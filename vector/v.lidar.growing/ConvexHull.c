@@ -7,10 +7,10 @@
 
 double **P, **cvxHull, **punti_bordo;
 
-/*----------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------*/
 void regGrow8(struct Cell_head Elaboration, struct element_grow **mat,
-	      double **punti, int *lung, int r, int c, int v, double Th_j,
-	      int maxP)
+              double **punti, int *lung, int r, int c, int v, double Th_j,
+              int maxP)
 {
     extern int count_obj;
 
@@ -21,58 +21,58 @@ void regGrow8(struct Cell_head Elaboration, struct element_grow **mat,
     punti[*lung][1] = r;
     punti[*lung][2] = mat[r][c].interp;
 
-    assert((*lung)++ < maxP - 1);	/* Condition to finish regGrow8 */
+    assert((*lung)++ < maxP - 1); /* Condition to finish regGrow8 */
 
     if (r - 1 >= 0) {
-	if ((mat[r - 1][c].clas > Th_j) && (mat[r - 1][c].clas < v) &&
-	    (mat[r - 1][c].fi != 0))
-	    regGrow8(Elaboration, mat, punti, lung, r - 1, c, v, Th_j, maxP);
+        if ((mat[r - 1][c].clas > Th_j) && (mat[r - 1][c].clas < v) &&
+            (mat[r - 1][c].fi != 0))
+            regGrow8(Elaboration, mat, punti, lung, r - 1, c, v, Th_j, maxP);
     }
 
     if (c - 1 >= 0) {
-	if ((mat[r][c - 1].clas > Th_j) && (mat[r][c - 1].clas < v) &&
-	    (mat[r][c - 1].fi != 0))
-	    regGrow8(Elaboration, mat, punti, lung, r, c - 1, v, Th_j, maxP);
+        if ((mat[r][c - 1].clas > Th_j) && (mat[r][c - 1].clas < v) &&
+            (mat[r][c - 1].fi != 0))
+            regGrow8(Elaboration, mat, punti, lung, r, c - 1, v, Th_j, maxP);
     }
 
     if (c + 1 < Elaboration.cols) {
-	if ((mat[r][c + 1].clas > Th_j) && (mat[r][c + 1].clas < v) &&
-	    (mat[r][c + 1].fi != 0))
-	    regGrow8(Elaboration, mat, punti, lung, r, c + 1, v, Th_j, maxP);
+        if ((mat[r][c + 1].clas > Th_j) && (mat[r][c + 1].clas < v) &&
+            (mat[r][c + 1].fi != 0))
+            regGrow8(Elaboration, mat, punti, lung, r, c + 1, v, Th_j, maxP);
     }
 
     if (r + 1 < Elaboration.rows) {
-	if ((mat[r + 1][c].clas > Th_j) && (mat[r + 1][c].clas < v) &&
-	    (mat[r + 1][c].fi != 0))
-	    regGrow8(Elaboration, mat, punti, lung, r + 1, c, v, Th_j, maxP);
+        if ((mat[r + 1][c].clas > Th_j) && (mat[r + 1][c].clas < v) &&
+            (mat[r + 1][c].fi != 0))
+            regGrow8(Elaboration, mat, punti, lung, r + 1, c, v, Th_j, maxP);
     }
 
     if ((r - 1 >= 0) && (c - 1 >= 0)) {
-	if ((mat[r - 1][c - 1].clas > Th_j) && (mat[r - 1][c - 1].clas < v) &&
-	    (mat[r - 1][c - 1].fi != 0))
-	    regGrow8(Elaboration, mat, punti, lung, r - 1, c - 1, v, Th_j,
-		     maxP);
+        if ((mat[r - 1][c - 1].clas > Th_j) && (mat[r - 1][c - 1].clas < v) &&
+            (mat[r - 1][c - 1].fi != 0))
+            regGrow8(Elaboration, mat, punti, lung, r - 1, c - 1, v, Th_j,
+                     maxP);
     }
 
     if ((r - 1 >= 0) && (c + 1 < Elaboration.cols)) {
-	if ((mat[r - 1][c + 1].clas > Th_j) && (mat[r - 1][c + 1].clas < v) &&
-	    (mat[r - 1][c + 1].fi != 0))
-	    regGrow8(Elaboration, mat, punti, lung, r - 1, c + 1, v, Th_j,
-		     maxP);
+        if ((mat[r - 1][c + 1].clas > Th_j) && (mat[r - 1][c + 1].clas < v) &&
+            (mat[r - 1][c + 1].fi != 0))
+            regGrow8(Elaboration, mat, punti, lung, r - 1, c + 1, v, Th_j,
+                     maxP);
     }
 
     if ((r + 1 < Elaboration.rows) && (c - 1 >= 0)) {
-	if ((mat[r + 1][c - 1].clas > Th_j) && (mat[r + 1][c - 1].clas < v) &&
-	    (mat[r + 1][c - 1].fi != 0))
-	    regGrow8(Elaboration, mat, punti, lung, r + 1, c - 1, v, Th_j,
-		     maxP);
+        if ((mat[r + 1][c - 1].clas > Th_j) && (mat[r + 1][c - 1].clas < v) &&
+            (mat[r + 1][c - 1].fi != 0))
+            regGrow8(Elaboration, mat, punti, lung, r + 1, c - 1, v, Th_j,
+                     maxP);
     }
 
     if ((r + 1 < Elaboration.rows) && (c + 1 < Elaboration.cols)) {
-	if ((mat[r + 1][c + 1].clas > Th_j) && (mat[r + 1][c + 1].clas < v) &&
-	    (mat[r + 1][c + 1].fi != 0))
-	    regGrow8(Elaboration, mat, punti, lung, r + 1, c + 1, v, Th_j,
-		     maxP);
+        if ((mat[r + 1][c + 1].clas > Th_j) && (mat[r + 1][c + 1].clas < v) &&
+            (mat[r + 1][c + 1].fi != 0))
+            regGrow8(Elaboration, mat, punti, lung, r + 1, c + 1, v, Th_j,
+                     maxP);
     }
 }
 
@@ -89,7 +89,6 @@ int ccw(double **P, int i, int j, int k)
     return a * d - b * c <= 0;
 }
 
-
 int cmpl(const void *a, const void *b)
 {
     double v;
@@ -104,33 +103,34 @@ int cmph(const void *a, const void *b)
     return cmpl(b, a);
 }
 
-int make_chain(double **V, int n, int (*cmp) (const void *, const void *))
+int make_chain(double **V, int n, int (*cmp)(const void *, const void *))
 {
     int i, j, s = 1;
     double *t;
 
-    qsort(V, (size_t) n, sizeof(double *), cmp);	/* It sorts the V's index */
+    qsort(V, (size_t)n, sizeof(double *), cmp); /* It sorts the V's index */
 
     /* */
     for (i = 2; i < n; i++) {
-	for (j = s; j >= 1 && ccw(V, i, j, j - 1); j--) ;
-	s = j + 1;
-	t = V[s];
-	V[s] = V[i];
-	V[i] = t;
+        for (j = s; j >= 1 && ccw(V, i, j, j - 1); j--)
+            ;
+        s = j + 1;
+        t = V[s];
+        V[s] = V[i];
+        V[i] = t;
     }
     return s;
 }
 
 int ch2d(double **P, int n)
 {
-    int u = make_chain(P, n, cmpl);	/* make lower hull */
+    int u = make_chain(P, n, cmpl); /* make lower hull */
 
     if (!n)
-	return 0;
+        return 0;
     P[n] = P[0];
 
-    return u + make_chain(P + u, n - u + 1, cmph);	/* make upper hull */
+    return u + make_chain(P + u, n - u + 1, cmph); /* make upper hull */
 }
 
 void print_hull(double **P, double **pti, int m, double **h)
@@ -138,9 +138,9 @@ void print_hull(double **P, double **pti, int m, double **h)
     int i;
 
     for (i = 0; i < m; i++) {
-	h[i][0] = pti[(P[i] - pti[0]) / 2][0];
-	h[i][1] = pti[(P[i] - pti[0]) / 2][1];
-	h[i][2] = pti[(P[i] - pti[0]) / 2][2];
+        h[i][0] = pti[(P[i] - pti[0]) / 2][0];
+        h[i][1] = pti[(P[i] - pti[0]) / 2][1];
+        h[i][2] = pti[(P[i] - pti[0]) / 2][2];
     }
 }
 
@@ -154,9 +154,9 @@ int checkHull(int cR, int cC, double **oldHull, int lungOld)
     newPoint = G_alloc_matrix(lungOld + 1, 2);
 
     for (count = 0; count < lungOld; count++) {
-	newPoint[count][0] = oldHull[count][0];
-	newPoint[count][1] = oldHull[count][1];
-	newP[count] = newPoint[count];
+        newPoint[count][0] = oldHull[count][0];
+        newPoint[count][1] = oldHull[count][1];
+        newP[count] = newPoint[count];
     }
 
     newPoint[lungOld][0] = cC;
@@ -167,34 +167,35 @@ int checkHull(int cR, int cC, double **oldHull, int lungOld)
     lungHullNew = ch2d(newP, lungOld + 1);
 
     if (lungOld != lungHullNew) {
-	G_free_matrix(newPoint);
-	free_Pvector(newP, 0, lungOld + 1);
-	return 0;
+        G_free_matrix(newPoint);
+        free_Pvector(newP, 0, lungOld + 1);
+        return 0;
     }
     else {
-	for (count = 0; count < lungOld; count++) {
-	    if ((oldHull[count][0] != newP[count][0]) ||
-		(oldHull[count][1] != newP[count][1])) {
-		G_free_matrix(newPoint);
-		free_Pvector(newP, 0, lungOld + 1);
-		return 0;
-	    }
-	}
+        for (count = 0; count < lungOld; count++) {
+            if ((oldHull[count][0] != newP[count][0]) ||
+                (oldHull[count][1] != newP[count][1])) {
+                G_free_matrix(newPoint);
+                free_Pvector(newP, 0, lungOld + 1);
+                return 0;
+            }
+        }
     }
     G_free_matrix(newPoint);
     free_Pvector(newP, 0, lungOld + 1);
     return 1;
 }
 
-/*---------------------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
 double pianOriz(double **punti, int obsNum, double *minNS, double *minEW,
-		double *maxNS, double *maxEW, struct element_grow **mat,
-		int CBordo)
+                double *maxNS, double *maxEW, struct element_grow **mat UNUSED,
+                int CBordo UNUSED)
 {
     int c1;
-    double minBordo, medioBordo;	/*, minBordo1; */
+    double minBordo, medioBordo; /*, minBordo1; */
 
-    /*Calcola coordinate min e max della zona e media delle righe e delle colonne */
+    /*Calcola coordinate min e max della zona e media delle righe e delle
+     * colonne */
     *minNS = punti[0][1];
     *maxNS = punti[0][1];
     *minEW = punti[0][0];
@@ -206,40 +207,41 @@ double pianOriz(double **punti, int obsNum, double *minNS, double *minEW,
     /*minBordo1 = punti[0][2]; */
 
     for (c1 = 0; c1 < obsNum; c1++) {
-	if (punti[c1][0] > *maxEW)
-	    *maxEW = punti[c1][0];
+        if (punti[c1][0] > *maxEW)
+            *maxEW = punti[c1][0];
 
-	if (punti[c1][0] < *minEW)
-	    *minEW = punti[c1][0];
+        if (punti[c1][0] < *minEW)
+            *minEW = punti[c1][0];
 
-	if (punti[c1][1] > *maxNS)
-	    *maxNS = punti[c1][1];
+        if (punti[c1][1] > *maxNS)
+            *maxNS = punti[c1][1];
 
-	if (punti[c1][1] < *minNS)
-	    *minNS = punti[c1][1];
-	/*
-	   if ((punti[c1][2] < minBordo1) && (mat[(int)(punti[c1][1])][(int)(punti[c1][0])].clas >= 1)
-	   && (mat[(int)(punti[c1][1])][(int)(punti[c1][0])].clas < CBordo)) {
-	   minBordo1 = punti[c1][2];
-	   }
-	 */
-	if (punti[c1][2] < minBordo)
-	    minBordo = punti[c1][2];
+        if (punti[c1][1] < *minNS)
+            *minNS = punti[c1][1];
+        /*
+           if ((punti[c1][2] < minBordo1) &&
+           (mat[(int)(punti[c1][1])][(int)(punti[c1][0])].clas >= 1)
+           && (mat[(int)(punti[c1][1])][(int)(punti[c1][0])].clas < CBordo)) {
+           minBordo1 = punti[c1][2];
+           }
+         */
+        if (punti[c1][2] < minBordo)
+            minBordo = punti[c1][2];
 
-	medioBordo += punti[c1][2];
+        medioBordo += punti[c1][2];
     }
     medioBordo /= obsNum;
     return medioBordo;
 }
 
-/*----------------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
 double **Pvector(long nl, long nh)
 {
     double **v;
 
-    v = (double **)calloc((size_t) (nh - nl + 1 + NR_END), sizeof(double *));
+    v = (double **)calloc((size_t)(nh - nl + 1 + NR_END), sizeof(double *));
     if (!v)
-	nrerror("allocation failure in dvector()");
+        nrerror("allocation failure in dvector()");
 
     return v - nl + NR_END;
 }
@@ -250,13 +252,12 @@ struct element_grow **P_alloc_element(int rows, int cols)
     int i;
 
     m = (struct element_grow **)G_calloc((rows + 1),
-					 sizeof(struct element_grow *));
-    m[0] =
-	(struct element_grow *)G_calloc(rows * cols,
-					sizeof(struct element_grow));
+                                         sizeof(struct element_grow *));
+    m[0] = (struct element_grow *)G_calloc(rows * cols,
+                                           sizeof(struct element_grow));
 
     for (i = 1; i <= rows; i++)
-	m[i] = m[i - 1] + cols;
+        m[i] = m[i - 1] + cols;
 
     return m;
 }
@@ -276,40 +277,39 @@ struct element_grow **structMatrix(long nrl, long nrh, long ncl, long nch)
     struct element_grow **m;
 
     /* allocate pointers to rows */
-    m = (struct element_grow **)calloc((size_t) (nrow + NR_END),
-				       sizeof(struct element_grow *));
+    m = (struct element_grow **)calloc((size_t)(nrow + NR_END),
+                                       sizeof(struct element_grow *));
     if (!m)
-	nrerror("allocation failure 1 in matrix()");
+        nrerror("allocation failure 1 in matrix()");
 
     m += NR_END;
     m -= nrl;
 
     /* allocate rows and set pointers to them */
-    m[nrl] =
-	(struct element_grow *)calloc((size_t) (nrow * ncol + NR_END),
-				      sizeof(struct element_grow));
+    m[nrl] = (struct element_grow *)calloc((size_t)(nrow * ncol + NR_END),
+                                           sizeof(struct element_grow));
     if (!m[nrl])
-	nrerror("allocation failure 2 in matrix()");
+        nrerror("allocation failure 2 in matrix()");
 
     m[nrl] += NR_END;
     m[nrl] -= ncl;
 
     for (i = nrl + 1; i <= nrh; i++)
-	m[i] = m[i - 1] + ncol;
+        m[i] = m[i - 1] + ncol;
 
     /* return pointer to array of pointers to rows */
     return m;
 }
 
-void free_Pvector(double **v, long nl, long nh)
+void free_Pvector(double **v, long nl, long nh UNUSED)
 {
 
-    free((FREE_ARG) (v + nl - NR_END));
+    free((FREE_ARG)(v + nl - NR_END));
 }
 
-void free_structmatrix(struct element_grow **m, long nrl, long nrh, long ncl,
-		       long nch)
+void free_structmatrix(struct element_grow **m, long nrl, long nrh UNUSED,
+                       long ncl, long nch UNUSED)
 {
-    free((FREE_ARG) (m[nrl] + ncl - NR_END));
-    free((FREE_ARG) (m + nrl - NR_END));
+    free((FREE_ARG)(m[nrl] + ncl - NR_END));
+    free((FREE_ARG)(m + nrl - NR_END));
 }

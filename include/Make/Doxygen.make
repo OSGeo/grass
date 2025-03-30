@@ -6,7 +6,7 @@ DOXOUTPUT=$(DOXNAME)lib
 #check for program
 checkdoxygen:
 	@(type doxygen > /dev/null || (echo "ERROR: Install 'doxygen' software first (get from http://www.doxygen.org)" && exit 1))
-	@(type dot     > /dev/null || (echo "ERROR: Install 'Graphviz/dot' software first" && exit 1)) 
+	@(type dot     > /dev/null || (echo "ERROR: Install 'Graphviz/dot' software first" && exit 1))
 
 # generate docs as single HTML document:
 htmldox-single: checkdoxygen cleandox

@@ -255,7 +255,7 @@ Internal variables:
  area()                 area of current cell in square meters           F
  null()                 NULL value
 </pre></div>
-Note, that the row(), col() and depth() indexing starts with 1. 
+Note, that the row(), col() and depth() indexing starts with 1.
 
 <h3>Floating point values in the expression</h3>
 
@@ -284,8 +284,8 @@ produce a floating-point result, as will using float():
 <h3>NULL support</h3>
 
 <ul>
-<li>Division by zero should result in NULL. 
-<li>Modulus by zero should result in NULL. 
+<li>Division by zero should result in NULL.
+<li>Modulus by zero should result in NULL.
 <li>NULL-values in any arithmetic or logical operation should result
 in NULL. (however, &amp;&amp;&amp; and ||| are treated specially, as described below).
 <li>The &amp;&amp;&amp; and ||| operators observe the following axioms even when x is NULL:
@@ -300,25 +300,25 @@ if(), eval() and isnull() are treated specially, as described below).
 <li>The eval() function always returns its last argument
 <li>The situation for if() is:
 <div class="code"><pre>
-if(x) 
-	NULL if x is NULL; 0 if x is zero; 1 otherwise 
-if(x,a) 
-	NULL if x is NULL; a if x is non-zero; 0 otherwise 
-if(x,a,b) 
-	NULL if x is NULL; a if x is non-zero; b otherwise 
-if(x,n,z,p) 
-	NULL if x is NULL; n if x is negative; 
-z if x is zero; p if x is positive 
+if(x)
+	NULL if x is NULL; 0 if x is zero; 1 otherwise
+if(x,a)
+	NULL if x is NULL; a if x is non-zero; 0 otherwise
+if(x,a,b)
+	NULL if x is NULL; a if x is non-zero; b otherwise
+if(x,n,z,p)
+	NULL if x is NULL; n if x is negative;
+z if x is zero; p if x is positive
 </pre></div>
-<li>The (new) function isnull(x) returns: 1 if x is NULL; 
-0 otherwise. The (new) function null() 
-(which has no arguments) returns an integer NULL. 
-<li>Non-NULL, but invalid, arguments to functions should result in NULL. 
+<li>The (new) function isnull(x) returns: 1 if x is NULL;
+0 otherwise. The (new) function null()
+(which has no arguments) returns an integer NULL.
+<li>Non-NULL, but invalid, arguments to functions should result in NULL.
 <div class="code"><pre>
-Examples: 
-log(-2) 
-sqrt(-2) 
-pow(a,b) where a is negative and b is not an integer 
+Examples:
+log(-2)
+sqrt(-2)
+pow(a,b) where a is negative and b is not an integer
 </pre></div>
 </ul>
 <p>NULL support: Please note that any math performed with NULL cells always
@@ -406,7 +406,7 @@ r3.mapcalc command using multi-line input.
 
 <h3>Backwards compatibility</h3>
 
-For the backwards compatibility with GRASS 6, 
+For the backwards compatibility with GRASS 6,
 <!-- check wording: -->
 if no options are given, it manufactures <tt>file=-</tt> (which reads from
 stdin), so you can continue to use e.g.:
@@ -481,7 +481,7 @@ See <em><a href="r.mask.html">r.mask</a></em> for details.
 
 <h3>Random number generator initialization</h3>
 <p>The pseudo-random number generator used by the rand() function can
-be initialised to a specific value using the <b>seed</b> option. 
+be initialised to a specific value using the <b>seed</b> option.
 This can be used to replicate a previous calculation.
 <p>Alternatively, it can be initialised from the system time and the
 PID using the <b>-r</b> flag. This should result in a different seed
@@ -490,7 +490,7 @@ being used each time.
 can be seen using <em>r.info</em>.
 <p>If you want other people to be able to verify your results, it's
 preferable to use the <b>seed</b> option to supply a seed which is
-either specified in the script or generated from a determenistic process
+either specified in the script or generated from a deterministic process
 such as a pseudo-random number generator given an explicit seed.
 <p>Note that the rand() function will generate a fatal error if neither
 the <b>seed</b> option nor the <b>-s</b> flag are given.
@@ -523,7 +523,7 @@ To change all values below 5 to NULL, keep otherwise:
 <div class="code"><pre>
 newmap = if(map &lt; 5, null(), map)
 </pre></div>
-The graph() function allows users to specify a x-y conversion using 
+The graph() function allows users to specify a x-y conversion using
 pairs of x,y coordinates.
 In some situations a transformation from one value to another is not
 easily established mathematically, but can be represented by a 2-D
@@ -591,13 +591,13 @@ NULL cells. It is left to the user to utilize the <tt>isnull()</tt> function.
 <b><a href="https://grass.osgeo.org/gdp/raster/mapcalc-algebra.pdf">r.mapcalc: An Algebra for GIS and Image
 Processing</a></b>, by Michael Shapiro and Jim Westervelt, U.S. Army
 Construction Engineering Research Laboratory (March/1991).
-<p> 
+<p>
 <b><a href="https://grass.osgeo.org/history_docs/mapcalc.pdf">Performing Map Calculations on GRASS Data:
 r.mapcalc Program Tutorial</a></b>, by Marji Larson, Michael Shapiro and Scott
 Tweddale, U.S. Army Construction Engineering Research Laboratory (December
 1991)
 <p>
-Neteler, M. (2001): Volume modelling of soils using GRASS GIS 3D tools. - in: 
+Neteler, M. (2001): Volume modelling of soils using GRASS GIS 3D tools. - in:
 Brovelli, M. (ed.)(2001): The Geomatics Workbook N. 2. Politecnico di Milano,
 Italy (ISSN 1591-092X) (<a href="http://geomatica.como.polimi.it/workbooks/n2/articoli/mn2.pdf">PDF</a>)
 

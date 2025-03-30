@@ -96,7 +96,7 @@ r.mapcalc "a4 = 40"
 m.nviz.image elevation_map=a1,a2,a3,a4 mode=fine,fine,fine,fine resolution_fine=1,6,1,1 resolution_coarse=9,9,9,9 shading=gouraud,gouraud,gouraud,gouraud style=surface,surface,surface,surface wire_color=136:136:136,136:136:136,136:136:136,136:136:136 color_map=landuse,landuse,landuse,landuse \
 position=0.03,0.31 height=92 perspective=36 twist=-99 zexag=200.000000 focus=1071,9393,30 \
 light_position=-0.57,0.75,0.80 light_brightness=80 light_ambient=20 light_color=255:255:255 \
-output=nviz_output format=ppm size=872,586  
+output=nviz_output format=ppm size=872,586
 
 
 Miscellaneous

@@ -6,8 +6,7 @@
 
 struct Cell_head region, page;
 
-static union
-{
+static union {
     char **c;
     unsigned char **u;
     short **s;
@@ -23,7 +22,7 @@ static int cur_x, cur_y;
 static int format;
 static CELL *cell;
 
-static int (*dot) ();
+static int (*dot)(int, int);
 static int cell_dot(int, int);
 static int fcell_dot(int, int);
 static int dcell_dot(int, int);
@@ -42,7 +41,7 @@ int begin_rasterization(int nrows, int f)
 
     max_rows = nrows;
     if (max_rows <= 0)
-	max_rows = 512;
+        max_rows = 512;
 
     Rast_get_window(&region);
     Rast_get_window(&page);
@@ -50,61 +49,61 @@ int begin_rasterization(int nrows, int f)
     pages = (region.rows + max_rows - 1) / max_rows;
 
     if (max_rows > region.rows)
-	max_rows = region.rows;
+        max_rows = region.rows;
 
     size = max_rows * region.cols;
     switch (format) {
     case USE_CHAR:
-	raster.c = (char **)G_calloc(max_rows, sizeof(char *));
-	raster.c[0] = (char *)G_calloc(size, sizeof(char));
-	for (i = 1; i < max_rows; i++)
-	    raster.c[i] = raster.c[i - 1] + region.cols;
-	dot = char_dot;
-	break;
+        raster.c = (char **)G_calloc(max_rows, sizeof(char *));
+        raster.c[0] = (char *)G_calloc(size, sizeof(char));
+        for (i = 1; i < max_rows; i++)
+            raster.c[i] = raster.c[i - 1] + region.cols;
+        dot = char_dot;
+        break;
 
     case USE_UCHAR:
-	raster.u =
-	    (unsigned char **)G_calloc(max_rows, sizeof(unsigned char *));
-	raster.u[0] = (unsigned char *)G_calloc(size, sizeof(unsigned char));
-	for (i = 1; i < max_rows; i++)
-	    raster.u[i] = raster.u[i - 1] + region.cols;
-	dot = uchar_dot;
-	break;
+        raster.u =
+            (unsigned char **)G_calloc(max_rows, sizeof(unsigned char *));
+        raster.u[0] = (unsigned char *)G_calloc(size, sizeof(unsigned char));
+        for (i = 1; i < max_rows; i++)
+            raster.u[i] = raster.u[i - 1] + region.cols;
+        dot = uchar_dot;
+        break;
 
     case USE_SHORT:
-	raster.s = (short **)G_calloc(max_rows, sizeof(short *));
-	raster.s[0] = (short *)G_calloc(size, sizeof(short));
-	for (i = 1; i < max_rows; i++)
-	    raster.s[i] = raster.s[i - 1] + region.cols;
-	dot = short_dot;
-	break;
+        raster.s = (short **)G_calloc(max_rows, sizeof(short *));
+        raster.s[0] = (short *)G_calloc(size, sizeof(short));
+        for (i = 1; i < max_rows; i++)
+            raster.s[i] = raster.s[i - 1] + region.cols;
+        dot = short_dot;
+        break;
 
     case USE_CELL:
-	raster.cell = (CELL **) G_calloc(max_rows, sizeof(CELL *));
-	raster.cell[0] = (CELL *) G_calloc(size, sizeof(CELL));
-	for (i = 1; i < max_rows; i++)
-	    raster.cell[i] = raster.cell[i - 1] + region.cols;
-	dot = cell_dot;
-	break;
+        raster.cell = (CELL **)G_calloc(max_rows, sizeof(CELL *));
+        raster.cell[0] = (CELL *)G_calloc(size, sizeof(CELL));
+        for (i = 1; i < max_rows; i++)
+            raster.cell[i] = raster.cell[i - 1] + region.cols;
+        dot = cell_dot;
+        break;
 
     case USE_FCELL:
-	raster.fcell = (FCELL **) G_calloc(max_rows, sizeof(FCELL *));
-	raster.fcell[0] = (FCELL *) G_calloc(size, sizeof(FCELL));
-	for (i = 1; i < max_rows; i++)
-	    raster.fcell[i] = raster.fcell[i - 1] + region.cols;
-	dot = fcell_dot;
-	break;
- 
+        raster.fcell = (FCELL **)G_calloc(max_rows, sizeof(FCELL *));
+        raster.fcell[0] = (FCELL *)G_calloc(size, sizeof(FCELL));
+        for (i = 1; i < max_rows; i++)
+            raster.fcell[i] = raster.fcell[i - 1] + region.cols;
+        dot = fcell_dot;
+        break;
+
     case USE_DCELL:
-	raster.dcell = (DCELL **) G_calloc(max_rows, sizeof(DCELL *));
-	raster.dcell[0] = (DCELL *) G_calloc(size, sizeof(DCELL));
-	for (i = 1; i < max_rows; i++)
-	    raster.dcell[i] = raster.dcell[i - 1] + region.cols;
-	dot = dcell_dot;
-	break;
+        raster.dcell = (DCELL **)G_calloc(max_rows, sizeof(DCELL *));
+        raster.dcell[0] = (DCELL *)G_calloc(size, sizeof(DCELL));
+        for (i = 1; i < max_rows; i++)
+            raster.dcell[i] = raster.dcell[i - 1] + region.cols;
+        dot = dcell_dot;
+        break;
     }
     if (format != USE_CELL && format != USE_FCELL && format != USE_DCELL)
-	cell = Rast_allocate_c_buf();
+        cell = Rast_allocate_c_buf();
 
     at_row = 0;
     configure_plot();
@@ -112,7 +111,7 @@ int begin_rasterization(int nrows, int f)
     return pages;
 }
 
-#define DONE 1
+#define DONE  1
 #define ERROR -1
 #define AGAIN 0
 
@@ -124,51 +123,51 @@ int configure_plot(void)
 
     nrows = region.rows - at_row;
     if (nrows <= 0)
-	return DONE;
+        return DONE;
 
     if (nrows > max_rows)
-	nrows = max_rows;
+        nrows = max_rows;
 
     ncols = region.cols;
 
     /* zero the raster */
     switch (format) {
     case USE_CHAR:
-	for (i = 0; i < nrows; i++)
-	    for (j = 0; j < ncols; j++)
-		raster.c[i][j] = 0;
-	break;
+        for (i = 0; i < nrows; i++)
+            for (j = 0; j < ncols; j++)
+                raster.c[i][j] = 0;
+        break;
 
     case USE_UCHAR:
-	for (i = 0; i < nrows; i++)
-	    for (j = 0; j < ncols; j++)
-		raster.u[i][j] = 0;
-	break;
+        for (i = 0; i < nrows; i++)
+            for (j = 0; j < ncols; j++)
+                raster.u[i][j] = 0;
+        break;
 
     case USE_SHORT:
-	for (i = 0; i < nrows; i++)
-	    for (j = 0; j < ncols; j++)
-		raster.s[i][j] = 0;
-	break;
+        for (i = 0; i < nrows; i++)
+            for (j = 0; j < ncols; j++)
+                raster.s[i][j] = 0;
+        break;
 
     case USE_CELL:
-	for (i = 0; i < nrows; i++)
-	    Rast_set_c_null_value(raster.cell[i], ncols);
-	break;
+        for (i = 0; i < nrows; i++)
+            Rast_set_c_null_value(raster.cell[i], ncols);
+        break;
     case USE_FCELL:
-	for (i = 0; i < nrows; i++)
-	    Rast_set_f_null_value(raster.fcell[i], ncols);
-	break;
+        for (i = 0; i < nrows; i++)
+            Rast_set_f_null_value(raster.fcell[i], ncols);
+        break;
     case USE_DCELL:
-	for (i = 0; i < nrows; i++)
-	    Rast_set_d_null_value(raster.dcell[i], ncols);
-	break;
+        for (i = 0; i < nrows; i++)
+            Rast_set_d_null_value(raster.dcell[i], ncols);
+        break;
     }
 
     /* change the region */
     page.north = region.north - at_row * region.ns_res;
     page.south = page.north - nrows * region.ns_res;
-    /* Rast_set_[inpu|output]_window not working but G_set_window ??? */
+    /* Rast_set_[input|output]_window not working but G_set_window ??? */
     G_set_window(&page);
 
     /* configure the plot routines */
@@ -177,7 +176,7 @@ int configure_plot(void)
     return AGAIN;
 }
 
-int  output_raster(int fd, int *null)
+int output_raster(int fd, int *null)
 {
     int i, j;
     FCELL *fcell;
@@ -185,26 +184,26 @@ int  output_raster(int fd, int *null)
 
     for (i = 0; i < page.rows; i++, at_row++) {
         switch (format) {
-        
+
         case USE_CHAR:
             for (j = 0; j < page.cols; j++) {
-                cell[j] = (CELL) raster.c[i][j];
+                cell[j] = (CELL)raster.c[i][j];
                 if (cell[j] == 0)
                     Rast_set_null_value(&cell[j], 1, CELL_TYPE);
             }
             break;
-            
+
         case USE_UCHAR:
             for (j = 0; j < page.cols; j++) {
-                cell[j] = (CELL) raster.u[i][j];
+                cell[j] = (CELL)raster.u[i][j];
                 if (cell[j] == 0)
                     Rast_set_null_value(&cell[j], 1, CELL_TYPE);
             }
             break;
-            
+
         case USE_SHORT:
             for (j = 0; j < page.cols; j++) {
-                cell[j] = (CELL) raster.s[i][j];
+                cell[j] = (CELL)raster.s[i][j];
                 if (cell[j] == 0)
                     Rast_set_null_value(&cell[j], 1, CELL_TYPE);
             }
@@ -225,17 +224,17 @@ int  output_raster(int fd, int *null)
             if (!null)
                 break;
             for (j = 0; j < page.cols; j++) {
-                if (fabs(fcell[j] - (FCELL) *null) < 1e-6)
+                if (fabs(fcell[j] - (FCELL)*null) < 1e-6)
                     Rast_set_null_value(&fcell[j], 1, FCELL_TYPE);
             }
             break;
-            
+
         case USE_DCELL:
             dcell = raster.dcell[i];
             if (!null)
                 break;
             for (j = 0; j < page.cols; j++) {
-                if (fabs(dcell[j] - (DCELL) *null) < 1e-6)
+                if (fabs(dcell[j] - (DCELL)*null) < 1e-6)
                     Rast_set_null_value(&dcell[j], 1, DCELL_TYPE);
             }
             break;
@@ -292,17 +291,17 @@ static int move(int x, int y)
 static int cont(int x, int y)
 {
     if (cur_x < 0 && x < 0)
-	goto set;
+        goto set;
     if (cur_y < 0 && y < 0)
-	goto set;
+        goto set;
     if (cur_x >= page.cols && x >= page.cols)
-	goto set;
+        goto set;
     if (cur_y >= page.rows && y >= page.rows)
-	goto set;
+        goto set;
 
     G_bresenham_line(cur_x, cur_y, x, y, dot);
 
-  set:
+set:
     move(x, y);
 
     return 0;
@@ -311,7 +310,7 @@ static int cont(int x, int y)
 static int cell_dot(int x, int y)
 {
     if (x >= 0 && x < page.cols && y >= 0 && y < page.rows)
-	raster.cell[y][x] = (CELL) cat_int;
+        raster.cell[y][x] = (CELL)cat_int;
 
     return 0;
 }
@@ -319,7 +318,7 @@ static int cell_dot(int x, int y)
 static int fcell_dot(int x, int y)
 {
     if (x >= 0 && x < page.cols && y >= 0 && y < page.rows)
-	raster.fcell[y][x] = (FCELL) cat_double;
+        raster.fcell[y][x] = (FCELL)cat_double;
 
     return 0;
 }
@@ -327,7 +326,7 @@ static int fcell_dot(int x, int y)
 static int dcell_dot(int x, int y)
 {
     if (x >= 0 && x < page.cols && y >= 0 && y < page.rows)
-	raster.dcell[y][x] = (DCELL) cat_double;
+        raster.dcell[y][x] = (DCELL)cat_double;
 
     return 0;
 }
@@ -335,7 +334,7 @@ static int dcell_dot(int x, int y)
 static int uchar_dot(int x, int y)
 {
     if (x >= 0 && x < page.cols && y >= 0 && y < page.rows)
-	raster.u[y][x] = cat_int;
+        raster.u[y][x] = cat_int;
 
     return 0;
 }
@@ -343,7 +342,7 @@ static int uchar_dot(int x, int y)
 static int char_dot(int x, int y)
 {
     if (x >= 0 && x < page.cols && y >= 0 && y < page.rows)
-	raster.c[y][x] = cat_int;
+        raster.c[y][x] = cat_int;
 
     return 0;
 }
@@ -351,7 +350,7 @@ static int char_dot(int x, int y)
 static int short_dot(int x, int y)
 {
     if (x >= 0 && x < page.cols && y >= 0 && y < page.rows)
-	raster.s[y][x] = cat_int;
+        raster.s[y][x] = cat_int;
 
     return 0;
 }

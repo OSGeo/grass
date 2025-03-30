@@ -30,7 +30,7 @@ import logging
 ###############################################################################
 
 
-class RPCDefs(object):
+class RPCDefs:
     # Function identifier and index
     STOP = 0
     GET_VECTOR_TABLE_AS_DICT = 1
@@ -62,7 +62,6 @@ def _get_raster_image_as_np(lock, conn, data):
         rast = RasterRow(name, mapset)
 
         if rast.exist():
-
             reg = Region()
             reg.from_rast(name)
 

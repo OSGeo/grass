@@ -25,4 +25,3 @@ r.info precip_abs_average
 t.rast.series input=precip_abs output=precip_abs_average_3months where="start_time >= '2001-04-01'"
 
 r.info precip_abs_average_3months
-

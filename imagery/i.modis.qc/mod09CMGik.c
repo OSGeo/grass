@@ -3,11 +3,11 @@
  * 01 -> class 1: small
  * 10 -> class 2: average
  * 11 -> class 3: high
- */  
+ */
 
 #include <grass/raster.h>
 
-CELL mod09CMGik(CELL pixel) 
+CELL mod09CMGik(CELL pixel)
 {
     CELL qctemp;
 
@@ -16,5 +16,3 @@ CELL mod09CMGik(CELL pixel)
 
     return qctemp;
 }
-
-

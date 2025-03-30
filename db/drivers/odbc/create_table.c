@@ -3,7 +3,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_create_table(dbTable * table)
+int db__driver_create_table(dbTable *table)
 {
     dbString sql;
     cursor *c;
@@ -20,18 +20,18 @@ int db__driver_create_table(dbTable * table)
 
     c = alloc_cursor();
     if (c == NULL)
-	return DB_FAILED;
+        return DB_FAILED;
 
     ret = SQLExecDirect(c->stmt, (SQLCHAR *)db_get_string(&sql), SQL_NTS);
 
     if ((ret != SQL_SUCCESS) && (ret != SQL_SUCCESS_WITH_INFO)) {
-	SQLGetDiagRec(SQL_HANDLE_STMT, c->stmt, 1, NULL, &err, msg,
-		      sizeof(msg), NULL);
-	db_d_append_error("SQLExecDirect():\n%s\n%s (%d)\n",
-			  db_get_string(&sql), msg, (int)err);
-	db_d_report_error();
+        SQLGetDiagRec(SQL_HANDLE_STMT, c->stmt, 1, NULL, &err, msg, sizeof(msg),
+                      NULL);
+        db_d_append_error("SQLExecDirect():\n%s\n%s (%d)\n",
+                          db_get_string(&sql), msg, (int)err);
+        db_d_report_error();
 
-	return DB_FAILED;
+        return DB_FAILED;
     }
 
     free_cursor(c);

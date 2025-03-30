@@ -9,18 +9,16 @@
  * 0111 -> class 7: Deep ocean
  * 1111 -> class 15: Fill Value
  * Classes 8-14: Not used
- */  
+ */
 
 #include <grass/raster.h>
 
-CELL mcd43B2b (CELL pixel) 
+CELL mcd43B2b(CELL pixel)
 {
     CELL qctemp;
 
-    pixel >>= 4;		/*bits [4-7] become [0-3] */
+    pixel >>= 4; /*bits [4-7] become [0-3] */
     qctemp = pixel & 0x0F;
-    
+
     return qctemp;
 }
-
-

@@ -331,7 +331,6 @@ def main():
     indicator_maps = {}
 
     while input_strds_end > start and stop > start:
-
         # Make sure that the cyclic computation will stop at the correct time
         if stop and end > stop:
             end = stop
@@ -564,7 +563,6 @@ def main():
 def create_strds_register_maps(
     in_strds, out_strds, out_maps, register_null, empty_maps, dbif
 ):
-
     out_id = out_strds.get_id()
 
     if out_strds.is_in_db(dbif):
@@ -617,7 +615,6 @@ def compute_occurrence(
     maximum_strds,
     dbif,
 ):
-
     if minimum_strds:
         input_maps_minimum = input_strds.get_registered_maps_as_objects(
             where=where, dbif=dbif

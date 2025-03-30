@@ -1,28 +1,28 @@
-| :exclamation:  Instructions below are not up-to-date. Update in progress. |
-|---------------------------------------------------------------------------|
-
 # GRASS GIS Mac OS X Build
 
 (and other Mac notes)
 
 ## Table of Contents
 
+| :exclamation:  Instructions below are not up-to-date. Update in progress. |
+|---------------------------------------------------------------------------|
+
 - Quickstart
 - About
 - Building GRASS
-    - Optimization
-    - Configure Example
-    - Leopard Notes
-    - Building an Installer Package
-    - Bundling Libraries and Programs
+  - Optimization
+  - Configure Example
+  - Leopard Notes
+  - Building an Installer Package
+  - Bundling Libraries and Programs
 - Developer Notes
 - Help Files
 - Addon Modules
 - Dependency Build Notes
-    - Universal Aqua Tcl/Tk
-    - Universal GPSBabel
-    - Universal NetPBM
-    - Universal FFMPEG
+  - Universal Aqua Tcl/Tk
+  - Universal GPSBabel
+  - Universal NetPBM
+  - Universal FFMPEG
 
 ## Quickstart
 
@@ -44,7 +44,7 @@ init.sh.
 ## Building GRASS
 
 Building GRASS as a Mac OS X application is pretty much the same as for
-a unix build (see the [INSTALL](../INSTALL) document for details). For an
+a unix build (see the [INSTALL.md](../INSTALL.md) document for details). For an
 application, just add this option to configure:
 
 `--enable-macosx-app`
@@ -170,7 +170,7 @@ As an example, to build GRASS using my frameworks and Tcl/Tk as built in
 the build notes below, this should work *(for a standard unix build,
 just remove the `--prefix` and `--enable-macosx-app` flags)*:
 
-```sh
+```bash
 ./configure \
     --with-freetype \
     --with-freetype-includes= \
@@ -233,7 +233,7 @@ and [gui/wxpython/README](../gui/wxpython/README), wxpython installer
 available at [wxpython.org](http://wxpython.org/)), add this to configure (fill
 in the correct version at x.x.x.x for the wxpython you have installed):
 
-```
+```bash
 --with-python
 --with-wxwidgets=/usr/local/lib/wxPython-unicode-x.x.x.x/bin/wx-config
 ```
@@ -243,7 +243,7 @@ system Python on Leopard.
 
 If you want ffmpeg support (see build instructions below), add this:
 
-```sh
+```bash
 --with-ffmpeg \
 --with-ffmpeg-includes="/usr/local/include \
     /usr/local/include/libavcodec /usr/local/include/libavdevice \
@@ -252,10 +252,12 @@ If you want ffmpeg support (see build instructions below), add this:
 --with-ffmpeg-libs=/usr/local/lib
 ```
 
-For cairo support (see build instructions at
-[kyngchaos.com](https://web.archive.org/web/20161112052733/http://www.kyngchaos.com/macosx/build/cairo/)), add this:
+For cairo support (see build
+instructions at
+[kyngchaos.com](https://web.archive.org/web/20161112052733/http://www.kyngchaos.com/macosx/build/cairo/)),
+add this:
 
-```sh
+```bash
 --with-cairo \
 --with-cairo-includes=/usr/local/include/cairo \
 --with-cairo-libs=/usr/local/lib \
@@ -390,7 +392,7 @@ folder in a Terminal and:
 
 `Platform [darwin] ==>` ↵
 
-`Netpbm shared library directory [default] ==> `**`/usr/local`**
+`Netpbm shared library directory [default] ==>` **`/usr/local`**
 
 choose where you will install it
 default is NOT /usr/local or any location at all, so you MUST set this
@@ -434,7 +436,8 @@ could use static, since GRASS only needs a few of the progs
 ignore warning about libz
 
 ```sh
-echo "JASPERLIB = /Library/Frameworks/UnixImageIO.framework/unix/lib/libjasper.dylib"  \
+echo "JASPERLIB = \
+    /Library/Frameworks/UnixImageIO.framework/unix/lib/libjasper.dylib"  \
     >> Makefile.config
 echo "JASPERHDR_DIR = /Library/Frameworks/UnixImageIO.framework/Headers" \
     >> Makefile.config
@@ -443,7 +446,8 @@ echo "JASPERHDR_DIR = /Library/Frameworks/UnixImageIO.framework/Headers" \
 For Tiger:
 
 ```sh
-echo "CC = /usr/bin/gcc -arch ppc -arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk" \
+echo "CC = /usr/bin/gcc -arch ppc -arch i386 \
+    -isysroot /Developer/SDKs/MacOSX10.4u.sdk" \
     >> Makefile.config
 ```
 
@@ -558,13 +562,13 @@ cd ../build-ppc
     --extra-ldflags="-arch ppc"
 make
 ```
+
 Don't install this one, there is no need.
 
 If you are building for Leopard, also do the 64bit varieties, otherwise
 skip to the lipo step below.
 
 For x86_64:
-
 
 ```sh
 cd build-x86_64
@@ -650,6 +654,6 @@ This program is free software under the GNU General Public License (>=v2).
 
 \- William Kyngesburye
 
-kyngchaos@kyngchaos.com
+<kyngchaos@kyngchaos.com>
 
-http://www.kyngchaos.com/
+<http://www.kyngchaos.com/>

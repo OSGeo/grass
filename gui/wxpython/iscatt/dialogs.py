@@ -18,8 +18,6 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
 
-import six
-
 import wx
 from gui_core.gselect import Select
 import wx.lib.colourselect as csel
@@ -49,7 +47,6 @@ class AddScattPlotDialog(wx.Dialog):
         self._createWidgets()
 
     def _createWidgets(self):
-
         self.labels = {}
         self.params = {}
 
@@ -90,7 +87,6 @@ class AddScattPlotDialog(wx.Dialog):
         self._layout()
 
     def _layout(self):
-
         border = wx.BoxSizer(wx.VERTICAL)
         dialogSizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -156,7 +152,6 @@ class AddScattPlotDialog(wx.Dialog):
         self.btn_remove.Bind(wx.EVT_BUTTON, self.OnRemoveLayer)
 
     def OnOk(self, event):
-
         if not self.GetBands():
             GMessage(parent=self, message=_("No scatter plots selected."))
             return
@@ -264,7 +259,7 @@ class ExportCategoryRaster(wx.Dialog):
     def OnTextChanged(self, event):
         """Name of new vector map given.
 
-        Enable/diable OK button.
+        Enable/disable OK button.
         """
         file = self.vectorNameCtrl.GetValue()
         if len(file) > 0:
@@ -381,7 +376,7 @@ class SettingsDialog(wx.Dialog):
             "sel_area": ["selection", _("Selected area color:")],
         }
 
-        for settKey, sett in six.iteritems(self.colorsSetts):
+        for settKey, sett in self.colorsSetts.items():
             settsLabels[settKey] = StaticText(parent=self, id=wx.ID_ANY, label=sett[1])
             col = UserSettings.Get(group="scatt", key=sett[0], subkey=settKey)
             self.settings[settKey] = csel.ColourSelect(
@@ -393,7 +388,7 @@ class SettingsDialog(wx.Dialog):
             "sel_area_opacty": ["selection", _("Selected area opacity:")],
         }
 
-        for settKey, sett in six.iteritems(self.sizeSetts):
+        for settKey, sett in self.sizeSetts.items():
             settsLabels[settKey] = StaticText(parent=self, id=wx.ID_ANY, label=sett[1])
             self.settings[settKey] = SpinCtrl(parent=self, id=wx.ID_ANY, min=0, max=100)
             size = int(UserSettings.Get(group="scatt", key=sett[0], subkey=settKey))
@@ -499,16 +494,15 @@ class SettingsDialog(wx.Dialog):
         self.Close()
 
     def UpdateSettings(self):
-
         chanaged_setts = []
-        for settKey, sett in six.iteritems(self.colorsSetts):
+        for settKey, sett in self.colorsSetts.items():
             col = tuple(self.settings[settKey].GetColour())
             col_s = UserSettings.Get(group="scatt", key=sett[0], subkey=settKey)
             if col_s != col:
                 UserSettings.Set(group="scatt", key=sett[0], subkey=settKey, value=col)
                 chanaged_setts.append([settKey, sett[0]])
 
-        for settKey, sett in six.iteritems(self.sizeSetts):
+        for settKey, sett in self.sizeSetts.items():
             val = self.settings[settKey].GetValue()
             val_s = UserSettings.Get(group="scatt", key=sett[0], subkey=settKey)
 

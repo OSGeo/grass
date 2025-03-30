@@ -1,4 +1,4 @@
-<h2>DESCRIPTION</h2> 
+<h2>DESCRIPTION</h2>
 
 This program allows a user to convert coordinates from one projection
 to another. Coordinates can be read from one file, converted, and
@@ -110,14 +110,14 @@ continue on to import the results into a GRASS vector points map in
 the current map projection:
 <div class="code"><pre>
 # check file content
-cat waypoints.txt 
+cat waypoints.txt
 -78.43977824 33.89587173
 -78.54944691 33.88964566
 -78.51078074 33.88141495
 -77.14037951 35.60543020
 
 # reproject points and generate vector map on the fly
-m.proj -i input=waypoints.txt | v.in.ascii input=- output=test_pnts 
+m.proj -i input=waypoints.txt | v.in.ascii input=- output=test_pnts
 
 # verify result
 v.db.select test_pnts cat|dbl_1|dbl_2|dbl_3
@@ -155,8 +155,8 @@ performs an inverse projection to latitude-longitude and then projects
 the coordinate list to the target projection.
 <p>
 Datum conversions are automatically handled by the PROJ library if
-<tt>+datum</tt> setings are specified on <b>both</b> the input <b>and</b> output
-projections on the command line. The <tt>+towgs84</tt> parameter can be used to 
+<tt>+datum</tt> settings are specified on <b>both</b> the input <b>and</b> output
+projections on the command line. The <tt>+towgs84</tt> parameter can be used to
 define either 3 or 7 term datum transform coefficients, satisfying this requirement.
 <p>If a datum is specified there is no need for the <tt>+ellps=</tt> or underlying
 parameters, <tt>+a=</tt>, <tt>+es=</tt>, etc.

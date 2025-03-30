@@ -6,8 +6,7 @@
 
 #define KEYLENGTH 64
 
-struct Item
-{
+struct Item {
     struct Option *option;
     struct Flag *flag;
     struct Item *next_item;
@@ -25,13 +24,14 @@ struct state {
     int suppress_required;
     int suppress_overwrite;
 
-    struct GModule module_info;	/* general information on the corresponding module */
+    struct GModule
+        module_info; /* general information on the corresponding module */
 
     const char *pgm_name;
     const char *pgm_path;
 
-    struct Flag first_flag;	/* First flag in a linked list      */
-    struct Flag *current_flag;	/* Pointer for traversing list      */
+    struct Flag first_flag;    /* First flag in a linked list      */
+    struct Flag *current_flag; /* Pointer for traversing list      */
 
     struct Option first_option;
     struct Option *current_option;
@@ -53,12 +53,14 @@ extern struct state *st;
 void G__usage_xml(void);
 void G__usage_html(void);
 void G__usage_rest(void);
+void G__usage_markdown(void);
 void G__usage_text(void);
 void G__script(void);
 char *G__json(void);
 void G__wps_print_process_description(void);
-int  G__uses_new_gisprompt(void);
-void G__print_keywords(FILE *, void (*)(FILE *, const char *));
+int G__uses_new_gisprompt(void);
+void G__print_keywords(FILE *, void (*)(FILE *, const char *), int);
+
 void G__split_gisprompt(const char *, char *, char *, char *);
 
 void G__check_option_rules(void);
@@ -67,4 +69,3 @@ int G__has_required_rule(void);
 void G__describe_option_rules_xml(FILE *);
 
 #endif
-

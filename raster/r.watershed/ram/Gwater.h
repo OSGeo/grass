@@ -1,7 +1,6 @@
 #ifndef __G_WATER_H__
 #define __G_WATER_H__
 
-
 /* program to map out drainage basin structure  */
 /* this one uses the A * search algorithm       */
 /* written by Chuck Ehlschlaeger                */
@@ -16,30 +15,33 @@
 /* program that memory runs out */
 /* #define G_malloc malloc */
 
-#define AR_SIZE			16
-#define AR_INCR			16
-#define NOMASK			1
-#define MIN_SLOPE		.00001
-#define MIN_GRADIENT_DEGREES	1
-#define DEG_TO_RAD		((2 * M_PI) / 360.)
-#define METER_TO_FOOT		(1 / 0.3048)
-#define MAX_BYTES		2000000
-#define PAGE_BLOCK		512
-#define RITE			1
-#define LEFT			2
-#define NEITHER			0
-#define ABS(x)	(((x) < 0) ? -(x) : (x))
-#define TSTSTR(a)	(fprintf (stderr, "%s\n", a))
-#define TST(a)		(fprintf (stderr, "%e\n", (double) (a)))
+#define AR_SIZE              16
+#define AR_INCR              16
+#define NOMASK               1
+#define MIN_SLOPE            .00001
+#define MIN_GRADIENT_DEGREES 1
+#define DEG_TO_RAD           ((2 * M_PI) / 360.)
+#define METER_TO_FOOT        (1 / 0.3048)
+#define MAX_BYTES            2000000
+#define PAGE_BLOCK           512
+#define RITE                 1
+#define LEFT                 2
+#define NEITHER              0
+#define ABS(x)               (((x) < 0) ? -(x) : (x))
+#define TSTSTR(a)            (fprintf(stderr, "%s\n", a))
+#define TST(a)               (fprintf(stderr, "%e\n", (double)(a)))
 
-#define POINT       struct points
-POINT {
+#define POINT                struct points
+POINT
+{
     int r, c; /* , downr, downc */
+
     /* int nxt; */
 };
 
 #define OC_STACK struct overland_cells_stack
-OC_STACK {
+OC_STACK
+{
     int row, col;
 };
 
@@ -75,12 +77,17 @@ extern char ele_name[GNAME_MAX], pit_name[GNAME_MAX];
 extern char run_name[GNAME_MAX], ob_name[GNAME_MAX];
 extern char ril_name[GNAME_MAX], rtn_name[GNAME_MAX], dep_name[GNAME_MAX];
 extern const char *this_mapset;
-extern char seg_name[GNAME_MAX], bas_name[GNAME_MAX], haf_name[GNAME_MAX], thr_name[8];
-extern char ls_name[GNAME_MAX], st_name[GNAME_MAX], sl_name[GNAME_MAX], sg_name[GNAME_MAX];
-extern char wat_name[GNAME_MAX], asp_name[GNAME_MAX], tci_name[GNAME_MAX], spi_name[GNAME_MAX];
+extern char seg_name[GNAME_MAX], bas_name[GNAME_MAX], haf_name[GNAME_MAX],
+    thr_name[8];
+extern char ls_name[GNAME_MAX], st_name[GNAME_MAX], sl_name[GNAME_MAX],
+    sg_name[GNAME_MAX];
+extern char wat_name[GNAME_MAX], asp_name[GNAME_MAX], tci_name[GNAME_MAX],
+    spi_name[GNAME_MAX];
 extern char arm_name[GNAME_MAX], dis_name[GNAME_MAX];
-extern char ele_flag, pit_flag, run_flag, dis_flag, ob_flag, flat_flag, rtn_flag;
-extern char wat_flag, asp_flag, arm_flag, ril_flag, dep_flag, tci_flag, spi_flag, atanb_flag;
+extern char ele_flag, pit_flag, run_flag, dis_flag, ob_flag, flat_flag,
+    rtn_flag;
+extern char wat_flag, asp_flag, arm_flag, ril_flag, dep_flag, tci_flag,
+    spi_flag, atanb_flag;
 extern char bas_flag, seg_flag, haf_flag, er_flag;
 extern char st_flag, sb_flag, sg_flag, sl_flag, ls_flag;
 extern FILE *fp;
@@ -139,6 +146,5 @@ CELL split_stream(int, int, int[], int[], int, CELL, double, CELL);
 
 /* usage.c */
 void usage(char *);
-
 
 #endif /* __G_WATER_H__ */

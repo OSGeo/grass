@@ -24,7 +24,6 @@ This program is free software under the GNU General Public License
 """
 import os
 import math
-import six
 from copy import deepcopy
 
 from grass.script.utils import try_remove
@@ -48,7 +47,6 @@ from vnet.vnet_utils import DegreesToRadians
 
 class VNETData:
     def __init__(self, guiparent, mapWin):
-
         # setting initialization
         self._initSettings()
 
@@ -176,8 +174,7 @@ class VNETData:
             "turn_layer": _("turntable layer"),
             "turn_cat_layer": _("unique categories layer"),
         }
-        for layer, layerLabel in six.iteritems(vals):
-
+        for layer, layerLabel in vals.items():
             if layer in ["turn_layer", "turn_cat_layer"] and not flags["t"]:
                 continue
             if layer in inv_params:
@@ -236,7 +233,6 @@ class VNETData:
 
 class VNETPointsData:
     def __init__(self, mapWin, an_data, an_params):
-
         self.mapWin = mapWin
         self.an_data = an_data
         self.an_params = an_params
@@ -291,7 +287,6 @@ class VNETPointsData:
         return self.snapping
 
     def AddPoint(self):
-
         self.pointsToDraw.AddItem(
             coords=(self.cols["def_vals"][3], self.cols["def_vals"][4])
         )
@@ -308,7 +303,6 @@ class VNETPointsData:
         self.pointsChanged.emit(method="DeletePoint", kwargs={"pt_id": pt_id})
 
     def SetPoints(self, pts_data):
-
         for item in self.pointsToDraw.GetAllItems():
             self.pointsToDraw.DeleteItem(item)
 
@@ -321,7 +315,7 @@ class VNETPointsData:
         self.pointsChanged.emit(method="SetPoints", kwargs={"pts_data": pts_data})
 
     def SetPointData(self, pt_id, data):
-        for col, v in six.iteritems(data):
+        for col, v in data.items():
             if col == "use":
                 continue
 
@@ -392,7 +386,7 @@ class VNETPointsData:
         textProp = self.pointsToDraw.GetPropertyVal("text")
         textProp["font"].SetPointSize(ptSize + 2)
 
-        for colKey, col in six.iteritems(colors):
+        for colKey, col in colors.items():
             pen = self.pointsToDraw.GetPen(colKey)
             if pen:
                 pen.SetColour(wx.Colour(col[0], col[1], col[2], 255))
@@ -425,16 +419,14 @@ class VNETPointsData:
         self.cols["type"][type_idx] = colValues
 
     def _ptDataToList(self, pt_data):
-
         pt_list_data = [None] * len(self.cols["name"])
 
-        for k, val in six.iteritems(pt_data):
+        for k, val in pt_data.items():
             pt_list_data[self.cols["name"].index(k)] = val
 
         return pt_list_data
 
     def _ptListDataToPtData(self, pt_list_data):
-
         pt_data = {}
         for i, val in enumerate(pt_list_data):
             pt_data[self.cols["name"][i]] = val
@@ -468,7 +460,6 @@ class VNETPointsData:
             self._vnetPathUpdateUsePoints(pt_id)
 
     def _vnetPathUpdateUsePoints(self, checked_pt_id):
-
         alreadyChecked = []
 
         type_idx = self.cols["name"].index("type")
@@ -529,7 +520,6 @@ class VNETPointsData:
         e, n = self.mapWin.GetLastEN()
 
         if self.snapping:
-
             # compute threshold
             snapTreshPix = int(
                 UserSettings.Get(group="vnet", key="other", subkey="snap_tresh")
@@ -565,7 +555,6 @@ class VNETPointsData:
             self.SetSelected(self.GetSelected() + 1)
 
     def GetColumns(self, only_relevant=True):
-
         cols_data = deepcopy(self.cols)
 
         hidden_cols = []
@@ -579,7 +568,7 @@ class VNETPointsData:
         i_red = 0
         hidden_cols.sort()
         for idx in hidden_cols:
-            for dt in six.itervalues(cols_data):
+            for dt in cols_data.values():
                 dt.pop(idx - i_red)
             i_red += 1
 
@@ -588,7 +577,6 @@ class VNETPointsData:
 
 class VNETAnalysisParameters:
     def __init__(self, an_props):
-
         self.an_props = an_props
 
         self.params = {
@@ -610,9 +598,8 @@ class VNETAnalysisParameters:
         self.parametersChanged = Signal("VNETAnalysisParameters.parametersChanged")
 
     def SetParams(self, params, flags):
-
         changed_params = {}
-        for p, v in six.iteritems(params):
+        for p, v in params.items():
             if p == "analysis" and v not in self.an_props.used_an:
                 continue
 
@@ -628,7 +615,7 @@ class VNETAnalysisParameters:
                 changed_params[p] = v
 
         changed_flags = {}
-        for p, v in six.iteritems(flags):
+        for p, v in flags.items():
             if p in self.flags:
                 self.flags[p] = v
                 changed_flags[p] = v
@@ -641,7 +628,6 @@ class VNETAnalysisParameters:
         return changed_params, changed_flags
 
     def GetParam(self, param):
-
         invParams = []
         if param in [
             "input",
@@ -661,7 +647,6 @@ class VNETAnalysisParameters:
         return self.params[param], True
 
     def GetParams(self):
-
         invParams = self._getInvalidParams(self.params)
         return self.params, invParams, self.flags
 
@@ -698,7 +683,6 @@ class VNETAnalysisParameters:
 
         # check costs columns
         for col in ["arc_column", "arc_backward_column", "node_column"]:
-
             if col == "node_column":
                 try:
                     table = dbInfo.GetTable(int(params["node_layer"]))
@@ -845,7 +829,6 @@ class VNETAnalysesProperties:
         return self.vnetProperties[key]
 
     def GetRelevantParams(self, analysis):
-
         if analysis not in self.vnetProperties:
             return None
 
@@ -856,7 +839,7 @@ class VNETAnalysesProperties:
 
         cols = self.vnetProperties[analysis]["cmdParams"]["cols"]
 
-        for col, v in six.iteritems(cols):
+        for col, v in cols.items():
             if "inputField" in col:
                 colInptF = v["inputField"]
             else:
@@ -886,7 +869,7 @@ class VNETTmpVectMaps:
         # map already exists
         if fullName:
             # TODO move dialog out of class, AddTmpVectMap(self, mapName,
-            # overvrite = False)
+            # overwrite = False)
             dlg = wx.MessageDialog(
                 parent=self.parent,
                 message=msg,
@@ -990,7 +973,6 @@ class VectMap:
         self.modifTime = None  # time, for modification check
 
     def __del__(self):
-
         self.DeleteRenderLayer()
 
     def AddRenderLayer(self, cmd=None, colorsCmd=None):
@@ -1096,7 +1078,7 @@ class VectMap:
 
             head.close()
             return ""
-        except IOError:
+        except OSError:
             return ""
 
 
@@ -1108,7 +1090,6 @@ class History:
     """
 
     def __init__(self):
-
         # max number of steps in history (zero based)
         self.maxHistSteps = 3
         # current history step
@@ -1261,7 +1242,6 @@ class History:
     def _parseValue(self, value, read=False):
         """Parse value"""
         if read:  # -> read data (cast values)
-
             if value:
                 if (
                     value[0] == "[" and value[-1] == "]"
@@ -1315,7 +1295,6 @@ class History:
         newHistStep = False
         isSearchedHistStep = False
         for line in hist.readlines():
-
             if not line.strip() and isSearchedHistStep:
                 break
             elif not line.strip():
@@ -1421,7 +1400,6 @@ class VNETGlobalTurnsData:
             old_from_angle = self.turn_data[row][1]
             new_to_angle = self.turn_data[row][2]
             if self.IsInInterval(old_from_angle, new_to_angle, new_from_angle):
-
                 prev_row = row - 1
                 if prev_row == -1:
                     prev_row = len(self.turn_data) - 1
@@ -1433,7 +1411,6 @@ class VNETGlobalTurnsData:
             old_to_angle = self.turn_data[row][2]
             new_from_angle = self.turn_data[row][1]
             if self.IsInInterval(new_from_angle, old_to_angle, new_to_angle):
-
                 next_row = row + 1
                 if len(self.turn_data) == next_row:
                     next_row = 0

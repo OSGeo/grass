@@ -105,24 +105,56 @@ The keys for attributes are lowercase or uppercase depending on how
 the columns were defined in the database.
 
 <p>
-Example with added indentation (note that booleans are not directly supported;
-here, an attribute is a string with value <tt>no</tt>):
+The JSON also contains information about columns stored under key
+<code>info</code>. Column names and types are under key <code>columns</code>.
+Each colum has SQL data type under <code>sql_type</code> in all caps.
+A boolean <code>is_number</code> specifies whether the value is a number, i.e.,
+integer or floating point number. The <code>is_number</code> value
+is aded for convenience and it is recommended to rely on the types derived
+from the JSON representation or the SQL types. The definition of
+<code>is_number</code> may change in the future.
+
+<p>
+Example with added indentation:
+
+<!--
+  Generated using:
+
+  v.db.select roadsmajor format=json where="cat in (1, 2)" \
+    columns="ROAD_NAME AS road_name, PROPYEAR + 2001 AS year, SHAPE_LEN as length" \
+    | jq
+-->
 
 <div class="code"><pre>
 {
+  "info": {
+    "columns": [
+      {
+        "name": "road_name",
+        "sql_type": "CHARACTER",
+        "is_number": false
+      },
+      {
+        "name": "year",
+        "sql_type": "INTEGER",
+        "is_number": true
+      },
+      {
+        "name": "length",
+        "sql_type": "DOUBLE PRECISION",
+        "is_number": true
+      }
+    ]
+  },
   "records": [
     {
-      "cat": 1,
       "road_name": "NC-50",
-      "multilane": "no",
       "year": 2001,
       "length": 4825.369405
     },
     {
-      "cat": 2,
       "road_name": "NC-50",
-      "multilane": "no",
-      "year": 2002,
+      "year": 2001,
       "length": 14392.589058
     }
   ]

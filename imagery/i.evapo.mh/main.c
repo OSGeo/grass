@@ -1,20 +1,20 @@
 /*****************************************************************************
-*
-* MODULE:	i.evapo.mh
-* AUTHOR:	Yann Chemin yann.chemin@gmail.com 
-*
-* PURPOSE:	To estimate the reference evapotranspiration by means
-*		of Modified Hargreaves method (2001).
-*		Also has a switch for original Hargreaves (1985),
-*		and for Hargreaves-Samani (1985).
-*
-* COPYRIGHT:	(C) 2007-2011 by the GRASS Development Team
-*
-*		This program is free software under the GNU General Public
-*		Licence (>=2). Read the file COPYING that comes with GRASS
-*		for details.
-*
-***************************************************************************/
+ *
+ * MODULE:        i.evapo.mh
+ * AUTHOR:        Yann Chemin yann.chemin@gmail.com
+ *
+ * PURPOSE:       To estimate the reference evapotranspiration by means
+ *                of Modified Hargreaves method (2001).
+ *                Also has a switch for original Hargreaves (1985),
+ *                and for Hargreaves-Samani (1985).
+ *
+ * COPYRIGHT:     (C) 2007-2011 by the GRASS Development Team
+ *
+ *                This program is free software under the GNU General Public
+ *                Licence (>=2). Read the file COPYING that comes with GRASS
+ *                for details.
+ *
+ ***************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,8 +24,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-double mh_original(double ra, double tavg, double tmax, double tmin,
-		   double p);
+double mh_original(double ra, double tavg, double tmax, double tmin, double p);
 double mh_eto(double ra, double tavg, double tmax, double tmin, double p);
 double mh_samani(double ra, double tavg, double tmax, double tmin);
 
@@ -33,7 +32,7 @@ int main(int argc, char *argv[])
 {
     /* buffer for input-output rasters */
     void *inrast_TEMPKAVG, *inrast_TEMPKMIN, *inrast_TEMPKMAX, *inrast_RNET,
-	*inrast_P;
+        *inrast_P;
     DCELL *outrast;
 
     /* pointers to input-output raster files */
@@ -53,7 +52,7 @@ int main(int argc, char *argv[])
     int nrows, ncols;
     int row, col;
 
-    /* parser stuctures definition */
+    /* parser structures definition */
     struct GModule *module;
     struct Option *input_RNET, *input_TEMPKAVG, *input_TEMPKMIN;
     struct Option *input_TEMPKMAX, *input_P;
@@ -69,33 +68,36 @@ int main(int argc, char *argv[])
     G_add_keyword(_("imagery"));
     G_add_keyword(_("evapotranspiration"));
     module->description =
-	_("Computes evapotranspiration calculation "
-	  "modified or original Hargreaves formulation, 2001.");
+        _("Computes evapotranspiration calculation "
+          "modified or original Hargreaves formulation, 2001.");
 
     /* Define different options */
     input_RNET = G_define_standard_option(G_OPT_R_INPUT);
     input_RNET->key = "netradiation_diurnal";
-    input_RNET->description = _("Name of input diurnal net radiation raster map [W/m2/d]");
+    input_RNET->description =
+        _("Name of input diurnal net radiation raster map [W/m2/d]");
 
     input_TEMPKAVG = G_define_standard_option(G_OPT_R_INPUT);
     input_TEMPKAVG->key = "average_temperature";
-    input_TEMPKAVG->description = _("Name of input average air temperature raster map [C]");
+    input_TEMPKAVG->description =
+        _("Name of input average air temperature raster map [C]");
 
     input_TEMPKMIN = G_define_standard_option(G_OPT_R_INPUT);
     input_TEMPKMIN->key = "minimum_temperature";
-    input_TEMPKMIN->description = _("Name of input minimum air temperature raster map [C]");
+    input_TEMPKMIN->description =
+        _("Name of input minimum air temperature raster map [C]");
 
     input_TEMPKMAX = G_define_standard_option(G_OPT_R_INPUT);
     input_TEMPKMAX->key = "maximum_temperature";
-    input_TEMPKMAX->description = _("Name of input maximum air temperature raster map [C]");
+    input_TEMPKMAX->description =
+        _("Name of input maximum air temperature raster map [C]");
 
     input_P = G_define_standard_option(G_OPT_R_INPUT);
     input_P->required = NO;
     input_P->key = "precipitation";
-    input_P->label =
-	_("Name of precipitation raster map [mm/month]");
+    input_P->label = _("Name of precipitation raster map [mm/month]");
     input_P->description = _("Disabled for original Hargreaves (1985)");
-    
+
     output = G_define_standard_option(G_OPT_R_OUTPUT);
     output->description = _("Name for output raster map [mm/d]");
 
@@ -113,7 +115,7 @@ int main(int argc, char *argv[])
     samani->description = _("Use Hargreaves-Samani (1985)");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     /* get entered parameters */
     RNET = input_RNET->answer;
@@ -138,7 +140,7 @@ int main(int argc, char *argv[])
     Rast_get_cellhd(TEMPKMIN, "", &cellhd);
     Rast_get_cellhd(TEMPKMAX, "", &cellhd);
     if (!original->answer) {
-	Rast_get_cellhd(P, "", &cellhd);
+        Rast_get_cellhd(P, "", &cellhd);
     }
     /* Allocate input buffer */
     inrast_RNET = Rast_allocate_d_buf();
@@ -146,7 +148,7 @@ int main(int argc, char *argv[])
     inrast_TEMPKMIN = Rast_allocate_d_buf();
     inrast_TEMPKMAX = Rast_allocate_d_buf();
     if (!original->answer) {
-	inrast_P = Rast_allocate_d_buf();
+        inrast_P = Rast_allocate_d_buf();
     }
     /* get rows and columns number of the current region */
     nrows = Rast_window_rows();
@@ -160,53 +162,52 @@ int main(int argc, char *argv[])
 
     /* start the loop through cells */
     for (row = 0; row < nrows; row++) {
-	G_percent(row, nrows, 2);
-	/* read input raster row into line buffer */
-	Rast_get_d_row(infd_RNET, inrast_RNET, row);
-	Rast_get_d_row(infd_TEMPKAVG, inrast_TEMPKAVG, row);
-	Rast_get_d_row(infd_TEMPKMIN, inrast_TEMPKMIN, row);
-	Rast_get_d_row(infd_TEMPKMAX, inrast_TEMPKMAX, row);
-	if (!original->answer) {
-	    Rast_get_d_row(infd_P, inrast_P, row);
-	}
-	for (col = 0; col < ncols; col++) {
-	    /* read current cell from line buffer */
-            d_rnet = ((DCELL *) inrast_RNET)[col];
-            d_tempkavg = ((DCELL *) inrast_TEMPKAVG)[col];
-            d_tempkmin = ((DCELL *) inrast_TEMPKMIN)[col];
-            d_tempkmax = ((DCELL *) inrast_TEMPKMAX)[col];
-	    if (!original->answer) {
-		    d_p = ((DCELL *) inrast_P)[col];
-	    }
-	    if (Rast_is_d_null_value(&d_rnet) ||
-		Rast_is_d_null_value(&d_tempkavg) ||
-		Rast_is_d_null_value(&d_tempkmin) ||
-		Rast_is_d_null_value(&d_tempkmax) || Rast_is_d_null_value(&d_p)) {
-		Rast_set_d_null_value(&outrast[col], 1);
-	    }
-	    else {
-		if (original->answer) {
-		    d_daily_et =
-			mh_original(d_rnet, d_tempkavg, d_tempkmax,
-				    d_tempkmin, d_p);
-		}
-		else if (samani->answer) {
-		    d_daily_et =
-			mh_samani(d_rnet, d_tempkavg, d_tempkmax, d_tempkmin);
-		}
-		else {
-		    d_daily_et =
-			mh_eto(d_rnet, d_tempkavg, d_tempkmax, d_tempkmin,
-			       d_p);
-		}
-		if (zero->answer && d_daily_et < 0)
-		    d_daily_et = 0.0;
-		/* write calculated ETP to output line buffer */
-		outrast[col] = d_daily_et;
-	    }
-	}
-	/* write output line buffer to output raster file */
-	Rast_put_d_row(outfd, outrast);
+        G_percent(row, nrows, 2);
+        /* read input raster row into line buffer */
+        Rast_get_d_row(infd_RNET, inrast_RNET, row);
+        Rast_get_d_row(infd_TEMPKAVG, inrast_TEMPKAVG, row);
+        Rast_get_d_row(infd_TEMPKMIN, inrast_TEMPKMIN, row);
+        Rast_get_d_row(infd_TEMPKMAX, inrast_TEMPKMAX, row);
+        if (!original->answer) {
+            Rast_get_d_row(infd_P, inrast_P, row);
+        }
+        for (col = 0; col < ncols; col++) {
+            /* read current cell from line buffer */
+            d_rnet = ((DCELL *)inrast_RNET)[col];
+            d_tempkavg = ((DCELL *)inrast_TEMPKAVG)[col];
+            d_tempkmin = ((DCELL *)inrast_TEMPKMIN)[col];
+            d_tempkmax = ((DCELL *)inrast_TEMPKMAX)[col];
+            if (!original->answer) {
+                d_p = ((DCELL *)inrast_P)[col];
+            }
+            if (Rast_is_d_null_value(&d_rnet) ||
+                Rast_is_d_null_value(&d_tempkavg) ||
+                Rast_is_d_null_value(&d_tempkmin) ||
+                Rast_is_d_null_value(&d_tempkmax) ||
+                Rast_is_d_null_value(&d_p)) {
+                Rast_set_d_null_value(&outrast[col], 1);
+            }
+            else {
+                if (original->answer) {
+                    d_daily_et = mh_original(d_rnet, d_tempkavg, d_tempkmax,
+                                             d_tempkmin, d_p);
+                }
+                else if (samani->answer) {
+                    d_daily_et =
+                        mh_samani(d_rnet, d_tempkavg, d_tempkmax, d_tempkmin);
+                }
+                else {
+                    d_daily_et =
+                        mh_eto(d_rnet, d_tempkavg, d_tempkmax, d_tempkmin, d_p);
+                }
+                if (zero->answer && d_daily_et < 0)
+                    d_daily_et = 0.0;
+                /* write calculated ETP to output line buffer */
+                outrast[col] = d_daily_et;
+            }
+        }
+        /* write output line buffer to output raster file */
+        Rast_put_d_row(outfd, outrast);
     }
     /* free buffers and close input maps */
 
@@ -215,14 +216,14 @@ int main(int argc, char *argv[])
     G_free(inrast_TEMPKMIN);
     G_free(inrast_TEMPKMAX);
     if (!original->answer) {
-	G_free(inrast_P);
+        G_free(inrast_P);
     }
     Rast_close(infd_RNET);
     Rast_close(infd_TEMPKAVG);
     Rast_close(infd_TEMPKMIN);
     Rast_close(infd_TEMPKMAX);
     if (!original->answer) {
-	Rast_close(infd_P);
+        Rast_close(infd_P);
     }
     /* generate color table between -20 and 20 */
     Rast_make_rainbow_colors(&color, -20, 20);
@@ -236,5 +237,5 @@ int main(int argc, char *argv[])
     G_free(outrast);
     Rast_close(outfd);
 
-    return(EXIT_SUCCESS);
+    return (EXIT_SUCCESS);
 }

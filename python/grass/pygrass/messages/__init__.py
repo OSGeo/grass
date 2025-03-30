@@ -77,10 +77,6 @@ def message_server(lock, conn):
             sys.exit()
 
         message = data[1]
-        # libgis limitation
-        if isinstance(message, type(" ")):
-            if len(message) >= 2000:
-                message = message[:1999]
 
         if message_type == "PERCENT":
             n = int(data[1])
@@ -108,7 +104,7 @@ def message_server(lock, conn):
         lock.release()
 
 
-class Messenger(object):
+class Messenger:
     """Fast and exit-safe interface to GRASS C-library message functions
 
     This class implements a fast and exit-safe interface to the GRASS

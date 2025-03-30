@@ -22,7 +22,7 @@ Updated by: Anne Ghisla, 2010
 Bug fix (9/12/2010) by Daniel:
    1) function interpolate_band was not generating the spectral response for the last value in the filter function. Fixed
    2) function pretty_print was not printing the 8th value of every line, cutting the filter function short.
- 
+
 """
 import os
 import sys

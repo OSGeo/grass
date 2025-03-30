@@ -8,12 +8,10 @@ for details.
 
 :authors: Vaclav Petras
 """
-from __future__ import print_function
 
 import os
 import shutil
 import subprocess
-import sys
 import hashlib
 import uuid
 import unittest
@@ -35,17 +33,11 @@ from .checkers import (
 from .utils import safe_repr
 from .gutils import is_map_in_mapset
 
-pyversion = sys.version_info[0]
-if pyversion == 2:
-    from StringIO import StringIO
-else:
-    from io import StringIO
-
-    unicode = str
+from io import StringIO
 
 
 class TestCase(unittest.TestCase):
-    # we dissable R0904 for all TestCase classes because their purpose is to
+    # we disable R0904 for all TestCase classes because their purpose is to
     # provide a lot of assert methods
     # pylint: disable=R0904
     """
@@ -62,7 +54,7 @@ class TestCase(unittest.TestCase):
     readable_names = False  # prefer shorter but unreadable map and file names
 
     def __init__(self, methodName):
-        super(TestCase, self).__init__(methodName)
+        super().__init__(methodName)
         self.grass_modules = []
         self.supplementary_files = []
         # Python unittest doc is saying that strings use assertMultiLineEqual
@@ -153,7 +145,7 @@ class TestCase(unittest.TestCase):
             )
         call_module("g.remove", quiet=True, flags="f", type="region", name=name)
         # TODO: we don't know if user calls this
-        # so perhaps some decorator which would use with statemet
+        # so perhaps some decorator which would use with statement
         # but we have zero chance of infuencing another test class
         # since we use class-specific name for temporary region
 
@@ -184,9 +176,7 @@ class TestCase(unittest.TestCase):
                 first = first.replace(os.linesep, "\n")
             if os.linesep in second:
                 second = second.replace(os.linesep, "\n")
-        return super(TestCase, self).assertMultiLineEqual(
-            first=first, second=second, msg=msg
-        )
+        return super().assertMultiLineEqual(first=first, second=second, msg=msg)
 
     def assertLooksLike(self, actual, reference, msg=None):
         r"""Test that ``actual`` text is the same as ``reference`` with ellipses.
@@ -199,11 +189,9 @@ class TestCase(unittest.TestCase):
         # actual is in the system codec while the passed reference is in utf-8;
         # re-decode reference into the system codec for proper comparison
         reference = decode(encode(reference, "utf-8"))
+        self.assertTrue(isinstance(actual, str), ("actual argument is not a string"))
         self.assertTrue(
-            isinstance(actual, (str, unicode)), ("actual argument is not a string")
-        )
-        self.assertTrue(
-            isinstance(reference, (str, unicode)),
+            isinstance(reference, str),
             ("reference argument is not a string"),
         )
         if os.linesep != "\n" and os.linesep in actual:
@@ -936,7 +924,7 @@ class TestCase(unittest.TestCase):
             # TODO: we are using r.info min max and r.univar min max interchangeably
             # but they might be different if region is different from map
             # not considered as an huge issue since we expect the tested maps
-            # to match with region, however a documentation should containe a notice
+            # to match with region, however a documentation should contain a notice
             self.assertRastersDifference(
                 actual=actual,
                 reference=reference,
@@ -1239,9 +1227,8 @@ class TestCase(unittest.TestCase):
         """
         import difflib
 
-        # 'U' taken from difflib documentation
-        fromlines = open(actual, "U").readlines()
-        tolines = open(reference, "U").readlines()
+        fromlines = open(actual).readlines()
+        tolines = open(reference).readlines()
         context_lines = 3  # number of context lines
         # TODO: filenames are set to "actual" and "reference", isn't it too general?
         # it is even more useful if map names or file names are some generated
@@ -1348,7 +1335,6 @@ class TestCase(unittest.TestCase):
             )
         # TODO: use this also in assert and apply when appropriate
         if expecting_stdout and not module.outputs.stdout.strip():
-
             if module.outputs.stderr:
                 errors = " The errors are:\n" + module.outputs.stderr
             else:
@@ -1366,7 +1352,7 @@ class TestCase(unittest.TestCase):
                 " output and got " + got + errors
             )
 
-    # TODO: we can also comapre time to some expected but that's tricky
+    # TODO: we can also compare time to some expected but that's tricky
     # maybe we should measure time but the real benchmarks with stdin/stdout
     # should be done by some other function
     # TODO: this should be the function used for valgrind or profiling or debug

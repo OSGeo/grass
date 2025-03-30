@@ -5,7 +5,7 @@
  *
  * (C) 2007-2009 Glynn Clements and the GRASS Development Team
  *
- * This program is free software under the GNU General Public License 
+ * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author Glynn Clements <glynn@gclements.plus.com>
@@ -30,7 +30,7 @@
  * \param statf pointer to Cell_stats structure which holds cell stats info
  */
 void Rast_make_histogram_eq_colors(struct Colors *colors,
-				   struct Cell_stats *statf)
+                                   struct Cell_stats *statf)
 {
     long count, total;
     CELL prev = 0, cat, val2;
@@ -48,10 +48,10 @@ void Rast_make_histogram_eq_colors(struct Colors *colors,
 
     Rast_rewind_cell_stats(statf);
     while (Rast_next_cell_stat(&cat, &count, statf))
-	if (count > 0)
-	    total += count;
+        if (count > 0)
+            total += count;
     if (total <= 0)
-	return;
+        return;
 
     span = total / 256.0;
     first = 1;
@@ -60,30 +60,30 @@ void Rast_make_histogram_eq_colors(struct Colors *colors,
 
     Rast_rewind_cell_stats(statf);
     while (Rast_next_cell_stat(&cat, &count, statf)) {
-	if (count <= 0)
-	    continue;
-	x = (sum + (count / 2.0)) / span;
-	if (x < 0)
-	    x = 0;
-	else if (x > 255)
-	    x = 255;
-	sum += count;
-	if (first) {
-	    prev = cat;
-	    grey = x;
-	    first = 0;
-	}
-	else if (grey != x) {
-	    val2 = cat - 1;
-	    Rast_add_c_color_rule(&prev, grey, grey, grey, &val2, grey, grey,
-				  grey, colors);
-	    grey = x;
-	    prev = cat;
-	}
+        if (count <= 0)
+            continue;
+        x = (sum + (count / 2.0)) / span;
+        if (x < 0)
+            x = 0;
+        else if (x > 255)
+            x = 255;
+        sum += count;
+        if (first) {
+            prev = cat;
+            grey = x;
+            first = 0;
+        }
+        else if (grey != x) {
+            val2 = cat - 1;
+            Rast_add_c_color_rule(&prev, grey, grey, grey, &val2, grey, grey,
+                                  grey, colors);
+            grey = x;
+            prev = cat;
+        }
     }
     if (!first) {
-	Rast_add_c_color_rule(&prev, grey, grey, grey, &cat, grey, grey, grey,
-			      colors);
+        Rast_add_c_color_rule(&prev, grey, grey, grey, &cat, grey, grey, grey,
+                              colors);
     }
 }
 
@@ -99,8 +99,7 @@ void Rast_make_histogram_eq_colors(struct Colors *colors,
    \param max maximum value
  */
 void Rast_make_histogram_log_colors(struct Colors *colors,
-				    struct Cell_stats *statf, int min,
-				    int max)
+                                    struct Cell_stats *statf, int min, int max)
 {
     long count, total;
     double lmin, lmax;
@@ -118,10 +117,10 @@ void Rast_make_histogram_log_colors(struct Colors *colors,
 
     Rast_rewind_cell_stats(statf);
     while (Rast_next_cell_stat(&cat, &count, statf))
-	if (count > 0)
-	    total += count;
+        if (count > 0)
+            total += count;
     if (total <= 0)
-	return;
+        return;
 
     first = 1;
     grey = 0;
@@ -131,31 +130,31 @@ void Rast_make_histogram_log_colors(struct Colors *colors,
 
     Rast_rewind_cell_stats(statf);
     while (Rast_next_cell_stat(&cat, &count, statf)) {
-	if (count <= 0)
-	    continue;
+        if (count <= 0)
+            continue;
 
-	/* log transform normalized */
-	x = (int)(255 * (log(cat) - lmin) / (lmax - lmin));
+        /* log transform normalized */
+        x = (int)(255 * (log(cat) - lmin) / (lmax - lmin));
 
-	if (x < 0)
-	    x = 0;
-	else if (x > 255)
-	    x = 255;
-	if (first) {
-	    prev = cat;
-	    grey = x;
-	    first = 0;
-	}
-	else if (grey != x) {
-	    val2 = cat - 1;
-	    Rast_add_c_color_rule(&prev, grey, grey, grey, &val2, grey, grey,
-				  grey, colors);
-	    grey = x;
-	    prev = cat;
-	}
+        if (x < 0)
+            x = 0;
+        else if (x > 255)
+            x = 255;
+        if (first) {
+            prev = cat;
+            grey = x;
+            first = 0;
+        }
+        else if (grey != x) {
+            val2 = cat - 1;
+            Rast_add_c_color_rule(&prev, grey, grey, grey, &val2, grey, grey,
+                                  grey, colors);
+            grey = x;
+            prev = cat;
+        }
     }
     if (!first) {
-	Rast_add_c_color_rule(&prev, grey, grey, grey, &cat, grey, grey, grey,
-			      colors);
+        Rast_add_c_color_rule(&prev, grey, grey, grey, &cat, grey, grey, grey,
+                              colors);
     }
 }

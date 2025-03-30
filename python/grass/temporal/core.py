@@ -30,7 +30,6 @@ for details.
 """
 # import traceback
 import os
-import sys
 import grass.script as gscript
 
 from .c_libraries_interface import CLibrariesInterface
@@ -53,9 +52,6 @@ except:
 import atexit
 from datetime import datetime
 
-if sys.version_info.major >= 3:
-    long = int
-
 ###############################################################################
 
 
@@ -66,11 +62,8 @@ def profile_function(func):
     if do_profiling == "True" or do_profiling == "1":
         import cProfile
         import pstats
+        import io
 
-        try:
-            import StringIO as io
-        except ImportError:
-            import io
         pr = cProfile.Profile()
         pr.enable()
         func()
@@ -435,7 +428,7 @@ def get_tgis_database_string():
     """Return the preprocessed temporal database string
 
     This string is the temporal database string set with t.connect
-    that was processed to substitue location, gisdbase and mapset
+    that was processed to substitute location, gisdbase and mapset
     variables.
     """
     global tgis_database_string
@@ -1065,7 +1058,7 @@ def _create_tgis_metadata_table(content, dbif=None):
 ###############################################################################
 
 
-class SQLDatabaseInterfaceConnection(object):
+class SQLDatabaseInterfaceConnection:
     def __init__(self):
         self.tgis_mapsets = get_available_temporal_mapsets()
         self.current_mapset = get_current_mapset()
@@ -1247,7 +1240,6 @@ class SQLDatabaseInterfaceConnection(object):
         return self.connections[mapset].execute_transaction(statement)
 
     def _create_mapset_error_message(self, mapset):
-
         return (
             "You have no permission to "
             "access mapset <%(mapset)s>, or "
@@ -1260,7 +1252,7 @@ class SQLDatabaseInterfaceConnection(object):
 ###############################################################################
 
 
-class DBConnection(object):
+class DBConnection:
     """This class represents the database interface connection
     and provides access to the chosen backend modules.
 
@@ -1450,7 +1442,7 @@ class DBConnection(object):
                             statement[0:pos],
                             statement[pos + 1 :],
                         )
-                    elif isinstance(args[count], (int, long)):
+                    elif isinstance(args[count], int):
                         statement = "%s%d%s" % (
                             statement[0:pos],
                             args[count],
@@ -1501,7 +1493,6 @@ class DBConnection(object):
 
         # Check if the database already exists
         if self.dbmi.__name__ == "sqlite3":
-
             self.cursor.execute(
                 "SELECT name FROM sqlite_master WHERE "
                 "type='table' AND name='%s';" % table_name

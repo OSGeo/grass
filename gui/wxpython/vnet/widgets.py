@@ -19,8 +19,6 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import sys
-import six
 from copy import copy, deepcopy
 
 import wx
@@ -40,9 +38,6 @@ from gui_core.wrap import (
     TextCtrl,
     CheckListCtrlMixin,
 )
-
-if sys.version_info.major >= 3:
-    basestring = str
 
 
 class PointsList(
@@ -185,11 +180,11 @@ class PointsList(
                 itemIndexes.append(col[iDefVal])
             else:
                 itemData.append(col[iDefVal])
-                itemIndexes.append(-1)  # not a choise column
+                itemIndexes.append(-1)  # not a choice column
 
         self.selIdxs.append(itemIndexes)
 
-        for hCol in six.itervalues(self.hiddenCols):
+        for hCol in self.hiddenCols.values():
             defVal = hCol["colsData"][iDefVal]
             if type(hCol["colsData"][iColEd]).__name__ == "list":
                 hCol["itemDataMap"].append(hCol["colsData"][iColEd][defVal])
@@ -250,7 +245,7 @@ class PointsList(
             self.selIdxs[key][colNum] = -1
 
         self.itemDataMap[key][colNum] = cellVal
-        if not isinstance(cellVal, basestring):
+        if not isinstance(cellVal, str):
             cellVal = str(cellVal)
         self.SetItem(index, colNum, cellVal)
 
@@ -270,7 +265,7 @@ class PointsList(
         index = self._findIndex(key)
 
         if index != -1:
-            if not isinstance(cellVal, basestring):
+            if not isinstance(cellVal, str):
                 cellVal = str(cellVal)
             self.SetItem(index, colNum, cellVal)
 
@@ -303,7 +298,7 @@ class PointsList(
         self.selIdxs.pop(key)
 
         # update hidden columns
-        for hCol in six.itervalues(self.hiddenCols):
+        for hCol in self.hiddenCols.values():
             hCol["itemDataMap"].pop(key)
             hCol["selIdxs"].pop(key)
 
@@ -408,7 +403,7 @@ class PointsList(
                 for editedCell in editedData:
                     if editedCell[1] != data[i][1]:
                         value = editedCell[1]
-                        if not isinstance(editedCell[1], basestring):
+                        if not isinstance(editedCell[1], str):
                             value = str(editedCell[1])
                         self.SetItem(index, editedCell[0], value)
                         self.itemDataMap[key][editedCell[0]] = editedCell[1]
@@ -583,7 +578,6 @@ class EditItem(wx.Dialog):
         row = 0
         iField = 0
         for cell in self.data:
-
             # Select
             if type(cell[2]).__name__ == "list":
                 self.fields.append(
@@ -618,7 +612,7 @@ class EditItem(wx.Dialog):
                         TextCtrl(parent=panel, id=wx.ID_ANY, size=(150, -1))
                     )
                     value = cell[1]
-                    if not isinstance(cell[1], basestring):
+                    if not isinstance(cell[1], str):
                         value = str(cell[1])
                     self.fields[iField].SetValue(value)
 
@@ -691,7 +685,7 @@ class EditItem(wx.Dialog):
             if type(cell[2]).__name__ == "list":
                 itemIndexes.append(self.fields[iField].GetSelection())
             else:
-                itemIndexes.append(-1)  # not a choise column
+                itemIndexes.append(-1)  # not a choice column
             if cell[2]:
                 iField += 1
 

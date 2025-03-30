@@ -51,7 +51,6 @@ for details.
     LexToken(FLOAT,2.45,1,42)
 
 """
-from __future__ import print_function
 
 try:
     import ply.yacc as yacc
@@ -80,7 +79,6 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
         nprocs=1,
         time_suffix=None,
     ):
-
         TemporalRasterBaseAlgebraParser.__init__(
             self,
             pid=pid,

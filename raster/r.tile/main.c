@@ -1,9 +1,9 @@
-
 /****************************************************************************
  *
  * MODULE:       r.tile
  * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com>
- * PURPOSE:      Retiles an existing raster map with user defined x and y tile size
+ * PURPOSE:      Retiles an existing raster map with user defined x and y tile
+ *               size
  * COPYRIGHT:    (C) 2013 by Glynn Clements and the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -17,8 +17,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-static struct
-{
+static struct {
     struct Option *rastin, *rastout, *width, *height, *overlap;
 } parm;
 static struct Cell_head dst_w, src_w, ovl_w;
@@ -42,8 +41,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("tiling"));
-    module->description =
-	_("Splits a raster map into tiles.");
+    module->description = _("Splits a raster map into tiles.");
 
     parm.rastin = G_define_standard_option(G_OPT_R_INPUT);
 
@@ -76,7 +74,7 @@ int main(int argc, char *argv[])
     parm.overlap->description = _("Overlap of tiles");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     G_get_set_window(&src_w);
     overlap = parm.overlap->answer ? atoi(parm.overlap->answer) : 0;
@@ -95,8 +93,8 @@ int main(int argc, char *argv[])
     xtiles = (src_w.cols + dst_w.cols - 1) / dst_w.cols;
     ytiles = (src_w.rows + dst_w.rows - 1) / dst_w.rows;
 
-    G_debug(1, "X: %d * %d, Y: %d * %d",
-	    xtiles, dst_w.cols, ytiles, dst_w.rows);
+    G_debug(1, "X: %d * %d, Y: %d * %d", xtiles, dst_w.cols, ytiles,
+            dst_w.rows);
 
     src_w.cols = xtiles * dst_w.cols + 2 * overlap;
     src_w.rows = ytiles * dst_w.rows + 2 * overlap;
@@ -123,35 +121,39 @@ int main(int argc, char *argv[])
 
     outfiles = G_malloc(xtiles * sizeof(int));
 
-    G_debug(1, "X: %d * %d, Y: %d * %d",
-	    xtiles, dst_w.cols, ytiles, dst_w.rows);
+    G_debug(1, "X: %d * %d, Y: %d * %d", xtiles, dst_w.cols, ytiles,
+            dst_w.rows);
 
-    G_message(_("Generating %d x %d = %d tiles..."), xtiles, ytiles, xtiles * ytiles);
+    G_message(_("Generating %d x %d = %d tiles..."), xtiles, ytiles,
+              xtiles * ytiles);
     for (ytile = 0; ytile < ytiles; ytile++) {
-	G_debug(1, "reading y tile: %d", ytile);
-	G_percent(ytile, ytiles, 2);
-	for (xtile = 0; xtile < xtiles; xtile++) {
-	    char name[GNAME_MAX];
-	    sprintf(name, "%s-%03d-%03d", parm.rastout->answer, ytile, xtile);
-	    outfiles[xtile] = Rast_open_new(name, map_type);
-	}
-	
-	for (y = 0; y < ovl_w.rows; y++) {
-	    int row = ytile * dst_w.rows + y;
-	    G_debug(1, "reading row: %d", row);
-	    Rast_get_row(infile, inbuf, row, map_type);
-	    
-	    for (xtile = 0; xtile < xtiles; xtile++) {
-		int cells = xtile * dst_w.cols;
-		void *ptr = G_incr_void_ptr(inbuf, cells * cell_size);
-		Rast_put_row(outfiles[xtile], ptr, map_type);
-	    }
-	}
+        G_debug(1, "reading y tile: %d", ytile);
+        G_percent(ytile, ytiles, 2);
+        for (xtile = 0; xtile < xtiles; xtile++) {
+            char name[GNAME_MAX];
 
-	for (xtile = 0; xtile < xtiles; xtile++) {
-	    Rast_close(outfiles[xtile]);
-	    write_support_files(xtile, ytile, overlap);
-	}
+            sprintf(name, "%s-%03d-%03d", parm.rastout->answer, ytile, xtile);
+            outfiles[xtile] = Rast_open_new(name, map_type);
+        }
+
+        for (y = 0; y < ovl_w.rows; y++) {
+            int row = ytile * dst_w.rows + y;
+
+            G_debug(1, "reading row: %d", row);
+            Rast_get_row(infile, inbuf, row, map_type);
+
+            for (xtile = 0; xtile < xtiles; xtile++) {
+                int cells = xtile * dst_w.cols;
+                void *ptr = G_incr_void_ptr(inbuf, cells * cell_size);
+
+                Rast_put_row(outfiles[xtile], ptr, map_type);
+            }
+        }
+
+        for (xtile = 0; xtile < xtiles; xtile++) {
+            Rast_close(outfiles[xtile]);
+            write_support_files(xtile, ytile, overlap);
+        }
     }
 
     Rast_close(infile);
@@ -184,12 +186,12 @@ static void write_support_files(int xtile, int ytile, int overlap)
 
     /* copy cats from source map */
     if (Rast_read_cats(parm.rastin->answer, "", &cats) < 0)
-	G_fatal_error(_("Unable to read cats for %s"),
-		      parm.rastin->answer);
+        G_fatal_error(_("Unable to read cats for %s"), parm.rastin->answer);
     Rast_write_cats(name, &cats);
 
     /* record map metadata/history info */
-    G_debug(1, "Tile %d,%d of %s: writing %s", xtile, ytile, parm.rastin->answer, name);
+    G_debug(1, "Tile %d,%d of %s: writing %s", xtile, ytile,
+            parm.rastin->answer, name);
     sprintf(title, "Tile %d,%d of %s", xtile, ytile, parm.rastin->answer);
     Rast_put_cell_title(name, title);
 
@@ -200,10 +202,9 @@ static void write_support_files(int xtile, int ytile, int overlap)
 
     /* copy color table from source map */
     if (Rast_read_colors(parm.rastin->answer, "", &colors) < 0)
-	G_fatal_error(_("Unable to read color table for %s"),
-		      parm.rastin->answer);
+        G_fatal_error(_("Unable to read color table for %s"),
+                      parm.rastin->answer);
     if (map_type != CELL_TYPE)
-	Rast_mark_colors_as_fp(&colors);
+        Rast_mark_colors_as_fp(&colors);
     Rast_write_colors(name, G_mapset(), &colors);
 }
-

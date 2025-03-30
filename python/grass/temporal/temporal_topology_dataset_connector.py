@@ -15,11 +15,10 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
 import copy
 
 
-class TemporalTopologyDatasetConnector(object):
+class TemporalTopologyDatasetConnector:
     """This class implements a temporal topology access structure to connect
     temporal related datasets
 

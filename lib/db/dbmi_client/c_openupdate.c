@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_client/c_openupdate.c
- * 
+ *
  * \brief DBMI Library (client) - open update cursor
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -16,19 +16,19 @@
 #include "macros.h"
 
 /*!
-  \brief Open update cursor
+   \brief Open update cursor
 
-  \param driver db driver
-  \param table_name table name
-  \param select SQL update statement (?)
-  \param cursor db cursor to be opened
-  \param mode open mode (?)
+   \param driver db driver
+   \param table_name table name
+   \param select SQL update statement (?)
+   \param cursor db cursor to be opened
+   \param mode open mode (?)
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
-int db_open_update_cursor(dbDriver * driver, dbString * table_name,
-			  dbString * select, dbCursor * cursor, int mode)
+int db_open_update_cursor(dbDriver *driver, dbString *table_name,
+                          dbString *select, dbCursor *cursor, int mode)
 {
     int ret_code;
 
@@ -48,7 +48,7 @@ int db_open_update_cursor(dbDriver * driver, dbString * table_name,
     DB_RECV_RETURN_CODE(&ret_code);
 
     if (ret_code != DB_OK)
-	return ret_code;	/* ret_code SHOULD == DB_FAILED */
+        return ret_code; /* ret_code SHOULD == DB_FAILED */
 
     /* get the results */
     DB_RECV_TOKEN(&cursor->token);

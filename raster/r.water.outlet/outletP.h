@@ -1,4 +1,3 @@
-
 /* over_cells.c */
 int overland_cells(int, int);
 

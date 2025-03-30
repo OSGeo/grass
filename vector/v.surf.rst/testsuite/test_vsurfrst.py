@@ -4,7 +4,6 @@ from grass.gunittest.gmodules import SimpleModule
 
 
 class TestVsurfrst(TestCase):
-
     elevation = "elevation"
     elevation_attrib = "elevation_attrib"
     elevation_threads = "elevation_threads"

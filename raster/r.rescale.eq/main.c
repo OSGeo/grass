@@ -1,11 +1,12 @@
-
 /****************************************************************************
  *
  * MODULE:       r.rescale.eq
  * AUTHOR(S):    Michael Shapiro, CERL (original contributor)
- *               Markus Neteler <neteler itc.it>, Bernhard Reiter <bernhard intevation.de>,
- *               Glynn Clements <glynn gclements.plus.com>, Jachym Cepicky <jachym les-ejk.cz>
- * PURPOSE:      
+ *               Markus Neteler <neteler itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Jachym Cepicky <jachym les-ejk.cz>
+ * PURPOSE:
  * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -13,6 +14,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -26,10 +28,10 @@ static void reclass(CELL, CELL, CELL);
 
 int main(int argc, char *argv[])
 {
-    char input[GNAME_MAX+8];
-    char output[GNAME_MAX+8];
+    char input[GNAME_MAX + 8];
+    char output[GNAME_MAX + 8];
     char title[GPATH_MAX];
-    char rules[GNAME_MAX+8];
+    char rules[GNAME_MAX + 8];
     const char *args[6];
     struct Popen child;
     CELL old_min, old_max;
@@ -38,9 +40,8 @@ int main(int argc, char *argv[])
     struct Cell_stats statf;
     char *old_name;
     char *new_name;
-    struct
-    {
-	struct Option *input, *from, *output, *to, *title;
+    struct {
+        struct Option *input, *from, *output, *to, *title;
     } parm;
 
     struct GModule *module;
@@ -52,8 +53,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("rescale"));
     module->description =
-	_("Rescales histogram equalized the range of category "
-	  "values in a raster map layer.");
+        _("Rescales histogram equalized the range of category "
+          "values in a raster map layer.");
 
     /* Define the different options */
 
@@ -65,8 +66,8 @@ int main(int argc, char *argv[])
     parm.from->key_desc = "min,max";
     parm.from->type = TYPE_INTEGER;
     parm.from->required = NO;
-    parm.from->description =
-	_("The input data range to be rescaled (default: full range of input map)");
+    parm.from->description = _("The input data range to be rescaled (default: "
+                               "full range of input map)");
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.output->description = _("The resulting raster map name");
@@ -86,42 +87,42 @@ int main(int argc, char *argv[])
     parm.title->description = _("Title for new raster map");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     old_name = parm.input->answer;
     new_name = parm.output->answer;
 
     get_stats(old_name, &statf);
     if (parm.from->answer) {
-	sscanf(parm.from->answers[0], "%d", &old_min);
-	sscanf(parm.from->answers[1], "%d", &old_max);
+        sscanf(parm.from->answers[0], "%d", &old_min);
+        sscanf(parm.from->answers[1], "%d", &old_max);
     }
     else
-	get_range(&statf, &old_min, &old_max, 0);
+        get_range(&statf, &old_min, &old_max, 0);
 
     if (old_min > old_max) {
-	cat = old_min;		/* swap */
-	old_min = old_max;
-	old_max = cat;
+        cat = old_min; /* swap */
+        old_min = old_max;
+        old_max = cat;
     }
 
     sscanf(parm.to->answers[0], "%d", &new_min);
     sscanf(parm.to->answers[1], "%d", &new_max);
     if (new_min > new_max) {
-	cat = new_min;		/* swap */
-	new_min = new_max;
-	new_max = cat;
+        cat = new_min; /* swap */
+        new_min = new_max;
+        new_max = cat;
     }
-    G_message(_("Rescale %s[%d,%d] to %s[%d,%d]"),
-	      old_name, old_min, old_max, new_name, new_min, new_max);
+    G_message(_("Rescale %s[%d,%d] to %s[%d,%d]"), old_name, old_min, old_max,
+              new_name, new_min, new_max);
 
     sprintf(input, "input=%s", old_name);
     sprintf(output, "output=%s", new_name);
 
     if (parm.title->answer)
-	sprintf(title, "title=%s", parm.title->answer);
+        sprintf(title, "title=%s", parm.title->answer);
     else
-	sprintf(title, "title=rescale of %s", old_name);
+        sprintf(title, "title=rescale of %s", old_name);
 
     sprintf(rules, "rules=-");
 
@@ -129,15 +130,13 @@ int main(int argc, char *argv[])
     args[1] = input;
     args[2] = output;
     args[3] = title;
-    args[4] = rules; 
+    args[4] = rules;
     args[5] = NULL;
 
     fp = G_popen_write(&child, "r.reclass", args);
 
-    Rast_cell_stats_histo_eq(&statf,
-			     old_min, old_max,
-			     new_min, new_max,
-			     0, reclass);
+    Rast_cell_stats_histo_eq(&statf, old_min, old_max, new_min, new_max, 0,
+                             reclass);
     G_popen_close(&child);
 
     return EXIT_SUCCESS;
@@ -145,9 +144,9 @@ int main(int argc, char *argv[])
 
 static void reclass(CELL cat1, CELL cat2, CELL value)
 {
-    fprintf(fp, "%ld thru %ld = %ld %ld",
-	    (long)cat1, (long)cat2, (long)value, (long)cat1);
+    fprintf(fp, "%ld thru %ld = %ld %ld", (long)cat1, (long)cat2, (long)value,
+            (long)cat1);
     if (cat1 != cat2)
-	fprintf(fp, " thru %ld", (long)cat2);
+        fprintf(fp, " thru %ld", (long)cat2);
     fprintf(fp, "\n");
 }

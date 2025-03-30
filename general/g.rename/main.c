@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       g.rename
@@ -46,61 +45,63 @@ int main(int argc, char *argv[])
     G_add_keyword(_("map management"));
     G_add_keyword(_("rename"));
     module->description =
-	_("Renames data base element files in the user's current mapset.");
+        _("Renames data base element files in the user's current mapset.");
     module->overwrite = 1;
 
     parm = (struct Option **)G_calloc(nlist, sizeof(struct Option *));
 
     for (n = 0; n < nlist; n++) {
-	parm[n] = M_define_option(n, _("renamed"), NO);
+        parm[n] = M_define_option(n, _("renamed"), NO);
     }
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     mapset = G_mapset();
 
     for (n = 0; n < nlist; n++) {
-	int i;
-	char *old, *new;
+        int i;
+        char *old, *new;
 
-	if (parm[n]->answers == NULL)
-	    continue;
-	i = 0;
-	while (parm[n]->answers[i]) {
-	    int renamed;
+        if (parm[n]->answers == NULL)
+            continue;
+        i = 0;
+        while (parm[n]->answers[i]) {
+            int renamed;
 
-	    old = parm[n]->answers[i++];
-	    new = parm[n]->answers[i++];
-	    if (!M_find(n, old, mapset)) {
-		G_warning(_("%s <%s> not found"), M_get_list(n)->maindesc, old);
-		continue;
-	    }
-	    if (M_find(n, new, mapset) && !(module->overwrite)) {
-		G_warning(_("<%s> already exists in mapset <%s>"), new,
-			  M_find(n, new, ""));
-		continue;
-	    }
-	    if (G_legal_filename(new) < 0) {
-		G_warning(_("<%s> is an illegal file name"), new);
-		continue;
-	    }
-	    if (G_strcasecmp(old, new) == 0) {
-		/* avoid problems on case-insensitive file systems (FAT, NTFS, ...) */
-		G_warning(_("%s=%s,%s: files could be the same, no rename possible"),
-			  parm[n]->key, old, new);
-		continue;
-	    }
+            old = parm[n]->answers[i++];
+            new = parm[n]->answers[i++];
+            if (!M_find(n, old, mapset)) {
+                G_warning(_("%s <%s> not found"), M_get_list(n)->maindesc, old);
+                continue;
+            }
+            if (M_find(n, new, mapset) && !(module->overwrite)) {
+                G_warning(_("<%s> already exists in mapset <%s>"), new,
+                          M_find(n, new, ""));
+                continue;
+            }
+            if (G_legal_filename(new) < 0) {
+                G_warning(_("<%s> is an illegal file name"), new);
+                continue;
+            }
+            if (G_strcasecmp(old, new) == 0) {
+                /* avoid problems on case-insensitive file systems (FAT, NTFS,
+                 * ...) */
+                G_warning(
+                    _("%s=%s,%s: files could be the same, no rename possible"),
+                    parm[n]->key, old, new);
+                continue;
+            }
 
-	    if ((renamed = M_do_rename(n, old, new)) == 1) {
-		result = EXIT_FAILURE;
-	    }
+            if ((renamed = M_do_rename(n, old, new)) == 1) {
+                result = EXIT_FAILURE;
+            }
 
-	    if (!renamed && strcmp(parm[n]->key, "raster") == 0) {
-		update_reclass_maps(new, mapset);
-		update_base_map(old, new, mapset);
-	    }
-	}
+            if (!renamed && strcmp(parm[n]->key, "raster") == 0) {
+                update_reclass_maps(new, mapset);
+                update_base_map(old, new, mapset);
+            }
+        }
     }
     exit(result);
 }
@@ -111,50 +112,57 @@ void update_reclass_maps(const char *name, const char *mapset)
     char **rmaps;
 
     if (Rast_is_reclassed_to(name, mapset, &nrmaps, &rmaps) <= 0)
-	return;
+        return;
 
     G_message(_("Updating reclass maps"));
 
     for (; *rmaps; rmaps++) {
-	char buf1[256], buf2[256], buf3[256], *str;
-	FILE *fp;
-	int ptr, l;
+        char buf1[256], buf2[256], buf3[256], *str;
+        FILE *fp;
+        off_t ptr, l;
 
-	G_message(" %s", *rmaps);
-	sprintf(buf3, "%s", *rmaps);
-	if ((str = strchr(buf3, '@'))) {
-	    *str = 0;
-	    sprintf(buf2, "%s", str + 1);
-	}
-	else {
-	    sprintf(buf2, "%s", mapset);
-	}
-	G_file_name(buf1, "cellhd", buf3, buf2);
+        G_message(" %s", *rmaps);
+        sprintf(buf3, "%s", *rmaps);
+        if ((str = strchr(buf3, '@'))) {
+            *str = 0;
+            sprintf(buf2, "%s", str + 1);
+        }
+        else {
+            sprintf(buf2, "%s", mapset);
+        }
+        G_file_name(buf1, "cellhd", buf3, buf2);
 
-	fp = fopen(buf1, "r");
-	if (fp == NULL)
-	    continue;
+        fp = fopen(buf1, "r");
+        if (fp == NULL)
+            continue;
 
-	fgets(buf2, 255, fp);
-	fgets(buf2, 255, fp);
-	fgets(buf2, 255, fp);
+        if (fgets(buf2, 255, fp) == NULL)
+            continue;
+        if (fgets(buf2, 255, fp) == NULL)
+            continue;
+        if (fgets(buf2, 255, fp) == NULL)
+            continue;
 
-	ptr = G_ftell(fp);
-	G_fseek(fp, 0L, SEEK_END);
-	l = G_ftell(fp) - ptr;
+        ptr = G_ftell(fp);
+        G_fseek(fp, 0L, SEEK_END);
+        l = G_ftell(fp) - ptr;
 
-	str = (char *)G_malloc(l);
-	G_fseek(fp, ptr, SEEK_SET);
-	fread(str, l, 1, fp);
-	fclose(fp);
+        str = (char *)G_malloc(l);
+        G_fseek(fp, ptr, SEEK_SET);
+        if (fread(str, l, 1, fp) != 1) {
+            if (ferror(fp))
+                G_fatal_error(_("Failed to read reclass maps file"));
+        }
+        fclose(fp);
 
-	fp = fopen(buf1, "w");
-	fprintf(fp, "reclass\n");
-	fprintf(fp, "name: %s\n", name);
-	fprintf(fp, "mapset: %s\n", mapset);
-	fwrite(str, l, 1, fp);
-	G_free(str);
-	fclose(fp);
+        fp = fopen(buf1, "w");
+        fprintf(fp, "reclass\n");
+        fprintf(fp, "name: %s\n", name);
+        fprintf(fp, "mapset: %s\n", mapset);
+        if ((fwrite(str, l, 1, fp) < 1) & (l > 0))
+            G_fatal_error(_("Failed to write full reclass maps file"));
+        G_free(str);
+        fclose(fp);
     }
 }
 
@@ -166,23 +174,24 @@ void update_base_map(const char *old, const char *new, const char *mapset)
     FILE *fp;
 
     if (Rast_is_reclass(new, mapset, bname, bmapset) <= 0)
-	return;
+        return;
 
     if (Rast_is_reclassed_to(bname, bmapset, &nrmaps, &rmaps) <= 0)
-	nrmaps = 0;
+        nrmaps = 0;
 
     found = 0;
     xold = G_fully_qualified_name(old, mapset);
     for (i = 0; i < nrmaps; i++) {
-	if (strcmp(xold, rmaps[i]) == 0) {
-	    found = 1;
-	    break;
-	}
+        if (strcmp(xold, rmaps[i]) == 0) {
+            found = 1;
+            break;
+        }
     }
 
     if (!found) {
-	G_fatal_error(_("Unable to find reclass information for <%s> in "
-			"base map <%s@%s>"), xold, bname, bmapset);
+        G_fatal_error(_("Unable to find reclass information for <%s> in "
+                        "base map <%s@%s>"),
+                      xold, bname, bmapset);
     }
 
     G_message(_("Updating base map <%s@%s>"), bname, bmapset);
@@ -191,18 +200,18 @@ void update_base_map(const char *old, const char *new, const char *mapset)
 
     fp = fopen(rpath, "w");
     if (fp == NULL) {
-	G_fatal_error(_("Unable to update dependency file in <%s@%s>"),
-		  bname, bmapset);
+        G_fatal_error(_("Unable to update dependency file in <%s@%s>"), bname,
+                      bmapset);
     }
 
     xnew = G_fully_qualified_name(new, mapset);
     for (; *rmaps; rmaps++) {
-	if (strcmp(xold, *rmaps) == 0) {
-	    fprintf(fp, "%s\n", xnew);
-	}
-	else {
-	    fprintf(fp, "%s\n", *rmaps);
-	}
+        if (strcmp(xold, *rmaps) == 0) {
+            fprintf(fp, "%s\n", xnew);
+        }
+        else {
+            fprintf(fp, "%s\n", *rmaps);
+        }
     }
 
     G_free(xold);

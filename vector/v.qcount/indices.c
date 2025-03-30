@@ -11,11 +11,7 @@
 #include "quaddefs.h"
 
 void qindices(int *cnt, int n, double *fisher, double *david, double *douglas,
-	      double *lloyd, double *lloydip, double *morisita)
-
-
-
-
+              double *lloyd, double *lloydip, double *morisita)
 /*
  * Calculates quadrat count indices for measuring departure from complete
  * spatial randomness. See Cressie (1991).
@@ -26,13 +22,13 @@ void qindices(int *cnt, int n, double *fisher, double *david, double *douglas,
 
     *morisita = 0.0;
     for (i = 0; i < n; ++i) {
-	m += cnt[i];
-	*morisita += (double)cnt[i] * (cnt[i] - 1.0);
+        m += cnt[i];
+        *morisita += (double)cnt[i] * (cnt[i] - 1.0);
     }
     m /= n;
 
     for (i = 0; i < n; ++i)
-	s += (cnt[i] - m) * (cnt[i] - m);
+        s += (cnt[i] - m) * (cnt[i] - m);
     s /= (n - 1);
 
     *fisher = s / m;
@@ -41,6 +37,6 @@ void qindices(int *cnt, int n, double *fisher, double *david, double *douglas,
     *lloyd = m + s / m - 1;
     *lloydip = *lloyd / m;
     *morisita *= n;
-    *morisita /= (n * m * (n * m - 1.0));	/* cressie */
+    *morisita /= (n * m * (n * m - 1.0)); /* cressie */
     /* *morisita = *lloydip * n * m / (n * m - 1.0);  ripley 1 */
 }

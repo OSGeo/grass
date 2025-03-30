@@ -4,15 +4,6 @@ Created on Thu Aug 23 11:07:38 2012
 @author: pietro
 
 """
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
 
 import os
 import subprocess

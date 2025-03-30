@@ -13,16 +13,16 @@
 #include <grass/raster.h>
 #include "r.proj.h"
 
-void p_cubic_f(struct cache *ibuffer,	/* input buffer                  */
-		void *obufptr,	/* ptr in output buffer          */
-		int cell_type,	/* raster map type of obufptr    */
-		double col_idx,	/* column index          */
-		double row_idx,	/* row index                     */
-	    struct Cell_head *cellhd	/* cell header of input layer    */
-    )
+void p_cubic_f(struct cache *ibuffer,   /* input buffer                  */
+               void *obufptr,           /* ptr in output buffer          */
+               int cell_type,           /* raster map type of obufptr    */
+               double col_idx,          /* column index          */
+               double row_idx,          /* row index                     */
+               struct Cell_head *cellhd /* cell header of input layer    */
+)
 {
     /* start nearest neighbor to do some basic tests */
-    int row, col;		/* row/col of nearest neighbor   */
+    int row, col; /* row/col of nearest neighbor   */
     FCELL cell;
 
     /* cut indices to integer */
@@ -47,7 +47,7 @@ void p_cubic_f(struct cache *ibuffer,	/* input buffer                  */
     if (Rast_is_f_null_value(obufptr)) {
         p_bilinear(ibuffer, obufptr, cell_type, col_idx, row_idx, cellhd);
         /* fallback to nearest if bilinear is null */
-	if (Rast_is_f_null_value(obufptr))
+        if (Rast_is_f_null_value(obufptr))
             Rast_set_f_value(obufptr, cell, cell_type);
     }
 }

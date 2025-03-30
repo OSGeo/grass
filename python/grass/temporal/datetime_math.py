@@ -8,7 +8,6 @@ for details.
 
 :authors: Soeren Gebbert
 """
-import sys
 from datetime import datetime, timedelta
 from .core import get_tgis_message_interface
 import copy
@@ -20,8 +19,6 @@ try:
 except:
     has_dateutil = False
 
-if sys.version_info[0] >= 3:
-    unicode = str
 
 DAY_IN_SECONDS = 86400
 SECOND_AS_DAY = 1.1574074074074073e-05
@@ -81,7 +78,6 @@ def time_delta_to_relative_time_seconds(delta):
 
 
 def decrement_datetime_by_string(mydate, increment, mult=1):
-
     """Return a new datetime object decremented with the provided
     relative dates specified as string.
     Additional a multiplier can be specified to multiply the increment
@@ -216,7 +212,7 @@ def increment_datetime_by_string(mydate, increment, mult=1):
     :param mult: A multiplier, default is 1
     :return: The new datetime object or none in case of an error
     """
-    return modify_datetime_by_string(mydate, increment, mult, sign=int(1))
+    return modify_datetime_by_string(mydate, increment, mult, sign=1)
 
 
 ###############################################################################
@@ -246,7 +242,6 @@ def modify_datetime_by_string(mydate, increment, mult=1, sign=1):
         return None
 
     if increment:
-
         seconds = 0
         minutes = 0
         hours = 0
@@ -430,7 +425,6 @@ def adjust_datetime_to_granularity(mydate, granularity):
     """
 
     if granularity:
-
         has_seconds = False
         has_minutes = False
         has_hours = False
@@ -861,7 +855,7 @@ def string_to_datetime(time_string):
              could not be converted
     """
 
-    if not isinstance(time_string, unicode) and not isinstance(time_string, str):
+    if not isinstance(time_string, str):
         return None
 
     time_object = check_datetime_string(time_string)
@@ -919,7 +913,6 @@ def datetime_to_grass_datetime_string(dt):
 
     # Check for time zone info in the datetime object
     if dt.tzinfo is not None:
-
         tz = dt.tzinfo.utcoffset(0)
         if tz.seconds > 86400 / 2:
             tz = (tz.seconds - 86400) / 60

@@ -44,7 +44,6 @@ in the <tt>Makefile</tt>.
 - Cdhc_dmax()
 - Cdhc_dmax_exp()
 - Cdhc_durbins_exact()
-- Cdhc_enormp()
 - Cdhc_extreme()
 - Cdhc_geary_test()
 - Cdhc_kolmogorov_smirnov()
@@ -64,4 +63,3 @@ in the <tt>Makefile</tt>.
 - Cdhc_xinormal()
 
 */
-

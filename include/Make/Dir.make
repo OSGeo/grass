@@ -7,7 +7,7 @@ include $(MODULE_TOPDIR)/include/Make/Html.make
 
 # don't install *.png, *.jpg for directories
 # to prevent problems with r.out.png etc
-IMGSRC := 
+IMGSRC :=
 
 subdirs:
 	@list='$(SUBDIRS)'; \

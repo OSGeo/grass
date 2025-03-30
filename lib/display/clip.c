@@ -1,4 +1,3 @@
-
 #include <math.h>
 #include <string.h>
 
@@ -21,7 +20,7 @@ static double interpolate(double a, double b, double ka, double kb)
 }
 
 static void clip_path_plane(struct path *dst, const struct path *src,
-			    const struct plane *p)
+                            const struct plane *p)
 {
     struct vertex *v0 = &src->vertices[src->count - 1];
     double x0 = v0->x;
@@ -32,41 +31,41 @@ static void clip_path_plane(struct path *dst, const struct path *src,
     path_reset(dst);
 
     for (i = 0; i < src->count; i++) {
-	struct vertex *v1 = &src->vertices[i];
-	double x1 = v1->x;
-	double y1 = v1->y;
-	double d1 = dist_plane(x1, y1, p);
-	int in0 = d0 <= 0;
-	int in1 = d1 <= 0;
+        struct vertex *v1 = &src->vertices[i];
+        double x1 = v1->x;
+        double y1 = v1->y;
+        double d1 = dist_plane(x1, y1, p);
+        int in0 = d0 <= 0;
+        int in1 = d1 <= 0;
 
-	if (in0 && !in1) {
-	    /* leaving */
-	    double x = interpolate(x0, x1, d0, d1);
-	    double y = interpolate(y0, y1, d0, d1);
-	    path_cont(dst, x, y);
-	}
+        if (in0 && !in1) {
+            /* leaving */
+            double x = interpolate(x0, x1, d0, d1);
+            double y = interpolate(y0, y1, d0, d1);
+            path_cont(dst, x, y);
+        }
 
-	if (!in0 && in1) {
-	    /* entering */
-	    double x = interpolate(x0, x1, d0, d1);
-	    double y = interpolate(y0, y1, d0, d1);
-	    path_move(dst, x, y);
-	}
+        if (!in0 && in1) {
+            /* entering */
+            double x = interpolate(x0, x1, d0, d1);
+            double y = interpolate(y0, y1, d0, d1);
+            path_move(dst, x, y);
+        }
 
-	if (in1)
-	    /* inside */
-	    path_cont(dst, x1, y1);
+        if (in1)
+            /* inside */
+            path_cont(dst, x1, y1);
 
-	x0 = x1;
-	y0 = y1;
-	d0 = d1;
+        x0 = x1;
+        y0 = y1;
+        d0 = d1;
     }
 }
 
 /******************************************************************************/
 
 static void cull_path_plane(struct path *dst, const struct path *src,
-			    const struct plane *p)
+                            const struct plane *p)
 {
     int last = -1;
     int prev = src->count - 1;
@@ -79,29 +78,29 @@ static void cull_path_plane(struct path *dst, const struct path *src,
     path_reset(dst);
 
     for (i = 0; i < src->count; i++) {
-	struct vertex *v1 = &src->vertices[i];
-	double x1 = v1->x;
-	double y1 = v1->y;
-	double d1 = dist_plane(x1, y1, p);
-	int in0 = d0 <= 0;
-	int in1 = d1 <= 0;
+        struct vertex *v1 = &src->vertices[i];
+        double x1 = v1->x;
+        double y1 = v1->y;
+        double d1 = dist_plane(x1, y1, p);
+        int in0 = d0 <= 0;
+        int in1 = d1 <= 0;
 
-	if (!in0 && in1 && last != prev) {
-	    /* entering */
-	    path_move(dst, x0, y0);
-	    last = prev;
-	}
+        if (!in0 && in1 && last != prev) {
+            /* entering */
+            path_move(dst, x0, y0);
+            last = prev;
+        }
 
-	if (in1 || in0) {
-	    /* inside or leaving */
-	    path_cont(dst, x1, y1);
-	    last = i;
-	}
+        if (in1 || in0) {
+            /* inside or leaving */
+            path_cont(dst, x1, y1);
+            last = i;
+        }
 
-	x0 = x1;
-	y0 = y1;
-	d0 = d1;
-	prev = i;
+        x0 = x1;
+        y0 = y1;
+        d0 = d1;
+        prev = i;
     }
 }
 
@@ -126,7 +125,8 @@ void D__set_clip_planes(struct clip *clip, const struct rectangle *rect)
     clip->top.k = -rect->top;
 }
 
-void D__cull_path(struct path *dst, const struct path *src, const struct clip *clip)
+void D__cull_path(struct path *dst, const struct path *src,
+                  const struct clip *clip)
 {
     struct path tmp1, tmp2;
 
@@ -142,7 +142,8 @@ void D__cull_path(struct path *dst, const struct path *src, const struct clip *c
     path_free(&tmp2);
 }
 
-void D__clip_path(struct path *dst, const struct path *src, const struct clip *clip)
+void D__clip_path(struct path *dst, const struct path *src,
+                  const struct clip *clip)
 {
     struct path tmp1, tmp2;
 
@@ -159,4 +160,3 @@ void D__clip_path(struct path *dst, const struct path *src, const struct clip *c
 }
 
 /******************************************************************************/
-

@@ -92,7 +92,7 @@ class WMSCapabilities(CapabilitiesBase, WMSCapabilitiesTree):
             self.layers_by_id[id] = parent_layer
             id += 1
 
-        layer_nodes = parent_layer.GetLayerNode().findall((self.xml_ns.Ns("Layer")))
+        layer_nodes = parent_layer.GetLayerNode().findall(self.xml_ns.Ns("Layer"))
 
         for node in layer_nodes:
             layer = WMSLayer(node, id, self)
@@ -250,7 +250,6 @@ class WMTSLayer(LayerBase):
         if param == "styles":
             styles = []
             for style_node in self.layer_node.findall(self.xml_ns.NsWmts("Style")):
-
                 style_name = ""
                 style_title = ""
 

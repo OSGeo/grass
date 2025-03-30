@@ -1,13 +1,13 @@
 /****************************************************************************
  *
- * MODULE:       lister utility for database maintenance routines 
- *               
+ * MODULE:       lister utility for database maintenance routines
+ *
  * AUTHOR(S):    Michael Shapiro (original contributor),
  *               U.S. Army Construction Engineering Research Laboratory
  *               Radim Blazek <radim.blazek gmail.com>,
  *               Markus Neteler <neteler itc.it>,
- *               Glynn Clements <glynn gclements.plus.com>, 
- *               
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *
  * PURPOSE:      Maintenance operations on GRASS data base files - lists
  *               available vector and raster maps
  *

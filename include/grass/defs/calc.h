@@ -1,4 +1,3 @@
-
 #ifndef GRASS_CALCDEFS_H
 #define GRASS_CALCDEFS_H
 

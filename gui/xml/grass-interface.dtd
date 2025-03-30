@@ -2,8 +2,8 @@
 
 	Copyright (C) 2000-2007 by the GRASS Development Team
 	Author: Jan-Oliver Wagner <jan intevation.de>
-	
-	Changes: 
+
+	Changes:
 	2007-10 by Martin Landa <landa.martin gmail.com>
 	   * added keywords element
 	   * added name element (fix for value element)
@@ -16,7 +16,7 @@
 	   * make <parameter-group> optional
 	   * move descriptions first, always optional
 	   * make <default> optional  // Should it reference <value> ?
-	   
+
 	2001-07-09:
 	   * Make an explicit flag element
 	   * make keydesc and gispropmpt elements
@@ -93,7 +93,7 @@
 
 
 <!--    The "gisprompt" is a three part description, used for map elements
-	and files.  It consists of a comma separated list of 
+	and files.  It consists of a comma separated list of
 	"age,element,prompt".  "Age" is "new | old | any"; "element" is
 	a grass map element such as "dig", and "prompt" is what to present
 	to the user in a prompt, such as "vector"
@@ -111,7 +111,7 @@
 <!ELEMENT flag         (description?)>
 <!ATTLIST flag         name            CDATA #REQUIRED>
 
-        
+
 <!--	a default of a parameter. Hopefully it does correspond
 	with the parameter type. How to set up rules for that
 	(same problem for <value>)?

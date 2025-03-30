@@ -17,7 +17,6 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
 from datetime import datetime
 from .core import init_dbif
 from .abstract_dataset import AbstractDatasetComparisonKeyStartTime
@@ -29,7 +28,7 @@ import grass.lib.gis as gis
 ###############################################################################
 
 
-class SpatioTemporalTopologyBuilder(object):
+class SpatioTemporalTopologyBuilder:
     """This class is designed to build the spatio-temporal topology
     of spatio-temporally related abstract dataset objects.
 
@@ -505,7 +504,6 @@ class SpatioTemporalTopologyBuilder(object):
         tree = rtree.RTreeCreateTree(-1, 0, dim)
 
         for i in range(len(maps)):
-
             rect = self._map_to_rect(tree, maps[i], spatial)
             rtree.RTreeInsertRect(rect, i + 1, tree)
 
@@ -556,7 +554,6 @@ class SpatioTemporalTopologyBuilder(object):
         list_ = gis.G_new_ilist()
 
         for j in range(len(mapsB)):
-
             rect = self._map_to_rect(tree, mapsB[j], spatial)
             vector.RTreeSearch2(tree, rect, list_)
             rtree.RTreeFreeRect(rect)
@@ -669,7 +666,6 @@ def set_temoral_relationship(A, B, relation):
 
 
 def set_spatial_relationship(A, B, relation):
-
     if relation == "equivalent":
         if A != B:
             if not B.get_equivalent() or (

@@ -1,4 +1,3 @@
-
 /****************************************************************
 this program runs its arguments as  a  command.  it  essentially
 does what the sh would do to look for the command. if / occurs in
@@ -30,7 +29,7 @@ int main(int argc, char *argv[])
     argc--;
     argv++;
     if (argc <= 0)
-	exit(1);
+        exit(1);
 
     execvp(argv[0], argv);
     fprintf(stderr, "%s: Command not found\n", argv[0]);

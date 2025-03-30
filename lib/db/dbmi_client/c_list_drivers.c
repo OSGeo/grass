@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_client/c_list_drivers.c
- * 
+ *
  * \brief DBMI Library (client) - list drivers
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -15,9 +15,10 @@
 #include <grass/dbmi.h>
 
 /*!
-  \brief Return comma separated list of existing DB drivers, used for driver parameter options
+   \brief Return comma separated list of existing DB drivers, used for driver
+   parameter options
 
-  \return list of db drivers
+   \return list of db drivers
  */
 const char *db_list_drivers(void)
 {
@@ -28,18 +29,18 @@ const char *db_list_drivers(void)
 
     /* read the dbmscap info */
     if (NULL == (list = db_read_dbmscap()))
-	return NULL;
+        return NULL;
     else {
-	/* build the comma separated string of existing drivers */
-	for (cur = list; cur; cur = cur->next) {
-	    if (cur->driverName[0] == '\0')
-		break;
-	    else {
-		if (cur != list)
-		    db_append_string(&drivernames, ",");
-		db_append_string(&drivernames, cur->driverName);
-	    }
-	}
+        /* build the comma separated string of existing drivers */
+        for (cur = list; cur; cur = cur->next) {
+            if (cur->driverName[0] == '\0')
+                break;
+            else {
+                if (cur != list)
+                    db_append_string(&drivernames, ",");
+                db_append_string(&drivernames, cur->driverName);
+            }
+        }
     }
 
     return db_get_string(&drivernames);

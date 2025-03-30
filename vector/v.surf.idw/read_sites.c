@@ -9,7 +9,7 @@
 /* 1/2001 added field parameter MN
  * update 12/99 to read multi-dim sites properly MN
  * updated 28 June 1995 to use new sites API.
- * Only uses floating point attributes. 
+ * Only uses floating point attributes.
  * mccauley
  */
 
@@ -25,22 +25,23 @@ void read_sites(const char *name, const char *field_name, const char *col,
     struct line_pnts *Points;
     struct line_cats *Cats;
 
-    Vect_set_open_level(1);     /* without topology */
+    Vect_set_open_level(1); /* without topology */
     if (Vect_open_old2(&Map, name, "", field_name) < 0)
         G_fatal_error(_("Unable to open vector map <%s>"), name);
 
     field = Vect_get_field_number(&Map, field_name);
-    with_z = col == NULL && Vect_is_3d(&Map);   /* read z-coordinates
-                                                   only when column is
-                                                   not defined */
+    with_z = col == NULL && Vect_is_3d(&Map); /* read z-coordinates
+                                                 only when column is
+                                                 not defined */
     if (!col) {
         if (!with_z)
-            G_important_message(_("Input vector map <%s> is 2D - using categories to interpolate"),
+            G_important_message(_("Input vector map <%s> is 2D - using "
+                                  "categories to interpolate"),
                                 Vect_get_full_name(&Map));
         else
-            G_important_message(_("Input vector map <%s> is 3D - using z-coordinates to interpolate"),
+            G_important_message(_("Input vector map <%s> is 3D - using "
+                                  "z-coordinates to interpolate"),
                                 Vect_get_full_name(&Map));
-
     }
 
     if (col) {
@@ -56,9 +57,8 @@ void read_sites(const char *name, const char *field_name, const char *col,
             G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                           Fi->database, Fi->driver);
 
-        nrec =
-            db_select_CatValArray(Driver, Fi->table, Fi->key, col, NULL,
-                                  &cvarr);
+        nrec = db_select_CatValArray(Driver, Fi->table, Fi->key, col, NULL,
+                                     &cvarr);
         G_debug(3, "nrec = %d", nrec);
 
         ctype = cvarr.ctype;
@@ -68,13 +68,12 @@ void read_sites(const char *name, const char *field_name, const char *col,
         if (nrec < 0)
             G_fatal_error(_("Unable to select data from table"));
 
-        G_verbose_message(n_
-                          ("One record selected from table",
-                           "%d records selected from table", nrec), nrec);
+        G_verbose_message(n_("One record selected from table",
+                             "%d records selected from table", nrec),
+                          nrec);
 
         db_close_database_shutdown_driver(Driver);
     }
-
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
@@ -90,7 +89,7 @@ void read_sites(const char *name, const char *field_name, const char *col,
 
             /* TODO: what to do with multiple cats */
             Vect_cat_get(Cats, field, &cat);
-            if (cat < 0)        /* skip features without category */
+            if (cat < 0) /* skip features without category */
                 continue;
 
             if (col) {
@@ -100,7 +99,7 @@ void read_sites(const char *name, const char *field_name, const char *col,
                     ret = db_CatValArray_get_value_int(&cvarr, cat, &ival);
                     dval = ival;
                 }
-                else {          /* DB_C_TYPE_DOUBLE */
+                else { /* DB_C_TYPE_DOUBLE */
                     ret = db_CatValArray_get_value_double(&cvarr, cat, &dval);
                 }
                 if (ret != DB_OK) {

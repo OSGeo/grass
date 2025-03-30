@@ -1,7 +1,7 @@
 """
 Name:       r.texture test
 Purpose:    Tests r.texture and its flags/options.
-	
+
 Author:     Sunveer Singh, Google Code-in 2017
 Copyright:  (C) 2017 by Sunveer Singh and the GRASS Development Team
 Licence:    This program is free software under the GNU General Public

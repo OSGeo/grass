@@ -5,15 +5,15 @@
  To be adapted by Christo A. Zietsman for conversion from Fortran to C.
  November 2002.
 
- Adapted by Mauro A. Homem Antunes for atmopheric corrections of 
- remotely sensed images in raw format (.RAW) of 8 bits. 
+ Adapted by Mauro A. Homem Antunes for atmopheric corrections of
+ remotely sensed images in raw format (.RAW) of 8 bits.
  April 4, 2001.
 
  Please refer to the following paper and acknowledge the authors of
  the model:
 
  Vermote, E.F., Tanre, D., Deuze, J.L., Herman, M., and Morcrette,
-    J.J., (1997), Second simulation of the satellite signal in 
+    J.J., (1997), Second simulation of the satellite signal in
     the solar spectrum, 6S: An overview., IEEE Trans. Geosc.
     and Remote Sens. 35(3):675-686.
 

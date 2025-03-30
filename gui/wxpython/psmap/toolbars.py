@@ -49,7 +49,7 @@ class PsMapToolbar(BaseToolbar):
 
         # custom button for graphics mode selection
         # TODO: could this be somehow generalized?
-        self.arrowButton = self.CreateSelectionButton()
+        self.arrowButton = self.CreateSelectionButton(tooltip=_("Select graphics tool"))
         self.arrowButtonId = self.InsertControl(18, self.arrowButton)
         self.arrowButton.Bind(wx.EVT_BUTTON, self.OnDrawGraphicsMenu)
 

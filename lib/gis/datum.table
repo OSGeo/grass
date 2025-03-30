@@ -6,11 +6,11 @@
 # format:
 # shortname "Full EPSG-style name" ellipsoid dx= dy= dz=
 #
-# where 
+# where
 # * short name is a single word datum specifier,
-# * Full EPSG-style name is the exact name used in the European 
+# * Full EPSG-style name is the exact name used in the European
 #   Petroleum Survey Group (EPSG) database (enclosed in double quotes),
-# * ellipsoid is the acronym of the ellipsoid used with this map datum, 
+# * ellipsoid is the acronym of the ellipsoid used with this map datum,
 #   (GRASS ellipsoid code, from ellipse.table)
 # * dx, dy and dz are the datum shift parameters that should cover the
 #   whole area the datum is used in.
@@ -18,7 +18,7 @@
 #
 # In general the 3-parameter transformation given in this file should
 # be a mean solution for the countries or area the datum is used in.
-# Specific transformations applying to a smaller region should be 
+# Specific transformations applying to a smaller region should be
 # specified in the datumtransform.table file.
 #
 # If 99999 or above is given for all 3 parameters, then the parameters
@@ -26,12 +26,12 @@
 # must be at least one set of parameters for the corrseponding datum
 # in the datumtransform.table file
 #
-# Please comment and cite the source if you add new parameters 
-# to this list. 
+# Please comment and cite the source if you add new parameters
+# to this list.
 # cited from NIMA document TR8350.2
 #
 # Datum parameters for/from European Terrestrial Reference System ETRS89
-# are here: http://www.crs-geo.eu 
+# are here: http://www.crs-geo.eu
 
 # World Geodetic System 1984
 wgs84  "WGS_1984"	  wgs84		dx=0.0	    dy=0.0      dz=0.0
@@ -47,7 +47,7 @@ nad83_2011 "NAD83_National_Spatial_Reference_System_2011" grs80         dx=0.0  
 tokyo  "Tokyo"                       bessel        dx=-148   dy=507    dz=685
 # Ordnance Survey of Great Britain (1936)
 osgb36 "OSGB_1936" airy          dx=368.0    dy=-120.0   dz=425.0
-# South American 1969 
+# South American 1969
 sam69 "South_American_Datum_1969"               sam69         dx=-57      dy=1        dz=-41
 SAD-69  "Please_use_sam69_instead"	  sam69         dx=-60.0    dy=-2.0     dz=-41.0
 # European 1950 mean

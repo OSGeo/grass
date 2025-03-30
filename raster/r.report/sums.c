@@ -15,12 +15,12 @@ double area_sum(int *ns, int nl)
     area = 0.0;
 
     if (nl >= 0) {
-	while (n < nstats && same_cats(k, n, nl))
-	    area += Gstats[n++].area;
+        while (n < nstats && same_cats(k, n, nl))
+            area += Gstats[n++].area;
     }
     else {
-	while (n < nstats)
-	    area += Gstats[n++].area;
+        while (n < nstats)
+            area += Gstats[n++].area;
     }
 
     *ns = n;
@@ -36,12 +36,12 @@ long count_sum(int *ns, int nl)
     count = 0;
 
     if (nl >= 0) {
-	while (n < nstats && same_cats(k, n, nl))
-	    count += Gstats[n++].count;
+        while (n < nstats && same_cats(k, n, nl))
+            count += Gstats[n++].count;
     }
     else {
-	while (n < nstats)
-	    count += Gstats[n++].count;
+        while (n < nstats)
+            count += Gstats[n++].count;
     }
 
     *ns = n;
@@ -56,7 +56,7 @@ int same_cats(int a, int b, int nl)
     cat_b = Gstats[b].cats;
 
     while (nl-- >= 0)
-	if (*cat_a++ != *cat_b++)
-	    return 0;
+        if (*cat_a++ != *cat_b++)
+            return 0;
     return 1;
 }

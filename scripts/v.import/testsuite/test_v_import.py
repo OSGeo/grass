@@ -16,7 +16,6 @@ from grass.gunittest.main import test
 
 
 class TestVImport(TestCase):
-
     imported = "test_v_import_imported"
 
     def tearDown(cls):

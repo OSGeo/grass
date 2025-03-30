@@ -78,8 +78,8 @@ class Frame(wx.Frame):
     def draw(self):
         app = self.app
         size = self.GetSize()
-        x0 = (size.GetWidth() - app.i_width) / 2
-        y0 = (size.GetHeight() - app.i_height) / 2
+        x0 = (size.GetWidth() - app.i_width) // 2
+        y0 = (size.GetHeight() - app.i_height) // 2
         dc = wx.PaintDC(self)
         data = app.imgbuf.reshape((app.i_height, app.i_width, 4))
         data = data[::, ::, 2::-1]

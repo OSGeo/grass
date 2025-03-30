@@ -3,7 +3,6 @@ Created on Fri Jul  4 16:32:54 2014
 
 @author: pietro
 """
-from __future__ import print_function
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
@@ -132,6 +131,84 @@ class TestCheckValueFunction(TestCase):
                 _check_value(param, -1.0)
             with self.assertRaises(ValueError):
                 _check_value(param, 2.6)
+
+    def test_positive_min_float_double(self):
+        """Check range checking for a positive minimum.
+
+        Tests positive cases, type of exception, and content of the message.
+        """
+        name = "number"
+        for ptype in ("float", "double"):
+            param = Parameter(
+                diz=dict(
+                    name=name,
+                    required="yes",
+                    multiple="no",
+                    type=ptype,
+                    values=[
+                        "2-",
+                    ],
+                )
+            )
+            value = 2
+            self.assertTupleEqual((float(value), value), _check_value(param, value))
+            value = 2.2
+            self.assertTupleEqual((value, value), _check_value(param, value))
+            value = "2"
+            self.assertTupleEqual((float(value), value), _check_value(param, value))
+            value = "2.5"
+            self.assertTupleEqual((float(value), value), _check_value(param, value))
+
+            # test errors
+            with self.assertRaisesRegex(ValueError, f"{name}.+elev"):
+                _check_value(param, "elev")
+            with self.assertRaisesRegex(TypeError, name):
+                _check_value(param, (1.0, 2.0))
+            # Only the main parts of the message are checked,
+            # but the check is order-dependent.
+            with self.assertRaisesRegex(ValueError, f"{name}.+1.9"):
+                _check_value(param, 1.9)
+            with self.assertRaisesRegex(ValueError, f"{name}.+-1.0"):
+                _check_value(param, -1.0)
+
+    def test_positive_max_float_double(self):
+        """Check range checking for a positive maximum.
+
+        Tests positive cases, type of exception, and content of the message.
+        """
+        name = "number"
+        for ptype in ("float", "double"):
+            param = Parameter(
+                diz=dict(
+                    name=name,
+                    required="yes",
+                    multiple="no",
+                    type=ptype,
+                    values=[
+                        "-100",
+                    ],
+                )
+            )
+            value = 1
+            self.assertTupleEqual((float(value), value), _check_value(param, value))
+            value = 1.2
+            self.assertTupleEqual((value, value), _check_value(param, value))
+            value = "0"
+            self.assertTupleEqual((float(value), value), _check_value(param, value))
+            value = "2.5"
+            self.assertTupleEqual((float(value), value), _check_value(param, value))
+
+            # test errors
+            with self.assertRaisesRegex(ValueError, f"{name}.+elev"):
+                _check_value(param, "elev")
+            with self.assertRaisesRegex(TypeError, name):
+                _check_value(param, (1.0, 2.0))
+            # Only the main parts of the message are checked,
+            # but the check is order-dependent.
+            with self.assertRaisesRegex(ValueError, f"{name}.+100.1"):
+                _check_value(param, 100.1)
+            with self.assertRaisesRegex(ValueError, f"{name}.+200"):
+                _check_value(param, 200.0)
 
     def test_single_integer(self):
         param = Parameter(

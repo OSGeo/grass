@@ -45,7 +45,7 @@ done
 
 TMP="`g.tempfile pid=$$`"
 if [ $? -ne 0 ] || [ -z "$TMP" ] ; then
-    g.message -e "Unable to create temporary files" 
+    g.message -e "Unable to create temporary files"
     exit 1
 fi
 
@@ -196,8 +196,10 @@ cat <<EOF >"${TMP}.html"
 <html>
 <head>
 <title>$(g.version | cut -f1 -d'(') Command list</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link rel="stylesheet" href="grassdocs.css" type="text/css">
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <link rel="stylesheet" href="grassdocs.css" type="text/css">
+ <meta http-equiv="content-language" content="en-us">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body bgcolor="white">
 

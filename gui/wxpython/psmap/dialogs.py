@@ -124,7 +124,6 @@ class TCValidator(Validator):
         return TCValidator(self.flag)
 
     def Validate(self, win):
-
         tc = self.GetWindow()
         val = tc.GetValue()
 
@@ -183,13 +182,13 @@ class PenStyleComboBox(OwnerDrawnComboBox):
         dc.DrawText(
             self.GetString(item),
             r.x + 3,
-            (r.y + 0) + ((r.height / 2) - dc.GetCharHeight()) / 2,
+            int((r.y + 0) + ((r.height / 2) - dc.GetCharHeight()) / 2),
         )
         dc.DrawLine(
             r.x + 5,
-            r.y + ((r.height / 4) * 3) + 1,
+            int(r.y + ((r.height / 4) * 3) + 1),
             r.x + r.width - 5,
-            r.y + ((r.height / 4) * 3) + 1,
+            int(r.y + ((r.height / 4) * 3) + 1),
         )
 
     def OnDrawBackground(self, dc, rect, item, flags):
@@ -757,7 +756,6 @@ class PageSetupDialog(PsmapDialog):
         return self.hBoxDict[item].GetItem(1).GetWindow()
 
     def _toList(self, paperStr):
-
         sizeList = list()
         for line in paperStr.strip().split("\n"):
             d = dict(zip([self.cat[1]] + self.cat[3:], line.split()))
@@ -1280,7 +1278,6 @@ class MapFramePanel(Panel):
                 each.GetWindow().Disable()
 
             if self.scale[scaleType]:
-
                 self.scaleTextCtrl.SetValue("%.0f" % (1 / self.scale[scaleType]))
             if self.center[scaleType]:
                 self.eastingTextCtrl.SetValue(str(self.center[scaleType][0]))
@@ -1351,7 +1348,6 @@ class MapFramePanel(Panel):
                 mapFrameDict["region"] = None
 
                 if mapFrameDict["drawMap"]:
-
                     if mapFrameDict["mapType"] == "raster":
                         mapFile = grass.find_file(mapFrameDict["map"], element="cell")
                         if mapFile["file"] == "":
@@ -1367,7 +1363,6 @@ class MapFramePanel(Panel):
                             self.instruction.AddInstruction(raster)
 
                     elif mapFrameDict["mapType"] == "vector":
-
                         mapFile = grass.find_file(mapFrameDict["map"], element="vector")
                         if mapFile["file"] == "":
                             GMessage("Vector %s not found" % mapFrameDict["map"])
@@ -1866,11 +1861,13 @@ class VectorPanel(Panel):
     def OnVector(self, event):
         """Gets info about toplogy and enables/disables choices point/line/area"""
         vmap = self.select.GetValue()
-        try:
-            topoInfo = grass.vector_info_topo(map=vmap)
-        except grass.ScriptError:
+        if not grass.find_file(
+            vmap,
+            element="vector",
+        )["name"]:
             return
 
+        topoInfo = grass.vector_info_topo(map=vmap)
         if topoInfo:
             self.vectorType.EnableItem(2, bool(topoInfo["areas"]))
             self.vectorType.EnableItem(
@@ -1968,16 +1965,14 @@ class VectorPanel(Panel):
             id = self.vectorList[pos][2]
 
             dlg = VPropertiesDialog(
-                self,
+                self.parent,
                 id=id,
-                settings=self.instruction,
-                env=self.env,
                 vectors=self.vectorList,
                 tmpSettings=self.tmpDialogDict[id],
             )
-            dlg.ShowModal()
-
-            self.parent.FindWindowById(wx.ID_OK).SetFocus()
+            if dlg.ShowModal() == wx.ID_OK:
+                dlg.update()
+            dlg.Destroy()
 
     def enableButtons(self, enable=True):
         """Enable/disable up, down, properties, delete buttons"""
@@ -2129,20 +2124,16 @@ class MainVectorDialog(PsmapDialog):
         pass
 
 
-class VPropertiesDialog(PsmapDialog):
-    def __init__(self, parent, id, settings, vectors, tmpSettings, env):
-        PsmapDialog.__init__(
+class VPropertiesDialog(Dialog):
+    def __init__(self, parent, id, vectors, tmpSettings):
+        Dialog.__init__(
             self,
             parent=parent,
-            id=id,
-            title="",
-            settings=settings,
-            env=env,
-            apply=False,
         )
 
         vectorList = vectors
         self.vPropertiesDict = tmpSettings
+        self.spinCtrlSize = (65, -1)
 
         # determine map and its type
         for item in vectorList:
@@ -2199,6 +2190,26 @@ class VPropertiesDialog(PsmapDialog):
             self.OnPattern(None)
 
         self._layout(notebook)
+
+    def _layout(self, panel):
+        # buttons
+        btnCancel = Button(self, wx.ID_CANCEL)
+        btnOK = Button(self, wx.ID_OK)
+        btnOK.SetDefault()
+
+        # sizers
+        btnSizer = wx.StdDialogButtonSizer()
+        btnSizer.AddButton(btnCancel)
+        btnSizer.AddButton(btnOK)
+        btnSizer.Realize()
+
+        mainSizer = wx.BoxSizer(wx.VERTICAL)
+        mainSizer.Add(panel, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
+        mainSizer.Add(btnSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
+
+        self.SetSizer(mainSizer)
+        mainSizer.Layout()
+        mainSizer.Fit(self)
 
     def _DataSelectionPanel(self, notebook):
         panel = Panel(
@@ -2929,9 +2940,7 @@ class VPropertiesDialog(PsmapDialog):
 
         styleText = StaticText(panel, id=wx.ID_ANY, label=_("Choose line style:"))
         penStyles = ["solid", "dashed", "dotted", "dashdotted"]
-        self.styleCombo = PenStyleComboBox(
-            panel, choices=penStyles, validator=TCValidator(flag="ZERO_AND_ONE_ONLY")
-        )
+        self.styleCombo = PenStyleComboBox(panel, choices=penStyles)
         # self.styleCombo = wx.ComboBox(panel, id = wx.ID_ANY,
         ##                            choices = ["solid", "dashed", "dotted", "dashdotted"],
         # validator = TCValidator(flag = 'ZERO_AND_ONE_ONLY'))
@@ -3291,10 +3300,6 @@ class VPropertiesDialog(PsmapDialog):
                 self.vPropertiesDict["style"] = "solid"
 
             self.vPropertiesDict["linecap"] = self.linecapChoice.GetStringSelection()
-
-    def OnOK(self, event):
-        self.update()
-        event.Skip()
 
 
 class LegendDialog(PsmapDialog):
@@ -4640,7 +4645,6 @@ class MapinfoDialog(PsmapDialog):
             self.colors["borderColor"].Disable()
 
     def update(self):
-
         # units
         currUnit = self.unitConv.findUnit(
             self.panel.units["unitsCtrl"].GetStringSelection()
@@ -4767,7 +4771,6 @@ class ScalebarDialog(PsmapDialog):
         if self.scalebarDict[
             "rect"
         ]:  # set position, ref point is center and not left top corner
-
             x = self.unitConv.convert(
                 value=self.scalebarDict["where"][0]
                 - self.scalebarDict["rect"].Get()[2] / 2,
@@ -5947,7 +5950,7 @@ class ImageDialog(PsmapDialog):
             try:
                 pImg = PILImage.open(file)
                 img = PilImageToWxImage(pImg)
-            except IOError as e:
+            except OSError as e:
                 GError(message=_("Unable to read file %s") % file)
                 self.ClearPreview()
                 return
@@ -5968,10 +5971,10 @@ class ImageDialog(PsmapDialog):
             return img
         if w > h:
             newW = self.previewSize[0]
-            newH = self.previewSize[0] * h / w
+            newH = self.previewSize[0] * h // w
         else:
             newH = self.previewSize[0]
-            newW = self.previewSize[0] * w / h
+            newW = self.previewSize[0] * w // h
         return img.Scale(newW, newH, wx.IMAGE_QUALITY_HIGH)
 
     def DrawWarningText(self, warning):

@@ -9,8 +9,8 @@ raster maps. The unit in the location must be meters.
 are ignored and handled as no flow boundaries.
 <br>
 This module calculates the concentration of the solution and optional the
-velocity field, based on the hydraulic conductivity, 
-the effective porosity and the initial piecometric heads. 
+velocity field, based on the hydraulic conductivity,
+the effective porosity and the initial piecometric heads.
 The vector components can be visualized with paraview if they are exported
 with r.out.vtk.
 <br>
@@ -22,7 +22,7 @@ This is the base of the solute transport computation.
 
 <br>
 <br>
-The solute transport will always be calculated transient. 
+The solute transport will always be calculated transient.
 For stady state computation set the timestep
 to a large number (billions of seconds).
 <br>
@@ -59,7 +59,7 @@ differential equation is of the following form:
 Three different boundary conditions are implemented,
 the Dirichlet, Transmission and Neumann conditions.
 The calculation and boundary status of single cells can be set with the status map.
-The following states are supportet:
+The following states are supported:
 
 <ul>
 <li>0 == inactive - the cell with status 0 will not be calculated, active cells will have a no flow boundary to an inactive cell</li>
@@ -78,16 +78,16 @@ module rapidely grow with the size of the input maps.
 <br>
 The resulting linear equation system <i>Ax = b</i> can be solved with several solvers.
 Several iterative solvers with unsymmetric sparse and quadratic matrices support are implemented.
-The jacobi method, the Gauss-Seidel method and the biconjugate gradients-stabilized (bicgstab) method. 
+The jacobi method, the Gauss-Seidel method and the biconjugate gradients-stabilized (bicgstab) method.
 Additionally a direct Gauss solver and LU solver are available. Those direct solvers
-only work with quadratic matrices, so be careful using them with large maps 
+only work with quadratic matrices, so be careful using them with large maps
 (maps of size 10.000 cells will need more than one gigabyte of ram).
 Always prefer a sparse matrix solver.
 
 <h2>EXAMPLE</h2>
 
 Use this small python script to create a working
-groundwater flow / solute transport area and data. 
+groundwater flow / solute transport area and data.
 Make sure you are not in a lat/lon projection.
 
 <div class="code"><pre>
@@ -156,4 +156,3 @@ S&ouml;ren Gebbert
 <p>This work is based on the Diploma Thesis of S&ouml;ren Gebbert available
 <a href="https://grass.osgeo.org/gdp/hydrology/gebbert2007_diplom_stroemung_grass_gis.pdf">here</a>
 at Technical University Berlin in Germany.
-

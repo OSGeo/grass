@@ -6,58 +6,58 @@ Date: Thu, 26 Jul 2007 11:01:44 +0200
 Subject: Re: r.horizon source code
 Lines: 1533
 
-I'm sending the r.sun sources to you here, even though the description is not 
-yet up to date. I think it works OK now, though I haven't tried all possible 
-combinations of options. For instance, I haven't ever used the incidence 
-angle or insolation time outputs. There's no reason why they should have 
+I'm sending the r.sun sources to you here, even though the description is not
+yet up to date. I think it works OK now, though I haven't tried all possible
+combinations of options. For instance, I haven't ever used the incidence
+angle or insolation time outputs. There's no reason why they should have
 stopped working but there are always changes that break something unexpected.
 
 The main changes  are:
 
-- possibility to read in horizon rasters to use with the shadow calculation. 
+- possibility to read in horizon rasters to use with the shadow calculation.
 
-- Calculation of the shadowing effect should now also work in lat/lon 
+- Calculation of the shadowing effect should now also work in lat/lon
 projection.
 
-- There was a bug in r.sun whereby the shadowing effect was calculated wrong 
-when the left-right and up-down directions in the projection are different 
-from east-west and north-south, as is the case in the projection we use 
-(Lambert Azimuthal) when moving away from the point of origin. This has been 
+- There was a bug in r.sun whereby the shadowing effect was calculated wrong
+when the left-right and up-down directions in the projection are different
+from east-west and north-south, as is the case in the projection we use
+(Lambert Azimuthal) when moving away from the point of origin. This has been
 fixed now though only checked with Lambert Azimuthal.
 
-- I'm not sure if this went in already in a previous version, but the 
-algorithm now also takes into account the curvature of the earth when 
+- I'm not sure if this went in already in a previous version, but the
+algorithm now also takes into account the curvature of the earth when
 calculating shadows.
 
-- new output possibility: glob_rad, which is the sum of the three radiation 
+- new output possibility: glob_rad, which is the sum of the three radiation
 components
 
-- new input parameter: <i>civiltime</i>. When this parameter is given, the 
-single time calculation will calculate the irradiance at the *same* time for 
-the entire raster instead of using the local solar time. The value of 
+- new input parameter: <i>civiltime</i>. When this parameter is given, the
+single time calculation will calculate the irradiance at the *same* time for
+the entire raster instead of using the local solar time. The value of
 <i>civiltime</i> is the timezone, relative to GMT. (+1 for central Europe)
 
-- new input parameter <i>numpartitions</i> No change in the calculation 
-methods, but the program will read the input rasters and do the calculations 
-in a number of chunks, instead of reading in everything at the start. Output 
-is still only at the very end. This is only to save memory. It will not work 
-if you try to calculate shadows without the horizon information, and the 
+- new input parameter <i>numpartitions</i> No change in the calculation
+methods, but the program will read the input rasters and do the calculations
+in a number of chunks, instead of reading in everything at the start. Output
+is still only at the very end. This is only to save memory. It will not work
+if you try to calculate shadows without the horizon information, and the
 program will tell you so.
 
-- I reorganized the source code quite a lot. In particular, I spun off several 
-functions into a separate source file called rsunlib.c. I also organized many 
-of the global variables into <i>struct</i>'s for an easier overview. I did 
+- I reorganized the source code quite a lot. In particular, I spun off several
+functions into a separate source file called rsunlib.c. I also organized many
+of the global variables into <i>struct</i>'s for an easier overview. I did
 this because we work here with several derivatives of r.sun:
 
-	* r.sunyear which calculates the optimum inclination angle for maximum 
+	* r.sunyear which calculates the optimum inclination angle for maximum
 insolation
-	* r.pv which calculates the PV output taking into account also temperature 
+	* r.pv which calculates the PV output taking into account also temperature
 effects
-	* r.sun.2axis which is r.sun for a moving plane, whose normal always points 
+	* r.sun.2axis which is r.sun for a moving plane, whose normal always points
 to the sun (two-axis tracking solar energy systems).
 
-Splitting the source code made it easier to reuse bits for these r.sun 
-derivatives. I haven't updated the Makefile to account for these changes yet. 
+Splitting the source code made it easier to reuse bits for these r.sun
+derivatives. I haven't updated the Makefile to account for these changes yet.
 Look at the little script  "compdebug" in the source directory.
 
 
@@ -70,9 +70,9 @@ Thomas
 
 
 
--- 
+--
 --------------------------------------------------
-Thomas Huld   
+Thomas Huld
 Joint Research Centre of the European Commission
 T.P. 450
 I-21020 Ispra, Italy

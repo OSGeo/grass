@@ -3,7 +3,6 @@ from grass.gunittest.main import test
 
 
 class TestVTo3D(TestCase):
-
     contours2d = "test_vto3d_contours2d"
     contours3d = "test_vto3d_contours3d"
 

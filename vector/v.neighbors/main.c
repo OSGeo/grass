@@ -1,16 +1,15 @@
-
 /***************************************************************
  *
  * MODULE:       v.neighbors
- * 
+ *
  * AUTHOR(S):    Radim Blazek, original code taken from r.neighbors/main.c
  *               OGR support by Martin Landa <landa.martin gmail.com> (2009)
- *               Choice of methods and cat/where selection implemented 
- *               by Moritz Lennert (2020), 
+ *               Choice of methods and cat/where selection implemented
+ *               by Moritz Lennert (2020),
  *               original code taken from v.vect.stats/main.c
- *               
+ *
  * PURPOSE:      Category manipulations
- *               
+ *
  * COPYRIGHT:    (C) 2001-2020 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -31,22 +30,14 @@
 #include <grass/stats.h>
 #include <grass/dbmi.h>
 
-struct menu
-{
-    stat_func *method;          /* routine to compute new value */
-    int otype;                  /* whether the result is an integer (unused) */
-    char *name;                 /* method name */
-    char *text;                 /* menu display - full description */
+struct menu {
+    stat_func *method; /* routine to compute new value */
+    int otype;         /* whether the result is an integer (unused) */
+    char *name;        /* method name */
+    char *text;        /* menu display - full description */
 };
 
-enum out_type
-{
-    T_FLOAT = 1,
-    T_INT = 2,
-    T_COUNT = 3,
-    T_COPY = 4,
-    T_SUM = 5
-};
+enum out_type { T_FLOAT = 1, T_INT = 2, T_COUNT = 3, T_COPY = 4, T_SUM = 5 };
 
 /* modify this table to add new methods */
 static struct menu menu[] = {
@@ -61,8 +52,7 @@ static struct menu menu[] = {
     {c_stddev, T_FLOAT, "stddev", "standard deviation"},
     {c_var, T_FLOAT, "variance", "statistical variance"},
     {c_divr, T_INT, "diversity", "number of different values"},
-    {NULL, 0, NULL, NULL}
-};
+    {NULL, 0, NULL, NULL}};
 
 static RASTER_MAP_TYPE output_type(RASTER_MAP_TYPE input_type, int weighted,
                                    int mode)
@@ -132,8 +122,10 @@ int main(int argc, char *argv[])
     G_add_keyword(_("aggregation"));
     module->label = _("Neighborhood analysis tool for vector point maps.");
     module->description = _("Makes each cell value a "
-                            "function of the attribute values assigned to the vector points or centroids "
-                            "in a radius around it, and stores new cell values in an output raster map.");
+                            "function of the attribute values assigned to the "
+                            "vector points or centroids "
+                            "in a radius around it, and stores new cell values "
+                            "in an output raster map.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 
@@ -173,14 +165,13 @@ int main(int argc, char *argv[])
     point_cats_opt = G_define_standard_option(G_OPT_V_CATS);
     point_where_opt = G_define_standard_option(G_OPT_DB_WHERE);
 
-
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
     if (strcmp(method_opt->answer, "count") != 0) {
         if (!column_opt->answer) {
-            G_fatal_error
-                ("Method other than count but no point column selected");
+            G_fatal_error(
+                "Method other than count but no point column selected");
         }
     }
 
@@ -199,9 +190,8 @@ int main(int argc, char *argv[])
             if ((strcmp(p, method_opt->answer) == 0))
                 break;
         if (!p) {
-            G_warning(_("<%s=%s> unknown %s"),
-                      method_opt->key, method_opt->answer,
-                      method_opt->answer);
+            G_warning(_("<%s=%s> unknown %s"), method_opt->key,
+                      method_opt->answer, method_opt->answer);
             G_usage();
             exit(EXIT_FAILURE);
         }
@@ -218,9 +208,8 @@ int main(int argc, char *argv[])
     field = Vect_get_field_number(&In, field_opt->answer);
     pcat_list = NULL;
     if (field > 0)
-        pcat_list = Vect_cats_set_constraint(&In, field,
-                                             point_where_opt->answer,
-                                             point_cats_opt->answer);
+        pcat_list = Vect_cats_set_constraint(
+            &In, field, point_where_opt->answer, point_cats_opt->answer);
 
     imap_type = CELL_TYPE;
 
@@ -250,8 +239,9 @@ int main(int argc, char *argv[])
         ctype = db_column_Ctype(driver, Fi->table, column_opt->answer);
 
         if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE)
-            G_fatal_error(_("points_column <%s> of points vector <%s> must be numeric"),
-                          column_opt->answer, Fi->table);
+            G_fatal_error(
+                _("points_column <%s> of points vector <%s> must be numeric"),
+                column_opt->answer, Fi->table);
 
         /* Determine raster type equivalent of ctype */
         switch (ctype) {
@@ -281,14 +271,15 @@ int main(int argc, char *argv[])
         box.E > region.east + radius || box.W < region.west - radius) {
         if (box.S > region.north + radius || box.N < region.south - radius ||
             box.W > region.east + radius || box.E < region.west - radius)
-            G_fatal_error(_("All points fall outside of the current computational region"));
+            G_fatal_error(_(
+                "All points fall outside of the current computational region"));
         G_warning(_("Input vector and computational region do not overlap"));
     }
 
-
     dia = sqrt(region.ns_res * region.ns_res + region.ew_res * region.ew_res);
     if (radius * 2.0 < dia) {
-        G_warning(_("The search diameter %g is smaller than cell diagonal %g: some points could not be detected"),
+        G_warning(_("The search diameter %g is smaller than cell diagonal %g: "
+                    "some points could not be detected"),
                   radius * 2, dia);
     }
 
@@ -349,16 +340,16 @@ int main(int argc, char *argv[])
                     !Vect_cats_in_constraint(Cats, field, pcat_list))
                     continue;
 
-
-                if (Vect_points_distance(x, y, 0.0, Points->x[0],
-                                         Points->y[0], 0.0, 0) <= radius) {
+                if (Vect_points_distance(x, y, 0.0, Points->x[0], Points->y[0],
+                                         0.0, 0) <= radius) {
 
                     count++;
 
                     if (strcmp(method_opt->answer, "count") != 0) {
 
                         if (Cats->n_cats > 1)
-                            G_warning(_("Several cat values found for point %d. Using only first"),
+                            G_warning(_("Several cat values found for point "
+                                        "%d. Using only first"),
                                       List->id[i]);
                         tmp_cat = Cats->cat[0];
                         /* find cat in array */
@@ -378,10 +369,8 @@ int main(int argc, char *argv[])
                             }
                             if (npvalcats >= npvalcatsalloc) {
                                 npvalcatsalloc += 10;
-                                pvalcats =
-                                    (double *)G_realloc(pvalcats,
-                                                        npvalcatsalloc
-                                                        * sizeof(double));
+                                pvalcats = (double *)G_realloc(
+                                    pvalcats, npvalcatsalloc * sizeof(double));
                             }
                         }
                     }

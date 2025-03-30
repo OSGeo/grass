@@ -2,29 +2,30 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-struct stats
-{
+struct stats {
     int nalloc;
     int n;
     long *cat;
     double *area;
 };
 
-struct menu
-{
-    const char *name;		/* method name */
-    int (*func)(const char *, const char *, const char *, int, struct Categories *);
-    const char *text;		/* menu display - full description */
+struct menu {
+    const char *name; /* method name */
+    int (*func)(const char *, const char *, const char *, int,
+                struct Categories *);
+    const char *text; /* menu display - full description */
 };
 
 extern struct menu menu[];
 
 int o_adev(const char *, const char *, const char *, int, struct Categories *);
-int o_average(const char *, const char *, const char *, int, struct Categories *);
+int o_average(const char *, const char *, const char *, int,
+              struct Categories *);
 int o_divr(const char *, const char *, const char *, int, struct Categories *);
 int o_kurt(const char *, const char *, const char *, int, struct Categories *);
 int o_max(const char *, const char *, const char *, int, struct Categories *);
-int o_median(const char *, const char *, const char *, int, struct Categories *);
+int o_median(const char *, const char *, const char *, int,
+             struct Categories *);
 int o_min(const char *, const char *, const char *, int, struct Categories *);
 int o_mode(const char *, const char *, const char *, int, struct Categories *);
 int o_sdev(const char *, const char *, const char *, int, struct Categories *);

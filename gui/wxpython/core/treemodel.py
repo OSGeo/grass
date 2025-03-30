@@ -15,13 +15,12 @@ This program is free software under the GNU General Public License
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
-import six
 import copy
 
 from grass.script.utils import naturally_sort
 
 
-class TreeModel(object):
+class TreeModel:
     """Class represents a tree structure with hidden root.
 
     TreeModel is used together with TreeView class to display results in GUI.
@@ -193,7 +192,7 @@ class TreeModel(object):
         return "\n".join(text)
 
 
-class DictNode(object):
+class DictNode:
     """Node which has data in a form of dictionary."""
 
     def __init__(self, data=None):
@@ -219,7 +218,7 @@ class DictNode(object):
     def nprint(self, text, indent=0):
         text.append(indent * " " + self.label)
         if self.data:
-            for key, value in six.iteritems(self.data):
+            for key, value in self.data.items():
                 text.append(
                     "%(indent)s* %(key)s : %(value)s"
                     % {"indent": (indent + 2) * " ", "key": key, "value": value}
@@ -244,7 +243,7 @@ class ModuleNode(DictNode):
     """Node representing module."""
 
     def __init__(self, label=None, data=None):
-        super(ModuleNode, self).__init__(data=data)
+        super().__init__(data=data)
         self._label = label if label else ""
         if not data:
             self.data = {}

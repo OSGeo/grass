@@ -18,4 +18,3 @@ default: parsubdirs htmldir
 
 
 $(SUBDIRS1): lib
-

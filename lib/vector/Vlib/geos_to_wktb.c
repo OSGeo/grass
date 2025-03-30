@@ -1,16 +1,16 @@
 /*!
-  \file lib/vector/Vlib/geos_to_wktb.c
+   \file lib/vector/Vlib/geos_to_wktb.c
 
-  \brief Vector library - GEOS powered WKT and WKB export
+   \brief Vector library - GEOS powered WKT and WKB export
 
-  Higher level functions for reading/writing/manipulating vectors.
+   Higher level functions for reading/writing/manipulating vectors.
 
-  (C) 2015 by the GRASS Development Team
+   (C) 2015 by the GRASS Development Team
 
-  This program is free software under the GNU General Public License
-  (>=v2).  Read the file COPYING that comes with GRASS for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
-  \author Soeren Gebbert <soerengebbert googlemail.com>
+   \author Soeren Gebbert <soerengebbert googlemail.com>
  */
 
 #include <stdlib.h>
@@ -21,7 +21,7 @@
 
 /*!
    \brief Read vector area and return it as Well Known Binary (WKB)
-          unsigned char array
+   unsigned char array
 
    \param Map pointer to Map_info structure
    \param area area id
@@ -30,14 +30,16 @@
    \return pointer to unsigned char array
    \return NULL on error
  */
-unsigned char *Vect_read_area_to_wkb(struct Map_info * Map, int area, size_t *size)
+unsigned char *Vect_read_area_to_wkb(struct Map_info *Map, int area,
+                                     size_t *size)
 {
     static int init = 0;
+
     /* The writer is static for performance reasons */
     static GEOSWKBWriter *writer = NULL;
     unsigned char *wkb = NULL;
 
-    if(init == 0) {
+    if (init == 0) {
         initGEOS(NULL, NULL);
         writer = GEOSWKBWriter_create();
         init += 1;
@@ -47,20 +49,20 @@ unsigned char *Vect_read_area_to_wkb(struct Map_info * Map, int area, size_t *si
 
     GEOSGeometry *geom = Vect_read_area_geos(Map, area);
 
-    if(!geom) {
-        return(NULL);
+    if (!geom) {
+        return (NULL);
     }
 
     wkb = GEOSWKBWriter_write(writer, geom, size);
 
     GEOSGeom_destroy(geom);
 
-    return(wkb);
+    return (wkb);
 }
 
 /*!
    \brief Read vector area and return it as Well Known Text (WKT)
-          unsigned char array
+   unsigned char array
 
    \param Map pointer to Map_info structure
    \param area area id
@@ -69,14 +71,15 @@ unsigned char *Vect_read_area_to_wkb(struct Map_info * Map, int area, size_t *si
    \return pointer to char array
    \return NULL on error
  */
-char *Vect_read_area_to_wkt(struct Map_info * Map, int area)
+char *Vect_read_area_to_wkt(struct Map_info *Map, int area)
 {
     static int init = 0;
+
     /* The writer is static for performance reasons */
     static GEOSWKTWriter *writer = NULL;
     char *wkt = NULL;
 
-    if(init == 0) {
+    if (init == 0) {
         initGEOS(NULL, NULL);
         writer = GEOSWKTWriter_create();
         init += 1;
@@ -86,22 +89,22 @@ char *Vect_read_area_to_wkt(struct Map_info * Map, int area)
 
     GEOSGeometry *geom = Vect_read_area_geos(Map, area);
 
-    if(!geom) {
-        return(NULL);
+    if (!geom) {
+        return (NULL);
     }
 
     wkt = GEOSWKTWriter_write(writer, geom);
 
     GEOSGeom_destroy(geom);
 
-    return(wkt);
+    return (wkt);
 }
 
 /*!
    \brief Read a Well Known Binary (WKB) representation of
-          a given feature id.
-           
-   This function reads a specific feature and converts it into a 
+   a given feature id.
+
+   This function reads a specific feature and converts it into a
    WKB representation. line_pnts and line_cats structures can be provided
    to store the result of the read operation. That is meaningful in case
    the category values of the feature are needed.
@@ -122,65 +125,66 @@ char *Vect_read_area_to_wkt(struct Map_info * Map, int area)
    \return pointer to unsigned char array
    \return NULL on error
  */
-unsigned char *Vect_read_line_to_wkb(const struct Map_info *Map, 
-                                     struct line_pnts *line_p, 
-                                     struct line_cats *line_c, 
-                                     int line, size_t *size,
-                                     int *error)
-{    
+unsigned char *Vect_read_line_to_wkb(struct Map_info *Map,
+                                     struct line_pnts *line_p,
+                                     struct line_cats *line_c, int line,
+                                     size_t *size, int *error)
+{
     static int init = 0;
+
     /* The writer is static for performance reasons */
     static GEOSWKBWriter *writer = NULL;
     unsigned char *wkb = NULL;
     int destroy_line = 0, destroy_cats = 0;
 
-    if(init == 0) {
+    if (init == 0) {
         initGEOS(NULL, NULL);
         writer = GEOSWKBWriter_create();
         init += 1;
     }
 
-    if(line_p == NULL) {
+    if (line_p == NULL) {
         destroy_line = 1;
         line_p = Vect_new_line_struct();
     }
-    
-    if(line_c == NULL) {
+
+    if (line_c == NULL) {
         destroy_cats = 1;
         line_c = Vect_new_cats_struct();
     }
-    
+
     int f_type = Vect_read_line(Map, line_p, line_c, line);
+
     /* Save the error state */
     *error = f_type;
-    
-    if(f_type < 0)
-        return(NULL);
-    
+
+    if (f_type < 0)
+        return (NULL);
+
     GEOSWKBWriter_setOutputDimension(writer, Vect_is_3d(Map) ? 3 : 2);
 
     GEOSGeometry *geom = Vect_line_to_geos(line_p, f_type, Vect_is_3d(Map));
-    
-    if(destroy_cats == 1)
+
+    if (destroy_cats == 1)
         Vect_destroy_cats_struct(line_c);
 
-    if(destroy_line == 1)
+    if (destroy_line == 1)
         Vect_destroy_line_struct(line_p);
 
-    if(!geom) {
-        return(NULL);
+    if (!geom) {
+        return (NULL);
     }
 
     wkb = GEOSWKBWriter_write(writer, geom, size);
 
     GEOSGeom_destroy(geom);
 
-    return(wkb);
+    return (wkb);
 }
 
 /*!
    \brief Create a Well Known Binary (WKB) representation of
-          given feature type from points.
+   given feature type from points.
 
    This function is not thread safe, it uses static variables for speedup.
 
@@ -198,15 +202,16 @@ unsigned char *Vect_read_line_to_wkb(const struct Map_info *Map,
    \return pointer to char array
    \return NULL on error
  */
-unsigned char *Vect_line_to_wkb(const struct line_pnts *points,
-                       int type, int with_z, size_t *size)
+unsigned char *Vect_line_to_wkb(const struct line_pnts *points, int type,
+                                int with_z, size_t *size)
 {
     static int init = 0;
+
     /* The writer is static for performance reasons */
     static GEOSWKBWriter *writer = NULL;
     unsigned char *wkb = NULL;
 
-    if(init == 0) {
+    if (init == 0) {
         initGEOS(NULL, NULL);
         writer = GEOSWKBWriter_create();
         init += 1;
@@ -216,20 +221,20 @@ unsigned char *Vect_line_to_wkb(const struct line_pnts *points,
 
     GEOSGeometry *geom = Vect_line_to_geos(points, type, with_z);
 
-    if(!geom) {
-        return(NULL);
+    if (!geom) {
+        return (NULL);
     }
 
     wkb = GEOSWKBWriter_write(writer, geom, size);
 
     GEOSGeom_destroy(geom);
 
-    return(wkb);
+    return (wkb);
 }
 
 /*!
    \brief Create a Well Known Text (WKT) representation of
-          given feature type from points.
+   given feature type from points.
 
    This function is not thread safe, it uses static variables for speedup.
 
@@ -246,15 +251,15 @@ unsigned char *Vect_line_to_wkb(const struct line_pnts *points,
    \return pointer to char array
    \return NULL on error
  */
-char *Vect_line_to_wkt(const struct line_pnts *points,
-                       int type, int with_z)
+char *Vect_line_to_wkt(const struct line_pnts *points, int type, int with_z)
 {
     static int init = 0;
+
     /* The writer is static for performance reasons */
     static GEOSWKTWriter *writer = NULL;
     char *wkt = NULL;
 
-    if(init == 0) {
+    if (init == 0) {
         initGEOS(NULL, NULL);
         writer = GEOSWKTWriter_create();
         init += 1;
@@ -264,15 +269,15 @@ char *Vect_line_to_wkt(const struct line_pnts *points,
 
     GEOSGeometry *geom = Vect_line_to_geos(points, type, with_z);
 
-    if(!geom) {
-        return(NULL);
+    if (!geom) {
+        return (NULL);
     }
 
     wkt = GEOSWKTWriter_write(writer, geom);
 
     GEOSGeom_destroy(geom);
 
-    return(wkt);
+    return (wkt);
 }
 
 #endif /* HAVE_GEOS */

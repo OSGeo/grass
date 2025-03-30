@@ -25,7 +25,6 @@ L
 
 
 class TestRInPoly(TestCase):
-
     rinpoly = "test_rinpoly"
 
     @classmethod

@@ -2,7 +2,7 @@
 # first found target
 first: pre default
 
-# create platform dirs 
+# create platform dirs
 ARCH_DIRS = $(ARCH_DISTDIR) $(ARCH_BINDIR) $(ARCH_INCDIR) $(ARCH_LIBDIR) \
 	$(BIN) $(ETC) \
 	$(DRIVERDIR) $(DBDRIVERDIR) $(FONTDIR) $(DOCSDIR) $(HTMLDIR) \

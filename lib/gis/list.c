@@ -9,7 +9,7 @@
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
-*/
+ */
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -22,35 +22,34 @@
 #include <grass/glocale.h>
 
 static int list_element(FILE *, const char *, const char *, const char *,
-			int (*)(const char *, const char *, const char *));
+                        int (*)(const char *, const char *, char *));
 
 /*!
-  \brief General purpose list function
-  
-  Will list files from all mapsets in the mapset list for a specified
-  database element.
-  
-  Note: output is to stdout piped thru the more utility
-  
-  \code
-  lister (char *name char *mapset, char* buf)
-  \endcode
-  
-  Given file <em>name</em>, and <em>mapset</em>, lister() should
-  copy a string into 'buf' when called with name == "", should set
-  buf to general title for mapset list.
-  
-  \param element    database element (eg, "cell", "cellhd", etc.)
-  \param desc       description for element (if NULL, element is used)
-  \param mapset     mapset to be listed "" to list all mapsets in mapset search list 
-                    "." will list current mapset
-  \param lister     if given will call this routine to get a list title.
-                    NULL if no titles desired. 
-*/
-void G_list_element(const char *element,
-		    const char *desc,
-		    const char *mapset,
-		    int (*lister) (const char *, const char *, const char *))
+   \brief General purpose list function
+
+   Will list files from all mapsets in the mapset list for a specified
+   database element.
+
+   Note: output is to stdout piped thru the more utility
+
+   \code
+   lister (char *name char *mapset, char* buf)
+   \endcode
+
+   Given file <em>name</em>, and <em>mapset</em>, lister() should
+   copy a string into 'buf' when called with name == "", should set
+   buf to general title for mapset list.
+
+   \param element    database element (eg, "cell", "cellhd", etc.)
+   \param desc       description for element (if NULL, element is used)
+   \param mapset     mapset to be listed "" to list all mapsets in mapset search
+   list
+   "." will list current mapset
+   \param lister     if given will call this routine to get a list title.
+   NULL if no titles desired.
+ */
+void G_list_element(const char *element, const char *desc, const char *mapset,
+                    int (*lister)(const char *, const char *, char *))
 {
     struct Popen pager;
     int n;
@@ -59,7 +58,7 @@ void G_list_element(const char *element,
 
     count = 0;
     if (desc == 0 || *desc == 0)
-	desc = element;
+        desc = element;
 
     /*
      * G_popen() the more command to page the output
@@ -73,20 +72,19 @@ void G_list_element(const char *element,
      * otherwise just list the specified mapset
      */
     if (mapset == 0 || *mapset == 0)
-	for (n = 0; (mapset = G_get_mapset_name(n)); n++)
-	    count += list_element(more, element, desc, mapset, lister);
+        for (n = 0; (mapset = G_get_mapset_name(n)); n++)
+            count += list_element(more, element, desc, mapset, lister);
     else
-	count += list_element(more, element, desc, mapset, lister);
+        count += list_element(more, element, desc, mapset, lister);
 
     if (count == 0) {
-	if (mapset == 0 || *mapset == 0)
-	    fprintf(more, _("no %s files available in current mapset\n"),
-		    desc);
-	else
-	    fprintf(more, _("no %s files available in mapset <%s>\n"),
-		    desc, mapset);
+        if (mapset == 0 || *mapset == 0)
+            fprintf(more, _("no %s files available in current mapset\n"), desc);
+        else
+            fprintf(more, _("no %s files available in mapset <%s>\n"), desc,
+                    mapset);
 
-	fprintf(more, "----------------------------------------------\n");
+        fprintf(more, "----------------------------------------------\n");
     }
     /*
      * close the more
@@ -94,8 +92,9 @@ void G_list_element(const char *element,
     G_close_pager(&pager);
 }
 
-static int list_element(FILE *out, const char *element, const char *desc, const char *mapset,
-			int (*lister)(const char *, const char *, const char *))
+static int list_element(FILE *out, const char *element, const char *desc,
+                        const char *mapset,
+                        int (*lister)(const char *, const char *, char *))
 {
     char path[GPATH_MAX];
     int count = 0;
@@ -106,8 +105,7 @@ static int list_element(FILE *out, const char *element, const char *desc, const 
      * convert . to current mapset
      */
     if (strcmp(mapset, ".") == 0)
-	mapset = G_mapset();
-
+        mapset = G_mapset();
 
     /*
      * get the full name of the GIS directory within the mapset
@@ -117,8 +115,8 @@ static int list_element(FILE *out, const char *element, const char *desc, const 
      */
     G_file_name(path, element, "", mapset);
     if (access(path, 0) != 0) {
-	fprintf(out, "\n");
-	return count;
+        fprintf(out, "\n");
+        return count;
     }
 
     /*
@@ -129,52 +127,51 @@ static int list_element(FILE *out, const char *element, const char *desc, const 
     list = G_ls2(path, &count);
 
     if (count > 0) {
-	fprintf(out, _("%s files available in mapset <%s>:\n"), desc, mapset);
-	if (lister) {
-	    char title[400];
-	    char name[GNAME_MAX];
+        fprintf(out, _("%s files available in mapset <%s>:\n"), desc, mapset);
+        if (lister) {
+            char title[400];
+            char name[GNAME_MAX];
 
-	    *name = *title = 0;
-	    lister(name, mapset, title);
-	    if (*title)
-		fprintf(out, "\n%-18s %-.60s\n", name, title);
-	}
+            *name = *title = 0;
+            lister(name, mapset, title);
+            if (*title)
+                fprintf(out, "\n%-18s %-.60s\n", name, title);
+        }
     }
 
     if (lister) {
-	for (i = 0; i < count; i++) {
-	    char title[400];
+        for (i = 0; i < count; i++) {
+            char title[400];
 
-	    lister(list[i], mapset, title);
-	    fprintf(out, "%-18s %-.60s\n", list[i], title);
-	}
+            lister(list[i], mapset, title);
+            fprintf(out, "%-18s %-.60s\n", list[i], title);
+        }
     }
     else
-	G_ls_format(list, count, 0, out);
+        G_ls_format(list, count, 0, out);
 
     fprintf(out, "\n");
 
     for (i = 0; i < count; i++)
-	G_free((char *)list[i]);
+        G_free((char *)list[i]);
     if (list)
-	G_free(list);
+        G_free(list);
 
     return count;
 }
 
 /*!
-  \brief List specified type of elements. Application must release
-  the allocated memory.
- 
-  \param element element type (G_ELEMENT_RASTER, G_ELEMENT_VECTOR, G_ELEMENT_REGION )
-  \param gisbase path to GISBASE
-  \param location location name
-  \param mapset mapset name
+   \brief List specified type of elements. Application must release
+   the allocated memory.
 
- \return zero terminated array of element names
-*/
+   \param element element type (G_ELEMENT_RASTER, G_ELEMENT_VECTOR,
+   G_ELEMENT_REGION ) \param gisbase path to GISBASE \param location location
+   name \param mapset mapset name
+
+   \return zero terminated array of element names
+ */
 char **G_list(int element, const char *gisbase, const char *location,
-	      const char *mapset)
+              const char *mapset)
 {
     char *el;
     char *buf;
@@ -185,43 +182,43 @@ char **G_list(int element, const char *gisbase, const char *location,
 
     switch (element) {
     case G_ELEMENT_RASTER:
-	el = "cell";
-	break;
+        el = "cell";
+        break;
 
     case G_ELEMENT_GROUP:
-	el = "group";
-	break;
+        el = "group";
+        break;
 
     case G_ELEMENT_VECTOR:
-	el = "vector";
-	break;
+        el = "vector";
+        break;
 
     case G_ELEMENT_REGION:
-	el = "windows";
-	break;
+        el = "windows";
+        break;
 
     default:
-	G_fatal_error(_("G_list: Unknown element type"));
+        G_fatal_error(_("G_list: Unknown element type"));
     }
 
-    buf = (char *)G_malloc(strlen(gisbase) + strlen(location)
-			   + strlen(mapset) + strlen(el) + 4);
+    buf = (char *)G_malloc(strlen(gisbase) + strlen(location) + strlen(mapset) +
+                           strlen(el) + 4);
 
     sprintf(buf, "%s/%s/%s/%s", gisbase, location, mapset, el);
 
     dirp = opendir(buf);
     G_free(buf);
 
-    if (dirp == NULL) {		/* this can happen if element does not exist */
-	list = (char **)G_calloc(1, sizeof(char *));
-	return list;
+    if (dirp == NULL) { /* this can happen if element does not exist */
+        list = (char **)G_calloc(1, sizeof(char *));
+        return list;
     }
 
     count = 0;
     while ((dp = readdir(dirp)) != NULL) {
-	if (dp->d_name[0] == '.')
-	    continue;
-	count++;
+        if (dp->d_name[0] == '.')
+            continue;
+        count++;
     }
     rewinddir(dirp);
 
@@ -229,12 +226,12 @@ char **G_list(int element, const char *gisbase, const char *location,
 
     count = 0;
     while ((dp = readdir(dirp)) != NULL) {
-	if (dp->d_name[0] == '.')
-	    continue;
+        if (dp->d_name[0] == '.')
+            continue;
 
-	list[count] = (char *)G_malloc(strlen(dp->d_name) + 1);
-	strcpy(list[count], dp->d_name);
-	count++;
+        list[count] = (char *)G_malloc(strlen(dp->d_name) + 1);
+        strcpy(list[count], dp->d_name);
+        count++;
     }
     closedir(dirp);
 
@@ -242,22 +239,22 @@ char **G_list(int element, const char *gisbase, const char *location,
 }
 
 /*!
-  \brief Free list
-  
-  \param list char* array to be freed
-  
-  \return
-*/
+   \brief Free list
+
+   \param list char* array to be freed
+
+   \return
+ */
 void G_free_list(char **list)
 {
     int i = 0;
 
     if (!list)
-	return;
+        return;
 
     while (list[i]) {
-	G_free(list[i]);
-	i++;
+        G_free(list[i]);
+        i++;
     }
     G_free(list);
 }

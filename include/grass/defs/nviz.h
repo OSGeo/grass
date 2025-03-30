@@ -32,7 +32,6 @@ int Nviz_get_cplane_translation(nv_data *, int, float *, float *, float *);
 int Nviz_set_fence_color(nv_data *, int);
 int Nviz_set_cplane_here(nv_data *, int, float, float);
 
-
 /* draw.c */
 int Nviz_draw_all_surf(nv_data *);
 int Nviz_draw_all_vect(void);
@@ -48,7 +47,7 @@ void Nviz_get_max_texture(int *);
 
 /* exag.c */
 int Nviz_get_exag_height(double *, double *, double *);
-double Nviz_get_exag();
+double Nviz_get_exag(void);
 
 /* lights.c */
 int Nviz_set_light_position(nv_data *, int, double, double, double, double);
@@ -62,9 +61,9 @@ void Nviz_draw_model(nv_data *);
 /* map_obj.c */
 int Nviz_new_map_obj(int, const char *, double, nv_data *);
 int Nviz_set_attr(int, int, int, int, const char *, double, nv_data *);
-void Nviz_set_surface_attr_default();
-int Nviz_set_vpoint_attr_default();
-int Nviz_set_volume_attr_default();
+void Nviz_set_surface_attr_default(void);
+int Nviz_set_vpoint_attr_default(int);
+int Nviz_set_volume_attr_default(int);
 int Nviz_unset_attr(int, int, int);
 
 /* nviz.c */
@@ -73,16 +72,18 @@ void Nviz_destroy_data(nv_data *);
 void Nviz_set_bgcolor(nv_data *, int);
 int Nviz_get_bgcolor(nv_data *);
 int Nviz_color_from_str(const char *);
-struct fringe_data *Nviz_new_fringe(nv_data *, int, unsigned long,
-				    double, int, int, int, int);
-struct fringe_data *Nviz_set_fringe(nv_data *, int, unsigned long,
-				    double, int, int, int, int);
+struct fringe_data *Nviz_new_fringe(nv_data *, int, unsigned long, double, int,
+                                    int, int, int);
+struct fringe_data *Nviz_set_fringe(nv_data *, int, unsigned long, double, int,
+                                    int, int, int);
 void Nviz_draw_fringe(nv_data *data);
 int Nviz_draw_arrow(nv_data *);
 int Nviz_set_arrow(nv_data *, int, int, float, unsigned int);
 void Nviz_delete_arrow(nv_data *);
-struct scalebar_data * Nviz_new_scalebar(nv_data *, int, float *, float, unsigned int);
-struct scalebar_data * Nviz_set_scalebar(nv_data *, int , int, int, float, unsigned int);
+struct scalebar_data *Nviz_new_scalebar(nv_data *, int, float *, float,
+                                        unsigned int);
+struct scalebar_data *Nviz_set_scalebar(nv_data *, int, int, int, float,
+                                        unsigned int);
 void Nviz_draw_scalebar(nv_data *);
 void Nviz_delete_scalebar(nv_data *, int);
 
@@ -98,7 +99,7 @@ int Nviz_get_zrange(nv_data *, float *, float *);
 float Nviz_get_longdim(nv_data *);
 
 /* render.c */
-struct render_window *Nviz_new_render_window();
+struct render_window *Nviz_new_render_window(void);
 void Nviz_init_render_window(struct render_window *);
 void Nviz_destroy_render_window(struct render_window *);
 int Nviz_create_render_window(struct render_window *, void *, int, int);

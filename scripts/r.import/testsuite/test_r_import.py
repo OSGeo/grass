@@ -7,7 +7,6 @@ import grass.script as gs
 
 
 class TestRImportRegion(TestCase):
-
     imported = "test_r_import_imported"
 
     @classmethod

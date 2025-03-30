@@ -42,7 +42,7 @@ def call_use_temp_region(script, size, remaining, nesting, map_name=None):
 def main():
     this_file = sys.argv[0]
     if len(sys.argv) == 1:
-        # Some resonable defaults for a trivial test to allow calling without
+        # Some reasonable defaults for a trivial test to allow calling without
         # any parameters.
         size = 100
         remaining = None

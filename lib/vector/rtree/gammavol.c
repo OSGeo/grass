@@ -1,25 +1,25 @@
-
 /****************************************************************************
-* MODULE:       R-Tree library 
-*              
-* AUTHOR(S):    Antonin Guttman - original code
-*               Daniel Green (green@superliminal.com) - major clean-up
-*                               and implementation of bounding spheres
-*               Markus Metz - file-based and memory-based R*-tree
-*               
-* PURPOSE:      Multidimensional index
-*
-* COPYRIGHT:    (C) 2010 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*****************************************************************************/
+ * MODULE:       R-Tree library
+ *
+ * AUTHOR(S):    Antonin Guttman - original code
+ *               Daniel Green (green@superliminal.com) - major clean-up
+ *                               and implementation of bounding spheres
+ *               Markus Metz - file-based and memory-based R*-tree
+ *
+ * PURPOSE:      Multidimensional index
+ *
+ * COPYRIGHT:    (C) 2010 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *****************************************************************************/
+
 #include <stdio.h>
 #include <math.h>
 
 #ifndef ABS
-#	define ABS(a) ((a) > 0 ? (a) : -(a))
+#define ABS(a) ((a) > 0 ? (a) : -(a))
 #endif
 
 #define EP .0000000001
@@ -33,16 +33,16 @@ double sphere_volume(double dimension)
     return exp(log_volume);
 }
 
-int main()
+int main(void)
 {
     double dim = 0, delta = 1;
 
     while (ABS(delta) > EP)
-	if (sphere_volume(dim + delta) > sphere_volume(dim))
-	    dim += delta;
-	else
-	    delta /= -2;
+        if (sphere_volume(dim + delta) > sphere_volume(dim))
+            dim += delta;
+        else
+            delta /= -2;
     fprintf(stdout, "max volume = %.10f at dimension %.10f\n",
-	    sphere_volume(dim), dim);
+            sphere_volume(dim), dim);
     return 0;
 }

@@ -7,7 +7,7 @@
 #               Glynn Clements
 #               Martin Landa <landa.martin gmail.com>
 # PURPOSE:      Create HTML manual page snippets
-# COPYRIGHT:    (C) 2007-2022 by Glynn Clements
+# COPYRIGHT:    (C) 2007-2024 by Glynn Clements
 #                and the GRASS Development Team
 #
 #               This program is free software under the GNU General
@@ -26,22 +26,12 @@ import locale
 import json
 import pathlib
 import subprocess
-import time
 
-try:
-    # Python 2 import
-    from HTMLParser import HTMLParser
-except ImportError:
-    # Python 3 import
-    from html.parser import HTMLParser
+from html.parser import HTMLParser
 
-from six.moves.urllib import request as urlrequest
-from six.moves.urllib.error import HTTPError, URLError
-
-try:
-    import urlparse
-except ImportError:
-    import urllib.parse as urlparse
+from urllib import request as urlrequest
+from urllib.error import HTTPError, URLError
+import urllib.parse as urlparse
 
 try:
     import grass.script as gs
@@ -56,51 +46,82 @@ HEADERS = {
 }
 HTTP_STATUS_CODES = list(http.HTTPStatus)
 
-if sys.version_info[0] == 2:
-    PY2 = True
-else:
-    PY2 = False
 
+def get_version_branch(major_version, addons_git_repo_url):
+    """Check if version branch for the current GRASS version exists,
+    if not, take branch for the previous version
+    For the official repo we assume that at least one version branch is present
 
-if not PY2:
-    unicode = str
+    :param major_version int: GRASS GIS major version
+    :param addons_git_repo_url str: Addons Git ropository URL
+
+    :return version_branch str: version branch
+    """
+    version_branch = f"grass{major_version}"
+    if gs:
+        branch = gs.Popen(
+            [
+                "git",
+                "ls-remote",
+                "--heads",
+                addons_git_repo_url,
+                f"refs/heads/{version_branch}",
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        branch, stderr = branch.communicate()
+        if stderr:
+            gs.fatal(
+                _(
+                    "Failed to get branch from the Git repository"
+                    " <{repo_path}>.\n{error}"
+                ).format(
+                    repo_path=addons_git_repo_url,
+                    error=gs.decode(stderr),
+                )
+            )
+        if version_branch not in gs.decode(branch):
+            version_branch = "grass{}".format(int(major_version) - 1)
+    return version_branch
 
 
 grass_version = os.getenv("VERSION_NUMBER", "unknown")
 trunk_url = ""
 addons_url = ""
 grass_git_branch = "main"
+major, minor, patch = None, None, None
 if grass_version != "unknown":
     major, minor, patch = grass_version.split(".")
-    base_url = "https://github.com/OSGeo"
-    trunk_url = "{base_url}/grass/tree/{branch}/".format(
-        base_url=base_url, branch=grass_git_branch
+    base_url = "https://github.com/OSGeo/"
+    trunk_url = urlparse.urljoin(
+        base_url,
+        urlparse.urljoin(
+            "grass/tree/",
+            grass_git_branch + "/",
+        ),
     )
-    addons_url = "{base_url}/grass-addons/tree/grass{major}/".format(
-        base_url=base_url, major=major
+    addons_url = urlparse.urljoin(
+        base_url,
+        urlparse.urljoin(
+            "grass-addons/tree/",
+            get_version_branch(
+                major,
+                urlparse.urljoin(base_url, "grass-addons/"),
+            ),
+        ),
     )
 
 
 def _get_encoding():
-    encoding = locale.getdefaultlocale()[1]
+    try:
+        # Python >= 3.11
+        encoding = locale.getencoding()
+    except AttributeError:
+        encoding = locale.getdefaultlocale()[1]
     if not encoding:
         encoding = "UTF-8"
     return encoding
-
-
-def decode(bytes_):
-    """Decode bytes with default locale and return (unicode) string
-
-    No-op if parameter is not bytes (assumed unicode string).
-
-    :param bytes bytes_: the bytes to decode
-    """
-    if isinstance(bytes_, unicode):
-        return bytes_
-    if isinstance(bytes_, bytes):
-        enc = _get_encoding()
-        return bytes_.decode(enc)
-    return unicode(bytes_)
 
 
 def urlopen(url, *args, **kwargs):
@@ -181,18 +202,22 @@ def download_git_commit(url, response_format, *args, **kwargs):
         )
 
 
-def get_default_git_log(src_dir):
+def get_default_git_log(src_dir, datetime_format="%A %b %d %H:%M:%S %Y"):
     """Get default Git commit and commit date, when getting commit from
     local Git, local JSON file and remote GitHub REST API server wasn't
-    successfull.
+    successful.
 
     :param str src_dir: addon source dir
+    :param str datetime_format: output commit datetime format
+                                e.g. Sunday Jan 16 23:09:35 2022
 
     :return dict: dict which store last commit and commnit date
     """
     return {
         "commit": "unknown",
-        "date": time.ctime(os.path.getmtime(src_dir)),
+        "date": datetime.fromtimestamp(os.path.getmtime(src_dir)).strftime(
+            datetime_format
+        ),
     }
 
 
@@ -231,7 +256,7 @@ def get_git_commit_from_file(
 
     :return dict git_log: dict which store last commit and commnit date
     """
-    # Accessed date time if getting commit from JSON file wasn't successfull
+    # Accessed date time if getting commit from JSON file wasn't successful
     if not git_log:
         git_log = get_default_git_log(src_dir=src_dir)
     json_file_path = os.path.join(
@@ -263,7 +288,7 @@ def get_git_commit_from_rest_api_for_addon_repo(
 
     :return dict git_log: dict which store last commit and commnit date
     """
-    # Accessed date time if getting commit from GitHub REST API wasn't successfull
+    # Accessed date time if getting commit from GitHub REST API wasn't successful
     if not git_log:
         git_log = get_default_git_log(src_dir=src_dir)
     grass_addons_url = (
@@ -295,7 +320,7 @@ def format_git_commit_date_from_rest_api(
 
     :param str commit_datetime: commit datetime
     :param str datetime_format: output commit datetime format
-                                e.g. Sun Jan 16 23:09:35 2022
+                                e.g. Sunday Jan 16 23:09:35 2022
 
     :return str: output formatted commit datetime
     """
@@ -312,7 +337,7 @@ def format_git_commit_date_from_local_git(
 
     :param str commit_datetime: commit datetime
     :param str datetime_format: output commit datetime format
-                                e.g. Sun Jan 16 23:09:35 2022
+                                e.g. Sunday Jan 16 23:09:35 2022
 
     :return str: output formatted commit datetime
     """
@@ -337,7 +362,6 @@ def has_src_code_git(src_dir, is_addon):
     else:
         os.chdir(topdir)
     try:
-
         process_result = subprocess.run(
             [
                 "git",
@@ -399,17 +423,18 @@ tmp_file = "%s.tmp.html" % pgm
 header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
- <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
  <title>${PGM} - GRASS GIS Manual</title>
  <meta name="Author" content="GRASS Development Team">
  <meta name="description" content="${PGM}: ${PGM_DESC}">
  <link rel="stylesheet" href="grassdocs.css" type="text/css">
+ <meta http-equiv="content-language" content="en-us">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body bgcolor="white">
 <div id="container">
 
 <a href="index.html"><img src="grass_logo.png" alt="GRASS logo"></a>
-<hr class="header">
 """
 
 header_nopgm = """<h2>${PGM}</h2>
@@ -424,7 +449,8 @@ header_pgm_desc = """<h2>NAME</h2>
 """
 
 sourcecode = string.Template(
-    """<h2>SOURCE CODE</h2>
+    """
+<h2>SOURCE CODE</h2>
 <p>
   Available at:
   <a href="${URL_SOURCE}">${PGM} source code</a>
@@ -482,14 +508,10 @@ GRASS GIS ${GRASS_VERSION} Reference Manual
 
 def read_file(name):
     try:
-        f = open(name, "rb")
-        s = f.read()
-        f.close()
-        if PY2:
-            return s
-        else:
-            return decode(s)
-    except IOError:
+        with open(name) as f:
+            s = f.read()
+        return s
+    except OSError:
         return ""
 
 
@@ -548,42 +570,90 @@ def escape_href(label):
     return label.replace(" ", "-").lower()
 
 
-def write_toc(data):
+def write_toc(data, hamburger_menu_toc=False):
+    """Write Table of Contents
+
+    :param tuple data: parsed data from MyHTMLParser class instance
+    :param bool hamburger_menu_toc: write hamburger menu TOC for the
+                                    mobile, tablet screen
+    """
+
     if not data:
         return
 
     fd = sys.stdout
-    fd.write('<div class="toc">\n')
-    fd.write('<h4 class="toc">Table of contents</h4>\n')
-    fd.write('<ul class="toc">\n')
+    if hamburger_menu_toc:
+        fd.write("<script>\n")
+        fd.write("// Create hamburger menu TOC HTML elements by the JavaScript\n")
+        fd.write("let temp = document.createElement('template');\n")
+        fd.write(
+            """const toc = '<ul class="toc-mobile-screen" """
+            """id="toc-mobile-screen">' + \n"""
+        )
+    else:
+        fd.write('<div class="toc">\n')
+        fd.write('<h4 class="toc">Table of contents</h4>\n')
+        fd.write('<ul class="toc">\n')
     first = True
     has_h2 = False
     in_h3 = False
     indent = 4
     for tag, href, text in data:
         if tag == "h3" and not in_h3 and has_h2:
-            fd.write('\n%s<ul class="toc">\n' % (" " * indent))
+            if hamburger_menu_toc:
+                fd.write("'<ul>' + \n")
+            else:
+                fd.write('\n%s<ul class="toc">\n' % (" " * indent))
             indent += 4
             in_h3 = True
         elif not first:
-            fd.write("</li>\n")
+            if hamburger_menu_toc:
+                fd.write("'</li>' + \n")
+            else:
+                fd.write("</li>\n")
 
         if tag == "h2":
             has_h2 = True
             if in_h3:
                 indent -= 4
-                fd.write("%s</ul></li>\n" % (" " * indent))
+                if hamburger_menu_toc:
+                    fd.write("'</ul></li>' + \n")
+                else:
+                    fd.write("%s</ul></li>\n" % (" " * indent))
                 in_h3 = False
 
         text = text.replace("\xa0", " ")
-        fd.write(
-            '%s<li class="toc"><a href="#%s" class="toc">%s</a>'
-            % (" " * indent, escape_href(text), text)
-        )
+        if hamburger_menu_toc:
+            fd.write(
+                f"""'<li><a class="toc-item" href="#{escape_href(text)}">"""
+                f"{text}</a>' + \n"
+            )
+        else:
+            fd.write(
+                '%s<li class="toc"><a href="#%s" class="toc">%s</a>'
+                % (" " * indent, escape_href(text), text)
+            )
         first = False
 
-    fd.write("</li>\n</ul>\n")
-    fd.write("</div>\n")
+    if hamburger_menu_toc:
+        fd.write(
+            """'</li>' +
+'<a class="close" href="#">' +
+'<img src="./hamburger_menu_close.svg" alt="close">' +
+'</a>' +
+'</ul>' +
+'<a class="hamburger" href="#toc-mobile-screen">' +
+'<img src="./hamburger_menu.svg" alt="menu">' +
+'</a>';
+temp.innerHTML = toc;
+const grassLogoLink = document.getElementsByTagName("img")[0];
+grassLogoLink.after(temp.content);
+</script>
+"""
+        )
+    else:
+        fd.write("</li>\n</ul>\n")
+        fd.write("</div>\n")
 
 
 def update_toc(data):
@@ -609,31 +679,78 @@ def update_toc(data):
 def get_addon_path():
     """Check if pgm is in the addons list and get addon path
 
-    return: pgm path if pgm is addon else None
+    Make or update list of the official addons source
+    code paths g.extension prefix parameter plus /grass-addons directory
+    using Git repository
+
+    :return str|None: pgm path if pgm is addon else None
     """
-    addon_base = os.getenv("GRASS_ADDON_BASE")
-    if addon_base:
-        # addons_paths.json is file created during install extension
-        # check get_addons_paths() function in the g.extension.py file
-        addons_file = "addons_paths.json"
-        addons_paths = os.path.join(addon_base, addons_file)
-        if not os.path.exists(addons_paths):
-            # Compiled addon has own dir e.g. ~/.grass8/addons/db.join/
-            # with bin/ docs/ etc/ scripts/ subdir, required for compilation
-            # addons on osgeo lxd container server and generation of
-            # modules.xml file (build-xml.py script), when addons_paths.json
-            # file is stored one level dir up
-            addons_paths = os.path.join(
-                os.path.abspath(os.path.join(addon_base, "..")),
-                addons_file,
+    addons_base_dir = os.getenv("GRASS_ADDON_BASE")
+    if addons_base_dir and major:
+        grass_addons_dir = pathlib.Path(addons_base_dir) / "grass-addons"
+        if gs:
+            call = gs.call
+            popen = gs.Popen
+            fatal = gs.fatal
+        else:
+            call = subprocess.call
+            popen = subprocess.Popen
+            fatal = sys.stderr.write
+        addons_branch = get_version_branch(
+            major_version=major,
+            addons_git_repo_url=urlparse.urljoin(base_url, "grass-addons/"),
+        )
+        if not pathlib.Path(addons_base_dir).exists():
+            pathlib.Path(addons_base_dir).mkdir(parents=True, exist_ok=True)
+        if not grass_addons_dir.exists():
+            call(
+                [
+                    "git",
+                    "clone",
+                    "-q",
+                    "--no-checkout",
+                    f"--branch={addons_branch}",
+                    "--filter=blob:none",
+                    urlparse.urljoin(base_url, "grass-addons/"),
+                ],
+                cwd=addons_base_dir,
             )
-            if not os.path.exists(addons_paths):
-                return
-        with open(addons_paths) as f:
-            addons_paths = json.load(f)
-        for addon in addons_paths["tree"]:
-            if pgm == pathlib.Path(addon["path"]).name:
-                return addon["path"]
+        addons_file_list = popen(
+            ["git", "ls-tree", "--name-only", "-r", addons_branch],
+            cwd=grass_addons_dir,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        addons_file_list, stderr = addons_file_list.communicate()
+        if stderr:
+            message = (
+                "Failed to get addons files list from the"
+                " Git repository <{repo_path}>.\n{error}"
+            )
+            if gs:
+                fatal(
+                    _(
+                        message,
+                    ).format(
+                        repo_path=grass_addons_dir,
+                        error=gs.decode(stderr),
+                    )
+                )
+            else:
+                message += "\n"
+                fatal(
+                    message.format(
+                        repo_path=grass_addons_dir,
+                        error=stderr.decode(),
+                    )
+                )
+        addon_paths = re.findall(
+            rf".*{pgm}*.",
+            gs.decode(addons_file_list) if gs else addons_file_list.decode(),
+        )
+        for addon_path in addon_paths:
+            if pgm == pathlib.Path(addon_path).name:
+                return addon_path
 
 
 # process header
@@ -685,10 +802,20 @@ if not re.search("<html>", src_data, re.IGNORECASE):
             )
     if not re.search("<html>", tmp_data, re.IGNORECASE):
         sys.stdout.write(header_tmpl.substitute(PGM=pgm, PGM_DESC=pgm_desc))
+
     if tmp_data:
+        header_logo_img_el = '<img src="grass_logo.png" alt="GRASS logo">'
         for line in tmp_data.splitlines(True):
-            if not re.search("</body>|</html>", line, re.IGNORECASE):
-                sys.stdout.write(line)
+            # The cleanup happens on Makefile level too.
+            if not re.search(
+                "</body>|</html>|</div> <!-- end container -->", line, re.IGNORECASE
+            ):
+                if header_logo_img_el in line:
+                    sys.stdout.write(line)
+                    # create hamburger menu TOC
+                    write_toc(create_toc(src_data), hamburger_menu_toc=True)
+                else:
+                    sys.stdout.write(line)
 
 # create TOC
 write_toc(create_toc(src_data))
@@ -779,36 +906,39 @@ else:
 if sys.platform == "win32":
     url_source = url_source.replace(os.path.sep, "/")
 
+# Process Source code section
+branches = "branches"
+tree = "tree"
+commits = "commits"
+
+if branches in url_source:
+    url_log = url_source.replace(branches, commits)
+    url_source = url_source.replace(branches, tree)
+else:
+    url_log = url_source.replace(tree, commits)
+
+git_commit = get_last_git_commit(
+    src_dir=curdir,
+    addon_path=addon_path if addon_path else None,
+    is_addon=True if addon_path else False,
+)
+if git_commit["commit"] == "unknown":
+    date_tag = "Accessed: {date}".format(date=git_commit["date"])
+else:
+    date_tag = "Latest change: {date} in commit: {commit}".format(
+        date=git_commit["date"], commit=git_commit["commit"]
+    )
+sys.stdout.write(
+    sourcecode.substitute(
+        URL_SOURCE=url_source,
+        PGM=pgm,
+        URL_LOG=url_log,
+        DATE_TAG=date_tag,
+    )
+)
+
+# Process footer
 if index_name:
-    branches = "branches"
-    tree = "tree"
-    commits = "commits"
-
-    if branches in url_source:
-        url_log = url_source.replace(branches, commits)
-        url_source = url_source.replace(branches, tree)
-    else:
-        url_log = url_source.replace(tree, commits)
-
-    git_commit = get_last_git_commit(
-        src_dir=curdir,
-        addon_path=addon_path if addon_path else None,
-        is_addon=True if addon_path else False,
-    )
-    if git_commit["commit"] == "unknown":
-        date_tag = "Accessed: {date}".format(date=git_commit["date"])
-    else:
-        date_tag = "Latest change: {date} in commit: {commit}".format(
-            date=git_commit["date"], commit=git_commit["commit"]
-        )
-    sys.stdout.write(
-        sourcecode.substitute(
-            URL_SOURCE=url_source,
-            PGM=pgm,
-            URL_LOG=url_log,
-            DATE_TAG=date_tag,
-        )
-    )
     sys.stdout.write(
         footer_index.substitute(
             INDEXNAME=index_name,

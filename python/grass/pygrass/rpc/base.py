@@ -41,7 +41,7 @@ def dummy_server(lock, conn):
         lock.release()
 
 
-class RPCServerBase(object):
+class RPCServerBase:
     """This is the base class for send and receive RPC server
     It uses a Pipe for IPC.
 
@@ -170,7 +170,7 @@ class RPCServerBase(object):
             if isinstance(ret, FatalError):
                 raise ret
             return ret
-        except (EOFError, IOError, FatalError) as e:
+        except (EOFError, OSError, FatalError) as e:
             # The pipe was closed by the checker thread because
             # the server process was killed
             raise FatalError("Exception raised: " + str(e) + " Message: " + message)

@@ -7,7 +7,7 @@
 
 # TODO: change to/add 3x3 example
 
-# created conf file as described in EXAMPLES, moving window, 
+# created conf file as described in EXAMPLES, moving window,
 # see gui/wxgui/rlisetup/g.gui.rlisetup.html
 echo "SAMPLINGFRAME 0|0|1|1
 SAMPLEAREA -1|-1|0.015021459227467811|0.011058451816745656

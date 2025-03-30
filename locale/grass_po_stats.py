@@ -14,13 +14,12 @@
 #
 #############################################################################
 
-from __future__ import print_function
-
-import os, sys
-import subprocess
-import json
-import glob
 import codecs
+import glob
+import json
+import os
+import subprocess
+import sys
 
 
 def read_po_files(inputdirpath):
@@ -108,7 +107,6 @@ def get_stats(languages, directory):
         lbad = 0
         # for each file
         for flang in pofilelist:
-
             fpref = flang.split("_")[0]
             # run msgfmt for statistics
             # TODO check if it's working on windows

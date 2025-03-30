@@ -2,7 +2,7 @@
 #include <grass/gis.h>
 #include "pi.h"
 
-/* distance from point to point along a geodesic 
+/* distance from point to point along a geodesic
  * code from
  *   Paul D. Thomas
  *   "Spheroidal Geodesics, Reference Systems, and Local Geometry"
@@ -20,14 +20,14 @@ static double al;
 
 static double t1r, t2r;
 
-#define DIST_PARAMS	struct dist_params
-DIST_PARAMS {
-    short targetrow;		/* interpolation row for which params apply */
+#define DIST_PARAMS struct dist_params
+DIST_PARAMS
+{
+    short targetrow; /* interpolation row for which params apply */
     double t1, t2, t3, t4;
 };
 
 static DIST_PARAMS *lat_params, *nextcalc;
-
 
 /* must be called once to establish the ellipsoid */
 int G_begin_geodesic_distance_l(short nrows, double a, double e2)
@@ -40,30 +40,28 @@ int G_begin_geodesic_distance_l(short nrows, double a, double e2)
     ff64 = f * f / 64;
 
     /* initialize lat_params array and indicate no prior data storage */
-    lat_params = (DIST_PARAMS *) G_calloc(nrows, sizeof(DIST_PARAMS));
+    lat_params = (DIST_PARAMS *)G_calloc(nrows, sizeof(DIST_PARAMS));
     for (i = 0, nextcalc = lat_params; i < nrows; i++, nextcalc++)
-	nextcalc->targetrow = -1;
+        nextcalc->targetrow = -1;
 
     return 0;
 }
-
 
 double LL_set_geodesic_distance_lat(double lat)
 {
     return (atan(boa * tan(Radians(lat))));
 }
 
-
 double set_sdlmr(double lon_diff)
 {
     return (sin(Radians(lon_diff) / 2));
 }
 
-
 /* must be called first */
-int LL_set_geodesic_distance(double *rowlook,	/* preprocessed latitude data by row */
-			     int unk, int data	/* row (y) of interpolation target, data value */
-    )
+int LL_set_geodesic_distance(
+    double *rowlook,  /* preprocessed latitude data by row */
+    int unk, int data /* row (y) of interpolation target, data value */
+)
 {
     double stm, ctm, sdtm, cdtm;
     double tm, dtm;
@@ -81,22 +79,21 @@ int LL_set_geodesic_distance(double *rowlook,	/* preprocessed latitude data by r
     cdtm = cos(dtm);
 
     nextcalc = lat_params + data;
-    if (nextcalc->targetrow != unk) {	/* reset latitude offset parameters */
-	temp = stm * cdtm;
-	nextcalc->t1 = temp * temp * 2;
+    if (nextcalc->targetrow != unk) { /* reset latitude offset parameters */
+        temp = stm * cdtm;
+        nextcalc->t1 = temp * temp * 2;
 
-	temp = sdtm * ctm;
-	nextcalc->t2 = temp * temp * 2;
+        temp = sdtm * ctm;
+        nextcalc->t2 = temp * temp * 2;
 
-	nextcalc->t3 = sdtm * sdtm;
-	nextcalc->t4 = cdtm * cdtm - stm * stm;
+        nextcalc->t3 = sdtm * sdtm;
+        nextcalc->t4 = cdtm * cdtm - stm * stm;
 
-	nextcalc->targetrow = unk;	/* parameterization tagged to row */
+        nextcalc->targetrow = unk; /* parameterization tagged to row */
     }
 
     return 0;
 }
-
 
 double LL_geodesic_distance(double sdlmr)
 {
@@ -104,22 +101,22 @@ double LL_geodesic_distance(double sdlmr)
 
     /* special case - shapiro */
     if (sdlmr == 0.0 && t1r == t2r)
-	return 0.0;
+        return 0.0;
 
     q = nextcalc->t3 + sdlmr * sdlmr * nextcalc->t4;
     /* special case - shapiro */
     if (q == 1.0)
-	return PI * al;
+        return PI * al;
 
-    cd = 1 - 2 * q;		/* ill-conditioned subtraction for small q */
+    cd = 1 - 2 * q; /* ill-conditioned subtraction for small q */
     /* mod starts here */
-    sd = 2 * sqrt(q - q * q);	/* sd^2 = 1 - cd^2 */
-    if (q != 0.0 && cd == 1.0)	/* test for small q */
-	t = 1.0;
+    sd = 2 * sqrt(q - q * q);  /* sd^2 = 1 - cd^2 */
+    if (q != 0.0 && cd == 1.0) /* test for small q */
+        t = 1.0;
     else if (sd == 0.0)
-	t = 1.0;
+        t = 1.0;
     else
-	t = acos(cd) / sd;	/* don't know how to fix acos(1-2*q) yet */
+        t = acos(cd) / sd; /* don't know how to fix acos(1-2*q) yet */
     /* mod ends here */
 
     u = nextcalc->t1 / (1 - q);
@@ -131,13 +128,10 @@ double LL_geodesic_distance(double sdlmr)
     a = -d * e;
 
     return (al * sd *
-	    (t - f / 4 * (t * x - y) +
-	     ff64 * (x * (a + (t - (a + e) / 2) * x) + y * (-2 * d + e * y)
-		     + d * x * y)
-	    )
-	);
+            (t - f / 4 * (t * x - y) +
+             ff64 * (x * (a + (t - (a + e) / 2) * x) + y * (-2 * d + e * y) +
+                     d * x * y)));
 }
-
 
 int free_dist_params(void)
 {

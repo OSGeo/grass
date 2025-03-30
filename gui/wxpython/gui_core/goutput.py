@@ -21,10 +21,16 @@ This program is free software under the GNU General Public License
 
 import textwrap
 
+import os
 import wx
 from wx import stc
 
 from grass.pydispatch.signal import Signal
+from grass.grassdb.history import (
+    read_history,
+    create_history_file,
+    get_current_mapset_gui_history_path,
+)
 
 # needed just for testing
 if __name__ == "__main__":
@@ -43,7 +49,7 @@ from core.gconsole import (
 )
 from core.globalvar import CheckWxVersion, wxPythonPhoenix
 from gui_core.prompt import GPromptSTC
-from gui_core.wrap import Button, ClearButton, ToggleButton, StaticText, StaticBox
+from gui_core.wrap import Button, ClearButton, StaticText
 from core.settings import UserSettings
 
 
@@ -84,6 +90,7 @@ class GConsoleWindow(wx.SplitterWindow):
         self.panelPrompt = wx.Panel(parent=self, id=wx.ID_ANY)
         # initialize variables
         self.parent = parent  # GMFrame | CmdPanel | ?
+        self.giface = giface
         self._gconsole = gconsole
         self._menuModel = menuModel
 
@@ -135,48 +142,31 @@ class GConsoleWindow(wx.SplitterWindow):
         if not self._gcstyle & GC_PROMPT:
             self.cmdPrompt.Hide()
 
-        if self._gcstyle & GC_PROMPT:
-            cmdLabel = _("Command prompt")
-            self.outputBox = StaticBox(
-                parent=self.panelOutput, id=wx.ID_ANY, label=" %s " % _("Output window")
-            )
+        # read history file
+        self._loadHistory()
+        if self.giface:
+            self.giface.currentMapsetChanged.connect(self._loadHistory)
 
-            self.cmdBox = StaticBox(
-                parent=self.panelOutput, id=wx.ID_ANY, label=" %s " % cmdLabel
-            )
+            if self._gcstyle == GC_PROMPT:
+                # connect update history signals only for main Console Window
+                self.giface.entryToHistoryAdded.connect(
+                    lambda cmd: self.cmdPrompt.AddEntryToCmdHistoryBuffer(cmd)
+                )
+                self.giface.entryFromHistoryRemoved.connect(
+                    lambda index: self.cmdPrompt.RemoveEntryFromCmdHistoryBuffer(index)
+                )
 
         # buttons
-        self.btnOutputClear = ClearButton(parent=self.panelOutput)
-        self.btnOutputClear.SetToolTip(_("Clear output window content"))
-        self.btnCmdClear = ClearButton(parent=self.panelOutput)
-        self.btnCmdClear.SetToolTip(_("Clear command prompt content"))
-        self.btnOutputSave = Button(parent=self.panelOutput, id=wx.ID_SAVE)
-        self.btnOutputSave.SetToolTip(_("Save output window content to the file"))
+        self.btnClear = ClearButton(parent=self.panelPrompt)
+        self.btnClear.SetToolTip(_("Clear prompt and output window"))
+        self.btnOutputSave = Button(parent=self.panelPrompt, id=wx.ID_SAVE)
+        self.btnOutputSave.SetToolTip(_("Save output to a file"))
         self.btnCmdAbort = Button(parent=self.panelProgress, id=wx.ID_STOP)
         self.btnCmdAbort.SetToolTip(_("Abort running command"))
-        self.btnCmdProtocol = ToggleButton(
-            parent=self.panelOutput,
-            id=wx.ID_ANY,
-            label=_("&Log file"),
-            size=self.btnCmdClear.GetSize(),
-        )
-        self.btnCmdProtocol.SetToolTip(
-            _(
-                "Toggle to save list of executed commands into "
-                "a file; content saved when switching off."
-            )
-        )
-        self.cmdFileProtocol = None
 
-        if not self._gcstyle & GC_PROMPT:
-            self.btnCmdClear.Hide()
-            self.btnCmdProtocol.Hide()
-
-        self.btnCmdClear.Bind(wx.EVT_BUTTON, self.cmdPrompt.OnCmdErase)
-        self.btnOutputClear.Bind(wx.EVT_BUTTON, self.OnOutputClear)
+        self.btnClear.Bind(wx.EVT_BUTTON, self.OnClear)
         self.btnOutputSave.Bind(wx.EVT_BUTTON, self.OnOutputSave)
         self.btnCmdAbort.Bind(wx.EVT_BUTTON, self._gconsole.OnCmdAbort)
-        self.btnCmdProtocol.Bind(wx.EVT_TOGGLEBUTTON, self.OnCmdProtocol)
 
         self._layout()
 
@@ -184,13 +174,6 @@ class GConsoleWindow(wx.SplitterWindow):
         """Do layout"""
         self.outputSizer = wx.BoxSizer(wx.VERTICAL)
         progressSizer = wx.BoxSizer(wx.HORIZONTAL)
-        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        if self._gcstyle & GC_PROMPT:
-            outBtnSizer = wx.StaticBoxSizer(self.outputBox, wx.HORIZONTAL)
-            cmdBtnSizer = wx.StaticBoxSizer(self.cmdBox, wx.HORIZONTAL)
-        else:
-            outBtnSizer = wx.BoxSizer(wx.HORIZONTAL)
-            cmdBtnSizer = wx.BoxSizer(wx.HORIZONTAL)
 
         if self._gcstyle & GC_PROMPT:
             promptSizer = wx.BoxSizer(wx.VERTICAL)
@@ -210,45 +193,21 @@ class GConsoleWindow(wx.SplitterWindow):
             )
             promptSizer.Add(helpText, proportion=0, flag=wx.EXPAND | wx.LEFT, border=5)
 
+            btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+            btnSizer.AddStretchSpacer()
+            btnSizer.Add(
+                self.btnOutputSave,
+                proportion=0,
+                flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
+                border=5,
+            )
+            btnSizer.Add(self.btnClear, proportion=0, flag=wx.EXPAND, border=5)
+            promptSizer.Add(btnSizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+
         self.outputSizer.Add(
             self.cmdOutput, proportion=1, flag=wx.EXPAND | wx.ALL, border=3
         )
-        if self._gcstyle & GC_PROMPT:
-            proportion = 1
-        else:
-            proportion = 0
-            outBtnSizer.AddStretchSpacer()
 
-        outBtnSizer.Add(
-            self.btnOutputClear,
-            proportion=proportion,
-            flag=wx.ALIGN_LEFT | wx.LEFT | wx.RIGHT | wx.BOTTOM,
-            border=5,
-        )
-
-        outBtnSizer.Add(
-            self.btnOutputSave,
-            proportion=proportion,
-            flag=wx.RIGHT | wx.BOTTOM,
-            border=5,
-        )
-
-        cmdBtnSizer.Add(
-            self.btnCmdProtocol,
-            proportion=1,
-            flag=wx.ALIGN_CENTER
-            | wx.ALIGN_CENTER_VERTICAL
-            | wx.LEFT
-            | wx.RIGHT
-            | wx.BOTTOM,
-            border=5,
-        )
-        cmdBtnSizer.Add(
-            self.btnCmdClear,
-            proportion=1,
-            flag=wx.ALIGN_CENTER | wx.RIGHT | wx.BOTTOM,
-            border=5,
-        )
         progressSizer.Add(
             self.btnCmdAbort, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER, border=5
         )
@@ -261,16 +220,7 @@ class GConsoleWindow(wx.SplitterWindow):
 
         self.panelProgress.SetSizer(progressSizer)
         progressSizer.Fit(self.panelProgress)
-
-        btnSizer.Add(outBtnSizer, proportion=1, flag=wx.ALL | wx.ALIGN_CENTER, border=5)
-        btnSizer.Add(
-            cmdBtnSizer,
-            proportion=1,
-            flag=wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM | wx.RIGHT,
-            border=5,
-        )
         self.outputSizer.Add(self.panelProgress, proportion=0, flag=wx.EXPAND)
-        self.outputSizer.Add(btnSizer, proportion=0, flag=wx.EXPAND)
 
         self.outputSizer.Fit(self)
         self.outputSizer.SetSizeHints(self)
@@ -282,12 +232,10 @@ class GConsoleWindow(wx.SplitterWindow):
             self.panelPrompt.SetSizer(promptSizer)
 
         # split window
-        if self._gcstyle & GC_PROMPT:
-            self.SplitHorizontally(self.panelOutput, self.panelPrompt, -50)
-        else:
-            self.SplitHorizontally(self.panelOutput, self.panelPrompt, -45)
+        self.SplitHorizontally(self.panelOutput, self.panelPrompt, 0)
+        if not (self._gcstyle & GC_PROMPT):
             self.Unsplit()
-        self.SetMinimumPaneSize(self.btnCmdClear.GetSize()[1] + 25)
+        self.SetMinimumPaneSize(self.btnClear.GetSize()[1] + 100)
 
         self.SetSashGravity(1.0)
 
@@ -295,6 +243,17 @@ class GConsoleWindow(wx.SplitterWindow):
         # layout
         self.SetAutoLayout(True)
         self.Layout()
+
+    def _loadHistory(self):
+        """Load history from a history file to data structures"""
+        history_path = get_current_mapset_gui_history_path()
+        try:
+            if not os.path.exists(history_path):
+                create_history_file(history_path)
+            self.cmdPrompt.cmdbuffer = read_history(history_path)
+            self.cmdPrompt.cmdindex = len(self.cmdPrompt.cmdbuffer)
+        except OSError as e:
+            GError(str(e))
 
     def GetPanel(self, prompt=True):
         """Get panel
@@ -386,12 +345,13 @@ class GConsoleWindow(wx.SplitterWindow):
             notification=Notification.MAKE_VISIBLE,
         )
 
-    def OnOutputClear(self, event):
-        """Clear content of output window"""
+    def OnClear(self, event):
+        """Clear content of output window and command window"""
         self.cmdOutput.SetReadOnly(False)
         self.cmdOutput.ClearAll()
         self.cmdOutput.SetReadOnly(True)
         self.progressbar.SetValue(0)
+        self.cmdPrompt.CmdErase()
 
     def GetProgressBar(self):
         """Return progress bar widget"""
@@ -424,7 +384,7 @@ class GConsoleWindow(wx.SplitterWindow):
             try:
                 output = open(path, "w")
                 output.write(text)
-            except IOError as e:
+            except OSError as e:
                 GError(
                     _("Unable to write file '%(path)s'.\n\nDetails: %(error)s")
                     % {"path": path, "error": e}
@@ -471,56 +431,6 @@ class GConsoleWindow(wx.SplitterWindow):
     def OnCmdProgress(self, event):
         """Update progress message info"""
         self.progressbar.SetValue(event.value)
-        event.Skip()
-
-    def CmdProtocolSave(self):
-        """Save list of manually entered commands into a text log file"""
-        if self.cmdFileProtocol is None:
-            return  # it should not happen
-
-        try:
-            with open(self.cmdFileProtocol, "a") as output:
-                cmds = self.cmdPrompt.GetCommands()
-                output.write("\n".join(cmds))
-                if len(cmds) > 0:
-                    output.write("\n")
-        except IOError as e:
-            GError(
-                _("Unable to write file '{filePath}'.\n\nDetails: {error}").format(
-                    filePath=self.cmdFileProtocol, error=e
-                )
-            )
-
-        self.showNotification.emit(
-            message=_("Command log saved to '{}'".format(self.cmdFileProtocol))
-        )
-        self.cmdFileProtocol = None
-
-    def OnCmdProtocol(self, event=None):
-        """Save commands into file"""
-        if not event.IsChecked():
-            # stop capturing commands, save list of commands to the
-            # protocol file
-            self.CmdProtocolSave()
-        else:
-            # start capturing commands
-            self.cmdPrompt.ClearCommands()
-            # ask for the file
-            dlg = wx.FileDialog(
-                self,
-                message=_("Save file as..."),
-                defaultFile="grass_cmd_log.txt",
-                wildcard=_("%(txt)s (*.txt)|*.txt|%(files)s (*)|*")
-                % {"txt": _("Text files"), "files": _("Files")},
-                style=wx.FD_SAVE,
-            )
-            if dlg.ShowModal() == wx.ID_OK:
-                self.cmdFileProtocol = dlg.GetPath()
-            else:
-                wx.CallAfter(self.btnCmdProtocol.SetValue, False)
-
-            dlg.Destroy()
-
         event.Skip()
 
     def OnCmdRun(self, event):

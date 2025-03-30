@@ -28,9 +28,9 @@
 
 #include "iclass_local_proto.h"
 
-
 /*!
-   \brief Calculates statistical values for one class and multiple bands based on training areas.
+   \brief Calculates statistical values for one class and multiple bands based
+   on training areas.
 
    Calculates values statistical based on the cells
    that are within training areas. Creates raster map
@@ -47,9 +47,9 @@
    \return number of processed training areas
    \return -1 on failure
  */
-int I_iclass_analysis(IClass_statistics * statistics, struct Ref *refer,
-		      struct Map_info *map_info, const char *layer_name,
-		      const char *group, const char *raster_name)
+int I_iclass_analysis(IClass_statistics *statistics, struct Ref *refer,
+                      struct Map_info *map_info, const char *layer_name,
+                      const char *group, const char *raster_name)
 {
     int ret;
 
@@ -63,8 +63,6 @@ int I_iclass_analysis(IClass_statistics * statistics, struct Ref *refer,
 
     IClass_perimeter_list perimeters;
 
-
-
     G_debug(1, "iclass_analysis(): group = %s", group);
 
     category = statistics->cat;
@@ -73,15 +71,14 @@ int I_iclass_analysis(IClass_statistics * statistics, struct Ref *refer,
     G_get_set_window(&band_region);
 
     /* find perimeter points from vector map */
-    ret =
-	vector2perimeters(map_info, layer_name, category, &perimeters,
-			  &band_region);
+    ret = vector2perimeters(map_info, layer_name, category, &perimeters,
+                            &band_region);
     if (ret < 0) {
-	return -1;
+        return -1;
     }
     else if (ret == 0) {
-	G_warning(_("No areas in category %d"), category);
-	return 0;
+        G_warning(_("No areas in category %d"), category);
+        return 0;
     }
 
     open_band_files(refer, &band_buffer, &band_fd);
@@ -94,13 +91,11 @@ int I_iclass_analysis(IClass_statistics * statistics, struct Ref *refer,
     return ret;
 }
 
-
-
 /*!
    \brief Read files for the specified group subgroup into the Ref structure.
 
    \param group_name name of imagery group
-   \param subgroup_name name of imagery subgroup 
+   \param subgroup_name name of imagery subgroup
    \param subgroup_name if it is NULL, bands from group will be used
    \param[out] refer pointer to band files structure
 
@@ -108,46 +103,48 @@ int I_iclass_analysis(IClass_statistics * statistics, struct Ref *refer,
    \return 0 on failure
  */
 int I_iclass_init_group(const char *group_name, const char *subgroup_name,
-			struct Ref *refer)
+                        struct Ref *refer)
 {
     int n;
 
     G_debug(3, "I_iclass_init_group(): group_name = %s, subgroup_name = %s",
-	    group_name, subgroup_name);
-    I_init_group_ref(refer);	/* called in I_get_group_ref */
+            group_name, subgroup_name);
+    I_init_group_ref(refer); /* called in I_get_group_ref */
 
     if (subgroup_name)
-	I_get_subgroup_ref(group_name, subgroup_name, refer);
+        I_get_subgroup_ref(group_name, subgroup_name, refer);
     else
-	I_get_group_ref(group_name, refer);
+        I_get_group_ref(group_name, refer);
 
     for (n = 0; n < refer->nfiles; n++) {
-	if (G_find_raster(refer->file[n].name, refer->file[n].mapset) == NULL) {
-	    if (subgroup_name)
-		G_warning(_("Raster map <%s@%s> in subgroup "
-			    "<%s> does not exist"), refer->file[n].name,
-			  refer->file[n].mapset, subgroup_name);
-	    else
-		G_warning(_("Raster map <%s@%s> in group "
-			    "<%s> does not exist"), refer->file[n].name,
-			  refer->file[n].mapset, group_name);
+        if (G_find_raster(refer->file[n].name, refer->file[n].mapset) == NULL) {
+            if (subgroup_name)
+                G_warning(_("Raster map <%s@%s> in subgroup "
+                            "<%s> does not exist"),
+                          refer->file[n].name, refer->file[n].mapset,
+                          subgroup_name);
+            else
+                G_warning(_("Raster map <%s@%s> in group "
+                            "<%s> does not exist"),
+                          refer->file[n].name, refer->file[n].mapset,
+                          group_name);
 
-	    I_free_group_ref(refer);
-	    return 0;
-	}
+            I_free_group_ref(refer);
+            return 0;
+        }
     }
 
     if (refer->nfiles <= 1) {
-	if (subgroup_name)
-	    G_warning(_
-		      ("Subgroup <%s> does not have enough files (it has %d files)"),
-		      subgroup_name, refer->nfiles);
-	else
-	    G_warning(_
-		      ("Group <%s> does not have enough files (it has %d files)"),
-		      group_name, refer->nfiles);
-	I_free_group_ref(refer);
-	return 0;
+        if (subgroup_name)
+            G_warning(
+                _("Subgroup <%s> does not have enough files (it has %d files)"),
+                subgroup_name, refer->nfiles);
+        else
+            G_warning(
+                _("Group <%s> does not have enough files (it has %d files)"),
+                group_name, refer->nfiles);
+        I_free_group_ref(refer);
+        return 0;
     }
 
     return 1;
@@ -160,8 +157,8 @@ int I_iclass_init_group(const char *group_name, const char *subgroup_name,
    \param refer pointer to band files structure
    \param raster_name name of temporary raster map (to be created)
  */
-void I_iclass_create_raster(IClass_statistics * statistics, struct Ref *refer,
-			    const char *raster_name)
+void I_iclass_create_raster(IClass_statistics *statistics, struct Ref *refer,
+                            const char *raster_name)
 {
     CELL **band_buffer;
 
@@ -170,7 +167,7 @@ void I_iclass_create_raster(IClass_statistics * statistics, struct Ref *refer,
     int b;
 
     for (b = 0; b < statistics->nbands; b++) {
-	band_range(statistics, b);
+        band_range(statistics, b);
     }
 
     open_band_files(refer, &band_buffer, &band_fd);

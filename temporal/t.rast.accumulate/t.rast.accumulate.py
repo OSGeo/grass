@@ -152,10 +152,9 @@
 # % key: r
 # % description: Reverse time direction in cyclic accumulation
 # %end
-from __future__ import print_function
+from copy import copy
 
 import grass.script as grass
-from copy import copy
 
 ############################################################################
 
@@ -325,7 +324,6 @@ def main():
     output_maps = []
 
     while input_strds_end > start and stop > start:
-
         # Make sure that the cyclic computation will stop at the correct time
         if stop and end > stop:
             end = stop

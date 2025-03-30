@@ -1,9 +1,9 @@
 /****************************************************************************
- * 
- *  MODULE:	r.terraflow
+ *
+ *  MODULE:        r.terraflow
  *
  *  COPYRIGHT (C) 2007 Laura Toma
- *   
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -24,66 +24,57 @@
 #include <grass/iostream/ami.h>
 #include "common.h"
 
-
-
-
 /* ********************************************************************** */
 /* deletes input stream *str and replaces it by the sorted stream */
 
-template<class T, class FUN>
-void
-sort(AMI_STREAM<T> **str, FUN fo) {
-  Rtimer rt;
-  AMI_STREAM<T> *sortedStr;
+template <class T, class FUN>
+void sort(AMI_STREAM<T> **str, FUN fo)
+{
+    Rtimer rt;
+    AMI_STREAM<T> *sortedStr;
 
-  if (stats)
-    stats->recordLength("pre-sort", *str);
-  rt_start(rt);
+    if (stats)
+        stats->recordLength("pre-sort", *str);
+    rt_start(rt);
 
-  /* let AMI_sort create its output stream and delete the inout stream */
-  int eraseInputStream = 1;
-  AMI_sort(*str,&sortedStr, &fo, eraseInputStream);
-  rt_stop(rt);
+    /* let AMI_sort create its output stream and delete the inout stream */
+    int eraseInputStream = 1;
+    AMI_sort(*str, &sortedStr, &fo, eraseInputStream);
+    rt_stop(rt);
 
-  if (stats) {
-      stats->recordLength("sort", sortedStr);
-      stats->recordTime("sort", rt);
-  }
+    if (stats) {
+        stats->recordLength("sort", sortedStr);
+        stats->recordTime("sort", rt);
+    }
 
-  sortedStr->seek(0);
-  *str = sortedStr;
-
+    sortedStr->seek(0);
+    *str = sortedStr;
 }
-
-
-
-
 
 /* ********************************************************************** */
 
 /* warning - creates a new stream and returns it !! */
-template<class T, class FUN>
-AMI_STREAM<T> *
-sort(AMI_STREAM<T> *strIn, FUN fo) {
-  Rtimer rt;
-  AMI_STREAM<T> *strOut;
+template <class T, class FUN>
+AMI_STREAM<T> *sort(AMI_STREAM<T> *strIn, FUN fo)
+{
+    Rtimer rt;
+    AMI_STREAM<T> *strOut;
 
-  if (stats)
-    stats->recordLength("pre-sort", strIn);
-  rt_start(rt);
+    if (stats)
+        stats->recordLength("pre-sort", strIn);
+    rt_start(rt);
 
-  AMI_sort(strIn, &strOut, &fo);
-  assert(strOut);
+    AMI_sort(strIn, &strOut, &fo);
+    assert(strOut);
 
-  rt_stop(rt);
-  if (stats) {
-      stats->recordLength("sort", strOut);
-      stats->recordTime("sort", rt);
-  }
+    rt_stop(rt);
+    if (stats) {
+        stats->recordLength("sort", strOut);
+        stats->recordTime("sort", rt);
+    }
 
-  strOut->seek(0);
-  return strOut;
+    strOut->seek(0);
+    return strOut;
 }
 
 #endif
-

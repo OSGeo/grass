@@ -11,18 +11,18 @@ DCELL **read_cell(const char *name)
     int row;
 
     fd = Rast_open_old(name, "");
-    
-    buf = G_malloc((size_t) nrows * ncols * sizeof(DCELL));
-    idx = G_malloc(nrows * sizeof(DCELL *));
-    
-    for (row = 0; row < nrows; row++) {
-	idx[row] = &buf[row * ncols];
 
-	Rast_get_d_row(fd, idx[row], row);
+    buf = G_malloc((size_t)nrows * ncols * sizeof(DCELL));
+    idx = G_malloc(nrows * sizeof(DCELL *));
+
+    for (row = 0; row < nrows; row++) {
+        idx[row] = &buf[row * ncols];
+
+        Rast_get_d_row(fd, idx[row], row);
     }
-    
+
     Rast_close(fd);
-    
+
     return idx;
 }
 

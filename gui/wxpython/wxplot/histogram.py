@@ -129,7 +129,7 @@ class HistogramPlotFrame(BasePlotFrame):
         dlg.Destroy()
 
     def SetupHistogram(self):
-        """Build data list for ploting each raster"""
+        """Build data list for plotting each raster"""
 
         #
         # populate raster dictionary

@@ -1,4 +1,3 @@
-
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include "globals.h"
@@ -20,13 +19,13 @@ int f_col(int argc, const int *argt, void **args)
     int i;
 
     if (argc > 0)
-	return E_ARG_HI;
+        return E_ARG_HI;
 
     if (argt[0] != CELL_TYPE)
-	return E_RES_TYPE;
+        return E_RES_TYPE;
 
     for (i = 0; i < columns; i++)
-	res[i] = i + 1;
+        res[i] = i + 1;
 
     return 0;
 }
@@ -38,13 +37,13 @@ int f_row(int argc, const int *argt, void **args)
     int i;
 
     if (argc > 0)
-	return E_ARG_HI;
+        return E_ARG_HI;
 
     if (argt[0] != CELL_TYPE)
-	return E_RES_TYPE;
+        return E_RES_TYPE;
 
     for (i = 0; i < columns; i++)
-	res[i] = row;
+        res[i] = row;
 
     return 0;
 }
@@ -56,13 +55,13 @@ int f_depth(int argc, const int *argt, void **args)
     int i;
 
     if (argc > 0)
-	return E_ARG_HI;
+        return E_ARG_HI;
 
     if (argt[0] != CELL_TYPE)
-	return E_RES_TYPE;
+        return E_RES_TYPE;
 
     for (i = 0; i < columns; i++)
-	res[i] = depth;
+        res[i] = depth;
 
     return 0;
 }
@@ -73,13 +72,13 @@ int f_nrows(int argc, const int *argt, void **args)
     int i;
 
     if (argc > 0)
-	return E_ARG_HI;
+        return E_ARG_HI;
 
     if (argt[0] != CELL_TYPE)
-	return E_RES_TYPE;
+        return E_RES_TYPE;
 
     for (i = 0; i < columns; i++)
-	res[i] = rows;
+        res[i] = rows;
 
     return 0;
 }
@@ -90,13 +89,13 @@ int f_ncols(int argc, const int *argt, void **args)
     int i;
 
     if (argc > 0)
-	return E_ARG_HI;
+        return E_ARG_HI;
 
     if (argt[0] != CELL_TYPE)
-	return E_RES_TYPE;
+        return E_RES_TYPE;
 
     for (i = 0; i < columns; i++)
-	res[i] = columns;
+        res[i] = columns;
 
     return 0;
 }
@@ -107,13 +106,13 @@ int f_ndepths(int argc, const int *argt, void **args)
     int i;
 
     if (argc > 0)
-	return E_ARG_HI;
+        return E_ARG_HI;
 
     if (argt[0] != CELL_TYPE)
-	return E_RES_TYPE;
+        return E_RES_TYPE;
 
     for (i = 0; i < columns; i++)
-	res[i] = depths;
+        res[i] = depths;
 
     return 0;
 }

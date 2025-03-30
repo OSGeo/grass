@@ -1,4 +1,3 @@
-
 /* georef coefficients */
 
 extern double E12[20], N12[20], Z12[20];

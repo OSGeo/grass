@@ -1,11 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       m.transform   (nee g.transform)
  * AUTHOR(S):    Brian J. Buckley
  *               Glynn Clements
  *               Hamish Bowman
- * PURPOSE:      Utility to compute transformation based upon GCPs and 
+ * PURPOSE:      Utility to compute transformation based upon GCPs and
  *               output error measurements
  * COPYRIGHT:    (C) 2006-2010 by the GRASS Development Team
  *
@@ -25,14 +24,12 @@
 #include <grass/imagery.h>
 #include <grass/glocale.h>
 
-struct Max
-{
+struct Max {
     int idx;
     double val;
 };
 
-struct Stats
-{
+struct Stats {
     struct Max x, y, g;
     double sum2, rms;
 };
@@ -60,13 +57,13 @@ static struct Stats fwd, rev;
 static void update_max(struct Max *m, int n, double k)
 {
     if (k > m->val) {
-	m->idx = n;
-	m->val = k;
+        m->idx = n;
+        m->val = k;
     }
 }
 
 static void update_stats(struct Stats *st, int n, double dx, double dy,
-			 double dg, double d2)
+                         double dg, double d2)
 {
     update_max(&st->x, n, dx);
     update_max(&st->y, n, dy);
@@ -82,95 +79,95 @@ static void diagonal(double *dg, double *d2, double dx, double dy)
 
 static void compute_transformation(void)
 {
-    static const int order_pnts[3] = { 3, 6, 10 };
+    static const int order_pnts[3] = {3, 6, 10};
     int n, i;
 
     equation_stat =
-	I_compute_georef_equations(&points, E12, N12, E21, N21, order);
+        I_compute_georef_equations(&points, E12, N12, E21, N21, order);
 
     if (equation_stat == 0)
-	G_fatal_error(_("Not enough points, %d are required"),
-		      order_pnts[order - 1]);
+        G_fatal_error(_("Not enough points, %d are required"),
+                      order_pnts[order - 1]);
 
     if (equation_stat <= 0)
-	G_fatal_error(_("Error conducting transform (%d)"), equation_stat);
+        G_fatal_error(_("Error conducting transform (%d)"), equation_stat);
 
     count = 0;
 
     for (n = 0; n < points.count; n++) {
-	double e1, n1, e2, n2;
-	double fx, fy, fd, fd2;
-	double rx, ry, rd, rd2;
+        double e1, n1, e2, n2;
+        double fx, fy, fd, fd2;
+        double rx, ry, rd, rd2;
 
-	if (points.status[n] <= 0)
-	    continue;
+        if (points.status[n] <= 0)
+            continue;
 
-	count++;
+        count++;
 
-	if (need_fwd) {
-	    I_georef(points.e1[n], points.n1[n], &e2, &n2, E12, N12, order);
+        if (need_fwd) {
+            I_georef(points.e1[n], points.n1[n], &e2, &n2, E12, N12, order);
 
-	    fx = fabs(e2 - points.e2[n]);
-	    fy = fabs(n2 - points.n2[n]);
+            fx = fabs(e2 - points.e2[n]);
+            fy = fabs(n2 - points.n2[n]);
 
-	    if (need_fd)
-		diagonal(&fd, &fd2, fx, fy);
+            if (need_fd)
+                diagonal(&fd, &fd2, fx, fy);
 
-	    if (summary)
-		update_stats(&fwd, n, fx, fy, fd, fd2);
-	}
+            if (summary)
+                update_stats(&fwd, n, fx, fy, fd, fd2);
+        }
 
-	if (need_rev) {
-	    I_georef(points.e2[n], points.n2[n], &e1, &n1, E21, N21, order);
+        if (need_rev) {
+            I_georef(points.e2[n], points.n2[n], &e1, &n1, E21, N21, order);
 
-	    rx = fabs(e1 - points.e1[n]);
-	    ry = fabs(n1 - points.n1[n]);
+            rx = fabs(e1 - points.e1[n]);
+            ry = fabs(n1 - points.n1[n]);
 
-	    if (need_rd)
-		diagonal(&rd, &rd2, rx, ry);
+            if (need_rd)
+                diagonal(&rd, &rd2, rx, ry);
 
-	    if (summary)
-		update_stats(&rev, n, rx, ry, rd, rd2);
-	}
+            if (summary)
+                update_stats(&rev, n, rx, ry, rd, rd2);
+        }
 
-	if (!columns[0])
-	    continue;
+        if (!columns[0])
+            continue;
 
-	if (coord_file)
-	    continue;
+        if (coord_file)
+            continue;
 
-	for (i = 0;; i++) {
-	    const char *col = columns[i];
+        for (i = 0;; i++) {
+            const char *col = columns[i];
 
-	    if (!col)
-		break;
+            if (!col)
+                break;
 
-	    if (strcmp("idx", col) == 0)
-		printf(" %d", n);
-	    if (strcmp("src", col) == 0)
-		printf(" %f %f", points.e1[n], points.n1[n]);
-	    if (strcmp("dst", col) == 0)
-		printf(" %f %f", points.e2[n], points.n2[n]);
-	    if (strcmp("fwd", col) == 0)
-		printf(" %f %f", e2, n2);
-	    if (strcmp("rev", col) == 0)
-		printf(" %f %f", e1, n1);
-	    if (strcmp("fxy", col) == 0)
-		printf(" %f %f", fx, fy);
-	    if (strcmp("rxy", col) == 0)
-		printf(" %f %f", rx, ry);
-	    if (strcmp("fd", col) == 0)
-		printf(" %f", fd);
-	    if (strcmp("rd", col) == 0)
-		printf(" %f", rd);
-	}
+            if (strcmp("idx", col) == 0)
+                printf(" %d", n);
+            if (strcmp("src", col) == 0)
+                printf(" %f %f", points.e1[n], points.n1[n]);
+            if (strcmp("dst", col) == 0)
+                printf(" %f %f", points.e2[n], points.n2[n]);
+            if (strcmp("fwd", col) == 0)
+                printf(" %f %f", e2, n2);
+            if (strcmp("rev", col) == 0)
+                printf(" %f %f", e1, n1);
+            if (strcmp("fxy", col) == 0)
+                printf(" %f %f", fx, fy);
+            if (strcmp("rxy", col) == 0)
+                printf(" %f %f", rx, ry);
+            if (strcmp("fd", col) == 0)
+                printf(" %f", fd);
+            if (strcmp("rd", col) == 0)
+                printf(" %f", rd);
+        }
 
-	printf("\n");
+        printf("\n");
     }
 
     if (summary && count > 0) {
-	fwd.rms = sqrt(fwd.sum2 / count);
-	rev.rms = sqrt(rev.sum2 / count);
+        fwd.rms = sqrt(fwd.sum2 / count);
+        rev.rms = sqrt(rev.sum2 / count);
     }
 }
 
@@ -191,17 +188,17 @@ static void do_stats(const char *name, const struct Stats *st)
 static void analyze(void)
 {
     if (equation_stat == -1)
-	G_warning(_("Poorly placed control points"));
+        G_warning(_("Poorly placed control points"));
     else if (equation_stat == -2)
-	G_fatal_error(_("Insufficient memory"));
+        G_fatal_error(_("Insufficient memory"));
     else if (equation_stat < 0)
-	G_fatal_error(_("Parameter error"));
+        G_fatal_error(_("Parameter error"));
     else if (equation_stat == 0)
-	G_fatal_error(_("No active control points"));
+        G_fatal_error(_("No active control points"));
     else if (summary) {
-	printf("Number of active points: %d\n", count);
-	do_stats("Forward", &fwd);
-	do_stats("Reverse", &rev);
+        printf("Number of active points: %d\n", count);
+        do_stats("Forward", &fwd);
+        do_stats("Reverse", &rev);
     }
 }
 
@@ -210,54 +207,54 @@ static void parse_format(void)
     int i;
 
     if (summary) {
-	need_fwd = need_rev = need_fd = need_rd = 1;
-	return;
+        need_fwd = need_rev = need_fd = need_rd = 1;
+        return;
     }
 
     if (!columns)
-	return;
+        return;
 
     for (i = 0;; i++) {
-	const char *col = columns[i];
+        const char *col = columns[i];
 
-	if (!col)
-	    break;
+        if (!col)
+            break;
 
-	if (strcmp("fwd", col) == 0)
-	    need_fwd = 1;
-	if (strcmp("fxy", col) == 0)
-	    need_fwd = 1;
-	if (strcmp("fd", col) == 0)
-	    need_fwd = need_fd = 1;
-	if (strcmp("rev", col) == 0)
-	    need_rev = 1;
-	if (strcmp("rxy", col) == 0)
-	    need_rev = 1;
-	if (strcmp("rd", col) == 0)
-	    need_rev = need_rd = 1;
+        if (strcmp("fwd", col) == 0)
+            need_fwd = 1;
+        if (strcmp("fxy", col) == 0)
+            need_fwd = 1;
+        if (strcmp("fd", col) == 0)
+            need_fwd = need_fd = 1;
+        if (strcmp("rev", col) == 0)
+            need_rev = 1;
+        if (strcmp("rxy", col) == 0)
+            need_rev = 1;
+        if (strcmp("rd", col) == 0)
+            need_rev = need_rd = 1;
     }
 }
 
 static void dump_cooefs(void)
 {
     int i;
-    static const int order_pnts[3] = { 3, 6, 10 };
+    static const int order_pnts[3] = {3, 6, 10};
 
     for (i = 0; i < order_pnts[order - 1]; i++)
-    	fprintf(stdout, "E%d=%.15g\n", i, forward ? E12[i] : E21[i]);
+        fprintf(stdout, "E%d=%.15g\n", i, forward ? E12[i] : E21[i]);
 
     for (i = 0; i < order_pnts[order - 1]; i++)
-    	fprintf(stdout, "N%d=%.15g\n", i, forward ? N12[i] : N21[i]);
+        fprintf(stdout, "N%d=%.15g\n", i, forward ? N12[i] : N21[i]);
 }
 
 static void xform_value(double east, double north)
 {
     double xe, xn;
 
-    if(forward)
-	I_georef(east, north, &xe, &xn, E12, N12, order);
+    if (forward)
+        I_georef(east, north, &xe, &xn, E12, N12, order);
     else
-	I_georef(east, north, &xe, &xn, E21, N21, order);
+        I_georef(east, north, &xe, &xn, E21, N21, order);
 
     fprintf(stdout, "%.15g %.15g\n", xe, xn);
 }
@@ -269,38 +266,37 @@ static void do_pt_xforms(void)
     FILE *fp;
 
     if (strcmp(coord_file, "-") == 0)
-    	fp = stdin;
+        fp = stdin;
     else {
-    	fp = fopen(coord_file, "r");
-    	if (!fp)
-    	    G_fatal_error(_("Unable to open file <%s>"), coord_file);
+        fp = fopen(coord_file, "r");
+        if (!fp)
+            G_fatal_error(_("Unable to open file <%s>"), coord_file);
     }
 
     for (;;) {
-    	char buf[64];
+        char buf[64];
 
-    	if (!G_getl2(buf, sizeof(buf), fp))
-    	    break;
+        if (!G_getl2(buf, sizeof(buf), fp))
+            break;
 
-    	if ((buf[0] == '#') || (buf[0] == '\0'))
-    	    continue;
+        if ((buf[0] == '#') || (buf[0] == '\0'))
+            continue;
 
-    	/* ? sscanf(buf, "%s %s", &east_str, &north_str)
-    	    ? G_scan_easting(,,-1)
-    	    ? G_scan_northing(,,-1) */
-    	/* ? muliple delims with sscanf(buf, "%[ ,|\t]", &dummy) ? */
+        /* ? sscanf(buf, "%s %s", &east_str, &north_str)
+           ? G_scan_easting(,,-1)
+           ? G_scan_northing(,,-1) */
+        /* ? muliple delims with sscanf(buf, "%[ ,|\t]", &dummy) ? */
 
-    	ret = sscanf(buf, "%lf %lf", &easting, &northing);
-    	if (ret != 2)
-    	    G_fatal_error(_("Invalid coordinates: [%s]"), buf);
+        ret = sscanf(buf, "%lf %lf", &easting, &northing);
+        if (ret != 2)
+            G_fatal_error(_("Invalid coordinates: [%s]"), buf);
 
-    	xform_value(easting, northing);
+        xform_value(easting, northing);
     }
 
     if (fp != stdin)
-    	fclose(fp);
+        fclose(fp);
 }
-
 
 int main(int argc, char **argv)
 {
@@ -317,7 +313,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("transformation"));
     G_add_keyword("GCP");
     module->description =
-	_("Computes a coordinate transformation based on the control points.");
+        _("Computes a coordinate transformation based on the control points.");
 
     grp = G_define_standard_option(G_OPT_I_GROUP);
 
@@ -336,17 +332,14 @@ int main(int argc, char **argv)
     fmt->multiple = YES;
     fmt->options = "idx,src,dst,fwd,rev,fxy,rxy,fd,rd";
     desc = NULL;
-    G_asprintf(&desc,
-	        "idx;%s;src;%s;dst;%s;fwd;%s;rev;%s;fxy;%s;rxy;%s;fd;%s;rd;%s",
-	        _("point index"),
-	        _("source coordinates"),
-	        _("destination coordinates"),
-	        _("forward coordinates (destination)"),
-	        _("reverse coordinates (source)"),
-	        _("forward coordinates difference (destination)"),
-	        _("reverse coordinates difference (source)"),
-	        _("forward error (destination)"),
-	        _("reverse error (source)"));
+    G_asprintf(
+        &desc, "idx;%s;src;%s;dst;%s;fwd;%s;rev;%s;fxy;%s;rxy;%s;fd;%s;rd;%s",
+        _("point index"), _("source coordinates"), _("destination coordinates"),
+        _("forward coordinates (destination)"),
+        _("reverse coordinates (source)"),
+        _("forward coordinates difference (destination)"),
+        _("reverse coordinates difference (source)"),
+        _("forward error (destination)"), _("reverse error (source)"));
     fmt->descriptions = desc;
     fmt->answer = "fd,rd";
     fmt->description = _("Output format");
@@ -357,8 +350,8 @@ int main(int argc, char **argv)
 
     xfm_pts = G_define_standard_option(G_OPT_F_INPUT);
     xfm_pts->required = NO;
-    xfm_pts->label =
-	_("File containing coordinates to transform (\"-\" to read from stdin)");
+    xfm_pts->label = _(
+        "File containing coordinates to transform (\"-\" to read from stdin)");
     xfm_pts->description = _("Local x,y coordinates to target east,north");
 
     rev_flag = G_define_flag();
@@ -371,8 +364,7 @@ int main(int argc, char **argv)
     dump_flag->description = _("Display transform matrix coefficients");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
-
+        exit(EXIT_FAILURE);
 
     name = grp->answer;
     order = atoi(val->answer);
@@ -391,11 +383,11 @@ int main(int argc, char **argv)
 
     analyze();
 
-    if(dump_flag->answer)
-	dump_cooefs();
+    if (dump_flag->answer)
+        dump_cooefs();
 
-    if(coord_file)
-	do_pt_xforms();
+    if (coord_file)
+        do_pt_xforms();
 
     return 0;
 }

@@ -12,16 +12,16 @@
 #include <math.h>
 #include "global.h"
 
-void p_cubic_f(struct cache *ibuffer,	 /* input buffer                */
-	       void *obufptr,	         /* ptr in output buffer        */
-	       int cell_type,	         /* raster map type of obufptr  */
-	       double *row_idx,	         /* row index                   */
-	       double *col_idx,	         /* column index                */
-	       struct Cell_head *cellhd	 /* cell header of input layer  */
-    )
+void p_cubic_f(struct cache *ibuffer,   /* input buffer                */
+               void *obufptr,           /* ptr in output buffer        */
+               int cell_type,           /* raster map type of obufptr  */
+               double *row_idx,         /* row index                   */
+               double *col_idx,         /* column index                */
+               struct Cell_head *cellhd /* cell header of input layer  */
+)
 {
     /* start nearest neighbor to do some basic tests */
-    int row, col;		/* row/col of nearest neighbor   */
+    int row, col; /* row/col of nearest neighbor   */
     DCELL *cellp, cell;
 
     /* cut indices to integer */
@@ -41,13 +41,13 @@ void p_cubic_f(struct cache *ibuffer,	 /* input buffer                */
         return;
     }
     cell = *cellp;
-    
+
     p_cubic(ibuffer, obufptr, cell_type, row_idx, col_idx, cellhd);
     /* fallback to bilinear if cubic is null */
     if (Rast_is_d_null_value(obufptr)) {
         p_bilinear(ibuffer, obufptr, cell_type, row_idx, col_idx, cellhd);
         /* fallback to nearest if bilinear is null */
-	if (Rast_is_d_null_value(obufptr))
-	    Rast_set_d_value(obufptr, cell, cell_type);
+        if (Rast_is_d_null_value(obufptr))
+            Rast_set_d_value(obufptr, cell, cell_type);
     }
 }

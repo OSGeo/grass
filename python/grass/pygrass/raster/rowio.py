@@ -39,7 +39,7 @@ get_row = {
 }
 
 
-class RowIO(object):
+class RowIO:
     def __init__(self):
         self.c_rowio = librowio.ROWIO()
         self.fd = None

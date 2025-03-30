@@ -30,7 +30,7 @@ def is_open(c_mapinfo):
 # =============================================
 
 
-class Info(object):
+class Info:
     """Basic vector info.
     To get access to the vector info the map must be opened. ::
 
@@ -341,7 +341,7 @@ class Info(object):
         :param tab_cols: define the name and type of the columns of the
                          attribute table of the vecto map
         :type tab_cols: list of pairs
-        :param link_name: define the name of the link connecttion with the
+        :param link_name: define the name of the link connection with the
                           database
         :type link_name: str
         :param link_key: define the nema of the column that will be use as
@@ -427,7 +427,7 @@ class Info(object):
                 )
             if layer_db_link.layer != layer:
                 raise RuntimeError(
-                    "The databse link for layer %d of <%s> references layer %d."
+                    "The database link for layer %d of <%s> references layer %d."
                     % (layer, self.name, layer_db_link.layer)
                 )
             self.layer = layer

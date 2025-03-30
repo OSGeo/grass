@@ -1,14 +1,15 @@
 /*!
    \file lib/ogsf/gvl_calc.c
 
-   \brief OGSF library - loading and manipulating volumes (lower level functions)
+   \brief OGSF library - loading and manipulating volumes (lower level
+   functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -27,39 +28,44 @@
 /*!
    \brief memory buffer for writing
  */
-#define BUFFER_SIZE 1000000
+#define BUFFER_SIZE      1000000
 
 /* USEFUL MACROS */
 
 /* interp. */
-#define	LINTERP(d,a,b)	(a + d * (b - a))
-#define TINTERP(d,v) ((v[0]*(1.-d[0])*(1.-d[1])*(1.-d[2])) +\
-			(v[1]*d[0]*(1.-d[1])*(1.-d[2])) + \
-			(v[2]*d[0]*d[1]*(1.-d[2])) + \
-			(v[3]*(1.-d[0])*d[1]*(1.-d[2])) + \
-			(v[4]*(1.-d[0])*(1.-d[1])*d[2]) + \
-			(v[5]*d[0]*(1.-d[1])*d[2]) + \
-			(v[6]*d[0]*d[1]*d[2]) + \
-			(v[7]*(1.-d[0])*d[1]*d[2]))
+#define LINTERP(d, a, b) (a + d * (b - a))
+#define TINTERP(d, v)                                                   \
+    ((v[0] * (1. - d[0]) * (1. - d[1]) * (1. - d[2])) +                 \
+     (v[1] * d[0] * (1. - d[1]) * (1. - d[2])) +                        \
+     (v[2] * d[0] * d[1] * (1. - d[2])) +                               \
+     (v[3] * (1. - d[0]) * d[1] * (1. - d[2])) +                        \
+     (v[4] * (1. - d[0]) * (1. - d[1]) * d[2]) +                        \
+     (v[5] * d[0] * (1. - d[1]) * d[2]) + (v[6] * d[0] * d[1] * d[2]) + \
+     (v[7] * (1. - d[0]) * d[1] * d[2]))
 
 #define FOR_VAR i_for
-#define FOR_0_TO_N(n, cmd) { int FOR_VAR; for (FOR_VAR = 0; FOR_VAR < n; FOR_VAR++) {cmd;} }
+#define FOR_0_TO_N(n, cmd)                          \
+    {                                               \
+        int FOR_VAR;                                \
+        for (FOR_VAR = 0; FOR_VAR < n; FOR_VAR++) { \
+            cmd;                                    \
+        }                                           \
+    }
 
 /*!
    \brief writing and reading isosurface data
  */
-#define WRITE(c) gvl_write_char(dbuff->ndx_new++, &(dbuff->new), c)
-#define READ() gvl_read_char(dbuff->ndx_old++, dbuff->old)
-#define SKIP(n) dbuff->ndx_old = dbuff->ndx_old + n
+#define WRITE(c)         gvl_write_char(dbuff->ndx_new++, &(dbuff->new), c)
+#define READ()           gvl_read_char(dbuff->ndx_old++, dbuff->old)
+#define SKIP(n)          dbuff->ndx_old = dbuff->ndx_old + n
 
 /*!
    \brief check and set data descriptor
  */
-#define IS_IN_DATA(att) ((isosurf->data_desc >> att) & 1)
+#define IS_IN_DATA(att)  ((isosurf->data_desc >> att) & 1)
 #define SET_IN_DATA(att) isosurf->data_desc = (isosurf->data_desc | (1 << att))
 
-typedef struct
-{
+typedef struct {
     unsigned char *old;
     unsigned char *new;
     int ndx_old;
@@ -82,33 +88,33 @@ double ResX, ResY, ResZ;
    \param ndx
    \param dbuff
  */
-void iso_w_cndx(int ndx, data_buffer * dbuff)
+void iso_w_cndx(int ndx, data_buffer *dbuff)
 {
     /* cube don't contains polys */
     if (ndx == -1) {
-	if (dbuff->num_zero == 0) {
-	    WRITE(0);
-	    dbuff->num_zero++;
-	}
-	else if (dbuff->num_zero == 254) {
-	    WRITE(dbuff->num_zero + 1);
-	    dbuff->num_zero = 0;
-	}
-	else {
-	    dbuff->num_zero++;
-	}
+        if (dbuff->num_zero == 0) {
+            WRITE(0);
+            dbuff->num_zero++;
+        }
+        else if (dbuff->num_zero == 254) {
+            WRITE(dbuff->num_zero + 1);
+            dbuff->num_zero = 0;
+        }
+        else {
+            dbuff->num_zero++;
+        }
     }
-    else {			/* isosurface cube */
-	if (dbuff->num_zero == 0) {
-	    WRITE((ndx / 256) + 1);
-	    WRITE(ndx % 256);
-	}
-	else {
-	    WRITE(dbuff->num_zero);
-	    dbuff->num_zero = 0;
-	    WRITE((ndx / 256) + 1);
-	    WRITE(ndx % 256);
-	}
+    else { /* isosurface cube */
+        if (dbuff->num_zero == 0) {
+            WRITE((ndx / 256) + 1);
+            WRITE(ndx % 256);
+        }
+        else {
+            WRITE(dbuff->num_zero);
+            dbuff->num_zero = 0;
+            WRITE((ndx / 256) + 1);
+            WRITE(ndx % 256);
+        }
     }
 }
 
@@ -117,25 +123,25 @@ void iso_w_cndx(int ndx, data_buffer * dbuff)
 
    \param dbuff
  */
-int iso_r_cndx(data_buffer * dbuff)
+int iso_r_cndx(data_buffer *dbuff)
 {
     int ndx, ndx2;
 
     if (dbuff->num_zero != 0) {
-	dbuff->num_zero--;
-	ndx = -1;
+        dbuff->num_zero--;
+        ndx = -1;
     }
     else {
-	WRITE(ndx = READ());
-	if (ndx == 0) {
-	    WRITE(dbuff->num_zero = READ());
-	    dbuff->num_zero--;
-	    ndx = -1;
-	}
-	else {
-	    WRITE(ndx2 = READ());
-	    ndx = (ndx - 1) * 256 + ndx2;
-	}
+        WRITE(ndx = READ());
+        if (ndx == 0) {
+            WRITE(dbuff->num_zero = READ());
+            dbuff->num_zero--;
+            ndx = -1;
+        }
+        else {
+            WRITE(ndx2 = READ());
+            ndx = (ndx - 1) * 256 + ndx2;
+        }
     }
 
     return ndx;
@@ -152,8 +158,8 @@ int iso_r_cndx(data_buffer * dbuff)
    \return 0
    \return ?
  */
-int iso_get_cube_value(geovol_isosurf * isosurf, int desc, int x, int y,
-		       int z, float *v)
+int iso_get_cube_value(geovol_isosurf *isosurf, int desc, int x, int y, int z,
+                       float *v)
 {
     double d;
     geovol_file *vf;
@@ -165,31 +171,31 @@ int iso_get_cube_value(geovol_isosurf * isosurf, int desc, int x, int y,
 
     /* get value from volume file */
     if (type == VOL_DTYPE_FLOAT) {
-	gvl_file_get_value(vf, (int)(x * ResX), (int)(y * ResY),
-			   (int)(z * ResZ), v);
+        gvl_file_get_value(vf, (int)(x * ResX), (int)(y * ResY),
+                           (int)(z * ResZ), v);
     }
     else if (type == VOL_DTYPE_DOUBLE) {
-	gvl_file_get_value(vf, (int)(x * ResX), (int)(y * ResY),
-			   (int)(z * ResZ), &d);
-	*v = (float)d;
+        gvl_file_get_value(vf, (int)(x * ResX), (int)(y * ResY),
+                           (int)(z * ResZ), &d);
+        *v = (float)d;
     }
     else {
-	return 0;
+        return 0;
     }
 
     /* null check */
     if (gvl_file_is_null_value(vf, v))
-	ret = 0;
+        ret = 0;
 
     /* adjust data */
     switch (desc) {
     case (ATT_TOPO):
-	*v = (*v) - isosurf->att[desc].constant;
-	break;
+        *v = (*v) - isosurf->att[desc].constant;
+        break;
     case (ATT_MASK):
-	if (isosurf->att[desc].constant)
-	    ret = !ret;
-	break;
+        if (isosurf->att[desc].constant)
+            ret = !ret;
+        break;
     }
 
     return ret;
@@ -203,11 +209,10 @@ int iso_get_cube_value(geovol_isosurf * isosurf, int desc, int x, int y,
    \param[out] min
    \param[out] max
  */
-void iso_get_range(geovol_isosurf * isosurf, int desc, double *min,
-		   double *max)
+void iso_get_range(geovol_isosurf *isosurf, int desc, double *min, double *max)
 {
     gvl_file_get_min_max(gvl_file_get_volfile(isosurf->att[desc].hfile), min,
-			 max);
+                         max);
 }
 
 /*!
@@ -220,17 +225,17 @@ void iso_get_range(geovol_isosurf * isosurf, int desc, double *min,
 
    \return
  */
-int iso_get_cube_values(geovol_isosurf * isosurf, int desc, int x, int y,
-			int z, float *v)
+int iso_get_cube_values(geovol_isosurf *isosurf, int desc, int x, int y, int z,
+                        float *v)
 {
     int p, ret = 1;
 
     for (p = 0; p < 8; ++p) {
-	if (iso_get_cube_value
-	    (isosurf, desc, x + ((p ^ (p >> 1)) & 1), y + ((p >> 1) & 1),
-	     z + ((p >> 2) & 1), &v[p]) == 0) {
-	    ret = 0;
-	}
+        if (iso_get_cube_value(isosurf, desc, x + ((p ^ (p >> 1)) & 1),
+                               y + ((p >> 1) & 1), z + ((p >> 2) & 1),
+                               &v[p]) == 0) {
+            ret = 0;
+        }
     }
 
     return ret;
@@ -243,73 +248,73 @@ int iso_get_cube_values(geovol_isosurf * isosurf, int desc, int x, int y,
    \param x,y,z
    \param grad
  */
-void iso_get_cube_grads(geovol_isosurf * isosurf, int x, int y, int z,
-			float (*grad)[3])
+void iso_get_cube_grads(geovol_isosurf *isosurf, int x, int y, int z,
+                        float (*grad)[3])
 {
     float v[3];
     int i, j, k, p;
 
     for (p = 0; p < 8; ++p) {
-	i = x + ((p ^ (p >> 1)) & 1);
-	j = y + ((p >> 1) & 1);
-	k = z + ((p >> 2) & 1);
+        i = x + ((p ^ (p >> 1)) & 1);
+        j = y + ((p >> 1) & 1);
+        k = z + ((p >> 2) & 1);
 
-	/* x */
-	if (i == 0) {
-	    iso_get_cube_value(isosurf, ATT_TOPO, i, j, k, &v[1]);
-	    iso_get_cube_value(isosurf, ATT_TOPO, i + 1, j, k, &v[2]);
-	    grad[p][0] = v[2] - v[1];
-	}
-	else {
-	    if (i == (Cols - 1)) {
-		iso_get_cube_value(isosurf, ATT_TOPO, i - 1, j, k, &v[0]);
-		iso_get_cube_value(isosurf, ATT_TOPO, i, j, k, &v[1]);
-		grad[p][0] = v[1] - v[0];
-	    }
-	    else {
-		iso_get_cube_value(isosurf, ATT_TOPO, i - 1, j, k, &v[0]);
-		iso_get_cube_value(isosurf, ATT_TOPO, i + 1, j, k, &v[2]);
-		grad[p][0] = (v[2] - v[0]) / 2;
-	    }
-	}
+        /* x */
+        if (i == 0) {
+            iso_get_cube_value(isosurf, ATT_TOPO, i, j, k, &v[1]);
+            iso_get_cube_value(isosurf, ATT_TOPO, i + 1, j, k, &v[2]);
+            grad[p][0] = v[2] - v[1];
+        }
+        else {
+            if (i == (Cols - 1)) {
+                iso_get_cube_value(isosurf, ATT_TOPO, i - 1, j, k, &v[0]);
+                iso_get_cube_value(isosurf, ATT_TOPO, i, j, k, &v[1]);
+                grad[p][0] = v[1] - v[0];
+            }
+            else {
+                iso_get_cube_value(isosurf, ATT_TOPO, i - 1, j, k, &v[0]);
+                iso_get_cube_value(isosurf, ATT_TOPO, i + 1, j, k, &v[2]);
+                grad[p][0] = (v[2] - v[0]) / 2;
+            }
+        }
 
-	/* y */
-	if (j == 0) {
-	    iso_get_cube_value(isosurf, ATT_TOPO, i, j, k, &v[1]);
-	    iso_get_cube_value(isosurf, ATT_TOPO, i, j + 1, k, &v[2]);
-	    grad[p][1] = v[2] - v[1];
-	}
-	else {
-	    if (j == (Rows - 1)) {
-		iso_get_cube_value(isosurf, ATT_TOPO, i, j - 1, k, &v[0]);
-		iso_get_cube_value(isosurf, ATT_TOPO, i, j, k, &v[1]);
-		grad[p][1] = v[1] - v[0];
-	    }
-	    else {
-		iso_get_cube_value(isosurf, ATT_TOPO, i, j - 1, k, &v[0]);
-		iso_get_cube_value(isosurf, ATT_TOPO, i, j + 1, k, &v[2]);
-		grad[p][1] = (v[2] - v[0]) / 2;
-	    }
-	}
+        /* y */
+        if (j == 0) {
+            iso_get_cube_value(isosurf, ATT_TOPO, i, j, k, &v[1]);
+            iso_get_cube_value(isosurf, ATT_TOPO, i, j + 1, k, &v[2]);
+            grad[p][1] = v[2] - v[1];
+        }
+        else {
+            if (j == (Rows - 1)) {
+                iso_get_cube_value(isosurf, ATT_TOPO, i, j - 1, k, &v[0]);
+                iso_get_cube_value(isosurf, ATT_TOPO, i, j, k, &v[1]);
+                grad[p][1] = v[1] - v[0];
+            }
+            else {
+                iso_get_cube_value(isosurf, ATT_TOPO, i, j - 1, k, &v[0]);
+                iso_get_cube_value(isosurf, ATT_TOPO, i, j + 1, k, &v[2]);
+                grad[p][1] = (v[2] - v[0]) / 2;
+            }
+        }
 
-	/* z */
-	if (k == 0) {
-	    iso_get_cube_value(isosurf, ATT_TOPO, i, j, k, &v[1]);
-	    iso_get_cube_value(isosurf, ATT_TOPO, i, j, k + 1, &v[2]);
-	    grad[p][2] = v[2] - v[1];
-	}
-	else {
-	    if (k == (Depths - 1)) {
-		iso_get_cube_value(isosurf, ATT_TOPO, i, j, k - 1, &v[0]);
-		iso_get_cube_value(isosurf, ATT_TOPO, i, j, k, &v[1]);
-		grad[p][2] = v[1] - v[0];
-	    }
-	    else {
-		iso_get_cube_value(isosurf, ATT_TOPO, i, j, k - 1, &v[0]);
-		iso_get_cube_value(isosurf, ATT_TOPO, i, j, k + 1, &v[2]);
-		grad[p][2] = (v[2] - v[0]) / 2;
-	    }
-	}
+        /* z */
+        if (k == 0) {
+            iso_get_cube_value(isosurf, ATT_TOPO, i, j, k, &v[1]);
+            iso_get_cube_value(isosurf, ATT_TOPO, i, j, k + 1, &v[2]);
+            grad[p][2] = v[2] - v[1];
+        }
+        else {
+            if (k == (Depths - 1)) {
+                iso_get_cube_value(isosurf, ATT_TOPO, i, j, k - 1, &v[0]);
+                iso_get_cube_value(isosurf, ATT_TOPO, i, j, k, &v[1]);
+                grad[p][2] = v[1] - v[0];
+            }
+            else {
+                iso_get_cube_value(isosurf, ATT_TOPO, i, j, k - 1, &v[0]);
+                iso_get_cube_value(isosurf, ATT_TOPO, i, j, k + 1, &v[2]);
+                grad[p][2] = (v[2] - v[0]) / 2;
+            }
+        }
     }
 }
 
@@ -320,8 +325,8 @@ void iso_get_cube_grads(geovol_isosurf * isosurf, int x, int y, int z,
    \param x,y,z
    \param dbuff
  */
-void iso_calc_cube(geovol_isosurf * isosurf, int x, int y, int z,
-		   data_buffer * dbuff)
+void iso_calc_cube(geovol_isosurf *isosurf, int x, int y, int z,
+                   data_buffer *dbuff)
 {
     int i, c_ndx;
     int crnt, v1, v2, c;
@@ -330,248 +335,243 @@ void iso_calc_cube(geovol_isosurf * isosurf, int x, int y, int z,
     double min, max;
 
     if (isosurf->att[ATT_TOPO].changed) {
-	/* read topo values, if there are NULL values then return */
-	if (!iso_get_cube_values(isosurf, ATT_TOPO, x, y, z, val[ATT_TOPO])) {
-	    iso_w_cndx(-1, dbuff);
-	    return;
-	}
+        /* read topo values, if there are NULL values then return */
+        if (!iso_get_cube_values(isosurf, ATT_TOPO, x, y, z, val[ATT_TOPO])) {
+            iso_w_cndx(-1, dbuff);
+            return;
+        }
 
-	/* mask */
-	if (isosurf->att[ATT_MASK].att_src == MAP_ATT) {
-	    if (!iso_get_cube_values
-		(isosurf, ATT_MASK, x, y, z, val[ATT_MASK])) {
-		iso_w_cndx(-1, dbuff);
-		return;
-	    }
-	}
+        /* mask */
+        if (isosurf->att[ATT_MASK].att_src == MAP_ATT) {
+            if (!iso_get_cube_values(isosurf, ATT_MASK, x, y, z,
+                                     val[ATT_MASK])) {
+                iso_w_cndx(-1, dbuff);
+                return;
+            }
+        }
 
-	/* index to precalculated table */
-	c_ndx = 0;
-	for (i = 0; i < 8; i++) {
-	    if (val[ATT_TOPO][i] > 0)
-		c_ndx |= 1 << i;
-	}
-	c_ndx = mc33_process_cube(c_ndx, val[ATT_TOPO]);
+        /* index to precalculated table */
+        c_ndx = 0;
+        for (i = 0; i < 8; i++) {
+            if (val[ATT_TOPO][i] > 0)
+                c_ndx |= 1 << i;
+        }
+        c_ndx = mc33_process_cube(c_ndx, val[ATT_TOPO]);
 
-	iso_w_cndx(c_ndx, dbuff);
+        iso_w_cndx(c_ndx, dbuff);
 
-	if (c_ndx == -1)
-	    return;
+        if (c_ndx == -1)
+            return;
 
-	/* calc cube grads */
-	iso_get_cube_grads(isosurf, x, y, z, grad);
-
+        /* calc cube grads */
+        iso_get_cube_grads(isosurf, x, y, z, grad);
     }
     else {
-	/* read cube index */
-	if ((c_ndx = iso_r_cndx(dbuff)) == -1)
-	    return;
+        /* read cube index */
+        if ((c_ndx = iso_r_cndx(dbuff)) == -1)
+            return;
     }
 
     /* get color values */
     if (isosurf->att[ATT_COLOR].changed &&
-	isosurf->att[ATT_COLOR].att_src == MAP_ATT) {
-	iso_get_cube_values(isosurf, ATT_COLOR, x, y, z, val[ATT_COLOR]);
+        isosurf->att[ATT_COLOR].att_src == MAP_ATT) {
+        iso_get_cube_values(isosurf, ATT_COLOR, x, y, z, val[ATT_COLOR]);
     }
 
     /* get transparency values */
     if (isosurf->att[ATT_TRANSP].changed &&
-	isosurf->att[ATT_TRANSP].att_src == MAP_ATT) {
-	iso_get_cube_values(isosurf, ATT_TRANSP, x, y, z, val[ATT_TRANSP]);
+        isosurf->att[ATT_TRANSP].att_src == MAP_ATT) {
+        iso_get_cube_values(isosurf, ATT_TRANSP, x, y, z, val[ATT_TRANSP]);
     }
 
     /* get shine values */
     if (isosurf->att[ATT_SHINE].changed &&
-	isosurf->att[ATT_SHINE].att_src == MAP_ATT) {
-	iso_get_cube_values(isosurf, ATT_SHINE, x, y, z, val[ATT_SHINE]);
+        isosurf->att[ATT_SHINE].att_src == MAP_ATT) {
+        iso_get_cube_values(isosurf, ATT_SHINE, x, y, z, val[ATT_SHINE]);
     }
 
     /* get emit values */
     if (isosurf->att[ATT_EMIT].changed &&
-	isosurf->att[ATT_EMIT].att_src == MAP_ATT) {
-	iso_get_cube_values(isosurf, ATT_EMIT, x, y, z, val[ATT_EMIT]);
+        isosurf->att[ATT_EMIT].att_src == MAP_ATT) {
+        iso_get_cube_values(isosurf, ATT_EMIT, x, y, z, val[ATT_EMIT]);
     }
 
-    FOR_0_TO_N(3, d_sum[FOR_VAR] = 0.;
-	       n_sum[FOR_VAR] = 0.);
+    FOR_0_TO_N(3, d_sum[FOR_VAR] = 0.; n_sum[FOR_VAR] = 0.);
 
     /* loop in edges */
     for (i = 0; i < cell_table[c_ndx].nedges; i++) {
-	/* get edge number */
-	crnt = cell_table[c_ndx].edges[i];
+        /* get edge number */
+        crnt = cell_table[c_ndx].edges[i];
 
-	/* set topo */
-	if (isosurf->att[ATT_TOPO].changed) {
-	    /* interior vertex */
-	    if (crnt == 12) {
-		FOR_0_TO_N(3,
-			   WRITE((d3[FOR_VAR] =
-				  d_sum[FOR_VAR] /
-				  ((float)(cell_table[c_ndx].nedges))) *
-				 255));
-		GS_v3norm(n_sum);
-		FOR_0_TO_N(3,
-			   WRITE((n_sum[FOR_VAR] /
-				  ((float)(cell_table[c_ndx].nedges)) +
-				  1.) * 127));
-		/* edge vertex */
-	    }
-	    else {
-		/* set egdes verts */
-		v1 = edge_vert[crnt][0];
-		v2 = edge_vert[crnt][1];
+        /* set topo */
+        if (isosurf->att[ATT_TOPO].changed) {
+            /* interior vertex */
+            if (crnt == 12) {
+                FOR_0_TO_N(3, WRITE((d3[FOR_VAR] =
+                                         d_sum[FOR_VAR] /
+                                         ((float)(cell_table[c_ndx].nedges))) *
+                                    255));
+                GS_v3norm(n_sum);
+                FOR_0_TO_N(3, WRITE((n_sum[FOR_VAR] /
+                                         ((float)(cell_table[c_ndx].nedges)) +
+                                     1.) *
+                                    127));
+                /* edge vertex */
+            }
+            else {
+                /* set edges verts */
+                v1 = edge_vert[crnt][0];
+                v2 = edge_vert[crnt][1];
 
-		/* calc intersection point - edge and isosurf */
-		d = val[ATT_TOPO][v1] / (val[ATT_TOPO][v1] -
-					 val[ATT_TOPO][v2]);
+                /* calc intersection point - edge and isosurf */
+                d = val[ATT_TOPO][v1] / (val[ATT_TOPO][v1] - val[ATT_TOPO][v2]);
 
-		d_sum[edge_vert_pos[crnt][0]] += d;
-		d_sum[edge_vert_pos[crnt][1]] += edge_vert_pos[crnt][2];
-		d_sum[edge_vert_pos[crnt][3]] += edge_vert_pos[crnt][4];
+                d_sum[edge_vert_pos[crnt][0]] += d;
+                d_sum[edge_vert_pos[crnt][1]] += edge_vert_pos[crnt][2];
+                d_sum[edge_vert_pos[crnt][3]] += edge_vert_pos[crnt][4];
 
-		WRITE(d * 255);
+                WRITE(d * 255);
 
-		/* set normal for intersect. point */
-		FOR_0_TO_N(3, n[FOR_VAR] =
-			   LINTERP(d, grad[v1][FOR_VAR], grad[v2][FOR_VAR]));
-		GS_v3norm(n);
-		FOR_0_TO_N(3, n_sum[FOR_VAR] += n[FOR_VAR]);
-		FOR_0_TO_N(3, WRITE((n[FOR_VAR] + 1.) * 127));
-	    }
-	}
-	else {
-	    /* read x,y,z of intersection point in cube coords */
-	    if (crnt == 12) {
-		WRITE(c = READ());
-		d3[0] = ((float)c) / 255.0;
-		WRITE(c = READ());
-		d3[1] = ((float)c) / 255.0;
-		WRITE(c = READ());
-		d3[2] = ((float)c) / 255.0;
-	    }
-	    else {
-		/* set egdes verts */
-		v1 = edge_vert[crnt][0];
-		v2 = edge_vert[crnt][1];
+                /* set normal for intersect. point */
+                FOR_0_TO_N(3, n[FOR_VAR] = LINTERP(d, grad[v1][FOR_VAR],
+                                                   grad[v2][FOR_VAR]));
+                GS_v3norm(n);
+                FOR_0_TO_N(3, n_sum[FOR_VAR] += n[FOR_VAR]);
+                FOR_0_TO_N(3, WRITE((n[FOR_VAR] + 1.) * 127));
+            }
+        }
+        else {
+            /* read x,y,z of intersection point in cube coords */
+            if (crnt == 12) {
+                WRITE(c = READ());
+                d3[0] = ((float)c) / 255.0;
+                WRITE(c = READ());
+                d3[1] = ((float)c) / 255.0;
+                WRITE(c = READ());
+                d3[2] = ((float)c) / 255.0;
+            }
+            else {
+                /* set edges verts */
+                v1 = edge_vert[crnt][0];
+                v2 = edge_vert[crnt][1];
 
-		WRITE(c = READ());
-		d = ((float)c) / 255.0;
-	    }
+                WRITE(c = READ());
+                d = ((float)c) / 255.0;
+            }
 
-	    /* set normals */
-	    FOR_0_TO_N(3, WRITE(READ()));
-	}
+            /* set normals */
+            FOR_0_TO_N(3, WRITE(READ()));
+        }
 
-	/* set color */
-	if (isosurf->att[ATT_COLOR].changed &&
-	    isosurf->att[ATT_COLOR].att_src == MAP_ATT) {
-	    if (crnt == 12) {
-		tv = TINTERP(d3, val[ATT_COLOR]);
-	    }
-	    else {
-		tv = LINTERP(d, val[ATT_COLOR][v1], val[ATT_COLOR][v2]);
-	    }
+        /* set color */
+        if (isosurf->att[ATT_COLOR].changed &&
+            isosurf->att[ATT_COLOR].att_src == MAP_ATT) {
+            if (crnt == 12) {
+                tv = TINTERP(d3, val[ATT_COLOR]);
+            }
+            else {
+                tv = LINTERP(d, val[ATT_COLOR][v1], val[ATT_COLOR][v2]);
+            }
 
-	    c = Gvl_get_color_for_value(isosurf->att[ATT_COLOR].att_data,
-					&tv);
+            c = Gvl_get_color_for_value(isosurf->att[ATT_COLOR].att_data, &tv);
 
-	    WRITE(c & RED_MASK);
-	    WRITE((c & GRN_MASK) >> 8);
-	    WRITE((c & BLU_MASK) >> 16);
+            WRITE(c & RED_MASK);
+            WRITE((c & GRN_MASK) >> 8);
+            WRITE((c & BLU_MASK) >> 16);
 
-	    if (IS_IN_DATA(ATT_COLOR))
-		SKIP(3);
-	}
-	else {
-	    if (isosurf->att[ATT_COLOR].att_src == MAP_ATT) {
-		FOR_0_TO_N(3, WRITE(READ()));
-	    }
-	    else {
-		if (IS_IN_DATA(ATT_COLOR))
-		    SKIP(3);
-	    }
-	}
+            if (IS_IN_DATA(ATT_COLOR))
+                SKIP(3);
+        }
+        else {
+            if (isosurf->att[ATT_COLOR].att_src == MAP_ATT) {
+                FOR_0_TO_N(3, WRITE(READ()));
+            }
+            else {
+                if (IS_IN_DATA(ATT_COLOR))
+                    SKIP(3);
+            }
+        }
 
-	/* set transparency */
-	if (isosurf->att[ATT_TRANSP].changed &&
-	    isosurf->att[ATT_TRANSP].att_src == MAP_ATT) {
-	    if (crnt == 12) {
-		tv = TINTERP(d3, val[ATT_TRANSP]);
-	    }
-	    else {
-		tv = LINTERP(d, val[ATT_TRANSP][v1], val[ATT_TRANSP][v2]);
-	    }
+        /* set transparency */
+        if (isosurf->att[ATT_TRANSP].changed &&
+            isosurf->att[ATT_TRANSP].att_src == MAP_ATT) {
+            if (crnt == 12) {
+                tv = TINTERP(d3, val[ATT_TRANSP]);
+            }
+            else {
+                tv = LINTERP(d, val[ATT_TRANSP][v1], val[ATT_TRANSP][v2]);
+            }
 
-	    iso_get_range(isosurf, ATT_TRANSP, &min, &max);
-	    c = (min != max) ? 255 - (tv - min) / (max - min) * 255 : 0;
+            iso_get_range(isosurf, ATT_TRANSP, &min, &max);
+            c = (min != max) ? 255 - (tv - min) / (max - min) * 255 : 0;
 
-	    WRITE(c);
-	    if (IS_IN_DATA(ATT_TRANSP))
-		SKIP(1);
-	}
-	else {
-	    if (isosurf->att[ATT_TRANSP].att_src == MAP_ATT) {
-		WRITE(READ());
-	    }
-	    else {
-		if (IS_IN_DATA(ATT_TRANSP))
-		    SKIP(1);
-	    }
-	}
+            WRITE(c);
+            if (IS_IN_DATA(ATT_TRANSP))
+                SKIP(1);
+        }
+        else {
+            if (isosurf->att[ATT_TRANSP].att_src == MAP_ATT) {
+                WRITE(READ());
+            }
+            else {
+                if (IS_IN_DATA(ATT_TRANSP))
+                    SKIP(1);
+            }
+        }
 
-	/* set shin */
-	if (isosurf->att[ATT_SHINE].changed &&
-	    isosurf->att[ATT_SHINE].att_src == MAP_ATT) {
-	    if (crnt == 12) {
-		tv = TINTERP(d3, val[ATT_SHINE]);
-	    }
-	    else {
-		tv = LINTERP(d, val[ATT_SHINE][v1], val[ATT_SHINE][v2]);
-	    }
+        /* set shin */
+        if (isosurf->att[ATT_SHINE].changed &&
+            isosurf->att[ATT_SHINE].att_src == MAP_ATT) {
+            if (crnt == 12) {
+                tv = TINTERP(d3, val[ATT_SHINE]);
+            }
+            else {
+                tv = LINTERP(d, val[ATT_SHINE][v1], val[ATT_SHINE][v2]);
+            }
 
-	    iso_get_range(isosurf, ATT_SHINE, &min, &max);
-	    c = (min != max) ? (tv - min) / (max - min) * 255 : 0;
+            iso_get_range(isosurf, ATT_SHINE, &min, &max);
+            c = (min != max) ? (tv - min) / (max - min) * 255 : 0;
 
-	    WRITE(c);
-	    if (IS_IN_DATA(ATT_SHINE))
-		SKIP(1);
-	}
-	else {
-	    if (isosurf->att[ATT_SHINE].att_src == MAP_ATT) {
-		WRITE(READ());
-	    }
-	    else {
-		if (IS_IN_DATA(ATT_SHINE))
-		    SKIP(1);
-	    }
-	}
+            WRITE(c);
+            if (IS_IN_DATA(ATT_SHINE))
+                SKIP(1);
+        }
+        else {
+            if (isosurf->att[ATT_SHINE].att_src == MAP_ATT) {
+                WRITE(READ());
+            }
+            else {
+                if (IS_IN_DATA(ATT_SHINE))
+                    SKIP(1);
+            }
+        }
 
-	/* set emit */
-	if (isosurf->att[ATT_EMIT].changed &&
-	    isosurf->att[ATT_EMIT].att_src == MAP_ATT) {
-	    if (crnt == 12) {
-		tv = TINTERP(d3, val[ATT_EMIT]);
-	    }
-	    else {
-		tv = LINTERP(d, val[ATT_EMIT][v1], val[ATT_EMIT][v2]);
-	    }
+        /* set emit */
+        if (isosurf->att[ATT_EMIT].changed &&
+            isosurf->att[ATT_EMIT].att_src == MAP_ATT) {
+            if (crnt == 12) {
+                tv = TINTERP(d3, val[ATT_EMIT]);
+            }
+            else {
+                tv = LINTERP(d, val[ATT_EMIT][v1], val[ATT_EMIT][v2]);
+            }
 
-	    iso_get_range(isosurf, ATT_EMIT, &min, &max);
-	    c = (min != max) ? (tv - min) / (max - min) * 255 : 0;
+            iso_get_range(isosurf, ATT_EMIT, &min, &max);
+            c = (min != max) ? (tv - min) / (max - min) * 255 : 0;
 
-	    WRITE(c);
-	    if (IS_IN_DATA(ATT_SHINE))
-		SKIP(1);
-	}
-	else {
-	    if (isosurf->att[ATT_EMIT].att_src == MAP_ATT) {
-		WRITE(READ());
-	    }
-	    else {
-		if (IS_IN_DATA(ATT_EMIT))
-		    SKIP(1);
-	    }
-	}
+            WRITE(c);
+            if (IS_IN_DATA(ATT_SHINE))
+                SKIP(1);
+        }
+        else {
+            if (isosurf->att[ATT_EMIT].att_src == MAP_ATT) {
+                WRITE(READ());
+            }
+            else {
+                if (IS_IN_DATA(ATT_EMIT))
+                    SKIP(1);
+            }
+        }
     }
 }
 
@@ -582,7 +582,7 @@ void iso_calc_cube(geovol_isosurf * isosurf, int x, int y, int z,
 
    \return 1
  */
-int gvl_isosurf_calc(geovol * gvol)
+int gvl_isosurf_calc(geovol *gvol)
 {
     int x, y, z;
     int i, a, read;
@@ -600,128 +600,126 @@ int gvl_isosurf_calc(geovol * gvol)
 
     /* initialize */
     for (i = 0; i < gvol->n_isosurfs; i++) {
-	isosurf = gvol->isosurf[i];
+        isosurf = gvol->isosurf[i];
 
-	/* initialize read/write buffers */
-	dbuff[i].old = NULL;
-	dbuff[i].new = NULL;
-	dbuff[i].ndx_old = 0;
-	dbuff[i].ndx_new = 0;
-	dbuff[i].num_zero = 0;
+        /* initialize read/write buffers */
+        dbuff[i].old = NULL;
+        dbuff[i].new = NULL;
+        dbuff[i].ndx_old = 0;
+        dbuff[i].ndx_new = 0;
+        dbuff[i].num_zero = 0;
 
-	need_update[i] = 0;
-	for (a = 1; a < MAX_ATTS; a++) {
-	    if (isosurf->att[a].changed) {
-		read = 0;
-		/* changed to map attribute */
-		if (isosurf->att[a].att_src == MAP_ATT) {
-		    vf = gvl_file_get_volfile(isosurf->att[a].hfile);
-		    read = 1;
-		}
-		/* changed threshold value */
-		if (a == ATT_TOPO) {
-		    isosurf->att[a].hfile = gvol->hfile;
-		    vf = gvl_file_get_volfile(gvol->hfile);
-		    read = 1;
-		}
-		/* initialize reading in selected mode */
-		if (read) {
-		    gvl_file_set_mode(vf, 3);
-		    gvl_file_start_read(vf);
-		}
+        need_update[i] = 0;
+        for (a = 1; a < MAX_ATTS; a++) {
+            if (isosurf->att[a].changed) {
+                read = 0;
+                /* changed to map attribute */
+                if (isosurf->att[a].att_src == MAP_ATT) {
+                    vf = gvl_file_get_volfile(isosurf->att[a].hfile);
+                    read = 1;
+                }
+                /* changed threshold value */
+                if (a == ATT_TOPO) {
+                    isosurf->att[a].hfile = gvol->hfile;
+                    vf = gvl_file_get_volfile(gvol->hfile);
+                    read = 1;
+                }
+                /* initialize reading in selected mode */
+                if (read) {
+                    gvl_file_set_mode(vf, 3);
+                    gvl_file_start_read(vf);
+                }
 
-		/* set update flag - isosurface will be calc */
-		if (read || IS_IN_DATA(a)) {
-		    need_update[i] = 1;
-		    need_update_global = 1;
-		}
-	    }
-	}
+                /* set update flag - isosurface will be calc */
+                if (read || IS_IN_DATA(a)) {
+                    need_update[i] = 1;
+                    need_update_global = 1;
+                }
+            }
+        }
 
-	if (need_update[i]) {
-	    /* set data buffer */
-	    dbuff[i].old = isosurf->data;
-	}
+        if (need_update[i]) {
+            /* set data buffer */
+            dbuff[i].old = isosurf->data;
+        }
     }
 
     /* calculate if only some isosurface changed */
     if (need_update_global) {
 
-	ResX = gvol->isosurf_x_mod;
-	ResY = gvol->isosurf_y_mod;
-	ResZ = gvol->isosurf_z_mod;
+        ResX = gvol->isosurf_x_mod;
+        ResY = gvol->isosurf_y_mod;
+        ResZ = gvol->isosurf_z_mod;
 
-	Cols = gvol->cols / ResX;
-	Rows = gvol->rows / ResY;
-	Depths = gvol->depths / ResZ;
+        Cols = gvol->cols / ResX;
+        Rows = gvol->rows / ResY;
+        Depths = gvol->depths / ResZ;
 
-	/* calc isosurface - marching cubes - start */
+        /* calc isosurface - marching cubes - start */
 
-	for (z = 0; z < Depths - 1; z++) {
-	    for (y = 0; y < Rows - 1; y++) {
-		for (x = 0; x < Cols - 1; x++) {
-		    for (i = 0; i < gvol->n_isosurfs; i++) {
-			/* recalculate only changed isosurfaces */
-			if (need_update[i]) {
-			    iso_calc_cube(gvol->isosurf[i], x, y, z,
-					  &dbuff[i]);
-			}
-		    }
-		}
-	    }
-	}
-
+        for (z = 0; z < Depths - 1; z++) {
+            for (y = 0; y < Rows - 1; y++) {
+                for (x = 0; x < Cols - 1; x++) {
+                    for (i = 0; i < gvol->n_isosurfs; i++) {
+                        /* recalculate only changed isosurfaces */
+                        if (need_update[i]) {
+                            iso_calc_cube(gvol->isosurf[i], x, y, z, &dbuff[i]);
+                        }
+                    }
+                }
+            }
+        }
     }
     /* end */
 
     /* deinitialize */
     for (i = 0; i < gvol->n_isosurfs; i++) {
-	isosurf = gvol->isosurf[i];
+        isosurf = gvol->isosurf[i];
 
-	/* set new isosurface data */
-	if (need_update[i]) {
-	    if (dbuff[i].num_zero != 0)
-		gvl_write_char(dbuff[i].ndx_new++, &(dbuff[i].new),
-			       dbuff[i].num_zero);
+        /* set new isosurface data */
+        if (need_update[i]) {
+            if (dbuff[i].num_zero != 0)
+                gvl_write_char(dbuff[i].ndx_new++, &(dbuff[i].new),
+                               dbuff[i].num_zero);
 
-	    if (dbuff[i].old == isosurf->data)
-		dbuff[i].old = NULL;
-	    G_free(isosurf->data);
-	    gvl_align_data(dbuff[i].ndx_new, &(dbuff[i].new));
-	    isosurf->data = dbuff[i].new;
-	    isosurf->data_desc = 0;
-	}
+            if (dbuff[i].old == isosurf->data)
+                dbuff[i].old = NULL;
+            G_free(isosurf->data);
+            gvl_align_data(dbuff[i].ndx_new, &(dbuff[i].new));
+            isosurf->data = dbuff[i].new;
+            isosurf->data_desc = 0;
+        }
 
-	for (a = 1; a < MAX_ATTS; a++) {
-	    if (isosurf->att[a].changed) {
-		read = 0;
-		/* changed map attribute */
-		if (isosurf->att[a].att_src == MAP_ATT) {
-		    vf = gvl_file_get_volfile(isosurf->att[a].hfile);
-		    read = 1;
-		}
-		/* changed threshold value */
-		if (a == ATT_TOPO) {
-		    isosurf->att[a].hfile = gvol->hfile;
-		    vf = gvl_file_get_volfile(gvol->hfile);
-		    read = 1;
-		}
-		/* deinitialize reading */
-		if (read) {
-		    gvl_file_end_read(vf);
+        for (a = 1; a < MAX_ATTS; a++) {
+            if (isosurf->att[a].changed) {
+                read = 0;
+                /* changed map attribute */
+                if (isosurf->att[a].att_src == MAP_ATT) {
+                    vf = gvl_file_get_volfile(isosurf->att[a].hfile);
+                    read = 1;
+                }
+                /* changed threshold value */
+                if (a == ATT_TOPO) {
+                    isosurf->att[a].hfile = gvol->hfile;
+                    vf = gvl_file_get_volfile(gvol->hfile);
+                    read = 1;
+                }
+                /* deinitialize reading */
+                if (read) {
+                    gvl_file_end_read(vf);
 
-		    /* set data description */
-		    SET_IN_DATA(a);
-		}
-		isosurf->att[a].changed = 0;
-	    }
-	    else if (isosurf->att[a].att_src == MAP_ATT) {
-		/* set data description */
-		SET_IN_DATA(a);
-	    }
-	}
+                    /* set data description */
+                    SET_IN_DATA(a);
+                }
+                isosurf->att[a].changed = 0;
+            }
+            else if (isosurf->att[a].att_src == MAP_ATT) {
+                /* set data description */
+                SET_IN_DATA(a);
+            }
+        }
     }
-    
+
     /* TODO: G_free() dbuff and need_update ??? */
 
     return (1);
@@ -738,16 +736,15 @@ void gvl_write_char(int pos, unsigned char **data, unsigned char c)
 {
     /* check to need allocation memory */
     if ((pos % BUFFER_SIZE) == 0) {
-	*data = G_realloc(*data,
-			  sizeof(char) * ((pos / BUFFER_SIZE) +
-					  1) * BUFFER_SIZE);
-	if (!(*data)) {
-	    return;
-	}
+        *data = G_realloc(*data, sizeof(char) * ((pos / BUFFER_SIZE) + 1) *
+                                     BUFFER_SIZE);
+        if (!(*data)) {
+            return;
+        }
 
-	G_debug(3,
-		"gvl_write_char(): reallocate memory for pos : %d to : %lu B",
-		pos, sizeof(char) * ((pos / BUFFER_SIZE) + 1) * BUFFER_SIZE);
+        G_debug(3,
+                "gvl_write_char(): reallocate memory for pos : %d to : %lu B",
+                pos, sizeof(char) * ((pos / BUFFER_SIZE) + 1) * BUFFER_SIZE);
     }
 
     (*data)[pos] = c;
@@ -765,8 +762,8 @@ void gvl_write_char(int pos, unsigned char **data, unsigned char c)
 unsigned char gvl_read_char(int pos, const unsigned char *data)
 {
     if (!data)
-	return '\0';
-    
+        return '\0';
+
     return data[pos];
 }
 
@@ -779,19 +776,19 @@ unsigned char gvl_read_char(int pos, const unsigned char *data)
 void gvl_align_data(int pos, unsigned char **data)
 {
     unsigned char *p = *data;
-    
 
     /* realloc memory to fit in data length */
-    p = (unsigned char *)G_realloc(p, sizeof(unsigned char) * pos);	/* G_fatal_error */
+    p = (unsigned char *)G_realloc(p, sizeof(unsigned char) *
+                                          pos); /* G_fatal_error */
     if (!p) {
-	return;
+        return;
     }
 
     G_debug(3, "gvl_align_data(): reallocate memory finally to : %d B", pos);
 
     if (pos == 0)
-	p = NULL;
-    
+        p = NULL;
+
     *data = p;
 
     return;
@@ -802,10 +799,11 @@ void gvl_align_data(int pos, unsigned char **data)
 
 /************************************************************************/
 
-#define DISTANCE_2(x1, y1, x2, y2)	sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2))
+#define DISTANCE_2(x1, y1, x2, y2) \
+    sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
 
-#define SLICE_MODE_INTERP_NO	0
-#define SLICE_MODE_INTERP_YES	1
+#define SLICE_MODE_INTERP_NO  0
+#define SLICE_MODE_INTERP_YES 1
 
 /*!
    \brief Get volume value
@@ -815,16 +813,16 @@ void gvl_align_data(int pos, unsigned char **data)
 
    \return value
  */
-float slice_get_value(geovol * gvl, int x, int y, int z)
+float slice_get_value(geovol *gvl, int x, int y, int z)
 {
     static double d;
     static geovol_file *vf;
     static int type;
     static float value;
 
-    if (x < 0 || y < 0 || z < 0 || (x > gvl->cols - 1) || (y > gvl->rows - 1)
-	|| (z > gvl->depths - 1))
-	return 0.;
+    if (x < 0 || y < 0 || z < 0 || (x > gvl->cols - 1) || (y > gvl->rows - 1) ||
+        (z > gvl->depths - 1))
+        return 0.;
 
     /* get volume file from attribute handle */
     vf = gvl_file_get_volfile(gvl->hfile);
@@ -832,14 +830,14 @@ float slice_get_value(geovol * gvl, int x, int y, int z)
 
     /* get value from volume file */
     if (type == VOL_DTYPE_FLOAT) {
-	gvl_file_get_value(vf, x, y, z, &value);
+        gvl_file_get_value(vf, x, y, z, &value);
     }
     else if (type == VOL_DTYPE_DOUBLE) {
-	gvl_file_get_value(vf, x, y, z, &d);
-	value = (float)d;
+        gvl_file_get_value(vf, x, y, z, &d);
+        value = (float)d;
     }
     else {
-	return 0.;
+        return 0.;
     }
 
     return value;
@@ -854,7 +852,7 @@ float slice_get_value(geovol * gvl, int x, int y, int z)
 
    \return 1
  */
-int slice_calc(geovol * gvl, int ndx_slc, void *colors)
+int slice_calc(geovol *gvl, int ndx_slc, void *colors)
 {
     int cols, rows, c, r;
     int i, j, k, pos, color;
@@ -871,37 +869,37 @@ int slice_calc(geovol * gvl, int ndx_slc, void *colors)
 
     /* set mods, pointer to x, y, z step value */
     if (slice->dir == X) {
-	modx = ResY;
-	mody = ResZ;
-	modz = ResX;
-	p_x = &k;
-	p_y = &i;
-	p_z = &j;
-	p_ex = &ek;
-	p_ey = &ei;
-	p_ez = &ej;
+        modx = ResY;
+        mody = ResZ;
+        modz = ResX;
+        p_x = &k;
+        p_y = &i;
+        p_z = &j;
+        p_ex = &ek;
+        p_ey = &ei;
+        p_ez = &ej;
     }
     else if (slice->dir == Y) {
-	modx = ResX;
-	mody = ResZ;
-	modz = ResY;
-	p_x = &i;
-	p_y = &k;
-	p_z = &j;
-	p_ex = &ei;
-	p_ey = &ek;
-	p_ez = &ej;
+        modx = ResX;
+        mody = ResZ;
+        modz = ResY;
+        p_x = &i;
+        p_y = &k;
+        p_z = &j;
+        p_ex = &ei;
+        p_ey = &ek;
+        p_ez = &ej;
     }
     else {
-	modx = ResX;
-	mody = ResY;
-	modz = ResZ;
-	p_x = &i;
-	p_y = &j;
-	p_z = &k;
-	p_ex = &ei;
-	p_ey = &ej;
-	p_ez = &ek;
+        modx = ResX;
+        mody = ResY;
+        modz = ResZ;
+        p_x = &i;
+        p_y = &j;
+        p_z = &k;
+        p_ex = &ei;
+        p_ey = &ej;
+        p_ez = &ek;
     }
 
     /* distance between slice def. points */
@@ -910,7 +908,7 @@ int slice_calc(geovol * gvl, int ndx_slc, void *colors)
 
     /* distance between slice def points is zero - nothing to do */
     if (distxy == 0. || distz == 0.) {
-	return (1);
+        return (1);
     }
 
     /* start reading volume file */
@@ -919,9 +917,8 @@ int slice_calc(geovol * gvl, int ndx_slc, void *colors)
     gvl_file_start_read(vf);
 
     /* set xy resolution */
-    modxy =
-	DISTANCE_2((slice->x2 - slice->x1) / distxy * modx,
-		   (slice->y2 - slice->y1) / distxy * mody, 0., 0.);
+    modxy = DISTANCE_2((slice->x2 - slice->x1) / distxy * modx,
+                       (slice->y2 - slice->y1) / distxy * mody, 0., 0.);
 
     /* cols/rows of slice */
     f_cols = distxy / modxy;
@@ -945,79 +942,79 @@ int slice_calc(geovol * gvl, int ndx_slc, void *colors)
     /* loop in slice cols */
     for (c = 0; c < cols + 1; c++) {
 
-	/* convert x, y to integer - index in grid */
-	i = (int)x;
-	j = (int)y;
+        /* convert x, y to integer - index in grid */
+        i = (int)x;
+        j = (int)y;
 
-	/* distance between index and real position */
-	ei = x - (float)i;
-	ej = y - (float)j;
+        /* distance between index and real position */
+        ei = x - (float)i;
+        ej = y - (float)j;
 
-	/* set z to slice z1 point */
-	z = slice->z1;
+        /* set z to slice z1 point */
+        z = slice->z1;
 
-	/* loop in slice rows */
-	for (r = 0; r < rows + 1; r++) {
+        /* loop in slice rows */
+        for (r = 0; r < rows + 1; r++) {
 
-	    /* distance between index and real position */
-	    k = (int)z;
-	    ek = z - (float)k;
+            /* distance between index and real position */
+            k = (int)z;
+            ek = z - (float)k;
 
-	    /* get interpolated value */
-	    if (slice->mode == SLICE_MODE_INTERP_YES) {
-		/* get grid values */
-		v[0] = slice_get_value(gvl, *p_x, *p_y, *p_z);
-		v[1] = slice_get_value(gvl, *p_x + 1, *p_y, *p_z);
-		v[2] = slice_get_value(gvl, *p_x, *p_y + 1, *p_z);
-		v[3] = slice_get_value(gvl, *p_x + 1, *p_y + 1, *p_z);
+            /* get interpolated value */
+            if (slice->mode == SLICE_MODE_INTERP_YES) {
+                /* get grid values */
+                v[0] = slice_get_value(gvl, *p_x, *p_y, *p_z);
+                v[1] = slice_get_value(gvl, *p_x + 1, *p_y, *p_z);
+                v[2] = slice_get_value(gvl, *p_x, *p_y + 1, *p_z);
+                v[3] = slice_get_value(gvl, *p_x + 1, *p_y + 1, *p_z);
 
-		v[4] = slice_get_value(gvl, *p_x, *p_y, *p_z + 1);
-		v[5] = slice_get_value(gvl, *p_x + 1, *p_y, *p_z + 1);
-		v[6] = slice_get_value(gvl, *p_x, *p_y + 1, *p_z + 1);
-		v[7] = slice_get_value(gvl, *p_x + 1, *p_y + 1, *p_z + 1);
+                v[4] = slice_get_value(gvl, *p_x, *p_y, *p_z + 1);
+                v[5] = slice_get_value(gvl, *p_x + 1, *p_y, *p_z + 1);
+                v[6] = slice_get_value(gvl, *p_x, *p_y + 1, *p_z + 1);
+                v[7] = slice_get_value(gvl, *p_x + 1, *p_y + 1, *p_z + 1);
 
-		/* get interpolated value */
-		value = v[0] * (1. - *p_ex) * (1. - *p_ey) * (1. - *p_ez)
-		    + v[1] * (*p_ex) * (1. - *p_ey) * (1. - *p_ez)
-		    + v[2] * (1. - *p_ex) * (*p_ey) * (1. - *p_ez)
-		    + v[3] * (*p_ex) * (*p_ey) * (1. - *p_ez)
-		    + v[4] * (1. - *p_ex) * (1. - *p_ey) * (*p_ez)
-		    + v[5] * (*p_ex) * (1. - *p_ey) * (*p_ez)
-		    + v[6] * (1. - *p_ex) * (*p_ey) * (*p_ez)
-		    + v[7] * (*p_ex) * (*p_ey) * (*p_ez);
+                /* get interpolated value */
+                value = v[0] * (1. - *p_ex) * (1. - *p_ey) * (1. - *p_ez) +
+                        v[1] * (*p_ex) * (1. - *p_ey) * (1. - *p_ez) +
+                        v[2] * (1. - *p_ex) * (*p_ey) * (1. - *p_ez) +
+                        v[3] * (*p_ex) * (*p_ey) * (1. - *p_ez) +
+                        v[4] * (1. - *p_ex) * (1. - *p_ey) * (*p_ez) +
+                        v[5] * (*p_ex) * (1. - *p_ey) * (*p_ez) +
+                        v[6] * (1. - *p_ex) * (*p_ey) * (*p_ez) +
+                        v[7] * (*p_ex) * (*p_ey) * (*p_ez);
 
-		/* no interp value */
-	    }
-	    else {
-		value = slice_get_value(gvl, *p_x, *p_y, *p_z);
-	    }
+                /* no interp value */
+            }
+            else {
+                value = slice_get_value(gvl, *p_x, *p_y, *p_z);
+            }
 
-	    /* translate value to color */
-	    color = Gvl_get_color_for_value(colors, &value);
+            /* translate value to color */
+            color = Gvl_get_color_for_value(colors, &value);
 
-	    /* write color to slice data */
-	    gvl_write_char(pos++, &(slice->data), color & RED_MASK);
-	    gvl_write_char(pos++, &(slice->data), (color & GRN_MASK) >> 8);
-	    gvl_write_char(pos++, &(slice->data), (color & BLU_MASK) >> 16);
+            /* write color to slice data */
+            gvl_write_char(pos++, &(slice->data), color & RED_MASK);
+            gvl_write_char(pos++, &(slice->data), (color & GRN_MASK) >> 8);
+            gvl_write_char(pos++, &(slice->data), (color & BLU_MASK) >> 16);
 
-	    /* step in z */
-	    if (r + 1 > f_rows) {
-		z += stepz * (f_rows - (float)r);
-	    }
-	    else {
-		z += stepz;
-	    }
-	}
+            /* step in z */
+            if (r + 1 > f_rows) {
+                z += stepz * (f_rows - (float)r);
+            }
+            else {
+                z += stepz;
+            }
+        }
 
-	/* step in x,y */
-	if (c + 1 > f_cols) {
-	    x += stepx * (f_cols - (float)c);
-	    y += stepy * (f_cols - (float)c);
-	}
-	else {
-	    x += stepx;
-	    y += stepy;
-	}
+        /* step in x,y */
+        if (c + 1 > f_cols) {
+            x += stepx * (f_cols - (float)c);
+            y += stepy * (f_cols - (float)c);
+        }
+        else {
+            x += stepx;
+            y += stepy;
+        }
     }
 
     /* end reading volume file */
@@ -1040,7 +1037,7 @@ int gvl_slices_calc(geovol *gvol)
     void *colors;
 
     G_debug(5, "gvl_slices_calc(): id=%d", gvol->gvol_id);
-    
+
     /* set current resolution */
     ResX = gvol->slice_x_mod;
     ResY = gvol->slice_y_mod;
@@ -1056,12 +1053,12 @@ int gvl_slices_calc(geovol *gvol)
 
     /* calc changed slices */
     for (i = 0; i < gvol->n_slices; i++) {
-	if (gvol->slice[i]->changed) {
-	    slice_calc(gvol, i, colors);
+        if (gvol->slice[i]->changed) {
+            slice_calc(gvol, i, colors);
 
-	    /* set changed flag */
-	    gvol->slice[i]->changed = 0;
-	}
+            /* set changed flag */
+            gvol->slice[i]->changed = 0;
+        }
     }
 
     /* free color */

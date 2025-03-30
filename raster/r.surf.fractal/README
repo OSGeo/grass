@@ -7,7 +7,7 @@ r.surf.fractal
 
 	Reference:
 
-	Saupe, D. (1988) Algorithms for random fractals, in Barnsley M., 
+	Saupe, D. (1988) Algorithms for random fractals, in Barnsley M.,
 		Devaney R., Mandelbrot B., Peitgen, H-O., Saupe D., and Voss R.
 		(1988) The Science of Fractal Images, Ch. 2, pp.71-136. London:
 		Springer-Verlag.
@@ -25,4 +25,3 @@ Parameters:
         default: 2.05
     n   Number of intermediate images to produce
         default: 0
-

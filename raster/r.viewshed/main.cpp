@@ -9,16 +9,16 @@
  *               wkrichar@bowdoin.edu or willster3021@gmail.com
  *               Markus Metz: surface interpolation
  *
- * Date:         July 2008; April 2011 
- * 
+ * Date:         July 2008; April 2011
+ *
  * PURPOSE: To calculate the viewshed (the visible cells in the
  * raster) for the given viewpoint (observer) location.  The
  * visibility model is the following: Two points in the raster are
  * considered visible to each other if the cells where they belong are
  * visible to each other.  Two cells are visible to each other if the
  * line-of-sight that connects their centers does not intersect the
- * terrain. The terrain is NOT viewed as a tesselation of flat cells, 
- * i.e. if the line-of-sight does not pass through the cell center, 
+ * terrain. The terrain is NOT viewed as a tessellation of flat cells,
+ * i.e. if the line-of-sight does not pass through the cell center,
  * elevation is determined using bilinear interpolation.
  * The viewshed algorithm is efficient both in
  * terms of CPU operations and I/O operations. It has worst-case
@@ -34,15 +34,13 @@
  *
  *****************************************************************************/
 
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 #include <unistd.h>
 
-extern "C"
-{
+extern "C" {
 #include <grass/config.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -57,48 +55,38 @@ extern "C"
 #include "statusstructure.h"
 #include "distribute.h"
 
-
-
-
 /* if the user does not specify how much memory is available for the
    program, this is the default value used (in bytes) */
-#define DEFAULT_MEMORY 500<<20
-
+#define DEFAULT_MEMORY        500 << 20
 
 /* observer elevation above the terrain */
 #define DEFAULT_OBS_ELEVATION 0
 
-
 /* All these flags are used for debugging */
 
 /* if this flag is set, it always runs in memory */
-//#define FORCE_INTERNAL
+// #define FORCE_INTERNAL
 
 /* if this is set, it runs in external memory, even if the problem is
    small enough to fit in memory.  In external memory it first tries
    to run the base-case, then recursion. */
-//#define FORCE_EXTERNAL
+// #define FORCE_EXTERNAL
 
 /* if this flag is set it runs in external memory, and starts
    recursion without checking the base-case. */
-//#define FORCE_DISTRIBUTION
-
-
+// #define FORCE_DISTRIBUTION
 
 /* ------------------------------------------------------------ */
 /* forward declarations */
 /* ------------------------------------------------------------ */
 void print_timings_internal(Rtimer sweepTime, Rtimer outputTime,
-			    Rtimer totalTime);
+                            Rtimer totalTime);
 void print_timings_external_memory(Rtimer totalTime, Rtimer viewshedTime,
-				   Rtimer outputTime, Rtimer sortOutputTime);
+                                   Rtimer outputTime, Rtimer sortOutputTime);
 
 void parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
-		ViewOptions * viewOptions, long long *memSizeBytes,
-		Cell_head * window);
-
-
-
+                ViewOptions *viewOptions, long long *memSizeBytes,
+                Cell_head *window);
 
 /* ------------------------------------------------------------ */
 int main(int argc, char *argv[])
@@ -116,13 +104,14 @@ int main(int argc, char *argv[])
     G_add_keyword(_("viewshed"));
     G_add_keyword(_("line of sight"));
     G_add_keyword(_("LOS"));
-    module->label = _("Computes the viewshed of a point on an elevation raster map.");
-    module->description = _("Default format: NULL (invisible), vertical angle wrt viewpoint (visible).");
+    module->label =
+        _("Computes the viewshed of a point on an elevation raster map.");
+    module->description = _("Default format: NULL (invisible), vertical angle "
+                            "wrt viewpoint (visible).");
 
     struct Cell_head region;
 
     Rast_get_window(&region);
-
 
     /* ************************************************************ */
     /* parameters set up */
@@ -130,7 +119,7 @@ int main(int argc, char *argv[])
 
     /* the maximum size of main memory that the program ca use. The
        user can specify it, otherwise the default value of 500MB is
-       used.  The program uses this value to decied in which mode to
+       used.  The program uses this value to decide in which mode to
        run --- in internal memory, or external memory.  */
 
     int vpRow, vpCol;
@@ -142,20 +131,20 @@ int main(int argc, char *argv[])
 
     ViewOptions viewOptions;
 
-    //viewOptions.inputfname = (char*)malloc(500); 
-    //viewOptions.outputfname = (char*)malloc(500);
-    //assert(inputfname && outputfname);
+    // viewOptions.inputfname = (char*)malloc(500);
+    // viewOptions.outputfname = (char*)malloc(500);
+    // assert(inputfname && outputfname);
     viewOptions.obsElev = DEFAULT_OBS_ELEVATION;
     viewOptions.maxDist = INFINITY_DISTANCE;
     viewOptions.outputMode = OUTPUT_ANGLE;
     viewOptions.doCurv = FALSE;
     viewOptions.doRefr = FALSE;
-    viewOptions.refr_coef = 1.0/7.0;
+    viewOptions.refr_coef = 1.0 / 7.0;
     viewOptions.horizontal_angle_min = 0;
     viewOptions.horizontal_angle_max = 360;
 
     parse_args(argc, argv, &vpRow, &vpCol, &viewOptions, &memSizeBytes,
-	       &region);
+               &region);
 
     /* set viewpoint with the coordinates specified by user. The
        height of the viewpoint is not known at this point---it will be
@@ -163,7 +152,6 @@ int main(int argc, char *argv[])
     Viewpoint vp;
 
     set_viewpoint_coord(&vp, vpRow, vpCol);
-
 
     /* ************************************************************ */
     /* set up the header of the raster with all raster info and make
@@ -178,14 +166,14 @@ int main(int argc, char *argv[])
        the algorithm will work correctly in theory. But this
        requires some changes. To do. */
     if (!(vp.row < hd->nrows && vp.col < hd->ncols)) {
-	/* unfortunately, we don't know the point coordinates now */
-	G_warning(_("Region extent: north=%f, south=%f, east=%f, west=%f"),
-	    hd->window.north, hd->window.south, hd->window.east, hd->window.west);
-	G_warning(_("Region extent: rows=%d, cols=%d"), hd->nrows, hd->ncols);
-	G_warning(_("Viewpoint: row=%d, col=%d"), vp.row, vp.col);
-	G_fatal_error(_("Viewpoint outside of computational region"));
+        /* unfortunately, we don't know the point coordinates now */
+        G_warning(_("Region extent: north=%f, south=%f, east=%f, west=%f"),
+                  hd->window.north, hd->window.south, hd->window.east,
+                  hd->window.west);
+        G_warning(_("Region extent: rows=%d, cols=%d"), hd->nrows, hd->ncols);
+        G_warning(_("Viewpoint: row=%d, col=%d"), vp.row, vp.col);
+        G_fatal_error(_("Viewpoint outside of computational region"));
     }
-
 
     /* set curvature params */
     viewOptions.cellsize = region.ew_res;
@@ -193,16 +181,14 @@ int main(int argc, char *argv[])
 
     G_get_ellipsoid_parameters(&viewOptions.ellps_a, &e2);
     if (viewOptions.ellps_a == 0) {
-	/*according to r.los, this can be
-	   problematic, so we'll have a backup, hardcoded radius :-( */
-	G_warning(_("Problems obtaining current ellipsoid parameters, using sphere (6370997.0)"));
-	viewOptions.ellps_a = 6370997.00;
+        /*according to r.los, this can be
+           problematic, so we'll have a backup, hardcoded radius :-( */
+        G_warning(_("Problems obtaining current ellipsoid parameters, using "
+                    "sphere (6370997.0)"));
+        viewOptions.ellps_a = 6370997.00;
     }
 
     G_begin_distance_calculations();
-
-
-
 
     /* ************************************************************ */
     /* decide whether the computation of the viewshed will take place
@@ -211,16 +197,16 @@ int main(int argc, char *argv[])
     long long inmemSizeBytes = get_viewshed_memory_usage(hd);
 
     G_verbose_message(_("In-memory memory usage is %lld B (%d MB), \
-			max mem allowed=%lld B(%dMB)"), inmemSizeBytes,
-			(int)(inmemSizeBytes >> 20), memSizeBytes,
-			(int)(memSizeBytes >> 20));
+                        max mem allowed=%lld B(%dMB)"),
+                      inmemSizeBytes, (int)(inmemSizeBytes >> 20), memSizeBytes,
+                      (int)(memSizeBytes >> 20));
     if (inmemSizeBytes < memSizeBytes) {
-	IN_MEMORY = 1;
-	G_verbose_message("*****  IN_MEMORY MODE  *****");
+        IN_MEMORY = 1;
+        G_verbose_message("*****  IN_MEMORY MODE  *****");
     }
     else {
-	G_verbose_message("*****  EXTERNAL_MEMORY MODE  *****");
-	IN_MEMORY = 0;
+        G_verbose_message("*****  EXTERNAL_MEMORY MODE  *****");
+        IN_MEMORY = 0;
     }
 
     /* the mode can be forced to in memory or external if the user
@@ -235,181 +221,165 @@ int main(int argc, char *argv[])
     G_debug(1, "FORCED INTERNAL");
 #endif
 
-
     /* ************************************************************ */
     /* compute viewshed in memory */
     /* ************************************************************ */
     if (IN_MEMORY) {
-	/*//////////////////////////////////////////////////// */
-	/*/viewshed in internal  memory */
-	/*//////////////////////////////////////////////////// */
-	Rtimer totalTime, outputTime, sweepTime;
-	MemoryVisibilityGrid *visgrid;
+        /*//////////////////////////////////////////////////// */
+        /*/viewshed in internal  memory */
+        /*//////////////////////////////////////////////////// */
+        Rtimer totalTime, outputTime, sweepTime;
+        MemoryVisibilityGrid *visgrid;
 
-	rt_start(totalTime);
+        rt_start(totalTime);
 
-	/*compute the viewshed and store it in visgrid */
-	rt_start(sweepTime);
-	visgrid =
-	    viewshed_in_memory(viewOptions.inputfname, hd, &vp, viewOptions);
-	rt_stop(sweepTime);
+        /*compute the viewshed and store it in visgrid */
+        rt_start(sweepTime);
+        visgrid =
+            viewshed_in_memory(viewOptions.inputfname, hd, &vp, viewOptions);
+        rt_stop(sweepTime);
 
-	/* write the output */
-	rt_start(outputTime);
-	save_inmem_visibilitygrid(visgrid, viewOptions, vp);
-	rt_stop(outputTime);
+        /* write the output */
+        rt_start(outputTime);
+        save_inmem_visibilitygrid(visgrid, viewOptions, vp);
+        rt_stop(outputTime);
 
-	rt_stop(totalTime);
+        rt_stop(totalTime);
 
-	print_timings_internal(sweepTime, outputTime, totalTime);
+        print_timings_internal(sweepTime, outputTime, totalTime);
     }
-
-
-
 
     /* ************************************************************ */
     /* compute viewshed in external memory */
     /* ************************************************************ */
     else {
 
-	/* ************************************************************ */
-	/* set up external memory mode */
-	/* setup STREAM_DIR if not already set */
-    char buf[GPATH_MAX + 256];
+        /* ************************************************************ */
+        /* set up external memory mode */
+        /* setup STREAM_DIR if not already set */
+        char buf[GPATH_MAX + 256];
 
-	if (getenv(STREAM_TMPDIR) != NULL) {
-	    /*if already set */
-	    G_debug(1, "%s=%s", STREAM_TMPDIR, getenv(STREAM_TMPDIR));
-	    G_debug(1, "Intermediate stream location: %s",
-		   getenv(STREAM_TMPDIR));
-	}
-	else {
-	    /*set it */
-	    sprintf(buf, "%s=%s", STREAM_TMPDIR, viewOptions.streamdir);
-	    G_debug(1, "setting %s ", buf);
-	    putenv(buf);
-	    if (getenv(STREAM_TMPDIR) == NULL) {
-		G_fatal_error(_("%s not set"), "STREAM_TMPDIR");
-		exit(1);
-	    }
-	    else {
-		G_debug(1, "are ok.");
-	    }
-	}
-	G_important_message(_("Intermediate files will not be deleted \
-		              in case of abnormal termination."));
-	G_important_message(_("Intermediate location: %s"), viewOptions.streamdir);
-	G_important_message(_("To save space delete these files manually!"));
+        if (getenv(STREAM_TMPDIR) != NULL) {
+            /*if already set */
+            G_debug(1, "%s=%s", STREAM_TMPDIR, getenv(STREAM_TMPDIR));
+            G_debug(1, "Intermediate stream location: %s",
+                    getenv(STREAM_TMPDIR));
+        }
+        else {
+            /*set it */
+            snprintf(buf, sizeof(buf), "%s=%s", STREAM_TMPDIR,
+                     viewOptions.streamdir);
+            G_debug(1, "setting %s ", buf);
+            putenv(buf);
+            if (getenv(STREAM_TMPDIR) == NULL) {
+                G_fatal_error(_("%s not set"), "STREAM_TMPDIR");
+                exit(1);
+            }
+            else {
+                G_debug(1, "are ok.");
+            }
+        }
+        G_important_message(_("Intermediate files will not be deleted \
+                              in case of abnormal termination."));
+        G_important_message(_("Intermediate location: %s"),
+                            viewOptions.streamdir);
+        G_important_message(_("To save space delete these files manually!"));
 
+        /* initialize IOSTREAM memory manager */
+        MM_manager.set_memory_limit(memSizeBytes);
+        MM_manager.ignore_memory_limit();
+        MM_manager.print_limit_mode();
 
-	/* initialize IOSTREAM memory manager */
-	MM_manager.set_memory_limit(memSizeBytes);
-	MM_manager.ignore_memory_limit();
-	MM_manager.print_limit_mode();
+        /* ************************************************************ */
+        /* BASE CASE OR DISTRIBUTION */
+        /* determine whether base-case of external algorithm is enough,
+           or recursion is necessary */
+        int BASE_CASE = 0;
 
+        if (get_active_str_size_bytes(hd) < memSizeBytes)
+            BASE_CASE = 1;
 
-
-	/* ************************************************************ */
-	/* BASE CASE OR DISTRIBUTION */
-	/* determine whether base-case of external algorithm is enough,
-	   or recursion is necessary */
-	int BASE_CASE = 0;
-
-	if (get_active_str_size_bytes(hd) < memSizeBytes)
-	    BASE_CASE = 1;
-
-	/*if the user set the FORCE_DISTRIBUTION flag, then the
-	   algorithm runs in the fuly recursive mode (even if this is
-	   not necessary). This is used solely for debugging purpses  */
+            /*if the user set the FORCE_DISTRIBUTION flag, then the
+               algorithm runs in the fuly recursive mode (even if this is
+               not necessary). This is used solely for debugging purpses  */
 #ifdef FORCE_DISTRIBUTION
-	BASE_CASE = 0;
+        BASE_CASE = 0;
 #endif
 
+        /* ************************************************************ */
+        /* external memory, base case  */
+        /* ************************************************************ */
+        if (BASE_CASE) {
+            G_debug(1, "---Active structure small, starting base case---");
 
+            Rtimer totalTime, viewshedTime, outputTime, sortOutputTime;
 
+            rt_start(totalTime);
 
-	/* ************************************************************ */
-	/* external memory, base case  */
-	/* ************************************************************ */
-	if (BASE_CASE) {
-	    G_debug
-		(1, "---Active structure small, starting base case---");
+            /*run viewshed's algorithm */
+            IOVisibilityGrid *visgrid;
 
-	    Rtimer totalTime, viewshedTime, outputTime, sortOutputTime;
+            rt_start(viewshedTime);
+            visgrid =
+                viewshed_external(viewOptions.inputfname, hd, &vp, viewOptions);
+            rt_stop(viewshedTime);
 
-	    rt_start(totalTime);
+            /*sort output */
+            rt_start(sortOutputTime);
+            sort_io_visibilitygrid(visgrid);
+            rt_stop(sortOutputTime);
 
-	    /*run viewshed's algorithm */
-	    IOVisibilityGrid *visgrid;
+            /*save output stream to file. */
+            rt_start(outputTime);
+            save_io_visibilitygrid(visgrid, viewOptions, vp);
+            rt_stop(outputTime);
 
-	    rt_start(viewshedTime);
-	    visgrid =
-		viewshed_external(viewOptions.inputfname, hd, &vp,
-				  viewOptions);
-	    rt_stop(viewshedTime);
+            rt_stop(totalTime);
 
-	    /*sort output */
-	    rt_start(sortOutputTime);
-	    sort_io_visibilitygrid(visgrid);
-	    rt_stop(sortOutputTime);
+            print_timings_external_memory(totalTime, viewshedTime, outputTime,
+                                          sortOutputTime);
+        }
 
-	    /*save output stream to file. */
-	    rt_start(outputTime);
-	    save_io_visibilitygrid(visgrid, viewOptions, vp);
-	    rt_stop(outputTime);
-
-	    rt_stop(totalTime);
-
-	    print_timings_external_memory(totalTime, viewshedTime,
-					  outputTime, sortOutputTime);
-	}
-
-
-
-	/************************************************************/
-	/* external memory, recursive distribution sweeping recursion */
-	/************************************************************ */
-	else {			/* if not  BASE_CASE */
+        /************************************************************/
+        /* external memory, recursive distribution sweeping recursion */
+        /************************************************************ */
+        else { /* if not  BASE_CASE */
 #ifndef FORCE_DISTRIBUTION
-	    G_debug(1, "---Active structure does not fit in memory,");
+            G_debug(1, "---Active structure does not fit in memory,");
 #else
-	    G_debug(1, "FORCED DISTRIBUTION");
+            G_debug(1, "FORCED DISTRIBUTION");
 #endif
 
-	    Rtimer totalTime, sweepTime, outputTime, sortOutputTime;
+            Rtimer totalTime, sweepTime, outputTime, sortOutputTime;
 
-	    rt_start(totalTime);
+            rt_start(totalTime);
 
-	    /*get the viewshed solution by distribution */
-	    IOVisibilityGrid *visgrid;
+            /*get the viewshed solution by distribution */
+            IOVisibilityGrid *visgrid;
 
-	    rt_start(sweepTime);
-	    visgrid =
-		distribute_and_sweep(viewOptions.inputfname, hd, &vp,
-				     viewOptions);
+            rt_start(sweepTime);
+            visgrid = distribute_and_sweep(viewOptions.inputfname, hd, &vp,
+                                           viewOptions);
 
-	    rt_stop(sweepTime);
+            rt_stop(sweepTime);
 
-	    /*sort the visibility grid so that it is in order when it is
-	       outputted */
-	    rt_start(sortOutputTime);
-	    sort_io_visibilitygrid(visgrid);
-	    rt_stop(sortOutputTime);
+            /*sort the visibility grid so that it is in order when it is
+               outputted */
+            rt_start(sortOutputTime);
+            sort_io_visibilitygrid(visgrid);
+            rt_stop(sortOutputTime);
 
-	    rt_start(outputTime);
-	    save_io_visibilitygrid(visgrid, viewOptions, vp);
-	    rt_stop(outputTime);
+            rt_start(outputTime);
+            save_io_visibilitygrid(visgrid, viewOptions, vp);
+            rt_stop(outputTime);
 
+            rt_stop(totalTime);
 
-	    rt_stop(totalTime);
-
-	    print_timings_external_memory(totalTime, sweepTime,
-					  outputTime, sortOutputTime);
-
-	}
+            print_timings_external_memory(totalTime, sweepTime, outputTime,
+                                          sortOutputTime);
+        }
     }
     /*end external memory, distribution sweep */
-
 
     /**************************************/
     /*        FINISH UP, ALL CASES        */
@@ -426,15 +396,11 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
-
-
-
 /* ------------------------------------------------------------ */
 /* parse arguments */
-void
-parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
-	   ViewOptions * viewOptions, long long *memSizeBytes,
-	   Cell_head * window)
+void parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
+                ViewOptions *viewOptions, long long *memSizeBytes,
+                Cell_head *window)
 {
 
     assert(vpRow && vpCol && memSizeBytes && window);
@@ -449,14 +415,14 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     struct Option *outputOpt;
 
     outputOpt = G_define_standard_option(G_OPT_R_OUTPUT);
-    
+
     /* curvature flag */
     struct Flag *curvature;
 
     curvature = G_define_flag();
     curvature->key = 'c';
     curvature->description =
-	_("Consider the curvature of the earth (current ellipsoid)");
+        _("Consider the curvature of the earth (current ellipsoid)");
 
     /* atmospheric refraction flag */
     struct Flag *refractionFlag;
@@ -464,7 +430,7 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     refractionFlag = G_define_flag();
     refractionFlag->key = 'r';
     refractionFlag->description =
-	_("Consider the effect of atmospheric refraction");
+        _("Consider the effect of atmospheric refraction");
     refractionFlag->guisection = _("Refraction");
 
     /* boolean output flag */
@@ -473,7 +439,7 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     booleanOutput = G_define_flag();
     booleanOutput->key = 'b';
     booleanOutput->description =
-	_("Output format is invisible = 0, visible = 1");
+        _("Output format is invisible = 0, visible = 1");
     booleanOutput->guisection = _("Output format");
 
     /* output mode = elevation flag */
@@ -481,8 +447,8 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
 
     elevationFlag = G_define_flag();
     elevationFlag->key = 'e';
-    elevationFlag->description =
-	_("Output format is invisible = NULL, else current elev - viewpoint_elev");
+    elevationFlag->description = _("Output format is invisible = NULL, else "
+                                   "current elev - viewpoint_elev");
     elevationFlag->guisection = _("Output format");
 
     /* viewpoint coordinates */
@@ -525,10 +491,10 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     maxDistOpt->required = NO;
     maxDistOpt->key_desc = "value";
     maxDistOpt->description =
-	_("Maximum visibility radius. By default infinity (-1)");
+        _("Maximum visibility radius. By default infinity (-1)");
     char infdist[10];
 
-    sprintf(infdist, "%d", INFINITY_DISTANCE);
+    snprintf(infdist, sizeof(infdist), "%d", INFINITY_DISTANCE);
     maxDistOpt->answer = infdist;
     maxDistOpt->guisection = _("Settings");
 
@@ -541,11 +507,12 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     direction->required = NO;
     direction->key_desc = "min,max";
     direction->options = "0-360";
-    direction->description =
-	_("Minimum and maximum horizontal angle limiting viewshed (0 is East, counterclockwise)");
+    direction->description = _("Minimum and maximum horizontal angle limiting "
+                               "viewshed (0 is East, counterclockwise)");
     direction->guisection = _("Settings");
 
-    /* atmospheric refraction coeff. 1/7 for visual, 0.325 for radio waves, ... */
+    /* atmospheric refraction coeff. 1/7 for visual, 0.325 for radio waves, ...
+     */
     /* in future we might calculate this based on the physics, for now we
        just fudge by the 1/7th approximation.
 
@@ -554,9 +521,8 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
         @article{yoeli1985making,
           title={The making of intervisibility maps with computer and plotter},
           author={Yoeli, Pinhas},
-          journal={Cartographica: The International Journal for Geographic Information and Geovisualization},
-          volume={22},
-          number={3},
+          journal={Cartographica: The International Journal for Geographic
+       Information and Geovisualization}, volume={22}, number={3},
           pages={88--103},
           year={1985},
           publisher={UT Press}
@@ -572,7 +538,7 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     refrCoeffOpt->answer = G_store("0.14286");
     refrCoeffOpt->options = "0.0-1.0";
     refrCoeffOpt->guisection = _("Refraction");
-    
+
     /* memory size */
     struct Option *memAmountOpt;
 
@@ -581,47 +547,45 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     memAmountOpt->type = TYPE_INTEGER;
     memAmountOpt->required = NO;
     memAmountOpt->key_desc = "value";
-    memAmountOpt->description =
-	_("Amount of memory to use in MB");
+    memAmountOpt->description = _("Amount of memory to use in MB");
     memAmountOpt->answer = G_store("500");
 
     /* temporary STREAM path */
     struct Option *streamdirOpt;
 
-    streamdirOpt = G_define_option() ;
-    streamdirOpt->key        = "directory";
-    streamdirOpt->type       = TYPE_STRING;
-    streamdirOpt->required   = NO;
-    //streamdirOpt->answer     = "";
-    streamdirOpt->description=
-       _("Directory to hold temporary files (they can be large)");
+    streamdirOpt = G_define_option();
+    streamdirOpt->key = "directory";
+    streamdirOpt->type = TYPE_STRING;
+    streamdirOpt->required = NO;
+    // streamdirOpt->answer     = "";
+    streamdirOpt->description =
+        _("Directory to hold temporary files (they can be large)");
 
     /*fill the options and flags with G_parser */
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
-
+        exit(EXIT_FAILURE);
 
     /* store the parameters into a structure to be used along the way */
     strcpy(viewOptions->inputfname, inputOpt->answer);
     strcpy(viewOptions->outputfname, outputOpt->answer);
-    
+
     if (!streamdirOpt->answer) {
-	const char *tmpdir = G_tempfile();
-	
-	if (G_mkdir(tmpdir) == -1)
-	    G_fatal_error(_("Unable to create temp dir"));
-	strcpy(viewOptions->streamdir, tmpdir);
+        const char *tmpdir = G_tempfile();
+
+        if (G_mkdir(tmpdir) == -1)
+            G_fatal_error(_("Unable to create temp dir"));
+        strcpy(viewOptions->streamdir, tmpdir);
     }
     else
-	strcpy(viewOptions->streamdir,streamdirOpt->answer);
-	
+        strcpy(viewOptions->streamdir, streamdirOpt->answer);
+
     viewOptions->obsElev = atof(obsElevOpt->answer);
-    if(tgtElevOpt->answer)
-	viewOptions->tgtElev = atof(tgtElevOpt->answer);
+    if (tgtElevOpt->answer)
+        viewOptions->tgtElev = atof(tgtElevOpt->answer);
 
     viewOptions->maxDist = atof(maxDistOpt->answer);
     if (viewOptions->maxDist < 0 && viewOptions->maxDist != INFINITY_DISTANCE) {
-	G_fatal_error(_("A negative max distance value is not allowed"));
+        G_fatal_error(_("A negative max distance value is not allowed"));
     }
     viewOptions->doDirection = 0;
     if (direction->answer) {
@@ -633,24 +597,24 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     viewOptions->doCurv = curvature->answer;
     viewOptions->doRefr = refractionFlag->answer;
     if (refractionFlag->answer && !curvature->answer)
-	G_fatal_error(_("Atmospheric refraction is only calculated with "
-			"respect to the curvature of the Earth. "
-			"Enable the -c flag as well."));
+        G_fatal_error(_("Atmospheric refraction is only calculated with "
+                        "respect to the curvature of the Earth. "
+                        "Enable the -c flag as well."));
     viewOptions->refr_coef = atof(refrCoeffOpt->answer);
 
     if (booleanOutput->answer)
-	viewOptions->outputMode = OUTPUT_BOOL;
+        viewOptions->outputMode = OUTPUT_BOOL;
     else if (elevationFlag->answer)
-	viewOptions->outputMode = OUTPUT_ELEV;
+        viewOptions->outputMode = OUTPUT_ELEV;
     else
-	viewOptions->outputMode = OUTPUT_ANGLE;
+        viewOptions->outputMode = OUTPUT_ANGLE;
 
     int memSizeMB = atoi(memAmountOpt->answer);
 
     if (memSizeMB < 0) {
-	G_warning(_("Amount of memory cannot be negative."));
-	G_warning(_(" Converting %d to %d MB"), memSizeMB, -memSizeMB);
-	memSizeMB = -memSizeMB;
+        G_warning(_("Amount of memory cannot be negative."));
+        G_warning(_(" Converting %d to %d MB"), memSizeMB, -memSizeMB);
+        memSizeMB = -memSizeMB;
     }
     *memSizeBytes = (long long)memSizeMB;
     *memSizeBytes = (*memSizeBytes) << 20;
@@ -661,20 +625,20 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
         convert the lat-lon coordinates to row and column format */
     *vpRow = (int)Rast_northing_to_row(atof(viewLocOpt->answers[1]), window);
     *vpCol = (int)Rast_easting_to_col(atof(viewLocOpt->answers[0]), window);
-    G_debug(3, "viewpoint converted from current projection: (%.3f, %.3f)  to col, row (%d, %d)",
-        atof(viewLocOpt->answers[0]), atof(viewLocOpt->answers[1]), *vpCol, *vpRow);
+    G_debug(3,
+            "viewpoint converted from current projection: (%.3f, %.3f)  to "
+            "col, row (%d, %d)",
+            atof(viewLocOpt->answers[0]), atof(viewLocOpt->answers[1]), *vpCol,
+            *vpRow);
 
     return;
 }
 
-
-
-
 /* ------------------------------------------------------------ */
 /*print the timings for the internal memory method of computing the
    viewshed */
-void
-print_timings_internal(Rtimer sweepTime, Rtimer outputTime, Rtimer totalTime)
+void print_timings_internal(Rtimer sweepTime, Rtimer outputTime,
+                            Rtimer totalTime)
 {
 
     char timeused[100];
@@ -694,12 +658,10 @@ print_timings_internal(Rtimer sweepTime, Rtimer outputTime, Rtimer totalTime)
     G_verbose_message("\n");
 }
 
-
 /* ------------------------------------------------------------ */
 /*print the timings for the external memory method of solving the viewshed */
-void
-print_timings_external_memory(Rtimer totalTime, Rtimer viewshedTime,
-			      Rtimer outputTime, Rtimer sortOutputTime)
+void print_timings_external_memory(Rtimer totalTime, Rtimer viewshedTime,
+                                   Rtimer outputTime, Rtimer sortOutputTime)
 {
 
     /*print timings */

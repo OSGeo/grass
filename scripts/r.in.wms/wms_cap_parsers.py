@@ -18,10 +18,7 @@ This program is free software under the GNU General Public License
 """
 import pathlib
 
-try:
-    from xml.etree.ElementTree import ParseError
-except ImportError:  # < Python 2.7
-    from xml.parsers.expat import ExpatError as ParseError
+from xml.etree.ElementTree import ParseError
 
 import xml.etree.ElementTree as etree
 import grass.script as grass
@@ -45,7 +42,7 @@ class BaseCapabilitiesTree(etree.ElementTree):
                 etree.ElementTree.__init__(self, file=cap_file)
             except ParseError:
                 raise ParseError(_("Unable to parse XML file"))
-            except IOError as error:
+            except OSError as error:
                 raise ParseError(
                     _("Unable to open XML file '%s'.\n%s\n" % (cap_file, error))
                 )
@@ -139,7 +136,7 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
         if first:
             self._initLayer(parent_layer, None)
 
-        layers = parent_layer.findall((self.xml_ns.Ns("Layer")))
+        layers = parent_layer.findall(self.xml_ns.Ns("Layer"))
 
         for l in layers:
             self._initLayer(l, parent_layer)

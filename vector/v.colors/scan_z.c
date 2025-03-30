@@ -4,9 +4,9 @@
 
 #include "local_proto.h"
 
-void scan_z(struct Map_info *Map, int field,
-            const char *style, const char *rules,
-            const struct FPRange *range, struct Colors *colors, int invert)
+void scan_z(struct Map_info *Map, int field, const char *style,
+            const char *rules, const struct FPRange *range,
+            struct Colors *colors, int invert)
 {
     int ltype, line, cat, i, found;
     int items_alloc;
@@ -32,14 +32,14 @@ void scan_z(struct Map_info *Map, int field,
 
     G_message(_("Reading features..."));
     line = i = found = 0;
-    while(TRUE) {
-	ltype = Vect_read_next_line(Map, Points, Cats);
-	if (ltype == -1)
-	    G_fatal_error(_("Unable to read vector map"));
-	if (ltype == -2)
-	    break; /* EOF */
+    while (TRUE) {
+        ltype = Vect_read_next_line(Map, Points, Cats);
+        if (ltype == -1)
+            G_fatal_error(_("Unable to read vector map"));
+        if (ltype == -2)
+            break; /* EOF */
 
-	G_progress(++line, 1e4);
+        G_progress(++line, 1e4);
 
         if (Vect_cat_get(Cats, field, &cat) == -1)
             continue; /* skip features without category */
@@ -53,11 +53,11 @@ void scan_z(struct Map_info *Map, int field,
         cvarr.value[i].cat = cat;
         cvarr.value[i++].val.d = Points->z[0];
 
-	if (!found || Points->z[0] < zmin)
-	    zmin = Points->z[0];
-	if (!found || Points->z[0] > zmax)
-	    zmax = Points->z[0];
-	found = 1;
+        if (!found || Points->z[0] < zmin)
+            zmin = Points->z[0];
+        if (!found || Points->z[0] > zmax)
+            zmax = Points->z[0];
+        found = 1;
     }
     G_progress(1, 1);
 
@@ -65,23 +65,23 @@ void scan_z(struct Map_info *Map, int field,
     db_CatValArray_sort_by_value(&cvarr);
 
     if (range) {
-	if (!found || (range->min >= zmin && range->min <= zmax))
-	    zmin = range->min;
-	else
-	    G_warning(_("Min value (%f) is out of range %f,%f"),
-		      range->min, zmin, zmax);
+        if (!found || (range->min >= zmin && range->min <= zmax))
+            zmin = range->min;
+        else
+            G_warning(_("Min value (%f) is out of range %f,%f"), range->min,
+                      zmin, zmax);
 
-	if (!found || (range->max <= zmax && range->max >= zmin))
-	    zmax = range->max;
-	else
-	    G_warning(_("Max value (%f) is out of range %f,%f"),
-		      range->max, zmin, zmax);
+        if (!found || (range->max <= zmax && range->max >= zmin))
+            zmax = range->max;
+        else
+            G_warning(_("Max value (%f) is out of range %f,%f"), range->max,
+                      zmin, zmax);
     }
 
     if (style)
-	make_colors(&vcolors, style, (DCELL) zmin, (DCELL) zmax, TRUE);
+        make_colors(&vcolors, style, (DCELL)zmin, (DCELL)zmax, TRUE);
     else if (rules)
-	load_colors(&vcolors, rules, (DCELL) zmin, (DCELL) zmax, TRUE);
+        load_colors(&vcolors, rules, (DCELL)zmin, (DCELL)zmax, TRUE);
 
     /* color table for categories */
     color_rules_to_cats(&cvarr, TRUE, &vcolors, colors, invert, zmin, zmax);

@@ -37,7 +37,6 @@ mcda (MC)
 
 
 class TestToolboxesMetadata(TestCase):
-
     url = "file://" + os.path.abspath("data")
 
     def test_listing(self):

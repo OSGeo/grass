@@ -8,7 +8,7 @@ by GRASS Development Team (https://grass.osgeo.org)
 
 Spatial index (based on R*-tree) is created with topology.
 
-Spatial index occupies a lot of memory but it is necessary for 
+Spatial index occupies a lot of memory but it is necessary for
 topology building. Also, it takes some time to release the memory
 occupied by spatial index (see dig_spidx_free()). The spatial index can
 also be built in file to save memory by setting the environment variable
@@ -23,7 +23,7 @@ It is possible to call Vect_set_release_support() before Vect_close()
 to enforce memory release, but it takes some time on large files.
 
 The spatial index is stored in file and not loaded for old vectors that
-are not updated, saving a lot of memory. Spatial queries are done in 
+are not updated, saving a lot of memory. Spatial queries are done in
 file.
 
 Currently most of the modules do not release the memory occupied for
@@ -55,7 +55,7 @@ int main
 }
 \endcode
 
-but it takes a bit longer. 
+but it takes a bit longer.
 
 It makes sense to release the spatial index if it is used only at the beginning
 of a module or in permanently running programs like QGIS. Note that this

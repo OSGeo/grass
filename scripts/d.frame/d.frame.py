@@ -92,7 +92,7 @@ def read_monitor_file(monitor, ftype="env"):
     mfile = check_monitor_file(monitor, ftype)
     try:
         fd = open(mfile, "r")
-    except IOError as e:
+    except OSError as e:
         fatal(_("Unable to get monitor info. %s"), e)
 
     lines = []
@@ -123,7 +123,7 @@ def write_monitor_file(monitor, lines, ftype="env"):
 
     try:
         fd = open(mfile, "w")
-    except IOError as e:
+    except OSError as e:
         fatal(_("Unable to get monitor info. %s"), e)
 
     fd.writelines(lines)
@@ -186,7 +186,7 @@ def calculate_frame(frame, at, width, height):
     at is from bottom left in percents (bottom,top,left,right)
     output is in pixels from top left (top,bottom,left,right)
 
-    This function does also the necessary formating.
+    This function does also the necessary formatting.
 
     >>> calculate_frame('apple', "0,49.8,0,50.2", 500, 500)
     'GRASS_RENDER_FRAME=251,500,0,251 # apple\\n'

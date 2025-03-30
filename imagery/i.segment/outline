@@ -3,7 +3,7 @@ https://grass.osgeo.org/wiki/GRASS_GSoC_2012_Image_Segmentation
 
 For anyone interested in background discussion, Rev 51907 includes original comments and discussion between EM, MM, and ML.  All comments were combined (and new threads started!) after that revision.
 
-TODO: Memory management, allow user to imput how much RAM can be used.  Compare i.watershed and i.cost for two current options, initial recommendations are to follow i.watershed.
+TODO: Memory management, allow user to input how much RAM can be used.  Compare i.watershed and i.cost for two current options, initial recommendations are to follow i.watershed.
 
 TODO: Are any parts here potentially useful as library functions?  Are any of these tasks already done by existing library functions?
 
@@ -34,7 +34,7 @@ constraint (vector linear/polygon) (optional)
 
 segmentation algorithm (only region growing accepted to start)
 
-pixel neighbors: for a particular pixel, use 4 neighbors or 8 neigbors? (flag, not set = 4 neighbors)
+pixel neighbors: for a particular pixel, use 4 neighbors or 8 neighbors? (flag, not set = 4 neighbors)
 
 Later: memory usage  (r.watershed uses -m flag + memory parameter)
 
@@ -93,7 +93,7 @@ output map structure:
 	- segment assignment
 	- candidate flag: has it been check during this iteration loop
 	- assigned flag: has it been assigned to a segment (only if number of seeds < number of pixels)
- 
+
 
 /*******************************************/
 /************* preprocessing ? *************/
@@ -138,12 +138,12 @@ If we have polygon constraints.  Outer for loop to process the image one polygon
 For t  (until no merges are made?)
 
 	Set candidate flag to true/1 for all pixels
-	
+
 	For each pixel that candidate flag is true:
 		function: find segment neighbors (Now we have list of pixels in current focus segment (Ri) and a list of neighbors)
 		Calculate similarity between Ri and neighbors
 		If it exists, Rk is both most similar, and also similarity is < T.
-		function: find segment neigbors of Rk
+		function: find segment neighbors of Rk
 		Calculate similarity between Rk and its neighbors
 		IF (Ri is Rk's best neighbor) (so they agree, both are best match for each other)
 			merge Ri and Rk: (probably as function?)
@@ -157,9 +157,9 @@ For t  (until no merges are made?)
 			set candidate flag to false for all pixels in Ri
 			Use Rk as next Ri  /* note, this is the eCognition technique.  Seems this is a bit faster, we already have segment membership pixels
 	loop
-	
+
 	Were any merges made for this time step?
-	
+
 next t
 
 Force a merge of regions that are below minimum size threshold (just merge with most similar neighbor, no comparison with similarity threshold)
@@ -181,7 +181,7 @@ If no seeds:  (can merge unassigned pixels and other segments)
 		1, 2, 3, 4, 5, 6, 7
 	else
 		1, 2, 3, 4, 5, 7
-	
+
 else (starting from seeds, so only want single unassigned pixels as neighbors, no merges with other segments allowed)
 	for diagonals:
 		2, 3, 4, 6
@@ -204,7 +204,7 @@ put input in "don't check" list
 /* EM: I think that could work for the "don't check" list.  But they will need to be initialized to zero each time...will that take too long?
  * It seems we would have to initialize the entire map for each function call?  Or keep track of a window size for row/column that was processed?
  * /
- 
+
 empty "neighbor" list
 While "to be checked" stack isn't empty:
 	pop
@@ -243,10 +243,10 @@ Using current pixel's segment ID's edges, return neighbors
 /* EM: So if we want to remember what pixels are part of each segment in a stable (instead of temporary) method, I think the
  * map data structure makes more sense.  Each element in the map would have: segment ID, processing flags, current values (mean of input data),
  * current number of pixels, and a list (linked list, sorted array, etc) of pixel members (row,column).  Edges would represent neighbor relations.
- * 
+ *
  * My feeling is that this will be very slow to set up, and need more memory for the first iterations (compared to the raster version)
  * But after the number of segments is reduced and the membership in each segment is higher, processing time will be faster.
- * 
+ *
  * My advisor recommends to implement both methods - to check the speed, and also as a code validation / logic validation / bug testing:
  * the segmented maps should be the same for both.
  */
@@ -315,7 +315,7 @@ i.seg.stats
 i.segment.stats
 r.stats.seg
 
--e  Maybe an option for basic vs. extended output statistics 
+-e  Maybe an option for basic vs. extended output statistics
 
 
 calculate statistics to be saved in data table for the vector map

@@ -6,7 +6,7 @@
 # AUTHOR(S):    Markus Neteler
 #               Converted to Python by Glynn Clements
 # PURPOSE:      Join a table to a map table
-# COPYRIGHT:    (C) 2007-2021 by Markus Neteler and the GRASS Development Team
+# COPYRIGHT:    (C) 2007-2023 by Markus Neteler and the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
@@ -56,6 +56,13 @@
 # % description: Subset of columns from the other table
 # %end
 
+# %option G_OPT_DB_COLUMN
+# % key: exclude_columns
+# % multiple: yes
+# % required: no
+# % description: Columns to exclude from the other table
+# %end
+
 import sys
 import string
 import grass.script as grass
@@ -72,6 +79,10 @@ def main():
         scolumns = options["subset_columns"].split(",")
     else:
         scolumns = None
+    if options["exclude_columns"]:
+        ecolumns = options["exclude_columns"].split(",")
+    else:
+        ecolumns = None
 
     try:
         f = grass.vector_layer_db(map, layer)
@@ -123,6 +134,10 @@ def main():
                     break
             if not found:
                 grass.warning(_("Column <%s> not found in table <%s>") % (scol, otable))
+
+    # exclude columns from other table
+    if ecolumns:
+        cols_to_add = list(filter(lambda col: col[0] not in ecolumns, cols_to_add))
 
     all_cols_tt = grass.vector_columns(map, int(layer)).keys()
     # This is used for testing presence (and potential name conflict) with

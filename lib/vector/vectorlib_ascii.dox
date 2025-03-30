@@ -39,12 +39,12 @@ Example:
 
 \verbatim
 ORGANIZATION: NC OneMap
-DIGIT DATE:   
+DIGIT DATE:
 DIGIT NAME:   helena
 MAP NAME:     North Carolina selected bridges (points map)
 MAP DATE:     Mon Nov  6 15:32:39 2006
 MAP SCALE:    1
-OTHER INFO:   
+OTHER INFO:
 ZONE:         0
 MAP THRESH:   0.000000
 \endverbatim
@@ -67,7 +67,7 @@ TYPE NUMBER_OF_COORDINATES [NUMBER_OF_CATEGORIES]
 [ LAYER CATEGORY]
 \endverbatim
 
-Everything above in <tt>[]</tt> is optional. 
+Everything above in <tt>[]</tt> is optional.
 
 The primitive codes are as follows:
 
@@ -99,15 +99,15 @@ Example:
 \verbatim
 P  1 1
  375171.4992779 317756.72097616
- 1     1 
+ 1     1
 B  5
- 637740       219580      
- 639530       219580      
- 639530       221230      
- 637740       221230      
- 637740       219580      
+ 637740       219580
+ 639530       219580
+ 639530       221230
+ 637740       221230
+ 637740       219580
 C  1 1
- 638635       220405      
+ 638635       220405
  1     2
 \endverbatim
 

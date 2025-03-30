@@ -12,21 +12,20 @@
 #include "flowline.h"
 #include "interpolate.h"
 
-static void test_interpolation(RASTER3D_Region * region,
-			       RASTER3D_Map ** input_maps, double north,
-			       double east, double top)
+static void test_interpolation(RASTER3D_Region *region,
+                               RASTER3D_Map **input_maps, double north,
+                               double east, double top)
 {
     double interpolated[3];
 
     if (interpolate_velocity(region, input_maps, north, east, top,
-			     &interpolated[0], &interpolated[1],
-			     &interpolated[2]) < 0) {
-	fprintf(stdout, "return=-1\n");
+                             &interpolated[0], &interpolated[1],
+                             &interpolated[2]) < 0) {
+        fprintf(stdout, "return=-1\n");
     }
     else
-	fprintf(stdout, "return=0\nvalues=%.10f,%.10f,%.10f\n",
-		interpolated[0], interpolated[1], interpolated[2]);
-
+        fprintf(stdout, "return=0\nvalues=%.10f,%.10f,%.10f\n", interpolated[0],
+                interpolated[1], interpolated[2]);
 }
 
 int main(int argc, char *argv[])
@@ -62,42 +61,39 @@ int main(int argc, char *argv[])
     input_opt->required = NO;
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     Rast3d_init_defaults();
     Rast3d_get_window(&region);
 
     if (strcmp(test_opt->answer, "interpolation") == 0) {
 
-
-	if (input_opt->answers) {
-	    for (i = 0; i < 3; i++) {
-		input_3drasters[i] =
-		    Rast3d_open_cell_old(input_opt->answers[i],
-					 G_find_raster3d(input_opt->
-							 answers[i], ""),
-					 &region, RASTER3D_TILE_SAME_AS_FILE,
-					 RASTER3D_USE_CACHE_DEFAULT);
-		if (input_3drasters[i] == NULL)
-		    Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"),
-				       input_opt->answers[i]);
-	    }
-	}
-	else
-	    G_fatal_error("No input map for interpolation test");
-	if (coordinates_opt->answers) {
-	    for (i = 0; i < 3; i++) {
-		if (coordinates_opt->answers[i]) {
-		    coordinates[i] = atof(coordinates_opt->answers[i]);
-		}
-		else
-		    G_fatal_error("Provide 3 coordinates");
-	    }
-	}
-	else
-	    G_fatal_error("No coordinates for interpolation test");
-	test_interpolation(&region, input_3drasters, coordinates[1],
-			   coordinates[0], coordinates[2]);
+        if (input_opt->answers) {
+            for (i = 0; i < 3; i++) {
+                input_3drasters[i] = Rast3d_open_cell_old(
+                    input_opt->answers[i],
+                    G_find_raster3d(input_opt->answers[i], ""), &region,
+                    RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
+                if (input_3drasters[i] == NULL)
+                    Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"),
+                                       input_opt->answers[i]);
+            }
+        }
+        else
+            G_fatal_error("No input map for interpolation test");
+        if (coordinates_opt->answers) {
+            for (i = 0; i < 3; i++) {
+                if (coordinates_opt->answers[i]) {
+                    coordinates[i] = atof(coordinates_opt->answers[i]);
+                }
+                else
+                    G_fatal_error("Provide 3 coordinates");
+            }
+        }
+        else
+            G_fatal_error("No coordinates for interpolation test");
+        test_interpolation(&region, input_3drasters, coordinates[1],
+                           coordinates[0], coordinates[2]);
     }
 
     return EXIT_SUCCESS;

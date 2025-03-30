@@ -1,13 +1,12 @@
-
 /***************************************************************
  *
  * MODULE:       v.to.points
- * 
+ *
  * AUTHOR(S):    Radim Blazek
  *               OGR support by Martin Landa <landa.martin gmail.com>
- *               
- * PURPOSE:      Create points along lines 
- *               
+ *
+ * PURPOSE:      Create points along lines
+ *
  * COPYRIGHT:    (C) 2002-2019 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -58,7 +57,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("vertex"));
     G_add_keyword(_("point"));
     module->description =
-	_("Creates points along input lines in new vector map with 2 layers.");
+        _("Creates points along input lines in new vector map with 2 layers.");
 
     opt.input = G_define_standard_option(G_OPT_V_INPUT);
 
@@ -84,11 +83,13 @@ int main(int argc, char **argv)
     opt.dmax->type = TYPE_DOUBLE;
     opt.dmax->required = NO;
     opt.dmax->answer = "100";
-    opt.dmax->description = _("Maximum distance between points in map units or percentage with -p");
+    opt.dmax->description =
+        _("Maximum distance between points in map units or percentage with -p");
 
     flag.inter = G_define_flag();
     flag.inter->key = 'i';
-    flag.inter->description = _("Interpolate points between line vertices (only for use=vertex)");
+    flag.inter->description =
+        _("Interpolate points between line vertices (only for use=vertex)");
 
     flag.percent = G_define_flag();
     flag.percent->key = 'p';
@@ -101,7 +102,7 @@ int main(int argc, char **argv)
     flag.table = G_define_standard_flag(G_FLG_V_TABLE);
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     LCats = Vect_new_cats_struct();
     LPoints = Vect_new_line_struct();
@@ -110,7 +111,7 @@ int main(int argc, char **argv)
     type = Vect_option_to_types(opt.type);
     dmax = atof(opt.dmax->answer);
     if (dmax <= 0)
-	G_fatal_error(_("Option %s must be positive"), opt.dmax->key);
+        G_fatal_error(_("Option %s must be positive"), opt.dmax->key);
 
     vertex_type = 0;
     if (opt.use->answer) {
@@ -135,28 +136,29 @@ int main(int argc, char **argv)
                   opt.use->key, "vertex");
         flag.inter->answer = FALSE;
     }
-    if (flag.reverse->answer && (vertex_type == GV_START || vertex_type == GV_END)) {
+    if (flag.reverse->answer &&
+        (vertex_type == GV_START || vertex_type == GV_END)) {
         G_warning(_("Flag -%c ignored (reason %s=%s)"), flag.reverse->key,
                   opt.use->key, opt.use->answer);
         flag.reverse->answer = FALSE;
     }
     Vect_check_input_output_name(opt.input->answer, opt.output->answer,
-				 G_FATAL_EXIT);
+                                 G_FATAL_EXIT);
 
     /* Open input lines */
     Vect_set_open_level(2);
 
     if (Vect_open_old2(&In, opt.input->answer, "", opt.lfield->answer) < 0)
-	G_fatal_error(_("Unable to open vector map <%s>"), opt.input->answer);
+        G_fatal_error(_("Unable to open vector map <%s>"), opt.input->answer);
 
     Vect_set_error_handler_io(&In, &Out);
-    
+
     field = Vect_get_field_number(&In, opt.lfield->answer);
-    
+
     /* Open output segments */
     if (Vect_open_new(&Out, opt.output->answer, Vect_is_3d(&In)) < 0)
-	G_fatal_error(_("Unable to create vector map <%s>"),
-			opt.output->answer);
+        G_fatal_error(_("Unable to create vector map <%s>"),
+                      opt.output->answer);
 
     Vect_copy_head_data(&In, &Out);
     Vect_hist_copy(&In, &Out);
@@ -166,160 +168,166 @@ int main(int argc, char **argv)
     driver = NULL;
     Fi = NULL;
     if (!flag.table->answer) {
-	struct field_info *Fin;
+        struct field_info *Fin;
 
-	/* copy input table */
-	Fin = Vect_get_field(&In, field);
-	if (Fin) {		/* table defined */
-	    int ret;
+        /* copy input table */
+        Fin = Vect_get_field(&In, field);
+        if (Fin) { /* table defined */
+            int ret;
 
-	    Fi = Vect_default_field_info(&Out, 1, NULL, GV_MTABLE);
-	    Vect_map_add_dblink(&Out, 1, NULL, Fi->table, Fin->key,
-				Fi->database, Fi->driver);
+            Fi = Vect_default_field_info(&Out, 1, NULL, GV_MTABLE);
+            Vect_map_add_dblink(&Out, 1, NULL, Fi->table, Fin->key,
+                                Fi->database, Fi->driver);
 
-	    ret = db_copy_table(Fin->driver, Fin->database, Fin->table,
-				Fi->driver, Vect_subst_var(Fi->database,
-							   &Out), Fi->table);
+            ret = db_copy_table(Fin->driver, Fin->database, Fin->table,
+                                Fi->driver, Vect_subst_var(Fi->database, &Out),
+                                Fi->table);
 
-	    if (ret == DB_FAILED) {
-		G_fatal_error(_("Unable to copy table <%s>"),
-			      Fin->table);
-	    }
-	}
+            if (ret == DB_FAILED) {
+                G_fatal_error(_("Unable to copy table <%s>"), Fin->table);
+            }
+        }
 
-	Fi = Vect_default_field_info(&Out, 2, NULL, GV_MTABLE);
-	Vect_map_add_dblink(&Out, 2, NULL, Fi->table, GV_KEY_COLUMN, Fi->database,
-			    Fi->driver);
+        Fi = Vect_default_field_info(&Out, 2, NULL, GV_MTABLE);
+        Vect_map_add_dblink(&Out, 2, NULL, Fi->table, GV_KEY_COLUMN,
+                            Fi->database, Fi->driver);
 
-	/* Open driver */
-	driver = db_start_driver_open_database(Fi->driver, Fi->database);
-	if (driver == NULL)
-	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-			  Fi->database, Fi->driver);
+        /* Open driver */
+        driver = db_start_driver_open_database(Fi->driver, Fi->database);
+        if (driver == NULL)
+            G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+                          Fi->database, Fi->driver);
         db_set_error_handler_driver(driver);
 
-	if (field == -1) 
-            sprintf(buf,
-                "create table %s ( cat int, along double precision )",
+        if (field == -1)
+            sprintf(buf, "create table %s ( cat int, along double precision )",
+                    Fi->table);
+        else
+            sprintf(
+                buf,
+                "create table %s ( cat int, lcat int, along double precision )",
                 Fi->table);
-         else
-            sprintf(buf,
-		"create table %s ( cat int, lcat int, along double precision )",
-		Fi->table);
-	db_append_string(&stmt, buf);
+        db_append_string(&stmt, buf);
 
-	if (db_execute_immediate(driver, &stmt) != DB_OK) {
-	    G_fatal_error(_("Unable to create table: '%s'"),
-			  db_get_string(&stmt));
-	}
+        if (db_execute_immediate(driver, &stmt) != DB_OK) {
+            G_fatal_error(_("Unable to create table: '%s'"),
+                          db_get_string(&stmt));
+        }
 
-	if (db_create_index2(driver, Fi->table, GV_KEY_COLUMN) != DB_OK)
-	    G_warning(_("Unable to create index for table <%s>, key <%s>"),
-		      Fi->table, GV_KEY_COLUMN);
+        if (db_create_index2(driver, Fi->table, GV_KEY_COLUMN) != DB_OK)
+            G_warning(_("Unable to create index for table <%s>, key <%s>"),
+                      Fi->table, GV_KEY_COLUMN);
 
-	if (db_grant_on_table (driver, Fi->table, DB_PRIV_SELECT,
-                               DB_GROUP | DB_PUBLIC) != DB_OK)
-	    G_fatal_error(_("Unable to grant privileges on table <%s>"),
-			  Fi->table);
+        if (db_grant_on_table(driver, Fi->table, DB_PRIV_SELECT,
+                              DB_GROUP | DB_PUBLIC) != DB_OK)
+            G_fatal_error(_("Unable to grant privileges on table <%s>"),
+                          Fi->table);
 
-	db_begin_transaction(driver);
+        db_begin_transaction(driver);
     }
 
     if (type & (GV_POINTS | GV_LINES | GV_FACE)) {
         int line, nlines, nskipped;
 
         nskipped = 0;
-	nlines = Vect_get_num_lines(&In);
-	for (line = 1; line <= nlines; line++) {
-	    int ltype, cat;
+        nlines = Vect_get_num_lines(&In);
+        for (line = 1; line <= nlines; line++) {
+            int ltype, cat;
 
-	    G_debug(3, "line = %d", line);
-	    G_percent(line, nlines, 2);
-            
-	    ltype = Vect_read_line(&In, LPoints, LCats, line);
-	    if (!(ltype & type))
-		continue;
+            G_debug(3, "line = %d", line);
+            G_percent(line, nlines, 2);
+
+            ltype = Vect_read_line(&In, LPoints, LCats, line);
+            if (!(ltype & type))
+                continue;
             if (!Vect_cat_get(LCats, field, &cat) && field != -1) {
                 nskipped++;
-		continue;
+                continue;
             }
 
             /* Assign CAT for layer 0 objects (i.e. boundaries) */
             if (field == -1)
                 cat = -1;
 
-	    if (LPoints->n_points <= 1) {
-		write_point(&Out, LPoints->x[0], LPoints->y[0], LPoints->z[0],
-			    cat, 0.0, driver, Fi);
-	    }
-	    else if (flag.percent->answer) {		/* lines */
-		double dmaxlen = Vect_line_length(LPoints) * dmax / 100.0;
-		write_line(&Out, LPoints, cat, vertex_type, flag.inter->answer,
-			   flag.reverse->answer, dmaxlen, driver, Fi);
-	    } else {
-		write_line(&Out, LPoints, cat, vertex_type, flag.inter->answer,
-			   flag.reverse->answer, dmax, driver, Fi);
-	    }
-	}
+            if (LPoints->n_points <= 1) {
+                write_point(&Out, LPoints->x[0], LPoints->y[0], LPoints->z[0],
+                            cat, 0.0, driver, Fi);
+            }
+            else if (flag.percent->answer) { /* lines */
+                double dmaxlen = Vect_line_length(LPoints) * dmax / 100.0;
+
+                write_line(&Out, LPoints, cat, vertex_type, flag.inter->answer,
+                           flag.reverse->answer, dmaxlen, driver, Fi);
+            }
+            else {
+                write_line(&Out, LPoints, cat, vertex_type, flag.inter->answer,
+                           flag.reverse->answer, dmax, driver, Fi);
+            }
+        }
 
         if (nskipped > 0)
             G_warning(_("%d features without category in layer <%d> skipped. "
-                        "Note that features without category (usually boundaries) are not "
+                        "Note that features without category (usually "
+                        "boundaries) are not "
                         "skipped when '%s=-1' is given."),
                       nskipped, field, opt.lfield->key);
     }
 
     if (type == GV_AREA) {
-	int area, nareas, centroid, cat;
+        int area, nareas, centroid, cat;
 
-	nareas = Vect_get_num_areas(&In);
-	for (area = 1; area <= nareas; area++) {
-	    int i, isle, nisles;
+        nareas = Vect_get_num_areas(&In);
+        for (area = 1; area <= nareas; area++) {
+            int i, isle, nisles;
 
-	    G_percent(area, nareas, 2);
-            
-	    centroid = Vect_get_area_centroid(&In, area);
-	    cat = -1;
-	    if (centroid > 0) {
-		Vect_read_line(&In, NULL, LCats, centroid);
-		if (!Vect_cat_get(LCats, field, &cat))
-		  continue;
-	    }
+            G_percent(area, nareas, 2);
 
-	    Vect_get_area_points(&In, area, LPoints);
+            centroid = Vect_get_area_centroid(&In, area);
+            cat = -1;
+            if (centroid > 0) {
+                Vect_read_line(&In, NULL, LCats, centroid);
+                if (!Vect_cat_get(LCats, field, &cat))
+                    continue;
+            }
 
-	    if (flag.percent->answer) {
-		double dmaxlen = Vect_line_length(LPoints) * dmax / 100.0;
-		write_line(&Out, LPoints, cat, vertex_type, flag.inter->answer,
-			   flag.reverse->answer, dmaxlen, driver, Fi);
-	    } else {
-		write_line(&Out, LPoints, cat, vertex_type, flag.inter->answer,
-			   flag.reverse->answer, dmax, driver, Fi);
-	    }
+            Vect_get_area_points(&In, area, LPoints);
 
-	    nisles = Vect_get_area_num_isles(&In, area);
+            if (flag.percent->answer) {
+                double dmaxlen = Vect_line_length(LPoints) * dmax / 100.0;
 
-	    for (i = 0; i < nisles; i++) {
-		isle = Vect_get_area_isle(&In, area, i);
-		Vect_get_isle_points(&In, isle, LPoints);
+                write_line(&Out, LPoints, cat, vertex_type, flag.inter->answer,
+                           flag.reverse->answer, dmaxlen, driver, Fi);
+            }
+            else {
+                write_line(&Out, LPoints, cat, vertex_type, flag.inter->answer,
+                           flag.reverse->answer, dmax, driver, Fi);
+            }
 
-		if (flag.percent->answer) {
-		    double dmaxlen = Vect_line_length(LPoints) * dmax / 100.0;
-		    write_line(&Out, LPoints, cat, vertex_type,
-			       flag.inter->answer, flag.reverse->answer,
-			       dmaxlen, driver, Fi);
-		} else {
-		    write_line(&Out, LPoints, cat, vertex_type,
-			       flag.inter->answer, flag.reverse->answer, dmax,
-			       driver, Fi);
-		}
-	    }
-	}
+            nisles = Vect_get_area_num_isles(&In, area);
+
+            for (i = 0; i < nisles; i++) {
+                isle = Vect_get_area_isle(&In, area, i);
+                Vect_get_isle_points(&In, isle, LPoints);
+
+                if (flag.percent->answer) {
+                    double dmaxlen = Vect_line_length(LPoints) * dmax / 100.0;
+
+                    write_line(&Out, LPoints, cat, vertex_type,
+                               flag.inter->answer, flag.reverse->answer,
+                               dmaxlen, driver, Fi);
+                }
+                else {
+                    write_line(&Out, LPoints, cat, vertex_type,
+                               flag.inter->answer, flag.reverse->answer, dmax,
+                               driver, Fi);
+                }
+            }
+        }
     }
 
     if (!flag.table->answer) {
-	db_commit_transaction(driver);
-	db_close_database_shutdown_driver(driver);
+        db_commit_transaction(driver);
+        db_close_database_shutdown_driver(driver);
     }
 
     Vect_build(&Out);
@@ -331,6 +339,6 @@ int main(int argc, char **argv)
                Vect_get_num_primitives(&Out, GV_POINT));
 
     Vect_close(&Out);
-    
+
     exit(EXIT_SUCCESS);
 }

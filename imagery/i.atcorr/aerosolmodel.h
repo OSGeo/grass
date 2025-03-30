@@ -65,7 +65,7 @@
 /*                                                                      c */
 /*                                                                      c */
 /*   example for iaer and iaerp                                         c */
-/* 8                      Multimodal Log-Normale distribution selected  c */
+/* 8                      Multimodal Log-Normal distribution selected  c */
 /* 0.0001 100.0 3         Rmin, Rmax, 3 components                      c */
 /* 0.5000 2.99 1.66E-7    Rmean, Sigma, percentage density-1st componentc */
 /* 1.53 1.53 1.53 1.53 1.53 1.53 1.52 1.40 1.22 1.27  nr-10 wavelengths c */
@@ -82,64 +82,60 @@
 /*                                                                      c */
 /* **********************************************************************c */
 
-struct AerosolModel
-{
-	long int iaer;	/* aerosol model */
-	double c[4];
+struct AerosolModel {
+    long int iaer; /* aerosol model */
+    double c[4];
 
 private:
-	double nis;
-	double sca[10];
-	long int iaerp;
+    double nis;
+    double sca[10];
+    long int iaerp;
 
-	/* methods */
-	void aeroso(const double xmud);
+    /* methods */
+    void aeroso(const double xmud);
 
-	string filename;
-	void load();
-	void save();	/* .mie file */
+    string filename;
+    void load();
+    void save(); /* .mie file */
 
-	/* defined models' initilizations */
-	void bdm();
-	void bbm();
-	void stm();
-	void dust();
-	void wate();
-	void ocea();
-	void soot();
+    /* defined models' initializations */
+    void bdm();
+    void bbm();
+    void stm();
+    void dust();
+    void wate();
+    void ocea();
+    void soot();
 
-	struct Mie_in
-	{
-		double rmax;
-		double rmin;
-		double rn[10][4];
-		double ri[10][4];
-		double x1[4];
-		double x2[4];
-		double x3[4];
-		double cij[4];
-		double rsunph[50];
-		double nrsunph[50];
+    struct Mie_in {
+        double rmax;
+        double rmin;
+        double rn[10][4];
+        double ri[10][4];
+        double x1[4];
+        double x2[4];
+        double x3[4];
+        double cij[4];
+        double rsunph[50];
+        double nrsunph[50];
 
-		long int icp;
-		long int irsunph;
-	};
+        long int icp;
+        long int irsunph;
+    };
 
-	Mie_in mie_in;
-	void mie(double (&ex)[4][10], double (&sc)[4][10], double (&asy)[4][10]);
-	void exscphase(const double alpha, const double nr, 
-				   const double ni, double& Qext, 
-				   double& Qsca, double (&p11)[83]);
+    Mie_in mie_in;
+    void mie(double (&ex)[4][10], double (&sc)[4][10], double (&asy)[4][10]);
+    void exscphase(const double alpha, const double nr, const double ni,
+                   double &Qext, double &Qsca, double (&p11)[83]);
 
-	void parse(const double xmud);
+    void parse(const double xmud);
 
-	/* format 132 */
-	void print132(string s);
+    /* format 132 */
+    void print132(string s);
+
 public:
-	void print();
-	static AerosolModel Parse(const double xmud);
+    void print();
+    static AerosolModel Parse(const double xmud);
 };
-
-
 
 #endif /* AEROSOL_MODEL_H */

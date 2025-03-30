@@ -8,19 +8,19 @@ msgstr ""
 "Project-Id-Version: grasslibs_lv\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2017-04-01 17:03+0200\n"
-"Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
-"Language-Team: Latvian <grass-translations@lists.osgeo.org>\n"
+"PO-Revision-Date: 2023-04-29 23:52+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Latvian <https://weblate.osgeo.org/projects/grass-gis/"
+"grasslibs/lv/>\n"
 "Language: lv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
+"X-Generator: Weblate 4.16.4\n"
 "X-Poedit-Language: Latvian\n"
 "X-Poedit-Country: LATVIA\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
-"2);\n"
 
 #: ../lib/init/grass.py:209
 msgid "WARNING"
@@ -756,8 +756,8 @@ msgstr ""
 #: ../lib/rst/interp_float/vinput2d.c:277
 #, c-format
 msgid ""
-"%d points given for interpolation (after thinning) is less than given NPMIN="
-"%d"
+"%d points given for interpolation (after thinning) is less than given "
+"NPMIN=%d"
 msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:282
@@ -6469,8 +6469,8 @@ msgstr ""
 #: ../lib/vector/Vlib/net_build.c:364
 #, c-format
 msgid ""
-"There exists more than one point of node <%d> with unique category field  <"
-"%d>.\n"
+"There exists more than one point of node <%d> with unique category field  "
+"<%d>.\n"
 "The unique categories layer is not valid therefore you will probably get "
 "incorrect results."
 msgstr ""
@@ -7643,15 +7643,15 @@ msgstr ""
 #: ../lib/python/temporal/register.py:268
 #, python-format
 msgid ""
-"Map is already registered in temporal database. Unable to update %(t)s map <"
-"%(id)s> with layer %(l)s. Overwrite flag is not set."
+"Map is already registered in temporal database. Unable to update %(t)s map "
+"<%(id)s> with layer %(l)s. Overwrite flag is not set."
 msgstr ""
 
 #: ../lib/python/temporal/register.py:275
 #, python-format
 msgid ""
-"Map is already registered in temporal database. Unable to update %(t)s map <"
-"%(id)s>. Overwrite flag is not set."
+"Map is already registered in temporal database. Unable to update %(t)s map "
+"<%(id)s>. Overwrite flag is not set."
 msgstr ""
 
 #: ../lib/python/temporal/register.py:299
@@ -7874,8 +7874,8 @@ msgstr ""
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2312
 #, python-format
 msgid ""
-"Map <%(map)s> with layer %(l)s is not registered in space time dataset <"
-"%(base)s>"
+"Map <%(map)s> with layer %(l)s is not registered in space time dataset "
+"<%(base)s>"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2318
@@ -8013,8 +8013,8 @@ msgstr ""
 #: ../lib/python/temporal/temporal_algebra.py:1214
 #, python-format
 msgid ""
-"Wrong temporal type of space time dataset <"
-"%s>                                       <%s> time is required"
+"Wrong temporal type of space time dataset "
+"<%s>                                       <%s> time is required"
 msgstr ""
 
 #: ../lib/python/temporal/temporal_algebra.py:1234
@@ -9691,8 +9691,8 @@ msgstr "Krāsu atbalsts priekš <%s@%s> %s"
 #: ../lib/raster/open.c:192
 #, c-format
 msgid ""
-"Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@"
-"%s> which does not exist"
+"Unable to open raster map <%s@%s> since it is a reclass of raster map "
+"<%s@%s> which does not exist"
 msgstr ""
 
 #: ../lib/raster/open.c:197
@@ -10475,165 +10475,3 @@ msgstr ""
 #: ../lib/proj/ellipse.c:141
 msgid "No ellipsoid info given in file"
 msgstr "Failā nav sniegta elipsoīda informācija"
-
-#~ msgid "Illegal row value"
-#~ msgstr "Neatļauta rindas vērtība"
-
-#~ msgid "Illegal col value"
-#~ msgstr "Neatļauta kolonas vērtība"
-
-#~ msgid "Illegal n-s3 resolution value"
-#~ msgstr "Nederīga n-s3 izšķirtspējas vērtība"
-
-#~ msgid "Illegal row3 value"
-#~ msgstr "Neatļauta row3 vērtība"
-
-#~ msgid "Illegal e-w3 resolution value"
-#~ msgstr "Neatļauta e-w3 izšķirtspējas vērtība"
-
-#~ msgid "Illegal col3 value"
-#~ msgstr "Neatļauta col3 vērtība"
-
-#, fuzzy
-#~ msgid "Unable to initialize pj"
-#~ msgstr "Nevar pārsaukt %s"
-
-#~ msgid ""
-#~ "Path '%s' not accessible\n"
-#~ "and you are not the owner of it."
-#~ msgstr ""
-#~ "Ceļš '%s' nav pieejams\n"
-#~ "un jūs neesat tā īpašnieks."
-
-#, fuzzy
-#~ msgid "Out of memmory"
-#~ msgstr "Neiespējami piešķirt atmiņu\n"
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to mogrify sql statement. There is no temporal database connection "
-#~ "defined for mapset <%(mapset)s>"
-#~ msgstr "neispējami atvērt datumu tabulas failu: %s"
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to check table. There is no temporal database connection defined "
-#~ "for mapset <%(mapset)s>"
-#~ msgstr "neispējami atvērt datumu tabulas failu: %s"
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to execute sql statement. There is no temporal database connection "
-#~ "defined for mapset <%(mapset)s>"
-#~ msgstr "neispējami atvērt datumu tabulas failu: %s"
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to fetch one. There is no temporal database connection defined for "
-#~ "mapset <%(mapset)s>"
-#~ msgstr "Nevar atvērt vēsturi vektoram '%s'"
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to fetch all. There is no temporal database connection defined for "
-#~ "mapset <%(mapset)s>"
-#~ msgstr "Nevar atvērt vēsturi vektoram '%s'"
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to execute transaction. There is no temporal database connection "
-#~ "defined for mapset <%(mapset)s>"
-#~ msgstr "Nevar atvērt vēsturi vektoram '%s'"
-
-#, fuzzy
-#~ msgid "Unable to find a temporary null file <%s>"
-#~ msgstr "neispējami atrast pagaidu null failu: %s"
-
-#, fuzzy
-#~ msgid "Unable to open null file <%s>"
-#~ msgstr "G_spawn: neispējami atvērt failu %s"
-
-#, fuzzy
-#~ msgid "ERROR: <%s> is not a valid GRASS location"
-#~ msgstr "Atvainojiet, <%s> nav derīgs parametrs"
-
-#, fuzzy
-#~ msgid "ERROR: option <%s>: <%s> exists.\n"
-#~ msgstr "Kļūda: opcija/pazīme <%s>: <%s> jau eksistē.\n"
-
-#, fuzzy
-#~ msgid "Unable to allocate stream"
-#~ msgstr "Neiespējami piešķirt atmiņu\n"
-
-#, fuzzy
-#~ msgid "Video codec not found"
-#~ msgstr "Vektorkarte <%s> nav atrasta"
-
-#, fuzzy
-#~ msgid "Unable to allocate temporary picture"
-#~ msgstr "Neiespējami piešķirt atmiņu\n"
-
-#, fuzzy
-#~ msgid "Error while writing video frame"
-#~ msgstr "Kļūdu raskrīšana ārpus topo faila.\n"
-
-#, fuzzy
-#~ msgid "Unable to find suitable output format"
-#~ msgstr "Nevar atvērt vēsturi vektoram '%s'"
-
-#, fuzzy
-#~ msgid "Invalid output format parameters"
-#~ msgstr ""
-#~ "\n"
-#~ "Kļūda: Trūkst vērtība parametram <%s>\n"
-
-#, fuzzy
-#~ msgid "Unable to open <%s>"
-#~ msgstr "Neiespējami atvērt failu %s iekš %s"
-
-#, fuzzy
-#~ msgid "Unable to open file '%s'"
-#~ msgstr "Neiespējami atvērt failu %s iekš %s"
-
-#~ msgid "Hit RETURN to continue"
-#~ msgstr "Spied ENTER, lai turpinātu"
-
-#, fuzzy
-#~ msgid "Vector map <%s> is not opened on topology level"
-#~ msgstr "Vektoru karte <%s> nav atvērta"
-
-#, fuzzy
-#~ msgid "Removing empty 3D raster maps"
-#~ msgstr "Ievades rastra faila nosaukums"
-
-#, fuzzy
-#~ msgid "Mode type: {0} not supported."
-#~ msgstr "Ieejas vektors '%s' nav atrasts"
-
-#, fuzzy
-#~ msgid "Invalid type {0}"
-#~ msgstr "neispējami mainīt direktoriju uz %s"
-
-#~ msgid "Attributes for category %d not found"
-#~ msgstr "Kategorijai %d atribūti nav atrasti"
-
-#~ msgid "Category must be integer"
-#~ msgstr "Kategorijai ir jābūt veselam skaitlim"
-
-#~ msgid "Memory error in writing timestamp"
-#~ msgstr "Laika zīmoga rakstīšanas atmiņas kļūda"
-
-#~ msgid "Illegal TimeStamp string"
-#~ msgstr "Nederīgs laika zīmoga teksts"
-
-#~ msgid "Cannot fetch row"
-#~ msgstr "Nevar saņemt rindu"
-
-#~ msgid "syntax error"
-#~ msgstr "sintakses kļūda"
-
-#~ msgid "R/G/B not in range 0-255"
-#~ msgstr "R/G/B nav diapazonā no 0 līdz 255"
-
-#~ msgid "invalid color name"
-#~ msgstr "nederīgs krāsas nosaukums"

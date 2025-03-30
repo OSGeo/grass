@@ -1,11 +1,10 @@
-
 /************************************************************************/
 
-/***				  frac.h			      ***/
+/***                                  frac.h                          ***/
 
 /***                    Header file for use with r.frac               ***/
 
-/***		     Jo Wood, V 1.0  - 19th October, 1994	      ***/
+/***                     Jo Wood, V 1.0  - 19th October, 1994         ***/
 
 /************************************************************************/
 
@@ -13,24 +12,25 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
-				/* programs. It sets up the necessary   */
-				/* prototypes for GRASS library calls.  */
+/* programs. It sets up the necessary   */
+/* prototypes for GRASS library calls.  */
 
-#define SWAP(a,b) tempr=(a); (a)=(b); (b) = tempr
+#define SWAP(a, b) \
+    tempr = (a);   \
+    (a) = (b);     \
+    (b) = tempr
 
-#define TWOPI 6.283185307179590	/* Constant value of 2 pi */
+#define TWOPI 6.283185307179590 /* Constant value of 2 pi */
 
 /* ------ Global variables ------ */
 
-extern const char
- *rast_out_name,		/* Name of the raster output file.      */
- *mapset_out;
+extern const char *rast_out_name, /* Name of the raster output file.      */
+    *mapset_out;
 
-extern int
-  fd_out,			/* File descriptor of output raster     */
-  Steps;			/* Number of intermediate images.       */
+extern int fd_out, /* File descriptor of output raster     */
+    Steps;         /* Number of intermediate images.       */
 
-extern double H;		/* Hausdorff-Besickovitch dimension.    */
+extern double H; /* Hausdorff-Besickovitch dimension.    */
 
 /* interface.c */
 int interface(int, char *[]);

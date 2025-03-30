@@ -3,15 +3,6 @@ Created on Fri May 25 12:57:10 2012
 
 @author: Pietro Zambelli
 """
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
 import ctypes
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
@@ -25,7 +16,7 @@ test_vector_name = "Region_test_vector"
 test_raster_name = "Region_test_raster"
 
 
-class Region(object):
+class Region:
     """This class is design to easily access and modify GRASS computational
     region. ::
 
@@ -347,7 +338,7 @@ class Region(object):
     def __ne__(self, other):
         return not self == other
 
-    # Restore Python 2 hashing beaviour on Python 3
+    # Restore Python 2 hashing behaviour on Python 3
     __hash__ = object.__hash__
 
     def keys(self):
@@ -671,7 +662,6 @@ class Region(object):
 
 
 if __name__ == "__main__":
-
     import doctest
     from grass.pygrass import utils
     from grass.script.core import run_command

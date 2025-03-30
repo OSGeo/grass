@@ -120,7 +120,18 @@ def main():
         shutil.rmtree(new_dir, True)
 
     # extract data
-    tar.extractall()
+    # Extraction filters were added in Python 3.12,
+    # and backported to 3.8.17, 3.9.17, 3.10.12, and 3.11.4
+    # See https://docs.python.org/3.12/library/tarfile.html#tarfile-extraction-filter
+    # and https://peps.python.org/pep-0706/
+    # In Python 3.12, using `filter=None` triggers a DepreciationWarning,
+    # and in Python 3.14, `filter='data'` will be the default
+    if hasattr(tarfile, "data_filter"):
+        tar.extractall(filter="data")
+    else:
+        # Remove this when no longer needed
+        grass.warning(_("Extracting may be unsafe; consider updating Python"))
+        tar.extractall()
     tar.close()
     if os.path.exists(os.path.join(data_name, "coor")):
         pass

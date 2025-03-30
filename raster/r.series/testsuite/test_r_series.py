@@ -4,7 +4,6 @@ from grass.gunittest.gmodules import call_module
 
 
 class TestRSeries(TestCase):
-
     average = "average"
     count = "count"
     median = "median"

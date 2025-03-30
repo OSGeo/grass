@@ -4,16 +4,16 @@
 based upon GCPs and output error measurements.
 
 <p>
-If coordinates are given with the <b>input</b> file option or fed from 
-<tt>stdin</tt>, both the input and the output format is "x y" with one 
-coordinate pair per line. Reverse transform is performed with the 
+If coordinates are given with the <b>input</b> file option or fed from
+<tt>stdin</tt>, both the input and the output format is "x y" with one
+coordinate pair per line. Reverse transform is performed with the
 <b>-r</b> flag.
 
 <p>
-The <b>format</b> option determines how control points are printed out. 
-A summary on the control points can be printed with the <b>-s</b> flag. 
-The summary includes maximum deviation observed when transforming GCPs 
-and overall RMS. The <b>format</b> option is ignored when coordinates 
+The <b>format</b> option determines how control points are printed out.
+A summary on the control points can be printed with the <b>-s</b> flag.
+The summary includes maximum deviation observed when transforming GCPs
+and overall RMS. The <b>format</b> option is ignored when coordinates
 are given with the <b>input</b> file option.
 
 <h2>NOTES</h2>
@@ -23,7 +23,7 @@ The transformations are:
 <div class="code"><pre>
     e = [E0 E1][1].[1]
         [E2  0][e] [n]
-   
+
     n = [N0 N1][1].[1]
         [N2  0][e] [n]
 </pre></div>
@@ -33,7 +33,7 @@ order=2:
     e = [E0 E1 E3][1 ] [1 ]
         [E2 E4  0][e ].[n ]
         [E5  0  0][e&sup2;] [n&sup2;]
-   
+
     n = [N0 N1 N3][1 ] [1 ]
         [N2 N4  0][e ].[n ]
         [N5  0  0][e&sup2;] [n&sup2;]
@@ -45,7 +45,7 @@ order=3:
         [E2 E4 E7  0][e ].[n ]
         [E5 E8  0  0][e&sup2;] [n&sup2;]
         [E9  0  0  0][e&sup3;] [n&sup3;]
-   
+
     n = [N0 N1 N3 N6][1 ] [1 ]
         [N2 N4 N7  0][e ].[n ]
         [N5 N8  0  0][e&sup2;] [n&sup2;]

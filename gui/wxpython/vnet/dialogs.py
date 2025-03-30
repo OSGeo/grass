@@ -25,12 +25,7 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import sys
 import math
-import six
-
-if sys.version_info.major >= 3:
-    unicode = str
 
 from grass.script import core as grass
 
@@ -236,7 +231,6 @@ class VNETDialog(wx.Dialog):
         )
 
     def _doVnetDialogLayout(self):
-
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         sizer.Add(self.notebook, proportion=1, flag=wx.EXPAND)
@@ -707,7 +701,6 @@ class VNETDialog(wx.Dialog):
         self.Layout()
 
     def PointsChanged(self, method, kwargs):
-
         if method == "EditMode" and not kwargs["activated"]:
             ptListToolbar = self.toolbars["pointsList"]
             if ptListToolbar:
@@ -722,7 +715,6 @@ class VNETDialog(wx.Dialog):
             self.notebook.SetSelectionByName("points")
 
     def OnCreateTtbBtn(self, event):
-
         params, err_params, flags = self.vnet_mgr.GetParams()
         dlg = CreateTtbDialog(parent=self, init_data=params)
 
@@ -739,7 +731,6 @@ class VNETDialog(wx.Dialog):
         dlg.Destroy()
 
     def TtbCreated(self):
-
         params, err_params, flags = self.vnet_mgr.GetParams()
         self._updateParamsTab(params, flags)
 
@@ -773,11 +764,11 @@ class VNETDialog(wx.Dialog):
             self.inputData["arc_layer"].SetSelection(0)
             self.inputData["node_layer"].SetSelection(0)
         elif itemsLen >= 1:
-            if unicode("1") in items:
-                iItem = items.index(unicode("1"))
+            if "1" in items:
+                iItem = items.index("1")
                 self.inputData["arc_layer"].SetSelection(iItem)
-            if unicode("2") in items:
-                iItem = items.index(unicode("2"))
+            if "2" in items:
+                iItem = items.index("2")
                 self.inputData["node_layer"].SetSelection(iItem)
 
         self.addToTreeBtn.Enable()
@@ -836,7 +827,7 @@ class VNETDialog(wx.Dialog):
 
     def _setInputData(self):
         params = {}
-        for k, v in six.iteritems(self.inputData):
+        for k, v in self.inputData.items():
             params[k] = v.GetValue()
         flags = {}
         self.vnet_mgr.SetParams(params, flags)
@@ -876,7 +867,6 @@ class VNETDialog(wx.Dialog):
             self.defIsecTurnsHndlrReg = False
 
     def OnDefGlobalTurnCosts(self, event):
-
         dialog = DefGlobalTurnsDialog(self, data=self.vnet_mgr.GetGlobalTurnsData())
         dialog.Show()
 
@@ -943,7 +933,6 @@ class VNETDialog(wx.Dialog):
                 self.notebook.SetSelectionByName("parameters")
 
     def AnalysisDone(self):
-
         curr_step, steps_num = self.vnet_mgr.GetHistStep()
         self.toolbars["mainToolbar"].UpdateUndoRedo(curr_step, steps_num)
 
@@ -1014,8 +1003,7 @@ class VNETDialog(wx.Dialog):
         used_cols = []
         attrCols = an_props["cmdParams"]["cols"]
 
-        for col in six.iterkeys(attrCols):
-
+        for col in attrCols.keys():
             if "inputField" in attrCols[col]:
                 colInptF = attrCols[col]["inputField"]
             else:
@@ -1194,11 +1182,9 @@ class PtsList(PointsList):
             self.Select(self._findIndex(kwargs["pt_id"]))
 
     def SetData(self, key, data):
-
         idx = self._findIndex(key)
-        for k, v in six.iteritems(data):
+        for k, v in data.items():
             if k == "use":
-
                 if v and not self.IsItemChecked(idx):
                     self.CheckItem(idx, True)
                 elif not v and self.IsItemChecked(idx):
@@ -1303,7 +1289,7 @@ class SettingsDialog(wx.Dialog):
             "selected": ["point_colors", _("Color for selected point:")],
         }
 
-        for settKey, sett in six.iteritems(self.colorsSetts):
+        for settKey, sett in self.colorsSetts.items():
             settsLabels[settKey] = StaticText(parent=self, id=wx.ID_ANY, label=sett[1])
             col = UserSettings.Get(group="vnet", key=sett[0], subkey=settKey)
             self.settings[settKey] = csel.ColourSelect(
@@ -1318,7 +1304,7 @@ class SettingsDialog(wx.Dialog):
             "max_hist_steps": ["other", _("Maximum number of results in history:")],
         }
 
-        for settKey, sett in six.iteritems(self.sizeSetts):
+        for settKey, sett in self.sizeSetts.items():
             settsLabels[settKey] = StaticText(parent=self, id=wx.ID_ANY, label=sett[1])
             self.settings[settKey] = SpinCtrl(parent=self, id=wx.ID_ANY, min=1, max=50)
             size = int(UserSettings.Get(group="vnet", key=sett[0], subkey=settKey))
@@ -1472,11 +1458,11 @@ class SettingsDialog(wx.Dialog):
             value=self.settings["line_width"].GetValue(),
         )
 
-        for settKey, sett in six.iteritems(self.colorsSetts):
+        for settKey, sett in self.colorsSetts.items():
             col = tuple(self.settings[settKey].GetColour())
             UserSettings.Set(group="vnet", key=sett[0], subkey=settKey, value=col)
 
-        for settKey, sett in six.iteritems(self.sizeSetts):
+        for settKey, sett in self.sizeSetts.items():
             UserSettings.Set(
                 group="vnet",
                 key=sett[0],
@@ -1577,13 +1563,12 @@ class CreateTtbDialog(wx.Dialog):
 
         btn = None
         for sel in ["input", "output", "arc_layer", "turn_layer", "turn_cat_layer"]:
-
             selPanels[sel].SetSizer(
                 self._doSelLayout(title=label[sel], sel=self.inputData[sel], btn=btn)
             )
             bsizer.Add(selPanels[sel], proportion=0, flag=wx.EXPAND)
 
-        for k, v in six.iteritems(init_data):
+        for k, v in init_data.items():
             if k in self.inputData:
                 self.inputData[k].SetValue(v)
 
@@ -1653,17 +1638,16 @@ class CreateTtbDialog(wx.Dialog):
         elif itemsLen == 1:
             self.inputData["arc_layer"].SetSelection(0)
         elif itemsLen >= 1:
-            if unicode("1") in items:
-                iItem = items.index(unicode("1"))
+            if "1" in items:
+                iItem = items.index("1")
                 self.inputData["arc_layer"].SetSelection(iItem)
         self.addToTreeBtn.Enable()
         if hasattr(self, "inpDbMgrData"):
             self._updateInputDbMgrPage(show=True)
 
     def GetData(self):
-
         params = {}
-        for param, sel in six.iteritems(self.inputData):
+        for param, sel in self.inputData.items():
             params[param] = sel.GetValue()
 
         return params
@@ -1705,7 +1689,6 @@ class OutputVectorDialog(wx.Dialog):
         self._layout()
 
     def _layout(self):
-
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         self.boxSizer.Add(
@@ -1731,7 +1714,6 @@ class VnetStatusbar(wx.StatusBar):
     """Extends wx.StatusBar class with functionality to show multiple messages with the highest priority"""
 
     def __init__(self, parent, style, id=wx.ID_ANY, **kwargs):
-
         wx.StatusBar.__init__(self, parent, id, style, **kwargs)
 
         self.maxPriority = 0
@@ -1756,7 +1738,6 @@ class VnetStatusbar(wx.StatusBar):
         self._updateStatus()
 
     def _updateStatus(self):
-
         currStatusText = ""
         for item in reversed(self.statusItems):
             if item["priority"] == self.maxPriority:
@@ -1821,7 +1802,6 @@ class DefIntesectionTurnCostDialog(wx.Dialog):
         ).GetParent().Hide()
 
     def SetIntersection(self, isec):
-
         self.browsePage.LoadData(self.layer, where="isec = %d" % (isec))
 
 
@@ -1835,7 +1815,6 @@ class DefGlobalTurnsDialog(wx.Dialog):
         title=_("Define Global Turn Costs"),
         **kwargs,
     ):  # v Gassu dopln preklad
-
         wx.Dialog.__init__(self, parent, id, title, style=style, **kwargs)
 
         self.data = data

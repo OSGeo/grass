@@ -35,11 +35,10 @@
 
 # %option G_OPT_R3_OUTPUT
 # %end
-from __future__ import print_function
-
 import os
-import grass.script as grass
 from datetime import datetime
+
+import grass.script as grass
 from grass.exceptions import CalledModuleError
 
 ############################################################################

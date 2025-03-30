@@ -10,7 +10,7 @@
 #            for details.
 
 """Utility functions warpping existing processes in a suitable way"""
-
+from pathlib import Path
 import grass.script as gs
 
 
@@ -200,3 +200,69 @@ def get_rendering_size(region, width, height, default_width=600, default_height=
     if region_height > region_width:
         return (round(default_height * region_width / region_height), default_height)
     return (default_width, round(default_width * region_height / region_width))
+
+
+def save_gif(
+    input_files,
+    output_filename,
+    duration=500,
+    label=True,
+    labels=None,
+    font=None,
+    text_size=12,
+    text_color="gray",
+):
+    """
+    Creates a GIF animation
+
+    param list input_files: list of paths to source
+    param str output_filename: destination gif filename
+    param int duration: time to display each frame; milliseconds
+    param bool label: include label stamp on each frame
+    param list labels: list of labels for each source image
+    param str font: font file
+    param int text_size: size of label text
+    param str text_color: color to use for the text
+    """
+    # Create a GIF from the PNG images
+    import PIL.Image  # pylint: disable=import-outside-toplevel
+    import PIL.ImageDraw  # pylint: disable=import-outside-toplevel
+    import PIL.ImageFont  # pylint: disable=import-outside-toplevel
+
+    # filepath to output GIF
+    filename = Path(output_filename)
+    if filename.suffix.lower() != ".gif":
+        raise ValueError(_("filename must end in '.gif'"))
+
+    images = []
+    for i, file in enumerate(input_files):
+        img = PIL.Image.open(file)
+        img = img.convert("RGBA", dither=None)
+        draw = PIL.ImageDraw.Draw(img)
+        if label:
+            if font:
+                font_obj = PIL.ImageFont.truetype(font, text_size)
+            else:
+                try:
+                    font_obj = PIL.ImageFont.load_default(size=text_size)
+                except TypeError:
+                    font_obj = PIL.ImageFont.load_default()
+            draw.text(
+                (0, 0),
+                labels[i],
+                fill=text_color,
+                font=font_obj,
+            )
+        images.append(img)
+
+    images[0].save(
+        fp=filename,
+        format="GIF",
+        append_images=images[1:],
+        save_all=True,
+        duration=duration,
+        loop=0,
+    )
+
+    # Display the GIF
+    return filename

@@ -17,16 +17,15 @@
 #include <grass/vector.h>
 
 /*!
-  Check if region overlaps with map extent.
+   Check if region overlaps with map extent.
 
-  \param Map vector map
-  \param n,s,e,w region bounding box
+   \param Map vector map
+   \param n,s,e,w region bounding box
 
-  \return 1 if regions overlap
-  \return 0 if not
-*/
-int
-V__map_overlap(struct Map_info *Map, double n, double s, double e, double w)
+   \return 1 if regions overlap
+   \return 0 if not
+ */
+int V__map_overlap(struct Map_info *Map, double n, double s, double e, double w)
 {
     struct Cell_head W;
 

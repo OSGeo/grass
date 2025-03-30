@@ -1,6 +1,6 @@
 #!/bin/sh
 # script to emulate an xterm in OSX Terminal.app
-# 
+#
 # -William Kyngesburye
 
 # just in case accidentally called on another system

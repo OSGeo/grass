@@ -65,43 +65,40 @@
 #define BACKWARD_COMPATIBILITY
 #define DEFAULT_COLOR "gray"
 
-struct rectinfo
-{
+struct rectinfo {
     double t, b, l, r;
 };
 
 static void set_color(char *);
 static void get_coordinates(double *, double *, double *, double *,
-			    struct rectinfo, char **, char, char);
+                            struct rectinfo, char **, char, char);
 static void draw_text(char *, double *, double *, double, char *, double, char,
-		      int, int, int);
+                      int, int, int);
 
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct
-    {
-	struct Option *text;
-	struct Option *size;
-	struct Option *fgcolor;
-	struct Option *bgcolor;
-	struct Option *line;
-	struct Option *at;
-	struct Option *rotation;
-	struct Option *align;
-	struct Option *linespacing;
-	struct Option *font;
-	struct Option *path;
-	struct Option *charset;
-	struct Option *input;
+    struct {
+        struct Option *text;
+        struct Option *size;
+        struct Option *fgcolor;
+        struct Option *bgcolor;
+        struct Option *line;
+        struct Option *at;
+        struct Option *rotation;
+        struct Option *align;
+        struct Option *linespacing;
+        struct Option *font;
+        struct Option *path;
+        struct Option *charset;
+        struct Option *input;
     } opt;
-    struct
-    {
-	struct Flag *p;
-	struct Flag *g;
-	struct Flag *b;
-	struct Flag *r;
-	struct Flag *s;
+    struct {
+        struct Flag *p;
+        struct Flag *g;
+        struct Flag *b;
+        struct Flag *r;
+        struct Flag *s;
     } flag;
 
     /* options and flags */
@@ -138,8 +135,8 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("display"));
     G_add_keyword(_("cartography"));
-    module->description =
-	_("Draws text in the active display frame on the graphics monitor using the current font.");
+    module->description = _("Draws text in the active display frame on the "
+                            "graphics monitor using the current font.");
 
     opt.text = G_define_option();
     opt.text->key = "text";
@@ -153,23 +150,18 @@ int main(int argc, char **argv)
     opt.input->description = _("Input file");
     opt.input->guisection = _("Input");
 
-    opt.fgcolor = G_define_option();
+    opt.fgcolor = G_define_standard_option(G_OPT_C);
     opt.fgcolor->key = "color";
-    opt.fgcolor->type = TYPE_STRING;
     opt.fgcolor->answer = DEFAULT_COLOR;
     opt.fgcolor->required = NO;
-    opt.fgcolor->description =
-	_("Text color, either a standard GRASS color or R:G:B triplet");
-    opt.fgcolor->gisprompt = "old_color,color,color";
+    opt.fgcolor->label = _("Text color");
     opt.fgcolor->guisection = _("Text");
 
-    opt.bgcolor = G_define_option();
+    opt.bgcolor = G_define_standard_option(G_OPT_CN);
     opt.bgcolor->key = "bgcolor";
-    opt.bgcolor->type = TYPE_STRING;
+    opt.bgcolor->answer = "none";
     opt.bgcolor->required = NO;
-    opt.bgcolor->description =
-        _("Text background color, either a standard GRASS color or R:G:B triplet");
-    opt.bgcolor->gisprompt = "old_color,color,color";
+    opt.bgcolor->label = _("Text background color");
     opt.bgcolor->guisection = _("Text");
 
     opt.rotation = G_define_option();
@@ -178,7 +170,7 @@ int main(int argc, char **argv)
     opt.rotation->required = NO;
     opt.rotation->answer = "0";
     opt.rotation->description =
-    _("Rotation angle in degrees (counter-clockwise)");
+        _("Rotation angle in degrees (counter-clockwise)");
     opt.rotation->guisection = _("Text");
 
     opt.linespacing = G_define_option();
@@ -194,8 +186,8 @@ int main(int argc, char **argv)
     opt.at->key_desc = "x,y";
     opt.at->type = TYPE_DOUBLE;
     opt.at->required = NO;
-    opt.at->description =
-	_("Screen position at which text will begin to be drawn (percentage, [0,0] is lower left)");
+    opt.at->description = _("Screen position at which text will begin to be "
+                            "drawn (percentage, [0,0] is lower left)");
     opt.at->guisection = _("Position");
 
     opt.line = G_define_option();
@@ -204,7 +196,7 @@ int main(int argc, char **argv)
     opt.line->type = TYPE_INTEGER;
     opt.line->options = "1-1000";
     opt.line->description =
-	_("The screen line number on which text will begin to be drawn");
+        _("The screen line number on which text will begin to be drawn");
     opt.line->guisection = _("Position");
 
     opt.align = G_define_option();
@@ -230,7 +222,7 @@ int main(int argc, char **argv)
     opt.size->answer = "5";
     opt.size->options = "0-100";
     opt.size->description =
-    _("Height of letters in percentage of available frame height");
+        _("Height of letters in percentage of available frame height");
     opt.size->guisection = _("Font settings");
 
     opt.path = G_define_standard_option(G_OPT_F_INPUT);
@@ -245,7 +237,7 @@ int main(int argc, char **argv)
     opt.charset->type = TYPE_STRING;
     opt.charset->required = NO;
     opt.charset->description =
-	_("Text encoding (only applicable to TrueType fonts)");
+        _("Text encoding (only applicable to TrueType fonts)");
     opt.charset->guisection = _("Font settings");
 
     flag.p = G_define_flag();
@@ -278,7 +270,7 @@ int main(int argc, char **argv)
 
     /* check command line */
     if (G_parser(argc, argv))
-	exit(1);
+        exit(1);
 
     /* parse options */
     text = opt.text->answer;
@@ -287,10 +279,10 @@ int main(int argc, char **argv)
     /* calculate rotation angle in radian */
     rotation = atof(opt.rotation->answer);
     if (!flag.r->answer)
-	rotation *= M_PI / 180.0;
+        rotation *= M_PI / 180.0;
     rotation = fmod(rotation, 2.0 * M_PI);
     if (rotation < 0.0)
-	rotation += 2.0 * M_PI;
+        rotation += 2.0 * M_PI;
 
     strncpy(align, opt.align->answer, 2);
     linespacing = atof(opt.linespacing->answer);
@@ -298,14 +290,14 @@ int main(int argc, char **argv)
     bold = flag.b->answer;
 
     D_open_driver();
-    
+
     if (opt.font->answer)
-	D_font(opt.font->answer);
+        D_font(opt.font->answer);
     else if (opt.path->answer)
-	D_font(opt.path->answer);
+        D_font(opt.path->answer);
 
     if (opt.charset->answer)
-	D_encoding(opt.charset->answer);
+        D_encoding(opt.charset->answer);
 
     D_setup(0);
 
@@ -313,38 +305,38 @@ int main(int argc, char **argv)
     D_get_dst(&win.t, &win.b, &win.l, &win.r);
 
     if (flag.s->answer)
-	size = atof(opt.size->answer);
+        size = atof(opt.size->answer);
     else
 #ifdef BACKWARD_COMPATIBILITY
-	size = atof(opt.size->answer) / 100.0 * (win.b - win.t) / linespacing;
+        size = atof(opt.size->answer) / 100.0 * (win.b - win.t) / linespacing;
 #else
-	size = atof(opt.size->answer) / 100.0 * (win.b - win.t);
+        size = atof(opt.size->answer) / 100.0 * (win.b - win.t);
 #endif
 
     fg_color = D_parse_color(opt.fgcolor->answer, TRUE);
     if (opt.bgcolor->answer) {
-	do_background = 1;
-	bg_color = D_parse_color(opt.bgcolor->answer, TRUE);
-	if (bg_color == 0) /* ie color="none" */
-	    do_background = 0;
+        do_background = 1;
+        bg_color = D_parse_color(opt.bgcolor->answer, TRUE);
+        if (bg_color == 0) /* ie color="none" */
+            do_background = 0;
     }
     else {
-	do_background = 0;
-	bg_color = 0;
+        do_background = 0;
+        bg_color = 0;
     }
     set_color(opt.fgcolor->answer);
 
     orig_x = orig_y = 0;
 
     if (opt.at->answers) {
-	get_coordinates(&x, &y, &east, &north, win, opt.at->answers,
-			flag.p->answer, flag.g->answer);
-	orig_x = x;
-	orig_y = y;
+        get_coordinates(&x, &y, &east, &north, win, opt.at->answers,
+                        flag.p->answer, flag.g->answer);
+        orig_x = x;
+        orig_y = y;
     }
     else {
-	x = win.l + (size * linespacing + 0.5) - size;	/* d.text: +5 */
-	y = win.t + line * (size * linespacing + 0.5);
+        x = win.l + (size * linespacing + 0.5) - size; /* d.text: +5 */
+        y = win.t + line * (size * linespacing + 0.5);
     }
 
     prev_x = x;
@@ -354,197 +346,200 @@ int main(int argc, char **argv)
     D_text_rotation(rotation * 180.0 / M_PI);
 
     if (text) {
-	if (text[0])
-	    draw_text(text, &x, &y, size, align, rotation, bold, do_background, fg_color, bg_color);
+        if (text[0])
+            draw_text(text, &x, &y, size, align, rotation, bold, do_background,
+                      fg_color, bg_color);
 
-	/* reset */
-	D_text_size(5, 5);
-	D_text_rotation(0.0);
+        /* reset */
+        D_text_size(5, 5);
+        D_text_rotation(0.0);
 
-	D_save_command(G_recreate_command());
-	D_close_driver();
+        D_save_command(G_recreate_command());
+        D_close_driver();
 
-	exit(EXIT_SUCCESS);
+        exit(EXIT_SUCCESS);
     }
 
     if (!opt.input->answer || strcmp(opt.input->answer, "-") == 0)
-	cmd_fp = stdin;
+        cmd_fp = stdin;
     else {
-	cmd_fp = fopen(opt.input->answer, "r");
-	if (!cmd_fp)
-	    G_fatal_error(_("Unable to open input file <%s>"), opt.input->answer);
+        cmd_fp = fopen(opt.input->answer, "r");
+        if (!cmd_fp)
+            G_fatal_error(_("Unable to open input file <%s>"),
+                          opt.input->answer);
     }
 
     if (isatty(fileno(cmd_fp)))
-	fprintf(stderr,
-		_("\nPlease enter text instructions.  Enter EOF (ctrl-d) on last line to quit\n"));
+        fprintf(stderr, _("\nPlease enter text instructions.  Enter EOF "
+                          "(ctrl-d) on last line to quit\n"));
 
     set_x = set_y = set_l = 0;
     first_text = 1;
     linefeed = 1;
     /* do the plotting */
     while (fgets(buf, sizeof(buf), cmd_fp)) {
-	int buf_len;
-	char *buf_ptr, *ptr;
+        int buf_len;
+        char *buf_ptr, *ptr;
 
-	buf_len = strlen(buf) - 1;
-	for (; buf[buf_len] == '\r' || buf[buf_len] == '\n'; buf_len--) ;
-	buf[buf_len + 1] = 0;
+        buf_len = strlen(buf) - 1;
+        for (; buf[buf_len] == '\r' || buf[buf_len] == '\n'; buf_len--)
+            ;
+        buf[buf_len + 1] = 0;
 
-	if (buf[0] == '.' && buf[1] != '.') {
-	    int i;
-	    double d;
+        if (buf[0] == '.' && buf[1] != '.') {
+            int i;
+            double d;
 
-	    G_squeeze(buf);	/* added 6/91 DBS @ CWU */
-	    for (buf_ptr = buf + 2; *buf_ptr == ' '; buf_ptr++) ;
-	    buf_len = strlen(buf_ptr);
+            G_squeeze(buf); /* added 6/91 DBS @ CWU */
+            for (buf_ptr = buf + 2; *buf_ptr == ' '; buf_ptr++)
+                ;
+            buf_len = strlen(buf_ptr);
 
-	    switch (buf[1] & 0x7f) {
-	    case 'F':
-		/* font */
-		if ((ptr = strchr(buf_ptr, ':')))
-		    *ptr = 0;
-		D_font(buf_ptr);
-		if (ptr)
-		    D_encoding(ptr + 1);
-		break;
-	    case 'C':
-		/* color */
-		set_color(buf_ptr);
-		fg_color = D_parse_color(buf_ptr, 1);
-		break;
-	    case 'G':
-		/* background color */
-		bg_color = D_parse_color(buf_ptr, 1);
-		do_background = 1;
-		break;
-	    case 'S':
-		/* size */
-		i = 0;
-		if (strchr("+-", buf_ptr[0]))
-		    i = 1;
-		d = atof(buf_ptr);
-		if (buf_ptr[buf_len - 1] != 'p')
+            switch (buf[1] & 0x7f) {
+            case 'F':
+                /* font */
+                if ((ptr = strchr(buf_ptr, ':')))
+                    *ptr = 0;
+                D_font(buf_ptr);
+                if (ptr)
+                    D_encoding(ptr + 1);
+                break;
+            case 'C':
+                /* color */
+                set_color(buf_ptr);
+                fg_color = D_parse_color(buf_ptr, 1);
+                break;
+            case 'G':
+                /* background color */
+                bg_color = D_parse_color(buf_ptr, 1);
+                do_background = 1;
+                break;
+            case 'S':
+                /* size */
+                i = 0;
+                if (strchr("+-", buf_ptr[0]))
+                    i = 1;
+                d = atof(buf_ptr);
+                if (buf_ptr[buf_len - 1] != 'p')
 #ifdef BACKWARD_COMPATIBILITY
-		    d *= (win.b - win.t) / 100.0 / linespacing;
+                    d *= (win.b - win.t) / 100.0 / linespacing;
 #else
-		    d *= (win.b - win.t) / 100.0;
+                    d *= (win.b - win.t) / 100.0;
 #endif
-		size = d + (i ? size : 0);
-		D_text_size(size, size);
-		break;
-	    case 'B':
-		/* bold */
-		bold = (atoi(buf_ptr) ? 1 : 0);
-		break;
-	    case 'A':
-		/* align */
-		strncpy(align, buf_ptr, 2);
-		break;
-	    case 'R':
-		/* rotation */
-		i = 0;
-		if (strchr("+-", buf_ptr[0]))
-		    i = 1;
-		d = atof(buf_ptr);
-		if (buf_ptr[buf_len - 1] != 'r')
-		    d *= M_PI / 180.0;
-		d += (i ? rotation : 0.0);
-		rotation = fmod(d, 2.0 * M_PI);
-		if (rotation < 0.0)
-		    rotation += 2.0 * M_PI;
-		D_text_rotation(rotation * 180.0 / M_PI);
-		break;
-	    case 'I':
-		/* linespacing */
-		linespacing = atof(buf_ptr);
-		break;
-	    case 'X':
-		/* x */
-		set_l = 0;
-		set_x = 1;
-		i = 0;
-		if (strchr("+-", buf_ptr[0]))
-		    i = 1;
-		d = atof(buf_ptr);
-		if (buf_ptr[buf_len - 1] == '%')
-		    /* percentage */
-		    d *= (win.r - win.l) / 100.0;
-		else if (buf_ptr[buf_len - 1] != 'p')
-		    /* column */
-		    d = (d - 1) * size * linespacing + 0.5;
-		x = prev_x = d + (i ? x : orig_x);
-		break;
-	    case 'Y':
-		/* y */
-		set_l = 0;
-		set_y = 1;
-		i = 0;
-		if (strchr("+-", buf_ptr[0]))
-		    i = 1;
-		d = atof(buf_ptr);
-		if (buf_ptr[buf_len - 1] == '%')
-		    /* percentage */
-		    d = win.b - d * (win.b - win.t) / 100.0;
-		else if (buf_ptr[buf_len - 1] != 'p')
-		    /* row */
-		    d *= size * linespacing + 0.5;
-		y = prev_y = d + (i ? y : orig_y);
-		break;
-	    case 'L':
-		/* linefeed */
-		set_l = 1;
-		linefeed = (atoi(buf_ptr) ? 1 : 0);
-		break;
-	    case 'E':
-		i = 0;
-		if (strchr("+-", buf_ptr[0]))
-		    i = 1;
-		d = atof(buf_ptr);
-		if (buf_ptr[buf_len - 1] == '%')
-		    d *= (win.r - win.l) / 100.0;
-		else if (buf_ptr[buf_len - 1] != 'p')
-		    d = D_u_to_d_col(d);
-		x = prev_x = orig_x = d + (i ? orig_x : win.l);
-		break;
-	    case 'N':
-		i = 0;
-		if (strchr("+-", buf_ptr[0]))
-		    i = 1;
-		d = atof(buf_ptr);
-		if (buf_ptr[buf_len - 1] == '%')
-		    d *= (win.b - win.t) / 100.0;
-		else if (buf_ptr[buf_len - 1] != 'p')
-		    d = D_u_to_d_row(d);
-		y = prev_y = orig_y = d + (i ? orig_y : win.t);
-		break;
-	    }
-	}
-	else {
-	    buf_ptr = buf;
-	    if (buf[0] == '.' && buf[1] == '.')
-		buf_ptr++;
+                size = d + (i ? size : 0);
+                D_text_size(size, size);
+                break;
+            case 'B':
+                /* bold */
+                bold = (atoi(buf_ptr) ? 1 : 0);
+                break;
+            case 'A':
+                /* align */
+                strncpy(align, buf_ptr, 2);
+                break;
+            case 'R':
+                /* rotation */
+                i = 0;
+                if (strchr("+-", buf_ptr[0]))
+                    i = 1;
+                d = atof(buf_ptr);
+                if (buf_ptr[buf_len - 1] != 'r')
+                    d *= M_PI / 180.0;
+                d += (i ? rotation : 0.0);
+                rotation = fmod(d, 2.0 * M_PI);
+                if (rotation < 0.0)
+                    rotation += 2.0 * M_PI;
+                D_text_rotation(rotation * 180.0 / M_PI);
+                break;
+            case 'I':
+                /* linespacing */
+                linespacing = atof(buf_ptr);
+                break;
+            case 'X':
+                /* x */
+                set_l = 0;
+                set_x = 1;
+                i = 0;
+                if (strchr("+-", buf_ptr[0]))
+                    i = 1;
+                d = atof(buf_ptr);
+                if (buf_ptr[buf_len - 1] == '%')
+                    /* percentage */
+                    d *= (win.r - win.l) / 100.0;
+                else if (buf_ptr[buf_len - 1] != 'p')
+                    /* column */
+                    d = (d - 1) * size * linespacing + 0.5;
+                x = prev_x = d + (i ? x : orig_x);
+                break;
+            case 'Y':
+                /* y */
+                set_l = 0;
+                set_y = 1;
+                i = 0;
+                if (strchr("+-", buf_ptr[0]))
+                    i = 1;
+                d = atof(buf_ptr);
+                if (buf_ptr[buf_len - 1] == '%')
+                    /* percentage */
+                    d = win.b - d * (win.b - win.t) / 100.0;
+                else if (buf_ptr[buf_len - 1] != 'p')
+                    /* row */
+                    d *= size * linespacing + 0.5;
+                y = prev_y = d + (i ? y : orig_y);
+                break;
+            case 'L':
+                /* linefeed */
+                set_l = 1;
+                linefeed = (atoi(buf_ptr) ? 1 : 0);
+                break;
+            case 'E':
+                i = 0;
+                if (strchr("+-", buf_ptr[0]))
+                    i = 1;
+                d = atof(buf_ptr);
+                if (buf_ptr[buf_len - 1] == '%')
+                    d *= (win.r - win.l) / 100.0;
+                else if (buf_ptr[buf_len - 1] != 'p')
+                    d = D_u_to_d_col(d);
+                x = prev_x = orig_x = d + (i ? orig_x : win.l);
+                break;
+            case 'N':
+                i = 0;
+                if (strchr("+-", buf_ptr[0]))
+                    i = 1;
+                d = atof(buf_ptr);
+                if (buf_ptr[buf_len - 1] == '%')
+                    d *= (win.b - win.t) / 100.0;
+                else if (buf_ptr[buf_len - 1] != 'p')
+                    d = D_u_to_d_row(d);
+                y = prev_y = orig_y = d + (i ? orig_y : win.t);
+                break;
+            }
+        }
+        else {
+            buf_ptr = buf;
+            if (buf[0] == '.' && buf[1] == '.')
+                buf_ptr++;
 
-	    if (!first_text && (linefeed || set_l)) {
-		/* if x is not given, increment x */
-		if (!set_x)
-		    x = prev_x +
-			(size * linespacing + 0.5) * sin(rotation);
-		/* if y is not given, increment y */
-		if (!set_y)
-		    y = prev_y +
-			(size * linespacing + 0.5) * cos(rotation);
-		prev_x = x;
-		prev_y = y;
-	    }
-	    set_x = set_y = set_l = first_text = 0;
+            if (!first_text && (linefeed || set_l)) {
+                /* if x is not given, increment x */
+                if (!set_x)
+                    x = prev_x + (size * linespacing + 0.5) * sin(rotation);
+                /* if y is not given, increment y */
+                if (!set_y)
+                    y = prev_y + (size * linespacing + 0.5) * cos(rotation);
+                prev_x = x;
+                prev_y = y;
+            }
+            set_x = set_y = set_l = first_text = 0;
 
-	    draw_text(buf_ptr, &x, &y, size, align, rotation, bold, do_background, fg_color, bg_color);
-	}
+            draw_text(buf_ptr, &x, &y, size, align, rotation, bold,
+                      do_background, fg_color, bg_color);
+        }
     }
 
     if (cmd_fp != stdin)
-	fclose(cmd_fp);
+        fclose(cmd_fp);
 
     /* reset */
     D_text_size(5, 5);
@@ -557,62 +552,62 @@ int main(int argc, char **argv)
 
 static void set_color(char *tcolor)
 {
-    int r, g, b, color;
+    unsigned int r, g, b, color;
 
-    if (sscanf(tcolor, "%d:%d:%d", &r, &g, &b) == 3 ||
-	sscanf(tcolor, "0x%02x%02x%02x", &r, &g, &b) == 3) {
-	if (r >= 0 && r < 256 && g >= 0 && g < 256 && b >= 0 && b < 256) {
-	    D_RGB_color(r, g, b);
-	}
+    if (sscanf(tcolor, "%u:%u:%u", &r, &g, &b) == 3 ||
+        sscanf(tcolor, "0x%02x%02x%02x", &r, &g, &b) == 3) {
+        if (r < 256 && g < 256 && b < 256) {
+            D_RGB_color(r, g, b);
+        }
     }
     else {
-	color = D_translate_color(tcolor);
-	if (!color) {
-	    G_warning(_("[%s]: No such color. Use '%s'"), tcolor,
-		      DEFAULT_COLOR);
-	    color = D_translate_color(DEFAULT_COLOR);
-	}
-	D_use_color(color);
+        color = D_translate_color(tcolor);
+        if (!color) {
+            G_warning(_("[%s]: No such color. Use '%s'"), tcolor,
+                      DEFAULT_COLOR);
+            color = D_translate_color(DEFAULT_COLOR);
+        }
+        D_use_color(color);
     }
 }
 
 static void get_coordinates(double *x, double *y, double *east, double *north,
-			    struct rectinfo win, char **at, char pixel,
-			    char geocoor)
+                            struct rectinfo win, char **at, char pixel,
+                            char geocoor)
 {
     double e, n;
 
     if (!at)
-	G_fatal_error(_("Invalid coordinates"));
+        G_fatal_error(_("Invalid coordinates"));
 
     e = atof(at[0]);
     n = atof(at[1]);
     if (pixel) {
-	*x = e + win.l;
-	*y = n + win.t;
-	e = D_d_to_u_col(*x);
-	n = D_d_to_u_row(*y);
+        *x = e + win.l;
+        *y = n + win.t;
+        e = D_d_to_u_col(*x);
+        n = D_d_to_u_row(*y);
     }
     else if (geocoor) {
-	*x = D_u_to_d_col(e);
-	*y = D_u_to_d_row(n);
+        *x = D_u_to_d_col(e);
+        *y = D_u_to_d_row(n);
     }
     else {
-	*x = win.l + (win.r - win.l) * e / 100.0;
-	*y = win.t + (win.b - win.t) * (100.0 - n) / 100.0;
-	e = D_d_to_u_col(*x);
-	n = D_d_to_u_row(*y);
+        *x = win.l + (win.r - win.l) * e / 100.0;
+        *y = win.t + (win.b - win.t) * (100.0 - n) / 100.0;
+        e = D_d_to_u_col(*x);
+        n = D_d_to_u_row(*y);
     }
 
     if (east)
-	*east = e;
+        *east = e;
     if (north)
-	*north = n;
+        *north = n;
 }
 
 static void draw_text(char *text, double *x, double *y, double size,
-		      char *align, double rotation, char bold,
-		      int do_background, int fg_color, int bg_color)
+                      char *align, double rotation, char bold,
+                      int do_background, int fg_color, int bg_color)
 {
     double w, h;
     double t, b, l, r;
@@ -623,7 +618,7 @@ static void draw_text(char *text, double *x, double *y, double size,
     /* R_get_text_box() does not work with rotation and returns a little bit
      * bigger dimension than actual text size */
     if (rotation != 0.0)
-	D_text_rotation(0.0);
+        D_text_rotation(0.0);
 
     D_get_text_box(text, &t, &b, &l, &r);
     t = D_u_to_d_row(t);
@@ -632,69 +627,70 @@ static void draw_text(char *text, double *x, double *y, double size,
     r = D_u_to_d_col(r);
 
     if (rotation != 0.0)
-	D_text_rotation(rotation * 180.0 / M_PI);
+        D_text_rotation(rotation * 180.0 / M_PI);
     w = r - l;
     h = b - t;
     if (w > 0)
-	w += 0.2 * size;
+        w += 0.2 * size;
     else
-	/* D_text() does not draw " ". */
-	w = 0.8 * size;
+        /* D_text() does not draw " ". */
+        w = 0.8 * size;
     if (h > 0)
-	h += 0.2 * size;
+        h += 0.2 * size;
     else
-	/* D_text() does not draw " ". */
-	h = 0.8 * size;
+        /* D_text() does not draw " ". */
+        h = 0.8 * size;
 
     c = cos(rotation);
     s = sin(rotation);
 
     if (strcmp(align, "ll") != 0) {
-	switch (align[0]) {
-	case 'l':
-	    break;
-	case 'c':
-	    *x += h / 2.0 * s;
-	    *y += h / 2.0 * c;
-	    break;
-	case 'u':
-	    *x += h * s;
-	    *y += h * c;
-	    break;
-	}
+        switch (align[0]) {
+        case 'l':
+            break;
+        case 'c':
+            *x += h / 2.0 * s;
+            *y += h / 2.0 * c;
+            break;
+        case 'u':
+            *x += h * s;
+            *y += h * c;
+            break;
+        }
 
-	switch (align[1]) {
-	case 'l':
-	    break;
-	case 'c':
-	    *x -= w / 2.0 * c;
-	    *y += w / 2.0 * s;
-	    break;
-	case 'r':
-	    *x -= w * c;
-	    *y += w * s;
-	    break;
-	}
+        switch (align[1]) {
+        case 'l':
+            break;
+        case 'c':
+            *x -= w / 2.0 * c;
+            *y += w / 2.0 * s;
+            break;
+        case 'r':
+            *x -= w * c;
+            *y += w * s;
+            break;
+        }
     }
 
     if (do_background) {
- 	pl = D_d_to_u_col(*x - size/2); /* some pixels margin for both sides */
- 	pt = D_d_to_u_row(*y + size/2);
- 	pr = D_d_to_u_col(*x + w + size/2);
- 	pb = D_d_to_u_row(*y - h - size/2);
-	D_use_color(bg_color);
- 	D_box_abs(pl, pt, pr, pb);    /* draw the box */
- 	D_use_color(fg_color); /* restore */
+        pl =
+            D_d_to_u_col(*x - size / 2); /* some pixels margin for both sides */
+        pt = D_d_to_u_row(*y + size / 2);
+        pr = D_d_to_u_col(*x + w + size / 2);
+        pb = D_d_to_u_row(*y - h - size / 2);
+        D_use_color(bg_color);
+        D_box_abs(pl, pt, pr, pb); /* draw the box */
+        D_use_color(fg_color);     /* restore */
     }
 
     D_pos_abs(D_d_to_u_col(*x), D_d_to_u_row(*y));
     D_text(text);
 
     if (bold) {
-	D_pos_abs(D_d_to_u_col(*x), D_d_to_u_row(*y + 1));
-	D_text(text);
-	D_pos_abs(D_d_to_u_col(*x + 1), D_d_to_u_row(*y));
-	D_text(text);
+        D_pos_abs(D_d_to_u_col(*x), D_d_to_u_row(*y + 1));
+        D_text(text);
+        D_pos_abs(D_d_to_u_col(*x + 1), D_d_to_u_row(*y));
+        D_text(text);
     }
 
     *x += w * c;

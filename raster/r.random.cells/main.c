@@ -1,12 +1,13 @@
-
 /****************************************************************************
  *
  * MODULE:       r.random.cells
- * AUTHOR(S):    Charles Ehlschlaeger; National Center for Geographic Information
- *               and Analysis, University of California, Santa Barbara (original contributor)
+ * AUTHOR(S):    Charles Ehlschlaeger; National Center for Geographic
+ *                 Information and Analysis, University of California,
+ *                 Santa Barbara (original contributor)
  *               Markus Neteler <neteler itc.it>
  *               Roberto Flor <flor itc.it>,
- *               Brad Douglas <rez touchofmadness.com>, Glynn Clements <glynn gclements.plus.com>
+ *               Brad Douglas <rez touchofmadness.com>,
+ *               Glynn Clements <glynn gclements.plus.com>
  * PURPOSE:      generates a random sets of cells that are at least
  *               some distance apart
  * COPYRIGHT:    (C) 1999-2008 by the GRASS Development Team
@@ -16,6 +17,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -49,7 +51,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("random"));
     G_add_keyword(_("autocorrelation"));
     module->description =
-	_("Generates random cell values with spatial dependence.");
+        _("Generates random cell values with spatial dependence.");
 
     Output = G_define_standard_option(G_OPT_R_OUTPUT);
 
@@ -59,30 +61,28 @@ int main(int argc, char *argv[])
     Distance->required = YES;
     Distance->multiple = NO;
     Distance->description =
-	_("Maximum distance of spatial correlation (value >= 0.0)");
+        _("Maximum distance of spatial correlation (value >= 0.0)");
 
     MaxCells = G_define_option();
     MaxCells->key = "ncells";
     MaxCells->type = TYPE_INTEGER;
     MaxCells->required = NO;
     MaxCells->options = "1-";
-    MaxCells->description =
-        _("Maximum number of cells to be created");
+    MaxCells->description = _("Maximum number of cells to be created");
 
     SeedStuff = G_define_option();
     SeedStuff->key = "seed";
     SeedStuff->type = TYPE_INTEGER;
     SeedStuff->required = NO;
-    SeedStuff->description =
-	_("Random seed, default [random]");
+    SeedStuff->description = _("Random seed, default [random]");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     Init();
     Indep();
-    
+
     G_done_msg(" ");
-    
+
     exit(EXIT_SUCCESS);
 }

@@ -41,21 +41,19 @@ int main(int argc, char *argv[])
     int ret;
 
     struct GModule *module;
-    struct
-    {
-	struct Flag *list;
-	struct Flag *extent;
-	struct Flag *table;
-	struct Flag *topo;
-	struct Flag *invert;
-	struct Flag *one_layer;
-	struct Flag *frame;
+    struct {
+        struct Flag *list;
+        struct Flag *extent;
+        struct Flag *table;
+        struct Flag *topo;
+        struct Flag *invert;
+        struct Flag *one_layer;
+        struct Flag *frame;
     } flag;
-    struct
-    {
-	struct Option *input;
-	struct Option *output;
-	struct Option *layers;
+    struct {
+        struct Option *input;
+        struct Option *output;
+        struct Option *layers;
     } opt;
 
     G_gisinit(argv[0]);
@@ -66,8 +64,7 @@ int main(int argc, char *argv[])
     G_add_keyword("DXF");
     G_add_keyword(_("level1"));
 
-    module->description =
-	_("Converts file in DXF format to GRASS vector map.");
+    module->description = _("Converts file in DXF format to GRASS vector map.");
 
     flag.extent = G_define_flag();
     flag.extent->key = 'e';
@@ -86,11 +83,11 @@ int main(int argc, char *argv[])
     flag.list->description = _("List available DXF layers and exit");
     flag.list->guisection = _("DXF layers");
     flag.list->suppress_required = YES;
-    
+
     flag.invert = G_define_flag();
     flag.invert->key = 'i';
     flag.invert->description =
-	_("Invert selection by DXF layers (don't import layers in list)");
+        _("Invert selection by DXF layers (don't import layers in list)");
     flag.invert->guisection = _("DXF layers");
 
     flag.one_layer = G_define_flag();
@@ -102,7 +99,7 @@ int main(int argc, char *argv[])
     opt.input->description = _("Path to input DXF file");
 
     opt.output = G_define_standard_option(G_OPT_V_OUTPUT);
-    
+
     opt.layers = G_define_option();
     opt.layers->key = "layers";
     opt.layers->type = TYPE_STRING;
@@ -112,7 +109,7 @@ int main(int argc, char *argv[])
     opt.layers->guisection = _("DXF layers");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     flag_list = flag.list->answer;
     flag_extent = flag.extent->answer;
@@ -123,31 +120,31 @@ int main(int argc, char *argv[])
     opt_layers = opt.layers->answers;
 
     if (flag_invert && !opt_layers)
-	G_fatal_error(_("Please specify list of DXF layers to exclude"));
+        G_fatal_error(_("Please specify list of DXF layers to exclude"));
 
     /* open DXF file */
     if (!(dxf = dxf_open(opt.input->answer)))
-	G_fatal_error(_("Unable to open DXF file <%s>"), opt.input->answer);
+        G_fatal_error(_("Unable to open DXF file <%s>"), opt.input->answer);
 
     if (flag_list)
-	G_verbose_message(_("Layer number: layer name / GRASS compliant name"));
+        G_verbose_message(_("Layer number: layer name / GRASS compliant name"));
     else {
-	int i;
+        int i;
 
-	if (opt_layers) {
-	    for (i = 0; opt_layers[i]; i++)
-		add_layer_to_list(opt_layers[i], 0);
-	}
+        if (opt_layers) {
+            for (i = 0; opt_layers[i]; i++)
+                add_layer_to_list(opt_layers[i], 0);
+        }
 
-	output = opt.output->answer;
+        output = opt.output->answer;
 
-	/* create vector map */
-	if (Vect_open_new(&Map, output, 1) < 0)
-	    G_fatal_error(_("Unable to create vector map <%s>"), output);
+        /* create vector map */
+        if (Vect_open_new(&Map, output, 1) < 0)
+            G_fatal_error(_("Unable to create vector map <%s>"), output);
 
-	Vect_set_map_name(&Map, output);
+        Vect_set_map_name(&Map, output);
 
-	Vect_hist_command(&Map);
+        Vect_hist_command(&Map);
     }
 
     /* import */
@@ -156,22 +153,22 @@ int main(int argc, char *argv[])
     dxf_close(dxf);
 
     if (flag_list)
-	init_list();
+        init_list();
     else {
-	Vect_close(&Map);
+        Vect_close(&Map);
 
-	if (ret) {
-	    if (Vect_open_old(&Map, output, G_mapset())) {
-		if (!flag_topo)
-		    if (!Vect_build(&Map))
-			G_warning(_("Building topology failed"));
-		Vect_close(&Map);
-	    }
-	}
-	else {
-	    Vect_delete(output);
-	    G_fatal_error(_("Failed to import DXF file!"));
-	}
+        if (ret) {
+            if (Vect_open_old(&Map, output, G_mapset())) {
+                if (!flag_topo)
+                    if (!Vect_build(&Map))
+                        G_warning(_("Building topology failed"));
+                Vect_close(&Map);
+            }
+        }
+        else {
+            Vect_delete(output);
+            G_fatal_error(_("Failed to import DXF file!"));
+        }
     }
 
     G_done_msg(" ");

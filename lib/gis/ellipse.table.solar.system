@@ -1,4 +1,4 @@
-# Solar system ellipsoids.  To use, copy the contents of this file 
+# Solar system ellipsoids.  To use, copy the contents of this file
 #   to the end of $GISBASE/etc/ellipse.table
 # Version 2010-09-10  Alessandro Frigeri <afrigeri@unipg.it>
 #
@@ -142,5 +142,3 @@ neptune    "Planet Neptune"               a=24764000.0 b=24341000.0
 Charon     "Pluto's satellite Charon"     a=593000.0 b=593000.0
 # Planet Pluto, IAU2000 definition
 pluto      "Planet Pluto"                 a=1195000.0 b=1195000.0
-
-

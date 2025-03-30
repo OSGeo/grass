@@ -106,9 +106,8 @@
 # % description: Ignore the current region settings and use the raster map regions
 # %end
 
-from __future__ import print_function
-
 import copy
+
 import grass.script as grass
 
 

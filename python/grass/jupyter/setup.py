@@ -47,7 +47,7 @@ class _JupyterGlobalSession:
     >>> session = gj.init(...)
 
     An object ends the session when it is destroyed or when the *finish* method is
-    called explicitely.
+    called explicitly.
 
     Notably, only the mapset is closed, but the libraries and GRASS modules
     remain on path.

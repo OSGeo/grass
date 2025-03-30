@@ -32,7 +32,6 @@
 # %end
 # %option G_OPT_R_OUTPUT
 # %end
-from __future__ import print_function
 
 import grass.script as gscript
 

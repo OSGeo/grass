@@ -47,7 +47,7 @@ class Circle:
         self.radius = r
 
 
-class MaskedArea(object):
+class MaskedArea:
     def __init__(self, region, raster, radius):
         self.region = region
         self.raster = raster
@@ -107,7 +107,7 @@ class RLiSetupMapPanel(wx.Panel):
             .CloseButton(False)
             .Layer(1)
             .Gripper(False)
-            .BestSize((self.toolbar.GetBestSize())),
+            .BestSize(self.toolbar.GetBestSize()),
         )
         self._mgr.Update()
 
@@ -285,7 +285,9 @@ class RLiSetupMapPanel(wx.Panel):
             "r.to.vect", input=tmpraster, output=tmpvector, type="area", overwrite=True
         )
 
-        RunCommand("v.to.rast", input=tmpvector, output=rasterName, value=1, use="val")
+        RunCommand(
+            "v.to.rast", input=tmpvector, output=rasterName, value=1, use="value"
+        )
         wx.EndBusyCursor()
         grass.use_temp_region()
         grass.run_command("g.region", vector=tmpvector)

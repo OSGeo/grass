@@ -11,11 +11,11 @@
  **  If a second argument is specified, the first argument is put in the
  **   list backwards.
  */
+
 #include <stdio.h>
 #include <grass/linkm.h>
 
-struct link
-{
+struct link {
     char let;
     struct link *next;
 };
@@ -27,12 +27,10 @@ int main(int argc, char *argv[])
     struct link List, *tmp, *p;
     int rev = 0;
 
-
     for (i = 0; i < 2000000; i++) {
-	p = (struct link *)malloc(sizeof(struct link));
-	free(p);
+        p = (struct link *)malloc(sizeof(struct link));
+        free(p);
     }
-
 
     exit(0);
 }

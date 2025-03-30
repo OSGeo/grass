@@ -3,8 +3,7 @@
 
 #include <grass/raster3d.h>
 
-struct Seed
-{
+struct Seed {
     double x;
     double y;
     double z;
@@ -12,10 +11,9 @@ struct Seed
     int flowaccum;
 };
 
-enum flowdir {FLOWDIR_UP, FLOWDIR_DOWN, FLOWDIR_BOTH};
+enum flowdir { FLOWDIR_UP, FLOWDIR_DOWN, FLOWDIR_BOTH };
 
-struct Integration
-{
+struct Integration {
     enum flowdir direction_type;
     enum flowdir actual_direction;
     char *unit;
@@ -27,8 +25,7 @@ struct Integration
     double min_step;
 };
 
-struct Gradient_info
-{
+struct Gradient_info {
     int compute_gradient;
     RASTER3D_Map *velocity_maps[3];
     RASTER3D_Map *scalar_map;

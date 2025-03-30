@@ -11,7 +11,6 @@
  *
  */
 
-
 #include "filters.h"
 
 #include "lidar.h"

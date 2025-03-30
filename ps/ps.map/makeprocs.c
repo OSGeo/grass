@@ -26,14 +26,14 @@ int make_procs(void)
 
     fp = fopen(filename, "r");
     if (!fp)
-	G_fatal_error(_("Unable to open prolog <%s>"), filename);
+        G_fatal_error(_("Unable to open prolog <%s>"), filename);
 
     for (;;) {
-	char buff[80];
+        char buff[80];
 
-	if (!fgets(buff, sizeof(buff), fp))
-	    break;
-	fputs(buff, PS.fp);
+        if (!fgets(buff, sizeof(buff), fp))
+            break;
+        fputs(buff, PS.fp);
     }
 
     fclose(fp);

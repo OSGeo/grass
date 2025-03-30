@@ -154,18 +154,10 @@ def register_maps_in_space_time_dataset(
             maplist = maps.split(",")
 
         # Build the map list again with the ids
-        for count in range(len(maplist)):
-            row = {}
-            mapname = maplist[count]
-            map_mapset = mapset
-            if "@" not in mapname:
-                found = gscript.find_file(element=type, name=mapname)
-                if found["mapset"] is not None and len(found["mapset"]) > 0:
-                    map_mapset = found["mapset"]
-            mapid = AbstractMapDataset.build_id(mapname, map_mapset, None)
-
-            row["id"] = mapid
-            maplist[count] = row
+        for idx, maplist_item in enumerate(maplist):
+            maplist[idx] = {
+                "id": AbstractMapDataset.build_id_from_search_path(maplist_item, type)
+            }
 
     # Read the map list from file
     if file:
@@ -209,24 +201,18 @@ def register_maps_in_space_time_dataset(
             mapname = line_list[0].strip()
             row = {}
 
-            if start_time_in_file and end_time_in_file:
+            if start_time_in_file:
                 row["start"] = line_list[1].strip()
-                row["end"] = line_list[2].strip()
 
-            if start_time_in_file and not end_time_in_file:
-                row["start"] = line_list[1].strip()
+            if end_time_in_file:
+                row["end"] = line_list[2].strip()
 
             if semantic_label_in_file:
                 idx = 3 if end_time_in_file else 2
                 # case-sensitive, the user decides on the band name
                 row["semantic_label"] = line_list[idx].strip()
 
-            map_mapset = mapset
-            if "@" not in mapname:
-                found = gscript.find_file(element=type, name=mapname)
-                if found["mapset"] is not None and len(found["mapset"]) > 0:
-                    map_mapset = found["mapset"]
-            row["id"] = AbstractMapDataset.build_id(mapname, map_mapset)
+            row["id"] = AbstractMapDataset.build_id_from_search_path(mapname, type)
 
             maplist.append(row)
 

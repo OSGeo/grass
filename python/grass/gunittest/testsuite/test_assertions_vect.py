@@ -211,7 +211,7 @@ class TestVectorGeometryAssertions(TestCase):
         )
 
     def test_assertVectorEqualsVector_geometry_same_header(self):
-        """Check small slighlty different maps with same header in ASCII."""
+        """Check small slightly different maps with same header in ASCII."""
         amap = "simple_vector_map_base_geom"
         bmap = "simple_vector_map_modified_geom"
         self.runModule(
@@ -238,7 +238,7 @@ class TestVectorGeometryAssertions(TestCase):
         )
 
     def test_assertVectorEqualsVector_geometry(self):
-        """Check small slighlty different maps with different headers in ASCII."""
+        """Check small slightly different maps with different headers in ASCII."""
         amap = "simple_vector_map_base"
         bmap = "simple_vector_map_different_header"
         self.runModule(
@@ -268,7 +268,7 @@ class TestVectorGeometryAssertions(TestCase):
         self.assertFileExists(self.simple_diff_header_file)
 
     def test_assertVectorAsciiEqualsVectorAscii_diff_content(self):
-        """Test ASCII files with slighlty different content.
+        """Test ASCII files with slightly different content.
 
         Prove that files were not deleted if not requested.
         """

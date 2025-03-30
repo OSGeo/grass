@@ -159,7 +159,6 @@ def main():
                 raster_maps = (new_map.get_id(),)
 
             for rastermap in raster_maps:
-
                 if column:
                     col_name = column
                 else:

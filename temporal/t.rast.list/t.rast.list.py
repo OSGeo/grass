@@ -162,7 +162,7 @@ def main():
         if separator == "|":
             # We use comma as the default for separator, so we override the pipe.
             # This does not allow for users to generate CSV with pipe, but unlike
-            # the C API, the Python interface specs does not allow reseting the default
+            # the C API, the Python interface specs does not allow resetting the default
             # except for setting it to an empty string which does not have a precedence
             # in the current code and the behavior is unclear.
             separator = ","

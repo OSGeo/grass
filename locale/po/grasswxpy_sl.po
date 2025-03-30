@@ -1169,7 +1169,7 @@ msgstr ""
 
 #: ../gui/wxpython/core/render.py:1132
 msgid ""
-"Unable to get current geographic extent. Force quiting wxGUI. Please "
+"Unable to get current geographic extent. Force quitting wxGUI. Please "
 "manually run g.region to fix the problem."
 msgstr ""
 
@@ -8562,7 +8562,7 @@ msgid "Random non overlapping"
 msgstr ""
 
 #: ../gui/wxpython/rlisetup/wizard.py:1354
-msgid "Systematic contiguos"
+msgid "Systematic contiguous"
 msgstr ""
 
 #: ../gui/wxpython/rlisetup/wizard.py:1355
@@ -8570,7 +8570,7 @@ msgid "Stratified random"
 msgstr ""
 
 #: ../gui/wxpython/rlisetup/wizard.py:1356
-msgid "Systematic non contiguos"
+msgid "Systematic non contiguous"
 msgstr ""
 
 #: ../gui/wxpython/rlisetup/wizard.py:1357
@@ -14476,7 +14476,7 @@ msgstr ""
 #: ../gui/wxpython/startup/guiutils.py:407
 #, python-brace-format
 msgid ""
-"The following error occured when deleting mapset <{path}>:\n"
+"The following error occurred when deleting mapset <{path}>:\n"
 "\n"
 "{error}\n"
 "\n"
@@ -14519,7 +14519,7 @@ msgstr ""
 #: ../gui/wxpython/startup/guiutils.py:492
 #, python-brace-format
 msgid ""
-"The following error occured when deleting location <{path}>:\n"
+"The following error occurred when deleting location <{path}>:\n"
 "\n"
 "{error}\n"
 "\n"
@@ -14561,7 +14561,7 @@ msgstr ""
 #: ../gui/wxpython/startup/guiutils.py:556
 #, python-brace-format
 msgid ""
-"The following error occured when deleting database <{path}>:\n"
+"The following error occurred when deleting database <{path}>:\n"
 "\n"
 "{error}\n"
 "\n"
@@ -15815,7 +15815,7 @@ msgid "Couldn't read file <{}>."
 msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:340
-msgid "Permission denied <{}>. Please change file permission for writting.{}"
+msgid "Permission denied <{}>. Please change file permission for writing.{}"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:352
@@ -15871,7 +15871,7 @@ msgid "Activate overwrite"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:665
-msgid "Deactive overwrite"
+msgid "Deactivate overwrite"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/goutput.py:139
@@ -16443,7 +16443,7 @@ msgid "Ask when removing map layer from layer tree"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:313
-msgid "Ask when quiting wxGUI or closing display"
+msgid "Ask when quitting wxGUI or closing display"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:327
@@ -16647,7 +16647,7 @@ msgid "Line width (in pixels):"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:1528
-msgid "Automatically hightlight selected features in map display"
+msgid "Automatically highlight selected features in map display"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:1545
@@ -17255,7 +17255,7 @@ msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:54
 #, python-format
-msgid "Unable to load icon theme. Reason: %s. Quiting wxGUI..."
+msgid "Unable to load icon theme. Reason: %s. Quitting wxGUI..."
 msgstr ""
 
 #: ../gui/wxpython/gcp/mapdisplay.py:50 ../gui/wxpython/gcp/manager.py:1052

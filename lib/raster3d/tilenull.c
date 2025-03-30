@@ -6,9 +6,8 @@
 
 /*---------------------------------------------------------------------------*/
 
-
 /*!
- * \brief 
+ * \brief
  *
  * Assumes that <em>tile</em> is a tile with the same dimensions as the
  * tiles of <em>map</em>. Fills <em>tile</em> with NULL-values of
@@ -20,25 +19,25 @@
  *  \return void
  */
 
-void Rast3d_set_null_tile_type(RASTER3D_Map * map, void *tile, int type)
+void Rast3d_set_null_tile_type(RASTER3D_Map *map, void *tile, int type)
 {
     Rast3d_set_null_value(tile, map->tileSize, type);
 }
 
 /*---------------------------------------------------------------------------*/
 
-
 /*!
- * \brief 
+ * \brief
  *
- * Is equivalent to Rast3d_set_null_tile_type (map, tile, Rast3d_file_type_map (map)).
+ * Is equivalent to Rast3d_set_null_tile_type (map, tile, Rast3d_file_type_map
+ * (map)).
  *
  *  \param map
  *  \param tile
  *  \return void
  */
 
-void Rast3d_set_null_tile(RASTER3D_Map * map, void *tile)
+void Rast3d_set_null_tile(RASTER3D_Map *map, void *tile)
 {
     Rast3d_set_null_tile_type(map, tile, map->typeIntern);
 }

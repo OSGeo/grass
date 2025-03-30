@@ -19,16 +19,16 @@
 #
 ############################################################################
 
-#%module
-#% description: Georectifies a map and allows managing Ground Control Points for 3D correction.
-#% keyword: imagery
-#% keyword: GUI
-#% keyword: aerial
-#% keyword: photo
-#% keyword: georectification
-#% keyword: geometry
-#% keyword: GCP
-#%end
+# %module
+# % description: Georectifies a map and allows managing Ground Control Points for 3D correction.
+# % keyword: imagery
+# % keyword: GUI
+# % keyword: aerial
+# % keyword: photo
+# % keyword: georectification
+# % keyword: geometry
+# % keyword: GCP
+# %end
 
 ##%option G_OPT_M_LOCATION
 ##% key: source_location

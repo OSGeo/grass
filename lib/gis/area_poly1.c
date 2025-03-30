@@ -20,9 +20,12 @@
 static struct state {
     double QA, QB, QC;
     double QbarA, QbarB, QbarC, QbarD;
-    double AE;  /** a^2(1-e^2) */
-    double Qp;  /** Q at the north pole */
-    double E;   /** Area of the earth */
+
+    double AE; /** a^2(1-e^2) */
+
+    double Qp; /** Q at the north pole */
+
+    double E; /** Area of the earth */
 } state;
 
 static struct state *st = &state;
@@ -44,7 +47,9 @@ static double Qbar(double x)
     cosx = cos(x);
     cosx2 = cosx * cosx;
 
-    return cosx * (st->QbarA + cosx2 * (st->QbarB + cosx2 * (st->QbarC + cosx2 * st->QbarD)));
+    return cosx *
+           (st->QbarA +
+            cosx2 * (st->QbarB + cosx2 * (st->QbarC + cosx2 * st->QbarD)));
 }
 
 /*!
@@ -79,14 +84,14 @@ void G_begin_ellipsoid_polygon_area(double a, double e2)
     st->Qp = Q(M_PI_2);
     st->E = 4 * M_PI * st->Qp * st->AE;
     if (st->E < 0.0)
-	st->E = -st->E;
+        st->E = -st->E;
 }
 
 /*!
  * \brief Area of lat-long polygon.
  *
- * Returns the area in square meters of the polygon described by the 
- * <i>n</i> pairs of <i>lat,long</i> vertices for latitude-longitude 
+ * Returns the area in square meters of the polygon described by the
+ * <i>n</i> pairs of <i>lat,long</i> vertices for latitude-longitude
  * grids.
  *
  * <b>Note:</b> This routine computes the area of a polygon on the
@@ -94,26 +99,26 @@ void G_begin_ellipsoid_polygon_area(double a, double e2)
  * not geodesics.  Each side is actually defined by a linear relationship
  * between latitude and longitude, i.e., on a rectangular/equidistant
  * cylindrical/Plate Carr{'e}e grid, the side would appear as a
- * straight line.  For two consecutive vertices of the polygon, 
+ * straight line.  For two consecutive vertices of the polygon,
  * (lat_1, long1) and (lat_2,long_2), the line joining them (i.e., the
  * polygon's side) is defined by:
  *
  \verbatim
-                                     lat_2  -  lat_1 
-     lat = lat_1 + (long - long_1) * ---------------
-                                     long_2 - long_1
+ lat_2  -  lat_1
+ lat = lat_1 + (long - long_1) * ---------------
+ long_2 - long_1
  \endverbatim
  *
  * where long_1 < long < long_2.
  *   The values of QbarA, etc., are determined by the integration of
- * the Q function.  Into www.integral-calculator.com, paste this 
+ * the Q function.  Into www.integral-calculator.com, paste this
  * expression :
  *
  \verbatim
  sin(x)+ (2/3)e^2(sin(x))^3 + (3/5)e^4(sin(x))^5 + (4/7)e^6(sin(x))^7
  \endverbatim
  *
- * and you'll get their values.  (Last checked 30 Oct 2013). 
+ * and you'll get their values.  (Last checked 30 Oct 2013).
  *
  * This function correctly computes (within the limits of the series
  * approximation) the area of a quadrilateral on the ellipsoid when
@@ -131,7 +136,8 @@ double G_ellipsoid_polygon_area(const double *lon, const double *lat, int n)
     double x1, y1, x2, y2, dx, dy;
     double Qbar1, Qbar2;
     double area;
-    double thresh = 1e-6;	/* threshold for dy, should be between 1e-4 and 1e-7 */
+    double thresh =
+        1e-6; /* threshold for dy, should be between 1e-4 and 1e-7 */
 
     x2 = Radians(lon[n - 1]);
     y2 = Radians(lat[n - 1]);
@@ -140,44 +146,44 @@ double G_ellipsoid_polygon_area(const double *lon, const double *lat, int n)
     area = 0.0;
 
     while (--n >= 0) {
-	x1 = x2;
-	y1 = y2;
-	Qbar1 = Qbar2;
+        x1 = x2;
+        y1 = y2;
+        Qbar1 = Qbar2;
 
-	x2 = Radians(*lon++);
-	y2 = Radians(*lat++);
-	Qbar2 = Qbar(y2);
+        x2 = Radians(*lon++);
+        y2 = Radians(*lat++);
+        Qbar2 = Qbar(y2);
 
-	if (x1 > x2)
-	    while (x1 - x2 > M_PI)
-		x2 += TWOPI;
-	else if (x2 > x1)
-	    while (x2 - x1 > M_PI)
-		x1 += TWOPI;
+        if (x1 > x2)
+            while (x1 - x2 > M_PI)
+                x2 += TWOPI;
+        else if (x2 > x1)
+            while (x2 - x1 > M_PI)
+                x1 += TWOPI;
 
-	dx = x2 - x1;
-	dy = y2 - y1;
+        dx = x2 - x1;
+        dy = y2 - y1;
 
-	if (fabs(dy) > thresh) {
-	    /* account for different latitudes y1, y2 */
-	    area += dx * (st->Qp - (Qbar2 - Qbar1) / dy);
-	    /* original: 
-	     * area += dx * st->Qp - (dx / dy) * (Qbar2 - Qbar1);
-	     */
-	}
-	else {
-	    /* latitudes y1, y2 are (nearly) identical */
-	    /* if y2 becomes similar to y1, i.e. y2 -> y1
-	     * Qbar2 - Qbar1 -> 0 and dy -> 0
-	     * (Qbar2 - Qbar1) / dy -> ?
-	     * (Qbar2 - Qbar1) / dy should approach Q((y1 + y2) / 2)
-	     * Metz 2017
-	     */
-	    area += dx * (st->Qp - Q((y1 + y2) / 2));
-	}
+        if (fabs(dy) > thresh) {
+            /* account for different latitudes y1, y2 */
+            area += dx * (st->Qp - (Qbar2 - Qbar1) / dy);
+            /* original:
+             * area += dx * st->Qp - (dx / dy) * (Qbar2 - Qbar1);
+             */
+        }
+        else {
+            /* latitudes y1, y2 are (nearly) identical */
+            /* if y2 becomes similar to y1, i.e. y2 -> y1
+             * Qbar2 - Qbar1 -> 0 and dy -> 0
+             * (Qbar2 - Qbar1) / dy -> ?
+             * (Qbar2 - Qbar1) / dy should approach Q((y1 + y2) / 2)
+             * Metz 2017
+             */
+            area += dx * (st->Qp - Q((y1 + y2) / 2));
+        }
     }
     if ((area *= st->AE) < 0.0)
-	area = -area;
+        area = -area;
 
     /* kludge - if polygon circles the south pole the area will be
      * computed as if it cirlced the north pole. The correction is
@@ -185,9 +191,9 @@ double G_ellipsoid_polygon_area(const double *lon, const double *lat, int n)
      * the "north pole" area.
      */
     if (area > st->E)
-	area = st->E;
+        area = st->E;
     if (area > st->E / 2)
-	area = st->E - area;
+        area = st->E - area;
 
     return area;
 }

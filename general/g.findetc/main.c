@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       g.findetc
@@ -41,13 +40,13 @@ int main(int argc, char *argv[])
     opt1->description = "Name of an file or directory";
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     strcpy(name, opt1->answer);
 
     fpath = G_find_etc(name);
     if (fpath)
-	fprintf(stdout, "%s\n", fpath);
+        fprintf(stdout, "%s\n", fpath);
 
     exit(fpath ? EXIT_SUCCESS : EXIT_FAILURE);
 }

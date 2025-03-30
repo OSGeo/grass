@@ -89,7 +89,7 @@ class IClassVDigitWindow(VDigitWindow):
             event.Skip()
             return
 
-        super(IClassVDigitWindow, self)._onLeftDown(event)
+        super()._onLeftDown(event)
 
     def _addRecord(self):
         return False
@@ -98,7 +98,7 @@ class IClassVDigitWindow(VDigitWindow):
         pass
 
     def _onRightUp(self, event):
-        super(IClassVDigitWindow, self)._onRightUp(event)
+        super()._onRightUp(event)
         self.parent.UpdateChangeState(changes=True)
 
     def GetCurrentCategory(self):

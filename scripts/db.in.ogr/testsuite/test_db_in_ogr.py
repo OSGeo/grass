@@ -45,7 +45,7 @@ class TestDbInOgr(TestCase):
 
         m = SimpleModule("db.tables", flags="p")
         self.assertModule(m)
-        self.assertRegexpMatches(decode(m.outputs.stdout), self.tableName1)
+        self.assertRegex(decode(m.outputs.stdout), self.tableName1)
 
     def test_import_dbf_file(self):
         """import dbf table"""
@@ -54,7 +54,7 @@ class TestDbInOgr(TestCase):
 
         m = SimpleModule("db.tables", flags="p")
         self.assertModule(m)
-        self.assertRegexpMatches(decode(m.outputs.stdout), self.tableName2)
+        self.assertRegex(decode(m.outputs.stdout), self.tableName2)
 
 
 if __name__ == "__main__":

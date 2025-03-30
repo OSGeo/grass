@@ -1,7 +1,8 @@
 /*!
    \file lib/ogsf/gv2.c
 
-   \brief OGSF library - loading and manipulating vector sets (higher level functions)
+   \brief OGSF library - loading and manipulating vector sets (higher level
+   functions)
 
    (C) 1999-2008, 2011 by the GRASS Development Team
 
@@ -39,13 +40,13 @@ int GV_vect_exists(int id)
     G_debug(3, "GV_vect_exists");
 
     if (NULL == gv_get_vect(id)) {
-	return (0);
+        return (0);
     }
 
     for (i = 0; i < Next_vect && !found; i++) {
-	if (Vect_ID[i] == id) {
-	    found = 1;
-	}
+        if (Vect_ID[i] == id) {
+            found = 1;
+        }
     }
 
     return (found);
@@ -62,14 +63,14 @@ int GV_new_vector(void)
     geovect *nv;
 
     if (Next_vect < MAX_VECTS) {
-	nv = gv_get_new_vect();
-	gv_set_defaults(nv);
-	Vect_ID[Next_vect] = nv->gvect_id;
-	++Next_vect;
+        nv = gv_get_new_vect();
+        gv_set_defaults(nv);
+        Vect_ID[Next_vect] = nv->gvect_id;
+        ++Next_vect;
 
-	G_debug(3, "GV_new_vector(): id=%d", nv->gvect_id);
+        G_debug(3, "GV_new_vector(): id=%d", nv->gvect_id);
 
-	return nv->gvect_id;
+        return nv->gvect_id;
     }
 
     return -1;
@@ -102,16 +103,16 @@ int *GV_get_vect_list(int *numvects)
     *numvects = Next_vect;
 
     if (Next_vect) {
-	ret = (int *)G_malloc(Next_vect * sizeof(int));
-	if (!ret) {
-	    return (NULL);
-	}
+        ret = (int *)G_malloc(Next_vect * sizeof(int));
+        if (!ret) {
+            return (NULL);
+        }
 
-	for (i = 0; i < Next_vect; i++) {
-	    ret[i] = Vect_ID[i];
-	}
+        for (i = 0; i < Next_vect; i++) {
+            ret[i] = Vect_ID[i];
+        }
 
-	return (ret);
+        return (ret);
     }
 
     return (NULL);
@@ -132,22 +133,22 @@ int GV_delete_vector(int id)
     G_debug(3, "GV_delete_vect");
 
     if (GV_vect_exists(id)) {
-	gv_delete_vect(id);
+        gv_delete_vect(id);
 
-	for (i = 0; i < Next_vect && !found; i++) {
-	    if (Vect_ID[i] == id) {
-		found = 1;
+        for (i = 0; i < Next_vect && !found; i++) {
+            if (Vect_ID[i] == id) {
+                found = 1;
 
-		for (j = i; j < Next_vect; j++) {
-		    Vect_ID[j] = Vect_ID[j + 1];
-		}
-	    }
-	}
+                for (j = i; j < Next_vect; j++) {
+                    Vect_ID[j] = Vect_ID[j + 1];
+                }
+            }
+        }
 
-	if (found) {
-	    --Next_vect;
-	    return (1);
-	}
+        if (found) {
+            --Next_vect;
+            return (1);
+        }
     }
 
     return (-1);
@@ -173,17 +174,17 @@ int GV_load_vector(int id, const char *filename)
     geovect *gv;
 
     if (NULL == (gv = gv_get_vect(id))) {
-	return (-1);
+        return (-1);
     }
 
     if (gv->lines) {
-	gv_free_vectmem(gv);
+        gv_free_vectmem(gv);
     }
 
     gv->filename = G_store(filename);
 
     if ((gv->lines = Gv_load_vect(filename, &(gv->n_lines)))) {
-	return (1);
+        return (1);
     }
 
     return (-1);
@@ -205,7 +206,7 @@ int GV_get_vectname(int id, char **filename)
     geovect *gv;
 
     if (NULL == (gv = gv_get_vect(id))) {
-	return (-1);
+        return (-1);
     }
 
     *filename = G_store(gv->filename);
@@ -230,7 +231,7 @@ int GV_set_style(int id, int mem, int color, int width, int use_z)
     geovect *gv;
 
     if (NULL == (gv = gv_get_vect(id))) {
-	return -1;
+        return -1;
     }
 
     gv->use_mem = mem;
@@ -240,7 +241,6 @@ int GV_set_style(int id, int mem, int color, int width, int use_z)
 
     return 1;
 }
-
 
 /*!
    \brief Get vector style
@@ -259,7 +259,7 @@ int GV_get_style(int id, int *mem, int *color, int *width, int *use_z)
     geovect *gv;
 
     if (NULL == (gv = gv_get_vect(id))) {
-	return -1;
+        return -1;
     }
 
     *mem = gv->use_mem;
@@ -272,9 +272,9 @@ int GV_get_style(int id, int *mem, int *color, int *width, int *use_z)
 
 /*!
    \brief Set vector set style for thematic mapping
-   
+
    Updates also style for each geoline.
-   
+
    \param id vector set id
    \param layer layer number for thematic mapping
    \param color color column name
@@ -284,25 +284,25 @@ int GV_get_style(int id, int *mem, int *color, int *width, int *use_z)
    \return 1 on success
    \return -1 on error (point set not found)
  */
-int GV_set_style_thematic(int id, int layer, const char* color, const char* width,
-			  struct Colors *color_rules)
+int GV_set_style_thematic(int id, int layer, const char *color,
+                          const char *width, struct Colors *color_rules)
 {
     geovect *gv;
 
     if (NULL == (gv = gv_get_vect(id))) {
-	return -1;
+        return -1;
     }
 
-    if(!gv->tstyle)
-	gv->tstyle = (gvstyle_thematic *)G_malloc(sizeof(gvstyle_thematic));
+    if (!gv->tstyle)
+        gv->tstyle = (gvstyle_thematic *)G_malloc(sizeof(gvstyle_thematic));
     G_zero(gv->tstyle, sizeof(gvstyle_thematic));
-    
+
     gv->tstyle->active = 1;
     gv->tstyle->layer = layer;
     if (color)
-	gv->tstyle->color_column = G_store(color);
+        gv->tstyle->color_column = G_store(color);
     if (width)
-	gv->tstyle->width_column = G_store(width);
+        gv->tstyle->width_column = G_store(width);
 
     Gv_load_vect_thematic(gv, color_rules);
 
@@ -311,7 +311,7 @@ int GV_set_style_thematic(int id, int layer, const char* color, const char* widt
 
 /*!
    \brief Make style for thematic mapping inactive
-   
+
    \param id vector set id
 
    \return 1 on success
@@ -324,11 +324,11 @@ int GV_unset_style_thematic(int id)
     G_debug(4, "GV_unset_style_thematic(): id=%d", id);
 
     if (NULL == (gv = gv_get_vect(id))) {
-	return -1;
+        return -1;
     }
 
     if (gv->tstyle) {
-	gv->tstyle->active = 0;
+        gv->tstyle->active = 0;
     }
 
     return 1;
@@ -349,9 +349,9 @@ void GV_set_trans(int id, float xtrans, float ytrans, float ztrans)
     gv = gv_get_vect(id);
 
     if (gv) {
-	gv->x_trans = xtrans;
-	gv->y_trans = ytrans;
-	gv->z_trans = ztrans;
+        gv->x_trans = xtrans;
+        gv->y_trans = ytrans;
+        gv->z_trans = ztrans;
     }
 
     return;
@@ -370,11 +370,11 @@ int GV_get_trans(int id, float *xtrans, float *ytrans, float *ztrans)
     gv = gv_get_vect(id);
 
     if (gv) {
-	*xtrans = gv->x_trans;
-	*ytrans = gv->y_trans;
-	*ztrans = gv->z_trans;
+        *xtrans = gv->x_trans;
+        *ytrans = gv->y_trans;
+        *ztrans = gv->z_trans;
 
-	return (1);
+        return (1);
     }
 
     return (-1);
@@ -395,16 +395,16 @@ int GV_select_surf(int hv, int hs)
     geovect *gv;
 
     if (GV_surf_is_selected(hv, hs)) {
-	return (1);
+        return (1);
     }
 
     gv = gv_get_vect(hv);
 
     if (gv && GS_surf_exists(hs)) {
-	gv->drape_surf_id[gv->n_surfs] = hs;
-	gv->n_surfs += 1;
+        gv->drape_surf_id[gv->n_surfs] = hs;
+        gv->n_surfs += 1;
 
-	return (1);
+        return (1);
     }
 
     return (-1);
@@ -425,23 +425,23 @@ int GV_unselect_surf(int hv, int hs)
     int i, j;
 
     if (!GV_surf_is_selected(hv, hs)) {
-	return (1);
+        return (1);
     }
 
     gv = gv_get_vect(hv);
 
     if (gv) {
-	for (i = 0; i < gv->n_surfs; i++) {
-	    if (gv->drape_surf_id[i] == hs) {
-		for (j = i; j < gv->n_surfs - 1; j++) {
-		    gv->drape_surf_id[j] = gv->drape_surf_id[j + 1];
-		}
+        for (i = 0; i < gv->n_surfs; i++) {
+            if (gv->drape_surf_id[i] == hs) {
+                for (j = i; j < gv->n_surfs - 1; j++) {
+                    gv->drape_surf_id[j] = gv->drape_surf_id[j + 1];
+                }
 
-		gv->n_surfs -= 1;
+                gv->n_surfs -= 1;
 
-		return (1);
-	    }
-	}
+                return (1);
+            }
+        }
     }
 
     return (-1);
@@ -464,11 +464,11 @@ int GV_surf_is_selected(int hv, int hs)
     gv = gv_get_vect(hv);
 
     if (gv) {
-	for (i = 0; i < gv->n_surfs; i++) {
-	    if (hs == gv->drape_surf_id[i]) {
-		return (1);
-	    }
-	}
+        for (i = 0; i < gv->n_surfs; i++) {
+            if (hs == gv->drape_surf_id[i]) {
+                return (1);
+            }
+        }
     }
 
     return (0);
@@ -488,13 +488,13 @@ void GV_draw_vect(int vid)
     gv = gv_get_vect(vid);
 
     if (gv) {
-	for (i = 0; i < gv->n_surfs; i++) {
-	    gs = gs_get_surf(gv->drape_surf_id[i]);
+        for (i = 0; i < gv->n_surfs; i++) {
+            gs = gs_get_surf(gv->drape_surf_id[i]);
 
-	    if (gs) {
-		gvd_vect(gv, gs, 0);
-	    }
-	}
+            if (gs) {
+                gvd_vect(gv, gs, 0);
+            }
+        }
     }
 
     return;
@@ -508,7 +508,7 @@ void GV_alldraw_vect(void)
     int id;
 
     for (id = 0; id < Next_vect; id++) {
-	GV_draw_vect(Vect_ID[id]);
+        GV_draw_vect(Vect_ID[id]);
     }
 
     return;
@@ -530,13 +530,13 @@ void GV_draw_fastvect(int vid)
     gv = gv_get_vect(vid);
 
     if (gv) {
-	for (i = 0; i < gv->n_surfs; i++) {
-	    gs = gs_get_surf(gv->drape_surf_id[i]);
+        for (i = 0; i < gv->n_surfs; i++) {
+            gs = gs_get_surf(gv->drape_surf_id[i]);
 
-	    if (gs) {
-		gvd_vect(gv, gs, 1);
-	    }
-	}
+            if (gs) {
+                gvd_vect(gv, gs, 1);
+            }
+        }
     }
 
     return;
@@ -550,7 +550,7 @@ void GV_alldraw_fastvect(void)
     int id;
 
     for (id = 0; id < Next_vect; id++) {
-	GV_draw_fastvect(Vect_ID[id]);
+        GV_draw_fastvect(Vect_ID[id]);
     }
 
     return;
@@ -571,9 +571,9 @@ int GV_Set_ClientData(int id, void *clientd)
 
     gv = gv_get_vect(id);
     if (gv) {
-	gv->clientdata = clientd;
+        gv->clientdata = clientd;
 
-	return (1);
+        return (1);
     }
 
     return (-1);
@@ -594,7 +594,7 @@ void *GV_Get_ClientData(int id)
     gv = gv_get_vect(id);
 
     if (gv) {
-	return (gv->clientdata);
+        return (gv->clientdata);
     }
 
     return (NULL);

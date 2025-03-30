@@ -80,30 +80,42 @@ def main():
         return 0
 
     if driver == "sqlite":
-        # echo "Using special trick for SQLite"
-        # http://www.sqlite.org/faq.html#q13
-        colnames = []
-        coltypes = []
-        for f in gscript.db_describe(table)["cols"]:
-            if f[0] != column:
-                colnames.append(f[0])
-                coltypes.append("%s %s" % (f[0], f[1]))
+        sqlite3_version = gscript.read_command(
+            "db.select",
+            sql="SELECT sqlite_version();",
+            flags="c",
+            database=database,
+            driver=driver,
+        ).split(".")[0:2]
 
-        colnames = ", ".join(colnames)
-        coltypes = ", ".join(coltypes)
+        if [int(i) for i in sqlite3_version] >= [int(i) for i in "3.35".split(".")]:
+            sql = "ALTER TABLE %s DROP COLUMN %s" % (table, column)
+            if column == "cat":
+                sql = "DROP INDEX %s_%s; %s" % (table, column, sql)
+        else:
+            # for older sqlite3 versions, use old way to remove column
+            colnames = []
+            coltypes = []
+            for f in gscript.db_describe(table)["cols"]:
+                if f[0] != column:
+                    colnames.append(f[0])
+                    coltypes.append("%s %s" % (f[0], f[1]))
 
-        cmds = [
-            "BEGIN TRANSACTION",
-            "CREATE TEMPORARY TABLE ${table}_backup(${coldef})",
-            "INSERT INTO ${table}_backup SELECT ${colnames} FROM ${table}",
-            "DROP TABLE ${table}",
-            "CREATE TABLE ${table}(${coldef})",
-            "INSERT INTO ${table} SELECT ${colnames} FROM ${table}_backup",
-            "DROP TABLE ${table}_backup",
-            "COMMIT",
-        ]
-        tmpl = string.Template(";\n".join(cmds))
-        sql = tmpl.substitute(table=table, coldef=coltypes, colnames=colnames)
+            colnames = ", ".join(colnames)
+            coltypes = ", ".join(coltypes)
+
+            cmds = [
+                "BEGIN TRANSACTION",
+                "CREATE TEMPORARY TABLE ${table}_backup(${coldef})",
+                "INSERT INTO ${table}_backup SELECT ${colnames} FROM ${table}",
+                "DROP TABLE ${table}",
+                "CREATE TABLE ${table}(${coldef})",
+                "INSERT INTO ${table} SELECT ${colnames} FROM ${table}_backup",
+                "DROP TABLE ${table}_backup",
+                "COMMIT",
+            ]
+            tmpl = string.Template(";\n".join(cmds))
+            sql = tmpl.substitute(table=table, coldef=coltypes, colnames=colnames)
     else:
         sql = "ALTER TABLE %s DROP COLUMN %s" % (table, column)
 

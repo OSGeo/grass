@@ -30,7 +30,6 @@ This program is free software under the GNU General Public License
 
 import os
 import re
-import six
 
 import wx
 
@@ -453,7 +452,7 @@ def CreateNewVector(
     disableAdd=False,
     disableTable=False,
 ):
-    """Create new vector map layer
+    r"""Create new vector map layer
 
     :param cmd: (prog, \*\*kwargs)
     :param title: window title
@@ -699,7 +698,6 @@ class GroupDialog(wx.Dialog):
         style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
         **kwargs,
     ):
-
         wx.Dialog.__init__(
             self, parent=parent, id=wx.ID_ANY, title=title, style=style, **kwargs
         )
@@ -986,8 +984,7 @@ class GroupDialog(wx.Dialog):
         if not check:
             self.gLayerBox.DeselectAll()
         else:
-            for item in range(self.subgListBox.GetCount()):
-                self.gLayerBox.Select(item)
+            self.gLayerBox.SelectAll()
 
         event.Skip()
 
@@ -1123,7 +1120,7 @@ class GroupDialog(wx.Dialog):
         """Get layers"""
         if self.edit_subg:
             layers = []
-            for maps, sel in six.iteritems(self.subgmaps):
+            for maps, sel in self.subgmaps.items():
                 if sel:
                     layers.append(maps)
         else:
@@ -1137,7 +1134,7 @@ class GroupDialog(wx.Dialog):
         wx.CallAfter(self.GroupSelected)
 
     def GroupSelected(self):
-        """Group was selected, check if changes were apllied"""
+        """Group was selected, check if changes were applied"""
         self._checkChange()
         group, s = self.GetSelectedGroup()
         maps = list()
@@ -1168,13 +1165,13 @@ class GroupDialog(wx.Dialog):
         self.subgListBox.Set(maps)
 
         for i, m in enumerate(maps):
-            if m in six.iterkeys(self.subgmaps) and self.subgmaps[m]:
+            if m in self.subgmaps.keys() and self.subgmaps[m]:
                 self.subgListBox.Check(i)
 
         self._checkSubGSellAll()
 
     def SubGroupSelected(self):
-        """Subgroup was selected, check if changes were apllied"""
+        """Subgroup was selected, check if changes were applied"""
         self._checkChange()
 
         subgroup = self.subGroupSelect.GetValue().strip()
@@ -1603,7 +1600,6 @@ class MapLayersDialogBase(wx.Dialog):
 
         # check all items by default
         for item in range(self.layers.GetCount()):
-
             self.layers.Check(item, check=self._selectAll())
 
     def OnChangeParams(self, event):
@@ -1810,13 +1806,10 @@ class SetOpacityDialog(wx.Dialog):
         style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
         opacity=1,
     ):
-
         self.parent = parent  # GMFrame
         self.opacity = opacity  # current opacity
 
-        super(SetOpacityDialog, self).__init__(
-            parent, id=id, pos=pos, size=size, style=style, title=title
-        )
+        super().__init__(parent, id=id, pos=pos, size=size, style=style, title=title)
 
         self.applyOpacity = Signal("SetOpacityDialog.applyOpacity")
         panel = wx.Panel(parent=self, id=wx.ID_ANY)
@@ -1940,6 +1933,7 @@ class ImageSizeDialog(wx.Dialog):
         style=wx.DEFAULT_DIALOG_STYLE,
         **kwargs,
     ):
+        img_size = kwargs.pop("img_size", None)
         self.parent = parent
 
         wx.Dialog.__init__(self, parent, id=id, style=style, title=title, **kwargs)
@@ -1953,11 +1947,11 @@ class ImageSizeDialog(wx.Dialog):
         size = self.parent.GetWindow().GetClientSize()
         self.width = SpinCtrl(parent=self.panel, id=wx.ID_ANY, style=wx.SP_ARROW_KEYS)
         self.width.SetRange(20, 1e6)
-        self.width.SetValue(size.width)
+        self.width.SetValue(img_size[0] if img_size else size.width)
         wx.CallAfter(self.width.SetFocus)
         self.height = SpinCtrl(parent=self.panel, id=wx.ID_ANY, style=wx.SP_ARROW_KEYS)
         self.height.SetRange(20, 1e6)
-        self.height.SetValue(size.height)
+        self.height.SetValue(img_size[1] if img_size else size.height)
         self.template = wx.Choice(
             parent=self.panel,
             id=wx.ID_ANY,
@@ -2444,7 +2438,6 @@ class DefaultFontDialog(wx.Dialog):
         settings=UserSettings,
         type="font",
     ):
-
         self.settings = settings
         self.type = type
 

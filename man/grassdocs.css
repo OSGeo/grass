@@ -1,7 +1,7 @@
 /* GRASS GIS documentation site style sheet
  *
  * send improvements to GRASS Developers list
- * 
+ *
  *  (eg how to reach the same result on netscape, mozilla konqueror?)
  *
  * Fonts:
@@ -233,4 +233,93 @@ table.compact tr:nth-child(even) {
 /* soft strike through so that we can still see the text */
 s {
     text-decoration-color: rgba(0, 0, 0, 0.53);
+}
+
+@media screen and (max-width: 1023.99px) {
+    .toc {
+        display: none
+    }
+}
+
+@media screen and (min-width: 1023.99px) {
+    .toc-mobile-screen, .toc-mobile-screen:target, .hamburger {
+        display: none;
+    }
+}
+
+.hamburger, .close {
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 32px;
+    height: 32px;
+}
+
+.hamburger {
+    background: white;
+}
+
+.hamburger img, .close img {
+    width: 100%;
+    height: 100%;
+}
+
+.toc-mobile-screen {
+    position: absolute;
+    padding: 0;
+    margin: 0;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    list-style: none;
+    background: white;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: start;
+    align-items: center;
+    transform: translateY(-100%);
+    transition: transform 0.2s ease;
+}
+
+.toc-mobile-screen:target {
+    transform: translateY(0);
+}
+
+.toc-mobile-screen > li > a {
+    display: block;
+    font-family: arial,sans-serif;
+    color: rgb(25%, 60%, 25%);
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-decoration: none;
+    border-bottom: 1px solid rgb(25%, 60%, 25%);
+    padding-bottom: 0.5rem;
+    text-align: center;
+}
+
+.toc-mobile-screen li a {
+    text-decoration: none;
+    border-bottom: 1px solid rgb(25%, 60%, 25%);
+    margin-bottom: 1rem;
+}
+
+.toc-mobile-screen li {
+    padding-bottom: 1rem;
+}
+
+.toc-mobile-screen li  a:hover, li a:focus {
+    border-bottom: 2px solid rgb(25%, 60%, 25%);
+}
+
+.toc-mobile-screen > li:first-child {
+    padding-top: 5rem;
+}
+
+.toc-mobile-screen > li {
+    padding-top: 2rem;
 }

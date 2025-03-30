@@ -45,7 +45,6 @@ class PointListToolbar(BaseToolbar):
         self.Realize()
 
     def _toolbarData(self):
-
         icons = {
             "insertPoint": MetaIcon(
                 img="pointer", label=_("Insert points from Map Display")
@@ -120,7 +119,6 @@ class MainToolbar(BaseToolbar):
         self.Realize()
 
     def _toolbarData(self):
-
         icons = {
             "run": MetaIcon(img="execute", label=_("Execute analysis")),
             "undo": MetaIcon(img="undo", label=_("Go to previous analysis result")),
@@ -184,7 +182,6 @@ class MainToolbar(BaseToolbar):
         )
 
     def UpdateUndoRedo(self, curr_step, steps_num):
-
         id = vars(self)["showResult"]
         self.ToggleTool(id, True)
 
@@ -238,7 +235,6 @@ class AnalysisToolbar(BaseToolbar):
         self.Realize()
 
     def _toolbarData(self):
-
         icons = {}
 
         return self._getToolbarData(())

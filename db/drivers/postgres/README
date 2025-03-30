@@ -5,7 +5,7 @@ This driver was originally written by Alex Shevlakov using dbf driver
 DBF driver was not good starting point, so I (R. Blazek) have rewritten it again
 using ODBC, postgres driver and adding new code.
 
-Driver supports only some field types, other types are ignored and warning is printed 
+Driver supports only some field types, other types are ignored and warning is printed
 by G_warning().
 
 FIELD TYPES:
@@ -32,4 +32,3 @@ character, char, character varying, varchar,  text, bool, boolean
 
 DB_C_TYPE_DATETIME:
 date, time, timestamp
-

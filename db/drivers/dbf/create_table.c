@@ -3,7 +3,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_create_table(dbTable * table)
+int db__driver_create_table(dbTable *table)
 {
     dbString sql;
     int ret;
@@ -19,9 +19,9 @@ int db__driver_create_table(dbTable * table)
     ret = execute(db_get_string(&sql), NULL);
 
     if (ret == DB_FAILED) {
-	db_d_append_error(_("Unable to create table"));
-	db_d_report_error();
-	return DB_FAILED;
+        db_d_append_error(_("Unable to create table"));
+        db_d_report_error();
+        return DB_FAILED;
     }
 
     return DB_OK;

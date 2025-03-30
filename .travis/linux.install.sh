@@ -26,7 +26,6 @@ sudo apt-get install --no-install-recommends \
         libreadline-dev \
         libsqlite3-dev \
         libtiff-dev \
-        libwxgtk3.0-gtk3-dev \
         libxmu-dev \
         libzstd-dev \
         python3 \
@@ -36,7 +35,6 @@ sudo apt-get install --no-install-recommends \
         python3-pil \
         python3-pip \
         python3-ply \
-        python3-six \
         python-wxgtk3.0 \
         unixodbc-dev \
         libnetcdf-dev   \
@@ -53,4 +51,3 @@ sudo apt-get install --no-install-recommends \
         pdal \
         proj-bin \
         proj-data
-

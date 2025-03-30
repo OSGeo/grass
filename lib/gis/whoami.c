@@ -38,27 +38,28 @@ const char *G_whoami(void)
     static const char *name;
 
     if (G_is_initialized(&initialized))
-	return name;
+        return name;
 
 #ifdef __MINGW32__
     name = getenv("USERNAME");
 #endif
     if (!name || !*name)
-	name = getenv("LOGNAME");
+        name = getenv("LOGNAME");
 
     if (!name || !*name)
-	name = getenv("USER");
+        name = getenv("USER");
 
 #ifndef __MINGW32__
     if (!name || !*name) {
-	struct passwd *p = getpwuid(getuid());
-	if (p && p->pw_name && *p->pw_name)
-	    name = G_store(p->pw_name);
+        struct passwd *p = getpwuid(getuid());
+
+        if (p && p->pw_name && *p->pw_name)
+            name = G_store(p->pw_name);
     }
 #endif
 
     if (!name || !*name)
-	name = "anonymous";
+        name = "anonymous";
 
     G_initialize_done(&initialized);
 

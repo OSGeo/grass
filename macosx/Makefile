@@ -2,7 +2,7 @@ MODULE_TOPDIR = ..
 
 include $(MODULE_TOPDIR)/include/Make/Vars.make
 
-SUBDIRS = 
+SUBDIRS =
 ifeq ($(MACOSX_APP),1)
 SUBDIRS = app
 endif
@@ -85,7 +85,7 @@ install-macosxapp:
 	-$(MAKE_DIR_CMD) ${PREFIX_TARGET}/${MACOSX_APP_NAME}/Contents/Resources/English.lproj/MainMenu.nib
 	$(INSTALL) app/build_html_user_index.sh ${INST_DIR_TARGET}/etc
 	$(INSTALL) app/build_gui_user_menu.sh ${INST_DIR_TARGET}/etc
-	$(INSTALL) app/python_wrapper ${INST_DIR_TARGET}/bin/python 
+	$(INSTALL) app/python_wrapper ${INST_DIR_TARGET}/bin/python
 	$(INSTALL_DATA) app/AppIcon.icns ${PREFIX_TARGET}/${MACOSX_APP_NAME}/Contents/Resources
 	$(INSTALL_DATA) app/GRASSDocument_gxw.icns ${PREFIX_TARGET}/${MACOSX_APP_NAME}/Contents/Resources
 	$(INSTALL_DATA) app/${OBJDIR}/Info.plist ${PREFIX_TARGET}/${MACOSX_APP_NAME}/Contents

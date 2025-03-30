@@ -1,14 +1,13 @@
-
 /****************************************************************************
  *
  * MODULE:       g.gisenv
  * AUTHOR(S):    Michael Shapiro CERL (original contributor)
  *               Radim Blazek <radim.blazek gmail.com>,
- *               Glynn Clements <glynn gclements.plus.com>, 
+ *               Glynn Clements <glynn gclements.plus.com>,
  *               Hamish Bowman <hamish_b yahoo.com>,
  *               Markus Neteler <neteler itc.it>
  *               Martin Landa <landa.martin gmail.com>
- * PURPOSE:      
+ * PURPOSE:
  * COPYRIGHT:    (C) 2003-2015 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -45,8 +44,9 @@ int main(int argc, char *argv[])
     G_add_keyword(_("variables"));
     G_add_keyword(_("scripts"));
     module->label =
-	_("Outputs and modifies the user's current GRASS variable settings.");
-    module->description = _("Prints all defined GRASS variables if no option is given.");
+        _("Outputs and modifies the user's current GRASS variable settings.");
+    module->description =
+        _("Prints all defined GRASS variables if no option is given.");
 
     get_opt = G_define_option();
     get_opt->key = "get";
@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
     get_opt->required = NO;
     get_opt->guisection = _("Get");
     get_opt->multiple = YES;
-    
+
     set_opt = G_define_option();
     set_opt->key = "set";
     set_opt->type = TYPE_STRING;
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
     unset_opt->required = NO;
     unset_opt->guisection = _("Set");
     unset_opt->multiple = YES;
-    
+
     store_opt = G_define_option();
     store_opt->key = "store";
     store_opt->type = TYPE_STRING;
@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
     sep_opt = G_define_standard_option(G_OPT_F_SEP);
     sep_opt->label = _("Separator for multiple GRASS variables");
     sep_opt->answer = "newline";
-    
+
     flag_s = G_define_flag();
     flag_s->key = 's';
     flag_s->description = _("Use shell syntax (for \"eval\")");
@@ -99,38 +99,38 @@ int main(int argc, char *argv[])
 
     G_option_exclusive(flag_s, flag_n, NULL);
     G_option_exclusive(get_opt, set_opt, unset_opt, NULL);
-    
+
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     sep = G_option_to_separator(sep_opt);
-    
+
     if (!get_opt->answer && !set_opt->answer && !unset_opt->answer) {
-	/* Print or optionally set environment variables */
-	int quote;
-	
-	if (flag_s->answer)
-	    quote = TRUE;
-	else if (flag_n->answer)
-	    quote = FALSE;
-	else
-	    quote = !isatty(fileno(stdout));
-	
-	for (n = 0; (name = G_get_env_name(n)); n++) {
-	    value = (char *)G_getenv_nofatal(name);
-	    if (value) {
-		if (!quote)
-		    fprintf(stdout, "%s=%s\n", name, value);
-		else
-		    fprintf(stdout, "%s='%s';\n", name, value);
-	    }
-	}
-	exit(EXIT_SUCCESS);
+        /* Print or optionally set environment variables */
+        int quote;
+
+        if (flag_s->answer)
+            quote = TRUE;
+        else if (flag_n->answer)
+            quote = FALSE;
+        else
+            quote = !isatty(fileno(stdout));
+
+        for (n = 0; (name = G_get_env_name(n)); n++) {
+            value = (char *)G_getenv_nofatal(name);
+            if (value) {
+                if (!quote)
+                    fprintf(stdout, "%s=%s\n", name, value);
+                else
+                    fprintf(stdout, "%s='%s';\n", name, value);
+            }
+        }
+        exit(EXIT_SUCCESS);
     }
-    
+
     store = G_VAR_GISRC;
     if (store_opt->answer[0] == 'm')
-	store = G_VAR_MAPSET;
+        store = G_VAR_MAPSET;
 
     if (get_opt->answer) {
         n = 0;
@@ -144,23 +144,23 @@ int main(int argc, char *argv[])
         }
         if (strcmp(sep, "\n") != 0)
             fprintf(stdout, "\n");
-        
-	exit(EXIT_SUCCESS);
+
+        exit(EXIT_SUCCESS);
     }
 
     u_name = NULL;
     if (set_opt->answer) {
         u_name = parse_variable(set_opt->answer, &value);
         if (value) {
-	    G_setenv2(u_name, value, store);
-	}
-	else {
+            G_setenv2(u_name, value, store);
+        }
+        else {
             /* unset */
-	    G_getenv2(u_name, store); /* G_fatal_error() if not defined */
-	    G_unsetenv2(u_name, store);
-	}
+            G_getenv2(u_name, store); /* G_fatal_error() if not defined */
+            G_unsetenv2(u_name, store);
+        }
     }
-    
+
     if (unset_opt->answer) {
         n = 0;
         while (unset_opt->answers[n]) {
@@ -168,15 +168,17 @@ int main(int argc, char *argv[])
             if (G_strcasecmp(u_name, "GISDBASE") == 0 ||
                 G_strcasecmp(u_name, "LOCATION_NAME") == 0 ||
                 G_strcasecmp(u_name, "MAPSET") == 0) {
-              G_warning(_("Variable <%s> is mandatory. No operation performed."),
-                        u_name);
-              n++;
-              continue;
+                G_warning(
+                    _("Variable <%s> is mandatory. No operation performed."),
+                    u_name);
+                n++;
+                continue;
             }
             if (value)
-                G_warning(_("Value '%s' ignored when unsetting the GRASS variable"),
-                          value);
-        
+                G_warning(
+                    _("Value '%s' ignored when unsetting the GRASS variable"),
+                    value);
+
             G_getenv2(u_name, store); /* G_fatal_error() if not defined */
             G_unsetenv2(u_name, store);
             n++;
@@ -197,7 +199,7 @@ char *parse_variable(const char *v_name, char **value)
     char *u_name; /* uppercase variable name */
     char *name, *ptr;
 
-    name  = G_store(v_name);
+    name = G_store(v_name);
     if (value)
         *value = NULL;
 

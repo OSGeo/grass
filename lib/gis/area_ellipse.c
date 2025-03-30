@@ -30,14 +30,14 @@ static struct state *st = &state;
 /*!
  * \brief Begin area calculations for ellipsoid.
  *
- * Initializes raster area calculations for an ellipsoid, where <i>a</i> 
- * is the semi-major axis of the ellipse (in meters), <i>e2</i> is the 
- * ellipsoid eccentricity squared, and <i>s</i> is a scale factor to 
- * allow for calculations of part of the zone (<i>s</i>=1.0 is full 
- * zone, <i>s</i>=0.5 is half the zone, and <i>s</i>=360/ew_res is for a 
+ * Initializes raster area calculations for an ellipsoid, where <i>a</i>
+ * is the semi-major axis of the ellipse (in meters), <i>e2</i> is the
+ * ellipsoid eccentricity squared, and <i>s</i> is a scale factor to
+ * allow for calculations of part of the zone (<i>s</i>=1.0 is full
+ * zone, <i>s</i>=0.5 is half the zone, and <i>s</i>=360/ew_res is for a
  * single grid cell).
- * 
- * <b>Note:</b> <i>e2</i> must be positive. A negative value makes no 
+ *
+ * <b>Note:</b> <i>e2</i> must be positive. A negative value makes no
  * sense, and zero implies a sphere.
  *
  * \param a semi-major axis
@@ -53,7 +53,7 @@ void G_begin_zone_area_on_ellipsoid(double a, double e2, double s)
 /*!
  * \brief Calculate integral for area between two latitudes.
  *
- * This routine is part of the integral for the area between two 
+ * This routine is part of the integral for the area between two
  * latitudes.
  *
  * \param lat latitude
@@ -73,10 +73,10 @@ double G_darea0_on_ellipsoid(double lat)
  * \brief Calculates area between latitudes.
  *
  * This routine shows how to calculate area between two lats, but
- * isn't efficient for row by row since G_darea0_on_ellipsoid() 
- * will be called twice for the same lat, once as a <i>south</i> then 
+ * isn't efficient for row by row since G_darea0_on_ellipsoid()
+ * will be called twice for the same lat, once as a <i>south</i> then
  * again as a <i>north</i>.
- * 
+ *
  * Returns the area between latitudes <i>north</i> and <i>south</i>
  * scaled by the factor <i>s</i> passed to
  * G_begin_zone_area_on_ellipsoid().

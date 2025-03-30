@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_client/c_list_idx.c
- * 
+ *
  * \brief DBMI Library (client) - list indexes
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -16,18 +16,18 @@
 #include "macros.h"
 
 /*!
-  \brief List indexes
+   \brief List indexes
 
-  \param driver db driver
-  \param table_name table name
-  \param[out] list list of db indexes
-  \param[out] dbDriver number of items in the list
+   \param driver db driver
+   \param table_name table name
+   \param[out] list list of db indexes
+   \param[out] dbDriver number of items in the list
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
-int db_list_indexes(dbDriver * driver, dbString * table_name, dbIndex ** list,
-		    int *count)
+int db_list_indexes(dbDriver *driver, dbString *table_name, dbIndex **list,
+                    int *count)
 {
     int ret_code;
 
@@ -42,7 +42,7 @@ int db_list_indexes(dbDriver * driver, dbString * table_name, dbIndex ** list,
     DB_RECV_RETURN_CODE(&ret_code);
 
     if (ret_code != DB_OK)
-	return ret_code;	/* ret_code SHOULD == DB_FAILED */
+        return ret_code; /* ret_code SHOULD == DB_FAILED */
 
     /* results */
     DB_RECV_INDEX_ARRAY(list, count);

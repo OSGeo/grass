@@ -7,8 +7,7 @@
 #include <grass/glocale.h>
 #include <grass/vector.h>
 
-struct dxf_file
-{
+struct dxf_file {
     char *name;
     FILE *fp;
     /* for G_percent() */
@@ -18,8 +17,8 @@ struct dxf_file
 };
 
 #define UNIDENTIFIED_LAYER "UNIDENTIFIED"
-#define ARR_INCR 256
-#define DXF_BUF_SIZE 256
+#define ARR_INCR           256
+#define DXF_BUF_SIZE       256
 
 #ifdef _MAIN_C_
 #define GLOBAL

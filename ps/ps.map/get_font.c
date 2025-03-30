@@ -16,15 +16,15 @@ int get_font(char *data)
      */
     dp = data;
     if (*dp >= 'a' && *dp <= 'z')
-	*dp = *dp - 'a' + 'A';
+        *dp = *dp - 'a' + 'A';
     while (*dp) {
-	if (*dp == ' ') {
-	    *dp++ = '-';
-	    if (*dp >= 'a' && *dp <= 'z')
-		*dp = *dp - 'a' + 'A';
-	}
-	else
-	    dp++;
+        if (*dp == ' ') {
+            *dp++ = '-';
+            if (*dp >= 'a' && *dp <= 'z')
+                *dp = *dp - 'a' + 'A';
+        }
+        else
+            dp++;
     }
 
     return 0;

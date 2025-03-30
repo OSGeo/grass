@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.surf.random
@@ -23,7 +22,6 @@
 #include <grass/raster.h>
 #include "local_proto.h"
 
-
 /** Return TRUE if text contains only an integer number
  *
  * @param buffer text with the number or other content
@@ -46,7 +44,7 @@ int is_int_only(const char *buffer)
 
 /** Issue a fatal error if the option value is not integer
  *
- * This catches the cases when option is readble as integer,
+ * This catches the cases when option is readable as integer,
  * but there would be additional characters left.
  * For example, when a number with a decimal point is read by C
  * functions, the decimal part is simply truncated and an integer is
@@ -57,7 +55,7 @@ void option_must_be_int(struct Option *option)
 {
     if (!is_int_only(option->answer))
         G_fatal_error(_("Option %s must be an integer, <%s> provided"),
-            option->key, option->answer);
+                      option->key, option->answer);
 }
 
 int main(int argc, char *argv[])
@@ -82,8 +80,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("surface"));
     G_add_keyword(_("random"));
-    module->description =
-        _("Produces a raster surface map of uniform random deviates with defined range.");
+    module->description = _("Produces a raster surface map of uniform random "
+                            "deviates with defined range.");
 
     out = G_define_standard_option(G_OPT_R_OUTPUT);
 
@@ -104,7 +102,7 @@ int main(int argc, char *argv[])
     i_flag->description = _("Create an integer raster map");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     min_value = atof(min->answer);
     max_value = atof(max->answer);
@@ -120,10 +118,10 @@ int main(int argc, char *argv[])
      * min == max as a possible extreme case. */
     if (min_value > max_value) {
         /* showing the not parsed numbers to show exactly what user
-         * provided and to avoid any issues with formating %f vs %d */
+         * provided and to avoid any issues with formatting %f vs %d */
         G_fatal_error(_("Minimum %s should be higher than maximum %s,"
                         " but %s > %s"),
-                        min->key, max->key, min->answer, max->answer);
+                      min->key, max->key, min->answer, max->answer);
     }
 
     randsurf(out->answer, min_value, max_value, i_flag->answer);
@@ -131,14 +129,12 @@ int main(int argc, char *argv[])
     /* Using user-provided strings instead of attempting to guess the
      * right formatting. */
     if (i_flag->answer) {
-        sprintf(title,
-            _("Uniform random integer values in range [%s, %s]"),
-            min->answer, max->answer);
+        sprintf(title, _("Uniform random integer values in range [%s, %s]"),
+                min->answer, max->answer);
     }
     else {
-        sprintf(title,
-            _("Uniform random float values in range [%s, %s)"),
-            min->answer, max->answer);
+        sprintf(title, _("Uniform random float values in range [%s, %s)"),
+                min->answer, max->answer);
     }
     Rast_put_cell_title(out->answer, title);
     Rast_short_history(out->answer, "raster", &history);

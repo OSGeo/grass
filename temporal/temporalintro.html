@@ -161,6 +161,24 @@ those for space-time raster datasets (check with <code>t.vect.list --help</code>
 </ul>
 
 <p>
+Similar to the <em>where</em> option, selected modules like
+<a href="t.rast.univar.html">t.rast.univar</a> support a
+<em>region_relation</em> option to limit computations to maps of
+the space time raster dataset that have a given spatial relation to the
+current computational region. Supported spatial relations are:
+<ul>
+ <li>"overlaps": process only maps that spatially overlap ("intersect")
+with the current computational region</li>
+ <li>"is_contained": process only maps that are fully within the current
+computational region</li>
+ <li>"contains": process only maps that contain (fully cover) the current
+computational region</li>
+</ul>
+Space time raster datasets may contain raster maps with varying spatial
+extent like for example series of scenes of satellite images. For such
+cases the <em>region_relation</em> option can be useful.
+
+<p>
 Moreover, there is <a href="v.what.strds.html">v.what.strds</a>, that
 uploads space-time raster dataset values at positions of vector points,
 to the attribute table of the vector map.

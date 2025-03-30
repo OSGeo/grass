@@ -3,12 +3,11 @@
 #include <grass/glocale.h>
 #include "defs.h"
 
-extern func interpolate;	/* interpolation routine */
+extern func interpolate; /* interpolation routine */
 
 extern int seg_mb_img;
 
-struct Image_Group
-{
+struct Image_Group {
     char name[GNAME_MAX];
     struct Ref ref;
     struct Control_Points control_points;

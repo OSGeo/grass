@@ -10,12 +10,6 @@ EXTRA_CFLAGS = $(VECT_CFLAGS)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
-$(OBJDIR)/main.o : EXTRA_CFLAGS += $(PDALCPPFLAGS)
-
-$(OBJDIR)/info.o : EXTRA_CFLAGS += $(PDALCPPFLAGS)
-
-$(OBJDIR)/grasslidarfilter.o : EXTRA_CFLAGS += $(PDALCPPFLAGS)
-
 LINK = $(CXX)
 
 ifneq ($(strip $(CXX)),)

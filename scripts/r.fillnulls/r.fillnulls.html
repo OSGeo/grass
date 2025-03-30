@@ -13,7 +13,7 @@ linear spline interpolation with Tykhonov regularization.
 Each area boundary buffer is set to three times the map resolution to get nominally
 three points around the edge. This way the algorithm interpolates into the hole with
 a trained slope and curvature at the edges, in order to avoid that such a flat plane
-is generated in a hole. The width of edge area can be adjusted by 
+is generated in a hole. The width of edge area can be adjusted by
 changing the edge parameter.
 <p>During the interpolation following warning may occur when using the RST method:<p>
 <tt>
@@ -27,7 +27,7 @@ ignore the warning. The interpolation will be continued. However, the user
 may pay attention to below notes.
 <p>
 If interpolation fails, temporary raster and vector maps are left in place to allow
-unfilled map hole (NULL area) identification and manual repair.
+unfilled map holes (NULL areas) to be identified and manually repaired.
 
 <p>
 When using the default RST method, the algorithm is based
@@ -40,7 +40,7 @@ NULL data area(s) of the input map and saved into a new raster map.
 
 Otherwise, either the linear or cubic spline interpolation with
 Tykhonov regularization can be selected (based on
-<em><a href="r.resamp.bspline.html">r.resamp.bspline</a></em>). 
+<em><a href="r.resamp.bspline.html">r.resamp.bspline</a></em>).
 
 <h2>WARNING</h2>
 
@@ -124,11 +124,12 @@ II. Application to Terrain Modeling and Surface Geometry Analysis,
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="r.fill.dir.html">r.fill.dir</a>, 
+<a href="r.fill.dir.html">r.fill.dir</a>,
 <a href="r.mapcalc.html">r.mapcalc</a>,
 <a href="r.resamp.bspline.html">r.resamp.bspline</a>,
 <a href="v.surf.bspline.html">v.surf.bspline</a>,
-<a href="v.surf.rst.html">v.surf.rst</a>
+<a href="v.surf.rst.html">v.surf.rst</a>,
+<a href="v.fill.holes.html">v.fill.holes</a>
 </em>
 
 <h2>AUTHORS</h2>

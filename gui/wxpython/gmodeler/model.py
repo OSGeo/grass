@@ -8,6 +8,8 @@ Classes:
  - model::ModelObject
  - model::ModelAction
  - model::ModelData
+ - model::ModelDataSingle
+ - model::ModelDataSeries
  - model::ModelRelation
  - model::ModelItem
  - model::ModelLoop
@@ -15,16 +17,17 @@ Classes:
  - model::ModelComment
  - model::ProcessModelFile
  - model::WriteModelFile
+ - model::WritePyWPSFile
  - model::WritePythonFile
  - model::ModelParamDialog
 
-(C) 2010-2018 by the GRASS Development Team
+(C) 2010-2024 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Martin Landa <landa.martin gmail.com>
-@author Python parameterization Ondrej Pesek <pesej.ondrek gmail.com>
+@PyWPS, Python parameterization Ondrej Pesek <pesej.ondrek gmail.com>
 """
 
 import os
@@ -33,16 +36,12 @@ import copy
 import re
 import mimetypes
 import time
-import six
 
-try:
-    import xml.etree.ElementTree as etree
-except ImportError:
-    import elementtree.ElementTree as etree  # Python <= 2.4
-
+import xml.etree.ElementTree as etree
 import xml.sax.saxutils as saxutils
 
 import wx
+from abc import ABC, abstractmethod
 from wx.lib import ogl
 
 from core import globalvar
@@ -58,13 +57,13 @@ from core.gcmd import (
 from core.settings import UserSettings
 from gui_core.forms import GUI, CmdPanel
 from gui_core.widgets import GNotebook
-from gui_core.wrap import Button
+from gui_core.wrap import Button, IsDark
 from gmodeler.giface import GraphicalModelerGrassInterface
 
 from grass.script import task as gtask
 
 
-class Model(object):
+class Model:
     """Class representing the model"""
 
     def __init__(self, canvas=None):
@@ -129,7 +128,7 @@ class Model(object):
 
     def ReorderItems(self, idxList):
         items = list()
-        for oldIdx, newIdx in six.iteritems(idxList):
+        for oldIdx, newIdx in idxList.items():
             item = self.items.pop(oldIdx)
             items.append(item)
             self.items.insert(newIdx, item)
@@ -358,7 +357,10 @@ class Model(object):
 
         # load data & relations
         for data in gxmXml.data:
-            dataItem = ModelData(
+            dataClass = (
+                ModelDataSeries if data["prompt"].startswith("st") else ModelDataSingle
+            )
+            dataItem = dataClass(
                 parent=self,
                 x=data["pos"][0],
                 y=data["pos"][1],
@@ -518,7 +520,7 @@ class Model(object):
         return errList
 
     def _substituteFile(self, item, params=None, checkOnly=False):
-        """Subsitute variables in command file inputs
+        """Substitute variables in command file inputs
 
         :param bool checkOnly: tuble - True to check variable, don't touch files
 
@@ -676,7 +678,7 @@ class Model(object):
                 return
 
             err = list()
-            for key, item in six.iteritems(params):
+            for key, item in params.items():
                 for p in item["params"]:
                     if p.get("value", "") == "":
                         err.append((key, p.get("name", ""), p.get("description", "")))
@@ -726,7 +728,7 @@ class Model(object):
                 # split condition
                 # TODO: this part needs some better solution
                 condVar, condText = map(
-                    lambda x: x.strip(), re.split("\s* in \s*", cond)
+                    lambda x: x.strip(), re.split(r"\s* in \s*", cond)
                 )
                 pattern = re.compile("%" + condVar)
                 # for vars()[condVar] in eval(condText): ?
@@ -760,7 +762,7 @@ class Model(object):
 
         # discard values
         if params:
-            for item in six.itervalues(params):
+            for item in params.values():
                 for p in item["params"]:
                     p["value"] = ""
 
@@ -826,7 +828,7 @@ class Model(object):
         if self.variables:
             params = list()
             result["variables"] = {"flags": list(), "params": params, "idx": idx}
-            for name, values in six.iteritems(self.variables):
+            for name, values in self.variables.items():
                 gtype = values.get("type", "string")
                 if gtype in ("raster", "vector", "mapset", "file", "region", "dir"):
                     gisprompt = True
@@ -892,7 +894,7 @@ class Model(object):
         return result
 
 
-class ModelObject(object):
+class ModelObject:
     def __init__(self, id=-1, label=""):
         self.id = id  # internal id, should be not changed
         self.label = ""
@@ -1352,7 +1354,7 @@ class ModelAction(ModelObject, ogl.DividedShape):
         ogl.RectangleShape.OnDraw(self, dc)
 
 
-class ModelData(ModelObject, ogl.EllipseShape):
+class ModelData(ModelObject):
     def __init__(self, parent, x, y, value="", prompt="", width=None, height=None):
         """Data item class
 
@@ -1380,15 +1382,20 @@ class ModelData(ModelObject, ogl.EllipseShape):
                 group="modeler", key="data", subkey=("size", "height")
             )
 
-        if self.parent.GetCanvas():
-            ogl.EllipseShape.__init__(self, width, height)
+        self._defineShape(width, height, x, y)
 
-            self.SetCanvas(self.parent)
-            self.SetX(x)
-            self.SetY(y)
-            self._setPen()
-            self._setBrush()
-            self.SetLabel()
+        self._setPen()
+        self._setBrush()
+        self.SetLabel()
+
+    @abstractmethod
+    def _defineShape(self, width, height, x, y):
+        """Define data item
+
+        :param width, height: dimension of the shape
+        :param x, y: position of the shape
+        """
+        pass
 
     def IsIntermediate(self):
         """Checks if data item is intermediate"""
@@ -1409,7 +1416,7 @@ class ModelData(ModelObject, ogl.EllipseShape):
     def OnDraw(self, dc):
         self._setPen()
 
-        ogl.EllipseShape.OnDraw(self, dc)
+        super().OnDraw(dc)
 
     def GetLog(self, string=True):
         """Get logging info"""
@@ -1470,17 +1477,17 @@ class ModelData(ModelObject, ogl.EllipseShape):
         """Get properties dialog"""
         self.propWin = win
 
-    def _setBrush(self):
-        """Set brush"""
-        if self.prompt == "raster":
+    def _getBrush(self):
+        """Get brush"""
+        if self.prompt in ("raster", "strds"):
             color = UserSettings.Get(
                 group="modeler", key="data", subkey=("color", "raster")
             )
-        elif self.prompt == "raster_3d":
+        elif self.prompt in ("raster_3d", "str3ds"):
             color = UserSettings.Get(
                 group="modeler", key="data", subkey=("color", "raster3d")
             )
-        elif self.prompt == "vector":
+        elif self.prompt in ("vector", "stvds"):
             color = UserSettings.Get(
                 group="modeler", key="data", subkey=("color", "vector")
             )
@@ -1493,10 +1500,15 @@ class ModelData(ModelObject, ogl.EllipseShape):
                 group="modeler", key="action", subkey=("color", "invalid")
             )
         wxColor = wx.Colour(color[0], color[1], color[2])
-        self.SetBrush(wx.Brush(wxColor))
 
-    def _setPen(self):
-        """Set pen"""
+        return wx.Brush(wxColor)
+
+    def _setBrush(self):
+        """Set brush"""
+        self.SetBrush(self._getBrush())
+
+    def _getPen(self):
+        """Get pen"""
         isParameterized = False
         for rel in self.GetRelations("from"):
             if rel.GetTo().IsParameterized():
@@ -1525,8 +1537,11 @@ class ModelData(ModelObject, ogl.EllipseShape):
         else:
             style = wx.SOLID
 
-        pen = wx.Pen(wx.BLACK, width, style)
-        self.SetPen(pen)
+        return wx.Pen(wx.BLACK, width, style)
+
+    def _setPen(self):
+        """Get pen"""
+        self.SetPen(self._getPen())
 
     def SetLabel(self):
         """Update text"""
@@ -1559,6 +1574,71 @@ class ModelData(ModelObject, ogl.EllipseShape):
         cmd.append("map=" + self.value)
 
         return cmd
+
+
+class ModelDataSingle(ModelData, ogl.EllipseShape):
+    def _defineShape(self, width, height, x, y):
+        """Define single data item (raster, raster_3d, vector)
+
+        :param width, height: dimension of the shape
+        :param x, y: position of the shape
+        """
+        ogl.EllipseShape.__init__(self, width, height)
+        if self.parent.GetCanvas():
+            self.SetCanvas(self.parent.GetCanvas())
+
+        self.SetX(x)
+        self.SetY(y)
+
+
+class ModelDataSeries(ModelData, ogl.CompositeShape):
+    def _defineShape(self, width, height, x, y):
+        """Define single data item (raster, raster_3d, vector)
+
+        :param width, height: dimension of the shape
+        :param x, y: position of the shape
+        """
+        ogl.CompositeShape.__init__(self)
+        if self.parent.GetCanvas():
+            self.SetCanvas(self.parent.GetCanvas())
+
+        self.constraining_shape = ogl.EllipseShape(width, height)
+        self.constrained_shape = ogl.EllipseShape(width - 20, height)
+        self.AddChild(self.constraining_shape)
+        self.AddChild(self.constrained_shape)
+
+        constraint = ogl.Constraint(
+            ogl.CONSTRAINT_CENTRED_BOTH,
+            self.constraining_shape,
+            [self.constrained_shape],
+        )
+        self.AddConstraint(constraint)
+        self.Recompute()
+
+        self.constraining_shape.SetDraggable(False)
+        self.constrained_shape.SetDraggable(False)
+        self.constrained_shape.SetSensitivityFilter(ogl.OP_CLICK_LEFT)
+
+        canvas = self.parent.GetCanvas()
+        if canvas:
+            dc = wx.ClientDC(canvas)
+            canvas.PrepareDC(dc)
+            self.Move(dc, x, y)
+
+        self.SetX(x)
+        self.SetY(y)
+
+    def _setBrush(self):
+        """Set brush"""
+        brush = self._getBrush()
+        self.constraining_shape.SetBrush(brush)
+        self.constrained_shape.SetBrush(brush)
+
+    def _setPen(self):
+        """Set brush"""
+        brush = self._getPen()
+        self.constraining_shape.SetPen(brush)
+        self.constrained_shape.SetPen(brush)
 
 
 class ModelRelation(ogl.LineShape):
@@ -1620,14 +1700,15 @@ class ModelRelation(ogl.LineShape):
         """Get list of control points"""
         return self._points
 
-    def _setPen(self):
+    def _setPen(self, bg_white=False):
         """Set pen"""
-        pen = wx.Pen(wx.BLACK, 1, wx.SOLID)
-        self.SetPen(pen)
+        self.SetPen(
+            wx.Pen(wx.WHITE if IsDark() and not bg_white else wx.BLACK, 1, wx.SOLID)
+        )
 
     def OnDraw(self, dc):
         """Draw relation"""
-        self._setPen()
+        self._setPen(dc.GetBackground() == wx.WHITE_BRUSH)
         ogl.LineShape.OnDraw(self, dc)
 
     def SetName(self, param):
@@ -2315,7 +2396,7 @@ class WriteModelFile:
             return
         self.fd.write("%s<variables>\n" % (" " * self.indent))
         self.indent += 4
-        for name, values in six.iteritems(self.variables):
+        for name, values in self.variables.items():
             self.fd.write(
                 '%s<variable name="%s" type="%s">\n'
                 % (" " * self.indent, name, values["type"])
@@ -2371,7 +2452,7 @@ class WriteModelFile:
         self.indent += 4
         if not action.IsEnabled():
             self.fd.write("%s<disabled />\n" % (" " * self.indent))
-        for key, val in six.iteritems(action.GetParams()):
+        for key, val in action.GetParams().items():
             if key == "flags":
                 for f in val:
                     if f.get("value", False) or f.get("parameterized", False):
@@ -2546,15 +2627,545 @@ class WriteModelFile:
         )
 
 
-class WritePythonFile:
+class WriteScriptFile(ABC):
+    """Abstract class for scripts based on the model."""
+
+    @abstractmethod
     def __init__(self, fd, model):
+        """Constructor to be overridden."""
+        self.fd = None
+        self.model = None
+        self.indent = None
+
+        # call method_write...()
+
+    def _writeItem(self, item, ignoreBlock=True, variables={}):
+        """Write model object to Python file"""
+        if isinstance(item, ModelAction):
+            if ignoreBlock and item.GetBlockId():
+                # ignore items in loops of conditions
+                return
+            self._writePythonAction(
+                item, variables, self.model.GetIntermediateData()[:3]
+            )
+        elif isinstance(item, ModelLoop) or isinstance(item, ModelCondition):
+            # substitute condition
+            cond = item.GetLabel()
+            for variable in self.model.GetVariables():
+                pattern = re.compile("%" + variable)
+                if pattern.search(cond):
+                    value = variables[variable].get("value", "")
+                    if variables[variable].get("type", "string") == "string":
+                        value = '"' + value + '"'
+                    cond = pattern.sub(value, cond)
+            if isinstance(item, ModelLoop):
+                condVar, condText = map(
+                    lambda x: x.strip(), re.split(r"\s* in \s*", cond)
+                )
+                cond = "%sfor %s in " % (" " * self.indent, condVar)
+                if condText[0] == "`" and condText[-1] == "`":
+                    task = GUI(show=None).ParseCommand(cmd=utils.split(condText[1:-1]))
+                    cond += "grass.read_command("
+                    cond += (
+                        self._getPythonActionCmd(task, len(cond), variables=[condVar])
+                        + ".splitlines()"
+                    )
+                else:
+                    cond += condText
+                self.fd.write("%s:\n" % cond)
+                self.indent += 4
+                variablesLoop = variables.copy()
+                variablesLoop[condVar] = None
+                for action in item.GetItems(self.model.GetItems(objType=ModelAction)):
+                    self._writeItem(action, ignoreBlock=False, variables=variablesLoop)
+                self.indent -= 4
+            if isinstance(item, ModelCondition):
+                self.fd.write("%sif %s:\n" % (" " * self.indent, cond))
+                self.indent += 4
+                condItems = item.GetItems()
+                for action in condItems["if"]:
+                    self._writeItem(action, ignoreBlock=False)
+                if condItems["else"]:
+                    self.indent -= 4
+                    self.fd.write("%selse:\n" % (" " * self.indent))
+                    self.indent += 4
+                    for action in condItems["else"]:
+                        self._writeItem(action, ignoreBlock=False)
+                self.indent += 4
+        self.fd.write("\n")
+        if isinstance(item, ModelComment):
+            self._writePythonComment(item)
+
+    def _writePythonComment(self, item):
+        """Write model comment to Python file"""
+        for line in item.GetLabel().splitlines():
+            self.fd.write("#" + line + "\n")
+
+    @staticmethod
+    def _getParamName(parameter_name, item):
+        return "{module_name}{module_id}_{param_name}".format(
+            module_name=re.sub("[^a-zA-Z]+", "", item.GetLabel()),
+            module_id=item.GetId(),
+            param_name=parameter_name,
+        )
+
+    def _getItemFlags(self, item, opts, variables):
+        """Get item flags that are needed to be parsed in the script.
+
+        :param item: module
+        :param opts: options of the task
+        :param variables: variables of the item
+        :return: string with flag names set to True, string with
+            comma-separated flags that are parameterized, list of
+            parameterized boolean parameters like verbose or overwrite (needed
+            as they are also tagged as flags)
+        """
+        item_params = []
+        item_true_flags = ""
+        item_parameterized_flags = []
+
+        parameterized_flags = [v["name"] for v in variables["flags"]]
+
+        for f in opts["flags"]:
+            if f.get("name") in parameterized_flags and len(f.get("name")) == 1:
+                item_parameterized_flags.append(
+                    '"{}"'.format(self._getParamName(f.get("name"), item))
+                )
+            if f.get("value", False):
+                name = f.get("name", "")
+                if len(name) > 1:
+                    item_params.append("%s=True" % name)
+                else:
+                    item_true_flags += name
+
+        item_parameterized_flags = ", ".join(item_parameterized_flags)
+
+        return item_true_flags, item_parameterized_flags, item_params
+
+
+class WritePyWPSFile(WriteScriptFile):
+    """Class for exporting model to PyWPS script."""
+
+    def __init__(self, fd, model, grassAPI="script"):
+        """Class for exporting model to PyWPS script."""
+        self.fd = fd
+        self.model = model
+        self.indent = 8
+        self.grassAPI = grassAPI
+
+        self._writePyWPS()
+
+    def _writePyWPS(self):
+        """Write PyWPS model to file"""
+        properties = self.model.GetProperties()
+
+        self.fd.write(
+            r"""#!/usr/bin/env python3
+
+import sys
+import os
+import atexit
+import tempfile
+"""
+        )
+        if self.grassAPI == "script":
+            self.fd.write("from grass.script import run_command\n")
+        else:
+            self.fd.write("from grass.pygrass.modules import Module\n")
+
+        self.fd.write(
+            r"""from pywps import Process, LiteralInput, ComplexInput, ComplexOutput, Format
+
+
+class Model(Process):
+
+    def __init__(self):
+        inputs = list()
+        outputs = list()
+
+"""
+        )
+
+        for item in self.model.GetItems():
+            self._write_input_outputs(item, self.model.GetIntermediateData()[:3])
+
+        self.fd.write(
+            r"""        super(Model, self).__init__(
+            self._handler,
+            identifier="{identifier}",
+            title="{title}",
+            inputs=inputs,
+            outputs=outputs,
+            # here you could also specify the GRASS location, for example:
+            # grass_location="EPSG:5514",
+            abstract="{abstract}",
+            version="1.0",
+            store_supported=True,
+            status_supported=True)
+""".format(
+                identifier=properties["name"],
+                title=properties["name"],
+                abstract='""'.join(properties["description"].splitlines()),
+            )
+        )
+
+        self.fd.write(
+            """
+    @staticmethod
+    def _handler(request, response):"""
+        )
+
+        self._writeHandler()
+
+        for item in self.model.GetItems(ModelAction):
+            if item.GetParameterizedParams()["flags"]:
+                self.fd.write(
+                    r"""
+
+def getParameterizedFlags(paramFlags, itemFlags):
+    fl = ""
+    for i in [key for key, value in paramFlags.items() if value[0].data == "True"]:
+        if i in itemFlags:
+            fl += i[-1]
+
+    return fl
+"""
+                )
+                break
+
+        self.fd.write(
+            """
+
+if __name__ == "__main__":
+    from pywps.app.Service import Service
+
+    processes = [Model()]
+    application = Service(processes)
+"""
+        )
+
+    def _write_input_outputs(self, item, intermediates):
+        parameterized_params = item.GetParameterizedParams()
+
+        for flag in parameterized_params["flags"]:
+            if flag["label"]:
+                desc = flag["label"]
+            else:
+                desc = flag["description"]
+
+            if flag["value"]:
+                value = '\n{}default="{}"'.format(
+                    " " * (self.indent + 4), flag["value"]
+                )
+            else:
+                value = '\n{}default="False"'.format(" " * (self.indent + 4))
+
+            io_data = "inputs"
+            object_type = "LiteralInput"
+            format_spec = 'data_type="string",'
+
+            self._write_input_output_object(
+                io_data,
+                object_type,
+                flag["name"],
+                item,
+                desc,
+                format_spec,
+                value,
+            )
+
+            self.fd.write("\n")
+
+        for param in parameterized_params["params"]:
+            desc = self._getParamDesc(param)
+            value = self._getParamValue(param)
+
+            if "input" in param["name"]:
+                io_data = "inputs"
+                object_type = "ComplexInput"
+                format_spec = self._getSupportedFormats(param["prompt"])
+            else:
+                io_data = "inputs"
+                object_type = "LiteralInput"
+                format_spec = 'data_type="{}"'.format(param["type"])
+
+            self._write_input_output_object(
+                io_data,
+                object_type,
+                param["name"],
+                item,
+                desc,
+                format_spec,
+                value,
+            )
+
+            self.fd.write("\n")
+
+        # write ComplexOutputs
+        for param in item.GetParams()["params"]:
+            desc = self._getParamDesc(param)
+            value = param["value"]
+            age = param["age"]
+
+            # ComplexOutput if: outputting a new non-intermediate layer and
+            # either not empty or parameterized
+            if (
+                age == "new"
+                and not any(value in i for i in intermediates)
+                and (value != "" or param in item.GetParameterizedParams()["params"])
+            ):
+                io_data = "outputs"
+                object_type = "ComplexOutput"
+                format_spec = self._getSupportedFormats(param["prompt"])
+
+                self._write_input_output_object(
+                    io_data, object_type, param["name"], item, desc, format_spec, ""
+                )
+
+                self.fd.write("\n")
+
+    def _write_input_output_object(
+        self,
+        io_data,
+        object_type,
+        name,
+        item,
+        desc,
+        format_spec,
+        value,
+    ):
+        self.fd.write(
+            """        {ins_or_outs}.append({lit_or_complex}(
+            identifier="{param_name}",
+            title="{description}",
+            {special_params}{value}))
+""".format(
+                ins_or_outs=io_data,
+                lit_or_complex=object_type,
+                param_name=self._getParamName(name, item),
+                description=desc,
+                special_params=format_spec,
+                value=value,
+            )
+        )
+
+    def _writeHandler(self):
+        for item in self.model.GetItems(ModelAction):
+            self._writeItem(item, variables=item.GetParameterizedParams())
+
+        self.fd.write("\n{}return response\n".format(" " * self.indent))
+
+    def _writePythonAction(self, item, variables={}, intermediates=None):
+        """Write model action to Python file"""
+        task = GUI(show=None).ParseCommand(cmd=item.GetLog(string=False))
+        strcmd = "\n%s%s(" % (
+            " " * self.indent,
+            "run_command" if self.grassAPI == "script" else "Module",
+        )
+        self.fd.write(
+            strcmd + self._getPythonActionCmd(item, task, len(strcmd) - 1, variables)
+        )
+
+        # write v.out.ogr and r.out.gdal exports for all outputs
+        for param in item.GetParams()["params"]:
+            value = param["value"]
+            age = param["age"]
+
+            # output if: outputting a new non-intermediate layer and
+            # either not empty or parameterized
+            if (
+                age == "new"
+                and not any(value in i for i in intermediates)
+                and (value != "" or param in item.GetParameterizedParams()["params"])
+            ):
+                if param["prompt"] == "vector":
+                    command = "v.out.ogr"
+                    format = '"GML"'
+                    extension = ".gml"
+                elif param["prompt"] == "raster":
+                    command = "r.out.gdal"
+                    format = '"GTiff"'
+                    extension = ".tif"
+                else:
+                    # TODO: Support 3D
+                    command = "WRITE YOUR EXPORT COMMAND"
+                    format = '"WRITE YOUR EXPORT FORMAT"'
+                    extension = "WRITE YOUR EXPORT EXTENSION"
+
+                n = param.get("name", None)
+                param_name = self._getParamName(n, item)
+
+                keys = param.keys()
+                if "parameterized" in keys and param["parameterized"] is True:
+                    param_request = 'request.inputs["{}"][0].data'.format(param_name)
+                else:
+                    param_request = '"{}"'.format(param["value"])
+
+                # if True, write the overwrite parameter to the model command
+                overwrite = self.model.GetProperties().get("overwrite", False)
+                if overwrite is True:
+                    overwrite_string = ",\n{}overwrite=True".format(
+                        " " * (self.indent + 12)
+                    )
+                else:
+                    overwrite_string = ""
+
+                strcmd_len = len(strcmd.strip())
+                self.fd.write(
+                    """
+{run_command}"{cmd}",
+{indent1}input={input},
+{indent2}output=os.path.join(
+{indent3}tempfile.gettempdir(),
+{indent4}{out} + "{format_ext}"),
+{indent5}format={format}{overwrite_string})
+""".format(
+                        run_command=strcmd,
+                        cmd=command,
+                        indent1=" " * (self.indent + strcmd_len),
+                        input=param_request,
+                        indent2=" " * (self.indent + strcmd_len),
+                        indent3=" " * (self.indent * 2 + strcmd_len),
+                        indent4=" " * (self.indent * 2 + strcmd_len),
+                        out=param_request,
+                        format_ext=extension,
+                        indent5=" " * (self.indent + strcmd_len),
+                        format=format,
+                        overwrite_string=overwrite_string,
+                    )
+                )
+
+                left_side_out = 'response.outputs["{}"].file'.format(param_name)
+                right_side_out = (
+                    "os.path.join(\n{indent1}"
+                    'tempfile.gettempdir(),\n{indent2}{out} + "'
+                    '{format_ext}")'.format(
+                        indent1=" " * (self.indent + 4),
+                        indent2=" " * (self.indent + 4),
+                        out=param_request,
+                        format_ext=extension,
+                    )
+                )
+                self.fd.write(
+                    "\n{}{} = {}".format(
+                        " " * self.indent, left_side_out, right_side_out
+                    )
+                )
+
+    def _getPythonActionCmd(self, item, task, cmdIndent, variables={}):
+        opts = task.get_options()
+
+        ret = ""
+        parameterizedParams = [v["name"] for v in variables["params"]]
+
+        flags, itemParameterizedFlags, params = self._getItemFlags(
+            item, opts, variables
+        )
+
+        out = None
+
+        for p in opts["params"]:
+            name = p.get("name", None)
+            value = p.get("value", None)
+
+            if (name and value) or (name in parameterizedParams):
+                ptype = p.get("type", "string")
+                foundVar = False
+
+                if name in parameterizedParams:
+                    foundVar = True
+                    if "input" in name:
+                        value = 'request.inputs["{}"][0].file'.format(
+                            self._getParamName(name, item)
+                        )
+                    else:
+                        value = 'request.inputs["{}"][0].data'.format(
+                            self._getParamName(name, item)
+                        )
+
+                if foundVar or ptype != "string":
+                    params.append("{}={}".format(name, value))
+                else:
+                    params.append('{}="{}"'.format(name, value))
+
+        ret += '"%s"' % task.get_name()
+        if flags:
+            ret += ',\n{indent}flags="{fl}"'.format(indent=" " * cmdIndent, fl=flags)
+            if itemParameterizedFlags:
+                ret += " + getParameterizedFlags(\n{}request.inputs, [{}])".format(
+                    " " * (cmdIndent + 4), itemParameterizedFlags
+                )
+        elif itemParameterizedFlags:
+            ret += ",\n{}flags=getParameterizedFlags(request.inputs, [{}])".format(
+                " " * cmdIndent, itemParameterizedFlags
+            )
+
+        if len(params) > 0:
+            ret += ",\n"
+            for opt in params[:-1]:
+                ret += "%s%s,\n" % (" " * cmdIndent, opt)
+            ret += "%s%s)" % (" " * cmdIndent, params[-1])
+        else:
+            ret += ")\n"
+
+        # TODO: Write the next line only for those not-tagged as intermediate
+        if out:
+            ret += '\n\n{}response.outputs["{}"].file = "{}"'.format(
+                " " * self.indent, out, out
+            )
+
+        return ret
+
+    def _getParamDesc(self, param):
+        if param["label"]:
+            desc = param["label"]
+        else:
+            desc = param["description"]
+
+        return desc
+
+    def _getParamValue(self, param):
+        if param["value"] and "output" not in param["name"]:
+            if param["type"] in ["float", "integer"]:
+                value = param["value"]
+            else:
+                value = '"{}"'.format(param["value"])
+
+            value = ",\n{}default={}".format(" " * (self.indent + 4), value)
+        else:
+            value = ""
+
+        return value
+
+    @staticmethod
+    def _getSupportedFormats(prompt):
+        """Get supported formats of an item.
+
+        :param prompt: param['prompt'] of an item
+        :return:
+        """
+        if prompt == "vector":
+            sup_formats = 'Format("application/gml+xml")'
+        elif prompt == "raster":
+            sup_formats = 'Format("image/tif")'
+        else:
+            sup_formats = "FORMAT UNKNOWN - WRITE YOUR OWN"
+
+        return "supported_formats=[{}]".format(sup_formats)
+
+
+class WritePythonFile(WriteScriptFile):
+    def __init__(self, fd, model, grassAPI="script"):
         """Class for exporting model to Python script
 
         :param fd: file descriptor
+        :param model: model to translate
+        :param grassAPI: script or pygrass
         """
         self.fd = fd
         self.model = model
         self.indent = 4
+        self.grassAPI = grassAPI
 
         self._writePython()
 
@@ -2614,7 +3225,7 @@ class WritePythonFile:
             )
         )
 
-        modelItems = self.model.GetItems()
+        modelItems = self.model.GetItems(ModelAction)
         for item in modelItems:
             for flag in item.GetParameterizedParams()["flags"]:
                 if flag["label"]:
@@ -2674,9 +3285,13 @@ import sys
 import os
 import atexit
 
-from grass.script import parser, run_command
+from grass.script import parser
 """
         )
+        if self.grassAPI == "script":
+            self.fd.write("from grass.script import run_command\n")
+        else:
+            self.fd.write("from grass.pygrass.modules import Module\n")
 
         # cleanup()
         rast, vect, rast3d, msg = self.model.GetIntermediateData()
@@ -2685,33 +3300,34 @@ from grass.script import parser, run_command
 def cleanup():
 """
         )
+        run_command = "run_command" if self.grassAPI == "script" else "Module"
         if rast:
             self.fd.write(
-                r"""  run_command('g.remove', flags='f', type='raster',
-                      name=%s)
+                r"""    %s("g.remove", flags="f", type="raster",
+                name=%s)
 """
-                % ",".join(map(lambda x: "'" + x + "'", rast))
+                % (run_command, ",".join(map(lambda x: '"' + x + '"', rast)))
             )
         if vect:
             self.fd.write(
-                r"""  run_command('g.remove', flags='f', type='vector',
-                      name=%s)
+                r"""    %s("g.remove", flags="f", type="vector",
+                name=%s)
 """
-                % ",".join(map(lambda x: "'" + x + "'", vect))
+                % (run_command, ",".join(map(lambda x: '"' + x + '"', vect)))
             )
         if rast3d:
             self.fd.write(
-                r"""  run_command('g.remove', flags='f', type='raster_3d',
-                      name=%s)
+                r"""    %s("g.remove", flags="f", type="raster_3d",
+                name=%s)
 """
-                % ",".join(map(lambda x: "'" + x + "'", rast3d))
+                % (run_command, ",".join(map(lambda x: '"' + x + '"', rast3d)))
             )
         if not rast and not vect and not rast3d:
             self.fd.write("    pass\n")
 
         self.fd.write("\ndef main(options, flags):\n")
-        for item in self.model.GetItems():
-            self._writePythonItem(item, variables=item.GetParameterizedParams())
+        for item in self.model.GetItems(ModelAction):
+            self._writeItem(item, variables=item.GetParameterizedParams())
 
         self.fd.write("    return 0\n")
 
@@ -2720,12 +3336,8 @@ def cleanup():
                 self.fd.write(
                     r"""
 def getParameterizedFlags(paramFlags, itemFlags):
-    fl = ''
-"""
-                )
-
-                self.fd.write(
-                    """    for i in [key for key, value in paramFlags.items() if value == 'True']:
+    fl = ""
+    for i in [key for key, value in paramFlags.items() if value == "True"]:
         if i in itemFlags:
             fl += i[-1]
 
@@ -2747,67 +3359,13 @@ if __name__ == "__main__":
 
         self.fd.write("    sys.exit(main(options, flags))\n")
 
-    def _writePythonItem(self, item, ignoreBlock=True, variables={}):
-        """Write model object to Python file"""
-        if isinstance(item, ModelAction):
-            if ignoreBlock and item.GetBlockId():
-                # ignore items in loops of conditions
-                return
-            self._writePythonAction(item, variables=variables)
-        elif isinstance(item, ModelLoop) or isinstance(item, ModelCondition):
-            # substitute condition
-            cond = item.GetLabel()
-            for variable in self.model.GetVariables():
-                pattern = re.compile("%" + variable)
-                if pattern.search(cond):
-                    value = variables[variable].get("value", "")
-                    if variables[variable].get("type", "string") == "string":
-                        value = '"' + value + '"'
-                    cond = pattern.sub(value, cond)
-            if isinstance(item, ModelLoop):
-                condVar, condText = map(
-                    lambda x: x.strip(), re.split("\s* in \s*", cond)
-                )
-                cond = "%sfor %s in " % (" " * self.indent, condVar)
-                if condText[0] == "`" and condText[-1] == "`":
-                    task = GUI(show=None).ParseCommand(cmd=utils.split(condText[1:-1]))
-                    cond += "grass.read_command("
-                    cond += (
-                        self._getPythonActionCmd(task, len(cond), variables=[condVar])
-                        + ".splitlines()"
-                    )
-                else:
-                    cond += condText
-                self.fd.write("%s:\n" % cond)
-                self.indent += 4
-                variablesLoop = variables.copy()
-                variablesLoop[condVar] = None
-                for action in item.GetItems(self.model.GetItems(objType=ModelAction)):
-                    self._writePythonItem(
-                        action, ignoreBlock=False, variables=variablesLoop
-                    )
-                self.indent -= 4
-            if isinstance(item, ModelCondition):
-                self.fd.write("%sif %s:\n" % (" " * self.indent, cond))
-                self.indent += 4
-                condItems = item.GetItems()
-                for action in condItems["if"]:
-                    self._writePythonItem(action, ignoreBlock=False)
-                if condItems["else"]:
-                    self.indent -= 4
-                    self.fd.write("%selse:\n" % (" " * self.indent))
-                    self.indent += 4
-                    for action in condItems["else"]:
-                        self._writePythonItem(action, ignoreBlock=False)
-                self.indent += 4
-        self.fd.write("\n")
-        if isinstance(item, ModelComment):
-            self._writePythonComment(item)
-
-    def _writePythonAction(self, item, variables={}):
+    def _writePythonAction(self, item, variables={}, intermediates=None):
         """Write model action to Python file"""
         task = GUI(show=None).ParseCommand(cmd=item.GetLog(string=False))
-        strcmd = "%srun_command(" % (" " * self.indent)
+        strcmd = "%s%s(" % (
+            " " * self.indent,
+            "run_command" if self.grassAPI == "script" else "Module",
+        )
         self.fd.write(
             strcmd + self._getPythonActionCmd(item, task, len(strcmd), variables) + "\n"
         )
@@ -2816,39 +3374,40 @@ if __name__ == "__main__":
         opts = task.get_options()
 
         ret = ""
-        flags = ""
-        params = list()
-        itemParameterizedFlags = list()
         parameterizedParams = [v["name"] for v in variables["params"]]
-        parameterizedFlags = [v["name"] for v in variables["flags"]]
 
-        for f in opts["flags"]:
-            if f.get("name") in parameterizedFlags and len(f.get("name")) == 1:
-                itemParameterizedFlags.append(
-                    '"{}"'.format(self._getParamName(f.get("name"), item))
-                )
-            if f.get("value", False):
-                name = f.get("name", "")
-                if len(name) > 1:
-                    params.append("%s = True" % name)
-                else:
-                    flags += name
-
-        itemParameterizedFlags = ", ".join(itemParameterizedFlags)
+        flags, itemParameterizedFlags, params = self._getItemFlags(
+            item, opts, variables
+        )
 
         for p in opts["params"]:
             name = p.get("name", None)
             value = p.get("value", None)
+            ptype = p.get("type", "string")
+
+            if (
+                self.grassAPI == "pygrass"
+                and (p.get("multiple", False) is True or len(p.get("key_desc", [])) > 1)
+                and "," in value
+            ):
+                value = value.split(",")
+                if ptype == "integer":
+                    value = list(map(int, value))
+                elif ptype == "float":
+                    value = list(map(float, value))
 
             if (name and value) or (name in parameterizedParams):
-                ptype = p.get("type", "string")
                 foundVar = False
 
                 if name in parameterizedParams:
                     foundVar = True
                     value = 'options["{}"]'.format(self._getParamName(name, item))
 
-                if foundVar or ptype != "string":
+                if (
+                    foundVar
+                    or isinstance(value, list)
+                    or (ptype != "string" and len(p.get("key_desc", [])) < 2)
+                ):
                     params.append("{}={}".format(name, value))
                 else:
                     params.append('{}="{}"'.format(name, value))
@@ -2875,11 +3434,6 @@ if __name__ == "__main__":
 
         return ret
 
-    def _writePythonComment(self, item):
-        """Write model comment to Python file"""
-        for line in item.GetLabel().splitlines():
-            self.fd.write("#" + line + "\n")
-
     def _substituteVariable(self, string, variable, data):
         """Substitute variable in the string
 
@@ -2890,7 +3444,7 @@ if __name__ == "__main__":
         :return: modified string
         """
         result = ""
-        ss = re.split("\w*(%" + variable + ")w*", string)
+        ss = re.split(r"\w*(%" + variable + ")w*", string)
 
         if not ss[0] and not ss[-1]:
             if data:
@@ -2913,13 +3467,6 @@ if __name__ == "__main__":
                     result += '"'
 
         return result.strip("+")
-
-    def _getParamName(self, parameter_name, item):
-        return "{module_name}{module_id}_{param_name}".format(
-            module_name=re.sub("[^a-zA-Z]+", "", item.GetLabel()),
-            module_id=item.GetId(),
-            param_name=parameter_name,
-        )
 
 
 class ModelParamDialog(wx.Dialog):
@@ -3000,7 +3547,7 @@ class ModelParamDialog(wx.Dialog):
     def _createPages(self):
         """Create for each parameterized module its own page"""
         nameOrdered = [""] * len(self.params.keys())
-        for name, params in six.iteritems(self.params):
+        for name, params in self.params.items():
             nameOrdered[params["idx"]] = name
         for name in nameOrdered:
             params = self.params[name]

@@ -202,6 +202,12 @@ class SpinCtrl(wx.SpinCtrl):
         else:
             wx.SpinCtrl.SetToolTipString(self, tip)
 
+    def SetRange(self, minVal, maxVal):
+        wx.SpinCtrl.SetRange(self, int(minVal), int(maxVal))
+
+    def SetValue(self, value):
+        wx.SpinCtrl.SetValue(self, int(value))
+
 
 class FloatSpin(fs.FloatSpin):
     """Wrapper around fs.FloatSpin to have more control
@@ -452,13 +458,13 @@ class ListCtrl(wx.ListCtrl):
         if hasattr(self, "HasCheckBoxes"):
             wx.ListCtrl.CheckItem(self, item, check)
         else:
-            super(ListCtrl, self).CheckItem(item, check)
+            super().CheckItem(item, check)
 
     def IsItemChecked(self, item):
         if hasattr(self, "HasCheckBoxes"):
             return wx.ListCtrl.IsItemChecked(self, item)
         else:
-            return super(ListCtrl, self).IsChecked(item)
+            return super().IsChecked(item)
 
 
 if CheckWxVersion([4, 1, 0]):
@@ -615,7 +621,7 @@ class Menu(wx.Menu):
 
     def AppendMenu(self, id, text, submenu, help=""):
         if wxPythonPhoenix:
-            wx.Menu.Append(self, id=id, item=text, subMenu=submenu, helpString=help)
+            wx.Menu.AppendSubMenu(self, submenu=submenu, text=text, help=help)
         else:
             wx.Menu.AppendMenu(self, id=id, text=text, submenu=submenu, help=help)
 
@@ -625,7 +631,7 @@ class DragImage(wx.GenericDragImage if wxPythonPhoenix else wx.DragImage):
     over the widget on different platforms/wxpython versions"""
 
     def __init__(self, *args, **kwargs):
-        super(DragImage, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class PseudoDC(wx.adv.PseudoDC if wxPythonPhoenix else wx.PseudoDC):
@@ -633,44 +639,44 @@ class PseudoDC(wx.adv.PseudoDC if wxPythonPhoenix else wx.PseudoDC):
     over the widget on different platforms/wxpython versions"""
 
     def __init__(self, *args, **kwargs):
-        super(PseudoDC, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def DrawLinePoint(self, *args, **kwargs):
         args = convertToInt(argsOrKwargs=args, roundVal=True)
         kwargs = convertToInt(argsOrKwargs=kwargs, roundVal=True)
         if wxPythonPhoenix:
-            super(PseudoDC, self).DrawLine(*args, **kwargs)
+            super().DrawLine(*args, **kwargs)
         else:
-            super(PseudoDC, self).DrawLinePoint(*args, **kwargs)
+            super().DrawLinePoint(*args, **kwargs)
 
     def DrawRectangleRect(self, rect):
         if wxPythonPhoenix:
-            super(PseudoDC, self).DrawRectangle(rect=rect)
+            super().DrawRectangle(rect=rect)
         else:
-            super(PseudoDC, self).DrawRectangleRect(rect)
+            super().DrawRectangleRect(rect)
 
     def BeginDrawing(self):
         if not wxPythonPhoenix:
-            super(PseudoDC, self).BeginDrawing()
+            super().BeginDrawing()
 
     def EndDrawing(self):
         if not wxPythonPhoenix:
-            super(PseudoDC, self).EndDrawing()
+            super().EndDrawing()
 
     def DrawRectangle(self, *args, **kwargs):
         args = convertToInt(argsOrKwargs=args, roundVal=True)
         kwargs = convertToInt(argsOrKwargs=kwargs, roundVal=True)
-        super(PseudoDC, self).DrawRectangle(*args, **kwargs)
+        super().DrawRectangle(*args, **kwargs)
 
     def DrawBitmap(self, *args, **kwargs):
         args = convertToInt(argsOrKwargs=args, roundVal=True)
         kwargs = convertToInt(argsOrKwargs=kwargs, roundVal=True)
-        super(PseudoDC, self).DrawBitmap(*args, **kwargs)
+        super().DrawBitmap(*args, **kwargs)
 
     def DrawCircle(self, *args, **kwargs):
         args = convertToInt(argsOrKwargs=args, roundVal=True)
         kwargs = convertToInt(argsOrKwargs=kwargs, roundVal=True)
-        super(PseudoDC, self).DrawCircle(*args, **kwargs)
+        super().DrawCircle(*args, **kwargs)
 
 
 class ClientDC(wx.ClientDC):
@@ -678,13 +684,13 @@ class ClientDC(wx.ClientDC):
     over the widget on different platforms/wxpython versions"""
 
     def __init__(self, *args, **kwargs):
-        super(ClientDC, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def GetFullMultiLineTextExtent(self, string, font=None):
         if wxPythonPhoenix:
-            return super(ClientDC, self).GetFullMultiLineTextExtent(string, font)
+            return super().GetFullMultiLineTextExtent(string, font)
         else:
-            return super(ClientDC, self).GetMultiLineTextExtent(string, font)
+            return super().GetMultiLineTextExtent(string, font)
 
 
 class Rect(wx.Rect):
@@ -757,7 +763,7 @@ class TextEntryDialog(wx.TextEntryDialog):
         pos=wx.DefaultPosition,
     ):
         if wxPythonPhoenix:
-            super(TextEntryDialog, self).__init__(
+            super().__init__(
                 parent=parent,
                 message=message,
                 caption=caption,
@@ -766,7 +772,7 @@ class TextEntryDialog(wx.TextEntryDialog):
                 pos=pos,
             )
         else:
-            super(TextEntryDialog, self).__init__(
+            super().__init__(
                 parent=parent,
                 message=message,
                 caption=caption,
@@ -912,6 +918,10 @@ class ListBox(wx.ListBox):
     def DeselectAll(self):
         for i in range(self.GetCount()):
             self.Deselect(i)
+
+    def SelectAll(self):
+        for i in range(self.GetCount()):
+            self.Select(i)
 
 
 class HyperlinkCtrl(HyperlinkCtrl_):

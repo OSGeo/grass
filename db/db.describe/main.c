@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       db.describe
@@ -22,17 +21,13 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-
-struct
-{
+struct {
     char *driver, *database, *table;
     int printcolnames;
 } parms;
 
-
 /* function prototypes */
 static void parse_command_line(int, char **);
-
 
 int main(int argc, char **argv)
 {
@@ -47,43 +42,44 @@ int main(int argc, char **argv)
 
     parse_command_line(argc, argv);
     if (!db_table_exists(parms.driver, parms.database, parms.table)) {
-	G_warning(_("Table <%s> not found in database <%s> using driver <%s>"),
-		   parms.table, parms.database, parms.driver);
-	exit(EXIT_FAILURE);
+        G_warning(_("Table <%s> not found in database <%s> using driver <%s>"),
+                  parms.table, parms.database, parms.driver);
+        exit(EXIT_FAILURE);
     }
     driver = db_start_driver(parms.driver);
     if (driver == NULL)
-	G_fatal_error(_("Unable to start driver <%s>"), parms.driver);
+        G_fatal_error(_("Unable to start driver <%s>"), parms.driver);
 
     db_init_handle(&handle);
     db_set_handle(&handle, parms.database, NULL);
     if (db_open_database(driver, &handle) != DB_OK)
-	G_fatal_error(_("Unable to open database <%s>"), parms.database);
+        G_fatal_error(_("Unable to open database <%s>"), parms.database);
 
     db_init_string(&table_name);
     db_set_string(&table_name, parms.table);
 
     if (db_describe_table(driver, &table_name, &table) != DB_OK)
-	G_fatal_error(_("Unable to describe table <%s>"), db_get_string(&table_name));
+        G_fatal_error(_("Unable to describe table <%s>"),
+                      db_get_string(&table_name));
 
     if (!parms.printcolnames)
-	print_table_definition(driver, table);
+        print_table_definition(driver, table);
     else {
-	ncols = db_get_table_number_of_columns(table);
+        ncols = db_get_table_number_of_columns(table);
 
-	db_init_string(&stmt);
-	sprintf(buf, "select * from %s", db_get_table_name(table));
-	db_set_string(&stmt, buf);
-	nrows = db_get_table_number_of_rows(driver, &stmt);
-	fprintf(stdout, "ncols: %d\n", ncols);
-	fprintf(stdout, "nrows: %d\n", nrows);
-	for (col = 0; col < ncols; col++) {
-	    column = db_get_table_column(table, col);
-	    fprintf(stdout, "Column %d: %s:%s:%d\n", (col + 1),
-		    db_get_column_name(column),
-		    db_sqltype_name(db_get_column_sqltype(column)),
-		    db_get_column_length(column));
-	}
+        db_init_string(&stmt);
+        sprintf(buf, "select * from %s", db_get_table_name(table));
+        db_set_string(&stmt, buf);
+        nrows = db_get_table_number_of_rows(driver, &stmt);
+        fprintf(stdout, "ncols: %d\n", ncols);
+        fprintf(stdout, "nrows: %d\n", nrows);
+        for (col = 0; col < ncols; col++) {
+            column = db_get_table_column(table, col);
+            fprintf(stdout, "Column %d: %s:%s:%d\n", (col + 1),
+                    db_get_column_name(column),
+                    db_sqltype_name(db_get_column_sqltype(column)),
+                    db_get_column_length(column));
+        }
     }
 
     db_close_database(driver);
@@ -91,7 +87,6 @@ int main(int argc, char **argv)
 
     exit(EXIT_SUCCESS);
 }
-
 
 static void parse_command_line(int argc, char **argv)
 {
@@ -106,7 +101,7 @@ static void parse_command_line(int argc, char **argv)
     cols = G_define_flag();
     cols->key = 'c';
     cols->description = _("Print column names only instead "
-			  "of full column descriptions");
+                          "of full column descriptions");
 
     table = G_define_standard_option(G_OPT_DB_TABLE);
     table->required = YES;
@@ -114,11 +109,11 @@ static void parse_command_line(int argc, char **argv)
     driver = G_define_standard_option(G_OPT_DB_DRIVER);
     driver->options = db_list_drivers();
     if ((drv = db_get_default_driver_name()))
-      driver->answer = (char *) drv;
+        driver->answer = (char *)drv;
 
     database = G_define_standard_option(G_OPT_DB_DATABASE);
     if ((db = db_get_default_database_name()))
-	database->answer = (char *) db;
+        database->answer = (char *)db;
 
     /* Set description */
     module = G_define_module();
@@ -127,7 +122,7 @@ static void parse_command_line(int argc, char **argv)
     module->description = _("Describes a table in detail.");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     parms.driver = driver->answer;
     parms.database = database->answer;

@@ -300,7 +300,7 @@ class AnimationController(wx.EvtHandler):
                     anim.SetLayerList(layerLists[i])
                     animationData.append(anim)
 
-        except (GException, ValueError, IOError) as e:
+        except (GException, ValueError, OSError) as e:
             GError(
                 parent=self.frame,
                 message=str(e),
@@ -582,8 +582,8 @@ class AnimationController(wx.EvtHandler):
             # paste decorations
             for decoration in decorations:
                 # add image
-                x = decoration["pos"][0] / 100.0 * size[0]
-                y = decoration["pos"][1] / 100.0 * size[1]
+                x = int(decoration["pos"][0] / 100.0 * size[0])
+                y = int(decoration["pos"][1] / 100.0 * size[1])
                 if decoration["name"] == "image":
                     decImage = wx.Image(decoration["file"])
                 elif decoration["name"] == "time":

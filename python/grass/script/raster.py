@@ -17,10 +17,8 @@ for details.
 .. sectionauthor:: Glynn Clements
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
-from __future__ import absolute_import
 
 import os
-import sys
 import string
 import time
 
@@ -37,10 +35,6 @@ from .core import (
 )
 from grass.exceptions import CalledModuleError
 from .utils import encode, float_or_dms, parse_key_val, try_remove
-
-
-if sys.version_info.major >= 3:
-    unicode = str
 
 
 def raster_history(map, overwrite=False, env=None):
@@ -109,12 +103,20 @@ def raster_info(map, env=None):
 
 
 def mapcalc(
-    exp, quiet=False, verbose=False, overwrite=False, seed=None, env=None, **kwargs
+    exp,
+    quiet=False,
+    superquiet=False,
+    verbose=False,
+    overwrite=False,
+    seed=None,
+    env=None,
+    **kwargs,
 ):
     """Interface to r.mapcalc.
 
     :param str exp: expression
     :param bool quiet: True to run quietly (<tt>--q</tt>)
+    :param bool superquiet: True to run extra quietly (<tt>--qq</tt>)
     :param bool verbose: True to run verbosely (<tt>--v</tt>)
     :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
     :param seed: an integer used to seed the random-number generator for the
@@ -137,6 +139,7 @@ def mapcalc(
             env=env,
             seed=seed,
             quiet=quiet,
+            superquiet=superquiet,
             verbose=verbose,
             overwrite=overwrite,
         )
@@ -145,7 +148,14 @@ def mapcalc(
 
 
 def mapcalc_start(
-    exp, quiet=False, verbose=False, overwrite=False, seed=None, env=None, **kwargs
+    exp,
+    quiet=False,
+    superquiet=False,
+    verbose=False,
+    overwrite=False,
+    seed=None,
+    env=None,
+    **kwargs,
 ):
     """Interface to r.mapcalc, doesn't wait for it to finish, returns Popen object.
 
@@ -166,6 +176,7 @@ def mapcalc_start(
 
     :param str exp: expression
     :param bool quiet: True to run quietly (<tt>--q</tt>)
+    :param bool superquiet: True to run extra quietly (<tt>--qq</tt>)
     :param bool verbose: True to run verbosely (<tt>--v</tt>)
     :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
     :param seed: an integer used to seed the random-number generator for the
@@ -188,6 +199,7 @@ def mapcalc_start(
         env=env,
         seed=seed,
         quiet=quiet,
+        superquiet=superquiet,
         verbose=verbose,
         overwrite=overwrite,
     )
@@ -207,7 +219,7 @@ def raster_what(map, coord, env=None, localized=False):
                        query
     :param env:
     """
-    if isinstance(map, (bytes, unicode)):
+    if isinstance(map, (bytes, str)):
         map_list = [map]
     else:
         map_list = map

@@ -33,7 +33,7 @@ from animation.utils import (
 from core.layerlist import LayerList, Layer
 
 
-class AnimationData(object):
+class AnimationData:
     def __init__(self):
         self._name = None
         self._windowIndex = 0
@@ -133,7 +133,7 @@ class AnimationData(object):
             raise ValueError(_("No workspace file selected."))
 
         if not os.path.exists(fileName):
-            raise IOError(_("File %s not found") % fileName)
+            raise OSError(_("File %s not found") % fileName)
         self._workspaceFile = fileName
 
         self.nvizTask.Load(self.workspaceFile)

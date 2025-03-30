@@ -11,8 +11,6 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
-from __future__ import print_function
-
 import os
 import sys
 import locale
@@ -80,10 +78,12 @@ def CheckWxPhoenix():
 
 
 def CheckWxVersion(version):
-    """Check wx version"""
-    ver = wx.__version__
-    parsed_version = parse_version_string(ver)
+    """Check wx version.
 
+    :return: True if current wx version is greater or equal than
+    specifed version otherwise False
+    """
+    parsed_version = parse_version_string(wx.__version__)
     if parsed_version < version:
         return False
 
@@ -164,7 +164,7 @@ GM_WINDOW_MIN_SIZE = (525, 400)
 # not defined UBUNTU_MENUPROXY on linux means standard menu,
 # so the probably problem
 # UBUNTU_MENUPROXY= means ubuntu with disabled global menu [1]
-# use UBUNTU_MENUPROXY=0 to disbale global menu on ubuntu but in the same time
+# use UBUNTU_MENUPROXY=0 to disable global menu on ubuntu but in the same time
 # to get smaller lmgr
 # [1] https://wiki.ubuntu.com/DesktopExperienceTeam/ApplicationMenu#Troubleshooting
 if sys.platform in ("win32", "darwin") or os.environ.get("UBUNTU_MENUPROXY"):
@@ -255,3 +255,10 @@ gtk3 = True if "gtk3" in wx.PlatformInfo else False
 
 """@Add GUIDIR/scripts into path"""
 os.environ["PATH"] = os.path.join(GUIDIR, "scripts") + os.pathsep + os.environ["PATH"]
+
+ignoredCmdPattern = (
+    r"^d\..*|^r[3]?\.mapcalc$|^i.group$|^r.import$|"
+    r"^r.external$|^r.external.out$|"
+    r"^v.import$|^v.external$|^v.external.out$|"
+    r"^cd$|^cd .*"
+)

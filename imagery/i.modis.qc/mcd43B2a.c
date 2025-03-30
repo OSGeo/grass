@@ -4,17 +4,15 @@
  * 0010 -> class 2: Satellite Platform: Aqua
  * 1111 -> class 15: Fill Value
  * Classes 3-14: Not used
- */  
+ */
 
 #include <grass/raster.h>
 
-CELL mcd43B2a (CELL pixel) 
+CELL mcd43B2a(CELL pixel)
 {
     CELL qctemp;
 
     qctemp = pixel & 0x0F;
-    
+
     return qctemp;
 }
-
-

@@ -1,14 +1,14 @@
 /*****************************************************************************
 *
-* MODULE:       SQL statement parser library 
-*   	    	
+* MODULE:       SQL statement parser library
+*
 * AUTHOR(S):    lex.l and yac.y were originally taken from unixODBC and
 *               probably written by Peter Harvey <pharvey@codebydesigns.com>,
 *               modifications and other code by Radim Blazek
 *
-* PURPOSE:      Parse input string containing SQL statement to 
+* PURPOSE:      Parse input string containing SQL statement to
 *               SQLPSTMT structure.
-*               SQL parser may be used by simple database drivers. 
+*               SQL parser may be used by simple database drivers.
 *
 * COPYRIGHT:    (C) 2000 by the GRASS Development Team
 *
@@ -28,7 +28,7 @@
 #define YYERROR_VERBOSE 1
 
 %}
-	
+
 	/* symbolic tokens */
 
 %union {
@@ -56,7 +56,7 @@
 %token <strval> COMPARISON_OPERATOR
 %token <strval> NAME
 %token <strval> STRING
-%token <intval> INTNUM 
+%token <intval> INTNUM
 %token <floatval> FLOATNUM
 
 %token ADD
@@ -86,14 +86,14 @@
 %token DESC
 
 %{
- 
+
 extern int yylex(void);
 
 %}
 
 %%
 
-y_sql:	
+y_sql:
 		y_alter
 	|	y_create
 	|	y_drop
@@ -103,17 +103,17 @@ y_sql:
 	|	y_delete
 	|	y_sql ';'
 	;
-	
+
 y_alter:
 		ALTER TABLE y_table ADD COLUMN y_columndef	{ sqpCommand(SQLP_ADD_COLUMN); }
 	|	ALTER TABLE y_table ADD y_columndef		{ sqpCommand(SQLP_ADD_COLUMN); }
 	|	ALTER TABLE y_table DROP COLUMN NAME            { sqpCommand(SQLP_DROP_COLUMN); sqpColumn($6);}
 	;
-	
+
 y_create:
 		CREATE TABLE y_table '(' y_columndefs ')'	{ sqpCommand(SQLP_CREATE); }
 	;
-	
+
 y_drop:
 		DROP TABLE y_table				{ sqpCommand(SQLP_DROP); }
 	;
@@ -124,7 +124,7 @@ y_select:
 	|	SELECT y_columns FROM y_table ORDER BY y_order	{ sqpCommand(SQLP_SELECT); }
 	|	SELECT y_columns FROM y_table WHERE y_condition ORDER BY y_order { sqpCommand(SQLP_SELECT); }
 	;
-	
+
 y_delete:
 		DELETE FROM y_table				{ sqpCommand(SQLP_DELETE); }
         |	DELETE FROM y_table WHERE y_condition		{ sqpCommand(SQLP_DELETE); }
@@ -140,7 +140,7 @@ y_update:
 	|	UPDATE y_table SET y_assignments WHERE y_condition	{ sqpCommand(SQLP_UPDATE); }
 
 	;
-	
+
 y_columndefs:
 		y_columndef
 	|	y_columndefs ',' y_columndef
@@ -160,7 +160,7 @@ y_columns:
 	'*'
         |	y_column_list
 	;
-	
+
 y_column_list:
 		NAME				{ sqpColumn( $1 ); }
 	|	y_column_list ',' NAME		{ sqpColumn( $3 ); }
@@ -169,7 +169,7 @@ y_column_list:
 y_table:
 		NAME 				{ sqpTable( $1 ); }
 	;
-	
+
 y_values:
 		VALUES '(' y_value_list ')'
 	;
@@ -193,7 +193,7 @@ y_assignments:
 		y_assignment
 	|	y_assignments ',' y_assignment
 	;
-	
+
 y_assignment:
                 NAME EQUAL NULL_VALUE	{ sqpAssignment( $1, NULL,  0, 0.0, NULL, SQLP_NULL ); }
 /*        |	NAME EQUAL STRING	{ sqpAssignment( $1,   $3,  0, 0.0, NULL, SQLP_S ); }
@@ -202,24 +202,24 @@ y_assignment:
 */        |       NAME EQUAL y_expression { sqpAssignment( $1, NULL, 0, 0.0, $3, SQLP_EXPR ); }
 	;
 
-y_condition:	
-		y_sub_condition { 
+y_condition:
+		y_sub_condition {
 		    $$ = $1;
-		    sqlpStmt->upperNodeptr = $$; 
-		}	
+		    sqlpStmt->upperNodeptr = $$;
+		}
 	;
 
-y_sub_condition:	
+y_sub_condition:
 		y_sub_condition2 { $$ = $1; }
 	|	y_sub_condition OR y_sub_condition2 { $$ = sqpNewExpressionNode (SQLP_OR, $1, $3); }
 	;
 
-y_sub_condition2:	
+y_sub_condition2:
 		y_boolean { $$ = $1; }
 	|	y_sub_condition2 AND y_boolean { $$ = sqpNewExpressionNode (SQLP_AND, $1, $3); }
 	;
 
-y_boolean:	
+y_boolean:
 		y_comparison { $$ = $1; }
 	|	'(' y_sub_condition ')' { $$ = $2; }
 	|	NOT y_boolean { $$ = sqpNewExpressionNode ( SQLP_NOT, NULL, $2); }
@@ -239,7 +239,7 @@ y_comparison:
 	|	y_expression NOT NULL_VALUE {
 		    $$ = sqpNewExpressionNode ( SQLP_NOTNULL, NULL, $1);
 		}
-	;	
+	;
 
 /* Mathematical expression */
 y_expression:
@@ -275,7 +275,7 @@ y_atom:
 	|	'(' y_expression ')'		{ $$ = $2; }
 	;
 
-/* Value used in expressions */ 
+/* Value used in expressions */
 y_value:
 		STRING				{ $$ = sqpNewValueNode (   $1,  0, 0.0,  SQLP_S ); }
 	|	INTNUM				{ $$ = sqpNewValueNode ( NULL, $1, 0.0,  SQLP_I ); }
@@ -297,5 +297,3 @@ y_order_desc:
 		NAME DESC			{ sqpOrderColumn( $1, SORT_DESC ); }
 	;
 %%
-
-

@@ -35,7 +35,6 @@ This program is free software under the GNU General Public License
 """
 import os
 import locale
-import six
 import functools
 
 import wx
@@ -336,7 +335,6 @@ class DatabasePage(TitledPage):
         dlg.Destroy()
 
     def OnPageChanging(self, event=None):
-
         self.location = self.tlocation.GetValue()
         self.grassdatabase = self.tgisdbase.GetLabel()
         self.locTitle = self.tlocTitle.GetValue()
@@ -765,7 +763,7 @@ class ItemList(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.ColumnSorterMix
         item1 = self.itemDataMap[key1][self._col]
         item2 = self.itemDataMap[key2][self._col]
 
-        if isinstance(item1, type("")) or isinstance(item2, type("")):
+        if isinstance(item1, str) or isinstance(item2, str):
             cmpVal = locale.strcoll(str(item1), str(item2))
         else:
             cmpVal = cmp(item1, item2)
@@ -906,7 +904,7 @@ class ProjParamsPage(TitledPage):
         """Go to next page"""
         if event.GetDirection():
             self.p4projparams = ""
-            for id, param in six.iteritems(self.pparam):
+            for id, param in self.pparam.items():
                 if param["type"] == "bool":
                     if param["value"] is False:
                         continue
@@ -1135,7 +1133,7 @@ class DatumPage(TitledPage):
             if self.datum not in self.parent.datums:
                 event.Veto()
             else:
-                # check for datum tranforms
+                # check for datum transforms
                 #                proj4string = self.parent.CreateProj4String()
                 #                + ' +datum=%s' % self.datum
                 ret = RunCommand(
@@ -1702,7 +1700,7 @@ class EPSGPage(TitledPage):
     def OnTextChange(self, event):
         value = self.searchb.GetValue()
         if value == "":
-            self.tlink.SetURL(str("https://epsg.io/"))
+            self.tlink.SetURL("https://epsg.io/")
             self.epsgcode = None
             self.epsgdesc = self.epsgparams = ""
             self.searchb.ChangeValue("")
@@ -1762,7 +1760,7 @@ class EPSGPage(TitledPage):
             return
 
         data = list()
-        for code, val in six.iteritems(self.epsgCodeDict):
+        for code, val in self.epsgCodeDict.items():
             if code is not None:
                 data.append((code, val[0], val[1]))
 
@@ -2038,7 +2036,7 @@ class IAUPage(TitledPage):
             return
 
         data = list()
-        for code, val in six.iteritems(self.epsgCodeDict):
+        for code, val in self.epsgCodeDict.items():
             if code is not None:
                 data.append((code, val[0], val[1]))
 
@@ -2101,7 +2099,7 @@ class CustomPage(TitledPage):
                 self.GetNext().SetPrev(self)
                 return
 
-            # check for datum tranforms
+            # check for datum transforms
             # FIXME: -t flag is a hack-around for trac bug #1849
             ret, out, err = RunCommand(
                 "g.proj",
@@ -2394,9 +2392,7 @@ class SummaryPage(TitledPage):
                 self.parent.custompage.customstring
                 + self.parent.custompage.custom_dtrans_string
             )
-            self.lproj4string.SetLabel(
-                ("%s" % combo_str.replace(" +", os.linesep + "+"))
-            )
+            self.lproj4string.SetLabel("%s" % combo_str.replace(" +", os.linesep + "+"))
 
         self.lprojection.SetLabel(label)
 
@@ -2773,7 +2769,7 @@ class LocationWizard(wx.Object):
         return None
 
     def CreateProj4String(self):
-        """Constract PROJ.4 string"""
+        """Construct PROJ.4 string"""
         proj = self.projpage.p4proj
         proj4params = self.paramspage.p4projparams
 

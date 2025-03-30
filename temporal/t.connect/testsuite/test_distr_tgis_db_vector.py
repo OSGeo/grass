@@ -15,7 +15,6 @@ import os
 
 
 class TestRasterExtraction(TestCase):
-
     mapsets_to_remove = []
     outfile = "vectlist.txt"
     gisenv = SimpleModule("g.gisenv", get="MAPSET")

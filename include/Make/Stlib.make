@@ -5,4 +5,3 @@ $(STLIB): $(STLIB_OBJS)
 	$(STLIB_LD) $@ $?; $(RANLIB) $@
 
 stlib: $(STLIB)
-

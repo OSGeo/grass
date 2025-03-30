@@ -19,7 +19,7 @@ static void format_double(double, char *, int);
 /*!
  * \brief Northing to ASCII.
  *
- * Converts the double representation of the <i>north</i> coordinate to 
+ * Converts the double representation of the <i>north</i> coordinate to
  * its ASCII representation (into <i>buf</i>).
  *
  * \param north northing
@@ -29,11 +29,11 @@ static void format_double(double, char *, int);
 void G_format_northing(double north, char *buf, int projection)
 {
     if (projection == PROJECTION_LL)
-	G_lat_format(north, buf);
+        G_lat_format(north, buf);
     else if (projection == -1)
-	format_double(north, buf, TRUE);
+        format_double(north, buf, TRUE);
     else
-	format_double(north, buf, FALSE);
+        format_double(north, buf, FALSE);
 }
 
 /*!
@@ -49,17 +49,17 @@ void G_format_northing(double north, char *buf, int projection)
 void G_format_easting(double east, char *buf, int projection)
 {
     if (projection == PROJECTION_LL)
-	G_lon_format(east, buf);
+        G_lon_format(east, buf);
     else if (projection == -1)
-	format_double(east, buf, TRUE);
+        format_double(east, buf, TRUE);
     else
-	format_double(east, buf, FALSE);
+        format_double(east, buf, FALSE);
 }
 
 /*!
  * \brief Resolution to ASCII.
  *
- * Converts the double representation of the <i>resolution</i> to its 
+ * Converts the double representation of the <i>resolution</i> to its
  * ASCII representation (into <i>buf</i>).
  *
  * \param resolution resolution value
@@ -69,11 +69,11 @@ void G_format_easting(double east, char *buf, int projection)
 void G_format_resolution(double res, char *buf, int projection)
 {
     if (projection == PROJECTION_LL)
-	G_llres_format(res, buf);
+        G_llres_format(res, buf);
     else if (projection == -1)
-	format_double(res, buf, TRUE);
+        format_double(res, buf, TRUE);
     else
-	format_double(res, buf, FALSE);
+        format_double(res, buf, FALSE);
 }
 
 /*
@@ -85,9 +85,9 @@ void G_format_resolution(double res, char *buf, int projection)
 static void format_double(double value, char *buf, int full_prec)
 {
     if (full_prec)
-	sprintf(buf, "%.15g", value);
+        sprintf(buf, "%.15g", value);
     else
-	sprintf(buf, "%.8f", value);
+        sprintf(buf, "%.8f", value);
 
     G_trim_decimal(buf);
 }

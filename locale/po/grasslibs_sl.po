@@ -9,14 +9,17 @@ msgstr ""
 "Project-Id-Version: grasslibs_sl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2005-04-26 09:38+0200\n"
-"Last-Translator: Miha Staut <mihastaut@yahoo.co.uk>\n"
-"Language-Team: Slovenščina <grass-translations@lists.osgeo.org>\n"
-"Language: sl_SL\n"
+"PO-Revision-Date: 2023-04-29 23:53+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Slovenian <https://weblate.osgeo.org/projects/grass-gis/"
+"grasslibs/sl/>\n"
+"Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.9\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
+"n%100==4 ? 2 : 3;\n"
+"X-Generator: Weblate 4.16.4\n"
 
 #: ../lib/init/grass.py:209
 #, fuzzy
@@ -1144,7 +1147,7 @@ msgstr "ne najdem MAPSET %s"
 #, fuzzy
 msgid "System not initialized. Programmer forgot to call G_gisinit()."
 msgstr ""
-"\aNAPAKA: Sistem ni inicializiran. Programer je pozabil poklicati "
+"\\aNAPAKA: Sistem ni inicializiran. Programer je pozabil poklicati "
 "G_gisinit()\n"
 
 #: ../lib/gis/cmprlz4.c:89 ../lib/gis/cmprlz4.c:156 ../lib/gis/cmprzlib.c:100
@@ -1431,8 +1434,7 @@ msgstr "Okno shranjeno v \"%s\" je povsem izven trenutnega GRASS okna."
 #, c-format
 msgid ""
 " Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
-msgstr ""
-" Le %d%% okna shranjenega v \"%s\" se prekriva s trenutnim GRASS oknom."
+msgstr " Le %d%% okna shranjenega v \"%s\" se prekriva s trenutnim GRASS oknom."
 
 #: ../lib/gis/seek.c:54 ../lib/gis/seek.c:60
 #, fuzzy, c-format
@@ -5960,6 +5962,8 @@ msgid "One primitive registered"
 msgid_plural "%d primitives registered"
 msgstr[0] "\r%d primitivnih enot registriranih      \n"
 msgstr[1] "\r%d primitivnih enot registriranih      \n"
+msgstr[2] ""
+msgstr[3] ""
 
 #: ../lib/vector/Vlib/build_nat.c:120 ../lib/vector/Vlib/build_sfa.c:386
 #: ../lib/vector/Vlib/build_sfa.c:665
@@ -5968,6 +5972,8 @@ msgid "One vertex registered"
 msgid_plural "%<PRId64> vertices registered"
 msgstr[0] "\r%d primitivnih enot registriranih      \n"
 msgstr[1] "\r%d primitivnih enot registriranih      \n"
+msgstr[2] ""
+msgstr[3] ""
 
 #: ../lib/vector/Vlib/build_nat.c:133
 #, fuzzy
@@ -5980,6 +5986,8 @@ msgid "One area built"
 msgid_plural "%d areas built"
 msgstr[0] "Topologija je zgrajena. \n"
 msgstr[1] "Topologija je zgrajena. \n"
+msgstr[2] ""
+msgstr[3] ""
 
 #: ../lib/vector/Vlib/build_nat.c:158
 #, fuzzy, c-format
@@ -5987,6 +5995,8 @@ msgid "One isle built"
 msgid_plural "%d isles built"
 msgstr[0] "Topologija je zgrajena. \n"
 msgstr[1] "Topologija je zgrajena. \n"
+msgstr[2] ""
+msgstr[3] ""
 
 #: ../lib/vector/Vlib/build_nat.c:169
 #, fuzzy
@@ -6489,6 +6499,8 @@ msgid "One category loaded"
 msgid_plural "%d categories loaded"
 msgstr[0] "Vrednost kategorije"
 msgstr[1] "Vrednost kategorije"
+msgstr[2] ""
+msgstr[3] ""
 
 #: ../lib/vector/Vlib/cats.c:627
 #, c-format
@@ -6522,6 +6534,8 @@ msgid "One feature without geometry skipped"
 msgid_plural "%d features without geometry skipped"
 msgstr[0] "Število območij brez centroida  :    %d\n"
 msgstr[1] "Število območij brez centroida  :    %d\n"
+msgstr[2] ""
+msgstr[3] ""
 
 #: ../lib/vector/Vlib/build_sfa.c:725
 #, fuzzy, c-format
@@ -10419,7 +10433,7 @@ msgstr ""
 #, fuzzy
 msgid "Raster library not initialized. Programmer forgot to call Rast_init()."
 msgstr ""
-"\aNAPAKA: Sistem ni inicializiran. Programer je pozabil poklicati "
+"\\aNAPAKA: Sistem ni inicializiran. Programer je pozabil poklicati "
 "G_gisinit()\n"
 
 #: ../lib/raster/init.c:112
@@ -10919,127 +10933,3 @@ msgstr "neveljaven elipsoid %s v datoteki"
 #: ../lib/proj/ellipse.c:141
 msgid "No ellipsoid info given in file"
 msgstr "V datoteki ni informacije o elipsoidu"
-
-#, fuzzy
-#~ msgid "which is missing."
-#~ msgstr "kateri manjka"
-
-#, fuzzy
-#~ msgid "whose header file can't be opened."
-#~ msgstr "katerega datoteka z vzglavjem ne more biti odprta"
-
-#, fuzzy
-#~ msgid "Unable to open header file for raster map <%s@%s>"
-#~ msgstr "Ne morem odpreti datoteke z zgodovino za vektor '%s'"
-
-#~ msgid "Illegal row value"
-#~ msgstr "row ima neveljavno vrednost"
-
-#~ msgid "Illegal col value"
-#~ msgstr "col ima neveljavno vrednost"
-
-#~ msgid "Illegal n-s3 resolution value"
-#~ msgstr "Resolucija n-s3 ima neveljavno vrednost"
-
-#~ msgid "Illegal row3 value"
-#~ msgstr "row3 ima neveljavno vrednost"
-
-#~ msgid "Illegal e-w3 resolution value"
-#~ msgstr "Resolucija e-w3 ima neveljavno vrednost"
-
-#~ msgid "Illegal col3 value"
-#~ msgstr "col3 ima neveljavno vrednost"
-
-#, fuzzy
-#~ msgid "Unable to rewrite feature/offset %lu in vector map <%s>"
-#~ msgstr "ne morem spremeniti direktorija v %s"
-
-#, fuzzy
-#~ msgid "Unable to delete feature/offset %lu from vector map <%s>"
-#~ msgstr "ne morem spremeniti direktorija v %s"
-
-#, fuzzy
-#~ msgid "Invalid offset (%ld)"
-#~ msgstr "ne morem spremeniti direktorija v %s"
-
-#, fuzzy
-#~ msgid "Unable to initialize pj"
-#~ msgstr "Nezmožen odpreti datoteko %s v %s"
-
-#, fuzzy
-#~ msgid "Error reading null data for row %d of <%s>"
-#~ msgstr "napaka pri branju %s sloja [%s] v \"mapset\" [%s], vrstica %d"
-
-#, fuzzy
-#~ msgid "invalid color name"
-#~ msgstr "Neveljavne koordinate"
-
-#, fuzzy
-#~ msgid "Unable to restore feature/offset %lu in vector map <%s>"
-#~ msgstr "ne morem spremeniti direktorija v %s"
-
-#, fuzzy
-#~ msgid "Out of memmory"
-#~ msgstr "ne morem dodeliti spomina"
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to check table. There is no temporal database connection defined "
-#~ "for mapset <%(mapset)s>"
-#~ msgstr "Nezmožen odpreti datoteko s tabelo fundamentalne točke: %s"
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to fetch one. There is no temporal database connection defined for "
-#~ "mapset <%(mapset)s>"
-#~ msgstr "Ne morem odpreti datoteke z zgodovino za vektor '%s'"
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to fetch all. There is no temporal database connection defined for "
-#~ "mapset <%(mapset)s>"
-#~ msgstr "Ne morem odpreti datoteke z zgodovino za vektor '%s'"
-
-#, fuzzy
-#~ msgid "Unable to find a temporary null file <%s>"
-#~ msgstr "Nezmožen odpreti datoteko s tabelo fundamentalne točke: %s"
-
-#, fuzzy
-#~ msgid "Unable to open null file <%s>"
-#~ msgstr "G_spawn: ne morem odpreti datoteke %s"
-
-#, fuzzy
-#~ msgid "ERROR: <%s> is not a valid GRASS location"
-#~ msgstr "Oprostite <%s> ni veljavna možnost\n"
-
-#, fuzzy
-#~ msgid "ERROR: option <%s>: <%s> exists.\n"
-#~ msgstr "Napaka: možnost <%s>: <%s> obstaja.\n"
-
-#, fuzzy
-#~ msgid "Unable to open file '%s'"
-#~ msgstr "Nezmožen odpreti datoteko %s v %s"
-
-#, fuzzy
-#~ msgid "Hit RETURN to continue"
-#~ msgstr "pritisnite RETURN za nadaljevanje -->"
-
-#, fuzzy
-#~ msgid "Vector map <%s> is not opened on topology level"
-#~ msgstr "Vneseni vektor '%s' ni bil najden"
-
-#, fuzzy
-#~ msgid "Removing empty 3D raster maps"
-#~ msgstr "Ime vhodnega rastrskega sloja"
-
-#, fuzzy
-#~ msgid "Mode type: {0} not supported."
-#~ msgstr "Vneseni vektor '%s' ni bil najden"
-
-#, fuzzy
-#~ msgid "Invalid type {0}"
-#~ msgstr "ne morem spremeniti direktorija v %s"
-
-#, fuzzy
-#~ msgid "Cannot fetch row"
-#~ msgstr "Ne morem zbrisati linije"

@@ -1,4 +1,3 @@
-
 /**
  * \file dalloc.c
  *
@@ -26,7 +25,6 @@
 #include <stdlib.h>
 #include <grass/gis.h>
 
-
 /**
  * \fn double *G_alloc_vector (size_t n)
  *
@@ -35,14 +33,13 @@
  * Allocate a vector (array) of <b>n</b> doubles initialized to zero.
  *
  * \param[in] n size of vector to allocate
- * \return double * 
+ * \return double *
  */
 
 double *G_alloc_vector(size_t n)
 {
     return (double *)G_calloc(n, sizeof(double));
 }
-
 
 /**
  * \fn double **G_alloc_matrix (int rows,int cols)
@@ -54,7 +51,7 @@ double *G_alloc_vector(size_t n)
  *
  * \param[in] rows number of rows in matrix
  * \param[in] cols number of columns in matrix
- * \return double ** 
+ * \return double **
  */
 
 double **G_alloc_matrix(int rows, int cols)
@@ -63,13 +60,12 @@ double **G_alloc_matrix(int rows, int cols)
     int i;
 
     m = (double **)G_calloc(rows, sizeof(double *));
-    m[0] = (double *)G_calloc((size_t) rows * cols, sizeof(double));
+    m[0] = (double *)G_calloc((size_t)rows * cols, sizeof(double));
     for (i = 1; i < rows; i++)
-	m[i] = m[i - 1] + cols;
+        m[i] = m[i - 1] + cols;
 
     return m;
 }
-
 
 /**
  * \fn float *G_alloc_fvector (size_t n)
@@ -79,14 +75,13 @@ double **G_alloc_matrix(int rows, int cols)
  * Allocate a vector (array) of <b>n</b> floats initialized to zero.
  *
  * \param[in] n size of vector to allocate
- * \return float * 
+ * \return float *
  */
 
 float *G_alloc_fvector(size_t n)
 {
     return (float *)G_calloc(n, sizeof(float));
 }
-
 
 /**
  * \fn float **G_alloc_fmatrix (int rows, int cols)
@@ -98,7 +93,7 @@ float *G_alloc_fvector(size_t n)
  *
  *  \param[in] rows number of rows in matrix
  *  \param[in] cols number of columns in matrix
- *  \return float ** 
+ *  \return float **
  */
 
 float **G_alloc_fmatrix(int rows, int cols)
@@ -107,13 +102,12 @@ float **G_alloc_fmatrix(int rows, int cols)
     int i;
 
     m = (float **)G_calloc(rows, sizeof(float *));
-    m[0] = (float *)G_calloc((size_t) rows * cols, sizeof(float));
+    m[0] = (float *)G_calloc((size_t)rows * cols, sizeof(float));
     for (i = 1; i < rows; i++)
-	m[i] = m[i - 1] + cols;
+        m[i] = m[i - 1] + cols;
 
     return m;
 }
-
 
 /**
  * \fn void G_free_vector (double *v)
@@ -134,7 +128,6 @@ void G_free_vector(double *v)
     return;
 }
 
-
 /**
  * \fn void G_free_fvector (float *v)
  *
@@ -154,7 +147,6 @@ void G_free_fvector(float *v)
     return;
 }
 
-
 /**
  * \fn void G_free_matrix (double **m)
  *
@@ -163,7 +155,7 @@ void G_free_fvector(float *v)
  * Deallocate a matrix of doubles.
  *
  *  \param[in,out] m matrix to free
- *  \return void 
+ *  \return void
  */
 
 void G_free_matrix(double **m)
@@ -174,7 +166,6 @@ void G_free_matrix(double **m)
 
     return;
 }
-
 
 /**
  * \fn void G_free_fmatrix (float **m)

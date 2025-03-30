@@ -63,7 +63,7 @@ disable=E1103,W0141,W0201,W0311,W0312,W0612,W0613,W0614,W0622,R0201,R0901,R0904,
 
 # E1101: %s %r has no %r member: why?
 # R0201: can be solved
-# F0401: somthing is possible to import only in grass
+# F0401: something is possible to import only in grass
 
 
 [REPORTS]
@@ -285,4 +285,3 @@ valid-classmethod-first-arg=cls
 # Exceptions that will emit a warning when being caught. Defaults to
 # "Exception"
 overgeneral-exceptions=Exception
-

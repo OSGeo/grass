@@ -33,16 +33,10 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
-from __future__ import print_function
-
 import os
 import sys
 import copy
-
-try:
-    import xml.etree.ElementTree as etree
-except ImportError:
-    import elementtree.ElementTree as etree  # Python <= 2.4
+import xml.etree.ElementTree as etree
 
 import wx
 
@@ -64,7 +58,6 @@ class MenuTreeModelBuilder:
     # TODO: message_handler=GError is just for backwards compatibility
     # message_handler=GError should be replaced by None
     def __init__(self, filename, expandAddons=True, message_handler=GError):
-
         self.menustyle = UserSettings.Get(
             group="appearance", key="menustyle", subkey="selection"
         )
@@ -245,7 +238,6 @@ def printCommands(node, fh, itemSep, menuSep):
 
 
 if __name__ == "__main__":
-
     action = "strings"
     menu = "manager"
 

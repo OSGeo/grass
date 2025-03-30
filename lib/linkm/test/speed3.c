@@ -10,11 +10,11 @@
  **   I think it better simulates normal use of the library than
  **   speed.c or speed2.c
  */
+
 #include <stdio.h>
 #include <grass/linkm.h>
 
-struct link
-{
+struct link {
     char let;
     struct link *next;
 };
@@ -27,38 +27,34 @@ int main(int argc, char *argv[])
     VOID_T *head;
     struct link List, *tmp, *p;
 
-
-
 #ifdef LINKM
-    head = (VOID_T *) link_init(sizeof(struct link));
+    head = (VOID_T *)link_init(sizeof(struct link));
 #endif
-
 
     for (j = 0; j < 1000; j++) {
-	tmp = &List;
+        tmp = &List;
 
-	for (i = 0; i < 2000; i++) {
+        for (i = 0; i < 2000; i++) {
 #ifdef LINKM
-	    p = (struct link *)link_new(head);
+            p = (struct link *)link_new(head);
 #else
-	    p = (struct link *)malloc(sizeof(struct link));
+            p = (struct link *)malloc(sizeof(struct link));
 #endif
-	    tmp->next = p;
-	    tmp = p;
-	    tmp->next = NULL;
-	}
+            tmp->next = p;
+            tmp = p;
+            tmp->next = NULL;
+        }
 
-	for (p = List.next; p != NULL;) {
-	    tmp = p->next;
+        for (p = List.next; p != NULL;) {
+            tmp = p->next;
 #ifdef LINKM
-	    link_dispose(head, p);
+            link_dispose(head, p);
 #else
-	    free(p);
+            free(p);
 #endif
-	    p = tmp;
-	}
+            p = tmp;
+        }
     }
-
 
 #ifdef LINKM
     link_cleanup(head);

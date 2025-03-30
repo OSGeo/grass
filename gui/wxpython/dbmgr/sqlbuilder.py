@@ -24,11 +24,8 @@ This program is free software under the GNU General Public License
 @author Refactoring, SQLBUilderUpdate by Stepan Turek <stepan.turek seznam.cz> (GSoC 2012, mentor: Martin Landa)
 """
 
-from __future__ import print_function
-
 import os
 import sys
-import six
 
 from core import globalvar
 import wx
@@ -186,7 +183,7 @@ class SQLBuilder(wx.Frame):
         }
 
         self.btn_logicpanel = wx.Panel(parent=self.panel, id=wx.ID_ANY)
-        for key, value in six.iteritems(self.btn_logic):
+        for key, value in self.btn_logic.items():
             btn = Button(parent=self.btn_logicpanel, id=wx.ID_ANY, label=value[0])
             self.btn_logic[key].append(btn.GetId())
 
@@ -344,7 +341,7 @@ class SQLBuilder(wx.Frame):
         self.btn_unique.Bind(wx.EVT_BUTTON, self.OnUniqueValues)
         self.btn_uniquesample.Bind(wx.EVT_BUTTON, self.OnSampleValues)
 
-        for key, value in six.iteritems(self.btn_logic):
+        for key, value in self.btn_logic.items():
             self.FindWindowById(value[1]).Bind(wx.EVT_BUTTON, self.OnAddMark)
 
         self.btn_close.Bind(wx.EVT_BUTTON, self.OnClose)
@@ -455,7 +452,7 @@ class SQLBuilder(wx.Frame):
         elif self.btn_arithmeticpanel and self.btn_arithmeticpanel.IsShown():
             btns = self.btn_arithmetic
 
-        for key, value in six.iteritems(btns):
+        for key, value in btns.items():
             if event.GetId() == value[1]:
                 mark = value[0]
                 break
@@ -475,7 +472,6 @@ class SQLBuilderSelect(SQLBuilder):
     """Class for building SELECT SQL statement"""
 
     def __init__(self, parent, vectmap, id=wx.ID_ANY, layer=1, evtHandler=None):
-
         self.evtHandler = evtHandler
 
         # set dialog title
@@ -634,7 +630,6 @@ class SQLBuilderUpdate(SQLBuilder):
     """Class for building UPDATE SQL statement"""
 
     def __init__(self, parent, vectmap, id=wx.ID_ANY, layer=1, column=None):
-
         self.column = column
         # set dialog title
         title = _("GRASS SQL Builder (%(type)s) - <%(map)s>") % {
@@ -697,7 +692,7 @@ class SQLBuilderUpdate(SQLBuilder):
 
         self.btn_arithmeticpanel = wx.Panel(parent=self.panel, id=wx.ID_ANY)
 
-        for key, value in six.iteritems(self.btn_arithmetic):
+        for key, value in self.btn_arithmetic.items():
             btn = Button(parent=self.btn_arithmeticpanel, id=wx.ID_ANY, label=value[0])
             self.btn_arithmetic[key].append(btn.GetId())
 
@@ -750,7 +745,7 @@ class SQLBuilderUpdate(SQLBuilder):
         self.hsizer.Insert(2, self.funcpanel, proportion=1, flag=wx.EXPAND)
 
         self.list_func.Bind(wx.EVT_LISTBOX, self.OnAddFunc)
-        for key, value in six.iteritems(self.btn_arithmetic):
+        for key, value in self.btn_arithmetic.items():
             self.FindWindowById(value[1]).Bind(wx.EVT_BUTTON, self.OnAddMark)
         self.mode.SetSelection(0)
         self.OnMode(None)
@@ -868,7 +863,6 @@ class SQLBuilderUpdate(SQLBuilder):
         self.text_sql.SetInsertionPoint(curspos)
 
     def _initSqlFunctions(self):
-
         self.sqlFuncs = {}
         # TODO add functions for other drivers
         self.sqlFuncs["sqlite"] = {
@@ -888,15 +882,12 @@ class SQLBuilderWhere(SQLBuilder):
     """Class for building SELECT SQL WHERE statement"""
 
     def __init__(self, parent, vectmap, id=wx.ID_ANY, layer=1):
-
         title = _("GRASS SQL Builder (%(type)s) - <%(map)s>") % {
             "type": "WHERE",
             "map": vectmap,
         }
 
-        super(SQLBuilderWhere, self).__init__(
-            parent, title, vectmap, id=wx.ID_ANY, layer=layer
-        )
+        super().__init__(parent, title, vectmap, id=wx.ID_ANY, layer=layer)
 
     def OnClear(self, event):
         self.text_sql.SetValue("")

@@ -58,7 +58,11 @@ class ViewFrame(wx.Frame):
         self.btn_close.Bind(wx.EVT_BUTTON, self.OnClose)
         self.btn_ok.Bind(wx.EVT_BUTTON, self.OnOk)
         self._layout()
-        self.enc = locale.getdefaultlocale()[1]
+        try:
+            # Python >= 3.11
+            self.enc = locale.getencoding()
+        except AttributeError:
+            self.enc = locale.getdefaultlocale()[1]
 
     def _layout(self):
         """Set the layout"""

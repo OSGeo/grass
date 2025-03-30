@@ -15,7 +15,7 @@
 #include <grass/vector.h>
 
 /*
-   int 
+   int
    Vect__get_window (
    struct Map_info *Map, double *n, double *s, double *e, double *w)
    {
