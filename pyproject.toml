@@ -289,7 +289,6 @@ ignore = [
 "gui/wxpython/icons/grass_icons.py" = ["PTH208"]
 "gui/wxpython/image2target/ii2t_manager.py" = ["PTH208", "SIM115"]
 "gui/wxpython/photo2image/ip2i_manager.py" = ["SIM115"]
-"gui/wxpython/psmap/dialogs.py" = ["PTH208"]
 "gui/wxpython/psmap/instructions.py" = ["SIM115"]
 "gui/wxpython/tools/update_menudata.py" = ["SIM115"]
 "gui/wxpython/vnet/vnet_data.py" = ["SIM115"]
