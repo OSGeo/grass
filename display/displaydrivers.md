@@ -1,3 +1,10 @@
+---
+description: Display drivers
+index: display
+---
+
+# Display drivers
+
 The current command line rendering mechanism is direct rendering into a
 file. The driver is selected by setting the `GRASS_RENDER_IMMEDIATE`
 variable or by running *[d.mon](d.mon.md)* module.
@@ -15,11 +22,11 @@ variable or by running *[d.mon](d.mon.md)* module.
 
 If environmental variable GRASS_RENDER_COMMAND is defined, rendering is
 redirected by display library to the given external command defined by
-this variable. Currently only Python scrips are supported.
+this variable. Currently only Python scripts are supported.
 
 Lets start with simple example of Python script called *render.py*:
 
-```sh
+```python
 #!/usr/bin/env python3
 
 import os

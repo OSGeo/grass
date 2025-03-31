@@ -1321,7 +1321,7 @@ class SearchModuleWidget(wx.Panel):
         """Search modules by keys
 
         :param keys: list of keys
-        :param value: patter to match
+        :param value: pattern to match
         """
         nodes = set()
         for key in keys:
@@ -1560,26 +1560,23 @@ class ManageSettingsWidget(wx.Panel):
             return data
 
         try:
-            fd = open(self.settingsFile)
+            with open(self.settingsFile) as fd:
+                fd_lines = fd.readlines()
+
+                if not fd_lines:
+                    return data
+
+                if fd_lines[0].strip() == "format_version=2.0":
+                    data = self._loadSettings_v2(fd_lines)
+                else:
+                    data = self._loadSettings_v1(fd_lines)
+
+                self.settingsChoice.SetItems(sorted(data.keys()))
+
         except OSError:
             return data
 
-        fd_lines = fd.readlines()
-
-        if not fd_lines:
-            fd.close()
-            return data
-
-        if fd_lines[0].strip() == "format_version=2.0":
-            data = self._loadSettings_v2(fd_lines)
-        else:
-            data = self._loadSettings_v1(fd_lines)
-
-        self.settingsChoice.SetItems(sorted(data.keys()))
-        fd.close()
-
         self.settingsLoaded.emit(settings=data)
-
         return data
 
     def _loadSettings_v2(self, fd_lines):

@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-23 03:37-0600\n"
-"PO-Revision-Date: 2024-05-27 09:55+0000\n"
+"PO-Revision-Date: 2025-03-12 12:05+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/"
 "grassmods/fr/>\n"
@@ -2855,8 +2855,8 @@ msgstr ""
 #, c-format
 msgid "%d point found"
 msgid_plural "%d points found"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d point trouvé"
+msgstr[1] "%d points trouvés"
 
 #: ../raster/r.cost/main.c:657 ../raster/r.walk/main.c:818
 #, c-format
@@ -4392,7 +4392,7 @@ msgstr "Lecture de la carte raster <%s> ..."
 #: ../raster/r.fill.dir/dopolys.c:102 ../raster/r.fill.dir/main.c:198
 #, c-format
 msgid "File writing error in %s() %d:%s"
-msgstr ""
+msgstr "Erreur d'écriture de fichier dans %s() %d:%s"
 
 #: ../raster/r.grow.distance/main.c:382 ../raster/r.fill.dir/main.c:265
 #: ../raster/r.stream.extract/close.c:253
@@ -4411,7 +4411,7 @@ msgstr "Écriture des cartes raster en sortie ..."
 #: ../raster/r.fill.dir/main.c:274
 #, c-format
 msgid "File reading error in %s() %d:%s"
-msgstr ""
+msgstr "Erreur de lecture de fichier dans %s() %d:%s"
 
 #: ../raster/r.grow.distance/main.c:481 ../raster/r.colors.out/raster_main.c:67
 #: ../raster/r.fill.dir/main.c:155 ../raster/r.colors/edit_colors.c:509
@@ -25658,9 +25658,8 @@ msgid "Group <%s@%s> contains no raster maps."
 msgstr "Jeu de cartes contenant les cartes raster d'entrée"
 
 #: ../imagery/i.svm.predict/main.c:168
-#, fuzzy
 msgid "Invalid signature file"
-msgstr "[à partir du fichier de signature %s]"
+msgstr ""
 
 #: ../imagery/i.svm.predict/main.c:173
 #, fuzzy
@@ -45967,7 +45966,7 @@ msgstr "segment"
 
 #: ../locale/scriptstrings/i.segment.hierarchical_to_translate.c:15
 msgid "Memory in MB"
-msgstr ""
+msgstr "Mémoire en Mo"
 
 #: ../locale/scriptstrings/i.segment.hierarchical_to_translate.c:23
 #, fuzzy
@@ -57334,7 +57333,7 @@ msgstr ""
 
 #: ../vector/v.colors.out/main.c:50
 msgid "Exports the color table associated with a vector map."
-msgstr "Exporter la table de couleur associée  une carte vecteur."
+msgstr "Exporter la table de couleur associée à une carte vecteur."
 
 #: ../vector/v.colors.out/main.c:64
 msgid "Name of attribute (numeric) column to which refer color rules"
@@ -63190,7 +63189,7 @@ msgstr ""
 
 #: ../vector/v.surf.rst/main.c:266
 msgid "Number of threads for parallel computing"
-msgstr ""
+msgstr "Nombre de threads pour le calcul parallèle"
 
 #: ../vector/v.surf.rst/main.c:272
 msgid "Name of raster map used as mask"
@@ -64027,7 +64026,7 @@ msgstr "Affiche les métadonnées d'une carte vecteur."
 #: ../vector/v.info/print.c:30 ../vector/v.info/print.c:32
 #, c-format
 msgid "%s"
-msgstr ""
+msgstr "%s"
 
 #: ../vector/v.info/print.c:141
 #, c-format

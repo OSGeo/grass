@@ -13,8 +13,8 @@ steepest slope), tangential curvature (measured in the direction of a
 tangent to contour line) or mean curvature are computed and saved as
 raster maps specified by the options **slope, aspect, pcurv, tcurv,
 mcurv** respectively. If **-d** flag is set, *v.surf.rst* outputs
-partial derivatives f<sub>x</sub>,f<sub>y</sub>,f<sub>xx</sub>,
-f<sub>yy</sub>,f<sub>xy</sub> instead of slope, aspect, profile,
+partial derivatives *f_x*, *f_y*, *f_xx*,
+*f_yy*, *f_xy* instead of slope, aspect, profile,
 tangential and mean curvatures respectively. If the input vector map
 have time stamp, the program creates time stamp for all output maps.
 
@@ -244,13 +244,11 @@ threads to be used with the **nprocs** parameter (default 1). Figures 1
 and 2 show benchmark results running on Intel® Core™ i5-10210U CPU @
 1.60GHz × 8. See benchmark scripts in the source code for more details.
 
-<img src="vsurfrst_benchmark.png" data-border="0"
-alt="benchmark for v.surf.rst" />  
+![benchmark for v.surf.rst](vsurfrst_benchmark.png)  
 *Figure 1: Benchmark shows execution time for different number of cells
 (1M, 2M, 4M, and 8M).*
 
-<img src="vsurfrst_cv_benchmark.png" data-border="0"
-alt="benchmark for cross-validation of v.surf.rst" />  
+![benchmark for cross-validation of v.surf.rst](vsurfrst_cv_benchmark.png)  
 *Figure 2: Benchmark shows execution time for running cross-validation
 on different number of cells (100k, 200k, 400k, and 800k).*
 

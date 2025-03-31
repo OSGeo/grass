@@ -24,26 +24,11 @@ assigns a unique flow direction towards the steepest downslope neighbor.
 The MFD method assigns multiple flow directions towards all downslope
 neighbors.
 
-<table width="80%" data-align="center">
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th><img src="rterraflow_dir2.png" alt="r.terraflow SFD" /></th>
-<th><img src="rterraflow_dir3.png" alt="r.terraflow MFD" /></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<th>Flow direction to steepest<br />
-downslope neighbor (SFD).</th>
-<th>Flow direction to all<br />
-downslope neighbors (MFD).</th>
-</tr>
-&#10;</tbody>
-</table>
+![r.terraflow SFD](rterraflow_dir2.png)  
+*Flow direction to the steepest downslope neighbor (SFD).*
+
+![r.terraflow MFD](rterraflow_dir3.png)  
+*Flow direction to all downslope neighbors (MFD).*
 
 The SFD and the MFD method cannot compute flow directions for cells
 which have the same height as all their neighbors (flat areas) or cells
@@ -65,12 +50,11 @@ terrain. Flooding produces a sink-less terrain in which every cell has a
 downslope flow path leading outside the terrain and therefore every cell
 in the terrain can be assigned SFD/MFD flow directions as above. Flow
 directions are encoded using powers of two clockwise starting from
-2<sup>0</sup> for east to 2<sup>7</sup> for north-east.
+2^0 for east to 2^7 for north-east.
 
-[<img src="rterraflow_direction_encoding.png" data-border="0" width="200"
-height="200" alt="r.terraflow direction encoding" />](rterraflow_direction_encoding.png)  
-Flow direction encoding clockwise starting from 2<sup>0</sup> for east
-to 2<sup>7</sup> for north-east; 0 for undetermined (sinks) and 1 for
+![r.terraflow direction encoding](rterraflow_direction_encoding.png)  
+Flow direction encoding clockwise starting from 2^0 for east
+to 2^7 for north-east; 0 for undetermined (sinks) and 1 for
 undefined (null cells)
 ([source](https://idea.isnew.info/how-to-import-arcgis-flow-direction-into-grass-gis.html))
 
@@ -159,7 +143,7 @@ g.region raster=elev_lid792_1m
 r.terraflow elevation=elev_lid792_1m accumulation=elev_lid792_1m_accumulation
 ```
 
-<img src="rterraflow_accumulation.png" data-border="0" />  
+![Flow accumulation](rterraflow_accumulation.png)  
 *Flow accumulation*
 
 Spearfish sample data set:
@@ -181,24 +165,16 @@ r.terraflow elev=elevation.10m filled=elevation10m.filled \
 
 ## REFERENCES
 
-1. The [TerraFlow](http://www.cs.duke.edu/geo*/terraflow/) project at
-    Duke University
-2. <a
-    href="http://www.cs.duke.edu/geo*/terraflow/papers/alenex00_drainage.ps.gz"
-    id="arge:drainage">I/O-efficient algorithms for problems on grid-based
-    terrains</a>. Lars Arge, Laura Toma, and Jeffrey S. Vitter. In
+1. [I/O-efficient algorithms for problems on grid-based terrains](https://dl.acm.org/doi/10.1145/945394.945395).
+   Lars Arge, Laura Toma, and Jeffrey S. Vitter. In
     *Proc. Workshop on Algorithm Engineering and Experimentation*, 2000.
     To appear in *Journal of Experimental Algorithms*.
-3. <a
-    href="http://www.cs.duke.edu/geo*/terraflow/papers/acmgis01_terraflow.pdf"
-    id="terraflow:acmgis01">Flow computation on massive grids</a>. Lars
-    Arge, Jeffrey S. Chase, Patrick N. Halpin, Laura Toma, Jeffrey S.
+2. [Flow computation on massive grids](https://dl.acm.org/doi/10.1145/512161.512180).
+    Lars Arge, Jeffrey S. Chase, Patrick N. Halpin, Laura Toma, Jeffrey S.
     Vitter, Dean Urban and Rajiv Wickremesinghe. In *Proc. ACM Symposium
     on Advances in Geographic Information Systems*, 2001.
-4. <a
-    href="http://www.cs.duke.edu/geo*/terraflow/papers/journal_terraflow.pdf"
-    id="terraflow:geoinformatica">Flow computation on massive grid
-    terrains</a>. Lars Arge, Jeffrey S. Chase, Patrick N. Halpin, Laura
+3. [Flow computation on massive grid terrain datasets](https://link.springer.com/article/10.1023/A:1025526421410).
+    Lars Arge, Jeffrey S. Chase, Patrick N. Halpin, Laura
     Toma, Jeffrey S. Vitter, Dean Urban and Rajiv Wickremesinghe. In
     *GeoInformatica, International Journal on Advances of Computer
     Science for Geographic Information Systems*, 7(4):283-313, December

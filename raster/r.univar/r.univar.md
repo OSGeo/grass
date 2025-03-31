@@ -56,8 +56,7 @@ raster files when different **nprocs** parameters are used. However,
 since the work allocation among threads is static, users should expect
 to have the same results when run with the same number of threads.
 
-<img src="r_univar_benchmark_size.png" data-border="0"
-alt="benchmark for number of cells" />  
+![benchmark for number of cells](r_univar_benchmark_size.png)  
 *Figure: Benchmark shows execution time for different number of cells
 and cores. See benchmark scripts in source code.*
 
@@ -180,9 +179,8 @@ d.legend raster=basins use=2,4,6,8,10,12,14,16,18,20,22,24,26,28,30
 d.barscale
 ```
 
-[<img src="runivar_basins.png" data-border="0" width="600" height="446"
-alt="r.univar basins and their IDs" />  
-](runivar_basins.png) *Figure: Zones (basins, opacity: 60%) with
+![r.univar basins and their IDs](runivar_basins.png)  
+*Figure: Zones (basins, opacity: 60%) with
 underlying elevation map for North Carolina sample dataset.*
 
 Then statistics for elevation can be calculated separately for every
@@ -212,9 +210,8 @@ stddev,variance,coeff_var,sum,sum_abs2,,116975,0,55.5787925720215,
 Comma Separated Values (CSV) file is best viewed through a spreadsheet
 program such as Microsoft Excel, Libre/Open Office Calc or Google Docs:
 
-[<img src="runivar_basins_elev_zonal.png" data-border="0" width="600"
-height="121" alt="r.univar raster statistics" />  
-](runivar_basins_elev_zonal.png) *Figure: Raster statistics for zones
+![r.univar raster statistics](runivar_basins_elev_zonal.png)  
+*Figure: Raster statistics for zones
 (basins, North Carolina sample dataset) viewed through Libre/Open Office
 Calc.*
 
@@ -226,7 +223,7 @@ r.univar -e elevation percentile=98 format=json
 
 will output the results in JSON format:
 
-```sh
+```json
 [
     {
         "n": 2025000,

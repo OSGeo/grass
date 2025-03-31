@@ -10,7 +10,7 @@ lowest total cost of traversing the space between each cell and the
 user-specified points (diagonal costs are multiplied by a factor that
 depends on the dimensions of the cell) and 2) a second raster map layer
 showing the movement direction to the next cell on the path back to the
-start point (see [Movement Direction](#move)). This module uses the
+start point (see [Movement Direction](#movement-direction)). This module uses the
 current geographic region settings. The **output** map will be of the
 same data format as the **input** map, integer or floating point.
 
@@ -20,7 +20,7 @@ The **input** *name* is the name of a raster map whose category values
 represent the surface cost. The **output** *name* is the name of the
 resultant raster map of cumulative cost. The **outdir** *name* is the
 name of the resultant raster map of movement directions (see [Movement
-Direction](#move)).
+Direction](#movement-direction)).
 
 *r.cost* can be run with three different methods of identifying the
 starting point(s). One or more points (geographic coordinate pairs) can
@@ -75,11 +75,10 @@ also considered.
 
 Knight's move example:
 
-<img src="rcost_knightsmove.png" data-border="1" />  
-
-|                                                                                                                                                                                                        |
-|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| *Flat cost surface without (left pane) and with the knight's move (right pane). The default is to grow the cost outwards in 8 directions. Using the knight's move grows it outwards in 16 directions.* |
+![Flat cost surface without and with the knight's move](rcost_knightsmove.png)  
+*Flat cost surface without (left pane) and with the knight's move (right pane).
+ The default is to grow the cost outwards in 8 directions.
+ Using the knight's move grows it outwards in 16 directions.*
 
 If the **nearest** output parameter is specified, the module will
 calculate for each cell its nearest starting point based on the
@@ -95,11 +94,10 @@ option to help the algorithm pick a particular direction.
 
 Example for solving multiple directions:
 
-<img src="rcost_solvedir.png" data-border="1" />  
-
-|                                                                                                                                                                                           |
-|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| *A field of equal cumulative costs with multiple paths (black). By default a path along the edge will be selected (red). Path selection can be controlled with the solver option (blue).* |
+![A field of equal cumulative costs with multiple paths](rcost_solvedir.png)  
+*A field of equal cumulative costs with multiple paths (black).
+ By default a path along the edge will be selected (red).
+ Path selection can be controlled with the solver option (blue).*
 
 Multiple directions can be solved as in the above example with the
 following steps:
@@ -241,9 +239,7 @@ Spearfish region):
   d.rast dist_meters
 ```
 
-<span id="move"></span>
-
-## Movement Direction
+### Movement Direction
 
 The movement direction surface is created to record the sequence of
 movements that created the cost accumulation surface. This movement

@@ -1,3 +1,9 @@
+---
+description: GRASS variables and environment variables
+---
+
+# GRASS variables and environment variables
+
 A variable in scripting is a symbolic name that holds data which can be
 used and modified during script execution. Variables allow scripts to
 store and manipulate values dynamically, making them more flexible and
@@ -475,6 +481,11 @@ region from the WIND file.
 This allows programs such as the GUI to run external commands on an
 alternate region without having to modify the WIND file then change it
 back afterwards.
+
+GRASS_MASK  
+\[libgis\]  
+use the raster map specified by name as mask, instead of a raster called
+MASK in the current mapset.
 
 ## List of selected GRASS gisenv variables
 

@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.13@sha256:426b85b823c113372f766a963f68cfd9cd4878e1bcc0fda58779127ee98a28eb
+# syntax=docker/dockerfile:1.14@sha256:4c68376a702446fc3c79af22de146a148bc3367e73c25a5803d453b6b3f722fb
 
 # Note: This file must be kept in sync in ./Dockerfile and ./docker/ubuntu/Dockerfile.
 #       Changes to this file must be copied over to the other file.
@@ -332,7 +332,7 @@ WORKDIR /src/grass_build
 
 # Set environmental variables for GRASS GIS compilation, without debug symbols
 # Set gcc/g++ environmental variables for GRASS GIS compilation, without debug symbols
-#ENV MYCFLAGS="-O2 -std=gnu99 -m64"
+#ENV MYCFLAGS="-O2 -std=gnu99"
 #ENV MYLDFLAGS="-s"
 # CXX stuff:
 
@@ -345,6 +345,9 @@ ENV LD_LIBRARY_PATH="/usr/local/lib" \
 
 # Configure compile and install GRASS GIS
 # and the GDAL-GRASS plugin
+# Build the GDAL-GRASS plugin
+# renovate: datasource=github-tags depName=OSGeo/gdal-grass
+ARG GDAL_GRASS_VERSION=1.0.3
 # hadolint ignore=DL3003
 RUN make distclean || echo "nothing to clean" \
     && ./configure ${GRASS_CONFIG} \
@@ -357,13 +360,11 @@ RUN make distclean || echo "nothing to clean" \
     rm -rf /usr/local/grass85/share; \
     mkdir -p /usr/local/grass85/gui/wxpython/xml/; \
     mv module_items.xml /usr/local/grass85/gui/wxpython/xml/module_items.xml \
-    && git clone https://github.com/OSGeo/gdal-grass \
+    && git clone --branch $GDAL_GRASS_VERSION --depth 1 https://github.com/OSGeo/gdal-grass.git \
     && cd "gdal-grass" \
-    && ./configure \
-      --with-gdal=/usr/bin/gdal-config \
-      --with-grass=/usr/local/grass85 \
-    && make -j $NUMTHREADS \
-    && make install -j $NUMTHREADS \
+    && cmake -B build -DAUTOLOAD_DIR=/usr/lib/gdalplugins -DBUILD_TESTING=OFF \
+    && cmake --build build \
+    && cmake --install build \
     && cd /src \
     && rm -rf "gdal-grass"
 

@@ -22,14 +22,13 @@ Hence this command is useful for
 The current geographic region definition and mask settings are
 respected.
 
-![](r_patch.png)
-
+![Result of patching of two raster maps containing NULLs](r_patch.png)  
 *Figure: Result of patching of two raster maps containing NULLs using
 the default settings.*
 
 ### Stacking order
 
-The first *name* listed in the string **input=***name*,*name*,*name*,...
+The first *name* listed in the string **input**=*name*,*name*,*name*,...
 is the name of the first map whose data values will be used to fill in
 cells in the current region. Then, the second through the last input
 maps (..., *name*, *name*, ...) will be used, in order, to supply data
@@ -39,12 +38,11 @@ values for the remaining "no data" cells (or cells with value 0 with
 In other words, the first raster map is used first and if it had some
 "no data" cells, then second raster map is used for these cells, then
 the third and so on. So the formal command line syntax can be also
-written as **input=***primary*,*secondary*,*tertiary*,... For two raster
+written as **input**=*primary*,*secondary*,*tertiary*,... For two raster
 maps, the first one can be viewed as the primary one or the default one
 and the second one as the secondary one or a fallback.
 
-![](r_patch_zeros_as_nulls.png)
-
+![Result of patching of two raster maps using the z flag](r_patch_zeros_as_nulls.png)  
 *Figure: Result of patching of two raster maps using the **-z** flag to
 treat zeros as NULLs. Note the value 1 being preserved from the first
 raster while the value 6 is taken from the second raster instead of the
@@ -147,10 +145,8 @@ used instead of *r.patch*.
 By specifying the number of parallel processes with **nprocs** option,
 *r.patch* can run significantly faster, see benchmarks below.
 
-<img src="r_patch_benchmark_size.png" data-border="0"
-alt="benchmark for number of cells" />
-<img src="r_patch_benchmark_memory.png" data-border="0"
-alt="benchmark for memory size" />  
+![benchmark for number of cells](r_patch_benchmark_size.png)
+![benchmark for memory size](r_patch_benchmark_memory.png)  
 *Figure: Benchmark on the left shows execution time for different number
 of cells, benchmark on the right shows execution time for different
 memory size for 5000x5000 raster. See benchmark scripts in source code.

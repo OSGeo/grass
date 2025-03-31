@@ -1,3 +1,10 @@
+---
+description: wxGUI Module dialogs
+index: wxGUI
+---
+
+# wxGUI Module dialogs
+
 ## KEYWORDS
 
 [general](general.md), [GUI](topic_GUI.md)
@@ -16,8 +23,7 @@ to the command representation which is used in the manuals and
 tutorials. The commands can be used to call the module in the command
 line, Shell scripts or, with a slight modification, in a Python script.
 
-<img src="wxGUI_modules_parameters.png" data-border="0"
-alt="r.neighbors dialog" />
+![r.neighbors dialog](wxGUI_modules_parameters.png)
 
 ### Tabs
 
@@ -33,11 +39,9 @@ The style of the tabs can be changed through *GUI settings* -
 depends on the platform and some styles might be more suitable for
 different platforms.
 
-<img src="wxGUI_modules_style_left.png" data-border="0"
-alt="dialog style left" />
-<img src="wxGUI_modules_style_top.png" data-border="0"
-alt="dialog style top" />  
-Figure: Example of style "left" and "top" on Ubuntu.
+![dialog style left](wxGUI_modules_style_left.png)
+![dialog style top](wxGUI_modules_style_top.png)  
+*Figure: Example of style "left" and "top" on Ubuntu.*
 
 ### Flags
 
@@ -46,7 +50,7 @@ three special flags - *overwrite*, *verbose* and *quiet*. Flags
 *verbose* and *quiet* set the level of verbosity of the module (how
 detailed the messages should be).
 
-<img src="wxGUI_modules_flags.png" data-border="0" alt="dialog flags" />  
+![dialog flags](wxGUI_modules_flags.png)
 
 Modules which output a new map or a new file have the flag *overwrite*
 which must be used when the specified output map or file is already
@@ -92,8 +96,7 @@ to the entry field. In case multiple maps can be specified (denoted by
 *\[multiple\]* label), selecting a map from the popup list will append
 the map names with comma in between.
 
-<img src="wxGUI_modules_widget_selection.png" data-border="0"
-alt="widget for selecting maps" />  
+![widget for selecting maps](wxGUI_modules_widget_selection.png)
 
 If the input file is supposed to be a text file (for example color rules
 in r.colors), it is possible to type the text in the provided box
@@ -104,10 +107,8 @@ so that user's workflow can be reproduced later. With *Load* button we
 can display the content of selected file and edit it directly in the
 box.
 
-<img src="wxGUI_modules_widget_file1.png" data-border="0"
-alt="widget for input files" />
-<img src="wxGUI_modules_widget_file2.png" data-border="0"
-alt="widget for input files" />  
+![widget for input files](wxGUI_modules_widget_file1.png)
+![widget for input files](wxGUI_modules_widget_file2.png)
 
 Figure: In the first image, user specified a full path to a file. In the
 second image, user typed color rules conveniently into the box below,

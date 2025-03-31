@@ -65,7 +65,7 @@ This filters out everything except the numbers.
 
 ### Extraction of values along profile defined by coordinates (variant 1)
 
-Extract a profile with coordinates (wayoints) provided on the command
+Extract a profile with coordinates (waypoints) provided on the command
 line (North Carolina data set):
 
 ```sh
@@ -127,7 +127,7 @@ r.profile -g input=elevation coordinates=641712,226095,641546,224138,641546,2220
 
 The output looks as follows:
 
-```sh
+```json
 [
     {
         "easting": 641712,
@@ -192,7 +192,7 @@ The JSON output makes for ease of integration with popular python data
 science libraries. For instance, here is an example of creating a
 scatterplot of distance vs elevation with color coding.
 
-```sh
+```python
 import grass.script as gs
 import pandas as pd
 import matplotlib.pyplot as plt

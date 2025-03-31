@@ -21,12 +21,12 @@ interpolates from the uphill and downhill values by the true distance.
 
 ### Parameters
 
-**input=***name*  
+**input**=*name*  
 Name of an existing raster map that contains a set of initial category
 values (i.e., some cells contain known elevation values (denoting
 contours) while the rest contain NULL values).
 
-**output=***name*  
+**output**=*name*  
 Name to be assigned to new output raster map that represents a smooth
 (e.g., elevation) surface generated from the known category values in
 the input raster map layer.
@@ -37,7 +37,7 @@ writing *output*.
 ## NOTES
 
 *r.surf.contour* works well under the following circumstances: 1) the
-contour lines extend to the the edge of the current region, 2) the
+contour lines extend to the edge of the current region, 2) the
 program is run at the same resolution as that of the input map, 3) there
 are no disjointed contour lines, and 4) no spot elevation data BETWEEN
 contour lines exist. Spot elevations at the tops of hills and the

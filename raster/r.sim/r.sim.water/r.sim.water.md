@@ -39,8 +39,7 @@ and
 dy = tan(slope) * sin(aspect)
 ```
 
-<img src="r_sim_water.png" style="margin: 0.5em;"
-alt="r.sim.water generated depth map" />  
+![r.sim.water generated depth map](r_sim_water.png)  
 *Figure: Simulated water flow in a rural area showing the areas with
 highest water depth highlighting streams, pooling, and wet areas during
 a rainfall event.*
@@ -214,8 +213,7 @@ d.northarrow at=90,25
 d.mon stop=cairo
 ```
 
-<img src="r_sim_water_water_depth.png" style="margin: 0.5em;"
-alt="r.sim.water generated depth map" />  
+![r.sim.water generated depth map](r_sim_water_water_depth.png)  
 *Figure: Simulated water depth map in the rural area of the North
 Carolina sample dataset.*
 

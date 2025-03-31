@@ -17,7 +17,7 @@ is fine.
 
 The data will be imported using the current region settings to set the
 new raster map's bounds and resolution. Any features falling outside the
-current region will be cropped. The region settings are contolled with
+current region will be cropped. The region settings are controlled with
 the *g.region* module.
 
 The format is a simplified version of the standard GRASS vector ASCII

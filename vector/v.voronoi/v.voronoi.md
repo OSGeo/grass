@@ -44,7 +44,7 @@ v.voronoi input=hospitals output=hospitals_voronoi
 
 Result:
 
-<img src="v_voronoi_points.png" data-border="0" />  
+![Voronoi diagram for hospitals in North Carolina](v_voronoi_points.png)  
 *Voronoi diagram for hospitals in North Carolina*
 
 ### Voronoi diagram for areas
@@ -58,7 +58,7 @@ v.voronoi input=urbanarea output=urbanarea_voronoi -a
 
 Result:
 
-<img src="v_voronoi_areas.png" data-border="0" />  
+![Voronoi diagram for urban areas in North Carolina](v_voronoi_areas.png)  
 *Voronoi diagram for urban areas in North Carolina*
 
 ### Skeletons and center lines of areas
@@ -73,9 +73,8 @@ v.voronoi input=urbanarea output=urbanarea_skeleton -s thin=2000
 
 Result:
 
-<img src="v_voronoi_skeleton.png" data-border="0" />  
-*Skeleton (blue) and center line (red) for urban areas in North
-Carolina*
+![Skeleton and center line for urban areas in North Carolina](v_voronoi_skeleton.png)  
+*Skeleton (blue) and center line (red) for urban areas in North Carolina*
 
 ## REFERENCES
 

@@ -1,3 +1,10 @@
+---
+description: wxGUI Temporal Plot Tool
+index: topic_GUI|GUI
+---
+
+# wxGUI Temporal Plot Tool
+
 ## DESCRIPTION
 
 The **Temporal Plot Tool** is a *[wxGUI](wxGUI.md)* component that
@@ -9,16 +16,9 @@ Supported features:
 - temporal datasets with interval/point and absolute/relative time,
 
 - show simple linear regression model line with calculated formula
-
-  ```sh
-  y = a + b*x (y is dependent variable, a is intercept, b is slope, x is explanatory variable)
-  ```
-
-  and
-
-  ```sh
-  r-squared (parameter of goodness-of-fit measure for linear regression model)
-  ```
+  `y = a + b*x`  (y is dependent variable, a is intercept, b is slope,
+  x is explanatory variable) and `r-squared` (parameter of goodness-of-fit
+  measure for linear regression model)
 
 - pop-up annotations with values information,
 
@@ -43,24 +43,21 @@ Supported features:
   because these software packages use a reference date other than the
   UNIX Epoch time (00:00:00 UTC on 1 January 1970)).
 
-[<img src="tplot.png" data-border="0" width="600" height="367"
-alt="Temporal Plot Tool" />](g_gui_tplot_labels.png)  
+![Temporal Plot Tool](tplot.png)  
 *Figure: Temporal Plot Tool*
 
 To optionally add a title to the temporal plot and/or change the x and y
 axes labels, first type the desired text and then click *Draw* as showed
 below.
 
-[<img src="g_gui_tplot_labels.png" data-border="0" width="600"
-height="482" alt="g.gui.tplot add title and axes labels" />](g_gui_tplot_labels.png)  
+![g.gui.tplot add title and axes labels](g_gui_tplot_labels.png)  
 *Figure: Add title and labels to a time series plot*
 
 To export the time series data to a text file (date and data values),
 type a name for the file and click *Draw* again. Optionally, set the
 check-box to print headers, as well.
 
-[<img src="g_gui_tplot_export_csv.png" data-border="0" width="600"
-height="481" alt="g.gui.tplot export time series as csv file" />](g_gui_tplot_export_csv.png)  
+[g.gui.tplot export time series as csv file](g_gui_tplot_export_csv.png)  
 *Figure: Export time series values to a text file*
 
 ## NOTES

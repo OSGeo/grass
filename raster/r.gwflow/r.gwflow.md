@@ -9,11 +9,8 @@ project's coordinate reference system must be meters.
 This module is sensitive to mask settings. All cells which are outside
 the mask are ignored and handled as no flow boundaries.
 
-<img src="r_gwflow_concept.png" data-border="0" />  
-
-|                        |
-|------------------------|
-| *Workflow of r.gwflow* |
+![Workflow of r.gwflow](r_gwflow_concept.png)  
+*Workflow of r.gwflow*
 
 *r.gwflow* calculates the piezometric head and optionally the water
 budget and the filter velocity field, based on the hydraulic
@@ -64,11 +61,11 @@ Two different boundary conditions are implemented, the Dirichlet and
 Neumann conditions. By default the calculation area is surrounded by
 homogeneous Neumann boundary conditions. The calculation and boundary
 status of single cells must be set with a status map, the following
-states are supportet:
+states are supported:
 
 - 0 == inactive - the cell with status 0 will not be calculated, active
   cells will have a no flow boundary to this cell
-- 1 == active - this cell is used for groundwater floaw calculation,
+- 1 == active - this cell is used for groundwater flow calculation,
   inner sources and recharge can be defined for those cells
 - 2 == Dirichlet - cells of this type will have a fixed piezometric head
   value which do not change over the time

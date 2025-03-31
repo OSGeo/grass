@@ -1384,7 +1384,7 @@ class GMFrame(wx.Frame):
                 message=_("Script file '%s' doesn't exist. Operation canceled.")
                 % filename,
             )
-            return
+            return None
 
         # check permission
         if not os.access(filename, os.X_OK):
@@ -1401,14 +1401,14 @@ class GMFrame(wx.Frame):
                 style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
             )
             if dlg.ShowModal() != wx.ID_YES:
-                return
+                return None
             dlg.Destroy()
             try:
                 mode = stat.S_IMODE(os.lstat(filename)[stat.ST_MODE])
                 os.chmod(filename, mode | stat.S_IXUSR)
             except OSError:
                 GError(_("Unable to set permission. Operation canceled."), parent=self)
-                return
+                return None
 
         # check GRASS_ADDON_PATH
         addonPath = os.getenv("GRASS_ADDON_PATH", [])
@@ -2037,7 +2037,7 @@ class GMFrame(wx.Frame):
         """Changes bookcontrol page to page associated with display."""
         # moved from mapdisp/frame.py
         # TODO: why it is called 3 times when getting focus?
-        # and one times when loosing focus?
+        # and one times when losing focus?
         pgnum = self.notebookLayers.GetPageIndex(notebookLayerPage)
         if pgnum > -1:
             self.notebookLayers.SetSelection(pgnum)

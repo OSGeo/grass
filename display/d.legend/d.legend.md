@@ -34,11 +34,11 @@ obscure. When using **lines**, auto-scaled text similar to "4 of 16
 categories" will be placed at the bottom of the legend.
 
 The **thin** option sets the thinning factor. For raster maps with a 0th
-category, **thin=***10* gives cats \[0,10,20,...\]. For raster maps
-starting at category 1, **thin=***10* gives cats \[1,11,21,...\].
+category, **thin**=*10* gives cats \[0,10,20,...\]. For raster maps
+starting at category 1, **thin**=*10* gives cats \[1,11,21,...\].
 
 The **use** option lets the user create a legend made up of arbitrary
-category values. e.g. **use=***1000,100,10,0,-10,-100,-1000*
+category values. e.g. **use**=*1000,100,10,0,-10,-100,-1000*
 
 The **range** option lets the user define the minimum and maximum
 categories to be used in the legend. It may also be used to define the
@@ -111,8 +111,7 @@ d.rast elevation
 d.legend -d elevation
 ```
 
-<img src="d_legend.png" data-border="1"
-alt="Elevation map with legend" />
+![Elevation map with legend](d_legend.png)
 
 Displaying the legend with custom labels and background:
 
@@ -122,8 +121,7 @@ d.rast elevation
 d.legend raster=elevation -t label_step=20 label_values=108 title=Legend -b bgcolor=255:255:204 border_color=gray
 ```
 
-<img src="d_legend_custom_labels_and_background.png" data-border="1"
-alt="Elevation map with custom legend" />
+![Elevation map with custom legend](d_legend_custom_labels_and_background.png)
 
 Displaying the legend with logarithmic scale:
 
@@ -134,8 +132,7 @@ d.rast flowacc
 d.legend raster=flowacc -t -l label_step=1
 ```
 
-<img src="d_legend_logarithmic.png" data-border="1"
-alt="Flow accumulation map with logarithmic legend" />
+![Flow accumulation map with logarithmic legend](d_legend_logarithmic.png)
 
 ## SEE ALSO
 

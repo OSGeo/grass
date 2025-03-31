@@ -78,7 +78,7 @@ permissions: {}
 jobs:
   verify-success:
     name: Success
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     continue-on-error: true
     steps:
       - name: Set outputs for each job result type
