@@ -492,24 +492,23 @@ def create_gisrc(tmpdir, gisrcrc):
 def read_gisrc(filename):
     kv = {}
     try:
-        f = open(filename)
+        with open(filename) as f:
+            for line in f:
+                try:
+                    k, v = line.split(":", 1)
+                except ValueError as e:
+                    warning(
+                        _(
+                            "Invalid line in RC file ({file}): '{line}' ({error})\n"
+                        ).format(line=line, error=e, file=filename)
+                    )
+                    continue
+                kv[k.strip()] = v.strip()
+            if not kv:
+                warning(_("Empty RC file ({file})").format(file=filename))
+
     except OSError:
         return kv
-
-    for line in f:
-        try:
-            k, v = line.split(":", 1)
-        except ValueError as e:
-            warning(
-                _("Invalid line in RC file ({file}): '{line}' ({error})\n").format(
-                    line=line, error=e, file=filename
-                )
-            )
-            continue
-        kv[k.strip()] = v.strip()
-    if not kv:
-        warning(_("Empty RC file ({file})").format(file=filename))
-    f.close()
 
     return kv
 
@@ -530,20 +529,18 @@ def write_gisrcrc(gisrcrc, gisrc, skip_variable=None):
 
 def read_env_file(path):
     kv = {}
-    f = open(path)
-    for line in f:
-        k, v = line.split(":", 1)
-        kv[k.strip()] = v.strip()
-    f.close()
+    with open(path) as f:
+        for line in f:
+            k, v = line.split(":", 1)
+            kv[k.strip()] = v.strip()
     return kv
 
 
 def write_gisrc(kv, filename, append=False):
     # use append=True to avoid a race condition between write_gisrc() and
     # grass_prompt() on startup (PR #548)
-    f = open(filename, "a" if append else "w")
-    f.writelines("%s: %s\n" % (k, v) for k, v in kv.items())
-    f.close()
+    with open(filename, "a" if append else "w") as f:
+        f.writelines("%s: %s\n" % (k, v) for k, v in kv.items())
 
 
 def add_mapset_to_gisrc(gisrc, grassdb, location, mapset):
@@ -1484,9 +1481,8 @@ def say_hello():
     sys.stderr.write(_("Welcome to GRASS GIS %s") % GRASS_VERSION)
     if GRASS_VERSION.endswith("dev"):
         try:
-            filerev = open(gpath("etc", "VERSIONNUMBER"))
-            linerev = filerev.readline().rstrip("\n")
-            filerev.close()
+            with open(gpath("etc", "VERSIONNUMBER")) as filerev:
+                linerev = filerev.readline().rstrip("\n")
 
             revision = linerev.split(" ")[1]
             sys.stderr.write(" (" + revision + ")")
@@ -1817,10 +1813,9 @@ def print_params(params):
         plat = gpath("include", "Make", "Platform.make")
         if not os.path.exists(plat):
             fatal(_("Please install the GRASS GIS development package"))
-        fileplat = open(plat)
-        # this is in fact require only for some, but prepare it anyway
-        linesplat = fileplat.readlines()
-        fileplat.close()
+        with open(plat) as fileplat:
+            # this is in fact require only for some, but prepare it anyway
+            linesplat = fileplat.readlines()
 
     for arg in params:
         if arg == "path":
@@ -1832,9 +1827,8 @@ def print_params(params):
             sys.stdout.write("%s\n" % val[0].split("=")[1].strip())
         elif arg == "build":
             build = gpath("include", "grass", "confparms.h")
-            filebuild = open(build)
-            val = filebuild.readline()
-            filebuild.close()
+            with open(build) as filebuild:
+                val = filebuild.readline()
             sys.stdout.write("%s\n" % val.strip().strip('"').strip())
         elif arg == "compiler":
             val = grep("CC", linesplat)
@@ -1842,9 +1836,8 @@ def print_params(params):
         elif arg == "revision":
             sys.stdout.write("@GRASS_VERSION_GIT@\n")
         elif arg == "svn_revision":
-            filerev = open(gpath("etc", "VERSIONNUMBER"))
-            linerev = filerev.readline().rstrip("\n")
-            filerev.close()
+            with open(gpath("etc", "VERSIONNUMBER")) as filerev:
+                linerev = filerev.readline().rstrip("\n")
             try:
                 revision = linerev.split(" ")[1]
                 sys.stdout.write("%s\n" % revision[1:])
