@@ -2254,7 +2254,7 @@ class Color:
         """Parse a tuple of style, fg color, bg color into an ANSI escape sequence.
 
         Returns a string with the ANSI escape sequence or None.
-        If raw is True it will return a raw ANSI escapre sequence instead of an encoded one.
+        If raw is True it will return a raw ANSI escape sequence instead of an encoded one.
         """
         e_start = ""
         e_end = ""
@@ -2283,7 +2283,7 @@ class Color:
         """Colors the given string to the given color
 
         If monochrome is True, it will not format the string
-        If raw is True, it will emit a raw ANSI escape code, rather than an exncoded one
+        If raw is True, it will emit a raw ANSI escape code, rather than an encoded one
         """
         if monochrome:
             return s
