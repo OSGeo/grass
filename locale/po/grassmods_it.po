@@ -15,15 +15,16 @@ msgstr ""
 "Project-Id-Version: grassmods_it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-23 03:37-0600\n"
-"PO-Revision-Date: 2015-03-29 13:25+0100\n"
-"Last-Translator: Luca Delucchi <lucadeluge@gmail.com>\n"
-"Language-Team: Italian <grass-translations@lists.osgeo.org>\n"
+"PO-Revision-Date: 2025-03-12 12:05+0000\n"
+"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
+"Language-Team: Italian <https://weblate.osgeo.org/projects/grass-gis/"
+"grassmods/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.10\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.4.3\n"
 "X-Poedit-Bookmarks: 2364,2381,2449,2554,2623,3551,3587,-1,-1,6460\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -63398,7 +63399,7 @@ msgstr ""
 #: ../vector/v.info/print.c:30 ../vector/v.info/print.c:32
 #, c-format
 msgid "%s"
-msgstr ""
+msgstr "%s"
 
 #: ../vector/v.info/print.c:141
 #, c-format
