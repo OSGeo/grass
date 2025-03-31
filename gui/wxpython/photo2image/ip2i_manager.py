@@ -865,7 +865,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         self.GCPcount = 0
         try:
             with open(self.file["points"], mode="w") as f:
-                # use os.linesep or '\n' here ???
                 f.write("# Ground Control Points File\n")
                 f.write("# \n")
                 f.write("# target location: " + self.currentlocation + "\n")
