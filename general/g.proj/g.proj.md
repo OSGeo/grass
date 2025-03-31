@@ -122,7 +122,7 @@ Print the CRS information for the current project in JSON format:
 g.proj -p format=json
 ```
 
-Print the CRS information for the current project in SHELL format:
+Print the CRS information for the current project in shell format:
 
 ```sh
 g.proj -p format=shell
@@ -245,14 +245,14 @@ ogr2ogr -t_srs "`g.proj -wf`" polbnda_italy_GB_ovest.shp polbnda_italy_LL.shp
 Using the CRS information for the current project in JSON format with pandas:
 
 ```python
-  import grass.script as gs
-  import pandas as pd
+import grass.script as gs
+import pandas as pd
 
-  # Run g.proj to get CRS information in JSON format.
-  proj_data = gs.parse_command("g.proj", flags="p", format="json")
+# Run g.proj to get CRS information in JSON format.
+proj_data = gs.parse_command("g.proj", flags="p", format="json")
 
-  df = pd.DataFrame(proj_data, index=[0]).T
-  print(df)
+df = pd.DataFrame.from_dict(proj_data, orient='index')
+print(df)
 ```
 
 ```sh

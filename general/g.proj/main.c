@@ -398,14 +398,15 @@ int main(int argc, char *argv[])
         modify_projinfo();
     else
 #ifdef HAVE_OGR
-        G_fatal_error(_("No output format specified, define one "
-                        "of flags -%c, -%c, -%c, or -%c"),
-                      printinfo->key, shellinfo->key, printproj4->key,
-                      printwkt->key);
+        G_fatal_error(
+            _("No output format specified. Define one of the options: "
+              "plain, shell, json, wkt, or proj4 using the -%c flag."),
+            printinfo->key);
 #else
-        G_fatal_error(_("No output format specified, define one "
-                        "of flags -%c, -%c, or -%c"),
-                      printinfo->key, shellinfo->key, printproj4->key);
+        G_fatal_error(
+            _("No output format specified. Define one of the options: "
+              "plain, shell, json, or proj4 using the -%c flag."),
+            printinfo->key);
 #endif
 
     /* Tidy Up */
