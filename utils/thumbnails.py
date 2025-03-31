@@ -15,6 +15,8 @@
 
 import os
 import atexit
+from pathlib import Path
+
 import grass.script as gs
 
 
@@ -35,10 +37,7 @@ def cleanup():
 
 
 def make_gradient(path):
-    fh = open(path)
-    text = fh.read()
-    fh.close()
-
+    text = Path(path).read_text()
     lines = text.splitlines()
     records = []
     for line in lines:
@@ -201,9 +200,10 @@ def main():
 
     gs.mapcalc("$grad = float(col())", grad=tmp_grad_rel, quiet=True)
 
-    for table in os.listdir(color_dir):
-        path = os.path.join(color_dir, table)
-        grad = make_gradient(path)
+    color_dir_path = Path(color_dir)
+    for table_path in color_dir_path.iterdir():
+        table = table_path.name
+        grad = make_gradient(table_path)
         make_image(output_dir, table, grad, height=height, width=width)
 
     gs.mapcalc("$grad = col()", grad=tmp_grad_abs, quiet=True)

@@ -24,7 +24,7 @@ from icons.icon import MetaIcon
 
 
 class ModelerToolbar(BaseToolbar):
-    """Graphical modeler toolbaro (see gmodeler.py)"""
+    """Graphical modeler toolbar (see gmodeler.py)"""
 
     def __init__(self, parent):
         BaseToolbar.__init__(self, parent)

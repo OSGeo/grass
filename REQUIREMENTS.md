@@ -35,6 +35,8 @@ for other platforms you may have to install some of them.
   GDAL: [https://gdal.org](https://gdal.org)
 - **Python >= 3.8** (for temporal framework, scripts, wxGUI, and ctypes interface)
   [https://www.python.org](https://www.python.org)
+- **MkDocs** with "Material" theme Python packages for the manual pages:
+  See `man/mkdocs/requirements.txt`.
 
 ## Optional packages
 
@@ -135,7 +137,7 @@ MacOSX users may go here to download precompiled libraries etc.:
 
 ---
 
-© _GRASS Development Team 1997-2024_
+© _GRASS Development Team 1997-2025_
 
 Please report bugs here:
 [https://grass.osgeo.org/contribute/](https://grass.osgeo.org/contribute/)

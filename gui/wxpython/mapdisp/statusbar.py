@@ -223,11 +223,13 @@ class SbManager:
         It should not be necessary to call it manually.
         """
 
-        widgets = []
-        for item in self.statusbarItems.values():
-            widgets.append((item.GetPosition(), item.GetWidget()))
-
-        widgets.append((1, self.progressbar.GetWidget()))
+        widgets = [
+            *[
+                (item.GetPosition(), item.GetWidget())
+                for item in self.statusbarItems.values()
+            ],
+            (1, self.progressbar.GetWidget()),
+        ]
 
         for idx, win in widgets:
             if not win:
@@ -624,11 +626,11 @@ class SbGoTo(SbItem):
                 projOut=projection,
                 flags="d",
             )
-            if coord:
-                if proj in {"ll", "latlong", "longlat"} and format == "DMS":
-                    return "%s" % utils.Deg2DMS(coord[0], coord[1], precision=precision)
-                return "%.*f; %.*f" % (precision, coord[0], precision, coord[1])
-            raise SbException(_("Error in projection (check the settings)"))
+            if not coord:
+                raise SbException(_("Error in projection (check the settings)"))
+            if proj in {"ll", "latlong", "longlat"} and format == "DMS":
+                return "%s" % utils.Deg2DMS(coord[0], coord[1], precision=precision)
+            return "%.*f; %.*f" % (precision, coord[0], precision, coord[1])
         if self.mapFrame.GetMap().projinfo["proj"] == "ll" and format == "DMS":
             return "%s" % utils.Deg2DMS(
                 region["center_easting"],
@@ -756,7 +758,7 @@ class SbCoordinates(SbTextItem):
             self.SetValue(e.message)
         # TODO: remove these excepts, they just hide errors, solve problems
         # differently
-        except TypeError as e:
+        except TypeError:
             self.SetValue("")
         except AttributeError:
             # during initialization MapFrame has no MapWindow
@@ -784,23 +786,21 @@ class SbCoordinates(SbTextItem):
         @throws SbException if useDefinedProjection is True and projection is not
                 defined in UserSettings
         """
-        if useDefinedProjection:
-            settings = UserSettings.Get(
-                group="projection", key="statusbar", subkey="proj4"
-            )
-            if not settings:
-                raise SbException(_("Projection not defined (check the settings)"))
-            # reproject values
-            proj, coord = utils.ReprojectCoordinates(
-                coord=(e, n), projOut=settings, flags="d"
-            )
-            if coord:
-                e, n = coord
-                if proj in {"ll", "latlong", "longlat"} and format == "DMS":
-                    return utils.Deg2DMS(e, n, precision=precision)
-                return "%.*f; %.*f" % (precision, e, precision, n)
+        if not useDefinedProjection:
+            if self.mapFrame.GetMap().projinfo["proj"] == "ll" and format == "DMS":
+                return utils.Deg2DMS(e, n, precision=precision)
+            return "%.*f; %.*f" % (precision, e, precision, n)
+        settings = UserSettings.Get(group="projection", key="statusbar", subkey="proj4")
+        if not settings:
+            raise SbException(_("Projection not defined (check the settings)"))
+        # reproject values
+        proj, coord = utils.ReprojectCoordinates(
+            coord=(e, n), projOut=settings, flags="d"
+        )
+        if not coord:
             raise SbException(_("Error in projection (check the settings)"))
-        if self.mapFrame.GetMap().projinfo["proj"] == "ll" and format == "DMS":
+        e, n = coord
+        if proj in {"ll", "latlong", "longlat"} and format == "DMS":
             return utils.Deg2DMS(e, n, precision=precision)
         return "%.*f; %.*f" % (precision, e, precision, n)
 

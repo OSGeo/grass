@@ -230,11 +230,11 @@ Symbol  description
 
   ==    equal
   !=    not equal
-  >     greater than
-  >=    greater than or equal
-  <     less than
-  <=    less than or equal
-  &&    and
+  &gt;     greater than
+  &gt;=    greater than or equal
+  &lt;     less than
+  &lt;=    less than or equal
+  &amp;&amp;    and
   ||    or
 </pre></div>
 
@@ -291,26 +291,26 @@ The structure is similar to the select operator with the addition of an
 aggregation operator:
 {"comparison operator", "topological relations", aggregation operator, "temporal operator"}
 <br>
-This aggregation operator (| or &) defines the behaviour when a map is
+This aggregation operator (| or &amp;) defines the behaviour when a map is
 related to more than one map, e.g. for the topological relation 'contains'.
-Should all (&) conditions for the related maps be true or is it sufficient
+Should all (&amp;) conditions for the related maps be true or is it sufficient
 to have any (|) condition that is true. The resulting boolean value is
-then compared to the first condition by the comparison operator (|| or &&).
+then compared to the first condition by the comparison operator (|| or &amp;&amp;).
 By default, the aggregation operator is related to the comparison
 operator:<br>
-comparison operator -> aggregation operator:
+comparison operator -&gt; aggregation operator:
 
 <div class="code"><pre>
-|| -> | and && -> &
+|| -&gt; | and &amp;&amp; -&gt; &amp;
 </pre></div>
 
 <b>Examples:</b>
 <div class="code"><pre>
 Condition 1 {||, equal, r} Condition 2
-Condition 1 {&&, equal|during, l} Condition 2
-Condition 1 {&&, equal|contains, |, l} Condition 2
-Condition 1 {&&, equal|during, l} Condition 2 && Condition 3
-Condition 1 {&&, equal|during, l} Condition 2 {&&,contains, |, r} Condition 3
+Condition 1 {&amp;&amp;, equal|during, l} Condition 2
+Condition 1 {&amp;&amp;, equal|contains, |, l} Condition 2
+Condition 1 {&amp;&amp;, equal|during, l} Condition 2 &amp;&amp; Condition 3
+Condition 1 {&amp;&amp;, equal|during, l} Condition 2 {&amp;&amp;,contains, |, r} Condition 3
 </pre></div>
 
 <h4>Hash operator</h4>
@@ -328,7 +328,7 @@ A list of integers (scalars) corresponding to the maps of A that contain
 maps from B will be returned.
 
 <div class="code"><pre>
-C = if({equal}, A {#, contains} B > 2, A {:, contains} B)
+C = if({equal}, A {#, contains} B &gt; 2, A {:, contains} B)
 </pre></div>
 
 This expression selects all maps from A that temporally contain at least 2
@@ -434,13 +434,13 @@ calculations would implicitly aggregate all maps of B into one result map for
 a1 of A:
 
 <pre class="code">
- C = A {+, contains} B --> c1 = a1 + b1 + b2 + b3
+ C = A {+, contains} B --&gt; c1 = a1 + b1 + b2 + b3
 </pre><p>
 
 <b>Important</b>: the aggregation behaviour is not symmetric
 
 <pre class="code">
- C = B {+, during} A --> c1 = b1 + a1
+ C = B {+, during} A --&gt; c1 = b1 + a1
                          c2 = b2 + a1
                          c3 = b3 + a1
 </pre>
@@ -497,7 +497,7 @@ t.rast.colors input=ndvi color=ndvi
 Sum maps from STRDS A with maps from STRDS B which have equal time stamps
 and are temporally before Jan. 1. 2005 and store them in STRDS D:
 <div class="code"><pre>
-D = if(start_date(A) < "2005-01-01", A + B)
+D = if(start_date(A) &lt; "2005-01-01", A + B)
 </pre></div>
 
 Create the sum of all maps from STRDS A and B that have equal time stamps
@@ -520,7 +520,7 @@ Select all cells from STRDS B with equal temporal relations to STRDS A, if
 the cells of A are in the range [100.0, 1600] of time intervals that have
 more than 30 days (Jan, Mar, May, Jul, Aug, Oct, Dec):
 <div class="code"><pre>
-C = if(A > 100 && A < 1600 && td(A) > 30, B)
+C = if(A &gt; 100 &amp;&amp; A &lt; 1600 &amp;&amp; td(A) &gt; 30, B)
 </pre></div>
 
 <h3>Selection of raster cells with temporal topology relation</h3>
@@ -528,7 +528,7 @@ C = if(A > 100 && A < 1600 && td(A) > 30, B)
 Same expression with explicit definition of the temporal topology relation
 and temporal operators:
 <div class="code"><pre>
-C = if({equal}, A > 100 && A < 1600 {&&,equal} td(A) > 30, B)
+C = if({equal}, A &gt; 100 &amp;&amp; A &lt; 1600 {&amp;&amp;,equal} td(A) &gt; 30, B)
 </pre></div>
 
 <h3>Conditional computation</h3>
@@ -539,7 +539,7 @@ than 10 degrees. Computation is performed if STRDS "Prec" and "Temp" have
 equal time stamps. The number of days or fraction of days per interval is
 computed using the td() function that has as argument the STRDS "Prec":
 <div class="code"><pre>
-C = if(Temp > 10.0, Prec / 3600.0 / 24.0 / td(Prec))
+C = if(Temp &gt; 10.0, Prec / 3600.0 / 24.0 / td(Prec))
 </pre></div>
 
 <h3>Conditional computation with temporal topology relation</h3>
@@ -547,7 +547,7 @@ C = if(Temp > 10.0, Prec / 3600.0 / 24.0 / td(Prec))
 Same expression with explicit definition of the temporal topology relation
 and temporal operators:
 <div class="code"><pre>
-C = if({equal}, Temp > 10.0, Prec / 3600.0 / 24.0 {/,equal,l} td(Prec))
+C = if({equal}, Temp &gt; 10.0, Prec / 3600.0 / 24.0 {/,equal,l} td(Prec))
 </pre></div>
 
 <h3>Computation with time intervals</h3>
@@ -555,7 +555,7 @@ Compute the mean value of all maps from STRDS A that are located during time
 intervals of STRDS B if more than one map of A is contained in an interval
 of B, use A otherwise. The resulting time intervals are either from B or A:
 <div class="code"><pre>
-C = if(B {#,contain} A > 1, (B {+,contain,l} A - B) / (B {#,contain} A), A)
+C = if(B {#,contain} A &gt; 1, (B {+,contain,l} A - B) / (B {#,contain} A), A)
 </pre></div>
 
 <h3>Computation with time intervals with temporal topology relation</h3>
@@ -563,14 +563,14 @@ C = if(B {#,contain} A > 1, (B {+,contain,l} A - B) / (B {#,contain} A), A)
 Same expression with explicit definition of the temporal topology relation
 and temporal operators:
 <div class="code"><pre>
-C = if({equal}, B {#,contain} A > 1, (B {+,contain,l} A {-,equal,l} B) {equal,=/} (B {#,contain} A), A)
+C = if({equal}, B {#,contain} A &gt; 1, (B {+,contain,l} A {-,equal,l} B) {equal,=/} (B {#,contain} A), A)
 </pre></div>
 
 <h3>Compute DOY for spatio-temporal conditions</h3>
 Compute the DOY for all maps from STRDS A where conditions are met at three
-consecutive time intervals (e.g. temperature > 0):
+consecutive time intervals (e.g. temperature &gt; 0):
 <div class="code"><pre>
-B = if(A > 0.0 && A[-1] > 0.0 && A[-2] > 0.0, start_doy(A, -1), 0)"
+B = if(A &gt; 0.0 &amp;&amp; A[-1] &gt; 0.0 &amp;&amp; A[-2] &gt; 0.0, start_doy(A, -1), 0)"
 </pre></div>
 
 
@@ -590,7 +590,7 @@ B = if(A > 0.0 && A[-1] > 0.0 && A[-2] > 0.0, start_doy(A, -1), 0)"
 <h2>REFERENCES</h2>
 
 The use of this module requires the following software to be installed:
-<a href="http://www.dabeaz.com/ply/">PLY(Python-Lex-Yacc)</a>
+<a href="https://www.dabeaz.com/ply/">PLY(Python-Lex-Yacc)</a>
 
 <p>
 <div class="code"><pre>

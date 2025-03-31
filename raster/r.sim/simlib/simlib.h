@@ -35,6 +35,7 @@ struct WaterParams {
     int miter, nwalka;
     double timec;
     int ts, timesec;
+    double mintimestep;
 
     double rain_val;
     double manin_val;
@@ -86,10 +87,10 @@ void free_walkers(void);
 
 struct options {
     struct Option *elevin, *dxin, *dyin, *rain, *infil, *traps, *manin,
-        *observation, *depth, *disch, *err, *outwalk, *nwalk, *niter, *outiter,
-        *density, *diffc, *hmax, *halpha, *hbeta, *wdepth, *detin, *tranin,
-        *tauin, *tc, *et, *conc, *flux, *erdep, *rainval, *maninval, *infilval,
-        *logfile, *seed, *threads;
+        *observation, *depth, *disch, *err, *outwalk, *nwalk, *niter,
+        *mintimestep, *outiter, *density, *diffc, *hmax, *halpha, *hbeta,
+        *wdepth, *detin, *tranin, *tauin, *tc, *et, *conc, *flux, *erdep,
+        *rainval, *maninval, *infilval, *logfile, *seed, *threads;
 };
 
 struct flags {

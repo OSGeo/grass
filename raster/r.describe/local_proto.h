@@ -7,7 +7,7 @@
  * PURPOSE:      Prints terse list of category values found in a raster
  *               map layer.
  *
- * COPYRIGHT:    (C) 2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006-2025 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -19,17 +19,23 @@
 #define __R_DESC_LOCAL_PROTO_H__
 
 #include <grass/raster.h>
+#include <grass/parson.h>
+
+enum OutputFormat { PLAIN, JSON };
 
 /* describe.c */
-int describe(const char *, int, char *, int, int, int, int, int);
+int describe(const char *, int, char *, int, int, int, int, int,
+             enum OutputFormat);
 
 /* dumplist.c */
 int long_list(struct Cell_stats *, DCELL, DCELL, char *, int, RASTER_MAP_TYPE,
-              int);
+              int, enum OutputFormat);
 int compact_list(struct Cell_stats *, DCELL, DCELL, char *, int,
-                 RASTER_MAP_TYPE, int);
-int compact_range_list(CELL, CELL, CELL, CELL, CELL, CELL, char *, int);
-int range_list(CELL, CELL, CELL, CELL, CELL, CELL, char *, int);
+                 RASTER_MAP_TYPE, int, enum OutputFormat);
+int compact_range_list(CELL, CELL, CELL, CELL, CELL, CELL, char *, int,
+                       enum OutputFormat);
+int range_list(CELL, CELL, CELL, CELL, CELL, CELL, char *, int,
+               enum OutputFormat);
 
 /* main.c */
 int main(int, char *[]);

@@ -120,6 +120,14 @@ class CmdThread(threading.Thread):
     def run(self):
         os.environ["GRASS_MESSAGE_FORMAT"] = "gui"
         while True:
+            variables = {
+                "callable": None,
+                "onDone": None,
+                "onPrepare": None,
+                "userData": None,
+                "addLayer": None,
+                "notification": None,
+            }
             requestId, args, kwds = self.requestQ.get()
             for key in (
                 "callable",
@@ -130,13 +138,11 @@ class CmdThread(threading.Thread):
                 "notification",
             ):
                 if key in kwds:
-                    vars()[key] = kwds[key]
+                    variables[key] = kwds[key]
                     del kwds[key]
-                else:
-                    vars()[key] = None
 
-            if not vars()["callable"]:
-                vars()["callable"] = GrassCmd
+            if not variables["callable"]:
+                variables["callable"] = GrassCmd
 
             requestTime = time.time()
 
@@ -146,21 +152,21 @@ class CmdThread(threading.Thread):
                     cmd=args[0],
                     time=requestTime,
                     pid=requestId,
-                    onPrepare=vars()["onPrepare"],
-                    userData=vars()["userData"],
+                    onPrepare=variables["onPrepare"],
+                    userData=variables["userData"],
                 )
 
                 wx.PostEvent(self.receiver, event)
 
                 # run command
                 event = wxCmdRun(
-                    cmd=args[0], pid=requestId, notification=vars()["notification"]
+                    cmd=args[0], pid=requestId, notification=variables["notification"]
                 )
 
                 wx.PostEvent(self.receiver, event)
 
             time.sleep(0.1)
-            self.requestCmd = vars()["callable"](*args, **kwds)
+            self.requestCmd = variables["callable"](*args, **kwds)
             if self._want_abort_all and self.requestCmd is not None:
                 self.requestCmd.abort()
                 if self.requestQ.empty():
@@ -211,7 +217,7 @@ class CmdThread(threading.Thread):
                         "map=%s" % mapName,
                         "color=%s" % colorTable,
                     ]
-                    self.requestCmdColor = vars()["callable"](*argsColor, **kwds)
+                    self.requestCmdColor = variables["callable"](*argsColor, **kwds)
                     self.resultQ.put((requestId, self.requestCmdColor.run()))
 
             if self.receiver:
@@ -221,10 +227,10 @@ class CmdThread(threading.Thread):
                     returncode=returncode,
                     time=requestTime,
                     pid=requestId,
-                    onDone=vars()["onDone"],
-                    userData=vars()["userData"],
-                    addLayer=vars()["addLayer"],
-                    notification=vars()["notification"],
+                    onDone=variables["onDone"],
+                    userData=variables["userData"],
+                    addLayer=variables["addLayer"],
+                    notification=variables["notification"],
                 )
 
                 # send event
@@ -310,7 +316,7 @@ class GStderr:
 
             if "GRASS_INFO_PERCENT" in line:
                 value = int(line.rsplit(":", 1)[1].strip())
-                progressValue = value if value >= 0 and value < 100 else 0
+                progressValue = value if 0 <= value < 100 else 0
             elif "GRASS_INFO_MESSAGE" in line:
                 self.type = "message"
                 self.message += line.split(":", 1)[1].strip() + "\n"
@@ -850,13 +856,15 @@ class GConsole(wx.EvtHandler):
             for p in task.get_options()["flags"]:
                 if p.get("name") == "r" and p.get("value"):
                     action = "delete"
+            mask_full_name = gs.parse_command("r.mask.status", format="json")["name"]
+            mask_name, mask_mapset = mask_full_name.split("@", maxsplit=1)
             gisenv = gs.gisenv()
             self._giface.grassdbChanged.emit(
                 grassdb=gisenv["GISDBASE"],
                 location=gisenv["LOCATION_NAME"],
-                mapset=gisenv["MAPSET"],
+                mapset=mask_mapset,
                 action=action,
-                map="MASK",
+                map=mask_name,
                 element="raster",
             )
 

@@ -1,5 +1,4 @@
-"""Error types for dispatcher mechanism
-"""
+"""Error types for dispatcher mechanism"""
 
 
 class DispatcherError(Exception):

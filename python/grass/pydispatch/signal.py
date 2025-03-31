@@ -266,8 +266,7 @@ class Signal:
         Traceback (most recent call last):
         TypeError: mywrite() takes exactly 1 argument (0 given)
         """
-        if "signal" in kwargs:
-            del kwargs["signal"]
+        kwargs.pop("signal", None)
         self.emit(*args, **kwargs)
 
 

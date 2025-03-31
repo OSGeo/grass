@@ -52,8 +52,9 @@ def replace_in_file(file_path, pattern, repl):
     # using tmp file to store the replaced content
     tmp_file_path = file_path + ".tmp"
     with open(file_path) as old_file, open(tmp_file_path, "w") as new_file:
-        for line in old_file:
-            new_file.write(re.sub(pattern=pattern, string=line, repl=repl))
+        new_file.writelines(
+            re.sub(pattern=pattern, string=line, repl=repl) for line in old_file
+        )
     # remove old file since it must not exist for rename/move
     os.remove(file_path)
     # replace old file by new file
@@ -160,19 +161,19 @@ def get_svn_revision():
     """
     # TODO: here should be starting directory
     # but now we are using current as starting
-    p = subprocess.Popen(
+    with subprocess.Popen(
         ["svnversion", "."], stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    )
-    stdout, stderr = p.communicate()
-    rc = p.poll()
-    if not rc:
+    ) as p:
+        stdout, stderr = p.communicate()
+        rc = p.poll()
+        if rc:
+            return None
         stdout = stdout.strip()
         stdout = stdout.removesuffix("M")
         if ":" in stdout:
             # the first one is the one of source code
             stdout = stdout.split(":")[0]
         return stdout
-    return None
 
 
 def get_svn_info():
@@ -277,9 +278,7 @@ def get_html_test_authors_table(directory, tests_authors):
         not_testing_authors = tested_dir_authors - tests_authors
     else:
         no_svn_text = (
-            '<span style="font-size: 60%">'
-            "Authors cannot be obtained using SVN."
-            "</span>"
+            '<span style="font-size: 60%">Authors cannot be obtained using SVN.</span>'
         )
         not_testing_authors = tested_dir_authors = [no_svn_text]
     if not not_testing_authors:
@@ -448,8 +447,7 @@ def wrap_stdstream_to_html(infile, outfile, module, stream):
     after = "</pre></body></html>"
     with open(outfile, "w") as html, open(infile) as text:
         html.write(before)
-        for line in text:
-            html.write(color_error_line(html_escape(line)))
+        html.writelines(color_error_line(html_escape(line)) for line in text)
         html.write(after)
 
 
@@ -516,8 +514,7 @@ def success_to_html_text(total, successes):
         # alternatives: SUCCEEDED, passed, OK
         return '<span style="color: green">succeeded</span>'
     return (
-        '<span style="color: red; font-size: 60%">'
-        "? more successes than total ?</span>"
+        '<span style="color: red; font-size: 60%">? more successes than total ?</span>'
     )
 
 
@@ -527,10 +524,8 @@ UNKNOWN_NUMBER_HTML = '<span style="font-size: 60%">unknown</span>'
 def success_to_html_percent(total, successes):
     if total:
         pass_per = 100 * (float(successes) / total)
-        pass_per = percent_to_html(pass_per)
-    else:
-        pass_per = UNKNOWN_NUMBER_HTML
-    return pass_per
+        return percent_to_html(pass_per)
+    return UNKNOWN_NUMBER_HTML
 
 
 class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
@@ -561,9 +556,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         svn_info = get_svn_info()
         if not svn_info:
             svn_text = (
-                '<span style="font-size: 60%">'
-                "SVN revision cannot be obtained"
-                "</span>"
+                '<span style="font-size: 60%">SVN revision cannot be obtained</span>'
             )
         else:
             url = get_source_url(
@@ -631,9 +624,9 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         )
 
         self.main_index.write(
-            "<tbody>{tfoot}</table>"
-            "<p>{summary}</p>"
-            "</body></html>".format(tfoot=tfoot, summary=summary_sentence)
+            "<tbody>{tfoot}</table><p>{summary}</p></body></html>".format(
+                tfoot=tfoot, summary=summary_sentence
+            )
         )
         self.main_index.close()
 
@@ -760,7 +753,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             # TODO: replace by better handling of potential lists when parsing
             # TODO: create link to module if running in grass or in addons
             # alternatively a link to module test summary
-            if type(modules) is not list:
+            if not isinstance(modules, list):
                 modules = [modules]
 
         # here we would have also links to coverage, profiling, ...
@@ -797,8 +790,10 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             file_index.write(files_section)
 
             if supplementary_files:
-                for f in supplementary_files:
-                    file_index.write('<li><a href="{f}">{f}</a></li>'.format(f=f))
+                file_index.writelines(
+                    '<li><a href="{f}">{f}</a></li>'.format(f=f)
+                    for f in supplementary_files
+                )
 
             file_index.write("</ul>")
 
@@ -853,41 +848,34 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
         svn_info = get_svn_info()
         svn_revision = "" if not svn_info else svn_info["revision"]
 
-        summary = {}
-        summary["files_total"] = self.test_files
-        summary["files_successes"] = self.files_pass
-        summary["files_failures"] = self.files_fail
-
-        summary["names"] = self.names
-        summary["tested_dirs"] = self.tested_dirs
-        # TODO: we don't have a general mechanism for storing any type in text
-        summary["files_returncodes"] = [str(item) for item in self.files_returncodes]
-
-        # let's use seconds as a universal time delta format
-        # (there is no standard way how to store time delta as string)
-        summary["time"] = self.main_time.total_seconds()
-
-        status = "failed" if self.files_fail else "succeeded"
-        summary["status"] = status
-
-        summary["total"] = self.total
-        summary["successes"] = self.successes
-        summary["failures"] = self.failures
-        summary["errors"] = self.errors
-        summary["skipped"] = self.skipped
-        summary["expected_failures"] = self.expected_failures
-        summary["unexpected_successes"] = self.unexpected_success
-
-        summary["test_files_authors"] = self.test_files_authors
-        summary["tested_modules"] = self.modules
-        summary["svn_revision"] = svn_revision
-        # ignoring issues with time zones
-        summary["timestamp"] = self.main_start_time.strftime("%Y-%m-%d %H:%M:%S")
-        # TODO: add some general metadata here (passed in constructor)
-
-        # add additional information
-        for key, value in self._info.items():
-            summary[key] = value
+        summary = {
+            "files_total": self.test_files,
+            "files_successes": self.files_pass,
+            "files_failures": self.files_fail,
+            "names": self.names,
+            "tested_dirs": self.tested_dirs,
+            # TODO: we don't have a general mechanism for storing any type in text
+            "files_returncodes": [str(item) for item in self.files_returncodes],
+            # let's use seconds as a universal time delta format
+            # (there is no standard way how to store time delta as string)
+            "time": self.main_time.total_seconds(),
+            "status": "failed" if self.files_fail else "succeeded",
+            "total": self.total,
+            "successes": self.successes,
+            "failures": self.failures,
+            "errors": self.errors,
+            "skipped": self.skipped,
+            "expected_failures": self.expected_failures,
+            "unexpected_successes": self.unexpected_success,
+            "test_files_authors": self.test_files_authors,
+            "tested_modules": self.modules,
+            "svn_revision": svn_revision,
+            # ignoring issues with time zones
+            "timestamp": self.main_start_time.strftime("%Y-%m-%d %H:%M:%S"),
+            # TODO: add some general metadata here (passed in constructor)
+            # add additional information
+            **dict(self._info.items()),
+        }
 
         summary_filename = os.path.join(self.result_dir, "test_keyvalue_result.txt")
         text = keyvalue_to_text(summary, sep="=", vsep="\n", isep=",")
@@ -958,9 +946,6 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
     def __init__(self, stream):
         super().__init__()
         self._stream = stream
-
-    def start(self, results_dir):
-        super().start(results_dir)
 
     def finish(self):
         super().finish()
@@ -1129,7 +1114,7 @@ class TestsuiteDirReporter:
                 test_file_authors = summary.get("test_file_authors")
                 if not test_file_authors:
                     test_file_authors = []
-                if type(test_file_authors) is not list:
+                if not isinstance(test_file_authors, list):
                     test_file_authors = [test_file_authors]
                 test_files_authors.extend(test_file_authors)
 

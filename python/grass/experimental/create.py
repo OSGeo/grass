@@ -39,18 +39,19 @@ def require_create_ensure_mapset(
     )
     exists = mapset_exists(path)
     if create and exists:
-        if overwrite:
-            delete_mapset(path.directory, path.location, path.mapset)
-        else:
-            raise ValueError(
+        if not overwrite:
+            msg = (
                 f"Mapset '{path.mapset}' already exists, "
                 "use a different name, overwrite, or ensure"
             )
+            raise ValueError(msg)
+        delete_mapset(path.directory, path.location, path.mapset)
     if create or (ensure and not exists):
         create_mapset(path.directory, path.location, path.mapset)
     elif not exists or not is_mapset_valid(path):
         reason = get_mapset_invalid_reason(path.directory, path.location, path.mapset)
-        raise ValueError(f"Mapset {path.mapset} is not valid: {reason}")
+        msg = f"Mapset {path.mapset} is not valid: {reason}"
+        raise ValueError(msg)
 
 
 def create_temporary_mapset(path, location=None) -> MapsetPath:

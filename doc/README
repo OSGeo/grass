@@ -40,7 +40,7 @@ Database
 
 streams attributes screenshot
 
-DIR="../trunk-commands/doc/"
+DIR="../doc/"
 for FILE in *.png; do convert $FILE -resize 200x200 $DIR/`basename -s .png $FILE`.jpg; done;
 
 

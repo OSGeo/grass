@@ -32,9 +32,12 @@ from grass.script.setup import set_gui_path
 
 set_gui_path()
 
+# flake8: noqa: E402
 from core.debug import Debug
 from core.gthread import gThread
 from gui_core.wrap import Button, StaticText
+
+# flakes8: qa
 
 
 # TODO: labels (and descriptions) translatable?
@@ -93,8 +96,8 @@ class RedirectText:
                 heigth = self._get_heigth(string)
                 wx.CallAfter(self.out.SetLabel, string)
                 self._resize(heigth)
-        except:
-            # window closed -> PyDeadObjectError
+        except (RuntimeError, AttributeError):
+            # window closed or destroyed
             pass
 
     def flush(self):
@@ -228,9 +231,7 @@ class LocationDownloadPanel(wx.Panel):
             parent=self, label=_("Select sample project to download:")
         )
 
-        choices = []
-        for item in self.locations:
-            choices.append(item["label"])
+        choices = [item["label"] for item in self.locations]
         self.choice = wx.Choice(parent=self, choices=choices)
 
         self.choice.Bind(wx.EVT_CHOICE, self.OnChangeChoice)
