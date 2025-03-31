@@ -119,7 +119,7 @@ def test_file_output(setup_maps, tmp_path):
         "r.out.ascii",
         input="custom_map",
         output=output_file,
-        overwrite="True",
+        overwrite=True,
         env=session.env,
     )
 
@@ -158,6 +158,24 @@ rows: 3
 cols: 3
 - - -
 2.56 2.56 2.56
+3 3 3"""
+
+    output_lines = clean_output(output)
+    expected_lines = clean_output(expected_output)
+
+    assert output_lines == expected_lines
+
+
+def test_h_i_flag(setup_maps):
+    """Test h(suppress header information) and i(force integer values) flags."""
+    session = setup_maps
+
+    output = gs.read_command(
+        "r.out.ascii", input="custom_map2", flags="hi", env=session.env
+    )
+
+    expected_output = """* * *
+3 3 3
 3 3 3"""
 
     output_lines = clean_output(output)
