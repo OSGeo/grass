@@ -1076,11 +1076,7 @@ def load_color_config(grass_config_dir):
     except FileNotFoundError:
         # Return with default colors if color config doesn't exist
         return Colors()
-    debug(
-        "Loaded color_config:\n{colors}".format(
-            colors=json.dumps(colors, sort_keys=True, indent=4)
-        )
-    )
+    debug(f"Loaded color_config:\n{json.dumps(colors, sort_keys=True, indent=4)}")
     return Colors(colors=colors)
 
 
@@ -2159,7 +2155,7 @@ def classic_parser(argv, default_gui, color_config=None):
         params.colors = Colors(path=Color(), mapset=Color(), project=Color())
     else:
         params.colors = color_config
-        debug("params.colors = {colors}".format(colors=params.colors.json()))
+        debug(f"params.colors = {params.colors.json()}")
 
     update_params_with_mapset_arguments(params, parsed_args)
     return params
@@ -2296,9 +2292,7 @@ class Colors:
     ):
         self._color = {}
         if colors:
-            debug(
-                "Loading color config from file: colors={colors}".format(colors=colors)
-            )
+            debug(f"Loading color config from file: colors={colors}")
             self.from_json(colors)
         else:
             self._color = {
@@ -2422,7 +2416,7 @@ def main():
     os.environ["GIS_LOCK"] = gis_lock
 
     color_config = load_color_config(grass_config_dir)
-    debug("loaded color_config={color_config}".format(color_config=color_config))
+    debug(f"loaded color_config={color_config}")
     params = parse_cmdline(sys.argv, default_gui=default_gui, color_config=color_config)
 
     grass_gui = params.grass_gui  # put it to variable, it is used a lot
