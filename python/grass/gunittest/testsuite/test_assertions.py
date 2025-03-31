@@ -188,7 +188,9 @@ class TestRasterMapAssertions(TestCase):
             self.assertRasterMinMax(test_map, refmin=1, refmax=10)
         self.assertEqual(
             str(context.exception),
-            f"The actual minimum is null for raster map {test_map}, but a reference minimum (1) was provided",
+            f"The actual limits for raster map {test_map}, are not within the specified limits.\n"
+            f"Actual: minimum=None, maximum=None\n"
+            f"Reference: minimum=1, maximum=10\n",
         )
 
     def test_assertRasterFitsUnivar(self):

@@ -19,7 +19,7 @@ import unittest
 
 from grass.pygrass.modules import Module
 from grass.exceptions import CalledModuleError
-from grass.script import text_to_string, encode, decode
+from grass.script import text_to_string, encode, decode, parse_command
 
 from .gmodules import call_module, SimpleModule
 from .checkers import (
@@ -507,6 +507,18 @@ class TestCase(unittest.TestCase):
             **parameters,
         )
 
+    def _parse_json_command(self, *args, **kwargs):
+        """Wrapper over parse_command to properly convert numbers
+        stored as strings in JSON.
+        """
+        result = parse_command(*args, **kwargs, format="json")
+        for key in result:
+            try:
+                result[key] = float(result[key])
+            except (ValueError, TypeError):
+                pass
+        return result
+
     # TODO: use precision?
     # TODO: write a test for this method with r.in.ascii
     def assertRasterMinMax(self, map, refmin, refmax, msg=None):
@@ -522,61 +534,22 @@ class TestCase(unittest.TestCase):
         To check that more statistics have certain values use
         `assertRasterFitsUnivar()` or `assertRasterFitsInfo()`
         """
-        stdout = call_module("r.info", map=map, flags="r")
-        actual = text_to_keyvalue(stdout, sep="=")
-        if actual["min"] == "NULL":
-            actual["min"] = None
-        if actual["max"] == "NULL":
-            actual["max"] = None
+        actual = self._parse_json_command("r.info", map=map)
+        min_mismatch = (
+            ((actual["min"] is None) != (refmin is None))
+            # previous check only passes if both values are None or not None
+            # at the same time, hence just checking one here is sufficient
+            or (actual["min"] is not None and refmin > actual["min"])
+        )
+        max_mismatch = ((actual["max"] is None) != (refmax is None)) or (
+            actual["max"] is not None and refmax < actual["max"]
+        )
 
-        if actual["min"] is None and refmin is not None:
+        if min_mismatch or max_mismatch:
             stdmsg = (
-                "The actual minimum is null for raster map {m}, "
-                "but a reference minimum ({r}) was provided".format(r=refmin, m=map)
-            )
-            self.fail(self._formatMessage(msg, stdmsg))
-        if actual["min"] is not None and refmin is None:
-            stdmsg = (
-                "The actual minimum is ({a}) for raster map {m}, "
-                "but the provided reference minimum was null".format(
-                    a=actual["min"], m=map
-                )
-            )
-            self.fail(self._formatMessage(msg, stdmsg))
-
-        if actual["min"] is not None and refmin is not None and refmin > actual["min"]:
-            stdmsg = (
-                "The actual minimum ({a}) is smaller than the reference"
-                " one ({r}) for raster map {m}"
-                " (with maximum {o})".format(
-                    a=actual["min"], r=refmin, m=map, o=actual["max"]
-                )
-            )
-            self.fail(self._formatMessage(msg, stdmsg))
-
-        if actual["max"] is None and refmax is not None:
-            stdmsg = (
-                "The actual maximum is null for raster map {m}, "
-                "but a reference maximum ({r}) was provided".format(r=refmax, m=map)
-            )
-            self.fail(self._formatMessage(msg, stdmsg))
-
-        if actual["max"] is not None and refmax is None:
-            stdmsg = (
-                "The actual maximum is ({a}) for raster map {m}, "
-                "but the provided reference maximum was null".format(
-                    a=actual["max"], m=map
-                )
-            )
-            self.fail(self._formatMessage(msg, stdmsg))
-
-        if actual["max"] is not None and refmax is not None and refmax < actual["max"]:
-            stdmsg = (
-                "The actual maximum ({a}) is greater than the reference"
-                " one ({r}) for raster map {m}"
-                " (with minimum {o})".format(
-                    a=actual["max"], r=refmax, m=map, o=actual["min"]
-                )
+                f"The actual limits for raster map {map}, are not within the specified limits.\n"
+                f"Actual: minimum={actual['min']}, maximum={actual['max']}\n"
+                f"Reference: minimum={refmin}, maximum={refmax}\n"
             )
             self.fail(self._formatMessage(msg, stdmsg))
 
