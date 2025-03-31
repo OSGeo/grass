@@ -1073,20 +1073,6 @@ def load_env(grass_env_file):
         # create a new environment variable
         os.environ[k] = v
 
-    # Allow for mixed ISIS-GRASS Environment
-    if os.getenv("ISISROOT"):
-        isis = os.getenv("ISISROOT")
-        os.environ["ISIS_LIB"] = isis + os.sep + "lib"
-        os.environ["ISIS_3RDPARTY"] = isis + os.sep + "3rdParty" + os.sep + "lib"
-        os.environ["QT_PLUGIN_PATH"] = isis + os.sep + "3rdParty" + os.sep + "plugins"
-        # os.environ['ISIS3DATA'] = isis + "$ISIS3DATA"
-        libpath = os.getenv("LD_LIBRARY_PATH", "")
-        isislibpath = os.getenv("ISIS_LIB")
-        isis3rdparty = os.getenv("ISIS_3RDPARTY")
-        os.environ["LD_LIBRARY_PATH"] = (
-            libpath + os.pathsep + isislibpath + os.pathsep + isis3rdparty
-        )
-
 
 def install_notranslation():
     # If locale is not supported, _ function might be missing

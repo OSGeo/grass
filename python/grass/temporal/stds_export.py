@@ -29,6 +29,7 @@ import os
 import shutil
 import tarfile
 import tempfile
+from pathlib import Path
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
@@ -402,9 +403,7 @@ def export_stds(
     # Write projection and metadata
     proj = gs.read_command("g.proj", flags="j")
 
-    proj_file = open(proj_file_name, "w")
-    proj_file.write(proj)
-    proj_file.close()
+    Path(proj_file_name).write_text(proj)
 
     init_file = open(init_file_name, "w")
     # Create the init string
@@ -431,9 +430,7 @@ def export_stds(
     init_file.close()
 
     metadata = gs.read_command("t.info", type=type_, input=sp.get_id())
-    metadata_file = open(metadata_file_name, "w")
-    metadata_file.write(metadata)
-    metadata_file.close()
+    Path(metadata_file_name).write_text(metadata)
 
     read_file = open(read_file_name, "w")
     if type_ == "strds":

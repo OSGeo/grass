@@ -483,7 +483,6 @@ def main():
             if method:
                 accmod.inputs["method"].value = method
 
-            print(accmod)
             accmod.run()
 
             if accmod.returncode != 0:

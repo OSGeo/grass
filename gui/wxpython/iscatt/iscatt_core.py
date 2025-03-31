@@ -531,7 +531,7 @@ class ScattPlotsCondsData:
                 # if key is missing condition is always True (full scatter plor
                 # is computed)
                 if scatt_id in self.cats[cat_id]:
-                    self.cats[cat_id][scatt_id]["np_vals"] = cats[cat_id][scatt_id][
+                    self.cats[cat_id][scatt_id]["np_vals"] = scatt_ids[scatt_id][
                         "np_vals"
                     ]
 

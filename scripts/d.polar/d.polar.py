@@ -202,7 +202,6 @@ def plot_eps(psout):
     epsscale = 0.1
     frameallowance = 1.1
     halfframe = 3000
-    center = (halfframe, halfframe)
     scale = halfframe / (outerradius * frameallowance)
 
     diagramlinewidth = halfframe / 400
@@ -210,11 +209,6 @@ def plot_eps(psout):
     axesfontsize = halfframe / 16
     diagramfontsize = halfframe / 20
     halfframe_2 = halfframe * 2
-
-    averagedirectioncolor = 1  # (blue)
-    diagramcolor = 4  # (red)
-    circlecolor = 2  # (green)
-    axescolor = 0  # (black)
 
     northjustification = 2
     eastjustification = 6
@@ -287,7 +281,6 @@ newpath
     )
     outf.write(s)
 
-    sublength = len(outercircle) - 2
     (x, y) = outercircle[1]
     outf.write("%.2f %.2f moveto\n" % (x * scale + halfframe, y * scale + halfframe))
     for x, y in outercircle[2:]:
@@ -343,7 +336,6 @@ newpath
     )
     outf.write(s)
 
-    sublength = len(sine_cosine_replic) - 2
     (x, y) = sine_cosine_replic[1]
     outf.write("%.2f %.2f moveto\n" % (x * scale + halfframe, y * scale + halfframe))
     for x, y in sine_cosine_replic[2:]:
@@ -369,7 +361,6 @@ newpath
     s = t.substitute(DIAGRAMLINEWIDTH=diagramlinewidth)
     outf.write(s)
 
-    sublength = len(vector) - 2
     (x, y) = vector[1]
     outf.write("%.2f %.2f moveto\n" % (x * scale + halfframe, y * scale + halfframe))
     for x, y in vector[2:]:
