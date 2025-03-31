@@ -694,10 +694,7 @@ def compute_datetime_delta(start, end):
             else:
                 d += 24 * 60 * day_diff
         elif d == 0:
-            if comp["hour"]:
-                d = 60 * comp["hour"]
-            else:
-                d = 24 * 60 * day_diff
+            d = 60 * comp["hour"] if comp["hour"] else 24 * 60 * day_diff
 
         comp["minute"] = d
 
@@ -914,10 +911,7 @@ def datetime_to_grass_datetime_string(dt):
     # Check for time zone info in the datetime object
     if dt.tzinfo is not None:
         tz = dt.tzinfo.utcoffset(0)
-        if tz.seconds > 86400 / 2:
-            tz = (tz.seconds - 86400) / 60
-        else:
-            tz = tz.seconds / 60
+        tz = (tz.seconds - 86400) / 60 if tz.seconds > 86400 / 2 else tz.seconds / 60
 
         string = "%.2i %s %.2i %.2i:%.2i:%.2i %+.4i" % (
             dt.day,
@@ -999,10 +993,7 @@ def create_numeric_suffix(base, count, zeros):
     if len(spli) == 2:
         suff = spli[1]
         if suff.isdigit():
-            if int(suff[0]) == 0:
-                zero = suff
-            else:
-                zero = "0{nu}".format(nu=suff)
+            zero = suff if int(suff[0]) == 0 else "0{nu}".format(nu=suff)
         else:
             zero = "05"
     else:

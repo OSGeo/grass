@@ -1376,7 +1376,7 @@ class DBConnection:
         if self.dbmi.__name__ == "psycopg2":
             if len(args) == 0:
                 return sql
-            elif self.connected:
+            if self.connected:
                 try:
                     return self.cursor.mogrify(sql, args)
                 except Exception as exc:
@@ -1391,57 +1391,56 @@ class DBConnection:
         elif self.dbmi.__name__ == "sqlite3":
             if len(args) == 0:
                 return sql
-            else:
-                # Unfortunately as sqlite does not support
-                # the transformation of sql strings and qmarked or
-                # named arguments we must make our hands dirty
-                # and do it by ourself. :(
-                # Doors are open for SQL injection because of the
-                # limited python sqlite3 implementation!!!
-                pos = 0
-                count = 0
-                maxcount = 100
-                statement = sql
+            # Unfortunately as sqlite does not support
+            # the transformation of sql strings and qmarked or
+            # named arguments we must make our hands dirty
+            # and do it by ourself. :(
+            # Doors are open for SQL injection because of the
+            # limited python sqlite3 implementation!!!
+            pos = 0
+            count = 0
+            maxcount = 100
+            statement = sql
 
-                while count < maxcount:
-                    pos = statement.find("?", pos + 1)
-                    if pos == -1:
-                        break
+            while count < maxcount:
+                pos = statement.find("?", pos + 1)
+                if pos == -1:
+                    break
 
-                    if args[count] is None:
-                        statement = "%sNULL%s" % (
-                            statement[0:pos],
-                            statement[pos + 1 :],
-                        )
-                    elif isinstance(args[count], int):
-                        statement = "%s%d%s" % (
-                            statement[0:pos],
-                            args[count],
-                            statement[pos + 1 :],
-                        )
-                    elif isinstance(args[count], float):
-                        statement = "%s%f%s" % (
-                            statement[0:pos],
-                            args[count],
-                            statement[pos + 1 :],
-                        )
-                    elif isinstance(args[count], datetime):
-                        statement = "%s'%s'%s" % (
-                            statement[0:pos],
-                            str(args[count]),
-                            statement[pos + 1 :],
-                        )
-                    else:
-                        # Default is a string, this works for datetime
-                        # objects too
-                        statement = "%s'%s'%s" % (
-                            statement[0:pos],
-                            str(args[count]),
-                            statement[pos + 1 :],
-                        )
-                    count += 1
+                if args[count] is None:
+                    statement = "%sNULL%s" % (
+                        statement[0:pos],
+                        statement[pos + 1 :],
+                    )
+                elif isinstance(args[count], int):
+                    statement = "%s%d%s" % (
+                        statement[0:pos],
+                        args[count],
+                        statement[pos + 1 :],
+                    )
+                elif isinstance(args[count], float):
+                    statement = "%s%f%s" % (
+                        statement[0:pos],
+                        args[count],
+                        statement[pos + 1 :],
+                    )
+                elif isinstance(args[count], datetime):
+                    statement = "%s'%s'%s" % (
+                        statement[0:pos],
+                        str(args[count]),
+                        statement[pos + 1 :],
+                    )
+                else:
+                    # Default is a string, this works for datetime
+                    # objects too
+                    statement = "%s'%s'%s" % (
+                        statement[0:pos],
+                        str(args[count]),
+                        statement[pos + 1 :],
+                    )
+                count += 1
 
-                return statement
+            return statement
 
     def check_table(self, table_name):
         """Check if a table exists in the temporal database

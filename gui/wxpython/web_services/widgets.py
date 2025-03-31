@@ -384,10 +384,7 @@ class WSPanel(wx.Panel):
                 continue
 
             if k in labels or k == "o":
-                if k != "o":
-                    label = labels[k]
-                else:
-                    label = param
+                label = labels[k] if k != "o" else param
 
                 gridSizer.Add(
                     label, flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL, pos=(row, 0)
@@ -454,10 +451,7 @@ class WSPanel(wx.Panel):
         """Update order in list."""
 
         def getlayercaption(layer):
-            if layer["title"]:
-                cap = layer["title"]
-            else:
-                cap = layer["name"]
+            cap = layer["title"] or layer["name"]
 
             if layer["style"]:
                 if layer["style"]["title"]:
@@ -633,7 +627,7 @@ class WSPanel(wx.Panel):
 
         # WMS standard - first layer in params is most bottom...
         # therefore layers order need to be reversed
-        l_st_list = [layer for layer in reversed(l_st_list)]
+        l_st_list.reverse()
         self.list.SelectLayers(l_st_list)
 
         params = {}

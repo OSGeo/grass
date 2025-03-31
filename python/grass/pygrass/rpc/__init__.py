@@ -10,8 +10,6 @@ for details.
 :authors: Soeren Gebbert
 """
 
-import time
-import threading
 import sys
 from multiprocessing import Process, Lock, Pipe
 from ctypes import CFUNCTYPE, c_void_p
@@ -24,7 +22,6 @@ import grass.lib.gis as libgis
 from .base import RPCServerBase
 from grass.pygrass.gis.region import Region
 from grass.pygrass import utils
-import logging
 
 ###############################################################################
 ###############################################################################

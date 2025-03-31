@@ -125,7 +125,7 @@ def clean_env():
     write_gisrc(env_new, gisrc)
 
 
-def is_debug():
+def is_debug() -> bool:
     """Returns True if we are in debug mode
 
     For debug messages use ``debug()``.
@@ -133,13 +133,8 @@ def is_debug():
     global _DEBUG
     if _DEBUG is not None:
         return _DEBUG
-    _DEBUG = os.getenv("GRASS_DEBUG")
     # translate to bool (no or empty variable means false)
-    if _DEBUG:
-        _DEBUG = True
-    else:
-        _DEBUG = False
-    return _DEBUG
+    return bool(os.getenv("GRASS_DEBUG"))
 
 
 def debug(msg):
@@ -400,7 +395,7 @@ def create_grass_config_dir():
             os.makedirs(directory)
         except OSError as e:
             # Can happen as a race condition
-            if not e.errno == errno.EEXIST or not os.path.isdir(directory):
+            if e.errno != errno.EEXIST or not os.path.isdir(directory):
                 fatal(
                     _(
                         "Failed to create configuration directory '{}' with error: {}"
@@ -496,7 +491,7 @@ def create_gisrc(tmpdir, gisrcrc):
 def read_gisrc(filename):
     kv = {}
     try:
-        f = open(filename, "r")
+        f = open(filename)
     except OSError:
         return kv
 
@@ -522,7 +517,7 @@ def write_gisrcrc(gisrcrc, gisrc, skip_variable=None):
     """Reads gisrc file and write to gisrcrc"""
     debug("Reading %s" % gisrc)
     number = 0
-    with open(gisrc, "r") as f:
+    with open(gisrc) as f:
         lines = f.readlines()
         for line in lines:
             if skip_variable in line:
@@ -535,7 +530,7 @@ def write_gisrcrc(gisrcrc, gisrc, skip_variable=None):
 
 def read_env_file(path):
     kv = {}
-    f = open(path, "r")
+    f = open(path)
     for line in f:
         k, v = line.split(":", 1)
         kv[k.strip()] = v.strip()
@@ -553,10 +548,7 @@ def write_gisrc(kv, filename, append=False):
 
 
 def add_mapset_to_gisrc(gisrc, grassdb, location, mapset):
-    if os.access(gisrc, os.R_OK):
-        kv = read_gisrc(gisrc)
-    else:
-        kv = {}
+    kv = read_gisrc(gisrc) if os.access(gisrc, os.R_OK) else {}
     kv["GISDBASE"] = grassdb
     kv["LOCATION_NAME"] = location
     kv["MAPSET"] = mapset
@@ -564,10 +556,7 @@ def add_mapset_to_gisrc(gisrc, grassdb, location, mapset):
 
 
 def add_last_mapset_to_gisrc(gisrc, last_mapset_path):
-    if os.access(gisrc, os.R_OK):
-        kv = read_gisrc(gisrc)
-    else:
-        kv = {}
+    kv = read_gisrc(gisrc) if os.access(gisrc, os.R_OK) else {}
     kv["LAST_MAPSET_PATH"] = last_mapset_path
     write_gisrc(kv, gisrc)
 
@@ -620,7 +609,7 @@ def create_initial_gisrc(filename):
 LOCATION_NAME: <UNKNOWN>
 MAPSET: <UNKNOWN>
 """
-        % os.getcwd()
+        % Path.cwd()
     )
     writefile(filename, s)
 
@@ -737,22 +726,21 @@ def cannot_create_location_reason(gisdbase, location):
             " the project <{location}>"
             " already exists."
         ).format(**locals())
-    elif os.path.isfile(path):
+    if os.path.isfile(path):
         return _(
             "Unable to create new project <{location}> because <{path}> is a file."
         ).format(**locals())
-    elif os.path.isdir(path):
+    if os.path.isdir(path):
         return _(
             "Unable to create new project <{location}> because"
             " the directory <{path}>"
             " already exists."
         ).format(**locals())
-    else:
-        return _(
-            "Unable to create new project in"
-            " the directory <{path}>"
-            " for an unknown reason."
-        ).format(**locals())
+    return _(
+        "Unable to create new project in"
+        " the directory <{path}>"
+        " for an unknown reason."
+    ).format(**locals())
 
 
 def set_mapset(
@@ -789,7 +777,7 @@ def set_mapset(
         # non-empty element as the last element (which is good for both mapset
         # and location split)
         if arg == ".":
-            arg = os.getcwd()
+            arg = str(Path.cwd())
         elif not os.path.isabs(arg):
             arg = os.path.abspath(arg)
         if arg.endswith(os.path.sep):
@@ -1098,7 +1086,7 @@ def set_language(grass_config_dir):
 
     # Override value is stored in wxGUI preferences file.
     try:
-        with open(os.path.join(grass_config_dir, "wx.json"), "r") as json_file:
+        with open(os.path.join(grass_config_dir, "wx.json")) as json_file:
             try:
                 language = json.load(json_file)["language"]["locale"]["lc_all"]
             except KeyError:
@@ -1281,65 +1269,6 @@ def set_language(grass_config_dir):
     gettext.install("grasslibs", gpath("locale"))
 
 
-def lock_mapset(mapset_path, force_gislock_removal, user):
-    """Lock the mapset and return name of the lock file
-
-    Behavior on error must be changed somehow; now it fatals but GUI case is
-    unresolved.
-    """
-    if not os.path.exists(mapset_path):
-        fatal(_("Path '%s' doesn't exist") % mapset_path)
-    if not os.access(mapset_path, os.W_OK):
-        error = _("Path '%s' not accessible.") % mapset_path
-        stat_info = os.stat(mapset_path)
-        mapset_uid = stat_info.st_uid
-        if mapset_uid != os.getuid():
-            # GTC %s is mapset's folder path
-            error = "%s\n%s" % (
-                error,
-                _("You are not the owner of '%s'.") % mapset_path,
-            )
-        fatal(error)
-    # Check for concurrent use
-    lockfile = os.path.join(mapset_path, ".gislock")
-    ret = call([gpath("etc", "lock"), lockfile, "%d" % os.getpid()])
-    msg = None
-    if ret == 2:
-        if not force_gislock_removal:
-            msg = _(
-                "%(user)s is currently running GRASS in selected mapset"
-                " (file %(file)s found). Concurrent use not allowed.\n"
-                "You can force launching GRASS using -f flag"
-                " (note that you need permission for this operation)."
-                " Have another look in the processor "
-                "manager just to be sure..."
-            ) % {"user": user, "file": lockfile}
-
-        else:
-            try_remove(lockfile)
-            message(
-                _(
-                    "%(user)s is currently running GRASS in selected mapset"
-                    " (file %(file)s found). Forcing to launch GRASS..."
-                )
-                % {"user": user, "file": lockfile}
-            )
-    elif ret != 0:
-        msg = (
-            _("Unable to properly access '%s'.\nPlease notify system personnel.")
-            % lockfile
-        )
-
-    if msg:
-        raise Exception(msg)
-    debug(
-        "Mapset <{mapset}> locked using '{lockfile}'".format(
-            mapset=mapset_path, lockfile=lockfile
-        )
-    )
-    return lockfile
-
-
 # TODO: the gisrcrc here does not make sense, remove it from load_gisrc
 def unlock_gisrc_mapset(gisrc, gisrcrc):
     """Unlock mapset from the gisrc file"""
@@ -1393,11 +1322,8 @@ def get_shell():
             sh = os.path.basename(sh)
         else:
             # If SHELL is not set, see if there is Bash and use it.
-            if shutil.which("bash"):
-                sh = "bash"
-            else:
-                # Fallback to sh if there is no Bash on path.
-                sh = "sh"
+            # Fallback to sh if there is no Bash on path.
+            sh = "bash" if shutil.which("bash") else "sh"
             # Ensure the variable is set.
             os.environ["SHELL"] = sh
 
@@ -1478,7 +1404,7 @@ def run_batch_job(batch_job: list):
         if script_in_addon_path and os.path.exists(script_in_addon_path):
             batch_job[0] = script_in_addon_path
             return script_in_addon_path
-        elif os.path.exists(batch_job[0]):
+        if os.path.exists(batch_job[0]):
             return batch_job[0]
 
     try:
@@ -1690,7 +1616,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
 
     # save command history in mapset dir and remember more
     # bash history file handled in specific_addition
-    if not sh == "bash":
+    if sh != "bash":
         os.environ["HISTFILE"] = os.path.join(location, sh_history)
 
     # instead of changing $HOME, start bash with:
@@ -1711,11 +1637,8 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     else:
         f.write("test -r ~/.alias && . ~/.alias\n")
 
-    if os.getenv("ISISROOT"):
-        # GRASS GIS and ISIS blend
-        grass_name = "ISIS-GRASS"
-    else:
-        grass_name = "GRASS"
+    # GRASS GIS and ISIS blend
+    grass_name = "GRASS" if not os.getenv("ISISROOT") else "ISIS-GRASS"
 
     if sh == "zsh":
         f.write("setopt PROMPT_SUBST\n")
@@ -1727,8 +1650,8 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
             )
         )
 
+    mask2d_test = "r.mask.status -t"
     # TODO: have a function and/or module to test this
-    mask2d_test = 'test -f "$MAPSET_PATH/cell/MASK"'
     mask3d_test = 'test -d "$MAPSET_PATH/grid3/RASTER3D_MASK"'
 
     specific_addition = ""
@@ -2421,14 +2344,16 @@ def main():
 
     location = mapset_settings.full_mapset
 
+    from grass.app.data import lock_mapset, MapsetLockingException
+
     try:
         # check and create .gislock file
         lock_mapset(
-            mapset_settings.full_mapset,
-            user=user,
-            force_gislock_removal=params.force_gislock_removal,
+            mapset_path=mapset_settings.full_mapset,
+            force_lock_removal=params.force_gislock_removal,
+            message_callback=message,
         )
-    except Exception as e:
+    except MapsetLockingException as e:
         fatal(e.args[0])
         sys.exit(_("Exiting..."))
 

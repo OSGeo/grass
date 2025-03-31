@@ -256,11 +256,7 @@ def _get_driver_name(lock, conn, data):
     :returns: Name of the driver or None if no temporal database present
     """
     mapset = data[1]
-    if not mapset:
-        mapset = libgis.G_mapset()
-    else:
-        mapset = encode(mapset)
-
+    mapset = libgis.G_mapset() if not mapset else encode(mapset)
     drstring = libtgis.tgis_get_mapset_driver_name(mapset)
     conn.send(decode(drstring.data))
 
@@ -280,10 +276,7 @@ def _get_database_name(lock, conn, data):
     dbstring = None
     try:
         mapset = data[1]
-        if not mapset:
-            mapset = libgis.G_mapset()
-        else:
-            mapset = encode(mapset)
+        mapset = libgis.G_mapset() if not mapset else encode(mapset)
         dbstring = libtgis.tgis_get_mapset_database_name(mapset)
         dbstring = dbstring.data
 
@@ -1011,13 +1004,12 @@ def _read_raster_history(name, mapset):
     if ret < 0:
         logging.warning(_("Unable to read history file"))
         return None
-    else:
-        kvp["creation_time"] = decode(
-            libraster.Rast_get_history(byref(hist), libraster.HIST_MAPID)
-        )
-        kvp["creator"] = decode(
-            libraster.Rast_get_history(byref(hist), libraster.HIST_CREATOR)
-        )
+    kvp["creation_time"] = decode(
+        libraster.Rast_get_history(byref(hist), libraster.HIST_MAPID)
+    )
+    kvp["creator"] = decode(
+        libraster.Rast_get_history(byref(hist), libraster.HIST_CREATOR)
+    )
 
     return kvp
 
@@ -1049,13 +1041,12 @@ def _read_raster3d_history(name, mapset):
     if ret < 0:
         logging.warning(_("Unable to read history file"))
         return None
-    else:
-        kvp["creation_time"] = decode(
-            libraster.Rast_get_history(byref(hist), libraster3d.HIST_MAPID)
-        )
-        kvp["creator"] = decode(
-            libraster.Rast_get_history(byref(hist), libraster3d.HIST_CREATOR)
-        )
+    kvp["creation_time"] = decode(
+        libraster.Rast_get_history(byref(hist), libraster3d.HIST_MAPID)
+    )
+    kvp["creator"] = decode(
+        libraster.Rast_get_history(byref(hist), libraster3d.HIST_CREATOR)
+    )
 
     return kvp
 
@@ -1142,43 +1133,42 @@ def _convert_timestamp_from_grass(ts):
         # ATTENTION: We ignore the time zone
         # TODO: Write time zone support
         return (pdt1, pdt2)
-    else:
-        unit = None
-        start = None
-        end = None
-        if count.value >= 1:
-            if dt1.year > 0:
-                unit = "years"
-                start = dt1.year
-            elif dt1.month > 0:
-                unit = "months"
-                start = dt1.month
-            elif dt1.day > 0:
-                unit = "days"
-                start = dt1.day
-            elif dt1.hour > 0:
-                unit = "hours"
-                start = dt1.hour
-            elif dt1.minute > 0:
-                unit = "minutes"
-                start = dt1.minute
-            elif dt1.second > 0:
-                unit = "seconds"
-                start = dt1.second
-        if count.value == 2:
-            if dt2.year > 0:
-                end = dt2.year
-            elif dt2.month > 0:
-                end = dt2.month
-            elif dt2.day > 0:
-                end = dt2.day
-            elif dt2.hour > 0:
-                end = dt2.hour
-            elif dt2.minute > 0:
-                end = dt2.minute
-            elif dt2.second > 0:
-                end = dt2.second
-        return (start, end, unit)
+    unit = None
+    start = None
+    end = None
+    if count.value >= 1:
+        if dt1.year > 0:
+            unit = "years"
+            start = dt1.year
+        elif dt1.month > 0:
+            unit = "months"
+            start = dt1.month
+        elif dt1.day > 0:
+            unit = "days"
+            start = dt1.day
+        elif dt1.hour > 0:
+            unit = "hours"
+            start = dt1.hour
+        elif dt1.minute > 0:
+            unit = "minutes"
+            start = dt1.minute
+        elif dt1.second > 0:
+            unit = "seconds"
+            start = dt1.second
+    if count.value == 2:
+        if dt2.year > 0:
+            end = dt2.year
+        elif dt2.month > 0:
+            end = dt2.month
+        elif dt2.day > 0:
+            end = dt2.day
+        elif dt2.hour > 0:
+            end = dt2.hour
+        elif dt2.minute > 0:
+            end = dt2.minute
+        elif dt2.second > 0:
+            end = dt2.second
+    return (start, end, unit)
 
 
 ###############################################################################

@@ -382,10 +382,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
     def OnSize(self, event):
         size = self.GetClientSize()
-        if CheckWxVersion(version=[2, 9]):
-            context = self.context
-        else:
-            context = self.GetContext()
+        context = self.context if CheckWxVersion(version=[2, 9]) else self.GetContext()
         if self.size != size and context:
             Debug.msg(
                 3, "GLCanvas.OnSize(): w = %d, h = %d" % (size.width, size.height)
@@ -412,7 +409,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         Debug.msg(1, "GLCanvas.OnPaint()")
 
         self.render["overlays"] = True
-        dc = wx.PaintDC(self)
+        wx.PaintDC(self)
         self.DoPaint()
 
     def DoPaint(self):
@@ -534,7 +531,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
         Used for fly-through mode.
         """
-        if not self.mouse["use"] == "fly":
+        if self.mouse["use"] != "fly":
             return
 
         key = event.GetKeyCode()
@@ -596,7 +593,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
         Used for fly-through mode.
         """
-        if not self.mouse["use"] == "fly":
+        if self.mouse["use"] != "fly":
             return
 
         key = event.GetKeyCode()
@@ -1393,7 +1390,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 GError(parent=self, message=e.value)
             # when nviz.tools is not yet ready
             # during opening 3D view 2nd time
-            except:
+            except Exception:
                 pass
 
         stop = gs.clock()
@@ -1438,7 +1435,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 GError(parent=self, message=e.value)
 
         if force and self.baseId > 0:  # unload base surface when quitting
-            ret = self._display.UnloadSurface(self.baseId)
+            self._display.UnloadSurface(self.baseId)
             self.baseId = -1
         if update:
             self.lmgr.nviz.UpdateSettings()
@@ -2134,10 +2131,10 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         #
         sliceId = 0
         for slice in data["slice"]:
-            ret = self._display.AddSlice(id, slice_id=sliceId)
+            self._display.AddSlice(id, slice_id=sliceId)
             if "update" in slice["position"]:
                 pos = slice["position"]
-                ret = self._display.SetSlicePosition(
+                self._display.SetSlicePosition(
                     id,
                     sliceId,
                     pos["x1"],
@@ -2358,10 +2355,10 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             try:
                 if type == "raster":
                     return data["surface"]["object"]["id"]
-                elif type == "vector":
+                if type == "vector":
                     if vsubtyp == "vpoint":
                         return data["vector"]["points"]["object"]["id"]
-                    elif vsubtyp == "vline":
+                    if vsubtyp == "vline":
                         return data["vector"]["lines"]["object"]["id"]
                 elif type == "raster_3d":
                     return data["volume"]["object"]["id"]

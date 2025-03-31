@@ -782,8 +782,7 @@ def GetSRSParamVal(srs):
 
     if srs in {84, 83, 27}:
         return "OGC:CRS{}".format(srs)
-    else:
-        return "EPSG:{}".format(srs)
+    return "EPSG:{}".format(srs)
 
 
 def GetEpsg(srs):

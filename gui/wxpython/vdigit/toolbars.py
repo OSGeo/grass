@@ -1291,10 +1291,7 @@ class VDigitToolbar(BaseToolbar):
                 layerNameList.append(layer.GetName())
 
         if updateTool:  # update toolbar
-            if not self.mapLayer:
-                value = _("Select vector map")
-            else:
-                value = layerNameSelected
+            value = _("Select vector map") if not self.mapLayer else layerNameSelected
 
             if not self.comboid:
                 if not self.tools or "selector" in self.tools:

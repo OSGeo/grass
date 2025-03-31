@@ -158,10 +158,7 @@ def register_maps_in_space_time_dataset(
 
     # Read the map list from file
     if file:
-        if hasattr(file, "readline"):
-            fd = file
-        else:
-            fd = open(file, "r")
+        fd = file if hasattr(file, "readline") else open(file)
 
         line = True
         while True:
@@ -264,10 +261,7 @@ def register_maps_in_space_time_dataset(
             end = row["end"]
 
         # Use the semantic label from file
-        if "semantic_label" in row:
-            semantic_label = row["semantic_label"]
-        else:
-            semantic_label = None
+        semantic_label = row.get("semantic_label", None)
 
         is_in_db = map_object.is_in_db(dbif, mapset)
 
@@ -642,10 +636,7 @@ def register_map_object_list(
             string = f"{id}|{start}|{end}\n"
             register_file.write(string)
 
-    if output_stds:
-        output_stds_id = output_stds.get_id()
-    else:
-        output_stds_id = None
+    output_stds_id = output_stds.get_id() if output_stds else None
 
     register_maps_in_space_time_dataset(
         type, output_stds_id, unit=unit, file=filename, dbif=dbif

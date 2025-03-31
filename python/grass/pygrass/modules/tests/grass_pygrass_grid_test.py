@@ -210,7 +210,7 @@ def test_patching_backend(tmp_path, patch_backend):
 
 @xfail_mp_spawn
 @pytest.mark.parametrize(
-    "width, height, processes",
+    ("width", "height", "processes"),
     [
         (None, None, max_processes()),
         (10, None, max_processes()),
@@ -249,7 +249,7 @@ def test_tiling(tmp_path, width, height, processes):
 @xfail_mp_spawn
 @pytest.mark.needs_solo_run
 @pytest.mark.parametrize(
-    "processes, backend",
+    ("processes", "backend"),
     [
         (1, "RasterRow"),
         (9, "RasterRow"),

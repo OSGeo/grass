@@ -202,9 +202,9 @@ class TemporalExtent(SQLDatabaseInterface):
             return RelativeTemporalExtent(
                 start_time=start, end_time=end, unit=self.get_unit()
             )
-        elif issubclass(type(self), AbsoluteTemporalExtent):
+        if issubclass(type(self), AbsoluteTemporalExtent):
             return AbsoluteTemporalExtent(start_time=start, end_time=end)
-        elif issubclass(type(self), TemporalExtent):
+        if issubclass(type(self), TemporalExtent):
             return TemporalExtent(start_time=start, end_time=end)
 
     def disjoint_union(self, extent):
@@ -391,9 +391,9 @@ class TemporalExtent(SQLDatabaseInterface):
             return RelativeTemporalExtent(
                 start_time=start, end_time=end, unit=self.get_unit()
             )
-        elif issubclass(type(self), AbsoluteTemporalExtent):
+        if issubclass(type(self), AbsoluteTemporalExtent):
             return AbsoluteTemporalExtent(start_time=start, end_time=end)
-        elif issubclass(type(self), TemporalExtent):
+        if issubclass(type(self), TemporalExtent):
             return TemporalExtent(start_time=start, end_time=end)
 
     def union(self, extent):
@@ -986,24 +986,21 @@ class TemporalExtent(SQLDatabaseInterface):
         """
         if "id" in self.D:
             return self.D["id"]
-        else:
-            return None
+        return None
 
     def get_start_time(self):
         """Get the valid start time of the extent
         :return: None if not found"""
         if "start_time" in self.D:
             return self.D["start_time"]
-        else:
-            return None
+        return None
 
     def get_end_time(self):
         """Get the valid end time of the extent
         :return: None if not found"""
         if "end_time" in self.D:
             return self.D["end_time"]
-        else:
-            return None
+        return None
 
     # Set the properties
     id = property(fget=get_id, fset=set_id)
@@ -1153,8 +1150,7 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
         :return: None if not found"""
         if "granularity" in self.D:
             return self.D["granularity"]
-        else:
-            return None
+        return None
 
     def get_map_time(self):
         """Get the type of the map time
@@ -1169,8 +1165,7 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
         """
         if "map_time" in self.D:
             return self.D["map_time"]
-        else:
-            return None
+        return None
 
     # Properties
     granularity = property(fget=get_granularity, fset=set_granularity)
@@ -1277,8 +1272,7 @@ class RelativeTemporalExtent(TemporalExtent):
         :return: None if not found"""
         if "unit" in self.D:
             return self.D["unit"]
-        else:
-            return None
+        return None
 
     def temporal_relation(self, map):
         """Returns the temporal relation between temporal objects
@@ -1427,8 +1421,7 @@ class STDSRelativeTime(RelativeTemporalExtent):
         :return: None if not found"""
         if "granularity" in self.D:
             return self.D["granularity"]
-        else:
-            return None
+        return None
 
     def get_map_time(self):
         """Get the type of the map time
@@ -1443,8 +1436,7 @@ class STDSRelativeTime(RelativeTemporalExtent):
         """
         if "map_time" in self.D:
             return self.D["map_time"]
-        else:
-            return None
+        return None
 
     # Properties
     granularity = property(fget=get_granularity, fset=set_granularity)

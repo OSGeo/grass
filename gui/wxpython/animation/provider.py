@@ -328,9 +328,8 @@ class BitmapProvider:
 
         if returncode == 0:
             return BitmapFromImage(autoCropImageFromFile(filename))
-        else:
-            os.remove(filename)
-            raise GException(messages)
+        os.remove(filename)
+        raise GException(messages)
 
 
 class BitmapRenderer:

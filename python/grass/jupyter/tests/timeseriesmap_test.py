@@ -1,7 +1,6 @@
 """Test TimeSeriesMap functions"""
 
 from pathlib import Path
-import sys
 
 import pytest
 
@@ -67,10 +66,6 @@ def test_render_layers(space_time_raster_dataset, fill_gaps):
         assert Path(filename).is_file()
 
 
-@pytest.mark.xfail(
-    sys.platform == "win32",
-    reason="DejaVuSans.ttf file isn't found and not installed with GRASS",
-)
 @pytest.mark.needs_solo_run
 def test_save(space_time_raster_dataset, tmp_path):
     """Test returns from animate and time_slider are correct object types"""

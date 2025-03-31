@@ -395,7 +395,7 @@ class PyEditController:
         dlg = wx.FileDialog(
             parent=self.guiparent,
             message=_("Choose file to save"),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             wildcard=_("Python script (*.py)|*.py"),
             style=wx.FD_SAVE,
         )
@@ -466,7 +466,7 @@ class PyEditController:
         dlg = wx.FileDialog(
             parent=self.guiparent,
             message=_("Open file"),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             wildcard=_("Python script (*.py)|*.py"),
             style=wx.FD_OPEN,
         )

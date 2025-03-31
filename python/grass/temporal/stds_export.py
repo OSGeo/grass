@@ -348,7 +348,7 @@ def export_stds(
     """
 
     # Save current working directory path
-    old_cwd = os.getcwd()
+    old_cwd = Path.cwd()
 
     # Create the temporary directory and jump into it
     new_cwd = tempfile.mkdtemp(dir=directory)

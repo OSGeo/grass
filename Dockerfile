@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.10@sha256:865e5dd094beca432e8c0a1d5e1c465db5f998dca4e439981029b3b81fb39ed5
+# syntax=docker/dockerfile:1.11@sha256:1f2be5a2aa052cbd9aedf893d17c63277c3d1c51b3fb0f3b029c6b34f658d057
 
 # Note: This file must be kept in sync in ./Dockerfile and ./docker/ubuntu/Dockerfile.
 #       Changes to this file must be copied over to the other file.
@@ -27,7 +27,7 @@ ARG DOCUMENTATION="https://github.com/OSGeo/grass/tree/${BRANCH}/docker/README.m
 ARG REF_NAME="grass-gis"
 ARG DIGEST="sha256:340d9b015b194dc6e2a13938944e0d016e57b9679963fdeb9ce021daac430221"
 
-FROM ubuntu:22.04@sha256:58b87898e82351c6cf9cf5b9f3c20257bb9e2dcf33af051e12ce532d7f94e3fe AS common_start
+FROM ubuntu:22.04@sha256:0e5e4a57c2499249aafc3b40fcd541e9a456aab7296681a3994d631587203f97 AS common_start
 
 ARG BUILD_DATE
 ARG REVISION
@@ -155,7 +155,6 @@ ARG GRASS_BUILD_PACKAGES="\
   libzstd-dev \
   mesa-common-dev \
   zlib1g-dev \
-  zlib1g-dev \
 "
 
 ARG GRASS_CONFIG="\
@@ -182,9 +181,9 @@ ARG GRASS_CONFIG="\
 "
 
 ARG GRASS_PYTHON_PACKAGES="\
-  Pillow \
   matplotlib \
   numpy<2 \
+  Pillow \
   pip \
   ply \
   psycopg2 \
@@ -239,10 +238,11 @@ ARG GRASS_BUILD_PACKAGES="${GRASS_BUILD_PACKAGES} \
   libxtst-dev \
 "
 
-ARG GRASS_ADDITIONAL_CONFIG="--with-opengl \
-  --with-x \
+ARG GRASS_ADDITIONAL_CONFIG="\
   --with-nls \
+  --with-opengl \
   --with-readline \
+  --with-x \
 "
 ARG GRASS_PYTHON_PACKAGES="${GRASS_PYTHON_PACKAGES} wxPython"
 # If you do not use any Gnome Accessibility features, to suppress warning

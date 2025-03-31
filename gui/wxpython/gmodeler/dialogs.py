@@ -291,11 +291,7 @@ class ModelSearchDialog(wx.Dialog):
 
     def _getCmd(self):
         line = self.cmd_prompt.GetCurLine()[0].strip()
-        if len(line) == 0:
-            cmd = []
-        else:
-            cmd = utils.split(str(line))
-        return cmd
+        return [] if len(line) == 0 else utils.split(str(line))
 
     def GetCmd(self):
         """Get command"""
@@ -980,10 +976,7 @@ class ItemListCtrl(ModelListCtrl):
                     checked.append(None)
             else:
                 bId = action.GetBlockId()
-                if not bId:
-                    bId = _("No")
-                else:
-                    bId = _("Yes")
+                bId = _("No") if not bId else _("Yes")
                 options = action.GetParameterizedParams()
                 params = []
                 for f in options["flags"]:
@@ -1110,10 +1103,7 @@ class ItemListCtrl(ModelListCtrl):
         idxList = {}
         itemsToSelect = []
         for i in items:
-            if up:
-                idx = i - 1
-            else:
-                idx = i + 1
+            idx = i - 1 if up else i + 1
             itemsToSelect.append(idx)
             idxList[model.GetItemIndex(modelActions[i])] = model.GetItemIndex(
                 modelActions[idx]

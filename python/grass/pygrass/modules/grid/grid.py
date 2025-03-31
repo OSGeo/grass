@@ -121,10 +121,8 @@ def read_gisrc(gisrc):
     ...                                      genv['GISDBASE']))
     True
     """
-    with open(gisrc, "r") as gfile:
-        gis = dict(
-            [(k.strip(), v.strip()) for k, v in [row.split(":", 1) for row in gfile]]
-        )
+    with open(gisrc) as gfile:
+        gis = {k.strip(): v.strip() for k, v in [row.split(":", 1) for row in gfile]}
     return gis["MAPSET"], gis["LOCATION_NAME"], gis["GISDBASE"]
 
 
@@ -147,7 +145,7 @@ def get_mapset(gisrc_src, gisrc_dst):
         copy_special_mapset_files(path_src, path_dst)
     src = Mapset(msrc, lsrc, gsrc)
     dst = Mapset(mdst, ldst, gdst)
-    visible = [m for m in src.visible]
+    visible = list(src.visible)
     if src.name not in visible:
         visible.append(src.name)
     dst.visible.extend(visible)
@@ -189,7 +187,7 @@ def copy_groups(groups, gisrc_src, gisrc_dst, region=None):
         # change gisdbase to src
         env["GISRC"] = gisrc_src
         get_grp(group=grp, env_=env)
-        rasts = [r for r in get_grp.outputs.stdout.split()]
+        rasts = list(get_grp.outputs.stdout.split())
         # change gisdbase to dst
         env["GISRC"] = gisrc_dst
         rast2cp = [r for r in rasts if rmloc(r) not in all_rasts]
@@ -497,15 +495,15 @@ class GridModule:
             self.gisrc_dst = write_gisrc(
                 self.n_mset.gisdbase, self.n_mset.location, self.n_mset.name
             )
-            rasters = [r for r in select(self.module.inputs, "raster")]
+            rasters = list(select(self.module.inputs, "raster"))
             if rasters:
                 copy_rasters(
                     rasters, self.gisrc_src, self.gisrc_dst, region=self.region
                 )
-            vectors = [v for v in select(self.module.inputs, "vector")]
+            vectors = list(select(self.module.inputs, "vector"))
             if vectors:
                 copy_vectors(vectors, self.gisrc_src, self.gisrc_dst)
-            groups = [g for g in select(self.module.inputs, "group")]
+            groups = list(select(self.module.inputs, "group"))
             if groups:
                 copy_groups(groups, self.gisrc_src, self.gisrc_dst, region=self.region)
         self.bboxes = split_region_in_overlapping_tiles(
@@ -592,7 +590,7 @@ class GridModule:
         else:
             ldst, gdst = self.mset.location, self.mset.gisdbase
         cmd = self.module.get_dict()
-        groups = [g for g in select(self.module.inputs, "group")]
+        groups = list(select(self.module.inputs, "group"))
         for row, box_row in enumerate(self.bboxes):
             for col, box in enumerate(box_row):
                 inms = None
@@ -603,7 +601,7 @@ class GridModule:
                         indx = row * cols + col
                         inms[key] = "%s@%s" % (self.inlist[key][indx], self.mset.name)
                 # set the computational region, prepare the region parameters
-                bbox = dict([(k[0], str(v)) for k, v in box.items()[:-2]])
+                bbox = {k[0]: str(v) for k, v in box.items()[:-2]}
                 bbox["nsres"] = "%f" % reg.nsres
                 bbox["ewres"] = "%f" % reg.ewres
                 new_mset = (

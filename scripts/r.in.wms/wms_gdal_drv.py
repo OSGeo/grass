@@ -17,7 +17,7 @@ import grass.script as gs
 
 try:
     from osgeo import gdal
-except:
+except ImportError:
     gs.fatal(
         _(
             "Unable to load GDAL Python bindings (requires package 'python-gdal' being "
@@ -155,7 +155,7 @@ class WMSGdalDrv(WMSBase):
         xml_file = self._createXML()
 
         # print xml file content for debug level 1
-        file = open(xml_file, "r")
+        file = open(xml_file)
         gs.debug("WMS request XML:\n%s" % file.read(), 1)
         file.close()
 

@@ -15,7 +15,7 @@
 #		Public License (>=v2). Read the file COPYING that
 #		comes with GRASS for details.
 #
-# MANUAL:       http://www.gnu.org/software/autoconf/manual/autoconf.html
+# MANUAL:       https://www.gnu.org/software/autoconf/manual/autoconf.html
 #               http://savannah.gnu.org/projects/autoconf/
 # Website for   config.guess, config.sub:
 #               wget http://git.savannah.gnu.org/cgit/config.git/plain/config.guess

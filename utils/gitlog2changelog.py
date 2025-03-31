@@ -78,14 +78,12 @@ for line in fin:
             dateFound = True
         except Exception as e:
             print(f"Could not parse dateList = '{line}'. Error: {e!s}")
-    # The Fossil-IDs are ignored:
-    elif line.startswith(("    Fossil-ID:", "    [[SVN:")):
-        continue
-    # The svn-id lines are ignored
-    elif "    git-svn-id:" in line:
-        continue
-    # The sign off line is ignored too
-    elif "Signed-off-by" in line:
+    # The Fossil-IDs, svn-id, ad sign off lines are ignored:
+    elif (
+        line.startswith(("    Fossil-ID:", "    [[SVN:"))
+        or "    git-svn-id:" in line
+        or "Signed-off-by" in line
+    ):
         continue
     # Extract the actual commit message for this commit
     elif authorFound & dateFound & messageFound is False:
