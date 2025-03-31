@@ -1896,11 +1896,11 @@ class Parameters:
     # we don't need to define any methods
     # pylint: disable=R0903
 
-    def __init__(self):
-        self.grass_gui = None
+    def __init__(self) -> None:
+        self.grass_gui: str | None = None
         self.create_new = None
         self.exit_grass = None
-        self.force_gislock_removal = None
+        self.force_gislock_removal: bool | None = None
         self.mapset = None
         self.geofile = None
         self.tmp_location = False
@@ -1908,7 +1908,9 @@ class Parameters:
         self.batch_job = None
 
 
-def add_mapset_arguments(parser, mapset_as_option):
+def add_mapset_arguments(
+    parser: argparse.ArgumentParser, mapset_as_option: bool
+) -> None:
     if mapset_as_option:
         parser.add_argument(
             "-m", "--mapset", metavar="PATH", type=str, help=_("use mapset %(metavar)s")
@@ -1952,7 +1954,9 @@ def add_mapset_arguments(parser, mapset_as_option):
     )
 
 
-def update_params_with_mapset_arguments(params, args):
+def update_params_with_mapset_arguments(
+    params: Parameters, args: argparse.Namespace
+) -> None:
     """Update location and mapset related parameters"""
     if args.force_remove_lock:
         params.force_gislock_removal = True
@@ -1972,7 +1976,7 @@ def update_params_with_mapset_arguments(params, args):
         params.mapset = args.mapset
 
 
-def classic_parser(argv, default_gui):
+def classic_parser(argv, default_gui) -> Parameters:
     """Parse CLI similar to v7 but with argparse
 
     --exec is handled before argparse is used.
@@ -2047,17 +2051,17 @@ def classic_parser(argv, default_gui):
     return params
 
 
-def parse_cmdline(argv, default_gui):
+def parse_cmdline(argv, default_gui) -> Parameters:
     """Parse command line parameters
 
     Returns Parameters object used throughout the script.
     """
-    params = classic_parser(argv, default_gui)
+    params: Parameters = classic_parser(argv, default_gui)
     validate_cmdline(params)
     return params
 
 
-def validate_cmdline(params) -> None:
+def validate_cmdline(params: Parameters) -> None:
     """Validate the cmdline params and exit if necessary."""
     if params.exit_grass and not params.create_new:
         fatal(_("Flag -e requires also flag -c"))
@@ -2134,7 +2138,7 @@ def main() -> None:
     gis_lock = str(os.getpid())
     os.environ["GIS_LOCK"] = gis_lock
 
-    params = parse_cmdline(sys.argv, default_gui=default_gui)
+    params: Parameters = parse_cmdline(sys.argv, default_gui=default_gui)
 
     grass_gui = params.grass_gui  # put it to variable, it is used a lot
 
