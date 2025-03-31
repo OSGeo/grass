@@ -492,24 +492,23 @@ def create_gisrc(tmpdir, gisrcrc):
 def read_gisrc(filename):
     kv = {}
     try:
-        f = open(filename)
+        with open(filename) as f:
+            for line in f:
+                try:
+                    k, v = line.split(":", 1)
+                except ValueError as e:
+                    warning(
+                        _(
+                            "Invalid line in RC file ({file}): '{line}' ({error})\n"
+                        ).format(line=line, error=e, file=filename)
+                    )
+                    continue
+                kv[k.strip()] = v.strip()
+            if not kv:
+                warning(_("Empty RC file ({file})").format(file=filename))
+
     except OSError:
         return kv
-
-    for line in f:
-        try:
-            k, v = line.split(":", 1)
-        except ValueError as e:
-            warning(
-                _("Invalid line in RC file ({file}): '{line}' ({error})\n").format(
-                    line=line, error=e, file=filename
-                )
-            )
-            continue
-        kv[k.strip()] = v.strip()
-    if not kv:
-        warning(_("Empty RC file ({file})").format(file=filename))
-    f.close()
 
     return kv
 
