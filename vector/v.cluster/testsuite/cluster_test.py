@@ -3,8 +3,6 @@ import tempfile
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.script import core as grass
-from grass.script import vector as gvector
-from grass.script import vector_info
 
 
 class TestVCluster(TestCase):
