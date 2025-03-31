@@ -120,7 +120,7 @@ def try_remove(path: StrPath) -> None:
         pass
 
 
-def clean_env():
+def clean_env() -> None:
     gisrc = os.environ["GISRC"]
     env_curr = read_gisrc(gisrc)
     env_new = {}
@@ -519,7 +519,6 @@ def read_gisrc(filename: StrPath):
     return kv
 
 
-
 def write_gisrcrc(gisrcrc: StrPath, gisrc: StrPath, skip_variable=None) -> None:
     """Reads gisrc file and write to gisrcrc"""
     debug("Reading %s" % gisrc)
@@ -534,8 +533,8 @@ def write_gisrcrc(gisrcrc: StrPath, gisrc: StrPath, skip_variable=None) -> None:
         f.writelines(lines)
 
 
-def read_env_file(path: StrPath):
-    kv = {}
+def read_env_file(path: StrPath) -> dict[str, str]:
+    kv: dict[str, str] = {}
     with open(path) as f:
         for line in f:
             k, v = line.split(":", 1)
@@ -572,7 +571,7 @@ def create_fallback_session(gisrc: StrPath, tmpdir) -> None:
     )
 
 
-def read_gui(gisrc, default_gui):
+def read_gui(gisrc: StrPath, default_gui):
     grass_gui = None
     # At this point the GRASS user interface variable has been set from the
     # command line, been set from an external environment variable,
@@ -701,13 +700,13 @@ def create_location(gisdbase, location, geostring) -> None:
         fatal(err.value.strip('"').strip("'").replace("\\n", os.linesep))
 
 
-def can_create_location(gisdbase, location) -> bool:
+def can_create_location(gisdbase: StrPath, location) -> bool:
     """Checks if location can be created"""
     path = os.path.join(gisdbase, location)
     return not os.path.exists(path)
 
 
-def cannot_create_location_reason(gisdbase, location) -> str:
+def cannot_create_location_reason(gisdbase: StrPath, location: str) -> str:
     """Returns a message describing why location cannot be created
 
     The goal is to provide the most suitable error message
@@ -1795,7 +1794,7 @@ def grep(pattern, lines):
     return [elem for elem in lines if expr.match(elem)]
 
 
-def io_is_interactive():
+def io_is_interactive() -> bool:
     """Return True if running in an interactive terminal (TTY), False otherwise"""
     return sys.stdin.isatty() and sys.stdout.isatty()
 
