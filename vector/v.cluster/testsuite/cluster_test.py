@@ -50,7 +50,7 @@ class TestVCluster(TestCase):
             "v.out.ascii", layer=2, input=map_name, format="point", separator="comma"
         )
 
-        #print(ascii_output)
+        # print(ascii_output)
         # Parse the ASCII output to extract cluster IDs
         clusters = {}
 
@@ -98,7 +98,7 @@ class TestVCluster(TestCase):
         info = vector_info("clustered")
 
         clusters = self.get_cluster_info("clustered")
-        #print(clusters)
+        # print(clusters)
         self.assertGreater(len(clusters), 1)
         cluster_sizes = sorted([len(points) for _, points in clusters.items()])
         self.assertEqual(cluster_sizes, [4, 4, 5])
@@ -138,7 +138,7 @@ class TestVCluster(TestCase):
 
         clusters = self.get_cluster_info("clustered")
         nodes = len(clusters[1])
-        #print(nodes)
+        # print(nodes)
 
         self.assertModule(
             "v.cluster",
