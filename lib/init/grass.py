@@ -2004,7 +2004,7 @@ class Parameters:
         self.tmp_mapset = False
         self.batch_job = None
         self.no_color: bool = False
-        self.colors: Colors | None = None
+        self.colors: Colors = Colors()
 
 
 def add_mapset_arguments(parser, mapset_as_option):
@@ -2156,7 +2156,8 @@ def classic_parser(argv, default_gui, color_config: Colors | None = None) -> Par
         params.no_color = True
         params.colors = Colors(path=Color(), mapset=Color(), project=Color())
     else:
-        params.colors = color_config
+        if color_config is not None:
+            params.colors = color_config
         debug(f"params.colors = {params.colors.json()}")
 
     update_params_with_mapset_arguments(params, parsed_args)
