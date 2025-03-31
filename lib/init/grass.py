@@ -59,6 +59,7 @@ import unicodedata
 import uuid
 
 from pathlib import Path
+from typing import NoReturn
 
 # mechanism meant for debugging this script (only)
 # private global to store if we are debugging
@@ -139,7 +140,7 @@ def is_debug() -> bool:
     return bool(os.getenv("GRASS_DEBUG"))
 
 
-def debug(msg):
+def debug(msg: str) -> None:
     """Print a debug message if in debug mode
 
     Do not use translatable strings for debug messages.
@@ -149,26 +150,26 @@ def debug(msg):
         sys.stderr.flush()
 
 
-def message(msg):
+def message(msg: str) -> None:
     sys.stderr.write(msg + "\n")
     sys.stderr.flush()
 
 
-def warning(text):
+def warning(text: str) -> None:
     sys.stderr.write(_("WARNING") + ": " + text + os.linesep)
 
 
-def fatal(msg):
+def fatal(msg: str) -> NoReturn:
     sys.stderr.write("%s: " % _("ERROR") + msg + os.linesep)
     sys.exit(_("Exiting..."))
 
 
-def readfile(path):
+def readfile(path) -> str:
     debug("Reading %s" % path)
     return Path(path).read_text()
 
 
-def writefile(path, s):
+def writefile(path, s) -> None:
     debug("Writing %s" % path)
     Path(path).write_text(s)
 
@@ -187,7 +188,7 @@ def Popen(cmd, **kwargs):  # pylint: disable=C0103
     return subprocess.Popen(cmd, **kwargs)
 
 
-def gpath(*args):
+def gpath(*args) -> str:
     """Construct path to file or directory in GRASS GIS installation
 
     Can be called only after GISBASE was set.
@@ -195,7 +196,7 @@ def gpath(*args):
     return os.path.join(GISBASE, *args)
 
 
-def wxpath(*args):
+def wxpath(*args) -> str:
     """Construct path to file or directory in GRASS wxGUI
 
     Can be called only after GISBASE was set.
@@ -210,7 +211,7 @@ def wxpath(*args):
     return os.path.join(_WXPYTHON_BASE, *args)
 
 
-def count_wide_chars(s):
+def count_wide_chars(s: str) -> int:
     """Returns the number of wide CJK characters in a string.
 
     :param str s: string
@@ -218,11 +219,11 @@ def count_wide_chars(s):
     return sum(unicodedata.east_asian_width(c) in "WF" for c in s)
 
 
-def fw(fmt, *args):
+def fw(fmt: str, *args) -> str:
     """Adjusts fixed-width string specifiers for wide CJK characters and
     returns a formatted string. Does not support named arguments yet.
 
-    :param str fmt: format string
+    :param fmt: format string
     :param *args: arguments for the format string
     """
     matches = []
@@ -309,7 +310,7 @@ Geographic Resources Analysis Support System (GRASS GIS).
 """
 
 
-def help_message(default_gui):
+def help_message(default_gui) -> None:
     t = string.Template(
         HELP_TEXT.format(
             usage=_("Usage"),
@@ -375,7 +376,7 @@ def help_message(default_gui):
     sys.stderr.write(s)
 
 
-def create_grass_config_dir():
+def create_grass_config_dir() -> str:
     """Create configuration directory
 
     Determines path of GRASS GIS user configuration directory and creates
@@ -407,7 +408,7 @@ def create_grass_config_dir():
     return directory
 
 
-def create_tmp(user, gis_lock):
+def create_tmp(user, gis_lock) -> str:
     """Create temporary directory
 
     :param user: user name to be used in the directory name
@@ -459,7 +460,7 @@ def create_tmp(user, gis_lock):
     return tmpdir
 
 
-def get_gisrc_from_config_dir(grass_config_dir, batch_job):
+def get_gisrc_from_config_dir(grass_config_dir, batch_job) -> str:
     """Set the global grassrc file (aka grassrcrc)"""
     if batch_job:
         # TODO: This is probably not needed since batch job does write to config.
@@ -471,7 +472,7 @@ def get_gisrc_from_config_dir(grass_config_dir, batch_job):
     return os.path.join(grass_config_dir, "rc")
 
 
-def create_gisrc(tmpdir, gisrcrc):
+def create_gisrc(tmpdir, gisrcrc) -> str:
     # Set the session grassrc file
     gisrc = os.path.join(tmpdir, "gisrc")
     os.environ["GISRC"] = gisrc
@@ -515,7 +516,7 @@ def read_gisrc(filename):
     return kv
 
 
-def write_gisrcrc(gisrcrc, gisrc, skip_variable=None):
+def write_gisrcrc(gisrcrc, gisrc, skip_variable=None) -> None:
     """Reads gisrc file and write to gisrcrc"""
     debug("Reading %s" % gisrc)
     number = 0
@@ -538,14 +539,14 @@ def read_env_file(path):
     return kv
 
 
-def write_gisrc(kv, filename, append=False):
+def write_gisrc(kv, filename, append=False) -> None:
     # use append=True to avoid a race condition between write_gisrc() and
     # grass_prompt() on startup (PR #548)
     with open(filename, "a" if append else "w") as f:
         f.writelines("%s: %s\n" % (k, v) for k, v in kv.items())
 
 
-def add_mapset_to_gisrc(gisrc, grassdb, location, mapset):
+def add_mapset_to_gisrc(gisrc, grassdb, location, mapset) -> None:
     kv = read_gisrc(gisrc) if os.access(gisrc, os.R_OK) else {}
     kv["GISDBASE"] = grassdb
     kv["LOCATION_NAME"] = location
@@ -553,13 +554,13 @@ def add_mapset_to_gisrc(gisrc, grassdb, location, mapset):
     write_gisrc(kv, gisrc)
 
 
-def add_last_mapset_to_gisrc(gisrc, last_mapset_path):
+def add_last_mapset_to_gisrc(gisrc, last_mapset_path) -> None:
     kv = read_gisrc(gisrc) if os.access(gisrc, os.R_OK) else {}
     kv["LAST_MAPSET_PATH"] = last_mapset_path
     write_gisrc(kv, gisrc)
 
 
-def create_fallback_session(gisrc, tmpdir):
+def create_fallback_session(gisrc, tmpdir) -> None:
     """Creates fallback temporary session"""
     # Create temporary location
     set_mapset(
@@ -654,7 +655,7 @@ def check_gui(expected_gui):
     return grass_gui
 
 
-def save_gui(gisrc, grass_gui):
+def save_gui(gisrc, grass_gui) -> None:
     """Save the user interface variable in the grassrc file"""
     if os.access(gisrc, os.F_OK):
         kv = read_gisrc(gisrc)
@@ -662,7 +663,7 @@ def save_gui(gisrc, grass_gui):
         write_gisrc(kv, gisrc)
 
 
-def create_location(gisdbase, location, geostring):
+def create_location(gisdbase, location, geostring) -> None:
     """Create GRASS Location using georeferenced file or EPSG
 
     EPSG code format is ``EPSG:code`` or ``EPSG:code:datum_trans``.
@@ -702,7 +703,7 @@ def can_create_location(gisdbase, location) -> bool:
     return not os.path.exists(path)
 
 
-def cannot_create_location_reason(gisdbase, location):
+def cannot_create_location_reason(gisdbase, location) -> str:
     """Returns a message describing why location cannot be created
 
     The goal is to provide the most suitable error message
@@ -976,7 +977,7 @@ def get_mapset_settings(gisrc):
 # TODO: does it really makes sense to tell user about gisrcrc?
 # anything could have happened in between loading from gisrcrc and now
 # (we do e.g. GUI or creating loctation)
-def load_gisrc(gisrc, gisrcrc):
+def load_gisrc(gisrc, gisrcrc) -> MapsetSettings:
     """Get the settings of Location and Mapset from the gisrc file
 
     :returns: MapsetSettings object
@@ -1001,7 +1002,7 @@ def load_gisrc(gisrc, gisrcrc):
 
 
 # load environmental variables from grass_env_file
-def load_env(grass_env_file):
+def load_env(grass_env_file) -> None:
     if not os.access(grass_env_file, os.R_OK):
         return
 
@@ -1053,7 +1054,7 @@ def load_env(grass_env_file):
         os.environ[k] = v
 
 
-def install_notranslation():
+def install_notranslation() -> None:
     # If locale is not supported, _ function might be missing
     # This function just installs _ as a pass-through function
     # See trac #3875 for details
@@ -1062,7 +1063,7 @@ def install_notranslation():
     builtins.__dict__["_"] = lambda x: x
 
 
-def set_language(grass_config_dir):
+def set_language(grass_config_dir) -> None:
     # This function is used to override system default language and locale
     # Such override can be requested only from wxGUI
     # An override if user has provided correct environmental variables as
@@ -1273,7 +1274,7 @@ def unlock_gisrc_mapset(gisrc, gisrcrc):
     try_remove(lockfile)
 
 
-def make_fontcap():
+def make_fontcap() -> None:
     # TODO: is GRASS_FONT_CAP ever defined? It seems it must be defined in system
     fc = os.getenv("GRASS_FONT_CAP")
     if fc and not os.access(fc, os.R_OK):
@@ -1281,7 +1282,7 @@ def make_fontcap():
         call(["g.mkfontcap"])
 
 
-def ensure_db_connected(mapset):
+def ensure_db_connected(mapset) -> None:
     """Predefine default driver if DB connection not defined
 
     :param mapset: full path to the mapset
@@ -1347,7 +1348,7 @@ def get_shell():
     return sh, shellname
 
 
-def get_grass_env_file(sh, grass_config_dir):
+def get_grass_env_file(sh, grass_config_dir) -> str:
     """Get name of the shell-specific GRASS environment (rc) file"""
     if sh in {"csh", "tcsh"}:
         grass_env_file = os.path.join(grass_config_dir, "cshrc")
@@ -1447,7 +1448,7 @@ def start_gui(grass_gui):
     return None
 
 
-def close_gui():
+def close_gui() -> None:
     """Close GUI if running"""
     if gpath("etc", "python") not in sys.path:
         sys.path.append(gpath("etc", "python"))
@@ -1464,7 +1465,7 @@ def close_gui():
             message(_("Unable to close GUI. {0}").format(e))
 
 
-def show_banner():
+def show_banner() -> None:
     """Write GRASS GIS ASCII name to stderr"""
     sys.stderr.write(
         r"""
@@ -1478,7 +1479,7 @@ def show_banner():
     )
 
 
-def say_hello():
+def say_hello() -> None:
     """Write welcome to stderr including code revision if in git copy"""
     sys.stderr.write(_("Welcome to GRASS GIS %s") % GRASS_VERSION)
     if GRASS_VERSION.endswith("dev"):
@@ -1501,7 +1502,7 @@ INFO_TEXT = r"""
 """
 
 
-def show_info(shellname, grass_gui, default_gui):
+def show_info(shellname, grass_gui, default_gui) -> None:
     """Write basic info about GRASS GIS and GRASS session to stderr"""
     sys.stderr.write(
         fw(
@@ -1749,7 +1750,7 @@ def default_startup(location, location_name):
     return start_shell()
 
 
-def done_message():
+def done_message() -> None:
     # here was something for batch job but it was never called
     message(_("Done."))
     message("")
@@ -1757,7 +1758,7 @@ def done_message():
     message("")
 
 
-def clean_temp():
+def clean_temp() -> None:
     """Clean mapset temporary directory
 
     Simple wrapper around the library function avoiding the need to solve imports at
@@ -1768,7 +1769,7 @@ def clean_temp():
     gsetup.clean_temp()
 
 
-def clean_all(*, start_time):
+def clean_all(*, start_time) -> None:
     from grass.script import setup as gsetup
 
     # clean default sqlite db
@@ -1795,7 +1796,7 @@ def io_is_interactive():
     return sys.stdin.isatty() and sys.stdout.isatty()
 
 
-def print_params(params):
+def print_params(params) -> None:
     """Write compile flags and other configuration to stdout"""
     if not params:
         params = [
@@ -1863,7 +1864,7 @@ def print_params(params):
             message(_("Parameter <%s> not supported") % arg)
 
 
-def get_username():
+def get_username() -> str:
     """Get name of the current user"""
     if WINDOWS:
         user = os.getenv("USERNAME")
@@ -2052,7 +2053,7 @@ def parse_cmdline(argv, default_gui):
     return params
 
 
-def validate_cmdline(params):
+def validate_cmdline(params) -> None:
     """Validate the cmdline params and exit if necessary."""
     if params.exit_grass and not params.create_new:
         fatal(_("Flag -e requires also flag -c"))
@@ -2082,7 +2083,7 @@ def validate_cmdline(params):
     # without --exec (usefulness to be evaluated).
 
 
-def find_grass_python_package():
+def find_grass_python_package() -> None:
     """Find path to grass package and add it to path"""
     if os.path.exists(gpath("etc", "python")):
         path_to_package = gpath("etc", "python")
@@ -2097,7 +2098,7 @@ def find_grass_python_package():
         raise RuntimeError(msg)
 
 
-def main():
+def main() -> None:
     """The main function which does the whole setup and run procedure
 
     Only few things are set on the module level.
