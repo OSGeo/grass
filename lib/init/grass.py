@@ -58,6 +58,10 @@ import unicodedata
 import argparse
 import json
 from pathlib import Path
+from typing import Any, Final, Literal, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
 
 
 # mechanism meant for debugging this script (only)
@@ -2171,9 +2175,18 @@ class Color:
     escaped- or raw escape sequence.
     """
 
-    def __init__(self, style="normal", fg=None, bg=None):
-        self.styles = ["normal", "bold", "light", "italic", "underline", "blink"]
-        self.colors = [
+    _style: int
+
+    def __init__(self, style: str = "normal", fg=None, bg=None) -> None:
+        self.styles: Final[list[str]] = [
+            "normal",
+            "bold",
+            "light",
+            "italic",
+            "underline",
+            "blink",
+        ]
+        self.colors: list[str] = [
             "black",
             "red",
             "green",
@@ -2192,52 +2205,52 @@ class Color:
             self.background = bg
 
     @property
-    def style(self):
+    def style(self) -> str:
         return self.styles[self._style]
 
     @style.setter
-    def style(self, value):
+    def style(self, value) -> None:
         if value not in self.styles:
             msg = "Color Style must be one of: {styles}".format(
                 styles=", ".join(self.styles)
             )
             raise ValueError(msg)
-        self._style = self.styles.index(value)
+        self._style: int = self.styles.index(value)
 
-    def _parse_color(self, value):
+    def _parse_color(self, value) -> int:
         if value not in self.colors:
             msg = "Color must be one of: {colors}".format(colors=", ".join(self.colors))
             raise ValueError(msg)
         return self.colors.index(value)
 
-    def _color_to_string(self, value):
+    def _color_to_string(self, value) -> str:
         if value is not None:
             return self.colors[value]
         return ""
 
     @property
-    def foreground(self):
+    def foreground(self) -> str:
         return self._color_to_string(self._foreground)
 
     @foreground.setter
-    def foreground(self, value):
+    def foreground(self, value) -> None:
         self._foreground = self._parse_color(value)
 
     @property
-    def background(self):
+    def background(self) -> str:
         return self._color_to_string(self._background)
 
     @background.setter
-    def background(self, value):
+    def background(self, value) -> None:
         self._background = self._parse_color(value)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self._ansi()
 
-    def raw(self, escape=None):
+    def raw(self, escape=None) -> str:
         return self._ansi(raw=True, escape=escape)
 
-    def _ansi(self, raw: bool = False, escape=None):
+    def _ansi(self, raw: bool = False, escape=None) -> str:
         """Parse a tuple of style, fg color, bg color into an ANSI escape sequence.
 
         Returns a string with the ANSI escape sequence or None.
@@ -2266,7 +2279,7 @@ class Color:
             ansi=";".join(ansi), e_start=e_start, e_end=e_end
         )
 
-    def colorize(self, s: str, monochrome: bool, raw: bool = False, escape=None):
+    def colorize(self, s: str, monochrome: bool, raw: bool = False, escape=None) -> str:
         """Colors the given string to the given color
 
         If monochrome is True, it will not format the string
@@ -2285,6 +2298,8 @@ class Color:
 
 class Colors:
     """Holds all colors for GRASS, and provides JSON serialization."""
+
+    _color: dict[str, Color]
 
     def __init__(
         self,
@@ -2306,14 +2321,14 @@ class Colors:
                 "project": project,
             }
 
-    def get(self, category):
+    def get(self, category: str) -> Color:
         return self._color[category]
 
-    def set(self, category, value):
+    def set(self, category: str, value) -> None:
         self._color[category] = value
 
-    def json(self, sort_keys=False, indent=4):
-        ret = {}
+    def json(self, sort_keys: bool = False, indent: int | str | None = 4) -> str:
+        ret: dict[str, dict[Literal["style", "fg", "bg"], str]] = {}
         for k, color in self._color.items():
             ret[k] = {"style": color.style}
             if color.foreground:
@@ -2322,7 +2337,7 @@ class Colors:
                 ret[k]["bg"] = color.background
         return json.dumps(ret, sort_keys=sort_keys, indent=indent)
 
-    def from_json(self, colors) -> None:
+    def from_json(self, colors: Mapping[str, Any]) -> None:
         for k, color in colors.items():
             self._color[k] = Color(
                 style=color.get("style", "normal"),
