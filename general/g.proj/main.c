@@ -90,7 +90,9 @@ int main(int argc, char *argv[])
     shellinfo->key = 'g';
     shellinfo->guisection = _("Print");
     shellinfo->description =
-        _("Print projection information in shell script style");
+        _("[DEPRECATED] Print projection information in shell script style. "
+          "This flag is obsolete and will be removed in a future release. Use "
+          "format=shell instead.");
 
     datuminfo = G_define_flag();
     datuminfo->key = 'd';
@@ -102,7 +104,9 @@ int main(int argc, char *argv[])
     printproj4->key = 'j';
     printproj4->guisection = _("Print");
     printproj4->description =
-        _("Print projection information in PROJ.4 format");
+        _("[DEPRECATED] Print projection information in PROJ.4 format. "
+          "This flag is obsolete and will be removed in a future release. Use "
+          "format=proj4 instead.");
 
     dontprettify = G_define_flag();
     dontprettify->key = 'f';
@@ -119,7 +123,10 @@ int main(int argc, char *argv[])
     printwkt = G_define_flag();
     printwkt->key = 'w';
     printwkt->guisection = _("Print");
-    printwkt->description = _("Print projection information in WKT format");
+    printwkt->description =
+        _("[DEPRECATED] Print projection information in WKT format. "
+          "This flag is obsolete and will be removed in a future release. Use "
+          "format=wkt instead.");
 
     esristyle = G_define_flag();
     esristyle->key = 'e';
@@ -226,6 +233,12 @@ int main(int argc, char *argv[])
     location->description = _("Name of new project (location) to create");
 
     format = G_define_standard_option(G_OPT_F_FORMAT);
+    format->options = "plain,shell,json,wkt,proj4";
+    format->descriptions = _("plain;Human readable text output;"
+                             "shell;shell script style text output;"
+                             "json;JSON (JavaScript Object Notation);"
+                             "wkt;Well-known text output;"
+                             "proj4;PROJ.4 style text output;");
     format->guisection = _("Print");
 
     if (G_parser(argc, argv))
@@ -236,18 +249,39 @@ int main(int argc, char *argv[])
     if (strcmp(format->answer, "json") == 0) {
         outputFormat = JSON;
     }
-    else if (shellinfo->answer) {
+    else if (strcmp(format->answer, "shell") == 0) {
         outputFormat = SHELL;
+    }
+    else if (strcmp(format->answer, "wkt") == 0) {
+        outputFormat = WKT;
+    }
+    else if (strcmp(format->answer, "proj4") == 0) {
+        outputFormat = PROJ4;
     }
     else {
         outputFormat = PLAIN;
     }
 
-    if (outputFormat == JSON &&
-        !(printinfo->answer || printproj4->answer || printwkt->answer)) {
-        G_fatal_error(_("The 'format=json' option can only be used with one of "
-                        "the -%c, -%c, or -%c flags"),
-                      printinfo->key, printproj4->key, printwkt->key);
+    if (outputFormat != PLAIN && (!printinfo->answer || shellinfo->answer ||
+                                  printproj4->answer || printwkt->answer)) {
+        G_fatal_error(_("The format option can only be used with -%c flag"),
+                      printinfo->key);
+    }
+
+    if (shellinfo->answer) {
+        G_warning(_("Flag 'g' is deprecated and will be removed in a future "
+                    "release. Please use format=shell instead."));
+        outputFormat = SHELL;
+    }
+    else if (printproj4->answer) {
+        G_warning(_("Flag 'j' is deprecated and will be removed in a future "
+                    "release. Please use format=proj4 instead."));
+        outputFormat = PROJ4;
+    }
+    else if (printwkt->answer) {
+        G_warning(_("Flag 'w' is deprecated and will be removed in a future "
+                    "release. Please use format=wkt instead."));
+        outputFormat = WKT;
     }
 
     /* list codes for given authority */
@@ -347,15 +381,16 @@ int main(int argc, char *argv[])
                       printproj4->key, create->key);
 #endif
     }
-    if (printinfo->answer || shellinfo->answer)
+    if ((printinfo->answer && outputFormat == PLAIN) || outputFormat == SHELL ||
+        outputFormat == JSON)
         print_projinfo(outputFormat);
     else if (datuminfo->answer)
         print_datuminfo();
-    else if (printproj4->answer)
-        print_proj4(dontprettify->answer, outputFormat);
+    else if (outputFormat == PROJ4)
+        print_proj4(dontprettify->answer);
 #ifdef HAVE_OGR
-    else if (printwkt->answer)
-        print_wkt(esristyle->answer, dontprettify->answer, outputFormat);
+    else if (outputFormat == WKT)
+        print_wkt(esristyle->answer, dontprettify->answer);
 #endif
     else if (location->answer)
         create_location(location->answer);

@@ -71,6 +71,9 @@ void print_projinfo(enum OutputFormat format)
             json_object_set_string(object, projinfo->key[i],
                                    projinfo->value[i]);
             break;
+        case PROJ4:
+        case WKT:
+            break;
         }
     }
 
@@ -87,6 +90,9 @@ void print_projinfo(enum OutputFormat format)
             break;
         case JSON:
             json_object_set_string(object, "srid", projsrid);
+            break;
+        case PROJ4:
+        case WKT:
             break;
         }
     }
@@ -108,6 +114,9 @@ void print_projinfo(enum OutputFormat format)
             case JSON:
                 json_object_set_string(object, projunits->key[i],
                                        projunits->value[i]);
+                break;
+            case PROJ4:
+            case WKT:
                 break;
             }
         }
@@ -171,14 +180,12 @@ void print_datuminfo(void)
 }
 
 /* print input projection information in PROJ format */
-void print_proj4(int dontprettify, enum OutputFormat format)
+void print_proj4(int dontprettify)
 {
     struct pj_info pjinfo = {0};
     char *i, *projstrmod;
     const char *projstr;
     const char *unfact;
-    JSON_Value *value = NULL;
-    JSON_Object *object = NULL;
 
     if (check_xy(PLAIN))
         return;
@@ -230,34 +237,17 @@ void print_proj4(int dontprettify, enum OutputFormat format)
     if (!projstrmod)
         projstrmod = G_store(projstr);
 
-    switch (format) {
-    case JSON:
-        value = json_value_init_object();
-        if (value == NULL) {
-            G_fatal_error(
-                _("Failed to initialize JSON object. Out of memory?"));
-        }
-        object = json_object(value);
+    for (i = projstrmod; *i; i++) {
+        /* Don't print the first space */
+        if (i == projstrmod && *i == ' ')
+            continue;
 
-        json_object_set_string(object, "proj4", projstrmod);
-
-        print_json(value);
-        break;
-    default:
-        for (i = projstrmod; *i; i++) {
-            /* Don't print the first space */
-            if (i == projstrmod && *i == ' ')
-                continue;
-            if (*i == ' ' && *(i + 1) == '+' && !(dontprettify))
-                fputc('\n', stdout);
-            else
-                fputc(*i, stdout);
-        }
-
-        fputc('\n', stdout);
-        break;
+        if (*i == ' ' && *(i + 1) == '+' && !(dontprettify))
+            fputc('\n', stdout);
+        else
+            fputc(*i, stdout);
     }
-
+    fputc('\n', stdout);
     G_free(projstrmod);
     G_free(pjinfo.srid);
     G_free(pjinfo.def);
@@ -267,11 +257,9 @@ void print_proj4(int dontprettify, enum OutputFormat format)
 }
 
 #ifdef HAVE_OGR
-void print_wkt(int esristyle, int dontprettify, enum OutputFormat format)
+void print_wkt(int esristyle, int dontprettify)
 {
     char *outwkt;
-    JSON_Value *value = NULL;
-    JSON_Object *object = NULL;
 
     if (check_xy(PLAIN))
         return;
@@ -342,23 +330,7 @@ void print_wkt(int esristyle, int dontprettify, enum OutputFormat format)
 #endif
 
     if (outwkt != NULL) {
-        switch (format) {
-        case JSON:
-            value = json_value_init_object();
-            if (value == NULL) {
-                G_fatal_error(
-                    _("Failed to initialize JSON object. Out of memory?"));
-            }
-            object = json_object(value);
-
-            json_object_set_string(object, "wkt", outwkt);
-
-            print_json(value);
-            break;
-        default:
-            fprintf(stdout, "%s\n", outwkt);
-            break;
-        }
+        fprintf(stdout, "%s\n", outwkt);
         CPLFree(outwkt);
     }
     else
@@ -392,6 +364,9 @@ static int check_xy(enum OutputFormat format)
             json_object_set_string(object, "name", "xy_location_unprojected");
 
             print_json(value);
+            break;
+        case PROJ4:
+        case WKT:
             break;
         }
         return 1;

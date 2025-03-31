@@ -122,16 +122,22 @@ Print the CRS information for the current project in JSON format:
 g.proj -p format=json
 ```
 
-Print the CRS information for the current project in WKT JSON format:
+Print the CRS information for the current project in SHELL format:
 
 ```sh
-g.proj -w format=json
+g.proj -p format=shell
 ```
 
-Print the CRS information for the current project in PROJ.4 JSON format:
+Print the CRS information for the current project in WKT format:
 
 ```sh
-g.proj -j format=json
+g.proj -p format=wkt
+```
+
+Print the CRS information for the current project in PROJ.4 format:
+
+```sh
+g.proj -p format=proj4
 ```
 
 List the possible datum transformation parameters for the current
