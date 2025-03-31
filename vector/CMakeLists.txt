@@ -102,9 +102,6 @@ set(vector_modules_list
     v.what.rast
     v.what.rast3)
 
-if(WITH_OPENDWG)
-  list(APPEND vector_modules_list v.in.dwg)
-endif()
 if(WITH_GEOS)
   list(APPEND vector_modules_list v.buffer)
 endif()
@@ -138,7 +135,7 @@ build_program_in_subdir(v.build DEPENDS grass_gis grass_vector)
 
 build_program_in_subdir(v.build.polylines DEPENDS grass_gis grass_vector)
 
-build_program_in_subdir(v.category DEPENDS grass_gis grass_vector)
+build_program_in_subdir(v.category DEPENDS grass_gis grass_vector grass_parson)
 
 build_program_in_subdir(
   v.class
@@ -325,7 +322,7 @@ build_program_in_subdir(
   grass_vector
   ${LIBM}
   PRIMARY_DEPENDS
-  PDAL)
+  ${PDAL})
 
 build_program_in_subdir(
   v.in.region
@@ -776,9 +773,9 @@ build_program_in_subdir(
 
 build_program_in_subdir(v.type DEPENDS grass_gis grass_vector)
 
-# XXX: to workaround an MSVC bug where NAN is not a contant
-# v.univar\main.c(77,8): error C2099: initializer is not a constant REMOVEME
-# later once the fix is released
+# XXX: to workaround an MSVC bug where NAN is not a constant
+# v.univar\main.c(77,8): error C2099: initializer is not a constant
+# REMOVEME later once the fix is released
 # https://developercommunity.visualstudio.com/t/NAN-is-no-longer-compile-time-constant-i/10688907#T-N10849410
 set(ucrt_noisy_nan_DEFS "")
 if(WIN32)
@@ -983,7 +980,3 @@ build_program_in_subdir(
   grass_vector
   PRIMARY_DEPENDS
   PostgreSQL::PostgreSQL)
-
-if(WITH_OPENDWG)
-  build_program_in_subdir(v.in.dwg DEPENDS grass_gis grass_vector ${LIBM})
-endif()

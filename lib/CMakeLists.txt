@@ -58,9 +58,9 @@ build_library_in_subdir(
   DEFS
   "${use_math_DEFS}"
   OPTIONAL_DEPENDS
+  CBLAS::CBLAS
   FFTW
-  LAPACKE
-  CBLAS
+  LAPACKE::LAPACKE
   OPENMP)
 
 build_library_in_subdir(linkm)
@@ -118,7 +118,7 @@ if(WITH_CAIRO)
       OPTIONAL_DEPENDS
       Iconv::Iconv)
   if(WITH_X11)
-    list(PREPEND _cairodriver_DEPENDS X11)
+    list(PREPEND _cairodriver_DEPENDS X11::X11)
   endif()
   build_library_in_subdir(cairodriver DEPENDS ${_cairodriver_DEPENDS})
 
@@ -229,7 +229,8 @@ if(WITH_OPENGL)
     grass_raster3d
     grass_vector
     GDAL::GDAL
-    OPENGL
+    OpenGL::GL
+    OpenGL::GLU
     TIFF::TIFF)
 
   build_library_in_subdir(
@@ -241,7 +242,9 @@ if(WITH_OPENGL)
     grass_bitmap
     grass_ogsf
     grass_gis
-    OPENGL)
+    OpenGL::GL
+    OPTIONAL_DEPENDS
+    X11::X11)
 endif()
 
 add_subdirectory(temporal)

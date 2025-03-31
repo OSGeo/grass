@@ -22,13 +22,12 @@ build_module(
   grass_datetime
   ZLIB::ZLIB
   OPTIONAL_DEPENDS
-  PTHREAD
-  BZIP2
-  ZSTD
+  BZip2::BZip2
   Iconv::Iconv
   Intl::Intl
-  # REGEX
   PostgreSQL::PostgreSQL
+  Threads::Threads
+  ZSTD
   DEFS
   "${grass_gis_DEFS}")
 

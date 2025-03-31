@@ -24,6 +24,8 @@ extend-exclude = ["python/libgrass_interface_generator"]
 
 [tool.ruff.lint]
 # See https://docs.astral.sh/ruff/rules/
+external = ["C2801"]
+
 select = [
     "A",      # flake8-builtins (A)
     "AIR",    # Airflow (AIR)
@@ -286,12 +288,8 @@ ignore = [
 "gui/wxpython/iclass/statistics.py" = ["A005"]
 "gui/wxpython/icons/grass_icons.py" = ["PTH208"]
 "gui/wxpython/image2target/ii2t_manager.py" = ["PTH208", "SIM115"]
-"gui/wxpython/modules/colorrules.py" = ["SIM115"]
-"gui/wxpython/modules/mcalc_builder.py" = ["SIM115"]
 "gui/wxpython/photo2image/ip2i_manager.py" = ["SIM115"]
-"gui/wxpython/psmap/dialogs.py" = ["PTH208"]
 "gui/wxpython/psmap/instructions.py" = ["SIM115"]
-"gui/wxpython/rlisetup/frame.py" = ["PTH208"]
 "gui/wxpython/tools/update_menudata.py" = ["SIM115"]
 "gui/wxpython/vnet/vnet_data.py" = ["SIM115"]
 "gui/wxpython/web_services/dialogs.py" = ["SIM115"]

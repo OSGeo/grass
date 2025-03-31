@@ -194,7 +194,9 @@ ARG GRASS_PYTHON_PACKAGES="\
 
 FROM common_start AS grass_without_gui
 
+
 ARG GRASS_CONFIG="${GRASS_CONFIG} --without-opengl --without-x"
+
 
 FROM common_start AS grass_with_gui
 
@@ -267,7 +269,7 @@ LABEL org.opencontainers.image.authors="$AUTHORS" \
 
 # Add ubuntugis unstable and fetch packages
 RUN apt-get update \
-    && apt-get install  -y --no-install-recommends --no-install-suggests \
+    && apt-get install -y --no-install-recommends --no-install-suggests \
     software-properties-common \
     gpg \
     gpg-agent \
@@ -289,7 +291,7 @@ RUN apt-get update \
 
 # # Get datum grids
 # # Currently using https://proj.org/en/9.3/usage/network.html#how-to-enable-network-capabilities
-# FROM ubuntu:22.04 as datum_grids
+# FROM ubuntu:22.04 AS datum_grids
 
 # # See: https://github.com/OSGeo/PROJ-data
 # RUN apt-get update \
@@ -338,7 +340,7 @@ WORKDIR /src/grass_build
 
 ENV LD_LIBRARY_PATH="/usr/local/lib" \
     LDFLAGS="-s -Wl,--no-undefined -lblas" \
-    CFLAGS="-O2 -std=gnu99 -m64" \
+    CFLAGS="-O2 -std=gnu99" \
     CXXFLAGS="" \
     # PYTHONPATH="$PYTHONPATH" \
     NUMTHREADS=4

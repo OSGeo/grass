@@ -280,8 +280,8 @@ int G_read_ellipsoid_table(int fatal)
             err++;
             sprintf(buf, " %d", line);
             if (*badlines)
-                strcat(badlines, ",");
-            strcat(badlines, buf);
+                G_strlcat(badlines, ",", sizeof(badlines));
+            G_strlcat(badlines, buf, sizeof(badlines));
             continue;
         }
 
@@ -303,8 +303,8 @@ int G_read_ellipsoid_table(int fatal)
             err++;
             sprintf(buf, " %d", line);
             if (*badlines)
-                strcat(badlines, ",");
-            strcat(badlines, buf);
+                G_strlcat(badlines, ",", sizeof(badlines));
+            G_strlcat(badlines, buf, sizeof(badlines));
             continue;
         }
     }

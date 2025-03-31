@@ -85,6 +85,12 @@ plugins:
   - glightbox
   - tags:
       tags_name_property: keywords
+      tags_slugify_format: "{slug}"
+  - tags:
+      tags: false
+      tags_name_property: keywords
+      tags_slugify_format: "{slug}"
+      listings_directive: topic_keyword
   - social:
       cards_layout_options:
         background_color: rgb(76, 176, 91)
@@ -152,30 +158,30 @@ nav:
               - Temporal Plot: wxGUI.tplot.md
           - List of Components: wxGUI.components.md
 
-  - Key Concepts:
-      - Raster Overview: rasterintro.md
-      - Raster 3D Overview: raster3dintro.md
-      - Vector Overview: vectorintro.md
-      - Databases Overview: databaseintro.md
-      - Database Drivers: sql.md
-      - Imagery Overview: imageryintro.md
-      - Temporal Overview: temporalintro.md
-      - Display Drivers: displaydrivers.md
-      - GRASS Projects: grass_database.md
-      - Projection and Transformations: projectionintro.md
+  - Key concepts:
+      - Raster overview: rasterintro.md
+      - 3D raster overview: raster3dintro.md
+      - Vector overview: vectorintro.md
+      - Databases overview: databaseintro.md
+      - Database drivers: sql.md
+      - Imagery overview: imageryintro.md
+      - Temporal overview: temporalintro.md
+      - Display drivers: displaydrivers.md
+      - GRASS projects: grass_database.md
+      - Projections and transformations: projectionintro.md
 
-  - Processing Tools:
-      - Processing Tools: full_index.md
-      - General Tools: general.md
-      - Raster Tools: raster.md
-      - Raster 3D Tools: raster3d.md
-      - Vector Tools: vector.md
-      - Database Tools: database.md
-      - Imagery Tools: imagery.md
-      - Temporal Tools: temporal.md
-      - Display Tools: display.md
-      - Postscript Tools: postscript.md
-      - Miscellaneous Tools: miscellaneous.md
+  - Tools:
+      - Tools: full_index.md
+      - General tools: general.md
+      - Raster tools: raster.md
+      - 3D raster tools: raster3d.md
+      - Vector tools: vector.md
+      - Database tools: database.md
+      - Imagery tools: imagery.md
+      - Temporal tools: temporal.md
+      - Display tools: display.md
+      - PostScript tools: postscript.md
+      - Miscellaneous tools: miscellaneous.md
 
   - Development: development_intro.md
 

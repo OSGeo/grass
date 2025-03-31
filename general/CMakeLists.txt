@@ -61,10 +61,18 @@ build_program_in_subdir(
   "-DGRASS_VERSION_UPDATE_PKG=${GRASS_VERSION_UPDATE_PKG}"
   "-DARCH=\"${BUILD_ARCH}\"")
 
-if(WITH_CAIRO AND WITH_X11 AND CAIRO_HAS_XLIB_XRENDER_SURFACE)
+if(WITH_CAIRO
+   AND WITH_X11
+   AND CAIRO_HAS_XLIB_XRENDER_SURFACE)
   if(NOT MSVC)
-    build_program_in_subdir(g.cairocomp DEPENDS grass_gis Fontconfig::Fontconfig
-                            PRIMARY_DEPENDS Cairo::Cairo)
+    build_program_in_subdir(
+      g.cairocomp
+      DEPENDS
+      grass_gis
+      Fontconfig::Fontconfig
+      X11::X11
+      PRIMARY_DEPENDS
+      Cairo::Cairo)
   endif()
 endif()
 

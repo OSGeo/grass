@@ -45,7 +45,8 @@ jobs:
             - name: Install dependencies
               run: |
                 sudo apt-get update -y
-                sudo apt-get install -y wget git gawk findutils ninja-build libpq-dev gettext unixodbc-dev
+                sudo apt-get install -y wget git gawk findutils ninja-build libpq-dev \
+                  gettext unixodbc-dev libnetcdf-dev
                 xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
                     sudo apt-get install -y --no-install-recommends --no-install-suggests
             - name: Print build environment variables
@@ -61,7 +62,7 @@ jobs:
               run: |
                 cmake ${CMAKE_OPTIONS} -S $GITHUB_WORKSPACE -B $GITHUB_WORKSPACE/build -G Ninja \
                   -DCMAKE_INSTALL_PREFIX=$HOME/install -DWITH_NLS=ON -DWITH_GUI=OFF -DWITH_DOCS=OFF \
-                  -DWITH_READLINE=ON -DWITH_ODBC=ON
+                  -DWITH_READLINE=ON -DWITH_ODBC=ON -DWITH_NETCDF=ON -DWITH_BZLIB=ON
             - name: Print CMakeCache.txt
               shell: bash -el {0}
               run: |
@@ -84,7 +85,7 @@ jobs:
               run: .github/workflows/test_thorough.sh --config .gunittest.cfg --min-success 98
             - name: Make HTML test report available
               if: ${{ !cancelled() }}
-              uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+              uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
               with:
                   name: testreport-CMake
                   path: testreport

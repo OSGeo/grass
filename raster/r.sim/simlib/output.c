@@ -1,6 +1,5 @@
 /* output.c (simlib), 20.nov.2002, JH */
 
-#include "simlib.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -11,13 +10,12 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-#include <grass/waterglobs.h>
 #include <grass/simlib.h>
 
 void free_walkers(Simulation *sim, const char *outwalk)
 {
-    G_free(w);
-    G_free(vavg);
+    G_free(sim->w);
+    G_free(sim->vavg);
     if (outwalk != NULL)
         G_free(sim->stack);
 }
@@ -101,7 +99,7 @@ void output_walker_as_vector(int tt_minutes, int ndigit,
 int output_data(int tt, double ft UNUSED, const Setup *setup,
                 const Geometry *geometry, const Settings *settings,
                 const Simulation *sim, const Inputs *inputs,
-                const Outputs *outputs)
+                const Outputs *outputs, const Grids *grids)
 {
 
     FCELL *depth_cell, *disch_cell, *err_cell;
@@ -233,10 +231,10 @@ int output_data(int tt, double ft UNUSED, const Setup *setup,
         i = geometry->my - iarc - 1;
         if (outputs->depth) {
             for (j = 0; j < geometry->mx; j++) {
-                if (zz[i][j] == UNDEF || gama[i][j] == UNDEF)
+                if (grids->zz[i][j] == UNDEF || grids->gama[i][j] == UNDEF)
                     Rast_set_f_null_value(depth_cell + j, 1);
                 else {
-                    a1 = pow(gama[i][j], 3. / 5.);
+                    a1 = pow(grids->gama[i][j], 3. / 5.);
                     depth_cell[j] = (FCELL)a1; /* add conv? */
                     gmax = amax1(gmax, a1);
                 }
@@ -246,12 +244,12 @@ int output_data(int tt, double ft UNUSED, const Setup *setup,
 
         if (outputs->disch) {
             for (j = 0; j < geometry->mx; j++) {
-                if (zz[i][j] == UNDEF || gama[i][j] == UNDEF ||
-                    cchez[i][j] == UNDEF)
+                if (grids->zz[i][j] == UNDEF || grids->gama[i][j] == UNDEF ||
+                    grids->cchez[i][j] == UNDEF)
                     Rast_set_f_null_value(disch_cell + j, 1);
                 else {
-                    a2 = geometry->step * gama[i][j] *
-                         cchez[i][j];          /* cchez incl. sqrt(sinsl) */
+                    a2 = geometry->step * grids->gama[i][j] *
+                         grids->cchez[i][j];   /* cchez incl. sqrt(sinsl) */
                     disch_cell[j] = (FCELL)a2; /* add conv? */
                     dismax = amax1(dismax, a2);
                 }
@@ -261,11 +259,11 @@ int output_data(int tt, double ft UNUSED, const Setup *setup,
 
         if (outputs->err) {
             for (j = 0; j < geometry->mx; j++) {
-                if (zz[i][j] == UNDEF || gammas[i][j] == UNDEF)
+                if (grids->zz[i][j] == UNDEF || grids->gammas[i][j] == UNDEF)
                     Rast_set_f_null_value(err_cell + j, 1);
                 else {
-                    err_cell[j] = (FCELL)gammas[i][j];
-                    gsmax = amax1(gsmax, gammas[i][j]); /* add conv? */
+                    err_cell[j] = (FCELL)grids->gammas[i][j];
+                    gsmax = amax1(gsmax, grids->gammas[i][j]); /* add conv? */
                 }
             }
             Rast_put_f_row(err_fd, err_cell);
@@ -273,10 +271,10 @@ int output_data(int tt, double ft UNUSED, const Setup *setup,
 
         if (outputs->conc) {
             for (j = 0; j < geometry->mx; j++) {
-                if (zz[i][j] == UNDEF || gama[i][j] == UNDEF)
+                if (grids->zz[i][j] == UNDEF || grids->gama[i][j] == UNDEF)
                     Rast_set_f_null_value(conc_cell + j, 1);
                 else {
-                    conc_cell[j] = (FCELL)gama[i][j];
+                    conc_cell[j] = (FCELL)grids->gama[i][j];
                     /*      gsmax = amax1(gsmax, gama[i][j]); */
                 }
             }
@@ -285,11 +283,11 @@ int output_data(int tt, double ft UNUSED, const Setup *setup,
 
         if (outputs->flux) {
             for (j = 0; j < geometry->mx; j++) {
-                if (zz[i][j] == UNDEF || gama[i][j] == UNDEF ||
-                    slope[i][j] == UNDEF)
+                if (grids->zz[i][j] == UNDEF || grids->gama[i][j] == UNDEF ||
+                    grids->slope[i][j] == UNDEF)
                     Rast_set_f_null_value(flux_cell + j, 1);
                 else {
-                    a2 = gama[i][j] * slope[i][j];
+                    a2 = grids->gama[i][j] * grids->slope[i][j];
                     flux_cell[j] = (FCELL)a2;
                     dismax = amax1(dismax, a2);
                 }
@@ -299,12 +297,12 @@ int output_data(int tt, double ft UNUSED, const Setup *setup,
 
         if (outputs->erdep) {
             for (j = 0; j < geometry->mx; j++) {
-                if (zz[i][j] == UNDEF || er[i][j] == UNDEF)
+                if (grids->zz[i][j] == UNDEF || grids->er[i][j] == UNDEF)
                     Rast_set_f_null_value(erdep_cell + j, 1);
                 else {
-                    erdep_cell[j] = (FCELL)er[i][j];
-                    ermax = amax1(ermax, er[i][j]);
-                    ermin = amin1(ermin, er[i][j]);
+                    erdep_cell[j] = (FCELL)grids->er[i][j];
+                    ermax = amax1(ermax, grids->er[i][j]);
+                    ermin = amin1(ermin, grids->er[i][j]);
                 }
             }
             Rast_put_f_row(erdep_fd, erdep_cell);
@@ -632,7 +630,8 @@ int output_data(int tt, double ft UNUSED, const Setup *setup,
     return 1;
 }
 
-int output_et(const Geometry *geometry, const Outputs *outputs)
+int output_et(const Geometry *geometry, const Outputs *outputs,
+              const Grids *grids)
 {
 
     FCELL *tc_cell, *et_cell;
@@ -683,12 +682,12 @@ int output_et(const Geometry *geometry, const Outputs *outputs)
         i = geometry->my - iarc - 1;
         if (outputs->et) {
             for (j = 0; j < geometry->mx; j++) {
-                if (zz[i][j] == UNDEF || er[i][j] == UNDEF)
+                if (grids->zz[i][j] == UNDEF || grids->er[i][j] == UNDEF)
                     Rast_set_f_null_value(et_cell + j, 1);
                 else {
-                    et_cell[j] = (FCELL)er[i][j]; /* add conv? */
-                    etmax = amax1(etmax, er[i][j]);
-                    etmin = amin1(etmin, er[i][j]);
+                    et_cell[j] = (FCELL)grids->er[i][j]; /* add conv? */
+                    etmax = amax1(etmax, grids->er[i][j]);
+                    etmin = amin1(etmin, grids->er[i][j]);
                 }
             }
             Rast_put_f_row(et_fd, et_cell);
@@ -696,14 +695,14 @@ int output_et(const Geometry *geometry, const Outputs *outputs)
 
         if (outputs->tc) {
             for (j = 0; j < geometry->mx; j++) {
-                if (zz[i][j] == UNDEF || sigma[i][j] == UNDEF ||
-                    si[i][j] == UNDEF)
+                if (grids->zz[i][j] == UNDEF || grids->sigma[i][j] == UNDEF ||
+                    grids->si[i][j] == UNDEF)
                     Rast_set_f_null_value(tc_cell + j, 1);
                 else {
-                    if (sigma[i][j] == 0.)
+                    if (grids->sigma[i][j] == 0.)
                         trc = 0.;
                     else
-                        trc = si[i][j] / sigma[i][j];
+                        trc = grids->si[i][j] / grids->sigma[i][j];
                     tc_cell[j] = (FCELL)trc;
                     /*  gsmax = amax1(gsmax, trc); */
                 }

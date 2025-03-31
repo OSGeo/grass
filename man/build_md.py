@@ -58,9 +58,9 @@ footer_tmpl = string.Template("")
 
 cmd2_tmpl = string.Template(
     r"""
-### ${cmd_label} commands (${cmd}.*)
+### ${cmd_label} tools (${cmd}.)
 
-| Module | Description |
+| Name | Description |
 |--------|-------------|
 """
 )
@@ -74,13 +74,11 @@ modclass_intro_tmpl = string.Template(
     r"""Go to [${modclass} introduction](${modclass_lower}intro.md) | [topics](topics.md)
 """
 )
-# "
-
 
 modclass_tmpl = string.Template(
-    r"""Go [back to help overview](index.md)
-### ${modclass} commands
-| Module | Description |
+    r"""
+## ${modclass} tools
+| Name | Description |
 |--------|-------------|
 """
 )
@@ -105,7 +103,7 @@ headerkeywords_tmpl = r"""# Keywords - Index of GRASS GIS modules
 headerkey_tmpl = string.Template(
     r"""# Topic: ${keyword}
 
-| Module | Description |
+| Tool | Description |
 |--------|-------------|
 """
 )
@@ -115,7 +113,7 @@ headerpso_tmpl = r"""
 # Standard Parser Options
 """
 
-header_graphical_index_tmpl = """# Graphical index of GRASS GIS modules
+header_graphical_index_tmpl = """# Graphical index
 """
 
 ############################################################################
