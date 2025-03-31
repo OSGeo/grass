@@ -37,13 +37,13 @@ import os
 import shutil
 import sys
 from copy import copy
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 import wx
 import wx.lib.colourselect as csel
 from core import globalvar
 from wx.lib.mixins.listctrl import ColumnSorterMixin, ListCtrlAutoWidthMixin
-import pathlib as Path
 
 if globalvar.wxPythonPhoenix or TYPE_CHECKING:
     from wx import adv as wiz
@@ -153,7 +153,6 @@ class GCPWizard:
         #
         self.target_gisrc = os.environ["GISRC"]
         self.gisrc_dict = {}
-
         with open(self.target_gisrc) as f:
             for line in f:
                 line = line.replace("\n", "").strip()
