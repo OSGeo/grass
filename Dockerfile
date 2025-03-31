@@ -6,7 +6,7 @@
 ARG GUI=without
 # Have build parameters as build arguments?
 # ARG LDFLAGS="-s -Wl,--no-undefined -lblas"
-# ARG CFLAGS="-O2 -std=gnu99 -m64"
+# ARG CFLAGS="-O2 -std=gnu99"
 # ARG CXXFLAGS=""
 # ARG PYTHONPATH="$PYTHONPATH"
 # ARG LD_LIBRARY_PATH="/usr/local/lib"
