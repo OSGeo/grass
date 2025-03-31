@@ -253,6 +253,10 @@ For complete documentation on the `grass.jupyter` package, see the
 [grass.jupyter](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.jupyter.html)
 library documentation page.
 
+For complete documentation on the `grass.script` package, see the
+[grass.script](https://grass.osgeo.org/grass-stable/manuals/libpython/script_intro.html)
+library documentation page.
+
 ## Tutorials
 
 - [Get started with GRASS in Jupyter Notebooks on Windows](https://grass-tutorials.osgeo.org/content/tutorials/get_started/JupyterOnWindows_OSGeo4W_Tutorial.html)
