@@ -113,7 +113,7 @@ headerpso_tmpl = r"""
 # Standard Parser Options
 """
 
-header_graphical_index_tmpl = """# Graphical index of GRASS GIS modules
+header_graphical_index_tmpl = """# Graphical index
 """
 
 ############################################################################
