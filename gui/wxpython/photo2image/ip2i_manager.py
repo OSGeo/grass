@@ -423,15 +423,15 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                     if "NUM" in line:
                         storeLine = fc_count
                         numberOfFiducial = int(line.split()[-1])
-                dataFiducialX = []
-                dataFiducialY = []
-                with open(self.file["camera"]) as fc:
-                    fc_count = 0
-                    for line in fc:
-                        fc_count += 1
-                        if fc_count > storeLine:
-                            dataFiducialX.append(line.split()[1])
-                            dataFiducialY.append(line.split()[2])
+            dataFiducialX = []
+            dataFiducialY = []
+            with open(self.file["camera"]) as fc:
+                fc_count = 0
+                for line in fc:
+                    fc_count += 1
+                    if fc_count > storeLine:
+                        dataFiducialX.append(line.split()[1])
+                        dataFiducialY.append(line.split()[2])
 
         except OSError as err:
             GError(
