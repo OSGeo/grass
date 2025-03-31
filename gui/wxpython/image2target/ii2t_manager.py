@@ -704,19 +704,13 @@ class GroupPage(TitledPage):
         self.xymapset = self.parent.gisrc_dict["MAPSET"]
 
         # create a list of groups in selected mapset
-        tmplist = [
-            p.name
-            for p in Path(
-                self.grassdatabase, self.xylocation, self.xymapset, "group"
-            ).iterdir()
-        ]
-        for item in tmplist:
-            if os.path.isdir(
-                os.path.join(
-                    self.grassdatabase, self.xylocation, self.xymapset, "group", item
-                )
-            ):
-                self.groupList.append(item)
+        tmplist = Path(self.grassdatabase, self.xylocation, self.xymapset, "group")
+        try:
+            for item_path in tmplist.iterdir():
+                if item_path.is_dir():
+                    self.groupList.append(item_path.name)
+        except FileNotFoundError:
+            pass
 
         if maptype == "raster":
             self.btn_vgroup.Hide()
@@ -1505,7 +1499,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         self.GCPcount = 0
         try:
             with open(self.file["control_points"], mode="w") as f:
-                # use os.linesep or '\n' here ???
                 f.write("# Ground Control Points File\n")
                 f.write("# \n")
                 f.write("# target location: " + self.currentlocation + "\n")
@@ -1585,9 +1578,8 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             GError(parent=self, message=_("target mapwin not defined"))
 
         try:
+            GCPcnt = 0
             with open(self.file["control_points"]) as f:
-                GCPcnt = 0
-
                 for line in f:
                     if line[0] == "#" or line == "":
                         continue
