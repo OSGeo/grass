@@ -216,7 +216,7 @@ def count_wide_chars(s):
     return sum(unicodedata.east_asian_width(c) in "WF" for c in s)
 
 
-def f(fmt, *args):
+def fw(fmt, *args):
     """Adjusts fixed-width string specifiers for wide CJK characters and
     returns a formatted string. Does not support named arguments yet.
 
@@ -1506,7 +1506,7 @@ INFO_TEXT = r"""
 def show_info(shellname, grass_gui, default_gui):
     """Write basic info about GRASS GIS and GRASS session to stderr"""
     sys.stderr.write(
-        f(
+        fw(
             INFO_TEXT,
             _("GRASS GIS homepage:"),
             # GTC Running through: SHELL NAME
@@ -1520,11 +1520,11 @@ def show_info(shellname, grass_gui, default_gui):
     )
 
     if grass_gui == "wxpython":
-        message(f("%-41sg.gui wxpython", _("If required, restart the GUI with:")))
+        message(fw("%-41sg.gui wxpython", _("If required, restart the GUI with:")))
     else:
-        message(f("%-41sg.gui %s", _("Start the GUI with:"), default_gui))
+        message(fw("%-41sg.gui %s", _("Start the GUI with:"), default_gui))
 
-    message(f("%-41sexit", _("When ready to quit enter:")))
+    message(fw("%-41sexit", _("When ready to quit enter:")))
     message("")
 
 
