@@ -108,7 +108,6 @@ class GCPWizard:
         self.target_gisrc = os.environ["GISRC"]
         self.source_gisrc = os.environ["GISRC"]
         self.gisrc_dict = {}
-
         with open(self.target_gisrc) as f:
             for line in f:
                 line = line.replace("\n", "").strip()
@@ -908,8 +907,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 ),
             )
             return
-
-        f.close()
 
         # if event != None save also to backup file
         if event:
