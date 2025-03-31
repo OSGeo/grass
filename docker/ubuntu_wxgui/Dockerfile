@@ -68,8 +68,9 @@ RUN apt-get update && apt-get upgrade -y && \
     libpq-dev \
     libproj-dev \
     libpython3-all-dev \
-    librsvg2-common \
     libreadline-dev \
+    librsvg2-common \
+    libsecret-1-0 \
     libsdl2-2.0-0 \
     libsqlite3-dev \
     libtiff-dev \
