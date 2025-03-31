@@ -37,6 +37,8 @@ is not safe, i.e. it has side effects (this should be changed in the future).
 # (this makes it more stable since we have to set up paths first)
 # pylint: disable=too-many-lines
 
+from __future__ import annotations
+
 import argparse
 import atexit
 import datetime
