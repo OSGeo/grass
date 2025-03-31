@@ -100,8 +100,6 @@ class TestVCluster(TestCase):
             overwrite=True,
         )
 
-        info = vector_info("clustered")
-
         clusters = self.get_cluster_info("clustered")
         # print(clusters)
         self.assertGreater(len(clusters), 1)
@@ -156,7 +154,6 @@ class TestVCluster(TestCase):
             overwrite=True,
         )
 
-        # info = vector_info("clustered")
         clusters_20 = self.get_cluster_info("clustered_20")
         nodes_20 = len(clusters_20[1])
 
