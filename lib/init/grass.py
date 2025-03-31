@@ -37,6 +37,8 @@ is not safe, i.e. it has side effects (this should be changed in the future).
 # (this makes it more stable since we have to set up paths first)
 # pylint: disable=too-many-lines
 
+from __future__ import annotations
+
 import sys
 import os
 import errno
@@ -1065,7 +1067,7 @@ def install_notranslation():
     builtins.__dict__["_"] = lambda x: x
 
 
-def load_color_config(grass_config_dir):
+def load_color_config(grass_config_dir) -> Colors:
     """Load terminal colors from a config file.
 
     If there is no color config file, create a default color setup.
@@ -1482,7 +1484,7 @@ def close_gui():
             message(_("Unable to close GUI. {0}").format(e))
 
 
-def show_banner(params):
+def show_banner(params: Parameters):
     """Write GRASS GIS ASCII name to stderr"""
     banner = r"""
           __________  ___   __________    _______________
@@ -1555,7 +1557,7 @@ def start_shell():
     return process
 
 
-def csh_startup(location, grass_env_file, sh, params):
+def csh_startup(location, grass_env_file, sh, params: Parameters):
     userhome = os.getenv("HOME")  # save original home
     home = location
     os.environ["HOME"] = home
@@ -1641,7 +1643,7 @@ def csh_startup(location, grass_env_file, sh, params):
     return process
 
 
-def sh_like_startup(location, location_name, grass_env_file, sh, params):
+def sh_like_startup(location, location_name, grass_env_file, sh, params: Parameters):
     """Start Bash or Z shell (but not sh (Bourne Shell))"""
     if sh == "bash":
         # set bash history to record an unlimited command history
@@ -1830,7 +1832,7 @@ PROMPT_COMMAND=grass_prompt\n""".format(
     return process
 
 
-def default_startup(location, location_name, params):
+def default_startup(location, location_name, params: Parameters):
     """Start shell making no assumptions about what is supported in PS1"""
 
     os.environ["PS1"] = "┌Mapset <{mapset}> in <{project}>\n└{name} : {path} > ".format(
@@ -2001,8 +2003,8 @@ class Parameters:
         self.tmp_location = False
         self.tmp_mapset = False
         self.batch_job = None
-        self.no_color = False
-        self.colors = None
+        self.no_color: bool = False
+        self.colors: Colors | None = None
 
 
 def add_mapset_arguments(parser, mapset_as_option):
@@ -2069,7 +2071,7 @@ def update_params_with_mapset_arguments(params, args):
         params.mapset = args.mapset
 
 
-def classic_parser(argv, default_gui, color_config=None):
+def classic_parser(argv, default_gui, color_config: Colors | None = None) -> Parameters:
     """Parse CLI similar to v7 but with argparse
 
     --exec is handled before argparse is used.
@@ -2234,7 +2236,7 @@ class Color:
     def raw(self, escape=None):
         return self._ansi(raw=True, escape=escape)
 
-    def _ansi(self, raw=False, escape=None):
+    def _ansi(self, raw: bool = False, escape=None):
         """Parse a tuple of style, fg color, bg color into an ANSI escape sequence.
 
         Returns a string with the ANSI escape sequence or None.
@@ -2263,7 +2265,7 @@ class Color:
             ansi=";".join(ansi), e_start=e_start, e_end=e_end
         )
 
-    def colorize(self, s, monochrome, raw=False, escape=None):
+    def colorize(self, s: str, monochrome: bool, raw: bool = False, escape=None):
         """Colors the given string to the given color
 
         If monochrome is True, it will not format the string
@@ -2319,7 +2321,7 @@ class Colors:
                 ret[k]["bg"] = color.background
         return json.dumps(ret, sort_keys=sort_keys, indent=indent)
 
-    def from_json(self, colors):
+    def from_json(self, colors) -> None:
         for k, color in colors.items():
             self._color[k] = Color(
                 style=color.get("style", "normal"),
@@ -2328,7 +2330,7 @@ class Colors:
             )
 
 
-def parse_cmdline(argv, default_gui, color_config=None):
+def parse_cmdline(argv, default_gui, color_config: Colors | None = None) -> Parameters:
     """Parse command line parameters
 
     Returns Parameters object used throughout the script.
@@ -2415,9 +2417,11 @@ def main():
     gis_lock = str(os.getpid())
     os.environ["GIS_LOCK"] = gis_lock
 
-    color_config = load_color_config(grass_config_dir)
+    color_config: Colors = load_color_config(grass_config_dir)
     debug(f"loaded color_config={color_config}")
-    params = parse_cmdline(sys.argv, default_gui=default_gui, color_config=color_config)
+    params: Parameters = parse_cmdline(
+        sys.argv, default_gui=default_gui, color_config=color_config
+    )
 
     grass_gui = params.grass_gui  # put it to variable, it is used a lot
 
