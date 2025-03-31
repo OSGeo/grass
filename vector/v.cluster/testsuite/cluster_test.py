@@ -16,6 +16,13 @@ class TestVCluster(TestCase):
             "v.random", output="test_points", npoints=100, seed=42, overwrite=True
         )
 
+    @classmethod
+    def tearDownClass(cls):
+        """Clean up"""
+        cls.runModule(
+            "g.remove", type="vector", name="test_points,clustered", flags="f"
+        )
+
     def setUp(self):
         self.temp_files = []
         self.temp_points = self.create_temp_file(
@@ -156,13 +163,6 @@ class TestVCluster(TestCase):
         nodes_20 = len(clusters_20[1])
 
         self.assertGreaterEqual(nodes_20, nodes)
-
-    @classmethod
-    def tearDownClass(cls):
-        """Clean up"""
-        cls.runModule(
-            "g.remove", type="vector", name="test_points,clustered", flags="f"
-        )
 
 
 if __name__ == "__main__":
