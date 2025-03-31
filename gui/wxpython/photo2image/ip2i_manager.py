@@ -492,8 +492,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             )
             return
 
-        f.close()
-
         # polynomial order transformation for georectification
         self.gr_order = self.grwiz.order
         # interpolation method for georectification
@@ -937,9 +935,8 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             GError(parent=self, message=_("target mapwin not defined"))
 
         try:
+            GCPcnt = 0
             with open(self.file["points"]) as f:
-                GCPcnt = 0
-
                 for line in f:
                     if line[0] == "#" or line == "":
                         continue
@@ -971,8 +968,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 ),
             )
             return
-
-        f.close()
 
         if GCPcnt == 0:
             # 3 gcp is minimum
