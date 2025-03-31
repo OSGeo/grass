@@ -17,9 +17,23 @@ cols=5`
 
 import os
 import sys
+import math
 
-from grass.lib.gis import *
-from grass.lib.raster import *
+from ctypes import POINTER, c_int, c_float, c_double, c_void_p, cast
+
+from grass.lib.gis import G_gisinit, G_find_raster2, G_free
+from grass.lib.raster import (
+    Rast_map_type,
+    CELL_TYPE,
+    FCELL_TYPE,
+    DCELL_TYPE,
+    Rast_open_old,
+    Rast_allocate_buf,
+    Rast_window_rows,
+    Rast_window_cols,
+    Rast_get_row,
+    Rast_close,
+)
 
 # check if GRASS is running or not
 if "GISBASE" not in os.environ:

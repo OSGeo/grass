@@ -19,6 +19,10 @@ This program is free software under the GNU General Public License
 
 import os
 import time
+import wx
+from wx.lib.newevent import NewEvent
+
+from grass.script import core as grass
 
 watchdog_used = True
 try:
@@ -31,11 +35,6 @@ except ImportError:
     watchdog_used = False
     PatternMatchingEventHandler = object
     FileSystemEventHandler = object
-
-import wx
-from wx.lib.newevent import NewEvent
-
-from grass.script import core as grass
 
 updateMapset, EVT_UPDATE_MAPSET = NewEvent()
 currentMapsetChanged, EVT_CURRENT_MAPSET_CHANGED = NewEvent()

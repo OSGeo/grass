@@ -79,7 +79,7 @@ for line in fin:
         except Exception as e:
             print(f"Could not parse dateList = '{line}'. Error: {e!s}")
     # The Fossil-IDs are ignored:
-    elif line.startswith("    Fossil-ID:") or line.startswith("    [[SVN:"):
+    elif line.startswith(("    Fossil-ID:", "    [[SVN:")):
         continue
     # The svn-id lines are ignored
     elif "    git-svn-id:" in line:

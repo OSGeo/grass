@@ -666,8 +666,6 @@ class RenderMapMgr(wx.EvtHandler):
 
         Make image composiotion, emits updateMap event.
         """
-        stopTime = time.time()
-
         maps = []
         masks = []
         opacities = []

@@ -1373,12 +1373,6 @@ class SubGroupSelect(wx.ComboBox):
         """Insert subgroups for defined group"""
         if not group:
             return
-        gisenv = gs.gisenv()
-        try:
-            name, mapset = group.split("@", 1)
-        except ValueError:
-            name = group
-            mapset = gisenv["MAPSET"]
 
         mlist = RunCommand("i.group", group=group, read=True, flags="sg").splitlines()
         try:

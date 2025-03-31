@@ -122,7 +122,7 @@ sorted and separated by a newline.
 
 Use function names which fulfill the official [GNU naming
 convention](https://www.gnu.org/prep/standards/html_node/Names.html). Instead of
-naming a function like: MyNewFunction() use snake case: my_new_function()`.
+naming a function like: `MyNewFunction()` use snake case: `my_new_function()`.
 
 ### Using pre-commit
 
@@ -192,7 +192,7 @@ There are three types of documentation: C API, Python API and tool documentation
 #### C API documentation
 
 We
-[​use doxygen and document the functions](https://grass.osgeo.org/programming8/)
+[use doxygen and document the functions](https://grass.osgeo.org/programming8/)
 directly in the source code. See `lib/gis/open.c` and `lib/gis/gislib.dox` for
 examples.
 
@@ -947,7 +947,7 @@ gs.message(_("Running through {}").format(shellname))
 ### Developing C tools
 
 Refer to the [online GRASS Programmer's
-Manual](​https://grass.osgeo.org/programming8/) or generate it with `make
+Manual](https://grass.osgeo.org/programming8/) or generate it with `make
 htmldocs` or `make pdfdocs`.
 
 #### Use GRASS library functions
@@ -962,7 +962,7 @@ improves portability.
 - File seek: `G_fseek()`, `G_ftell()`
 - Printing: `G_asprintf()`, `G_vsaprintf()`, `G_vfaprintf()`, ...
 
-Please refer to [the programmers manual](https://grass.osgeo.org/programming8/)
+Please refer to the [programmers manual](https://grass.osgeo.org/programming8/)
 for the proper use (e.g., determining if any casts are needed for arguments or
 return values) of these library functions. They may perform a task slightly
 different from their corresponding C library function, and thus, their use may

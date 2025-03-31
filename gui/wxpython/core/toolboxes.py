@@ -855,7 +855,7 @@ def module_test():
 
     someDiff = False
     for line in result:
-        if line.startswith("+") or line.startswith("-"):
+        if line.startswith(("+", "-")):
             sys.stdout.write(line)
             someDiff = True
     if someDiff:

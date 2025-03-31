@@ -21,6 +21,7 @@ from grass.script.core import tempname
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.checkers import keyvalue_equals
+from grass.gunittest.utils import xfail_windows
 
 
 class MatrixCorrectnessTest(TestCase):
@@ -474,6 +475,7 @@ class JSONOutputTest(TestCase):
                 keyvalue_equals(self.expected_outputs[i], json_out, precision=4)
             )
 
+    @xfail_windows
     def test_file(self):
         for i in range(len(self.references)):
             f = NamedTemporaryFile()

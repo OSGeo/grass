@@ -227,7 +227,7 @@ def notes_from_gh_api(start_tag, end_tag, branch, categories, exclude):
     raw_changes = lines[start_whats_changed + 1 : end_whats_changed]
     changes = []
     for change in raw_changes:
-        if change.startswith("* ") or change.startswith("- "):
+        if change.startswith(("* ", "- ")):
             changes.append(change[2:])
         else:
             changes.append(change)

@@ -307,8 +307,6 @@ class UpdateThread(Thread):
                     pTable = self.task.get_param(
                         "dbtable", element="element", raiseError=False
                     )
-                    if pTable:
-                        table = pTable.get("value", "")
 
             if name == "LayerSelect":
                 # determine format
@@ -1546,7 +1544,6 @@ class CmdPanel(wx.Panel):
                         if value:
                             selection.SetValue(value)
 
-                        formatSelector = True
                         # A gselect.Select is a combobox with two children: a textctl
                         # and a popupwindow; we target the textctl here
                         textWin = selection.GetTextCtrl()

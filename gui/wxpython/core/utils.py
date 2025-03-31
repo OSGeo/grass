@@ -827,8 +827,12 @@ def StoreEnvVariable(key, value=None, envFile=None):
     if os.path.exists(envFile):
         try:
             fd = open(envFile)
-        except OSError as e:
-            sys.stderr.write(_("Unable to open file '%s'\n") % envFile)
+        except OSError as error:
+            sys.stderr.write(
+                _("Unable to open file '{name}': {error}\n").format(
+                    name=envFile, error=error
+                )
+            )
             return
         for line in fd:
             line = line.rstrip(os.linesep)
@@ -857,8 +861,12 @@ def StoreEnvVariable(key, value=None, envFile=None):
     # write update env file
     try:
         fd = open(envFile, "w")
-    except OSError as e:
-        sys.stderr.write(_("Unable to create file '%s'\n") % envFile)
+    except OSError as error:
+        sys.stderr.write(
+            _("Unable to create file '{name}': {error}\n").format(
+                name=envFile, error=error
+            )
+        )
         return
     if windows:
         expCmd = "set"

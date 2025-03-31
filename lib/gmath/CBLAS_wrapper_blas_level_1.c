@@ -21,15 +21,19 @@
 #include <string.h>
 #include <grass/gmath.h>
 
-#if defined(HAVE_ATLAS)
+#if defined(HAVE_LIBBLAS)
+#if defined(HAVE_CBLAS_ATLAS_H)
+#include <cblas-atlas.h>
+#else
 #include <cblas.h>
 #endif
+#endif /* HAVE_LIBBLAS */
 
 /*!
  * \brief Compute the dot product of vector x and y
- * using the ATLAS routine cblas_ddot
+ * using the CBLAS routine cblas_ddot
  *
- * If grass was not compiled with ATLAS support
+ * If grass was not compiled with CBLAS support
  * it will call #G_math_f_x_dot_y, the OpenMP multi threaded
  * grass implementatiom
  *
@@ -41,7 +45,7 @@
  * */
 double G_math_ddot(double *x, double *y, int rows)
 {
-#if defined(HAVE_ATLAS)
+#if defined(HAVE_LIBBLAS)
     return cblas_ddot(rows, x, 1, y, 1);
 #else
     double val;
@@ -53,9 +57,9 @@ double G_math_ddot(double *x, double *y, int rows)
 
 /*!
  * \brief Compute the dot product of vector x and y
- * using the ATLAS routine cblas_sdsdot
+ * using the CBLAS routine cblas_sdsdot
  *
- * If grass was not compiled with ATLAS support
+ * If grass was not compiled with CBLAS support
  * it will call #G_math_f_x_dot_y, the OpenMP multi threaded
  * grass implementatiom
  *
@@ -68,7 +72,7 @@ double G_math_ddot(double *x, double *y, int rows)
  * */
 float G_math_sdsdot(float *x, float *y, float a, int rows)
 {
-#if defined(HAVE_ATLAS)
+#if defined(HAVE_LIBBLAS)
     return cblas_sdsdot(rows, a, x, 1, y, 1);
 #else
     float val;
@@ -80,9 +84,9 @@ float G_math_sdsdot(float *x, float *y, float a, int rows)
 
 /*!
  * \brief Compute the euclidean norm of vector x
- * using the ATLAS routine cblas_dnrm2
+ * using the CBLAS routine cblas_dnrm2
  *
- * If grass was not compiled with ATLAS support
+ * If grass was not compiled with CBLAS support
  * it will call #G_math_d_euclid_norm, the OpenMP multi threaded
  * grass implementatiom
  *
@@ -93,7 +97,7 @@ float G_math_sdsdot(float *x, float *y, float a, int rows)
  * */
 double G_math_dnrm2(double *x, int rows)
 {
-#if defined(HAVE_ATLAS)
+#if defined(HAVE_LIBBLAS)
     return cblas_dnrm2(rows, x, 1);
 #else
     double val;
@@ -105,9 +109,9 @@ double G_math_dnrm2(double *x, int rows)
 
 /*!
  * \brief Compute the absolute sum norm of vector x
- * using the ATLAS routine cblas_dasum
+ * using the CBLAS routine cblas_dasum
  *
- * If grass was not compiled with ATLAS support
+ * If grass was not compiled with CBLAS support
  * it will call #G_math_d_asum_norm, the OpenMP multi threaded
  * grass implementatiom
  *
@@ -118,7 +122,7 @@ double G_math_dnrm2(double *x, int rows)
  * */
 double G_math_dasum(double *x, int rows)
 {
-#if defined(HAVE_ATLAS)
+#if defined(HAVE_LIBBLAS)
     return cblas_dasum(rows, x, 1);
 #else
     double val;
@@ -130,9 +134,9 @@ double G_math_dasum(double *x, int rows)
 
 /*!
  * \brief Compute the maximum norm of vector x
- * using the ATLAS routine cblas_idamax
+ * using the CBLAS routine cblas_idamax
  *
- * If grass was not compiled with ATLAS support
+ * If grass was not compiled with CBLAS support
  * it will call #G_math_d_max_norm, the OpenMP multi threaded
  * grass implementatiom
  *
@@ -143,7 +147,7 @@ double G_math_dasum(double *x, int rows)
  * */
 double G_math_idamax(double *x, int rows)
 {
-#if defined(HAVE_ATLAS)
+#if defined(HAVE_LIBBLAS)
     return cblas_idamax(rows, x, 1);
 #else
     double val;
@@ -155,9 +159,9 @@ double G_math_idamax(double *x, int rows)
 
 /*!
  * \brief Scale vector x with scalar a
- * using the ATLAS routine cblas_dscal
+ * using the CBLAS routine cblas_dscal
  *
- * If grass was not compiled with ATLAS support
+ * If grass was not compiled with CBLAS support
  * it will call #G_math_d_ax_by, the OpenMP multi threaded
  * grass implementatiom
  *
@@ -169,7 +173,7 @@ double G_math_idamax(double *x, int rows)
  * */
 void G_math_dscal(double *x, double a, int rows)
 {
-#if defined(HAVE_ATLAS)
+#if defined(HAVE_LIBBLAS)
     cblas_dscal(rows, a, x, 1);
 #else
     G_math_d_ax_by(x, x, x, a, 0.0, rows);
@@ -181,7 +185,7 @@ void G_math_dscal(double *x, double a, int rows)
 /*!
  * \brief  Copy vector x to vector y
  *
- * If grass was not compiled with ATLAS support
+ * If grass was not compiled with CBLAS support
  * it will call #G_math_d_copy
  *
  * \param x       (double *)
@@ -192,7 +196,7 @@ void G_math_dscal(double *x, double a, int rows)
  * */
 void G_math_dcopy(double *x, double *y, int rows)
 {
-#if defined(HAVE_ATLAS)
+#if defined(HAVE_LIBBLAS)
     cblas_dcopy(rows, x, 1, y, 1);
 #else
     G_math_d_copy(x, y, rows);
@@ -206,7 +210,7 @@ void G_math_dcopy(double *x, double *y, int rows)
  *
  * \f[ {\bf z} = a{\bf x} + {\bf y} \f]
  *
- * If grass was not compiled with ATLAS support
+ * If grass was not compiled with CBLAS support
  * it will call #G_math_d_ax_by, the
  * grass implementatiom
 
@@ -220,7 +224,7 @@ void G_math_dcopy(double *x, double *y, int rows)
  * */
 void G_math_daxpy(double *x, double *y, double a, int rows)
 {
-#if defined(HAVE_ATLAS)
+#if defined(HAVE_LIBBLAS)
     cblas_daxpy(rows, a, x, 1, y, 1);
 #else
     G_math_d_ax_by(x, y, y, a, 1.0, rows);
@@ -231,15 +235,15 @@ void G_math_daxpy(double *x, double *y, double a, int rows)
 
 /****************************************************************** */
 
-/********* F L O A T / S I N G L E   P E P R E C I S I O N ******** */
+/********* F L O A T / S I N G L E    P R E C I S I O N   ********* */
 
 /****************************************************************** */
 
 /*!
  * \brief Compute the dot product of vector x and y
- * using the ATLAS routine cblas_sdot
+ * using the CBLAS routine cblas_sdot
  *
- * If grass was not compiled with ATLAS support
+ * If grass was not compiled with CBLAS support
  * it will call #G_math_f_x_dot_y, the OpenMP multi threaded
  * grass implementatiom
  *
@@ -251,7 +255,7 @@ void G_math_daxpy(double *x, double *y, double a, int rows)
  * */
 float G_math_sdot(float *x, float *y, int rows)
 {
-#if defined(HAVE_ATLAS)
+#if defined(HAVE_LIBBLAS)
     return cblas_sdot(rows, x, 1, y, 1);
 #else
     float val;
@@ -263,9 +267,9 @@ float G_math_sdot(float *x, float *y, int rows)
 
 /*!
  * \brief Compute the euclidean norm of vector x
- * using the ATLAS routine cblas_dnrm2
+ * using the CBLAS routine cblas_dnrm2
  *
- * If grass was not compiled with ATLAS support
+ * If grass was not compiled with CBLAS support
  * it will call #G_math_f_euclid_norm, the OpenMP multi threaded
  * grass implementatiom
  *
@@ -276,7 +280,7 @@ float G_math_sdot(float *x, float *y, int rows)
  * */
 float G_math_snrm2(float *x, int rows)
 {
-#if defined(HAVE_ATLAS)
+#if defined(HAVE_LIBBLAS)
     return cblas_snrm2(rows, x, 1);
 #else
     float val;
@@ -288,9 +292,9 @@ float G_math_snrm2(float *x, int rows)
 
 /*!
  * \brief Compute the absolute sum norm of vector x
- * using the ATLAS routine cblas_dasum
+ * using the CBLAS routine cblas_dasum
  *
- * If grass was not compiled with ATLAS support
+ * If grass was not compiled with CBLAS support
  * it will call #G_math_f_asum_norm, the OpenMP multi threaded
  * grass implementatiom
  *
@@ -301,7 +305,7 @@ float G_math_snrm2(float *x, int rows)
  * */
 float G_math_sasum(float *x, int rows)
 {
-#if defined(HAVE_ATLAS)
+#if defined(HAVE_LIBBLAS)
     return cblas_sasum(rows, x, 1);
 #else
     float val;
@@ -313,9 +317,9 @@ float G_math_sasum(float *x, int rows)
 
 /*!
  * \brief Compute the maximum norm of vector x
- * using the ATLAS routine cblas_idamax
+ * using the CBLAS routine cblas_idamax
  *
- * If grass was not compiled with ATLAS support
+ * If grass was not compiled with CBLAS support
  * it will call #G_math_f_max_norm, the OpenMP multi threaded
  * grass implementatiom
  *
@@ -326,7 +330,7 @@ float G_math_sasum(float *x, int rows)
  * */
 float G_math_isamax(float *x, int rows)
 {
-#if defined(HAVE_ATLAS)
+#if defined(HAVE_LIBBLAS)
     return cblas_isamax(rows, x, 1);
 #else
     float val;
@@ -338,9 +342,9 @@ float G_math_isamax(float *x, int rows)
 
 /*!
  * \brief Scale vector x with scalar a
- * using the ATLAS routine cblas_dscal
+ * using the CBLAS routine cblas_dscal
  *
- * If grass was not compiled with ATLAS support
+ * If grass was not compiled with CBLAS support
  * it will call #G_math_f_ax_by, the OpenMP multi threaded
  * grass implementatiom
  *
@@ -352,7 +356,7 @@ float G_math_isamax(float *x, int rows)
  * */
 void G_math_sscal(float *x, float a, int rows)
 {
-#if defined(HAVE_ATLAS)
+#if defined(HAVE_LIBBLAS)
     cblas_sscal(rows, a, x, 1);
 #else
     G_math_f_ax_by(x, x, x, a, 0.0, rows);
@@ -364,7 +368,7 @@ void G_math_sscal(float *x, float a, int rows)
 /*!
  * \brief  Copy vector x to vector y
  *
- * If grass was not compiled with ATLAS support
+ * If grass was not compiled with CBLAS support
  * it will call #G_math_f_copy, the
  * grass implementatiom
  *
@@ -376,7 +380,7 @@ void G_math_sscal(float *x, float a, int rows)
  * */
 void G_math_scopy(float *x, float *y, int rows)
 {
-#if defined(HAVE_ATLAS)
+#if defined(HAVE_LIBBLAS)
     cblas_scopy(rows, x, 1, y, 1);
 #else
     G_math_f_copy(x, y, rows);
@@ -390,7 +394,7 @@ void G_math_scopy(float *x, float *y, int rows)
  *
  * \f[ {\bf z} = a{\bf x} + {\bf y} \f]
  *
- * If grass was not compiled with ATLAS support
+ * If grass was not compiled with CBLAS support
  * it will call #G_math_f_ax_by, the
  * grass implementatiom
 
@@ -404,7 +408,7 @@ void G_math_scopy(float *x, float *y, int rows)
  * */
 void G_math_saxpy(float *x, float *y, float a, int rows)
 {
-#if defined(HAVE_ATLAS)
+#if defined(HAVE_LIBBLAS)
     cblas_saxpy(rows, a, x, 1, y, 1);
 #else
     G_math_f_ax_by(x, y, y, a, 1.0, rows);

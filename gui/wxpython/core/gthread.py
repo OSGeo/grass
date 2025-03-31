@@ -95,8 +95,6 @@ class gThread(threading.Thread, wx.EvtHandler):
                 else:
                     vars()[key] = None
 
-            requestTime = time.time()
-
             ret = None
             exception = None
             time.sleep(0.01)

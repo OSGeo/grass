@@ -98,7 +98,6 @@ class PyStc(stc.StyledTextCtrl):
             9, wx.FONTFAMILY_MODERN, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL
         )
         face = font.GetFaceName()
-        size = font.GetPointSize()
 
         # setting the monospace here to not mess with the rest of the code
         # TODO: review the whole styling
