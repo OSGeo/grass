@@ -59,7 +59,7 @@ import unicodedata
 import uuid
 
 from pathlib import Path
-from typing import TYPE_CHECKING, NoReturn
+from typing import TYPE_CHECKING, Literal, NoReturn
 
 if TYPE_CHECKING:
     from _typeshed import StrPath
@@ -1426,7 +1426,7 @@ def run_batch_job(batch_job: list):
     return returncode
 
 
-def start_gui(grass_gui):
+def start_gui(grass_gui: Literal["wxpython"]):
     """Start specified GUI
 
     :param grass_gui: GUI name (supported values: 'wxpython')
