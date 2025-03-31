@@ -59,7 +59,10 @@ import unicodedata
 import uuid
 
 from pathlib import Path
-from typing import NoReturn
+from typing import TYPE_CHECKING, NoReturn
+
+if TYPE_CHECKING:
+    from _typeshed import StrPath
 
 # mechanism meant for debugging this script (only)
 # private global to store if we are debugging
@@ -110,7 +113,7 @@ CYGWIN = sys.platform.startswith("cygwin")
 MACOS = sys.platform.startswith("darwin")
 
 
-def try_remove(path):
+def try_remove(path: StrPath) -> None:
     try:
         os.remove(path)
     except:  # noqa: E722
@@ -164,12 +167,12 @@ def fatal(msg: str) -> NoReturn:
     sys.exit(_("Exiting..."))
 
 
-def readfile(path) -> str:
+def readfile(path: StrPath) -> str:
     debug("Reading %s" % path)
     return Path(path).read_text()
 
 
-def writefile(path, s) -> None:
+def writefile(path: StrPath, s: str) -> None:
     debug("Writing %s" % path)
     Path(path).write_text(s)
 
@@ -472,7 +475,7 @@ def get_gisrc_from_config_dir(grass_config_dir, batch_job) -> str:
     return os.path.join(grass_config_dir, "rc")
 
 
-def create_gisrc(tmpdir, gisrcrc) -> str:
+def create_gisrc(tmpdir: StrPath, gisrcrc: StrPath) -> str:
     # Set the session grassrc file
     gisrc = os.path.join(tmpdir, "gisrc")
     os.environ["GISRC"] = gisrc
@@ -492,7 +495,7 @@ def create_gisrc(tmpdir, gisrcrc) -> str:
     return gisrc
 
 
-def read_gisrc(filename):
+def read_gisrc(filename: StrPath):
     kv = {}
     try:
         with open(filename) as f:
@@ -516,7 +519,8 @@ def read_gisrc(filename):
     return kv
 
 
-def write_gisrcrc(gisrcrc, gisrc, skip_variable=None) -> None:
+
+def write_gisrcrc(gisrcrc: StrPath, gisrc: StrPath, skip_variable=None) -> None:
     """Reads gisrc file and write to gisrcrc"""
     debug("Reading %s" % gisrc)
     number = 0
@@ -530,7 +534,7 @@ def write_gisrcrc(gisrcrc, gisrc, skip_variable=None) -> None:
         f.writelines(lines)
 
 
-def read_env_file(path):
+def read_env_file(path: StrPath):
     kv = {}
     with open(path) as f:
         for line in f:
@@ -539,14 +543,14 @@ def read_env_file(path):
     return kv
 
 
-def write_gisrc(kv, filename, append=False) -> None:
+def write_gisrc(kv, filename: StrPath, append=False) -> None:
     # use append=True to avoid a race condition between write_gisrc() and
     # grass_prompt() on startup (PR #548)
     with open(filename, "a" if append else "w") as f:
         f.writelines("%s: %s\n" % (k, v) for k, v in kv.items())
 
 
-def add_mapset_to_gisrc(gisrc, grassdb, location, mapset) -> None:
+def add_mapset_to_gisrc(gisrc: StrPath, grassdb, location, mapset) -> None:
     kv = read_gisrc(gisrc) if os.access(gisrc, os.R_OK) else {}
     kv["GISDBASE"] = grassdb
     kv["LOCATION_NAME"] = location
@@ -554,13 +558,13 @@ def add_mapset_to_gisrc(gisrc, grassdb, location, mapset) -> None:
     write_gisrc(kv, gisrc)
 
 
-def add_last_mapset_to_gisrc(gisrc, last_mapset_path) -> None:
+def add_last_mapset_to_gisrc(gisrc: StrPath, last_mapset_path) -> None:
     kv = read_gisrc(gisrc) if os.access(gisrc, os.R_OK) else {}
     kv["LAST_MAPSET_PATH"] = last_mapset_path
     write_gisrc(kv, gisrc)
 
 
-def create_fallback_session(gisrc, tmpdir) -> None:
+def create_fallback_session(gisrc: StrPath, tmpdir) -> None:
     """Creates fallback temporary session"""
     # Create temporary location
     set_mapset(
@@ -601,7 +605,7 @@ def read_gui(gisrc, default_gui):
     return grass_gui
 
 
-def create_initial_gisrc(filename):
+def create_initial_gisrc(filename: StrPath) -> None:
     # for convenience, define GISDBASE as pwd:
     s = r"""GISDBASE: %s
 LOCATION_NAME: <UNKNOWN>
@@ -655,7 +659,7 @@ def check_gui(expected_gui):
     return grass_gui
 
 
-def save_gui(gisrc, grass_gui) -> None:
+def save_gui(gisrc: StrPath, grass_gui) -> None:
     """Save the user interface variable in the grassrc file"""
     if os.access(gisrc, os.F_OK):
         kv = read_gisrc(gisrc)
@@ -738,13 +742,13 @@ def cannot_create_location_reason(gisdbase, location) -> str:
 
 
 def set_mapset(
-    gisrc,
+    gisrc: StrPath,
     arg=None,
     geofile=None,
     create_new=False,
     tmp_location=False,
     tmp_mapset=False,
-    tmpdir=None,
+    tmpdir: StrPath | None = None,
 ):
     """Selected Location and Mapset are checked and created if requested
 
@@ -962,7 +966,7 @@ class MapsetSettings:
         return self.gisdbase and self.location and self.mapset
 
 
-def get_mapset_settings(gisrc):
+def get_mapset_settings(gisrc: StrPath) -> MapsetSettings | None:
     """Get the settings of Location and Mapset from the gisrc file"""
     mapset_settings = MapsetSettings()
     kv = read_gisrc(gisrc)
@@ -977,7 +981,7 @@ def get_mapset_settings(gisrc):
 # TODO: does it really makes sense to tell user about gisrcrc?
 # anything could have happened in between loading from gisrcrc and now
 # (we do e.g. GUI or creating loctation)
-def load_gisrc(gisrc, gisrcrc) -> MapsetSettings:
+def load_gisrc(gisrc: StrPath, gisrcrc: StrPath) -> MapsetSettings:
     """Get the settings of Location and Mapset from the gisrc file
 
     :returns: MapsetSettings object
@@ -1002,7 +1006,7 @@ def load_gisrc(gisrc, gisrcrc) -> MapsetSettings:
 
 
 # load environmental variables from grass_env_file
-def load_env(grass_env_file) -> None:
+def load_env(grass_env_file: StrPath) -> None:
     if not os.access(grass_env_file, os.R_OK):
         return
 
@@ -1063,7 +1067,7 @@ def install_notranslation() -> None:
     builtins.__dict__["_"] = lambda x: x
 
 
-def set_language(grass_config_dir) -> None:
+def set_language(grass_config_dir: StrPath) -> None:
     # This function is used to override system default language and locale
     # Such override can be requested only from wxGUI
     # An override if user has provided correct environmental variables as
@@ -1264,9 +1268,9 @@ def set_language(grass_config_dir) -> None:
 
 
 # TODO: the gisrcrc here does not make sense, remove it from load_gisrc
-def unlock_gisrc_mapset(gisrc, gisrcrc):
+def unlock_gisrc_mapset(gisrc: StrPath, gisrcrc: StrPath) -> None:
     """Unlock mapset from the gisrc file"""
-    settings = load_gisrc(gisrc, gisrcrc)
+    settings: MapsetSettings = load_gisrc(gisrc, gisrcrc)
     lockfile = os.path.join(settings.full_mapset, ".gislock")
     # this fails silently, perhaps a warning would be helpful to
     # catch cases when removal was not possible due to e.g. another
@@ -1282,7 +1286,7 @@ def make_fontcap() -> None:
         call(["g.mkfontcap"])
 
 
-def ensure_db_connected(mapset) -> None:
+def ensure_db_connected(mapset: StrPath) -> None:
     """Predefine default driver if DB connection not defined
 
     :param mapset: full path to the mapset
@@ -1348,7 +1352,7 @@ def get_shell():
     return sh, shellname
 
 
-def get_grass_env_file(sh, grass_config_dir) -> str:
+def get_grass_env_file(sh, grass_config_dir: StrPath) -> str:
     """Get name of the shell-specific GRASS environment (rc) file"""
     if sh in {"csh", "tcsh"}:
         grass_env_file = os.path.join(grass_config_dir, "cshrc")
@@ -1536,7 +1540,7 @@ def start_shell():
     return process
 
 
-def csh_startup(location, grass_env_file):
+def csh_startup(location, grass_env_file: StrPath):
     userhome = os.getenv("HOME")  # save original home
     home = location
     os.environ["HOME"] = home
