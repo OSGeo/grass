@@ -154,16 +154,14 @@ def aggregate_raster_maps(
                 _(
                     "Raster map <%(name)s> is already in temporal "
                     "database, use overwrite flag to overwrite"
-                    % ({"name": new_map.get_name()})
                 )
+                % ({"name": new_map.get_name()})
             )
             return
 
     msgr.verbose(
-        _(
-            "Computing aggregation of maps between %(st)s - %(end)s"
-            % {"st": str(start), "end": str(end)}
-        )
+        _("Computing aggregation of maps between %(st)s - %(end)s")
+        % {"st": str(start), "end": str(end)}
     )
 
     # Create the r.series input file
@@ -356,8 +354,9 @@ def aggregate_by_topology(
                     _(
                         "Unable to perform aggregation. Output raster "
                         "map <%(name)s> exists and overwrite flag was "
-                        "not set" % ({"name": output_name})
+                        "not set"
                     )
+                    % ({"name": output_name})
                 )
 
             output_list.append(map_layer)
@@ -380,8 +379,8 @@ def aggregate_by_topology(
                             "reached (%i). The module r.series will "
                             "be run with flag z, to avoid open "
                             "files limit exceeding."
-                            % (int(file_limit), len(aggregation_list))
                         )
+                        % (int(file_limit), len(aggregation_list))
                     )
                     mod(flags="z")
                 process_queue.put(mod)

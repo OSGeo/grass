@@ -47,7 +47,7 @@ from grass.script import core as grass
 
 
 def oifcalc(sdev, corr, k1, k2, k3):
-    grass.debug(_("Calculating OIF for combination: %s, %s, %s" % (k1, k2, k3)), 1)
+    grass.debug(_("Calculating OIF for combination: %s, %s, %s") % (k1, k2, k3), 1)
     # calculate SUM of Stddeviations:
     ssdev = [sdev[k1], sdev[k2], sdev[k3]]
     numer = sum(ssdev)

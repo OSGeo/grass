@@ -45,7 +45,7 @@ class BaseCapabilitiesTree(ET.ElementTree):
                 raise ParseError(_("Unable to parse XML file"))
             except OSError as error:
                 raise ParseError(
-                    _("Unable to open XML file '%s'.\n%s\n" % (cap_file, error))
+                    _("Unable to open XML file '%s'.\n%s\n") % (cap_file, error)
                 )
         else:
             try:

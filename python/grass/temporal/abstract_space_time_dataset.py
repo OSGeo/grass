@@ -2025,7 +2025,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             )
 
         if not check_granularity_string(gran, self.get_temporal_type()):
-            self.msgr.error(_("Wrong granularity format: %s" % (gran)))
+            self.msgr.error(_("Wrong granularity format: %s") % (gran))
             return False
 
         dbif, connection_state_changed = init_dbif(dbif)

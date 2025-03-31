@@ -152,13 +152,13 @@ def main():
                         "Temporal type of space time raster datasets must be equal\n"
                         "<%(a)s> of type %(type_a)s do not match <%(b)s> of type "
                         "%(type_b)s"
-                        % {
-                            "a": first_strds.get_id(),
-                            "type_a": first_strds.get_temporal_type(),
-                            "b": dataset.get_id(),
-                            "type_b": dataset.get_temporal_type(),
-                        }
                     )
+                    % {
+                        "a": first_strds.get_id(),
+                        "type_a": first_strds.get_temporal_type(),
+                        "b": dataset.get_id(),
+                        "type_b": dataset.get_temporal_type(),
+                    }
                 )
 
         mapmatrizes = tgis.sample_stds_by_stds_topology(

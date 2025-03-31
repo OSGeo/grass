@@ -156,12 +156,12 @@ def reporthook(count, block_size, total_size):
     sys.stdout.write(
         _(
             "Download in progress, wait until it is finished "
-            "{0}%, {1} MB, {2} KB/s, {3:.0f} seconds passed".format(
-                percent,
-                progress_size / (1024 * 1024),
-                speed,
-                duration,
-            ),
+            "{0}%, {1} MB, {2} KB/s, {3:.0f} seconds passed"
+        ).format(
+            percent,
+            progress_size / (1024 * 1024),
+            speed,
+            duration,
         ),
     )
 

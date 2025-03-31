@@ -97,9 +97,7 @@ def print_category(category, changes, file=None):
         # Relies on author being specified as username.
         if " " in author:
             author = author.split(" ", maxsplit=1)[0]
-        if author.startswith("@"):
-            # We expect that to be always the case, but we test anyway.
-            author = author[1:]
+        author = author.removeprefix("@")
         if author in known_bot_names or author.endswith("[bot]"):
             hidden.append(item)
         elif len(visible) > max_section_length:

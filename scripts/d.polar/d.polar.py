@@ -425,8 +425,8 @@ def main():
             gcore.fatal(
                 _(
                     "EPS output file path <{}>, doesn't exists. "
-                    "Set new output file path.".format(eps)
-                )
+                    "Set new output file path."
+                ).format(eps)
             )
         else:
             eps = basename(eps, "eps") + ".eps"
@@ -436,8 +436,8 @@ def main():
             gcore.fatal(
                 _(
                     "option <output>: <{}> exists. To overwrite, "
-                    "use the --overwrite flag.".format(eps)
-                )
+                    "use the --overwrite flag."
+                ).format(eps)
             )
 
     # check if we have xgraph (if no EPS output requested)
