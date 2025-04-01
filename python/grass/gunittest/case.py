@@ -507,9 +507,8 @@ class TestCase(unittest.TestCase):
             **parameters,
         )
 
-    # TODO: use precision?
     # TODO: write a test for this method with r.in.ascii
-    def assertRasterMinMax(self, map, refmin, refmax, msg=None):
+    def assertRasterMinMax(self, map, refmin, refmax, precision=0.00001, msg=None):
         """Test that raster map minimum and maximum are within limits.
 
         Minimum and maximum values are obtained from r.info.
@@ -527,10 +526,10 @@ class TestCase(unittest.TestCase):
             ((actual["min"] is None) != (refmin is None))
             # previous check only passes if both values are None or not None
             # at the same time, hence just checking one here is sufficient
-            or (actual["min"] is not None and refmin > actual["min"])
+            or (actual["min"] is not None and (refmin - actual["min"] > precision))
         )
         max_mismatch = ((actual["max"] is None) != (refmax is None)) or (
-            actual["max"] is not None and refmax < actual["max"]
+            actual["max"] is not None and (actual["max"] - refmax > precision)
         )
 
         if min_mismatch or max_mismatch:
