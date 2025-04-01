@@ -37,26 +37,26 @@ is not safe, i.e. it has side effects (this should be changed in the future).
 # (this makes it more stable since we have to set up paths first)
 # pylint: disable=too-many-lines
 
-import sys
-import os
-import errno
+import argparse
 import atexit
 import datetime
+import errno
 import gettext
+import json
+import locale
+import os
+import platform
+import re
 import shutil
 import signal
 import string
 import subprocess
-import re
-import platform
+import sys
 import tempfile
-import locale
-import uuid
 import unicodedata
-import argparse
-import json
-from pathlib import Path
+import uuid
 
+from pathlib import Path
 
 # mechanism meant for debugging this script (only)
 # private global to store if we are debugging
@@ -216,7 +216,7 @@ def count_wide_chars(s):
     return sum(unicodedata.east_asian_width(c) in "WF" for c in s)
 
 
-def f(fmt, *args):
+def fw(fmt, *args):
     """Adjusts fixed-width string specifiers for wide CJK characters and
     returns a formatted string. Does not support named arguments yet.
 
@@ -492,24 +492,23 @@ def create_gisrc(tmpdir, gisrcrc):
 def read_gisrc(filename):
     kv = {}
     try:
-        f = open(filename)
+        with open(filename) as f:
+            for line in f:
+                try:
+                    k, v = line.split(":", 1)
+                except ValueError as e:
+                    warning(
+                        _(
+                            "Invalid line in RC file ({file}): '{line}' ({error})\n"
+                        ).format(line=line, error=e, file=filename)
+                    )
+                    continue
+                kv[k.strip()] = v.strip()
+            if not kv:
+                warning(_("Empty RC file ({file})").format(file=filename))
+
     except OSError:
         return kv
-
-    for line in f:
-        try:
-            k, v = line.split(":", 1)
-        except ValueError as e:
-            warning(
-                _("Invalid line in RC file ({file}): '{line}' ({error})\n").format(
-                    line=line, error=e, file=filename
-                )
-            )
-            continue
-        kv[k.strip()] = v.strip()
-    if not kv:
-        warning(_("Empty RC file ({file})").format(file=filename))
-    f.close()
 
     return kv
 
@@ -530,20 +529,18 @@ def write_gisrcrc(gisrcrc, gisrc, skip_variable=None):
 
 def read_env_file(path):
     kv = {}
-    f = open(path)
-    for line in f:
-        k, v = line.split(":", 1)
-        kv[k.strip()] = v.strip()
-    f.close()
+    with open(path) as f:
+        for line in f:
+            k, v = line.split(":", 1)
+            kv[k.strip()] = v.strip()
     return kv
 
 
 def write_gisrc(kv, filename, append=False):
     # use append=True to avoid a race condition between write_gisrc() and
     # grass_prompt() on startup (PR #548)
-    f = open(filename, "a" if append else "w")
-    f.writelines("%s: %s\n" % (k, v) for k, v in kv.items())
-    f.close()
+    with open(filename, "a" if append else "w") as f:
+        f.writelines("%s: %s\n" % (k, v) for k, v in kv.items())
 
 
 def add_mapset_to_gisrc(gisrc, grassdb, location, mapset):
@@ -754,11 +751,11 @@ def set_mapset(
     tmp_location requires tmpdir (which is used as gisdbase)
     """
     from grass.grassdb.checks import (
-        is_mapset_valid,
-        is_location_valid,
-        get_mapset_invalid_reason,
         get_location_invalid_reason,
         get_location_invalid_suggestion,
+        get_mapset_invalid_reason,
+        is_location_valid,
+        is_mapset_valid,
         mapset_exists,
     )
 
@@ -1484,9 +1481,8 @@ def say_hello():
     sys.stderr.write(_("Welcome to GRASS GIS %s") % GRASS_VERSION)
     if GRASS_VERSION.endswith("dev"):
         try:
-            filerev = open(gpath("etc", "VERSIONNUMBER"))
-            linerev = filerev.readline().rstrip("\n")
-            filerev.close()
+            with open(gpath("etc", "VERSIONNUMBER")) as filerev:
+                linerev = filerev.readline().rstrip("\n")
 
             revision = linerev.split(" ")[1]
             sys.stderr.write(" (" + revision + ")")
@@ -1506,7 +1502,7 @@ INFO_TEXT = r"""
 def show_info(shellname, grass_gui, default_gui):
     """Write basic info about GRASS GIS and GRASS session to stderr"""
     sys.stderr.write(
-        f(
+        fw(
             INFO_TEXT,
             _("GRASS GIS homepage:"),
             # GTC Running through: SHELL NAME
@@ -1520,11 +1516,11 @@ def show_info(shellname, grass_gui, default_gui):
     )
 
     if grass_gui == "wxpython":
-        message(f("%-41sg.gui wxpython", _("If required, restart the GUI with:")))
+        message(fw("%-41sg.gui wxpython", _("If required, restart the GUI with:")))
     else:
-        message(f("%-41sg.gui %s", _("Start the GUI with:"), default_gui))
+        message(fw("%-41sg.gui %s", _("Start the GUI with:"), default_gui))
 
-    message(f("%-41sexit", _("When ready to quit enter:")))
+    message(fw("%-41sexit", _("When ready to quit enter:")))
     message("")
 
 
@@ -1817,10 +1813,9 @@ def print_params(params):
         plat = gpath("include", "Make", "Platform.make")
         if not os.path.exists(plat):
             fatal(_("Please install the GRASS GIS development package"))
-        fileplat = open(plat)
-        # this is in fact require only for some, but prepare it anyway
-        linesplat = fileplat.readlines()
-        fileplat.close()
+        with open(plat) as fileplat:
+            # this is in fact require only for some, but prepare it anyway
+            linesplat = fileplat.readlines()
 
     for arg in params:
         if arg == "path":
@@ -1832,9 +1827,8 @@ def print_params(params):
             sys.stdout.write("%s\n" % val[0].split("=")[1].strip())
         elif arg == "build":
             build = gpath("include", "grass", "confparms.h")
-            filebuild = open(build)
-            val = filebuild.readline()
-            filebuild.close()
+            with open(build) as filebuild:
+                val = filebuild.readline()
             sys.stdout.write("%s\n" % val.strip().strip('"').strip())
         elif arg == "compiler":
             val = grep("CC", linesplat)
@@ -1842,9 +1836,8 @@ def print_params(params):
         elif arg == "revision":
             sys.stdout.write("@GRASS_VERSION_GIT@\n")
         elif arg == "svn_revision":
-            filerev = open(gpath("etc", "VERSIONNUMBER"))
-            linerev = filerev.readline().rstrip("\n")
-            filerev.close()
+            with open(gpath("etc", "VERSIONNUMBER")) as filerev:
+                linerev = filerev.readline().rstrip("\n")
             try:
                 revision = linerev.split(" ")[1]
                 sys.stdout.write("%s\n" % revision[1:])
@@ -2177,10 +2170,10 @@ def main():
 
     from grass.app.runtime import (
         ensure_home,
-        set_paths,
+        set_browser,
         set_defaults,
         set_display_defaults,
-        set_browser,
+        set_paths,
     )
 
     ensure_home()
@@ -2334,7 +2327,7 @@ def main():
 
     location = mapset_settings.full_mapset
 
-    from grass.app.data import lock_mapset, MapsetLockingException
+    from grass.app.data import MapsetLockingException, lock_mapset
 
     try:
         # check and create .gislock file
