@@ -35,6 +35,7 @@ This program is free software under the GNU General Public License
 import os
 import string
 from math import ceil
+from pathlib import Path
 from time import localtime, strftime
 
 import grass.script as gs
@@ -42,10 +43,9 @@ import wx
 from core.gcmd import GError, GMessage, GWarning
 from core.utils import GetCmdString
 from dbmgr.vinfo import VectorDBInfo
-from grass.script.task import cmdlist_to_tuple
 from grass.exceptions import ScriptError
+from grass.script.task import cmdlist_to_tuple
 from gui_core.wrap import NewId as wxNewId
-
 from psmap.utils import (  # Add any additional required names from psmap.utils here
     BBoxAfterRotation,
     GetMapBounds,
@@ -57,9 +57,6 @@ from psmap.utils import (  # Add any additional required names from psmap.utils 
     getRasterType,
     projInfo,
 )
-
-# Import Path from pathlib at the top of the file if not already there
-from pathlib import Path
 
 
 def NewId():
@@ -162,7 +159,7 @@ class Instruction:
         # first read file to get information about region and scaletype
         isRegionComment = False
         orientation = "Portrait"
-        for line in content.split("\n"):
+        for line in content.splitlines():
             if "# g.region" in line:
                 self.SetRegion(regionInstruction=line)
                 isRegionComment = True
@@ -198,7 +195,7 @@ class Instruction:
         buffer = []
         instruction = None
         vectorMapNumber = 1
-        for line in content.split("\n"):
+        for line in content.splitlines():
             if not line.strip():
                 continue
             line = line.strip()
