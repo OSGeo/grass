@@ -80,7 +80,7 @@ RUN echo "Install main packages";\
     apk add --no-cache $GRASS_RUN_PACKAGES
 
 
-FROM common as build
+FROM common AS build
 
 # ================
 # CONFIG VARIABLES
@@ -189,7 +189,7 @@ RUN cp /usr/local/grass/gui/wxpython/xml/module_items.xml module_items.xml; \
     mv module_items.xml /usr/local/grass/gui/wxpython/xml/module_items.xml;
 
 
-FROM common as grass
+FROM common AS grass
 
 # GRASS GIS specific
 # allow work with MAPSETs that are not owned by current user
@@ -205,8 +205,8 @@ COPY --from=build /usr/local/bin/grass /usr/local/bin/grass
 COPY --from=build /usr/local/grass* /usr/local/grass/
 COPY --from=build /usr/lib/gdalplugins/*_GRASS.so /usr/lib/gdalplugins/
 # Set GISBASE
-ENV GISBASE /usr/local/grass
-ENV GRASS_GISBASE /usr/local/grass
+ENV GISBASE=/usr/local/grass
+ENV GRASS_GISBASE=/usr/local/grass
 
 # run simple LAZ test
 COPY docker/testdata/simple.laz /tmp/
