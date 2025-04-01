@@ -7,18 +7,18 @@ https://svn.osgeo.org/osgeo/graphics/toolbar-icons/24x24/
 __author__ = "Robert Szczepanek"
 
 import os
-from pathlib import Path  # Import Path
+from pathlib import Path
 
 from core import globalvar
 
 iconPath = os.path.join(globalvar.ICONDIR, "grass")
-iconPathObj = Path(iconPath)  # Create a Path object
+iconPathObj = Path(iconPath)
 
 iconSet = {}
 
-for icon in iconPathObj.iterdir():  # Use iterdir()
-    name = icon.stem  # Use Path.stem to get the name
-    ext = icon.suffix  # Use Path.suffix to get the extension
+for icon in iconPathObj.iterdir():
+    name = icon.stem
+    ext = icon.suffix
     if ext != ".png":
         continue
-    iconSet[name] = icon.name  # Store the full filename (name + ext)
+    iconSet[name] = icon.name
