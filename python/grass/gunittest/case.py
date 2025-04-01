@@ -507,18 +507,6 @@ class TestCase(unittest.TestCase):
             **parameters,
         )
 
-    def _parse_json_command(self, *args, **kwargs):
-        """Wrapper over parse_command to properly convert numbers
-        stored as strings in JSON.
-        """
-        result = parse_command(*args, **kwargs, format="json")
-        for key in result:
-            try:
-                result[key] = float(result[key])
-            except (ValueError, TypeError):
-                pass
-        return result
-
     # TODO: use precision?
     # TODO: write a test for this method with r.in.ascii
     def assertRasterMinMax(self, map, refmin, refmax, msg=None):
@@ -534,7 +522,7 @@ class TestCase(unittest.TestCase):
         To check that more statistics have certain values use
         `assertRasterFitsUnivar()` or `assertRasterFitsInfo()`
         """
-        actual = self._parse_json_command("r.info", map=map)
+        actual = parse_command("r.info", map=map, format="json")
         min_mismatch = (
             ((actual["min"] is None) != (refmin is None))
             # previous check only passes if both values are None or not None
