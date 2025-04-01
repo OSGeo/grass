@@ -70,6 +70,8 @@ graphical_index_style = """\
 
 .img-list li img.default-img {
     max-height: 5ex;
+    background-color: var(--gs-primary-color);
+    padding: 5px;
 }
 
 .img-list li .desc {
@@ -234,7 +236,7 @@ def generate_page_for_category_md(
             if skip_no_image and not img:
                 continue
             if not img:
-                img = "grass_logo.png"
+                img = "grass_logo.svg"
                 img_class = "default-img"
             if basename.startswith("wxGUI"):
                 basename = basename.replace(".", " ")
