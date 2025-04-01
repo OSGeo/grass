@@ -5,13 +5,7 @@ import math
 
 
 class TestASTERToarRegression(TestCase):
-    """Regression test suite for i.aster.toar to detect any change in computation results.
-
-    This suite ensures:
-    - Each gain mode and output type produces consistent numerical output.
-    - Minimal runs of the module (grouping compatible flags).
-    - Theoretical properties are validated (e.g. thermal bands = float).
-    """
+    """Regression test suite for i.aster.toar GRASS module."""
 
     input_bands = [
         f"b{i}" for i in [1, 2, "3N", "3B", 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
@@ -57,7 +51,7 @@ class TestASTERToarRegression(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        """Create reproducible random input data."""
+        """Create input raster maps and set up the region."""
         cls.use_temp_region()
         cls.runModule("g.region", n=10, s=0, e=10, w=0, rows=10, cols=10)
 
@@ -72,6 +66,7 @@ class TestASTERToarRegression(TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        """Remove all temporary rasters created by the tests and restore region."""
         cls.runModule(
             "g.remove", type="raster", pattern=f"{cls.output_base}.*", flags="f"
         )
@@ -87,6 +82,7 @@ class TestASTERToarRegression(TestCase):
         cls.del_temp_region()
 
     def _assert_band_stats(self, test_case, bands):
+        """Helper function to assert that raster statistics match expected regression values."""
         for band in bands:
             stats = self.expected[test_case][band]
             self.assertRasterExists(f"{self.output_base}.{band}")
@@ -95,7 +91,7 @@ class TestASTERToarRegression(TestCase):
             )
 
     def test_radiance_output(self):
-        """Test output in radiance mode (-r) for thermal bands with strict regression values"""
+        """Test output in radiance mode (-r flag) for thermal bands (10-14)."""
         self.assertModule(
             "i.aster.toar",
             input=",".join(self.input_bands),
@@ -115,7 +111,8 @@ class TestASTERToarRegression(TestCase):
             self.assertLess(info["max"], 5.0, "Radiance max too high for thermal bands")
 
     def test_high_gain_modes(self):
-        """Test high gain modes (-a -b) and ensure values match regression expectations"""
+        """Test VNIR and SWIR high gain modes (-a -b).
+        Ensure that reflectance outputs match regression expectations."""
         self.assertModule(
             "i.aster.toar",
             input=",".join(self.input_bands),
@@ -127,7 +124,8 @@ class TestASTERToarRegression(TestCase):
         self._assert_band_stats("vnir_high", [1, 2, "3N", "3B", 4, 5, 6, 7, 8, 9])
 
     def test_low_gain_modes(self):
-        """Test low gain modes (-c -d -e) and check for consistent regression behavior"""
+        """Test VNIR and SWIR low gain modes (-c -d -e).
+        Verify output matches regression expectations under low gain."""
         self.assertModule(
             "i.aster.toar",
             input=",".join(self.input_bands),
@@ -141,10 +139,9 @@ class TestASTERToarRegression(TestCase):
     def test_sun_elevation_effect_on_reflectance(self):
         """Test the theoretical effect of sun_elevation on reflectance.
 
-        For reflectance outputs (using high gain flags "ab"), the correction is applied as:
-        reflectance ∝ 1/cos(sun_zenith),
-        where sun_zenith = 90° - sun_elevation.
-        Thus, for sun_elevation of 45° (sun_zenith = 45°) and 60° (sun_zenith = 30°), the ratio of
+        For reflectance outputs (using high gain flags "ab"),:
+        reflectance ∝ 1/cos(90° - sun_elevation),
+        Thus, for sun_elevation of 45° and 60°, the ratio of
         outputs should be approximately:
         reflectance60/reflectance45 = cos(45°)/cos(30°) ≈ 0.8165.
         """
