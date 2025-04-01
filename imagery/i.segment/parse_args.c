@@ -195,7 +195,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
             if (G_strlcpy(name, group->answers[bands], sizeof(name)) >=
                 sizeof(name)) {
                 G_fatal_error(_("Raster map name <%s> is too long"),
-                                group->answers[bands]);
+                              group->answers[bands]);
             }
             mapset = G_find_raster(name, "");
             if (!mapset)
