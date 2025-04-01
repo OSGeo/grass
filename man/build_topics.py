@@ -110,7 +110,7 @@ def build_topics(ext):
     with Path(man_dir, f"topics.{ext}").open("w") as topicsfile:
         topicsfile.write(
             header1_tmpl.substitute(
-                title="GRASS GIS %s Reference Manual - Topics index" % grass_version
+                title="GRASS %s Reference Manual - Topics index" % grass_version
             )
         )
         topicsfile.write(headertopics_tmpl)
@@ -122,7 +122,7 @@ def build_topics(ext):
                 if ext == "html":
                     keyfile.write(
                         header1_tmpl.substitute(
-                            title="GRASS GIS "
+                            title="GRASS "
                             "%s Reference Manual: Topic %s"
                             % (grass_version, key.replace("_", " "))
                         )
