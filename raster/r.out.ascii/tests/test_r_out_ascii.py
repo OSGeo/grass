@@ -167,7 +167,7 @@ cols: 3
 
 
 def test_h_i_flag(setup_maps):
-    """Test h(suppress header information) and i(force integer values) flags."""
+    """Test -h (suppress header information) and -i (force integer values) flags."""
     session = setup_maps
 
     output = gs.read_command(
