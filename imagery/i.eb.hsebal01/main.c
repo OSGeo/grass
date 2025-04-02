@@ -138,7 +138,6 @@ int main(int argc, char *argv[])
     input_ustar->key = "frictionvelocitystar";
     input_ustar->type = TYPE_DOUBLE;
     input_ustar->required = YES;
-    input_ustar->gisprompt = "old,value";
     input_ustar->answer = "0.32407";
     input_ustar->description =
         _("Value of the height independent friction velocity (u*) [m/s]");
