@@ -332,7 +332,7 @@ typedef enum {
     G_OPT_M_NULL_VALUE, /*!< null value string */
     G_OPT_M_NPROCS,     /*!< number of threads for parallel computing */
     G_OPT_M_SEED,       /*!< seed for random number generator */
-
+    G_OPT_STAC_API,     /*!< STAC API endpoint */
     G_OPT_STDS_INPUT, /*!< old input space time dataset of type strds, str3ds or
                          stvds */
     G_OPT_STDS_INPUTS,   /*!< old input space time datasets */

@@ -719,6 +719,10 @@ void G_sleep(unsigned int);
 int G_snprintf(char *, size_t, const char *, ...)
     __attribute__((format(printf, 3, 4)));
 
+/* stac.c */
+char *G_stac_api_options(void);
+char *G_stac_api_descriptions(void);
+
 /* strings.c */
 int G_strcasecmp(const char *, const char *);
 int G_strncasecmp(const char *, const char *, int);
