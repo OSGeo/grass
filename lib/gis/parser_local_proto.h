@@ -66,6 +66,7 @@ void G__split_gisprompt(const char *, char *, char *, char *);
 void G__check_option_rules(void);
 void G__describe_option_rules(void);
 int G__has_required_rule(void);
+const struct Option *G__first_required_option_from_rules(void);
 void G__describe_option_rules_xml(FILE *);
 
 #endif

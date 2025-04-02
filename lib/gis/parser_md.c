@@ -433,20 +433,20 @@ void print_cli_short_version(FILE *file, const char *indent)
 
     new_prompt = G__uses_new_gisprompt();
 
-    fprintf(stdout, "%s**%s**", indent, st->pgm_name);
-    fprintf(stdout, "\n");
+    fprintf(file, "%s**%s**", indent, st->pgm_name);
+    fprintf(file, "\n");
 
     /* print short version first */
     if (st->n_flags) {
         flag = &st->first_flag;
-        fprintf(stdout, "%s[**-", indent);
+        fprintf(file, "%s[**-", indent);
         while (flag != NULL) {
-            fprintf(stdout, "%c", flag->key);
+            fprintf(file, "%c", flag->key);
             flag = flag->next_flag;
         }
-        fprintf(stdout, "**]");
+        fprintf(file, "**]");
     }
-    fprintf(stdout, "\n");
+    fprintf(file, "\n");
 
     if (st->n_opts) {
         opt = &st->first_option;
@@ -469,28 +469,28 @@ void print_cli_short_version(FILE *file, const char *indent)
                     type = "string";
                     break;
                 }
-            fprintf(stdout, "%s", indent);
+            fprintf(file, "%s", indent);
             if (!opt->required)
-                fprintf(stdout, "[");
-            fprintf(stdout, "**%s**=", opt->key);
-            fprintf(stdout, "*%s*", type);
+                fprintf(file, "[");
+            fprintf(file, "**%s**=", opt->key);
+            fprintf(file, "*%s*", type);
             if (opt->multiple) {
-                fprintf(stdout, " [,");
-                fprintf(stdout, "*%s*,...]", type);
+                fprintf(file, " [,");
+                fprintf(file, "*%s*,...]", type);
             }
             if (!opt->required)
-                fprintf(stdout, "]");
-            fprintf(stdout, "\n");
+                fprintf(file, "]");
+            fprintf(file, "\n");
 
             opt = opt->next_opt;
         }
     }
     if (new_prompt)
-        fprintf(stdout, "%s[**--overwrite**]\n", indent);
+        fprintf(file, "%s[**--overwrite**]\n", indent);
 
-    fprintf(stdout, "%s[**--verbose**]\n", indent);
-    fprintf(stdout, "%s[**--quiet**]\n", indent);
-    fprintf(stdout, "%s[**--ui**]\n", indent);
+    fprintf(file, "%s[**--verbose**]\n", indent);
+    fprintf(file, "%s[**--quiet**]\n", indent);
+    fprintf(file, "%s[**--ui**]\n", indent);
 }
 
 void print_python_short_version(FILE *file, const char *indent)
@@ -499,40 +499,85 @@ void print_python_short_version(FILE *file, const char *indent)
     struct Flag *flag;
     const char *type;
     int new_prompt = 0;
+    bool output_format_option = false;
+    const char *output_format_default = NULL;
+    bool shell_eval_flag = false;
+    const char *python_function = NULL;
 
     new_prompt = G__uses_new_gisprompt();
 
-    if (!new_prompt) {
-        fprintf(stdout, "%s*grass.script.run_command*(\"***%s***\",", indent,
-                st->pgm_name);
+    if (st->n_opts) {
+        opt = &st->first_option;
+        while (opt != NULL) {
+            if (strcmp(opt->key, "format") == 0) {
+                if (opt->options) {
+                    int i = 0;
+                    while (opt->opts[i]) {
+                        if (strcmp(opt->opts[i], "csv") == 0)
+                            output_format_default = "csv";
+                        if (strcmp(opt->opts[i], "json") == 0) {
+                            output_format_default = "json";
+                            break;
+                        }
+                        i++;
+                    }
+                }
+                if (output_format_default) {
+                    output_format_option = true;
+                }
+                break;
+            }
+            opt = opt->next_opt;
+        }
+    }
+    if (st->n_flags) {
+        flag = &st->first_flag;
+        while (st->n_flags && flag != NULL) {
+            if (flag->key == 'g') {
+                shell_eval_flag = true;
+                break;
+            }
+            flag = flag->next_flag;
+        }
+    }
+    if (output_format_option || (!new_prompt && shell_eval_flag)) {
+        python_function = "parse_command";
+        // We know this is can be parsed, but we can't detect just plain stdout
+        // because we can't distinguish between plain text outputs and
+        // modifications of data.
     }
     else {
-        fprintf(stdout, "%s*grass.script.parse_command*(\"***%s***\",", indent,
-                st->pgm_name);
+        python_function = "run_command";
     }
-    fprintf(stdout, "\n");
+    fprintf(file, "%s*grass.script.%s*(\"***%s***\",", indent, python_function,
+            st->pgm_name);
+    fprintf(file, "\n");
 
     if (st->n_opts) {
         opt = &st->first_option;
 
         while (opt != NULL) {
-            fprintf(stdout, "%s    ", indent);
+            fprintf(file, "%s    ", indent);
             if (!opt->required && !opt->answer) {
-                fprintf(stdout, "**%s**=*None*", opt->key);
+                fprintf(file, "**%s**=*None*", opt->key);
             }
             else {
-                fprintf(stdout, "**%s**", opt->key);
+                fprintf(file, "**%s**", opt->key);
             }
             if (opt->answer) {
-                fprintf(stdout, "=", opt->key);
+                fprintf(file, "=");
                 if (opt->type == TYPE_INTEGER || opt->type == TYPE_DOUBLE) {
-                    fprintf(stdout, "*%s*", opt->answer);
+                    fprintf(file, "*");
+                    print_escaped(file, opt->answer);
+                    fprintf(file, "*");
                 }
                 else {
-                    fprintf(stdout, "*\"%s\"*", opt->answer);
+                    fprintf(file, "*\"");
+                    print_escaped(file, opt->answer);
+                    fprintf(file, "\"*");
                 }
             }
-            fprintf(stdout, ",\n");
+            fprintf(file, ",\n");
 
             opt = opt->next_opt;
         }
@@ -540,22 +585,24 @@ void print_python_short_version(FILE *file, const char *indent)
 
     if (st->n_flags) {
         flag = &st->first_flag;
-        fprintf(stdout, "%s    **flags**=*None*,", indent);
+        fprintf(file, "%s    **flags**=*None*,\n", indent);
     }
-    fprintf(stdout, "\n");
 
     if (new_prompt)
-        fprintf(stdout, "%s    **overwrite**=*False*,\n", indent);
+        fprintf(file, "%s    **overwrite**=*False*,\n", indent);
 
-    fprintf(stdout, "%s    **verbose**=*False*,\n", indent);
-    fprintf(stdout, "%s    **quiet**=*False*,\n", indent);
-    fprintf(stdout, "%s    **superquiet**=*False*)\n", indent);
+    fprintf(file, "%s    **verbose**=*False*,\n", indent);
+    fprintf(file, "%s    **quiet**=*False*,\n", indent);
+    fprintf(file, "%s    **superquiet**=*False*)\n", indent);
 
-    fprintf(stdout, "\n%sExample:\n", indent);
+    fprintf(file, "\n%sExample:\n", indent);
 
-    fprintf(stdout, "\n%s```python\n", indent);
-    fprintf(stdout, "%sgs.run_command(\"%s\",", indent, st->pgm_name);
-    fprintf(stdout, " ");
+    fprintf(file, "\n%s```python\n", indent);
+    fprintf(file, "%sgs.%s(\"%s\"", indent, python_function, st->pgm_name);
+
+    const struct Option *first_required_rule_option =
+        G__first_required_option_from_rules();
+
     if (st->n_opts) {
         opt = &st->first_option;
 
@@ -577,38 +624,38 @@ void print_python_short_version(FILE *file, const char *indent)
                     type = "string";
                     break;
                 }
-            if (opt->required) {
-                fprintf(stdout, "%s", opt->key);
-                fprintf(stdout, "=", opt->key);
-                if (opt->answer) {
+            if (opt->required || first_required_rule_option == opt) {
+                fprintf(file, ", %s=", opt->key);
+                if (output_format_default && strcmp(opt->key, "format") == 0) {
+                    fprintf(file, "\"%s\"", output_format_default);
+                }
+                else if (opt->answer) {
                     if (opt->type == TYPE_INTEGER || opt->type == TYPE_DOUBLE) {
-                        fprintf(stdout, "%s", opt->answer);
+                        fprintf(file, "%s", opt->answer);
                     }
                     else {
-                        fprintf(stdout, "\"%s\"", opt->answer);
+                        fprintf(file, "\"%s\"", opt->answer);
                     }
                 }
                 else {
                     if (opt->type == TYPE_INTEGER || opt->type == TYPE_DOUBLE) {
-                        fprintf(stdout, "%s", type);
+                        fprintf(file, "%s", type);
                     }
                     else {
-                        fprintf(stdout, "\"%s\"", type);
+                        fprintf(file, "\"%s\"", type);
                     }
                 }
-                fprintf(stdout, ", ");
             }
             opt = opt->next_opt;
         }
     }
-    fprintf(stdout, ")\n%s```\n", indent);
+    fprintf(file, ")\n%s```\n", indent);
 }
 
 void print_cli_long_version(const char *indent)
 {
     struct Option *opt;
     struct Flag *flag;
-    const char *type;
     int new_prompt = 0;
 
     new_prompt = G__uses_new_gisprompt();
@@ -661,7 +708,6 @@ void print_python_long_version(const char *indent)
 {
     struct Option *opt;
     struct Flag *flag;
-    const char *type;
     int new_prompt = 0;
 
     new_prompt = G__uses_new_gisprompt();
