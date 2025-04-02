@@ -73,7 +73,7 @@ void G__usage_markdown(void)
     const char *tab_indent = "    ";
 
     /* short version */
-    fprintf(stdout, "\n=== \"Command line (Bash)\"\n\n");
+    fprintf(stdout, "\n=== \"Command line\"\n\n");
     print_cli_short_version(stdout, tab_indent);
     fprintf(stdout, "\n=== \"Python (grass.script)\"\n\n");
     print_python_short_version(stdout, tab_indent);
@@ -81,7 +81,7 @@ void G__usage_markdown(void)
     fprintf(stdout, "\n## %s\n", _("Parameters"));
 
     /* long version */
-    fprintf(stdout, "\n=== \"Command line (Bash)\"\n\n");
+    fprintf(stdout, "\n=== \"Command line\"\n\n");
     print_cli_long_version(tab_indent);
     fprintf(stdout, "\n=== \"Python (grass.script)\"\n\n");
     print_python_long_version(tab_indent);
