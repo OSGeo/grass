@@ -4,13 +4,13 @@ authors:
     - GRASS Development Team
 ---
 
-# Interfaces
+# Interfaces overview
 
 GRASS provides a number of interfaces for interacting with the software.
 The most common interfaces are command line, Python, Jupyter Notebooks,
 and graphical user interface.
 
-## Command Line
+## Command line
 
 The command line, also know as terminal or shell, interface allows you to start
 a GRASS session to run GRASS commands, execute scripts, or open the graphical
@@ -31,8 +31,7 @@ g.region raster=elevation
 r.slope.aspect elevation=elevation slope=slope aspect=aspect
 ```
 
-To learn more about the command line interface, see the
-[Command Line Interface](command_line_intro.md) page.
+[Learn more :material-arrow-right-bold:](command_line_intro.md){ .md-button }
 
 ## Python
 
@@ -70,41 +69,58 @@ with gs.setup.init(Path("grassdata/project_name")) as session:
     gs.run_command('r.slope.aspect', elevation='elevation', slope='slope', aspect='aspect')
 ```
 
-To learn more about the GRASS Python Scripting library, see the
-[grass.script package](python_intro.md) page.
+[Learn more :material-arrow-right-bold:](python_intro.md){ .md-button }
 
-## Jupyter Notebooks
+## Jupyter notebooks
 
-Jupyter Notebooks are a great way to interact with GRASS. The `grass.jupyter`
-module provides a Jupyter interface to GRASS. This allows users to write Jupyter
-Notebooks to interact with GRASS. The `grass.jupyter` module contains the `Map`,
-`InteractiveMap`, `Map3D`, `TimeSeriesMap`, and `SeriesMap` classes which
-provide functionality for working with maps in Jupyter Notebooks.
+Jupyter notebooks provide an interactive environment for writing and running code,
+combining text, code, and visualizations in a single document.
+They are widely used for data analysis, workflow prototyping, and scientific computing,
+making them a powerful tool for working with GRASS.
+
+The `grass.jupyter` Python package provides a [Jupyter](https://jupyter.org/)
+notebook interface to GRASS. It includes modules for creating map figures,
+interactive web maps, visualizing data series and time series, and generating
+3D visualizations.
+
+To get started with `grass.jupyter`, import the package,
+and start a GRASS session with the `gj.init` function:
 
 ```python
-from pathlib import Path
 import grass.jupyter as gj
 
-session = gj.init(Path(grassdata, project_name))
-
-slope_map = gj.Map()  # Create a new map
-slope_map.d_rast(map='slope')  # Add the slope raster to the map
-slope_map.d_barscale(at=(80, 10))  # Add a bar scale to the map
-slope_map.d_legend(raster='slope', at=(80, 90))  # Add a legend to the map
-slope_map.show()  # Display the map
+session = gj.init("path/to/my_project")
 ```
 
-![Slope Map](r_slope_aspect_slope.png)
+All classes and functions for interaction in notebooks are now available under `gj`,
+for example we can display a map with a selected raster and vector:
 
-Learn more about the GRASS Jupyter interface on the
-[Jupyter Notebooks](jupyter_intro.md) page.
+```python
+# Create a new map
+m = gj.Map()
 
-## Desktop Graphical User Interface
+# Add a raster map to the map object
+m.d_rast(map="elevation")
 
-The GRASS Desktop GUI is a graphical user interface for GRASS. The GUI provides
-a visual interface for interacting with GRASS. The GUI provides a number of tools
-for interactive data processing, analysis, and visualization. The GUI is
-avaliable on Windows, macOS, and Linux.
+# Add a vector map to the map object
+m.d_vect(map="streets", color="black")
 
-Learn more about the GRASS Desktop GUI on the
-[Desktop GUI](wxguiintro.md) page.
+# Display the map
+m.show()
+```
+
+![Elevation map overlayed with streets with gj.Map](jupyter_map.png)
+
+[Learn more :material-arrow-right-bold:](jupyter_intro.md){ .md-button }
+
+## Desktop graphical user interface
+
+The GRASS Desktop GUI is a graphical user interface for GRASS.
+Designed for efficiency and ease of use, it provides an intuitive way to
+interact with spatial data and the powerful tools available in GRASS.
+The GUI supports the visualisation of spatial data,
+the execution of geoprocessing tasks and the management of complex workflows.
+
+![GRASS desktop GUI](grass_start.png)
+
+[Learn more :material-arrow-right-bold:](helptext.md){ .md-button }

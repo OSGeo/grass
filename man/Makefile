@@ -274,9 +274,6 @@ $(MDDIR)/source/python_intro.md: mkdocs/docs/python_intro.md
 $(MDDIR)/source/command_line_intro.md: mkdocs/docs/command_line_intro.md
 	$(INSTALL_DATA) $< $@
 
-$(MDDIR)/source/interfaces_overview.md: mkdocs/docs/interfaces_overview.md
-	$(INSTALL_DATA) $< $@
-
 $(MDDIR)/scripts/hook_list_scripts.py: mkdocs/scripts/hook_list_scripts.py | $(MDDIR)/scripts
 	$(INSTALL_DATA) $< $@
 

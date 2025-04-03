@@ -340,4 +340,3 @@ not the environment variable.
 - [Introduction into temporal data processing](temporalintro.md)
 - [Database management](databaseintro.md)
 - [Projections and spatial transformations](projectionintro.md)
-- [Graphical User Interface](wxguiintro.md)

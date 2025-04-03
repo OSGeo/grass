@@ -179,6 +179,5 @@ Alternatively, GRASS 3D raster maps can be imported and exported from/to
 - [Introduction into image processing](imageryintro.md)
 - [Introduction into temporal data processing](temporalintro.md)
 - [Projections and spatial transformations](projectionintro.md)
-- [Graphical User Interface](wxguiintro.md)
 - [wxGUI 3D View Mode](wxGUI.nviz.md)
 - *[m.nviz.image](m.nviz.image.md)*

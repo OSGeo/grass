@@ -111,4 +111,3 @@ original MAPSET to the current MAPSET with [g.copy](g.copy.md).
 - [Introduction into image processing](imageryintro.md)
 - [Introduction into temporal data processing](temporalintro.md)
 - [Projections and spatial transformations](projectionintro.md)
-- [Graphical User Interface](wxguiintro.md)

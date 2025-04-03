@@ -80,4 +80,3 @@ A graphical user interface is provided by [wxGUI](wxGUI.md).
 - [Introduction into image processing](imageryintro.md)
 - [Introduction into temporal data processing](temporalintro.md)
 - [Database management](databaseintro.md)
-- [Graphical User Interface](wxguiintro.md)

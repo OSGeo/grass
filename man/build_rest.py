@@ -79,7 +79,6 @@ Quick Introduction
         Intro vector map processing and network analysis <vectorintro>
         Intro database management <databaseintro>
         Intro temporal data processing <temporalintro>
-        Intro Graphical User Interface <wxguiintro>
 
 Display/Graphical User Interfaces
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

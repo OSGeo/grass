@@ -25,6 +25,22 @@ from build import (
 
 CORE_TEXT = """\
 # Tools
+
+GRASS offers a comprehensive set of tools for geospatial processing, modeling,
+analysis, and visualization. These tools are categorized by data type,
+with prefixes indicating their respective categories. Use the table below to explore
+the main tool categories:
+
+| Prefix | Category                          | Description                        |
+|--------|-----------------------------------|------------------------------------|
+| `g.`   | [General](general.md)             | General GIS management tools       |
+| `r.`   | [Raster](raster.md)               | Raster data processing tools       |
+| `r3.`  | [3D raster](raster3d.md)          | 3D Raster data processing tools    |
+| `v.`   | [Vector](vector.md)               | Vector data processing tools       |
+| `i.`   | [Imagery](imagery.md)             | Imagery processing tools           |
+| `t.`   | [Temporal](temporal.md)           | Temporal data processing tools     |
+| `db.`  | [Database](database.md)           | Database management tools          |
+| `d.`   | [Display](display.md)             | Display and visualization tools    |
 """
 
 ADDONS_TEXT = """\
