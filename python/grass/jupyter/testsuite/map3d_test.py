@@ -139,7 +139,9 @@ class TestMap3D(TestCase):
         """Test saving of file"""
         grass_renderer = gj.Map3D()
         # Add a vector and a raster to the map
-        grass_renderer.render(elevation_map="elevation", color_map="elevation", perspective=20)
+        grass_renderer.render(
+            elevation_map="elevation", color_map="elevation", perspective=20
+        )
         custom_filename = "test_filename_save.png"
         grass_renderer.save(custom_filename)
         # Add files to self for cleanup later
