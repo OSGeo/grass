@@ -25,7 +25,7 @@ static char *get_file_path(void)
         G_fatal_error(_("Unable to find file: %s"), "stac/stac_api.json");
     }
     return path;
-};
+}
 
 /*!
   \brief Read the STAC API JSON file
@@ -87,7 +87,7 @@ char *G_stac_api_options(void)
 
     json_value_free(stac_json);
     return buf;
-};
+}
 
 /*!
   \brief Get the STAC API descriptions
