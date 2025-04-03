@@ -36,6 +36,10 @@ add_custom_command(
   POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E make_directory
           ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/proj
+  COMMAND ${CMAKE_COMMAND} -E make_directory
+          ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/stac
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/stac_api.json
+          ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/stac
   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/colors
           ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/colors
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/ellipse.table
@@ -73,8 +77,9 @@ install(
         projections
   DESTINATION ${GRASS_INSTALL_ETCDIR}/proj)
 install(FILES colors.desc renamed_options DESTINATION ${GRASS_INSTALL_ETCDIR})
-
+install(FILES stac_api.json DESTINATION ${GRASS_INSTALL_ETCDIR}/stac)
 target_include_directories(grass_gis PUBLIC ${ZLIB_INCLUDE_DIR})
+target_link_libraries(grass_gis PRIVATE grass_parson)
 
 if(UNIX)
   target_link_libraries(grass_gis PRIVATE ${LIBM})
