@@ -268,9 +268,6 @@ $(MDDIR)/source/keywords.md: mkdocs/keywords.md
 $(MDDIR)/source/development_intro.md: mkdocs/docs/development_intro.md
 	$(INSTALL_DATA) $< $@
 
-$(MDDIR)/source/jupyter_intro.md: mkdocs/docs/jupyter_intro.md
-	$(INSTALL_DATA) $< $@
-
 $(MDDIR)/source/python_intro.md: mkdocs/docs/python_intro.md
 	$(INSTALL_DATA) $< $@
 
@@ -305,11 +302,11 @@ $(MDDIR)/overrides/fragments/tags/default/listing.html: mkdocs/overrides/fragmen
 	$(INSTALL_DATA) $< $@
 
 build-mkdocs:
-	@cd $(MDDIR) ; SITE_NAME="GRASS GIS $(GRASS_VERSION_NUMBER) Reference Manual" \
-	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS GIS $(GRASS_VERSION_NUMBER) Reference Manual" \
+	@cd $(MDDIR) ; SITE_NAME="GRASS $(GRASS_VERSION_NUMBER) Reference Manual" \
+	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS $(GRASS_VERSION_NUMBER) Reference Manual" \
 	mkdocs build
 
 serve-mkdocs:
-	@cd $(MDDIR) ; SITE_NAME="GRASS GIS $(GRASS_VERSION_NUMBER) Reference Manual" \
-	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS GIS $(GRASS_VERSION_NUMBER) Reference Manual" \
+	@cd $(MDDIR) ; SITE_NAME="GRASS $(GRASS_VERSION_NUMBER) Reference Manual" \
+	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS $(GRASS_VERSION_NUMBER) Reference Manual" \
 	mkdocs serve
