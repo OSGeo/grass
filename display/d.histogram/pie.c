@@ -73,6 +73,7 @@ int pie(struct stat_list *dist_stats, /* list of distribution statistics */
     char txt[1024];
     char tic_name[80];
     DCELL dmin, dmax, range_dmin, range_dmax, dval;
+    dmin = 0.0;
 
     /* get coordinates of current screen window */
     D_get_src(&t, &b, &l, &r);
