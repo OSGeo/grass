@@ -290,6 +290,9 @@ int main(int argc, char *argv[])
         _("Default: degrees counter-clockwise from East, with flat = 0");
     flag.n->guisection = _("Settings");
 
+    G_option_required(parm.slope, parm.aspect, parm.pcurv, parm.tcurv, parm.dx,
+                      parm.dy, parm.dxx, parm.dyy, parm.dxy, NULL);
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
@@ -371,17 +374,6 @@ int main(int argc, char *argv[])
         perc = 1;
     else if (strcmp(slope_fmt, "degrees") == 0)
         deg = 1;
-
-    if (slope_name == NULL && aspect_name == NULL && pcurv_name == NULL &&
-        tcurv_name == NULL && dx_name == NULL && dy_name == NULL &&
-        dxx_name == NULL && dyy_name == NULL && dxy_name == NULL) {
-        G_fatal_error(
-            _("You must specify at least one of the parameters: "
-              "<%s>, <%s>, <%s>, <%s>, <%s>, <%s>, <%s>, <%s> or <%s>"),
-            parm.slope->key, parm.aspect->key, parm.pcurv->key, parm.tcurv->key,
-            parm.dx->key, parm.dy->key, parm.dxx->key, parm.dyy->key,
-            parm.dxy->key);
-    }
 
     G_get_window(&window);
 
