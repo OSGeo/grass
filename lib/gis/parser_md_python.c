@@ -92,8 +92,25 @@ void print_python_option(FILE *file, const struct Option *opt,
         break;
     }
     fprintf(file, "%s**%s** : ", indent, opt->key);
+    int tuple_items = G__option_num_tuple_items(opt);
     if (opt->multiple) {
-        fprintf(file, "%s, list[%s]", type, type);
+        if (tuple_items) {
+            fprintf(file, "list[tuple[%s", type);
+            for (int i = 1; i < tuple_items; i++) {
+                fprintf(file, ", %s", type);
+            }
+            fprintf(file, "]], list[%s], str", type);
+        }
+        else {
+            fprintf(file, "%s, list[%s]", type, type);
+        }
+    }
+    else if (tuple_items) {
+        fprintf(file, "tuple[%s", type);
+        for (int i = 1; i < tuple_items; i++) {
+            fprintf(file, ", %s", type);
+        }
+        fprintf(file, "], list[%s], str", type);
     }
     else {
         fprintf(file, "%s", type);
@@ -323,7 +340,9 @@ void G__md_print_python_short_version(FILE *file, const char *indent)
             }
             if (opt->answer) {
                 fprintf(file, "=");
-                if (opt->type == TYPE_INTEGER || opt->type == TYPE_DOUBLE) {
+                int tuple_items = G__option_num_tuple_items(opt);
+                if (!tuple_items &&
+                    (opt->type == TYPE_INTEGER || opt->type == TYPE_DOUBLE)) {
                     fprintf(file, "*");
                     G__md_print_escaped(file, opt->answer);
                     fprintf(file, "*");

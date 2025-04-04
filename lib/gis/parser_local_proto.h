@@ -63,6 +63,7 @@ void G__md_print_cli_long_version(FILE *file, const char *indent);
 void G__md_print_python_long_version(FILE *file, const char *indent);
 void G__md_print_escaped(FILE *f, const char *str);
 void G__md_print_escaped_for_options(FILE *f, const char *str);
+int G__option_num_tuple_items(const struct Option *opt);
 
 void G__usage_text(void);
 void G__script(void);

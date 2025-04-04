@@ -58,3 +58,37 @@ void G__md_print_escaped_for_options(FILE *f, const char *str)
 }
 
 #undef do_escape
+
+// This can eventually go to a file with functions related to Option,
+// but for now it is here until parser.c is refactored.
+/**
+ * \brief Get number of tuple items if option is a tuple
+ *
+ * Note that parser code generally does not consider tuples with only one
+ * item, so this function never returns 1.
+ *
+ * The number of items is determined by counting commas in the option key
+ * description.
+ *
+ * \param opt Option definition
+ * \return Number of items or zero if not a tuple
+ */
+int G__option_num_tuple_items(const struct Option *opt)
+{
+    // If empty, it cannot be considered a tuple.
+    if (!opt->key_desc)
+        return 0;
+
+    int n_items = 1;
+    const char *ptr;
+
+    for (ptr = opt->key_desc; *ptr != '\0'; ptr++)
+        if (*ptr == ',')
+            n_items++;
+
+    // Only one item is not considered a tuple.
+    if (n_items == 1)
+        return 0;
+    // Only two and more items are a tuple.
+    return n_items;
+}
