@@ -48,12 +48,22 @@ struct state {
 
 extern struct state *st;
 
+#define MD_NEWLINE "  "
+
 /* functions which are used by several parser functions in different files */
 
 void G__usage_xml(void);
 void G__usage_html(void);
 void G__usage_rest(void);
+
 void G__usage_markdown(void);
+void G__md_print_cli_short_version(FILE *file, const char *indent);
+void G__md_print_python_short_version(FILE *file, const char *indent);
+void G__md_print_cli_long_version(FILE *file, const char *indent);
+void G__md_print_python_long_version(FILE *file, const char *indent);
+void G__md_print_escaped(FILE *f, const char *str);
+void G__md_print_escaped_for_options(FILE *f, const char *str);
+
 void G__usage_text(void);
 void G__script(void);
 char *G__json(void);
