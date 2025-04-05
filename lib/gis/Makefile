@@ -2,7 +2,7 @@ MODULE_TOPDIR = ../..
 
 LIB = GIS
 
-LIBES = $(OPENMP_LIBPATH) $(OPENMP_LIB)
+LIBES = $(OPENMP_LIBPATH) $(OPENMP_LIB) $(PARSONLIB)
 EXTRA_INC = $(ZLIBINCPATH) $(BZIP2INCPATH) $(ZSTDINCPATH) $(PTHREADINCPATH) $(REGEXINCPATH) $(OPENMP_INCPATH)
 EXTRA_CFLAGS = $(OPENMP_CFLAGS) -DGRASS_VERSION_DATE=\"'$(GRASS_VERSION_DATE)'\"
 
@@ -16,17 +16,26 @@ MOD_OBJS := $(filter-out fmode.o,$(AUTO_OBJS))
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
+STACSRC := stac_api.json
+STACFILES := $(patsubst %,$(ETC)/stac/%,$(STACSRC))
+
 PROJFILES := $(patsubst %,$(ETC)/proj/%,$(PROJSRC))
 
 COLORSRC := $(filter-out colors/CVS,$(wildcard colors/[abcdefghijklmnopqrstuvwxyz]*))
 COLORFILES := $(patsubst colors/%,$(ETC)/colors/%,$(COLORSRC))
 
-default: lib $(FMODE_OBJ) $(PROJFILES) $(COLORFILES) $(ETC)/colors.desc $(ETC)/renamed_options
+default: lib $(FMODE_OBJ) $(PROJFILES) $(COLORFILES) $(STACFILES) $(ETC)/colors.desc $(ETC)/renamed_options
 
 ifdef MINGW
 $(FMODE_OBJ): $(OBJDIR)/fmode.o
 	$(INSTALL) $< $@
 endif
+
+$(ETC)/stac:
+	$(MKDIR) $< $@
+
+$(ETC)/stac/%: % | $(ETC)/stac
+	$(INSTALL_DATA) $< $@
 
 $(ETC)/colors:
 	$(MKDIR) $@

@@ -134,6 +134,9 @@
    - G_OPT_T_TYPE
    - G_OPT_T_WHERE
 
+   - STAC API
+   - G_OPT_STAC_API
+
    \param opt type of Option struct to create specified by STD_OPT enum
 
    \return pointer to an Option struct
@@ -982,6 +985,18 @@ struct Option *G_define_standard_option(int opt)
         Opt->options = "plain,json";
         Opt->descriptions = _("plain;Plain text output;"
                               "json;JSON (JavaScript Object Notation);");
+        break;
+
+    case G_OPT_STAC_API:
+        Opt->key = "stac_api";
+        Opt->key_desc = "url";
+        Opt->type = TYPE_STRING;
+        Opt->required = NO;
+        Opt->multiple = NO;
+        Opt->options = G_stac_api_options();
+        Opt->description = _(
+            "URL of the STAC API endpoint (e.g. https://stac-api.example.com)");
+        // Opt->descriptions = G_stac_api_descriptions();
         break;
     }
 
