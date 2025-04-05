@@ -139,7 +139,7 @@ jobs:
         run: |
           echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
 
-      - uses: rui314/setup-mold@f80524ca6eeaa76759b57fb78ddce5d87a20c720 # v1
+      - uses: rui314/setup-mold@e16410e7f8d9e167b74ad5697a9089a35126eb50 # v1
       - name: Build
         run: .github/workflows/build_${{ matrix.os }}.sh $HOME/install
 
