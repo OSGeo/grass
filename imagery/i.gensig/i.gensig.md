@@ -21,14 +21,8 @@ member of the imagery group. Signatures generated for one scene are
 suitable for classification of other scenes as long as they consist of
 same raster bands (semantic labels match).
 
-## OPTIONS
-
-### Parameters
-
-**trainingmap=***name*  
-ground truth training map
-
-This map must be prepared by the user in advance using vector or raster
+Input **trainingmap** map must be prepared by the user in advance
+using vector or raster
 digitizer. Of course other methods could be devised by the user for
 creating this training map - *i.gensig* makes no assumption about the
 origin of this map layer. It simply creates signatures for the classes
@@ -37,28 +31,19 @@ specified in other options - see below). The *[wxGUI vector
 digitizer](wxGUI.vdigit.md)* can be used for interactively creating the
 training map.
 
-**group=***name*  
-imagery group
-
-This is the name of the group that contains the band files which
+Input **group** is the name of the group that contains the band files which
 comprise the image to be analyzed. The *[i.group](i.group.md)* command
 is used to construct groups of raster layers which comprise an image.
 
-<span id="subgroup"></span>**subgroup=***name*  
-subgroup containing image files
-
-This names the subgroup within the group that selects a subset of the
+Input **subgroup** names the subgroup within the group that selects a subset of the
 bands to be analyzed. The *[i.group](i.group.md)* command is also used
 to prepare this subgroup. The subgroup mechanism allows the user to
 select a subset of all the band files that form an image.
 
-**signaturefile=***name*  
-resultant signature file
-
-This is the resultant signature file (containing the means and
+Input **signaturefile** is the resultant signature file (containing the means and
 covariance matrices) for each class in the training map that is
-associated with the band files in the subgroup select (see
-[above](#subgroup)). Resultant singature file can be used with any other
+associated with the band files in the subgroup select.
+Resultant signature file can be used with any other
 imagery group as long as semantic labels match.
 
 ## NOTES

@@ -40,8 +40,8 @@ point per cell is counted is sometimes called 2D (two dimensional)
 histogram because a histogram is used in univariate statistics (in one
 dimension) to count the number samples falling into a given bin.
 
-![](r_in_lidar_binning_count.png) ![](r_in_lidar_binning_mean.png)
-
+![r_in_lidar_binning_count](r_in_lidar_binning_count.png)
+![r_in_lidar_binning_mean](r_in_lidar_binning_mean.png)  
 *Figure: The binning on left was used to count number of points per
 (sometimes also called 2D histogram). The numbers in cells are examples
 of counts, the rest is represented by the color. The binning on right
@@ -116,7 +116,7 @@ median
 This computes the median of point values for each cell
 
 percentile  
-p<sup>*th*</sup> (nth) percentile of points in cell
+p-*th* (nth) percentile of points in cell
 
 skewness  
 This is a skewness of point values in cell
@@ -156,7 +156,7 @@ module. The **zrange** parameter is especially powerful when used
 together with the **base_raster** parameter. The **zrange** is applied
 to Z values after the **base_raster** reduction.
 
-![](r_in_lidar_zrange.png)
+![r_in_lidar_zrange](r_in_lidar_zrange.png)
 
 *Figure: This is the principle of zrange filter. Points with the Z
 coordinate value below the lower value in the range (here 180) are
@@ -206,7 +206,7 @@ data often come with precomputed DEMs (quality should be checked in this
 case) and there is often a DEM available for a given area (fit with the
 point cloud, especially vertical, and resolution should be checked).
 
-![](r_in_lidar_base_raster.png)
+![r_in_lidar_base_raster](r_in_lidar_base_raster.png)
 
 *Figure: This is a profile of base raster (in orange) representing
 digital elevation model and selected points, e.g. first return, from
@@ -430,7 +430,7 @@ r.in.lidar input="Serpent Mound Model LAS Data.laz" \
            output=Serpent_Mound_Model_LAS_Data method=mean
 ```
 
-![](r_in_lidar.png)  
+![Figure: Elevation for the whole area of Serpent Mound dataset](r_in_lidar.png)  
 *Figure: Elevation for the whole area of Serpent Mound dataset*
 
 ### Height above ground

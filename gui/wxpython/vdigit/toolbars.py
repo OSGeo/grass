@@ -1060,7 +1060,7 @@ class VDigitToolbar(BaseToolbar):
                 style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
             )
             if dlg.ShowModal() != wx.ID_YES:
-                return
+                return None
             RunCommand("v.build", map=mapLayer.GetName())
 
         # deactivate layer

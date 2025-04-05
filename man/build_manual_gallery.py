@@ -19,6 +19,7 @@ from pathlib import Path
 import fnmatch
 import re
 from typing import TYPE_CHECKING
+import operator
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -89,8 +90,21 @@ header_graphical_index_tmpl = """\
 
 <a href="index.html"><img src="grass_logo.png" alt="GRASS logo"></a>
 <hr class="header">
-<h2>GRASS GIS manual gallery</h2>
+<h2>GRASS manual gallery</h2>
 """
+
+# The recommeded width from style guide.
+MIN_IMAGE_WIDTH = 600
+
+
+def image_width(filename):
+    """Get image size in pixels (width times height)"""
+    try:
+        from PIL import Image
+    except ImportError:
+        return None
+
+    return Image.open(filename).size[0]  # First element is width.
 
 
 def img_in_file(filename: str | os.PathLike[str], imagename: str, ext: str) -> bool:
@@ -100,7 +114,7 @@ def img_in_file(filename: str | os.PathLike[str], imagename: str, ext: str) -> b
         pattern = re.compile("<img .*src=.{0}.*>".format(imagename))
     else:
         # expecting markdown
-        pattern = re.compile(r"!\[(.*?)\]\({0}\)".format(imagename))
+        pattern = re.compile(r"\]\({0}\)".format(imagename))
     return bool(re.search(pattern, Path(filename).read_text()))
 
 
@@ -167,21 +181,26 @@ def main(ext):
         if filename in img_blacklist:
             continue
         if file_matches(filename, img_patterns):
+            width = image_width(Path(man_dir, filename))
+            if width is not None and width < MIN_IMAGE_WIDTH:
+                # Skip small images.
+                continue
             for man_filename in man_files:
                 if img_in_file(Path(man_dir, man_filename), filename, ext):
                     img_files[filename] = man_filename
                     # for now suppose one image per manual filename
+                    continue
 
     with open(Path(man_dir, output_name), "w") as output:
-        output.write(
-            header1_tmpl.substitute(
-                title="GRASS GIS %s Reference Manual: Manual gallery" % grass_version
-            )
-        )
+        if ext == "html":
+            title = "GRASS %s Reference Manual: Manual gallery" % grass_version
+        else:
+            title = "Manual gallery"
+        output.write(header1_tmpl.substitute(title=title))
         if ext == "html":
             output.write(header_graphical_index_tmpl)
             output.write('<ul class="img-list">\n')
-        for image, filename in sorted(img_files.items()):
+        for image, filename in sorted(img_files.items(), key=operator.itemgetter(1)):
             name = get_module_name(filename, ext)
             title = title_from_names(name, image)
             if ext == "html":
@@ -194,10 +213,12 @@ def main(ext):
                     "</li>\n".format(fn=filename, img=image, title=title, name=name)
                 )
             else:
-                output.write(f'[![{name}]({image} "{title}")]({filename})\n')
+                output.write(
+                    f'[![{name}]({image} "{title}")]({filename})  \n*{title}*\n\n'
+                )
         if ext == "html":
             output.write("</ul>")
-        write_footer(output, f"index.{ext}", year)
+        write_footer(output, f"index.{ext}", year, template=ext)
 
     return img_files
 

@@ -1,0 +1,183 @@
+---
+name: Documentation
+
+# Builds Markdown documentation for core and addons.
+
+on:
+  push:
+    branches:
+      - main
+      - releasebranch_*
+  pull_request:
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  ubuntu:
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+      cancel-in-progress: true
+
+    runs-on: ubuntu-22.04
+    env:
+      PYTHONWARNINGS: always
+      # renovate: datasource=python-version depName=python
+      PYTHON_VERSION: "3.13"
+
+    steps:
+      - name: Checkout core
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          repository: OSGeo/grass
+          path: grass
+          fetch-depth: 0
+
+      - name: Get dependencies
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y wget git gawk findutils
+          xargs -a <(awk '! /^ *(#|$)/' "grass/.github/workflows/apt.txt") -r -- \
+              sudo apt-get install -y --no-install-recommends --no-install-suggests
+
+      - name: Set up Python
+        uses: actions/setup-python@8d9ed9ac5c53483de85588cdf95a591a75ab9f55 # v5.5.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+
+      - name: Set version variables
+        run: |
+          cd grass
+          eval $(./utils/update_version.py status --bash)
+          echo "MAJOR=$MAJOR" >> $GITHUB_ENV
+          echo "MINOR=$MINOR" >> $GITHUB_ENV
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "YEAR=$YEAR" >> $GITHUB_ENV
+
+      - name: Checkout addons
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          repository: OSGeo/grass-addons
+          ref: grass${{ env.MAJOR }}
+          path: grass-addons
+          fetch-depth: 0
+
+      - name: Install Python dependencies
+        # We install both core and addon dependencies, but we don't install any
+        # dependencies from the extra list in addons because we don't actually
+        # run them (and they should be lazy-imported).
+        run: |
+          pip install -r grass/.github/workflows/python_requirements.txt
+          pip install -r grass-addons/.github/workflows/requirements.txt
+
+      - name: Create installation directory
+        run: |
+          mkdir "$HOME/install"
+
+      - name: Set number of cores for compilation
+        run: |
+          echo "MAKEFLAGS=-j$(nproc)" >> "$GITHUB_ENV"
+
+      - name: Set LD_LIBRARY_PATH for compilation
+        run: |
+          echo "LD_LIBRARY_PATH=$HOME/install/lib" >> "$GITHUB_ENV"
+
+      - name: Build core
+        run: |
+          cd grass
+          ../grass/.github/workflows/build_ubuntu-22.04.sh "$HOME/install"
+
+      - name: Add the bin directory to PATH
+        run: |
+          echo "$HOME/install/bin" >> "$GITHUB_PATH"
+
+      - name: Print installed versions
+        if: always()
+        run: ./grass/.github/workflows/print_versions.sh
+
+      - name: Test executing of the grass command
+        run: ./grass/.github/workflows/test_simple.sh
+
+      - name: Compile addons
+        run: |
+          ./grass-addons/utils/cronjobs_osgeo_lxd/compile_addons_git.sh \
+            "$MAJOR" \
+            "$MINOR" \
+            $(pwd)/grass-addons/src \
+            $(grass --config path) \
+            $(pwd)/addons-build-dir \
+            grass
+
+      - name: Get target path for Markdown files
+        run: |
+          echo MKDOCS_DIR="$(grass --config path)/docs/mkdocs" >> "$GITHUB_ENV"
+
+      - name: Move from build to target directory
+        run: |
+          mkdir "$MKDOCS_DIR/source/addons"
+          mv -v addons-build-dir/docs/md/source/* "$MKDOCS_DIR/source/addons"
+
+      - name: Build index
+        run: |
+          export ARCH="$(grass --config arch)"
+          export ARCH_DISTDIR="$(grass --config path)"
+          export VERSION_NUMBER="$VERSION"
+          grass --tmp-project XY --exec \
+            python grass/man/build_full_index.py md index "$MKDOCS_DIR/source/addons" addons
+
+      - name: Copy shared files to addons
+        run: |
+          cd "$MKDOCS_DIR/source"
+          # This should match directories with color tables and other files
+          # linked from the pages.
+          for name in $(ls -1d */ | grep -vE "^(addons|libpython)/$"); do
+            cp -rv $name addons
+          done
+
+      - name: Get mkdocs
+        run: |
+          pip install -r "grass/man/mkdocs/requirements.txt"
+
+      - name: Run mkdocs
+        run: |
+          cd grass
+          eval $(./utils/update_version.py status --bash)
+          cd ..
+          export SITE_NAME="GRASS GIS $VERSION Reference Manual"
+          export COPYRIGHT="&copy; 2003-$YEAR GRASS Development Team, GRASS GIS $VERSION Reference Manual"
+          cd $MKDOCS_DIR
+          mkdocs build
+
+      - name: Build Sphinx documentation
+        run: |
+          pip install sphinx sphinx-sitemap
+          cd grass
+          make sphinxdoclib
+          ARCH="$(grass --config arch)"
+          mv -v dist.$ARCH/docs/html/libpython $MKDOCS_DIR/site
+
+      - name: Merge Sphinx and MkDocs Sitemaps
+        run: |
+          cd grass
+          python utils/merge_sitemaps.py \
+            --mkdocs-sitemap "$MKDOCS_DIR/site/sitemap.xml" \
+            --sphinx-sitemap "$MKDOCS_DIR/site/libpython/sitemap.xml" \
+            --output "$MKDOCS_DIR/site/sitemap.xml" \
+            --version $VERSION -o
+
+      - name: Make logs available
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: grass-addon-build-logs
+          if-no-files-found: error
+          path: addons-build-dir/logs
+          retention-days: 3
+
+      - name: Make the result available
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: mkdocs-site
+          if-no-files-found: error
+          path: ${{ env.MKDOCS_DIR }}/site
+          retention-days: 3

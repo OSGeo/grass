@@ -1,12 +1,12 @@
 ## DESCRIPTION
 
 *r.category* prints the category values and labels for the raster map
-layer specified by **map=***name* to standard output. You can also use
+layer specified by **map**=*name* to standard output. You can also use
 it to set category labels for a raster map.
 
 The user can specify all needed parameters on the command line, and run
 the program non-interactively. If the user does not specify any
-categories (e.g., using the optional **cats=***range*\[,*range*,...\]
+categories (e.g., using the optional **cats**=*range*\[,*range*,...\]
 argument), then all the category values and labels for the named raster
 map layer that occur in the map are printed. The entire *map* is read
 using *[r.describe](r.describe.md)*, to determine which categories occur
@@ -16,7 +16,7 @@ single category values, or as ranges of values. The user may also
 (optionally) specify that a field separator other than a space or tab be
 used to separate the category value from its corresponding category
 label in the output, by using the
-**separator=***character*\|*space*\|*tab* option (see example below). If
+**separator**=*character*\|*space*\|*tab* option (see example below). If
 no field separator is specified by the user, a tab is used to separate
 these fields in the output, by default.
 
@@ -178,7 +178,7 @@ r.category diseasemap separator=":" rules=- << EOF
 EOF
 ```
 
-This sets the categoy values 1 and 2 to respective text labels.
+This sets the category values 1 and 2 to respective text labels.
 Alternatively, the rules can be stored in an ASCII text file and loaded
 via the *rules* parameter.
 

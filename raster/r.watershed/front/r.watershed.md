@@ -151,9 +151,9 @@ from article entitled *Revised Slope Steepness Factor for the Universal
 Soil Loss Equation* (McCool et al. 1987). Since the S factor is a small
 number (usually less than one), the GRASS output map is of type DCELL.
 
-### A<sup>T</sup> least-cost search algorithm
+### A^T least-cost search algorithm
 
-*r.watershed* uses an A<sup>T</sup> least-cost search algorithm (see
+*r.watershed* uses an A^T least-cost search algorithm (see
 REFERENCES section) designed to minimize the impact of DEM data errors.
 Compared to *[r.terraflow](r.terraflow.md)*, this algorithm provides
 more accurate results in areas of low slope as well as DEMs constructed
@@ -182,7 +182,7 @@ to those obtained when running *[r.cost](r.cost.md)* and
 direction (SFD, D8) and multiple flow direction (MFD). With MFD, water
 flow is distributed to all neighbouring cells with lower elevation,
 using slope towards neighbouring cells as a weighing factor for
-proportional distribution. The A<sup>T</sup> least-cost path is always
+proportional distribution. The A^T least-cost path is always
 included. As a result, depressions and obstacles are traversed with a
 graceful flow convergence before the overflow. The convergence factor
 causes flow accumulation to converge more strongly with higher values.
@@ -221,9 +221,9 @@ as an alternative, although disk space requirements of
 
 ### Large regions with many cells
 
-The upper limit of the *ram* version is 2 billion (2<sup>31</sup> - 1)
+The upper limit of the *ram* version is 2 billion (2^31 - 1)
 cells, whereas the upper limit for the *seg* version is 9
-billion-billion (2<sup>63</sup> - 1 =
+billion-billion (2^63 - 1 =
 [9.223372e+18](https://en.wikipedia.org/wiki/9223372036854775807))
 cells.  
 In some situations, the region size (number of cells) may be too large
@@ -418,7 +418,7 @@ Display output in a nice way
 
 ## REFERENCES
 
-- Ehlschlaeger C. (1989). *Using the A<sup>T</sup> Search Algorithm to
+- Ehlschlaeger C. (1989). *Using the A^T Search Algorithm to
   Develop Hydrologic Models from Digital Elevation Data*, **Proceedings
   of International Geographic Information Systems (IGIS) Symposium
   '89**, pp 275-281 (Baltimore, MD, 18-19 March 1989).  

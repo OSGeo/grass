@@ -1,6 +1,10 @@
-## KEYWORDS
+---
+description: wxGUI Toolboxes
+index: wxGUI
+keywords: [general, GUI]
+---
 
-[general](general.md), [GUI](topic_GUI.md)
+# wxGUI Toolboxes
 
 ## DESCRIPTION
 

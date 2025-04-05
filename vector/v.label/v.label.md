@@ -15,10 +15,6 @@ A description of the labels file follows.
 The file is located in `$MAPSET/paint/labels/`. The file is a plain-text
 ASCII file containing the following fields:
 
-#### Caution: The following information may be incomplete, out of date, and wrong
-
-The label information that must be provided in the *labels* file is:
-
 **TEXT**:  
 Lines in multiple line labels will appear one above the next. More than
 one line of text can be specified by notating the end of a line with a
@@ -79,13 +75,14 @@ vertical height of the letters in meters on the ground. Thus text will
 grow or shrink depending on the scale at which the map is drawn.
 Alternatively *fontsize* can set the font size in normal font points.
 
-<span id="textcolor">**TEXT COLOR**</span>:  
+**TEXT COLOR**:  
 This selects the text color. If unspecified, the label's text is drawn
 in *black*, by default. The text color can be specified in one of
 several ways:
 
-1. By color name:  
-    `aqua black blue brown cyan gray green grey indigo magenta orange purple red violet white yellow`
+1. By color name: *aqua*, *black*, *blue*, *brown*, *cyan*, *gray*,
+   *green*, *grey*, *indigo*, *magenta*, *orange*, *purple*, *red*,
+   *violet*, *white*, *yellow*
 2. As red, green, blue component values. (0-255)  
     for example: `128:100:200`
 3. Specify "`none`" to suppress the lettering.
@@ -99,8 +96,8 @@ The text can be highlighted in another color so that it appears to be in
 two colors. The text is drawn first in this color at a wider line width,
 and then redrawn in the text color at the regular line width. No
 highlight color ("`none`") is used by default, if unspecified by the
-user. To specify use of no highlight color, specify "`none`". (See [TEXT
-COLOR](#textcolor) above for a list of permissible color names.)
+user. To specify use of no highlight color, specify "`none`". (See TEXT
+COLOR above for a list of permissible color names.)
 
 **HIGHLIGHT WIDTH**:  
 Specifies how far from the text lines (in units of pixels) the highlight
@@ -110,13 +107,13 @@ highlight color).
 **BACKGROUND COLOR**:  
 Text may be boxed in a solid color by specifying a background color.
 Specify "`none`" for no background. The default background color
-setting, if unspecified by the user, is *white*. (See [TEXT
-COLOR](#textcolor) above for a list of permissible color names.)
+setting, if unspecified by the user, is *white*. (See TEXT
+COLOR above for a list of permissible color names.)
 
 **BORDER COLOR**:  
 Select a color for the border around the background. Specify "`none`" to
 suppress the border. The default border color used, if unspecified, is
-*black*. (See [TEXT COLOR](#textcolor) above for a list of permissible
+*black*. (See TEXT COLOR above for a list of permissible
 color names.)
 
 **OPAQUE TO VECTORS**:  

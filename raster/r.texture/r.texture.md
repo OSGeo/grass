@@ -39,7 +39,7 @@ species. The usefulness and use of texture is highly dependent on the
 resolution of satellite imagery and on the scale of the human
 intervention or the phenomenon that created the texture (also see the
 discussion of scale dependency below). The user should observe the
-phenomenon visually in order to determine an adequat setting of the
+phenomenon visually in order to determine an adequate setting of the
 *size* parameter.
 
 The output of *r.texture* can constitute very useful additional
@@ -250,7 +250,7 @@ direction, except for those areas where there are three columns of equal
 values (as size=3). The overlaid grid highlights that the texture
 measures output maps are cropped at the margins.
 
-<img src="r_texture_directions_example.png" data-border="1" />  
+![IDM textures according to direction](r_texture_directions_example.png)  
 *IDM textures according to direction*
 
 ## REFERENCES

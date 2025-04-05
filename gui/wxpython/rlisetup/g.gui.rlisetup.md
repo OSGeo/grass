@@ -1,3 +1,10 @@
+---
+description: wxGUI RLi Setup
+index: topic_GUI|GUI
+---
+
+# wxGUI RLi Setup
+
 ## DESCRIPTION
 
 The **g.gui.rlisetup** is a *[wxGUI](wxGUI.md)* component which allows
@@ -35,8 +42,6 @@ Definition of region for analysis:
 ### Usage details
 
 The startup window shows your configuration files, you can:
-
-**TODO: description below needs further updates**
 
 1. ***View/Edit*** (Load a file) from the shown list: the configuration
     is shown in a small text editor window. Configuration files are
@@ -178,7 +183,7 @@ Select type of shape:
 3\. Save settings: click on button  
 (4.) Close
 
-Now an anaysis can be performed using one of the analytical modules,
+Now an analysis can be performed using one of the analytical modules,
 e.g.
 
 ```sh
@@ -211,7 +216,7 @@ Example for a whole region analysis, the output is a text file: Click on
 3\. Save settings: click on button  
 (4.) Close
 
-Now an anaysis can be performed using one of the analytical modules,
+Now an analysis can be performed using one of the analytical modules,
 e.g.
 
 ```sh

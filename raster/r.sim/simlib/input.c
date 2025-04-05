@@ -1,6 +1,5 @@
 /* input.c (simlib), 20.nov.2002, JH */
 
-#include "simlib.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -8,8 +7,8 @@
 #include <grass/glocale.h>
 #include <grass/linkm.h>
 #include <grass/gmath.h>
+#include <grass/raster.h>
 #include <grass/simlib.h>
-#include <grass/waterglobs.h>
 
 /* Local prototypes for raster map reading and array allocation */
 static float **read_float_raster_map(int rows, int cols, char *name,
@@ -24,136 +23,50 @@ static void copy_matrix_undef_double_to_float_values(int rows, int cols,
 static void copy_matrix_undef_float_values(int rows, int cols, float **source,
                                            float **target);
 
-/*!
- * \brief Initialize WaterParams structure.
- */
-void WaterParams_init(struct WaterParams *wp)
-{
-    /* this is little bit lengthy and perhaps error-prone
-     * but it simplifies initialization since then there is no
-     * difference in between initialization in water and sediment
-     * for the variables which are not used and would have been
-     * initialized if they were just global variables */
-
-    wp->rain_val = 0;
-    wp->manin_val = 0;
-    wp->infil_val = 0;
-
-    wp->elevin = NULL;
-    wp->dxin = NULL;
-    wp->dyin = NULL;
-    wp->rain = NULL;
-    wp->infil = NULL;
-    wp->traps = NULL;
-    wp->manin = NULL;
-    wp->depth = NULL;
-    wp->disch = NULL;
-    wp->err = NULL;
-    wp->outwalk = NULL;
-    wp->observation = NULL;
-    wp->logfile = NULL;
-    wp->mapset = NULL;
-    wp->tserie = NULL;
-
-    wp->wdepth = NULL;
-    wp->detin = NULL;
-    wp->tranin = NULL;
-    wp->tauin = NULL;
-    wp->tc = NULL;
-    wp->et = NULL;
-    wp->conc = NULL;
-    wp->flux = NULL;
-    wp->erdep = NULL;
-
-    wp->rainval = NULL;
-    wp->maninval = NULL;
-    wp->infilval = NULL;
-}
-
-/*!
- * \brief Initialize global variables in the library.
- */
-void init_library_globals(struct WaterParams *wp)
-{
-    /* this is little bit lengthy and perhaps error-prone
-     * but it separates library from its interface */
-
-    rain_val = wp->rain_val;
-    manin_val = wp->manin_val;
-    infil_val = wp->infil_val;
-
-    elevin = wp->elevin;
-    dxin = wp->dxin;
-    dyin = wp->dyin;
-    rain = wp->rain;
-    infil = wp->infil;
-    traps = wp->traps;
-    manin = wp->manin;
-    depth = wp->depth;
-    disch = wp->disch;
-    err = wp->err;
-    outwalk = wp->outwalk;
-    observation = wp->observation;
-    logfile = wp->logfile;
-    mapset = wp->mapset;
-    tserie = wp->tserie;
-
-    wdepth = wp->wdepth;
-    detin = wp->detin;
-    tranin = wp->tranin;
-    tauin = wp->tauin;
-    tc = wp->tc;
-    et = wp->et;
-    conc = wp->conc;
-    flux = wp->flux;
-    erdep = wp->erdep;
-
-    rainval = wp->rainval;
-    maninval = wp->maninval;
-    infilval = wp->infilval;
-}
-
 /* we do the allocation inside because we anyway need to set the variables */
 
-void alloc_grids_water(const Geometry *geometry)
+void alloc_grids_water(const Geometry *geometry, const Outputs *outputs,
+                       Grids *grids)
 {
     /* memory allocation for output grids */
     G_debug(1, "beginning memory allocation for output grids");
 
-    gama = G_alloc_matrix(geometry->my, geometry->mx);
-    if (err != NULL)
-        gammas = G_alloc_matrix(geometry->my, geometry->mx);
-    dif = G_alloc_fmatrix(geometry->my, geometry->mx);
+    grids->gama = G_alloc_matrix(geometry->my, geometry->mx);
+    if (outputs->err != NULL)
+        grids->gammas = G_alloc_matrix(geometry->my, geometry->mx);
+    grids->dif = G_alloc_fmatrix(geometry->my, geometry->mx);
 }
 
-void alloc_grids_sediment(const Geometry *geometry)
+void alloc_grids_sediment(const Geometry *geometry, const Outputs *outputs,
+                          Grids *grids)
 {
     /* mandatory for si,sigma */
 
-    si = G_alloc_matrix(geometry->my, geometry->mx);
-    sigma = G_alloc_matrix(geometry->my, geometry->mx);
+    grids->si = G_alloc_matrix(geometry->my, geometry->mx);
+    grids->sigma = G_alloc_matrix(geometry->my, geometry->mx);
 
     /* memory allocation for output grids */
 
-    dif = G_alloc_fmatrix(geometry->my, geometry->mx);
-    if (erdep != NULL || et != NULL)
-        er = G_alloc_fmatrix(geometry->my, geometry->mx);
+    grids->dif = G_alloc_fmatrix(geometry->my, geometry->mx);
+    if (outputs->erdep != NULL || outputs->et != NULL)
+        grids->er = G_alloc_fmatrix(geometry->my, geometry->mx);
 }
 
-void init_grids_sediment(const Setup *setup, const Geometry *geometry)
+void init_grids_sediment(const Setup *setup, const Geometry *geometry,
+                         const Outputs *outputs, Grids *grids)
 {
     /* this should be fulfilled for sediment but not water */
-    if (et != NULL)
-        erod(si, setup, geometry);
+    if (outputs->et != NULL)
+        erod(grids->si, setup, geometry, grids);
 }
 
-void alloc_walkers(int max_walkers, Simulation *sim)
+void alloc_walkers(int max_walkers, Simulation *sim, const Outputs *outputs)
 {
     G_debug(1, "beginning memory allocation for walkers");
 
-    w = (struct point3D *)G_calloc(max_walkers, sizeof(struct point3D));
-    vavg = (struct point2D *)G_calloc(max_walkers, sizeof(struct point2D));
-    if (outwalk != NULL)
+    sim->w = (struct point3D *)G_calloc(max_walkers, sizeof(struct point3D));
+    sim->vavg = (struct point2D *)G_calloc(max_walkers, sizeof(struct point2D));
+    if (outputs->outwalk != NULL)
         sim->stack =
             (struct point3D *)G_calloc(max_walkers, sizeof(struct point3D));
 }
@@ -170,7 +83,8 @@ void alloc_walkers(int max_walkers, Simulation *sim)
 
 /* ************************************************************************* */
 /* Read all input maps and input values into memory ************************ */
-int input_data(int rows, int cols, Simulation *sim)
+int input_data(int rows, int cols, Simulation *sim, const Inputs *inputs,
+               const Outputs *outputs, Grids *grids)
 {
     int max_walkers;
     double unitconv = 0.000000278; /* mm/hr to m/s */
@@ -179,20 +93,21 @@ int input_data(int rows, int cols, Simulation *sim)
     G_debug(1, "Reading input data");
 
     /* Elevation and gradients are mandatory */
-    zz = read_float_raster_map(rows, cols, elevin, 1.0);
-    v1 = read_double_raster_map(rows, cols, dxin, 1.0);
-    v2 = read_double_raster_map(rows, cols, dyin, 1.0);
+    grids->zz = read_float_raster_map(rows, cols, inputs->elevin, 1.0);
+    grids->v1 = read_double_raster_map(rows, cols, inputs->dxin, 1.0);
+    grids->v2 = read_double_raster_map(rows, cols, inputs->dyin, 1.0);
 
     /* Update elevation map */
-    copy_matrix_undef_double_to_float_values(rows, cols, v1, zz);
-    copy_matrix_undef_double_to_float_values(rows, cols, v2, zz);
+    copy_matrix_undef_double_to_float_values(rows, cols, grids->v1, grids->zz);
+    copy_matrix_undef_double_to_float_values(rows, cols, grids->v2, grids->zz);
 
     /* Manning surface roughnes: read map or use a single value */
-    if (manin != NULL) {
-        cchez = read_float_raster_map(rows, cols, manin, 1.0);
+    if (inputs->manin != NULL) {
+        grids->cchez = read_float_raster_map(rows, cols, inputs->manin, 1.0);
     }
-    else if (manin_val >= 0.0) { /* If no value set its set to -999.99 */
-        cchez = create_float_matrix(rows, cols, manin_val);
+    else if (inputs->manin_val >=
+             0.0) { /* If no value set its set to -999.99 */
+        grids->cchez = create_float_matrix(rows, cols, inputs->manin_val);
     }
     else {
         G_fatal_error(_("Manning's n raster map not found and manin_val "
@@ -200,64 +115,66 @@ int input_data(int rows, int cols, Simulation *sim)
     }
 
     /* Rain: read rain map or use a single value for all cells */
-    if (rain != NULL) {
-        si = read_double_raster_map(rows, cols, rain, unitconv);
+    if (inputs->rain != NULL) {
+        grids->si = read_double_raster_map(rows, cols, inputs->rain, unitconv);
     }
-    else if (rain_val >= 0.0) { /* If no value set its set to -999.99 */
-        si = create_double_matrix(rows, cols, rain_val * unitconv);
+    else if (inputs->rain_val >= 0.0) { /* If no value set its set to -999.99 */
+        grids->si =
+            create_double_matrix(rows, cols, inputs->rain_val * unitconv);
     }
     else {
-        si = create_double_matrix(rows, cols, (double)UNDEF);
+        grids->si = create_double_matrix(rows, cols, (double)UNDEF);
     }
 
     /* Update elevation map */
-    copy_matrix_undef_double_to_float_values(rows, cols, si, zz);
+    copy_matrix_undef_double_to_float_values(rows, cols, grids->si, grids->zz);
 
     /* Infiltration: read map or use a single value */
-    if (infil != NULL) {
-        inf = read_double_raster_map(rows, cols, infil, unitconv);
+    if (inputs->infil != NULL) {
+        grids->inf =
+            read_double_raster_map(rows, cols, inputs->infil, unitconv);
     }
-    else if (infil_val >= 0.0) { /* If no value set its set to -999.99 */
-        inf = create_double_matrix(rows, cols, infil_val * unitconv);
+    else if (inputs->infil_val >=
+             0.0) { /* If no value set its set to -999.99 */
+        grids->inf =
+            create_double_matrix(rows, cols, inputs->infil_val * unitconv);
     }
     else {
-        inf = create_double_matrix(rows, cols, (double)UNDEF);
+        grids->inf = create_double_matrix(rows, cols, (double)UNDEF);
     }
 
     /* Traps */
-    if (traps != NULL)
-        trap = read_float_raster_map(rows, cols, traps, 1.0);
+    if (inputs->traps != NULL)
+        grids->trap = read_float_raster_map(rows, cols, inputs->traps, 1.0);
     else
-        trap = create_float_matrix(rows, cols, (double)UNDEF);
+        grids->trap = create_float_matrix(rows, cols, (double)UNDEF);
 
-    if (detin != NULL) {
-        dc = read_float_raster_map(rows, cols, detin, 1.0);
-        copy_matrix_undef_float_values(rows, cols, dc, zz);
+    if (inputs->detin != NULL) {
+        grids->dc = read_float_raster_map(rows, cols, inputs->detin, 1.0);
+        copy_matrix_undef_float_values(rows, cols, grids->dc, grids->zz);
     }
 
-    if (tranin != NULL) {
-        ct = read_float_raster_map(rows, cols, tranin, 1.0);
-        copy_matrix_undef_float_values(rows, cols, ct, zz);
+    if (inputs->tranin != NULL) {
+        grids->ct = read_float_raster_map(rows, cols, inputs->tranin, 1.0);
+        copy_matrix_undef_float_values(rows, cols, grids->ct, grids->zz);
     }
 
-    if (tauin != NULL) {
-        tau = read_float_raster_map(rows, cols, tauin, 1.0);
-        copy_matrix_undef_float_values(rows, cols, tau, zz);
+    if (inputs->tauin != NULL) {
+        grids->tau = read_float_raster_map(rows, cols, inputs->tauin, 1.0);
+        copy_matrix_undef_float_values(rows, cols, grids->tau, grids->zz);
     }
 
-    if (wdepth != NULL) {
-        gama = read_double_raster_map(rows, cols, wdepth, 1.0);
-        copy_matrix_undef_double_to_float_values(rows, cols, gama, zz);
+    if (inputs->wdepth != NULL) {
+        grids->gama = read_double_raster_map(rows, cols, inputs->wdepth, 1.0);
+        copy_matrix_undef_double_to_float_values(rows, cols, grids->gama,
+                                                 grids->zz);
     }
     /* allocate walkers */
     max_walkers = sim->maxwa + cols * rows;
-    alloc_walkers(max_walkers, sim);
+    alloc_walkers(max_walkers, sim, outputs);
 
     /* Array for gradient checking */
-    slope = create_double_matrix(rows, cols, 0.0);
-
-    /* Create the observation points and open the logfile */
-    create_observation_points();
+    grids->slope = create_double_matrix(rows, cols, 0.0);
 
     return 1;
 }
@@ -265,7 +182,8 @@ int input_data(int rows, int cols, Simulation *sim)
 /* ************************************************************************* */
 
 /* data preparations, sigma, shear, etc. */
-int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings)
+int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
+               const Inputs *inputs, const Outputs *outputs, Grids *grids)
 {
     int k, l;
     double zx, zy, zd2, zd4, sinsl;
@@ -295,9 +213,9 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings)
 
     for (k = 0; k < geometry->my; k++) {
         for (l = 0; l < geometry->mx; l++) {
-            if (zz[k][l] != UNDEF) {
-                zx = v1[k][l];
-                zy = v2[k][l];
+            if (grids->zz[k][l] != UNDEF) {
+                zx = grids->v1[k][l];
+                zy = grids->v2[k][l];
                 zd2 = zx * zx + zy * zy;
                 sinsl = sqrt(zd2) / sqrt(zd2 + 1); /* sin(terrain slope) */
                 /* Computing MIN */
@@ -306,67 +224,72 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings)
                 /* Computing MAX */
                 zd2max = amax1(zd2max, zd2);
                 zd4 = sqrt(zd2); /* ^.25 */
-                if (cchez[k][l] != 0.) {
-                    cchez[k][l] = 1. / cchez[k][l]; /* 1/n */
+                if (grids->cchez[k][l] != 0.) {
+                    grids->cchez[k][l] = 1. / grids->cchez[k][l]; /* 1/n */
                 }
                 else {
                     G_fatal_error(_("Zero value in Mannings n"));
                 }
                 if (zd2 == 0.) {
-                    v1[k][l] = 0.;
-                    v2[k][l] = 0.;
-                    slope[k][l] = 0.;
+                    grids->v1[k][l] = 0.;
+                    grids->v2[k][l] = 0.;
+                    grids->slope[k][l] = 0.;
                 }
                 else {
-                    if (wdepth)
-                        hh = pow(gama[k][l], 2. / 3.);
+                    if (inputs->wdepth)
+                        hh = pow(grids->gama[k][l], 2. / 3.);
                     /* hh = 1 if there is no water depth input */
-                    v1[k][l] = (double)hh * cchez[k][l] * zx / zd4;
-                    v2[k][l] = (double)hh * cchez[k][l] * zy / zd4;
+                    grids->v1[k][l] =
+                        (double)hh * grids->cchez[k][l] * zx / zd4;
+                    grids->v2[k][l] =
+                        (double)hh * grids->cchez[k][l] * zy / zd4;
 
-                    slope[k][l] =
-                        sqrt(v1[k][l] * v1[k][l] + v2[k][l] * v2[k][l]);
+                    grids->slope[k][l] =
+                        sqrt(grids->v1[k][l] * grids->v1[k][l] +
+                             grids->v2[k][l] * grids->v2[k][l]);
                 }
-                if (wdepth) {
-                    sheer =
-                        (double)(cmul2 * gama[k][l] * sinsl); /* shear stress */
+                if (inputs->wdepth) {
+                    sheer = (double)(cmul2 * grids->gama[k][l] *
+                                     sinsl); /* shear stress */
                     /* if critical shear stress >= shear then all zero */
-                    if ((sheer <= tau[k][l]) || (ct[k][l] == 0.)) {
-                        si[k][l] = 0.;
-                        sigma[k][l] = 0.;
+                    if ((sheer <= grids->tau[k][l]) ||
+                        (grids->ct[k][l] == 0.)) {
+                        grids->si[k][l] = 0.;
+                        grids->sigma[k][l] = 0.;
                     }
                     else {
-                        si[k][l] = (double)(dc[k][l] * (sheer - tau[k][l]));
-                        sigma[k][l] =
-                            (double)(dc[k][l] / ct[k][l]) *
-                            (sheer - tau[k][l]) /
+                        grids->si[k][l] = (double)(grids->dc[k][l] *
+                                                   (sheer - grids->tau[k][l]));
+                        grids->sigma[k][l] =
+                            (double)(grids->dc[k][l] / grids->ct[k][l]) *
+                            (sheer - grids->tau[k][l]) /
                             (pow(sheer,
                                  1.5)); /* rill erosion=1.5, sheet = 1.1 */
                     }
                 }
-                setup->sisum += si[k][l];
-                smin = amin1(smin, si[k][l]);
-                smax = amax1(smax, si[k][l]);
-                if (inf) {
-                    infsum += inf[k][l];
-                    infmin = amin1(infmin, inf[k][l]);
-                    infmax = amax1(infmax, inf[k][l]);
+                setup->sisum += grids->si[k][l];
+                smin = amin1(smin, grids->si[k][l]);
+                smax = amax1(smax, grids->si[k][l]);
+                if (grids->inf) {
+                    infsum += grids->inf[k][l];
+                    infmin = amin1(infmin, grids->inf[k][l]);
+                    infmax = amax1(infmax, grids->inf[k][l]);
                 }
-                vmax = amax1(vmax, slope[k][l]);
-                vsum += slope[k][l];
-                chsum += cchez[k][l];
-                zmin = amin1(zmin, (double)zz[k][l]);
-                zmax =
-                    amax1(zmax, (double)zz[k][l]); /* not clear were needed */
-                if (wdepth)
-                    sigmax = amax1(sigmax, sigma[k][l]);
-                cchezmax = amax1(cchezmax, cchez[k][l]);
+                vmax = amax1(vmax, grids->slope[k][l]);
+                vsum += grids->slope[k][l];
+                chsum += grids->cchez[k][l];
+                zmin = amin1(zmin, (double)grids->zz[k][l]);
+                zmax = amax1(
+                    zmax, (double)grids->zz[k][l]); /* not clear were needed */
+                if (inputs->wdepth)
+                    sigmax = amax1(sigmax, grids->sigma[k][l]);
+                cchezmax = amax1(cchezmax, grids->cchez[k][l]);
                 /* saved sqrt(sinsl)*cchez to cchez array for output */
-                cchez[k][l] *= sqrt(sinsl);
+                grids->cchez[k][l] *= sqrt(sinsl);
             } /* DEFined area */
         }
     }
-    if (inf != NULL && smax < infmax)
+    if (grids->inf != NULL && smax < infmax)
         G_warning(_("Infiltration exceeds the rainfall rate everywhere! No "
                     "overland flow."));
 
@@ -376,10 +299,10 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings)
     setup->vmean = vsum / cc;
     double chmean = chsum / cc;
 
-    if (inf)
+    if (grids->inf)
         setup->infmean = infsum / cc;
 
-    if (wdepth)
+    if (inputs->wdepth)
         deltaw = 0.8 / (sigmax * vmax); /*time step for sediment */
     setup->deltap =
         0.25 * sqrt(geometry->stepx * geometry->stepy) /
@@ -417,7 +340,7 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings)
                  "Number of iterations \t= %d cells\n", setup->miter),
               setup->miter);
     G_message(_("Time step \t= %.2f s\n"), setup->deltap);
-    if (wdepth) {
+    if (inputs->wdepth) {
         G_message(_("Sigmax \t= %f\nMax velocity \t= %f m/s\n"), sigmax, vmax);
         G_message(_("Time step used \t= %.2f s\n"), deltaw);
     }
@@ -439,22 +362,24 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings)
      */
     for (k = 0; k < geometry->my; k++) {
         for (l = 0; l < geometry->mx; l++) {
-            if (zz[k][l] != UNDEF) {
-                v1[k][l] *= setup->deltap;
-                v2[k][l] *= setup->deltap;
+            if (grids->zz[k][l] != UNDEF) {
+                grids->v1[k][l] *= setup->deltap;
+                grids->v2[k][l] *= setup->deltap;
                 /*if(v1[k][l]*v1[k][l]+v2[k][l]*v2[k][l] > cellsize, warning,
                  *napocitaj ak viac ako 10%a*/
                 /* THIS IS CORRECT SOLUTION currently commented out */
-                if (inf)
-                    inf[k][l] *= settings->timesec;
-                if (wdepth)
-                    gama[k][l] = 0.;
-                if (et) {
-                    if (sigma[k][l] == 0. || slope[k][l] == 0.)
-                        si[k][l] = 0.;
+                if (grids->inf)
+                    grids->inf[k][l] *= settings->timesec;
+                if (inputs->wdepth)
+                    grids->gama[k][l] = 0.;
+                if (outputs->et) {
+                    if (grids->sigma[k][l] == 0. || grids->slope[k][l] == 0.)
+                        grids->si[k][l] = 0.;
                     else
                         /* temp for transp. cap. erod */
-                        si[k][l] = si[k][l] / (slope[k][l] * sigma[k][l]);
+                        grids->si[k][l] =
+                            grids->si[k][l] /
+                            (grids->slope[k][l] * grids->sigma[k][l]);
                 }
             } /* DEFined area */
         }
@@ -466,9 +391,10 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings)
      D_T({\bf r})= \nabla\cdot {\bf T}({\bf r})
      *   \f$
      */
-    if (et) {
-        erod(si, setup, geometry); /* compute divergence of t.capc */
-        if (output_et(geometry) != 1)
+    if (outputs->et) {
+        erod(grids->si, setup, geometry,
+             grids); /* compute divergence of t.capc */
+        if (output_et(geometry, outputs, grids) != 1)
             G_fatal_error(_("Unable to write et file"));
     }
 
@@ -476,21 +402,23 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings)
      * this sigma does not store the first order reaction coefficient but the
      * operator WRITE the equation here
      */
-    if (wdepth) {
+    if (inputs->wdepth) {
         for (k = 0; k < geometry->my; k++) {
             for (l = 0; l < geometry->mx; l++) {
-                if (zz[k][l] != UNDEF) {
+                if (grids->zz[k][l] != UNDEF) {
                     /* get back from temp */
-                    if (et)
-                        si[k][l] = si[k][l] * slope[k][l] * sigma[k][l];
-                    if (sigma[k][l] != 0.)
+                    if (outputs->et)
+                        grids->si[k][l] = grids->si[k][l] * grids->slope[k][l] *
+                                          grids->sigma[k][l];
+                    if (grids->sigma[k][l] != 0.)
                         /* rate of weight loss - w=w*sigma ,
                          * vaha prechadzky po n-krokoch je sigma^n */
 
                         /*!!!!! not clear what's here :-\ !!!!! */
 
-                        sigma[k][l] =
-                            exp(-sigma[k][l] * setup->deltap * slope[k][l]);
+                        grids->sigma[k][l] =
+                            exp(-grids->sigma[k][l] * setup->deltap *
+                                grids->slope[k][l]);
                     /* if(sigma[k][l]<0.5) warning, napocitaj,
                      * ak vacsie ako 50% skonci, zmensi deltap)*/
                 }
@@ -539,7 +467,7 @@ float **create_float_matrix(int rows, int cols, float fill_value)
 
     G_verbose_message("Creating float matrix with value %g", fill_value);
 
-    /* Allocate the float marix */
+    /* Allocate the float matrix */
     matrix = G_alloc_fmatrix(rows, cols);
 
     for (row = 0; row < rows; row++) {
@@ -560,7 +488,7 @@ double **create_double_matrix(int rows, int cols, double fill_value)
 
     G_verbose_message("Creating double matrix with value %g", fill_value);
 
-    /* Allocate the float marix */
+    /* Allocate the float matrix */
     matrix = G_alloc_matrix(rows, cols);
 
     for (row = 0; row < rows; row++) {
@@ -589,7 +517,7 @@ float **read_float_raster_map(int rows, int cols, char *name, float unitconv)
     /* Allocate the row buffer */
     row_buff = Rast_allocate_f_buf();
 
-    /* Allocate the float marix */
+    /* Allocate the float matrix */
     matrix = G_alloc_fmatrix(rows, cols);
 
     for (row = 0; row < rows; row++) {
@@ -632,7 +560,7 @@ double **read_double_raster_map(int rows, int cols, char *name, double unitconv)
     /* Allocate the row buffer */
     row_buff = Rast_allocate_d_buf();
 
-    /* Allocate the double marix */
+    /* Allocate the double matrix */
     matrix = G_alloc_matrix(rows, cols);
 
     for (row = 0; row < rows; row++) {

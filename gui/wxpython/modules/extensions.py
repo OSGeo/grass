@@ -185,7 +185,7 @@ class InstallExtensionWindow(wx.Frame):
         item = self.tree.GetSelected()
         if not item or "command" not in item[0].data:
             GError(_("Extension not defined"), parent=self)
-            return
+            return None
 
         name = item[0].data["command"]
 

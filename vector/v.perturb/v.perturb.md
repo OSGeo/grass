@@ -33,8 +33,7 @@ v.perturb input=comm_colleges output=uniform_perturb parameters=100000
 
 Your map should look similar to this figure:
 
-<img src="v_perturb_uniform.png" data-border="0"
-alt="v.perturb uniform distribution example" />  
+![v.perturb uniform distribution example](v_perturb_uniform.png)  
 *Figure: Map showing the actual community college points and uniformly
 random chosen points.*
 
@@ -47,8 +46,7 @@ For a normal distribution with a mean of 5000 and standard deviation of
 v.perturb input=comm_colleges output=normal_perturb distribution=normal parameters=5000,2000
 ```
 
-<img src="v_perturb_normal.png" data-border="0"
-alt="v.perturb normal distribution example" />  
+![v.perturb normal distribution example](v_perturb_normal.png)  
 *Figure: Map showing the actual community college points and normally
 random chosen and colored points. Notice that each point is closer to
 the original point.*

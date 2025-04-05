@@ -128,12 +128,10 @@ v.overlay ainput=poly1 binput=poly2 operator=not output=poly_1_2_not
 v.overlay ainput=poly1 binput=poly2 operator=xor output=poly_1_2_xor
 ```
 
-<img src="v_overlay_poly_1_2.png" data-border="0"
-alt="GRASS v.overlay: input polygons (1 and 2)" />  
+![GRASS v.overlay: input polygons (1 and 2)](v_overlay_poly_1_2.png)  
 *Figure: v.overlay operations: original input polygons*
 
-<img src="v_overlay_poly_1_2_a_o_n_x.png" data-border="0"
-alt="GRASS v.overlay results: AND, OR, NOT, XOR operations" />  
+![GRASS v.overlay results: AND, OR, NOT, XOR operations](v_overlay_poly_1_2_a_o_n_x.png)  
 *Figure: v.overlay results of AND, OR, NOT, XOR operations*
 
 ### Polygons overlaid with polygons
@@ -181,12 +179,9 @@ b_NAME|Raleigh
 b_UA_TYPE|UA
 ```
 
-<img src="v_overlay_urbanarea.png" data-border="1"
-alt="GRASS v.overlay: polygon to polygon union (input 1)" />
-<img src="v_overlay_census_wake2000.png" data-border="1"
-alt="GRASS v.overlay: polygon to polygon union (input 2)" />
-<img src="v_overlay_urban_census2000.png" data-border="1"
-alt="GRASS v.overlay: polygon to polygon union (result)" />  
+![GRASS v.overlay: polygon to polygon union (input 1)](v_overlay_urbanarea.png)
+![GRASS v.overlay: polygon to polygon union (input 2)](v_overlay_census_wake2000.png)
+![GRASS v.overlay: polygon to polygon union (result)](v_overlay_urban_census2000.png)  
 *Figure: v.overlay: Polygon union (right) of urban area (left) and
 Census 2000 (middle) areas (North Carolina dataset)*
 
@@ -210,10 +205,7 @@ v.overlay ainput=roadsmajor atype=line binput=raleigh out=roadsmajor_raleigh ope
 ```
 
 ![GRASS v.overlay: Line to polygon clipping](v_overlay_area_lines.png)  
-
-|                                               |
-|-----------------------------------------------|
-| *Figure: v.overlay: Line to polygon clipping* |
+*Figure: v.overlay: Line to polygon clipping*
 
 ## SEE ALSO
 

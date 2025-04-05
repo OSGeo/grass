@@ -15,15 +15,16 @@ msgstr ""
 "Project-Id-Version: grassmods_it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-23 03:37-0600\n"
-"PO-Revision-Date: 2015-03-29 13:25+0100\n"
-"Last-Translator: Luca Delucchi <lucadeluge@gmail.com>\n"
-"Language-Team: Italian <grass-translations@lists.osgeo.org>\n"
+"PO-Revision-Date: 2025-04-03 08:42+0000\n"
+"Last-Translator: luca <lucadeluge@gmail.com>\n"
+"Language-Team: Italian <https://weblate.osgeo.org/projects/grass-gis/"
+"grassmods/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.10\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.4.3\n"
 "X-Poedit-Bookmarks: 2364,2381,2449,2554,2623,3551,3587,-1,-1,6460\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -7650,7 +7651,7 @@ msgstr ""
 
 #: ../raster/r.buildvrt/main.c:80
 msgid "Build a VRT (Virtual Raster) from the list of input raster maps."
-msgstr ""
+msgstr "Crea un VRT (Raster Virtuale) dalla lista di mappe raster di input."
 
 #: ../raster/r.buildvrt/main.c:83
 msgid "Name of input raster files"
@@ -16113,7 +16114,7 @@ msgstr ""
 
 #: ../raster/r.watershed/front/main.c:84
 msgid "Calculates hydrological parameters and RUSLE factors."
-msgstr ""
+msgstr "Calcola parametri idrologichi e fattori RUSLE."
 
 #: ../raster/r.watershed/front/main.c:87 ../raster/r.watershed/front/main.c:95
 #: ../raster/r.watershed/front/main.c:102
@@ -17936,7 +17937,7 @@ msgstr ""
 
 #: ../raster/r.regression.multi/main.c:133
 msgid "Calculates multiple linear regression from raster maps."
-msgstr "Calcola la regressione lineare per mappe raster."
+msgstr "Calcola la regressione lineare multipla da mappe raster."
 
 #: ../raster/r.regression.multi/main.c:147
 msgid "Map to store residuals"
@@ -34361,6 +34362,8 @@ msgid ""
 "Calculates univariate statistics from a raster map based on a vector map and "
 "uploads statistics to new attribute columns."
 msgstr ""
+"Calcola statistiche univariate da una mappa raster basata su una mappa "
+"vettoriale e carica le statistiche su nuove colonne di attributi."
 
 #: ../locale/scriptstrings/v.rast.stats_to_translate.c:9
 msgid "Continue if upload column(s) already exist"
@@ -44221,7 +44224,7 @@ msgstr "Sovrascrive la proiezione (usa la proiezione della location)"
 
 #: ../locale/scriptstrings/r.mapcalc.simple_to_translate.c:1
 msgid "Calculates a new raster map from a simple r.mapcalc expression."
-msgstr ""
+msgstr "Calcola una nuova mappa raster da una semplice espressione r.mapcalc."
 
 #: ../locale/scriptstrings/r.mapcalc.simple_to_translate.c:4
 msgid "simple"
@@ -45709,6 +45712,8 @@ msgid ""
 "Assigns timestamps and registers raster, vector and raster3d maps in a space "
 "time dataset."
 msgstr ""
+"Assegna timestamp e registra mappe raster, vettoriali e raster3d in un "
+"dataset spazio tempo"
 
 #: ../locale/scriptstrings/t.register_to_translate.c:4
 msgid "register"
@@ -57555,6 +57560,8 @@ msgstr ""
 #: ../vector/v.drape/main.c:60
 msgid "Converts 2D vector features to 3D by sampling of elevation raster map."
 msgstr ""
+"Converte gli elementi di un vettoriale 2D in 3D campionando un mappa raster "
+"dell'elevazione."
 
 #: ../vector/v.drape/main.c:82 ../vector/v.extrude/main.c:125
 msgid "Elevation raster map for height extraction"
@@ -57652,6 +57659,8 @@ msgstr ""
 #: ../vector/v.category/main.c:77
 msgid "Attaches, deletes or reports vector categories to/from/of map geometry."
 msgstr ""
+"Aggiunge, elimina o riporta categorie vettoriali a/da/di geometria della "
+"mappa."
 
 #: ../vector/v.category/main.c:91
 msgid "Feature ids (by default all features are processed)"
@@ -63398,7 +63407,7 @@ msgstr ""
 #: ../vector/v.info/print.c:30 ../vector/v.info/print.c:32
 #, c-format
 msgid "%s"
-msgstr ""
+msgstr "%s"
 
 #: ../vector/v.info/print.c:141
 #, c-format
@@ -63781,9 +63790,8 @@ msgstr ""
 "corrispondere"
 
 #: ../vector/v.in.pdal/main.cpp:132
-#, fuzzy
 msgid "Converts LAS LiDAR point clouds to a GRASS vector map with PDAL."
-msgstr "Converte un file DWG/DXF in una mappa vettoriale di GRASS"
+msgstr "Converte nuvole di punti LAS LiDAT a vettoriale di GRASS con PDAL."
 
 #: ../vector/v.in.pdal/main.cpp:215
 msgid "Reproject to projects's coordinate system if needed"

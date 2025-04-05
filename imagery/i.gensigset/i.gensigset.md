@@ -28,11 +28,8 @@ An usage example can be found in [i.smap](i.smap.md) documentation.
 
 ### Parameters
 
-**trainingmap=***name*  
-ground truth training map
-
-This raster layer, supplied as input by the user, has some of its pixels
-already classified, and the rest (probably most) of the pixels
+The **trainingmap** raster layer, supplied as input by the user, has some of
+its pixels already classified, and the rest (probably most) of the pixels
 unclassified. Classified means that the pixel has a non-zero value and
 unclassified means that the pixel has a zero value.
 
@@ -46,35 +43,25 @@ to define the areas representative of the classes in the image.
 At present, there is no fully-interactive tool specifically designed for
 producing this layer.
 
-**group=***name*  
-imagery group
-
-This is the name of the group that contains the band files which
+Option **group** is the name of the group that contains the band files which
 comprise the image to be analyzed. The *[i.group](i.group.md)* command
 is used to construct groups of raster layers which comprise an image.
 
-**subgroup=***name*  
-subgroup containing image files
-
-This names the subgroup within the group that selects a subset of the
-bands to be analyzed. The *[i.group](i.group.md)* command is also used
+Option **subgroup** names the subgroup within the group that selects a subset
+of the bands to be analyzed. The *[i.group](i.group.md)* command is also used
 to prepare this subgroup. The subgroup mechanism allows the user to
 select a subset of all the band files that form an image.
 
-**signaturefile=***name*  
-resultant signature file
-
-This is the resultant signature file (containing the means and
+Option **signaturefile** is the resultant signature file (containing the means and
 covariance matrices) for each class in the training map that is
 associated with the band files in the subgroup selected.
 
-**maxsig=***value*  
-maximum number of sub-signatures in any class  
-default: 5
+Option **maxsig** is the maximum number of sub-signatures in any class
+(default: 5).
 
 The spectral signatures which are produced by this program are "mixed"
 signatures (see [NOTES](#notes)). Each signature contains one or more
-subsignatures (represeting subclasses). The algorithm in this program
+subsignatures (representing subclasses). The algorithm in this program
 starts with a maximum number of subclasses and reduces this number to a
 minimal number of subclasses which are spectrally distinct. The user has
 the option to set this starting value with this option.
@@ -109,13 +96,13 @@ accurate training data.
 This clustering algorithm estimates both the number of distinct
 subclasses in each class, and the spectral mean and covariance for each
 subclass. The number of subclasses is estimated using Rissanen's minimum
-description length (MDL) criteria \[[1](#rissanen83)\]. This criteria
+description length (MDL) criteria (Rissanen, 1983). This criteria
 attempts to determine the number of subclasses which "best" describe the
 data. The approximate maximum likelihood estimates of the mean and
 covariance of the subclasses are computed using the expectation
-maximization (EM) algorithm \[[2](#dempster77),[3](#redner84)\].
+maximization (EM) algorithm (Dempster, 1977 and Redner, 1984).
 
-## WARNINGS
+### WARNINGS
 
 If warnings like this occur, reducing the remaining classes to 0:
 
@@ -139,13 +126,13 @@ then the user should check for:
 
 ## REFERENCES
 
-- <span id="rissanen83">J. Rissanen,</span> "A Universal Prior for
+1. J. Rissanen, "A Universal Prior for
   Integers and Estimation by Minimum Description Length," *Annals of
   Statistics,* vol. 11, no. 2, pp. 417-431, 1983.
-- <span id="dempster77">A. Dempster, N. Laird and D. Rubin,</span>
+2. A. Dempster, N. Laird and D. Rubin,
   "Maximum Likelihood from Incomplete Data via the EM Algorithm," *J.
   Roy. Statist. Soc. B,* vol. 39, no. 1, pp. 1-38, 1977.
-- <span id="redner84">E. Redner and H. Walker,</span> "Mixture
+3. E. Redner and H. Walker, "Mixture
   Densities, Maximum Likelihood and the EM Algorithm," *SIAM Review,*
   vol. 26, no. 2, April 1984.
 

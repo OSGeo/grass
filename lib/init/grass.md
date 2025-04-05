@@ -1,3 +1,9 @@
+---
+description: GRASS startup program
+---
+
+# GRASS startup program
+
 ## SYNOPSIS
 
 **grass** \[**-h** \| **-help** \| **--help**\] \[**-v** \|
@@ -237,50 +243,83 @@ HTML web browser to use for displaying help pages.
 
 The following are some examples of how you could start GRASS
 
-**grass**  
 Start GRASS using the default user interface. The user will be prompted
 to choose the appropriate project and mapset.
 
-**grass --gui**  
+```sh
+grass
+```
+
 Start GRASS using the graphical user interface. The user will be
 prompted to choose the appropriate project and mapset.
 
-**grass --text**  
+```sh
+grass --gui
+```
+
 Start GRASS using the text-based user interface. Appropriate project and
 mapset must be set by environmental variables (see examples below)
 otherwise taken from the last GRASS session.
 
-**grass --gtext**  
+```sh
+grass --text
+```
+
 Start GRASS using the text-based user interface. The user will be
 prompted to choose the appropriate project and mapset.
 
-**grass $HOME/grassdata/spearfish70/user1**  
+```sh
+grass --gtext
+```
+
 Start GRASS using the default user interface and automatically launch
-into the given mapset, bypassing the mapset selection menu.
+into the given mapset, bypassing the mapset selection menu:
 
-**grass --gui -**  
+```sh
+grass $HOME/grassdata/spearfish70/user1
+```
+
 Start GRASS using the graphical user interface and try to obtain the
-project and mapset from environment variables.
+project and mapset from environment variables:
 
-**grass -c EPSG:4326 $HOME/grassdata/myproject**  
+```sh
+grass --gui -
+```
+
 Creates a new GRASS project with EPSG code 4326 (latitude-longitude,
-WGS84) in the specified GISDBASE
+WGS84) in the specified GISDBASE:
 
-**grass -c EPSG:5514:3 $HOME/grassdata/myproject**  
+```sh
+grass -c EPSG:4326 $HOME/grassdata/myproject
+```
+
 Creates a new GRASS project with EPSG code 5514 (S-JTSK / Krovak East
 North - SJTSK) with datum transformation parameters used in Czech
-Republic in the specified GISDBASE
+Republic in the specified GISDBASE:
 
-**grass -c XY $HOME/grassdata/gnomonic --exec g.proj -c proj4='+proj=gnom +lat_0=90 +lon_0=-50'**  
+```sh
+grass -c EPSG:5514:3 $HOME/grassdata/myproject
+```
+
 Creates a new GRASS project from PROJ definition string (here:
 [gnomonic](https://proj4.org/operations/projections/gnom.html)) in the
-specified GISDBASE
+specified GISDBASE:
 
-**grass -c myvector.shp $HOME/grassdata/myproject**  
-Creates a new GRASS project based on georeferenced Shapefile
+```sh
+grass -c XY $HOME/grassdata/gnomonic --exec g.proj -c proj4='+proj=gnom +lat_0=90 +lon_0=-50'
+```
 
-**grass -c myraster.tif $HOME/grassdata/myproject**  
-Creates a new GRASS project based on georeferenced GeoTIFF file
+Creates a new GRASS project based on georeferenced Shapefile:
+
+```sh
+grass -c myvector.shp $HOME/grassdata/myproject
+```
+
+Creates a new GRASS project based on georeferenced GeoTIFF file:
+
+```sh
+grass -c myraster.tif $HOME/grassdata/myproject
+```
 
 ### Batch jobs with the exec interface
 

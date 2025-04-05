@@ -1,3 +1,10 @@
+---
+description: wxGUI Temporal Plot Tool
+index: topic_GUI|GUI
+---
+
+# wxGUI Temporal Plot Tool
+
 ## DESCRIPTION
 
 The **Temporal Plot Tool** is a *[wxGUI](wxGUI.md)* component that
@@ -36,7 +43,7 @@ Supported features:
   because these software packages use a reference date other than the
   UNIX Epoch time (00:00:00 UTC on 1 January 1970)).
 
-![Temporal Plot Tool](g_gui_tplot_labels.png)  
+![Temporal Plot Tool](tplot.png)  
 *Figure: Temporal Plot Tool*
 
 To optionally add a title to the temporal plot and/or change the x and y

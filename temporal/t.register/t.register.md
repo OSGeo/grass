@@ -68,7 +68,7 @@ have no access to the temporal database.
 
 There are several options to register maps by means of a file. The input
 file consists of a list of map names, optionally along with timestamps.
-Each map name (and timestaps if provided) should be stored in a new line
+Each map name (and timestamps if provided) should be stored in a new line
 in this file.
 
 When only map names are provided, the *increment* option and the **-i**

@@ -989,7 +989,7 @@ def get_wxgui_extensions(url):
     file_ = urlopen(url)
     if not file_:
         gs.warning(_("Unable to fetch '%s'") % url)
-        return
+        return None
 
     for line in file_.readlines():
         # list extensions
@@ -2038,6 +2038,7 @@ def install_extension_std_platforms(name, source, url, branch):
         "bin": os.path.join(srcdir, "bin"),
         "docs": os.path.join(srcdir, "docs"),
         "html": os.path.join(srcdir, "docs", "html"),
+        "mkdocs": os.path.join(srcdir, "docs", "mkdocs"),
         "rest": os.path.join(srcdir, "docs", "rest"),
         "man": os.path.join(srcdir, "docs", "man"),
         "script": os.path.join(srcdir, "scripts"),
@@ -2053,6 +2054,7 @@ def install_extension_std_platforms(name, source, url, branch):
         "RUN_GISRC=%s" % os.environ["GISRC"],
         "BIN=%s" % dirs["bin"],
         "HTMLDIR=%s" % dirs["html"],
+        "MDDIR=%s" % dirs["mkdocs"],
         "RESTDIR=%s" % dirs["rest"],
         "MANBASEDIR=%s" % dirs["man"],
         "SCRIPTDIR=%s" % dirs["script"],

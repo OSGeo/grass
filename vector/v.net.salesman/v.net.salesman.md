@@ -40,13 +40,11 @@ Traveling salesman for 6 digitized nodes (Spearfish):
 
 Shortest path, along unimproved roads:
 
-<img src="vnetsalesman.png" data-border="1"
-alt="v.net.salesman example using distance" />
+![v.net.salesman example using distance](vnetsalesman.png)
 
 Fastest path, along highways:
 
-<img src="vnetsalesmantime.png" data-border="1"
-alt="v.net.salesman example using time" />
+![v.net.salesman example using time](vnetsalesmantime.png)
 
 Searching for the shortest path using distance and the fastest path
 using traveling time according to the speed limits of different road

@@ -13,7 +13,7 @@
  *
  * NOTES:
  *
- * 1) see dhist.h for a decalaration of the structure stat_list.
+ * 1) see dhist.h for a declaration of the structure stat_list.
  * 2) see pie.h for normalized coordinates of the different parts
  *    of the pie-chart, like the origin of the pie, the label
  *    positions, etc.
@@ -73,6 +73,7 @@ int pie(struct stat_list *dist_stats, /* list of distribution statistics */
     char txt[1024];
     char tic_name[80];
     DCELL dmin, dmax, range_dmin, range_dmax, dval;
+    dmin = 0.0;
 
     /* get coordinates of current screen window */
     D_get_src(&t, &b, &l, &r);
