@@ -48,12 +48,23 @@ struct state {
 
 extern struct state *st;
 
+#define MD_NEWLINE "  "
+
 /* functions which are used by several parser functions in different files */
 
 void G__usage_xml(void);
 void G__usage_html(void);
 void G__usage_rest(void);
+
 void G__usage_markdown(void);
+void G__md_print_cli_short_version(FILE *file, const char *indent);
+void G__md_print_python_short_version(FILE *file, const char *indent);
+void G__md_print_cli_long_version(FILE *file, const char *indent);
+void G__md_print_python_long_version(FILE *file, const char *indent);
+void G__md_print_escaped(FILE *f, const char *str);
+void G__md_print_escaped_for_options(FILE *f, const char *str);
+int G__option_num_tuple_items(const struct Option *opt);
+
 void G__usage_text(void);
 void G__script(void);
 char *G__json(void);
@@ -66,6 +77,7 @@ void G__split_gisprompt(const char *, char *, char *, char *);
 void G__check_option_rules(void);
 void G__describe_option_rules(void);
 int G__has_required_rule(void);
+const struct Option *G__first_required_option_from_rules(void);
 void G__describe_option_rules_xml(FILE *);
 
 #endif

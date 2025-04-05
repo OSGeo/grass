@@ -491,6 +491,30 @@ int G__has_required_rule(void)
     return FALSE;
 }
 
+const struct Option *G__first_required_option_from_rules(void)
+{
+    size_t i;
+
+    for (i = 0; i < rules.count; i++) {
+        const struct rule *rule = &((const struct rule *)rules.data)[i];
+
+        if (rule->type == RULE_REQUIRED) {
+            if (rule->count < 0)
+                G_fatal_error(
+                    _("Internal error: the number of options is < 0"));
+            size_t j;
+            for (j = 0; j < (unsigned int)rule->count; j++) {
+                void *p = rule->opts[j];
+                if (is_flag(p))
+                    continue;
+                else
+                    return (const struct Option *)p;
+            }
+        }
+    }
+    return NULL;
+}
+
 static const char *const rule_types[] = {"exclusive", "required",
                                          "requires",  "requires-all",
                                          "excludes",  "collective"};
