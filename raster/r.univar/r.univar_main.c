@@ -206,11 +206,9 @@ int main(int argc, char *argv[])
 #endif
     /* table field separator */
     zone_info.sep = G_option_to_separator(param.separator);
-    double nan_val;
-    sscanf("-nan", "%lf", &nan_val);
 
-    zone_info.min = nan_val; /* set to nan as default */
-    zone_info.max = nan_val; /* set to nan as default */
+    zone_info.min = 0;
+    zone_info.max = 0;
     zone_info.n_zones = 0;
 
     /* setting up thread workspace */
