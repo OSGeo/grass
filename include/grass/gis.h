@@ -137,7 +137,7 @@ static const char *GRASS_copyright UNUSED = "GRASS GNU GPL licensed Software";
 #define WKT_FILE         "PROJ_WKT"
 #define SRID_FILE        "PROJ_SRID"
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 #define CONFIG_DIR "GRASS8"
 #else
 #define CONFIG_DIR ".grass8"
@@ -154,6 +154,12 @@ static const char *GRASS_copyright UNUSED = "GRASS GNU GPL licensed Software";
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
 /* define PI and friends */
+#if defined(_MSC_VER)
+#define _USE_MATH_DEFINES 1
+#include <math.h>
+#undef min
+#undef max
+#else
 #undef M_PI
 #define M_PI 3.14159265358979323846 /* pi */
 
@@ -162,6 +168,7 @@ static const char *GRASS_copyright UNUSED = "GRASS GNU GPL licensed Software";
 
 #undef M_PI_4
 #define M_PI_4 0.78539816339744830962 /* pi/4 */
+#endif
 
 #undef M_R2D
 #define M_R2D 57.295779513082320877 /* 180/pi */
