@@ -16,7 +16,6 @@ from build import (
     get_files,
     write_footer,
     write_header,
-    to_title,
     grass_version,
     grass_version_major,
     grass_version_minor,
@@ -25,7 +24,7 @@ from build import (
 )
 
 CORE_TEXT = """\
-# Processing Tools
+# Tools
 """
 
 ADDONS_TEXT = """\
@@ -33,8 +32,8 @@ ADDONS_TEXT = """\
 
 GRASS is free and open source software,
 anyone may develop their own extensions (addons).
-The <a href="https://github.com/OSGeo/grass-addons">GRASS GIS
-Addons repository</a> on GitHub contains a growing list of GRASS
+The [GRASS Addons repository](https://github.com/OSGeo/grass-addons)
+on GitHub contains a growing list of GRASS
 tools, which are currently not part of the core software package, but
 can easily be  <b>installed</b> in your local GRASS installation
 through the graphical user interface (<i>Menu - Settings - Addons
@@ -42,10 +41,9 @@ Extension - Install</i>) or via the <a
 href="../g.extension.html">g.extension</a> command.
 
 ## How to contribute?
-<!-- TODO: Link this with development guidelines. -->
-You may propose your Addon to the <a href="https://github.com/OSGeo/grass-addons">GRASS GIS
-Addons repository</a>. Please read the <a href="https://github.com/OSGeo/grass-addons/blob/grass8/CONTRIBUTING.md">Contributing</a>
-document as well as the <a href="https://trac.osgeo.org/grass/wiki/Submitting">GRASS GIS programming best practice</a>.
+You may propose your Addon to the [GRASS Addons repository](https://github.com/OSGeo/grass-addons).
+Please read the [addons contributing file](https://github.com/OSGeo/grass-addons/blob/grass8/CONTRIBUTING.md)
+as well as the [GRASS style guide](style_guide.md)</a>.
 
 These manual pages are updated daily. Last run: {date}.
 If you don't see an addon you know exists, please check the log files of compilation:
@@ -82,30 +80,35 @@ def build_full_index(ext, index_name, source_dir, year, text_type):
 
     # TODO: create some master function/dict somewhere
     class_labels = {
-        "d": "display",
-        "db": "database",
-        "g": "general",
-        "i": "imagery",
-        "m": "miscellaneous",
+        "d": "Display",
+        "db": "Database",
+        "g": "General",
+        "i": "Imagery",
+        "m": "Miscellaneous",
         "ps": "PostScript",
-        "r": "raster",
+        "r": "Raster",
         "r3": "3D raster",
-        "t": "temporal",
-        "v": "vector",
+        "t": "Temporal",
+        "v": "Vector",
     }
+
+    ignore_classes = ["test"]
 
     classes = []
     for cmd in get_files(source_dir, "*", extension=ext):
         prefix = cmd.split(".")[0]
+        if prefix in ignore_classes:
+            continue
         if prefix not in [item[0] for item in classes]:
             classes.append((prefix, class_labels.get(prefix, prefix)))
+    # Sort by prefix.
     classes.sort(key=itemgetter(0))
 
     # begin full index:
     filename = f"{index_name}.{ext}"
     with open(filename + ".tmp", "w") as f:
         if ext == "html":
-            text = f"GRASS GIS {grass_version} Reference Manual - Full index"
+            text = f"GRASS {grass_version} Reference Manual - Full index"
             write_header(
                 f,
                 text,
@@ -132,7 +135,7 @@ def build_full_index(ext, index_name, source_dir, year, text_type):
 
         # for all module groups:
         for cls, cls_label in classes:
-            f.write(cmd2_tmpl.substitute(cmd_label=to_title(cls_label), cmd=cls))
+            f.write(cmd2_tmpl.substitute(cmd_label=cls_label, cmd=cls))
             # for all modules:
             for cmd in get_files(source_dir, cls, extension=ext):
                 basename = os.path.splitext(cmd)[0]

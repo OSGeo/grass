@@ -112,6 +112,7 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.ifconfig",
     "sphinx.ext.viewcode",
+    "sphinx_sitemap",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -135,7 +136,7 @@ copyright = "2025, GRASS Development Team"
 # built documents.
 #
 # The short X.Y version.
-# version = '0.1'
+version = grass_version
 # The full version, including alpha/beta/rc tags.
 # release = '0.1'
 
@@ -431,3 +432,14 @@ epub_exclude_files = ["search.html"]
 
 # Where class documentation comes from (class or __init__ docstring).
 autoclass_content = "both"
+
+# sphinx-sitemap extension config
+# https://sphinx-sitemap.readthedocs.io/en/latest/advanced-configuration.html
+sitemap_filename = "sitemap.xml"
+html_baseurl = "https://grass.osgeo.org/"
+sitemap_url_scheme = "grass{version}manuals/libpython/{link}"
+
+sitemap_excludes = [
+    "search.html",
+    "genindex.html",
+]

@@ -57,7 +57,7 @@ If one or both of the input vector maps are 3D, the user is notified
 accordingly.
 
 The *-p* flag prints the results to standard output. By default the
-output is in form of a linear matrix. If only only variable is upploaded
+output is in form of a linear matrix. If only only variable is uploaded
 and a square matrix is desired, the user can set the *-s* flag.
 
 ## EXAMPLES

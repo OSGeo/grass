@@ -1,5 +1,3 @@
-# Tags
-
-Following is a list of relevant tags:
+# Tools by keywords
 
 <!-- material/tags { exclude: [unit test] } -->
