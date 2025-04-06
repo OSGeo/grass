@@ -41,6 +41,21 @@ from gui_core.wrap import Button, CloseButton, StaticText, StaticBox
 from core.utils import GetValidLayerName
 from core.settings import UserSettings, GetDisplayVectSettings
 
+try:
+    from osgeo import gdal
+    # Explicitly enable GDAL exceptions to avoid FutureWarning
+    # This is required for GDAL 4.0+ compatibility
+    gdal.UseExceptions()
+    haveGdal = True
+except ImportError:
+    haveGdal = False
+    sys.stderr.write(
+        _(
+            "Unable to load GDAL Python bindings.\n"
+            "Import/Export functionality may not work without the bindings.\n"
+        )
+    )
+
 
 class ImportDialog(wx.Dialog):
     """Dialog for bulk import of various data (base class)"""
@@ -486,90 +501,88 @@ class GdalImportDialog(ImportDialog):
         if not dsn:
             return
 
-    # Enable GDAL exceptions once at the start
-    try:
-        from osgeo import gdal
-
-        gdal.DontUseExceptions()
-    except ImportError:
-        GError(
-            parent=self,
-            message=_("The Python GDAL package is missing. Please install it."),
-        )
-        return
+        # Enable GDAL exceptions once at the start
+        try:
+            gdal.DontUseExceptions()
+        except ImportError:
+            GError(
+                parent=self,
+                message=_("The Python GDAL package is missing. Please install it."),
+            )
+            return
 
         for layer, output, listId in data:
             userData = {}
             idsn = dsn  # Default value
 
-        try:
-            # Check if dataset exists first
-            if not os.path.exists(dsn):
-                GError(parent=self, message=f"Dataset does not exist: {dsn}")
-                return
+            try:
+                # Check if dataset exists first
+                if not os.path.exists(dsn):
+                    GError(parent=self, message=f"Dataset does not exist: {dsn}")
+                    return
 
                 dataset = gdal.Open(dsn)
                 if dataset is None:
                     raise RuntimeError(f"Failed to open dataset: {dsn}")
 
-            if self.dsnInput.GetType() == "dir":
-                idsn = os.path.join(dsn, layer)
-            elif self.dsnInput.GetType() == "db":
-                if "PG:" in dsn:
-                    idsn = f"{dsn} table={layer}"
-                else:
-                    driver_name = dataset.GetDriver().ShortName
-                    if "Rasterlite" in driver_name:
-                        idsn = f"RASTERLITE:{dsn},table={layer}"
+                if self.dsnInput.GetType() == "dir":
+                    idsn = os.path.join(dsn, layer)
+                elif self.dsnInput.GetType() == "db":
+                    if "PG:" in dsn:
+                        idsn = f"{dsn} table={layer}"
+                    else:
+                        driver_name = dataset.GetDriver().ShortName
+                        if "Rasterlite" in driver_name:
+                            idsn = f"RASTERLITE:{dsn},table={layer}"
 
-            # Validate dataset again for `idsn`
-            if not os.path.exists(idsn):
-                GError(parent=self, message=f"Dataset does not exist: {idsn}")
-                return
+                # Validate dataset again for `idsn`
+                if not os.path.exists(idsn):
+                    GError(parent=self, message=f"Dataset does not exist: {idsn}")
+                    return
 
-            dataset = gdal.Open(idsn)
-            if dataset is None:
-                raise RuntimeError(f"Failed to open dataset: {idsn}")
+                dataset = gdal.Open(idsn)
+                if dataset is None:
+                    raise RuntimeError(f"Failed to open dataset: {idsn}")
 
-        except RuntimeError as e:
-            GError(parent=self, message=f"GDAL error while opening dataset: {e}")
-        return
+            except RuntimeError as e:
+                GError(parent=self, message=f"GDAL error while opening dataset: {e}")
+            return
 
-        # check number of bands
-        nBandsStr = RunCommand("r.in.gdal", flags="p", input=idsn, read=True)
-        nBands = -1
-        # noqa: W293
-        if nBandsStr:
-            try:
-                nBands = int(nBandsStr.rstrip("\n"))
-            except ValueError:
-                pass
-        if nBands < 0:
-            GWarning(_("Unable to determine number of raster bands"), parent=self)
-            nBands = 1
+            # check number of bands
+            nBandsStr = RunCommand("r.in.gdal", flags="p", input=idsn, read=True)
+            nBands = -1
+            # noqa: W293
+            if nBandsStr:
+                try:
+                    nBands = int(nBandsStr.rstrip("\n"))
+                except ValueError:
+                    pass
+            if nBands < 0:
+                GWarning(_("Unable to determine number of raster bands"), parent=self)
+                nBands = 1
 
-        userData["nbands"] = nBands
-        cmd = self.getSettingsPageCmd()
-        cmd.append("input=%s" % idsn)
-        cmd.append("output=%s" % output)
+            userData["nbands"] = nBands
+            cmd = self.getSettingsPageCmd()
+            cmd.append("input=%s" % idsn)
+            cmd.append("output=%s" % output)
 
-        if self.override.IsChecked():
-            cmd.append("-o")
+            if self.override.IsChecked():
+                cmd.append("-o")
 
-        if self.overwrite.IsChecked():
-            cmd.append("--overwrite")
+            if self.overwrite.IsChecked():
+                cmd.append("--overwrite")
 
-        if (
-            UserSettings.Get(group="cmd", key="overwrite", subkey="enabled")
-            and "--overwrite" not in cmd
-        ):
-            cmd.append("--overwrite")
+            if (
+                UserSettings.Get(group="cmd", key="overwrite", subkey="enabled")
+                and "--overwrite" not in cmd
+            ):
+                cmd.append("--overwrite")
 
-        self._addToCommandQueue()
-        # run in Layer Manager
-        self._giface.RunCmd(
-            cmd, onDone=self.OnCmdDone, userData=userData, addLayer=False
-        )
+            self._addToCommandQueue()
+            # run in Layer Manager
+            self._giface.RunCmd(
+                cmd, onDone=self.OnCmdDone, userData=userData, addLayer=False
+            )
 
     def OnCmdDone(self, event):
         """Load layers and close if required"""

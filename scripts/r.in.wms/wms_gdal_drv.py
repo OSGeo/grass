@@ -14,17 +14,22 @@ This program is free software under the GNU General Public License
 """
 
 import grass.script as gs
+import sys
 
 try:
     from osgeo import gdal
+    # Explicitly enable GDAL exceptions to avoid FutureWarning
+    # This is required for GDAL 4.0+ compatibility
+    gdal.UseExceptions()
+    haveGdal = True
 except ImportError:
-    gs.fatal(
+    haveGdal = False
+    sys.stderr.write(
         _(
-            "Unable to load GDAL Python bindings (requires package 'python-gdal' being "
-            "installed)"
+            "Unable to load GDAL Python bindings.\n"
+            "WMS functionality may not work without the bindings.\n"
         )
     )
-    gdal.DontUseExceptions()
 import xml.etree.ElementTree as ET
 
 from wms_base import WMSBase, GetSRSParamVal

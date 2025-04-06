@@ -88,6 +88,21 @@ from gui_core.wrap import (
 
 from grass.pydispatch.signal import Signal
 
+try:
+    from osgeo import gdal
+    # Explicitly enable GDAL exceptions to avoid FutureWarning
+    # This is required for GDAL 4.0+ compatibility
+    gdal.UseExceptions()
+    haveGdal = True
+except ImportError:
+    haveGdal = False
+    sys.stderr.write(
+        _(
+            "Unable to load GDAL Python bindings.\n"
+            "Some functionality may not work without the bindings.\n"
+        )
+    )
+
 
 class Select(ComboCtrl):
     def __init__(

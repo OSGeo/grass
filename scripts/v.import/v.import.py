@@ -106,6 +106,21 @@ import re  # only needed for GDAL version < 2.4.1
 import grass.script as gs
 from grass.exceptions import CalledModuleError
 
+try:
+    from osgeo import gdal
+    # Explicitly enable GDAL exceptions to avoid FutureWarning
+    # This is required for GDAL 4.0+ compatibility
+    gdal.UseExceptions()
+    haveGdal = True
+except ImportError:
+    haveGdal = False
+    sys.stderr.write(
+        _(
+            "Unable to load GDAL Python bindings.\n"
+            "Vector import functionality may not work without the bindings.\n"
+        )
+    )
+
 # initialize global vars
 TMPLOC = None
 SRCGISRC = None
@@ -261,27 +276,21 @@ def main():
     gs.verbose(_("Creating temporary project for <%s>...") % OGRdatasource)
 
     try:
-        if OGRdatasource.lower().endswith("gml"):
-            from osgeo import gdal
-
-            gdal.DontUseExceptions()
-
         if int(gdal.VersionInfo("VERSION_NUM")) < GDAL_COMPUTE_VERSION(2, 4, 1):
             fix_gfsfile(OGRdatasource)
-
-        gs.run_command(
-            "v.in.ogr",
-            input=OGRdatasource,
-            project=TMPLOC,
-            flags="i",
-            quiet=True,
-            overwrite=overwrite,
-            **vopts,
-        )
     except RuntimeError as e:
         gs.fatal(f"GDAL error while checking version: {e}")
-    except CalledModuleError:
-        gs.fatal(_("Unable to create project from OGR datasource <%s>") % OGRdatasource)
+
+    gs.run_command(
+        "v.in.ogr",
+        input=OGRdatasource,
+        project=TMPLOC,
+        flags="i",
+        quiet=True,
+        overwrite=overwrite,
+        **vopts,
+    )
+
     # switch to temp location
     os.environ["GISRC"] = str(SRCGISRC)
 
@@ -334,9 +343,7 @@ def main():
     gs.message(_("Importing <%s> ...") % OGRdatasource)
     try:
         if OGRdatasource.lower().endswith("gml"):
-            try:
-                from osgeo import gdal
-            except ImportError:
+            if not haveGdal:
                 gs.fatal(
                     _(
                         "Unable to load GDAL Python bindings (requires package "

@@ -27,16 +27,21 @@ from grass.script.utils import try_remove
 from grass.script import core as grass
 from grass.exceptions import CalledModuleError
 
-from core.debug import Debug
-from core.gthread import gThread
 
 try:
     from osgeo import gdal
-
-    gdal.DontUseExceptions()
+    # Explicitly enable GDAL exceptions to avoid FutureWarning
+    # This is required for GDAL 4.0+ compatibility
+    gdal.UseExceptions()
     haveGdal = True
 except ImportError:
     haveGdal = False
+    sys.stderr.write(
+        _(
+            "Unable to load GDAL Python bindings.\n"
+            "WMS layers can not be displayed without the bindings.\n"
+        )
+    )
 
 
 from grass.pydispatch.signal import Signal
@@ -47,7 +52,7 @@ class RenderWMSMgr(wx.EvtHandler):
 
     def __init__(self, layer, env):
         if not haveGdal:
-            sys.stderr.write(
+            raise RuntimeError(
                 _(
                     "Unable to load GDAL Python bindings.\n"
                     "WMS layers can not be displayed without the bindings.\n"
@@ -55,7 +60,6 @@ class RenderWMSMgr(wx.EvtHandler):
             )
 
         self.layer = layer
-
         wx.EvtHandler.__init__(self)
 
         # thread for d.wms commands
@@ -78,81 +82,82 @@ class RenderWMSMgr(wx.EvtHandler):
         try_remove(self.tempMap)
 
     def Render(self, cmd, env):
-        """If it is needed, download missing WMS data.
-
-        .. todo::
-            lmgr deletes mapfile and maskfile when order of layers
-            was changed (drag and drop) - if deleted, fetch data again
-        """
+        """If it is needed, download missing WMS data."""
         if not haveGdal:
+            self.renderingFailed.emit(env=env, layer=self.layer)
             return
 
-        Debug.msg(
-            1,
-            "RenderWMSMgr.Render(%s): force=%d img=%s"
-            % (self.layer, self.layer.forceRender, self.layer.mapfile),
-        )
-
-        env = copy.copy(env)
-        self.dstSize["cols"] = int(env["GRASS_RENDER_WIDTH"])
-        self.dstSize["rows"] = int(env["GRASS_RENDER_HEIGHT"])
-
-        region = self._getRegionDict(env)
-        self._fitAspect(region, self.dstSize)
-
-        self.updateMap = True
-        fetchData = True  # changed to True when calling Render()
-
-        if self.renderedRegion is None or cmd != self.fetched_data_cmd:
-            fetchData = True
-        else:
-            for c in ["north", "south", "east", "west"]:
-                if self.renderedRegion and region[c] != self.renderedRegion[c]:
-                    fetchData = True
-                    break
-
-            for c in ["e-w resol", "n-s resol"]:
-                if self.renderedRegion and region[c] != self.renderedRegion[c]:
-                    break
-
-        if fetchData:
-            self.fetched_data_cmd = None
-            self.renderedRegion = region
-
-            try_remove(self.layer.mapfile)
-            try_remove(self.tempMap)
-
-            self.currentPid = self.thread.GetId()
-            # self.thread.Terminate()
-            self.downloading = True
-
-            self.fetching_cmd = cmd
-
-            env["GRASS_RENDER_FILE"] = self.tempMap
-            env["GRASS_REGION"] = self._createRegionStr(region)
-
-            cmd_render = copy.deepcopy(cmd)
-            cmd_render[1]["quiet"] = True  # be quiet
-
-            self._startTime = time.time()
-            self.thread.Run(
-                callable=self._render,
-                cmd=cmd_render,
-                env=env,
-                ondone=self.OnRenderDone,
-                userdata={"env": env},
+        try:
+            Debug.msg(
+                1,
+                "RenderWMSMgr.Render(%s): force=%d img=%s"
+                % (self.layer, self.layer.forceRender, self.layer.mapfile),
             )
-            self.layer.forceRender = False
 
-        self.updateProgress.emit(env=env, layer=self.layer)
+            env = copy.copy(env)
+            self.dstSize["cols"] = int(env["GRASS_RENDER_WIDTH"])
+            self.dstSize["rows"] = int(env["GRASS_RENDER_HEIGHT"])
+
+            region = self._getRegionDict(env)
+            self._fitAspect(region, self.dstSize)
+
+            self.updateMap = True
+            fetchData = True  # changed to True when calling Render()
+
+            if self.renderedRegion is None or cmd != self.fetched_data_cmd:
+                fetchData = True
+            else:
+                for c in ["north", "south", "east", "west"]:
+                    if self.renderedRegion and region[c] != self.renderedRegion[c]:
+                        fetchData = True
+                        break
+
+                for c in ["e-w resol", "n-s resol"]:
+                    if self.renderedRegion and region[c] != self.renderedRegion[c]:
+                        break
+
+            if fetchData:
+                self.fetched_data_cmd = None
+                self.renderedRegion = region
+
+                try_remove(self.layer.mapfile)
+                try_remove(self.tempMap)
+
+                self.currentPid = self.thread.GetId()
+                self.downloading = True
+
+                self.fetching_cmd = cmd
+
+                env["GRASS_RENDER_FILE"] = self.tempMap
+                env["GRASS_REGION"] = self._createRegionStr(region)
+
+                cmd_render = copy.deepcopy(cmd)
+                cmd_render[1]["quiet"] = True  # be quiet
+
+                self._startTime = time.time()
+                self.thread.Run(
+                    callable=self._render,
+                    cmd=cmd_render,
+                    env=env,
+                    ondone=self.OnRenderDone,
+                    userdata={"env": env},
+                )
+                self.layer.forceRender = False
+
+            self.updateProgress.emit(env=env, layer=self.layer)
+        except Exception as e:
+            self.renderingFailed.emit(env=env, layer=self.layer)
+            Debug.msg(1, f"RenderWMSMgr.Render error: {str(e)}")
 
     def _render(self, cmd, env):
         try:
-            # TODO: use errors=status when working
             grass.run_command(cmd[0], env=env, **cmd[1])
             return 0
         except CalledModuleError as e:
             grass.error(e)
+            return 1
+        except Exception as e:
+            grass.error(f"Error in _render: {str(e)}")
             return 1
 
     def OnRenderDone(self, event):
@@ -166,45 +171,46 @@ class RenderWMSMgr(wx.EvtHandler):
             self.fetched_data_cmd = None
             return
 
-        self.mapMerger = GDALRasterMerger(
-            targetFile=self.layer.mapfile,
-            region=self.renderedRegion,
-            bandsNum=3,
-            gdalDriver="PNM",
-            fillValue=0,
-        )
-        self.mapMerger.AddRasterBands(self.tempMap, {1: 1, 2: 2, 3: 3})
-        del self.mapMerger
-
-        add_alpha_channel = True
-        mask_fill_value = 0
-        if self.fetching_cmd[1]["format"] == "jpeg":
-            mask_fill_value = (
-                255  # white color, g.pnmcomp doesn't apply mask (alpha channel)
+        try:
+            self.mapMerger = GDALRasterMerger(
+                targetFile=self.layer.mapfile,
+                region=self.renderedRegion,
+                bandsNum=3,
+                gdalDriver="PNM",
+                fillValue=0,
             )
-            add_alpha_channel = False
+            self.mapMerger.AddRasterBands(self.tempMap, {1: 1, 2: 2, 3: 3})
+            del self.mapMerger
 
-        self.maskMerger = GDALRasterMerger(
-            targetFile=self.layer.maskfile,
-            region=self.renderedRegion,
-            bandsNum=1,
-            gdalDriver="PNM",
-            fillValue=mask_fill_value,
-        )
-        if add_alpha_channel:
-            # {4 : 1} alpha channel (4) to first and only channel (1) in mask
-            self.maskMerger.AddRasterBands(self.tempMap, {4: 1})
-        del self.maskMerger
+            add_alpha_channel = True
+            mask_fill_value = 0
+            if self.fetching_cmd[1]["format"] == "jpeg":
+                mask_fill_value = 255  # white color, g.pnmcomp doesn't apply mask (alpha channel)
+                add_alpha_channel = False
 
-        self.fetched_data_cmd = self.fetching_cmd
+            self.maskMerger = GDALRasterMerger(
+                targetFile=self.layer.maskfile,
+                region=self.renderedRegion,
+                bandsNum=1,
+                gdalDriver="PNM",
+                fillValue=mask_fill_value,
+            )
+            if add_alpha_channel:
+                self.maskMerger.AddRasterBands(self.tempMap, {4: 1})
+            del self.maskMerger
 
-        Debug.msg(
-            1,
-            "RenderWMSMgr.OnRenderDone(%s): ret=%d time=%f"
-            % (self.layer, event.ret, time.time() - self._startTime),
-        )
+            self.fetched_data_cmd = self.fetching_cmd
 
-        self.dataFetched.emit(env=event.userdata["env"], layer=self.layer)
+            Debug.msg(
+                1,
+                "RenderWMSMgr.OnRenderDone(%s): ret=%d time=%f"
+                % (self.layer, event.ret, time.time() - self._startTime),
+            )
+
+            self.dataFetched.emit(env=event.userdata["env"], layer=self.layer)
+        except Exception as e:
+            self.renderingFailed.emit(env=event.userdata["env"], layer=self.layer)
+            Debug.msg(1, f"RenderWMSMgr.OnRenderDone error: {str(e)}")
 
     def _getRegionDict(self, env):
         """Parse string from GRASS_REGION env variable into dict."""
@@ -291,6 +297,9 @@ class GDALRasterMerger:
 
     def __init__(self, targetFile, region, bandsNum, gdalDriver, fillValue=None):
         """Create raster for merging."""
+        if not haveGdal:
+            raise RuntimeError("GDAL Python bindings not available")
+
         self.gdalDrvType = gdalDriver
 
         nsRes = (region["south"] - region["north"]) / region["rows"]
@@ -302,99 +311,119 @@ class GDALRasterMerger:
             self.tGeotransform, region
         )
 
-        driver = gdal.GetDriverByName(self.gdalDrvType)
-        if not driver:
-            grass.fatal(f"GDAL driver {self.gdalDrvType} not found.")
+        try:
+            driver = gdal.GetDriverByName(self.gdalDrvType)
+            if not driver:
+                raise RuntimeError(f"GDAL driver {self.gdalDrvType} not found.")
 
-        self.tDataset = driver.Create(
-            targetFile, region["cols"], region["rows"], bandsNum, gdal.GDT_Byte
-        )
-        if self.tDataset is None:
-            grass.fatal("Failed to create target dataset.")
-
-        if fillValue is not None:
-            for iBand in range(1, self.tDataset.RasterCount + 1):
-                self.tDataset.GetRasterBand(iBand).Fill(fillValue)
-
-        def AddRasterBands(self, sourceFile, sTBands):
-            """Add raster bands from sourceFile into the merging raster."""
-
-    try:
-        sDataset = gdal.Open(sourceFile, gdal.GA_ReadOnly)
-    except RuntimeError as e:
-        grass.warning(f"AddRasterBands Warning: {e}")
-        return
-
-        sGeotransform = sDataset.GetGeoTransform()
-
-        sSize = {"rows": sDataset.RasterYSize, "cols": sDataset.RasterXSize}
-
-        sUlx, sUly, sLrx, sLry = self._getCorners(sGeotransform, sSize)
-
-        # figure out intersection region
-        tIntsctUlx = max(self.tUlx, sUlx)
-        tIntsctLrx = min(self.tLrx, sLrx)
-        if self.tGeotransform[5] < 0:
-            tIntsctUly = min(self.tUly, sUly)
-            tIntsctLry = max(self.tLry, sLry)
-        else:
-            tIntsctUly = max(self.tUly, sUly)
-            tIntsctLry = min(self.tLry, sLry)
-
-        # do they even intersect?
-        if tIntsctUlx >= tIntsctLrx:
-            return
-        if self.tGeotransform[5] < 0 and tIntsctUly <= tIntsctLry:
-            return
-        if self.tGeotransform[5] > 0 and tIntsctUly >= tIntsctLry:
-            return
-
-        # compute target window in pixel coordinates.
-        tXoff = int((tIntsctUlx - self.tGeotransform[0]) / self.tGeotransform[1] + 0.1)
-        tYoff = int((tIntsctUly - self.tGeotransform[3]) / self.tGeotransform[5] + 0.1)
-        tXsize = (
-            int((tIntsctLrx - self.tGeotransform[0]) / self.tGeotransform[1] + 0.5)
-            - tXoff
-        )
-        tYsize = (
-            int((tIntsctLry - self.tGeotransform[3]) / self.tGeotransform[5] + 0.5)
-            - tYoff
-        )
-
-        if tXsize < 1 or tYsize < 1:
-            return
-
-        # Compute source window in pixel coordinates.
-        sXoff = int((tIntsctUlx - sGeotransform[0]) / sGeotransform[1])
-        sYoff = int((tIntsctUly - sGeotransform[3]) / sGeotransform[5])
-        sXsize = int((tIntsctLrx - sGeotransform[0]) / sGeotransform[1] + 0.5) - sXoff
-        sYsize = int((tIntsctLry - sGeotransform[3]) / sGeotransform[5] + 0.5) - sYoff
-
-        if sXsize < 1 or sYsize < 1:
-            return
-
-        for sBandNnum, tBandNum in sTBands.items():
-            bandData = sDataset.GetRasterBand(sBandNnum).ReadRaster(
-                sXoff, sYoff, sXsize, sYsize, tXsize, tYsize, gdal.GDT_Byte
+            self.tDataset = driver.Create(
+                targetFile, region["cols"], region["rows"], bandsNum, gdal.GDT_Byte
             )
-            self.tDataset.GetRasterBand(tBandNum).WriteRaster(
-                tXoff, tYoff, tXsize, tYsize, bandData, tXsize, tYsize, gdal.GDT_Byte
+            if self.tDataset is None:
+                raise RuntimeError("Failed to create target dataset.")
+
+            if fillValue is not None:
+                for iBand in range(1, self.tDataset.RasterCount + 1):
+                    self.tDataset.GetRasterBand(iBand).Fill(fillValue)
+        except Exception as e:
+            raise RuntimeError(f"Error in GDALRasterMerger initialization: {str(e)}")
+
+    def AddRasterBands(self, sourceFile, sTBands):
+        """Add raster bands from sourceFile into the merging raster."""
+        if not haveGdal:
+            raise RuntimeError("GDAL Python bindings not available")
+
+        try:
+            sDataset = gdal.Open(sourceFile, gdal.GA_ReadOnly)
+            if sDataset is None:
+                raise RuntimeError(f"Failed to open source file: {sourceFile}")
+
+            sGeotransform = sDataset.GetGeoTransform()
+
+            sSize = {"rows": sDataset.RasterYSize, "cols": sDataset.RasterXSize}
+
+            sUlx, sUly, sLrx, sLry = self._getCorners(sGeotransform, sSize)
+
+            # figure out intersection region
+            tIntsctUlx = max(self.tUlx, sUlx)
+            tIntsctLrx = min(self.tLrx, sLrx)
+            if self.tGeotransform[5] < 0:
+                tIntsctUly = min(self.tUly, sUly)
+                tIntsctLry = max(self.tLry, sLry)
+            else:
+                tIntsctUly = max(self.tUly, sUly)
+                tIntsctLry = min(self.tLry, sLry)
+
+            # do they even intersect?
+            if tIntsctUlx >= tIntsctLrx:
+                return
+            if self.tGeotransform[5] < 0 and tIntsctUly <= tIntsctLry:
+                return
+            if self.tGeotransform[5] > 0 and tIntsctUly >= tIntsctLry:
+                return
+
+            # compute target window in pixel coordinates.
+            tXoff = int((tIntsctUlx - self.tGeotransform[0]) / self.tGeotransform[1] + 0.1)
+            tYoff = int((tIntsctUly - self.tGeotransform[3]) / self.tGeotransform[5] + 0.1)
+            tXsize = (
+                int((tIntsctLrx - self.tGeotransform[0]) / self.tGeotransform[1] + 0.5)
+                - tXoff
             )
+            tYsize = (
+                int((tIntsctLry - self.tGeotransform[3]) / self.tGeotransform[5] + 0.5)
+                - tYoff
+            )
+
+            if tXsize < 1 or tYsize < 1:
+                return
+
+            # Compute source window in pixel coordinates.
+            sXoff = int((tIntsctUlx - sGeotransform[0]) / sGeotransform[1])
+            sYoff = int((tIntsctUly - sGeotransform[3]) / sGeotransform[5])
+            sXsize = int((tIntsctLrx - sGeotransform[0]) / sGeotransform[1] + 0.5) - sXoff
+            sYsize = int((tIntsctLry - sGeotransform[3]) / sGeotransform[5] + 0.5) - sYoff
+
+            if sXsize < 1 or sYsize < 1:
+                return
+
+            for sBandNnum, tBandNum in sTBands.items():
+                bandData = sDataset.GetRasterBand(sBandNnum).ReadRaster(
+                    sXoff, sYoff, sXsize, sYsize, tXsize, tYsize, gdal.GDT_Byte
+                )
+                self.tDataset.GetRasterBand(tBandNum).WriteRaster(
+                    tXoff, tYoff, tXsize, tYsize, bandData, tXsize, tYsize, gdal.GDT_Byte
+                )
+        except Exception as e:
+            raise RuntimeError(f"Error in AddRasterBands: {str(e)}")
+        finally:
+            if 'sDataset' in locals():
+                sDataset = None
 
     def _getCorners(self, geoTrans, size):
-        ulx = geoTrans[0]
-        uly = geoTrans[3]
-        lrx = geoTrans[0] + size["cols"] * geoTrans[1]
-        lry = geoTrans[3] + size["rows"] * geoTrans[5]
+        """Get corners of the raster."""
+        try:
+            ulx = geoTrans[0]
+            uly = geoTrans[3]
+            lrx = geoTrans[0] + size["cols"] * geoTrans[1]
+            lry = geoTrans[3] + size["rows"] * geoTrans[5]
 
-        return ulx, uly, lrx, lry
+            return ulx, uly, lrx, lry
+        except Exception as e:
+            raise RuntimeError(f"Error in _getCorners: {str(e)}")
 
     def SetGeorefAndProj(self):
         """Set georeference and projection to target file"""
-        projection = grass.read_command("g.proj", flags="wf")
-        self.tDataset.SetProjection(projection)
+        if not haveGdal:
+            raise RuntimeError("GDAL Python bindings not available")
 
-        self.tDataset.SetGeoTransform(self.tGeotransform)
+        try:
+            projection = grass.read_command("g.proj", flags="wf")
+            self.tDataset.SetProjection(projection)
+            self.tDataset.SetGeoTransform(self.tGeotransform)
+        except Exception as e:
+            raise RuntimeError(f"Error in SetGeorefAndProj: {str(e)}")
 
     def __del__(self):
-        self.tDataset = None
+        """Cleanup GDAL resources"""
+        if hasattr(self, 'tDataset') and self.tDataset is not None:
+            self.tDataset = None
