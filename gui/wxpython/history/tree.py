@@ -57,6 +57,7 @@ class HistoryBrowserNode(DictFilterNode):
 
     def __init__(self, data=None):
         super().__init__(data=data)
+        self.error_button = None
 
     @property
     def label(self):
@@ -71,6 +72,38 @@ class HistoryBrowserNode(DictFilterNode):
         if "timestamp" in self.data.keys():
             return self.data["timestamp"]
         return None
+
+    @property
+    def error_message(self):
+        """Get error message from node data."""
+        return self.data.get("error_message", "")
+
+    def set_error_message(self, error_message):
+        """Set error message in node data."""
+        self.data["error_message"] = error_message
+
+    def create_error_button(self, parent):
+        """Create error button for displaying error details."""
+        if not self.error_message:
+            return None
+
+        self.error_button = wx.Button(parent, wx.ID_ANY, "?", style=wx.BU_EXACTFIT)
+        self.error_button.SetForegroundColour(wx.RED)
+        self.error_button.SetToolTip(_("Show error details"))
+        self.error_button.Bind(wx.EVT_BUTTON, self._on_error_button)
+        return self.error_button
+
+    def _on_error_button(self, event):
+        """Show error details in a dialog."""
+        if self.error_message:
+            dlg = wx.MessageDialog(
+                self.error_button.GetParent(),
+                self.error_message,
+                _("Error Details"),
+                wx.OK | wx.ICON_ERROR
+            )
+            dlg.ShowModal()
+            dlg.Destroy()
 
     def dayToLabel(self, day):
         """

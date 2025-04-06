@@ -81,11 +81,13 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         self.title = title
 
         self.region_settings = None
+        self.error_message = None
 
         self._initImages()
 
         self._createGeneralInfoBox()
         self._createRegionSettingsBox()
+        self._createErrorBox()
 
         self._layout()
 
@@ -122,6 +124,7 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         return None
 
     def _layout(self):
+        """Layout the panel."""
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(
             self.general_info_box_sizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5
@@ -132,10 +135,15 @@ class HistoryInfoPanel(SP.ScrolledPanel):
             flag=wx.EXPAND | wx.ALL,
             border=5,
         )
-        self.SetSizer(mainSizer)
-        self.SetMinSize(self.GetBestSize())
+        mainSizer.Add(
+            self.error_box_sizer,
+            proportion=0,
+            flag=wx.EXPAND | wx.ALL,
+            border=5,
+        )
 
-        self.Layout()
+        self.SetSizer(mainSizer)
+        self.SetupScrolling()
 
     def _initImages(self):
         bmpsize = (16, 16)
@@ -195,6 +203,19 @@ class HistoryInfoPanel(SP.ScrolledPanel):
 
         self.sizer_region_settings_grid.AddGrowableCol(1)
         self.region_settings_box.Hide()
+
+    def _createErrorBox(self):
+        """Create error message box."""
+        self.error_box = StaticBox(parent=self, id=wx.ID_ANY, label=_("Error Details"))
+        self.error_box_sizer = wx.StaticBoxSizer(self.error_box, wx.VERTICAL)
+        
+        self.error_text = StaticText(parent=self, id=wx.ID_ANY, label="")
+        self.error_text.SetForegroundColour(wx.RED)
+        self.error_box_sizer.Add(
+            self.error_text, proportion=0, flag=wx.EXPAND | wx.ALL, border=5
+        )
+        
+        self.error_box.Hide()
 
     def _general_info_filter(self, key, value):
         filter_keys = ["timestamp", "runtime", "status"]
@@ -412,6 +433,32 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         self.giface.updateMap.emit(render=False, renderVector=False)
         self._updateRegionSettingsMatch()
         self.Layout()
+
+    def showError(self, error_message):
+        """Show error message."""
+        self.error_message = error_message
+        self.error_text.SetLabel(error_message)
+        self.error_box.Show()
+        self.Layout()
+        self.SetupScrolling()
+
+    def hideError(self):
+        """Hide error message."""
+        self.error_message = None
+        self.error_text.SetLabel("")
+        self.error_box.Hide()
+        self.Layout()
+        self.SetupScrolling()
+
+    def updateCommandInfo(self, data):
+        """Update command info display."""
+        self.updateGeneralInfo(data)
+        if "region" in data:
+            self.updateRegionSettings(data["region"])
+        if "error_message" in data:
+            self.showError(data["error_message"])
+        else:
+            self.hideError()
 
 
 class HistoryBrowser(wx.SplitterWindow):
