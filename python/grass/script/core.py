@@ -490,7 +490,45 @@ def run_command(*args, **kwargs):
             sys.stderr.write(stderr)
     else:
         returncode = ps.wait()
-    return handle_errors(returncode, result=None, args=args, kwargs=kwargs)
+
+
+command_str = (
+    " ".join(args)
+    if args
+    else " ".join([f"{k}={v}" for k, v in kwargs.items() if k != "flags"])
+)
+# Get history file path
+from grass.script import gisenv
+
+history_file = os.path.join(
+    gisenv()["GISDBASE"],
+    gisenv()["LOCATION_NAME"],
+    gisenv()["MAPSET"],
+    ".grass",
+    "grass_history",
+)
+
+# Log to history
+try:
+    result = handle_errors(returncode, result=None, args=args, kwargs=kwargs)
+    status = "success"
+    error = None
+except CalledModuleError as e:
+    status = "failed"
+    error = str(e)
+    result = None
+
+# Write to history file
+with open(history_file, "a") as f:
+    f.write(f"command={command_str}\n")
+    f.write(f"status={status}\n")
+    if error:
+        f.write(f"error={error}\n")
+
+if status == "failed":
+    raise  # Re-raise the exception
+
+return result
 
 
 def pipe_command(*args, **kwargs):

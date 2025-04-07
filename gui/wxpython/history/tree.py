@@ -57,6 +57,7 @@ class HistoryBrowserNode(DictFilterNode):
 
     def __init__(self, data=None):
         super().__init__(data=data)
+        self.error_button = None
 
     @property
     def label(self):
@@ -71,6 +72,38 @@ class HistoryBrowserNode(DictFilterNode):
         if "timestamp" in self.data.keys():
             return self.data["timestamp"]
         return None
+
+    @property
+    def error_message(self):
+        """Get error message from node data."""
+        return self.data.get("error_message", "")
+
+    def set_error_message(self, error_message):
+        """Set error message in node data."""
+        self.data["error_message"] = error_message
+
+    def create_error_button(self, parent):
+        """Create error button for displaying error details."""
+        if not self.error_message:
+            return None
+
+        self.error_button = wx.Button(parent, wx.ID_ANY, "?", style=wx.BU_EXACTFIT)
+        self.error_button.SetForegroundColour(wx.RED)
+        self.error_button.SetToolTip(_("Show error details"))
+        self.error_button.Bind(wx.EVT_BUTTON, self._on_error_button)
+        return self.error_button
+
+    def _on_error_button(self, event):
+        """Show error details in a dialog."""
+        if self.error_message:
+            dlg = wx.MessageDialog(
+                self.error_button.GetParent(),
+                self.error_message,
+                _("Error Details"),
+                wx.OK | wx.ICON_ERROR
+            )
+            dlg.ShowModal()
+            dlg.Destroy()
 
     def dayToLabel(self, day):
         """
@@ -369,17 +402,17 @@ class HistoryBrowserTree(CTreeView):
             GError(str(e))
 
     def GetCommandInfo(self, index):
-        """Get command info for the given command index.
-        It is a wrapper which considers GError.
+        """Fetch command info including error messages."""
 
-        :param int index: index of the command
-        """
-        command_info = {}
-        try:
-            history_path = history.get_current_mapset_gui_history_path()
-            command_info = history.read(history_path)[index]["command_info"]
-        except (OSError, ValueError) as e:
-            GError(str(e))
+    command_info = {}
+    try:
+        history_path = history.get_current_mapset_gui_history_path()
+        entry = history.read(history_path)[index]
+        command_info = entry.get("command_info", {})
+        if "error" in entry:
+            command_info["error"] = entry["error"]
+    except (OSError, ValueError) as e:
+        GError(str(e))
         return command_info
 
     def GetHistoryNode(self, entry, command_index=None):
@@ -520,27 +553,38 @@ class HistoryBrowserTree(CTreeView):
 
         :param entry dict: entry with 'command' and 'command_info' keys
         """
-        # Get node of first command
-        first_node = self.GetHistoryNode(entry=entry, command_index=0)
 
-        # Extract command info
-        command_info = entry["command_info"]
-        status = command_info["status"]
-        timestamp = command_info["timestamp"]
+    # Get node of first command
+    first_node = self.GetHistoryNode(entry=entry, command_index=0)
 
-        # Convert timestamp to datetime object
-        datetime_timestamp = self._timestampToDatetime(timestamp)
+    # Extract command info
+    command_info = entry["command_info"]
+    status = command_info["status"]
+    timestamp = command_info["timestamp"]
 
-        # Update command node
-        self._model.UpdateNode(
-            first_node,
-            status=status,
-            timestamp=datetime_timestamp,
+    # Extract error message if the command failed
+    error_message = command_info.get("error", "")
+
+    # Convert timestamp to datetime object
+    datetime_timestamp = self._timestampToDatetime(timestamp)
+
+    # Update command node with error message included
+    self._model.UpdateNode(
+        first_node,
+        status=status,
+        timestamp=datetime_timestamp,
+        error_message=error_message,  # Store error message
+    )
+    self._reloadNode(first_node.parent)
+
+    # Show command info in info panel
+    self.infoPanel.showCommandInfo(command_info)
+
+    # If the command failed, show the error message in the panel
+    if status.lower() == "failed" and error_message:
+        self.infoPanel.showCommandInfo(
+            f"{command_info}\nError: {error_message}", color="red"
         )
-        self._reloadNode(first_node.parent)
-
-        # Show command info in info panel
-        self.infoPanel.showCommandInfo(command_info)
 
     def Run(self, node=None):
         """Parse selected history command into list and launch module dialog."""
