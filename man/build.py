@@ -99,9 +99,9 @@ def write_header(f, title, ismain=False, body_width="99%", template="html"):
     if template == "html":
         from build_html import header1_tmpl, macosx_tmpl, header2_tmpl
     else:
-        from build_md import header1_tmpl, macosx_tmpl, header2_tmpl
+        from build_md import header1_tmpl, header2_tmpl
     f.write(header1_tmpl.substitute(title=title))
-    if ismain and macosx:
+    if ismain and macosx and template == "html":
         f.write(
             macosx_tmpl.substitute(grass_version=grass_version, grass_mmver=grass_mmver)
         )
@@ -123,14 +123,13 @@ def write_cmd_overview(f, template="html"):
 def write_footer(f, index_url, year=None, template="html"):
     if template == "html":
         from build_html import footer_tmpl
-    else:
-        from build_md import footer_tmpl
-    cur_year = default_year if year is None else year
-    f.write(
-        footer_tmpl.substitute(
-            grass_version=grass_version, index_url=index_url, year=cur_year
+
+        cur_year = default_year if year is None else year
+        f.write(
+            footer_tmpl.substitute(
+                grass_version=grass_version, index_url=index_url, year=cur_year
+            )
         )
-    )
 
 
 def to_title(name):
