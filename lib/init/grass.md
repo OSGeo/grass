@@ -40,9 +40,14 @@ reference system defined by EPSG code and datum transform parameters
 **-e**  
 Exit after creation of project or mapset. Only with **-c** flag
 
-**-f**  
-Forces removal of .gislock if exists (use with care!). Only with --text
-flag
+**--timeout SECONDS**  
+Specifies how long, in seconds, to wait for a mapset lock to be acquired.
+
+**-f** \| **--force-remove-lock**  
+Forces removal of the lock file if it exists. Use with care.
+Use a different mapset for another concurrent session.
+Use a process manager to check if another process is using
+the mapset before using the flag.
 
 **--text**  
 Indicates that Text-based User Interface should be used (skip welcome
