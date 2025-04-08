@@ -29,6 +29,7 @@ static void print_python_option(FILE *file, const struct Option *opt,
 static void print_python_example(FILE *file, const char *python_function,
                                  const char *output_format_default,
                                  const char *indent);
+static void print_python_tuple(FILE *file, const char *type, int num_items);
 
 void print_python_short_flag(FILE *file, const char *key, const char *label,
                              const char *description, const char *indent)
@@ -55,7 +56,7 @@ void print_python_short_flag(FILE *file, const char *key, const char *label,
 void print_python_long_flag(FILE *file, const char *key, const char *label,
                             const char *description, const char *indent)
 {
-    fprintf(file, "%s**%s**: bool, default False", indent, key);
+    fprintf(file, "%s**%s**: bool, *optional*", indent, key);
     fprintf(file, MD_NEWLINE);
     fprintf(file, "\n");
     if (label != NULL) {
@@ -69,7 +70,21 @@ void print_python_long_flag(FILE *file, const char *key, const char *label,
         fprintf(file, "%s", indent);
         G__md_print_escaped(file, "\t");
         G__md_print_escaped(file, description);
+        fprintf(file, MD_NEWLINE);
+        fprintf(file, "\n");
     }
+    fprintf(file, "%s", indent);
+    G__md_print_escaped(file, "\t");
+    fprintf(file, "Default: *False*");
+}
+
+void print_python_tuple(FILE *file, const char *type, int num_items)
+{
+    fprintf(file, "tuple[%s", type);
+    for (int i = 1; i < num_items; i++) {
+        fprintf(file, ", %s", type);
+    }
+    fprintf(file, "]");
 }
 
 void print_python_option(FILE *file, const struct Option *opt,
@@ -95,35 +110,37 @@ void print_python_option(FILE *file, const struct Option *opt,
     int tuple_items = G__option_num_tuple_items(opt);
     if (opt->multiple) {
         if (tuple_items) {
-            fprintf(file, "list[tuple[%s", type);
-            for (int i = 1; i < tuple_items; i++) {
-                fprintf(file, ", %s", type);
-            }
-            fprintf(file, "]], list[%s], str", type);
+            fprintf(file, "list[");
+            print_python_tuple(file, type, tuple_items);
+            fprintf(file, "] | ");
+            print_python_tuple(file, type, tuple_items);
+            fprintf(file, " | list[%s] | str", type);
         }
         else {
-            fprintf(file, "%s, list[%s]", type, type);
+            if (strcmp(type, "str")) {
+                // If it is not a string, we also show it can be a string
+                // because that may be more relevant to show that for
+                // lists due to examples (it is possible for single value as
+                // well).
+                fprintf(file, "%s | list[%s] | str", type, type);
+            }
+            else {
+                fprintf(file, "%s | list[%s]", type, type);
+            }
         }
     }
     else if (tuple_items) {
-        fprintf(file, "tuple[%s", type);
-        for (int i = 1; i < tuple_items; i++) {
-            fprintf(file, ", %s", type);
-        }
-        fprintf(file, "], list[%s], str", type);
+        print_python_tuple(file, type, tuple_items);
+        fprintf(file, " | list[%s] | str", type);
     }
     else {
         fprintf(file, "%s", type);
     }
-    if (opt->key_desc) {
-        fprintf(file, ", `%s`", opt->key_desc);
-    }
-    /* fprintf(file, "*"); */
     if (opt->required) {
-        fprintf(file, ", required");
+        fprintf(file, ", *required*");
     }
     else {
-        fprintf(file, ", optional");
+        fprintf(file, ", *optional*");
     }
 
     fprintf(file, MD_NEWLINE);
@@ -142,6 +159,34 @@ void print_python_option(FILE *file, const struct Option *opt,
         G__md_print_escaped(file, "\t");
         G__md_print_escaped(file, opt->description);
     }
+    if (opt->gisprompt || opt->key_desc) {
+        fprintf(file, MD_NEWLINE);
+        fprintf(file, "\n");
+        fprintf(file, "%s", indent);
+        G__md_print_escaped(file, "\t");
+        fprintf(file, "%s: ", _("Used as"));
+    }
+    if (opt->gisprompt) {
+        char age[KEYLENGTH];
+        char element[KEYLENGTH];
+        char desc[KEYLENGTH];
+        G__split_gisprompt(opt->gisprompt, age, element, desc);
+        if (strcmp(age, "new") == 0)
+            fprintf(file, "output, ");
+        else if (strcmp(age, "old") == 0)
+            fprintf(file, "input, ");
+        // While element more strictly expresses how the value will be
+        // used given that the parser may read that information, desc
+        // is meant as a user-facing representation of the same
+        // information.
+        fprintf(file, "%s", desc);
+    }
+    if (opt->gisprompt && opt->key_desc) {
+        fprintf(file, ", ");
+    }
+    if (opt->key_desc) {
+        fprintf(file, "*%s*", opt->key_desc);
+    }
 
     if (opt->options) {
         fprintf(file, MD_NEWLINE);
@@ -150,19 +195,6 @@ void print_python_option(FILE *file, const struct Option *opt,
         G__md_print_escaped(file, "\t");
         fprintf(file, "%s: *", _("Allowed values"));
         G__md_print_escaped_for_options(file, opt->options);
-        fprintf(file, "*");
-    }
-
-    if (opt->def) {
-        fprintf(file, MD_NEWLINE);
-        fprintf(file, "\n");
-        fprintf(file, "%s", indent);
-        G__md_print_escaped(file, "\t");
-        fprintf(file, "%s:", _("Default"));
-        /* TODO check if value is empty
-           if (!opt->def.empty()){ */
-        fprintf(file, " *");
-        G__md_print_escaped(file, opt->def);
         fprintf(file, "*");
     }
 
@@ -203,6 +235,17 @@ void print_python_option(FILE *file, const struct Option *opt,
             }
             i++;
         }
+    }
+
+    if (opt->def) {
+        fprintf(file, MD_NEWLINE);
+        fprintf(file, "\n");
+        fprintf(file, "%s", indent);
+        G__md_print_escaped(file, "\t");
+        fprintf(file, "%s:", _("Default"));
+        fprintf(file, " *");
+        G__md_print_escaped(file, opt->def);
+        fprintf(file, "*");
     }
 }
 
@@ -395,7 +438,7 @@ void G__md_print_python_long_version(FILE *file, const char *indent)
 
     // Short (one-letter) flags and tool-specific long flags
     if (st->n_flags) {
-        fprintf(file, "%s**flags** : str", indent);
+        fprintf(file, "%s**flags** : str, *optional*", indent);
         fprintf(file, MD_NEWLINE);
         fprintf(file, "\n");
         fprintf(file, "%s", indent);
@@ -403,8 +446,10 @@ void G__md_print_python_long_version(FILE *file, const char *indent)
         fprintf(file, "Allowed values: ");
         flag = &st->first_flag;
         while (st->n_flags && flag != NULL) {
-            fprintf(file, "*%s*, ", &flag->key);
+            fprintf(file, "*%s*", &flag->key);
             flag = flag->next_flag;
+            if (flag != NULL)
+                fprintf(file, ", ");
         }
         fprintf(file, MD_NEWLINE);
         fprintf(file, "\n");
