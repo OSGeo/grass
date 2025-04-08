@@ -616,8 +616,8 @@ void print_info(struct Map_info *Map)
     divider('|');
 
     if (map_type == GV_FORMAT_OGR || map_type == GV_FORMAT_OGR_DIRECT) {
-        G_saprintf(line, "%-17s%s (%s)", _("Map format:"),
-                   maptype_str, Vect_get_finfo_format_info(Map));
+        G_saprintf(line, "%-17s%s (%s)", _("Map format:"), maptype_str,
+                   Vect_get_finfo_format_info(Map));
         printline(line);
 
         /* for OGR format print also datasource and layer */
@@ -638,8 +638,8 @@ void print_info(struct Map_info *Map)
 
         finfo = Vect_get_finfo(Map);
 
-        G_saprintf(line, "%-17s%s (%s)", _("Map format:"),
-                   maptype_str, Vect_get_finfo_format_info(Map));
+        G_saprintf(line, "%-17s%s (%s)", _("Map format:"), maptype_str,
+                   Vect_get_finfo_format_info(Map));
         printline(line);
 
         /* for PostGIS format print also datasource and layer */
@@ -734,8 +734,8 @@ void print_info(struct Map_info *Map)
         utm_zone = Vect_get_zone(Map);
         utm_zone_str = format_zone(utm_zone);
 
-        G_saprintf(line, "  %s: %s (%s %s)", _("Projection"),
-                   proj_name, _("zone"), utm_zone_str);
+        G_saprintf(line, "  %s: %s (%s %s)", _("Projection"), proj_name,
+                   _("zone"), utm_zone_str);
     }
     else
         G_saprintf(line, "  %s: %s", _("Projection"), proj_name);
