@@ -17,6 +17,7 @@ class TestEvapotranspirationMH(TestCase):
 
     @classmethod
     def setUpClass(cls):
+        """Setup input rasters and configure test environment."""
         seed = 43
         cls.use_temp_region()
         gs.run_command("g.region", n=10, s=0, e=10, w=0, rows=10, cols=10)
@@ -61,11 +62,12 @@ class TestEvapotranspirationMH(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls.del_temp_region()
+        """Remove generated rasters and reset test environment."""
         gs.run_command("g.remove", type="raster", name=cls.tmp_rasters, flags="f")
+        cls.del_temp_region()
 
     def create_raster(self, name, expression, seed=None):
-        """Helper to create raster and register it for cleanup"""
+        """Create temporary raster map and register it for cleanup."""
         self.runModule(
             "r.mapcalc",
             expression=f"{name} = {expression}",
@@ -75,7 +77,7 @@ class TestEvapotranspirationMH(TestCase):
         self.tmp_rasters.append(name)
 
     def run_evapo(self, output, flags="", overwrite=True, **kwargs):
-        """Helper to run i.evapo.mh and register output for cleanup"""
+        """Execute the i.evapo.mh module with standardized parameters."""
         self.assertModule(
             "i.evapo.mh",
             flags=flags,
@@ -86,7 +88,7 @@ class TestEvapotranspirationMH(TestCase):
         self.tmp_rasters.append(output)
 
     def test_z_flag_negative_values(self):
-        """Test -z flag sets negative values to zero"""
+        """Verify -z flag clamps negative output values to zero."""
         self.create_raster("netrad_z", "10")
         self.create_raster("min_temp_z", "0")
         self.create_raster("max_temp_z", "10")
@@ -107,7 +109,7 @@ class TestEvapotranspirationMH(TestCase):
         self.assertGreaterEqual(stats["min"], 0)
 
     def test_h_flag_precipitation_ignored(self):
-        """Test -h flag ignores precipitation"""
+        """Confirm -h flag makes precipitation input irrelevant."""
         self.run_evapo(
             flags="h",
             netradiation_diurnal=self.netradiation_diurnal,
@@ -132,7 +134,7 @@ class TestEvapotranspirationMH(TestCase):
         )
 
     def test_s_flag_different_output(self):
-        """Test -s flag produces different results from default"""
+        """Check -s flag produces different results from default method."""
         self.run_evapo(
             netradiation_diurnal=self.netradiation_diurnal,
             average_temperature=self.average_temperature,
@@ -156,19 +158,19 @@ class TestEvapotranspirationMH(TestCase):
         stats = {"min": 0, "max": 2276.226764, "mean": 985.087234}
         self.assertRasterFitsUnivar(raster="diff_map", reference=stats, precision=1e-6)
 
-    def test_hargreaves_formula_workaround(self):
-        """Test original Hargreaves formula using workaround for internal unit scaling"""
+    def test_hargreaves_formula(self):
+        """Validate Hargreaves formula implementation matches reference."""
         self.create_raster("netrad_test", "0.1446759")
         self.create_raster("tmin_test", "10")
         self.create_raster("tmax_test", "30")
         self.create_raster("tavg_test", "20")
 
-        def mh_original_grass_equiv(ra_input_w, tavg, tmax, tmin):
+        def calculate_et(ra_input_w, tavg, tmax, tmin):
             ra_mj = ra_input_w * 86.4
             td = tmax - tmin
             return 0.0023 * 0.408 * ra_mj * (tavg + 17.8) * math.sqrt(td)
 
-        expected_et = mh_original_grass_equiv(0.1446759, 20, 30, 10)
+        expected_et = calculate_et(0.1446759, 20, 30, 10)
 
         self.run_evapo(
             flags="h",
@@ -181,7 +183,7 @@ class TestEvapotranspirationMH(TestCase):
         stats = gs.parse_command("r.univar", map="et_const", flags="g", format="json")[
             0
         ]
-        self.assertAlmostEqual(stats["mean"], expected_et, delta=1e-6)
+        self.assertAlmostEqual(stats["mean"], expected_et)
 
 
 if __name__ == "__main__":
