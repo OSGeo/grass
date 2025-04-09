@@ -14,17 +14,22 @@ This program is free software under the GNU General Public License
 """
 
 import grass.script as gs
+import sys
 
 try:
     from osgeo import gdal
+    # Explicitly enable GDAL exceptions to avoid FutureWarning
+    # This is required for GDAL 4.0+ compatibility
+    gdal.UseExceptions()
+    haveGdal = True
 except ImportError:
-    gs.fatal(
+    haveGdal = False
+    sys.stderr.write(
         _(
-            "Unable to load GDAL Python bindings (requires package 'python-gdal' being "
-            "installed)"
+            "Unable to load GDAL Python bindings.\n"
+            "WMS functionality may not work without the bindings.\n"
         )
     )
-
 import xml.etree.ElementTree as ET
 
 from wms_base import WMSBase, GetSRSParamVal
@@ -163,10 +168,13 @@ class WMSGdalDrv(WMSBase):
             gdal.SetConfigOption("GDAL_HTTP_PROXY", str(self.proxy))
         if self.proxy_user_pw:
             gdal.SetConfigOption("GDAL_HTTP_PROXYUSERPWD", str(self.proxy_user_pw))
-        wms_dataset = gdal.Open(xml_file, gdal.GA_ReadOnly)
-        gs.try_remove(xml_file)
-        if wms_dataset is None:
-            gs.fatal(_("Unable to open GDAL WMS driver"))
+
+        try:
+            driver = gdal.GetDriverByName(self.gdal_drv_format)
+            if driver is None:
+                raise RuntimeError(f"Unable to find {self.gdal_drv_format} driver")
+        except RuntimeError as e:
+            gs.fatal(f"GDAL Driver Error: {e}")
 
         self._debug("_download", "GDAL dataset created")
 

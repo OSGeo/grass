@@ -88,6 +88,21 @@ from gui_core.wrap import (
 
 from grass.pydispatch.signal import Signal
 
+try:
+    from osgeo import gdal
+    # Explicitly enable GDAL exceptions to avoid FutureWarning
+    # This is required for GDAL 4.0+ compatibility
+    gdal.UseExceptions()
+    haveGdal = True
+except ImportError:
+    haveGdal = False
+    sys.stderr.write(
+        _(
+            "Unable to load GDAL Python bindings.\n"
+            "Some functionality may not work without the bindings.\n"
+        )
+    )
+
 
 class Select(ComboCtrl):
     def __init__(
@@ -2623,17 +2638,23 @@ class GdalSelect(wx.Panel):
         """Get Rasterlite DB rasters
 
         :param str dsn: Rasterlite DB data source name
-
         :return list: list of Rasterlite DB rasters
         """
-        try:
-            from osgeo import gdal
-        except ImportError:
-            GError(
-                parent=self,
-                message=_("The Python GDAL package is missing. Please install it."),
-            )
-            return []
+
+    try:
+        from osgeo import gdal
+
+        gdal.DontUseExceptions()
+        rasterlite = gdal.Open(dsn)
+        if rasterlite is None:
+            raise RuntimeError(f"Failed to open Rasterlite database: {dsn}")
+
+        rasters = rasterlite.GetSubDatasets()
+        return rasters
+    except RuntimeError as e:
+        GError(parent=self, message=f"GDAL error while opening Rasterlite DB: {e}")
+        return []
+
         rasterlite = gdal.Open(dsn)
         rasters = rasterlite.GetSubDatasets()
         if rasters:
