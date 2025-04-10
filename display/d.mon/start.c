@@ -40,8 +40,10 @@ char *start(const char *name, const char *output, int width, int height,
         D_open_driver();
 
         output_name = D_get_file();
-        if (!output_name)
+        if (!output_name) {
+            G_free(output_path);
             return NULL;
+        }
         if (!update && access(output_name, F_OK) == 0) {
             if (G_get_overwrite()) {
                 G_warning(_("File <%s> already exists and will be overwritten"),
@@ -233,8 +235,10 @@ int start_mon(const char *name, const char *output, int select, int width,
 
     /* create cmd file (list of GRASS display commands to render) */
     G_debug(1, "Monitor name=%s, cmdfile = %s", name, cmd_file);
-    if (0 > creat(cmd_file, 0666))
+    int fd2 = creat(cmd_file, 0666);
+    if (0 > fd2)
         G_fatal_error(_("Unable to create file <%s>"), cmd_file);
+    close(fd2);
 
     /* select monitor if requested */
     if (select)
@@ -243,6 +247,8 @@ int start_mon(const char *name, const char *output, int select, int width,
     G_free(mon_path);
     G_free(out_file);
     G_free(env_file);
+    G_free(cmd_file);
+    G_free(leg_file);
 
     return 0;
 }
