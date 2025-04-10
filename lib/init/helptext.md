@@ -80,11 +80,6 @@ line.
 
 ## See also
 
-*[GRASS GIS Reference Manual](index.md)  
-[GRASS GIS startup program manual page](grass.md)  
-[GRASS GIS tutorials and books](https://grass.osgeo.org/learn/)*
-
-[List of EPSG codes](https://spatialreference.org/) (Database of
-worldwide coordinate systems), [CRS Explorer - PROJ
-codes](https://crs-explorer.proj.org/), and [EPSG Geodetic Parameter
-Dataset](https://epsg.org/)
+- [The grass command](grass.md)
+- [GRASS tutorials and books](https://grass.osgeo.org/learn/)
+- [Intro to projections and transformations](projectionintro.md)

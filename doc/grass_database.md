@@ -203,10 +203,7 @@ using import options in the *File* menu in *Layer Manager* or
 
 ## See also
 
-*[GRASS GIS Reference Manual](index.md)  
-[GRASS GIS startup program manual page](grass.md)  
-[Importing data on GRASS
-Wiki](https://grasswiki.osgeo.org/wiki/Importing_data)  
-[r.import](r.import.md), [v.import](v.import.md),
-[r.external](r.external.md), [v.external](v.external.md),
-[r.proj](r.proj.md), [v.proj](v.proj.md),*
+- [The grass command](grass.md)
+- *[r.import](r.import.md), [v.import](v.import.md), [r.external](r.external.md),*
+  *[v.external](v.external.md), [r.proj](r.proj.md), [v.proj](v.proj.md)*
+- [Importing data on GRASS Wiki](https://grasswiki.osgeo.org/wiki/Importing_data)

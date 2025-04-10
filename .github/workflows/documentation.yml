@@ -144,8 +144,8 @@ jobs:
           cd grass
           eval $(./utils/update_version.py status --bash)
           cd ..
-          export SITE_NAME="GRASS GIS $VERSION Reference Manual"
-          export COPYRIGHT="&copy; 2003-$YEAR GRASS Development Team, GRASS GIS $VERSION Reference Manual"
+          export SITE_NAME="GRASS $VERSION Documentation"
+          export COPYRIGHT="&copy; 2003-$YEAR GRASS Development Team, GRASS $VERSION Documentation"
           cd $MKDOCS_DIR
           mkdocs build
 

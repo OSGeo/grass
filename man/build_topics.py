@@ -108,11 +108,10 @@ def build_topics(ext):
             keywords[key][fname] = desc
 
     with Path(man_dir, f"topics.{ext}").open("w") as topicsfile:
-        topicsfile.write(
-            header1_tmpl.substitute(
-                title="GRASS %s Reference Manual - Topics index" % grass_version
-            )
-        )
+        title = "Topics index"
+        if ext == "html":
+            title = f"GRASS {grass_version} Reference Manual - {title}"
+        topicsfile.write(header1_tmpl.substitute(title=title))
         topicsfile.write(headertopics_tmpl)
 
         for key, values in sorted(keywords.items(), key=lambda s: s[0].lower()):
