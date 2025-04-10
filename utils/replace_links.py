@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import os
 import re
 import argparse
 import difflib
@@ -8,15 +7,13 @@ from pathlib import Path
 
 
 def replace_links_in_markdown(
-    filepath, replace_url, replacement, dry_run=False, verbose=False, diff=False
+    filepath, replace_url, replacement, dry_run, verbose, diff
 ):
     content = Path(filepath).read_text()
-
     # Match Markdown links/images with multiline labels.
     pattern = re.compile(
         r"(!?\[.*?\])\(\s*" + re.escape(replace_url) + r"([^)]*)?\s*\)", re.DOTALL
     )
-
     if pattern.search(content):
         new_content = pattern.sub(
             lambda m: f"{m.group(1)}({replacement}{m.group(2) or ''})", content
@@ -47,17 +44,17 @@ def replace_grass_links(args):
     new_base_url = ensure_trailing_slash(args.new_base_url)
 
     for subdir in args.target_dirs:
-        dir_path = os.path.join(args.root_dir, subdir)
+        dir_path = Path(args.root_dir) / subdir
         replacement = new_base_url if subdir == "" else f"{new_base_url}.."
-
         # This assumes that the directory exists.
         for file_path in Path.iterdir(dir_path):
-            if os.path.isfile(file_path) and file_path.suffix == args.file_ext:
+            if file_path.is_file() and file_path.suffix == args.file_ext:
                 replace_links_in_markdown(
                     file_path,
                     replace_url,
                     replacement,
                     dry_run=args.dry_run,
+                    diff=args.diff,
                     verbose=args.verbose,
                 )
 
