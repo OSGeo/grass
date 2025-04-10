@@ -70,11 +70,10 @@ int main(int argc, char *argv[])
                "int;%s;"
                "std;%s;"
                "qua;%s;"
-               "equ;%s",
-               /* "dis;%s" */
+               "equ;%s;"
+               "dis;%s",
                _("simple intervals"), _("standard deviations"), _("quantiles"),
-               _("equiprobable (normal distribution)"));
-    /* _("discontinuities"));currently disabled because of bugs */
+               _("equiprobable (normal distribution)"), _("discontinuities"));
     algo_opt->descriptions = desc;
 
     nbclass_opt = G_define_option();
@@ -151,15 +150,15 @@ int main(int argc, char *argv[])
     nbreaks = nbclass - 1; /* we need one less classbreaks (min and max
                               excluded) than classes */
 
-    classbreaks = (double *)G_malloc((nbreaks) * sizeof(double));
-    for (i = 0; i < nbreaks; i++)
+    classbreaks = (double *)G_malloc((nbclass) * sizeof(double));
+    for (i = 0; i < nbclass; i++)
         classbreaks[i] = 0;
 
     /* Get classbreaks for given algorithm and number of classbreaks.
      * finfo takes any info coming from the classification algorithms
      * equ algorithm can alter number of class breaks */
     finfo = AS_class_apply_algorithm(AS_option_to_algorithm(algo_opt), data,
-                                     nrec, &nbreaks, classbreaks);
+                                     nrec, &nbreaks, &classbreaks);
 
     if (G_strcasecmp(algo_opt->answer, "dis") == 0 && finfo < 3.84148)
         G_warning(
