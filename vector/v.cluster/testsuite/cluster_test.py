@@ -11,14 +11,21 @@ class TestVCluster(TestCase):
         """Create test data with proper attribute table setup"""
         # Generate random points
         cls.runModule(
-            "v.random", output="test_points", npoints=100, seed=42, overwrite=True,
+            "v.random",
+            output="test_points",
+            npoints=100,
+            seed=42,
+            overwrite=True,
         )
 
     @classmethod
     def tearDownClass(cls):
         """Clean up"""
         cls.runModule(
-            "g.remove", type="vector", name="test_points,clustered", flags="f",
+            "g.remove",
+            type="vector",
+            name="test_points,clustered",
+            flags="f",
         )
 
     def setUp(self):
