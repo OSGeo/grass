@@ -1,5 +1,7 @@
 #include <math.h>
+
 #include <grass/arraystats.h>
+#include <grass/gis.h>
 
 /*provides basic univar stats */
 void AS_basic_stats(double *data, int count, struct GASTATS *stats)
@@ -34,31 +36,43 @@ void AS_basic_stats(double *data, int count, struct GASTATS *stats)
     return;
 }
 
-void AS_eqdrt(double vectx[], double vecty[], int i1, int i2, double *vabc)
+void AS_eqdrt(double vectx[], double vecty[], int i1, int i2, double *a,
+              double *b, double *c)
 {
-    double bn = 0, bd = 0, x1 = 0, y1 = 0;
+    double bn = 0.0, bd = 0.0, x1 = 0.0, y1 = 0.0;
+    double x2 = 0.0, y2 = 0.0;
 
-    vabc[0] = 0;
-    vabc[1] = 0;
-    vabc[2] = 0;
+    *a = 0.0;
+    *b = 0.0;
+    *c = 0.0;
+
+    x1 = vectx[i1];
+    y1 = vecty[i1];
+    x2 = vectx[i2];
+    y2 = vecty[i2];
+
     if (i1 == 0) {
-        x1 = 0;
-        y1 = 0;
+        x1 = 0.0;
+        y1 = 0.0;
     }
     else {
         x1 = vectx[i1];
         y1 = vecty[i1];
     }
-    bn = y1 - vecty[i2];
-    bd = x1 - vectx[i2];
-    if (bd != 0) {
-        vabc[1] = bn / bd;
-        vabc[0] = y1 - vabc[1] * x1;
-        return;
+
+    bn = y1 - y2;
+    bd = x1 - x2;
+
+    if (fabs(bd) < GRASS_EPSILON) {
+        if (fabs(bn) < GRASS_EPSILON) {
+            printf("Points are equal\n");
+        }
+        else {
+            *c = x1;
+        }
     }
-    if (bn != 0)
-        vabc[2] = x1;
-    else
-        G_debug(3, "Points are equal\n");
-    return;
+    else {
+        *b = bn / bd;
+        *a = y1 - *b * x1;
+    }
 }
