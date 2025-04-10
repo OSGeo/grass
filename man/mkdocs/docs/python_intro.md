@@ -753,4 +753,4 @@ and work in parallel processing workflows.
 To turn your script into an addon, see the [GRASS Addon Cookiecutter Template](https://github.com/OSGeo/grass-addon-cookiecutter).
 
 <!-- markdownlint-disable-next-line line-length -->
-[GRASS Python best practices :material-arrow-right-bold:](hstyle_guide.html#developing-python-scripts){ .md-button }
+[GRASS Python best practices :material-arrow-right-bold:](style_guide.html#developing-python-scripts){ .md-button }
