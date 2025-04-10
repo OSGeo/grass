@@ -28,6 +28,7 @@ from .map import Map
 from .utils import get_number_of_cores, save_gif
 
 
+
 class BaseSeriesMap:
     """
     Base class for SeriesMap and TimeSeriesMap
@@ -56,10 +57,10 @@ class BaseSeriesMap:
         self._width = width
         self._height = height
         self._slider_description = ""
+        self._legend = None  # Shared legend settings for all timesteps/frames
         self._labels = []
         self._indices = []
         self.base_file = None
-
         # Create a temporary directory for our PNG images
         # Resource managed by weakref.finalize.
         self._tmpdir = (
@@ -98,12 +99,29 @@ class BaseSeriesMap:
                 self._base_calls.append((grass_module, kwargs))
 
         return wrapper
+    
+    def d_legend(self, **kwargs):
+        """Display legend for all timesteps/frames."""
+        self._legend = kwargs
+        self._layers_rendered = False  # Force re-render  
+    
 
     def _render_baselayers(self, img):
         """Add collected baselayers to Map instance"""
         for grass_module, kwargs in self._base_layer_calls:
             img.run(grass_module, **kwargs)
 
+    def _apply_overlays(self, img):
+        """Apply overlay commands (d.vect, d.barscale) to map instance"""
+        for grass_module, kwargs in self._base_calls:
+            img.run(grass_module, **kwargs)        
+
+    def _apply_legend(self, img):
+        """Apply legend to a map instance"""
+        if self._legend:
+            img.d_legend(**self._legend) 
+     
+                  
     def _render(self, tasks):
         """
         Renders the base image for the dataset.
@@ -145,7 +163,7 @@ class BaseSeriesMap:
         for i, filename in results:
             self._base_filename_dict[i] = filename
 
-        self._layers_rendered = True
+        self._layers_rendered = True     
 
     def show(self, slider_width=None):
         """Create interactive timeline slider.
