@@ -1,0 +1,17 @@
+<div class="md-copyright">
+    {% if config.copyright %}
+    <div class="md-copyright__highlight">
+        {{ config.copyright }}
+    </div>
+    {% endif %}
+    Funded by the
+    <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2303651" target="_blank" rel="noopener">
+        U.S. National Science Foundation Award (2303651)
+    </a>
+    {% if not config.extra.generator == false %}
+    &amp; Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+        Material for MkDocs
+    </a>
+    {% endif %}
+</div>
