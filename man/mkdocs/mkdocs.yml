@@ -103,7 +103,6 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.tasklist
   - pymdownx.snippets
-  - pymdownx.tabbed
   - pymdownx.magiclink
   - attr_list
   - md_in_html
