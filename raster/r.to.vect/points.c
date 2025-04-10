@@ -53,8 +53,8 @@ int extract_points(int z_flag UNUSED)
         }
 
         for (col = 0; col < cell_head.cols; col++) {
-            int cat, val;
-            double dval;
+            int cat = 0, val = 0;
+            double dval = 0.0;
 
             x = Rast_col_to_easting((double)(col + .5), &cell_head);
 
