@@ -253,7 +253,6 @@ int AS_class_equiprob(double *data, int count, int *nbreaks, double **clbrks_in)
         classbreaks = G_realloc(classbreaks, j * sizeof(double));
         for (i = 0; i < j; i++)
             classbreaks[i] = 0;
-        //        *classbreaks = classbreaks;
     }
 
     j = 0;
