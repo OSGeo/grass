@@ -16,7 +16,7 @@ If you don't have a project yet, create a new one first:
 ```python
 import grass.script as gs
 
-gs.create_project("path/to/my_project", epsg=3358)
+gs.create_project("path/to/my_project", epsg="3358")
 ```
 
 To get started with `grass.jupyter`, import the package,
