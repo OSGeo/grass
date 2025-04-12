@@ -141,7 +141,7 @@ jobs:
             --target-dirs "" addons \
             --new-base-url "" \
             --verbose \
-            https://grass.osgeo.org/grass-stable/manuals
+            https://grass.osgeo.org/grass-stable/manuals \
             "$MKDOCS_DIR/source/"
 
       - name: Get mkdocs
