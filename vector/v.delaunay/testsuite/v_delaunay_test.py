@@ -90,7 +90,6 @@ class TestVDelaunay(TestCase):
             flags="l",
             overwrite=True,
         )
-
         topology_l_flag = vector_info_topo("output_l_flag")
         self.assertGreater(topology_l_flag["lines"], 0)
         self.assertEqual(topology_l_flag["areas"], 0)
