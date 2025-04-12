@@ -339,7 +339,6 @@ ignore = [
 "scripts/d.polar/d.polar.py" = ["FURB154", "SIM115"]
 "scripts/db.in.ogr/db.in.ogr.py" = ["SIM115"]
 "scripts/db.test/db.test.py" = ["SIM115"]
-"scripts/db.univar/db.univar.py" = ["SIM115"]
 "scripts/g.download.project/g.download.project.py" = ["PTH208"]
 "scripts/g.extension.all/g.extension.all.py" = ["SIM115"]
 "scripts/g.extension/g.extension.py" = ["PTH208", "SIM115"]
