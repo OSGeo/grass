@@ -344,7 +344,6 @@ ignore = [
 "scripts/g.extension.all/g.extension.all.py" = ["SIM115"]
 "scripts/g.extension/g.extension.py" = ["PTH208", "SIM115"]
 "scripts/g.extension/testsuite/test_addons_modules.py" = ["PTH208"]
-"scripts/g.search.modules/g.search.modules.py" = ["SIM115"]
 "scripts/i.oif/i.oif*.py" = ["SIM115"]
 "scripts/m.proj/m.proj.py" = ["SIM115"]
 "scripts/r.in.wms/wms_*.py" = ["SIM115"]

@@ -65,13 +65,11 @@
 
 import os
 import sys
-
+import xml.etree.ElementTree as ET
 from operator import itemgetter
 
-from grass.script import core as grass
 from grass.exceptions import CalledModuleError
-
-import xml.etree.ElementTree as ET
+from grass.script import core as grass
 
 COLORIZE = False
 
@@ -200,10 +198,8 @@ def _search_module(
 
     WXGUIDIR = os.path.join(os.getenv("GISBASE"), "gui", "wxpython")
     filename = os.path.join(WXGUIDIR, "xml", "module_items.xml")
-    menudata_file = open(filename)
-
-    menudata = ET.parse(menudata_file)
-    menudata_file.close()
+    with open(filename) as menudata_file:
+        menudata = ET.parse(menudata_file)
 
     items = menudata.findall("module-item")
 
@@ -211,18 +207,16 @@ def _search_module(
     if os.getenv("GRASS_ADDON_BASE"):
         filename_addons = os.path.join(os.getenv("GRASS_ADDON_BASE"), "modules.xml")
         if os.path.isfile(filename_addons):
-            addon_menudata_file = open(filename_addons)
-            addon_menudata = ET.parse(addon_menudata_file)
-            addon_menudata_file.close()
+            with open(filename_addons) as addon_menudata_file:
+                addon_menudata = ET.parse(addon_menudata_file)
             addon_items = addon_menudata.findall("task")
             items.extend(addon_items)
 
     # add system-wide installed addons to modules list
     filename_addons_s = os.path.join(os.getenv("GISBASE"), "modules.xml")
     if os.path.isfile(filename_addons_s):
-        addon_menudata_file_s = open(filename_addons_s)
-        addon_menudata_s = ET.parse(addon_menudata_file_s)
-        addon_menudata_file_s.close()
+        with open(filename_addons_s) as addon_menudata_file_s:
+            addon_menudata_s = ET.parse(addon_menudata_file_s)
         addon_items_s = addon_menudata_s.findall("task")
         items.extend(addon_items_s)
 
