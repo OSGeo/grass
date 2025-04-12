@@ -274,9 +274,6 @@ $(MDDIR)/source/python_intro.md: mkdocs/docs/python_intro.md
 $(MDDIR)/source/command_line_intro.md: mkdocs/docs/command_line_intro.md
 	$(INSTALL_DATA) $< $@
 
-$(MDDIR)/source/interfaces_overview.md: mkdocs/docs/interfaces_overview.md
-	$(INSTALL_DATA) $< $@
-
 $(MDDIR)/scripts/hook_list_scripts.py: mkdocs/scripts/hook_list_scripts.py | $(MDDIR)/scripts
 	$(INSTALL_DATA) $< $@
 
@@ -302,11 +299,11 @@ $(MDDIR)/overrides/fragments/tags/default/listing.html: mkdocs/overrides/fragmen
 	$(INSTALL_DATA) $< $@
 
 build-mkdocs:
-	@cd $(MDDIR) ; SITE_NAME="GRASS $(GRASS_VERSION_NUMBER) Reference Manual" \
-	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS $(GRASS_VERSION_NUMBER) Reference Manual" \
+	@cd $(MDDIR) ; SITE_NAME="GRASS $(GRASS_VERSION_NUMBER) Documentation" \
+	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS $(GRASS_VERSION_NUMBER) Documentation" \
 	mkdocs build
 
 serve-mkdocs:
-	@cd $(MDDIR) ; SITE_NAME="GRASS $(GRASS_VERSION_NUMBER) Reference Manual" \
-	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS $(GRASS_VERSION_NUMBER) Reference Manual" \
+	@cd $(MDDIR) ; SITE_NAME="GRASS $(GRASS_VERSION_NUMBER) Documentation" \
+	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS $(GRASS_VERSION_NUMBER) Documentation" \
 	mkdocs serve
