@@ -227,7 +227,7 @@ class TestVCluster(TestCase):
             layer=2,
             separator="comma",
         )
-        #print(ascii_2d)
+
         clusterIds_2d = set()
         for line in ascii_2d.splitlines():
             if line.strip():  # Skip empty lines
