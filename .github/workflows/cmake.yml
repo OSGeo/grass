@@ -4,13 +4,13 @@ name: CMake
 on:
     push:
         paths-ignore:
-            - 'doc/**'
+          - "doc/**"
         branches:
-            - main
-            - releasebranch_*
+          - main
+          - releasebranch_*
     pull_request:
         paths-ignore:
-            - 'doc/**'
+          - "doc/**"
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
