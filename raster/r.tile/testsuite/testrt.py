@@ -65,7 +65,6 @@ class Testrr(TestCase):
             map=tile,
             refmin=74.75373,
             refmax=156.3300,
-            msg="tile-000-000 in degrees must be between 74.75374 and 156.3299",
         )
 
     def test_minmax(self):
