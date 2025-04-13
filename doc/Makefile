@@ -11,6 +11,7 @@ FILES := $(wildcard *.html)
 MDFILES := grass_database.md \
 	projectionintro.md \
 	jupyter_intro.md \
-	interfaces_overview.md
+	interfaces_overview.md \
+	python_intro.md
 
 default: $(patsubst %,$(HTMLDIR)/%,$(FILES)) $(patsubst %,$(MDDIR)/source/%,$(MDFILES)) parsubdirs
