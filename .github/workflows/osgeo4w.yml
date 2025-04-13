@@ -140,7 +140,6 @@ jobs:
           set PYTHONPATH=%GISBASE%\etc\python;%PYTHONPATH%
           path %GISBASE%\lib;%GISBASE%\bin;%PATH%
           pytest ^
-            @.github/workflows/pytest_args_ci.txt ^
             @.github/workflows/pytest_args_gunittest.txt
         shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}""
 

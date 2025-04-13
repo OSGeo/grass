@@ -111,7 +111,6 @@ jobs:
           export INITIAL_GISBASE="$(grass --config path)"
           export INITIAL_PWD="${PWD}"
           pytest \
-            @.github/workflows/pytest_args_ci.txt \
             @.github/workflows/pytest_args_cov.txt \
             @.github/workflows/pytest_args_gunittest.txt
       - name: Fix non-standard installed script paths in coverage data

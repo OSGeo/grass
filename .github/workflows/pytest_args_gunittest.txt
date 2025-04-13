@@ -1,3 +1,7 @@
+--verbose
+--color=yes
+--durations=0
+--durations-min=0.5
 @.github/workflows/pytest_args_deselect.txt
 --ignore-glob=**/tests/**
 --ignore=gui/
