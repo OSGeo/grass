@@ -108,6 +108,14 @@ jobs:
             @.github/workflows/pytest_args_ci.txt \
             @.github/workflows/pytest_args_not_parallel.txt \
             -k 'not testsuite'
+      - name: Run pytest with a single worker (for gunittest-based tests)
+        shell: micromamba-shell {0}
+        run: |
+          export PYTHONPATH=$(grass --config python_path):$PYTHONPATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
+          pytest \
+            @.github/workflows/pytest_args_ci.txt \
+            -k "testsuite"
 
       - name: Cache GRASS Sample Dataset
         id: cached-data

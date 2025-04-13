@@ -104,6 +104,16 @@ jobs:
             @.github/workflows/pytest_args_cov.txt \
             @.github/workflows/pytest_args_not_parallel.txt \
             -k 'not testsuite'
+      - name: Run pytest with a single worker (for gunittest-based tests)
+        run: |
+          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
+          export INITIAL_GISBASE="$(grass --config path)"
+          export INITIAL_PWD="${PWD}"
+          pytest \
+            @.github/workflows/pytest_args_ci.txt \
+            @.github/workflows/pytest_args_cov.txt \
+            -k 'testsuite'
       - name: Fix non-standard installed script paths in coverage data
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
