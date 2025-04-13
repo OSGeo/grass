@@ -1,6 +1,7 @@
 @.github/workflows/pytest_args_deselect.txt
 --ignore-glob=**/tests/**
 --ignore=gui/
+--ignore=python/grass/temporal/unit_tests.py
 -k testsuite or lib/gis/testsuite/test_gis_lib_getl.py
 -k testsuite or lib/init/testsuite/test_grass_tmp_mapset.py
 -k testsuite or lib/vector/Vlib/testsuite/test_vlib_box.py
