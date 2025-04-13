@@ -361,7 +361,7 @@ markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
     "needs_solo_run: marks tests that must be run without any other tests running in parallel",
 ]
-minversion = "6.0"
+minversion = "8.2"
 python_files = "*/tests/*_test.py */tests/test_*.py"
 timeout = 300
 
