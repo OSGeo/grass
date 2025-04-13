@@ -81,7 +81,6 @@ class Testrr(TestCase):
             map=tile1,
             refmin=55.57878,
             refmax=144.2674,
-            msg="tile-000-001 in degrees must be between 55.57879 and 144.2673",
         )
 
 
