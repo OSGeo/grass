@@ -181,8 +181,8 @@ class TestRasterMapAssertions(TestCase):
     def tearDownClass(cls):
         cls.del_temp_region()
 
-    def test_assertRasterMinMax(self):
-        test_map = tempname(10)
+    def test_assertRasterMinMaxNulls(self):
+        test_map = append_uuid("tmp")
         self.runModule("r.mapcalc", expression=f"{test_map} = null()")
         with self.assertRaises(AssertionError) as context:
             self.assertRasterMinMax(test_map, refmin=1, refmax=10)
