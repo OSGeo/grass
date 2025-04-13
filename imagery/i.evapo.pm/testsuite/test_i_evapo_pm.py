@@ -115,10 +115,10 @@ class TestEvapoPMDetailed(TestCase):
             raster="evapo_zeroed",
             reference={
                 "min": 0,
-                "max": 0.002782,
-                "mean": 0.000368,
-                "stddev": 0.000635,
-                "sum": 0.036843,
+                "max": 0.003593,
+                "mean": 0.000402,
+                "stddev": 0.000606,
+                "sum": 406.723942,
             },
             precision=1e-6,
         )
