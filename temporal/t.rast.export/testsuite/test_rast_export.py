@@ -20,13 +20,13 @@ class TestRasterExport(TestCase):
         tmp = gs.tempdir()
         self.addCleanup(gs.try_rmdir, tmp)
         self.float_ = os.path.join(tmp, "geotiffloat")
-        self.addCleanup(os.remove, self.float_)
+        self.addCleanup(gs.try_remove, self.float_)
         self.int_ = os.path.join(tmp, "geotifint")
-        self.addCleanup(os.remove, self.int_)
+        self.addCleanup(gs.try_remove, self.int_)
         self.grid = os.path.join(tmp, "grid")
-        self.addCleanup(os.remove, self.grid)
+        self.addCleanup(gs.try_remove, self.grid)
         self.pack = os.path.join(tmp, "pack")
-        self.addCleanup(os.remove, self.pack)
+        self.addCleanup(gs.try_remove, self.pack)
 
     @classmethod
     def setUpClass(cls):
