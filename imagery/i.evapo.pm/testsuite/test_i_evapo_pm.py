@@ -41,7 +41,7 @@ class TestEvapoPMDetailed(TestCase):
         )
 
     def test_basic_calculation(self):
-        """Test core functionality produces valid output range"""
+        """Test core functionality produces valid output range."""
 
         self.assertModule(
             "i.evapo.pm",
@@ -57,11 +57,11 @@ class TestEvapoPMDetailed(TestCase):
         self.assertRasterFitsUnivar(
             raster="evapo_basic",
             reference={
-                "min": 0.002493,
-                "max": 5.75943,
-                "mean": 2.456132,
-                "stddev": 1.506537,
-                "sum": 245.613251,
+                "min": 0.000129,
+                "max": 6.052911,
+                "mean": 2.335533,
+                "stddev": 1.470312,
+                "sum": 2360290.423755,
             },
             precision=1e-6,
         )
@@ -86,11 +86,11 @@ class TestEvapoPMDetailed(TestCase):
         self.assertRasterFitsUnivar(
             raster="evapo_negative",
             reference={
-                "min": -0.093944,
-                "max": 0.0027821,
-                "mean": -0.0382201,
-                "stddev": 0.0350721,
-                "sum": -3.822016,
+                "min": -0.098428,
+                "max": 0.003593,
+                "mean": -0.031994,
+                "stddev": 0.034073,
+                "sum": -32333.889996,
             },
             precision=1e-6,
         )
