@@ -89,7 +89,6 @@ jobs:
             python3-numpy
             python3-pip
             python3-ply
-            python3-pytest
             python3-pywin32
             python3-six
             python3-wxpython
@@ -120,8 +119,11 @@ jobs:
         shell: msys2 {0}
         run: .github/workflows/test_simple.sh
 
-      - name: Install pytest plugins
-        run: python -m pip install pytest-timeout
+      - name: Install additional python packages
+        run: |
+          python -m pip install ^
+            pytest ^
+            pytest-timeout
         shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}""
       - name: Run pytest with a single worker
         run: |
