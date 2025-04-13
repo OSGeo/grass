@@ -44,7 +44,7 @@ and *[grass.pygrass](https://grass.osgeo.org/grass-stable/manuals/libpython/pygr
 enables access to the internal data structures of GRASS.
 
 To get started with scripting, create a new project with `gs.create_project` and
-start a GRASS session with the `gs.init` function to initialize the
+start a GRASS session with the `gs.setup.init` function to initialize the
 GRASS environment.
 
 ```python
@@ -62,7 +62,7 @@ import grass.script as gs
 gs.create_project(path="path/to/my_project", epsg="3358")
 
 # Initialize the GRASS session
-with gs.init("path/to/my_project") as session:
+with gs.setup.init("path/to/my_project") as session:
 
     # Run GRASS tools
     gs.run_command("r.import", input="/path/to/elevation.tif", output="elevation")

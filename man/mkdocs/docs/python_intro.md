@@ -14,12 +14,13 @@ provides a Python interface to GRASS tools
 and *[grass.pygrass](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_index.html)*
 enables access to the internal data structures of GRASS.
 
-## GRASS Script
+## Scripting API
 
 ### Setup
 
 To get started with scripting, you must first append the GRASS
-Python path to the system path and then import the *grass.script* library. From
+Python path to the system path and then import the *grass.script* library
+(path append may not be needed on some systems). From
 here, you can create a new project with *gs.create_project* and start a GRASS
 session with the *grass.script.setup.init* function.
 
@@ -38,7 +39,7 @@ import grass.script as gs
 gs.create_project(path="path/to/my_project", epsg="3358")
 
 # Initialize the GRASS session
-with gs.init("path/to/my_project") as session:
+with gs.setup.init("path/to/my_project") as session:
 
     # Run GRASS tools
     gs.run_command("r.import", input="/path/to/elevation.tif", output="elevation")
@@ -47,7 +48,7 @@ with gs.init("path/to/my_project") as session:
 ```
 
 If you are running a script in an already initialized GRASS session, you
-can run the tools right away:
+can run the tools right away (without the call to *init*):
 
 ```python
 import grass.script as gs
@@ -155,11 +156,11 @@ The most common ones are:
 Here is an example how to use these helper functions:
 
 ```python
-# Get region resolution to get cell size
+# Get region resolution to get cell size (assuming projected CRS)
 region = gs.region()
 cell_area = region["nsres"] * region["ewres"]
 
-# Compute volume with raster algebra
+# Compute volume with raster algebra (or use area())
 gs.mapcalc(f"volume = elevation * {cell_area}")
 
 # Get number of points in a vector map
@@ -174,8 +175,9 @@ This makes it easy to integrate GRASS with the broader Python scientific
 stack for advanced analysis and custom modeling.
 Using *[grass.script.array](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.array.array)*
 and *[grass.script.array3d](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.array.array3d)*,
-you can load raster maps into memory, perform array-based operations,
-and write results back as a GRASS raster or 3D raster.
+you can switch between GRASS raster maps and NumPy arrays, run GRASS tools,
+and perform array-based operations as needed.
+It works for rasters as well as for 3D rasters.
 
 This example shows a workflow for writing a NumPy array
 to a GRASS raster, running a GRASS tool, and loading the result as a NumPy array:
@@ -195,8 +197,6 @@ gs.run_command("g.region", n=elevation_array.shape[0], s=0,
 # Write the NumPy array to a new GRASS raster map
 map2d = garray.array()
 map2d[:] = elevation_array
-
-# Output the array to a raster map in GRASS
 map2d.write("elevation", overwrite=True)
 
 # Compute e.g., flow accumulation
@@ -224,7 +224,7 @@ elev_2 *= 2
 elev_2.write(mapname="elevation_2")
 ```
 
-## Object-Oriented GRASS
+## Object-Oriented API
 
 PyGRASS is an object-oriented Python library that provides access to the internal
 data structures of GRASS for more advanced scripting and modeling. PyGRASS works
@@ -253,8 +253,6 @@ mapsets. The core classes include [Gisdbase](https://grass.osgeo.org/grass-stabl
 [Location](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.gis.html#pygrass.gis.Location),
 and [Mapset](https://grass.osgeo.org/grass85/manuals/libpython/pygrass.gis.html#pygrass.gis.Mapset).
 
-#### Gisdbase
-
 The [Gisdbase](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.gis.html#pygrass.gis.Gisdbase)
 class provides access to the GRASS database
 and where you can manage GRASS projects and mapsets.
@@ -277,8 +275,6 @@ objects.
 ['nc_spm_08_grass7', 'my_project']
 ```
 
-#### Location
-
 The [Location](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.gis.html#pygrass.gis.Location)
 object provides access to the specific project
 and its mapsets.
@@ -294,8 +290,6 @@ print(location.name)
 # Get list of mapsets in the location
 mapsets = location.mapsets()
 ```
-
-#### Mapset
 
 The [Mapset](https://grass.osgeo.org/grass85/manuals/libpython/pygrass.gis.html#pygrass.gis.Mapset)
 object provides access to the specific mapset and its layers.
@@ -313,7 +307,7 @@ rasters = mapset.glist(type='raster')
 For more details about the `gis` module, see the Full Documentation:
 [GIS Module](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_gis.html)
 
-#### Region
+### Region
 
 The [grass.pygrass.gis.region](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.gis.html#pygrass.gis.region.Region)
 module gives access to read and modify computational regions. For example, to
