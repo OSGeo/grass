@@ -130,14 +130,18 @@ jobs:
           call %OSGEO4W_ROOT%\opt\grass\etc\env.bat
           set PYTHONPATH=%GISBASE%\etc\python;%PYTHONPATH%
           path %GISBASE%\lib;%GISBASE%\bin;%PATH%
-          pytest @.github/workflows/pytest_args_ci.txt -k "not testsuite"
+          pytest ^
+            @.github/workflows/pytest_args_ci.txt ^
+            -k "not testsuite"
         shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}""
       - name: Run pytest with a single worker (for gunittest-based tests)
         run: |
           call %OSGEO4W_ROOT%\opt\grass\etc\env.bat
           set PYTHONPATH=%GISBASE%\etc\python;%PYTHONPATH%
           path %GISBASE%\lib;%GISBASE%\bin;%PATH%
-          pytest @.github/workflows/pytest_args_ci.txt -k "testsuite"
+          pytest ^
+            @.github/workflows/pytest_args_ci.txt ^
+            @.github/workflows/pytest_args_gunittest.txt
         shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}""
 
       - name: Run tests

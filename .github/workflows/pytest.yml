@@ -113,7 +113,7 @@ jobs:
           pytest \
             @.github/workflows/pytest_args_ci.txt \
             @.github/workflows/pytest_args_cov.txt \
-            -k 'testsuite'
+            @.github/workflows/pytest_args_gunittest.txt
       - name: Fix non-standard installed script paths in coverage data
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH

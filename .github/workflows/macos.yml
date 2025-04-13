@@ -115,7 +115,7 @@ jobs:
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
           pytest \
             @.github/workflows/pytest_args_ci.txt \
-            -k "testsuite"
+            @.github/workflows/pytest_args_gunittest.txt
 
       - name: Cache GRASS Sample Dataset
         id: cached-data
