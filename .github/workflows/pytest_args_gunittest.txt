@@ -1,18 +1,4 @@
---deselect=imagery/i.signatures/testsuite/test_i_signatures.py
---deselect=lib/gis/testsuite/gis_lib_env_test.py
---deselect=lib/imagery/testsuite/test_imagery_find.py
---deselect=lib/imagery/testsuite/test_imagery_sigfile.py
---deselect=lib/imagery/testsuite/test_imagery_signature_management.py
---deselect=lib/imagery/testsuite/test_imagery_sigsetfile.py
---deselect=lib/raster/testsuite/test_raster_metadata.py
---deselect=lib/vector/Vlib/testsuite/test_vlib_intersect.py
---deselect=python/grass/pygrass/gis/testsuite/test_gis.py
---deselect=python/grass/pygrass/vector/testsuite/test_geometry.py
---deselect=python/grass/pygrass/vector/testsuite/test_geometry_attrs.py
---deselect=python/grass/pygrass/vector/testsuite/test_vector.py
---deselect=python/grass/pygrass/vector/testsuite/test_vector3d.py
---deselect=raster/r.support/testsuite/test_r_support.py
---deselect=scripts/r.semantic.label/testsuite/test_r_semantic_label.py
+@.github/workflows/pytest_args_deselect.txt
 --ignore-glob=**/tests/**
 --ignore=gui/
 -k testsuite or lib/gis/testsuite/test_gis_lib_getl.py
