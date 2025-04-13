@@ -362,7 +362,11 @@ markers = [
     "needs_solo_run: marks tests that must be run without any other tests running in parallel",
 ]
 minversion = "8.2"
-python_files = "*/tests/*_test.py */tests/test_*.py"
+python_files = """
+    */tests/*_test.py
+    */tests/test_*.py
+    **/testsuite/*test*.py
+"""
 timeout = 300
 
 
