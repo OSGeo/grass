@@ -133,7 +133,7 @@ class TestMap3D(TestCase):
         """Check that show() works"""
         renderer = gj.Map3D()
         renderer.render(elevation_map="elevation", color_map="elevation")
-        self.assertTrue(renderer.show(), "Failed to create IPython Image object")
+        self.assertIsNone(renderer.show(), "Failed to create IPython Image object")
 
 
 if __name__ == "__main__":

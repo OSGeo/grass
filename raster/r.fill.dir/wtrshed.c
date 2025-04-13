@@ -103,12 +103,14 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
         for (i = 0; i < mxbuf; i++) {
             bas[i].offset = dir[i].offset = (off_t)rdline * bufsz;
 
-            lseek(fm, bas[i].offset, SEEK_SET);
+            if (lseek(fm, bas[i].offset, SEEK_SET) == -1)
+                G_fatal_error(_("Unable to seek: %s"), strerror(errno));
             if (read(fm, bas[i].p, bufsz) < 0)
                 G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
                               errno, strerror(errno));
 
-            lseek(fd, dir[i].offset, SEEK_SET);
+            if (lseek(fd, dir[i].offset, SEEK_SET) == -1)
+                G_fatal_error(_("Unable to seek: %s"), strerror(errno));
             if (read(fd, dir[i].p, bufsz) < 0)
                 G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
                               errno, strerror(errno));
@@ -127,7 +129,8 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
             }
 
             /* write one line */
-            lseek(fm, bas[sline].offset, SEEK_SET);
+            if (lseek(fm, bas[sline].offset, SEEK_SET) == -1)
+                G_fatal_error(_("Unable to seek: %s"), strerror(errno));
             if (write(fm, bas[sline].p, bufsz) < 0)
                 G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
                               errno, strerror(errno));
@@ -148,12 +151,14 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
                 bas[mxbuf - 1].offset = dir[mxbuf - 1].offset =
                     (off_t)rdline * bufsz;
 
-                lseek(fm, bas[mxbuf - 1].offset, SEEK_SET);
+                if (lseek(fm, bas[mxbuf - 1].offset, SEEK_SET) == -1)
+                    G_fatal_error(_("Unable to seek: %s"), strerror(errno));
                 if (read(fm, bas[mxbuf - 1].p, bufsz) < 0)
                     G_fatal_error(_("File reading error in %s() %d:%s"),
                                   __func__, errno, strerror(errno));
 
-                lseek(fd, dir[mxbuf - 1].offset, SEEK_SET);
+                if (lseek(fd, dir[mxbuf - 1].offset, SEEK_SET) == -1)
+                    G_fatal_error(_("Unable to seek: %s"), strerror(errno));
                 if (read(fd, dir[mxbuf - 1].p, bufsz) < 0)
                     G_fatal_error(_("File reading error in %s() %d:%s"),
                                   __func__, errno, strerror(errno));
@@ -174,12 +179,14 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
         for (i = mxbuf - 1; i >= 0; i -= 1) {
             bas[i].offset = dir[i].offset = (off_t)rdline * bufsz;
 
-            lseek(fm, bas[i].offset, SEEK_SET);
+            if (lseek(fm, bas[i].offset, SEEK_SET) == -1)
+                G_fatal_error(_("Unable to seek: %s"), strerror(errno));
             if (read(fm, bas[i].p, bufsz) < 0)
                 G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
                               errno, strerror(errno));
 
-            lseek(fd, dir[i].offset, SEEK_SET);
+            if (lseek(fd, dir[i].offset, SEEK_SET) == -1)
+                G_fatal_error(_("Unable to seek: %s"), strerror(errno));
             if (read(fd, dir[i].p, bufsz) < 0)
                 G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
                               errno, strerror(errno));
@@ -199,7 +206,8 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
             }
 
             /* write one line */
-            lseek(fm, bas[nline - 1].offset, SEEK_SET);
+            if (lseek(fm, bas[nline - 1].offset, SEEK_SET) == -1)
+                G_fatal_error(_("Unable to seek: %s"), strerror(errno));
             if (write(fm, bas[nline - 1].p, bufsz) < 0)
                 G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
                               errno, strerror(errno));
@@ -219,12 +227,14 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
 
                 bas[0].offset = dir[0].offset = (off_t)rdline * bufsz;
 
-                lseek(fm, bas[0].offset, SEEK_SET);
+                if (lseek(fm, bas[0].offset, SEEK_SET) == -1)
+                    G_fatal_error(_("Unable to seek: %s"), strerror(errno));
                 if (read(fm, bas[0].p, bufsz) < 0)
                     G_fatal_error(_("File reading error in %s() %d:%s"),
                                   __func__, errno, strerror(errno));
 
-                lseek(fd, dir[0].offset, SEEK_SET);
+                if (lseek(fd, dir[0].offset, SEEK_SET) == -1)
+                    G_fatal_error(_("Unable to seek: %s"), strerror(errno));
                 if (read(fd, dir[0].p, bufsz) < 0)
                     G_fatal_error(_("File reading error in %s() %d:%s"),
                                   __func__, errno, strerror(errno));

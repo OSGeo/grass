@@ -352,4 +352,3 @@ point cloud.
 - [Introduction into temporal data processing](temporalintro.md)
 - [Introduction to database management](databaseintro.md)
 - [Projections and spatial transformations](projectionintro.md)
-- [Graphical User Interface](wxguiintro.md)
