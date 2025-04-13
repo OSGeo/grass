@@ -6,7 +6,6 @@ import os
 from pathlib import Path
 
 import grass.script.core as gcore
-from grass.script import tempname
 from grass.pygrass.modules import Module
 
 from grass.gunittest.case import TestCase
