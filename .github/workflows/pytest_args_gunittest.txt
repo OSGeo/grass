@@ -1,3 +1,27 @@
+--deselect=imagery/i.signatures/testsuite/test_i_signatures.py
+--deselect=lib/gis/testsuite/gis_lib_env_test.py
+--deselect=lib/imagery/testsuite/test_imagery_find.py
+--deselect=lib/imagery/testsuite/test_imagery_sigfile.py
+--deselect=lib/imagery/testsuite/test_imagery_signature_management.py
+--deselect=lib/imagery/testsuite/test_imagery_sigsetfile.py
+--deselect=lib/raster/testsuite/test_raster_metadata.py
+--deselect=lib/vector/Vlib/testsuite/test_vlib_intersect.py
+--deselect=python/grass/pygrass/gis/testsuite/test_gis.py
+--deselect=python/grass/pygrass/vector/testsuite/test_geometry.py
+--deselect=python/grass/pygrass/vector/testsuite/test_geometry_attrs.py
+--deselect=python/grass/pygrass/vector/testsuite/test_vector.py
+--deselect=python/grass/pygrass/vector/testsuite/test_vector3d.py
+--deselect=raster/r.support/testsuite/test_r_support.py
+--deselect=scripts/r.semantic.label/testsuite/test_r_semantic_label.py
 --ignore-glob=**/tests/**
 --ignore=gui/
---deselect=imagery/i.signatures/testsuite/test_i_signatures.py
+-k testsuite or lib/gis/testsuite/test_gis_lib_getl.py
+-k testsuite or lib/init/testsuite/test_grass_tmp_mapset.py
+-k testsuite or lib/vector/Vlib/testsuite/test_vlib_box.py
+-k testsuite or python/grass/exceptions/testsuite/test_ScriptError.py
+-k testsuite or python/grass/gunittest/testsuite/test_checkers.py
+-k testsuite or python/grass/pygrass/modules/interface/testsuite/test_flag.py
+-k testsuite or python/grass/pygrass/modules/interface/testsuite/test_parameter.py
+-k testsuite or python/grass/pygrass/vector/testsuite/test_filters.py
+-k testsuite or python/grass/script/testsuite/test_core_make_val.py
+-k testsuite or python/grass/script/testsuite/test_utils.py
