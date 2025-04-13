@@ -1,4 +1,3 @@
--ra
 --ignore-glob=**/tests/**
 --ignore=gui/
 --deselect=imagery/i.signatures/testsuite/test_i_signatures.py
