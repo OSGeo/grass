@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 
 import grass.script.core as gcore
+from grass.script import append_uuid
 from grass.pygrass.modules import Module
 
 from grass.gunittest.case import TestCase
