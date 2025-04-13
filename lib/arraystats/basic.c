@@ -62,7 +62,7 @@ void AS_eqdrt(double vectx[], double vecty[], int i1, int i2, double *a,
 
     if (fabs(bd) < GRASS_EPSILON) {
         if (fabs(bn) < GRASS_EPSILON) {
-            printf("Points are equal\n");
+            G_debug(3, "Points are equal\n");
         }
         else {
             *c = x1;
