@@ -97,7 +97,8 @@ jobs:
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
           pytest \
             @.github/workflows/pytest_args_ci.txt \
-            @.github/workflows/pytest_args_parallel.txt
+            @.github/workflows/pytest_args_parallel.txt \
+            -k 'not testsuite'
       - name: Run pytest with a single worker (for tests marked with needs_solo_run)
         shell: micromamba-shell {0}
         run: |
@@ -105,7 +106,8 @@ jobs:
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
           pytest \
             @.github/workflows/pytest_args_ci.txt \
-            @.github/workflows/pytest_args_not_parallel.txt
+            @.github/workflows/pytest_args_not_parallel.txt \
+            -k 'not testsuite'
 
       - name: Cache GRASS Sample Dataset
         id: cached-data
