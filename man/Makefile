@@ -26,9 +26,6 @@ DSTFILES := \
 	$(MDDIR)/overrides/fragments/tags/default/listing.html \
 	$(MDDIR)/source/keywords.md \
 	$(MDDIR)/source/development_intro.md \
-	$(MDDIR)/source/interfaces_overview.md \
-	$(MDDIR)/source/jupyter_intro.md \
-	$(MDDIR)/source/python_intro.md \
 	$(MDDIR)/source/command_line_intro.md
 
 categories = \
@@ -266,9 +263,6 @@ $(MDDIR)/source/keywords.md: mkdocs/keywords.md
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/source/development_intro.md: mkdocs/docs/development_intro.md
-	$(INSTALL_DATA) $< $@
-
-$(MDDIR)/source/python_intro.md: mkdocs/docs/python_intro.md
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/source/command_line_intro.md: mkdocs/docs/command_line_intro.md
