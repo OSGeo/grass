@@ -23,7 +23,7 @@
 
         devShells.default =
           let
-            pyPackages = pkgs.python311Packages;
+            pyPackages = pkgs.python312Packages;
 
           in
           pkgs.mkShell {
