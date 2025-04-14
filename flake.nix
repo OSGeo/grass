@@ -1,5 +1,5 @@
 {
-  description = "GRASS GIS";
+  description = "GRASS";
 
   nixConfig = {
     extra-substituters = [ "https://osgeo-grass.cachix.org" ];
