@@ -1,13 +1,11 @@
 import os
 import platform
 
+import grass.script as gs
 from grass.exceptions import CalledModuleError
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-import grass.script as gs
-from grass.script import legal_name
-from grass.script import utils
+from grass.script import legal_name, utils
 
 
 class TestUnique(TestCase):
