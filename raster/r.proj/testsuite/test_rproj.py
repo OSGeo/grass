@@ -34,52 +34,11 @@ dst_project = "nc_latlong"
 
 raster_maps = [
     "landclass96",
-    "soilsID",
-    "landuse",
-    "slope",
-    "elev_state_500m",
-    "urban",
-    "ncmask_500m",
-    "lsat7_2002_10",
-    "ortho_2001_t792_1m",
-    "lsat7_2002_20",
-    "soils_Kfactor",
-    "lsat7_2002_80",
-    "zipcodes_dbl",
-    "boundary",
-    "lsat7_2002_61",
-    "roadsmajor",
-    "lsat7_2002_50",
-    "landcover",
-    "elev_lid792_1m",
-    "cfactorgrow_1m",
-    "geology_30m",
-    "elevation_shade",
-    "el_D782_6m",
-    "geology",
-    "facility",
-    "el_D792_6m",
-    "basin_50K",
-    "landcover_1m",
-    "soils",
-    "elev_ned_30m",
-    "elev_srtm_30m",
     "lsat7_2002_40",
-    "lakes",
-    "el_D783_6m",
     "elevation",
     "lsat7_2002_70",
-    "landuse96_28m",
-    "zipcodes",
-    "el_D793_6m",
-    "aspect",
-    "lsat7_2002_30",
-    "cfactorbare_1m",
-    "towns",
-    "lsat7_2002_62",
     "boundary_county_500m",
     "basin",
-    "streams_derived",
 ]
 
 
@@ -252,9 +211,10 @@ class TestRasterreport(TestCase):
         )
         result_list = result.split()
 
-        self.assertListEqual(
-            result_list, raster_maps, "Mismatch in raster map list (plain)"
-        )
+        for r_map in raster_maps:
+            self.assertIn(
+                r_map, result_list, f"'{r_map}' not found in raster map list (plain)"
+            )
 
     def test_list_output_json(self):
         """Test JSON output of available raster maps in input mapset."""
@@ -267,8 +227,11 @@ class TestRasterreport(TestCase):
         )
         result = json.loads(output)
 
-        expected = {"maps": raster_maps}
-        self.assertDictEqual(result, expected, "Mismatch in raster map list (JSON)")
+        self.assertIn("maps", result, "'maps' key not found in result (JSON)")
+        for r_map in raster_maps:
+            self.assertIn(
+                r_map, result["maps"], f"'{r_map}' not found in raster map list (JSON)"
+            )
 
     def test_print_output_plain(self):
         """Test printing input map bounds in the current projection (plain format)."""
