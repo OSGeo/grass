@@ -17,6 +17,7 @@
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import call_module
 import shutil
+import json
 
 raster_info = """north=35.8096296297222
 south=35.6874074075
@@ -30,6 +31,56 @@ cells=41250"""
 
 src_project = "nc_spm_full_v2alpha2"
 dst_project = "nc_latlong"
+
+raster_maps = [
+    "landclass96",
+    "soilsID",
+    "landuse",
+    "slope",
+    "elev_state_500m",
+    "urban",
+    "ncmask_500m",
+    "lsat7_2002_10",
+    "ortho_2001_t792_1m",
+    "lsat7_2002_20",
+    "soils_Kfactor",
+    "lsat7_2002_80",
+    "zipcodes_dbl",
+    "boundary",
+    "lsat7_2002_61",
+    "roadsmajor",
+    "lsat7_2002_50",
+    "landcover",
+    "elev_lid792_1m",
+    "cfactorgrow_1m",
+    "geology_30m",
+    "elevation_shade",
+    "el_D782_6m",
+    "geology",
+    "facility",
+    "el_D792_6m",
+    "basin_50K",
+    "landcover_1m",
+    "soils",
+    "elev_ned_30m",
+    "elev_srtm_30m",
+    "lsat7_2002_40",
+    "lakes",
+    "el_D783_6m",
+    "elevation",
+    "lsat7_2002_70",
+    "landuse96_28m",
+    "zipcodes",
+    "el_D793_6m",
+    "aspect",
+    "lsat7_2002_30",
+    "cfactorbare_1m",
+    "towns",
+    "lsat7_2002_62",
+    "boundary_county_500m",
+    "basin",
+    "streams_derived",
+]
 
 
 class TestRasterreport(TestCase):
@@ -58,7 +109,7 @@ class TestRasterreport(TestCase):
         """
         output = method
         # Get the boundary and set up region for the projected map
-        stdout = call_module(
+        flag_output = call_module(
             "r.proj",
             project=src_project,
             mapset="PERMANENT",
@@ -66,7 +117,7 @@ class TestRasterreport(TestCase):
             method=method,
             flags="g",
         )
-        settings = dict([line.split("=") for line in stdout.split()])
+        settings = dict([line.split("=") for line in flag_output.split()])
 
         call_module(
             "g.region",
@@ -79,6 +130,18 @@ class TestRasterreport(TestCase):
             flags="a",
             res=1,
         )
+
+        option_output = call_module(
+            "r.proj",
+            project=src_project,
+            mapset="PERMANENT",
+            input=self.input,
+            method=method,
+            flags="p",
+            format="shell",
+        )
+
+        self.assertEqual(flag_output, option_output)
 
         # Project the map
         self.assertModule(
@@ -178,6 +241,79 @@ class TestRasterreport(TestCase):
         variance=412.695433658258"""
 
         self.run_rproj_test(method, statics)
+
+    def test_list_output_plain(self):
+        """Test plain output of available raster maps in input mapset ."""
+        result = call_module(
+            "r.proj",
+            project=src_project,
+            mapset="PERMANENT",
+            flags="l",
+        )
+        result_list = result.split()
+
+        self.assertListEqual(
+            result_list, raster_maps, "Mismatch in raster map list (plain)"
+        )
+
+    def test_list_output_json(self):
+        """Test JSON output of available raster maps in input mapset."""
+        output = call_module(
+            "r.proj",
+            project=src_project,
+            mapset="PERMANENT",
+            flags="l",
+            format="json",
+        )
+        result = json.loads(output)
+
+        expected = {"maps": raster_maps}
+        self.assertDictEqual(result, expected, "Mismatch in raster map list (JSON)")
+
+    def test_print_output_plain(self):
+        """Test printing input map bounds in the current projection (plain format)."""
+        result = call_module(
+            "r.proj",
+            project=src_project,
+            mapset="PERMANENT",
+            input=self.input,
+            flags="p",
+        )
+        result_lines = [line for line in result.split("\n") if line.strip() != ""]
+
+        expected = [
+            "Source cols: 1500",
+            "Source rows: 1350",
+            "Local north: 35:48:34.593777N",
+            "Local south: 35:41:15.026269N",
+            "Local west: 78:46:28.633781W",
+            "Local east: 78:36:29.891436W",
+        ]
+
+        self.assertListEqual(result_lines, expected, "Mismatch in print output (plain)")
+
+    def test_print_output_json(self):
+        """Test printing input map bounds in the current projection (JSON format)."""
+        output = call_module(
+            "r.proj",
+            project=src_project,
+            mapset="PERMANENT",
+            input=self.input,
+            flags="p",
+            format="json",
+        )
+        result = json.loads(output)
+
+        expected = {
+            "cols": 1500,
+            "east": "78:36:29.891436W",
+            "north": "35:48:34.593777N",
+            "rows": 1350,
+            "south": "35:41:15.026269N",
+            "west": "78:46:28.633781W",
+        }
+
+        self.assertDictEqual(result, expected, "Mismatch in print output (JSON)")
 
 
 if __name__ == "__main__":
