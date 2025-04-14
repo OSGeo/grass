@@ -35,21 +35,21 @@ r.slope.aspect elevation=elevation slope=slope aspect=aspect
 
 ## Python
 
-The `grass.script` module provides a Python interface to GRASS. This allows
-users to write Python scripts to interact with GRASS. The `grass.script` module
-contains the `gs.script.core` module which provides the core functionality for the
-GRASS Python interface, the `grass.script.raster` module which provides
-functionality for working with raster data, and the `grass.script.vector` module
-which provides functionality for working with vector data.
+GRASS Python interface provides libraries to create GRASS scripts and access
+the internal data structures of GRASS. The Python interface consists of
+two main libraries:
+*[grass.script](https://grass.osgeo.org/grass-stable/manuals/libpython/script_intro.html)*
+provides a Python interface to GRASS tools
+and *[grass.pygrass](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_index.html)*
+enables access to the internal data structures of GRASS.
 
-To get started Python, create a new project with `gs.create_project` and start a
-GRASS session with the `grass.script.setup.init` function to initialize the
+To get started with scripting, create a new project with `gs.create_project` and
+start a GRASS session with the `gs.setup.init` function to initialize the
 GRASS environment.
 
 ```python
 import sys
 import subprocess
-from pathlib import Path
 
 # Append GRASS to the python system path
 sys.path.append(
@@ -59,14 +59,15 @@ sys.path.append(
 import grass.script as gs
 
 # Create a new project
-gs.create_project(path=grassdata, name=project_name, epsg="3358", overwrite=False)
+gs.create_project(path="path/to/my_project", epsg="3358")
 
 # Initialize the GRASS session
-with gs.setup.init(Path("grassdata/project_name")) as session:
+with gs.setup.init("path/to/my_project") as session:
 
-    # Run GRASS commands
-    gs.run_command('g.region', raster='elevation')
-    gs.run_command('r.slope.aspect', elevation='elevation', slope='slope', aspect='aspect')
+    # Run GRASS tools
+    gs.run_command("r.import", input="/path/to/elevation.tif", output="elevation")
+    gs.run_command("g.region", raster="elevation")
+    gs.run_command("r.slope.aspect", elevation="elevation", slope="slope")
 ```
 
 [Learn more :material-arrow-right-bold:](python_intro.md){ .md-button }
