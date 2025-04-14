@@ -20,7 +20,6 @@ from grass.script.core import tempname
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-from grass.gunittest.utils import xfail_windows
 
 from grass.lib.gis import G_mapset_path
 from grass.lib.raster import Rast_write_semantic_label
@@ -176,7 +175,6 @@ class SuccessTest(TestCase):
         )
         cls.runModule("g.remove", flags="f", type="group", name=cls.group, quiet=True)
 
-    @xfail_windows
     def test_v1(self):
         """Test v1 signature"""
         self.assertModule(
@@ -198,7 +196,6 @@ class SuccessTest(TestCase):
         self.assertEqual(res.get_cat(0)[1], 1)
         res.close()
 
-    @xfail_windows
     def test_v2(self):
         """Test v2 signature"""
         self.assertModule(
