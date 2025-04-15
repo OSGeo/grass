@@ -39,7 +39,7 @@ char *Rast_mask_info(void)
 
     switch (Rast__mask_info(name, mapset)) {
     case 1:
-        sprintf(text, _("<%s> in mapset <%s>"), name, mapset);
+        snprintf(text, sizeof(text), _("<%s> in mapset <%s>"), name, mapset);
         break;
     case -1:
         strcpy(text, _("none"));

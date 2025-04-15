@@ -120,14 +120,15 @@ int Rast__quant_import(const char *name, const char *mapset,
     }
 
     /* first check if quant2/mapset/name exists in the current mapset */
-    sprintf(element, "quant2/%s", mapset);
+    snprintf(element, sizeof(element), "quant2/%s", mapset);
     if ((fd = G_fopen_old(element, name, G_mapset()))) {
         parsStat = quant_parse_file(fd, quant);
         fclose(fd);
         if (parsStat)
             return 1;
-        sprintf(buf, "quantization file in quant2 for raster map <%s> is empty",
-                G_fully_qualified_name(name, mapset));
+        snprintf(buf, sizeof(buf),
+                 "quantization file in quant2 for raster map <%s> is empty",
+                 G_fully_qualified_name(name, mapset));
     }
 
     /* now try reading regular : cell_misc/name/quant file */
@@ -290,7 +291,7 @@ int Rast__quant_export(const char *name, const char *mapset,
             return -1;
     }
     else {
-        sprintf(element, "quant2/%s", mapset);
+        snprintf(element, sizeof(element), "quant2/%s", mapset);
         G_remove(element, name);
         G_make_mapset_object_group(element);
         if (!(fd = G_fopen_new(element, name)))
