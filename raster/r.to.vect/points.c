@@ -75,6 +75,8 @@ int extract_points(int z_flag UNUSED)
                     continue;
                 dval = dcellbuf[col];
                 break;
+            default:
+                G_fatal_error(_("Unsupported raster data type encountered."));
             }
 
             /* value_flag is used only for CELL type */
