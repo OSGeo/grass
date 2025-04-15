@@ -403,9 +403,7 @@ void print_shell(struct Map_info *Map, const char *field_opt,
     }
     else if (map_type == GV_FORMAT_POSTGIS) {
         int topo_format;
-        char *toposchema_name, *topogeom_column;
-        toposchema_name = NULL;
-        topogeom_column = NULL;
+        char *toposchema_name = NULL, *topogeom_column = NULL;
         const struct Format_info *finfo;
 
         finfo = Vect_get_finfo(Map);
@@ -633,9 +631,7 @@ void print_info(struct Map_info *Map)
     }
     else if (map_type == GV_FORMAT_POSTGIS) {
         int topo_format;
-        char *toposchema_name, *topogeom_column;
-        toposchema_name = NULL;
-        topogeom_column = NULL;
+        char *toposchema_name = NULL, *topogeom_column = NULL;
         int topo_geo_only;
 
         const struct Format_info *finfo;
