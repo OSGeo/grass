@@ -456,7 +456,8 @@ int main(int argc, char *argv[])
     Rast_close(outfile);
 
     /* record map metadata/history info */
-    sprintf(title, "Resample by %s interpolation", method->answer);
+    snprintf(title, sizeof(title), "Resample by %s interpolation",
+             method->answer);
     Rast_put_cell_title(rastout->answer, title);
 
     Rast_short_history(rastout->answer, "raster", &history);

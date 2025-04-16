@@ -19,13 +19,15 @@ int read_range(void)
     /* read the fpranges and ranges of all input maps */
     for (i = 0; i < noi; i++) {
         if (Rast_read_fp_range(name[i], G_mapset(), &drange) <= 0) {
-            sprintf(buff, "Can't read f_range for map %s", name[i]);
+            snprintf(buff, sizeof(buff), "Can't read f_range for map %s",
+                     name[i]);
             G_fatal_error("%s", buff);
         }
         Rast_get_fp_range_min_max(&drange, &tmp_dmin, &tmp_dmax);
 
         if (Rast_read_range(name[i], G_mapset(), &range) <= 0) {
-            sprintf(buff, "Can't read range for map %s", name[i]);
+            snprintf(buff, sizeof(buff), "Can't read range for map %s",
+                     name[i]);
             G_fatal_error("%s", buff);
         }
         Rast_get_range_min_max(&range, &tmp_min, &tmp_max);
@@ -49,8 +51,8 @@ int report_range(void)
     if (Rast_is_d_null_value(&old_dmin) || Rast_is_d_null_value(&old_dmax))
         G_message(_("Old data range is empty"));
     else {
-        sprintf(buff, "%.15g", old_dmin);
-        sprintf(buff2, "%.15g", old_dmax);
+        snprintf(buff, sizeof(buff), "%.15g", old_dmin);
+        snprintf(buff2, sizeof(buff2), "%.15g", old_dmax);
         G_trim_decimal(buff);
         G_trim_decimal(buff2);
         G_message(_("Old data range is %s to %s"), buff, buff2);
