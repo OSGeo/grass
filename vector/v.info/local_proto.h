@@ -17,7 +17,7 @@ void parse_args(int, char **, char **, char **, int *, int *, int *,
                 enum OutputFormat *);
 
 /* print.c */
-void format_double(double, char *);
+void format_double(double, char[256]);
 void print_region(struct Map_info *, enum OutputFormat, JSON_Object *);
 void print_topo(struct Map_info *, enum OutputFormat, JSON_Object *);
 void print_columns(struct Map_info *, const char *, const char *,

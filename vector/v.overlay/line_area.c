@@ -378,8 +378,9 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                         if (driver) {
                             ATTR *at;
 
-                            sprintf(buf, "insert into %s values ( %d",
-                                    Fi->table, ncat);
+                            snprintf(buf, sizeof(buf),
+                                     "insert into %s values ( %d", Fi->table,
+                                     ncat);
                             db_set_string(&stmt, buf);
 
                             /* cata */
@@ -396,7 +397,8 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                                                          attr[0].null_values);
                                 }
                                 else {
-                                    sprintf(buf, ", %d", Cats->cat[i]);
+                                    snprintf(buf, sizeof(buf), ", %d",
+                                             Cats->cat[i]);
                                     db_append_string(&stmt, buf);
                                 }
                             }
@@ -406,7 +408,7 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                                                      attr[0].null_values);
                                 }
                                 else {
-                                    sprintf(buf, ", null");
+                                    snprintf(buf, sizeof(buf), ", null");
                                     db_append_string(&stmt, buf);
                                 }
                             }
@@ -425,7 +427,8 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                                                          attr[1].null_values);
                                 }
                                 else {
-                                    sprintf(buf, ", %d", ACats->cat[j]);
+                                    snprintf(buf, sizeof(buf), ", %d",
+                                             ACats->cat[j]);
                                     db_append_string(&stmt, buf);
                                 }
                             }
@@ -435,7 +438,7 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                                                      attr[1].null_values);
                                 }
                                 else {
-                                    sprintf(buf, ", null");
+                                    snprintf(buf, sizeof(buf), ", null");
                                     db_append_string(&stmt, buf);
                                 }
                             }

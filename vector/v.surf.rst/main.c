@@ -373,8 +373,8 @@ int main(int argc, char *argv[])
         dmin = ns_res / 2;
     disk = n_rows * n_cols * sizeof(int);
     sdisk = n_rows * n_cols * sizeof(short int);
-    sprintf(dmaxchar, "%f", dmin * 5);
-    sprintf(dminchar, "%f", dmin);
+    snprintf(dmaxchar, sizeof(dmaxchar), "%f", dmin * 5);
+    snprintf(dminchar, sizeof(dminchar), "%f", dmin);
 
     if (!parm.dmin->answer) {
         parm.dmin->answer = G_store(dminchar);
@@ -626,7 +626,7 @@ int main(int argc, char *argv[])
 
         /* Create new table */
         db_zero_string(&sql2);
-        sprintf(buf, "create table %s ( ", ff->table);
+        snprintf(buf, sizeof(buf), "create table %s ( ", ff->table);
         db_append_string(&sql2, buf);
         db_append_string(&sql2, "cat integer");
         db_append_string(&sql2, ", flt1 double precision");
