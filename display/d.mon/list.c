@@ -82,12 +82,11 @@ void print_list(FILE *fd)
         G_message(_("List of running monitors:"));
     else {
         G_important_message(_("No monitors running"));
-        goto cleanup;
     }
 
     for (i = 0; i < n; i++)
         fprintf(fd, "%s\n", list[i]);
-cleanup:
+
     for (i = 0; i < n; i++)
         G_free(list[i]);
     G_free(list);
@@ -98,21 +97,23 @@ int check_mon(const char *name)
 {
     char **list;
     int i, n;
-    int found = FALSE;
 
     list_mon(&list, &n);
 
     for (i = 0; i < n; i++)
         if (G_strcasecmp(list[i], name) == 0) {
-            found = TRUE;
-            goto cleanup;
+            for (i = 0; i < n; i++) {
+                G_free(list[i]);
+            }
+            G_free(list);
+            return TRUE;
         }
-cleanup:
+
     for (i = 0; i < n; i++)
         G_free(list[i]);
     G_free(list);
 
-    return found;
+    return FALSE;
 }
 
 /* list related commands for given monitor */
