@@ -51,6 +51,7 @@ TRANSLATION_KEYS = {
     "rows": _("Number of rows:"),
     "cols": _("Number of columns:"),
     "cells": _("Number of cells:"),
+    "error": _("Error:"),
 }
 
 
@@ -80,15 +81,50 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         self.title = title
 
         self.region_settings = None
+        self.error_message = None
 
         self._initImages()
 
         self._createGeneralInfoBox()
         self._createRegionSettingsBox()
+        self._createErrorBox()
 
         self._layout()
 
+    def _get_saved_regions(self):
+        """Return a dict of saved regions {name: params}."""
+        saved_regions = {}
+        windows_dir = os.path.join(
+            gs.gisenv()["GISDBASE"],
+            gs.gisenv()["LOCATION_NAME"],
+            gs.gisenv()["MAPSET"],
+            "windows",
+        )
+        try:
+            for file in os.listdir(windows_dir):
+                if file.endswith(".wind"):
+                    region_name = os.path.splitext(file)[0]
+                    region_params = gs.parse_command(
+                        "g.region", flags="ug", region=region_name
+                    )
+                    saved_regions[region_name] = region_params
+        except FileNotFoundError:
+            pass
+        return saved_regions
+
+    def _get_matching_region_name(self, region_settings):
+        """Check if region matches a saved region."""
+        saved_regions = self._get_saved_regions()
+        for name, params in saved_regions.items():
+            if all(
+                str(region_settings.get(key)) == str(params.get(key, ""))
+                for key in ["n", "s", "e", "w", "nsres", "ewres"]
+            ):
+                return name
+        return None
+
     def _layout(self):
+        """Layout the panel."""
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(
             self.general_info_box_sizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5
@@ -99,10 +135,15 @@ class HistoryInfoPanel(SP.ScrolledPanel):
             flag=wx.EXPAND | wx.ALL,
             border=5,
         )
-        self.SetSizer(mainSizer)
-        self.SetMinSize(self.GetBestSize())
+        mainSizer.Add(
+            self.error_box_sizer,
+            proportion=0,
+            flag=wx.EXPAND | wx.ALL,
+            border=5,
+        )
 
-        self.Layout()
+        self.SetSizer(mainSizer)
+        self.SetupScrolling()
 
     def _initImages(self):
         bmpsize = (16, 16)
@@ -163,6 +204,19 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         self.sizer_region_settings_grid.AddGrowableCol(1)
         self.region_settings_box.Hide()
 
+    def _createErrorBox(self):
+        """Create error message box."""
+        self.error_box = StaticBox(parent=self, id=wx.ID_ANY, label=_("Error Details"))
+        self.error_box_sizer = wx.StaticBoxSizer(self.error_box, wx.VERTICAL)
+        
+        self.error_text = StaticText(parent=self, id=wx.ID_ANY, label="")
+        self.error_text.SetForegroundColour(wx.RED)
+        self.error_box_sizer.Add(
+            self.error_text, proportion=0, flag=wx.EXPAND | wx.ALL, border=5
+        )
+        
+        self.error_box.Hide()
+
     def _general_info_filter(self, key, value):
         filter_keys = ["timestamp", "runtime", "status"]
         return key in filter_keys or ((key in {"mask2d", "mask3d"}) and value is True)
@@ -171,41 +225,64 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         return key not in {"projection", "zone", "cells"}
 
     def _updateGeneralInfoBox(self, command_info):
-        """Update a static box for displaying general info about the command.
-
-        :param dict command_info: command info entry for update
-        """
+        """Update general info box with error message if command failed."""
         self.sizer_general_info.Clear(True)
 
-        idx = 0
-        for key, value in command_info.items():
-            if self._general_info_filter(key, value):
-                self.sizer_general_info.Add(
-                    StaticText(
-                        parent=self.general_info_box,
-                        id=wx.ID_ANY,
-                        label=make_label(key),
-                        style=wx.ALIGN_LEFT,
-                    ),
-                    flag=wx.ALIGN_LEFT | wx.ALL,
-                    border=5,
-                    pos=(idx, 0),
-                )
-                self.sizer_general_info.Add(
-                    StaticText(
-                        parent=self.general_info_box,
-                        id=wx.ID_ANY,
-                        label=get_translated_value(key, value),
-                        style=wx.ALIGN_LEFT,
-                    ),
-                    flag=wx.ALIGN_LEFT | wx.ALL,
-                    border=5,
-                    pos=(idx, 1),
-                )
-                idx += 1
+    idx = 0
+    for key, value in command_info.items():
+        if self._general_info_filter(key, value):
+            # Add status label
+            self.sizer_general_info.Add(
+                StaticText(
+                    parent=self.general_info_box,
+                    label=make_label(key),
+                    style=wx.ALIGN_LEFT,
+                ),
+                flag=wx.ALIGN_LEFT | wx.ALL,
+                border=5,
+                pos=(idx, 0),
+            )
+            self.sizer_general_info.Add(
+                StaticText(
+                    parent=self.general_info_box,
+                    label=get_translated_value(key, value),
+                    style=wx.ALIGN_LEFT,
+                ),
+                flag=wx.ALIGN_LEFT | wx.ALL,
+                border=5,
+                pos=(idx, 1),
+            )
+            idx += 1
 
-        self.general_info_box.Layout()
-        self.general_info_box.Show()
+            # Add error message if status is "failed"
+            if key == "status" and value.lower() == "failed":
+                error_msg = command_info.get("error", "")
+                if error_msg:
+                    # Error label
+                    self.sizer_general_info.Add(
+                        StaticText(
+                            parent=self.general_info_box,
+                            label=make_label("error"),
+                            style=wx.ALIGN_LEFT,
+                        ),
+                        flag=wx.ALIGN_LEFT | wx.ALL,
+                        border=5,
+                        pos=(idx, 0),
+                    )
+                    # Error value (in red)
+                    error_text = StaticText(
+                        parent=self.general_info_box,
+                        label=error_msg,
+                        style=wx.ALIGN_LEFT,
+                    )
+                    error_text.SetForegroundColour(wx.RED)
+                    self.sizer_general_info.Add(
+                        error_text,
+                        flag=wx.ALIGN_LEFT | wx.ALL,
+                        border=5,
+                        pos=(idx, 1),
+                    )
+                    idx += 1
 
     def _updateRegionSettingsGrid(self, command_info):
         """Update a grid that displays numerical values
@@ -249,18 +326,35 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         """Update text, icon and button dealing with region update"""
         self.sizer_region_settings_match.Clear(True)
 
-        # Region condition
-        history_region = self.region_settings
-        current_region = self._get_current_region()
-        region_matches = history_region == current_region
+    region_name = self._get_matching_region_name(self.region_settings)
 
-        # Icon and button according to the condition
-        if region_matches:
-            icon = self.icons["check"]
-            button_label = None
-        else:
-            icon = self.icons["cross"]
-            button_label = _("Update current region")
+    region_name_label = (
+        _("Region name: {}").format(region_name)
+        if region_name
+        else _("Region name: Not set")
+    )
+    # Add region name text
+    text_region_name = StaticText(
+        parent=self.region_settings_box, label=region_name_label, style=wx.ALIGN_LEFT
+    )
+    self.sizer_region_settings_match.Add(
+        text_region_name,
+        proportion=0,
+        flag=wx.ALIGN_CENTER_VERTICAL | wx.RIGHT,
+        border=10,
+    )
+    # Existing region match logic below
+    history_region = self.region_settings
+    current_region = self._get_current_region()
+    region_matches = history_region == current_region
+
+    # Icon and button according to the condition
+    if region_matches:
+        icon = self.icons["check"]
+        button_label = None
+    else:
+        icon = self.icons["cross"]
+        button_label = _("Update current region")
 
         # Static text
         textRegionMatch = StaticText(
@@ -339,6 +433,32 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         self.giface.updateMap.emit(render=False, renderVector=False)
         self._updateRegionSettingsMatch()
         self.Layout()
+
+    def showError(self, error_message):
+        """Show error message."""
+        self.error_message = error_message
+        self.error_text.SetLabel(error_message)
+        self.error_box.Show()
+        self.Layout()
+        self.SetupScrolling()
+
+    def hideError(self):
+        """Hide error message."""
+        self.error_message = None
+        self.error_text.SetLabel("")
+        self.error_box.Hide()
+        self.Layout()
+        self.SetupScrolling()
+
+    def updateCommandInfo(self, data):
+        """Update command info display."""
+        self.updateGeneralInfo(data)
+        if "region" in data:
+            self.updateRegionSettings(data["region"])
+        if "error_message" in data:
+            self.showError(data["error_message"])
+        else:
+            self.hideError()
 
 
 class HistoryBrowser(wx.SplitterWindow):
