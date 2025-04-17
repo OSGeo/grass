@@ -536,7 +536,8 @@ void print_shell(struct Map_info *Map, const char *field_opt,
         fprintf(stdout, "comment=%s\n", Vect_get_comment(Map));
         break;
     case JSON:
-        json_object_set_string(root_object, "projection", Vect_get_proj_name(Map));
+        json_object_set_string(root_object, "projection",
+                               Vect_get_proj_name(Map));
         if (G_projection() == PROJECTION_UTM) {
             json_object_set_number(root_object, "zone", Vect_get_zone(Map));
         }
