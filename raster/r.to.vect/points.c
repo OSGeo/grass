@@ -30,6 +30,8 @@ int extract_points(int z_flag UNUSED)
     case DCELL_TYPE:
         dcellbuf = Rast_allocate_d_buf();
         break;
+    default:
+        G_fatal_error(_("Unsupported raster data type encountered."));
     }
 
     G_message(_("Extracting points..."));
@@ -75,8 +77,6 @@ int extract_points(int z_flag UNUSED)
                     continue;
                 dval = dcellbuf[col];
                 break;
-            default:
-                G_fatal_error(_("Unsupported raster data type encountered."));
             }
 
             /* value_flag is used only for CELL type */
