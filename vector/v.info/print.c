@@ -731,8 +731,8 @@ void print_info(struct Map_info *Map)
         utm_zone = Vect_get_zone(Map);
         utm_zone_str = format_zone(utm_zone);
 
-        G_saprintf(line, "  %s: %s (%s %s)", _("Projection"), Vect_get_proj_name(Map),
-                   _("zone"), utm_zone_str);
+        G_saprintf(line, "  %s: %s (%s %s)", _("Projection"),
+                   Vect_get_proj_name(Map), _("zone"), utm_zone_str);
     }
     else
         G_saprintf(line, "  %s: %s", _("Projection"), Vect_get_proj_name(Map));
