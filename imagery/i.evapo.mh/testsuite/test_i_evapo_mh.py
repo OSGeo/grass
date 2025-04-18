@@ -165,12 +165,16 @@ class TestEvapotranspirationMH(TestCase):
         self.create_raster("tmax_test", "30")
         self.create_raster("tavg_test", "20")
 
-        def calculate_et(ra_input_w, tavg, tmax, tmin):
-            ra_mj = ra_input_w * 86.4
-            td = tmax - tmin
-            return 0.0023 * 0.408 * ra_mj * (tavg + 17.8) * math.sqrt(td)
+        # Compute expected ET using Hargreaves formula
+        ra_input_w = 0.1446759
+        tmin = 10
+        tmax = 30
+        tavg = 20
 
-        expected_et = calculate_et(0.1446759, 20, 30, 10)
+        ra_mj = ra_input_w * 0.0864  # Correct W/m² -> MJ/m²/day conversion
+        td = tmax - tmin
+
+        expected_et = 0.0023 * 0.408 * ra_mj * (tavg + 17.8) * math.sqrt(td)
 
         self.run_evapo(
             flags="h",
