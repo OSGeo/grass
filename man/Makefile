@@ -20,15 +20,13 @@ DSTFILES := \
 	$(MDDIR)/source/grassdocs.css \
 	$(MDDIR)/scripts/hook_list_scripts.py \
 	$(MDDIR)/source/index.md \
+	$(MDDIR)/overrides/partials/copyright.html \
 	$(MDDIR)/overrides/partials/footer.html \
 	$(MDDIR)/overrides/partials/actions.html \
 	$(MDDIR)/overrides/partials/source.html \
 	$(MDDIR)/overrides/fragments/tags/default/listing.html \
 	$(MDDIR)/source/keywords.md \
 	$(MDDIR)/source/development_intro.md \
-	$(MDDIR)/source/interfaces_overview.md \
-	$(MDDIR)/source/jupyter_intro.md \
-	$(MDDIR)/source/python_intro.md \
 	$(MDDIR)/source/command_line_intro.md
 
 categories = \
@@ -268,13 +266,7 @@ $(MDDIR)/source/keywords.md: mkdocs/keywords.md
 $(MDDIR)/source/development_intro.md: mkdocs/docs/development_intro.md
 	$(INSTALL_DATA) $< $@
 
-$(MDDIR)/source/python_intro.md: mkdocs/docs/python_intro.md
-	$(INSTALL_DATA) $< $@
-
 $(MDDIR)/source/command_line_intro.md: mkdocs/docs/command_line_intro.md
-	$(INSTALL_DATA) $< $@
-
-$(MDDIR)/source/interfaces_overview.md: mkdocs/docs/interfaces_overview.md
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/scripts/hook_list_scripts.py: mkdocs/scripts/hook_list_scripts.py | $(MDDIR)/scripts
@@ -282,6 +274,9 @@ $(MDDIR)/scripts/hook_list_scripts.py: mkdocs/scripts/hook_list_scripts.py | $(M
 
 $(MDDIR)/scripts:
 	$(MKDIR) $@
+
+$(MDDIR)/overrides/partials/copyright.html: mkdocs/overrides/partials/copyright.html | $(MDDIR)/overrides/partials
+	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/overrides/partials/footer.html: mkdocs/overrides/partials/footer.html | $(MDDIR)/overrides/partials
 	$(INSTALL_DATA) $< $@
@@ -302,11 +297,11 @@ $(MDDIR)/overrides/fragments/tags/default/listing.html: mkdocs/overrides/fragmen
 	$(INSTALL_DATA) $< $@
 
 build-mkdocs:
-	@cd $(MDDIR) ; SITE_NAME="GRASS $(GRASS_VERSION_NUMBER) Reference Manual" \
-	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS $(GRASS_VERSION_NUMBER) Reference Manual" \
+	@cd $(MDDIR) ; SITE_NAME="GRASS $(GRASS_VERSION_NUMBER) Documentation" \
+	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS $(GRASS_VERSION_NUMBER) Documentation" \
 	mkdocs build
 
 serve-mkdocs:
-	@cd $(MDDIR) ; SITE_NAME="GRASS $(GRASS_VERSION_NUMBER) Reference Manual" \
-	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS $(GRASS_VERSION_NUMBER) Reference Manual" \
+	@cd $(MDDIR) ; SITE_NAME="GRASS $(GRASS_VERSION_NUMBER) Documentation" \
+	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS $(GRASS_VERSION_NUMBER) Documentation" \
 	mkdocs serve

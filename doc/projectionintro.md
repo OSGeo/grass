@@ -70,6 +70,10 @@ A graphical user interface is provided by [wxGUI](wxGUI.md).
   Europe](https://mapref.org)
 - [Information and Service System for European Coordinate Reference
   Systems - CRS](https://www.crs-geo.eu/)
+- [List of EPSG codes](https://spatialreference.org/)
+  (Database of worldwide coordinate systems)
+- [CRS Explorer - PROJ codes](https://crs-explorer.proj.org/)
+- [EPSG Geodetic Parameter Dataset](https://epsg.org/)
 
 ## See also
 
@@ -80,4 +84,3 @@ A graphical user interface is provided by [wxGUI](wxGUI.md).
 - [Introduction into image processing](imageryintro.md)
 - [Introduction into temporal data processing](temporalintro.md)
 - [Database management](databaseintro.md)
-- [Graphical User Interface](wxguiintro.md)
