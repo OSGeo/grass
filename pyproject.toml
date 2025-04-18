@@ -288,7 +288,6 @@ ignore = [
 "gui/wxpython/iclass/statistics.py" = ["A005"]
 "gui/wxpython/tools/update_menudata.py" = ["SIM115"]
 "gui/wxpython/vnet/vnet_data.py" = ["SIM115"]
-"gui/wxpython/web_services/dialogs.py" = ["SIM115"]
 "gui/wxpython/wxplot/profile.py" = ["A005", "SIM115"]
 "lib/imagery/testsuite/test_imagery_signature_management.py" = ["SIM115"]
 "lib/imagery/testsuite/test_imagery_sigsetfile.py" = ["FURB152"]
