@@ -103,8 +103,8 @@ def image_width(filename):
         from PIL import Image
     except ImportError:
         return None
-
-    return Image.open(filename).size[0]  # First element is width.
+    with Image.open(filename) as img:
+        return img.size[0]  # First element is width.
 
 
 def img_in_file(filename: str | os.PathLike[str], imagename: str, ext: str) -> bool:
