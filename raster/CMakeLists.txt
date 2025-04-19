@@ -420,6 +420,7 @@ build_program_in_subdir(
   grass_gis
   grass_raster
   grass_gproj
+  grass_parson
   ${LIBM}
   OPTIONAL_DEPENDS
   OPENMP)
