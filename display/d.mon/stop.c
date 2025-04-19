@@ -84,5 +84,6 @@ int stop_wx(const char *name)
     }
 #endif
 
+    G_free(pid);
     return 0;
 }
