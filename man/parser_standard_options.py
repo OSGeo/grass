@@ -360,9 +360,7 @@ if __name__ == "__main__":
             if args.output is not None
             else contextlib.nullcontext(sys.stdout)
         ) as outfile,
-        open(args.text)
-        if args.text is not None
-        else urlopen(args.url, proxies=None) as cfile,
+        open(args.text) if args.text is not None else urlopen(args.url) as cfile,
     ):
         options = OptTable(parse_options(cfile.readlines(), startswith=args.startswith))
         outform = args.format
