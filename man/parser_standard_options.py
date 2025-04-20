@@ -379,7 +379,7 @@ if __name__ == "__main__":
             print(getattr(options, outform)(), file=outfile)
         else:
             year = os.getenv("VERSION_DATE")
-            name = args.output.name
+            name = outfile.name
 
             def write_output(f: IO[str], ext: str) -> None:
                 f.write(header1_tmpl.substitute(title="Standard Parser Options"))
