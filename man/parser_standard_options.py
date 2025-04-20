@@ -6,6 +6,7 @@ Copyright 2015-2025 by Pietro Zambelli and the GRASS Development Team
 """
 
 import argparse
+import contextlib
 import os
 import re
 import sys
@@ -327,15 +328,12 @@ if __name__ == "__main__":
         "-t",
         "--text",
         dest="text",
-        type=argparse.FileType("r"),
         help="Provide the file to parse",
     )
     parser.add_argument(
         "-o",
         "--output",
-        default=sys.stdout,
         dest="output",
-        type=argparse.FileType("w"),
         help="The file where the output should be written (default: stdout)",
     )
     parser.add_argument(
@@ -351,48 +349,53 @@ if __name__ == "__main__":
         "--html_params",
         default="border=1",
         type=str,
-        dest="htmlparmas",
+        dest="htmlparams",
         help="Options for the HTML table",
     )
     args = parser.parse_args()
 
-    cfile = args.text or urlopen(args.url, proxies=None)
-
-    options = OptTable(parse_options(cfile.readlines(), startswith=args.startswith))
-    outform = args.format
-    if outform in ("csv", "html", "markdown"):
-        print(getattr(options, outform)(), file=args.output)
-        args.output.close()
-    else:
-        year = os.getenv("VERSION_DATE")
-        name = args.output.name
-        args.output.close()
-
-        def write_output(ext):
-            with open(name, "w") as outfile:
-                outfile.write(header1_tmpl.substitute(title="Standard Parser Options"))
-                outfile.write(headerpso_tmpl)
-                if ext == "html":
-                    outfile.write(options.html(toptions=args.htmlparmas))
-                else:
-                    outfile.write(options.markdown())
-                write_footer(outfile, f"index.{ext}", year, template=ext)
-
-        from build import (
-            write_footer,
-        )
-
-        ext = os.path.splitext(name)[1][1:]
-
-        if ext == "html":
-            from build_html import (
-                header1_tmpl,
-                headerpso_tmpl,
-            )
+    with (
+        (
+            open(args.output, "w")
+            if args.output is not None
+            else contextlib.nullcontext(sys.stdout)
+        ) as outfile,
+        open(args.text)
+        if args.text is not None
+        else urlopen(args.url, proxies=None) as cfile,
+    ):
+        options = OptTable(parse_options(cfile.readlines(), startswith=args.startswith))
+        outform = args.format
+        if outform in ("csv", "html", "markdown"):
+            print(getattr(options, outform)(), file=outfile)
         else:
-            from build_md import (
-                header1_tmpl,
-                headerpso_tmpl,
+            year = os.getenv("VERSION_DATE")
+            name = args.output.name
+
+            def write_output(f, ext) -> None:
+                f.write(header1_tmpl.substitute(title="Standard Parser Options"))
+                f.write(headerpso_tmpl)
+                if ext == "html":
+                    f.write(options.html(toptions=args.htmlparams))
+                else:
+                    f.write(options.markdown())
+                write_footer(f, f"index.{ext}", year, template=ext)
+
+            from build import (
+                write_footer,
             )
 
-        write_output(ext)  # html or md
+            ext = os.path.splitext(name)[1][1:]
+
+            if ext == "html":
+                from build_html import (
+                    header1_tmpl,
+                    headerpso_tmpl,
+                )
+            else:
+                from build_md import (
+                    header1_tmpl,
+                    headerpso_tmpl,
+                )
+
+            write_output(f=outfile, ext=ext)  # html or md
