@@ -336,7 +336,7 @@ if __name__ == "__main__":
         default=sys.stdout,
         dest="output",
         type=argparse.FileType("w"),
-        help="Provide the url with the file to parse",
+        help="The file where the output should be written (default: stdout)",
     )
     parser.add_argument(
         "-s",
