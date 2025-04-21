@@ -21,8 +21,7 @@ class TestITarget(TestCase):
     def tearDownClass(cls):
         cls.del_temp_region()
         cls.runModule("g.remove", type="raster", name="test_base,test_extra", flags="f")
-        for group in cls.groups:
-            cls.runModule("g.remove", type="group", name=group, flags="f")
+        cls.runModule("g.remove", type="group", name=cls.groups, flags="f")
 
     def _target_path(self, group):
         """Return full filesystem path to group's TARGET file."""
