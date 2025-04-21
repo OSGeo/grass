@@ -103,7 +103,6 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.tasklist
   - pymdownx.snippets
-  - pymdownx.tabbed
   - pymdownx.magiclink
   - attr_list
   - md_in_html
@@ -124,10 +123,6 @@ nav:
       - Getting started: index.md
       # These are linking to interfaces, but they would eventually be new pages
       # which would provide more context, but less detail.
-      - Command line: command_line_intro.md
-      - Python: python_intro.md
-      - jupyter_get_started.md
-      - Graphical user interface: helptext.md
       - Tutorials: https://grass-tutorials.osgeo.org/
   - Interfaces:
       - Overview: interfaces_overview.md
@@ -138,7 +133,7 @@ nav:
       - Python: python_intro.md
       - Jupyter notebooks: jupyter_intro.md
       - Graphical user interface:
-          - Overview: wxguiintro.md
+          - Introduction: helptext.md
           - Features: wxGUI.md
           - Tool dialogs: wxGUI.modules.md
           - Attribute table management: wxGUI.dbmgr.md
@@ -159,6 +154,7 @@ nav:
           - List of components: wxGUI.components.md
 
   - Key concepts:
+      - GRASS projects: grass_database.md
       - Raster overview: rasterintro.md
       - 3D raster overview: raster3dintro.md
       - Vector overview: vectorintro.md
@@ -167,7 +163,6 @@ nav:
       - Imagery overview: imageryintro.md
       - Temporal overview: temporalintro.md
       - Display drivers: displaydrivers.md
-      - GRASS projects: grass_database.md
       - Projections and transformations: projectionintro.md
 
   - Tools:

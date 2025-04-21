@@ -266,4 +266,3 @@ their raster pendants, but with 3D raster map layers:
 - [Introduction into image processing](imageryintro.md)
 - [Database management](databaseintro.md)
 - [Projections and spatial transformations](projectionintro.md)
-- [Graphical User Interface](wxguiintro.md)
