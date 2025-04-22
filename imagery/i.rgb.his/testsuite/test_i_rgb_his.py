@@ -102,11 +102,18 @@ class TestIRGBHIS(TestCase):
             ]
         )
 
-        univar = gs.parse_command("r.univar", map="test_intensity_gray", format="json")
-        self.assertAlmostEqual(univar[0]["mean"], 100.0, places=6)
+        univar_hue = gs.parse_command("r.univar", map="test_hue_gray", format="json")
+        self.assertAlmostEqual(univar_hue[0]["mean"], 0.0, places=6)
 
-        univar = gs.parse_command("r.univar", map="test_saturation_gray", format="json")
-        self.assertAlmostEqual(univar[0]["mean"], 0.0, places=6)
+        univar_intensity = gs.parse_command(
+            "r.univar", map="test_intensity_gray", format="json"
+        )
+        self.assertAlmostEqual(univar_intensity[0]["mean"], 100.0, places=6)
+
+        univar_saturation = gs.parse_command(
+            "r.univar", map="test_saturation_gray", format="json"
+        )
+        self.assertAlmostEqual(univar_saturation[0]["mean"], 0.0, places=6)
 
     def test_pure_primary_colors(self):
         """Test conversion for primary RGB colors"""
