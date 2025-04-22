@@ -213,10 +213,10 @@ n=-4265502.30382993 s=-4473453.15255565 w=14271663.19157564 e=14409956.2693866 r
 # calculate where output map will be in JSON format
 r.proj input=elevation project=ll_wgs84 mapset=user1 -p format=json
 {
-    "north": "-4265502.30382993",
-    "south": "-4473453.15255565",
-    "west": "14271663.19157564",
-    "east": "14409956.2693866",
+    "north": -4265502.30382993,
+    "south": -4473453.15255565,
+    "west": 14271663.19157564,
+    "east": 14409956.2693866,
     "rows": 12277,
     "cols": 8162
 }

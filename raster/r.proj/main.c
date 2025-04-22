@@ -144,9 +144,6 @@ int main(int argc, char **argv)
 
     enum OutputFormat outputFormat;
 
-    JSON_Value *root_value = NULL;
-    JSON_Object *root_object = NULL;
-
     G_gisinit(argv[0]);
 
     module = G_define_module();
@@ -339,13 +336,6 @@ int main(int argc, char **argv)
         JSON_Value *maps_value = NULL;
 
         if (outputFormat == JSON) {
-            root_value = json_value_init_object();
-            if (root_value == NULL) {
-                G_fatal_error(
-                    _("Failed to initialize JSON object. Out of memory?"));
-            }
-            root_object = json_object(root_value);
-
             maps_value = json_value_init_array();
             if (maps_value == NULL) {
                 G_fatal_error(
@@ -371,16 +361,14 @@ int main(int argc, char **argv)
             }
         }
         if (outputFormat == JSON) {
-            json_object_set_value(root_object, "maps", maps_value);
-
             char *serialized_string = NULL;
-            serialized_string = json_serialize_to_string_pretty(root_value);
+            serialized_string = json_serialize_to_string_pretty(maps_value);
             if (serialized_string == NULL) {
                 G_fatal_error(_("Failed to initialize pretty JSON string."));
             }
             puts(serialized_string);
             json_free_serialized_string(serialized_string);
-            json_value_free(root_value);
+            json_value_free(maps_value);
         }
         else {
             fflush(stdout);
@@ -457,6 +445,9 @@ int main(int argc, char **argv)
     ocols = outcellhd.cols;
 
     if (print_bounds->answer) {
+        JSON_Value *root_value = NULL;
+        JSON_Object *root_object = NULL;
+
         G_message(_("Input map <%s@%s> in project <%s>:"), inmap->answer,
                   setname, inlocation->answer);
 
@@ -511,10 +502,10 @@ int main(int argc, char **argv)
             break;
 
         case JSON:
-            json_object_set_string(root_object, "north", north_str);
-            json_object_set_string(root_object, "south", south_str);
-            json_object_set_string(root_object, "west", west_str);
-            json_object_set_string(root_object, "east", east_str);
+            json_object_set_number(root_object, "north", inorth);
+            json_object_set_number(root_object, "south", isouth);
+            json_object_set_number(root_object, "west", iwest);
+            json_object_set_number(root_object, "east", ieast);
             json_object_set_number(root_object, "rows", irows);
             json_object_set_number(root_object, "cols", icols);
             break;

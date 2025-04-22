@@ -227,10 +227,9 @@ class TestRasterreport(TestCase):
         )
         result = json.loads(output)
 
-        self.assertIn("maps", result, "'maps' key not found in result (JSON)")
         for r_map in raster_maps:
             self.assertIn(
-                r_map, result["maps"], f"'{r_map}' not found in raster map list (JSON)"
+                r_map, result, f"'{r_map}' not found in raster map list (JSON)"
             )
 
     def test_print_output_plain(self):
@@ -273,11 +272,11 @@ class TestRasterreport(TestCase):
 
         expected = {
             "cols": 1500,
-            "east": "78:36:29.891436W",
-            "north": "35:48:34.593777N",
+            "east": -78.60830317669155,
+            "north": 35.80960938255465,
             "rows": 1350,
-            "south": "35:41:15.026269N",
-            "west": "78:46:28.633781W",
+            "south": 35.68750729683966,
+            "west": -78.7746204948163,
         }
 
         self.assertDictEqual(result, expected, "Mismatch in print output (JSON)")
