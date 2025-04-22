@@ -1496,11 +1496,16 @@ char *Vect__get_path(char *path, struct Map_info *Map)
         char path_tmp[GPATH_MAX];
 
         G__temp_element(path_tmp, TRUE);
-        (void)snprintf(path, GPATH_MAX, "%s/%s/%s", path_tmp, GV_DIRECTORY,
-                       Map->name);
+        if (snprintf(path, GPATH_MAX, "%s/%s/%s", path_tmp, GV_DIRECTORY,
+                     Map->name) >= GPATH_MAX)
+            G_fatal_error(_("Filepath '%s/%s' exceeds max length"), path_tmp,
+                          Map->name);
     }
     else {
-        (void)snprintf(path, GPATH_MAX, "%s/%s", GV_DIRECTORY, Map->name);
+        if (snprintf(path, GPATH_MAX, "%s/%s", GV_DIRECTORY, Map->name) >=
+            GPATH_MAX)
+            G_fatal_error(_("Filepath '%s/%s' exceeds max length"),
+                          GV_DIRECTORY, Map->name);
     }
 
     return path;
