@@ -97,23 +97,21 @@ int check_mon(const char *name)
 {
     char **list;
     int i, n;
+    int ret = FALSE;
 
     list_mon(&list, &n);
 
     for (i = 0; i < n; i++)
         if (G_strcasecmp(list[i], name) == 0) {
-            for (i = 0; i < n; i++) {
-                G_free(list[i]);
-            }
-            G_free(list);
-            return TRUE;
+            ret = TRUE;
+            break;
         }
 
     for (i = 0; i < n; i++)
         G_free(list[i]);
     G_free(list);
 
-    return FALSE;
+    return ret;
 }
 
 /* list related commands for given monitor */
