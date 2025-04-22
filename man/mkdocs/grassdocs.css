@@ -3,32 +3,103 @@
   /* GRASS Variables
   Use these variables to customize the GRASS theme.
   ----------------------------------------------------------------------------- */
-  --gs-osgeo-blue: rgb(0, 58, 64); /* OSGeo Blue */
-  --gs-support-color: rgb(243, 57, 138); /* Pink */
-  --gs-support-color--dark: rgba(243, 57, 138, 0.541);
-  --gs-support-color--light: rgba(243, 57, 138, 0.322);
-  --gs-white-color: rgb(255, 255, 255); /* White */
-  --gs-white-color--light: rgba(255, 255, 255, 0.541);
-  --gs-white-color--lighter: rgba(255, 255, 255, 0.322);
-  --gs-white-color--lightest: rgba(255, 255, 255, 0.071);
-  --gs-black-color: rgb(0, 0, 0); /* Black */
 
-  --gs-primary-color: rgb(76, 176, 91); /* Dark green */
+  /* Primary Color */
+  --gs-primary-color: rgb(76, 176, 91);
   --gs-primary-color--light: rgba(76, 176, 91, 0.541);
   --gs-primary-color--lighter: rgba(76, 176, 91, 0.322);
   --gs-primary-color--lightest: rgba(76, 176, 91, 0.071);
-  --gs-primary-color-light: rgba(158, 210, 156, 1); /* Light green */
-  --gs-primary-color-light--light: rgba(158, 210, 156, 0.541);
-  --gs-primary-color-light--lighter: rgba(158, 210, 156, 0.322);
-  --gs-primary-color-light--lightest: rgba(158, 210, 156, 0.071);
-  --gs-primary-color-dark: rgba(8, 139, 54, 1); /* Dark green */
-  --gs-secondary-color: var(--gs-osgeo-blue); /* OSGeo Blue */
-  --gs-secondary-color--light: rgba(0, 58, 64, 0.541);
-  --gs-secondary-color--lighter: rgba(0, 58, 64, 0.322);
-  --gs-secondary-color--lightest: rgba(0, 58, 64, 0.071);
-  --gs-primary-bg-color: var(--gs-white-color); /* White */
-  --gs-primary-bg-color-dark: rgba(135, 135, 135, 0.1);
 
+  /* Primary Alt Color */
+  --gs-primary-alt-color: rgb(110, 208, 121);
+  --gs-primary-alt-color--light: rgba(110, 208, 121, 0.541);
+  --gs-primary-alt-color--lighter: rgba(110, 208, 121, 0.322);
+  --gs-primary-alt-color--lightest: rgba(110, 208, 121, 0.071);
+
+  /* Primary Light Color */
+  --gs-primary-light-color: rgb(135, 233, 145);
+  --gs-primary-light-color--light: rgba(135, 233, 145, 0.541);
+  --gs-primary-light-color--lighter: rgba(138, 233, 145, 0.322);
+  --gs-primary-light-color--lightest: rgba(138, 233, 145, 0.071);
+
+  /* Primary Dark Color */
+  --gs-primary-color-dark: rgb(8, 139, 54);
+  --gs-primary-color-dark--light: rgba(8, 139, 54, 0.541);
+  --gs-primary-color-dark--lighter: rgba(8, 139, 54, 0.322);
+  --gs-primary-color-dark--lightest: rgba(8, 139, 54, 0.071);
+
+  /* Secondary Color */
+  --gs-secondary-color: rgb(0, 57, 63);
+  --gs-secondary-color--light: rgba(0, 57, 63, 0.541);
+  --gs-secondary-color--lighter: rgba(0, 57, 63, 0.322);
+  --gs-secondary-color--lightest: rgba(0, 57, 63, 0.071);
+
+  /* Secondary Alt Color */
+  --gs-secondary-alt-color: rgb(39, 87, 92);
+  --gs-secondary-alt-color--light: rgba(39, 87, 92, 0.541);
+  --gs-secondary-alt-color--lighter: rgba(39, 87, 92, 0.322);
+  --gs-secondary-alt-color--lightest: rgba(39, 87, 92, 0.071);
+
+  /* Secondary Light Color */
+  --gs-secondary-light-color: rgb(74, 120, 125);
+  --gs-secondary-light-color--light: rgba(74, 121, 127, 0.541);
+  --gs-secondary-light-color--lighter: rgba(74, 121, 127, 0.322);
+  --gs-secondary-light-color--lightest: rgba(74, 121, 127, 0.071);
+
+  /* Secondary Dark Color */
+  --gs-secondary-dark-color: rgb(0, 32, 36);
+  --gs-secondary-dark-color--light: rgba(0, 32, 36, 0.541);
+  --gs-secondary-dark-color--lighter: rgba(0, 32, 36, 0.322);
+  --gs-secondary-dark-color--lightest: rgba(0, 32, 36, 0.071);
+
+  /* Special Colors */
+  --gs-support-color: rgb(243, 57, 138);
+  --gs-support-color--dark: rgba(243, 57, 138, 0.541);
+  --gs-support-color--light: rgba(243, 57, 138, 0.322);
+  --gs-yard-sign-color: rgb(116, 93, 2);
+
+  /* White */
+  --gs-base-white-color: rgb(255, 255, 255);
+  --gs-white-color: rgb(247, 247, 247);
+  --gs-white-color--light: rgba(247, 247, 247, 0.541);
+  --gs-white-color--lighter: rgba(247, 247, 247, 0.322);
+  --gs-white-color--lightest: rgba(247, 247, 247, 0.071);
+
+  /* Black */
+  --gs-base-black-color: rgb(0, 0, 0);
+  --gs-black-color: rgb(2, 25, 5);
+  --gs-black-color--light: rgba(2, 25, 5, 0.541);
+  --gs-black-color--lighter: rgba(2, 25, 5, 0.322);
+  --gs-black-color--lightest: rgba(2, 25, 5, 0.071);
+
+  /* Grey */
+  --gs-grey-color: rgb(145, 144, 143);
+  --gs-grey-color-light: rgba(145, 144, 143, 0.541);
+  --gs-grey-color-lighter: rgba(145, 144, 143, 0.322);
+  --gs-grey-color-lightest: rgba(145, 144, 143, 0.071);
+
+  /* Grey Alt */
+  --gs-grey-alt-color: rgb(216, 216, 216);
+  --gs-grey-alt-color--light: rgba(216, 216, 216, 0.541);
+  --gs-grey-alt-color--lighter: rgba(216, 216, 216, 0.322);
+  --gs-grey-alt-color--lightest: rgba(216, 216, 216, 0.071);
+
+  /* Grey Light */
+  --gs-grey-light-color: rgb(240, 240, 241);
+  --gs-grey-light-color--light: rgba(240, 240, 241, 0.541);
+  --gs-grey-light-color--lighter: rgba(240, 240, 241, 0.322);
+  --gs-grey-light-color--lightest: rgba(240, 240, 241, 0.071);
+
+  /* Dark Gray */
+  --gs-grey-dark-color: rgb(117, 116, 115);
+  --gs-grey-dark-color--light: rgba(117, 116, 115, 0.541);
+  --gs-grey-dark-color--lighter: rgba(117, 116, 115, 0.322);
+  --gs-grey-dark-color--lightest: rgba(117, 116, 115, 0.071);
+
+  /* Images */
+  --gs-grass-background-image: url("/images/logos/banner.jpg");
+
+  /* Icons */
   --md-admonition-icon--grass-icon: url('grass_logo.svg');
 
 
@@ -65,8 +136,8 @@
   --md-footer-fg-color:              var(--gs-secondary-color);
   --md-footer-fg-color--light:       var(--gs-white-color);
   --md-footer-fg-color--lighter:     var(--gs-white-color);
-  --md-footer-bg-color:              var(--gs-primary-color-light--lightest);;
-  --md-footer-bg-color--light:       var(--gs-primary-color-light--light);
+  --md-footer-bg-color:              var(--gs-primary-light-color--lightest);;
+  --md-footer-bg-color--light:       var(--gs-primary-light-color--light);
   --md-footer-bg-color--dark:        var(--gs-primary-color);
 
   /* Typeset Colors */
@@ -196,7 +267,7 @@
 /* Custom GRASS admonition (callout) style: */
 .md-typeset .admonition.grass-tip,
 .md-typeset details.grass-tip {
-  border-color: var(--gs-primary-color-light);
+  border-color: var(--gs-primary-light-color);
 }
 .md-typeset .grass-tip > .admonition-title,
 .md-typeset .grass-tip > summary {
