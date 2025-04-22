@@ -1,15 +1,10 @@
 ---
 description: wxGUI Raster Digitizer
 index: wxGUI
+keywords: [display, GUI, raster, editing, digitizer]
 ---
 
 # wxGUI Raster Digitizer
-
-## KEYWORDS
-
-[display](display.md), [GUI](topic_GUI.md),
-[raster](keywords.md#raster), [editing](keywords.md#editing),
-[digitizer](keywords.md#digitizer)
 
 ## DESCRIPTION
 
