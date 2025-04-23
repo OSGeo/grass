@@ -13,7 +13,7 @@
  *
  * NOTES:
  *
- * 1) see dhist.h for a decalaration of the structure stat_list.
+ * 1) see dhist.h for a declaration of the structure stat_list.
  * 2) see pie.h for normalized coordinates of the different parts
  *    of the pie-chart, like the origin of the pie, the label
  *    positions, etc.
@@ -30,8 +30,10 @@
 
 #include <string.h>
 
-#include <grass/raster.h>
 #include <grass/display.h>
+#include <grass/gis.h>
+#include <grass/glocale.h>
+#include <grass/raster.h>
 
 #include "pie.h"
 
@@ -71,6 +73,7 @@ int pie(struct stat_list *dist_stats, /* list of distribution statistics */
     char txt[1024];
     char tic_name[80];
     DCELL dmin, dmax, range_dmin, range_dmax, dval;
+    dmin = 0.0;
 
     /* get coordinates of current screen window */
     D_get_src(&t, &b, &l, &r);
@@ -123,7 +126,10 @@ int pie(struct stat_list *dist_stats, /* list of distribution statistics */
             i++;
         tic_every = tics[i].every;
         tic_unit = tics[i].unit;
-        strcpy(tic_name, tics[i].name);
+        if (G_strlcpy(tic_name, tics[i].name, sizeof(tic_name)) >=
+            sizeof(tic_name)) {
+            G_fatal_error(_("Tic name <%s> is too long"), tics[i].name);
+        }
     }
     else {
         if (is_fp && !cat_ranges) {

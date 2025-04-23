@@ -195,6 +195,7 @@ void write_vtk_structured_coordinates(int fd, FILE *fp, char *varname UNUSED,
         }
         rowcount++;
     }
+    G_free(raster);
     return;
 }
 
@@ -272,7 +273,7 @@ void write_vtk_polygonal_coordinates(int fd, FILE *fp, char *varname UNUSED,
     }
 
     if (polytype == TRIANGLE_STRIPS) {
-        /*TriangleStrips, take a look ate www.vtk.org for the definition of
+        /*TriangleStrips, take a look at https://vtk.org/ for the definition of
          * triangle_strips in vtk */
         /*If we use triangelestrips, the number of points per strip is equal to
          * the double number of cols we have */
@@ -310,7 +311,7 @@ void write_vtk_polygonal_coordinates(int fd, FILE *fp, char *varname UNUSED,
             fprintf(fp, "\n");
         }
     }
-
+    G_free(raster);
     return;
 }
 
@@ -352,6 +353,7 @@ void write_vtk_data(int fd, FILE *fp, char *varname, struct Cell_head region,
         }
         fprintf(fp, "\n");
     }
+    G_free(raster);
     return;
 }
 
@@ -408,6 +410,9 @@ void write_vtk_rgb_image_data(int redfd, int greenfd, int bluefd, FILE *fp,
             }
         }
     }
+    G_free(redraster);
+    G_free(greenraster);
+    G_free(blueraster);
     return;
 }
 
@@ -454,5 +459,8 @@ void write_vtk_vector_data(int xfd, int yfd, int zfd, FILE *fp,
             fprintf(fp, "%.*f %.*f %.*f \n", dp, x, dp, y, dp, z);
         }
     }
+    G_free(xraster);
+    G_free(yraster);
+    G_free(zraster);
     return;
 }

@@ -208,10 +208,10 @@ class AnalysisToolbar(BaseToolbar):
         self.vnet_mgr = vnet_mgr
         self.InitToolbar(self._toolbarData())
 
-        choices = []
-
-        for moduleName in self.vnet_mgr.GetAnalyses():
-            choices.append(self.vnet_mgr.GetAnalysisProperties(moduleName)["label"])
+        choices = [
+            self.vnet_mgr.GetAnalysisProperties(moduleName)["label"]
+            for moduleName in self.vnet_mgr.GetAnalyses()
+        ]
 
         self.anChoice = ComboBox(
             parent=self,
@@ -235,5 +235,4 @@ class AnalysisToolbar(BaseToolbar):
         self.Realize()
 
     def _toolbarData(self):
-
         return self._getToolbarData(())

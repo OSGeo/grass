@@ -1,0 +1,131 @@
+---
+name: macOS distribute app
+
+# Build and bundle macOS app
+
+on:
+  workflow_dispatch:
+  schedule:
+    # At 07:30 on Thursdays.
+    # See https://crontab.guru/#30_7_*_*_THU
+    - cron: "30 7 * * THU"
+  push:
+    tags:
+      - '**'
+
+permissions: {}
+
+env:
+  KEYCHAIN_PROFILE: notarytool-profile
+
+jobs:
+  macos_build:
+    name: macOS distribute
+    if: ${{ github.repository == 'OSGeo/grass' }}
+
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{
+        matrix.name }}-${{ matrix.os }}
+      cancel-in-progress: true
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        name:
+          - "x86_64"
+          - "arm64"
+        include:
+          - name: "x86_64"
+            os: macos-13
+            deployment_target: 10.13
+          - name: "arm64"
+            os: macos-14
+            deployment_target: 11
+      fail-fast: false
+
+    steps:
+      - name: Info
+        run: |
+          echo "macOS version $(sw_vers -productVersion)"
+          echo "architecture $(uname -a)"
+      - name: Disabling Spotlight
+        run: sudo mdutil -a -i off
+      - name: Uninstalling Homebrew
+        run: |
+          echo "Moving directories..."
+          sudo mkdir /opt/local-off /opt/homebrew-off
+          test ! -d /usr/local || /usr/bin/sudo /usr/bin/find /usr/local \
+            -mindepth 1 -maxdepth 1 -type d -print -exec /bin/mv {} \
+            /opt/local-off/ \;
+          test ! -d /opt/homebrew || /usr/bin/sudo /usr/bin/find /opt/homebrew \
+            -mindepth 1 -maxdepth 1 -type d -print -exec /bin/mv {} \
+            /opt/homebrew-off/ \;
+          echo "Removing files..."
+          test ! -d /usr/local || /usr/bin/sudo /usr/bin/find /usr/local \
+            -mindepth 1 -maxdepth 1 -type f -print -delete
+          test ! -d /opt/homebrew || /usr/bin/sudo /usr/bin/find /opt/homebrew \
+            -mindepth 1 -maxdepth 1 -type f -print -delete
+          # Rehash to forget about the deleted files
+          hash -r
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Environment info
+        shell: bash -el {0}
+        run: |
+          printenv | sort
+
+      - name: Install the Apple certificate and provisioning profile
+        env:
+          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+          MACOS_PROVISION_PROFILE: ${{ secrets.MACOS_PROVISION_PROFILE }}
+          MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
+          MACOS_CERTIFICATE_NAME: ${{ secrets.MACOS_CERTIFICATE_NAME }}
+          MACOS_CI_KEYCHAIN_PWD: ${{ secrets.MACOS_CI_KEYCHAIN_PWD }}
+          MACOS_NOTARIZATION_APPLE_ID: ${{ secrets.MACOS_NOTARIZATION_APPLE_ID }}
+          MACOS_NOTARIZATION_TEAM_ID: ${{ secrets.MACOS_NOTARIZATION_TEAM_ID }}
+          MACOS_NOTARIZATION_PWD: ${{ secrets.MACOS_NOTARIZATION_PWD }}
+        run: |
+          CERT="$RUNNER_TEMP/certificate.p12"
+          INTERMEDIATE_CERT="$RUNNER_TEMP/DeveloperIDG2CA.cer"
+
+          curl -o "$INTERMEDIATE_CERT" https://www.apple.com/certificateauthority/DeveloperIDG2CA.cer
+
+          echo -n "$MACOS_CERTIFICATE" | base64 --decode -o "$CERT"
+          echo -n "$MACOS_PROVISION_PROFILE" | base64 --decode -o "$RUNNER_TEMP/embedded.provisionprofile"
+
+          security create-keychain -p "$MACOS_CI_KEYCHAIN_PWD" build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p "$MACOS_CI_KEYCHAIN_PWD" build.keychain
+          security set-keychain-settings -t 15000
+          security import "$INTERMEDIATE_CERT" -k build.keychain -T /usr/bin/codesign
+          security import "$CERT" -k build.keychain -P "$MACOS_CERTIFICATE_PWD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$MACOS_CI_KEYCHAIN_PWD" \
+            build.keychain 1> /dev/null
+
+          echo "Create keychain profile"
+          xcrun notarytool store-credentials "$KEYCHAIN_PROFILE" --apple-id "$MACOS_NOTARIZATION_APPLE_ID"\
+            --team-id "$MACOS_NOTARIZATION_TEAM_ID" --password "$MACOS_NOTARIZATION_PWD"
+
+      - name: Create config file
+        shell: bash -el {0}
+        env:
+          Config: ${HOME}/.config/grass/configure-build-${{ matrix.name }}.sh
+          MACOS_CERTIFICATE_NAME: ${{ secrets.MACOS_CERTIFICATE_NAME }}
+        run: |
+          mkdir -p "${HOME}/.config/grass"
+          echo sdk=\"$(xcrun --show-sdk-path)\" >> ${{ env.Config }}
+          echo deployment_target=\"${{ matrix.deployment_target }}\" >> ${{ env.Config }}
+          echo cs_ident=\"${MACOS_CERTIFICATE_NAME}\" >> ${{ env.Config }}
+          echo cs_keychain_profile=\"${KEYCHAIN_PROFILE}\" >> ${{ env.Config }}
+          echo cs_provisionprofile=\"${RUNNER_TEMP}/embedded.provisionprofile\" >> ${{ env.Config }}
+
+      - name: Build GRASS GIS app
+        run: |
+          ./macos/build_grass_app.bash --with-liblas --notarize -o "${{ runner.temp }}"
+
+      - name: Upload DMG file as artifact
+        if: ${{ success() && !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: ${{ env.DMG_NAME }}
+          path: ${{ env.DMG_FILE }}
+          retention-days: 3

@@ -545,17 +545,17 @@ class Module:
     """  # noqa: E501
 
     def __init__(self, cmd, *args, **kargs):
-        if isinstance(cmd, str):
-            self.name = cmd
-        else:
-            raise GrassError("Problem initializing the module {s}".format(s=cmd))
+        if not isinstance(cmd, str):
+            msg = "Problem initializing the module {s}".format(s=cmd)
+            raise GrassError(msg)
+        self.name = cmd
         try:
             # call the command with --interface-description
             get_cmd_xml = Popen([cmd, "--interface-description"], stdout=PIPE)
         except OSError as e:
             print("OSError error({0}): {1}".format(e.errno, e.strerror))
             str_err = "Error running: `%s --interface-description`."
-            raise GrassError(str_err % self.name)
+            raise GrassError(str_err % self.name) from e
         # get the xml of the module
         self.xml = get_cmd_xml.communicate()[0]
         # transform and parse the xml into an Element class:
@@ -637,17 +637,13 @@ class Module:
 
         self.update(*args, **kargs)
 
-        #
         # check if execute
-        #
-        if self.run_:
-            #
-            # check reqire parameters
-            #
-            if self.check_:
-                self.check()
-            return self.run()
-        return self
+        if not self.run_:
+            return self
+        # check required parameters
+        if self.check_:
+            self.check()
+        return self.run()
 
     def update(self, *args, **kargs):
         """Update module parameters and selected object attributes.
@@ -773,12 +769,12 @@ class Module:
         """Return a dictionary that includes the name, all valid
         inputs, outputs and flags
         """
-        dic = {}
-        dic["name"] = self.name
-        dic["inputs"] = [(k, v.value) for k, v in self.inputs.items() if v.value]
-        dic["outputs"] = [(k, v.value) for k, v in self.outputs.items() if v.value]
-        dic["flags"] = [flg for flg in self.flags if self.flags[flg].value]
-        return dic
+        return {
+            "name": self.name,
+            "inputs": [(k, v.value) for k, v in self.inputs.items() if v.value],
+            "outputs": [(k, v.value) for k, v in self.outputs.items() if v.value],
+            "flags": [flg for flg in self.flags if self.flags[flg].value],
+        }
 
     def make_cmd(self):
         """Create the command string that can be executed in a shell

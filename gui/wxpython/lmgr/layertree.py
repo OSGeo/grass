@@ -1111,9 +1111,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
     def OnHistogram(self, event):
         """Plot histogram for given raster map layer"""
-        rasterList = []
-        for layer in self.GetSelectedLayers():
-            rasterList.append(self.GetLayerInfo(layer, key="maplayer").GetName())
+        rasterList = [
+            self.GetLayerInfo(layer, key="maplayer").GetName()
+            for layer in self.GetSelectedLayers()
+        ]
 
         if not rasterList:
             GError(
@@ -1151,11 +1152,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
     def OnReportStats(self, event):
         """Print 2D statistics"""
-        rasters = []
         # TODO: Implement self.GetSelectedLayers(ltype='raster')
-        for layer in self.GetSelectedLayers():
-            if self.GetLayerInfo(layer, key="type") == "raster":
-                rasters.append(self.GetLayerInfo(layer, key="maplayer").GetName())
+        rasters = [
+            self.GetLayerInfo(layer, key="maplayer").GetName()
+            for layer in self.GetSelectedLayers()
+            if self.GetLayerInfo(layer, key="type") == "raster"
+        ]
 
         if rasters:
             self._giface.RunCmd(
@@ -1225,7 +1227,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
     def OnPopupGroupOpacityLevel(self, event):
         """Popup opacity level indicator for group of layers"""
-        # Get opacity level from the first finded map layer
+        # Get opacity level from the first found map layer
         child, cookie = self.GetFirstChild(self.layer_selected)
         while child:
             maplayer = self.GetLayerInfo(child, key="maplayer")
@@ -1460,7 +1462,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 if self.GetLayerInfo(item, key="type") == "vector":
                     name = self.GetLayerInfo(item, key="maplayer").GetName()
                     if name == lname:
-                        return
+                        return None
                 item = self.GetNextItem(item)
 
         selectedLayer = self.GetSelectedLayer()
@@ -1879,7 +1881,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         Detects if mouse points at checkbox.
         """
         thisItem, flags = self.HitTest(event.GetPosition())
-        # workaround: in order not to check checkox when clicking outside
+        # workaround: in order not to check checkbox when clicking outside
         # we need flag TREE_HITTEST_ONITEMCHECKICON but not TREE_HITTEST_ONITEMLABEL
         # this applies only for TR_FULL_ROW_HIGHLIGHT style
         if (flags & CT.TREE_HITTEST_ONITEMCHECKICON) and not (
@@ -2256,9 +2258,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             win = self.FindWindowById(self.GetLayerInfo(item, key="ctrl"))
             if win.GetValue() is not None:
                 cmd = win.GetValue().split(";")
-                cmdlist = []
-                for c in cmd:
-                    cmdlist.append(c.split(" "))
+                cmdlist = [c.split(" ") for c in cmd]
                 opac = 1.0
                 chk = self.IsItemChecked(item)
                 hidden = not self.IsVisible(item)

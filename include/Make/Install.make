@@ -122,7 +122,7 @@ $(DESTDIR)$(INST_DIR) $(DESTDIR)$(UNIX_BIN):
 	$(MAKE_DIR_CMD) $@
 
 $(STARTUP): $(ARCH_DISTDIR)/$(GRASS_NAME).tmp
-	sed -e 's#'@GISBASE@'#'$(INST_DIR)'#g' \
+	sed -e 's#'@GISBASE_INSTALL_PATH@'#'$(INST_DIR)'#g' \
 	    -e 's#'@LD_LIBRARY_PATH_VAR@'#'$(LD_LIBRARY_PATH_VAR)'#g' \
 	    -e 's#'@CONFIG_PROJSHARE@'#'$(PROJSHARE)'#g' \
 	    $< > $@

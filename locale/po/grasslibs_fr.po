@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-23 03:37-0600\n"
-"PO-Revision-Date: 2023-04-29 23:51+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2025-03-12 12:05+0000\n"
+"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/"
 "grasslibs/fr/>\n"
 "Language: fr\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.16.4\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: ../lib/nviz/render.c:43
 #, c-format
@@ -1182,7 +1182,7 @@ msgstr "WKT '%s' non reconnu"
 
 #: ../lib/proj/do_proj.c:360
 msgid "Unable to create PROJ object"
-msgstr ""
+msgstr "Impossible de créer l'objet PROJ"
 
 #: ../lib/proj/do_proj.c:439
 msgid "Input coordinate system is NULL"
@@ -1288,7 +1288,7 @@ msgstr ""
 #: ../lib/proj/do_proj.c:835
 #, c-format
 msgid "%s"
-msgstr ""
+msgstr "%s"
 
 #: ../lib/proj/do_proj.c:970
 #, c-format
@@ -2078,12 +2078,12 @@ msgstr "L'ouverture de fichiers multiples n'est pas supportée par %s="
 #: ../lib/gis/parser.c:1936
 #, c-format
 msgid "Unable to open %s file <%s>: %s"
-msgstr ""
+msgstr "Impossible d'ouvrir le fichier %s <%s> : %s"
 
 #: ../lib/gis/parser.c:1943
-#, c-format
+#, c-format, fuzzy
 msgid "Unable to create %s file <%s>: %s"
-msgstr ""
+msgstr "Impossible de créer le fichier %s <%s> : %s"
 
 #: ../lib/gis/open.c:69
 #, c-format
@@ -2275,12 +2275,14 @@ msgid "East must be larger than West, but %g (east) <= %g (west)"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:112 ../lib/gis/adj_cellhd.c:271
+#, fuzzy
 msgid "Invalid coordinates: negative number of columns"
-msgstr ""
+msgstr "Coordonnées invalides : nombre de colonnes négatif"
 
 #: ../lib/gis/adj_cellhd.c:115 ../lib/gis/adj_cellhd.c:274
+#, fuzzy
 msgid "Invalid coordinates: negative number of rows"
-msgstr ""
+msgstr "Coordonnées invalides : Nombre de lignes négatif"
 
 #: ../lib/gis/adj_cellhd.c:122 ../lib/gis/adj_cellhd.c:284
 msgid "NS resolution has been changed"
@@ -2330,8 +2332,9 @@ msgid "Top must be larger than Bottom, but %g (top) <= %g (bottom)"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:277
+#, fuzzy
 msgid "Invalid coordinates: negative number of depths"
-msgstr ""
+msgstr "Coordonnées invalides : Nombre de profondeurs négatif"
 
 #: ../lib/gis/adj_cellhd.c:311
 #, c-format
@@ -2918,7 +2921,7 @@ msgstr "Nom de la région enregistrée"
 
 #: ../lib/gis/parser_standard_options.c:769
 msgid "Number of threads for parallel computing"
-msgstr ""
+msgstr "Nombre de threads pour le calcul parallèle"
 
 #: ../lib/gis/parser_standard_options.c:779
 msgid "Name of the input space time dataset"
@@ -3043,12 +3046,12 @@ msgstr "Erreur interne : option ou argument non trouvé"
 #: ../lib/gis/parser_dependencies.c:190
 #, c-format
 msgid "%s or <%s>"
-msgstr ""
+msgstr "%s ou <%s>"
 
 #: ../lib/gis/parser_dependencies.c:190
 #, c-format
 msgid "%s and <%s>"
-msgstr ""
+msgstr "%s et <%s>"
 
 #: ../lib/gis/parser_dependencies.c:228
 #, c-format
@@ -3068,7 +3071,7 @@ msgstr "L'option <%s> nécessite au moins un de %s"
 #: ../lib/gis/parser_dependencies.c:298
 #, c-format
 msgid "Option <%s> requires %s"
-msgstr ""
+msgstr "L'option <%s> nécessite %s"
 
 #: ../lib/gis/parser_dependencies.c:334
 #, c-format
@@ -3297,7 +3300,7 @@ msgstr "Champ compressé invalide : %s"
 #: ../lib/vector/Vlib/break_polygons.c:375
 #, c-format
 msgid "File writing error in %s() %d:%s"
-msgstr ""
+msgstr "Erreur d'écriture de fichier dans %s() %d:%s"
 
 #: ../lib/gis/view.c:169
 #, c-format
@@ -3408,8 +3411,11 @@ msgid "  %*s   options: "
 msgstr "  %*s   options: "
 
 #: ../lib/gis/env.c:129
+#, fuzzy
 msgid "No active GRASS session: GISRC environment variable not set"
 msgstr ""
+"Aucune session GRASS active : La variable d'environnement GISRC n'est pas "
+"définie."
 
 #: ../lib/gis/env.c:367 ../lib/gis/env.c:393
 #, fuzzy, c-format
@@ -3543,7 +3549,7 @@ msgstr ""
 #: ../lib/raster/close.c:64
 #, c-format
 msgid "Unable to close file %s for raster map %s: %s"
-msgstr ""
+msgstr "Impossible de fermer le fichier %s pour la carte raster %s : %s"
 
 #: ../lib/raster/close.c:104 ../lib/raster/close.c:137
 #, c-format
@@ -3580,6 +3586,7 @@ msgstr "Erreur d'écriture de données FP compressées à la ligne %d de <%s> : 
 #, c-format
 msgid "Error writing compressed data for row %d of <%s>: %s"
 msgstr ""
+"Erreur lors de l'écriture des données compressées à la ligne % de <%s> : %s"
 
 #: ../lib/raster/put_row.c:413
 #, c-format
@@ -3604,6 +3611,8 @@ msgstr "Pas de fichier null pour <%s>"
 #, c-format
 msgid "Error writing compressed null data for row %d of <%s>: %s"
 msgstr ""
+"Erreur lors de l'écriture des données nulles compressées à la ligne %d de "
+"<%s> : %s"
 
 #: ../lib/raster/put_row.c:571
 #, c-format
@@ -4035,6 +4044,8 @@ msgstr "Rast_set_null_value : mauvais type de données !"
 msgid ""
 "However, that raster map is missing. Perhaps, it was deleted by mistake."
 msgstr ""
+"Cependant, cette carte raster est manquante. Elle a peut-être été supprimée "
+"par erreur."
 
 #: ../lib/raster/get_cellhd.c:67
 msgid ""
@@ -4505,7 +4516,7 @@ msgstr "options standards"
 
 #: ../lib/init/grass.py:411 ../lib/init/grass.py:2313
 msgid "deprecated, use --tmp-project instead"
-msgstr ""
+msgstr "obsolète, utiliser --tmp-project à la place."
 
 #: ../lib/init/grass.py:412
 msgid "location was renamed to project"
@@ -4518,11 +4529,11 @@ msgstr "créer un Secteur temporaire (utiliser avec l'option --exec)"
 
 #: ../lib/init/grass.py:415
 msgid "created in a temporary directory and deleted at exit"
-msgstr ""
+msgstr "créé dans un répertoire temporaire et supprimé à la sortie"
 
 #: ../lib/init/grass.py:417
 msgid "create temporary mapset (use with the --exec flag)"
-msgstr ""
+msgstr "créer un jeu de cartes temporaire (utilisez avec l'option --exec)."
 
 #: ../lib/init/grass.py:418
 msgid "created in the specified project and deleted at exit"
@@ -4572,6 +4583,9 @@ msgid ""
 "The python command does not work as expected.\n"
 "Please check your installation or set the GRASS_PYTHON environment variable."
 msgstr ""
+"La commande Python ne fonctionne pas comme prévu.\n"
+"Veuillez vérifier votre installation ou définir la variable d'environnement "
+"GRASS_PYTHON."
 
 #: ../lib/init/grass.py:903
 msgid "GRASS GUI not found. Please check your installation."
@@ -4624,18 +4638,22 @@ msgstr ""
 "raison inconnue."
 
 #: ../lib/init/grass.py:1089
+#, fuzzy
 msgid ""
 "Mapset <{}> already exists. Unable to create a new temporary mapset of that "
 "name."
 msgstr ""
+"Le jeu de cartes <{}> existe déjà. Impossible de créer un nouveau jeu de "
+"cartes temporaire de ce nom."
 
 #: ../lib/init/grass.py:1094
 msgid "Mapset <{}> already exists."
-msgstr ""
+msgstr "Le jeu de cartes <{}> existe déjà."
 
 #: ../lib/init/grass.py:1102
+#, fuzzy
 msgid "A new mapset can be created using '-c' flag."
-msgstr ""
+msgstr "Un nouveau jeu de cartes peut être créé en utilisant l'option '-c'."
 
 #: ../lib/init/grass.py:1104
 msgid "Maybe you meant a different directory."
@@ -4867,12 +4885,13 @@ msgid "use temporary mapset in project %(metavar)s"
 msgstr ""
 
 #: ../lib/init/grass.py:2296
+#, fuzzy
 msgid "path to mapset (or project if creating one)"
-msgstr ""
+msgstr "chemin d'accès au jeu de cartes (ou au projet s'il est créé)."
 
 #: ../lib/init/grass.py:2299
 msgid "use temporary mapset"
-msgstr ""
+msgstr "utiliser un jeu de cartes temporaire"
 
 #: ../lib/init/grass.py:2306
 #, python-format
@@ -4884,8 +4903,10 @@ msgid "remove lock if present"
 msgstr ""
 
 #: ../lib/init/grass.py:2331
+#, fuzzy
 msgid "Option --tmp-location is deprecated, use --tmp-project instead\n"
 msgstr ""
+"L'option --tmp-location est obsolète, utilisez --tmp-project à la place.\n"
 
 #: ../lib/init/grass.py:2375
 msgid "execute module or script (followed by executable with arguments)"
@@ -4897,7 +4918,7 @@ msgstr "L'option -e nécessite également l'option -c"
 
 #: ../lib/init/grass.py:2433
 msgid "Flag -c requires name of project or mapset"
-msgstr ""
+msgstr "L'option -c requiert le nom du projet ou du jeu de cartes."
 
 #: ../lib/init/grass.py:2436
 msgid "Either --tmp-project or --tmp-mapset can be used, not both"
@@ -4960,6 +4981,8 @@ msgid ""
 "Failed to start GRASS GIS, no default project to copy in the installation or "
 "copying failed."
 msgstr ""
+"Le démarrage de GRASS GIS a échoué, il n'y a pas de projet par défaut à "
+"copier dans l'installation, ou la copie a échoué."
 
 #: ../lib/init/grass.py:2724
 #, python-format
@@ -5528,7 +5551,7 @@ msgstr ""
 #: ../lib/imagery/manage_signatures.c:194
 #, c-format
 msgid "%s is not in the current mapset (%s)"
-msgstr ""
+msgstr "%s n'est pas dans le jeu de cartes courant (%s)"
 
 #: ../lib/imagery/manage_signatures.c:94
 #, c-format
@@ -5538,7 +5561,7 @@ msgstr ""
 #: ../lib/imagery/manage_signatures.c:215
 #, c-format
 msgid "Unable to rename <%s> to <%s>"
-msgstr ""
+msgstr "Impossible de renommer <%s> en <%s>"
 
 #: ../lib/imagery/georef_tps.c:207
 msgid "Calculating forward transformation coefficients"
@@ -6932,7 +6955,7 @@ msgstr "Coupure des polygones (passe 1 : sélection des points de coupure) ..."
 #: ../lib/vector/Vlib/break_polygons.c:337
 #, c-format
 msgid "File reading error in %s() %d:%s"
-msgstr ""
+msgstr "Erreur de lecture de fichier dans %s() %d:%s"
 
 #: ../lib/vector/Vlib/break_polygons.c:291
 #: ../lib/vector/Vlib/break_polygons.c:555
@@ -7515,9 +7538,9 @@ msgid "OGR layer <%s> not found"
 msgstr "Couche OGR <%s> non trouvée"
 
 #: ../lib/vector/Vlib/open_ogr.c:105 ../lib/vector/Vlib/write_ogr.c:349
-#, c-format
+#, c-format, fuzzy
 msgid "OGR transaction with layer <%s> failed to start"
-msgstr ""
+msgstr "La transaction OGR avec la couche <%s> a échoué à démarrer"
 
 #: ../lib/vector/Vlib/open_ogr.c:153 ../lib/vector/Vlib/open_pg.c:199
 #, c-format
@@ -9346,7 +9369,7 @@ msgstr "Utilisation du pilote graphique <%s> ..."
 #: ../lib/display/r_raster.c:170
 #, c-format
 msgid "GRASS_NOTIFY command <%s> failed"
-msgstr ""
+msgstr "La commande GRASS_NOTIFY <%s> a échoué"
 
 #: ../lib/display/icon.c:80
 #, c-format

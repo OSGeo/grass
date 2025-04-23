@@ -17,7 +17,7 @@ input data, without regard to the mask.
 
 The <b>-e</b> flag is the error analysis option that interpolates values
 only for those cells of the input raster map which have non-zero values and
-outputs the difference (see <a href="#minuse.html">NOTES</a> below).
+outputs the difference (see <a href="#minuse">NOTES</a> below).
 <p>The <b>npoints</b> parameter defines the number of nearest data points used
 to determine the interpolated value of an output raster cell.
 
@@ -66,8 +66,8 @@ irregularly spaced input data.  However, the output result
 for the former may include unacceptable nonconformities in
 the surface pattern.
 
-<a name="minuse.html"></a>
-<p>
+<h3 id="minuse">Surface-generation error analysis</h3>
+
 The <b>-e</b> flag option provides a standard
 surface-generation error analysis facility. It produces an output raster map
 of the difference of interpolated values minus input values for those cells

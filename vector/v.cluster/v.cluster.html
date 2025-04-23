@@ -20,7 +20,9 @@ have a density (maximum distance between points) not larger than
 <b>distance</b> or <b>method=density</b> if clusters should be created
 separately for each observed density (distance to the farthest neighbor).
 
-<h4>dbscan</h4>
+<h3>Clustering methods</h3>
+
+<h4>dbscan method</h4>
 The <a href="https://en.wikipedia.org/wiki/DBSCAN">Density-Based Spatial
 Clustering of Applications with Noise</a> is a commonly used clustering
 algorithm. A new cluster is started for a point with at least
@@ -29,12 +31,12 @@ are added to the cluster. The cluster is then expanded as long as at
 least <i>min</i> - 1 neighbors are within the maximum distance for each
 point already in the cluster.
 
-<h4>dbscan2</h4>
+<h4>dbscan2 method</h4>
 Similar to <i>dbscan</i>, but here it is sufficient if the resultant
 cluster consists of at least <b>min</b> points, even if no point in the
 cluster has at least <i>min - 1</i> neighbors within <b>distance</b>.
 
-<h4>density</h4>
+<h4>density method</h4>
 This method creates clusters according to their point density. The
 maximum distance is not used. Instead, the points are sorted ascending
 by the distance to their farthest neighbor (core distance), inspecting
@@ -44,9 +46,9 @@ expanded as for DBSCAN, with the difference that each cluster has its
 own maximum distance. This method can identify clusters with different
 densities and can create nested clusters.
 
-<h4>optics</h4>
-This method is <a
-href="https://en.wikipedia.org/wiki/OPTICS_algorithm">Ordering Points to
+<h4>optics method</h4>
+This method is
+<a href="https://en.wikipedia.org/wiki/OPTICS_algorithm">Ordering Points to
 Identify the Clustering Structure</a>. It is controlled by the number
 of neighbor points (option <i>min</i> - 1). The core distance of a
 point is the distance to the farthest neighbor. The reachability of a
@@ -75,7 +77,7 @@ The OPTICS algorithm uses each yet unprocessed point to start a new
 cluster. The order of the input points is arbitrary and can thus
 influence the resultant clusters.
 
-<h4>optics2</h4>
+<h4>optics2 method</h4>
 <b>EXPERIMENTAL</b> This method is similar to OPTICS, minimizing the
 reachability of each point. Points are reconnected if their
 reachability can be reduced. Contrary to OPTICS, a cluster's seed is
@@ -176,6 +178,7 @@ d.mon stop=cairo
 
 Generate random points for analysis (100 points per area), use different
 method for clustering and visualize using color stored the attribute table.
+
 <div class="code"><pre>
 # pick a subregion of the vector urbanarea
 g.region -p n=272950 s=188330 w=574720 e=703090 res=10

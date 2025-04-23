@@ -66,8 +66,8 @@ int draw_scale(double east, double north, int length, int seg, int units,
     int i, incr;
     double x_pos, y_pos;
     double t, b, l, r;
-    double pt, pb, pl, pr; /* background box */
-    double tt, tb, tl, tr; /* text box */
+    double pt = 0.0, pb = 0.0, pl = 0.0, pr = 0.0; /* background box */
+    double tt, tb, tl, tr;                         /* text box */
     double xarr[5], yarr[5];
     double seg_len;
     const struct scale *scales = all_scales[use_feet];
@@ -634,8 +634,12 @@ int draw_scale(double east, double north, int length, int seg, int units,
     }
     D_stroke();
 
-    if (fontsize < 0)
+    if (fontsize < 0) {
+        if (length != 0) {
+            G_free(label);
+        }
         return 0;
+    }
 
     /* draw the distance + units text */
 
@@ -675,6 +679,9 @@ int draw_scale(double east, double north, int length, int seg, int units,
 
         D_pos_abs(x_pos + 5 - (tr - tl), y_pos + ysize / 2 + (tt - tb) / 2);
         D_text(label);
+    }
+    if (length != 0) {
+        G_free(label);
     }
 
     return 0;

@@ -7,7 +7,7 @@
 #               Markus Neteler
 #               Converted to Python by Glynn Clements
 #               Markus Metz
-# PURPOSE:      Facilitates creation of raster MASK
+# PURPOSE:      Facilitates creation of 2D raster mask
 # COPYRIGHT:    (C) 2005-2013 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
@@ -17,7 +17,7 @@
 #############################################################################
 
 # %module
-# % description: Creates a MASK for limiting raster operation.
+# % description: Creates a raster mask for limiting raster operation.
 # % keyword: raster
 # % keyword: mask
 # % keyword: null data
@@ -98,36 +98,52 @@ def main():
         gs.fatal(_("Either parameter <raster> or parameter <vector> is required"))
 
     mapset = gs.gisenv()["MAPSET"]
-    exists = bool(gs.find_file("MASK", element="cell", mapset=mapset)["file"])
+    mask_status = gs.parse_command("r.mask.status", format="json")
+    exists = mask_status["present"]
+    mask_full_name = mask_status["name"]
+
+    # Does the name point to the current mapset?
+    name, mask_mapset = mask_full_name.split("@", maxsplit=1)
+    if mask_mapset != mapset:
+        gs.fatal(
+            _(
+                "r.mask can only operate on raster mask in the current mapset "
+                "({current_mapset}), but mask name is set to {full_name}"
+            ).format(current_mapset=mapset, full_name=mask_full_name)
+        )
 
     if remove:
         # -> remove
         if exists:
             if sys.platform == "win32":
                 gs.run_command(
-                    "g.remove", flags="if", quiet=True, type="raster", name="MASK"
+                    "g.remove", flags="if", quiet=True, type="raster", name=name
                 )
             else:
                 gs.run_command(
-                    "g.remove", flags="f", quiet=True, type="raster", name="MASK"
+                    "g.remove", flags="f", quiet=True, type="raster", name=name
                 )
-            gs.message(_("Raster MASK removed"))
+            gs.message(_("Raster mask removed"))
         else:
-            gs.fatal(_("No existing MASK to remove"))
+            gs.fatal(
+                _("No existing mask to remove (no raster named {name})").format(
+                    name=name
+                )
+            )
     else:
         # -> create
         if exists:
             if not gs.overwrite():
                 gs.fatal(
                     _(
-                        "MASK already found in current mapset. Delete first or "
-                        "overwrite."
-                    )
+                        "Raster mask is already present in the current mapset. "
+                        "Use overwrite or delete raster named {name}."
+                    ).format(name=name)
                 )
             else:
-                gs.warning(_("MASK already exists and will be overwritten"))
+                gs.warning(_("Raster mask already exists and will be overwritten"))
                 gs.run_command(
-                    "g.remove", flags="f", quiet=True, type="raster", name="MASK"
+                    "g.remove", flags="f", quiet=True, type="raster", name=name
                 )
 
         if raster:
@@ -146,7 +162,7 @@ def main():
                     )
 
             p = gs.feed_command(
-                "r.reclass", input=raster, output="MASK", overwrite=True, rules="-"
+                "r.reclass", input=raster, output=name, overwrite=True, rules="-"
             )
             res = "%s = 1" % maskcats
             p.stdin.write(encode(res))
@@ -167,7 +183,7 @@ def main():
                 gs.warning(
                     _(
                         "No area found in vector map <%s>. "
-                        "Creating a convex hull for MASK."
+                        "Creating a convex hull to create a raster mask."
                     )
                     % vector_name
                 )
@@ -201,7 +217,7 @@ def main():
                 "v.to.rast",
                 input=to_rast_input,
                 layer=layer,
-                output="MASK",
+                output=name,
                 use="value",
                 value="1",
                 type="area",
@@ -213,19 +229,19 @@ def main():
         if invert:
             global tmp
             tmp = "r_mask_%d" % os.getpid()
-            gs.run_command("g.rename", raster=("MASK", tmp), quiet=True)
-            gs.message(_("Creating inverted raster MASK..."))
-            gs.mapcalc("MASK = if(isnull($tmp), 1, null())", tmp=tmp)
-            gs.verbose(_("Inverted raster MASK created"))
+            gs.run_command("g.rename", raster=(name, tmp), quiet=True)
+            gs.message(_("Creating inverted raster mask..."))
+            gs.mapcalc("$mask = if(isnull($tmp), 1, null())", mask=name, tmp=tmp)
+            gs.verbose(_("Inverted raster mask created"))
         else:
-            gs.verbose(_("Raster MASK created"))
+            gs.verbose(_("Raster mask created"))
 
         gs.message(
             _(
                 "All subsequent raster operations will be limited to "
-                "the MASK area. Removing or renaming raster map named "
-                "'MASK' will restore raster operations to normal."
-            )
+                "the raster mask area. Removing the mask (with r.mask -r) or renaming "
+                "a raster map named '{name}' will restore raster operations to normal."
+            ).format(name=name)
         )
 
 
