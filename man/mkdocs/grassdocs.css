@@ -5,6 +5,8 @@
   ----------------------------------------------------------------------------- */
   /* GRASS Font */
   --gs-grass-font: 'Fira Sans Regular', sans-serif;
+  --gs-grass-font--medium: 'Fira Sans Medium', sans-serif;
+  --gs-grass-font--bold: 'Fira Sans Bold', sans-serif;
   --gs-grass-font--light: 'Fira Sans ExtraLight', sans-serif;
 
   /* Primary Color */
@@ -165,7 +167,15 @@
   --md-typeset-a-color: var(--gs-primary-color);
   /* Link color */
   --md-typeset-a-color--hover: var(--gs-primary-alt-color);
-  /* Not sure */
+  --md-typeset-color: var(--md-default-fg-color);
+  --md-typeset-del-color: #f5503d26;
+  --md-typeset-ins-color: #0bd57026;
+  --md-typeset-kbd-color: #fafafa;
+  --md-typeset-kbd-accent-color: #fff;
+  --md-typeset-kbd-border-color: #b8b8b8;
+  --md-typeset-mark-color: #ffff0080;
+  --md-typeset-table-color: var(--gs-black-color);
+  --md-typeset-table-color--light: var(--gs-black-color--light);
 
   /* Mermaid colors */
   /* ----------------------------------------------------------------------------- */
@@ -217,27 +227,21 @@
   --md-code-hl-generic-color: var(--md-default-fg-color--light);
   --md-code-hl-variable-color: var(--md-default-fg-color--light);
 
-  /* Unset Colors */
+  /* Admonition Colors */
   /* ----------------------------------------------------------------------------- */
-
-
-
-  --md-typeset-color: var(--md-default-fg-color);
-  --md-typeset-del-color: #f5503d26;
-  --md-typeset-ins-color: #0bd57026;
-  --md-typeset-kbd-color: #fafafa;
-  --md-typeset-kbd-accent-color: #fff;
-  --md-typeset-kbd-border-color: #b8b8b8;
-  --md-typeset-mark-color: #ffff0080;
-  --md-typeset-table-color: #0000001f;
-  --md-typeset-table-color--light: rgba(0, 0, 0, .035);
   --md-admonition-fg-color: var(--md-default-fg-color);
   --md-admonition-bg-color: var(--md-default-bg-color);
-  --md-warning-fg-color: #000000de;
-  --md-warning-bg-color: #ff9;
-  --md-shadow-z1: 0 0.2rem 0.5rem #0000000d, 0 0 0.05rem #0000001a;
-  --md-shadow-z2: 0 0.2rem 0.5rem #0000001a, 0 0 0.05rem #00000040;
-  --md-shadow-z3: 0 0.2rem 0.5rem #0003, 0 0 0.05rem #00000059;
+
+  /* Warning Colors */
+  /* ----------------------------------------------------------------------------- */
+  --md-warning-fg-color: var(--gs-primary-alt-color);
+  --md-warning-bg-color: var(--gs-primary-alt-color--light);
+
+  /* Shadow Colors */
+  /* ----------------------------------------------------------------------------- */
+  --md-shadow-z1: 0 0.2rem 0.5rem var(--gs-black-color--light), 0 0 0.05rem var(--gs-black-color--lightest);
+  --md-shadow-z2: 0 0.2rem 0.5rem var(--gs-black-color--lightest), 0 0 0.05rem var(--gs-black-color--lighter);
+  --md-shadow-z3: 0 0.2rem 0.5rem var(--gs-black-color--lighter), 0 0 0.05rem var(--gs-black-color--light);
 }
 
 .md-header {
