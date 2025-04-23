@@ -50,7 +50,7 @@ jobs:
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
 
-      - uses: rui314/setup-mold@f80524ca6eeaa76759b57fb78ddce5d87a20c720 # v1
+      - uses: rui314/setup-mold@e16410e7f8d9e167b74ad5697a9089a35126eb50 # v1
 
       - name: Install Python dependencies
         run: |
@@ -87,12 +87,10 @@ jobs:
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
           export INITIAL_GISBASE="$(grass --config path)"
           export INITIAL_PWD="${PWD}"
-          pytest --verbose --color=yes --durations=0 --durations-min=0.5 \
-            --numprocesses auto \
-            --cov \
-            --cov-context=test \
-            -ra . \
-            -m 'not needs_solo_run'
+          pytest \
+            @.github/workflows/pytest_args_ci.txt \
+            @.github/workflows/pytest_args_cov.txt \
+            @.github/workflows/pytest_args_parallel.txt
 
       - name: Run pytest with a single worker (for tests marked with needs_solo_run)
         run: |
@@ -100,12 +98,10 @@ jobs:
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
           export INITIAL_GISBASE="$(grass --config path)"
           export INITIAL_PWD="${PWD}"
-          pytest --verbose --color=yes --durations=0 --durations-min=0.5 \
-            --cov \
-            --cov-context=test \
-            --cov-append \
-            -ra . \
-            -m 'needs_solo_run'
+          pytest \
+            @.github/workflows/pytest_args_ci.txt \
+            @.github/workflows/pytest_args_cov.txt \
+            @.github/workflows/pytest_args_not_parallel.txt
       - name: Fix non-standard installed script paths in coverage data
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
@@ -117,7 +113,7 @@ jobs:
           coverage html
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@0565863a31f2c772f9f0395002a31e3f06189574 # v5.4.0
+        uses: codecov/codecov-action@ad3126e916f78f00edff4ed0317cf185271ccc2d # v5.4.2
         with:
           verbose: true
           flags: pytest-python-${{ matrix.python-version }}

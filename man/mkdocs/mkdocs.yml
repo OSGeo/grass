@@ -103,7 +103,6 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.tasklist
   - pymdownx.snippets
-  - pymdownx.tabbed
   - pymdownx.magiclink
   - attr_list
   - md_in_html
@@ -120,45 +119,42 @@ markdown_extensions:
 
 # Navigation
 nav:
-  - Getting Started:
-      - Getting Started: index.md
+  - Getting started:
+      - Getting started: index.md
       # These are linking to interfaces, but they would eventually be new pages
       # which would provide more context, but less detail.
-      - Command Line: command_line_intro.md
-      - Python: python_intro.md
-      - Jupyter Notebook: jupyter_intro.md
-      - Graphical User Interface: helptext.md
       - Tutorials: https://grass-tutorials.osgeo.org/
   - Interfaces:
-      - Interfaces: interfaces_overview.md
-      - Command Line:
-          - Command Line Introduction: command_line_intro.md
-          - The grass Command: grass.md
-          - Environmental Variables: variables.md
-      - Python Overview: python_intro.md
-      - Jupyter Notebooks: jupyter_intro.md
-      - Desktop GUI:
-          - GUI Overview: wxguiintro.md
+      - Overview: interfaces_overview.md
+      - Command line:
+          - Command line introduction: command_line_intro.md
+          - The grass command: grass.md
+          - Environmental variables: variables.md
+      - Python: python_intro.md
+      - Jupyter notebooks: jupyter_intro.md
+      - Graphical user interface:
+          - Introduction: helptext.md
           - Features: wxGUI.md
-          - Tool Dialogs: wxGUI.modules.md
-          - Attribute Table Management: wxGUI.dbmgr.md
-          - Cartographic Composer: wxGUI.psmap.md
-          - Data Catalog: wxGUI.datacatalog.md
-          - Vector Digitizer: wxGUI.vdigit.md
-          - Raster Digitizer: wxGUI.rdigit.md
-          - Graphical Modeler: wxGUI.gmodeler.md
-          - Ground Control Points Manager: wxGUI.gcp.md
-          - Network Analysis: wxGUI.vnet.md
+          - Tool dialogs: wxGUI.modules.md
+          - Attribute table management: wxGUI.dbmgr.md
+          - Cartographic composer: wxGUI.psmap.md
+          - Data catalog: wxGUI.datacatalog.md
+          - Vector digitizer: wxGUI.vdigit.md
+          - Raster digitizer: wxGUI.rdigit.md
+          - Graphical modeler: wxGUI.gmodeler.md
+          - Ground control points manager: wxGUI.gcp.md
+          - Network analysis: wxGUI.vnet.md
           - Visualization:
               - Animation: wxGUI.animation.md
-              - 3D Visualization: wxGUI.nviz.md
-              - Interactive Scatter Plot: wxGUI.iscatt.md
-              - Map Swipe: wxGUI.mapswipe.md
+              - 3D visualization: wxGUI.nviz.md
+              - Interactive scatter plot: wxGUI.iscatt.md
+              - Map swipe: wxGUI.mapswipe.md
               - Timeline: wxGUI.timeline.md
-              - Temporal Plot: wxGUI.tplot.md
-          - List of Components: wxGUI.components.md
+              - Temporal plot: wxGUI.tplot.md
+          - List of components: wxGUI.components.md
 
   - Key concepts:
+      - GRASS projects: grass_database.md
       - Raster overview: rasterintro.md
       - 3D raster overview: raster3dintro.md
       - Vector overview: vectorintro.md
@@ -167,7 +163,6 @@ nav:
       - Imagery overview: imageryintro.md
       - Temporal overview: temporalintro.md
       - Display drivers: displaydrivers.md
-      - GRASS projects: grass_database.md
       - Projections and transformations: projectionintro.md
 
   - Tools:

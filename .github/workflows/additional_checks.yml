@@ -36,7 +36,13 @@ jobs:
         with:
           filters: |
             precommit:
+              - '.clang-format'
+              - '.flake8'
+              - '.github/**'
+              - '.markdownlint.yml'
               - '.pre-commit-config.yaml'
+              - '.yamllint'
+              - 'pyproject.toml'
 
       - name: Check for CRLF endings
         uses: erclu/check-crlf@94acb86c2a41b0a46bd8087b63a06f0457dd0c6c # v1.2.0

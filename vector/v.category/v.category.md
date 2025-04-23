@@ -168,19 +168,19 @@ v.category input=roads option=layers format=json
 Using report option in JSON format with pandas:
 
 ```python
-  import grass.script as gs
-  import pandas as pd
+import grass.script as gs
+import pandas as pd
 
-  # Run v.category command with report option.
-  data = gs.parse_command(
-      "v.category",
-      input="bridges",
-      option="report",
-      format="json",
-  )
+# Run v.category command with report option.
+data = gs.parse_command(
+    "v.category",
+    input="bridges",
+    option="report",
+    format="json",
+)
 
-  df = pd.DataFrame(data)
-  print(df)
+df = pd.DataFrame(data)
+print(df)
 ```
 
 ```sh
@@ -193,20 +193,20 @@ Using print option with the first layer, only for feature ids 1-5 in JSON
 format with pandas:
 
 ```python
-  import grass.script as gs
-  import pandas as pd
+import grass.script as gs
+import pandas as pd
 
-  # Run v.category command with print option.
-  data = gs.parse_command(
-      "v.category",
-      input="bridges",
-      option="print",
-      ids="1-5",
-      format="json",
-  )
+# Run v.category command with print option.
+data = gs.parse_command(
+    "v.category",
+    input="bridges",
+    option="print",
+    ids="1-5",
+    format="json",
+)
 
-  df = pd.DataFrame(data)
-  print(df)
+df = pd.DataFrame(data)
+print(df)
 ```
 
 ```sh

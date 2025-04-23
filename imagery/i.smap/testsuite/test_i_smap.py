@@ -32,7 +32,7 @@ class TestISmap(TestCase):
         )
         cls.runModule(
             "r.mapcalc",
-            expression=f"{cls.input_maps[2]} = 20 * exp(-((row() - 50)^2 + (col() - 50)^2) / 500)",
+            expression=f"{cls.input_maps[2]} = 20 * exp(-(((row() - 50)^2 + (col() - 50)^2) / 500))",
             overwrite=True,
         )
         cls.temp_rasters.extend(cls.input_maps)
