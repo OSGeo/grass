@@ -1,23 +1,50 @@
-"""Experimental low-level CLI interface for the main GRASS executable functionality
+##############################################################################
+# AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
+#
+# PURPOSE:   API to call GRASS tools as Python functions without a session
+#
+# COPYRIGHT: (C) 2025 Vaclav Petras and the GRASS Development Team
+#
+#            This program is free software under the GNU General Public
+#            License (>=v2). Read the file COPYING that comes with GRASS
+#            for details.
+##############################################################################
 
-(C) 2025 by Vaclav Petras and the GRASS Development Team
-
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
-
-.. sectionauthor:: Vaclav Petras <wenzeslaus gmail com>
+"""
+Experimental low-level CLI interface for the main GRASS executable functionality
 
 This is not a stable part of the API. Use at your own risk.
 """
 
 import argparse
+import tempfile
 import os
 import sys
+import subprocess
 from pathlib import Path
+
 
 import grass.script as gs
 from grass.app.data import lock_mapset, unlock_mapset, MapsetLockingException
+from grass.experimental.standalone import StandaloneTools
+
+
+def subcommand_run_tool(args, tool_args: list, help: bool):
+    command = [args.tool_name, *tool_args]
+    if help:
+        with tempfile.TemporaryDirectory() as tmp_dir_name:
+            project_name = "project"
+            project_path = Path(tmp_dir_name) / project_name
+            gs.create_project(project_path)
+            with gs.setup.init(project_path) as session:
+                result = subprocess.run(command, env=session.env)
+        return result.returncode
+
+    with StandaloneTools(capture_output=False) as tools:
+        try:
+            tools.run_from_list(command)
+        except subprocess.CalledProcessError as error:
+            return error.returncode
 
 
 def subcommand_lock_mapset(args):
@@ -47,9 +74,15 @@ def main():
         description="Experimental low-level CLI interface to GRASS. Consult developers before using it.",
         prog=program,
     )
-    subparsers = parser.add_subparsers(title="subcommands", required=True)
+    subparsers = parser.add_subparsers(
+        title="subcommands", required=True, dest="subcommand"
+    )
 
     # Subcommand parsers
+
+    subparser = subparsers.add_parser("run", help="run a tool")
+    subparser.add_argument("tool_name", type=str)
+    subparser.set_defaults(func=subcommand_run_tool)
 
     parser_foo = subparsers.add_parser("lock", help="lock a mapset")
     parser_foo.add_argument("mapset_path", type=str)
@@ -82,5 +115,19 @@ def main():
     parser_bar.add_argument("mapset_path", type=str)
     parser_bar.set_defaults(func=subcommand_unlock_mapset)
 
-    args = parser.parse_args()
-    args.func(args)
+    raw_args = sys.argv
+    add_back = None
+    if len(sys.argv) > 3 and sys.argv[1] == "run":
+        # Maybe a better workaround is to use custom --help, action="help", print_help, and dedicated tool help function.
+        if "--help" in sys.argv[3:]:
+            raw_args = raw_args.remove("--help")
+            add_back = "--help"
+        if "--h" in sys.argv[3:]:
+            raw_args = raw_args.remove("--h")
+            add_back = "--h"
+    args, other_args = parser.parse_known_args()
+    if args.subcommand == "run":
+        if add_back:
+            other_args.append(add_back)
+        return args.func(args, other_args, help=bool(add_back))
+    return args.func(args)
