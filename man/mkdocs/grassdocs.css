@@ -1,8 +1,11 @@
-:root > * {
+:root>* {
 
   /* GRASS Variables
   Use these variables to customize the GRASS theme.
   ----------------------------------------------------------------------------- */
+  /* GRASS Font */
+  --gs-grass-font: 'Fira Sans Regular', sans-serif;
+  --gs-grass-font--light: 'Fira Sans ExtraLight', sans-serif;
 
   /* Primary Color */
   --gs-primary-color: rgb(76, 176, 91);
@@ -90,11 +93,11 @@
   --gs-grey-light-color--lighter: rgba(240, 240, 241, 0.322);
   --gs-grey-light-color--lightest: rgba(240, 240, 241, 0.071);
 
-  /* Dark Gray */
-  --gs-grey-dark-color: rgb(117, 116, 115);
-  --gs-grey-dark-color--light: rgba(117, 116, 115, 0.541);
-  --gs-grey-dark-color--lighter: rgba(117, 116, 115, 0.322);
-  --gs-grey-dark-color--lightest: rgba(117, 116, 115, 0.071);
+  /* Grey Dark */
+  --gs-grey-dark-color: rgb(78, 77, 76);
+  --gs-grey-dark-color--light: rgba(78, 77, 76, 0.541);
+  --gs-grey-dark-color--lighter: rgba(78, 77, 76, 0.322);
+  --gs-grey-dark-color--lightest: rgba(78, 77, 76, 0.071);
 
   /* Images */
   --gs-grass-background-image: url("/images/logos/banner.jpg");
@@ -114,36 +117,55 @@
 
   /* Default Colors */
   /* ----------------------------------------------------------------------------- */
-  --md-default-fg-weight: 800;
+  --md-text-font-family: var(--gs-grass-font);
+  --md-text-font: var(--gs-grass-font);
+  --md-code-font: var(--gs-grass-font);
+  --md-default-fg-weight: 400;
+
+  --md-hue: 225deg;
+  --md-default-fg-color: var(--gs-grey-dark-color);
+  --md-default-fg-color--light: var(--gs-grey-dark-color--light);
+  --md-default-fg-color--lighter: var(--gs-grey-dark-color--lighter);
+  --md-default-fg-color--lightest: var(--gs-grey-dark-color--lightest);
+
+  --md-default-bg-color: var(--gs-white-color);
+  --md-default-bg-color--light: var(--gs-white-color--light);
+  --md-default-bg-color--lighter: var(--gs-white-color--lighter);
+  --md-default-bg-color--lightest: var(--gs-white-color--lightest);
 
   /* Primary color shades */
   /* ----------------------------------------------------------------------------- */
-  --md-primary-fg-color:             var(--gs-primary-color); /* Dark green */
-  --md-primary-fg-color--light:      var(--gs-primary-color--light);
-  --md-primary-fg-color--dark:       var(--gs-primary-color-dark);
-  --md-primary-bg-color:             var(--gs-white-color); /* Includes color for the navbar text */
-  --md-primary-bg-color--light:      var(--gs-white-color--light);
+  --md-primary-fg-color: var(--gs-primary-color-dark);
+  /* Dark green */
+  --md-primary-fg-color--light: var(--gs-primary-color-dark--light);
+  --md-primary-fg-color--dark: var(--gs-primary-color-dark);
+  --md-primary-bg-color: var(--gs-white-color);
+  /* Includes color for the navbar text */
+  --md-primary-bg-color--light: var(--gs-white-color--light);
 
   /* Accent Colors */
   /* ----------------------------------------------------------------------------- */
-  --md-accent-fg-color:              var(--gs-secondary-color); /* Link color on hover */
-  --md-accent-fg-color--transparent: var(--gs-secondary-color--light);
-  --md-accent-bg-color:              var(--gs-white-color);
-  --md-accent-bg-color--light:       var(--gs-primary-color--light);
+  --md-accent-fg-color: var(--gs-primary-color-dark);
+  /* Link color on hover */
+  --md-accent-fg-color--transparent: var(--gs-primary-alt-color--light);
+  --md-accent-bg-color: var(--gs-white-color);
+  --md-accent-bg-color--light: var(--gs-primary-color--light);
 
   /* Footer */
   /* ----------------------------------------------------------------------------- */
-  --md-footer-fg-color:              var(--gs-secondary-color);
-  --md-footer-fg-color--light:       var(--gs-white-color);
-  --md-footer-fg-color--lighter:     var(--gs-white-color);
-  --md-footer-bg-color:              var(--gs-primary-light-color--lightest);;
-  --md-footer-bg-color--light:       var(--gs-primary-light-color--light);
-  --md-footer-bg-color--dark:        var(--gs-primary-color);
+  --md-footer-fg-color: var(--gs-secondary-color);
+  --md-footer-fg-color--light: var(--gs-white-color);
+  --md-footer-fg-color--lighter: var(--gs-white-color);
+  --md-footer-bg-color: var(--gs-primary-light-color--lightest);
+  --md-footer-bg-color--light: var(--gs-primary-light-color--light);
+  --md-footer-bg-color--dark: var(--gs-secondary-color);
 
   /* Typeset Colors */
   /* ----------------------------------------------------------------------------- */
-  --md-typeset-a-color: var(--gs-secondary-color); /* Link color */
-  --md-typeset-a-color--hover: var(--gs-secondary-color--light); /* Not sure */
+  --md-typeset-a-color: var(--gs-primary-color);
+  /* Link color */
+  --md-typeset-a-color--hover: var(--gs-primary-alt-color);
+  /* Not sure */
 
   /* Mermaid colors */
   /* ----------------------------------------------------------------------------- */
@@ -174,33 +196,32 @@
   --md-mermaid-sequence-number-bg-color: var(--md-mermaid-node-fg-color);
   --md-mermaid-sequence-number-fg-color: var(--md-accent-bg-color);
 
-  /* Unset Colors */
+
+  /* Code Highlighting */
   /* ----------------------------------------------------------------------------- */
-  --md-hue: 225deg;
-  --md-default-fg-color: #000000de;
-  --md-default-fg-color--light: #0000008a;
-  --md-default-fg-color--lighter: #00000052;
-  --md-default-fg-color--lightest: #00000012;
-  --md-default-bg-color: #fff;
-  --md-default-bg-color--light: #ffffffb3;
-  --md-default-bg-color--lighter: #ffffff4d;
-  --md-default-bg-color--lightest: #ffffff1f;
-  --md-code-fg-color: #36464e;
-  --md-code-bg-color: #f5f5f5;
-  --md-code-hl-color: #4287ff;
-  --md-code-hl-color--light: #4287ff1a;
-  --md-code-hl-number-color: #d52a2a;
-  --md-code-hl-special-color: #db1457;
-  --md-code-hl-function-color: #a846b9;
-  --md-code-hl-constant-color: #6e59d9;
-  --md-code-hl-keyword-color: #3f6ec6;
-  --md-code-hl-string-color: #1c7d4d;
-  --md-code-hl-name-color: var(--md-code-fg-color);
+  --md-code-fg-color: var(--gs-primary-color-dark);
+  --md-code-bg-color: var(--gs-grey-light-color);
+  --md-code-hl-color: var(--gs-secondary-light-color);
+  --md-code-hl-color--light: var(--gs-grey-dark-color);
+  --md-code-hl-number-color: var(--gs-secondary-color);
+  --md-code-hl-special-color: var(--gs-secondary-dark-color);
+  --md-code-hl-function-color: var(--gs-secondary-alt-color);
+  --md-code-hl-constant-color: var(--gs-support-color--dark);
+  --md-code-hl-keyword-color: var(--gs-primary-color);
+  --md-code-hl-string-color: var(--gs-secondary-color);
+  --md-code-hl-name-color: var(--gs-primary-color);
+
   --md-code-hl-operator-color: var(--md-default-fg-color--light);
   --md-code-hl-punctuation-color: var(--md-default-fg-color--light);
   --md-code-hl-comment-color: var(--md-default-fg-color--light);
   --md-code-hl-generic-color: var(--md-default-fg-color--light);
   --md-code-hl-variable-color: var(--md-default-fg-color--light);
+
+  /* Unset Colors */
+  /* ----------------------------------------------------------------------------- */
+
+
+
   --md-typeset-color: var(--md-default-fg-color);
   --md-typeset-del-color: #f5503d26;
   --md-typeset-ins-color: #0bd57026;
@@ -241,6 +262,38 @@
   height: 3rem;
 }
 
+/* Typesets */
+.md-typeset h1 {
+  color: var(--gs-secondary-light-color);
+  font-weight: bold;
+  font-size: 2.25em;
+  line-height: 1.3;
+  margin: 0 0 1.25em;
+}
+
+.md-typeset h2 {
+  font-family: var(--gs-grass-font--light);
+  color: var(--gs-secondary-light-color);
+  font-size: 2em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  margin: .64em 0 .64em;
+}
+
+.md-typeset h3 {
+  color: var(--gs-secondary-light-color);
+  font-size: 1.25em;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  line-height: 1.5;
+  margin: 1.6em 0 .8em;
+}
+
+.md-typeset a:focus,
+.md-typeset a:hover {
+  color: var(--md-accent-fg-color);
+}
+
 .md-typeset table:not([class]) tbody tr:hover {
   background-color: transparent;
 }
@@ -258,7 +311,8 @@
   color: var(--gs-support-color);
 }
 
-.md-button.gs-support-button:focus, .md-button.gs-support-button:hover {
+.md-button.gs-support-button:focus,
+.md-button.gs-support-button:hover {
   background-color: var(--gs-support-color);
   border-color: var(--gs-support-color);
   color: var(--gs-white-color);
@@ -269,13 +323,15 @@
 .md-typeset details.grass-tip {
   border-color: var(--gs-primary-light-color);
 }
-.md-typeset .grass-tip > .admonition-title,
-.md-typeset .grass-tip > summary {
+
+.md-typeset .grass-tip>.admonition-title,
+.md-typeset .grass-tip>summary {
   background-color: var(--gs-primary-color--lightest);
 }
-.md-typeset .grass-tip > .admonition-title::before,
-.md-typeset .grass-tip > summary::before {
+
+.md-typeset .grass-tip>.admonition-title::before,
+.md-typeset .grass-tip>summary::before {
   background-color: var(--gs-primary-color);
   -webkit-mask-image: var(--md-admonition-icon--grass-icon);
-          mask-image: var(--md-admonition-icon--grass-icon);
+  mask-image: var(--md-admonition-icon--grass-icon);
 }
