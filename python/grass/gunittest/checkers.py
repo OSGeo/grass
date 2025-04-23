@@ -272,7 +272,8 @@ def values_equal(value_a, value_b, precision: float = 0.000001) -> bool:
     True
     >>> values_equal("Hello", "hello")
     False
-    """  # noqa: D402; Add a summary
+    """  # noqa: D402
+    # Add a summary
     # each if body needs to handle only not equal state
 
     if isinstance(value_a, float) and isinstance(value_b, float):
@@ -545,7 +546,8 @@ def check_text_ellipsis(reference, actual) -> bool:
 
     >>> check_text_ellipsis("Result: [569] (...)", "Result: 9 (too high)")
     False
-    """  # noqa: D402; Add a summary
+    """  # noqa: D402
+    # Add a summary
     ref_escaped = re.escape(reference)
     exp = re.compile(r"\\\.\\\.\\\.")  # matching escaped ...
     ref_regexp = exp.sub(".+", ref_escaped) + "$"
@@ -605,7 +607,8 @@ def check_text_ellipsis_doctest(reference, actual):
     ...     optionflags=doctest.ELLIPSIS,
     ... )
     False
-    """  # noqa: D402; Add a summary
+    """  # noqa: D402
+    # Add a summary
     # this can be also global
     checker = doctest.OutputChecker()
     return checker.check_output(reference, actual, optionflags=doctest.ELLIPSIS)

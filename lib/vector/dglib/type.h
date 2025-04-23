@@ -24,7 +24,7 @@
 #define _DGL_TYPE_H_ 1
 
 /*
- * local endianess
+ * local endianness
  */
 #ifdef WORDS_BIGENDIAN
 #define G_XDR 1
