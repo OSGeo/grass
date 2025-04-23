@@ -19,6 +19,7 @@ import os
 import shutil
 
 import grass.script as gs
+from grass.exceptions import CalledModuleError
 
 
 class ExecutedTool:
@@ -104,6 +105,7 @@ class Tools:
         freeze_region=False,
         stdin=None,
         errors=None,
+        capture_output=True,
     ):
         if env:
             self._env = env.copy()
@@ -128,6 +130,7 @@ class Tools:
             self._env["GRASS_VERBOSE"] = "3"
         self._set_stdin(stdin)
         self._errors = errors
+        self._capture_output = capture_output
 
     # These could be public, not protected.
     def _freeze_region(self):
@@ -154,34 +157,47 @@ class Tools:
 
         :param str module: name of GRASS module
         :param `**kwargs`: named arguments passed to run_command()"""
+        args, popen_options = gs.popen_args_command(name, **kwargs)
+        return self._execute_tool(args, **popen_options)
+
+    def _execute_tool(self, command, **popen_options):
         # alternatively use dev null as default or provide it as convenient settings
-        stdout_pipe = gs.PIPE
-        stderr_pipe = gs.PIPE
+        if self._capture_output:
+            stdout_pipe = gs.PIPE
+            stderr_pipe = gs.PIPE
+        else:
+            stdout_pipe = None
+            stderr_pipe = None
         if self._stdin:
             stdin_pipe = gs.PIPE
             stdin = gs.utils.encode(self._stdin)
         else:
             stdin_pipe = None
             stdin = None
-        process = gs.start_command(
-            name,
-            env=self._env,
-            **kwargs,
+        # Allowing to overwrite env, but that's just to have maximum flexibility when
+        # the session is actually set up, but it may be confusing.
+        if "env" not in popen_options:
+            popen_options["env"] = self._env
+        process = gs.Popen(
+            command,
             stdin=stdin_pipe,
             stdout=stdout_pipe,
             stderr=stderr_pipe,
+            **popen_options,
         )
         stdout, stderr = process.communicate(input=stdin)
-        stderr = gs.utils.decode(stderr)
+        if stderr:
+            stderr = gs.utils.decode(stderr)
         returncode = process.poll()
         if returncode and self._errors != "ignore":
-            raise gs.CalledModuleError(
-                name,
-                code=" ".join([f"{key}={value}" for key, value in kwargs.items()]),
+            raise CalledModuleError(
+                command[0],
+                code=" ".join(command),
                 returncode=returncode,
                 errors=stderr,
             )
-        return ExecutedTool(name=name, kwargs=kwargs, stdout=stdout, stderr=stderr)
+        # We don't have the keyword arguments to pass to the resulting object.
+        return ExecutedTool(name=command[0], kwargs=None, stdout=stdout, stderr=stderr)
 
     def feed_input_to(self, stdin, /):
         """Get a new object which will feed text input to a tool or tools"""

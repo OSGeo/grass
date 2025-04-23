@@ -3,8 +3,8 @@
 import os
 import pytest
 
-import grass.script as gs
 from grass.experimental.tools import Tools
+from grass.exceptions import CalledModuleError
 
 
 def test_key_value_parser_number(xy_dataset_session):
@@ -78,7 +78,7 @@ def test_no_overwrite(xy_dataset_session):
     """Check that it fails without overwrite"""
     tools = Tools(session=xy_dataset_session)
     tools.r_random_surface(output="surface", seed=42)
-    with pytest.raises(gs.CalledModuleError, match="overwrite"):
+    with pytest.raises(CalledModuleError, match="overwrite"):
         tools.r_random_surface(output="surface", seed=42)
 
 
@@ -99,7 +99,7 @@ def test_global_overwrite_vs_env(xy_dataset_session):
     os.environ["GRASS_OVERWRITE"] = "1"  # change to xy_dataset_session.env
     tools = Tools(session=xy_dataset_session, env=env)
     tools.r_random_surface(output="surface", seed=42)
-    with pytest.raises(gs.CalledModuleError, match="overwrite"):
+    with pytest.raises(CalledModuleError, match="overwrite"):
         tools.r_random_surface(output="surface", seed=42)
     del os.environ["GRASS_OVERWRITE"]  # check or ideally remove this
 
@@ -109,7 +109,7 @@ def test_global_overwrite_vs_init(xy_dataset_session):
     tools = Tools(session=xy_dataset_session)
     os.environ["GRASS_OVERWRITE"] = "1"  # change to xy_dataset_session.env
     tools.r_random_surface(output="surface", seed=42)
-    with pytest.raises(gs.CalledModuleError, match="overwrite"):
+    with pytest.raises(CalledModuleError, match="overwrite"):
         tools.r_random_surface(output="surface", seed=42)
     del os.environ["GRASS_OVERWRITE"]  # check or ideally remove this
 
@@ -126,7 +126,7 @@ def test_raises(xy_dataset_session):
     """Test that exception is raised for wrong parameter value"""
     tools = Tools(session=xy_dataset_session)
     wrong_name = "wrong_standard"
-    with pytest.raises(gs.CalledModuleError, match=wrong_name):
+    with pytest.raises(CalledModuleError, match=wrong_name):
         tools.feed_input_to("13.45,29.96,200").v_in_ascii(
             input="-",
             output="point",
