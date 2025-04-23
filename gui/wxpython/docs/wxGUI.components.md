@@ -1,13 +1,10 @@
 ---
 description: wxGUI Components
 index: wxGUI
+keywords: [general, GUI]
 ---
 
 # wxGUI Components
-
-## KEYWORDS
-
-[general](general.md), [GUI](topic_GUI.md)
 
 ## DESCRIPTION
 

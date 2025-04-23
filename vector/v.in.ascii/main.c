@@ -472,7 +472,7 @@ int main(int argc, char *argv[])
                     length = db_get_column_length(column);
                     coltype2[i] = ctype;
 
-                    if (catcol == i) { /* if catcol == -1 it cannot be tru */
+                    if (catcol == i) { /* if catcol == -1 it cannot be true */
                         key = G_store(db_get_column_name(column));
                     }
 
