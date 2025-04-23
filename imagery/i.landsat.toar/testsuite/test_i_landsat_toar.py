@@ -68,13 +68,24 @@ class TestLandsatTOARBasic(TestCase):
     def tearDownClass(cls):
         """Remove generated data"""
         cls.del_temp_region()
-        for band in cls.bands:
-            cls.runModule(
-                "g.remove", flags="f", type="raster", name=f"{cls.input_prefix}{band}"
-            )
-            cls.runModule(
-                "g.remove", flags="f", type="raster", name=f"{cls.output_prefix}{band}"
-            )
+        input_rasters = [f"{cls.input_prefix}{b}" for b in cls.bands]
+        output_rasters = [f"{cls.output_prefix}{b}" for b in cls.bands]
+        extra_outputs = {
+            "scaled_": ["1"],
+            "rad_": ["1"],
+            "manual_": ["1"],
+            "dos_": ["1"],
+            "gain_": ["1", "2", "3", "4", "5", "61", "62", "7", "8"],
+            "dos3_": ["1"],
+        }
+
+        test_rasters = []
+        for suffix, bands in extra_outputs.items():
+            test_rasters += [f"{cls.output_prefix}{suffix}{b}" for b in bands]
+        all_rasters = input_rasters + output_rasters + test_rasters
+        cls.runModule("g.remove", flags="f", type="raster", name=all_rasters)
+
+        # Remove metfile if it exists
         if os.path.exists(cls.metfile):
             os.remove(cls.metfile)
 
