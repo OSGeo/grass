@@ -84,8 +84,6 @@ class TestLandsatTOARBasic(TestCase):
             test_rasters += [f"{cls.output_prefix}{suffix}{b}" for b in bands]
         all_rasters = input_rasters + output_rasters + test_rasters
         cls.runModule("g.remove", flags="f", type="raster", name=all_rasters)
-
-        # Remove metfile if it exists
         if os.path.exists(cls.metfile):
             os.remove(cls.metfile)
 
