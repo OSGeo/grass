@@ -11,6 +11,7 @@ for details.
 This is not a stable part of the API. Use at your own risk.
 """
 
+import sys
 from .cli import main
 
-main()
+sys.exit(main())
