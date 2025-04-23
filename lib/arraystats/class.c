@@ -22,8 +22,8 @@ int AS_option_to_algorithm(const struct Option *option)
     G_fatal_error(_("Unknown algorithm '%s'"), option->answer);
 }
 
-double AS_class_apply_algorithm(int algo, double *data, int nrec, int *nbreaks,
-                                double **classbreaks)
+double AS_class_apply_algorithm(int algo, const double data[], int nrec,
+                                int *nbreaks, double classbreaks[])
 {
     double finfo = 0.0;
 
@@ -53,12 +53,12 @@ double AS_class_apply_algorithm(int algo, double *data, int nrec, int *nbreaks,
     return finfo;
 }
 
-int AS_class_interval(double *data, int count, int nbreaks, double **clbrks_in)
+int AS_class_interval(const double data[], int count, int nbreaks,
+                      double classbreaks[])
 {
     double min, max;
     double step;
     int i = 0;
-    double *classbreaks = *clbrks_in;
 
     min = data[0];
     max = data[count - 1];
@@ -71,13 +71,13 @@ int AS_class_interval(double *data, int count, int nbreaks, double **clbrks_in)
     return (1);
 }
 
-double AS_class_stdev(double *data, int count, int nbreaks, double **clbrks_in)
+double AS_class_stdev(const double data[], int count, int nbreaks,
+                      double classbreaks[])
 {
     struct GASTATS stats;
     int i;
     int nbclass;
     double scale = 1.0;
-    double *classbreaks = *clbrks_in;
 
     AS_basic_stats(data, count, &stats);
 
@@ -136,10 +136,10 @@ double AS_class_stdev(double *data, int count, int nbreaks, double **clbrks_in)
     return (scale);
 }
 
-int AS_class_quant(double *data, int count, int nbreaks, double **clbrks_in)
+int AS_class_quant(const double data[], int count, int nbreaks,
+                   double classbreaks[])
 {
     int i, step;
-    double *classbreaks = *clbrks_in;
 
     step = count / (nbreaks + 1);
 
@@ -149,14 +149,14 @@ int AS_class_quant(double *data, int count, int nbreaks, double **clbrks_in)
     return (1);
 }
 
-int AS_class_equiprob(double *data, int count, int *nbreaks, double **clbrks_in)
+int AS_class_equiprob(const double data[], int count, int *nbreaks,
+                      double classbreaks[])
 {
     int i, j;
     double *lequi; /*Vector of scale factors for probabilities of the normal
                       distribution */
     struct GASTATS stats;
     int nbclass;
-    double *classbreaks = *clbrks_in;
 
     nbclass = *nbreaks + 1;
 
@@ -251,9 +251,8 @@ int AS_class_equiprob(double *data, int count, int *nbreaks, double **clbrks_in)
             _("There are classbreaks outside the range min-max. Number of "
               "classes reduced to %i, but using probabilities for %i classes."),
             j + 1, *nbreaks + 1);
-        classbreaks = G_realloc(classbreaks, j * sizeof(double));
         for (i = 0; i < j; i++)
-            classbreaks[i] = 0;
+            classbreaks[i] = 0.0;
     }
 
     j = 0;
@@ -264,18 +263,16 @@ int AS_class_equiprob(double *data, int count, int *nbreaks, double **clbrks_in)
             j++;
         }
     }
-    *clbrks_in = classbreaks;
     *nbreaks = j;
 
     G_free(lequi);
     return (1);
 }
 
-double AS_class_discont(double *data, int count, int nbreaks,
-                        double **clbrks_in)
+double AS_class_discont(const double data[], int count, int nbreaks,
+                        double classbreaks[])
 {
     int i, j;
-    double *classbreaks = *clbrks_in;
     double chi2 = 1000.0;
 
     /* get the number of values */
@@ -437,8 +434,8 @@ double AS_class_discont(double *data, int count, int nbreaks,
     return (chi2);
 }
 
-int AS_class_frequencies(double *data, int count, int nbreaks,
-                         double *classbreaks, int *frequencies)
+int AS_class_frequencies(const double data[], int count, int nbreaks,
+                         double classbreaks[], int frequencies[])
 {
     int i, j;
 

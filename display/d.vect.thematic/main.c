@@ -414,7 +414,7 @@ int main(int argc, char **argv)
              * algorithms */
             class_info =
                 AS_class_apply_algorithm(AS_option_to_algorithm(algo_opt), data,
-                                         nrec, &nbreaks, &breakpoints);
+                                         nrec, &nbreaks, breakpoints);
         }
         else {
 

@@ -4,7 +4,7 @@
 #include <grass/gis.h>
 
 /*provides basic univar stats */
-void AS_basic_stats(double *data, int count, struct GASTATS *stats)
+void AS_basic_stats(const double data[], int count, struct GASTATS *stats)
 {
     int i = 1;
     double sum = 0, sumsq = 0, sumabs = 0;
