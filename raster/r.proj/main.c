@@ -58,6 +58,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <math.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/gprojects.h>
@@ -502,10 +503,34 @@ int main(int argc, char **argv)
             break;
 
         case JSON:
-            json_object_set_number(root_object, "north", inorth);
-            json_object_set_number(root_object, "south", isouth);
-            json_object_set_number(root_object, "west", iwest);
-            json_object_set_number(root_object, "east", ieast);
+            if (isfinite(inorth)) {
+                json_object_set_number(root_object, "north", inorth);
+            }
+            else {
+                json_object_set_null(root_object, "north");
+            }
+
+            if (isfinite(isouth)) {
+                json_object_set_number(root_object, "south", isouth);
+            }
+            else {
+                json_object_set_null(root_object, "south");
+            }
+
+            if (isfinite(iwest)) {
+                json_object_set_number(root_object, "west", iwest);
+            }
+            else {
+                json_object_set_null(root_object, "west");
+            }
+
+            if (isfinite(ieast)) {
+                json_object_set_number(root_object, "east", ieast);
+            }
+            else {
+                json_object_set_null(root_object, "east");
+            }
+
             json_object_set_number(root_object, "rows", irows);
             json_object_set_number(root_object, "cols", icols);
             break;
