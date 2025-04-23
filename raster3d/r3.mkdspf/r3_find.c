@@ -5,6 +5,7 @@
  **************************************************************/
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include <grass/raster3d.h>
 
 int g3_find_dsp_file(const char *cell, const char *file, const char *mset)
@@ -15,7 +16,9 @@ int g3_find_dsp_file(const char *cell, const char *file, const char *mset)
     if (file == NULL || *file == 0)
         return 0;
 
-    strcpy(tofind, file);
+    if (G_strlcpy(tofind, file, sizeof(tofind)) >= sizeof(tofind)) {
+        G_fatal_error(_("File name <%s> is too long"), file);
+    }
 
     if (G_name_is_fully_qualified(cell, name, mapset))
         sprintf(element, "grid3/%s/dsp", name);
