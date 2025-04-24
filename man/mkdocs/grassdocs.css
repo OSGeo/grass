@@ -153,7 +153,7 @@
 
   /* Footer */
   /* ----------------------------------------------------------------------------- */
-  --md-footer-fg-color: var(--gs-secondary-color);
+  --md-footer-fg-color: var(--gs-white-color--light);
   --md-footer-fg-color--light: var(--gs-white-color);
   --md-footer-fg-color--lighter: var(--gs-white-color);
   --md-footer-bg-color: var(--gs-primary-light-color--lightest);
