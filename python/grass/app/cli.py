@@ -65,11 +65,12 @@ def subcommand_unlock_mapset(args):
     unlock_mapset(args.mapset_path)
 
 
-def main():
+def main(args=None, program=None):
     # Top-level parser
-    program = os.path.basename(sys.argv[0])
-    if program == "__main__.py":
-        program = f"{Path(sys.executable).name} -m grass.app"
+    if program is None:
+        program = os.path.basename(sys.argv[0])
+        if program == "__main__.py":
+            program = f"{Path(sys.executable).name} -m grass.app"
     parser = argparse.ArgumentParser(
         description="Experimental low-level CLI interface to GRASS. Consult developers before using it.",
         prog=program,
@@ -115,19 +116,19 @@ def main():
     parser_bar.add_argument("mapset_path", type=str)
     parser_bar.set_defaults(func=subcommand_unlock_mapset)
 
-    raw_args = sys.argv
+    raw_args = args.copy()
     add_back = None
-    if len(sys.argv) > 3 and sys.argv[1] == "run":
+    if len(raw_args) > 3 and raw_args[1] == "run":
         # Maybe a better workaround is to use custom --help, action="help", print_help, and dedicated tool help function.
-        if "--help" in sys.argv[3:]:
+        if "--help" in raw_args[3:]:
             raw_args = raw_args.remove("--help")
             add_back = "--help"
-        if "--h" in sys.argv[3:]:
+        if "--h" in raw_args[3:]:
             raw_args = raw_args.remove("--h")
             add_back = "--h"
-    args, other_args = parser.parse_known_args()
+    parsed_args, other_args = parser.parse_known_args(raw_args)
     if args.subcommand == "run":
         if add_back:
             other_args.append(add_back)
-        return args.func(args, other_args, help=bool(add_back))
-    return args.func(args)
+        return parsed_args.func(parsed_args, other_args, help=bool(add_back))
+    return parsed_args.func(parsed_args)
