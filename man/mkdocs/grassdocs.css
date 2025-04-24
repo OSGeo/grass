@@ -137,9 +137,8 @@
 
   /* Primary color shades */
   /* ----------------------------------------------------------------------------- */
-  --md-primary-fg-color: var(--gs-primary-color-dark);
-  /* Dark green */
-  --md-primary-fg-color--light: var(--gs-primary-color-dark--light);
+  --md-primary-fg-color: var(--gs-primary-color);
+  --md-primary-fg-color--light: var(--gs-primary-color--light);
   --md-primary-fg-color--dark: var(--gs-primary-color-dark);
   --md-primary-bg-color: var(--gs-white-color);
   /* Includes color for the navbar text */
@@ -147,8 +146,7 @@
 
   /* Accent Colors */
   /* ----------------------------------------------------------------------------- */
-  --md-accent-fg-color: var(--gs-primary-color-dark);
-  /* Link color on hover */
+  --md-accent-fg-color: var(--gs-primary-color-dark); /* Link color on hover */
   --md-accent-fg-color--transparent: var(--gs-primary-alt-color--light);
   --md-accent-bg-color: var(--gs-white-color);
   --md-accent-bg-color--light: var(--gs-primary-color--light);
@@ -165,7 +163,6 @@
   /* Typeset Colors */
   /* ----------------------------------------------------------------------------- */
   --md-typeset-a-color: var(--gs-primary-color);
-  /* Link color */
   --md-typeset-a-color--hover: var(--gs-primary-alt-color);
   --md-typeset-color: var(--md-default-fg-color);
   --md-typeset-del-color: #f5503d26;
@@ -174,8 +171,8 @@
   --md-typeset-kbd-accent-color: #fff;
   --md-typeset-kbd-border-color: #b8b8b8;
   --md-typeset-mark-color: #ffff0080;
-  --md-typeset-table-color: var(--gs-black-color);
-  --md-typeset-table-color--light: var(--gs-black-color--light);
+  --md-typeset-table-color: var(--gs-grey-alt-color);
+  --md-typeset-table-color--light: var(--gs-grey-alt-color--light);
 
   /* Mermaid colors */
   /* ----------------------------------------------------------------------------- */
@@ -209,21 +206,21 @@
 
   /* Code Highlighting */
   /* ----------------------------------------------------------------------------- */
-  --md-code-fg-color: var(--gs-primary-color-dark);
+  --md-code-fg-color: var(--gs-secondary-alt-color);
   --md-code-bg-color: var(--gs-grey-light-color);
-  --md-code-hl-color: var(--gs-secondary-light-color);
+  /* --md-code-hl-color: var(--gs-secondary-light-color); */
   --md-code-hl-color--light: var(--gs-grey-dark-color);
   --md-code-hl-number-color: var(--gs-secondary-color);
   --md-code-hl-special-color: var(--gs-secondary-dark-color);
   --md-code-hl-function-color: var(--gs-secondary-alt-color);
-  --md-code-hl-constant-color: var(--gs-support-color--dark);
-  --md-code-hl-keyword-color: var(--gs-primary-color);
-  --md-code-hl-string-color: var(--gs-secondary-color);
-  --md-code-hl-name-color: var(--gs-primary-color);
+  --md-code-hl-constant-color: var(--gs-primary-color-dark);
+  --md-code-hl-keyword-color: var(--gs-secondary-light-color);
+  --md-code-hl-string-color: var(--gs-secondary-color-dark);
+  --md-code-hl-name-color: var(--gs-primary-color-dark);
 
   --md-code-hl-operator-color: var(--md-default-fg-color--light);
   --md-code-hl-punctuation-color: var(--md-default-fg-color--light);
-  --md-code-hl-comment-color: var(--md-default-fg-color--light);
+  --md-code-hl-comment-color: var(--md-default-fg-color);
   --md-code-hl-generic-color: var(--md-default-fg-color--light);
   --md-code-hl-variable-color: var(--md-default-fg-color--light);
 
@@ -266,13 +263,33 @@
   height: 3rem;
 }
 
+.md-tabs {
+  background-color: var(--md-primary-fg-color);
+  color: var(--gs-base-white-color);
+  display: block;
+  line-height: 1.3;
+  overflow: auto;
+  width: 100%;
+  z-index: 3;
+}
+
+.md-nav__title {
+  color: var(--gs-secondary-alt-color);
+  display: block;
+  font-weight: 700;
+  overflow: hidden;
+  padding: 0 .6rem;
+  text-overflow: ellipsis;
+}
+
 /* Typesets */
 .md-typeset h1 {
-  color: var(--gs-secondary-light-color);
+  color: var(--gs-grey-color);
+  font-family: var(--gs-grass-font--bold);
   font-weight: bold;
   font-size: 2.25em;
   line-height: 1.3;
-  margin: 0 0 1.25em;
+  margin: 0 0 1em;
 }
 
 .md-typeset h2 {
