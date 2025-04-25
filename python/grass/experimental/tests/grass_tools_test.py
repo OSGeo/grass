@@ -1,8 +1,13 @@
 """Test grass.experimental.Tools class"""
 
 import os
+import json
+
 import pytest
 
+
+import grass.script as gs
+from grass.experimental.mapset import TemporaryMapsetSession
 from grass.experimental.tools import Tools
 from grass.exceptions import CalledModuleError
 
@@ -34,6 +39,32 @@ def test_json_parser(xy_dataset_session):
         == "r.random"
     )
 
+def test_json_direct_access(xy_dataset_session):
+    """Check that JSON is parsed"""
+    tools = Tools(session=xy_dataset_session)
+    assert (
+        tools.g_search_modules(keyword="random", flags="j")[0]["name"]
+        == "r.random"
+    )
+
+def test_json_direct_access_bad_key_type(xy_dataset_session):
+    """Check that JSON is parsed"""
+    tools = Tools(session=xy_dataset_session)
+    with pytest.raises(TypeError):
+        tools.g_search_modules(keyword="random", flags="j")["name"]
+
+def test_json_direct_access_bad_key_value(xy_dataset_session):
+    """Check that JSON is parsed"""
+    tools = Tools(session=xy_dataset_session)
+    high_number = 100_000_000
+    with pytest.raises(IndexError):
+        tools.g_search_modules(keyword="random", flags="j")[high_number]
+
+def test_json_direct_access_not_json(xy_dataset_session):
+    """Check that JSON is parsed"""
+    tools = Tools(session=xy_dataset_session)
+    with pytest.raises(json.JSONDecodeError):
+        tools.g_search_modules(keyword="random")[0]["name"]
 
 def test_stdout_as_text(xy_dataset_session):
     """Check that simple text is parsed and has no whitespace"""
@@ -132,3 +163,53 @@ def test_raises(xy_dataset_session):
             output="point",
             format=wrong_name,
         )
+
+def test_run_command(xy_dataset_session):
+    """Check run_command and its overwrite parameter"""
+    tools = Tools(session=xy_dataset_session)
+    tools.run_command("r.random.surface", output="surface", seed=42)
+    tools.run_command("r.random.surface", output="surface", seed=42, overwrite=True)
+
+
+def test_parse_command_key_value(xy_dataset_session):
+    tools = Tools(session=xy_dataset_session)
+    assert tools.parse_command("g.region", flags="g")["nsres"] == "1"
+
+
+def test_parse_command_json(xy_dataset_session):
+    tools = Tools(session=xy_dataset_session)
+    assert tools.parse_command("g.region", flags="g", format="json")["region"]["ns-res"] == 1
+
+
+def test_with_context_managers(tmpdir):
+    project = tmpdir / "project"
+    gs.create_project(project)
+    with gs.setup.init(project) as session:
+        tools = Tools(session=session)
+        tools.r_random_surface(output="surface", seed=42)
+        with TemporaryMapsetSession(env=tools.env) as mapset:
+            tools.r_random_surface(output="surface", seed=42, env=mapset.env)
+            with gs.MaskManager(env=mapset.env) as mask:
+                # TODO: Do actual test
+                tools.r_univar(map="surface", env=mask.env, format="json")[0]["mean"]
+
+def test_misspelling(xy_dataset_session):
+    tools = Tools(session=xy_dataset_session)
+    with pytest.raises(AttributeError, match="r.slope.aspect"):
+        tools.r_sloppy_respect()
+    
+def test_multiple_suggestions(xy_dataset_session):
+    tools = Tools(session=xy_dataset_session)
+    with pytest.raises(AttributeError, match="v.db.univar|db.univar"):
+         tools.db_v_uni_var()
+
+
+def test_tool_group_vs_model_name(xy_dataset_session):
+    tools = Tools(session=xy_dataset_session)
+    with pytest.raises(AttributeError, match="r.sim.water"):
+        tools.rSIMWEwater()
+
+def test_wrong_attribute(xy_dataset_session):
+    tools = Tools(session=xy_dataset_session)
+    with pytest.raises(AttributeError, match="execute_big_command"):
+        tools.execute_big_command()

@@ -5,7 +5,7 @@
 #
 # PURPOSE:   API to call GRASS tools (modules) as Python functions
 #
-# COPYRIGHT: (C) 2023 Vaclav Petras and the GRASS Development Team
+# COPYRIGHT: (C) 2023-2025 Vaclav Petras and the GRASS Development Team
 #
 #            This program is free software under the GNU General Public
 #            License (>=v2). Read the file COPYING that comes with GRASS
@@ -86,6 +86,16 @@ class ExecutedTool:
         # ends with a newline character which is for display only.
         return self._decoded_stdout.strip("\n").split(separator)
 
+    def __getitem__(self, name):
+        # TODO: cache parsed JSON
+        if self._stdout:
+            # We are testing just std out and letting rest to the parse and the user.
+            # This makes no assumption about how JSON is produced by the tool.
+            print(self.json, name)
+            return self.json[name]
+        msg = f"Output of the tool {self._name} is not JSON"
+        raise ValueError(msg)
+
 
 class Tools:
     """Call GRASS tools as methods
@@ -158,9 +168,17 @@ class Tools:
         :param str module: name of GRASS module
         :param `**kwargs`: named arguments passed to run_command()"""
         args, popen_options = gs.popen_args_command(name, **kwargs)
-        return self._execute_tool(args, **popen_options)
+        # We approximate tool_kwargs as original kwargs.
+        return self._execute_tool(args, tool_kwargs=kwargs, **popen_options)
 
-    def _execute_tool(self, command, **popen_options):
+    def run_command(self, name, /, **kwargs):
+        # Adjust error handling or provide custom implementation for full control?
+        return gs.run_command(name, **kwargs, env=self._env)
+
+    def parse_command(self, name, /, **kwargs):
+        return gs.parse_command(name, **kwargs, env=self._env)
+
+    def _execute_tool(self, command, tool_kwargs=None, **popen_options):
         # alternatively use dev null as default or provide it as convenient settings
         if self._capture_output:
             stdout_pipe = gs.PIPE
@@ -196,8 +214,11 @@ class Tools:
                 returncode=returncode,
                 errors=stderr,
             )
+        # TODO: solve tool_kwargs is None
         # We don't have the keyword arguments to pass to the resulting object.
-        return ExecutedTool(name=command[0], kwargs=None, stdout=stdout, stderr=stderr)
+        return ExecutedTool(
+            name=command[0], kwargs=tool_kwargs, stdout=stdout, stderr=stderr
+        )
 
     def feed_input_to(self, stdin, /):
         """Get a new object which will feed text input to a tool or tools"""
@@ -207,6 +228,37 @@ class Tools:
         """Get a new object which will ignore errors of the called tools"""
         return Tools(env=self._env, errors="ignore")
 
+    def levenshtein_distance(self, text1: str, text2: str) -> int:
+        if len(text1) < len(text2):
+            return self.levenshtein_distance(text2, text1)
+
+        if len(text2) == 0:
+            return len(text1)
+
+        previous_row = list(range(len(text2) + 1))
+        for i, char1 in enumerate(text1):
+            current_row = [i + 1]
+            for j, char2 in enumerate(text2):
+                insertions = previous_row[j + 1] + 1
+                deletions = current_row[j] + 1
+                substitutions = previous_row[j] + (char1 != char2)
+                current_row.append(min(insertions, deletions, substitutions))
+            previous_row = current_row
+
+        return previous_row[-1]
+
+    def suggest_tools(self, tool):
+        # TODO: cache commands also for dir
+        all_names = list(gs.get_commands()[0])
+        result = []
+        max_suggestions = 10
+        for name in all_names:
+            if self.levenshtein_distance(tool, name) < len(tool) / 2:
+                result.append(name)
+            if len(result) >= max_suggestions:
+                break
+        return result
+
     def __getattr__(self, name):
         """Parse attribute to GRASS display module. Attribute should be in
         the form 'd_module_name'. For example, 'd.rast' is called with 'd_rast'.
@@ -215,12 +267,19 @@ class Tools:
         grass_module = name.replace("_", ".")
         # Assert module exists
         if not shutil.which(grass_module):
-            raise AttributeError(
-                _(
-                    "Cannot find GRASS tool {}. "
-                    "Is the session set up and the tool on path?"
-                ).format(grass_module)
+            suggesions = self.suggest_tools(grass_module)
+            if suggesions:
+                msg = (
+                    f"Tool {grass_module} not found. "
+                    f"Did you mean: {', '.join(suggesions)}?"
+                )
+                raise AttributeError(msg)
+            msg = (
+                f"Tool or attribute {name} not found. "
+                "If you are executing a tool, is the session set up and the tool on path? "
+                "If you are looking for an attribute, is it in the documentation?"
             )
+            raise AttributeError(msg)
 
         def wrapper(**kwargs):
             # Run module
@@ -269,9 +328,6 @@ def _test():
     tools_pro = Tools(
         session=session, freeze_region=True, overwrite=True, superquiet=True
     )
-    # gs.feed_command("v.in.ascii",
-    #    input="-", output="point", separator=",",
-    #    stdin="13.45,29.96,200", overwrite=True)
     tools_pro.r_slope_aspect(elevation="elevation", slope="slope")
     tools_pro.feed_input_to("13.45,29.96,200").v_in_ascii(
         input="-", output="point", separator=","
@@ -284,16 +340,6 @@ def _test():
     exaggerated = "exaggerated"
     tools_pro.r_mapcalc(expression=f"{exaggerated} = 5 * {elevation}")
     tools_pro.feed_input_to(f"{exaggerated} = 5 * {elevation}").r_mapcalc(file="-")
-
-    # try:
-    tools_pro.feed_input_to("13.45,29.96,200").v_in_ascii(
-        input="-",
-        output="point",
-        format="xstandard",
-    )
-    # except gs.CalledModuleError as error:
-    #    print("Exception text:")
-    #    print(error)
 
 
 if __name__ == "__main__":
