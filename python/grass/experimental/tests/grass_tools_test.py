@@ -93,6 +93,13 @@ def test_stdout_split_space(xy_dataset_session):
     assert tools.g_mapset(flags="l").text_split(" ") == ["PERMANENT", ""]
 
 
+def test_stdout_without_capturing(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, capture_output=False)
+    assert not tools.g_mapset(flags="p").text
+    assert tools.g_mapset(flags="p").text is None
+
+
 def test_direct_overwrite(xy_dataset_session):
     """Check overwrite as a parameter"""
     tools = Tools(session=xy_dataset_session)

@@ -30,14 +30,17 @@ class ExecutedTool:
         self._kwargs = kwargs
         self._stdout = stdout
         self._stderr = stderr
-        if self._stdout:
+        if self._stdout is not None:
             self._decoded_stdout = gs.decode(self._stdout)
         else:
-            self._decoded_stdout = ""
+            self._decoded_stdout = None
+        self._cached_json = None
 
     @property
     def text(self) -> str:
         """Text output as decoded string"""
+        if self._decoded_stdout is None:
+            return None
         return self._decoded_stdout.strip()
 
     @property
@@ -47,7 +50,9 @@ class ExecutedTool:
         This returns the nested structure of dictionaries and lists or fails when
         the output is not JSON.
         """
-        return json.loads(self._stdout)
+        if self._cached_json is None:
+            self._cached_json = json.loads(self._stdout)
+        return self._cached_json
 
     @property
     def keyval(self):
@@ -91,7 +96,6 @@ class ExecutedTool:
         if self._stdout:
             # We are testing just std out and letting rest to the parse and the user.
             # This makes no assumption about how JSON is produced by the tool.
-            print(self.json, name)
             return self.json[name]
         msg = f"Output of the tool {self._name} is not JSON"
         raise ValueError(msg)
@@ -151,7 +155,6 @@ class Tools:
         self._env["GRASS_OVERWRITE"] = "1"
 
     def _set_stdin(self, stdin, /):
-        print("_set_stdin", stdin)
         self._stdin = stdin
 
     @property
@@ -264,13 +267,13 @@ class Tools:
         the form 'd_module_name'. For example, 'd.rast' is called with 'd_rast'.
         """
         # Reformat string
-        grass_module = name.replace("_", ".")
+        tool_name = name.replace("_", ".")
         # Assert module exists
-        if not shutil.which(grass_module):
-            suggesions = self.suggest_tools(grass_module)
+        if not shutil.which(tool_name):
+            suggesions = self.suggest_tools(tool_name)
             if suggesions:
                 msg = (
-                    f"Tool {grass_module} not found. "
+                    f"Tool {tool_name} not found. "
                     f"Did you mean: {', '.join(suggesions)}?"
                 )
                 raise AttributeError(msg)
@@ -283,7 +286,7 @@ class Tools:
 
         def wrapper(**kwargs):
             # Run module
-            return self.run(grass_module, **kwargs)
+            return self.run(tool_name, **kwargs)
 
         return wrapper
 
