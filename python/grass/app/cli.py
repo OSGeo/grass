@@ -13,7 +13,7 @@
 """
 Experimental low-level CLI interface for the main GRASS executable functionality
 
-This is not a stable part of the API. Use at your own risk.
+This is not a stable part of the API. Contact developers before using it.
 """
 
 import argparse

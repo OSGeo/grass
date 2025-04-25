@@ -12,7 +12,7 @@
 
 """Minimal file for package execution for low-level CLI interface
 
-This is not a stable part of the API. Use at your own risk.
+This is not a stable part of the API. Contact developers before using it.
 """
 
 import sys
