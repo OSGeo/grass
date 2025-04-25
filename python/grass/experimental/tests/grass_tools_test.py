@@ -39,19 +39,19 @@ def test_json_parser(xy_dataset_session):
         == "r.random"
     )
 
+
 def test_json_direct_access(xy_dataset_session):
     """Check that JSON is parsed"""
     tools = Tools(session=xy_dataset_session)
-    assert (
-        tools.g_search_modules(keyword="random", flags="j")[0]["name"]
-        == "r.random"
-    )
+    assert tools.g_search_modules(keyword="random", flags="j")[0]["name"] == "r.random"
+
 
 def test_json_direct_access_bad_key_type(xy_dataset_session):
     """Check that JSON is parsed"""
     tools = Tools(session=xy_dataset_session)
     with pytest.raises(TypeError):
         tools.g_search_modules(keyword="random", flags="j")["name"]
+
 
 def test_json_direct_access_bad_key_value(xy_dataset_session):
     """Check that JSON is parsed"""
@@ -60,11 +60,13 @@ def test_json_direct_access_bad_key_value(xy_dataset_session):
     with pytest.raises(IndexError):
         tools.g_search_modules(keyword="random", flags="j")[high_number]
 
+
 def test_json_direct_access_not_json(xy_dataset_session):
     """Check that JSON is parsed"""
     tools = Tools(session=xy_dataset_session)
     with pytest.raises(json.JSONDecodeError):
         tools.g_search_modules(keyword="random")[0]["name"]
+
 
 def test_stdout_as_text(xy_dataset_session):
     """Check that simple text is parsed and has no whitespace"""
@@ -164,6 +166,7 @@ def test_raises(xy_dataset_session):
             format=wrong_name,
         )
 
+
 def test_run_command(xy_dataset_session):
     """Check run_command and its overwrite parameter"""
     tools = Tools(session=xy_dataset_session)
@@ -178,7 +181,10 @@ def test_parse_command_key_value(xy_dataset_session):
 
 def test_parse_command_json(xy_dataset_session):
     tools = Tools(session=xy_dataset_session)
-    assert tools.parse_command("g.region", flags="g", format="json")["region"]["ns-res"] == 1
+    assert (
+        tools.parse_command("g.region", flags="g", format="json")["region"]["ns-res"]
+        == 1
+    )
 
 
 def test_with_context_managers(tmpdir):
@@ -193,21 +199,24 @@ def test_with_context_managers(tmpdir):
                 # TODO: Do actual test
                 tools.r_univar(map="surface", env=mask.env, format="json")[0]["mean"]
 
+
 def test_misspelling(xy_dataset_session):
     tools = Tools(session=xy_dataset_session)
-    with pytest.raises(AttributeError, match="r.slope.aspect"):
+    with pytest.raises(AttributeError, match=r"r\.slope\.aspect"):
         tools.r_sloppy_respect()
-    
+
+
 def test_multiple_suggestions(xy_dataset_session):
     tools = Tools(session=xy_dataset_session)
-    with pytest.raises(AttributeError, match="v.db.univar|db.univar"):
-         tools.db_v_uni_var()
+    with pytest.raises(AttributeError, match=r"v\.db\.univar|db\.univar"):
+        tools.db_v_uni_var()
 
 
 def test_tool_group_vs_model_name(xy_dataset_session):
     tools = Tools(session=xy_dataset_session)
-    with pytest.raises(AttributeError, match="r.sim.water"):
+    with pytest.raises(AttributeError, match=r"r\.sim\.water"):
         tools.rSIMWEwater()
+
 
 def test_wrong_attribute(xy_dataset_session):
     tools = Tools(session=xy_dataset_session)
