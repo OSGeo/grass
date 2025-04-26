@@ -119,11 +119,10 @@ int main(int argc, char **argv)
     algo_opt->options = "int,std,qua,equ,dis";
     algo_opt->description = _("Algorithm to use for classification");
     desc = NULL;
-    G_asprintf(&desc, "int;%s;std;%s;qua;%s;equ;%s", _("simple intervals"),
-               _("standard deviations"), _("quantiles"),
-               _("equiprobable (normal distribution)"));
+    G_asprintf(&desc, "int;%s;std;%s;qua;%s;equ;%s;dis;%s",
+               _("simple intervals"), _("standard deviations"), _("quantiles"),
+               _("equiprobable (normal distribution)"), _("discontinuities"));
     algo_opt->descriptions = desc;
-    /*currently disabled because of bugs       "dis;discontinuities"); */
     algo_opt->guisection = _("Classes");
 
     nbclass_opt = G_define_option();

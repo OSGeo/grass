@@ -186,6 +186,7 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
                const Inputs *inputs, const Outputs *outputs, Grids *grids)
 {
     int k, l;
+    int n = 0;
     double zx, zy, zd2, zd4, sinsl;
     double cc, cmul2;
     double sheer;
@@ -286,14 +287,17 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
                 cchezmax = amax1(cchezmax, grids->cchez[k][l]);
                 /* saved sqrt(sinsl)*cchez to cchez array for output */
                 grids->cchez[k][l] *= sqrt(sinsl);
+                n += 1;
             } /* DEFined area */
         }
     }
     if (grids->inf != NULL && smax < infmax)
         G_warning(_("Infiltration exceeds the rainfall rate everywhere! No "
                     "overland flow."));
-
-    cc = (double)geometry->mx * geometry->my;
+    if (n == 0) {
+        G_fatal_error(_("No values in the elevation raster."));
+    }
+    cc = (double)n;
 
     setup->si0 = setup->sisum / cc;
     setup->vmean = vsum / cc;
