@@ -296,7 +296,7 @@ def init(
     specified to allow concurrent processes to wait for the lock to be released::
 
         with gs.setup.init("~/grassdata/nc_spm_08/user1", lock=True, timeout=30):
-            # ... use GRASS modules here
+            # ... use GRASS tools here
 
     :param path: path to GRASS database
     :param location: location name
