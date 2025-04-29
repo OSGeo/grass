@@ -213,7 +213,7 @@ void worker_end(void)
 
 char *mask_preprocessing(char *mask, char *raster, struct area_entry *ad)
 {
-    const char *tmp_file;
+    char *tmp_file;
     int mask_fd, old_fd, *buf, i, j;
     CELL *old;
 
@@ -237,8 +237,11 @@ char *mask_preprocessing(char *mask, char *raster, struct area_entry *ad)
             /* NULL -> 0, else 1 */
             buf[j] = !Rast_is_c_null_value(&old[j + ad->x]);
         }
-        if (write(mask_fd, buf, ad->cl * sizeof(int)) < 0)
-            return NULL;
+        if (write(mask_fd, buf, ad->cl * sizeof(int)) < 0) {
+            G_free(tmp_file);
+            tmp_file = NULL;
+            break;
+        }
     }
 
     close(mask_fd);
@@ -247,7 +250,7 @@ char *mask_preprocessing(char *mask, char *raster, struct area_entry *ad)
     G_free(buf);
     G_free(old);
 
-    return G_store(tmp_file);
+    return tmp_file;
 }
 
 CELL *RLI_get_cell_raster_row(int fd, int row, struct area_entry *ad)

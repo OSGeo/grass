@@ -282,6 +282,10 @@ def lock_mapset(
     Assumes that the runtime is set up (specifically that GISBASE is in
     the environment). Environment can be provided as *env*.
     """
+    if process_id is None:
+        process_id = os.getpid()
+    if not env:
+        env = os.environ
     if not os.path.exists(mapset_path):
         raise MapsetLockingException(_("Path '{}' doesn't exist").format(mapset_path))
     if not os.access(mapset_path, os.W_OK):

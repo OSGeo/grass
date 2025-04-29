@@ -90,13 +90,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("color table"));
     module->description = _("Queries colors for a raster map layer.");
 
-    opt.input = G_define_option();
-    opt.input->key = "input";
-    opt.input->type = TYPE_STRING;
-    opt.input->required = YES;
-    opt.input->multiple = NO;
-    opt.input->gisprompt = "old,cell,raster";
-    opt.input->description = _("Name of existing raster map to query colors");
+    opt.input = G_define_standard_option(G_OPT_R_INPUT);
 
     opt.value = G_define_option();
     opt.value->key = "value";

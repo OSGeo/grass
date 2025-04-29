@@ -1,7 +1,7 @@
 ##############################################################################
 # AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
 #
-# PURPOSE:   API to call GRASS tools as Python functions without a session
+# PURPOSE:   Python-driven CLI interface
 #
 # COPYRIGHT: (C) 2025 Vaclav Petras and the GRASS Development Team
 #
@@ -13,7 +13,7 @@
 """
 Experimental low-level CLI interface for the main GRASS executable functionality
 
-This is not a stable part of the API. Use at your own risk.
+This is not a stable part of the API. Contact developers before using it.
 """
 
 import argparse
@@ -65,6 +65,25 @@ def subcommand_unlock_mapset(args):
     unlock_mapset(args.mapset_path)
 
 
+def call_g_manual(**kwargs):
+    with tempfile.TemporaryDirectory() as tmp_dir_name:
+        project_name = "project"
+        project_path = Path(tmp_dir_name) / project_name
+        gs.create_project(project_path)
+        with gs.setup.init(project_path) as session:
+            return gs.run_command(
+                "g.manual", **kwargs, env=session.env, errors="status"
+            )
+
+
+def subcommand_show_help(args):
+    return call_g_manual(entry=args.page)
+
+
+def subcommand_show_man(args):
+    return call_g_manual(entry=args.page, flags="m")
+
+
 def main(args=None, program=None):
     # Top-level parser
     if program is None:
@@ -85,9 +104,9 @@ def main(args=None, program=None):
     subparser.add_argument("tool_name", type=str)
     subparser.set_defaults(func=subcommand_run_tool)
 
-    parser_foo = subparsers.add_parser("lock", help="lock a mapset")
-    parser_foo.add_argument("mapset_path", type=str)
-    parser_foo.add_argument(
+    subparser = subparsers.add_parser("lock", help="lock a mapset")
+    subparser.add_argument("mapset_path", type=str)
+    subparser.add_argument(
         "--process-id",
         metavar="PID",
         type=int,
@@ -97,24 +116,38 @@ def main(args=None, program=None):
             "automatically unlocked if there is no process with this PID)"
         ),
     )
-    parser_foo.add_argument(
+    subparser.add_argument(
         "--timeout",
         metavar="TIMEOUT",
         type=float,
         default=30,
         help=_("mapset locking timeout in seconds"),
     )
-    parser_foo.add_argument(
+    subparser.add_argument(
         "-f",
         "--force-remove-lock",
         action="store_true",
         help=_("remove lock if present"),
     )
-    parser_foo.set_defaults(func=subcommand_lock_mapset)
+    subparser.set_defaults(func=subcommand_lock_mapset)
 
-    parser_bar = subparsers.add_parser("unlock", help="unlock a mapset")
-    parser_bar.add_argument("mapset_path", type=str)
-    parser_bar.set_defaults(func=subcommand_unlock_mapset)
+    subparser = subparsers.add_parser("unlock", help="unlock a mapset")
+    subparser.add_argument("mapset_path", type=str)
+    subparser.set_defaults(func=subcommand_unlock_mapset)
+
+    subparser = subparsers.add_parser(
+        "help", help="show HTML documentation for a tool or topic"
+    )
+    subparser.add_argument("page", type=str)
+    subparser.set_defaults(func=subcommand_show_help)
+
+    subparser = subparsers.add_parser(
+        "man", help="show man page for a tool or topic using"
+    )
+    subparser.add_argument("page", type=str)
+    subparser.set_defaults(func=subcommand_show_man)
+
+    # Parsing
 
     raw_args = args.copy()
     add_back = None
@@ -131,4 +164,5 @@ def main(args=None, program=None):
         if add_back:
             other_args.append(add_back)
         return parsed_args.func(parsed_args, other_args, help=bool(add_back))
+    parsed_args = parser.parse_args(args)
     return parsed_args.func(parsed_args)
