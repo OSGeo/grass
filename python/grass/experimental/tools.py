@@ -181,7 +181,8 @@ class Tools:
     def parse_command(self, name, /, **kwargs):
         return gs.parse_command(name, **kwargs, env=self._env)
 
-    def _execute_tool(self, command, tool_kwargs=None, **popen_options):
+    # Make this an overload of run.
+    def run_from_list(self, command, tool_kwargs=None, **popen_options):
         # alternatively use dev null as default or provide it as convenient settings
         if self._capture_output:
             stdout_pipe = gs.PIPE
