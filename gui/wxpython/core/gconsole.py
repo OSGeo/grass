@@ -673,7 +673,9 @@ class GConsole(wx.EvtHandler):
                 return
 
             skipInterface = True
-            if os.path.splitext(command[0])[1] in {".py", ".sh"}:
+            if os.path.splitext(command[0])[1] in {".py", ".sh"} and not isinstance(
+                self._guiparent, FormNotebook
+            ):
                 try:
                     with open(command[0]) as sfile:
                         for line in sfile:
