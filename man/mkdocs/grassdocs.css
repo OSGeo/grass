@@ -336,6 +336,7 @@
 /* Custom GRASS support button style: */
 .md-button.gs-support-button {
   color: var(--gs-support-color);
+  margin: 0 0.25rem;
 }
 
 .md-button.gs-support-button:focus,
