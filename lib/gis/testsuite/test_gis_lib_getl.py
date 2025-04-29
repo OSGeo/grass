@@ -3,6 +3,7 @@
 @author Vaclav Petras
 """
 
+import os
 import ctypes
 import pathlib
 import unittest
@@ -17,7 +18,10 @@ class TestNewlinesWithGetlFunctions(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
+        if os.name == "nt":
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("msvcrt"))
+        else:
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
         cls.libc.fopen.restype = ctypes.POINTER(libgis.FILE)
         cls.libc.fopen.argtypes = [ctypes.c_char_p, ctypes.c_char_p]
         cls.file_path = pathlib.Path("test.txt")
