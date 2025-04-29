@@ -32,7 +32,6 @@ theme:
     - search.suggest
     - search.highlight
     - navigation.footer
-    - navigation.indexes
     - navigation.instant
     - navigation.instant.progress
     - navigation.tabs

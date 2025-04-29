@@ -125,10 +125,10 @@
   --md-default-fg-weight: 400;
 
   --md-hue: 225deg;
-  --md-default-fg-color: var(--gs-grey-dark-color);
-  --md-default-fg-color--light: var(--gs-grey-dark-color--light);
-  --md-default-fg-color--lighter: var(--gs-grey-dark-color--lighter);
-  --md-default-fg-color--lightest: var(--gs-grey-dark-color--lightest);
+  --md-default-fg-color: var(--gs-black-color);
+  --md-default-fg-color--light: var(--gs-black-color--light);
+  --md-default-fg-color--lighter: var(---gs-black-color--lighter);
+  --md-default-fg-color--lightest: var(--gs-black-color--lightest);
 
   --md-default-bg-color: var(--gs-white-color);
   --md-default-bg-color--light: var(--gs-white-color--light);
@@ -273,6 +273,7 @@
   z-index: 3;
 }
 
+/* Changes the header color of the table of contents */
 .md-nav__title {
   color: var(--gs-secondary-alt-color);
   display: block;
@@ -282,9 +283,14 @@
   text-overflow: ellipsis;
 }
 
+/* Changes the header color of the nav bar */
+.md-nav--lifted>.md-nav__list>.md-nav__item>[for] {
+  color: var(--gs-secondary-alt-color);
+}
+
 /* Typesets */
 .md-typeset h1 {
-  color: var(--gs-grey-color);
+  color: var(--gs-secondary-alt-color);
   font-family: var(--gs-grass-font--bold);
   font-weight: bold;
   font-size: 2.25em;
