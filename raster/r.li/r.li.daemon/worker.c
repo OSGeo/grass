@@ -217,15 +217,19 @@ char *mask_preprocessing(char *mask, char *raster, struct area_entry *ad)
     int mask_fd, old_fd, *buf, i, j;
     CELL *old;
 
-    buf = G_malloc(ad->cl * sizeof(int));
-
     G_debug(3, "daemon mask preproc: raster=[%s] mask=[%s]  rl=%d cl=%d",
             raster, mask, ad->rl, ad->cl);
 
     tmp_file = G_tempfile();
-    mask_fd = open(tmp_file, O_RDWR | O_CREAT, 0755);
+    if ((mask_fd = open(tmp_file, O_RDWR | O_CREAT, 0755) < 0)) {
+        G_free(tmp_file);
+        return NULL;
+    }
+
     old_fd = Rast_open_old(mask, "");
     old = Rast_allocate_c_buf();
+
+    buf = G_malloc(ad->cl * sizeof(int));
 
     /* write out sample area size: ad->rl rows and ad->cl columns */
 
