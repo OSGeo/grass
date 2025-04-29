@@ -172,7 +172,9 @@ class MapsetLockingException(Exception):
     pass
 
 
-def lock_mapset(mapset_path, force_lock_removal, message_callback):
+def lock_mapset(
+    mapset_path, force_lock_removal, message_callback, process_id=None, env=None
+):
     """Acquire a lock for a mapset and return name of new lock file
 
     Raises MapsetLockingException when it is not possible to acquire a lock for the
@@ -186,6 +188,10 @@ def lock_mapset(mapset_path, force_lock_removal, message_callback):
     Assumes that the runtime is set up (specifically that GISBASE is in
     the environment).
     """
+    if process_id is None:
+        process_id = os.getpid()
+    if not env:
+        env = os.environ
     if not os.path.exists(mapset_path):
         raise MapsetLockingException(_("Path '{}' doesn't exist").format(mapset_path))
     if not os.access(mapset_path, os.W_OK):
@@ -200,9 +206,9 @@ def lock_mapset(mapset_path, force_lock_removal, message_callback):
         raise MapsetLockingException(error)
     # Check for concurrent use
     lockfile = os.path.join(mapset_path, ".gislock")
-    locker_path = os.path.join(os.environ["GISBASE"], "etc", "lock")
+    locker_path = os.path.join(env["GISBASE"], "etc", "lock")
     ret = subprocess.run(
-        [locker_path, lockfile, "%d" % os.getpid()], check=False
+        [locker_path, lockfile, f"{process_id}"], check=False
     ).returncode
     msg = None
     if ret == 2:
@@ -232,3 +238,9 @@ def lock_mapset(mapset_path, force_lock_removal, message_callback):
     if msg:
         raise MapsetLockingException(msg)
     return lockfile
+
+
+def unlock_mapset(mapset_path):
+    """Unlock a mapset"""
+    lockfile = os.path.join(mapset_path, ".gislock")
+    gs.try_remove(lockfile)
