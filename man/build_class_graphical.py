@@ -70,6 +70,8 @@ graphical_index_style = """\
 
 .img-list li img.default-img {
     max-height: 5ex;
+    background-color: var(--gs-primary-color);
+    padding: 5px;
 }
 
 .img-list li .desc {
@@ -95,7 +97,7 @@ header_graphical_index_tmpl = f"""\
 
 <a href="index.html"><img src="grass_logo.png" alt="GRASS logo"></a>
 <hr class="header">
-<h2>Graphical index of GRASS GIS modules</h2>
+<h2>Graphical index of GRASS tools</h2>
 """
 
 
@@ -140,7 +142,7 @@ def generate_page_for_category(
     with open(filename + ".tmp", "w") as output:
         output.write(
             header1_tmpl.substitute(
-                title="GRASS GIS %s Reference Manual: Graphical index" % grass_version
+                title="GRASS %s Reference Manual: Graphical index" % grass_version
             )
         )
         output.write(header_graphical_index_tmpl)
@@ -151,15 +153,16 @@ def generate_page_for_category(
                 module_family = "3D raster"
             output.write(
                 modclass_intro_tmpl.substitute(
-                    modclass=module_family, modclass_lower=module_family.lower()
+                    modclass=to_title(module_family),
+                    modclass_lower=module_family.lower(),
                 )
             )
         if module_family == "wxGUI":
             output.write("<h3>wxGUI components:</h3>")
         elif module_family == "guimodules":
-            output.write("<h3>g.gui.* modules:</h3>")
+            output.write("<h3>g.gui.* tools:</h3>")
         else:
-            output.write("<h3>{0} modules:</h3>".format(to_title(module_family)))
+            output.write("<h3>{0} tools:</h3>".format(to_title(module_family)))
         output.write('<ul class="img-list">')
 
         # for all modules:
@@ -233,7 +236,7 @@ def generate_page_for_category_md(
             if skip_no_image and not img:
                 continue
             if not img:
-                img = "grass_logo.png"
+                img = "grass_logo.svg"
                 img_class = "default-img"
             if basename.startswith("wxGUI"):
                 basename = basename.replace(".", " ")

@@ -355,7 +355,7 @@ def init(
             force_lock_removal=force_unlock,
             timeout=timeout,
             process_id=process_id,
-            message_callback=print,
+            message_callback=lambda x: print(x, file=sys.stderr),
             env=env,
         )
 

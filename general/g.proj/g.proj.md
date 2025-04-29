@@ -116,6 +116,30 @@ Print the CRS information for the current project:
 g.proj -p
 ```
 
+Print the CRS information for the current project in JSON format:
+
+```sh
+g.proj -p format=json
+```
+
+Print the CRS information for the current project in shell format:
+
+```sh
+g.proj -p format=shell
+```
+
+Print the CRS information for the current project in WKT format:
+
+```sh
+g.proj -p format=wkt
+```
+
+Print the CRS information for the current project in PROJ.4 format:
+
+```sh
+g.proj -p format=proj4
+```
+
 List the possible datum transformation parameters for the current
 project:  
 
@@ -214,6 +238,40 @@ Reproject external vector map to current GRASS project using the OGR
 
 ```sh
 ogr2ogr -t_srs "`g.proj -wf`" polbnda_italy_GB_ovest.shp polbnda_italy_LL.shp
+```
+
+### Using g.proj JSON output with pandas
+
+Using the CRS information for the current project in JSON format with pandas:
+
+```python
+import grass.script as gs
+import pandas as pd
+
+# Run g.proj to get CRS information in JSON format.
+proj_data = gs.parse_command("g.proj", flags="p", format="json")
+
+df = pd.DataFrame.from_dict(proj_data, orient='index')
+print(df)
+```
+
+```sh
+                               0
+name     Lambert Conformal Conic
+proj                         lcc
+datum                      nad83
+a                      6378137.0
+es          0.006694380022900787
+lat_1          36.16666666666666
+lat_2          34.33333333333334
+lat_0                      33.75
+lon_0                        -79
+x_0                    609601.22
+y_0                            0
+no_defs                  defined
+unit                       Meter
+units                     Meters
+meters                         1
 ```
 
 ## REFERENCES

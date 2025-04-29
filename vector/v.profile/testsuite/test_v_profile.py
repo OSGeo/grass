@@ -129,7 +129,7 @@ class TestProfiling(TestCase):
         )
         # Neither of coords or input line are provided
         self.assertModuleFail("v.profile", input=self.in_points, buffer=10)
-        # Two coordinate parirs are reqiured
+        # Two coordinate parirs are required
         self.assertModuleFail(
             "v.profile", input=self.in_points, coordinates=(647952, 236176), buffer=10
         )
