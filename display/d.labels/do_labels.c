@@ -223,6 +223,7 @@ int show_it(void)
     /* get the box size for each line of text and expand the bounding box as
      * needed */
     n_lines = 0;
+    Y = north - (line_size * 1.2);
     for (;;) {
         n_chars = 0;
 
