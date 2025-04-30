@@ -520,6 +520,7 @@ static void Vect_snap_lines_list_kdtree(struct Map_info *Map,
 
     G_verbose_message(_("Snapped vertices: %d"), nsnapped);
     G_verbose_message(_("New vertices: %d"), ncreated);
+    Vect_destroy_list(List);
 }
 
 static void Vect_snap_lines_list_rtree(struct Map_info *Map,
@@ -564,6 +565,7 @@ static void Vect_snap_lines_list_rtree(struct Map_info *Map,
 
         rtreefd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
         remove(filename);
+        G_free(filename);
     }
     RTree = RTreeCreateTree(rtreefd, 0, 2);
 
@@ -879,6 +881,7 @@ static void Vect_snap_lines_list_rtree(struct Map_info *Map,
 
     G_verbose_message(_("Snapped vertices: %d"), nsnapped);
     G_verbose_message(_("New vertices: %d"), ncreated);
+    Vect_destroy_list(List);
 }
 
 /*!
@@ -988,8 +991,10 @@ int Vect_snap_line(struct Map_info *Map, struct ilist *reflist,
         changed = 1;
 
     nlines = reflist->n_values;
-    if (nlines < 1)
+    if (nlines < 1) {
+        G_free(rect.boundary);
         return changed;
+    }
 
     LPoints = Vect_new_line_struct();
     NPoints = Vect_new_line_struct();
