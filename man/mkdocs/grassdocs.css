@@ -127,7 +127,7 @@
   --md-hue: 225deg;
   --md-default-fg-color: var(--gs-black-color);
   --md-default-fg-color--light: var(--gs-black-color--light);
-  --md-default-fg-color--lighter: var(---gs-black-color--lighter);
+  --md-default-fg-color--lighter: var(--gs-black-color--lighter);
   --md-default-fg-color--lightest: var(--gs-black-color--lightest);
 
   --md-default-bg-color: var(--gs-white-color);
@@ -206,23 +206,25 @@
 
   /* Code Highlighting */
   /* ----------------------------------------------------------------------------- */
-  --md-code-fg-color: var(--gs-secondary-alt-color);
-  --md-code-bg-color: var(--gs-grey-light-color);
-  /* --md-code-hl-color: var(--gs-secondary-light-color); */
+  --md-code-fg-color: var(--gs-secondary-color); /*Good*/
+  --md-code-bg-color: var(--gs-grey-light-color); /*Good*/
+  --md-code-hl-color: var(--gs-secondary-light-color);
   --md-code-hl-color--light: var(--gs-grey-dark-color);
-  --md-code-hl-number-color: var(--gs-secondary-color);
-  --md-code-hl-special-color: var(--gs-secondary-dark-color);
-  --md-code-hl-function-color: var(--gs-secondary-alt-color);
-  --md-code-hl-constant-color: var(--gs-primary-color-dark);
-  --md-code-hl-keyword-color: var(--gs-secondary-light-color);
-  --md-code-hl-string-color: var(--gs-secondary-color-dark);
-  --md-code-hl-name-color: var(--gs-primary-color-dark);
 
-  --md-code-hl-operator-color: var(--md-default-fg-color--light);
+  --md-code-hl-number-color: var(--gs-primary-color-dark); /*Good*/
+  --md-code-hl-special-color: var(--gs-secondary-light-color); /*Unknown*/
+  --md-code-hl-function-color: var(--gs-secondary-alt-color); /*Good*/
+  --md-code-hl-keyword-color: var(--gs-primary-color); /*Good*/
+  --md-code-hl-string-color: var(--gs-primary-color); /*Good*/
+
+  --md-code-hl-constant-color: var(--gs-primary-color); /*Good*/
+  --md-code-hl-name-color: var(--gs-secondary-alt-color); /*Good*/
+
+  --md-code-hl-operator-color: var(--gs-secondary-light-color); /*Good*/
   --md-code-hl-punctuation-color: var(--md-default-fg-color--light);
-  --md-code-hl-comment-color: var(--md-default-fg-color);
+  --md-code-hl-comment-color: var(--gs-grey-color); /*Good*/
   --md-code-hl-generic-color: var(--md-default-fg-color--light);
-  --md-code-hl-variable-color: var(--md-default-fg-color--light);
+  --md-code-hl-variable-color: var(--gs-secondary-alt-color);
 
   /* Admonition Colors */
   /* ----------------------------------------------------------------------------- */
