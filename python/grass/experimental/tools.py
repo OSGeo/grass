@@ -172,7 +172,7 @@ class Tools:
         :param `**kwargs`: named arguments passed to run_command()"""
         args, popen_options = gs.popen_args_command(name, **kwargs)
         # We approximate tool_kwargs as original kwargs.
-        return self._execute_tool(args, tool_kwargs=kwargs, **popen_options)
+        return self.run_from_list(args, tool_kwargs=kwargs, **popen_options)
 
     def run_command(self, name, /, **kwargs):
         # Adjust error handling or provide custom implementation for full control?
