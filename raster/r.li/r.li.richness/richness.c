@@ -81,7 +81,6 @@ int richness(int fd, char **par UNUSED, struct area_entry *ad, double *result)
     }
     default: {
         G_fatal_error("data type unknown");
-        return RLI_ERRORE;
     }
     }
 
@@ -117,8 +116,8 @@ int calculate(int fd, struct area_entry *ad, double *result)
             return RLI_ERRORE;
         mask_buf = G_malloc(ad->cl * sizeof(int));
         if (mask_buf == NULL) {
+            close(mask_fd);
             G_fatal_error("malloc mask_buf failed");
-            return RLI_ERRORE;
         }
         masked = TRUE;
     }
@@ -127,8 +126,8 @@ int calculate(int fd, struct area_entry *ad, double *result)
     for (j = 0; j < ad->rl; j++) { /* for each row */
         if (masked) {
             if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
+                close(mask_fd);
                 G_fatal_error("mask read failed");
-                return RLI_ERRORE;
             }
         }
 
@@ -152,8 +151,9 @@ int calculate(int fd, struct area_entry *ad, double *result)
                     uc.val.c = precCell;
                     albero = avl_make(uc, (long)1);
                     if (albero == NULL) {
+                        if (masked)
+                            close(mask_fd);
                         G_fatal_error("avl_make error");
-                        return RLI_ERRORE;
                     }
                     m++;
                 }
@@ -162,8 +162,9 @@ int calculate(int fd, struct area_entry *ad, double *result)
                     ris = avl_add(&albero, uc, (long)1);
                     switch (ris) {
                     case AVL_ERR: {
+                        if (masked)
+                            close(mask_fd);
                         G_fatal_error("avl_add error");
-                        return RLI_ERRORE;
                     }
                     case AVL_ADD: {
                         m++;
@@ -173,8 +174,9 @@ int calculate(int fd, struct area_entry *ad, double *result)
                         break;
                     }
                     default: {
+                        if (masked)
+                            close(mask_fd);
                         G_fatal_error("avl_make unknown error");
-                        return RLI_ERRORE;
                     }
                     }
                 }
@@ -189,8 +191,9 @@ int calculate(int fd, struct area_entry *ad, double *result)
             uc.val.c = precCell;
             albero = avl_make(uc, (long)1);
             if (albero == NULL) {
+                if (masked)
+                    close(mask_fd);
                 G_fatal_error("avl_make error");
-                return RLI_ERRORE;
             }
             m++;
         }
@@ -199,8 +202,9 @@ int calculate(int fd, struct area_entry *ad, double *result)
             ris = avl_add(&albero, uc, (long)1);
             switch (ris) {
             case AVL_ERR: {
+                if (masked)
+                    close(mask_fd);
                 G_fatal_error("avl_add error");
-                return RLI_ERRORE;
             }
             case AVL_ADD: {
                 m++;
@@ -210,8 +214,9 @@ int calculate(int fd, struct area_entry *ad, double *result)
                 break;
             }
             default: {
+                if (masked)
+                    close(mask_fd);
                 G_fatal_error("avl_add unknown error");
-                return RLI_ERRORE;
             }
             }
         }
@@ -254,8 +259,8 @@ int calculateD(int fd, struct area_entry *ad, double *result)
             return RLI_ERRORE;
         mask_buf = G_malloc(ad->cl * sizeof(int));
         if (mask_buf == NULL) {
+            close(mask_fd);
             G_fatal_error("malloc mask_buf failed");
-            return RLI_ERRORE;
         }
         masked = TRUE;
     }
@@ -264,8 +269,8 @@ int calculateD(int fd, struct area_entry *ad, double *result)
     for (j = 0; j < ad->rl; j++) { /* for each row */
         if (masked) {
             if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
+                close(mask_fd);
                 G_fatal_error("mask read failed");
-                return RLI_ERRORE;
             }
         }
 
@@ -289,8 +294,9 @@ int calculateD(int fd, struct area_entry *ad, double *result)
                     uc.val.dc = precCell;
                     albero = avl_make(uc, (long)1);
                     if (albero == NULL) {
+                        if (masked)
+                            close(mask_fd);
                         G_fatal_error("avl_make error");
-                        return RLI_ERRORE;
                     }
                     m++;
                 }
@@ -299,8 +305,9 @@ int calculateD(int fd, struct area_entry *ad, double *result)
                     ris = avl_add(&albero, uc, (long)1);
                     switch (ris) {
                     case AVL_ERR: {
+                        if (masked)
+                            close(mask_fd);
                         G_fatal_error("avl_add error");
-                        return RLI_ERRORE;
                     }
                     case AVL_ADD: {
                         m++;
@@ -310,8 +317,9 @@ int calculateD(int fd, struct area_entry *ad, double *result)
                         break;
                     }
                     default: {
+                        if (masked)
+                            close(mask_fd);
                         G_fatal_error("avl_make unknown error");
-                        return RLI_ERRORE;
                     }
                     }
                 }
@@ -326,8 +334,9 @@ int calculateD(int fd, struct area_entry *ad, double *result)
             uc.val.dc = precCell;
             albero = avl_make(uc, (long)1);
             if (albero == NULL) {
+                if (masked)
+                    close(mask_fd);
                 G_fatal_error("avl_make error");
-                return RLI_ERRORE;
             }
             m++;
         }
@@ -336,8 +345,9 @@ int calculateD(int fd, struct area_entry *ad, double *result)
             ris = avl_add(&albero, uc, (long)1);
             switch (ris) {
             case AVL_ERR: {
+                if (masked)
+                    close(mask_fd);
                 G_fatal_error("avl_add error");
-                return RLI_ERRORE;
             }
             case AVL_ADD: {
                 m++;
@@ -347,8 +357,9 @@ int calculateD(int fd, struct area_entry *ad, double *result)
                 break;
             }
             default: {
+                if (masked)
+                    close(mask_fd);
                 G_fatal_error("avl_add unknown error");
-                return RLI_ERRORE;
             }
             }
         }
@@ -391,8 +402,8 @@ int calculateF(int fd, struct area_entry *ad, double *result)
             return RLI_ERRORE;
         mask_buf = G_malloc(ad->cl * sizeof(int));
         if (mask_buf == NULL) {
+            close(mask_fd);
             G_fatal_error("malloc mask_buf failed");
-            return RLI_ERRORE;
         }
         masked = TRUE;
     }
@@ -401,8 +412,8 @@ int calculateF(int fd, struct area_entry *ad, double *result)
     for (j = 0; j < ad->rl; j++) { /* for each row */
         if (masked) {
             if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
+                close(mask_fd);
                 G_fatal_error("mask read failed");
-                return RLI_ERRORE;
             }
         }
 
@@ -427,8 +438,9 @@ int calculateF(int fd, struct area_entry *ad, double *result)
                     uc.val.fc = precCell;
                     albero = avl_make(uc, (long)1);
                     if (albero == NULL) {
+                        if (masked)
+                            close(mask_fd);
                         G_fatal_error("avl_make error");
-                        return RLI_ERRORE;
                     }
                     m++;
                 }
@@ -437,8 +449,9 @@ int calculateF(int fd, struct area_entry *ad, double *result)
                     ris = avl_add(&albero, uc, (long)1);
                     switch (ris) {
                     case AVL_ERR: {
+                        if (masked)
+                            close(mask_fd);
                         G_fatal_error("avl_add error");
-                        return RLI_ERRORE;
                     }
                     case AVL_ADD: {
                         m++;
@@ -448,8 +461,9 @@ int calculateF(int fd, struct area_entry *ad, double *result)
                         break;
                     }
                     default: {
+                        if (masked)
+                            close(mask_fd);
                         G_fatal_error("avl_make unknown error");
-                        return RLI_ERRORE;
                     }
                     }
                 }
@@ -465,8 +479,9 @@ int calculateF(int fd, struct area_entry *ad, double *result)
             uc.val.fc = precCell;
             albero = avl_make(uc, (long)1);
             if (albero == NULL) {
+                if (masked)
+                    close(mask_fd);
                 G_fatal_error("avl_make error");
-                return RLI_ERRORE;
             }
             m++;
         }
@@ -475,8 +490,9 @@ int calculateF(int fd, struct area_entry *ad, double *result)
             ris = avl_add(&albero, uc, (long)1);
             switch (ris) {
             case AVL_ERR: {
+                if (masked)
+                    close(mask_fd);
                 G_fatal_error("avl_add error");
-                return RLI_ERRORE;
             }
             case AVL_ADD: {
                 m++;
@@ -486,8 +502,9 @@ int calculateF(int fd, struct area_entry *ad, double *result)
                 break;
             }
             default: {
+                if (masked)
+                    close(mask_fd);
                 G_fatal_error("avl_add unknown error");
-                return RLI_ERRORE;
             }
             }
         }
