@@ -28,10 +28,10 @@
   --gs-primary-light-color--lightest: rgba(138, 233, 145, 0.071);
 
   /* Primary Dark Color */
-  --gs-primary-color-dark: rgb(8, 139, 54);
-  --gs-primary-color-dark--light: rgba(8, 139, 54, 0.541);
-  --gs-primary-color-dark--lighter: rgba(8, 139, 54, 0.322);
-  --gs-primary-color-dark--lightest: rgba(8, 139, 54, 0.071);
+  --gs-primary-dark-color: rgb(8, 139, 54);
+  --gs-primary-dark-color--light: rgba(8, 139, 54, 0.541);
+  --gs-primary-dark-color--lighter: rgba(8, 139, 54, 0.322);
+  --gs-primary-dark-color--lightest: rgba(8, 139, 54, 0.071);
 
   /* Secondary Color */
   --gs-secondary-color: rgb(0, 57, 63);
@@ -139,14 +139,14 @@
   /* ----------------------------------------------------------------------------- */
   --md-primary-fg-color: var(--gs-primary-color);
   --md-primary-fg-color--light: var(--gs-primary-color--light);
-  --md-primary-fg-color--dark: var(--gs-primary-color-dark);
+  --md-primary-fg-color--dark: var(--gs-primary-dark-color);
   --md-primary-bg-color: var(--gs-white-color);
   /* Includes color for the navbar text */
   --md-primary-bg-color--light: var(--gs-white-color--light);
 
   /* Accent Colors */
   /* ----------------------------------------------------------------------------- */
-  --md-accent-fg-color: var(--gs-primary-color-dark); /* Link color on hover */
+  --md-accent-fg-color: var(--gs-primary-dark-color); /* Link color on hover */
   --md-accent-fg-color--transparent: var(--gs-primary-alt-color--light);
   --md-accent-bg-color: var(--gs-white-color);
   --md-accent-bg-color--light: var(--gs-primary-color--light);
@@ -211,7 +211,7 @@
   --md-code-hl-color: var(--gs-secondary-light-color);
   --md-code-hl-color--light: var(--gs-grey-dark-color);
 
-  --md-code-hl-number-color: var(--gs-primary-color-dark); /*Good*/
+  --md-code-hl-number-color: var(--gs-primary-dark-color); /*Good*/
   --md-code-hl-special-color: var(--gs-secondary-light-color); /*Unknown*/
   --md-code-hl-function-color: var(--gs-secondary-alt-color); /*Good*/
   --md-code-hl-keyword-color: var(--gs-primary-color); /*Good*/
