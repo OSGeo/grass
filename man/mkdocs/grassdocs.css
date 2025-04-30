@@ -64,14 +64,14 @@
   --gs-yard-sign-color: rgb(116, 93, 2);
 
   /* White */
-  --gs-base-white-color: rgb(255, 255, 255);
+  --gs-white-base-color: rgb(255, 255, 255);
   --gs-white-color: rgb(247, 247, 247);
   --gs-white-color--light: rgba(247, 247, 247, 0.541);
   --gs-white-color--lighter: rgba(247, 247, 247, 0.322);
   --gs-white-color--lightest: rgba(247, 247, 247, 0.071);
 
   /* Black */
-  --gs-base-black-color: rgb(0, 0, 0);
+  --gs-black-base-color: rgb(0, 0, 0);
   --gs-black-color: rgb(2, 25, 5);
   --gs-black-color--light: rgba(2, 25, 5, 0.541);
   --gs-black-color--lighter: rgba(2, 25, 5, 0.322);
@@ -267,7 +267,7 @@
 
 .md-tabs {
   background-color: var(--md-primary-fg-color);
-  color: var(--gs-base-white-color);
+  color: var(--gs-white-base-color);
   display: block;
   line-height: 1.3;
   overflow: auto;
