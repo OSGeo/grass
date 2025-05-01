@@ -289,6 +289,8 @@ Geographic Resources Analysis Support System (GRASS GIS).
                                    {tmp_location_detail}
   --tmp-mapset                   {tmp_mapset}
                                    {tmp_mapset_detail}
+  --timeout SECONDS              {lock_timeout}
+                                   {lock_timeout_detail}
 
 {params}:
   GISDBASE                       {gisdbase}
@@ -371,6 +373,10 @@ def help_message(default_gui) -> None:
             ),
             tmp_mapset=_("create temporary mapset (use with the --exec flag)"),
             tmp_mapset_detail=_("created in the specified project and deleted at exit"),
+            lock_timeout=_("timeout for acquiring a mapset lock"),
+            lock_timeout_detail=_(
+                "time for which the process will attempt to get a lock in seconds"
+            ),
         )
     )
     s = t.substitute(
@@ -1905,6 +1911,7 @@ class Parameters:
         self.tmp_location = False
         self.tmp_mapset = False
         self.batch_job = None
+        self.lock_timeout = None
 
 
 def add_mapset_arguments(
@@ -1946,6 +1953,13 @@ def add_mapset_arguments(
         help=_("deprecated, use --tmp-project instead"),
     )
     parser.add_argument(
+        "--timeout",
+        metavar="SECONDS",
+        type=float,
+        default=30,
+        help=_("mapset locking timeout in seconds"),
+    )
+    parser.add_argument(
         "-f",
         "--force-remove-lock",
         action="store_true",
@@ -1973,6 +1987,7 @@ def update_params_with_mapset_arguments(
         params.tmp_mapset = True
     if args.mapset:
         params.mapset = args.mapset
+    params.lock_timeout = args.timeout
 
 
 def classic_parser(argv, default_gui) -> Parameters:
@@ -2345,6 +2360,7 @@ def main() -> None:
             mapset_path=mapset_settings.full_mapset,
             force_lock_removal=params.force_gislock_removal,
             message_callback=message,
+            timeout=params.lock_timeout,
         )
     except MapsetLockingException as e:
         fatal(e.args[0])
