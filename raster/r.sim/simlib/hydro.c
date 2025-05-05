@@ -180,23 +180,26 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                         if (grids->zz[k][l] != UNDEF) {
                             if (grids->inf[k][l] !=
                                 UNDEF) { /* infiltration part */
-                                if (grids->inf[k][l] - grids->si[k][l] > 0.) {
 
-                                    double decr = pow(
-                                        addac * sim->w[lw].m,
+                                double decr =
+                                    pow(addac * sim->w[lw].m,
                                         3. / 5.); /* decreasing factor in m */
-                                    if (grids->inf[k][l] > decr) {
-                                        grids->inf[k][l] -=
-                                            decr; /* decrease infilt. in cell
-                                                     and eliminate the walker */
+                                if (grids->inf[k][l] > decr) {
+                                    grids->inf[k][l] -=
+                                        decr; /* decrease infilt. in cell
+                                                    and eliminate the walker */
+                                    sim->w[lw].m = 0.;
+                                    continue;
+                                }
+                                else {
+                                    grids->inf[k][l] = 0.;
+                                    sim->w[lw].m -= sim.rwalk *
+                                                    grids->inf[k][l] /
+                                                    setup->sisum;
+                                    // eliminate walker
+                                    if (sim->w[lw].m < 0.) {
                                         sim->w[lw].m = 0.;
-                                    }
-                                    else {
-                                        sim->w[lw].m -=
-                                            pow(grids->inf[k][l], 5. / 3.) /
-                                            addac; /* use just proportional part
-                                                      of the walker weight */
-                                        grids->inf[k][l] = 0.;
+                                        continue;
                                     }
                                 }
                             }
