@@ -128,7 +128,7 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = "Python library documentation"
+project = "GRASS Python Library"
 copyright = "2025, GRASS Development Team"
 
 # The version info for the project you're documenting, acts as replacement for
@@ -189,7 +189,7 @@ html_theme = "sphinx_material"
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
-    "nav_title": "PyGRASS Documentation",
+    "nav_title": "GRASS Python Docs",
     "repo_url": "https://github.com/OSGeo/grass/",
     "repo_name": "GRASS",
     "repo_type": "github",
@@ -247,9 +247,9 @@ html_theme_options = {
             "internal": True,
         },
         {
-            "href": "../pydispatch.html",
+            "href": "pydispatch",
             "title": "pyDispatch",
-            "internal": False,
+            "internal": True,
         },
     ],
 }
@@ -259,10 +259,10 @@ html_theme_options = {
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-# html_title = None
+html_title = "GRASS Python Library Documentation"
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
-# html_short_title = None
+html_short_title = "Get Started"
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
