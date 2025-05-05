@@ -1,10 +1,10 @@
-GRASS GIS Temporal Framework
+Temporal Framework
 ================================
 
 Introduction
 ------------
 
-The GRASS GIS Temporal Framework implements the temporal GIS functionality of GRASS GIS
+The GRASS Temporal Framework implements the temporal GIS functionality of GRASS
 and provides an API to implement spatio-temporal processing modules. The framework
 introduces space time datasets that represent time series of raster, 3D raster or vector maps.
 This framework provides the following functionalities:
