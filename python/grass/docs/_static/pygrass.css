@@ -167,7 +167,7 @@
 
      /* Footer */
      /* ----------------------------------------------------------------------------- */
-     --md-footer-fg-color: var(--gs-white-color--light);
+     --md-footer-fg-color: var(--gs-secondary-color);
      --md-footer-fg-color--light: var(--gs-white-color);
      --md-footer-fg-color--lighter: var(--gs-white-color);
      --md-footer-bg-color: var(--gs-primary-light-color--lightest);
@@ -273,18 +273,20 @@ body {
      background-color: var(--md-primary-bg-color);
  }
 
- /* .md-logo {
-    background-image: var(--gs-grass-logo);
-    height: 70%;
-    width: 70%;
-    height: 3rem;
- } */
-
  .md-header__button.md-logo {
      margin-top: 0;
      margin-bottom: 0;
      padding-top: 0;
      padding-bottom: 0;
+ }
+
+ .md-footer-nav {
+     background-color: var(--md-footer-bg-color);
+     color: var(--md-footer-fg-color);
+ }
+
+ .md-footer-meta {
+     background-color: var(--md-footer-bg-color--dark);
  }
 
 .md-typeset h2[id] .headerlink:focus,
