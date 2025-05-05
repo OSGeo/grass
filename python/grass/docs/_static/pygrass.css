@@ -260,34 +260,42 @@ body {
     font-family: var(--gs-grass-font);
 }
 
+code {
+    font-family: var(--gs-grass-font);
+}
+
  /* We need to override the default Material theme colors */
  [data-md-color-primary=grass-green] .md-header,
  [data-md-color-primary=grass-green] .md-hero,
  [data-md-color-primary=grass-green] .md-tabs {
     background-color: var(--gs-primary-color);
     color: var(--gs-white-color);
- }
+}
 
- .md-header {
-     font-weight: bold;
-     background-color: var(--md-primary-bg-color);
- }
+.md-header {
+    font-weight: bold;
+    background-color: var(--md-primary-bg-color);
+}
 
- .md-header__button.md-logo {
-     margin-top: 0;
-     margin-bottom: 0;
-     padding-top: 0;
-     padding-bottom: 0;
- }
+.md-header__button.md-logo {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
 
- .md-footer-nav {
-     background-color: var(--md-footer-bg-color);
-     color: var(--md-footer-fg-color);
- }
+.md-header-nav__topic {
+    color: var(--gs-white-base-color) !important;
+}
 
- .md-footer-meta {
-     background-color: var(--md-footer-bg-color--dark);
- }
+.md-footer-nav {
+    background-color: var(--md-footer-bg-color);
+    color: var(--md-footer-fg-color);
+}
+
+.md-footer-meta {
+    background-color: var(--md-footer-bg-color--dark);
+}
 
 .md-typeset h2[id] .headerlink:focus,
 .md-typeset h2[id]:hover .headerlink:hover,
@@ -311,109 +319,109 @@ body {
     z-index: 3;
  }
 
- /* Changes the header color of the table of contents */
- .md-nav__title {
-     color: var(--gs-secondary-alt-color);
-     display: block;
-     font-weight: 700;
-     overflow: hidden;
-     padding: 0 .6rem;
-     text-overflow: ellipsis;
- }
+/* Changes the header color of the table of contents */
+.md-nav__title {
+    color: var(--gs-secondary-alt-color);
+    display: block;
+    font-weight: 700;
+    overflow: hidden;
+    padding: 0 .6rem;
+    text-overflow: ellipsis;
+}
 
  /* Changes the header color of the nav bar */
- .md-nav--lifted>.md-nav__list>.md-nav__item>[for] {
-     color: var(--gs-secondary-alt-color);
- }
+.md-nav--lifted>.md-nav__list>.md-nav__item>[for] {
+    color: var(--gs-secondary-alt-color);
+}
 
- .md-nav__link--active,
- .md-nav__link:active {
-        color: var(--gs-primary-dark-color);
- }
+.md-nav__link--active,
+.md-nav__link:active {
+    color: var(--gs-primary-dark-color);
+}
 
- /* Typesets */
- .md-typeset h1 {
-     color: var(--gs-secondary-alt-color);
-     font-family: var(--gs-grass-font--bold);
-     font-weight: bold;
-     font-size: 2.25em;
-     line-height: 1.3;
-     margin: 0 0 1em;
- }
+/* Typesets */
+.md-typeset h1 {
+    color: var(--gs-secondary-alt-color);
+    font-family: var(--gs-grass-font--bold);
+    font-weight: bold;
+    font-size: 2.25em;
+    line-height: 1.3;
+    margin: 0 0 1em;
+}
 
- .md-typeset h2 {
-     font-family: var(--gs-grass-font--light);
-     color: var(--gs-secondary-light-color);
-     font-size: 2em;
-     text-transform: capitalize;
-     line-height: 1.4;
-     margin: .64em 0 .64em;
- }
+.md-typeset h2 {
+    font-family: var(--gs-grass-font--light);
+    color: var(--gs-secondary-light-color);
+    font-size: 2em;
+    text-transform: capitalize;
+    line-height: 1.4;
+    margin: .64em 0 .64em;
+}
 
- .md-typeset h3 {
-     color: var(--gs-secondary-light-color);
-     font-size: 1.25em;
-     font-weight: 600;
-     letter-spacing: -.01em;
-     line-height: 1.5;
-     margin: 1.6em 0 .8em;
- }
+.md-typeset h3 {
+    color: var(--gs-secondary-light-color);
+    font-size: 1.25em;
+    font-weight: 600;
+    letter-spacing: -.01em;
+    line-height: 1.5;
+    margin: 1.6em 0 .8em;
+}
 
- .md-typeset a {
-     color: var(--md-typeset-a-color);
-     text-decoration: none;
- }
+.md-typeset a {
+    color: var(--md-typeset-a-color);
+    text-decoration: none;
+}
 
- .md-typeset a:focus,
- .md-typeset a:hover,
- .md-nav__link:focus,
- .md-nav__link:hover {
-     color: var(--md-accent-fg-color);
- }
+.md-typeset a:focus,
+.md-typeset a:hover,
+.md-nav__link:focus,
+.md-nav__link:hover {
+    color: var(--md-accent-fg-color);
+}
 
- .md-typeset table:not([class]) tbody tr:hover {
-     background-color: transparent;
- }
+.md-typeset table:not([class]) tbody tr:hover {
+    background-color: transparent;
+}
 
- .gs-icon-primary {
-     color: var(--gs-primary-color);
- }
+.gs-icon-primary {
+    color: var(--gs-primary-color);
+}
 
- .gs-icon-accent {
-     color: var(--gs-secondary-color);
- }
+.gs-icon-accent {
+    color: var(--gs-secondary-color);
+}
 
- /* Custom GRASS support button style: */
- .md-button.gs-support-button {
-     color: var(--gs-support-color);
-     margin: 0 0.25rem;
- }
+/* Custom GRASS support button style: */
+.md-button.gs-support-button {
+    color: var(--gs-support-color);
+    margin: 0 0.25rem;
+}
 
- .md-button.gs-support-button:focus,
- .md-button.gs-support-button:hover {
-     background-color: var(--gs-support-color);
-     border-color: var(--gs-support-color);
-     color: var(--gs-white-color);
- }
+.md-button.gs-support-button:focus,
+.md-button.gs-support-button:hover {
+    background-color: var(--gs-support-color);
+    border-color: var(--gs-support-color);
+    color: var(--gs-white-color);
+}
 
- /* Custom GRASS admonition (callout) style: */
- .md-typeset .admonition.grass-tip,
- .md-typeset details.grass-tip {
-     border-color: var(--gs-primary-light-color);
- }
+/* Custom GRASS admonition (callout) style: */
+.md-typeset .admonition.grass-tip,
+.md-typeset details.grass-tip {
+    border-color: var(--gs-primary-light-color);
+}
 
- .md-typeset .grass-tip>.admonition-title,
- .md-typeset .grass-tip>summary {
-     background-color: var(--gs-primary-color--lightest);
- }
+.md-typeset .grass-tip>.admonition-title,
+.md-typeset .grass-tip>summary {
+    background-color: var(--gs-primary-color--lightest);
+}
 
- .md-typeset .grass-tip>.admonition-title::before,
- .md-typeset .grass-tip>summary::before {
-     background-color: var(--gs-primary-color);
-     -webkit-mask-image: var(--md-admonition-icon--grass-icon);
-     mask-image: var(--md-admonition-icon--grass-icon);
- }
+.md-typeset .grass-tip>.admonition-title::before,
+.md-typeset .grass-tip>summary::before {
+    background-color: var(--gs-primary-color);
+    -webkit-mask-image: var(--md-admonition-icon--grass-icon);
+    mask-image: var(--md-admonition-icon--grass-icon);
+}
 
- .highlight {
-     background-color: var(--gs-grey-light-color);
- }
+.highlight {
+    background-color: var(--gs-grey-light-color);
+}
