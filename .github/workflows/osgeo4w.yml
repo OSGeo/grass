@@ -133,7 +133,6 @@ jobs:
           path %GISBASE%\lib;%GISBASE%\bin;%PATH%
           pytest ^
             @.github/workflows/pytest_args_ci.txt ^
-            --deselect=lib/raster/testsuite/test_raster_metadata.py ^
             -k "not testsuite"
         shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}""
       - name: Run pytest with a single worker (for gunittest-based tests)
