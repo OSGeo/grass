@@ -1,4 +1,4 @@
-GRASS Python library documentation
+Getting Started
 ==========================================
 
 Python, a widely used general-purpose, high-level programming language
@@ -33,7 +33,7 @@ Additional Resources
   the Python interface to GRASS.
 * `GRASS Jupyter notebooks introduction <manuals/jupyter_intro.html>`_ provides an overview of how to use the **grass.jupyter** module.
 
-.. _GRASS GIS: https://grass.osgeo.org/
+.. _GRASS: https://grass.osgeo.org/
 
 --------------------
 Modules and Packages

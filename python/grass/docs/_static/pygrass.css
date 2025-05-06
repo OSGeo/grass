@@ -303,6 +303,16 @@ code {
     color: var(--gs-secondary-alt-color);
 }
 
+.md-nav__link {
+    display: block;
+    margin-top: .625em;
+    transition: color .125s;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    overflow: hidden;
+    color: var(--gs-primary-color)
+}
+
 /* Changes the show source table of content link */
 .md-nav__extra_link:focus,
 .md-nav__extra_link:hover {
@@ -420,6 +430,10 @@ code {
     background-color: var(--gs-primary-color);
     -webkit-mask-image: var(--md-admonition-icon--grass-icon);
     mask-image: var(--md-admonition-icon--grass-icon);
+}
+
+span.sig-prename.descclassname {
+    color: var(--gs-secondary-alt-color);
 }
 
 .highlight {
