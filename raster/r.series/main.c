@@ -17,6 +17,8 @@
  *****************************************************************************/
 
 #if defined(_OPENMP)
+#include <stdbool.h>
+
 #include <omp.h>
 #endif
 #include <stdlib.h>

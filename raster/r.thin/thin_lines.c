@@ -19,13 +19,6 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-#define LEFT        1
-#define RIGHT       2
-
-#define true        1
-#define false       0
-#define DELETED_PIX 9999
-
 static int n_rows, n_cols, pad_size;
 static int box_right, box_left, box_top, box_bottom;
 

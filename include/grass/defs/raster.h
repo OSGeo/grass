@@ -1,6 +1,8 @@
 #ifndef GRASS_RASTERDEFS_H
 #define GRASS_RASTERDEFS_H
 
+#include <stdbool.h>
+
 #include <grass/gis.h>
 
 /* --- ANSI prototypes for the lib/raster functions --- */

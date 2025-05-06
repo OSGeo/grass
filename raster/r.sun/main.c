@@ -37,6 +37,7 @@ email: hofierka@geomodel.sk,marcel.suri@jrc.it,
 #include <omp.h>
 #endif
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
