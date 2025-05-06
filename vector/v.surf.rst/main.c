@@ -26,6 +26,7 @@
 #if defined(_OPENMP)
 #include <omp.h>
 #endif
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
