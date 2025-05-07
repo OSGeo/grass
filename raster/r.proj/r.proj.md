@@ -283,18 +283,17 @@ r.proj input=elevation.dem output=elevation.dem.reproj \
   project=source_project_name mapset=PERMANENT res=5 method=bicubic
 ```
 
-### Using r.proj JSON output with pandas
+### Using r.proj JSON output with python
 
 Displaying the input map's bounds in the current projection in JSON format
-using pandas:
+using python:
 
 ```python
 import grass.script as gs
-import pandas as pd
 
 # Run the r.proj command to print the input map's bounds in the current 
 # projection using JSON output format
-data = gs.parse_command(
+bounds = gs.parse_command(
     "r.proj",
     project="nc_spm_full_v2alpha2",
     mapset="PERMANENT",
@@ -303,18 +302,17 @@ data = gs.parse_command(
     format="json",
 )
 
-df = pd.DataFrame.from_dict(data, orient="index")
-print(df)
+for bound, value in bounds.items():
+    print(f"{bound}: {value}")
 ```
 
 ```sh
-            0
-north  228500
-south  215000
-west   630000
-east   645000
-rows     1350
-cols     1500
+north: 228500
+south: 215000
+west: 630000
+east: 645000
+rows: 1350
+cols: 1500
 ```
 
 ## REFERENCES
