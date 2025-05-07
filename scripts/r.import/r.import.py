@@ -121,6 +121,20 @@ import math
 import grass.script as gs
 from grass.exceptions import CalledModuleError
 
+try:
+    from osgeo import gdal
+    # Explicitly enable GDAL exceptions to avoid FutureWarning
+    # This is required for GDAL 4.0+ compatibility
+    gdal.UseExceptions()
+    haveGdal = True
+except ImportError:
+    haveGdal = False
+    sys.stderr.write(
+        _(
+            "Unable to load GDAL Python bindings.\n"
+            "Raster import functionality may not work without the bindings.\n"
+        )
+    )
 
 # initialize global vars
 TMPLOC = None

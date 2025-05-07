@@ -41,6 +41,21 @@ from gui_core.wrap import Button, CloseButton, StaticText, StaticBox
 from core.utils import GetValidLayerName
 from core.settings import UserSettings, GetDisplayVectSettings
 
+try:
+    from osgeo import gdal
+    # Explicitly enable GDAL exceptions to avoid FutureWarning
+    # This is required for GDAL 4.0+ compatibility
+    gdal.UseExceptions()
+    haveGdal = True
+except ImportError:
+    haveGdal = False
+    sys.stderr.write(
+        _(
+            "Unable to load GDAL Python bindings.\n"
+            "Import/Export functionality may not work without the bindings.\n"
+        )
+    )
+
 
 class ImportDialog(wx.Dialog):
     """Dialog for bulk import of various data (base class)"""
@@ -464,8 +479,9 @@ class GdalImportDialog(ImportDialog):
         self.list.SelectAll(select=True)
         self.layersData = data
 
-    def OnRun(self, event):
-        """Import/Link data (each layes as separate vector map)"""
+        def OnRun(self, event):
+            """Import/Link data (each layer as separate vector map)"""
+
         self.commandId = -1
         data = self.list.GetLayers()
 
@@ -485,35 +501,57 @@ class GdalImportDialog(ImportDialog):
         if not dsn:
             return
 
+        # Enable GDAL exceptions once at the start
+        try:
+            gdal.DontUseExceptions()
+        except ImportError:
+            GError(
+                parent=self,
+                message=_("The Python GDAL package is missing. Please install it."),
+            )
+            return
+
         for layer, output, listId in data:
             userData = {}
+            idsn = dsn  # Default value
 
-            if self.dsnInput.GetType() == "dir":
-                idsn = os.path.join(dsn, layer)
-            elif self.dsnInput.GetType() == "db":
-                idsn = dsn
-                if "PG:" in dsn:
-                    idsn = f"{dsn} table={layer}"
-                elif os.path.exists(idsn):
-                    try:
-                        from osgeo import gdal
-                    except ImportError:
-                        GError(
-                            parent=self,
-                            message=_(
-                                "The Python GDAL package is missing. Please install it."
-                            ),
-                        )
-                        return
-                    dataset = gdal.Open(dsn)
-                    if "Rasterlite" in dataset.GetDriver().ShortName:
-                        idsn = f"RASTERLITE:{dsn},table={layer}"
-            else:
-                idsn = dsn
+            try:
+                # Check if dataset exists first
+                if not os.path.exists(dsn):
+                    GError(parent=self, message=f"Dataset does not exist: {dsn}")
+                    return
+
+                dataset = gdal.Open(dsn)
+                if dataset is None:
+                    raise RuntimeError(f"Failed to open dataset: {dsn}")
+
+                if self.dsnInput.GetType() == "dir":
+                    idsn = os.path.join(dsn, layer)
+                elif self.dsnInput.GetType() == "db":
+                    if "PG:" in dsn:
+                        idsn = f"{dsn} table={layer}"
+                    else:
+                        driver_name = dataset.GetDriver().ShortName
+                        if "Rasterlite" in driver_name:
+                            idsn = f"RASTERLITE:{dsn},table={layer}"
+
+                # Validate dataset again for `idsn`
+                if not os.path.exists(idsn):
+                    GError(parent=self, message=f"Dataset does not exist: {idsn}")
+                    return
+
+                dataset = gdal.Open(idsn)
+                if dataset is None:
+                    raise RuntimeError(f"Failed to open dataset: {idsn}")
+
+            except RuntimeError as e:
+                GError(parent=self, message=f"GDAL error while opening dataset: {e}")
+            return
 
             # check number of bands
             nBandsStr = RunCommand("r.in.gdal", flags="p", input=idsn, read=True)
             nBands = -1
+            # noqa: W293
             if nBandsStr:
                 try:
                     nBands = int(nBandsStr.rstrip("\n"))
