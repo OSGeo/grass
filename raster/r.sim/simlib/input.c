@@ -291,9 +291,6 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
             } /* DEFined area */
         }
     }
-    if (grids->inf != NULL && smax < infmax)
-        G_warning(_("Infiltration exceeds the rainfall rate everywhere! No "
-                    "overland flow."));
     if (n == 0) {
         G_fatal_error(_("No values in the elevation raster."));
     }

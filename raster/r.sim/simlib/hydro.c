@@ -192,10 +192,10 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                                     continue;
                                 }
                                 else {
-                                    grids->inf[k][l] = 0.;
-                                    sim->w[lw].m -= sim.rwalk *
+                                    sim->w[lw].m -= sim->rwalk *
                                                     grids->inf[k][l] /
                                                     setup->sisum;
+                                    grids->inf[k][l] = 0.;
                                     // eliminate walker
                                     if (sim->w[lw].m < 0.) {
                                         sim->w[lw].m = 0.;
