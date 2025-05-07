@@ -17,6 +17,7 @@
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import call_module
 import shutil
+import json
 
 raster_info = """north=35.8096296297222
 south=35.6874074075
@@ -30,6 +31,15 @@ cells=41250"""
 
 src_project = "nc_spm_full_v2alpha2"
 dst_project = "nc_latlong"
+
+raster_maps = [
+    "landclass96",
+    "lsat7_2002_40",
+    "elevation",
+    "lsat7_2002_70",
+    "boundary_county_500m",
+    "basin",
+]
 
 
 class TestRasterreport(TestCase):
@@ -58,7 +68,7 @@ class TestRasterreport(TestCase):
         """
         output = method
         # Get the boundary and set up region for the projected map
-        stdout = call_module(
+        flag_output = call_module(
             "r.proj",
             project=src_project,
             mapset="PERMANENT",
@@ -66,7 +76,7 @@ class TestRasterreport(TestCase):
             method=method,
             flags="g",
         )
-        settings = dict([line.split("=") for line in stdout.split()])
+        settings = dict([line.split("=") for line in flag_output.split()])
 
         call_module(
             "g.region",
@@ -79,6 +89,18 @@ class TestRasterreport(TestCase):
             flags="a",
             res=1,
         )
+
+        option_output = call_module(
+            "r.proj",
+            project=src_project,
+            mapset="PERMANENT",
+            input=self.input,
+            method=method,
+            flags="p",
+            format="shell",
+        )
+
+        self.assertEqual(flag_output, option_output)
 
         # Project the map
         self.assertModule(
@@ -178,6 +200,86 @@ class TestRasterreport(TestCase):
         variance=412.695433658258"""
 
         self.run_rproj_test(method, statics)
+
+    def test_list_output_plain(self):
+        """Test plain output of available raster maps in input mapset ."""
+        result = call_module(
+            "r.proj",
+            project=src_project,
+            mapset="PERMANENT",
+            flags="l",
+        )
+        result_list = result.split()
+
+        for r_map in raster_maps:
+            self.assertIn(
+                r_map, result_list, f"'{r_map}' not found in raster map list (plain)"
+            )
+
+    def test_list_output_json(self):
+        """Test JSON output of available raster maps in input mapset."""
+        output = call_module(
+            "r.proj",
+            project=src_project,
+            mapset="PERMANENT",
+            flags="l",
+            format="json",
+        )
+        result = json.loads(output)
+
+        for r_map in raster_maps:
+            self.assertIn(
+                r_map, result, f"'{r_map}' not found in raster map list (JSON)"
+            )
+
+    def test_print_output_plain(self):
+        """Test printing input map bounds in the current projection (plain format)."""
+        result = call_module(
+            "r.proj",
+            project=src_project,
+            mapset="PERMANENT",
+            input=self.input,
+            flags="p",
+        )
+
+        # Replacing '\r' because Windows uses '\r\n' for line endings, but we
+        # want to remove the '\r' (carriage return) to standardize line endings
+        result = result.replace("\r", "")
+        result_lines = [line for line in result.split("\n") if line.strip() != ""]
+
+        expected = [
+            "Source cols: 1500",
+            "Source rows: 1350",
+            "Local north: 35:48:34.593777N",
+            "Local south: 35:41:15.026269N",
+            "Local west: 78:46:28.633781W",
+            "Local east: 78:36:29.891436W",
+        ]
+
+        self.assertListEqual(result_lines, expected, "Mismatch in print output (plain)")
+
+    def test_print_output_json(self):
+        """Test printing input map bounds in the current projection (JSON format)."""
+        output = call_module(
+            "r.proj",
+            project=src_project,
+            mapset="PERMANENT",
+            input=self.input,
+            flags="p",
+            format="json",
+        )
+        result = json.loads(output)
+
+        expected = {
+            "cols": 1500,
+            "east": -78.60830317669155,
+            "north": 35.80960938255465,
+            "rows": 1350,
+            "south": 35.68750729683966,
+            "west": -78.7746204948163,
+        }
+
+        self.assertDictEqual(result, expected, "Mismatch in print output (JSON)")
 
 
 if __name__ == "__main__":
