@@ -59,6 +59,8 @@ class SeriesMap(BaseSeriesMap):
         """
         super().__init__(width, height, env)
 
+        self._layer_count = 0
+
         # Handle Regions
         self._region_manager = RegionManagerForSeries(
             use_region=use_region,
@@ -78,14 +80,14 @@ class SeriesMap(BaseSeriesMap):
         # Update region to rasters if not use_region or saved_region
         self._region_manager.set_region_from_rasters(rasters)
         if self._baseseries_added:
-            assert self.baseseries == len(rasters), _(
-                "Number of vectors in series must match number of vectors"
-            )
-            for i in range(self.baseseries):
+            if self._layer_count != len(rasters):
+                msg = _("Number of rasters in series must match")
+                raise RuntimeError(msg)
+            for i in range(self._layer_count):
                 kwargs["map"] = rasters[i]
                 self._calls[i].append(("d.rast", kwargs.copy()))
         else:
-            self.baseseries = len(rasters)
+            self._layer_count = len(rasters)
             for raster in rasters:
                 kwargs["map"] = raster
                 self._calls.append([("d.rast", kwargs.copy())])
@@ -105,14 +107,14 @@ class SeriesMap(BaseSeriesMap):
         # Update region extent to vectors if not use_region or saved_region
         self._region_manager.set_region_from_vectors(vectors)
         if self._baseseries_added:
-            assert self.baseseries == len(vectors), _(
-                "Number of rasters in series must match number of vectors"
-            )
-            for i in range(self.baseseries):
+            if self._layer_count != len(vectors):
+                msg = _("Number of vectors in series must match")
+                raise RuntimeError(msg)
+            for i in range(self._layer_count):
                 kwargs["map"] = vectors[i]
                 self._calls[i].append(("d.vect", kwargs.copy()))
         else:
-            self.baseseries = len(vectors)
+            self._layer_count = len(vectors)
             for vector in vectors:
                 kwargs["map"] = vector
                 self._calls.append([("d.vect", kwargs.copy())])
@@ -120,13 +122,13 @@ class SeriesMap(BaseSeriesMap):
         if not self._labels:
             self._labels = vectors
         self._layers_rendered = False
-        self._indices = range(len(self._labels))
+        self._indices = list(range(len(self._labels)))
 
     def add_names(self, names):
         """Add list of names associated with layers.
         Default will be names of first series added."""
-        assert self.baseseries == len(names), _(
-            "Number of vectors in series must match number of vectors"
-        )
+        if self._layer_count != len(names):
+            msg = _("Number of names must match number of added layers")
+            raise RuntimeError(msg)
         self._labels = names
-        self._indices = list(range(len(self._labels)))
+        self._indices = list(range(self._layer_count))

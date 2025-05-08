@@ -152,6 +152,7 @@ class TimeSeriesMap(BaseSeriesMap):
         self._layers = None
         self._date_layer_dict = {}
         self._slider_description = _("Date/Time")
+        self._baseseries = None
 
         # Handle Regions
         self._region_manager = RegionManagerForTimeSeries(
@@ -163,18 +164,18 @@ class TimeSeriesMap(BaseSeriesMap):
         :param str baseseries: name of space-time dataset
         :param bool fill_gaps: fill empty time steps with data from previous step
         """
-        if self._baseseries_added and self.baseseries != baseseries:
+        if self._baseseries_added and self._baseseries != baseseries:
             msg = "Cannot add more than one space time dataset"
             raise AttributeError(msg)
         self._element_type = "strds"
         check_timeseries_exists(baseseries, self._element_type)
-        self.baseseries = baseseries
+        self._baseseries = baseseries
         self._fill_gaps = fill_gaps
         self._baseseries_added = True
 
         # create list of layers to render and date/times
         self._layers, self._labels = collect_layers(
-            self.baseseries, self._element_type, self._fill_gaps
+            self._baseseries, self._element_type, self._fill_gaps
         )
         for raster in self._layers:
             kwargs["map"] = raster
@@ -186,7 +187,7 @@ class TimeSeriesMap(BaseSeriesMap):
             self._labels[i]: self._layers[i] for i in range(len(self._labels))
         }
         # Update Region
-        self._region_manager.set_region_from_timeseries(self.baseseries)
+        self._region_manager.set_region_from_timeseries(self._baseseries)
         self._indices = self._labels
 
     def add_vector_series(self, baseseries, fill_gaps=False, **kwargs):
@@ -194,18 +195,18 @@ class TimeSeriesMap(BaseSeriesMap):
         :param str baseseries: name of space-time dataset
         :param bool fill_gaps: fill empty time steps with data from previous step
         """
-        if self._baseseries_added and self.baseseries != baseseries:
+        if self._baseseries_added and self._baseseries != baseseries:
             msg = "Cannot add more than one space time dataset"
             raise AttributeError(msg)
         self._element_type = "stvds"
         check_timeseries_exists(baseseries, self._element_type)
-        self.baseseries = baseseries
+        self._baseseries = baseseries
         self._fill_gaps = fill_gaps
         self._baseseries_added = True
 
         # create list of layers to render and date/times
         self._layers, self._labels = collect_layers(
-            self.baseseries, self._element_type, self._fill_gaps
+            self._baseseries, self._element_type, self._fill_gaps
         )
         for vector in self._layers:
             kwargs["map"] = vector
@@ -217,7 +218,7 @@ class TimeSeriesMap(BaseSeriesMap):
             self._labels[i]: self._layers[i] for i in range(len(self._labels))
         }
         # Update Region
-        self._region_manager.set_region_from_timeseries(self.baseseries)
+        self._region_manager.set_region_from_timeseries(self._baseseries)
         self._indices = self._labels
 
     def d_legend(self, **kwargs):
@@ -232,7 +233,7 @@ class TimeSeriesMap(BaseSeriesMap):
                 self._calls[i].append(("d.legend", kwargs))
         else:
             info = gs.parse_command(
-                "t.info", input=self.baseseries, flags="g", env=self._env
+                "t.info", input=self._baseseries, flags="g", env=self._env
             )
             for i in range(len(self._layers)):
                 self._calls[i].append(
