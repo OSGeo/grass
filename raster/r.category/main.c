@@ -440,7 +440,7 @@ int print_d_label(double x, enum OutputFormat format, JSON_Array *root_array,
 
     switch (format) {
     case PLAIN:
-        sprintf(tmp, "%.10f", x);
+        snprintf(tmp, sizeof(tmp), "%.10f", x);
         G_trim_decimal(tmp);
         fprintf(stdout, "%s%s%s", tmp, fs, label);
         if (color_format != NONE) {
