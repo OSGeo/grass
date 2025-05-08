@@ -393,7 +393,8 @@ int main(int argc, char *argv[])
             for (q = 0; q <= lsat.band[i].qcalmax; q++)
                 hist[q] = 0L;
 
-            sprintf(band_in, "%s%d", inputname, lsat.band[i].code);
+            snprintf(band_in, sizeof(band_in), "%s%d", inputname,
+                     lsat.band[i].code);
             Rast_get_cellhd(band_in, "", &cellhd);
             Rast_set_window(&cellhd);
             if ((infd = Rast_open_old(band_in, "")) < 0)
@@ -529,9 +530,10 @@ int main(int argc, char *argv[])
 
     G_message(_("Calculating..."));
     for (i = 0; i < lsat.bands; i++) {
-        sprintf(band_in, "%s%d", inputname,
-                (named->answer ? lsat.band[i].number : lsat.band[i].code));
-        sprintf(band_out, "%s%d", outputname, lsat.band[i].code);
+        snprintf(band_in, sizeof(band_in), "%s%d", inputname,
+                 (named->answer ? lsat.band[i].number : lsat.band[i].code));
+        snprintf(band_out, sizeof(band_out), "%s%d", outputname,
+                 lsat.band[i].code);
 
         /* set same size as original band raster */
         Rast_get_cellhd(band_in, "", &cellhd);
