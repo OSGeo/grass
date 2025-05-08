@@ -34,11 +34,12 @@
     for (i = 0; i < 76; i++) \
         fprintf(out, "-");   \
     fprintf(out, "%c\n", x)
+#define TMPBUF_SZ 100
 
 enum OutputFormat { PLAIN, JSON };
 
 /* local prototypes */
-static void format_double(const double, char *);
+static void format_double(const double, char[100]);
 static void compose_line(FILE *, const char *, ...);
 static char *history_as_string(struct History *hist);
 
@@ -46,7 +47,7 @@ int main(int argc, char **argv)
 {
     const char *name, *mapset;
     const char *title;
-    char tmp1[100], tmp2[100], tmp3[100], tmp4[100];
+    char tmp1[TMPBUF_SZ], tmp2[TMPBUF_SZ], tmp3[TMPBUF_SZ], tmp4[TMPBUF_SZ];
     char timebuff[256];
     char *units, *vdatum, *semantic_label;
     int i;
@@ -851,9 +852,9 @@ int main(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
-static void format_double(const double value, char *buf)
+static void format_double(const double value, char buf[100])
 {
-    sprintf(buf, "%.8f", value);
+    snprintf(buf, TMPBUF_SZ, "%.8f", value);
     G_trim_decimal(buf);
 }
 
