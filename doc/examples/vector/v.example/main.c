@@ -166,8 +166,8 @@ int main(int argc, char *argv[])
                    *Points->y, *Points->z, cat);
 
             /* Prepeare SQL query to get point attribute data */
-            sprintf(sql, "select * from %s where %s=%d", Fi->table, Fi->key,
-                    cat);
+            snprintf(sql, sizeof(sql), "select * from %s where %s=%d",
+                     Fi->table, Fi->key, cat);
             G_debug(1, "SQL: \"%s\"", sql);
             db_set_string(&dbsql, sql);
             /* Now execute query */
