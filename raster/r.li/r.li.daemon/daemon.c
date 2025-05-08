@@ -180,8 +180,12 @@ int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
     }
     else {
         /* text file output */
+        close(res);
         G_done_msg("Result written to text file <%s>", out);
     }
+
+    G_free(g);
+    G_free(l);
 
     /* This is only return in this function, so the documented 1 is
        actually never returned. */
@@ -214,12 +218,16 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
         G_fatal_error(_("Cannot read setup file"));
 
     letti = read(setup, buf, s.st_size);
-    if (letti < s.st_size)
+    if (letti < s.st_size) {
+        close(setup);
         G_fatal_error(_("Cannot read setup file"));
+    }
 
     token = strtok(buf, " ");
-    if (strcmp("SAMPLINGFRAME", token) != 0)
+    if (strcmp("SAMPLINGFRAME", token) != 0) {
+        close(setup);
         G_fatal_error(_("Unable to parse configuration file (sampling frame)"));
+    }
 
     rel_x = atof(strtok(NULL, "|"));
     rel_y = atof(strtok(NULL, "|"));
@@ -294,7 +302,10 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
                 g->count = 1;
                 g->maskname = NULL;
 
-                return disposeAreas(l, g, strtok(NULL, "\n"));
+                int res = disposeAreas(l, g, strtok(NULL, "\n"));
+                close(setup);
+                G_free(buf);
+                return res;
             }
             else {
                 msg m;
@@ -335,6 +346,7 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
                  strcmp(token, "SAMPLEAREA") == 0);
 
         close(setup);
+        G_free(buf);
         return toReturn;
     }
     else if (strcmp("MASKEDSAMPLEAREA", token) == 0) {
@@ -371,7 +383,11 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
                 g->cl = sa_cl;
                 g->count = 1;
                 g->maskname = maskname;
-                return disposeAreas(l, g, strtok(NULL, "\n"));
+
+                int res = disposeAreas(l, g, strtok(NULL, "\n"));
+                close(setup);
+                G_free(buf);
+                return res;
             }
             else {
                 /*read file and create list */
@@ -413,6 +429,7 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
                strcmp(token, "MASKEDSAMPLEAREA") == 0);
 
         close(setup);
+        G_free(buf);
         return NORMAL;
     }
     else if (strcmp("MASKEDOVERLAYAREA", token) == 0) {
@@ -486,12 +503,14 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
                             "with the <%s> raster map"),
                           token);
         close(setup);
+        G_free(buf);
         return NORMAL;
     }
     else
         G_fatal_error(_("Unable to parse configuration file (sample area)"));
 
     close(setup);
+    G_free(buf);
     return ERROR;
 }
 
@@ -566,6 +585,7 @@ int disposeAreas(struct list *l, struct g_area *g, char *def)
                 }
             }
         }
+        G_free(assigned);
         return NORMAL;
     }
     else if (strcmp(token, "SYSTEMATICCONTIGUOUS") == 0) {

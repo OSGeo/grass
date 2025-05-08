@@ -10,6 +10,7 @@
 
    \author Vaclav Petras
  */
+#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 

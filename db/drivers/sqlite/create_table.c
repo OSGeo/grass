@@ -61,7 +61,7 @@ int db__driver_create_table(dbTable *table)
         db_append_string(&sql, " ");
         switch (sqltype) {
         case DB_SQL_TYPE_CHARACTER:
-            sprintf(buf, "varchar(%d)", collen);
+            snprintf(buf, sizeof(buf), "varchar(%d)", collen);
             db_append_string(&sql, buf);
             break;
         case DB_SQL_TYPE_SMALLINT:

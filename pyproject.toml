@@ -353,6 +353,7 @@ addopts = """
     --ignore-glob='dist.*'
     --ignore-glob='bin.*'
     --ignore-glob='*/tests/data/*'
+    --ignore-glob='*/testsuite/data/**'
     --ignore-glob='*/grass/pygrass/tests/*'
     --doctest-glob='*doctest*.txt'
     --ignore='raster/r.category/test_rcategory_doctest.txt'
@@ -361,8 +362,12 @@ markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
     "needs_solo_run: marks tests that must be run without any other tests running in parallel",
 ]
-minversion = "6.0"
-python_files = "*/tests/*_test.py */tests/test_*.py"
+minversion = "8.2"
+python_files = """
+    */tests/*_test.py
+    */tests/test_*.py
+    **/testsuite/*test*.py
+"""
 timeout = 300
 
 
