@@ -38,7 +38,7 @@ int Vect_legal_filename(const char *s)
     char buf[GNAME_MAX];
     int i;
 
-    sprintf(buf, "%s", s);
+    snprintf(buf, sizeof(buf), "%s", s);
 
     if (*s == '.' || *s == 0) {
         G_warning(
