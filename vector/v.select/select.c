@@ -429,6 +429,10 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
     Vect_destroy_line_struct(BPoints);
     Vect_destroy_list(BoundList);
     Vect_destroy_boxlist(List);
+    Vect_destroy_line_struct(OPoints);
+    for (i = 0; i < isles_alloc; i++)
+        Vect_destroy_line_struct(IPoints[i]);
+    G_free(IPoints);
 
     return nfound;
 }
