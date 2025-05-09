@@ -268,7 +268,8 @@ int plot1(struct Map_info *Map, int type, int area UNUSED,
                     custom_rgb = FALSE;
                 }
                 else {
-                    sprintf(colorstring, "%s", db_get_string(cv_rgb->val.s));
+                    snprintf(colorstring, sizeof(colorstring), "%s",
+                             db_get_string(cv_rgb->val.s));
 
                     if (*colorstring != '\0') {
                         G_debug(3, "element %d: colorstring: %s", line,

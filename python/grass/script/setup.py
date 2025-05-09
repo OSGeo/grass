@@ -245,6 +245,7 @@ def init(
     grass_path=None,
     env=None,
     lock=False,
+    timeout=0,
     force_unlock=False,
 ):
     """Initialize system variables to run GRASS modules
@@ -291,9 +292,10 @@ def init(
         with gs.setup.init("~/grassdata/nc_spm_08/user1")
             # ... use GRASS modules here
 
-    A mapset can be locked which will prevent other session from locking it::
+    A mapset can be locked which will prevent other session from locking it. A timeout can be
+    specified to allow concurrent processes to wait for the lock to be released::
 
-        with gs.setup.init("~/grassdata/nc_spm_08/user1", lock=True):
+        with gs.setup.init("~/grassdata/nc_spm_08/user1", lock=True, timeout=30):
             # ... use GRASS tools here
 
     :param path: path to GRASS database
@@ -351,6 +353,7 @@ def init(
         lock_mapset(
             mapset_path.path,
             force_lock_removal=force_unlock,
+            timeout=timeout,
             process_id=process_id,
             message_callback=lambda x: print(x, file=sys.stderr),
             env=env,

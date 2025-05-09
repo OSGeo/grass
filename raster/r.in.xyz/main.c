@@ -1193,8 +1193,9 @@ int main(int argc, char *argv[])
     /* close raster file & write history */
     Rast_close(out_fd);
 
-    sprintf(title, "Raw x,y,z data binned into a raster grid by cell %s",
-            method_opt->answer);
+    snprintf(title, sizeof(title),
+             "Raw x,y,z data binned into a raster grid by cell %s",
+             method_opt->answer);
     Rast_put_cell_title(outmap, title);
 
     Rast_short_history(outmap, "raster", &history);

@@ -93,7 +93,7 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels)
                                 Rast_get_c_cat((CELL *)rastp[i], &labels[i]));
                 }
                 else if (map_type[i] == FCELL_TYPE) {
-                    sprintf(str1, "%.8g", *((FCELL *)rastp[i]));
+                    snprintf(str1, sizeof(str1), "%.8g", *((FCELL *)rastp[i]));
                     G_trim_decimal(str1);
                     G_strip(str1);
                     fprintf(stdout, "%s%s", i ? fs : "", str1);
@@ -102,7 +102,7 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels)
                                 Rast_get_f_cat((FCELL *)rastp[i], &labels[i]));
                 }
                 else if (map_type[i] == DCELL_TYPE) {
-                    sprintf(str1, "%.16g", *((DCELL *)rastp[i]));
+                    snprintf(str1, sizeof(str1), "%.16g", *((DCELL *)rastp[i]));
                     G_trim_decimal(str1);
                     G_strip(str1);
                     fprintf(stdout, "%s%s", i ? fs : "", str1);
