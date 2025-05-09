@@ -324,7 +324,7 @@ int G_mapset_permissions2(const char *gisdbase, const char *location,
     char path[GPATH_MAX];
     struct stat info;
 
-    sprintf(path, "%s/%s/%s", gisdbase, location, mapset);
+    snprintf(path, sizeof(path), "%s/%s/%s", gisdbase, location, mapset);
 
     if (G_stat(path, &info) != 0)
         return -1;
