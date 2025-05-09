@@ -155,7 +155,7 @@ class TestEvapotranspirationMH(TestCase):
         self.create_raster(
             "diff_map", f"{self.output_map}_default - {self.output_map}_s"
         )
-        stats = {"min": 0, "max": 2276.226764, "mean": 985.087234}
+        stats = {"min": 0, "max": 2.276227, "mean": 0.985087}
         self.assertRasterFitsUnivar(raster="diff_map", reference=stats, precision=1e-6)
 
     def test_hargreaves_formula(self):
@@ -165,13 +165,12 @@ class TestEvapotranspirationMH(TestCase):
         self.create_raster("tmax_test", "30")
         self.create_raster("tavg_test", "20")
 
-        # Compute expected ET using Hargreaves formula
         ra_input_w = 0.1446759
         tmin = 10
         tmax = 30
         tavg = 20
 
-        ra_mj = ra_input_w * 0.0864  # Correct W/m² -> MJ/m²/day conversion
+        ra_mj = ra_input_w * 0.0864
         td = tmax - tmin
 
         expected_et = 0.0023 * 0.408 * ra_mj * (tavg + 17.8) * math.sqrt(td)
