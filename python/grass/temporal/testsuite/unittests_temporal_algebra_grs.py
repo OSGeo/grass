@@ -9,14 +9,15 @@ for details.
 
 import datetime
 
-import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+
+import grass.temporal as tgis
 
 
 class TestTemporalAlgebraGranularity(TestCase):
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         """Initiate the temporal GIS and set the region"""
         tgis.init(True)  # Raise on error instead of exit(1)
         cls.use_temp_region()
@@ -131,17 +132,17 @@ class TestTemporalAlgebraGranularity(TestCase):
             end="2001-01-04",
         )
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         pass
         # self.runModule("t.remove", inputs="R", quiet=True)
 
     @classmethod
-    def tearDownClass(cls):
+    def tearDownClass(cls) -> None:
         """Remove the temporary region"""
         # cls.runModule("t.remove", flags="rf", inputs="A,B,C,D", quiet=True)
         cls.del_temp_region()
 
-    def test_common_granularity_1(self):
+    def test_common_granularity_1(self) -> None:
         """Testing the common granularity function."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         expr = "R = A : B"
@@ -173,7 +174,7 @@ class TestTemporalAlgebraGranularity(TestCase):
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), "1 month")
 
-    def test_common_granularity_2(self):
+    def test_common_granularity_2(self) -> None:
         """Testing the common granularity function year to month samping."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         expr = "R = A : C"
@@ -192,7 +193,7 @@ class TestTemporalAlgebraGranularity(TestCase):
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), "1 month")
 
-    def test_common_granularity_3(self):
+    def test_common_granularity_3(self) -> None:
         """Testing the common granularity function with gaps."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         expr = "R = A : D"
@@ -211,7 +212,7 @@ class TestTemporalAlgebraGranularity(TestCase):
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), "1 month")
 
-    def test_common_granularity_4(self):
+    def test_common_granularity_4(self) -> None:
         """Testing the common granularity function year to month with gaps."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         expr = "R = C : D"
@@ -230,7 +231,7 @@ class TestTemporalAlgebraGranularity(TestCase):
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), "1 month")
 
-    def test_common_granularity_4(self):
+    def test_common_granularity_4(self) -> None:
         """Testing the common granularity function year to month with gaps."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         expr = "R = C : D"
@@ -249,7 +250,7 @@ class TestTemporalAlgebraGranularity(TestCase):
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), "1 month")
 
-    def test_common_granularity_5(self):
+    def test_common_granularity_5(self) -> None:
         """Testing the common granularity function year to month with gaps."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         expr = "R = A : C : D"
@@ -268,7 +269,7 @@ class TestTemporalAlgebraGranularity(TestCase):
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), "1 month")
 
-    def test_common_granularity_6(self):
+    def test_common_granularity_6(self) -> None:
         """Testing the common granularity function year to month with gaps."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         expr = "R = if(start_month(A) > 2, A : C : D)"

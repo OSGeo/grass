@@ -2,11 +2,16 @@
 
 import multiprocessing
 import os
+import sys
 from functools import partial
 
 import pytest
 
 import grass.script as gs
+from grass.app.data import MapsetLockingException
+
+RUNTIME_GISBASE_SHOULD_BE_PRESENT = "Runtime (GISBASE) should be present"
+SESSION_FILE_NOT_DELETED = "Session file not deleted"
 
 xfail_mp_spawn = pytest.mark.xfail(
     multiprocessing.get_start_method() == "spawn",
@@ -91,8 +96,8 @@ def test_init_finish_global_functions_capture_strerr0_partial(tmp_path):
     )
     session_file, runtime_present = run_in_subprocess(init_finish)
     assert session_file, "Expected file name from the subprocess"
-    assert runtime_present, "Runtime (GISBASE) should be present"
-    assert not os.path.exists(session_file), "Session file not deleted"
+    assert runtime_present, RUNTIME_GISBASE_SHOULD_BE_PRESENT
+    assert not os.path.exists(session_file), SESSION_FILE_NOT_DELETED
 
 
 @xfail_mp_spawn
@@ -113,8 +118,8 @@ def test_init_finish_global_functions_capture_strerr0(tmp_path):
 
     session_file, runtime_present = run_in_subprocess(init_finish)
     assert session_file, "Expected file name from the subprocess"
-    assert runtime_present, "Runtime (GISBASE) should be present"
-    assert not os.path.exists(session_file), "Session file not deleted"
+    assert runtime_present, RUNTIME_GISBASE_SHOULD_BE_PRESENT
+    assert not os.path.exists(session_file), SESSION_FILE_NOT_DELETED
 
 
 @xfail_mp_spawn
@@ -139,8 +144,8 @@ def test_init_finish_global_functions_capture_strerrX(tmp_path):
         init_finish
     )
     assert session_file, "Expected file name from the subprocess"
-    assert runtime_present, "Runtime (GISBASE) should be present"
-    assert not os.path.exists(session_file), "Session file not deleted"
+    assert runtime_present, RUNTIME_GISBASE_SHOULD_BE_PRESENT
+    assert not os.path.exists(session_file), SESSION_FILE_NOT_DELETED
     # This is testing the current implementation behavior, but it is not required
     # to be this way in terms of design.
     assert runtime_present_after, "Runtime should continue to be present"
@@ -189,7 +194,7 @@ def test_init_finish_global_functions_isolated(tmp_path):
     ) = run_in_subprocess(init_finish)
 
     # Runtime
-    assert runtime_present_during, "Runtime (GISBASE) should be present"
+    assert runtime_present_during, RUNTIME_GISBASE_SHOULD_BE_PRESENT
     # This is testing the current implementation behavior, but it is not required
     # to be this way in terms of design.
     assert runtime_present_after, "Expected GISBASE to be present when finished"
@@ -198,7 +203,7 @@ def test_init_finish_global_functions_isolated(tmp_path):
     assert session_file_present_during, "Expected session file to be present"
     assert session_file_variable_present_during, "Variable GISRC should be present"
     assert not session_file_variable_present_after, "Not expecting GISRC when finished"
-    assert not os.path.exists(session_file), "Session file not deleted"
+    assert not os.path.exists(session_file), SESSION_FILE_NOT_DELETED
 
 
 @xfail_mp_spawn
@@ -220,8 +225,8 @@ def test_init_as_context_manager_env_attribute(tmp_path):
     session_file, file_existed, runtime_present = run_in_subprocess(workload)
     assert session_file, "Expected file name from the subprocess"
     assert file_existed, "File should have been present"
-    assert runtime_present, "Runtime (GISBASE) should be present"
-    assert not os.path.exists(session_file), "Session file not deleted"
+    assert runtime_present, RUNTIME_GISBASE_SHOULD_BE_PRESENT
+    assert not os.path.exists(session_file), SESSION_FILE_NOT_DELETED
     assert not os.environ.get("GISRC")
     assert not os.environ.get("GISBASE")
 
@@ -243,3 +248,133 @@ def test_init_environment_isolation(tmp_path):
     # We test if the global environment is intact after closing the session.
     assert not os.environ.get("GISRC")
     assert not os.environ.get("GISBASE")
+
+
+@pytest.mark.skipif(
+    sys.platform.startswith("win"), reason="Locking is disabled on Windows"
+)
+def test_init_lock_global_environment(tmp_path):
+    """Check that init function can lock a mapset and respect that lock.
+
+    Locking should fail regardless of using the same environment or not.
+    Here we are using a global environment as if these would be independent processes.
+    """
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy(), lock=True) as top_session:
+        gs.run_command("g.region", flags="p", env=top_session.env)
+        # An attempt to lock a locked mapset should fail.
+        with (
+            pytest.raises(MapsetLockingException, match=r"Concurrent.*mapset"),
+            gs.setup.init(project, env=os.environ.copy(), lock=True),
+        ):
+            pass
+
+
+def test_init_ignore_lock_global_environment(tmp_path):
+    """Check that no locking ignores the present lock"""
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy(), lock=True) as top_session:
+        gs.run_command("g.region", flags="p", env=top_session.env)
+        with gs.setup.init(
+            project, env=os.environ.copy(), lock=False
+        ) as nested_session:
+            gs.run_command("g.region", flags="p", env=nested_session.env)
+        # No locking is the default.
+        with gs.setup.init(project, env=os.environ.copy()) as nested_session:
+            gs.run_command("g.region", flags="p", env=nested_session.env)
+
+
+@pytest.mark.skipif(
+    sys.platform.startswith("win"), reason="Locking is disabled on Windows"
+)
+def test_init_lock_nested_environments(tmp_path):
+    """Check that init function can lock a mapset using nested environments"""
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy(), lock=True) as top_session:
+        gs.run_command("g.region", flags="p", env=top_session.env)
+        # An attempt to lock a locked mapset should fail.
+        with (
+            pytest.raises(MapsetLockingException, match=r"Concurrent.*mapset"),
+            gs.setup.init(project, env=top_session.env.copy(), lock=True),
+        ):
+            pass
+
+
+def test_init_ignore_lock_nested_environments(tmp_path):
+    """Check that No locking ignores the present lock using nested environments"""
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy(), lock=True) as top_session:
+        gs.run_command("g.region", flags="p", env=top_session.env)
+        with gs.setup.init(
+            project, env=top_session.env.copy(), lock=False
+        ) as nested_session:
+            gs.run_command("g.region", flags="p", env=nested_session.env)
+        # No locking is the default.
+        with gs.setup.init(project, env=top_session.env.copy()) as nested_session:
+            gs.run_command("g.region", flags="p", env=nested_session.env)
+
+
+def test_init_force_unlock(tmp_path):
+    """Force-unlocking should remove an existing lock"""
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy(), lock=True) as top_session:
+        gs.run_command("g.region", flags="p", env=top_session.env)
+        with gs.setup.init(
+            project, env=os.environ.copy(), lock=True, force_unlock=True
+        ) as nested_session:
+            gs.run_command("g.region", flags="p", env=nested_session.env)
+
+
+@pytest.mark.skipif(
+    sys.platform.startswith("win"), reason="Locking is disabled on Windows"
+)
+def test_init_lock_fail_with_unlock_false(tmp_path):
+    """No force-unlocking should fail if there is an existing lock"""
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy(), lock=True) as top_session:
+        gs.run_command("g.region", flags="p", env=top_session.env)
+        with (
+            pytest.raises(MapsetLockingException, match=r"Concurrent.*mapset"),
+            gs.setup.init(
+                project, env=os.environ.copy(), lock=True, force_unlock=False
+            ),
+        ):
+            pass
+
+
+@pytest.mark.skipif(
+    sys.platform.startswith("win"), reason="Locking is disabled on Windows"
+)
+def test_init_lock_fail_without_unlock(tmp_path):
+    """No force-unlocking is the default and it should fail with an existing lock"""
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy(), lock=True) as top_session:
+        gs.run_command("g.region", flags="p", env=top_session.env)
+        with (
+            pytest.raises(MapsetLockingException, match=r"Concurrent.*mapset"),
+            gs.setup.init(project, env=os.environ.copy(), lock=True),
+        ):
+            pass
+
+
+@pytest.mark.skipif(
+    sys.platform.startswith("win"), reason="Locking is disabled on Windows"
+)
+def test_init_lock_timeout_fail(tmp_path):
+    """Fail with locked mapset with non-zero timeout"""
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy(), lock=True) as top_session:
+        gs.run_command("g.region", flags="p", env=top_session.env)
+        with (
+            pytest.raises(MapsetLockingException, match=r"Concurrent.*mapset"),
+            gs.setup.init(project, env=os.environ.copy(), lock=True, timeout=2),
+        ):
+            pass

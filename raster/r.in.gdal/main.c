@@ -807,7 +807,7 @@ int main(int argc, char *argv[])
 
                 /* check: two channels with identical name ? */
                 if (strcmp(colornamebuf, colornamebuf2) == 0)
-                    sprintf(colornamebuf, "%s", suffix);
+                    snprintf(colornamebuf, sizeof(colornamebuf), "%s", suffix);
                 else
                     strcpy(colornamebuf2, colornamebuf);
 
@@ -815,14 +815,17 @@ int main(int argc, char *argv[])
                  * are named 'Gray' */
                 if (strcmp(colornamebuf, "Undefined") == 0 ||
                     strcmp(colornamebuf, "Gray") == 0)
-                    sprintf(szBandName, "%s.%s", output, suffix);
+                    snprintf(szBandName, sizeof(szBandName), "%s.%s", output,
+                             suffix);
                 else {
                     G_tolcase(colornamebuf);
-                    sprintf(szBandName, "%s.%s", output, colornamebuf);
+                    snprintf(szBandName, sizeof(szBandName), "%s.%s", output,
+                             colornamebuf);
                 }
             }
             else
-                sprintf(szBandName, "%s.%s", output, suffix);
+                snprintf(szBandName, sizeof(szBandName), "%s.%s", output,
+                         suffix);
 
             if (!parm.outloc->answer) { /* Check if the map exists */
                 if (G_find_raster2(szBandName, G_mapset())) {
@@ -900,7 +903,8 @@ int main(int argc, char *argv[])
                 /* does the target location exist? */
                 G_create_alt_env();
                 G_setenv_nogisrc("LOCATION_NAME", parm.target->answer);
-                sprintf(target_mapset, "PERMANENT"); /* must exist */
+                snprintf(target_mapset, sizeof(target_mapset),
+                         "PERMANENT"); /* must exist */
                 G_setenv_nogisrc("MAPSET", target_mapset);
 
                 if (G_mapset_permissions(target_mapset) == -1) {
@@ -1124,7 +1128,8 @@ static void SetupReprojector(const char *pszSrcWKT, const char *pszDstLoc,
     /* Change to user defined target location for GCPs transformation */
     G_create_alt_env();
     G_setenv_nogisrc("LOCATION_NAME", (char *)pszDstLoc);
-    sprintf(target_mapset, "PERMANENT"); /* to find PROJ_INFO */
+    snprintf(target_mapset, sizeof(target_mapset),
+             "PERMANENT"); /* to find PROJ_INFO */
 
     permissions = G_mapset_permissions(target_mapset);
     if (permissions >= 0) {
@@ -1142,8 +1147,9 @@ static void SetupReprojector(const char *pszSrcWKT, const char *pszDstLoc,
     }
     else { /* can't access target mapset */
         /* access to mapset PERMANENT in target location is not required */
-        sprintf(errbuf, _("Mapset <%s> in target project <%s> - "),
-                target_mapset, pszDstLoc);
+        snprintf(errbuf, sizeof(errbuf),
+                 _("Mapset <%s> in target project <%s> - "), target_mapset,
+                 pszDstLoc);
         strcat(errbuf,
                permissions == 0 ? _("permission denied") : _("not found"));
         G_fatal_error("%s", errbuf);
@@ -1255,9 +1261,9 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
     /*      Create the new raster(s)                                          */
     /* -------------------------------------------------------------------- */
     if (complex) {
-        sprintf(outputReal, "%s.real", output);
+        snprintf(outputReal, sizeof(outputReal), "%s.real", output);
         cfR = Rast_open_new(outputReal, data_type);
-        sprintf(outputImg, "%s.imaginary", output);
+        snprintf(outputImg, sizeof(outputImg), "%s.imaginary", output);
 
         cfI = Rast_open_new(outputImg, data_type);
 
@@ -2034,6 +2040,7 @@ static int dump_rat(GDALRasterBandH hBand, char *outrat, int nBand)
         fprintf(fp, "\n");
     }
     fclose(fp);
+    G_free(field_type);
 
     return 1;
 }

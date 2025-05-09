@@ -48,8 +48,10 @@ int row_length, row_count, n_rows;
 int total_areas;
 int n_alloced_ptrs;
 
-int smooth_flag; /* this is 0 for no smoothing, 1 for smoothing of lines */
-int value_flag;  /* use raster values as categories */
+int smooth_flag;   /* this is 0 for no smoothing, 1 for smoothing of lines */
+int value_flag;    /* use raster values as categories */
+int centroid_flag; /* re-center centroids */
+
 struct Categories RastCats;
 int has_cats; /* Category labels available */
 struct field_info *Fi;
@@ -66,6 +68,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *in_opt, *out_opt, *feature_opt, *column_name;
     struct Flag *smooth_flg, *value_flg, *z_flg, *no_topol, *notab_flg;
+    struct Flag *centroid_flg;
     int feature, notab_flag;
 
     G_gisinit(argv[0]);
@@ -115,6 +118,13 @@ int main(int argc, char *argv[])
     no_topol->label = _("Do not build vector topology");
     no_topol->description = _("Recommended for massive point conversion");
 
+    centroid_flg = G_define_flag();
+    centroid_flg->key = 'c';
+    centroid_flg->label =
+        _("Move centroids to more central locations within areas");
+    centroid_flg->description = _("Default: centroids are located anywhere in "
+                                  "areas, often close to boundaries");
+
     notab_flg = G_define_standard_flag(G_FLG_V_TABLE);
 
     if (G_parser(argc, argv))
@@ -123,6 +133,7 @@ int main(int argc, char *argv[])
     feature = Vect_option_to_types(feature_opt);
     smooth_flag = (smooth_flg->answer) ? SMOOTH : NO_SMOOTH;
     value_flag = value_flg->answer;
+    centroid_flag = centroid_flg->answer;
     notab_flag = notab_flg->answer;
 
     if (z_flg->answer && (feature != GV_POINT))
@@ -191,7 +202,7 @@ int main(int argc, char *argv[])
 
         /* Create new table */
         db_zero_string(&sql);
-        sprintf(buf, "create table %s ( cat integer", Fi->table);
+        snprintf(buf, sizeof(buf), "create table %s ( cat integer", Fi->table);
         db_append_string(&sql, buf);
 
         if (!value_flag) { /* add value to the table */
@@ -219,7 +230,7 @@ int main(int argc, char *argv[])
             }
             clen += 10;
 
-            sprintf(buf, ", label varchar(%d)", clen);
+            snprintf(buf, sizeof(buf), ", label varchar(%d)", clen);
             db_append_string(&sql, buf);
         }
 
@@ -328,8 +339,8 @@ int main(int argc, char *argv[])
                 }
                 G_debug(3, "cat = %d label = %s", cat, db_get_string(&label));
 
-                sprintf(buf, "insert into %s values ( %d, '%s')", Fi->table,
-                        cat, db_get_string(&label));
+                snprintf(buf, sizeof(buf), "insert into %s values ( %d, '%s')",
+                         Fi->table, cat, db_get_string(&label));
                 db_set_string(&sql, buf);
                 G_debug(3, "%s", db_get_string(&sql));
 

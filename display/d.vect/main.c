@@ -531,7 +531,7 @@ char *icon_files(void)
 
     list = NULL;
     len = 0;
-    sprintf(path, "%s/etc/symbol", G_gisbase());
+    snprintf(path, sizeof(path), "%s/etc/symbol", G_gisbase());
 
     dir = opendir(path);
     if (!dir)
@@ -544,7 +544,8 @@ char *icon_files(void)
         if (d->d_name[0] == '.')
             continue;
 
-        sprintf(path_i, "%s/etc/symbol/%s", G_gisbase(), d->d_name);
+        snprintf(path_i, sizeof(path_i), "%s/etc/symbol/%s", G_gisbase(),
+                 d->d_name);
         dir_i = opendir(path_i);
 
         if (!dir_i)
@@ -557,7 +558,7 @@ char *icon_files(void)
 
             list = G_realloc(list, (count + 1) * sizeof(char *));
 
-            sprintf(buf, "%s/%s", d->d_name, d_i->d_name);
+            snprintf(buf, sizeof(buf), "%s/%s", d->d_name, d_i->d_name);
             list[count++] = G_store(buf);
 
             len += strlen(d->d_name) + strlen(d_i->d_name) + 2; /* '/' + ',' */

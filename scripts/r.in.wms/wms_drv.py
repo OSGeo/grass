@@ -329,18 +329,18 @@ class BaseRequestMgr:
         # request data bbox specified in row and col number
         self.t_num_bbox = {}
 
-        self.t_num_bbox["min_col"] = int(
-            floor((bbox["minx"] - tl_corner["minx"]) / tile_span["x"] + epsilon)
+        self.t_num_bbox["min_col"] = floor(
+            (bbox["minx"] - tl_corner["minx"]) / tile_span["x"] + epsilon
         )
-        self.t_num_bbox["max_col"] = int(
-            floor((bbox["maxx"] - tl_corner["minx"]) / tile_span["x"] - epsilon)
+        self.t_num_bbox["max_col"] = floor(
+            (bbox["maxx"] - tl_corner["minx"]) / tile_span["x"] - epsilon
         )
 
-        self.t_num_bbox["min_row"] = int(
-            floor((tl_corner["maxy"] - bbox["maxy"]) / tile_span["y"] + epsilon)
+        self.t_num_bbox["min_row"] = floor(
+            (tl_corner["maxy"] - bbox["maxy"]) / tile_span["y"] + epsilon
         )
-        self.t_num_bbox["max_row"] = int(
-            floor((tl_corner["maxy"] - bbox["miny"]) / tile_span["y"] - epsilon)
+        self.t_num_bbox["max_row"] = floor(
+            (tl_corner["maxy"] - bbox["miny"]) / tile_span["y"] - epsilon
         )
 
         # Does required bbox intersects bbox of data available on server?

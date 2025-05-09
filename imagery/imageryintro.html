@@ -30,9 +30,9 @@ are called "at-satellite", for example the amount of energy sensed
 by the sensor of the satellite platform is encoded in 8 or more
 bits. This energy is called radiance-at-sensor. To obtain physical
 values from DNs, satellite image providers use a linear transform
-equation <tt>(y = a * x + b)</tt> to encode the radiance-at-sensor
+equation <code>(y = a * x + b)</code> to encode the radiance-at-sensor
 in 8 to 16 bits. DNs can be turned back into physical values by
-applying the reverse formula <tt>(x = (y - b) / a)</tt>.
+applying the reverse formula <code>(x = (y - b) / a)</code>.
 <p>
 The GRASS GIS module <a href="i.landsat.toar.html">i.landsat.toar</a>
 easily transforms Landsat DN to radiance-at-sensor (top of atmosphere,
@@ -48,7 +48,7 @@ influences the signal as recorded at the sensor. This atmospheric
 interaction with the sun energy reflected back into space by
 ground/vegetation/soil needs to be corrected. The need of
 removing atmospheric artifacts stems from the fact that the
-atmosphericic conditions are changing over time. Hence, to gain
+atmospheric conditions are changing over time. Hence, to gain
 comparability between Earth surface images taken at different
 times, atmospheric need to be removed converting at-sensor values
 which are top of atmosphere to surface reflectance values.
@@ -76,10 +76,10 @@ map, but along the edge of the map itself.
 As a general rule in GRASS:
 <ol>
 <li> Raster/imagery output maps have their bounds and resolution equal
- to those of the current region.
+ to those of the current region.</li>
 <li> Raster/imagery input maps are automatically cropped/padded and
  rescaled (using nearest-neighbor resampling) to match the current
- region.
+ region.</li>
 </ol>
 
 
@@ -114,7 +114,7 @@ signature files of one imagery or raster group can be used to classify
 a different group with identical semantic labels.
 
 <div align="center" style="margin: 10px">
-<img src="band_references_scheme.png" width=600 height=435 border=0><br>
+<img src="band_references_scheme.png" alt="GRASS GIS band references scheme" width="600" height="435" border="0"><br>
 <i>
     New enhanced classification workflow involving semantic labels.
 </i>
@@ -171,7 +171,7 @@ An example for indices derived from multispectral data is the NDVI
 status with NDVI, the Red and the Near Infrared channels (NIR) are
 taken as used as input for simple map algebra in the GRASS command
 <a href="r.mapcalc.html">r.mapcalc</a>
-(<tt>ndvi = 1.0 * (nir - red)/(nir + red)</tt>). With
+(<code>ndvi = 1.0 * (nir - red)/(nir + red)</code>). With
 <a href="r.colors.html">r.colors</a> an optimized "ndvi" color table
 can be assigned afterward. Also other vegetation indices can be
 generated likewise.
@@ -204,16 +204,19 @@ GRASS supports the following methods:
     or <a href="g.gui.iclass.html">g.gui.iclass</a>, <a href="i.maxlik.html">i.maxlik</a>)
    using the Maximum Likelihood classification method</li>
   </ul>
+  </li>
 <li> Combined radiometric/geometric (segmentation based) classification:
   <ul>
   <li> Supervised classification (<a href="i.gensigset.html">i.gensigset</a>,
-   <a href="i.smap.html">i.smap</a>)
+   <a href="i.smap.html">i.smap</a>)</li>
   </ul>
+  </li>
 <li> Object-oriented classification:
   <ul>
   <li> Unsupervised classification (segmentation based:
-       <a href="i.segment.html">i.segment</a>)
+       <a href="i.segment.html">i.segment</a>)</li>
   </ul>
+  </li>
 </ul>
 
 Kappa statistic can be calculated to validate the results
@@ -246,8 +249,8 @@ top-of-atmosphere radiance or reflectance and temperature (<a href="i.aster.toar
 
 <h3>Time series processing</h3>
 
-GRASS also offers support for time series processing (<a
-href="r.series.html">r.series</a>). Statistics can be derived from a
+GRASS also offers support for time series processing
+(<a href="r.series.html">r.series</a>). Statistics can be derived from a
 set of coregistered input maps such as multitemporal satellite
 data. The common univariate statistics and also linear regression can
 be calculated.

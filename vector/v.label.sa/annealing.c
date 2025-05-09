@@ -40,10 +40,10 @@ static unsigned int overlaps_created = 0;
 static unsigned int overlaps_removed = 0;
 
 /**
- * This funxtion does the actual sumulated annealing process. Each round 30 x
+ * This function does the actual simulated annealing process. Each round 30 x
  * n (the number of labels) a label is picked at random, and placed in a random
  * new position. Then the dE is calculated, and if dE is > 0 the new position is
- * reversed with the probablility 1 - e^(-dE / T).
+ * reversed with the probability 1 - e^(-dE / T).
  @param labels The array of all labels.
  @param n_labels The size of the labels array.
  @params The commandline parameters.

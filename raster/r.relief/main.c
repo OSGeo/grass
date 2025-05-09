@@ -431,7 +431,7 @@ int main(int argc, char *argv[])
     Rast_make_grey_scale_fp_colors(&colors, min, max);
     Rast_write_colors(sr_name, G_mapset(), &colors);
 
-    sprintf(buf, "Shaded relief of \"%s\"", elev_name);
+    snprintf(buf, sizeof(buf), "Shaded relief of \"%s\"", elev_name);
     Rast_put_cell_title(sr_name, buf);
 
     /* writing history file */

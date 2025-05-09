@@ -87,8 +87,8 @@ class _JupyterGlobalSession:
         gisenv = gs.gisenv()
         if (
             not location
-            and not mapset
-            and len(Path(path).parts) == 1
+            and (not mapset)
+            and (len(Path(path).parts) == 1)
             and mapset_exists(
                 path=gisenv["GISDBASE"], location=gisenv["LOCATION_NAME"], mapset=path
             )

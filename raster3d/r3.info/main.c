@@ -18,16 +18,14 @@
 
 /* \todo
  *    History support still not full implemented.
- *    Only parts of the timestep functionality are implemented, the timzone is
+ *    Only parts of the timestep functionality are implemented, the timezone is
  * missed ;).
  */
-
-/*local prototype */
-int format_double(double value, char *buf);
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include <grass/gis.h>
 #include <grass/raster3d.h>
 #include <grass/glocale.h>
@@ -40,6 +38,9 @@ int format_double(double value, char *buf);
     fprintf(out, "%c\n", x)
 
 #define TMP_LENGTH 100
+
+/*local prototype */
+static int format_double(double, char[100]);
 
 static char *name;
 
@@ -329,11 +330,11 @@ int main(int argc, char *argv[])
             Rast3d_range_min_max(g3map, &dmin, &dmax);
 
             if (dmin != dmin)
-                sprintf(tmp1, "%s", "NULL");
+                snprintf(tmp1, sizeof(tmp1), "%s", "NULL");
             else
                 format_double(dmin, tmp1);
             if (dmax != dmax)
-                sprintf(tmp2, "%s", "NULL");
+                snprintf(tmp2, sizeof(tmp2), "%s", "NULL");
             else
                 format_double(dmax, tmp2);
 
@@ -394,15 +395,15 @@ int main(int argc, char *argv[])
     }
     else { /* Print information in shell style */
         if (gflag->answer) {
-            sprintf(tmp1, "%f", cellhd.north);
-            sprintf(tmp2, "%f", cellhd.south);
+            snprintf(tmp1, sizeof(tmp1), "%f", cellhd.north);
+            snprintf(tmp2, sizeof(tmp2), "%f", cellhd.south);
             G_trim_decimal(tmp1);
             G_trim_decimal(tmp2);
             fprintf(out, "north=%s\n", tmp1);
             fprintf(out, "south=%s\n", tmp2);
 
-            sprintf(tmp1, "%f", cellhd.east);
-            sprintf(tmp2, "%f", cellhd.west);
+            snprintf(tmp1, sizeof(tmp1), "%f", cellhd.east);
+            snprintf(tmp2, sizeof(tmp2), "%f", cellhd.west);
             G_trim_decimal(tmp1);
             G_trim_decimal(tmp2);
             fprintf(out, "east=%s\n", tmp1);
@@ -507,10 +508,9 @@ int main(int argc, char *argv[])
 }
 
 /**************************************************************************/
-int format_double(double value, char *buf)
+static int format_double(double value, char buf[100])
 {
-
-    sprintf(buf, "%.8f", value);
+    snprintf(buf, TMP_LENGTH, "%.8f", value);
     G_trim_decimal(buf);
     return 0;
 }

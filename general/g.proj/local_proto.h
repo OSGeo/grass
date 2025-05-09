@@ -4,6 +4,8 @@ extern struct Key_Value *projinfo, *projunits, *projepsg;
 extern char *projsrid, *projwkt;
 extern struct Cell_head cellhd;
 
+enum OutputFormat { PLAIN, SHELL, JSON, WKT, PROJ4 };
+
 /* input.c */
 void input_currloc(void);
 
@@ -16,7 +18,7 @@ int input_georef(char *);
 #endif
 
 /* output.c */
-void print_projinfo(int);
+void print_projinfo(enum OutputFormat);
 void print_datuminfo(void);
 void print_proj4(int);
 

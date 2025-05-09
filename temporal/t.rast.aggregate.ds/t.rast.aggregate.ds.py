@@ -50,7 +50,6 @@
 # % description: A numerical suffix separated by an underscore will be attached to create a unique identifier
 # % required: yes
 # % multiple: no
-# % gisprompt:
 # %end
 
 # %option
@@ -144,10 +143,7 @@ def main():
     if sampler_sp.temporal_extent.get_map_time() != "interval":
         dbif.close()
         gs.fatal(
-            _(
-                "All registered maps of the aggregation dataset "
-                "must have time intervals"
-            )
+            _("All registered maps of the aggregation dataset must have time intervals")
         )
 
     # We will create the strds later, but need to check here

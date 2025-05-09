@@ -6,7 +6,7 @@
  * PURPOSE:     This file contains definitions of variables and data types
  *              for use with most, if not all, Grass programs. This file is
  *              usually included in every Grass program.
- * COPYRIGHT:   (C) 2000-2024 by the GRASS Development Team
+ * COPYRIGHT:   (C) 2000-2025 by the GRASS Development Team
  *
  *              This program is free software under the GNU General Public
  *              License (>=v2). Read the file COPYING that comes with GRASS
@@ -22,7 +22,6 @@
 /* System include files */
 #include <stdio.h>
 #include <stdarg.h>
-#include <stdbool.h>
 
 /* Grass and local include files */
 #include <grass/config.h>
@@ -76,11 +75,11 @@ static const char *GRASS_copyright UNUSED = "GRASS GNU GPL licensed Software";
  */
 /* and 'false' For historical reasons 'TRUE' and 'FALSE' are still valid. */
 #ifndef TRUE
-#define TRUE true
+#define TRUE 1
 #endif
 
 #ifndef FALSE
-#define FALSE false
+#define FALSE 0
 #endif
 
 /*! \brief Cross-platform Newline Character */
@@ -316,8 +315,9 @@ typedef enum {
     G_OPT_F_OUTPUT,    /*!< new output file */
     G_OPT_F_SEP,       /*!< data field separator */
 
-    G_OPT_C,  /*!< color */
-    G_OPT_CN, /*!< color or none */
+    G_OPT_C,        /*!< color */
+    G_OPT_CN,       /*!< color or none */
+    G_OPT_C_FORMAT, /*!< set color format to rgb,hex,hsv or triplet */
 
     G_OPT_M_UNITS,      /*!< units */
     G_OPT_M_DATATYPE,   /*!< datatype */
@@ -330,6 +330,7 @@ typedef enum {
     G_OPT_M_REGION,     /*!< saved region */
     G_OPT_M_NULL_VALUE, /*!< null value string */
     G_OPT_M_NPROCS,     /*!< number of threads for parallel computing */
+    G_OPT_M_SEED,       /*!< seed for random number generator */
 
     G_OPT_STDS_INPUT, /*!< old input space time dataset of type strds, str3ds or
                          stvds */

@@ -65,7 +65,7 @@ Usage::
     session.finish()
 
 
-(C) 2010-2024 by the GRASS Development Team
+(C) 2010-2025 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -237,7 +237,17 @@ def setup_runtime_env(gisbase=None, *, env=None):
     set_path_to_python_executable(env=env)
 
 
-def init(path, location=None, mapset=None, *, grass_path=None, env=None):
+def init(
+    path,
+    location=None,
+    mapset=None,
+    *,
+    grass_path=None,
+    env=None,
+    lock=False,
+    timeout=0,
+    force_unlock=False,
+):
     """Initialize system variables to run GRASS modules
 
     This function is for running GRASS GIS without starting it with the
@@ -281,6 +291,12 @@ def init(path, location=None, mapset=None, *, grass_path=None, env=None):
         import grass.script as gs
         with gs.setup.init("~/grassdata/nc_spm_08/user1")
             # ... use GRASS modules here
+
+    A mapset can be locked which will prevent other session from locking it. A timeout can be
+    specified to allow concurrent processes to wait for the lock to be released::
+
+        with gs.setup.init("~/grassdata/nc_spm_08/user1", lock=True, timeout=30):
+            # ... use GRASS tools here
 
     :param path: path to GRASS database
     :param location: location name
@@ -326,13 +342,27 @@ def init(path, location=None, mapset=None, *, grass_path=None, env=None):
         env = os.environ
     setup_runtime_env(grass_path, env=env)
 
-    # TODO: lock the mapset?
-    env["GIS_LOCK"] = str(os.getpid())
+    process_id = os.getpid()
+    env["GIS_LOCK"] = str(process_id)
+
+    if lock:
+        # We have cyclic imports between grass.script and grass.app.
+        # pylint: disable=import-outside-toplevel
+        from grass.app.data import lock_mapset
+
+        lock_mapset(
+            mapset_path.path,
+            force_lock_removal=force_unlock,
+            timeout=timeout,
+            process_id=process_id,
+            message_callback=lambda x: print(x, file=sys.stderr),
+            env=env,
+        )
 
     env["GISRC"] = write_gisrc(
         mapset_path.directory, mapset_path.location, mapset_path.mapset
     )
-    return SessionHandle(env=env)
+    return SessionHandle(env=env, locked=lock)
 
 
 class SessionHandle:
@@ -382,10 +412,11 @@ class SessionHandle:
         # session ends automatically here, global environment was never modifed
     """
 
-    def __init__(self, *, env, active=True):
+    def __init__(self, *, env, active=True, locked=False):
         self._env = env
         self._active = active
         self._start_time = datetime.datetime.now(datetime.timezone.utc)
+        self._locked = locked
 
     @property
     def active(self):
@@ -404,9 +435,8 @@ class SessionHandle:
         :returns: reference to the object (self)
         """
         if not self.active:
-            raise ValueError(
-                "Attempt to use inactive (finished) session as a context manager"
-            )
+            msg = "Attempt to use inactive (finished) session as a context manager"
+            raise ValueError(msg)
         return self
 
     def __exit__(self, type, value, traceback):
@@ -423,16 +453,17 @@ class SessionHandle:
         and finish the session. No GRASS modules can be called afterwards.
         """
         if not self.active:
-            raise ValueError("Attempt to finish an already finished session")
+            msg = "Attempt to finish an already finished session"
+            raise ValueError(msg)
         self._active = False
-        finish(env=self._env, start_time=self._start_time)
+        finish(env=self._env, start_time=self._start_time, unlock=self._locked)
 
 
 # clean-up functions when terminating a GRASS session
 # these fns can only be called within a valid GRASS session
 
 
-def clean_default_db(*, modified_after=None, env=None):
+def clean_default_db(*, modified_after=None, env=None, gis_env=None):
     """Clean (vacuum) the default db if it is SQLite
 
     When *modified_after* is set, database is cleaned only when it was modified
@@ -446,7 +477,8 @@ def clean_default_db(*, modified_after=None, env=None):
     if not conn or conn["driver"] != "sqlite":
         return
     # check if db exists
-    gis_env = gs.gisenv(env=env)
+    if not gis_env:
+        gis_env = gs.gisenv(env=env)
     database = conn["database"]
     database = database.replace("$GISDBASE", gis_env["GISDBASE"])
     database = database.replace("$LOCATION_NAME", gis_env["LOCATION_NAME"])
@@ -496,7 +528,7 @@ def clean_temp(env=None):
     )
 
 
-def finish(*, env=None, start_time=None):
+def finish(*, env=None, start_time=None, unlock=False):
     """Terminate the GRASS session and clean up
 
     GRASS commands can no longer be used after this function has been
@@ -513,17 +545,34 @@ def finish(*, env=None, start_time=None):
     When *start_time* is set, it might be used to determine cleaning procedures.
     Currently, it is used to do SQLite database vacuum only when database was modified
     since the session started.
+
+    The function does not check whether the mapset is locked or not, but *unlock* can be
+    provided to unlock the mapset.
     """
     if not env:
         env = os.environ
 
-    clean_default_db(modified_after=start_time, env=env)
+    import grass.script as gs
+
+    gis_env = gs.gisenv(env=env)
+
+    clean_default_db(modified_after=start_time, env=env, gis_env=gis_env)
     clean_temp(env=env)
-    # TODO: unlock the mapset?
+
     # unset the GISRC and delete the file
     from grass.script import utils as gutils
 
     gutils.try_remove(env["GISRC"])
     del env["GISRC"]
-    # remove gislock env var (not the gislock itself
+
+    if unlock:
+        # We have cyclic imports between grass.script and grass.app.
+        # pylint: disable=import-outside-toplevel
+        from grass.app.data import unlock_mapset
+
+        mapset_path = Path(
+            gis_env["GISDBASE"], gis_env["LOCATION_NAME"], gis_env["MAPSET"]
+        )
+        unlock_mapset(mapset_path)
+    # remove gislock env var
     del env["GIS_LOCK"]
