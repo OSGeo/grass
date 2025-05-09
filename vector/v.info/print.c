@@ -9,7 +9,6 @@
 
 #include "local_proto.h"
 
-#define BUFSZ        256
 #define printline(x) G_faprintf(stdout, " | %-74.74s |\n", x)
 #define divider(x)             \
     fprintf(stdout, " %c", x); \
@@ -18,7 +17,7 @@
     fprintf(stdout, "%c\n", x)
 
 /* cloned from lib/gis/wind_format.c */
-void format_double(double value, char buf[256])
+void format_double(double value, char buf[BUFSZ])
 {
     snprintf(buf, BUFSZ, "%.8f", value);
     G_trim_decimal(buf);
