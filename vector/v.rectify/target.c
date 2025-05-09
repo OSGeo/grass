@@ -15,18 +15,20 @@ int get_target(char *group)
 
     if (group && *group) {
         if (!I_get_target(group, location, mapset)) {
-            sprintf(buf, _("Target information for group <%s> missing"), group);
+            snprintf(buf, sizeof(buf),
+                     _("Target information for group <%s> missing"), group);
             goto error;
         }
     }
     else {
-        sprintf(location, "%s", G_location());
-        sprintf(mapset, "%s", G_mapset());
+        snprintf(location, sizeof(location), "%s", G_location());
+        snprintf(mapset, sizeof(mapset), "%s", G_mapset());
     }
 
-    sprintf(buf, "%s/%s", G_gisdbase(), location);
+    snprintf(buf, sizeof(buf), "%s/%s", G_gisdbase(), location);
     if (access(buf, 0) != 0) {
-        sprintf(buf, _("Target project <%s> not found"), location);
+        snprintf(buf, sizeof(buf), _("Target project <%s> not found"),
+                 location);
         goto error;
     }
     select_target_env();
@@ -37,7 +39,8 @@ int get_target(char *group)
         select_current_env();
         return 1;
     }
-    sprintf(buf, _("Mapset <%s> in target project <%s> - "), mapset, location);
+    snprintf(buf, sizeof(buf), _("Mapset <%s> in target project <%s> - "),
+             mapset, location);
     strcat(buf, stat == 0 ? _("permission denied") : _("not found"));
 error:
     strcat(buf, _("Please run i.target for group."));
