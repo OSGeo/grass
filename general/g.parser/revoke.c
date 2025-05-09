@@ -19,11 +19,12 @@ int reinvoke_script(const struct context *ctx, const char *filename)
     for (flag = ctx->first_flag; flag; flag = flag->next_flag) {
         char buff[16];
 
-        sprintf(buff, "GIS_FLAG_%c=%d", flag->key, flag->answer ? 1 : 0);
+        snprintf(buff, sizeof(buff), "GIS_FLAG_%c=%d", flag->key,
+                 flag->answer ? 1 : 0);
         putenv(G_store(buff));
 
-        sprintf(buff, "GIS_FLAG_%c=%d", toupper(flag->key),
-                flag->answer ? 1 : 0);
+        snprintf(buff, sizeof(buff), "GIS_FLAG_%c=%d", toupper(flag->key),
+                 flag->answer ? 1 : 0);
 
         G_debug(2, "set %s", buff);
         putenv(G_store(buff));

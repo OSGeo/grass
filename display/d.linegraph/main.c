@@ -89,7 +89,7 @@ static char *icon_files(void)
 
     list = NULL;
     len = 0;
-    sprintf(path, "%s/etc/symbol", G_gisbase());
+    snprintf(path, sizeof(path), "%s/etc/symbol", G_gisbase());
 
     dir = opendir(path);
     if (!dir)
@@ -102,7 +102,8 @@ static char *icon_files(void)
         if (d->d_name[0] == '.')
             continue;
 
-        sprintf(path_i, "%s/etc/symbol/%s", G_gisbase(), d->d_name);
+        snprintf(path_i, sizeof(path_i), "%s/etc/symbol/%s", G_gisbase(),
+                 d->d_name);
         dir_i = opendir(path_i);
 
         if (!dir_i)
@@ -115,7 +116,7 @@ static char *icon_files(void)
 
             list = G_realloc(list, (count + 1) * sizeof(char *));
 
-            sprintf(buf, "%s/%s", d->d_name, d_i->d_name);
+            snprintf(buf, sizeof(buf), "%s/%s", d->d_name, d_i->d_name);
             list[count++] = G_store(buf);
 
             len += strlen(d->d_name) + strlen(d_i->d_name) + 2; /* '/' + ',' */
@@ -195,7 +196,7 @@ int main(int argc, char **argv)
 
     char txt[1024];
     char tic_name[1024];
-    char *name, *xlabel;
+    char *name, xlabel[4096] = {0};
     char color_name[20];
 
     struct Option *dir_opt, *x_opt, *y_opt;
@@ -396,12 +397,13 @@ int main(int argc, char **argv)
        will be the Y file(s) */
 
     if (dir_opt->answer != NULL) {
-        sprintf(in[0].full_name, "%s/%s", dir_opt->answer, x_opt->answer);
+        snprintf(in[0].full_name, sizeof(in[0].full_name), "%s/%s",
+                 dir_opt->answer, x_opt->answer);
     }
     else {
-        sprintf(in[0].full_name, "%s", x_opt->answer);
+        snprintf(in[0].full_name, sizeof(in[0].full_name), "%s", x_opt->answer);
     }
-    sprintf(in[0].name, "%s", x_opt->answer);
+    snprintf(in[0].name, sizeof(in[0].name), "%s", x_opt->answer);
 
     if ((in[0].fp = fopen(in[0].full_name, "r")) == NULL)
         G_fatal_error(_("Unable to open input file <%s>"), in[0].full_name);
@@ -413,12 +415,13 @@ int main(int argc, char **argv)
     for (i = 0, j = 1; (name = y_opt->answers[i]); i++, j++) {
 
         if (dir_opt->answer != NULL) {
-            sprintf(in[j].full_name, "%s/%s", dir_opt->answer, name);
+            snprintf(in[j].full_name, sizeof(in[j].full_name), "%s/%s",
+                     dir_opt->answer, name);
         }
         else {
-            sprintf(in[j].full_name, "%s", name);
+            snprintf(in[j].full_name, sizeof(in[j].full_name), "%s", name);
         }
-        sprintf(in[j].name, "%s", name);
+        snprintf(in[j].name, sizeof(in[j].name), "%s", name);
 
         if ((in[j].fp = fopen(in[j].full_name, "r")) == NULL)
             G_fatal_error(_("Unable to open input file <%s>"), in[j].full_name);
@@ -848,9 +851,9 @@ int main(int argc, char **argv)
             if (scale_x_labels)
                 value *= x_scale;
             if ((value >= 1) || (value <= -1) || (value == 0))
-                sprintf(txt, "%.0f", (value / tic_unit));
+                snprintf(txt, sizeof(txt), "%.0f", (value / tic_unit));
             else
-                sprintf(txt, "%.2f", (value));
+                snprintf(txt, sizeof(txt), "%.2f", (value));
             text_height = (b - t) * TEXT_HEIGHT;
             text_width = (r - l) * TEXT_WIDTH;
             D_text_size(text_width, text_height);
@@ -888,9 +891,11 @@ int main(int argc, char **argv)
 
     /* draw the x-axis label */
     if ((strcmp(title[0]->answer, "") == 0) && (strcmp(tic_name, "") == 0))
-        xlabel = G_store("");
+        xlabel[0] = '\0';
     else
-        G_asprintf(&xlabel, "X: %s %s", title[0]->answer, tic_name);
+        snprintf(xlabel, sizeof(xlabel), "X: %s %s", title[0]->answer,
+                 tic_name);
+
     text_height = (b - t) * TEXT_HEIGHT;
     text_width = (r - l) * TEXT_WIDTH * 1.5;
     D_text_size(text_width, text_height);
@@ -977,9 +982,10 @@ int main(int argc, char **argv)
                 /* draw a tic-mark number */
 
                 if (scale_y_labels)
-                    sprintf(txt, "%f.0", (i / tic_unit * y_scale));
+                    snprintf(txt, sizeof(txt), "%f.0",
+                             (i / tic_unit * y_scale));
                 else
-                    sprintf(txt, "%d", (i / tic_unit));
+                    snprintf(txt, sizeof(txt), "%d", (i / tic_unit));
                 text_height = (b - t) * TEXT_HEIGHT;
                 text_width = (r - l) * TEXT_WIDTH;
                 set_optimal_text_size(text_width, text_height, txt, &tt, &tb,
@@ -1001,9 +1007,11 @@ int main(int argc, char **argv)
 
     /* draw the y-axis label */
     if ((strcmp(title[1]->answer, "") == 0) && (strcmp(tic_name, "") == 0))
-        xlabel = G_store("");
+        xlabel[0] = '\0';
     else
-        G_asprintf(&xlabel, "Y: %s %s", title[1]->answer, tic_name);
+        snprintf(xlabel, sizeof(xlabel), "Y: %s %s", title[1]->answer,
+                 tic_name);
+
     text_height = (b - t) * TEXT_HEIGHT;
     text_width = (r - l) * TEXT_WIDTH * 1.5;
     D_text_size(text_width, text_height);
@@ -1013,7 +1021,7 @@ int main(int argc, char **argv)
     D_text(xlabel);
 
     /* top label */
-    sprintf(xlabel, "%s", title[2]->answer);
+    snprintf(xlabel, sizeof(xlabel), "%s", title[2]->answer);
     text_height = (b - t) * TEXT_HEIGHT;
     text_width = (r - l) * TEXT_WIDTH * 2.0;
     D_text_size(text_width, text_height);

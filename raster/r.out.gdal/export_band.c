@@ -340,7 +340,7 @@ int export_band(GDALDatasetH hMEMDS, int band, const char *name,
         if (!no_metadata) {
             if (rcount > 0) {
                 /* Create metadata entries for color table rules */
-                sprintf(value, "%d", rcount);
+                snprintf(value, sizeof(value), "%d", rcount);
                 GDALSetMetadataItem(hBand, "COLOR_TABLE_RULES_COUNT", value,
                                     NULL);
             }
@@ -356,9 +356,10 @@ int export_band(GDALDatasetH hMEMDS, int band, const char *name,
                 Rast_get_fp_color_rule(&val1, &r1, &g1, &b1, &val2, &r2, &g2,
                                        &b2, &sGrassColors, i);
 
-                sprintf(key, "COLOR_TABLE_RULE_RGB_%d", rcount - i - 1);
-                sprintf(value, "%e %e %d %d %d %d %d %d", val1, val2, r1, g1,
-                        b1, r2, g2, b2);
+                snprintf(key, sizeof(key), "COLOR_TABLE_RULE_RGB_%d",
+                         rcount - i - 1);
+                snprintf(value, sizeof(value), "%e %e %d %d %d %d %d %d", val1,
+                         val2, r1, g1, b1, r2, g2, b2);
                 GDALSetMetadataItem(hBand, key, value, NULL);
             }
         }

@@ -171,7 +171,8 @@ int main(int argc, char *argv[])
                 char *pattern;
 
                 pattern = (char *)G_malloc(strlen(opt.pattern->answer) + 3);
-                sprintf(pattern, "{%s}", opt.pattern->answer);
+                snprintf(pattern, (strlen(opt.pattern->answer) + 3), "{%s}",
+                         opt.pattern->answer);
 
                 filter =
                     G_ls_glob_filter(pattern, 0, (int)flag.ignorecase->answer);
@@ -198,7 +199,8 @@ int main(int argc, char *argv[])
                 char *pattern;
 
                 pattern = (char *)G_malloc(strlen(opt.exclude->answer) + 3);
-                sprintf(pattern, "{%s}", opt.exclude->answer);
+                snprintf(pattern, (strlen(opt.exclude->answer) + 3), "{%s}",
+                         opt.exclude->answer);
 
                 exclude =
                     G_ls_glob_filter(pattern, 1, (int)flag.ignorecase->answer);
@@ -294,7 +296,8 @@ int main(int argc, char *argv[])
         if (flag.full->answer) {
             char lister[GPATH_MAX];
 
-            sprintf(lister, "%s/etc/lister/%s", G_gisbase(), elem->element[0]);
+            snprintf(lister, sizeof(lister), "%s/etc/lister/%s", G_gisbase(),
+                     elem->element[0]);
 
             G_debug(3, "lister CMD: %s", lister);
 
