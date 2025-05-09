@@ -31,7 +31,7 @@ char **list_subgroups(const char *group, const char *mapset, int *subgs_num)
     if (I_find_group2(group, mapset) == 0)
         return NULL;
 
-    sprintf(buf, "group/%s/subgroup", group);
+    snprintf(buf, sizeof(buf), "group/%s/subgroup", group);
     G_file_name(path, buf, "", mapset);
 
     if (G_lstat(path, &sb) || !S_ISDIR(sb.st_mode))

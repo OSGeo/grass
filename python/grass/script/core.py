@@ -372,6 +372,40 @@ def handle_errors(returncode, result, args, kwargs):
         raise CalledModuleError(module=module, code=code, returncode=returncode)
 
 
+def popen_args_command(
+    prog,
+    flags="",
+    overwrite=False,
+    quiet=False,
+    verbose=False,
+    superquiet=False,
+    **kwargs,
+):
+    """Split tool name and parameters from Popen parameters
+
+    Does the splitting based on known Popen parameter names, and then does the
+    transformation from Python parameters to a list of command line arguments
+    for Popen.
+    """
+    options = {}
+    popen_kwargs = {}
+    for opt, val in kwargs.items():
+        if opt in _popen_args:
+            popen_kwargs[opt] = val
+        else:
+            options[opt] = val
+    args = make_command(
+        prog,
+        flags=flags,
+        overwrite=overwrite,
+        quiet=quiet,
+        superquiet=superquiet,
+        verbose=verbose,
+        **options,
+    )
+    return args, popen_kwargs
+
+
 def start_command(
     prog,
     flags="",
@@ -409,22 +443,14 @@ def start_command(
 
     :return: Popen object
     """
-    options = {}
-    popts = {}
-    for opt, val in kwargs.items():
-        if opt in _popen_args:
-            popts[opt] = val
-        else:
-            options[opt] = val
-
-    args = make_command(
+    args, popts = popen_args_command(
         prog,
         flags=flags,
         overwrite=overwrite,
         quiet=quiet,
         superquiet=superquiet,
         verbose=verbose,
-        **options,
+        **kwargs,
     )
 
     if debug_level() > 0:

@@ -101,7 +101,7 @@ void list_codes(char *authname)
         authname = "epsg";
 
     init_info = proj_init_info(authname);
-    sprintf(pathname, "%s", init_info.filename);
+    snprintf(pathname, sizeof(pathname), "%s", init_info.filename);
 
     if (access(pathname, F_OK) != 0)
         G_fatal_error(_("Unable to find init file %s"), authname);
@@ -118,7 +118,7 @@ void list_codes(char *authname)
     grass_proj_share = getenv("GRASS_PROJSHARE");
     if (!grass_proj_share)
         G_fatal_error(_("Environment variable GRASS_PROJSHARE is not set"));
-    sprintf(pathname, "%s/%s", grass_proj_share, authname);
+    snprintf(pathname, sizeof(pathname), "%s/%s", grass_proj_share, authname);
     G_convert_dirseps_to_host(pathname);
 #endif
 
@@ -158,7 +158,7 @@ void list_codes(char *authname)
          * definition follows code until next '<' */
 
         if (*buf == '#' && buflen > 2) {
-            sprintf(name, "%s", buf + 2);
+            snprintf(name, sizeof(name), "%s", buf + 2);
             continue;
         }
 
@@ -187,7 +187,7 @@ void list_codes(char *authname)
 
                 if (j < buflen) {
                     buf[j] = '\0';
-                    sprintf(code, "%s", buf + bufstart);
+                    snprintf(code, sizeof(code), "%s", buf + bufstart);
                 }
                 i = j + 1;
                 bufstart = i;
@@ -198,7 +198,7 @@ void list_codes(char *authname)
                 /* the remaining content of the line could be the name */
                 bufstart = i + 1;
                 if (bufstart < buflen) {
-                    sprintf(name, "%s", buf + bufstart);
+                    snprintf(name, sizeof(name), "%s", buf + bufstart);
                     G_strip(name);
                 }
                 i = buflen;

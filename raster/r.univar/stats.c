@@ -127,7 +127,7 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
 
         if (stats[z].n == 0)
             stats[z].sum = stats[z].sum_abs = NAN;
-        sprintf(sum_str, "%.15g", stats[z].sum);
+        snprintf(sum_str, sizeof(sum_str), "%.15g", stats[z].sum);
         G_trim_decimal(sum_str);
 
         if (!param.shell_style->answer && format == PLAIN) {
@@ -449,7 +449,7 @@ int print_stats_table(univar_stat *stats)
                 /* percentile is not an exact integer */
                 char buf[24];
 
-                sprintf(buf, "%.15g", stats[0].perc[i]);
+                snprintf(buf, sizeof(buf), "%.15g", stats[0].perc[i]);
                 G_strchg(buf, '.', '_');
                 fprintf(stdout, "%sperc_%s", zone_info.sep, buf);
             }
@@ -519,11 +519,11 @@ int print_stats_table(univar_stat *stats)
         /* coefficient of variance */
         fprintf(stdout, "%.15g%s", var_coef, zone_info.sep);
         /* sum */
-        sprintf(sum_str, "%.15g", stats[z].sum);
+        snprintf(sum_str, sizeof(sum_str), "%.15g", stats[z].sum);
         G_trim_decimal(sum_str);
         fprintf(stdout, "%s%s", sum_str, zone_info.sep);
         /* absolute sum */
-        sprintf(sum_str, "%.15g", stats[z].sum_abs);
+        snprintf(sum_str, sizeof(sum_str), "%.15g", stats[z].sum_abs);
         G_trim_decimal(sum_str);
         fprintf(stdout, "%s", sum_str);
 
