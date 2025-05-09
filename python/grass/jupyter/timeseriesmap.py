@@ -218,7 +218,9 @@ class TimeSeriesMap(BaseSeriesMap):
             self._labels[i]: self._layers[i] for i in range(len(self._labels))
         }
         # Update Region
-        self._region_manager.set_region_from_timeseries(self._baseseries)
+        self._region_manager.set_region_from_timeseries(
+            self._baseseries, element_type="stvds"
+        )
         self._indices = self._labels
 
     def d_legend(self, **kwargs):
