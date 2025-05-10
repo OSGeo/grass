@@ -44,16 +44,17 @@ from .c_libraries_interface import CLibrariesInterface
 
 # Import all supported database backends
 # Ignore import errors since they are checked later
-try:
-    import sqlite3
-except ImportError:
-    pass
+
+import sqlite3
+
 # Postgresql is optional, existence is checked when needed
 try:
     import psycopg2
     import psycopg2.extras
+
+    db_errors = (sqlite3.Error, psycopg2.Error)
 except ImportError:
-    pass
+    db_errors = (sqlite3.Error,)
 
 import atexit
 from datetime import datetime
@@ -1500,7 +1501,7 @@ class DBConnection:
                 self.cursor.execute(statement, args)
             else:
                 self.cursor.execute(statement)
-        except (sqlite3.Error, psycopg2.Error):
+        except db_errors:
             if connected:
                 self.close()
             self.msgr.error(_("Unable to execute :\n %(sql)s") % {"sql": statement})
@@ -1543,7 +1544,7 @@ class DBConnection:
             else:
                 self.cursor.execute(statement)
             self.connection.commit()
-        except (sqlite3.Error, psycopg2.Error):
+        except db_errors:
             if connected:
                 self.close()
             self.msgr.error(
