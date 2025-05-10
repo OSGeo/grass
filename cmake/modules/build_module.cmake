@@ -151,6 +151,7 @@ function(build_module)
   set_property(GLOBAL PROPERTY MODULE_LIST "${MODULE_LIST};${G_NAME}")
 
   add_dependencies(${G_NAME} copy_header)
+  add_dependencies(${G_NAME} copy_make)
 
   foreach(G_OPTIONAL_DEPEND ${G_OPTIONAL_DEPENDS})
     if(TARGET ${G_OPTIONAL_DEPEND})
