@@ -143,8 +143,7 @@ jobs:
           pytest ^
             @.github/workflows/pytest_args_ci.txt ^
             @.github/workflows/pytest_args_deselect.txt ^
-            @.github/workflows/pytest_args_gunittest.txt ^
-            --deselect=lib/init/testsuite/test_grass_tmp_mapset.py
+            @.github/workflows/pytest_args_gunittest.txt
         shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}""
 
       - name: Run tests

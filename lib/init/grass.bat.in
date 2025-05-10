@@ -22,8 +22,3 @@ set GRASS_PYTHON=@GRASS_PYTHON@
 set GRASS_CONFIG_DIR=@grass_config_dir@
 
 "@GRASS_PYTHON@" "@gisbase_init_dir@\etc\@START_UP@" %*
-
-rem
-rem Pause on error
-rem
-if %ERRORLEVEL% GEQ 1 pause
