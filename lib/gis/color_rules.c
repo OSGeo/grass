@@ -268,7 +268,7 @@ struct colorinfo *get_colorinfo(int *nrules)
     char **cnames;
 
     /* load color rules */
-    snprintf(path, GPATH_MAX, "%s/etc/colors", G_gisbase());
+    snprintf(path, GPATH_MAX, "%s/etc/colors", G_share_dir());
 
     *nrules = 0;
     cnames = G_ls2(path, nrules);
@@ -284,7 +284,7 @@ struct colorinfo *get_colorinfo(int *nrules)
         colorinfo[i].desc = NULL;
 
         /* open color rule file */
-        snprintf(path, GPATH_MAX, "%s/etc/colors/%s", G_gisbase(),
+        snprintf(path, GPATH_MAX, "%s/etc/colors/%s", G_share_dir(),
                  colorinfo[i].name);
         fp = fopen(path, "r");
         if (!fp)
@@ -361,7 +361,7 @@ struct colorinfo *get_colorinfo(int *nrules)
     qsort(colorinfo, *nrules, sizeof(struct colorinfo), cmp_clrname);
 
     /* load color descriptions */
-    snprintf(path, GPATH_MAX, "%s/etc/colors.desc", G_gisbase());
+    snprintf(path, GPATH_MAX, "%s/etc/colors.desc", G_share_dir());
     fp = fopen(path, "r");
     if (!fp)
         G_fatal_error(_("Unable to open color descriptions"));

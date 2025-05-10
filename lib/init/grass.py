@@ -100,6 +100,43 @@ if "GISBASE" in os.environ and len(os.getenv("GISBASE")) > 0:
 else:
     GISBASE = os.path.normpath("@GISBASE_INSTALL_PATH@")
     os.environ["GISBASE"] = GISBASE
+
+if "GRASS_SHARE_DIR" in os.environ and len(os.getenv("GRASS_SHARE_DIR")) > 0:
+    GRASS_SHARE_DIR = os.path.normpath(os.environ["GRASS_SHARE_DIR"])
+else:
+    GRASS_SHARE_DIR = os.path.normpath("@GRASS_SHARE_DIR@")
+    os.environ["GRASS_SHARE_DIR"] = GRASS_SHARE_DIR
+
+if "GRASS_LOCALEDIR" in os.environ and len(os.getenv("GRASS_LOCALEDIR")) > 0:
+    GRASS_LOCALEDIR = os.path.normpath(os.environ["GRASS_LOCALEDIR"])
+else:
+    GRASS_LOCALEDIR = os.path.normpath("@GRASS_LOCALE@")
+    os.environ["GRASS_LOCALEDIR"] = GRASS_LOCALEDIR
+
+if "GRASS_PYDIR" in os.environ and len(os.getenv("GRASS_PYDIR")) > 0:
+    GRASS_PYDIR = os.path.normpath(os.environ["GRASS_PYDIR"])
+else:
+    GRASS_PYDIR = os.path.normpath("@GRASS_PYDIR@")
+    os.environ["GRASS_PYDIR"] = GRASS_PYDIR
+
+if "GRASS_GUIWXDIR" in os.environ and len(os.getenv("GRASS_GUIWXDIR")) > 0:
+    GRASS_GUIWXDIR = os.path.normpath(os.environ["GRASS_GUIWXDIR"])
+else:
+    GRASS_GUIWXDIR = os.path.normpath("@GRASS_GUIWXDIR@")
+    os.environ["GRASS_GUIWXDIR"] = GRASS_GUIWXDIR
+
+if "GRASS_GUISCRIPTDIR" in os.environ and len(os.getenv("GRASS_GUISCRIPTDIR")) > 0:
+    GRASS_GUISCRIPTDIR = os.path.normpath(os.environ["GRASS_GUISCRIPTDIR"])
+else:
+    GRASS_GUISCRIPTDIR = os.path.normpath("@GRASS_GUISCRIPTDIR@")
+    os.environ["GRASS_GUISCRIPTDIR"] = GRASS_GUISCRIPTDIR
+
+if "GRASS_GUIRESDIR" in os.environ and len(os.getenv("GRASS_GUIRESDIR")) > 0:
+    GRASS_GUIRESDIR = os.path.normpath(os.environ["GRASS_GUIRESDIR"])
+else:
+    GRASS_GUIRESDIR = os.path.normpath("@GRASS_GUIRESDIR@")
+    os.environ["GRASS_GUIRESDIR"] = GRASS_GUIRESDIR
+
 CMD_NAME = "@START_UP@"
 GRASS_VERSION = "@GRASS_VERSION_NUMBER@"
 GRASS_VERSION_MAJOR = "@GRASS_VERSION_MAJOR@"
@@ -1188,7 +1225,7 @@ def set_language(grass_config_dir: StrPath) -> None:
                         os.environ["LC_MESSAGES"] = "C"
                         os.environ["LC_NUMERIC"] = "C"
                         os.environ["LC_TIME"] = "C"
-                        gettext.install("grasslibs", gpath("locale"))
+                        gettext.install("grasslibs", os.environ["GRASS_LOCALEDIR"])
                         sys.stderr.write(
                             "All attempts to enable English language have"
                             " failed. GRASS running with C locale.\n"
@@ -1269,7 +1306,7 @@ def set_language(grass_config_dir: StrPath) -> None:
         del os.environ["LC_ALL"]  # Remove LC_ALL to not override LC_NUMERIC
 
     # From now on enforce the new language
-    gettext.install("grasslibs", gpath("locale"))
+    gettext.install("grasslibs", os.environ["GRASS_LOCALEDIR"])
 
 
 # TODO: the gisrcrc here does not make sense, remove it from load_gisrc
