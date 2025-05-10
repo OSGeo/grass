@@ -24,6 +24,7 @@ jobs:
       PYTHONWARNINGS: always
       # renovate: datasource=python-version depName=python
       PYTHON_VERSION: "3.13"
+      CMakeVersion: "3.22.0"
 
     steps:
       - name: Checkout core
@@ -33,12 +34,31 @@ jobs:
           path: grass
           fetch-depth: 0
 
+      - name: Install CMake
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          arch=$(echo $(uname -s)-$(uname -m) | awk '{print tolower($0)}')
+          v=v${{ env.CMakeVersion }}/cmake-${{ env.CMakeVersion }}-${arch}.tar.gz
+          wget https://github.com/Kitware/CMake/releases/download/$v
+          tar xzf cmake-${{ env.CMakeVersion }}-${arch}.tar.gz
+          echo "CMAKE_DIR=$GITHUB_WORKSPACE/cmake-${{ env.CMakeVersion }}-${arch}/bin" >> $GITHUB_ENV
+          echo "$GITHUB_WORKSPACE/cmake-${{ env.CMakeVersion }}-${arch}/bin" >> $GITHUB_PATH
+      - run: |
+          cmake --version
       - name: Get dependencies
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y wget git gawk findutils
+          sudo apt-get install -y wget git gawk findutils \
+            ninja-build libpq-dev \
+            gettext unixodbc-dev libnetcdf-dev
           xargs -a <(awk '! /^ *(#|$)/' "grass/.github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
+      - name: Print build environment variables
+        shell: bash -el {0}
+        run: |
+          printenv | sort
+          gcc --version
+          ldd --version
 
       - name: Set up Python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
@@ -83,10 +103,21 @@ jobs:
         run: |
           echo "LD_LIBRARY_PATH=$HOME/install/lib" >> "$GITHUB_ENV"
 
-      - name: Build core
+      - name: Configure (core)
         run: |
-          cd grass
-          ../grass/.github/workflows/build_ubuntu-22.04.sh "$HOME/install"
+          cmake ${CMAKE_OPTIONS} -S $GITHUB_WORKSPACE/grass -B $GITHUB_WORKSPACE/grass/build -G Ninja \
+            -DCMAKE_INSTALL_PREFIX=$HOME/install -DWITH_NLS=ON -DWITH_GUI=OFF -DWITH_DOCS=OFF \
+            -DWITH_READLINE=ON -DWITH_ODBC=ON -DWITH_NETCDF=ON -DWITH_BZLIB=ON
+      - name: Print CMakeCache.txt
+        shell: bash -el {0}
+        run: |
+          cat ${GITHUB_WORKSPACE}/grass/build/CMakeCache.txt
+      - name: Build (core)
+        run: |
+          cmake --build grass/build --verbose -j$(nproc)
+      - name: Install (core)
+        run: |
+          cmake --install $GITHUB_WORKSPACE/grass/build --verbose
 
       - name: Add the bin directory to PATH
         run: |
