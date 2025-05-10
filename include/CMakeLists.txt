@@ -1,3 +1,5 @@
+add_subdirectory(Make)
+
 file(GLOB_RECURSE SRCHS "*.h" "*.make")
 set(include_depends)
 foreach(srch ${SRCHS})
