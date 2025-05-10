@@ -341,7 +341,7 @@ public:
     // (pow(arity,level-1)*basesize); the <nextstream> pointer of buffer
     // is set to point to the argument stream; (in this way no stream
     // copying is done, just one pointer copy). The user should be aware
-    // the the argument stream is 'lost' - that is a stream cannot be
+    // the argument stream is 'lost' - that is a stream which cannot be
     // inserted repeatedly into many buffers because this would lead to
     // several buffers pointing to the same stream.
 
@@ -1068,10 +1068,10 @@ long em_buffer<T, Key>::insert(T *a, long n)
 
    the <nextstream> pointer of buffer is set to point to the argument
    stream; (in this way no stream copying is done, just one pointer
-   copy). The user should be aware the the argument stream is 'lost' -
-   that is a stream cannot be inserted repeatedly into many buffers
-   because this would lead to several buffers pointing to the same
-   stream.
+   copy). The user should be aware the argument stream is 'lost' -
+   that is a stream which cannot be inserted repeatedly into many
+   buffers because this would lead to several buffers pointing to the
+   same stream.
 
    stream is assume stream is sorted; bos = how many elements must be
    skipped (were deleted) from the beginning of stream;
