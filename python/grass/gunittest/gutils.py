@@ -17,7 +17,7 @@ from .checkers import text_to_keyvalue
 
 
 def get_current_mapset():
-    """Get curret mapset name as a string"""
+    """Get current mapset name as a string"""
     return call_module("g.mapset", flags="p").strip()
 
 

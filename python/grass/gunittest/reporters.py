@@ -305,7 +305,7 @@ def get_html_test_authors_table(directory, tests_authors):
 
 
 class GrassTestFilesMultiReporter:
-    """Interface to multiple repoter objects
+    """Interface to multiple reporter objects
 
     For start and finish of the tests and of a test of one file,
     it calls corresponding methods of all contained reporters.
@@ -844,7 +844,7 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
     def finish(self):
         super().finish()
 
-        # this shoul be moved to some additional meta passed in constructor
+        # this should be moved to some additional meta passed in constructor
         svn_info = get_svn_info()
         svn_revision = "" if not svn_info else svn_info["revision"]
 
