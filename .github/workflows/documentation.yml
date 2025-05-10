@@ -24,7 +24,7 @@ jobs:
       PYTHONWARNINGS: always
       # renovate: datasource=python-version depName=python
       PYTHON_VERSION: "3.13"
-      CMakeVersion: "3.22.0"
+      CMakeVersion: "4.0.2"
 
     steps:
       - name: Checkout core
