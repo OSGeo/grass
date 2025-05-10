@@ -244,7 +244,7 @@ check_target(ATLAS HAVE_LIBATLAS)
 check_target(CBLAS::CBLAS HAVE_LIBBLAS)
 check_target(LAPACKE::LAPACKE HAVE_LIBLAPACK)
 check_target(TIFF::TIFF HAVE_TIFFIO_H)
-check_target(NETCDF HAVE_NETCDF)
+check_target(NetCDF::NetCDF HAVE_NETCDF)
 check_target(GEOS::geos_c HAVE_GEOS)
 
 if(MSVC)
