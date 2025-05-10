@@ -43,7 +43,24 @@ endforeach()
 file(WRITE ${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}/grass/confparms.h
      "\"/*  */\\n\"")
 
-add_subdirectory(Make)
+# add_subdirectory(Make)
+
+file(GLOB_RECURSE SRCMAKES "*.make")
+set(include_make_depends)
+foreach(srcmake ${SRCMAKES})
+  get_filename_component(srcmake_DIR ${srcmake} DIRECTORY)
+  get_filename_component(srcmake_NAME ${srcmake} NAME)
+  string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/" "" dstmake_DIR "${srcmake_DIR}")
+  set(output_dir1 ${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}/${dstmake_DIR})
+  add_custom_command(
+    OUTPUT ${output_dir1}/${srcmake_NAME}
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${output_dir1}
+    COMMAND ${CMAKE_COMMAND} -E copy ${srcmake} ${output_dir1}
+    COMMENT "Copy ${srcmake} to ${output_dir1}/${srcmake_NAME}")
+  list(APPEND include_make_depends ${output_dir1}/${srcmake_NAME})
+endforeach()
+
+add_custom_target(copy_make DEPENDS ${include_make_depends} LIB_PYTHON)
 
 install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}/
         DESTINATION ${GRASS_INSTALL_INCLUDEDIR})
