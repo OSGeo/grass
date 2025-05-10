@@ -461,7 +461,7 @@ def get_lib_path(modname, libname=None):
 
 
 def set_path(modulename, dirname=None, path="."):
-    """Set sys.path looking in the the local directory GRASS directories.
+    """Set sys.path looking in the local directory GRASS directories.
 
     :param modulename: string with the name of the GRASS module
     :param dirname: string with the directory name containing the python

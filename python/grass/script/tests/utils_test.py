@@ -4,7 +4,7 @@ import grass.script as gs
 
 
 def test_named_separators():
-    """Check that named separtors are recognized and correctly evaluated"""
+    """Check that named separators are recognized and correctly evaluated"""
     assert gs.separator("pipe") == "|"
     assert gs.separator("comma") == ","
     assert gs.separator("space") == " "
@@ -13,7 +13,7 @@ def test_named_separators():
 
 
 def test_backslash_separators():
-    """Check that separtors specified as an escape sequence are correctly evaluated"""
+    """Check that separators specified as an escape sequence are correctly evaluated"""
     assert gs.separator(r"\t") == "\t"
     assert gs.separator(r"\n") == "\n"
 

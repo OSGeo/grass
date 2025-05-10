@@ -1249,7 +1249,7 @@ def region(region3d=False, complete=False, env=None):
     >>> # obtain n, s, e and w values
     >>> [curent_region[key] for key in "nsew"]  # doctest: +ELLIPSIS
     [..., ..., ..., ...]
-    >>> # obtain ns and ew resulutions
+    >>> # obtain ns and ew resolutions
     >>> (curent_region['nsres'], curent_region['ewres'])  # doctest: +ELLIPSIS
     (..., ...)
 
