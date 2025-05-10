@@ -100,7 +100,6 @@ if(NOT USE_X11)
   endif()
 endif()
 
-configure_file(Platform.make.in Platform.cmake.make @ONLY)
 configure_file(Platform.make.in Platform.make @ONLY)
 endblock()
 

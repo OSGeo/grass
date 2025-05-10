@@ -2,7 +2,7 @@ add_subdirectory(Make)
 
 file(GLOB_RECURSE SRCHS "*.h" "*.make")
 set(include_depends)
-foreach(srch ${SRCHS})
+foreach(srch ${SRCHS} "Make/Platform.make")
   get_filename_component(srch_DIR ${srch} DIRECTORY)
   get_filename_component(srch_NAME ${srch} NAME)
   string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/" "" dsth_DIR "${srch_DIR}")
