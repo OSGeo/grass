@@ -45,3 +45,5 @@ file(WRITE ${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}/grass/confparms.h
 
 install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}/
         DESTINATION ${GRASS_INSTALL_INCLUDEDIR})
+
+add_subdirectory(Make)
