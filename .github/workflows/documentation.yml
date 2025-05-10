@@ -131,7 +131,7 @@ jobs:
         run: ./grass/.github/workflows/test_simple.sh
 
       - name: Compile addons
-        if: false
+        # if: false
         run: |
           ./grass-addons/utils/cronjobs_osgeo_lxd/compile_addons_git.sh \
             "$MAJOR" \
