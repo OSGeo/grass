@@ -707,7 +707,7 @@ def init(raise_fatal_error: bool = False, skip_db_version_check: bool = False):
         backup_howto = _(
             "Run t.upgrade command to upgrade your temporal database.\n"
             "Consider creating a backup of your temporal database to avoid "
-            "loosing data in case something goes wrong.\n"
+            "losing data in case something goes wrong.\n"
         )
     else:
         backup_howto = _(

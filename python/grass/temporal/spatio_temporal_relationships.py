@@ -409,7 +409,7 @@ class SpatioTemporalTopologyBuilder:
         return self._first
 
     def _build_internal_iteratable(self, maps, spatial) -> None:
-        """Build an iteratable temporal topology structure for all maps in
+        """Build an iterable temporal topology structure for all maps in
         the list and store the maps internally
 
         Basically the "next" and "prev" relations will be set in the
@@ -429,7 +429,7 @@ class SpatioTemporalTopologyBuilder:
         self._detect_first()
 
     def _build_iteratable(self, maps, spatial) -> None:
-        """Build an iteratable temporal topology structure for
+        """Build an iterable temporal topology structure for
         all maps in the list
 
         Basically the "next" and "prev" relations will be set in

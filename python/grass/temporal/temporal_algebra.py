@@ -2849,7 +2849,7 @@ class TemporalAlgebraParser:
             comp_op = t[2]
             value = str(t[3])
             for map_i in maplist:
-                # Evaluate time diferences and hash operator statements for each map.
+                # Evaluate time differences and hash operator statements for each map.
                 try:
                     td = map_i.map_value[0].td
                     boolname = eval(str(td) + comp_op + value)

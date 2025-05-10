@@ -1135,7 +1135,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         if not maps:
             return None
 
-        # We need to adjust the end time in case the the dataset has no
+        # We need to adjust the end time in case the dataset has no
         # interval time, so we can catch time instances at the end
         if self.get_map_time() != "interval":
             if self.is_time_absolute():
@@ -1165,13 +1165,13 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         The temporal topology search order is as follows:
 
         1. Maps that are equal to the actual granule are used
-        2. If no euqal found then maps that contain the actual granule
+        2. If no equal found then maps that contain the actual granule
            are used
         3. If no maps are found that contain the actual granule then maps
            are used that overlaps the actual granule
         4. If no overlaps maps found then overlapped maps are used
         5. If no overlapped maps are found then maps are used that are
-           durin the actual granule
+           during the actual granule
 
 
         Each entry in the resulting list is a list of

@@ -635,7 +635,7 @@ class TemporalOperatorParser:
         t[0] = t[1]
 
     def p_over(self, t) -> None:
-        # The the over keyword
+        # The over keyword
         """
         relation : OVER
         """
