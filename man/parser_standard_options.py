@@ -5,23 +5,35 @@ Copyright 2015-2025 by Pietro Zambelli and the GRASS Development Team
 @author: Vaclav Petras (Markdown output)
 """
 
+from __future__ import annotations
+
 import argparse
+import contextlib
 import os
 import re
 import sys
 
+from typing import IO, TYPE_CHECKING
 from urllib.request import urlopen
 from collections import defaultdict
 
+if TYPE_CHECKING:
+    from collections.abc import Generator
 
-def parse_options(lines, startswith="Opt"):
-    def split_in_groups(lines):
-        def count_par_diff(line):
+
+def parse_options(
+    lines: list[str], startswith="Opt"
+) -> list[tuple[str, dict[str, str | list[str]]]]:
+    def split_in_groups(
+        lines: list[str],
+    ) -> Generator[tuple[str, list[str] | None], None]:
+        def count_par_diff(line: str) -> int:
             open_par = line.count("(")
             close_par = line.count(")")
             return open_par - close_par
 
-        res = None
+        res: list[str] | None = None
+        optname: str = ""
         diff = 0
         for line in lines:
             if line.startswith("case"):
@@ -34,17 +46,17 @@ def parse_options(lines, startswith="Opt"):
                 diff = count_par_diff(line)
             elif diff > 0:
                 diff -= count_par_diff(line)
-            else:
-                res.append(line) if res is not None else None
+            elif res is not None:
+                res.append(line)
 
-    def split_opt_line(line):
+    def split_opt_line(line: str) -> tuple[str, str]:
         index = line.index("=")
         key = line[:index].strip()
         default = line[index + 1 :].strip()
         return key, default
 
-    def parse_glines(glines):
-        res = {}
+    def parse_glines(glines: list[str]) -> dict[str, str | list[str]]:
+        res: dict[str, str | list[str]] = {}
         key = None
         dynamic_answer = False
         for line in glines:
@@ -58,8 +70,6 @@ def parse_options(lines, startswith="Opt"):
                 dynamic_answer = False
             if dynamic_answer or line.startswith("/*"):
                 continue
-            if line.startswith("/*"):
-                continue
             if line.startswith(startswith) and line.endswith(";"):
                 key, default = (w.strip() for w in split_opt_line(line[5:]))
                 res[key] = default
@@ -71,10 +81,12 @@ def parse_options(lines, startswith="Opt"):
             elif key is not None:
                 if key not in res:
                     res[key] = []
+                # TODO: Possible problem to do .append() on a string, if the value is
+                # a string, previously set with `res[key] = default` above
                 res[key].append(line)
         return res
 
-    def clean_value(val):
+    def clean_value(val: list | str) -> str:
         if isinstance(val, list):
             val = "".join(val)
         val = val.strip()
@@ -90,10 +102,10 @@ def parse_options(lines, startswith="Opt"):
         return val.replace(r"\"", '"')
 
     lines = [line.strip() for line in lines]
-    result = []
+    result: list[tuple[str, dict[str, str | list[str]]]] = []
     for optname, glines in split_in_groups(lines):
         if glines:
-            res = parse_glines(glines)
+            res: dict[str, str | list[str]] = parse_glines(glines)
             if res:
                 for key, val in res.items():
                     res[key] = clean_value(val)
@@ -271,7 +283,7 @@ class OptTable:
     def markdown(self, endline="\n"):
         return markdown(options=self.options, columns=self.columns, endline=endline)
 
-    def html(self, endline="\n", indent="  ", toptions="border=1"):
+    def html(self, endline="\n", indent="  ", toptions: str | None = "border=1"):
         """Return a HTML table with the options"""
         html = ["<table{0}>".format(" " + toptions if toptions else "")]
         # write headers
@@ -327,16 +339,13 @@ if __name__ == "__main__":
         "-t",
         "--text",
         dest="text",
-        type=argparse.FileType("r"),
         help="Provide the file to parse",
     )
     parser.add_argument(
         "-o",
         "--output",
-        default=sys.stdout,
         dest="output",
-        type=argparse.FileType("w"),
-        help="Provide the url with the file to parse",
+        help="The file where the output should be written (default: stdout)",
     )
     parser.add_argument(
         "-s",
@@ -351,48 +360,51 @@ if __name__ == "__main__":
         "--html_params",
         default="border=1",
         type=str,
-        dest="htmlparmas",
+        dest="htmlparams",
         help="Options for the HTML table",
     )
     args = parser.parse_args()
 
-    cfile = args.text or urlopen(args.url, proxies=None)
-
-    options = OptTable(parse_options(cfile.readlines(), startswith=args.startswith))
-    outform = args.format
-    if outform in ("csv", "html", "markdown"):
-        print(getattr(options, outform)(), file=args.output)
-        args.output.close()
-    else:
-        year = os.getenv("VERSION_DATE")
-        name = args.output.name
-        args.output.close()
-
-        def write_output(ext):
-            with open(name, "w") as outfile:
-                outfile.write(header1_tmpl.substitute(title="Standard Parser Options"))
-                outfile.write(headerpso_tmpl)
-                if ext == "html":
-                    outfile.write(options.html(toptions=args.htmlparmas))
-                else:
-                    outfile.write(options.markdown())
-                write_footer(outfile, f"index.{ext}", year, template=ext)
-
-        from build import (
-            write_footer,
-        )
-
-        ext = os.path.splitext(name)[1][1:]
-
-        if ext == "html":
-            from build_html import (
-                header1_tmpl,
-                headerpso_tmpl,
-            )
+    with (
+        (
+            open(args.output, "w")
+            if args.output is not None
+            else contextlib.nullcontext(sys.stdout)
+        ) as outfile,
+        open(args.text) if args.text is not None else urlopen(args.url) as cfile,
+    ):
+        options = OptTable(parse_options(cfile.readlines(), startswith=args.startswith))
+        outform = args.format
+        if outform in ("csv", "html", "markdown"):
+            print(getattr(options, outform)(), file=outfile)
         else:
-            from build_md import (
-                header1_tmpl,
-                headerpso_tmpl,
+            year = os.getenv("VERSION_DATE")
+            name = outfile.name
+
+            def write_output(f: IO[str], ext: str) -> None:
+                f.write(header1_tmpl.substitute(title="Standard Parser Options"))
+                f.write(headerpso_tmpl)
+                if ext == "html":
+                    f.write(options.html(toptions=args.htmlparams))
+                else:
+                    f.write(options.markdown())
+                write_footer(f, f"index.{ext}", year, template=ext)
+
+            from build import (
+                write_footer,
             )
 
-        write_output(ext)  # html or md
+            ext = os.path.splitext(name)[1][1:]
+
+            if ext == "html":
+                from build_html import (
+                    header1_tmpl,
+                    headerpso_tmpl,
+                )
+            else:
+                from build_md import (
+                    header1_tmpl,
+                    headerpso_tmpl,
+                )
+
+            write_output(f=outfile, ext=ext)  # html or md
