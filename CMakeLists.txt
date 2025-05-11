@@ -212,6 +212,7 @@ include(build_gui_in_subdir)
 include(generate_html)
 
 set(MKHTML_PY ${CMAKE_BINARY_DIR}/utils/mkhtml.py)
+set(MKMARKDOWN_PY ${CMAKE_BINARY_DIR}/utils/mkmarkdown.py)
 set(THUMBNAILS_PY ${CMAKE_BINARY_DIR}/utils/thumbnails.py)
 set(HTML2MAN VERSION_NUMBER=${GRASS_VERSION_NUMBER} ${PYTHON_EXECUTABLE}
              ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/g.html2man.py)

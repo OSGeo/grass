@@ -45,6 +45,7 @@ function(build_script_in_subdir dir_name)
   endif()
 
   set(HTML_FILE ${G_SRC_DIR}/${G_NAME}.html)
+  set(MD_FILE ${G_SRC_DIR}/${G_NAME}.md)
 
   configure_file(
     ${G_SRC_DIR}/${G_NAME}.py
@@ -80,6 +81,8 @@ function(build_script_in_subdir dir_name)
 
   set(HTML_FILE_NAME ${G_NAME})
   set(OUT_HTML_FILE "")
+  set(MD_FILE_NAME ${G_NAME})
+  set(OUT_MD_FILE "")
 
   if(WITH_DOCS AND NOT G_NO_DOCS)
 
@@ -91,6 +94,7 @@ function(build_script_in_subdir dir_name)
     endif()
 
     set(HTML_FILE ${G_SRC_DIR}/${G_NAME}.html)
+    set(MD_FILE ${G_SRC_DIR}/${G_NAME}.md)
     if(EXISTS ${HTML_FILE})
       install(FILES ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${G_NAME}.html
               DESTINATION ${GRASS_INSTALL_DOCDIR})
@@ -104,9 +108,24 @@ function(build_script_in_subdir dir_name)
         )
       endif()
     endif()
+    if(EXISTS ${MD_FILE})
+      install(FILES ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${G_NAME}.md
+              DESTINATION ${GRASS_INSTALL_DOCDIR})
+    else()
+      set(MD_FILE)
+      file(GLOB md_files ${G_SRC_DIR}/*.md)
+      if(md_files)
+        message(
+          FATAL_ERROR
+            "${md_file} does not exists. ${G_SRC_DIR} \n ${OUTDIR}/${G_DEST_DIR}| ${G_NAME}"
+        )
+      endif()
+    endif()
 
     set(TMP_HTML_FILE ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.tmp.html)
     set(OUT_HTML_FILE ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${G_NAME}.html)
+    set(TMP_MD_FILE ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.tmp.md)
+    set(OUT_MD_FILE ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${G_NAME}.md)
 
     add_custom_command(
       OUTPUT ${OUT_HTML_FILE}
@@ -125,11 +144,28 @@ function(build_script_in_subdir dir_name)
       COMMENT "Creating ${OUT_HTML_FILE}"
       DEPENDS ${TRANSLATE_C_FILE} LIB_PYTHON)
 
+    add_custom_command(
+      OUTPUT ${OUT_MD_FILE}
+      COMMAND ${CMAKE_COMMAND} -E copy ${G_SRC_DIR}/${G_NAME}.md
+              ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.md
+      COMMAND
+        ${grass_env_command} ${PYTHON_EXECUTABLE}
+        ${OUTDIR}/${G_DEST_DIR}/${G_NAME}${SCRIPT_EXT} --md-description <
+        ${NULL_DEVICE} > ${TMP_MD_FILE}
+      COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${MKMARKDOWN_PY}
+              ${G_NAME} > ${OUT_MD_FILE}
+      COMMAND ${copy_images_command}
+      COMMAND ${CMAKE_COMMAND} -E remove ${TMP_MD_FILE}
+              ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.md
+      COMMENT "Creating ${OUT_MD_FILE}"
+      DEPENDS ${TRANSLATE_C_FILE} LIB_PYTHON)
+
     install(FILES ${OUT_HTML_FILE} DESTINATION ${GRASS_INSTALL_DOCDIR})
+    install(FILES ${OUT_MD_FILE} DESTINATION ${GRASS_INSTALL_DOCDIR})
 
   endif() # WITH_DOCS
 
-  add_custom_target(${G_NAME} DEPENDS ${TRANSLATE_C_FILE} ${OUT_HTML_FILE})
+  add_custom_target(${G_NAME} DEPENDS ${TRANSLATE_C_FILE} ${OUT_HTML_FILE} ${OUT_MD_FILE})
 
   set(modules_list
       "${G_NAME};${modules_list}"
