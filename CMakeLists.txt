@@ -253,6 +253,7 @@ else()
 endif()
 
 set(NO_HTML_DESCR_TARGETS "g.parser;ximgview;test.raster3d.lib")
+set(NO_MD_DESCR_TARGETS "g.parser;ximgview;test.raster3d.lib")
 
 add_subdirectory(demolocation)
 
