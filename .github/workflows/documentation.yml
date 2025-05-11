@@ -47,7 +47,8 @@ jobs:
       - name: Get dependencies
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y wget git gawk findutils \
+          sudo apt-get install -y --no-install-recommends --no-install-suggests \
+            wget git gawk findutils \
             ninja-build libpq-dev \
             gettext unixodbc-dev libnetcdf-dev
           xargs -a <(awk '! /^ *(#|$)/' "grass/.github/workflows/apt.txt") -r -- \
