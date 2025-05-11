@@ -141,7 +141,7 @@ function(build_gui_in_subdir dir_name)
       COMMAND ${CMAKE_COMMAND} -E remove ${TMP_MD_FILE}
               ${CMAKE_CURRENT_BINARY_DIR}/${G_TARGET_NAME}.md
       COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${MKMARKDOWN_PY}
-              ${G_TARGET_NAME} ${GRASS_VERSION_DATE} > ${GUI_MARKDOWN_FILE}
+              ${G_TARGET_NAME} ${GRASS_VERSION_DATE} > ${GUI_MD_FILE}
       COMMENT "Creating ${OUT_MD_FILE} and ${GUI_MD_FILE}"
       DEPENDS ${OUT_SCRIPT_FILE} GUI_WXPYTHON LIB_PYTHON)
 
