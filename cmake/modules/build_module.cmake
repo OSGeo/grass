@@ -13,7 +13,7 @@ function(build_module)
   cmake_parse_arguments(
     G
     "EXE;NO_DOCS"
-    "NAME;SRC_DIR;SRC_REGEX;RUNTIME_OUTPUT_DIR;PACKAGE;HTML_FILE_NAME"
+    "NAME;SRC_DIR;SRC_REGEX;RUNTIME_OUTPUT_DIR;PACKAGE;HTML_FILE_NAME;MD_FILE_NAME"
     "SOURCES;INCLUDES;DEPENDS;OPTIONAL_DEPENDS;PRIMARY_DEPENDS;DEFS;HEADERS;TEST_SOURCES"
     ${ARGN})
 
@@ -39,6 +39,7 @@ function(build_module)
     set(G_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR})
   endif()
   set(html_file "${G_SRC_DIR}/${G_NAME}.html")
+  set(md_file "${G_SRC_DIR}/${G_NAME}.md")
 
   foreach(G_HEADER ${G_HEADERS})
     if(EXISTS "${G_SRC_DIR}/${G_HEADER}")
@@ -69,18 +70,25 @@ function(build_module)
   endif()
 
   set(RUN_HTML_DESCR TRUE)
+  set(RUN_MD_DESCR TRUE)
   # Auto set if to run RUN_HTML_DESCR
   if(G_EXE)
     set(RUN_HTML_DESCR TRUE)
+    set(RUN_MD_DESCR TRUE)
     if(G_RUNTIME_OUTPUT_DIR)
       set(RUN_HTML_DESCR FALSE)
+      set(RUN_MD_DESCR FALSE)
     endif()
     # g.parser and some others does not have --html-description.
     if(${G_NAME} IN_LIST NO_HTML_DESCR_TARGETS)
       set(RUN_HTML_DESCR FALSE)
     endif()
+    if(${G_NAME} IN_LIST NO_MD_DESCR_TARGETS)
+      set(RUN_MD_DESCR FALSE)
+    endif()
   else()
     set(RUN_HTML_DESCR FALSE)
+    set(RUN_MD_DESCR FALSE)
   endif()
 
   set(install_dest "")
@@ -98,7 +106,8 @@ function(build_module)
   endif()
 
   if(MSVC)
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${CMAKE_BUILD_TYPE} ${G_RUNTIME_OUTPUT_DIR})
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${CMAKE_BUILD_TYPE}
+        ${G_RUNTIME_OUTPUT_DIR})
   elseif(NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${G_RUNTIME_OUTPUT_DIR})
   endif()
@@ -113,6 +122,7 @@ function(build_module)
       set_target_properties(${G_NAME} PROPERTIES FOLDER bin)
     endif()
     set(default_html_file_name ${G_NAME})
+    set(default_md_file_name ${G_NAME})
     set(PGM_NAME ${G_NAME})
     if(WIN32)
       set(PGM_NAME ${G_NAME}.exe)
@@ -135,7 +145,9 @@ function(build_module)
         "${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}/export/${G_NAME}_export.h")
     # Default is to use library target name without grass_ prefix
     string(REPLACE "grass_" "" default_html_file_name ${G_NAME})
+    string(REPLACE "grass_" "" default_md_file_name ${G_NAME})
     set(PGM_NAME ${default_html_file_name})
+    set(PGM_NAME ${default_md_file_name})
 
     generate_export_header(${G_NAME} STATIC_DEFINE "STATIC_BUILD"
                            EXPORT_FILE_NAME ${export_file_name})
@@ -145,6 +157,11 @@ function(build_module)
     set(HTML_FILE_NAME ${G_HTML_FILE_NAME})
   else()
     set(HTML_FILE_NAME ${default_html_file_name})
+  endif()
+  if(G_MD_FILE_NAME)
+    set(MD_FILE_NAME ${G_MD_FILE_NAME})
+  else()
+    set(MD_FILE_NAME ${default_md_file_name})
   endif()
 
   get_property(MODULE_LIST GLOBAL PROPERTY MODULE_LIST)
@@ -220,30 +237,50 @@ function(build_module)
   endif()
 
   set(G_HTML_FILE_NAME "${HTML_FILE_NAME}.html")
+  set(G_MD_FILE_NAME "${MD_FILE_NAME}.md")
   set(html_file_search ${G_SRC_DIR}/${G_HTML_FILE_NAME})
+  set(md_file_search ${G_SRC_DIR}/${G_MD_FILE_NAME})
   if(NOT G_NO_DOCS AND NOT EXISTS ${html_file_search})
+    set(G_NO_DOCS YES)
+  endif()
+  if(NOT G_NO_DOCS AND NOT EXISTS ${md_file_search})
     set(G_NO_DOCS YES)
   endif()
 
   if(WITH_DOCS AND NOT G_NO_DOCS)
     set(HTML_FILE)
+    set(MD_FILE)
     if(EXISTS ${html_file_search})
       set(HTML_FILE ${html_file_search})
       install(FILES ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${G_HTML_FILE_NAME}
               DESTINATION ${GRASS_INSTALL_DOCDIR})
     endif()
+    if(EXISTS ${md_file_search})
+      set(MD_FILE ${md_file_search})
+      install(FILES ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/${G_MD_FILE_NAME}
+              DESTINATION ${GRASS_INSTALL_MKDOCSDIR})
+    endif()
 
     if(NOT HTML_FILE)
+      return()
+    endif()
+    if(NOT MD_FILE)
       return()
     endif()
 
     get_filename_component(HTML_FILE_NAME ${HTML_FILE} NAME)
     get_filename_component(PGM_SOURCE_DIR ${HTML_FILE} PATH)
+    get_filename_component(MD_FILE_NAME ${MD_FILE} NAME)
+    get_filename_component(PGM_SOURCE_DIR ${MD_FILE} PATH)
 
     string(REPLACE ".html" "" PGM_NAME "${HTML_FILE_NAME}")
     string(REPLACE ".html" ".tmp.html" TMP_HTML_NAME ${HTML_FILE_NAME})
     set(TMP_HTML_FILE ${CMAKE_CURRENT_BINARY_DIR}/${TMP_HTML_NAME})
     set(OUT_HTML_FILE ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${HTML_FILE_NAME})
+    string(REPLACE ".md" "" PGM_NAME "${MD_FILE_NAME}")
+    string(REPLACE ".md" ".tmp.md" TMP_MD_NAME ${MD_FILE_NAME})
+    set(TMP_MD_FILE ${CMAKE_CURRENT_BINARY_DIR}/${TMP_MD_NAME})
+    set(OUT_MD_FILE ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/${MD_FILE_NAME})
 
     set(PGM_EXT "")
     if(WIN32)
@@ -252,10 +289,16 @@ function(build_module)
 
     if(RUN_HTML_DESCR)
       set(html_descr_command
-            ${G_NAME}${PGM_EXT}  --html-description < ${NULL_DEVICE} | ${SEARCH_COMMAND}
-            ${HTML_SEARCH_STR})
+          ${G_NAME}${PGM_EXT} --html-description < ${NULL_DEVICE} |
+          ${SEARCH_COMMAND} ${HTML_SEARCH_STR})
     else()
       set(html_descr_command ${CMAKE_COMMAND} -E echo)
+    endif()
+    if(RUN_MD_DESCR)
+      set(md_descr_command ${G_NAME}${PGM_EXT} --md-description <
+                           ${NULL_DEVICE})
+    else()
+      set(md_descr_command ${CMAKE_COMMAND} -E echo)
     endif()
 
     file(
@@ -263,9 +306,12 @@ function(build_module)
       LIST_DIRECTORIES FALSE
       ${G_SRC_DIR}/*.png ${G_SRC_DIR}/*.jpg)
     if(IMG_FILES)
-      set(copy_images_command ${CMAKE_COMMAND} -E copy ${IMG_FILES}
-                              ${OUTDIR}/${GRASS_INSTALL_DOCDIR})
+      set(copy_images_command
+          ${CMAKE_COMMAND} -E copy ${IMG_FILES}
+          ${OUTDIR}/${GRASS_INSTALL_DOCDIR} ${CMAKE_COMMAND} -E copy
+          ${IMG_FILES} ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR})
       install(FILES ${IMG_FILES} DESTINATION ${GRASS_INSTALL_DOCDIR})
+      install(FILES ${IMG_FILES} DESTINATION ${GRASS_INSTALL_MKDOCSDIR})
     endif()
 
     add_custom_command(
@@ -280,7 +326,20 @@ function(build_module)
       COMMAND ${CMAKE_COMMAND} -E remove ${TMP_HTML_FILE}
               ${CMAKE_CURRENT_BINARY_DIR}/${G_HTML_FILE_NAME}
       COMMENT "Creating ${OUT_HTML_FILE}")
+    add_custom_command(
+      TARGET ${G_NAME}
+      POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy ${G_SRC_DIR}/${G_MD_FILE_NAME}
+              ${CMAKE_CURRENT_BINARY_DIR}/${G_MD_FILE_NAME}
+      COMMAND ${grass_env_command} ${md_descr_command} > ${TMP_MD_FILE}
+      COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${MKMARKDOWN_PY}
+              ${PGM_NAME} > ${OUT_MD_FILE}
+      COMMAND ${copy_images_command}
+      COMMAND ${CMAKE_COMMAND} -E remove ${TMP_MD_FILE}
+              ${CMAKE_CURRENT_BINARY_DIR}/${G_MD_FILE_NAME}
+      COMMENT "Creating ${OUT_MD_FILE}")
     install(FILES ${OUT_HTML_FILE} DESTINATION ${GRASS_INSTALL_DOCDIR})
+    install(FILES ${OUT_MD_FILE} DESTINATION ${GRASS_INSTALL_MKDOCSDIR})
   endif() # WITH_DOCS
 
   foreach(test_SOURCE ${G_TEST_SOURCES})
