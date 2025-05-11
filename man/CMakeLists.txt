@@ -20,6 +20,23 @@ set(data_files
     ${CMAKE_CURRENT_SOURCE_DIR}/parser_standard_options.css
     ${CMAKE_CURRENT_SOURCE_DIR}/parser_standard_options.js)
 install(FILES ${data_files} DESTINATION ${GRASS_INSTALL_DOCDIR})
+set(data_files_md
+    ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs.yml
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/grass_logo.svg
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/grass_icon.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/favicon.ico
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/grassdocs.css
+    ${CMAKE_CURRENT_SOURCE_DIR}/scripts/hook_list_scripts.py
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/index.md
+    ${CMAKE_CURRENT_SOURCE_DIR}/overrides/partials/copyright.html
+    ${CMAKE_CURRENT_SOURCE_DIR}/overrides/partials/footer.html
+    ${CMAKE_CURRENT_SOURCE_DIR}/overrides/partials/actions.html
+    ${CMAKE_CURRENT_SOURCE_DIR}/overrides/partials/source.html
+    ${CMAKE_CURRENT_SOURCE_DIR}/overrides/fragments/tags/default/listing.html
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/keywords.md
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/development_intro.md
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/command_line_intro.md)
+install(FILES ${data_files_md} DESTINATION ${GRASS_INSTALL_MKDOCSDIR})
 
 add_custom_command(
   TARGET build_full_index
