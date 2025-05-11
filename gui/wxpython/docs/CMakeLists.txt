@@ -7,13 +7,13 @@ set(wxpython_html_files
     wxGUI.toolboxes
     wxGUI.vnet)
 
-add_custom_target(wxpython_docs DEPENDS grass_gis)
+add_custom_target(wxpython_docs DEPENDS grass_gis LIB_PYTHON)
 add_dependencies(GUI_WXPYTHON wxpython_docs)
 
 foreach(html_file ${wxpython_html_files})
   add_custom_command(
     TARGET wxpython_docs
-    PRE_BUILD DEPENDS LIB_PYTHON
+    PRE_BUILD
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${MKHTML_PY} ${html_file}
             > ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${html_file}.html
