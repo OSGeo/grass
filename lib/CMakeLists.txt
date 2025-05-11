@@ -43,57 +43,10 @@ if(CMAKE_SYSTEM_NAME MATCHES "Linux")
   target_link_libraries(grass_raster PRIVATE ${DL_LIBRARY})
 endif()
 
-add_subdirectory(external/ccmath)
 configure_file(
   external/ccmath/ccmath.h
   ${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}/grass/ccmath_grass.h COPYONLY)
-# build_library_in_subdir(external/ccmath HEADERS "ccmath.h" SOURCES "external/ccmath/solv.c" "external/ccmath/minv.c" DEPENDS "external/ccmath/solv.c.o" "external/ccmath/minv.c.o" )
-# set(g_lib_ccmath_src
-#     external/ccmath/chouse.c
-#     external/ccmath/chousv.c
-#     external/ccmath/cmattr.c
-#     external/ccmath/cmcpy.c
-#     external/ccmath/cminv.c
-#     external/ccmath/cmmul.c
-#     external/ccmath/cmmult.c
-#     external/ccmath/cmprt.c
-#     external/ccmath/csolv.c
-#     external/ccmath/cvmul.c
-#     external/ccmath/eigen.c
-#     external/ccmath/eigval.c
-#     external/ccmath/evmax.c
-#     external/ccmath/hconj.c
-#     external/ccmath/heigval.c
-#     external/ccmath/heigvec.c
-#     external/ccmath/hevmax.c
-#     external/ccmath/hmgen.c
-#     external/ccmath/house.c
-#     external/ccmath/housev.c
-#     external/ccmath/minv.c
-#     external/ccmath/mmul.c
-#     external/ccmath/ortho.c
-#     external/ccmath/psinv.c
-#     external/ccmath/qrbdi.c
-#     external/ccmath/qrbdu1.c
-#     external/ccmath/qrbdv.c
-#     external/ccmath/qrecvc.c
-#     external/ccmath/qreval.c
-#     external/ccmath/solv.c
-#     external/ccmath/solvps.c
-#     external/ccmath/sv2u1v.c
-#     external/ccmath/sv2uv.c
-#     external/ccmath/sv2val.c
-#     external/ccmath/svdu1v.c
-#     external/ccmath/svduv.c
-#     external/ccmath/svdval.c
-#     external/ccmath/trncm.c
-#     external/ccmath/unitary.c
-#     external/ccmath/utrncm.c
-#     external/ccmath/utrnhm.c)
-# build_library_in_subdir(external/ccmath SOURCES ${g_lib_ccmath_src} HEADERS
-#                         "ccmath.h")
-# build_library_in_subdir(external/ccmath)
-build_library_in_subdir(external/ccmath SOURCES $<TARGET_OBJECTS:ccmathObjs>)
+build_library_in_subdir(external/ccmath)
 
 build_library_in_subdir(external/shapelib NAME grass_shape HEADERS "shapefil.h")
 
