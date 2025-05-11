@@ -267,7 +267,7 @@ endif()
 add_subdirectory(lib)
 add_subdirectory(python)
 add_subdirectory(utils)
-set(modules_list)
+set(modules_list CACHE INTERNAL "list of modules")
 
 set(ALL_SUBDIRS
     db
