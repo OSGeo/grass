@@ -8,7 +8,7 @@ function(print_all_variables)
   message(STATUS "End of CMake Variables:")
 endfunction()
 
-print_all_variables()
+# print_all_variables()
 block()
 if(NOT CC)
   set(CC ${CMAKE_C_COMPILER})
