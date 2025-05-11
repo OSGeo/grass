@@ -127,8 +127,7 @@ foreach(category ${categories})
   string(REPLACE ":" ";" category_list ${category})
   list(GET category_list 0 prefix)
   list(GET category_list 1 class_name)
-  list(APPEND category_targets build_class_${class_name}
-       build_class_${class_name}_md)
+  list(APPEND category_targets build_class_${class_name})
   add_custom_target(
     build_class_${class_name}
     COMMAND
@@ -138,15 +137,6 @@ foreach(category ${categories})
     DEPENDS build_pso
     COMMENT "man generation: build class ${class_name}")
   set_target_properties(build_class_${class_name} PROPERTIES FOLDER man)
-  add_custom_target(
-    build_class_${class_name}_md
-    COMMAND
-      ${grass_env_command} ${PYTHON_EXECUTABLE}
-      ${CMAKE_CURRENT_SOURCE_DIR}/build_class.py ${prefix} ${class_name}
-      ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}
-    DEPENDS build_pso_md
-    COMMENT "man generation: build class ${class_name} (markdown)")
-  set_target_properties(build_class_${class_name}_md PROPERTIES FOLDER man)
 endforeach()
 
 # TODO: this shouldn't depend on GUI_WXPYTHON
