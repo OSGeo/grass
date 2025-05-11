@@ -147,7 +147,7 @@ jobs:
       - name: Move from build to target directory
         run: |
           mkdir -p "$MKDOCS_DIR/source/addons"
-          mkdir -p addons-build-dir/docs/md/source
+          mkdir -p addons-build-dir/docs/md/source/ignore
           mv -v addons-build-dir/docs/md/source/* "$MKDOCS_DIR/source/addons"
 
       - name: Build index
