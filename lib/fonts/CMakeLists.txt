@@ -22,22 +22,74 @@ set(font_files
     romant.hmp
     scriptc.hmp
     scripts.hmp)
-list(TRANSFORM font_files PREPEND fonts/)
+# set(font_files2 ${font_files})
+# list(TRANSFORM font_files PREPEND fonts/)
 
-add_custom_target(fonts)
-
+# list(TRANSFORM font_files )
+# add_custom_target()
+# $<PATH:ABSOLUTE_PATH[,NORMALIZE],path...,base_directory>
 add_custom_command(
-  TARGET fonts
-  PRE_BUILD
-  COMMAND ${CMAKE_COMMAND} -E make_directory ${OUTDIR}/${GRASS_INSTALL_FONTSDIR}
-  BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_FONTSDIR})
+  OUTPUT
+    "$<PATH:ABSOLUTE_PATH,${font_files},${OUTDIR}/${GRASS_INSTALL_FONTSDIR}>"
+  COMMAND_EXPAND_LISTS
+  # $<JOIN:$<PATH:ABSOLUTE_PATH,$<PATH:CMAKE_PATH,NORMALIZE,${font_files}>,${CMAKE_CURRENT_SOURCE_DIR}/fonts>, >
+  # "$<JOIN:$<PATH:ABSOLUTE_PATH,$<PATH:CMAKE_PATH,NORMALIZE,${font_files}>,${CMAKE_CURRENT_SOURCE_DIR}/fonts>, >"
+  # "$<JOIN:$<PATH:ABSOLUTE_PATH,${font_files},${CMAKE_CURRENT_SOURCE_DIR}/fonts>,; >"
+  COMMAND
+    ${CMAKE_COMMAND} -E copy_if_different
+    "$<PATH:ABSOLUTE_PATH,${font_files},${CMAKE_CURRENT_SOURCE_DIR}/fonts>"
+    ${OUTDIR}/${GRASS_INSTALL_FONTSDIR}
+  DEPENDS
+    "$<PATH:ABSOLUTE_PATH,${font_files},${CMAKE_CURRENT_SOURCE_DIR}/fonts>")
+# add_custom_command(
+#     OUTPUT "$<PATH:ABSOLUTE_PATH,${font_files},${OUTDIR}/${GRASS_INSTALL_FONTSDIR}>"
+#     COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<PATH:ABSOLUTE_PATH,${font_files},${CMAKE_CURRENT_SOURCE_DIR}/fonts>"
+#             ${OUTDIR}/${GRASS_INSTALL_FONTSDIR}
+#     DEPENDS "$<PATH:ABSOLUTE_PATH,${font_files},${CMAKE_CURRENT_SOURCE_DIR}/fonts>"
+#     BYPRODUCTS "$<PATH:ABSOLUTE_PATH,${font_files},${OUTDIR}/${GRASS_INSTALL_FONTSDIR}>")
+add_custom_target(
+  fonts
+  DEPENDS
+    "$<PATH:ABSOLUTE_PATH,${font_files},${OUTDIR}/${GRASS_INSTALL_FONTSDIR}>")
+install(
+  FILES
+    "$<PATH:ABSOLUTE_PATH,${font_files},${OUTDIR}/${GRASS_INSTALL_FONTSDIR}>"
+  DESTINATION ${GRASS_INSTALL_FONTSDIR})
+# add_custom_command(
+#     OUTPUT "$<PATH:ABSOLUTE_PATH,${font_files2},${OUTDIR}/${GRASS_INSTALL_FONTSDIR}>"
+#     COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<PATH:ABSOLUTE_PATH,${font_files},${CMAKE_CURRENT_SOURCE_DIR}>"
+#             ${OUTDIR}/${GRASS_INSTALL_FONTSDIR}
+#     DEPENDS "$<PATH:ABSOLUTE_PATH,${font_files},${CMAKE_CURRENT_SOURCE_DIR}>"
+#     BYPRODUCTS "$<PATH:ABSOLUTE_PATH,${font_files2},${OUTDIR}/${GRASS_INSTALL_FONTSDIR}>")
+# add_custom_target(fonts DEPENDS "$<PATH:ABSOLUTE_PATH,${font_files2},${OUTDIR}/${GRASS_INSTALL_FONTSDIR}>")
 
-foreach(font_file ${font_files})
-  add_custom_command(
-    TARGET fonts
-    PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/${font_file}
-            ${OUTDIR}/${GRASS_INSTALL_FONTSDIR})
-endforeach()
+# # add_custom_command(
+# #   TARGET fonts
+# #   PRE_BUILD
+# #   COMMAND ${CMAKE_COMMAND} -E make_directory ${OUTDIR}/${GRASS_INSTALL_FONTSDIR}
+# #   BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_FONTSDIR})
 
-install(FILES ${font_files} DESTINATION ${GRASS_INSTALL_FONTSDIR})
+# foreach(font_file ${font_files})
+#   # TODO: Use $<PATH:GET_FILENAME,path...> generator expression with cmake 3.24
+#   # https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html#path-decomposition
+#   cmake_path(GET font_file FILENAME font_file_filename)
+#   add_custom_command(
+#     OUTPUT ${OUTDIR}/${GRASS_INSTALL_FONTSDIR}/${font_file_filename}
+#     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/${font_file}
+#             ${OUTDIR}/${GRASS_INSTALL_FONTSDIR}
+#     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${font_file} ${font_file} ${OUTDIR}/${GRASS_INSTALL_FONTSDIR}
+#     BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_FONTSDIR}/${font_file_filename})
+#   # add_custom_command(
+#   #   TARGET fonts
+#   #   PRE_BUILD
+#   #   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/${font_file}
+#   #           ${OUTDIR}/${GRASS_INSTALL_FONTSDIR}
+#   #   # DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${font_file}
+#   #   BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_FONTSDIR}/${font_file_filename})
+#   # add_dependencies(fonts ${OUTDIR}/${GRASS_INSTALL_FONTSDIR}/${font_file_filename})
+#   # add_dependencies(fonts ${CMAKE_CURRENT_SOURCE_DIR}/${font_file})
+# endforeach()
+# unset(font_file_filename)
+
+# install(FILES ${font_files} DESTINATION ${GRASS_INSTALL_FONTSDIR})
+# install(FILES "$<PATH:ABSOLUTE_PATH,${font_files2},${OUTDIR}/${GRASS_INSTALL_FONTSDIR}>" DESTINATION ${GRASS_INSTALL_FONTSDIR})
