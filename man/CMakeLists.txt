@@ -146,7 +146,7 @@ add_custom_target(
   COMMAND
     ${grass_env_command} ${PYTHON_EXECUTABLE}
     ${CMAKE_CURRENT_SOURCE_DIR}/build_check.py ${OUTDIR}/${GRASS_INSTALL_DOCDIR}
-  DEPENDS ${category_targets} ALL_MODULES LIB_PYTHON GUI_WXPYTHON
+  DEPENDS ${category_targets} ALL_MODULES LIB_PYTHON
   COMMENT "man generation: check output")
 
 #[=======[ TODO: implement somehow...
