@@ -210,6 +210,7 @@ include(copy_python_files_in_subdir)
 include(build_script_in_subdir)
 include(build_gui_in_subdir)
 include(generate_html)
+include(generate_md)
 
 set(MKHTML_PY ${CMAKE_BINARY_DIR}/utils/mkhtml.py)
 set(MKMARKDOWN_PY ${CMAKE_BINARY_DIR}/utils/mkmarkdown.py)
