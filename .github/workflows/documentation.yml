@@ -171,9 +171,9 @@ jobs:
         run: |
           pip install -r "grass/man/mkdocs/requirements.txt"
 
-      - run: ls -la -r $MKDOCS_DIR
-      - run: ls -la -r $MKDOCS_DIR/..
-      - run: ls -la -r $MKDOCS_DIR/../..
+      - run: ls -la -R $MKDOCS_DIR
+      - run: ls -la -R $MKDOCS_DIR/..
+      - run: ls -la -R $MKDOCS_DIR/../..
       - name: Run mkdocs
         run: |
           cd grass
