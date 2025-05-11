@@ -21,7 +21,7 @@ set(data_files
     ${CMAKE_CURRENT_SOURCE_DIR}/parser_standard_options.js)
 install(FILES ${data_files} DESTINATION ${GRASS_INSTALL_DOCDIR})
 set(data_files_md
-    ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs.yml
+    ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/mkdocs.yml
     ${CMAKE_CURRENT_SOURCE_DIR}/source/grass_logo.svg
     ${CMAKE_CURRENT_SOURCE_DIR}/source/grass_icon.png
     ${CMAKE_CURRENT_SOURCE_DIR}/source/favicon.ico
