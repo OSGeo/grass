@@ -91,6 +91,7 @@ function(build_script_in_subdir dir_name)
       set(copy_images_command ${CMAKE_COMMAND} -E copy ${IMG_FILES}
                               ${OUTDIR}/${GRASS_INSTALL_DOCDIR})
       install(FILES ${IMG_FILES} DESTINATION ${GRASS_INSTALL_DOCDIR})
+      install(FILES ${IMG_FILES} DESTINATION ${GRASS_INSTALL_MKDOCSDIR})
     endif()
 
     set(HTML_FILE ${G_SRC_DIR}/${G_NAME}.html)
@@ -109,8 +110,8 @@ function(build_script_in_subdir dir_name)
       endif()
     endif()
     if(EXISTS ${MD_FILE})
-      install(FILES ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${G_NAME}.md
-              DESTINATION ${GRASS_INSTALL_DOCDIR})
+      install(FILES ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/${G_NAME}.md
+              DESTINATION ${GRASS_INSTALL_MKDOCSDIR})
     else()
       set(MD_FILE)
       file(GLOB md_files ${G_SRC_DIR}/*.md)
@@ -125,7 +126,7 @@ function(build_script_in_subdir dir_name)
     set(TMP_HTML_FILE ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.tmp.html)
     set(OUT_HTML_FILE ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${G_NAME}.html)
     set(TMP_MD_FILE ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.tmp.md)
-    set(OUT_MD_FILE ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${G_NAME}.md)
+    set(OUT_MD_FILE ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/${G_NAME}.md)
 
     add_custom_command(
       OUTPUT ${OUT_HTML_FILE}
@@ -161,7 +162,7 @@ function(build_script_in_subdir dir_name)
       DEPENDS ${TRANSLATE_C_FILE} LIB_PYTHON)
 
     install(FILES ${OUT_HTML_FILE} DESTINATION ${GRASS_INSTALL_DOCDIR})
-    install(FILES ${OUT_MD_FILE} DESTINATION ${GRASS_INSTALL_DOCDIR})
+    install(FILES ${OUT_MD_FILE} DESTINATION ${GRASS_INSTALL_MKDOCSDIR})
 
   endif() # WITH_DOCS
 
