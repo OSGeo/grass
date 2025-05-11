@@ -137,13 +137,12 @@ function(build_gui_in_subdir dir_name)
         --md-description < ${NULL_DEVICE} > ${TMP_MD_FILE}
       COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${MKMARKDOWN_PY}
               ${G_TARGET_NAME} ${GRASS_VERSION_DATE} > ${OUT_MD_FILE}
-      COMMENT "Creating ${OUT_MD_FILE}"
       COMMAND ${copy_images_md_command}
       COMMAND ${CMAKE_COMMAND} -E remove ${TMP_MD_FILE}
               ${CMAKE_CURRENT_BINARY_DIR}/${G_TARGET_NAME}.md
       COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${MKMARKDOWN_PY}
               ${G_TARGET_NAME} ${GRASS_VERSION_DATE} > ${GUI_MARKDOWN_FILE}
-      COMMENT "Creating ${GUI_MARKDOWN_FILE}"
+      COMMENT "Creating ${OUT_MD_FILE} and ${GUI_MD_FILE}"
       DEPENDS ${OUT_SCRIPT_FILE} GUI_WXPYTHON LIB_PYTHON)
 
     install(FILES ${OUT_HTML_FILE} ${GUI_HTML_FILE}
