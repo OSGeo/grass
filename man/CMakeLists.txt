@@ -7,7 +7,7 @@ add_custom_target(
     ${CMAKE_CURRENT_SOURCE_DIR}/build_full_index.py
     ${YEAR}
   BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/full_index.html
-  DEPENDS ALL_MODULES LIB_PYTHON GUI_WXPYTHON
+  DEPENDS ALL_MODULES LIB_PYTHON $<$<BOOL:${WITH_GUI}>:GUI_WXPYTHON>
   COMMENT "man generation: build full index")
 
 set(data_files
