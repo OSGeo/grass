@@ -12,6 +12,7 @@ function(build_gui_in_subdir dir_name)
   set(G_TARGET_NAME g.gui.${G_NAME})
 
   set(HTML_FILE_NAME ${G_TARGET_NAME})
+  set(MD_FILE_NAME ${G_TARGET_NAME})
 
   file(GLOB PYTHON_FILES "${G_SRC_DIR}/*.py")
   if(NOT PYTHON_FILES)
@@ -63,10 +64,14 @@ function(build_gui_in_subdir dir_name)
     if(IMG_FILES)
       set(copy_images_command ${CMAKE_COMMAND} -E copy ${IMG_FILES}
                               "${OUTDIR}/${GRASS_INSTALL_DOCDIR}")
+      set(copy_images_md_command ${CMAKE_COMMAND} -E copy ${IMG_FILES}
+                                 "${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}")
       install(FILES ${IMG_FILES} DESTINATION ${GRASS_INSTALL_DOCDIR})
+      install(FILES ${IMG_FILES} DESTINATION ${GRASS_INSTALL_MKDOCSDIR})
     endif()
 
     set(HTML_FILE ${G_SRC_DIR}/${G_TARGET_NAME}.html)
+    set(MD_FILE ${G_SRC_DIR}/${G_TARGET_NAME}.md)
     if(EXISTS ${HTML_FILE})
       install(FILES ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${G_TARGET_NAME}.html
               DESTINATION ${GRASS_INSTALL_DOCDIR})
@@ -80,12 +85,28 @@ function(build_gui_in_subdir dir_name)
         )
       endif()
     endif()
+    if(EXISTS ${MD_FILE})
+      install(FILES ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/${G_TARGET_NAME}.md
+              DESTINATION ${GRASS_INSTALL_MKDOCSDIR})
+    else()
+      set(MD_FILE)
+      file(GLOB md_files ${G_SRC_DIR}/*.md)
+      if(md_files)
+        message(
+          FATAL_ERROR
+            "${md_file} does not exists. ${G_SRC_DIR} \n ${RUNTIME_GISBASE}/scripts| ${G_TARGET_NAME}"
+        )
+      endif()
+    endif()
 
     set(TMP_HTML_FILE
         ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${G_TARGET_NAME}.tmp.html)
     set(OUT_HTML_FILE ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${G_TARGET_NAME}.html)
     set(GUI_HTML_FILE ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/wxGUI.${G_NAME}.html)
-
+    set(TMP_MD_FILE
+        ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${G_TARGET_NAME}.tmp.md)
+    set(OUT_MD_FILE ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/${G_TARGET_NAME}.md)
+    set(GUI_MD_FILE ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/wxGUI.${G_NAME}.md)
 
     add_custom_command(
       OUTPUT ${OUT_HTML_FILE}
@@ -107,15 +128,35 @@ function(build_gui_in_subdir dir_name)
       COMMENT "Creating ${GUI_HTML_FILE}"
       DEPENDS ${OUT_SCRIPT_FILE} GUI_WXPYTHON LIB_PYTHON)
 
+    add_custom_command(
+      OUTPUT ${OUT_MD_FILE}
+      COMMAND ${CMAKE_COMMAND} -E copy ${G_SRC_DIR}/${G_TARGET_NAME}.md
+              ${CMAKE_CURRENT_BINARY_DIR}/${G_TARGET_NAME}.md
+      COMMAND
+        ${grass_env_command} ${PYTHON_EXECUTABLE}
+        ${OUTDIR}/${GRASS_INSTALL_SCRIPTDIR}/${G_TARGET_NAME}${SCRIPT_EXT}
+        --md-description < ${NULL_DEVICE} > ${TMP_MD_FILE}
+      COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${MKMARKDOWN_PY}
+              ${G_TARGET_NAME} ${GRASS_VERSION_DATE} > ${OUT_MD_FILE}
+      COMMENT "Creating ${OUT_MD_FILE}"
+      COMMAND ${copy_images_md_command}
+      COMMAND ${CMAKE_COMMAND} -E remove ${TMP_MD_FILE}
+              ${CMAKE_CURRENT_BINARY_DIR}/${G_TARGET_NAME}.md
+      COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${MKMARKDOWN_PY}
+              ${G_TARGET_NAME} ${GRASS_VERSION_DATE} > ${GUI_MARKDOWN_FILE}
+      COMMENT "Creating ${GUI_MARKDOWN_FILE}"
+      DEPENDS ${OUT_SCRIPT_FILE} GUI_WXPYTHON LIB_PYTHON)
 
     install(FILES ${OUT_HTML_FILE} ${GUI_HTML_FILE}
             DESTINATION ${GRASS_INSTALL_DOCDIR})
+    install(FILES ${OUT_MD_FILE} ${GUI_MD_FILE}
+            DESTINATION ${GRASS_INSTALL_MKDOCSDIR})
 
   endif() # WITH_DOCS
 
   add_custom_target(
     ${G_TARGET_NAME} DEPENDS ${GUI_STAMP_FILE} ${OUT_SCRIPT_FILE}
-                             ${OUT_HTML_FILE})
+                             ${OUT_HTML_FILE} ${OUT_MD_FILE})
 
   set(modules_list
       "${G_TARGET_NAME};${modules_list}"
