@@ -306,10 +306,10 @@ function(build_module)
       LIST_DIRECTORIES FALSE
       ${G_SRC_DIR}/*.png ${G_SRC_DIR}/*.jpg)
     if(IMG_FILES)
-      set(copy_images_command
-          ${CMAKE_COMMAND} -E copy ${IMG_FILES}
-          ${OUTDIR}/${GRASS_INSTALL_DOCDIR} ${CMAKE_COMMAND} -E copy
-          ${IMG_FILES} ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR})
+      set(copy_images_command ${CMAKE_COMMAND} -E copy ${IMG_FILES}
+                              ${OUTDIR}/${GRASS_INSTALL_DOCDIR})
+      set(copy_images_md_command ${CMAKE_COMMAND} -E copy ${IMG_FILES}
+                                 ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR})
       install(FILES ${IMG_FILES} DESTINATION ${GRASS_INSTALL_DOCDIR})
       install(FILES ${IMG_FILES} DESTINATION ${GRASS_INSTALL_MKDOCSDIR})
     endif()
@@ -334,7 +334,7 @@ function(build_module)
       COMMAND ${grass_env_command} ${md_descr_command} > ${TMP_MD_FILE}
       COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${MKMARKDOWN_PY}
               ${PGM_NAME} > ${OUT_MD_FILE}
-      COMMAND ${copy_images_command}
+      COMMAND ${copy_images_md_command}
       COMMAND ${CMAKE_COMMAND} -E remove ${TMP_MD_FILE}
               ${CMAKE_CURRENT_BINARY_DIR}/${G_MD_FILE_NAME}
       COMMENT "Creating ${OUT_MD_FILE}")
