@@ -145,7 +145,7 @@ function(build_module)
         "${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}/export/${G_NAME}_export.h")
     # Default is to use library target name without grass_ prefix
     string(REPLACE "grass_" "" default_html_file_name ${G_NAME})
-    string(REPLACE "grass_" "" default_md_file_name ${G_NAME})
+    # string(REPLACE "grass_" "" default_md_file_name ${G_NAME})
     set(PGM_NAME ${default_html_file_name})
     set(PGM_NAME ${default_md_file_name})
 
