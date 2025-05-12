@@ -86,7 +86,7 @@ The ClangFormat settings for the repo are defined in
 [.clang-format](../../.clang-format).
 
 If using pre-commit is not an option, for whatever reason, there is a helper
-script [grass_clang_format.sh](./utils/grass_clang_format.sh), which simplifies
+script [grass_clang_format.sh](../../utils/grass_clang_format.sh), which simplifies
 bulk reformatting.
 
 #### Order of include headers
