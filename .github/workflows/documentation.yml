@@ -51,6 +51,7 @@ jobs:
             wget git gawk findutils \
             ninja-build libpq-dev \
             libnotify4 \
+            libsdl2-2.0-0 \
             gettext unixodbc-dev libnetcdf-dev
           xargs -a <(awk '! /^ *(#|$)/' "grass/.github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
