@@ -51,7 +51,6 @@ jobs:
             wget git gawk findutils \
             ninja-build libpq-dev \
             libglu1-mesa \
-            libgstreamer-plugins-base1.0 \
             libgtk-3-0 \
             libjpeg8 \
             libnotify4 \
