@@ -50,8 +50,18 @@ jobs:
           sudo apt-get install -y --no-install-recommends --no-install-suggests \
             wget git gawk findutils \
             ninja-build libpq-dev \
+            libglu1-mesa \
+            libgstreamer-plugins-base1.0 \
+            libgtk-3-0 \
+            libjpeg8 \
             libnotify4 \
+            libpng16-16 \
+            librsvg2-common \
             libsdl2-2.0-0 \
+            libsm6 \
+            libtiff5 \
+            libwebkit2gtk-4.0 \
+            libxtst6 \
             gettext unixodbc-dev libnetcdf-dev
           xargs -a <(awk '! /^ *(#|$)/' "grass/.github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
