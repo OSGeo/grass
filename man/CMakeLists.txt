@@ -21,23 +21,37 @@ set(data_files
     ${CMAKE_CURRENT_SOURCE_DIR}/parser_standard_options.css
     ${CMAKE_CURRENT_SOURCE_DIR}/parser_standard_options.js)
 install(FILES ${data_files} DESTINATION ${GRASS_INSTALL_DOCDIR})
+
+# MkDocs file hierarchy on install
+# Files that go into the "source/" subdirectory of docs/mkdocs
 set(data_files_md
-    ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/mkdocs.yml
-    ${CMAKE_CURRENT_SOURCE_DIR}/source/grass_logo.svg
-    ${CMAKE_CURRENT_SOURCE_DIR}/source/grass_icon.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/source/favicon.ico
-    ${CMAKE_CURRENT_SOURCE_DIR}/source/grassdocs.css
-    ${CMAKE_CURRENT_SOURCE_DIR}/scripts/hook_list_scripts.py
-    ${CMAKE_CURRENT_SOURCE_DIR}/source/index.md
-    ${CMAKE_CURRENT_SOURCE_DIR}/overrides/partials/copyright.html
-    ${CMAKE_CURRENT_SOURCE_DIR}/overrides/partials/footer.html
-    ${CMAKE_CURRENT_SOURCE_DIR}/overrides/partials/actions.html
-    ${CMAKE_CURRENT_SOURCE_DIR}/overrides/partials/source.html
-    ${CMAKE_CURRENT_SOURCE_DIR}/overrides/fragments/tags/default/listing.html
-    ${CMAKE_CURRENT_SOURCE_DIR}/source/keywords.md
-    ${CMAKE_CURRENT_SOURCE_DIR}/source/development_intro.md
-    ${CMAKE_CURRENT_SOURCE_DIR}/source/command_line_intro.md)
-install(FILES ${data_files_md} DESTINATION ${GRASS_INSTALL_MKDOCSDIR})
+    ${CMAKE_CURRENT_SOURCE_DIR}/grass_logo.svg
+    ${CMAKE_CURRENT_SOURCE_DIR}/grass_icon.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/favicon.ico
+    ${CMAKE_CURRENT_SOURCE_DIR}/grassdocs.css
+    ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/index.md
+    ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/keywords.md
+    ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/docs/development_intro.md
+    ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/docs/command_line_intro.md)
+# Files that go into the "overrides/partials/" subdirectory of docs/mkdocs
+set(data_files_md_partials
+    ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/overrides/partials/copyright.html
+    ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/overrides/partials/footer.html
+    ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/overrides/partials/actions.html
+    ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/overrides/partials/source.html)
+# Installing files from the variables above
+install(FILES ${data_files_md} DESTINATION ${GRASS_INSTALL_MKDOCSDIR}/source)
+install(FILES ${data_files_md_partials}
+        DESTINATION ${GRASS_INSTALL_MKDOCSDIR}/overrides/partials)
+# Installing individual files that weren't contained in a variable
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/mkdocs.yml
+        DESTINATION ${GRASS_INSTALL_MKDOCSDIR})
+install(
+  FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/overrides/fragments/tags/default/listing.html
+  DESTINATION ${GRASS_INSTALL_MKDOCSDIR}/overrides/fragments/tags/default)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/scripts/hook_list_scripts.py
+        DESTINATION ${GRASS_INSTALL_MKDOCSDIR}/scripts)
 
 add_custom_command(
   TARGET build_full_index
