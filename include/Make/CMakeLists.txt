@@ -9,7 +9,7 @@ function(print_all_variables)
 endfunction()
 
 # print_all_variables()
-block()
+# block()
 if(NOT CC)
   set(CC ${CMAKE_C_COMPILER})
 endif()
@@ -144,7 +144,7 @@ if(NOT CROSS_COMPILING)
 endif()
 
 configure_file(Platform.make.in Platform.make @ONLY)
-endblock()
+# endblock()
 
 # file(GLOB_RECURSE SRCMAKES "*.make")
 # set(include_make_depends)
