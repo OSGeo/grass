@@ -106,7 +106,7 @@ jobs:
       - name: Configure (core)
         run: |
           cmake ${CMAKE_OPTIONS} -S $GITHUB_WORKSPACE/grass -B $GITHUB_WORKSPACE/grass/build -G Ninja \
-            -DCMAKE_INSTALL_PREFIX=$HOME/install -DWITH_NLS=ON -DWITH_GUI=OFF -DWITH_DOCS=ON \
+            -DCMAKE_INSTALL_PREFIX=$HOME/install -DWITH_NLS=ON -DWITH_GUI=ON -DWITH_DOCS=ON \
             -DWITH_READLINE=ON -DWITH_ODBC=ON -DWITH_NETCDF=ON -DWITH_BZLIB=ON
       - name: Print CMakeCache.txt
         shell: bash -el {0}
