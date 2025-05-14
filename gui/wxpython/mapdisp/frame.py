@@ -785,7 +785,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
             return
         width, height = self.MapWindow.GetClientSize()
 
-        name = None
+        name = ""
         extType = None
 
         for param in command[1:]:
