@@ -251,7 +251,7 @@ from the window, a map canvas where a map composition of one or more
 layers is displayed, and a statusbar with information about the
 geographic region of the maps displayed.
 
-![Map Display Window](wxGUI_map_display.jpg)  
+![Map Display Window](wxGUI_map_display.png)  
 *Figure: Map Display screenshot on Ubuntu*
 
 Each Map Display Window has a unique layer tree (in the layer manager)
