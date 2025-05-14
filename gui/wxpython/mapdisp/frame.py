@@ -784,6 +784,10 @@ class MapPanel(SingleMapPanel, MainPageBase):
         if not ltype:
             return
         width, height = self.MapWindow.GetClientSize()
+
+        name = None
+        extType = None
+
         for param in command[1:]:
             try:
                 p, val = param.split("=")
