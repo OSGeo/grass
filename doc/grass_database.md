@@ -36,7 +36,7 @@ used in GRASS to hold attribute data and might be part of the GRASS
 Database. From user point of view, GRASS Database with all its
 data in it is similar to, e.g. PostGIS, database, as it stores all
 information inside in a specific format and is accessible by specific
-tools. GRASS Databases is in GRASS often called GISDBASE or
+tools. GRASS Database is often called GISDBASE or
 DATABASE.
 
 ## GRASS Projects
