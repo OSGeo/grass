@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-23 03:37-0600\n"
-"PO-Revision-Date: 2024-03-28 22:45+0000\n"
+"PO-Revision-Date: 2025-04-03 08:42+0000\n"
 "Last-Translator: luca <lucadeluge@gmail.com>\n"
 "Language-Team: Italian <https://weblate.osgeo.org/projects/grass-gis/"
 "grasswxpy/it/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: ../gui/wxpython/nviz/tools.py:109 ../gui/wxpython/nviz/preferences.py:65
 #: ../gui/wxpython/nviz/preferences.py:69
@@ -1951,7 +1951,7 @@ msgstr ""
 
 #: ../gui/wxpython/datacatalog/infomanager.py:36
 msgid "Create new Location"
-msgstr ""
+msgstr "Crea nuova Location"
 
 #: ../gui/wxpython/datacatalog/infomanager.py:37
 msgid "Learn more"
@@ -2057,9 +2057,8 @@ msgid "Do you want to create a new project (also known as location)?"
 msgstr "Si vuole creare un nuovo mapset?"
 
 #: ../gui/wxpython/datacatalog/catalog.py:217
-#, fuzzy
 msgid "Create project?"
-msgstr "Crea pacchetto"
+msgstr "Crea progetto?"
 
 #: ../gui/wxpython/datacatalog/catalog.py:314
 msgid "Link external raster data  [r.external]"
@@ -2087,11 +2086,11 @@ msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:353
 msgid "Create raster map from x,y,z data  [r.in.xyz]"
-msgstr ""
+msgstr "Crea mappa raster da dati x,y,z [r.in.xyz]"
 
 #: ../gui/wxpython/datacatalog/catalog.py:359
 msgid "Create vector map from x,y,z data  [v.in.ascii]"
-msgstr ""
+msgstr "Crea mappa vettoriale da dati x,y,z [v.in.ascii]"
 
 #: ../gui/wxpython/datacatalog/catalog.py:365
 #: ../gui/wxpython/menustrings.py:164 ../gui/wxpython/menustrings.py:1204
@@ -2208,7 +2207,7 @@ msgstr "Rinomina mappa"
 
 #: ../gui/wxpython/datacatalog/tree.py:1186
 msgid "Cannot rename mapset"
-msgstr ""
+msgstr "Il mapset non può essere rinominato"
 
 #: ../gui/wxpython/datacatalog/tree.py:1199
 #, python-brace-format
@@ -2217,7 +2216,7 @@ msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1211
 msgid "Cannot rename location"
-msgstr ""
+msgstr "La location non può essere rinominata"
 
 #: ../gui/wxpython/datacatalog/tree.py:1223
 #, python-brace-format
@@ -2382,14 +2381,12 @@ msgid "&Create mapset"
 msgstr "&Crea mapset"
 
 #: ../gui/wxpython/datacatalog/tree.py:2168
-#, fuzzy
 msgid "&Delete project"
-msgstr "&Elimina mapset"
+msgstr "&Elimina progetto"
 
 #: ../gui/wxpython/datacatalog/tree.py:2174
-#, fuzzy
 msgid "&Rename project"
-msgstr "&Rinomina mapset"
+msgstr "&Rinomina progetto"
 
 #: ../gui/wxpython/datacatalog/tree.py:2193
 #, fuzzy
@@ -2397,9 +2394,8 @@ msgid "&Create new project (location)"
 msgstr "&Crea nuova location"
 
 #: ../gui/wxpython/datacatalog/tree.py:2197
-#, fuzzy
 msgid "&Download sample project (location)"
-msgstr "&Scarica location di esempio"
+msgstr "&Scarica progetto di esempio (location)"
 
 #: ../gui/wxpython/datacatalog/tree.py:2202
 msgid "&Remove GRASS database from data catalog"
@@ -2410,9 +2406,8 @@ msgid "&Delete GRASS database from disk"
 msgstr "&Elimana di database di GRASS dal disco"
 
 #: ../gui/wxpython/datacatalog/tree.py:2239
-#, fuzzy
 msgid "&Delete projects (locations)"
-msgstr "&Elimina locations"
+msgstr "&Elimina progetti (locations)"
 
 #: ../gui/wxpython/datacatalog/tree.py:2251
 msgid "&Delete mapsets"
@@ -2448,14 +2443,12 @@ msgid "Add existing or create new database"
 msgstr "Aggiungi un database esistente o creane uno nuovo"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:35
-#, fuzzy
 msgid "Create new mapset in current project"
-msgstr "Crea un nuovo Mapset nella Location selezionata"
+msgstr "Crea un nuovo mapset nel progetto corrente"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:39
-#, fuzzy
 msgid "Create new project (location) in current GRASS database"
-msgstr "Crea nuova mapset nella location attuale, cambia il mapset attuale."
+msgstr "Crea nuovo progetto (location) nell'attuale database GRASS"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:43
 msgid "Download sample project (location) to current GRASS database"
@@ -2811,9 +2804,8 @@ msgid "General info"
 msgstr "Generale"
 
 #: ../gui/wxpython/history/browser.py:138
-#, fuzzy
 msgid "Computational region during command execution"
-msgstr "Imposta regione computazionale da una regione precedentemente salvata"
+msgstr ""
 
 #: ../gui/wxpython/history/browser.py:265
 #: ../gui/wxpython/history/browser.py:292
@@ -2881,9 +2873,8 @@ msgid "Save file as..."
 msgstr "Salva file come..."
 
 #: ../gui/wxpython/history/browser.py:485
-#, fuzzy
 msgid "Command history saved to '{}'"
-msgstr "Output dei comandi salvati in '{}'"
+msgstr "Storia dei comandi salvati in '{}'"
 
 #: ../gui/wxpython/startup/locdownload.py:148
 msgid "Download in progress, wait until it is finished 0%"
@@ -3025,6 +3016,11 @@ msgid ""
 "\n"
 "No mapset will be renamed."
 msgstr ""
+"Non si può rinominare il mapset <{mapset}> per la seguene ragione:\n"
+"\n"
+"{reasons}\n"
+"\n"
+"Nessun mapset sarà rinominato."
 
 #: ../gui/wxpython/startup/guiutils.py:234
 msgid "Unable to rename selected mapset"
@@ -3083,6 +3079,11 @@ msgid ""
 "\n"
 "No project will be renamed."
 msgstr ""
+"Non si può rinominare il progetto <{location}> per le seguenti ragioni:\n"
+"\n"
+"{reasons}\n"
+"\n"
+"Nessun progetto sarà eliminato."
 
 #: ../gui/wxpython/startup/guiutils.py:288
 #, fuzzy
@@ -3117,6 +3118,11 @@ msgid ""
 "\n"
 "No mapsets will be deleted."
 msgstr ""
+"Non si può eliminare uno o più mapset per le seguenti ragioni:\n"
+"\n"
+"{reasons}\n"
+"\n"
+"Nessun mapset sarà eliminato."
 
 #: ../gui/wxpython/startup/guiutils.py:378
 msgid "Unable to delete selected mapsets"
@@ -3159,6 +3165,11 @@ msgid ""
 "\n"
 "No projects will be deleted."
 msgstr ""
+"Non si può eliminare uno o più progetto per le seguenti ragioni:\n"
+"\n"
+"{reasons}\n"
+"\n"
+"Nessun progetto sarà eliminato."
 
 #: ../gui/wxpython/startup/guiutils.py:463
 #, fuzzy
@@ -3205,6 +3216,12 @@ msgid ""
 "\n"
 "GRASS database will not be deleted."
 msgstr ""
+"Non si può eliminare il database di GRASS dal disco per la seguente ragione:"
+"\n"
+"\n"
+"{reasons}\n"
+"\n"
+"Il database di GRASS non sarà eliminato."
 
 #: ../gui/wxpython/startup/guiutils.py:536
 msgid "Unable to delete selected GRASS database"
@@ -4177,7 +4194,7 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:384
 msgid "Create a generic cartesian coordinate system (XY)"
-msgstr ""
+msgstr "Crea un generico sistema di coordinate cartesiane (XY)"
 
 #: ../gui/wxpython/location_wizard/wizard.py:387
 #: ../gui/wxpython/location_wizard/wizard.py:1524
@@ -5772,7 +5789,7 @@ msgstr "Importa vettoriali Mapgen o Matlab-ASCII in GRASS."
 
 #: ../gui/wxpython/menustrings.py:91 ../gui/wxpython/menustrings.py:1131
 msgid "Converts LAS LiDAR point clouds to a GRASS vector map with PDAL."
-msgstr ""
+msgstr "Converte nuvole di punti LAS LiDAT a vettoriale di GRASS con PDAL."
 
 #: ../gui/wxpython/menustrings.py:92 ../gui/wxpython/menustrings.py:1132
 msgid "Unpack vector map"
@@ -6398,14 +6415,12 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:238
-#, fuzzy
 msgid "Change project (location) and mapset"
-msgstr "Cambia i correnti location e mapset"
+msgstr "Cambia progetto (location) e mapset"
 
 #: ../gui/wxpython/menustrings.py:239
-#, fuzzy
 msgid "Change current project and mapset."
-msgstr "Cambia i correnti location e mapset"
+msgstr "Cambia il corrente progetto e mapset."
 
 #: ../gui/wxpython/menustrings.py:240
 msgid "Change mapset"
@@ -6438,9 +6453,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:248
-#, fuzzy
 msgid "Create new project (location)"
-msgstr "Crea nuova location"
+msgstr "Crea nuovo progetto (location)"
 
 #: ../gui/wxpython/menustrings.py:249
 #, fuzzy
@@ -6657,11 +6671,11 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:298 ../gui/wxpython/menustrings.py:1263
 msgid "Build a VRT (Virtual Raster)"
-msgstr ""
+msgstr "Crea un VRT (Raster Virtuale)"
 
 #: ../gui/wxpython/menustrings.py:299 ../gui/wxpython/menustrings.py:1264
 msgid "Build a VRT (Virtual Raster) from the list of input raster maps."
-msgstr ""
+msgstr "Crea un VRT (Raster Virtuale) dalla lista di mappe raster di input."
 
 #: ../gui/wxpython/menustrings.py:300 ../gui/wxpython/menustrings.py:606
 #: ../gui/wxpython/menustrings.py:1265 ../gui/wxpython/menustrings.py:1571
@@ -6825,7 +6839,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:342 ../gui/wxpython/menustrings.py:1307
 msgid "Calculates a new raster map from a simple r.mapcalc expression."
-msgstr ""
+msgstr "Calcola una nuova mappa raster da una semplice espressione r.mapcalc."
 
 #: ../gui/wxpython/menustrings.py:344 ../gui/wxpython/menustrings.py:1309
 msgid "Raster map calculator."
@@ -7203,7 +7217,7 @@ msgstr "Analisi dei bacini idrografici"
 
 #: ../gui/wxpython/menustrings.py:420 ../gui/wxpython/menustrings.py:1385
 msgid "Calculates hydrological parameters and RUSLE factors."
-msgstr ""
+msgstr "Calcola parametri idrologichi e fattori RUSLE."
 
 #: ../gui/wxpython/menustrings.py:421 ../gui/wxpython/menustrings.py:1386
 msgid "Watershed subbasins"
@@ -7855,7 +7869,7 @@ msgstr "Regressione multipla"
 
 #: ../gui/wxpython/menustrings.py:558 ../gui/wxpython/menustrings.py:1523
 msgid "Calculates multiple linear regression from raster maps."
-msgstr ""
+msgstr "Calcola la regressione lineare multipla da mappe raster."
 
 #: ../gui/wxpython/menustrings.py:559 ../gui/wxpython/menustrings.py:1524
 msgid "Mutual category occurrences"
@@ -7935,6 +7949,8 @@ msgstr "Crea vettore 3D sopra un raster"
 #: ../gui/wxpython/menustrings.py:574 ../gui/wxpython/menustrings.py:1539
 msgid "Converts 2D vector features to 3D by sampling of elevation raster map."
 msgstr ""
+"Converte gli elementi di un vettoriale 2D in 3D campionando un mappa raster "
+"dell'elevazione."
 
 #: ../gui/wxpython/menustrings.py:575 ../gui/wxpython/menustrings.py:1540
 msgid "Extrude 3D vector map"
@@ -8479,6 +8495,8 @@ msgstr "Cambia o visualizza categorie"
 #: ../gui/wxpython/menustrings.py:709 ../gui/wxpython/menustrings.py:1674
 msgid "Attaches, deletes or reports vector categories to/from/of map geometry."
 msgstr ""
+"Aggiunge, elimina o riporta categorie vettoriali a/da/di geometria della "
+"mappa."
 
 #: ../gui/wxpython/menustrings.py:711 ../gui/wxpython/menustrings.py:1676
 msgid ""
@@ -8503,6 +8521,8 @@ msgid ""
 "Calculates univariate statistics from a raster map based on a vector map and "
 "uploads statistics to new attribute columns."
 msgstr ""
+"Calcola statistiche univariate da una mappa raster basata su una mappa "
+"vettoriale e carica le statistiche su nuove colonne di attributi."
 
 #: ../gui/wxpython/menustrings.py:715 ../gui/wxpython/menustrings.py:1680
 msgid "Update area attributes from vector"
@@ -9654,6 +9674,8 @@ msgid ""
 "Assigns timestamps and registers raster, vector and raster3d maps in a space "
 "time dataset."
 msgstr ""
+"Assegna timestamp e registra mappe raster, vettoriali e raster3d in un "
+"dataset spazio tempo"
 
 #: ../gui/wxpython/menustrings.py:987 ../gui/wxpython/menustrings.py:1952
 msgid "Unregister maps from datasets"
@@ -10327,7 +10349,7 @@ msgstr ""
 
 #: ../gui/wxpython/wxplot/scatter.py:58
 msgid "Bivariate Scatterplot"
-msgstr ""
+msgstr "Grafico di dispersione bivariato"
 
 #: ../gui/wxpython/wxplot/scatter.py:59 ../gui/wxpython/wxplot/scatter.py:60
 #: ../gui/wxpython/wxplot/histogram.py:59
@@ -10345,7 +10367,7 @@ msgstr "Almeno due raster devono essere specificati"
 
 #: ../gui/wxpython/wxplot/scatter.py:141
 msgid "Bivariate Scatterplot of "
-msgstr ""
+msgstr "Grafico di dispersione bivariato di "
 
 #: ../gui/wxpython/wxplot/scatter.py:163 ../gui/wxpython/wxplot/scatter.py:164
 #, python-format
@@ -11236,7 +11258,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:349
 msgid "Couldn't write file <{}>.{}"
-msgstr ""
+msgstr "Non è possibile scrivere il file <{}>.{}"
 
 #: ../gui/wxpython/gui_core/pyedit.py:472
 msgid "Open file"
@@ -11401,7 +11423,7 @@ msgstr "Chiedi quando si sta chiudendo wxGUI o un display"
 
 #: ../gui/wxpython/gui_core/preferences.py:325
 msgid "Automatically copy selected text to clipboard (in the Console tab)"
-msgstr ""
+msgstr "Copia automaticamente il testo agli appunti (nel pannello Console)"
 
 #: ../gui/wxpython/gui_core/preferences.py:348
 #, fuzzy
@@ -11606,7 +11628,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:1228
 msgid "Close dialog when completed successfully"
-msgstr ""
+msgstr "Chiudi finestra quando è completato con successo"
 
 #: ../gui/wxpython/gui_core/preferences.py:1240
 #: ../gui/wxpython/gui_core/dialogs.py:343
@@ -13902,7 +13924,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_manager.py:1619
 #, python-format
 msgid "CONTROL_POINTS file saved for group <%s>"
-msgstr ""
+msgstr "File dei CONTROL_POINTS salvato per gruppo <%s>"
 
 #: ../gui/wxpython/image2target/ii2t_manager.py:1667
 msgid "Reading CONTROL_POINTS file failed"
@@ -14770,7 +14792,7 @@ msgstr ""
 
 #: ../gui/wxpython/rdigit/g.gui.rdigit.py:212
 msgid "Base raster map <{}> not found in current mapset."
-msgstr ""
+msgstr "Mappa raster di base <{}> non trovata nel mapset corrente."
 
 #: ../gui/wxpython/rdigit/g.gui.rdigit.py:237
 msgid "Raster Digitizer - GRASS GIS"
@@ -17344,7 +17366,7 @@ msgstr ""
 #: ../gui/wxpython/main_window/frame.py:1026 ../gui/wxpython/lmgr/frame.py:583
 #: ../gui/wxpython/lmgr/frame.py:907
 msgid "Close Map Display {}"
-msgstr ""
+msgstr "Chiudi Visualizzatore della Mappa {}"
 
 #: ../gui/wxpython/main_window/frame.py:588 ../gui/wxpython/lmgr/frame.py:181
 msgid "Workspace Toolbar"
@@ -17492,7 +17514,7 @@ msgstr "Versione di GRASS"
 
 #: ../gui/wxpython/main_window/frame.py:1655 ../gui/wxpython/lmgr/frame.py:1504
 msgid "Code revision"
-msgstr ""
+msgstr "Revisione del codice"
 
 #: ../gui/wxpython/main_window/frame.py:1657 ../gui/wxpython/lmgr/frame.py:1506
 msgid "Build date"
@@ -17693,8 +17715,9 @@ msgid "Add raster cell numbers"
 msgstr "Aggiungi i valori numerici delle celle raster"
 
 #: ../gui/wxpython/lmgr/layertree.py:67
+#, fuzzy
 msgid "Add thematic (choropleth) vector map layer"
-msgstr ""
+msgstr "Aggiunge mappa vettoriale tematica (choropleth)"
 
 #: ../gui/wxpython/lmgr/layertree.py:70
 msgid "Add thematic chart layer"
@@ -17743,7 +17766,7 @@ msgstr "Layer"
 
 #: ../gui/wxpython/lmgr/layertree.py:464
 msgid "Check selected layers"
-msgstr ""
+msgstr "Controlla layers selezionati"
 
 #: ../gui/wxpython/lmgr/layertree.py:475
 msgid "Uncheck selected layers"
@@ -19693,7 +19716,7 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/g.gui.psmap.py:52
 msgid "Cartographic Composer - GRASS GIS"
-msgstr ""
+msgstr "Compositore cartografico - GRASS GIS"
 
 #: ../gui/wxpython/psmap/utils.py:101
 msgid "inch"

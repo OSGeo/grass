@@ -209,7 +209,7 @@ def decode(bytes_: AnyStr, encoding: str | None = None) -> str:
         enc = _get_encoding() if encoding is None else encoding
         return bytes_.decode(enc)
     # only text should be used
-    msg = "can only accept types str and bytes"
+    msg = f"can only accept types str and bytes, not {type(bytes_).__name__}"
     raise TypeError(msg)
 
 

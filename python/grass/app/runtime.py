@@ -179,10 +179,7 @@ def set_python_path_variable(install_path, env):
 def set_path_to_python_executable(env):
     """Set GRASS_PYTHON environment variable"""
     if not env.get("GRASS_PYTHON"):
-        if WINDOWS:
-            env["GRASS_PYTHON"] = "python3.exe"
-        else:
-            env["GRASS_PYTHON"] = "python3"
+        env["GRASS_PYTHON"] = sys.executable
 
 
 def set_defaults(config_projshare_path):

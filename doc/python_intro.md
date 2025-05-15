@@ -4,41 +4,29 @@ authors:
     - GRASS Development Team
 ---
 
-# Python Introduction
+# Python introduction
 
-GRASSs' Python interface provides libraries to create GRASS scripts and access
-the internal data structures of GRASS. The Python interface is broken down into
-three main libraries:
-[grass.script](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#module-script.core),
-[grass.pygrass](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_index.html),
-and [grass.temporal](https://grass.osgeo.org/grass-stable/manuals/libpython/temporal_framework.html).
-The `grass.script` library provides a Python interface to GRASS, the `grass.pygrass`
-library provides access to the internal data structures of GRASS, and the
-`grass.temporal` library provides a Python interface to the temporal framework
-in GRASS.
+GRASS Python interface provides libraries to create GRASS scripts and access
+the internal data structures of GRASS. The Python interface consists of
+two main libraries:
+*[grass.script](https://grass.osgeo.org/grass-stable/manuals/libpython/script_intro.html)*
+provides a Python interface to GRASS tools
+and *[grass.pygrass](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_index.html)*
+enables access to the internal data structures of GRASS.
 
-This introduction will cover the basics of the GRASS Python interface and provide
-examples of how to use the libraries to create scripts and access the internal
-data structures of GRASS. However, it is important to note that this is not comprehensive
-documentation. For a complete reference of the GRASS Python interface, see the
-
-<!-- markdownlint-disable-next-line line-length -->
-[Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-stable/manuals/libpython/index.html){ .md-button }
-
-## GRASS Script
+## Scripting API
 
 ### Setup
 
-To get started with the GRASS Python interface, you must first append the GRASS
-Python path to the system path and then import the `grass.script` library. From
-here, you can create a new project with `gs.create_project` and start a GRASS
-session with the `grass.script.setup.init` function to initialize the GRASS
-environment.
+To get started with scripting, you must first append the GRASS
+Python path to the system path and then import the *grass.script* library
+(path append may not be needed on some systems). From
+here, you can create a new project with *gs.create_project* and start a GRASS
+session with the *grass.script.setup.init* function.
 
 ```python
 import sys
 import subprocess
-from pathlib import Path
 
 # Append GRASS to the python system path
 sys.path.append(
@@ -48,63 +36,70 @@ sys.path.append(
 import grass.script as gs
 
 # Create a new project
-gs.create_project(path=grassdata, name=project_name, epsg="3358", overwrite=False)
+gs.create_project(path="path/to/my_project", epsg="3358")
 
 # Initialize the GRASS session
-with gs.setup.init(Path("grassdata/project_name")) as session:
+with gs.setup.init("path/to/my_project") as session:
 
-    # Run GRASS commands
-    gs.run_command('g.region', raster='elevation')
-    gs.run_command(
-        'r.slope.aspect',
-        elevation='elevation',
-        slope='slope',
-        aspect='aspect'
-    )
+    # Run GRASS tools
+    gs.run_command("r.import", input="/path/to/elevation.tif", output="elevation")
+    gs.run_command("g.region", raster="elevation")
+    gs.run_command("r.slope.aspect", elevation="elevation", slope="slope")
 ```
 
-!!! grass-tip "Use `if __name__ == '__main__':`"
-    When writing GRASS scripts, it is a good idea to include the GRASS session
-    setup in a `if __name__ == '__main__':` block. This will allow the script to
-    be imported into other scripts without running the GRASS session setup or executed
-    as a standalone script.
+If you are running a script in an already initialized GRASS session, you
+can run the tools right away (without the call to *init*):
 
-### Tool Execution
+```python
+import grass.script as gs
 
-The `gs.run_command`, `gs.read_command`, `gs.write_command`, and
-`gs.parse_command` functions are the four main `grass.scripts`
+# Run GRASS tools
+gs.run_command("g.import", input="/path/to/elevation.tif", output="elevation")
+gs.run_command("g.region", raster="elevation")
+gs.run_command("r.slope.aspect", elevation="elevation", slope="slope")
+```
+
+### Running tools
+
+The *[gs.run_command](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.run_command)*,
+*[gs.parse_command](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.parse_command)*,
+*[gs.read_command](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.read_command)*,
+and *[gs.write_command](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.write_command)*
+ functions are the four main *grass.script*
 functions used to execute GRASS tools with Python.
 
-| Function            | Description                                      |
-|---------------------|--------------------------------------------------|
-| `gs.run_command`    | Run a GRASS command with no return value         |
-| `gs.read_command`   | Run a GRASS command and return the `stdout`      |
-| `gs.write_command`  | Run a GRASS command and write to `stdin`         |
-| `gs.parse_command`  | Run a GRASS command and parse the `stdout`       |
-
-!!! grass-tip "Command Syntax"
-    The syntax for the `gs.run_command`, `gs.read_command`, `gs.write_command`,
-    and `gs.parse_command` function follows the pattern:
-    `function_name(module.name, option1=value1, option2=..., flags='flagletters')`
-
-The `gs.run_command` function is used to run a GRASS command when you require
-no return value from the command. For example, when setting the computational region
-with `g.region`:
+The *[gs.run_command](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.run_command)*
+function is used to run a GRASS tool when you require
+no return value. For example, when computing raster slope with
+[r.slope.aspect](r.slope.aspect.md):
 
 ```python
-gs.run_command('g.region', raster='elevation')
+gs.run_command("r.slope.aspect", elevation="elevation", slope="slope")
 ```
 
-The `gs.read_command` function is used to run a GRASS command when you require
-the results sent to the `stdout`. For example, when reading the output of `r.univar`:
+The *[gs.parse_command](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.parse_command)*
+function is useful when the tool returns
+machine-readable text output on the standard output.
+For example, use it to parse the output of [v.db.select](v.db.select.md#json)
+to represent attribute data in a Python dictionary:
 
 ```python
-stats = gs.read_command('r.univar', map='elevation', flags='g')
+data = gs.parse_command("v.db.select", map="hospitals", format="json")
 ```
 
-The `gs.write_command` function is used to run send data to a GRASS command
-through the `stdin`. For example, when writing a custom color scheme to
-a raster map with `r.colors`:
+The *[gs.read_command](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.read_command)*
+function returns the text output of a GRASS tool.
+This can be useful when you want to print human-readable output of a tool.
+For example, when reading the output of [g.region](g.region.md):
+
+```python
+print(gs.read_command("g.region", flags="p"))
+```
+
+The *[gs.write_command](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.write_command)*
+function is used to send data to a GRASS tool
+through the standard input. For example, when writing a custom color scheme to
+a raster map with [r.colors](r.colors.md):
 
 ```python
 color_scheme = """
@@ -114,118 +109,122 @@ color_scheme = """
 80% #d95f0e
 100% #993404
 """
-gs.write_command('r.colors',
-    map='elevation',
-    rules='-',  # Read from stdin
-    stdin=color_scheme
-)
+gs.write_command("r.colors",
+                 map="elevation",
+                 rules="-",  # Read from stdin
+                 stdin=color_scheme
+                )
 ```
 
-The `gs.parse_command` function is used to run a GRASS command when you require
-the results sent to the `stdout` and parsed as a key-value pair. For example,
-to parse the output of `r.univar` as JSON data:
+For error handling, please refer to the [documentation](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.handle_errors).
 
-```python
-univar_json = gs.parse_command(
-    'r.univar',
-    map='elevation',
-    format="json",
-    flags='g'
-)
-```
+!!! grass-tip "Overwriting data"
+    By default, GRASS prevents overwriting existing maps to protect your data,
+    so you need to explicitly allow overwriting when re-running analyses
+    or generating outputs with the same name.
+    For a single call, use the overwrite parameter:
+    <!-- markdownlint-disable-next-line MD046 -->
+    ```python
+    gs.run_command("r.slope.aspect", elevation="elevation", slope="slope", overwrite=True)
+    ```
+    For an entire script, set the environment variable before running any GRASS tools:
+    <!-- markdownlint-disable-next-line MD046 -->
+    ```python
+    import os
+    os.environ["GRASS_OVERWRITE"] = "1"
+    ```
+    See related [best practices](style_guide.html#overwriting-existing-data)
+    when writing a Python tool.
 
-!!! grass-tip "Use JSON Format"
-    It is a good idea to use the `JSON` format when parsing the output of a GRASS
-    command with `gs.parse_command`. The `JSON` format provides a consistent
-    structure for the output and is easy to work with in Python.
+### Helper functions
 
-<!-- markdownlint-disable-next-line line-length -->
-[Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-stable/manuals/libpython/script_intro.html){ .md-button }
-
-### Rasters
-
-The [grass.script.raster](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#module-script.raster)
-library provides provides functional access to raster metadata
-and processing tools. Some of the core functions include:
+The *grass.script* provides several helper functions to make scripting faster.
+The most common ones are:
 
 | Function | Description |
 |----------|-------------|
-| [raster_info](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.raster.raster_info) | Get information about a raster map |
-| [raster_what](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.raster.raster_what) | Get information about a raster map |
-| [history](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.raster.history) | Get the history of a raster map |
-| [mapcalc](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.raster.mapcalc) | Execute a raster algebra expression |
+| [gs.region](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.region) | Get the GRASS region info as a dictionary |
+| [gs.raster_info](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.raster.raster_info) | Get basic information about a raster map as a dictionary|
+| [gs.raster_what](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.raster.raster_what) | Query raster at coordinates |
+| [gs.mapcalc](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.raster.mapcalc) | Execute a raster algebra expression |
+| [vector_columns](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.vector.vector_columns) | Get the columns of a vector attribute table                  |
+| [vector_info](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.vector.vector_info) | Get information about a vector map |
+| [vector_db_select](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.vector.vector_db_select) | Get attribute data of a vector map |
+| [vector_info_topo](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.vector.vector_info_topo) | Get topology information about a vector map |
+| [mapcalc3d](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.raster3d.mapcalc3d) | Execute a 3D raster algebra expression |
 
-Here is an example of how to use the [grass.script.raster](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#module-script.raster)
-module:
-
-```python
-# Get metadata about the elevation raster
-gs.raster_info('elevation')
-
-# Create a new raster map with the mapcalc expression
-gs.mapcalc(expression="elevation_2x = elevation * 2")
-```
-
-!!! grass-tip "Why not use the tool directly?"
-    The `raster` module provides a more functional approach to working with raster
-    maps in GRASS.
-
-<!-- markdownlint-disable-next-line line-length -->
-[Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#module-script.raster){ .md-button }
-
-### Vectors
-
-The [grass.script.vector](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#module-script.vector)
-library provides functional access to vector metadata
-and processing tools. Some of the core functions include:
-
-| Function            | Description                                      |
-|---------------------|--------------------------------------------------|
-| [vector_columns](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.vector.vector_columnsr)    | Get the columns of a vector map                  |
-| [vector_info](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.vector.vector_info)       | Get information about a vector map               |
-| [vector_db](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.vector.vector_db)         | Get the database connection of a vector map      |
-| [vector_db_select](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.vector.vector_db_select)  | Select data from a vector map                    |
-| [vector_info_topo](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.vector.vector_info_topo)  | Get topology information about a vector map      |
-
-Here we will use the [grass.script.vector](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#module-script.vector)
-module to get the topological information about the `geology` vector map:
+Here is an example how to use these helper functions:
 
 ```python
-# Get the topology information about the geology vector map
-geology_topo = gs.vector_info_topo("geology")
+# Get region resolution to get cell size (assuming projected CRS)
+region = gs.region()
+cell_area = region["nsres"] * region["ewres"]
 
-# Get the number nodes
-nodes = geology_topo.nodes
+# Compute volume with raster algebra (or use area())
+gs.mapcalc(f"volume = elevation * {cell_area}")
+
+# Get number of points in a vector map
+num_points = gs.vector_info_topo("hospitals")["points"])
 ```
 
-<!-- markdownlint-disable-next-line line-length -->
-[Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#module-script.vector){ .md-button }
+### NumPy interface
 
-### 3D Rasters
+The GRASS Python API includes a NumPy interface that allows you to read
+and write raster data as NumPy arrays.
+This makes it easy to integrate GRASS with the broader Python scientific
+stack for advanced analysis and custom modeling.
+Using *[grass.script.array](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.array.array)*
+and *[grass.script.array3d](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.array.array3d)*,
+you can switch between GRASS raster maps and NumPy arrays, run GRASS tools,
+and perform array-based operations as needed.
+It works for rasters as well as for 3D rasters.
 
-Incomplete Section
+This example shows a workflow for writing a NumPy array
+to a GRASS raster, running a GRASS tool, and loading the result as a NumPy array:
 
 ```python
-r3grass.raster3d_info('elevation3d')
+import numpy as np
+from grass.script import array as garray
 
-r3grass.mapcalc3d('volume = row() + col() + depth()')
+# Create a 100x100 sinusoidal elevation surface
+xx, yy = np.meshgrid(np.linspace(0, 1, 100), np.linspace(0, 1, 100))
+elevation_array = np.sin(xx) + np.cos(yy)
+
+# Set the region to match the array dimensions and resolution
+gs.run_command("g.region", n=elevation_array.shape[0], s=0,
+               e=elevation_array.shape[1], w=0, res=1)
+
+# Write the NumPy array to a new GRASS raster map
+map2d = garray.array()
+map2d[:] = elevation_array
+map2d.write("elevation", overwrite=True)
+
+# Compute e.g., flow accumulation
+gs.run_command("r.watershed", elevation="elevation", accumulation="accumulation")
+
+# Load as numpy array
+accumulation_array = garray.array("accumulation")
 ```
 
-<!-- markdownlint-disable-next-line line-length -->
-[Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#module-script.raster3d){ .md-button }
-
-### Database Management
-
-Incomplete Section
+This example demonstrates reading an existing GRASS raster into a NumPy array,
+modifying the array, and writing the modified array back to a GRASS raster:
 
 ```python
-from grass.script import db as dbgrass
+import numpy as np
+import seaborn as sns
+from grass.script import array as garray
+
+# Read elevation as numpy array
+elev = garray.array(mapname="elevation")
+# Plot raster histogram
+sns.histplot(data=elev.ravel(), kde=True)
+# Modify values
+elev_2 *= 2
+# Write modified array into a GRASS raster
+elev_2.write(mapname="elevation_2")
 ```
 
-<!-- markdownlint-disable-next-line line-length -->
-[Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#module-script.db){ .md-button }
-
-## Object-Oriented GRASS
+## Object-Oriented API
 
 PyGRASS is an object-oriented Python library that provides access to the internal
 data structures of GRASS for more advanced scripting and modeling. PyGRASS works
@@ -254,8 +253,6 @@ mapsets. The core classes include [Gisdbase](https://grass.osgeo.org/grass-stabl
 [Location](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.gis.html#pygrass.gis.Location),
 and [Mapset](https://grass.osgeo.org/grass85/manuals/libpython/pygrass.gis.html#pygrass.gis.Mapset).
 
-#### Gisdbase
-
 The [Gisdbase](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.gis.html#pygrass.gis.Gisdbase)
 class provides access to the GRASS database
 and where you can manage GRASS projects and mapsets.
@@ -278,8 +275,6 @@ objects.
 ['nc_spm_08_grass7', 'my_project']
 ```
 
-#### Location
-
 The [Location](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.gis.html#pygrass.gis.Location)
 object provides access to the specific project
 and its mapsets.
@@ -295,8 +290,6 @@ print(location.name)
 # Get list of mapsets in the location
 mapsets = location.mapsets()
 ```
-
-#### Mapset
 
 The [Mapset](https://grass.osgeo.org/grass85/manuals/libpython/pygrass.gis.html#pygrass.gis.Mapset)
 object provides access to the specific mapset and its layers.
@@ -314,7 +307,7 @@ rasters = mapset.glist(type='raster')
 For more details about the `gis` module, see the Full Documentation:
 [GIS Module](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_gis.html)
 
-#### Region
+### Region
 
 The [grass.pygrass.gis.region](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.gis.html#pygrass.gis.region.Region)
 module gives access to read and modify computational regions. For example, to
@@ -744,71 +737,14 @@ To learn more about the `Module` class, see the Full Documentation:
 <!-- markdownlint-disable-next-line line-length -->
 [Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_modules.html#module-class){ .md-button }
 
-## Message and Error Handling
+## GRASS Python best practices
 
-The `grass.script` library provides functions to display messages and errors.
+When you are ready to take your scripts to the next level,
+such as turning them into GRASS addons, check out
+[GRASS Python development best practices](style_guide.html#developing-python-scripts).
+Following the gudelines ensures your tools integrate smoothly with the GRASS environment,
+and work in parallel processing workflows.
+To turn your script into an addon, see the [GRASS Addon Cookiecutter Template](https://github.com/OSGeo/grass-addon-cookiecutter).
 
-| Function | Description |
-|----------|-------------|
-| `message` | Display a message to the user |
-| `warning` | Display a warning to the user |
-| `error` | Display an error message to the user (but not fail the script) |
-| `fatal` | Display an error message to the user and stop the script |
-
-Here is an example of how to use the `message` and `warning` functions:
-
-```python
-import grass.script as gs
-# Not localized
-gs.message("Hello World")
-```
-
-```python
-# With translation function
-gs.warning(_("This is a warning"))
-```
-
-Here we can use the GRASS `fatal` function to display an error message to the user
-when the `g.region` command fails with a `CalledModuleError`.
-
-```python
-try:
-    gs.run_command('g.region', raster='elevation')
-except gs.CalledModuleError as e:
-    gs.fatal(_("Failed to set region: {e}"))
-```
-
-!!! grass-tip "Use Formatted Strings"
-    When using the `gs.message` and `gs.fatal` functions, it is a good idea to
-    use formatted strings to provide more information about the message or error.
-    However, f-strings are not suitable when calling the translation function
-    as they don't allow formatting to happen on the translated string.
-    Instead, use the `str.format` method.  
-    <!-- markdownlint-disable-next-line line-length -->
-    :x: `gs.fatal(_(f"Error calculating height above nearest drainage: {e.stderr}"))`  
-    <!-- markdownlint-disable-next-line line-length -->
-    :white_check_mark: `gs.fatal(_("Error calculating height above nearest drainage: %s") % e.stderr)`
-
-## Python FAQ
-
-To help you decide which library to use try answering the following questions:
-
-```mermaid
-graph TD
-    A[What type of data you are working with?];
-    A -- Raster data --> D;
-    A -- Vector data --> H;
-
-    D[Will you use existing tool?];
-    D -- Yes --> F[Use *grass.script* with raster tools such as *r.series*, *r.mapcalc*, *r.neighbors*];
-    D -- No --> G[Use *grass.pygrass.raster* API];
-
-    H[Will you use existing tool?];
-    H -- Yes --> J[Use *grass.script* with vector tools such as *v.overlay*, *v.to.db*, *v.extract*];
-    H -- No --> K[Use *grass.pygrass.vector* API];
-
-    G -- Do you need more control? --> N[Use *ctypes* to directly access C raster API];
-    K -- Do you need more control? --> O[Use *ctypes* to directly access C vector API];
-```
-
-Full Documentation: [GRASS Python Library](https://grass.osgeo.org/grass-stable/manuals/libpython/index.html)
+<!-- markdownlint-disable-next-line line-length -->
+[GRASS Python best practices :material-arrow-right-bold:](style_guide.html#developing-python-scripts){ .md-button }

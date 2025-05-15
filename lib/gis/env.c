@@ -342,7 +342,7 @@ static FILE *open_env(const char *mode, int loc)
         /* TODO: better place ? */
         read_env(G_VAR_GISRC);
 
-        sprintf(buf, "%s/%s/VAR", G_location_path(), G_mapset());
+        snprintf(buf, sizeof(buf), "%s/%s/VAR", G_location_path(), G_mapset());
     }
 
     return fopen(buf, mode);

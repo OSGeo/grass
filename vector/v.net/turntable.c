@@ -126,9 +126,9 @@ static int add_uturn(dbDriver *driver, char *ttb_name, int *next_ttb_cat,
             isec = isec_start_cat;
         }
         /* cat, ln_from, ln_to, cost, isec, angle */
-        sprintf(buf, "INSERT INTO %s values ( %d, %d, %d, %f, %d, %f);",
-                ttb_name, (*next_ttb_cat), ln_cat, ln_cat * -1, 0.0, isec,
-                M_PI);
+        snprintf(buf, sizeof(buf),
+                 "INSERT INTO %s values ( %d, %d, %d, %f, %d, %f);", ttb_name,
+                 (*next_ttb_cat), ln_cat, ln_cat * -1, 0.0, isec, M_PI);
         db_set_string(&db_buf, buf);
 
         G_debug(3, "Adding u-turn into turntable:\n%s", db_get_string(&db_buf));
@@ -209,8 +209,9 @@ static int add_turns(dbDriver *driver, char *ttb_name, int *next_ttb_cat,
         }
 
         /* cat, ln_from, ln_to, cost, isec, angle */
-        sprintf(buf, "INSERT INTO %s values ( %d, %d, %d, %f, %d,", ttb_name,
-                (*next_ttb_cat), ln_f, ln_t, 0.0, isec_cat);
+        snprintf(buf, sizeof(buf),
+                 "INSERT INTO %s values ( %d, %d, %d, %f, %d,", ttb_name,
+                 (*next_ttb_cat), ln_f, ln_t, 0.0, isec_cat);
         db_set_string(&db_buf, buf);
 
         if (angle == -9.0)
@@ -221,7 +222,7 @@ static int add_turns(dbDriver *driver, char *ttb_name, int *next_ttb_cat,
             if (i == 1)
                 angle *= -1;
 
-            sprintf(buf, "%f)", angle);
+            snprintf(buf, sizeof(buf), "%f)", angle);
             db_append_string(&db_buf, buf);
         }
 
@@ -732,10 +733,10 @@ void turntable(struct opt *opt)
     db_set_error_handler_driver(driver);
 
     key_col = "cat";
-    sprintf(buf,
-            "CREATE TABLE %s (%s INTEGER, ln_from INTEGER, ln_to INTEGER, "
-            "cost DOUBLE PRECISION, isec INTEGER, angle DOUBLE PRECISION)",
-            ttb_name, key_col);
+    snprintf(buf, sizeof(buf),
+             "CREATE TABLE %s (%s INTEGER, ln_from INTEGER, ln_to INTEGER, "
+             "cost DOUBLE PRECISION, isec INTEGER, angle DOUBLE PRECISION)",
+             ttb_name, key_col);
 
     db_init_string(&db_buf);
     db_set_string(&db_buf, buf);
