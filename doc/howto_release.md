@@ -1,4 +1,4 @@
-# How to release GRASS GIS binaries and source code
+# How to release GRASS binaries and source code
 
 ## Assumptions
 
@@ -80,7 +80,7 @@ For a release, change the version after the RC cycle to an official release:
 ```
 
 The script will compute the correct version string and print a message
-containing it into the terminal (e.g., "version: GRASS GIS 3.5.0RC1").
+containing it into the terminal (e.g., "version: GRASS 3.5.0RC1").
 
 Commit with a commit message suggested by the script, e.g.:
 
@@ -152,7 +152,7 @@ stored for annotated tags including a date; message is suggested by the
 `./utils/update_version.py` script):
 
 ```bash
-git tag $TAG -a -m "GRASS GIS $VERSION"
+git tag $TAG -a -m "GRASS $VERSION"
 ```
 
 List all tags (annotated will be at the top of both lists):
