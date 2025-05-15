@@ -10,7 +10,7 @@ class TestHISRGB(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        """Set the region and create input maps for grayscale and primary hue tests."""
+        """Set computational region and generate input rasters for tests."""
         cls.use_temp_region()
         gs.run_command("g.region", n=10, s=0, e=10, w=0, rows=10, cols=10)
 
@@ -32,13 +32,13 @@ class TestHISRGB(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """Clean up temporary maps and region."""
+        """Clean up temporary maps, region and mask."""
         cls.del_temp_region()
         gs.run_command("g.remove", type="raster", name=cls.tmp_rasters, flags="f")
         gs.run_command("r.mask", flags="r")
 
     def run_i_his_rgb(self, hue, intensity, saturation, red, green, blue):
-        """Helper to call i.his.rgb and track outputs."""
+        """Helper function to run i.his.rgb and register output raster maps for cleanup."""
         gs.run_command(
             "i.his.rgb",
             hue=hue,
