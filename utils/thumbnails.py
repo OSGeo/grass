@@ -158,7 +158,7 @@ def main():
 
     os.environ["GRASS_OVERWRITE"] = "1"
 
-    color_dir = os.path.join(os.environ["GISBASE"], "etc", "colors")
+    color_dir = os.path.join(os.environ["GRASS_SHARE_DIR"], "etc", "colors")
     output_dir = sys.argv[1]
 
     if not os.path.exists(output_dir):
