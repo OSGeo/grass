@@ -409,7 +409,6 @@ if not exist "%GISBASE%\etc\fontcap" (
 )
 
 "%GRASS_PYTHON%" "%GISBASE%\etc\grass$version.py" %*
-if %ERRORLEVEL% geq 1 pause
 EOT
 unix2dos $dist/grass.bat
 
