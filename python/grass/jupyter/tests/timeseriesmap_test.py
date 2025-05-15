@@ -42,7 +42,7 @@ def test_default_init(space_time_raster_dataset):
     """Check that TimeSeriesMap init runs with default parameters"""
     img = gj.TimeSeriesMap()
     img.add_raster_series(space_time_raster_dataset.name)
-    assert img.baseseries == space_time_raster_dataset.name
+    assert img._baseseries == space_time_raster_dataset.name
 
 
 @pytest.mark.needs_solo_run

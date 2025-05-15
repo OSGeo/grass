@@ -47,7 +47,6 @@ class BaseSeriesMap:
         else:
             self._env = os.environ.copy()
 
-        self.baseseries = None
         self._base_layer_calls = []
         self._calls = []
         self._baseseries_added = False
