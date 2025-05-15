@@ -349,7 +349,8 @@ int report(enum OutputFormat format)
                     if (Values[i].i1 >= 0)
                         snprintf(left, sizeof(left), "%d", Values[i].i1);
                     else
-                        snprintf(left, sizeof(left), "-1"); /* NULL, no area/cat */
+                        snprintf(left, sizeof(left),
+                                 "-1"); /* NULL, no area/cat */
                 }
                 else if (Values[i].count1 > 1) {
                     snprintf(left, sizeof(left), "-");
@@ -365,7 +366,8 @@ int report(enum OutputFormat format)
                     if (Values[i].i2 >= 0)
                         snprintf(right, sizeof(right), "%d", Values[i].i2);
                     else
-                        snprintf(right, sizeof(right), "-1"); /* NULL, no area/cat */
+                        snprintf(right, sizeof(right),
+                                 "-1"); /* NULL, no area/cat */
                 }
                 else if (Values[i].count2 > 1) {
                     snprintf(right, sizeof(right), "-");
