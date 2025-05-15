@@ -124,6 +124,12 @@ $(DESTDIR)$(INST_DIR) $(DESTDIR)$(UNIX_BIN):
 $(STARTUP): $(ARCH_DISTDIR)/$(GRASS_NAME).tmp
 	sed -e 's#'@GISBASE_INSTALL_PATH@'#'$(INST_DIR)'#g' \
 	    -e 's#'@LD_LIBRARY_PATH_VAR@'#'$(LD_LIBRARY_PATH_VAR)'#g' \
+	    -e 's#@GRASS_SHARE_DIR@#$(INST_DIR)#' \
+	    -e 's#@GRASS_LOCALE@#$(INST_DIR)/locale#' \
+	    -e 's#@GRASS_PYDIR@#$(INST_DIR)/etc/python#' \
+	    -e 's#@GRASS_GUIWXDIR@#$(INST_DIR)/gui/wxpython#' \
+	    -e 's#@GRASS_GUISCRIPTDIR@#$(INST_DIR)/gui/scripts#' \
+	    -e 's#@GRASS_GUIRESDIR@#$(INST_DIR)/gui#' \
 	    -e 's#'@CONFIG_PROJSHARE@'#'$(PROJSHARE)'#g' \
 	    $< > $@
 	-$(CHMOD) a+x $@
