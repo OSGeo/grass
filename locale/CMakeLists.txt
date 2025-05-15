@@ -46,6 +46,7 @@ foreach(po_file ${po_files})
 
   add_custom_command(
     TARGET generate_mo_files_${po_file_name}
+    POST_BUILD
     COMMAND ${MSGFMT} --statistics -o
             ${OUTDIR}/${GRASS_INSTALL_LOCALEDIR}/${mo_file} ${po_file}
     BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_LOCALEDIR}/${mo_file})
