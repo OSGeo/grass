@@ -1,7 +1,7 @@
-Interface to GRASS GIS modules
+Interface to GRASS modules
 ==============================
 
-In :mod:`~pygrass.modules` module, GRASS GIS modules are represented
+In :mod:`~pygrass.modules` module, GRASS modules are represented
 by :class:`~pygrass.modules.interface.module.Module` class
 objects. These objects are generated based on the XML module
 description that is used also for the generation of the graphical user
@@ -14,7 +14,7 @@ interface (GUI). ::
 
 
 It is possible to create a run-able module object and run it later (this
-is also needed for registering GRASS GIS commands with more than one dot
+is also needed for registering GRASS commands with more than one dot
 in their name, e.g. r.slope.aspect):
 
     >>> slope_aspect = Module("r.slope.aspect", elevation='elevation',
@@ -188,7 +188,7 @@ Another example of use: ::
     {'max': '156.3299', 'min': '55.57879'}
 
 
-Launching GRASS GIS modules in parallel
+Launching GRASS modules in parallel
 ---------------------------------------
 
 PyGRASS implements simple mechanism for launching GRASS modules in
