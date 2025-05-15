@@ -786,7 +786,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
         width, height = self.MapWindow.GetClientSize()
 
         name = ""
-        extType = None
+        extType = "png"
 
         for param in command[1:]:
             try:
