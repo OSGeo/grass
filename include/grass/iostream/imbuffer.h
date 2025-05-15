@@ -196,7 +196,7 @@ private:
     // sort the buffer (recursively)
     void sort_rec(unsigned long start, unsigned long end);
 
-    // partition the buffer and return the the position of the pivot
+    // partition the buffer and return the position of the pivot
     unsigned long partition(unsigned long start, unsigned long end);
 };
 
@@ -286,7 +286,7 @@ void im_buffer<T>::sort_rec(unsigned long start, unsigned long end)
 }
 
 /************************************************************/
-// partition the buffer in place and return the the position of the
+// partition the buffer in place and return the position of the
 // pivot
 template <class T>
 unsigned long im_buffer<T>::partition(unsigned long start, unsigned long end)

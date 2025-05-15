@@ -504,7 +504,7 @@ struct G_3dview {
     float from_to[2][3]; /* eye position & lookat position */
     float fov;           /* field of view */
     float twist;         /* right_hand rotation about from_to */
-    float exag;          /* terrain elevation exageration */
+    float exag;          /* terrain elevation exaggeration */
     int mesh_freq;       /* cells per grid line */
     int poly_freq;       /* cells per polygon */
     int display_type;    /* 1 for mesh, 2 for poly, 3 for both */
