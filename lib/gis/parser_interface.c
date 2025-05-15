@@ -107,7 +107,7 @@ void G__usage_xml(void)
     char *type;
     char *s, *top;
     int i;
-    const char *encoding = NULL;
+    const char *encoding = "";
     int new_prompt = 0;
 
     new_prompt = G__uses_new_gisprompt();
