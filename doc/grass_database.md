@@ -1,11 +1,11 @@
 ---
-description: GRASS GIS Database
+description: GRASS Database
 ---
 
-# GRASS GIS Database
+# GRASS Database
 
-A GRASS GIS Database is simply a set of directories and files with
-certain structure which GRASS GIS works efficiently with. Project is a
+A GRASS Database is simply a set of directories and files with
+certain structure which GRASS works efficiently with. Project is a
 directory with data related to one geographic location or a project. All
 data within one project has the same coordinate reference system. A
 project contains mapsets and each mapset contains data related to a
@@ -13,15 +13,15 @@ specific task, user or a smaller project. Within each project, a
 mandatory PERMANENT mapset exists which can contain commonly used data
 within one GRASS project such as base maps. The PERMANENT mapset also
 contains metadata related to the project such as the coordinate
-reference system. When GRASS GIS is started it connects to a database,
+reference system. When GRASS is started it connects to a database,
 project and mapset specified by the user.
 
 ![example: nc_spm - highway - elevation](grass_database.png)  
-*Fig. 1: GRASS GIS Database structure as visible to the user*
+*Fig. 1: GRASS Database structure as visible to the user*
 
-## GRASS GIS Database Directory
+## GRASS Database Directory
 
-All data for GRASS GIS must be in GRASS GIS Database which is a
+All data for GRASS must be in GRASS Database which is a
 directory (visible on the disk) containing subdirectories which are
 GRASS projects. User can have one or more of Databases on the disk.
 Typically users have one directory called `grassdata` in their home
@@ -30,13 +30,13 @@ directory mounted as a network directory (network file system). For
 teams, a centralized GRASS DATABASE would be defined in a shared network
 file system (e.g. NFS).
 
-GRASS GIS Databases can be safely copied or moved as any other
+GRASS Databases can be safely copied or moved as any other
 directories. Don't be confused with (relational) databases which are
-used in GRASS GIS to hold attribute data and might be part of the GRASS
-GIS Database. From user point of view, GRASS GIS Database with all its
+used in GRASS to hold attribute data and might be part of the GRASS
+Database. From user point of view, GRASS Database with all its
 data in it is similar to, e.g. PostGIS, database, as it stores all
 information inside in a specific format and is accessible by specific
-tools. GRASS GIS Databases is in GRASS GIS often called GISDBASE or
+tools. GRASS Database is often called GISDBASE or
 DATABASE.
 
 ## GRASS Projects
@@ -51,7 +51,7 @@ reference system.
 
 GRASS projects can be safely copied or moved as any other directories.
 Compressed projects are usually what GRASS users exchange between each
-other when they want to share a lot of data. For example, GRASS GIS
+other when they want to share a lot of data. For example, GRASS
 sample data are provided as projects.
 
 Note that a GRASS project used to be called *location* and this name has
@@ -59,17 +59,17 @@ not been completely removed from code and documentation yet.
 
 Users and programmers familiar with relational databases such as
 PostgreSQL can view projects as individual databases inside a storage
-area (the GRASS GIS Database). Mapsets in a project are like namespaces
+area (the GRASS Database). Mapsets in a project are like namespaces
 or schemas inside a database.
 
 ## GRASS Mapsets
 
 Mapsets contains the actual data, mostly geospatial data, referred to as
-maps in GRASS GIS. Mapsets are a tool for organizing maps in a
+maps in GRASS. Mapsets are a tool for organizing maps in a
 transparent way as well as a tool for isolating different tasks to
 prevent data loss.
 
-GRASS GIS is always connected to one particular mapset. GRASS GIS
+GRASS is always connected to one particular mapset. GRASS
 modules can create, modify, change, or delete a data only in the current
 mapset. By default, only the data from the current mapset and PERMANENT
 mapset are visible. Using [*g.mapsets*](g.mapsets.md) module or in GUI
@@ -100,11 +100,11 @@ that their coordinate reference systems (as reported by
 coordinate reference systems, it is recommended to use
 [*r.proj*](r.proj.md) or [*v.proj*](v.proj.md) to reproject the data.
 The files and directories should not be moved or modified directly, but
-only using GRASS GIS tools.
+only using GRASS tools.
 
 ## The role of the PERMANENT Mapset
 
-When creating a new project, GRASS GIS automatically creates a special
+When creating a new project, GRASS automatically creates a special
 mapset called PERMANENT where the core data for the project are stored.
 
 Since the maps in PERMANENT mapset are visible from all the other
@@ -119,7 +119,7 @@ mapset by the other users. The PERMANENT mapset is useful for providing
 general spatial data (e.g. an elevation model), accessible but
 write-protected to all users who are working with the same GRASS project
 as the database owner. To manipulate or add data to PERMANENT, the owner
-can start GRASS GIS and choose the relevant project and the PERMANENT
+can start GRASS and choose the relevant project and the PERMANENT
 mapset.
 
 The PERMANENT mapset also contains the `DEFAULT_WIND` file which holds
@@ -129,7 +129,7 @@ have the option of switching back to the default region at any time.
 
 ## Importing, exporting and linking data
 
-GRASS GIS works only with data which are imported into a GRASS Database,
+GRASS works only with data which are imported into a GRASS Database,
 so all data needs to be imported, e.g. by [*r.in.gdal*](r.in.gdal.md) or
 highly convenient [*r.import*](r.import.md), before the actual analysis.
 Data in GRASS Datable can be exported using for example
@@ -149,14 +149,14 @@ raster maps. Similarly for newly created maps,
 where the actual data will be stored, however in GRASS Database the data
 will be created as standard maps.
 
-## Starting GRASS GIS
+## Starting GRASS
 
-After launching GRASS GIS for the first time, the GUI opens in a default
+After launching GRASS for the first time, the GUI opens in a default
 project `world_latlong_wgs84`. From there a new project can be created.
 
-![GRASS GIS GUI after first start](grass_start.png)  
+![GRASS GUI after first start](grass_start.png)  
 
-GRASS GIS can be also started with a given database, project and mapset
+GRASS can be also started with a given database, project and mapset
 from the command line. For example, the following will start in a given
 mapset with only command line interface:
 
