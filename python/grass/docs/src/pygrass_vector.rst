@@ -73,7 +73,7 @@ To begin using a vector map, it must first be opened: ::
 
 The ``open()`` method supports a number of option arguments (see the
 :class:`~pygrass.vector.abstract.Info` documentation for a complete
-list). In particular, the mode argument can take a a value of:
+list). In particular, the mode argument can take a value of:
 
 * 'r': read-only mode, vector features are read-only (attribute table
   is modifiable since are handle by a database);
