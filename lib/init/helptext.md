@@ -1,23 +1,23 @@
 ---
-description: GRASS GIS Quickstart
+description: GRASS Quickstart
 ---
 
-# GRASS GIS Quickstart
+# GRASS Quickstart
 
-When [launching](grass.md) GRASS GIS for the first time, you will open a
+When [launching](grass.md) GRASS for the first time, you will open a
 **default project** "world_latlog_wgs84" where you can find a map layer
 called "country_boundaries" showing a world map in the WGS84 coordinate
 system.
 
-![GRASS GIS after first startup](grass_start.png)
+![GRASS after first startup](grass_start.png)
 
 The main component of the Data tab is the *Data Catalog* which shows the
-GRASS GIS hierarchical structure consisting of database ![GRASS
+GRASS hierarchical structure consisting of database ![GRASS
 Database](grassdb.png), project ![project](location.png) and
 mapset ![mapset](mapset.png).
 
 ![GRASS Database](grassdb.png) **GRASS database** (directory with projects)  
-Running GRASS GIS for the first time, a folder named "grassdata" is
+Running GRASS for the first time, a folder named "grassdata" is
 automatically created. Depending on your operating system, you can find
 it in your $HOME directory (\*nix) or My Documents (MS Windows).
 
@@ -29,11 +29,11 @@ you should create a new project corresponding to your system.
 
 ![mapset](mapset.png) **mapset** (a subproject)  
 Each project can have many mapsets for managing different aspects of a
-project or project's subregions. When creating a new project, GRASS GIS
+project or project's subregions. When creating a new project, GRASS
 automatically creates a special mapset called PERMANENT where the core
 data for the project can be stored.
 
-For more info about data hierarchy, see [GRASS GIS
+For more info about data hierarchy, see [GRASS
 Database](grass_database.md) page.
 
 ## GRASS started in the default project, now what?
@@ -74,8 +74,8 @@ for a tool in the Modules tab.
 
 ## Text-based startup and project creation
 
-GRASS GIS can be run entirely without using the graphical user
-interface. See [examples](grass.md) of running GRASS GIS from a command
+GRASS can be run entirely without using the graphical user
+interface. See [examples](grass.md) of running GRASS from a command
 line.
 
 ## See also
