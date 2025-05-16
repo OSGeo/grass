@@ -62,6 +62,14 @@ jobs:
           path: grass-addons
           fetch-depth: 0
 
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@63069e3931dedbf3b63792097479563182fe70d1 # v1.2.18
+        with:
+          create-symlink: true
+          verbose: 2
+          evict-old-files: 7d
+          key: ${{ github.workflow }}-${{ github.job }}-grass${{ env.MAJOR }}-${{ matrix.python-version }}
+
       - name: Install Python dependencies
         # We install both core and addon dependencies, but we don't install any
         # dependencies from the extra list in addons because we don't actually
