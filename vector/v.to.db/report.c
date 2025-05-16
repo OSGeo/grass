@@ -164,31 +164,32 @@ int report(void)
         for (i = 0; i < vstat.rcat; i++) {
             if (Values[i].count1 == 1) {
                 if (Values[i].i1 >= 0)
-                    sprintf(left, "%d", Values[i].i1);
+                    snprintf(left, sizeof(left), "%d", Values[i].i1);
                 else
-                    sprintf(left, "-1"); /* NULL, no area/cat */
+                    snprintf(left, sizeof(left), "-1"); /* NULL, no area/cat */
             }
             else if (Values[i].count1 > 1) {
-                sprintf(left, "-");
+                snprintf(left, sizeof(left), "-");
             }
             else { /* Values[i].count1 == 0 */
                 /* It can be OK if the category is assigned to an element
                    type which is not GV_BOUNDARY */
                 /* -> TODO: print only if there is boundary with that cat */
-                sprintf(left, "-");
+                snprintf(left, sizeof(left), "-");
             }
 
             if (Values[i].count2 == 1) {
                 if (Values[i].i2 >= 0)
-                    sprintf(right, "%d", Values[i].i2);
+                    snprintf(right, sizeof(right), "%d", Values[i].i2);
                 else
-                    sprintf(right, "-1"); /* NULL, no area/cat */
+                    snprintf(right, sizeof(right),
+                             "-1"); /* NULL, no area/cat */
             }
             else if (Values[i].count2 > 1) {
-                sprintf(right, "-");
+                snprintf(right, sizeof(right), "-");
             }
             else { /* Values[i].count1 == 0 */
-                sprintf(right, "-");
+                snprintf(right, sizeof(right), "-");
             }
 
             fprintf(stdout, "%d%s%s%s%s\n", Values[i].cat, options.fs, left,

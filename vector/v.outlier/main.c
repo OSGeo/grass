@@ -179,10 +179,10 @@ int main(int argc, char *argv[])
     /* Setting auxiliary table's name */
     if (out_opt->answer) {
         if (G_name_is_fully_qualified(out_opt->answer, xname, xmapset)) {
-            sprintf(table_name, "%s_aux", xname);
+            snprintf(table_name, sizeof(table_name), "%s_aux", xname);
         }
         else
-            sprintf(table_name, "%s_aux", out_opt->answer);
+            snprintf(table_name, sizeof(table_name), "%s_aux", out_opt->answer);
     }
 
     /* Something went wrong in a previous v.outlier execution */
