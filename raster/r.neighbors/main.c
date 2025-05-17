@@ -449,8 +449,9 @@ int main(int argc, char *argv[])
         if (parm.title->answer)
             strcpy(out->title, parm.title->answer);
         else
-            sprintf(out->title, "%dx%d neighborhood: %s of %s", ncb.nsize,
-                    ncb.nsize, menu[method].name, ncb.oldcell);
+            snprintf(out->title, sizeof(out->title),
+                     "%dx%d neighborhood: %s of %s", ncb.nsize, ncb.nsize,
+                     menu[method].name, ncb.oldcell);
     }
 
     /* copy color table? */

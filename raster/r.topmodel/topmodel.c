@@ -16,8 +16,8 @@ void create_topidxstats(char *topidx, int ntopidxclasses, char *outtopidxstats)
     int i;
     int total_ncells;
 
-    sprintf(input, "input=%s", topidx);
-    sprintf(nsteps, "nsteps=%d", ntopidxclasses - 1);
+    snprintf(input, sizeof(input), "input=%s", topidx);
+    snprintf(nsteps, sizeof(nsteps), "nsteps=%d", ntopidxclasses - 1);
 
     G_message("Creating topographic index statistics file...");
     G_verbose_message("r.stats -nc %s %s ...", input, nsteps);

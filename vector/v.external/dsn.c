@@ -27,7 +27,7 @@ char *get_datasource_name(const char *opt_dsn, int use_ogr)
         database[i] = '\0';
 
         /* build connection string */
-        sprintf(connect_str, "%s", opt_dsn);
+        snprintf(connect_str, sizeof(connect_str), "%s", opt_dsn);
 
         /* add db.login settings (user, password, host, port) */
         if (DB_OK ==

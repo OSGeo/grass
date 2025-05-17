@@ -74,7 +74,7 @@ static char *_make_toplevel(void)
     if (NULL == (path = G_calloc(1, len))) {
         return NULL;
     }
-    sprintf(path, "%s%s", homedir, "/.grass");
+    snprintf(path, len, "%s%s", homedir, "/.grass");
 #else
     me = getuid();
     my_passwd = getpwuid(me);
@@ -85,7 +85,7 @@ static char *_make_toplevel(void)
     if (NULL == (path = G_calloc(1, len)))
         return NULL;
 
-    sprintf(path, "%s%s", my_passwd->pw_dir, "/.grass");
+    snprintf(path, len, "%s%s", my_passwd->pw_dir, "/.grass");
 #endif
 
     status = G_lstat(path, &buf);
@@ -213,7 +213,8 @@ static char *_make_sublevels(const char *elems)
     }
 
     /* Allocate our path to be large enough */
-    if ((path = G_calloc(1, strlen(top) + strlen(elems) + 2)) == NULL) {
+    size_t bufsize = strlen(top) + strlen(elems) + 2;
+    if ((path = G_calloc(1, bufsize)) == NULL) {
         G_free(top);
         G_free(cp);
         return NULL;
@@ -225,7 +226,7 @@ static char *_make_sublevels(const char *elems)
      * make it into the returned path.
      */
     for (; i > 0; i--) {
-        sprintf(path, "%s/%s", top, cp);
+        snprintf(path, bufsize, "%s/%s", top, cp);
         errno = 0;
         status = G_lstat(path, &buf);
         if (status != 0) {
@@ -314,7 +315,7 @@ char *G_rc_path(const char *element, const char *item)
     }
     path = ptr;
     ptr = strchr(path, '\0');
-    sprintf(ptr, "/%s", item);
+    snprintf(ptr, len, "/%s", item);
 
     return path;
 } /* G_rc_path */
