@@ -1004,7 +1004,7 @@ def get_wxgui_extensions(url):
 
 
 def cleanup():
-    """Cleanup after the downloads and copilation"""
+    """Cleanup after the downloads and compilation"""
     if REMOVE_TMPDIR:
         try_rmdir(TMPDIR)
 
