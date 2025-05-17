@@ -233,7 +233,7 @@ struct ellps_list *read_ellipsoid_table(int fatal)
     struct ellps_list *current = NULL, *outputlist = NULL;
     double a, e2, rf;
 
-    sprintf(file, "%s%s", G_gisbase(), ELLIPSOIDTABLE);
+    snprintf(file, sizeof(file), "%s%s", G_gisbase(), ELLIPSOIDTABLE);
     fd = fopen(file, "r");
 
     if (!fd) {
@@ -252,7 +252,7 @@ struct ellps_list *read_ellipsoid_table(int fatal)
         if (sscanf(buf, "%s  \"%1023[^\"]\" %s %s", name, descr, buf1, buf2) !=
             4) {
             err++;
-            sprintf(buf, " %d", line);
+            snprintf(buf, sizeof(buf), " %d", line);
             if (*badlines)
                 strcat(badlines, ",");
             strcat(badlines, buf);
@@ -274,7 +274,7 @@ struct ellps_list *read_ellipsoid_table(int fatal)
         }
         else {
             err++;
-            sprintf(buf, " %d", line);
+            snprintf(buf, sizeof(buf), " %d", line);
             if (*badlines)
                 strcat(badlines, ",");
             strcat(badlines, buf);

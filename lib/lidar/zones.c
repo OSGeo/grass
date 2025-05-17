@@ -585,8 +585,9 @@ void P_Aux_to_Vector(struct Map_info *Map UNUSED, struct Map_info *Out,
     db_init_string(&sql);
     db_zero_string(&sql);
 
-    sprintf(buf, "select ID, X, Y, sum(Interp) from %s group by ID, X, Y",
-            tab_name);
+    snprintf(buf, sizeof(buf),
+             "select ID, X, Y, sum(Interp) from %s group by ID, X, Y",
+             tab_name);
 
     db_append_string(&sql, buf);
     db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL);

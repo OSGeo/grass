@@ -197,11 +197,12 @@ int main(int argc, char *argv[])
         /* Show message giving output format */
         G_message(_("Output columns:"));
         if (coords == 1)
-            sprintf(formatbuff,
-                    _("Easting, Northing, Along track dist. [%s], Elevation"),
-                    unit);
+            snprintf(formatbuff, sizeof(formatbuff),
+                     _("Easting, Northing, Along track dist. [%s], Elevation"),
+                     unit);
         else
-            sprintf(formatbuff, _("Along track dist. [%s], Elevation"), unit);
+            snprintf(formatbuff, sizeof(formatbuff),
+                     _("Along track dist. [%s], Elevation"), unit);
         if (clr)
             strcat(formatbuff, _(" RGB color"));
         G_message("%s", formatbuff);

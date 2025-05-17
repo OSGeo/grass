@@ -31,7 +31,7 @@ from grass.lib.vector import (
 )
 
 if "GISBASE" not in os.environ:
-    sys.exit("You must be in GRASS GIS to run this program.")
+    sys.exit("You must be in GRASS to run this program.")
 
 input = sys.argv[1] if len(sys.argv) == 2 else input("Name of vector map? ")
 
