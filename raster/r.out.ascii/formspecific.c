@@ -214,3 +214,23 @@ int write_GSGRID(int fd, FILE *fp, int nrows, int ncols, int out_type, int dp,
 
     return (0);
 }
+
+/* write the LISFLOOD ASCII heading */
+int writeLISFLOODheader(FILE *fp, char *nodataval)
+{
+    struct Cell_head region;
+    char buf[128];
+
+    G_get_window(&region);
+    fprintf(fp, "ncols\t\t%d\n", region.cols);
+    fprintf(fp, "nrows\t\t%d\n", region.rows);
+    G_format_easting(region.west, buf, region.proj);
+    fprintf(fp, "xllcorner\t%s\n", buf);
+    G_format_northing(region.south, buf, region.proj);
+    fprintf(fp, "yllcorner\t%s\n", buf);
+    fprintf(fp, "cellsize\t%.f\n", region.ew_res);
+
+    fprintf(fp, "NODATA_value\t%s\n", nodataval);
+
+    return 0;
+}
