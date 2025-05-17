@@ -911,8 +911,7 @@ int main(int argc, char *argv[])
     /* save= */
     if ((name = parm.save->answer)) {
         update_file = false;
-        temp_window = window;
-        if (G_put_element_window(&temp_window, "windows", name) < 0)
+        if (G_put_element_window(&window, "windows", name) < 0)
             G_fatal_error(_("Unable to set region <%s>"), name);
     }
 
