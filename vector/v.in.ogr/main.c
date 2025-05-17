@@ -490,11 +490,11 @@ int main(int argc, char *argv[])
         len = strlen("SHAPE_ENCODING") + strlen(param.encoding->answer) + 2;
         encbuf = G_malloc(len * sizeof(char));
         /* -> Esri Shapefile */
-        sprintf(encbuf, "SHAPE_ENCODING=%s", param.encoding->answer);
+        snprintf(encbuf, len, "SHAPE_ENCODING=%s", param.encoding->answer);
         encp = G_store(encbuf);
         putenv(encp);
         /* -> DXF */
-        sprintf(encbuf, "DXF_ENCODING=%s", param.encoding->answer);
+        snprintf(encbuf, len, "DXF_ENCODING=%s", param.encoding->answer);
         encp = G_store(encbuf);
         putenv(encp);
         /* todo: others ? */
@@ -897,10 +897,10 @@ int main(int argc, char *argv[])
      * polygons are written to the vector then cleaned and centroids are
      * calculated for all areas in clean vector. Then second pass through finds
      * all centroids in each polygon feature and adds its category to the
-     * centroid. The result is that one centroid may have 0, 1 ore more
-     * categories of one ore more (more input layers) fields. */
+     * centroid. The result is that one centroid may have 0, 1 or more
+     * categories of one or more (more input layers) fields. */
 
-    /* get input column to use for categoy values, create tables */
+    /* get input column to use for category values, create tables */
     OGR_iterator_reset(&OGR_iter);
     key_column = G_malloc(nlayers * sizeof(char *));
     key_idx = G_malloc(nlayers * sizeof(int));
@@ -1007,7 +1007,7 @@ int main(int argc, char *argv[])
 
                 /* avoid that we get the key column twice */
                 if (strcmp(Ogr_fieldname, key_column[layer]) == 0) {
-                    sprintf(namebuf, "%s_", Ogr_fieldname);
+                    snprintf(namebuf, sizeof(namebuf), "%s_", Ogr_fieldname);
                     Ogr_fieldname = G_store(namebuf);
                 }
 
@@ -1056,7 +1056,8 @@ int main(int argc, char *argv[])
                 else if (Ogr_ftype == OFTIntegerList ||
                          Ogr_ftype == OFTInteger64List) {
                     /* hack: treat as string */
-                    sprintf(buf, "varchar ( %d )", OFTIntegerListlength);
+                    snprintf(buf, sizeof(buf), "varchar ( %d )",
+                             OFTIntegerListlength);
                     col_info[i_out].type = G_store(buf);
                     G_warning(_("Writing column <%s> with fixed length %d "
                                 "chars (may be truncated)"),
@@ -1072,7 +1073,7 @@ int main(int argc, char *argv[])
                     col_info[i_out].type = "time";
                 }
                 else if (Ogr_ftype == OFTDateTime) {
-                    sprintf(buf, "%s", datetime_type);
+                    snprintf(buf, sizeof(buf), "%s", datetime_type);
                     col_info[i_out].type = G_store(buf);
                 }
                 else if (Ogr_ftype == OFTString) {
@@ -1092,13 +1093,14 @@ int main(int argc, char *argv[])
                         col_info[i_out].type = "text";
                     }
                     else {
-                        sprintf(buf, "varchar ( %d )", fwidth);
+                        snprintf(buf, sizeof(buf), "varchar ( %d )", fwidth);
                         col_info[i_out].type = G_store(buf);
                     }
                 }
                 else if (Ogr_ftype == OFTStringList) {
                     /* hack: treat as string */
-                    sprintf(buf, "varchar ( %d )", OFTIntegerListlength);
+                    snprintf(buf, sizeof(buf), "varchar ( %d )",
+                             OFTIntegerListlength);
                     col_info[i_out].type = G_store(buf);
                     G_warning(_("Writing column %s with fixed length %d chars "
                                 "(may be truncated)"),
@@ -1133,7 +1135,8 @@ int main(int argc, char *argv[])
                             _("Column name <%s> renamed to <%s_%d>"),
                             col_info[i + i_a].name, col_info[i + i_a].name,
                             i_a);
-                        sprintf(buf, "%s_%d", col_info[i + i_a].name, i_a);
+                        snprintf(buf, sizeof(buf), "%s_%d",
+                                 col_info[i + i_a].name, i_a);
                         col_info[i + i_a].name = G_store(buf);
                         i_a++;
                         done = 0;
@@ -1145,12 +1148,13 @@ int main(int argc, char *argv[])
 
             /* Create table */
             i = 0;
-            sprintf(buf, "create table %s (\"%s\" %s", Fi->table,
-                    col_info[i].name, col_info[i].type);
+            snprintf(buf, sizeof(buf), "create table %s (\"%s\" %s", Fi->table,
+                     col_info[i].name, col_info[i].type);
             db_set_string(&sql, buf);
 
             for (i = 1; i < ncols_out; i++) {
-                sprintf(buf, ", \"%s\" %s", col_info[i].name, col_info[i].type);
+                snprintf(buf, sizeof(buf), ", \"%s\" %s", col_info[i].name,
+                         col_info[i].type);
                 db_append_string(&sql, buf);
             }
 
@@ -1387,7 +1391,7 @@ int main(int argc, char *argv[])
                         Fi->table, Fi->key);
             }
             else {
-                sprintf(buf, "drop table %s", Fi->table);
+                snprintf(buf, sizeof(buf), "drop table %s", Fi->table);
                 db_set_string(&sql, buf);
                 if (db_execute_immediate(driver, &sql) != DB_OK) {
                     G_fatal_error(_("Unable to drop table: '%s'"),
@@ -1444,7 +1448,7 @@ int main(int argc, char *argv[])
          * centroids were not identical */
         /* Disabled, because the mechanism has changed:
          * at this stage, there are no centroids yet, centroids are calculated
-         * later for output areas, not fo input polygons */
+         * later for output areas, not for input polygons */
         /*
            fprintf ( stderr, separator );
            fprintf ( stderr, "Snap centroids (threshold 0.000001):\n" );
@@ -1667,24 +1671,25 @@ int main(int argc, char *argv[])
 
         Vect_hist_write(&Map, separator);
         Vect_hist_write(&Map, "\n");
-        sprintf(buf, _("%d input polygons\n"), n_polygons);
+        snprintf(buf, sizeof(buf), _("%d input polygons\n"), n_polygons);
         G_message(_("%d input polygons"), n_polygons);
         Vect_hist_write(&Map, buf);
 
-        sprintf(buf, _("Total area: %G (%d areas)\n"), total_area, ncentr);
+        snprintf(buf, sizeof(buf), _("Total area: %G (%d areas)\n"), total_area,
+                 ncentr);
         G_message(_("Total area: %G (%d areas)"), total_area, ncentr);
         Vect_hist_write(&Map, buf);
 
-        sprintf(buf, _("Overlapping area: %G (%d areas)\n"), overlap_area,
-                n_overlaps);
+        snprintf(buf, sizeof(buf), _("Overlapping area: %G (%d areas)\n"),
+                 overlap_area, n_overlaps);
         if (n_overlaps) {
             G_message(_("Overlapping area: %G (%d areas)"), overlap_area,
                       n_overlaps);
         }
         Vect_hist_write(&Map, buf);
 
-        sprintf(buf, _("Area without category: %G (%d areas)\n"), nocat_area,
-                n_nocat);
+        snprintf(buf, sizeof(buf), _("Area without category: %G (%d areas)\n"),
+                 nocat_area, n_nocat);
         if (n_nocat) {
             G_message(_("Area without category: %G (%d areas)"), nocat_area,
                       n_nocat);

@@ -8,14 +8,17 @@ msgstr ""
 "Project-Id-Version: grassmods_ar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-23 03:37-0600\n"
-"PO-Revision-Date: 2005-03-09 12:50+0100\n"
-"Last-Translator: Dr. Alaa Masoud <alaamasoud@hotmail.com>\n"
-"Language-Team: Arabic <grass-translations@lists.osgeo.org>\n"
+"PO-Revision-Date: 2025-03-12 16:14+0000\n"
+"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
+"Language-Team: Arabic <https://weblate.osgeo.org/projects/grass-gis/"
+"grassmods/ar/>\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.2\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: ../temporal/t.connect/main.c:34
 #: ../locale/scriptstrings/t.merge_to_translate.c:2
@@ -66246,7 +66249,7 @@ msgid "Outputs basic information about a vector map."
 msgstr "اخراج المعلومات الأساسية لخرائط راسترية يحددها المستخدم"
 
 #: ../vector/v.info/print.c:30 ../vector/v.info/print.c:32
-#, fuzzy, c-format
+#, c-format
 msgid "%s"
 msgstr "%s"
 

@@ -152,10 +152,10 @@ and resolution of the target project should be set appropriately
 beforehand.
 
 A simple way to do this is to check the projected bounds of the input
-map in the current project's CRS using the **-p** flag. The **-g** flag
-reports the same thing, but in a form which can be directly cut and
-pasted into a *[g.region](g.region.md)* command. After setting the
-region in that way you might check the cell resolution with "*g.region
+map in the current project's CRS using the **-p** flag. The **format=shell**
+option with **-p** flag reports the same thing, but in a form which can be
+directly cut and pasted into a *[g.region](g.region.md)* command. After setting
+the region in that way you might check the cell resolution with "*g.region
 -p*" then snap it to a regular grid with *[g.region](g.region.md)*'s
 **-a** flag. E.g. `g.region -a res=5 -p`. Note that this is just a rough
 guide.
@@ -179,12 +179,22 @@ be odd with trimming.
 
 ## EXAMPLES
 
+To list raster maps in input mapset:
+
+```sh
+# list raster maps in plain output format
+r.proj project=ll_wgs84 mapset=user1 -l
+
+# list raster maps in JSON output format
+r.proj project=ll_wgs84 mapset=user1 -l format=json
+```
+
 ### Inline method
 
-With GRASS running in the destination project use the **-g** flag to
-show the input map's bounds once reprojected into the current working
-CRS, then use that to set the region bounds before performing the
-reprojection:
+With GRASS running in the destination project use the **format=shell** option
+with **-p** flag to show the input map's bounds once reprojected into the
+current working CRS, then use that to set the region bounds before performing
+the reprojection:
 
 ```sh
 # calculate where output map will be
@@ -197,8 +207,19 @@ Local west: 14271663.19157564
 Local east: 14409956.2693866
 
 # same calculation, but in a form which can be cut and pasted into a g.region call
-r.proj input=elevation project=ll_wgs84 mapset=user1 -g
+r.proj input=elevation project=ll_wgs84 mapset=user1 -p format=shell
 n=-4265502.30382993 s=-4473453.15255565 w=14271663.19157564 e=14409956.2693866 rows=12277 cols=8162
+
+# calculate where output map will be in JSON format
+r.proj input=elevation project=ll_wgs84 mapset=user1 -p format=json
+{
+    "north": -4265502.30382993,
+    "south": -4473453.15255565,
+    "west": 14271663.19157564,
+    "east": 14409956.2693866,
+    "rows": 12277,
+    "cols": 8162
+}
 
 g.region n=-4265502.30382993 s=-4473453.15255565 \
   w=14271663.19157564 e=14409956.2693866 rows=12277 cols=8162 -p
@@ -260,6 +281,38 @@ g.region vector=bounds_reprojected res=5 -a
 
 r.proj input=elevation.dem output=elevation.dem.reproj \
   project=source_project_name mapset=PERMANENT res=5 method=bicubic
+```
+
+### Using r.proj JSON output with python
+
+Displaying the input map's bounds in the current projection in JSON format
+using python:
+
+```python
+import grass.script as gs
+
+# Run the r.proj command to print the input map's bounds in the current 
+# projection using JSON output format
+bounds = gs.parse_command(
+    "r.proj",
+    project="nc_spm_full_v2alpha2",
+    mapset="PERMANENT",
+    input="elevation",
+    flags="p",
+    format="json",
+)
+
+for bound, value in bounds.items():
+    print(f"{bound}: {value}")
+```
+
+```sh
+north: 228500
+south: 215000
+west: 630000
+east: 645000
+rows: 1350
+cols: 1500
 ```
 
 ## REFERENCES

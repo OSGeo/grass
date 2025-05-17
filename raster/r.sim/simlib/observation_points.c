@@ -1,9 +1,9 @@
 /* obervation_points.c (simlib), 14.mar.2011, SG */
 
-#include "simlib.h"
 #include <grass/glocale.h>
 #include <grass/vector.h>
-#include <grass/waterglobs.h>
+
+#include <grass/simlib.h>
 
 static void init_points(ObservationPoints *p, int);
 static void realloc_points(ObservationPoints *p, int);

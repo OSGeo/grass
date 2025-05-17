@@ -47,11 +47,12 @@ void write_point(struct Map_info *Out, double x, double y, double z,
 
         db_init_string(&stmt);
         if (line_cat > 0)
-            sprintf(buf, "insert into %s values ( %d, %d, %.15g )", Fi->table,
-                    point_cat, line_cat, along);
+            snprintf(buf, sizeof(buf),
+                     "insert into %s values ( %d, %d, %.15g )", Fi->table,
+                     point_cat, line_cat, along);
         else
-            sprintf(buf, "insert into %s values ( %d, %.15g )", Fi->table,
-                    point_cat, along);
+            snprintf(buf, sizeof(buf), "insert into %s values ( %d, %.15g )",
+                     Fi->table, point_cat, along);
         db_append_string(&stmt, buf);
 
         if (db_execute_immediate(driver, &stmt) != DB_OK) {

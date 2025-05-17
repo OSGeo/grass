@@ -34,22 +34,18 @@ def build_class(ext):
 
     filename = modclass + f".{ext}"
     with open(filename + ".tmp", "w") as f:
+        modclass_lower = modclass.lower()
+        # convert keyword to nice form
+        modclass_visible = "3D raster" if modclass_lower == "raster3d" else modclass
         write_header(
             f,
-            "{} modules - GRASS GIS {} Reference Manual".format(
-                modclass.capitalize(), grass_version
-            ),
+            "{} tools".format(to_title(modclass_visible)),
             template=ext,
         )
-        modclass_lower = modclass.lower()
-        modclass_visible = modclass
         if modclass_lower not in no_intro_page_classes:
-            if modclass_visible == "raster3d":
-                # convert keyword to nice form
-                modclass_visible = "3D raster"
             f.write(
                 modclass_intro_tmpl.substitute(
-                    modclass=modclass_visible, modclass_lower=modclass_lower
+                    modclass=to_title(modclass_visible), modclass_lower=modclass_lower
                 )
             )
         f.write(modclass_tmpl.substitute(modclass=to_title(modclass_visible)))
@@ -78,7 +74,6 @@ if __name__ == "__main__":
         year = sys.argv[3]
 
     from build import (
-        grass_version,
         to_title,
         check_for_desc_override,
         replace_file,
