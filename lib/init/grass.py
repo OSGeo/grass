@@ -98,7 +98,10 @@ if ENCODING is None:
 if "GISBASE" in os.environ and len(os.getenv("GISBASE")) > 0:
     GISBASE = os.path.normpath(os.environ["GISBASE"])
 else:
-    GISBASE = os.path.normpath("@GISBASE_INSTALL_PATH@")
+    if "CONDA_PREFIX" in os.environ and len(os.getenv("CONDA_PREFIX")) > 0:
+        GISBASE = os.path.normpath(f"{os.environ['CONDA_PREFIX']}/lib64/grass85")
+    else:
+        GISBASE = os.path.normpath("@GISBASE_INSTALL_PATH@")
     os.environ["GISBASE"] = GISBASE
 CMD_NAME = "@START_UP@"
 GRASS_VERSION = "@GRASS_VERSION_NUMBER@"
