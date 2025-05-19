@@ -566,6 +566,13 @@ class Module:
             if e.tag not in {"parameter", "flag"}:
                 self.__setattr__(e.tag, GETFROMTAG[e.tag](e))
 
+        # some modules may have a label defined: in this case stay
+        # consistent with other modules -> define 'description'
+        # property instead
+        if hasattr(self, "description") is False:
+            self.description = self.label
+            del self.label
+
         #
         # extract parameters from the xml
         #
