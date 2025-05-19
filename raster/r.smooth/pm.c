@@ -33,7 +33,7 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
     out[0] = out[1];
     out[pm_params->ncols + 1] = out[pm_params->ncols];
     row_cache->fill(out, 0, row_cache);
-    for (unsigned int row = 0; row < pm_params->nrows; row++) {
+    for (int row = 0; row < pm_params->nrows; row++) {
         Rast_get_d_row(in_fd, &out[1], row);
         out[0] = out[1];
         out[pm_params->ncols + 1] = out[pm_params->ncols];
@@ -62,7 +62,7 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
         row_cache->put(out, 0, row_cache);
 
         /* Loop over padded data */
-        for (unsigned int prow = 1; prow < pm_params->nrows + 1; prow++) {
+        for (int prow = 1; prow < pm_params->nrows + 1; prow++) {
             /* Slide down by a single row */
             out = ra;
             ra = rc;
@@ -243,20 +243,22 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
 
     /* Write out final data */
     int out_fd = Rast_open_new(pm_params->out_map, data_type);
+    FCELL *fbuf;
+    CELL *cbuf;
     switch (data_type) {
     case DCELL_TYPE:
-        for (unsigned int row = 0; row < pm_params->nrows; row++) {
-            double *dbuf = row_cache->get(row + 1, row_cache);
+        for (int row = 0; row < pm_params->nrows; row++) {
+            DCELL *dbuf = row_cache->get(row + 1, row_cache);
             Rast_put_d_row(out_fd, &(dbuf[1]));
         }
         break;
     case FCELL_TYPE:
-        FCELL *fbuf = (FCELL *)G_malloc(pm_params->ncols * sizeof(FCELL));
-        for (unsigned int row = 0; row < pm_params->nrows; row++) {
-            double const *dbuf = row_cache->get(row + 1, row_cache);
+        fbuf = (FCELL *)G_malloc(pm_params->ncols * sizeof(FCELL));
+        for (int row = 0; row < pm_params->nrows; row++) {
+            DCELL const *dbuf = row_cache->get(row + 1, row_cache);
 /* Get rid of padding and cast to output type */
 #pragma GCC ivdep
-            for (unsigned int col = 0; col < pm_params->ncols; col++) {
+            for (int col = 0; col < pm_params->ncols; col++) {
                 fbuf[col] = (FCELL)dbuf[col + 1];
             }
             Rast_put_f_row(out_fd, fbuf);
@@ -264,12 +266,12 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
         G_free(fbuf);
         break;
     case CELL_TYPE:
-        CELL *cbuf = G_malloc(pm_params->ncols * sizeof(CELL));
-        for (unsigned int row = 0; row < pm_params->nrows; row++) {
-            double const *dbuf = row_cache->get(row + 1, row_cache);
+        cbuf = G_malloc(pm_params->ncols * sizeof(CELL));
+        for (int row = 0; row < pm_params->nrows; row++) {
+            DCELL const *dbuf = row_cache->get(row + 1, row_cache);
 /* Get rid of padding and cast to output type */
 #pragma GCC ivdep
-            for (unsigned int col = 0; col < pm_params->ncols; col++) {
+            for (int col = 0; col < pm_params->ncols; col++) {
                 cbuf[col] = (CELL)round(dbuf[col + 1]);
             }
             Rast_put_c_row(out_fd, cbuf);
