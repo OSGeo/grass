@@ -1,5 +1,5 @@
 {
-  description = "GRASS GIS";
+  description = "GRASS";
 
   nixConfig = {
     extra-substituters = [ "https://osgeo-grass.cachix.org" ];
@@ -23,7 +23,7 @@
 
         devShells.default =
           let
-            pyPackages = pkgs.python311Packages;
+            pyPackages = pkgs.python312Packages;
 
           in
           pkgs.mkShell {

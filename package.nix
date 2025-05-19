@@ -26,7 +26,7 @@
 , pkg-config
 , postgresql
 , proj
-, python311Packages
+, python312Packages
 , readline
 , sqlite
 , wxGTK32
@@ -36,7 +36,7 @@
 
 
 let
-  pyPackages = python311Packages;
+  pyPackages = python312Packages;
 
 in
 stdenv.mkDerivation (finalAttrs: {
