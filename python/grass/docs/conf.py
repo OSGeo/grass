@@ -210,7 +210,7 @@ html_theme_options = {
         },
         {
             "href": "pygrass_index",
-            "title": "Object-Oriented API",
+            "title": "PyGRASS API",
             "internal": True,
         },
         {
@@ -231,21 +231,6 @@ html_theme_options = {
         {
             "href": "exceptions",
             "title": "Exceptions",
-            "internal": True,
-        },
-        {
-            "href": "imaging",
-            "title": "Imaging",
-            "internal": True,
-        },
-        {
-            "href": "imaging",
-            "title": "Imaging",
-            "internal": True,
-        },
-        {
-            "href": "pydispatch",
-            "title": "pyDispatch",
             "internal": True,
         },
     ],
