@@ -570,8 +570,11 @@ class Module:
         # consistent with other modules -> define 'description'
         # property instead
         if hasattr(self, "description") is False:
-            self.description = self.label
-            del self.label
+            if hasattr(self, "label") is True:
+                self.description = self.label
+                del self.label
+            else:
+                self.description = "not defined"
 
         #
         # extract parameters from the xml
