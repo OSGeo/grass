@@ -14,7 +14,7 @@
 
 ## Description
 
-GRASS GIS ([https://grass.osgeo.org/](https://grass.osgeo.org/)) is
+GRASS ([https://grass.osgeo.org/](https://grass.osgeo.org/)) is
 a Geographic Information System used for geospatial data management and
 analysis, image processing, graphics/map production, spatial modeling, and
 visualization.
