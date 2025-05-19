@@ -25,15 +25,15 @@ FILES = \
 	$(ETC)/echo$(EXE) \
 	$(ETC)/license \
 	$(ETC)/VERSIONNUMBER \
-	$(HTMLDIR)/help_project_structure.png \
-	$(HTMLDIR)/grassdb.png \
-	$(HTMLDIR)/location.png \
-	$(HTMLDIR)/location-add.png \
-	$(HTMLDIR)/location-download.png \
-	$(HTMLDIR)/mapset.png \
-	$(HTMLDIR)/raster-import.png \
-	$(HTMLDIR)/vector-import.png \
-	$(HTMLDIR)/grass_start.png
+	$(HTMLDIR)/images/help_project_structure.png \
+	$(HTMLDIR)/images/grass_start.png \
+	$(HTMLDIR)/icons/grassdb.png \
+	$(HTMLDIR)/icons/location.png \
+	$(HTMLDIR)/icons/location-add.png \
+	$(HTMLDIR)/icons/location-download.png \
+	$(HTMLDIR)/icons/mapset.png \
+	$(HTMLDIR)/icons/raster-import.png \
+	$(HTMLDIR)/icons/vector-import.png
 
 ifeq ($(findstring darwin,$(ARCH)),darwin)
 	FILES += \
