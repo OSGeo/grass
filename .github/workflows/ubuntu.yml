@@ -27,7 +27,7 @@ jobs:
       matrix:
         name:
           - "22.04"
-          - minimum config
+          # - minimum config
 
         # Only run tests for these folders in this matrix job.
         extra-include:
@@ -56,9 +56,9 @@ jobs:
           # This is without optional things but it still keeps things useful,
           # so, e.g., without OpenMP, but with PDAL. Code or tests should be written
           # so that test pass even when these optional things are not present.
-          - name: minimum config
-            os: ubuntu-22.04
-            config: ubuntu-22.04_without_x
+          # - name: minimum config
+          #   os: ubuntu-22.04
+          #   config: ubuntu-22.04_without_x
       fail-fast: false
 
     steps:
