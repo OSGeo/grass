@@ -139,7 +139,7 @@ int output_data(int tt, double ft UNUSED, const Setup *setup,
     tt_minutes = (int)(tt / 60. + 0.5);
 
     /* Create timestamp */
-    sprintf(timestamp_buf, "%d minutes", tt_minutes);
+    snprintf(timestamp_buf, sizeof(timestamp_buf), "%d minutes", tt_minutes);
     G_scan_timestamp(&timestamp, timestamp_buf);
 
     /* Write the output walkers */

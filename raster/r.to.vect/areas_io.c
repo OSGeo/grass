@@ -355,15 +355,16 @@ int write_area(
             Vect_write_line(&Map, GV_CENTROID, points, Cats);
 
             if (driver != NULL && !value_flag) {
-                sprintf(buf, "insert into %s values (%d, ", Fi->table, cat);
+                snprintf(buf, sizeof(buf), "insert into %s values (%d, ",
+                         Fi->table, cat);
                 db_set_string(&sql, buf);
                 switch (data_type) {
                 case CELL_TYPE:
-                    sprintf(buf, "%d", (int)p->cat);
+                    snprintf(buf, sizeof(buf), "%d", (int)p->cat);
                     break;
                 case FCELL_TYPE:
                 case DCELL_TYPE:
-                    sprintf(buf, "%f", p->cat);
+                    snprintf(buf, sizeof(buf), "%f", p->cat);
                     break;
                 }
                 db_append_string(&sql, buf);
@@ -373,7 +374,7 @@ int write_area(
 
                     db_set_string(&label, temp_buf);
                     db_double_quote_string(&label);
-                    sprintf(buf, ", '%s'", db_get_string(&label));
+                    snprintf(buf, sizeof(buf), ", '%s'", db_get_string(&label));
                     db_append_string(&sql, buf);
                 }
 

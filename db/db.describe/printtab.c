@@ -30,7 +30,7 @@ int print_table_definition(dbDriver *driver, dbTable *table,
     ncols = db_get_table_number_of_columns(table);
 
     db_init_string(&stmt);
-    sprintf(buf, "select * from %s", db_get_table_name(table));
+    snprintf(buf, sizeof(buf), "select * from %s", db_get_table_name(table));
     db_set_string(&stmt, buf);
     nrows = db_get_table_number_of_rows(driver, &stmt);
 

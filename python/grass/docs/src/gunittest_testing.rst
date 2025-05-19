@@ -518,14 +518,14 @@ to reimplementing the functionality, relying on a person examining the data,
 or improper tests such as mere testing
 if the module executed without an error without looking at the actual results.
 Moreover, the testing framework does not have a control over what is
-executed and how which limits potential usage and features of testing
-framework. Doing this also prevents testing framework from creating a
+executed and how, which limits potential usage and features of the testing
+framework. Doing this also prevents the testing framework from creating a
 detailed report and thus better understanding of what is tested and what is
 failing. Shell scripts are also harder to execute on MS Windows where the
 interpreter might not be available or might not be on path.
 
 The testing framework uses Shell interpreter with ``-e`` flag when executing
-the tests, so the tests does not have to use ``set -e`` and can rely on it being
+the tests, so the tests do not have to use ``set -e`` and can rely on it being
 set from outside. The flag ensures that if some command fails, i.e. ends with
 non-zero return code (exit status), the execution of the script ends too.
 The testing framework also uses ``-x`` flag to print the executed commands
@@ -551,25 +551,25 @@ Data
     Both the section and the practice itself are under development.
 
 Most of the tests requires some input data. However, it is good to write
-a test in the way that it is independent on the available data.
+a test in the way that it is independent of the available data.
 In case of GRASS, we have we can have tests of functions where
 some numbers or strings are input and some numbers or string are output.
-These tests does not require any data to be provided since the numbers
+These tests do not require any data to be provided since the numbers
 can be part of the test. Then we have another category of tests, typically
 tests of GRASS modules, which require some maps to be on the input
 and thus the output (and test) depends on the specific data.
-Again, it it best to have tests which does not require any special data
-or generally environment settings (e.g. geographic projection)
+Again, it is best to have tests which do not require any special data
+or general environment settings (e.g. geographic projection)
 but it is much easier to write good tests with a given set of data.
-So, an compromises must be made and tests of different types should be written.
+So, compromises must be made and tests of different types should be written.
 
-In the GRASS testing framework, each test file should be marked according to
+In the GRASS testing framework, each test file should be marked according to the
 category it belongs to. Each category corresponds to GRASS location or locations
 where the test file can run successfully.
 
 Universal tests
-    First category is *universal*. The tests in this category use some some
-    hard coded constants, generated data, random data, or their own imported
+    First category is *universal*. The tests in this category use some
+    hardcoded constants, generated data, random data, or their own imported
     data as in input to function and GRASS modules. All the tests, input data
     and reference results should be projection independent. These tests will
     runs always regardless of available locations.
@@ -581,7 +581,7 @@ Standard names tests
     names, i.e. raster map named elevation will always contain some kind of
     digital elevation model of some area, so raster map elevation can be
     used to compute aspect. In other words, these tests should be able to
-    (successfully) run in any location with a maps named in the same way as
+    (successfully) run in any location with maps named in the same way as
     in the standard testing location(s).
 
 Standard data tests
@@ -590,14 +590,14 @@ Standard data tests
     as in the *standard names* but the tests rely also on the data being the
     same as in the standard testing location(s). However, the (geographic)
     projection or data storage can be different. This is expected to be the
-    most common case but it is much better if the tests is one of the previous
-    categories (*universal* or *standard names*). If it is possible the
-    functions or modules with tests in this category should have also tests
-    which will fit into one of the previous categories, even though these
-    additional tests will not be as precise as the other tests.
+    most common case but it is much better if the tests are one of the previous
+    categories (*universal* or *standard names*). If possible, the functions
+    or modules with tests in this category should also have tests which will
+    fit into one of the previous categories, even though these additional tests
+    will not be as precise as the other tests.
 
 Location specific tests
-    Finally, there are tests which requires certain concrete location. There
+    Finally, there are tests which require a certain concrete location. There
     is (or will be) a set of standard testing locations each will have the same
     data (maps) but the projections and data storage types will be different.
     The suggested locations are: NC sample location in SPM projection,
@@ -610,7 +610,7 @@ Location specific tests
     standard locations.
 
 Specialized location tests
-    Additionally, an specialized location with a collection of strange,
+    Additionally, a specialized location with a collection of strange,
     incorrect, or generally extreme data will be provided. In theory, more
     than one location like this can be created if the data cannot be
     together in one location or if the location itself is somehow special,
@@ -634,7 +634,7 @@ Data specific to one test
 
 If the data required by the test are not part of standard location
 and cannot be part of the test file itself, this data should be stored
-in files in ``data`` subdirectory of ``testsuite`` directory.
+in files in the ``data`` subdirectory of the ``testsuite`` directory.
 The test should access the data using a relative path from its location,
 i.e. all data will be accessed using ``data/...``. This ``data`` directory
 might be used directly when running test file directly in the directory

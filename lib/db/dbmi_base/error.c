@@ -109,10 +109,10 @@ void db_syserror(const char *s)
 
     *lead = 0;
     if (who)
-        sprintf(lead, "%s: ", who);
+        snprintf(lead, sizeof(lead), "%s: ", who);
 
     if (errno > 0)
-        sprintf(msg, "%s%s: %s", lead, strerror(errno), s);
+        snprintf(msg, sizeof(msg), "%s%s: %s", lead, strerror(errno), s);
 
     db_error(msg);
 }
@@ -145,7 +145,7 @@ void db_procedure_not_implemented(const char *name)
 {
     char msg[128];
 
-    sprintf(msg, _("dbmi: %s() not implemented"), name);
+    snprintf(msg, sizeof(msg), _("dbmi: %s() not implemented"), name);
     db_error(msg);
     err_code = DB_NOPROC;
 }
@@ -159,7 +159,7 @@ void db_noproc_error(int procnum)
 {
     char msg[128];
 
-    sprintf(msg, _("dbmi: Invalid procedure %d"), procnum);
+    snprintf(msg, sizeof(msg), _("dbmi: Invalid procedure %d"), procnum);
     db_error(msg);
     err_code = DB_NOPROC;
 }
@@ -188,12 +188,12 @@ void db_print_error(void)
 
     *lead = 0;
     if (who)
-        sprintf(lead, "%s: ", who);
+        snprintf(lead, sizeof(lead), "%s: ", who);
 
     if (user_print_function) {
         char buf[2048];
 
-        sprintf(buf, "%s%s\n", lead, err_msg);
+        snprintf(buf, sizeof(buf), "%s%s\n", lead, err_msg);
         user_print_function(buf);
     }
     else

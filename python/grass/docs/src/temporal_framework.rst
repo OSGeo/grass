@@ -86,7 +86,7 @@ the SQL object serialization, all classes that represent table entries, datetime
 :mod:`~temporal.metadata`
 """""""""""""""""""""""""
 
-    Implements the metadata base classes and datatype specific derivatives fpr all datasets [#allds]_.
+    Implements the metadata base classes and datatype specific derivatives for all datasets [#allds]_.
 
 :mod:`~temporal.spatial_topology_dataset_connector`
 """""""""""""""""""""""""""""""""""""""""""""""""""
@@ -135,7 +135,7 @@ temporal processing algorithms and temporal GRASS modules.
 """""""""""""""""""""""""""""""""
 
     - Implements the base class for all datasets [#allds]_ :class:`~temporal.abstract_dataset.AbstractDataset`.
-    - Implements the the select, insert and update functionality as well as
+    - Implements the select, insert and update functionality as well as
       convenient functions to access the base, extent and metadata information
 
 :mod:`~temporal.abstract_map_dataset`

@@ -22,7 +22,7 @@ int I_find_camera_file(char *camera, char *file)
     if (file == NULL || *file == 0)
         return 0;
 
-    sprintf(element, "camera");
+    snprintf(element, sizeof(element), "camera");
 
     return G_find_file(element, camera, G_mapset()) != NULL;
 }
