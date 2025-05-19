@@ -27,7 +27,7 @@ static struct state {
     double north_value;
     double north;
     double (*darea0)(double);
-    double (*darea0) (double);
+    double (*darea0)(double);
     struct geod_geodesic g;
 } state;
 
@@ -177,7 +177,7 @@ double G_area_of_polygon(const double *x, const double *y, int n)
 
         geod_polygon_init(&p, FALSE);
         /* GeographicLib does not need a closed ring,
-        * see example for geod_polygonarea() in geodesic.h */
+         * see example for geod_polygonarea() in geodesic.h */
         /* add points in reverse order */
         i = n;
         while (--i)

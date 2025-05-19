@@ -88,7 +88,7 @@ double G_distance(double e1, double n1, double e2, double n2)
 
         geod_inverse(&st->g, n1, e1, n2, e2, &ps12, &pazi1, &pazi2);
 
-        return ps12; 
+        return ps12;
         /* return G_geodesic_distance(e1, n1, e2, n2); */
     }
     else
