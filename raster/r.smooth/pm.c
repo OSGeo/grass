@@ -1,7 +1,7 @@
 /*
  * r.smooth Perona & Malik smoothing
  *
- *   Copyright 2024 by Maris Nartiss, and The GRASS Development Team
+ *   Copyright 2025 by Maris Nartiss, and The GRASS Development Team
  *   Author: Maris Nartiss
  *
  *   This program is free software licensed under the GPL (>=v2).

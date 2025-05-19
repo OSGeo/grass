@@ -11,7 +11,7 @@
  *               Robust anisotropic diffusion. IEEE transactions on image
  *               processing, 7(3).
  *
- * COPYRIGHT:    (C) 2024 by Maris Nartiss and the GRASS Development Team
+ * COPYRIGHT:    (C) 2025 by Maris Nartiss and the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
