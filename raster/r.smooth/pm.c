@@ -94,7 +94,7 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
                 gradients[7][pcol - 1] =
                     (rb[pcol + 1] - rc[pcol]) * pm_params->diag_cor;
 
-                /* Use 0 for nan gradients to not propogate holes */
+                /* Use 0 for nan gradients to not propagate holes */
                 gradients[0][pcol - 1] =
                     gradients[0][pcol - 1] != gradients[0][pcol - 1]
                         ? 0

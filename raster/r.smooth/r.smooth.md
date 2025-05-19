@@ -1,23 +1,23 @@
 ## DESCRIPTION
 
-The module performs an adaptive (edge pereserving) raster smoothing
+The module performs an adaptive (edge preserving) raster smoothing
 with anisotropic diffusion.
 The module implements three diffusivity (conductance) functions:
 exponential and quadratic (as sugessted by Perona & Malik 1990) and
 Tukey's biweight (as suggested by Black et al. 1998).
 
 Implementation of the Tukey's biweight diffusivity function is quite
-agressive and tends to produce continuous smoothed areas. Its output is
+aggressive and tends to produce continuous smoothed areas. Its output is
 well suited for raster segmentation. The *-p* flag allows to switch
 into a more gentle variation of the function that better preserves minor
-details and thus is better suited e.g. for visualization.
+details and thus is better suited e.g. for visualisation.
 
 The *threshold* parameter is in map units (DN, meters, etc.)
 and serves an indicator on how small difference should be considered as
 noise. It will be different for each map.
 
 The *lambda* parameter impacts smoothing speed. For exponential
-and quadratic diffusivity functions the value is authomatically bound
+and quadratic diffusivity functions the value is automatically bound
 to range of 0 to 0.25. For the Tukey diffusivity function full range is
 available.
 
@@ -25,7 +25,7 @@ The *steps* parameter sets number of iterations for smoothing.
 Depending on selected diffusivity function, large number of iterations
 can result in a loss of fine details. In terms of detail preservation
 functions can be ordered with increasing preservation as *quadratic,
-exponental, Tukey, Tukey with the -p flag*.
+exponential, Tukey, Tukey with the -p flag*.
 
 ## NOTES
 
@@ -35,9 +35,9 @@ converted to the same type as the input map.
 The module will try to keep all temporary data in RAM. Thus it is important
 to set the *memory* parameter as high as possible.
 
-The original Perona & Malik paper uses von Neumann (4-connected) neibourhood for
-value calculation, but this module uses Moore (8-connected) neibourhood.
-Computed gradients of neigbouring cells are adjusted to equalize distances for
+The original Perona & Malik paper uses von Neumann (4-connected) neighbourhood for
+value calculation, but this module uses Moore (8-connected) neighbourhood.
+Computed gradients of neighbouring cells are adjusted to equalise distances for
 diagonals and non-square cells.
 
 ## EXAMPLE
@@ -46,7 +46,7 @@ diagonals and non-square cells.
 # Set computational region to orthophoto map
 g.region raster=ortho_2001_t792_1m -p
 
-# Smooth with average in a 3x3 window. Note how all edges have became blury
+# Smooth with average in a 3x3 window. Note how all edges have became blurry
 # but at the same time streets and roofs are still noisy
 r.neighbors input=ortho_2001_t792_1m output=ortho_smoothed_avg\
  size=3 method=average
@@ -61,12 +61,12 @@ r.neighbors input=ortho_2001_t792_1m output=ortho_smoothed_med\
 r.smooth function=quadratic input=ortho_2001_t792_1m output=ortho_smoothed_qa\
  threshold=15 lambda=0.4 steps=20
 
-# Smooth with exponental diffusivity function. Even better edge delineation
+# Smooth with exponential diffusivity function. Even better edge delineation
 # but at the same time increase of noise in really noisy areas.
-r.smooth function=exponental input=ortho_2001_t792_1m output=ortho_smoothed_ex\
+r.smooth function=exponential input=ortho_2001_t792_1m output=ortho_smoothed_ex\
  threshold=15 lambda=0.4 steps=20
 
-# Smooth with agressive Tukey's diffusivity function. Better preservation of
+# Smooth with aggressive Tukey's diffusivity function. Better preservation of
 # minor details e.g. as road markings but little smoothing in areas with
 # fine, well expressed texture.
 r.smooth function=tukey input=ortho_2001_t792_1m output=ortho_smoothed_ta\

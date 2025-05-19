@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
     opt.met->type = TYPE_STRING;
     opt.met->required = YES;
     opt.met->description = _("Diffusivity function");
-    opt.met->options = "exponental,quadratic,tukey";
+    opt.met->options = "exponential,quadratic,tukey";
     opt.met->answer = "tukey";
 
     opt.mem = G_define_standard_option(G_OPT_MEMORYMB);
@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
         pm_params.conditional = 2;
         pm_params.dt = lambda > 0.25 ? 0.25 : lambda;
     }
-    /* Lambda needs to be devided by number of neighbours
+    /* Lambda needs to be divided by number of neighbours
      * according to formula 5 in Black et al. 1998 */
     pm_params.dt = pm_params.dt / 8.0;
 
@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
     }
 
     /* Static adjustment for non-square cells.
-     * Should be replaced with much more expensice true per-row distance
+     * Should be replaced with much more expensive true per-row distance
      * calculation for a ll location. */
     pm_params.vert_cor = window.ns_res / window.ew_res;
     pm_params.diag_cor =
