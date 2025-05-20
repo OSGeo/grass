@@ -22,6 +22,7 @@ int parse_command_line(int argc, char *argv[])
         struct Option *units;
         struct Option *qcol;
         struct Option *fs;
+        struct Option *format;
     } parms;
     struct {
         struct Flag *h, *p, *s, *t;
@@ -116,6 +117,13 @@ int parse_command_line(int argc, char *argv[])
     parms.fs->label = _("Field separator for print mode");
     parms.fs->guisection = _("Print");
 
+    parms.format = G_define_standard_option(G_OPT_F_FORMAT);
+    parms.format->descriptions =
+        _("plain;Plain text output;"
+          "json;JSON (JavaScript Object Notation), only used when print only "
+          "flag is also set;");
+    parms.format->guisection = _("Print");
+
     flags.p = G_define_flag();
     flags.p->key = 'p';
     flags.p->description = _("Print only");
@@ -167,6 +175,13 @@ int parse_command_line(int argc, char *argv[])
     options.units = parse_units(parms.units->answer);
 
     options.fs = G_option_to_separator(parms.fs);
+
+    if (strcmp(parms.format->answer, "json") == 0) {
+        options.format = JSON;
+    }
+    else {
+        options.format = PLAIN;
+    }
 
     /* Check number of columns */
     ncols = 0;
