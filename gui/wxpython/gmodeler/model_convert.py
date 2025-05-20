@@ -27,12 +27,7 @@ from abc import ABC, abstractmethod
 from core import utils
 from gui_core.forms import GUI, CmdPanel
 
-from gmodeler.model import (
-    ModelAction,
-    ModelComment,
-    ModelCondition,
-    ModelLoop
-)
+from gmodeler.model import ModelAction, ModelComment, ModelCondition, ModelLoop
 
 
 class BaseModelConverter(ABC):
@@ -782,7 +777,9 @@ class ModelToPython(BaseModelConverter):
 # %module
 # % description: {description}
 # %end
-""".format(description=" ".join(properties["description"].splitlines()))
+""".format(
+                description=" ".join(properties["description"].splitlines())
+            )
         )
 
         modelItems = self.model.GetItems(ModelAction)
