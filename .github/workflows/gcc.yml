@@ -6,7 +6,7 @@ on:
     branches:
       - main
       - releasebranch_*
-  pull_request:
+  # pull_request:
 
 permissions: {}
 
