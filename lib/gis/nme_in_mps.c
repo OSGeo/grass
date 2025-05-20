@@ -103,10 +103,10 @@ char *G_fully_qualified_name(const char *name, const char *mapset)
     char fullname[GNAME_MAX + GMAPSET_MAX];
 
     if (strchr(name, '@') || strlen(mapset) < 1) {
-        sprintf(fullname, "%s", name);
+        snprintf(fullname, sizeof(fullname), "%s", name);
     }
     else {
-        sprintf(fullname, "%s@%s", name, mapset);
+        snprintf(fullname, sizeof(fullname), "%s@%s", name, mapset);
     }
 
     return G_store(fullname);

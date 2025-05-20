@@ -212,7 +212,8 @@ static char *check_program(const char *pgm, const char *dir, const char *ext)
 {
     char pathname[GPATH_MAX];
 
-    sprintf(pathname, "%s%s%s%s", dir, *dir ? "\\" : "", pgm, ext);
+    snprintf(pathname, sizeof(pathname), "%s%s%s%s", dir, *dir ? "\\" : "", pgm,
+             ext);
     return access(pathname, 0) == 0 ? G_store(pathname) : NULL;
 }
 
@@ -445,11 +446,12 @@ static void do_redirects(struct redirect *redirects, int num_redirects,
 
 static void add_binding(const char **env, int *pnum, const struct binding *b)
 {
-    char *str = G_malloc(strlen(b->var) + strlen(b->val) + 2);
+    size_t bufsize = strlen(b->var) + strlen(b->val) + 2;
+    char *str = G_malloc(bufsize);
     int n = *pnum;
     int i;
 
-    sprintf(str, "%s=%s", b->var, b->val);
+    snprintf(str, bufsize, "%s=%s", b->var, b->val);
 
     for (i = 0; i < n; i++)
         if (G_strcasecmp(env[i], b->var) == 0) {
@@ -640,9 +642,10 @@ static void do_bindings(const struct binding *bindings, int num_bindings)
 
     for (i = 0; i < num_bindings; i++) {
         const struct binding *b = &bindings[i];
-        char *str = G_malloc(strlen(b->var) + strlen(b->val) + 2);
+        size_t bufsize = strlen(b->var) + strlen(b->val) + 2;
+        char *str = G_malloc(bufsize);
 
-        sprintf(str, "%s=%s", b->var, b->val);
+        snprintf(str, bufsize, "%s=%s", b->var, b->val);
         putenv(str);
     }
 }

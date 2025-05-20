@@ -17,9 +17,9 @@
     fprintf(stdout, "%c\n", x)
 
 /* cloned from lib/gis/wind_format.c */
-void format_double(double value, char *buf)
+void format_double(double value, char buf[BUFSZ])
 {
-    sprintf(buf, "%.8f", value);
+    snprintf(buf, BUFSZ, "%.8f", value);
     G_trim_decimal(buf);
 }
 
@@ -559,7 +559,7 @@ void print_info(struct Map_info *Map)
     struct TimeStamp ts;
     int time_ok, first_time_ok, second_time_ok;
     struct bound_box box;
-    char tmp1[256], tmp2[256];
+    char tmp1[BUFSZ], tmp2[BUFSZ];
 
     time_ok = first_time_ok = second_time_ok = FALSE;
     map_type = Vect_maptype(Map);
@@ -745,19 +745,21 @@ void print_info(struct Map_info *Map)
 
     G_format_northing(box.N, tmp1, G_projection());
     G_format_northing(box.S, tmp2, G_projection());
-    sprintf(line, "              %c: %17s    %c: %17s", 'N', tmp1, 'S', tmp2);
+    snprintf(line, sizeof(line), "              %c: %17s    %c: %17s", 'N',
+             tmp1, 'S', tmp2);
     printline(line);
 
     G_format_easting(box.E, tmp1, G_projection());
     G_format_easting(box.W, tmp2, G_projection());
-    sprintf(line, "              %c: %17s    %c: %17s", 'E', tmp1, 'W', tmp2);
+    snprintf(line, sizeof(line), "              %c: %17s    %c: %17s", 'E',
+             tmp1, 'W', tmp2);
     printline(line);
 
     if (Vect_is_3d(Map)) {
         format_double(box.B, tmp1);
         format_double(box.T, tmp2);
-        sprintf(line, "              %c: %17s    %c: %17s", 'B', tmp1, 'T',
-                tmp2);
+        snprintf(line, sizeof(line), "              %c: %17s    %c: %17s", 'B',
+                 tmp1, 'T', tmp2);
         printline(line);
     }
     printline("");
@@ -767,7 +769,7 @@ void print_info(struct Map_info *Map)
     printline(line);
     G_saprintf(line, "  %s:", _("Comment"));
     printline(line);
-    sprintf(line, "    %s", Vect_get_comment(Map));
+    snprintf(line, sizeof(line), "    %s", Vect_get_comment(Map));
     printline(line);
     divider('+');
     fprintf(stdout, "\n");

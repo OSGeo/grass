@@ -29,7 +29,6 @@ jobs:
       - name: Checkout core
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          repository: OSGeo/grass
           path: grass
           fetch-depth: 0
 
@@ -63,6 +62,14 @@ jobs:
           path: grass-addons
           fetch-depth: 0
 
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@63069e3931dedbf3b63792097479563182fe70d1 # v1.2.18
+        with:
+          create-symlink: true
+          verbose: 2
+          evict-old-files: 7d
+          key: ${{ github.workflow }}-${{ github.job }}-grass${{ env.MAJOR }}-${{ matrix.python-version }}
+
       - name: Install Python dependencies
         # We install both core and addon dependencies, but we don't install any
         # dependencies from the extra list in addons because we don't actually
@@ -70,6 +77,8 @@ jobs:
         run: |
           pip install -r grass/.github/workflows/python_requirements.txt
           pip install -r grass-addons/.github/workflows/requirements.txt
+
+      - uses: rui314/setup-mold@67424c1b3680e35255d95971cbd5de0047bf31c3 # v1
 
       - name: Create installation directory
         run: |
