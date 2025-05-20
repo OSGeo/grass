@@ -321,7 +321,7 @@ int main(int argc, char *argv[])
     parm.dmin->required = NO;
     parm.dmin->description =
         _("Minimum distance between points (to remove almost identical "
-          "points). Default vaule is half of "
+          "points). Default value is half of "
           " the smaller resolution of the current region");
     parm.dmin->guisection = _("Parameters");
 
