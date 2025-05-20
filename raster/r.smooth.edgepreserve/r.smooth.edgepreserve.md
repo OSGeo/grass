@@ -1,31 +1,51 @@
 ## DESCRIPTION
 
-The module performs an adaptive (edge preserving) raster smoothing
-with anisotropic diffusion.
-The module implements three diffusivity (conductance) functions:
-exponential and quadratic (as sugessted by Perona & Malik 1990) and
-Tukey's biweight (as suggested by Black et al. 1998).
+This module performs **adaptive, edge-preserving raster smoothing**
+using **anisotropic diffusion**. The result is a denoised raster that
+retains important features, especially edges. Unlike traditional
+smoothing methods (such as a uniform average filter, like the one available
+in *r.neighbors*), this module smooths **only areas with similar values**
+and works to **preserve sharp transitions** between different regions.
+An example is provided in the picture below: "A" is the original and
+"B" is the smoothed version.
 
-Implementation of the Tukey's biweight diffusivity function is quite
-aggressive and tends to produce continuous smoothed areas. Its output is
-well suited for raster segmentation. The *-p* flag allows to switch
-into a more gentle variation of the function that better preserves minor
-details and thus is better suited e.g. for visualisation.
+![An example of smoothed image](r.smooth.edgepreserve.jpg)
 
-The *threshold* parameter is in map units (DN, meters, etc.)
-and serves an indicator on how small difference should be considered as
-noise. It will be different for each map.
+The module supports three types of diffusivity (conductance) functions:
 
-The *lambda* parameter impacts smoothing speed. For exponential
-and quadratic diffusivity functions the value is automatically bound
-to range of 0 to 0.25. For the Tukey diffusivity function full range is
-available.
+- **Exponential**
+- **Quadratic**  
+  *(both as proposed by Perona & Malik, 1990)*
+- **Tukey’s biweight**  
+  *(as proposed by Black et al., 1998)*
 
-The *steps* parameter sets number of iterations for smoothing.
-Depending on selected diffusivity function, large number of iterations
-can result in a loss of fine details. In terms of detail preservation
-functions can be ordered with increasing preservation as *quadratic,
-exponential, Tukey, Tukey with the -p flag*.
+The **Tukey’s biweight** function is more aggressive than the others and
+tends to produce large, smoothly blended areas. This makes it
+particularly useful for **raster segmentation**. If you prefer a gentler
+effect that **preserves smaller features**, you can use the `-p` flag,
+which switches to a softer variant of the Tukey function — ideal for
+applications like **visualization**.
+
+## Parameters
+
+- **`threshold`**  
+  Defines how small a difference in raster values should be treated as
+  noise. The unit depends on the raster (e.g., digital numbers, meters,
+  etc.), and should be adjusted individually for each map.
+
+- **`lambda`**  
+  Controls the **smoothing rate**.
+  - For **exponential** and **quadratic** functions, the value is
+  automatically clamped between `0` and `0.25` for numeric stability.
+  - For **Tukey**, the full range is used.
+
+- **`steps`**  
+  Specifies the number of **smoothing iterations**. Higher values result
+  in stronger smoothing.  
+  Note that:
+  - Excessive iterations can cause **loss of fine detail**.
+  - Detail preservation improves in this order:  
+    `quadratic` → `exponential` → `Tukey` → `Tukey` with `-p` flag.
 
 ## NOTES
 
@@ -33,7 +53,8 @@ Internally calculations are performed in double precision and only at the end
 converted to the same type as the input map.
 
 The module will try to keep all temporary data in RAM. Thus it is important
-to set the *memory* parameter as high as possible.
+to set the *memory* parameter as high as possible.  If the map does
+not fit into RAM, a temporary file will be used instead.
 
 The original Perona & Malik paper uses von Neumann (4-connected) neighbourhood for
 value calculation, but this module uses Moore (8-connected) neighbourhood.
@@ -80,16 +101,16 @@ r.smooth.edgepreserve function=tukey input=ortho_2001_t792_1m \
 
 ## SEE ALSO
 
-* Smooth with statistics: *[r.neighbours](r.neighbours)*
-* The Mumford-Shah variational model for image segmentation (an add-on):
+- Smooth with statistics: *[r.neighbours](r.neighbours)*
+- The Mumford-Shah variational model for image segmentation (an add-on):
 *[r.smooth.seg](https://grass.osgeo.org/grass84/manuals/addons/r.smooth.seg.html)*
 
 ## REFERENCES
 
-* Perona P. and Malik J. 1990. Scale-space and edge detection using anisotropic
+- Perona P. and Malik J. 1990. Scale-space and edge detection using anisotropic
 diffusion. *IEEE transactions on pattern analysis and machine intelligence*,
 12(7).
-* Black M.J., Sapiro G., Marimont D.H. and Heeger D. 1998. Robust anisotropic
+- Black M.J., Sapiro G., Marimont D.H. and Heeger D. 1998. Robust anisotropic
 diffusion. *IEEE transactions on image processing*, 7(3).
 
 ## AUTHOR
