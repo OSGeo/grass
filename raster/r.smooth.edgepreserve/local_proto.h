@@ -1,5 +1,5 @@
 /*
- * r.smooth
+ * r.smooth.edgepreserve
  *
  *   Copyright 2025 by Maris Nartiss, and The GRASS Development Team
  *   Author: Maris Nartiss

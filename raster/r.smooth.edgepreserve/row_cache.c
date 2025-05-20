@@ -1,5 +1,5 @@
 /*
- * r.smooth row cache
+ * r.smooth.edgepreserve row cache
  *
  *   Copyright 2025 by Maris Nartiss, and The GRASS Development Team
  *   Author: Maris Nartiss

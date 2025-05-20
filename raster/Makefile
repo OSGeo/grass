@@ -94,7 +94,7 @@ SUBDIRS = \
 	r.relief \
 	r.sim \
 	r.slope.aspect \
-	r.smooth \
+	r.smooth.edgepreserve \
 	r.solute.transport \
 	r.spread \
 	r.spreadpath \

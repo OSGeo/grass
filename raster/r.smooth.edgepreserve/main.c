@@ -1,6 +1,6 @@
 /****************************************************************************
  *
- * MODULE:       r.smooth
+ * MODULE:       r.smooth.edgepreserve
  * AUTHOR(S):    Maris Nartiss maris.gis gmail.com
  * PURPOSE:      Provides smoothing with anisotropic diffusion according to:
  *               Perona P. and Malik J. 1990. Scale-space and edge detection

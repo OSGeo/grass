@@ -1,5 +1,5 @@
 """
-Name:      r.smooth tests
+Name:      r.smooth.edgepreserve tests
 Purpose:   Test corectness of outputs
 
 Author:    Maris Nartiss
@@ -99,7 +99,7 @@ class SmoothingTest(TestCase):
         out_map_i = tempname(10)
         self.rm_rast.append(out_map_i)
         self.assertModule(
-            "r.smooth",
+            "r.smooth.edgepreserve",
             input_=self.in_map_i,
             output=out_map_i,
             memory=100,
@@ -122,7 +122,7 @@ class SmoothingTest(TestCase):
         out_map_f = tempname(10)
         self.rm_rast.append(out_map_f)
         self.assertModule(
-            "r.smooth",
+            "r.smooth.edgepreserve",
             input_=self.in_map_f,
             output=out_map_f,
             memory=100,
@@ -145,7 +145,7 @@ class SmoothingTest(TestCase):
         out_map_d = tempname(10)
         self.rm_rast.append(out_map_d)
         self.assertModule(
-            "r.smooth",
+            "r.smooth.edgepreserve",
             input_=self.in_map_d,
             output=out_map_d,
             memory=100,
@@ -167,7 +167,7 @@ class SmoothingTest(TestCase):
         out_map_f = tempname(10)
         self.rm_rast.append(out_map_f)
         self.assertModule(
-            "r.smooth",
+            "r.smooth.edgepreserve",
             input_=self.in_map_f,
             output=out_map_f,
             memory=100,
@@ -188,7 +188,7 @@ class SmoothingTest(TestCase):
         out_map_f = tempname(10)
         self.rm_rast.append(out_map_f)
         self.assertModule(
-            "r.smooth",
+            "r.smooth.edgepreserve",
             input_=self.in_map_f,
             output=out_map_f,
             memory=100,
@@ -209,7 +209,7 @@ class SmoothingTest(TestCase):
         out_map_f = tempname(10)
         self.rm_rast.append(out_map_f)
         self.assertModule(
-            "r.smooth",
+            "r.smooth.edgepreserve",
             input_=self.in_map_f,
             output=out_map_f,
             memory=0.0022,

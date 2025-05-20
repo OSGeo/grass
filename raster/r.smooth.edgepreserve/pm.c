@@ -1,5 +1,5 @@
 /*
- * r.smooth Perona & Malik smoothing
+ * r.smooth.edgepreserve Perona & Malik smoothing
  *
  *   Copyright 2025 by Maris Nartiss, and The GRASS Development Team
  *   Author: Maris Nartiss

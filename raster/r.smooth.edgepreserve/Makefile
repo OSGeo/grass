@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../..
 
-PGM = r.smooth
+PGM = r.smooth.edgepreserve
 
 LIBES = $(ROWIOLIB) $(RASTERLIB) $(GISLIB)
 EXTRA_LIBS = $(OPENMP_LIBPATH) $(OPENMP_LIB)

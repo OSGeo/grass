@@ -58,24 +58,24 @@ r.neighbors input=ortho_2001_t792_1m output=ortho_smoothed_med\
 
 # Smooth with quadratic diffusivity function. Note better preservation of
 # small details and reduction of noise on streets and roofs.
-r.smooth function=quadratic input=ortho_2001_t792_1m output=ortho_smoothed_qa\
- threshold=15 lambda=0.4 steps=20
+r.smooth.edgepreserve function=quadratic input=ortho_2001_t792_1m \
+ output=ortho_smoothed_qa threshold=15 lambda=0.4 steps=20
 
 # Smooth with exponential diffusivity function. Even better edge delineation
 # but at the same time increase of noise in really noisy areas.
-r.smooth function=exponential input=ortho_2001_t792_1m output=ortho_smoothed_ex\
- threshold=15 lambda=0.4 steps=20
+r.smooth.edgepreserve function=exponential input=ortho_2001_t792_1m \
+ output=ortho_smoothed_ex threshold=15 lambda=0.4 steps=20
 
 # Smooth with aggressive Tukey's diffusivity function. Better preservation of
 # minor details e.g. as road markings but little smoothing in areas with
 # fine, well expressed texture.
-r.smooth function=tukey input=ortho_2001_t792_1m output=ortho_smoothed_ta\
- threshold=15 lambda=0.4 steps=20
+r.smooth.edgepreserve function=tukey input=ortho_2001_t792_1m \
+ output=ortho_smoothed_ta threshold=15 lambda=0.4 steps=20
 
 # Smooth with preserving Tukey's diffusivity function. Only low noise areas
 # have been smoothed.
-r.smooth function=tukey input=ortho_2001_t792_1m output=ortho_smoothed_tp\
- threshold=15 lambda=0.4 steps=20 -p
+r.smooth.edgepreserve function=tukey input=ortho_2001_t792_1m \
+ output=ortho_smoothed_tp threshold=15 lambda=0.4 steps=20 -p
 ```
 
 ## SEE ALSO
