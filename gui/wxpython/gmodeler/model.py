@@ -53,7 +53,7 @@ from gmodeler.model_items import (
 from core.giface import StandaloneGrassInterface
 from gui_core.forms import GUI, CmdPanel
 from gui_core.widgets import GNotebook
-from gui_core.wrap import Button, IsDark
+from gui_core.wrap import Button
 from gmodeler.giface import GraphicalModelerGrassInterface
 
 from grass.script import task as gtask
