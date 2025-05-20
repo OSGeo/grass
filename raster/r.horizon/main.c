@@ -889,34 +889,6 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
         json_set_float_serialization_format("%lf");
     }
 
-    // double dfr_rad = settings->step * deg2rad;
-
-    // double xp = geometry->xmin + origin_point.xg0;
-    // double yp = geometry->ymin + origin_point.yg0;
-
-    // double angle = (settings->single_direction * deg2rad) + pihalf;
-    // double printangle = settings->single_direction;
-
-    // origin_point.maxlength = settings->fixedMaxLength;
-    // /* JSON variables and formating */
-
-    // JSON_Value *horizons_value;
-    // JSON_Array *horizons;
-
-    // switch (format) {
-    // case PLAIN:
-    //     fprintf(fp, "azimuth,horizon_height");
-    //     if (settings->horizonDistance)
-    //         fprintf(fp, ",horizon_distance");
-    //     fprintf(fp, "\n");
-    //     break;
-    // case JSON:
-    //     json_object_set_number(json_origin, "x", xcoord);
-    //     json_object_set_number(json_origin, "y", ycoord);
-    //     horizons_value = json_value_init_array();
-    //     horizons = json_value_get_array(horizons_value);
-    //     break;
-    // }
 
     for (int i = 0; i < point_count; i++) {
         /* Write out header */
