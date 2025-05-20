@@ -16,6 +16,19 @@
 
 #include "local_proto.h"
 
+/* Workaround to not fail on unknown #pragma during compilation */
+#if defined(__GNUC__) && (__GNUC__ >= 4) && (__GNUC_MINOR__ >= 9)
+#define PRAGMA_IVDEP _Pragma("GCC ivdep")
+#elif defined(__clang__) && (__clang_major__ >= 10)
+#define PRAGMA_IVDEP _Pragma("clang loop ivdep(enable)")
+#elif defined(__INTEL_COMPILER) || defined(__INTEL_LLVM_COMPILER)
+#define PRAGMA_IVDEP _Pragma("ivdep")
+#elif defined(_MSC_VER)
+#define PRAGMA_IVDEP __pragma(loop(ivdep))
+#else
+#define PRAGMA_IVDEP /* noop if ivdep is not supported */
+#endif
+
 void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
 {
     /* Copy initial data to the tmp file */
@@ -233,7 +246,7 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
     /* Let out and ra leak, as they might be freed by caching functions */
     G_free(di);
 
-#pragma GCC ivdep
+    PRAGMA_IVDEP
     for (unsigned int i = 0; i < 8; i++) {
         G_free(gradients[i]);
         G_free(divs[i]);
@@ -256,8 +269,8 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
         fbuf = (FCELL *)G_malloc(pm_params->ncols * sizeof(FCELL));
         for (int row = 0; row < pm_params->nrows; row++) {
             DCELL const *dbuf = row_cache->get(row + 1, row_cache);
-/* Get rid of padding and cast to output type */
-#pragma GCC ivdep
+            /* Get rid of padding and cast to output type */
+            PRAGMA_IVDEP
             for (int col = 0; col < pm_params->ncols; col++) {
                 fbuf[col] = (FCELL)dbuf[col + 1];
             }
@@ -269,8 +282,8 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
         cbuf = G_malloc(pm_params->ncols * sizeof(CELL));
         for (int row = 0; row < pm_params->nrows; row++) {
             DCELL const *dbuf = row_cache->get(row + 1, row_cache);
-/* Get rid of padding and cast to output type */
-#pragma GCC ivdep
+            /* Get rid of padding and cast to output type */
+            PRAGMA_IVDEP
             for (int col = 0; col < pm_params->ncols; col++) {
                 cbuf[col] = (CELL)round(dbuf[col + 1]);
             }
