@@ -395,7 +395,7 @@ GDAL Pages: <https://gdal.org>
 [r.in.ascii](r.in.ascii.md), [r.in.bin](r.in.bin.md),
 [r.null](r.null.md), [t.register](t.register.md)*
 
-GRASS GIS Wiki page: Import of [Global
+GRASS Wiki page: Import of [Global
 datasets](https://grasswiki.osgeo.org/wiki/Global_datasets)
 
 ## AUTHOR
