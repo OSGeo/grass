@@ -189,10 +189,21 @@ def merge_md_files(md1, md2, content_modifier1, content_modifier2):
         yaml_items.append(yaml1)
     if yaml2:
         yaml_items.append(yaml2)
-    combined_yaml = "\n".join(yaml_items)
+    if yaml_items:
+        # Add YAML header only when non-empty.
+        combined_yaml = "\n".join(yaml_items)
+        result = ["---\n", combined_yaml, "\n---\n\n"]
+    else:
+        result = []
 
     # Attach the rest of the document.
-    return ["---\n", combined_yaml, "\n---\n\n", content1, "\n", content2, "\n"]
+    if content1:
+        result.extend([content1, "\n"])
+    if content1 and content2:
+        result.append("\n")
+    if content2:
+        result.extend([content2, "\n"])
+    return result
 
 
 def main():

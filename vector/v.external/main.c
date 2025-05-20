@@ -183,15 +183,15 @@ int main(int argc, char *argv[])
 
     /* Vect_open_new created 'head', 'coor', 'hist'
        -> delete 'coor' and create 'frmt' */
-    sprintf(buf, "%s/%s/%s/%s/coor", G_location_path(), G_mapset(),
-            GV_DIRECTORY, output);
+    snprintf(buf, sizeof(buf), "%s/%s/%s/%s/coor", G_location_path(),
+             G_mapset(), GV_DIRECTORY, output);
     G_debug(2, "Delete '%s'", buf);
     if (unlink(buf) == -1) {
         G_fatal_error(_("Unable to delete '%s'"), buf);
     }
 
     /* create frmt file */
-    sprintf(buf, "%s/%s", GV_DIRECTORY, output);
+    snprintf(buf, sizeof(buf), "%s/%s", GV_DIRECTORY, output);
     fd = G_fopen_new(buf, GV_FRMT_ELEMENT);
     if (fd == NULL)
         G_fatal_error(_("Unable to create file '%s/%s'"), buf, GV_FRMT_ELEMENT);

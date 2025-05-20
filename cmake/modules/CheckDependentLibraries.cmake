@@ -21,13 +21,6 @@ if(UNIX)
 endif()
 
 find_package(PROJ REQUIRED)
-if(PROJ_FOUND)
-  add_library(PROJ INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET PROJ PROPERTY INTERFACE_LINK_LIBRARIES
-                                    ${PROJ_LIBRARY${find_library_suffix}})
-  set_property(TARGET PROJ PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                    ${PROJ_INCLUDE_DIR})
-endif()
 
 find_package(GDAL REQUIRED)
 
@@ -50,53 +43,27 @@ find_package(Iconv)
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads)
-if(Threads_FOUND)
-  add_library(PTHREAD INTERFACE IMPORTED GLOBAL)
-  if(THREADS_HAVE_PTHREAD_ARG)
-    set_property(TARGET PTHREAD PROPERTY INTERFACE_COMPILE_OPTIONS "-pthread")
-  endif()
-  if(CMAKE_THREAD_LIBS_INIT)
-    set_property(TARGET PTHREAD PROPERTY INTERFACE_LINK_LIBRARIES
-                                         "${CMAKE_THREAD_LIBS_INIT}")
-  endif()
-endif()
 
 # Graphics options
 
 if(WITH_X11)
   find_package(X11 REQUIRED)
-  if(X11_FOUND)
-    add_library(X11 INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET X11 PROPERTY INTERFACE_LINK_LIBRARIES ${X11_LIBRARIES})
-    set_property(TARGET X11 PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                     ${X11_INCLUDE_DIR})
-  endif()
 endif()
 
 if(WITH_OPENGL)
-  find_package(OpenGL REQUIRED)
-  if(OPENGL_FOUND)
-    add_library(OPENGL INTERFACE IMPORTED GLOBAL)
-    if(APPLE)
-      find_library(AGL_FRAMEWORK AGL DOC "AGL lib for OSX")
-      set(APP "-framework AGL -framework ApplicationServices")
-    endif()
-    set_property(TARGET OPENGL PROPERTY INTERFACE_LINK_LIBRARIES
-                                        ${OPENGL_LIBRARIES} ${AGL_FRAMEWORK})
-    set_property(TARGET OPENGL PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                        ${OPENGL_INCLUDE_DIR} ${AGL_FRAMEWORK})
+  find_package(OpenGL REQUIRED COMPONENTS OpenGL)
+  if(APPLE)
+    find_library(AGL_FRAMEWORK AGL REQUIRED)
+    set_property(
+      TARGET OpenGL::GL
+      APPEND
+      PROPERTY INTERFACE_LINK_LIBRARIES ${AGL_FRAMEWORK})
   endif()
 endif()
 
 if(WITH_CAIRO)
+  find_package(Fontconfig REQUIRED)
   find_package(Cairo REQUIRED)
-  if(CAIRO_FOUND)
-    add_library(CAIRO INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET CAIRO PROPERTY INTERFACE_LINK_LIBRARIES
-                                       ${CAIRO_LIBRARIES})
-    set_property(TARGET CAIRO PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                       ${CAIRO_INCLUDE_DIRS})
-  endif()
 endif()
 
 if(WITH_LIBPNG)
@@ -144,13 +111,6 @@ endif()
 
 if(WITH_BZLIB)
   find_package(BZip2 REQUIRED)
-  if(BZIP2_FOUND)
-    add_library(BZIP2 INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET BZIP2 PROPERTY INTERFACE_LINK_LIBRARIES
-                                       ${BZIP2_LIBRARY${find_library_suffix}})
-    set_property(TARGET BZIP2 PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                       ${BZIP2_INCLUDE_DIR})
-  endif()
 endif()
 
 # Command-line options
@@ -161,14 +121,6 @@ endif()
 # Language options
 if(WITH_FREETYPE)
   find_package(Freetype REQUIRED)
-  if(FREETYPE_FOUND)
-    add_library(FREETYPE INTERFACE IMPORTED GLOBAL)
-    set_property(
-      TARGET FREETYPE PROPERTY INTERFACE_LINK_LIBRARIES
-                               ${FREETYPE_LIBRARY${find_library_suffix}})
-    set_property(TARGET FREETYPE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                          ${FREETYPE_INCLUDE_DIRS})
-  endif()
 endif()
 
 if(WITH_NLS)
@@ -177,6 +129,7 @@ if(WITH_NLS)
     set(MSGFMT ${GETTEXT_MSGFMT_EXECUTABLE})
     set(MSGMERGE ${GETTEXT_MSGMERGE_EXECUTABLE})
   endif()
+  find_package(Intl REQUIRED)
 endif()
 
 # Computing options
@@ -191,46 +144,18 @@ if(WITH_FFTW)
   endif()
 endif()
 
-if(WIN32)
-  set(BLA_PREFER_PKGCONFIG ON)
-  set(BLA_PKGCONFIG_BLAS "openblas")
-  set(BLA_PKGCONFIG_LAPACK "openblas")
-else()
-  set(BLA_PKGCONFIG_BLAS "blas-netlib")
-  set(BLA_PKGCONFIG_LAPACK "lapacke")
-endif()
-
 if(WITH_CBLAS)
-  # find_package(CBLAS CONFIG REQUIRED)
-  pkg_check_modules(CBLAS QUIET ${BLA_PKGCONFIG_BLAS})
-  if (CBLAS_FOUND)
-    add_library(CBLAS INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET CBLAS PROPERTY INTERFACE_LINK_LIBRARIES
-                                      ${CBLAS_LIBRARIES})
-    set_property(TARGET CBLAS PROPERTY INTERFACE_LINK_DIRECTORIES
-                                      ${CBLAS_LIBRARY_DIRS})
-    set_property(TARGET CBLAS PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                      ${CBLAS_INCLUDEDIR})
+  if(NOT CBLAS_PREFER_PKGCONFIG)
+    set(CBLAS_PREFER_PKGCONFIG ON)
   endif()
-  include(FindPackageHandleStandardArgs)
-  find_package_handle_standard_args(CBLAS REQUIRED_VARS CBLAS_LIBRARIES
-                                    CBLAS_INCLUDEDIR)
+  find_package(CBLAS REQUIRED)
 endif()
 
 if(WITH_LAPACKE)
-  # find_package(LAPACKE CONFIG REQUIRED)
-  pkg_check_modules(LAPACKE QUIET ${BLA_PKGCONFIG_LAPACK})
-  if(LAPACKE_FOUND)
-    add_library(LAPACKE INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET LAPACKE PROPERTY INTERFACE_LINK_LIBRARIES
-                                        ${LAPACKE_LIBRARIES})
-    set_property(TARGET LAPACKE PROPERTY INTERFACE_LINK_DIRECTORIES
-                                        ${LAPACKE_LIBRARY_DIRS})
-    set_property(TARGET LAPACKE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                        ${LAPACKE_INCLUDEDIR})
+  if(NOT WITH_CBLAS)
+    message(FATAL_ERROR "LAPACKE support requires CBLAS")
   endif()
-  find_package_handle_standard_args(LAPACKE REQUIRED_VARS LAPACKE_LIBRARIES
-                                    LAPACKE_INCLUDEDIR)
+  find_package(LAPACKE REQUIRED)
 endif()
 
 if(WITH_OPENMP)
@@ -250,24 +175,10 @@ endif()
 # Data format options
 if(WITH_TIFF)
   find_package(TIFF REQUIRED)
-  if(TIFF_FOUND)
-    add_library(TIFF INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET TIFF PROPERTY INTERFACE_LINK_LIBRARIES
-                                      ${TIFF_LIBRARY${find_library_suffix}})
-    set_property(TARGET TIFF PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                      ${TIFF_INCLUDE_DIR})
-  endif()
 endif()
 
 if(WITH_NETCDF)
   find_package(NetCDF REQUIRED)
-  if(NetCDF_FOUND)
-    add_library(NETCDF INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET NETCDF PROPERTY INTERFACE_LINK_LIBRARIES
-                                        ${NetCDF_LIBRARY})
-    set_property(TARGET NETCDF PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                        ${NetCDF_INCLUDE_DIR})
-  endif()
 endif()
 
 if(WITH_GEOS)
@@ -276,14 +187,15 @@ if(WITH_GEOS)
 endif()
 
 if(WITH_PDAL)
-  find_package(PDAL REQUIRED)
-  if(PDAL_FOUND)
-    add_library(PDAL INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET PDAL PROPERTY INTERFACE_LINK_LIBRARIES
-                                      ${PDAL_LIBRARIES})
-    set_property(TARGET PDAL PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                      ${PDAL_INCLUDE_DIRS})
+  find_package(PDAL REQUIRED CONFIG)
+  set(PDAL pdalcpp)
+  if(NOT TARGET pdalcpp
+     AND TARGET pdal_base
+     AND TARGET pdal_util)
+    # Workaround for PDAL <2.6
+    set(PDAL pdal_base pdal_util)
   endif()
+  message(STATUS "Found PDAL: ${PDAL_DIR} (found version \"${PDAL_VERSION}\")")
 endif()
 
 if(WITH_LIBLAS)
@@ -307,7 +219,7 @@ if(Python3_FOUND)
   #]]
 endif()
 
-check_target(PROJ HAVE_PROJ_H)
+check_target(PROJ::proj HAVE_PROJ_H)
 check_target(GDAL::GDAL HAVE_GDAL)
 check_target(GDAL::GDAL HAVE_OGR)
 check_target(ZLIB::ZLIB HAVE_ZLIB_H)
@@ -321,25 +233,23 @@ check_target(PostgreSQL::PostgreSQL HAVE_LIBPQ_FE_H)
 check_target(MYSQL HAVE_MYSQL_H)
 check_target(ODBC::ODBC HAVE_SQL_H)
 check_target(ZSTD HAVE_ZSTD_H)
-check_target(BZIP2 HAVE_BZLIB_H)
+check_target(BZip2::BZip2 HAVE_BZLIB_H)
 check_target(Readline::Readline HAVE_READLINE_READLINE_H)
 check_target(Readline::History HAVE_READLINE_HISTORY_H)
-check_target(FREETYPE HAVE_FT2BUILD_H)
+check_target(Freetype::Freetype HAVE_FT2BUILD_H)
+check_target(Cairo::Cairo HAVE_CAIRO_H)
 # set(CMAKE_REQUIRED_INCLUDES "${FFTW_INCLUDE_DIR}") no target ATLAS in
 # thirdpary/CMakeLists.txt
 check_target(ATLAS HAVE_LIBATLAS)
-check_target(CBLAS HAVE_LIBBLAS)
-check_target(CBLAS HAVE_CBLAS_H)
-check_target(LAPACKE HAVE_LIBLAPACK)
-check_target(LAPACKE HAVE_CLAPACK_H)
-check_target(TIFF HAVE_TIFFIO_H)
+check_target(CBLAS::CBLAS HAVE_LIBBLAS)
+check_target(LAPACKE::LAPACKE HAVE_LIBLAPACK)
+check_target(TIFF::TIFF HAVE_TIFFIO_H)
 check_target(NETCDF HAVE_NETCDF)
 check_target(GEOS::geos_c HAVE_GEOS)
 
 if(MSVC)
   check_target(PCRE HAVE_PCRE_H)
 endif()
-
 
 set(HAVE_PBUFFERS 0)
 set(HAVE_PIXMAPS 0)

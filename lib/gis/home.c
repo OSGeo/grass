@@ -66,7 +66,8 @@ const char *G__home(void)
         home = getenv("USERPROFILE");
 
         if (!home) {
-            sprintf(buf, "%s%s", getenv("HOMEDRIVE"), getenv("HOMEPATH"));
+            snprintf(buf, sizeof(buf), "%s%s", getenv("HOMEDRIVE"),
+                     getenv("HOMEPATH"));
 
             if (strlen(buf) >= 0)
                 home = G_store(buf);

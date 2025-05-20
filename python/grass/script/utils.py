@@ -209,7 +209,7 @@ def decode(bytes_: AnyStr, encoding: str | None = None) -> str:
         enc = _get_encoding() if encoding is None else encoding
         return bytes_.decode(enc)
     # only text should be used
-    msg = "can only accept types str and bytes"
+    msg = f"can only accept types str and bytes, not {type(bytes_).__name__}"
     raise TypeError(msg)
 
 
@@ -461,7 +461,7 @@ def get_lib_path(modname, libname=None):
 
 
 def set_path(modulename, dirname=None, path="."):
-    """Set sys.path looking in the the local directory GRASS directories.
+    """Set sys.path looking in the local directory GRASS directories.
 
     :param modulename: string with the name of the GRASS module
     :param dirname: string with the directory name containing the python

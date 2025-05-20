@@ -81,6 +81,29 @@ area           0          0          0
 all         1379          1       1379
 ```
 
+Report vector categories in JSON format:
+
+```sh
+v.category input=testmap option=report format=json
+
+[
+  {
+      "type": "line",
+      "layer": 1,
+      "count": 1379,
+      "min": 1,
+      "max": 1379
+  },
+  {
+      "type": "all",
+      "layer": 1,
+      "count": 1379,
+      "min": 1,
+      "max": 1379
+  }
+]
+```
+
 ### Delete all vector categories in layer 1
 
 ```sh
@@ -126,6 +149,73 @@ Print vector categories from the first layer, only for feature ids 1-50.
 
 ```sh
 v.category input=roads option=print layer=1 id=1-50
+```
+
+Print vector categories from the first layer, only for feature ids 1-50 in JSON format.
+
+```sh
+v.category input=roads option=print layer=1 id=1-50 format=json
+```
+
+### Print only layer numbers in JSON format
+
+```sh
+v.category input=roads option=layers format=json
+```
+
+### Using v.category JSON output with pandas
+
+Using report option in JSON format with pandas:
+
+```python
+import grass.script as gs
+import pandas as pd
+
+# Run v.category command with report option.
+data = gs.parse_command(
+    "v.category",
+    input="bridges",
+    option="report",
+    format="json",
+)
+
+df = pd.DataFrame(data)
+print(df)
+```
+
+```sh
+    type  layer  count  min    max
+0  point      1  10938    1  10938
+1    all      1  10938    1  10938
+```
+
+Using print option with the first layer, only for feature ids 1-5 in JSON
+format with pandas:
+
+```python
+import grass.script as gs
+import pandas as pd
+
+# Run v.category command with print option.
+data = gs.parse_command(
+    "v.category",
+    input="bridges",
+    option="print",
+    ids="1-5",
+    format="json",
+)
+
+df = pd.DataFrame(data)
+print(df)
+```
+
+```sh
+    id  layer  category
+0   1      1         1
+1   2      1         2
+2   3      1         3
+3   4      1         4
+4   5      1         5
 ```
 
 ## SEE ALSO

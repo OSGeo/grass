@@ -54,7 +54,7 @@ longer path.
 The test program cr_large_graph aims at figuring out performances, creating a graph of
 357202/60000 arc/node.
 Given that lot of insertion slowness depends on the node ids sorting, cr_large_graph can
-run in two ways: sorted ot interlaced.
+run in two ways: sorted or interlaced.
 
 These are my time results (700Mhz intel):
 

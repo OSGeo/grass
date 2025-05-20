@@ -22,7 +22,6 @@
 /* System include files */
 #include <stdio.h>
 #include <stdarg.h>
-#include <stdbool.h>
 
 /* Grass and local include files */
 #include <grass/config.h>
@@ -76,11 +75,11 @@ static const char *GRASS_copyright UNUSED = "GRASS GNU GPL licensed Software";
  */
 /* and 'false' For historical reasons 'TRUE' and 'FALSE' are still valid. */
 #ifndef TRUE
-#define TRUE true
+#define TRUE 1
 #endif
 
 #ifndef FALSE
-#define FALSE false
+#define FALSE 0
 #endif
 
 /*! \brief Cross-platform Newline Character */
@@ -505,7 +504,7 @@ struct G_3dview {
     float from_to[2][3]; /* eye position & lookat position */
     float fov;           /* field of view */
     float twist;         /* right_hand rotation about from_to */
-    float exag;          /* terrain elevation exageration */
+    float exag;          /* terrain elevation exaggeration */
     int mesh_freq;       /* cells per grid line */
     int poly_freq;       /* cells per polygon */
     int display_type;    /* 1 for mesh, 2 for poly, 3 for both */

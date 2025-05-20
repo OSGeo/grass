@@ -439,7 +439,7 @@ FunctionEnd
     !define MUI_FINISHPAGE_RUN_FUNCTION "LaunchGrass"
     !define MUI_FINISHPAGE_SHOWREADME
     !define MUI_FINISHPAGE_SHOWREADME_NOTCHECKED
-    !define MUI_FINISHPAGE_SHOWREADME_TEXT "View the reference manual"
+    !define MUI_FINISHPAGE_SHOWREADME_TEXT "View the documentation"
     !define MUI_FINISHPAGE_SHOWREADME_FUNCTION "ViewReadme"
 !insertmacro MUI_PAGE_FINISH
 
@@ -466,7 +466,7 @@ FunctionEnd
 
 ;----------------------------------------------------------------------------------------------------------------------------
 
-;launch reference manual by exit the installation wizard
+;open documentation by exit the installation wizard
 
 Function ViewReadme
 
@@ -676,8 +676,6 @@ Section "GRASS" SecGRASS
 	FileWrite $0 'cd "%USERPROFILE%"'
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 '"%GRASS_PYTHON%" "%GISBASE%\etc\grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@.py" %*'
-	FileWrite $0 '$\r$\n$\r$\n'
-	FileWrite $0 'if %ERRORLEVEL% GEQ 1 pause'
 	FileClose $0
 	done_create_grass_command.bat:
 

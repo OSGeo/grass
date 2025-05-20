@@ -91,7 +91,7 @@ int db__driver_open_database(dbHandle *handle)
 
     /* set path to the schema */
     if (schema && strlen(schema) > 0) {
-        sprintf(buf, "set search_path to %s", schema);
+        snprintf(buf, sizeof(buf), "set search_path to %s", schema);
         res = PQexec(pg_conn, buf);
 
         if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {

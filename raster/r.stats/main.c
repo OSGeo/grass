@@ -373,7 +373,7 @@ int main(int argc, char *argv[])
     if (dp < 0)
         strcpy(fmt, "%lf");
     else
-        sprintf(fmt, "%%.%dlf", dp);
+        snprintf(fmt, sizeof(fmt), "%%.%dlf", dp);
 
     if (raw_data)
         raw_stats(fd, with_coordinates, with_xy, with_labels);

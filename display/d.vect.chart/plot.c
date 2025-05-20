@@ -66,13 +66,13 @@ int plot(int ctype, struct Map_info *Map, int type, int field, char *columns,
 
         /* Select values from DB */
         if (ctype == CTYPE_PIE && sizecol != NULL) {
-            sprintf(buf, "select %s, %s from %s where %s = %d", columns,
-                    sizecol, Fi->table, Fi->key, cat);
+            snprintf(buf, sizeof(buf), "select %s, %s from %s where %s = %d",
+                     columns, sizecol, Fi->table, Fi->key, cat);
             nselcols = ncols + 1;
         }
         else {
-            sprintf(buf, "select %s from %s where %s = %d", columns, Fi->table,
-                    Fi->key, cat);
+            snprintf(buf, sizeof(buf), "select %s from %s where %s = %d",
+                     columns, Fi->table, Fi->key, cat);
             nselcols = ncols;
         }
 

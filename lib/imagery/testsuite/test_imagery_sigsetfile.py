@@ -11,6 +11,7 @@ for details
 
 import stat
 import ctypes
+import os
 import shutil
 from pathlib import Path
 
@@ -44,7 +45,10 @@ from grass.lib.imagery import (
 class SigSetFileTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
+        if os.name == "nt":
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("msvcrt"))
+        else:
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
         cls.mpath = utils.decode(G_mapset_path())
         cls.mapset_name = Mapset().name
         cls.sig_name = tempname(10)
@@ -224,7 +228,10 @@ class SigSetFileTestCase(TestCase):
 class SortSigSetBySemanticLabelTest(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
+        if os.name == "nt":
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("msvcrt"))
+        else:
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
         cls.mapset = Mapset().name
         cls.map1 = tempname(10)
         cls.semantic_label1 = "The_Doors"

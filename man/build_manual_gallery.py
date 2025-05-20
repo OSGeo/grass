@@ -90,7 +90,7 @@ header_graphical_index_tmpl = """\
 
 <a href="index.html"><img src="grass_logo.png" alt="GRASS logo"></a>
 <hr class="header">
-<h2>GRASS GIS manual gallery</h2>
+<h2>GRASS manual gallery</h2>
 """
 
 # The recommeded width from style guide.
@@ -103,8 +103,8 @@ def image_width(filename):
         from PIL import Image
     except ImportError:
         return None
-
-    return Image.open(filename).size[0]  # First element is width.
+    with Image.open(filename) as img:
+        return img.size[0]  # First element is width.
 
 
 def img_in_file(filename: str | os.PathLike[str], imagename: str, ext: str) -> bool:
@@ -193,7 +193,7 @@ def main(ext):
 
     with open(Path(man_dir, output_name), "w") as output:
         if ext == "html":
-            title = "GRASS GIS %s Reference Manual: Manual gallery" % grass_version
+            title = "GRASS %s Reference Manual: Manual gallery" % grass_version
         else:
             title = "Manual gallery"
         output.write(header1_tmpl.substitute(title=title))
