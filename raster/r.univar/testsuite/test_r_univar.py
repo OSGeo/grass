@@ -569,10 +569,45 @@ class TestRasterUnivar(TestCase):
         )
 
     def test_json(self):
+        reference = {
+            "n": 16200,
+            "null_cells": 0,
+            "cells": 16200,
+            "min": 102,
+            "max": 380,
+            "range": 278,
+            "mean": 241,
+            "mean_of_abs": 241,
+            "stddev": 62.04702517714555,
+            "variance": 3849.8333333333335,
+            "coeff_var": 25.745653600475332,
+            "sum": 3904200,
+            "first_quartile": 191,
+            "median": 241,
+            "third_quartile": 291,
+            "percentiles": [{"percentile": 90, "value": 324}],
+        }
+
+        module = SimpleModule(
+            "r.univar",
+            map=["map_a", "map_b"],
+            flags="e",
+            format="json",
+        )
+        self.runModule(module)
+        output = json.loads(module.outputs.stdout)
+
+        for ref_key, ref_val in reference.items():
+            if isinstance(ref_val, float):
+                self.assertAlmostEqual(ref_val, output[ref_key], places=6)
+            else:
+                self.assertEqual(ref_val, output[ref_key])
+
+    def test_json_zone(self):
         reference = [
             {
-                "zone_number": 1,
-                "zone_category": "",
+                "zone": 1,
+                "zone_label": "",
                 "n": 3420,
                 "null_cells": 0,
                 "cells": 3420,
@@ -591,8 +626,8 @@ class TestRasterUnivar(TestCase):
                 "third_quartile": 255,
             },
             {
-                "zone_number": 2,
-                "zone_category": "",
+                "zone": 2,
+                "zone_label": "",
                 "n": 12780,
                 "null_cells": 0,
                 "cells": 12780,
@@ -616,7 +651,7 @@ class TestRasterUnivar(TestCase):
             "r.univar",
             map=["map_a", "map_b"],
             zones="zone_map",
-            flags="ge",
+            flags="e",
             format="json",
         )
         self.runModule(module)
