@@ -154,7 +154,7 @@ const char *Vect_get_column_names_types(struct Map_info *Map, int field)
     dbHandle handle;
     dbString table_name;
     dbTable *table;
-    const char **col_type_names;
+    char **col_type_names;
     char *list;
 
     num_dblinks = Vect_get_num_dblinks(Map);
@@ -180,16 +180,21 @@ const char *Vect_get_column_names_types(struct Map_info *Map, int field)
     ncols = db_get_table_number_of_columns(table);
     col_type_names = G_malloc(ncols * sizeof(char *));
     for (col = 0; col < ncols; col++) {
-        char buf[256];
+        col_type_names[col] = (char *)G_calloc(256, sizeof(char));
 
-        sprintf(buf, "%s(%s)",
-                db_get_column_name(db_get_table_column(table, col)),
-                db_sqltype_name(
-                    db_get_column_sqltype(db_get_table_column(table, col))));
-        col_type_names[col] = buf;
+        snprintf(col_type_names[col], 256, "%s(%s)",
+                 db_get_column_name(db_get_table_column(table, col)),
+                 db_sqltype_name(
+                     db_get_column_sqltype(db_get_table_column(table, col))));
     }
-    if ((list = G_str_concat(col_type_names, ncols, ",", BUFF_MAX)) == NULL)
+
+    if ((list = G_str_concat((const char **)col_type_names, ncols, ",",
+                             BUFF_MAX)) == NULL)
         list = G_store("");
+
+    for (col = 0; col < ncols; col++) {
+        G_free(col_type_names[col]);
+    }
     G_free(col_type_names);
     G_debug(3, "%s", list);
 

@@ -35,6 +35,7 @@ Program was refactored by Anna Petrasova to remove most global variables.
 #include <omp.h>
 #endif
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -523,7 +524,7 @@ int main(int argc, char *argv[])
             settings.fixedMaxLength); /* predefined as BIG */
 
     /* TODO: fixing BIG, there is a bug with distant mountains not being seen:
-       attempt to contrain to current region
+       attempt to constrain to current region
 
        fixedMaxLength = (fixedMaxLength < AMAX1(deltx, delty)) ? fixedMaxLength
        : AMAX1(deltx, delty); G_debug(1,"Using maxdistance %f", fixedMaxLength);
@@ -888,6 +889,35 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
         json_set_float_serialization_format("%lf");
     }
 
+    // double dfr_rad = settings->step * deg2rad;
+
+    // double xp = geometry->xmin + origin_point.xg0;
+    // double yp = geometry->ymin + origin_point.yg0;
+
+    // double angle = (settings->single_direction * deg2rad) + pihalf;
+    // double printangle = settings->single_direction;
+
+    // origin_point.maxlength = settings->fixedMaxLength;
+    // /* JSON variables and formating */
+
+    // JSON_Value *horizons_value;
+    // JSON_Array *horizons;
+
+    // switch (format) {
+    // case PLAIN:
+    //     fprintf(fp, "azimuth,horizon_height");
+    //     if (settings->horizonDistance)
+    //         fprintf(fp, ",horizon_distance");
+    //     fprintf(fp, "\n");
+    //     break;
+    // case JSON:
+    //     json_object_set_number(json_origin, "x", xcoord);
+    //     json_object_set_number(json_origin, "y", ycoord);
+    //     horizons_value = json_value_init_array();
+    //     horizons = json_value_get_array(horizons_value);
+    //     break;
+    // }
+
     for (int i = 0; i < point_count; i++) {
         /* Write out header */
         switch (format) {
@@ -1231,8 +1261,10 @@ void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
             _("Calculating map %01d of %01d (angle %.2f, raster map <%s>)"),
             (k + 1), arrayNumInt, angle_deg, shad_filename);
 
+        int j;
+
 #pragma omp parallel for schedule(static, 1) default(shared)
-        for (int j = hor_row_start; j < hor_row_end; j++) {
+        for (j = hor_row_start; j < hor_row_end; j++) {
             G_percent(j - hor_row_start, hor_numrows - 1, 2);
             for (int i = hor_col_start; i < hor_col_end; i++) {
                 OriginPoint origin_point;

@@ -86,7 +86,8 @@ int db__driver_create_table(dbTable *table)
             break;
 
         case DB_SQL_TYPE_CHARACTER:
-            sprintf(buf, "VARCHAR(%d)", db_get_column_length(column));
+            snprintf(buf, sizeof(buf), "VARCHAR(%d)",
+                     db_get_column_length(column));
             db_append_string(&sql, buf);
             break;
         case DB_SQL_TYPE_TEXT:

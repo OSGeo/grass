@@ -12,6 +12,7 @@
 #           for details.
 
 """Render 3D visualizations"""
+
 from __future__ import annotations
 
 import os
@@ -229,6 +230,13 @@ class Map3D:
     def show(self):
         """Displays a PNG image of map"""
         # Lazy import to avoid an import-time dependency on IPython.
-        from IPython.display import Image  # pylint: disable=import-outside-toplevel
+        from IPython.display import Image, display  # pylint: disable=import-outside-toplevel
 
-        return Image(self._filename)
+        display(Image(self._filename))
+
+    def save(self, filename):
+        """Saves an image to the specified *filename*"""
+        from PIL import Image
+
+        img = Image.open(self._filename)
+        img.save(filename)

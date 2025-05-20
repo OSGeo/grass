@@ -140,13 +140,18 @@ PGM = rasterintro
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
 default:
-	$(MAKE) -C r.mapcalc
 	$(MAKE) htmldir
 
 htmldir: parsubdirs
 
 $(HTMLDIR)/r.in.png:
 	# no-op - override Html.make rule for .png image files
+$(MDDIR)/source/r.in.png:
+	# no-op - override Html.make rule for .png image files
 
 $(HTMLDIR)/r.out.png:
 	# no-op - override Html.make rule for .png image files
+$(MDDIR)/source/r.out.png:
+	# no-op - override Html.make rule for .png image files
+
+r.colors: r.mapcalc

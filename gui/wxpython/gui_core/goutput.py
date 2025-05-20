@@ -26,6 +26,7 @@ import wx
 from wx import stc
 
 from grass.pydispatch.signal import Signal
+from pathlib import Path
 
 # needed just for testing
 if __name__ == "__main__":
@@ -352,15 +353,12 @@ class GConsoleWindow(wx.SplitterWindow):
             path = dlg.GetPath()
 
             try:
-                output = open(path, "w")
-                output.write(text)
+                Path(path).write_text(text)
             except OSError as e:
                 GError(
                     _("Unable to write file '%(path)s'.\n\nDetails: %(error)s")
                     % {"path": path, "error": e}
                 )
-            finally:
-                output.close()
             message = _("Command output saved into '%s'") % path
             self.showNotification.emit(message=message)
 
@@ -619,12 +617,13 @@ class GStc(stc.StyledTextCtrl):
             for c in message:
                 if c == "\b":
                     self.linePos -= 1
-                else:
-                    self.SetCurrentPos(self.linePos)
-                    self.ReplaceSelection(c)
-                    self.linePos = self.GetCurrentPos()
-                    if c != " ":
-                        last_c = c
+                    continue
+
+                self.SetCurrentPos(self.linePos)
+                self.ReplaceSelection(c)
+                self.linePos = self.GetCurrentPos()
+                if c != " ":
+                    last_c = c
             if last_c not in (digits):
                 self.AddTextWrapped("\n", wrap=None)
                 self.linePos = -1

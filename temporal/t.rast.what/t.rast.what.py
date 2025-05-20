@@ -105,6 +105,7 @@
 
 import copy
 import sys
+from contextlib import nullcontext
 
 import grass.script as gs
 
@@ -357,75 +358,71 @@ def one_point_per_row_output(
     output is of type: x,y,start,end,value
     """
     # open the output file for writing
-    out_file = open(output, "w") if output != "-" else sys.stdout
-
-    if write_header is True:
-        out_str = ""
-        if vcat:
-            out_str += "cat{sep}"
-        if site_input:
-            out_str += "x{sep}y{sep}site{sep}start{sep}end{sep}value\n"
-        else:
-            out_str += "x{sep}y{sep}start{sep}end{sep}value\n"
-        out_file.write(out_str.format(sep=separator))
-
-    for count in range(len(output_files)):
-        file_name = output_files[count]
-        gs.verbose(_("Transforming r.what output file %s") % (file_name))
-        map_list = output_time_list[count]
-        in_file = open(file_name)
-        for line in in_file:
-            line = line.split(separator)
+    with open(output, "w") if output != "-" else nullcontext(sys.stdout) as out_file:
+        if write_header is True:
+            out_str = ""
             if vcat:
-                cat = line[0]
-                x = line[1]
-                y = line[2]
-                values = line[4:]
-                if site_input:
-                    site = line[3]
-                    values = line[5:]
-
+                out_str += "cat{sep}"
+            if site_input:
+                out_str += "x{sep}y{sep}site{sep}start{sep}end{sep}value\n"
             else:
-                x = line[0]
-                y = line[1]
-                if site_input:
-                    site = line[2]
-                values = line[3:]
+                out_str += "x{sep}y{sep}start{sep}end{sep}value\n"
+            out_file.write(out_str.format(sep=separator))
 
-            for i in range(len(values)):
-                start, end = map_list[i].get_temporal_extent_as_tuple()
-                cat_str = "{ca}{sep}".format(ca=cat, sep=separator) if vcat else ""
-                if site_input:
-                    coor_string = (
-                        "%(x)10.10f%(sep)s%(y)10.10f%(sep)s%(site_name)s%(sep)s"
-                        % (
+        for count in range(len(output_files)):
+            file_name = output_files[count]
+            gs.verbose(_("Transforming r.what output file %s") % (file_name))
+            map_list = output_time_list[count]
+            with open(file_name) as in_file:
+                for line in in_file:
+                    line = line.split(separator)
+                    if vcat:
+                        cat = line[0]
+                        x = line[1]
+                        y = line[2]
+                        values = line[4:]
+                        if site_input:
+                            site = line[3]
+                            values = line[5:]
+
+                    else:
+                        x = line[0]
+                        y = line[1]
+                        if site_input:
+                            site = line[2]
+                        values = line[3:]
+
+                    for i in range(len(values)):
+                        start, end = map_list[i].get_temporal_extent_as_tuple()
+                        cat_str = (
+                            "{ca}{sep}".format(ca=cat, sep=separator) if vcat else ""
+                        )
+                        if site_input:
+                            coor_string = (
+                                "%(x)10.10f%(sep)s%(y)10.10f%(sep)s%(site_name)s%(sep)s"
+                                % (
+                                    {
+                                        "x": float(x),
+                                        "y": float(y),
+                                        "site_name": str(site),
+                                        "sep": separator,
+                                    }
+                                )
+                            )
+                        else:
+                            coor_string = "%(x)10.10f%(sep)s%(y)10.10f%(sep)s" % (
+                                {"x": float(x), "y": float(y), "sep": separator}
+                            )
+                        time_string = "%(start)s%(sep)s%(end)s%(sep)s%(val)s\n" % (
                             {
-                                "x": float(x),
-                                "y": float(y),
-                                "site_name": str(site),
+                                "start": str(start),
+                                "end": str(end),
+                                "val": (values[i].strip()),
                                 "sep": separator,
                             }
                         )
-                    )
-                else:
-                    coor_string = "%(x)10.10f%(sep)s%(y)10.10f%(sep)s" % (
-                        {"x": float(x), "y": float(y), "sep": separator}
-                    )
-                time_string = "%(start)s%(sep)s%(end)s%(sep)s%(val)s\n" % (
-                    {
-                        "start": str(start),
-                        "end": str(end),
-                        "val": (values[i].strip()),
-                        "sep": separator,
-                    }
-                )
 
-                out_file.write(cat_str + coor_string + time_string)
-
-        in_file.close()
-
-    if out_file is not sys.stdout:
-        out_file.close()
+                        out_file.write(cat_str + coor_string + time_string)
 
 
 ############################################################################
@@ -441,77 +438,73 @@ def one_point_per_col_output(
     Each row represents a single raster map, hence a single time stamp
     """
     # open the output file for writing
-    out_file = open(output, "w") if output != "-" else sys.stdout
 
     first = True
-    for count in range(len(output_files)):
-        file_name = output_files[count]
-        gs.verbose(_("Transforming r.what output file %s") % (file_name))
-        in_file = open(file_name)
-        lines = in_file.readlines()
+    with open(output, "w") if output != "-" else nullcontext(sys.stdout) as out_file:
+        for count in range(len(output_files)):
+            file_name = output_files[count]
+            gs.verbose(_("Transforming r.what output file %s") % (file_name))
+            with open(file_name) as in_file:
+                lines = in_file.readlines()
 
-        matrix = []
-        for line in lines:
-            matrix.append(line.split(separator))
+            matrix = []
+            for line in lines:
+                matrix.append(line.split(separator))
 
-        num_cols = len(matrix[0])
+            num_cols = len(matrix[0])
 
-        if first is True:
-            if write_header is True:
-                out_str = "start%(sep)send" % ({"sep": separator})
+            if first is True:
+                if write_header is True:
+                    out_str = "start%(sep)send" % ({"sep": separator})
 
-                # Define different separator for coordinates and sites
-                coor_sep = ";" if separator == "," else ","
+                    # Define different separator for coordinates and sites
+                    coor_sep = ";" if separator == "," else ","
 
-                for row in matrix:
-                    if vcat:
-                        cat = row[0]
-                        x = row[1]
-                        y = row[2]
-                        out_str += (
-                            "{sep}{cat}{csep}{x:10.10f}{csep}"
-                            "{y:10.10f}".format(
-                                cat=cat,
-                                x=float(x),
-                                y=float(y),
-                                sep=separator,
-                                csep=coor_sep,
+                    for row in matrix:
+                        if vcat:
+                            cat = row[0]
+                            x = row[1]
+                            y = row[2]
+                            out_str += (
+                                "{sep}{cat}{csep}{x:10.10f}{csep}{y:10.10f}".format(
+                                    cat=cat,
+                                    x=float(x),
+                                    y=float(y),
+                                    sep=separator,
+                                    csep=coor_sep,
+                                )
                             )
-                        )
-                        if site_input:
-                            site = row[3]
-                            out_str += "{sep}{site}".format(sep=coor_sep, site=site)
-                    else:
-                        x = row[0]
-                        y = row[1]
-                        out_str += "{sep}{x:10.10f}{csep}{y:10.10f}".format(
-                            x=float(x), y=float(y), sep=separator, csep=coor_sep
-                        )
-                        if site_input:
-                            site = row[2]
-                            out_str += "{sep}{site}".format(sep=coor_sep, site=site)
+                            if site_input:
+                                site = row[3]
+                                out_str += "{sep}{site}".format(sep=coor_sep, site=site)
+                        else:
+                            x = row[0]
+                            y = row[1]
+                            out_str += "{sep}{x:10.10f}{csep}{y:10.10f}".format(
+                                x=float(x), y=float(y), sep=separator, csep=coor_sep
+                            )
+                            if site_input:
+                                site = row[2]
+                                out_str += "{sep}{site}".format(sep=coor_sep, site=site)
 
-                out_file.write(out_str + "\n")
+                    out_file.write(out_str + "\n")
 
-        first = False
+            first = False
 
-        ncol = 4 if vcat else 3
-        for col in range(num_cols - ncol):
-            start, end = output_time_list[count][col].get_temporal_extent_as_tuple()
-            time_string = "%(start)s%(sep)s%(end)s" % (
-                {"start": str(start), "end": str(end), "sep": separator}
-            )
-            out_file.write(time_string)
-            for row in range(len(matrix)):
-                value = matrix[row][col + ncol]
-                out_file.write(
-                    "%(sep)s%(value)s" % ({"sep": separator, "value": value.strip()})
+            ncol = 4 if vcat else 3
+            for col in range(num_cols - ncol):
+                start, end = output_time_list[count][col].get_temporal_extent_as_tuple()
+                time_string = "%(start)s%(sep)s%(end)s" % (
+                    {"start": str(start), "end": str(end), "sep": separator}
                 )
-            out_file.write("\n")
-
-        in_file.close()
-    if out_file is not sys.stdout:
-        out_file.close()
+                out_file.write(time_string)
+                for row in range(len(matrix)):
+                    value = matrix[row][col + ncol]
+                    out_file.write(
+                        "%(sep)s%(value)s"
+                        % ({"sep": separator, "value": value.strip()})
+                    )
+                out_file.write("\n")
 
 
 ############################################################################
@@ -528,7 +521,6 @@ def one_point_per_timerow_output(
      3730731.49590371|5642483.51236521|6|8|7|7
      3581249.04638104|5634411.97526282|5|8|7|7
     """  # noqa: E501
-    out_file = open(output, "w") if output != "-" else sys.stdout
 
     matrix = []
     header = ""
@@ -538,7 +530,6 @@ def one_point_per_timerow_output(
         file_name = output_files[count]
         gs.verbose("Transforming r.what output file %s" % (file_name))
         map_list = output_time_list[count]
-        in_file = open(file_name)
 
         if write_header:
             if first is True:
@@ -554,7 +545,8 @@ def one_point_per_timerow_output(
                 )
                 header += time_string
 
-        lines = in_file.readlines()
+        with open(file_name) as in_file:
+            lines = in_file.readlines()
 
         for i in range(len(lines)):
             cols = lines[i].split(separator)
@@ -574,26 +566,23 @@ def one_point_per_timerow_output(
 
         first = False
 
-        in_file.close()
+    with open(output, "w") if output != "-" else nullcontext(sys.stdout) as out_file:
+        if write_header:
+            out_file.write(header + "\n")
 
-    if write_header:
-        out_file.write(header + "\n")
+        gs.verbose(_("Writing the output file <%s>") % (output))
+        for row in matrix:
+            first = True
+            for col in row:
+                value = col.strip()
 
-    gs.verbose(_("Writing the output file <%s>") % (output))
-    for row in matrix:
-        first = True
-        for col in row:
-            value = col.strip()
+                if first is False:
+                    out_file.write("%s" % (separator))
+                out_file.write(value)
 
-            if first is False:
-                out_file.write("%s" % (separator))
-            out_file.write(value)
+                first = False
 
-            first = False
-
-        out_file.write("\n")
-    if out_file is not sys.stdout:
-        out_file.close()
+            out_file.write("\n")
 
 
 ############################################################################

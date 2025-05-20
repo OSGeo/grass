@@ -387,7 +387,7 @@ in different locations.
 .. todo::
     Add example of assertions of key-value results.
 
-Especially if a module module has a lot of different parameters allowed
+Especially if a module has a lot of different parameters allowed
 in different combinations, you should test the if the wrong ones are really
 disallowed and proper error messages are provided (in addition, you can
 test things such as creation and removal of maps in error states).
@@ -672,8 +672,8 @@ For C/C++ code we additionally use the third party solution `Coverity Scan`_
 where GRASS GIS is registered as project number `1038`_. Also you can use
 `Cppcheck`_ which will show a lot of errors which compilers do not check.
 In any case, set your compiler to high error and warning levels,
-check them and fix them in your code. Furthermore, `Travis-CI`_ is used
-to check if the source code can still be compiled after submitting changes
+check them and fix them in your code. Furthermore, continuous integrations is
+used to check if the source code can still be compiled after submitting changes
 to the repository.
 
 For Python, we recommend pylint and then for style issues pep8 tool
@@ -718,7 +718,6 @@ Further reading
 .. _unittest: https://docs.python.org/2/library/unittest.html
 .. _doctest: https://docs.python.org/2/library/doctest.html
 .. _Coverity Scan: https://scan.coverity.com/
-.. _Travis-CI: https://travis-ci.org/github/OSGeo/grass
 .. _1038: https://scan.coverity.com/projects/1038
 .. _Cppcheck: http://cppcheck.sourceforge.net/
 .. _sandbox: https://svn.osgeo.org/grass/sandbox/wenzeslaus/grass_py_static_check.py

@@ -32,7 +32,7 @@ extern "C" {
 #include <pdal/Writer.hpp>
 
 /* Binning code wrapped as a PDAL Writer class */
-#ifdef HAVE_PDAL_NOFILENAMEWRITER
+#if PDAL_VERSION_MAJOR >= 2 && PDAL_VERSION_MINOR >= 7
 class GrassRasterWriter : public pdal::NoFilenameWriter,
                           public pdal::Streamable {
 #else
@@ -98,7 +98,7 @@ public:
 
         // TODO: check the bounds and report discrepancies in
         // number of filtered out vs processed to the user
-        // (alternativelly, change the spatial bounds test to
+        // (alternatively, change the spatial bounds test to
         // give same results as this, but it might be actually helpful
         // to tell user that they have points right on the border)
         int arr_row = (int)((region_->north - y) / region_->ns_res);

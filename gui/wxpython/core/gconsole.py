@@ -316,7 +316,7 @@ class GStderr:
 
             if "GRASS_INFO_PERCENT" in line:
                 value = int(line.rsplit(":", 1)[1].strip())
-                progressValue = value if value >= 0 and value < 100 else 0
+                progressValue = value if 0 <= value < 100 else 0
             elif "GRASS_INFO_MESSAGE" in line:
                 self.type = "message"
                 self.message += line.split(":", 1)[1].strip() + "\n"
@@ -673,7 +673,9 @@ class GConsole(wx.EvtHandler):
                 return
 
             skipInterface = True
-            if os.path.splitext(command[0])[1] in {".py", ".sh"}:
+            if os.path.splitext(command[0])[1] in {".py", ".sh"} and not isinstance(
+                self._guiparent, FormNotebook
+            ):
                 try:
                     with open(command[0]) as sfile:
                         for line in sfile:
@@ -856,13 +858,15 @@ class GConsole(wx.EvtHandler):
             for p in task.get_options()["flags"]:
                 if p.get("name") == "r" and p.get("value"):
                     action = "delete"
+            mask_full_name = gs.parse_command("r.mask.status", format="json")["name"]
+            mask_name, mask_mapset = mask_full_name.split("@", maxsplit=1)
             gisenv = gs.gisenv()
             self._giface.grassdbChanged.emit(
                 grassdb=gisenv["GISDBASE"],
                 location=gisenv["LOCATION_NAME"],
-                mapset=gisenv["MAPSET"],
+                mapset=mask_mapset,
                 action=action,
-                map="MASK",
+                map=mask_name,
                 element="raster",
             )
 

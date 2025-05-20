@@ -330,7 +330,7 @@ void visibility_points(struct Point *points, int num_points, struct Line *lines,
         /* loop through the other points */
         for (j = 0; j < num_points - n; j++) {
 
-            /* loop trhough the lines */
+            /* loop through the lines */
             for (k = 0; k < num_lines; k++) {
                 if (segment1(&points[j]) == &lines[k] ||
                     segment2(&points[j]) == &lines[k])

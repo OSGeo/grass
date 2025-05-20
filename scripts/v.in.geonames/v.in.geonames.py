@@ -8,9 +8,9 @@
 #               Converted to Python by Glynn Clements
 #
 # PURPOSE:      Import geonames.org dumps
-#               http://download.geonames.org/export/dump/
+#               https://download.geonames.org/export/dump/
 #
-#               Feature Codes: http://www.geonames.org/export/codes.html
+#               Feature Codes: https://www.geonames.org/export/codes.html
 #
 # COPYRIGHT:    (c) 2008-2014 Markus Neteler, GRASS Development Team
 #
@@ -69,7 +69,7 @@ def main():
     gs.message(_("Converting %d place names...") % num_places)
 
     # pump data into GRASS:
-    #  http://download.geonames.org/export/dump/readme.txt
+    #  https://download.geonames.org/export/dump/readme.txt
     #  The main 'geoname' table has the following fields :
     #  ---------------------------------------------------
     #  geonameid         : integer id of record in geonames database
@@ -78,8 +78,8 @@ def main():
     #  alternatenames    : alternatenames, comma separated varchar(4000)
     #  latitude          : latitude in decimal degrees (wgs84)
     #  longitude         : longitude in decimal degrees (wgs84)
-    #  feature class     : see http://www.geonames.org/export/codes.html, char(1)
-    #  feature code      : see http://www.geonames.org/export/codes.html, varchar(10)
+    #  feature class     : see https://www.geonames.org/export/codes.html, char(1)
+    #  feature code      : see https://www.geonames.org/export/codes.html, varchar(10)
     #  country code      : ISO-3166 2-letter country code, 2 characters
     #  cc2               : alternate country codes, comma separated, ISO-3166 2-letter country code, 60 characters
     #  admin1 code       : fipscode (subject to change to iso code), isocode for the us and ch, see file admin1Codes.txt for display names of this code; varchar(20)
@@ -89,7 +89,7 @@ def main():
     #  population        : integer
     #  elevation         : in meters, integer
     #  gtopo30           : average elevation of 30'x30' (ca 900mx900m) area in meters, integer
-    #  timezone          : the timezone id (see file http://download.geonames.org/export/dump/timeZones.txt)
+    #  timezone          : the timezone id (see file https://download.geonames.org/export/dump/timeZones.txt)
     #  modification date : date of last modification in yyyy-MM-dd format
 
     # geonameid|name|asciiname|alternatenames|latitude|longitude|featureclass|featurecode|countrycode|cc2|admin1code|admin2code|admin3code|admin4code|population|elevation|gtopo30|timezone|modificationdate

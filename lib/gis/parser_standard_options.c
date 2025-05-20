@@ -111,6 +111,7 @@
    - G_OPT_M_REGION
    - G_OPT_M_NULL_VALUE
    - G_OPT_M_NPROCS
+   - G_OPT_M_SEED
 
    - temporal GIS framework
    - G_OPT_STDS_INPUT
@@ -784,6 +785,17 @@ struct Option *G_define_standard_option(int opt)
             Opt->answer = memstr;
         /* end dynamic answer */
         Opt->description = _("Number of threads for parallel computing");
+        break;
+
+    case G_OPT_M_SEED:
+        Opt->key = "seed";
+        Opt->type = TYPE_INTEGER;
+        Opt->required = NO;
+        Opt->label = _("Seed value for the random number generator");
+        Opt->description =
+            _("Using the same seed ensures identical results, "
+              "while a randomly generated seed produces different outcomes "
+              "in each run.");
         break;
 
         /* Spatio-temporal modules of the temporal GIS framework */

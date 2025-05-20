@@ -13,10 +13,14 @@
 
 #include <grass/config.h>
 #include <grass/gis.h>
-
 #ifdef HAVE_REGEX_H
-
 #include <regex.h>
+#endif
+
+#ifdef HAVE_PCRE_H
+#include <string.h>
+#include <pcre.h>
+#endif
 
 struct buffer {
     char *buf;
@@ -143,14 +147,33 @@ static int wc2regex(struct buffer *buf, const char *pat)
 
 static int re_filter(const char *filename, void *closure)
 {
+#ifdef HAVE_REGEX_H
     regex_t *regex = closure;
 
     return filename[0] != '.' && regexec(regex, filename, 0, NULL, 0) == 0;
+#endif
+#ifdef HAVE_PCRE_H
+    const char *pcreErrorStr;
+    pcre_extra *pcreExtra;
+    int pcreExecRet;
+    pcre *pcre_regex = closure;
+
+    /* Optimize the regex */
+    pcreExtra = pcre_study(pcre_regex, 0, &pcreErrorStr);
+    pcreExecRet = pcre_exec(pcre_regex, pcreExtra, filename,
+                            strlen(filename), /* length of string */
+                            0,                /* Start looking at this point */
+                            0,                /* OPTIONS */
+                            NULL, 0);         /* Length of subStrVec */
+
+    return filename[0] != '.' && pcreExecRet == 0;
+#endif
 }
 
 void *G_ls_regex_filter(const char *pat, int exclude, int extended,
                         int ignorecase)
 {
+#ifdef HAVE_REGEX_H
     regex_t *regex = G_malloc(sizeof(regex_t));
 
     if (regcomp(regex, pat,
@@ -166,12 +189,57 @@ void *G_ls_regex_filter(const char *pat, int exclude, int extended,
         G_set_ls_filter(re_filter, regex);
 
     return regex;
+#endif
+
+#ifdef HAVE_PCRE_H
+    pcre *pcre_regex;
+    const char *pcreErrorStr;
+    int pcreErrorOffset;
+
+    /* First, the regex string must be compiled */
+    pcre_regex = pcre_compile(pat, 0, &pcreErrorStr, &pcreErrorOffset, NULL);
+    /*
+       if (regcomp(regex, pat, REG_NOSUB |
+       (extended ? REG_EXTENDED : 0) |
+       (ignorecase ? REG_ICASE : 0)) != 0) {
+       pcre_free(pcre_regex);
+       return NULL;
+       }
+     */
+    if (exclude)
+        G_set_ls_exclude_filter(re_filter, pcre_regex);
+    else
+        G_set_ls_filter(re_filter, pcre_regex);
+
+    /* First, the regex string must be compiled */
+    pcre_regex = pcre_compile(pat, 0, &pcreErrorStr, &pcreErrorOffset, NULL);
+    /*
+       if (regcomp(regex, pat, REG_NOSUB |
+       (extended ? REG_EXTENDED : 0) |
+       (ignorecase ? REG_ICASE : 0)) != 0) {
+       pcre_free(pcre_regex);
+       return NULL;
+       }
+     */
+    if (exclude)
+        G_set_ls_exclude_filter(re_filter, pcre_regex);
+    else
+        G_set_ls_filter(re_filter, pcre_regex);
+
+    return pcre_regex;
+#endif
 }
 
 void *G_ls_glob_filter(const char *pat, int exclude, int ignorecase)
 {
     struct buffer buf;
+
+#ifdef HAVE_REGEX_H
     regex_t *regex;
+#endif
+#ifdef HAVE_PCRE_H
+    pcre *pcre_regex;
+#endif
 
     init(&buf);
 
@@ -179,21 +247,31 @@ void *G_ls_glob_filter(const char *pat, int exclude, int ignorecase)
         fini(&buf);
         return NULL;
     }
-
+#ifdef HAVE_REGEX_H
     regex = G_ls_regex_filter(buf.buf, exclude, 1, ignorecase);
+#endif
+#ifdef HAVE_PCRE_H
+    pcre_regex = G_ls_regex_filter(buf.buf, exclude, 1, ignorecase);
+#endif
 
     fini(&buf);
 
+#ifdef HAVE_REGEX_H
     return regex;
+#endif
+#ifdef HAVE_PCRE_H
+    return pcre_regex;
+#endif
 }
 
 void G_free_ls_filter(void *regex)
 {
     if (!regex)
         return;
-
+#ifdef HAVE_REGEX_H
     regfree(regex);
-    G_free(regex);
-}
-
 #endif
+#ifdef HAVE_PCRE_H
+    pcre_free(regex);
+#endif
+}

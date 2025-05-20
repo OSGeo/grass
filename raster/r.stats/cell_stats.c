@@ -54,7 +54,7 @@ int cell_stats(int fd[], int with_percents, int with_counts, int with_areas,
 
             /* we can't compute hash on null values, so we change all
                nulls to max+1, set NULL_CELL to max+1, and later compare
-               with NULL_CELL to chack for nulls */
+               with NULL_CELL to check for nulls */
             reset_null_vals(cell[i], ncols);
         }
 
@@ -66,6 +66,10 @@ int cell_stats(int fd[], int with_percents, int with_counts, int with_areas,
     sort_cell_stats(do_sort);
     print_cell_stats(fmt, with_percents, with_counts, with_areas, with_labels,
                      fs);
+    for (i = 0; i < nfiles; i++) {
+        G_free(cell[i]);
+    }
+    G_free(cell);
 
     return 0;
 }
