@@ -1070,11 +1070,11 @@ def isInRegion(regionA, regionB) -> bool:
     For example, region A is a display region and region B is some reference
     region, e.g., a computational region.
 
-    >>> displayRegion = {'n': 223900, 's': 217190, 'w': 630780, 'e': 640690}
-    >>> compRegion = {'n': 228500, 's': 215000, 'w': 630000, 'e': 645000}
+    >>> displayRegion = {"n": 223900, "s": 217190, "w": 630780, "e": 640690}
+    >>> compRegion = {"n": 228500, "s": 215000, "w": 630000, "e": 645000}
     >>> isInRegion(displayRegion, compRegion)
     True
-    >>> displayRegion = {'n':226020, 's': 212610, 'w': 626510, 'e': 646330}
+    >>> displayRegion = {"n": 226020, "s": 212610, "w": 626510, "e": 646330}
     >>> isInRegion(displayRegion, compRegion)
     False
 
