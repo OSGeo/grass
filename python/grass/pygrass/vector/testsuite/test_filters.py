@@ -6,7 +6,6 @@ Created on Thu Jul  2 07:25:34 2015
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
 from grass.pygrass.vector.table import Filters
 
 

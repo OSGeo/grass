@@ -300,7 +300,7 @@ int GS_new_light(void)
 /*!
    \brief Set light position
 
-   \bug I think lights array doesnt match sgi_light array
+   \bug I think lights array doesn't match sgi_light array
 
    \param num light id (starts with 1)
    \param xpos,ypos,zpos coordinates (model)
@@ -3428,7 +3428,7 @@ void GS_clear(int col)
      */
     glClearDepth(1.0);
     glClearColor(
-        ((float)((col)&0xff)) / 255., (float)((col) >> 8 & 0xff) / 255.,
+        ((float)((col) & 0xff)) / 255., (float)((col) >> 8 & 0xff) / 255.,
         (float)((col) >> 16 & 0xff) / 255., (float)((col) >> 24 & 0xff) / 255.);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 

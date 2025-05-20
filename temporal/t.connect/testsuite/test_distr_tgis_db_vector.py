@@ -8,21 +8,23 @@ for details.
 :authors: Soeren Gebbert
 """
 
+import os
+from pathlib import Path
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 from grass.gunittest.utils import silent_rmtree
-import os
 
 
 class TestRasterExtraction(TestCase):
     mapsets_to_remove = []
     outfile = "vectlist.txt"
-    gisenv = SimpleModule("g.gisenv", get="MAPSET")
-    TestCase.runModule(gisenv, expecting_stdout=True)
-    old_mapset = gisenv.outputs.stdout.strip()
 
     @classmethod
     def setUpClass(cls):
+        gisenv = SimpleModule("g.gisenv", get="MAPSET")
+        cls.runModule(gisenv, expecting_stdout=True)
+        cls.old_mapset = gisenv.outputs.stdout.strip()
         os.putenv("GRASS_OVERWRITE", "1")
         for i in range(1, 5):
             mapset_name = "testvect%i" % i
@@ -106,8 +108,7 @@ class TestRasterExtraction(TestCase):
         )
         self.assertModule(t_list)
         self.assertFileExists(self.outfile)
-        with open(self.outfile, "r") as f:
-            read_data = f.read()
+        read_data = Path(self.outfile).read_text()
         for a, b in zip(list_string.split("\n"), read_data.split("\n")):
             self.assertEqual(a.strip(), b.strip())
         # self.assertLooksLike(reference=read_data, actual=list_string)
@@ -199,8 +200,7 @@ class TestRasterExtraction(TestCase):
         )
         self.assertModule(trast_list)
         self.assertFileExists(self.outfile)
-        with open(self.outfile, "r") as f:
-            read_data = f.read()
+        read_data = Path(self.outfile).read_text()
         for a, b in zip(list_string.split("\n"), read_data.split("\n")):
             self.assertEqual(a.strip(), b.strip())
         if os.path.isfile(self.outfile):

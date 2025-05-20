@@ -18,15 +18,15 @@ def _check_value(param, value):
     string = (bytes, str)
 
     def raiseexcpet(exc, param, ptype, value):
-        """Function to modifa the error message"""
+        """Function to modify the error message"""
         msg = req % (param.name, param.typedesc, ptype, value, str(exc))
         if isinstance(exc, ValueError):
             raise ValueError(msg)
-        elif isinstance(exc, TypeError):
+        if isinstance(exc, TypeError):
             raise TypeError(msg)
-        else:
-            exc.message = msg
-            raise exc
+
+        exc.message = msg
+        raise exc
 
     def check_string(value):
         """Function to check that a string parameter is already a string"""
@@ -34,9 +34,7 @@ def _check_value(param, value):
             if type(value) in (int, float):
                 value = str(value)
             if type(value) not in string:
-                msg = (
-                    "The Parameter <%s> require a string," " %s instead is provided: %r"
-                )
+                msg = "The Parameter <%s> require a string, %s instead is provided: %r"
                 raise ValueError(msg % (param.name, type(value), value))
         return value
 
@@ -57,15 +55,14 @@ def _check_value(param, value):
                 if isinstance(value, tuple)
                 else (value, value)
             )
-        if param.multiple:
-            # everything looks fine, so check each value
-            try:
-                return [param.type(check_string(val)) for val in value], value
-            except Exception as exc:
-                raiseexcpet(exc, param, param.type, value)
-        else:
+        if not param.multiple:
             msg = "The Parameter <%s> does not accept multiple inputs"
             raise TypeError(msg % param.name)
+        # everything looks fine, so check each value
+        try:
+            return ([param.type(check_string(val)) for val in value], value)
+        except Exception as exc:
+            raiseexcpet(exc, param, param.type, value)
 
     if param.keydescvalues:
         msg = "The Parameter <%s> require multiple inputs in the form: %s"
@@ -114,10 +111,11 @@ def _check_value(param, value):
                         good = True
                         break
             if not good:
-                raise ValueError(
-                    f"The Parameter <{param.name}>, must be one of the following "
+                msg = (
+                    f"The parameter <{param.name}>, must be one of the following "
                     f"values: {param.values!r} not '{newvalue}'"
                 )
+                raise ValueError(msg)
     return (
         (
             [
@@ -150,7 +148,7 @@ class Parameter:
         >>> param.value = 3
         Traceback (most recent call last):
            ...
-        ValueError: The Parameter <int_number>, must be one of the following values: [2, 4, 6, 8] not '3'
+        ValueError: The parameter <int_number>, must be one of the following values: [2, 4, 6, 8] not '3'
 
     ...
     """  # noqa: E501
@@ -162,16 +160,16 @@ class Parameter:
         self.max = None
         diz = element2dict(xparameter) if xparameter is not None else diz
         if diz is None:
-            raise TypeError("Xparameter or diz are required")
+            msg = "xparameter or diz are required"
+            raise TypeError(msg)
         self.name = diz["name"]
-        self.required = True if diz["required"] == "yes" else False
-        self.multiple = True if diz["multiple"] == "yes" else False
+        self.required = diz["required"] == "yes"
+        self.multiple = diz["multiple"] == "yes"
         # check the type
-        if diz["type"] in GETTYPE:
-            self.type = GETTYPE[diz["type"]]
-            self.typedesc = diz["type"]
-        else:
+        if diz["type"] not in GETTYPE:
             raise TypeError("New type: %s, ignored" % diz["type"])
+        self.type = GETTYPE[diz["type"]]
+        self.typedesc = diz["type"]
 
         self.description = diz.get("description", None)
         self.keydesc, self.keydescvalues = diz.get("keydesc", (None, None))
@@ -218,7 +216,7 @@ class Parameter:
         #
         if "gisprompt" in diz and diz["gisprompt"]:
             self.typedesc = diz["gisprompt"].get("prompt", "")
-            self.input = False if diz["gisprompt"]["age"] == "new" else True
+            self.input = diz["gisprompt"]["age"] != "new"
         else:
             self.input = True
 
@@ -339,10 +337,7 @@ class Parameter:
         ..
         """
         if hasattr(self, "values"):
-            if self.isrange:
-                vals = self.isrange
-            else:
-                vals = ", ".join([repr(val) for val in self.values])
+            vals = self.isrange or ", ".join([repr(val) for val in self.values])
         else:
             vals = False
         if self.keydescvalues:

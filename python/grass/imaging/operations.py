@@ -59,7 +59,7 @@ try:
     from PIL import Image
 
     try:
-        import PIL.ImageOps as ImageOps
+        from PIL import ImageOps
     except ImportError:
         ImageOps = None
 except ImportError:

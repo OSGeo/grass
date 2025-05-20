@@ -9,6 +9,8 @@ for details.
 .. sectionauthor:: Vaclav Petras <wenzeslaus gmail com>
 """
 
+from __future__ import annotations
+
 import datetime
 import glob
 import os
@@ -20,7 +22,7 @@ import grass.script as gs
 from grass.script import gisenv
 
 
-def mapset_exists(path, location=None, mapset=None):
+def mapset_exists(path: str | os.PathLike[str], location=None, mapset=None) -> bool:
     """Returns True whether mapset path exists.
 
     Either only *path* is provided or all three parameters need to be provided.
@@ -30,27 +32,27 @@ def mapset_exists(path, location=None, mapset=None):
     :param mapset: name of a Mapset if not part of *path*
     """
     if location and mapset:
-        path = os.path.join(path, location, mapset)
+        path = Path(path, location, mapset)
     elif location or mapset:
         raise ValueError(_("Provide only path or all three parameters, not two"))
-    return os.path.exists(path)
+    return Path(path).exists()
 
 
-def location_exists(path, location=None):
+def location_exists(path: str | os.PathLike[str], location=None) -> bool:
     """Returns True whether location path exists.
 
     :param path: Path to a Location or to a GRASS GIS database directory
     :param location: name of a Location if not part of *path*
     """
     if location:
-        path = os.path.join(path, location)
-    return os.path.exists(path)
+        path = Path(path, location)
+    return Path(path).exists()
 
 
 # TODO: distinguish between valid for getting maps and usable as current
 # https://lists.osgeo.org/pipermail/grass-dev/2016-September/082317.html
 # interface created according to the current usage
-def is_mapset_valid(path, location=None, mapset=None):
+def is_mapset_valid(path: str | os.PathLike[str], location=None, mapset=None) -> bool:
     """Return True if GRASS Mapset is valid
 
     Either only *path* is provided or all three parameters need to be provided.
@@ -64,13 +66,13 @@ def is_mapset_valid(path, location=None, mapset=None):
     # WIND doesn't exist (assuming that neither GRASS_REGION nor
     # WIND_OVERRIDE environmental variables are set).
     if location and mapset:
-        path = os.path.join(path, location, mapset)
+        path = Path(path, location, mapset)
     elif location or mapset:
         raise ValueError(_("Provide only path or all three parameters, not two"))
-    return os.access(os.path.join(path, "WIND"), os.R_OK)
+    return os.access(Path(path, "WIND"), os.R_OK)
 
 
-def is_location_valid(path, location=None):
+def is_location_valid(path: str | os.PathLike[str], location=None) -> bool:
     """Return True if GRASS Location is valid
 
     :param path: Path to a Location or to a GRASS GIS database directory
@@ -81,31 +83,27 @@ def is_location_valid(path, location=None):
     # containing a PERMANENT/DEFAULT_WIND file is probably a GRASS
     # location, while a directory lacking it probably isn't.
     if location:
-        path = os.path.join(path, location)
-    return os.access(os.path.join(path, "PERMANENT", "DEFAULT_WIND"), os.F_OK)
+        path = Path(path, location)
+    return os.access(Path(path, "PERMANENT", "DEFAULT_WIND"), os.F_OK)
 
 
-def is_mapset_current(database, location, mapset):
+def is_mapset_current(database, location, mapset) -> bool:
     """Return True if the given GRASS Mapset is the current mapset"""
     genv = gisenv()
-    if (
+    return bool(
         database == genv["GISDBASE"]
         and location == genv["LOCATION_NAME"]
         and mapset == genv["MAPSET"]
-    ):
-        return True
-    return False
+    )
 
 
-def is_location_current(database, location):
+def is_location_current(database, location) -> bool:
     """Return True if the given GRASS Location is the current location"""
     genv = gisenv()
-    if database == genv["GISDBASE"] and location == genv["LOCATION_NAME"]:
-        return True
-    return False
+    return bool(database == genv["GISDBASE"] and location == genv["LOCATION_NAME"])
 
 
-def is_current_user_mapset_owner(mapset_path):
+def is_current_user_mapset_owner(mapset_path: str | os.PathLike[str]) -> bool:
     """Returns True if mapset owner is the current user.
     On Windows it always returns True."""
     # Note that this does account for libgis built with SKIP_MAPSET_OWN_CHK
@@ -117,17 +115,17 @@ def is_current_user_mapset_owner(mapset_path):
     # Mapset needs to be owned by user.
     if sys.platform == "win32":
         return True
-    stat_info = os.stat(mapset_path)
+    stat_info = Path(mapset_path).stat()
     mapset_uid = stat_info.st_uid
     return mapset_uid == os.getuid()
 
 
-def is_different_mapset_owner(mapset_path):
+def is_different_mapset_owner(mapset_path: str | os.PathLike[str]) -> bool:
     """Returns True if mapset owner is different from the current user"""
     return not is_current_user_mapset_owner(mapset_path)
 
 
-def get_mapset_owner(mapset_path):
+def get_mapset_owner(mapset_path: str | os.PathLike[str]) -> str | None:
     """Returns mapset owner name or None if owner name unknown.
     On Windows it always returns None."""
     if sys.platform == "win32":
@@ -163,32 +161,32 @@ def is_first_time_user():
     genv = gisenv()
     if "LAST_MAPSET_PATH" in genv.keys():
         return genv["LAST_MAPSET_PATH"] == os.path.join(
-            os.getcwd(), cfg.unknown_location, cfg.unknown_mapset
+            Path.cwd(), cfg.unknown_location, cfg.unknown_mapset
         )
     return False
 
 
-def is_mapset_locked(mapset_path):
+def is_mapset_locked(mapset_path: str | os.PathLike[str]) -> bool:
     """Check if the mapset is locked"""
     lock_name = ".gislock"
-    lockfile = os.path.join(mapset_path, lock_name)
-    return os.path.exists(lockfile)
+    lockfile = Path(mapset_path, lock_name)
+    return lockfile.exists()
 
 
-def get_lockfile_if_present(database, location, mapset):
+def get_lockfile_if_present(database, location, mapset) -> str | None:
     """Return path to lock if present, None otherwise
 
     Returns the path as a string or None if nothing was found, so the
     return value can be used to test if the lock is present.
     """
     lock_name = ".gislock"
-    lockfile = os.path.join(database, location, mapset, lock_name)
-    if os.path.isfile(lockfile):
-        return lockfile
+    lockfile = Path(database, location, mapset, lock_name)
+    if lockfile.is_file():
+        return str(lockfile)
     return None
 
 
-def get_mapset_lock_info(mapset_path):
+def get_mapset_lock_info(mapset_path: str | os.PathLike[str]):
     """Get information about .gislock file.
     Assumes lock file exists, use is_mapset_locked to find out.
     Returns information as a dictionary with keys
@@ -207,15 +205,13 @@ def get_mapset_lock_info(mapset_path):
     return info
 
 
-def can_start_in_mapset(mapset_path, ignore_lock=False):
+def can_start_in_mapset(mapset_path, ignore_lock: bool = False) -> bool:
     """Check if a mapset from a gisrc file is usable for new session"""
-    if not is_mapset_valid(mapset_path):
-        return False
-    if not is_current_user_mapset_owner(mapset_path):
-        return False
-    if not ignore_lock and is_mapset_locked(mapset_path):
-        return False
-    return True
+    return not (
+        (not is_mapset_valid(mapset_path))
+        or (not is_current_user_mapset_owner(mapset_path))
+        or (not ignore_lock and is_mapset_locked(mapset_path))
+    )
 
 
 def get_reason_id_mapset_not_usable(mapset_path):
@@ -228,24 +224,25 @@ def get_reason_id_mapset_not_usable(mapset_path):
     if not os.path.exists(mapset_path):
         return "non-existent"
     # Check whether mapset is valid
-    elif not is_mapset_valid(mapset_path):
+    if not is_mapset_valid(mapset_path):
         return "invalid"
     # Check whether mapset is owned by current user
-    elif not is_current_user_mapset_owner(mapset_path):
+    if not is_current_user_mapset_owner(mapset_path):
         return "different-owner"
     # Check whether mapset is locked
-    elif is_mapset_locked(mapset_path):
+    if is_mapset_locked(mapset_path):
         return "locked"
     return None
 
 
-def dir_contains_location(path):
+def dir_contains_location(path: str | os.PathLike[str]) -> bool:
     """Return True if directory *path* contains a valid location"""
-    if not os.path.isdir(path):
+    p = Path(path)
+    if not p.is_dir():
         return False
-    for name in os.listdir(path):
-        if os.path.isdir(os.path.join(path, name)):
-            if is_location_valid(path, name):
+    for name in p.iterdir():
+        if name.is_dir():
+            if is_location_valid(name):
                 return True
     return False
 
@@ -266,8 +263,8 @@ def get_mapset_invalid_reason(database, location, mapset, none_for_no_reason=Fal
     # Since we are trying to get the one most likely message, we need all
     # those return statements here.
     # pylint: disable=too-many-return-statements
-    location_path = os.path.join(database, location)
-    mapset_path = os.path.join(location_path, mapset)
+    location_path = Path(database, location)
+    mapset_path = location_path / mapset
     # first checking the location validity
     # perhaps a special set of checks with different messages mentioning mapset
     # will be needed instead of the same set of messages used for location
@@ -277,28 +274,22 @@ def get_mapset_invalid_reason(database, location, mapset, none_for_no_reason=Fal
     if location_msg:
         return location_msg
     # if location is valid, check mapset
-    if mapset not in os.listdir(location_path):
+    if not mapset_path.exists():
         # TODO: remove the grass.py specific wording
         return _(
             "Mapset <{mapset}> doesn't exist in GRASS Location <{location}>"
         ).format(mapset=mapset, location=location)
-    if not os.path.isdir(mapset_path):
+    if not mapset_path.is_dir():
         return _("<%s> is not a GRASS Mapset because it is not a directory") % mapset
-    if not os.path.isfile(os.path.join(mapset_path, "WIND")):
+    if not (mapset_path / "WIND").is_file():
         return (
-            _(
-                "<%s> is not a valid GRASS Mapset"
-                " because it does not have a WIND file"
-            )
+            _("<%s> is not a valid GRASS Mapset because it does not have a WIND file")
             % mapset
         )
     # based on the is_mapset_valid() function
-    if not os.access(os.path.join(mapset_path, "WIND"), os.R_OK):
+    if not os.access(mapset_path / "WIND", os.R_OK):
         return (
-            _(
-                "<%s> is not a valid GRASS Mapset"
-                " because its WIND file is not readable"
-            )
+            _("<%s> is not a valid GRASS Mapset because its WIND file is not readable")
             % mapset
         )
     # no reason for invalidity found (might be valid)
@@ -309,7 +300,9 @@ def get_mapset_invalid_reason(database, location, mapset, none_for_no_reason=Fal
     ).format(mapset=mapset, location=location)
 
 
-def get_location_invalid_reason(database, location, none_for_no_reason=False):
+def get_location_invalid_reason(
+    database, location, none_for_no_reason=False
+) -> str | None:
     """Returns a message describing what is wrong with the Location
 
     The goal is to provide the most suitable error message
@@ -327,31 +320,25 @@ def get_location_invalid_reason(database, location, none_for_no_reason=False):
     :param none_for_no_reason: When True, return None when reason is unknown
     :returns: translated message or None
     """
-    location_path = os.path.join(database, location)
-    permanent_path = os.path.join(location_path, "PERMANENT")
+    location_path = Path(database, location)
+    permanent_path = location_path / "PERMANENT"
 
     # directory
-    if not os.path.exists(location_path):
+    if not location_path.exists():
         return _("Location <%s> doesn't exist") % location_path
     # permanent mapset
-    if "PERMANENT" not in os.listdir(location_path):
+    if not permanent_path.exists():
         return (
-            _(
-                "<%s> is not a valid GRASS Location"
-                " because PERMANENT Mapset is missing"
-            )
+            _("<%s> is not a valid GRASS Location because PERMANENT Mapset is missing")
             % location_path
         )
-    if not os.path.isdir(permanent_path):
+    if not permanent_path.is_dir():
         return (
-            _(
-                "<%s> is not a valid GRASS Location"
-                " because PERMANENT is not a directory"
-            )
+            _("<%s> is not a valid GRASS Location because PERMANENT is not a directory")
             % location_path
         )
     # partially based on the is_location_valid() function
-    if not os.path.isfile(os.path.join(permanent_path, "DEFAULT_WIND")):
+    if not (permanent_path / "DEFAULT_WIND").is_file():
         return (
             _(
                 "<%s> is not a valid GRASS Location"
@@ -368,14 +355,14 @@ def get_location_invalid_reason(database, location, none_for_no_reason=False):
     )
 
 
-def get_location_invalid_suggestion(database, location):
+def get_location_invalid_suggestion(database, location) -> str | None:
     """Return suggestion what to do when specified location is not valid
 
     It gives suggestion when:
      * A mapset was specified instead of a location.
      * A GRASS database was specified instead of a location.
     """
-    location_path = os.path.join(database, location)
+    location_path = Path(database, location)
     # a common error is to use mapset instead of location,
     # if that's the case, include that info into the message
     if is_mapset_valid(location_path):
@@ -605,9 +592,7 @@ def get_reasons_grassdb_not_removable(grassdb):
     locations = []
     for g_location in g_locations:
         locations.append((grassdb, g_location))
-    messages = get_reasons_locations_not_removable(locations)
-
-    return messages
+    return get_reasons_locations_not_removable(locations)
 
 
 def get_list_of_locations(dbase):
@@ -617,7 +602,7 @@ def get_list_of_locations(dbase):
 
     :return: list of locations (sorted)
     """
-    locations = list()
+    locations = []
     for location in glob.glob(os.path.join(dbase, "*")):
         if os.path.join(location, "PERMANENT") in glob.glob(
             os.path.join(location, "*")

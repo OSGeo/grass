@@ -30,9 +30,7 @@ class NvizSettings:
 
     def SetConstantDefaultProp(self):
         """Set default constant data properties"""
-        data = dict()
-        for key, value in UserSettings.Get(group="nviz", key="constant").items():
-            data[key] = value
+        data = dict(UserSettings.Get(group="nviz", key="constant").items())
         color = (
             str(data["color"][0])
             + ":"
@@ -47,7 +45,7 @@ class NvizSettings:
     def SetSurfaceDefaultProp(self, data=None):
         """Set default surface data properties"""
         if not data:
-            data = dict()
+            data = {}
         for sec in ("attribute", "draw", "mask", "position"):
             data[sec] = {}
 
@@ -79,7 +77,7 @@ class NvizSettings:
 
             if control == "wire-color":
                 value = str(value[0]) + ":" + str(value[1]) + ":" + str(value[2])
-            elif control in ("mode", "style", "shading"):
+            elif control in {"mode", "style", "shading"}:
                 if "mode" not in data["draw"]:
                     data["draw"]["mode"] = {}
                 continue
@@ -105,11 +103,11 @@ class NvizSettings:
 
     def SetVolumeDefaultProp(self):
         """Set default volume data properties"""
-        data = dict()
+        data = {}
         for sec in ("attribute", "draw", "position"):
-            data[sec] = dict()
+            data[sec] = {}
             for sec in ("isosurface", "slice"):
-                data[sec] = list()
+                data[sec] = []
 
         #
         # draw
@@ -136,14 +134,8 @@ class NvizSettings:
                 sel = UserSettings.Get(
                     group="nviz", key="volume", subkey=["draw", "mode"]
                 )
-                if sel == 0:
-                    desc = "isosurface"
-                else:
-                    desc = "slice"
-                data["draw"]["mode"] = {
-                    "value": sel,
-                    "desc": desc,
-                }
+                desc = "isosurface" if sel == 0 else "slice"
+                data["draw"]["mode"] = {"value": sel, "desc": desc}
             elif control == "box":
                 box = UserSettings.Get(
                     group="nviz", key="volume", subkey=["draw", "box"]
@@ -172,7 +164,7 @@ class NvizSettings:
 
     def SetIsosurfaceDefaultProp(self):
         """Set default isosurface properties"""
-        data = dict()
+        data = {}
         for attr in ("shine", "topo", "transp", "color", "inout"):
             data[attr] = {}
             data[attr]["update"] = None
@@ -187,10 +179,11 @@ class NvizSettings:
 
     def SetSliceDefaultProp(self):
         """Set default slice properties"""
-        data = dict()
-        data["position"] = copy.deepcopy(
-            UserSettings.Get(group="nviz", key="volume", subkey="slice_position")
-        )
+        data = {
+            "position": copy.deepcopy(
+                UserSettings.Get(group="nviz", key="volume", subkey="slice_position")
+            )
+        }
         data["position"]["update"] = None
 
         data["transp"] = copy.deepcopy(
@@ -201,7 +194,7 @@ class NvizSettings:
     def SetVectorDefaultProp(self, longDim, data=None):
         """Set default vector data properties"""
         if not data:
-            data = dict()
+            data = {}
         for sec in ("lines", "points"):
             data[sec] = {}
 
@@ -324,8 +317,7 @@ class NvizSettings:
         :param mode:
         :param style:
         :param shade:
-        :param string: if True input parameters are strings otherwise
-                       selections
+        :param string: if True input parameters are strings otherwise selections
         """
         if not wxnviz:
             return None
@@ -393,8 +385,9 @@ class NvizSettings:
         # arrow
         if type == "arrow":
             data["arrow"] = copy.deepcopy(UserSettings.Get(group="nviz", key="arrow"))
-            data["arrow"]["color"] = "%d:%d:%d" % (
-                UserSettings.Get(group="nviz", key="arrow", subkey="color")[:3]
+            data["arrow"]["color"] = (
+                "%d:%d:%d"
+                % (UserSettings.Get(group="nviz", key="arrow", subkey="color")[:3])
             )
             data["arrow"].update(
                 copy.deepcopy(
@@ -410,8 +403,9 @@ class NvizSettings:
             data["scalebar"] = copy.deepcopy(
                 UserSettings.Get(group="nviz", key="scalebar")
             )
-            data["scalebar"]["color"] = "%d:%d:%d" % (
-                UserSettings.Get(group="nviz", key="scalebar", subkey="color")[:3]
+            data["scalebar"]["color"] = (
+                "%d:%d:%d"
+                % (UserSettings.Get(group="nviz", key="scalebar", subkey="color")[:3])
             )
             data["scalebar"].update(
                 copy.deepcopy(

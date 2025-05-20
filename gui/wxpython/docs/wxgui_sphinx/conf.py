@@ -10,21 +10,9 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys
-import os
 from datetime import date
 import string
 from shutil import copy
-
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-if not os.getenv("GISBASE"):
-    sys.exit("GISBASE not defined")
-sys.path.insert(
-    0, os.path.abspath(os.path.join(os.environ["GISBASE"], "etc", "python", "grass"))
-)
-
 from grass.script import core
 
 footer_tmpl = string.Template(
@@ -34,7 +22,7 @@ footer_tmpl = string.Template(
 | <a href="../keywords.html">Keywords Index</a>
 | <a href="../full_index.html">Full Index</a></p>
 <p>&copy; 2003-${year} <a href="https://grass.osgeo.org">GRASS Development Team</a>,
-GRASS GIS ${grass_version} Reference Manual</p>
+GRASS ${grass_version} Documentation</p>
 {% endblock %}
 """
 )
@@ -335,7 +323,7 @@ epub_copyright = copyright
 # The format is a list of tuples containing the path and title.
 # epub_pre_files = []
 
-# HTML files shat should be inserted after the pages created by sphinx.
+# HTML files that should be inserted after the pages created by sphinx.
 # The format is a list of tuples containing the path and title.
 # epub_post_files = []
 

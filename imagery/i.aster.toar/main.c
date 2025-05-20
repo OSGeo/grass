@@ -112,14 +112,12 @@ int main(int argc, char *argv[])
     input1->key = "dayofyear";
     input1->type = TYPE_DOUBLE;
     input1->required = YES;
-    input1->gisprompt = "value";
     input1->description = _("Day of Year of satellite overpass [0-366]");
 
     input2 = G_define_option();
     input2->key = "sun_elevation";
     input2->type = TYPE_DOUBLE;
     input2->required = YES;
-    input2->gisprompt = "value";
     input2->description = _("Sun elevation angle (degrees, < 90.0)");
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
@@ -165,21 +163,21 @@ int main(int argc, char *argv[])
     /*Prepare the output file names */
 
     /********************/
-    sprintf(result0, "%s%s", result, ".1");
-    sprintf(result1, "%s%s", result, ".2");
-    sprintf(result2, "%s%s", result, ".3N");
-    sprintf(result3, "%s%s", result, ".3B");
-    sprintf(result4, "%s%s", result, ".4");
-    sprintf(result5, "%s%s", result, ".5");
-    sprintf(result6, "%s%s", result, ".6");
-    sprintf(result7, "%s%s", result, ".7");
-    sprintf(result8, "%s%s", result, ".8");
-    sprintf(result9, "%s%s", result, ".9");
-    sprintf(result10, "%s%s", result, ".10");
-    sprintf(result11, "%s%s", result, ".11");
-    sprintf(result12, "%s%s", result, ".12");
-    sprintf(result13, "%s%s", result, ".13");
-    sprintf(result14, "%s%s", result, ".14");
+    snprintf(result0, sizeof(result0), "%s%s", result, ".1");
+    snprintf(result1, sizeof(result1), "%s%s", result, ".2");
+    snprintf(result2, sizeof(result2), "%s%s", result, ".3N");
+    snprintf(result3, sizeof(result3), "%s%s", result, ".3B");
+    snprintf(result4, sizeof(result4), "%s%s", result, ".4");
+    snprintf(result5, sizeof(result5), "%s%s", result, ".5");
+    snprintf(result6, sizeof(result6), "%s%s", result, ".6");
+    snprintf(result7, sizeof(result7), "%s%s", result, ".7");
+    snprintf(result8, sizeof(result8), "%s%s", result, ".8");
+    snprintf(result9, sizeof(result9), "%s%s", result, ".9");
+    snprintf(result10, sizeof(result10), "%s%s", result, ".10");
+    snprintf(result11, sizeof(result11), "%s%s", result, ".11");
+    snprintf(result12, sizeof(result12), "%s%s", result, ".12");
+    snprintf(result13, sizeof(result13), "%s%s", result, ".13");
+    snprintf(result14, sizeof(result14), "%s%s", result, ".14");
 
     /********************/
     /*Prepare radiance boundaries */

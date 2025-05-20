@@ -113,9 +113,11 @@ def make_mapset(mapset, location=None, gisdbase=None):
     :type gisdbase: str"""
     res = libgis.G_make_mapset(gisdbase, location, mapset)
     if res == -1:
-        raise GrassError("Cannot create new mapset")
-    elif res == -2:
-        raise GrassError("Illegal name")
+        msg = "Cannot create new mapset"
+        raise GrassError(msg)
+    if res == -2:
+        msg = "Illegal name"
+        raise GrassError(msg)
 
 
 class Gisdbase:
@@ -162,8 +164,7 @@ class Gisdbase:
         """
         if location in self.locations():
             return Location(location, self.name)
-        else:
-            raise KeyError("Location: %s does not exist" % location)
+        raise KeyError("Location: %s does not exist" % location)
 
     def __iter__(self):
         for loc in self.locations():
@@ -172,7 +173,8 @@ class Gisdbase:
     # TODO remove or complete this function
     def new_location(self):
         if libgis.G_make_location() != 0:
-            raise GrassError("Cannot create new location")
+            msg = "Cannot create new location"
+            raise GrassError(msg)
 
     def locations(self):
         """Return a list of locations that are available in the gisdbase: ::
@@ -234,8 +236,7 @@ class Location:
     def __getitem__(self, mapset):
         if mapset in self.mapsets():
             return Mapset(mapset)
-        else:
-            raise KeyError("Mapset: %s does not exist" % mapset)
+        raise KeyError("Mapset: %s does not exist" % mapset)
 
     def __iter__(self):
         lpath = self.path()
@@ -271,7 +272,7 @@ class Location:
             [...]
 
         """
-        mapsets = [mapset for mapset in self]
+        mapsets = [mapset for mapset in self]  # noqa: C416 # pylint: disable=R1721
         if permissions:
             mapsets = [
                 mapset
@@ -382,12 +383,11 @@ class Mapset:
         elist = []
         for el in clist:
             el_name = ct.cast(el, ct.c_char_p).value
-            if el_name:
-                elist.append(decode(el_name))
-            else:
+            if not el_name:
                 if pattern:
                     return fnmatch.filter(elist, pattern)
                 return elist
+            elist.append(decode(el_name))
 
     def is_current(self):
         """Check if the MAPSET is the working MAPSET"""
@@ -404,7 +404,8 @@ class Mapset:
     def delete(self):
         """Delete the mapset"""
         if self.is_current():
-            raise GrassError("The mapset is in use.")
+            msg = "The mapset is in use."
+            raise GrassError(msg)
         shutil.rmtree(self.path())
 
     def path(self):
@@ -430,7 +431,7 @@ class VisibleMapset:
     def read(self):
         """Return the mapsets in the search path"""
         try:
-            with open(self.spath, "r") as f:
+            with open(self.spath) as f:
                 lines = f.readlines()
                 if lines:
                     return [line.strip() for line in lines]
@@ -457,11 +458,11 @@ class VisibleMapset:
         :param mapset: a mapset's name
         :type mapset: str
         """
-        if mapset not in self.read() and mapset in self.location:
-            with open(self.spath, "a+") as f:
-                f.write("%s\n" % mapset)
-        else:
-            raise TypeError("Mapset not found")
+        if mapset in self.read() or mapset not in self.location:
+            msg = "Mapset not found"
+            raise TypeError(msg)
+        with open(self.spath, "a+") as f:
+            f.write("%s\n" % mapset)
 
     def remove(self, mapset):
         """Remove mapset to the search path
@@ -503,10 +504,11 @@ if __name__ == "__main__":
 
     doctest.testmod()
 
-    # Remove the generated vector map, if exist
     mset = utils.get_mapset_vector(test_vector_name, mapset="")
     if mset:
+        # Remove the generated vector map, if exists
         run_command("g.remove", flags="f", type="vector", name=test_vector_name)
     mset = utils.get_mapset_raster(test_raster_name, mapset="")
     if mset:
+        # Remove the generated raster map, if exists
         run_command("g.remove", flags="f", type="raster", name=test_raster_name)

@@ -34,31 +34,30 @@
 # %option G_OPT_R_OUTPUT
 # %end
 
-import grass.script as gscript
+import grass.script as gs
 
 
 def copy_colors(fh, map, offset):
-    p = gscript.pipe_command("r.colors.out", map=map)
+    p = gs.pipe_command("r.colors.out", map=map)
     for line in p.stdout:
-        f = gscript.decode(line).rstrip("\r\n").split(" ")
+        f = gs.decode(line).rstrip("\r\n").split(" ")
         if offset:
-            if f[0] in ["nv", "default"]:
+            if f[0] in {"nv", "default"}:
                 continue
             f[0] = str(float(f[0]) + offset)
-        fh.write(gscript.encode(" ".join(f) + "\n"))
+        fh.write(gs.encode(" ".join(f) + "\n"))
     p.wait()
 
 
 def get_limit(map):
-    return gscript.raster_info(map)["max"]
+    return gs.raster_info(map)["max"]
 
 
 def make_expression(i, count):
     if i > count:
         return "null()"
-    else:
-        e = make_expression(i + 1, count)
-        return "if(isnull($image%d),%s,$image%d+$offset%d)" % (i, e, i, i)
+    e = make_expression(i + 1, count)
+    return "if(isnull($image%d),%s,$image%d+$offset%d)" % (i, e, i, i)
 
 
 def main():
@@ -67,7 +66,7 @@ def main():
 
     count = len(images)
     msg = _("Do not forget to set region properly to cover all images.")
-    gscript.warning(msg)
+    gs.warning(msg)
 
     offset = 0
     offsets = []
@@ -78,24 +77,24 @@ def main():
         parms["offset%d" % (n + 1)] = offset
         offset += get_limit(img) + 1
 
-    gscript.message(_("Mosaicing %d images...") % count)
+    gs.message(_("Mosaicing %d images...") % count)
 
-    gscript.mapcalc("$output = " + make_expression(1, count), output=output, **parms)
+    gs.mapcalc("$output = " + make_expression(1, count), output=output, **parms)
 
     # modify the color table:
-    p = gscript.feed_command("r.colors", map=output, rules="-")
+    p = gs.feed_command("r.colors", map=output, rules="-")
     for img, offset in zip(images, offsets):
         print(img, offset)
         copy_colors(p.stdin, img, offset)
     p.stdin.close()
     p.wait()
 
-    gscript.message(_("Done. Raster map <%s> created.") % output)
+    gs.message(_("Done. Raster map <%s> created.") % output)
 
     # write cmd history:
-    gscript.raster_history(output)
+    gs.raster_history(output)
 
 
 if __name__ == "__main__":
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
     main()

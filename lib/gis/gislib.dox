@@ -275,7 +275,7 @@ exit(). G_setenv_nogisrc() just returns the NULL pointer.
 
  - G_setenv_nogisrc()
 
-These routines set the the GRASS environment variable <em>name</em> to
+These routines set the GRASS environment variable <em>name</em> to
 <em>value</em>. If <em>value</em> is NULL, the <em>name</em> is unset.
 
 Both routines set the value in module memory, but only G_setenv()
@@ -1179,12 +1179,28 @@ The next routines replaces character(s) from string.
 
 Replace all occurrences of character in string with new.
 
+ - G_str_to_sql()
+
+Make string SQL compliant.
+
+ - G_str_replace()
+
+Replace all occurrences of old_str in buffer with new_str.
+
 This next routine copies a string to allocated memory.
 
  - G_store()
 
 This routine allocates enough memory to hold the string, and returns a
 pointer to the allocated memory.
+
+ - G_store_lower()
+
+Copy string to allocated memory and convert copied string to lower case.
+
+ - G_store_upper()
+
+Copy string to allocated memory and convert copied string to upper case.
 
 The next 2 routines convert between upper and lower case.
 
@@ -1203,12 +1219,6 @@ equivalent.
 This routine remove trailing zeros from decimal number for example:
 23.45000 would come back as 23.45.
 
- - G_index()
-
- - G_rindex()
-
-Get position of delimiter.
-
  - G_strcasecmp()
 
  - G_strncasecmp()
@@ -1220,11 +1230,24 @@ String compare ignoring case (upper or lower).
 Return a pointer to the first occurrence of subString in mainString,
 or NULL if no occurrences are found.
 
- - G_strdup()
+ - G_str_concat()
 
-Returns a pointer to a string that is a duplicate of the string given
-to G_strdup.  The duplicate is created using malloc. If unable to
-allocate the required space, NULL is returned.
+Concatenation of a list of strings, separated by a given character.
+
+ - G_tokenize()
+ - G_tokenize2()
+
+Tokenize string. Create array of strings from an input string split up with
+given delimiter characters.
+
+ - G_strlcat()
+
+Size-bounded string concatenation (wrapper function to strlcat()).
+
+ - G_strlcpy()
+
+Size-bounded string copying (wrapper function to strlcpy()).
+
 
 \section Enhanced_UNIX_Routines Enhanced UNIX Routines
 

@@ -29,6 +29,7 @@ import collections.abc
 from core import globalvar
 from core.gcmd import GException, GError
 from core.utils import GetSettingsPath, PathJoin, rgb2str
+from pathlib import Path
 
 
 class SettingsJSONEncoder(json.JSONEncoder):
@@ -59,8 +60,7 @@ class SettingsJSONEncoder(json.JSONEncoder):
                 return [color(e) for e in item]
             if isinstance(item, dict):
                 return {key: color(value) for key, value in item.items()}
-            else:
-                return item
+            return item
 
         return super().iterencode(color(obj))
 
@@ -73,7 +73,7 @@ def settings_JSON_decode_hook(obj):
         return tuple(int(hexcode[i : i + 2], 16) for i in range(0, len(hexcode), 2))
 
     for k, v in obj.items():
-        if isinstance(v, str) and v.startswith("#") and len(v) in [7, 9]:
+        if isinstance(v, str) and v.startswith("#") and len(v) in {7, 9}:
             obj[k] = colorhex2tuple(v)
     return obj
 
@@ -105,12 +105,13 @@ class Settings:
     def _generateLocale(self):
         """Generate locales"""
         try:
-            self.locs = os.listdir(os.path.join(os.environ["GISBASE"], "locale"))
+            locale_path = Path(os.environ["GISBASE"]) / "locale"
+            self.locs = [p.name for p in locale_path.iterdir() if p.is_dir()]
             self.locs.append("en")  # GRASS doesn't ship EN po files
             self.locs.sort()
             # Add a default choice to not override system locale
             self.locs.insert(0, "system")
-        except:
+        except Exception:
             # No NLS
             self.locs = ["system"]
 
@@ -767,7 +768,7 @@ class Settings:
             },
         }
 
-        # quick fix, http://trac.osgeo.org/grass/ticket/1233
+        # quick fix, https://trac.osgeo.org/grass/ticket/1233
         # TODO
         if sys.platform == "darwin":
             self.defaultSettings["general"]["defWindowPos"]["enabled"] = False
@@ -817,9 +818,9 @@ class Settings:
         )
 
         self.internalSettings["display"]["driver"]["choices"] = ["cairo", "png"]
-        self.internalSettings["display"]["statusbarMode"][
-            "choices"
-        ] = None  # set during MapFrame init
+        self.internalSettings["display"]["statusbarMode"]["choices"] = (
+            None  # set during MapFrame init
+        )
         self.internalSettings["display"]["mouseWheelZoom"]["choices"] = (
             _("Zoom and recenter"),
             _("Zoom to mouse cursor"),
@@ -922,7 +923,7 @@ class Settings:
             return dictionary
 
         try:
-            with open(self.filePath, "r") as f:
+            with open(self.filePath) as f:
                 update = json.load(f, object_hook=settings_JSON_decode_hook)
                 update_nested_dict_by_dict(settings, update)
         except json.JSONDecodeError as e:
@@ -942,33 +943,28 @@ class Settings:
             settings = self.userSettings
 
         try:
-            fd = open(self.legacyFilePath, "r")
+            with open(self.legacyFilePath) as fd:
+                line = ""
+                for line in fd:
+                    line = line.rstrip("%s" % os.linesep)
+                    group, key = line.split(self.sep)[0:2]
+                    kv = line.split(self.sep)[2:]
+                    subkeyMaster = None
+                    if len(kv) % 2 != 0:  # multiple (e.g. nviz)
+                        subkeyMaster = kv[0]
+                        del kv[0]
+                    idx = 0
+                    while idx < len(kv):
+                        subkey = [subkeyMaster, kv[idx]] if subkeyMaster else kv[idx]
+                        value = kv[idx + 1]
+                        value = self._parseValue(value, read=True)
+                        self.Append(settings, group, key, subkey, value)
+                        idx += 2
         except OSError:
             sys.stderr.write(
                 _("Unable to read settings file <%s>\n") % self.legacyFilePath
             )
             return
-
-        try:
-            line = ""
-            for line in fd.readlines():
-                line = line.rstrip("%s" % os.linesep)
-                group, key = line.split(self.sep)[0:2]
-                kv = line.split(self.sep)[2:]
-                subkeyMaster = None
-                if len(kv) % 2 != 0:  # multiple (e.g. nviz)
-                    subkeyMaster = kv[0]
-                    del kv[0]
-                idx = 0
-                while idx < len(kv):
-                    if subkeyMaster:
-                        subkey = [subkeyMaster, kv[idx]]
-                    else:
-                        subkey = kv[idx]
-                    value = kv[idx + 1]
-                    value = self._parseValue(value, read=True)
-                    self.Append(settings, group, key, subkey, value)
-                    idx += 2
         except ValueError as e:
             print(
                 _(
@@ -979,9 +975,6 @@ class Settings:
                 % {"file": self.legacyFilePath, "detail": e, "line": line},
                 file=sys.stderr,
             )
-            fd.close()
-
-        fd.close()
 
     def SaveToFile(self, settings=None):
         """Save settings to the file"""
@@ -992,9 +985,9 @@ class Settings:
         if not os.path.exists(dirPath):
             try:
                 os.mkdir(dirPath)
-            except:
+            except OSError:
                 GError(_("Unable to create settings directory"))
-                return
+                return None
         try:
             with open(self.filePath, "w") as f:
                 json.dump(settings, f, indent=2, cls=SettingsJSONEncoder)
@@ -1002,10 +995,7 @@ class Settings:
             raise GException(e)
         except Exception as e:
             raise GException(
-                _(
-                    "Writing settings to file <%(file)s> failed."
-                    "\n\nDetails: %(detail)s"
-                )
+                _("Writing settings to file <%(file)s> failed.\n\nDetails: %(detail)s")
                 % {"file": self.filePath, "detail": e}
             )
         return self.filePath
@@ -1032,7 +1022,7 @@ class Settings:
                         value = float(value)
                     except ValueError:
                         pass
-        else:  # -> write settings
+        else:  # -> write settings  # noqa: PLR5501
             if isinstance(value, type(())):  # -> color
                 value = str(value[0]) + ":" + str(value[1]) + ":" + str(value[2])
 
@@ -1062,15 +1052,13 @@ class Settings:
             if subkey is None:
                 if key is None:
                     return settings[group]
-                else:
-                    return settings[group][key]
-            else:
-                if isinstance(subkey, type(tuple())) or isinstance(
-                    subkey, type(list())
-                ):
-                    return settings[group][key][subkey[0]][subkey[1]]
-                else:
-                    return settings[group][key][subkey]
+
+                return settings[group][key]
+
+            if isinstance(subkey, (list, tuple)):
+                return settings[group][key][subkey[0]][subkey[1]]
+
+            return settings[group][key][subkey]
 
         except KeyError:
             print(
@@ -1101,15 +1089,16 @@ class Settings:
             if subkey is None:
                 if key is None:
                     settings[group] = value
-                else:
-                    settings[group][key] = value
-            else:
-                if isinstance(subkey, type(tuple())) or isinstance(
-                    subkey, type(list())
-                ):
-                    settings[group][key][subkey[0]][subkey[1]] = value
-                else:
-                    settings[group][key][subkey] = value
+                    return
+                settings[group][key] = value
+                return
+
+            if isinstance(subkey, (list, tuple)):
+                settings[group][key][subkey[0]][subkey[1]] = value
+                return
+            settings[group][key][subkey] = value
+            return
+
         except KeyError:
             raise GException(
                 "%s '%s:%s:%s'" % (_("Unable to set "), group, key, subkey)
@@ -1201,7 +1190,7 @@ UserSettings = Settings()
 
 
 def GetDisplayVectSettings():
-    settings = list()
+    settings = []
     if not UserSettings.Get(
         group="vectorLayer", key="featureColor", subkey=["transparent", "enabled"]
     ):
@@ -1225,21 +1214,23 @@ def GetDisplayVectSettings():
     else:
         settings.append("fcolor=none")
 
-    settings.append(
-        "width=%s" % UserSettings.Get(group="vectorLayer", key="line", subkey="width")
+    settings.extend(
+        (
+            "width=%s"
+            % UserSettings.Get(group="vectorLayer", key="line", subkey="width"),
+            "icon=%s"
+            % UserSettings.Get(group="vectorLayer", key="point", subkey="symbol"),
+            "size=%s"
+            % UserSettings.Get(group="vectorLayer", key="point", subkey="size"),
+        )
     )
-    settings.append(
-        "icon=%s" % UserSettings.Get(group="vectorLayer", key="point", subkey="symbol")
-    )
-    settings.append(
-        "size=%s" % UserSettings.Get(group="vectorLayer", key="point", subkey="size")
-    )
-    types = []
-    for ftype in ["point", "line", "boundary", "centroid", "area", "face"]:
+    types = [
+        ftype
+        for ftype in ["point", "line", "boundary", "centroid", "area", "face"]
         if UserSettings.Get(
             group="vectorLayer", key="showType", subkey=[ftype, "enabled"]
-        ):
-            types.append(ftype)
+        )
+    ]
     settings.append("type=%s" % ",".join(types))
 
     if UserSettings.Get(group="vectorLayer", key="randomColors", subkey="enabled"):

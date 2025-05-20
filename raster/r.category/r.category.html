@@ -45,7 +45,7 @@ cat:Label
 val1:val2:Label
 </pre></div>
 
-If the filename is given as "-", the category labels are read from <tt>stdin</tt>
+If the filename is given as "-", the category labels are read from <code>stdin</code>
 
 <h3>Default and dynamic category labels</h3>
 
@@ -68,26 +68,26 @@ explicit labels can be also of the form:
 </pre></div>
 <p>In the format line
 <ul>
-<li><tt>$1</tt> refers to the value <tt>num*5.0+1000</tt> (ie, using the first 2 coefficients)
-<li><tt>$2</tt> refers to the value <tt>num*5.0+1005</tt> (ie, using the last 2 coefficients)
+<li><code>$1</code> refers to the value <code>num*5.0+1000</code> (ie, using the first 2 coefficients)</li>
+<li><code>$2</code> refers to the value <code>num*5.0+1005</code> (ie, using the last 2 coefficients)</li>
 </ul>
-  <tt>$1.2</tt> will print <tt>$1</tt> with 2 decimal places.
-<p>Also, the form <tt>$?xxx$yyy$</tt> translates into <tt>yyy</tt> if the category is 1, xxx
-otherwise. The <tt>$yyy$</tt> is optional. Thus
-<p>  <tt>$1 meter$?s</tt>
+  <code>$1.2</code> will print <code>$1</code> with 2 decimal places.
+<p>Also, the form <code>$?xxx$yyy$</code> translates into <code>yyy</code> if the category is 1, xxx
+otherwise. The <code>$yyy$</code> is optional. Thus
+<p>  <code>$1 meter$?s</code>
 <p>will become: <br>
-  <tt>1 meter</tt> (for category 1)<br>
-  <tt>2 meters</tt> (for category 2), etc.
+  <code>1 meter</code> (for category 1)<br>
+  <code>2 meters</code> (for category 2), etc.
 
 <p>
-<tt>format='Elevation: $1.2 to $2.2 feet'   ## Format Statement</tt><br>
-<tt>coefficients="5.0,1000,5.0,1005"	## Coefficients</tt>
+<code>format='Elevation: $1.2 to $2.2 feet'   ## Format Statement</code><br>
+<code>coefficients="5.0,1000,5.0,1005"	## Coefficients</code>
 
 <p>The format and coefficients above would be used to generate the
 following statement in creation of the format appropriate category
 string for category "num":
 <p>
-<tt>sprintf(buff,"Elevation: %.2f to %.2f feet", num*5.0+1000, num*5.0*1005)</tt>
+<code>sprintf(buff,"Elevation: %.2f to %.2f feet", num*5.0+1000, num*5.0*1005)</code>
 
 <p>Note: while both the format and coefficient lines must be present
       a blank line for the format string will effectively suppress
@@ -99,9 +99,9 @@ since i-th rule and i-th label are entered at the same time, we
 know that i-th rule maps fp range to i, thus we know for sure
 that cats.labels[i] corresponds to i-th quant rule
 -->
-<p>To use a "<tt>$</tt>" in the label without triggering the plural test,
-put "<tt>$$</tt>" in the format string.
-<p>Use 'single quotes' when using a "<tt>$</tt>" on the command line to
+<p>To use a "<code>$</code>" in the label without triggering the plural test,
+put "<code>$$</code>" in the format string.
+<p>Use 'single quotes' when using a "<code>$</code>" on the command line to
 avoid unwanted shell substitution.
 
 <h2>EXAMPLES</h2>
@@ -133,7 +133,7 @@ r.category map=landclass96 cats=2,5-7
 </pre></div>
 
 prints only the category values and labels for <em>landclass96</em> map layer
-categories <tt>2</tt> and <tt>5</tt> through <tt>7</tt>.
+categories <code>2</code> and <code>5</code> through <code>7</code>.
 
 <p>
 <div class="code"><pre>
@@ -143,9 +143,29 @@ r.category map=landclass96 cats=3,4 separator=comma
 </pre></div>
 
 prints the values and labels for <em>landclass96</em> map layer categories
-<tt>3</tt> and <tt>4</tt>, but uses "<tt>,</tt>" (instead of a tab)
+<code>3</code> and <code>4</code>, but uses "<code>,</code>" (instead of a tab)
 as the character separating the category values from the category
 values in the output.
+
+<p>
+<div class="code"><pre>
+r.category map=landclass96 cats=3,4 output_format=json
+</pre></div>
+
+generates the following JSON output:
+
+<div class="code"><pre>
+[
+    {
+        "category": 3,
+        "description": "herbaceous"
+    },
+    {
+        "category": 4,
+        "description": "shrubland"
+    }
+]
+</pre></div>
 
 <h3>Adding categories</h3>
 
@@ -157,7 +177,7 @@ r.category diseasemap separator=":" rules=- &lt;&lt; EOF
 EOF
 </pre></div>
 
-This sets the categoy values 1 and 2 to respective text labels.
+This sets the category values 1 and 2 to respective text labels.
 
 Alternatively, the rules can be stored in an ASCII text file and loaded
 via the <em>rules</em> parameter.

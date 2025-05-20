@@ -8,9 +8,9 @@
 #               Converted to Python by Glynn Clements
 #
 # PURPOSE:      Import geonames.org dumps
-#               http://download.geonames.org/export/dump/
+#               https://download.geonames.org/export/dump/
 #
-#               Feature Codes: http://www.geonames.org/export/codes.html
+#               Feature Codes: https://www.geonames.org/export/codes.html
 #
 # COPYRIGHT:    (c) 2008-2014 Markus Neteler, GRASS Development Team
 #
@@ -36,7 +36,7 @@
 
 import os
 
-import grass.script as grass
+import grass.script as gs
 
 
 def main():
@@ -44,20 +44,20 @@ def main():
     outfile = options["output"]
 
     # are we in LatLong location?
-    s = grass.read_command("g.proj", flags="j")
-    kv = grass.parse_key_val(s)
+    s = gs.read_command("g.proj", flags="j")
+    kv = gs.parse_key_val(s)
     if kv["+proj"] != "longlat":
-        grass.fatal(_("This module only operates in LatLong/WGS84 locations"))
+        gs.fatal(_("This module only operates in LatLong/WGS84 locations"))
 
     # input test
     if not os.access(infile, os.R_OK):
-        grass.fatal(_("File <%s> not found") % infile)
+        gs.fatal(_("File <%s> not found") % infile)
 
     # DBF doesn't support lengthy text fields
-    kv = grass.db_connection()
+    kv = gs.db_connection()
     dbfdriver = kv["driver"] == "dbf"
     if dbfdriver:
-        grass.warning(
+        gs.warning(
             _(
                 "Since DBF driver is used, the content of the 'alternatenames' column "
                 "might be cut with respect to the original Geonames.org column content"
@@ -66,10 +66,10 @@ def main():
 
     with open(infile, encoding="utf-8") as f:
         num_places = sum(1 for each in f)
-    grass.message(_("Converting %d place names...") % num_places)
+    gs.message(_("Converting %d place names...") % num_places)
 
     # pump data into GRASS:
-    #  http://download.geonames.org/export/dump/readme.txt
+    #  https://download.geonames.org/export/dump/readme.txt
     #  The main 'geoname' table has the following fields :
     #  ---------------------------------------------------
     #  geonameid         : integer id of record in geonames database
@@ -78,8 +78,8 @@ def main():
     #  alternatenames    : alternatenames, comma separated varchar(4000)
     #  latitude          : latitude in decimal degrees (wgs84)
     #  longitude         : longitude in decimal degrees (wgs84)
-    #  feature class     : see http://www.geonames.org/export/codes.html, char(1)
-    #  feature code      : see http://www.geonames.org/export/codes.html, varchar(10)
+    #  feature class     : see https://www.geonames.org/export/codes.html, char(1)
+    #  feature code      : see https://www.geonames.org/export/codes.html, varchar(10)
     #  country code      : ISO-3166 2-letter country code, 2 characters
     #  cc2               : alternate country codes, comma separated, ISO-3166 2-letter country code, 60 characters
     #  admin1 code       : fipscode (subject to change to iso code), isocode for the us and ch, see file admin1Codes.txt for display names of this code; varchar(20)
@@ -89,7 +89,7 @@ def main():
     #  population        : integer
     #  elevation         : in meters, integer
     #  gtopo30           : average elevation of 30'x30' (ca 900mx900m) area in meters, integer
-    #  timezone          : the timezone id (see file http://download.geonames.org/export/dump/timeZones.txt)
+    #  timezone          : the timezone id (see file https://download.geonames.org/export/dump/timeZones.txt)
     #  modification date : date of last modification in yyyy-MM-dd format
 
     # geonameid|name|asciiname|alternatenames|latitude|longitude|featureclass|featurecode|countrycode|cc2|admin1code|admin2code|admin3code|admin4code|population|elevation|gtopo30|timezone|modificationdate
@@ -143,7 +143,7 @@ def main():
             "modification date",
         ]
 
-    grass.run_command(
+    gs.run_command(
         "v.in.ascii",
         cat=0,
         x=6,
@@ -155,9 +155,9 @@ def main():
     )
 
     # write cmd history:
-    grass.vector_history(outfile)
+    gs.vector_history(outfile)
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

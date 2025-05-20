@@ -40,8 +40,7 @@ def benchmark(size, label, results):
         overwrite=True,
     )
     results.append(bm.benchmark_nprocs(module, label=label, max_nprocs=8, repeat=3))
-    Module("g.remove", quiet=True, flags="f", type="raster", name=reference)
-    Module("g.remove", quiet=True, flags="f", type="raster", name=output)
+    Module("g.remove", quiet=True, flags="f", type="raster", name=(reference, output))
 
 
 def generate_map(rows, cols, fname):

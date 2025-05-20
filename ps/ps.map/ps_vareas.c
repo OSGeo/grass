@@ -65,6 +65,7 @@ static int plot_area(struct Map_info *P_map, int area, double shift)
     if (0 > (ret = Vect_get_area_points(P_map, area, Points))) {
         if (ret == -1)
             G_warning(_("Read error in vector map"));
+        Vect_destroy_line_struct(Points);
         return 0;
     }
     construct_path(Points, shift, WHOLE_PATH);
@@ -76,10 +77,12 @@ static int plot_area(struct Map_info *P_map, int area, double shift)
         if (0 > (ret = Vect_get_isle_points(P_map, island, Points))) {
             if (ret == -1)
                 G_warning(_("Read error in vector map"));
+            Vect_destroy_line_struct(Points);
             return -1;
         }
         construct_path(Points, shift, WHOLE_PATH);
     }
+    Vect_destroy_line_struct(Points);
     return 1;
 }
 
@@ -238,7 +241,7 @@ int PS_vareas_plot(struct Map_info *P_map, int vec)
                  */
                 /* load pattern */
                 eps_bbox(vector.layer[vec].pat, &llx, &lly, &urx, &ury);
-                sprintf(pat, "APATTEPS%d", vec);
+                snprintf(pat, sizeof(pat), "APATTEPS%d", vec);
                 pat_save(PS.fp, vector.layer[vec].pat, pat);
                 fprintf(PS.fp, "<<  /PatternType 1\n    /PaintType 1\n    "
                                "/TilingType 1\n");
@@ -255,7 +258,7 @@ int PS_vareas_plot(struct Map_info *P_map, int vec)
                 fprintf(PS.fp, "        %s\n", pat);
                 fprintf(PS.fp, "        end\n");
                 fprintf(PS.fp, "      } bind\n>>\n");
-                sprintf(pat, "APATT%d", vec);
+                snprintf(pat, sizeof(pat), "APATT%d", vec);
                 fprintf(PS.fp, " matrix\n makepattern /%s exch def\n", pat);
                 fprintf(PS.fp, "/Pattern setcolorspace\n %s setcolor\n", pat);
             }

@@ -64,7 +64,7 @@ int V1_close_pg(struct Map_info *Map NOPG_UNUSED)
     if (pg_info->cursor_name) {
         char stmt[DB_SQL_MAX];
 
-        sprintf(stmt, "CLOSE %s", pg_info->cursor_name);
+        snprintf(stmt, sizeof(stmt), "CLOSE %s", pg_info->cursor_name);
         if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
             G_warning(_("Unable to close cursor %s"), pg_info->cursor_name);
             return -1;
@@ -130,7 +130,7 @@ int V2_close_pg(struct Map_info *Map NOPG_UNUSED)
         char file_path[GPATH_MAX];
 
         /* delete old support files if available */
-        sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
+        snprintf(buf, sizeof(buf), "%s/%s", GV_DIRECTORY, Map->name);
         Vect__get_element_path(file_path, Map, GV_TOPO_ELEMENT);
         if (access(file_path, F_OK) == 0) /* file exists? */
             unlink(file_path);

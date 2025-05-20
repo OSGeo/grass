@@ -271,13 +271,13 @@ class ScatterRasterDialog(wx.Dialog):
 
     def GetRasterPairs(self):
         """Get raster pairs"""
-        pairsList = list()
-        pair = list()
+        pairsList = []
+        pair = []
         for r in self.rasterList:
             pair.append(r)
             if len(pair) == 2:
                 pairsList.append(tuple(pair))
-                pair = list()
+                pair = []
 
         return list(pairsList)
 
@@ -464,9 +464,8 @@ class HistRasterDialog(wx.Dialog):
         )
         if self.rasterRadio.GetValue():
             self.gselection.Disable()
-        else:
-            if self.group is not None:
-                self.gselection.SetValue(self.group)
+        elif self.group is not None:
+            self.gselection.SetValue(self.group)
         box.Add(self.gselection, pos=(2, 1))
 
         #
@@ -548,8 +547,6 @@ class HistRasterDialog(wx.Dialog):
             self.gselection.Enable()
             self.rselection.Disable()
             self.rselection.SetValue("")
-        else:
-            pass
 
     def OnRasterSelection(self, event):
         """Handler for selecting a single raster map"""
@@ -987,9 +984,7 @@ class OptDialog(wx.Dialog):
         gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
 
         row = 0
-        choicelist = []
-        for i in self.rasterList:
-            choicelist.append(str(i))
+        choicelist = [str(i) for i in self.rasterList]
 
         self.mapchoice = Choice(
             parent=self, id=wx.ID_ANY, size=(300, -1), choices=choicelist

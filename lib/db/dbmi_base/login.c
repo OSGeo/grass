@@ -167,8 +167,9 @@ static int write_file(LOGIN *login)
 
     /* fchmod is not available on Windows */
     /* fchmod ( fileno(fd), S_IRUSR | S_IWUSR ); */
+#ifndef _MSC_VER
     chmod(file, S_IRUSR | S_IWUSR);
-
+#endif
     for (i = 0; i < login->n; i++) {
         fprintf(fd, "%s|%s", login->data[i].driver, login->data[i].database);
         if (login->data[i].user) {
@@ -253,22 +254,23 @@ static int set_login(const char *driver, const char *database, const char *user,
 /*!
    \brief Set login parameters for driver/database
 
-   \deprecated Use db_set_login2() instead.
-
-   \todo: GRASS 8: to be replaced by db_set_login2().
-
    \param driver driver name
    \param database database name
    \param user user name
    \param password password string
+   \param host host name
+   \param port
+   \param overwrite TRUE to overwrite existing connections
 
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db_set_login(const char *driver, const char *database, const char *user,
-                 const char *password)
+int db_set_login2(const char *driver, const char *database, const char *user,
+                  const char *password, const char *host, const char *port,
+                  int overwrite)
 {
-    return set_login(driver, database, user, password, NULL, NULL, FALSE);
+    return db_set_login(driver, database, user, password, host, port,
+                        overwrite);
 }
 
 /*!
@@ -285,9 +287,9 @@ int db_set_login(const char *driver, const char *database, const char *user,
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db_set_login2(const char *driver, const char *database, const char *user,
-                  const char *password, const char *host, const char *port,
-                  int overwrite)
+int db_set_login(const char *driver, const char *database, const char *user,
+                 const char *password, const char *host, const char *port,
+                 int overwrite)
 {
     return set_login(driver, database, user, password, host, port, overwrite);
 }
@@ -346,22 +348,20 @@ static int get_login(const char *driver, const char *database,
 
    If driver/database is not found, output arguments are set to NULL.
 
-   \deprecated Use db_set_login2() instead.
-
-   \todo: GRASS 8: to be replaced by db_set_login2().
-
    \param driver driver name
    \param database database name (can be NULL)
    \param[out] user name
    \param[out] password string
+   \param[out] host name
+   \param[out] port
 
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db_get_login(const char *driver, const char *database, const char **user,
-                 const char **password)
+int db_get_login2(const char *driver, const char *database, const char **user,
+                  const char **password, const char **host, const char **port)
 {
-    return get_login(driver, database, user, password, NULL, NULL);
+    return db_get_login(driver, database, user, password, host, port);
 }
 
 /*!
@@ -379,8 +379,8 @@ int db_get_login(const char *driver, const char *database, const char **user,
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db_get_login2(const char *driver, const char *database, const char **user,
-                  const char **password, const char **host, const char **port)
+int db_get_login(const char *driver, const char *database, const char **user,
+                 const char **password, const char **host, const char **port)
 {
     return get_login(driver, database, user, password, host, port);
 }

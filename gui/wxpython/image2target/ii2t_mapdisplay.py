@@ -448,7 +448,7 @@ class MapPanel(SingleMapPanel):
         dlg = wx.FileDialog(
             parent=self,
             message=_(
-                "Choose a file name to save the image " "(no need to add extension)"
+                "Choose a file name to save the image (no need to add extension)"
             ),
             wildcard=filetype,
             style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
@@ -474,7 +474,6 @@ class MapPanel(SingleMapPanel):
         """
         Print options and output menu for map display
         """
-        point = wx.GetMousePosition()
         printmenu = Menu()
         # Add items to the menu
         setup = wx.MenuItem(printmenu, wx.ID_ANY, _("Page setup"))
@@ -518,7 +517,6 @@ class MapPanel(SingleMapPanel):
 
     def OnZoomMenu(self, event):
         """Popup Zoom menu"""
-        point = wx.GetMousePosition()
         zoommenu = Menu()
         # Add items to the menu
 
@@ -567,7 +565,7 @@ class MapPanel(SingleMapPanel):
         return self.toolbars["gcpdisp"]
 
     def _setActiveMapWindow(self, mapWindow):
-        if not self.MapWindow == mapWindow:
+        if self.MapWindow != mapWindow:
             self.MapWindow = mapWindow
             self.Map = mapWindow.Map
             self.UpdateActive(mapWindow)

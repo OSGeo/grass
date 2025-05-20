@@ -18,8 +18,10 @@ This program is free software under the GNU General Public License
 """
 
 import datetime
+from operator import itemgetter
+from pathlib import Path
 
-import grass.script as grass
+import grass.script as gs
 import grass.temporal as tgis
 from core.gcmd import GException
 from core.settings import UserSettings
@@ -115,9 +117,7 @@ class TemporalManager:
 
         # check for units for relative type
         if relative:
-            units = set()
-            for infoDict in self.timeseriesInfo.values():
-                units.add(infoDict["unit"])
+            units = {infoDict["unit"] for infoDict in self.timeseriesInfo.values()}
             if len(units) > 1:
                 message = _(
                     "It is not allowed to display data with different units (%s)."
@@ -162,10 +162,11 @@ class TemporalManager:
             return self._getCommonGranularity()
 
     def _getCommonGranularity(self):
-        allMaps = []
-        for dataset in self.timeseriesList:
-            maps = self.timeseriesInfo[dataset]["maps"]
-            allMaps.extend(maps)
+        allMaps = [
+            a
+            for dataset in self.timeseriesList
+            for a in self.timeseriesInfo[dataset]["maps"]
+        ]
 
         if self.temporalType == TemporalType.ABSOLUTE:
             gran = tgis.compute_absolute_time_granularity(allMaps)
@@ -196,9 +197,9 @@ class TemporalManager:
         # by a temporary dataset, I don't know how it would work with point
         # data
         if self.temporalType == TemporalType.ABSOLUTE:
-            timestamps = sorted(list(labelListSet), key=lambda x: x[0])
+            timestamps = sorted(list(labelListSet), key=itemgetter(0))
         else:
-            timestamps = sorted(list(labelListSet), key=lambda x: x[0])
+            timestamps = sorted(list(labelListSet), key=itemgetter(0))
 
         newMapLists = []
         for mapList, labelList in zip(mapLists, labelLists):
@@ -210,9 +211,9 @@ class TemporalManager:
             newMapList[i : i + len(mapList)] = mapList
             newMapLists.append(newMapList)
 
-        mapDict = {}
-        for i, dataset in enumerate(self.timeseriesList):
-            mapDict[dataset] = newMapLists[i]
+        mapDict = {
+            dataset: newMapLists[i] for i, dataset in enumerate(self.timeseriesList)
+        }
 
         if self.temporalType == TemporalType.ABSOLUTE:
             # ('1996-01-01 00:00:00', '1997-01-01 00:00:00', 'year'),
@@ -259,10 +260,8 @@ class TemporalManager:
 
         elif self.temporalType == TemporalType.RELATIVE:
             unit = self.timeseriesInfo[timeseries]["unit"]
-            if self.granularityMode == GranularityMode.ONE_UNIT:
-                gran = 1
-            else:
-                gran = granNum
+            gran = 1 if self.granularityMode == GranularityMode.ONE_UNIT else granNum
+
         # start sampling - now it can be used for both interval and point data
         # after instance, there can be a gap or an interval
         # if it is a gap we remove it and put there the previous instance instead
@@ -289,27 +288,22 @@ class TemporalManager:
                     followsPoint = True
                     lastTimeseries = series
                     end = None
+                elif series:
+                    # map exists, stop point mode
+                    listOfMaps.append(series)
+                    afterPoint = False
+                elif afterPoint:
+                    # check point mode
+                    if followsPoint:
+                        # skip this one, already there
+                        followsPoint = False
+                        continue
+                    # append the last one (of point time)
+                    listOfMaps.append(lastTimeseries)
+                    end = None
                 else:
-                    end = end
-                    # interval data
-                    if series:
-                        # map exists, stop point mode
-                        listOfMaps.append(series)
-                        afterPoint = False
-                    else:
-                        # check point mode
-                        if afterPoint:
-                            if followsPoint:
-                                # skip this one, already there
-                                followsPoint = False
-                                continue
-                            else:
-                                # append the last one (of point time)
-                                listOfMaps.append(lastTimeseries)
-                                end = None
-                        else:
-                            # append series which is None
-                            listOfMaps.append(series)
+                    # append series which is None
+                    listOfMaps.append(series)
                 timeLabels.append((start, end, unit))
 
         return timeLabels, listOfMaps
@@ -347,7 +341,7 @@ class TemporalManager:
         maps = sp.get_registered_maps_as_objects()
 
         if not sp.check_temporal_topology(maps):
-            raise GException(_("Topology of Space time dataset %s is invalid." % id))
+            raise GException(_("Topology of Space time dataset %s is invalid.") % id)
 
         timeseriesList.append(id)
         infoDict[id] = {}
@@ -389,7 +383,7 @@ def test():
 
 
 def createAbsoluteInterval():
-    grass.run_command(
+    gs.run_command(
         "g.region",
         s=0,
         n=80,
@@ -403,23 +397,22 @@ def createAbsoluteInterval():
         quiet=True,
     )
 
-    grass.mapcalc(exp="prec_1 = rand(0, 550)", overwrite=True)
-    grass.mapcalc(exp="prec_2 = rand(0, 450)", overwrite=True)
-    grass.mapcalc(exp="prec_3 = rand(0, 320)", overwrite=True)
-    grass.mapcalc(exp="prec_4 = rand(0, 510)", overwrite=True)
-    grass.mapcalc(exp="prec_5 = rand(0, 300)", overwrite=True)
-    grass.mapcalc(exp="prec_6 = rand(0, 650)", overwrite=True)
+    gs.mapcalc(exp="prec_1 = rand(0, 550)", overwrite=True)
+    gs.mapcalc(exp="prec_2 = rand(0, 450)", overwrite=True)
+    gs.mapcalc(exp="prec_3 = rand(0, 320)", overwrite=True)
+    gs.mapcalc(exp="prec_4 = rand(0, 510)", overwrite=True)
+    gs.mapcalc(exp="prec_5 = rand(0, 300)", overwrite=True)
+    gs.mapcalc(exp="prec_6 = rand(0, 650)", overwrite=True)
 
-    grass.mapcalc(exp="temp_1 = rand(0, 550)", overwrite=True)
-    grass.mapcalc(exp="temp_2 = rand(0, 450)", overwrite=True)
-    grass.mapcalc(exp="temp_3 = rand(0, 320)", overwrite=True)
-    grass.mapcalc(exp="temp_4 = rand(0, 510)", overwrite=True)
-    grass.mapcalc(exp="temp_5 = rand(0, 300)", overwrite=True)
-    grass.mapcalc(exp="temp_6 = rand(0, 650)", overwrite=True)
+    gs.mapcalc(exp="temp_1 = rand(0, 550)", overwrite=True)
+    gs.mapcalc(exp="temp_2 = rand(0, 450)", overwrite=True)
+    gs.mapcalc(exp="temp_3 = rand(0, 320)", overwrite=True)
+    gs.mapcalc(exp="temp_4 = rand(0, 510)", overwrite=True)
+    gs.mapcalc(exp="temp_5 = rand(0, 300)", overwrite=True)
+    gs.mapcalc(exp="temp_6 = rand(0, 650)", overwrite=True)
 
-    n1 = grass.read_command("g.tempfile", pid=1, flags="d").strip()
-    fd = open(n1, "w")
-    fd.write(
+    n1 = gs.read_command("g.tempfile", pid=1, flags="d").strip()
+    Path(n1).write_text(
         "prec_1|2001-01-01|2001-02-01\n"
         "prec_2|2001-04-01|2001-05-01\n"
         "prec_3|2001-05-01|2001-09-01\n"
@@ -427,11 +420,9 @@ def createAbsoluteInterval():
         "prec_5|2002-01-01|2002-05-01\n"
         "prec_6|2002-05-01|2002-07-01\n"
     )
-    fd.close()
 
-    n2 = grass.read_command("g.tempfile", pid=2, flags="d").strip()
-    fd = open(n2, "w")
-    fd.write(
+    n2 = gs.read_command("g.tempfile", pid=2, flags="d").strip()
+    Path(n2).write_text(
         "temp_1|2000-10-01|2001-01-01\n"
         "temp_2|2001-04-01|2001-05-01\n"
         "temp_3|2001-05-01|2001-09-01\n"
@@ -439,17 +430,16 @@ def createAbsoluteInterval():
         "temp_5|2002-01-01|2002-05-01\n"
         "temp_6|2002-05-01|2002-07-01\n"
     )
-    fd.close()
     name1 = "absinterval1"
     name2 = "absinterval2"
-    grass.run_command(
+    gs.run_command(
         "t.unregister",
         type="raster",
         maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6,"
         "temp_1,temp_2,temp_3,temp_4,temp_5,temp_6",
     )
     for name, fname in zip((name1, name2), (n1, n2)):
-        grass.run_command(
+        gs.run_command(
             "t.create",
             overwrite=True,
             type="strds",
@@ -458,15 +448,13 @@ def createAbsoluteInterval():
             title="A test with input files",
             descr="A test with input files",
         )
-        grass.run_command(
-            "t.register", flags="i", input=name, file=fname, overwrite=True
-        )
+        gs.run_command("t.register", flags="i", input=name, file=fname, overwrite=True)
 
     return name1, name2
 
 
 def createRelativeInterval():
-    grass.run_command(
+    gs.run_command(
         "g.region",
         s=0,
         n=80,
@@ -480,23 +468,22 @@ def createRelativeInterval():
         quiet=True,
     )
 
-    grass.mapcalc(exp="prec_1 = rand(0, 550)", overwrite=True)
-    grass.mapcalc(exp="prec_2 = rand(0, 450)", overwrite=True)
-    grass.mapcalc(exp="prec_3 = rand(0, 320)", overwrite=True)
-    grass.mapcalc(exp="prec_4 = rand(0, 510)", overwrite=True)
-    grass.mapcalc(exp="prec_5 = rand(0, 300)", overwrite=True)
-    grass.mapcalc(exp="prec_6 = rand(0, 650)", overwrite=True)
+    gs.mapcalc(exp="prec_1 = rand(0, 550)", overwrite=True)
+    gs.mapcalc(exp="prec_2 = rand(0, 450)", overwrite=True)
+    gs.mapcalc(exp="prec_3 = rand(0, 320)", overwrite=True)
+    gs.mapcalc(exp="prec_4 = rand(0, 510)", overwrite=True)
+    gs.mapcalc(exp="prec_5 = rand(0, 300)", overwrite=True)
+    gs.mapcalc(exp="prec_6 = rand(0, 650)", overwrite=True)
 
-    grass.mapcalc(exp="temp_1 = rand(0, 550)", overwrite=True)
-    grass.mapcalc(exp="temp_2 = rand(0, 450)", overwrite=True)
-    grass.mapcalc(exp="temp_3 = rand(0, 320)", overwrite=True)
-    grass.mapcalc(exp="temp_4 = rand(0, 510)", overwrite=True)
-    grass.mapcalc(exp="temp_5 = rand(0, 300)", overwrite=True)
-    grass.mapcalc(exp="temp_6 = rand(0, 650)", overwrite=True)
+    gs.mapcalc(exp="temp_1 = rand(0, 550)", overwrite=True)
+    gs.mapcalc(exp="temp_2 = rand(0, 450)", overwrite=True)
+    gs.mapcalc(exp="temp_3 = rand(0, 320)", overwrite=True)
+    gs.mapcalc(exp="temp_4 = rand(0, 510)", overwrite=True)
+    gs.mapcalc(exp="temp_5 = rand(0, 300)", overwrite=True)
+    gs.mapcalc(exp="temp_6 = rand(0, 650)", overwrite=True)
 
-    n1 = grass.read_command("g.tempfile", pid=1, flags="d").strip()
-    fd = open(n1, "w")
-    fd.write(
+    n1 = gs.read_command("g.tempfile", pid=1, flags="d").strip()
+    Path(n1).write_text(
         "prec_1|1|4\n"
         "prec_2|6|7\n"
         "prec_3|7|10\n"
@@ -504,11 +491,9 @@ def createRelativeInterval():
         "prec_5|11|14\n"
         "prec_6|14|17\n"
     )
-    fd.close()
 
-    n2 = grass.read_command("g.tempfile", pid=2, flags="d").strip()
-    fd = open(n2, "w")
-    fd.write(
+    n2 = gs.read_command("g.tempfile", pid=2, flags="d").strip()
+    Path(n2).write_text(
         "temp_1|5|6\n"
         "temp_2|6|7\n"
         "temp_3|7|10\n"
@@ -516,17 +501,16 @@ def createRelativeInterval():
         "temp_5|11|18\n"
         "temp_6|19|22\n"
     )
-    fd.close()
     name1 = "relinterval1"
     name2 = "relinterval2"
-    grass.run_command(
+    gs.run_command(
         "t.unregister",
         type="raster",
         maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6,"
         "temp_1,temp_2,temp_3,temp_4,temp_5,temp_6",
     )
     for name, fname in zip((name1, name2), (n1, n2)):
-        grass.run_command(
+        gs.run_command(
             "t.create",
             overwrite=True,
             type="strds",
@@ -535,7 +519,7 @@ def createRelativeInterval():
             title="A test with input files",
             descr="A test with input files",
         )
-        grass.run_command(
+        gs.run_command(
             "t.register",
             flags="i",
             input=name,
@@ -547,7 +531,7 @@ def createRelativeInterval():
 
 
 def createAbsolutePoint():
-    grass.run_command(
+    gs.run_command(
         "g.region",
         s=0,
         n=80,
@@ -561,16 +545,15 @@ def createAbsolutePoint():
         quiet=True,
     )
 
-    grass.mapcalc(exp="prec_1 = rand(0, 550)", overwrite=True)
-    grass.mapcalc(exp="prec_2 = rand(0, 450)", overwrite=True)
-    grass.mapcalc(exp="prec_3 = rand(0, 320)", overwrite=True)
-    grass.mapcalc(exp="prec_4 = rand(0, 510)", overwrite=True)
-    grass.mapcalc(exp="prec_5 = rand(0, 300)", overwrite=True)
-    grass.mapcalc(exp="prec_6 = rand(0, 650)", overwrite=True)
+    gs.mapcalc(exp="prec_1 = rand(0, 550)", overwrite=True)
+    gs.mapcalc(exp="prec_2 = rand(0, 450)", overwrite=True)
+    gs.mapcalc(exp="prec_3 = rand(0, 320)", overwrite=True)
+    gs.mapcalc(exp="prec_4 = rand(0, 510)", overwrite=True)
+    gs.mapcalc(exp="prec_5 = rand(0, 300)", overwrite=True)
+    gs.mapcalc(exp="prec_6 = rand(0, 650)", overwrite=True)
 
-    n1 = grass.read_command("g.tempfile", pid=1, flags="d").strip()
-    fd = open(n1, "w")
-    fd.write(
+    n1 = gs.read_command("g.tempfile", pid=1, flags="d").strip()
+    Path(n1).write_text(
         "prec_1|2001-01-01\n"
         "prec_2|2001-03-01\n"
         "prec_3|2001-04-01\n"
@@ -578,9 +561,8 @@ def createAbsolutePoint():
         "prec_5|2001-08-01\n"
         "prec_6|2001-09-01\n"
     )
-    fd.close()
     name = "abspoint"
-    grass.run_command(
+    gs.run_command(
         "t.create",
         overwrite=True,
         type="strds",
@@ -590,12 +572,12 @@ def createAbsolutePoint():
         descr="A test with input files",
     )
 
-    grass.run_command("t.register", flags="i", input=name, file=n1, overwrite=True)
+    gs.run_command("t.register", flags="i", input=name, file=n1, overwrite=True)
     return name
 
 
 def createRelativePoint():
-    grass.run_command(
+    gs.run_command(
         "g.region",
         s=0,
         n=80,
@@ -609,21 +591,19 @@ def createRelativePoint():
         quiet=True,
     )
 
-    grass.mapcalc(exp="prec_1 = rand(0, 550)", overwrite=True)
-    grass.mapcalc(exp="prec_2 = rand(0, 450)", overwrite=True)
-    grass.mapcalc(exp="prec_3 = rand(0, 320)", overwrite=True)
-    grass.mapcalc(exp="prec_4 = rand(0, 510)", overwrite=True)
-    grass.mapcalc(exp="prec_5 = rand(0, 300)", overwrite=True)
-    grass.mapcalc(exp="prec_6 = rand(0, 650)", overwrite=True)
+    gs.mapcalc(exp="prec_1 = rand(0, 550)", overwrite=True)
+    gs.mapcalc(exp="prec_2 = rand(0, 450)", overwrite=True)
+    gs.mapcalc(exp="prec_3 = rand(0, 320)", overwrite=True)
+    gs.mapcalc(exp="prec_4 = rand(0, 510)", overwrite=True)
+    gs.mapcalc(exp="prec_5 = rand(0, 300)", overwrite=True)
+    gs.mapcalc(exp="prec_6 = rand(0, 650)", overwrite=True)
 
-    n1 = grass.read_command("g.tempfile", pid=1, flags="d").strip()
-    fd = open(n1, "w")
-    fd.write(
-        "prec_1|1\n" "prec_2|3\n" "prec_3|5\n" "prec_4|7\n" "prec_5|11\n" "prec_6|13\n"
+    n1 = gs.read_command("g.tempfile", pid=1, flags="d").strip()
+    Path(n1).write_text(
+        "prec_1|1\nprec_2|3\nprec_3|5\nprec_4|7\nprec_5|11\nprec_6|13\n"
     )
-    fd.close()
     name = "relpoint"
-    grass.run_command(
+    gs.run_command(
         "t.create",
         overwrite=True,
         type="strds",
@@ -633,7 +613,7 @@ def createRelativePoint():
         descr="A test with input files",
     )
 
-    grass.run_command("t.register", unit="day", input=name, file=n1, overwrite=True)
+    gs.run_command("t.register", unit="day", input=name, file=n1, overwrite=True)
     return name
 
 

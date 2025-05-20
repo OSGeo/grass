@@ -22,10 +22,10 @@
 
 # %module
 # % description: Plots the values of temporal datasets.
-# % keywords: general
-# % keywords: GUI
-# % keywords: temporal
-# % keywords: plot
+# % keyword: general
+# % keyword: GUI
+# % keyword: temporal
+# % keyword: plot
 # %end
 
 # %flag
@@ -109,11 +109,11 @@
 # % required: no
 # %end
 
-import grass.script as gscript
+import grass.script as gs
 
 
 def main():
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
 
     import wx
 
@@ -126,7 +126,7 @@ def main():
     try:
         from tplot.frame import TplotFrame
     except ImportError as e:
-        gscript.fatal(e.message)
+        gs.fatal(e.message)
     rasters = None
     if options["strds"]:
         rasters = options["strds"].strip().split(",")
@@ -142,20 +142,18 @@ def main():
     if options["stvds"]:
         vectors = options["stvds"].strip().split(",")
         if not options["attr"]:
-            gscript.fatal(_("With stvds you have to set 'attr' option"))
+            gs.fatal(_("With stvds you have to set 'attr' option"))
         else:
             attr = options["attr"]
         if coords and cats:
-            gscript.fatal(
+            gs.fatal(
                 _(
                     "With stvds it is not possible to use 'coordinates' "
                     "and 'cats' options together"
                 )
             )
         elif not coords and not cats:
-            gscript.warning(
-                _("With stvds you have to use 'coordinates' or " "'cats' option")
-            )
+            gs.warning(_("With stvds you have to use 'coordinates' or 'cats' option"))
     title = None
     if options["title"]:
         title = options["title"]
@@ -188,7 +186,7 @@ def main():
         ylabel,
         csvfile,
         flags["h"],
-        gscript.overwrite,
+        gs.overwrite,
     )
     if output:
         frame.OnRedraw()

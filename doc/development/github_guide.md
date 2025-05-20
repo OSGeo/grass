@@ -122,6 +122,25 @@ a PR.
 Alternatively, you can explore GitHub CLI tool (_gh_) which allows you
 to do `git push` and create a PR in one step with `gh pr create -fw`.
 
+## Guidelines for writing a meaningful pull request
+
+A well-written pull request clearly conveys the purpose and impact of the
+proposed changes.
+
+### PR Title
+
+The title should be descriptive and clearly summarize the main purpose or change
+in the pull request. Start the title with the tool name or a
+[keyword](https://github.com/OSGeo/grass/blob/main/utils/release.yml) (e.g.:
+`tool name: Add functionality Y for Z`. Keep it short, i.e. aim for concise titles,
+typically under 50-60 characters.
+
+### PR Content
+
+A pull request requires an abstract, change details, and more. When you create
+the new PR, you are presented with a [template](https://github.com/OSGeo/grass/blob/main/.github/PULL_REQUEST_TEMPLATE/pull_request_template.md)
+to help standardize the content.
+
 ## After creating a PR
 
 GRASS GIS maintainers will now review your PR.
@@ -173,7 +192,7 @@ git fetch upstream
 git merge upstream/main
 ```
 
-Git will ask you to edit the merge commit messsage, you can leave the default
+Git will ask you to edit the merge commit message, you can leave the default
 and close the editor. You may run into a conflict,
 in that case you need to resolve it.
 

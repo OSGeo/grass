@@ -50,7 +50,7 @@ else:
     import wx.lib.flatnotebook as FN
 import wx.lib.scrolledpanel as scrolled
 
-import grass.script as grass
+import grass.script as gs
 from grass.script.utils import decode
 
 from dbmgr.sqlbuilder import SQLBuilderSelect, SQLBuilderUpdate
@@ -198,17 +198,16 @@ class VirtualAttributeList(
                     GError(
                         parent=self,
                         message=_(
-                            "Column <%(column)s> not found in "
-                            "in the table <%(table)s>."
+                            "Column <%(column)s> not found in in the table <%(table)s>."
                         )
                         % {"column": col, "table": tableName},
                     )
-                    return
+                    return None
 
         try:
             # for maps connected via v.external
             keyId = columns.index(keyColumn)
-        except:
+        except ValueError:
             keyId = -1
 
         # read data
@@ -221,130 +220,139 @@ class VirtualAttributeList(
         # values, so while sticking with ASCII we make it something
         # highly unlikely to exist naturally.
         fs = "{_sep_}"
+        with tempfile.NamedTemporaryFile(mode="w+b") as outFile:
+            cmdParams = {"quiet": True, "parent": self, "flags": "c", "separator": fs}
 
-        outFile = tempfile.NamedTemporaryFile(mode="w+b")
-
-        cmdParams = dict(quiet=True, parent=self, flags="c", separator=fs)
-
-        if sql:
-            cmdParams.update(dict(sql=sql, output=outFile.name, overwrite=True))
-            ret = RunCommand("db.select", **cmdParams)
-            self.sqlFilter = {"sql": sql}
-        else:
-            cmdParams.update(
-                dict(map=self.mapDBInfo.map, layer=layer, where=where, stdout=outFile)
-            )
-
-            self.sqlFilter = {"where": where}
-
-            if columns:
-                # Enclose column name with SQL standard double quotes
+            if sql:
                 cmdParams.update(
-                    dict(columns=",".join([f'"{col}"' for col in columns]))
+                    {"sql": sql, "output": outFile.name, "overwrite": True}
                 )
-
-            ret = RunCommand("v.db.select", **cmdParams)
-
-        # These two should probably be passed to init more cleanly
-        # setting the numbers of items = number of elements in the dictionary
-        self.itemDataMap = {}
-        self.itemIndexMap = []
-        self.itemCatsMap = {}
-
-        self.DeleteAllItems()
-
-        # self.ClearAll()
-        for i in range(self.GetColumnCount()):
-            self.DeleteColumn(0)
-
-        i = 0
-        info = wx.ListItem()
-        if globalvar.wxPythonPhoenix:
-            info.Mask = wx.LIST_MASK_TEXT | wx.LIST_MASK_IMAGE | wx.LIST_MASK_FORMAT
-            info.Image = -1
-            info.Format = 0
-        else:
-            info.m_mask = wx.LIST_MASK_TEXT | wx.LIST_MASK_IMAGE | wx.LIST_MASK_FORMAT
-            info.m_image = -1
-            info.m_format = 0
-        for column in columns:
-            if globalvar.wxPythonPhoenix:
-                info.Text = column
-                self.InsertColumn(i, info)
+                RunCommand("db.select", **cmdParams)
+                self.sqlFilter = {"sql": sql}
             else:
-                info.m_text = column
-                self.InsertColumnInfo(i, info)
-            i += 1
-            if i >= 256:
-                self.log.write(_("Can display only 256 columns."))
-
-        i = 0
-        outFile.seek(0)
-
-        enc = GetDbEncoding()
-        first_wrong_encoding = True
-        while True:
-            # os.linesep doesn't work here (MSYS)
-            # not sure what the replace is for?
-            # but we need strip to get rid of the ending newline
-            # which on windows leaves \r in a last empty attribute table cell
-            # and causes error
-            try:
-                record = (
-                    decode(outFile.readline(), encoding=enc).strip().replace("\n", "")
+                cmdParams.update(
+                    {
+                        "map": self.mapDBInfo.map,
+                        "layer": layer,
+                        "where": where,
+                        "stdout": outFile,
+                    }
                 )
-            except UnicodeDecodeError as e:
-                record = (
-                    outFile.readline()
-                    .decode(encoding=enc, errors="replace")
-                    .strip()
-                    .replace("\n", "")
-                )
-                if first_wrong_encoding:
-                    first_wrong_encoding = False
-                    GWarning(
-                        parent=self,
-                        message=_(
-                            "Incorrect encoding {enc} used. Set encoding in GUI "
-                            "Settings or set GRASS_DB_ENCODING variable."
-                        ).format(enc=enc),
+
+                self.sqlFilter = {"where": where}
+
+                if columns:
+                    # Enclose column name with SQL standard double quotes
+                    cmdParams.update(
+                        {"columns": ",".join([f'"{col}"' for col in columns])}
                     )
 
-            if not record:
-                break
+                RunCommand("v.db.select", **cmdParams)
 
-            record = record.split(fs)
-            if len(columns) != len(record):
-                # Assuming there will be always at least one.
-                last = record[-1]
-                show_max = 3
-                if len(record) > show_max:
-                    record = record[:show_max]
-                # TODO: The real fix here is to use JSON output from v.db.select or
-                # proper CSV output and real CSV reader here (Python csv and json
-                # packages).
-                raise GException(
-                    _(
-                        "Unable to read the table <{table}> from the database due"
-                        " to seemingly inconsistent number of columns in the data"
-                        " transfer."
-                        " Check row: {row}..."
-                        " Likely, a newline character is present in the attribute value"
-                        " starting with: '{value}'"
-                        " Use the v.db.select module to investigate."
-                    ).format(table=tableName, row=" | ".join(record), value=last)
+            # These two should probably be passed to init more cleanly
+            # setting the numbers of items = number of elements in the dictionary
+            self.itemDataMap = {}
+            self.itemIndexMap = []
+            self.itemCatsMap = {}
+
+            self.DeleteAllItems()
+
+            # self.ClearAll()
+            for i in range(self.GetColumnCount()):
+                self.DeleteColumn(0)
+
+            i = 0
+            info = wx.ListItem()
+            if globalvar.wxPythonPhoenix:
+                info.Mask = wx.LIST_MASK_TEXT | wx.LIST_MASK_IMAGE | wx.LIST_MASK_FORMAT
+                info.Image = -1
+                info.Format = 0
+            else:
+                info.m_mask = (
+                    wx.LIST_MASK_TEXT | wx.LIST_MASK_IMAGE | wx.LIST_MASK_FORMAT
                 )
-                self.columns = {}  # because of IsEmpty method
-                return None
+                info.m_image = -1
+                info.m_format = 0
+            for column in columns:
+                if globalvar.wxPythonPhoenix:
+                    info.Text = column
+                    self.InsertColumn(i, info)
+                else:
+                    info.m_text = column
+                    self.InsertColumnInfo(i, info)
+                i += 1
+                if i >= 256:
+                    self.log.write(_("Can display only 256 columns."))
 
-            self.AddDataRow(i, record, columns, keyId)
+            i = 0
+            outFile.seek(0)
 
-            i += 1
-            if i >= 100000:
-                self.log.write(_("Viewing limit: 100000 records."))
-                break
+            enc = GetDbEncoding()
+            first_wrong_encoding = True
+            while True:
+                # os.linesep doesn't work here (MSYS)
+                # not sure what the replace is for?
+                # but we need strip to get rid of the ending newline
+                # which on windows leaves \r in a last empty attribute table cell
+                # and causes error
+                try:
+                    record = (
+                        decode(outFile.readline(), encoding=enc)
+                        .strip()
+                        .replace("\n", "")
+                    )
+                except UnicodeDecodeError:
+                    record = (
+                        outFile.readline()
+                        .decode(encoding=enc, errors="replace")
+                        .strip()
+                        .replace("\n", "")
+                    )
+                    if first_wrong_encoding:
+                        first_wrong_encoding = False
+                        GWarning(
+                            parent=self,
+                            message=_(
+                                "Incorrect encoding {enc} used. Set encoding in GUI "
+                                "Settings or set GRASS_DB_ENCODING variable."
+                            ).format(enc=enc),
+                        )
 
-        self.SetItemCount(i)
+                if not record:
+                    break
+
+                record = record.split(fs)
+                if len(columns) != len(record):
+                    # Assuming there will be always at least one.
+                    last = record[-1]
+                    show_max = 3
+                    if len(record) > show_max:
+                        record = record[:show_max]
+                    # TODO: The real fix here is to use JSON output from v.db.select or
+                    # proper CSV output and real CSV reader here (Python csv and json
+                    # packages).
+                    raise GException(
+                        _(
+                            "Unable to read the table <{table}> from the database due"
+                            " to seemingly inconsistent number of columns in the data"
+                            " transfer."
+                            " Check row: {row}..."
+                            " Likely, a newline character is present in the attribute value"
+                            " starting with: '{value}'"
+                            " Use the v.db.select module to investigate."
+                        ).format(table=tableName, row=" | ".join(record), value=last)
+                    )
+                    self.columns = {}  # because of IsEmpty method
+                    return None
+
+                self.AddDataRow(i, record, columns, keyId)
+
+                i += 1
+                if i >= 100000:
+                    self.log.write(_("Viewing limit: 100000 records."))
+                    break
+
+            self.SetItemCount(i)
 
         if where:
             item = -1
@@ -357,10 +365,8 @@ class VirtualAttributeList(
         i = 0
         for col in columns:
             width = self.columns[col]["length"] * 6  # FIXME
-            if width < 60:
-                width = 60
-            if width > 300:
-                width = 300
+            width = max(width, 60)
+            width = min(width, 300)
             self.SetColumnWidth(col=i, width=width)
             i += 1
 
@@ -705,8 +711,7 @@ class VirtualAttributeList(
 
         if ascending:
             return cmpVal
-        else:
-            return -cmpVal
+        return -cmpVal
 
     def GetSortImages(self):
         """Used by the ColumnSorterMixin, see wx/lib/mixins/listctrl.py"""
@@ -715,12 +720,9 @@ class VirtualAttributeList(
     def OnGetItemImage(self, item):
         return -1
 
-    def IsEmpty(self):
+    def IsEmpty(self) -> bool:
         """Check if list if empty"""
-        if self.columns:
-            return False
-
-        return True
+        return not self.columns
 
     def _updateColSortFlag(self):
         """
@@ -750,7 +752,7 @@ class DbMgrBase:
         :param item: item from Layer Tree
         :param log: log window
         :param statusbar: widget with statusbar
-        :param kwagrs: other wx.Frame's arguments
+        :param kwargs: other wx.Frame's arguments
         """
 
         # stores all data, which are shared by pages
@@ -782,8 +784,8 @@ class DbMgrBase:
         # the current mapset
         mapInfo = None
         if self.dbMgrData["vectName"]:
-            mapInfo = grass.find_file(name=self.dbMgrData["vectName"], element="vector")
-        if not mapInfo or mapInfo["mapset"] != grass.gisenv()["MAPSET"]:
+            mapInfo = gs.find_file(name=self.dbMgrData["vectName"], element="vector")
+        if not mapInfo or mapInfo["mapset"] != gs.gisenv()["MAPSET"]:
             self.dbMgrData["editable"] = False
         else:
             self.dbMgrData["editable"] = True
@@ -817,8 +819,8 @@ class DbMgrBase:
 
         # vector attributes can be changed only if vector map is in
         # the current mapset
-        mapInfo = grass.find_file(name=self.dbMgrData["vectName"], element="vector")
-        if not mapInfo or mapInfo["mapset"] != grass.gisenv()["MAPSET"]:
+        mapInfo = gs.find_file(name=self.dbMgrData["vectName"], element="vector")
+        if not mapInfo or mapInfo["mapset"] != gs.gisenv()["MAPSET"]:
             self.dbMgrData["editable"] = False
         else:
             self.dbMgrData["editable"] = True
@@ -921,7 +923,7 @@ class DbMgrNotebookBase(GNotebook):
         self.listOfCommands = []
         self.listOfSQLStatements = []
 
-        # initializet pages
+        # initialize pages
         self.pages = self.parentDbMgrBase.pages
 
         # shared data among pages
@@ -963,11 +965,10 @@ class DbMgrNotebookBase(GNotebook):
                     self.layerPage[self.selLayer]["data"]
                 ).GetItemCount()
             )
-        except:
+        except Exception:
             pass
 
         if idCol:
-            winCol = self.FindWindowById(idCol)
             table = self.dbMgrData["mapDBInfo"].layers[self.selLayer]["table"]
             self.dbMgrData["mapDBInfo"].GetColumns(table)
 
@@ -1058,9 +1059,7 @@ class DbMgrNotebookBase(GNotebook):
         if not name:
             GError(
                 parent=self,
-                message=_(
-                    "Unable to add column to the table. " "No column name defined."
-                ),
+                message=_("Unable to add column to the table. No column name defined."),
             )
             return False
 
@@ -1144,7 +1143,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
     def AddLayer(self, layer, pos=-1):
         """Adds tab which represents table and enables browse it
 
-        :param layer: vector map layer conntected to table
+        :param layer: vector map layer connected to table
         :param pos: position of tab, if -1 it is added to end
 
         :return: True if layer was added
@@ -1537,7 +1536,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
         if dlg.ShowModal() == wx.ID_OK:
             values = dlg.GetValues()  # string
-            updateList = list()
+            updateList = []
             try:
                 for i in range(len(values)):
                     if i == keyId:  # skip key column
@@ -1548,10 +1547,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                     column = tlist.columns[columnName[i]]
                     if len(values[i]) > 0:
                         try:
-                            if missingKey is True:
-                                idx = i - 1
-                            else:
-                                idx = i
+                            idx = i - 1 if missingKey else i
 
                             if column["ctype"] != str:
                                 tlist.itemDataMap[item][idx] = column["ctype"](
@@ -1645,16 +1641,13 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         if dlg.ShowModal() == wx.ID_OK:
             try:  # get category number
                 cat = int(dlg.GetValues(columns=[keyColumn])[0])
-            except:
+            except ValueError:
                 cat = -1
 
             try:
                 if cat in tlist.itemCatsMap.values():
                     raise ValueError(
-                        _(
-                            "Record with category number %d "
-                            "already exists in the table."
-                        )
+                        _("Record with category number %d already exists in the table.")
                         % cat
                     )
 
@@ -1666,11 +1659,10 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                     if len(values[i]) == 0:  # NULL
                         if columnName[i] == keyColumn:
                             raise ValueError(
-                                _("Category number (column %s)" " is missing.")
-                                % keyColumn
+                                _("Category number (column %s) is missing.") % keyColumn
                             )
-                        else:
-                            continue
+
+                        continue
 
                     try:
                         if tlist.columns[columnName[i]]["ctype"] == int:
@@ -1678,12 +1670,19 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                             values[i] = int(float(values[i]))
                         elif tlist.columns[columnName[i]]["ctype"] == float:
                             values[i] = float(values[i])
-                    except:
+                    except ValueError:
                         raise ValueError(
                             _("Value '%(value)s' needs to be entered as %(type)s.")
                             % {
                                 "value": values[i],
                                 "type": tlist.columns[columnName[i]]["type"],
+                            }
+                        )
+                    except KeyError:
+                        raise KeyError(
+                            _("Column '%(column)s' does not exist.")
+                            % {
+                                "column": columnName[i],
                             }
                         )
                     columnsString += "%s," % columnName[i]
@@ -1707,10 +1706,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                 del values[0]
 
             # add new item to the tlist
-            if len(tlist.itemIndexMap) > 0:
-                index = max(tlist.itemIndexMap) + 1
-            else:
-                index = 0
+            index = max(tlist.itemIndexMap) + 1 if len(tlist.itemIndexMap) > 0 else 0
 
             tlist.itemIndexMap.append(index)
             tlist.itemDataMap[index] = values
@@ -1828,11 +1824,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
             return
 
         tlist = self.FindWindowById(self.layerPage[self.selLayer]["data"])
-        if selectedOnly:
-            fn = tlist.GetSelectedItems
-        else:
-            fn = tlist.GetItems
-
+        fn = tlist.GetSelectedItems if selectedOnly else tlist.GetItems
         cats = list(map(int, fn()))
 
         digitToolbar = None
@@ -1929,11 +1921,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         :return: True if map has been redrawn, False if no map is given
         """
         tlist = self.FindWindowById(self.layerPage[self.selLayer]["data"])
-        if selectedOnly:
-            fn = tlist.GetSelectedItems
-        else:
-            fn = tlist.GetItems
-
+        fn = tlist.GetSelectedItems if selectedOnly else tlist.GetItems
         cats = {self.selLayer: fn()}
 
         if self.mapdisplay.Map.GetLayerIndex(self.qlayer) < 0:
@@ -2003,37 +1991,36 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         if len(cats) == 0:
             GMessage(parent=self, message=_("Nothing to extract."))
             return
-        else:
-            # dialog to get file name
-            dlg = CreateNewVector(
-                parent=self,
-                title=_("Extract selected features"),
-                giface=self.giface,
-                cmd=(
-                    (
-                        "v.extract",
-                        {
-                            "input": self.dbMgrData["vectName"],
-                            "cats": ListOfCatsToRange(cats),
-                        },
-                        "output",
-                    )
-                ),
-                disableTable=True,
-            )
-            if not dlg:
-                return
-
-            name = dlg.GetName(full=True)
-
-            if not self.mapdisplay and self.mapdisplay.tree:
-                pass
-            elif name and dlg.IsChecked("add"):
-                # add layer to map layer tree
-                self.mapdisplay.tree.AddLayer(
-                    ltype="vector", lname=name, lcmd=["d.vect", "map=%s" % name]
+        # dialog to get file name
+        dlg = CreateNewVector(
+            parent=self,
+            title=_("Extract selected features"),
+            giface=self.giface,
+            cmd=(
+                (
+                    "v.extract",
+                    {
+                        "input": self.dbMgrData["vectName"],
+                        "cats": ListOfCatsToRange(cats),
+                    },
+                    "output",
                 )
-            dlg.Destroy()
+            ),
+            disableTable=True,
+        )
+        if not dlg:
+            return
+
+        name = dlg.GetName(full=True)
+
+        if not self.mapdisplay and self.mapdisplay.tree:
+            pass
+        elif name and dlg.IsChecked("add"):
+            # add layer to map layer tree
+            self.mapdisplay.tree.AddLayer(
+                ltype="vector", lname=name, lcmd=["d.vect", "map=%s" % name]
+            )
+        dlg.Destroy()
 
     def OnDeleteSelected(self, event):
         """Delete vector objects selected in attribute browse window
@@ -2167,11 +2154,10 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         # sort by key column
         if sql and "order by" in sql.lower():
             pass  # don't order by key column
+        elif keyColumn > -1:
+            listWin.SortListItems(col=keyColumn, ascending=True)
         else:
-            if keyColumn > -1:
-                listWin.SortListItems(col=keyColumn, ascending=True)
-            else:
-                listWin.SortListItems(col=0, ascending=True)
+            listWin.SortListItems(col=0, ascending=True)
 
         wx.EndBusyCursor()
 
@@ -2239,24 +2225,20 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                 break
             cols += c
             index += 1
-        if cols == "*":
-            cols = None
-        else:
-            cols = cols.split(",")
+        cols = None if cols == "*" else cols.split(",")
 
         tablelen = len(self.dbMgrData["mapDBInfo"].layers[self.selLayer]["table"])
 
-        if statement[index + 1 : index + 6].lower() != "from " or statement[
-            index + 6 : index + 6 + tablelen
-        ] != "%s" % (self.dbMgrData["mapDBInfo"].layers[self.selLayer]["table"]):
+        if (
+            statement[index + 1 : index + 6].lower() != "from "
+            or statement[index + 6 : index + 6 + tablelen]
+            != "%s" % (self.dbMgrData["mapDBInfo"].layers[self.selLayer]["table"])
+        ):
             return None
 
         if len(statement[index + 7 + tablelen :]) > 0:
             index = statement.lower().find("where ")
-            if index > -1:
-                where = statement[index + 6 :]
-            else:
-                where = None
+            where = statement[index + 6 :] if index > -1 else None
         else:
             where = None
 
@@ -2603,46 +2585,44 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         if not name or not nameTo:
             GError(
                 parent=self,
-                message=_("Unable to rename column. " "No column name defined."),
+                message=_("Unable to rename column. No column name defined."),
             )
             return
-        else:
-            item = tlist.FindItem(start=-1, str=name)
-            if item > -1:
-                if tlist.FindItem(start=-1, str=nameTo) > -1:
-                    GError(
-                        parent=self,
-                        message=_(
-                            "Unable to rename column <%(column)s> to "
-                            "<%(columnTo)s>. Column already exists "
-                            "in the table <%(table)s>."
-                        )
-                        % {"column": name, "columnTo": nameTo, "table": table},
-                    )
-                    return
-                else:
-                    tlist.SetItemText(item, nameTo)
-
-                    self.listOfCommands.append(
-                        (
-                            "v.db.renamecolumn",
-                            {
-                                "map": self.dbMgrData["vectName"],
-                                "layer": self.selLayer,
-                                "column": "%s,%s" % (name, nameTo),
-                            },
-                        )
-                    )
-            else:
+        item = tlist.FindItem(start=-1, str=name)
+        if item > -1:
+            if tlist.FindItem(start=-1, str=nameTo) > -1:
                 GError(
                     parent=self,
                     message=_(
-                        "Unable to rename column. "
-                        "Column <%(column)s> doesn't exist in the table <%(table)s>."
+                        "Unable to rename column <%(column)s> to "
+                        "<%(columnTo)s>. Column already exists "
+                        "in the table <%(table)s>."
                     )
-                    % {"column": name, "table": table},
+                    % {"column": name, "columnTo": nameTo, "table": table},
                 )
                 return
+            tlist.SetItemText(item, nameTo)
+
+            self.listOfCommands.append(
+                (
+                    "v.db.renamecolumn",
+                    {
+                        "map": self.dbMgrData["vectName"],
+                        "layer": self.selLayer,
+                        "column": "%s,%s" % (name, nameTo),
+                    },
+                )
+            )
+        else:
+            GError(
+                parent=self,
+                message=_(
+                    "Unable to rename column. "
+                    "Column <%(column)s> doesn't exist in the table <%(table)s>."
+                )
+                % {"column": name, "table": table},
+            )
+            return
 
         # apply changes
         self.ApplyCommands(self.listOfCommands, self.listOfSQLStatements)
@@ -2693,10 +2673,9 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         tlist = self.FindWindowById(self.layerPage[self.selLayer]["tableData"])
 
         item = tlist.GetFirstSelected()
-        countSelected = tlist.GetSelectedItemCount()
         if UserSettings.Get(group="atm", key="askOnDeleteRec", subkey="enabled"):
-            # if the user select more columns to delete, all the columns name
-            # will appear the the warning dialog
+            # if the user selects more columns to delete, all the columns names
+            # will appear with a warning dialog
             if tlist.GetSelectedItemCount() > 1:
                 deleteColumns = "columns '%s'" % tlist.GetItemText(item)
                 while item != -1:
@@ -2968,7 +2947,6 @@ class DbMgrLayersPage(wx.Panel):
 
     def OnLayerRightUp(self, event):
         """Layer description area, context menu"""
-        pass
 
 
 class TableListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
@@ -3025,7 +3003,7 @@ class TableListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
                 str(self.table[column]["type"]),
                 int(self.table[column]["length"]),
             )
-            i = i + 1
+            i += 1
 
         self.SendSizeEvent()
 
@@ -3119,12 +3097,12 @@ class LayerBook(wx.Notebook):
         # get default values
         #
         self.defaultConnect = {}
-        genv = grass.gisenv()
-        vectMap = grass.find_file(
+        genv = gs.gisenv()
+        vectMap = gs.find_file(
             name=vectName,
             element="vector",
         )
-        vectGisrc, vectEnv = grass.create_environment(
+        vectGisrc, vectEnv = gs.create_environment(
             gisdbase=genv["GISDBASE"],
             location=genv["LOCATION_NAME"],
             mapset=vectMap["mapset"],
@@ -3136,7 +3114,7 @@ class LayerBook(wx.Notebook):
             read=True,
             quiet=True,
         )
-        grass.utils.try_remove(vectGisrc)
+        gs.utils.try_remove(vectGisrc)
 
         for line in connect.splitlines():
             item, value = line.split(":", 1)
@@ -3271,7 +3249,7 @@ class LayerBook(wx.Notebook):
 
         # tooltips
         self.addLayerWidgets["addCat"][0].SetToolTip(
-            _("You need to add categories " "by v.category module.")
+            _("You need to add categories by v.category module.")
         )
 
         # table description
@@ -3330,10 +3308,7 @@ class LayerBook(wx.Notebook):
         row = 0
         for key in ("layer", "driver", "database", "table", "key", "addCat"):
             label, value = self.addLayerWidgets[key]
-            if not value:
-                span = (1, 2)
-            else:
-                span = (1, 1)
+            span = (1, 2) if not value else (1, 1)
             dataSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0), span=span)
 
             if not value:
@@ -3818,7 +3793,7 @@ class LayerBook(wx.Notebook):
         """Delete layer"""
         try:
             layer = int(self.deleteLayer.GetValue())
-        except:
+        except ValueError:
             return
 
         RunCommand(
@@ -3865,10 +3840,10 @@ class LayerBook(wx.Notebook):
         """Layer number of layer to be deleted is changed"""
         try:
             layer = int(event.GetString())
-        except:
+        except ValueError:
             try:
-                layer = self.mapDBInfo.layers.keys()[0]
-            except:
+                layer = list(self.mapDBInfo.layers.keys())[0]
+            except IndexError:
                 return
 
         if self.GetCurrentPage() == self.modifyPanel:
@@ -4037,17 +4012,18 @@ class FieldStatistics(wx.Frame):
             return
 
         fd, sqlFilePath = tempfile.mkstemp(text=True)
-        sqlFile = open(sqlFilePath, "w")
         stats = ["count", "min", "max", "avg", "sum", "null"]
-        for fn in stats:
-            if fn == "null":
-                sqlFile.write(
-                    "select count(*) from %s where %s is null;%s"
-                    % (table, column, "\n")
-                )
-            else:
-                sqlFile.write("select %s(%s) from %s;%s" % (fn, column, table, "\n"))
-        sqlFile.close()
+        with open(sqlFilePath, "w") as sqlFile:
+            for fn in stats:
+                if fn == "null":
+                    sqlFile.write(
+                        "select count(*) from %s where %s is null;%s"
+                        % (table, column, "\n")
+                    )
+                else:
+                    sqlFile.write(
+                        "select %s(%s) from %s;%s" % (fn, column, table, "\n")
+                    )
 
         dataStr = RunCommand(
             "db.select",
@@ -4059,7 +4035,7 @@ class FieldStatistics(wx.Frame):
             database=database,
         )
         if not dataStr:
-            GError(parent=self.parent, message=_("Unable to calculte statistics."))
+            GError(parent=self.parent, message=_("Unable to calculate statistics."))
             self.Close()
             return
 
@@ -4068,7 +4044,7 @@ class FieldStatistics(wx.Frame):
             GError(
                 parent=self.parent,
                 message=_(
-                    "Unable to calculte statistics. "
+                    "Unable to calculate statistics. "
                     "Invalid number of lines %d (should be %d)."
                 )
                 % (len(dataLines), len(stats)),
@@ -4095,7 +4071,7 @@ class FieldStatistics(wx.Frame):
         )
         if not dataVar:
             GWarning(
-                parent=self.parent, message=_("Unable to calculte standard deviation.")
+                parent=self.parent, message=_("Unable to calculate standard deviation.")
             )
         varSum = 0
         for var in decode(dataVar).splitlines():

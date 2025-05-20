@@ -7,6 +7,13 @@ import pytest
 
 import grass.script as gs
 
+xfail_mp_spawn = pytest.mark.xfail(
+    multiprocessing.get_start_method() == "spawn",
+    reason="Multiprocessing using 'spawn' start method requires pickable functions",
+    raises=AttributeError,
+    strict=True,
+)
+
 
 # This is useful when we want to ensure that function like init does
 # not change the global environment.
@@ -28,9 +35,7 @@ def create_and_get_srid(tmp_path):
     """Create location on the same path as the current one"""
     bootstrap_location = "bootstrap"
     desired_location = "desired"
-    gs.core._create_location_xy(
-        tmp_path, bootstrap_location
-    )  # pylint: disable=protected-access
+    gs.core._create_location_xy(tmp_path, bootstrap_location)  # pylint: disable=protected-access
     with gs.setup.init(tmp_path / bootstrap_location, env=os.environ.copy()) as session:
         gs.create_location(tmp_path, desired_location, epsg="3358")
         assert (tmp_path / desired_location).exists()
@@ -50,6 +55,7 @@ def test_with_same_path(tmp_path):
     assert srid == "EPSG:3358"
 
 
+@xfail_mp_spawn
 def test_with_init_in_subprocess(tmp_path):
     """Check creation when running in a subprocess"""
 
@@ -93,9 +99,7 @@ def test_with_different_path(tmp_path):
     tmp_path_a = tmp_path / "a"
     tmp_path_b = tmp_path / "b"
     tmp_path_a.mkdir()
-    gs.core._create_location_xy(
-        tmp_path_a, bootstrap_location
-    )  # pylint: disable=protected-access
+    gs.core._create_location_xy(tmp_path_a, bootstrap_location)  # pylint: disable=protected-access
     with gs.setup.init(
         tmp_path_a / bootstrap_location, env=os.environ.copy()
     ) as session:
@@ -141,9 +145,7 @@ def test_files(tmp_path):
     """Check expected files are created"""
     bootstrap_location = "bootstrap"
     desired_location = "desired"
-    gs.core._create_location_xy(
-        tmp_path, bootstrap_location
-    )  # pylint: disable=protected-access
+    gs.core._create_location_xy(tmp_path, bootstrap_location)  # pylint: disable=protected-access
     with gs.setup.init(tmp_path / bootstrap_location, env=os.environ.copy()):
         description = "This is a test (not Gauss-Krüger or Křovák)"
         gs.create_location(tmp_path, desired_location, epsg="3358", desc=description)
@@ -167,7 +169,7 @@ def set_and_test_description(tmp_path, text):
     gs.core._set_location_description(tmp_path, name, text)
     description_file = tmp_path / name / "PERMANENT" / "MYNAME"
     assert description_file.exists()
-    text = text if text else ""  # None and empty should both yield empty.
+    text = text or ""  # None and empty should both yield empty.
     assert description_file.read_text(encoding="utf-8").strip() == text
 
 

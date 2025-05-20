@@ -201,7 +201,7 @@ int gvd_vect(geovect *gv, geosurf *gs, int do_fast)
                         }
                         gsd_endline();
                     }
-                    /* need to handle MASK! */
+                    /* need to handle mask! */
                     else if (src == CONST_ATT) {
                         /* for now - but later, do seg intersect maskedge */
                         if (gs_point_is_masked(gs, bgn) ||

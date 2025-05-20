@@ -27,15 +27,15 @@ specified alone when using the <em>dir</em> option.
 <p><em><b>use</b></em> options are:
 <ul>
 <li>
-<em>attr</em> - read values from attribute table (default)
+<em>attr</em> - read values from attribute table (default)</li>
 <li>
-<em>cat</em>  - read values from category
+<em>cat</em>  - read values from category</li>
 <li>
-<em>value</em>  - use value specified by <em><b>value</b></em> option
+<em>value</em>  - use value specified by <em><b>value</b></em> option</li>
 <li>
-<em>z</em>    - use z coordinate (points or contours only)
+<em>z</em>    - use z coordinate (points or contours only)</li>
 <li>
-<em>dir</em>  - line direction in degrees counterclockwise from east (lines only)
+<em>dir</em>  - line direction in degrees counterclockwise from east (lines only)</li>
 </ul>
 <p>The <em><b>column</b></em> parameter uses an existing column from the vector map
 database table as the category value in the output raster map. Existing table
@@ -49,13 +49,13 @@ been assigned category/attribute labels (e.g., through use of
 Labeled areas and/or centroids will produce filled raster coverages with edges
 that straddle the original area boundary <b>as long as the boundary is NOT
 labeled</b>.
-<br>(Use <tt>v.category option=del type=boundary</tt> to remove.)
+<br>(Use <code>v.category option=del type=boundary</code> to remove.)</li>
 <li>
 Labeled lines and boundaries will produce lines of raster cells which touch the
-original vector line. This tends to be more aggressive than area-only conversions.
+original vector line. This tends to be more aggressive than area-only conversions.</li>
 <li>
 Points and orphaned centroids will be converted into single cells on the
-resultant raster map.
+resultant raster map.</li>
 </ul>
 <p><p><b>Line directions</b> are given in degrees counterclockwise from east.
 <p><p>Raster category labels are supported for all of <em>use=</em> except <em>use=z</em>.
@@ -106,7 +106,7 @@ r.mapcalc "route_slope_dir = abs(atan(tan(slope) * cos(aspect - busroute11_dir))
 </pre></div>
 
 <center>
-<img src="v_to_rast_direction.png" alt="Slope along path" border=1><br>
+<img src="v_to_rast_direction.png" alt="Slope along path" border="1"><br>
 Slope in degrees along bus route
 </center>
 
@@ -153,7 +153,7 @@ d.grid 5000
 </pre></div>
 
 <center>
-<img src="v_to_rast_binning.png" alt="Number of schools per raster cell" border=1><br>
+<img src="v_to_rast_binning.png" alt="Number of schools per raster cell" border="1"><br>
 Number of schools per raster cell
 </center>
 

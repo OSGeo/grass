@@ -8,7 +8,7 @@ Usage:
     from grass.script import core as grass
     grass.parser()
 
-(C) 2008-2024 by the GRASS Development Team
+(C) 2008-2025 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -17,6 +17,8 @@ for details.
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 .. sectionauthor:: Michael Barton <michael.barton asu.edu>
 """
+
+from __future__ import annotations
 
 import os
 import sys
@@ -30,17 +32,27 @@ import shlex
 import json
 import csv
 import io
+from collections.abc import Mapping
 from tempfile import NamedTemporaryFile
 from pathlib import Path
+from typing import TYPE_CHECKING, TypeVar
 
 from .utils import KeyValue, parse_key_val, basename, encode, decode, try_remove
 from grass.exceptions import ScriptError, CalledModuleError
 from grass.grassdb.manage import resolve_mapset_path
 
 
+if TYPE_CHECKING:
+    from _typeshed import StrPath
+
+
+T = TypeVar("T")
+_Env = Mapping[str, str]
+
+
 # subprocess wrapper that uses shell on Windows
 class Popen(subprocess.Popen):
-    _builtin_exts = set([".com", ".exe", ".bat", ".cmd"])
+    _builtin_exts = {".com", ".exe", ".bat", ".cmd"}
 
     @staticmethod
     def _escape_for_shell(arg):
@@ -51,7 +63,7 @@ class Popen(subprocess.Popen):
         if (
             sys.platform == "win32"
             and isinstance(args, list)
-            and not kwargs.get("shell", False)
+            and not kwargs.get("shell")
             and kwargs.get("executable") is None
         ):
             cmd = shutil.which(args[0])
@@ -124,11 +136,10 @@ def _make_unicode(val, enc):
     """
     if val is None or enc is None:
         return val
-    else:
-        if enc == "default":
-            return decode(val)
-        else:
-            return decode(val, encoding=enc)
+
+    if enc == "default":
+        return decode(val)
+    return decode(val, encoding=enc)
 
 
 def get_commands(*, env=None):
@@ -155,8 +166,8 @@ def get_commands(*, env=None):
 
         gisbase = get_install_path()
 
-    cmd = list()
-    scripts = {".py": list()} if sys.platform == "win32" else {}
+    cmd = []
+    scripts = {".py": []} if sys.platform == "win32" else {}
 
     def scan(gisbase, directory):
         dir_path = os.path.join(gisbase, directory)
@@ -178,7 +189,7 @@ def get_commands(*, env=None):
     gui_path = os.path.join(gisbase, "etc", "gui", "scripts")
     if os.path.exists(gui_path):
         os.environ["PATH"] = os.getenv("PATH") + os.pathsep + gui_path
-        cmd = cmd + os.listdir(gui_path)
+        cmd += os.listdir(gui_path)
 
     return set(cmd), scripts
 
@@ -218,9 +229,7 @@ def get_real_command(cmd):
         if os.path.splitext(cmd)[1] == ".py":
             cmd = cmd[:-3]
         # PATHEXT is necessary to check on Windows (force lowercase)
-        pathext = list(
-            map(lambda x: x.lower(), os.environ["PATHEXT"].split(os.pathsep))
-        )
+        pathext = [x.lower() for x in os.environ["PATHEXT"].split(os.pathsep)]
         if ".py" not in pathext:
             # we assume that PATHEXT contains always '.py'
             os.environ["PATHEXT"] = ".py;" + os.environ["PATHEXT"]
@@ -271,7 +280,8 @@ def make_command(
     if flags:
         flags = _make_val(flags)
         if "-" in flags:
-            raise ScriptError("'-' is not a valid flag")
+            msg = "'-' is not a valid flag"
+            raise ScriptError(msg)
         args.append("-" + flags)
     for opt, val in options.items():
         if opt in _popen_args:
@@ -337,10 +347,7 @@ def handle_errors(returncode, result, args, kwargs):
         args = make_command(*args, **kwargs)
         # Since we are in error handler, let's be extra cautious
         # about an empty command.
-        if args:
-            module = args[0]
-        else:
-            module = None
+        module = args[0] if args else None
         code = " ".join(args)
         return module, code
 
@@ -351,12 +358,11 @@ def handle_errors(returncode, result, args, kwargs):
         return result
     if handler.lower() == "ignore":
         return result
-    elif handler.lower() == "fatal":
+    if handler.lower() == "fatal":
         module, code = get_module_and_code(args, kwargs)
         fatal(
             _(
-                "Module {module} ({code}) failed with"
-                " non-zero return code {returncode}"
+                "Module {module} ({code}) failed with non-zero return code {returncode}"
             ).format(module=module, code=code, returncode=returncode)
         )
     elif handler.lower() == "exit":
@@ -364,6 +370,40 @@ def handle_errors(returncode, result, args, kwargs):
     else:
         module, code = get_module_and_code(args, kwargs)
         raise CalledModuleError(module=module, code=code, returncode=returncode)
+
+
+def popen_args_command(
+    prog,
+    flags="",
+    overwrite=False,
+    quiet=False,
+    verbose=False,
+    superquiet=False,
+    **kwargs,
+):
+    """Split tool name and parameters from Popen parameters
+
+    Does the splitting based on known Popen parameter names, and then does the
+    transformation from Python parameters to a list of command line arguments
+    for Popen.
+    """
+    options = {}
+    popen_kwargs = {}
+    for opt, val in kwargs.items():
+        if opt in _popen_args:
+            popen_kwargs[opt] = val
+        else:
+            options[opt] = val
+    args = make_command(
+        prog,
+        flags=flags,
+        overwrite=overwrite,
+        quiet=quiet,
+        superquiet=superquiet,
+        verbose=verbose,
+        **options,
+    )
+    return args, popen_kwargs
 
 
 def start_command(
@@ -403,22 +443,14 @@ def start_command(
 
     :return: Popen object
     """
-    options = {}
-    popts = {}
-    for opt, val in kwargs.items():
-        if opt in _popen_args:
-            popts[opt] = val
-        else:
-            options[opt] = val
-
-    args = make_command(
+    args, popts = popen_args_command(
         prog,
         flags=flags,
         overwrite=overwrite,
         quiet=quiet,
         superquiet=superquiet,
         verbose=verbose,
-        **options,
+        **kwargs,
     )
 
     if debug_level() > 0:
@@ -861,39 +893,38 @@ def get_capture_stderr():
 # interface to g.parser
 
 
-def _parse_opts(lines):
-    options = {}
-    flags = {}
+def _parse_opts(lines: list) -> tuple[dict[str, str], dict[str, bool]]:
+    options: dict[str, str] = {}
+    flags: dict[str, bool] = {}
     for line in lines:
         if not line:
             break
         try:
             var, val = line.split(b"=", 1)
         except ValueError:
-            raise SyntaxError("invalid output from g.parser: {}".format(line))
+            msg = "invalid output from g.parser: {}".format(line)
+            raise SyntaxError(msg)
         try:
             var = decode(var)
             val = decode(val)
         except UnicodeError as error:
-            raise SyntaxError(
-                "invalid output from g.parser ({error}): {line}".format(
-                    error=error, line=line
-                )
+            msg = "invalid output from g.parser ({error}): {line}".format(
+                error=error, line=line
             )
+            raise SyntaxError(msg)
         if var.startswith("flag_"):
             flags[var[5:]] = bool(int(val))
         elif var.startswith("opt_"):
             options[var[4:]] = val
-        elif var in ["GRASS_OVERWRITE", "GRASS_VERBOSE"]:
+        elif var in {"GRASS_OVERWRITE", "GRASS_VERBOSE"}:
             os.environ[var] = val
         else:
-            raise SyntaxError(
-                "unexpected output variable from g.parser: {}".format(line)
-            )
+            msg = "unexpected output variable from g.parser: {}".format(line)
+            raise SyntaxError(msg)
     return (options, flags)
 
 
-def parser():
+def parser() -> tuple[dict[str, str], dict[str, bool]]:
     """Interface to g.parser, intended to be run from the top-level, e.g.:
 
     ::
@@ -927,15 +958,14 @@ def parser():
             argv[0] = os.path.join(sys.path[0], name)
 
     prog = "g.parser.exe" if sys.platform == "win32" else "g.parser"
-    p = subprocess.Popen([prog, "-n"] + argv, stdout=subprocess.PIPE)
-    s = p.communicate()[0]
-    lines = s.split(b"\0")
-
-    if not lines or lines[0] != b"@ARGS_PARSED@":
-        stdout = os.fdopen(sys.stdout.fileno(), "wb")
-        stdout.write(s)
-        sys.exit(p.returncode)
-    return _parse_opts(lines[1:])
+    with subprocess.Popen([prog, "-n"] + argv, stdout=subprocess.PIPE) as p:
+        s = p.communicate()[0]
+        lines = s.split(b"\0")
+        if not lines or lines[0] != b"@ARGS_PARSED@":
+            stdout = os.fdopen(sys.stdout.fileno(), "wb")
+            stdout.write(s)
+            sys.exit(p.returncode)
+        return _parse_opts(lines[1:])
 
 
 # interface to g.tempfile
@@ -985,9 +1015,7 @@ def tempname(length, lowercase=False):
     if not lowercase:
         chars += string.ascii_uppercase
     random_part = "".join(random.choice(chars) for _ in range(length))
-    randomname = "tmp_" + random_part
-
-    return randomname
+    return "tmp_" + random_part
 
 
 def _compare_projection(dic):
@@ -1038,20 +1066,22 @@ def _compare_units(dic):
 
 
 def _text_to_key_value_dict(
-    filename, sep=":", val_sep=",", checkproj=False, checkunits=False
-):
+    filename: StrPath,
+    sep: str = ":",
+    val_sep: str = ",",
+    checkproj: bool = False,
+    checkunits: bool = False,
+) -> KeyValue[list[int | float | str]]:
     """Convert a key-value text file, where entries are separated by newlines
     and the key and value are separated by `sep', into a key-value dictionary
     and discover/use the correct data types (float, int or string) for values.
 
-    :param str filename: The name or name and path of the text file to convert
-    :param str sep: The character that separates the keys and values, default
-                    is ":"
-    :param str val_sep: The character that separates the values of a single
+    :param filename: The name or name and path of the text file to convert
+    :param sep: The character that separates the keys and values, default is ":"
+    :param val_sep: The character that separates the values of a single
                         key, default is ","
-    :param bool checkproj: True if it has to check some information about
-                           projection system
-    :param bool checkproj: True if it has to check some information about units
+    :param checkproj: True if it has to check some information about projection system
+    :param checkunits: True if it has to check some information about units
 
     :return: The dictionary
 
@@ -1070,19 +1100,19 @@ def _text_to_key_value_dict(
         {'a': ['Hello'], 'c': [1, 2, 3, 4, 5], 'b': [1.0], 'd': ['hello', 8, 0.1]}
 
     """
-    text = open(filename, "r").readlines()
-    kvdict = KeyValue()
+    with Path(filename).open() as f:
+        text = f.readlines()
+    kvdict: KeyValue[list[int | float | str]] = KeyValue()
 
     for line in text:
-        if line.find(sep) >= 0:
-            key, value = line.split(sep)
-            key = key.strip()
-            value = value.strip()
-        else:
+        if line.find(sep) < 0:
             # Jump over empty values
             continue
+        key, value = line.split(sep)
+        key = key.strip()
+        value = value.strip()
         values = value.split(val_sep)
-        value_list = []
+        value_list: list[int | float | str] = []
 
         for value in values:
             not_float = False
@@ -1163,23 +1193,22 @@ def compare_key_value_text_files(
                 return False
         elif isinstance(dict_a[key], float) or isinstance(dict_b[key], float):
             warning(
-                _("Mixing value types. Will try to compare after " "integer conversion")
+                _("Mixing value types. Will try to compare after integer conversion")
             )
             return int(dict_a[key]) == int(dict_b[key])
         elif key == "+towgs84":
             # We compare the sum of the entries
             if abs(sum(dict_a[key]) - sum(dict_b[key])) > precision:
                 return False
-        else:
-            if dict_a[key] != dict_b[key]:
-                return False
+        elif dict_a[key] != dict_b[key]:
+            return False
     return True
 
 
 # interface to g.gisenv
 
 
-def gisenv(env=None):
+def gisenv(env: _Env | None = None) -> KeyValue[str | None]:
     """Returns the output from running g.gisenv (with no arguments), as a
     dictionary. Example:
 
@@ -1197,18 +1226,15 @@ def gisenv(env=None):
 # interface to g.region
 
 
-def locn_is_latlong(env=None):
+def locn_is_latlong(env: _Env | None = None) -> bool:
     """Tests if location is lat/long. Value is obtained
     by checking the "g.region -pu" projection code.
 
     :return: True for a lat/long region, False otherwise
     """
     s = read_command("g.region", flags="pu", env=env)
-    kv = parse_key_val(s, ":")
-    if kv["projection"].split(" ")[0] == "3":
-        return True
-    else:
-        return False
+    kv: KeyValue[str | None] = parse_key_val(s, ":")
+    return kv["projection"].split(" ")[0] == "3"
 
 
 def region(region3d=False, complete=False, env=None):
@@ -1255,7 +1281,9 @@ def region(region3d=False, complete=False, env=None):
     return reg
 
 
-def region_env(region3d=False, flags=None, env=None, **kwargs):
+def region_env(
+    region3d: bool = False, flags: str | None = None, env: _Env | None = None, **kwargs
+) -> str:
     """Returns region settings as a string which can used as
     GRASS_REGION environmental variable.
 
@@ -1265,8 +1293,8 @@ def region_env(region3d=False, flags=None, env=None, **kwargs):
     See also :func:`use_temp_region()` for alternative method how to define
     temporary region used for raster-based computation.
 
-    :param bool region3d: True to get 3D region
-    :param string flags: for example 'a'
+    :param region3d: True to get 3D region
+    :param flags: for example 'a'
     :param env: dictionary with system environment variables (`os.environ` by default)
     :param kwargs: g.region's parameters like 'raster', 'vector' or 'region'
 
@@ -1280,21 +1308,21 @@ def region_env(region3d=False, flags=None, env=None, **kwargs):
     :return: empty string on error
     """
     # read proj/zone from WIND file
-    gis_env = gisenv(env)
+    gis_env: KeyValue[str | None] = gisenv(env)
     windfile = os.path.join(
         gis_env["GISDBASE"], gis_env["LOCATION_NAME"], gis_env["MAPSET"], "WIND"
     )
-    with open(windfile, "r") as fd:
+    with open(windfile) as fd:
         grass_region = ""
-        for line in fd.readlines():
-            key, value = map(lambda x: x.strip(), line.split(":", 1))
-            if kwargs and key not in ("proj", "zone"):
+        for line in fd:
+            key, value = (x.strip() for x in line.split(":", 1))
+            if kwargs and key not in {"proj", "zone"}:
                 continue
             if (
                 not kwargs
                 and not region3d
                 and key
-                in (
+                in {
                     "top",
                     "bottom",
                     "cols3",
@@ -1303,7 +1331,7 @@ def region_env(region3d=False, flags=None, env=None, **kwargs):
                     "e-w resol3",
                     "n-s resol3",
                     "t-b resol",
-                )
+                }
             ):
                 continue
 
@@ -1457,22 +1485,21 @@ def list_strings(type, pattern=None, mapset=None, exclude=None, flag="", env=Non
     :return: list of elements
     """
     if type == "cell":
-        verbose(_('Element type should be "raster" and not "%s"') % type)
+        verbose(_('Element type should be "raster" and not "%s"') % type, env=env)
 
-    result = list()
-    for line in read_command(
-        "g.list",
-        quiet=True,
-        flags="m" + flag,
-        type=type,
-        pattern=pattern,
-        exclude=exclude,
-        mapset=mapset,
-        env=env,
-    ).splitlines():
-        result.append(line.strip())
-
-    return result
+    return [
+        line.strip()
+        for line in read_command(
+            "g.list",
+            quiet=True,
+            flags="m" + flag,
+            type=type,
+            pattern=pattern,
+            exclude=exclude,
+            mapset=mapset,
+            env=env,
+        ).splitlines()
+    ]
 
 
 def list_pairs(type, pattern=None, mapset=None, exclude=None, flag="", env=None):
@@ -1530,7 +1557,9 @@ def list_grouped(
         flag += "t"
     for i in range(len(types)):
         if types[i] == "cell":
-            verbose(_('Element type should be "raster" and not "%s"') % types[i])
+            verbose(
+                _('Element type should be "raster" and not "%s"') % types[i], env=env
+            )
             types[i] = "raster"
     result = {}
     if check_search_path:
@@ -1553,7 +1582,7 @@ def list_grouped(
         try:
             name, mapset = line.split("@")
         except ValueError:
-            warning(_("Invalid element '%s'") % line)
+            warning(_("Invalid element '%s'") % line, env=env)
             continue
 
         if store_types:
@@ -1571,20 +1600,19 @@ def list_grouped(
                         name,
                     ]
                 }
+        elif mapset in result:
+            result[mapset].append(name)
         else:
-            if mapset in result:
-                result[mapset].append(name)
-            else:
-                result[mapset] = [
-                    name,
-                ]
+            result[mapset] = [
+                name,
+            ]
 
     return result
 
 
 # color parsing
 
-named_colors = {
+named_colors: dict[str, tuple[float, float, float]] = {
     "white": (1.00, 1.00, 1.00),
     "black": (0.00, 0.00, 0.00),
     "red": (1.00, 0.00, 0.00),
@@ -1604,7 +1632,9 @@ named_colors = {
 }
 
 
-def parse_color(val, dflt=None):
+def parse_color(
+    val: str, dflt: tuple[float, float, float] | None = None
+) -> tuple[float, float, float] | None:
     """Parses the string "val" as a GRASS colour, which can be either one of
     the named colours or an R:G:B tuple e.g. 255:255:255. Returns an
     (r,g,b) triple whose components are floating point values between 0
@@ -1623,9 +1653,9 @@ def parse_color(val, dflt=None):
     if val in named_colors:
         return named_colors[val]
 
-    vals = val.split(":")
+    vals: list[str] = val.split(":")
     if len(vals) == 3:
-        return tuple(float(v) / 255 for v in vals)
+        return (float(vals[0]) / 255, float(vals[1]) / 255, float(vals[2]) / 255)
 
     return dflt
 
@@ -1659,8 +1689,7 @@ def verbosity():
     vbstr = os.getenv("GRASS_VERBOSE")
     if vbstr:
         return int(vbstr)
-    else:
-        return 2
+    return 2
 
 
 # Various utilities, not specific to GRASS
@@ -1688,14 +1717,13 @@ def find_program(pgm, *args):
             or non-zero return code
     :return: True otherwise
     """
-    nuldev = open(os.devnull, "w+")
-    try:
-        # TODO: the doc or impl is not correct, any return code is accepted
-        call([pgm] + list(args), stdin=nuldev, stdout=nuldev, stderr=nuldev)
-        found = True
-    except Exception:
-        found = False
-    nuldev.close()
+    with open(os.devnull, "w+") as nuldev:
+        try:
+            # TODO: the doc or impl is not correct, any return code is accepted
+            call([pgm] + list(args), stdin=nuldev, stdout=nuldev, stderr=nuldev)
+            found = True
+        except Exception:
+            found = False
 
     return found
 
@@ -1710,13 +1738,10 @@ def mapsets(search_path=False, env=None):
 
     :return: list of mapsets
     """
-    if search_path:
-        flags = "p"
-    else:
-        flags = "l"
+    flags = "p" if search_path else "l"
     mapsets = read_command("g.mapsets", flags=flags, sep="newline", quiet=True, env=env)
     if not mapsets:
-        fatal(_("Unable to list mapsets"))
+        fatal(_("Unable to list mapsets"), env=env)
 
     return mapsets.splitlines()
 
@@ -1807,12 +1832,13 @@ def create_project(
         shutil.rmtree(os.path.join(mapset_path.directory, mapset_path.location))
 
     stdin = None
-    kwargs = dict()
+    kwargs = {}
     if datum:
         kwargs["datum"] = datum
     if datum_trans:
         kwargs["datum_trans"] = datum_trans
 
+    ps = None
     if epsg:
         ps = pipe_command(
             "g.proj",
@@ -1868,7 +1894,7 @@ def create_project(
     else:
         _create_location_xy(mapset_path.directory, mapset_path.location)
 
-    if epsg or proj4 or filename or wkt:
+    if ps is not None and (epsg or proj4 or filename or wkt):
         error = ps.communicate(stdin)[1]
         try_remove(tmp_gisrc)
 
@@ -1881,16 +1907,15 @@ def create_project(
 def _set_location_description(path, location, text):
     """Set description (aka title aka MYNAME) for a location"""
     try:
-        fd = codecs.open(
+        with codecs.open(
             os.path.join(path, location, "PERMANENT", "MYNAME"),
             encoding="utf-8",
             mode="w",
-        )
-        if text:
-            fd.write(text + os.linesep)
-        else:
-            fd.write(os.linesep)
-        fd.close()
+        ) as fd:
+            if text:
+                fd.write(text + os.linesep)
+            else:
+                fd.write(os.linesep)
     except OSError as e:
         raise ScriptError(repr(e))
 
@@ -1903,11 +1928,14 @@ def _create_location_xy(database, location):
     :param database: GRASS database where to create new location
     :param location: location name
     """
-    cur_dir = os.getcwd()
+    cur_dir = Path.cwd()
     try:
         os.chdir(database)
+        permanent_dir = Path(location, "PERMANENT")
+        default_wind_path = permanent_dir / "DEFAULT_WIND"
+        wind_path = permanent_dir / "WIND"
         os.mkdir(location)
-        os.mkdir(os.path.join(location, "PERMANENT"))
+        permanent_dir.mkdir()
 
         # create DEFAULT_WIND and WIND files
         regioninfo = [
@@ -1931,16 +1959,8 @@ def _create_location_xy(database, location):
             "t-b resol:  1",
         ]
 
-        defwind = open(os.path.join(location, "PERMANENT", "DEFAULT_WIND"), "w")
-        for param in regioninfo:
-            defwind.write(param + "%s" % os.linesep)
-        defwind.close()
-
-        shutil.copy(
-            os.path.join(location, "PERMANENT", "DEFAULT_WIND"),
-            os.path.join(location, "PERMANENT", "WIND"),
-        )
-
+        default_wind_path.write_text("\n".join(regioninfo))
+        shutil.copy(default_wind_path, wind_path)
         os.chdir(cur_dir)
     except OSError as e:
         raise ScriptError(repr(e))
@@ -2009,7 +2029,7 @@ def legal_name(s):
         useful anyway for checking map names and column names.
     """
     if not s or s[0] == ".":
-        warning(_("Illegal filename <%s>. Cannot be 'NULL' or start with " "'.'.") % s)
+        warning(_("Illegal filename <%s>. Cannot be 'NULL' or start with '.'.") % s)
         return False
 
     illegal = [c for c in s if c in "/\"'@,=*~" or c <= " " or c >= "\177"]
@@ -2044,10 +2064,7 @@ def create_environment(gisdbase, location, mapset, env=None):
         f.write("GISDBASE: {g}\n".format(g=gisdbase))
         f.write("LOCATION_NAME: {l}\n".format(l=location))
         f.write("GUI: text\n")
-    if env:
-        env = env.copy()
-    else:
-        env = os.environ.copy()
+    env = env.copy() if env else os.environ.copy()
     env["GISRC"] = f.name
     # remove mapset-specific env vars
     env = sanitize_mapset_environment(env)

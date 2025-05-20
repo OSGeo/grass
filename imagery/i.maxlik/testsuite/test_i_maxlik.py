@@ -10,6 +10,7 @@ Licence:   This program is free software under the GNU General Public
 """
 
 import ctypes
+import os
 import shutil
 
 from grass.pygrass import utils
@@ -44,7 +45,10 @@ class SuccessTest(TestCase):
         """Ensures expected computational region and generated data"""
         cls.use_temp_region()
         cls.runModule("g.region", n=5, s=0, e=5, w=0, res=1)
-        cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
+        if os.name == "nt":
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("msvcrt"))
+        else:
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
         cls.mpath = utils.decode(G_mapset_path())
         cls.mapset_name = Mapset().name
         cls.sig_name1 = tempname(10)
@@ -162,13 +166,12 @@ class SuccessTest(TestCase):
         cls.del_temp_region()
         shutil.rmtree(cls.sig_dir1, ignore_errors=True)
         shutil.rmtree(cls.sig_dir2, ignore_errors=True)
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.b1, quiet=True)
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.b2, quiet=True)
         cls.runModule(
-            "g.remove", flags="f", type="raster", name=cls.v1_class, quiet=True
-        )
-        cls.runModule(
-            "g.remove", flags="f", type="raster", name=cls.v2_class, quiet=True
+            "g.remove",
+            flags="f",
+            type="raster",
+            name=(cls.b1, cls.b2, cls.v1_class, cls.v2_class),
+            quiet=True,
         )
         cls.runModule("g.remove", flags="f", type="group", name=cls.group, quiet=True)
 

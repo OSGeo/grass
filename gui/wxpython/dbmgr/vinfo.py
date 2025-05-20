@@ -22,7 +22,8 @@ from gui_core.gselect import VectorDBInfo as VectorDBInfoBase
 from gui_core.wrap import StaticText
 from core.gcmd import RunCommand, GError
 from core.settings import UserSettings
-import grass.script as grass
+import grass.script as gs
+from grass.exceptions import ScriptError
 
 
 def GetUnicodeValue(value):
@@ -37,8 +38,7 @@ def GetUnicodeValue(value):
     if isinstance(value, bytes):
         enc = GetDbEncoding()
         return str(value, enc, errors="replace")
-    else:
-        return str(value)
+    return str(value)
 
 
 def GetDbEncoding():
@@ -46,10 +46,9 @@ def GetDbEncoding():
     then env variable), if not assumes unicode."""
     enc = UserSettings.Get(group="atm", key="encoding", subkey="value")
     if not enc and "GRASS_DB_ENCODING" in os.environ:
-        enc = os.environ["GRASS_DB_ENCODING"]
-    else:
-        enc = "utf-8"  # assuming UTF-8
-    return enc
+        return os.environ["GRASS_DB_ENCODING"]
+    # assuming UTF-8
+    return "utf-8"
 
 
 def CreateDbInfoDesc(panel, mapDBInfo, layer):
@@ -102,16 +101,13 @@ class VectorDBInfo(VectorDBInfoBase):
         """Get attributes by coordinates (all available layers)
 
         Return line id or None if no line is found"""
-        line = None
-        nselected = 0
-
         try:
-            data = grass.vector_what(
+            data = gs.vector_what(
                 map=self.map,
                 coord=(float(queryCoords[0]), float(queryCoords[1])),
                 distance=float(qdist),
             )
-        except grass.ScriptError:
+        except ScriptError:
             GError(
                 parent=None,
                 message=_(
@@ -124,9 +120,7 @@ class VectorDBInfo(VectorDBInfoBase):
             return None
 
         # process attributes
-        ret = dict()
-        for key in ["Category", "Layer", "Table", "Id"]:
-            ret[key] = list()
+        ret = {key: [] for key in ["Category", "Layer", "Table", "Id"]}
 
         for record in data:
             if "Table" not in record:
@@ -136,11 +130,10 @@ class VectorDBInfo(VectorDBInfoBase):
             for key, value in record["Attributes"].items():
                 if len(value) < 1:
                     value = None
+                elif self.tables[table][key]["ctype"] != str:
+                    value = self.tables[table][key]["ctype"](value)
                 else:
-                    if self.tables[table][key]["ctype"] != str:
-                        value = self.tables[table][key]["ctype"](value)
-                    else:
-                        value = GetUnicodeValue(value)
+                    value = GetUnicodeValue(value)
                 self.tables[table][key]["values"].append(value)
 
             for key, value in record.items():

@@ -50,7 +50,6 @@
 # % description: A numerical suffix separated by an underscore will be attached to create a unique identifier
 # % required: yes
 # % multiple: no
-# % gisprompt:
 # %end
 
 # %option
@@ -103,8 +102,7 @@
 # % description: Register Null maps
 # %end
 
-import grass.script as gcore
-
+import grass.script as gs
 
 ############################################################################
 
@@ -139,22 +137,17 @@ def main():
 
     if sampler_sp.get_temporal_type() != sp.get_temporal_type():
         dbif.close()
-        gcore.fatal(
-            _("Input and aggregation dataset must have " "the same temporal type")
-        )
+        gs.fatal(_("Input and aggregation dataset must have the same temporal type"))
 
     # Check if intervals are present
     if sampler_sp.temporal_extent.get_map_time() != "interval":
         dbif.close()
-        gcore.fatal(
-            _(
-                "All registered maps of the aggregation dataset "
-                "must have time intervals"
-            )
+        gs.fatal(
+            _("All registered maps of the aggregation dataset must have time intervals")
         )
 
     # We will create the strds later, but need to check here
-    tgis.check_new_stds(output, "strds", dbif, gcore.overwrite())
+    tgis.check_new_stds(output, "strds", dbif, gs.overwrite())
 
     map_list = sp.get_registered_maps_as_objects(
         where=where, order="start_time", dbif=dbif
@@ -162,7 +155,7 @@ def main():
 
     if not map_list:
         dbif.close()
-        gcore.fatal(_("Space time raster dataset <%s> is empty") % input)
+        gs.fatal(_("Space time raster dataset <%s> is empty") % input)
 
     granularity_list = sampler_sp.get_registered_maps_as_objects(
         where=where, order="start_time", dbif=dbif
@@ -170,7 +163,7 @@ def main():
 
     if not granularity_list:
         dbif.close()
-        gcore.fatal(_("Space time raster dataset <%s> is empty") % sampler)
+        gs.fatal(_("Space time raster dataset <%s> is empty") % sampler)
 
     gran = sampler_sp.get_granularity()
 
@@ -185,7 +178,7 @@ def main():
         method=method,
         nprocs=nprocs,
         spatial=None,
-        overwrite=gcore.overwrite(),
+        overwrite=gs.overwrite(),
     )
 
     if output_list:
@@ -198,7 +191,7 @@ def main():
             description,
             semantic_type,
             dbif,
-            gcore.overwrite(),
+            gs.overwrite(),
         )
         tgis.register_map_object_list(
             "rast",
@@ -217,5 +210,5 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = gcore.parser()
+    options, flags = gs.parser()
     main()

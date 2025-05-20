@@ -157,7 +157,7 @@ int test_mean_calc(void)
     weight = N_exp_upwinding(vector, distance, D);
     G_message("N_exp_upwinding: vector %g distance %g D %g weight %g\n", vector,
               distance, D, weight);
-    sprintf(buff1, "%1.2lf", weight);
+    snprintf(buff1, sizeof(buff1), "%1.2lf", weight);
     sscanf(buff1, "%lf", &weight);
 
     if (weight != 0.05) {
@@ -170,7 +170,7 @@ int test_mean_calc(void)
     weight = N_exp_upwinding(vector, distance, D);
     G_message("N_exp_upwinding: vector %g distance %g D %g weight %g\n", vector,
               distance, D, weight);
-    sprintf(buff1, "%1.2lf", weight);
+    snprintf(buff1, sizeof(buff1), "%1.2lf", weight);
     sscanf(buff1, "%lf", &weight);
 
     if (weight != 0.95) {

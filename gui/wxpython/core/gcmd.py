@@ -25,34 +25,51 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
+from __future__ import annotations
+
+import errno
+import locale
 import os
+import signal
+import subprocess
 import sys
 import time
-import errno
-import signal
 import traceback
-import locale
-import subprocess
 from threading import Thread
+from typing import TYPE_CHECKING, AnyStr, TextIO, overload
+
 import wx
-
-is_mswindows = sys.platform == "win32"
-if is_mswindows:
-    from win32file import ReadFile, WriteFile
-    from win32pipe import PeekNamedPipe
-    import msvcrt
-else:
-    import select
-    import fcntl
-
 from core.debug import Debug
 from core.globalvar import SCT_EXT
 
 from grass.script import core as grass
 from grass.script.utils import decode, encode
 
+is_mswindows = sys.platform == "win32"
+if is_mswindows:
+    import msvcrt
 
-def DecodeString(string):
+    from win32file import ReadFile, WriteFile
+    from win32pipe import PeekNamedPipe
+else:
+    import fcntl
+    import select
+
+if TYPE_CHECKING:
+    from io import TextIOWrapper
+
+
+@overload
+def DecodeString(string: AnyStr) -> AnyStr | str:
+    pass
+
+
+@overload
+def DecodeString(string: None) -> None:
+    pass
+
+
+def DecodeString(string: AnyStr | None) -> AnyStr | str | None:
     """Decode string using system encoding
 
     :param string: string to be decoded
@@ -68,7 +85,17 @@ def DecodeString(string):
     return string
 
 
-def EncodeString(string):
+@overload
+def EncodeString(string: str) -> bytes | str:
+    pass
+
+
+@overload
+def EncodeString(string: None) -> None:
+    pass
+
+
+def EncodeString(string: str | None) -> bytes | str | None:
     """Return encoded string using system locales
 
     :param string: string to be encoded
@@ -153,25 +180,25 @@ class Popen(subprocess.Popen):
                 # "^" must be the first character in the list to avoid double
                 # escaping.
                 for c in ("^", "|", "&", "<", ">"):
-                    if c in args[i]:
-                        if "=" in args[i]:
-                            a = args[i].split("=")
-                            k = a[0] + "="
-                            v = "=".join(a[1 : len(a)])
-                        else:
-                            k = ""
-                            v = args[i]
+                    if c not in args[i]:
+                        continue
+                    if "=" in args[i]:
+                        a = args[i].split("=")
+                        k = a[0] + "="
+                        v = "=".join(a[1 : len(a)])
+                    else:
+                        k = ""
+                        v = args[i]
 
-                        # If there are spaces, the argument was already
-                        # esscaped with double quotes, so don't escape it
-                        # again.
-                        if c in v and " " not in v:
-                            # Here, we escape each ^ in ^^^ with ^^ and a
-                            # <special character> with ^ + <special character>,
-                            # so we need 7 carets.
-
-                            v = v.replace(c, "^^^^^^^" + c)
-                            args[i] = k + v
+                    # If there are spaces, the argument was already
+                    # escaped with double quotes, so don't escape it
+                    # again.
+                    if c in v and " " not in v:
+                        # Here, we escape each ^ in ^^^ with ^^ and a
+                        # <special character> with ^ + <special character>,
+                        # so we need 7 carets.
+                        v = v.replace(c, "^^^^^^^" + c)
+                        args[i] = k + v
 
         subprocess.Popen.__init__(self, args, **kwargs)
 
@@ -201,12 +228,11 @@ class Popen(subprocess.Popen):
             import win32api
 
             handle = win32api.OpenProcess(1, 0, self.pid)
-            return 0 != win32api.TerminateProcess(handle, 0)
-        else:
-            try:
-                os.kill(-self.pid, signal.SIGTERM)  # kill whole group
-            except OSError:
-                pass
+            return win32api.TerminateProcess(handle, 0) != 0
+        try:
+            os.kill(-self.pid, signal.SIGTERM)  # kill whole group
+        except OSError:
+            pass
 
     if sys.platform == "win32":
 
@@ -222,7 +248,7 @@ class Popen(subprocess.Popen):
             except ValueError:
                 return self._close("stdin")
             except (pywintypes.error, Exception) as why:
-                if why.winerror in (109, errno.ESHUTDOWN):
+                if why.winerror in {109, errno.ESHUTDOWN}:
                     return self._close("stdin")
                 raise
 
@@ -238,14 +264,13 @@ class Popen(subprocess.Popen):
             try:
                 x = msvcrt.get_osfhandle(conn.fileno())
                 (read, nAvail, nMessage) = PeekNamedPipe(x, 0)
-                if maxsize < nAvail:
-                    nAvail = maxsize
+                nAvail = min(maxsize, nAvail)
                 if nAvail > 0:
                     (errCode, read) = ReadFile(x, nAvail, None)
             except ValueError:
                 return self._close(which)
             except (pywintypes.error, Exception) as why:
-                if why.winerror in (109, errno.ESHUTDOWN):
+                if why.winerror in {109, errno.ESHUTDOWN}:
                     return self._close(which)
                 raise
 
@@ -300,9 +325,8 @@ class Popen(subprocess.Popen):
 message = "Other end disconnected!"
 
 
-def recv_some(p, t=0.1, e=1, tr=5, stderr=0):
-    if tr < 1:
-        tr = 1
+def recv_some(p, t=0.1, e=1, tr=5, stderr=0) -> str:  # TODO: use LiteralString on 3.11+
+    tr = max(tr, 1)
     x = time.time() + t
     y = []
     r = ""
@@ -314,9 +338,8 @@ def recv_some(p, t=0.1, e=1, tr=5, stderr=0):
         if r is None:
             if e:
                 raise Exception(message)
-            else:
-                break
-        elif r:
+            break
+        if r:
             y.append(decode(r))
         else:
             time.sleep(max((x - time.time()) / tr, 0))
@@ -346,7 +369,7 @@ class Command:
         stdin=None,
         verbose=None,
         wait=True,
-        rerr=False,
+        rerr: bool | None = False,
         stdout=None,
         stderr=None,
     ):
@@ -418,7 +441,7 @@ class Command:
                             _("Error: ") + self.__GetError(),
                         )
                     )
-                elif rerr == sys.stderr:  # redirect message to sys
+                if rerr == sys.stderr:  # redirect message to sys
                     stderr.write("Execution failed: '%s'" % (" ".join(self.cmd)))
                     stderr.write(
                         "%sDetails:%s%s"
@@ -486,7 +509,7 @@ class Command:
                     type = "WARNING"
                 elif "GRASS_INFO_ERROR" in line:  # error
                     type = "ERROR"
-                elif "GRASS_INFO_END":  # end of message
+                elif "GRASS_INFO_END" in line:  # end of message
                     msg.append((type, content))
                     type = None
                     content = ""
@@ -501,7 +524,7 @@ class Command:
     def __GetError(self):
         """Get error message or ''"""
         if not self.cmdThread.module:
-            return _("Unable to exectute command: '%s'") % " ".join(self.cmd)
+            return _("Unable to execute command: '%s'") % " ".join(self.cmd)
 
         for type, msg in self.__ProcessStdErr():
             if type == "ERROR":
@@ -514,7 +537,14 @@ class CommandThread(Thread):
     """Create separate thread for command. Used for commands launched
     on the background."""
 
-    def __init__(self, cmd, env=None, stdin=None, stdout=sys.stdout, stderr=sys.stderr):
+    def __init__(
+        self,
+        cmd,
+        env=None,
+        stdin: TextIOWrapper | None = None,
+        stdout: TextIO = sys.stdout,
+        stderr: TextIO = sys.stderr,
+    ) -> None:
         """
         :param cmd: command (given as list)
         :param env: environmental variables
@@ -526,11 +556,11 @@ class CommandThread(Thread):
 
         self.cmd = cmd
         self.stdin = stdin
-        self.stdout = stdout
-        self.stderr = stderr
+        self.stdout: TextIO = stdout
+        self.stderr: TextIO = stderr
         self.env = env
 
-        self.module = None
+        self.module: Popen | None = None
         self.error = ""
 
         self._want_abort = False
@@ -551,7 +581,7 @@ class CommandThread(Thread):
     def run(self):
         """Run command"""
         if len(self.cmd) == 0:
-            return
+            return None
 
         Debug.msg(1, "gcmd.CommandThread(): %s" % " ".join(self.cmd))
 
@@ -588,7 +618,7 @@ class CommandThread(Thread):
             print(e, file=sys.stderr)
             return 1
 
-        if self.stdin:  # read stdin if requested ...
+        if self.stdin and self.module.stdin is not None:  # read stdin if requested...
             self.module.stdin.write(self.stdin)
             self.module.stdin.close()
 
@@ -597,14 +627,14 @@ class CommandThread(Thread):
 
     def _redirect_stream(self):
         """Redirect stream"""
-        if self.stdout:
+        if self.stdout and self.module is not None and self.module.stdout is not None:
             # make module stdout/stderr non-blocking
             out_fileno = self.module.stdout.fileno()
             if not is_mswindows:
                 flags = fcntl.fcntl(out_fileno, fcntl.F_GETFL)
                 fcntl.fcntl(out_fileno, fcntl.F_SETFL, flags | os.O_NONBLOCK)
 
-        if self.stderr:
+        if self.stderr and self.module is not None and self.module.stderr is not None:
             # make module stdout/stderr non-blocking
             out_fileno = self.module.stderr.fileno()
             if not is_mswindows:
@@ -612,19 +642,20 @@ class CommandThread(Thread):
                 fcntl.fcntl(out_fileno, fcntl.F_SETFL, flags | os.O_NONBLOCK)
 
         # wait for the process to end, sucking in stuff until it does end
-        while self.module.poll() is None:
-            if self._want_abort:  # abort running process
-                self.module.terminate()
-                self.aborted = True
-                return
-            if self.stdout:
-                line = recv_some(self.module, e=0, stderr=0)
-                self.stdout.write(line)
-            if self.stderr:
-                line = recv_some(self.module, e=0, stderr=1)
-                self.stderr.write(line)
-                if len(line) > 0:
-                    self.error = line
+        if self.module is not None:
+            while self.module.poll() is None:
+                if self._want_abort:  # abort running process
+                    self.module.terminate()
+                    self.aborted = True
+                    return
+                if self.stdout:
+                    line = recv_some(self.module, e=0, stderr=0)
+                    self.stdout.write(line)
+                if self.stderr:
+                    line = recv_some(self.module, e=0, stderr=1)
+                    self.stderr.write(line)
+                    if len(line) > 0:
+                        self.error = line
 
         # get the last output
         if self.stdout:
@@ -636,22 +667,22 @@ class CommandThread(Thread):
             if len(line) > 0:
                 self.error = line
 
-    def abort(self):
+    def abort(self) -> None:
         """Abort running process, used by main thread to signal an abort"""
         self._want_abort = True
 
 
-def _formatMsg(text):
+def _formatMsg(text: str) -> str:
     """Format error messages for dialogs"""
     message = ""
     for line in text.splitlines():
         if len(line) == 0:
             continue
-        elif "GRASS_INFO_MESSAGE" in line:
-            message += line.split(":", 1)[1].strip() + "\n"
-        elif "GRASS_INFO_WARNING" in line:
-            message += line.split(":", 1)[1].strip() + "\n"
-        elif "GRASS_INFO_ERROR" in line:
+        if (
+            "GRASS_INFO_MESSAGE" in line
+            or "GRASS_INFO_WARNING" in line
+            or "GRASS_INFO_ERROR" in line
+        ):
             message += line.split(":", 1)[1].strip() + "\n"
         elif "GRASS_INFO_END" in line:
             return message
@@ -664,14 +695,14 @@ def _formatMsg(text):
 def RunCommand(
     prog,
     flags="",
-    overwrite=False,
-    quiet=False,
-    verbose=False,
+    overwrite: bool = False,
+    quiet: bool = False,
+    verbose: bool = False,
     parent=None,
-    read=False,
+    read: bool = False,
     parse=None,
-    stdin=None,
-    getErrorMsg=False,
+    stdin: TextIO | None = None,
+    getErrorMsg: bool = False,
     env=None,
     **kwargs,
 ):
@@ -712,10 +743,7 @@ def RunCommand(
         kwargs["stdin"] = subprocess.PIPE
 
     # Do not change the environment, only a local copy.
-    if env:
-        env = env.copy()
-    else:
-        env = os.environ.copy()
+    env = env.copy() if env else os.environ.copy()
 
     if parent:
         env["GRASS_MESSAGE_FORMAT"] = "standard"
@@ -724,7 +752,7 @@ def RunCommand(
 
     ps = grass.start_command(prog, flags, overwrite, quiet, verbose, env=env, **kwargs)
 
-    if stdin:
+    if stdin and ps.stdin:
         ps.stdin.write(encode(stdin))
         ps.stdin.close()
         ps.stdin = None
@@ -752,8 +780,7 @@ def RunCommand(
     if not read:
         if not getErrorMsg:
             return ret
-        else:
-            return ret, _formatMsg(stderr)
+        return ret, _formatMsg(stderr)
 
     if stdout:
         Debug.msg(3, "gcmd.RunCommand(): return stdout\n'%s'" % stdout)
@@ -772,7 +799,7 @@ def RunCommand(
     return stdout, _formatMsg(stderr)
 
 
-def GetDefaultEncoding(forceUTF8=False):
+def GetDefaultEncoding(forceUTF8: bool = False) -> str:
     """Get default system encoding
 
     :param bool forceUTF8: force 'UTF-8' if encoding is not defined
@@ -794,4 +821,4 @@ def GetDefaultEncoding(forceUTF8=False):
     return enc
 
 
-_enc = GetDefaultEncoding()  # define as global variable
+_enc: str = GetDefaultEncoding()  # define as global variable

@@ -10,18 +10,24 @@ on:
     # See https://crontab.guru/#32_10_*/100,1-7_*_WED
     - cron: "32 10 */100,1-7 * WED"
 
+permissions: {}
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   update-configure:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+      pull-requests: write
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Create URL to the run output
         id: vars
         run: echo "run-url=https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" >> $GITHUB_OUTPUT
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: "Check that autoconf scripts are up-to-date:"
         run: |
           rm -f config.guess config.sub
@@ -33,7 +39,7 @@ jobs:
         run: git status --ignored
       - name: Create Pull Request
         id: cpr
-        uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c # v6.1.0
+        uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7.0.8
         with:
           commit-message: "config.guess + config.sub: updated from http://git.savannah.gnu.org/cgit/config.git/plain/"
           branch: periodic/update-configure

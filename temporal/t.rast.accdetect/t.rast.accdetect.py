@@ -45,7 +45,7 @@
 
 # %option G_OPT_STRDS_OUTPUT
 # % key: occurrence
-# % description: The output space time raster dataset that stores the occurrence of the the accumulation pattern using the provided data range
+# % description: The output space time raster dataset that stores the occurrence of the accumulation pattern using the provided data range
 # % required: yes
 # %end
 
@@ -94,7 +94,6 @@
 # % description: A numerical suffix separated by an underscore will be attached to create a unique identifier
 # % required: yes
 # % multiple: no
-# % gisprompt:
 # %end
 
 # %option
@@ -135,8 +134,7 @@
 # % description: Reverse time direction in cyclic accumulation
 # %end
 
-import grass.script as grass
-
+import grass.script as gs
 
 # lazy imports at the end of the file
 
@@ -164,7 +162,7 @@ def main():
     reverse = flags["r"]
     time_suffix = options["suffix"]
 
-    grass.set_raise_on_error(True)
+    gs.set_raise_on_error(True)
 
     # Make sure the temporal database exists
     tgis.init()
@@ -174,16 +172,12 @@ def main():
 
     mapset = tgis.get_current_mapset()
 
-    if input.find("@") >= 0:
-        id = input
-    else:
-        id = input + "@" + mapset
-
+    id = input if input.find("@") >= 0 else input + "@" + mapset
     input_strds = tgis.SpaceTimeRasterDataset(id)
 
     if not input_strds.is_in_db():
         dbif.close()
-        grass.fatal(
+        gs.fatal(
             _("Space time %s dataset <%s> not found")
             % (input_strds.get_output_map_instance(None).get_type(), id)
         )
@@ -196,7 +190,7 @@ def main():
         if not minimum or not maximum:
             if not range_:
                 dbif.close()
-                grass.fatal(
+                gs.fatal(
                     _(
                         "You need to set the range to compute the occurrence"
                         " space time raster dataset"
@@ -210,9 +204,9 @@ def main():
 
         occurrence_strds = tgis.SpaceTimeRasterDataset(occurrence_id)
         if occurrence_strds.is_in_db(dbif):
-            if not grass.overwrite():
+            if not gs.overwrite():
                 dbif.close()
-                grass.fatal(
+                gs.fatal(
                     _(
                         "Space time raster dataset <%s> is already in the "
                         "database, use overwrite flag to overwrite"
@@ -224,7 +218,7 @@ def main():
     if indicator:
         if not occurrence:
             dbif.close()
-            grass.fatal(
+            gs.fatal(
                 _(
                     "You need to set the occurrence to compute the indicator"
                     " space time raster dataset"
@@ -232,22 +226,22 @@ def main():
             )
         if not staend:
             dbif.close()
-            grass.fatal(
+            gs.fatal(
                 _(
                     "You need to set the staend options to compute the indicator"
                     " space time raster dataset"
                 )
             )
         if indicator.find("@") >= 0:
-            indicator = indicator
+            indicator_id = indicator
         else:
             indicator_id = indicator + "@" + mapset
 
         indicator_strds = tgis.SpaceTimeRasterDataset(indicator_id)
         if indicator_strds.is_in_db(dbif):
-            if not grass.overwrite():
+            if not gs.overwrite():
                 dbif.close()
-                grass.fatal(
+                gs.fatal(
                     _(
                         "Space time raster dataset <%s> is already in the "
                         "database, use overwrite flag to overwrite"
@@ -262,46 +256,36 @@ def main():
     # The minimum threshold space time raster dataset
     minimum_strds = None
     if minimum:
-        if minimum.find("@") >= 0:
-            minimum_id = minimum
-        else:
-            minimum_id = minimum + "@" + mapset
+        minimum_id = minimum if minimum.find("@") >= 0 else minimum + "@" + mapset
 
         minimum_strds = tgis.SpaceTimeRasterDataset(minimum_id)
         if not minimum_strds.is_in_db():
             dbif.close()
-            grass.fatal(
+            gs.fatal(
                 _("Space time raster dataset <%s> not found") % (minimum_strds.get_id())
             )
 
         if minimum_strds.get_temporal_type() != input_strds.get_temporal_type():
             dbif.close()
-            grass.fatal(
-                _("Temporal type of input strds and minimum strds must be equal")
-            )
+            gs.fatal(_("Temporal type of input strds and minimum strds must be equal"))
 
         minimum_strds.select(dbif)
 
     # The maximum threshold space time raster dataset
     maximum_strds = None
     if maximum:
-        if maximum.find("@") >= 0:
-            maximum_id = maximum
-        else:
-            maximum_id = maximum + "@" + mapset
+        maximum_id = maximum if maximum.find("@") >= 0 else maximum + "@" + mapset
 
         maximum_strds = tgis.SpaceTimeRasterDataset(maximum_id)
         if not maximum_strds.is_in_db():
             dbif.close()
-            grass.fatal(
+            gs.fatal(
                 _("Space time raster dataset <%s> not found") % (maximum_strds.get_id())
             )
 
         if maximum_strds.get_temporal_type() != input_strds.get_temporal_type():
             dbif.close()
-            grass.fatal(
-                _("Temporal type of input strds and maximum strds must be equal")
-            )
+            gs.fatal(_("Temporal type of input strds and maximum strds must be equal"))
 
         maximum_strds.select(dbif)
 
@@ -309,16 +293,10 @@ def main():
 
     if input_strds.is_time_absolute():
         start = tgis.string_to_datetime(start)
-        if stop:
-            stop = tgis.string_to_datetime(stop)
-        else:
-            stop = input_strds_end
+        stop = tgis.string_to_datetime(stop) if stop else input_strds_end
     else:
         start = int(start)
-        if stop:
-            stop = int(stop)
-        else:
-            stop = input_strds_end
+        stop = int(stop) if stop else input_strds_end
 
     if input_strds.is_time_absolute():
         end = tgis.increment_datetime_by_string(start, cycle)
@@ -338,7 +316,7 @@ def main():
         where = "start_time >= '%s' AND start_time < '%s'" % (str(start), str(end))
         input_maps = input_strds.get_registered_maps_as_objects(where=where, dbif=dbif)
 
-        grass.debug(len(input_maps))
+        gs.debug(len(input_maps))
 
         input_topo = tgis.SpatioTemporalTopologyBuilder()
         input_topo.build(input_maps, input_maps)
@@ -346,7 +324,7 @@ def main():
         if len(input_maps) == 0:
             continue
 
-        grass.message(_("Processing cycle %s - %s" % (str(start), str(end))))
+        gs.message(_("Processing cycle %s - %s") % (str(start), str(end)))
 
         count = compute_occurrence(
             occurrence_maps,
@@ -370,10 +348,7 @@ def main():
         if indicator:
             num_maps = len(input_maps)
             for i in range(num_maps):
-                if reverse:
-                    map = input_maps[num_maps - i - 1]
-                else:
-                    map = input_maps[i]
+                map = input_maps[num_maps - i - 1] if reverse else input_maps[i]
 
                 if (
                     input_strds.get_temporal_type() == "absolute"
@@ -403,14 +378,14 @@ def main():
 
                 # Check if new map is in the temporal database
                 if indicator_map.is_in_db(dbif):
-                    if grass.overwrite():
+                    if gs.overwrite():
                         # Remove the existing temporal database entry
                         indicator_map.delete(dbif)
                         indicator_map = input_strds.get_new_map_instance(
                             indicator_map_id
                         )
                     else:
-                        grass.fatal(
+                        gs.fatal(
                             _(
                                 "Map <%s> is already registered in the temporal"
                                 " database, use overwrite flag to overwrite."
@@ -426,7 +401,7 @@ def main():
                         prev_map = curr_map
                         subexpr1 = "null()"
                         subexpr3 = "%i" % (indicator_start)
-                    elif i > 0 and i < num_maps - 1:
+                    elif 0 < i < num_maps - 1:
                         prev_map = occurrence_maps[map.next().get_id()].get_name()
                         next_map = occurrence_maps[map.prev().get_id()].get_name()
                         # In case the previous map is null() set null() or the start
@@ -463,12 +438,12 @@ def main():
                             curr_map,
                             indicator_mid,
                         )
-                else:
+                else:  # noqa: PLR5501
                     if i == 0:
                         prev_map = curr_map
                         subexpr1 = "null()"
                         subexpr3 = "%i" % (indicator_start)
-                    elif i > 0 and i < num_maps - 1:
+                    elif 0 < i < num_maps - 1:
                         prev_map = occurrence_maps[map.prev().get_id()].get_name()
                         next_map = occurrence_maps[map.next().get_id()].get_name()
                         # In case the previous map is null() set null() or the start
@@ -512,8 +487,8 @@ def main():
                     subexpr1,
                     subexpr3,
                 )
-                grass.debug(expression)
-                grass.mapcalc(expression, overwrite=True)
+                gs.debug(expression)
+                gs.mapcalc(expression, overwrite=True)
 
                 map_start, map_end = map.get_temporal_extent_as_tuple()
 
@@ -560,7 +535,7 @@ def main():
     # Remove empty maps
     if len(empty_maps) > 0:
         for map in empty_maps:
-            grass.run_command(
+            gs.run_command(
                 "g.remove", flags="f", type="raster", name=map.get_name(), quiet=True
             )
 
@@ -574,7 +549,7 @@ def create_strds_register_maps(
     out_id = out_strds.get_id()
 
     if out_strds.is_in_db(dbif):
-        if grass.overwrite():
+        if gs.overwrite():
             out_strds.delete(dbif)
             out_strds = in_strds.get_new_instance(out_id)
 
@@ -587,7 +562,7 @@ def create_strds_register_maps(
     for map in out_maps.values():
         count += 1
         if count % 10 == 0:
-            grass.percent(count, len(out_maps), 1)
+            gs.percent(count, len(out_maps), 1)
         # Read the raster map data
         map.load()
         # In case of a empty map continue, do not register empty maps
@@ -601,7 +576,7 @@ def create_strds_register_maps(
         out_strds.register_map(map, dbif)
 
     out_strds.update_from_registered_maps(dbif)
-    grass.percent(1, 1, 1)
+    gs.percent(1, 1, 1)
 
 
 ############################################################################
@@ -642,19 +617,13 @@ def compute_occurrence(
     # Aggregate
     num_maps = len(input_maps)
     for i in range(num_maps):
-        if reverse:
-            map = input_maps[num_maps - i - 1]
-        else:
-            map = input_maps[i]
+        map = input_maps[num_maps - i - 1] if reverse else input_maps[i]
 
         # Compute the days since start
         input_start, input_end = map.get_temporal_extent_as_tuple()
 
         td = input_start - start
-        if map.is_time_absolute():
-            days = tgis.time_delta_to_relative_time(td)
-        else:
-            days = td
+        days = tgis.time_delta_to_relative_time(td) if map.is_time_absolute() else td
 
         if input_strds.get_temporal_type() == "absolute" and tsuffix == "gran":
             suffix = tgis.create_suffix_from_datetime(
@@ -672,12 +641,12 @@ def compute_occurrence(
 
         # Check if new map is in the temporal database
         if occurrence_map.is_in_db(dbif):
-            if grass.overwrite():
+            if gs.overwrite():
                 # Remove the existing temporal database entry
                 occurrence_map.delete(dbif)
                 occurrence_map = input_strds.get_new_map_instance(occurrence_map_id)
             else:
-                grass.fatal(
+                gs.fatal(
                     _(
                         "Map <%s> is already registered in the temporal"
                         " database, use overwrite flag to overwrite."
@@ -711,8 +680,8 @@ def compute_occurrence(
             max,
             days,
         )
-        grass.debug(expression)
-        grass.mapcalc(expression, overwrite=True)
+        gs.debug(expression)
+        gs.mapcalc(expression, overwrite=True)
 
         map_start, map_end = map.get_temporal_extent_as_tuple()
 
@@ -734,7 +703,7 @@ def compute_occurrence(
 ############################################################################
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     # lazy imports
     import grass.temporal as tgis
 

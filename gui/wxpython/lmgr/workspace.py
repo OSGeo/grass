@@ -16,7 +16,9 @@ for details.
 import os
 import tempfile
 
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
+
+from pathlib import Path
 
 import wx
 import wx.aui
@@ -44,7 +46,7 @@ class WorkspaceManager:
         self._giface.workspaceChanged.connect(self.WorkspaceChanged)
 
     def WorkspaceChanged(self):
-        "Update window title"
+        """Update window title"""
         self.workspaceChanged = True
 
     def New(self):
@@ -103,7 +105,7 @@ class WorkspaceManager:
         dlg = wx.FileDialog(
             parent=self.lmgr,
             message=_("Choose workspace file"),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             wildcard=_("GRASS Workspace File (*.gxw)|*.gxw"),
         )
 
@@ -133,7 +135,7 @@ class WorkspaceManager:
         )
         if returncode != 0:
             # TODO: use the function from grass.py
-            reason = _("Most likely the database, location or mapset" " does not exist")
+            reason = _("Most likely the database, location or mapset does not exist")
             details = errors
             message = _(
                 "Unable to change to location and mapset"
@@ -149,14 +151,14 @@ class WorkspaceManager:
                 style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
             )
             dlg.CenterOnParent()
-            if dlg.ShowModal() in [wx.ID_NO, wx.ID_CANCEL]:
+            if dlg.ShowModal() in {wx.ID_NO, wx.ID_CANCEL}:
                 return False
         else:
             # TODO: copy from ChangeLocation function
             GMessage(
                 parent=self.lmgr,
                 message=_(
-                    "Current location is <%(loc)s>.\n" "Current mapset is <%(mapset)s>."
+                    "Current location is <%(loc)s>.\nCurrent mapset is <%(mapset)s>."
                 )
                 % {"loc": gxwXml.location, "mapset": gxwXml.mapset},
             )
@@ -171,15 +173,16 @@ class WorkspaceManager:
         """
         # parse workspace file
         try:
-            gxwXml = ProcessWorkspaceFile(etree.parse(filename))
+            gxwXml = ProcessWorkspaceFile(ET.parse(filename))
         except Exception as e:
             GError(
                 parent=self.lmgr,
                 message=_(
                     "Reading workspace file <%s> failed.\n"
-                    "Invalid file, unable to parse XML document."
+                    "Invalid file, unable to parse XML document.\n"
+                    "Error details: %s"
                 )
-                % filename,
+                % (filename, str(e)),
             )
             return False
 
@@ -213,7 +216,7 @@ class WorkspaceManager:
         # start map displays first (list of layers can be empty)
         #
         displayId = 0
-        mapdisplay = list()
+        mapdisplay = []
         for display in gxwXml.displays:
             mapdisp = self.lmgr.NewDisplay(name=display["name"], show=False)
             mapdisplay.append(mapdisp)
@@ -314,35 +317,37 @@ class WorkspaceManager:
             for overlay in gxwXml.overlays:
                 # overlay["cmd"][0] name of command e.g. d.barscale, d.legend
                 # overlay["cmd"][1:] parameters and flags
-                if overlay["display"] == i:
-                    if overlay["cmd"][0] == "d.legend.vect":
-                        mapdisplay[i].AddLegendVect(overlay["cmd"])
-                    if overlay["cmd"][0] == "d.legend":
-                        mapdisplay[i].AddLegendRast(overlay["cmd"])
-                    if overlay["cmd"][0] == "d.barscale":
-                        mapdisplay[i].AddBarscale(overlay["cmd"])
-                    if overlay["cmd"][0] == "d.northarrow":
-                        mapdisplay[i].AddArrow(overlay["cmd"])
-                    if overlay["cmd"][0] == "d.text":
-                        mapdisplay[i].AddDtext(overlay["cmd"])
+                if overlay["display"] != i:
+                    continue
+                if overlay["cmd"][0] == "d.legend.vect":
+                    mapdisplay[i].AddLegendVect(overlay["cmd"])
+                if overlay["cmd"][0] == "d.legend":
+                    mapdisplay[i].AddLegendRast(overlay["cmd"])
+                if overlay["cmd"][0] == "d.barscale":
+                    mapdisplay[i].AddBarscale(overlay["cmd"])
+                if overlay["cmd"][0] == "d.northarrow":
+                    mapdisplay[i].AddArrow(overlay["cmd"])
+                if overlay["cmd"][0] == "d.text":
+                    mapdisplay[i].AddDtext(overlay["cmd"])
 
             # avoid double-rendering when loading workspace
             # mdisp.MapWindow2D.UpdateMap()
             # nviz
-            if gxwXml.displays[i]["viewMode"] == "3d":
-                mapdisplay[i].AddNviz()
-                self.lmgr.nvizUpdateState(
-                    view=gxwXml.nviz_state["view"],
-                    iview=gxwXml.nviz_state["iview"],
-                    light=gxwXml.nviz_state["light"],
-                )
-                mapdisplay[i].MapWindow3D.constants = gxwXml.nviz_state["constants"]
-                for idx, constant in enumerate(mapdisplay[i].MapWindow3D.constants):
-                    mapdisplay[i].MapWindow3D.AddConstant(constant, i + 1)
-                for page in ("view", "light", "fringe", "constant", "cplane"):
-                    self.lmgr.nvizUpdatePage(page)
-                self.lmgr.nvizUpdateSettings()
-                mapdisplay[i].toolbars["map"].combo.SetSelection(1)
+            if gxwXml.displays[i]["viewMode"] != "3d":
+                continue
+            mapdisplay[i].AddNviz()
+            self.lmgr.nvizUpdateState(
+                view=gxwXml.nviz_state["view"],
+                iview=gxwXml.nviz_state["iview"],
+                light=gxwXml.nviz_state["light"],
+            )
+            mapdisplay[i].MapWindow3D.constants = gxwXml.nviz_state["constants"]
+            for idx, constant in enumerate(mapdisplay[i].MapWindow3D.constants):
+                mapdisplay[i].MapWindow3D.AddConstant(constant, i + 1)
+            for page in ("view", "light", "fringe", "constant", "cplane"):
+                self.lmgr.nvizUpdatePage(page)
+            self.lmgr.nvizUpdateSettings()
+            mapdisplay[i].toolbars["map"].combo.SetSelection(1)
 
         #
         # load layout
@@ -362,7 +367,7 @@ class WorkspaceManager:
         dlg = wx.FileDialog(
             parent=self.lmgr,
             message=_("Choose file to save current workspace"),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             wildcard=_("GRASS Workspace File (*.gxw)|*.gxw"),
             style=wx.FD_SAVE,
         )
@@ -428,32 +433,30 @@ class WorkspaceManager:
         """Save layer tree layout to workspace file
         :return: True on success, False on error
         """
-        tmpfile = tempfile.TemporaryFile(mode="w+b")
-        try:
-            WriteWorkspaceFile(lmgr=self.lmgr, file=tmpfile)
-        except Exception as e:
-            GError(
-                parent=self.lmgr,
-                message=_("Writing current settings to workspace file " "failed."),
-            )
-            return False
-
-        try:
-            mfile = open(filename, "wb")
-            tmpfile.seek(0)
-            for line in tmpfile.readlines():
-                mfile.write(line)
-        except OSError:
-            GError(
-                parent=self.lmgr,
-                message=_("Unable to open file <%s> for writing.") % filename,
-            )
-            return False
-
-        mfile.close()
-
+        with tempfile.TemporaryFile(mode="w+b") as tmpfile:
+            try:
+                WriteWorkspaceFile(lmgr=self.lmgr, file=tmpfile)
+            except Exception as e:
+                GError(
+                    parent=self.lmgr,
+                    message=_(
+                        "Writing current settings to workspace file <%s> failed.\n"
+                        "Error details: %s"
+                    )
+                    % (tmpfile, str(e)),
+                )
+                return False
+            try:
+                with open(filename, "wb") as mfile:
+                    tmpfile.seek(0)
+                    mfile.writelines(tmpfile.readlines())
+            except OSError:
+                GError(
+                    parent=self.lmgr,
+                    message=_("Unable to open file <%s> for writing.") % filename,
+                )
+                return False
         self.AddFileToHistory(file_path=filename)
-
         return True
 
     def CanClosePage(self, caption):
@@ -466,9 +469,7 @@ class WorkspaceManager:
             if self.workspaceFile:
                 message = _("Do you want to save changes in the workspace?")
             else:
-                message = _(
-                    "Do you want to store current settings " "to workspace file?"
-                )
+                message = _("Do you want to store current settings to workspace file?")
 
             # ask user to save current settings
             if maptree.GetCount() > 0:
@@ -514,12 +515,20 @@ class WorkspaceManager:
         :return None
         """
         if menu:
-            file_menu = menu.GetMenu(
-                menuIndex=menu.FindMenu(title=_("File")),
-            )
-            workspace_item = file_menu.FindItem(
-                id=file_menu.FindItem(itemString=_("Workspace")),
-            )[0]
+            menu_index = menu.FindMenu(_("File"))
+            if menu_index == wx.NOT_FOUND:
+                # try untranslated version
+                menu_index = menu.FindMenu("File")
+                if menu_index == wx.NOT_FOUND:
+                    return
+            file_menu = menu.GetMenu(menu_index)
+            workspace_index = file_menu.FindItem(_("Workspace"))
+            if workspace_index == wx.NOT_FOUND:
+                workspace_index = file_menu.FindItem("Workspace")
+                if workspace_index == wx.NOT_FOUND:
+                    return
+            workspace_item = file_menu.FindItemById(workspace_index)
+
             self._recent_files = RecentFilesMenu(
                 app_name="main",
                 parent_menu=workspace_item.GetSubMenu(),
@@ -550,9 +559,8 @@ class WorkspaceManager:
         """
         if not file_exists:
             GError(
-                _(
-                    "File <{}> doesn't exist."
-                    " It was probably moved or deleted.".format(path)
+                _("File <{}> doesn't exist. It was probably moved or deleted.").format(
+                    path
                 ),
                 parent=self.lmgr,
             )

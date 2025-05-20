@@ -172,8 +172,8 @@ void gk_follow_frames(Viewnode *view, int numsteps, Keylist *keys, int step,
 
         GS_get_from(tmp);
         G_debug(3, "gk_follow_frames():");
-        G_debug(3, "  MASK: %lx", mask);
-        G_debug(3, "  FROM: %f %f %f", tmp[X], tmp[Y], tmp[Z]);
+        G_debug(3, "  mask: %lx", mask);
+        G_debug(3, "  from: %f %f %f", tmp[X], tmp[Y], tmp[Z]);
 
         /* ACS 1 line: was      GS_get_focus(tmp);
            with this kanimator works also for flythrough navigation
@@ -207,7 +207,7 @@ void gk_follow_frames(Viewnode *view, int numsteps, Keylist *keys, int step,
             GS_set_fov((int)v->fields[KF_FOV]);
         }
 
-        /* Initilaize lights before drawing */
+        /* Initialize lights before drawing */
         num = 1;
         GS_getlight_position(num, &x, &y, &z, &w);
         GS_setlight_position(num, x, y, z, w);

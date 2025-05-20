@@ -19,14 +19,14 @@ jobs:
     steps:
       - name: Create a .git directory needed by reviewdog
         run: git init
-      - uses: actions/download-artifact@65a9edc5881444af0b9093a5e628f2fe47ea3b2e # v4.1.7
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         id: diff
         continue-on-error: true
         with:
           name: diff
           github-token: ${{ github.token }}
           run-id: ${{github.event.workflow_run.id }}
-      - uses: reviewdog/action-setup@3f401fe1d58fe77e10d665ab713057375e39b887 # v1.3.0
+      - uses: reviewdog/action-setup@e04ffabe3898a0af8d0fb1af00c188831c4b5893 # v1.3.2
       - name: Check what tools have suggestions to post
         # Using this pattern to have expected file names explicitly named
         id: tools
@@ -47,6 +47,7 @@ jobs:
           INPUT_TOOL_NAMES: >-
             black
             clang-format
+            ruff
       - name: Post Black suggestions
         if: ${{ steps.tools.outputs.black == 'true' }}
         run: |
@@ -78,6 +79,24 @@ jobs:
               -reporter="github-pr-review" < "${TMPFILE}"
         env:
           INPUT_TOOL_NAME: clang-format
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CI_COMMIT: ${{ github.event.workflow_run.head_sha }}
+          CI_REPO_OWNER: ${{ github.event.workflow_run.repository.owner.login }}
+          CI_REPO_NAME: ${{ github.event.workflow_run.repository.name }}
+          # CI_PULL_REQUEST: "" # Populated from reviewdog's "-guess" flag since hard to get
+      - name: Post Ruff suggestions
+        if: ${{ steps.tools.outputs.ruff == 'true' }}
+        run: |
+          TMPFILE="diff-${INPUT_TOOL_NAME}.patch"
+          GITHUB_ACTIONS="" reviewdog \
+              -name="${INPUT_TOOL_NAME:-reviewdog-suggester}" \
+              -f=diff \
+              -f.diff.strip=1 \
+              -filter-mode=nofilter \
+              -guess \
+              -reporter="github-pr-review" < "${TMPFILE}"
+        env:
+          INPUT_TOOL_NAME: ruff
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CI_COMMIT: ${{ github.event.workflow_run.head_sha }}
           CI_REPO_OWNER: ${{ github.event.workflow_run.repository.owner.login }}

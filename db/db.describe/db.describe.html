@@ -7,7 +7,7 @@ is used only column names instead of full column descriptions is given.
 
 If parameters for database connection are already set with
 <a href="db.connect.html">db.connect</a>, they are taken as default values and
-do not need to be spcified each time.
+do not need to be specified each time.
 
 <h2>EXAMPLES</h2>
 
@@ -59,6 +59,232 @@ column:OBJECTID
 description:
 type:INTEGER
 [...]
+</pre></div>
+
+<h3>JSON Output</h3>
+<div class="code"><pre>
+db.describe table=hospitals format=json
+</pre></div>
+
+<div class="code"><pre>
+{
+    "table": "hospitals",
+    "description": "",
+    "insert": null,
+    "delete": null,
+    "ncols": 16,
+    "nrows": 160,
+    "columns": [
+        {
+            "position": 1,
+            "column": "cat",
+            "description": "",
+            "type": "INTEGER",
+            "length": 20,
+            "scale": 0,
+            "precision": 0,
+            "default": null,
+            "nullok": true,
+            "select": null,
+            "update": null
+        },
+        {
+            "position": 2,
+            "column": "OBJECTID",
+            "description": "",
+            "type": "INTEGER",
+            "length": 20,
+            "scale": 0,
+            "precision": 0,
+            "default": null,
+            "nullok": true,
+            "select": null,
+            "update": null
+        },
+        {
+            "position": 3,
+            "column": "AREA",
+            "description": "",
+            "type": "DOUBLE PRECISION",
+            "length": 20,
+            "scale": 0,
+            "precision": 0,
+            "default": null,
+            "nullok": true,
+            "select": null,
+            "update": null
+        },
+        {
+            "position": 4,
+            "column": "PERIMETER",
+            "description": "",
+            "type": "DOUBLE PRECISION",
+            "length": 20,
+            "scale": 0,
+            "precision": 0,
+            "default": null,
+            "nullok": true,
+            "select": null,
+            "update": null
+        },
+        {
+            "position": 5,
+            "column": "HLS_",
+            "description": "",
+            "type": "INTEGER",
+            "length": 20,
+            "scale": 0,
+            "precision": 0,
+            "default": null,
+            "nullok": true,
+            "select": null,
+            "update": null
+        },
+        {
+            "position": 6,
+            "column": "HLS_ID",
+            "description": "",
+            "type": "INTEGER",
+            "length": 20,
+            "scale": 0,
+            "precision": 0,
+            "default": null,
+            "nullok": true,
+            "select": null,
+            "update": null
+        },
+        {
+            "position": 7,
+            "column": "NAME",
+            "description": "",
+            "type": "CHARACTER",
+            "length": 45,
+            "scale": 0,
+            "precision": 0,
+            "default": null,
+            "nullok": true,
+            "select": null,
+            "update": null
+        },
+        {
+            "position": 8,
+            "column": "ADDRESS",
+            "description": "",
+            "type": "CHARACTER",
+            "length": 35,
+            "scale": 0,
+            "precision": 0,
+            "default": null,
+            "nullok": true,
+            "select": null,
+            "update": null
+        },
+        {
+            "position": 9,
+            "column": "CITY",
+            "description": "",
+            "type": "CHARACTER",
+            "length": 16,
+            "scale": 0,
+            "precision": 0,
+            "default": null,
+            "nullok": true,
+            "select": null,
+            "update": null
+        },
+        {
+            "position": 10,
+            "column": "ZIP",
+            "description": "",
+            "type": "CHARACTER",
+            "length": 5,
+            "scale": 0,
+            "precision": 0,
+            "default": null,
+            "nullok": true,
+            "select": null,
+            "update": null
+        },
+        {
+            "position": 11,
+            "column": "COUNTY",
+            "description": "",
+            "type": "CHARACTER",
+            "length": 12,
+            "scale": 0,
+            "precision": 0,
+            "default": null,
+            "nullok": true,
+            "select": null,
+            "update": null
+        },
+        {
+            "position": 12,
+            "column": "PHONE",
+            "description": "",
+            "type": "CHARACTER",
+            "length": 14,
+            "scale": 0,
+            "precision": 0,
+            "default": null,
+            "nullok": true,
+            "select": null,
+            "update": null
+        },
+        {
+            "position": 13,
+            "column": "CANCER",
+            "description": "",
+            "type": "CHARACTER",
+            "length": 4,
+            "scale": 0,
+            "precision": 0,
+            "default": null,
+            "nullok": true,
+            "select": null,
+            "update": null
+        },
+        {
+            "position": 14,
+            "column": "POLYGONID",
+            "description": "",
+            "type": "INTEGER",
+            "length": 20,
+            "scale": 0,
+            "precision": 0,
+            "default": null,
+            "nullok": true,
+            "select": null,
+            "update": null
+        },
+        {
+            "position": 15,
+            "column": "SCALE",
+            "description": "",
+            "type": "DOUBLE PRECISION",
+            "length": 20,
+            "scale": 0,
+            "precision": 0,
+            "default": null,
+            "nullok": true,
+            "select": null,
+            "update": null
+        },
+        {
+            "position": 16,
+            "column": "ANGLE",
+            "description": "",
+            "type": "DOUBLE PRECISION",
+            "length": 20,
+            "scale": 0,
+            "precision": 0,
+            "default": null,
+            "nullok": true,
+            "select": null,
+            "update": null
+        }
+    ]
+}
 </pre></div>
 
 <h2>SEE ALSO</h2>

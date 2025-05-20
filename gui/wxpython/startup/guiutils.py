@@ -165,9 +165,8 @@ def create_location_interactively(guiparent, grassdb):
     gWizard = LocationWizard(parent=guiparent, grassdatabase=grassdb)
 
     if gWizard.location is None:
-        gWizard_output = (None, None, None)
+        return (None, None, None)
         # Returns Nones after Cancel
-        return gWizard_output
 
     if gWizard.georeffile:
         message = _("Do you want to import {} to the newly created project?").format(
@@ -200,11 +199,9 @@ def create_location_interactively(guiparent, grassdb):
         )
         # Returns database and location created by user
         # and a mapset user may want to switch to
-        gWizard_output = (gWizard.grassdatabase, gWizard.location, mapset)
-    else:
-        # Returns PERMANENT mapset when user mapset not defined
-        gWizard_output = (gWizard.grassdatabase, gWizard.location, "PERMANENT")
-    return gWizard_output
+        return (gWizard.grassdatabase, gWizard.location, mapset)
+    # Returns PERMANENT mapset when user mapset not defined
+    return (gWizard.grassdatabase, gWizard.location, "PERMANENT")
 
 
 def rename_mapset_interactively(guiparent, grassdb, location, mapset):
@@ -586,7 +583,7 @@ def can_switch_mapset_interactive(guiparent, grassdb, location, mapset):
 
     if is_mapset_locked(mapset_path):
         info = get_mapset_lock_info(mapset_path)
-        user = info["owner"] if info["owner"] else _("unknown")
+        user = info["owner"] or _("unknown")
         lockpath = info["lockpath"]
         timestamp = info["timestamp"]
 
@@ -653,7 +650,7 @@ def import_file(guiparent, filePath, env):
     if returncode != 0:
         GError(
             parent=guiparent,
-            message=_("Import of <%(name)s> failed.\n" "Reason: %(msg)s")
+            message=_("Import of <%(name)s> failed.\nReason: %(msg)s")
             % ({"name": filePath, "msg": error}),
         )
     else:
@@ -708,15 +705,14 @@ def switch_mapset_interactively(
                 GMessage(
                     parent=guiparent,
                     message=_(
-                        "Current project is <%(loc)s>.\n"
-                        "Current mapset is <%(mapset)s>."
+                        "Current project is <%(loc)s>.\nCurrent mapset is <%(mapset)s>."
                     )
                     % {"loc": location, "mapset": mapset},
                 )
             giface.currentMapsetChanged.emit(
                 dbase=None, location=location, mapset=mapset
             )
-    else:
+    else:  # noqa: PLR5501
         if RunCommand("g.mapset", parent=guiparent, mapset=mapset) == 0:
             if show_confirmation:
                 GMessage(

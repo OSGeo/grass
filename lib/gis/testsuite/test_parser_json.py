@@ -10,11 +10,13 @@ for details.
 
 import subprocess
 from grass.gunittest.case import TestCase
+from grass.gunittest.utils import xfail_windows
 from grass.script import decode
 import json
 
 
 class TestParserJson(TestCase):
+    @xfail_windows
     def test_r_slope_aspect_json(self):
         args = [
             "r.slope.aspect",
@@ -58,6 +60,7 @@ class TestParserJson(TestCase):
         self.assertEqual(json_code["inputs"], inputs)
         self.assertEqual(json_code["outputs"], outputs)
 
+    @xfail_windows
     def test_v_out_ascii(self):
         args = [
             "v.out.ascii",
@@ -91,6 +94,7 @@ class TestParserJson(TestCase):
         self.assertEqual(json_code["inputs"], inputs)
         self.assertEqual(json_code["outputs"], outputs)
 
+    @xfail_windows
     def test_v_info(self):
         args = ["v.info", "map=hospitals@PERMANENT", "-c", "--json"]
 

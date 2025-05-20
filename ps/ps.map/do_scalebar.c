@@ -2,6 +2,7 @@
 
 #include <string.h>
 #include <math.h>
+#include <grass/gis.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 #include "distance.h"
@@ -86,7 +87,8 @@ int do_scalebar(void)
 
             /* do text */
             if (i == 0 || lab == sb.numbers) {
-                sprintf(num, "%s", nice_number((sb.length / sb.segment) * i));
+                snprintf(num, sizeof(num), "%s",
+                         nice_number((sb.length / sb.segment) * i));
                 text_box_path(x1, y2 + margin, CENTER, LOWER, num, 0);
                 if (sb.bgcolor) { /* TODO: take bg color, not just [white|none]
                                    */
@@ -101,7 +103,7 @@ int do_scalebar(void)
             if ((lab > 0 && i == seg - 1) ||
                 (sb.numbers == 1 && i == seg - 1)) {
                 /* special case for last label */
-                sprintf(num, "%s", nice_number(sb.length));
+                snprintf(num, sizeof(num), "%s", nice_number(sb.length));
                 text_box_path(x2, y2 + margin, CENTER, LOWER, num, 0);
                 if (sb.bgcolor) {
                     set_rgb_color(WHITE);
@@ -144,7 +146,7 @@ int do_scalebar(void)
         fprintf(PS.fp, "%.1f %.1f %.1f %.1f L D\n", x1, y1, x2, y2);
 
         /* draw label */
-        sprintf(num, "%s", nice_number(sb.length));
+        snprintf(num, sizeof(num), "%s", nice_number(sb.length));
         text_box_path(x1, y2 + margin, CENTER, LOWER, num, 0);
         if (sb.bgcolor) {
             set_rgb_color(WHITE);
@@ -166,7 +168,8 @@ int do_scalebar(void)
 
             /* do text */
             if (lab == sb.numbers) {
-                sprintf(num, "%s", nice_number((sb.length / sb.segment) * i));
+                snprintf(num, sizeof(num), "%s",
+                         nice_number((sb.length / sb.segment) * i));
 
                 text_box_path(x1, y3 + margin, CENTER, LOWER, num, 0);
                 if (sb.bgcolor) {
@@ -182,17 +185,17 @@ int do_scalebar(void)
 
     /* draw units label */
     if (sb.units == SB_UNITS_AUTO)
-        strcpy(num, G_database_unit_name(TRUE));
+        (void)G_strlcpy(num, G_database_unit_name(TRUE), sizeof(num));
     else if (sb.units == SB_UNITS_METERS)
-        strcpy(num, _("meters"));
+        (void)G_strlcpy(num, _("meters"), sizeof(num));
     else if (sb.units == SB_UNITS_KM)
-        strcpy(num, _("kilometers"));
+        (void)G_strlcpy(num, _("kilometers"), sizeof(num));
     else if (sb.units == SB_UNITS_FEET)
-        strcpy(num, _("feet"));
+        (void)G_strlcpy(num, _("feet"), sizeof(num));
     else if (sb.units == SB_UNITS_MILES)
-        strcpy(num, _("miles"));
+        (void)G_strlcpy(num, _("miles"), sizeof(num));
     else if (sb.units == SB_UNITS_NMILES)
-        strcpy(num, _("nautical miles"));
+        (void)G_strlcpy(num, _("nautical miles"), sizeof(num));
 
     text_box_path(72.0 * (x + length / 2),
                   72.0 * (PS.page_height - (sb.y + 0.075)), CENTER, UPPER, num,
@@ -214,13 +217,13 @@ static char *nice_number(double val)
     static char text[50];
 
     if (val == (int)val)
-        sprintf(text, "%.0f", val);
+        snprintf(text, sizeof(text), "%.0f", val);
     else if ((val * 10.) == (int)(val * 10))
-        sprintf(text, "%.1f", val);
+        snprintf(text, sizeof(text), "%.1f", val);
     else if ((val * 100.) == (int)(val * 100))
-        sprintf(text, "%.2f", val);
+        snprintf(text, sizeof(text), "%.2f", val);
     else
-        sprintf(text, "%.3f", val);
+        snprintf(text, sizeof(text), "%.3f", val);
 
     return text;
 }

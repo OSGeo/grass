@@ -6,7 +6,7 @@ import os
 import pytest
 
 import grass.script as gs
-import grass.experimental as experimental
+from grass import experimental
 
 
 @pytest.fixture
@@ -40,9 +40,7 @@ def unique_id():
 
 
 @pytest.fixture
-def xy_mapset_session(
-    xy_session_for_module, unique_id
-):  # pylint: disable=redefined-outer-name
+def xy_mapset_session(xy_session_for_module, unique_id):  # pylint: disable=redefined-outer-name
     """Active session in a mapset of an XY location
 
     Mapset scope is function, while the location scope is module.

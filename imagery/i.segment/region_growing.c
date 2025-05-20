@@ -192,7 +192,8 @@ int region_growing(struct globals *globals)
     int pathflag; /* =1 if we didn't find mutually best neighbors, continue with
                      Rk */
     int candidates_only;
-    struct ngbr_stats Ri, Rk, Rk_bestn, /* Rk's best neighbor */
+    struct ngbr_stats Ri = {0}, Rk = {0},
+                      Rk_bestn = {0}, /* Rk's best neighbor */
         *next;
     int Ri_nn, Rk_nn; /* number of neighbors for Ri/Rk */
     struct NB_TREE *Ri_ngbrs, *Rk_ngbrs;
@@ -519,9 +520,9 @@ int region_growing(struct globals *globals)
                             }
                         }
                     } /* end if < threshold */
-                }     /* end pathflag */
-            }         /* next col */
-        }             /* next row */
+                } /* end pathflag */
+            } /* next col */
+        } /* next row */
         G_percent(1, 1, 1);
 
         /* finished one pass for processing candidate pixels */
@@ -695,7 +696,7 @@ static int find_best_neighbor(struct ngbr_stats *Ri, struct reg_stats *Ri_rs,
                               int clear_cand, struct globals *globals)
 {
     int n, n_ngbrs, no_check, cmp;
-    struct rc ngbr_rc, next, *pngbr_rc;
+    struct rc ngbr_rc = {0}, next = {0}, *pngbr_rc = NULL;
     struct rclist rilist;
     double tempsim;
     int neighbors[8][2];
@@ -843,7 +844,7 @@ static int find_best_neighbor(struct ngbr_stats *Ri, struct reg_stats *Ri_rs,
                     }
                 }
             }
-        } while (n--);                     /* end do loop - next neighbor */
+        } while (n--); /* end do loop - next neighbor */
     } while (rclist_drop(&rilist, &next)); /* while there are cells to check */
 
     /* clean up */
@@ -885,14 +886,14 @@ double calculate_shape(struct reg_stats *rsi, struct reg_stats *rsk,
 
     /* here we calculate a shape index for the new object to be created
      * the radiometric index ranges from 0 to 1, 0 = identical
-     * with the shape index we want to favour compact and smooth opjects
+     * with the shape index we want to favour compact and smooth objects
      * thus the shape index should range from 0 to 1,
      * 0 = maximum compactness and smoothness */
 
     double smooth, compact;
     int pl, pbbox, count;
     double bboxdiag;
-    int pl1, pl2, count1, count2;
+    int pl1 = 0, pl2 = 0, count1 = 0, count2 = 0;
     int e1, n1, s1, w1, e2, n2, s2, w2, ns_extent, ew_extent;
 
     pl = pl1 + pl2 - nshared;
@@ -988,7 +989,7 @@ static int search_neighbors(struct ngbr_stats *Ri, struct reg_stats *Ri_rs,
 int update_band_vals(int row, int col, struct reg_stats *rs,
                      struct globals *globals)
 {
-    struct rc next, ngbr_rc;
+    struct rc next = {0}, ngbr_rc = {0};
     int neighbors[8][2];
     int rid, count, n;
 
@@ -1497,7 +1498,7 @@ static int calculate_reg_stats(int row, int col, struct reg_stats *rs,
         ret = 1;
     else if (globals->min_reg_size == 3) {
         int n, rid;
-        struct rc ngbr_rc;
+        struct rc ngbr_rc = {0};
         int neighbors[8][2];
 
         globals->find_neighbors(row, col, neighbors);
@@ -1540,7 +1541,7 @@ static int calculate_reg_stats(int row, int col, struct reg_stats *rs,
         /* rs->id must be set */
         struct pavl_table *rc_check_tree; /* cells already checked */
         int n, rid;
-        struct rc ngbr_rc, *pngbr_rc, next;
+        struct rc ngbr_rc = {0}, *pngbr_rc = NULL, next = {0};
         struct rclist rilist;
         int neighbors[8][2];
         int no_check;

@@ -101,13 +101,10 @@ def test_aggregate_column_result(dataset, backend):
     for stats_column in stats_columns:
         assert stats_column in columns
         column_info = columns[stats_column]
-        if stats_column.endswith("_n"):
-            correct_type = "integer"
-        else:
-            correct_type = "double precision"
-        assert (
-            columns[stats_column]["type"].lower() == correct_type
-        ), f"{stats_column} has a wrong type"
+        correct_type = "integer" if stats_column.endswith("_n") else "double precision"
+        assert columns[stats_column]["type"].lower() == correct_type, (
+            f"{stats_column} has a wrong type"
+        )
     assert dataset.str_column_name in columns
     column_info = columns[dataset.str_column_name]
     assert column_info["type"].lower() == "character"
@@ -221,13 +218,10 @@ def test_sqlite_agg_accepted(dataset):
     for method, stats_column in zip(stats, expected_stats_columns):
         assert stats_column in columns
         column_info = columns[stats_column]
-        if method == "count":
-            correct_type = "integer"
-        else:
-            correct_type = "double precision"
-        assert (
-            columns[stats_column]["type"].lower() == correct_type
-        ), f"{stats_column} has a wrong type"
+        correct_type = "integer" if method == "count" else "double precision"
+        assert columns[stats_column]["type"].lower() == correct_type, (
+            f"{stats_column} has a wrong type"
+        )
     assert dataset.str_column_name in columns
     column_info = columns[dataset.str_column_name]
     assert column_info["type"].lower() == "character"

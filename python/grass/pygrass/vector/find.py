@@ -4,28 +4,38 @@ Created on Tue Mar 19 11:09:30 2013
 @author: pietro
 """
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import grass.lib.vector as libvect
-
 from grass.pygrass.errors import must_be_open
+from grass.pygrass.vector.basic import BoxList, Ilist
+from grass.pygrass.vector.geometry import Area, Isle, Node, read_line
 
-from grass.pygrass.vector.basic import Ilist, BoxList
-from grass.pygrass.vector.geometry import read_line, Isle, Area, Node
+if TYPE_CHECKING:
+    from grass.pygrass.vector.table import Table
 
 # For test purposes
 test_vector_name = "find_doctest_map"
 
 
 class AbstractFinder:
-    def __init__(self, c_mapinfo, table=None, writeable=False):
-        """Abstract finder
-        -----------------
+    def __init__(
+        self, c_mapinfo, table: Table | None = None, writeable: bool = False
+    ) -> None:
+        """Find geometry feature(s) around a point or that are inside or intersect
+        with a bounding box.
 
-        Find geometry feature around a point.
+        :param c_mapinfo: Pointer to the vector layer mapinfo structure
+        :type c_mapinfo: ctypes pointer to mapinfo structure
+        :param table: Attribute table of the vector layer
+        :param writable: True or False
         """
         self.c_mapinfo = c_mapinfo
-        self.table = table
-        self.writeable = writeable
-        self.vtype = {
+        self.table: Table | None = table
+        self.writeable: bool = writeable
+        self.vtype: dict[str, int] = {
             "point": libvect.GV_POINT,  # 1
             "line": libvect.GV_LINE,  # 2
             "boundary": libvect.GV_BOUNDARY,  # 3
@@ -33,7 +43,7 @@ class AbstractFinder:
             "all": -1,
         }
 
-    def is_open(self):
+    def is_open(self) -> bool:
         """Check if the vector map is open or not"""
         from . import abstract
 
@@ -47,20 +57,6 @@ class PointFinder(AbstractFinder):
     of a vector map that are close to a point. The PointFinder class
     is part of a topological vector map object.
     """
-
-    def __init__(self, c_mapinfo, table=None, writeable=False):
-        """Find geometry feature(s) around a point.
-
-        :param c_mapinfo: Pointer to the vector layer mapinfo structure
-        :type c_mapinfo: ctypes pointer to mapinfo structure
-
-        :param table: Attribute table of the vector layer
-        :type table: Class Table from grass.pygrass.table
-
-        :param writable: True or False
-        :type writeable: boolean
-        """
-        super().__init__(c_mapinfo, table, writeable)
 
     @must_be_open
     def node(self, point, maxdist):
@@ -101,7 +97,7 @@ class PointFinder(AbstractFinder):
             self.c_mapinfo,
             point.x,
             point.y,
-            point.z if point.z else 0,
+            point.z or 0,
             float(maxdist),
             int(not point.is2D),
         )
@@ -166,7 +162,7 @@ class PointFinder(AbstractFinder):
             self.c_mapinfo,
             point.x,
             point.y,
-            point.z if point.z else 0,
+            point.z or 0,
             self.vtype[type],
             float(maxdist),
             int(not point.is2D),
@@ -257,7 +253,7 @@ class PointFinder(AbstractFinder):
             self.c_mapinfo,
             point.x,
             point.y,
-            point.z if point.z else 0,
+            point.z or 0,
             self.vtype[type],
             float(maxdist),
             int(not point.is2D),
@@ -397,21 +393,6 @@ class BboxFinder(AbstractFinder):
 
     """
 
-    def __init__(self, c_mapinfo, table=None, writeable=False):
-        """Find geometry feature(s)that are insider or intersect
-        with a boundingbox.
-
-         :param c_mapinfo: Pointer to the vector layer mapinfo structure
-         :type c_mapinfo: ctypes pointer to mapinfo structure
-
-         :param table: Attribute table of the vector layer
-         :type table: Class Table from grass.pygrass.table
-
-         :param writable: True or False
-         :type writeable: boolean
-        """
-        super().__init__(c_mapinfo, table, writeable)
-
     @must_be_open
     def geos(self, bbox, type="all", bboxlist_only=False):
         """Find vector features inside a boundingbox.
@@ -490,11 +471,10 @@ class BboxFinder(AbstractFinder):
         ):
             if bboxlist_only:
                 return found
-            else:
-                return (
-                    read_line(f_id, self.c_mapinfo, self.table, self.writeable)
-                    for f_id in found.ids
-                )
+            return (
+                read_line(f_id, self.c_mapinfo, self.table, self.writeable)
+                for f_id in found.ids
+            )
 
     @must_be_open
     def nodes(self, bbox):
@@ -586,22 +566,21 @@ class BboxFinder(AbstractFinder):
 
         >>> test_vect.close()
         """
-        boxlist = boxlist if boxlist else BoxList()
+        boxlist = boxlist or BoxList()
         if libvect.Vect_select_areas_by_box(
             self.c_mapinfo, bbox.c_bbox, boxlist.c_boxlist
         ):
             if bboxlist_only:
                 return boxlist
-            else:
-                return (
-                    Area(
-                        v_id=a_id,
-                        c_mapinfo=self.c_mapinfo,
-                        table=self.table,
-                        writeable=self.writeable,
-                    )
-                    for a_id in boxlist.ids
+            return (
+                Area(
+                    v_id=a_id,
+                    c_mapinfo=self.c_mapinfo,
+                    table=self.table,
+                    writeable=self.writeable,
                 )
+                for a_id in boxlist.ids
+            )
 
     @must_be_open
     def islands(self, bbox, bboxlist_only=False):
@@ -652,22 +631,18 @@ class BboxFinder(AbstractFinder):
         ):
             if bboxlist_only:
                 return found
-            else:
-                return (
-                    Isle(
-                        v_id=i_id,
-                        c_mapinfo=self.c_mapinfo,
-                        table=self.table,
-                        writeable=self.writeable,
-                    )
-                    for i_id in found.ids
+            return (
+                Isle(
+                    v_id=i_id,
+                    c_mapinfo=self.c_mapinfo,
+                    table=self.table,
+                    writeable=self.writeable,
                 )
+                for i_id in found.ids
+            )
 
 
 class PolygonFinder(AbstractFinder):
-    def __init__(self, c_mapinfo, table=None, writeable=False):
-        super().__init__(c_mapinfo, table, writeable)
-
     def lines(self, polygon, isles=None):
         pass
 
@@ -677,15 +652,16 @@ class PolygonFinder(AbstractFinder):
 
 if __name__ == "__main__":
     import doctest
+
     from grass.pygrass import utils
 
     utils.create_test_vector_map(test_vector_name)
     doctest.testmod()
 
-    """Remove the generated vector map, if exist"""
     from grass.pygrass.utils import get_mapset_vector
     from grass.script.core import run_command
 
     mset = get_mapset_vector(test_vector_name, mapset="")
     if mset:
+        # Remove the generated vector map, if exists
         run_command("g.remove", flags="f", type="vector", name=test_vector_name)

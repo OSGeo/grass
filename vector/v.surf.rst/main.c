@@ -26,6 +26,7 @@
 #if defined(_OPENMP)
 #include <omp.h>
 #endif
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -33,12 +34,12 @@
 
 #include <grass/gis.h>
 #include <grass/vector.h>
+#include <grass/raster.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 #include <grass/linkm.h>
 #include <grass/bitmap.h>
 #include <grass/interpf.h>
-
 #include <grass/qtree.h>
 #include <grass/dataquad.h>
 #include <grass/gmath.h>
@@ -412,16 +413,7 @@ int main(int argc, char *argv[])
                   threads, abs(threads));
         threads = abs(threads);
     }
-    if (parm.devi->answer && threads > 1) {
-        G_warning(_(
-            "Parallel computation disabled when deviation output is required"));
-        threads = 1;
-    }
-    if (parm.cvdev->answer && threads > 1) {
-        G_warning(_("Parallel computation disabled when cross validation "
-                    "output is required"));
-        threads = 1;
-    }
+
 #if defined(_OPENMP)
     omp_set_num_threads(threads);
 #else
@@ -429,8 +421,8 @@ int main(int argc, char *argv[])
         G_warning(_("GRASS GIS is not compiled with OpenMP support, parallel "
                     "computation is disabled."));
 #endif
-    if (threads > 1 && G_find_raster("MASK", G_mapset()) != NULL) {
-        G_warning(_("Parallel processing disabled due to active MASK."));
+    if (threads > 1 && Rast_mask_is_present()) {
+        G_warning(_("Parallel processing disabled due to active mask."));
         threads = 1;
     }
     if (devi) {
@@ -666,11 +658,27 @@ int main(int argc, char *argv[])
                       Tmp_fd_z, Tmp_fd_dx, Tmp_fd_dy, Tmp_fd_xx, Tmp_fd_yy,
                       Tmp_fd_xy, create_devi, NULL, cv, parm.wheresql->answer);
 
+#if defined(_OPENMP)
+    if (cv || create_devi) {
+        /* use the particular check_point function for cv or dev*/
+        /* IL_interp_segments_2d_parallel should use these functions*/
+        IL_init_func_2d(&params, IL_grid_calc_2d, IL_matrix_create,
+                        IL_check_at_points_2d_cvdev, IL_secpar_loop_2d, IL_crst,
+                        IL_crstg, IL_write_temp_2d);
+    }
+    else {
+        IL_init_func_2d(&params, IL_grid_calc_2d, IL_matrix_create,
+                        IL_check_at_points_2d, IL_secpar_loop_2d, IL_crst,
+                        IL_crstg, IL_write_temp_2d);
+    }
+#else
     IL_init_func_2d(&params, IL_grid_calc_2d, IL_matrix_create,
                     IL_check_at_points_2d, IL_secpar_loop_2d, IL_crst, IL_crstg,
                     IL_write_temp_2d);
+#endif
 
     totsegm = IL_vector_input_data_2d(&params, &Map, with_z ? 0 : field, zcol,
+
                                       scol, info, &xmin, &xmax, &ymin, &ymax,
                                       &zmin, &zmax, &NPOINT, &dmax);
     if (totsegm <= 0) {

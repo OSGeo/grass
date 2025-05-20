@@ -1,4 +1,4 @@
-FROM alpine:3.20@sha256:b89d9c93e9ed3597455c90a0b88a8bbb5cb7188438f70953fede212a0c4394e0 as common
+FROM alpine:3.21@sha256:a8560b36e8b8210634f77d9f7f9efd7ffa463e380b75e2e74aff4511df3ef88c as common
 
 # Based on:
 # https://github.com/mundialis/docker-grass-gis/blob/master/Dockerfile
@@ -11,9 +11,9 @@ ARG PYTHON_VERSION=3
 # List of packages to be installed (proj-data omitted: 570.04 MB)
 ENV GRASS_RUN_PACKAGES="\
       attr \
-      build-base \
       bash \
       bison \
+      build-base \
       bzip2 \
       cairo \
       curl \
@@ -35,9 +35,9 @@ ENV GRASS_RUN_PACKAGES="\
       gdal-driver-PNG \
       gdal-driver-WMS \
       gdal-tools \
-      gettext \
       geos \
       geos-dev \
+      gettext \
       git \
       gnutls \
       jsoncpp \
@@ -52,15 +52,15 @@ ENV GRASS_RUN_PACKAGES="\
       musl \
       musl-utils \
       ncurses \
-      openjpeg \
       openblas \
-      py3-numpy \
-      py3-pillow \
-      python3 \
+      openjpeg \
       pdal \
       pdal-dev \
       postgresql15-client \
       proj-util \
+      py3-numpy \
+      py3-pillow \
+      python3 \
       sqlite \
       sqlite-libs \
       subversion \
@@ -80,7 +80,7 @@ RUN echo "Install main packages";\
     apk add --no-cache $GRASS_RUN_PACKAGES
 
 
-FROM common as build
+FROM common AS build
 
 # ================
 # CONFIG VARIABLES
@@ -89,23 +89,23 @@ FROM common as build
 # set configuration options, without wxGUI
 ENV GRASS_CONFIG="\
       --enable-largefile \
-      --with-cxx \
-      --with-proj-share=/usr/share/proj \
-      --with-gdal \
-      --with-pdal \
-      --with-geos \
-      --with-sqlite \
       --with-bzlib \
-      --with-zstd \
       --with-cairo --with-cairo-ldflags=-lfontconfig \
+      --with-cxx \
       --with-fftw \
-      --with-postgres --with-postgres-includes=/usr/include/postgresql \
+      --with-gdal \
+      --with-geos \
       --with-openmp \
+      --with-pdal \
+      --with-postgres --with-postgres-includes=/usr/include/postgresql \
+      --with-proj-share=/usr/share/proj \
+      --with-sqlite \
+      --with-zstd \
       --without-freetype \
-      --without-opengl \
-      --without-nls \
       --without-mysql \
+      --without-nls \
       --without-odbc \
+      --without-opengl \
       "
 
 # Set environmental variables for GRASS GIS compilation, without debug symbols
@@ -123,6 +123,7 @@ ENV GRASS_BUILD_PACKAGES="\
       build-base \
       bzip2-dev \
       cairo-dev \
+      cmake \
       fftw-dev \
       freetype-dev \
       geos-dev \
@@ -132,13 +133,13 @@ ENV GRASS_BUILD_PACKAGES="\
       libjpeg-turbo-dev \
       libpng-dev \
       libpq-dev \
-      openjpeg-dev \
       openblas-dev \
+      openjpeg-dev \
       pdal \
       pdal-dev \
       proj-dev \
-      python3-dev \
       py3-numpy-dev \
+      python3-dev \
       sqlite-dev \
       tar \
       tiff-dev \
@@ -166,8 +167,17 @@ RUN echo "  => Configure and compile grass" && \
     make install && \
     ldconfig /etc/ld.so.conf.d
 
+# Build the GDAL-GRASS plugin
+# renovate: datasource=github-tags depName=OSGeo/gdal-grass
+ARG GDAL_GRASS_VERSION=1.0.3
+RUN git clone --branch $GDAL_GRASS_VERSION --depth 1 https://github.com/OSGeo/gdal-grass.git /src/gdal-grass
+WORKDIR /src/gdal-grass
+RUN cmake -B build -DAUTOLOAD_DIR=/usr/lib/gdalplugins -DBUILD_TESTING=OFF && \
+    cmake --build build && \
+    cmake --install build
+
 # Get rid of version number here, restore in next stage via symbolic link
-RUN mv $(grass --config path) /usr/local/grass
+RUN mv /usr/local/grass85 /usr/local/grass
 
 # Reduce the image size - Remove unnecessary grass files
 RUN cp /usr/local/grass/gui/wxpython/xml/module_items.xml module_items.xml; \
@@ -178,16 +188,8 @@ RUN cp /usr/local/grass/gui/wxpython/xml/module_items.xml module_items.xml; \
     mkdir -p /usr/local/grass/gui/wxpython/xml/; \
     mv module_items.xml /usr/local/grass/gui/wxpython/xml/module_items.xml;
 
-RUN git clone https://github.com/OSGeo/gdal-grass /src/gdal-grass
-WORKDIR /src/gdal-grass
-RUN ./configure \
-    --with-gdal=/usr/bin/gdal-config \
-    --with-grass=/usr/local/grass && \
-    make -j $NUMTHREADS && \
-    make install -j $NUMTHREADS
 
-
-FROM common as grass
+FROM common AS grass
 
 # GRASS GIS specific
 # allow work with MAPSETs that are not owned by current user
@@ -202,13 +204,17 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
 COPY --from=build /usr/local/bin/grass /usr/local/bin/grass
 COPY --from=build /usr/local/grass* /usr/local/grass/
 COPY --from=build /usr/lib/gdalplugins/*_GRASS.so /usr/lib/gdalplugins/
+# Set GISBASE
+ENV GISBASE=/usr/local/grass
+ENV GRASS_GISBASE=/usr/local/grass
+
 # run simple LAZ test
 COPY docker/testdata/simple.laz /tmp/
 COPY docker/testdata/test_grass_python.py docker/testdata/test_grass_session.py docker/alpine/grass_tests.sh /scripts/
 
 # run GRASS GIS python session and scan the test LAZ file; some cleanup
 # also show installed version
-RUN ln -sf /usr/local/grass $(grass --config path); \
+RUN ln -sf /usr/local/grass /usr/local/grass85; \
     rm -rf /tmp/grasstest_epsg_25832; \
     $SHELL /scripts/grass_tests.sh; \
     python /scripts/test_grass_session.py && rm -rf /tmp/grasstest_epsg_25832; \

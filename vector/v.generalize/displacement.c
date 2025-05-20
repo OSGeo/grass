@@ -91,7 +91,7 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
             POINT cur;
 
             point_assign(Points, j, with_z, &cur, 0);
-            /* check whether we alerady have point with the same
+            /* check whether we already have point with the same
              * coordinates */
             findex = pindex;
             for (q = 0; q < pindex; q++)
@@ -310,6 +310,8 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
     matrix_free(&fy);
     matrix_free(&dx_old);
     matrix_free(&dy_old);
+    Vect_destroy_cats_struct(Cats);
+    Vect_destroy_line_struct(Points);
 
     return 0;
 }

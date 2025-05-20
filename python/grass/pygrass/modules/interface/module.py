@@ -334,11 +334,11 @@ class Module:
     >>> region.flags.u = True
     >>> region.flags["3"].value = True  # set numeric flags
     >>> region.get_bash()
-    'g.region -p -3 -u'
+    'g.region format=plain -p -3 -u'
     >>> new_region = copy.deepcopy(region)
     >>> new_region.inputs.res = "10"
     >>> new_region.get_bash()
-    'g.region res=10 -p -3 -u'
+    'g.region res=10 format=plain -p -3 -u'
 
     >>> neighbors = Module("r.neighbors")
     >>> neighbors.inputs.input = "mapA"
@@ -545,25 +545,25 @@ class Module:
     """  # noqa: E501
 
     def __init__(self, cmd, *args, **kargs):
-        if isinstance(cmd, str):
-            self.name = cmd
-        else:
-            raise GrassError("Problem initializing the module {s}".format(s=cmd))
+        if not isinstance(cmd, str):
+            msg = "Problem initializing the module {s}".format(s=cmd)
+            raise GrassError(msg)
+        self.name = cmd
         try:
             # call the command with --interface-description
             get_cmd_xml = Popen([cmd, "--interface-description"], stdout=PIPE)
         except OSError as e:
             print("OSError error({0}): {1}".format(e.errno, e.strerror))
             str_err = "Error running: `%s --interface-description`."
-            raise GrassError(str_err % self.name)
+            raise GrassError(str_err % self.name) from e
         # get the xml of the module
         self.xml = get_cmd_xml.communicate()[0]
         # transform and parse the xml into an Element class:
-        # http://docs.python.org/library/xml.etree.elementtree.html
+        # https://docs.python.org/library/xml.etree.elementtree.html
         tree = fromstring(self.xml)
 
         for e in tree:
-            if e.tag not in ("parameter", "flag"):
+            if e.tag not in {"parameter", "flag"}:
                 self.__setattr__(e.tag, GETFROMTAG[e.tag](e))
 
         #
@@ -637,17 +637,13 @@ class Module:
 
         self.update(*args, **kargs)
 
-        #
         # check if execute
-        #
-        if self.run_:
-            #
-            # check reqire parameters
-            #
-            if self.check_:
-                self.check()
-            return self.run()
-        return self
+        if not self.run_:
+            return self
+        # check required parameters
+        if self.check_:
+            self.check()
+        return self.run()
 
     def update(self, *args, **kargs):
         """Update module parameters and selected object attributes.
@@ -720,12 +716,11 @@ class Module:
         #     pre name par flg special
         if flags and special:
             return "%s.%s(%s, flags=%r, %s)" % (prefix, name, params, flags, special)
-        elif flags:
+        if flags:
             return "%s.%s(%s, flags=%r)" % (prefix, name, params, flags)
-        elif special:
+        if special:
             return "%s.%s(%s, %s)" % (prefix, name, params, special)
-        else:
-            return "%s.%s(%s)" % (prefix, name, params)
+        return "%s.%s(%s)" % (prefix, name, params)
 
     def __str__(self):
         """Return the command string that can be executed in a shell"""
@@ -774,12 +769,12 @@ class Module:
         """Return a dictionary that includes the name, all valid
         inputs, outputs and flags
         """
-        dic = {}
-        dic["name"] = self.name
-        dic["inputs"] = [(k, v.value) for k, v in self.inputs.items() if v.value]
-        dic["outputs"] = [(k, v.value) for k, v in self.outputs.items() if v.value]
-        dic["flags"] = [flg for flg in self.flags if self.flags[flg].value]
-        return dic
+        return {
+            "name": self.name,
+            "inputs": [(k, v.value) for k, v in self.inputs.items() if v.value],
+            "outputs": [(k, v.value) for k, v in self.outputs.items() if v.value],
+            "flags": [flg for flg in self.flags if self.flags[flg].value],
+        }
 
     def make_cmd(self):
         """Create the command string that can be executed in a shell
@@ -952,7 +947,8 @@ class MultiModule:
     ...     set_temp_region=True,
     ... )
     >>> str(mm)
-    'g.region -p ; g.region -p ; g.region -p ; g.region -p ; g.region -p'
+    'g.region format=plain -p ; g.region format=plain -p ; g.region format=plain -p ; \
+g.region format=plain -p ; g.region format=plain -p'
     >>> t = mm.run()
     >>> isinstance(t, Process)
     True
@@ -1025,16 +1021,15 @@ class MultiModule:
                 module.finish_ = True
                 module.run()
             return None
+        if self.set_temp_region is True:
+            self.p = Process(
+                target=run_modules_in_temp_region, args=[self.module_list, self.q]
+            )
         else:
-            if self.set_temp_region is True:
-                self.p = Process(
-                    target=run_modules_in_temp_region, args=[self.module_list, self.q]
-                )
-            else:
-                self.p = Process(target=run_modules, args=[self.module_list, self.q])
-            self.p.start()
+            self.p = Process(target=run_modules, args=[self.module_list, self.q])
+        self.p.start()
 
-            return self.p
+        return self.p
 
     def wait(self):
         """Wait for all processes to finish. Call this method

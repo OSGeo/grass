@@ -28,6 +28,7 @@
 #endif
 
 #include <math.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -290,6 +291,9 @@ int main(int argc, char *argv[])
         _("Default: degrees counter-clockwise from East, with flat = 0");
     flag.n->guisection = _("Settings");
 
+    G_option_required(parm.slope, parm.aspect, parm.pcurv, parm.tcurv, parm.dx,
+                      parm.dy, parm.dxx, parm.dyy, parm.dxy, NULL);
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
@@ -305,8 +309,8 @@ int main(int argc, char *argv[])
                     "threads setting."));
     nprocs = 1;
 #endif
-    if (nprocs > 1 && G_find_raster("MASK", G_mapset()) != NULL) {
-        G_warning(_("Parallel processing disabled due to active MASK."));
+    if (nprocs > 1 && Rast_mask_is_present()) {
+        G_warning(_("Parallel processing disabled due to active mask."));
         nprocs = 1;
     }
     radians_to_degrees = 180.0 / M_PI;
@@ -371,17 +375,6 @@ int main(int argc, char *argv[])
         perc = 1;
     else if (strcmp(slope_fmt, "degrees") == 0)
         deg = 1;
-
-    if (slope_name == NULL && aspect_name == NULL && pcurv_name == NULL &&
-        tcurv_name == NULL && dx_name == NULL && dy_name == NULL &&
-        dxx_name == NULL && dyy_name == NULL && dxy_name == NULL) {
-        G_fatal_error(
-            _("You must specify at least one of the parameters: "
-              "<%s>, <%s>, <%s>, <%s>, <%s>, <%s>, <%s>, <%s> or <%s>"),
-            parm.slope->key, parm.aspect->key, parm.pcurv->key, parm.tcurv->key,
-            parm.dx->key, parm.dy->key, parm.dxx->key, parm.dyy->key,
-            parm.dxy->key);
-    }
 
     G_get_window(&window);
 
@@ -589,10 +582,10 @@ int main(int argc, char *argv[])
         int start = written;
         int end = written + range;
 
-#pragma omp parallel if (nprocs > 1)                                    \
-    firstprivate(north, east, south, west, ns_med, H, V) private(       \
-        row, col, size, slp_ptr, asp_ptr, pcurv_ptr, tcurv_ptr, dx_ptr, \
-        dxx_ptr, dxy_ptr, dy_ptr, dyy_ptr)
+#pragma omp parallel if (nprocs > 1)                                        \
+    firstprivate(north, east, south, west, ns_med, H, V) private(           \
+            row, col, size, slp_ptr, asp_ptr, pcurv_ptr, tcurv_ptr, dx_ptr, \
+                dxx_ptr, dxy_ptr, dy_ptr, dyy_ptr)
         {
             int t_id = FIRST_THREAD;
 
@@ -617,10 +610,9 @@ int main(int argc, char *argv[])
 
             /* static scheduling is essential for buffer to be initialized
              * properly */
-#pragma omp for schedule(static) reduction(min                               \
-                                           : c1min, c2min, min_asp, min_slp) \
-    reduction(max                                                            \
-              : c1max, c2max, max_asp, max_slp)
+#pragma omp for schedule(static)                    \
+    reduction(min : c1min, c2min, min_asp, min_slp) \
+    reduction(max : c1max, c2max, max_asp, max_slp)
             for (row = start; row < end; row++) {
                 if (!initialized) {
                     initialized = true;
@@ -1043,7 +1035,7 @@ int main(int argc, char *argv[])
 #pragma omp atomic update
                 computed++;
             } /* end row loop */
-        }     /* end parallel region */
+        } /* end parallel region */
 
         /* write the computed buffer chunk to disk */
         written = end;

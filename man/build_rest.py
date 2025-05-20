@@ -9,10 +9,11 @@ Created on Thu Aug  9 14:04:12 2012
 """
 # utilities for generating REST indices
 # utilities for generating HTML indices
-# (C) 2003-2024 by Luca Delucchi and the GRASS Development Team
+# (C) 2003-2025 by Luca Delucchi and the GRASS Development Team
 
 import os
 import string
+from pathlib import Path
 
 # TODO: better fix this in include/Make/Rest.make, see bug RT #5361
 
@@ -29,7 +30,7 @@ exclude_mods = [
 # these modules don't use G_parser()
 
 desc_override = {
-    "g.parser": "Provides automated parser, GUI, and help support for GRASS scipts.",
+    "g.parser": "Provides automated parser, GUI, and help support for GRASS scripts.",
     "r.li.daemon": "Support module for r.li landscape index calculations.",
 }
 
@@ -169,7 +170,7 @@ footer_tmpl = string.Template(
 --------------
 
 :doc:`Manual main page <index>` \| :doc:`Full Index <full_index>`
- 2003-2024 `GRASS Development Team <https://grass.osgeo.org>`_, GRASS GIS ${grass_version} Reference Manual
+ 2003-2025 `GRASS Development Team <https://grass.osgeo.org>`_, GRASS GIS ${grass_version} Reference Manual
 """  # noqa: E501
 )
 
@@ -271,16 +272,11 @@ def check_for_desc_override(basename):
 
 
 def read_file(name):
-    f = open(name, "r")
-    s = f.read()
-    f.close()
-    return s
+    return Path(name).read_text()
 
 
 def write_file(name, contents):
-    f = open(name, "w")
-    f.write(contents)
-    f.close()
+    Path(name).write_text(contents)
 
 
 def try_mkdir(path):
@@ -314,9 +310,9 @@ def rest_files(cls=None):
     for cmd in sorted(os.listdir(rest_dir)):
         if (
             cmd.endswith(".txt")
-            and (cls in [None, "*"] or cmd.startswith(cls + "."))
+            and (cls in {None, "*"} or cmd.startswith(cls + "."))
             and (cls != "*" or len(cmd.split(".")) >= 3)
-            and cmd not in ["full_index.txt", "index.txt"]
+            and cmd not in {"full_index.txt", "index.txt"}
             and cmd not in exclude_mods
             and not cmd.startswith("wxGUI.")
         ):
@@ -337,25 +333,24 @@ def write_rest_footer(f, index_url):
 
 
 def get_desc(cmd):
-    f = open(cmd, "r")
-    while True:
-        line = f.readline()
-        if not line:
-            return ""
-        if "NAME" in line:
-            break
+    with Path(cmd).open() as f:
+        while True:
+            line = f.readline()
+            if not line:
+                return ""
+            if "NAME" in line:
+                break
 
-    while True:
-        line = f.readline()
-        if not line:
-            return ""
-        if "SYNOPSIS" in line:
-            break
-        if "*" in line:
-            sp = line.split("-", 1)
-            if len(sp) > 1:
-                return sp[1].strip()
-            else:
+        while True:
+            line = f.readline()
+            if not line:
+                return ""
+            if "SYNOPSIS" in line:
+                break
+            if "*" in line:
+                sp = line.split("-", 1)
+                if len(sp) > 1:
+                    return sp[1].strip()
                 return None
 
     return ""

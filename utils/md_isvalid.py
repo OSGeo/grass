@@ -14,8 +14,8 @@ import grass.script as gs
 
 
 def check_md(filename):
-    p = subprocess.Popen(["mdl", filename])
-    p.wait()
+    with subprocess.Popen(["mdl", filename]) as p:
+        p.wait()
 
 
 def print_line():
@@ -27,22 +27,18 @@ def check_module(module):
     print(module)
     tmp_file = gs.tempfile()
     with open(tmp_file, "w") as fp:
-        p = subprocess.Popen([module, "--md-description"], stdout=fp)
-        p.wait()
-
-        p = subprocess.Popen(
+        with subprocess.Popen([module, "--md-description"], stdout=fp) as p:
+            p.wait()
+        with subprocess.Popen(
             [
                 "mdl",
                 "--style",
                 os.path.join(os.path.dirname(__file__), "mdl_style.rb"),
                 fp.name,
             ]
-        )
-        p.wait()
-
-        returncode = p.returncode
-
-    return returncode
+        ) as p:
+            p.wait()
+            return p.returncode
 
 
 if __name__ == "__main__":

@@ -49,13 +49,6 @@
  * values are in IEEE format.
  */
 
-/*
- * Updates:
- *
- * April 13, 1995, brianp
- *   finished Cray support for 2-byte and 4-byte compress modes
- */
-
 #include <grass/config.h>
 #include <assert.h>
 #include <stdio.h>
@@ -63,6 +56,9 @@
 #include <string.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
+#include <errno.h>
+
 #include "binio.h"
 #include "v5d.h"
 #include "vis5d.h"
@@ -412,7 +408,7 @@ void v5dPrintStruct(const v5dstruct *v)
         printf("Rotated equidistant projection:\n");
         printf("\tLatitude of grid(0,0): %f\n", v->ProjArgs[0]);
         printf("\tLongitude of grid(0,0): %f\n", v->ProjArgs[1]);
-        printf("\tRow Increment: %f degress\n", v->ProjArgs[2]);
+        printf("\tRow Increment: %f degrees\n", v->ProjArgs[2]);
         printf("\tColumn Increment: %f degrees\n", v->ProjArgs[3]);
         printf("\tCenter Latitude: %f\n", v->ProjArgs[4]);
         printf("\tCenter Longitude: %f\n", v->ProjArgs[5]);
@@ -467,7 +463,7 @@ static void compute_ga_gb(int nr, int nc, int nl, const float data[],
     /*
      * Compute ga, gb values for whole grid.
      */
-    int i, lev, allmissing, num;
+    int i, allmissing, num;
     float min, max, a, b;
 
     min = 1.0e30;
@@ -549,7 +545,6 @@ static void compute_ga_gb(int nr, int nc, int nl, const float data[],
 
         delt = (gridmax - gridmin) / 100000.0;
         if (ABS(gridmin) < delt && gridmin != 0.0 && compressmode != 4) {
-            float min, max;
 
             for (j = 0; j < nrncnl; j++) {
                 if (!IS_MISSING(data[j]) && data[j] < delt)
@@ -719,21 +714,6 @@ void v5dCompressGrid(int nr, int nc, int nl, int compressmode,
             else {
                 one_over_a = 1.0 / ga[lev];
             }
-#ifdef _CRAY
-            /* this is tricky because sizeof(V5Dushort)==8, not 2 */
-            for (i = 0; i < nrnc; i++, p++) {
-                V5Dushort compvalue;
-
-                if (IS_MISSING(data[p])) {
-                    compvalue = 65535;
-                }
-                else {
-                    compvalue = (V5Dushort)(int)((data[p] - b) * one_over_a);
-                }
-                compdata1[p * 2 + 0] = compvalue >> 8;    /* upper byte */
-                compdata1[p * 2 + 1] = compvalue & 0xffu; /* lower byte */
-            }
-#else
             for (i = 0; i < nrnc; i++, p++) {
                 if (IS_MISSING(data[p])) {
                     compdata2[p] = 65535;
@@ -743,20 +723,14 @@ void v5dCompressGrid(int nr, int nc, int nl, int compressmode,
                 }
             }
             /* TODO: byte-swapping on little endian??? */
-#endif
         }
     }
 
     else {
         /* compressmode==4 */
-#ifdef _CRAY
-        cray_to_ieee_array(compdata, data, nrncnl);
-#else
-        /* other machines: just copy 4-byte IEEE floats */
         assert(sizeof(float) == 4);
         memcpy(compdata, data, nrncnl * 4);
         /* TODO: byte-swapping on little endian??? */
-#endif
     }
 }
 
@@ -832,20 +806,6 @@ void v5dDecompressGrid(int nr, int nc, int nl, int compressmode, void *compdata,
             float a = ga[lev];
             float b = gb[lev];
 
-#ifdef _CRAY
-            /* this is tricky because sizeof(V5Dushort)==8, not 2 */
-            for (i = 0; i < nrnc; i++, p++) {
-                int compvalue;
-
-                compvalue = (compdata1[p * 2] << 8) | compdata1[p * 2 + 1];
-                if (compvalue == 65535) {
-                    data[p] = MISSING;
-                }
-                else {
-                    data[p] = (float)compvalue * a + b;
-                }
-            }
-#else
             /* sizeof(V5Dushort)==2! */
             for (i = 0; i < nrnc; i++, p++) {
                 if (compdata2[p] == 65535) {
@@ -855,19 +815,13 @@ void v5dDecompressGrid(int nr, int nc, int nl, int compressmode, void *compdata,
                     data[p] = (float)(int)compdata2[p] * a + b;
                 }
             }
-#endif
         }
     }
 
     else {
         /* compressmode==4 */
-#ifdef _CRAY
-        ieee_to_cray_array(data, compdata, nrncnl);
-#else
-        /* other machines: just copy 4-byte IEEE floats */
         assert(sizeof(float) == 4);
         memcpy(data, compdata, nrncnl * 4);
-#endif
     }
 }
 
@@ -1233,7 +1187,10 @@ static int read_comp_header(int f, v5dstruct *v)
     unsigned int id;
 
     /* reset file position to start of file */
-    lseek(f, 0, SEEK_SET);
+    if (lseek(f, 0, SEEK_SET) == -1) {
+        G_warning(_("Unable to seek: %s"), strerror(errno));
+        return 0;
+    }
 
     /* read file ID */
     read_int4(f, (int *)&id);
@@ -1335,8 +1292,8 @@ static int read_comp_header(int f, v5dstruct *v)
 
                 /* skip ahead by 'gridsize' bytes */
                 if (lseek(f, gridsize, SEEK_CUR) == -1) {
-                    printf("Error:  Unexpected end of file, ");
-                    printf("file may be corrupted.\n");
+                    G_warning(_("Error: Unexpected end of file, file may be "
+                                "corrupted."));
                     return 0;
                 }
                 min = -(125.0 + gb) / ga;
@@ -1479,7 +1436,10 @@ static int read_comp_grid(v5dstruct *v, int time, int var, float *ga, float *gb,
 
     /* move to position in file */
     pos = grid_position(v, time, var);
-    lseek(f, pos, SEEK_SET);
+    if (lseek(f, pos, SEEK_SET) == -1) {
+        G_warning(_("Unable to seek: %s"), strerror(errno));
+        return 0;
+    }
 
     if (v->FileFormat == 0x80808083) {
         /* read McIDAS grid and file numbers */
@@ -1552,7 +1512,13 @@ static int read_comp_grid(v5dstruct *v, int time, int var, float *ga, float *gb,
  */
 static int read_v5d_header(v5dstruct *v)
 {
-#define SKIP(N) lseek(f, N, SEEK_CUR)
+#define SKIP(N)                                                  \
+    do {                                                         \
+        if (lseek(f, N, SEEK_CUR) == -1) {                       \
+            G_warning(_("Unable to seek: %s"), strerror(errno)); \
+            return 0;                                            \
+        }                                                        \
+    } while (0)
     int end_of_header = 0;
     unsigned int id;
     int idlen, var, numargs;
@@ -1871,13 +1837,19 @@ static int read_v5d_header(v5dstruct *v)
         case TAG_END:
             /* end of header */
             end_of_header = 1;
-            lseek(f, length, SEEK_CUR);
+            if (lseek(f, length, SEEK_CUR) == -1) {
+                G_warning(_("Unable to seek: %s"), strerror(errno));
+                return 0;
+            }
             break;
 
         default:
             /* unknown tag, skip to next tag */
             printf("Unknown tag: %d  length=%d\n", tag, length);
-            lseek(f, length, SEEK_CUR);
+            if (lseek(f, length, SEEK_CUR) == -1) {
+                G_warning(_("Unable to seek: %s"), strerror(errno));
+                return 0;
+            }
             break;
         }
     }
@@ -1967,7 +1939,10 @@ int v5dReadCompressedGrid(v5dstruct *v, int time, int var, float *ga, float *gb,
 
     /* move to position in file */
     pos = grid_position(v, time, var);
-    lseek(v->FileDesc, pos, SEEK_SET);
+    if (lseek(v->FileDesc, pos, SEEK_SET) == -1) {
+        G_warning(_("Unable to seek: %s"), strerror(errno));
+        return 0;
+    }
 
     /* read ga, gb arrays */
     read_float4_array(v->FileDesc, ga, v->Nl[var]);
@@ -2119,7 +2094,10 @@ static int write_v5d_header(v5dstruct *v)
     }
 
     /* set file pointer to start of file */
-    lseek(f, 0, SEEK_SET);
+    if (lseek(f, 0, SEEK_SET) == -1) {
+        G_warning(_("Unable to seek: %s"), strerror(errno));
+        return 0;
+    }
     v->CurPos = 0;
 
     /*
@@ -2223,7 +2201,10 @@ static int write_v5d_header(v5dstruct *v)
         /* We're writing to a brand new file.  Reserve 10000 bytes */
         /* for future header growth. */
         WRITE_TAG(v, TAG_END, 10000);
-        lseek(f, 10000, SEEK_CUR);
+        if (lseek(f, 10000, SEEK_CUR) == -1) {
+            G_warning(_("Unable to seek: %s"), strerror(errno));
+            return 0;
+        }
 
         /* Let file pointer indicate where first grid is stored */
         v->FirstGridPos = ltell(f);
@@ -2337,7 +2318,7 @@ int v5dWriteCompressedGrid(const v5dstruct *v, int time, int var,
     pos = grid_position(v, time, var);
     if (lseek(v->FileDesc, pos, SEEK_SET) < 0) {
         /* lseek failed, return error */
-        printf("Error in v5dWrite[Compressed]Grid: seek failed, disk full?\n");
+        G_warning(_("Unable to seek: %s"), strerror(errno));
         return 0;
     }
 
@@ -2453,9 +2434,15 @@ int v5dCloseFile(v5dstruct *v)
     if (v->Mode == 'w') {
         /* rewrite header because writing grids updates the minval and */
         /* maxval fields */
-        lseek(v->FileDesc, 0, SEEK_SET);
+        if (lseek(v->FileDesc, 0, SEEK_SET) == -1) {
+            G_warning(_("Unable to seek: %s"), strerror(errno));
+            return 0;
+        }
         status = write_v5d_header(v);
-        lseek(v->FileDesc, 0, SEEK_END);
+        if (lseek(v->FileDesc, 0, SEEK_END) == -1) {
+            G_warning(_("Unable to seek: %s"), strerror(errno));
+            return 0;
+        }
         close(v->FileDesc);
     }
     else if (v->Mode == 'r') {
@@ -2685,11 +2672,7 @@ int v5dClose(void)
 #ifdef UNDERSCORE
 int v5dcreate_
 #else
-#ifdef _CRAY
-int V5DCREATE
-#else
 int v5dcreate
-#endif
 #endif
 
     (const char *name, const int *numtimes, const int *numvars, const int *nr,
@@ -2848,11 +2831,7 @@ int v5dcreate
 #ifdef UNDERSCORE
 int v5dcreatesimple_
 #else
-#ifdef _CRAY
-int V5DCREATESIMPLE
-#else
 int v5dcreatesimple
-#endif
 #endif
 
     (const char *name, const int *numtimes, const int *numvars, const int *nr,
@@ -2885,12 +2864,7 @@ int v5dcreatesimple
 #ifdef UNDERSCORE
     return v5dcreate_
 #else
-#ifdef _CRAY
-    return V5DCREATE
-#else
-
     return v5dcreate
-#endif
 #endif
         (name, numtimes, numvars, nr, nc, varnl, varname, timestamp, datestamp,
          &compressmode, &projection, projarg, &vertical, vertarg);
@@ -2904,11 +2878,7 @@ int v5dcreatesimple
 #ifdef UNDERSCORE
 int v5dsetlowlev_
 #else
-#ifdef _CRAY
-int V5DSETLOWLEV
-#else
 int v5dsetlowlev
-#endif
 #endif
     (int *lowlev)
 {
@@ -2924,11 +2894,7 @@ int v5dsetlowlev
 #ifdef UNDERSCORE
 int v5dsetunits_
 #else
-#ifdef _CRAY
-int V5DSETUNITS
-#else
 int v5dsetunits
-#endif
 #endif
     (int *var, char *name)
 {
@@ -2945,11 +2911,7 @@ int v5dsetunits
 #ifdef UNDERSCORE
 int v5dwrite_
 #else
-#ifdef _CRAY
-int V5DWRITE
-#else
 int v5dwrite
-#endif
 #endif
     (const int *time, const int *var, const float *data)
 {
@@ -2966,11 +2928,7 @@ int v5dwrite
 #ifdef UNDERSCORE
 int v5dmcfile_
 #else
-#ifdef _CRAY
-int V5DMCFILE
-#else
 int v5dmcfile
-#endif
 #endif
     (const int *time, const int *var, const int *mcfile, const int *mcgrid)
 {
@@ -2994,11 +2952,7 @@ int v5dmcfile
 #ifdef UNDERSCORE
 int v5dclose_(void)
 #else
-#ifdef _CRAY
-int V5DCLOSE(void)
-#else
 int v5dclose(void)
-#endif
 #endif
 {
     return v5dClose();

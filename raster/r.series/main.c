@@ -17,6 +17,8 @@
  *****************************************************************************/
 
 #if defined(_OPENMP)
+#include <stdbool.h>
+
 #include <omp.h>
 #endif
 #include <stdlib.h>
@@ -164,7 +166,7 @@ int main(int argc, char *argv[])
     parm.file->key = "file";
     parm.file->description =
         _("Input file with one raster map name and optional one weight per "
-          "line, field separator between name and weight is |");
+          "line, field separator between name and weight is | (pipe)");
     parm.file->required = NO;
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
@@ -227,8 +229,8 @@ int main(int argc, char *argv[])
                     "threads setting."));
     nprocs = 1;
 #endif
-    if (nprocs > 1 && G_find_raster("MASK", G_mapset()) != NULL) {
-        G_warning(_("Parallel processing disabled due to active MASK."));
+    if (nprocs > 1 && Rast_mask_is_present()) {
+        G_warning(_("Parallel processing disabled due to active mask."));
         nprocs = 1;
     }
     lo = -INFINITY;
@@ -617,7 +619,7 @@ int main(int argc, char *argv[])
 
                 computed++;
             } /* end for loop */
-        }     /* end parallel region */
+        } /* end parallel region */
 
         /* write output buffer to disk */
         for (i = 0; i < num_outputs; i++) {

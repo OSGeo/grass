@@ -9,53 +9,57 @@ for details.
 :authors: Soeren Gebbert
 """
 
+from __future__ import annotations
+
 import getpass
 from datetime import datetime
+from typing import Literal
+
+import grass.script.array as garray
+
 from .abstract_map_dataset import AbstractMapDataset
 from .abstract_space_time_dataset import AbstractSpaceTimeDataset
 from .base import (
     Raster3DBase,
-    RasterBase,
-    VectorBase,
-    STR3DSBase,
-    STVDSBase,
-    STRDSBase,
-    VectorSTDSRegister,
     Raster3DSTDSRegister,
+    RasterBase,
     RasterSTDSRegister,
+    STR3DSBase,
+    STRDSBase,
+    STVDSBase,
+    VectorBase,
+    VectorSTDSRegister,
 )
 from .metadata import (
     Raster3DMetadata,
     RasterMetadata,
-    VectorMetadata,
-    STRDSMetadata,
     STR3DSMetadata,
+    STRDSMetadata,
     STVDSMetadata,
+    VectorMetadata,
 )
 from .spatial_extent import (
-    RasterSpatialExtent,
     Raster3DSpatialExtent,
-    VectorSpatialExtent,
-    STRDSSpatialExtent,
+    RasterSpatialExtent,
     STR3DSSpatialExtent,
+    STRDSSpatialExtent,
     STVDSSpatialExtent,
+    VectorSpatialExtent,
 )
 from .temporal_extent import (
-    RasterAbsoluteTime,
-    RasterRelativeTime,
     Raster3DAbsoluteTime,
     Raster3DRelativeTime,
-    VectorAbsoluteTime,
-    VectorRelativeTime,
-    STRDSAbsoluteTime,
-    STRDSRelativeTime,
+    RasterAbsoluteTime,
+    RasterRelativeTime,
     STR3DSAbsoluteTime,
     STR3DSRelativeTime,
+    STRDSAbsoluteTime,
+    STRDSRelativeTime,
     STVDSAbsoluteTime,
     STVDSRelativeTime,
+    VectorAbsoluteTime,
+    VectorRelativeTime,
 )
-import grass.script.array as garray
-
 
 GRASS_TIMESTAMP_FMT = "%a %b  %d %H:%M:%S %Y"
 
@@ -176,18 +180,18 @@ class RasterDataset(AbstractMapDataset):
 
     """
 
-    def __init__(self, ident):
+    def __init__(self, ident) -> None:
         AbstractMapDataset.__init__(self)
         self.reset(ident)
 
-    def is_stds(self):
+    def is_stds(self) -> Literal[False]:
         """Return True if this class is a space time dataset
 
         :return: True if this class is a space time dataset, False otherwise
         """
         return False
 
-    def get_type(self):
+    def get_type(self) -> Literal["raster"]:
         return "raster"
 
     def get_new_instance(self, ident):
@@ -252,7 +256,7 @@ class RasterDataset(AbstractMapDataset):
             return garray.array(self.get_map_id())
         return garray.array()
 
-    def reset(self, ident):
+    def reset(self, ident) -> None:
         """Reset the internal structure and set the identifier"""
         self.base = RasterBase(ident=ident)
         self.absolute_time = RasterAbsoluteTime(ident=ident)
@@ -268,7 +272,7 @@ class RasterDataset(AbstractMapDataset):
         """
         return self.ciface.has_raster_timestamp(self.get_name(), self.get_mapset())
 
-    def read_timestamp_from_grass(self):
+    def read_timestamp_from_grass(self) -> bool:
         """Read the timestamp of this map from the map metadata
         in the grass file system based spatial database and
         set the internal time stamp that should be inserted/updated
@@ -287,10 +291,8 @@ class RasterDataset(AbstractMapDataset):
 
         if check < 1:
             self.msgr.error(
-                _(
-                    "Unable to read timestamp file "
-                    "for raster map <%s>" % (self.get_map_id())
-                )
+                _("Unable to read timestamp file for raster map <%s>")
+                % (self.get_map_id())
             )
             return False
 
@@ -301,7 +303,7 @@ class RasterDataset(AbstractMapDataset):
 
         return True
 
-    def write_timestamp_to_grass(self):
+    def write_timestamp_to_grass(self) -> bool:
         """Write the timestamp of this map into the map metadata in
         the grass file system based spatial database.
 
@@ -315,19 +317,15 @@ class RasterDataset(AbstractMapDataset):
 
         if check == -1:
             self.msgr.error(
-                _(
-                    "Unable to create timestamp file "
-                    "for raster map <%s>" % (self.get_map_id())
-                )
+                _("Unable to create timestamp file for raster map <%s>")
+                % (self.get_map_id())
             )
             return False
 
         if check == -2:
             self.msgr.error(
-                _(
-                    "Invalid datetime in timestamp for raster map "
-                    "<%s>" % (self.get_map_id())
-                )
+                _("Invalid datetime in timestamp for raster map <%s>")
+                % (self.get_map_id())
             )
             return False
 
@@ -337,7 +335,7 @@ class RasterDataset(AbstractMapDataset):
 
         return True
 
-    def remove_timestamp_from_grass(self):
+    def remove_timestamp_from_grass(self) -> bool:
         """Remove the timestamp from the grass file system based
         spatial database
 
@@ -349,13 +347,13 @@ class RasterDataset(AbstractMapDataset):
 
         if check == -1:
             self.msgr.error(
-                _("Unable to remove timestamp for raster map <%s>" % (self.get_name()))
+                _("Unable to remove timestamp for raster map <%s>") % (self.get_name())
             )
             return False
 
         return True
 
-    def read_semantic_label_from_grass(self):
+    def read_semantic_label_from_grass(self) -> bool:
         """Read the semantic label of this map from the map metadata
         in the GRASS file system based spatial database and
         set the internal semantic label that should be inserted/updated
@@ -376,7 +374,7 @@ class RasterDataset(AbstractMapDataset):
 
         return True
 
-    def write_semantic_label_to_grass(self):
+    def write_semantic_label_to_grass(self) -> bool:
         """Write the semantic label of this map into the map metadata in
         the GRASS file system based spatial database.
 
@@ -389,10 +387,8 @@ class RasterDataset(AbstractMapDataset):
         )
         if check == -1:
             self.msgr.error(
-                _(
-                    "Unable to write semantic label for raster map <%s>"
-                    % (self.get_name())
-                )
+                _("Unable to write semantic label for raster map <%s>")
+                % (self.get_name())
             )
             return False
 
@@ -405,7 +401,7 @@ class RasterDataset(AbstractMapDataset):
         """
         return self.ciface.raster_map_exists(self.get_name(), self.get_mapset())
 
-    def load(self):
+    def load(self) -> bool:
         """Load all info from an existing raster map into the internal structure
 
         This method checks first if the map exists, in case it exists
@@ -433,43 +429,39 @@ class RasterDataset(AbstractMapDataset):
 
         kvp = self.ciface.read_raster_info(self.get_name(), self.get_mapset())
 
-        if kvp:
-            # Fill spatial extent
-            self.set_spatial_extent_from_values(
-                north=kvp["north"],
-                south=kvp["south"],
-                east=kvp["east"],
-                west=kvp["west"],
-            )
+        if not kvp:
+            return False
+        # Fill spatial extent
+        self.set_spatial_extent_from_values(
+            north=kvp["north"], south=kvp["south"], east=kvp["east"], west=kvp["west"]
+        )
 
-            # Fill metadata
-            self.metadata.set_nsres(kvp["nsres"])
-            self.metadata.set_ewres(kvp["ewres"])
-            self.metadata.set_datatype(kvp["datatype"])
-            self.metadata.set_min(kvp["min"])
-            self.metadata.set_max(kvp["max"])
+        # Fill metadata
+        self.metadata.set_nsres(kvp["nsres"])
+        self.metadata.set_ewres(kvp["ewres"])
+        self.metadata.set_datatype(kvp["datatype"])
+        self.metadata.set_min(kvp["min"])
+        self.metadata.set_max(kvp["max"])
 
-            rows = int(kvp["rows"])
-            cols = int(kvp["cols"])
+        rows = int(kvp["rows"])
+        cols = int(kvp["cols"])
 
-            ncells = cols * rows
+        ncells = cols * rows
 
-            self.metadata.set_cols(cols)
-            self.metadata.set_rows(rows)
-            self.metadata.set_number_of_cells(ncells)
+        self.metadata.set_cols(cols)
+        self.metadata.set_rows(rows)
+        self.metadata.set_number_of_cells(ncells)
 
-            # Fill semantic label if defined
-            semantic_label = self.ciface.read_raster_semantic_label(
-                self.get_name(), self.get_mapset()
-            )
-            if semantic_label:
-                self.metadata.set_semantic_label(semantic_label)
+        # Fill semantic label if defined
+        semantic_label = self.ciface.read_raster_semantic_label(
+            self.get_name(), self.get_mapset()
+        )
+        if semantic_label:
+            self.metadata.set_semantic_label(semantic_label)
 
-            return True
+        return True
 
-        return False
-
-    def set_semantic_label(self, semantic_label):
+    def set_semantic_label(self, semantic_label) -> None:
         """Set semantic label identifier
 
         Metadata is updated in order to propagate semantic label into
@@ -613,18 +605,18 @@ class Raster3DDataset(AbstractMapDataset):
 
     """
 
-    def __init__(self, ident):
+    def __init__(self, ident) -> None:
         AbstractMapDataset.__init__(self)
         self.reset(ident)
 
-    def is_stds(self):
+    def is_stds(self) -> Literal[False]:
         """Return True if this class is a space time dataset
 
         :return: True if this class is a space time dataset, False otherwise
         """
         return False
 
-    def get_type(self):
+    def get_type(self) -> Literal["raster3d"]:
         return "raster3d"
 
     def get_new_instance(self, ident):
@@ -640,15 +632,13 @@ class Raster3DDataset(AbstractMapDataset):
         """Return True if the spatial extents overlap"""
         if self.get_type() == dataset.get_type() or dataset.get_type() == "str3ds":
             return self.spatial_extent.overlapping(dataset.spatial_extent)
-        else:
-            return self.spatial_extent.overlapping_2d(dataset.spatial_extent)
+        return self.spatial_extent.overlapping_2d(dataset.spatial_extent)
 
     def spatial_relation(self, dataset):
         """Return the two or three dimensional spatial relation"""
         if self.get_type() == dataset.get_type() or dataset.get_type() == "str3ds":
             return self.spatial_extent.spatial_relation(dataset.spatial_extent)
-        else:
-            return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
+        return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
 
     def spatial_intersection(self, dataset):
         """Return the three or two dimensional intersection as spatial_extent
@@ -659,8 +649,7 @@ class Raster3DDataset(AbstractMapDataset):
         """
         if self.get_type() == dataset.get_type() or dataset.get_type() == "str3ds":
             return self.spatial_extent.intersect(dataset.spatial_extent)
-        else:
-            return self.spatial_extent.intersect_2d(dataset.spatial_extent)
+        return self.spatial_extent.intersect_2d(dataset.spatial_extent)
 
     def spatial_union(self, dataset):
         """Return the three or two dimensional union as spatial_extent
@@ -671,8 +660,7 @@ class Raster3DDataset(AbstractMapDataset):
         """
         if self.get_type() == dataset.get_type() or dataset.get_type() == "str3ds":
             return self.spatial_extent.union(dataset.spatial_extent)
-        else:
-            return self.spatial_extent.union_2d(dataset.spatial_extent)
+        return self.spatial_extent.union_2d(dataset.spatial_extent)
 
     def spatial_disjoint_union(self, dataset):
         """Return the three or two dimensional union as spatial_extent object.
@@ -682,8 +670,7 @@ class Raster3DDataset(AbstractMapDataset):
         """
         if self.get_type() == dataset.get_type() or dataset.get_type() == "str3ds":
             return self.spatial_extent.disjoint_union(dataset.spatial_extent)
-        else:
-            return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
+        return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
 
     def get_np_array(self):
         """Return this 3D raster map as memmap numpy style array to access the
@@ -705,7 +692,7 @@ class Raster3DDataset(AbstractMapDataset):
             return garray.array3d(self.get_map_id())
         return garray.array3d()
 
-    def reset(self, ident):
+    def reset(self, ident) -> None:
         """Reset the internal structure and set the identifier"""
         self.base = Raster3DBase(ident=ident)
         self.absolute_time = Raster3DAbsoluteTime(ident=ident)
@@ -721,7 +708,7 @@ class Raster3DDataset(AbstractMapDataset):
         """
         return self.ciface.has_raster3d_timestamp(self.get_name(), self.get_mapset())
 
-    def read_timestamp_from_grass(self):
+    def read_timestamp_from_grass(self) -> bool:
         """Read the timestamp of this map from the map metadata
         in the grass file system based spatial database and
         set the internal time stamp that should be inserted/updated
@@ -740,10 +727,8 @@ class Raster3DDataset(AbstractMapDataset):
 
         if check < 1:
             self.msgr.error(
-                _(
-                    "Unable to read timestamp file "
-                    "for 3D raster map <%s>" % (self.get_map_id())
-                )
+                _("Unable to read timestamp file for 3D raster map <%s>")
+                % (self.get_map_id())
             )
             return False
 
@@ -754,7 +739,7 @@ class Raster3DDataset(AbstractMapDataset):
 
         return True
 
-    def write_timestamp_to_grass(self):
+    def write_timestamp_to_grass(self) -> bool:
         """Write the timestamp of this map into the map metadata
         in the grass file system based spatial database.
 
@@ -768,19 +753,15 @@ class Raster3DDataset(AbstractMapDataset):
 
         if check == -1:
             self.msgr.error(
-                _(
-                    "Unable to create timestamp file "
-                    "for 3D raster map <%s>" % (self.get_map_id())
-                )
+                _("Unable to create timestamp file for 3D raster map <%s>")
+                % (self.get_map_id())
             )
             return False
 
         if check == -2:
             self.msgr.error(
-                _(
-                    "Invalid datetime in timestamp for 3D raster "
-                    "map <%s>" % (self.get_map_id())
-                )
+                _("Invalid datetime in timestamp for 3D raster map <%s>")
+                % (self.get_map_id())
             )
             return False
 
@@ -790,7 +771,7 @@ class Raster3DDataset(AbstractMapDataset):
 
         return True
 
-    def remove_timestamp_from_grass(self):
+    def remove_timestamp_from_grass(self) -> bool:
         """Remove the timestamp from the grass file system based spatial database
 
         :return: True if success, False on error
@@ -801,10 +782,7 @@ class Raster3DDataset(AbstractMapDataset):
 
         if check == -1:
             self.msgr.error(
-                _(
-                    "Unable to remove timestamp for raster map "
-                    "<%s>" % (self.get_name())
-                )
+                _("Unable to remove timestamp for raster map <%s>") % (self.get_name())
             )
             return False
 
@@ -817,7 +795,7 @@ class Raster3DDataset(AbstractMapDataset):
         """
         return self.ciface.raster3d_map_exists(self.get_name(), self.get_mapset())
 
-    def load(self):
+    def load(self) -> bool:
         """Load all info from an existing 3d raster map into the internal structure
 
         This method checks first if the map exists, in case it exists
@@ -846,38 +824,37 @@ class Raster3DDataset(AbstractMapDataset):
         # Fill spatial extent
         kvp = self.ciface.read_raster3d_info(self.get_name(), self.get_mapset())
 
-        if kvp:
-            self.set_spatial_extent_from_values(
-                north=kvp["north"],
-                south=kvp["south"],
-                east=kvp["east"],
-                west=kvp["west"],
-                top=kvp["top"],
-                bottom=kvp["bottom"],
-            )
+        if not kvp:
+            return False
+        self.set_spatial_extent_from_values(
+            north=kvp["north"],
+            south=kvp["south"],
+            east=kvp["east"],
+            west=kvp["west"],
+            top=kvp["top"],
+            bottom=kvp["bottom"],
+        )
 
-            # Fill metadata
-            self.metadata.set_nsres(kvp["nsres"])
-            self.metadata.set_ewres(kvp["ewres"])
-            self.metadata.set_tbres(kvp["tbres"])
-            self.metadata.set_datatype(kvp["datatype"])
-            self.metadata.set_min(kvp["min"])
-            self.metadata.set_max(kvp["max"])
+        # Fill metadata
+        self.metadata.set_nsres(kvp["nsres"])
+        self.metadata.set_ewres(kvp["ewres"])
+        self.metadata.set_tbres(kvp["tbres"])
+        self.metadata.set_datatype(kvp["datatype"])
+        self.metadata.set_min(kvp["min"])
+        self.metadata.set_max(kvp["max"])
 
-            rows = int(kvp["rows"])
-            cols = int(kvp["cols"])
-            depths = int(kvp["depths"])
+        rows = int(kvp["rows"])
+        cols = int(kvp["cols"])
+        depths = int(kvp["depths"])
 
-            ncells = cols * rows * depths
+        ncells = cols * rows * depths
 
-            self.metadata.set_cols(cols)
-            self.metadata.set_rows(rows)
-            self.metadata.set_depths(depths)
-            self.metadata.set_number_of_cells(ncells)
+        self.metadata.set_cols(cols)
+        self.metadata.set_rows(rows)
+        self.metadata.set_depths(depths)
+        self.metadata.set_number_of_cells(ncells)
 
-            return True
-
-        return False
+        return True
 
 
 ###############################################################################
@@ -995,18 +972,18 @@ class VectorDataset(AbstractMapDataset):
 
     """
 
-    def __init__(self, ident):
+    def __init__(self, ident) -> None:
         AbstractMapDataset.__init__(self)
         self.reset(ident)
 
-    def is_stds(self):
+    def is_stds(self) -> Literal[False]:
         """Return True if this class is a space time dataset
 
         :return: True if this class is a space time dataset, False otherwise
         """
         return False
 
-    def get_type(self):
+    def get_type(self) -> Literal["vector"]:
         return "vector"
 
     def get_new_instance(self, ident):
@@ -1058,7 +1035,7 @@ class VectorDataset(AbstractMapDataset):
         """
         return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
 
-    def reset(self, ident):
+    def reset(self, ident) -> None:
         """Reset the internal structure and set the identifier"""
         self.base = VectorBase(ident=ident)
         self.absolute_time = VectorAbsoluteTime(ident=ident)
@@ -1073,7 +1050,7 @@ class VectorDataset(AbstractMapDataset):
             self.get_name(), self.get_mapset(), self.get_layer()
         )
 
-    def read_timestamp_from_grass(self):
+    def read_timestamp_from_grass(self) -> bool:
         """Read the timestamp of this map from the map metadata
         in the grass file system based spatial database and
         set the internal time stamp that should be inserted/updated
@@ -1090,10 +1067,8 @@ class VectorDataset(AbstractMapDataset):
 
         if check < 1:
             self.msgr.error(
-                _(
-                    "Unable to read timestamp file "
-                    "for vector map <%s>" % (self.get_map_id())
-                )
+                _("Unable to read timestamp file for vector map <%s>")
+                % (self.get_map_id())
             )
             return False
 
@@ -1104,7 +1079,7 @@ class VectorDataset(AbstractMapDataset):
 
         return True
 
-    def write_timestamp_to_grass(self):
+    def write_timestamp_to_grass(self) -> bool:
         """Write the timestamp of this map into the map metadata in
         the grass file system based spatial database.
 
@@ -1119,25 +1094,21 @@ class VectorDataset(AbstractMapDataset):
 
         if check == -1:
             self.msgr.error(
-                _(
-                    "Unable to create timestamp file "
-                    "for vector map <%s>" % (self.get_map_id())
-                )
+                _("Unable to create timestamp file for vector map <%s>")
+                % (self.get_map_id())
             )
             return False
 
         if check == -2:
             self.msgr.error(
-                _(
-                    "Invalid datetime in timestamp for vector "
-                    "map <%s>" % (self.get_map_id())
-                )
+                _("Invalid datetime in timestamp for vector map <%s>")
+                % (self.get_map_id())
             )
             return False
 
         return True
 
-    def remove_timestamp_from_grass(self):
+    def remove_timestamp_from_grass(self) -> bool:
         """Remove the timestamp from the grass file system based spatial
         database
 
@@ -1147,9 +1118,8 @@ class VectorDataset(AbstractMapDataset):
 
         if check == -1:
             self.msgr.error(
-                _(
-                    "Unable to remove timestamp for vector "
-                    "map <%s>" % (self.get_name())
+                _("Unable to remove timestamp for vector map <%s>").format(
+                    self.get_name()
                 )
             )
             return False
@@ -1163,7 +1133,7 @@ class VectorDataset(AbstractMapDataset):
         """
         return self.ciface.vector_map_exists(self.get_name(), self.get_mapset())
 
-    def load(self):
+    def load(self) -> bool:
         """Load all info from an existing vector map into the internal structure
 
         This method checks first if the map exists, in case it exists
@@ -1192,35 +1162,34 @@ class VectorDataset(AbstractMapDataset):
         # Get the data from an existing vector map
         kvp = self.ciface.read_vector_info(self.get_name(), self.get_mapset())
 
-        if kvp:
-            # Fill spatial extent
-            self.set_spatial_extent_from_values(
-                north=kvp["north"],
-                south=kvp["south"],
-                east=kvp["east"],
-                west=kvp["west"],
-                top=kvp["top"],
-                bottom=kvp["bottom"],
-            )
+        if not kvp:
+            return False
+        # Fill spatial extent
+        self.set_spatial_extent_from_values(
+            north=kvp["north"],
+            south=kvp["south"],
+            east=kvp["east"],
+            west=kvp["west"],
+            top=kvp["top"],
+            bottom=kvp["bottom"],
+        )
 
-            # Fill metadata
-            self.metadata.set_3d_info(kvp["map3d"])
-            self.metadata.set_number_of_points(kvp["points"])
-            self.metadata.set_number_of_lines(kvp["lines"])
-            self.metadata.set_number_of_boundaries(kvp["boundaries"])
-            self.metadata.set_number_of_centroids(kvp["centroids"])
-            self.metadata.set_number_of_faces(kvp["faces"])
-            self.metadata.set_number_of_kernels(kvp["kernels"])
-            self.metadata.set_number_of_primitives(kvp["primitives"])
-            self.metadata.set_number_of_nodes(kvp["nodes"])
-            self.metadata.set_number_of_areas(kvp["areas"])
-            self.metadata.set_number_of_islands(kvp["islands"])
-            self.metadata.set_number_of_holes(kvp["holes"])
-            self.metadata.set_number_of_volumes(kvp["volumes"])
+        # Fill metadata
+        self.metadata.set_3d_info(kvp["map3d"])
+        self.metadata.set_number_of_points(kvp["points"])
+        self.metadata.set_number_of_lines(kvp["lines"])
+        self.metadata.set_number_of_boundaries(kvp["boundaries"])
+        self.metadata.set_number_of_centroids(kvp["centroids"])
+        self.metadata.set_number_of_faces(kvp["faces"])
+        self.metadata.set_number_of_kernels(kvp["kernels"])
+        self.metadata.set_number_of_primitives(kvp["primitives"])
+        self.metadata.set_number_of_nodes(kvp["nodes"])
+        self.metadata.set_number_of_areas(kvp["areas"])
+        self.metadata.set_number_of_islands(kvp["islands"])
+        self.metadata.set_number_of_holes(kvp["holes"])
+        self.metadata.set_number_of_volumes(kvp["volumes"])
 
-            return True
-
-        return False
+        return True
 
 
 ###############################################################################
@@ -1258,24 +1227,24 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
     ...
     """
 
-    def __init__(self, ident):
+    def __init__(self, ident) -> None:
         AbstractSpaceTimeDataset.__init__(self, ident)
 
-    def set_semantic_label(self, semantic_label):
+    def set_semantic_label(self, semantic_label) -> None:
         """Set semantic label
 
         :param str semantic_label: semantic label (eg. S2_1)
         """
         self.semantic_label = semantic_label
 
-    def is_stds(self):
+    def is_stds(self) -> Literal[True]:
         """Return True if this class is a space time dataset
 
         :return: True if this class is a space time dataset, False otherwise
         """
         return True
 
-    def get_type(self):
+    def get_type(self) -> Literal["strds"]:
         return "strds"
 
     def get_new_instance(self, ident):
@@ -1291,7 +1260,7 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
         """Return the name of the map register table"""
         return self.metadata.get_raster_register()
 
-    def set_map_register(self, name):
+    def set_map_register(self, name) -> None:
         """Set the name of the map register table"""
         self.metadata.set_raster_register(name)
 
@@ -1329,7 +1298,7 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
         """
         return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
 
-    def reset(self, ident):
+    def reset(self, ident) -> None:
         """Reset the internal structure and set the identifier"""
         self.base = STRDSBase(ident=ident)
         self.base.set_creator(str(getpass.getuser()))
@@ -1374,17 +1343,17 @@ class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
     ...
     """
 
-    def __init__(self, ident):
+    def __init__(self, ident) -> None:
         AbstractSpaceTimeDataset.__init__(self, ident)
 
-    def is_stds(self):
+    def is_stds(self) -> Literal[True]:
         """Return True if this class is a space time dataset
 
         :return: True if this class is a space time dataset, False otherwise
         """
         return True
 
-    def get_type(self):
+    def get_type(self) -> Literal["str3ds"]:
         return "str3ds"
 
     def get_new_instance(self, ident):
@@ -1400,7 +1369,7 @@ class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
         """Return the name of the map register table"""
         return self.metadata.get_raster3d_register()
 
-    def set_map_register(self, name):
+    def set_map_register(self, name) -> None:
         """Set the name of the map register table"""
         self.metadata.set_raster3d_register(name)
 
@@ -1409,16 +1378,14 @@ class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
 
         if self.get_type() == dataset.get_type() or dataset.get_type() == "str3ds":
             return self.spatial_extent.overlapping(dataset.spatial_extent)
-        else:
-            return self.spatial_extent.overlapping_2d(dataset.spatial_extent)
+        return self.spatial_extent.overlapping_2d(dataset.spatial_extent)
 
     def spatial_relation(self, dataset):
         """Return the two or three dimensional spatial relation"""
 
         if self.get_type() == dataset.get_type() or dataset.get_type() == "str3ds":
             return self.spatial_extent.spatial_relation(dataset.spatial_extent)
-        else:
-            return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
+        return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
 
     def spatial_intersection(self, dataset):
         """Return the three or two dimensional intersection as spatial_extent
@@ -1429,8 +1396,7 @@ class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
         """
         if self.get_type() == dataset.get_type() or dataset.get_type() == "raster3d":
             return self.spatial_extent.intersect(dataset.spatial_extent)
-        else:
-            return self.spatial_extent.intersect_2d(dataset.spatial_extent)
+        return self.spatial_extent.intersect_2d(dataset.spatial_extent)
 
     def spatial_union(self, dataset):
         """Return the three or two dimensional union as spatial_extent
@@ -1441,8 +1407,7 @@ class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
         """
         if self.get_type() == dataset.get_type() or dataset.get_type() == "raster3d":
             return self.spatial_extent.union(dataset.spatial_extent)
-        else:
-            return self.spatial_extent.union_2d(dataset.spatial_extent)
+        return self.spatial_extent.union_2d(dataset.spatial_extent)
 
     def spatial_disjoint_union(self, dataset):
         """Return the three or two dimensional union as spatial_extent object.
@@ -1452,10 +1417,9 @@ class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
         """
         if self.get_type() == dataset.get_type() or dataset.get_type() == "raster3d":
             return self.spatial_extent.disjoint_union(dataset.spatial_extent)
-        else:
-            return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
+        return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
 
-    def reset(self, ident):
+    def reset(self, ident) -> None:
         """Reset the internal structure and set the identifier"""
         self.base = STR3DSBase(ident=ident)
         self.base.set_creator(str(getpass.getuser()))
@@ -1500,17 +1464,17 @@ class SpaceTimeVectorDataset(AbstractSpaceTimeDataset):
     ...
     """
 
-    def __init__(self, ident):
+    def __init__(self, ident) -> None:
         AbstractSpaceTimeDataset.__init__(self, ident)
 
-    def is_stds(self):
+    def is_stds(self) -> Literal[True]:
         """Return True if this class is a space time dataset
 
         :return: True if this class is a space time dataset, False otherwise
         """
         return True
 
-    def get_type(self):
+    def get_type(self) -> Literal["stvds"]:
         return "stvds"
 
     def get_new_instance(self, ident):
@@ -1526,7 +1490,7 @@ class SpaceTimeVectorDataset(AbstractSpaceTimeDataset):
         """Return the name of the map register table"""
         return self.metadata.get_vector_register()
 
-    def set_map_register(self, name):
+    def set_map_register(self, name) -> None:
         """Set the name of the map register table"""
         self.metadata.set_vector_register(name)
 
@@ -1564,7 +1528,7 @@ class SpaceTimeVectorDataset(AbstractSpaceTimeDataset):
         """
         return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
 
-    def reset(self, ident):
+    def reset(self, ident) -> None:
         """Reset the internal structure and set the identifier"""
         self.base = STVDSBase(ident=ident)
         self.base.set_creator(str(getpass.getuser()))

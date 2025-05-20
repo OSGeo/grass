@@ -110,6 +110,9 @@ void set_params(void)
         _("Table output format instead of standard output format");
     param.table->guisection = _("Formatting");
 
+    param.format = G_define_standard_option(G_OPT_F_FORMAT);
+    param.format->guisection = _("Print");
+
     param.use_rast_region = G_define_flag();
     param.use_rast_region->key = 'r';
     param.use_rast_region->description =
@@ -139,6 +142,8 @@ int main(int argc, char *argv[])
     struct Range zone_range;
     const char *mapset, *name;
     int t;
+
+    enum OutputFormat format;
 
     G_gisinit(argv[0]);
 
@@ -175,11 +180,22 @@ int main(int argc, char *argv[])
         }
     }
 
+    if (strcmp(param.format->answer, "json") == 0) {
+        format = JSON;
+    }
+    else {
+        format = PLAIN;
+    }
+
     /* set nprocs parameter */
     int nprocs;
     sscanf(param.nprocs->answer, "%d", &nprocs);
     if (nprocs < 1)
         G_fatal_error(_("<%d> is not valid number of nprocs."), nprocs);
+    if (nprocs > 1 && Rast_mask_is_present()) {
+        G_warning(_("Parallel processing disabled due to active mask."));
+        nprocs = 1;
+    }
 #if defined(_OPENMP)
     omp_set_num_threads(nprocs);
 #else
@@ -188,10 +204,6 @@ int main(int argc, char *argv[])
                     "threads setting."));
     nprocs = 1;
 #endif
-    if (nprocs > 1 && G_find_raster("MASK", G_mapset()) != NULL) {
-        G_warning(_("Parallel processing disabled due to active MASK."));
-        nprocs = 1;
-    }
     /* table field separator */
     zone_info.sep = G_option_to_separator(param.separator);
 
@@ -283,7 +295,7 @@ int main(int argc, char *argv[])
     if (param.table->answer)
         print_stats_table(stats);
     else
-        print_stats(stats);
+        print_stats(stats, format);
 
     /* release memory */
     free_univar_stat_struct(stats);
@@ -358,6 +370,7 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
 #endif
 
     int computed = 0;
+    int row;
 
 #pragma omp parallel
     {
@@ -384,7 +397,7 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
         }
 
 #pragma omp for
-        for (int row = 0; row < rows; row++) {
+        for (row = 0; row < rows; row++) {
             thread_workspace *w = &tw[t_id];
 
             Rast_get_row(w->fd, w->raster_row, row, map_type);

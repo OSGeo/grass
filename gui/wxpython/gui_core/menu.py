@@ -50,7 +50,7 @@ class MenuBase:
         """
         self.parent = parent
         self.model = model
-        self.menucmd = dict()
+        self.menucmd = {}
         self.bmpsize = (16, 16)
         self.class_handler = class_handler if class_handler is not None else parent
 
@@ -62,13 +62,11 @@ class MenuBase:
                 label = child.label
                 subMenu = self._createMenu(child)
                 menu.AppendMenu(wx.ID_ANY, label, subMenu)
-            else:
-                data = child.data.copy()
-                data.pop("label")
+                continue
+            data = child.data.copy()
+            data.pop("label")
 
-                self._createMenuItem(menu, label=child.label, **data)
-
-        self.parent.Bind(wx.EVT_MENU_HIGHLIGHT_ALL, self.OnMenuHighlight)
+            self._createMenuItem(menu, label=child.label, **data)
 
         return menu
 
@@ -93,10 +91,7 @@ class MenuBase:
             menu.AppendSeparator()
             return
 
-        if command:
-            helpString = command + " -- " + description
-        else:
-            helpString = description
+        helpString = command + " -- " + description if command else description
 
         if shortcut:
             label += "\t" + shortcut
@@ -135,19 +130,6 @@ class MenuBase:
         :return: dictionary of commands
         """
         return self.menucmd
-
-    def OnMenuHighlight(self, event):
-        """
-        Default menu help handler
-        """
-        # Show how to get menu item info from this event handler
-        id = event.GetMenuId()
-        item = self.FindItemById(id)
-        if item:
-            help = item.GetHelp()
-
-        # but in this case just call Skip so the default is done
-        event.Skip()
 
 
 class Menu(MenuBase, wx.MenuBar):
@@ -360,8 +342,7 @@ class RecentFilesMenu:
                          written into the .recent_files file
     :param obj parent_menu: menu widget instance where be inserted
                             recent files menu on the specified position
-    :param int pos: position (index) where insert recent files menu in
-                    the parent menu
+    :param int pos: position (index) where insert recent files menu in the parent menu
     :param int history_len: the maximum number of file paths written
                             into the .recent_files file to app name group
     """
@@ -459,7 +440,7 @@ class RecentFilesMenu:
 
     def RemoveNonExistentFiles(self):
         """Remove non existent files from the history"""
-        for i in reversed(range(0, self._filehistory.GetCount())):
+        for i in reversed(range(self._filehistory.GetCount())):
             file = self._filehistory.GetHistoryFile(index=i)
             if not os.path.exists(file):
                 self._filehistory.RemoveFileFromHistory(i=i)

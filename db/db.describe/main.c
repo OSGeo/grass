@@ -19,11 +19,13 @@
 #include <grass/gis.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
+#include <grass/parson.h>
 #include "local_proto.h"
 
 struct {
     char *driver, *database, *table;
     int printcolnames;
+    enum OutputFormat format;
 } parms;
 
 /* function prototypes */
@@ -40,7 +42,25 @@ int main(int argc, char **argv)
     char buf[1024];
     dbString stmt;
 
+    JSON_Object *root_object = NULL, *col_object = NULL;
+    JSON_Value *root_value = NULL, *cols_value = NULL, *col_value = NULL;
+    JSON_Array *cols_array = NULL;
+
     parse_command_line(argc, argv);
+
+    if (parms.format == JSON) {
+        root_value = json_value_init_object();
+        if (root_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
+        root_object = json_object(root_value);
+        cols_value = json_value_init_array();
+        if (cols_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
+        cols_array = json_array(cols_value);
+    }
+
     if (!db_table_exists(parms.driver, parms.database, parms.table)) {
         G_warning(_("Table <%s> not found in database <%s> using driver <%s>"),
                   parms.table, parms.database, parms.driver);
@@ -63,23 +83,65 @@ int main(int argc, char **argv)
                       db_get_string(&table_name));
 
     if (!parms.printcolnames)
-        print_table_definition(driver, table);
+        print_table_definition(driver, table, parms.format, root_object,
+                               cols_array);
     else {
         ncols = db_get_table_number_of_columns(table);
 
         db_init_string(&stmt);
-        sprintf(buf, "select * from %s", db_get_table_name(table));
+        snprintf(buf, sizeof(buf), "select * from %s",
+                 db_get_table_name(table));
         db_set_string(&stmt, buf);
         nrows = db_get_table_number_of_rows(driver, &stmt);
-        fprintf(stdout, "ncols: %d\n", ncols);
-        fprintf(stdout, "nrows: %d\n", nrows);
+
+        switch (parms.format) {
+        case PLAIN:
+            fprintf(stdout, "ncols: %d\n", ncols);
+            fprintf(stdout, "nrows: %d\n", nrows);
+            break;
+        case JSON:
+            json_object_set_number(root_object, "ncols", ncols);
+            json_object_set_number(root_object, "nrows", nrows);
+            break;
+        }
+
         for (col = 0; col < ncols; col++) {
             column = db_get_table_column(table, col);
-            fprintf(stdout, "Column %d: %s:%s:%d\n", (col + 1),
-                    db_get_column_name(column),
-                    db_sqltype_name(db_get_column_sqltype(column)),
-                    db_get_column_length(column));
+
+            switch (parms.format) {
+            case PLAIN:
+                fprintf(stdout, "Column %d: %s:%s:%d\n", (col + 1),
+                        db_get_column_name(column),
+                        db_sqltype_name(db_get_column_sqltype(column)),
+                        db_get_column_length(column));
+                break;
+            case JSON:
+                col_value = json_value_init_object();
+                col_object = json_object(col_value);
+                json_object_set_number(col_object, "position", col + 1);
+                json_object_set_string(col_object, "name",
+                                       db_get_column_name(column));
+                json_object_set_string(
+                    col_object, "type",
+                    db_sqltype_name(db_get_column_sqltype(column)));
+                json_object_set_number(col_object, "length",
+                                       db_get_column_length(column));
+                json_array_append_value(cols_array, col_value);
+                break;
+            }
         }
+    }
+
+    if (parms.format == JSON) {
+        json_object_set_value(root_object, "columns", cols_value);
+        char *serialized_string = NULL;
+        serialized_string = json_serialize_to_string_pretty(root_value);
+        if (serialized_string == NULL) {
+            G_fatal_error(_("Failed to initialize pretty JSON string."));
+        }
+        puts(serialized_string);
+        json_free_serialized_string(serialized_string);
+        json_value_free(root_value);
     }
 
     db_close_database(driver);
@@ -90,7 +152,7 @@ int main(int argc, char **argv)
 
 static void parse_command_line(int argc, char **argv)
 {
-    struct Option *driver, *database, *table;
+    struct Option *driver, *database, *table, *format_opt;
     struct Flag *cols;
     struct GModule *module;
     const char *drv, *db;
@@ -115,9 +177,13 @@ static void parse_command_line(int argc, char **argv)
     if ((db = db_get_default_database_name()))
         database->answer = (char *)db;
 
+    format_opt = G_define_standard_option(G_OPT_F_FORMAT);
+    format_opt->guisection = _("Print");
+
     /* Set description */
     module = G_define_module();
     G_add_keyword(_("database"));
+    G_add_keyword(_("json"));
     G_add_keyword(_("attribute table"));
     module->description = _("Describes a table in detail.");
 
@@ -128,4 +194,11 @@ static void parse_command_line(int argc, char **argv)
     parms.database = database->answer;
     parms.table = table->answer;
     parms.printcolnames = cols->answer;
+
+    if (strcmp(format_opt->answer, "json") == 0) {
+        parms.format = JSON;
+    }
+    else {
+        parms.format = PLAIN;
+    }
 }
