@@ -889,7 +889,6 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
         json_set_float_serialization_format("%lf");
     }
 
-
     for (int i = 0; i < point_count; i++) {
         /* Write out header */
         switch (format) {
