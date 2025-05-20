@@ -389,7 +389,8 @@ static int mk_attribs(int cat, struct field_info *Fi, dbDriver *Driver,
     /* create SQL-string and query attribs */
     db_init_string(&dbstring);
 
-    sprintf(buf, "SELECT * FROM %s WHERE %s = %d", Fi->table, Fi->key, cat);
+    snprintf(buf, sizeof(buf), "SELECT * FROM %s WHERE %s = %d", Fi->table,
+             Fi->key, cat);
 
     db_set_string(&dbstring, buf);
 

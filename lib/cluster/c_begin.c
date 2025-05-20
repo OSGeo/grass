@@ -54,7 +54,7 @@ int I_cluster_begin(struct Cluster *C, int nbands)
     /* prepare the signatures for nbands */
 
     I_init_signatures(&C->S, nbands);
-    sprintf(C->S.title, _("produced by i.cluster"));
+    snprintf(C->S.title, sizeof(C->S.title), _("produced by i.cluster"));
 
     /* allocate the data (points) arrays */
     C->points = (DCELL **)malloc(C->nbands * sizeof(DCELL *));

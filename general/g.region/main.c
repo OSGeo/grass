@@ -906,17 +906,15 @@ int main(int argc, char *argv[])
             }
         }
     }
+    G_adjust_Cell_head3(&window, row_flag, col_flag, 0);
 
     /* save= */
     if ((name = parm.save->answer)) {
         update_file = false;
-        temp_window = window;
-        G_adjust_Cell_head3(&temp_window, 0, 0, 0);
-        if (G_put_element_window(&temp_window, "windows", name) < 0)
+        if (G_put_element_window(&window, "windows", name) < 0)
             G_fatal_error(_("Unable to set region <%s>"), name);
     }
 
-    G_adjust_Cell_head3(&window, row_flag, col_flag, 0);
     if (flag.force->answer || (update_file && !flag.noupdate->answer)) {
         if (G_put_window(&window) < 0)
             G_fatal_error(_("Unable to update current region"));
