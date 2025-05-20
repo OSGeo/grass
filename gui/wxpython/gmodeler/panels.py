@@ -66,8 +66,8 @@ from gui_core.wrap import (
 )
 from main_window.page import MainPageBase
 from gmodeler.giface import GraphicalModelerGrassInterface
-from gmodeler.model import (
-    Model,
+from gmodeler.model import Model
+from gmodeler.model_items import (
     ModelAction,
     ModelRelation,
     ModelLoop,
