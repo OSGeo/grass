@@ -99,7 +99,9 @@ if "GISBASE" in os.environ and len(os.getenv("GISBASE")) > 0:
     GISBASE = os.path.normpath(os.environ["GISBASE"])
 else:
     if "CONDA_PREFIX" in os.environ and len(os.getenv("CONDA_PREFIX")) > 0:
-        GISBASE = os.path.normpath(f"{os.environ['CONDA_PREFIX']}/lib64/grass85")
+        GISBASE = os.path.normpath(
+            f"{os.environ['CONDA_PREFIX']}/lib64/grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@"
+        )
     else:
         GISBASE = os.path.normpath("@GISBASE_INSTALL_PATH@")
     os.environ["GISBASE"] = GISBASE
