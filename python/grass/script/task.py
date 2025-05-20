@@ -159,7 +159,7 @@ class grassTask:
                 return f
         raise ValueError(_("Flag not found: %s") % aFlag)
 
-    def get_cmd_error(self):
+    def get_cmd_error(self) -> list[str]:
         """Get error string produced by get_cmd(ignoreErrors = False)
 
         :return: list of errors
