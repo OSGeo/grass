@@ -865,13 +865,13 @@ class PyEditFrame(wx.Frame):
         wx.Frame.__init__(self, parent=parent, id=id, title=title, **kwargs)
         self.parent = parent
 
-        self.panel = PyEditPanel(parent=self)
+        self.panel = PyEditPanel(parent=self, giface=giface)
 
         filename = os.path.join(globalvar.WXGUIDIR, "xml", "menudata_pyedit.xml")
         self.menubar = Menubar(
             parent=self,
             model=MenuTreeModelBuilder(filename).GetModel(separators=True),
-            class_handler=self,
+            class_handler=self.panel,
         )
         self.SetMenuBar(self.menubar)
 
@@ -883,7 +883,7 @@ class PyEditFrame(wx.Frame):
         self.Fit()
         self.SetAutoLayout(True)
         self.Layout()
-        self.Bind(wx.EVT_CLOSE, self.OnClose)
+        self.Bind(wx.EVT_CLOSE, self.panel.OnClose)
 
 
 def main():
