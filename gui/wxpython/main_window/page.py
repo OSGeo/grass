@@ -88,7 +88,7 @@ class MainPageBase:
             self._docked = not self._docked
             self._docking_callback(self)
 
-    def _onCloseWindow(self, event):
+    def _onCloseWindow(self, event=None):
         """Close window"""
         if self.canCloseCallback:
             pgnum_dict = self.canCloseCallback()
