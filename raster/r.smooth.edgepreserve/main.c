@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
 
     struct {
-        struct Option *input, *output, *K, *l, *t, *met, *mem;
+        struct Option *input, *output, *K, *l, *t, *met, *mem, *nprocs;
         struct Flag *pres;
     } opt;
 
@@ -88,6 +88,7 @@ int main(int argc, char *argv[])
     opt.met->answer = G_store("tukey");
 
     opt.mem = G_define_standard_option(G_OPT_MEMORYMB);
+    opt.nprocs = G_define_standard_option(G_OPT_M_NPROCS);
 
     opt.pres = G_define_flag();
     opt.pres->key = 'p';
@@ -96,6 +97,8 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
+
+    G_set_omp_num_threads(opt.nprocs);
 
     struct PM_params pm_params;
     const char *in_map, *out_map, *in_mapset;
