@@ -12,6 +12,11 @@
     The intended usage is at the beginning of a C tool when parameters are
     processed, namely the G_OPT_M_NPROCS standard option.
 
+    If \em nprocs is set to 0, default OpenMP internal logic is used.
+    If \em nprocs is a positive number, specified number of threads is used.
+    If \em nprocs is a negative number, then <em>maximum threads - number</em>
+    is used instead (e.g. to keep \em number of cores free for other use.
+
     \param opt A nprocs Option struct to specify the number of threads
     \return the number of threads set up for OpenMP parallel computing
 */
@@ -26,6 +31,10 @@ int G_set_omp_num_threads(struct Option *opt)
 
     int threads = atoi(opt->answer);
 #if defined(_OPENMP)
+    if (threads == 0) {
+        return omp_get_max_threads();
+    }
+
     int num_logic_procs = omp_get_num_procs();
     if (threads < 1) {
         threads += num_logic_procs;
@@ -35,7 +44,7 @@ int G_set_omp_num_threads(struct Option *opt)
     G_verbose_message(_("%d threads are set up for parallel computing."),
                       threads);
 #else
-    if (threads != 1) {
+    if (threads != 0) {
         G_warning(_("GRASS GIS is not compiled with OpenMP support, parallel "
                     "computation is disabled. Only one thread will be used."));
         threads = 1;
