@@ -1,4 +1,4 @@
-# GRASS GIS Repository
+# GRASS Repository
 
 [![GCC C/C++ standards check](https://github.com/OSGeo/grass/workflows/GCC%20C/C++%20standards%20check/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3A%22GCC+C%2FC%2B%2B+standards+check%22)
 [![Python code quality check](https://github.com/OSGeo/grass/workflows/Python%20code%20quality%20check/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3A%22Python+code+quality+check%22)
@@ -14,7 +14,7 @@
 
 ## Description
 
-GRASS GIS ([https://grass.osgeo.org/](https://grass.osgeo.org/)) is
+GRASS ([https://grass.osgeo.org/](https://grass.osgeo.org/)) is
 a Geographic Information System used for geospatial data management and
 analysis, image processing, graphics/map production, spatial modeling, and
 visualization.
@@ -49,9 +49,9 @@ A. Docker image **without graphical user interface - wxGUI**.
 docker build -t grassgis .
 ```
 
-A test run (assuming you have the existing GRASS GIS test location; it can be
-downloaded from
-[here](https://grass.osgeo.org/sampledata/north_carolina/nc_basic_spm_grass7.zip))
+A test run (assuming you have the existing GRASS test location;
+
+[Download test project data here](https://grass.osgeo.org/sampledata/north_carolina/nc_basic_spm_grass7.zip))
 
 ```bash
 # case 1: launching in the grassdata directory in which the location is stored:

@@ -6,7 +6,7 @@ vector map.
 
 In default, boundaries of clip map are dissolved before clipping.
 Alternatively, flag **-d** can be ticked to retain the boundaries of
-clip map. Flag **-b** facilitates clipping by current computational
+clip map. Flag **-r** facilitates clipping by current computational
 region.
 
 It is possible to clip vector maps consisting of points, lines, areas or
