@@ -22,6 +22,8 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
+static void substitute_variable(char **, const char *, const char *,
+                                int offset);
 static char *substitute_variables(dbConnection *);
 
 int main(int argc, char *argv[])
@@ -227,6 +229,19 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
+void substitute_variable(char **database, const char *variable,
+                         const char *value, int offset)
+{
+    char *c, buf[GPATH_MAX];
+
+    strcpy(buf, *database);
+    c = (char *)strstr(buf, variable);
+    if (c != NULL) {
+        *c = '\0';
+        snprintf(*database, GPATH_MAX, "%s%s%s", buf, value, c + offset);
+    }
+}
+
 char *substitute_variables(dbConnection *conn)
 {
     char *database, *c, buf[GPATH_MAX];
@@ -237,26 +252,9 @@ char *substitute_variables(dbConnection *conn)
     database = (char *)G_malloc(GPATH_MAX);
     strcpy(database, conn->databaseName);
 
-    strcpy(buf, database);
-    c = (char *)strstr(buf, "$GISDBASE");
-    if (c != NULL) {
-        *c = '\0';
-        snprintf(database, GPATH_MAX, "%s%s%s", buf, G_gisdbase(), c + 9);
-    }
-
-    strcpy(buf, database);
-    c = (char *)strstr(buf, "$LOCATION_NAME");
-    if (c != NULL) {
-        *c = '\0';
-        snprintf(database, GPATH_MAX, "%s%s%s", buf, G_location(), c + 14);
-    }
-
-    strcpy(buf, database);
-    c = (char *)strstr(buf, "$MAPSET");
-    if (c != NULL) {
-        *c = '\0';
-        snprintf(database, GPATH_MAX, "%s%s%s", buf, G_mapset(), c + 7);
-    }
+    substitute_variable(&database, "$GISDBASE", G_gisdbase(), 9);
+    substitute_variable(&database, "$LOCATION_NAME", G_location(), 14);
+    substitute_variable(&database, "$MAPSET", G_mapset(), 7);
 #ifdef __MINGW32__
     if (strcmp(conn->driverName, "sqlite") == 0 ||
         strcmp(conn->driverName, "dbf") == 0) {
