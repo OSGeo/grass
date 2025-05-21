@@ -24,7 +24,7 @@ from gui_core.wrap import TextEntryDialog as wxTextEntryDialog, NewId, Menu
 from gui_core.forms import GUI
 from core.gcmd import GException, GError
 
-from gmodeler.model import (
+from gmodeler.model_items import (
     ModelRelation,
     ModelAction,
     ModelData,
