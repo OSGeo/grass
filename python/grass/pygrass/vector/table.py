@@ -1207,7 +1207,7 @@ class Table:
             )
 
     def exist(self, cursor=None):
-        """Return True if the table already exist in the DB, False otherwise
+        """Return True if the table already exists in the DB, False otherwise
 
         :param cursor: the cursor to connect, if None it use the cursor
                        of connection table object
