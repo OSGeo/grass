@@ -422,7 +422,7 @@ class VectorTopo(Vector):
             [Area(1), Area(2), Area(3)]
 
 
-        to sort the result in a efficient way, use: ::
+        to sort the result in an efficient way, use: ::
 
             >>> from operator import methodcaller as method
             >>> areas.sort(key=method("area"), reverse=True)  # sort the list
@@ -443,7 +443,6 @@ class VectorTopo(Vector):
 
             >>> test_vect.close()
         """
-        is2D = not self.is_3D()
         if vtype not in _GEOOBJ.keys():
             keys = "', '".join(sorted(_GEOOBJ.keys()))
             raise ValueError("vtype not supported, use one of: '%s'" % keys)
@@ -451,6 +450,7 @@ class VectorTopo(Vector):
             ids = (indx for indx in range(1, self.number_of(vtype) + 1))
             if idonly:
                 return ids
+            is2D = not self.is_3D()
             return (
                 _GEOOBJ[vtype](
                     v_id=indx,
