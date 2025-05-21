@@ -735,6 +735,12 @@ class PyEditToolbar(BaseToolbar):
 
 
 class PyEditPanel(wx.Panel, MainPageBase):
+    # GUI class
+    # pylint: disable=missing-docstring
+    # pylint: disable=too-many-public-methods
+    # pylint: disable=invalid-name
+    """PyEdit panel"""
+
     def __init__(
         self,
         parent,
