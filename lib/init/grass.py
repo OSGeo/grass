@@ -1789,7 +1789,7 @@ def clean_all(*, start_time) -> None:
 def grep(pattern, lines):
     """Search lines (list of strings) and return them when beginning matches.
 
-    >>> grep("a", ['abc', 'cab', 'sdr', 'aaa', 'sss'])
+    >>> grep("a", ["abc", "cab", "sdr", "aaa", "sss"])
     ['abc', 'aaa']
     """
     expr = re.compile(pattern)

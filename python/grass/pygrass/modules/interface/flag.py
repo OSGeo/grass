@@ -7,15 +7,14 @@ class Flag:
 
     It is possible to set flags of command using this object.
 
-    >>> flag = Flag(diz=dict(name='a', description='Flag description',
-    ...                      default=True))
+    >>> flag = Flag(diz=dict(name="a", description="Flag description", default=True))
     >>> flag.name
     'a'
     >>> flag.special
     False
     >>> flag.description
     'Flag description'
-    >>> flag = Flag(diz=dict(name='overwrite'))
+    >>> flag = Flag(diz=dict(name="overwrite"))
     >>> flag.name
     'overwrite'
     >>> flag.special
@@ -35,14 +34,15 @@ class Flag:
     def get_bash(self):
         """Return the BASH representation of a flag.
 
-        >>> flag = Flag(diz=dict(name='a', description='Flag description',
-        ...                      default=True))
+        >>> flag = Flag(
+        ...     diz=dict(name="a", description="Flag description", default=True)
+        ... )
         >>> flag.get_bash()
         ''
         >>> flag.value = True
         >>> flag.get_bash()
         '-a'
-        >>> flag = Flag(diz=dict(name='overwrite'))
+        >>> flag = Flag(diz=dict(name="overwrite"))
         >>> flag.get_bash()
         ''
         >>> flag.value = True
@@ -58,14 +58,15 @@ class Flag:
     def get_python(self):
         """Return the python representation of a flag.
 
-        >>> flag = Flag(diz=dict(name='a', description='Flag description',
-        ...                      default=True))
+        >>> flag = Flag(
+        ...     diz=dict(name="a", description="Flag description", default=True)
+        ... )
         >>> flag.get_python()
         ''
         >>> flag.value = True
         >>> flag.get_python()
         'a'
-        >>> flag = Flag(diz=dict(name='overwrite'))
+        >>> flag = Flag(diz=dict(name="overwrite"))
         >>> flag.get_python()
         ''
         >>> flag.value = True
@@ -104,7 +105,7 @@ class Flag:
         a: True
             Flag description
 
-        >>> flag = Flag(diz=dict(name='overwrite'))
+        >>> flag = Flag(diz=dict(name="overwrite"))
         >>> print(flag.__doc__)
         overwrite: None
             None

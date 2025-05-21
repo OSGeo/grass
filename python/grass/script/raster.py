@@ -6,6 +6,7 @@ Usage:
 ::
 
     from grass.script import raster as grass
+
     grass.raster_history(map)
 
 
@@ -84,7 +85,7 @@ def raster_info(map, env=None):
     """Return information about a raster map (interface to
     `r.info -gre`). Example:
 
-    >>> raster_info('elevation') # doctest: +ELLIPSIS
+    >>> raster_info("elevation")  # doctest: +ELLIPSIS
     {'creator': '"helena"', 'cols': '1500' ... 'south': 215000.0}
 
     :param str map: map name
@@ -170,20 +171,19 @@ def mapcalc_start(
 ):
     """Interface to r.mapcalc, doesn't wait for it to finish, returns Popen object.
 
-    >>> output = 'newele'
-    >>> input = 'elevation'
+    >>> output = "newele"
+    >>> input = "elevation"
     >>> expr1 = '"%s" = "%s" * 10' % (output, input)
-    >>> expr2 = '...'   # etc.
+    >>> expr2 = "..."  # etc.
     >>> # launch the jobs:
     >>> p1 = mapcalc_start(expr1)
     >>> p2 = mapcalc_start(expr2)
-    ...
     >>> # wait for them to finish:
     >>> p1.wait()
     0
     >>> p2.wait()
     1
-    >>> run_command('g.remove', flags='f', type='raster', name=output)
+    >>> run_command("g.remove", flags="f", type="raster", name=output)
 
     :param str exp: expression
     :param bool quiet: True to run quietly (<tt>--q</tt>)
@@ -222,7 +222,7 @@ def mapcalc_start(
 def raster_what(map, coord, env=None, localized=False):
     """Interface to r.what
 
-    >>> raster_what('elevation', [[640000, 228000]])
+    >>> raster_what("elevation", [[640000, 228000]])
     [{'elevation': {'color': '255:214:000', 'label': '', 'value': '102.479'}}]
 
     :param str map: the map name
@@ -337,7 +337,7 @@ class MaskManager:
     ...     gs.run_command(
     ...         "r.mapcalc",
     ...         expression=f"{manager.mask_name} = row() < col()",
-    ...         env=manager.env
+    ...         env=manager.env,
     ...     )
     ...     gs.run_command(
     ...         "r.mapcalc", expression=f"masked_elevation = elevation", env=manager.env

@@ -125,7 +125,7 @@ class Gisdbase:
 
         >>> from grass.script.core import gisenv
         >>> gisdbase = Gisdbase()
-        >>> gisdbase.name == gisenv()['GISDBASE']
+        >>> gisdbase.name == gisenv()["GISDBASE"]
         True
 
     ..
@@ -154,7 +154,7 @@ class Gisdbase:
         """Return a Location object. ::
 
             >>> from grass.script.core import gisenv
-            >>> loc_env = gisenv()['LOCATION_NAME']
+            >>> loc_env = gisenv()["LOCATION_NAME"]
             >>> gisdbase = Gisdbase()
             >>> loc_py = gisdbase[loc_env]
             >>> loc_env == loc_py.name
@@ -180,7 +180,7 @@ class Gisdbase:
         """Return a list of locations that are available in the gisdbase: ::
 
             >>> gisdbase = Gisdbase()
-            >>> gisdbase.locations()                     # doctest: +ELLIPSIS
+            >>> gisdbase.locations()  # doctest: +ELLIPSIS
             [...]
 
         ..
@@ -199,11 +199,11 @@ class Location:
 
         >>> from grass.script.core import gisenv
         >>> location = Location()
-        >>> location                                      # doctest: +ELLIPSIS
+        >>> location  # doctest: +ELLIPSIS
         Location(...)
-        >>> location.gisdbase == gisenv()['GISDBASE']
+        >>> location.gisdbase == gisenv()["GISDBASE"]
         True
-        >>> location.name == gisenv()['LOCATION_NAME']
+        >>> location.name == gisenv()["LOCATION_NAME"]
         True
 
     ..
@@ -294,13 +294,13 @@ class Mapset:
         >>> from grass.script.core import gisenv
         >>> genv = gisenv()
         >>> mapset = Mapset()
-        >>> mapset                                        # doctest: +ELLIPSIS
+        >>> mapset  # doctest: +ELLIPSIS
         Mapset(...)
-        >>> mapset.gisdbase == genv['GISDBASE']
+        >>> mapset.gisdbase == genv["GISDBASE"]
         True
-        >>> mapset.location == genv['LOCATION_NAME']
+        >>> mapset.location == genv["LOCATION_NAME"]
         True
-        >>> mapset.name == genv['MAPSET']
+        >>> mapset.name == genv["MAPSET"]
         True
 
     ..
