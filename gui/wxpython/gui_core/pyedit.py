@@ -757,10 +757,6 @@ class PyEditPanel(wx.Panel, MainPageBase):
         self._giface = giface
 
         self.toolbar = PyEditToolbar(parent=self)
-        # workaround for http://trac.wxwidgets.org/ticket/13888
-        # TODO: toolbar is set in toolbar and here
-        # if sys.platform != "darwin":
-        #     self.SetToolBar(self.toolbar)
 
         self.panel = PyStc(parent=self, statusbar=statusbar)
         if IsDark():
