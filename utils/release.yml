@@ -19,7 +19,7 @@ notes:
       example: "doc:"
 
     - title: Libraries and General Functionality
-      regexp: '(?:Revert \")?(grass_|lib|TGIS|tgis)[^ ]*: '
+      regexp: '(?:Revert \")?(grass_|lib)[^ ]*: '
       example: "grass_btree: or lib/btree:"
 
     - title: Startup, Initialization, and Environment
