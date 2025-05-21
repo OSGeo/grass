@@ -777,7 +777,7 @@ struct Option *G_define_standard_option(int opt)
         Opt->type = TYPE_INTEGER;
         Opt->required = NO;
         Opt->multiple = NO;
-        Opt->answer = "1";
+        Opt->answer = "0";
         /* start dynamic answer */
         /* check NPROCS in GISRC, set with g.gisenv */
         memstr = G_store(G_getenv_nofatal("NPROCS"));
