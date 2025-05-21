@@ -24,7 +24,7 @@ class SemanticLabelReader:
     def __init__(self):
         self._json_files = glob.glob(
             os.path.join(
-                os.environ["GRASS_SHARE_DIR"], "etc", "i.band.library", "*.json"
+                os.environ["GRASS_SHAREDIR"], "etc", "i.band.library", "*.json"
             )
         )
         if not self._json_files:

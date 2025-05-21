@@ -19,12 +19,27 @@ static const char *get_g_env(const char *);
 
 const char *G_share_dir(void)
 {
-    return get_g_env("GRASS_SHARE_DIR");
+    return get_g_env("GRASS_SHAREDIR");
 }
 
 const char *G_locale_dir(void)
 {
     return get_g_env("GRASS_LOCALEDIR");
+}
+
+const char *G_fonts_dir(void)
+{
+    return get_g_env("GRASS_FONTSDIR");
+}
+
+const char *G_colors_dir(void)
+{
+    return get_g_env("GRASS_COLORSDIR");
+}
+
+const char *G_etc_dir(void)
+{
+    return get_g_env("GRASS_ETCDIR");
 }
 
 static const char *get_g_env(const char *env_var)

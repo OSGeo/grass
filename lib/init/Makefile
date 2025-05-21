@@ -70,7 +70,7 @@ endif
 	rm -f $@
 	sed \
 	-e 's#@GISBASE_INSTALL_PATH@#$(RUN_GISBASE)#' \
-	-e 's#@GRASS_SHARE_DIR@#$(RUN_GISBASE)#' \
+	-e 's#@GRASS_SHAREDIR@#$(RUN_GISBASE)#' \
 	-e 's#@GRASS_LOCALE@#$(RUN_GISBASE)/locale#' \
 	-e 's#@GRASS_PYDIR@#$(RUN_GISBASE)/etc/python#' \
 	-e 's#@GRASS_GUIWXDIR@#$(RUN_GISBASE)/gui/wxpython#' \

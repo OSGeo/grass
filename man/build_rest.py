@@ -360,7 +360,7 @@ def get_desc(cmd):
 
 arch_dist_dir = os.environ["ARCH_DISTDIR"]
 rest_dir = os.path.join(arch_dist_dir, "docs", "rest")
-grass_share_dir = os.environ["GRASS_SHARE_DIR"]
+grass_share_dir = os.environ["GRASS_SHAREDIR"]
 ver = read_file(os.path.join(grass_share_dir, "etc", "VERSIONNUMBER"))
 try:
     grass_version = ver.split()[0].strip()

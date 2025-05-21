@@ -168,7 +168,7 @@ int main(int argc, char *argv[])
     if (!gis_lock)
         G_fatal_error(_("Unable to read GIS_LOCK environment variable"));
 
-    G_asprintf(&lock_prog, "%s/etc/lock", G_share_dir());
+    G_asprintf(&lock_prog, "%s/lock", G_etc_dir());
 
     snprintf(path, sizeof(path), "%s/.gislock", mapset_new_path);
     G_debug(2, "%s", path);

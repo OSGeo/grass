@@ -45,6 +45,6 @@ if __name__ == "__main__":
     image = options["image"]
     percent = options["percent"]
     python = os.getenv("GRASS_PYTHON", "python")
-    grass_share_dir = os.environ["GRASS_SHARE_DIR"]
+    grass_share_dir = os.environ["GRASS_SHAREDIR"]
     script = os.path.join(grass_share_dir, "etc", "wxpyimgview_gui.py")
     os.execlp(python, script, script, image, percent)

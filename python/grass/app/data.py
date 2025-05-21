@@ -99,7 +99,7 @@ def _get_startup_location_in_distribution():
 
     Returns startup location if found or None if nothing was found.
     """
-    share_dir = os.getenv("GRASS_SHARE_DIR")
+    share_dir = os.getenv("GRASS_SHAREDIR")
     startup_location = os.path.join(share_dir, "demolocation")
 
     # Find out if startup location exists
@@ -206,7 +206,7 @@ def acquire_mapset_lock(
     :param message_callback: callback to show messages when locked
     :param env: system environment variables
 
-    The function assumes the `GRASS_SHARE_DIR` variable is in the environment.
+    The function assumes the `GRASS_SHAREDIR` variable is in the environment.
     The variable is used to find the lock program. If *env* is not provided,
     `os.environ` is used.
     """
@@ -215,7 +215,7 @@ def acquire_mapset_lock(
     if not env:
         env = os.environ
     lock_file = os.path.join(mapset_path, ".gislock")
-    locker_path = os.path.join(env["GRASS_SHARE_DIR"], "etc", "lock")
+    locker_path = os.path.join(env["GRASS_ETCDIR"], "lock")
     total_sleep = 0
     try_number = 0
     initial_sleep = min(initial_sleep, timeout)

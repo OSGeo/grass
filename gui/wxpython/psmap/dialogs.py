@@ -2203,7 +2203,7 @@ class VPropertiesDialog(Dialog):
         self.currLayer = self.vPropertiesDict["layer"]
 
         # path to symbols, patterns
-        g_share_dir = os.getenv("GRASS_SHARE_DIR")
+        g_share_dir = os.getenv("GRASS_SHAREDIR")
         self.symbolPath = os.path.join(g_share_dir, "etc", "symbol")
         self.symbols = []
         for dir in Path(self.symbolPath).iterdir():
@@ -6193,7 +6193,7 @@ class NorthArrowDialog(ImageDialog):
         return NorthArrow(self.id, self.instruction, env=self.env)
 
     def _getImageDirectory(self):
-        g_share_dir = os.getenv("GRASS_SHARE_DIR")
+        g_share_dir = os.getenv("GRASS_SHAREDIR")
         return os.path.join(g_share_dir, "etc", "paint", "decorations")
 
     def _addConvergence(self, panel, gridBagSizer):

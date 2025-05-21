@@ -101,11 +101,11 @@ else:
     GISBASE = os.path.normpath("@GISBASE_INSTALL_PATH@")
     os.environ["GISBASE"] = GISBASE
 
-if "GRASS_SHARE_DIR" in os.environ and len(os.getenv("GRASS_SHARE_DIR")) > 0:
-    GRASS_SHARE_DIR = os.path.normpath(os.environ["GRASS_SHARE_DIR"])
+if "GRASS_SHAREDIR" in os.environ and len(os.getenv("GRASS_SHAREDIR")) > 0:
+    GRASS_SHAREDIR = os.path.normpath(os.environ["GRASS_SHAREDIR"])
 else:
-    GRASS_SHARE_DIR = os.path.normpath("@GRASS_SHARE_DIR@")
-    os.environ["GRASS_SHARE_DIR"] = GRASS_SHARE_DIR
+    GRASS_SHAREDIR = os.path.normpath("@GRASS_SHAREDIR@")
+    os.environ["GRASS_SHAREDIR"] = GRASS_SHAREDIR
 
 if "GRASS_LOCALEDIR" in os.environ and len(os.getenv("GRASS_LOCALEDIR")) > 0:
     GRASS_LOCALEDIR = os.path.normpath(os.environ["GRASS_LOCALEDIR"])
@@ -136,6 +136,18 @@ if "GRASS_GUIRESDIR" in os.environ and len(os.getenv("GRASS_GUIRESDIR")) > 0:
 else:
     GRASS_GUIRESDIR = os.path.normpath("@GRASS_GUIRESDIR@")
     os.environ["GRASS_GUIRESDIR"] = GRASS_GUIRESDIR
+
+if "GRASS_FONTSDIR" in os.environ and len(os.getenv("GRASS_FONTSDIR")) > 0:
+    GRASS_FONTSDIR = os.path.normpath(os.environ["GRASS_FONTSDIR"])
+else:
+    GRASS_FONTSDIR = os.path.normpath("@GRASS_FONTSDIR@")
+    os.environ["GRASS_FONTSDIR"] = GRASS_FONTSDIR
+
+if "GRASS_ETCDIR" in os.environ and len(os.getenv("GRASS_ETCDIR")) > 0:
+    GRASS_ETCDIR = os.path.normpath(os.environ["GRASS_ETCDIR"])
+else:
+    GRASS_ETCDIR = os.path.normpath("@GRASS_ETCDIR@")
+    os.environ["GRASS_ETCDIR"] = GRASS_ETCDIR
 
 CMD_NAME = "@START_UP@"
 GRASS_VERSION = "@GRASS_VERSION_NUMBER@"

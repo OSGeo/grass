@@ -38,7 +38,7 @@ WXPY_POTFILES = find ../gui/wxpython -name '*.py' | xargs grep -l "_(\"\|n_(\""
 MOD_PYFILES = find ../scripts -name '*.py' | xargs grep -l "_(\"\|n_(\""
 
 define po_stats
-GISBASE="$(RUN_GISBASE)" GRASS_SHARE_DIR="$(RUN_GISBASE)" $(PYTHON) ./grass_po_stats.py
+GISBASE="$(RUN_GISBASE)" GRASS_SHAREDIR="$(RUN_GISBASE)" $(PYTHON) ./grass_po_stats.py
 endef
 
 #The xgettext utility is used to automate the creation of

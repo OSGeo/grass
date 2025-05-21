@@ -236,9 +236,7 @@ def plot_eps(psout):
     ##########
     outf = open(psout, "w")
 
-    prolog = os.path.join(
-        os.environ["GRASS_SHARE_DIR"], "etc", "d.polar", "ps_defs.eps"
-    )
+    prolog = os.path.join(os.environ["GRASS_SHAREDIR"], "etc", "d.polar", "ps_defs.eps")
     inf = open(prolog)
     shutil.copyfileobj(inf, outf)
     inf.close()
