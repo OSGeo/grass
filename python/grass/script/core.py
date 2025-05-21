@@ -66,13 +66,13 @@ class Popen(subprocess.Popen):
         cmd = shutil.which(args[0], path=path)
         if cmd is None:
             raise OSError(_("Cannot find the executable {0}").format(args[0]))
+        args = [cmd] + args[1:]
         if (
             sys.platform == "win32"
             and isinstance(args, list)
             and not kwargs.get("shell")
             and kwargs.get("executable") is None
         ):
-            args = [cmd] + args[1:]
             name, ext = os.path.splitext(cmd)
             if ext.lower() not in self._builtin_exts:
                 kwargs["shell"] = True
