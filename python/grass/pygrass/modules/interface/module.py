@@ -652,7 +652,10 @@ class Module:
         Return label proberty value in the case that description
         property is not defined by a module.
         """
-        return self._description if hasattr(self, "_description") else self.label
+        try:
+            return self._description if hasattr(self, "_description") else self.label
+        except AttributeError:
+            return "?"
 
     @description.setter
     def description(self, value):
