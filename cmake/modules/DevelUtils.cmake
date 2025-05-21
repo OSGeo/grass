@@ -1,6 +1,6 @@
 # From https://stackoverflow.com/a/34292622
 
-# Get all properties that cmake supports
+# Get all propreties that cmake supports
 if(NOT CMAKE_PROPERTY_LIST)
     execute_process(COMMAND cmake --help-property-list OUTPUT_VARIABLE CMAKE_PROPERTY_LIST)
 
