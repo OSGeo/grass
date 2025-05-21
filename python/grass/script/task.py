@@ -8,7 +8,8 @@ Usage:
 ::
 
     from grass.script import task as gtask
-    gtask.command_info('r.info')
+
+    gtask.command_info("r.info")
 
 (C) 2011 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -38,8 +39,10 @@ class grassTask:
 
     ::
 
-        blackList = {'items' : {'d.legend' : { 'flags' : ['m'], 'params' : [] }},
-                     'enabled': True}
+        blackList = {
+            "items": {"d.legend": {"flags": ["m"], "params": []}},
+            "enabled": True,
+        }
 
     :param str path: full path
     :param blackList: hide some options in the GUI (dictionary)
@@ -159,7 +162,7 @@ class grassTask:
                 return f
         raise ValueError(_("Flag not found: %s") % aFlag)
 
-    def get_cmd_error(self):
+    def get_cmd_error(self) -> list[str]:
         """Get error string produced by get_cmd(ignoreErrors = False)
 
         :return: list of errors
@@ -515,7 +518,7 @@ def command_info(cmd):
     with entries for description, keywords, usage, flags, and
     parameters, e.g.
 
-    >>> command_info('g.tempfile') # doctest: +NORMALIZE_WHITESPACE
+    >>> command_info("g.tempfile")  # doctest: +NORMALIZE_WHITESPACE
     {'keywords': ['general', 'support'], 'params': [{'gisprompt': False,
     'multiple': False, 'name': 'pid', 'guidependency': '', 'default': '',
     'age': None, 'required': True, 'value': '', 'label': '', 'guisection': '',
@@ -534,7 +537,7 @@ def command_info(cmd):
     file and prints it's file name.", 'usage': 'g.tempfile pid=integer [--help]
     [--verbose] [--quiet]'}
 
-    >>> command_info('v.buffer')
+    >>> command_info("v.buffer")
     ['vector', 'geometry', 'buffer']
 
     :param str cmd: the command to query

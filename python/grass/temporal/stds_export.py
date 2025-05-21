@@ -7,13 +7,13 @@ Usage:
 
     import grass.temporal as tgis
 
-    input="temp_1950_2012@PERMANENT"
-    output="/tmp/temp_1950_2012.tar.gz"
-    compression="gzip"
-    directory="/tmp"
-    where=None
-    format_="GTiff"
-    type_="strds"
+    input = "temp_1950_2012@PERMANENT"
+    output = "/tmp/temp_1950_2012.tar.gz"
+    compression = "gzip"
+    directory = "/tmp"
+    where = None
+    format_ = "GTiff"
+    type_ = "strds"
     tgis.export_stds(input, output, compression, directory, where, format_, type_)
 
 

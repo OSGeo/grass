@@ -29,7 +29,7 @@ class SeriesMap(BaseSeriesMap):
 
     Basic usage::
 
-    >>> series = gj.SeriesMap(height = 500)
+    >>> series = gj.SeriesMap(height=500)
     >>> series.add_rasters(["elevation_shade", "geology", "soils"])
     >>> series.add_vectors(["streams", "streets", "viewpoints"])
     >>> series.d_barscale()

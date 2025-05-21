@@ -28,7 +28,7 @@ notes).
 The main difference between <em>r.in.lidar</em> and
 <em><a href="v.in.lidar.html">v.in.lidar</a></em> is that
 <em>r.in.lidar</em> creates a raster instead of just importing the
-points into GRASS GIS. However, <em>r.in.lidar</em> does not merely
+points into GRASS. However, <em>r.in.lidar</em> does not merely
 rasterizes the points from the point cloud. <em>r.in.lidar</em>
 uses binning to derive values for individual raster cells,
 so the value of a cell is typically an aggregation of values
@@ -42,7 +42,7 @@ In the basic case, binning is a method which counts the number of
 points which fall into one raster cell, i.e. bin. The number of points
 per cell (bin) indicates the density of points in the point cloud.
 The cell (bin) is always square or rectangular in case of
-<em>r.in.lidar</em> because the result is GRASS GIS 2D raster.
+<em>r.in.lidar</em> because the result is GRASS 2D raster.
 The result of binning where the number of point per cell is counted
 is sometimes called 2D (two dimensional) histogram because
 a histogram is used in univariate statistics (in one dimension)
@@ -155,7 +155,7 @@ g.region s=s-0.000001
 </pre></div>
 
 See <em><a href="g.region.html">g.region</a></em> for details about
-computation region handling in GRASS GIS.
+computation region handling in GRASS.
 
 <p>
 The <b>zrange</b> parameter may be used for filtering the input data by
