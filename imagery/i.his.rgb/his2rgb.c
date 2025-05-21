@@ -1,148 +1,104 @@
 /******************************************************************************
-NAME:            HIS2RGB
-
-PURPOSE          To process hue,intensity,saturation bands to red,green,blue.
-
-ALGORITHM:
-                 Get hue, intensity, saturation from input buffer
-                 Create the RGB bands
-                 Write to output buffer
-
-ASSUMPTION:
-                 The input images are read to the input buffer.
-
-******************************************************************************/
-/* For GRASS one row from each cell map is passed in and each cell in
-   each band is processed and written out.   CWU GIS Lab: DBS 8/90 */
+ * FUNCTION:    his2rgb
+ *
+ * PURPOSE:     Converts a row of HIS (Hue, Intensity, Saturation) values
+ *              into RGB (Red, Green, Blue) using normalized transformations.
+ *
+ * NOTES:       - Handles grayscale (S=0), black (I=0), and pure hues.
+ *              - Assumes input images are already read into rowbuffer.
+ *              - Overwrites the original rowbuffer with RGB results.
+ *****************************************************************************/
 
 #include <grass/gis.h>
 #include "globals.h"
+#include <math.h>
 
-void his2rgb(CELL *rowbuffer[3], int columns)
+#define CLAMP(x, lo, hi) ((x) < (lo) ? (lo) : ((x) > (hi) ? (hi) : (x)))
+
+// function to remove redundancy in the old code
+static double hue2rgb(double m1, double m2, double h)
 {
-    long sample;     /* sample indicator                          */
-    double red;      /* the red band output                       */
-    double red255;   /* the red band output                       */
-    double green;    /* the green band output                     */
-    double green255; /* the green band output                     */
-    double blue;     /* the blue band output                      */
-    double blue255;  /* the blue band output                      */
-    double m1;       /* value used for determining RGB            */
-    double m2;       /* value used for determining RGB            */
-    double scalei;   /* intensity value                           */
-    double scales;   /* saturation value                          */
-    double hue;      /* hue                                       */
-    double savehue;  /* save the hue for future processing        */
+    if (h < 0.0)
+        h += 360.0;
+    if (h >= 360.0)
+        h -= 360.0;
 
-    for (sample = 0; sample < columns; sample++) {
-        if (Rast_is_c_null_value(&rowbuffer[0][sample]) ||
-            Rast_is_c_null_value(&rowbuffer[1][sample]) ||
-            Rast_is_c_null_value(&rowbuffer[2][sample])) {
-            Rast_set_c_null_value(&rowbuffer[0][sample], 1);
-            Rast_set_c_null_value(&rowbuffer[1][sample], 1);
-            Rast_set_c_null_value(&rowbuffer[2][sample], 1);
+    if (h < 60.0)
+        return m1 + (m2 - m1) * h / 60.0;
+    else if (h < 180.0)
+        return m2;
+    else if (h < 240.0)
+        return m1 + (m2 - m1) * (240.0 - h) / 60.0;
+    else
+        return m1;
+}
+
+void his2rgb(CELL *rowbuffer[3], int cols)
+{
+    // NULL values handling
+    for (int i = 0; i < cols; i++) {
+        if (Rast_is_c_null_value(&rowbuffer[0][i]) ||
+            Rast_is_c_null_value(&rowbuffer[1][i]) ||
+            Rast_is_c_null_value(&rowbuffer[2][i])) {
+            for (int j = 0; j < 3; j++)
+                Rast_set_c_null_value(&rowbuffer[j][i], 1);
             continue;
         }
 
-        red = green = blue = 0.0;
-        scalei = (double)rowbuffer[1][sample];
-        scalei /= 255.;
-        scales = (double)rowbuffer[2][sample];
-        scales /= 255.;
-        m2 = 0.0;
-        if (scalei <= 0.50)
-            m2 = scalei * (1.0 + scales);
-        else if (scalei > 0.50)
-            m2 = scalei + scales - (scalei * scales);
-        m1 = 2.0 * scalei - m2;
+        int h_raw = rowbuffer[0][i];
+        int i_raw = rowbuffer[1][i];
+        int s_raw = rowbuffer[2][i];
 
-        hue = (double)360.0 * rowbuffer[0][sample] / 255.0;
-
-        if (scales == 0.0) {
-            if (hue == -1.0) {
-                red = scalei;
-                green = scalei;
-                blue = scalei;
-            }
+        // Range Check for the I and S (skip H range check to allow degrees)
+        if (i_raw < 0 || i_raw > 255 || s_raw < 0 || s_raw > 255) {
+            for (int j = 0; j < 3; j++)
+                Rast_set_c_null_value(&rowbuffer[j][i], 1);
+            continue;
         }
+
+        double h = (double)h_raw;
+        if (h <= 255.0)
+            h = h * 360.0 / 255.0; // Scale 0–255 to 0-360 degrees
+
+        double intensity = i_raw / 255.0;
+        double saturation = s_raw / 255.0;
+
+        double r, g, b;
+
+        // Intensity 0 -> Black
+        if (intensity < 1e-6) {
+            r = g = b = 0.0;
+        }
+        // Saturation 0 -> Grayscale
+        else if (saturation < 1e-6) {
+            r = g = b = intensity;
+        }
+        // Pure Intensities and Saturation -> Pure Hues
+        else if (intensity >= 1.0 - 1e-6 && saturation >= 1.0 - 1e-6) {
+            if (h < 60.0 || h >= 360.0)
+                r = 1.0, g = 0.0, b = 0.0;
+            else if (h < 180.0)
+                r = 0.0, g = 1.0, b = 0.0;
+            else
+                r = 0.0, g = 0.0, b = 1.0;
+        }
+        // General conversion
         else {
-            /* calculate the red band */
-            savehue = hue + 120.0;
-            if (savehue > 360.0)
-                savehue -= 360.0;
-            if (savehue < 0.0)
-                savehue += 360.0;
-            if (savehue < 60.0)
-                red = m1 + (m2 - m1) * savehue / 60.0;
-            else if (savehue < 180.0)
-                red = m2;
-            else if (savehue < 240.0)
-                red = m1 + (m2 - m1) * (240.0 - savehue) / 60.0;
-            else
-                red = m1;
+            double m2 = (intensity <= 0.5)
+                            ? (intensity * (1.0 + saturation))
+                            : (intensity + saturation - intensity * saturation);
+            double m1 = 2.0 * intensity - m2;
 
-            /* calculate the green band */
-            savehue = hue;
-            if (savehue > 360.0)
-                savehue -= 360.0;
-            if (savehue < 0.0)
-                savehue += 360.0;
-            if (savehue < 60.0)
-                green = m1 + (m2 - m1) * savehue / 60.0;
-            else if (savehue < 180.0)
-                green = m2;
-            else if (savehue < 240.0)
-                green = m1 + (m2 - m1) * (240.0 - savehue) / 60.0;
-            else
-                green = m1;
-
-            /* calculate the blue band */
-            savehue = hue - 120.0;
-            if (savehue > 360.0)
-                savehue -= 360.0;
-            if (savehue < 0.0)
-                savehue += 360.0;
-            if (savehue < 60.0)
-                blue = m1 + (m2 - m1) * savehue / 60.0;
-            else if (savehue < 180.0)
-                blue = m2;
-            else if (savehue < 240.0)
-                blue = m1 + (m2 - m1) * (240.0 - savehue) / 60.0;
-            else
-                blue = m1;
+            r = hue2rgb(m1, m2, h + 120.0);
+            g = hue2rgb(m1, m2, h);
+            b = hue2rgb(m1, m2, h - 120.0);
         }
 
-        red255 = red * 255.0;
-        green255 = green * 255.0;
-        blue255 = blue * 255.0;
-        if (red255 > 255.0)
-            red = 255.0;
-        else
-            red = red255;
-        if (green255 > 255.0)
-            green = 255.0;
-        else
-            green = green255;
-        if (blue255 > 255.0)
-            blue = 255.0;
-        else
-            blue = blue255;
-
-        if (red > 255. - 0.5)
-            red = 255. - 0.5;
-        if (red < 0.0)
-            red = 0.0;
-        if (green > 255. - 0.5)
-            green = 255. - 0.5;
-        if (green < 0.0)
-            green = 0.0;
-        if (blue > 255. - 0.5)
-            blue = 255. - 0.5;
-        if (blue < 0.0)
-            blue = 0.0;
-
-        rowbuffer[0][sample] = (unsigned char)(red + 0.5);
-        rowbuffer[1][sample] = (unsigned char)(green + 0.5);
-        rowbuffer[2][sample] = (unsigned char)(blue + 0.5);
+        // Convert normalized RGB values [0.0, 1.0] to integer CELL values [0,
+        // 255] Clamp to ensure values stay within valid range and add 0.5 for
+        // rounding to nearest integer
+        rowbuffer[0][i] = (CELL)(CLAMP(r, 0.0, 1.0) * 255.0 + 0.5);
+        rowbuffer[1][i] = (CELL)(CLAMP(g, 0.0, 1.0) * 255.0 + 0.5);
+        rowbuffer[2][i] = (CELL)(CLAMP(b, 0.0, 1.0) * 255.0 + 0.5);
     }
 }
