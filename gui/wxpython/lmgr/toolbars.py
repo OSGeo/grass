@@ -202,6 +202,9 @@ class LMToolsToolbar(AuiToolbar):
             "newdisplay": MetaIcon(
                 img="monitor-create", label=_("Start new map display")
             ),
+            "newjupyter": MetaIcon(
+                img="monitor-create", label=_("Jupyter Notebook Console")
+            ),
             "mapcalc": MetaIcon(
                 img="raster-calculator", label=_("Raster Map Calculator")
             ),
@@ -222,6 +225,11 @@ class LMToolsToolbar(AuiToolbar):
                     ("newdisplay", _("New display")),
                     icons["newdisplay"],
                     self.parent.OnNewDisplay,
+                ),
+                (
+                    ("newjupyter", _("New jupyter notebook")),
+                    icons["newjupyter"],
+                    self.parent.OnNewJupyterNotebook,
                 ),
                 (None,),
                 (
