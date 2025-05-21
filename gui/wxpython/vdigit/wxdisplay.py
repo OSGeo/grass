@@ -344,7 +344,7 @@ class DisplayDriver:
             dcId = 1
             self.topology["highlight"] += 1
             if not self._drawSelected:
-                return
+                return None
         elif robj.type != TYPE_AREA and self._isSelected(robj.fid):
             pdc = self.dcTmp
             if self.settings["highlightDupl"]["enabled"] and self._isDuplicated(
@@ -363,7 +363,7 @@ class DisplayDriver:
             dcId = 1
             self.topology["highlight"] += 1
             if not self._drawSelected:
-                return
+                return None
         else:
             pdc = self.dc
             pen, brush = self._definePen(robj.type)
@@ -444,7 +444,7 @@ class DisplayDriver:
                         "Use v.clean to remove it."
                     )
                 )
-                return
+                return None
             if robj.type == TYPE_AREA:
                 pdc.DrawPolygon(points)
             else:
@@ -1204,7 +1204,7 @@ class DisplayDriver:
     def GetDuplicates(self):
         """Return ids of (selected) duplicated vector features"""
         if not self.poMapInfo:
-            return
+            return None
 
         ids = {}
         APoints = Vect_new_line_struct()
@@ -1225,14 +1225,15 @@ class DisplayDriver:
 
                 Vect_read_line(self.poMapInfo, BPoints, None, line2)
 
-                if Vect_line_check_duplicate(APoints, BPoints, WITHOUT_Z):
-                    if i not in ids:
-                        ids[i] = []
-                        ids[i].append((line1, self._getCatString(line1)))
-                        self.selected["idsDupl"].append(line1)
+                if not Vect_line_check_duplicate(APoints, BPoints, WITHOUT_Z):
+                    continue
+                if i not in ids:
+                    ids[i] = []
+                    ids[i].append((line1, self._getCatString(line1)))
+                    self.selected["idsDupl"].append(line1)
 
-                    ids[i].append((line2, self._getCatString(line2)))
-                    self.selected["idsDupl"].append(line2)
+                ids[i].append((line2, self._getCatString(line2)))
+                self.selected["idsDupl"].append(line2)
 
         Vect_destroy_line_struct(APoints)
         Vect_destroy_line_struct(BPoints)

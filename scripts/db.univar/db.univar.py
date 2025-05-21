@@ -77,22 +77,17 @@ def cleanup():
 
 
 def sortfile(infile, outfile):
-    inf = open(infile)
-    outf = open(outfile, "w")
-
-    if gs.find_program("sort", "--help"):
-        gs.run_command("sort", flags="n", stdin=inf, stdout=outf)
-    else:
-        # FIXME: we need a large-file sorting function
-        gs.warning(_("'sort' not found: sorting in memory"))
-        lines = inf.readlines()
-        for i in range(len(lines)):
-            lines[i] = float(lines[i].rstrip("\r\n"))
-        lines.sort()
-        outf.writelines(str(line) + "\n" for line in lines)
-
-    inf.close()
-    outf.close()
+    with open(infile) as inf, open(outfile, "w") as outf:
+        if (not gs.setup.WINDOWS) and gs.find_program("sort", "--help"):
+            gs.run_command("sort", flags="n", stdin=inf, stdout=outf)
+        else:
+            # FIXME: we need a large-file sorting function
+            gs.warning(_("'sort' not found: sorting in memory"))
+            lines = inf.readlines()
+            for i in range(len(lines)):
+                lines[i] = float(lines[i].rstrip("\r\n"))
+            lines.sort()
+            outf.writelines(str(line) + "\n" for line in lines)
 
 
 def main():
@@ -149,24 +144,22 @@ def main():
     if not driver:
         driver = None
 
-    tmpf = open(tmp, "w")
-    gs.run_command(
-        "db.select",
-        flags="c",
-        table=table,
-        database=database,
-        driver=driver,
-        sql=sql,
-        stdout=tmpf,
-    )
-    tmpf.close()
+    with open(tmp, "w") as tmpf:
+        gs.run_command(
+            "db.select",
+            flags="c",
+            table=table,
+            database=database,
+            driver=driver,
+            sql=sql,
+            stdout=tmpf,
+        )
 
     # check if result is empty
-    tmpf = open(tmp)
-    if tmpf.read(1) == "":
-        if output_format in {"plain", "shell"}:
-            gs.fatal(_("Table <%s> contains no data.") % table)
-        tmpf.close()
+    with open(tmp) as tmpf:
+        if tmpf.read(1) == "":
+            if output_format in {"plain", "shell"}:
+                gs.fatal(_("Table <%s> contains no data.") % table)
 
     # calculate statistics
     if output_format == "plain":
@@ -179,19 +172,18 @@ def main():
     minv = 1e300
     maxv = -1e300
 
-    tmpf = open(tmp)
-    for line in tmpf:
-        line = line.rstrip("\r\n")
-        if len(line) == 0:
-            continue
-        x = float(line)
-        N += 1
-        sum += x
-        sum2 += x * x
-        sum3 += abs(x)
-        maxv = max(maxv, x)
-        minv = min(minv, x)
-    tmpf.close()
+    with open(tmp) as tmpf:
+        for line in tmpf:
+            line = line.rstrip("\r\n")
+            if len(line) == 0:
+                continue
+            x = float(line)
+            N += 1
+            sum += x
+            sum2 += x * x
+            sum3 += abs(x)
+            maxv = max(maxv, x)
+            minv = min(minv, x)
 
     if N <= 0:
         if output_format in {"plain", "shell"}:
@@ -307,24 +299,24 @@ def main():
             ppos[i] = 1
         pval[i] = 0
 
-    inf = open(tmp + ".sort")
-    line_number = 1
-    for line in inf:
-        line = line.rstrip("\r\n")
-        if len(line) == 0:
-            continue
-        if line_number == q25pos:
-            q25 = float(line)
-        if line_number == q50apos:
-            q50a = float(line)
-        if line_number == q50bpos:
-            q50b = float(line)
-        if line_number == q75pos:
-            q75 = float(line)
-        for i in range(len(ppos)):
-            if line_number == ppos[i]:
-                pval[i] = float(line)
-        line_number += 1
+    with open(tmp + ".sort") as inf:
+        line_number = 1
+        for line in inf:
+            line = line.rstrip("\r\n")
+            if len(line) == 0:
+                continue
+            if line_number == q25pos:
+                q25 = float(line)
+            if line_number == q50apos:
+                q50a = float(line)
+            if line_number == q50bpos:
+                q50b = float(line)
+            if line_number == q75pos:
+                q75 = float(line)
+            for i in range(len(ppos)):
+                if line_number == ppos[i]:
+                    pval[i] = float(line)
+            line_number += 1
 
     q50 = (q50a + q50b) / 2
 

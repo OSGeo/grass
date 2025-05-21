@@ -14,9 +14,20 @@ DSTFILES := \
 	$(HTMLDIR)/parser_standard_options.css \
 	$(HTMLDIR)/parser_standard_options.js \
 	$(MDDIR)/mkdocs.yml \
-	$(MDDIR)/source/grass_logo.png \
+	$(MDDIR)/source/grass_logo.svg \
+	$(MDDIR)/source/grass_icon.png \
+	$(MDDIR)/source/favicon.ico \
 	$(MDDIR)/source/grassdocs.css \
-	$(MDDIR)/overrides/partials/footer.html
+	$(MDDIR)/scripts/hook_list_scripts.py \
+	$(MDDIR)/source/index.md \
+	$(MDDIR)/overrides/partials/copyright.html \
+	$(MDDIR)/overrides/partials/footer.html \
+	$(MDDIR)/overrides/partials/actions.html \
+	$(MDDIR)/overrides/partials/source.html \
+	$(MDDIR)/overrides/fragments/tags/default/listing.html \
+	$(MDDIR)/source/keywords.md \
+	$(MDDIR)/source/development_intro.md \
+	$(MDDIR)/source/command_line_intro.md
 
 categories = \
 	d:display \
@@ -38,11 +49,11 @@ IDXSRC = full_index index topics keywords graphical_index manual_gallery class_g
 
 INDICES := $(patsubst %,$(HTMLDIR)/%.html,$(IDXSRC))
 
-IDXSRC_MD = full_index index topics keywords graphical_index manual_gallery parser_standard_options $(IDXCATS)
+IDXSRC_MD = full_index index topics graphical_index manual_gallery class_graphical parser_standard_options $(IDXCATS)
 INDICES_MD := $(patsubst %,$(MDDIR)/source/%.md,$(IDXSRC_MD))
 
 ALL_HTML := $(wildcard $(HTMLDIR)/*.*.html)
-ALL_MD := $(wildcard $(MDDIR)/source/*.*.html)
+ALL_MD := $(wildcard $(MDDIR)/source/*.*.md)
 
 ifneq (@(type sphinx-build2 > /dev/null),)
 SPHINXBUILD   = sphinx-build2
@@ -125,7 +136,13 @@ $(MDDIR)/source/topics.md: $(ALL_MD)
 define build_class_graphical
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
-	$(PYTHON) ./build_class_graphical.py $(HTMLDIR)
+	$(PYTHON) ./build_class_graphical.py html $(HTMLDIR)
+endef
+
+define build_class_graphical_md
+GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
+	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
+	$(PYTHON) ./build_class_graphical.py md $(MDDIR)/source
 endef
 
 $(HTMLDIR)/topics.html: $(ALL_HTML) build_topics.py
@@ -140,7 +157,7 @@ $(HTMLDIR)/full_index.html: $(ALL_HTML) build_full_index.py build_html.py
 	$(call build,full_index)
 	touch $@
 
-$(MDDIR)/source/full_index.md: $(ALL_MD) build_full_index.py build_html.py
+$(MDDIR)/source/full_index.md: $(ALL_MD) build_full_index.py build_md.py
 	$(call build,full_index)
 	touch $@
 
@@ -148,15 +165,7 @@ $(HTMLDIR)/index.html: build_index.py build_html.py
 	$(call build,index)
 	touch $@
 
-$(MDDIR)/source/index.md: build_index.py build_md.py
-	$(call build,index)
-	touch $@
-
 $(HTMLDIR)/keywords.html: $(ALL_HTML)
-	$(call build_keywords)
-	touch $@
-
-$(MDDIR)/source/keywords.md: $(ALL_MD)
 	$(call build_keywords)
 	touch $@
 
@@ -187,6 +196,11 @@ $(HTMLDIR)/class_graphical.html: $(ALL_HTML)
 	$(call build_class_graphical)
 	touch $@
 
+# TODO: this should be done in the same way as category_rule
+$(MDDIR)/source/class_graphical.md: $(ALL_MD)
+	$(call build_class_graphical_md)
+	touch $@
+
 define category_rule
 $$(HTMLDIR)/$(2).html: $$(wildcard $$(HTMLDIR)/$(1).*.html) build_class.py build_html.py
 	$$(call build,class,$(1) $(2))
@@ -210,9 +224,6 @@ $(HTMLDIR)/grassdocs.css: grassdocs.css
 $(HTMLDIR)/grass_logo.png: grass_logo.png
 	$(INSTALL_DATA) $< $@
 
-$(MDDIR)/source/grass_logo.png: grass_logo.png
-	$(INSTALL_DATA) $< $@
-
 $(HTMLDIR)/hamburger_menu.svg: hamburger_menu.svg
 	$(INSTALL_DATA) $< $@
 
@@ -234,16 +245,63 @@ $(HTMLDIR)/parser_standard_options.css: parser_standard_options.css
 $(MDDIR)/mkdocs.yml: mkdocs/mkdocs.yml
 	$(INSTALL_DATA) $< $@
 
+$(MDDIR)/source/index.md: mkdocs/index.md
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/grass_logo.svg: grass_logo.svg
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/grass_icon.png: grass_icon.png
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/favicon.ico: favicon.ico
+	$(INSTALL_DATA) $< $@
+
 $(MDDIR)/source/grassdocs.css: mkdocs/grassdocs.css
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/keywords.md: mkdocs/keywords.md
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/development_intro.md: mkdocs/docs/development_intro.md
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/command_line_intro.md: mkdocs/docs/command_line_intro.md
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/scripts/hook_list_scripts.py: mkdocs/scripts/hook_list_scripts.py | $(MDDIR)/scripts
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/scripts:
+	$(MKDIR) $@
+
+$(MDDIR)/overrides/partials/copyright.html: mkdocs/overrides/partials/copyright.html | $(MDDIR)/overrides/partials
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/overrides/partials/footer.html: mkdocs/overrides/partials/footer.html | $(MDDIR)/overrides/partials
 	$(INSTALL_DATA) $< $@
 
+$(MDDIR)/overrides/partials/actions.html: mkdocs/overrides/partials/actions.html | $(MDDIR)/overrides/partials
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/overrides/partials/source.html: mkdocs/overrides/partials/source.html | $(MDDIR)/overrides/partials
+	$(INSTALL_DATA) $< $@
+
 $(MDDIR)/overrides/partials:
 	$(MKDIR) $@
 
+$(MDDIR)/overrides/fragments/tags/default:
+	$(MKDIR) $@
+
+$(MDDIR)/overrides/fragments/tags/default/listing.html: mkdocs/overrides/fragments/tags/default/listing.html | $(MDDIR)/overrides/fragments/tags/default
+	$(INSTALL_DATA) $< $@
+
 build-mkdocs:
-	@cd $(MDDIR) ; SITE_NAME="GRASS GIS $(GRASS_VERSION_NUMBER) Reference Manual" \
-	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS GIS $(GRASS_VERSION_NUMBER) Reference Manual" \
+	@cd $(MDDIR) ; SITE_NAME="GRASS $(GRASS_VERSION_NUMBER) Documentation" \
+	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS $(GRASS_VERSION_NUMBER) Documentation" \
 	mkdocs build
+
+serve-mkdocs:
+	@cd $(MDDIR) ; SITE_NAME="GRASS $(GRASS_VERSION_NUMBER) Documentation" \
+	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS $(GRASS_VERSION_NUMBER) Documentation" \
+	mkdocs serve

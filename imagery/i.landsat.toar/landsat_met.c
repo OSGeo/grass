@@ -107,7 +107,7 @@ void get_mtlformat(const char metadata[], char *key, char value[])
 void lsat_metadata(char *metafile, lsat_data *lsat)
 {
     FILE *f;
-    char mtldata[METADATA_SIZE];
+    char mtldata[METADATA_SIZE] = {'\0'};
     char key[MAX_STR], value[MAX_STR];
     void (*get_mtldata)(const char[], char *, char[]);
 
@@ -117,7 +117,7 @@ void lsat_metadata(char *metafile, lsat_data *lsat)
     /* store metadata in ram */
     if ((f = fopen(metafile, "r")) == NULL)
         G_fatal_error(_("Metadata file <%s> not found"), metafile);
-    i = fread(mtldata, METADATA_SIZE, 1, f);
+    i = fread(mtldata, METADATA_SIZE - 1, 1, f);
     (void)fclose(f);
 
     /* set version of the metadata file */
@@ -165,7 +165,7 @@ void lsat_metadata(char *metafile, lsat_data *lsat)
         chrncpy(lsat->date, value, 10);
     }
     else
-        G_warning("Using adquisition date from the command line 'date'");
+        G_warning("Using acquisition date from the command line 'date'");
 
     get_mtldata(mtldata, "FILE_DATE", value);
     if (value[0] == '\0') {
@@ -231,12 +231,12 @@ void lsat_metadata(char *metafile, lsat_data *lsat)
     case 7: {
         char *fmt_gain[] = {"BAND%d_GAIN%d", " GAIN_BAND_%d_VCID_%d"};
         for (i = 1, j = 0; i < 9; i++) {
-            sprintf(key, fmt_gain[ver_mtl], i, 1);
+            snprintf(key, sizeof(key), fmt_gain[ver_mtl], i, 1);
             if (i != 6)
                 key[ver_mtl == 0 ? 10 : 12] = '\0';
             get_mtldata(mtldata, key, value + j++);
             if (i == 6) {
-                sprintf(key, fmt_gain[ver_mtl], i, 2);
+                snprintf(key, sizeof(key), fmt_gain[ver_mtl], i, 2);
                 get_mtldata(mtldata, key, value + j++);
             }
         }
@@ -258,16 +258,18 @@ void lsat_metadata(char *metafile, lsat_data *lsat)
         if (ver_mtl == 0) {
             G_verbose_message("Metada file is MTL file: old format");
             for (i = 0; i < lsat->bands; i++) {
-                sprintf(key, "LMAX_BAND%d", lsat->band[i].code);
+                snprintf(key, sizeof(key), "LMAX_BAND%d", lsat->band[i].code);
                 get_mtldata(mtldata, key, value);
                 lsat->band[i].lmax = atof(value);
-                sprintf(key, "LMIN_BAND%d", lsat->band[i].code);
+                snprintf(key, sizeof(key), "LMIN_BAND%d", lsat->band[i].code);
                 get_mtldata(mtldata, key, value);
                 lsat->band[i].lmin = atof(value);
-                sprintf(key, "QCALMAX_BAND%d", lsat->band[i].code);
+                snprintf(key, sizeof(key), "QCALMAX_BAND%d",
+                         lsat->band[i].code);
                 get_mtldata(mtldata, key, value);
                 lsat->band[i].qcalmax = atof(value);
-                sprintf(key, "QCALMIN_BAND%d", lsat->band[i].code);
+                snprintf(key, sizeof(key), "QCALMIN_BAND%d",
+                         lsat->band[i].code);
                 get_mtldata(mtldata, key, value);
                 lsat->band[i].qcalmin = atof(value);
             }
@@ -284,56 +286,63 @@ void lsat_metadata(char *metafile, lsat_data *lsat)
                     "RADIANCE & QUANTIZE from  MIN_MAX_(RADIANCE|PIXEL_VALUE)");
                 for (i = 0; i < lsat->bands; i++) {
                     if (lsat->number == 7 && lsat->band[i].thermal) {
-                        sprintf(key, "RADIANCE_MAXIMUM_BAND_6_VCID_%d",
-                                lsat->band[i].code - 60);
+                        snprintf(key, sizeof(key),
+                                 "RADIANCE_MAXIMUM_BAND_6_VCID_%d",
+                                 lsat->band[i].code - 60);
                         get_mtldata(mtldata, key, value);
                         lsat->band[i].lmax = atof(value);
-                        sprintf(key, "RADIANCE_MINIMUM_BAND_6_VCID_%d",
-                                lsat->band[i].code - 60);
+                        snprintf(key, sizeof(key),
+                                 "RADIANCE_MINIMUM_BAND_6_VCID_%d",
+                                 lsat->band[i].code - 60);
                         get_mtldata(mtldata, key, value);
                         lsat->band[i].lmin = atof(value);
-                        sprintf(key, "QUANTIZE_CAL_MAX_BAND_6_VCID_%d",
-                                lsat->band[i].code - 60);
+                        snprintf(key, sizeof(key),
+                                 "QUANTIZE_CAL_MAX_BAND_6_VCID_%d",
+                                 lsat->band[i].code - 60);
                         get_mtldata(mtldata, key, value);
                         lsat->band[i].qcalmax = atof(value);
-                        sprintf(key, "QUANTIZE_CAL_MIN_BAND_6_VCID_%d",
-                                lsat->band[i].code - 60);
+                        snprintf(key, sizeof(key),
+                                 "QUANTIZE_CAL_MIN_BAND_6_VCID_%d",
+                                 lsat->band[i].code - 60);
                         get_mtldata(mtldata, key, value);
                         lsat->band[i].qcalmin = atof(value);
                     }
                     else {
-                        sprintf(key, "RADIANCE_MAXIMUM_BAND_%d",
-                                lsat->band[i].code);
+                        snprintf(key, sizeof(key), "RADIANCE_MAXIMUM_BAND_%d",
+                                 lsat->band[i].code);
                         get_mtldata(mtldata, key, value);
                         lsat->band[i].lmax = atof(value);
-                        sprintf(key, "RADIANCE_MINIMUM_BAND_%d",
-                                lsat->band[i].code);
+                        snprintf(key, sizeof(key), "RADIANCE_MINIMUM_BAND_%d",
+                                 lsat->band[i].code);
                         get_mtldata(mtldata, key, value);
                         lsat->band[i].lmin = atof(value);
-                        sprintf(key, "QUANTIZE_CAL_MAX_BAND_%d",
-                                lsat->band[i].code);
+                        snprintf(key, sizeof(key), "QUANTIZE_CAL_MAX_BAND_%d",
+                                 lsat->band[i].code);
                         get_mtldata(mtldata, key, value);
                         lsat->band[i].qcalmax = atof(value);
-                        sprintf(key, "QUANTIZE_CAL_MIN_BAND_%d",
-                                lsat->band[i].code);
+                        snprintf(key, sizeof(key), "QUANTIZE_CAL_MIN_BAND_%d",
+                                 lsat->band[i].code);
                         get_mtldata(mtldata, key, value);
                         lsat->band[i].qcalmin = atof(value);
                     }
                     /* other possible values of each band */
                     if (lsat->band[i].thermal) {
-                        sprintf(key, "K1_CONSTANT_BAND_%d", lsat->band[i].code);
+                        snprintf(key, sizeof(key), "K1_CONSTANT_BAND_%d",
+                                 lsat->band[i].code);
                         get_mtldata(mtldata, key, value);
                         if (value[0] != '\0')
                             lsat->band[i].K1 = atof(value);
-                        sprintf(key, "K2_CONSTANT_BAND_%d", lsat->band[i].code);
+                        snprintf(key, sizeof(key), "K2_CONSTANT_BAND_%d",
+                                 lsat->band[i].code);
                         get_mtldata(mtldata, key, value);
                         if (value[0] != '\0')
                             lsat->band[i].K2 = atof(value);
                     }
                     else if (lsat->number == 8) {
                         /* ESUN from  REFLECTANCE and RADIANCE ADD_BAND */
-                        sprintf(key, "REFLECTANCE_MAXIMUM_BAND_%d",
-                                lsat->band[i].code);
+                        snprintf(key, sizeof(key),
+                                 "REFLECTANCE_MAXIMUM_BAND_%d",
+                                 lsat->band[i].code);
                         get_mtldata(mtldata, key, value);
                         if (value[0] != '\0')
                             lsat->band[i].esun =
@@ -349,10 +358,12 @@ void lsat_metadata(char *metafile, lsat_data *lsat)
                 G_verbose_message(
                     "RADIANCE & QUANTIZE from RADIOMETRIC_RESCALING");
                 for (i = 0; i < lsat->bands; i++) {
-                    sprintf(key, "RADIANCE_MULT_BAND_%d", lsat->band[i].code);
+                    snprintf(key, sizeof(key), "RADIANCE_MULT_BAND_%d",
+                             lsat->band[i].code);
                     get_mtldata(mtldata, key, value);
                     lsat->band[i].gain = atof(value);
-                    sprintf(key, "RADIANCE_ADD_BAND_%d", lsat->band[i].code);
+                    snprintf(key, sizeof(key), "RADIANCE_ADD_BAND_%d",
+                             lsat->band[i].code);
                     get_mtldata(mtldata, key, value);
                     lsat->band[i].bias = atof(value);
                     /* reversing to calculate the values of Lmin and Lmax ... */
@@ -366,22 +377,24 @@ void lsat_metadata(char *metafile, lsat_data *lsat)
                      * function */
                     if (lsat->number == 8) {
                         if (lsat->band[i].thermal) {
-                            sprintf(key, "K1_CONSTANT_BAND_%d",
-                                    lsat->band[i].code);
+                            snprintf(key, sizeof(key), "K1_CONSTANT_BAND_%d",
+                                     lsat->band[i].code);
                             get_mtldata(mtldata, key, value);
                             lsat->band[i].K1 = atof(value);
-                            sprintf(key, "K2_CONSTANT_BAND_%d",
-                                    lsat->band[i].code);
+                            snprintf(key, sizeof(key), "K2_CONSTANT_BAND_%d",
+                                     lsat->band[i].code);
                             get_mtldata(mtldata, key, value);
                             lsat->band[i].K2 = atof(value);
                         }
                         else {
-                            sprintf(key, "REFLECTANCE_MULT_BAND_%d",
-                                    lsat->band[i].code);
+                            snprintf(key, sizeof(key),
+                                     "REFLECTANCE_MULT_BAND_%d",
+                                     lsat->band[i].code);
                             get_mtldata(mtldata, key, value);
                             lsat->band[i].K1 = atof(value);
-                            sprintf(key, "REFLECTANCE_ADD_BAND_%d",
-                                    lsat->band[i].code);
+                            snprintf(key, sizeof(key),
+                                     "REFLECTANCE_ADD_BAND_%d",
+                                     lsat->band[i].code);
                             get_mtldata(mtldata, key, value);
                             lsat->band[i].K2 = atof(value);
                             /* ESUN from  REFLECTANCE_ADD_BAND */
@@ -410,14 +423,14 @@ void lsat_metadata(char *metafile, lsat_data *lsat)
         G_verbose_message(
             "RADIANCE & QUANTIZE from band setting of the metadata file");
         for (i = 0; i < lsat->bands; i++) {
-            sprintf(key, "Band%dGainSetting", lsat->band[i].code);
+            snprintf(key, sizeof(key), "Band%dGainSetting", lsat->band[i].code);
             get_mtldata(mtldata, key, value);
             if (value[0] == '\0') {
                 G_warning("%s", key);
                 continue;
             }
             lsat->band[i].gain = atof(value);
-            sprintf(key, "Band%dBiasSetting", lsat->band[i].code);
+            snprintf(key, sizeof(key), "Band%dBiasSetting", lsat->band[i].code);
             get_mtldata(mtldata, key, value);
             if (value[0] == '\0') {
                 G_warning("%s", key);

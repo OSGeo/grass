@@ -25,6 +25,7 @@
  *
  *****************************************************************************/
 
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
@@ -241,8 +242,9 @@ int main(int argc, char *argv[])
     if (centroidsmap) {
         G_message(_("Creating vector point map <%s>..."), centroidsmap);
         /* set comment */
-        sprintf(buf, _("From '%s' on raster map <%s> using clumps from <%s>"),
-                argv[0], datamap, clumpmap);
+        snprintf(buf, sizeof(buf),
+                 _("From '%s' on raster map <%s> using clumps from <%s>"),
+                 argv[0], datamap, clumpmap);
         Vect_set_comment(fd_centroids, buf);
 
         /* create attribute table */
@@ -260,8 +262,8 @@ int main(int argc, char *argv[])
         db_begin_transaction(driver);
 
         db_init_string(&sql);
-        sprintf(
-            buf,
+        snprintf(
+            buf, sizeof(buf),
             "create table %s (cat integer, volume double precision, "
             "average double precision, sum double precision, count integer)",
             Fi->table);
@@ -304,8 +306,9 @@ int main(int argc, char *argv[])
                 Cats->cat[0] = i;
                 Vect_write_line(fd_centroids, GV_POINT, Points, Cats);
 
-                sprintf(buf, "insert into %s values (%d, %f, %f, %f, %ld)",
-                        Fi->table, i, vol, avg, sum[i], count[i]);
+                snprintf(buf, sizeof(buf),
+                         "insert into %s values (%d, %f, %f, %f, %ld)",
+                         Fi->table, i, vol, avg, sum[i], count[i]);
                 db_set_string(&sql, buf);
 
                 if (db_execute_immediate(driver, &sql) != DB_OK)

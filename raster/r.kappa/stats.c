@@ -25,12 +25,16 @@ int stats(void)
     const char *argv[9];
     int argc = 0;
 
-    strcpy(mname, maps[1]);
+    if (G_strlcpy(mname, maps[1], sizeof(mname)) >= sizeof(mname)) {
+        G_fatal_error(_("Raster map name <%s> is too long"), maps[1]);
+    }
     mmapset = G_find_raster2(mname, "");
     if (mmapset == NULL)
         G_fatal_error(_("Raster map <%s> not found"), maps[0]);
 
-    strcpy(rname, maps[0]);
+    if (G_strlcpy(rname, maps[0], sizeof(rname)) >= sizeof(rname)) {
+        G_fatal_error(_("Raster map name <%s> is too long"), maps[0]);
+    }
     rmapset = G_find_raster2(rname, "");
     if (rmapset == NULL)
         G_fatal_error(_("Raster map <%s> not found"), maps[1]);
@@ -43,8 +47,9 @@ int stats(void)
 
     argv[argc++] = "separator=:";
 
-    sprintf(buf, "input=%s,%s", G_fully_qualified_name(mname, mmapset),
-            G_fully_qualified_name(rname, rmapset));
+    snprintf(buf, sizeof(buf), "input=%s,%s",
+             G_fully_qualified_name(mname, mmapset),
+             G_fully_qualified_name(rname, rmapset));
     argv[argc++] = buf;
 
     argv[argc++] = SF_REDIRECT_FILE;
@@ -62,7 +67,8 @@ int stats(void)
     fd = fopen(stats_file, "r");
     if (fd == NULL) {
         unlink(stats_file);
-        sprintf(buf, "Unable to open result file <%s>\n", stats_file);
+        snprintf(buf, sizeof(buf), "Unable to open result file <%s>\n",
+                 stats_file);
     }
 
     while (G_getl(buf, sizeof buf, fd)) {

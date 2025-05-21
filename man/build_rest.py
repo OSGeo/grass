@@ -30,7 +30,7 @@ exclude_mods = [
 # these modules don't use G_parser()
 
 desc_override = {
-    "g.parser": "Provides automated parser, GUI, and help support for GRASS scipts.",
+    "g.parser": "Provides automated parser, GUI, and help support for GRASS scripts.",
     "r.li.daemon": "Support module for r.li landscape index calculations.",
 }
 
@@ -79,7 +79,6 @@ Quick Introduction
         Intro vector map processing and network analysis <vectorintro>
         Intro database management <databaseintro>
         Intro temporal data processing <temporalintro>
-        Intro Graphical User Interface <wxguiintro>
 
 Display/Graphical User Interfaces
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

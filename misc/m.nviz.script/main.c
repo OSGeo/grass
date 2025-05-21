@@ -182,9 +182,9 @@ int main(int argc, char *argv[])
 
     /* Set Image name */
     if (parm.name->answer)
-        sprintf(img_name, "%s", parm.name->answer);
+        snprintf(img_name, sizeof(img_name), "%s", parm.name->answer);
     else
-        sprintf(img_name, "NVIZ");
+        snprintf(img_name, sizeof(img_name), "NVIZ");
 
     /* Open ASCII file for output */
     /* append ".nvscr" to filename if it doesn't already have it */
@@ -202,34 +202,36 @@ int main(int argc, char *argv[])
     /* Done with file */
 
     /* Output initial startup stuff */
-    sprintf(buf1, "## REGION: n=%f s=%f e=%f w=%f\n## Input=%s Dist=%f Ht=%f\n",
-            window.north, window.south, window.east, window.west, outfile, DIST,
-            HT);
+    snprintf(buf1, sizeof(buf1),
+             "## REGION: n=%f s=%f e=%f w=%f\n## Input=%s Dist=%f Ht=%f\n",
+             window.north, window.south, window.east, window.west, outfile,
+             DIST, HT);
 
-    sprintf(buf2, "\nset FRAMES %d\n", no_frames);
+    snprintf(buf2, sizeof(buf2), "\nset FRAMES %d\n", no_frames);
     strcat(buf1, buf2);
     fprintf(fp, "%s", buf1);
 
-    sprintf(buf1, "SendScriptLine \"Nclear_keys\"");
-    sprintf(buf2, "\nSendScriptLine \"Nupdate_frames\"");
+    snprintf(buf1, sizeof(buf1), "SendScriptLine \"Nclear_keys\"");
+    snprintf(buf2, sizeof(buf2), "\nSendScriptLine \"Nupdate_frames\"");
     strcat(buf1, buf2);
     fprintf(fp, "%s", buf1);
 
-    sprintf(buf1, "\nSendScriptLine \"Nset_numsteps $FRAMES\"");
-    sprintf(buf2, "\nSendScriptLine \"Nupdate_frames\"\n");
+    snprintf(buf1, sizeof(buf1), "\nSendScriptLine \"Nset_numsteps $FRAMES\"");
+    snprintf(buf2, sizeof(buf2), "\nSendScriptLine \"Nupdate_frames\"\n");
     strcat(buf1, buf2);
     fprintf(fp, "%s", buf1);
 
     /* Use Linear mode for smooth frame transition */
-    sprintf(buf1, "\nSendScriptLine \"Nset_interp_mode linear\"");
-    sprintf(buf2, "\nSendScriptLine \"Nupdate_frames\"\n\n");
+    snprintf(buf1, sizeof(buf1),
+             "\nSendScriptLine \"Nset_interp_mode linear\"");
+    snprintf(buf2, sizeof(buf2), "\nSendScriptLine \"Nupdate_frames\"\n\n");
     strcat(buf1, buf2);
     fprintf(fp, "%s", buf1);
 
     /* enable vector and sites drawing */
     if (parm.e->answer) {
-        sprintf(buf1, "\nSendScriptLine \"Nshow_vect on\"");
-        sprintf(buf2, "\nSendScriptLine \"Nshow_sites on\"\n\n");
+        snprintf(buf1, sizeof(buf1), "\nSendScriptLine \"Nshow_vect on\"");
+        snprintf(buf2, sizeof(buf2), "\nSendScriptLine \"Nshow_sites on\"\n\n");
         strcat(buf1, buf2);
         fprintf(fp, "%s", buf1);
     }
@@ -479,21 +481,23 @@ int read_rast(double east, double north, double rrdist, int fd, int out_type,
 
     if (out_type) {
         /* Set Camera Position */
-        sprintf(buf2, "\nSendScriptLine \"Nmove_to_real %f %f %f\"", east,
-                north, camera_height);
+        snprintf(buf2, sizeof(buf2),
+                 "\nSendScriptLine \"Nmove_to_real %f %f %f\"", east, north,
+                 camera_height);
         key_time += (rrdist + fabs(camera_height - OLD_DEPTH)) / 10000.;
     }
     else {
 
         /* Set Center of View */
-        sprintf(buf2, "\nSendScriptLine \"Nset_focus %f %f %f\"",
-                east - window.west - (window.ew_res / 2),
-                north - window.south - (window.ns_res / 2), camera_height);
+        snprintf(buf2, sizeof(buf2), "\nSendScriptLine \"Nset_focus %f %f %f\"",
+                 east - window.west - (window.ew_res / 2),
+                 north - window.south - (window.ns_res / 2), camera_height);
 
         /* Use frame number for now -- TODO figure even increment
          * based on no. of frames and distance */
-        sprintf(buf, "\nSendScriptLine \"Nadd_key %f KF_ALL_MASK 1 0.0\"\n",
-                key_time);
+        snprintf(buf, sizeof(buf),
+                 "\nSendScriptLine \"Nadd_key %f KF_ALL_MASK 1 0.0\"\n",
+                 key_time);
         strcat(buf2, buf);
         cnt++;
     }

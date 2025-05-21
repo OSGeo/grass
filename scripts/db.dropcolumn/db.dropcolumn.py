@@ -87,7 +87,6 @@ def main():
 
     if not force:
         gs.message(_("Column <%s> would be deleted.") % column)
-        gs.message("")
         gs.message(
             _("You must use the force flag (-f) to actually remove it. Exiting.")
         )
@@ -122,11 +121,11 @@ def main():
             cmds = [
                 "BEGIN TRANSACTION",
                 "CREATE TEMPORARY TABLE ${table}_backup(${coldef})",
-                "INSERT INTO ${table}_backup SELECT ${colnames} FROM ${table}",
-                "DROP TABLE ${table}",
+                "INSERT INTO ${table}_backup SELECT ${colnames} FROM ${table}",  # noqa: RUF027
+                "DROP TABLE ${table}",  # noqa: RUF027
                 "CREATE TABLE ${table}(${coldef})",
-                "INSERT INTO ${table} SELECT ${colnames} FROM ${table}_backup",
-                "DROP TABLE ${table}_backup",
+                "INSERT INTO ${table} SELECT ${colnames} FROM ${table}_backup",  # noqa: RUF027
+                "DROP TABLE ${table}_backup",  # noqa: RUF027
                 "COMMIT",
             ]
             tmpl = string.Template(";\n".join(cmds))

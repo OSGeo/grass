@@ -1,10 +1,247 @@
-:root > * {
-  --md-primary-fg-color:        #088B36;
-  --md-primary-fg-color--light: #088B36;
-  --md-primary-fg-color--dark:  #088B36;
-  --md-footer-bg-color:         #088B36;
-  --md-footer-bg-color--light:  #088B36;
-  --md-footer-bg-color--dark:   #088B36;
+:root>* {
+
+  /* GRASS Variables
+  Use these variables to customize the GRASS theme.
+  ----------------------------------------------------------------------------- */
+  /* GRASS Font */
+  --gs-grass-font: 'Fira Sans Regular', sans-serif;
+  --gs-grass-font--medium: 'Fira Sans Medium', sans-serif;
+  --gs-grass-font--bold: 'Fira Sans Bold', sans-serif;
+  --gs-grass-font--light: 'Fira Sans ExtraLight', sans-serif;
+
+  /* Primary Color */
+  --gs-primary-color: rgb(76, 176, 91);
+  --gs-primary-color--light: rgba(76, 176, 91, 0.541);
+  --gs-primary-color--lighter: rgba(76, 176, 91, 0.322);
+  --gs-primary-color--lightest: rgba(76, 176, 91, 0.071);
+
+  /* Primary Alt Color */
+  --gs-primary-alt-color: rgb(110, 208, 121);
+  --gs-primary-alt-color--light: rgba(110, 208, 121, 0.541);
+  --gs-primary-alt-color--lighter: rgba(110, 208, 121, 0.322);
+  --gs-primary-alt-color--lightest: rgba(110, 208, 121, 0.071);
+
+  /* Primary Light Color */
+  --gs-primary-light-color: rgb(135, 233, 145);
+  --gs-primary-light-color--light: rgba(135, 233, 145, 0.541);
+  --gs-primary-light-color--lighter: rgba(138, 233, 145, 0.322);
+  --gs-primary-light-color--lightest: rgba(138, 233, 145, 0.071);
+
+  /* Primary Dark Color */
+  --gs-primary-dark-color: rgb(8, 139, 54);
+  --gs-primary-dark-color--light: rgba(8, 139, 54, 0.541);
+  --gs-primary-dark-color--lighter: rgba(8, 139, 54, 0.322);
+  --gs-primary-dark-color--lightest: rgba(8, 139, 54, 0.071);
+
+  /* Secondary Color */
+  --gs-secondary-color: rgb(0, 57, 63);
+  --gs-secondary-color--light: rgba(0, 57, 63, 0.541);
+  --gs-secondary-color--lighter: rgba(0, 57, 63, 0.322);
+  --gs-secondary-color--lightest: rgba(0, 57, 63, 0.071);
+
+  /* Secondary Alt Color */
+  --gs-secondary-alt-color: rgb(39, 87, 92);
+  --gs-secondary-alt-color--light: rgba(39, 87, 92, 0.541);
+  --gs-secondary-alt-color--lighter: rgba(39, 87, 92, 0.322);
+  --gs-secondary-alt-color--lightest: rgba(39, 87, 92, 0.071);
+
+  /* Secondary Light Color */
+  --gs-secondary-light-color: rgb(74, 120, 125);
+  --gs-secondary-light-color--light: rgba(74, 121, 127, 0.541);
+  --gs-secondary-light-color--lighter: rgba(74, 121, 127, 0.322);
+  --gs-secondary-light-color--lightest: rgba(74, 121, 127, 0.071);
+
+  /* Secondary Dark Color */
+  --gs-secondary-dark-color: rgb(0, 32, 36);
+  --gs-secondary-dark-color--light: rgba(0, 32, 36, 0.541);
+  --gs-secondary-dark-color--lighter: rgba(0, 32, 36, 0.322);
+  --gs-secondary-dark-color--lightest: rgba(0, 32, 36, 0.071);
+
+  /* Special Colors */
+  --gs-support-color: rgb(243, 57, 138);
+  --gs-support-color--dark: rgba(243, 57, 138, 0.541);
+  --gs-support-color--light: rgba(243, 57, 138, 0.322);
+  --gs-yard-sign-color: rgb(116, 93, 2);
+
+  /* White */
+  --gs-white-base-color: rgb(255, 255, 255);
+  --gs-white-color: rgb(247, 247, 247);
+  --gs-white-color--light: rgba(247, 247, 247, 0.541);
+  --gs-white-color--lighter: rgba(247, 247, 247, 0.322);
+  --gs-white-color--lightest: rgba(247, 247, 247, 0.071);
+
+  /* Black */
+  --gs-black-base-color: rgb(0, 0, 0);
+  --gs-black-color: rgb(2, 25, 5);
+  --gs-black-color--light: rgba(2, 25, 5, 0.541);
+  --gs-black-color--lighter: rgba(2, 25, 5, 0.322);
+  --gs-black-color--lightest: rgba(2, 25, 5, 0.071);
+
+  /* Grey */
+  --gs-grey-color: rgb(145, 144, 143);
+  --gs-grey-color-light: rgba(145, 144, 143, 0.541);
+  --gs-grey-color-lighter: rgba(145, 144, 143, 0.322);
+  --gs-grey-color-lightest: rgba(145, 144, 143, 0.071);
+
+  /* Grey Alt */
+  --gs-grey-alt-color: rgb(216, 216, 216);
+  --gs-grey-alt-color--light: rgba(216, 216, 216, 0.541);
+  --gs-grey-alt-color--lighter: rgba(216, 216, 216, 0.322);
+  --gs-grey-alt-color--lightest: rgba(216, 216, 216, 0.071);
+
+  /* Grey Light */
+  --gs-grey-light-color: rgb(240, 240, 241);
+  --gs-grey-light-color--light: rgba(240, 240, 241, 0.541);
+  --gs-grey-light-color--lighter: rgba(240, 240, 241, 0.322);
+  --gs-grey-light-color--lightest: rgba(240, 240, 241, 0.071);
+
+  /* Grey Dark */
+  --gs-grey-dark-color: rgb(78, 77, 76);
+  --gs-grey-dark-color--light: rgba(78, 77, 76, 0.541);
+  --gs-grey-dark-color--lighter: rgba(78, 77, 76, 0.322);
+  --gs-grey-dark-color--lightest: rgba(78, 77, 76, 0.071);
+
+  /* Images */
+  --gs-grass-background-image: url("/images/logos/banner.jpg");
+
+  /* Icons */
+  --md-admonition-icon--grass-icon: url('grass_logo.svg');
+
+
+  /* Material MkDocs Variables
+  Customization Docs:
+    https://squidfunk.github.io/mkdocs-material/customization/
+  Color Docs:
+    https://squidfunk.github.io/mkdocs-material/setup/changing-the-colors/?h=colors
+  Color Definitions for all CSS variables:
+    https://github.com/squidfunk/mkdocs-material/blob/master/src/templates/assets/stylesheets/main/_colors.scss
+  ----------------------------------------------------------------------------- */
+
+  /* Default Colors */
+  /* ----------------------------------------------------------------------------- */
+  --md-text-font-family: var(--gs-grass-font);
+  --md-text-font: var(--gs-grass-font);
+  --md-code-font: var(--gs-grass-font);
+  --md-default-fg-weight: 400;
+
+  --md-hue: 225deg;
+  --md-default-fg-color: var(--gs-black-color);
+  --md-default-fg-color--light: var(--gs-black-color--light);
+  --md-default-fg-color--lighter: var(--gs-black-color--lighter);
+  --md-default-fg-color--lightest: var(--gs-black-color--lightest);
+
+  --md-default-bg-color: var(--gs-white-color);
+  --md-default-bg-color--light: var(--gs-white-color--light);
+  --md-default-bg-color--lighter: var(--gs-white-color--lighter);
+  --md-default-bg-color--lightest: var(--gs-white-color--lightest);
+
+  /* Primary color shades */
+  /* ----------------------------------------------------------------------------- */
+  --md-primary-fg-color: var(--gs-primary-color);
+  --md-primary-fg-color--light: var(--gs-primary-color--light);
+  --md-primary-fg-color--dark: var(--gs-primary-dark-color);
+  --md-primary-bg-color: var(--gs-white-color);
+  /* Includes color for the navbar text */
+  --md-primary-bg-color--light: var(--gs-white-color--light);
+
+  /* Accent Colors */
+  /* ----------------------------------------------------------------------------- */
+  --md-accent-fg-color: var(--gs-primary-dark-color); /* Link color on hover */
+  --md-accent-fg-color--transparent: var(--gs-primary-alt-color--light);
+  --md-accent-bg-color: var(--gs-white-color);
+  --md-accent-bg-color--light: var(--gs-primary-color--light);
+
+  /* Footer */
+  /* ----------------------------------------------------------------------------- */
+  --md-footer-fg-color: var(--gs-secondary-color);
+  --md-footer-fg-color--light: var(--gs-white-color);
+  --md-footer-fg-color--lighter: var(--gs-white-color);
+  --md-footer-bg-color: var(--gs-primary-light-color--lightest);
+  --md-footer-bg-color--light: var(--gs-primary-light-color--light);
+  --md-footer-bg-color--dark: var(--gs-secondary-color);
+
+  /* Typeset Colors */
+  /* ----------------------------------------------------------------------------- */
+  --md-typeset-a-color: var(--gs-primary-color);
+  --md-typeset-a-color--hover: var(--gs-primary-alt-color);
+  --md-typeset-color: var(--md-default-fg-color);
+  --md-typeset-del-color: #f5503d26;
+  --md-typeset-ins-color: #0bd57026;
+  --md-typeset-kbd-color: #fafafa;
+  --md-typeset-kbd-accent-color: #fff;
+  --md-typeset-kbd-border-color: #b8b8b8;
+  --md-typeset-mark-color: #ffff0080;
+  --md-typeset-table-color: var(--gs-grey-alt-color);
+  --md-typeset-table-color--light: var(--gs-grey-alt-color--light);
+
+  /* Mermaid colors */
+  /* ----------------------------------------------------------------------------- */
+  --md-mermaid-font-family: var(--md-text-font-family), sans-serif;
+  --md-mermaid-edge-color: var(--md-code-fg-color);
+  --md-mermaid-node-bg-color: var(--md-primary-fg-color--light);
+  --md-mermaid-node-fg-color: var(--md-primary-fg-color);
+  --md-mermaid-label-bg-color: var(--md-default-bg-color);
+  --md-mermaid-label-fg-color: var(--md-code-fg-color);
+  --md-mermaid-sequence-actor-bg-color: var(--md-mermaid-label-bg-color);
+  --md-mermaid-sequence-actor-fg-color: var(--md-mermaid-label-fg-color);
+  --md-mermaid-sequence-actor-border-color: var(--md-mermaid-node-fg-color);
+  --md-mermaid-sequence-actor-line-color: var(--md-default-fg-color--lighter);
+  --md-mermaid-sequence-actorman-bg-color: var(--md-mermaid-label-bg-color);
+  --md-mermaid-sequence-actorman-line-color: var(--md-mermaid-node-fg-color);
+  --md-mermaid-sequence-box-bg-color: var(--md-mermaid-node-bg-color);
+  --md-mermaid-sequence-box-fg-color: var(--md-mermaid-edge-color);
+  --md-mermaid-sequence-label-bg-color: var(--md-mermaid-node-bg-color);
+  --md-mermaid-sequence-label-fg-color: var(--md-mermaid-node-fg-color);
+  --md-mermaid-sequence-loop-bg-color: var(--md-mermaid-node-bg-color);
+  --md-mermaid-sequence-loop-fg-color: var(--md-mermaid-edge-color);
+  --md-mermaid-sequence-loop-border-color: var(--md-mermaid-node-fg-color);
+  --md-mermaid-sequence-message-fg-color: var(--md-mermaid-edge-color);
+  --md-mermaid-sequence-message-line-color: var(--md-mermaid-edge-color);
+  --md-mermaid-sequence-note-bg-color: var(--md-mermaid-label-bg-color);
+  --md-mermaid-sequence-note-fg-color: var(--md-mermaid-edge-color);
+  --md-mermaid-sequence-note-border-color: var(--md-mermaid-label-fg-color);
+  --md-mermaid-sequence-number-bg-color: var(--md-mermaid-node-fg-color);
+  --md-mermaid-sequence-number-fg-color: var(--md-accent-bg-color);
+
+
+  /* Code Highlighting */
+  /* ----------------------------------------------------------------------------- */
+  --md-code-fg-color: var(--gs-secondary-color);
+  --md-code-bg-color: var(--gs-grey-light-color);
+  --md-code-hl-color: var(--gs-secondary-light-color);
+  --md-code-hl-color--light: var(--gs-grey-dark-color);
+  --md-code-hl-number-color: var(--gs-primary-dark-color);
+  --md-code-hl-special-color: var(--gs-secondary-light-color);
+  --md-code-hl-function-color: var(--gs-secondary-alt-color);
+  --md-code-hl-keyword-color: var(--gs-primary-color);
+  --md-code-hl-string-color: var(--gs-primary-color);
+  --md-code-hl-constant-color: var(--gs-primary-color);
+  --md-code-hl-name-color: var(--gs-secondary-alt-color);
+  --md-code-hl-operator-color: var(--gs-secondary-light-color);
+  --md-code-hl-punctuation-color: var(--md-default-fg-color--light);
+  --md-code-hl-comment-color: var(--gs-grey-color);
+  --md-code-hl-generic-color: var(--md-default-fg-color--light);
+  --md-code-hl-variable-color: var(--gs-secondary-alt-color);
+
+  /* Admonition Colors */
+  /* ----------------------------------------------------------------------------- */
+  --md-admonition-fg-color: var(--md-default-fg-color);
+  --md-admonition-bg-color: var(--md-default-bg-color);
+
+  /* Warning Colors */
+  /* ----------------------------------------------------------------------------- */
+  --md-warning-fg-color: var(--gs-primary-alt-color);
+  --md-warning-bg-color: var(--gs-primary-alt-color--light);
+
+  /* Shadow Colors */
+  /* ----------------------------------------------------------------------------- */
+  --md-shadow-z1: 0 0.2rem 0.5rem var(--gs-black-color--light), 0 0 0.05rem var(--gs-black-color--lightest);
+  --md-shadow-z2: 0 0.2rem 0.5rem var(--gs-black-color--lightest), 0 0 0.05rem var(--gs-black-color--lighter);
+  --md-shadow-z3: 0 0.2rem 0.5rem var(--gs-black-color--lighter), 0 0 0.05rem var(--gs-black-color--light);
+}
+
+.md-header {
+  font-weight: bold;
 }
 
 .md-header__button.md-logo {
@@ -18,4 +255,110 @@
 .md-header__button.md-logo svg {
   height: 70%;
   width: 70%;
+}
+
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+  height: 3rem;
+}
+
+.md-tabs {
+  background-color: var(--md-primary-fg-color);
+  color: var(--gs-white-base-color);
+  display: block;
+  line-height: 1.3;
+  overflow: auto;
+  width: 100%;
+  z-index: 3;
+}
+
+/* Changes the header color of the table of contents */
+.md-nav__title {
+  color: var(--gs-secondary-alt-color);
+  display: block;
+  font-weight: 700;
+  overflow: hidden;
+  padding: 0 .6rem;
+  text-overflow: ellipsis;
+}
+
+/* Changes the header color of the nav bar */
+.md-nav--lifted>.md-nav__list>.md-nav__item>[for] {
+  color: var(--gs-secondary-alt-color);
+}
+
+/* Typesets */
+.md-typeset h1 {
+  color: var(--gs-secondary-alt-color);
+  font-family: var(--gs-grass-font--bold);
+  font-weight: bold;
+  font-size: 2.25em;
+  line-height: 1.3;
+  margin: 0 0 1em;
+}
+
+.md-typeset h2 {
+  font-family: var(--gs-grass-font--light);
+  color: var(--gs-secondary-light-color);
+  font-size: 2em;
+  text-transform: capitalize;
+  line-height: 1.4;
+  margin: .64em 0 .64em;
+}
+
+.md-typeset h3 {
+  color: var(--gs-secondary-light-color);
+  font-size: 1.25em;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  line-height: 1.5;
+  margin: 1.6em 0 .8em;
+}
+
+.md-typeset a:focus,
+.md-typeset a:hover {
+  color: var(--md-accent-fg-color);
+}
+
+.md-typeset table:not([class]) tbody tr:hover {
+  background-color: transparent;
+}
+
+.gs-icon-primary {
+  color: var(--gs-primary-color);
+}
+
+.gs-icon-accent {
+  color: var(--gs-secondary-color);
+}
+
+/* Custom GRASS support button style: */
+.md-button.gs-support-button {
+  color: var(--gs-support-color);
+  margin: 0 0.25rem;
+}
+
+.md-button.gs-support-button:focus,
+.md-button.gs-support-button:hover {
+  background-color: var(--gs-support-color);
+  border-color: var(--gs-support-color);
+  color: var(--gs-white-color);
+}
+
+/* Custom GRASS admonition (callout) style: */
+.md-typeset .admonition.grass-tip,
+.md-typeset details.grass-tip {
+  border-color: var(--gs-primary-light-color);
+}
+
+.md-typeset .grass-tip>.admonition-title,
+.md-typeset .grass-tip>summary {
+  background-color: var(--gs-primary-color--lightest);
+}
+
+.md-typeset .grass-tip>.admonition-title::before,
+.md-typeset .grass-tip>summary::before {
+  background-color: var(--gs-primary-color);
+  -webkit-mask-image: var(--md-admonition-icon--grass-icon);
+  mask-image: var(--md-admonition-icon--grass-icon);
 }

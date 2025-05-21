@@ -801,7 +801,7 @@ class VNETDialog(wx.Dialog):
             self.inputData[k].SetValue(params[k])
 
     def OnALayerSel(self, event):
-        """When arc layer from vector map is selected, populates corespondent columns
+        """When arc layer from vector map is selected, populates corresponding columns
         selects"""
         self.inputData["arc_column"].InsertColumns(
             vector=self.inputData["input"].GetValue(),
@@ -817,7 +817,7 @@ class VNETDialog(wx.Dialog):
         self._setInputData()
 
     def OnNLayerSel(self, event):
-        """When node layer from vector map is selected, populates corespondent column
+        """When node layer from vector map is selected, populates corresponding column
         select"""
         if self.vnet_mgr.IsSnappingActive():
             self.vnet_mgr.Snapping(activate=True)
@@ -1189,15 +1189,16 @@ class PtsList(PointsList):
                     self.CheckItem(idx, True)
                 elif not v and self.IsItemChecked(idx):
                     self.CheckItem(idx, False)
-            else:
-                found = 0
-                for col in self.colsData:
-                    if k == col[0]:
-                        found = 1
-                        break
+                continue
 
-                if found:
-                    self.EditCellKey(key, k, v)
+            found = 0
+            for col in self.colsData:
+                if k == col[0]:
+                    found = 1
+                    break
+
+            if found:
+                self.EditCellKey(key, k, v)
 
     def OnItemSelected(self, event):
         """Item selected"""

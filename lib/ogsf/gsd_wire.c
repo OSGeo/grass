@@ -25,10 +25,10 @@
 #define DO_ARROWS
 
 /************************************************************************/
-/* Notes on exageration:
-   vertical exageration is of two forms:
-   1) global exageration (from geoview struct)
-   2) vertical exageration for each surface - not implemented
+/* Notes on exaggeration:
+   vertical exaggeration is of two forms:
+   1) global exaggeration (from geoview struct)
+   2) vertical exaggeration for each surface - not implemented
  */
 
 /************************************************************************/
@@ -556,7 +556,7 @@ int gsd_wire_arrows(geosurf *surf)
    \brief Draw coarse surface
 
    New (TEST) wire routine that draws low res surface
-   Based on new Trinagle Fan routine
+   Based on new Triangle Fan routine
    Resolution is a function of current surface resolution
    times wire resolution
 

@@ -13,7 +13,7 @@
  *
  * NOTES:
  *
- * 1) see dhist.h for a decalaration of the structure stat_list.
+ * 1) see dhist.h for a declaration of the structure stat_list.
  * 2) see pie.h for normalized coordinates of the different parts
  *    of the pie-chart, like the origin of the pie, the label
  *    positions, etc.
@@ -73,6 +73,7 @@ int pie(struct stat_list *dist_stats, /* list of distribution statistics */
     char txt[1024];
     char tic_name[80];
     DCELL dmin, dmax, range_dmin, range_dmax, dval;
+    dmin = 0.0;
 
     /* get coordinates of current screen window */
     D_get_src(&t, &b, &l, &r);
@@ -339,11 +340,12 @@ int pie(struct stat_list *dist_stats, /* list of distribution statistics */
             D_stroke();
 
             if (nodata && i == dist_stats->mincat)
-                sprintf(txt, "null");
+                snprintf(txt, sizeof(txt), "null");
             else if (is_fp)
-                sprintf(txt, "%d", (int)(dmin / (double)tic_unit));
+                snprintf(txt, sizeof(txt), "%d",
+                         (int)(dmin / (double)tic_unit));
             else
-                sprintf(txt, "%d", (int)(i / tic_unit));
+                snprintf(txt, sizeof(txt), "%d", (int)(i / tic_unit));
             text_height = height * TEXT_HEIGHT;
             text_width = width * TEXT_WIDTH;
             D_text_size(text_width, text_height);
@@ -382,9 +384,9 @@ int pie(struct stat_list *dist_stats, /* list of distribution statistics */
 
     /* draw the x-axis label */
     if (tic_unit != 1)
-        sprintf(xlabel, "Cell Values %s", tic_name);
+        snprintf(xlabel, sizeof(xlabel), "Cell Values %s", tic_name);
     else
-        sprintf(xlabel, "Cell Values");
+        snprintf(xlabel, sizeof(xlabel), "Cell Values");
     text_height = height * TEXT_HEIGHT;
     text_width = width * TEXT_WIDTH;
     D_text_size(text_width, text_height);

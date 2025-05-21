@@ -8,7 +8,7 @@ int get_double(const struct proj_parm *parm, const struct proj_desc *desc,
 {
     char answer[200];
 
-    sprintf(answer, "Enter %s ", desc->desc);
+    snprintf(answer, sizeof(answer), "Enter %s ", desc->desc);
     *val = prompt_num_double(answer, parm->deflt, 1);
     return 1;
 }
@@ -18,7 +18,7 @@ int get_int(const struct proj_parm *parm, const struct proj_desc *desc,
 {
     char answer[200];
 
-    sprintf(answer, "Enter %s ", desc->desc);
+    snprintf(answer, sizeof(answer), "Enter %s ", desc->desc);
     *val = prompt_num_int(answer, (int)parm->deflt, 1);
     return 1;
 }
@@ -34,7 +34,7 @@ int get_zone(void)
             first_time = 0;
         else
             fprintf(stdout, "Invalid zone! Try Again:\n");
-        sprintf(answer, "Enter Zone");
+        snprintf(answer, sizeof(answer), "Enter Zone");
         zone = prompt_num_int(answer, 0, 0);
     }
     return (1);

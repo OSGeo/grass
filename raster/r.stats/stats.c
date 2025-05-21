@@ -107,7 +107,7 @@ void fix_max_fp_val(CELL *cell, int ncols)
 
 /* we can't compute hash on null values, so we change all
  *  nulls to max+1, set NULL_CELL to max+1, and later compare
- *  with NULL_CELL to chack for nulls */
+ *  with NULL_CELL to check for nulls */
 void reset_null_vals(CELL *cell, int ncols)
 {
     while (ncols-- > 0) {
@@ -386,7 +386,7 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
                                                    average);
                             break;
                         case PLAIN:
-                            sprintf(str1, "%10f", average);
+                            snprintf(str1, sizeof(str1), "%10f", average);
                             G_trim_decimal(str1);
                             G_strip(str1);
                             fprintf(stdout, "%s%s", i ? fs : "", str1);
@@ -403,8 +403,8 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
                             break;
                         case PLAIN:
                             /* print intervals */
-                            sprintf(str1, "%10f", dLow);
-                            sprintf(str2, "%10f", dHigh);
+                            snprintf(str1, sizeof(str1), "%10f", dLow);
+                            snprintf(str2, sizeof(str2), "%10f", dHigh);
                             G_trim_decimal(str1);
                             G_trim_decimal(str2);
                             G_strip(str1);

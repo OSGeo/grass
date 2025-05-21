@@ -459,8 +459,8 @@ static void do_reclass(const char *basemap, char **outputs)
 
     G_message(_("Generating reclass maps"));
 
-    sprintf(input_arg, "input=%s", basemap);
-    sprintf(rules_arg, "rules=%s", tempfile);
+    snprintf(input_arg, (strlen(basemap) + 7), "input=%s", basemap);
+    snprintf(rules_arg, (strlen(tempfile) + 7), "rules=%s", tempfile);
 
     for (quant = 0; quant < num_quants; quant++) {
         const char *output = outputs[quant];
@@ -468,7 +468,7 @@ static void do_reclass(const char *basemap, char **outputs)
         FILE *fp;
         int cat;
 
-        sprintf(output_arg, "output=%s", output);
+        snprintf(output_arg, (strlen(output) + 8), "output=%s", output);
 
         fp = fopen(tempfile, "w");
         if (!fp)

@@ -46,7 +46,7 @@ from gui_core.wrap import (
     NewId,
     CheckListCtrlMixin,
 )
-from gmodeler.model import ModelData, ModelAction, ModelCondition
+from gmodeler.model_items import ModelData, ModelAction, ModelCondition
 
 
 class ModelDataDialog(SimpleDialog):
@@ -132,7 +132,7 @@ class ModelDataDialog(SimpleDialog):
     def GetType(self):
         """Get element type"""
         if not self.etype:
-            return
+            return None
         return self.element.tcp.GetType()
 
     def OnType(self, event):

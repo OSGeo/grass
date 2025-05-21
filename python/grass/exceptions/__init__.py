@@ -34,7 +34,7 @@ class ParameterError(Exception):
 class ScriptError(Exception):
     """Raised during script execution. ::
 
-    >>> error = ScriptError('My error message!')
+    >>> error = ScriptError("My error message!")
     >>> error.value
     'My error message!'
     >>> print(error)

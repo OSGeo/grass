@@ -266,7 +266,7 @@ int main(int argc, char *argv[])
     ncols = Rast_window_cols();
     sides = 8; /* not a user option */
     c_fac =
-        5; /* not a user option, MFD covergence factor 5 gives best results */
+        5; /* not a user option, MFD convergence factor 5 gives best results */
 
     /* segment structures */
     seg_rows = seg_cols = 64;

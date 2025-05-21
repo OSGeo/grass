@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-23 03:37-0600\n"
-"PO-Revision-Date: 2024-05-27 09:55+0000\n"
+"PO-Revision-Date: 2025-03-14 18:43+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/"
 "grassmods/fr/>\n"
@@ -2855,8 +2855,8 @@ msgstr ""
 #, c-format
 msgid "%d point found"
 msgid_plural "%d points found"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d point trouvé"
+msgstr[1] "%d points trouvés"
 
 #: ../raster/r.cost/main.c:657 ../raster/r.walk/main.c:818
 #, c-format
@@ -4392,7 +4392,7 @@ msgstr "Lecture de la carte raster <%s> ..."
 #: ../raster/r.fill.dir/dopolys.c:102 ../raster/r.fill.dir/main.c:198
 #, c-format
 msgid "File writing error in %s() %d:%s"
-msgstr ""
+msgstr "Erreur d'écriture de fichier dans %s() %d:%s"
 
 #: ../raster/r.grow.distance/main.c:382 ../raster/r.fill.dir/main.c:265
 #: ../raster/r.stream.extract/close.c:253
@@ -4411,7 +4411,7 @@ msgstr "Écriture des cartes raster en sortie ..."
 #: ../raster/r.fill.dir/main.c:274
 #, c-format
 msgid "File reading error in %s() %d:%s"
-msgstr ""
+msgstr "Erreur de lecture de fichier dans %s() %d:%s"
 
 #: ../raster/r.grow.distance/main.c:481 ../raster/r.colors.out/raster_main.c:67
 #: ../raster/r.fill.dir/main.c:155 ../raster/r.colors/edit_colors.c:509
@@ -4464,7 +4464,7 @@ msgstr "%s n'est pas une règle valide"
 
 #: ../raster/r.quant/main.c:50
 msgid "quantization"
-msgstr ""
+msgstr "quantification"
 
 #: ../raster/r.quant/main.c:52
 msgid "Produces the quantization file for a floating-point map."
@@ -6769,7 +6769,7 @@ msgstr ""
 #: ../raster/r.spread/main.c:560
 #, c-format
 msgid "Reading %s..."
-msgstr ""
+msgstr "Lecture de la couche %s..."
 
 #: ../raster/r.topmodel/infiltration.c:148
 #: ../raster/r.topmodel/infiltration.c:218
@@ -6831,7 +6831,7 @@ msgstr "Impossible d'ouvrir le fichier d'entrée <%s>"
 #: ../raster/r.topmodel/file_io.c:57
 #, c-format
 msgid "%s cannot be 0"
-msgstr ""
+msgstr "%s ne peut pas être 0"
 
 #: ../raster/r.topmodel/main.c:52
 msgid "Simulates TOPMODEL which is a physically based hydrologic model."
@@ -23756,7 +23756,7 @@ msgstr ""
 
 #: ../imagery/i.landsat.toar/main.c:83 ../imagery/i.landsat.acca/main.c:114
 msgid "Example: 'B.' for B.1, B.2, ..."
-msgstr ""
+msgstr "Exemple : \"B.\" pour B.1, B.2, ..."
 
 #: ../imagery/i.landsat.toar/main.c:86
 #: ../locale/scriptstrings/v.to.rast.multi_to_translate.c:22
@@ -25335,7 +25335,7 @@ msgstr "Lancement de la FFT ... "
 
 #: ../imagery/i.fft/main.c:167 ../imagery/i.ifft/main.c:192
 msgid "Rotating data..."
-msgstr "Rotation des données ... "
+msgstr "Rotation des données…"
 
 #: ../imagery/i.fft/main.c:175
 msgid "Writing transformed data..."
@@ -25658,9 +25658,8 @@ msgid "Group <%s@%s> contains no raster maps."
 msgstr "Jeu de cartes contenant les cartes raster d'entrée"
 
 #: ../imagery/i.svm.predict/main.c:168
-#, fuzzy
 msgid "Invalid signature file"
-msgstr "[à partir du fichier de signature %s]"
+msgstr ""
 
 #: ../imagery/i.svm.predict/main.c:173
 #, fuzzy
@@ -25982,7 +25981,7 @@ msgstr "Impossible d'écrire la carte vecteur <%s>"
 
 #: ../imagery/i.svm.train/main.c:511
 msgid "Training successfully complete"
-msgstr ""
+msgstr "Entraînement complété avec succès"
 
 #: ../imagery/i.evapo.mh/main.c:71
 msgid ""
@@ -26857,7 +26856,7 @@ msgstr ""
 #: ../imagery/i.segment/main.c:70
 #, c-format
 msgid "Number of segments created: %d"
-msgstr ""
+msgstr "Nombre de segments créés :  %d"
 
 #: ../imagery/i.segment/parse_args.c:25
 msgid "Name of input imagery group or raster maps"
@@ -27550,7 +27549,7 @@ msgstr ""
 #: ../imagery/i.landsat.acca/algorithm.c:153
 #, c-format
 msgid "* Histogram classes: %d"
-msgstr ""
+msgstr "* Classes d'h­istogrammes : %d"
 
 #: ../imagery/i.landsat.acca/algorithm.c:165
 msgid "* 98.75 percentile: %.2lf K"
@@ -27611,8 +27610,9 @@ msgstr ""
 
 #: ../imagery/i.landsat.acca/main.c:108
 #: ../locale/scriptstrings/i.sentinel.mask_to_translate.c:5
+#, fuzzy
 msgid "cloud detection"
-msgstr ""
+msgstr "détection des nuages"
 
 #: ../imagery/i.landsat.acca/main.c:122
 msgid "B56composite (step 6)"
@@ -31548,7 +31548,7 @@ msgstr ""
 #: ../locale/scriptstrings/v.isochrones_to_translate.c:16
 #: ../locale/scriptstrings/v.isochrones_to_translate.c:18
 msgid "r.cost"
-msgstr ""
+msgstr "r.cost"
 
 #: ../locale/scriptstrings/v.isochrones_to_translate.c:15
 msgid "Speed for off-road areas (in km/h > 0)"
@@ -33176,9 +33176,8 @@ msgid "Name for the new color table rules file"
 msgstr "Nom du nouveau fichier d'icones"
 
 #: ../locale/scriptstrings/r.colors.matplotlib_to_translate.c:8
-#, fuzzy
 msgid "Name of color table"
-msgstr "table de couleur"
+msgstr "Nom de la table de couleur"
 
 #: ../locale/scriptstrings/r.colors.matplotlib_to_translate.c:9
 msgid ""
@@ -35987,7 +35986,7 @@ msgstr ""
 #: ../locale/scriptstrings/r.learn.ml_to_translate.c:43
 #: ../locale/scriptstrings/r.learn.train_to_translate.c:53
 msgid "learning rate"
-msgstr ""
+msgstr "taux d’apprentissage"
 
 #: ../locale/scriptstrings/r.learn.ml_to_translate.c:44
 #: ../locale/scriptstrings/r.learn.train_to_translate.c:54
@@ -44568,7 +44567,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/t.rast.colors_to_translate.c:6
 msgid "Name of color table (see r.color help)"
-msgstr "Nom de la table de couleur (voir r.color pour l'aide)"
+msgstr "Nom de la table de couleur (voir l’aide de r.color)"
 
 #: ../locale/scriptstrings/t.rast.patch_to_translate.c:1
 #, fuzzy
@@ -45967,7 +45966,7 @@ msgstr "segment"
 
 #: ../locale/scriptstrings/i.segment.hierarchical_to_translate.c:15
 msgid "Memory in MB"
-msgstr ""
+msgstr "Mémoire en Mo"
 
 #: ../locale/scriptstrings/i.segment.hierarchical_to_translate.c:23
 #, fuzzy
@@ -48503,16 +48502,14 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.boxplot_to_translate.c:43
 #: ../locale/scriptstrings/v.boxplot_to_translate.c:26
-#, fuzzy
 msgid "Rotate labels"
-msgstr "Afficher les étiquettes de catégorie"
+msgstr "Pivoter les étiquettes de catégorie"
 
 #: ../locale/scriptstrings/r.boxplot_to_translate.c:44
 #: ../locale/scriptstrings/r.series.boxplot_to_translate.c:32
 #: ../locale/scriptstrings/r.series.boxplot_to_translate.c:33
-#, fuzzy
 msgid "Rotate labels (degrees)"
-msgstr "Afficher les étiquettes de catégorie"
+msgstr "Pivoter les étiquettes de catégorie (degrés)"
 
 #: ../locale/scriptstrings/r.boxplot_to_translate.c:46
 #, fuzzy
@@ -49458,9 +49455,8 @@ msgid "start and end pks (last pk = -1)"
 msgstr ""
 
 #: ../locale/scriptstrings/v.civil_to_translate.c:107
-#, fuzzy
 msgid "Create backup file"
-msgstr "Impossible de lire le fichier de configuration"
+msgstr "Créer fichier de sauvegarde"
 
 #: ../locale/scriptstrings/d.what.vect_to_translate.c:1
 msgid ""
@@ -56381,6 +56377,8 @@ msgid ""
 "Current row %d:\n"
 "%s\n"
 msgstr ""
+"Ligne actuelle %d :\n"
+"%s\n"
 
 #: ../vector/v.in.ascii/points.c:202 ../vector/v.in.ascii/points.c:235
 #, c-format
@@ -57334,7 +57332,7 @@ msgstr ""
 
 #: ../vector/v.colors.out/main.c:50
 msgid "Exports the color table associated with a vector map."
-msgstr "Exporter la table de couleur associée  une carte vecteur."
+msgstr "Exporter la table de couleur associée à une carte vecteur."
 
 #: ../vector/v.colors.out/main.c:64
 msgid "Name of attribute (numeric) column to which refer color rules"
@@ -60271,7 +60269,7 @@ msgstr ""
 #: ../vector/v.patch/main.c:252
 #, c-format
 msgid "Missing table for <%s>"
-msgstr ""
+msgstr "Table manquante pour <%s>"
 
 #: ../vector/v.patch/main.c:256
 #, c-format
@@ -61877,7 +61875,7 @@ msgstr ""
 #: ../vector/v.transform/main.c:166 ../vector/v.transform/main.c:176
 #: ../vector/v.transform/main.c:183
 msgid "Custom"
-msgstr ""
+msgstr "Personnalisé"
 
 #: ../vector/v.transform/main.c:119
 msgid "Shifting value for x coordinates"
@@ -61982,7 +61980,7 @@ msgstr ""
 
 #: ../vector/v.class/main.c:75 ../display/d.vect.thematic/main.c:123
 msgid "quantiles"
-msgstr ""
+msgstr "quantiles"
 
 #: ../vector/v.class/main.c:76 ../display/d.vect.thematic/main.c:124
 msgid "equiprobable (normal distribution)"
@@ -63190,7 +63188,7 @@ msgstr ""
 
 #: ../vector/v.surf.rst/main.c:266
 msgid "Number of threads for parallel computing"
-msgstr ""
+msgstr "Nombre de threads pour le calcul parallèle"
 
 #: ../vector/v.surf.rst/main.c:272
 msgid "Name of raster map used as mask"
@@ -64027,7 +64025,7 @@ msgstr "Affiche les métadonnées d'une carte vecteur."
 #: ../vector/v.info/print.c:30 ../vector/v.info/print.c:32
 #, c-format
 msgid "%s"
-msgstr ""
+msgstr "%s"
 
 #: ../vector/v.info/print.c:141
 #, c-format
@@ -65576,7 +65574,7 @@ msgstr "Nombre d'étiquette texte pour la légende du gradient lissé"
 #: ../display/d.legend/main.c:158 ../display/d.legend/main.c:259
 #: ../display/d.legend/main.c:269 ../display/d.legend/main.c:279
 msgid "Gradient"
-msgstr ""
+msgstr "Gradient"
 
 #: ../display/d.legend/main.c:164
 msgid "Number of digits after decimal point"
@@ -67274,7 +67272,7 @@ msgstr ""
 
 #: ../display/d.barscale/main.c:141
 msgid "Number of segments"
-msgstr ""
+msgstr "Nombre de segments"
 
 #: ../display/d.barscale/main.c:145
 msgid "Bar scale and text color"
@@ -71584,3 +71582,7 @@ msgstr ""
 
 #~ msgid "DONE: compressed file is %lu %s (%.2f%) larger"
 #~ msgstr "FAIT : le fichier compressé est %lu %s (%.2f%) plus grand"
+
+msgctxt "1"
+msgid "learning rate"
+msgstr "taux d’apprentissage"

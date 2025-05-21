@@ -25,7 +25,6 @@ import locale
 
 from html.parser import HTMLParser
 
-from urllib import request as urlrequest
 import urllib.parse as urlparse
 
 try:
@@ -40,6 +39,7 @@ from mkdocs import (
     get_last_git_commit,
     top_dir as topdir,
     get_addon_path,
+    set_proxy,
 )
 
 grass_version = os.getenv("VERSION_NUMBER", "unknown")
@@ -80,20 +80,7 @@ def _get_encoding():
     return encoding
 
 
-def set_proxy():
-    """Set proxy"""
-    proxy = os.getenv("GRASS_PROXY")
-    if proxy:
-        proxies = {}
-        for ptype, purl in (p.split("=") for p in proxy.split(",")):
-            proxies[ptype] = purl
-        urlrequest.install_opener(
-            urlrequest.build_opener(urlrequest.ProxyHandler(proxies))
-        )
-
-
 set_proxy()
-
 
 html_page_footer_pages_path = os.getenv("HTML_PAGE_FOOTER_PAGES_PATH") or ""
 

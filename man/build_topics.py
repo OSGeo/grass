@@ -4,6 +4,8 @@
 # (c) 2012-2025 by the GRASS Development Team
 
 import os
+import re
+import sys
 import glob
 from pathlib import Path
 
@@ -43,25 +45,61 @@ def build_topics(ext):
             if ext == "html":
                 index_keys = lines.index("<h2>KEYWORDS</h2>\n") + 1
                 index_desc = lines.index("<h2>NAME</h2>\n") + 1
-            else:
-                # expecting markdown
-                index_keys = lines.index("### KEYWORDS\n") + 3
-                index_desc = lines.index("## NAME\n") + 2
         except Exception:
             continue
         try:
             if ext == "html":
                 key = lines[index_keys].split(",")[1].strip().replace(" ", "_")
                 key = key.split(">")[1].split("<")[0]
-            else:
-                # expecting markdown
-                key = lines[index_keys].split("]")[0].lstrip("[")
         except Exception:
             continue
         try:
-            desc = lines[index_desc].split("-", 1)[1].strip()
+            if ext == "html":
+                desc = lines[index_desc].split("-", 1)[1].strip()
         except Exception:
-            desc.strip()
+            if ext == "html":
+                desc = desc.strip()
+
+        if ext == "md":
+            key = None
+            desc = None
+            for line in lines:
+                # We accept, but don't require, YAML inline list syntax.
+                match = re.match(r"keywords:\s*\[\s*(.*)\s*\]\s*", line)
+                if not match:
+                    match = re.match(r"keywords:\s*(.*)\s*", line)
+                if match:
+                    text = match.group(1)
+                    if not text:
+                        print(
+                            f"Warning: Empty keyword list in {fname}", file=sys.stderr
+                        )
+                        break
+                    # We accept only non-quoted YAML strings.
+                    keys = [item.strip() for item in text.split(",")]
+                    if len(keys) < 2:
+                        print(
+                            f"Warning: File {fname} has only one keyword",
+                            file=sys.stderr,
+                        )
+                        break
+                    key = keys[1]  # Second keyword is topic.
+                match = re.match(r"description:\s*(.*)\s*", line)
+                if match:
+                    text = match.group(1)
+                    if not text:
+                        print(f"Warning: Empty tile in {fname}", file=sys.stderr)
+                        break
+                    desc = text
+                if desc and key:
+                    break
+            if not desc or not key:
+                continue
+
+        # Line ending can appear here on Windows.
+        key = key.strip()
+        if not key:
+            continue
 
         if key not in keywords.keys():
             keywords[key] = {}
@@ -70,11 +108,10 @@ def build_topics(ext):
             keywords[key][fname] = desc
 
     with Path(man_dir, f"topics.{ext}").open("w") as topicsfile:
-        topicsfile.write(
-            header1_tmpl.substitute(
-                title="GRASS GIS %s Reference Manual - Topics index" % grass_version
-            )
-        )
+        title = "Topics index"
+        if ext == "html":
+            title = f"GRASS {grass_version} Reference Manual - {title}"
+        topicsfile.write(header1_tmpl.substitute(title=title))
         topicsfile.write(headertopics_tmpl)
 
         for key, values in sorted(keywords.items(), key=lambda s: s[0].lower()):
@@ -84,11 +121,13 @@ def build_topics(ext):
                 if ext == "html":
                     keyfile.write(
                         header1_tmpl.substitute(
-                            title="GRASS GIS "
+                            title="GRASS "
                             "%s Reference Manual: Topic %s"
                             % (grass_version, key.replace("_", " "))
                         )
                     )
+                if ext == "md":
+                    keyfile.write("---\nhide:\n  - toc\n---\n\n")
                 keyfile.write(headerkey_tmpl.substitute(keyword=key.replace("_", " ")))
                 num_modules = 0
                 for mod, desc in sorted(values.items()):
@@ -102,7 +141,7 @@ def build_topics(ext):
                     topicsfile.writelines(
                         [
                             moduletopics_tmpl.substitute(
-                                key=key, name=key.replace("_", " ")
+                                key=key.replace(" ", "_"), name=key.replace("_", " ")
                             )
                         ]
                     )
@@ -125,9 +164,9 @@ def build_topics(ext):
                     # expecting markdown
                     keyfile.write(
                         "*See also the corresponding keyword"
-                        " [{key}](keywords.md#{key})"
-                        " for additional references.*\n".format(
-                            key=key.replace(" ", "-").replace("_", "-").lower()
+                        " for additional references:*\n"
+                        "\n<!-- topic_keyword {{ include: [{key}] }} -->\n".format(
+                            key=key,
                         )
                     )
 

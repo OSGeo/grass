@@ -73,7 +73,7 @@ from gui_core.wrap import (
 )
 from location_wizard.dialogs import SelectTransformDialog
 
-from grass.exceptions import OpenError
+from grass.exceptions import OpenError, ScriptError
 from grass.grassdb.checks import location_exists
 from grass.script import core as grass
 from grass.script import decode
@@ -1662,7 +1662,7 @@ class EPSGPage(TitledPage):
         if event.GetDirection():
             if not self.epsgcode:
                 event.Veto()
-                return
+                return None
             # check for datum transforms
             ret = RunCommand(
                 "g.proj", read=True, epsg=self.epsgcode, datum_trans="-1", flags="t"
@@ -1882,7 +1882,7 @@ class IAUPage(TitledPage):
         if event.GetDirection():
             if not self.epsgcode:
                 event.Veto()
-                return
+                return None
             # check for datum transforms
             ret = RunCommand(
                 "g.proj",
@@ -2089,7 +2089,7 @@ class CustomPage(TitledPage):
 
             if self.customstring.find("+datum=") < 0:
                 self.GetNext().SetPrev(self)
-                return
+                return None
 
             # check for datum transforms
             # FIXME: -t flag is a hack-around for trac bug #1849
@@ -2109,7 +2109,7 @@ class CustomPage(TitledPage):
                     style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
                 )
                 event.Veto()
-                return
+                return None
 
             if out:
                 dtrans = ""
@@ -2739,7 +2739,7 @@ class LocationWizard(wx.Object):
                     desc=self.startpage.locTitle,
                 )
 
-        except grass.ScriptError as e:
+        except ScriptError as e:
             return e.value
 
         return None

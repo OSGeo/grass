@@ -67,11 +67,10 @@ def main(ext):
         )
 
     with open(os.path.join(man_dir, output_name + f".{ext}"), "w") as output:
-        output.write(
-            header1_tmpl.substitute(
-                title=f"GRASS GIS {grass_version} Reference Manual - Graphical index"
-            )
-        )
+        title = "Graphical index"
+        if ext == "html":
+            title = f"GRASS {grass_version} Reference Manual - {title}"
+        output.write(header1_tmpl.substitute(title=title))
         output.write(header_graphical_index_tmpl)
         if ext == "html":
             output.write('<ul class="img-list">\n')
@@ -87,8 +86,8 @@ def main(ext):
                 )
             else:
                 output.write(
-                    "- [![{name}]({img})]({link})".format(
-                        link=html_file, img=image, name=label
+                    "[![{name}]({img})]({link}.md)\n".format(
+                        link=html_file.removesuffix(".html"), img=image, name=label
                     )
                 )
 

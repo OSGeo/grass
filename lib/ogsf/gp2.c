@@ -122,7 +122,7 @@ int *GP_get_site_list(int *numsites)
 }
 
 /*!
-   \brief Delete registrated point set
+   \brief Delete registered point set
 
    \param id point set id
 

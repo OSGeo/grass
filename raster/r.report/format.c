@@ -48,7 +48,7 @@ int scient_format(double v, char *buf, int n, int dp)
     char temp[50];
     int i;
 
-    sprintf(temp, "%#.*g", dp, v);
+    snprintf(temp, sizeof(temp), "%#.*g", dp, v);
     for (i = 0; i <= n && temp[i] == ' '; i++) {
     }
     strcpy(buf, temp + i);
@@ -62,8 +62,8 @@ int format_double(double v, char *buf, int n, int dp)
     char temp[100];
     int i, ncommas;
 
-    sprintf(fmt, "%%%d.%df", n, dp);
-    sprintf(temp, fmt, v);
+    snprintf(fmt, sizeof(fmt), "%%%d.%df", n, dp);
+    snprintf(temp, sizeof(temp), fmt, v);
     strcpy(buf, temp);
     G_insert_commas(temp);
     ncommas = strlen(temp) - strlen(buf);

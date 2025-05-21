@@ -9,6 +9,8 @@ for details.
 :authors: Vaclav Petras
 """
 
+from __future__ import annotations
+
 import os
 import datetime
 from pathlib import Path
@@ -303,7 +305,7 @@ def get_html_test_authors_table(directory, tests_authors):
 
 
 class GrassTestFilesMultiReporter:
-    """Interface to multiple repoter objects
+    """Interface to multiple reporter objects
 
     For start and finish of the tests and of a test of one file,
     it calls corresponding methods of all contained reporters.
@@ -437,7 +439,7 @@ def percent_to_html(percent):
         color = "orange"
     else:
         color = "green"
-    return '<span style="color: {color}">{percent:.0f}%</span>'.format(
+    return '<span style="color: {color}">{percent:.1f}%</span>'.format(
         percent=percent, color=color
     )
 
@@ -528,6 +530,12 @@ def success_to_html_percent(total, successes):
     return UNKNOWN_NUMBER_HTML
 
 
+def format_percentage(percentage: float | None) -> str:
+    if percentage is not None:
+        return "{nsper:.1f}%".format(nsper=percentage)
+    return "unknown percentage"
+
+
 class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
     unknown_number = UNKNOWN_NUMBER_HTML
 
@@ -602,17 +610,9 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             )
         )
 
-        # this is the second place with this function
-        # TODO: provide one implementation
-        def format_percentage(percentage):
-            if percentage is not None:
-                return "{nsper:.0f}%".format(nsper=percentage)
-            return "unknown percentage"
-
         summary_sentence = (
             "\nExecuted {nfiles} test files in {time:}."
-            "\nFrom them"
-            " {nsfiles} files ({nsper}) were successful"
+            "\nFrom them, {nsfiles} files ({nsper}) were successful"
             " and {nffiles} files ({nfper}) failed.\n".format(
                 nfiles=self.test_files,
                 time=self.main_time,
@@ -844,7 +844,7 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
     def finish(self):
         super().finish()
 
-        # this shoul be moved to some additional meta passed in constructor
+        # this should be moved to some additional meta passed in constructor
         svn_info = get_svn_info()
         svn_revision = "" if not svn_info else svn_info["revision"]
 
@@ -949,11 +949,6 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
 
     def finish(self):
         super().finish()
-
-        def format_percentage(percentage):
-            if percentage is not None:
-                return "{nsper:.0f}%".format(nsper=percentage)
-            return "unknown percentage"
 
         summary_sentence = (
             "\nExecuted {nfiles} test files in {time:}."

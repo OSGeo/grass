@@ -227,7 +227,7 @@ class WMSBase:
         self.temp_map = self._download()
 
         if not self.temp_map:
-            return
+            return None
 
         self._reprojectMap()
 
@@ -502,19 +502,14 @@ class WMSBase:
 
 class GRASSImporter:
     def __init__(self, opt_output, cleanup_bands):
-        self.cleanup_mask = False
         self.cleanup_bands = cleanup_bands
 
         # output map name
         self.opt_output = opt_output
 
-        # suffix for existing mask (during overriding will be saved
-        # into raster named:self.opt_output + this suffix)
-        self.original_mask_suffix = "_temp_MASK"
-
         # check names of temporary rasters, which module may create
         maps = []
-        for suffix in (".red", ".green", ".blue", ".alpha", self.original_mask_suffix):
+        for suffix in (".red", ".green", ".blue", ".alpha"):
             rast = self.opt_output + suffix
             if gs.find_file(rast, element="cell", mapset=".")["file"]:
                 maps.append(rast)
@@ -529,24 +524,6 @@ class GRASSImporter:
             )
 
     def __del__(self):
-        # removes temporary mask, used for import transparent or warped temp_map
-        if self.cleanup_mask:
-            # clear temporary mask, which was set by module
-            try:
-                gs.run_command("r.mask", quiet=True, flags="r")
-            except CalledModuleError:
-                gs.fatal(_("%s failed") % "r.mask")
-
-            # restore original mask, if exists
-            if gs.find_file(
-                self.opt_output + self.original_mask_suffix, element="cell", mapset="."
-            )["name"]:
-                try:
-                    mask_copy = self.opt_output + self.original_mask_suffix
-                    gs.run_command("g.copy", quiet=True, raster=mask_copy + ",MASK")
-                except CalledModuleError:
-                    gs.fatal(_("%s failed") % "g.copy")
-
         # remove temporary created rasters
         maps = []
         rast = self.opt_output + ".alpha"
@@ -554,7 +531,7 @@ class GRASSImporter:
             maps.append(rast)
 
         if self.cleanup_bands:
-            for suffix in (".red", ".green", ".blue", self.original_mask_suffix):
+            for suffix in (".red", ".green", ".blue"):
                 rast = self.opt_output + suffix
                 if gs.find_file(rast, element="cell", mapset=".")["file"]:
                     maps.append(rast)
@@ -615,17 +592,12 @@ class GRASSImporter:
         # mask created from alpha layer, which describes real extend
         # of warped layer (may not be a rectangle), also mask contains
         # transparent parts of raster
-        if gs.find_file(self.opt_output + ".alpha", element="cell", mapset=".")["name"]:
-            # saving current mask (if exists) into temp raster
-            if gs.find_file("MASK", element="cell", mapset=".")["name"]:
-                try:
-                    mask_copy = self.opt_output + self.original_mask_suffix
-                    gs.run_command("g.copy", quiet=True, raster="MASK," + mask_copy)
-                except CalledModuleError:
-                    gs.fatal(_("%s failed") % "g.copy")
+        with gs.MaskManager():
+            self._post_process()
 
-            # info for destructor
-            self.cleanup_mask = True
+    def _post_process(self):
+        """Embed nulls from alpha and create RGB composite"""
+        if gs.find_file(self.opt_output + ".alpha", element="cell", mapset=".")["name"]:
             try:
                 gs.run_command(
                     "r.mask",
@@ -639,7 +611,7 @@ class GRASSImporter:
                 gs.fatal(_("%s failed") % "r.mask")
 
             if not self.cleanup_bands:
-                # use the MASK to set NULL values
+                # Use the alpha-derived mask to set NULL values.
                 for suffix in (".red", ".green", ".blue"):
                     rast = self.opt_output + suffix
                     if gs.find_file(rast, element="cell", mapset=".")["file"]:

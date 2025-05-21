@@ -1,4 +1,4 @@
-FROM alpine:3.21@sha256:56fa17d2a7e7f168a043a2712e63aed1f8543aeafdcee47c58dcffe38ed51099 as common
+FROM alpine:3.21@sha256:a8560b36e8b8210634f77d9f7f9efd7ffa463e380b75e2e74aff4511df3ef88c as common
 
 # Based on:
 # https://github.com/mundialis/docker-grass-gis/blob/master/Dockerfile
@@ -80,7 +80,7 @@ RUN echo "Install main packages";\
     apk add --no-cache $GRASS_RUN_PACKAGES
 
 
-FROM common as build
+FROM common AS build
 
 # ================
 # CONFIG VARIABLES
@@ -123,6 +123,7 @@ ENV GRASS_BUILD_PACKAGES="\
       build-base \
       bzip2-dev \
       cairo-dev \
+      cmake \
       fftw-dev \
       freetype-dev \
       geos-dev \
@@ -166,8 +167,17 @@ RUN echo "  => Configure and compile grass" && \
     make install && \
     ldconfig /etc/ld.so.conf.d
 
+# Build the GDAL-GRASS plugin
+# renovate: datasource=github-tags depName=OSGeo/gdal-grass
+ARG GDAL_GRASS_VERSION=1.0.3
+RUN git clone --branch $GDAL_GRASS_VERSION --depth 1 https://github.com/OSGeo/gdal-grass.git /src/gdal-grass
+WORKDIR /src/gdal-grass
+RUN cmake -B build -DAUTOLOAD_DIR=/usr/lib/gdalplugins -DBUILD_TESTING=OFF && \
+    cmake --build build && \
+    cmake --install build
+
 # Get rid of version number here, restore in next stage via symbolic link
-RUN mv $(grass --config path) /usr/local/grass
+RUN mv /usr/local/grass85 /usr/local/grass
 
 # Reduce the image size - Remove unnecessary grass files
 RUN cp /usr/local/grass/gui/wxpython/xml/module_items.xml module_items.xml; \
@@ -178,16 +188,8 @@ RUN cp /usr/local/grass/gui/wxpython/xml/module_items.xml module_items.xml; \
     mkdir -p /usr/local/grass/gui/wxpython/xml/; \
     mv module_items.xml /usr/local/grass/gui/wxpython/xml/module_items.xml;
 
-RUN git clone https://github.com/OSGeo/gdal-grass /src/gdal-grass
-WORKDIR /src/gdal-grass
-RUN ./configure \
-    --with-gdal=/usr/bin/gdal-config \
-    --with-grass=/usr/local/grass && \
-    make -j $NUMTHREADS && \
-    make install -j $NUMTHREADS
 
-
-FROM common as grass
+FROM common AS grass
 
 # GRASS GIS specific
 # allow work with MAPSETs that are not owned by current user
@@ -203,7 +205,8 @@ COPY --from=build /usr/local/bin/grass /usr/local/bin/grass
 COPY --from=build /usr/local/grass* /usr/local/grass/
 COPY --from=build /usr/lib/gdalplugins/*_GRASS.so /usr/lib/gdalplugins/
 # Set GISBASE
-ENV GISBASE /usr/local/grass
+ENV GISBASE=/usr/local/grass
+ENV GRASS_GISBASE=/usr/local/grass
 
 # run simple LAZ test
 COPY docker/testdata/simple.laz /tmp/
@@ -211,7 +214,7 @@ COPY docker/testdata/test_grass_python.py docker/testdata/test_grass_session.py 
 
 # run GRASS GIS python session and scan the test LAZ file; some cleanup
 # also show installed version
-RUN ln -sf /usr/local/grass $(grass --config path); \
+RUN ln -sf /usr/local/grass /usr/local/grass85; \
     rm -rf /tmp/grasstest_epsg_25832; \
     $SHELL /scripts/grass_tests.sh; \
     python /scripts/test_grass_session.py && rm -rf /tmp/grasstest_epsg_25832; \
