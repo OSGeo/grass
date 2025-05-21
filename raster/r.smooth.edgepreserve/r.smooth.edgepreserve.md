@@ -26,7 +26,7 @@ effect that **preserves smaller features**, you can use the `-p` flag,
 which switches to a softer variant of the Tukey function — ideal for
 applications like **visualization**.
 
-## Parameters
+### Parameters
 
 - **`threshold`**  
   Defines how small a difference in raster values should be treated as
