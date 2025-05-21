@@ -112,7 +112,7 @@ def get_xyz(pnt):
     (1, 1, 0.0)
     >>> get_xyz((1, 1, 2))
     (1, 1, 2)
-    >>> get_xyz((1, 1, 2, 2))                          #doctest: +ELLIPSIS
+    >>> get_xyz((1, 1, 2, 2))  # doctest: +ELLIPSIS
     Traceback (most recent call last):
         ...
     ValueError: The the format of the point is not supported: (1, 1, 2, 2)
@@ -159,11 +159,11 @@ class Attrs:
 
         >>> from grass.pygrass.vector import VectorTopo
         >>> test_vect = VectorTopo(test_vector_name)
-        >>> test_vect.open('r')
+        >>> test_vect.open("r")
         >>> v1 = test_vect[1]
-        >>> v1.attrs['name']
+        >>> v1.attrs["name"]
         'point'
-        >>> v1.attrs['name', 'value']
+        >>> v1.attrs["name", "value"]
         ('point', 1.0)
         >>> test_vect.close()
 
@@ -183,19 +183,19 @@ class Attrs:
 
         >>> from grass.pygrass.vector import VectorTopo
         >>> test_vect = VectorTopo(test_vector_name)
-        >>> test_vect.open('r')
+        >>> test_vect.open("r")
         >>> v1 = test_vect[1]
-        >>> v1.attrs['name']
+        >>> v1.attrs["name"]
         'point'
 
-        >>> v1.attrs['name'] = "new_point_1"
-        >>> v1.attrs['name']
+        >>> v1.attrs["name"] = "new_point_1"
+        >>> v1.attrs["name"]
         'new_point_1'
 
-        >>> v1.attrs['name', 'value'] = "new_point_2", 100.
-        >>> v1.attrs['name', 'value']
+        >>> v1.attrs["name", "value"] = "new_point_2", 100.0
+        >>> v1.attrs["name", "value"]
         ('new_point_2', 100.0)
-        >>> v1.attrs['name', 'value'] = "point", 1.
+        >>> v1.attrs["name", "value"] = "point", 1.0
         >>> v1.attrs.table.conn.commit()
         >>> test_vect.close()
 
@@ -227,7 +227,7 @@ class Attrs:
 
         >>> from grass.pygrass.vector import VectorTopo
         >>> test_vect = VectorTopo(test_vector_name)
-        >>> test_vect.open('r')
+        >>> test_vect.open("r")
         >>> v1 = test_vect[1]
         >>> v1.attrs.values()
         (1, 'point', 1.0)
@@ -247,7 +247,7 @@ class Attrs:
 
         >>> from grass.pygrass.vector import VectorTopo
         >>> test_vect = VectorTopo(test_vector_name)
-        >>> test_vect.open('r')
+        >>> test_vect.open("r")
         >>> v1 = test_vect[1]
         >>> v1.attrs.keys()
         ['cat', 'name', 'value']
@@ -596,7 +596,7 @@ class Point(Geo):
 
         >>> pnt = Point(0, 0)
         >>> boundary, centroid = pnt.buffer(10)
-        >>> boundary                              #doctest: +ELLIPSIS
+        >>> boundary  # doctest: +ELLIPSIS
         Line([Point(10.000000, 0.000000),...Point(10.000000, 0.000000)])
         >>> centroid
         Point(0.000000, 0.000000)
@@ -620,7 +620,7 @@ class Line(Geo):
     """Instantiate a new Line with a list of tuple, or with a list of Point. ::
 
         >>> line = Line([(0, 0), (1, 1), (2, 0), (1, -1)])
-        >>> line                               #doctest: +NORMALIZE_WHITESPACE
+        >>> line  # doctest: +NORMALIZE_WHITESPACE
         Line([Point(0.000000, 0.000000),
               Point(1.000000, 1.000000),
               Point(2.000000, 0.000000),
@@ -799,8 +799,8 @@ class Line(Geo):
         :type forward: bool
 
             >>> line = Line([(0, 0), (1, 1)])
-            >>> line.extend( Line([(2, 2), (3, 3)]) )
-            >>> line                           #doctest: +NORMALIZE_WHITESPACE
+            >>> line.extend(Line([(2, 2), (3, 3)]))
+            >>> line  # doctest: +NORMALIZE_WHITESPACE
             Line([Point(0.000000, 0.000000),
                   Point(1.000000, 1.000000),
                   Point(2.000000, 2.000000),
@@ -833,8 +833,8 @@ class Line(Geo):
         :type pnt: a Point object
 
             >>> line = Line([(0, 0), (1, 1)])
-            >>> line.insert(0, Point(1.000000, -1.000000) )
-            >>> line                           #doctest: +NORMALIZE_WHITESPACE
+            >>> line.insert(0, Point(1.000000, -1.000000))
+            >>> line  # doctest: +NORMALIZE_WHITESPACE
             Line([Point(1.000000, -1.000000),
                   Point(0.000000, 0.000000),
                   Point(1.000000, 1.000000)])
@@ -889,7 +889,7 @@ class Line(Geo):
 
             >>> point = Point(2.3, 0.5)
             >>> line = Line([(0, 0), (2, 0), (3, 0)])
-            >>> line.distance(point)           #doctest: +NORMALIZE_WHITESPACE
+            >>> line.distance(point)  # doctest: +NORMALIZE_WHITESPACE
             LineDist(point=Point(2.300000, 0.000000),
                      dist=0.5, spdist=0.2999999999999998, sldist=2.3)
         """
@@ -939,9 +939,9 @@ class Line(Geo):
 
          >>> line = Line([(0, 0), (1, 1), (2, 2)])
          >>> midle_pnt = line.pop(1)
-         >>> midle_pnt                #doctest: +NORMALIZE_WHITESPACE
+         >>> midle_pnt  # doctest: +NORMALIZE_WHITESPACE
          Point(1.000000, 1.000000)
-         >>> line                     #doctest: +NORMALIZE_WHITESPACE
+         >>> line  # doctest: +NORMALIZE_WHITESPACE
          Line([Point(0.000000, 0.000000), Point(2.000000, 2.000000)])
 
         """
@@ -961,7 +961,7 @@ class Line(Geo):
 
          >>> line = Line([(0, 0), (1, 1), (2, 2)])
          >>> line.delete(-1)
-         >>> line                     #doctest: +NORMALIZE_WHITESPACE
+         >>> line  # doctest: +NORMALIZE_WHITESPACE
          Line([Point(0.000000, 0.000000), Point(1.000000, 1.000000)])
 
         """
@@ -996,7 +996,7 @@ class Line(Geo):
 
             >>> line = Line([(0, 0), (1.0, 1.0), (1.2, 0.9), (2, 2)])
             >>> line.prune_thresh(0.5)
-            >>> line                     #doctest: +SKIP +NORMALIZE_WHITESPACE
+            >>> line  # doctest: +SKIP +NORMALIZE_WHITESPACE
             Line([Point(0.000000, 0.000000),
                   Point(1.000000, 1.000000),
                   Point(2.000000, 2.000000)])
@@ -1016,7 +1016,7 @@ class Line(Geo):
 
             >>> line = Line([(0, 0), (1, 1), (2, 2)])
             >>> line.remove((2, 2))
-            >>> line[-1]                     #doctest: +NORMALIZE_WHITESPACE
+            >>> line[-1]  # doctest: +NORMALIZE_WHITESPACE
             Point(1.000000, 1.000000)
 
         ..
@@ -1084,7 +1084,7 @@ class Line(Geo):
         """Return an array of coordinates. ::
 
             >>> line = Line([(0, 0), (1, 1), (2, 0), (1, -1)])
-            >>> line.to_array()                 #doctest: +NORMALIZE_WHITESPACE
+            >>> line.to_array()  # doctest: +NORMALIZE_WHITESPACE
             array([[ 0.,  0.],
                    [ 1.,  1.],
                    [ 2.,  0.],
@@ -1098,7 +1098,7 @@ class Line(Geo):
         """Return a Well Known Text string of the line. ::
 
             >>> line = Line([(0, 0), (1, 1), (1, 2)])
-            >>> line.to_wkt_p()                 #doctest: +ELLIPSIS
+            >>> line.to_wkt_p()  # doctest: +ELLIPSIS
             'LINESTRING(0.000000 0.000000, ..., 1.000000 2.000000)'
 
         ..
@@ -1115,7 +1115,7 @@ class Line(Geo):
 
             >>> line = Line()
             >>> line.from_wkt("LINESTRING(0 0,1 1,1 2)")
-            >>> line                           #doctest: +NORMALIZE_WHITESPACE
+            >>> line  # doctest: +NORMALIZE_WHITESPACE
             Line([Point(0.000000, 0.000000),
                   Point(1.000000, 1.000000),
                   Point(1.000000, 2.000000)])
@@ -1157,9 +1157,9 @@ class Line(Geo):
 
         >>> line = Line([(0, 0), (0, 2)])
         >>> boundary, centroid, isles = line.buffer(10)
-        >>> boundary                              #doctest: +ELLIPSIS
+        >>> boundary  # doctest: +ELLIPSIS
         Line([Point(-10.000000, 0.000000),...Point(-10.000000, 0.000000)])
-        >>> centroid                     #doctest: +NORMALIZE_WHITESPACE
+        >>> centroid  # doctest: +NORMALIZE_WHITESPACE
         Point(0.000000, 0.000000)
         >>> isles
         []
@@ -1392,8 +1392,7 @@ class Boundary(Line):
     def area(self):
         """Return the area of the polygon.
 
-        >>> bound = Boundary(points=[(0, 0), (0, 2), (2, 2), (2, 0),
-        ...                          (0, 0)])
+        >>> bound = Boundary(points=[(0, 0), (0, 2), (2, 2), (2, 0), (0, 0)])
         >>> bound.area()
         4.0
 

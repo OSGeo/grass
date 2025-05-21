@@ -46,7 +46,7 @@ from gui_core.wrap import (
     NewId,
     CheckListCtrlMixin,
 )
-from gmodeler.model import ModelData, ModelAction, ModelCondition
+from gmodeler.model_items import ModelData, ModelAction, ModelCondition
 
 
 class ModelDataDialog(SimpleDialog):

@@ -42,7 +42,7 @@ char **list_subgroups(const char *group, const char *mapset, int *subgs_num)
 }
 
 /*!
- * \brief Get list of subgroups which a group contatins.
+ * \brief Get list of subgroups which a group contains.
  *
  * \param group group name
  * \param[out] subgs_num number of subgroups which the group contains
@@ -56,7 +56,7 @@ char **I_list_subgroups(const char *group, int *subgs_num)
 }
 
 /*!
- * \brief Get list of subgroups which a group contatins.
+ * \brief Get list of subgroups which a group contains.
  *
  * \param group group name
  * \param mapset mapset name
