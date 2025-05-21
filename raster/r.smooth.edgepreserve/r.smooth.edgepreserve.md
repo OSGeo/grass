@@ -1,15 +1,16 @@
 ## DESCRIPTION
 
-This module performs **adaptive, edge-preserving raster smoothing**
-using **anisotropic diffusion**. The result is a denoised raster that
+This module performs adaptive, edge-preserving raster smoothing
+using anisotropic diffusion. The result is a denoised raster that
 retains important features, especially edges. Unlike traditional
 smoothing methods (such as a uniform average filter, like the one available
-in *r.neighbors*), this module smooths **only areas with similar values**
-and works to **preserve sharp transitions** between different regions.
-An example is provided in the picture below: "A" is the original and
-"B" is the smoothed version.
+in *r.neighbors*), this module smooths only areas with similar values
+and works to preserve sharp transitions between different regions.
 
-![An example of smoothed image](r.smooth.edgepreserve.jpg)
+![An example of smoothed image](r_smooth_edgepreserve.jpg)  
+*Figure: "A" is the original (unsmoothed) raster and
+"B" is the smoothed version (with quite agressive settings to emphasize
+smoothing effects).*
 
 The module supports three types of diffusivity (conductance) functions:
 
@@ -21,10 +22,10 @@ The module supports three types of diffusivity (conductance) functions:
 
 The **Tukey’s biweight** function is more aggressive than the others and
 tends to produce large, smoothly blended areas. This makes it
-particularly useful for **raster segmentation**. If you prefer a gentler
-effect that **preserves smaller features**, you can use the `-p` flag,
+particularly useful for raster segmentation. If you prefer a gentler
+effect that preserves smaller features, you can use the **`-p`** flag,
 which switches to a softer variant of the Tukey function — ideal for
-applications like **visualization**.
+applications like visualization.
 
 ### Parameters
 
@@ -34,18 +35,18 @@ applications like **visualization**.
   etc.), and should be adjusted individually for each map.
 
 - **`lambda`**  
-  Controls the **smoothing rate**.
+  Controls the smoothing rate.
   - For **exponential** and **quadratic** functions, the value is
   automatically clamped between `0` and `0.25` for numeric stability.
   - For **Tukey**, the full range is used.
 
 - **`steps`**  
-  Specifies the number of **smoothing iterations**. Higher values result
+  Specifies the number of smoothing iterations. Higher values result
   in stronger smoothing.  
   Note that:
-  - Excessive iterations can cause **loss of fine detail**.
+  - Excessive iterations can cause loss of fine detail.
   - Detail preservation improves in this order:  
-    `quadratic` → `exponential` → `Tukey` → `Tukey` with `-p` flag.
+    `quadratic` → `exponential` → `Tukey` → `Tukey` with **`-p`** flag.
 
 ## NOTES
 
@@ -53,15 +54,15 @@ Internally calculations are performed in double precision and only at the end
 converted to the same type as the input map.
 
 The module will try to keep all temporary data in RAM. Thus it is important
-to set the *memory* parameter as high as possible.  If the map does
+to set the **`memory`** parameter as high as possible.  If the map does
 not fit into RAM, a temporary file will be used instead.
 
-The original Perona & Malik paper uses von Neumann (4-connected) neighbourhood for
-value calculation, but this module uses Moore (8-connected) neighbourhood.
-Computed gradients of neighbouring cells are adjusted to equalise distances for
-diagonals and non-square cells.
+The original *Perona & Malik* paper uses von Neumann (4-connected)
+neighbourhood for value calculation, but this module uses Moore
+(8-connected) neighbourhood. Computed gradients of neighbouring cells
+are adjusted to equalise distances for diagonals and non-square cells.
 
-## EXAMPLE
+## EXAMPLES
 
 ```sh
 # Set computational region to orthophoto map
