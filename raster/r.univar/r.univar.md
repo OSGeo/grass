@@ -113,6 +113,50 @@ third_quartile=126.792
 percentile_98=147.727
 ```
 
+Here's how to calculate univariate statistics for the `elevation` raster map
+from the North Carolina sample dataset using Python:
+
+```python
+import grass.script as gs
+
+# Run the r.univar command with JSON output format, along with extended
+# statistics.
+stats = gs.parse_command(
+    "r.univar",
+    map="elevation",
+    flags="e",
+    percentile="98",
+    format="json",
+)
+
+# Print all stats, handling percentiles specially
+for key, value in stats.items():
+    if key == "percentiles":
+        for p in value:
+            print(f"percentile_{p['percentile']}: {p['value']}")
+    else:
+        print(f"{key}: {value}")
+```
+
+```sh
+n: 2025000
+null_cells: 0
+cells: 2025000
+min: 55.5787925720215
+max: 156.329864501953
+range: 100.751071929932
+mean: 110.375440275606
+mean_of_abs: 110.375440275606
+stddev: 20.3153233205981
+variance: 412.712361620436
+coeff_var: 18.4056555243368
+sum: 223510266.558102
+first_quartile: 94.79
+median: 108.88
+third_quartile: 126.792
+percentile_98: 147.727
+```
+
 ### Zonal statistics
 
 In this example, the raster polygon map `basins` in the North Carolina
