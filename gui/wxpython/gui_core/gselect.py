@@ -2258,7 +2258,9 @@ class GdalSelect(wx.Panel):
                     )
                 if ret:
                     raster_srid = gs.utils.decode(ret).replace(os.linesep, "")
-                    location_srid = gs.parse_command("g.proj", flags="g")
+                    location_srid = gs.parse_command(
+                        "g.proj", flags="p", format="shell"
+                    )
                     if raster_srid == location_srid["srid"].split(":")[-1]:
                         projectionMatch = "1"
             else:
