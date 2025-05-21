@@ -38,7 +38,7 @@ class GProjTestCase(TestCase):
 
     def test_wkt_output(self):
         """Test if g.proj returns WKT"""
-        module_flag = SimpleModule("g.proj", flags="w")
+        module_flag = SimpleModule("g.proj", flags="p", format="wkt")
         self.assertModule(module_flag)
         result_flag = module_flag.outputs.stdout
         self.assertIn("PROJCRS", result_flag)
