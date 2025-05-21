@@ -584,13 +584,13 @@ def _expandRuntimeModules(node, loadMetadata=True):
     useful for incompatible addons.
 
     >>> tree = etree.fromstring(
-    ...     "<items>" '<module-item name="g.region"></module-item>' "</items>"
+    ...     '<items><module-item name="g.region"></module-item></items>'
     ... )
     >>> _expandRuntimeModules(tree)
     >>> etree.tostring(tree)
     b'<items><module-item name="g.region"><module>g.region</module><description>Manages the boundary definitions for the geographic region.</description><keywords>general,settings,computational region,extent,resolution,level1</keywords></module-item></items>'
     >>> tree = etree.fromstring(
-    ...     "<items>" '<module-item name="m.proj"></module-item>' "</items>"
+    ...     '<items><module-item name="m.proj"></module-item></items>'
     ... )
     >>> _expandRuntimeModules(tree)
     >>> etree.tostring(tree)
