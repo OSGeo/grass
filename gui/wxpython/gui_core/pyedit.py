@@ -709,7 +709,7 @@ class PyEditToolbar(BaseToolbar):
                 (
                     ("quit", self.icons["quit"].label),
                     self.icons["quit"],
-                    self.parent.OnClose,
+                    self.parent.OnCloseWindow,
                 ),
             )
         )
@@ -797,7 +797,7 @@ class PyEditPanel(wx.Panel, MainPageBase):
     def OnSave(self, *args, **kwargs):
         self.controller.OnSave(*args, **kwargs)
 
-    def OnClose(self, *args, **kwargs):
+    def OnCloseWindow(self, *args, **kwargs):
         # this will be often true because PyStc is using EVT_KEY_DOWN
         # to say if it was modified, not actual user change in text
         if self.controller.IsContentValuable():
