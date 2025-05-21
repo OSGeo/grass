@@ -566,16 +566,6 @@ class Module:
             if e.tag not in {"parameter", "flag"}:
                 self.__setattr__(e.tag, GETFROMTAG[e.tag](e))
 
-        # some modules may have a label defined: in this case stay
-        # consistent with other modules -> define 'description'
-        # property instead
-        if hasattr(self, "description") is False:
-            if hasattr(self, "label") is True:
-                self.description = self.label
-                del self.label
-            else:
-                self.description = "not defined"
-
         #
         # extract parameters from the xml
         #
@@ -654,6 +644,19 @@ class Module:
         if self.check_:
             self.check()
         return self.run()
+
+    @property
+    def description(self):
+        """Get module description.
+
+        Return label proberty value in the case that description
+        property is not defined by a module.
+        """
+        return self._description if hasattr(self, "_description") else self.label
+
+    @description.setter
+    def description(self, value):
+        self._description = value
 
     def update(self, *args, **kargs):
         """Update module parameters and selected object attributes.
