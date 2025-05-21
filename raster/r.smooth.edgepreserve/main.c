@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     opt.K->required = YES;
     opt.K->description = _("Gradient magnitude threshold (in map units)");
     opt.K->guisection = _("Diffusion");
-    opt.K->answer = "5";
+    opt.K->answer = G_store("5");
     opt.K->options = "0.000000001-";
 
     opt.l = G_define_option();
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     opt.l->required = YES;
     opt.l->description = _("Rate of diffusion");
     opt.l->guisection = _("Diffusion");
-    opt.l->answer = "0.1";
+    opt.l->answer = G_store("0.1");
     opt.l->options = "0-1";
 
     opt.t = G_define_option();
@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
     opt.t->required = YES;
     opt.t->description = _("Number of diffusion steps");
     opt.t->guisection = _("Diffusion");
-    opt.t->answer = "10";
+    opt.t->answer = G_store("10");
     opt.t->options = "1-";
 
     opt.met = G_define_option();
@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
     opt.met->required = YES;
     opt.met->description = _("Diffusivity function");
     opt.met->options = "exponential,quadratic,tukey";
-    opt.met->answer = "tukey";
+    opt.met->answer = G_store("tukey");
 
     opt.mem = G_define_standard_option(G_OPT_MEMORYMB);
 
@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
      * according to formula 5 in Black et al. 1998 */
     pm_params.dt = pm_params.dt / 8.0;
 
-    in_mapset = (char *)G_find_raster2(in_map, "");
+    in_mapset = G_find_raster2(in_map, "");
     if (in_mapset == NULL)
         G_fatal_error(_("Raster map <%s> not found"), in_map);
 
@@ -146,6 +146,9 @@ int main(int argc, char *argv[])
     pm_params.ncols = window.cols;
     if (pm_params.nrows < 3 || pm_params.ncols < 3) {
         G_fatal_error(_("Computational region is too small!"));
+    }
+    if (INT_MAX - 2 < pm_params.nrows || INT_MAX - 2 < pm_params.ncols) {
+        G_fatal_error(_("Computational region is too large!"));
     }
 
     /* Static adjustment for non-square cells.

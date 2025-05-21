@@ -12,6 +12,21 @@
 #include <grass/gis.h>
 #include <grass/rowio.h>
 
+/* Workaround to not fail on unknown #pragma during compilation */
+#ifndef PRAGMA_IVDEP
+#if defined(__GNUC__) && (__GNUC__ >= 4) && (__GNUC_MINOR__ >= 9)
+#define PRAGMA_IVDEP _Pragma("GCC ivdep")
+#elif defined(__clang__) && (__clang_major__ >= 10)
+#define PRAGMA_IVDEP _Pragma("clang loop ivdep(enable)")
+#elif defined(__INTEL_COMPILER) || defined(__INTEL_LLVM_COMPILER)
+#define PRAGMA_IVDEP _Pragma("ivdep")
+#elif defined(_MSC_VER)
+#define PRAGMA_IVDEP __pragma(loop(ivdep))
+#else
+#define PRAGMA_IVDEP /* noop if ivdep is not supported */
+#endif
+#endif
+
 struct Row_cache {
     ROWIO rowio_cache;
     bool use_rowio;

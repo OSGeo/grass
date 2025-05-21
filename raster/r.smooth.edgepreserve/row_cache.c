@@ -26,7 +26,7 @@ int rowio_get_row(int fd, void *buf, int row, int buf_len)
 {
     lseek(fd, ((off_t)row) * buf_len, SEEK_SET);
     errno = 0;
-    ssize_t reads = read(fd, buf, buf_len);
+    ssize_t reads = read(fd, buf, (size_t)buf_len);
     if (reads == -1)
         G_fatal_error(
             _("There was an error reading data from a temporary file. %d: %s"),
@@ -40,7 +40,7 @@ int rowio_put_row(int fd, const void *buf, int row, int buf_len)
     // can't use G_fseek, as rowio operates on file descriptors
     lseek(fd, ((off_t)row) * buf_len, SEEK_SET);
     errno = 0;
-    ssize_t writes = write(fd, buf, buf_len);
+    ssize_t writes = write(fd, buf, (size_t)buf_len);
     if (writes == -1)
         G_fatal_error(
             _("There was an error writing data from a temporary file. %d: %s"),
@@ -100,9 +100,9 @@ void setup_row_cache(int nrows, int ncols, double max_ram,
     /* 1 cell padding on each side */
     row_cache->nrows = nrows + 2;
     row_cache->ncols = ncols + 2;
-    row_cache->len = (row_cache->ncols) * sizeof(DCELL);
+    row_cache->len = (size_t)(row_cache->ncols) * sizeof(DCELL);
     /* Try to keep in RAM as much as possible */
-    double max_rows = max_ram / (row_cache->len / (1024.0 * 1024));
+    double max_rows = max_ram / ((double)(row_cache->len) / (1024.0 * 1024));
     /* 22 rows are used for computation */
     row_cache->use_rowio = max_rows - 22 > nrows ? false : true;
 
@@ -124,7 +124,7 @@ void setup_row_cache(int nrows, int ncols, double max_ram,
                           strerror(errno));
         int cache_nrows = (int)max_rows - 22;
         if (Rowio_setup(&(row_cache->rowio_cache), row_cache->tmp_fd,
-                        cache_nrows, row_cache->len, &rowio_get_row,
+                        cache_nrows, (int)row_cache->len, &rowio_get_row,
                         &rowio_put_row) != 1)
             G_fatal_error(_("Error creating row cache"));
         row_cache->get = &get_rowio;
@@ -134,9 +134,9 @@ void setup_row_cache(int nrows, int ncols, double max_ram,
     else {
         G_verbose_message(_("Keeping temporary data in RAM"));
         /* Everything fits into RAM, no need for disk access */
-        row_cache->matrix =
-            (DCELL **)G_malloc(row_cache->nrows * sizeof(DCELL *));
-#pragma GCC ivdep
+        row_cache->matrix = (DCELL **)G_malloc(
+            (long unsigned int)row_cache->nrows * sizeof(DCELL *));
+        PRAGMA_IVDEP
         for (int row = 0; row < row_cache->nrows; row++) {
             row_cache->matrix[row] = (DCELL *)G_malloc(row_cache->len);
         }
@@ -157,7 +157,7 @@ void teardown_row_cache(struct Row_cache *row_cache)
         G_free(row_cache->tmp_name);
     }
     else {
-#pragma GCC ivdep
+        PRAGMA_IVDEP
         for (int row = 0; row < row_cache->nrows; row++) {
             G_free(row_cache->matrix[row]);
         }

@@ -16,19 +16,6 @@
 
 #include "local_proto.h"
 
-/* Workaround to not fail on unknown #pragma during compilation */
-#if defined(__GNUC__) && (__GNUC__ >= 4) && (__GNUC_MINOR__ >= 9)
-#define PRAGMA_IVDEP _Pragma("GCC ivdep")
-#elif defined(__clang__) && (__clang_major__ >= 10)
-#define PRAGMA_IVDEP _Pragma("clang loop ivdep(enable)")
-#elif defined(__INTEL_COMPILER) || defined(__INTEL_LLVM_COMPILER)
-#define PRAGMA_IVDEP _Pragma("ivdep")
-#elif defined(_MSC_VER)
-#define PRAGMA_IVDEP __pragma(loop(ivdep))
-#else
-#define PRAGMA_IVDEP /* noop if ivdep is not supported */
-#endif
-
 void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
 {
     /* Copy initial data to the tmp file */
@@ -37,8 +24,10 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
         Rast_map_type(pm_params->in_map, pm_params->in_mapset);
 
     /* Sliding rows (above, current, below + modified) */
-    DCELL *out = G_malloc((pm_params->ncols + 2) * sizeof(DCELL));
-    DCELL *ra = G_malloc((pm_params->ncols + 2) * sizeof(DCELL));
+    DCELL *out =
+        G_malloc((long unsigned int)(pm_params->ncols + 2) * sizeof(DCELL));
+    DCELL *ra =
+        G_malloc((long unsigned int)(pm_params->ncols + 2) * sizeof(DCELL));
     DCELL *rc;
     DCELL *rb;
     /* We'll use nrows + 2 pad rows at each end + 2 pad cols */
@@ -57,13 +46,16 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
 
     /* No padding for gradients and divs */
     DCELL **gradients, **divs, *di;
-    di = (DCELL *)G_malloc(pm_params->ncols * sizeof(DCELL));
+    di = (DCELL *)G_malloc((long unsigned int)(pm_params->ncols) *
+                           sizeof(DCELL));
     gradients = (DCELL **)G_malloc(8 * sizeof(DCELL *));
     divs = (DCELL **)G_malloc(8 * sizeof(DCELL *));
 #pragma GCC unroll 8
-    for (unsigned int i = 0; i < 8; i++) {
-        gradients[i] = (DCELL *)G_malloc(pm_params->ncols * sizeof(DCELL));
-        divs[i] = (DCELL *)G_malloc(pm_params->ncols * sizeof(DCELL));
+    for (int i = 0; i < 8; i++) {
+        gradients[i] = (DCELL *)G_malloc((long unsigned int)(pm_params->ncols) *
+                                         sizeof(DCELL));
+        divs[i] = (DCELL *)G_malloc((long unsigned int)(pm_params->ncols) *
+                                    sizeof(DCELL));
     }
 
     /* A single step */
@@ -75,7 +67,8 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
         row_cache->put(out, 0, row_cache);
 
         /* Loop over padded data */
-        for (int prow = 1; prow < pm_params->nrows + 1; prow++) {
+        for (int prow = 1; prow < (int)((unsigned int)pm_params->nrows + 1);
+             prow++) {
             /* Slide down by a single row */
             out = ra;
             ra = rc;
@@ -83,7 +76,7 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
             rb = row_cache->get(prow + 1, row_cache);
 
 #pragma omp parallel for
-            for (unsigned int pcol = 1; pcol <= pm_params->ncols; pcol++) {
+            for (int pcol = 1; pcol <= pm_params->ncols; pcol++) {
                 // N
                 gradients[0][pcol - 1] =
                     (ra[pcol] - rc[pcol]) * pm_params->vert_cor;
@@ -109,44 +102,28 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
 
                 /* Use 0 for nan gradients to not propagate holes */
                 gradients[0][pcol - 1] =
-                    gradients[0][pcol - 1] != gradients[0][pcol - 1]
-                        ? 0
-                        : gradients[0][pcol - 1];
+                    isnan(gradients[0][pcol - 1]) ? 0 : gradients[0][pcol - 1];
                 gradients[1][pcol - 1] =
-                    gradients[1][pcol - 1] != gradients[1][pcol - 1]
-                        ? 0
-                        : gradients[1][pcol - 1];
+                    isnan(gradients[1][pcol - 1]) ? 0 : gradients[1][pcol - 1];
                 gradients[2][pcol - 1] =
-                    gradients[2][pcol - 1] != gradients[2][pcol - 1]
-                        ? 0
-                        : gradients[2][pcol - 1];
+                    isnan(gradients[2][pcol - 1]) ? 0 : gradients[2][pcol - 1];
                 gradients[3][pcol - 1] =
-                    gradients[3][pcol - 1] != gradients[3][pcol - 1]
-                        ? 0
-                        : gradients[3][pcol - 1];
+                    isnan(gradients[3][pcol - 1]) ? 0 : gradients[3][pcol - 1];
                 gradients[4][pcol - 1] =
-                    gradients[4][pcol - 1] != gradients[4][pcol - 1]
-                        ? 0
-                        : gradients[4][pcol - 1];
+                    isnan(gradients[4][pcol - 1]) ? 0 : gradients[4][pcol - 1];
                 gradients[5][pcol - 1] =
-                    gradients[5][pcol - 1] != gradients[5][pcol - 1]
-                        ? 0
-                        : gradients[5][pcol - 1];
+                    isnan(gradients[5][pcol - 1]) ? 0 : gradients[5][pcol - 1];
                 gradients[6][pcol - 1] =
-                    gradients[6][pcol - 1] != gradients[6][pcol - 1]
-                        ? 0
-                        : gradients[6][pcol - 1];
+                    isnan(gradients[6][pcol - 1]) ? 0 : gradients[6][pcol - 1];
                 gradients[7][pcol - 1] =
-                    gradients[7][pcol - 1] != gradients[7][pcol - 1]
-                        ? 0
-                        : gradients[7][pcol - 1];
+                    isnan(gradients[7][pcol - 1]) ? 0 : gradients[7][pcol - 1];
             }
 
             /* Calculate diffusivity coefficient */
             if (pm_params->conditional == 3) {
                 /* Black et al. 1998 Tukey's biweight function */
 #pragma omp parallel for
-                for (unsigned int col = 0; col < pm_params->ncols; col++) {
+                for (int col = 0; col < pm_params->ncols; col++) {
                     /* Both variations of impact of scale are two ways
                      * how to read 17th formula of Black et al. */
                     if (pm_params->preserve) {
@@ -170,14 +147,14 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
                     }
                     else {
 #pragma GCC unroll 8
-                        for (unsigned int i = 0; i < 8; i++) {
+                        for (int i = 0; i < 8; i++) {
                             if (pm_params->scale < fabs(gradients[i][col])) {
                                 gradients[i][col] = 0;
                             }
                         }
                     }
 #pragma GCC unroll 8
-                    for (unsigned int i = 0; i < 8; i++) {
+                    for (int i = 0; i < 8; i++) {
                         divs[i][col] =
                             gradients[i][col] * 0.5 *
                             ((1 - ((gradients[i][col] * gradients[i][col]) /
@@ -190,9 +167,9 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
             else if (pm_params->conditional == 1) {
 /* Perona & Malik 1st diffusivity function = exponential */
 #pragma omp parallel for
-                for (unsigned int col = 0; col < pm_params->ncols; col++) {
+                for (int col = 0; col < pm_params->ncols; col++) {
 #pragma GCC unroll 8
-                    for (unsigned int i = 0; i < 8; i++) {
+                    for (int i = 0; i < 8; i++) {
                         divs[i][col] =
                             gradients[i][col] *
                             exp(-1.0 *
@@ -204,9 +181,9 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
             else if (pm_params->conditional == 2) {
 /* Perona & Malik 2nd diffusivity function = quadratic */
 #pragma omp parallel for
-                for (unsigned int col = 0; col < pm_params->ncols; col++) {
+                for (int col = 0; col < pm_params->ncols; col++) {
 #pragma GCC unroll 8
-                    for (unsigned int i = 0; i < 8; i++) {
+                    for (int i = 0; i < 8; i++) {
                         divs[i][col] =
                             gradients[i][col] *
                             (1 / (1 + ((gradients[i][col] * gradients[i][col]) /
@@ -217,7 +194,7 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
 
 /* Calculate new values and add padding */
 #pragma omp parallel for
-            for (unsigned int col = 0; col < pm_params->ncols; col++) {
+            for (int col = 0; col < pm_params->ncols; col++) {
                 di[col] = divs[0][col] + divs[1][col] + divs[2][col] +
                           divs[3][col] + divs[4][col] + divs[5][col] +
                           divs[6][col] + divs[7][col];
@@ -247,7 +224,7 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
     G_free(di);
 
     PRAGMA_IVDEP
-    for (unsigned int i = 0; i < 8; i++) {
+    for (int i = 0; i < 8; i++) {
         G_free(gradients[i]);
         G_free(divs[i]);
     }
@@ -266,7 +243,8 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
         }
         break;
     case FCELL_TYPE:
-        fbuf = (FCELL *)G_malloc(pm_params->ncols * sizeof(FCELL));
+        fbuf = (FCELL *)G_malloc((long unsigned int)(pm_params->ncols) *
+                                 sizeof(FCELL));
         for (int row = 0; row < pm_params->nrows; row++) {
             DCELL const *dbuf = row_cache->get(row + 1, row_cache);
             /* Get rid of padding and cast to output type */
@@ -279,7 +257,7 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
         G_free(fbuf);
         break;
     case CELL_TYPE:
-        cbuf = G_malloc(pm_params->ncols * sizeof(CELL));
+        cbuf = G_malloc((long unsigned int)(pm_params->ncols) * sizeof(CELL));
         for (int row = 0; row < pm_params->nrows; row++) {
             DCELL const *dbuf = row_cache->get(row + 1, row_cache);
             /* Get rid of padding and cast to output type */
