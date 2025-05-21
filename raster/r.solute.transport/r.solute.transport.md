@@ -86,7 +86,7 @@ projection.
 ```python
 #!/usr/bin/env python3
 # This is an example script how groundwater flow and solute transport are
-# computed within GRASS GIS
+# computed within GRASS
 import sys
 import os
 import grass.script as gs
