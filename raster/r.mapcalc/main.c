@@ -121,16 +121,13 @@ int main(int argc, char **argv)
 
     nprocs = G_define_standard_option(G_OPT_M_NPROCS);
 
+    char **p = G_malloc(3 * sizeof(char *));
     if (argc == 1) {
-        char **p = G_malloc(3 * sizeof(char *));
-
         p[0] = argv[0];
         p[1] = G_store("file=-");
         p[2] = NULL;
         argv = p;
         argc = 2;
-        G_free(p);
-        p = NULL;
     }
 
     if (G_parser(argc, argv))
@@ -190,17 +187,22 @@ int main(int argc, char **argv)
     threads = atoi(nprocs->answer);
 #if defined(_OPENMP)
     omp_set_num_threads(threads);
-    G_message(_("Computing in parallel, number of threads: %d"),
-              omp_get_max_threads());
+    // G_message(_("Computing in parallel, number of threads: %d"),
+    //           omp_get_max_threads());
 #else
-    G_message(_("Computing in serial (no OpenMP support)"));
+    // G_message(_("Computing in serial (no OpenMP support)"));
 #endif
     execute(result);
     post_exec();
 
     all_ok = 1;
 
-    G_free(nprocs->answer);
+    // Free nprocs->answer if it is not the default value, "1"
+    if (threads > 1) {
+        G_free(nprocs->answer);
+    }
+    G_free(p);
+    p = NULL;
 
     if (floating_point_exception_occurred) {
         G_warning(_("Floating point error(s) occurred in the calculation"));

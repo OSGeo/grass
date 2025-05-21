@@ -179,31 +179,12 @@ static void *cache_get_raw(struct row_cache *cache, int row, int data_type)
         return sub->buf[0];
     }
 
-    tmp = G_alloca(cache->nrows * sizeof(void *));
-    memcpy(tmp, sub->buf, cache->nrows * sizeof(void *));
-    vtmp = G_alloca(cache->nrows);
-    memcpy(vtmp, sub->valid, cache->nrows);
-
-    i = (i < 0) ? 0 : cache->nrows - 1;
-    newrow = row - i;
-
-    for (j = 0; j < cache->nrows; j++) {
-        int r = newrow + j;
-        int k = r - sub->row;
-        int l = (k + cache->nrows) % cache->nrows;
-
-        sub->buf[j] = tmp[l];
-        sub->valid[j] = k >= 0 && k < cache->nrows && vtmp[l];
+    else {
+        i = (i < 0) ? 0 : cache->nrows - 1;
+        newrow = row - i;
+        read_row(cache->fd, sub->buf[i], row, data_type);
+        return sub->buf[i];
     }
-
-    sub->row = newrow;
-    G_freea(tmp);
-    G_freea(vtmp);
-
-    read_row(cache->fd, sub->buf[i], row, data_type);
-    sub->valid[i] = 1;
-
-    return sub->buf[i];
 }
 
 static void cache_get(struct row_cache *cache, void *buf, int row, int res_type)
