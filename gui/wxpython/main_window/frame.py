@@ -906,6 +906,18 @@ class GMFrame(wx.Frame):
         # add map display panel to notebook and make it current
         self.mainnotebook.AddPage(gmodeler_panel, _("Graphical Modeler"))
 
+    def OnNewJupyterNotebook(self, event=None, cmd=None):
+        """Launch Jupyter Notebook page. See OnIClass documentation"""
+        from jupyter_notebook.panel import JupyterPanel
+
+        jupyter_panel = JupyterPanel(
+            parent=self, giface=self._giface, statusbar=self.statusbar, dockable=True
+        )
+        jupyter_panel.SetUpPage()
+
+        # add map display panel to notebook and make it current
+        self.mainnotebook.AddPage(jupyter_panel, _("Jupyter Notebook"))
+
     def OnPsMap(self, event=None, cmd=None):
         """Launch Cartographic Composer. See OnIClass documentation"""
         from psmap.frame import PsMapFrame
