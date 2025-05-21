@@ -62,7 +62,7 @@ class Popen(subprocess.Popen):
 
     def __init__(self, args, **kwargs):
         # If env is provided and is not None, use it.
-        path = kwargs["env"].get("PATH") if kwargs.get("kwargs") else None
+        path = kwargs["env"].get("PATH") if kwargs.get("env") else None
         cmd = shutil.which(args[0], path=path)
         if cmd is None:
             raise OSError(_("Cannot find the executable {0}").format(args[0]))
