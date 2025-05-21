@@ -1285,7 +1285,7 @@ class ModelParamDialog(wx.Dialog):
 
     def GetErrors(self):
         """Check for errors, get list of messages"""
-        return [task.get_cmd_error() for task in self.tasks]
+        return [err for task in self.tasks for err in task.get_cmd_error()]
 
     def DeleteIntermediateData(self) -> bool:
         """Check if to delete intermediate data"""
