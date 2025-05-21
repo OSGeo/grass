@@ -21,6 +21,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #include <math.h>
 
 #include <grass/gis.h>
