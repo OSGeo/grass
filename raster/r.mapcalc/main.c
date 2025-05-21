@@ -187,11 +187,12 @@ int main(int argc, char **argv)
     threads = atoi(nprocs->answer);
 #if defined(_OPENMP)
     omp_set_num_threads(threads);
-    // G_message(_("Computing in parallel, number of threads: %d"),
-    //           omp_get_max_threads());
-#else
-    // G_message(_("Computing in serial (no OpenMP support)"));
+    // G_message(_("Compute in paraell. Number of threads set to %d."),
+    // threads);
+// #else
+// G_message(_("Compute in searial. OpenMP is not available."));
 #endif
+
     execute(result);
     post_exec();
 
@@ -208,6 +209,8 @@ int main(int argc, char **argv)
         G_warning(_("Floating point error(s) occurred in the calculation"));
         all_ok = 0;
     }
+
+    printf("all_ok = %d\n", all_ok);
 
     return all_ok ? EXIT_SUCCESS : EXIT_FAILURE;
 }

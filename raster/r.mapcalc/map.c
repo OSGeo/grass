@@ -460,7 +460,8 @@ static void close_map(struct map *m)
     if (m->use_rowio) {
         for (int i = 0; i < threads; i++)
             cache_release(&m->caches[i]);
-        G_free(&m->caches);
+        if (threads > 1)
+            G_free(m->caches);
         m->use_rowio = 0;
     }
 }

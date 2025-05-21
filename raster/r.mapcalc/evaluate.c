@@ -375,6 +375,13 @@ void execute(expr_list *ee)
 
 #if defined(_OPENMP)
     threads = omp_get_max_threads();
+    if ((threads > rows) && (threads > 1)) {
+        threads = rows;
+        omp_set_num_threads(threads);
+        G_message(_("The number of rows is less than the number of threads. \
+            Set the number of threads to be the same as the rows = %d"),
+                  threads);
+    }
 #endif
     current_row = (int *)G_malloc(sizeof(int) * threads);
 

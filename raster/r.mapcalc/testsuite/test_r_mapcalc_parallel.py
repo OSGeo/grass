@@ -93,6 +93,103 @@ class TestRandFunction(TestCase):
         self.assertModule("r.mapcalc", expression="nonrand_cell = 200", nprocs=THREADS)
         self.to_remove.append("nonrand_cell")
 
+    def test_seed_required(self):
+        """Test that seed is required when rand() is used
+
+        This test can, and probably should, generate an error message.
+        """
+        self.assertModuleFail(
+            "r.mapcalc", expression="rand_x = rand(1, 200)", nprocs=THREADS
+        )
+        # TODO: assert map not exists but it would be handy here
+        # TODO: test that error message was generated
+
+    def test_seed_cell(self):
+        """Test given seed with CELL against reference map"""
+        seed = 500
+        self.runModule(
+            "r.in.ascii", input="-", stdin=cell_seed_500, output="rand_cell_ref"
+        )
+        self.to_remove.append("rand_cell_ref")
+        self.assertModule(
+            "r.mapcalc",
+            seed=seed,
+            expression="rand_cell = rand(1, 200)",
+            nprocs=THREADS,
+        )
+        self.to_remove.append("rand_cell")
+        # this assert is using r.mapcalc but we are testing different
+        # functionality than used by assert
+        self.assertRastersNoDifference(
+            actual="rand_cell", reference="rand_cell_ref", precision=0
+        )
+        self.rinfo_contains_number("rand_cell", seed)
+
+    def test_seed_dcell(self):
+        """Test given seed with DCELL against reference map"""
+        seed = 600
+        self.runModule(
+            "r.in.ascii", input="-", stdin=dcell_seed_600, output="rand_dcell_ref"
+        )
+        self.to_remove.append("rand_dcell_ref")
+        self.assertModule(
+            "r.mapcalc",
+            seed=seed,
+            expression="rand_dcell = rand(1.0, 200.0)",
+            nprocs=THREADS,
+        )
+        self.to_remove.append("rand_dcell")
+        # this assert is using r.mapcalc but we are testing different
+        # functionality than used by assert
+        self.assertRastersNoDifference(
+            actual="rand_dcell", reference="rand_dcell_ref", precision=0.00000000000001
+        )
+        self.rinfo_contains_number("rand_dcell", seed)
+
+    def test_seed_fcell(self):
+        """Test given seed with FCELL against reference map"""
+        seed = 700
+        self.runModule(
+            "r.in.ascii", input="-", stdin=fcell_seed_700, output="rand_fcell_ref"
+        )
+        self.to_remove.append("rand_fcell_ref")
+        self.assertModule(
+            "r.mapcalc",
+            seed=seed,
+            expression="rand_fcell = rand(float(1), 200)",
+            nprocs=THREADS,
+        )
+        self.to_remove.append("rand_fcell")
+        # this assert is using r.mapcalc but we are testing different
+        # functionality than used by assert
+        self.assertRastersNoDifference(
+            actual="rand_fcell", reference="rand_fcell_ref", precision=0.000001
+        )
+        self.rinfo_contains_number("rand_fcell", seed)
+
+    def test_auto_seed(self):
+        """Test that two runs with -s does not give same maps"""
+        self.assertModule(
+            "r.mapcalc",
+            flags="s",
+            expression="rand_auto_1 = rand(1., 2)",
+            nprocs=THREADS,
+        )
+        self.to_remove.append("rand_auto_1")
+        self.assertModule(
+            "r.mapcalc",
+            flags="s",
+            expression="rand_auto_2 = rand(1., 2)",
+            nprocs=THREADS,
+        )
+        self.to_remove.append("rand_auto_2")
+        self.assertRastersDifference(
+            "rand_auto_1",
+            "rand_auto_2",
+            statistics={"min": -1, "max": 1, "mean": 0},
+            precision=0.5,
+        )  # low precision, we have few cells
+
 
 # TODO: add more expressions
 # TODO: add tests with prepared data
