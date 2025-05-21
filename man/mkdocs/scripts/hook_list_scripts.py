@@ -27,6 +27,8 @@ def on_env(env: Environment, config, files):
     """Enable loopcontrols extension in Jinja2"""
     env.add_extension("jinja2.ext.loopcontrols")
     env.globals["github_path"] = github_path
+    env.trim_blocks = True
+    env.lstrip_blocks = True
     return env
 
 

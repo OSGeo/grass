@@ -7,18 +7,29 @@ Usage:
 
     import grass.temporal as tgis
 
-    input="/tmp/temp_1950_2012.tar.gz"
-    output="temp_1950_2012"
-    directory="/tmp"
-    title="My new dataset"
-    descr="May new shiny dataset"
-    location=None
-    link=True
-    exp=True
-    overr=False
-    create=False
-    tgis.import_stds(input, output, directory, title, descr, location,
-                    link, exp, overr, create, "strds")
+    input = "/tmp/temp_1950_2012.tar.gz"
+    output = "temp_1950_2012"
+    directory = "/tmp"
+    title = "My new dataset"
+    descr = "May new shiny dataset"
+    location = None
+    link = True
+    exp = True
+    overr = False
+    create = False
+    tgis.import_stds(
+        input,
+        output,
+        directory,
+        title,
+        descr,
+        location,
+        link,
+        exp,
+        overr,
+        create,
+        "strds",
+    )
 
 
 (C) 2012-2013 by the GRASS Development Team

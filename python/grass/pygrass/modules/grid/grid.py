@@ -31,12 +31,11 @@ def select(parms, ptype):
     :type ptype: str
     :returns: An iterator with the value of the parameter.
 
-    >>> slp = Module('r.slope.aspect',
-    ...              elevation='ele', slope='slp', aspect='asp',
-    ...              run_=False)
-    >>> for rast in select(slp.outputs, 'raster'):
+    >>> slp = Module(
+    ...     "r.slope.aspect", elevation="ele", slope="slp", aspect="asp", run_=False
+    ... )
+    >>> for rast in select(slp.outputs, "raster"):
     ...     print(rast)
-    ...
     slp
     asp
     """
@@ -73,20 +72,20 @@ def copy_mapset(mapset, path):
 
 
     >>> from grass.script.core import gisenv
-    >>> mname = gisenv()['MAPSET']
+    >>> mname = gisenv()["MAPSET"]
     >>> mset = Mapset()
     >>> mset.name == mname
     True
     >>> import tempfile as tmp
     >>> import os
-    >>> path = os.path.join(tmp.gettempdir(), 'my_loc', 'my_mset')
-    >>> copy_mapset(mset, path)                           # doctest: +ELLIPSIS
+    >>> path = os.path.join(tmp.gettempdir(), "my_loc", "my_mset")
+    >>> copy_mapset(mset, path)  # doctest: +ELLIPSIS
     Mapset(...)
-    >>> sorted(os.listdir(path))                          # doctest: +ELLIPSIS
+    >>> sorted(os.listdir(path))  # doctest: +ELLIPSIS
     [...'PERMANENT'...]
-    >>> sorted(os.listdir(os.path.join(path, 'PERMANENT')))
+    >>> sorted(os.listdir(os.path.join(path, "PERMANENT")))
     ['DEFAULT_WIND', 'PROJ_INFO', 'PROJ_UNITS', 'VAR', 'WIND']
-    >>> sorted(os.listdir(os.path.join(path, mname)))   # doctest: +ELLIPSIS
+    >>> sorted(os.listdir(os.path.join(path, mname)))  # doctest: +ELLIPSIS
     [...'WIND'...]
     >>> import shutil
     >>> shutil.rmtree(path)
@@ -116,9 +115,10 @@ def read_gisrc(gisrc):
     >>> import os
     >>> from grass.script.core import gisenv
     >>> genv = gisenv()
-    >>> (read_gisrc(os.environ['GISRC']) == (genv['MAPSET'],
-    ...                                      genv['LOCATION_NAME'],
-    ...                                      genv['GISDBASE']))
+    >>> (
+    ...     read_gisrc(os.environ["GISRC"])
+    ...     == (genv["MAPSET"], genv["LOCATION_NAME"], genv["GISDBASE"])
+    ... )
     True
     """
     with open(gisrc) as gfile:
@@ -310,9 +310,14 @@ def get_cmd(cmdd):
     :param cmdd: a module dictionary with all the parameters
     :type cmdd: dict
 
-    >>> slp = Module('r.slope.aspect',
-    ...              elevation='ele', slope='slp', aspect='asp',
-    ...              overwrite=True, run_=False)
+    >>> slp = Module(
+    ...     "r.slope.aspect",
+    ...     elevation="ele",
+    ...     slope="slp",
+    ...     aspect="asp",
+    ...     overwrite=True,
+    ...     run_=False,
+    ... )
     >>> get_cmd(slp.get_dict())  # doctest: +ELLIPSIS
     ['r.slope.aspect', 'elevation=ele', 'format=degrees', ..., '--o']
     """
@@ -414,11 +419,18 @@ class GridModule:
     When patch_backend is "r.patch", r.patch is used with nprocs=processes.
     r.patch can only be used when overlap is 0.
 
-    >>> grd = GridModule('r.slope.aspect',
-    ...                  width=500, height=500, overlap=2,
-    ...                  processes=None, split=False,
-    ...                  elevation='elevation',
-    ...                  slope='slope', aspect='aspect', overwrite=True)
+    >>> grd = GridModule(
+    ...     "r.slope.aspect",
+    ...     width=500,
+    ...     height=500,
+    ...     overlap=2,
+    ...     processes=None,
+    ...     split=False,
+    ...     elevation="elevation",
+    ...     slope="slope",
+    ...     aspect="aspect",
+    ...     overwrite=True,
+    ... )
     >>> grd.run()
 
     Temporary mapsets created start with a generated prefix which is unique for each

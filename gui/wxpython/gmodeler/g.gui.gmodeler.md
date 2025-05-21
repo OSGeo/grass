@@ -200,7 +200,9 @@ window with *Save* and *Run* option are shown in the figures below.
 *Figure: Items with Script editor window.*
 
 For convenience, this model for the Graphical Modeler is also available
-for download [here](g_gui_gmodeler_zipcodes_avg_elevation.gxm).
+for download.
+
+- Download: [Example Model](g_gui_gmodeler_zipcodes_avg_elevation.gxm).
 
 The model is run by clicking the *Run* button ![run](icons/execute.png).
 When all inputs are set, the results can be displayed as shown in the

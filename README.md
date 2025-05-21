@@ -49,9 +49,9 @@ A. Docker image **without graphical user interface - wxGUI**.
 docker build -t grassgis .
 ```
 
-A test run (assuming you have the existing GRASS test location; it can be
-downloaded from
-[here](https://grass.osgeo.org/sampledata/north_carolina/nc_basic_spm_grass7.zip))
+A test run (assuming you have the existing GRASS test location;
+
+[Download test project data here](https://grass.osgeo.org/sampledata/north_carolina/nc_basic_spm_grass7.zip))
 
 ```bash
 # case 1: launching in the grassdata directory in which the location is stored:
