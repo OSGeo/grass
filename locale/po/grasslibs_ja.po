@@ -15,8 +15,7 @@ msgstr ""
 "POT-Creation-Date: 2024-05-23 03:37-0600\n"
 "PO-Revision-Date: 2025-03-12 12:05+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
-"Language-Team: Japanese <https://weblate.osgeo.org/projects/grass-gis/"
-"grasslibs/ja/>\n"
+"Language-Team: Japanese <https://weblate.osgeo.org/projects/grass-gis/grasslibs/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -353,8 +352,7 @@ msgstr "作業マトリックスにスペースを割り当てられませんで
 
 #: ../lib/gmath/la.c:557
 msgid "Matrix (or submatrix is singular). Solution undetermined"
-msgstr ""
-"マトリックス (,またはサブマトリックスは単数です). 解決策は確定していません"
+msgstr "マトリックス (,またはサブマトリックスは単数です). 解決策は確定していません"
 
 #: ../lib/gmath/la.c:561
 msgid "Problem in LA routine."
@@ -757,8 +755,7 @@ msgstr "シンボルライン座標値を読み取れません: %s"
 
 #: ../lib/symbol/read.c:256
 #, c-format
-msgid ""
-"Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"
+msgid "Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"
 msgstr ""
 
 #: ../lib/symbol/read.c:281
@@ -806,11 +803,8 @@ msgstr "ファイル書込みができません。"
 
 #: ../lib/rst/interp_float/segmen2d.c:133
 #: ../lib/rst/interp_float/segmen2d_parallel.c:189
-msgid ""
-"Taking too long to find points for interpolation - please change the region "
-"to area where your points are. Continuing calculations..."
-msgstr ""
-"補間するには遠すぎます 指定した点の範囲を変更してください 処理を継続します..."
+msgid "Taking too long to find points for interpolation - please change the region to area where your points are. Continuing calculations..."
+msgstr "補間するには遠すぎます 指定した点の範囲を変更してください 処理を継続します..."
 
 #: ../lib/rst/interp_float/segmen2d.c:194
 #: ../lib/rst/interp_float/segmen2d.c:200
@@ -858,8 +852,7 @@ msgstr "最初に列番号 (%d) を %d に変更します。"
 
 #: ../lib/rst/interp_float/resout2d.c:288
 msgid "No color table for input raster map -- will not create color table"
-msgstr ""
-"入力ラスタマップ用のカラーテーブルなし -- カラーテーブルを作成しません。"
+msgstr "入力ラスタマップ用のカラーテーブルなし -- カラーテーブルを作成しません。"
 
 #: ../lib/rst/interp_float/resout2d.c:481
 msgid "Changing the region back to initial..."
@@ -950,9 +943,7 @@ msgstr "%d ポイントを無視されています (高密度のため)"
 
 #: ../lib/rst/interp_float/vinput2d.c:273
 #, c-format
-msgid ""
-"%d points given for interpolation (after thinning) is less than given "
-"NPMIN=%d"
+msgid "%d points given for interpolation (after thinning) is less than given NPMIN=%d"
 msgstr "%d 点は NPMIN=%d で指定された補間点（狭くした後でも）よりも少いです"
 
 #: ../lib/rst/interp_float/vinput2d.c:279
@@ -961,18 +952,12 @@ msgstr "指定範囲内はポイント数はゼロです。"
 
 #: ../lib/rst/interp_float/vinput2d.c:285
 #, c-format
-msgid ""
-"Segmentation parameters set to invalid values: npmin= %d, segmax= %d for "
-"smooth connection of segments, npmin > segmax (see manual)"
-msgstr ""
-"分割パラメータが正しくありません: 分割がスムーズに行うためには以下の条件にし"
-"てくださいnpmin= %d, segmax= %d  npmin > segmax (マニュアル参照のこと)"
+msgid "Segmentation parameters set to invalid values: npmin= %d, segmax= %d for smooth connection of segments, npmin > segmax (see manual)"
+msgstr "分割パラメータが正しくありません: 分割がスムーズに行うためには以下の条件にしてくださいnpmin= %d, segmax= %d  npmin > segmax (マニュアル参照のこと)"
 
 #: ../lib/rst/interp_float/vinput2d.c:292
 #, c-format
-msgid ""
-"There are less than %d points for interpolation. No segmentation is "
-"necessary, to run the program faster set segmax=%d (see manual)"
+msgid "There are less than %d points for interpolation. No segmentation is necessary, to run the program faster set segmax=%d (see manual)"
 msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:297
@@ -1005,9 +990,7 @@ msgstr "挿入できません %f,%f,%f a = %d"
 
 #: ../lib/rst/interp_float/interp2d.c:234
 #, c-format
-msgid ""
-"Overshoot - increase in tension suggested. Overshoot occurs at (%d,%d) cell. "
-"Z-value %f, zmin %f, zmax %f."
+msgid "Overshoot - increase in tension suggested. Overshoot occurs at (%d,%d) cell. Z-value %f, zmin %f, zmax %f."
 msgstr ""
 
 #: ../lib/proj/ellipse.c:97
@@ -1143,9 +1126,7 @@ msgstr ""
 
 #: ../lib/proj/do_proj.c:492
 #, c-format
-msgid ""
-"The transformation pipeline contains an '%s' step. Remove this step if "
-"easting and northing are swapped in the output."
+msgid "The transformation pipeline contains an '%s' step. Remove this step if easting and northing are swapped in the output."
 msgstr ""
 
 #: ../lib/proj/do_proj.c:557
@@ -1295,8 +1276,7 @@ msgstr "PROJ.4-styleパラメータの文字列が取得出来ません"
 
 #: ../lib/proj/convert.c:217
 #, c-format
-msgid ""
-"OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
+msgid "OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
 msgstr ""
 
 #: ../lib/proj/convert.c:231
@@ -1306,9 +1286,7 @@ msgstr "OGR はWKT-styleパラメータの文字列を導けません (OGR エ�
 
 #: ../lib/proj/convert.c:470
 #, c-format
-msgid ""
-"Updating spatial reference with embedded proj4 definition failed. Proj4 "
-"definition: <%s>"
+msgid "Updating spatial reference with embedded proj4 definition failed. Proj4 definition: <%s>"
 msgstr ""
 
 #: ../lib/proj/convert.c:481
@@ -1347,9 +1325,7 @@ msgstr ""
 
 #: ../lib/arraystats/class.c:249
 #, c-format
-msgid ""
-"There are classbreaks outside the range min-max. Number of classes reduced "
-"to %i, but using probabilities for %i classes."
+msgid "There are classbreaks outside the range min-max. Number of classes reduced to %i, but using probabilities for %i classes."
 msgstr ""
 
 #: ../lib/gis/location.c:61
@@ -1439,8 +1415,7 @@ msgstr ""
 #: ../lib/gis/open_misc.c:46
 #, c-format
 msgid "G__open_misc(read): mapset <%s> doesn't match xmapset <%s>"
-msgstr ""
-"G__open_misc(読み取り): マップセット <%s>は xmapsetと一致していません <%s>"
+msgstr "G__open_misc(読み取り): マップセット <%s>は xmapsetと一致していません <%s>"
 
 #: ../lib/gis/open_misc.c:73
 #, c-format
@@ -1858,8 +1833,7 @@ msgstr ""
 
 #: ../lib/gis/parser.c:1079
 #, c-format
-msgid ""
-"Please update the usage of <%s>: flag <%c> has been renamed to option <%s>"
+msgid "Please update the usage of <%s>: flag <%c> has been renamed to option <%s>"
 msgstr ""
 
 #: ../lib/gis/parser.c:1226
@@ -1874,14 +1848,12 @@ msgstr ""
 
 #: ../lib/gis/parser.c:1250
 #, c-format
-msgid ""
-"Please update the usage of <%s>: option <%s> has been renamed to flag <%s>"
+msgid "Please update the usage of <%s>: option <%s> has been renamed to flag <%s>"
 msgstr ""
 
 #: ../lib/gis/parser.c:1255
 #, c-format
-msgid ""
-"Please update the usage of <%s>: option <%s> has been renamed to flag <%c>"
+msgid "Please update the usage of <%s>: option <%s> has been renamed to flag <%c>"
 msgstr ""
 
 #: ../lib/gis/parser.c:1266
@@ -2486,8 +2458,7 @@ msgid "Database schema"
 msgstr "データベーススキーマ"
 
 #: ../lib/gis/parser_standard_options.c:200
-msgid ""
-"Do not use this option if schemas are not supported by driver/database server"
+msgid "Do not use this option if schemas are not supported by driver/database server"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:209
@@ -2631,9 +2602,7 @@ msgid "Data type used in the output raster3d map"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:453
-msgid ""
-"Number of digits used as mantissa in the internal map storage, 0 -23 for "
-"float, 0 - 52 for double, max or default"
+msgid "Number of digits used as mantissa in the internal map storage, 0 -23 for float, 0 - 52 for double, max or default"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:464
@@ -2641,9 +2610,7 @@ msgid "The compression method used in the output raster3d map"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:473
-msgid ""
-"The dimensions of the tiles used in the output raster3d map (XxYxZ or "
-"default: 16x16x8)"
+msgid "The dimensions of the tiles used in the output raster3d map (XxYxZ or default: 16x16x8)"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:484
@@ -2685,10 +2652,7 @@ msgid "Layer number or name"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:548
-msgid ""
-"Vector features can have category values in different layers. This number "
-"determines which layer to use. When used with direct OGR access this is the "
-"layer name."
+msgid "Vector features can have category values in different layers. This number determines which layer to use. When used with direct OGR access this is the layer name."
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:558
@@ -2696,10 +2660,7 @@ msgid "Layer number or name ('-1' for all layers)"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:560
-msgid ""
-"A single vector map can be connected to multiple database tables. This "
-"number determines which table to use. When used with direct OGR access this "
-"is the layer name."
+msgid "A single vector map can be connected to multiple database tables. This number determines which table to use. When used with direct OGR access this is the layer name."
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:569
@@ -2884,9 +2845,7 @@ msgid "The temporal type of the space time dataset"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:931
-msgid ""
-"WHERE conditions of SQL statement without 'where' keyword used in the "
-"temporal GIS framework"
+msgid "WHERE conditions of SQL statement without 'where' keyword used in the temporal GIS framework"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:933
@@ -3211,11 +3170,8 @@ msgstr " 保存したウィンドウ \"%s\" は完全に現在のGRASSウィン�
 
 #: ../lib/gis/view.c:540
 #, c-format
-msgid ""
-" Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
-msgstr ""
-" ウィンドウの %d%% のみ保存できます \"%s\" 現在のGRASSウィンドウと重複してい"
-"ます"
+msgid " Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
+msgstr " ウィンドウの %d%% のみ保存できます \"%s\" 現在のGRASSウィンドウと重複しています"
 
 #: ../lib/gis/timestamp.c:292
 #, c-format
@@ -3358,16 +3314,12 @@ msgstr ""
 
 #: ../lib/gis/gisinit.c:59 ../lib/gis/gisinit.c:110
 #, c-format
-msgid ""
-"Module built against version %s but trying to use version %s. In case of "
-"errors you need to rebuild the module against GRASS GIS version %s."
+msgid "Module built against version %s but trying to use version %s. In case of errors you need to rebuild the module against GRASS GIS version %s."
 msgstr ""
 
 #: ../lib/gis/gisinit.c:67 ../lib/gis/gisinit.c:118
 #, c-format
-msgid ""
-"Module built against version %s but trying to use version %s. You need to "
-"rebuild GRASS GIS or untangle multiple installations."
+msgid "Module built against version %s but trying to use version %s. You need to rebuild GRASS GIS or untangle multiple installations."
 msgstr ""
 
 #: ../lib/gis/gisinit.c:82
@@ -3382,9 +3334,7 @@ msgstr ""
 
 #: ../lib/gis/gisinit.c:136
 msgid "System not initialized. Programmer forgot to call G_gisinit()."
-msgstr ""
-"システムが初期化されません。 プログラマーが G_gisinit()を呼び出すのを忘れてい"
-"ます。"
+msgstr "システムが初期化されません。 プログラマーが G_gisinit()を呼び出すのを忘れています。"
 
 #: ../lib/gis/done_msg.c:37
 #, c-format
@@ -3585,9 +3535,7 @@ msgstr "<%s> データセットが作成出来ません（<%s>ドライバ使用
 
 #: ../lib/raster/gdal.c:324
 #, c-format
-msgid ""
-"Driver <%s> does not support direct writing. Using MEM driver for "
-"intermediate dataset."
+msgid "Driver <%s> does not support direct writing. Using MEM driver for intermediate dataset."
 msgstr ""
 
 #: ../lib/raster/gdal.c:330
@@ -3685,9 +3633,7 @@ msgstr ""
 
 #: ../lib/raster/open.c:192
 #, c-format
-msgid ""
-"Unable to open raster map <%s@%s> since it is a reclass of raster map "
-"<%s@%s> which does not exist"
+msgid "Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@%s> which does not exist"
 msgstr ""
 
 #: ../lib/raster/open.c:197
@@ -3712,9 +3658,7 @@ msgstr ""
 
 #: ../lib/raster/open.c:243
 #, c-format
-msgid ""
-"Raster map <%s> is in different projection than current region. Found <%s>, "
-"should be <%s>."
+msgid "Raster map <%s> is in different projection than current region. Found <%s>, should be <%s>."
 msgstr ""
 
 #: ../lib/raster/open.c:250
@@ -3729,8 +3673,7 @@ msgstr ""
 
 #: ../lib/raster/open.c:281
 #, c-format
-msgid ""
-"Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
+msgid "Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
 msgstr ""
 
 #: ../lib/raster/open.c:293
@@ -3797,8 +3740,7 @@ msgid "Raster map <%s> is not xdr: byte_order: %s"
 msgstr "ラスターマップ<%s>はxdrではありません: バイト順: %s"
 
 #: ../lib/raster/open.c:1055
-msgid ""
-"Rast_set_quant_rules() can be called only for raster maps opened for reading"
+msgid "Rast_set_quant_rules() can be called only for raster maps opened for reading"
 msgstr ""
 
 #: ../lib/raster/sample.c:68
@@ -3814,9 +3756,7 @@ msgid "Rast_set_window() called while window split"
 msgstr ""
 
 #: ../lib/raster/set_window.c:133
-msgid ""
-"Rast_set_read_window(): projection/zone differs from that of currently open "
-"raster maps"
+msgid "Rast_set_read_window(): projection/zone differs from that of currently open raster maps"
 msgstr ""
 
 #: ../lib/raster/set_window.c:161
@@ -3890,28 +3830,21 @@ msgid "Rast_set_null_value: wrong data type!"
 msgstr ""
 
 #: ../lib/raster/get_cellhd.c:65
-msgid ""
-"However, that raster map is missing. Perhaps, it was deleted by mistake."
+msgid "However, that raster map is missing. Perhaps, it was deleted by mistake."
 msgstr ""
 
 #: ../lib/raster/get_cellhd.c:67
-msgid ""
-"However, header file of that raster map can't be opened. It seems that it "
-"was corrupted after creating the reclass raster map."
+msgid "However, header file of that raster map can't be opened. It seems that it was corrupted after creating the reclass raster map."
 msgstr ""
 
 #: ../lib/raster/get_cellhd.c:71
 #, c-format
-msgid ""
-"Unable to read header file for raster map <%s@%s>. It is a reclass of raster "
-"map <%s@%s>. %s"
+msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s>. %s"
 msgstr ""
 
 #: ../lib/raster/get_cellhd.c:79
 #, c-format
-msgid ""
-"Unable to open header file for raster map <%s@%s>. It seems that some "
-"previous step failed and created an incomplete raster map."
+msgid "Unable to open header file for raster map <%s@%s>. It seems that some previous step failed and created an incomplete raster map."
 msgstr ""
 
 #: ../lib/raster/interp.c:214
@@ -4041,21 +3974,15 @@ msgid "Unable to write stats file for <%s>"
 msgstr ""
 
 #: ../lib/raster/window.c:32
-msgid ""
-"Internal error: Rast_get_window() called with split window. Use "
-"Rast_get_input_window() or Rast_get_output_window() instead."
+msgid "Internal error: Rast_get_window() called with split window. Use Rast_get_input_window() or Rast_get_output_window() instead."
 msgstr ""
 
 #: ../lib/raster/window.c:93
-msgid ""
-"Internal error: Rast_window_rows() called with split window. Use "
-"Rast_input_window_rows() or Rast_output_window_rows() instead."
+msgid "Internal error: Rast_window_rows() called with split window. Use Rast_input_window_rows() or Rast_output_window_rows() instead."
 msgstr ""
 
 #: ../lib/raster/window.c:130
-msgid ""
-"Internal error: Rast_window_cols() called with split window. Use "
-"Rast_input_window_cols() or Rast_output_window_cols() instead."
+msgid "Internal error: Rast_window_cols() called with split window. Use Rast_input_window_cols() or Rast_output_window_cols() instead."
 msgstr ""
 
 #: ../lib/raster/init.c:59
@@ -4216,8 +4143,7 @@ msgid "exit after creation of project or mapset. Only with -c flag"
 msgstr ""
 
 #: ../lib/init/grass.py:372
-msgid ""
-"force removal of .gislock if exists (use with care!). Only with --text flag"
+msgid "force removal of .gislock if exists (use with care!). Only with --text flag"
 msgstr ""
 
 #: ../lib/init/grass.py:375
@@ -4241,9 +4167,7 @@ msgid "print GRASS configuration parameters"
 msgstr ""
 
 #: ../lib/init/grass.py:383
-msgid ""
-"options: arch,build,compiler,date,path,python_path,revision,svn_revision,"
-"version"
+msgid "options: arch,build,compiler,date,path,python_path,revision,svn_revision,version"
 msgstr ""
 
 #: ../lib/init/grass.py:387
@@ -4259,8 +4183,7 @@ msgid "initial GRASS project (location)"
 msgstr ""
 
 #: ../lib/init/grass.py:391
-msgid ""
-"directory containing mapsets with one common coordinate reference system"
+msgid "directory containing mapsets with one common coordinate reference system"
 msgstr ""
 
 #: ../lib/init/grass.py:394
@@ -4344,9 +4267,7 @@ msgid "The APPDATA variable is not set, ask your operating system support"
 msgstr ""
 
 #: ../lib/init/grass.py:450
-msgid ""
-"The APPDATA variable points to directory which does not exist, ask your "
-"operating system support"
+msgid "The APPDATA variable points to directory which does not exist, ask your operating system support"
 msgstr ""
 
 #: ../lib/init/grass.py:465
@@ -4400,8 +4321,7 @@ msgstr ""
 
 #: ../lib/init/grass.py:989
 #, python-brace-format
-msgid ""
-"Unable to create new project because the project <{location}> already exists."
+msgid "Unable to create new project because the project <{location}> already exists."
 msgstr ""
 
 #: ../lib/init/grass.py:995
@@ -4411,21 +4331,16 @@ msgstr ""
 
 #: ../lib/init/grass.py:999
 #, python-brace-format
-msgid ""
-"Unable to create new project <{location}> because the directory <{path}> "
-"already exists."
+msgid "Unable to create new project <{location}> because the directory <{path}> already exists."
 msgstr ""
 
 #: ../lib/init/grass.py:1005
 #, python-brace-format
-msgid ""
-"Unable to create new project in the directory <{path}> for an unknown reason."
+msgid "Unable to create new project in the directory <{path}> for an unknown reason."
 msgstr ""
 
 #: ../lib/init/grass.py:1089
-msgid ""
-"Mapset <{}> already exists. Unable to create a new temporary mapset of that "
-"name."
+msgid "Mapset <{}> already exists. Unable to create a new temporary mapset of that name."
 msgstr ""
 
 #: ../lib/init/grass.py:1094
@@ -4454,16 +4369,12 @@ msgid "Unable to create new mapset <{mapset}> because <{path}> is a file."
 msgstr ""
 
 #: ../lib/init/grass.py:1159
-msgid ""
-"The mapset <{}> is missing the WIND file (computational region). It will be "
-"fixed now. Note that this warning may become an error in future versions."
+msgid "The mapset <{}> is missing the WIND file (computational region). It will be fixed now. Note that this warning may become an error in future versions."
 msgstr ""
 
 #: ../lib/init/grass.py:1169
 #, python-brace-format
-msgid ""
-"No CRS is needed for creating mapset <{mapset}>, but <{geofile}> was "
-"provided as CRS. Did you mean to create a new project?"
+msgid "No CRS is needed for creating mapset <{mapset}>, but <{geofile}> was provided as CRS. Did you mean to create a new project?"
 msgstr ""
 
 #: ../lib/init/grass.py:1176
@@ -4471,9 +4382,7 @@ msgid "Creating new GRASS GIS mapset <{}>..."
 msgstr ""
 
 #: ../lib/init/grass.py:1207
-msgid ""
-"GRASS GIS database directory, project and mapset not set properly. Use GUI "
-"or command line to set them."
+msgid "GRASS GIS database directory, project and mapset not set properly. Use GUI or command line to set them."
 msgstr ""
 
 #: ../lib/init/grass.py:1267
@@ -4505,18 +4414,13 @@ msgstr ""
 #: ../lib/init/grass.py:1588
 #, python-format
 msgid ""
-"%(user)s is currently running GRASS in selected mapset (file %(file)s "
-"found). Concurrent use not allowed.\n"
-"You can force launching GRASS using -f flag (note that you need permission "
-"for this operation). Have another look in the processor manager just to be "
-"sure..."
+"%(user)s is currently running GRASS in selected mapset (file %(file)s found). Concurrent use not allowed.\n"
+"You can force launching GRASS using -f flag (note that you need permission for this operation). Have another look in the processor manager just to be sure..."
 msgstr ""
 
 #: ../lib/init/grass.py:1599
 #, python-format
-msgid ""
-"%(user)s is currently running GRASS in selected mapset (file %(file)s "
-"found). Forcing to launch GRASS..."
+msgid "%(user)s is currently running GRASS in selected mapset (file %(file)s found). Forcing to launch GRASS..."
 msgstr ""
 
 #: ../lib/init/grass.py:1606
@@ -4676,14 +4580,11 @@ msgid "Either --tmp-project or --tmp-mapset can be used, not both"
 msgstr ""
 
 #: ../lib/init/grass.py:2443
-msgid ""
-"Coordinate reference system argument (e.g. EPSG) is needed for --tmp-project"
+msgid "Coordinate reference system argument (e.g. EPSG) is needed for --tmp-project"
 msgstr ""
 
 #: ../lib/init/grass.py:2450
-msgid ""
-"Only one argument (e.g. EPSG) is needed for --tmp-project, mapset name <{}> "
-"provided"
+msgid "Only one argument (e.g. EPSG) is needed for --tmp-project, mapset name <{}> provided"
 msgstr ""
 
 #: ../lib/init/grass.py:2544
@@ -4708,14 +4609,11 @@ msgid "Starting GRASS GIS..."
 msgstr ""
 
 #: ../lib/init/grass.py:2614
-msgid ""
-"Failed to start GRASS GIS, grassdata directory cannot be found or created."
+msgid "Failed to start GRASS GIS, grassdata directory cannot be found or created."
 msgstr ""
 
 #: ../lib/init/grass.py:2621
-msgid ""
-"Failed to start GRASS GIS, no default project to copy in the installation or "
-"copying failed."
+msgid "Failed to start GRASS GIS, no default project to copy in the installation or copying failed."
 msgstr ""
 
 #: ../lib/init/grass.py:2724
@@ -5114,8 +5012,7 @@ msgstr ""
 
 #: ../lib/cairodriver/read_ppm.c:53
 #, c-format
-msgid ""
-"Cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d"
+msgid "Cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d"
 msgstr ""
 
 #: ../lib/cairodriver/graph.c:67
@@ -5361,9 +5258,7 @@ msgid "Invalid size of category raster conditions file."
 msgstr ""
 
 #: ../lib/imagery/iscatt_core.c:568
-msgid ""
-"Data inconsistent. Value computed for scatter plot is out of initialized "
-"range."
+msgid "Data inconsistent. Value computed for scatter plot is out of initialized range."
 msgstr ""
 
 #: ../lib/imagery/iscatt_core.c:739
@@ -5472,8 +5367,7 @@ msgstr "グループ [%s in %s] のファイル [%s] を開けません"
 #: ../lib/imagery/fopen.c:51
 #, c-format
 msgid "Unable to find file [%s] for subgroup [%s] of group [%s in %s]"
-msgstr ""
-"グループ [%s in %s] のサブグループ [%s] のファイル [%s] が見つかりません "
+msgstr "グループ [%s in %s] のサブグループ [%s] のファイル [%s] が見つかりません "
 
 #: ../lib/imagery/fopen.c:63 ../lib/imagery/fopen.c:161
 #, c-format
@@ -5488,8 +5382,7 @@ msgstr "グループ [%s in %s] のファイル [%s] を作成できません"
 #: ../lib/imagery/fopen.c:138
 #, c-format
 msgid "Unable to create file [%s] for subgroup [%s] of group [%s in %s]"
-msgstr ""
-"グループ [%s in %s] の サブグループ [%s] のファイル [%s] を作成できません"
+msgstr "グループ [%s in %s] の サブグループ [%s] のファイル [%s] を作成できません"
 
 #: ../lib/imagery/target.c:38
 #, c-format
@@ -5543,9 +5436,7 @@ msgstr ""
 
 #: ../lib/db/dbmi_base/login.c:235
 #, c-format
-msgid ""
-"DB connection <%s/%s> already exists. Re-run '%s' with '--%s' flag to "
-"overwrite existing settings."
+msgid "DB connection <%s/%s> already exists. Re-run '%s' with '--%s' flag to overwrite existing settings."
 msgstr ""
 
 #: ../lib/db/dbmi_base/default_name.c:139
@@ -5810,9 +5701,7 @@ msgstr ""
 
 #: ../lib/ogsf/gp3.c:295
 #, c-format
-msgid ""
-"%d points without category. Unable to determine color rules for features "
-"without category."
+msgid "%d points without category. Unable to determine color rules for features without category."
 msgstr ""
 
 #: ../lib/ogsf/gsd_img_ppm.c:50 ../lib/ogsf/gsd_img_tif.c:63
@@ -5852,8 +5741,7 @@ msgstr "3D ラスターマップ <%s> の範囲を読めません"
 
 #: ../lib/ogsf/gsd_surf.c:1737
 msgid "Cut-plane points mis-match between surfaces. Check resolution(s)."
-msgstr ""
-"カット平面のポイントはサーフェスの間で一致しません. 解決策を確認してください."
+msgstr "カット平面のポイントはサーフェスの間で一致しません. 解決策を確認してください."
 
 #: ../lib/ogsf/gsds.c:109
 msgid "Maximum number of datasets exceeded"
@@ -5870,9 +5758,7 @@ msgstr "カラー素材: %d"
 
 #: ../lib/ogsf/gsd_prim.c:638
 #, c-format
-msgid ""
-"gsd_rot(): %c is an invalid axis specification. Rotation ignored. Please "
-"advise GRASS developers of this error"
+msgid "gsd_rot(): %c is an invalid axis specification. Rotation ignored. Please advise GRASS developers of this error"
 msgstr ""
 
 #: ../lib/ogsf/gsd_legend.c:245
@@ -5965,9 +5851,7 @@ msgstr ""
 
 #: ../lib/ogsf/gv3.c:425
 #, c-format
-msgid ""
-"%d features without category. Unable to determine color rules for features "
-"without category."
+msgid "%d features without category. Unable to determine color rules for features without category."
 msgstr ""
 
 #: ../lib/ogsf/gs3.c:127 ../lib/ogsf/gs3.c:191 ../lib/ogsf/gs3.c:343
@@ -5988,8 +5872,7 @@ msgstr "ラスターマップ <%s> からカラーを転換しています..."
 
 #: ../lib/ogsf/gs3.c:960
 msgid "View not saved by this program,there may be some inconsistancies"
-msgstr ""
-"このプログラムにビューは保存されていません,　不一致がある可能性があります"
+msgstr "このプログラムにビューは保存されていません,　不一致がある可能性があります"
 
 #: ../lib/ogsf/gvl2.c:267
 #, c-format
@@ -6118,8 +6001,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/read_pg.c:375
 #, c-format
-msgid ""
-"Requesting invalid feature from cache (%d). Number of features in cache: %d"
+msgid "Requesting invalid feature from cache (%d). Number of features in cache: %d"
 msgstr ""
 
 #: ../lib/vector/Vlib/read_pg.c:379
@@ -6254,8 +6136,7 @@ msgstr ""
 #: ../lib/vector/Vlib/net_analyze.c:301 ../lib/vector/Vlib/net_analyze.c:342
 #, c-format
 msgid ""
-"There exists more than one point on node <%d> with unique category in field  "
-"<%d>.\n"
+"There exists more than one point on node <%d> with unique category in field  <%d>.\n"
 "The unique category layer may not be valid."
 msgstr ""
 
@@ -6319,9 +6200,7 @@ msgstr "ベクトルマップは開かれていません"
 
 #: ../lib/vector/Vlib/geos.c:57
 #, c-format
-msgid ""
-"Vect_read_line_geos(): feature id %d is not reasonable (max features in "
-"vector map <%s>: %d)"
+msgid "Vect_read_line_geos(): feature id %d is not reasonable (max features in vector map <%s>: %d)"
 msgstr ""
 
 #: ../lib/vector/Vlib/geos.c:63
@@ -6384,9 +6263,7 @@ msgstr ""
 #: ../lib/vector/Vlib/net_build.c:976
 #, c-format
 msgid "Data type of column <%s> not supported (must be numeric)"
-msgstr ""
-"データ型 of 列 <%s> のデータタイプはサポートされていません (数字でなければな"
-"らない)"
+msgstr "データ型 of 列 <%s> のデータタイプはサポートされていません (数字でなければならない)"
 
 #: ../lib/vector/Vlib/net_build.c:197 ../lib/vector/Vlib/net_build.c:955
 msgid "Setting node costs..."
@@ -6403,9 +6280,7 @@ msgstr "テーブル <%s> に列 <%s> が見つかりません"
 #: ../lib/vector/Vlib/net_build.c:272 ../lib/vector/Vlib/net_build.c:1018
 #, c-format
 msgid "Database record for node %d (cat = %d) not found (cost set to 0)"
-msgstr ""
-"ノード %d (cat = %d) のデータベースレコードは見つかりませんでした (コストは0"
-"にセットされています)"
+msgstr "ノード %d (cat = %d) のデータベースレコードは見つかりませんでした (コストは0にセットされています)"
 
 #: ../lib/vector/Vlib/net_build.c:327 ../lib/vector/Vlib/net_build.c:347
 msgid "Cannot add network arc for virtual node connection."
@@ -6414,39 +6289,30 @@ msgstr ""
 #: ../lib/vector/Vlib/net_build.c:359
 #, c-format
 msgid ""
-"There exists more than one point of node <%d> with unique category field  "
-"<%d>.\n"
-"The unique categories layer is not valid therefore you will probably get "
-"incorrect results."
+"There exists more than one point of node <%d> with unique category field  <%d>.\n"
+"The unique categories layer is not valid therefore you will probably get incorrect results."
 msgstr ""
 
 #: ../lib/vector/Vlib/net_build.c:392
 #, c-format
 msgid ""
-"Unable to find point representing intersection <%d> in unique categories "
-"field <%d>.\n"
+"Unable to find point representing intersection <%d> in unique categories field <%d>.\n"
 "Cost for the intersection was set to 0.\n"
-"The unique categories layer is not valid therefore you will probably get "
-"incorrect results."
+"The unique categories layer is not valid therefore you will probably get incorrect results."
 msgstr ""
 
 #: ../lib/vector/Vlib/net_build.c:407
 #, c-format
 msgid ""
-"Unable to find node for point representing intersection <%d> in unique "
-"categories field <%d>.\n"
+"Unable to find node for point representing intersection <%d> in unique categories field <%d>.\n"
 "Cost for the intersection was set to 0.\n"
-"The unique categories layer is not valid therefore you will probably get "
-"incorrect results."
+"The unique categories layer is not valid therefore you will probably get incorrect results."
 msgstr ""
 
 #: ../lib/vector/Vlib/net_build.c:434
 #, fuzzy, c-format
-msgid ""
-"Database record for turn with cat = %d is not found. (The turn was skipped."
-msgstr ""
-"ノード %d (cat = %d) のデータベースレコードは見つかりませんでした (コストは0"
-"にセットされています)"
+msgid "Database record for turn with cat = %d is not found. (The turn was skipped."
+msgstr "ノード %d (cat = %d) のデータベースレコードは見つかりませんでした (コストは0にセットされています)"
 
 #: ../lib/vector/Vlib/net_build.c:467
 msgid "Cannot add network arc representing turn."
@@ -6464,22 +6330,17 @@ msgstr "アークを登録しています..."
 #, c-format
 msgid ""
 "Line with id <%d> has more unique categories defined in field <%d>.\n"
-"The unique categories layer is not valid therefore you will probably get "
-"incorrect results."
+"The unique categories layer is not valid therefore you will probably get incorrect results."
 msgstr ""
 
 #: ../lib/vector/Vlib/net_build.c:580
 #, c-format
-msgid ""
-"Database record for line %d (cat = %d, forward/both direction(s)) not found "
-"(cost was set to 0)"
+msgid "Database record for line %d (cat = %d, forward/both direction(s)) not found (cost was set to 0)"
 msgstr ""
 
 #: ../lib/vector/Vlib/net_build.c:596
 #, c-format
-msgid ""
-"Database record for line %d (cat = %d, backword direction) not found(cost "
-"was set to 0)"
+msgid "Database record for line %d (cat = %d, backword direction) not found(cost was set to 0)"
 msgstr ""
 
 #: ../lib/vector/Vlib/net_build.c:659 ../lib/vector/Vlib/net_build.c:1054
@@ -6497,16 +6358,12 @@ msgstr "グラフは作成されています"
 
 #: ../lib/vector/Vlib/net_build.c:861
 #, c-format
-msgid ""
-"Database record for line %d (cat = %d, forward/both direction(s)) not found "
-"(forward/both direction(s) of line skipped)"
+msgid "Database record for line %d (cat = %d, forward/both direction(s)) not found (forward/both direction(s) of line skipped)"
 msgstr ""
 
 #: ../lib/vector/Vlib/net_build.c:878
 #, c-format
-msgid ""
-"Database record for line %d (cat = %d, backword direction) not "
-"found(direction of line skipped)"
+msgid "Database record for line %d (cat = %d, backword direction) not found(direction of line skipped)"
 msgstr ""
 
 #: ../lib/vector/Vlib/net_build.c:925
@@ -6533,8 +6390,7 @@ msgid "Feature table <%s> has no primary key defined"
 msgstr ""
 
 #: ../lib/vector/Vlib/build_ogr.c:89
-msgid ""
-"Random read is not supported by OGR for this layer. Unable to build topology."
+msgid "Random read is not supported by OGR for this layer. Unable to build topology."
 msgstr ""
 
 #: ../lib/vector/Vlib/build_ogr.c:95 ../lib/vector/Vlib/build_pg.c:109
@@ -6772,8 +6628,7 @@ msgid "Temporary vector maps can be accessed only in the current mapset"
 msgstr ""
 
 #: ../lib/vector/Vlib/open.c:289
-msgid ""
-"Vector map which is not in the current mapset cannot be opened for update"
+msgid "Vector map which is not in the current mapset cannot be opened for update"
 msgstr ""
 
 #: ../lib/vector/Vlib/open.c:324
@@ -6794,9 +6649,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/open.c:439
 #, c-format
-msgid ""
-"Unable to open vector map <%s> on level %d. Try to rebuild vector topology "
-"with v.build."
+msgid "Unable to open vector map <%s> on level %d. Try to rebuild vector topology with v.build."
 msgstr ""
 
 #: ../lib/vector/Vlib/open.c:466
@@ -6900,13 +6753,11 @@ msgstr ""
 
 #: ../lib/vector/Vlib/build.c:134
 msgid "Unable to add area (map closed, topo saved)"
-msgstr ""
-"領域を追加できません (マップは閉じられています, topoは保存されています)"
+msgstr "領域を追加できません (マップは閉じられています, topoは保存されています)"
 
 #: ../lib/vector/Vlib/build.c:142
 msgid "Unable to add isle (map closed, topo saved)"
-msgstr ""
-"アイルを追加できません (マップは閉じられています, topoは保存されています)"
+msgstr "アイルを追加できません (マップは閉じられています, topoは保存されています)"
 
 #: ../lib/vector/Vlib/build.c:152
 msgid "Area of size = 0.0 ignored"
@@ -7050,9 +6901,7 @@ msgid "Error writing out topo file"
 msgstr "topo ファイル書き込みのエラー"
 
 #: ../lib/vector/Vlib/build.c:1227
-msgid ""
-"Unable to build spatial index from topology, vector map is not opened at "
-"topology level 2"
+msgid "Unable to build spatial index from topology, vector map is not opened at topology level 2"
 msgstr ""
 
 #: ../lib/vector/Vlib/build.c:1248
@@ -7167,16 +7016,12 @@ msgstr ""
 
 #: ../lib/vector/Vlib/open_ogr.c:288
 #, c-format
-msgid ""
-"Feature index format version %d.%d is not supported by this release. Try to "
-"rebuild topology or upgrade GRASS."
+msgid "Feature index format version %d.%d is not supported by this release. Try to rebuild topology or upgrade GRASS."
 msgstr ""
 
 #: ../lib/vector/Vlib/open_ogr.c:294
 #, c-format
-msgid ""
-"Your GRASS version does not fully support feature index format %d.%d of the "
-"vector. Consider to rebuild topology or upgrade GRASS."
+msgid "Your GRASS version does not fully support feature index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
 msgstr ""
 
 #: ../lib/vector/Vlib/poly.c:264
@@ -7241,9 +7086,7 @@ msgid "PostGIS topology schema <%s> dropped"
 msgstr ""
 
 #: ../lib/vector/Vlib/open_pg.c:573
-msgid ""
-"Connection to PostgreSQL database failed. Try to set up username/password by "
-"db.login."
+msgid "Connection to PostgreSQL database failed. Try to set up username/password by db.login."
 msgstr ""
 
 #: ../lib/vector/Vlib/open_pg.c:580
@@ -7710,8 +7553,7 @@ msgstr ""
 #: ../lib/vector/Vlib/legal_vname.c:45
 #, c-format
 msgid "Illegal vector map name <%s>. May not contain '.' or 'NULL'."
-msgstr ""
-"無効なベクトルマップ名です<%s>.  '.' あるいは 'NULL'.が含まれていません。"
+msgstr "無効なベクトルマップ名です<%s>.  '.' あるいは 'NULL'.が含まれていません。"
 
 #: ../lib/vector/Vlib/legal_vname.c:52
 #, c-format
@@ -7725,8 +7567,7 @@ msgstr "無効なベクトルマップ名です <%s>. 文字 '%c' は使用で�
 
 #: ../lib/vector/Vlib/legal_vname.c:68
 #, c-format
-msgid ""
-"Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."
+msgid "Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."
 msgstr ""
 
 #: ../lib/vector/Vlib/legal_vname.c:104 ../lib/vector/Vlib/legal_vname.c:109
@@ -7819,8 +7660,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/build_pg.c:1062
 #, c-format
-msgid ""
-"Unable to build simple features from topogeometry data. Unsupported type %d."
+msgid "Unable to build simple features from topogeometry data. Unsupported type %d."
 msgstr ""
 
 #: ../lib/vector/Vlib/write_ogr.c:237
@@ -7922,16 +7762,12 @@ msgstr ""
 
 #: ../lib/vector/Vlib/open_nat.c:154
 #, c-format
-msgid ""
-"Coor file of vector map <%s@%s> is larger than it should be (%<PRId64> bytes "
-"excess)"
+msgid "Coor file of vector map <%s@%s> is larger than it should be (%<PRId64> bytes excess)"
 msgstr ""
 
 #: ../lib/vector/Vlib/open_nat.c:159
 #, c-format
-msgid ""
-"Coor file of vector <%s@%s> is shorter than it should be (%<PRId64> bytes "
-"missing)."
+msgid "Coor file of vector <%s@%s> is shorter than it should be (%<PRId64> bytes missing)."
 msgstr ""
 
 #: ../lib/vector/Vlib/read.c:26 ../lib/vector/Vlib/write.c:33
@@ -8006,13 +7842,11 @@ msgstr "不明な演算子"
 
 #: ../lib/vector/Vlib/overlay.c:128
 msgid "Overlay: line/boundary types not supported by AND operator"
-msgstr ""
-"オーバーレイ: ライン/境界タイプはAND演算子によってサポートされていません"
+msgstr "オーバーレイ: ライン/境界タイプはAND演算子によってサポートされていません"
 
 #: ../lib/vector/Vlib/overlay.c:132
 msgid "Overlay: area x area types not supported by AND operator"
-msgstr ""
-"オーバーレイ: 領域 x 領域タイプはAND演算子によってサポートされていません"
+msgstr "オーバーレイ: 領域 x 領域タイプはAND演算子によってサポートされていません"
 
 #: ../lib/vector/Vlib/field.c:77
 #, c-format
@@ -8044,9 +7878,7 @@ msgid "Database connection not defined. Skipping."
 msgstr ""
 
 #: ../lib/vector/Vlib/field.c:222
-msgid ""
-"More DB links defined for input vector map. Using only first DB link for "
-"output."
+msgid "More DB links defined for input vector map. Using only first DB link for output."
 msgstr ""
 
 #: ../lib/vector/Vlib/field.c:298
@@ -8090,8 +7922,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/field.c:812
 #, c-format
-msgid ""
-"Feature table <%s> has no primary key defined. Unable to define DB links."
+msgid "Feature table <%s> has no primary key defined. Unable to define DB links."
 msgstr ""
 
 #: ../lib/vector/Vlib/field.c:831
@@ -8173,9 +8004,7 @@ msgid "Modifications: %d"
 msgstr ""
 
 #: ../lib/vector/Vlib/dgraph.c:426
-msgid ""
-"Trying to add more edges to the planar_graph than the initial allocation "
-"size allows"
+msgid "Trying to add more edges to the planar_graph than the initial allocation size allows"
 msgstr ""
 
 #: ../lib/vector/Vlib/build_sfa.c:273 ../lib/vector/Vlib/build_sfa.c:545
@@ -8412,9 +8241,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/ascii.c:916
 #, c-format
-msgid ""
-"%d features without category skipped. To export also features without "
-"category use '%s=-1'."
+msgid "%d features without category skipped. To export also features without category use '%s=-1'."
 msgstr ""
 
 #: ../lib/vector/Vlib/constraint.c:150
@@ -8431,13 +8258,11 @@ msgid "Unexpected result of line_intersection() res = %d"
 msgstr ""
 
 #: ../lib/vector/Vlib/buffer2.c:587
-msgid ""
-"Next edge was visited (right) but it is not the first one !!! breaking loop"
+msgid "Next edge was visited (right) but it is not the first one !!! breaking loop"
 msgstr ""
 
 #: ../lib/vector/Vlib/buffer2.c:598
-msgid ""
-"Next edge was visited (left) but it is not the first one !!! breaking loop"
+msgid "Next edge was visited (left) but it is not the first one !!! breaking loop"
 msgstr ""
 
 #: ../lib/vector/Vlib/buffer2.c:646
@@ -8546,9 +8371,7 @@ msgstr ""
 
 #: ../lib/vector/diglib/cindex_rw.c:158
 #, c-format
-msgid ""
-"This version of GRASS (%d.%d) is too old to read this category index format. "
-"Try to rebuild topology or upgrade GRASS to at least version %d."
+msgid "This version of GRASS (%d.%d) is too old to read this category index format. Try to rebuild topology or upgrade GRASS to at least version %d."
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:56
@@ -8557,28 +8380,22 @@ msgstr ""
 
 #: ../lib/vector/diglib/test.c:74
 #, c-format
-msgid ""
-"Error in read/write portable double, byte_order = %d Written: %.16e3E Read: "
-"%.16e3E"
+msgid "Error in read/write portable double, byte_order = %d Written: %.16e3E Read: %.16e3E"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:89
 #, c-format
-msgid ""
-"Error in read/write portable float, byte_order = %d Written: %.8e3E Read: "
-"%.8e3E"
+msgid "Error in read/write portable float, byte_order = %d Written: %.8e3E Read: %.8e3E"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:105
 #, c-format
-msgid ""
-"Error in read/write portable off_t, byte_order = %d Written: %lu Read: %lu"
+msgid "Error in read/write portable off_t, byte_order = %d Written: %lu Read: %lu"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:120
 #, c-format
-msgid ""
-"Error in read/write portable long, byte_order = %d Written: %lu Read: %lu"
+msgid "Error in read/write portable long, byte_order = %d Written: %lu Read: %lu"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:135
@@ -8588,8 +8405,7 @@ msgstr ""
 
 #: ../lib/vector/diglib/test.c:152
 #, c-format
-msgid ""
-"Error in read/write portable short, byte_order = %d Written: %d Read: %d"
+msgid "Error in read/write portable short, byte_order = %d Written: %d Read: %d"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:167
@@ -8608,23 +8424,17 @@ msgstr ""
 
 #: ../lib/vector/diglib/spindex_rw.c:301
 #, c-format
-msgid ""
-"This version of GRASS (%d.%d) is too old to read this spatial index format. "
-"Try to rebuild topology or upgrade GRASS to at least version %d."
+msgid "This version of GRASS (%d.%d) is too old to read this spatial index format. Try to rebuild topology or upgrade GRASS to at least version %d."
 msgstr ""
 
 #: ../lib/vector/diglib/spindex_rw.c:310
 #, c-format
-msgid ""
-"Your GRASS version does not fully support spatial index format %d.%d of the "
-"vector. Consider to rebuild topology or upgrade GRASS."
+msgid "Your GRASS version does not fully support spatial index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
 msgstr ""
 
 #: ../lib/vector/diglib/spindex_rw.c:320
 #, c-format
-msgid ""
-"Spatial index format version %d.%d is not supported by this release. Please "
-"rebuild topology."
+msgid "Spatial index format version %d.%d is not supported by this release. Please rebuild topology."
 msgstr ""
 
 #: ../lib/vector/diglib/portable.c:210 ../lib/vector/diglib/portable.c:243
@@ -8666,28 +8476,21 @@ msgstr "メモリ用にファイルをロードできません, ファイルが�
 
 #: ../lib/vector/diglib/file.c:213
 msgid "Vector memory mode not supported, using 'AUTO'"
-msgstr ""
-"ベクトルメモリーモードはサポートされていません。, 'AUTO'を使用してください"
+msgstr "ベクトルメモリーモードはサポートされていません。, 'AUTO'を使用してください"
 
 #: ../lib/vector/diglib/plus_struct.c:567
 #, c-format
-msgid ""
-"This version of GRASS (%d.%d) is too old to read this topology format. Try "
-"to rebuild topology or upgrade GRASS to at least version %d."
+msgid "This version of GRASS (%d.%d) is too old to read this topology format. Try to rebuild topology or upgrade GRASS to at least version %d."
 msgstr ""
 
 #: ../lib/vector/diglib/plus_struct.c:576
 #, c-format
-msgid ""
-"Your GRASS version does not fully support topology format %d.%d of the "
-"vector. Consider to rebuild topology or upgrade GRASS."
+msgid "Your GRASS version does not fully support topology format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
 msgstr ""
 
 #: ../lib/vector/diglib/plus_struct.c:589
 #, c-format
-msgid ""
-"Old topology format version %d.%d is not supported by this release. Try to "
-"rebuild topology using v.build or v.build.all module."
+msgid "Old topology format version %d.%d is not supported by this release. Try to rebuild topology using v.build or v.build.all module."
 msgstr ""
 
 #: ../lib/vector/diglib/plus.c:221
@@ -8748,9 +8551,7 @@ msgstr "追加ファイルに島を書き込めません"
 
 #: ../lib/vector/diglib/plus_node.c:213
 #, c-format
-msgid ""
-"Attempt to read line angle for the line which is not connected to the node: "
-"node %d, line %d"
+msgid "Attempt to read line angle for the line which is not connected to the node: node %d, line %d"
 msgstr ""
 
 #: ../lib/vector/diglib/port_init.c:159
@@ -8803,9 +8604,7 @@ msgstr "不必要なエリアを削除しようとしています"
 #: ../lib/vector/diglib/plus_area.c:419
 #, c-format
 msgid "Dead centroid %d registered for area (bug in the vector library)"
-msgstr ""
-"エリアに不必要なセントロイドが %d 個記録されました (ベクトルライブラリ内のバ"
-"グ)"
+msgstr "エリアに不必要なセントロイドが %d 個記録されました (ベクトルライブラリ内のバグ)"
 
 #: ../lib/vector/diglib/plus_area.c:443
 #, c-format
@@ -8824,9 +8623,7 @@ msgstr ""
 
 #: ../lib/display/r_raster.c:131
 #, c-format
-msgid ""
-"Neither %s (managed by d.mon command) nor %s (used for direct rendering) "
-"defined"
+msgid "Neither %s (managed by d.mon command) nor %s (used for direct rendering) defined"
 msgstr ""
 
 #: ../lib/display/r_raster.c:149
@@ -8868,8 +8665,7 @@ msgstr "[%s]: そのような色はありません"
 
 #, c-format
 #~ msgid "Unable to create signature file <%s> for subgroup <%s> of group <%s>"
-#~ msgstr ""
-#~ "署名ファイル <%s> が作成できません。 サブグループ： <%s> 、グループ： <%s>"
+#~ msgstr "署名ファイル <%s> が作成できません。 サブグループ： <%s> 、グループ： <%s>"
 
 #~ msgid "Unable to open OGR DBMI driver"
 #~ msgstr "OGR DBMI ドライバーを開けません"
@@ -8926,8 +8722,7 @@ msgstr "[%s]: そのような色はありません"
 
 #, c-format
 #~ msgid "Datum <%s> not recognised by GRASS and no parameters found"
-#~ msgstr ""
-#~ "データム <%s> はGRASSに認識されていません そしてパラメータが見つかりません"
+#~ msgstr "データム <%s> はGRASSに認識されていません そしてパラメータが見つかりません"
 
 #~ msgid "Fixing subtle input data rounding error of west boundary (%g>%g)"
 #~ msgstr "西境界の入力データの丸め誤差を調整する (%g>%g)"
@@ -8944,21 +8739,15 @@ msgstr "[%s]: そのような色はありません"
 #~ msgstr "メモリ不足"
 
 #, fuzzy
-#~ msgid ""
-#~ "Unable to check table. There is no temporal database connection defined "
-#~ "for mapset <%(mapset)s>"
+#~ msgid "Unable to check table. There is no temporal database connection defined for mapset <%(mapset)s>"
 #~ msgstr "ベクトル データベース 定義ファイル '%s' を開けません"
 
 #, fuzzy
-#~ msgid ""
-#~ "Unable to fetch one. There is no temporal database connection defined for "
-#~ "mapset <%(mapset)s>"
+#~ msgid "Unable to fetch one. There is no temporal database connection defined for mapset <%(mapset)s>"
 #~ msgstr "���"
 
 #, fuzzy
-#~ msgid ""
-#~ "Unable to fetch all. There is no temporal database connection defined for "
-#~ "mapset <%(mapset)s>"
+#~ msgid "Unable to fetch all. There is no temporal database connection defined for mapset <%(mapset)s>"
 #~ msgstr "���"
 
 #, fuzzy
@@ -9015,12 +8804,8 @@ msgstr "[%s]: そのような色はありません"
 #~ msgid "Illegal TimeStamp string"
 #~ msgstr "不正なタイムスタンプストリング"
 
-#~ msgid ""
-#~ "Dev note: Adapted sites library used for vector points. (module should be "
-#~ "updated to GRASS 6 vector library)"
-#~ msgstr ""
-#~ "Dev note: ベクトルポイントに使用された適合されたサイトライブラリ. (モ"
-#~ "ジュールをGRASS 6 ベクトルライブラリにアップデートする必要があります)"
+#~ msgid "Dev note: Adapted sites library used for vector points. (module should be updated to GRASS 6 vector library)"
+#~ msgstr "Dev note: ベクトルポイントに使用された適合されたサイトライブラリ. (モジュールをGRASS 6 ベクトルライブラリにアップデートする必要があります)"
 
 #~ msgid "Cannot fetch row"
 #~ msgstr "行をフェッチできません"
