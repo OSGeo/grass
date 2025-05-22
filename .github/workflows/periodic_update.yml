@@ -83,13 +83,14 @@ jobs:
             --without-fftw \
             --without-cairo \
             --without-freetype \
-          && echo "" 
+          && echo ""
+      - run: make -j
       - name: Create .pot files (containing original messages)
         run: cd locale && make pot
       - name: Merge new messages
         run: cd locale && make update-po
       - name: Verify the .po files
-        run: cd locale && make verify  
+        run: cd locale && make verify
       # Display changes, only to follow along in the logs.
       - run: git diff
       - name: Double check if files are modified
