@@ -127,53 +127,11 @@ update-po:
 		lingua=`basename $$suffix .po`; \
 		prefix=`echo $$po | cut -d'_' -f1`; \
 		if msgmerge $(MSGMERGE_ARGS) -o $$prefix\_$$suffix.new $$prefix\_$$suffix ../templates/$$prefix.pot; then\
-		  msguniq $(MSGUNIQ_ARGS) $$prefix\_$$suffix.new > $$prefix\_$$suffix; \
-		  rm -f $$prefix\_$$suffix.new; \
-		  echo "Merged new messages into $$prefix\_$$suffix" ; \
-		else \
-		    echo "Merging failed"; \
-		fi \
-		done
-	@echo "Be careful with git commits as .po file updates must be synchronized with the individual translators."
-update-po2:
-	@for i in $(DOMAINS) ; do \
-		if [ "`ls ./po/$$i\_*.po 2>/dev/null`" = "" ] ; then \
-		 echo "No $$i.po file found in ./po/ directory. Will create new po files from template." ; \
-		 cp ./templates/$$i.pot ./po/$$i.po ; \
-		 echo "Created ./po/$$i.po - Rename to ./po/$$i\_LANG.po (with LANG: de, ru, ...)" ; \
-		 echo "Then you can translate the messages in this file (e.g with kbabel)" ; \
-		fi ;\
-	done
-	@cd ./po/ ; for po in `ls *_*.po 2>/dev/null` ; do \
-		suffix=`echo $$po | cut -d'_' -f2-`; \
-		lingua=`basename $$suffix .po`; \
-		prefix=`echo $$po | cut -d'_' -f1`; \
-		if msgmerge $(MSGMERGE_ARGS) --update $$prefix\_$$suffix ../templates/$$prefix.pot; then\
-		  echo "Merged new messages into $$prefix\_$$suffix" ; \
-		else \
-		    echo "Merging failed"; \
-		fi \
-		done
-	@echo "Be careful with git commits as .po file updates must be synchronized with the individual translators."
-update-po3:
-	@for i in $(DOMAINS) ; do \
-		if [ "`ls ./po/$$i\_*.po 2>/dev/null`" = "" ] ; then \
-		 echo "No $$i.po file found in ./po/ directory. Will create new po files from template." ; \
-		 cp ./templates/$$i.pot ./po/$$i.po ; \
-		 echo "Created ./po/$$i.po - Rename to ./po/$$i\_LANG.po (with LANG: de, ru, ...)" ; \
-		 echo "Then you can translate the messages in this file (e.g with kbabel)" ; \
-		fi ;\
-	done
-	@cd ./po/ ; for po in `ls *_*.po 2>/dev/null` ; do \
-		suffix=`echo $$po | cut -d'_' -f2-`; \
-		lingua=`basename $$suffix .po`; \
-		prefix=`echo $$po | cut -d'_' -f1`; \
-		if msgmerge $(MSGMERGE_ARGS) -o $$prefix\_$$suffix.new $$prefix\_$$suffix ../templates/$$prefix.pot; then\
 		  msguniq $(MSGUNIQ_ARGS) --use-first $$prefix\_$$suffix.new > $$prefix\_$$suffix; \
 		  rm -f $$prefix\_$$suffix.new; \
 		  echo "Merged new messages into $$prefix\_$$suffix" ; \
 		else \
-		    echo "Merging failed"; \
+		  echo "Merging failed"; \
 		fi \
 		done
 	@echo "Be careful with git commits as .po file updates must be synchronized with the individual translators."
