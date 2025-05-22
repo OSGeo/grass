@@ -1,4 +1,4 @@
-## DESCRIPTION
+## Description
 
 *t.rast.mapcalc* performs spatio-temporal *mapcalc* expressions on maps
 of temporally sampled space time raster datasets (STRDS). Spatial and
@@ -78,7 +78,7 @@ The supported internal variables for the **current sample interval** or
 The *end\_\** functions are represented by the null() internal variable
 in case of time instances.
 
-## NOTES
+## Notes
 
 We will discuss the internal work of *t.rast.mapcalc* with an example.
 Imagine we have two STRDS as input, each one of monthly granularity. The
@@ -127,7 +127,7 @@ r.mapcalc expression="c_6 = if(8 == 5 || 8 == 6, (a8 + b8), (a8 * b8))"
 Semantic labels present in the sample dataset A will be transferred to
 the output dataset.
 
-## EXAMPLES
+## Examples
 
 The following command creates a new space time raster dataset
 `january_under_0` that will set to null all cells with temperature above
@@ -171,7 +171,7 @@ t.rast.mapcalc inputs=test.S2_8,test.S2_4 output=ndvi basename=ndvi \
 For more information about semantic label concept see
 *[i.band.library](i.band.library.md)* module.
 
-## SEE ALSO
+## See also
 
 *[r.mapcalc](r.mapcalc.md), [t.register](t.register.md),
 [t.rast.list](t.rast.list.md), [t.info](t.info.md)*
@@ -179,6 +179,6 @@ For more information about semantic label concept see
 [Temporal data processing
 Wiki](https://grasswiki.osgeo.org/wiki/Temporal_data_processing)
 
-## AUTHOR
+## Author
 
 Sören Gebbert, Thünen Institute of Climate-Smart Agriculture
