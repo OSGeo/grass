@@ -37,13 +37,24 @@ WXPY_POTFILES = find ../gui/wxpython -name '*.py' | xargs grep -l "_(\"\|n_(\""
 #For Python script module messages
 MOD_PYFILES = find ../scripts -name '*.py' | xargs grep -l "_(\"\|n_(\""
 
-XGETTEXT_ARGS = --no-wrap --sort-by-file
-MSGMERGE_ARGS = --no-wrap --sort-by-file --previous
-MSGUNIQ_ARGS = --no-wrap --sort-by-file
+XGETTEXT_ARGS = --no-wrap
+MSGMERGE_ARGS = --no-wrap
+MSGUNIQ_ARGS =
+# XGETTEXT_ARGS = --no-wrap --sort-by-file
+# MSGMERGE_ARGS = --no-wrap --sort-by-file --previous
+# MSGUNIQ_ARGS = --no-wrap --sort-by-file
 
 define po_stats
 GISBASE="$(RUN_GISBASE)" $(PYTHON) ./grass_po_stats.py
 endef
+
+pot-unique:
+	@echo "Sorting $(LIBDOMAIN)..."
+	msguniq $(MSGUNIQ_ARGS) -o ./templates/$(LIBDOMAIN).pot ./templates/$(LIBDOMAIN).pot
+	@echo "Sorting $(MODDOMAIN)..."
+	msguniq $(MSGUNIQ_ARGS) -o ./templates/$(MODDOMAIN).pot ./templates/$(MODDOMAIN).pot
+	@echo "Sorting $(WXPYDOMAIN)..."
+	msguniq $(MSGUNIQ_ARGS) -o ./templates/$(WXPYDOMAIN).pot ./templates/$(WXPYDOMAIN).pot
 
 #The xgettext utility is used to automate the creation of
 #portable message files (.po)
