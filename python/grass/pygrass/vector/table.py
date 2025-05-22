@@ -955,11 +955,16 @@ class DBlinks:
         """
         nlinks = self.num_dblinks()
         if nlinks == 0:
-            raise IndexError
+            raise IndexError(_("No links available."))
         if indx < 0:
             indx += nlinks
         if indx > nlinks:
-            raise IndexError
+            raise IndexError(
+                _(
+                    "Index out of bounds. The maximum index allowed is "
+                    "{max_link_indx}, the queried index is {indx}"
+                ).format(max_link_indx=nlinks - 1, indx=indx)
+            )
         c_fieldinfo = libvect.Vect_get_dblink(self.c_mapinfo, indx)
         return Link(c_fieldinfo=c_fieldinfo) if c_fieldinfo else None
 
