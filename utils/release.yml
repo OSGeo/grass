@@ -3,7 +3,7 @@ notes:
   categories:
     - title: Tools
       # yamllint disable-line rule:line-length
-      regexp: '(?:Revert \")?((d|db|g|i|m|ps|r|r3|t|v)\.[^ ]*)(, (d|db|g|i|m|ps|r|r3|t|v)\.[^ ]*)?: |(modules|tools|temporal): '
+      regexp: '(?:Revert \")?((d|db|g|i|m|ps|r|r3|t|v)\.[^ ]*)(, (d|db|g|i|m|ps|r|r3|t|v)\.[^ ]*)?: |(display|imagery|misc|modules|ps|raster3d|raster|scripts|temporal|tools|vector|visualization): '
       example: "r.slope.aspect:"
 
     - title: Graphical User Interface
@@ -19,7 +19,7 @@ notes:
       example: "doc:"
 
     - title: Libraries and General Functionality
-      regexp: '(?:Revert \")?(grass_|lib|TGIS|tgis|raster|vector)[^ ]*: '
+      regexp: '(?:Revert \")?(grass_|lib)[^ ]*: '
       example: "grass_btree: or lib/btree:"
 
     - title: Startup, Initialization, and Environment
