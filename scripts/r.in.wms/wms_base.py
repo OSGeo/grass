@@ -127,7 +127,9 @@ class WMSBase:
 
         self.source_epsg = str(GetEpsg(self.params["srs"]))
         self.target_epsg = None
-        target_crs = gs.parse_command("g.proj", flags="g", delimiter="=")
+        target_crs = gs.parse_command(
+            "g.proj", flags="p", format="shell", delimiter="="
+        )
         if "epsg" in target_crs.keys():
             self.target_epsg = target_crs["epsg"]
             if self.source_epsg != self.target_epsg:
