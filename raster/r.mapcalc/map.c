@@ -152,10 +152,7 @@ static void cache_release(struct row_cache *cache)
 static void *cache_get_raw(struct row_cache *cache, int row, int data_type)
 {
     struct sub_cache *sub;
-    void **tmp;
-    char *vtmp;
-    int i, j;
-    int newrow;
+    int i;
 
     if (!cache->sub[data_type])
         cache_sub_init(cache, data_type);
@@ -181,7 +178,6 @@ static void *cache_get_raw(struct row_cache *cache, int row, int data_type)
 
     else {
         i = (i < 0) ? 0 : cache->nrows - 1;
-        newrow = row - i;
         read_row(cache->fd, sub->buf[i], row, data_type);
         return sub->buf[i];
     }
