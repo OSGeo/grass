@@ -92,7 +92,7 @@ jobs:
       - name: Verify the .po files
         run: cd locale && make verify
       # Display changes, only to follow along in the logs.
-      - run: git diff
+      # - run: git diff
       - name: Double check if files are modified
         run: git status --ignored
       - name: Create Pull Request
