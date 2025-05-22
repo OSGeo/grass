@@ -172,6 +172,7 @@ jobs:
       #   run: cd locale && make verify
       # - name: Double check if files are modified
       #   run: git status --ignored
+      - run: rm .gunittest.extra.cfg
       - name: Commit and push applied linter fixes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
