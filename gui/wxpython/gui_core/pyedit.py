@@ -676,43 +676,54 @@ class PyEditToolbar(BaseToolbar):
 
     def _toolbarData(self):
         """Toolbar data"""
-        return self._getToolbarData(
+        data = (
             (
+                ("open", self.icons["open"].label.rsplit(" ", 1)[0]),
+                self.icons["open"],
+                self.parent.OnOpen,
+            ),
+            (
+                ("save", self.icons["save"].label.rsplit(" ", 1)[0]),
+                self.icons["save"],
+                self.parent.OnSave,
+            ),
+            (None,),
+            (
+                ("run", self.icons["run"].label.rsplit(" ", 1)[0]),
+                self.icons["run"],
+                self.parent.OnRun,
+            ),
+            (
+                ("overwrite", self.icons["overwriteTrue"].label),
+                self.icons["overwriteTrue"],
+                self.OnSetOverwrite,
+                wx.ITEM_CHECK,
+            ),
+            (None,),
+            (
+                ("help", self.icons["help"].label),
+                self.icons["help"],
+                self.parent.OnHelp,
+            ),
+        )
+        if self.parent.IsDockable():
+            data += (
                 (
-                    ("open", self.icons["open"].label.rsplit(" ", 1)[0]),
-                    self.icons["open"],
-                    self.parent.OnOpen,
-                ),
-                (
-                    ("save", self.icons["save"].label.rsplit(" ", 1)[0]),
-                    self.icons["save"],
-                    self.parent.OnSave,
-                ),
-                (None,),
-                (
-                    ("run", self.icons["run"].label.rsplit(" ", 1)[0]),
-                    self.icons["run"],
-                    self.parent.OnRun,
-                ),
-                (
-                    ("overwrite", self.icons["overwriteTrue"].label),
-                    self.icons["overwriteTrue"],
-                    self.OnSetOverwrite,
+                    ("docking", BaseIcons["docking"].label),
+                    BaseIcons["docking"],
+                    self.parent.OnDockUndock,
                     wx.ITEM_CHECK,
                 ),
-                (None,),
-                (
-                    ("help", self.icons["help"].label),
-                    self.icons["help"],
-                    self.parent.OnHelp,
-                ),
-                (
-                    ("quit", self.icons["quit"].label),
-                    self.icons["quit"],
-                    self.parent.OnCloseWindow,
-                ),
             )
+        data += (
+            (
+                ("quit", self.icons["quit"].label),
+                self.icons["quit"],
+                self.parent.OnCloseWindow,
+            ),
         )
+
+        return self._getToolbarData(data)
 
     # TODO: add overwrite also to the menu and sync with toolbar
     def OnSetOverwrite(self, event):
