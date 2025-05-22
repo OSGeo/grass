@@ -255,17 +255,6 @@ static void evaluate_map(expression *e)
                 current_depth + e->data.map.depth,
                 current_row[tid] + e->data.map.row, e->data.map.col,
                 e->buf[tid], e->res_type);
-
-    // printf("reading: tid %d, map_idx %d, current_d %d, map_d %d, current_r
-    // %d, map_row %d, map_col %d, value %f\n",
-    //         tid,
-    //         e->data.map.idx,
-    //         current_depth,
-    //         e->data.map.depth,
-    //         current_row[tid],
-    //         e->data.map.row,
-    //         e->data.map.col,
-    //         ((double *)e->buf[tid])[0]);
 }
 
 static void evaluate_function(expression *e)
@@ -383,7 +372,7 @@ static void error_handler(void *p UNUSED)
 
 void execute(expr_list *ee)
 {
-    int verbose = isatty(2);
+    int verbose;
     expr_list *l;
     expression **exp_arr;
     int count, n, i;
@@ -453,18 +442,22 @@ void execute(expr_list *ee)
 
 #if defined(_OPENMP)
     threads = omp_get_max_threads();
+    /* Make sure the number of threads no more that the number of rows in
+     * rasters */
     if ((threads > rows) && (threads > 1)) {
         threads = rows;
         omp_set_num_threads(threads);
-        G_message(_("The number of rows is less than the number of threads. \
-            Set the number of threads to be the same as the rows = %d"),
-                  threads);
+        G_verbose_message(
+            _("The number of rows is less than the number of threads. \
+            Set the number of threads to be the same as the rows = %d."),
+            threads);
     }
 #endif
     current_row = (int *)G_malloc(sizeof(int) * threads);
     count = rows * depths;
     n = 0;
 
+    verbose = isatty(2);
     for (current_depth = 0; current_depth < depths; current_depth++) {
 #pragma omp parallel for default(shared) schedule(static, 1) private(i) ordered
         for (int row = 0; row < rows; row++) {
@@ -475,6 +468,7 @@ void execute(expr_list *ee)
 #if defined(_OPENMP)
             tid = omp_get_thread_num();
 #endif
+            /* calculate through expressions row by row */
             current_row[tid] = row;
             for (i = 0; i < num_exprs; i++) {
                 expression *e = exp_arr[i];
@@ -482,11 +476,9 @@ void execute(expr_list *ee)
                 evaluate(e);
 #pragma omp ordered
                 {
+                    /* write out values to a file row by row */
                     if (e->type == expr_type_binding) {
                         fd = e->data.bind.fd;
-                        // printf("binding: fd %d, tid %d, row %d, value %f\n",
-                        // fd, tid,
-                        //        row, ((double *)e->buf[tid])[0]);
                         put_map_row(fd, e->buf[tid], e->res_type);
                     }
                 }
@@ -540,6 +532,10 @@ void execute(expr_list *ee)
         free_buf(e);
         if (e->type == expr_type_function)
             free_argv(e);
+        if (e->type == expr_type_map && e->data.map.idx) {
+            G_free(e->data.map.idx);
+            e->data.map.idx = NULL;
+        }
     }
     G_free(exp_arr);
     current_row = NULL;

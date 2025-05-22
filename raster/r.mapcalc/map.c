@@ -539,26 +539,6 @@ int open_map(const char *name, int mod, int row, int col)
         break;
     }
 
-    // for (i = 0; i < num_maps; i++) {
-    //     m = &maps[i];
-
-    //     if (strcmp(m->name, name) != 0 || strcmp(m->mapset, mapset) != 0)
-    //         continue;
-
-    //     if (row < m->min_row)
-    //         m->min_row = row;
-    //     if (row > m->max_row)
-    //         m->max_row = row;
-
-    //     if (use_cats && !m->have_cats)
-    //         init_cats(m);
-
-    //     if (use_colors && !m->have_colors)
-    //         init_colors(m);
-
-    //     return i;
-    // }
-
     if (num_maps >= max_maps) {
         max_maps += 10;
         maps = G_realloc(maps, max_maps * sizeof(struct map));

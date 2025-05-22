@@ -44,7 +44,7 @@ def benchmark(size, step, label, results):
     generate_map(rows=size, cols=size, fname=map2)
     module = Module(
         "r.mapcalc",
-        expression=f"{output}=({map1} + {map2})/2",
+        expression=f"{output}=({map1} + {map2} - 2*{map2} + {map1}*{map2} - {map1}/{map2})/2",
         overwrite=True,
     )
 
