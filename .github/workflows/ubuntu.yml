@@ -176,6 +176,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           branch: periodic-update-i18n-ubuntu-temp-${{ matrix.config }}
+          create_branch: true
 
       # - name: Create Pull Request
       #   id: cpr
