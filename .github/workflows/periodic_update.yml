@@ -72,7 +72,10 @@ jobs:
       - name: Install dependencied
         run: |
           sudo apt update
-          sudo apt install gettext
+          sudo apt install \
+            gettext \
+            libgdal-dev \
+            libproj-dev
       - run: ./configure --without-pdal
       - name: Create .pot files (containing original messages)
         run: cd locale && make pot
