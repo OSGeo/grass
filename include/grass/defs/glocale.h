@@ -1,10 +1,9 @@
 #ifndef GRASS_GLOCALEDEFS_H
 #define GRASS_GLOCALEDEFS_H
 
-#if defined(_MSC_VER)
-#ifndef __attribute__
+#if !defined __GNUC__ || __GNUC__ < 2
+#undef __attribute__
 #define __attribute__(x)
-#endif
 #endif
 
 extern void G_init_locale(void);
