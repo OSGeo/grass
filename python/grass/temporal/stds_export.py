@@ -394,7 +394,7 @@ def export_stds(
                 _export_raster3d_maps(rows, tar, list_file, new_cwd, fs)
 
     # Write projection and metadata
-    proj = gs.read_command("g.proj", flags="j")
+    proj = gs.read_command("g.proj", flags="p", format="proj4")
 
     Path(proj_file_name).write_text(proj)
 
