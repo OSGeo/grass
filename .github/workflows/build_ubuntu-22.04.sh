@@ -16,13 +16,16 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
+# get nr of cores
+NUM_CORES=$(nproc)
+
 # Adding -Werror to make's CFLAGS is a workaround for configuring with
 # an old version of configure, which issues compiler warnings and
 # errors out. This may be removed with upgraded configure.in file.
-makecmd="make"
+makecmd="make -j$NUM_CORES"
 if [[ "$#" -ge 2 ]]; then
     ARGS=("$@")
-    makecmd="make CFLAGS='$CFLAGS ${ARGS[@]:1}' CXXFLAGS='$CXXFLAGS ${ARGS[@]:1}'"
+    makecmd="make -j$NUM_CORES CFLAGS='$CFLAGS ${ARGS[@]:1}' CXXFLAGS='$CXXFLAGS ${ARGS[@]:1}'"
 fi
 
 # non-existent variables as an errors
