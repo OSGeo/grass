@@ -896,7 +896,7 @@ class PyEditFrame(wx.Frame):
         self.Fit()
         self.SetAutoLayout(True)
         self.Layout()
-        self.Bind(wx.EVT_CLOSE, self.panel.OnClose)
+        self.Bind(wx.EVT_CLOSE, self.panel.OnCloseWindow)
 
 
 def main():
