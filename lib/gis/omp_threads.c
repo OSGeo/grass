@@ -1,10 +1,11 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #if defined(_OPENMP)
 #include <omp.h>
 #endif
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
@@ -41,7 +42,9 @@ int G_set_omp_num_threads(struct Option *opt)
         threads = (threads < 1) ? 1 : threads;
     }
     omp_set_num_threads(threads);
-    G_verbose_message(_("%d threads are set up for parallel computing."),
+    G_verbose_message(n_("One thread is set up for parallel computing.",
+                         "%d threads are set up for parallel computing.",
+                         threads),
                       threads);
 #else
     if (!(threads == 0 || threads == 1)) {
