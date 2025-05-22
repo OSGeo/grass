@@ -324,7 +324,7 @@ def import_stds(
         Path(proj_name_tmp).write_text(proj_content)
 
         with open(temp_name, "w") as temp_file:
-            p = gs.start_command("g.proj", flags="j", stdout=temp_file)
+            p = gs.start_command("g.proj", flags="p", format="proj4", stdout=temp_file)
             p.communicate()
 
         if not gs.compare_key_value_text_files(temp_name, proj_name_tmp, sep="="):
