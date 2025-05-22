@@ -175,8 +175,7 @@ jobs:
       - name: Commit and push applied linter fixes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          branch: >-
-            periodic/update-i18n-ubuntu-temp-${{ matrix.config }}
+          branch: periodic-update-i18n-ubuntu-temp-${{ matrix.config }}
 
       # - name: Create Pull Request
       #   id: cpr
