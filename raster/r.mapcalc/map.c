@@ -497,7 +497,6 @@ int map_type(const char *name, int mod)
 
 int open_map(const char *name, int mod, int row, int col)
 {
-    int i;
     const char *mapset;
     int use_cats = 0;
     int use_colors = 0;
