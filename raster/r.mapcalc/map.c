@@ -426,6 +426,9 @@ static void read_map(struct map *m, void *buf, int res_type, int row, int col)
     else
         read_row(m->fd, buf, row, res_type);
 
+#ifdef _OPENMP
+    tid = omp_get_thread_num();
+#endif
     if (col)
         column_shift(buf, res_type, col);
 }
@@ -536,25 +539,25 @@ int open_map(const char *name, int mod, int row, int col)
         break;
     }
 
-    for (i = 0; i < num_maps; i++) {
-        m = &maps[i];
+    // for (i = 0; i < num_maps; i++) {
+    //     m = &maps[i];
 
-        if (strcmp(m->name, name) != 0 || strcmp(m->mapset, mapset) != 0)
-            continue;
+    //     if (strcmp(m->name, name) != 0 || strcmp(m->mapset, mapset) != 0)
+    //         continue;
 
-        if (row < m->min_row)
-            m->min_row = row;
-        if (row > m->max_row)
-            m->max_row = row;
+    //     if (row < m->min_row)
+    //         m->min_row = row;
+    //     if (row > m->max_row)
+    //         m->max_row = row;
 
-        if (use_cats && !m->have_cats)
-            init_cats(m);
+    //     if (use_cats && !m->have_cats)
+    //         init_cats(m);
 
-        if (use_colors && !m->have_colors)
-            init_colors(m);
+    //     if (use_colors && !m->have_colors)
+    //         init_colors(m);
 
-        return i;
-    }
+    //     return i;
+    // }
 
     if (num_maps >= max_maps) {
         max_maps += 10;

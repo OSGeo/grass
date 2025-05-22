@@ -13,7 +13,7 @@ import grass.benchmark as bm
 def main():
     results = []
     metrics = ["time", "speedup", "efficiency"]
-    mapsizes = [10e6, 20e6, 40e6, 80e6]
+    mapsizes = [10e6, 20e6]  # , 40e6, 80e6]
 
     # run benchmarks
 

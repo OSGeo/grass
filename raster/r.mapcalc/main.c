@@ -210,8 +210,6 @@ int main(int argc, char **argv)
         all_ok = 0;
     }
 
-    printf("all_ok = %d\n", all_ok);
-
     return all_ok ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 

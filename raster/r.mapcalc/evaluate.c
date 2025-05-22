@@ -134,8 +134,15 @@ static void initialize_map(expression *e)
 {
     allocate_buf(e);
 
-    e->data.map.idx = open_map(e->data.map.name, e->data.map.mod,
-                               e->data.map.row, e->data.map.col);
+    int threads = 1;
+#if defined(_OPENMP)
+    threads = omp_get_max_threads();
+#endif
+    e->data.map.idx = G_malloc(threads * sizeof(int));
+    for (int t = 0; t < threads; t++) {
+        e->data.map.idx[t] = open_map(e->data.map.name, e->data.map.mod,
+                                      e->data.map.row, e->data.map.col);
+    }
 }
 
 static void initialize_function(expression *e)
@@ -244,11 +251,21 @@ static void evaluate_map(expression *e)
 #if defined(_OPENMP)
     tid = omp_get_thread_num();
 #endif
-
-    get_map_row(e->data.map.idx, e->data.map.mod,
+    get_map_row(e->data.map.idx[tid], e->data.map.mod,
                 current_depth + e->data.map.depth,
                 current_row[tid] + e->data.map.row, e->data.map.col,
                 e->buf[tid], e->res_type);
+
+    // printf("reading: tid %d, map_idx %d, current_d %d, map_d %d, current_r
+    // %d, map_row %d, map_col %d, value %f\n",
+    //         tid,
+    //         e->data.map.idx,
+    //         current_depth,
+    //         e->data.map.depth,
+    //         current_row[tid],
+    //         e->data.map.row,
+    //         e->data.map.col,
+    //         ((double *)e->buf[tid])[0]);
 }
 
 static void evaluate_function(expression *e)
@@ -373,18 +390,6 @@ void execute(expr_list *ee)
     int num_exprs = 0;
     int threads = 1;
 
-#if defined(_OPENMP)
-    threads = omp_get_max_threads();
-    if ((threads > rows) && (threads > 1)) {
-        threads = rows;
-        omp_set_num_threads(threads);
-        G_message(_("The number of rows is less than the number of threads. \
-            Set the number of threads to be the same as the rows = %d"),
-                  threads);
-    }
-#endif
-    current_row = (int *)G_malloc(sizeof(int) * threads);
-
     exprs = ee;
     G_add_error_handler(error_handler, NULL);
 
@@ -446,11 +451,22 @@ void execute(expr_list *ee)
 
     setup_maps();
 
+#if defined(_OPENMP)
+    threads = omp_get_max_threads();
+    if ((threads > rows) && (threads > 1)) {
+        threads = rows;
+        omp_set_num_threads(threads);
+        G_message(_("The number of rows is less than the number of threads. \
+            Set the number of threads to be the same as the rows = %d"),
+                  threads);
+    }
+#endif
+    current_row = (int *)G_malloc(sizeof(int) * threads);
     count = rows * depths;
     n = 0;
 
     for (current_depth = 0; current_depth < depths; current_depth++) {
-#pragma omp parallel for default(shared) schedule(static, 1) ordered
+#pragma omp parallel for default(shared) schedule(static, 1) private(i) ordered
         for (int row = 0; row < rows; row++) {
             if (verbose)
                 G_percent(n, count, 2);
@@ -463,20 +479,20 @@ void execute(expr_list *ee)
             for (i = 0; i < num_exprs; i++) {
                 expression *e = exp_arr[i];
                 int fd;
-
                 evaluate(e);
 #pragma omp ordered
                 {
                     if (e->type == expr_type_binding) {
                         fd = e->data.bind.fd;
+                        // printf("binding: fd %d, tid %d, row %d, value %f\n",
+                        // fd, tid,
+                        //        row, ((double *)e->buf[tid])[0]);
                         put_map_row(fd, e->buf[tid], e->res_type);
                     }
                 }
             }
-#pragma omp critical
-            {
-                n++;
-            }
+#pragma omp atomic update
+            n++;
         }
     }
 
@@ -505,11 +521,11 @@ void execute(expr_list *ee)
 
         if (val->type == expr_type_map) {
             if (val->data.map.mod == 'M') {
-                copy_cats(var, val->data.map.idx);
-                copy_colors(var, val->data.map.idx);
+                copy_cats(var, val->data.map.idx[0]);
+                copy_colors(var, val->data.map.idx[0]);
             }
 
-            copy_history(var, val->data.map.idx);
+            copy_history(var, val->data.map.idx[0]);
         }
         else
             create_history(var, val);

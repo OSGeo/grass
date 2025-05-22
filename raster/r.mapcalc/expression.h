@@ -27,7 +27,7 @@ typedef struct expr_data_map {
     const char *name;
     int mod;
     int row, col, depth;
-    int idx;
+    int *idx; /* array to store fds for multi-threads*/
 } expr_data_map;
 
 typedef struct expr_data_func {
