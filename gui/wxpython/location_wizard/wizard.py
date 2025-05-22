@@ -1916,7 +1916,8 @@ class IAUPage(TitledPage):
             # convert them:
             ret, projlabel, err = RunCommand(
                 "g.proj",
-                flags="jft",
+                flags="ftp",
+                format="proj4",
                 proj4=self.epsgparams,
                 datum_trans=self.parent.datum_trans,
                 getErrorMsg=True,
@@ -2133,7 +2134,8 @@ class CustomPage(TitledPage):
                 # convert them:
                 ret, projlabel, err = RunCommand(
                     "g.proj",
-                    flags="jft",
+                    flags="ftp",
+                    format="proj4",
                     proj4=self.customstring,
                     datum_trans=dtrans,
                     getErrorMsg=True,
@@ -2297,7 +2299,11 @@ class SummaryPage(TitledPage):
                     extra_opts["datum_trans"] = dtrans
 
                 ret, projlabel, err = RunCommand(
-                    "g.proj", flags="jf", proj4=proj4string, **extra_opts
+                    "g.proj",
+                    flags="fp",
+                    format="proj4",
+                    proj4=proj4string,
+                    **extra_opts,
                 )
             elif coordsys == "iau":
                 if len(datum) > 0:
@@ -2305,12 +2311,17 @@ class SummaryPage(TitledPage):
                     extra_opts["datum_trans"] = dtrans
 
                 ret, projlabel, err = RunCommand(
-                    "g.proj", flags="jf", proj4=iauproj4string, **extra_opts
+                    "g.proj",
+                    flags="fp",
+                    format="proj4",
+                    proj4=iauproj4string,
+                    **extra_opts,
                 )
             elif coordsys == "epsg":
                 ret, projlabel, err = RunCommand(
                     "g.proj",
-                    flags="jft",
+                    flags="ftp",
+                    format="proj4",
                     epsg=epsgcode,
                     datum_trans=dtrans,
                     **extra_opts,
@@ -2318,14 +2329,16 @@ class SummaryPage(TitledPage):
             elif coordsys == "file":
                 ret, projlabel, err = RunCommand(
                     "g.proj",
-                    flags="jft",
+                    flags="ftp",
+                    format="proj4",
                     georef=self.parent.filepage.georeffile,
                     **extra_opts,
                 )
             elif coordsys == "wkt":
                 ret, projlabel, err = RunCommand(
                     "g.proj",
-                    flags="jft",
+                    flags="ftp",
+                    format="proj4",
                     wkt="-",
                     stdin=self.parent.wktpage.wktstring,
                     **extra_opts,
