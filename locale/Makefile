@@ -39,8 +39,8 @@ MOD_PYFILES = find ../scripts -name '*.py' | xargs grep -l "_(\"\|n_(\""
 
 XGETTEXT_ARGS = --no-wrap
 MSGMERGE_ARGS = --no-wrap
-MSGUNIQ_ARGS =
-MSGUNIQ_PO_ARGS =
+MSGUNIQ_ARGS = --no-wrap
+MSGUNIQ_PO_ARGS = --no-wrap
 # XGETTEXT_ARGS = --no-wrap --sort-by-file
 # MSGMERGE_ARGS = --no-wrap --sort-by-file --previous
 # MSGUNIQ_ARGS = --no-wrap --sort-by-file
