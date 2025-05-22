@@ -307,6 +307,8 @@ class TestCase(unittest.TestCase):
             msg=msg,
             sep="=",
             precision=precision,
+            # FIXME: Remove this after issues with r.univar are solved:
+            nprocs=1,
         )
 
     def assertRasterFitsInfo(self, raster, reference, precision=None, msg=None):
