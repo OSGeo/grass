@@ -31,7 +31,7 @@ char **list_subgroups(const char *group, const char *mapset, int *subgs_num)
     if (I_find_group2(group, mapset) == 0)
         return NULL;
 
-    sprintf(buf, "group/%s/subgroup", group);
+    snprintf(buf, sizeof(buf), "group/%s/subgroup", group);
     G_file_name(path, buf, "", mapset);
 
     if (G_lstat(path, &sb) || !S_ISDIR(sb.st_mode))
@@ -42,7 +42,7 @@ char **list_subgroups(const char *group, const char *mapset, int *subgs_num)
 }
 
 /*!
- * \brief Get list of subgroups which a group contatins.
+ * \brief Get list of subgroups which a group contains.
  *
  * \param group group name
  * \param[out] subgs_num number of subgroups which the group contains
@@ -56,7 +56,7 @@ char **I_list_subgroups(const char *group, int *subgs_num)
 }
 
 /*!
- * \brief Get list of subgroups which a group contatins.
+ * \brief Get list of subgroups which a group contains.
  *
  * \param group group name
  * \param mapset mapset name

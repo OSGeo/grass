@@ -597,32 +597,32 @@ int G_adjust_window_ll(struct Cell_head *cellhd)
     cellhds = *cellhd;
 
     old = cellhds.ns_res * 3600;
-    sprintf(buf, "%f", old);
+    snprintf(buf, sizeof(buf), "%f", old);
     sscanf(buf, "%lf", &new);
     cellhds.ns_res = new;
 
     old = cellhds.ew_res * 3600;
-    sprintf(buf, "%f", old);
+    snprintf(buf, sizeof(buf), "%f", old);
     sscanf(buf, "%lf", &new);
     cellhds.ew_res = new;
 
     old = cellhds.north * 3600;
-    sprintf(buf, "%f", old);
+    snprintf(buf, sizeof(buf), "%f", old);
     sscanf(buf, "%lf", &new);
     cellhds.north = new;
 
     old = cellhds.south * 3600;
-    sprintf(buf, "%f", old);
+    snprintf(buf, sizeof(buf), "%f", old);
     sscanf(buf, "%lf", &new);
     cellhds.south = new;
 
     old = cellhds.west * 3600;
-    sprintf(buf, "%f", old);
+    snprintf(buf, sizeof(buf), "%f", old);
     sscanf(buf, "%lf", &new);
     cellhds.west = new;
 
     old = cellhds.east * 3600;
-    sprintf(buf, "%f", old);
+    snprintf(buf, sizeof(buf), "%f", old);
     sscanf(buf, "%lf", &new);
     cellhds.east = new;
 

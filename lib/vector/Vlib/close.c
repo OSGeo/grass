@@ -253,7 +253,7 @@ int Vect_save_frmt(struct Map_info *Map)
     }
 
     /* create frmt file */
-    sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
+    snprintf(buf, sizeof(buf), "%s/%s", GV_DIRECTORY, Map->name);
     fd = G_fopen_new(buf, GV_FRMT_ELEMENT);
     if (fd == NULL) {
         G_fatal_error("Unable to create file '%s'", buf);

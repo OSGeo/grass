@@ -1182,7 +1182,7 @@ class SpatialExtent(SQLDatabaseInterface):
             edge = "S"
             edge_count += 1
 
-        # Meet a a single edge only
+        # Meet a single edge only
         if edge_count != 1:
             return False
 

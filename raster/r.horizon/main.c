@@ -35,6 +35,7 @@ Program was refactored by Anna Petrasova to remove most global variables.
 #include <omp.h>
 #endif
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

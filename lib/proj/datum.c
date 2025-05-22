@@ -270,7 +270,7 @@ GPJ_get_datum_transform_by_name(const char *inputname)
 
     /* Now check for additional parameters in datumtransform.table */
 
-    sprintf(file, "%s%s", G_gisbase(), DATUMTRANSFORMTABLE);
+    snprintf(file, sizeof(file), "%s%s", G_gisbase(), DATUMTRANSFORMTABLE);
 
     fd = fopen(file, "r");
     if (!fd) {
@@ -347,7 +347,7 @@ struct datum_list *read_datum_table(void)
     int line;
     struct datum_list *current = NULL, *outputlist = NULL;
 
-    sprintf(file, "%s%s", G_gisbase(), DATUMTABLE);
+    snprintf(file, sizeof(file), "%s%s", G_gisbase(), DATUMTABLE);
 
     fd = fopen(file, "r");
     if (!fd) {

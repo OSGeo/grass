@@ -3253,8 +3253,6 @@ if __name__ == "__main__":
             "forms.py opening form for: %s"
             % task.get_cmd(ignoreErrors=True, ignoreRequired=True),
         )
-        app = GrassGUIApp(task)
-        app.MainLoop()
     else:  # Test
         # Test grassTask from within a GRASS session
         if os.getenv("GISBASE") is not None:
@@ -3391,4 +3389,5 @@ if __name__ == "__main__":
             },
         ]
         q = wx.LogNull()
-        GrassGUIApp(task).MainLoop()
+
+    GrassGUIApp(task).MainLoop()
