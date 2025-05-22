@@ -1183,8 +1183,8 @@ msgid ""
 "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package "
 "to be installed. {0}"
 msgstr ""
-"La herramienta de gráfica temporal necesita que el paquete \"matplotlib\" "
-"(mathplotlib-python) esté instalado. {0}"
+"La herramienta de gráfica temporal necesita que el paquete "
+"\"matplotlib\" (mathplotlib-python) esté instalado. {0}"
 
 #: ../gui/wxpython/tplot/frame.py:104
 msgid "Temporal Plot Tool"

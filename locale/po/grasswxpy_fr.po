@@ -1132,8 +1132,8 @@ msgid ""
 msgstr ""
 "Ce module requiert le module NumPy, qui n'a pas pu être importé. Il n'est "
 "probablement pas installé (ne fait pas partie de la distribution standard "
-"Python). Voir le site Numeric Python (https://numpy.org) pour "
-"télécharger les binaires ou le code source."
+"Python). Voir le site Numeric Python (https://numpy.org) pour télécharger "
+"les binaires ou le code source."
 
 #: ../gui/wxpython/nviz/wxnviz.py:361 ../gui/wxpython/nviz/wxnviz.py:372
 #: ../gui/wxpython/iclass/g.gui.iclass.py:88

@@ -1099,8 +1099,7 @@ msgid ""
 msgstr ""
 "이 모듈은 NumPy 모듈이 필요하지만 가져올 수 없었습니다. 표준 파이썬 배포에 포"
 "함되지 않았기 때문에 아마도 설치되지 않은 것 같습니다. 소스나 이진코드를 내려"
-"받는데 필요한 정보는 Numeric Python 사이트 https://numpy.org에서 확인하"
-"세요."
+"받는데 필요한 정보는 Numeric Python 사이트 https://numpy.org에서 확인하세요."
 
 #: ../gui/wxpython/nviz/wxnviz.py:361 ../gui/wxpython/nviz/wxnviz.py:372
 #: ../gui/wxpython/iclass/g.gui.iclass.py:88

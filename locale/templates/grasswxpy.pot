@@ -12910,6 +12910,7 @@ msgid "Zoom to saved region extents"
 msgstr ""
 
 #: ../gui/wxpython/mapwin/buffered.py:2103
+#: ../gui/wxpython/mapdisp/frame.py:1531
 msgid "Set computational region from named region"
 msgstr ""
 
@@ -14933,10 +14934,6 @@ msgstr ""
 
 #: ../gui/wxpython/mapdisp/frame.py:1528
 msgid "Set computational region extent interactively"
-msgstr ""
-
-#: ../gui/wxpython/mapdisp/frame.py:1531
-msgid "Set computational region from named region"
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/frame.py:1534

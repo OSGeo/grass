@@ -1107,8 +1107,8 @@ msgid ""
 msgstr ""
 "このモジュールはインポートされないNumPyモジュールを必要とします. おそらくイン"
 "ストールされていません（標準的なPython分布の一環ではありません）. ソースまた"
-"はバイナリのダウンロードに関する情報は数値Pythonのサイト（https://numpy.org"
-"）を参照してください"
+"はバイナリのダウンロードに関する情報は数値Pythonのサイト（https://numpy.org）"
+"を参照してください"
 
 #: ../gui/wxpython/nviz/wxnviz.py:361 ../gui/wxpython/nviz/wxnviz.py:372
 #: ../gui/wxpython/iclass/g.gui.iclass.py:88

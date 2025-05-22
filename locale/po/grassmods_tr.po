@@ -548,11 +548,13 @@ msgstr ""
 msgid "raster"
 msgstr "raster"
 
-#: ../doc/examples/raster/r.example/main.c:84 ../doc/examples/vector/v.example/main.c:50
+#: ../doc/examples/raster/r.example/main.c:84
+#: ../doc/examples/vector/v.example/main.c:50
 msgid "keyword2"
 msgstr ""
 
-#: ../doc/examples/raster/r.example/main.c:85 ../doc/examples/vector/v.example/main.c:51
+#: ../doc/examples/raster/r.example/main.c:85
+#: ../doc/examples/vector/v.example/main.c:51
 msgid "keyword3"
 msgstr ""
 
@@ -560,43 +562,43 @@ msgstr ""
 msgid "My first raster module"
 msgstr "İlk raster modülüm"
 
-#: ../doc/examples/raster/r.example/main.c:105 ../raster/r.terraflow/main.cpp:207
-#: ../raster/r.terraflow/main.cpp:354 ../raster/r.terraflow/main.cpp:390
-#: ../raster/r.info/main.c:111 ../raster/r.cost/main.c:364
-#: ../raster/r.cost/main.c:391 ../raster/r.cost/main.c:711
-#: ../raster/r.null/main.c:129 ../raster/r.spread/main.c:445
-#: ../raster/r.spread/main.c:448 ../raster/r.spread/main.c:451
-#: ../raster/r.spread/main.c:455 ../raster/r.spread/main.c:458
-#: ../raster/r.spread/main.c:461 ../raster/r.compress/main.c:124
-#: ../raster/r.compress/main.c:318 ../raster/r.tile/main.c:84
-#: ../raster/r.univar/r.univar_main.c:301 ../raster/r.walk/main.c:467
-#: ../raster/r.walk/main.c:495 ../raster/r.walk/main.c:500
-#: ../raster/r.walk/main.c:872 ../raster/r.reclass/main.c:80
-#: ../raster/r.distance/parse.c:70 ../raster/r.distance/parse.c:79
-#: ../raster/r.mapcalc/map.c:515 ../raster/r.mapcalc/map.c:813
-#: ../raster/r.mapcalc/map3.c:712 ../raster/r.sim/simlib/output.c:369
-#: ../raster/r.sim/simlib/output.c:378 ../raster/r.sim/simlib/output.c:406
-#: ../raster/r.sim/simlib/output.c:415 ../raster/r.sim/simlib/output.c:457
-#: ../raster/r.sim/simlib/output.c:473 ../raster/r.sim/simlib/output.c:494
-#: ../raster/r.sim/simlib/output.c:535 ../raster/r.sim/simlib/output.c:574
-#: ../raster/r.sim/simlib/output.c:738 ../raster/r.flow/flow_io.c:67
-#: ../raster/r.flow/flow_io.c:245 ../raster/r.geomorphon/memory.c:47
-#: ../raster/r.coin/main.c:119 ../raster/r.coin/main.c:121
-#: ../raster/r.colors/edit_colors.c:505 ../raster/r.ros/main.c:362
-#: ../raster/r.ros/main.c:373 ../raster/r.ros/main.c:377
-#: ../raster/r.ros/main.c:382 ../raster/r.ros/main.c:387
-#: ../raster/r.ros/main.c:401 ../raster/r.ros/main.c:405
-#: ../raster/r.ros/main.c:420 ../raster/r.ros/main.c:424
-#: ../raster/r.ros/main.c:434 ../raster/r.fill.stats/main.c:1026
-#: ../raster/r.buffer/main.c:110 ../raster/r.report/parse.c:265
-#: ../raster/r.carve/main.c:160 ../raster/r.stream.extract/main.c:169
-#: ../raster/r.stream.extract/main.c:173 ../raster/r.stream.extract/main.c:178
-#: ../raster/r.category/main.c:115 ../raster/r.category/main.c:135
-#: ../raster/r.kappa/stats.c:31 ../raster/r.kappa/stats.c:36
-#: ../raster/r.kappa/main.c:179 ../raster/r.cross/main.c:101
-#: ../misc/m.nviz.image/surface.c:50 ../misc/m.nviz.image/surface.c:107
-#: ../general/g.region/main.c:450 ../general/g.region/main.c:820
-#: ../general/g.region/main.c:829
+#: ../doc/examples/raster/r.example/main.c:105
+#: ../raster/r.terraflow/main.cpp:207 ../raster/r.terraflow/main.cpp:354
+#: ../raster/r.terraflow/main.cpp:390 ../raster/r.info/main.c:111
+#: ../raster/r.cost/main.c:364 ../raster/r.cost/main.c:391
+#: ../raster/r.cost/main.c:711 ../raster/r.null/main.c:129
+#: ../raster/r.spread/main.c:445 ../raster/r.spread/main.c:448
+#: ../raster/r.spread/main.c:451 ../raster/r.spread/main.c:455
+#: ../raster/r.spread/main.c:458 ../raster/r.spread/main.c:461
+#: ../raster/r.compress/main.c:124 ../raster/r.compress/main.c:318
+#: ../raster/r.tile/main.c:84 ../raster/r.univar/r.univar_main.c:301
+#: ../raster/r.walk/main.c:467 ../raster/r.walk/main.c:495
+#: ../raster/r.walk/main.c:500 ../raster/r.walk/main.c:872
+#: ../raster/r.reclass/main.c:80 ../raster/r.distance/parse.c:70
+#: ../raster/r.distance/parse.c:79 ../raster/r.mapcalc/map.c:515
+#: ../raster/r.mapcalc/map.c:813 ../raster/r.mapcalc/map3.c:712
+#: ../raster/r.sim/simlib/output.c:369 ../raster/r.sim/simlib/output.c:378
+#: ../raster/r.sim/simlib/output.c:406 ../raster/r.sim/simlib/output.c:415
+#: ../raster/r.sim/simlib/output.c:457 ../raster/r.sim/simlib/output.c:473
+#: ../raster/r.sim/simlib/output.c:494 ../raster/r.sim/simlib/output.c:535
+#: ../raster/r.sim/simlib/output.c:574 ../raster/r.sim/simlib/output.c:738
+#: ../raster/r.flow/flow_io.c:67 ../raster/r.flow/flow_io.c:245
+#: ../raster/r.geomorphon/memory.c:47 ../raster/r.coin/main.c:119
+#: ../raster/r.coin/main.c:121 ../raster/r.colors/edit_colors.c:505
+#: ../raster/r.ros/main.c:362 ../raster/r.ros/main.c:373
+#: ../raster/r.ros/main.c:377 ../raster/r.ros/main.c:382
+#: ../raster/r.ros/main.c:387 ../raster/r.ros/main.c:401
+#: ../raster/r.ros/main.c:405 ../raster/r.ros/main.c:420
+#: ../raster/r.ros/main.c:424 ../raster/r.ros/main.c:434
+#: ../raster/r.fill.stats/main.c:1026 ../raster/r.buffer/main.c:110
+#: ../raster/r.report/parse.c:265 ../raster/r.carve/main.c:160
+#: ../raster/r.stream.extract/main.c:169 ../raster/r.stream.extract/main.c:173
+#: ../raster/r.stream.extract/main.c:178 ../raster/r.category/main.c:115
+#: ../raster/r.category/main.c:135 ../raster/r.kappa/stats.c:31
+#: ../raster/r.kappa/stats.c:36 ../raster/r.kappa/main.c:179
+#: ../raster/r.cross/main.c:101 ../misc/m.nviz.image/surface.c:50
+#: ../misc/m.nviz.image/surface.c:107 ../general/g.region/main.c:450
+#: ../general/g.region/main.c:820 ../general/g.region/main.c:829
 #: ../imagery/i.ortho.photo/i.ortho.elev/main.c:219
 #: ../imagery/i.gensig/parse.c:38 ../imagery/i.svm.train/main.c:260
 #: ../imagery/i.segment/parse_args.c:198 ../imagery/i.pca/main.c:132
@@ -957,32 +959,32 @@ msgstr "<%s> vektör haritası açılamıyor"
 msgid "Unable to create vector map <%s>"
 msgstr "<%s> vektör haritası oluşturulamıyor"
 
-#: ../doc/examples/vector/v.example/main.c:110 ../vector/v.generalize/misc.c:167
-#: ../vector/v.to.rast/support.c:101 ../vector/v.to.rast/support.c:271
-#: ../vector/v.to.rast/support.c:499 ../vector/v.distance/main.c:563
-#: ../vector/v.buffer/main.c:422 ../vector/v.univar/main.c:236
-#: ../vector/v.what.rast/main.c:137 ../vector/v.extrude/main.c:223
-#: ../vector/v.vect.stats/main.c:345 ../vector/v.vect.stats/main.c:421
-#: ../vector/v.what.rast3/main.c:121 ../vector/v.surf.bspline/crosscorr.c:123
-#: ../vector/v.colors/write_rgb.c:20 ../vector/v.colors/read_rgb.c:23
-#: ../vector/v.colors/scan_attr.c:24 ../vector/v.edit/select.c:496
-#: ../vector/v.neighbors/main.c:219 ../vector/v.overlay/main.c:422
-#: ../display/d.vect.chart/plot.c:36 ../display/d.vect.thematic/plot1.c:107
-#: ../display/d.vect/shape.c:41
+#: ../doc/examples/vector/v.example/main.c:110
+#: ../vector/v.generalize/misc.c:167 ../vector/v.to.rast/support.c:101
+#: ../vector/v.to.rast/support.c:271 ../vector/v.to.rast/support.c:499
+#: ../vector/v.distance/main.c:563 ../vector/v.buffer/main.c:422
+#: ../vector/v.univar/main.c:236 ../vector/v.what.rast/main.c:137
+#: ../vector/v.extrude/main.c:223 ../vector/v.vect.stats/main.c:345
+#: ../vector/v.vect.stats/main.c:421 ../vector/v.what.rast3/main.c:121
+#: ../vector/v.surf.bspline/crosscorr.c:123 ../vector/v.colors/write_rgb.c:20
+#: ../vector/v.colors/read_rgb.c:23 ../vector/v.colors/scan_attr.c:24
+#: ../vector/v.edit/select.c:496 ../vector/v.neighbors/main.c:219
+#: ../vector/v.overlay/main.c:422 ../display/d.vect.chart/plot.c:36
+#: ../display/d.vect.thematic/plot1.c:107 ../display/d.vect/shape.c:41
 #, c-format
 msgid "Database connection not defined for layer %d"
 msgstr "%d katmanının veritabanı bağlantısı belirlenmedi"
 
-#: ../doc/examples/vector/v.example/main.c:130 ../raster/r.stream.extract/close.c:176
-#: ../db/db.execute/main.c:68 ../db/db.createdb/main.c:38
-#: ../db/db.columns/main.c:47 ../db/db.dropdb/main.c:39
-#: ../db/db.databases/main.c:47 ../db/db.describe/main.c:51
-#: ../db/db.tables/main.c:45 ../db/db.select/main.c:74
-#: ../vector/v.db.connect/main.c:216 ../vector/v.db.connect/main.c:285
-#: ../vector/v.out.vtk/writeVTK.c:640 ../vector/v.profile/main.c:434
-#: ../vector/v.profile/main.c:600 ../vector/v.out.svg/main.c:152
-#: ../vector/v.edit/select.c:502 ../display/d.vect.thematic/main.c:295
-#: ../display/d.vect/opt.c:147
+#: ../doc/examples/vector/v.example/main.c:130
+#: ../raster/r.stream.extract/close.c:176 ../db/db.execute/main.c:68
+#: ../db/db.createdb/main.c:38 ../db/db.columns/main.c:47
+#: ../db/db.dropdb/main.c:39 ../db/db.databases/main.c:47
+#: ../db/db.describe/main.c:51 ../db/db.tables/main.c:45
+#: ../db/db.select/main.c:74 ../vector/v.db.connect/main.c:216
+#: ../vector/v.db.connect/main.c:285 ../vector/v.out.vtk/writeVTK.c:640
+#: ../vector/v.profile/main.c:434 ../vector/v.profile/main.c:600
+#: ../vector/v.out.svg/main.c:152 ../vector/v.edit/select.c:502
+#: ../display/d.vect.thematic/main.c:295 ../display/d.vect/opt.c:147
 #, c-format
 msgid "Unable to start driver <%s>"
 msgstr "Sürücü başlatılamıyor<%s>"
@@ -1063,7 +1065,8 @@ msgstr ""
 msgid "Error while retrieving database record for cat %d"
 msgstr ""
 
-#: ../doc/examples/vector/v.example/main.c:220 ../vector/v.fill.holes/main.c:196
+#: ../doc/examples/vector/v.example/main.c:220
+#: ../vector/v.fill.holes/main.c:196
 #, c-format
 msgid "Unable to copy attribute table to vector map <%s>"
 msgstr ""
@@ -44790,8 +44793,9 @@ msgstr ""
 
 #: ../locale/scriptstrings/i.sentinel.download_to_translate.c:31
 msgid ""
-"USGS Earth Explorer only supports query options \"identifier\", \"filename\" "
-"(in ESA name format) or \"usgs_identifier\" (in USGS name format)"
+"USGS Earth Explorer only supports query options \"identifier\", "
+"\"filename\" (in ESA name format) or \"usgs_identifier\" (in USGS name "
+"format)"
 msgstr ""
 
 #: ../locale/scriptstrings/i.sentinel.download_to_translate.c:33
@@ -49196,8 +49200,8 @@ msgstr ""
 
 #: ../locale/scriptstrings/m.csw.update_to_translate.c:10
 msgid ""
-"Separator inside connections resources item string '{Name}{Separator}{URL}' "
-"(print only), use \"separator\""
+"Separator inside connections resources item string '{Name}{Separator}"
+"{URL}' (print only), use \"separator\""
 msgstr ""
 
 #: ../locale/scriptstrings/m.csw.update_to_translate.c:12

@@ -21369,9 +21369,9 @@ msgstr "подписи:"
 #~ "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some "
 #~ "systems also python-matplotlib-wx) package(s) to be installed. {0}"
 #~ msgstr ""
-#~ "Для временной шкалы требуется установка пакета (пакетов) «matplotlib» "
-#~ "(python-matplotlib, а в некоторых системах ещё и python-matplotlib-wx). "
-#~ "{0}"
+#~ "Для временной шкалы требуется установка пакета (пакетов) "
+#~ "«matplotlib» (python-matplotlib, а в некоторых системах ещё и python-"
+#~ "matplotlib-wx). {0}"
 
 #, python-format
 #~ msgid ""

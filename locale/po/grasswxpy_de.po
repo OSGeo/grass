@@ -1127,8 +1127,8 @@ msgid ""
 msgstr ""
 "Dieses erfordert NumPy, das nicht importiert werden konnte. Es ist eventuell "
 "nicht installiert (es ist nicht Bestandteil der Standard-Python-"
-"Distribution). Gehe zur Numeric Python Website (https://numpy.org), um "
-"den Quellcode oder Binaries zu erhalten."
+"Distribution). Gehe zur Numeric Python Website (https://numpy.org), um den "
+"Quellcode oder Binaries zu erhalten."
 
 #: ../gui/wxpython/nviz/wxnviz.py:361 ../gui/wxpython/nviz/wxnviz.py:372
 #: ../gui/wxpython/iclass/g.gui.iclass.py:88
@@ -6948,8 +6948,8 @@ msgstr "SIMWE Oberflächenabflussmodellierung"
 #: ../gui/wxpython/menustrings.py:428 ../gui/wxpython/menustrings.py:1391
 msgid "Overland flow hydrologic simulation using path sampling method (SIMWE)."
 msgstr ""
-"Hydrologische Simulation des Oberflächenabfluss mittels \"path sampling\" "
-"(SIMWE)."
+"Hydrologische Simulation des Oberflächenabfluss mittels \"path "
+"sampling\" (SIMWE)."
 
 #: ../gui/wxpython/menustrings.py:429 ../gui/wxpython/menustrings.py:1392
 msgid "SIMWE Sediment flux modeling"

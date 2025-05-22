@@ -2081,7 +2081,7 @@ msgid "Unable to open %s file <%s>: %s"
 msgstr "Impossible d'ouvrir le fichier %s <%s> : %s"
 
 #: ../lib/gis/parser.c:1943
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Unable to create %s file <%s>: %s"
 msgstr "Impossible de créer le fichier %s <%s> : %s"
 
@@ -7538,7 +7538,7 @@ msgid "OGR layer <%s> not found"
 msgstr "Couche OGR <%s> non trouvée"
 
 #: ../lib/vector/Vlib/open_ogr.c:105 ../lib/vector/Vlib/write_ogr.c:349
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "OGR transaction with layer <%s> failed to start"
 msgstr "La transaction OGR avec la couche <%s> a échoué à démarrer"
 

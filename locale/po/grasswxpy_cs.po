@@ -1116,8 +1116,8 @@ msgid ""
 msgstr ""
 "Tento modul vyžaduje modul NumPy, který nelze importovat. Nejspíše není "
 "nainstalován (není součástí standardní instalace Pythonu). Podívejte se na "
-"stránku Numeric Python (https://numpy.org), kde naleznete další "
-"informace o stažení a instalaci."
+"stránku Numeric Python (https://numpy.org), kde naleznete další informace o "
+"stažení a instalaci."
 
 #: ../gui/wxpython/nviz/wxnviz.py:361 ../gui/wxpython/nviz/wxnviz.py:372
 #: ../gui/wxpython/iclass/g.gui.iclass.py:88

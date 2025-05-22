@@ -1123,8 +1123,8 @@ msgid ""
 msgstr ""
 "Acest modul necesită modulul NumPy, care nu a putut fi importat. Probabil nu "
 "este instalat (nu este parte a distribuției standard de Python). Vezi site-"
-"ul Numeric Python (https://numpy.org) pentru informații despre "
-"descărcarea codului sursă."
+"ul Numeric Python (https://numpy.org) pentru informații despre descărcarea "
+"codului sursă."
 
 #: ../gui/wxpython/nviz/wxnviz.py:361 ../gui/wxpython/nviz/wxnviz.py:372
 #: ../gui/wxpython/iclass/g.gui.iclass.py:88
