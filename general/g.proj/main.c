@@ -83,8 +83,7 @@ int main(int argc, char *argv[])
     printinfo = G_define_flag();
     printinfo->key = 'p';
     printinfo->guisection = _("Print");
-    printinfo->description =
-        _("Print projection information in conventional GRASS format");
+    printinfo->description = _("Print projection information");
 
     shellinfo = G_define_flag();
     shellinfo->key = 'g';
