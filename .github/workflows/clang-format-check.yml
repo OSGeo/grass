@@ -9,6 +9,9 @@ on:
       - '**.[ch]'
       - '**.[ch]pp'
   pull_request:
+    paths:
+      - '**.[ch]'
+      - '**.[ch]pp'
   workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
