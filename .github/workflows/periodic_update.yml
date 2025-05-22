@@ -55,3 +55,50 @@ jobs:
         run: |
           echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
           echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
+  update-i18n:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Create URL to the run output
+        id: vars
+        run: echo "run-url=https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" >> $GITHUB_OUTPUT
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Install dependencied
+        run: |
+          sudo apt update
+          sudo apt install gettext
+      - run: ./configure --without-pdal
+      - name: Create .pot files (containing original messages)
+        run: cd locale && make pot
+      - name: Merge new messages
+        run: cd locale && make update-po
+      - name: Verify the .po files
+        run: cd locale && make verify  
+      # Display changes, only to follow along in the logs.
+      - run: git diff
+      - name: Double check if files are modified
+        run: git status --ignored
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7.0.8
+        with:
+          commit-message: "locale: Update translation files"
+          branch: periodic/update-i18n
+          title: "locale: Update translation files"
+          body: |
+            This updates the .pot template files, as well as all language-specific .po files.
+            [Workflow run summary](${{ steps.vars.outputs.run-url }})
+
+            Automated changes by [create-pull-request](https://github.com/peter-evans/create-pull-request) GitHub action
+      - name: Check outputs
+        if: ${{ steps.cpr.outputs.pull-drequest-number }}
+        run: |
+          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
+
