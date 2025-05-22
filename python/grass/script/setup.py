@@ -276,6 +276,7 @@ def init(
 
         # ... setup GISBASE and sys.path before import
         import grass.script as gs
+
         session = gs.setup.init(
             "~/grassdata/nc_spm_08/user1",
             grass_path="/usr/lib/grass",

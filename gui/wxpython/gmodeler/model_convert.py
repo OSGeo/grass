@@ -27,7 +27,7 @@ from abc import ABC, abstractmethod
 from core import utils
 from gui_core.forms import GUI
 
-from gmodeler.model import ModelAction, ModelComment, ModelCondition, ModelLoop
+from gmodeler.model_items import ModelAction, ModelComment, ModelCondition, ModelLoop
 
 
 class BaseModelConverter(ABC):

@@ -7,6 +7,9 @@
 ;Mail to: grass-dev@lists.osgeo.org
 
 ;----------------------------------------------------------------------------------------------------------------------------
+; Create a Unicode installer. Supported with NSIS 3.0 and more, and the installers will not work with Windows 95-98-ME.
+Unicode true
+;----------------------------------------------------------------------------------------------------------------------------
 
 ;Select if you are building a "Development Version" (Devel) or a "Release Version" (Release) of the GRASS Installer
 
@@ -19,6 +22,10 @@ SetCompressor /SOLID lzma
 SetCompressorDictSize 128
 
 ;----------------------------------------------------------------------------------------------------------------------------
+; Make the installer support High DPI screens
+ManifestDPIAware true
+
+;----------------------------------------------------------------------------------------------------------------------------
 
 ;Version variables
 
@@ -29,7 +36,7 @@ SetCompressorDictSize 128
 !endif
 !define BINARY_REVISION "1"
 !define VERSION_NUMBER "@GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@"
-!define GRASS_BASE "GRASS GIS @GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@"
+!define GRASS_BASE "GRASS @GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@"
 !define GRASS_COMMAND "grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@"
 
 ;----------------------------------------------------------------------------------------------------------------------------
@@ -60,12 +67,12 @@ InstallDir "$PROGRAMFILES64\${GRASS_BASE}"
 !define PACKAGE_FOLDER ".\GRASS-@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@-Package"
 !if ${INSTALLER_TYPE} == "Release"
 	!define INSTALLER_NAME "WinGRASS-${VERSION_NUMBER}-${BINARY_REVISION}-Setup.exe"
-	!define DISPLAYED_NAME "GRASS GIS ${VERSION_NUMBER}-${BINARY_REVISION}"
-	!define CHECK_INSTALL_NAME "GRASS GIS @GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@"
+	!define DISPLAYED_NAME "GRASS ${VERSION_NUMBER}-${BINARY_REVISION}"
+	!define CHECK_INSTALL_NAME "GRASS @GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@"
 !else
 	!define INSTALLER_NAME "WinGRASS-${VERSION_NUMBER}-${GIT_REVISION}-${BINARY_REVISION}-Setup.exe"
-	!define DISPLAYED_NAME "GRASS GIS ${VERSION_NUMBER}-${GIT_REVISION}-${BINARY_REVISION}"
-	!define CHECK_INSTALL_NAME "GRASS GIS @GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@ GIT"
+	!define DISPLAYED_NAME "GRASS ${VERSION_NUMBER}-${GIT_REVISION}-${BINARY_REVISION}"
+	!define CHECK_INSTALL_NAME "GRASS @GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@ GIT"
 !endif
 
 ;Define the source path of the demolocation files
@@ -403,7 +410,7 @@ FunctionEnd
 !define MUI_ABORTWARNING
 !define MUI_ICON ".\Installer-Files\Install_GRASS.ico"
 !define MUI_UNICON ".\Installer-Files\Uninstall_GRASS.ico"
-!define MUI_HEADERIMAGE_BITMAP_NOSTETCH ".\Installer-Files\InstallHeaderImage.bmp"
+!define MUI_HEADERIMAGE_BITMAP_NOSTRETCH ".\Installer-Files\InstallHeaderImage.bmp"
 !define MUI_HEADERIMAGE_UNBITMAP_NOSTRETCH ".\Installer-Files\UnInstallHeaderImage.bmp"
 !define MUI_WELCOMEFINISHPAGE_BITMAP ".\Installer-Files\WelcomeFinishPage.bmp"
 !define MUI_UNWELCOMEFINISHPAGE_BITMAP ".\Installer-Files\UnWelcomeFinishPage.bmp"
@@ -435,7 +442,7 @@ FunctionEnd
     !define MUI_FINISHPAGE_NOAUTOCLOSE
     !define MUI_FINISHPAGE_RUN
     !define MUI_FINISHPAGE_RUN_NOTCHECKED
-    !define MUI_FINISHPAGE_RUN_TEXT "Launch GRASS GIS"
+    !define MUI_FINISHPAGE_RUN_TEXT "Launch GRASS"
     !define MUI_FINISHPAGE_RUN_FUNCTION "LaunchGrass"
     !define MUI_FINISHPAGE_SHOWREADME
     !define MUI_FINISHPAGE_SHOWREADME_NOTCHECKED
@@ -619,7 +626,7 @@ Section "GRASS" SecGRASS
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "InstallPath" "$INSTALL_DIR"
 
 	;HKEY_LOCAL_MACHINE Uninstall entries
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "DisplayName" "GRASS GIS @GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "DisplayName" "GRASS @GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "UninstallString" "$INSTALL_DIR\Uninstall-GRASS.exe"
 
 	!if ${INSTALLER_TYPE} == "Release"
@@ -641,7 +648,7 @@ Section "GRASS" SecGRASS
 	SetShellVarContext current
 
 	CreateShortCut "$DESKTOP\${GRASS_BASE}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "--gui"\
-	"$INSTALL_DIR\gui\icons\grass.ico" "" SW_SHOWNORMAL "" "Launch GRASS GIS ${VERSION_NUMBER}"
+	"$INSTALL_DIR\gui\icons\grass.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER}"
 
 	;Create the Windows Start Menu Shortcuts
 	SetShellVarContext all
@@ -649,10 +656,10 @@ Section "GRASS" SecGRASS
 	CreateDirectory "$SMPROGRAMS\${GRASS_BASE}"
 
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\${GRASS_BASE}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "--gui"\
-	"$INSTALL_DIR\gui\icons\grass.ico" "" SW_SHOWNORMAL "" "Launch GRASS GIS ${VERSION_NUMBER}"
+	"$INSTALL_DIR\gui\icons\grass.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER}"
 
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\Uninstall ${GRASS_BASE}.lnk" "$INSTALL_DIR\Uninstall-GRASS.exe" ""\
-	"$INSTALL_DIR\Uninstall-GRASS.exe" "" SW_SHOWNORMAL "" "Uninstall GRASS GIS ${VERSION_NUMBER}"
+	"$INSTALL_DIR\Uninstall-GRASS.exe" "" SW_SHOWNORMAL "" "Uninstall GRASS ${VERSION_NUMBER}"
 
 	;Create the grass_command.bat
 	ClearErrors
