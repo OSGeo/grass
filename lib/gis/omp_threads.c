@@ -45,7 +45,7 @@ int G_set_omp_num_threads(struct Option *opt)
                       threads);
 #else
     if (!(threads == 0 || threads == 1)) {
-        G_warning(_("GRASS GIS is not compiled with OpenMP support, parallel "
+        G_warning(_("GRASS is not compiled with OpenMP support, parallel "
                     "computation is disabled. Only one thread will be used."));
     }
     threads = 1;
