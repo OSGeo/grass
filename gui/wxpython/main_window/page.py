@@ -48,6 +48,9 @@ class MainPageBase:
         # Emitted when renaming page.
         self.renamingPage = Signal("MainPage.renamingPage")
 
+    def OnCloseWindow(self, event=None):
+        raise NotImplementedError
+
     def _pgnumDict(self):
         """Get dictionary containing page index"""
         return {"mainnotebook": self._mainnotebook.GetPageIndex(self)}
