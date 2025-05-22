@@ -174,7 +174,7 @@ jobs:
         with:
           commit-message: "locale: Update translation files (ubuntu ${{ matrix.name }})"
           branch: periodic/update-i18n-ubuntu-${{ matrix.config }}-${{ matrix.extra-include }}
-          title: "locale: Update translation files"
+          title: "locale: Update translation files (ubuntu ${{ matrix.name }})"
           body: |
             This updates the .pot template files, as well as all language-specific .po files.
             [Workflow run summary](${{ steps.vars.outputs.run-url }})
