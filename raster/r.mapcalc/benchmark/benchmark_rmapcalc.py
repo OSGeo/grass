@@ -1,7 +1,7 @@
-"""Benchmarking of r.horizon
-point mode, one direction
+"""Benchmarking of r.mapcalc
+raster (2D)
 
-@author Chung-Yuan Liang, 2024
+@author Chung-Yuan Liang, 2025
 """
 
 from grass.exceptions import CalledModuleError
@@ -13,7 +13,7 @@ import grass.benchmark as bm
 def main():
     results = []
     metrics = ["time", "speedup", "efficiency"]
-    mapsizes = [10e6, 20e6]  # , 40e6, 80e6]
+    mapsizes = [10e6, 20e6]
 
     # run benchmarks
 
