@@ -168,7 +168,6 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7.0.8
         with:
-          
           commit-message: "locale: Update translation files (ubuntu ${{ matrix.name }})"
           branch: periodic/update-i18n-ubuntu-${{ matrix.config }}-${{ matrix.extra-include }}
           title: "locale: Update translation files"
