@@ -160,8 +160,10 @@ jobs:
       - name: Test executing of the grass command
         run: .github/workflows/test_simple.sh
 
-      - name: Remove duplicates in files
+      - name: Remove duplicates in template files
         run: cd locale && make pot-unique
+      - name: Remove duplicates in .po files
+        run: cd locale && make unique-po
       # - name: Create .pot files (containing original messages)
       #   run: cd locale && make pot
       # - name: Merge new messages
