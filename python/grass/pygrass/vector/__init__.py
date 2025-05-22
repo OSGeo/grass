@@ -207,15 +207,15 @@ class Vector(Info):
             # already features in the map when we opened it
             cat = (self._cats[-1] if self._cats else 0) + 1
 
-        if cat is not None and cat not in self._cats:
-            self._cats.append(cat)
-            if self.table is not None and attrs is not None:
-                attr = [cat, *attrs]
-                cur = self.table.conn.cursor()
-                cur.execute(self.table.columns.insert_str, attr)
-                cur.close()
-
         if cat is not None:
+            if cat not in self._cats:
+                self._cats.append(cat)
+                if self.table is not None and attrs is not None:
+                    attr = [cat, *attrs]
+                    cur = self.table.conn.cursor()
+                    cur.execute(self.table.columns.insert_str, attr)
+                    cur.close()
+
             cats = Cats(geo_obj.c_cats)
             cats.reset()
             cats.set(cat, self.layer)
