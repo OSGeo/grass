@@ -1,7 +1,7 @@
 #[[
 AUTHOR(S):  Rashad Kanavath <rashad km gmail>
 PURPOSE:    This is the main function that builds all grass libraries (prefixed with grass_)
-            and grass exeuctables. This cmake function is tailored to meet requirement of grass
+            and grass executables. This cmake function is tailored to meet requirement of grass
             gnu make rules
 COPYRIGHT:  (C) 2020 by the GRASS Development Team
 
