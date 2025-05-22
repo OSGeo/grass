@@ -64,7 +64,9 @@ jobs:
             c: gnu17
             cxx: c++17
       fail-fast: false
-
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: Create URL to the run output
         id: vars
