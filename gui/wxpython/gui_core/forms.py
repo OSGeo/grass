@@ -2297,6 +2297,8 @@ class CmdPanel(wx.Panel):
 
                 elif prompt == "sql_query":
                     win = gselect.SqlWhereSelect(parent=which_panel, param=p)
+                    if value:
+                        win.SetValue(value)  # parameter previously set
                     p["wxId"] = [win.GetTextWin().GetId()]
                     win.GetTextWin().Bind(wx.EVT_TEXT, self.OnSetValue)
                     which_sizer.Add(
