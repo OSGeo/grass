@@ -60,7 +60,7 @@ class GProjTestCase(TestCase):
 
     def test_proj4_output(self):
         """Test if g.proj returns consistent PROJ4 output."""
-        module_flag = SimpleModule("g.proj", flags="j")
+        module_flag = SimpleModule("g.proj", flags="p", format="proj4")
         self.assertModule(module_flag)
         result_flag = module_flag.outputs.stdout
         self.assert_keys_in_output(result_flag, "+")
