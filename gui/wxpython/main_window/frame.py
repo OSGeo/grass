@@ -1997,7 +1997,7 @@ class GMFrame(wx.Frame):
         )
 
         # add map display panel to notebook and make it current
-        self.mainnotebook.AddPage(simpleEditor, _("Simple editor"))
+        self.mainnotebook.AddPage(simpleEditor, _("Code editor"))
 
     def OnShowAttributeTable(self, event, selection=None):
         """Show attribute table of the given vector map layer"""
