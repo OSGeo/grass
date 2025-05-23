@@ -164,19 +164,19 @@ jobs:
         run: cd locale && make pot-unique
       - name: Remove duplicates in .po files
         run: cd locale && make unique-po
-      # - name: Create .pot files (containing original messages)
-      #   run: cd locale && make pot
-      # - name: Merge new messages
-      #   run: cd locale && make update-po
-      # - name: Verify the .po files
-      #   run: cd locale && make verify
-      # - name: Double check if files are modified
-      #   run: git status --ignored
+      - name: Create .pot files (containing original messages)
+        run: cd locale && make pot
+      - name: Merge new messages
+        run: cd locale && make update-po
+      - name: Verify the .po files
+        run: cd locale && make verify
+      - name: Double check if files are modified
+        run: git status --ignored
       - run: rm .gunittest.extra.cfg
       - name: Commit and push applied linter fixes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          branch: periodic-update-i18n-ubuntu-temp-${{ matrix.config }}2
+          branch: periodic-update-i18n-ubuntu-temp-${{ matrix.config }}3
           create_branch: true
 
       # - name: Create Pull Request
