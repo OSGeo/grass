@@ -27,7 +27,7 @@ jobs:
       matrix:
         name:
           - "22.04"
-          - minimum config
+          # - minimum config
 
         # Only run tests for these folders in this matrix job.
         extra-include:
@@ -44,10 +44,10 @@ jobs:
           # newlines with spaces, and strip newline at end.
           # See https://yaml-multiline.info/
           - temporal
-          # - >-
-          #   db display doc docker general gui
-          #   imagery lib misc ps python raster raster3d scripts
-          #   testsuite utils vector visualization
+          - >-
+            db display doc docker general gui
+            imagery lib misc ps python raster raster3d scripts
+            testsuite utils vector visualization
 
         include:
           - name: "22.04"
@@ -58,23 +58,13 @@ jobs:
           # This is without optional things but it still keeps things useful,
           # so, e.g., without OpenMP, but with PDAL. Code or tests should be written
           # so that test pass even when these optional things are not present.
-          - name: minimum config
-            os: ubuntu-22.04
-            config: ubuntu-22.04_without_x
-            c: gnu17
-            cxx: c++17
+          # - name: minimum config
+          #   os: ubuntu-22.04
+          #   config: ubuntu-22.04_without_x
       fail-fast: false
-    permissions:
-      contents: write
-      pull-requests: write
+
     steps:
-      - name: Create URL to the run output
-        id: vars
-        run: echo "run-url=https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" >> $GITHUB_OUTPUT
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with:
-          fetch-depth: 0
-          ref: ${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
       - name: Invert inclusion list to an exclusion list
         id: get-exclude
         run: |
@@ -116,14 +106,9 @@ jobs:
       - name: Get dependencies
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y wget git gawk findutils gettext
+          sudo apt-get install -y wget git gawk findutils
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
-
-      - name: Install wxPython
-        run: |
-          pip install -U wxpython \
-            -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-22.04
 
       - name: Create installation directory
         run: |
@@ -165,42 +150,6 @@ jobs:
       - name: Test executing of the grass command
         run: .github/workflows/test_simple.sh
 
-      - name: Remove duplicates in template files
-        run: cd locale && make pot-unique
-      - name: Remove duplicates in .po files
-        run: cd locale && make unique-po
-      - name: Create .pot files (containing original messages)
-        run: cd locale && make pot
-      - name: Merge new messages
-        run: cd locale && make update-po
-      - name: Verify the .po files
-        run: cd locale && make verify
-      - name: Double check if files are modified
-        run: git status --ignored
-      - run: rm .gunittest.extra.cfg
-      - name: Commit and push applied linter fixes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          branch: periodic-update-i18n-ubuntu-temp-${{ matrix.config }}4
-          create_branch: true
-
-      # - name: Create Pull Request
-      #   id: cpr
-      #   uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7.0.8
-      #   with:
-      #     commit-message: "locale: Update translation files (ubuntu ${{ matrix.name }})"
-      #     branch: periodic/update-i18n-ubuntu-${{ matrix.config }}-${{ matrix.extra-include }}
-      #     title: "locale: Update translation files (ubuntu ${{ matrix.name }})"
-      #     body: |
-      #       This updates the .pot template files, as well as all language-specific .po files.
-      #       [Workflow run summary](${{ steps.vars.outputs.run-url }})
-
-      #       Automated changes by [create-pull-request](https://github.com/peter-evans/create-pull-request) GitHub action
-      # - name: Check outputs
-      #   if: ${{ steps.cpr.outputs.pull-request-number }}
-      #   run: |
-      #     echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
-      #     echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
       - name: Cache GRASS Sample Dataset
         id: cached-data
         uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
