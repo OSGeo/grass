@@ -70,12 +70,12 @@ g.region raster=ortho_2001_t792_1m -p
 
 # Smooth with average in a 3x3 window. Note how all edges have became blurry
 # but at the same time streets and roofs are still noisy
-r.neighbors input=ortho_2001_t792_1m output=ortho_smoothed_avg\
+r.neighbors input=ortho_2001_t792_1m output=ortho_smoothed_avg \
  size=3 method=average
 
 # Smooth with median in a 3x3 window. Although better than average smoothing,
 # thin lines still are lost and noise on streets and roofs is still present.
-r.neighbors input=ortho_2001_t792_1m output=ortho_smoothed_med\
+r.neighbors input=ortho_2001_t792_1m output=ortho_smoothed_med \
  size=3 method=median
 
 # Smooth with quadratic diffusivity function. Note better preservation of
@@ -104,7 +104,7 @@ r.smooth.edgepreserve function=tukey input=ortho_2001_t792_1m \
 
 - Smooth with statistics: *[r.neighbours](r.neighbours)*
 - The Mumford-Shah variational model for image segmentation (an add-on):
-*[r.smooth.seg](https://grass.osgeo.org/grass84/manuals/addons/r.smooth.seg.html)*
+*[r.smooth.seg](https://grass.osgeo.org/grass-stable/manuals/addons/r.smooth.seg.html)*
 
 ## REFERENCES
 

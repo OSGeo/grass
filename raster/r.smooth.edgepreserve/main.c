@@ -46,6 +46,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("smoothing"));
     G_add_keyword(_("edge detection"));
+    G_add_keyword(_("parallel"));
+    G_add_keyword(_("denoise"));
     module->description = _("Smoothing with anisotropic diffusion");
 
     opt.input = G_define_standard_option(G_OPT_R_INPUT);
