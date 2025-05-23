@@ -14,11 +14,6 @@ This program is free software under the GNU General Public License
 @author Linda Karlovska <linda.karlovska seznam.cz>
 """
 
-import json
-import subprocess
-import threading
-from pathlib import Path
-
 import wx
 
 try:
@@ -26,10 +21,10 @@ try:
 except ImportError as e:
     raise RuntimeError(_("wx.html2 is required for Jupyter integration.")) from e
 
-import grass.script as gs
-import grass.jupyter as gj
-
 from main_window.page import MainPageBase
+
+from grass.notebooks.launcher import NotebookServerManager
+from grass.notebooks.directory import NotebookDirectoryManager
 
 
 class JupyterPanel(wx.Panel, MainPageBase):
@@ -60,177 +55,70 @@ class JupyterPanel(wx.Panel, MainPageBase):
 
         self.SetName("Jupyter")
 
-    def start_jupyter_server(self, notebooks_dir):
-        """Spustí Jupyter notebook server v daném adresáři na volném portu."""
-        import socket
-        import time
+    def _hide_file_menu(self, event):
+        """Inject JavaScript to hide Jupyter's File menu
+        and header after load.
+        :param event: wx.EVT_WEBVIEW_LOADED event
+        """
+        # Hide File menu and header
+        webview = event.GetEventObject()
+        js = """
+        var interval = setInterval(function() {
+            // Hide File menu
+            var fileMenu = document.querySelector('li#file_menu, a#filelink, a[aria-controls="file_menu"]');
+            if (fileMenu) {
+                if (fileMenu.tagName === "LI") {
+                    fileMenu.style.display = 'none';
+                } else if (fileMenu.parentElement && fileMenu.parentElement.tagName === "LI") {
+                    fileMenu.parentElement.style.display = 'none';
+                }
+            }
+            // Hide top header
+            var header = document.getElementById('header-container');
+            if (header) {
+                header.style.display = 'none';
+            }
+            // Stop checking once both are hidden
+            if (fileMenu && header) {
+                clearInterval(interval);
+            }
+        }, 500);
+        """
+        webview.RunScript(js)
 
-        # Najdi volný port
-        sock = socket.socket()
-        sock.bind(("", 0))
-        port = sock.getsockname()[1]
-        sock.close()
+    def _add_notebook_tab(self, url, title):
+        """Add a new tab with a Jupyter notebook loaded in a WebView.
 
-        # Spusť server v samostatném vlákně
-        def run_server():
-            subprocess.Popen(
-                [
-                    "jupyter",
-                    "notebook",
-                    "--no-browser",
-                    "--NotebookApp.token=''",
-                    "--NotebookApp.password=''",
-                    "--port",
-                    str(port),
-                    "--notebook-dir",
-                    notebooks_dir,
-                ]
-            )
+        This method creates a new browser tab inside the notebook panel
+        and loads the given URL. After the page is loaded, it injects
+        JavaScript to hide certain UI elements from the Jupyter interface.
 
-        threading.Thread(target=run_server, daemon=True).start()
-
-        output = subprocess.check_output(["jupyter", "notebook", "list"]).decode()
-        print(output)
-
-        # Počkej, až server naběhne (lepší by bylo kontrolovat výstup, zde jen krátké čekání)
-        time.sleep(3)
-        print(port)
-        return f"http://localhost:{port}"
+        :param url: URL to the Jupyter notebook
+        :param title: Title of the new tab
+        """
+        webview = html.WebView.New(self.notebook)
+        wx.CallAfter(webview.LoadURL, url)
+        wx.CallAfter(webview.Bind, html.EVT_WEBVIEW_LOADED, self._hide_file_menu)
+        self.notebook.AddPage(webview, title)
 
     def SetUpPage(self):
         """Set up the Jupyter Notebook interface."""
-        gisenv = gs.gisenv()
-        gisdbase = gisenv["GISDBASE"]
-        location = gisenv["LOCATION_NAME"]
-        mapset = gisenv["MAPSET"]
-        mapset_path = f"{gisdbase}/{location}/{mapset}"
-        notebooks_dir = Path(mapset_path) / "notebooks"
-        notebooks_dir.mkdir(parents=True, exist_ok=True)
-        self.session = gj.init(mapset_path)
+        # Create a directory manager to handle notebook files
+        # and a server manager to run the Jupyter server
+        dir_manager = NotebookDirectoryManager()
+        dir_manager.prepare_notebook_files()
 
-        # Spusť Jupyter server v adresáři notebooks
-        url_base = self.start_jupyter_server(notebooks_dir)
+        server_manager = NotebookServerManager(dir_manager.notebook_workdir)
+        server_manager.start_server()
 
-        # Najdi všechny .ipynb soubory v notebooks/
-        ipynb_files = [f for f in Path.iterdir(notebooks_dir) if f.endswith(".ipynb")]
-        print(ipynb_files)
+        self.notebook = wx.Notebook(self)
 
-        if not ipynb_files:
-            print("No notebooks found in the directory.")
-            # Pokud nejsou žádné soubory, vytvoř template
-            new_notebook_name = "template.ipynb"
-            print(new_notebook_name)
-            new_notebook_path = Path(notebooks_dir) / (new_notebook_name)
-            template = {
-                "cells": [
-                    {
-                        "cell_type": "markdown",
-                        "metadata": {},
-                        "source": [
-                            "# Template file\n",
-                        ],
-                    },
-                    {
-                        "cell_type": "markdown",
-                        "metadata": {},
-                        "source": [
-                            "You can add your own code here\n",
-                            "or create new notebooks in the GRASS GUI\n",
-                            "and they will be automatically saved in the directory: `{}`\n".format(
-                                notebooks_dir.replace("\\", "/")
-                            ),
-                            "and opened in the Jupyter Notebook interface.\n",
-                            "\n",
-                        ],
-                    },
-                    {
-                        "cell_type": "code",
-                        "execution_count": None,
-                        "metadata": {},
-                        "outputs": [],
-                        "source": [
-                            "import grass.script as gs",
-                        ],
-                    },
-                    {
-                        "cell_type": "code",
-                        "execution_count": None,
-                        "metadata": {},
-                        "outputs": [],
-                        "source": [
-                            "print('Raster maps in the current mapset:')\n",
-                            "for rast in gs.list_strings(type='raster'):\n",
-                            "    print('  ', rast)\n",
-                        ],
-                    },
-                    {
-                        "cell_type": "code",
-                        "execution_count": None,
-                        "metadata": {},
-                        "outputs": [],
-                        "source": [
-                            "print('\\nVector maps in the current mapset:')\n",
-                            "for vect in gs.list_strings(type='vector'):\n",
-                            "    print('  ', vect)\n",
-                        ],
-                    },
-                ],
-                "metadata": {
-                    "kernelspec": {
-                        "display_name": "Python 3",
-                        "language": "python",
-                        "name": "python3",
-                    },
-                    "language_info": {"name": "python", "version": "3.x"},
-                },
-                "nbformat": 4,
-                "nbformat_minor": 2,
-            }
-            print(new_notebook_path)
-            print("template")
-            with open(new_notebook_path, "w", encoding="utf-8") as f:
-                json.dump(template, f, ensure_ascii=False, indent=2)
-            ipynb_files.append(new_notebook_name)
-
-        notebook = wx.Notebook(self)
-
-        # Po načtení stránky injektujte JS pro skrytí File menu
-        def hide_file_menu(event):
-            browser = event.GetEventObject()
-            print(browser)
-            js = """
-            var interval = setInterval(function() {
-                // Skrytí File menu
-                var fileMenu = document.querySelector('li#file_menu, a#filelink, a[aria-controls="file_menu"]');
-                if (fileMenu) {
-                    if (fileMenu.tagName === "LI") {
-                        fileMenu.style.display = 'none';
-                    } else if (fileMenu.parentElement && fileMenu.parentElement.tagName === "LI") {
-                        fileMenu.parentElement.style.display = 'none';
-                    }
-                }
-                // Skrytí horního panelu
-                var header = document.getElementById('header-container');
-                if (header) {
-                    header.style.display = 'none';
-                }
-                // Ukonči interval, pokud jsou oba prvky nalezeny
-                if (fileMenu && header) {
-                    clearInterval(interval);
-                }
-            }, 500);
-            """
-
-            browser.RunScript(js)
-
-        for fname in ipynb_files:
-            url_base = url_base.rstrip("/")
-            url = f"{url_base}/notebooks/{fname}"
-            browser = html.WebView.New(notebook)
-            wx.CallAfter(browser.LoadURL, url)
-            wx.CallAfter(browser.Bind, html.EVT_WEBVIEW_LOADED, hide_file_menu)
-            notebook.AddPage(browser, fname)
+        # Create a new tab for each notebook file
+        for fname in dir_manager.notebook_files:
+            print(fname)
+            url = server_manager.get_notebook_url(fname)
+            self._add_notebook_tab(url, fname)
 
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(notebook, 1, wx.EXPAND)
+        sizer.Add(self.notebook, 1, wx.EXPAND)
         self.SetSizer(sizer)
