@@ -412,8 +412,8 @@ class UpdateQThread(Thread):
 
     requestId = 0
 
-    def __init__(self, parent, requestQ, resultQ, **kwds):
-        Thread.__init__(self, **kwds)
+    def __init__(self, parent, requestQ, resultQ, **kwargs):
+        Thread.__init__(self, **kwargs)
 
         self.parent = parent  # cmdPanel
         self.daemon = True
@@ -423,19 +423,19 @@ class UpdateQThread(Thread):
 
         self.start()
 
-    def Update(self, callable, *args, **kwds):
+    def Update(self, callable, *args, **kwargs):
         UpdateQThread.requestId += 1
 
         self.request = None
-        self.requestQ.put((UpdateQThread.requestId, callable, args, kwds))
+        self.requestQ.put((UpdateQThread.requestId, callable, args, kwargs))
 
         return UpdateQThread.requestId
 
     def run(self):
         while True:
-            requestId, callable, args, kwds = self.requestQ.get()
+            requestId, callable, args, kwargs = self.requestQ.get()
 
-            self.request = callable(*args, **kwds)
+            self.request = callable(*args, **kwargs)
 
             self.resultQ.put((requestId, self.request.run()))
 
