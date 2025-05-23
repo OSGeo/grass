@@ -484,18 +484,31 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
                     bucket->nextp = G_incr_void_ptr(bucket->nextp, value_sz);
                 }
 
-                double val = ((map_type == DCELL_TYPE)   ? *((DCELL *)ptr)
-                              : (map_type == FCELL_TYPE) ? *((FCELL *)ptr)
-                                                         : *((CELL *)ptr));
-
-                KahanSum(&zd->sum, &c_sum, val);
-                KahanSum(&zd->sumsq, &c_sumsq, val * val);
-                KahanSum(&zd->sum_abs, &c_sum_abs, fabs(val));
-
-                if (val > zd->max)
-                    zd->max = val;
-                if (val < zd->min)
-                    zd->min = val;
+                if ((map_type == DCELL_TYPE) || (map_type == FCELL_TYPE)) {
+                    /* use KahamSum for floating point */
+                    double val = ((map_type == DCELL_TYPE) ? *((DCELL *)ptr)
+                                                           : *((FCELL *)ptr));
+                    KahanSum(&zd->sum, &c_sum, val);
+                    KahanSum(&zd->sumsq, &c_sumsq, val * val);
+                    KahanSum(&zd->sum_abs, &c_sum_abs, fabs(val));
+                    if (val > zd->max)
+                        zd->max = val;
+                    if (val < zd->min)
+                        zd->min = val;
+                }
+                else if (map_type == CELL_TYPE) {
+                    /* integer does not have floating point error */
+                    int val = *((CELL *)ptr);
+                    zd->sum += val;
+                    zd->sumsq += val * val;
+                    zd->sum_abs += abs(val);
+                    if (val > zd->max)
+                        zd->max = val;
+                    if (val < zd->min)
+                        zd->min = val;
+                }
+                else
+                    G_fatal_error(_("Unknown map type"));
 
                 ptr = G_incr_void_ptr(ptr, value_sz);
                 if (n_zones)
@@ -591,9 +604,20 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
             stats[z].size += zd->size;
 #pragma omp critical
             {
-                KahanSum(&stats[z].sum, &c_sum, zd->sum);
-                KahanSum(&stats[z].sumsq, &c_sumsq, zd->sumsq);
-                KahanSum(&stats[z].sum_abs, &c_sum_abs, zd->sum_abs);
+                if ((map_type == DCELL_TYPE) || (map_type == FCELL_TYPE)) {
+                    /* use KahanSum for floating point */
+                    KahanSum(&stats[z].sum, &c_sum, zd->sum);
+                    KahanSum(&stats[z].sumsq, &c_sumsq, zd->sumsq);
+                    KahanSum(&stats[z].sum_abs, &c_sum_abs, zd->sum_abs);
+                }
+                else if (map_type == CELL_TYPE) {
+                    /* integer does not have floating point error */
+                    stats[z].sum += zd->sum;
+                    stats[z].sumsq += zd->sumsq;
+                    stats[z].sum_abs += zd->sum_abs;
+                }
+                else
+                    G_fatal_error(_("Unknown map type"));
             }
 
 #if defined(_OPENMP)
