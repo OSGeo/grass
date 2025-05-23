@@ -160,13 +160,13 @@ class Vector(Info):
         then write the two points on the map, with ::
 
             >>> new.write(point0, cat=1, attrs=("pub",))
-            >>> new.write(point1, cat=2, attrs=("resturant",))
+            >>> new.write(point1, cat=2, attrs=("restaurant",))
 
         commit the db changes ::
 
             >>> new.table.conn.commit()
             >>> new.table.execute().fetchall()
-            [(1, 'pub'), (2, 'resturant')]
+            [(1, 'pub'), (2, 'restaurant')]
 
         close the vector map ::
 
@@ -184,7 +184,7 @@ class Vector(Info):
             >>> new.read(1).attrs["name"]
             'pub'
             >>> new.read(2).attrs["name"]
-            'resturant'
+            'restaurant'
             >>> new.close()
             >>> new.remove()
 
@@ -605,10 +605,10 @@ class VectorTopo(Vector):
         then write the two points on the map, with ::
 
             >>> test_vect.write(point0, cat=1, attrs=("pub",))
-            >>> test_vect.write(point1, cat=2, attrs=("resturant",))
+            >>> test_vect.write(point1, cat=2, attrs=("restaurant",))
             >>> test_vect.table.conn.commit()  # save changes in the DB
             >>> test_vect.table_to_dict()
-            {1: [1, 'pub'], 2: [2, 'resturant']}
+            {1: [1, 'pub'], 2: [2, 'restaurant']}
             >>> test_vect.close()
 
         Now rewrite one point of the vector map: ::
