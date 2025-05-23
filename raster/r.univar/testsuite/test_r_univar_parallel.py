@@ -1,6 +1,8 @@
 """Test of r.univar
 In multithreading computings, summation between threads may cause floating point errors.
+Besides, the summation over the whole map may cause floating point errors.
 This test is to check if the output of r.univar is correct.
+
 @author Chung-Yuan Liang, 2025
 """
 
@@ -16,7 +18,7 @@ class TestRasterUnivar(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """!Remove the temporary region"""
+        """Remove the temporary region"""
         cls.del_temp_region()
 
     def tearDown(self):
@@ -34,33 +36,6 @@ class TestRasterUnivar(TestCase):
             "r.mapcalc", expression="map01 = double(1) + double(0.1)", overwrite=True
         )
 
-    # def test_threads(self):
-    #     # Output of r.univar with single thread
-    #     single_t = SimpleModule(
-    #         "r.univar",
-    #         map="map01",
-    #         flags="g",
-    #         nprocs=1,
-    #     )
-    #     self.assertModule(single_t)
-    #     out_single = single_t.outputs.stdout
-
-    #     # Output of r.univar with different number of threads
-    #     for nprocs in range(1, 9):
-    #         multi_t = SimpleModule(
-    #             "r.univar",
-    #             map="map01",
-    #             flags="g",
-    #             nprocs=nprocs,
-    #         )
-    #         self.assertModule(multi_t)
-    #         out_multi = multi_t.outputs.stdout
-    #         print(f"nprocs={nprocs}", out_multi)
-    #         self.assertMultiLineEqual(first=out_single,
-    #                                   second=out_multi,
-    #                                   msg=f"{nprocs} threads failed")
-
-    def test_threads_2(self):
         # Output of r.univar with single thread
         single_t = SimpleModule(
             "r.univar",
@@ -69,9 +44,10 @@ class TestRasterUnivar(TestCase):
             nprocs=1,
         )
         self.assertModule(single_t)
-        out_single = single_t.outputs.stdout
+        self.out_single = single_t.outputs.stdout
 
-        # Output of r.univar with different number of threads
+    def test_threads_2(self):
+        # Output of r.univar with 2 threads
         nprocs = 2
         multi_t = SimpleModule(
             "r.univar",
@@ -82,21 +58,11 @@ class TestRasterUnivar(TestCase):
         self.assertModule(multi_t)
         out_multi = multi_t.outputs.stdout
         self.assertMultiLineEqual(
-            first=out_single, second=out_multi, msg=f"{nprocs} threads failed"
+            first=self.out_single, second=out_multi, msg=f"{nprocs} threads failed"
         )
 
     def test_threads_4(self):
-        # Output of r.univar with single thread
-        single_t = SimpleModule(
-            "r.univar",
-            map="map01",
-            flags="g",
-            nprocs=1,
-        )
-        self.assertModule(single_t)
-        out_single = single_t.outputs.stdout
-
-        # Output of r.univar with different number of threads
+        # Output of r.univar with 4 threads
         nprocs = 4
         multi_t = SimpleModule(
             "r.univar",
@@ -107,21 +73,11 @@ class TestRasterUnivar(TestCase):
         self.assertModule(multi_t)
         out_multi = multi_t.outputs.stdout
         self.assertMultiLineEqual(
-            first=out_single, second=out_multi, msg=f"{nprocs} threads failed"
+            first=self.out_single, second=out_multi, msg=f"{nprocs} threads failed"
         )
 
     def test_threads_8(self):
-        # Output of r.univar with single thread
-        single_t = SimpleModule(
-            "r.univar",
-            map="map01",
-            flags="g",
-            nprocs=1,
-        )
-        self.assertModule(single_t)
-        out_single = single_t.outputs.stdout
-
-        # Output of r.univar with different number of threads
+        # Output of r.univar with 8 threads
         nprocs = 8
         multi_t = SimpleModule(
             "r.univar",
@@ -132,7 +88,7 @@ class TestRasterUnivar(TestCase):
         self.assertModule(multi_t)
         out_multi = multi_t.outputs.stdout
         self.assertMultiLineEqual(
-            first=out_single, second=out_multi, msg=f"{nprocs} threads failed"
+            first=self.out_single, second=out_multi, msg=f"{nprocs} threads failed"
         )
 
 
