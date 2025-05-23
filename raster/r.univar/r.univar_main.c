@@ -127,8 +127,8 @@ static univar_stat *univar_stat_with_percentiles(int map_type);
 static void process_raster(univar_stat *stats, thread_workspace *tw,
                            const struct Cell_head *region, int nprocs);
 
-/* Use KahanSum to avoid floating point error from lots of summations */
-void KahanSum(double *sum, double *c, double x)
+/* Use Kahan sum to avoid floating point error from lots of summations */
+void kahan_sum(double *sum, double *c, double x)
 {
     double y = x - *c;
     double t = *sum + y;
@@ -485,12 +485,12 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
                 }
 
                 if ((map_type == DCELL_TYPE) || (map_type == FCELL_TYPE)) {
-                    /* use KahamSum for floating point */
+                    /* use Kaham sum for floating point */
                     double val = ((map_type == DCELL_TYPE) ? *((DCELL *)ptr)
                                                            : *((FCELL *)ptr));
-                    KahanSum(&zd->sum, &c_sum, val);
-                    KahanSum(&zd->sumsq, &c_sumsq, val * val);
-                    KahanSum(&zd->sum_abs, &c_sum_abs, fabs(val));
+                    kahan_sum(&zd->sum, &c_sum, val);
+                    kahan_sum(&zd->sumsq, &c_sumsq, val * val);
+                    kahan_sum(&zd->sum_abs, &c_sum_abs, fabs(val));
                     if (val > zd->max)
                         zd->max = val;
                     if (val < zd->min)
@@ -605,10 +605,10 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
 #pragma omp critical
             {
                 if ((map_type == DCELL_TYPE) || (map_type == FCELL_TYPE)) {
-                    /* use KahanSum for floating point */
-                    KahanSum(&stats[z].sum, &c_sum, zd->sum);
-                    KahanSum(&stats[z].sumsq, &c_sumsq, zd->sumsq);
-                    KahanSum(&stats[z].sum_abs, &c_sum_abs, zd->sum_abs);
+                    /* use Kahan sum for floating point */
+                    kahan_sum(&stats[z].sum, &c_sum, zd->sum);
+                    kahan_sum(&stats[z].sumsq, &c_sumsq, zd->sumsq);
+                    kahan_sum(&stats[z].sum_abs, &c_sum_abs, zd->sum_abs);
                 }
                 else if (map_type == CELL_TYPE) {
                     /* integer does not have floating point error */
