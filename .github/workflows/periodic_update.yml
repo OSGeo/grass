@@ -106,7 +106,7 @@ jobs:
         run: |
           git diff --exit-code --quiet --ignore-matching-lines=^\"POT-Creation-Date:
           exit_code=$?
-          echo "CHANGED_FILES=${exit_code}" >> "${GITHUB_OUTPUT}"
+          echo "CHANGED_FILES=${exit_code}" | tee -a "${GITHUB_OUTPUT}"
       - name: Translation files were changed
         if: ${{ (steps.changed-files.outputs.CHANGED_FILES == '1') }}
         run: echo "Translation files were changed"
