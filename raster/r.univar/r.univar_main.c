@@ -126,15 +126,7 @@ static int open_raster(const char *infile);
 static univar_stat *univar_stat_with_percentiles(int map_type);
 static void process_raster(univar_stat *stats, thread_workspace *tw,
                            const struct Cell_head *region, int nprocs);
-
-/* Use Kahan sum to avoid floating point error from lots of summations */
-void kahan_sum(double *sum, double *c, double x)
-{
-    double y = x - *c;
-    double t = *sum + y;
-    *c = (t - *sum) - y; /* (t - sum) recovers the high-order part of y; */
-    *sum = t;            /* Algebraically, c should always be zero. */
-}
+static void kahan_sum(double *sum, double *c, double x);
 
 /* *************************************************************** */
 /* **** the main functions for r.univar ************************** */
@@ -666,4 +658,13 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
     }
     if (!(param.shell_style->answer))
         G_percent(rows, rows, 2);
+}
+
+/* Use Kahan sum to avoid floating point error from lots of summations */
+static void kahan_sum(double *sum, double *c, double x)
+{
+    double y = x - *c;
+    double t = *sum + y;
+    *c = (t - *sum) - y; /* (t - sum) recovers the high-order part of y; */
+    *sum = t;            /* Algebraically, c should always be zero. */
 }
