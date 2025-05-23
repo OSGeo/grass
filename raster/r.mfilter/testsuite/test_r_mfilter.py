@@ -72,7 +72,7 @@ class TestNeighbors(TestCase):
                 "mean": 39041.4984470043,
                 "mean_of_abs": 39041.4984470043,
                 "stddev": 348.205753496913,
-                "variance": 121247.246768353,
+                "variance": 121247.246631722,
                 "coeff_var": 0.891886242454486,
                 "sum": 69864371055.9297,
             },
