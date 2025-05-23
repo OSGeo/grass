@@ -51,7 +51,7 @@ See [CONTRIBUTING file](CONTRIBUTING.md) for more details.
 
 ## Compiling GRASS
 
-See the INSTALL.md file. In addition, there are
+See the [INSTALL.md file](INSTALL.md). In addition, there are
 detailed [compile instructions](https://grasswiki.osgeo.org/wiki/Compile_and_Install)
 in the Wiki.
 
