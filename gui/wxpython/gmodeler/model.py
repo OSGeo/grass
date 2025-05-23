@@ -1211,7 +1211,7 @@ class WriteModelFile:
         """Escapes value to be stored in XML.
 
         :param value: string to be escaped as XML
-        :return: a XML-valid string
+        :return: an XML-valid string
         """
         return saxutils.escape(value)
 
