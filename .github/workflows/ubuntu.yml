@@ -15,7 +15,8 @@ permissions: {}
 jobs:
   ubuntu:
     concurrency:
-      group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{
+      group: >-
+        ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{
         matrix.name }}-${{ matrix.os }}-${{ matrix.extra-include }}
       cancel-in-progress: true
 
@@ -26,7 +27,7 @@ jobs:
       matrix:
         name:
           - "22.04"
-          - minimum config
+          # - minimum config
 
         # Only run tests for these folders in this matrix job.
         extra-include:
@@ -52,12 +53,14 @@ jobs:
           - name: "22.04"
             os: ubuntu-22.04
             config: ubuntu-22.04
+            c: gnu17
+            cxx: c++17
           # This is without optional things but it still keeps things useful,
           # so, e.g., without OpenMP, but with PDAL. Code or tests should be written
           # so that test pass even when these optional things are not present.
-          - name: minimum config
-            os: ubuntu-22.04
-            config: ubuntu-22.04_without_x
+          # - name: minimum config
+          #   os: ubuntu-22.04
+          #   config: ubuntu-22.04_without_x
       fail-fast: false
 
     steps:
@@ -130,10 +133,12 @@ jobs:
       - name: Build
         env:
           # TODO: -pedantic-errors here won't go through ./configure (with GNU C)
-          CFLAGS: -fPIC -Wvla
+          CFLAGS: -std=${{ matrix.c }} -fPIC -Wvla -ffp-contract=off -Wall -Wextra
           # TODO: -pedantic-errors here won't compile
-          CXXFLAGS: -fPIC
-        run: .github/workflows/build_${{ matrix.config }}.sh $HOME/install -Werror
+          CXXFLAGS: -std=${{ matrix.cxx }} -fPIC -ffp-contract=off -Wall -Wextra
+        run: |
+          .github/workflows/build_${{ matrix.config }}.sh $HOME/install \
+            -isystem/usr/include/gdal -Wpedantic -Werror
 
       - name: Add the bin directory to PATH
         run: |
@@ -146,12 +151,32 @@ jobs:
       - name: Test executing of the grass command
         run: .github/workflows/test_simple.sh
 
+      - name: Cache GRASS Sample Dataset
+        id: cached-data
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: sample-data/nc_spm_full_v2alpha2.tar.gz
+          key: nc_spm_full_v2alpha2.tar.gz
+          enableCrossOsArchive: true
+
+      - name: Download GRASS Sample Dataset
+        if: steps.cached-data.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p sample-data
+          curl -L "$SAMPLE_DATA" -o sample-data/nc_spm_full_v2alpha2.tar.gz
+        env:
+          SAMPLE_DATA: "https://grass.osgeo.org/sampledata/north_carolina/\
+            nc_spm_full_v2alpha2.tar.gz"
+
       - name: Run tests
         run: .github/workflows/test_thorough.sh --config .gunittest.extra.cfg
+        env:
+          SAMPLE_DATA_URL: "file://${{ github.workspace }}/sample-data/\
+            nc_spm_full_v2alpha2.tar.gz"
 
       - name: Make HTML test report available
         if: ${{ always() }}
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: testreport-${{ matrix.os }}-${{ matrix.config }}-${{ matrix.extra-include }}
           path: testreport

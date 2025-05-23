@@ -40,6 +40,7 @@ from .core import (
     parser,
     percent,
     pipe_command,
+    popen_args_command,
     read_command,
     region,
     region_env,
@@ -68,7 +69,14 @@ from .db import (
     db_table_in_vector,
 )
 from .imagery import group_to_dict
-from .raster import mapcalc, mapcalc_start, raster_history, raster_info, raster_what
+from .raster import (
+    mapcalc,
+    mapcalc_start,
+    raster_history,
+    raster_info,
+    raster_what,
+    MaskManager,
+)
 from .raster3d import mapcalc3d, raster3d_info
 from .utils import (
     KeyValue,
@@ -108,6 +116,7 @@ from .vector import (
 __all__ = [
     "PIPE",
     "KeyValue",
+    "MaskManager",
     "Popen",
     "append_node_pid",
     "append_random",
@@ -171,6 +180,7 @@ __all__ = [
     "parser",
     "percent",
     "pipe_command",
+    "popen_args_command",
     "raster3d_info",
     "raster_history",
     "raster_info",

@@ -7,7 +7,7 @@ to [GRASS Quickstart](helptext.md).
 A *mapset* holds a distinct set of data layers, each relevant to the
 same (or a subset of the same) geographic region, and each drawn in the
 same map coordinate system. At the outset of every GRASS session, the
-user identifies a GRASS data base, project (previosuly called location),
+user identifies a GRASS data base, project (previously called location),
 and mapset that are to be the user's *current data base*, *current
 project*, and *current mapset* for the duration of the session; any maps
 created by the user during the session will be stored under the *current
@@ -91,7 +91,7 @@ PERMANENT mapset are always selected):
 g.mapsets -s
 ```
 
-![](g_mapsets_gui.png)  
+![g_mapsets_gui](g_mapsets_gui.png)
 
 ### Print available mapsets
 

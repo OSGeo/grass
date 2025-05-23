@@ -45,7 +45,7 @@ different reference system.
 | 2    | **goes east** observation    | enter month, day, decimal hour (universal time-hh.ddd), n. of column, n. of line. (full scale 17000×12000) |
 | 3    | **goes west** observation    | enter month, day, decimal hour (universal time-hh.ddd), n. of column, n. of line. (full scale 17000×12000) |
 | 4    | **avhrr** (PM noaa)          | enter month, day, decimal hour (universal time-hh.ddd), n. of column(1-2048), xlonan, hna, give long.(xlonan) and overpass hour (hna) at the ascendant node at equator |
-| 5    | **avhrr** (AM noaa)          | enter month, day, decimal hour (universal time-hh.ddd) <br> n. of column(1-2048), xlonan, hna, give long.(xlonan) and overpass hour (hna) at the ascendant node at equator |
+| 5    | **avhrr** (AM noaa)          | enter month, day, decimal hour (universal time-hh.ddd), n. of column(1-2048), xlonan, hna, give long.(xlonan) and overpass hour (hna) at the ascendant node at equator |
 | 6    | **hrv** (spot)               | enter month, day, hh.ddd, long., lat. * |
 | 7    | **tm** (landsat)             | enter month, day, hh.ddd, long., lat. * |
 | 8    | **etm+** (landsat7)          | enter month, day, hh.ddd, long., lat. * |
@@ -180,7 +180,7 @@ simulation. Specifically:
 |------|---------|
 | -2 | Enter wlinf, wlsup. The filter function will be equal to 1 over the whole band (as iwave=0) but step by step output will be printed. |
 | -1 | Enter wl (monochr. cond, gaseous absorption is included). |
-| 0 | Enter wlinf, wlsup.<br />The filter function will be equal to 1 over the whole band. |
+| 0 | Enter wlinf, wlsup. The filter function will be equal to 1 over the whole band. |
 | 1 | Enter wlinf, wlsup and user's filter function s(lambda) by step of 0.0025 micrometer. |
 
 Pre-defined satellite bands:
@@ -426,7 +426,7 @@ Carolina project. The computational region was set to the extent of the
 individual bands (*B01-B12*) that we want to apply the atmospheric
 correction to. The following steps are applied to each band separately.
 
-**Create the parameters file for i.atcorr**
+#### Create the parameters file for i.atcorr
 
 In the first step we create a file containing the 6S parameters for a
 particular scene and band. To create a 6S file, we need to obtain the
@@ -530,7 +530,7 @@ text file, for example `params_B02.txt`.
 167
 ```
 
-**Compute atmospheric correction**
+#### Compute atmospheric correction
 
 In the next step we run *i.atcorr* for the selected band *B02* of our
 Sentinel 2 scene. We have to specify the following parameters:
@@ -665,7 +665,7 @@ r.mapcalc "lsat7_2002_40_rad = ((241.1 - (-5.1)) / (255.0 - 1.0)) * (lsat7_2002_
 Again, the *r.mapcalc* calculation is only needed when working with
 satellite data other than Landsat or ASTER.
 
-#### Create the parameters file for i.atcorr
+#### Create the parameters file for i.atcorr for Landsat
 
 The underlying 6S model is parametrized through a control file,
 indicated with the **parameters** option. This is a text file defining

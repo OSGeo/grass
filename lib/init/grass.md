@@ -1,3 +1,9 @@
+---
+description: GRASS startup program
+---
+
+# GRASS startup program
+
 ## SYNOPSIS
 
 **grass** \[**-h** \| **-help** \| **--help**\] \[**-v** \|
@@ -34,9 +40,14 @@ reference system defined by EPSG code and datum transform parameters
 **-e**  
 Exit after creation of project or mapset. Only with **-c** flag
 
-**-f**  
-Forces removal of .gislock if exists (use with care!). Only with --text
-flag
+**--timeout SECONDS**  
+Specifies how long, in seconds, to wait for a mapset lock to be acquired.
+
+**-f** \| **--force-remove-lock**  
+Forces removal of the lock file if it exists. Use with care.
+Use a different mapset for another concurrent session.
+Use a process manager to check if another process is using
+the mapset before using the flag.
 
 **--text**  
 Indicates that Text-based User Interface should be used (skip welcome
@@ -56,7 +67,7 @@ date, path, python_path, revision, svn_revision, version)
 
 **--exec EXECUTABLE**  
 Execute GRASS module or script. The provided executable will be executed
-in a GRASS GIS non-interactive session.
+in a GRASS non-interactive session.
 
 **--tmp-project**  
 Run using a temporary project which is created based on the given
@@ -90,7 +101,7 @@ Initial mapset directory which is a subdirectory of PROJECT
 
 ## DESCRIPTION
 
-This command is used to launch GRASS GIS. It will parse the command line
+This command is used to launch GRASS. It will parse the command line
 arguments and then initialize GRASS for the user. Since GRASS modules
 require a specific environment, this program must be called before any
 other GRASS module can run. The command line arguments are optional and
@@ -121,7 +132,7 @@ subprocess itself can be interactive if that is what the user requires.
 
 ### Config flag
 
-The flag **--config option** prints GRASS GIS configuration and version
+The flag **--config option** prints GRASS configuration and version
 parameters, with the options:
 
 - **arch**: system architecture (e.g., `x86_64-pc-linux-gnu`)
@@ -137,7 +148,7 @@ parameters, with the options:
 
 ## SAMPLE DATA
 
-The GRASS GIS project provides several free sample geospatial datasets
+The GRASS project provides several free sample geospatial datasets
 as ready-to-use projects. They are available to download at
 <https://grass.osgeo.org/download/sample-data/>. The "North Carolina
 data set" is a modern package of geospatial data from North Carolina
@@ -237,50 +248,83 @@ HTML web browser to use for displaying help pages.
 
 The following are some examples of how you could start GRASS
 
-**grass**  
 Start GRASS using the default user interface. The user will be prompted
 to choose the appropriate project and mapset.
 
-**grass --gui**  
+```sh
+grass
+```
+
 Start GRASS using the graphical user interface. The user will be
 prompted to choose the appropriate project and mapset.
 
-**grass --text**  
+```sh
+grass --gui
+```
+
 Start GRASS using the text-based user interface. Appropriate project and
 mapset must be set by environmental variables (see examples below)
 otherwise taken from the last GRASS session.
 
-**grass --gtext**  
+```sh
+grass --text
+```
+
 Start GRASS using the text-based user interface. The user will be
 prompted to choose the appropriate project and mapset.
 
-**grass $HOME/grassdata/spearfish70/user1**  
+```sh
+grass --gtext
+```
+
 Start GRASS using the default user interface and automatically launch
-into the given mapset, bypassing the mapset selection menu.
+into the given mapset, bypassing the mapset selection menu:
 
-**grass --gui -**  
+```sh
+grass $HOME/grassdata/spearfish70/user1
+```
+
 Start GRASS using the graphical user interface and try to obtain the
-project and mapset from environment variables.
+project and mapset from environment variables:
 
-**grass -c EPSG:4326 $HOME/grassdata/myproject**  
+```sh
+grass --gui -
+```
+
 Creates a new GRASS project with EPSG code 4326 (latitude-longitude,
-WGS84) in the specified GISDBASE
+WGS84) in the specified GISDBASE:
 
-**grass -c EPSG:5514:3 $HOME/grassdata/myproject**  
+```sh
+grass -c EPSG:4326 $HOME/grassdata/myproject
+```
+
 Creates a new GRASS project with EPSG code 5514 (S-JTSK / Krovak East
 North - SJTSK) with datum transformation parameters used in Czech
-Republic in the specified GISDBASE
+Republic in the specified GISDBASE:
 
-**grass -c XY $HOME/grassdata/gnomonic --exec g.proj -c proj4='+proj=gnom +lat_0=90 +lon_0=-50'**  
+```sh
+grass -c EPSG:5514:3 $HOME/grassdata/myproject
+```
+
 Creates a new GRASS project from PROJ definition string (here:
 [gnomonic](https://proj4.org/operations/projections/gnom.html)) in the
-specified GISDBASE
+specified GISDBASE:
 
-**grass -c myvector.shp $HOME/grassdata/myproject**  
-Creates a new GRASS project based on georeferenced Shapefile
+```sh
+grass -c XY $HOME/grassdata/gnomonic --exec g.proj -c proj4='+proj=gnom +lat_0=90 +lon_0=-50'
+```
 
-**grass -c myraster.tif $HOME/grassdata/myproject**  
-Creates a new GRASS project based on georeferenced GeoTIFF file
+Creates a new GRASS project based on georeferenced Shapefile:
+
+```sh
+grass -c myvector.shp $HOME/grassdata/myproject
+```
+
+Creates a new GRASS project based on georeferenced GeoTIFF file:
+
+```sh
+grass -c myraster.tif $HOME/grassdata/myproject
+```
 
 ### Batch jobs with the exec interface
 
@@ -347,7 +391,7 @@ A very simple Python script ("test.py") may look like this:
 # import GRASS Python bindings (see also pygrass)
 import grass.script as gs
 
-gs.message('Current GRASS GIS environment:')
+gs.message('Current GRASS environment:')
 print(gs.gisenv())
 
 gs.message('Available raster maps:')
@@ -458,10 +502,10 @@ environmental variable.
 
 List of [GRASS environment variables](variables.md)
 
-[GRASS GIS Web site](https://grass.osgeo.org)  
-[GRASS GIS User Wiki](https://grasswiki.osgeo.org/wiki/)  
-[GRASS GIS Bug Tracker](https://github.com/OSGeo/grass/issues)  
-[GRASS GIS 8 Programmer's Manual](https://grass.osgeo.org/programming8/)
+[GRASS Web site](https://grass.osgeo.org)  
+[GRASS User Wiki](https://grasswiki.osgeo.org/wiki/)  
+[GRASS Bug Tracker](https://github.com/OSGeo/grass/issues)  
+[GRASS 8 Programmer's Manual](https://grass.osgeo.org/programming8/)
 
 ## AUTHORS (of this page)
 

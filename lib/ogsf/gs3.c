@@ -123,9 +123,9 @@ int Gs_loadmap_as_float(struct Cell_head *wind, const char *map_name,
     *has_null = 0;
 
     cellfile = Rast_open_old(map_name, map_set);
+    char *mname = G_fully_qualified_name(map_name, map_set);
 
-    G_message(_("Loading raster map <%s>..."),
-              G_fully_qualified_name(map_name, map_set));
+    G_message(_("Loading raster map <%s>..."), mname);
 
     for (row = 0; row < wind->rows; row++) {
         offset = row * wind->cols;
@@ -144,6 +144,7 @@ int Gs_loadmap_as_float(struct Cell_head *wind, const char *map_name,
     G_percent(1, 1, 1);
 
     G_debug(4, "  has_null=%d", *has_null);
+    G_free(mname);
 
     Rast_close(cellfile);
 
@@ -187,9 +188,9 @@ int Gs_loadmap_as_int(struct Cell_head *wind, const char *map_name, int *buff,
     *has_null = 0;
 
     cellfile = Rast_open_old(map_name, map_set);
+    char *mname = G_fully_qualified_name(map_name, map_set);
 
-    G_message(_("Loading raster map <%s>..."),
-              G_fully_qualified_name(map_name, map_set));
+    G_message(_("Loading raster map <%s>..."), mname);
 
     for (row = 0; row < wind->rows; row++) {
         offset = row * wind->cols;
@@ -209,6 +210,7 @@ int Gs_loadmap_as_int(struct Cell_head *wind, const char *map_name, int *buff,
     G_percent(1, 1, 1);
 
     Rast_close(cellfile);
+    G_free(mname);
 
     return (1);
 }
@@ -340,8 +342,8 @@ int Gs_loadmap_as_short(struct Cell_head *wind, const char *map_name,
         return -1;
     }
 
-    G_message(_("Loading raster map <%s>..."),
-              G_fully_qualified_name(map_name, map_set));
+    char *mname = G_fully_qualified_name(map_name, map_set);
+    G_message(_("Loading raster map <%s>..."), mname);
 
     for (row = 0; row < wind->rows; row++) {
         offset = row * wind->cols;
@@ -379,6 +381,7 @@ int Gs_loadmap_as_short(struct Cell_head *wind, const char *map_name,
     Rast_close(cellfile);
 
     G_free(tmp_buf);
+    G_free(mname);
 
     return (overflow ? -2 : 1);
 }
@@ -446,8 +449,8 @@ int Gs_loadmap_as_char(struct Cell_head *wind, const char *map_name,
         return -1;
     }
 
-    G_message(_("Loading raster map <%s>..."),
-              G_fully_qualified_name(map_name, map_set));
+    char *mname = G_fully_qualified_name(map_name, map_set);
+    G_message(_("Loading raster map <%s>..."), mname);
 
     for (row = 0; row < wind->rows; row++) {
         offset = row * wind->cols;
@@ -486,6 +489,7 @@ int Gs_loadmap_as_char(struct Cell_head *wind, const char *map_name,
     Rast_close(cellfile);
 
     G_free(tmp_buf);
+    G_free(mname);
 
     return (overflow ? -2 : 1);
 }
@@ -532,8 +536,8 @@ int Gs_loadmap_as_bitmap(struct Cell_head *wind, const char *map_name,
         return -1;
     }
 
-    G_message(_("Loading raster map <%s>..."),
-              G_fully_qualified_name(map_name, map_set));
+    char *mname = G_fully_qualified_name(map_name, map_set);
+    G_message(_("Loading raster map <%s>..."), mname);
 
     for (row = 0; row < wind->rows; row++) {
         Rast_get_c_row(cellfile, tmp_buf, row);
@@ -552,6 +556,7 @@ int Gs_loadmap_as_bitmap(struct Cell_head *wind, const char *map_name,
     Rast_close(cellfile);
 
     G_free(tmp_buf);
+    G_free(mname);
 
     return (1);
 }
@@ -650,9 +655,9 @@ void Gs_pack_colors(const char *filename, int *buff, int rows, int cols)
     Rast_read_colors(filename, mapset, &colrules);
 
     cur = buff;
+    char *mname = G_fully_qualified_name(filename, mapset);
 
-    G_message(_("Translating colors from raster map <%s>..."),
-              G_fully_qualified_name(filename, mapset));
+    G_message(_("Translating colors from raster map <%s>..."), mname);
 
     for (i = 0; i < rows; i++) {
         Rast_lookup_c_colors(cur, r, g, b, set, cols, &colrules);
@@ -677,7 +682,7 @@ void Gs_pack_colors(const char *filename, int *buff, int rows, int cols)
     G_free(r);
     G_free(g);
     G_free(b);
-
+    G_free(mname);
     G_free(set);
 
     return;
@@ -721,9 +726,9 @@ void Gs_pack_colors_float(const char *filename, float *fbuf, int *ibuf,
 
     fcur = fbuf;
     icur = ibuf;
+    char *mname = G_fully_qualified_name(filename, mapset);
 
-    G_message(_("Translating colors from raster map <%s>..."),
-              G_fully_qualified_name(filename, mapset));
+    G_message(_("Translating colors from raster map <%s>..."), mname);
 
     for (i = 0; i < rows; i++) {
         Rast_lookup_f_colors(fcur, r, g, b, set, cols, &colrules);
@@ -750,6 +755,7 @@ void Gs_pack_colors_float(const char *filename, float *fbuf, int *ibuf,
     G_free(g);
     G_free(b);
     G_free(set);
+    G_free(mname);
 
     return;
 }
@@ -958,7 +964,7 @@ int Gs_load_3dview(const char *vname, geoview *gv, geodisplay *gd UNUSED,
     if (ret >= 0) {
         if (strcmp((v.pgm_id), "Nvision-ALPHA!")) {
             G_warning(_("View not saved by this program,"
-                        "there may be some inconsistancies"));
+                        "there may be some inconsistencies"));
         }
 
         /* set poly and mesh resolutions */

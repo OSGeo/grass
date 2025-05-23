@@ -63,7 +63,7 @@ v.proj in=mymap project=latlong mapset=user1
 
 [PROJ](https://proj.org): Projection/datum support library.
 
-**Further reading**
+Further reading:
 
 - [ASPRS Grids and
   Datum](https://www.asprs.org/asprs-publications/grids-and-datums)

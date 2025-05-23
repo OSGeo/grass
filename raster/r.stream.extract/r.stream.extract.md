@@ -214,7 +214,7 @@ Now display both stream maps and decide which one is more realistic.
 
 ## REFERENCES
 
-- Ehlschlaeger, C. (1989). *Using the A<sup>T</sup> Search Algorithm to
+- Ehlschlaeger, C. (1989). *Using the A^T Search Algorithm to
   Develop Hydrologic Models from Digital Elevation Data*, **Proceedings
   of International Geographic Information Systems (IGIS) Symposium
   '89**, pp 275-281 (Baltimore, MD, 18-19 March 1989). URL:

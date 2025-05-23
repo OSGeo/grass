@@ -14,7 +14,6 @@
 
 /* hydro.c (simlib), 20.nov.2002, JH */
 
-#include "simlib.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -23,7 +22,6 @@
 #include <grass/linkm.h>
 #include <grass/glocale.h>
 
-#include <grass/waterglobs.h>
 #include <grass/simlib.h>
 /*
  * Soeren 8. Mar 2011 TODO:
@@ -32,55 +30,8 @@
  *
  */
 
-struct _points points;
 struct point2D;
 struct point3D;
-
-char *elevin;
-char *dxin;
-char *dyin;
-char *rain;
-char *infil;
-char *traps;
-char *manin;
-char *depth;
-char *disch;
-char *err;
-char *outwalk;
-char *observation;
-char *logfile;
-char *mapset;
-char *tserie;
-
-char *wdepth;
-char *detin;
-char *tranin;
-char *tauin;
-char *tc;
-char *et;
-char *conc;
-char *flux;
-char *erdep;
-
-char *rainval;
-char *maninval;
-char *infilval;
-
-float **zz, **cchez;
-double **v1, **v2, **slope;
-double **gama, **gammas, **si, **inf, **sigma;
-float **dc, **tau, **er, **ct, **trap;
-float **dif;
-
-/* int iflag[MAXW]; */
-struct point3D *w;
-struct point2D *vavg;
-
-double rain_val;
-double manin_val;
-double infil_val;
-
-struct History history; /* holds meta-data (title, comments,..) */
 
 /* **************************************************** */
 /*       create walker representation of si */
@@ -88,11 +39,12 @@ struct History history; /* holds meta-data (title, comments,..) */
 /*                       .......... iblock loop */
 
 void main_loop(const Setup *setup, const Geometry *geometry,
-               const Settings *settings, Simulation *sim)
+               const Settings *settings, Simulation *sim,
+               ObservationPoints *points, const Inputs *inputs,
+               const Outputs *outputs, Grids *grids)
 {
     int i, l, k;
     int iblock;
-    int iter1;
     double conn;
     double addac;
 
@@ -123,24 +75,26 @@ void main_loop(const Setup *setup, const Geometry *geometry,
 
         for (k = 0; k < geometry->my; k++) {
             for (l = 0; l < geometry->mx; l++) { /* run thru the whole area */
-                if (zz[k][l] != UNDEF) {
+                if (grids->zz[k][l] != UNDEF) {
 
                     double x = geometry->xp0 + geometry->stepx * (double)(l);
                     double y = geometry->yp0 + geometry->stepy * (double)(k);
 
-                    double gen = sim->rwalk * si[k][l] / setup->sisum;
+                    double gen = sim->rwalk * grids->si[k][l] / setup->sisum;
                     int mgen = (int)gen;
                     double wei = gen / (double)(mgen + 1);
 
                     for (int iw = 1; iw <= mgen + 1;
                          iw++) { /* assign walkers */
-                        w[lw].x = x + geometry->stepx * (simwe_rand() - 0.5);
-                        w[lw].y = y + geometry->stepy * (simwe_rand() - 0.5);
-                        w[lw].m = wei;
+                        sim->w[lw].x =
+                            x + geometry->stepx * (simwe_rand() - 0.5);
+                        sim->w[lw].y =
+                            y + geometry->stepy * (simwe_rand() - 0.5);
+                        sim->w[lw].m = wei;
 
-                        walkwe += w[lw].m;
-                        vavg[lw].x = v1[k][l];
-                        vavg[lw].y = v2[k][l];
+                        walkwe += sim->w[lw].m;
+                        sim->vavg[lw].x = grids->v1[k][l];
+                        sim->vavg[lw].y = grids->v2[k][l];
                         lw++;
                     }
                 } /* defined area */
@@ -162,9 +116,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
         for (i = 1; i <= setup->miter;
              i++) { /* iteration loop depending on simulation time and deltap */
             G_percent(i, setup->miter, 1);
-            iter1 = i / setup->iterout;
-            iter1 *= setup->iterout;
-            if (iter1 == i) {
+            if (setup->iterout > 0 && i % setup->iterout == 0) {
                 /* nfiterw = i / iterout + 10;
                    nfiterh = i / iterout + 40; */
                 G_debug(2, "iblock=%d i=%d miter=%d nwalk=%d nwalka=%d", iblock,
@@ -202,18 +154,19 @@ void main_loop(const Setup *setup, const Geometry *geometry,
 #else
                 for (lw = 0; lw < sim->nwalk; lw++) {
 #endif
-                    if (w[lw].m > EPS) { /* check the walker weight */
+                    if (sim->w[lw].m > EPS) { /* check the walker weight */
                         ++(nwalka);
-                        l = (int)((w[lw].x + stxm) / geometry->stepx) -
+                        l = (int)((sim->w[lw].x + stxm) / geometry->stepx) -
                             geometry->mx - 1;
-                        k = (int)((w[lw].y + stym) / geometry->stepy) -
+                        k = (int)((sim->w[lw].y + stym) / geometry->stepy) -
                             geometry->my - 1;
 
                         if (l > geometry->mx - 1 || k > geometry->my - 1 ||
                             k < 0 || l < 0) {
 
                             G_debug(2, " k,l=%d,%d", k, l);
-                            printf("    lw,w=%d %f %f", lw, w[lw].y, w[lw].m);
+                            printf("    lw,w=%d %f %f", lw, sim->w[lw].y,
+                                   sim->w[lw].m);
                             G_debug(2, "    stxym=%f %f", stxm, stym);
                             printf("    step=%f %f", geometry->stepx,
                                    geometry->stepy);
@@ -224,34 +177,35 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                             G_debug(2, "  ");
                         }
 
-                        if (zz[k][l] != UNDEF) {
-                            if (inf[k][l] != UNDEF) { /* infiltration part */
-                                if (inf[k][l] - si[k][l] > 0.) {
+                        if (grids->zz[k][l] != UNDEF) {
+                            if (grids->inf[k][l] !=
+                                UNDEF) { /* infiltration part */
+                                if (grids->inf[k][l] - grids->si[k][l] > 0.) {
 
                                     double decr = pow(
-                                        addac * w[lw].m,
+                                        addac * sim->w[lw].m,
                                         3. / 5.); /* decreasing factor in m */
-                                    if (inf[k][l] > decr) {
-                                        inf[k][l] -=
+                                    if (grids->inf[k][l] > decr) {
+                                        grids->inf[k][l] -=
                                             decr; /* decrease infilt. in cell
                                                      and eliminate the walker */
-                                        w[lw].m = 0.;
+                                        sim->w[lw].m = 0.;
                                     }
                                     else {
-                                        w[lw].m -=
-                                            pow(inf[k][l], 5. / 3.) /
+                                        sim->w[lw].m -=
+                                            pow(grids->inf[k][l], 5. / 3.) /
                                             addac; /* use just proportional part
                                                       of the walker weight */
-                                        inf[k][l] = 0.;
+                                        grids->inf[k][l] = 0.;
                                     }
                                 }
                             }
 
-                            gama[k][l] +=
-                                (addac * w[lw].m); /* add walker weigh to water
-                                                      depth or conc. */
+                            grids->gama[k][l] +=
+                                (addac * sim->w[lw].m); /* add walker weigh to
+                                                      water depth or conc. */
 
-                            double d1 = gama[k][l] * conn;
+                            double d1 = grids->gama[k][l] * conn;
                             double gaux, gauy;
 #if defined(_OPENMP)
                             gasdev_for_paralel(&gaux, &gauy);
@@ -262,63 +216,70 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                             double hhc = pow(d1, 3. / 5.);
                             double velx, vely;
                             if (hhc > settings->hhmax &&
-                                wdepth == NULL) { /* increased diffusion if
-                                                     w.depth > hhmax */
-                                dif[k][l] = (settings->halpha + 1) * deldif;
-                                velx = vavg[lw].x;
-                                vely = vavg[lw].y;
+                                inputs->wdepth == NULL) { /* increased diffusion
+                                                     if w.depth > hhmax */
+                                grids->dif[k][l] =
+                                    (settings->halpha + 1) * deldif;
+                                velx = sim->vavg[lw].x;
+                                vely = sim->vavg[lw].y;
                             }
                             else {
-                                dif[k][l] = deldif;
-                                velx = v1[k][l];
-                                vely = v2[k][l];
+                                grids->dif[k][l] = deldif;
+                                velx = grids->v1[k][l];
+                                vely = grids->v2[k][l];
                             }
 
-                            if (traps != NULL && trap[k][l] != 0.) { /* traps */
+                            if (inputs->traps != NULL &&
+                                grids->trap[k][l] != 0.) { /* traps */
 
                                 float eff = simwe_rand(); /* random generator */
 
-                                if (eff <= trap[k][l]) {
+                                if (eff <= grids->trap[k][l]) {
                                     velx = -0.1 *
-                                           v1[k][l]; /* move it slightly back */
-                                    vely = -0.1 * v2[k][l];
+                                           grids->v1[k][l]; /* move it slightly
+                                                               back */
+                                    vely = -0.1 * grids->v2[k][l];
                                 }
                             }
 
-                            w[lw].x +=
-                                (velx + dif[k][l] * gaux); /* move the walker */
-                            w[lw].y += (vely + dif[k][l] * gauy);
+                            sim->w[lw].x +=
+                                (velx +
+                                 grids->dif[k][l] * gaux); /* move the walker */
+                            sim->w[lw].y += (vely + grids->dif[k][l] * gauy);
 
-                            if (hhc > settings->hhmax && wdepth == NULL) {
-                                vavg[lw].x =
-                                    settings->hbeta * (vavg[lw].x + v1[k][l]);
-                                vavg[lw].y =
-                                    settings->hbeta * (vavg[lw].y + v2[k][l]);
+                            if (hhc > settings->hhmax &&
+                                inputs->wdepth == NULL) {
+                                sim->vavg[lw].x =
+                                    settings->hbeta *
+                                    (sim->vavg[lw].x + grids->v1[k][l]);
+                                sim->vavg[lw].y =
+                                    settings->hbeta *
+                                    (sim->vavg[lw].y + grids->v2[k][l]);
                             }
 
-                            if (w[lw].x <= geometry->xmin ||
-                                w[lw].y <= geometry->ymin ||
-                                w[lw].x >= geometry->xmax ||
-                                w[lw].y >= geometry->ymax) {
-                                w[lw].m = 1e-10; /* eliminate walker if it is
-                                                    out of area */
+                            if (sim->w[lw].x <= geometry->xmin ||
+                                sim->w[lw].y <= geometry->ymin ||
+                                sim->w[lw].x >= geometry->xmax ||
+                                sim->w[lw].y >= geometry->ymax) {
+                                sim->w[lw].m = 1e-10; /* eliminate walker if it
+                                                    is out of area */
                             }
                             else {
-                                if (wdepth != NULL) {
-                                    l = (int)((w[lw].x + stxm) /
+                                if (inputs->wdepth != NULL) {
+                                    l = (int)((sim->w[lw].x + stxm) /
                                               geometry->stepx) -
                                         geometry->mx - 1;
-                                    k = (int)((w[lw].y + stym) /
+                                    k = (int)((sim->w[lw].y + stym) /
                                               geometry->stepy) -
                                         geometry->my - 1;
-                                    w[lw].m *= sigma[k][l];
+                                    sim->w[lw].m *= grids->sigma[k][l];
                                 }
 
                             } /* else */
                         } /*DEFined area */
                         else {
-                            w[lw].m = 1e-10; /* eliminate walker if it is out of
-                                                area */
+                            sim->w[lw].m = 1e-10; /* eliminate walker if it is
+                                                out of area */
                         }
                     }
                 } /* lw loop */
@@ -330,14 +291,16 @@ void main_loop(const Setup *setup, const Geometry *geometry,
              * output implementation */
             /* Save all walkers located within the computational region and with
                valid z coordinates */
-            if (outwalk != NULL && (i == setup->miter || i == iter1)) {
+            if (outputs->outwalk != NULL &&
+                (i == setup->miter ||
+                 (setup->iterout > 0 && i % setup->iterout == 0))) {
                 sim->nstack = 0;
 
                 for (lw = 0; lw < sim->nwalk; lw++) {
                     /* Compute the  elevation raster map index */
-                    l = (int)((w[lw].x + stxm) / geometry->stepx) -
+                    l = (int)((sim->w[lw].x + stxm) / geometry->stepx) -
                         geometry->mx - 1;
-                    k = (int)((w[lw].y + stym) / geometry->stepy) -
+                    k = (int)((sim->w[lw].y + stym) / geometry->stepy) -
                         geometry->my - 1;
 
                     /* Check for correct elevation raster map index */
@@ -345,65 +308,67 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                         k >= geometry->my)
                         continue;
 
-                    if (w[lw].m > EPS && zz[k][l] != UNDEF) {
+                    if (sim->w[lw].m > EPS && grids->zz[k][l] != UNDEF) {
 
                         /* Save the 3d position of the walker */
                         sim->stack[sim->nstack].x =
                             geometry->mixx / geometry->conv +
-                            w[lw].x / geometry->conv;
+                            sim->w[lw].x / geometry->conv;
                         sim->stack[sim->nstack].y =
                             geometry->miyy / geometry->conv +
-                            w[lw].y / geometry->conv;
-                        sim->stack[sim->nstack].m = zz[k][l];
+                            sim->w[lw].y / geometry->conv;
+                        sim->stack[sim->nstack].m = grids->zz[k][l];
 
                         sim->nstack++;
                     }
                 } /* lw loop */
             }
 
-            if (i == iter1 && settings->ts) {
+            if (settings->ts && setup->iterout > 0 && i % setup->iterout == 0) {
                 /* call output for iteration output */
-                if (erdep != NULL)
-                    erod(gama, setup, geometry); /* divergence of gama field */
+                if (outputs->erdep != NULL)
+                    erod(grids->gama, setup, geometry,
+                         grids); /* divergence of gama field */
 
                 conn = (double)nblock / (double)iblock;
                 int itime = (int)(i * setup->deltap * setup->timec);
-                int ii =
-                    output_data(itime, conn, setup, geometry, settings, sim);
+                int ii = output_data(itime, conn, setup, geometry, settings,
+                                     sim, inputs, outputs, grids);
                 if (ii != 1)
                     G_fatal_error(_("Unable to write raster maps"));
             }
 
             /* Write the water depth each time step at an observation point */
-            if (points.is_open) {
+            if (points->is_open) {
                 double value = 0.0;
                 int p;
 
-                fprintf(points.output, "%.6d ", i);
+                fprintf(points->output, "%.6d ", i);
                 /* Write for each point */
-                for (p = 0; p < points.npoints; p++) {
-                    l = (int)((points.x[p] - geometry->mixx + stxm) /
+                for (p = 0; p < points->npoints; p++) {
+                    l = (int)((points->x[p] - geometry->mixx + stxm) /
                               geometry->stepx) -
                         geometry->mx - 1;
-                    k = (int)((points.y[p] - geometry->miyy + stym) /
+                    k = (int)((points->y[p] - geometry->miyy + stym) /
                               geometry->stepy) -
                         geometry->my - 1;
 
-                    if (zz[k][l] != UNDEF) {
+                    if (grids->zz[k][l] != UNDEF) {
 
-                        if (wdepth == NULL)
-                            value = geometry->step * gama[k][l] * cchez[k][l];
+                        if (inputs->wdepth == NULL)
+                            value = geometry->step * grids->gama[k][l] *
+                                    grids->cchez[k][l];
                         else
-                            value = gama[k][l] * slope[k][l];
+                            value = grids->gama[k][l] * grids->slope[k][l];
 
-                        fprintf(points.output, "%2.4f ", value);
+                        fprintf(points->output, "%2.4f ", value);
                     }
                     else {
                         /* Point is invalid, so a negative value is written */
-                        fprintf(points.output, "%2.4f ", -1.0);
+                        fprintf(points->output, "%2.4f ", -1.0);
                     }
                 }
-                fprintf(points.output, "\n");
+                fprintf(points->output, "\n");
             }
         } /* miter */
 
@@ -420,18 +385,18 @@ void main_loop(const Setup *setup, const Geometry *geometry,
            }
            } */
 
-        if (err != NULL) {
+        if (outputs->err != NULL) {
             for (k = 0; k < geometry->my; k++) {
                 for (l = 0; l < geometry->mx; l++) {
-                    if (zz[k][l] != UNDEF) {
-                        double d1 = gama[k][l] * (double)conn;
-                        gammas[k][l] += pow(d1, 3. / 5.);
+                    if (grids->zz[k][l] != UNDEF) {
+                        double d1 = grids->gama[k][l] * (double)conn;
+                        grids->gammas[k][l] += pow(d1, 3. / 5.);
                     } /* DEFined area */
                 }
             }
         }
-        if (erdep != NULL)
-            erod(gama, setup, geometry);
+        if (outputs->erdep != NULL)
+            erod(grids->gama, setup, geometry, grids);
     }
     /*                       ........ end of iblock loop */
 
@@ -439,13 +404,14 @@ void main_loop(const Setup *setup, const Geometry *geometry,
     if (!settings->ts) {
         conn = (double)nblock / (double)iblock;
         int itime = (int)(i * setup->deltap * setup->timec);
-        int ii = output_data(itime, conn, setup, geometry, settings, sim);
+        int ii = output_data(itime, conn, setup, geometry, settings, sim,
+                             inputs, outputs, grids);
         if (ii != 1)
             G_fatal_error(_("Cannot write raster maps"));
     }
     /* Close the observation logfile */
-    if (points.is_open)
-        fclose(points.output);
+    if (points->is_open)
+        fclose(points->output);
 
-    points.is_open = 0;
+    points->is_open = 0;
 }

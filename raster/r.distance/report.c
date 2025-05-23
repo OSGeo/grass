@@ -127,7 +127,7 @@ static void print(struct ReportLine *line, struct Parms *parms)
         fprintf(stdout, "%ld%s%ld", (long)line->cat1, fs, (long)line->cat2);
 
     /* print distance */
-    sprintf(temp, "%.10f", line->distance);
+    snprintf(temp, sizeof(temp), "%.10f", line->distance);
     G_trim_decimal(temp);
     fprintf(stdout, "%s%s", fs, temp);
 

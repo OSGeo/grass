@@ -55,6 +55,7 @@ from core.watchdog import (
     EVT_CURRENT_MAPSET_CHANGED,
     MapsetWatchdog,
 )
+from core.menutree import MenuTreeModelBuilder
 from gui_core.preferences import MapsetAccess, PreferencesDialog
 from lmgr.layertree import LayerTree, LMIcons
 from lmgr.menudata import LayerManagerMenuData, LayerManagerModuleTree
@@ -1384,7 +1385,7 @@ class GMFrame(wx.Frame):
                 message=_("Script file '%s' doesn't exist. Operation canceled.")
                 % filename,
             )
-            return
+            return None
 
         # check permission
         if not os.access(filename, os.X_OK):
@@ -1401,14 +1402,14 @@ class GMFrame(wx.Frame):
                 style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
             )
             if dlg.ShowModal() != wx.ID_YES:
-                return
+                return None
             dlg.Destroy()
             try:
                 mode = stat.S_IMODE(os.lstat(filename)[stat.ST_MODE])
                 os.chmod(filename, mode | stat.S_IXUSR)
             except OSError:
                 GError(_("Unable to set permission. Operation canceled."), parent=self)
-                return
+                return None
 
         # check GRASS_ADDON_PATH
         addonPath = os.getenv("GRASS_ADDON_PATH", [])
@@ -1980,14 +1981,23 @@ class GMFrame(wx.Frame):
 
     def OnSimpleEditor(self, event):
         # import on demand
-        from gui_core.pyedit import PyEditFrame
+        from gui_core.pyedit import PyEditPanel
 
         # we don't keep track of them and we don't care about open files
         # there when closing the main GUI
-        simpleEditor = PyEditFrame(parent=self, giface=self._giface)
-        simpleEditor.SetSize(self.GetSize())
-        simpleEditor.CenterOnScreen()
-        simpleEditor.Show()
+        simpleEditor = PyEditPanel(
+            parent=self, giface=self._giface, statusbar=self.statusbar, dockable=True
+        )
+        filename = os.path.join(globalvar.WXGUIDIR, "xml", "menudata_pyedit.xml")
+        simpleEditor.SetUpPage(
+            self,
+            self.mainnotebook,
+            menuModel=MenuTreeModelBuilder(filename).GetModel(separators=True),
+            menuName="&Editor",
+        )
+
+        # add map display panel to notebook and make it current
+        self.mainnotebook.AddPage(simpleEditor, _("Code editor"))
 
     def OnShowAttributeTable(self, event, selection=None):
         """Show attribute table of the given vector map layer"""
@@ -2037,7 +2047,7 @@ class GMFrame(wx.Frame):
         """Changes bookcontrol page to page associated with display."""
         # moved from mapdisp/frame.py
         # TODO: why it is called 3 times when getting focus?
-        # and one times when loosing focus?
+        # and one times when losing focus?
         pgnum = self.notebookLayers.GetPageIndex(notebookLayerPage)
         if pgnum > -1:
             self.notebookLayers.SetSelection(pgnum)

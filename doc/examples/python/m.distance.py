@@ -68,7 +68,7 @@ def main():
     # calc distance
 
     proj_type = G_begin_distance_calculations()
-    # returns 0 if projection has no metrix (ie. imagery)
+    # returns 0 if projection is not metric (ie. imagery)
     # returns 1 if projection is planimetric
     # returns 2 if projection is latitude-longitude
 

@@ -764,8 +764,9 @@ int main(int argc, char *argv[])
     Rast_close(outrastfd);
 
     /* set map title */
-    sprintf(title, "%s interpolation with Tykhonov regularization",
-            method_opt->answer);
+    snprintf(title, sizeof(title),
+             "%s interpolation with Tykhonov regularization",
+             method_opt->answer);
     Rast_put_cell_title(out_opt->answer, title);
     /* write map history */
     Rast_short_history(out_opt->answer, "raster", &history);

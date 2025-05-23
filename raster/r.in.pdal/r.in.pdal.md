@@ -22,7 +22,7 @@ example raw LiDAR or sidescan sonar swath data.
 
 The main difference between *r.in.pdal* and *[v.in.pdal](v.in.pdal.md)*
 is that *r.in.pdal* creates a raster instead of just importing the
-points into GRASS GIS. However, *r.in.pdal* does not merely rasterizes
+points into GRASS. However, *r.in.pdal* does not merely rasterizes
 the points from the point cloud. *r.in.pdal* uses binning to derive
 values for individual raster cells, so the value of a cell is typically
 an aggregation of values of individual points falling into one cell. In
@@ -34,12 +34,12 @@ In the basic case, binning is a method which counts the number of points
 which fall into one raster cell, i.e. bin. The number of points per cell
 (bin) indicates the density of points in the point cloud. The cell (bin)
 is always square or rectangular in case of *r.in.pdal* because the
-result is GRASS GIS 2D raster. The result of binning where the number of
+result is GRASS 2D raster. The result of binning where the number of
 point per cell is counted is sometimes called 2D (two dimensional)
 histogram because a histogram is used in univariate statistics (in one
 dimension) to count the number samples falling into a given bin.
 
-![](r_in_lidar_binning_count.png) ![](r_in_lidar_binning_mean.png)
+![r_in_lidar_binning_count](r_in_lidar_binning_count.png)
 
 *Figure: The binning on left was used to count number of points per
 (sometimes also called 2D histogram). The numbers in cells are examples
@@ -120,7 +120,7 @@ cell. If there are more than one mode for a cell, an arbitrary one will
 be selected.
 
 percentile  
-p<sup>*th*</sup> (nth) percentile of points in cell
+p-*th* (nth) percentile of points in cell
 
 skewness  
 This is a skewness of point values in cell
@@ -171,7 +171,7 @@ g.region s=s-0.000001
 ```
 
 See *[g.region](g.region.md)* for details about computation region
-handling in GRASS GIS.
+handling in GRASS.
 
 The **zrange** parameter may be used for filtering the input data by
 vertical extent. Example uses include filtering out extreme outliers and
@@ -185,7 +185,7 @@ module. The **zrange** parameter is especially powerful when used
 together with the **base_raster** parameter. The **zrange** is applied
 to Z values after the **base_raster** reduction.
 
-![](r_in_lidar_zrange.png)
+![r_in_lidar_zrange](r_in_lidar_zrange.png)
 
 *Figure: This is the principle of zrange filter. Points with the Z
 coordinate value below the lower value in the range (here 180) are
@@ -251,7 +251,7 @@ data often come with precomputed DEMs (quality should be checked in this
 case) and there is often a DEM available for a given area (fit with the
 point cloud, especially vertical, and resolution should be checked).
 
-![](r_in_lidar_base_raster.png)
+![r_in_lidar_base_raster](r_in_lidar_base_raster.png)
 
 *Figure: This is a profile of base raster (in orange) representing
 digital elevation model and selected points, e.g. first return, from
@@ -471,8 +471,7 @@ r.in.pdal input="Serpent Mound Model LAS Data.laz" \
            output=Serpent_Mound_Model_LAS_Data method=mean
 ```
 
-![](r_in_lidar.png)
-
+![Elevation for the whole area of Serpent Mound dataset](r_in_lidar.png)  
 *Figure: Elevation for the whole area of Serpent Mound dataset*
 
 ### Height above ground

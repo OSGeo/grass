@@ -1,10 +1,14 @@
-## KEYWORDS
+---
+description: wxGUI Module dialogs
+index: wxGUI
+keywords: [general, GUI]
+---
 
-[general](general.md), [GUI](topic_GUI.md)
+# wxGUI Module dialogs
 
 ## DESCRIPTION
 
-GRASS GIS functionality is organized into modules, which are standalone
+GRASS functionality is organized into modules, which are standalone
 programs with defined interface. Their graphical user interface (GUI) is
 a dialog with several tabs which organize module parameters into groups.
 

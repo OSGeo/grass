@@ -424,7 +424,7 @@ class TplotFrame(wx.Frame):
             return
         mode = None
         unit = None
-        columns = ",".join(["name", "start_time", "end_time"])
+        columns = "name,start_time,end_time"
         for series in timeseries:
             name = series[0]
             fullname = name + "@" + series[1]
@@ -559,7 +559,7 @@ class TplotFrame(wx.Frame):
                 ),
             )
             return
-        columns = ",".join(["name", "start_time", "end_time", "id", "layer"])
+        columns = "name,start_time,end_time,id,layer"
         for series in timeseries:
             name = series[0]
             fullname = name + "@" + series[1]
@@ -1221,7 +1221,7 @@ class TplotFrame(wx.Frame):
         :param list vectors: a list of temporal vector dataset's name
         :param list coors: a list with x/y coordinates
         :param list cats: a list with incld. categories of vector
-        :param str attr:  name of attribute of vectror data
+        :param str attr:  name of attribute of vector data
         """
         if not (rasters or vectors) or not (coors or cats):
             return

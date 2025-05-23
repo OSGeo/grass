@@ -1,4 +1,10 @@
-### Projection management in general
+---
+description: Projections and spatial transformations in GRASS
+---
+
+# Projections and spatial transformations in GRASS
+
+## Projection management in general
 
 A GRASS project is referenced with a single projection and coordinate
 system (or unreferenced as XY project). When creating a new project from
@@ -8,14 +14,14 @@ system are defined. To change the projection of maps, a new project has
 to be created and the desired maps have to be reprojected into it from
 the source project as explained below.
 
-### Reprojecting raster maps
+## Reprojecting raster maps
 
 Rasters are reprojected using the raster projection tool
 *[r.proj](r.proj.md)*. The tool is used in the target project to "pull"
 a map from its source project. Both projects need to have a projection
 defined, i.e., they cannot be XY (unprojected).
 
-### Raster map transformation
+## Raster map transformation
 
 To transform an unprojected map from a XY project into a projected
 project (or another XY project), a forward transformation is performed.
@@ -31,14 +37,14 @@ A graphical user interface is provided by [wxGUI](wxGUI.md).
 To simply translate a raster map (without stretching or rotation), the
 [r.region](r.region.md) command can be used.
 
-### Vector map projections
+## Vector map projections
 
 Vectors are reprojected using the vector projection tool
 *[v.proj](v.proj.md)*. The tool is used in the target project to "pull"
 a map from its source project. Both projects need to have a projection
 defined, i.e., they cannot be XY (unprojected).
 
-### Vector map transformation
+## Vector map transformation
 
 To transform an unprojected map (e.g. CAD map) into projected
 coordinates, a forward transformation is performed. The unreferenced map
@@ -52,7 +58,7 @@ control points.
 
 A graphical user interface is provided by [wxGUI](wxGUI.md).
 
-### References
+## References
 
 - [ASPRS Grids and
   Datum](https://www.asprs.org/asprs-publications/grids-and-datums)
@@ -64,8 +70,12 @@ A graphical user interface is provided by [wxGUI](wxGUI.md).
   Europe](https://mapref.org)
 - [Information and Service System for European Coordinate Reference
   Systems - CRS](https://www.crs-geo.eu/)
+- [List of EPSG codes](https://spatialreference.org/)
+  (Database of worldwide coordinate systems)
+- [CRS Explorer - PROJ codes](https://crs-explorer.proj.org/)
+- [EPSG Geodetic Parameter Dataset](https://epsg.org/)
 
-### See also
+## See also
 
 - [Introduction into raster data processing](rasterintro.md)
 - [Introduction into 3D raster data (voxel)
@@ -74,4 +84,3 @@ A graphical user interface is provided by [wxGUI](wxGUI.md).
 - [Introduction into image processing](imageryintro.md)
 - [Introduction into temporal data processing](temporalintro.md)
 - [Database management](databaseintro.md)
-- [Graphical User Interface](wxguiintro.md)

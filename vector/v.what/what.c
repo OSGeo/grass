@@ -60,8 +60,8 @@ static void F_generate(const char *drvname, const char *dbname,
      * application before F_generate() is called, because it may be correct
      * (connection defined in DB but table does not exist) */
 
-    sprintf(buf, "select %s from %s where %s = %d", columns, tblname, key,
-            keyval);
+    snprintf(buf, sizeof(buf), "select %s from %s where %s = %d", columns,
+             tblname, key, keyval);
     G_debug(2, "%s", buf);
     db_set_string(&sql, buf);
     if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) != DB_OK)
@@ -94,15 +94,17 @@ static void F_generate(const char *drvname, const char *dbname,
             case OUTPUT_JSON:
                 formbuf = G_str_replace(db_get_string(&str), "\\", "\\\\");
                 formbuf = G_str_replace(formbuf, "\"", "\\\"");
-                sprintf(buf, "%s\"%s\": \"%s\"", col == 0 ? "" : ",\n", colname,
-                        formbuf);
+                snprintf(buf, sizeof(buf), "%s\"%s\": \"%s\"",
+                         col == 0 ? "" : ",\n", colname, formbuf);
                 G_free(formbuf);
                 break;
             case OUTPUT_SCRIPT:
-                sprintf(buf, "%s=%s\n", colname, db_get_string(&str));
+                snprintf(buf, sizeof(buf), "%s=%s\n", colname,
+                         db_get_string(&str));
                 break;
             default:
-                sprintf(buf, "%s : %s\n", colname, db_get_string(&str));
+                snprintf(buf, sizeof(buf), "%s : %s\n", colname,
+                         db_get_string(&str));
             }
             db_append_string(&html, buf);
         }
@@ -370,7 +372,7 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                     Map[i].name, Map[i].mapset);
             break;
         default:
-            fprintf(stdout, "%s\nMap: %s \nMapset: %s\n", SEP, Map[i].name,
+            fprintf(stdout, "%s\nMap: %s\nMapset: %s\n", SEP, Map[i].name,
                     Map[i].mapset);
             break;
         }
@@ -427,22 +429,22 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
 
             switch (type) {
             case GV_POINT:
-                sprintf(buf, "Point");
+                snprintf(buf, sizeof(buf), "Point");
                 break;
             case GV_LINE:
-                sprintf(buf, "Line");
+                snprintf(buf, sizeof(buf), "Line");
                 break;
             case GV_BOUNDARY:
-                sprintf(buf, "Boundary");
+                snprintf(buf, sizeof(buf), "Boundary");
                 break;
             case GV_FACE:
-                sprintf(buf, "Face");
+                snprintf(buf, sizeof(buf), "Face");
                 break;
             case GV_CENTROID:
-                sprintf(buf, "Centroid");
+                snprintf(buf, sizeof(buf), "Centroid");
                 break;
             default:
-                sprintf(buf, "Unknown");
+                snprintf(buf, sizeof(buf), "Unknown");
             }
             if (type & GV_LINES) {
                 if (G_projection() == 3)

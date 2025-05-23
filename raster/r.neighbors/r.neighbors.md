@@ -9,8 +9,7 @@ might be assigned a value equal to the average of the values appearing
 in its 3 x 3 cell "neighborhood" in the input layer. Note that the
 centre cell is also included in the calculation.
 
-![](r_neighbors.png)
-
+![Illustration for an 3x3 average neighborhood](r_neighbors.png)  
 *Figure: Illustration for an 3x3 average neighborhood*
 
 ### OPTIONS
@@ -394,7 +393,7 @@ raster. See benchmark scripts in source code. (Intel Core i9-10940X CPU
 @ 3.30GHz x 28)*
 
 To reduce the memory requirements to minimum, set option **memory** to
-zero. To take advantage of the parallelization, GRASS GIS needs to be
+zero. To take advantage of the parallelization, GRASS needs to be
 compiled with OpenMP enabled.
 
 ## EXAMPLES

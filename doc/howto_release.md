@@ -1,4 +1,4 @@
-# How to release GRASS GIS binaries and source code
+# How to release GRASS binaries and source code
 
 ## Assumptions
 
@@ -80,7 +80,7 @@ For a release, change the version after the RC cycle to an official release:
 ```
 
 The script will compute the correct version string and print a message
-containing it into the terminal (e.g., "version: GRASS GIS 3.5.0RC1").
+containing it into the terminal (e.g., "version: GRASS 3.5.0RC1").
 
 Commit with a commit message suggested by the script, e.g.:
 
@@ -152,7 +152,7 @@ stored for annotated tags including a date; message is suggested by the
 `./utils/update_version.py` script):
 
 ```bash
-git tag $TAG -a -m "GRASS GIS $VERSION"
+git tag $TAG -a -m "GRASS $VERSION"
 ```
 
 List all tags (annotated will be at the top of both lists):
@@ -395,7 +395,7 @@ Update the GRASS version at <https://github.com/landam/wingrass-maintenance-scri
 
 - On major or minor version change (on release branch creation) update
   [dev_packages.csv](https://github.com/landam/wingrass-maintenance-scripts/blob/master/dev_packages.csv)
-- On release (inluding RC) update
+- On release (including RC) update
   [releases.csv](https://github.com/landam/wingrass-maintenance-scripts/blob/master/releases.csv)
   and
   [grass_packager_release.bat](https://github.com/landam/wingrass-maintenance-scripts/blob/master/grass_packager_release.bat#L12)
@@ -537,7 +537,7 @@ Add release to history page:
   - <grass-user@lists.osgeo.org>
 
 If final release, send out an announcement (press release)
-which is a shortened version of release desciption and website news item.
+which is a shortened version of release description and website news item.
 Note: Do not use relative links.
 
 - Our main mailing lists:

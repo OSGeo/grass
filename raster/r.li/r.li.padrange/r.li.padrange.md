@@ -5,10 +5,8 @@ as:
 ![r.li.padrange formula](rlipadrange_formula.png)  
 with:  
 
-- **a<span class="small"><span class="small">max</span></span>**: max
-  patch area size
-- **a<span class="small"><span class="small">min</span></span>**: min
-  patch area size
+- *a_max*: max patch area size
+- *a_min*: min patch area size
 
 This index is calculated using a 4 neighbour algorithm, diagonal cells
 are ignored when tracing a patch.

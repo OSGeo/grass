@@ -311,6 +311,7 @@ LOC_ARG_WITH(freetype, FreeType)
 LOC_ARG_WITH(nls, NLS, no)
 LOC_ARG_WITH(readline, Readline, no)
 LOC_ARG_WITH(regex, regex)
+LOC_ARG_WITH(pcre, pcre, no)
 LOC_ARG_WITH(pthread, POSIX threads, no)
 LOC_ARG_WITH(openmp, OpenMP, no)
 LOC_ARG_WITH(opencl, OpenCL, no)
@@ -417,6 +418,9 @@ LOC_ARG_WITH_SHARE(proj, External PROJ.4)
 
 LOC_ARG_WITH_INC(regex, regex)
 LOC_ARG_WITH_LIB(regex, regex)
+
+LOC_ARG_WITH_INC(pcre, pcre)
+LOC_ARG_WITH_LIB(pcre, pcre)
 
 LOC_ARG_WITH_INC(pthread, POSIX threads)
 LOC_ARG_WITH_LIB(pthread, POSIX threads)
@@ -831,6 +835,7 @@ AC_SUBST(PROJSHARE)
 # Enable regex option
 
 LOC_CHECK_USE(regex,regex,USE_REGEX)
+LOC_CHECK_USE(pcre,pcre,USE_PCRE)
 
 REGEXINCPATH=
 REGEXLIBPATH=
@@ -851,13 +856,32 @@ LOC_CHECK_LIB_PATH(regex,regex,REGEXLIBPATH)
 LOC_CHECK_FUNC(regcomp,regex functions,REGEXLIB,,,,,[
 LOC_CHECK_LIBS(regex,regcomp,regex,$REGEXLIBPATH,REGEXLIB,,,)
 ])
+AC_SUBST(USE_REGEX)
+
+elif test -n "$USE_PCRE"; then
+
+# With pcre includes directory
+
+LOC_CHECK_INC_PATH(pcre,pcre,REGEXINCPATH)
+
+LOC_CHECK_INCLUDES(pcre.h,pcre,$REGEXINCPATH)
+
+# With pcre library directory
+
+LOC_CHECK_LIB_PATH(pcre,pcre,REGEXLIBPATH)
+
+LOC_CHECK_FUNC(pcre_compile,pcre functions,REGEXLIB,,,,,[
+LOC_CHECK_LIBS(pcre,pcre_compile,pcre,$REGEXLIBPATH,REGEXLIB,,,)
+])
+
+dnl USE_REGEX=0
+AC_SUBST(USE_PCRE)
 
 fi # $USE_REGEX
 
 AC_SUBST(REGEXINCPATH)
 AC_SUBST(REGEXLIBPATH)
 AC_SUBST(REGEXLIB)
-AC_SUBST(USE_REGEX)
 
 # Done checking regex
 
@@ -2040,6 +2064,7 @@ LOC_MSG_USE(POSIX thread support,USE_PTHREAD)
 LOC_MSG_USE(PostgreSQL support,USE_POSTGRES)
 LOC_MSG_USE(Readline support,USE_READLINE)
 LOC_MSG_USE(Regex support,USE_REGEX)
+LOC_MSG_USE(PCRE support,USE_PCRE)
 LOC_MSG_USE(SQLite support,USE_SQLITE)
 LOC_MSG_USE(TIFF support,USE_TIFF)
 LOC_MSG_USE(X11 support,USE_X11)

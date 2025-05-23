@@ -61,11 +61,11 @@ Two different boundary conditions are implemented, the Dirichlet and
 Neumann conditions. By default the calculation area is surrounded by
 homogeneous Neumann boundary conditions. The calculation and boundary
 status of single cells must be set with a status map, the following
-states are supportet:
+states are supported:
 
 - 0 == inactive - the cell with status 0 will not be calculated, active
   cells will have a no flow boundary to this cell
-- 1 == active - this cell is used for groundwater floaw calculation,
+- 1 == active - this cell is used for groundwater flow calculation,
   inner sources and recharge can be defined for those cells
 - 2 == Dirichlet - cells of this type will have a fixed piezometric head
   value which do not change over the time
@@ -150,6 +150,5 @@ paraview --data=/tmp/gwdata_unconf2d.vtk &
 
 Sören Gebbert
 
-This work is based on the Diploma Thesis of Sören Gebbert available
-[here](https://grass.osgeo.org/gdp/hydrology/gebbert2007_diplom_stroemung_grass_gis.pdf)
+This work is based on the [Diploma Thesis of Sören Gebbert](https://grass.osgeo.org/gdp/hydrology/gebbert2007_diplom_stroemung_grass_gis.pdf)
 at Technical University Berlin in Germany.

@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    /* backward comaptibility -> simple list implied l flag list, if there was
+    /* backward compatibility -> simple list implied l flag list, if there was
        only l flag (with s flag added it is not clear, simple_flag is linked to
        both) */
     if ((simple_flag->answer && !s->answer) && !l->answer)
@@ -257,15 +257,15 @@ static int add_or_update_group(char group[INAME_LEN], char **rasters, int k)
             skip = 1;
             continue;
         }
+        char *rname = G_fully_qualified_name(rasters[m], mapset);
 
-        G_message(_("Adding raster map <%s> to group"),
-                  G_fully_qualified_name(rasters[m], mapset));
+        G_message(_("Adding raster map <%s> to group"), rname);
 
         /* Go through existing files to check for duplicates */
         for (n = 0; n < ref.nfiles; n++) {
             if (strcmp(rasters[m], ref.file[n].name) == 0) {
                 G_message(_("Raster map <%s> exists in group. Skipped."),
-                          G_fully_qualified_name(rasters[m], mapset));
+                          rname);
                 skip = 1;
                 continue;
             }
@@ -273,6 +273,7 @@ static int add_or_update_group(char group[INAME_LEN], char **rasters, int k)
 
         if (skip == 0)
             I_add_file_to_group_ref(rasters[m], mapset, &ref);
+        G_free(rname);
     }
 
     G_debug(1, "writing group REF");
@@ -298,21 +299,22 @@ static int add_or_update_subgroup(char group[INAME_LEN],
             skip = 1;
             continue;
         }
+        char *rname = G_fully_qualified_name(rasters[m], mapset);
 
-        G_message(_("Adding raster map <%s> to subgroup"),
-                  G_fully_qualified_name(rasters[m], mapset));
+        G_message(_("Adding raster map <%s> to subgroup"), rname);
 
         /* Go through existing files to check for duplicates */
         for (n = 0; n < ref.nfiles; n++) {
             if (strcmp(rasters[m], ref.file[n].name) == 0) {
                 G_message(_("Raster map <%s> exists in subgroup. Skipping..."),
-                          G_fully_qualified_name(rasters[m], mapset));
+                          rname);
                 skip = 1;
                 continue;
             }
         }
         if (skip == 0)
             I_add_file_to_group_ref(rasters[m], mapset, &ref);
+        G_free(rname);
     }
 
     G_debug(1, "writing subgroup REF");

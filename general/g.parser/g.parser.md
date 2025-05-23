@@ -1,7 +1,10 @@
-## KEYWORDS
+---
+name: g.parser
+description: Provides full parser support for GRASS scripts.
+keywords: [general, support, scripts]
+---
 
-[general](general.md), [support](topic_support.md),
-[scripts](keywords.md#scripts)
+# Provides full parser support for GRASS scripts
 
 ## SYNOPSIS
 

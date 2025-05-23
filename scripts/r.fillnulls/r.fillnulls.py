@@ -12,9 +12,9 @@
 #               Per hole filling with RST by Maris Nartiss
 #               Speedup for per hole filling with RST by Stefan Blumentrath
 # PURPOSE:      fills NULL (no data areas) in raster maps
-#               The script respects a user mask (MASK) if present.
+#               The script respects a user mask if present.
 #
-# COPYRIGHT:    (C) 2001-2018 by the GRASS Development Team
+# COPYRIGHT:    (C) 2001-2025 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
@@ -117,7 +117,7 @@ mapset = None
 
 
 def cleanup():
-    # delete internal mask and any TMP files:
+    # delete internal any temporary files:
     if len(tmp_vmaps) > 0:
         gs.run_command(
             "g.remove", quiet=True, flags="fb", type="vector", name=tmp_vmaps
@@ -126,11 +126,6 @@ def cleanup():
         gs.run_command(
             "g.remove", quiet=True, flags="fb", type="raster", name=tmp_rmaps
         )
-    if usermask and mapset:
-        if gs.find_file(usermask, mapset=mapset)["file"]:
-            gs.run_command(
-                "g.rename", quiet=True, raster=(usermask, "MASK"), overwrite=True
-            )
 
 
 def main():
@@ -159,13 +154,11 @@ def main():
     # save original region
     reg_org = gs.region()
 
-    # check if a MASK is already present
-    # and remove it to not interfere with NULL lookup part
-    # as we don't fill MASKed parts!
-    if gs.find_file("MASK", mapset=mapset)["file"]:
-        usermask = "usermask_mask." + unique
-        gs.message(_("A user raster mask (MASK) is present. Saving it..."))
-        gs.run_command("g.rename", quiet=quiet, raster=("MASK", usermask))
+    # Check if a raster mask is present.
+    # We need to handle the mask in a special way, so we don't fill the masked parts.
+    mask_status = gs.parse_command("r.mask.status", format="json")
+    if mask_status["present"]:
+        usermask = mask_status["name"]
 
     # check if method is rst to use v.surf.rst
     if method == "rst":
@@ -184,16 +177,18 @@ def main():
 
         # creating binary (0/1) map
         if usermask:
+            # Disable masking to not interfere with NULL lookup part.
             gs.message(_("Skipping masked raster parts"))
-            gs.mapcalc(
-                (
-                    '$tmp1 = if(isnull("$input") && !($mask == 0 || isnull($mask)),1,'
-                    "null())"
-                ),
-                tmp1=prefix + "nulls",
-                input=input,
-                mask=usermask,
-            )
+            with gs.MaskManager():
+                gs.mapcalc(
+                    (
+                        '$tmp1 = if(isnull("$input") && !($mask == 0 || isnull($mask)),'
+                        "1,null())"
+                    ),
+                    tmp1=prefix + "nulls",
+                    input=input,
+                    mask=usermask,
+                )
         else:
             gs.mapcalc(
                 '$tmp1 = if(isnull("$input"),1,null())',
@@ -201,16 +196,6 @@ def main():
                 input=input,
             )
         tmp_rmaps.append(prefix + "nulls")
-
-        # restoring user's mask, if present
-        # to ignore MASKed original values
-        if usermask:
-            gs.message(_("Restoring user mask (MASK)..."))
-            try:
-                gs.run_command("g.rename", quiet=quiet, raster=(usermask, "MASK"))
-            except CalledModuleError:
-                gs.warning(_("Failed to restore user MASK!"))
-            usermask = None
 
         # grow identified holes by X pixels
         gs.message(_("Growing NULL areas"))
@@ -282,10 +267,9 @@ def main():
             quiet=quiet,
         )
         cat_list = []
-        cats_file = open(cats_file_name)
-        for line in cats_file:
-            cat_list.append(line.rstrip("\n"))
-        cats_file.close()
+        with open(cats_file_name) as cats_file:
+            for line in cats_file:
+                cat_list.append(line.rstrip("\n"))
         os.remove(cats_file_name)
 
         if len(cat_list) < 1:
@@ -590,21 +574,22 @@ def main():
         new_env["LC_ALL"] = "C"
         if usermask:
             try:
-                p = gs.core.start_command(
-                    "r.resamp.bspline",
-                    input=input,
-                    mask=usermask,
-                    output=prefix + "filled",
-                    method=method,
-                    ew_step=3 * reg["ewres"],
-                    ns_step=3 * reg["nsres"],
-                    lambda_=lambda_,
-                    memory=memory,
-                    flags="n",
-                    stderr=subprocess.PIPE,
-                    env=new_env,
-                )
-                stderr = gs.decode(p.communicate()[1])
+                with gs.MaskManager():
+                    p = gs.core.start_command(
+                        "r.resamp.bspline",
+                        input=input,
+                        mask=usermask,
+                        output=prefix + "filled",
+                        method=method,
+                        ew_step=3 * reg["ewres"],
+                        ns_step=3 * reg["nsres"],
+                        lambda_=lambda_,
+                        memory=memory,
+                        flags="n",
+                        stderr=subprocess.PIPE,
+                        env=new_env,
+                    )
+                    stderr = gs.decode(p.communicate()[1])
                 if "No NULL cells found" in stderr:
                     gs.run_command(
                         "g.copy", raster="%s,%sfilled" % (input, prefix), overwrite=True
@@ -655,15 +640,6 @@ def main():
                     _("Failure during bspline interpolation. Error message: %s")
                     % stderr
                 )
-
-    # restoring user's mask, if present:
-    if usermask:
-        gs.message(_("Restoring user mask (MASK)..."))
-        try:
-            gs.run_command("g.rename", quiet=quiet, raster=(usermask, "MASK"))
-        except CalledModuleError:
-            gs.warning(_("Failed to restore user MASK!"))
-        usermask = None
 
     # set region to original extents, align to input
     gs.run_command(

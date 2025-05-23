@@ -30,6 +30,7 @@ This program is free software under the GNU General Public License
 
 import os
 import re
+from pathlib import Path
 
 import wx
 
@@ -37,7 +38,6 @@ from grass.script import core as grass
 from grass.script.utils import naturally_sorted, try_remove
 
 from grass.pydispatch.signal import Signal
-
 from core import globalvar
 from core.gcmd import GError, RunCommand, GMessage
 from gui_core.gselect import (
@@ -491,7 +491,7 @@ def CreateNewVector(
             % outmap,
         )
         dlg.Destroy()
-        return
+        return None
 
     if outmap == "":  # should not happen
         dlg.Destroy()
@@ -1715,7 +1715,7 @@ class MapLayersDialog(MapLayersDialogBase):
 
 
 class MapLayersDialogForGroups(MapLayersDialogBase):
-    """Subclass of MapLayersDialogBase used for specyfying maps in an imagery group.
+    """Subclass of MapLayersDialogBase used for specifying maps in an imagery group.
 
     Shows only raster maps.
     """
@@ -2082,7 +2082,7 @@ class SymbolDialog(wx.Dialog):
         """
         wx.Dialog.__init__(self, parent=parent, title=title, id=wx.ID_ANY)
 
-        self.symbolPath = symbolPath
+        self.symbolPath = Path(symbolPath)
         self.currentSymbol = currentSymbol  # default basic/x
         self.selected = None
         self.selectedDir = None
@@ -2095,7 +2095,7 @@ class SymbolDialog(wx.Dialog):
         vSizer = wx.BoxSizer(wx.VERTICAL)
         fgSizer = wx.FlexGridSizer(rows=2, cols=2, vgap=5, hgap=5)
         self.folderChoice = wx.Choice(
-            mainPanel, id=wx.ID_ANY, choices=os.listdir(self.symbolPath)
+            mainPanel, id=wx.ID_ANY, choices=[p.name for p in self.symbolPath.iterdir()]
         )
         self.folderChoice.Bind(wx.EVT_CHOICE, self.OnFolderSelect)
 
@@ -2134,8 +2134,8 @@ class SymbolDialog(wx.Dialog):
 
         # show panel with the largest number of images and fit size
         count = [
-            len(os.listdir(os.path.join(self.symbolPath, folder)))
-            for folder in os.listdir(self.symbolPath)
+            len(list((self.symbolPath / folder).iterdir()))
+            for folder in [p.name for p in self.symbolPath.iterdir()]
         ]
 
         index = count.index(max(count))
@@ -2165,7 +2165,7 @@ class SymbolDialog(wx.Dialog):
         """Creates multiple panels with symbols.
 
         Panels are shown/hidden according to selected folder."""
-        folders = os.listdir(self.symbolPath)
+        folders = [p.name for p in self.symbolPath.iterdir()]
 
         panels = []
         self.symbolPanels = []
@@ -2173,7 +2173,7 @@ class SymbolDialog(wx.Dialog):
         for folder in folders:
             panel = wx.Panel(parent, style=wx.BORDER_RAISED)
             sizer = wx.GridSizer(cols=6, vgap=3, hgap=3)
-            images = self._getSymbols(path=os.path.join(self.symbolPath, folder))
+            images = self._getSymbols(path=self.symbolPath / folder)
 
             symbolPanels = []
             for img in images:
@@ -2191,7 +2191,7 @@ class SymbolDialog(wx.Dialog):
 
     def _getSymbols(self, path):
         # we assume that images are in subfolders (1 level only)
-        imageList = [os.path.join(path, image) for image in os.listdir(path)]
+        imageList = [str(p) for p in path.iterdir()]
 
         return sorted(imageList)
 

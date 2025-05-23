@@ -37,7 +37,7 @@ char *OGR_list_write_drivers(void)
         list = G_realloc(list, (count + 1) * sizeof(char *));
 
         /* chg white space to underscore in GDAL driver names */
-        sprintf(buf, "%s", GDALGetDriverShortName(hDriver));
+        snprintf(buf, sizeof(buf), "%s", GDALGetDriverShortName(hDriver));
         G_strchg(buf, ' ', '_');
         list[count++] = G_store(buf);
         len += strlen(buf) + 1; /* + ',' */

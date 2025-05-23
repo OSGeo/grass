@@ -1,7 +1,13 @@
+---
+description: GRASS variables and environment variables
+---
+
+# GRASS variables and environment variables
+
 A variable in scripting is a symbolic name that holds data which can be
 used and modified during script execution. Variables allow scripts to
 store and manipulate values dynamically, making them more flexible and
-reusable. In GRASS GIS, there are two types of variables:
+reusable. In GRASS, there are two types of variables:
 
 - [shell environment](#setting-shell-environment-variables) variables,
 - [GRASS gisenv](#setting-grass-gisenv-variables) variables.
@@ -374,7 +380,7 @@ default is set to the number of CPUs on the system. Setting to '1'
 effectively disables parallel processing.
 
 TMPDIR, TEMP, TMP  
-\[Various GRASS GIS commands and wxGUI\]  
+\[Various GRASS commands and wxGUI\]  
 The default wxGUI temporary directory is chosen from a
 platform-dependent list, but the user can control the selection of this
 directory by setting one of the TMPDIR, TEMP or TMP environment
@@ -475,6 +481,11 @@ region from the WIND file.
 This allows programs such as the GUI to run external commands on an
 alternate region without having to modify the WIND file then change it
 back afterwards.
+
+GRASS_MASK  
+\[libgis\]  
+use the raster map specified by name as mask, instead of a raster called
+MASK in the current mapset.
 
 ## List of selected GRASS gisenv variables
 

@@ -227,8 +227,8 @@ class DMonMap(Map):
                         layersOrder[i] = next_layer
                         next_layer += 1
                     # layer must be put higher in render order (same cmd was
-                    # insered more times)
-                    # TODO delete rendurant cmds from cmd file?
+                    # inserted more times)
+                    # TODO delete redundant cmds from cmd file?
                     else:
                         for j, l_order in enumerate(layersOrder):
                             if l_order > layersOrder[i]:
@@ -462,7 +462,7 @@ class DMonGrassInterface(StandaloneMapDisplayGrassInterface):
 
 
 class DMonDisplay(FrameMixin, MapPanel):
-    """Map display for wrapping map panel with d.mon mathods and frame methods"""
+    """Map display for wrapping map panel with d.mon methods and frame methods"""
 
     def __init__(self, parent, giface, id, Map, title, toolbars, statusbar):
         # init map panel
@@ -492,13 +492,14 @@ class DMonDisplay(FrameMixin, MapPanel):
 
         # update env file
         width, height = self.MapWindow.GetClientSize()
-        for line in fileinput.input(monFile["env"], inplace=True):
-            if "GRASS_RENDER_WIDTH" in line:
-                print("GRASS_RENDER_WIDTH={0}".format(width))
-            elif "GRASS_RENDER_HEIGHT" in line:
-                print("GRASS_RENDER_HEIGHT={0}".format(height))
-            else:
-                print(line.rstrip("\n"))
+        with fileinput.input(monFile["env"], inplace=True) as file:
+            for line in file:
+                if "GRASS_RENDER_WIDTH" in line:
+                    print("GRASS_RENDER_WIDTH={0}".format(width))
+                elif "GRASS_RENDER_HEIGHT" in line:
+                    print("GRASS_RENDER_HEIGHT={0}".format(height))
+                else:
+                    print(line.rstrip("\n"))
 
         # add Map Display panel to Map Display frame
         sizer = wx.BoxSizer(wx.VERTICAL)

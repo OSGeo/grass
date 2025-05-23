@@ -1,7 +1,10 @@
-## KEYWORDS
+---
+description: wxGUI Vector Network Analysis Tool
+index: wxGUI
+keywords: [vector, GUI, network]
+---
 
-[vector](vector.md), [network](topic_network.md),
-[vector](keywords.md#vector)
+# wxGUI Vector Network Analysis Tool
 
 ## DESCRIPTION
 
