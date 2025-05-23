@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_sl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-23 17:40+0000\n"
+"POT-Creation-Date: 2025-05-23 22:56+0000\n"
 "PO-Revision-Date: 2025-03-12 12:06+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Slovenian <https://weblate.osgeo.org/projects/grass-gis/grassmods/sl/>\n"
@@ -1950,6 +1950,7 @@ msgstr ""
 #: ../raster/r.series.accumulate/main.c:76 ../raster/r.series.interp/main.c:72
 #: ../raster/r.series/main.c:153 ../raster/r.sim/r.sim.sediment/main.c:112
 #: ../raster/r.sim/r.sim.water/main.c:112 ../raster/r.slope.aspect/main.c:166
+#: ../raster/r.smooth.edgepreserve/main.c:46
 #: ../raster/r.solute.transport/main.c:228 ../raster/r.spread/main.c:102
 #: ../raster/r.spreadpath/main.c:77 ../raster/r.statistics/main.c:53
 #: ../raster/r.stats.quantile/main.c:565 ../raster/r.stats.zonal/main.c:104
@@ -5552,7 +5553,8 @@ msgstr "Ime obstoječega rastrskega sloja."
 #: ../raster/r.sim/simlib/output.c:434 ../raster/r.sim/simlib/output.c:476
 #: ../raster/r.sim/simlib/output.c:492 ../raster/r.sim/simlib/output.c:513
 #: ../raster/r.sim/simlib/output.c:555 ../raster/r.sim/simlib/output.c:595
-#: ../raster/r.sim/simlib/output.c:762 ../raster/r.spread/main.c:445
+#: ../raster/r.sim/simlib/output.c:762
+#: ../raster/r.smooth.edgepreserve/main.c:144 ../raster/r.spread/main.c:445
 #: ../raster/r.spread/main.c:448 ../raster/r.spread/main.c:451
 #: ../raster/r.spread/main.c:455 ../raster/r.spread/main.c:458
 #: ../raster/r.spread/main.c:461 ../raster/r.stream.extract/main.c:169
@@ -16921,8 +16923,9 @@ msgstr "Izračuna univariatne statistične parametre za ne NULL celice rastrskeg
 #: ../raster/r.resamp.filter/main.c:437 ../raster/r.resamp.interp/main.c:92
 #: ../raster/r.series/main.c:156 ../raster/r.sim/r.sim.sediment/main.c:119
 #: ../raster/r.sim/r.sim.water/main.c:118 ../raster/r.slope.aspect/main.c:171
-#: ../raster/r.sun/main.c:245 ../raster/r.texture/main.c:101
-#: ../raster/r.univar/r.univar_main.c:155 ../vector/v.surf.rst/main.c:153
+#: ../raster/r.smooth.edgepreserve/main.c:49 ../raster/r.sun/main.c:245
+#: ../raster/r.texture/main.c:101 ../raster/r.univar/r.univar_main.c:155
+#: ../vector/v.surf.rst/main.c:153
 #, fuzzy
 msgid "parallel"
 msgstr "izpiši znak razmejitve med polji"
@@ -29876,6 +29879,115 @@ msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
 msgid "Dxy raster map <%s> complete"
 msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
 
+#: ../raster/r.smooth.edgepreserve/main.c:47 ../vector/v.generalize/main.c:79
+msgid "smoothing"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:48
+#, fuzzy
+msgid "edge detection"
+msgstr "Izhodni sloj"
+
+#: ../raster/r.smooth.edgepreserve/main.c:50
+msgid "denoise"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:51
+msgid "Smoothing with anisotropic diffusion"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:61
+#, fuzzy
+msgid "Gradient magnitude threshold (in map units)"
+msgstr "Največja razdalja med točkami in enotami karte."
+
+#: ../raster/r.smooth.edgepreserve/main.c:62
+#: ../raster/r.smooth.edgepreserve/main.c:71
+#: ../raster/r.smooth.edgepreserve/main.c:80
+#: ../raster/r.smooth.edgepreserve/main.c:98
+msgid "Diffusion"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:70
+msgid "Rate of diffusion"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:79
+#, fuzzy
+msgid "Number of diffusion steps"
+msgstr "število kvantizacijskih korakov"
+
+#: ../raster/r.smooth.edgepreserve/main.c:88
+#, fuzzy
+msgid "Diffusivity function"
+msgstr "Nepoznan tip"
+
+#: ../raster/r.smooth.edgepreserve/main.c:97
+msgid "Preserve details with Tukey"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:149
+#, fuzzy
+msgid "Wrong computational region"
+msgstr "Uporabi trenutno regijo"
+
+#: ../raster/r.smooth.edgepreserve/main.c:154
+#, fuzzy
+msgid "Computational region is too small!"
+msgstr "Določi regijo tako, da bo enaka temu rastrskemu sloju"
+
+#: ../raster/r.smooth.edgepreserve/main.c:157
+#, fuzzy
+msgid "Computational region is too large!"
+msgstr "Določi regijo tako, da bo enaka temu rastrskemu sloju"
+
+#: ../raster/r.smooth.edgepreserve/main.c:205
+#, fuzzy
+msgid "Smoothed map"
+msgstr "De-komprimiraj sloj"
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:32
+#, fuzzy, c-format
+msgid "There was an error reading data from a temporary file. %d: %s"
+msgstr "Vrednost, ki bo prirejena NULL vrednosti"
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:46
+#, fuzzy, c-format
+msgid "There was an error writing data from a temporary file. %d: %s"
+msgstr "Napaka pri branju dbmscap datoteke\n"
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:59
+#, fuzzy
+msgid "Error fetching data from a disk cache"
+msgstr "Za vrstico (cat = %d) ni zapisa (record)<"
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:111
+msgid "Insufficient memory to hold processed data. Either increase available memory with the \"memory\" parameter or reduce size of the computational region."
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:115
+msgid "Using disk for temporary data storage"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:123
+#, fuzzy, c-format
+msgid "Error creating row cache. %d: %s"
+msgstr "Ne najdem vhodne datoteke %s\n"
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:129
+#, fuzzy
+msgid "Error creating row cache"
+msgstr "Ne najdem vhodne datoteke %s\n"
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:135
+msgid "Keeping temporary data in RAM"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:155
+#, fuzzy, c-format
+msgid "Error cleaning up row cache. %d: %s"
+msgstr "Nisem uspel odpreti vhodne datoteke."
+
 #: ../raster/r.solute.transport/main.c:56
 msgid "The initial concentration in [kg/m^3]"
 msgstr ""
@@ -41648,10 +41760,6 @@ msgstr "Zapisujem novo datoteko...\n"
 #, fuzzy
 msgid "simplification"
 msgstr "Ime datoteke z rezultatom klasifikacije"
-
-#: ../vector/v.generalize/main.c:79
-msgid "smoothing"
-msgstr ""
 
 #: ../vector/v.generalize/main.c:80
 msgid "displacement"
@@ -55388,10 +55496,6 @@ msgstr "Vhodni sloj"
 #~ msgstr "Število točk najbližjih točk, ki bodo upoštevane"
 
 #, fuzzy
-#~ msgid "Number of scaling steps"
-#~ msgstr "število kvantizacijskih korakov"
-
-#, fuzzy
 #~ msgid "Number of significant digits per attribute column"
 #~ msgstr "Število decimalk (le za \"floating point\" podatke)"
 
@@ -56610,10 +56714,6 @@ msgstr "Vhodni sloj"
 #~ msgstr "Ime datoteke s filtrom"
 
 #, fuzzy
-#~ msgid "Set computational region to input raster map"
-#~ msgstr "Določi regijo tako, da bo enaka temu rastrskemu sloju"
-
-#, fuzzy
 #~ msgid "Set computational region to maximum image extent"
 #~ msgstr "Določi regijo tako, da bo enaka temu rastrskemu sloju"
 
@@ -56652,10 +56752,6 @@ msgstr "Vhodni sloj"
 #, fuzzy
 #~ msgid "Set the resolution of plot"
 #~ msgstr "Ime izhodnega rastrskega sloja"
-
-#, fuzzy
-#~ msgid "Set to original computational region"
-#~ msgstr "Uporabi trenutno regijo"
 
 #, fuzzy
 #~ msgid "Sets color rules for features in a vector map using a numeric attribute column."
@@ -58151,10 +58247,6 @@ msgstr "Vhodni sloj"
 #, fuzzy
 #~ msgid "walking distance"
 #~ msgstr "neveljavna regija: %s"
-
-#, fuzzy
-#~ msgid "weight function"
-#~ msgstr "Nepoznan tip"
 
 #, fuzzy
 #~ msgid "width and height of the color legend"

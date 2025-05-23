@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-23 17:40+0000\n"
+"POT-Creation-Date: 2025-05-23 22:56+0000\n"
 "PO-Revision-Date: 2025-03-12 12:05+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Greek <https://weblate.osgeo.org/projects/grass-gis/grassmods/el/>\n"
@@ -1781,6 +1781,7 @@ msgstr ""
 #: ../raster/r.series.accumulate/main.c:76 ../raster/r.series.interp/main.c:72
 #: ../raster/r.series/main.c:153 ../raster/r.sim/r.sim.sediment/main.c:112
 #: ../raster/r.sim/r.sim.water/main.c:112 ../raster/r.slope.aspect/main.c:166
+#: ../raster/r.smooth.edgepreserve/main.c:46
 #: ../raster/r.solute.transport/main.c:228 ../raster/r.spread/main.c:102
 #: ../raster/r.spreadpath/main.c:77 ../raster/r.statistics/main.c:53
 #: ../raster/r.stats.quantile/main.c:565 ../raster/r.stats.zonal/main.c:104
@@ -5175,7 +5176,8 @@ msgstr ""
 #: ../raster/r.sim/simlib/output.c:434 ../raster/r.sim/simlib/output.c:476
 #: ../raster/r.sim/simlib/output.c:492 ../raster/r.sim/simlib/output.c:513
 #: ../raster/r.sim/simlib/output.c:555 ../raster/r.sim/simlib/output.c:595
-#: ../raster/r.sim/simlib/output.c:762 ../raster/r.spread/main.c:445
+#: ../raster/r.sim/simlib/output.c:762
+#: ../raster/r.smooth.edgepreserve/main.c:144 ../raster/r.spread/main.c:445
 #: ../raster/r.spread/main.c:448 ../raster/r.spread/main.c:451
 #: ../raster/r.spread/main.c:455 ../raster/r.spread/main.c:458
 #: ../raster/r.spread/main.c:461 ../raster/r.stream.extract/main.c:169
@@ -15641,8 +15643,9 @@ msgstr ""
 #: ../raster/r.resamp.filter/main.c:437 ../raster/r.resamp.interp/main.c:92
 #: ../raster/r.series/main.c:156 ../raster/r.sim/r.sim.sediment/main.c:119
 #: ../raster/r.sim/r.sim.water/main.c:118 ../raster/r.slope.aspect/main.c:171
-#: ../raster/r.sun/main.c:245 ../raster/r.texture/main.c:101
-#: ../raster/r.univar/r.univar_main.c:155 ../vector/v.surf.rst/main.c:153
+#: ../raster/r.smooth.edgepreserve/main.c:49 ../raster/r.sun/main.c:245
+#: ../raster/r.texture/main.c:101 ../raster/r.univar/r.univar_main.c:155
+#: ../vector/v.surf.rst/main.c:153
 msgid "parallel"
 msgstr ""
 
@@ -27437,6 +27440,110 @@ msgstr ""
 msgid "Dxy raster map <%s> complete"
 msgstr ""
 
+#: ../raster/r.smooth.edgepreserve/main.c:47 ../vector/v.generalize/main.c:79
+msgid "smoothing"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:48
+#, fuzzy
+msgid "edge detection"
+msgstr "Όνομα τοποθεσία"
+
+#: ../raster/r.smooth.edgepreserve/main.c:50
+msgid "denoise"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:51
+msgid "Smoothing with anisotropic diffusion"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:61
+msgid "Gradient magnitude threshold (in map units)"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:62
+#: ../raster/r.smooth.edgepreserve/main.c:71
+#: ../raster/r.smooth.edgepreserve/main.c:80
+#: ../raster/r.smooth.edgepreserve/main.c:98
+msgid "Diffusion"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:70
+msgid "Rate of diffusion"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:79
+#, fuzzy
+msgid "Number of diffusion steps"
+msgstr "Όνομα του δεύτερου ράστερ χάρτη για blending"
+
+#: ../raster/r.smooth.edgepreserve/main.c:88
+msgid "Diffusivity function"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:97
+msgid "Preserve details with Tukey"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:149
+#, fuzzy
+msgid "Wrong computational region"
+msgstr "Όνομα εισαγώμενου ράστερ χάρτη "
+
+#: ../raster/r.smooth.edgepreserve/main.c:154
+#, fuzzy
+msgid "Computational region is too small!"
+msgstr "Όνομα εισαγώμενου ράστερ χάρτη "
+
+#: ../raster/r.smooth.edgepreserve/main.c:157
+#, fuzzy
+msgid "Computational region is too large!"
+msgstr "Όνομα εισαγώμενου ράστερ χάρτη "
+
+#: ../raster/r.smooth.edgepreserve/main.c:205
+msgid "Smoothed map"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:32
+#, c-format
+msgid "There was an error reading data from a temporary file. %d: %s"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:46
+#, c-format
+msgid "There was an error writing data from a temporary file. %d: %s"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:59
+msgid "Error fetching data from a disk cache"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:111
+msgid "Insufficient memory to hold processed data. Either increase available memory with the \"memory\" parameter or reduce size of the computational region."
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:115
+msgid "Using disk for temporary data storage"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:123
+#, c-format
+msgid "Error creating row cache. %d: %s"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:129
+msgid "Error creating row cache"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:135
+msgid "Keeping temporary data in RAM"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:155
+#, c-format
+msgid "Error cleaning up row cache. %d: %s"
+msgstr ""
+
 #: ../raster/r.solute.transport/main.c:56
 msgid "The initial concentration in [kg/m^3]"
 msgstr ""
@@ -38333,10 +38440,6 @@ msgstr ""
 msgid "simplification"
 msgstr ""
 
-#: ../vector/v.generalize/main.c:79
-msgid "smoothing"
-msgstr ""
-
 #: ../vector/v.generalize/main.c:80
 msgid "displacement"
 msgstr ""
@@ -48858,10 +48961,6 @@ msgstr ""
 #~ msgstr "Αριθμός γραμμών που θα εμφανίζονται στο υπόμνημα."
 
 #, fuzzy
-#~ msgid "Number of scaling steps"
-#~ msgstr "Όνομα του δεύτερου ράστερ χάρτη για blending"
-
-#, fuzzy
 #~ msgid "Number of significant digits per attribute column"
 #~ msgstr "Όνομα του δεύτερου ράστερ χάρτη για blending"
 
@@ -49253,14 +49352,6 @@ msgstr ""
 #~ msgstr "Όνομα του ASCII εξαγώμενου αρχείου"
 
 #, fuzzy
-#~ msgid "Set computational region to input raster map"
-#~ msgstr "Όνομα εισαγώμενου ράστερ χάρτη "
-
-#, fuzzy
-#~ msgid "Set to original computational region"
-#~ msgstr "Όνομα εισαγώμενου ράστερ χάρτη "
-
-#, fuzzy
 #~ msgid "Setup database"
 #~ msgstr "Εξαγωγή όνομα βάσης δεδομένων"
 
@@ -49481,10 +49572,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "prefix name output layer"
 #~ msgstr "Όνομα εξαγόμενου ράστερ χάρτη"
-
-#, fuzzy
-#~ msgid "selection"
-#~ msgstr "Όνομα τοποθεσία"
 
 #, fuzzy
 #~ msgid "uri destination"

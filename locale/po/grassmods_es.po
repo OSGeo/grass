@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-23 17:40+0000\n"
+"POT-Creation-Date: 2025-05-23 22:56+0000\n"
 "PO-Revision-Date: 2025-03-12 12:05+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grassmods/es/>\n"
@@ -1789,6 +1789,7 @@ msgstr ""
 #: ../raster/r.series.accumulate/main.c:76 ../raster/r.series.interp/main.c:72
 #: ../raster/r.series/main.c:153 ../raster/r.sim/r.sim.sediment/main.c:112
 #: ../raster/r.sim/r.sim.water/main.c:112 ../raster/r.slope.aspect/main.c:166
+#: ../raster/r.smooth.edgepreserve/main.c:46
 #: ../raster/r.solute.transport/main.c:228 ../raster/r.spread/main.c:102
 #: ../raster/r.spreadpath/main.c:77 ../raster/r.statistics/main.c:53
 #: ../raster/r.stats.quantile/main.c:565 ../raster/r.stats.zonal/main.c:104
@@ -5203,7 +5204,8 @@ msgstr "Mi primer módulo ráster"
 #: ../raster/r.sim/simlib/output.c:434 ../raster/r.sim/simlib/output.c:476
 #: ../raster/r.sim/simlib/output.c:492 ../raster/r.sim/simlib/output.c:513
 #: ../raster/r.sim/simlib/output.c:555 ../raster/r.sim/simlib/output.c:595
-#: ../raster/r.sim/simlib/output.c:762 ../raster/r.spread/main.c:445
+#: ../raster/r.sim/simlib/output.c:762
+#: ../raster/r.smooth.edgepreserve/main.c:144 ../raster/r.spread/main.c:445
 #: ../raster/r.spread/main.c:448 ../raster/r.spread/main.c:451
 #: ../raster/r.spread/main.c:455 ../raster/r.spread/main.c:458
 #: ../raster/r.spread/main.c:461 ../raster/r.stream.extract/main.c:169
@@ -15758,8 +15760,9 @@ msgstr "Calcula estadísticas univariadas a partir de celdas no nulas para cada 
 #: ../raster/r.resamp.filter/main.c:437 ../raster/r.resamp.interp/main.c:92
 #: ../raster/r.series/main.c:156 ../raster/r.sim/r.sim.sediment/main.c:119
 #: ../raster/r.sim/r.sim.water/main.c:118 ../raster/r.slope.aspect/main.c:171
-#: ../raster/r.sun/main.c:245 ../raster/r.texture/main.c:101
-#: ../raster/r.univar/r.univar_main.c:155 ../vector/v.surf.rst/main.c:153
+#: ../raster/r.smooth.edgepreserve/main.c:49 ../raster/r.sun/main.c:245
+#: ../raster/r.texture/main.c:101 ../raster/r.univar/r.univar_main.c:155
+#: ../vector/v.surf.rst/main.c:153
 #, fuzzy
 msgid "parallel"
 msgstr "separar"
@@ -27667,6 +27670,128 @@ msgstr "Mapa ráster Dyy  <%s> terminado"
 msgid "Dxy raster map <%s> complete"
 msgstr "Mapa ráster Dxy <%s>terminado"
 
+#: ../raster/r.smooth.edgepreserve/main.c:47 ../vector/v.generalize/main.c:79
+msgid "smoothing"
+msgstr "suavizando"
+
+#: ../raster/r.smooth.edgepreserve/main.c:48
+#, fuzzy
+#| msgid "cloud detection"
+msgid "edge detection"
+msgstr "detección de nubes"
+
+#: ../raster/r.smooth.edgepreserve/main.c:50
+msgid "denoise"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:51
+msgid "Smoothing with anisotropic diffusion"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:61
+#, fuzzy
+#| msgid "Viewpoint height (in map units)"
+msgid "Gradient magnitude threshold (in map units)"
+msgstr "Altura en pantalla (en unidades de mapa)"
+
+#: ../raster/r.smooth.edgepreserve/main.c:62
+#: ../raster/r.smooth.edgepreserve/main.c:71
+#: ../raster/r.smooth.edgepreserve/main.c:80
+#: ../raster/r.smooth.edgepreserve/main.c:98
+#, fuzzy
+#| msgid "fusion"
+msgid "Diffusion"
+msgstr "fusión"
+
+#: ../raster/r.smooth.edgepreserve/main.c:70
+#, fuzzy
+#| msgid "Water diffusion constant"
+msgid "Rate of diffusion"
+msgstr "Constante de difusión del agua"
+
+#: ../raster/r.smooth.edgepreserve/main.c:79
+#, fuzzy
+msgid "Number of diffusion steps"
+msgstr "Número de pasos de cuantización"
+
+#: ../raster/r.smooth.edgepreserve/main.c:88
+#, fuzzy
+msgid "Diffusivity function"
+msgstr "Función kernel"
+
+#: ../raster/r.smooth.edgepreserve/main.c:97
+msgid "Preserve details with Tukey"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:149
+#, fuzzy
+#| msgid "computational region"
+msgid "Wrong computational region"
+msgstr "región computacional"
+
+#: ../raster/r.smooth.edgepreserve/main.c:154
+#, fuzzy
+#| msgid "computational region"
+msgid "Computational region is too small!"
+msgstr "región computacional"
+
+#: ../raster/r.smooth.edgepreserve/main.c:157
+#, fuzzy
+#| msgid "computational region"
+msgid "Computational region is too large!"
+msgstr "región computacional"
+
+#: ../raster/r.smooth.edgepreserve/main.c:205
+#, fuzzy
+#| msgid "choropleth map"
+msgid "Smoothed map"
+msgstr "mapa coroplético"
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:32
+#, fuzzy, c-format
+msgid "There was an error reading data from a temporary file. %d: %s"
+msgstr "No se puede leer el archivo REF para el subgrupo  <%s> en el grupo  <%s>"
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:46
+#, fuzzy, c-format
+#| msgid "Error writing temporary file <%s>"
+msgid "There was an error writing data from a temporary file. %d: %s"
+msgstr "Error al escribir archivo temporal <%s>"
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:59
+msgid "Error fetching data from a disk cache"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:111
+msgid "Insufficient memory to hold processed data. Either increase available memory with the \"memory\" parameter or reduce size of the computational region."
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:115
+msgid "Using disk for temporary data storage"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:123
+#, fuzzy, c-format
+#| msgid "Error creating layer 2"
+msgid "Error creating row cache. %d: %s"
+msgstr "Error al crear capa 2"
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:129
+#, fuzzy
+#| msgid "Error creating layer 2"
+msgid "Error creating row cache"
+msgstr "Error al crear capa 2"
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:135
+msgid "Keeping temporary data in RAM"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:155
+#, fuzzy, c-format
+#| msgid "Error closing output file %s"
+msgid "Error cleaning up row cache. %d: %s"
+msgstr "Error al cerrar archivo de salida %s"
+
 #: ../raster/r.solute.transport/main.c:56
 msgid "The initial concentration in [kg/m^3]"
 msgstr "La concentración inicial en [kg/m^3]"
@@ -38703,10 +38828,6 @@ msgstr "Resolviendo conflictos..."
 #: ../vector/v.generalize/main.c:78
 msgid "simplification"
 msgstr "simplificación"
-
-#: ../vector/v.generalize/main.c:79
-msgid "smoothing"
-msgstr "suavizando"
 
 #: ../vector/v.generalize/main.c:80
 msgid "displacement"
@@ -52893,10 +53014,6 @@ msgstr "Archivo de imagen"
 #~ msgstr "Número de subclases es %d"
 
 #, fuzzy
-#~ msgid "Number of scaling steps"
-#~ msgstr "Número de pasos de cuantización"
-
-#, fuzzy
 #~ msgid "Number of significant digits per attribute column"
 #~ msgstr "Número de dígitos significativos (coma flotante solamente)"
 
@@ -56672,10 +56789,6 @@ msgstr "Archivo de imagen"
 #, fuzzy
 #~ msgid "walking distance"
 #~ msgstr "Distancia no válida"
-
-#, fuzzy
-#~ msgid "weight function"
-#~ msgstr "Función kernel"
 
 #~ msgid "weight= and -c are mutually exclusive"
 #~ msgstr "weight= y -c son excluyentes mutuamente"
