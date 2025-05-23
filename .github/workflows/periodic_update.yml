@@ -93,11 +93,30 @@ jobs:
         run: cd locale && make update-po
       - name: Verify the .po files
         run: cd locale && make verify
-      # Display changes, only to follow along in the logs.
-      # - run: git diff
+      - name: Preview changed files
+        run: git diff | head -n200
+      # The POT-Creation-Date gets updated by xgettext with the latest
+      # version-controlled modification time among all the given input files.
+      - name: Preview changed files, except for the POT-Creation-Date
+        run: |
+          git diff --ignore-matching-lines=^\"POT-Creation-Date:  | head -n200
+      - name: Get if files were updated
+        id: changed-files
+        continue-on-error: true
+        run: |
+          git diff --exit-code --quiet --ignore-matching-lines=^\"POT-Creation-Date:
+          exit_code=$?
+          echo "CHANGED_FILES=${exit_code}" >> "${GITHUB_OUTPUT}"
+      - name: Translation files were changed
+        if: ${{ (fromJson(steps.changed-files.outputs.CHANGED_FILES) == 1) }}
+        run: echo "Translation files were changed"
+      - name: Translation files were not changed
+        if: ${{ ! (fromJson(steps.changed-files.outputs.CHANGED_FILES) == 1) }}
+        run: echo "Translation files were not changed"
       - name: Double check if files are modified
         run: git status --ignored
       - name: Create Pull Request
+        if: ${{ (fromJson(steps.changed-files.outputs.CHANGED_FILES) == 1) }}
         id: cpr
         uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7.0.8
         with:
@@ -110,7 +129,7 @@ jobs:
 
             Automated changes by [create-pull-request](https://github.com/peter-evans/create-pull-request) GitHub action
       - name: Check outputs
-        if: ${{ steps.cpr.outputs.pull-request-number }}
+        if: ${{ (fromJson(steps.changed-files.outputs.CHANGED_FILES) == 1) && steps.cpr.outputs.pull-request-number }}
         run: |
           echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
           echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
