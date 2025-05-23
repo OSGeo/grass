@@ -677,13 +677,7 @@ class TaskFrame(wx.Frame):
                     border=5,
                 )
 
-        hasNew = False
-        for p in self.task.params:
-            if p.get("age", "old") == "new":
-                hasNew = True
-                break
-
-        if self.get_dcmd is None and hasNew:
+        if self.get_dcmd is None:
             # close dialog when command is terminated
             self.closebox = CheckBox(
                 parent=self.panel, label=_("Close dialog on finish"), style=wx.NO_BORDER
