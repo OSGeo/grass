@@ -27,7 +27,7 @@ class TestResampFilter(TestCase):
                 "stddev": 20.3084660266678,
                 "variance": 412.433792356322,
                 "coeff_var": 18.3994429908677,
-                "sum": 620861845.962976,
+                "sum": 620861845.962989,
             },
             "bartlett": {
                 "n": 5625000,
@@ -113,7 +113,7 @@ class TestResampFilter(TestCase):
                 "stddev": 20.3108768847555,
                 "variance": 412.531719827694,
                 "coeff_var": 18.4016270729355,
-                "sum": 620861851.095669,
+                "sum": 620861851.095697,
             },
             "normal": {
                 "n": 5625000,

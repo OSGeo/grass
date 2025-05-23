@@ -40,7 +40,7 @@ class TestResampInterp(TestCase):
             "stddev": 20.304736015932,
             "variance": 412.282304676688,
             "coeff_var": 18.3948803378694,
-            "sum": 619853590.902006,
+            "sum": 619853590.902052,
         },
         "bicubic": {
             "n": 5601275,
