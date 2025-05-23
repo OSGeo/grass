@@ -105,7 +105,7 @@ class gThread(threading.Thread, wx.EvtHandler):
 
             self._terminate_evt = wxThdTerminate(
                 onterminate=variables["onterminate"],
-                kwargs=kwargs,
+                kwds=kwargs,
                 args=args,
                 pid=requestId,
             )
@@ -124,7 +124,7 @@ class gThread(threading.Thread, wx.EvtHandler):
 
             event = wxCmdDone(
                 ondone=variables["ondone"],
-                kwargs=kwargs,
+                kwds=kwargs,
                 args=args,  # TODO expand args to kwargs
                 ret=ret,
                 exception=exception,
