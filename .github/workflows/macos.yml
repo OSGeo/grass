@@ -23,9 +23,6 @@ jobs:
     runs-on: macos-14
     env:
       PYTHONWARNINGS: always
-    permissions:
-      contents: write
-      pull-requests: write
     steps:
       - name: Info
         run: |
