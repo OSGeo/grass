@@ -45,14 +45,6 @@ define po_stats
 GISBASE="$(RUN_GISBASE)" $(PYTHON) ./grass_po_stats.py
 endef
 
-pot-unique:
-	@echo "Sorting $(LIBDOMAIN)..."
-	msguniq $(MSGUNIQ_ARGS) -o ./templates/$(LIBDOMAIN).pot ./templates/$(LIBDOMAIN).pot
-	@echo "Sorting $(MODDOMAIN)..."
-	msguniq $(MSGUNIQ_ARGS) -o ./templates/$(MODDOMAIN).pot ./templates/$(MODDOMAIN).pot
-	@echo "Sorting $(WXPYDOMAIN)..."
-	msguniq $(MSGUNIQ_ARGS) -o ./templates/$(WXPYDOMAIN).pot ./templates/$(WXPYDOMAIN).pot
-
 #The xgettext utility is used to automate the creation of
 #portable message files (.po)
 pot:
