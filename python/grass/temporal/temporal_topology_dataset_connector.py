@@ -48,7 +48,6 @@ class TemporalTopologyDatasetConnector:
         # We have build the temporal topology and we know the first map
         start = first
         while start:
-
             # Print all maps this map temporally contains
             dlist = start.get_contains()
             for map in dlist:

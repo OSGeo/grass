@@ -422,7 +422,7 @@ class VectorTopo(Vector):
             [Area(1), Area(2), Area(3)]
 
 
-        to sort the result in a efficient way, use: ::
+        to sort the result in an efficient way, use: ::
 
             >>> from operator import methodcaller as method
             >>> areas.sort(key=method("area"), reverse=True)  # sort the list
@@ -443,7 +443,6 @@ class VectorTopo(Vector):
 
             >>> test_vect.close()
         """
-        is2D = not self.is_3D()
         if vtype not in _GEOOBJ.keys():
             keys = "', '".join(sorted(_GEOOBJ.keys()))
             raise ValueError("vtype not supported, use one of: '%s'" % keys)
@@ -451,6 +450,7 @@ class VectorTopo(Vector):
             ids = (indx for indx in range(1, self.number_of(vtype) + 1))
             if idonly:
                 return ids
+            is2D = not self.is_3D()
             return (
                 _GEOOBJ[vtype](
                     v_id=indx,
@@ -773,7 +773,6 @@ class VectorTopo(Vector):
          >>> for entry in result:
          ...     f_id, cat, wkb = entry
          ...     print((f_id, cat, len(wkb)))
-         ...
          (1, 1, 21)
          (2, 1, 21)
          (3, 1, 21)
@@ -784,7 +783,6 @@ class VectorTopo(Vector):
          >>> for entry in result:
          ...     f_id, cat, wkb = entry
          ...     print((f_id, cat, len(wkb)))
-         ...
          (4, 2, 57)
          (5, 2, 57)
          (6, 2, 57)
@@ -800,7 +798,6 @@ class VectorTopo(Vector):
          >>> for entry in result:
          ...     f_id, cat, wkb = entry
          ...     print((f_id, cat, len(wkb)))
-         ...
          (19, 3, 21)
          (18, 3, 21)
          (20, 3, 21)
@@ -897,7 +894,6 @@ class VectorTopo(Vector):
          >>> for entry in result:
          ...     a_id, cat, wkb = entry
          ...     print((a_id, cat, len(wkb)))
-         ...
          (1, 3, 225)
          (2, 3, 141)
          (3, 3, 93)
@@ -909,7 +905,6 @@ class VectorTopo(Vector):
          >>> for entry in result:
          ...     a_id, cat, wkb = entry
          ...     print((a_id, cat, len(wkb)))
-         ...
          (1, 3, 225)
          (2, 3, 141)
          (3, 3, 93)

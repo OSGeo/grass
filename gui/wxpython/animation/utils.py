@@ -127,11 +127,11 @@ def getNameAndLayer(name):
     and returns map name with mapset (when there was mapset)
     and layer (can be None).
 
-    >>> getNameAndLayer('name:2@mapset')
+    >>> getNameAndLayer("name:2@mapset")
     ('name@mapset', '2')
-    >>> getNameAndLayer('name@mapset')
+    >>> getNameAndLayer("name@mapset")
     ('name@mapset', None)
-    >>> getNameAndLayer('name:2')
+    >>> getNameAndLayer("name:2")
     ('name', '2')
     """
     mapset = layer = None
@@ -239,7 +239,7 @@ def ComputeScaledRect(sourceSize, destSize):
     """Fits source rectangle into destination rectangle
     by scaling and centering.
 
-        >>> ComputeScaledRect(sourceSize = (10, 40), destSize = (100, 50))
+        >>> ComputeScaledRect(sourceSize=(10, 40), destSize=(100, 50))
         {'height': 50, 'scale': 1.25, 'width': 13, 'x': 44, 'y': 0}
 
     :param sourceSize: size of source rectangle

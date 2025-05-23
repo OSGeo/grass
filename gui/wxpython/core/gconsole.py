@@ -362,7 +362,7 @@ class GConsole(wx.EvtHandler):
     def __init__(self, guiparent=None, giface=None, ignoredCmdPattern=None):
         r"""
         :param guiparent: parent window for created GUI objects
-        :param lmgr: layer manager window (TODO: replace by giface)
+        :param giface: GRASS interface instance
         :param ignoredCmdPattern: regular expression specifying commands
                                   to be ignored (e.g. @c '^d\..*' for
                                   display commands)

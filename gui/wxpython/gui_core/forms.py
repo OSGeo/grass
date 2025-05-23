@@ -2297,6 +2297,9 @@ class CmdPanel(wx.Panel):
 
                 elif prompt == "sql_query":
                     win = gselect.SqlWhereSelect(parent=which_panel, param=p)
+                    value = self._getValue(p)
+                    if value:
+                        win.SetValue(value)  # parameter previously set
                     p["wxId"] = [win.GetTextWin().GetId()]
                     win.GetTextWin().Bind(wx.EVT_TEXT, self.OnSetValue)
                     which_sizer.Add(
@@ -3253,8 +3256,6 @@ if __name__ == "__main__":
             "forms.py opening form for: %s"
             % task.get_cmd(ignoreErrors=True, ignoreRequired=True),
         )
-        app = GrassGUIApp(task)
-        app.MainLoop()
     else:  # Test
         # Test grassTask from within a GRASS session
         if os.getenv("GISBASE") is not None:
@@ -3391,4 +3392,5 @@ if __name__ == "__main__":
             },
         ]
         q = wx.LogNull()
-        GrassGUIApp(task).MainLoop()
+
+    GrassGUIApp(task).MainLoop()

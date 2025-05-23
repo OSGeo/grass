@@ -37,7 +37,7 @@ def get_region(env=None):
 
 def get_location_proj_string(env=None):
     """Returns projection of environment in PROJ.4 format"""
-    out = gs.read_command("g.proj", flags="jf", env=env)
+    out = gs.read_command("g.proj", flags="fp", format="proj4", env=env)
     return out.strip()
 
 

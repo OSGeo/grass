@@ -6,6 +6,7 @@ Usage:
 ::
 
     from grass.script import core as grass
+
     grass.parser()
 
 (C) 2008-2025 by the GRASS Development Team
@@ -218,7 +219,7 @@ def get_real_command(cmd):
     For other cases it just returns a module (name).
     So, you can just use this function for all without further check.
 
-    >>> get_real_command('g.region')
+    >>> get_real_command("g.region")
     'g.region'
 
     :param cmd: the command
@@ -254,7 +255,7 @@ def make_command(
     Popen() or call(). Example:
 
 
-    >>> make_command("g.message", flags = 'w', message = 'this is a warning')
+    >>> make_command("g.message", flags="w", message="this is a warning")
     ['g.message', '-w', 'message=this is a warning']
 
 
@@ -472,7 +473,7 @@ def run_command(*args, **kwargs):
     interface. By default, an exception is raised in case of a non-zero
     return code by default.
 
-    >>> run_command('g.region', raster='elevation')
+    >>> run_command("g.region", raster="elevation")
 
     See :func:`start_command()` for details about parameters and usage.
 
@@ -604,7 +605,7 @@ def parse_command(*args, **kwargs):
 
     ::
 
-        parse_command(..., parse=(gs.parse_key_val, {'sep': ':'}))
+        parse_command(..., parse=(gs.parse_key_val, {"sep": ":"}))
 
     Parameter <em>delimiter</em> is deprecated.
 
@@ -647,9 +648,11 @@ def write_command(*args, **kwargs):
     by the *stdin* argument fed to the process' standard input.
 
     >>> write_command(
-    ...    'v.in.ascii', input='-',
-    ...    stdin='%s|%s' % (635818.8, 221342.4),
-    ...    output='view_point')
+    ...     "v.in.ascii",
+    ...     input="-",
+    ...     stdin="%s|%s" % (635818.8, 221342.4),
+    ...     output="view_point",
+    ... )
     0
 
     See ``start_command()`` for details about parameters and usage.
@@ -1097,7 +1100,7 @@ def _text_to_key_value_dict(
 
     ::
 
-        {'a': ['Hello'], 'c': [1, 2, 3, 4, 5], 'b': [1.0], 'd': ['hello', 8, 0.1]}
+        {"a": ["Hello"], "c": [1, 2, 3, 4, 5], "b": [1.0], "d": ["hello", 8, 0.1]}
 
     """
     with Path(filename).open() as f:
@@ -1213,7 +1216,7 @@ def gisenv(env: _Env | None = None) -> KeyValue[str | None]:
     dictionary. Example:
 
     >>> env = gisenv()
-    >>> print(env['GISDBASE'])  # doctest: +SKIP
+    >>> print(env["GISDBASE"])  # doctest: +SKIP
     /opt/grass-data
 
     :param env: dictionary with system environment variables (`os.environ` by default)
@@ -1250,7 +1253,7 @@ def region(region3d=False, complete=False, env=None):
     >>> [curent_region[key] for key in "nsew"]  # doctest: +ELLIPSIS
     [..., ..., ..., ...]
     >>> # obtain ns and ew resolutions
-    >>> (curent_region['nsres'], curent_region['ewres'])  # doctest: +ELLIPSIS
+    >>> (curent_region["nsres"], curent_region["ewres"])  # doctest: +ELLIPSIS
     (..., ...)
 
     :return: dictionary of region values
@@ -1300,9 +1303,9 @@ def region_env(
 
     ::
 
-        os.environ['GRASS_REGION'] = grass.region_env(region='detail')
-        grass.mapcalc('map=1', overwrite=True)
-        os.environ.pop('GRASS_REGION')
+        os.environ["GRASS_REGION"] = grass.region_env(region="detail")
+        grass.mapcalc("map=1", overwrite=True)
+        os.environ.pop("GRASS_REGION")
 
     :return: string with region values
     :return: empty string on error
@@ -1420,15 +1423,15 @@ def find_file(name, element="cell", mapset=None, env=None):
 
     Example:
 
-    >>> result = find_file('elevation', element='cell')
-    >>> print(result['fullname'])
+    >>> result = find_file("elevation", element="cell")
+    >>> print(result["fullname"])
     elevation@PERMANENT
-    >>> print(result['file'])  # doctest: +ELLIPSIS
+    >>> print(result["file"])  # doctest: +ELLIPSIS
     /.../PERMANENT/cell/elevation
-    >>> result = find_file('elevation', element='raster')
-    >>> print(result['fullname'])
+    >>> result = find_file("elevation", element="raster")
+    >>> print(result["fullname"])
     elevation@PERMANENT
-    >>> print(result['file'])  # doctest: +ELLIPSIS
+    >>> print(result["file"])  # doctest: +ELLIPSIS
     /.../PERMANENT/cell/elevation
 
 
@@ -1533,7 +1536,7 @@ def list_grouped(
     keys are mapset names and the values are lists of maps in that
     mapset. Example:
 
-    >>> list_grouped('vect', pattern='*roads*')['PERMANENT']
+    >>> list_grouped("vect", pattern="*roads*")["PERMANENT"]
     ['railroads', 'roadsmajor']
 
     :param str type: element type (raster, vector, raster_3d, region, ...)
@@ -1705,9 +1708,9 @@ def find_program(pgm, *args):
 
     Example:
 
-    >>> find_program('r.sun', '--help')
+    >>> find_program("r.sun", "--help")
     True
-    >>> find_program('ls', '--version')
+    >>> find_program("ls", "--version")
     True
 
     :param str pgm: program name
