@@ -247,6 +247,7 @@ def print_gridded_dataset_univar_statistics(
         run_=False,
     )
 
+    nprocs = max(nprocs, 1)
     if nprocs == 1:
         strings = [
             compute_univar_stats(
