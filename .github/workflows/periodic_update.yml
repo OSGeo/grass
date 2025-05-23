@@ -108,15 +108,15 @@ jobs:
           exit_code=$?
           echo "CHANGED_FILES=${exit_code}" | tee -a "${GITHUB_OUTPUT}"
       - name: Translation files were changed
-        if: ${{ (steps.changed-files.outputs.CHANGED_FILES == '1') }}
+        if: ${{ (steps.changed-files.outputs.CHANGED_FILES) }}
         run: echo "Translation files were changed"
       - name: Translation files were not changed
-        if: ${{ ! (steps.changed-files.outputs.CHANGED_FILES == '1') }}
+        if: ${{ ! (steps.changed-files.outputs.CHANGED_FILES) }}
         run: echo "Translation files were not changed"
       - name: Double check if files are modified
         run: git status --ignored
       - name: Create Pull Request
-        if: ${{ (steps.changed-files.outputs.CHANGED_FILES == '1') }}
+        if: ${{ (steps.changed-files.outputs.CHANGED_FILES) }}
         id: cpr
         uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7.0.8
         with:
@@ -129,7 +129,7 @@ jobs:
 
             Automated changes by [create-pull-request](https://github.com/peter-evans/create-pull-request) GitHub action
       - name: Check outputs
-        if: ${{ (steps.changed-files.outputs.CHANGED_FILES == '1') && steps.cpr.outputs.pull-request-number }}
+        if: ${{ (steps.changed-files.outputs.CHANGED_FILES) && steps.cpr.outputs.pull-request-number }}
         run: |
           echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
           echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
