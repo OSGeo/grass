@@ -40,7 +40,6 @@ MOD_PYFILES = find ../scripts -name '*.py' | xargs grep -l "_(\"\|n_(\""
 XGETTEXT_ARGS = --no-wrap --sort-by-file
 MSGMERGE_ARGS = --no-wrap --sort-by-file --previous
 MSGUNIQ_ARGS = --no-wrap --sort-by-file
-MSGUNIQ_PO_ARGS = --no-wrap --sort-by-file
 
 define po_stats
 GISBASE="$(RUN_GISBASE)" $(PYTHON) ./grass_po_stats.py
@@ -53,27 +52,6 @@ pot-unique:
 	msguniq $(MSGUNIQ_ARGS) -o ./templates/$(MODDOMAIN).pot ./templates/$(MODDOMAIN).pot
 	@echo "Sorting $(WXPYDOMAIN)..."
 	msguniq $(MSGUNIQ_ARGS) -o ./templates/$(WXPYDOMAIN).pot ./templates/$(WXPYDOMAIN).pot
-
-unique-po:
-	@for i in $(DOMAINS) ; do \
-		if [ "`ls ./po/$$i\_*.po 2>/dev/null`" = "" ] ; then \
-		 echo "No $$i.po file found in ./po/ directory. Will create new po files from template." ; \
-		 cp ./templates/$$i.pot ./po/$$i.po ; \
-		 echo "Created ./po/$$i.po - Rename to ./po/$$i\_LANG.po (with LANG: de, ru, ...)" ; \
-		 echo "Then you can translate the messages in this file (e.g with kbabel)" ; \
-		fi ;\
-	done
-	@cd ./po/ ; for po in `ls *_*.po 2>/dev/null` ; do \
-		suffix=`echo $$po | cut -d'_' -f2-`; \
-		lingua=`basename $$suffix .po`; \
-		prefix=`echo $$po | cut -d'_' -f1`; \
-		if msguniq $(MSGUNIQ_PO_ARGS) $$prefix\_$$suffix -o $$prefix\_$$suffix; then \
-			echo "Unique messages into $$prefix\_$$suffix" ; \
-		else \
-		    echo "Unique failed"; \
-		fi \
-		done
-	@echo "Be careful with git commits as .po file updates must be synchronized with the individual translators."
 
 #The xgettext utility is used to automate the creation of
 #portable message files (.po)
