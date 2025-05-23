@@ -43,7 +43,6 @@ export INSTALL_PREFIX=$1
     --with-lapack \
     --with-libsvm \
     --with-netcdf \
-    --with-nls \
     --with-openmp \
     --with-pdal \
     --with-proj-share=/usr/share/proj \
