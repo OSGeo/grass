@@ -127,6 +127,15 @@ static univar_stat *univar_stat_with_percentiles(int map_type);
 static void process_raster(univar_stat *stats, thread_workspace *tw,
                            const struct Cell_head *region, int nprocs);
 
+/* Use KahanSum to avoid floating point error from lots of summations */
+void KahanSum(double *sum, double *c, double x)
+{
+    double y = x - *c;
+    double t = *sum + y;
+    *c = (t - *sum) - y; /* (t - sum) recovers the high-order part of y; */
+    *sum = t;            /* Algebraically, c should always be zero. */
+}
+
 /* *************************************************************** */
 /* **** the main functions for r.univar ************************** */
 /* *************************************************************** */
@@ -354,6 +363,11 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
     const int n_zones = zone_info.n_zones;
     const int n_alloc = n_zones ? n_zones : 1;
 
+    /* initialize for KhanSum through rows */
+    double c_sum = 0.0;
+    double c_sumsq = 0.0;
+    double c_sum_abs = 0.0;
+
     for (int t = 0; t < nprocs; t++) {
         tw[t].raster_row = Rast_allocate_buf(map_type);
         if (n_zones) {
@@ -372,7 +386,7 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
     int computed = 0;
     int row;
 
-#pragma omp parallel
+#pragma omp parallel private(row, c_sum, c_sumsq, c_sum_abs)
     {
         int t_id = 0;
 #if defined(_OPENMP)
@@ -474,9 +488,9 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
                               : (map_type == FCELL_TYPE) ? *((FCELL *)ptr)
                                                          : *((CELL *)ptr));
 
-                zd->sum += val;
-                zd->sumsq += val * val;
-                zd->sum_abs += fabs(val);
+                KahanSum(&zd->sum, &c_sum, val);
+                KahanSum(&zd->sumsq, &c_sumsq, val * val);
+                KahanSum(&zd->sum_abs, &c_sum_abs, fabs(val));
 
                 if (val > zd->max)
                     zd->max = val;
@@ -494,6 +508,11 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
                 G_percent(computed, rows, 2);
             }
         } /* end row loop */
+
+        /* initialize for KhanSum through threads */
+        c_sum = 0.0;
+        c_sumsq = 0.0;
+        c_sum_abs = 0.0;
 
         for (int z = 0; z < n_alloc; z++) {
             zone_workspace *zd = &zw[z];
@@ -570,12 +589,12 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
             }
 #pragma omp atomic update
             stats[z].size += zd->size;
-#pragma omp atomic update
-            stats[z].sum += zd->sum;
-#pragma omp atomic update
-            stats[z].sumsq += zd->sumsq;
-#pragma omp atomic update
-            stats[z].sum_abs += zd->sum_abs;
+#pragma omp critical
+            {
+                KahanSum(&stats[z].sum, &c_sum, zd->sum);
+                KahanSum(&stats[z].sumsq, &c_sumsq, zd->sumsq);
+                KahanSum(&stats[z].sum_abs, &c_sum_abs, zd->sum_abs);
+            }
 
 #if defined(_OPENMP)
             omp_set_lock(&minmax[z]);
