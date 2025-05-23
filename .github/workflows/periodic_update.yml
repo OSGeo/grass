@@ -94,12 +94,12 @@ jobs:
       - name: Verify the .po files
         run: cd locale && make verify
       - name: Preview changed files
-        run: git diff | head -n200
+        run: git diff | head -n2000
       # The POT-Creation-Date gets updated by xgettext with the latest
       # version-controlled modification time among all the given input files.
       - name: Preview changed files, except for the POT-Creation-Date
         run: |
-          git diff --ignore-matching-lines=^\"POT-Creation-Date:  | head -n200
+          git diff --ignore-matching-lines=^\"POT-Creation-Date:  | head -n2000
       - name: Get if files were updated
         id: changed-files
         continue-on-error: true
