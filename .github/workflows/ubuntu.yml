@@ -120,6 +120,11 @@ jobs:
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
 
+      - name: Install wxPython
+        run: |
+          pip install -U wxpython \
+            -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-22.04
+
       - name: Create installation directory
         run: |
           mkdir $HOME/install
@@ -176,7 +181,7 @@ jobs:
       - name: Commit and push applied linter fixes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          branch: periodic-update-i18n-ubuntu-temp-${{ matrix.config }}3
+          branch: periodic-update-i18n-ubuntu-temp-${{ matrix.config }}4
           create_branch: true
 
       # - name: Create Pull Request
