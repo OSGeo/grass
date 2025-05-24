@@ -603,8 +603,9 @@ def init(raise_fatal_error: bool = False, skip_db_version_check: bool = False):
     msgr.debug(1, ("Raise on error id: %s" % str(raise_on_error)))
 
     ciface = get_tgis_c_library_interface()
-    driver_string = ciface.get_driver_name()
-    database_string = ciface.get_database_name()
+    current_mapset = decode(gs.gisenv().get("MAPSET"))
+    driver_string = ciface.get_driver_name(current_mapset)
+    database_string = ciface.get_database_name(current_mapset)
 
     # Set the mapset check and the timestamp write
     if "TGIS_DISABLE_MAPSET_CHECK" in grassenv:
@@ -657,8 +658,9 @@ def init(raise_fatal_error: bool = False, skip_db_version_check: bool = False):
     else:
         # Set the default sqlite3 connection in case nothing was defined
         gs.run_command("t.connect", flags="d")
-        driver_string = ciface.get_driver_name()
-        database_string = ciface.get_database_name()
+        current_mapset = decode(gs.gisenv().get("MAPSET"))
+        driver_string = ciface.get_driver_name(current_mapset)
+        database_string = ciface.get_database_name(current_mapset)
         tgis_backend = driver_string
         try:
             import sqlite3
@@ -789,7 +791,6 @@ def init(raise_fatal_error: bool = False, skip_db_version_check: bool = False):
                         "not supported any more. {m}"
                     ).format(m=message)
                 )
-
         return
 
     create_temporal_database(dbif)
