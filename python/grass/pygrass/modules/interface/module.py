@@ -260,7 +260,7 @@ class ParallelModuleQueue:
         """Get the number of Module processes that are in the queue running
         or finished
 
-        :returns: the number fo Module processes running/finished in the queue
+        :returns: the number of Module processes running/finished in the queue
         """
         return self._proc_count
 
