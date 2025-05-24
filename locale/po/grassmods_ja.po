@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-23 17:40+0000\n"
+"POT-Creation-Date: 2025-05-23 22:56+0000\n"
 "PO-Revision-Date: 2025-03-12 12:05+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Japanese <https://weblate.osgeo.org/projects/grass-gis/grassmods/ja/>\n"
@@ -1785,6 +1785,7 @@ msgstr ""
 #: ../raster/r.series.accumulate/main.c:76 ../raster/r.series.interp/main.c:72
 #: ../raster/r.series/main.c:153 ../raster/r.sim/r.sim.sediment/main.c:112
 #: ../raster/r.sim/r.sim.water/main.c:112 ../raster/r.slope.aspect/main.c:166
+#: ../raster/r.smooth.edgepreserve/main.c:46
 #: ../raster/r.solute.transport/main.c:228 ../raster/r.spread/main.c:102
 #: ../raster/r.spreadpath/main.c:77 ../raster/r.statistics/main.c:53
 #: ../raster/r.stats.quantile/main.c:565 ../raster/r.stats.zonal/main.c:104
@@ -5181,7 +5182,8 @@ msgstr "自分の最初のラスターモジュール"
 #: ../raster/r.sim/simlib/output.c:434 ../raster/r.sim/simlib/output.c:476
 #: ../raster/r.sim/simlib/output.c:492 ../raster/r.sim/simlib/output.c:513
 #: ../raster/r.sim/simlib/output.c:555 ../raster/r.sim/simlib/output.c:595
-#: ../raster/r.sim/simlib/output.c:762 ../raster/r.spread/main.c:445
+#: ../raster/r.sim/simlib/output.c:762
+#: ../raster/r.smooth.edgepreserve/main.c:144 ../raster/r.spread/main.c:445
 #: ../raster/r.spread/main.c:448 ../raster/r.spread/main.c:451
 #: ../raster/r.spread/main.c:455 ../raster/r.spread/main.c:458
 #: ../raster/r.spread/main.c:461 ../raster/r.stream.extract/main.c:169
@@ -15694,8 +15696,9 @@ msgstr ""
 #: ../raster/r.resamp.filter/main.c:437 ../raster/r.resamp.interp/main.c:92
 #: ../raster/r.series/main.c:156 ../raster/r.sim/r.sim.sediment/main.c:119
 #: ../raster/r.sim/r.sim.water/main.c:118 ../raster/r.slope.aspect/main.c:171
-#: ../raster/r.sun/main.c:245 ../raster/r.texture/main.c:101
-#: ../raster/r.univar/r.univar_main.c:155 ../vector/v.surf.rst/main.c:153
+#: ../raster/r.smooth.edgepreserve/main.c:49 ../raster/r.sun/main.c:245
+#: ../raster/r.texture/main.c:101 ../raster/r.univar/r.univar_main.c:155
+#: ../vector/v.surf.rst/main.c:153
 msgid "parallel"
 msgstr ""
 
@@ -27533,6 +27536,115 @@ msgstr ""
 msgid "Dxy raster map <%s> complete"
 msgstr ""
 
+#: ../raster/r.smooth.edgepreserve/main.c:47 ../vector/v.generalize/main.c:79
+msgid "smoothing"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:48
+#, fuzzy
+#| msgid "cloud detection"
+msgid "edge detection"
+msgstr "雲検出"
+
+#: ../raster/r.smooth.edgepreserve/main.c:50
+msgid "denoise"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:51
+msgid "Smoothing with anisotropic diffusion"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:61
+#, fuzzy
+#| msgid "Viewpoint height (in map units)"
+msgid "Gradient magnitude threshold (in map units)"
+msgstr "視点の高さ(マップユニット内で)"
+
+#: ../raster/r.smooth.edgepreserve/main.c:62
+#: ../raster/r.smooth.edgepreserve/main.c:71
+#: ../raster/r.smooth.edgepreserve/main.c:80
+#: ../raster/r.smooth.edgepreserve/main.c:98
+msgid "Diffusion"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:70
+msgid "Rate of diffusion"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:79
+#, fuzzy
+msgid "Number of diffusion steps"
+msgstr "分割の幅 "
+
+#: ../raster/r.smooth.edgepreserve/main.c:88
+msgid "Diffusivity function"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:97
+msgid "Preserve details with Tukey"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:149
+#, fuzzy
+msgid "Wrong computational region"
+msgstr "現在の領域の設定を使用 "
+
+#: ../raster/r.smooth.edgepreserve/main.c:154
+#, fuzzy
+msgid "Computational region is too small!"
+msgstr "指定したベクトルマップを含むマップセット"
+
+#: ../raster/r.smooth.edgepreserve/main.c:157
+#, fuzzy
+msgid "Computational region is too large!"
+msgstr "指定したベクトルマップを含むマップセット"
+
+#: ../raster/r.smooth.edgepreserve/main.c:205
+msgid "Smoothed map"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:32
+#, fuzzy, c-format
+msgid "There was an error reading data from a temporary file. %d: %s"
+msgstr "グループ <%s> のサブグループ<%s> のREFファイルが読み取れません"
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:46
+#, fuzzy, c-format
+#| msgid "%s: Error writing temporary file"
+msgid "There was an error writing data from a temporary file. %d: %s"
+msgstr "%s: 一時ファイル書き込み中のエラー"
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:59
+msgid "Error fetching data from a disk cache"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:111
+msgid "Insufficient memory to hold processed data. Either increase available memory with the \"memory\" parameter or reduce size of the computational region."
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:115
+msgid "Using disk for temporary data storage"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:123
+#, c-format
+msgid "Error creating row cache. %d: %s"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:129
+#, fuzzy
+msgid "Error creating row cache"
+msgstr "色 %s の解釈におけるエラー"
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:135
+msgid "Keeping temporary data in RAM"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:155
+#, c-format
+msgid "Error cleaning up row cache. %d: %s"
+msgstr ""
+
 #: ../raster/r.solute.transport/main.c:56
 msgid "The initial concentration in [kg/m^3]"
 msgstr ""
@@ -38487,10 +38599,6 @@ msgstr "コンフリクトを解決しています"
 msgid "simplification"
 msgstr ""
 
-#: ../vector/v.generalize/main.c:79
-msgid "smoothing"
-msgstr ""
-
 #: ../vector/v.generalize/main.c:80
 msgid "displacement"
 msgstr ""
@@ -47424,9 +47532,6 @@ msgstr "画像ファイル"
 #~ msgid "%s available in mapset <%s>:"
 #~ msgstr "使用可能なマップセットの一覧表示 "
 
-#~ msgid "%s: Error writing temporary file"
-#~ msgstr "%s: 一時ファイル書き込み中のエラー"
-
 #~ msgid "%s=%s - illegal number of interpolation points"
 #~ msgstr "%s=%s - 完ポイントの数が不正です"
 
@@ -51093,10 +51198,6 @@ msgstr "画像ファイル"
 #~ msgstr "サブクラス数は %d"
 
 #, fuzzy
-#~ msgid "Number of scaling steps"
-#~ msgstr "分割の幅 "
-
-#, fuzzy
 #~ msgid "Number of significant digits per attribute column"
 #~ msgstr "小数点以下の有効桁数"
 
@@ -52205,10 +52306,6 @@ msgstr "画像ファイル"
 #~ msgstr "カラーテーブルを無視"
 
 #, fuzzy
-#~ msgid "Set computational region to input raster map"
-#~ msgstr "指定したベクトルマップを含むマップセット"
-
-#, fuzzy
 #~ msgid "Set flier color"
 #~ msgstr "ベクトルライン カラー"
 
@@ -52235,10 +52332,6 @@ msgstr "画像ファイル"
 #, fuzzy
 #~ msgid "Set the resolution of plot"
 #~ msgstr "結果をソートする"
-
-#, fuzzy
-#~ msgid "Set to original computational region"
-#~ msgstr "現在の領域の設定を使用 "
 
 #, fuzzy
 #~ msgid "Setting for parameter pmethod"

@@ -27,7 +27,7 @@ notes:
       example: "startup:"
 
     - title: Translations, Internationalization, and Localization
-      regexp: '(?:Revert \")?(i18n|i18N|L10n|L10N|t9n|translations?): |Translations update from '
+      regexp: '(?:Revert \")?(i18n|i18N|L10n|L10N|locale|t9n|translations?): |Translations update from '
       example: "i18n:"
 
     - title: Windows
