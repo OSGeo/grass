@@ -161,6 +161,8 @@ static const char *GRASS_copyright UNUSED = "GRASS GNU GPL licensed Software";
 
 #undef M_PI_4
 #ifdef _MSC_VER
+/* use the same value from ucrt\corecrt_math_defines.h to avoid redefinition
+ * warnings */
 #define M_PI_4 0.785398163397448309616 /* pi/4 */
 #else
 #define M_PI_4 0.78539816339744830962 /* pi/4 */
