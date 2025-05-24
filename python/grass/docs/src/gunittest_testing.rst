@@ -1,4 +1,4 @@
-Testing GRASS GIS source code and modules
+Testing Framework
 =========================================
 
 If you are already familiar with the basic concepts
@@ -15,7 +15,7 @@ of GRASS testing framework, you might want to skip to one of:
 Introduction
 ------------
 
-For the testing in GRASS GIS, we are using a `gunittest` package and
+For the testing in GRASS, we are using a `gunittest` package and
 we usually refer to the system of writing and running tests
 as to a *GRASS testing framework*.
 
@@ -26,8 +26,8 @@ or running of test in the way that process terminations potentially
 caused by C library functions does not influence the main testing process.
 
 Some tests will run without any data but many tests require
-the small (basic) version of GRASS GIS sample Location for North Carolina
-(see `GRASS GIS sample data`).
+the small (basic) version of GRASS sample Location for North Carolina
+(see `GRASS sample data`).
 
 Basic example
 -------------
@@ -96,7 +96,7 @@ within an expect interval. There is a much larger selection of assert methods
 in :class:`~gunittest.case.TestCase` class documentation
 and also in Python `unittest`_ package documentation.
 
-To run the test, run GRASS GIS, use NC SPM sample location and create
+To run the test, run GRASS, use NC SPM sample location and create
 a separate mapset (name it ``test`` for example). Then go to the directory
 with the test file and run it:
 
@@ -149,7 +149,7 @@ test case
 test suite
     A *test suite*, or also *testsuite*, is a set of tests focused on one
     topic, functionality or unit (similarly to test case).
-    In GRASS GIS, it is a set of files in one ``testsuite`` directory.
+    In GRASS, it is a set of files in one ``testsuite`` directory.
     The test files in one ``testsuite``
     directory are expected to test what is in the parent directory
     of a given ``testsuite`` directory. This is used to organize
@@ -199,7 +199,7 @@ test fixture (test set up and tear down)
     methods are executed once for the whole class while the methods
     without ``Class`` are executed for each test method.
 
-    In GRASS GIS, the preparation may, but does not have to, contain imports
+    In GRASS, the preparation may, but does not have to, contain imports
     of maps, using temporary region, setting computational region,
     or generating random maps. The cleanup step should remove temporary
     region as well as remove all created maps and files.
@@ -231,7 +231,7 @@ of the directory with tested files (module, package, library). Each test file
 All test file names should have pattern ``test*.py`` or ``*.py``
 if another naming convention seems more appropriate.
 
-GRASS GIS `gunittest` package and testing framework is similar to the standard
+GRASS `gunittest` package and testing framework is similar to the standard
 Python ``unittest`` package, so the ways to build tests are very similar.
 Test methods are in a test test case class and each test method tests one
 think using one or more assert methods.
@@ -669,7 +669,7 @@ Besides testing, you can also use some tools to check the quality of your code
 according to various standards and occurrence of certain code patterns.
 
 For C/C++ code we additionally use the third party solution `Coverity Scan`_
-where GRASS GIS is registered as project number `1038`_. Also you can use
+where GRASS is registered as project number `1038`_. Also you can use
 `Cppcheck`_ which will show a lot of errors which compilers do not check.
 In any case, set your compiler to high error and warning levels,
 check them and fix them in your code. Furthermore, continuous integrations is
@@ -721,4 +721,4 @@ Further reading
 .. _1038: https://scan.coverity.com/projects/1038
 .. _Cppcheck: http://cppcheck.sourceforge.net/
 .. _sandbox: https://svn.osgeo.org/grass/sandbox/wenzeslaus/grass_py_static_check.py
-.. _GRASS GIS sample data: https://grass.osgeo.org/download/data/ and http://fatra.cnr.ncsu.edu/data/ (nc_spm_full_v2alpha)
+.. _GRASS sample data: https://grass.osgeo.org/download/data/ and http://fatra.cnr.ncsu.edu/data/ (nc_spm_full_v2alpha)
