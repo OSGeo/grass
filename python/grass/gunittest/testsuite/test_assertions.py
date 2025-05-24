@@ -239,7 +239,7 @@ class TestRasterMapAssertions(TestCase):
         self.assertRastersNoDifference(
             actual="elevation",
             reference="elevation",
-            precision=0,  # this might need to be increased
+            precision=1e-10,
             statistics={"mean": 0},
             msg="The difference of same maps should have small mean",
         )
@@ -248,7 +248,7 @@ class TestRasterMapAssertions(TestCase):
             self.assertRastersNoDifference,
             actual="elevation",
             reference="geology",
-            precision=1,
+            precision=1e-10,
             statistics={"mean": 0},
             msg="The difference of different maps should have huge mean",
         )

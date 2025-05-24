@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-23 17:40+0000\n"
+"POT-Creation-Date: 2025-05-23 22:56+0000\n"
 "PO-Revision-Date: 2025-03-12 16:14+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Arabic <https://weblate.osgeo.org/projects/grass-gis/grassmods/ar/>\n"
@@ -1938,6 +1938,7 @@ msgstr ""
 #: ../raster/r.series.accumulate/main.c:76 ../raster/r.series.interp/main.c:72
 #: ../raster/r.series/main.c:153 ../raster/r.sim/r.sim.sediment/main.c:112
 #: ../raster/r.sim/r.sim.water/main.c:112 ../raster/r.slope.aspect/main.c:166
+#: ../raster/r.smooth.edgepreserve/main.c:46
 #: ../raster/r.solute.transport/main.c:228 ../raster/r.spread/main.c:102
 #: ../raster/r.spreadpath/main.c:77 ../raster/r.statistics/main.c:53
 #: ../raster/r.stats.quantile/main.c:565 ../raster/r.stats.zonal/main.c:104
@@ -5522,7 +5523,8 @@ msgstr "اسم الخريطة الراسترية الموجودة"
 #: ../raster/r.sim/simlib/output.c:434 ../raster/r.sim/simlib/output.c:476
 #: ../raster/r.sim/simlib/output.c:492 ../raster/r.sim/simlib/output.c:513
 #: ../raster/r.sim/simlib/output.c:555 ../raster/r.sim/simlib/output.c:595
-#: ../raster/r.sim/simlib/output.c:762 ../raster/r.spread/main.c:445
+#: ../raster/r.sim/simlib/output.c:762
+#: ../raster/r.smooth.edgepreserve/main.c:144 ../raster/r.spread/main.c:445
 #: ../raster/r.spread/main.c:448 ../raster/r.spread/main.c:451
 #: ../raster/r.spread/main.c:455 ../raster/r.spread/main.c:458
 #: ../raster/r.spread/main.c:461 ../raster/r.stream.extract/main.c:169
@@ -16864,8 +16866,9 @@ msgstr "حساب إحصائيات المتغير الأحادى من خلايا 
 #: ../raster/r.resamp.filter/main.c:437 ../raster/r.resamp.interp/main.c:92
 #: ../raster/r.series/main.c:156 ../raster/r.sim/r.sim.sediment/main.c:119
 #: ../raster/r.sim/r.sim.water/main.c:118 ../raster/r.slope.aspect/main.c:171
-#: ../raster/r.sun/main.c:245 ../raster/r.texture/main.c:101
-#: ../raster/r.univar/r.univar_main.c:155 ../vector/v.surf.rst/main.c:153
+#: ../raster/r.smooth.edgepreserve/main.c:49 ../raster/r.sun/main.c:245
+#: ../raster/r.texture/main.c:101 ../raster/r.univar/r.univar_main.c:155
+#: ../vector/v.surf.rst/main.c:153
 #, fuzzy
 msgid "parallel"
 msgstr "الفاصل الحقلى بين بيانات المخرج"
@@ -29746,6 +29749,115 @@ msgstr "غير موجودة <%s> الخريطة الراسترية "
 msgid "Dxy raster map <%s> complete"
 msgstr "غير موجودة <%s> الخريطة الراسترية "
 
+#: ../raster/r.smooth.edgepreserve/main.c:47 ../vector/v.generalize/main.c:79
+msgid "smoothing"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:48
+#, fuzzy
+msgid "edge detection"
+msgstr "الخريطة المخرجة"
+
+#: ../raster/r.smooth.edgepreserve/main.c:50
+msgid "denoise"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:51
+msgid "Smoothing with anisotropic diffusion"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:61
+#, fuzzy
+msgid "Gradient magnitude threshold (in map units)"
+msgstr "المسافة العظمى بين النقاط بوحدات الخريطة"
+
+#: ../raster/r.smooth.edgepreserve/main.c:62
+#: ../raster/r.smooth.edgepreserve/main.c:71
+#: ../raster/r.smooth.edgepreserve/main.c:80
+#: ../raster/r.smooth.edgepreserve/main.c:98
+msgid "Diffusion"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:70
+msgid "Rate of diffusion"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:79
+#, fuzzy
+msgid "Number of diffusion steps"
+msgstr "عدد خطوات التقسيم الكمى"
+
+#: ../raster/r.smooth.edgepreserve/main.c:88
+#, fuzzy
+msgid "Diffusivity function"
+msgstr "نوع غير معروف"
+
+#: ../raster/r.smooth.edgepreserve/main.c:97
+msgid "Preserve details with Tukey"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:149
+#, fuzzy
+msgid "Wrong computational region"
+msgstr "استخدام المنطقة الحالية"
+
+#: ../raster/r.smooth.edgepreserve/main.c:154
+#, fuzzy
+msgid "Computational region is too small!"
+msgstr "ضبط المنطقة الحالية من ابعاد هذه الخريطة "
+
+#: ../raster/r.smooth.edgepreserve/main.c:157
+#, fuzzy
+msgid "Computational region is too large!"
+msgstr "ضبط المنطقة الحالية من ابعاد هذه الخريطة "
+
+#: ../raster/r.smooth.edgepreserve/main.c:205
+#, fuzzy
+msgid "Smoothed map"
+msgstr "فك الخريطة"
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:32
+#, fuzzy, c-format
+msgid "There was an error reading data from a temporary file. %d: %s"
+msgstr "لم يتم تحديث الحدود"
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:46
+#, fuzzy, c-format
+msgid "There was an error writing data from a temporary file. %d: %s"
+msgstr "خطا فى محاولة قراءة ملف قاعدة البيانات dbmscap\n"
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:59
+#, fuzzy
+msgid "Error fetching data from a disk cache"
+msgstr "cat = %d لا يوجد تسجيل للخط"
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:111
+msgid "Insufficient memory to hold processed data. Either increase available memory with the \"memory\" parameter or reduce size of the computational region."
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:115
+msgid "Using disk for temporary data storage"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:123
+#, fuzzy, c-format
+msgid "Error creating row cache. %d: %s"
+msgstr "خطا فى محاولة قراءة ملف قاعدة البيانات dbmscap\n"
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:129
+#, fuzzy
+msgid "Error creating row cache"
+msgstr "خطا فى محاولة قراءة ملف قاعدة البيانات dbmscap\n"
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:135
+msgid "Keeping temporary data in RAM"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:155
+#, fuzzy, c-format
+msgid "Error cleaning up row cache. %d: %s"
+msgstr "خطا فى محاولة قراءة ملف قاعدة البيانات dbmscap\n"
+
 #: ../raster/r.solute.transport/main.c:56
 msgid "The initial concentration in [kg/m^3]"
 msgstr ""
@@ -41461,10 +41573,6 @@ msgstr "الخريطة الفيكتورية لنقاط البدء"
 #, fuzzy
 msgid "simplification"
 msgstr "اسم ملف ناتج التصنيف"
-
-#: ../vector/v.generalize/main.c:79
-msgid "smoothing"
-msgstr ""
 
 #: ../vector/v.generalize/main.c:80
 msgid "displacement"
@@ -55142,10 +55250,6 @@ msgstr "ملف المدخل"
 #~ msgstr "عدد نقاط الإستيفاء"
 
 #, fuzzy
-#~ msgid "Number of scaling steps"
-#~ msgstr "عدد خطوات التقسيم الكمى"
-
-#, fuzzy
 #~ msgid "Number of significant digits per attribute column"
 #~ msgstr "عدد الأرقام المميزة , النقط العشرية فقط"
 
@@ -56372,10 +56476,6 @@ msgstr "ملف المدخل"
 #~ msgstr "اسم الخريطة الراسترية الجديدة"
 
 #, fuzzy
-#~ msgid "Set computational region to input raster map"
-#~ msgstr "ضبط المنطقة الحالية من ابعاد هذه الخريطة "
-
-#, fuzzy
 #~ msgid "Set computational region to maximum image extent"
 #~ msgstr "ضبط المنطقة الحالية من ابعاد هذه الخريطة "
 
@@ -56414,10 +56514,6 @@ msgstr "ملف المدخل"
 #, fuzzy
 #~ msgid "Set the resolution of plot"
 #~ msgstr "اسم ااملف المخرج"
-
-#, fuzzy
-#~ msgid "Set to original computational region"
-#~ msgstr "استخدام المنطقة الحالية"
 
 #, fuzzy
 #~ msgid "Setting for parameter pmethod"
@@ -57873,10 +57969,6 @@ msgstr "ملف المدخل"
 #, fuzzy
 #~ msgid "walking distance"
 #~ msgstr "%s:منطقة غير صالحة"
-
-#, fuzzy
-#~ msgid "weight function"
-#~ msgstr "نوع غير معروف"
 
 #, fuzzy
 #~ msgid "width and height of the color legend"
