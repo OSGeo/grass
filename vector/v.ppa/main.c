@@ -289,8 +289,7 @@ void calculate_function_values(struct kdtree *kdtree, struct Point *points,
  * @param n The number of points in the array.
  * @param output_file The path to the output file where the results will be
  * saved.
- * @param num_random_points The number of random points to generate for F
- * function calculation.
+ * @param num_random_points The number of random points to generate.
  * @param num_simulations The number of Monte Carlo simulations to perform.
  */
 void monte_carlo_envelope(struct kdtree *kdtree, struct Point *points,
@@ -342,7 +341,7 @@ void monte_carlo_envelope(struct kdtree *kdtree, struct Point *points,
         free(sim_values);
     }
 
-    fprintf(fp, "Distance,Lower Envelope,Upper Envelope\n");
+    fprintf(fp, "Distance,Lower,Upper\n");
     for (int d = 0; d < num_distances; d++) {
         double distance = d * max_dist / num_distances;
         fprintf(fp, "%f,%f,%f\n", distance, lower_envelope[d],
