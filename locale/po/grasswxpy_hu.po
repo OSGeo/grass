@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-23 17:40+0000\n"
+"POT-Creation-Date: 2025-05-23 22:56+0000\n"
 "PO-Revision-Date: 2018-03-10 17:22+0100\n"
 "Last-Translator: Zoltan Siki <siki@agt.bme.hu>, 2018\n"
 "Language-Team: Hungarian (https://www.transifex.com/grass-gis/teams/45198/hu/)\n"
@@ -668,7 +668,7 @@ msgid "Animation Toolbar"
 msgstr "Animáció eszközssor"
 
 #: ../gui/wxpython/animation/frame.py:213 ../gui/wxpython/lmgr/frame.py:188
-#: ../gui/wxpython/main_window/frame.py:597
+#: ../gui/wxpython/main_window/frame.py:598
 #: ../gui/wxpython/mapswipe/frame.py:310
 msgid "Misc Toolbar"
 msgstr "Vegyes eszközsor"
@@ -875,7 +875,7 @@ msgstr "Figyelmeztetés"
 #: ../gui/wxpython/core/gcmd.py:153
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:714
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:760
-#: ../gui/wxpython/lmgr/frame.py:2319 ../gui/wxpython/main_window/frame.py:2417
+#: ../gui/wxpython/lmgr/frame.py:2319 ../gui/wxpython/main_window/frame.py:2427
 msgid "Message"
 msgstr "Üzenet"
 
@@ -897,7 +897,7 @@ msgstr "Hiba:"
 msgid "Unable to execute command: '%s'"
 msgstr "Nem tudom végrehajtani a parancsot: '%s'"
 
-#: ../gui/wxpython/core/gcmd.py:778 ../gui/wxpython/gui_core/forms.py:2989
+#: ../gui/wxpython/core/gcmd.py:778 ../gui/wxpython/gui_core/forms.py:2992
 #, python-format
 msgid "Error in %s"
 msgstr "Hiba ebben %s"
@@ -3686,7 +3686,7 @@ msgstr "Változók"
 
 #: ../gui/wxpython/gmodeler/frame.py:31 ../gui/wxpython/gmodeler/panels.py:106
 #: ../gui/wxpython/gui_core/forms.py:1500 ../gui/wxpython/lmgr/toolbars.py:208
-#: ../gui/wxpython/main_window/frame.py:906
+#: ../gui/wxpython/main_window/frame.py:907
 msgid "Graphical Modeler"
 msgstr "Grfikus modellező"
 
@@ -3795,7 +3795,7 @@ msgid "Script editor"
 msgstr "&Egyszerű szerkesztő"
 
 #: ../gui/wxpython/gmodeler/panels.py:194
-#: ../gui/wxpython/gui_core/forms.py:2509
+#: ../gui/wxpython/gui_core/forms.py:2512
 msgid "Command output"
 msgstr "Parancs output"
 
@@ -3857,7 +3857,7 @@ msgstr "Válasszon modell fájlt"
 
 #: ../gui/wxpython/gmodeler/panels.py:832
 #: ../gui/wxpython/gmodeler/panels.py:890 ../gui/wxpython/lmgr/frame.py:848
-#: ../gui/wxpython/main_window/frame.py:975
+#: ../gui/wxpython/main_window/frame.py:976
 msgid "GRASS Model File (*.gxm)|*.gxm"
 msgstr "GRASS Model fájl (*.gxm)|*.gxm"
 
@@ -4060,7 +4060,7 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/panels.py:1615
 #: ../gui/wxpython/gui_core/preferences.py:443
-#: ../gui/wxpython/lmgr/frame.py:650 ../gui/wxpython/main_window/frame.py:720
+#: ../gui/wxpython/lmgr/frame.py:650 ../gui/wxpython/main_window/frame.py:721
 msgid "Python"
 msgstr ""
 
@@ -4086,8 +4086,8 @@ msgid "Update"
 msgstr "Aktualizál"
 
 #: ../gui/wxpython/gmodeler/panels.py:1722
-#: ../gui/wxpython/gui_core/pyedit.py:398
-#: ../gui/wxpython/gui_core/pyedit.py:469
+#: ../gui/wxpython/gui_core/pyedit.py:400
+#: ../gui/wxpython/gui_core/pyedit.py:471
 msgid "Python script (*.py)|*.py"
 msgstr "Python szkript (*.py)|*.py"
 
@@ -4096,18 +4096,18 @@ msgid "JSON file (*.json)|*.json"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/panels.py:1728
-#: ../gui/wxpython/gui_core/pyedit.py:396
+#: ../gui/wxpython/gui_core/pyedit.py:398
 msgid "Choose file to save"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/panels.py:1749
-#: ../gui/wxpython/gui_core/pyedit.py:416 ../gui/wxpython/wxplot/profile.py:428
+#: ../gui/wxpython/gui_core/pyedit.py:418 ../gui/wxpython/wxplot/profile.py:428
 #, python-format
 msgid "File <%s> already exists. Do you want to overwrite this file?"
 msgstr "<%s> fájl már létezik. Felül akarja írni ezt a fájlt?"
 
 #: ../gui/wxpython/gmodeler/panels.py:1752
-#: ../gui/wxpython/gui_core/pyedit.py:419
+#: ../gui/wxpython/gui_core/pyedit.py:421
 msgid "Save file"
 msgstr "Fájl mentés"
 
@@ -4195,7 +4195,7 @@ msgid "Height:"
 msgstr "Magasság:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:285
-#: ../gui/wxpython/lmgr/frame.py:629 ../gui/wxpython/main_window/frame.py:647
+#: ../gui/wxpython/lmgr/frame.py:629 ../gui/wxpython/main_window/frame.py:648
 #: ../gui/wxpython/nviz/tools.py:114
 msgid "Data"
 msgstr "Adat"
@@ -4713,7 +4713,7 @@ msgid "Optional"
 msgstr "Opcionális"
 
 #: ../gui/wxpython/gui_core/forms.py:1084
-#: ../gui/wxpython/gui_core/forms.py:2313
+#: ../gui/wxpython/gui_core/forms.py:2316
 msgid "Parameterized in model"
 msgstr ""
 
@@ -4731,7 +4731,7 @@ msgid "valid range"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/forms.py:1379
-#: ../gui/wxpython/gui_core/forms.py:2950
+#: ../gui/wxpython/gui_core/forms.py:2953
 #: ../gui/wxpython/gui_core/toolbars.py:70
 msgid "Select font"
 msgstr "Betűkészlet"
@@ -4811,15 +4811,15 @@ msgstr "Elemtípus"
 msgid "Projection match"
 msgstr "Vetület egyezik"
 
-#: ../gui/wxpython/gui_core/forms.py:2519
+#: ../gui/wxpython/gui_core/forms.py:2522
 msgid "Manual"
 msgstr "Kézikönyv"
 
-#: ../gui/wxpython/gui_core/forms.py:2559
+#: ../gui/wxpython/gui_core/forms.py:2562
 msgid "Nothing to load."
 msgstr "Nincs mit betölteni."
 
-#: ../gui/wxpython/gui_core/forms.py:2568
+#: ../gui/wxpython/gui_core/forms.py:2571
 #, python-format
 msgid ""
 "Unable to load file.\n"
@@ -4830,31 +4830,31 @@ msgstr ""
 "\n"
 "Ok: %s"
 
-#: ../gui/wxpython/gui_core/forms.py:2589
+#: ../gui/wxpython/gui_core/forms.py:2592
 #: ../gui/wxpython/modules/colorrules.py:687
 msgid "Nothing to save."
 msgstr "Nincs mit menteni."
 
-#: ../gui/wxpython/gui_core/forms.py:2594
+#: ../gui/wxpython/gui_core/forms.py:2597
 msgid "Save input as..."
 msgstr "Input mentése másként..."
 
-#: ../gui/wxpython/gui_core/forms.py:2933
+#: ../gui/wxpython/gui_core/forms.py:2936
 msgid "No dataset given."
 msgstr "Nem adott adathalmazt."
 
-#: ../gui/wxpython/gui_core/forms.py:3101
-#: ../gui/wxpython/gui_core/forms.py:3120
+#: ../gui/wxpython/gui_core/forms.py:3104
+#: ../gui/wxpython/gui_core/forms.py:3123
 #, python-format
 msgid "Unable to parse command '%s'"
 msgstr "Nem tudom értelmezni a parancsot '%s'"
 
-#: ../gui/wxpython/gui_core/forms.py:3128
+#: ../gui/wxpython/gui_core/forms.py:3131
 #, python-format
 msgid "%(cmd)s: parameter '%(key)s' not available"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:3214
+#: ../gui/wxpython/gui_core/forms.py:3217
 msgid "Try to set up GRASS_ADDON_PATH or GRASS_ADDON_BASE variable."
 msgstr "Próbálja meg beállítani a GRASS_ADDON_PATH vagy GRASS_ADDON_BASE változót."
 
@@ -4899,12 +4899,12 @@ msgid "Translation status"
 msgstr "Fordítás státusz"
 
 #: ../gui/wxpython/gui_core/ghelp.py:120 ../gui/wxpython/gui_core/ghelp.py:948
-#: ../gui/wxpython/lmgr/frame.py:1462 ../gui/wxpython/main_window/frame.py:1617
+#: ../gui/wxpython/lmgr/frame.py:1462 ../gui/wxpython/main_window/frame.py:1618
 msgid "Unable to get GRASS version\n"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/ghelp.py:134 ../gui/wxpython/lmgr/frame.py:1489
-#: ../gui/wxpython/main_window/frame.py:1644
+#: ../gui/wxpython/main_window/frame.py:1645
 msgid "unknown version"
 msgstr "ismeretlen verzió"
 
@@ -5386,13 +5386,13 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:415
 #: ../gui/wxpython/gui_core/preferences.py:1198
-#: ../gui/wxpython/lmgr/frame.py:636 ../gui/wxpython/main_window/frame.py:677
+#: ../gui/wxpython/lmgr/frame.py:636 ../gui/wxpython/main_window/frame.py:678
 #: ../gui/wxpython/mapswipe/toolbars.py:27
 msgid "Tools"
 msgstr "Eszközök"
 
 #: ../gui/wxpython/gui_core/preferences.py:429
-#: ../gui/wxpython/lmgr/frame.py:646 ../gui/wxpython/main_window/frame.py:706
+#: ../gui/wxpython/lmgr/frame.py:646 ../gui/wxpython/main_window/frame.py:707
 #, fuzzy
 msgid "History"
 msgstr "Hisztogram"
@@ -5564,7 +5564,7 @@ msgid "Maximum memory in MB to be used (supported tools only):"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:1351
-#: ../gui/wxpython/lmgr/frame.py:632 ../gui/wxpython/main_window/frame.py:662
+#: ../gui/wxpython/lmgr/frame.py:632 ../gui/wxpython/main_window/frame.py:663
 msgid "Layers"
 msgstr ""
 
@@ -5737,83 +5737,83 @@ msgstr "Tulajdonos"
 msgid "Type command here and press Enter"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:308
+#: ../gui/wxpython/gui_core/pyedit.py:300
 msgid "Permission denied <{}>. Please change file permission for reading."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:315
+#: ../gui/wxpython/gui_core/pyedit.py:307
 msgid "Couldn't read file <{}>."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:334
+#: ../gui/wxpython/gui_core/pyedit.py:326
 msgid "Permission denied <{}>. Please change file permission for writing.{}"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:345
+#: ../gui/wxpython/gui_core/pyedit.py:337
 msgid "Couldn't write file <{}>.{}"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:359
-#: ../gui/wxpython/gui_core/pyedit.py:369
+#: ../gui/wxpython/gui_core/pyedit.py:361
+#: ../gui/wxpython/gui_core/pyedit.py:371
 #, fuzzy
 #| msgid "Export model to Python script"
 msgid " Unable to launch Python script."
 msgstr "Modell export Python szkriptbe"
 
-#: ../gui/wxpython/gui_core/pyedit.py:467
+#: ../gui/wxpython/gui_core/pyedit.py:469
 msgid "Open file"
 msgstr "Fájl nyitás"
 
-#: ../gui/wxpython/gui_core/pyedit.py:509
+#: ../gui/wxpython/gui_core/pyedit.py:511
 #, python-brace-format
 msgid "File <{path}> doesn't exist. It was probably moved or deleted."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:577
+#: ../gui/wxpython/gui_core/pyedit.py:579
 msgid "Replace the content by the template?"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:579
+#: ../gui/wxpython/gui_core/pyedit.py:581
 msgid "Replace the content by the example?"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:581
+#: ../gui/wxpython/gui_core/pyedit.py:583
 msgid "Replace the current content by the file content?"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:588
+#: ../gui/wxpython/gui_core/pyedit.py:590
 msgid "Replace content"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:601
+#: ../gui/wxpython/gui_core/pyedit.py:603
 msgid "Set parameters for the script"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:603
+#: ../gui/wxpython/gui_core/pyedit.py:605
 msgid "Specify command line parameters for the script separated by spaces:"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:656
+#: ../gui/wxpython/gui_core/pyedit.py:658
 msgid "Open (Ctrl+O)"
 msgstr "Megnyitás (Ctrl+O)"
 
-#: ../gui/wxpython/gui_core/pyedit.py:657
+#: ../gui/wxpython/gui_core/pyedit.py:659
 msgid "Save (Ctrl+S)"
 msgstr "Mentés (Ctrl+S)"
 
-#: ../gui/wxpython/gui_core/pyedit.py:658
+#: ../gui/wxpython/gui_core/pyedit.py:660
 msgid "Run (Ctrl+R)"
 msgstr "Futtatás (Ctrl+R)"
 
-#: ../gui/wxpython/gui_core/pyedit.py:660
+#: ../gui/wxpython/gui_core/pyedit.py:662
 msgid "Activate overwrite"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:661
+#: ../gui/wxpython/gui_core/pyedit.py:663
 msgid "Deactivate overwrite"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:742
+#: ../gui/wxpython/gui_core/pyedit.py:876
 msgid "Simple Python Editor"
 msgstr "Egyszerű Python szerkesztő"
 
@@ -6083,7 +6083,7 @@ msgid "No vector map layer selected. Operation canceled."
 msgstr "Nincs szelektált térkép réteg. A művelet megszakadt."
 
 #: ../gui/wxpython/gui_core/vselect.py:288 ../gui/wxpython/lmgr/frame.py:2318
-#: ../gui/wxpython/main_window/frame.py:2416
+#: ../gui/wxpython/main_window/frame.py:2426
 #: ../gui/wxpython/mapdisp/frame.py:711
 msgid "No map layer selected. Operation canceled."
 msgstr "Nincs kiválasztott térkép réteg. A művelet megszakadt."
@@ -6564,7 +6564,7 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/iclass/frame.py:107 ../gui/wxpython/iclass/frame.py:1654
-#: ../gui/wxpython/lmgr/frame.py:1687 ../gui/wxpython/main_window/frame.py:1841
+#: ../gui/wxpython/lmgr/frame.py:1687 ../gui/wxpython/main_window/frame.py:1842
 msgid "Supervised Classification Tool"
 msgstr ""
 
@@ -7557,7 +7557,7 @@ msgstr ""
 msgid "Remove selected class"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:111 ../gui/wxpython/main_window/frame.py:127
+#: ../gui/wxpython/lmgr/frame.py:111 ../gui/wxpython/main_window/frame.py:128
 msgid "GRASS GIS"
 msgstr ""
 
@@ -7565,97 +7565,97 @@ msgstr ""
 msgid "There were some issues when loading menu or Tools tab:"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:183 ../gui/wxpython/main_window/frame.py:592
+#: ../gui/wxpython/lmgr/frame.py:183 ../gui/wxpython/main_window/frame.py:593
 msgid "Workspace Toolbar"
 msgstr "Munkaterület eszközsor"
 
-#: ../gui/wxpython/lmgr/frame.py:187 ../gui/wxpython/main_window/frame.py:596
+#: ../gui/wxpython/lmgr/frame.py:187 ../gui/wxpython/main_window/frame.py:597
 msgid "Tools Toolbar"
 msgstr "Eszközök eszközsor"
 
-#: ../gui/wxpython/lmgr/frame.py:189 ../gui/wxpython/main_window/frame.py:598
+#: ../gui/wxpython/lmgr/frame.py:189 ../gui/wxpython/main_window/frame.py:599
 msgid "3D view Toolbar"
 msgstr "3D nézet eszközsor"
 
-#: ../gui/wxpython/lmgr/frame.py:362 ../gui/wxpython/main_window/frame.py:306
+#: ../gui/wxpython/lmgr/frame.py:362 ../gui/wxpython/main_window/frame.py:307
 msgid "Rename current Map Display"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:485 ../gui/wxpython/main_window/frame.py:432
+#: ../gui/wxpython/lmgr/frame.py:485 ../gui/wxpython/main_window/frame.py:433
 #, python-brace-format
 msgid "Map Display {number}"
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:583 ../gui/wxpython/lmgr/frame.py:903
-#: ../gui/wxpython/main_window/frame.py:530
-#: ../gui/wxpython/main_window/frame.py:1026
+#: ../gui/wxpython/main_window/frame.py:531
+#: ../gui/wxpython/main_window/frame.py:1027
 msgid "Close Map Display {}"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:639 ../gui/wxpython/main_window/frame.py:692
+#: ../gui/wxpython/lmgr/frame.py:639 ../gui/wxpython/main_window/frame.py:693
 msgid "Console"
 msgstr "Konzol"
 
-#: ../gui/wxpython/lmgr/frame.py:794 ../gui/wxpython/main_window/frame.py:921
+#: ../gui/wxpython/lmgr/frame.py:794 ../gui/wxpython/main_window/frame.py:922
 #, fuzzy
 msgid "Map Swipe Tool"
 msgstr "Térkép eszközsor"
 
-#: ../gui/wxpython/lmgr/frame.py:846 ../gui/wxpython/main_window/frame.py:973
+#: ../gui/wxpython/lmgr/frame.py:846 ../gui/wxpython/main_window/frame.py:974
 msgid "Choose model to run"
 msgstr "Válassza ki a futtatandó modelt"
 
-#: ../gui/wxpython/lmgr/frame.py:998 ../gui/wxpython/main_window/frame.py:1139
+#: ../gui/wxpython/lmgr/frame.py:998 ../gui/wxpython/main_window/frame.py:1140
 #, python-format
 msgid "Command '%s' not yet implemented in the WxGUI. Try adding it as a command layer instead."
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1180 ../gui/wxpython/lmgr/frame.py:1858
-#: ../gui/wxpython/main_window/frame.py:1335
-#: ../gui/wxpython/main_window/frame.py:2012
+#: ../gui/wxpython/main_window/frame.py:1336
+#: ../gui/wxpython/main_window/frame.py:2022
 msgid "Selected map layer is not vector."
 msgstr "A kiválasztott térkép réteg nem vektor."
 
-#: ../gui/wxpython/lmgr/frame.py:1187 ../gui/wxpython/main_window/frame.py:1342
+#: ../gui/wxpython/lmgr/frame.py:1187 ../gui/wxpython/main_window/frame.py:1343
 msgid "Editing is allowed only for vector maps from the current mapset."
 msgstr "A szerkesztés csak az aktuális térképcsoport vektor térképeire engedélyezett."
 
-#: ../gui/wxpython/lmgr/frame.py:1214 ../gui/wxpython/main_window/frame.py:1369
+#: ../gui/wxpython/lmgr/frame.py:1214 ../gui/wxpython/main_window/frame.py:1370
 msgid "Choose script file to run"
 msgstr "Válassza ki a futtatandó szkript ffájlt"
 
-#: ../gui/wxpython/lmgr/frame.py:1216 ../gui/wxpython/main_window/frame.py:1371
+#: ../gui/wxpython/lmgr/frame.py:1216 ../gui/wxpython/main_window/frame.py:1372
 msgid "Python script (*.py)|*.py|Bash script (*.sh)|*.sh"
 msgstr "Python szkript (*.py)|*.py|Bash szkript (*.sh)|*.sh"
 
-#: ../gui/wxpython/lmgr/frame.py:1229 ../gui/wxpython/main_window/frame.py:1384
+#: ../gui/wxpython/lmgr/frame.py:1229 ../gui/wxpython/main_window/frame.py:1385
 #, python-format
 msgid "Script file '%s' doesn't exist. Operation canceled."
 msgstr "'%s' szkript fájl nem létezik. A művelet megszakadt."
 
-#: ../gui/wxpython/lmgr/frame.py:1239 ../gui/wxpython/main_window/frame.py:1394
+#: ../gui/wxpython/lmgr/frame.py:1239 ../gui/wxpython/main_window/frame.py:1395
 #, python-format
 msgid "Script <%s> is not executable. Do you want to set the permissions that allows you to run this script (note that you must be the owner of the file)?"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1245 ../gui/wxpython/main_window/frame.py:1400
+#: ../gui/wxpython/lmgr/frame.py:1245 ../gui/wxpython/main_window/frame.py:1401
 msgid "Set permission?"
 msgstr "Engedély beállítás?"
 
-#: ../gui/wxpython/lmgr/frame.py:1255 ../gui/wxpython/main_window/frame.py:1410
+#: ../gui/wxpython/lmgr/frame.py:1255 ../gui/wxpython/main_window/frame.py:1411
 msgid "Unable to set permission. Operation canceled."
 msgstr "Nem tudom az engedélyt beállítani. A művelet megszakadt."
 
-#: ../gui/wxpython/lmgr/frame.py:1268 ../gui/wxpython/main_window/frame.py:1423
+#: ../gui/wxpython/lmgr/frame.py:1268 ../gui/wxpython/main_window/frame.py:1424
 #, python-format
 msgid "Directory '%s' is not defined in GRASS_ADDON_PATH. Do you want add this directory to GRASS_ADDON_PATH?"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1272 ../gui/wxpython/main_window/frame.py:1427
+#: ../gui/wxpython/lmgr/frame.py:1272 ../gui/wxpython/main_window/frame.py:1428
 msgid "Update Addons path?"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1279 ../gui/wxpython/main_window/frame.py:1434
+#: ../gui/wxpython/lmgr/frame.py:1279 ../gui/wxpython/main_window/frame.py:1435
 #, python-format
 msgid "Launching script '%s'..."
 msgstr ""
@@ -7664,11 +7664,11 @@ msgstr ""
 msgid "No location/mapset provided. Operation canceled."
 msgstr "Nem kaptam helyet/térképcsoportot. A művelet megszakadt."
 
-#: ../gui/wxpython/lmgr/frame.py:1334 ../gui/wxpython/main_window/frame.py:1489
+#: ../gui/wxpython/lmgr/frame.py:1334 ../gui/wxpython/main_window/frame.py:1490
 msgid "No mapset provided. Operation canceled."
 msgstr "Nem kaptam térképcsoportot. A művelet megszakadt."
 
-#: ../gui/wxpython/lmgr/frame.py:1369 ../gui/wxpython/main_window/frame.py:1524
+#: ../gui/wxpython/lmgr/frame.py:1369 ../gui/wxpython/main_window/frame.py:1525
 #, python-format
 msgid ""
 "Working directory changed to:\n"
@@ -7677,67 +7677,67 @@ msgstr ""
 "A munka könyvtár erre módosult:\n"
 "\"%s\""
 
-#: ../gui/wxpython/lmgr/frame.py:1375 ../gui/wxpython/main_window/frame.py:1530
+#: ../gui/wxpython/lmgr/frame.py:1375 ../gui/wxpython/main_window/frame.py:1531
 msgid "Changes current working directory for this GUI."
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1376 ../gui/wxpython/main_window/frame.py:1531
+#: ../gui/wxpython/lmgr/frame.py:1376 ../gui/wxpython/main_window/frame.py:1532
 msgid "Usage: cd [directory]"
 msgstr "Használat: cd [könyvtár]"
 
-#: ../gui/wxpython/lmgr/frame.py:1377 ../gui/wxpython/main_window/frame.py:1532
+#: ../gui/wxpython/lmgr/frame.py:1377 ../gui/wxpython/main_window/frame.py:1533
 msgid "Without parameters it opens a dialog."
 msgstr "Paraméterek nélkül egy párbeszédablakot nyit."
 
-#: ../gui/wxpython/lmgr/frame.py:1383 ../gui/wxpython/main_window/frame.py:1538
+#: ../gui/wxpython/lmgr/frame.py:1383 ../gui/wxpython/main_window/frame.py:1539
 msgid "If ~ (tilde) is present as the first directory on the path, it is replaced by user's home directory."
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1402 ../gui/wxpython/main_window/frame.py:1557
+#: ../gui/wxpython/lmgr/frame.py:1402 ../gui/wxpython/main_window/frame.py:1558
 msgid "More than one parameter provided."
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1423 ../gui/wxpython/main_window/frame.py:1578
+#: ../gui/wxpython/lmgr/frame.py:1423 ../gui/wxpython/main_window/frame.py:1579
 msgid "Choose a working directory"
 msgstr "Válasszon munka könyvtárat"
 
-#: ../gui/wxpython/lmgr/frame.py:1472 ../gui/wxpython/main_window/frame.py:1627
+#: ../gui/wxpython/lmgr/frame.py:1472 ../gui/wxpython/main_window/frame.py:1628
 msgid "System Info"
 msgstr "Rendszer info"
 
-#: ../gui/wxpython/lmgr/frame.py:1488 ../gui/wxpython/main_window/frame.py:1643
+#: ../gui/wxpython/lmgr/frame.py:1488 ../gui/wxpython/main_window/frame.py:1644
 msgid "GRASS version"
 msgstr "GRASS version"
 
-#: ../gui/wxpython/lmgr/frame.py:1490 ../gui/wxpython/main_window/frame.py:1645
+#: ../gui/wxpython/lmgr/frame.py:1490 ../gui/wxpython/main_window/frame.py:1646
 msgid "Code revision"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1492 ../gui/wxpython/main_window/frame.py:1647
+#: ../gui/wxpython/lmgr/frame.py:1492 ../gui/wxpython/main_window/frame.py:1648
 msgid "Build date"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1494 ../gui/wxpython/main_window/frame.py:1649
+#: ../gui/wxpython/lmgr/frame.py:1494 ../gui/wxpython/main_window/frame.py:1650
 msgid "Build platform"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1506 ../gui/wxpython/main_window/frame.py:1661
+#: ../gui/wxpython/lmgr/frame.py:1506 ../gui/wxpython/main_window/frame.py:1662
 msgid "Platform"
 msgstr "Platform"
 
-#: ../gui/wxpython/lmgr/frame.py:1566 ../gui/wxpython/main_window/frame.py:1721
+#: ../gui/wxpython/lmgr/frame.py:1566 ../gui/wxpython/main_window/frame.py:1722
 msgid "Close all Map Displays"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1584 ../gui/wxpython/main_window/frame.py:1739
+#: ../gui/wxpython/lmgr/frame.py:1584 ../gui/wxpython/main_window/frame.py:1740
 msgid "Enter new name:"
 msgstr "Új név:"
 
-#: ../gui/wxpython/lmgr/frame.py:1585 ../gui/wxpython/main_window/frame.py:1740
+#: ../gui/wxpython/lmgr/frame.py:1585 ../gui/wxpython/main_window/frame.py:1741
 msgid "Rename Map Display"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1679 ../gui/wxpython/main_window/frame.py:1833
+#: ../gui/wxpython/lmgr/frame.py:1679 ../gui/wxpython/main_window/frame.py:1834
 #, python-format
 msgid ""
 "Unable to launch \"Supervised Classification Tool\".\n"
@@ -7745,35 +7745,35 @@ msgid ""
 "Reason: %s"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1726 ../gui/wxpython/main_window/frame.py:1880
+#: ../gui/wxpython/lmgr/frame.py:1726 ../gui/wxpython/main_window/frame.py:1881
 msgid "Unable to start Timeline Tool."
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1736 ../gui/wxpython/main_window/frame.py:1890
+#: ../gui/wxpython/lmgr/frame.py:1736 ../gui/wxpython/main_window/frame.py:1891
 msgid "Unable to start Temporal Plot Tool."
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1906 ../gui/wxpython/main_window/frame.py:2058
+#: ../gui/wxpython/lmgr/frame.py:1906 ../gui/wxpython/main_window/frame.py:2068
 msgid "Add selected map layers into layer tree"
 msgstr "Kiválasztott térkép rétegek hozzáadás a réteg fához"
 
 #: ../gui/wxpython/lmgr/frame.py:1938 ../gui/wxpython/lmgr/frame.py:1976
-#: ../gui/wxpython/main_window/frame.py:2090
-#: ../gui/wxpython/main_window/frame.py:2128
+#: ../gui/wxpython/main_window/frame.py:2100
+#: ../gui/wxpython/main_window/frame.py:2138
 #, python-format
 msgid "Unsupported map layer type <%s>."
 msgstr "Nem támogatott térkép réteg típus <%s>"
 
-#: ../gui/wxpython/lmgr/frame.py:2119 ../gui/wxpython/main_window/frame.py:2252
+#: ../gui/wxpython/lmgr/frame.py:2119 ../gui/wxpython/main_window/frame.py:2262
 msgid "Note that cell values can only be displayed for regions of less than 10,000 cells."
 msgstr "A cella értékek megjelenítése csak a 10,000 cellánál kisebb régiókra lehetséges."
 
 #: ../gui/wxpython/lmgr/frame.py:2214 ../gui/wxpython/lmgr/layertree.py:2128
-#: ../gui/wxpython/main_window/frame.py:2328
+#: ../gui/wxpython/main_window/frame.py:2338
 msgid "opacity:"
 msgstr "átlátszóság:"
 
-#: ../gui/wxpython/lmgr/frame.py:2223 ../gui/wxpython/main_window/frame.py:2337
+#: ../gui/wxpython/lmgr/frame.py:2223 ../gui/wxpython/main_window/frame.py:2347
 #, python-format
 msgid ""
 "Do you want to remove map layer(s)\n"
@@ -7784,23 +7784,23 @@ msgstr ""
 "%s\n"
 "a réteg fából?"
 
-#: ../gui/wxpython/lmgr/frame.py:2228 ../gui/wxpython/main_window/frame.py:2342
+#: ../gui/wxpython/lmgr/frame.py:2228 ../gui/wxpython/main_window/frame.py:2352
 msgid "Do you want to remove selected map layer(s) from layer tree?"
 msgstr "El akarja távolítani a kiválasztott térkép réteg(ek)et a réteg fából?"
 
-#: ../gui/wxpython/lmgr/frame.py:2234 ../gui/wxpython/main_window/frame.py:2348
+#: ../gui/wxpython/lmgr/frame.py:2234 ../gui/wxpython/main_window/frame.py:2358
 msgid "Remove map layer"
 msgstr "Térkép réteg eltávolítás"
 
-#: ../gui/wxpython/lmgr/frame.py:2292 ../gui/wxpython/main_window/frame.py:2390
+#: ../gui/wxpython/lmgr/frame.py:2292 ../gui/wxpython/main_window/frame.py:2400
 msgid "Quit GRASS GUI"
 msgstr "Kilépés a GRASS GUI-ból"
 
-#: ../gui/wxpython/lmgr/frame.py:2330 ../gui/wxpython/main_window/frame.py:2428
+#: ../gui/wxpython/lmgr/frame.py:2330 ../gui/wxpython/main_window/frame.py:2438
 msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:2341 ../gui/wxpython/main_window/frame.py:2439
+#: ../gui/wxpython/lmgr/frame.py:2341 ../gui/wxpython/main_window/frame.py:2449
 msgid "Constrain map to region geometry?"
 msgstr ""
 
@@ -8761,14 +8761,19 @@ msgstr "<%s> fájlt nem találom."
 msgid "WKT string missing."
 msgstr ""
 
-#: ../gui/wxpython/main_window/frame.py:160
+#: ../gui/wxpython/main_window/frame.py:161
 msgid "There were some issues when loading menu or Tools:"
 msgstr ""
 
-#: ../gui/wxpython/main_window/frame.py:1449
+#: ../gui/wxpython/main_window/frame.py:1450
 #, fuzzy
 msgid "No project provided. Operation canceled."
 msgstr "Nem kaptam térképcsoportot. A művelet megszakadt."
+
+#: ../gui/wxpython/main_window/frame.py:2000
+#, fuzzy
+msgid "Code editor"
+msgstr "Python szerkesztő"
 
 #: ../gui/wxpython/mapdisp/frame.py:171
 #, python-format

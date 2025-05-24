@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-23 17:40+0000\n"
+"POT-Creation-Date: 2025-05-23 22:56+0000\n"
 "PO-Revision-Date: 2025-04-03 08:42+0000\n"
 "Last-Translator: luca <lucadeluge@gmail.com>\n"
 "Language-Team: Italian <https://weblate.osgeo.org/projects/grass-gis/grassmods/it/>\n"
@@ -1788,6 +1788,7 @@ msgstr ""
 #: ../raster/r.series.accumulate/main.c:76 ../raster/r.series.interp/main.c:72
 #: ../raster/r.series/main.c:153 ../raster/r.sim/r.sim.sediment/main.c:112
 #: ../raster/r.sim/r.sim.water/main.c:112 ../raster/r.slope.aspect/main.c:166
+#: ../raster/r.smooth.edgepreserve/main.c:46
 #: ../raster/r.solute.transport/main.c:228 ../raster/r.spread/main.c:102
 #: ../raster/r.spreadpath/main.c:77 ../raster/r.statistics/main.c:53
 #: ../raster/r.stats.quantile/main.c:565 ../raster/r.stats.zonal/main.c:104
@@ -5191,7 +5192,8 @@ msgstr "Il mio primo modulo raster"
 #: ../raster/r.sim/simlib/output.c:434 ../raster/r.sim/simlib/output.c:476
 #: ../raster/r.sim/simlib/output.c:492 ../raster/r.sim/simlib/output.c:513
 #: ../raster/r.sim/simlib/output.c:555 ../raster/r.sim/simlib/output.c:595
-#: ../raster/r.sim/simlib/output.c:762 ../raster/r.spread/main.c:445
+#: ../raster/r.sim/simlib/output.c:762
+#: ../raster/r.smooth.edgepreserve/main.c:144 ../raster/r.spread/main.c:445
 #: ../raster/r.spread/main.c:448 ../raster/r.spread/main.c:451
 #: ../raster/r.spread/main.c:455 ../raster/r.spread/main.c:458
 #: ../raster/r.spread/main.c:461 ../raster/r.stream.extract/main.c:169
@@ -15710,8 +15712,9 @@ msgstr ""
 #: ../raster/r.resamp.filter/main.c:437 ../raster/r.resamp.interp/main.c:92
 #: ../raster/r.series/main.c:156 ../raster/r.sim/r.sim.sediment/main.c:119
 #: ../raster/r.sim/r.sim.water/main.c:118 ../raster/r.slope.aspect/main.c:171
-#: ../raster/r.sun/main.c:245 ../raster/r.texture/main.c:101
-#: ../raster/r.univar/r.univar_main.c:155 ../vector/v.surf.rst/main.c:153
+#: ../raster/r.smooth.edgepreserve/main.c:49 ../raster/r.sun/main.c:245
+#: ../raster/r.texture/main.c:101 ../raster/r.univar/r.univar_main.c:155
+#: ../vector/v.surf.rst/main.c:153
 msgid "parallel"
 msgstr ""
 
@@ -27580,6 +27583,120 @@ msgstr "Mappa raster Dyy <%s> completata"
 msgid "Dxy raster map <%s> complete"
 msgstr "Mappa raster Dxy <%s> completata"
 
+#: ../raster/r.smooth.edgepreserve/main.c:47 ../vector/v.generalize/main.c:79
+msgid "smoothing"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:48
+#, fuzzy
+#| msgid "Reverse selection"
+msgid "edge detection"
+msgstr "Selezione inversa"
+
+#: ../raster/r.smooth.edgepreserve/main.c:50
+msgid "denoise"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:51
+msgid "Smoothing with anisotropic diffusion"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:61
+#, fuzzy
+#| msgid "Viewpoint height (in map units)"
+msgid "Gradient magnitude threshold (in map units)"
+msgstr "Altezza del punto di vista (in unità di mappa)"
+
+#: ../raster/r.smooth.edgepreserve/main.c:62
+#: ../raster/r.smooth.edgepreserve/main.c:71
+#: ../raster/r.smooth.edgepreserve/main.c:80
+#: ../raster/r.smooth.edgepreserve/main.c:98
+msgid "Diffusion"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:70
+#, fuzzy
+#| msgid "Water diffusion constant"
+msgid "Rate of diffusion"
+msgstr "Costante di diffusione dell'acqua"
+
+#: ../raster/r.smooth.edgepreserve/main.c:79
+#, fuzzy
+msgid "Number of diffusion steps"
+msgstr "Numero di livelli di quantizzazione"
+
+#: ../raster/r.smooth.edgepreserve/main.c:88
+#, fuzzy
+msgid "Diffusivity function"
+msgstr "Funzione kernel"
+
+#: ../raster/r.smooth.edgepreserve/main.c:97
+msgid "Preserve details with Tukey"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/main.c:149
+#, fuzzy
+msgid "Wrong computational region"
+msgstr "Utilizza la regione corrente"
+
+#: ../raster/r.smooth.edgepreserve/main.c:154
+#, fuzzy
+msgid "Computational region is too small!"
+msgstr "Mapset contenente la mappa raster di input"
+
+#: ../raster/r.smooth.edgepreserve/main.c:157
+#, fuzzy
+msgid "Computational region is too large!"
+msgstr "Mapset contenente la mappa raster di input"
+
+#: ../raster/r.smooth.edgepreserve/main.c:205
+msgid "Smoothed map"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:32
+#, fuzzy, c-format
+msgid "There was an error reading data from a temporary file. %d: %s"
+msgstr "Impossibile leggere il file REF per il sottogruppo <%s> nel gruppo <%s>"
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:46
+#, fuzzy, c-format
+#| msgid "%s: Error writing temporary file"
+msgid "There was an error writing data from a temporary file. %d: %s"
+msgstr "%s: Errore nella scrittura del file temporaneo"
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:59
+msgid "Error fetching data from a disk cache"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:111
+msgid "Insufficient memory to hold processed data. Either increase available memory with the \"memory\" parameter or reduce size of the computational region."
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:115
+msgid "Using disk for temporary data storage"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:123
+#, fuzzy, c-format
+#| msgid "Error reading wildcard"
+msgid "Error creating row cache. %d: %s"
+msgstr "Errore nella lettura della wildcard"
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:129
+#, fuzzy
+#| msgid "Error reading wildcard"
+msgid "Error creating row cache"
+msgstr "Errore nella lettura della wildcard"
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:135
+msgid "Keeping temporary data in RAM"
+msgstr ""
+
+#: ../raster/r.smooth.edgepreserve/row_cache.c:155
+#, c-format
+msgid "Error cleaning up row cache. %d: %s"
+msgstr ""
+
 #: ../raster/r.solute.transport/main.c:56
 msgid "The initial concentration in [kg/m^3]"
 msgstr ""
@@ -38562,10 +38679,6 @@ msgstr "Risoluzione dei conflitti in corso ..."
 msgid "simplification"
 msgstr ""
 
-#: ../vector/v.generalize/main.c:79
-msgid "smoothing"
-msgstr ""
-
 #: ../vector/v.generalize/main.c:80
 msgid "displacement"
 msgstr ""
@@ -47546,9 +47659,6 @@ msgstr "File immagine"
 #~ msgid "%s available in mapset <%s>:"
 #~ msgstr "Elenco dei mapset disponibili"
 
-#~ msgid "%s: Error writing temporary file"
-#~ msgstr "%s: Errore nella scrittura del file temporaneo"
-
 #~ msgid "%s=%s - illegal number of interpolation points"
 #~ msgstr "%s=%s - numero di punti per l'interpolazione non accettabile "
 
@@ -51196,10 +51306,6 @@ msgstr "File immagine"
 #~ msgstr "Il numero di sottoclassi è %d"
 
 #, fuzzy
-#~ msgid "Number of scaling steps"
-#~ msgstr "Numero di livelli di quantizzazione"
-
-#, fuzzy
 #~ msgid "Number of significant digits per attribute column"
 #~ msgstr "Numero di cifre significative (solo valori a virgola mobile)"
 
@@ -52310,10 +52416,6 @@ msgstr "File immagine"
 #~ msgstr "tabella dei colori"
 
 #, fuzzy
-#~ msgid "Set computational region to input raster map"
-#~ msgstr "Mapset contenente la mappa raster di input"
-
-#, fuzzy
 #~ msgid "Set flier color"
 #~ msgstr "Colore della linea vettoriale"
 
@@ -52340,10 +52442,6 @@ msgstr "File immagine"
 #, fuzzy
 #~ msgid "Set the resolution of plot"
 #~ msgstr "Ordina il risultato"
-
-#, fuzzy
-#~ msgid "Set to original computational region"
-#~ msgstr "Utilizza la regione corrente"
 
 #~ msgid "Setting grey color table for <%s> (data range)"
 #~ msgstr "Impostando la tabella del colore per <%s> (range dei dati)"
@@ -53708,10 +53806,6 @@ msgstr "File immagine"
 #, fuzzy
 #~ msgid "walking distance"
 #~ msgstr "Distanza non valida"
-
-#, fuzzy
-#~ msgid "weight function"
-#~ msgstr "Funzione kernel"
 
 #~ msgid "weight= and gauss= are mutually exclusive"
 #~ msgstr "weight= e gauss= sono mutuamente esclusivi"
