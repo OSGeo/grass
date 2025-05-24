@@ -31,7 +31,6 @@ A mapcalc expression must be provided to process the temporal sampled
 maps. Temporal internal variables are available in addition to the
 *[r.mapcalc](r.mapcalc.md)* spatial operators and functions:
 
-
 ### Supported internal variables
 
 The supported internal variables for **relative** and **absolute time** are:
@@ -45,11 +44,18 @@ and in relative units in case of relative time.
 #### Start time
 
 *start_time()* - This internal variable represents the time difference
-between the start time of the sample space time raster dataset and the start time of the current sample interval or instance. The time is measured in days and fraction of days for absolute time, and in relative units in case of relative time.
+between the start time of the sample space time raster dataset and the start
+time of the current sample interval or instance. The time is measured in days
+and fraction of days for absolute time, and in relative units in case of
+relative time.
 
 #### End time
 
-*end_time()* - This internal variable represents the time difference between the start time of the sample space time raster dataset and the end time of the current sample interval. The time is measured in days and fraction of days for absolute time, and in relative units in case of relative time. The end_time() will be represented by null() in case of a time instance.
+*end_time()* - This internal variable represents the time difference between
+the start time of the sample space time raster dataset and the end time of the
+current sample interval. The time is measured in days and fraction of days for
+absolute time, and in relative units in case of relative time. The end_time()
+will be represented by null() in case of a time instance.
 
 The supported internal variables for the **current sample interval** or
 **instance for absolute time** are:
