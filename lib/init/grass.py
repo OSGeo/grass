@@ -71,6 +71,8 @@ _DEBUG = None
 # for wxpath
 _WXPYTHON_BASE = None
 
+GISBASE = None
+
 try:
     # Python >= 3.11
     ENCODING = locale.getencoding()
@@ -81,73 +83,6 @@ if ENCODING is None:
     print("Default locale not found, using UTF-8")  # intentionally not translatable
 
 # The "@...@" variables are being substituted during build process
-#
-# TODO: should GISBASE be renamed to something like GRASS_PATH?
-# GISBASE marks complete runtime, so no need to get it here when
-# setting it up, possible scenario: existing runtime and starting
-# GRASS in that, we want to overwrite the settings, not to take it
-# possibly same for GRASS_PROJSHARE and others but maybe not
-#
-# We need to simultaneously make sure that:
-# - we get GISBASE from os.environ if it is defined (doesn't this mean that we are
-#   already inside a GRASS session? If we are, why do we need to run this script
-#   again???).
-# - GISBASE exists as an ENV variable
-#
-# pmav99: Ugly as hell, but that's what the code before the refactoring was doing.
-if "GISBASE" in os.environ and len(os.getenv("GISBASE")) > 0:
-    GISBASE = os.path.normpath(os.environ["GISBASE"])
-else:
-    GISBASE = os.path.normpath("@GISBASE_INSTALL_PATH@")
-    os.environ["GISBASE"] = GISBASE
-
-if "GRASS_SHAREDIR" in os.environ and len(os.getenv("GRASS_SHAREDIR")) > 0:
-    GRASS_SHAREDIR = os.path.normpath(os.environ["GRASS_SHAREDIR"])
-else:
-    GRASS_SHAREDIR = os.path.normpath("@GRASS_SHAREDIR@")
-    os.environ["GRASS_SHAREDIR"] = GRASS_SHAREDIR
-
-if "GRASS_LOCALEDIR" in os.environ and len(os.getenv("GRASS_LOCALEDIR")) > 0:
-    GRASS_LOCALEDIR = os.path.normpath(os.environ["GRASS_LOCALEDIR"])
-else:
-    GRASS_LOCALEDIR = os.path.normpath("@GRASS_LOCALE@")
-    os.environ["GRASS_LOCALEDIR"] = GRASS_LOCALEDIR
-
-if "GRASS_PYDIR" in os.environ and len(os.getenv("GRASS_PYDIR")) > 0:
-    GRASS_PYDIR = os.path.normpath(os.environ["GRASS_PYDIR"])
-else:
-    GRASS_PYDIR = os.path.normpath("@GRASS_PYDIR@")
-    os.environ["GRASS_PYDIR"] = GRASS_PYDIR
-
-if "GRASS_GUIWXDIR" in os.environ and len(os.getenv("GRASS_GUIWXDIR")) > 0:
-    GRASS_GUIWXDIR = os.path.normpath(os.environ["GRASS_GUIWXDIR"])
-else:
-    GRASS_GUIWXDIR = os.path.normpath("@GRASS_GUIWXDIR@")
-    os.environ["GRASS_GUIWXDIR"] = GRASS_GUIWXDIR
-
-if "GRASS_GUISCRIPTDIR" in os.environ and len(os.getenv("GRASS_GUISCRIPTDIR")) > 0:
-    GRASS_GUISCRIPTDIR = os.path.normpath(os.environ["GRASS_GUISCRIPTDIR"])
-else:
-    GRASS_GUISCRIPTDIR = os.path.normpath("@GRASS_GUISCRIPTDIR@")
-    os.environ["GRASS_GUISCRIPTDIR"] = GRASS_GUISCRIPTDIR
-
-if "GRASS_GUIRESDIR" in os.environ and len(os.getenv("GRASS_GUIRESDIR")) > 0:
-    GRASS_GUIRESDIR = os.path.normpath(os.environ["GRASS_GUIRESDIR"])
-else:
-    GRASS_GUIRESDIR = os.path.normpath("@GRASS_GUIRESDIR@")
-    os.environ["GRASS_GUIRESDIR"] = GRASS_GUIRESDIR
-
-if "GRASS_FONTSDIR" in os.environ and len(os.getenv("GRASS_FONTSDIR")) > 0:
-    GRASS_FONTSDIR = os.path.normpath(os.environ["GRASS_FONTSDIR"])
-else:
-    GRASS_FONTSDIR = os.path.normpath("@GRASS_FONTSDIR@")
-    os.environ["GRASS_FONTSDIR"] = GRASS_FONTSDIR
-
-if "GRASS_ETCDIR" in os.environ and len(os.getenv("GRASS_ETCDIR")) > 0:
-    GRASS_ETCDIR = os.path.normpath(os.environ["GRASS_ETCDIR"])
-else:
-    GRASS_ETCDIR = os.path.normpath("@GRASS_ETCDIR@")
-    os.environ["GRASS_ETCDIR"] = GRASS_ETCDIR
 
 CMD_NAME = "@START_UP@"
 GRASS_VERSION = "@GRASS_VERSION_NUMBER@"
@@ -2152,9 +2087,16 @@ def validate_cmdline(params: Parameters) -> None:
 
 def find_grass_python_package() -> None:
     """Find path to grass package and add it to path"""
-    if os.path.exists(gpath("etc", "python")):
-        path_to_package = gpath("etc", "python")
-        sys.path.append(path_to_package)
+    GRASS_PREFIX = "@GRASS_PREFIX@"
+
+    if "GRASS_PYDIR" in os.environ and len(os.getenv("GRASS_PYDIR")) > 0:
+        GRASS_PYDIR = os.path.normpath(os.environ["GRASS_PYDIR"])
+    else:
+        GRASS_PYDIR = os.path.normpath(os.path.join(GRASS_PREFIX, "@GRASS_PYDIR@"))
+        os.environ["GRASS_PYDIR"] = GRASS_PYDIR
+
+    if os.path.exists(GRASS_PYDIR):
+        sys.path.append(GRASS_PYDIR)
         # now we can import stuff from grass package
     else:
         # Not translatable because we don't have translations loaded.
@@ -2163,6 +2105,12 @@ def find_grass_python_package() -> None:
             "Is the installation of GRASS complete?"
         )
         raise RuntimeError(msg)
+
+    from grass.app import resource_paths
+
+    resource_paths.set_resource_paths()  # noqa: F821
+    global GISBASE
+    GISBASE = resource_paths.GISBASE
 
 
 def main() -> None:

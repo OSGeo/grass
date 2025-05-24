@@ -69,13 +69,6 @@ $(ARCH_BINDIR)/$(START_UP): grass.py
 endif
 	rm -f $@
 	sed \
-	-e 's#@GISBASE_INSTALL_PATH@#$(RUN_GISBASE)#' \
-	-e 's#@GRASS_SHAREDIR@#$(RUN_GISBASE)#' \
-	-e 's#@GRASS_LOCALE@#$(RUN_GISBASE)/locale#' \
-	-e 's#@GRASS_PYDIR@#$(RUN_GISBASE)/etc/python#' \
-	-e 's#@GRASS_GUIWXDIR@#$(RUN_GISBASE)/gui/wxpython#' \
-	-e 's#@GRASS_GUISCRIPTDIR@#$(RUN_GISBASE)/gui/scripts#' \
-	-e 's#@GRASS_GUIRESDIR@#$(RUN_GISBASE)/gui#' \
 	-e 's#@GRASS_VERSION_NUMBER@#$(GRASS_VERSION_NUMBER)#' \
 	-e 's#@GRASS_VERSION_MAJOR@#$(GRASS_VERSION_MAJOR)#' \
 	-e 's#@GRASS_VERSION_MINOR@#$(GRASS_VERSION_MINOR)#' \
@@ -83,6 +76,8 @@ endif
 	-e 's#@LD_LIBRARY_PATH_VAR@#$(LD_LIBRARY_PATH_VAR)#' \
 	-e 's#@START_UP@#$(START_UP)#' \
 	-e 's#@CONFIG_PROJSHARE@#$(PROJSHARE)#' \
+	-e 's#@GRASS_PREFIX@#$(RUN_GISBASE)#' \
+	-e 's#@GRASS_PYDIR@#etc/python#' \
 	$< > $@
 	chmod +x $@
 
@@ -97,6 +92,8 @@ $(ARCH_DISTDIR)/$(START_UP).tmp: grass.py
 	-e 's#@GRASS_CONFIG_DIR@#$(GRASS_CONFIG_DIR)#' \
 	-e 's#@LD_LIBRARY_PATH_VAR@#$(LD_LIBRARY_PATH_VAR)#' \
 	-e 's#@CONFIG_PROJSHARE@#$(PROJSHARE)#' \
+	-e 's#@GRASS_PREFIX@#$(RUN_GISBASE)#' \
+	-e 's#@GRASS_PYDIR@#etc/python#' \
 	$< > $@
 
 $(ETC)/echo$(EXE) $(ETC)/run$(EXE): $(ETC)/%$(EXE): $(OBJDIR)/%.o
