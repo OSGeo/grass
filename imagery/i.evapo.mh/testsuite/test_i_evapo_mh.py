@@ -105,7 +105,7 @@ class TestEvapotranspirationMH(TestCase):
         )
         stats = gs.parse_command(
             "r.univar", map=self.output_map, flags="g", format="json"
-        )[0]
+        )
         self.assertGreaterEqual(stats["min"], 0)
 
     def test_h_flag_precipitation_ignored(self):
@@ -183,9 +183,7 @@ class TestEvapotranspirationMH(TestCase):
             maximum_temperature="tmax_test",
             output="et_const",
         )
-        stats = gs.parse_command("r.univar", map="et_const", flags="g", format="json")[
-            0
-        ]
+        stats = gs.parse_command("r.univar", map="et_const", flags="g", format="json")
         self.assertAlmostEqual(stats["mean"], expected_et)
 
 

@@ -8,7 +8,7 @@ def raster_exists(name, env=None):
 
 
 def raster_sum(name, env=None):
-    return gs.parse_command("r.univar", map="ones", env=env, format="json")[0]["sum"]
+    return gs.parse_command("r.univar", map="ones", env=env, format="json")["sum"]
 
 
 def test_mask_manager_no_operation(session_2x2):

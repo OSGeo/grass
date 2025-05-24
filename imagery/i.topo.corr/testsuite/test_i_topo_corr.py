@@ -177,14 +177,14 @@ class TestITopoCorr(TestCase):
         )
         corr_stats = gs.parse_command("r.univar", map=output_map, format="json")
         self.assertAlmostEqual(
-            orig_stats[0]["min"],
-            corr_stats[0]["min"],
+            orig_stats["min"],
+            corr_stats["min"],
             delta=1e-2,
             msg="Min value not preserved.",
         )
         self.assertAlmostEqual(
-            orig_stats[0]["max"],
-            corr_stats[0]["max"],
+            orig_stats["max"],
+            corr_stats["max"],
             delta=1e-2,
             msg="Max value not preserved",
         )
@@ -218,7 +218,7 @@ class TestITopoCorr(TestCase):
             stats = gs.parse_command(
                 "r.univar", map=f"{output_name}.{scaled_input}", format="json"
             )
-            results.append(stats[0]["mean"])
+            results.append(stats["mean"])
         self.assertAlmostEqual(
             results[1] / results[0], scales[1] / scales[0], delta=1e-6
         )
