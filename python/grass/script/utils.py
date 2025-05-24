@@ -46,9 +46,9 @@ VT = TypeVar("VT")  # Value type
 def float_or_dms(s) -> float:
     """Convert DMS to float.
 
-    >>> round(float_or_dms('26:45:30'), 5)
+    >>> round(float_or_dms("26:45:30"), 5)
     26.75833
-    >>> round(float_or_dms('26:0:0.1'), 5)
+    >>> round(float_or_dms("26:0:0.1"), 5)
     26.00003
 
     :param s: DMS value
@@ -64,15 +64,15 @@ def separator(sep: str) -> str:
     """Returns separator from G_OPT_F_SEP appropriately converted
     to character.
 
-    >>> separator('pipe')
+    >>> separator("pipe")
     '|'
-    >>> separator('comma')
+    >>> separator("comma")
     ','
 
     If the string does not match any of the separator keywords,
     it is returned as is:
 
-    >>> separator(', ')
+    >>> separator(", ")
     ', '
 
     :param str separator: character or separator keyword
@@ -156,11 +156,11 @@ class KeyValue(dict[str, VT]):
     written using attribute syntax. Example:
 
     >>> reg = KeyValue()
-    >>> reg['north'] = 489
+    >>> reg["north"] = 489
     >>> reg.north
     489
     >>> reg.south = 205
-    >>> reg['south']
+    >>> reg["south"]
     205
 
     The keys of KeyValue are strings. To use other key types, use other mapping types.
@@ -196,9 +196,9 @@ def decode(bytes_: AnyStr, encoding: str | None = None) -> str:
     Example
     -------
 
-    >>> decode(b'S\xc3\xbcdtirol')
+    >>> decode(b"S\xc3\xbcdtirol")
     u'Südtirol'
-    >>> decode(u'Südtirol')
+    >>> decode("Südtirol")
     u'Südtirol'
     >>> decode(1234)
     u'1234'
@@ -225,9 +225,9 @@ def encode(string: AnyStr, encoding: str | None = None) -> bytes:
     Example
     -------
 
-    >>> encode(b'S\xc3\xbcdtirol')
+    >>> encode(b"S\xc3\xbcdtirol")
     b'S\xc3\xbcdtirol'
-    >>> decode(u'Südtirol')
+    >>> decode("Südtirol")
     b'S\xc3\xbcdtirol'
     >>> decode(1234)
     b'1234'
@@ -292,9 +292,9 @@ def parse_key_val(
     """Parse a string into a dictionary, where entries are separated
     by newlines and the key and value are separated by `sep` (default: `=`)
 
-    >>> parse_key_val('min=20\\nmax=50') == {'min': '20', 'max': '50'}
+    >>> parse_key_val("min=20\\nmax=50") == {"min": "20", "max": "50"}
     True
-    >>> parse_key_val('min=20\\nmax=50', val_type=float) == {'min': 20, 'max': 50}
+    >>> parse_key_val("min=20\\nmax=50", val_type=float) == {"min": 20, "max": 50}
     True
 
     :param s: string to be parsed
@@ -501,8 +501,8 @@ def set_path(modulename, dirname=None, path="."):
 
     in the source code the function is called with the following parameters: ::
 
-        set_path('r.green', 'libhydro', '..')
-        set_path('r.green', 'libgreen', os.path.join('..', '..'))
+        set_path("r.green", "libhydro", "..")
+        set_path("r.green", "libgreen", os.path.join("..", ".."))
 
     when we are executing the module: r.green.hydro.financial locally from
     the command line:  ::

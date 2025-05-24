@@ -846,8 +846,9 @@ def create_temporal_relation_sql_where_statement(
      :param start: The start time
      :param end: The end time
      :param use_start: Select maps of which the start time is located in
-                       the selection granule ::
+                       the selection granule:
 
+                       .. code-block:: output
                            map    :        s
                            granule:  s-----------------e
 
@@ -856,44 +857,43 @@ def create_temporal_relation_sql_where_statement(
 
                            map    :        s--------e
                            granule:  s-----------------e
-
-
      :param use_during: Select maps which are temporal during the selection
-                        granule  ::
+                        granule:
 
+                        .. code-block:: output
                             map    :     s-----------e
                             granule:  s-----------------e
-
      :param use_overlap: Select maps which temporal overlap the selection
-                         granule ::
+                         granule:
 
+                         .. code-block:: output
                              map    :     s-----------e
                              granule:        s-----------------e
 
                              map    :     s-----------e
                              granule:  s----------e
-
      :param use_contain: Select maps which temporally contain the selection
-                         granule ::
+                         granule:
 
+                         .. code-block:: output
                              map    :  s-----------------e
                              granule:     s-----------e
-
      :param use_equal: Select maps which temporally equal to the selection
-                       granule ::
+                       granule:
 
+                       .. code-block:: output
                            map    :  s-----------e
                            granule:  s-----------e
-
      :param use_follows: Select maps which temporally follow the selection
-                         granule ::
+                         granule:
 
+                         .. code-block:: output
                              map    :              s-----------e
                              granule:  s-----------e
-
      :param use_precedes: Select maps which temporally precedes the
-                          selection granule ::
+                          selection granule:
 
+                          .. code-block:: output
                               map    :  s-----------e
                               granule:              s-----------e
 

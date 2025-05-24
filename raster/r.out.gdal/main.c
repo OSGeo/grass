@@ -707,7 +707,7 @@ int main(int argc, char *argv[])
         char *pszValue;
 
         pszKey = "TIFFTAG_SOFTWARE";
-        G_asprintf(&pszValue, "GRASS GIS %s with GDAL %d.%d.%d",
+        G_asprintf(&pszValue, "GRASS %s with GDAL %d.%d.%d",
                    GRASS_VERSION_NUMBER, GDAL_VERSION_MAJOR, GDAL_VERSION_MINOR,
                    GDAL_VERSION_REV);
         GDALSetMetadataItem(hCurrDS, pszKey, pszValue, NULL);
@@ -718,7 +718,7 @@ int main(int argc, char *argv[])
         char *pszValue;
 
         pszKey = "SOFTWARE";
-        G_asprintf(&pszValue, "GRASS GIS %s with GDAL %d.%d.%d",
+        G_asprintf(&pszValue, "GRASS %s with GDAL %d.%d.%d",
                    GRASS_VERSION_NUMBER, GDAL_VERSION_MAJOR, GDAL_VERSION_MINOR,
                    GDAL_VERSION_REV);
         GDALSetMetadataItem(hCurrDS, pszKey, pszValue, NULL);

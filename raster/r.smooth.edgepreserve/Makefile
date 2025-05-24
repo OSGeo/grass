@@ -1,0 +1,13 @@
+MODULE_TOPDIR = ../..
+
+PGM = r.smooth.edgepreserve
+
+LIBES = $(ROWIOLIB) $(RASTERLIB) $(GISLIB)
+EXTRA_LIBS = $(OPENMP_LIBPATH) $(OPENMP_LIB)
+DEPENDENCIES = $(ROWIODEP) $(RASTERDEP) $(GISDEP)
+EXTRA_CFLAGS = $(OPENMP_CFLAGS)
+EXTRA_INC = $(OPENMP_INCPATH)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+default: cmd

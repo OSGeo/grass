@@ -1474,11 +1474,11 @@ def show_banner() -> None:
     """Write GRASS ASCII name to stderr"""
     sys.stderr.write(
         r"""
-          __________  ___   __________    _______________
-         / ____/ __ \/   | / ___/ ___/   / ____/  _/ ___/
-        / / __/ /_/ / /| | \__ \\_  \   / / __ / / \__ \
-       / /_/ / _, _/ ___ |___/ /__/ /  / /_/ // / ___/ /
-       \____/_/ |_/_/  |_/____/____/   \____/___//____/
+                   __________  ___   __________
+                  / ____/ __ \/   | / ___/ ___/
+                 / / __/ /_/ / /| | \__ \\_  \
+                / /_/ / _, _/ ___ |___/ /__/ /
+                \____/_/ |_/_/  |_/____/____/
 
 """
     )
@@ -1789,7 +1789,7 @@ def clean_all(*, start_time) -> None:
 def grep(pattern, lines):
     """Search lines (list of strings) and return them when beginning matches.
 
-    >>> grep("a", ['abc', 'cab', 'sdr', 'aaa', 'sss'])
+    >>> grep("a", ["abc", "cab", "sdr", "aaa", "sss"])
     ['abc', 'aaa']
     """
     expr = re.compile(pattern)
