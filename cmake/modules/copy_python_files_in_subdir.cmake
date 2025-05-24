@@ -9,9 +9,14 @@ SPDX-License-Identifier: GPL-2.0-or-later
 #]]
 
 function(copy_python_files_in_subdir dir_name dst_prefix)
-  cmake_parse_arguments(G "PRE_BUILD;PRE_LINK;POST_BUILD" "TARGET" "" ${ARGN})
+  cmake_parse_arguments(G "PRE_BUILD;PRE_LINK;POST_BUILD" "TARGET" "EXCLUDE" ${ARGN})
 
   file(GLOB PY_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${dir_name}/*.py")
+
+  if(G_EXCLUDE)
+    list(TRANSFORM G_EXCLUDE APPEND "${CMAKE_CURRENT_SOURCE_DIR}/${dir_name}/")
+    list(REMOVE_ITEM PY_FILES ${G_EXCLUDE})
+  endif()
 
   if(DEFINED G_TARGET)
     if(${G_PRE_BUILD})
