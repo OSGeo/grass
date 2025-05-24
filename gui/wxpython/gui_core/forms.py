@@ -13,7 +13,7 @@ Classes:
  - forms::GrassGUIApp
 
 This program is just a coarse approach to automatically build a GUI
-from a xml-based GRASS user interface description.
+from an xml-based GRASS user interface description.
 
 You need to have Python 2.4, wxPython 2.8 and python-xml.
 
