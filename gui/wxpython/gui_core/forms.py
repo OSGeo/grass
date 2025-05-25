@@ -332,6 +332,7 @@ class UpdateThread(Thread):
                         "vector": map,
                         "layer": layer,
                         "dbInfo": cparams[map]["dbInfo"],
+                        "setDefaultValue": False,
                     }
                 # table
                 elif driver and db:
@@ -339,10 +340,12 @@ class UpdateThread(Thread):
                         "table": pTable.get("value"),
                         "driver": driver,
                         "database": db,
+                        "setDefaultValue": False,
                     }
                 elif pTable:
                     self.data[win.GetParent().InsertTableColumns] = {
-                        "table": pTable.get("value")
+                        "table": pTable.get("value"),
+                        "setDefaultValue": False,
                     }
 
             elif name == "SubGroupSelect":
