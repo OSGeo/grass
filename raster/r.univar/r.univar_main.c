@@ -381,6 +381,9 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
 #pragma omp parallel private(row, c_sum, c_sumsq, c_sum_abs)
     {
         int t_id = 0;
+        c_sum = 0;
+        c_sumsq = 0;
+        c_sum_abs = 0;
 #if defined(_OPENMP)
         t_id = omp_get_thread_num();
 #endif
