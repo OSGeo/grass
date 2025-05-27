@@ -906,14 +906,15 @@ class GMFrame(wx.Frame):
         # add map display panel to notebook and make it current
         self.mainnotebook.AddPage(gmodeler_panel, _("Graphical Modeler"))
 
-    def OnNewJupyterNotebook(self, event=None, cmd=None):
-        """Launch Jupyter Notebook page. See OnIClass documentation"""
+    def OnJupyterNotebook(self, event=None, cmd=None):
+        """Launch Jupyter Notebook page. See OnJupyterNotebook documentation"""
         from jupyter_notebook.panel import JupyterPanel
 
         jupyter_panel = JupyterPanel(
             parent=self, giface=self._giface, statusbar=self.statusbar, dockable=True
         )
-        jupyter_panel.SetUpPage()
+        jupyter_panel.SetUpPage(self, self.mainnotebook)
+        jupyter_panel.SetUpNotebookInterface()
 
         # add map display panel to notebook and make it current
         self.mainnotebook.AddPage(jupyter_panel, _("Jupyter Notebook"))
@@ -2417,6 +2418,10 @@ class GMFrame(wx.Frame):
             if hasattr(event, "Veto"):
                 event.Veto()
             return
+
+        from grass.workflows import JupyterServerRegistry
+
+        JupyterServerRegistry.get().stop_all_servers()
 
         self.DisplayCloseAll()
 

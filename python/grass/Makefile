@@ -14,7 +14,7 @@ SUBDIRS = \
 	gunittest \
 	imaging \
 	jupyter \
-	notebooks \
+	workflows \
 	pydispatch \
 	pygrass \
 	script \
