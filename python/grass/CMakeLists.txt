@@ -2,6 +2,7 @@ set(PYDIRS
     benchmark
     exceptions
     grassdb
+    workflows
     gunittest
     imaging
     jupyter

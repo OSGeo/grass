@@ -202,34 +202,27 @@ class LMToolsToolbar(AuiToolbar):
             "newdisplay": MetaIcon(
                 img="monitor-create", label=_("Start new map display")
             ),
-            "newjupyter": MetaIcon(
-                img="monitor-create", label=_("Jupyter Notebook Console")
-            ),
             "mapcalc": MetaIcon(
                 img="raster-calculator", label=_("Raster Map Calculator")
             ),
-            "modeler": MetaIcon(img="modeler-main", label=_("Graphical Modeler")),
             "georectify": MetaIcon(img="georectify", label=_("Georectifier")),
             "composer": MetaIcon(img="print-compose", label=_("Cartographic Composer")),
-            "script-load": MetaIcon(
-                img="script-load", label=_("Launch user-defined script")
-            ),
+            "modeler": MetaIcon(img="modeler-main", label=_("Open Graphical Modeler")),
             "python": MetaIcon(
                 img="python", label=_("Open a simple Python code editor")
+            ),
+            "jupyter": MetaIcon(img="jupyter", label=_("Start Jupyter Notebook")),
+            "script-load": MetaIcon(
+                img="script-load", label=_("Launch user-defined script")
             ),
         }
 
         return self._getToolbarData(
             (
                 (
-                    ("newdisplay", _("New display")),
+                    ("newdisplay", icons["newdisplay"].label),
                     icons["newdisplay"],
                     self.parent.OnNewDisplay,
-                ),
-                (
-                    ("newjupyter", _("New jupyter notebook")),
-                    icons["newjupyter"],
-                    self.parent.OnNewJupyterNotebook,
                 ),
                 (None,),
                 (
@@ -243,25 +236,30 @@ class LMToolsToolbar(AuiToolbar):
                     self.parent.OnGCPManager,
                 ),
                 (
-                    ("modeler", icons["modeler"].label),
-                    icons["modeler"],
-                    self.parent.OnGModeler,
-                ),
-                (
                     ("mapOutput", icons["composer"].label),
                     icons["composer"],
                     self.parent.OnPsMap,
                 ),
                 (None,),
                 (
-                    ("script-load", icons["script-load"].label),
-                    icons["script-load"],
-                    self.parent.OnRunScript,
+                    ("modeler", icons["modeler"].label),
+                    icons["modeler"],
+                    self.parent.OnGModeler,
                 ),
                 (
                     ("python", _("Python code editor")),
                     icons["python"],
                     self.parent.OnSimpleEditor,
+                ),
+                (
+                    ("jupyter", icons["jupyter"].label),
+                    icons["jupyter"],
+                    self.parent.OnJupyterNotebook,
+                ),
+                (
+                    ("script-load", icons["script-load"].label),
+                    icons["script-load"],
+                    self.parent.OnRunScript,
                 ),
             )
         )
