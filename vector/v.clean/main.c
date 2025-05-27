@@ -341,7 +341,7 @@ int main(int argc, char *argv[])
      */
 
     for (i = 0; i < ntools; i++) {
-        G_important_message(_("Rebuilding parts of topology..."));
+        G_message(_("Rebuilding parts of topology..."));
         if (tools[i] == TOOL_RMDAC || tools[i] == TOOL_PRUNE ||
             tools[i] == TOOL_RMAREA) {
             Vect_build_partial(&Out, GV_BUILD_CENTROIDS);
