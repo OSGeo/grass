@@ -2026,7 +2026,7 @@ def legal_name(s):
 
     This is the Python implementation of :func:`G_legal_filename()` function.
 
-    ..note::
+    .. note::
 
         It is not clear when exactly use this function, but it might be
         useful anyway for checking map names and column names.
