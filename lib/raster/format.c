@@ -190,7 +190,12 @@ static int write_row_ptrs(int nrows, off_t *row_ptr, int fd)
     unsigned char *buf, *b;
     int len, row, result;
 
-    lseek(fd, 0L, SEEK_SET);
+    if (lseek(fd, 0L, SEEK_SET) == (off_t)-1) {
+        int err = errno;
+        /* GTC seek refers to reading/writing from a different position
+         * in a file */
+        G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+    }
 
     len = (nrows + 1) * nbytes + 1;
     b = buf = G_malloc(len);

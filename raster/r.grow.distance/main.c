@@ -387,7 +387,12 @@ int main(int argc, char **argv)
 
         G_percent(row, nrows, 2);
 
-        lseek(temp_fd, offset, SEEK_SET);
+        if (lseek(temp_fd, offset, SEEK_SET) == (off_t)-1) {
+            int err = errno;
+            /* GTC seek refers to reading/writing from a different position
+             * in a file */
+            G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+        }
 
         if (read(temp_fd, new_x_row, ncols * sizeof(CELL)) < 0)
             G_fatal_error(_("File reading error in %s() %d:%s"), __func__,

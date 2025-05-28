@@ -22,6 +22,9 @@
 #include <unistd.h>
 #include <math.h>
 #include <time.h>
+#include <string.h>
+#include <errno.h>
+
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
@@ -421,7 +424,12 @@ CELL cluster_bands(struct globals *globals)
         G_fatal_error(_("Too many objects: integer overflow"));
 
     /* rewind temp file */
-    lseek(cfd, 0, SEEK_SET);
+    if (lseek(cfd, 0, SEEK_SET) == (off_t)-1) {
+        int err = errno;
+        /* GTC seek refers to reading/writing from a different position
+         * in a file */
+        G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+    }
 
     /****************************************************
      *                      PASS 2                      *

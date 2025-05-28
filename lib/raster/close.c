@@ -396,6 +396,12 @@ static int close_new(int fd, int ok)
         if (fcb->null_row_ptr) { /* compressed nulls */
             fcb->null_row_ptr[fcb->cellhd.rows] =
                 lseek(fcb->null_fd, 0L, SEEK_CUR);
+            if (fcb->null_row_ptr[fcb->cellhd.rows] == (off_t)-1) {
+                int err = errno;
+                /* GTC seek refers to reading/writing from a different position
+                 * in a file */
+                G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+            }
             Rast__write_null_row_ptrs(fd, fcb->null_fd);
         }
 
