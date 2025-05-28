@@ -544,7 +544,7 @@ def init(raise_fatal_error: bool = False, skip_db_version_check: bool = False):
      - GRASS_TGIS_PROFILE (True, False, 1, 0)
      - GRASS_TGIS_RAISE_ON_ERROR (True, False, 1, 0)
 
-     ..warning::
+     .. warning::
 
          This functions must be called before any spatio-temporal processing
          can be started
