@@ -2,6 +2,9 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <string.h>
+#include <errno.h>
+
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/rbtree.h> /* Red Black Tree library functions */
@@ -147,7 +150,12 @@ static int update_cid_box(int cfd, int rowmin, int rowmax, int colmin,
 
     for (row = rowmin; row <= rowmax; row++) {
         coffset = (off_t)row * csize + colmin * sizeof(CELL);
-        lseek(cfd, coffset, SEEK_SET);
+        if (lseek(cfd, coffset, SEEK_SET) == (off_t)-1) {
+            int err = errno;
+            /* GTC seek refers to reading/writing from a different position
+             * in a file */
+            G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+        }
         if (read(cfd, cbuf, csizebox) != csizebox)
             G_fatal_error(_("Unable to read from temp file"));
 
@@ -158,7 +166,12 @@ static int update_cid_box(int cfd, int rowmin, int rowmax, int colmin,
             cp++;
         }
 
-        lseek(cfd, coffset, SEEK_SET);
+        if (lseek(cfd, coffset, SEEK_SET) == (off_t)-1) {
+            int err = errno;
+            /* GTC seek refers to reading/writing from a different position
+             * in a file */
+            G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+        }
         if (write(cfd, cbuf, csizebox) != csizebox)
             G_fatal_error(_("Unable to write to temp file"));
     }
@@ -247,7 +260,13 @@ static int find_best_neighbour(int bfd, int nin, DCELL *rng, int cfd, int csize,
 
             if (crow != rown) {
                 coffset = (off_t)rown * csize;
-                lseek(cfd, coffset, SEEK_SET);
+                if (lseek(cfd, coffset, SEEK_SET) == (off_t)-1) {
+                    int err = errno;
+                    /* GTC seek refers to reading/writing from a different
+                     * position in a file */
+                    G_fatal_error(_("Unable to seek: %d %s"), err,
+                                  strerror(err));
+                }
                 if (read(cfd, cbuf, csize) != csize)
                     G_fatal_error(_("Unable to read from temp file"));
                 crow = rown;
@@ -281,14 +300,26 @@ static int find_best_neighbour(int bfd, int nin, DCELL *rng, int cfd, int csize,
                         if (!have_Ri) {
                             boffset = (off_t)sizeof(DCELL) *
                                       (next.row * ncols + next.col);
-                            lseek(bfd, boffset, SEEK_SET);
+                            if (lseek(bfd, boffset, SEEK_SET) == (off_t)-1) {
+                                int err = errno;
+                                /* GTC seek refers to reading/writing from a
+                                 * different position in a file */
+                                G_fatal_error(_("Unable to seek: %d %s"), err,
+                                              strerror(err));
+                            }
                             if (read(bfd, val, bsize) != bsize)
                                 G_fatal_error(
                                     _("Unable to read from temp file"));
                             have_Ri = 1;
                         }
                         boffset = (off_t)sizeof(DCELL) * (rown * ncols + coln);
-                        lseek(bfd, boffset, SEEK_SET);
+                        if (lseek(bfd, boffset, SEEK_SET) == (off_t)-1) {
+                            int err = errno;
+                            /* GTC seek refers to reading/writing from a
+                             * different position in a file */
+                            G_fatal_error(_("Unable to seek: %d %s"), err,
+                                          strerror(err));
+                        }
                         if (read(bfd, valn, bsize) != bsize)
                             G_fatal_error(_("Unable to read from temp file"));
 
@@ -413,7 +444,12 @@ int merge_small_clumps(int *in_fd, int nin, DCELL *rng, int diag, int minsize,
         clumpid[i] = 0;
 
     /* rewind temp file */
-    lseek(cfd, 0, SEEK_SET);
+    if (lseek(cfd, 0, SEEK_SET) == (off_t)-1) {
+        int err = errno;
+        /* GTC seek refers to reading/writing from a different position
+         * in a file */
+        G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+    }
 
     G_message(_("Merging clumps smaller than %d cells..."), minsize);
 
@@ -442,7 +478,12 @@ int merge_small_clumps(int *in_fd, int nin, DCELL *rng, int diag, int minsize,
 
             /* read clump id */
             coffset = (off_t)row * csize + col * size1;
-            lseek(cfd, coffset, SEEK_SET);
+            if (lseek(cfd, coffset, SEEK_SET) == (off_t)-1) {
+                int err = errno;
+                /* GTC seek refers to reading/writing from a different position
+                 * in a file */
+                G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+            }
             if (read(cfd, &this_id, size1) != size1)
                 G_fatal_error(_("Unable to read from temp file"));
 
@@ -510,7 +551,12 @@ int merge_small_clumps(int *in_fd, int nin, DCELL *rng, int diag, int minsize,
     G_message(_("Renumbering remaining %d clumps..."), n_clumps_new);
 
     /* rewind temp file */
-    lseek(cfd, 0, SEEK_SET);
+    if (lseek(cfd, 0, SEEK_SET) == (off_t)-1) {
+        int err = errno;
+        /* GTC seek refers to reading/writing from a different position
+         * in a file */
+        G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+    }
 
     for (row = 0; row < nrows; row++) {
         G_percent(row, nrows, 4);

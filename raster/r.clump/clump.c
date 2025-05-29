@@ -94,8 +94,11 @@ static CELL do_renumber(int *in_fd, DCELL *rng, int nin, int diag, int minsize,
             G_percent(row, nrows, 2);
 
             coffset = (off_t)row * csize;
-            if (lseek(cfd, coffset, SEEK_SET) == -1) {
-                G_fatal_error(_("Unable to seek: %s"), strerror(errno));
+            if (lseek(cfd, coffset, SEEK_SET) == (off_t)-1) {
+                int err = errno;
+                /* GTC seek refers to reading/writing from a different position
+                 * in a file */
+                G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
             }
             if (read(cfd, cur_clump, csize) != csize)
                 G_fatal_error(_("Unable to read from temp file"));
@@ -112,8 +115,12 @@ static CELL do_renumber(int *in_fd, DCELL *rng, int nin, int diag, int minsize,
                 temp_clump++;
             }
             if (do_write) {
-                if (lseek(cfd, coffset, SEEK_SET) == -1) {
-                    G_fatal_error(_("Unable to seek: %s"), strerror(errno));
+                if (lseek(cfd, coffset, SEEK_SET) == (off_t)-1) {
+                    int err = errno;
+                    /* GTC seek refers to reading/writing from a different
+                     * position in a file */
+                    G_fatal_error(_("Unable to seek: %d %s"), err,
+                                  strerror(err));
                 }
                 if (write(cfd, cur_clump, csize) != csize)
                     G_fatal_error(_("Unable to write to temp file"));
@@ -141,7 +148,12 @@ static CELL do_renumber(int *in_fd, DCELL *rng, int nin, int diag, int minsize,
      * using instead the temp file with initial clump labels */
 
     /* rewind temp file */
-    lseek(cfd, 0, SEEK_SET);
+    if (lseek(cfd, 0, SEEK_SET) == (off_t)-1) {
+        int err = errno;
+        /* GTC seek refers to reading/writing from a different position
+         * in a file */
+        G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+    }
 
     cur_clump = Rast_allocate_c_buf();
     out_cell = Rast_allocate_c_buf();

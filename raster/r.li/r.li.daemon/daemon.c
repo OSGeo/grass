@@ -738,7 +738,12 @@ int write_raster(int mv_fd, int random_access, struct g_area *g)
     center = g->sf_x + ((int)g->cl / 2);
 
     file_buf = G_malloc(cols * sizeof(double));
-    lseek(random_access, 0, SEEK_SET);
+    if (lseek(random_access, 0, SEEK_SET) == (off_t)-1) {
+        int err = errno;
+        /* GTC seek refers to reading/writing from a different position
+         * in a file */
+        G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+    }
 
     cell_buf = Rast_allocate_d_buf();
     Rast_set_d_null_value(cell_buf, Rast_window_cols() + 1);
