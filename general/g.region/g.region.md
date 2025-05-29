@@ -438,7 +438,7 @@ center latitude: 35.736431420327719
 ```
 
 To convert region bbox to wgs84 decimal degrees bbox, use the **g.region**
-command with the `-ubg` flags and JSON output format:
+command with the `-bg` flags and JSON output format:
 
 ```python
 import grass.script as gs
