@@ -31,7 +31,9 @@ build_library_in_subdir(
   PROJ::proj
   grass_gis
   grass_gproj
-  grass_parson)
+  grass_parson
+  OPTIONAL_DEPENDS
+  OPENMP)
 
 if(TARGET LAPACKE)
   target_link_libraries(grass_raster PRIVATE LAPACKE)
