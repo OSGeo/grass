@@ -525,10 +525,10 @@ int output_data(int tt, double ft UNUSED, const Setup *setup,
             &hist, "init.walk=%d, maxwalk=%d, remaining walkers=%d", sim->nwalk,
             sim->maxwa, sim->nwalka);
 
-        // duratoin (sec.): Total simulation time in seconds
-        // time-serie iteration: Number of iterations (cells)
+        // duration (sec.): Total simulation time in seconds
+        // time-series iteration: Number of iterations (cells)
         Rast_append_format_history(
-            &hist, "duration (sec.)=%d, time-serie iteration=%d",
+            &hist, "duration (sec.)=%d, time-series iteration=%d",
             settings->timesec, tt);
 
         // written deltap: Time step for water (s)
@@ -577,10 +577,10 @@ int output_data(int tt, double ft UNUSED, const Setup *setup,
             &hist, "init.walkers=%d, maxwalk=%d, rem. walkers=%d", sim->nwalk,
             sim->maxwa, sim->nwalka);
 
-        // duratoin (sec.): Total simulation time in seconds
-        // time-serie iteration: Number of iterations (cells)
+        // duration (sec.): Total simulation time in seconds
+        // time-series iteration: Number of iterations (cells)
         Rast_append_format_history(
-            &hist, "duration (sec.)=%d, time-serie iteration=%d",
+            &hist, "duration (sec.)=%d, time-series iteration=%d",
             settings->timesec, tt);
 
         // written deltap: Time step for water (s)
