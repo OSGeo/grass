@@ -11,6 +11,9 @@
  *               for details.
  *
  *****************************************************************************/
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 
 #include <unistd.h>
 #include <stdio.h>
@@ -59,10 +62,11 @@ static expr_list *parse_file(const char *filename)
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct Option *expr, *file, *seed, *region;
+    struct Option *expr, *file, *seed, *region, *nprocs;
     struct Flag *random, *describe;
     int all_ok;
     char *desc;
+    int threads = 1;
 
     G_gisinit(argv[0]);
 
@@ -115,9 +119,10 @@ int main(int argc, char **argv)
     describe->key = 'l';
     describe->description = _("List input and output maps");
 
-    if (argc == 1) {
-        char **p = G_malloc(3 * sizeof(char *));
+    nprocs = G_define_standard_option(G_OPT_M_NPROCS);
 
+    char **p = G_malloc(3 * sizeof(char *));
+    if (argc == 1) {
         p[0] = argv[0];
         p[1] = G_store("file=-");
         p[2] = NULL;
@@ -179,10 +184,43 @@ int main(int argc, char **argv)
     }
 
     pre_exec();
+    threads = atoi(nprocs->answer);
+
+/* Determine the number of threads */
+#if defined(_OPENMP)
+    if ((strcmp(argv[0], "r3.mapcalc") == 0) && (threads > 1)) {
+        threads = 1;
+        G_verbose_message(_("r3.mapcalc does not support parallel execution."));
+    }
+    else if (seeded) {
+        threads = 1;
+        G_verbose_message(
+            _("Parallel execution is not supported for random seed."));
+    }
+    else {
+        /* make the maximum num of threads be 4 to avoid I/O overheads from too
+         * many threads */
+        threads = threads > 4 ? 4 : threads;
+        G_verbose_message(_("The default number of threads is %d."), threads);
+    }
+    omp_set_num_threads(threads);
+    G_verbose_message(_("Compute in paralell. Number of threads set to %d."),
+                      threads);
+#else
+    G_verbose_message(_("Compute in searial. OpenMP is not available."));
+#endif
+
     execute(result);
     post_exec();
 
     all_ok = 1;
+
+    // Free nprocs->answer if it is not the default value, "1"
+    if (threads > 1) {
+        G_free(nprocs->answer);
+    }
+    G_free(p);
+    p = NULL;
 
     if (floating_point_exception_occurred) {
         G_warning(_("Floating point error(s) occurred in the calculation"));
