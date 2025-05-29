@@ -413,7 +413,7 @@ g.region -l format=json
 }
 ```
 
-### Python Example
+### Python example
 
 To get the latitude and longitude coordinates of the region center using
 Python, use the `format=json` option along with the `-l` flag:
@@ -432,9 +432,22 @@ print(f"center longitude: {data['center_long']}")
 print(f"center latitude: {data['center_lat']}")
 ```
 
-```sh
+```text
 center longitude: -78.679022655614958
 center latitude: 35.736431420327719
+```
+
+To convert region bbox to wgs84 decimal degrees bbox, use the **g.region**
+command with the `-ubg` flags and JSON output format:
+
+```python
+import grass.script as gs
+
+# Run g.region with -ubg flags and JSON output
+region = gs.parse_command("g.region", quiet=True, flags="ubg", format="json")
+bbox = [region[k] for k in ("ll_w", "ll_s", "ll_e", "ll_n")]
+
+print(f"Region bbox to wgs84 decimal degrees bbox: {bbox}")
 ```
 
 ## SEE ALSO
