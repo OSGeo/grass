@@ -22,7 +22,8 @@ int make_procs(void)
     level = (PS.level != 1) ? 2 : 1;
     fprintf(PS.fp, "/level %d def\n", level);
 
-    snprintf(filename, sizeof(filename), "%s/etc/paint/prolog.ps", G_gisbase());
+    snprintf(filename, sizeof(filename), "%s/etc/paint/prolog.ps",
+             G_share_dir());
 
     fp = fopen(filename, "r");
     if (!fp)
