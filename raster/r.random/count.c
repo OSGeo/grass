@@ -98,21 +98,6 @@ void get_stats(struct rr_state *theState)
 
     G_percent(1, 1, 1);
 
-    /* rewind the in raster map descriptor for later use */
-    if (lseek(theState->fd_old, 0, SEEK_SET) == (off_t)-1) {
-        int err = errno;
-        /* GTC seek refers to reading/writing from a different position
-         * in a file */
-        G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
-    }
-    if (theState->docover == 1)
-        if (lseek(theState->fd_cold, 0, SEEK_SET) == (off_t)-1) {
-            int err = errno;
-            /* GTC seek refers to reading/writing from a different position
-             * in a file */
-            G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
-        }
-
     /* Set the NULL value replacement */
     switch (theState->nulls.type) {
     case CELL_TYPE:
