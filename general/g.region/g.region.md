@@ -443,11 +443,10 @@ command with the `-ubg` flags and JSON output format:
 ```python
 import grass.script as gs
 
-# Run g.region with -ubg flags and JSON output
+# Get WGS84 bounding box
 region = gs.parse_command(
     "g.region",
-    quiet=True,
-    flags="ubg",
+    flags="bg",
     format="json",
 )
 bbox = [region[k] for k in ("ll_w", "ll_s", "ll_e", "ll_n")]
