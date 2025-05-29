@@ -444,7 +444,12 @@ command with the `-ubg` flags and JSON output format:
 import grass.script as gs
 
 # Run g.region with -ubg flags and JSON output
-region = gs.parse_command("g.region", quiet=True, flags="ubg", format="json")
+region = gs.parse_command(
+    "g.region",
+    quiet=True,
+    flags="ubg",
+    format="json",
+)
 bbox = [region[k] for k in ("ll_w", "ll_s", "ll_e", "ll_n")]
 
 print(f"Region bbox to wgs84 decimal degrees bbox: {bbox}")
