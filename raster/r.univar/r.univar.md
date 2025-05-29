@@ -113,7 +113,7 @@ third_quartile=126.792
 percentile_98=147.727
 ```
 
-Here's how to calculate univariate statistics for the `elevation` raster map
+Here's how to calculate percentiles for the `elevation` raster map
 from the North Carolina sample dataset using Python:
 
 ```python
@@ -125,36 +125,18 @@ stats = gs.parse_command(
     "r.univar",
     map="elevation",
     flags="e",
-    percentile="98",
+    percentile=[90, 95, 98],
     format="json",
 )
 
-# Print all stats, handling percentiles specially
-for key, value in stats.items():
-    if key == "percentiles":
-        for p in value:
-            print(f"percentile_{p['percentile']}: {p['value']}")
-    else:
-        print(f"{key}: {value}")
+for p in stats["percentiles"]:
+    print(f"percentile_{p['percentile']}: {p['value']}")
 ```
 
 ```sh
-n: 2025000
-null_cells: 0
-cells: 2025000
-min: 55.5787925720215
-max: 156.329864501953
-range: 100.751071929932
-mean: 110.375440275606
-mean_of_abs: 110.375440275606
-stddev: 20.3153233205981
-variance: 412.712361620436
-coeff_var: 18.4056555243368
-sum: 223510266.558102
-first_quartile: 94.79
-median: 108.88
-third_quartile: 126.792
-percentile_98: 147.727
+percentile_90: 128.5538330078125
+percentile_95: 130.60475158691406
+percentile_98: 132.13844299316406
 ```
 
 ### Zonal statistics
