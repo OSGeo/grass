@@ -444,7 +444,7 @@ class TestSlopeAspectEdge(TestCase):
             slope=self.slope_threaded,
             nprocs=8,
         )
-        values = "null_cells=5696\nmean=3.86452"
+        values = "null_cells=5696\nmean=3.86452240667335"
         self.assertRasterFitsUnivar(
             raster=self.slope, reference=values, precision=self.precision
         )
@@ -462,7 +462,7 @@ class TestSlopeAspectEdge(TestCase):
             flags="e",
             nprocs=8,
         )
-        values = "null_cells=0\nmean=3.86119"
+        values = "null_cells=0\nmean=3.86118542369876"
         self.assertRasterFitsUnivar(
             raster=self.slope_edge, reference=values, precision=self.precision
         )
