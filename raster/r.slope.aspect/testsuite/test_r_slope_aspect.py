@@ -237,12 +237,14 @@ class TestSlopeAspectAgainstReference(TestCase):
         )
         # check against reference data
         self.assertRastersNoDifference(
-            actual=self.aspect, reference=self.ref_aspect, precision=0.0001
+            actual=self.aspect,
+            reference=self.ref_aspect,
+            precision=0.0001,  # TODO: Use a smaller threshold or self.precision
         )
         self.assertRastersNoDifference(
             actual=self.aspect_threaded,
             reference=self.ref_aspect,
-            precision=0.0001,
+            precision=0.0001,  # TODO: Use a smaller threshold or self.precision
         )
 
 
