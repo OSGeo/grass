@@ -135,7 +135,7 @@ class TestSlopeAspectAgainstReference(TestCase):
     """
 
     # precision for comparisons
-    precision = 0.0001
+    precision = 0.00000001
     ref_aspect = "reference_aspect"
     aspect = "fractal_aspect"
     aspect_threaded = "fractal_aspect_threaded"
@@ -247,7 +247,7 @@ class TestSlopeAspectAgainstReference(TestCase):
 
 
 class TestSlopeAspectAgainstItself(TestCase):
-    precision = 0.0000001
+    precision = 0.00000001
     elevation = "elevation"
 
     t_aspect = "sa_together_aspect"
@@ -409,7 +409,7 @@ class TestSlopeAspectEdge(TestCase):
     """
 
     # precision for comparisons
-    precision = 0.0001
+    precision = 0.00000001
     slope = "elevation_slope"
     slope_threaded = "elevation_slope_threaded"
     slope_edge = "elevation_slope_edge"
@@ -477,7 +477,7 @@ class TestSlopeAspectAllOutputs(TestCase):
     """
 
     # precision for comparisons
-    precision = 0.0001
+    precision = 0.00000001
     slope = "elevation_slope"
     slope_threaded = "elevation_slope_threaded"
     aspect = "elevation_aspect"
