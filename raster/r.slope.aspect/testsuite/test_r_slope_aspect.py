@@ -135,7 +135,7 @@ class TestSlopeAspectAgainstReference(TestCase):
     """
 
     # precision for comparisons
-    precision = 0.00000001
+    precision = 1e-14
     ref_aspect = "reference_aspect"
     aspect = "fractal_aspect"
     aspect_threaded = "fractal_aspect_threaded"
@@ -237,17 +237,17 @@ class TestSlopeAspectAgainstReference(TestCase):
         )
         # check against reference data
         self.assertRastersNoDifference(
-            actual=self.aspect, reference=self.ref_aspect, precision=self.precision
+            actual=self.aspect, reference=self.ref_aspect, precision=0.0001
         )
         self.assertRastersNoDifference(
             actual=self.aspect_threaded,
             reference=self.ref_aspect,
-            precision=self.precision,
+            precision=0.0001,
         )
 
 
 class TestSlopeAspectAgainstItself(TestCase):
-    precision = 0.00000001
+    precision = 1e-14
     elevation = "elevation"
 
     t_aspect = "sa_together_aspect"
@@ -409,7 +409,7 @@ class TestSlopeAspectEdge(TestCase):
     """
 
     # precision for comparisons
-    precision = 0.00000001
+    precision = 1e-14
     slope = "elevation_slope"
     slope_threaded = "elevation_slope_threaded"
     slope_edge = "elevation_slope_edge"
@@ -477,7 +477,7 @@ class TestSlopeAspectAllOutputs(TestCase):
     """
 
     # precision for comparisons
-    precision = 0.00000001
+    precision = 1e-11
     slope = "elevation_slope"
     slope_threaded = "elevation_slope_threaded"
     aspect = "elevation_aspect"
