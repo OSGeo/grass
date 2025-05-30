@@ -55,3 +55,79 @@ jobs:
         run: |
           echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
           echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
+  update-i18n:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Create URL to the run output
+        id: vars
+        run: echo "run-url=https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" >> $GITHUB_OUTPUT
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y --no-install-recommends --no-install-suggests \
+            gettext \
+            libgdal-dev \
+            libproj-dev
+      - name: Configure grass with minimal packages
+        run: |
+          ./configure \
+            --with-nls \
+            --without-cairo \
+            --without-fftw \
+            --without-freetype \
+            --without-opengl \
+            --without-pdal
+      - name: Build grass core
+        run: make -j$(nproc)
+      - name: Create .pot files (containing original messages)
+        run: cd locale && make pot
+      - name: Merge new messages
+        run: cd locale && make update-po
+      - name: Verify the .po files
+        run: cd locale && make verify
+      - name: Preview changed files
+        run: git diff | head -n2000
+      # The POT-Creation-Date gets updated by xgettext with the latest
+      # version-controlled modification time among all the given input files.
+      - name: Preview changed files, except for the POT-Creation-Date
+        run: |
+          git diff --ignore-matching-lines=^\"POT-Creation-Date:  | head -n2000
+      - name: Get if files were updated
+        id: changed-files
+        continue-on-error: true
+        run: |
+          git diff --exit-code --quiet --ignore-matching-lines=^\"POT-Creation-Date:
+      - name: Translation files were changed
+        if: ${{ steps.changed-files.outcome == 'failure' }}
+        run: echo "Translation files were changed"
+      - name: Translation files were not changed
+        if: ${{ steps.changed-files.outcome == 'success' }}
+        run: echo "Translation files were not changed"
+      - name: Double check if files are modified
+        run: git status --ignored
+      - name: Create Pull Request
+        if: ${{ steps.changed-files.outcome == 'failure' }}
+        id: cpr
+        uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7.0.8
+        with:
+          commit-message: "locale: Update translation files"
+          branch: periodic/update-i18n
+          title: "locale: Update translation files"
+          body: |
+            This updates the .pot template files, as well as all language-specific .po files.
+            [Workflow run summary](${{ steps.vars.outputs.run-url }})
+
+            Automated changes by [create-pull-request](https://github.com/peter-evans/create-pull-request) GitHub action
+      - name: Check outputs
+        if: ${{ steps.changed-files.outcome == 'failure' && steps.cpr.outputs.pull-request-number }}
+        run: |
+          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"

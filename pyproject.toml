@@ -348,6 +348,9 @@ ignore = [
 "grass.script" = "gs"
 "grass.temporal" = "tgis"
 
+[tool.ruff.format]
+docstring-code-format = true
+
 [tool.pytest.ini_options]
 addopts = """
     --ignore-glob='dist.*'
