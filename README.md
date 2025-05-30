@@ -88,7 +88,7 @@ For using and building a GRASS docker image, see [docker/README.md](docker/READM
 
 ## Further documents
 
-- [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md)
+- [NumFOCUS Code of Conduct](CODE_OF_CONDUCT.md)
 - [Roadmap](https://grass.osgeo.org/about/roadmap/)
 - [Governance](https://grass.osgeo.org/about/governance/)
 
