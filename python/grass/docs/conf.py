@@ -92,9 +92,6 @@ grass_version = core.version()["version"]
 today = date.today()
 
 copy("_templates/layout.html.template", "_templates/layout.html")
-with open("_templates/layout.html", "a") as f:
-    f.write(footer_tmpl.substitute(grass_version=grass_version, year=today.year))
-    f.close()
 
 # -- General configuration -----------------------------------------------------
 
@@ -128,7 +125,7 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = "Python library documentation"
+project = "GRASS Python Library"
 copyright = "2025, GRASS Development Team"
 
 # The version info for the project you're documenting, acts as replacement for
@@ -183,31 +180,80 @@ pygments_style = "sphinx"
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = "traditional"
+html_theme = "sphinx_material"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-# html_theme_options = {}
+html_theme_options = {
+    "nav_title": "GRASS Python Docs",
+    "repo_url": "https://github.com/OSGeo/grass/",
+    "repo_name": "GRASS",
+    "repo_type": "github",
+    "logo": "grass_logo.svg",
+    # Visible levels of the global TOC; -1 means unlimited
+    "globaltoc_depth": 1,
+    # If False, expand all TOC entries
+    "globaltoc_collapse": True,
+    # If True, show hidden TOC entries
+    "globaltoc_includehidden": False,
+    "touch_icon": "grass_logo.png",
+    "color_primary": "grass-green",
+    "color_accent": "grass-green",
+    "version_dropdown": False,
+    "localtoc_label_text": "Table of contents",
+    "nav_links": [
+        {
+            "href": "script_intro",
+            "title": "Scripting API",
+            "internal": True,
+        },
+        {
+            "href": "pygrass_index",
+            "title": "PyGRASS API",
+            "internal": True,
+        },
+        {
+            "href": "temporal_framework",
+            "title": "Temporal Framework",
+            "internal": True,
+        },
+        {
+            "href": "grass.jupyter",
+            "title": "Jupyter API",
+            "internal": True,
+        },
+        {
+            "href": "gunittest_testing",
+            "title": "Testing",
+            "internal": True,
+        },
+        {
+            "href": "exceptions",
+            "title": "Exceptions",
+            "internal": True,
+        },
+    ],
+}
 
 # Add any paths that contain custom themes here, relative to this directory.
 # html_theme_path = []
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-# html_title = None
+html_title = "GRASS Python Library Documentation"
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
-# html_short_title = None
+html_short_title = "Get Started"
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-# html_logo = None
-
+html_logo = "_static/grass_logo.svg"
+logo_url = "_static/grass_logo.svg"
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-# html_favicon = None
+html_favicon = "_static/favicon.ico"
 
 # The base URL which points to the root of the HTML documentation. It is used
 # to indicate the location of document using the Canonical Link Relation.
@@ -217,7 +263,6 @@ html_baseurl = "https://grass.osgeo.org/grass-stable/manuals/libpython/"
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
-
 # Add any extra paths that contain custom files (such as robots.txt or
 # .htaccess) here, relative to this directory. These files are copied
 # directly to the root of the documentation.
@@ -232,7 +277,15 @@ html_static_path = ["_static"]
 # html_use_smartypants = True
 
 # Custom sidebar templates, maps document names to template names.
-html_sidebars = {"**": ["localtoc.html", "relations.html", "searchbox.html"]}
+html_sidebars = {
+    "**": [
+        "logo-text.html",
+        "globaltoc.html",
+        "localtoc.html",
+        "relations.html",
+        "searchbox.html",
+    ]
+}
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
