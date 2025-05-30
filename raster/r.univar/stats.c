@@ -88,7 +88,7 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
     JSON_Array *root_array;
     JSON_Object *zone_object;
 
-    if (format == JSON) {
+    if (format == JSON && zone_info.n_zones) {
         root_value = json_value_init_array();
         if (root_value == NULL) {
             G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
@@ -147,6 +147,10 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
         if (param.shell_style->answer || format == JSON) {
             if (format == JSON) {
                 zone_value = json_value_init_object();
+                if (zone_value == NULL) {
+                    G_fatal_error(
+                        _("Failed to initialize JSON object. Out of memory?"));
+                }
                 zone_object = json_object(zone_value);
             }
             if (zone_info.n_zones) {
@@ -158,9 +162,9 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
                             Rast_get_c_cat(&z_cat, &(zone_info.cats)));
                     break;
                 case JSON:
-                    json_object_set_number(zone_object, "zone_number", z_cat);
+                    json_object_set_number(zone_object, "zone", z_cat);
                     json_object_set_string(
-                        zone_object, "zone_category",
+                        zone_object, "zone_label",
                         Rast_get_c_cat(&z_cat, &(zone_info.cats)));
                     break;
                 }
@@ -314,6 +318,10 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
 
                 if (format == JSON) {
                     percentiles_array_value = json_value_init_array();
+                    if (percentiles_array_value == NULL) {
+                        G_fatal_error(_(
+                            "Failed to initialize JSON array. Out of memory?"));
+                    }
                     percentiles_array = json_array(percentiles_array_value);
                 }
 
@@ -329,6 +337,10 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
                         break;
                     case JSON:
                         percentile_value = json_value_init_object();
+                        if (percentile_value == NULL) {
+                            G_fatal_error(_("Failed to initialize JSON object. "
+                                            "Out of memory?"));
+                        }
                         percentile_object = json_object(percentile_value);
                         json_object_set_number(percentile_object, "percentile",
                                                stats[z].perc[i]);
@@ -389,19 +401,32 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
          * above with zone */
         /* if (!(param.shell_style->answer))
            G_message("\n"); */
-        if (format == JSON) {
+        if (format == JSON && zone_info.n_zones) {
             json_array_append_value(root_array, zone_value);
         }
     }
 
     if (format == JSON) {
-        char *serialized_string = json_serialize_to_string_pretty(root_value);
+        char *serialized_string = NULL;
+        if (zone_info.n_zones) {
+            serialized_string = json_serialize_to_string_pretty(root_value);
+        }
+        else {
+            serialized_string = json_serialize_to_string_pretty(zone_value);
+        }
+
         if (serialized_string == NULL) {
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         }
         puts(serialized_string);
         json_free_serialized_string(serialized_string);
-        json_value_free(root_value);
+
+        if (zone_info.n_zones) {
+            json_value_free(root_value);
+        }
+        else {
+            json_value_free(zone_value);
+        }
     }
 
     return 1;
