@@ -240,12 +240,7 @@ class TestRasterreport(TestCase):
             mapset="PERMANENT",
             input=self.input,
             flags="p",
-        )
-
-        # Replacing '\r' because Windows uses '\r\n' for line endings, but we
-        # want to remove the '\r' (carriage return) to standardize line endings
-        result = result.replace("\r", "")
-        result_lines = [line for line in result.split("\n") if line.strip() != ""]
+        ).splitlines()
 
         expected = [
             "Source cols: 1500",
@@ -256,7 +251,7 @@ class TestRasterreport(TestCase):
             "Local east: 78:36:29.891436W",
         ]
 
-        self.assertListEqual(result_lines, expected, "Mismatch in print output (plain)")
+        self.assertListEqual(result, expected, "Mismatch in print output (plain)")
 
     def test_print_output_json(self):
         """Test printing input map bounds in the current projection (JSON format)."""

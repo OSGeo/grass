@@ -21,7 +21,7 @@ class TestRWhatColor(TestCase):
             "r.what.color", input=self.input, flags="i", stdin=self.value
         )
         self.assertModule(module)
-        result = module.outputs.stdout
+        result = module.outputs.stdout.splitlines()
         expected = [
             "50: *",
             "100: 255:229:0",
@@ -31,11 +31,7 @@ class TestRWhatColor(TestCase):
             "*: *",
         ]
 
-        result_lines = [line for line in result.split("\n") if line.strip() != ""]
-
-        self.assertListEqual(
-            result_lines, expected, "Mismatch in printed output (plain)"
-        )
+        self.assertListEqual(result, expected, "Mismatch in printed output (plain)")
 
     def test_r_what_color_plain_with_format_option(self):
         """Test the r.what.color command with the format option for plain text output."""
@@ -47,7 +43,7 @@ class TestRWhatColor(TestCase):
             format="#%02X%02X%02X",
         )
         self.assertModule(module)
-        result = module.outputs.stdout
+        result = module.outputs.stdout.splitlines()
         expected = [
             "50: *",
             "100: #FFE500",
@@ -57,10 +53,8 @@ class TestRWhatColor(TestCase):
             "*: *",
         ]
 
-        result_lines = [line for line in result.split("\n") if line.strip() != ""]
-
         self.assertListEqual(
-            result_lines,
+            result,
             expected,
             "Mismatch in printed output (plain) with the format option",
         )
