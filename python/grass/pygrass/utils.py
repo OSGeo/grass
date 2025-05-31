@@ -526,30 +526,30 @@ def create_test_stream_network_map(map_name="streams"):
 
     :param map_name: The vector map name that should be used
 
-    .. code-block:: output
+    .. code-block:: none
 
-       1(0,2)  3(2,2)
-        \     /
-       1 \   / 2
-          \ /
-           2(1,1)
-    6(0,1) ||  5(2,1)
-       5 \ || / 4
-          \||/
-           4(1,0)
-           |
-           | 6
-           |7(1,-1)
+           1(0,2)  3(2,2)
+            \     /
+           1 \   / 2
+              \ /
+               2(1,1)
+        6(0,1) ||  5(2,1)
+           5 \ || / 4
+              \||/
+               4(1,0)
+               |
+               | 6
+               |7(1,-1)
 
-       7(0,-1) 8(2,-1)
-        \     /
-       8 \   / 9
-          \ /
-           9(1, -2)
-           |
-           | 10
-           |
-          10(1,-3)
+           7(0,-1) 8(2,-1)
+            \     /
+           8 \   / 9
+              \ /
+               9(1, -2)
+               |
+               | 10
+               |
+              10(1,-3)
     """
 
     from grass.pygrass.vector import VectorTopo
