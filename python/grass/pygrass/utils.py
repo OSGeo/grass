@@ -51,7 +51,7 @@ def findfiles(dirpath, match=None):
 
 
 def findmaps(type, pattern=None, mapset="", location="", gisdbase=""):
-    """Return a list of tuple contining the names of the:
+    """Return a list of tuples containing the names of the:
 
     * map
     * mapset,
