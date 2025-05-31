@@ -1394,13 +1394,16 @@ class STRDSMetadata(STDSRasterMetadataBase):
 
     def get_raster_register(self):
         """Get the raster map register table name
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "raster_register" in self.D:
             return self.D["raster_register"]
         return None
 
     def get_number_of_semantic_labels(self):
         """Get the number of registered semantic labels
+
         :return: None if not found
         """
         if "number_of_semantic_labels" in self.D:
@@ -1411,6 +1414,7 @@ class STRDSMetadata(STDSRasterMetadataBase):
         """Get the distinct semantic labels of registered maps
            The distinct semantic labels are not stored in the metadata table
            and fetched on-the-fly
+
         :return: None if not found
         """
         if get_tgis_db_version_from_metadata() <= 2:
