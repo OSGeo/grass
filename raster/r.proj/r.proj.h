@@ -33,6 +33,8 @@ struct menu {
     char *text;  /* menu display - full description       */
 };
 
+enum OutputFormat { PLAIN, SHELL, JSON };
+
 extern void bordwalk(const struct Cell_head *, struct Cell_head *,
                      const struct pj_info *, const struct pj_info *,
                      const struct pj_info *, int);

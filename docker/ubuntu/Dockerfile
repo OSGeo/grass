@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.14@sha256:4c68376a702446fc3c79af22de146a148bc3367e73c25a5803d453b6b3f722fb
+# syntax=docker/dockerfile:1.16@sha256:e2dd261f92e4b763d789984f6eab84be66ab4f5f08052316d8eb8f173593acf7
 
 # Note: This file must be kept in sync in ./Dockerfile and ./docker/ubuntu/Dockerfile.
 #       Changes to this file must be copied over to the other file.
@@ -27,7 +27,7 @@ ARG DOCUMENTATION="https://github.com/OSGeo/grass/tree/${BRANCH}/docker/README.m
 ARG REF_NAME="grass-gis"
 ARG DIGEST="sha256:340d9b015b194dc6e2a13938944e0d016e57b9679963fdeb9ce021daac430221"
 
-FROM ubuntu:22.04@sha256:ed1544e454989078f5dec1bfdabd8c5cc9c48e0705d07b678ab6ae3fb61952d2 AS common_start
+FROM ubuntu:22.04@sha256:67cadaff1dca187079fce41360d5a7eb6f7dcd3745e53c79ad5efd8563118240 AS common_start
 
 ARG BUILD_DATE
 ARG REVISION

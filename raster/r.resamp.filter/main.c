@@ -495,7 +495,7 @@ int main(int argc, char *argv[])
     nprocs = 1;
 #endif
     if (nprocs > 1 && Rast_mask_is_present()) {
-        G_warning(_("Parallel processing disabled due to active make."));
+        G_warning(_("Parallel processing disabled due to active mask."));
         nprocs = 1;
     }
     if (parm.radius->answer) {
@@ -663,7 +663,8 @@ int main(int argc, char *argv[])
     Rast_close(outfile);
 
     /* record map metadata/history info */
-    sprintf(title, "Filter resample by %s", parm.method->answer);
+    snprintf(title, sizeof(title), "Filter resample by %s",
+             parm.method->answer);
     Rast_put_cell_title(parm.rastout->answer, title);
 
     {

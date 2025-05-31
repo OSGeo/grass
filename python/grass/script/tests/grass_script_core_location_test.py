@@ -46,7 +46,9 @@ def create_and_get_srid(tmp_path):
             "g.gisenv", set=f"LOCATION_NAME={desired_location}", env=session.env
         )
         gs.run_command("g.gisenv", set="MAPSET=PERMANENT", env=session.env)
-        return gs.parse_command("g.proj", flags="g", env=session.env)["srid"]
+        return gs.parse_command("g.proj", flags="p", format="shell", env=session.env)[
+            "srid"
+        ]
 
 
 def test_with_same_path(tmp_path):
@@ -88,7 +90,9 @@ def test_without_session(tmp_path):
     wkt_file = tmp_path / name / "PERMANENT" / "PROJ_WKT"
     assert wkt_file.exists()
     with gs.setup.init(tmp_path / name, env=os.environ.copy()) as session:
-        epsg = gs.parse_command("g.proj", flags="g", env=session.env)["srid"]
+        epsg = gs.parse_command("g.proj", flags="p", format="shell", env=session.env)[
+            "srid"
+        ]
         assert epsg == "EPSG:3358"
 
 
@@ -112,7 +116,9 @@ def test_with_different_path(tmp_path):
             "g.gisenv", set=f"LOCATION_NAME={desired_location}", env=session.env
         )
         gs.run_command("g.gisenv", set="MAPSET=PERMANENT", env=session.env)
-        epsg = gs.parse_command("g.proj", flags="g", env=session.env)["srid"]
+        epsg = gs.parse_command("g.proj", flags="p", format="shell", env=session.env)[
+            "srid"
+        ]
         assert epsg == "EPSG:3358"
 
 
@@ -126,7 +132,9 @@ def test_path_only(tmp_path):
     assert mapset_path.exists()
     assert wkt_file.exists()
     with gs.setup.init(full_path, env=os.environ.copy()) as session:
-        epsg = gs.parse_command("g.proj", flags="g", env=session.env)["srid"]
+        epsg = gs.parse_command("g.proj", flags="p", format="shell", env=session.env)[
+            "srid"
+        ]
         assert epsg == "EPSG:3358"
 
 
@@ -137,7 +145,9 @@ def test_create_project(tmp_path):
     wkt_file = tmp_path / name / "PERMANENT" / "PROJ_WKT"
     assert wkt_file.exists()
     with gs.setup.init(tmp_path / name, env=os.environ.copy()) as session:
-        epsg = gs.parse_command("g.proj", flags="g", env=session.env)["srid"]
+        epsg = gs.parse_command("g.proj", flags="p", format="shell", env=session.env)[
+            "srid"
+        ]
         assert epsg == "EPSG:3358"
 
 

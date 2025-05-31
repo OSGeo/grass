@@ -113,6 +113,32 @@ third_quartile=126.792
 percentile_98=147.727
 ```
 
+Here's how to calculate percentiles for the `elevation` raster map
+from the North Carolina sample dataset using Python:
+
+```python
+import grass.script as gs
+
+# Run the r.univar command with JSON output format, along with extended
+# statistics.
+stats = gs.parse_command(
+    "r.univar",
+    map="elevation",
+    flags="e",
+    percentile=[90, 95, 98],
+    format="json",
+)
+
+for p in stats["percentiles"]:
+    print(f"percentile_{p['percentile']}: {p['value']}")
+```
+
+```sh
+percentile_90: 128.5538330078125
+percentile_95: 130.60475158691406
+percentile_98: 132.13844299316406
+```
+
 ### Zonal statistics
 
 In this example, the raster polygon map `basins` in the North Carolina
@@ -224,35 +250,29 @@ r.univar -e elevation percentile=98 format=json
 will output the results in JSON format:
 
 ```json
-[
-    {
-        "n": 2025000,
-        "null_cells": 0,
-        "cells": 2025000,
-        "min": 55.578792572021484,
-        "max": 156.32986450195312,
-        "range": 100.75107192993164,
-        "mean": 110.37544027560575,
-        "mean_of_abs": 110.37544027560575,
-        "stddev": 20.315323320598083,
-        "variance": 412.7123616204363,
-        "coeff_var": 18.40565552433679,
-        "sum": 223510266.55810165,
-        "first_quartile": 94.789985656738281,
-        "median": 108.87990570068359,
-        "third_quartile": 126.79196929931641,
-         "percentiles": [
-            {
-                "percentile": 98,
-                "value": 147.7265625
-            },
-            {
-                "percentile": 9,
-                "value": 83.494270324707031
-            }
-        ]
-    }
-]
+{
+    "n": 2025000,
+    "null_cells": 0,
+    "cells": 2025000,
+    "min": 55.578792572021484,
+    "max": 156.32986450195312,
+    "range": 100.75107192993164,
+    "mean": 110.37544027560575,
+    "mean_of_abs": 110.37544027560575,
+    "stddev": 20.315323320598083,
+    "variance": 412.7123616204363,
+    "coeff_var": 18.40565552433679,
+    "sum": 223510266.55810165,
+    "first_quartile": 94.789985656738281,
+    "median": 108.87990570068359,
+    "third_quartile": 126.79196929931641,
+    "percentiles": [
+        {
+            "percentile": 98,
+            "value": 147.7265625
+        }
+    ]
+}
 ```
 
 ## TODO

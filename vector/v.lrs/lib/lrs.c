@@ -84,14 +84,14 @@ int LR_get_milepost(dbDriver *driver, char *table_name, char *lcat_col,
 
     /* Because some drivers (dbf) do not support complex queries mixing OR and
      * AND more records with simple condition are selected and processed here */
-    sprintf(buf,
-            "select %s, %s, %s, %s, %s, %s, %s from %s where "
-            "%s = %d and "  /* lcat_col = line_cat */
-            "%s <= %f and " /* start_map_col <= map_offset */
-            "%s >= %f",     /* end_map_col >= map_offset */
-            lid_col, start_map_col, end_map_col, start_mp_col, start_off_col,
-            end_mp_col, end_off_col, table_name, lcat_col, line_cat,
-            start_map_col, map_offset, end_map_col, map_offset);
+    snprintf(buf, sizeof(buf),
+             "select %s, %s, %s, %s, %s, %s, %s from %s where "
+             "%s = %d and "  /* lcat_col = line_cat */
+             "%s <= %f and " /* start_map_col <= map_offset */
+             "%s >= %f",     /* end_map_col >= map_offset */
+             lid_col, start_map_col, end_map_col, start_mp_col, start_off_col,
+             end_mp_col, end_off_col, table_name, lcat_col, line_cat,
+             start_map_col, map_offset, end_map_col, map_offset);
 
     G_debug(3, "  SQL: %s", buf);
     db_init_string(&stmt);
@@ -383,9 +383,10 @@ int LR_get_nearest_offset(dbDriver *driver, char *table_name, char *lcat_col,
      *         b. next nearest segment is reached
      */
 
-    sprintf(buf, "select %s, %s, %s, %s, %s, %s, %s from %s where %s = %d",
-            lcat_col, start_map_col, end_map_col, start_mp_col, start_off_col,
-            end_mp_col, end_off_col, table_name, lid_col, lid);
+    snprintf(buf, sizeof(buf),
+             "select %s, %s, %s, %s, %s, %s, %s from %s where %s = %d",
+             lcat_col, start_map_col, end_map_col, start_mp_col, start_off_col,
+             end_mp_col, end_off_col, table_name, lid_col, lid);
 
     G_debug(3, "  SQL: %s", buf);
     db_init_string(&stmt);

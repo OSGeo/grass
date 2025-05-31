@@ -666,16 +666,17 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         :param stds: The space time dataset to be used for temporal sampling
         :param method: This option specifies what sample method should be
-                      used. In case the registered maps are of temporal
-                      point type, only the start time is used for sampling.
-                      In case of mixed of interval data the user can chose
-                      between:
+               used. In case the registered maps are of temporal
+               point type, only the start time is used for sampling.
+               In case of mixed of interval data the user can chose
+               between:
 
                - Example ["start", "during", "equals"]
 
                - start: Select maps of which the start time is
-                 located in the selection granule::
+                 located in the selection granule:
 
+                 .. code-block:: output
                      map    :        s
                      granule:  s-----------------e
 
@@ -686,15 +687,17 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      granule:  s-----------------e
 
                - contains: Select maps which are temporal
-                  during the selection granule::
+                 during the selection granule:
 
+                 .. code-block:: output
                      map    :     s-----------e
                      granule:  s-----------------e
 
                - overlap: Select maps which temporal overlap
                  the selection granule, this includes overlaps and
-                 overlapped::
+                 overlapped:
 
+                 .. code-block:: output
                      map    :     s-----------e
                      granule:        s-----------------e
 
@@ -702,26 +705,30 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      granule:  s----------e
 
                - during: Select maps which temporally contains
-                 the selection granule::
+                 the selection granule:
 
+                 .. code-block:: output
                      map    :  s-----------------e
                      granule:     s-----------e
 
                - equals: Select maps which temporally equal
-                 to the selection granule::
+                 to the selection granule:
 
+                 .. code-block:: output
                      map    :  s-----------e
                      granule:  s-----------e
 
                - follows: Select maps which temporally follow
-                 the selection granule::
+                 the selection granule:
 
+                 .. code-block:: output
                      map    :              s-----------e
                      granule:  s-----------e
 
                - precedes: Select maps which temporally precedes
-                 the selection granule::
+                 the selection granule:
 
+                 .. code-block:: output
                      map    :  s-----------e
                      granule:              s-----------e
 
@@ -881,16 +888,17 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         :param stds: The space time dataset to be used for temporal sampling
         :param method: This option specifies what sample method should be
-                      used. In case the registered maps are of temporal
-                      point type, only the start time is used for sampling.
-                      In case of mixed of interval data the user can chose
-                      between:
+               used. In case the registered maps are of temporal
+               point type, only the start time is used for sampling.
+               In case of mixed of interval data the user can chose
+               between:
 
                - Example ["start", "during", "equals"]
 
                - start: Select maps of which the start time is
-                 located in the selection granule::
+                 located in the selection granule:
 
+                 .. code-block:: output
                      map    :        s
                      granule:  s-----------------e
 
@@ -901,15 +909,17 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      granule:  s-----------------e
 
                - contains: Select maps which are temporal
-                 during the selection granule::
+                 during the selection granule:
 
+                 .. code-block:: output
                      map    :     s-----------e
                      granule:  s-----------------e
 
                - overlap: Select maps which temporal overlap
                  the selection granule, this includes overlaps and
-                 overlapped::
+                 overlapped:
 
+                 .. code-block:: output
                      map    :     s-----------e
                      granule:        s-----------------e
 
@@ -917,26 +927,30 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      granule:  s----------e
 
                - during: Select maps which temporally contains
-                 the selection granule::
+                 the selection granule:
 
+                 .. code-block:: output
                      map    :  s-----------------e
                      granule:     s-----------e
 
                - equals: Select maps which temporally equal
-                 to the selection granule::
+                 to the selection granule:
 
+                 .. code-block:: output
                      map    :  s-----------e
                      granule:  s-----------e
 
                - follows: Select maps which temporally follow
-                 the selection granule::
+                 the selection granule:
 
+                 .. code-block:: output
                      map    :              s-----------e
                      granule:  s-----------e
 
                - precedes: Select maps which temporally precedes
-                 the selection granule::
+                 the selection granule:
 
+                 .. code-block:: output
                      map    :  s-----------e
                      granule:              s-----------e
 
@@ -1135,7 +1149,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         if not maps:
             return None
 
-        # We need to adjust the end time in case the the dataset has no
+        # We need to adjust the end time in case the dataset has no
         # interval time, so we can catch time instances at the end
         if self.get_map_time() != "interval":
             if self.is_time_absolute():
@@ -1165,13 +1179,13 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         The temporal topology search order is as follows:
 
         1. Maps that are equal to the actual granule are used
-        2. If no euqal found then maps that contain the actual granule
+        2. If no equal found then maps that contain the actual granule
            are used
         3. If no maps are found that contain the actual granule then maps
            are used that overlaps the actual granule
         4. If no overlaps maps found then overlapped maps are used
         5. If no overlapped maps are found then maps are used that are
-           durin the actual granule
+           during the actual granule
 
 
         Each entry in the resulting list is a list of
