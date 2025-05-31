@@ -445,21 +445,21 @@ def create_test_vector_map(map_name="test_vector"):
     11 boundaries and 4 centroids. The attribute table contains cat, name
     and value columns.
 
-     param map_name: The vector map name that should be used
+    :param map_name: The vector map name that should be used
 
+    .. code-block:: none
 
-
-                               P1 P2 P3
-        6                       *  *  *
-        5
-        4    _______ ___ ___   L1 L2 L3
-     Y  3   |A1___ *|  *|  *|   |  |  |
-        2   | |A2*| |   |   |   |  |  |
-        1   | |___| |A3 |A4 |   |  |  |
-        0   |_______|___|___|   |  |  |
-       -1
-         -1 0 1 2 3 4 5 6 7 8 9 10 12 14
-                        X
+                                   P1 P2 P3
+            6                       *  *  *
+            5
+            4    _______ ___ ___   L1 L2 L3
+         Y  3   |A1___ *|  *|  *|   |  |  |
+            2   | |A2*| |   |   |   |  |  |
+            1   | |___| |A3 |A4 |   |  |  |
+            0   |_______|___|___|   |  |  |
+           -1
+             -1 0 1 2 3 4 5 6 7 8 9 10 12 14
+                            X
     """
 
     from grass.pygrass.vector import VectorTopo
