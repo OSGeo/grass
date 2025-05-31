@@ -137,9 +137,9 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
                 fprintf(stdout, "\nzone %d %s\n\n", z_cat,
                         Rast_get_c_cat(&z_cat, &(zone_info.cats)));
             }
-            fprintf(stdout, "total null and non-null cells: %lu\n",
+            fprintf(stdout, "total null and non-null cells: %zu\n",
                     stats[z].size);
-            fprintf(stdout, "total null cells: %lu\n\n",
+            fprintf(stdout, "total null cells: %zu\n\n",
                     stats[z].size - stats[z].n);
             fprintf(stdout, "Of the non-null cells:\n----------------------\n");
         }
@@ -171,9 +171,9 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
             }
             switch (format) {
             case PLAIN:
-                fprintf(stdout, "n=%lu\n", stats[z].n);
-                fprintf(stdout, "null_cells=%lu\n", stats[z].size - stats[z].n);
-                fprintf(stdout, "cells=%lu\n", stats[z].size);
+                fprintf(stdout, "n=%zu\n", stats[z].n);
+                fprintf(stdout, "null_cells=%zu\n", stats[z].size - stats[z].n);
+                fprintf(stdout, "cells=%zu\n", stats[z].size);
                 fprintf(stdout, "min=%.15g\n", stats[z].min);
                 fprintf(stdout, "max=%.15g\n", stats[z].max);
                 fprintf(stdout, "range=%.15g\n", stats[z].max - stats[z].min);
@@ -205,7 +205,7 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
             }
         }
         else {
-            fprintf(stdout, "n: %lu\n", stats[z].n);
+            fprintf(stdout, "n: %zu\n", stats[z].n);
             fprintf(stdout, "minimum: %g\n", stats[z].min);
             fprintf(stdout, "maximum: %g\n", stats[z].max);
             fprintf(stdout, "range: %g\n", stats[z].max - stats[z].min);
@@ -523,9 +523,9 @@ int print_stats_table(univar_stat *stats)
         }
 
         /* non-null cells cells */
-        fprintf(stdout, "%lu%s", stats[z].n, zone_info.sep);
+        fprintf(stdout, "%zu%s", stats[z].n, zone_info.sep);
         /* null cells */
-        fprintf(stdout, "%lu%s", stats[z].size - stats[z].n, zone_info.sep);
+        fprintf(stdout, "%zu%s", stats[z].size - stats[z].n, zone_info.sep);
         /* min */
         fprintf(stdout, "%.15g%s", stats[z].min, zone_info.sep);
         /* max */
