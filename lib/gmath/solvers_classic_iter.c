@@ -228,6 +228,8 @@ int G_math_solver_jacobi(double **A, double *x, double *b, int rows, int maxit,
             break;
     }
 
+    G_free(Enew);
+
     return 1;
 }
 
@@ -284,6 +286,8 @@ int G_math_solver_gs(double **A, double *x, double *b, int rows, int maxit,
         if (err < error)
             break;
     }
+
+    G_free(Enew);
 
     return 1;
 }

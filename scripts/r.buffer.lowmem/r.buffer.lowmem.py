@@ -90,12 +90,9 @@ def main():
     distances1 = [scale * float(d) for d in distances]
     distances2 = [d * d for d in distances1]
 
-    s = gs.read_command("g.proj", flags="j")
+    s = gs.read_command("g.proj", flags="p", format="proj4")
     kv = gs.parse_key_val(s)
-    if kv["+proj"] == "longlat":
-        metric = "geodesic"
-    else:
-        metric = "squared"
+    metric = "geodesic" if kv["+proj"] == "longlat" else "squared"
 
     gs.run_command(
         "r.grow.distance", input=input, metric=metric, distance=temp_dist, flags="m"

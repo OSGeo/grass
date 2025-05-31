@@ -572,6 +572,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
             if (access(file_path, F_OK) == 0) /* fidx file exists? */
                 unlink(file_path);
         }
+        Map->support_updated = TRUE;
     }
 
     return level;
@@ -987,10 +988,10 @@ int Vect_open_tmp_new(struct Map_info *Map, const char *name, int with_z)
     char tmp_name[GNAME_MAX];
 
     if (!name) {
-        sprintf(tmp_name, "tmp_%d", getpid());
+        snprintf(tmp_name, sizeof(tmp_name), "tmp_%d", getpid());
     }
     else {
-        sprintf(tmp_name, "%s", name);
+        snprintf(tmp_name, sizeof(tmp_name), "%s", name);
     }
     G_debug(1, "Vect_open_tmp_new(): name = '%s' with_z = %d", name, with_z);
 
@@ -1070,18 +1071,18 @@ const char *Vect_maptype_info(struct Map_info *Map)
 
     switch (Map->format) {
     case GV_FORMAT_NATIVE:
-        sprintf(maptype, "native");
+        snprintf(maptype, sizeof(maptype), "native");
         break;
     case GV_FORMAT_OGR:
     case GV_FORMAT_OGR_DIRECT:
-        sprintf(maptype, "OGR");
+        snprintf(maptype, sizeof(maptype), "OGR");
         break;
     case GV_FORMAT_POSTGIS:
-        sprintf(maptype, "PostGIS");
+        snprintf(maptype, sizeof(maptype), "PostGIS");
         break;
     default:
-        sprintf(maptype, _("unknown %d (update Vect_maptype_info)"),
-                Map->format);
+        snprintf(maptype, sizeof(maptype),
+                 _("unknown %d (update Vect_maptype_info)"), Map->format);
     }
 
     return G_store(maptype);
@@ -1495,10 +1496,16 @@ char *Vect__get_path(char *path, struct Map_info *Map)
         char path_tmp[GPATH_MAX];
 
         G__temp_element(path_tmp, TRUE);
-        sprintf(path, "%s/%s/%s", path_tmp, GV_DIRECTORY, Map->name);
+        if (snprintf(path, GPATH_MAX, "%s/%s/%s", path_tmp, GV_DIRECTORY,
+                     Map->name) >= GPATH_MAX)
+            G_fatal_error(_("Filepath '%s/%s' exceeds max length"), path_tmp,
+                          Map->name);
     }
     else {
-        sprintf(path, "%s/%s", GV_DIRECTORY, Map->name);
+        if (snprintf(path, GPATH_MAX, "%s/%s", GV_DIRECTORY, Map->name) >=
+            GPATH_MAX)
+            G_fatal_error(_("Filepath '%s/%s' exceeds max length"),
+                          GV_DIRECTORY, Map->name);
     }
 
     return path;

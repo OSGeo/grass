@@ -109,7 +109,7 @@ static int read_row_ptrs(int nrows, int old, off_t *row_ptr, int fd)
     if (old) {
         n = ((unsigned int)nrows + 1) * sizeof(off_t);
         if (read(fd, row_ptr, n) != n)
-            goto badread;
+            return -1;
         return 1;
     }
 
@@ -121,9 +121,9 @@ static int read_row_ptrs(int nrows, int old, off_t *row_ptr, int fd)
      */
 
     if (read(fd, &nbytes, 1) != 1)
-        goto badread;
+        return -1;
     if (nbytes == 0)
-        goto badread;
+        return -1;
 
     n = ((unsigned int)nrows + 1) * nbytes;
     buf = G_malloc(n);
@@ -151,6 +151,7 @@ static int read_row_ptrs(int nrows, int old, off_t *row_ptr, int fd)
     return 1;
 
 badread:
+    G_free(buf);
     return -1;
 }
 

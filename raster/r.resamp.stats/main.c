@@ -149,6 +149,9 @@ static void resamp_unweighted(void)
 
         Rast_put_d_row(outfile, outbuf);
     }
+    G_free(row_map);
+    G_free(col_map);
+    G_free(values);
 }
 
 static void resamp_weighted(void)
@@ -233,6 +236,9 @@ static void resamp_weighted(void)
 
         Rast_put_d_row(outfile, outbuf);
     }
+    G_free(row_map);
+    G_free(col_map);
+    G_free(values);
 }
 
 int main(int argc, char *argv[])
@@ -372,7 +378,8 @@ int main(int argc, char *argv[])
     Rast_close(outfile);
 
     /* record map metadata/history info */
-    sprintf(title, "Aggregate resample by %s", parm.method->answer);
+    snprintf(title, sizeof(title), "Aggregate resample by %s",
+             parm.method->answer);
     Rast_put_cell_title(parm.rastout->answer, title);
 
     Rast_short_history(parm.rastout->answer, "raster", &history);

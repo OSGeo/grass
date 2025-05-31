@@ -103,11 +103,7 @@ def main():
     if not system and not name:
         gs.fatal(_("Please specify %s=") % ("name"))
 
-    if name.find("@") >= 0:
-        id_ = name
-    else:
-        id_ = name + "@" + gs.gisenv()["MAPSET"]
-
+    id_ = name if name.find("@") >= 0 else name + "@" + gs.gisenv()["MAPSET"]
     dataset = tgis.dataset_factory(type_, id_)
 
     if not dataset.is_in_db(dbif):

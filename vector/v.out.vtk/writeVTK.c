@@ -572,8 +572,8 @@ char *get_att(char *name, int cat, struct field_info *Fi, dbDriver *Driver,
         first = 0;
     }
 
-    sprintf(buf, "SELECT %s FROM %s WHERE %s = %d", name, Fi->table, Fi->key,
-            cat);
+    snprintf(buf, sizeof(buf), "SELECT %s FROM %s WHERE %s = %d", name,
+             Fi->table, Fi->key, cat);
 
     db_set_string(&dbstring, buf);
 

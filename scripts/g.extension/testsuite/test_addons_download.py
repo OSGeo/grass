@@ -51,10 +51,9 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         if self.install_prefix.exists():
             files = [path.name for path in self.install_prefix.iterdir()]
             if files:
-                raise RuntimeError(
-                    f"Install prefix path '{self.install_prefix}' \
+                msg = f"Install prefix path '{self.install_prefix}' \
                     contains files {','.join(files)}"
-                )
+                raise RuntimeError(msg)
 
     def tearDown(self):
         """Remove created files"""
@@ -219,7 +218,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
     def test_github_install_official_multimodule_and_check_metadata(self):
         """Test installing multi-module extension from official addons
         repository without printing warning no metadata available message
-        for module wich install HTML page file only"""
+        for module which install HTML page file only"""
         extension = "i.sentinel"
         gextension = SimpleModule(
             "g.extension",

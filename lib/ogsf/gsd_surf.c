@@ -58,10 +58,10 @@ static int get_point_below(Point3 **, geosurf **, int, int, int, int *);
 static int FCmode;
 
 /************************************************************************/
-/* Notes on exageration:
-   vertical exageration is of two forms:
-   1) global exageration (from geoview struct)
-   2) vertical exageration for each surface (UN-IMPLEMENTED)
+/* Notes on exaggeration:
+   vertical exaggeration is of two forms:
+   1) global exaggeration (from geoview struct)
+   2) vertical exaggeration for each surface (UN-IMPLEMENTED)
  */
 
 /************************************************************************/
@@ -228,7 +228,7 @@ int gsd_surf_map_old(geosurf *surf)
      */
     check_transp = 0;
     tratt = &(surf->att[ATT_TRANSP]);
-    ktrans = (255 << 24);
+    ktrans = (255U << 24);
     trans_src = surf->att[ATT_TRANSP].att_src;
 
     if (CONST_ATT == trans_src && surf->att[ATT_TRANSP].constant != 0.0) {
@@ -344,7 +344,7 @@ int gsd_surf_map_old(geosurf *surf)
             if (check_transp) {
                 GET_MAPATT(trbuff, offset, ttr);
                 ktrans = (char)SCALE_ATT(tratt, ttr, 0, 255);
-                ktrans = (char)(255 - ktrans) << 24;
+                ktrans = (char)(255U - ktrans) << 24;
             }
 
             gsd_litvert_func(n, ktrans | curcolor, pt);
@@ -369,7 +369,7 @@ int gsd_surf_map_old(geosurf *surf)
             if (check_transp) {
                 GET_MAPATT(trbuff, offset, ttr);
                 ktrans = (char)SCALE_ATT(tratt, ttr, 0, 255);
-                ktrans = (char)(255 - ktrans) << 24;
+                ktrans = (char)(255U - ktrans) << 24;
             }
 
             if (check_material) {
@@ -469,7 +469,7 @@ int gsd_surf_map_old(geosurf *surf)
                     if (check_transp) {
                         GET_MAPATT(trbuff, offset, ttr);
                         ktrans = (char)SCALE_ATT(tratt, ttr, 0, 255);
-                        ktrans = (char)(255 - ktrans) << 24;
+                        ktrans = (char)(255U - ktrans) << 24;
                     }
 
                     if (check_material) {
@@ -524,7 +524,7 @@ int gsd_surf_map_old(geosurf *surf)
                     if (check_transp) {
                         GET_MAPATT(trbuff, offset, ttr);
                         ktrans = (char)SCALE_ATT(tratt, ttr, 0, 255);
-                        ktrans = (char)(255 - ktrans) << 24;
+                        ktrans = (char)(255U - ktrans) << 24;
                     }
 
                     if (check_material) {
@@ -580,7 +580,7 @@ int gsd_surf_map_old(geosurf *surf)
                 if (check_transp) {
                     GET_MAPATT(trbuff, offset, ttr);
                     ktrans = (char)SCALE_ATT(tratt, ttr, 0, 255);
-                    ktrans = (char)(255 - ktrans) << 24;
+                    ktrans = (char)(255U - ktrans) << 24;
                 }
 
                 if (check_material) {
@@ -649,7 +649,7 @@ int gsd_surf_map_old(geosurf *surf)
                 if (check_transp) {
                     GET_MAPATT(trbuff, offset, ttr);
                     ktrans = (char)SCALE_ATT(tratt, ttr, 0, 255);
-                    ktrans = (char)(255 - ktrans) << 24;
+                    ktrans = (char)(255U - ktrans) << 24;
                 }
 
                 if (check_material) {
@@ -1734,7 +1734,7 @@ int gsd_wall(float *bgn, float *end, float *norm)
 
         if (n) {
             if (npts != npts1) {
-                G_warning(_("Cut-plane points mis-match between surfaces. "
+                G_warning(_("Cut-plane points mismatch between surfaces. "
                             "Check resolution(s)."));
                 err = 1;
                 nsurfs = n;
@@ -2144,7 +2144,7 @@ int gsd_surf_map(geosurf *surf)
      */
     check_transp = 0;
     tratt = &(surf->att[ATT_TRANSP]);
-    ktrans = (255 << 24);
+    ktrans = (255U << 24);
     trans_src = surf->att[ATT_TRANSP].att_src;
 
     if (CONST_ATT == trans_src && surf->att[ATT_TRANSP].constant != 0.0) {
@@ -2328,7 +2328,7 @@ int gsd_surf_map(geosurf *surf)
                 if (check_transp) {
                     GET_MAPATT(trbuff, offset2[ii], ttr);
                     ktrans = (char)SCALE_ATT(tratt, ttr, 0, 255);
-                    ktrans = (char)(255 - ktrans) << 24;
+                    ktrans = (char)(255U - ktrans) << 24;
                 }
 
                 if (check_material) {

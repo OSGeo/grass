@@ -83,7 +83,7 @@ def main():
     # define classes which needs imports as local
     # for longer definitions, a separate file would be a better option
     class RDigitMapDisplay(FrameMixin, MapPanel):
-        """Map display for wrapping map panel with r.digit mathods and frame methods"""
+        """Map display for wrapping map panel with r.digit methods and frame methods"""
 
         def __init__(
             self,
@@ -154,7 +154,7 @@ def main():
             :param str name: map name
             :param str ltype: layer type
             """
-            mapLayer = self._mapObj.AddLayer(
+            self._mapObj.AddLayer(
                 ltype=ltype,
                 name=name,
                 command=["d.rast", "map={}".format(name)],

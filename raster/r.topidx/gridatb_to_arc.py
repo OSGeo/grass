@@ -7,7 +7,7 @@ if (
     len(sys.argv) == 1
     or len(sys.argv) == 4
     or len(sys.argv) > 5
-    or re.match("^-*help", sys.argv[1])
+    or re.match(r"^-*help", sys.argv[1])
 ):
     print("Usage: gridatb.to.arc.py gridatb_file arc_file [xllcorner yllcorner]")
     sys.exit()
@@ -33,7 +33,7 @@ inf = open(infname)
 
 title = inf.readline()
 inline = inf.readline()
-m = re.match("^[ \t]*([0-9.]+)[ \t]+([0-9.]+)[ \t]+([0-9.]+)[ \t]*$", inline)
+m = re.match(r"^[ \t]*([0-9.]+)[ \t]+([0-9.]+)[ \t]+([0-9.]+)[ \t]*$", inline)
 if not m:
     print(f"{infname}: Invalid input file format")
     inf.close()
@@ -54,8 +54,7 @@ cellsize      {cellsize}
 NODATA_value  9999
 """
 )
-for inline in inf:
-    outf.write(inline)
+outf.writelines(inf)
 
 inf.close()
 outf.close()

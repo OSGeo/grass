@@ -149,10 +149,7 @@ class ScattsManager:
             callable=self.core.CleanUp, ondone=lambda event: self.CleanUpDone()
         )
 
-        if self.show_add_scatt_plot:
-            show_add = True
-        else:
-            show_add = False
+        show_add = bool(self.show_add_scatt_plot)
 
         self.all_bands_to_bands = dict(zip(bands, [-1] * len(bands)))
         self.all_bands = bands
@@ -508,7 +505,7 @@ class PlotsRenderingManager:
     """Manages rendering of scatter plot.
 
     .. todo::
-        still space for optimalization
+        still space for optimization
     """
 
     def __init__(self, scatt_mgr, cats_mgr, core):
@@ -697,10 +694,7 @@ class CategoriesManager:
 
     def AddCategory(self, cat_id=None, name=None, color=None, nstd=None):
         if cat_id is None:
-            if self.cats_ids:
-                cat_id = max(self.cats_ids) + 1
-            else:
-                cat_id = 1
+            cat_id = max(self.cats_ids) + 1 if self.cats_ids else 1
 
         if self.scatt_mgr.data_set:
             self.scatt_mgr.thread.Run(callable=self.core.AddCategory, cat_id=cat_id)
@@ -963,16 +957,15 @@ class IMapDispConnection:
 
         bands = []
         while True:
-            if dlg.ShowModal() == wx.ID_OK:
-                bands = dlg.GetGroupBandsErr(parent=self.scatt_mgr.guiparent)
-                if bands:
-                    name, s = dlg.GetData()
-                    group = gs.find_file(name=name, element="group")
-                    self.set_g["group"] = group["name"]
-                    self.set_g["subg"] = s
+            if dlg.ShowModal() != wx.ID_OK:
+                break
+            bands = dlg.GetGroupBandsErr(parent=self.scatt_mgr.guiparent)
+            if bands:
+                name, s = dlg.GetData()
+                group = gs.find_file(name=name, element="group")
+                self.set_g["group"] = group["name"]
+                self.set_g["subg"] = s
 
-                    break
-            else:
                 break
 
         dlg.Destroy()
@@ -1139,11 +1132,9 @@ class IClassConnection:
 
     def SetCategory(self, cat, stats):
         self.cats_mgr.setCategoryAttrs.disconnect(self.SetStatistics)
-        cats_attr = {}
-
-        for attr in ["name", "color", "nstd"]:
-            if attr in stats:
-                cats_attr[attr] = stats[attr]
+        cats_attr = {
+            attr: stats[attr] for attr in ["name", "color", "nstd"] if attr in stats
+        }
 
         if cats_attr:
             self.cats_mgr.SetCategoryAttrs(cat, cats_attr)

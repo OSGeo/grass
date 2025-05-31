@@ -102,11 +102,11 @@ int V1_open_old_pg(struct Map_info *Map NOPG_UNUSED, int update NOPG_UNUSED)
         connect_db(pg_info);
 
     /* get fid and geometry column */
-    sprintf(stmt,
-            "SELECT f_geometry_column, coord_dimension, srid, type "
-            "FROM geometry_columns WHERE f_table_schema = '%s' AND "
-            "f_table_name = '%s'",
-            pg_info->schema_name, pg_info->table_name);
+    snprintf(stmt, sizeof(stmt),
+             "SELECT f_geometry_column, coord_dimension, srid, type "
+             "FROM geometry_columns WHERE f_table_schema = '%s' AND "
+             "f_table_name = '%s'",
+             pg_info->schema_name, pg_info->table_name);
     G_debug(2, "SQL: %s", stmt);
 
     res = PQexec(pg_info->conn, stmt);
@@ -179,8 +179,9 @@ int V2_open_old_pg(struct Map_info *Map NOPG_UNUSED)
         char stmt[DB_SQL_MAX];
 
         /* get topo schema id */
-        sprintf(stmt, "SELECT id FROM topology.topology WHERE name = '%s'",
-                pg_info->toposchema_name);
+        snprintf(stmt, sizeof(stmt),
+                 "SELECT id FROM topology.topology WHERE name = '%s'",
+                 pg_info->toposchema_name);
         res = PQexec(pg_info->conn, stmt);
         if (!res || PQresultStatus(res) != PGRES_TUPLES_OK) {
             G_warning("%s\n%s", _("Topology schema not found."),
@@ -264,10 +265,10 @@ int V1_open_new_pg(struct Map_info *Map NOPG_UNUSED,
         pg_info->geom_column = G_store(GV_PG_GEOMETRY_COLUMN);
 
     /* check if feature table already exists */
-    sprintf(stmt,
-            "SELECT * FROM pg_tables "
-            "WHERE schemaname = '%s' AND tablename = '%s'",
-            pg_info->schema_name, pg_info->table_name);
+    snprintf(stmt, sizeof(stmt),
+             "SELECT * FROM pg_tables "
+             "WHERE schemaname = '%s' AND tablename = '%s'",
+             pg_info->schema_name, pg_info->table_name);
     G_debug(2, "SQL: %s", stmt);
 
     res = PQexec(pg_info->conn, stmt);
@@ -377,21 +378,21 @@ char *get_key_column(struct Format_info_pg *pg_info)
 
     PGresult *res;
 
-    sprintf(stmt,
-            "SELECT kcu.column_name "
-            "FROM INFORMATION_SCHEMA.TABLES t "
-            "LEFT JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc "
-            "ON tc.table_catalog = t.table_catalog "
-            "AND tc.table_schema = t.table_schema "
-            "AND tc.table_name = t.table_name "
-            "AND tc.constraint_type = 'PRIMARY KEY' "
-            "LEFT JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE kcu "
-            "ON kcu.table_catalog = tc.table_catalog "
-            "AND kcu.table_schema = tc.table_schema "
-            "AND kcu.table_name = tc.table_name "
-            "AND kcu.constraint_name = tc.constraint_name "
-            "WHERE t.table_schema = '%s' AND t.table_name = '%s'",
-            pg_info->schema_name, pg_info->table_name);
+    snprintf(stmt, sizeof(stmt),
+             "SELECT kcu.column_name "
+             "FROM INFORMATION_SCHEMA.TABLES t "
+             "LEFT JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc "
+             "ON tc.table_catalog = t.table_catalog "
+             "AND tc.table_schema = t.table_schema "
+             "AND tc.table_name = t.table_name "
+             "AND tc.constraint_type = 'PRIMARY KEY' "
+             "LEFT JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE kcu "
+             "ON kcu.table_catalog = tc.table_catalog "
+             "AND kcu.table_schema = tc.table_schema "
+             "AND kcu.table_name = tc.table_name "
+             "AND kcu.constraint_name = tc.constraint_name "
+             "WHERE t.table_schema = '%s' AND t.table_name = '%s'",
+             pg_info->schema_name, pg_info->table_name);
     G_debug(2, "SQL: %s", stmt);
 
     res = PQexec(pg_info->conn, stmt);
@@ -459,15 +460,15 @@ int drop_table(struct Format_info_pg *pg_info)
     PGresult *result, *result_drop;
 
     /* check if topology schema exists */
-    sprintf(stmt,
-            "SELECT COUNT(*) FROM pg_tables WHERE schemaname = 'topology'");
+    snprintf(stmt, sizeof(stmt),
+             "SELECT COUNT(*) FROM pg_tables WHERE schemaname = 'topology'");
     if (Vect__execute_get_value_pg(pg_info->conn, stmt) != 0) {
         /* drop topology schema(s) related to the feature table */
-        sprintf(stmt,
-                "SELECT t.name FROM topology.layer AS l JOIN "
-                "topology.topology AS t ON l.topology_id = t.id "
-                "WHERE l.table_name = '%s'",
-                pg_info->table_name);
+        snprintf(stmt, sizeof(stmt),
+                 "SELECT t.name FROM topology.layer AS l JOIN "
+                 "topology.topology AS t ON l.topology_id = t.id "
+                 "WHERE l.table_name = '%s'",
+                 pg_info->table_name);
         G_debug(2, "SQL: %s", stmt);
 
         result = PQexec(pg_info->conn, stmt);
@@ -478,7 +479,8 @@ int drop_table(struct Format_info_pg *pg_info)
         }
         for (i = 0; i < PQntuples(result); i++) {
             topo_schema = PQgetvalue(result, i, 0);
-            sprintf(stmt, "SELECT topology.DropTopology('%s')", topo_schema);
+            snprintf(stmt, sizeof(stmt), "SELECT topology.DropTopology('%s')",
+                     topo_schema);
             G_debug(2, "SQL: %s", stmt);
 
             result_drop = PQexec(pg_info->conn, stmt);
@@ -494,8 +496,8 @@ int drop_table(struct Format_info_pg *pg_info)
     }
 
     /* drop feature table */
-    sprintf(stmt, "DROP TABLE \"%s\".\"%s\"", pg_info->schema_name,
-            pg_info->table_name);
+    snprintf(stmt, sizeof(stmt), "DROP TABLE \"%s\".\"%s\"",
+             pg_info->schema_name, pg_info->table_name);
     G_debug(2, "SQL: %s", stmt);
 
     if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
@@ -535,16 +537,16 @@ void connect_db(struct Format_info_pg *pg_info)
 
         /* try connection settings for given database first, then try
          * any settings defined for pg driver */
-        db_get_login2("pg", dbname, &user, &passwd, &host, &port);
+        db_get_login("pg", dbname, &user, &passwd, &host, &port);
         /* any settings defined for pg driver disabled - can cause
            problems when running multiple local/remote db clusters
            if (strlen(dbname) > 0 && !user && !passwd)
-           db_get_login2("pg", NULL, &user, &passwd, &host, &port);
+           db_get_login("pg", NULL, &user, &passwd, &host, &port);
          */
         if (user || passwd || host || port) {
             char conninfo[DB_SQL_MAX];
 
-            sprintf(conninfo, "%s", pg_info->conninfo);
+            snprintf(conninfo, sizeof(conninfo), "%s", pg_info->conninfo);
             if (user) {
                 strcat(conninfo, " user=");
                 strcat(conninfo, user);
@@ -579,8 +581,8 @@ void connect_db(struct Format_info_pg *pg_info)
     if (!pg_info->db_name)
         G_warning(_("Unable to get database name"));
 
-    sprintf(
-        stmt,
+    snprintf(
+        stmt, sizeof(stmt),
         "SELECT COUNT(*) FROM pg_tables WHERE tablename = 'spatial_ref_sys'");
     if (Vect__execute_get_value_pg(pg_info->conn, stmt) != 1) {
         PQfinish(pg_info->conn);
@@ -591,8 +593,9 @@ void connect_db(struct Format_info_pg *pg_info)
 
     if (pg_info->toposchema_name) {
         /* check if topology schema exists */
-        sprintf(stmt,
-                "SELECT COUNT(*) FROM pg_tables WHERE schemaname = 'topology'");
+        snprintf(
+            stmt, sizeof(stmt),
+            "SELECT COUNT(*) FROM pg_tables WHERE schemaname = 'topology'");
         if (Vect__execute_get_value_pg(pg_info->conn, stmt) == 0) {
             PQfinish(pg_info->conn);
             G_fatal_error(
@@ -627,11 +630,11 @@ int check_topo(struct Format_info_pg *pg_info, struct Plus_head *plus)
         return 0;
 
     /* check if topology layer/schema exists */
-    sprintf(stmt,
-            "SELECT t.id,t.name,t.hasz,l.feature_column FROM topology.layer "
-            "AS l JOIN topology.topology AS t ON l.topology_id = t.id "
-            "WHERE schema_name = '%s' AND table_name = '%s'",
-            pg_info->schema_name, pg_info->table_name);
+    snprintf(stmt, sizeof(stmt),
+             "SELECT t.id,t.name,t.hasz,l.feature_column FROM topology.layer "
+             "AS l JOIN topology.topology AS t ON l.topology_id = t.id "
+             "WHERE schema_name = '%s' AND table_name = '%s'",
+             pg_info->schema_name, pg_info->table_name);
     G_debug(2, "SQL: %s", stmt);
 
     res = PQexec(pg_info->conn, stmt);
@@ -649,10 +652,10 @@ int check_topo(struct Format_info_pg *pg_info, struct Plus_head *plus)
     pg_info->topogeom_column = G_store(PQgetvalue(res, 0, 3));
 
     /* check extra GRASS tables */
-    sprintf(stmt,
-            "SELECT COUNT(*) FROM pg_tables WHERE schemaname = '%s' "
-            "AND tablename LIKE '%%_grass'",
-            pg_info->toposchema_name);
+    snprintf(stmt, sizeof(stmt),
+             "SELECT COUNT(*) FROM pg_tables WHERE schemaname = '%s' "
+             "AND tablename LIKE '%%_grass'",
+             pg_info->toposchema_name);
     if (Vect__execute_get_value_pg(pg_info->conn, stmt) != TOPO_TABLE_NUM)
         pg_info->topo_geo_only = TRUE;
 
@@ -774,8 +777,8 @@ struct P_node *read_p_node(struct Plus_head *plus, int n, int id,
         if (!lines_data && !angles_data) { /* pg_info->topo_geo_only == TRUE */
             char stmt[DB_SQL_MAX];
 
-            sprintf(
-                stmt,
+            snprintf(
+                stmt, sizeof(stmt),
                 "SELECT edge_id,'s' as node,"
                 "ST_Azimuth(ST_StartPoint(geom), ST_PointN(geom, 2)) AS angle"
                 " FROM \"%s\".edge WHERE start_node = %d UNION ALL "
@@ -1138,17 +1141,19 @@ int Vect__load_plus_head(struct Map_info *Map)
 
     /* get map bounding box
        first try to get info from 'topology.grass' table */
-    sprintf(stmt, "SELECT %s FROM \"%s\".\"%s\" WHERE %s = %d", TOPO_BBOX,
-            TOPO_SCHEMA, TOPO_TABLE, TOPO_ID, pg_info->toposchema_id);
+    snprintf(stmt, sizeof(stmt), "SELECT %s FROM \"%s\".\"%s\" WHERE %s = %d",
+             TOPO_BBOX, TOPO_SCHEMA, TOPO_TABLE, TOPO_ID,
+             pg_info->toposchema_id);
     G_debug(2, "SQL: %s", stmt);
     res = PQexec(pg_info->conn, stmt);
     if (!res || PQresultStatus(res) != PGRES_TUPLES_OK || PQntuples(res) != 1) {
         PQclear(res);
 
         /* otherwise try to calculate bbox from TopoGeometry elements */
-        sprintf(stmt, "SELECT ST_3DExtent(%s) FROM \"%s\".\"%s\"",
-                pg_info->topogeom_column, pg_info->schema_name,
-                pg_info->table_name);
+        snprintf(stmt, sizeof(stmt),
+                 "SELECT ST_3DExtent(%s) FROM \"%s\".\"%s\"",
+                 pg_info->topogeom_column, pg_info->schema_name,
+                 pg_info->table_name);
         G_debug(2, "SQL: %s", stmt);
         res = PQexec(pg_info->conn, stmt);
         if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
@@ -1170,18 +1175,18 @@ int Vect__load_plus_head(struct Map_info *Map)
 
     /* nodes
        note: isolated nodes are registered in GRASS Topology model */
-    sprintf(stmt,
-            "SELECT COUNT(DISTINCT node) FROM (SELECT start_node AS node "
-            "FROM \"%s\".edge GROUP BY start_node UNION ALL SELECT end_node "
-            "AS node FROM \"%s\".edge GROUP BY end_node) AS foo",
-            pg_info->toposchema_name, pg_info->toposchema_name);
+    snprintf(stmt, sizeof(stmt),
+             "SELECT COUNT(DISTINCT node) FROM (SELECT start_node AS node "
+             "FROM \"%s\".edge GROUP BY start_node UNION ALL SELECT end_node "
+             "AS node FROM \"%s\".edge GROUP BY end_node) AS foo",
+             pg_info->toposchema_name, pg_info->toposchema_name);
     plus->n_nodes = Vect__execute_get_value_pg(pg_info->conn, stmt);
     if (!pg_info->topo_geo_only) {
         int n_nodes;
 
         /* check nodes consistency */
-        sprintf(stmt, "SELECT COUNT(*) FROM \"%s\".%s",
-                pg_info->toposchema_name, TOPO_TABLE_NODE);
+        snprintf(stmt, sizeof(stmt), "SELECT COUNT(*) FROM \"%s\".%s",
+                 pg_info->toposchema_name, TOPO_TABLE_NODE);
         n_nodes = Vect__execute_get_value_pg(pg_info->conn, stmt);
         if (n_nodes != plus->n_nodes) {
             G_warning(_("Different number of nodes detected (%d, %d)"),
@@ -1192,21 +1197,23 @@ int Vect__load_plus_head(struct Map_info *Map)
     G_debug(3, "Vect_open_topo_pg(): n_nodes=%d", plus->n_nodes);
 
     /* lines (edges in PostGIS Topology model) */
-    sprintf(stmt, "SELECT COUNT(*) FROM \"%s\".edge", pg_info->toposchema_name);
+    snprintf(stmt, sizeof(stmt), "SELECT COUNT(*) FROM \"%s\".edge",
+             pg_info->toposchema_name);
     /* + isolated nodes as points
        + centroids */
     plus->n_lines = Vect__execute_get_value_pg(pg_info->conn, stmt);
 
     /* areas (faces with face_id > 0 in PostGIS Topology model) */
-    sprintf(stmt, "SELECT COUNT(*) FROM \"%s\".face WHERE face_id > 0",
-            pg_info->toposchema_name);
+    snprintf(stmt, sizeof(stmt),
+             "SELECT COUNT(*) FROM \"%s\".face WHERE face_id > 0",
+             pg_info->toposchema_name);
     plus->n_areas = Vect__execute_get_value_pg(pg_info->conn, stmt);
     if (!pg_info->topo_geo_only) {
         int n_areas;
 
         /* check areas consistency */
-        sprintf(stmt, "SELECT COUNT(*) FROM \"%s\".%s",
-                pg_info->toposchema_name, TOPO_TABLE_AREA);
+        snprintf(stmt, sizeof(stmt), "SELECT COUNT(*) FROM \"%s\".%s",
+                 pg_info->toposchema_name, TOPO_TABLE_AREA);
         n_areas = Vect__execute_get_value_pg(pg_info->conn, stmt);
         if (n_areas != plus->n_areas) {
             G_warning(_("Different number of areas detected (%d, %d)"),
@@ -1220,15 +1227,16 @@ int Vect__load_plus_head(struct Map_info *Map)
        note: universal face is represented in GRASS Topology model as isle
        (area=0)
      */
-    sprintf(stmt, "SELECT COUNT(*) FROM \"%s\".face WHERE face_id < 0",
-            pg_info->toposchema_name);
+    snprintf(stmt, sizeof(stmt),
+             "SELECT COUNT(*) FROM \"%s\".face WHERE face_id < 0",
+             pg_info->toposchema_name);
     plus->n_isles = Vect__execute_get_value_pg(pg_info->conn, stmt);
     if (!pg_info->topo_geo_only) {
         int n_isles;
 
         /* check areas consistency */
-        sprintf(stmt, "SELECT COUNT(*) FROM \"%s\".%s",
-                pg_info->toposchema_name, TOPO_TABLE_ISLE);
+        snprintf(stmt, sizeof(stmt), "SELECT COUNT(*) FROM \"%s\".%s",
+                 pg_info->toposchema_name, TOPO_TABLE_ISLE);
         n_isles = Vect__execute_get_value_pg(pg_info->conn, stmt);
         if (n_isles != plus->n_isles) {
             G_warning(_("Different number of areas detected (%d, %d)"),
@@ -1241,42 +1249,42 @@ int Vect__load_plus_head(struct Map_info *Map)
     /* number of features according the type */
 
     /* points */
-    sprintf(stmt,
-            "SELECT COUNT(*) FROM \"%s\".node WHERE containing_face "
-            "IS NULL AND node_id NOT IN "
-            "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
-            "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
-            "\"%s\".edge GROUP BY end_node) AS foo)",
-            pg_info->toposchema_name, pg_info->toposchema_name,
-            pg_info->toposchema_name);
+    snprintf(stmt, sizeof(stmt),
+             "SELECT COUNT(*) FROM \"%s\".node WHERE containing_face "
+             "IS NULL AND node_id NOT IN "
+             "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
+             "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
+             "\"%s\".edge GROUP BY end_node) AS foo)",
+             pg_info->toposchema_name, pg_info->toposchema_name,
+             pg_info->toposchema_name);
     plus->n_plines = Vect__execute_get_value_pg(pg_info->conn, stmt);
     G_debug(3, "Vect_open_topo_pg(): n_plines=%d", plus->n_plines);
 
     /* lines */
-    sprintf(stmt,
-            "SELECT COUNT(*) FROM \"%s\".edge WHERE "
-            "left_face = 0 AND right_face = 0",
-            pg_info->toposchema_name);
+    snprintf(stmt, sizeof(stmt),
+             "SELECT COUNT(*) FROM \"%s\".edge WHERE "
+             "left_face = 0 AND right_face = 0",
+             pg_info->toposchema_name);
     plus->n_llines = Vect__execute_get_value_pg(pg_info->conn, stmt);
     G_debug(3, "Vect_open_topo_pg(): n_llines=%d", plus->n_llines);
 
     /* boundaries */
-    sprintf(stmt,
-            "SELECT COUNT(*) FROM \"%s\".edge WHERE "
-            "left_face != 0 OR right_face != 0",
-            pg_info->toposchema_name);
+    snprintf(stmt, sizeof(stmt),
+             "SELECT COUNT(*) FROM \"%s\".edge WHERE "
+             "left_face != 0 OR right_face != 0",
+             pg_info->toposchema_name);
     plus->n_blines = Vect__execute_get_value_pg(pg_info->conn, stmt);
     G_debug(3, "Vect_open_topo_pg(): n_blines=%d", plus->n_blines);
 
     /* centroids */
-    sprintf(stmt,
-            "SELECT COUNT(*) FROM \"%s\".node WHERE containing_face "
-            "IS NOT NULL AND node_id NOT IN "
-            "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
-            "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
-            "\"%s\".edge GROUP BY end_node) AS foo)",
-            pg_info->toposchema_name, pg_info->toposchema_name,
-            pg_info->toposchema_name);
+    snprintf(stmt, sizeof(stmt),
+             "SELECT COUNT(*) FROM \"%s\".node WHERE containing_face "
+             "IS NOT NULL AND node_id NOT IN "
+             "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
+             "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
+             "\"%s\".edge GROUP BY end_node) AS foo)",
+             pg_info->toposchema_name, pg_info->toposchema_name,
+             pg_info->toposchema_name);
     plus->n_clines = Vect__execute_get_value_pg(pg_info->conn, stmt);
     G_debug(3, "Vect_open_topo_pg(): n_clines=%d", plus->n_clines);
 
@@ -1359,10 +1367,10 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
         int cat;
 
         /* read areas from 'area_grass' table */
-        sprintf(stmt,
-                "SELECT area_id,lines,centroid,isles FROM \"%s\".%s ORDER BY "
-                "area_id",
-                pg_info->toposchema_name, TOPO_TABLE_AREA);
+        snprintf(stmt, sizeof(stmt),
+                 "SELECT area_id,lines,centroid,isles FROM \"%s\".%s ORDER BY "
+                 "area_id",
+                 pg_info->toposchema_name, TOPO_TABLE_AREA);
         G_debug(2, "SQL: %s", stmt);
 
         res = PQexec(pg_info->conn, stmt);
@@ -1410,9 +1418,9 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
     }
     else {
         /* read isles from 'isle_grass' table */
-        sprintf(stmt,
-                "SELECT isle_id,lines,area FROM \"%s\".%s ORDER BY isle_id",
-                pg_info->toposchema_name, TOPO_TABLE_ISLE);
+        snprintf(stmt, sizeof(stmt),
+                 "SELECT isle_id,lines,area FROM \"%s\".%s ORDER BY isle_id",
+                 pg_info->toposchema_name, TOPO_TABLE_ISLE);
         G_debug(2, "SQL: %s", stmt);
 
         res = PQexec(pg_info->conn, stmt);
@@ -1496,16 +1504,17 @@ int Vect__load_map_nodes_pg(struct Map_info *Map, int geom_only)
     offset = &(pg_info->offset);
 
     if (pg_info->topo_geo_only || geom_only)
-        sprintf(stmt,
-                "SELECT node_id,geom FROM \"%s\".node WHERE node_id IN "
-                "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
-                "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
-                "\"%s\".edge GROUP BY end_node) AS foo) ORDER BY node_id",
-                pg_info->toposchema_name, pg_info->toposchema_name,
-                pg_info->toposchema_name);
+        snprintf(
+            stmt, sizeof(stmt),
+            "SELECT node_id,geom FROM \"%s\".node WHERE node_id IN "
+            "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
+            "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
+            "\"%s\".edge GROUP BY end_node) AS foo) ORDER BY node_id",
+            pg_info->toposchema_name, pg_info->toposchema_name,
+            pg_info->toposchema_name);
     else
-        sprintf(
-            stmt,
+        snprintf(
+            stmt, sizeof(stmt),
             "SELECT node.node_id,geom,lines,angles FROM \"%s\".node AS node "
             "JOIN \"%s\".%s AS node_grass ON node.node_id = node_grass.node_id "
             "ORDER BY node_id",
@@ -1579,29 +1588,30 @@ int Vect__load_map_lines_pg(struct Map_info *Map)
        -> points
      */
     if (pg_info->topo_geo_only)
-        sprintf(stmt,
-                "SELECT tt.node_id,tt.geom,ft.%s FROM \"%s\".node AS tt "
-                "LEFT JOIN \"%s\".\"%s\" AS ft ON "
-                "(%s).type = 1 AND (%s).id = node_id WHERE containing_face "
-                "IS NULL AND node_id NOT IN "
-                "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
-                "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
-                "\"%s\".edge GROUP BY end_node) AS foo) ORDER BY node_id",
-                pg_info->fid_column, pg_info->toposchema_name,
-                pg_info->schema_name, pg_info->table_name,
-                pg_info->topogeom_column, pg_info->topogeom_column,
-                pg_info->toposchema_name, pg_info->toposchema_name);
+        snprintf(
+            stmt, sizeof(stmt),
+            "SELECT tt.node_id,tt.geom,ft.%s FROM \"%s\".node AS tt "
+            "LEFT JOIN \"%s\".\"%s\" AS ft ON "
+            "(%s).type = 1 AND (%s).id = node_id WHERE containing_face "
+            "IS NULL AND node_id NOT IN "
+            "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
+            "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
+            "\"%s\".edge GROUP BY end_node) AS foo) ORDER BY node_id",
+            pg_info->fid_column, pg_info->toposchema_name, pg_info->schema_name,
+            pg_info->table_name, pg_info->topogeom_column,
+            pg_info->topogeom_column, pg_info->toposchema_name,
+            pg_info->toposchema_name);
     else
-        sprintf(stmt,
-                "SELECT tt.node_id,tt.geom,ft.%s "
-                "FROM \"%s\".node AS tt LEFT JOIN \"%s\".\"%s\" AS ft ON "
-                "(%s).type = 1 AND (%s).id = node_id WHERE node_id NOT IN "
-                "(SELECT node_id FROM \"%s\".%s) AND containing_face IS NULL "
-                "ORDER BY node_id",
-                pg_info->fid_column, pg_info->toposchema_name,
-                pg_info->schema_name, pg_info->table_name,
-                pg_info->topogeom_column, pg_info->topogeom_column,
-                pg_info->toposchema_name, TOPO_TABLE_NODE);
+        snprintf(stmt, sizeof(stmt),
+                 "SELECT tt.node_id,tt.geom,ft.%s "
+                 "FROM \"%s\".node AS tt LEFT JOIN \"%s\".\"%s\" AS ft ON "
+                 "(%s).type = 1 AND (%s).id = node_id WHERE node_id NOT IN "
+                 "(SELECT node_id FROM \"%s\".%s) AND containing_face IS NULL "
+                 "ORDER BY node_id",
+                 pg_info->fid_column, pg_info->toposchema_name,
+                 pg_info->schema_name, pg_info->table_name,
+                 pg_info->topogeom_column, pg_info->topogeom_column,
+                 pg_info->toposchema_name, TOPO_TABLE_NODE);
     G_debug(2, "SQL: %s", stmt);
     res = PQexec(pg_info->conn, stmt);
     if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
@@ -1632,18 +1642,18 @@ int Vect__load_map_lines_pg(struct Map_info *Map)
        -> boundaries
      */
     if (pg_info->topo_geo_only)
-        sprintf(stmt,
-                "SELECT edge_id,start_node,end_node,left_face,right_face AS "
-                "right_area,tt.geom,ft.%s "
-                "FROM \"%s\".edge AS tt LEFT JOIN \"%s\".\"%s\" AS ft ON "
-                "(%s).type = 2 AND "
-                "(%s).id = edge_id ORDER BY edge_id",
-                pg_info->fid_column, pg_info->toposchema_name,
-                pg_info->schema_name, pg_info->table_name,
-                pg_info->topogeom_column, pg_info->topogeom_column);
+        snprintf(stmt, sizeof(stmt),
+                 "SELECT edge_id,start_node,end_node,left_face,right_face AS "
+                 "right_area,tt.geom,ft.%s "
+                 "FROM \"%s\".edge AS tt LEFT JOIN \"%s\".\"%s\" AS ft ON "
+                 "(%s).type = 2 AND "
+                 "(%s).id = edge_id ORDER BY edge_id",
+                 pg_info->fid_column, pg_info->toposchema_name,
+                 pg_info->schema_name, pg_info->table_name,
+                 pg_info->topogeom_column, pg_info->topogeom_column);
     else
-        sprintf(
-            stmt,
+        snprintf(
+            stmt, sizeof(stmt),
             "SELECT "
             "edge_id,start_node,end_node,left_area,right_area,tt.geom,ft.%s "
             "FROM \"%s\".edge AS tt LEFT JOIN \"%s\".\"%s\" ON "
@@ -1688,8 +1698,8 @@ int Vect__load_map_lines_pg(struct Map_info *Map)
        -> centroids
      */
     if (pg_info->topo_geo_only)
-        sprintf(
-            stmt,
+        snprintf(
+            stmt, sizeof(stmt),
             "SELECT node_id,tt.geom,containing_face,ft.%s FROM "
             "\"%s\".node AS tt LEFT JOIN \"%s\".\"%s\" AS ft ON "
             "(%s).type = 3 AND (%s).id = containing_face WHERE containing_face "
@@ -1702,17 +1712,17 @@ int Vect__load_map_lines_pg(struct Map_info *Map)
             pg_info->topogeom_column, pg_info->toposchema_name,
             pg_info->toposchema_name);
     else
-        sprintf(stmt,
-                "SELECT tt.node_id,tt.geom,containing_face,ft.%s FROM "
-                "\"%s\".node AS tt LEFT JOIN \"%s\".\"%s\" AS ft ON "
-                "(%s).type = 3 AND (%s).id = containing_face WHERE "
-                "node_id NOT IN (SELECT node_id FROM \"%s\".%s) AND "
-                "containing_face "
-                "IS NOT NULL ORDER BY node_id",
-                pg_info->fid_column, pg_info->toposchema_name,
-                pg_info->schema_name, pg_info->table_name,
-                pg_info->topogeom_column, pg_info->topogeom_column,
-                pg_info->toposchema_name, TOPO_TABLE_NODE);
+        snprintf(stmt, sizeof(stmt),
+                 "SELECT tt.node_id,tt.geom,containing_face,ft.%s FROM "
+                 "\"%s\".node AS tt LEFT JOIN \"%s\".\"%s\" AS ft ON "
+                 "(%s).type = 3 AND (%s).id = containing_face WHERE "
+                 "node_id NOT IN (SELECT node_id FROM \"%s\".%s) AND "
+                 "containing_face "
+                 "IS NOT NULL ORDER BY node_id",
+                 pg_info->fid_column, pg_info->toposchema_name,
+                 pg_info->schema_name, pg_info->table_name,
+                 pg_info->topogeom_column, pg_info->topogeom_column,
+                 pg_info->toposchema_name, TOPO_TABLE_NODE);
     G_debug(2, "SQL: %s", stmt);
     res = PQexec(pg_info->conn, stmt);
     if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||

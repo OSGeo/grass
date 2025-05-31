@@ -37,7 +37,7 @@ CONVERT_GRAN["minute"] = "60 second"
 ###############################################################################
 
 
-def check_granularity_string(granularity, temporal_type):
+def check_granularity_string(granularity, temporal_type) -> bool:
     """Check if the granularity string is valid
 
     :param granularity: The granularity string
@@ -90,19 +90,19 @@ def check_granularity_string(granularity, temporal_type):
     if temporal_type == "absolute":
         try:
             num, unit = granularity.split(" ")
-        except:
+        except (ValueError, AttributeError):
             return False
         if unit not in SUPPORTED_GRAN:
             return False
 
         try:
             int(num)
-        except:
+        except ValueError:
             return False
     elif temporal_type == "relative":
         try:
             int(granularity)
-        except:
+        except ValueError:
             return False
     else:
         return False
@@ -494,7 +494,7 @@ def compute_absolute_time_granularity(maps):
         # Keep the temporal extent to compare to the following/next map
         previous_start, previous_end = start, end
 
-    # Create a list with a single time unit only
+    # Create a set with a single time unit only
     dlist = set()
     assigned_time_unit = None
     time_unit_multipliers = {
@@ -529,11 +529,8 @@ def compute_absolute_time_granularity(maps):
     if not dlist:
         return None
 
-    if len(dlist) > 1:
-        # Find greatest common divisor
-        granularity = gcd_list(dlist)
-    else:
-        granularity = dlist.pop()
+    # Find greatest common divisor to get a single time unit
+    granularity = gcd_list(dlist) if len(dlist) > 1 else dlist.pop()
 
     if granularity is None:
         return None
@@ -1179,7 +1176,7 @@ def gran_plural_unit(gran):
 ########################################################################
 
 
-def gran_to_gran(from_gran, to_gran="days", shell=False):
+def gran_to_gran(from_gran, to_gran="days", shell: bool = False):
     """Converts the computed absolute granularity of a STDS to a smaller
     granularity based on the Gregorian calendar hierarchy that 1 year
     equals 12 months or 365.2425 days or 24 * 365.2425 hours or 86400 *

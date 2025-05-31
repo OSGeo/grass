@@ -362,7 +362,7 @@ int G_units(const char *units_name)
     else if (strcasecmp(units_name, "minute") == 0 ||
              strcasecmp(units_name, "minutes") == 0)
         return U_MINUTES;
-    else if (strcasecmp(units_name, "secons") == 0 ||
+    else if (strcasecmp(units_name, "second") == 0 ||
              strcasecmp(units_name, "seconds") == 0)
         return U_SECONDS;
 

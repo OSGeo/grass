@@ -16,12 +16,11 @@ station file for imagery group referenced by a sub-block.  These entries
 include: the (XC,YC,ZC) standard (e.g. UTM) approximate coordinates of the camera exposure
 station; initial roll, pitch, and yaw angles (in degrees) of the cameras
 attitude; and the <em>a priori</em> standard deviations for these
-parameters. During the imagery program, <em>i.photo.rectify</em>, the initial camera
+parameters. During the imagery program, <em>i.ortho.rectify</em>, the initial camera
 exposure station file is used for computation of the ortho-rectification
 parameters.  If no initial camera exposure station file exist, the default
-values are computed from the control points file created in <em><A
-HREF="g.gui.image2target.html">g.gui.image2target</a></em>.
-
+values are computed from the control points file created in
+<em><a href="g.gui.image2target.html">g.gui.image2target</a></em>.
 
 <p>
 
@@ -29,19 +28,19 @@ The following menu is displayed:
 <pre>
         Please provide the following information
 
-	INITIAL XC: Meters                __________
-	INITIAL YC: Meters                __________
-	INITIAL ZC: Meters                __________
-	INITIAL omega (pitch) degrees:    __________
-	INITIAL phi  (roll) degrees:      __________
-	INITIAL kappa  (yaw) degrees:     __________
+    INITIAL XC: Meters                __________
+    INITIAL YC: Meters                __________
+    INITIAL ZC: Meters                __________
+    INITIAL omega (pitch) degrees:    __________
+    INITIAL phi  (roll) degrees:      __________
+    INITIAL kappa  (yaw) degrees:     __________
 
-	Standard Deviation XC: Meters     __________
-	Standard Deviation YC: Meters     __________
-	Standard Deviation ZC: Meters     __________
-	Std. Dev. omega (pitch) degrees:  __________
-	Std. Dev. phi  (roll) degrees:    __________
-	Std. Dev. kappa  (yaw) degrees:   __________
+    Standard Deviation XC: Meters     __________
+    Standard Deviation YC: Meters     __________
+    Standard Deviation ZC: Meters     __________
+    Std. Dev. omega (pitch) degrees:  __________
+    Std. Dev. phi  (roll) degrees:    __________
+    Std. Dev. kappa  (yaw) degrees:   __________
 
         Use these values at run time? (1=yes, 0=no)
 
@@ -55,9 +54,9 @@ represent an approximation for the location of the camera at the time of
 exposure.
 
 <ul>
-<li> X: East aircraft position;
-<li> Y: North aircraft position;
-<li> Z: Flight altitude above sea level
+<li> X: East aircraft position;</li>
+<li> Y: North aircraft position;</li>
+<li> Z: Flight altitude above sea level</li>
 </ul>
 
 <p>
@@ -68,12 +67,12 @@ exposure.
 
 <ul>
 <li> Omega (pitch): Raising or lowering of the aircraft's front (turning
-  around the wings' axis);
+  around the wings' axis);</li>
 <li> Phi (roll): Raising or lowering of the wings (turning around the
-  aircraft's axis);
+  aircraft's axis);</li>
 <li> Kappa (yaw): Rotation needed to align the aerial photo to true north:
   needs to be denoted as +90 degree for clockwise turn and -90 degree for
-  a counterclockwise turn.
+  a counterclockwise turn.</li>
 </ul>
 
 <p>
@@ -108,7 +107,7 @@ values in this menu are not used.
 <a href="i.ortho.elev.html">i.ortho.elev</a>,
 <a href="i.ortho.camera.html">i.ortho.camera</a>,
 <a href="i.ortho.transform.html">i.ortho.transform</a>,
-<a href="i.photo.rectify.html">i.photo.rectify</a>
+<a href="i.ortho.rectify.html">i.ortho.rectify</a>
 </em>
 
 <h2>AUTHOR</h2>

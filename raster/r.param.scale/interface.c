@@ -72,7 +72,7 @@ void interface(int argc, char **argv)
 
     /* Each option has a 'key' (short descriptn), a 'description` (longer one)
      */
-    /* a 'type' (eg int, or string), and an indication whether manditory or not
+    /* a 'type' (eg int, or string), and an indication whether mandatory or not
      */
 
     rast_out->description =
@@ -92,7 +92,7 @@ void interface(int argc, char **argv)
     tol2_val->required = NO;
     tol2_val->answer = "0.0001";
 
-    sprintf(buf, "3-%i", MAX_WSIZE);
+    snprintf(buf, sizeof(buf), "3-%i", MAX_WSIZE);
     win_size->key = "size";
     win_size->description = _("Size of processing window (odd number only)");
     win_size->type = TYPE_INTEGER;

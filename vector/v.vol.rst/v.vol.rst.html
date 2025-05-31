@@ -16,7 +16,7 @@ geometric parameters of the interpolated
 phenomenon can be computed (magnitude of gradient, direction of
 gradient defined by horizontal and vertical angles), change of gradient,
 Gauss-Kronecker curvature, or mean curvature). These geometric
-parameteres are saved as
+parameters are saved as
 3D raster maps <b>gradient, aspect_horizontal, aspect_vertical, ncurvature, gcurvature, mcurvature</b>,
 respectively. Maps <b>aspect_horizontal</b> and <b>aspect_vertical</b> are in degrees.
 
@@ -68,7 +68,7 @@ only a subset of the input vectors.
 
 <div class="code"><pre>
 # preparation as in above example
-v.vol.rst elevrand_3d wcol=soilrange elevation=soilrange zscale=100 where="soilrange > 3"
+v.vol.rst elevrand_3d wcol=soilrange elevation=soilrange zscale=100 where="soilrange &gt; 3"
 </pre></div>
 
 <h3>Cross validation procedure</h3>
@@ -85,7 +85,7 @@ very long time, so it might be worth to use just a sample data
 representing the whole dataset.
 
 <p><i>Example
- (based on <a href="http://www.grassbook.org/data_menu2nd.php">Slovakia3d dataset</a>):</i>
+ (based on <a href="https://grassbook.org/data_menu2nd.php">Slovakia3d dataset</a>):</i>
 <p><div class="code"><pre>
 v.info -c precip3d
 g.region n=5530000 s=5275000 w=4186000 e=4631000 res=500 -p

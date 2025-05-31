@@ -6,7 +6,7 @@
  * PURPOSE:     This file contains definitions of variables and data types
  *              for use with most, if not all, Grass programs. This file is
  *              usually included in every Grass program.
- * COPYRIGHT:   (C) 2000-2024 by the GRASS Development Team
+ * COPYRIGHT:   (C) 2000-2025 by the GRASS Development Team
  *
  *              This program is free software under the GNU General Public
  *              License (>=v2). Read the file COPYING that comes with GRASS
@@ -22,7 +22,6 @@
 /* System include files */
 #include <stdio.h>
 #include <stdarg.h>
-#include <stdbool.h>
 
 /* Grass and local include files */
 #include <grass/config.h>
@@ -76,11 +75,11 @@ static const char *GRASS_copyright UNUSED = "GRASS GNU GPL licensed Software";
  */
 /* and 'false' For historical reasons 'TRUE' and 'FALSE' are still valid. */
 #ifndef TRUE
-#define TRUE true
+#define TRUE 1
 #endif
 
 #ifndef FALSE
-#define FALSE false
+#define FALSE 0
 #endif
 
 /*! \brief Cross-platform Newline Character */
@@ -161,7 +160,13 @@ static const char *GRASS_copyright UNUSED = "GRASS GNU GPL licensed Software";
 #define M_PI_2 1.57079632679489661923 /* pi/2 */
 
 #undef M_PI_4
+#ifdef _MSC_VER
+/* use the same value from ucrt\corecrt_math_defines.h to avoid redefinition
+ * warnings */
+#define M_PI_4 0.785398163397448309616 /* pi/4 */
+#else
 #define M_PI_4 0.78539816339744830962 /* pi/4 */
+#endif
 
 #undef M_R2D
 #define M_R2D 57.295779513082320877 /* 180/pi */
@@ -316,8 +321,9 @@ typedef enum {
     G_OPT_F_OUTPUT,    /*!< new output file */
     G_OPT_F_SEP,       /*!< data field separator */
 
-    G_OPT_C,  /*!< color */
-    G_OPT_CN, /*!< color or none */
+    G_OPT_C,        /*!< color */
+    G_OPT_CN,       /*!< color or none */
+    G_OPT_C_FORMAT, /*!< set color format to rgb,hex,hsv or triplet */
 
     G_OPT_M_UNITS,      /*!< units */
     G_OPT_M_DATATYPE,   /*!< datatype */
@@ -330,6 +336,7 @@ typedef enum {
     G_OPT_M_REGION,     /*!< saved region */
     G_OPT_M_NULL_VALUE, /*!< null value string */
     G_OPT_M_NPROCS,     /*!< number of threads for parallel computing */
+    G_OPT_M_SEED,       /*!< seed for random number generator */
 
     G_OPT_STDS_INPUT, /*!< old input space time dataset of type strds, str3ds or
                          stvds */
@@ -503,7 +510,7 @@ struct G_3dview {
     float from_to[2][3]; /* eye position & lookat position */
     float fov;           /* field of view */
     float twist;         /* right_hand rotation about from_to */
-    float exag;          /* terrain elevation exageration */
+    float exag;          /* terrain elevation exaggeration */
     int mesh_freq;       /* cells per grid line */
     int poly_freq;       /* cells per polygon */
     int display_type;    /* 1 for mesh, 2 for poly, 3 for both */

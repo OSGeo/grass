@@ -57,13 +57,13 @@ When <em>univar</em> is used, the methods available are the ones which
 
 When the <em>sql</em> backend is used, the methods depend on the SQL
 database backend used for the attribute table of the input vector. For
-SQLite, there are at least the following <a
-href="https://www.sqlite.org/lang_aggfunc.html">built-in aggregate
+SQLite, there are at least the following
+<a href="https://www.sqlite.org/lang_aggfunc.html">built-in aggregate
 functions</a>: <em>count</em>, <em>min</em>, <em>max</em>,
 <em>avg</em>, <em>sum</em>, and <em>total</em>.
 
-For PostgreSQL, the list of <a
-href="https://www.postgresql.org/docs/current/functions-aggregate.html">aggregate
+For PostgreSQL, the list of
+<a href="https://www.postgresql.org/docs/current/functions-aggregate.html">aggregate
 functions</a> is much longer and includes, e.g., <em>count</em>,
 <em>min</em>, <em>max</em>, <em>avg</em>, <em>sum</em>,
 <em>stddev</em>, and <em>variance</em>.
@@ -167,7 +167,7 @@ numbered fields referred to as layers. Refer to <em>v.category</em> for
 more details.
 
 <p>
-Merging of areas can also be accomplished using <tt>v.extract -d</tt>
+Merging of areas can also be accomplished using <code>v.extract -d</code>
 which provides some additional options. In fact, <em>v.dissolve</em> is
 simply a front-end to that module. The use of the <em>column</em>
 parameter adds a call to <em>v.reclass</em> before.
@@ -276,8 +276,8 @@ specified manually with the <b>result_columns</b> option:
 
 <div class="code"><pre>
 v.dissolve input=boundary_municp column=DOTURBAN_N output=municipalities_4 \
-	aggregate_columns=ACRES,NEW_PERC_G aggregate_methods=sum,avg \
-	result_columns=acres,new_perc_g
+    aggregate_columns=ACRES,NEW_PERC_G aggregate_methods=sum,avg \
+    result_columns=acres,new_perc_g
 </pre></div>
 
 <p>
@@ -336,9 +336,9 @@ functions with multiple parameters, for example specify separator to be
 used with <em>group_concat</em>:
 
 <div class="code"><pre>
-    v.dissolve input=boundary_municp column=DOTURBAN_N output=municipalities_7 \
-        aggregate_columns="group_concat(MB_NAME, ';')" \
-        result_columns="names TEXT"
+v.dissolve input=boundary_municp column=DOTURBAN_N output=municipalities_7 \
+    aggregate_columns="group_concat(MB_NAME, ';')" \
+    result_columns="names TEXT"
 </pre></div>
 
 <p>

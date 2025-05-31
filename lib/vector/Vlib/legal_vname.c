@@ -32,13 +32,13 @@
 int Vect_legal_filename(const char *s)
 {
     /* full list of SQL keywords available at
-       http://www.postgresql.org/docs/8.2/static/sql-keywords-appendix.html
+       https://www.postgresql.org/docs/8.2/static/sql-keywords-appendix.html
      */
     static const char *keywords[] = {"and", "or", "not", NULL};
     char buf[GNAME_MAX];
     int i;
 
-    sprintf(buf, "%s", s);
+    snprintf(buf, sizeof(buf), "%s", s);
 
     if (*s == '.' || *s == 0) {
         G_warning(

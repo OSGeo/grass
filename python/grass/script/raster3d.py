@@ -6,6 +6,7 @@ Usage:
 ::
 
     from grass.script import raster3d as grass
+
     grass.raster3d_info(map)
 
 
@@ -30,12 +31,13 @@ from grass.exceptions import CalledModuleError
 
 def raster3d_info(map, env=None):
     """Return information about a raster3d map (interface to `r3.info`).
+
     Example:
 
-    >>> mapcalc3d('volume = row() + col() + depth()')
-    >>> raster3d_info('volume') # doctest: +ELLIPSIS
+    >>> mapcalc3d("volume = row() + col() + depth()")
+    >>> raster3d_info("volume")  # doctest: +ELLIPSIS
     {'vertical_units': '"units"', 'tbres': 1.0, ... 'south': 185000.0}
-    >>> run_command('g.remove', flags='f', type='raster_3d', name='volume')
+    >>> run_command("g.remove", flags="f", type="raster_3d", name="volume")
     0
 
     :param str map: map name
@@ -108,4 +110,7 @@ def mapcalc3d(
             overwrite=overwrite,
         )
     except CalledModuleError:
-        fatal(_("An error occurred while running r3.mapcalc with expression: %s") % e)
+        fatal(
+            _("An error occurred while running r3.mapcalc with expression: %s") % e,
+            env=env,
+        )

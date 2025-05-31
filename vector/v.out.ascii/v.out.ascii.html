@@ -19,17 +19,17 @@ between machines.
 
 <p>If old version is requested, the <b>output</b> files
 from <em>v.out.ascii</em> is placed in
-the <tt>$LOCATION/$MAPSET/dig_ascii/</tt>
-and <tt>$LOCATION/$MAPSET/dig_att</tt> directory.
+the <code>$LOCATION/$MAPSET/dig_ascii/</code>
+and <code>$LOCATION/$MAPSET/dig_att</code> directory.
 
 <p>If <b>layer &gt; 0</b> then only features with a category number
 will be exported. Use <em><a href="v.category.html">v.category</a></em> to add
 them if needed or define <b>layer=-1</b> to export also features without category.
 
 <p><em>v.out.ascii</em> in the old version mode (<b>-o</b>) does not
-copy the <tt>dig_cats</tt> file associated with the binary
+copy the <code>dig_cats</code> file associated with the binary
 vector <b>input</b> map to the new <b>output</b> file name. The user
-must copy the <tt>dig_cats</tt> file to the new <b>output</b> name if
+must copy the <code>dig_cats</code> file to the new <b>output</b> name if
 this is desired (e.g. using the UNIX <em>cp</em> command).
 
 <p>It is possible to output the coordinates of vertices in a non-points vector
@@ -90,7 +90,7 @@ v.out.ascii input=quads format=point
 Print also selected attributes:
 
 <div class="code"><pre>
-v.out.ascii input=geodetic_pts format=point where="cat > 5 and cat <= 8" columns=GEOD_NAME
+v.out.ascii input=geodetic_pts format=point where="cat &gt; 5 and cat &lt;= 8" columns=GEOD_NAME
 
 573638.06289275|271623.25042595|6|27 WC 6
 574416.81289275|274116.65542595|7|27 WC 7
@@ -100,7 +100,7 @@ v.out.ascii input=geodetic_pts format=point where="cat > 5 and cat <= 8" columns
 To print all attributes type <b>columns=*</b>:
 
 <div class="code"><pre>
-v.out.ascii input=geodetic_pts format=point where="cat > 5 and cat <= 8" columns=*
+v.out.ascii input=geodetic_pts format=point where="cat &gt; 5 and cat &lt;= 8" columns=*
 573638.06289275|271623.25042595|6|6|0.00000000|0.00000000|6|6|27 WC 6|573638.09200000|271623.24100000|0.00|0|1.00000000|1.00000000
 574416.81289275|274116.65542595|7|7|0.00000000|0.00000000|7|7|27 WC 7|574416.84100000|274116.64900000|0.00|0|1.00000000|1.00000000
 575301.31189275|275303.81342595|8|8|0.00000000|0.00000000|8|8|27 WC 8|575301.30600000|275303.82600000|0.00|0|1.00000000|1.00000000
@@ -109,7 +109,7 @@ v.out.ascii input=geodetic_pts format=point where="cat > 5 and cat <= 8" columns
 <h3>WKT mode</h3>
 
 WKT is abbreviation
-for <a href="http://en.wikipedia.org/wiki/Well-known_text">Well-known
+for <a href="https://en.wikipedia.org/wiki/Well-known_text">Well-known
 text</a>.
 
 <div class="code"><pre>

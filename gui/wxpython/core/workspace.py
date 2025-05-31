@@ -169,11 +169,8 @@ class ProcessWorkspaceFile:
                 size = None
 
             extentAttr = display.get("extent", "")
-            if extentAttr:
-                # w, s, e, n
-                extent = map(float, extentAttr.split(","))
-            else:
-                extent = None
+            # w, s, e, n
+            extent = map(float, extentAttr.split(",")) if extentAttr else None
 
             # projection
             node_projection = display.find("projection")
@@ -312,10 +309,7 @@ class ProcessWorkspaceFile:
                     )
                 )
 
-        if layer.find("selected") is not None:
-            selected = True
-        else:
-            selected = False
+        selected = layer.find("selected") is not None
 
         #
         # Vector digitizer settings
@@ -330,10 +324,7 @@ class ProcessWorkspaceFile:
         # Nviz (3D settings)
         #
         node_nviz = layer.find("nviz")
-        if node_nviz is not None:
-            nviz = self.__processLayerNviz(node_nviz)
-        else:
-            nviz = None
+        nviz = self.__processLayerNviz(node_nviz) if node_nviz is not None else None
 
         return (cmd, selected, vdigit, nviz)
 
@@ -729,10 +720,7 @@ class ProcessWorkspaceFile:
                 try:
                     value = cast(node_tag.text)
                 except ValueError:
-                    if cast == str:
-                        value = ""
-                    else:
-                        value = None
+                    value = "" if cast == str else None
             if dc:
                 dc[tag] = {}
                 dc[tag]["value"] = value
@@ -1473,7 +1461,7 @@ class WriteWorkspaceFile:
         self.indent -= 4
 
     def __writeNvizState(self, view, iview, light, constants):
-        """ "Save Nviz properties (view, light) to workspace
+        """Save Nviz properties (view, light) to workspace
 
         :param view: Nviz view properties
         :param iview: Nviz internal view properties
@@ -1742,7 +1730,11 @@ class ProcessGrcFile:
         :return: list of map layers
         """
         try:
-            file = open(self.filename)
+            with open(self.filename) as file:  # Changed to context manager
+                line_id = 1
+                for line in file:
+                    self.process_line(line.rstrip("\n"), line_id)
+                    line_id += 1
         except OSError:
             wx.MessageBox(
                 parent=parent,
@@ -1751,13 +1743,6 @@ class ProcessGrcFile:
                 style=wx.OK | wx.ICON_ERROR,
             )
             return []
-
-        line_id = 1
-        for line in file:
-            self.process_line(line.rstrip("\n"), line_id)
-            line_id += 1
-
-        file.close()
 
         if self.num_error > 0:
             wx.MessageBox(
