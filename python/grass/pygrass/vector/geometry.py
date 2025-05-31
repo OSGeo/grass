@@ -1790,7 +1790,7 @@ class Area(Geo):
 
         int Vect_get_area_cat(const struct Map_info \*Map, int area, int field)
 
-        ..warning: Not implemented
+        .. warning:: Not implemented
         """
 
     @mapinfo_must_be_set

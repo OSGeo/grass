@@ -211,7 +211,7 @@ def get_enable_mapset_check():
     database.
     Overwrite this global variable by: g.gisenv set="TGIS_DISABLE_MAPSET_CHECK=True"
 
-    ..warning::
+    .. warning::
 
         Be aware to face corrupted temporal database in case this
         global variable is set to False. This feature is highly
@@ -231,7 +231,7 @@ def get_enable_timestamp_write():
     the temporal database using the C-library timestamp interface.
     Overwrite this global variable by: g.gisenv set="TGIS_DISABLE_TIMESTAMP_WRITE=True"
 
-    ..warning::
+    .. warning::
 
         Be aware that C-libraries can not access timestamp information if
         they are not written as spatial database metadata, hence modules
@@ -544,7 +544,7 @@ def init(raise_fatal_error: bool = False, skip_db_version_check: bool = False):
      - GRASS_TGIS_PROFILE (True, False, 1, 0)
      - GRASS_TGIS_RAISE_ON_ERROR (True, False, 1, 0)
 
-     ..warning::
+     .. warning::
 
          This functions must be called before any spatio-temporal processing
          can be started

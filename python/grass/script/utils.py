@@ -599,7 +599,7 @@ def append_node_pid(name):
 
     >>> append_node_pid("tmp_raster_1")
 
-    ..note::
+    .. note::
 
         Before you use this function for creating temporary files (i.e., normal
         files on disk, not maps and other mapset elements), see functions
@@ -632,7 +632,7 @@ def append_uuid(name):
 
     >>> append_uuid("tmp")
 
-    ..note::
+    .. note::
 
         See the note about creating temporary files in the
         :func:`append_node_pid()` description.
@@ -647,12 +647,12 @@ def append_random(name, suffix_length=None, total_length=None):
     >>> append_random("tmp", 8)
     >>> append_random("tmp", total_length=16)
 
-    ..note::
+    .. note::
 
         Note that this will be influenced by the random seed set for the Python
         random package.
 
-    ..note::
+    .. note::
 
         See the note about creating temporary files in the
         :func:`append_node_pid()` description.
