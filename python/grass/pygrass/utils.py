@@ -517,14 +517,16 @@ def create_test_vector_map(map_name="test_vector"):
 def create_test_stream_network_map(map_name="streams"):
     R"""Create test data
 
-       This functions creates a vector map layer with lines that represent
-       a stream network with two different graphs. The first graph
-       contains a loop, the second can be used as directed graph.
+    This functions creates a vector map layer with lines that represent
+    a stream network with two different graphs. The first graph
+    contains a loop, the second can be used as directed graph.
 
-       This should be used in doc and unit tests to create location/mapset
-       independent vector map layer.
+    This should be used in doc and unit tests to create location/mapset
+    independent vector map layer.
 
-        param map_name: The vector map name that should be used
+    :param map_name: The vector map name that should be used
+
+    .. code-block:: output
 
        1(0,2)  3(2,2)
         \     /
