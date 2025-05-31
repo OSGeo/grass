@@ -1426,7 +1426,7 @@ class TemporalAlgebraParser:
         :param compare_bool: Boolean for comparing boolean map values based on
                              related map list and comparison operator.
         :param compop: Comparison operator, && or ||.
-        :param aggregate: Aggregation operator for relation map list, & or |.
+        :param aggregate: Aggregation operator for relation map list, & or \\|.
 
         :return: List of maps from maplistA that fulfil the topological relationships
                  to maplistB specified in topolist.
@@ -1692,7 +1692,7 @@ class TemporalAlgebraParser:
 
         :param map_i: Map object with temporal extent.
         :param compop: Comparison operator, && or ||.
-        :param aggregate: Aggregation operator for relation map list, & or |.
+        :param aggregate: Aggregation operator for relation map list, & or \\|.
         :param temporal_topo_list: List of strings for given temporal relations.
         :param spatial_topo_list: List of strings for given spatial relations.
 
