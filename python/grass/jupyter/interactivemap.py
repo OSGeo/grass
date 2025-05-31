@@ -338,7 +338,7 @@ class InteractiveMap:
         :param str name: name of vector to be added to map;
                          positional-only parameter
         :param str title: vector name for layer control
-        :**kwargs: keyword arguments passed to GeoJSON overlay
+        :param kwargs: keyword arguments passed to GeoJSON overlay
         """
         self.vector_name.append(name)
         Vector(name, title=title, renderer=self._renderer, **kwargs).add_to(self.map)
@@ -357,7 +357,7 @@ class InteractiveMap:
 
         :param str name: name of raster to add to display; positional-only parameter
         :param str title: raster name for layer control
-        :**kwargs: keyword arguments passed to image overlay
+        :param kwargs: keyword arguments passed to image overlay
         """
         self.raster_name.append(name)
         Raster(name, title=title, renderer=self._renderer, **kwargs).add_to(self.map)
