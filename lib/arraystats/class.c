@@ -20,6 +20,8 @@ int AS_option_to_algorithm(const struct Option *option)
         return CLASS_DISCONT;
 
     G_fatal_error(_("Unknown algorithm '%s'"), option->answer);
+
+    return 0;
 }
 
 double AS_class_apply_algorithm(int algo, const double data[], int nrec,
