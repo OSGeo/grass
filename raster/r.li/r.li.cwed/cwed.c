@@ -106,21 +106,22 @@ int contrastWeightedEdgeDensity(int fd, char **par, struct area_entry *ad,
     file_fd = open(file, O_RDONLY);
     if (file_fd == -1) {
         G_fatal_error("can't  open file %s", file);
-        return RLI_ERRORE;
     }
 
     strFile = concatena("", "");
     if (strFile == NULL) {
+        close(file_fd);
         G_fatal_error("can't  concat strFile");
-        return RLI_ERRORE;
     }
 
     while ((l = read(file_fd, row, NMAX)) > 0) {
-        strFile = concatena(strFile, row);
-        if (strFile == NULL) {
+        char *strFile_tmp = concatena(strFile, row);
+        if (strFile_tmp == NULL) {
+            close(file_fd);
             G_fatal_error("can't  concat strFile 2");
-            return RLI_ERRORE;
         }
+        G_free(strFile);
+        strFile = strFile_tmp;
     }
 
     l = close(file_fd);
@@ -140,13 +141,11 @@ int contrastWeightedEdgeDensity(int fd, char **par, struct area_entry *ad,
     bufRighe = split_arg(strFile, separatore, &totRow);
     if (bufRighe == NULL) {
         G_fatal_error("can't  split buf_righe\n");
-        return RLI_ERRORE;
     }
 
     cc = G_malloc(tabSize * sizeof(CoppiaPesata));
     if (cc == NULL) {
         G_fatal_error("malloc cc failed");
-        return RLI_ERRORE;
     }
 
     for (i = 0; i < totRow; i++) {
@@ -161,14 +160,12 @@ int contrastWeightedEdgeDensity(int fd, char **par, struct area_entry *ad,
 
         if (b == NULL) {
             G_fatal_error("can't split bufRighe [%d]", i);
-            return RLI_ERRORE;
         }
 
         if (num != 1) {
 
             if (num != 3) {
                 G_fatal_error("wrong file format at line %d", i + 1);
-                return RLI_ERRORE;
             }
 
             c1.t = ad->data_type;
@@ -191,7 +188,6 @@ int contrastWeightedEdgeDensity(int fd, char **par, struct area_entry *ad,
             }
             default: {
                 G_fatal_error("data type unknown");
-                return RLI_ERRORE;
             }
             }
             p = atof(b[2]);
@@ -201,7 +197,6 @@ int contrastWeightedEdgeDensity(int fd, char **par, struct area_entry *ad,
                 cc = G_realloc(cc, tabSize * sizeof(CoppiaPesata));
                 if (cc == NULL) {
                     G_fatal_error("realloc cc failed");
-                    return _ERR;
                 }
             }
 
@@ -209,7 +204,6 @@ int contrastWeightedEdgeDensity(int fd, char **par, struct area_entry *ad,
             switch (ris) {
             case _ERR: {
                 G_fatal_error("add error");
-                return RLI_ERRORE;
             }
             case _ADD: {
                 totCoppie++;
@@ -220,13 +214,16 @@ int contrastWeightedEdgeDensity(int fd, char **par, struct area_entry *ad,
             }
             default: {
                 G_fatal_error("add unknown error");
-                return RLI_ERRORE;
             }
             }
         }
         /* else num = 1  ---> in the line there is only 1 token
          * I ignore this line
          */
+
+        for (long j = 0; j < num; j++)
+            G_free(b[j]);
+        G_free(b);
     }
 
     switch (ad->data_type) {
@@ -244,19 +241,21 @@ int contrastWeightedEdgeDensity(int fd, char **par, struct area_entry *ad,
     }
     default: {
         G_fatal_error("data type unknown");
-        return RLI_ERRORE;
     }
     }
 
-    if (ris != RLI_OK) {
-        return RLI_ERRORE;
-    }
+    if (ris == RLI_OK)
+        *result = indice;
+    else
+        ris = RLI_ERRORE;
 
-    *result = indice;
-
+    for (long j = 0; j < totRow; j++)
+        G_free(bufRighe[j]);
+    G_free(bufRighe);
+    G_free(strFile);
     G_free(cc);
 
-    return RLI_OK;
+    return ris;
 }
 
 int calculate(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
@@ -267,6 +266,7 @@ int calculate(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
     double area = 0;
 
     int i = 0, j;
+    int res = RLI_OK;
     int mask_fd = -1;
     int masked = FALSE;
     int *mask_corr = NULL, *mask_sup = NULL, *mask_tmp;
@@ -284,18 +284,17 @@ int calculate(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
     if (ad->mask == 1) {
         if ((mask_fd = open(ad->mask_name, O_RDONLY, 0755)) < 0) {
             G_fatal_error("can't open mask");
-            return RLI_ERRORE;
         }
 
         mask_corr = G_malloc(ad->cl * sizeof(int));
         if (mask_corr == NULL) {
+            close(mask_fd);
             G_fatal_error("malloc mask_corr failed");
-            return RLI_ERRORE;
         }
         mask_sup = G_malloc(ad->cl * sizeof(int));
         if (mask_sup == NULL) {
+            close(mask_fd);
             G_fatal_error("malloc mask_buf failed");
-            return RLI_ERRORE;
         }
         for (j = 0; j < ad->cl; j++)
             mask_corr[j] = 0;
@@ -305,8 +304,9 @@ int calculate(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
 
     buf_null = Rast_allocate_c_buf();
     if (buf_null == NULL) {
+        if (masked)
+            close(mask_fd);
         G_fatal_error("malloc buf_null failed");
-        return RLI_ERRORE;
     }
 
     c1.t = CELL_TYPE;
@@ -328,8 +328,8 @@ int calculate(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
             mask_sup = mask_corr;
             mask_corr = mask_tmp;
             if (read(mask_fd, mask_corr, (ad->cl * sizeof(int))) < 0) {
+                close(mask_fd);
                 G_fatal_error("reading mask_corr");
-                return RLI_ERRORE;
             }
         }
 
@@ -359,8 +359,10 @@ int calculate(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
                     c2.val.c = prevCell;
 
                     r = updateCoppia(cc, c1, c2, totCoppie);
-                    if (r == RLI_ERRORE)
-                        return RLI_ERRORE;
+                    if (r == RLI_ERRORE) {
+                        res = RLI_ERRORE;
+                        goto free_exit;
+                    }
                 }
 
                 if ((!(Rast_is_null_value(&supCell, CELL_TYPE))) &&
@@ -370,8 +372,10 @@ int calculate(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
                     c1.val.c = corrCell;
                     c2.val.c = supCell;
                     r = updateCoppia(cc, c1, c2, totCoppie);
-                    if (r == RLI_ERRORE)
-                        return RLI_ERRORE;
+                    if (r == RLI_ERRORE) {
+                        res = RLI_ERRORE;
+                        goto free_exit;
+                    }
                 }
             }
             prevCell = corrCell;
@@ -393,6 +397,7 @@ int calculate(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
     }
     *result = indice;
 
+free_exit:
     if (masked) {
         close(mask_fd);
         G_free(mask_corr);
@@ -401,7 +406,7 @@ int calculate(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
 
     G_free(buf_null);
 
-    return RLI_OK;
+    return res;
 }
 
 int calculateD(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
@@ -412,6 +417,7 @@ int calculateD(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
     double area = 0;
 
     int i = 0, j;
+    int res = RLI_OK;
     int mask_fd = -1;
     int masked = FALSE;
     int *mask_corr = NULL, *mask_sup = NULL, *mask_tmp;
@@ -429,18 +435,17 @@ int calculateD(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
     if (ad->mask == 1) {
         if ((mask_fd = open(ad->mask_name, O_RDONLY, 0755)) < 0) {
             G_fatal_error("can't  open mask");
-            return RLI_ERRORE;
         }
 
         mask_corr = G_malloc(ad->cl * sizeof(int));
         if (mask_corr == NULL) {
+            close(mask_fd);
             G_fatal_error("malloc mask_corr failed");
-            return RLI_ERRORE;
         }
         mask_sup = G_malloc(ad->cl * sizeof(int));
         if (mask_sup == NULL) {
+            close(mask_fd);
             G_fatal_error("malloc mask_buf failed");
-            return RLI_ERRORE;
         }
         for (j = 0; j < ad->cl; j++)
             mask_corr[j] = 0;
@@ -450,8 +455,9 @@ int calculateD(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
 
     buf_null = Rast_allocate_d_buf();
     if (buf_null == NULL) {
+        if (masked)
+            close(mask_fd);
         G_fatal_error("malloc buf_null failed");
-        return RLI_ERRORE;
     }
 
     c1.t = DCELL_TYPE;
@@ -473,8 +479,8 @@ int calculateD(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
             mask_sup = mask_corr;
             mask_corr = mask_tmp;
             if (read(mask_fd, mask_corr, (ad->cl * sizeof(int))) < 0) {
+                close(mask_fd);
                 G_fatal_error("reading mask_corr");
-                return RLI_ERRORE;
             }
         }
         Rast_set_d_null_value(&prevCell, 1);
@@ -502,8 +508,10 @@ int calculateD(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
                     c1.val.dc = corrCell;
                     c2.val.dc = prevCell;
                     r = updateCoppia(cc, c1, c2, totCoppie);
-                    if (r == RLI_ERRORE)
-                        return RLI_ERRORE;
+                    if (r == RLI_ERRORE) {
+                        res = RLI_ERRORE;
+                        goto free_exit;
+                    }
                 }
 
                 if ((!(Rast_is_null_value(&supCell, DCELL_TYPE))) &&
@@ -513,8 +521,10 @@ int calculateD(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
                     c1.val.dc = corrCell;
                     c2.val.dc = supCell;
                     r = updateCoppia(cc, c1, c2, totCoppie);
-                    if (r == RLI_ERRORE)
-                        return RLI_ERRORE;
+                    if (r == RLI_ERRORE) {
+                        res = RLI_ERRORE;
+                        goto free_exit;
+                    }
                 }
             }
             prevCell = corrCell;
@@ -535,6 +545,8 @@ int calculateD(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
         indice = somma * 10000 / area;
     }
     *result = indice;
+
+free_exit:
     if (masked) {
         close(mask_fd);
         G_free(mask_corr);
@@ -543,7 +555,7 @@ int calculateD(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
 
     G_free(buf_null);
 
-    return RLI_OK;
+    return res;
 }
 
 int calculateF(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
@@ -554,6 +566,7 @@ int calculateF(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
     double area = 0;
 
     int i = 0, j;
+    int res = RLI_OK;
     int mask_fd = -1;
     int masked = FALSE;
     int *mask_corr = NULL, *mask_sup = NULL, *mask_tmp;
@@ -571,18 +584,17 @@ int calculateF(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
     if (ad->mask == 1) {
         if ((mask_fd = open(ad->mask_name, O_RDONLY, 0755)) < 0) {
             G_fatal_error("can't  open mask");
-            return RLI_ERRORE;
         }
 
         mask_corr = G_malloc(ad->cl * sizeof(int));
         if (mask_corr == NULL) {
+            close(mask_fd);
             G_fatal_error("malloc mask_corr failed");
-            return RLI_ERRORE;
         }
         mask_sup = G_malloc(ad->cl * sizeof(int));
         if (mask_sup == NULL) {
+            close(mask_fd);
             G_fatal_error("malloc mask_buf failed");
-            return RLI_ERRORE;
         }
         for (j = 0; j < ad->cl; j++)
             mask_corr[j] = 0;
@@ -593,8 +605,9 @@ int calculateF(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
     /* allocate and initialize buffers */
     buf_null = Rast_allocate_f_buf();
     if (buf_null == NULL) {
+        if (masked)
+            close(mask_fd);
         G_fatal_error("malloc buf_sup failed");
-        return RLI_ERRORE;
     }
     /*the first time buf_sup is all null */
     Rast_set_f_null_value(buf_null + ad->x, ad->cl);
@@ -616,8 +629,8 @@ int calculateF(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
             mask_sup = mask_corr;
             mask_corr = mask_tmp;
             if (read(mask_fd, mask_corr, (ad->cl * sizeof(int))) < 0) {
+                close(mask_fd);
                 G_fatal_error("reading mask_corr");
-                return RLI_ERRORE;
             }
         }
         Rast_set_f_null_value(&prevCell, 1);
@@ -645,8 +658,10 @@ int calculateF(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
                     c1.val.fc = corrCell;
                     c2.val.fc = prevCell;
                     r = updateCoppia(cc, c1, c2, totCoppie);
-                    if (r == RLI_ERRORE)
-                        return RLI_ERRORE;
+                    if (r == RLI_ERRORE) {
+                        res = RLI_ERRORE;
+                        goto free_exit;
+                    }
                 }
 
                 if ((!(Rast_is_null_value(&supCell, FCELL_TYPE))) &&
@@ -656,8 +671,10 @@ int calculateF(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
                     c1.val.fc = corrCell;
                     c2.val.fc = supCell;
                     r = updateCoppia(cc, c1, c2, totCoppie);
-                    if (r == RLI_ERRORE)
-                        return RLI_ERRORE;
+                    if (r == RLI_ERRORE) {
+                        res = RLI_ERRORE;
+                        goto free_exit;
+                    }
                 }
             }
             prevCell = corrCell;
@@ -678,6 +695,8 @@ int calculateF(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
         indice = somma * 10000 / area;
     }
     *result = indice;
+
+free_exit:
     if (masked) {
         close(mask_fd);
         G_free(mask_corr);
@@ -686,7 +705,7 @@ int calculateF(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
 
     G_free(buf_null);
 
-    return RLI_OK;
+    return res;
 }
 
 int addCoppia(Coppie *cc, generic_cell ce1, generic_cell ce2, double pe,
@@ -728,7 +747,6 @@ int addCoppia(Coppie *cc, generic_cell ce1, generic_cell ce2, double pe,
     }
     default: {
         G_fatal_error("data type unknown");
-        return _ERR;
     }
     }
 
@@ -754,7 +772,6 @@ int addCoppia(Coppie *cc, generic_cell ce1, generic_cell ce2, double pe,
     cp = G_malloc(sizeof(CoppiaPesata));
     if (cp == NULL) {
         G_fatal_error("malloc cp failed");
-        return _ERR;
     }
     cp->c1 = ce1;
     cp->c2 = ce2;
@@ -763,13 +780,11 @@ int addCoppia(Coppie *cc, generic_cell ce1, generic_cell ce2, double pe,
 
     if (cc == NULL) {
         G_fatal_error("realloc cc failed");
-        return _ERR;
     }
 
     cc[it] = G_malloc(sizeof(CoppiaPesata));
     if (cc[it] == NULL) {
         G_fatal_error("malloc cc[it] failed");
-        return _ERR;
     }
     cc[it] = cp;
 
@@ -806,7 +821,6 @@ int updateCoppia(Coppie *cc, generic_cell c1, generic_cell c2, long tc)
     }
     default: {
         G_fatal_error("data type unknown");
-        return RLI_ERRORE;
     }
     }
 

@@ -34,18 +34,20 @@
     for (i = 0; i < 76; i++) \
         fprintf(out, "-");   \
     fprintf(out, "%c\n", x)
+#define TMPBUF_SZ 100
 
 enum OutputFormat { PLAIN, JSON };
 
 /* local prototypes */
-static void format_double(const double, char *);
+static void format_double(const double, char[100]);
 static void compose_line(FILE *, const char *, ...);
+static char *history_as_string(struct History *hist);
 
 int main(int argc, char **argv)
 {
     const char *name, *mapset;
     const char *title;
-    char tmp1[100], tmp2[100], tmp3[100], tmp4[100];
+    char tmp1[TMPBUF_SZ], tmp2[TMPBUF_SZ], tmp3[TMPBUF_SZ], tmp4[TMPBUF_SZ];
     char timebuff[256];
     char *units, *vdatum, *semantic_label;
     int i;
@@ -773,16 +775,14 @@ int main(int argc, char **argv)
                     json_object_set_string(
                         root_object, "description",
                         Rast_get_history(&hist, HIST_KEYWRD));
-                    JSON_Value *comments_value = json_value_init_array();
-                    JSON_Array *comments = json_array(comments_value);
-                    if (Rast_history_length(&hist)) {
-                        for (i = 0; i < Rast_history_length(&hist); i++) {
-                            json_array_append_string(
-                                comments, Rast_history_line(&hist, i));
-                        }
+                    char *buffer = history_as_string(&hist);
+                    if (buffer) {
+                        json_object_set_string(root_object, "comments", buffer);
+                        G_free(buffer);
                     }
-                    json_object_set_value(root_object, "comments",
-                                          comments_value);
+                    else {
+                        json_object_set_null(root_object, "comments");
+                    }
                 }
                 else {
                     json_object_set_null(root_object, "source1");
@@ -794,7 +794,7 @@ int main(int argc, char **argv)
             }
         }
 
-        if (hflag->answer || format == JSON) {
+        if (hflag->answer) {
             if (hist_ok) {
                 switch (format) {
                 case PLAIN:
@@ -823,16 +823,15 @@ int main(int argc, char **argv)
                     json_object_set_string(
                         root_object, "description",
                         Rast_get_history(&hist, HIST_KEYWRD));
-                    JSON_Value *comments_value = json_value_init_array();
-                    JSON_Array *comments = json_array(comments_value);
-                    if (Rast_history_length(&hist)) {
-                        for (i = 0; i < Rast_history_length(&hist); i++) {
-                            json_array_append_string(
-                                comments, Rast_history_line(&hist, i));
-                        }
+                    char *buffer = history_as_string(&hist);
+                    if (buffer) {
+                        json_object_set_string(root_object, "comments", buffer);
+                        G_free(buffer);
                     }
-                    json_object_set_value(root_object, "comments",
-                                          comments_value);
+                    else {
+                        json_object_set_null(root_object, "comments");
+                    }
+
                     break;
                 }
             }
@@ -853,9 +852,9 @@ int main(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
-static void format_double(const double value, char *buf)
+static void format_double(const double value, char buf[100])
 {
-    sprintf(buf, "%.8f", value);
+    snprintf(buf, TMPBUF_SZ, "%.8f", value);
     G_trim_decimal(buf);
 }
 
@@ -873,4 +872,47 @@ static void compose_line(FILE *out, const char *fmt, ...)
 
     printline(line);
     G_free(line);
+}
+
+static char *history_as_string(struct History *hist)
+{
+    int history_length = Rast_history_length(hist);
+    char *buffer = NULL;
+    if (history_length) {
+        size_t buffer_size = 0;
+        size_t total_length = 0;
+        for (int i = 0; i < history_length; i++) {
+            const char *line = Rast_history_line(hist, i);
+            size_t line_length = strlen(line);
+
+            // +1 for the null character
+            size_t required_size = total_length + line_length + 1;
+            if (required_size > buffer_size) {
+                // This is heuristic for reallocation based on remaining
+                // iterations and current size which is a good estimate for the
+                // first iteration and possible overshoot later on reducing the
+                // number of reallocations.
+                buffer_size = required_size * (history_length - i);
+                buffer = (char *)G_realloc(buffer, buffer_size);
+                if (total_length == 0)
+                    buffer[0] = '\0';
+            }
+            if (line_length >= 1 && line[line_length - 1] == '\\') {
+                // Ending backslash is line continuation.
+                strncat(buffer, line, line_length - 1);
+                total_length += line_length - 1;
+            }
+            else {
+                strncat(buffer, line, line_length);
+                total_length += line_length;
+                if (i < history_length - 1) {
+                    // Add newline to separate lines, but don't and newline at
+                    // the end of last (or only) line.
+                    strcat(buffer, "\n");
+                    ++total_length;
+                }
+            }
+        }
+    }
+    return buffer;
 }

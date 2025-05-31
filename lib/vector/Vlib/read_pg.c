@@ -631,7 +631,8 @@ SF_FeatureType get_feature(struct Map_info *Map, int fid, int type)
 
         PQclear(pg_info->res);
 
-        sprintf(stmt, "FETCH %d in %s", CURSOR_PAGE, pg_info->cursor_name);
+        snprintf(stmt, sizeof(stmt), "FETCH %d in %s", CURSOR_PAGE,
+                 pg_info->cursor_name);
         G_debug(3, "SQL: %s", stmt);
         pg_info->res = PQexec(pg_info->conn, stmt);
         if (!pg_info->res || PQresultStatus(pg_info->res) != PGRES_TUPLES_OK) {
@@ -1272,29 +1273,29 @@ int Vect__open_cursor_next_line_pg(struct Format_info_pg *pg_info,
                 G_warning(_("Unable to parse '%s'"), pg_info->where);
                 return -1;
             }
-            sprintf(stmt,
-                    "DECLARE %s CURSOR FOR SELECT \"%s\",\"%s\" FROM "
-                    "\"%s\".\"%s\" WHERE \"%s\"=%s ORDER BY \"%s\"",
-                    pg_info->cursor_name, pg_info->geom_column,
-                    pg_info->fid_column, pg_info->schema_name,
-                    pg_info->table_name, tokens[0], tokens[1],
-                    pg_info->fid_column);
+            snprintf(stmt, sizeof(stmt),
+                     "DECLARE %s CURSOR FOR SELECT \"%s\",\"%s\" FROM "
+                     "\"%s\".\"%s\" WHERE \"%s\"=%s ORDER BY \"%s\"",
+                     pg_info->cursor_name, pg_info->geom_column,
+                     pg_info->fid_column, pg_info->schema_name,
+                     pg_info->table_name, tokens[0], tokens[1],
+                     pg_info->fid_column);
             G_free_tokens(tokens);
         }
         else {
-            sprintf(stmt,
-                    "DECLARE %s CURSOR FOR SELECT \"%s\",\"%s\" FROM "
-                    "\"%s\".\"%s\" ORDER BY \"%s\"",
-                    pg_info->cursor_name, pg_info->geom_column,
-                    pg_info->fid_column, pg_info->schema_name,
-                    pg_info->table_name, pg_info->fid_column);
+            snprintf(stmt, sizeof(stmt),
+                     "DECLARE %s CURSOR FOR SELECT \"%s\",\"%s\" FROM "
+                     "\"%s\".\"%s\" ORDER BY \"%s\"",
+                     pg_info->cursor_name, pg_info->geom_column,
+                     pg_info->fid_column, pg_info->schema_name,
+                     pg_info->table_name, pg_info->fid_column);
         }
     }
     else {
         /* topology access (geom,id,fid,type) */
         /* TODO: optimize SQL statement (for points/centroids) */
-        sprintf(
-            stmt,
+        snprintf(
+            stmt, sizeof(stmt),
             "DECLARE %s CURSOR FOR "
             "SELECT geom,id,type,fid FROM ("
             "SELECT tt.node_id AS id,tt.geom, %d AS type, ft.%s AS fid FROM "
@@ -1345,9 +1346,10 @@ int Vect__open_cursor_next_line_pg(struct Format_info_pg *pg_info,
     }
 
     if (fetch_all)
-        sprintf(stmt, "FETCH ALL in %s", pg_info->cursor_name);
+        snprintf(stmt, sizeof(stmt), "FETCH ALL in %s", pg_info->cursor_name);
     else
-        sprintf(stmt, "FETCH %d in %s", CURSOR_PAGE, pg_info->cursor_name);
+        snprintf(stmt, sizeof(stmt), "FETCH %d in %s", CURSOR_PAGE,
+                 pg_info->cursor_name);
     G_debug(3, "SQL: %s", stmt);
     pg_info->res =
         PQexec(pg_info->conn, stmt); /* fetch records from select cursor */
@@ -1391,12 +1393,12 @@ int Vect__open_cursor_line_pg(struct Format_info_pg *pg_info, int fid, int type)
 
     if (!pg_info->toposchema_name) {
         /* simple feature access (geom) */
-        sprintf(stmt,
-                "DECLARE %s CURSOR FOR SELECT %s FROM \"%s\".\"%s\" "
-                "WHERE %s BETWEEN %d AND %d ORDER BY %s",
-                pg_info->cursor_name, pg_info->geom_column,
-                pg_info->schema_name, pg_info->table_name, pg_info->fid_column,
-                fid, fid + CURSOR_PAGE, pg_info->fid_column);
+        snprintf(stmt, sizeof(stmt),
+                 "DECLARE %s CURSOR FOR SELECT %s FROM \"%s\".\"%s\" "
+                 "WHERE %s BETWEEN %d AND %d ORDER BY %s",
+                 pg_info->cursor_name, pg_info->geom_column,
+                 pg_info->schema_name, pg_info->table_name, pg_info->fid_column,
+                 fid, fid + CURSOR_PAGE, pg_info->fid_column);
     }
     else {
         /* topological access */
@@ -1408,21 +1410,21 @@ int Vect__open_cursor_line_pg(struct Format_info_pg *pg_info, int fid, int type)
 
         if (type & GV_POINTS) {
             /* points (geom,containing_face) */
-            sprintf(stmt,
-                    "DECLARE %s CURSOR FOR SELECT geom,containing_face "
-                    " FROM \"%s\".node WHERE node_id BETWEEN %d AND %d ORDER "
-                    "BY node_id",
-                    pg_info->cursor_name, pg_info->toposchema_name, fid,
-                    fid + CURSOR_PAGE);
+            snprintf(stmt, sizeof(stmt),
+                     "DECLARE %s CURSOR FOR SELECT geom,containing_face "
+                     " FROM \"%s\".node WHERE node_id BETWEEN %d AND %d ORDER "
+                     "BY node_id",
+                     pg_info->cursor_name, pg_info->toposchema_name, fid,
+                     fid + CURSOR_PAGE);
         }
         else {
             /* edges (geom,left_face,right_face) */
-            sprintf(stmt,
-                    "DECLARE %s CURSOR FOR SELECT geom,left_face,right_face "
-                    " FROM \"%s\".edge WHERE edge_id BETWEEN %d AND %d ORDER "
-                    "BY edge_id",
-                    pg_info->cursor_name, pg_info->toposchema_name, fid,
-                    fid + CURSOR_PAGE);
+            snprintf(stmt, sizeof(stmt),
+                     "DECLARE %s CURSOR FOR SELECT geom,left_face,right_face "
+                     " FROM \"%s\".edge WHERE edge_id BETWEEN %d AND %d ORDER "
+                     "BY edge_id",
+                     pg_info->cursor_name, pg_info->toposchema_name, fid,
+                     fid + CURSOR_PAGE);
         }
     }
     if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
@@ -1431,7 +1433,7 @@ int Vect__open_cursor_line_pg(struct Format_info_pg *pg_info, int fid, int type)
     }
     pg_info->next_line = 0;
 
-    sprintf(stmt, "FETCH ALL in %s", pg_info->cursor_name);
+    snprintf(stmt, sizeof(stmt), "FETCH ALL in %s", pg_info->cursor_name);
     pg_info->res = PQexec(pg_info->conn, stmt);
     if (!pg_info->res || PQresultStatus(pg_info->res) != PGRES_TUPLES_OK) {
         error_tuples(pg_info);
@@ -1459,7 +1461,7 @@ int Vect__close_cursor_pg(struct Format_info_pg *pg_info)
     if (pg_info->cursor_name) {
         char stmt[DB_SQL_MAX];
 
-        sprintf(stmt, "CLOSE %s", pg_info->cursor_name);
+        snprintf(stmt, sizeof(stmt), "CLOSE %s", pg_info->cursor_name);
         if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
             G_warning(_("Unable to close cursor %s"), pg_info->cursor_name);
             return -1;
@@ -1488,9 +1490,10 @@ int Vect__select_line_pg(struct Format_info_pg *pg_info, int fid, int type)
 
     if (!pg_info->toposchema_name) {
         /* simple feature access */
-        sprintf(stmt, "SELECT %s FROM \"%s\".\"%s\" WHERE %s = %d",
-                pg_info->geom_column, pg_info->schema_name, pg_info->table_name,
-                pg_info->fid_column, fid);
+        snprintf(stmt, sizeof(stmt),
+                 "SELECT %s FROM \"%s\".\"%s\" WHERE %s = %d",
+                 pg_info->geom_column, pg_info->schema_name,
+                 pg_info->table_name, pg_info->fid_column, fid);
     }
     else {
         /* topological access */
@@ -1512,27 +1515,27 @@ int Vect__select_line_pg(struct Format_info_pg *pg_info, int fid, int type)
                 nodeid = "containing_face";
             }
 
-            sprintf(stmt,
-                    "SELECT tt.geom,tt.containing_face,ft.%s FROM \"%s\".node "
-                    "AS tt "
-                    "LEFT JOIN \"%s\".\"%s\" AS ft ON (%s).type = %d and "
-                    "(%s).id = %s "
-                    "WHERE node_id = %d",
-                    pg_info->fid_column, pg_info->toposchema_name,
-                    pg_info->schema_name, pg_info->table_name,
-                    pg_info->topogeom_column, topotype,
-                    pg_info->topogeom_column, nodeid, fid);
+            snprintf(stmt, sizeof(stmt),
+                     "SELECT tt.geom,tt.containing_face,ft.%s FROM \"%s\".node "
+                     "AS tt "
+                     "LEFT JOIN \"%s\".\"%s\" AS ft ON (%s).type = %d and "
+                     "(%s).id = %s "
+                     "WHERE node_id = %d",
+                     pg_info->fid_column, pg_info->toposchema_name,
+                     pg_info->schema_name, pg_info->table_name,
+                     pg_info->topogeom_column, topotype,
+                     pg_info->topogeom_column, nodeid, fid);
         }
         else {
-            sprintf(stmt,
-                    "SELECT tt.geom,tt.left_face,tt.right_face,ft.%s FROM "
-                    "\"%s\".edge AS tt "
-                    "LEFT JOIN \"%s\".\"%s\" AS ft ON (%s).type = 2 and "
-                    "(%s).id = edge_id "
-                    "WHERE edge_id = %d",
-                    pg_info->fid_column, pg_info->toposchema_name,
-                    pg_info->schema_name, pg_info->table_name,
-                    pg_info->topogeom_column, pg_info->topogeom_column, fid);
+            snprintf(stmt, sizeof(stmt),
+                     "SELECT tt.geom,tt.left_face,tt.right_face,ft.%s FROM "
+                     "\"%s\".edge AS tt "
+                     "LEFT JOIN \"%s\".\"%s\" AS ft ON (%s).type = 2 and "
+                     "(%s).id = edge_id "
+                     "WHERE edge_id = %d",
+                     pg_info->fid_column, pg_info->toposchema_name,
+                     pg_info->schema_name, pg_info->table_name,
+                     pg_info->topogeom_column, pg_info->topogeom_column, fid);
         }
     }
     G_debug(3, "SQL: %s", stmt);

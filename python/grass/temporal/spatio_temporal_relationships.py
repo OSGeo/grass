@@ -409,7 +409,7 @@ class SpatioTemporalTopologyBuilder:
         return self._first
 
     def _build_internal_iteratable(self, maps, spatial) -> None:
-        """Build an iteratable temporal topology structure for all maps in
+        """Build an iterable temporal topology structure for all maps in
         the list and store the maps internally
 
         Basically the "next" and "prev" relations will be set in the
@@ -417,7 +417,7 @@ class SpatioTemporalTopologyBuilder:
         The maps will be added to the object, so they can be
         accessed using the iterator of this class
 
-        :param maps: A sorted (by start_time)list of abstract_dataset
+        :param maps: A sorted (by start_time) list of abstract_dataset
                      objects with initiated temporal extent
         """
         self._build_iteratable(maps, spatial)
@@ -429,7 +429,7 @@ class SpatioTemporalTopologyBuilder:
         self._detect_first()
 
     def _build_iteratable(self, maps, spatial) -> None:
-        """Build an iteratable temporal topology structure for
+        """Build an iterable temporal topology structure for
         all maps in the list
 
         Basically the "next" and "prev" relations will be set in
@@ -586,7 +586,7 @@ class SpatioTemporalTopologyBuilder:
 
                 A = mapsA[i]
                 B = mapsB[j]
-                set_temoral_relationship(A, B, relation)
+                set_temporal_relationship(A, B, relation)
 
                 if spatial is not None:
                     relation = mapsB[j].spatial_relation(mapsA[i])
@@ -619,7 +619,7 @@ class SpatioTemporalTopologyBuilder:
 ###############################################################################
 
 
-def set_temoral_relationship(A, B, relation) -> None:
+def set_temporal_relationship(A, B, relation) -> None:
     if relation in {"equal", "equals"}:
         if A != B:
             if not B.get_equal() or (B.get_equal() and A not in B.get_equal()):
@@ -846,8 +846,9 @@ def create_temporal_relation_sql_where_statement(
      :param start: The start time
      :param end: The end time
      :param use_start: Select maps of which the start time is located in
-                       the selection granule ::
+                       the selection granule:
 
+                       .. code-block:: output
                            map    :        s
                            granule:  s-----------------e
 
@@ -856,44 +857,43 @@ def create_temporal_relation_sql_where_statement(
 
                            map    :        s--------e
                            granule:  s-----------------e
-
-
      :param use_during: Select maps which are temporal during the selection
-                        granule  ::
+                        granule:
 
+                        .. code-block:: output
                             map    :     s-----------e
                             granule:  s-----------------e
-
      :param use_overlap: Select maps which temporal overlap the selection
-                         granule ::
+                         granule:
 
+                         .. code-block:: output
                              map    :     s-----------e
                              granule:        s-----------------e
 
                              map    :     s-----------e
                              granule:  s----------e
-
      :param use_contain: Select maps which temporally contain the selection
-                         granule ::
+                         granule:
 
+                         .. code-block:: output
                              map    :  s-----------------e
                              granule:     s-----------e
-
      :param use_equal: Select maps which temporally equal to the selection
-                       granule ::
+                       granule:
 
+                       .. code-block:: output
                            map    :  s-----------e
                            granule:  s-----------e
-
      :param use_follows: Select maps which temporally follow the selection
-                         granule ::
+                         granule:
 
+                         .. code-block:: output
                              map    :              s-----------e
                              granule:  s-----------e
-
      :param use_precedes: Select maps which temporally precedes the
-                          selection granule ::
+                          selection granule:
 
+                          .. code-block:: output
                               map    :  s-----------e
                               granule:              s-----------e
 

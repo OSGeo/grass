@@ -207,7 +207,7 @@ int main(int argc, char *argv[])
         datafds[i] =
             Rast_open_old(refs.file[i - 1].name, refs.file[i - 1].mapset);
 
-        sprintf(tempname, "%s.%d", out_opt->answer, i);
+        snprintf(tempname, sizeof(tempname), "%s.%d", out_opt->answer, i);
         outfds[i] = Rast_open_c_new(tempname);
     }
 
@@ -230,7 +230,7 @@ int main(int argc, char *argv[])
         }
 
         Rast_make_grey_scale_colors(&color_tbl, 0, outbandmax[i]);
-        sprintf(tempname, "%s.%d", out_opt->answer, i);
+        snprintf(tempname, sizeof(tempname), "%s.%d", out_opt->answer, i);
 
         /* write a color table */
         Rast_write_colors(tempname, G_mapset(), &color_tbl);

@@ -24,7 +24,9 @@ class TestRSimWater(TestCase):
     def setUpClass(cls):
         """Set up region, create necessary data"""
         cls.runModule("g.region", n=224000, s=223000, e=637000, w=636000, res=10)
-        cls.runModule("r.slope.aspect", elevation=cls.elevation, dx=cls.dx, dy=cls.dy)
+        cls.runModule(
+            "r.slope.aspect", elevation=cls.elevation, dx=cls.dx, dy=cls.dy, flags="e"
+        )
         cls.runModule(
             "r.unpack",
             input="data/depth_default.pack",
@@ -167,7 +169,9 @@ class TestRSimWaterLarge(TestCase):
     def setUpClass(cls):
         """Set up region, create necessary data"""
         cls.runModule("g.region", raster=cls.elevation)
-        cls.runModule("r.slope.aspect", elevation=cls.elevation, dx=cls.dx, dy=cls.dy)
+        cls.runModule(
+            "r.slope.aspect", elevation=cls.elevation, dx=cls.dx, dy=cls.dy, flags="e"
+        )
 
     @classmethod
     def tearDownClass(cls):
@@ -191,7 +195,7 @@ class TestRSimWaterLarge(TestCase):
             random_seed=1,
         )
         self.assertRasterFitsUnivar(
-            self.depth, reference="sum=30364.327529", precision=1e-6
+            self.depth, reference="sum=30423.190201", precision=1e-6
         )
 
 

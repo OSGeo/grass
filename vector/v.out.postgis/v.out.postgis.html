@@ -6,48 +6,48 @@ PostGIS feature table. Features without category are skipped.
 <p>
 By default GRASS GIS topological features are converted into simple
 features
-(see <a href="http://www.opengeospatial.org/standards/sfa">OGC Simple
+(see <a href="https://www.ogc.org/publications/standard/sfa/">OGC Simple
 Feature Access</a> specification for details). Flag <b>-l</b> allows
 to export vector features as topological elements stored
-in <a href="http://postgis.refractions.net/docs/Topology.html">PostGIS
+in <a href="https://postgis.net/docs/Topology.html">PostGIS
 Topology</a> schema. Note that topological export requires PostGIS
 version 2 or later.
 
 <p>
 Additional creation options can be defined by <b>options</b> parameter:
 <ul>
-  <li><tt>FID=&lt;column&gt;</tt> - name of column which will be used as
-  primary key (feature id), default: <tt>fid</tt></li>
-  <li><tt>GEOMETRY_NAME=&lt;column&gt;</tt> name of column which will
-  be used for storing geometry data in feature table, default: <tt>geom</tt></li>
-  <li><tt>SPATIAL_INDEX=YES|NO</tt> - enable/disable creating spatial
-  index on geometry column, default: <tt>YES</tt></li>
-  <li><tt>PRIMARY_KEY=YES|NO</tt> - enable/disable adding primary key
-  on FID column, default: <tt>YES</tt></li>
-  <li><tt>SRID=&lt;value&gt;</tt> - spatial reference identifier,
+  <li><code>FID=&lt;column&gt;</code> - name of column which will be used as
+  primary key (feature id), default: <code>fid</code></li>
+  <li><code>GEOMETRY_NAME=&lt;column&gt;</code> name of column which will
+  be used for storing geometry data in feature table, default: <code>geom</code></li>
+  <li><code>SPATIAL_INDEX=YES|NO</code> - enable/disable creating spatial
+  index on geometry column, default: <code>YES</code></li>
+  <li><code>PRIMARY_KEY=YES|NO</code> - enable/disable adding primary key
+  on FID column, default: <code>YES</code></li>
+  <li><code>SRID=&lt;value&gt;</code> - spatial reference identifier,
   default: not defined</li>
 </ul>
 
 PostGIS Topology related options (relevant only for <b>-l</b> flag):
 
 <ul>
-  <li><tt>TOPOSCHEMA_NAME=&lt;schema name&gt;</tt> - name of PostGIS
-  Topology schema, default: <tt>topo_&lt;input&gt;</tt></li>
-  <li><tt>TOPOGEOM_NAME=&lt;column&gt;</tt> - name of column which
+  <li><code>TOPOSCHEMA_NAME=&lt;schema name&gt;</code> - name of PostGIS
+  Topology schema, default: <code>topo_&lt;input&gt;</code></li>
+  <li><code>TOPOGEOM_NAME=&lt;column&gt;</code> - name of column which
   will be used for storing topogeometry data in feature table,
-  default: <tt>topo</tt></li>
-  <li><tt>TOPO_TOLERANCE=&lt;value&gt;</tt> - tolerance for PostGIS
+  default: <code>topo</code></li>
+  <li><code>TOPO_TOLERANCE=&lt;value&gt;</code> - tolerance for PostGIS
   Topology schema,
-  see <a href="http://www.postgis.net/docs/manual-2.0/CreateTopology.html">CreateTopology</a>
-  function for details, default: <tt>0</tt></li>
-  <li><tt>TOPO_GEO_ONLY=YES|NO</tt> - store in PostGIS Topology schema
+  see <a href="https://postgis.net/docs/CreateTopology.html">CreateTopology</a>
+  function for details, default: <code>0</code></li>
+  <li><code>TOPO_GEO_ONLY=YES|NO</code> - store in PostGIS Topology schema
   only data relevant to Topo-Geo data model,
-  default: <tt>NO</tt></li>
+  default: <code>NO</code></li>
 </ul>
 
 <p>
 Creation <b>options</b> are comma-separated pairs
-(<tt>key=value</tt>), the options are case-insensitive. Note
+(<code>key=value</code>), the options are case-insensitive. Note
 that <b>options</b> defined
 by <em><a href="v.external.out.html">v.external.out</a></em> are
 ignored by <em>v.out.postgis</em>.
@@ -63,9 +63,9 @@ features</em>, ie. boundaries and centroids (forming topological
 areas) become polygons, isles become holes. Geometry of simple feature
 elements is stored in PostGIS feature table in the column named
 &quot;geom&quot;. Name of the geometry column can be changed
-by <b>options=</b><tt>GEOMETRY_NAME=&lt;column&gt;</tt>. Note that for
+by <b>options=</b><code>GEOMETRY_NAME=&lt;column&gt;</code>. Note that for
 exporting vector features as simple features can be alternatively
-used <a href="https://gdal.org/drv_pg.html">PostgreSQL driver</a>
+used <a href="https://gdal.org/en/stable/drivers/vector/pg.html">PostgreSQL driver</a>
 from <a href="https://gdal.org/">OGR</a> library
 through <em><a href="v.out.ogr.html">v.out.ogr</a></em> module.
 
@@ -83,7 +83,7 @@ details).
 <em>v.out.postgis</em> currently supports only three basic output
 simple feature types: Points, Linestrings and Polygons. Also 3D
 features of the same type are supported, eg. 3D points are exported
-as <tt>PointZ</tt> simple feature. Faces are exported as 3D
+as <code>PointZ</code> simple feature. Faces are exported as 3D
 polygons. 3D features are written to the output automatically if input
 vector map is 3D. If <b>-2</b> flag is given then the output is always
 2D (z-coordinate is silently ignored for 3D input vector maps).
@@ -95,7 +95,7 @@ category are exported as multiple single features.
 <p>
 <em>v.out.postgis</em> also allows exporting vector features as
 <em>topological elements</em>
-in <a href="http://postgis.refractions.net/docs/Topology.html">PostGIS
+in <a href="https://postgis.net/docs/Topology.html">PostGIS
 Topology</a> schema. PostGIS Topology extension uses three tables to
 store basic topological elements which forms topological objects like
 areas or isles in GRASS terminology. <em>Nodes</em> (0-dimensional
@@ -116,9 +116,9 @@ table.
 
 Tables <i>node</i>, <i>edge</i> and <i>face</i> are stored in given
 topological schema. By default <em>v.out.postgis</em> defines its name
-as <tt>topo_&lt;input&gt;</tt>. Alternatively, the name for topology
+as <code>topo_&lt;input&gt;</code>. Alternatively, the name for topology
 schema can be defined
-by <b>options=</b><tt>TOPOSCHEMA_NAME=&lt;name&gt;</tt>.
+by <b>options=</b><code>TOPOSCHEMA_NAME=&lt;name&gt;</code>.
 
 <h2>EXAMPLES</h2>
 
@@ -162,7 +162,7 @@ topological access to the data.
 
 Database schema for storing exported data can be defined
 by <b>output_layer</b> as
-<tt>&lt;schema_name&gt;.&lt;table_name&gt;</tt>. If the specified
+<code>&lt;schema_name&gt;.&lt;table_name&gt;</code>. If the specified
 schema doesn't exist in the database, then it's automatically created.
 
 <p>
@@ -177,7 +177,7 @@ v.out.postgis input=bridges output="PG:dbname=grass" output_layer=grassout.bridg
 
 Example below demonstrates how to define name for geometry column and
 disable building spatial index. Spatial reference system is defined
-by <tt>srid</tt> identifier which corresponds in this case with EPSG
+by <code>srid</code> identifier which corresponds in this case with EPSG
 3358 (North Carolina dataset).
 
 <div class="code"><pre>
@@ -233,7 +233,7 @@ v.out.postgis -t input=railroads output="PG:dbname=grass"
 By default <em>v.out.postgis</em> exports data as simple
 features. Flag <b>-l</b> allows exporting data as topological elements
 instead of simple features. Export topological elements is stored in
-<a href="http://postgis.refractions.net/docs/Topology.html">PostGIS
+<a href="https://postgis.net/docs/Topology.html">PostGIS
 Topology</a> schema.
 
 <div class="code"><pre>
@@ -264,8 +264,8 @@ page</a>.
 <h2>REFERENCES</h2>
 
 <ul>
-  <li><a href="http://www.opengeospatial.org/standards/sfa">OGC Simple Feature Access</a> specification</li>
-  <li><a href="http://postgis.net/docs/Topology.html">PostGIS Topology</a> documentation</li>
+  <li><a href="https://www.ogc.org/publications/standard/sfa/">OGC Simple Feature Access</a> specification</li>
+  <li><a href="https://postgis.net/docs/Topology.html">PostGIS Topology</a> documentation</li>
   <li><a href="https://grass.osgeo.org/programming8/vlibPg.html">GRASS-PostGIS data provider</a></li>
 </ul>
 

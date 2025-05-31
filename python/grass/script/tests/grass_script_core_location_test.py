@@ -35,9 +35,7 @@ def create_and_get_srid(tmp_path):
     """Create location on the same path as the current one"""
     bootstrap_location = "bootstrap"
     desired_location = "desired"
-    gs.core._create_location_xy(
-        tmp_path, bootstrap_location
-    )  # pylint: disable=protected-access
+    gs.core._create_location_xy(tmp_path, bootstrap_location)  # pylint: disable=protected-access
     with gs.setup.init(tmp_path / bootstrap_location, env=os.environ.copy()) as session:
         gs.create_location(tmp_path, desired_location, epsg="3358")
         assert (tmp_path / desired_location).exists()
@@ -48,7 +46,9 @@ def create_and_get_srid(tmp_path):
             "g.gisenv", set=f"LOCATION_NAME={desired_location}", env=session.env
         )
         gs.run_command("g.gisenv", set="MAPSET=PERMANENT", env=session.env)
-        return gs.parse_command("g.proj", flags="g", env=session.env)["srid"]
+        return gs.parse_command("g.proj", flags="p", format="shell", env=session.env)[
+            "srid"
+        ]
 
 
 def test_with_same_path(tmp_path):
@@ -90,7 +90,9 @@ def test_without_session(tmp_path):
     wkt_file = tmp_path / name / "PERMANENT" / "PROJ_WKT"
     assert wkt_file.exists()
     with gs.setup.init(tmp_path / name, env=os.environ.copy()) as session:
-        epsg = gs.parse_command("g.proj", flags="g", env=session.env)["srid"]
+        epsg = gs.parse_command("g.proj", flags="p", format="shell", env=session.env)[
+            "srid"
+        ]
         assert epsg == "EPSG:3358"
 
 
@@ -101,9 +103,7 @@ def test_with_different_path(tmp_path):
     tmp_path_a = tmp_path / "a"
     tmp_path_b = tmp_path / "b"
     tmp_path_a.mkdir()
-    gs.core._create_location_xy(
-        tmp_path_a, bootstrap_location
-    )  # pylint: disable=protected-access
+    gs.core._create_location_xy(tmp_path_a, bootstrap_location)  # pylint: disable=protected-access
     with gs.setup.init(
         tmp_path_a / bootstrap_location, env=os.environ.copy()
     ) as session:
@@ -116,7 +116,9 @@ def test_with_different_path(tmp_path):
             "g.gisenv", set=f"LOCATION_NAME={desired_location}", env=session.env
         )
         gs.run_command("g.gisenv", set="MAPSET=PERMANENT", env=session.env)
-        epsg = gs.parse_command("g.proj", flags="g", env=session.env)["srid"]
+        epsg = gs.parse_command("g.proj", flags="p", format="shell", env=session.env)[
+            "srid"
+        ]
         assert epsg == "EPSG:3358"
 
 
@@ -130,7 +132,9 @@ def test_path_only(tmp_path):
     assert mapset_path.exists()
     assert wkt_file.exists()
     with gs.setup.init(full_path, env=os.environ.copy()) as session:
-        epsg = gs.parse_command("g.proj", flags="g", env=session.env)["srid"]
+        epsg = gs.parse_command("g.proj", flags="p", format="shell", env=session.env)[
+            "srid"
+        ]
         assert epsg == "EPSG:3358"
 
 
@@ -141,7 +145,9 @@ def test_create_project(tmp_path):
     wkt_file = tmp_path / name / "PERMANENT" / "PROJ_WKT"
     assert wkt_file.exists()
     with gs.setup.init(tmp_path / name, env=os.environ.copy()) as session:
-        epsg = gs.parse_command("g.proj", flags="g", env=session.env)["srid"]
+        epsg = gs.parse_command("g.proj", flags="p", format="shell", env=session.env)[
+            "srid"
+        ]
         assert epsg == "EPSG:3358"
 
 
@@ -149,9 +155,7 @@ def test_files(tmp_path):
     """Check expected files are created"""
     bootstrap_location = "bootstrap"
     desired_location = "desired"
-    gs.core._create_location_xy(
-        tmp_path, bootstrap_location
-    )  # pylint: disable=protected-access
+    gs.core._create_location_xy(tmp_path, bootstrap_location)  # pylint: disable=protected-access
     with gs.setup.init(tmp_path / bootstrap_location, env=os.environ.copy()):
         description = "This is a test (not Gauss-Krüger or Křovák)"
         gs.create_location(tmp_path, desired_location, epsg="3358", desc=description)

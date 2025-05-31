@@ -298,7 +298,7 @@ into database tables.
 
 With <a href="v.to.points.html">v.to.points</a>,
 <a href="v.to.rast.html">v.to.rast</a> and <a href="v.to.rast3.html">v.to.rast3</a>
-conversions are performed. Note that a raster mask ("MASK") will not be
+conversions are performed. Note that a raster mask will not be
 respected since it is only applied when <em>reading</em> an existing
 GRASS raster map.
 
@@ -371,7 +371,7 @@ approximation (also called interpolation):
 
 Lidar point clouds (first and last return) are imported from text files
 with <a href="v.in.ascii.html">v.in.ascii</a> or from LAS files with
-<a href="v.in.lidar.html"> v.in.lidar</a>. Both modules recognize the
+<a href="v.in.pdal.html"> v.in.pdal</a>. Both modules recognize the
 -b flag to not build topology. Outlier detection is done with
 <a href="v.outlier.html">v.outlier</a> on both first and last return data.
 Then, with <a href="v.lidar.edgedetection.html">v.lidar.edgedetection</a>,
@@ -394,5 +394,4 @@ a point cloud.
   <li><a href="temporalintro.html">Introduction into temporal data processing</a></li>
   <li><a href="databaseintro.html">Introduction to database management</a></li>
   <li><a href="projectionintro.html">Projections and spatial transformations</a></li>
-  <li><a href="wxguiintro.html">Graphical User Interface</a></li>
 </ul>

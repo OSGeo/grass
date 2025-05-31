@@ -4,7 +4,7 @@
  *   Calculates univariate statistics from the non-null cells of a GRASS
  *   raster map
  *
- *   Copyright 2006-2014 by M. Hamish Bowman, and The GRASS Development Team
+ *   Copyright 2006-2014 by M. Hamish Bowman, and the GRASS Development Team
  *   Author: M. Hamish Bowman, University of Otago, Dunedin, New Zealand
  *
  *   Extended 2007 by Volker Wichmann to support the aggregate functions
@@ -1193,8 +1193,9 @@ int main(int argc, char *argv[])
     /* close raster file & write history */
     Rast_close(out_fd);
 
-    sprintf(title, "Raw x,y,z data binned into a raster grid by cell %s",
-            method_opt->answer);
+    snprintf(title, sizeof(title),
+             "Raw x,y,z data binned into a raster grid by cell %s",
+             method_opt->answer);
     Rast_put_cell_title(outmap, title);
 
     Rast_short_history(outmap, "raster", &history);

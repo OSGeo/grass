@@ -95,9 +95,9 @@ v.db.select mysoils layer=2
 
 <p>Compute D<sub>L</sub>, the Fractal Dimension (Mandelbrot, 1982), of the
 boundary defining a polygon based on the formula:
-<br><tt>
+<br><code>
 D = 2 * (log perimeter) / (log area):<br>
-</tt>
+</code>
 <div class="code"><pre>
 g.copy vect=soils,mysoils
 v.db.addcolumn mysoils col="d double precision"
@@ -138,6 +138,28 @@ v.to.db -p roads option=length type=line units=k
 <p>Report number of features for each category in the input vector map:<br>
 <div class="code"><pre>
 v.to.db -p roads option=count type=line
+</pre></div>
+
+Report all line lengths of the input vector map in JSON format:<br>
+<div class="code"><pre>
+v.to.db busroute6 -p option=length type=line format=json
+</pre></div>
+<div class="code"><pre>
+{
+    "totals": {
+        "length": 10426.657857419743
+    },
+    "records": [
+        {
+            "category": 1,
+            "length": 4554.943058982206
+        },
+        {
+            "category": 2,
+            "length": 5871.714798437537
+        }
+    ]
+}
 </pre></div>
 
 <h2>REFERENCES</h2>

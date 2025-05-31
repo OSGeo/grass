@@ -6,6 +6,7 @@ Usage:
 ::
 
     from grass.script import vector as grass
+
     grass.vector_db(map)
 
 (C) 2008-2010 by the GRASS Development Team
@@ -163,6 +164,7 @@ def vector_history(map, replace=False, env=None):
 
 def vector_info_topo(map, layer=1, env=None):
     """Return information about a vector map (interface to `v.info -t`).
+
     Example:
 
     >>> vector_info_topo("geology")  # doctest: +NORMALIZE_WHITESPACE

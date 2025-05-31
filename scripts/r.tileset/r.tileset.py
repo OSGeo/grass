@@ -189,14 +189,14 @@ def projectPoints(points, source, dest):
     """Projects a list of points"""
     dest_points = []
 
-    input = tempfile.NamedTemporaryFile(mode="wt")
-    for point in points:
-        input.file.write(
-            "%f;%f\n" % (point[0] * source["scale"], point[1] * source["scale"])
-        )
-    input.file.flush()
+    with tempfile.NamedTemporaryFile(mode="wt") as input:
+        for point in points:
+            input.write(
+                "%f;%f\n" % (point[0] * source["scale"], point[1] * source["scale"])
+            )
+        input.flush()
 
-    dest_points, errors = project(input.name, source, dest)
+        dest_points, errors = project(input.name, source, dest)
 
     return dest_points, errors
 
@@ -259,7 +259,7 @@ def main():
         )
     # destination projection
     if not options["destproj"]:
-        dest_proj = gcore.read_command("g.proj", quiet=True, flags="jf")
+        dest_proj = gcore.read_command("g.proj", quiet=True, flags="fp", format="proj4")
         dest_proj = decode(dest_proj).rstrip("\n")
         if not dest_proj:
             gcore.fatal(_("g.proj failed"))
@@ -269,7 +269,7 @@ def main():
 
     # projection scale
     if not options["destscale"]:
-        ret = gcore.parse_command("g.proj", quiet=True, flags="j")
+        ret = gcore.parse_command("g.proj", quiet=True, flags="p", format="proj4")
         if not ret:
             gcore.fatal(_("g.proj failed"))
 

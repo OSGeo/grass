@@ -72,9 +72,9 @@ int map_setup(void)
     /* set the scale */
     /*   work from height not width to minimize lat/lon curvature problems?? */
     if (!PS.scaletext[0]) {
-        sprintf(PS.scaletext, "1 : %.0f",
-                METERS_TO_INCHES * distance(PS.w.east, PS.w.west) * 72.0 /
-                    PS.map_pix_wide);
+        snprintf(PS.scaletext, sizeof(PS.scaletext), "1 : %.0f",
+                 METERS_TO_INCHES * distance(PS.w.east, PS.w.west) * 72.0 /
+                     PS.map_pix_wide);
     }
 
     G_message(_("Scale set to %s"), PS.scaletext);

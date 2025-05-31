@@ -402,7 +402,7 @@ char *Rast_get_cat(void *rast, struct Categories *pcats,
     char fmt[30], value_str[30];
 
     if (Rast_is_null_value(rast, data_type)) {
-        sprintf(label, "no data");
+        snprintf(label, sizeof(label), "no data");
         return label;
     }
 
@@ -439,7 +439,7 @@ char *Rast_get_cat(void *rast, struct Categories *pcats,
                     *l++ = *v++;
             }
             else if (get_fmt(&f, fmt, &i)) {
-                sprintf(v = value_str, fmt, a[i]);
+                snprintf(v = value_str, sizeof(value_str), fmt, a[i]);
                 while (*v)
                     *l++ = *v++;
             }
@@ -995,14 +995,14 @@ static void write_cats(const char *element, const char *name,
         descr = Rast_get_ith_d_cat(cats, i, &val1, &val2);
         if ((cats->fmt && cats->fmt[0]) || (descr && descr[0])) {
             if (val1 == val2) {
-                sprintf(str1, "%.10f", val1);
+                snprintf(str1, sizeof(str1), "%.10f", val1);
                 G_trim_decimal(str1);
                 fprintf(fd, "%s:%s\n", str1, descr != NULL ? descr : "");
             }
             else {
-                sprintf(str1, "%.10f", val1);
+                snprintf(str1, sizeof(str1), "%.10f", val1);
                 G_trim_decimal(str1);
-                sprintf(str2, "%.10f", val2);
+                snprintf(str2, sizeof(str2), "%.10f", val2);
                 G_trim_decimal(str2);
                 fprintf(fd, "%s:%s:%s\n", str1, str2,
                         descr != NULL ? descr : "");
@@ -1306,6 +1306,7 @@ int Rast_sort_cats(struct Categories *pcats)
         Rast_set_d_cat(&d1, &d2, descr, pcats);
     }
     Rast_free_cats(&save_cats);
+    G_free(indexes);
 
     return 0;
 }

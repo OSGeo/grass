@@ -66,7 +66,7 @@
 #define DGL_ES_DIRECTED            0x1 /* force edge to be directed */
 
 /*
- * Endianess Values - returned by dglGet_Endianess() function
+ * Endianness Values - returned by dglGet_Endianess() function
  */
 #define DGL_ENDIAN_BIG             1
 #define DGL_ENDIAN_LITTLE          2

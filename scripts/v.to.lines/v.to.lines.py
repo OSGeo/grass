@@ -187,7 +187,7 @@ def main():
                 "g.remove", flags="f", type="vector", name=remove_names, quiet=quiet
             )
             gs.fatal(_("Error removing table from layer 1"))
-    # TODO: when this except is happaning, it seems that never, so it seems wrong
+    # TODO: when this except is happening, it seems that never, so it seems wrong
     except Exception:
         gs.warning(_("No table for layer %d") % 1)
     try:

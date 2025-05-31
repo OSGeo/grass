@@ -17,7 +17,7 @@ import sys
 from ctypes import CFUNCTYPE, POINTER, byref, c_int, c_void_p, cast
 from datetime import datetime
 from multiprocessing import Lock, Pipe, Process
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Literal
 
 import grass.lib.date as libdate
 import grass.lib.gis as libgis
@@ -31,8 +31,10 @@ from grass.pygrass.rpc.base import RPCServerBase
 from grass.pygrass.utils import decode
 from grass.pygrass.vector import VectorTopo
 from grass.script.utils import encode
+import grass.script as gs
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
     from multiprocessing.connection import Connection
     from multiprocessing.synchronize import _LockLike
 
@@ -319,37 +321,9 @@ def _available_mapsets(lock: _LockLike, conn: Connection, data) -> None:
 
     :returns: Names of available mapsets as list of strings
     """
-
-    count = 0
     mapset_list = []
     try:
-        # Initialize the accessible mapset list, this is bad C design!!!
-        libgis.G_get_mapset_name(0)
-        mapsets = libgis.G_get_available_mapsets()
-        while mapsets[count]:
-            char_list = ""
-            mapset = mapsets[count]
-
-            permission = libgis.G_mapset_permissions(mapset)
-            in_search_path = libgis.G_is_mapset_in_search_path(mapset)
-
-            c = 0
-            while mapset[c] != b"\x00":
-                val = decode(mapset[c])
-                char_list += val
-                c += 1
-
-            if permission >= 0 and in_search_path == 1:
-                mapset_list.append(char_list)
-
-            libgis.G_debug(
-                1,
-                "c_library_server._available_mapsets: \n  mapset:  %s\n"
-                "  has permission %i\n  in search path: %i"
-                % (char_list, permission, in_search_path),
-            )
-            count += 1
-
+        mapset_list = gs.parse_command("g.mapsets", flags="p", format="json")["mapsets"]
         # We need to sort the mapset list, but the first one should be
         # the current mapset
         current_mapset = decode(libgis.G_mapset())
@@ -1239,8 +1213,10 @@ def c_library_server(lock: _LockLike, conn: Connection) -> None:
 
     libgis.G_add_error_handler(cerror_handler, None)
 
-    # Crerate the function array
-    functions = [0] * 50
+    # Create the function array
+    functions: list[
+        Callable[[_LockLike, Connection, Any], Literal[-1, -2] | None] | int
+    ] = [0] * 50
     functions[RPCDefs.STOP] = _stop
     functions[RPCDefs.HAS_TIMESTAMP] = _has_timestamp
     functions[RPCDefs.WRITE_TIMESTAMP] = _write_timestamp

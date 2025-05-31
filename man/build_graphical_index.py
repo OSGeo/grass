@@ -5,7 +5,7 @@
 # MODULE:    build_graphical_index
 # AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
 # PURPOSE:   Build graphical index
-# COPYRIGHT: (C) 2015-2024 by Vaclav Petras and the GRASS Development Team
+# COPYRIGHT: (C) 2015-2025 by Vaclav Petras and the GRASS Development Team
 #
 #        This program is free software under the GNU General Public
 #        License (>=v2). Read the file COPYING that comes with GRASS
@@ -67,11 +67,10 @@ def main(ext):
         )
 
     with open(os.path.join(man_dir, output_name + f".{ext}"), "w") as output:
-        output.write(
-            header1_tmpl.substitute(
-                title=f"GRASS GIS {grass_version} Reference Manual - Graphical index"
-            )
-        )
+        title = "Graphical index"
+        if ext == "html":
+            title = f"GRASS {grass_version} Reference Manual - {title}"
+        output.write(header1_tmpl.substitute(title=title))
         output.write(header_graphical_index_tmpl)
         if ext == "html":
             output.write('<ul class="img-list">\n')
@@ -87,8 +86,8 @@ def main(ext):
                 )
             else:
                 output.write(
-                    "- [![{name}]({img})]({link})".format(
-                        link=html_file, img=image, name=label
+                    "[![{name}]({img})]({link}.md)\n".format(
+                        link=html_file.removesuffix(".html"), img=image, name=label
                     )
                 )
 

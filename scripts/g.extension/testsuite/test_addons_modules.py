@@ -17,8 +17,8 @@ from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
 from grass.gunittest.utils import silent_rmtree, xfail_windows
 from grass.script.utils import decode
-
 import os
+from pathlib import Path
 
 
 MODULES_OUTPUT = """\
@@ -44,9 +44,7 @@ v.in.redwg
 v.neighborhoodmatrix
 v.transects
 wx.metadata
-""".replace(
-    "\n", os.linesep
-)
+""".replace("\n", os.linesep)
 
 
 class TestModulesMetadata(TestCase):
@@ -79,13 +77,12 @@ class TestModulesFromDifferentSources(TestCase):
     def setUp(self):
         """Make sure we are not dealing with some old files"""
         if os.path.exists(self.install_prefix):
-            files = os.listdir(self.install_prefix)
+            files = [p.name for p in Path(self.install_prefix).iterdir()]
             if files:
-                raise RuntimeError(
-                    "Install prefix path '{}' contains files {}".format(
-                        self.install_prefix, files
-                    )
+                msg = "Install prefix path '{}' contains files {}".format(
+                    self.install_prefix, files
                 )
+                raise RuntimeError(msg)
 
     def tearDown(self):
         """Remove created files"""

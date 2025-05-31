@@ -4,28 +4,38 @@ Created on Tue Mar 19 11:09:30 2013
 @author: pietro
 """
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import grass.lib.vector as libvect
-
 from grass.pygrass.errors import must_be_open
+from grass.pygrass.vector.basic import BoxList, Ilist
+from grass.pygrass.vector.geometry import Area, Isle, Node, read_line
 
-from grass.pygrass.vector.basic import Ilist, BoxList
-from grass.pygrass.vector.geometry import read_line, Isle, Area, Node
+if TYPE_CHECKING:
+    from grass.pygrass.vector.table import Table
 
 # For test purposes
 test_vector_name = "find_doctest_map"
 
 
 class AbstractFinder:
-    def __init__(self, c_mapinfo, table=None, writeable=False):
-        """Abstract finder
-        -----------------
+    def __init__(
+        self, c_mapinfo, table: Table | None = None, writeable: bool = False
+    ) -> None:
+        """Find geometry feature(s) around a point or that are inside or intersect
+        with a bounding box.
 
-        Find geometry feature around a point.
+        :param c_mapinfo: Pointer to the vector layer mapinfo structure
+        :type c_mapinfo: ctypes pointer to mapinfo structure
+        :param table: Attribute table of the vector layer
+        :param writable: True or False
         """
         self.c_mapinfo = c_mapinfo
-        self.table = table
-        self.writeable = writeable
-        self.vtype = {
+        self.table: Table | None = table
+        self.writeable: bool = writeable
+        self.vtype: dict[str, int] = {
             "point": libvect.GV_POINT,  # 1
             "line": libvect.GV_LINE,  # 2
             "boundary": libvect.GV_BOUNDARY,  # 3
@@ -33,7 +43,7 @@ class AbstractFinder:
             "all": -1,
         }
 
-    def is_open(self):
+    def is_open(self) -> bool:
         """Check if the vector map is open or not"""
         from . import abstract
 
@@ -47,20 +57,6 @@ class PointFinder(AbstractFinder):
     of a vector map that are close to a point. The PointFinder class
     is part of a topological vector map object.
     """
-
-    def __init__(self, c_mapinfo, table=None, writeable=False):
-        """Find geometry feature(s) around a point.
-
-        :param c_mapinfo: Pointer to the vector layer mapinfo structure
-        :type c_mapinfo: ctypes pointer to mapinfo structure
-
-        :param table: Attribute table of the vector layer
-        :type table: Class Table from grass.pygrass.table
-
-        :param writable: True or False
-        :type writeable: boolean
-        """
-        super().__init__(c_mapinfo, table, writeable)
 
     @must_be_open
     def node(self, point, maxdist):
@@ -81,10 +77,10 @@ class PointFinder(AbstractFinder):
         >>> from grass.pygrass.vector import VectorTopo
         >>> from grass.pygrass.vector.geometry import Point
         >>> test_vect = VectorTopo(test_vector_name)
-        >>> test_vect.open('r')
+        >>> test_vect.open("r")
 
         # Find nearest node
-        >>> points = (Point(10,0), Point(10,4), Point(14,0))
+        >>> points = (Point(10, 0), Point(10, 4), Point(14, 0))
         >>> result = []
         >>> for point in points:
         ...     f = test_vect.find_by_point.node(point=point, maxdist=1)
@@ -93,7 +89,7 @@ class PointFinder(AbstractFinder):
         >>> result
         [Node(2), Node(1), Node(6)]
 
-        >>> test_vect.find_by_point.node(point=Point(20,20), maxdist=0)
+        >>> test_vect.find_by_point.node(point=Point(20, 20), maxdist=0)
 
         >>> test_vect.close()
         """
@@ -139,17 +135,17 @@ class PointFinder(AbstractFinder):
         >>> from grass.pygrass.vector import VectorTopo
         >>> from grass.pygrass.vector.geometry import Point
         >>> test_vect = VectorTopo(test_vector_name)
-        >>> test_vect.open('r')
+        >>> test_vect.open("r")
 
         # Find single features
-        >>> points = (Point(10,0), Point(10,6), Point(14,2))
+        >>> points = (Point(10, 0), Point(10, 6), Point(14, 2))
         >>> result = []
         >>> for point in points:
         ...     f = test_vect.find_by_point.geo(point=point, maxdist=1)
         ...     if f:
         ...         result.append(f)
         >>> for f in result:
-        ...     print(f.to_wkt_p())    #doctest: +NORMALIZE_WHITESPACE
+        ...     print(f.to_wkt_p())  # doctest: +NORMALIZE_WHITESPACE
         LINESTRING(10.000000 4.000000,
                    10.000000 2.000000,
                    10.000000 0.000000)
@@ -158,7 +154,7 @@ class PointFinder(AbstractFinder):
                    14.000000 2.000000,
                    14.000000 0.000000)
 
-        >>> test_vect.find_by_point.geo(point=Point(20,20), maxdist=0)
+        >>> test_vect.find_by_point.geo(point=Point(20, 20), maxdist=0)
 
         >>> test_vect.close()
         """
@@ -202,18 +198,17 @@ class PointFinder(AbstractFinder):
         >>> from grass.pygrass.vector import VectorTopo
         >>> from grass.pygrass.vector.geometry import Point
         >>> test_vect = VectorTopo(test_vector_name)
-        >>> test_vect.open('r')
+        >>> test_vect.open("r")
 
         # Find multiple features
-        >>> points = (Point(10,0), Point(10,5), Point(14,2))
+        >>> points = (Point(10, 0), Point(10, 5), Point(14, 2))
         >>> result = []
         >>> for point in points:
-        ...     f = test_vect.find_by_point.geos(point=point,
-        ...                                      maxdist=1.5)
+        ...     f = test_vect.find_by_point.geos(point=point, maxdist=1.5)
         ...     if f:
         ...         result.append(f)
         >>> for f in result:
-        ...     print(f)             #doctest: +NORMALIZE_WHITESPACE
+        ...     print(f)  # doctest: +NORMALIZE_WHITESPACE
         [Line([Point(10.000000, 4.000000),
                Point(10.000000, 2.000000),
                Point(10.000000, 0.000000)])]
@@ -226,11 +221,11 @@ class PointFinder(AbstractFinder):
                Point(14.000000, 0.000000)])]
 
         # Find multiple boundaries
-        >>> point = Point(3,3)
-        >>> result = test_vect.find_by_point.geos(point=Point(3,3),
-        ...                                          type="boundary",
-        ...                                          maxdist=1.5)
-        >>> result                   #doctest: +NORMALIZE_WHITESPACE
+        >>> point = Point(3, 3)
+        >>> result = test_vect.find_by_point.geos(
+        ...     point=Point(3, 3), type="boundary", maxdist=1.5
+        ... )
+        >>> result  # doctest: +NORMALIZE_WHITESPACE
         [Boundary([Point(0.000000, 4.000000), Point(4.000000, 4.000000)]),
          Boundary([Point(4.000000, 4.000000), Point(4.000000, 0.000000)]),
          Boundary([Point(1.000000, 1.000000), Point(1.000000, 3.000000),
@@ -239,15 +234,15 @@ class PointFinder(AbstractFinder):
          Boundary([Point(4.000000, 4.000000), Point(6.000000, 4.000000)])]
 
         # Find multiple centroids
-        >>> point = Point(3,3)
-        >>> result = test_vect.find_by_point.geos(point=Point(3,3),
-        ...                                          type="centroid",
-        ...                                          maxdist=1.5)
-        >>> result                   #doctest: +NORMALIZE_WHITESPACE
+        >>> point = Point(3, 3)
+        >>> result = test_vect.find_by_point.geos(
+        ...     point=Point(3, 3), type="centroid", maxdist=1.5
+        ... )
+        >>> result  # doctest: +NORMALIZE_WHITESPACE
         [Centroid(2.500000, 2.500000),
          Centroid(3.500000, 3.500000)]
 
-        >>> test_vect.find_by_point.geos(point=Point(20,20), maxdist=0)
+        >>> test_vect.find_by_point.geos(point=Point(20, 20), maxdist=0)
 
         >>> test_vect.close()
         """
@@ -285,10 +280,10 @@ class PointFinder(AbstractFinder):
         >>> from grass.pygrass.vector import VectorTopo
         >>> from grass.pygrass.vector.geometry import Point
         >>> test_vect = VectorTopo(test_vector_name)
-        >>> test_vect.open('r')
+        >>> test_vect.open("r")
 
         # Find AREAS
-        >>> points = (Point(0.5,0.5), Point(5,1), Point(7,1))
+        >>> points = (Point(0.5, 0.5), Point(5, 1), Point(7, 1))
         >>> result = []
         >>> for point in points:
         ...     area = test_vect.find_by_point.area(point)
@@ -296,7 +291,7 @@ class PointFinder(AbstractFinder):
         >>> result
         [Area(1), Area(2), Area(4)]
         >>> for area in result:
-        ...     print(area.to_wkt())         #doctest: +NORMALIZE_WHITESPACE
+        ...     print(area.to_wkt())  # doctest: +NORMALIZE_WHITESPACE
         POLYGON ((0.0000000000000000 0.0000000000000000,
                   0.0000000000000000 4.0000000000000000,
                   0.0000000000000000 4.0000000000000000,
@@ -327,7 +322,7 @@ class PointFinder(AbstractFinder):
                   8.0000000000000000 0.0000000000000000,
                   6.0000000000000000 0.0000000000000000))
 
-        >>> test_vect.find_by_point.area(Point(20,20))
+        >>> test_vect.find_by_point.area(Point(20, 20))
 
         >>> test_vect.close()
         """
@@ -356,10 +351,10 @@ class PointFinder(AbstractFinder):
         >>> from grass.pygrass.vector import VectorTopo
         >>> from grass.pygrass.vector.geometry import Point
         >>> test_vect = VectorTopo(test_vector_name)
-        >>> test_vect.open('r')
+        >>> test_vect.open("r")
 
         # Find ISLANDS
-        >>> points = (Point(2,2), Point(5,1))
+        >>> points = (Point(2, 2), Point(5, 1))
         >>> result = []
         >>> for point in points:
         ...     area = test_vect.find_by_point.island(point)
@@ -367,14 +362,14 @@ class PointFinder(AbstractFinder):
         >>> result
         [Isle(2), Isle(1)]
         >>> for isle in result:
-        ...     print(isle.to_wkt())         #doctest: +NORMALIZE_WHITESPACE
+        ...     print(isle.to_wkt())  # doctest: +NORMALIZE_WHITESPACE
         Polygon((1.000000 1.000000, 3.000000 1.000000,
                  3.000000 3.000000, 1.000000 3.000000, 1.000000 1.000000))
         Polygon((0.000000 4.000000, 0.000000 0.000000, 4.000000 0.000000,
                  6.000000 0.000000, 8.000000 0.000000, 8.000000 4.000000,
                  6.000000 4.000000, 4.000000 4.000000, 0.000000 4.000000))
 
-        >>> test_vect.find_by_point.island(Point(20,20))
+        >>> test_vect.find_by_point.island(Point(20, 20))
 
         >>> test_vect.close()
         """
@@ -396,21 +391,6 @@ class BboxFinder(AbstractFinder):
     The BboxFinder class is part of a topological vector map object.
 
     """
-
-    def __init__(self, c_mapinfo, table=None, writeable=False):
-        """Find geometry feature(s)that are insider or intersect
-        with a boundingbox.
-
-         :param c_mapinfo: Pointer to the vector layer mapinfo structure
-         :type c_mapinfo: ctypes pointer to mapinfo structure
-
-         :param table: Attribute table of the vector layer
-         :type table: Class Table from grass.pygrass.table
-
-         :param writable: True or False
-         :type writeable: boolean
-        """
-        super().__init__(c_mapinfo, table, writeable)
 
     @must_be_open
     def geos(self, bbox, type="all", bboxlist_only=False):
@@ -440,11 +420,11 @@ class BboxFinder(AbstractFinder):
         >>> from grass.pygrass.vector import VectorTopo
         >>> from grass.pygrass.vector.basic import Bbox
         >>> test_vect = VectorTopo(test_vector_name)
-        >>> test_vect.open('r')
+        >>> test_vect.open("r")
 
         >>> bbox = Bbox(north=5, south=-1, east=3, west=-1)
         >>> result = test_vect.find_by_bbox.geos(bbox=bbox)
-        >>> [bbox for bbox in result] #doctest: +NORMALIZE_WHITESPACE
+        >>> [bbox for bbox in result]  # doctest: +NORMALIZE_WHITESPACE
         [Boundary([Point(4.000000, 0.000000), Point(0.000000, 0.000000)]),
          Boundary([Point(0.000000, 0.000000), Point(0.000000, 4.000000)]),
          Boundary([Point(0.000000, 4.000000), Point(4.000000, 4.000000)]),
@@ -454,9 +434,8 @@ class BboxFinder(AbstractFinder):
          Centroid(2.500000, 2.500000)]
 
         >>> bbox = Bbox(north=5, south=-1, east=3, west=-1)
-        >>> result = test_vect.find_by_bbox.geos(bbox=bbox,
-        ...                                      bboxlist_only=True)
-        >>> result                   #doctest: +NORMALIZE_WHITESPACE
+        >>> result = test_vect.find_by_bbox.geos(bbox=bbox, bboxlist_only=True)
+        >>> result  # doctest: +NORMALIZE_WHITESPACE
         Boxlist([Bbox(0.0, 0.0, 4.0, 0.0),
                  Bbox(4.0, 0.0, 0.0, 0.0),
                  Bbox(4.0, 4.0, 4.0, 0.0),
@@ -465,7 +444,7 @@ class BboxFinder(AbstractFinder):
 
         >>> bbox = Bbox(north=7, south=-1, east=15, west=9)
         >>> result = test_vect.find_by_bbox.geos(bbox=bbox)
-        >>> [bbox for bbox in result] #doctest: +NORMALIZE_WHITESPACE
+        >>> [bbox for bbox in result]  # doctest: +NORMALIZE_WHITESPACE
         [Line([Point(10.000000, 4.000000), Point(10.000000, 2.000000),
                Point(10.000000, 0.000000)]),
          Point(10.000000, 6.000000),
@@ -511,7 +490,7 @@ class BboxFinder(AbstractFinder):
         >>> from grass.pygrass.vector import VectorTopo
         >>> from grass.pygrass.vector.basic import Bbox
         >>> test_vect = VectorTopo(test_vector_name)
-        >>> test_vect.open('r')
+        >>> test_vect.open("r")
 
         # Find nodes in box
         >>> bbox = Bbox(north=5, south=-1, east=15, west=9)
@@ -560,7 +539,7 @@ class BboxFinder(AbstractFinder):
         >>> from grass.pygrass.vector import VectorTopo
         >>> from grass.pygrass.vector.basic import Bbox
         >>> test_vect = VectorTopo(test_vector_name)
-        >>> test_vect.open('r')
+        >>> test_vect.open("r")
 
         # Find areas in box
         >>> bbox = Bbox(north=5, south=-1, east=9, west=-1)
@@ -569,9 +548,8 @@ class BboxFinder(AbstractFinder):
         [Area(1), Area(2), Area(3), Area(4)]
 
         >>> bbox = Bbox(north=5, south=-1, east=9, west=-1)
-        >>> result = test_vect.find_by_bbox.areas(bbox=bbox,
-        ...                                       bboxlist_only=True)
-        >>> result                   #doctest: +NORMALIZE_WHITESPACE
+        >>> result = test_vect.find_by_bbox.areas(bbox=bbox, bboxlist_only=True)
+        >>> result  # doctest: +NORMALIZE_WHITESPACE
         Boxlist([Bbox(4.0, 0.0, 4.0, 0.0),
                  Bbox(4.0, 0.0, 6.0, 4.0),
                  Bbox(3.0, 1.0, 3.0, 1.0),
@@ -580,8 +558,7 @@ class BboxFinder(AbstractFinder):
         >>> bbox = Bbox(north=20, south=18, east=20, west=18)
         >>> test_vect.find_by_bbox.areas(bbox=bbox)
 
-        >>> test_vect.find_by_bbox.areas(bbox=bbox,
-        ...                              bboxlist_only=True)
+        >>> test_vect.find_by_bbox.areas(bbox=bbox, bboxlist_only=True)
 
         >>> test_vect.close()
         """
@@ -621,7 +598,7 @@ class BboxFinder(AbstractFinder):
         >>> from grass.pygrass.vector import VectorTopo
         >>> from grass.pygrass.vector.basic import Bbox
         >>> test_vect = VectorTopo(test_vector_name)
-        >>> test_vect.open('r')
+        >>> test_vect.open("r")
 
         # Find isles in box
         >>> bbox = Bbox(north=5, south=-1, east=9, west=-1)
@@ -630,17 +607,15 @@ class BboxFinder(AbstractFinder):
         [Isle(1), Isle(2)]
 
         >>> bbox = Bbox(north=5, south=-1, east=9, west=-1)
-        >>> result = test_vect.find_by_bbox.islands(bbox=bbox,
-        ...                                       bboxlist_only=True)
-        >>> result                   #doctest: +NORMALIZE_WHITESPACE
+        >>> result = test_vect.find_by_bbox.islands(bbox=bbox, bboxlist_only=True)
+        >>> result  # doctest: +NORMALIZE_WHITESPACE
         Boxlist([Bbox(4.0, 0.0, 8.0, 0.0),
                  Bbox(3.0, 1.0, 3.0, 1.0)])
 
         >>> bbox = Bbox(north=20, south=18, east=20, west=18)
         >>> test_vect.find_by_bbox.islands(bbox=bbox)
 
-        >>> test_vect.find_by_bbox.islands(bbox=bbox,
-        ...                              bboxlist_only=True)
+        >>> test_vect.find_by_bbox.islands(bbox=bbox, bboxlist_only=True)
 
         >>> test_vect.close()
         """
@@ -662,9 +637,6 @@ class BboxFinder(AbstractFinder):
 
 
 class PolygonFinder(AbstractFinder):
-    def __init__(self, c_mapinfo, table=None, writeable=False):
-        super().__init__(c_mapinfo, table, writeable)
-
     def lines(self, polygon, isles=None):
         pass
 
@@ -674,15 +646,16 @@ class PolygonFinder(AbstractFinder):
 
 if __name__ == "__main__":
     import doctest
+
     from grass.pygrass import utils
 
     utils.create_test_vector_map(test_vector_name)
     doctest.testmod()
 
-    """Remove the generated vector map, if exist"""
     from grass.pygrass.utils import get_mapset_vector
     from grass.script.core import run_command
 
     mset = get_mapset_vector(test_vector_name, mapset="")
     if mset:
+        # Remove the generated vector map, if exists
         run_command("g.remove", flags="f", type="vector", name=test_vector_name)
