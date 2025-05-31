@@ -184,3 +184,47 @@ CMakeUserPresets.json
 *-prefix/
 
 # End of https://www.toptal.com/developers/gitignore/api/cmake
+
+# Auto-generated sphinx source files for python library docs
+python/grass/docs/src/exceptions.rst
+python/grass/docs/src/grass.app.rst
+python/grass/docs/src/grass.benchmark.rst
+python/grass/docs/src/grass.exceptions.rst
+python/grass/docs/src/grass.experimental.rst
+python/grass/docs/src/grass.grassdb.rst
+python/grass/docs/src/grass.gunittest.rst
+python/grass/docs/src/grass.imaging.rst
+python/grass/docs/src/grass.jupyter.rst
+python/grass/docs/src/grass.pydispatch.rst
+python/grass/docs/src/grass.pygrass.gis.rst
+python/grass/docs/src/grass.pygrass.messages.rst
+python/grass/docs/src/grass.pygrass.modules.grid.rst
+python/grass/docs/src/grass.pygrass.modules.interface.rst
+python/grass/docs/src/grass.pygrass.modules.rst
+python/grass/docs/src/grass.pygrass.raster.rst
+python/grass/docs/src/grass.pygrass.rpc.rst
+python/grass/docs/src/grass.pygrass.rst
+python/grass/docs/src/grass.pygrass.shell.rst
+python/grass/docs/src/grass.pygrass.tests.rst
+python/grass/docs/src/grass.pygrass.vector.rst
+python/grass/docs/src/grass.rst
+python/grass/docs/src/grass.script.rst
+python/grass/docs/src/grass.semantic_label.rst
+python/grass/docs/src/grass.temporal.rst
+python/grass/docs/src/grass.utils.rst
+python/grass/docs/src/gunittest.rst
+python/grass/docs/src/imaging.rst
+python/grass/docs/src/pydispatch.rst
+python/grass/docs/src/pygrass.gis.rst
+python/grass/docs/src/pygrass.messages.rst
+python/grass/docs/src/pygrass.modules.grid.rst
+python/grass/docs/src/pygrass.modules.interface.rst
+python/grass/docs/src/pygrass.modules.rst
+python/grass/docs/src/pygrass.raster.rst
+python/grass/docs/src/pygrass.rpc.rst
+python/grass/docs/src/pygrass.rst
+python/grass/docs/src/pygrass.shell.rst
+python/grass/docs/src/pygrass.tests.rst
+python/grass/docs/src/pygrass.vector.rst
+python/grass/docs/src/script.rst
+python/grass/docs/src/temporal.rst
