@@ -31,9 +31,6 @@ class TestRWhatColor(TestCase):
             "*: *",
         ]
 
-        # Replacing '\r' because Windows uses '\r\n' for line endings, but we
-        # want to remove the '\r' (carriage return) to standardize line endings
-        result = result.replace("\r", "")
         result_lines = [line for line in result.split("\n") if line.strip() != ""]
 
         self.assertListEqual(
@@ -60,9 +57,6 @@ class TestRWhatColor(TestCase):
             "*: *",
         ]
 
-        # Replacing '\r' because Windows uses '\r\n' for line endings, but we
-        # want to remove the '\r' (carriage return) to standardize line endings
-        result = result.replace("\r", "")
         result_lines = [line for line in result.split("\n") if line.strip() != ""]
 
         self.assertListEqual(
