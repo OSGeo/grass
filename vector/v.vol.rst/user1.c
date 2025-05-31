@@ -63,7 +63,7 @@
 int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
 {
     struct quadruple *point;
-    double x, y, z, w, nz = 0., sm;
+    double x, y, z, w, nz = 0., sm = 0.;
     double c1, c2, c3, c4, c5, c6, nsg;
     int i, j, k = 0, a, irev, cfmask;
     int ddisk = 0;

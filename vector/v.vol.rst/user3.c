@@ -659,7 +659,7 @@ int POINT(int n_points, struct quadruple *points, struct point_3d skip_point)
 {
     double errmax, h, xx, yy, r2, hz, zz, ww, err, xmm, ymm, zmm, /* wmm, */ r,
         etar;
-    int n1, mm, m, mmax, inside;
+    int n1, mm, m, mmax = 0, inside;
 
     errmax = .0;
     n1 = n_points + 1;
