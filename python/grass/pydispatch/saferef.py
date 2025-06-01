@@ -15,13 +15,13 @@ else:
 def safeRef(target, onDelete=None):
     """Return a *safe* weak reference to a callable target
 
-    target -- the object to be weakly referenced, if it's a
-        bound method reference, will create a BoundMethodWeakref,
+    :param target: The object to be weakly referenced, if it's a
+        bound method reference, will create a :py:class:`BoundMethodWeakref`,
         otherwise creates a simple weakref.
-    onDelete -- if provided, will have a hard reference stored
+    :param onDelete: If provided, will have a hard reference stored
         to the callable to be called after the safe reference
         goes out of scope with the reference object, (either a
-        weakref or a BoundMethodWeakref) as argument.
+        weakref or a :py:class:`BoundMethodWeakref`) as argument.
     """
     if hasattr(target, im_self):
         if getattr(target, im_self) is not None:
@@ -41,34 +41,49 @@ def safeRef(target, onDelete=None):
 class BoundMethodWeakref:
     """'Safe' and reusable weak references to instance methods
 
-    BoundMethodWeakref objects provide a mechanism for
+    :py:class:`BoundMethodWeakref` objects provide a mechanism for
     referencing a bound method without requiring that the
     method object itself (which is normally a transient
-    object) is kept alive.  Instead, the BoundMethodWeakref
+    object) is kept alive.  Instead, the :py:class:`BoundMethodWeakref`
     object keeps weak references to both the object and the
     function which together define the instance method.
 
-    Attributes:
-        key -- the identity key for the reference, calculated
-            by the class's calculateKey method applied to the
+    :Attributes:
+
+        .. attribute:: key
+
+            the identity key for the reference, calculated
+            by the class's :py:meth:`.calculateKey` method applied to the
             target instance method
-        deletionMethods -- sequence of callable objects taking
+
+        .. attribute:: deletionMethods
+
+            sequence of callable objects taking
             single argument, a reference to this object which
             will be called when *either* the target object or
             target function is garbage collected (i.e. when
             this object becomes invalid).  These are specified
-            as the onDelete parameters of safeRef calls.
-        weakSelf -- weak reference to the target object
-        weakFunc -- weak reference to the target function
+            as the onDelete parameters of :py:func:`safeRef` calls.
 
-    Class Attributes:
-        _allInstances -- class attribute pointing to all live
-            BoundMethodWeakref objects indexed by the class's
+        .. attribute:: weakSelf
+
+            weak reference to the target object
+
+        .. attribute:: weakFunc
+
+            weak reference to the target function
+
+    :Class Attributes:
+
+        .. attribute:: _allInstances
+
+            class attribute pointing to all live
+            :py:class:`BoundMethodWeakref` objects indexed by the class's
             calculateKey(target) method applied to the target
             objects.  This weak value dictionary is used to
             short-circuit creation so that multiple references
             to the same (object, function) pair produce the
-            same BoundMethodWeakref instance.
+            same :py:class:`BoundMethodWeakref` instance.
 
     """
 
@@ -82,7 +97,7 @@ class BoundMethodWeakref:
         referenced instance methods.  The key corresponding
         to the target is calculated, and if there is already
         an existing reference, that is returned, with its
-        deletionMethods attribute updated.  Otherwise the
+        :attr:`deletionMethods` attribute updated.  Otherwise the
         new instance is created and registered in the table
         of already-referenced methods.
         """
@@ -99,12 +114,14 @@ class BoundMethodWeakref:
     def __init__(self, target, onDelete=None):
         """Return a weak-reference-like instance for a bound method
 
-        target -- the instance-method target for the weak
+        :param target: the instance-method target for the weak
             reference, must have <im_self> and <im_func> attributes
-            and be reconstructable via:
+            and be reconstructable via::
+
                 target.<im_func>.__get__( target.<im_self> )
+
             which is true of built-in instance methods.
-        onDelete -- optional callback which will be called
+        :param onDelete: optional callback which will be called
             when this weak reference ceases to be valid
             (i.e. either the object or the function is garbage
             collected).  Should take a single argument,
