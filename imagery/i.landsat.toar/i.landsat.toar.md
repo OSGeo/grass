@@ -26,7 +26,7 @@ settings, in order to have the largest possible sample of pixels from
 where to get the darkest one of the scene and perform the DOS
 correction. To limit the results to a custom region, the user is advised
 to clip the results (with
-[r.clip](https://grass.osgeo.org/grass-stable/manuals/addons/r.clip.html),
+[r.clip](https://grass.osgeo.org/grass-devel/manuals/addons/r.clip.html),
 for instance) or to define the region first, import the images with
 region cropping, and then running the module.
 

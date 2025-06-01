@@ -38,9 +38,9 @@ r.slope.aspect elevation=elevation slope=slope aspect=aspect
 GRASS Python interface provides libraries to create GRASS scripts and access
 the internal data structures of GRASS. The Python interface consists of
 two main libraries:
-*[grass.script](https://grass.osgeo.org/grass-stable/manuals/libpython/script_intro.html)*
+*[grass.script](https://grass.osgeo.org/grass-devel/manuals/libpython/script_intro.html)*
 provides a Python interface to GRASS tools
-and *[grass.pygrass](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_index.html)*
+and *[grass.pygrass](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_index.html)*
 enables access to the internal data structures of GRASS.
 
 To get started with scripting, create a new project with `gs.create_project` and

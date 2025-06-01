@@ -181,7 +181,7 @@ bottom=0.000000
 ## PYTHON
 
 See *[Python Scripting
-Library](https://grass.osgeo.org/grass-stable/manuals/libpython/)* for
+Library](https://grass.osgeo.org/grass-devel/manuals/libpython/)* for
 more info.
 
 Note: The Python tab in the *wxGUI* can be used for entering the
