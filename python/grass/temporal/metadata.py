@@ -170,6 +170,7 @@ class RasterMetadataBase(SQLDatabaseInterface):
 
     def get_id(self):
         """Convenient method to get the unique identifier (primary key)
+
         :return: None if not found
         """
         if "id" in self.D:

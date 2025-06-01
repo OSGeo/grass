@@ -982,6 +982,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
     def get_id(self):
         """Convenient method to get the unique identifier (primary key)
+
         :return: None if not found
         """
         if "id" in self.D:
@@ -990,14 +991,18 @@ class TemporalExtent(SQLDatabaseInterface):
 
     def get_start_time(self):
         """Get the valid start time of the extent
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "start_time" in self.D:
             return self.D["start_time"]
         return None
 
     def get_end_time(self):
         """Get the valid end time of the extent
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "end_time" in self.D:
             return self.D["end_time"]
         return None
@@ -1147,7 +1152,9 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
 
     def get_granularity(self):
         """Get the granularity of the space time dataset
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "granularity" in self.D:
             return self.D["granularity"]
         return None
@@ -1275,7 +1282,9 @@ class RelativeTemporalExtent(TemporalExtent):
 
     def get_unit(self):
         """Get the unit of the relative time
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "unit" in self.D:
             return self.D["unit"]
         return None
@@ -1424,7 +1433,9 @@ class STDSRelativeTime(RelativeTemporalExtent):
 
     def get_granularity(self):
         """Get the granularity of the space time dataset
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "granularity" in self.D:
             return self.D["granularity"]
         return None

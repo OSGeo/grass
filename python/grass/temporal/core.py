@@ -364,6 +364,7 @@ def get_raise_on_error():
 
 def get_tgis_version():
     """Get the supported version of the temporal framework
+
     :returns: The version number of the temporal framework as integer
     """
     global tgis_version
@@ -375,6 +376,7 @@ def get_tgis_version():
 
 def get_tgis_db_version():
     """Get the supported version of the temporal database
+
     :returns: The version number of the temporal database as integer
     """
     global tgis_db_version

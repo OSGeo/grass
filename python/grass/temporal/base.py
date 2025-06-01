@@ -420,7 +420,9 @@ class SQLDatabaseInterface(DictSQLSerializer):
     def get_insert_statement(self):
         """Return the sql statement and the argument
         list in database specific style
-        :return: The INSERT string"""
+
+        :return: The INSERT string
+        """
         return self.serialize("INSERT", self.get_table_name())
 
     def get_insert_statement_mogrified(self, dbif=None):
@@ -466,7 +468,6 @@ class SQLDatabaseInterface(DictSQLSerializer):
 
         :param ident: The identifier to be updated, useful for renaming
         :return: The UPDATE string
-
         """
         if ident:
             return self.serialize(
@@ -792,7 +793,8 @@ class DatasetBase(SQLDatabaseInterface):
     def get_mapset(self):
         """Get the name of mapset of this dataset
 
-        :return: None if not found"""
+        :return: None if not found
+        """
         if "mapset" in self.D:
             return self.D["mapset"]
         return None
