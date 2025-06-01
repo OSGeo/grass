@@ -188,7 +188,7 @@ class BoundMethodWeakref:
         return None, otherwise returns a bound instance
         method for our object and function.
 
-        Note:
+        .. note::
             You may call this method any number of times,
             as it does not invalidate the reference.
         """
