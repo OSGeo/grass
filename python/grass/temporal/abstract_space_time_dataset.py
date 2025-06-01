@@ -1438,7 +1438,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         :param dbif: The database interface to be used
         :param spatial_extent: Spatial extent dict and projection information
             e.g. from g.region -ug3 with GRASS GIS region keys
-            "n", "s", "e", "w", "b", "t", and  "projection".
+            "n", "s", "e", "w", "b", "t", and "projection".
         :param spatial_relation: Spatial relation to the provided
             spatial extent as a string with one of the following values:
 
@@ -1447,7 +1447,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             - "is_contained": maps that are fully within the provided spatial extent
             - "contains": maps that contain (fully cover) the provided spatial extent
 
-        :return: ordered object list, in case nothing found None is returned
+        :return: Ordered object list, in case nothing found None is returned
         """
 
         dbif, connection_state_changed = init_dbif(dbif)
@@ -1569,7 +1569,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         :param dbif: The database interface to be used
         :param spatial_extent: Spatial extent dict and projection information
             e.g. from g.region -ug3 with GRASS GIS region keys
-            "n", "s", "e", "w", "b", "t", and  "projection".
+            "n", "s", "e", "w", "b", "t", and "projection".
         :param spatial_relation: Spatial relation to the provided
             spatial extent as a string with one of the following values:
 
@@ -1578,7 +1578,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             - "is_contained": maps that are fully within the provided spatial extent
             - "contains": maps that contain (fully cover) the provided spatial extent
 
-        :return: The ordered map object list,
+        :return: The ordered map object list.
                 In case nothing is found, an empty list is returned
         """
 
@@ -1837,7 +1837,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         function is useful to retrieve e.g. granules from an STRDS
         with satellite imagery where scene consists of different bands
         that have different semantic_labels but equal an temporal extend
-        (group=["strat_time", "end_time"]).
+        (group=["start_time", "end_time"]).
         The returned SQL rows of grouped output contain the selected
         columns plus the columns in the group option. If no columns
         are selected only the "id" column is returned. Content of the
