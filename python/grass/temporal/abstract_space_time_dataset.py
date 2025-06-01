@@ -193,14 +193,14 @@ class AbstractSpaceTimeDataset(AbstractDataset):
     ) -> None:
         """Set the initial values of the space time dataset
 
-         In addition the command creation string is generated
-         an inserted into the metadata object.
+        In addition the command creation string is generated
+        an inserted into the metadata object.
 
-         This method only modifies this object and does not commit
-         the modifications to the temporal database.
+        This method only modifies this object and does not commit
+        the modifications to the temporal database.
 
-         The insert() function must be called to commit
-         this content into the temporal database.
+        The insert() function must be called to commit
+        this content into the temporal database.
 
         :param temporal_type: The temporal type of this space
                              time dataset (absolute or relative)
