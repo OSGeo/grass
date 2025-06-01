@@ -1427,10 +1427,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             "n", "s", "e", "w", "b", "t", and  "projection".
         :param spatial_relation: Spatial relation to the provided
             spatial extent as a string with one of the following values:
-            "overlaps": maps that spatially overlap ("intersect")
-                        within the provided spatial extent
-            "is_contained": maps that are fully within the provided spatial extent
-            "contains": maps that contain (fully cover) the provided spatial extent
+
+            - "overlaps": maps that spatially overlap ("intersect")
+              within the provided spatial extent
+            - "is_contained": maps that are fully within the provided spatial extent
+            - "contains": maps that contain (fully cover) the provided spatial extent
 
         :return: ordered object list, in case nothing found None is returned
         """
@@ -1502,10 +1503,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             "n", "s", "e", "w", "b", "t", and  "projection".
         :param spatial_relation: Spatial relation to the provided
             spatial extent as a string with one of the following values:
-            "overlaps": maps that spatially overlap ("intersect")
-                        within the provided spatial extent
-            "is_contained": maps that are fully within the provided spatial extent
-            "contains": maps that contain (fully cover) the provided spatial extent
+
+            - "overlaps": maps that spatially overlap ("intersect")
+              within the provided spatial extent
+            - "is_contained": maps that are fully within the provided spatial extent
+            - "contains": maps that contain (fully cover) the provided spatial extent
 
         :return: The ordered map object list,
                 In case nothing found None is returned
@@ -1556,10 +1558,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             "n", "s", "e", "w", "b", "t", and  "projection".
         :param spatial_relation: Spatial relation to the provided
             spatial extent as a string with one of the following values:
-            "overlaps": maps that spatially overlap ("intersect")
-                        within the provided spatial extent
-            "is_contained": maps that are fully within the provided spatial extent
-            "contains": maps that contain (fully cover) the provided spatial extent
+
+            - "overlaps": maps that spatially overlap ("intersect")
+              within the provided spatial extent
+            - "is_contained": maps that are fully within the provided spatial extent
+            - "contains": maps that contain (fully cover) the provided spatial extent
 
         :return: The ordered map object list,
                 In case nothing is found, an empty list is returned
@@ -1717,10 +1720,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             e.g. from g.region -ug3
         :param str spatial_relation: Spatial relation to the provided
             spatial extent as a string with one of the following values:
-            "overlaps": maps that spatially overlap ("intersect")
-                        within the provided spatial extent
-            "is_contained": maps that are fully within the provided spatial extent
-            "contains": maps that contain (fully cover) the provided spatial extent
+
+            - "overlaps": maps that spatially overlap ("intersect")
+              within the provided spatial extent
+            - "is_contained": maps that are fully within the provided spatial extent
+            - "contains": maps that contain (fully cover) the provided spatial extent
 
         :return: updated SQL WHERE statement
 
@@ -1840,10 +1844,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             "n", "s", "e", "w", "b", "t", and  "projection".
         :param spatial_relation: Spatial relation to the provided
             spatial extent as a string with one of the following values:
-            "overlaps": maps that spatially overlap ("intersect")
-                        within the provided spatial extent
-            "is_contained": maps that are fully within the provided spatial extent
-            "contains": maps that contain (fully cover) the provided spatial extent
+
+            - "overlaps": maps that spatially overlap ("intersect")
+              within the provided spatial extent
+            - "is_contained": maps that are fully within the provided spatial extent
+            - "contains": maps that contain (fully cover) the provided spatial extent
         :param dbif: The database interface to be used
 
         :return: SQL rows of all registered maps grouped by the columns given in
