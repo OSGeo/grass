@@ -158,12 +158,12 @@ class SpatialExtent(SQLDatabaseInterface):
         - covered
         - equivalent
 
-        .. code-block:: python
+        .. code-block:: pycon
 
-             >>> A = SpatialExtent(north=80, south=20, east=60, west=10)
-             >>> B = SpatialExtent(north=80, south=20, east=60, west=10)
-             >>> A.overlapping_2d(B)
-             True
+            >>> A = SpatialExtent(north=80, south=20, east=60, west=10)
+            >>> B = SpatialExtent(north=80, south=20, east=60, west=10)
+            >>> A.overlapping_2d(B)
+            True
 
         :param extent: The spatial extent to check overlapping with
         :return: True or False
@@ -214,16 +214,16 @@ class SpatialExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
-             >>> A = SpatialExtent(
-             ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
-             ... )
-             >>> B = SpatialExtent(
-             ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
-             ... )
-             >>> A.overlapping(B)
-             True
+            >>> A = SpatialExtent(
+            ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
+            ... )
+            >>> A.overlapping(B)
+            True
 
         :param extent: The spatial extent to check overlapping with
         :return: True or False

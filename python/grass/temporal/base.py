@@ -213,35 +213,35 @@ class SQLDatabaseInterface(DictSQLSerializer):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
-         >>> init()
-         >>> t = SQLDatabaseInterface("raster", "soil@PERMANENT")
-         >>> t.mapset = get_current_mapset()
-         >>> t.D["name"] = "soil"
-         >>> t.D["mapset"] = "PERMANENT"
-         >>> t.D["creator"] = "soeren"
-         >>> t.D["creation_time"] = datetime(2001, 1, 1)
-         >>> t.get_delete_statement()
-         "DELETE FROM raster WHERE id = 'soil@PERMANENT';\\n"
-         >>> t.get_is_in_db_statement()
-         "SELECT id FROM raster WHERE id = 'soil@PERMANENT';\\n"
-         >>> t.get_select_statement()
-         ("SELECT  creation_time  , mapset  , name  , creator  FROM raster WHERE id = 'soil@PERMANENT';\\n", ())
-         >>> t.get_select_statement_mogrified()
-         "SELECT  creation_time  , mapset  , name  , creator  FROM raster WHERE id = 'soil@PERMANENT';\\n"
-         >>> t.get_insert_statement()
-         ('INSERT INTO raster ( creation_time  ,mapset  ,name  ,creator ) VALUES (? ,? ,? ,?) ;\\n', (datetime.datetime(2001, 1, 1, 0, 0), 'PERMANENT', 'soil', 'soeren'))
-         >>> t.get_insert_statement_mogrified()
-         "INSERT INTO raster ( creation_time  ,mapset  ,name  ,creator ) VALUES ('2001-01-01 00:00:00' ,'PERMANENT' ,'soil' ,'soeren') ;\\n"
-         >>> t.get_update_statement()
-         ("UPDATE raster SET  creation_time = ?  ,mapset = ?  ,name = ?  ,creator = ? WHERE id = 'soil@PERMANENT';\\n", (datetime.datetime(2001, 1, 1, 0, 0), 'PERMANENT', 'soil', 'soeren'))
-         >>> t.get_update_statement_mogrified()
-         "UPDATE raster SET  creation_time = '2001-01-01 00:00:00'  ,mapset = 'PERMANENT'  ,name = 'soil'  ,creator = 'soeren' WHERE id = 'soil@PERMANENT';\\n"
-         >>> t.get_update_all_statement()
-         ("UPDATE raster SET  creation_time = ?  ,mapset = ?  ,name = ?  ,creator = ? WHERE id = 'soil@PERMANENT';\\n", (datetime.datetime(2001, 1, 1, 0, 0), 'PERMANENT', 'soil', 'soeren'))
-         >>> t.get_update_all_statement_mogrified()
-         "UPDATE raster SET  creation_time = '2001-01-01 00:00:00'  ,mapset = 'PERMANENT'  ,name = 'soil'  ,creator = 'soeren' WHERE id = 'soil@PERMANENT';\\n"
+        >>> init()
+        >>> t = SQLDatabaseInterface("raster", "soil@PERMANENT")
+        >>> t.mapset = get_current_mapset()
+        >>> t.D["name"] = "soil"
+        >>> t.D["mapset"] = "PERMANENT"
+        >>> t.D["creator"] = "soeren"
+        >>> t.D["creation_time"] = datetime(2001, 1, 1)
+        >>> t.get_delete_statement()
+        "DELETE FROM raster WHERE id = 'soil@PERMANENT';\\n"
+        >>> t.get_is_in_db_statement()
+        "SELECT id FROM raster WHERE id = 'soil@PERMANENT';\\n"
+        >>> t.get_select_statement()
+        ("SELECT  creation_time  , mapset  , name  , creator  FROM raster WHERE id = 'soil@PERMANENT';\\n", ())
+        >>> t.get_select_statement_mogrified()
+        "SELECT  creation_time  , mapset  , name  , creator  FROM raster WHERE id = 'soil@PERMANENT';\\n"
+        >>> t.get_insert_statement()
+        ('INSERT INTO raster ( creation_time  ,mapset  ,name  ,creator ) VALUES (? ,? ,? ,?) ;\\n', (datetime.datetime(2001, 1, 1, 0, 0), 'PERMANENT', 'soil', 'soeren'))
+        >>> t.get_insert_statement_mogrified()
+        "INSERT INTO raster ( creation_time  ,mapset  ,name  ,creator ) VALUES ('2001-01-01 00:00:00' ,'PERMANENT' ,'soil' ,'soeren') ;\\n"
+        >>> t.get_update_statement()
+        ("UPDATE raster SET  creation_time = ?  ,mapset = ?  ,name = ?  ,creator = ? WHERE id = 'soil@PERMANENT';\\n", (datetime.datetime(2001, 1, 1, 0, 0), 'PERMANENT', 'soil', 'soeren'))
+        >>> t.get_update_statement_mogrified()
+        "UPDATE raster SET  creation_time = '2001-01-01 00:00:00'  ,mapset = 'PERMANENT'  ,name = 'soil'  ,creator = 'soeren' WHERE id = 'soil@PERMANENT';\\n"
+        >>> t.get_update_all_statement()
+        ("UPDATE raster SET  creation_time = ?  ,mapset = ?  ,name = ?  ,creator = ? WHERE id = 'soil@PERMANENT';\\n", (datetime.datetime(2001, 1, 1, 0, 0), 'PERMANENT', 'soil', 'soeren'))
+        >>> t.get_update_all_statement_mogrified()
+        "UPDATE raster SET  creation_time = '2001-01-01 00:00:00'  ,mapset = 'PERMANENT'  ,name = 'soil'  ,creator = 'soeren' WHERE id = 'soil@PERMANENT';\\n"
 
     """  # noqa: E501
 
@@ -1150,16 +1150,16 @@ class AbstractSTDSRegister(SQLDatabaseInterface):
     """This is the base class for all maps to store the space time datasets
     as comma separated string in which they are registered
 
-     Usage:
+    Usage:
 
-     .. code-block:: python
+    .. code-block:: pycon
 
-         >>> init()
-         >>> t = AbstractSTDSRegister("raster", "soil@PERMANENT", "A@P,B@P,C@P")
-         >>> t.id
-         'soil@PERMANENT'
-         >>> t.registered_stds
-         'A@P,B@P,C@P'
+        >>> init()
+        >>> t = AbstractSTDSRegister("raster", "soil@PERMANENT", "A@P,B@P,C@P")
+        >>> t.id
+        'soil@PERMANENT'
+        >>> t.registered_stds
+        'A@P,B@P,C@P'
 
     """
 

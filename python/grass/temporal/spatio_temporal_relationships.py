@@ -74,7 +74,7 @@ class SpatioTemporalTopologyBuilder:
         # Dictionary like accessed
         map = tb["name@mapset"]
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> # Example with two lists of maps
         >>> import grass.temporal as tgis
@@ -91,7 +91,6 @@ class SpatioTemporalTopologyBuilder:
         ...     check = mapB.set_relative_time(i, i + 1, "months")
         ...     mapsA.append(mapA)
         ...     mapsB.append(mapB)
-        ...
         >>> # Build the topology between the two map lists
         >>> tb = SpatioTemporalTopologyBuilder()
         >>> tb.build(mapsA, mapsB, None)
@@ -103,7 +102,6 @@ class SpatioTemporalTopologyBuilder:
         ...             "Map %s has equal relation to map %s"
         ...             % (map.get_name(), relations[0].get_name())
         ...         )
-        ...
         Map a0 has equal relation to map b0
         Map a1 has equal relation to map b1
         Map a2 has equal relation to map b2
@@ -116,7 +114,6 @@ class SpatioTemporalTopologyBuilder:
         ...             "Map %s has equal relation to map %s"
         ...             % (map.get_name(), relations[0].get_name())
         ...         )
-        ...
         Map b0 has equal relation to map a0
         Map b1 has equal relation to map a1
         Map b2 has equal relation to map a2
@@ -134,7 +131,6 @@ class SpatioTemporalTopologyBuilder:
         ...     check = mapB.set_relative_time(i + 1, i + 2, "months")
         ...     mapsA.append(mapA)
         ...     mapsB.append(mapB)
-        ...
         >>> # Build the topology between the two map lists
         >>> tb = SpatioTemporalTopologyBuilder()
         >>> tb.build(mapsA, mapsB, None)
@@ -145,7 +141,6 @@ class SpatioTemporalTopologyBuilder:
         ...     for key in m.keys():
         ...         if key not in ["NEXT", "PREV"]:
         ...             print((key, m[key][0].get_temporal_extent_as_tuple()))
-        ...
         (0, 1)
         ('PRECEDES', (1, 2))
         (1, 2)
@@ -175,7 +170,6 @@ class SpatioTemporalTopologyBuilder:
         ...     check = mapB.set_absolute_time(start, end)
         ...     mapsA.append(mapA)
         ...     mapsB.append(mapB)
-        ...
         >>> # Build the topology between the two map lists
         >>> tb = SpatioTemporalTopologyBuilder()
         >>> tb.build(mapsA, mapsB, None)
@@ -186,7 +180,6 @@ class SpatioTemporalTopologyBuilder:
         ...     for key in m.keys():
         ...         if key not in ["NEXT", "PREV"]:
         ...             print((key, m[key][0].get_temporal_extent_as_tuple()))
-        ...
         (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0))
         ('PRECEDES', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2002, 1, 1, 0, 0)))
         (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2002, 1, 1, 0, 0))
@@ -216,7 +209,6 @@ class SpatioTemporalTopologyBuilder:
         ...     check = mapB.set_absolute_time(start, end)
         ...     mapsA.append(mapA)
         ...     mapsB.append(mapB)
-        ...
         >>> # Build the topology between the two map lists
         >>> tb = SpatioTemporalTopologyBuilder()
         >>> tb.build(mapsA, mapsB, None)
@@ -227,7 +219,6 @@ class SpatioTemporalTopologyBuilder:
         ...     for key in m.keys():
         ...         if key not in ["NEXT", "PREV"]:
         ...             print((key, m[key][0].get_temporal_extent_as_tuple()))
-        ...
         (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0))
         ('DURING', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
         ('STARTS', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
@@ -262,7 +253,6 @@ class SpatioTemporalTopologyBuilder:
         ...     check = mapB.set_absolute_time(start, end)
         ...     mapsA.append(mapA)
         ...     mapsB.append(mapB)
-        ...
         >>> # Build the topology between the two map lists
         >>> tb = SpatioTemporalTopologyBuilder()
         >>> tb.build(mapsA, mapsB, None)
@@ -273,7 +263,6 @@ class SpatioTemporalTopologyBuilder:
         ...     for key in m.keys():
         ...         if key not in ["NEXT", "PREV"]:
         ...             print((key, m[key][0].get_temporal_extent_as_tuple()))
-        ...
         (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2002, 1, 1, 0, 0))
         ('OVERLAPS', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0)))
         ('DURING', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
@@ -313,7 +302,6 @@ class SpatioTemporalTopologyBuilder:
         ...     check = mapB.set_absolute_time(start, end)
         ...     mapsA.append(mapA)
         ...     mapsB.append(mapB)
-        ...
         >>> # Build the topology between the two map lists
         >>> tb = SpatioTemporalTopologyBuilder()
         >>> tb.build(mapsA, mapsB, None)
@@ -324,7 +312,6 @@ class SpatioTemporalTopologyBuilder:
         ...     for key in m.keys():
         ...         if key not in ["NEXT", "PREV"]:
         ...             print((key, m[key][0].get_temporal_extent_as_tuple()))
-        ...
         (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2000, 1, 1, 0, 0, 2))
         ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
         ('PRECEDES', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
@@ -351,7 +338,6 @@ class SpatioTemporalTopologyBuilder:
         ...     end = datetime.datetime(2000, 1, 1, 0, 0, i + 2)
         ...     check = mapA.set_absolute_time(start, end)
         ...     mapsA.append(mapA)
-        ...
         >>> tb = SpatioTemporalTopologyBuilder()
         >>> tb.build(mapsA)
         >>> # Check relations of mapsA
@@ -361,7 +347,6 @@ class SpatioTemporalTopologyBuilder:
         ...     for key in m.keys():
         ...         if key not in ["NEXT", "PREV"]:
         ...             print((key, m[key][0].get_temporal_extent_as_tuple()))
-        ...
         (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2000, 1, 1, 0, 0, 2))
         ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
         ('PRECEDES', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))

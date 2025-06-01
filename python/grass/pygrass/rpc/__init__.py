@@ -264,52 +264,57 @@ class DataProvider(RPCServerBase):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
-         >>> from grass.pygrass.rpc import DataProvider
-         >>> import time
-         >>> provider = DataProvider()
-         >>> ret = provider.get_raster_image_as_np(name=test_raster_name)
-         >>> len(ret)
-         64
+            >>> from grass.pygrass.rpc import DataProvider
+            >>> import time
+            >>> provider = DataProvider()
+            >>> ret = provider.get_raster_image_as_np(name=test_raster_name)
+            >>> len(ret)
+            64
 
-         >>> extent = {
-         ...     "north": 30,
-         ...     "south": 10,
-         ...     "east": 30,
-         ...     "west": 10,
-         ...     "rows": 2,
-         ...     "cols": 2,
-         ... }
-         >>> ret = provider.get_raster_image_as_np(name=test_raster_name, extent=extent)
-         >>> len(ret)
-         16
+            >>> extent = {
+            ...     "north": 30,
+            ...     "south": 10,
+            ...     "east": 30,
+            ...     "west": 10,
+            ...     "rows": 2,
+            ...     "cols": 2,
+            ... }
+            >>> ret = provider.get_raster_image_as_np(
+            ...     name=test_raster_name, extent=extent
+            ... )
+            >>> len(ret)
+            16
 
-         >>> extent = {"rows": 3, "cols": 1}
-         >>> ret = provider.get_raster_image_as_np(name=test_raster_name, extent=extent)
-         >>> len(ret)
-         12
+            >>> extent = {"rows": 3, "cols": 1}
+            >>> ret = provider.get_raster_image_as_np(
+            ...     name=test_raster_name, extent=extent
+            ... )
+            >>> len(ret)
+            12
 
-         >>> extent = {
-         ...     "north": 100,
-         ...     "south": 10,
-         ...     "east": 30,
-         ...     "west": 10,
-         ...     "rows": 2,
-         ...     "cols": 2,
-         ... }
-         >>> ret = provider.get_raster_image_as_np(name=test_raster_name, extent=extent)
+            >>> extent = {
+            ...     "north": 100,
+            ...     "south": 10,
+            ...     "east": 30,
+            ...     "west": 10,
+            ...     "rows": 2,
+            ...     "cols": 2,
+            ... }
+            >>> ret = provider.get_raster_image_as_np(
+            ...     name=test_raster_name, extent=extent
+            ... )
 
-         >>> provider.stop()
-         >>> time.sleep(1)
+           >>> provider.stop()
+           >>> time.sleep(1)
 
-         >>> extent = {"rows": 3, "cols": 1}
-         >>> ret = provider.get_raster_image_as_np(name=test_raster_name, extent=extent)
-         >>> len(ret)
-         12
-
-
-         ..
+            >>> extent = {"rows": 3, "cols": 1}
+            >>> ret = provider.get_raster_image_as_np(
+            ...     name=test_raster_name, extent=extent
+            ... )
+            >>> len(ret)
+            12
         """
         self.check_server()
         self.client_conn.send(
@@ -324,26 +329,25 @@ class DataProvider(RPCServerBase):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
-         >>> from grass.pygrass.rpc import DataProvider
-         >>> provider = DataProvider()
-         >>> ret = provider.get_vector_table_as_dict(name=test_vector_name)
-         >>> ret["table"]
-         {1: [1, 'point', 1.0], 2: [2, 'line', 2.0], 3: [3, 'centroid', 3.0]}
-         >>> ret["columns"]
-         Columns([('cat', 'INTEGER'), ('name', 'varchar(50)'), ('value', 'double precision')])
-         >>> ret = provider.get_vector_table_as_dict(
-         ...     name=test_vector_name, where="value > 1"
-         ... )
-         >>> ret["table"]
-         {2: [2, 'line', 2.0], 3: [3, 'centroid', 3.0]}
-         >>> ret["columns"]
-         Columns([('cat', 'INTEGER'), ('name', 'varchar(50)'), ('value', 'double precision')])
-         >>> provider.get_vector_table_as_dict(name="no_map", where="value > 1")
-         >>> provider.stop()
+            >>> from grass.pygrass.rpc import DataProvider
+            >>> provider = DataProvider()
+            >>> ret = provider.get_vector_table_as_dict(name=test_vector_name)
+            >>> ret["table"]
+            {1: [1, 'point', 1.0], 2: [2, 'line', 2.0], 3: [3, 'centroid', 3.0]}
+            >>> ret["columns"]
+            Columns([('cat', 'INTEGER'), ('name', 'varchar(50)'), ('value', 'double precision')])
+            >>> ret = provider.get_vector_table_as_dict(
+            ...     name=test_vector_name, where="value > 1"
+            ... )
+            >>> ret["table"]
+            {2: [2, 'line', 2.0], 3: [3, 'centroid', 3.0]}
+            >>> ret["columns"]
+            Columns([('cat', 'INTEGER'), ('name', 'varchar(50)'), ('value', 'double precision')])
+            >>> provider.get_vector_table_as_dict(name="no_map", where="value > 1")
+            >>> provider.stop()
 
-         ..
         """  # noqa: E501
         self.check_server()
         self.client_conn.send([RPCDefs.GET_VECTOR_TABLE_AS_DICT, name, mapset, where])
@@ -364,89 +368,82 @@ class DataProvider(RPCServerBase):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
-         >>> from grass.pygrass.rpc import DataProvider
-         >>> provider = DataProvider()
-         >>> wkb = provider.get_vector_features_as_wkb_list(
-         ...     name=test_vector_name, extent=None, feature_type="point"
-         ... )
-         >>> for entry in wkb:
-         ...     f_id, cat, string = entry
-         ...     print(f_id, cat, len(string))
-         ...
-         1 1 21
-         2 1 21
-         3 1 21
+            >>> from grass.pygrass.rpc import DataProvider
+            >>> provider = DataProvider()
+            >>> wkb = provider.get_vector_features_as_wkb_list(
+            ...     name=test_vector_name, extent=None, feature_type="point"
+            ... )
+            >>> for entry in wkb:
+            ...     f_id, cat, string = entry
+            ...     print(f_id, cat, len(string))
+            1 1 21
+            2 1 21
+            3 1 21
 
-         >>> extent = {"north": 6.6, "south": 5.5, "east": 14.5, "west": 13.5}
-         >>> wkb = provider.get_vector_features_as_wkb_list(
-         ...     name=test_vector_name, extent=extent, feature_type="point"
-         ... )
-         >>> for entry in wkb:
-         ...     f_id, cat, string = entry
-         ...     print(f_id, cat, len(string))
-         ...
-         3 1 21
+            >>> extent = {"north": 6.6, "south": 5.5, "east": 14.5, "west": 13.5}
+            >>> wkb = provider.get_vector_features_as_wkb_list(
+            ...     name=test_vector_name, extent=extent, feature_type="point"
+            ... )
+            >>> for entry in wkb:
+            ...     f_id, cat, string = entry
+            ...     print(f_id, cat, len(string))
+            3 1 21
 
-         >>> wkb = provider.get_vector_features_as_wkb_list(
-         ...     name=test_vector_name, extent=None, feature_type="line"
-         ... )
-         >>> for entry in wkb:
-         ...     f_id, cat, string = entry
-         ...     print(f_id, cat, len(string))
-         ...
-         4 2 57
-         5 2 57
-         6 2 57
+            >>> wkb = provider.get_vector_features_as_wkb_list(
+            ...     name=test_vector_name, extent=None, feature_type="line"
+            ... )
+            >>> for entry in wkb:
+            ...     f_id, cat, string = entry
+            ...     print(f_id, cat, len(string))
+            4 2 57
+            5 2 57
+            6 2 57
 
 
-         >>> wkb = provider.get_vector_features_as_wkb_list(
-         ...     name=test_vector_name, extent=None, feature_type="centroid"
-         ... )
-         >>> for entry in wkb:
-         ...     f_id, cat, string = entry
-         ...     print(f_id, cat, len(string))
-         ...
-         19 3 21
-         18 3 21
-         20 3 21
-         21 3 21
+            >>> wkb = provider.get_vector_features_as_wkb_list(
+            ...     name=test_vector_name, extent=None, feature_type="centroid"
+            ... )
+            >>> for entry in wkb:
+            ...     f_id, cat, string = entry
+            ...     print(f_id, cat, len(string))
+            19 3 21
+            18 3 21
+            20 3 21
+            21 3 21
 
-         >>> wkb = provider.get_vector_features_as_wkb_list(
-         ...     name=test_vector_name, extent=None, feature_type="area"
-         ... )
-         >>> for entry in wkb:
-         ...     f_id, cat, string = entry
-         ...     print(f_id, cat, len(string))
-         ...
-         1 3 225
-         2 3 141
-         3 3 93
-         4 3 141
+            >>> wkb = provider.get_vector_features_as_wkb_list(
+            ...     name=test_vector_name, extent=None, feature_type="area"
+            ... )
+            >>> for entry in wkb:
+            ...     f_id, cat, string = entry
+            ...     print(f_id, cat, len(string))
+            1 3 225
+            2 3 141
+            3 3 93
+            4 3 141
 
-         >>> wkb = provider.get_vector_features_as_wkb_list(
-         ...     name=test_vector_name, extent=None, feature_type="boundary"
-         ... )
-         >>> for entry in wkb:
-         ...     f_id, cat, string = entry
-         ...     print(f_id, cat, len(string))
-         ...
-         10 None 41
-         7 None 41
-         8 None 41
-         9 None 41
-         11 None 89
-         12 None 41
-         14 None 41
-         13 None 41
-         17 None 41
-         15 None 41
-         16 None 41
+            >>> wkb = provider.get_vector_features_as_wkb_list(
+            ...     name=test_vector_name, extent=None, feature_type="boundary"
+            ... )
+            >>> for entry in wkb:
+            ...     f_id, cat, string = entry
+            ...     print(f_id, cat, len(string))
+            10 None 41
+            7 None 41
+            8 None 41
+            9 None 41
+            11 None 89
+            12 None 41
+            14 None 41
+            13 None 41
+            17 None 41
+            15 None 41
+            16 None 41
 
-         >>> provider.stop()
+            >>> provider.stop()
 
-         ..
         """
         self.check_server()
         self.client_conn.send(

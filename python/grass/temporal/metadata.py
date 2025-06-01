@@ -961,31 +961,31 @@ class STDSMetadataBase(SQLDatabaseInterface):
     strds, stvds and str3ds datasets
     setting/getting the id, the title and the description
 
-     Usage:
+    Usage:
 
-     .. code-block:: python
+    .. code-block:: pycon
 
-         >>> init()
-         >>> meta = STDSMetadataBase(
-         ...     ident="soils@PERMANENT", title="Soils", description="Soils 1950 - 2010"
-         ... )
-         >>> meta.id
-         'soils@PERMANENT'
-         >>> meta.title
-         'Soils'
-         >>> meta.description
-         'Soils 1950 - 2010'
-         >>> meta.number_of_maps
-         >>> meta.print_info()
-          | Number of registered maps:.. None
-          |
-          | Title:
-          | Soils
-          | Description:
-          | Soils 1950 - 2010
-          | Command history:
-         >>> meta.print_shell_info()
-         number_of_maps=None
+        >>> init()
+        >>> meta = STDSMetadataBase(
+        ...     ident="soils@PERMANENT", title="Soils", description="Soils 1950 - 2010"
+        ... )
+        >>> meta.id
+        'soils@PERMANENT'
+        >>> meta.title
+        'Soils'
+        >>> meta.description
+        'Soils 1950 - 2010'
+        >>> meta.number_of_maps
+        >>> meta.print_info()
+         | Number of registered maps:.. None
+         |
+         | Title:
+         | Soils
+         | Description:
+         | Soils 1950 - 2010
+         | Command history:
+        >>> meta.print_shell_info()
+        number_of_maps=None
 
     """
 
@@ -1731,72 +1731,72 @@ class STVDSMetadata(STDSMetadataBase):
     new vector maps are added. Therefor only some set- an many get-functions
     are available.
 
-     Usage:
+    Usage:
 
-     .. code-block:: python
+    .. code-block:: pycon
 
-         >>> init()
-         >>> meta = STVDSMetadata(
-         ...     ident="lidars@PERMANENT",
-         ...     title="LIDARS",
-         ...     description="LIDARS 2008 - 2010",
-         ... )
-         >>> meta.id
-         'lidars@PERMANENT'
-         >>> meta.title
-         'LIDARS'
-         >>> meta.description
-         'LIDARS 2008 - 2010'
-         >>> meta.number_of_maps
-         >>> meta.number_of_points
-         >>> meta.number_of_lines
-         >>> meta.number_of_boundaries
-         >>> meta.number_of_centroids
-         >>> meta.number_of_faces
-         >>> meta.number_of_kernels
-         >>> meta.number_of_primitives
-         >>> meta.number_of_nodes
-         >>> meta.number_of_areas
-         >>> meta.number_of_islands
-         >>> meta.number_of_holes
-         >>> meta.number_of_volumes
-         >>> meta.print_info()
-          +-------------------- Metadata information ----------------------------------+
-          | Vector register table:...... None
-          | Number of points ........... None
-          | Number of lines ............ None
-          | Number of boundaries ....... None
-          | Number of centroids ........ None
-          | Number of faces ............ None
-          | Number of kernels .......... None
-          | Number of primitives ....... None
-          | Number of nodes ............ None
-          | Number of areas ............ None
-          | Number of islands .......... None
-          | Number of holes ............ None
-          | Number of volumes .......... None
-          | Number of registered maps:.. None
-          |
-          | Title:
-          | LIDARS
-          | Description:
-          | LIDARS 2008 - 2010
-          | Command history:
-         >>> meta.print_shell_info()
-         vector_register=None
-         points=None
-         lines=None
-         boundaries=None
-         centroids=None
-         faces=None
-         kernels=None
-         primitives=None
-         nodes=None
-         areas=None
-         islands=None
-         holes=None
-         volumes=None
-         number_of_maps=None
+        >>> init()
+        >>> meta = STVDSMetadata(
+        ...     ident="lidars@PERMANENT",
+        ...     title="LIDARS",
+        ...     description="LIDARS 2008 - 2010",
+        ... )
+        >>> meta.id
+        'lidars@PERMANENT'
+        >>> meta.title
+        'LIDARS'
+        >>> meta.description
+        'LIDARS 2008 - 2010'
+        >>> meta.number_of_maps
+        >>> meta.number_of_points
+        >>> meta.number_of_lines
+        >>> meta.number_of_boundaries
+        >>> meta.number_of_centroids
+        >>> meta.number_of_faces
+        >>> meta.number_of_kernels
+        >>> meta.number_of_primitives
+        >>> meta.number_of_nodes
+        >>> meta.number_of_areas
+        >>> meta.number_of_islands
+        >>> meta.number_of_holes
+        >>> meta.number_of_volumes
+        >>> meta.print_info()
+         +-------------------- Metadata information ----------------------------------+
+         | Vector register table:...... None
+         | Number of points ........... None
+         | Number of lines ............ None
+         | Number of boundaries ....... None
+         | Number of centroids ........ None
+         | Number of faces ............ None
+         | Number of kernels .......... None
+         | Number of primitives ....... None
+         | Number of nodes ............ None
+         | Number of areas ............ None
+         | Number of islands .......... None
+         | Number of holes ............ None
+         | Number of volumes .......... None
+         | Number of registered maps:.. None
+         |
+         | Title:
+         | LIDARS
+         | Description:
+         | LIDARS 2008 - 2010
+         | Command history:
+        >>> meta.print_shell_info()
+        vector_register=None
+        points=None
+        lines=None
+        boundaries=None
+        centroids=None
+        faces=None
+        kernels=None
+        primitives=None
+        nodes=None
+        areas=None
+        islands=None
+        holes=None
+        volumes=None
+        number_of_maps=None
 
     """
 

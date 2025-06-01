@@ -1431,7 +1431,7 @@ class TemporalAlgebraParser:
         :return: List of maps from maplistA that fulfil the topological relationships
                  to maplistB specified in topolist.
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> # Example with two lists of maps
             >>> import grass.temporal as tgis
@@ -1451,7 +1451,6 @@ class TemporalAlgebraParser:
             ...     check = mapB.set_relative_time(i, i + 1, "months")
             ...     mapsA.append(mapA)
             ...     mapsB.append(mapB)
-            ...
             >>> resultlist = l.build_spatio_temporal_topology_list(
             ...     mapsA, mapsB, ["EQUAL"]
             ... )
@@ -1462,7 +1461,6 @@ class TemporalAlgebraParser:
             ...             "Map %s has equal relation to map %s"
             ...             % (map.get_name(), relations[0].get_name())
             ...         )
-            ...
             Map a0 has equal relation to map b0
             Map a1 has equal relation to map b1
             Map a2 has equal relation to map b2
@@ -1492,7 +1490,6 @@ class TemporalAlgebraParser:
             ...     check = mapB.set_relative_time(i, i + 2, "months")
             ...     mapsA.append(mapA)
             ...     mapsB.append(mapB)
-            ...
             >>> resultlist = l.build_spatio_temporal_topology_list(
             ...     mapsA, mapsB, ["starts", "during"]
             ... )
@@ -1503,7 +1500,6 @@ class TemporalAlgebraParser:
             ...             "Map %s has start relation to map %s"
             ...             % (map.get_name(), relations[0].get_name())
             ...         )
-            ...
             Map a0 has start relation to map b0
             Map a1 has start relation to map b1
             Map a2 has start relation to map b2
@@ -1521,7 +1517,6 @@ class TemporalAlgebraParser:
             ...             "Map %s has during relation to map %s"
             ...             % (map.get_name(), relations[0].get_name())
             ...         )
-            ...
             Map a0 has during relation to map b0
             Map a1 has during relation to map b0
             Map a2 has during relation to map b1
@@ -1547,7 +1542,6 @@ class TemporalAlgebraParser:
             ...     mapB.map_value = True
             ...     mapsA.append(mapA)
             ...     mapsB.append(mapB)
-            ...
             >>> # Create two list of maps with equal time stamps
             >>> mapsA = []
             >>> mapsB = []
@@ -1568,11 +1562,9 @@ class TemporalAlgebraParser:
             ...     )
             ...     mapsA.append(mapA)
             ...     mapsB.append(mapB)
-            ...
             >>> resultlist = l.build_spatio_temporal_topology_list(mapsA, mapsB)
             >>> for map in resultlist:
             ...     print(map.get_id())
-            ...
             a5@B
             a6@B
             a7@B
@@ -1583,7 +1575,6 @@ class TemporalAlgebraParser:
             ... )
             >>> for map in resultlist:
             ...     print(map.get_id())
-            ...
 
         """
         # Check the topology definitions and return the list of temporal and spatial

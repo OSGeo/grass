@@ -1231,118 +1231,113 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         Usage:
 
-         .. code-block:: python
+        .. code-block:: pycon
 
-             >>> import grass.temporal as tgis
-             >>> maps = []
-             >>> for i in range(3):
-             ...     map = tgis.RasterDataset("map%i@PERMANENT" % i)
-             ...     check = map.set_relative_time(i + 2, i + 3, "days")
-             ...     maps.append(map)
-             ...
-             >>> grans = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity(
-             ...     maps, 0, 8, 1
-             ... )
-             >>> for map_list in grans:
-             ...     print(
-             ...         map_list[0].get_id(),
-             ...         map_list[0].get_temporal_extent_as_tuple(),
-             ...     )
-             ...
-             None (0, 1)
-             None (1, 2)
-             map0@PERMANENT (2, 3)
-             map1@PERMANENT (3, 4)
-             map2@PERMANENT (4, 5)
-             None (5, 6)
-             None (6, 7)
-             None (7, 8)
+            >>> import grass.temporal as tgis
+            >>> maps = []
+            >>> for i in range(3):
+            ...     map = tgis.RasterDataset("map%i@PERMANENT" % i)
+            ...     check = map.set_relative_time(i + 2, i + 3, "days")
+            ...     maps.append(map)
+            >>> grans = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity(
+            ...     maps, 0, 8, 1
+            ... )
+            >>> for map_list in grans:
+            ...     print(
+            ...         map_list[0].get_id(),
+            ...         map_list[0].get_temporal_extent_as_tuple(),
+            ...     )
+            None (0, 1)
+            None (1, 2)
+            map0@PERMANENT (2, 3)
+            map1@PERMANENT (3, 4)
+            map2@PERMANENT (4, 5)
+            None (5, 6)
+            None (6, 7)
+            None (7, 8)
 
-             >>> maps = []
-             >>> map1 = tgis.RasterDataset("map1@PERMANENT")
-             >>> check = map1.set_relative_time(2, 6, "days")
-             >>> maps.append(map1)
-             >>> map2 = tgis.RasterDataset("map2@PERMANENT")
-             >>> check = map2.set_relative_time(7, 13, "days")
-             >>> maps.append(map2)
-             >>> grans = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity(
-             ...     maps, 0, 16, 2
-             ... )
-             >>> for map_list in grans:
-             ...     print(
-             ...         map_list[0].get_id(),
-             ...         map_list[0].get_temporal_extent_as_tuple(),
-             ...     )
-             ...
-             None (0, 2)
-             map1@PERMANENT (2, 4)
-             map1@PERMANENT (4, 6)
-             map2@PERMANENT (6, 8)
-             map2@PERMANENT (8, 10)
-             map2@PERMANENT (10, 12)
-             map2@PERMANENT (12, 14)
-             None (14, 16)
+            >>> maps = []
+            >>> map1 = tgis.RasterDataset("map1@PERMANENT")
+            >>> check = map1.set_relative_time(2, 6, "days")
+            >>> maps.append(map1)
+            >>> map2 = tgis.RasterDataset("map2@PERMANENT")
+            >>> check = map2.set_relative_time(7, 13, "days")
+            >>> maps.append(map2)
+            >>> grans = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity(
+            ...     maps, 0, 16, 2
+            ... )
+            >>> for map_list in grans:
+            ...     print(
+            ...         map_list[0].get_id(),
+            ...         map_list[0].get_temporal_extent_as_tuple(),
+            ...     )
+            None (0, 2)
+            map1@PERMANENT (2, 4)
+            map1@PERMANENT (4, 6)
+            map2@PERMANENT (6, 8)
+            map2@PERMANENT (8, 10)
+            map2@PERMANENT (10, 12)
+            map2@PERMANENT (12, 14)
+            None (14, 16)
 
-             >>> maps = []
-             >>> map1 = tgis.RasterDataset("map1@PERMANENT")
-             >>> check = map1.set_relative_time(2, None, "days")
-             >>> maps.append(map1)
-             >>> map2 = tgis.RasterDataset("map2@PERMANENT")
-             >>> check = map2.set_relative_time(7, None, "days")
-             >>> maps.append(map2)
-             >>> grans = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity(
-             ...     maps, 0, 16, 2
-             ... )
-             >>> for map_list in grans:
-             ...     print(
-             ...         map_list[0].get_id(),
-             ...         map_list[0].get_temporal_extent_as_tuple(),
-             ...     )
-             ...
-             None (0, 2)
-             map1@PERMANENT (2, 4)
-             None (4, 6)
-             map2@PERMANENT (6, 8)
-             None (8, 10)
-             None (10, 12)
-             None (12, 14)
-             None (14, 16)
+            >>> maps = []
+            >>> map1 = tgis.RasterDataset("map1@PERMANENT")
+            >>> check = map1.set_relative_time(2, None, "days")
+            >>> maps.append(map1)
+            >>> map2 = tgis.RasterDataset("map2@PERMANENT")
+            >>> check = map2.set_relative_time(7, None, "days")
+            >>> maps.append(map2)
+            >>> grans = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity(
+            ...     maps, 0, 16, 2
+            ... )
+            >>> for map_list in grans:
+            ...     print(
+            ...         map_list[0].get_id(),
+            ...         map_list[0].get_temporal_extent_as_tuple(),
+            ...     )
+            None (0, 2)
+            map1@PERMANENT (2, 4)
+            None (4, 6)
+            map2@PERMANENT (6, 8)
+            None (8, 10)
+            None (10, 12)
+            None (12, 14)
+            None (14, 16)
 
-             >>> maps = []
-             >>> map1 = tgis.RasterDataset("map1@PERMANENT")
-             >>> check = map1.set_absolute_time(
-             ...     datetime(2000, 4, 1), datetime(2000, 6, 1)
-             ... )
-             >>> maps.append(map1)
-             >>> map2 = tgis.RasterDataset("map2@PERMANENT")
-             >>> check = map2.set_absolute_time(
-             ...     datetime(2000, 8, 1), datetime(2000, 12, 1)
-             ... )
-             >>> maps.append(map2)
-             >>> grans = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity(
-             ...     maps, datetime(2000, 1, 1), datetime(2001, 4, 1), "1 month"
-             ... )
-             >>> for map_list in grans:
-             ...     print(
-             ...         map_list[0].get_id(),
-             ...         map_list[0].get_temporal_extent_as_tuple(),
-             ...     )
-             ...
-             None (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2000, 2, 1, 0, 0))
-             None (datetime.datetime(2000, 2, 1, 0, 0), datetime.datetime(2000, 3, 1, 0, 0))
-             None (datetime.datetime(2000, 3, 1, 0, 0), datetime.datetime(2000, 4, 1, 0, 0))
-             map1@PERMANENT (datetime.datetime(2000, 4, 1, 0, 0), datetime.datetime(2000, 5, 1, 0, 0))
-             map1@PERMANENT (datetime.datetime(2000, 5, 1, 0, 0), datetime.datetime(2000, 6, 1, 0, 0))
-             None (datetime.datetime(2000, 6, 1, 0, 0), datetime.datetime(2000, 7, 1, 0, 0))
-             None (datetime.datetime(2000, 7, 1, 0, 0), datetime.datetime(2000, 8, 1, 0, 0))
-             map2@PERMANENT (datetime.datetime(2000, 8, 1, 0, 0), datetime.datetime(2000, 9, 1, 0, 0))
-             map2@PERMANENT (datetime.datetime(2000, 9, 1, 0, 0), datetime.datetime(2000, 10, 1, 0, 0))
-             map2@PERMANENT (datetime.datetime(2000, 10, 1, 0, 0), datetime.datetime(2000, 11, 1, 0, 0))
-             map2@PERMANENT (datetime.datetime(2000, 11, 1, 0, 0), datetime.datetime(2000, 12, 1, 0, 0))
-             None (datetime.datetime(2000, 12, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0))
-             None (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2001, 2, 1, 0, 0))
-             None (datetime.datetime(2001, 2, 1, 0, 0), datetime.datetime(2001, 3, 1, 0, 0))
-             None (datetime.datetime(2001, 3, 1, 0, 0), datetime.datetime(2001, 4, 1, 0, 0))
+            >>> maps = []
+            >>> map1 = tgis.RasterDataset("map1@PERMANENT")
+            >>> check = map1.set_absolute_time(
+            ...     datetime(2000, 4, 1), datetime(2000, 6, 1)
+            ... )
+            >>> maps.append(map1)
+            >>> map2 = tgis.RasterDataset("map2@PERMANENT")
+            >>> check = map2.set_absolute_time(
+            ...     datetime(2000, 8, 1), datetime(2000, 12, 1)
+            ... )
+            >>> maps.append(map2)
+            >>> grans = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity(
+            ...     maps, datetime(2000, 1, 1), datetime(2001, 4, 1), "1 month"
+            ... )
+            >>> for map_list in grans:
+            ...     print(
+            ...         map_list[0].get_id(),
+            ...         map_list[0].get_temporal_extent_as_tuple(),
+            ...     )
+            None (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2000, 2, 1, 0, 0))
+            None (datetime.datetime(2000, 2, 1, 0, 0), datetime.datetime(2000, 3, 1, 0, 0))
+            None (datetime.datetime(2000, 3, 1, 0, 0), datetime.datetime(2000, 4, 1, 0, 0))
+            map1@PERMANENT (datetime.datetime(2000, 4, 1, 0, 0), datetime.datetime(2000, 5, 1, 0, 0))
+            map1@PERMANENT (datetime.datetime(2000, 5, 1, 0, 0), datetime.datetime(2000, 6, 1, 0, 0))
+            None (datetime.datetime(2000, 6, 1, 0, 0), datetime.datetime(2000, 7, 1, 0, 0))
+            None (datetime.datetime(2000, 7, 1, 0, 0), datetime.datetime(2000, 8, 1, 0, 0))
+            map2@PERMANENT (datetime.datetime(2000, 8, 1, 0, 0), datetime.datetime(2000, 9, 1, 0, 0))
+            map2@PERMANENT (datetime.datetime(2000, 9, 1, 0, 0), datetime.datetime(2000, 10, 1, 0, 0))
+            map2@PERMANENT (datetime.datetime(2000, 10, 1, 0, 0), datetime.datetime(2000, 11, 1, 0, 0))
+            map2@PERMANENT (datetime.datetime(2000, 11, 1, 0, 0), datetime.datetime(2000, 12, 1, 0, 0))
+            None (datetime.datetime(2000, 12, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0))
+            None (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2001, 2, 1, 0, 0))
+            None (datetime.datetime(2001, 2, 1, 0, 0), datetime.datetime(2001, 3, 1, 0, 0))
+            None (datetime.datetime(2001, 3, 1, 0, 0), datetime.datetime(2001, 4, 1, 0, 0))
 
         """  # noqa: E501
 
@@ -1742,14 +1737,15 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         :return: updated SQL WHERE statement
 
-        .. code-block:: python
-             >>> import grass.script as gs
-             >>> where = None
-             >>> spatial_extent = gs.parse_command("g.region", flags="ug3")
-             >>> _update_where_statement_by_spatial_extent(
-             ...     where, spatial_extent, "overlaps"
-             ... )
-             ((north > 0 AND south < 1 AND east > 0 AND west < 1))
+        .. code-block:: pycon
+
+            >>> import grass.script as gs
+            >>> where = None
+            >>> spatial_extent = gs.parse_command("g.region", flags="ug3")
+            >>> _update_where_statement_by_spatial_extent(
+            ...     where, spatial_extent, "overlaps"
+            ... )
+            ((north > 0 AND south < 1 AND east > 0 AND west < 1))
         """
 
         # initialized WHERE statement
@@ -1954,7 +1950,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         :return: The modified map list, None if nothing to shift or wrong
                 granularity
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> import grass.temporal as tgis
             >>> maps = []
@@ -1965,10 +1961,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             ...     else:
             ...         check = map.set_relative_time(i, None, "years")
             ...     maps.append(map)
-            ...
             >>> for map in maps:
             ...     map.temporal_extent.print_info()
-            ...
              +-------------------- Relative time -----------------------------------------+
              | Start time:................. 0
              | End time:................... 1
@@ -1992,7 +1986,6 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             >>> maps = tgis.AbstractSpaceTimeDataset.shift_map_list(maps, 5)
             >>> for map in maps:
             ...     map.temporal_extent.print_info()
-            ...
              +-------------------- Relative time -----------------------------------------+
              | Start time:................. 5
              | End time:................... 6
@@ -2109,7 +2102,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> import grass.temporal as tgis
             >>> maps = []
@@ -2120,10 +2113,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             ...     else:
             ...         check = map.set_relative_time(i, None, "years")
             ...     maps.append(map)
-            ...
             >>> for map in maps:
             ...     map.temporal_extent.print_info()
-            ...
              +-------------------- Relative time -----------------------------------------+
              | Start time:................. 0
              | End time:................... 1
@@ -2147,7 +2138,6 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             >>> maps = tgis.AbstractSpaceTimeDataset.snap_map_list(maps)
             >>> for map in maps:
             ...     map.temporal_extent.print_info()
-            ...
              +-------------------- Relative time -----------------------------------------+
              | Start time:................. 0
              | End time:................... 1
