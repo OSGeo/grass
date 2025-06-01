@@ -118,7 +118,7 @@ def db_connection(force=False, env=None):
     >>> db_connection()
     {'group': '', 'schema': '', 'driver': 'sqlite', 'database': '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'}
 
-    :param force True to set up default DB connection if not defined
+    :param force: True to set up default DB connection if not defined
     :param env: environment
 
     :return: parsed output of db.connect
