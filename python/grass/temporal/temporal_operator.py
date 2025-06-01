@@ -9,7 +9,7 @@ for details.
 
 :authors: Thomas Leppelt and Soeren Gebbert
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> p = TemporalOperatorParser()
     >>> expression = "{equal|equivalent|cover|in|meet|contain|overlap}"

@@ -3,7 +3,7 @@ Metadata classes for map layer and space time datasets
 
 Usage:
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> import grass.temporal as tgis
     >>> tgis.init()
@@ -33,7 +33,7 @@ class RasterMetadataBase(SQLDatabaseInterface):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> meta = RasterMetadataBase(
@@ -319,7 +319,7 @@ class RasterMetadata(RasterMetadataBase):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> meta = RasterMetadata(
@@ -446,7 +446,7 @@ class Raster3DMetadata(RasterMetadataBase):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> meta = Raster3DMetadata(
@@ -601,7 +601,7 @@ class VectorMetadata(SQLDatabaseInterface):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> meta = VectorMetadata(
@@ -1163,7 +1163,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> meta = STDSRasterMetadataBase(
@@ -1390,7 +1390,7 @@ class STRDSMetadata(STDSRasterMetadataBase):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> meta = STRDSMetadata(
@@ -1577,7 +1577,7 @@ class STR3DSMetadata(STDSRasterMetadataBase):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> meta = STR3DSMetadata(

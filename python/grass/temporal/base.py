@@ -5,7 +5,7 @@ serialization and de-serialization and the sql database interface.
 
 Usage:
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> import grass.temporal as tgis
     >>> tgis.init()
@@ -51,7 +51,7 @@ class DictSQLSerializer:
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> init()
             >>> t = DictSQLSerializer()
@@ -590,7 +590,7 @@ class DatasetBase(SQLDatabaseInterface):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> t = DatasetBase(
@@ -961,7 +961,7 @@ class STDSBase(DatasetBase):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> t = STDSBase(

@@ -3,7 +3,7 @@ Temporal topology dataset connector class
 
 Usage:
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> import grass.temporal as tgis
     >>> tmr = tgis.TemporalTopologyDatasetConnector()

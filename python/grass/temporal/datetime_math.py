@@ -68,7 +68,7 @@ def decrement_datetime_by_string(
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
          >>> dt = datetime(2001, 1, 1, 0, 0, 0)
          >>> string = "31 days"
@@ -363,7 +363,7 @@ def adjust_datetime_to_granularity(mydate: datetime, granularity):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> dt = datetime(2001, 8, 8, 12, 30, 30)
         >>> adjust_datetime_to_granularity(dt, "5 seconds")
@@ -853,7 +853,7 @@ def string_to_datetime(time_string: str) -> datetime | None:
 def datetime_to_grass_datetime_string(dt: datetime | None) -> str:
     """Convert a python datetime object into a GRASS datetime string
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> import grass.temporal as tgis
         >>> import dateutil.parser as parser

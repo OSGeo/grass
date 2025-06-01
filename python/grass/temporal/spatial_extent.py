@@ -3,7 +3,7 @@ Spatial extents classes for map layer and space time datasets
 
 Usage:
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> import grass.temporal as tgis
     >>> tgis.init()
@@ -83,7 +83,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> extent = SpatialExtent(
@@ -1402,7 +1402,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = SpatialExtent(
             ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
