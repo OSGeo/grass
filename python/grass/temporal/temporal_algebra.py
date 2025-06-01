@@ -1754,15 +1754,15 @@ class TemporalAlgebraParser:
         :return: List of temporal relations (equal, during), the given function
             (!:) and the interval/instances (l).
 
-        .. code-block:: python
+        .. code-block:: pycon
 
-             >>> import grass.temporal as tgis
-             >>> tgis.init()
-             >>> p = tgis.TemporalOperatorParser()
-             >>> operator = "{+, during}"
-             >>> p.parse(operator, optype="raster")
-             >>> print((p.relations, p.temporal, p.function))
-             (['during'], 'l', '+')
+            >>> import grass.temporal as tgis
+            >>> tgis.init()
+            >>> p = tgis.TemporalOperatorParser()
+            >>> operator = "{+, during}"
+            >>> p.parse(operator, optype="raster")
+            >>> print((p.relations, p.temporal, p.function))
+            (['during'], 'l', '+')
 
         """
         p = TemporalOperatorParser()
@@ -1794,7 +1794,7 @@ class TemporalAlgebraParser:
 
         :return: List of selected maps from maplistA.
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> import grass.temporal as tgis
             >>> tgis.init()
@@ -1814,7 +1814,6 @@ class TemporalAlgebraParser:
             ...     check = mapB.set_relative_time(i + 5, i + 6, "months")
             ...     mapsA.append(mapA)
             ...     mapsB.append(mapB)
-            ...
             >>> resultlist = l.perform_temporal_selection(
             ...     mapsA, mapsB, ["EQUAL"], False
             ... )
@@ -1825,7 +1824,6 @@ class TemporalAlgebraParser:
             ...             "Map %s has equal relation to map %s"
             ...             % (map.get_name(), relations[0].get_name())
             ...         )
-            ...
             Map a5 has equal relation to map b0
             Map a6 has equal relation to map b1
             Map a7 has equal relation to map b2
@@ -1838,7 +1836,6 @@ class TemporalAlgebraParser:
             ...             "Map %s has no equal relation to mapset mapsB"
             ...             % (map.get_name())
             ...         )
-            ...
             Map a0 has no equal relation to mapset mapsB
             Map a1 has no equal relation to mapset mapsB
             Map a2 has no equal relation to mapset mapsB
@@ -1878,7 +1875,7 @@ class TemporalAlgebraParser:
 
         :return: List of maps with the new temporal extends.
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> import grass.temporal as tgis
             >>> tgis.init()
@@ -1897,7 +1894,6 @@ class TemporalAlgebraParser:
             ...     check = mapB.set_relative_time(i * 2, i * 2 + 2, "months")
             ...     mapsA.append(mapA)
             ...     mapsB.append(mapB)
-            ...
             >>> resultlist = p.set_granularity(
             ...     mapsA, mapsB, toperator="u", topolist=["during"]
             ... )
@@ -1906,7 +1902,6 @@ class TemporalAlgebraParser:
             ...     print(
             ...         map.get_id() + " - start: " + str(start) + " end: " + str(end)
             ...     )
-            ...
             a1@B - start: 0 end: 2
             a0@B - start: 0 end: 2
             a3@B - start: 2 end: 4
@@ -2013,7 +2008,7 @@ class TemporalAlgebraParser:
 
         :return: Dictionary with temporal functions for given input map.
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> import grass.temporal as tgis
             >>> import datetime
@@ -2029,7 +2024,6 @@ class TemporalAlgebraParser:
             ...         datetime.datetime(2000, 1, 1), datetime.datetime(2000, 10, 1)
             ...     )
             ...     tfuncdict = l.get_temporal_func_dict(mapA)
-            ...
             >>> print(tfuncdict["START_YEAR"])
             2000
             >>> print(tfuncdict["START_TIME"])

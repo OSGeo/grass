@@ -299,7 +299,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = SpatialExtent(
             ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
@@ -474,7 +474,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = SpatialExtent(
             ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
@@ -633,7 +633,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = SpatialExtent(
             ...     north=79, south=21, east=59, west=11, bottom=-49, top=49
@@ -666,7 +666,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = SpatialExtent(north=80, south=20, east=60, west=10)
             >>> B = SpatialExtent(north=79, south=21, east=59, west=11)
@@ -686,7 +686,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = SpatialExtent(
             ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
@@ -710,7 +710,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = SpatialExtent(north=80, south=20, east=60, west=10)
             >>> B = SpatialExtent(north=80, south=20, east=60, west=10)
@@ -759,7 +759,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = SpatialExtent(
             ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
