@@ -149,7 +149,7 @@ def db_select(sql=None, filename=None, table=None, env=None, **args):
     >>> db_select(sql="SELECT cat,CITY FROM myfirestations WHERE cat < 4")
     (('1', 'Morrisville'), ('2', 'Morrisville'), ('3', 'Apex'))
 
-    Simplified usage (it performs <tt>SELECT * FROM myfirestations</tt>.)
+    Simplified usage (it performs ``SELECT * FROM myfirestations``.)
 
     >>> db_select(table="myfirestations")  # doctest: +ELLIPSIS
     (('1', '24', 'Morrisville #3', ... 'HS2A', '1.37'))
