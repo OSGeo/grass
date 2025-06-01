@@ -115,6 +115,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
     @abstractmethod
     def get_map_register(self):
         """Return the name of the map register table
+
         :return: The map register table name
         """
 
@@ -290,6 +291,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
     def get_semantic_type(self):
         """Return the semantic type of this dataset
+
         :return: The semantic type
         """
         return self.base.get_semantic_type()

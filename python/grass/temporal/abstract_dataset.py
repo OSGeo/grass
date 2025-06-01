@@ -301,6 +301,7 @@ class AbstractDataset(
 
     def get_relative_time_unit(self):
         """Returns the relative time unit
+
         :return: The relative time unit as string, None if not present
         """
         return self.relative_time.get_unit()
