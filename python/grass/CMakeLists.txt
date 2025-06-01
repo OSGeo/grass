@@ -1,5 +1,4 @@
 set(PYDIRS
-    app
     benchmark
     exceptions
     grassdb
@@ -29,11 +28,25 @@ foreach(pydir ${PYDIRS})
   copy_python_files_in_subdir(${pydir} ${PYDIR_GRASS})
 endforeach()
 
+# 'app' directory handled separately, because of configuration of
+# resource_paths.py
+copy_python_files_in_subdir(app ${PYDIR_GRASS} EXCLUDE resource_paths.py)
+set(GRASS_PREFIX ${OUTDIR})
+configure_file(app/resource_paths.py.in
+  ${OUTDIR}/${GRASS_INSTALL_PYDIR}/grass/app/resource_paths.py @ONLY)
+set(GRASS_PREFIX ${CMAKE_INSTALL_PREFIX})
+configure_file(app/resource_paths.py.in
+  ${CMAKE_CURRENT_BINARY_DIR}/resource_paths.py @ONLY)
+install(
+  FILES ${CMAKE_CURRENT_BINARY_DIR}/resource_paths.py
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/${GRASS_INSTALL_PYDIR}/grass/app)
+unset(GRASS_PREFIX)
+
 configure_file(__init__.py ${OUTDIR}/${PYDIR_GRASS}/ COPYONLY)
 configure_file(script/setup.py ${OUTDIR}/${PYDIR_GRASS}/script/setup.py
                COPYONLY)
 
-set(pydir_targets ${PYDIRS})
+set(pydir_targets ${PYDIRS} app)
 list(TRANSFORM pydir_targets REPLACE "/" "_")
 list(TRANSFORM pydir_targets PREPEND "python_")
 

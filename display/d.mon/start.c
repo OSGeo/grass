@@ -115,8 +115,12 @@ char *start_wx(const char *name, const char *element, int width, int height,
     mapfile = (char *)G_malloc(GPATH_MAX);
     mapfile[0] = '\0';
 
-    snprintf(progname, sizeof(progname), "%s/gui/wxpython/mapdisp/main.py",
-             G_gisbase());
+    const char *wxdir = getenv("GRASS_GUIWXDIR");
+    if (!wxdir)
+        G_fatal_error(_("Incomplete GRASS session: Variable '%s' not set"),
+                      "GRASS_GUIWXDIR");
+
+    snprintf(progname, sizeof(progname), "%s/mapdisp/main.py", wxdir);
     snprintf(str_width, sizeof(str_width), "%d", width);
     snprintf(str_height, sizeof(str_height), "%d", height);
 
