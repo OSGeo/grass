@@ -139,8 +139,8 @@ def db_connection(force=False, env=None):
 def db_select(sql=None, filename=None, table=None, env=None, **args):
     """Perform SQL select statement
 
-    Note: one of <em>sql</em>, <em>filename</em>, or <em>table</em>
-    arguments must be provided.
+    .. note:: One of **sql**, **filename**, or **table**
+        arguments must be provided.
 
     Examples:
 

@@ -548,11 +548,12 @@ class Region:
         error message is printed and exit() is called if there is a problem
         reading the region.
 
-        <b>Note:</b> GRASS applications that read or write raster maps
-        should not use this routine since its use implies that the active
-        module region will not be used. Programs that read or write raster
-        map data (or vector data) can query the active module region using
-        Rast_window_rows() and Rast_window_cols().
+        .. warning::
+            GRASS applications that read or write raster maps
+            should not use this routine since its use implies that the active
+            module region will not be used. Programs that read or write raster
+            map data (or vector data) can query the active module region using
+            Rast_window_rows() and Rast_window_cols().
 
         :param force_read: If True the WIND file of the current mapset
                            is re-readed, otherwise the initial region
