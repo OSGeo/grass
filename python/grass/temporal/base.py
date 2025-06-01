@@ -266,12 +266,14 @@ class SQLDatabaseInterface(DictSQLSerializer):
     def get_table_name(self):
         """Return the name of the table in which the internal
         data are inserted, updated or selected
+
         :return: The name of the table
         """
         return self.table
 
     def get_delete_statement(self):
         """Return the delete string
+
         :return: The DELETE string
         """
         return (
@@ -305,6 +307,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
     def get_is_in_db_statement(self):
         """Return the selection string that checks if this object is registered in the
         temporal database
+
         :return: The SELECT string
         """
         return (
@@ -349,6 +352,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
     def get_select_statement(self):
         """Return the sql statement and the argument list in
         database specific style
+
         :return: The SELECT string
         """
         return self.serialize(
@@ -778,13 +782,16 @@ class DatasetBase(SQLDatabaseInterface):
 
     def get_name(self):
         """Get the name of the dataset
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "name" in self.D:
             return self.D["name"]
         return None
 
     def get_mapset(self):
         """Get the name of mapset of this dataset
+
         :return: None if not found"""
         if "mapset" in self.D:
             return self.D["mapset"]
@@ -792,21 +799,27 @@ class DatasetBase(SQLDatabaseInterface):
 
     def get_creator(self):
         """Get the creator of the dataset
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "creator" in self.D:
             return self.D["creator"]
         return None
 
     def get_ctime(self):
         """Get the creation time of the dataset, datatype is datetime
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "creation_time" in self.D:
             return self.D["creation_time"]
         return None
 
     def get_ttype(self):
         """Get the temporal type of the map
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "temporal_type" in self.D:
             return self.D["temporal_type"]
         return None
@@ -1014,6 +1027,7 @@ class STDSBase(DatasetBase):
 
     def get_semantic_type(self):
         """Get the semantic type of the space time dataset
+
         :return: None if not found
         """
         if "semantic_type" in self.D:

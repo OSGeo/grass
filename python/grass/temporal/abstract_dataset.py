@@ -233,18 +233,21 @@ class AbstractDataset(
 
     def get_id(self):
         """Return the unique identifier of the dataset
+
         :return: The id of the dataset "name(:layer)@mapset" as string
         """
         return self.base.get_id()
 
     def get_name(self):
         """Return the name
+
         :return: The name of the dataset as string
         """
         return self.base.get_name()
 
     def get_mapset(self):
         """Return the mapset
+
         :return: The mapset in which the dataset was created as string
         """
         return self.base.get_mapset()
