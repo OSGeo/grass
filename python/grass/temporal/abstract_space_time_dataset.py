@@ -2510,13 +2510,13 @@ class AbstractSpaceTimeDataset(AbstractDataset):
     def register_map(self, map, dbif=None) -> bool:
         """Register a map in the space time dataset.
 
-         This method takes care of the registration of a map
-         in a space time dataset.
+        This method takes care of the registration of a map
+        in a space time dataset.
 
-         In case the map is already registered this function
-         will break with a warning and return False.
+        In case the map is already registered this function
+        will break with a warning and return False.
 
-         This method raises a FatalError exception in case of a fatal error
+        This method raises a FatalError exception in case of a fatal error
 
         :param map: The AbstractMapDataset object that should be registered
         :param dbif: The database interface to be used
