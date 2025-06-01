@@ -19,6 +19,7 @@ ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) -c 
 I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 SPHINXBUILD     = sphinx-build
 SPHINXAPIDOC    = sphinx-apidoc
+SPHINX_APIDOC_OPTIONS = members,show-inheritance,undoc-members,special-members,private-members
 
 # some distros come with a different name
 BUILD  := $(type $(SPHINXBUILD) >/dev/null)  || (SPHINXBUILD  = sphinx-build2)
@@ -63,7 +64,7 @@ libpythonapidoc:
 	$(call run_grass,$(SPHINXAPIDOC) -T -f -t _templates/sphinx/apidoc/ -o src/ ../imaging/)
 	$(call run_grass,$(SPHINXAPIDOC) -T -f -t _templates/sphinx/apidoc/ -o src/ ../exceptions/)
 	$(call run_grass,$(SPHINXAPIDOC) -T -f -t _templates/sphinx/apidoc/ -o src/ ../gunittest/ ../gunittest/multireport.py ../gunittest/multirunner.py ../gunittest/main.py)
-	$(call run_grass,$(SPHINXAPIDOC) -T -f -t _templates/sphinx/apidoc/ -o src/ ../pydispatch/)
+	$(call run_grass,SPHINX_APIDOC_OPTIONS="$(SPHINX_APIDOC_OPTIONS)" $(SPHINXAPIDOC) -T -f -t _templates/sphinx/apidoc/ -o src/ ../pydispatch/)
 	$(call run_grass,$(SPHINXAPIDOC) -T -f -t _templates/sphinx/apidoc/ -o src/ ../pygrass/)
 	$(call run_grass,$(SPHINXAPIDOC) -T -f -t _templates/sphinx/apidoc/ -o src/ ../script/)
 	$(call run_grass,$(SPHINXAPIDOC) -T -f -t _templates/sphinx/apidoc/ -o src/ ../temporal/)
