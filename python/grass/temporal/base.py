@@ -70,10 +70,10 @@ class DictSQLSerializer:
             >>> t.serialize(type="UPDATE ALL", table="raster_base")
             ('UPDATE raster_base SET  name = ?  ,creator = ?  ,creation_time = ?  ,modification_time = ?  ,mapset = ?  ,id = ? ;\\n', ('soil', 'soeren', datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0), 'PERMANENT', 'soil@PERMANENT'))
 
-            :param type: must be SELECT. INSERT, UPDATE
-            :param table: The name of the table to select, insert or update
-            :param where: The optional where statement
-            :return: a tuple containing the SQL string and the arguments
+        :param type: must be SELECT. INSERT, UPDATE
+        :param table: The name of the table to select, insert or update
+        :param where: The optional where statement
+        :return: a tuple containing the SQL string and the arguments
 
         """  # noqa: E501
 
@@ -558,9 +558,9 @@ class SQLDatabaseInterface(DictSQLSerializer):
         """Serialize the content of this object, including None objects,
         and update it in the temporal database using the internal identifier
 
-           :param dbif: The database interface to be used,
-                        if None a temporary connection will be established
-           :param ident: The identifier to be updated, useful for renaming
+        :param dbif: The database interface to be used,
+                    if None a temporary connection will be established
+        :param ident: The identifier to be updated, useful for renaming
         """
         if self.ident is None:
             self.msgr.fatal(_("Missing identifier"))

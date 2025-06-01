@@ -74,9 +74,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         """Get dataset name including semantic label filter if enabled.
 
         :param bool semantic_label: True to return dataset name
-        including semantic label filter if defined
-        (eg. "landsat.L8_1") otherwise dataset name is returned only
-        (eg. "landsat").
+          including semantic label filter if defined
+          (eg. "landsat.L8_1") otherwise dataset name is returned only
+          (eg. "landsat").
 
         :return str: dataset name
 
