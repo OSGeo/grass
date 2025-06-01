@@ -997,19 +997,18 @@ def tempdir(env=None):
     return tmp
 
 
-def tempname(length, lowercase=False):
+def tempname(length: int, lowercase: bool = False) -> str:
     """Generate a GRASS and SQL compliant random name starting with tmp_
     followed by a random part of length "length"
 
-    :param int length: length of the random part of the name to generate
-    :param bool lowercase: use only lowercase characters to generate name
-    :returns: String with a random name of length "length" starting with a letter
-    :rtype: str
+    :param length: length of the random part of the name to generate
+    :param lowercase: use only lowercase characters to generate name
+    :return: String with a random name of length "length" starting with a letter
 
     :Example:
 
-    >>> tempname(12)
-    'tmp_MxMa1kAS13s9'
+        >>> tempname(12)
+        'tmp_MxMa1kAS13s9'
 
     .. seealso:: functions :func:`append_uuid()`, :func:`append_random()`
     """
