@@ -1229,15 +1229,15 @@ class DBConnection:
 
     The following DBMS are supported:
 
-      - sqlite via the sqlite3 standard library
-      - postgresql via psycopg2
+    - sqlite via the sqlite3 standard library
+    - postgresql via psycopg2
     """
 
     def __init__(self, backend=None, dbstring: str | None = None) -> None:
         """Constructor of a database connection
 
-        param backend:The database backend sqlite or pg
-        param dbstring: The database connection string
+        :param backend: The database backend sqlite or pg
+        :param dbstring: The database connection string
         """
         self.connected = False
         if backend is None:
