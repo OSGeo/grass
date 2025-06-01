@@ -796,13 +796,12 @@ def count_temporal_topology_relationships(maps1, maps2=None, dbif=None):
     """Count the temporal relations of a single list of maps or between two
     lists of maps
 
-
-     :param maps1: A list of abstract_dataset
-                   objects with initiated temporal extent
-     :param maps2: A list of abstract_dataset
-                   objects with initiated temporal extent
-     :param dbif: The database interface to be used
-     :return: A dictionary with counted temporal relationships
+    :param maps1: A list of abstract_dataset
+                objects with initiated temporal extent
+    :param maps2: A list of abstract_dataset
+                objects with initiated temporal extent
+    :param dbif: The database interface to be used
+    :return: A dictionary with counted temporal relationships
     """
 
     tb = SpatioTemporalTopologyBuilder()
