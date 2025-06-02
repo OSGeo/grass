@@ -66,7 +66,7 @@ class AbstractMapDataset(AbstractDataset):
         """Return a new space time dataset instance that store maps with the
         type of this map object (raster, raster_3d or vector)
 
-        :param ident The identifier of the space time dataset
+        :param ident: The identifier of the space time dataset
         :return: The new space time dataset instance
         """
 

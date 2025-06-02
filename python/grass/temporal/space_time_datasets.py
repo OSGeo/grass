@@ -224,7 +224,7 @@ class RasterDataset(AbstractMapDataset):
         """Return the two dimensional union as spatial_extent
         object or None in case the extents does not overlap or meet.
 
-        :param dataset :The abstract dataset to create a union with
+        :param dataset: The abstract dataset to create a union with
         :return: The union spatial extent or None
         """
         return self.spatial_extent.union_2d(dataset.spatial_extent)

@@ -1749,11 +1749,10 @@ class TemporalAlgebraParser:
     def eval_toperator(self, operator, optype="relation"):
         """This function evaluates a string containing temporal operations.
 
-         :param operator: String of temporal operations, e.g. {!=,equal|during,l}.
-         :param optype: String to define operator type.
-
-         :return :List of temporal relations (equal, during), the given function
-          (!:) and the interval/instances (l).
+        :param operator: String of temporal operations, e.g. {!=,equal|during,l}.
+        :param optype: String to define operator type.
+        :return: List of temporal relations (equal, during), the given function
+            (!:) and the interval/instances (l).
 
         .. code-block:: python
 
