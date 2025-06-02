@@ -535,11 +535,7 @@ class RegionManagerEnv:
     ...     gs.parse_command("r.univar", map="elevation", format="json")
 
 
-    This is *incorrect* usage (calling `g.region`):
-    >>> with gs.RegionManagerEnv():
-            gs.run_command("g.region", raster="elevation")
-    ...     gs.run_command("r.univar", map="elevation", env=manager.env)
-
+    Do not call `g.region` within the context. Instead, use the `set_region` method.
     """
 
     def __init__(self, env: dict[str, str] | None = None, **kwargs):
