@@ -366,8 +366,8 @@ class SpatialExtent(SQLDatabaseInterface):
              | Bottom:..................... -30.0
 
 
-         :param extent: The spatial extent to intersect with
-         :return: The intersection spatial extent
+        :param extent: The spatial extent to intersect with
+        :return: The intersection spatial extent
         """  # noqa: E501
 
         if not self.overlapping(extent):
@@ -556,8 +556,8 @@ class SpatialExtent(SQLDatabaseInterface):
              | Bottom:..................... -50.0
 
 
-         :param extent: The spatial extent to create a disjoint union with
-         :return: The union spatial extent
+        :param extent: The spatial extent to create a disjoint union with
+        :return: The union spatial extent
         """  # noqa: E501
 
         new = self.disjoint_union_2d(extent)
@@ -1809,6 +1809,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
     def get_id(self):
         """Convenient method to get the unique identifier (primary key)
+
         :return: None if not found
         """
         if "id" in self.D:
@@ -1862,42 +1863,54 @@ class SpatialExtent(SQLDatabaseInterface):
 
     def get_north(self):
         """Get the northern edge of the map
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "north" in self.D:
             return self.D["north"]
         return None
 
     def get_south(self):
         """Get the southern edge of the map
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "south" in self.D:
             return self.D["south"]
         return None
 
     def get_east(self):
         """Get the eastern edge of the map
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "east" in self.D:
             return self.D["east"]
         return None
 
     def get_west(self):
         """Get the western edge of the map
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "west" in self.D:
             return self.D["west"]
         return None
 
     def get_top(self):
         """Get the top edge of the map
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "top" in self.D:
             return self.D["top"]
         return None
 
     def get_bottom(self):
         """Get the bottom edge of the map
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "bottom" in self.D:
             return self.D["bottom"]
         return None
