@@ -94,7 +94,9 @@ def main(args=None, program=None):
         description="Experimental low-level CLI interface to GRASS. Consult developers before using it.",
         prog=program,
     )
-    subparsers = parser.add_subparsers(title="subcommands", required=True)
+    subparsers = parser.add_subparsers(
+        title="subcommands", dest="subcommand", required=True
+    )
 
     # Subcommand parsers
 

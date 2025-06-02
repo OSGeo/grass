@@ -2,6 +2,7 @@
 
 import os
 import json
+import io
 
 import numpy as np
 import pytest
@@ -264,4 +265,60 @@ def test_numpy_one_input_one_output(xy_dataset_session):
     tools.g_region(rows=2, cols=3)
     slope = tools.r_slope_aspect(elevation=np.ones((2, 3)), slope=np.ndarray)
     assert slope.shape == (2, 3)
-    assert slope[0] == 0
+    assert slope[0, 0] == 0
+
+
+def test_pack_input_output(xy_dataset_session, rows_raster_file3x3):
+    """Check that global overwrite is not used when separate env is used"""
+    tools = Tools(session=xy_dataset_session)
+    tools.g_region(rows=3, cols=3)
+    assert os.path.exists(rows_raster_file3x3)
+    tools.r_slope_aspect(elevation=rows_raster_file3x3, slope="file.grass_raster")
+    assert os.path.exists("file.grass_raster")
+
+
+def test_tool_groups_raster(xy_dataset_session):
+    """Check that global overwrite is not used when separate env is used"""
+    raster = Tools(session=xy_dataset_session, prefix="r")
+    raster.mapcalc(expression="streams = if(row() > 1, 1, null())")
+    raster.buffer(input="streams", output="buffer", distance=1)
+    assert raster.info(map="streams", format="json")["datatype"] == "CELL"
+
+
+def test_tool_groups_vector(xy_dataset_session):
+    """Check that global overwrite is not used when separate env is used"""
+    vector = Tools(prefix="v")
+    vector.edit(map="points", type="point", tool="create", env=xy_dataset_session.env)
+    # Here, the feed_input_to style does not make sense, but we are not using StringIO
+    # here to test the feed_input_to functionality and avoid dependence on the StringIO
+    # functionality.
+    # The ASCII format is for one point with no categories.
+    vector.feed_input_to("P 1 0\n  10 20").edit(
+        map="points",
+        type="point",
+        tool="add",
+        input="-",
+        flags="n",
+        env=xy_dataset_session.env,
+    )
+    vector.buffer(
+        input="points", output="buffer", distance=1, env=xy_dataset_session.env
+    )
+    assert (
+        vector.info(map="buffer", format="json", env=xy_dataset_session.env)["areas"]
+        == 1
+    )
+
+
+def test_stdin_as_stringio_object(xy_dataset_session):
+    """Check that global overwrite is not used when separate env is used"""
+    tools = Tools(session=xy_dataset_session)
+    tools.v_edit(map="points", type="point", tool="create")
+    tools.v_edit(
+        map="points",
+        type="point",
+        tool="add",
+        input=io.StringIO("P 1 0\n  10 20"),
+        flags="n",
+    )
+    assert tools.v_info(map="points", format="json")["points"] == 1

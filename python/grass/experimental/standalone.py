@@ -52,6 +52,7 @@ class StandaloneTools(Tools):
         return self.run_from_list(gs.make_command(name, flags=flags, **kwargs))
 
     # Make this an overload of run.
+    # Or at least use the same signature as the parent class.
     def run_from_list(self, command):
         """
 
@@ -85,13 +86,17 @@ class StandaloneTools(Tools):
                 flags="o",
                 env=self._session.env,
             )
-        if input_rasters:
-            # Reset the region for every run or keep it persistent?
-            gs.run_command(
-                "g.region", raster=input_rasters[0].stem, env=self._session.env
-            )
 
-        result = self.run_from_list(command, env=self._session.env)
+        def before_execution():
+            if input_rasters:
+                # Reset the region for every run or keep it persistent?
+                gs.run_command(
+                    "g.region", raster=input_rasters[0].stem, env=self._session.env
+                )
+
+        before_execution()
+
+        result = super().run_from_list(command, env=self._session.env)
 
         # Pack the output raster
         for raster in output_rasters:
@@ -104,6 +109,7 @@ class StandaloneTools(Tools):
                 flags="c",
                 overwrite=True,
                 superquiet=True,
+                env=self._session.env,
             )
         return result
 

@@ -77,3 +77,18 @@ def xy_mapset_non_permament(xy_session):  # pylint: disable=redefined-outer-name
         "test1", create=True, env=xy_session.env
     ) as session:
         yield session
+
+
+@pytest.fixture
+def rows_raster_file3x3(tmp_path):
+    project = tmp_path / "xy_test"
+    gs.core.create_project(project)  # pylint: disable=protected-access
+    with gs.setup.init(project, env=os.environ.copy()) as session:
+        gs.run_command("g.region", rows=3, cols=3, env=session.env)
+        gs.mapcalc("rows = row()", env=session.env)
+        output_file = tmp_path / "rows.grass_raster"
+        gs.run_command(
+            "r.pack", input="rows", output=output_file, flags="c", env=session.env
+        )
+
+    return output_file

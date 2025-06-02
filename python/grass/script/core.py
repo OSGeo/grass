@@ -307,7 +307,7 @@ def make_command(
     return args
 
 
-def handle_errors(returncode, result, args, kwargs):
+def handle_errors(returncode, result, args, kwargs, handler=None, stderr=None):
     """Error handler for :func:`run_command()` and similar functions
 
     The functions which are using this function to handle errors,
@@ -352,7 +352,8 @@ def handle_errors(returncode, result, args, kwargs):
         code = " ".join(args)
         return module, code
 
-    handler = kwargs.get("errors", "raise")
+    if handler is None:
+        handler = kwargs.get("errors", "raise")
     if handler.lower() == "status":
         return returncode
     if returncode == 0:
@@ -370,7 +371,9 @@ def handle_errors(returncode, result, args, kwargs):
         sys.exit(returncode)
     else:
         module, code = get_module_and_code(args, kwargs)
-        raise CalledModuleError(module=module, code=code, returncode=returncode)
+        raise CalledModuleError(
+            module=module, code=code, returncode=returncode, errors=stderr
+        )
 
 
 def popen_args_command(

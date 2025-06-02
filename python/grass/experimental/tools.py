@@ -18,6 +18,7 @@ import json
 import os
 import shutil
 from pathlib import Path
+from io import StringIO
 
 import numpy as np
 
@@ -124,6 +125,7 @@ class Tools:
         stdin=None,
         errors=None,
         capture_output=True,
+        prefix=None,
     ):
         if env:
             self._env = env.copy()
@@ -138,7 +140,7 @@ class Tools:
             self._overwrite()
         # This hopefully sets the numbers directly. An alternative implementation would
         # be to pass the parameter every time.
-        # Does not check for multiple set at the same time, but the most versbose wins
+        # Does not check for multiple set at the same time, but the most verbose wins
         # for safety.
         if superquiet:
             self._env["GRASS_VERBOSE"] = "0"
@@ -149,6 +151,7 @@ class Tools:
         self._set_stdin(stdin)
         self._errors = errors
         self._capture_output = capture_output
+        self._prefix = prefix
 
     # These could be public, not protected.
     def _freeze_region(self):
@@ -166,28 +169,6 @@ class Tools:
         """Internally used environment (reference to it, not a copy)"""
         return self._env
 
-    def _digest_data_parameters(self, parameters, command):
-        # Uses parameters, but modifies the command.
-        input_rasters = []
-        if "inputs" in parameters:
-            for item in parameters["inputs"]:
-                if item["value"].endswith(".grass_raster"):
-                    input_rasters.append(Path(item["value"]))
-                    for i, arg in enumerate(command):
-                        if arg.startswith(f"{item['param']}="):
-                            arg = arg.replace(item["value"], Path(item["value"]).stem)
-                            command[i] = arg
-        output_rasters = []
-        if "outputs" in parameters:
-            for item in parameters["outputs"]:
-                if item["value"].endswith(".grass_raster"):
-                    output_rasters.append(Path(item["value"]))
-                    for i, arg in enumerate(command):
-                        if arg.startswith(f"{item['param']}="):
-                            arg = arg.replace(item["value"], Path(item["value"]).stem)
-                            command[i] = arg
-        return input_rasters, output_rasters
-
     def run(self, name, /, **kwargs):
         """Run modules from the GRASS display family (modules starting with "d.").
 
@@ -198,6 +179,7 @@ class Tools:
         :param `**kwargs`: named arguments passed to run_command()"""
         original = {}
         original_outputs = {}
+        stdin = None
 
         for key, value in kwargs.items():
             if isinstance(value, np.ndarray):
@@ -206,6 +188,9 @@ class Tools:
             elif value == np.ndarray:
                 kwargs[key] = "tmp_future_serialized_array"
                 original_outputs[key] = value
+            elif isinstance(value, StringIO):
+                kwargs[key] = "-"
+                stdin = value.getvalue()
 
         args, popen_options = gs.popen_args_command(name, **kwargs)
 
@@ -213,9 +198,21 @@ class Tools:
 
         import subprocess
 
-        parameters = json.loads(
-            subprocess.check_output([*args, "--json"], text=True, env=env)
+        interface_result = subprocess.run(
+            [*args, "--json"], text=True, capture_output=True, env=env
         )
+        if interface_result.returncode != 0:
+            # This is only for the error states.
+            return gs.handle_errors(
+                interface_result.returncode,
+                result=None,
+                args=[name],
+                kwargs=kwargs,
+                stderr=interface_result.stderr,
+                handler="raise",
+            )
+
+        parameters = json.loads(interface_result.stdout)
         if "inputs" in parameters:
             for param in parameters["inputs"]:
                 if param["param"] not in original:
@@ -225,8 +222,49 @@ class Tools:
                 map2d[:] = original[param["param"]]
                 map2d.write("tmp_serialized_array", overwrite=True)
 
+        def is_raster_pack_file(value):
+            return value.endswith((".grass_raster", ".pack", ".rpack"))
+
+        # Uses parameters, but modifies the command, generates list of rasters and vectors.
+        input_rasters = []
+        if "inputs" in parameters:
+            for item in parameters["inputs"]:
+                if is_raster_pack_file(item["value"]):
+                    input_rasters.append(Path(item["value"]))
+                    # No need to change that for the original kwargs.
+                    # kwargs[item["param"]] = Path(item["value"]).stem
+                    # Actual parameters to execute are now a list.
+                    for i, arg in enumerate(args):
+                        if arg.startswith(f"{item['param']}="):
+                            arg = arg.replace(item["value"], Path(item["value"]).stem)
+                            args[i] = arg
+        output_rasters = []
+        if "outputs" in parameters:
+            for item in parameters["outputs"]:
+                if is_raster_pack_file(item["value"]):
+                    output_rasters.append(Path(item["value"]))
+                    # kwargs[item["param"]] = Path(item["value"]).stem
+                    for i, arg in enumerate(args):
+                        if arg.startswith(f"{item['param']}="):
+                            arg = arg.replace(item["value"], Path(item["value"]).stem)
+                            args[i] = arg
+
+        for raster_file in input_rasters:
+            # Currently we override the projection check.
+            gs.run_command(
+                "r.unpack",
+                input=raster_file,
+                output=raster_file.stem,
+                overwrite=True,
+                superquiet=True,
+                # flags="o",
+                env=self._env,
+            )
+
         # We approximate tool_kwargs as original kwargs.
-        result = self.run_from_list(args, tool_kwargs=kwargs, **popen_options)
+        result = self.run_from_list(
+            args, tool_kwargs=kwargs, stdin=stdin, **popen_options
+        )
 
         if "outputs" in parameters:
             for param in parameters["outputs"]:
@@ -234,6 +272,19 @@ class Tools:
                     continue
                 output_array = garray.array("tmp_future_serialized_array")
                 result = output_array
+
+        # Pack the output raster
+        for raster in output_rasters:
+            # Overwriting a file is a warning, so to avoid it, we delete the file first.
+            Path(raster).unlink(missing_ok=True)
+            gs.run_command(
+                "r.pack",
+                input=raster.stem,
+                output=raster,
+                flags="c",
+                overwrite=True,
+                superquiet=True,
+            )
 
         return result
 
@@ -245,7 +296,7 @@ class Tools:
         return gs.parse_command(name, **kwargs, env=self._env)
 
     # Make this an overload of run.
-    def run_from_list(self, command, tool_kwargs=None, **popen_options):
+    def run_from_list(self, command, tool_kwargs=None, stdin=None, **popen_options):
         # alternatively use dev null as default or provide it as convenient settings
         if self._capture_output:
             stdout_pipe = gs.PIPE
@@ -256,6 +307,9 @@ class Tools:
         if self._stdin:
             stdin_pipe = gs.PIPE
             stdin = gs.utils.encode(self._stdin)
+        elif stdin:
+            stdin_pipe = gs.PIPE
+            stdin = gs.utils.encode(stdin)
         else:
             stdin_pipe = None
             stdin = None
@@ -289,7 +343,14 @@ class Tools:
 
     def feed_input_to(self, stdin, /):
         """Get a new object which will feed text input to a tool or tools"""
-        return Tools(env=self._env, stdin=stdin)
+        return Tools(
+            env=self._env,
+            stdin=stdin,
+            freeze_region=self._region_is_frozen,
+            errors=self._errors,
+            capture_output=self._capture_output,
+            prefix=self._prefix,
+        )
 
     def ignore_errors_of(self):
         """Get a new object which will ignore errors of the called tools"""
@@ -330,6 +391,8 @@ class Tools:
         """Parse attribute to GRASS display module. Attribute should be in
         the form 'd_module_name'. For example, 'd.rast' is called with 'd_rast'.
         """
+        if self._prefix:
+            name = f"{self._prefix}.{name}"
         # Reformat string
         tool_name = name.replace("_", ".")
         # Assert module exists
