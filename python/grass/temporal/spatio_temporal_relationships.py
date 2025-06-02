@@ -905,95 +905,97 @@ def create_temporal_relation_sql_where_statement(
 
     Usage:
 
-    >>> # Relative time
-    >>> start = 1
-    >>> end = 2
-    >>> create_temporal_relation_sql_where_statement(start, end, use_start=False)
-    >>> create_temporal_relation_sql_where_statement(start, end)
-    '((start_time >= 1 and start_time < 2) )'
-    >>> create_temporal_relation_sql_where_statement(start, end, use_start=True)
-    '((start_time >= 1 and start_time < 2) )'
-    >>> create_temporal_relation_sql_where_statement(
-    ...     start, end, use_start=False, use_during=True
-    ... )
-    '(((start_time > 1 and end_time < 2) OR (start_time >= 1 and end_time < 2) OR (start_time > 1 and end_time <= 2)))'
-    >>> create_temporal_relation_sql_where_statement(
-    ...     start, end, use_start=False, use_overlap=True
-    ... )
-    '(((start_time < 1 and end_time > 1 and end_time < 2) OR (start_time < 2 and start_time > 1 and end_time > 2)))'
-    >>> create_temporal_relation_sql_where_statement(
-    ...     start, end, use_start=False, use_contain=True
-    ... )
-    '(((start_time < 1 and end_time > 2) OR (start_time <= 1 and end_time > 2) OR (start_time < 1 and end_time >= 2)))'
-    >>> create_temporal_relation_sql_where_statement(
-    ...     start, end, use_start=False, use_equal=True
-    ... )
-    '((start_time = 1 and end_time = 2))'
-    >>> create_temporal_relation_sql_where_statement(
-    ...     start, end, use_start=False, use_follows=True
-    ... )
-    '((start_time = 2))'
-    >>> create_temporal_relation_sql_where_statement(
-    ...     start, end, use_start=False, use_precedes=True
-    ... )
-    '((end_time = 1))'
-    >>> create_temporal_relation_sql_where_statement(
-    ...     start,
-    ...     end,
-    ...     use_start=True,
-    ...     use_during=True,
-    ...     use_overlap=True,
-    ...     use_contain=True,
-    ...     use_equal=True,
-    ...     use_follows=True,
-    ...     use_precedes=True,
-    ... )
-    '((start_time >= 1 and start_time < 2)  OR ((start_time > 1 and end_time < 2) OR (start_time >= 1 and end_time < 2) OR (start_time > 1 and end_time <= 2)) OR ((start_time < 1 and end_time > 1 and end_time < 2) OR (start_time < 2 and start_time > 1 and end_time > 2)) OR ((start_time < 1 and end_time > 2) OR (start_time <= 1 and end_time > 2) OR (start_time < 1 and end_time >= 2)) OR (start_time = 1 and end_time = 2) OR (start_time = 2) OR (end_time = 1))'
+    .. code-block:: pycon
 
-    >>> # Absolute time
-    >>> start = datetime(2001, 1, 1, 12, 30)
-    >>> end = datetime(2001, 3, 31, 14, 30)
-    >>> create_temporal_relation_sql_where_statement(start, end, use_start=False)
-    >>> create_temporal_relation_sql_where_statement(start, end)
-    "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00') )"
-    >>> create_temporal_relation_sql_where_statement(start, end, use_start=True)
-    "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00') )"
-    >>> create_temporal_relation_sql_where_statement(
-    ...     start, end, use_start=False, use_during=True
-    ... )
-    "(((start_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time >= '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time > '2001-01-01 12:30:00' and end_time <= '2001-03-31 14:30:00')))"
-    >>> create_temporal_relation_sql_where_statement(
-    ...     start, end, use_start=False, use_overlap=True
-    ... )
-    "(((start_time < '2001-01-01 12:30:00' and end_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time < '2001-03-31 14:30:00' and start_time > '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00')))"
-    >>> create_temporal_relation_sql_where_statement(
-    ...     start, end, use_start=False, use_contain=True
-    ... )
-    "(((start_time < '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time <= '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time < '2001-01-01 12:30:00' and end_time >= '2001-03-31 14:30:00')))"
-    >>> create_temporal_relation_sql_where_statement(
-    ...     start, end, use_start=False, use_equal=True
-    ... )
-    "((start_time = '2001-01-01 12:30:00' and end_time = '2001-03-31 14:30:00'))"
-    >>> create_temporal_relation_sql_where_statement(
-    ...     start, end, use_start=False, use_follows=True
-    ... )
-    "((start_time = '2001-03-31 14:30:00'))"
-    >>> create_temporal_relation_sql_where_statement(
-    ...     start, end, use_start=False, use_precedes=True
-    ... )
-    "((end_time = '2001-01-01 12:30:00'))"
-    >>> create_temporal_relation_sql_where_statement(
-    ...     start,
-    ...     end,
-    ...     use_start=True,
-    ...     use_during=True,
-    ...     use_overlap=True,
-    ...     use_contain=True,
-    ...     use_equal=True,
-    ...     use_follows=True,
-    ...     use_precedes=True,
-    ... )
-    "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00')  OR ((start_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time >= '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time > '2001-01-01 12:30:00' and end_time <= '2001-03-31 14:30:00')) OR ((start_time < '2001-01-01 12:30:00' and end_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time < '2001-03-31 14:30:00' and start_time > '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00')) OR ((start_time < '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time <= '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time < '2001-01-01 12:30:00' and end_time >= '2001-03-31 14:30:00')) OR (start_time = '2001-01-01 12:30:00' and end_time = '2001-03-31 14:30:00') OR (start_time = '2001-03-31 14:30:00') OR (end_time = '2001-01-01 12:30:00'))"
+        >>> # Relative time
+        >>> start = 1
+        >>> end = 2
+        >>> create_temporal_relation_sql_where_statement(start, end, use_start=False)
+        >>> create_temporal_relation_sql_where_statement(start, end)
+        '((start_time >= 1 and start_time < 2) )'
+        >>> create_temporal_relation_sql_where_statement(start, end, use_start=True)
+        '((start_time >= 1 and start_time < 2) )'
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start, end, use_start=False, use_during=True
+        ... )
+        '(((start_time > 1 and end_time < 2) OR (start_time >= 1 and end_time < 2) OR (start_time > 1 and end_time <= 2)))'
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start, end, use_start=False, use_overlap=True
+        ... )
+        '(((start_time < 1 and end_time > 1 and end_time < 2) OR (start_time < 2 and start_time > 1 and end_time > 2)))'
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start, end, use_start=False, use_contain=True
+        ... )
+        '(((start_time < 1 and end_time > 2) OR (start_time <= 1 and end_time > 2) OR (start_time < 1 and end_time >= 2)))'
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start, end, use_start=False, use_equal=True
+        ... )
+        '((start_time = 1 and end_time = 2))'
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start, end, use_start=False, use_follows=True
+        ... )
+        '((start_time = 2))'
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start, end, use_start=False, use_precedes=True
+        ... )
+        '((end_time = 1))'
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start,
+        ...     end,
+        ...     use_start=True,
+        ...     use_during=True,
+        ...     use_overlap=True,
+        ...     use_contain=True,
+        ...     use_equal=True,
+        ...     use_follows=True,
+        ...     use_precedes=True,
+        ... )
+        '((start_time >= 1 and start_time < 2)  OR ((start_time > 1 and end_time < 2) OR (start_time >= 1 and end_time < 2) OR (start_time > 1 and end_time <= 2)) OR ((start_time < 1 and end_time > 1 and end_time < 2) OR (start_time < 2 and start_time > 1 and end_time > 2)) OR ((start_time < 1 and end_time > 2) OR (start_time <= 1 and end_time > 2) OR (start_time < 1 and end_time >= 2)) OR (start_time = 1 and end_time = 2) OR (start_time = 2) OR (end_time = 1))'
+
+        >>> # Absolute time
+        >>> start = datetime(2001, 1, 1, 12, 30)
+        >>> end = datetime(2001, 3, 31, 14, 30)
+        >>> create_temporal_relation_sql_where_statement(start, end, use_start=False)
+        >>> create_temporal_relation_sql_where_statement(start, end)
+        "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00') )"
+        >>> create_temporal_relation_sql_where_statement(start, end, use_start=True)
+        "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00') )"
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start, end, use_start=False, use_during=True
+        ... )
+        "(((start_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time >= '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time > '2001-01-01 12:30:00' and end_time <= '2001-03-31 14:30:00')))"
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start, end, use_start=False, use_overlap=True
+        ... )
+        "(((start_time < '2001-01-01 12:30:00' and end_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time < '2001-03-31 14:30:00' and start_time > '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00')))"
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start, end, use_start=False, use_contain=True
+        ... )
+        "(((start_time < '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time <= '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time < '2001-01-01 12:30:00' and end_time >= '2001-03-31 14:30:00')))"
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start, end, use_start=False, use_equal=True
+        ... )
+        "((start_time = '2001-01-01 12:30:00' and end_time = '2001-03-31 14:30:00'))"
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start, end, use_start=False, use_follows=True
+        ... )
+        "((start_time = '2001-03-31 14:30:00'))"
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start, end, use_start=False, use_precedes=True
+        ... )
+        "((end_time = '2001-01-01 12:30:00'))"
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start,
+        ...     end,
+        ...     use_start=True,
+        ...     use_during=True,
+        ...     use_overlap=True,
+        ...     use_contain=True,
+        ...     use_equal=True,
+        ...     use_follows=True,
+        ...     use_precedes=True,
+        ... )
+        "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00')  OR ((start_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time >= '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time > '2001-01-01 12:30:00' and end_time <= '2001-03-31 14:30:00')) OR ((start_time < '2001-01-01 12:30:00' and end_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time < '2001-03-31 14:30:00' and start_time > '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00')) OR ((start_time < '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time <= '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time < '2001-01-01 12:30:00' and end_time >= '2001-03-31 14:30:00')) OR (start_time = '2001-01-01 12:30:00' and end_time = '2001-03-31 14:30:00') OR (start_time = '2001-03-31 14:30:00') OR (end_time = '2001-01-01 12:30:00'))"
 
     """  # noqa: E501
 
