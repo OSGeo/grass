@@ -99,7 +99,7 @@ options for changing region is used (**res=**, **raster=**, etc). This
 can be used for example to print modified region values for further use
 without actually modifying the current region. Similarly, **-o** flag
 forces to update current region file even when e.g., only printing was
-specified. Flag **-o** was added in GRASS GIS version 8 to simulate
+specified. Flag **-o** was added in GRASS version 8 to simulate
 *g.region* behavior in prior versions when current region file was
 always updated unless **-u** was specified.
 
