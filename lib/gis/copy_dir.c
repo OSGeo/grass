@@ -86,7 +86,7 @@ int G_recursive_copy(const char *src, const char *dst)
             const char *p = strrchr(src, '/');
 
             /* src => dst/src */
-            sprintf(path, "%s/%s", dst, (p ? p + 1 : src));
+            snprintf(path, sizeof(path), "%s/%s", dst, (p ? p + 1 : src));
             return G_recursive_copy(src, path);
         }
 
@@ -138,8 +138,8 @@ int G_recursive_copy(const char *src, const char *dst)
         if (dp->d_name[0] == '.')
             continue;
 
-        sprintf(path, "%s/%s", src, dp->d_name);
-        sprintf(path2, "%s/%s", dst, dp->d_name);
+        snprintf(path, sizeof(path), "%s/%s", src, dp->d_name);
+        snprintf(path2, sizeof(path2), "%s/%s", dst, dp->d_name);
 
         if (G_recursive_copy(path, path2) != 0) {
             closedir(dirp);

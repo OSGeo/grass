@@ -362,3 +362,19 @@ def test_init_lock_fail_without_unlock(tmp_path):
             gs.setup.init(project, env=os.environ.copy(), lock=True),
         ):
             pass
+
+
+@pytest.mark.skipif(
+    sys.platform.startswith("win"), reason="Locking is disabled on Windows"
+)
+def test_init_lock_timeout_fail(tmp_path):
+    """Fail with locked mapset with non-zero timeout"""
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy(), lock=True) as top_session:
+        gs.run_command("g.region", flags="p", env=top_session.env)
+        with (
+            pytest.raises(MapsetLockingException, match=r"Concurrent.*mapset"),
+            gs.setup.init(project, env=os.environ.copy(), lock=True, timeout=2),
+        ):
+            pass

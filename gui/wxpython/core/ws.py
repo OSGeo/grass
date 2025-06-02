@@ -381,7 +381,7 @@ class GDALRasterMerger:
 
     def SetGeorefAndProj(self):
         """Set georeference and projection to target file"""
-        projection = grass.read_command("g.proj", flags="wf")
+        projection = grass.read_command("g.proj", flags="fp", format="wkt")
         self.tDataset.SetProjection(projection)
 
         self.tDataset.SetGeoTransform(self.tGeotransform)

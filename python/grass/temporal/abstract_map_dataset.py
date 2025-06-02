@@ -745,10 +745,8 @@ class AbstractMapDataset(AbstractDataset):
             ...         check = map.set_relative_time(i, None, "years")
             ...     map.temporal_buffer(3)
             ...     maps.append(map)
-            ...
             >>> for map in maps:
             ...     map.temporal_extent.print_info()
-            ...
              +-------------------- Relative time -----------------------------------------+
              | Start time:................. -3
              | End time:................... 4
@@ -780,10 +778,8 @@ class AbstractMapDataset(AbstractDataset):
             ...         check = map.set_absolute_time(datetime(2001, i, 1), None)
             ...     map.temporal_buffer("7 days")
             ...     maps.append(map)
-            ...
             >>> for map in maps:
             ...     map.temporal_extent.print_info()
-            ...
              +-------------------- Absolute time -----------------------------------------+
              | Start time:................. 2000-12-25 00:00:00
              | End time:................... 2001-01-08 00:00:00

@@ -110,7 +110,7 @@ int db_set_default_connection(void)
         connection.databaseName = "$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/";
         db_set_connection(&connection);
 
-        sprintf(buf, "%s/%s/dbf", G_location_path(), G_mapset());
+        snprintf(buf, sizeof(buf), "%s/%s/dbf", G_location_path(), G_mapset());
         G_make_mapset_object_group("dbf");
     }
     else if (strcmp(DB_DEFAULT_DRIVER, "sqlite") == 0) {

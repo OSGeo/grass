@@ -6,6 +6,7 @@ Usage:
 ::
 
     from grass.script import vector as grass
+
     grass.vector_db(map)
 
 (C) 2008-2010 by the GRASS Development Team
