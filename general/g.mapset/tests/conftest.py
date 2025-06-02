@@ -26,5 +26,6 @@ def simple_dataset(tmp_path_factory):
 
         yield SimpleNamespace(
             mapsets=TEST_MAPSETS,
+            project=project,
             current_mapset="test1",
         )
