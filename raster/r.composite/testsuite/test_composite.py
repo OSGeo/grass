@@ -2,6 +2,7 @@ import os
 import pytest
 import grass.script as gs
 
+
 @pytest.fixture
 def setup_composite(tmp_path):
     """Set up GRASS session and create RGB composite map."""
@@ -37,18 +38,21 @@ def test_rgb_composite_values(setup_composite):
     # Get map as ASCII
     ascii_data = gs.read_command("r.out.ascii", input="rgb_composite", env=session.env)
     data_lines = [
-        line.strip() for line in ascii_data.splitlines()
-        if line.strip() and not line.startswith(("north", "south", "east", "west", "rows", "cols"))
+        line.strip()
+        for line in ascii_data.splitlines()
+        if line.strip()
+        and not line.startswith(("north", "south", "east", "west", "rows", "cols"))
     ]
 
     # Define expected RGB values row-wise
     expected_data = [
-        '4104 4680 5000',
-        '4100 4676 4996',
-        '4127 4703 5023',
+        "4104 4680 5000",
+        "4100 4676 4996",
+        "4127 4703 5023",
     ]
 
     assert data_lines == expected_data
+
 
 # Test for one null row in all the color maps
 def test_null_value_propagation(setup_composite):
@@ -56,9 +60,17 @@ def test_null_value_propagation(setup_composite):
 
     # Force NULLs in the red map at second row
     # Set all maps to NULL in row 2
-    gs.mapcalc("red_null = if(row() == 2, null(), row() * 50)", overwrite=True, env=session.env)
-    gs.mapcalc("green_null = if(row() == 2, null(), col() * 50)", overwrite=True, env=session.env)
-    gs.mapcalc("blue_null = if(row() == 2, null(), 100)", overwrite=True, env=session.env)
+    gs.mapcalc(
+        "red_null = if(row() == 2, null(), row() * 50)", overwrite=True, env=session.env
+    )
+    gs.mapcalc(
+        "green_null = if(row() == 2, null(), col() * 50)",
+        overwrite=True,
+        env=session.env,
+    )
+    gs.mapcalc(
+        "blue_null = if(row() == 2, null(), 100)", overwrite=True, env=session.env
+    )
 
     # Re-run composite with modified red
     gs.run_command(
@@ -72,7 +84,9 @@ def test_null_value_propagation(setup_composite):
     )
 
     # Export to ASCII to inspect NULLs
-    ascii_data = gs.read_command("r.out.ascii", input="rgb_composite_null", env=session.env)
+    ascii_data = gs.read_command(
+        "r.out.ascii", input="rgb_composite_null", env=session.env
+    )
 
     # Assert that NULLs ('*') are present
     assert "*" in ascii_data, "Expected NULL values ('*') not found in composite output"
