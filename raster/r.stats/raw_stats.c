@@ -119,9 +119,10 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
                     switch (format) {
                     case JSON:
                         json_object_set_null(category, "category");
-                        json_object_set_string(
-                            category, "label",
-                            Rast_get_c_cat(&null_cell, &labels[i]));
+                        if (with_labels)
+                            json_object_set_string(
+                                category, "label",
+                                Rast_get_c_cat(&null_cell, &labels[i]));
                         break;
                     case PLAIN:
                         fprintf(stdout, "%s%s", i ? fs : "", no_data_str);
@@ -157,9 +158,10 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
                     case JSON:
                         json_object_set_number(category, "category",
                                                *((FCELL *)rastp[i]));
-                        json_object_set_string(
-                            category, "label",
-                            Rast_get_f_cat((FCELL *)rastp[i], &labels[i]));
+                        if (with_labels)
+                            json_object_set_string(
+                                category, "label",
+                                Rast_get_f_cat((FCELL *)rastp[i], &labels[i]));
                         break;
                     case PLAIN:
                         snprintf(str1, sizeof(str1), "%.8g",
@@ -179,9 +181,10 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
                     case JSON:
                         json_object_set_number(category, "category",
                                                *((DCELL *)rastp[i]));
-                        json_object_set_string(
-                            category, "label",
-                            Rast_get_d_cat((DCELL *)rastp[i], &labels[i]));
+                        if (with_labels)
+                            json_object_set_string(
+                                category, "label",
+                                Rast_get_d_cat((DCELL *)rastp[i], &labels[i]));
                         break;
                     case PLAIN:
                         snprintf(str1, sizeof(str1), "%.16g",
