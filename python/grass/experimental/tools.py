@@ -162,6 +162,29 @@ class Tools:
         """Internally used environment (reference to it, not a copy)"""
         return self._env
 
+    def _digest_data_parameters(self, parameters, command):
+        # Uses parameters, but modifies the command.
+        input_rasters = []
+        if "inputs" in parameters:
+            for item in parameters["inputs"]:
+                if item["value"].endswith(".grass_raster"):
+                    input_rasters.append(Path(item["value"]))
+                    for i, arg in enumerate(command):
+                        if arg.startswith(f"{item['param']}="):
+                            arg = arg.replace(item["value"], Path(item["value"]).stem)
+                            command[i] = arg
+        output_rasters = []
+        if "outputs" in parameters:
+            for item in parameters["outputs"]:
+                if item["value"].endswith(".grass_raster"):
+                    output_rasters.append(Path(item["value"]))
+                    for i, arg in enumerate(command):
+                        if arg.startswith(f"{item['param']}="):
+                            arg = arg.replace(item["value"], Path(item["value"]).stem)
+                            command[i] = arg
+        return input_rasters, output_rasters
+
+
     def run(self, name, /, **kwargs):
         """Run modules from the GRASS display family (modules starting with "d.").
 
@@ -170,9 +193,48 @@ class Tools:
 
         :param str module: name of GRASS module
         :param `**kwargs`: named arguments passed to run_command()"""
+        original = {}
+        original_outputs = {}
+        import grass.script.array as garray
+        import numpy as np
+        for key, value in kwargs.items():
+            if isinstance(value, np.ndarray):
+                kwargs[key] = "tmp_serialized_array"
+                original[key] = value
+            elif value == np.ndarray:
+                kwargs[key] = "tmp_future_serialized_array"
+                original_outputs[key] = value
+
         args, popen_options = gs.popen_args_command(name, **kwargs)
+
+        env = popen_options.get("env", self._env)
+
+        import subprocess
+        parameters = json.loads(
+            subprocess.check_output(
+                [*args, "--json"], text=True, env=env
+            )
+        )
+        if "inputs" in parameters:
+            for param in parameters["inputs"]:
+                if param["param"] not in original:
+                    continue
+                map2d = garray.array()
+                print(param)
+                map2d[:] = original[param["param"]]
+                map2d.write("tmp_serialized_array", overwrite=True)
+
         # We approximate tool_kwargs as original kwargs.
-        return self.run_from_list(args, tool_kwargs=kwargs, **popen_options)
+        result = self.run_from_list(args, tool_kwargs=kwargs, **popen_options)
+
+        if "outputs" in parameters:
+            for param in parameters["outputs"]:
+                if param["param"] not in original_outputs:
+                    continue
+                output_array = garray.array("tmp_future_serialized_array")
+                result = output_array
+
+        return result
 
     def run_command(self, name, /, **kwargs):
         # Adjust error handling or provide custom implementation for full control?

@@ -229,3 +229,38 @@ def test_wrong_attribute(xy_dataset_session):
     tools = Tools(session=xy_dataset_session)
     with pytest.raises(AttributeError, match="execute_big_command"):
         tools.execute_big_command()
+
+import numpy as np
+
+def test_numpy_one_input(xy_dataset_session):
+    """Check that global overwrite is not used when separate env is used"""
+    tools = Tools(session=xy_dataset_session)
+    tools.r_slope_aspect(elevation=np.ones((1, 1)), slope="slope")
+    assert tools.r_info(map="slope", format="json")["datatype"] == "FCELL"
+
+# Other possible ways how to handle the syntax:
+
+# class ToNumpy:
+#     pass
+
+# class AsInput:
+#     pass
+
+# def test_numpy_one_input(xy_dataset_session):
+#     """Check that global overwrite is not used when separate env is used"""
+#     tools = Tools(session=xy_dataset_session)
+#     tools.r_slope_aspect(elevation=np.ones((1, 1)), slope="slope", aspect="aspect", force_numpy_for_output=True)
+#     tools.r_slope_aspect(elevation=np.ones((1, 1)), slope=np.nulls(0,0), aspect="aspect")
+#     tools.r_slope_aspect(elevation=np.ones((1, 1)), slope=ToNumpy(), aspect="aspect")
+#     tools.r_slope_aspect(elevation=np.ones((1, 1)), slope=np.ndarray, aspect="aspect")
+#     tools.r_slope_aspect.ufunc(np.ones((1, 1)), slope=True, aspect=True, overwrite=True)  # (np.array, np.array)
+#     tools.r_slope_aspect(elevation=np.ones((1, 1)), slope=AsInput, aspect=AsInput)  # {"slope": np.array(...), "aspect": np.array(...) }
+#     assert tools.r_info(map="slope", format="json")["datatype"] == "FCELL"
+
+def test_numpy_one_input_one_output(xy_dataset_session):
+    """Check that global overwrite is not used when separate env is used"""
+    tools = Tools(session=xy_dataset_session)
+    tools.g_region(rows=2, cols=3)
+    slope = tools.r_slope_aspect(elevation=np.ones((2, 3)), slope=np.ndarray)
+    assert slope.shape == (2, 3)
+    assert slope[0] == 0
