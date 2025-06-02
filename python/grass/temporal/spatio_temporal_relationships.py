@@ -952,6 +952,8 @@ def create_temporal_relation_sql_where_statement(
         ... )
         '((start_time >= 1 and start_time < 2)  OR ((start_time > 1 and end_time < 2) OR (start_time >= 1 and end_time < 2) OR (start_time > 1 and end_time <= 2)) OR ((start_time < 1 and end_time > 1 and end_time < 2) OR (start_time < 2 and start_time > 1 and end_time > 2)) OR ((start_time < 1 and end_time > 2) OR (start_time <= 1 and end_time > 2) OR (start_time < 1 and end_time >= 2)) OR (start_time = 1 and end_time = 2) OR (start_time = 2) OR (end_time = 1))'
 
+    .. code-block:: pycon
+
         >>> # Absolute time
         >>> start = datetime(2001, 1, 1, 12, 30)
         >>> end = datetime(2001, 3, 31, 14, 30)
