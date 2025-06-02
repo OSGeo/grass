@@ -115,6 +115,10 @@ this is not desired, the input map(s) has/have to be reinterpolated
 beforehand with one of the dedicated modules. Masks can be set
 ([r3.mask](r3.mask.md)).
 
+The 3D resolution of the computational region is distinct from its
+2D resolution. Setting one does not affect the other.
+They both share the same extent, however.
+
 ## 3D raster analyses and operations
 
 Powerful 3D raster map algebra is implemented in

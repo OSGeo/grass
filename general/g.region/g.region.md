@@ -20,10 +20,16 @@ projection. Each region also has associated with it the specific
 east-west and north-south resolutions of its smallest units (rectangular
 units called "cells").
 
+The region extent is common between 2D and 3D maps.
+However, the 2D resolution, used for 2D raster maps, is set separately
+from the 3D resolution, used for 3D raster maps.
+Updating the 2D resolution of the region will not affect its 3D resolution,
+and vice versa.
+
 The region's boundaries are given as the northernmost, southernmost,
-easternmost, and westernmost points that define its extent (cell edges).
-The north and south boundaries are commonly called *northings*, while
-the east and west boundaries are called *eastings*.
+easternmost, westernmost, bottommost, and topmost points that define
+its extent (cell edges). The north and south boundaries are commonly
+called *northings*, while the east and west boundaries are called *eastings*.
 
 The region's cell resolution defines the size of the smallest piece of
 data recognized (imported, analyzed, displayed, stored, etc.) by GRASS
