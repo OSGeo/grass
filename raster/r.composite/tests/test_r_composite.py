@@ -36,22 +36,14 @@ def test_rgb_composite_values(setup_composite):
     session = setup_composite
 
     # Get map as ASCII
-    ascii_data = gs.read_command("r.out.ascii", input="rgb_composite", env=session.env)
-    data_lines = [
-        line.strip()
-        for line in ascii_data.splitlines()
-        if line.strip()
-        and not line.startswith(("north", "south", "east", "west", "rows", "cols"))
-    ]
+    ascii_data = gs.read_command(
+        "r.out.ascii", input="rgb_composite", env=session.env, flags="h"
+    )
 
     # Define expected RGB values row-wise
-    expected_data = [
-        "4104 4680 5000",
-        "4100 4676 4996",
-        "4127 4703 5023",
-    ]
+    expected_data = "4104 4680 5000 \n4100 4676 4996 \n4127 4703 5023 \n"
 
-    assert data_lines == expected_data
+    assert ascii_data == expected_data
 
 
 # Test for one null row in all the color maps
