@@ -40,8 +40,12 @@ def test_rgb_composite_values(setup_composite):
         "r.out.ascii", input="rgb_composite", env=session.env, flags="h"
     )
 
+    ascii_data = [
+        row.strip() for row in ascii_data.replace("\r\n", "\n").strip().split("\n")
+    ]
+
     # Define expected RGB values row-wise
-    expected_data = "4104 4680 5000 \n4100 4676 4996 \n4127 4703 5023 \n"
+    expected_data = ["4104 4680 5000", "4100 4676 4996", "4127 4703 5023"]
 
     assert ascii_data == expected_data
 
