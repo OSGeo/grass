@@ -534,8 +534,9 @@ class RegionManagerEnv:
             manager.env["GRASS_REGION"] = gs.region_env()
     ...     gs.parse_command("r.univar", map="elevation", format="json")
 
+    .. caution::
 
-    Do not call `g.region` within the context. Instead, use the `set_region` method.
+        To set region within the context, do not call `g.region`, use `set_region` instead.
     """
 
     def __init__(self, env: dict[str, str] | None = None, **kwargs):
