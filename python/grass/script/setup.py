@@ -276,6 +276,7 @@ def init(
 
         # ... setup GISBASE and sys.path before import
         import grass.script as gs
+
         session = gs.setup.init(
             "~/grassdata/nc_spm_08/user1",
             grass_path="/usr/lib/grass",
@@ -409,7 +410,7 @@ class SessionHandle:
         with gs.setup.init("~/grassdata/nc_spm_08/user1", env=os.environ.copy()):
             # ... use GRASS modules here with env parameter
             gs.run_command("g.region", flags="p", env=session.env)
-        # session ends automatically here, global environment was never modifed
+        # session ends automatically here, global environment was never modified
     """
 
     def __init__(self, *, env, active=True, locked=False):

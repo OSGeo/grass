@@ -3,7 +3,7 @@
 Find below the development and maintenance documentation.
 The API documentation is available in the appropriate places,
 but here is the information relevant to contributing to and
-maintaining GRASS GIS.
+maintaining GRASS.
 
 ## Style and GitHub guide
 

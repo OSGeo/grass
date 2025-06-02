@@ -61,12 +61,13 @@ int G_make_location(const char *location_name, struct Cell_head *wind,
         return -3;
 
     /* Try to create the location directory, under the gisdbase. */
-    sprintf(path, "%s/%s", G_gisdbase(), location_name);
+    snprintf(path, sizeof(path), "%s/%s", G_gisdbase(), location_name);
     if (G_mkdir(path) != 0)
         return -1;
 
     /* Make the PERMANENT mapset. */
-    sprintf(path, "%s/%s/%s", G_gisdbase(), location_name, "PERMANENT");
+    snprintf(path, sizeof(path), "%s/%s/%s", G_gisdbase(), location_name,
+             "PERMANENT");
     if (G_mkdir(path) != 0) {
         return -1;
     }
@@ -518,8 +519,8 @@ int G_write_projwkt(const char *location_name, const char *wktstring)
         return 0;
 
     if (location_name && *location_name)
-        sprintf(path, "%s/%s/%s/%s", G_gisdbase(), location_name, "PERMANENT",
-                WKT_FILE);
+        snprintf(path, sizeof(path), "%s/%s/%s/%s", G_gisdbase(), location_name,
+                 "PERMANENT", WKT_FILE);
     else
         G_file_name(path, "", WKT_FILE, "PERMANENT");
 
@@ -570,8 +571,8 @@ int G_write_projsrid(const char *location_name, const char *sridstring)
         return 0;
 
     if (location_name && *location_name)
-        sprintf(path, "%s/%s/%s/%s", G_gisdbase(), location_name, "PERMANENT",
-                SRID_FILE);
+        snprintf(path, sizeof(path), "%s/%s/%s/%s", G_gisdbase(), location_name,
+                 "PERMANENT", SRID_FILE);
     else
         G_file_name(path, "", SRID_FILE, "PERMANENT");
 

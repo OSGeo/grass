@@ -14,8 +14,9 @@ Classes:
  - dialogs::VariableListCtrl
  - dialogs::ItemListCtrl
  - dialogs::ItemCheckListCtrl
+ - dialogs::ModelParamDialog
 
-(C) 2010-2016 by the GRASS Development Team
+(C) 2010-2025 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -30,8 +31,9 @@ import wx.lib.mixins.listctrl as listmix
 
 from core import globalvar
 from core import utils
-from gui_core.widgets import SearchModuleWidget, SimpleValidator
 from core.gcmd import GError
+from gui_core.forms import CmdPanel
+from gui_core.widgets import SearchModuleWidget, SimpleValidator, GNotebook
 from gui_core.dialogs import SimpleDialog, MapLayersDialogForModeler
 from gui_core.prompt import GPromptSTC
 from gui_core.gselect import Select, ElementSelect
@@ -46,7 +48,10 @@ from gui_core.wrap import (
     NewId,
     CheckListCtrlMixin,
 )
-from gmodeler.model import ModelData, ModelAction, ModelCondition
+from gmodeler.model_items import ModelData, ModelAction, ModelCondition
+from gmodeler.giface import GraphicalModelerGrassInterface
+
+from grass.script import task as gtask
 
 
 class ModelDataDialog(SimpleDialog):
@@ -1164,3 +1169,124 @@ class ItemCheckListCtrl(ItemListCtrl, CheckListCtrlMixin):
             if iId == aId:
                 self.CheckItem(i, flag)
                 break
+
+
+class ModelParamDialog(wx.Dialog):
+    def __init__(
+        self,
+        parent,
+        model,
+        giface,
+        params,
+        id=wx.ID_ANY,
+        title=_("Model parameters"),
+        style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
+        **kwargs,
+    ):
+        """Model parameters dialog"""
+        self.parent = parent
+        self._model = model
+        self._giface = giface
+        self.params = params
+        self.tasks = []  # list of tasks/pages
+
+        wx.Dialog.__init__(
+            self, parent=parent, id=id, title=title, style=style, **kwargs
+        )
+
+        self.notebook = GNotebook(parent=self, style=globalvar.FNPageDStyle)
+
+        panel = self._createPages()
+        wx.CallAfter(self.notebook.SetSelection, 0)
+
+        # intermediate data?
+        self.interData = wx.CheckBox(
+            parent=self, label=_("Delete intermediate data when finish")
+        )
+        self.interData.SetValue(True)
+        rast, vect, rast3d, msg = self._model.GetIntermediateData()
+        if not rast and not vect and not rast3d:
+            self.interData.Hide()
+
+        self.btnCancel = Button(parent=self, id=wx.ID_CANCEL)
+        self.btnRun = Button(parent=self, id=wx.ID_OK, label=_("&Run"))
+        self.btnRun.SetDefault()
+
+        self._layout()
+
+        size = self.GetBestSize()
+        self.SetMinSize(size)
+        self.SetSize(
+            (size.width, size.height + panel.constrained_size[1] - panel.panelMinHeight)
+        )
+
+    def _layout(self):
+        btnSizer = wx.StdDialogButtonSizer()
+        btnSizer.AddButton(self.btnCancel)
+        btnSizer.AddButton(self.btnRun)
+        btnSizer.Realize()
+
+        mainSizer = wx.BoxSizer(wx.VERTICAL)
+        mainSizer.Add(self.notebook, proportion=1, flag=wx.EXPAND)
+        if self.interData.IsShown():
+            mainSizer.Add(
+                self.interData,
+                proportion=0,
+                flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER,
+                border=5,
+            )
+
+            mainSizer.Add(
+                wx.StaticLine(parent=self, id=wx.ID_ANY, style=wx.LI_HORIZONTAL),
+                proportion=0,
+                flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
+                border=5,
+            )
+
+        mainSizer.Add(btnSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
+
+        self.SetSizer(mainSizer)
+        mainSizer.Fit(self)
+
+    def _createPages(self):
+        """Create for each parameterized module its own page"""
+        nameOrdered = [""] * len(self.params.keys())
+        for name, params in self.params.items():
+            nameOrdered[params["idx"]] = name
+        for name in nameOrdered:
+            params = self.params[name]
+            panel = self._createPage(name, params)
+            if name == "variables":
+                name = _("Variables")
+            self.notebook.AddPage(page=panel, text=name)
+
+        return panel
+
+    def _createPage(self, name, params):
+        """Define notebook page"""
+        if name in globalvar.grassCmd:
+            task = gtask.grassTask(name)
+        else:
+            task = gtask.grassTask()
+        task.flags = params["flags"]
+        task.params = params["params"]
+
+        panel = CmdPanel(
+            parent=self,
+            id=wx.ID_ANY,
+            task=task,
+            giface=GraphicalModelerGrassInterface(
+                model=self._model, giface=self._giface
+            ),
+        )
+        self.tasks.append(task)
+
+        return panel
+
+    def GetErrors(self):
+        """Check for errors, get list of messages"""
+        return [err for task in self.tasks for err in task.get_cmd_error()]
+
+    def DeleteIntermediateData(self) -> bool:
+        """Check if to delete intermediate data"""
+        return bool(self.interData.IsShown() and self.interData.IsChecked())

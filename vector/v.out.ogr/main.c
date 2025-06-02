@@ -520,7 +520,7 @@ int main(int argc, char *argv[])
         hDriver = GDALGetDriver(i);
         G_debug(2, "driver %d : %s", i, GDALGetDriverShortName(hDriver));
         /* chg white space to underscore in OGR driver names */
-        sprintf(buf, "%s", GDALGetDriverShortName(hDriver));
+        snprintf(buf, sizeof(buf), "%s", GDALGetDriverShortName(hDriver));
         G_strchg(buf, ' ', '_');
         if (strcmp(buf, options.format->answer) == 0) {
             drn = i;
@@ -597,11 +597,11 @@ int main(int argc, char *argv[])
         char shape_geom[20];
 
         if ((otype & GV_POINTS) || (otype & GV_KERNEL))
-            sprintf(shape_geom, "POINTZ");
+            snprintf(shape_geom, sizeof(shape_geom), "POINTZ");
         if ((otype & GV_LINES))
-            sprintf(shape_geom, "ARCZ");
+            snprintf(shape_geom, sizeof(shape_geom), "ARCZ");
         if ((otype & GV_AREA) || (otype & GV_FACE))
-            sprintf(shape_geom, "POLYGONZ");
+            snprintf(shape_geom, sizeof(shape_geom), "POLYGONZ");
         /* check if the right LCO is already present */
         const char *shpt;
 

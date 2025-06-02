@@ -94,9 +94,7 @@ def main(args=None, program=None):
         description="Experimental low-level CLI interface to GRASS. Consult developers before using it.",
         prog=program,
     )
-    subparsers = parser.add_subparsers(
-        title="subcommands", required=True, dest="subcommand"
-    )
+    subparsers = parser.add_subparsers(title="subcommands", required=True)
 
     # Subcommand parsers
 
@@ -149,20 +147,25 @@ def main(args=None, program=None):
 
     # Parsing
 
+    if not args:
+        args = sys.argv[1:]
     raw_args = args.copy()
     add_back = None
-    if len(raw_args) > 3 and raw_args[1] == "run":
-        # Maybe a better workaround is to use custom --help, action="help", print_help, and dedicated tool help function.
-        if "--help" in raw_args[3:]:
-            raw_args = raw_args.remove("--help")
+    if len(raw_args) > 2 and raw_args[0] == "run":
+        # Getting the --help of tools needs to work around the standard help mechanism
+        # of argparse.
+        # Maybe a better workaround is to use custom --help, action="help", print_help,
+        # and dedicated tool help function complimentary with g.manual subcommand
+        # interface.
+        if "--help" in raw_args[2:]:
+            raw_args.remove("--help")
             add_back = "--help"
-        if "--h" in raw_args[3:]:
-            raw_args = raw_args.remove("--h")
+        elif "--h" in raw_args[2:]:
+            raw_args.remove("--h")
             add_back = "--h"
     parsed_args, other_args = parser.parse_known_args(raw_args)
-    if args.subcommand == "run":
+    if parsed_args.subcommand == "run":
         if add_back:
             other_args.append(add_back)
         return parsed_args.func(parsed_args, other_args, help=bool(add_back))
-    parsed_args = parser.parse_args(args)
     return parsed_args.func(parsed_args)

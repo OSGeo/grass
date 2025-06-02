@@ -21,9 +21,9 @@ int g3_find_dsp_file(const char *cell, const char *file, const char *mset)
     }
 
     if (G_name_is_fully_qualified(cell, name, mapset))
-        sprintf(element, "grid3/%s/dsp", name);
+        snprintf(element, sizeof(element), "grid3/%s/dsp", name);
     else
-        sprintf(element, "grid3/%s/dsp", cell);
+        snprintf(element, sizeof(element), "grid3/%s/dsp", cell);
 
     return G_find_file(element, tofind, mset) != NULL;
 }

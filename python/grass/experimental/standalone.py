@@ -91,7 +91,7 @@ class StandaloneTools(Tools):
                 "g.region", raster=input_rasters[0].stem, env=self._session.env
             )
 
-        result = self._execute_tool(command, env=self._session.env)
+        result = self.run_from_list(command, env=self._session.env)
 
         # Pack the output raster
         for raster in output_rasters:

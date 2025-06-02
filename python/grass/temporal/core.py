@@ -44,16 +44,17 @@ from .c_libraries_interface import CLibrariesInterface
 
 # Import all supported database backends
 # Ignore import errors since they are checked later
-try:
-    import sqlite3
-except ImportError:
-    pass
+
+import sqlite3
+
 # Postgresql is optional, existence is checked when needed
 try:
     import psycopg2
     import psycopg2.extras
+
+    db_errors = (sqlite3.Error, psycopg2.Error)
 except ImportError:
-    pass
+    db_errors = (sqlite3.Error,)
 
 import atexit
 from datetime import datetime
@@ -210,7 +211,7 @@ def get_enable_mapset_check():
     database.
     Overwrite this global variable by: g.gisenv set="TGIS_DISABLE_MAPSET_CHECK=True"
 
-    ..warning::
+    .. warning::
 
         Be aware to face corrupted temporal database in case this
         global variable is set to False. This feature is highly
@@ -230,7 +231,7 @@ def get_enable_timestamp_write():
     the temporal database using the C-library timestamp interface.
     Overwrite this global variable by: g.gisenv set="TGIS_DISABLE_TIMESTAMP_WRITE=True"
 
-    ..warning::
+    .. warning::
 
         Be aware that C-libraries can not access timestamp information if
         they are not written as spatial database metadata, hence modules
@@ -543,7 +544,7 @@ def init(raise_fatal_error: bool = False, skip_db_version_check: bool = False):
      - GRASS_TGIS_PROFILE (True, False, 1, 0)
      - GRASS_TGIS_RAISE_ON_ERROR (True, False, 1, 0)
 
-     ..warning::
+     .. warning::
 
          This functions must be called before any spatio-temporal processing
          can be started
@@ -602,8 +603,9 @@ def init(raise_fatal_error: bool = False, skip_db_version_check: bool = False):
     msgr.debug(1, ("Raise on error id: %s" % str(raise_on_error)))
 
     ciface = get_tgis_c_library_interface()
-    driver_string = ciface.get_driver_name()
-    database_string = ciface.get_database_name()
+    current_mapset = decode(gs.gisenv().get("MAPSET"))
+    driver_string = ciface.get_driver_name(current_mapset)
+    database_string = ciface.get_database_name(current_mapset)
 
     # Set the mapset check and the timestamp write
     if "TGIS_DISABLE_MAPSET_CHECK" in grassenv:
@@ -656,8 +658,9 @@ def init(raise_fatal_error: bool = False, skip_db_version_check: bool = False):
     else:
         # Set the default sqlite3 connection in case nothing was defined
         gs.run_command("t.connect", flags="d")
-        driver_string = ciface.get_driver_name()
-        database_string = ciface.get_database_name()
+        current_mapset = decode(gs.gisenv().get("MAPSET"))
+        driver_string = ciface.get_driver_name(current_mapset)
+        database_string = ciface.get_database_name(current_mapset)
         tgis_backend = driver_string
         try:
             import sqlite3
@@ -706,7 +709,7 @@ def init(raise_fatal_error: bool = False, skip_db_version_check: bool = False):
         backup_howto = _(
             "Run t.upgrade command to upgrade your temporal database.\n"
             "Consider creating a backup of your temporal database to avoid "
-            "loosing data in case something goes wrong.\n"
+            "losing data in case something goes wrong.\n"
         )
     else:
         backup_howto = _(
@@ -788,7 +791,6 @@ def init(raise_fatal_error: bool = False, skip_db_version_check: bool = False):
                         "not supported any more. {m}"
                     ).format(m=message)
                 )
-
         return
 
     create_temporal_database(dbif)
@@ -1500,7 +1502,7 @@ class DBConnection:
                 self.cursor.execute(statement, args)
             else:
                 self.cursor.execute(statement)
-        except (sqlite3.Error, psycopg2.Error):
+        except db_errors:
             if connected:
                 self.close()
             self.msgr.error(_("Unable to execute :\n %(sql)s") % {"sql": statement})
@@ -1543,7 +1545,7 @@ class DBConnection:
             else:
                 self.cursor.execute(statement)
             self.connection.commit()
-        except (sqlite3.Error, psycopg2.Error):
+        except db_errors:
             if connected:
                 self.close()
             self.msgr.error(

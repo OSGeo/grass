@@ -5,7 +5,7 @@
 #
 # PURPOSE:   API to call GRASS tools (modules) as Python functions
 #
-# COPYRIGHT: (C) 2023 Vaclav Petras and the GRASS Development Team
+# COPYRIGHT: (C) 2023-2025 Vaclav Petras and the GRASS Development Team
 #
 #            This program is free software under the GNU General Public
 #            License (>=v2). Read the file COPYING that comes with GRASS
@@ -17,8 +17,12 @@
 import json
 import os
 import shutil
+from pathlib import Path
+
+import numpy as np
 
 import grass.script as gs
+import grass.script.array as garray
 from grass.exceptions import CalledModuleError
 
 
@@ -30,14 +34,17 @@ class ExecutedTool:
         self._kwargs = kwargs
         self._stdout = stdout
         self._stderr = stderr
-        if self._stdout:
+        if self._stdout is not None:
             self._decoded_stdout = gs.decode(self._stdout)
         else:
-            self._decoded_stdout = ""
+            self._decoded_stdout = None
+        self._cached_json = None
 
     @property
     def text(self) -> str:
         """Text output as decoded string"""
+        if self._decoded_stdout is None:
+            return None
         return self._decoded_stdout.strip()
 
     @property
@@ -47,7 +54,9 @@ class ExecutedTool:
         This returns the nested structure of dictionaries and lists or fails when
         the output is not JSON.
         """
-        return json.loads(self._stdout)
+        if self._cached_json is None:
+            self._cached_json = json.loads(self._stdout)
+        return self._cached_json
 
     @property
     def keyval(self):
@@ -85,6 +94,15 @@ class ExecutedTool:
         # The use of strip is assuming that the output is one line which
         # ends with a newline character which is for display only.
         return self._decoded_stdout.strip("\n").split(separator)
+
+    def __getitem__(self, name):
+        # TODO: cache parsed JSON
+        if self._stdout:
+            # We are testing just std out and letting rest to the parse and the user.
+            # This makes no assumption about how JSON is produced by the tool.
+            return self.json[name]
+        msg = f"Output of the tool {self._name} is not JSON"
+        raise ValueError(msg)
 
 
 class Tools:
@@ -141,13 +159,34 @@ class Tools:
         self._env["GRASS_OVERWRITE"] = "1"
 
     def _set_stdin(self, stdin, /):
-        print("_set_stdin", stdin)
         self._stdin = stdin
 
     @property
     def env(self):
         """Internally used environment (reference to it, not a copy)"""
         return self._env
+
+    def _digest_data_parameters(self, parameters, command):
+        # Uses parameters, but modifies the command.
+        input_rasters = []
+        if "inputs" in parameters:
+            for item in parameters["inputs"]:
+                if item["value"].endswith(".grass_raster"):
+                    input_rasters.append(Path(item["value"]))
+                    for i, arg in enumerate(command):
+                        if arg.startswith(f"{item['param']}="):
+                            arg = arg.replace(item["value"], Path(item["value"]).stem)
+                            command[i] = arg
+        output_rasters = []
+        if "outputs" in parameters:
+            for item in parameters["outputs"]:
+                if item["value"].endswith(".grass_raster"):
+                    output_rasters.append(Path(item["value"]))
+                    for i, arg in enumerate(command):
+                        if arg.startswith(f"{item['param']}="):
+                            arg = arg.replace(item["value"], Path(item["value"]).stem)
+                            command[i] = arg
+        return input_rasters, output_rasters
 
     def run(self, name, /, **kwargs):
         """Run modules from the GRASS display family (modules starting with "d.").
@@ -157,10 +196,56 @@ class Tools:
 
         :param str module: name of GRASS module
         :param `**kwargs`: named arguments passed to run_command()"""
-        args, popen_options = gs.popen_args_command(name, **kwargs)
-        return self._execute_tool(args, **popen_options)
+        original = {}
+        original_outputs = {}
 
-    def _execute_tool(self, command, **popen_options):
+        for key, value in kwargs.items():
+            if isinstance(value, np.ndarray):
+                kwargs[key] = "tmp_serialized_array"
+                original[key] = value
+            elif value == np.ndarray:
+                kwargs[key] = "tmp_future_serialized_array"
+                original_outputs[key] = value
+
+        args, popen_options = gs.popen_args_command(name, **kwargs)
+
+        env = popen_options.get("env", self._env)
+
+        import subprocess
+
+        parameters = json.loads(
+            subprocess.check_output([*args, "--json"], text=True, env=env)
+        )
+        if "inputs" in parameters:
+            for param in parameters["inputs"]:
+                if param["param"] not in original:
+                    continue
+                map2d = garray.array()
+                print(param)
+                map2d[:] = original[param["param"]]
+                map2d.write("tmp_serialized_array", overwrite=True)
+
+        # We approximate tool_kwargs as original kwargs.
+        result = self.run_from_list(args, tool_kwargs=kwargs, **popen_options)
+
+        if "outputs" in parameters:
+            for param in parameters["outputs"]:
+                if param["param"] not in original_outputs:
+                    continue
+                output_array = garray.array("tmp_future_serialized_array")
+                result = output_array
+
+        return result
+
+    def run_command(self, name, /, **kwargs):
+        # Adjust error handling or provide custom implementation for full control?
+        return gs.run_command(name, **kwargs, env=self._env)
+
+    def parse_command(self, name, /, **kwargs):
+        return gs.parse_command(name, **kwargs, env=self._env)
+
+    # Make this an overload of run.
+    def run_from_list(self, command, tool_kwargs=None, **popen_options):
         # alternatively use dev null as default or provide it as convenient settings
         if self._capture_output:
             stdout_pipe = gs.PIPE
@@ -196,8 +281,11 @@ class Tools:
                 returncode=returncode,
                 errors=stderr,
             )
+        # TODO: solve tool_kwargs is None
         # We don't have the keyword arguments to pass to the resulting object.
-        return ExecutedTool(name=command[0], kwargs=None, stdout=stdout, stderr=stderr)
+        return ExecutedTool(
+            name=command[0], kwargs=tool_kwargs, stdout=stdout, stderr=stderr
+        )
 
     def feed_input_to(self, stdin, /):
         """Get a new object which will feed text input to a tool or tools"""
@@ -207,24 +295,62 @@ class Tools:
         """Get a new object which will ignore errors of the called tools"""
         return Tools(env=self._env, errors="ignore")
 
+    def levenshtein_distance(self, text1: str, text2: str) -> int:
+        if len(text1) < len(text2):
+            return self.levenshtein_distance(text2, text1)
+
+        if len(text2) == 0:
+            return len(text1)
+
+        previous_row = list(range(len(text2) + 1))
+        for i, char1 in enumerate(text1):
+            current_row = [i + 1]
+            for j, char2 in enumerate(text2):
+                insertions = previous_row[j + 1] + 1
+                deletions = current_row[j] + 1
+                substitutions = previous_row[j] + (char1 != char2)
+                current_row.append(min(insertions, deletions, substitutions))
+            previous_row = current_row
+
+        return previous_row[-1]
+
+    def suggest_tools(self, tool):
+        # TODO: cache commands also for dir
+        all_names = list(gs.get_commands()[0])
+        result = []
+        max_suggestions = 10
+        for name in all_names:
+            if self.levenshtein_distance(tool, name) < len(tool) / 2:
+                result.append(name)
+            if len(result) >= max_suggestions:
+                break
+        return result
+
     def __getattr__(self, name):
         """Parse attribute to GRASS display module. Attribute should be in
         the form 'd_module_name'. For example, 'd.rast' is called with 'd_rast'.
         """
         # Reformat string
-        grass_module = name.replace("_", ".")
+        tool_name = name.replace("_", ".")
         # Assert module exists
-        if not shutil.which(grass_module):
-            raise AttributeError(
-                _(
-                    "Cannot find GRASS tool {}. "
-                    "Is the session set up and the tool on path?"
-                ).format(grass_module)
+        if not shutil.which(tool_name):
+            suggesions = self.suggest_tools(tool_name)
+            if suggesions:
+                msg = (
+                    f"Tool {tool_name} not found. "
+                    f"Did you mean: {', '.join(suggesions)}?"
+                )
+                raise AttributeError(msg)
+            msg = (
+                f"Tool or attribute {name} not found. "
+                "If you are executing a tool, is the session set up and the tool on path? "
+                "If you are looking for an attribute, is it in the documentation?"
             )
+            raise AttributeError(msg)
 
         def wrapper(**kwargs):
             # Run module
-            return self.run(grass_module, **kwargs)
+            return self.run(tool_name, **kwargs)
 
         return wrapper
 
@@ -269,9 +395,6 @@ def _test():
     tools_pro = Tools(
         session=session, freeze_region=True, overwrite=True, superquiet=True
     )
-    # gs.feed_command("v.in.ascii",
-    #    input="-", output="point", separator=",",
-    #    stdin="13.45,29.96,200", overwrite=True)
     tools_pro.r_slope_aspect(elevation="elevation", slope="slope")
     tools_pro.feed_input_to("13.45,29.96,200").v_in_ascii(
         input="-", output="point", separator=","
@@ -284,16 +407,6 @@ def _test():
     exaggerated = "exaggerated"
     tools_pro.r_mapcalc(expression=f"{exaggerated} = 5 * {elevation}")
     tools_pro.feed_input_to(f"{exaggerated} = 5 * {elevation}").r_mapcalc(file="-")
-
-    # try:
-    tools_pro.feed_input_to("13.45,29.96,200").v_in_ascii(
-        input="-",
-        output="point",
-        format="xstandard",
-    )
-    # except gs.CalledModuleError as error:
-    #    print("Exception text:")
-    #    print(error)
 
 
 if __name__ == "__main__":

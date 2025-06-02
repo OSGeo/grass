@@ -28,6 +28,7 @@
 #endif
 
 #include <math.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -1125,24 +1126,24 @@ int main(int argc, char *argv[])
         if (!flag.n->answer) {
             for (i = ceil(max_asp); i >= 1; i--) {
                 if (i == 360)
-                    sprintf(buf, "east");
+                    snprintf(buf, sizeof(buf), "east");
                 else if (i == 45)
-                    sprintf(buf, "north ccw of east");
+                    snprintf(buf, sizeof(buf), "north ccw of east");
                 else if (i == 90)
-                    sprintf(buf, "north");
+                    snprintf(buf, sizeof(buf), "north");
                 else if (i == 135)
-                    sprintf(buf, "north ccw of west");
+                    snprintf(buf, sizeof(buf), "north ccw of west");
                 else if (i == 180)
-                    sprintf(buf, "west");
+                    snprintf(buf, sizeof(buf), "west");
                 else if (i == 225)
-                    sprintf(buf, "south ccw of west");
+                    snprintf(buf, sizeof(buf), "south ccw of west");
                 else if (i == 270)
-                    sprintf(buf, "south");
+                    snprintf(buf, sizeof(buf), "south");
                 else if (i == 315)
-                    sprintf(buf, "south ccw of east");
+                    snprintf(buf, sizeof(buf), "south ccw of east");
                 else
-                    sprintf(buf, "%d degree%s ccw from east", i,
-                            i == 1 ? "" : "s");
+                    snprintf(buf, sizeof(buf), "%d degree%s ccw from east", i,
+                             i == 1 ? "" : "s");
                 if (data_type == CELL_TYPE) {
                     Rast_set_c_cat((CELL *)&i, (CELL *)&i, buf, &cats);
                     continue;
@@ -1163,24 +1164,24 @@ int main(int argc, char *argv[])
         else {
             for (i = ceil(max_asp); i >= 1; i--) {
                 if (i == 0 || i == 360)
-                    sprintf(buf, "north");
+                    snprintf(buf, sizeof(buf), "north");
                 else if (i == 45)
-                    sprintf(buf, "north-east");
+                    snprintf(buf, sizeof(buf), "north-east");
                 else if (i == 90)
-                    sprintf(buf, "east");
+                    snprintf(buf, sizeof(buf), "east");
                 else if (i == 135)
-                    sprintf(buf, "south-east");
+                    snprintf(buf, sizeof(buf), "south-east");
                 else if (i == 180)
-                    sprintf(buf, "south");
+                    snprintf(buf, sizeof(buf), "south");
                 else if (i == 225)
-                    sprintf(buf, "south-west");
+                    snprintf(buf, sizeof(buf), "south-west");
                 else if (i == 270)
-                    sprintf(buf, "west");
+                    snprintf(buf, sizeof(buf), "west");
                 else if (i == 315)
-                    sprintf(buf, "north-west");
+                    snprintf(buf, sizeof(buf), "north-west");
                 else
-                    sprintf(buf, "%d degree%s cw from north", i,
-                            i == 1 ? "" : "s");
+                    snprintf(buf, sizeof(buf), "%d degree%s cw from north", i,
+                             i == 1 ? "" : "s");
                 if (data_type == CELL_TYPE) {
                     Rast_set_c_cat((CELL *)&i, (CELL *)&i, buf, &cats);
                     continue;
@@ -1285,9 +1286,9 @@ int main(int argc, char *argv[])
            the one defined for i-1.5, i-.5 interval which is added later */
         for (i = ceil(max_slp); i > /* INC BY ONE >= */ 0; i--) {
             if (deg)
-                sprintf(buf, "%d degree%s", i, i == 1 ? "" : "s");
+                snprintf(buf, sizeof(buf), "%d degree%s", i, i == 1 ? "" : "s");
             else if (perc)
-                sprintf(buf, "%d percent", i);
+                snprintf(buf, sizeof(buf), "%d percent", i);
             if (data_type == CELL_TYPE) {
                 /* INCR_BY_ONE
                    Rast_set_c_cat(i+1, buf, &cats);

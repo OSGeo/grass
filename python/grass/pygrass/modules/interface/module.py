@@ -57,7 +57,6 @@ class ParallelModuleQueue:
     ...     mapcalc_list.append(new_mapcalc)
     ...     m = new_mapcalc(expression="test_pygrass_%i = %i" % (i, i))
     ...     queue.put(m)
-    ...
     >>> queue.wait()
     >>> mapcalc_list = queue.get_finished_modules()
     >>> queue.get_num_run_procs()
@@ -66,7 +65,6 @@ class ParallelModuleQueue:
     3
     >>> for mapcalc in mapcalc_list:
     ...     print(mapcalc.returncode)
-    ...
     0
     0
     0
@@ -82,7 +80,6 @@ class ParallelModuleQueue:
     ...     mapcalc_list.append(new_mapcalc)
     ...     m = new_mapcalc(expression="test_pygrass_%i = %i" % (i, i))
     ...     queue.put(m)
-    ...
     >>> queue.wait()
     >>> mapcalc_list = queue.get_finished_modules()
     >>> queue.get_num_run_procs()
@@ -91,7 +88,6 @@ class ParallelModuleQueue:
     8
     >>> for mapcalc in mapcalc_list:
     ...     print(mapcalc.returncode)
-    ...
     0
     0
     0
@@ -113,7 +109,6 @@ class ParallelModuleQueue:
     ...         module_list=[new_gregion, new_mapcalc], sync=False, set_temp_region=True
     ...     )
     ...     queue.put(mm)
-    ...
     >>> queue.wait()
     >>> proc_list = queue.get_finished_modules()
     >>> queue.get_num_run_procs()
@@ -122,7 +117,6 @@ class ParallelModuleQueue:
     3
     >>> for proc in proc_list:
     ...     print(proc.returncode)
-    ...
     0
     0
     0
@@ -166,7 +160,6 @@ class ParallelModuleQueue:
     8
     >>> for mapcalc in mapcalc_list:
     ...     print(mapcalc.returncode)
-    ...
     0
     0
     0
@@ -210,7 +203,6 @@ class ParallelModuleQueue:
     3
     >>> for mapcalc in mapcalc_list:
     ...     print(mapcalc.returncode)
-    ...
     0
     0
     0
@@ -268,7 +260,7 @@ class ParallelModuleQueue:
         """Get the number of Module processes that are in the queue running
         or finished
 
-        :returns: the number fo Module processes running/finished in the queue
+        :returns: the number of Module processes running/finished in the queue
         """
         return self._proc_count
 
