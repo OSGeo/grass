@@ -185,17 +185,18 @@ class Tools:
 
         :param str module: name of GRASS module
         :param `**kwargs`: named arguments passed to run_command()"""
-        original = {}
-        original_outputs = {}
+        numpy_inputs = {}
+        numpy_outputs = {}
         stdin = None
 
         for key, value in kwargs.items():
             if isinstance(value, np.ndarray):
-                kwargs[key] = "tmp_serialized_array"
-                original[key] = value
-            elif value == np.ndarray:
-                kwargs[key] = "tmp_future_serialized_array"
-                original_outputs[key] = value
+                kwargs[key] = gs.append_uuid("tmp_serialized_input_array")
+                numpy_inputs[key] = value
+            elif value in (np.ndarray, np.array, garray.array):
+                # We test for class or the function.
+                kwargs[key] = gs.append_uuid("tmp_serialized_output_array")
+                numpy_outputs[key] = value
             elif isinstance(value, StringIO):
                 kwargs[key] = "-"
                 stdin = value.getvalue()
@@ -223,12 +224,10 @@ class Tools:
         parameters = json.loads(interface_result.stdout)
         if "inputs" in parameters:
             for param in parameters["inputs"]:
-                if param["param"] not in original:
-                    continue
-                map2d = garray.array()
-                print(param)
-                map2d[:] = original[param["param"]]
-                map2d.write("tmp_serialized_array", overwrite=True)
+                if param["param"] in numpy_inputs:
+                    map2d = garray.array()
+                    map2d[:] = numpy_inputs[param["param"]]
+                    map2d.write(kwargs[param["param"]])
 
         def is_raster_pack_file(value):
             return value.endswith((".grass_raster", ".pack", ".rpack"))
@@ -274,12 +273,17 @@ class Tools:
             args, tool_kwargs=kwargs, stdin=stdin, **popen_options
         )
 
+        output_arrays = []
         if "outputs" in parameters:
             for param in parameters["outputs"]:
-                if param["param"] not in original_outputs:
+                if param["param"] not in numpy_outputs:
                     continue
-                output_array = garray.array("tmp_future_serialized_array")
-                result = output_array
+                output_array = garray.array(kwargs[param["param"]])
+                output_arrays.append(output_array)
+        if len(output_arrays) == 1:
+            result = output_arrays[0]
+        elif len(output_arrays) > 1:
+            result = tuple(output_arrays)
 
         # Pack the output raster
         for raster in output_rasters:
