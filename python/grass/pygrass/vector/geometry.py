@@ -980,7 +980,7 @@ class Line(Geo):
 
             >>> line = Line([(0, 0), (1, 1), (1, 1), (2, 2)])
             >>> line.prune()
-            >>> line  #doctest: +NORMALIZE_WHITESPACE
+            >>> line  # doctest: +NORMALIZE_WHITESPACE
             Line([Point(0.000000, 0.000000),
                   Point(1.000000, 1.000000),
                   Point(2.000000, 2.000000)])
