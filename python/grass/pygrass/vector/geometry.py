@@ -370,7 +370,7 @@ class Geo:
     @mapinfo_must_be_set
     def read(self):
         """Read and set the coordinates of the centroid from the vector map,
-        using the centroid_id and calling the Vect_read_line C function"""
+        using the centroid_id and calling the ``Vect_read_line`` C function"""
         self.id, ftype, c_points, c_cats = c_read_line(
             self.id, self.c_mapinfo, self.c_points, self.c_cats
         )
@@ -550,7 +550,7 @@ class Point(Geo):
         return "POINT(%s)" % " ".join(["%f" % coord for coord in self.coords()])
 
     def distance(self, pnt):
-        """Calculate distance of 2 points, using the Vect_points_distance
+        """Calculate distance of 2 points, using the ``Vect_points_distance``
         C function, If one of the point have z == None, return the 2D distance.
 
         :param pnt: the point for calculate the distance
@@ -795,7 +795,7 @@ class Line(Geo):
         :type line: Line object of list of points
         :param forward: if forward is True the line is extend forward otherwise
                         is extend backward. The method use the
-                        `Vect_append_points` C function.
+                        ``Vect_append_points`` C function.
         :type forward: bool
 
             >>> line = Line([(0, 0), (1, 1)])
@@ -850,25 +850,25 @@ class Line(Geo):
 
     def length(self):
         """Calculate line length, 3D-length in case of 3D vector line, using
-        `Vect_line_length` C function.  ::
+        ``Vect_line_length`` C function.
+
+        .. code-block:: pycon
 
             >>> line = Line([(0, 0), (1, 1), (0, 1)])
             >>> line.length()
             2.414213562373095
-
-        ..
         """
         return libvect.Vect_line_length(self.c_points)
 
     def length_geodesic(self):
-        """Calculate line length, using `Vect_line_geodesic_length` C function.
-        ::
+        """Calculate line length, using ``Vect_line_geodesic_length`` C function.
+
+        .. code-block:: pycon
 
             >>> line = Line([(0, 0), (1, 1), (0, 1)])
             >>> line.length_geodesic()
             2.414213562373095
 
-        ..
         """
         return libvect.Vect_line_geodesic_length(self.c_points)
 
@@ -974,7 +974,9 @@ class Line(Geo):
 
     def prune(self):
         """Remove duplicate points, i.e. zero length segments, using
-        `Vect_line_prune` C function. ::
+        ``Vect_line_prune`` C function.
+
+        .. code-block:: pycon
 
             >>> line = Line([(0, 0), (1, 1), (1, 1), (2, 2)])
             >>> line.prune()
@@ -982,8 +984,6 @@ class Line(Geo):
             Line([Point(0.000000, 0.000000),
                   Point(1.000000, 1.000000),
                   Point(2.000000, 2.000000)])
-
-        ..
         """
         libvect.Vect_line_prune(self.c_points)
 
@@ -1009,7 +1009,7 @@ class Line(Geo):
 
     def remove(self, pnt):
         """Delete point at given index and move all points above down, using
-        `Vect_line_delete_point` C function.
+        ``Vect_line_delete_point`` C function.
 
         :param pnt: the point to remove
         :type pnt: a Point object or a tuple with the coordinates
@@ -1029,7 +1029,7 @@ class Line(Geo):
         raise ValueError(msg)
 
     def reverse(self):
-        """Reverse the order of vertices, using `Vect_line_reverse`
+        """Reverse the order of vertices, using ``Vect_line_reverse``
         C function. ::
 
             >>> line = Line([(0, 0), (1, 1), (2, 2)])
@@ -1445,7 +1445,7 @@ class Centroid(Point):
     @mapinfo_must_be_set
     def _centroid_id(self):
         """Return the centroid_id, using the c_mapinfo and an area_id
-        attributes of the class, and calling the Vect_get_area_centroid
+        attributes of the class, and calling the ``Vect_get_area_centroid``
         C function, if no centroid_id were found return None"""
         centroid_id = libvect.Vect_get_area_centroid(self.c_mapinfo, self.area_id)
         return centroid_id if centroid_id != 0 else None
@@ -1453,7 +1453,7 @@ class Centroid(Point):
     @mapinfo_must_be_set
     def _area_id(self):
         """Return the area_id, using the c_mapinfo and an centroid_id
-        attributes of the class, and calling the Vect_centroid_area
+        attributes of the class, and calling the ``Vect_centroid_area``
         C function, if no area_id were found return None"""
         area_id = libvect.Vect_get_centroid_area(self.c_mapinfo, self.id)
         return area_id if area_id != 0 else None
