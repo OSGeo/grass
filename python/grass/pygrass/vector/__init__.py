@@ -745,12 +745,12 @@ class VectorTopo(Vector):
         :type bbox: grass.pygrass.vector.basic.Bbox
 
         :param feature_type: The type of feature that should be converted to
-                             the Well Known Binary (WKB) format. Supported are:
+                            the Well Known Binary (WKB) format. Supported are:
                             'point'    -> libvect.GV_POINT     1
                             'line'     -> libvect.GV_LINE      2
                             'boundary' -> libvect.GV_BOUNDARY  3
                             'centroid' -> libvect.GV_CENTROID  4
-        :type type: string
+        :type feature_type: string
 
         :param field: The category field
         :type field: integer
