@@ -88,12 +88,23 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
     JSON_Array *root_array;
     JSON_Object *zone_object;
 
-    if (format == JSON && zone_info.n_zones) {
-        root_value = json_value_init_array();
-        if (root_value == NULL) {
-            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+    if (format == JSON) {
+        if (zone_info.n_zones) {
+            root_value = json_value_init_array();
+            if (root_value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON array. Out of memory?"));
+            }
+            root_array = json_array(root_value);
         }
-        root_array = json_array(root_value);
+        else {
+            zone_value = json_value_init_object();
+            if (zone_value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON object. Out of memory?"));
+            }
+            zone_object = json_object(zone_value);
+        }
     }
 
     int z, n_zones = zone_info.n_zones;
@@ -145,7 +156,7 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
         }
 
         if (param.shell_style->answer || format == JSON) {
-            if (format == JSON) {
+            if (format == JSON && zone_info.n_zones) {
                 zone_value = json_value_init_object();
                 if (zone_value == NULL) {
                     G_fatal_error(
