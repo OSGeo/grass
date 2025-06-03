@@ -24,7 +24,7 @@ import weakref
 from pathlib import Path
 
 import grass.script as gs
-from .tools import Tools
+from .tools import Tools, PackImporterExporter
 
 
 # Using inheritance to get the getattr behavior and other functionality,
@@ -45,10 +45,16 @@ class StandaloneTools(Tools):
         self._tmp_dir = None
         self._tmp_dir_finalizer = None
         self._session = session
+        if session:
+            # If session is provided, we will use it as is.
+            self._crs_initialized = True
+        # Because we don't setup a session here, we don't have runtime available for
+        # tools to be called through method calls. Should we just start session here
+        # to have the runtime?
         self._errors = errors
         self._capture_output = capture_output
 
-    def run(self, name, /, *, flags, **kwargs):
+    def run(self, name, /, *, flags=None, **kwargs):
         return self.run_from_list(gs.make_command(name, flags=flags, **kwargs))
 
     # Make this an overload of run.
@@ -68,72 +74,31 @@ class StandaloneTools(Tools):
             )
         )
 
-        input_rasters, output_rasters = self._digest_data_parameters(
-            parameters, command
-        )
+        pack_importer_exporter = PackImporterExporter(env=self._session.env)
+        pack_importer_exporter.modify_and_ingest_argument_list(command, parameters)
 
         if not self._crs_initialized:
-            self._initialize_crs(input_rasters)
+            self._initialize_crs(pack_importer_exporter.input_rasters)
 
-        for raster_file in input_rasters:
-            # Currently we override the projection check.
+        pack_importer_exporter.import_data()
+
+        if pack_importer_exporter.input_rasters:
+            # Reset the region for every run or keep it persistent?
+            # Also, we now set that even for an existing session, this is
+            # consistent with behavior without a provided session.
+            # We could use env to pass the regions which would allow for the change
+            # while not touching the underlying session.
             gs.run_command(
-                "r.unpack",
-                input=raster_file,
-                output=raster_file.stem,
-                overwrite=True,
-                superquiet=True,
-                flags="o",
+                "g.region",
+                raster=pack_importer_exporter.input_rasters[0].stem,
                 env=self._session.env,
             )
-
-        def before_execution():
-            if input_rasters:
-                # Reset the region for every run or keep it persistent?
-                gs.run_command(
-                    "g.region", raster=input_rasters[0].stem, env=self._session.env
-                )
-
-        before_execution()
 
         result = super().run_from_list(command, env=self._session.env)
 
-        # Pack the output raster
-        for raster in output_rasters:
-            # Overwriting a file is a warning, so to avoid it, we delete the file first.
-            Path(raster).unlink(missing_ok=True)
-            gs.run_command(
-                "r.pack",
-                input=raster.stem,
-                output=raster,
-                flags="c",
-                overwrite=True,
-                superquiet=True,
-                env=self._session.env,
-            )
-        return result
+        pack_importer_exporter.export_data()
 
-    def _digest_data_parameters(self, parameters, command):
-        # Uses parameters, but modifies the command.
-        input_rasters = []
-        if "inputs" in parameters:
-            for item in parameters["inputs"]:
-                if item["value"].endswith(".grass_raster"):
-                    input_rasters.append(Path(item["value"]))
-                    for i, arg in enumerate(command):
-                        if arg.startswith(f"{item['param']}="):
-                            arg = arg.replace(item["value"], Path(item["value"]).stem)
-                            command[i] = arg
-        output_rasters = []
-        if "outputs" in parameters:
-            for item in parameters["outputs"]:
-                if item["value"].endswith(".grass_raster"):
-                    output_rasters.append(Path(item["value"]))
-                    for i, arg in enumerate(command):
-                        if arg.startswith(f"{item['param']}="):
-                            arg = arg.replace(item["value"], Path(item["value"]).stem)
-                            command[i] = arg
-        return input_rasters, output_rasters
+        return result
 
     def _create_session(self):
         # Temporary folder for all our files

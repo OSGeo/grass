@@ -17,6 +17,7 @@
 import json
 import os
 import shutil
+import subprocess
 from pathlib import Path
 from io import StringIO
 
@@ -25,6 +26,119 @@ import numpy as np
 import grass.script as gs
 import grass.script.array as garray
 from grass.exceptions import CalledModuleError
+
+
+class PackImporterExporter:
+    def __init__(self, *, env):
+        self._env = env
+
+    @classmethod
+    def is_raster_pack_file(cls, value):
+        return value.endswith((".grass_raster", ".pack", ".rpack"))
+
+    def modify_and_ingest_argument_list(self, args, parameters):
+        # Uses parameters, but modifies the command, generates list of rasters and vectors.
+        self.input_rasters = []
+        if "inputs" in parameters:
+            for item in parameters["inputs"]:
+                if self.is_raster_pack_file(item["value"]):
+                    self.input_rasters.append(Path(item["value"]))
+                    # No need to change that for the original kwargs.
+                    # kwargs[item["param"]] = Path(item["value"]).stem
+                    # Actual parameters to execute are now a list.
+                    for i, arg in enumerate(args):
+                        if arg.startswith(f"{item['param']}="):
+                            arg = arg.replace(item["value"], Path(item["value"]).stem)
+                            args[i] = arg
+        self.output_rasters = []
+        if "outputs" in parameters:
+            for item in parameters["outputs"]:
+                if self.is_raster_pack_file(item["value"]):
+                    self.output_rasters.append(Path(item["value"]))
+                    # kwargs[item["param"]] = Path(item["value"]).stem
+                    for i, arg in enumerate(args):
+                        if arg.startswith(f"{item['param']}="):
+                            arg = arg.replace(item["value"], Path(item["value"]).stem)
+                            args[i] = arg
+
+    def import_rasters(self):
+        for raster_file in self.input_rasters:
+            # Currently we override the projection check.
+            gs.run_command(
+                "r.unpack",
+                input=raster_file,
+                output=raster_file.stem,
+                overwrite=True,
+                superquiet=True,
+                # flags="o",
+                env=self._env,
+            )
+
+    def export_rasters(self):
+        # Pack the output raster
+        for raster in self.output_rasters:
+            # Overwriting a file is a warning, so to avoid it, we delete the file first.
+            Path(raster).unlink(missing_ok=True)
+            gs.run_command(
+                "r.pack",
+                input=raster.stem,
+                output=raster,
+                flags="c",
+                overwrite=True,
+                superquiet=True,
+            )
+
+    def import_data(self):
+        self.import_rasters()
+
+    def export_data(self):
+        self.export_rasters()
+
+
+class ObjectParameterHandler:
+    def __init__(self, *, env):
+        self._env = env
+        self._numpy_inputs = {}
+        self._numpy_outputs = {}
+        self.stdin = None
+
+    def process_parameters(self, kwargs):
+        for key, value in kwargs.items():
+            if isinstance(value, np.ndarray):
+                kwargs[key] = gs.append_uuid("tmp_serialized_input_array")
+                self._numpy_inputs[key] = value
+            elif value in (np.ndarray, np.array, garray.array):
+                # We test for class or the function.
+                kwargs[key] = gs.append_uuid("tmp_serialized_output_array")
+                self._numpy_outputs[key] = value
+            elif isinstance(value, StringIO):
+                kwargs[key] = "-"
+                self.stdin = value.getvalue()
+
+    def translate_objects_to_data(self, kwargs, parameters):
+        if "inputs" in parameters:
+            for param in parameters["inputs"]:
+                if param["param"] in self._numpy_inputs:
+                    map2d = garray.array(env=self._env)
+                    map2d[:] = self._numpy_inputs[param["param"]]
+                    map2d.write(kwargs[param["param"]])
+
+    def translate_data_to_objects(self, kwargs, parameters):
+        output_arrays = []
+        if "outputs" in parameters:
+            for param in parameters["outputs"]:
+                if param["param"] not in self._numpy_outputs:
+                    continue
+                output_array = garray.array(kwargs[param["param"]], env=self._env)
+                output_arrays.append(output_array)
+        if len(output_arrays) == 1:
+            self.result = output_arrays[0]
+            return True
+        if len(output_arrays) > 1:
+            self.result = tuple(output_arrays)
+            return True
+        self.result = None
+        return False
 
 
 class ExecutedTool:
@@ -185,27 +299,13 @@ class Tools:
 
         :param str module: name of GRASS module
         :param `**kwargs`: named arguments passed to run_command()"""
-        numpy_inputs = {}
-        numpy_outputs = {}
-        stdin = None
 
-        for key, value in kwargs.items():
-            if isinstance(value, np.ndarray):
-                kwargs[key] = gs.append_uuid("tmp_serialized_input_array")
-                numpy_inputs[key] = value
-            elif value in (np.ndarray, np.array, garray.array):
-                # We test for class or the function.
-                kwargs[key] = gs.append_uuid("tmp_serialized_output_array")
-                numpy_outputs[key] = value
-            elif isinstance(value, StringIO):
-                kwargs[key] = "-"
-                stdin = value.getvalue()
+        object_parameter_handler = ObjectParameterHandler(env=self._env)
+        object_parameter_handler.process_parameters(kwargs)
 
         args, popen_options = gs.popen_args_command(name, **kwargs)
 
         env = popen_options.get("env", self._env)
-
-        import subprocess
 
         interface_result = subprocess.run(
             [*args, "--json"], text=True, capture_output=True, env=env
@@ -222,81 +322,27 @@ class Tools:
             )
 
         parameters = json.loads(interface_result.stdout)
-        if "inputs" in parameters:
-            for param in parameters["inputs"]:
-                if param["param"] in numpy_inputs:
-                    map2d = garray.array()
-                    map2d[:] = numpy_inputs[param["param"]]
-                    map2d.write(kwargs[param["param"]])
+        object_parameter_handler.translate_objects_to_data(kwargs, parameters)
 
-        def is_raster_pack_file(value):
-            return value.endswith((".grass_raster", ".pack", ".rpack"))
-
-        # Uses parameters, but modifies the command, generates list of rasters and vectors.
-        input_rasters = []
-        if "inputs" in parameters:
-            for item in parameters["inputs"]:
-                if is_raster_pack_file(item["value"]):
-                    input_rasters.append(Path(item["value"]))
-                    # No need to change that for the original kwargs.
-                    # kwargs[item["param"]] = Path(item["value"]).stem
-                    # Actual parameters to execute are now a list.
-                    for i, arg in enumerate(args):
-                        if arg.startswith(f"{item['param']}="):
-                            arg = arg.replace(item["value"], Path(item["value"]).stem)
-                            args[i] = arg
-        output_rasters = []
-        if "outputs" in parameters:
-            for item in parameters["outputs"]:
-                if is_raster_pack_file(item["value"]):
-                    output_rasters.append(Path(item["value"]))
-                    # kwargs[item["param"]] = Path(item["value"]).stem
-                    for i, arg in enumerate(args):
-                        if arg.startswith(f"{item['param']}="):
-                            arg = arg.replace(item["value"], Path(item["value"]).stem)
-                            args[i] = arg
-
-        for raster_file in input_rasters:
-            # Currently we override the projection check.
-            gs.run_command(
-                "r.unpack",
-                input=raster_file,
-                output=raster_file.stem,
-                overwrite=True,
-                superquiet=True,
-                # flags="o",
-                env=self._env,
-            )
+        pack_importer_exporter = PackImporterExporter(env=self._env)
+        pack_importer_exporter.modify_and_ingest_argument_list(args, parameters)
+        pack_importer_exporter.import_data()
 
         # We approximate tool_kwargs as original kwargs.
         result = self.run_from_list(
-            args, tool_kwargs=kwargs, stdin=stdin, **popen_options
+            args,
+            tool_kwargs=kwargs,
+            stdin=object_parameter_handler.stdin,
+            **popen_options,
         )
 
-        output_arrays = []
-        if "outputs" in parameters:
-            for param in parameters["outputs"]:
-                if param["param"] not in numpy_outputs:
-                    continue
-                output_array = garray.array(kwargs[param["param"]])
-                output_arrays.append(output_array)
-        if len(output_arrays) == 1:
-            result = output_arrays[0]
-        elif len(output_arrays) > 1:
-            result = tuple(output_arrays)
+        use_objects = object_parameter_handler.translate_data_to_objects(
+            kwargs, parameters
+        )
+        if use_objects:
+            result = object_parameter_handler.result
 
-        # Pack the output raster
-        for raster in output_rasters:
-            # Overwriting a file is a warning, so to avoid it, we delete the file first.
-            Path(raster).unlink(missing_ok=True)
-            gs.run_command(
-                "r.pack",
-                input=raster.stem,
-                output=raster,
-                flags="c",
-                overwrite=True,
-                superquiet=True,
-            )
+        pack_importer_exporter.export_data()
 
         return result
 
@@ -408,7 +454,7 @@ class Tools:
         # Reformat string
         tool_name = name.replace("_", ".")
         # Assert module exists
-        if not shutil.which(tool_name):
+        if not shutil.which(tool_name, path=self._env["PATH"]):
             suggesions = self.suggest_tools(tool_name)
             if suggesions:
                 msg = (
