@@ -1264,7 +1264,7 @@ class CLibrariesInterface(RPCServerBase):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> import grass.script as gscript
         >>> import grass.temporal as tgis
@@ -1350,7 +1350,6 @@ class CLibrariesInterface(RPCServerBase):
         ...     if res[0]:
         ...         print(str(res[1][0]), str(res[1][0]))
         ...         ciface.remove_raster_timestamp("test", tgis.get_current_mapset())
-        ...
         1995-03-12 10:34:40 1995-03-12 10:34:40
         1
         >>> ciface.has_raster_timestamp("test", tgis.get_current_mapset())
@@ -1377,7 +1376,6 @@ class CLibrariesInterface(RPCServerBase):
         ...     if res[0]:
         ...         print(str(res[1][0]), str(res[1][0]))
         ...         ciface.remove_raster3d_timestamp("test", tgis.get_current_mapset())
-        ...
         1995-03-12 10:34:40 1995-03-12 10:34:40
         1
         >>> ciface.has_raster3d_timestamp("test", tgis.get_current_mapset())
@@ -1423,7 +1421,6 @@ class CLibrariesInterface(RPCServerBase):
         ...     if res[0]:
         ...         print(str(res[1][0]), str(res[1][0]))
         ...         ciface.remove_vector_timestamp("test", tgis.get_current_mapset())
-        ...
         1995-03-12 10:34:40 1995-03-12 10:34:40
         1
         >>> ciface.has_vector_timestamp("test", tgis.get_current_mapset())
