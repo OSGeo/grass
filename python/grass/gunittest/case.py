@@ -643,7 +643,7 @@ class TestCase(unittest.TestCase):
     ):
         """Test the existence of a file.
 
-        .. note:
+        .. note::
             By default this also checks if the file size is greater than 0
             since we rarely want a file to be empty. It also checks
             if the file is accessible for reading since we expect that user
@@ -696,7 +696,7 @@ class TestCase(unittest.TestCase):
             hasher.update(open("original_result.png", "rb").read())
             hasher.hexdigest()
 
-        .. note:
+        .. note::
             For text files, always create MD5 sum using ``\n`` (LF)
             as newline characters for consistency. Also use newline
             at the end of file (as for example, Git or PEP8 requires).
@@ -1158,11 +1158,11 @@ class TestCase(unittest.TestCase):
     def assertVectorEqualsVector(self, actual, reference, digits, precision, msg=None):
         """Test that two vectors are equal.
 
-        .. note:
+        .. note::
             This test should not be used to test ``v.in.ascii`` and
             ``v.out.ascii`` modules.
 
-        .. warning:
+        .. warning::
             ASCII files for vectors are loaded into memory, so this
             function works well only for "not too big" vector maps.
         """
@@ -1187,11 +1187,11 @@ class TestCase(unittest.TestCase):
     def assertVectorEqualsAscii(self, actual, reference, digits, precision, msg=None):
         """Test that vector is equal to the vector stored in GRASS ASCII file.
 
-        .. note:
+        .. note::
             This test should not be used to test ``v.in.ascii`` and
             ``v.out.ascii`` modules.
 
-        .. warning:
+        .. warning::
             ASCII files for vectors are loaded into memory, so this
             function works well only for "not too big" vector maps.
         """
@@ -1225,11 +1225,11 @@ class TestCase(unittest.TestCase):
     ):
         """Test that two GRASS ASCII vector files are equal.
 
-        .. note:
+        .. note::
             This test should not be used to test ``v.in.ascii`` and
             ``v.out.ascii`` modules.
 
-        .. warning:
+        .. warning::
             ASCII files for vectors are loaded into memory, so this
             function works well only for "not too big" vector maps.
         """
