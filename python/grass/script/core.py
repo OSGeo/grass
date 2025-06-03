@@ -660,8 +660,8 @@ def write_command(*args, **kwargs):
     The behavior on error can be changed using *errors* parameter
     which is passed to the :func:`handle_errors()` function.
 
-    :param *args: unnamed arguments passed to ``start_command()``
-    :param **kwargs: named arguments passed to ``start_command()``
+    :param args: unnamed arguments passed to ``start_command()``
+    :param kwargs: named arguments passed to ``start_command()``
 
     :returns: 0 with default parameters for backward compatibility only
 
