@@ -1,7 +1,6 @@
 """Test grass.experimental.Tools class"""
 
 import os
-import json
 import io
 
 import numpy as np
@@ -63,9 +62,12 @@ def test_json_direct_access_bad_key_value(xy_dataset_session):
 
 
 def test_json_direct_access_not_json(xy_dataset_session):
-    """Check that JSON is parsed"""
+    """Check that JSON parsing creates an ValueError
+
+    Specifically, this tests the case when format="json" is not set.
+    """
     tools = Tools(session=xy_dataset_session)
-    with pytest.raises(json.JSONDecodeError):
+    with pytest.raises(ValueError, match=r"format.*json"):
         tools.g_search_modules(keyword="random")[0]["name"]
 
 

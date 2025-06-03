@@ -97,12 +97,20 @@ class ExecutedTool:
         return self._decoded_stdout.strip("\n").split(separator)
 
     def __getitem__(self, name):
-        # TODO: cache parsed JSON
         if self._stdout:
             # We are testing just std out and letting rest to the parse and the user.
             # This makes no assumption about how JSON is produced by the tool.
-            return self.json[name]
-        msg = f"Output of the tool {self._name} is not JSON"
+            try:
+                return self.json[name]
+            except json.JSONDecodeError as error:
+                if self._kwargs.get("format") == "json":
+                    raise
+                msg = (
+                    f"Output of {self._name} cannot be parsed as JSON. "
+                    'Did you use format="json"?'
+                )
+                raise ValueError(msg) from error
+        msg = f"No text output for {self._name} to be parsed as JSON"
         raise ValueError(msg)
 
 
