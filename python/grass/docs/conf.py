@@ -485,6 +485,8 @@ epub_exclude_files = ["search.html"]
 
 # Where class documentation comes from (class or __init__ docstring).
 autoclass_content = "both"
+# Render todo boxes instead of hiding them
+todo_include_todos = True
 
 # sphinx-sitemap extension config
 # https://sphinx-sitemap.readthedocs.io/en/latest/advanced-configuration.html
