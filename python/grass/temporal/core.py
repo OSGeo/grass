@@ -4,7 +4,7 @@ SQL database and to establish a connection to the database.
 
 Usage:
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> import grass.temporal as tgis
     >>> # Create the temporal database
@@ -314,7 +314,7 @@ def set_raise_on_error(raise_exp: bool = True):
     :param raise_exp: True to raise a FatalError exception instead of calling
                       sys.exit(1) when using the tgis messenger interface
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> import grass.temporal as tgis
         >>> tgis.init()
@@ -1360,7 +1360,7 @@ class DBConnection:
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> init()
             >>> dbif = SQLDatabaseInterfaceConnection()

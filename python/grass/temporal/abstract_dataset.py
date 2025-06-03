@@ -125,19 +125,19 @@ class AbstractDataset(
     def reset(self, ident):
         """Reset the internal structure and set the identifier
 
-         This method creates the dataset specific internal objects
-         that store the base information, the spatial and temporal extent
-         and the metadata. It must be implemented in the dataset
-         specific subclasses. This is the code for the
-         vector dataset:
+        This method creates the dataset specific internal objects
+        that store the base information, the spatial and temporal extent
+        and the metadata. It must be implemented in the dataset
+        specific subclasses. This is the code for the
+        vector dataset:
 
-         .. code-block:: python
+        .. code-block:: python
 
-             self.base = VectorBase(ident=ident)
-             self.absolute_time = VectorAbsoluteTime(ident=ident)
-             self.relative_time = VectorRelativeTime(ident=ident)
-             self.spatial_extent = VectorSpatialExtent(ident=ident)
-             self.metadata = VectorMetadata(ident=ident)
+            self.base = VectorBase(ident=ident)
+            self.absolute_time = VectorAbsoluteTime(ident=ident)
+            self.relative_time = VectorRelativeTime(ident=ident)
+            self.spatial_extent = VectorSpatialExtent(ident=ident)
+            self.metadata = VectorMetadata(ident=ident)
 
         :param ident: The identifier of the dataset that  "name@mapset" or
                       in case of vector maps "name:layer@mapset"
@@ -580,15 +580,15 @@ class AbstractDatasetComparisonKeyStartTime:
     """This comparison key can be used to sort lists of abstract datasets
     by start time
 
-     Example:
+    Example:
 
-     .. code-block:: python
+    .. code-block:: python
 
-         # Return all maps in a space time raster dataset as map objects
-         map_list = strds.get_registered_maps_as_objects()
+        # Return all maps in a space time raster dataset as map objects
+        map_list = strds.get_registered_maps_as_objects()
 
-         # Sort the maps in the list by start time
-         sorted_map_list = sorted(map_list, key=AbstractDatasetComparisonKeyStartTime)
+        # Sort the maps in the list by start time
+        sorted_map_list = sorted(map_list, key=AbstractDatasetComparisonKeyStartTime)
     """
 
     def __init__(self, obj, *args) -> None:
@@ -632,15 +632,15 @@ class AbstractDatasetComparisonKeyEndTime:
     """This comparison key can be used to sort lists of abstract datasets
     by end time
 
-     Example:
+    Example:
 
-     .. code-block:: python
+    .. code-block:: python
 
-         # Return all maps in a space time raster dataset as map objects
-         map_list = strds.get_registered_maps_as_objects()
+        # Return all maps in a space time raster dataset as map objects
+        map_list = strds.get_registered_maps_as_objects()
 
-         # Sort the maps in the list by end time
-         sorted_map_list = sorted(map_list, key=AbstractDatasetComparisonKeyEndTime)
+        # Sort the maps in the list by end time
+        sorted_map_list = sorted(map_list, key=AbstractDatasetComparisonKeyEndTime)
     """
 
     def __init__(self, obj, *args) -> None:

@@ -3,7 +3,7 @@ Temporal extent classes
 
 Usage:
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> import grass.temporal as tgis
     >>> from datetime import datetime
@@ -38,7 +38,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> A = TemporalExtent(
@@ -98,7 +98,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=5, end_time=6)
             >>> inter = A.intersect(A)
@@ -216,7 +216,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=5, end_time=6)
             >>> inter = A.intersect(A)
@@ -405,7 +405,7 @@ class TemporalExtent(SQLDatabaseInterface):
                  or None in case the temporal extents are unrelated
                  (before or after)
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=5, end_time=8)
             >>> B = TemporalExtent(start_time=3, end_time=4)
@@ -442,7 +442,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=5, end_time=6)
             >>> B = TemporalExtent(start_time=5, end_time=7)
@@ -473,7 +473,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=5, end_time=7)
             >>> B = TemporalExtent(start_time=5, end_time=6)
@@ -504,7 +504,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=6, end_time=7)
             >>> B = TemporalExtent(start_time=5, end_time=7)
@@ -535,7 +535,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=5, end_time=7)
             >>> B = TemporalExtent(start_time=6, end_time=7)
@@ -566,7 +566,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=8, end_time=9)
             >>> B = TemporalExtent(start_time=6, end_time=7)
@@ -594,7 +594,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=6, end_time=7)
             >>> B = TemporalExtent(start_time=8, end_time=9)
@@ -624,7 +624,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=5, end_time=7)
             >>> B = TemporalExtent(start_time=7, end_time=9)
@@ -665,7 +665,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=5, end_time=7)
             >>> B = TemporalExtent(start_time=3, end_time=5)
@@ -694,7 +694,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=5, end_time=7)
             >>> B = TemporalExtent(start_time=7, end_time=9)
@@ -722,7 +722,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=5, end_time=7)
             >>> B = TemporalExtent(start_time=4, end_time=9)
@@ -761,7 +761,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=4, end_time=9)
             >>> B = TemporalExtent(start_time=5, end_time=8)
@@ -800,7 +800,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=5, end_time=6)
             >>> B = TemporalExtent(start_time=5, end_time=6)
@@ -834,7 +834,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=5, end_time=7)
             >>> B = TemporalExtent(start_time=6, end_time=8)
@@ -874,7 +874,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=6, end_time=8)
             >>> B = TemporalExtent(start_time=5, end_time=7)
@@ -1084,7 +1084,7 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> A = STDSAbsoluteTime(
@@ -1232,7 +1232,7 @@ class RelativeTemporalExtent(TemporalExtent):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> A = RelativeTemporalExtent(
@@ -1359,7 +1359,7 @@ class STDSRelativeTime(RelativeTemporalExtent):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> A = STDSRelativeTime(
