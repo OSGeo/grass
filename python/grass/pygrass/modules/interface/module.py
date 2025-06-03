@@ -23,22 +23,22 @@ class ParallelModuleQueue:
     """This class is designed to run an arbitrary number of pygrass Module or
     MultiModule processes in parallel.
 
-    Objects of type grass.pygrass.modules.Module or
-    grass.pygrass.modules.MultiModule can be put into the
-    queue using put() method. When the queue is full with the maximum
+    Objects of type :py:class:`grass.pygrass.modules.Module` or
+    :py:class:`grass.pygrass.modules.MultiModule` can be put into the
+    queue using :py:meth:`put` method. When the queue is full with the maximum
     number of parallel processes it will wait for all processes to finish,
     sets the stdout and stderr of the Module object and removes it
     from the queue when its finished.
 
     To finish the queue before the maximum number of parallel
-    processes was reached call wait() .
+    processes was reached, call :py:meth:`wait`.
 
     This class will raise a GrassError in case a Module process exits
     with a return code other than 0.
 
-    Processes that were run asynchronously with the MultiModule class
+    Processes that were run asynchronously with the :py:class:`MultiModule` class
     will not raise a GrassError in case of failure. This must be manually checked
-    by accessing finished modules by calling get_finished_modules().
+    by accessing finished modules by calling :py:meth:`get_finished_modules`.
 
     Usage:
 
@@ -536,7 +536,7 @@ class Module:
     os = 'linux'
     language = 'python'
 
-    In the Module class we heavily use this language feature to pass arguments
+    In the :py:class:`Module` class we heavily use this language feature to pass arguments
     and keyword arguments to the grass module.
     """  # noqa: E501
 

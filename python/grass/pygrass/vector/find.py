@@ -423,7 +423,7 @@ class BboxFinder(AbstractFinder):
                  If bboxlist_only is True a BoxList
                  object will be returned, or None if nothing was found.
 
-        This methods uses libvect.Vect_select_lines_by_box()
+        This methods uses :py:meth:`libvect.Vect_select_lines_by_box`
 
         Examples:
 
