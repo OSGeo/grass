@@ -1855,6 +1855,7 @@ GEOOBJ = {
 
 
 def c_read_next_line(c_mapinfo, c_points, c_cats):
+    """:meta private:"""
     v_id = c_mapinfo.contents.next_line
     v_id = v_id if v_id != 0 else None
     ftype = libvect.Vect_read_next_line(c_mapinfo, c_points, c_cats)
@@ -1896,6 +1897,7 @@ def read_next_line(
 
 
 def c_read_line(feature_id, c_mapinfo, c_points, c_cats):
+    """:meta private:"""
     nmax = libvect.Vect_get_num_lines(c_mapinfo)
     if feature_id < 0:  # Handle negative indices
         feature_id += nmax + 1
