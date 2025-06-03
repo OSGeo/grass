@@ -40,6 +40,24 @@ def test_json_parser(xy_dataset_session):
     )
 
 
+def test_json_with_name_and_parameter_call(xy_dataset_session):
+    """Check that JSON is parsed with a name-and-parameters style call"""
+    tools = Tools(session=xy_dataset_session)
+    assert (
+        tools.run("g.search.modules", keyword="random", flags="j")[0]["name"]
+        == "r.random"
+    )
+
+
+def test_json_with_subprocess_run_like_call(xy_dataset_session):
+    """Check that JSON is parsed with a name-and-parameters style call"""
+    tools = Tools(session=xy_dataset_session)
+    assert (
+        tools.run_from_list(["g.search.modules", "keyword=random", "-j"])[0]["name"]
+        == "r.random"
+    )
+
+
 def test_json_direct_access(xy_dataset_session):
     """Check that JSON is parsed"""
     tools = Tools(session=xy_dataset_session)
@@ -286,6 +304,20 @@ def test_numpy_one_input_one_output(xy_dataset_session):
     assert np.all(slope == np.full((2, 3), 0))
 
 
+def test_numpy_with_name_and_parameter(xy_dataset_session):
+    """Check that a NumPy array works as input and for signaling output
+
+    It tests that the np.ndarray class is supported to signal output.
+    Return type is not strictly defined, so we are not testing for it explicitly
+    (only by actually using it as an NumPy array).
+    """
+    tools = Tools(session=xy_dataset_session)
+    tools.g_region(rows=2, cols=3)
+    slope = tools.run("r.slope.aspect", elevation=np.ones((2, 3)), slope=np.ndarray)
+    assert slope.shape == (2, 3)
+    assert np.all(slope == np.full((2, 3), 0))
+
+
 def test_numpy_one_input_multiple_outputs(xy_dataset_session):
     """Check that a NumPy array function works for signaling multiple outputs
 
@@ -338,6 +370,34 @@ def test_pack_input_output(xy_dataset_session, rows_raster_file3x3):
     tools.g_region(rows=3, cols=3)
     assert os.path.exists(rows_raster_file3x3)
     tools.r_slope_aspect(elevation=rows_raster_file3x3, slope="file.grass_raster")
+    assert os.path.exists("file.grass_raster")
+
+
+def test_pack_input_output_with_name_and_parameter_call(
+    xy_dataset_session, rows_raster_file3x3
+):
+    """Check that global overwrite is not used when separate env is used"""
+    tools = Tools(session=xy_dataset_session)
+    tools.g_region(rows=3, cols=3)
+    assert os.path.exists(rows_raster_file3x3)
+    tools.run(
+        "r.slope.aspect", elevation=rows_raster_file3x3, slope="file.grass_raster"
+    )
+    assert os.path.exists("file.grass_raster")
+
+
+def test_pack_input_output_with_subprocess_run_like_call(
+    xy_dataset_session, rows_raster_file3x3
+):
+    tools = Tools(session=xy_dataset_session)
+    assert os.path.exists(rows_raster_file3x3)
+    tools.run_from_list(
+        [
+            "r.slope.aspect",
+            f"elevation={rows_raster_file3x3}",
+            "aspect=file.grass_raster",
+        ]
+    )
     assert os.path.exists("file.grass_raster")
 
 

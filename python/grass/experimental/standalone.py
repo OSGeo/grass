@@ -24,7 +24,7 @@ import weakref
 from pathlib import Path
 
 import grass.script as gs
-from .tools import Tools, PackImporterExporter
+from .tools import Tools, PackImporterExporter, ObjectParameterHandler
 
 
 # Using inheritance to get the getattr behavior and other functionality,
@@ -54,12 +54,68 @@ class StandaloneTools(Tools):
         self._errors = errors
         self._capture_output = capture_output
 
-    def run(self, name, /, *, flags=None, **kwargs):
-        return self.run_from_list(gs.make_command(name, flags=flags, **kwargs))
+    def _process_parameters(self, command, popen_options):
+        if not self._session:
+            # We create session and an empty XY project in one step.
+            self._create_session()
+
+        env = popen_options.get("env", self._session.env)
+
+        return subprocess.run(
+            [*command, "--json"], text=True, capture_output=True, env=env
+        )
+
+    def run(self, name, /, **kwargs):
+        object_parameter_handler = ObjectParameterHandler()
+        object_parameter_handler.process_parameters(kwargs)
+
+        args, popen_options = gs.popen_args_command(name, **kwargs)
+
+        interface_result = self._process_parameters(args, popen_options)
+        if interface_result.returncode != 0:
+            # This is only for the error states.
+            return gs.handle_errors(
+                interface_result.returncode,
+                result=None,
+                args=[name],
+                kwargs=kwargs,
+                stderr=interface_result.stderr,
+                handler="raise",
+            )
+        parameters = json.loads(interface_result.stdout)
+
+        if not self._session:
+            # We create session and an empty XY project in one step.
+            self._create_session()
+
+        object_parameter_handler.translate_objects_to_data(
+            kwargs, parameters, env=self._session.env
+        )
+        # We approximate tool_kwargs as original kwargs.
+        result = self.run_from_list(
+            args,
+            tool_kwargs=kwargs,
+            processed_parameters=parameters,
+            stdin=object_parameter_handler.stdin,
+            **popen_options,
+        )
+        use_objects = object_parameter_handler.translate_data_to_objects(
+            kwargs, parameters, env=self._session.env
+        )
+        if use_objects:
+            result = object_parameter_handler.result
+        return result
 
     # Make this an overload of run.
     # Or at least use the same signature as the parent class.
-    def run_from_list(self, command):
+    def run_from_list(
+        self,
+        command,
+        tool_kwargs=None,
+        stdin=None,
+        processed_parameters=None,
+        **popen_options,
+    ):
         """
 
         Passing --help to this function will not work.
@@ -94,7 +150,7 @@ class StandaloneTools(Tools):
                 env=self._session.env,
             )
 
-        result = super().run_from_list(command, env=self._session.env)
+        result = super().no_nonsense_run_from_list(command, env=self._session.env)
 
         pack_importer_exporter.export_data()
 

@@ -88,7 +88,12 @@ def rows_raster_file3x3(tmp_path):
         gs.mapcalc("rows = row()", env=session.env)
         output_file = tmp_path / "rows.grass_raster"
         gs.run_command(
-            "r.pack", input="rows", output=output_file, flags="c", env=session.env
+            "r.pack",
+            input="rows",
+            output=output_file,
+            flags="c",
+            superquiet=True,
+            env=session.env,
         )
 
     return output_file

@@ -96,8 +96,7 @@ class PackImporterExporter:
 
 
 class ObjectParameterHandler:
-    def __init__(self, *, env):
-        self._env = env
+    def __init__(self):
         self._numpy_inputs = {}
         self._numpy_outputs = {}
         self.stdin = None
@@ -115,21 +114,21 @@ class ObjectParameterHandler:
                 kwargs[key] = "-"
                 self.stdin = value.getvalue()
 
-    def translate_objects_to_data(self, kwargs, parameters):
+    def translate_objects_to_data(self, kwargs, parameters, env):
         if "inputs" in parameters:
             for param in parameters["inputs"]:
                 if param["param"] in self._numpy_inputs:
-                    map2d = garray.array(env=self._env)
+                    map2d = garray.array(env=env)
                     map2d[:] = self._numpy_inputs[param["param"]]
                     map2d.write(kwargs[param["param"]])
 
-    def translate_data_to_objects(self, kwargs, parameters):
+    def translate_data_to_objects(self, kwargs, parameters, env):
         output_arrays = []
         if "outputs" in parameters:
             for param in parameters["outputs"]:
                 if param["param"] not in self._numpy_outputs:
                     continue
-                output_array = garray.array(kwargs[param["param"]], env=self._env)
+                output_array = garray.array(kwargs[param["param"]], env=env)
                 output_arrays.append(output_array)
         if len(output_arrays) == 1:
             self.result = output_arrays[0]
@@ -291,6 +290,13 @@ class Tools:
         """Internally used environment (reference to it, not a copy)"""
         return self._env
 
+    def _process_parameters(self, command, popen_options):
+        env = popen_options.get("env", self._env)
+
+        return subprocess.run(
+            [*command, "--json"], text=True, capture_output=True, env=env
+        )
+
     def run(self, name, /, **kwargs):
         """Run modules from the GRASS display family (modules starting with "d.").
 
@@ -300,16 +306,12 @@ class Tools:
         :param str module: name of GRASS module
         :param `**kwargs`: named arguments passed to run_command()"""
 
-        object_parameter_handler = ObjectParameterHandler(env=self._env)
+        object_parameter_handler = ObjectParameterHandler()
         object_parameter_handler.process_parameters(kwargs)
 
         args, popen_options = gs.popen_args_command(name, **kwargs)
 
-        env = popen_options.get("env", self._env)
-
-        interface_result = subprocess.run(
-            [*args, "--json"], text=True, capture_output=True, env=env
-        )
+        interface_result = self._process_parameters(args, popen_options)
         if interface_result.returncode != 0:
             # This is only for the error states.
             return gs.handle_errors(
@@ -320,41 +322,76 @@ class Tools:
                 stderr=interface_result.stderr,
                 handler="raise",
             )
-
         parameters = json.loads(interface_result.stdout)
-        object_parameter_handler.translate_objects_to_data(kwargs, parameters)
-
-        pack_importer_exporter = PackImporterExporter(env=self._env)
-        pack_importer_exporter.modify_and_ingest_argument_list(args, parameters)
-        pack_importer_exporter.import_data()
+        object_parameter_handler.translate_objects_to_data(
+            kwargs, parameters, env=self._env
+        )
 
         # We approximate tool_kwargs as original kwargs.
         result = self.run_from_list(
             args,
             tool_kwargs=kwargs,
+            processed_parameters=parameters,
             stdin=object_parameter_handler.stdin,
             **popen_options,
         )
-
         use_objects = object_parameter_handler.translate_data_to_objects(
-            kwargs, parameters
+            kwargs, parameters, env=self._env
         )
         if use_objects:
             result = object_parameter_handler.result
+        return result
 
+    def run_from_list(
+        self,
+        command,
+        tool_kwargs=None,
+        stdin=None,
+        processed_parameters=None,
+        **popen_options,
+    ):
+        if not processed_parameters:
+            interface_result = self._process_parameters(command, popen_options)
+            if interface_result.returncode != 0:
+                # This is only for the error states.
+                return gs.handle_errors(
+                    interface_result.returncode,
+                    result=None,
+                    args=[command],
+                    kwargs=tool_kwargs,
+                    stderr=interface_result.stderr,
+                    handler="raise",
+                )
+            processed_parameters = json.loads(interface_result.stdout)
+
+        pack_importer_exporter = PackImporterExporter(env=self._env)
+        pack_importer_exporter.modify_and_ingest_argument_list(
+            command, processed_parameters
+        )
+        pack_importer_exporter.import_data()
+
+        # We approximate tool_kwargs as original kwargs.
+        result = self.no_nonsense_run_from_list(
+            command,
+            tool_kwargs=tool_kwargs,
+            stdin=stdin,
+            **popen_options,
+        )
         pack_importer_exporter.export_data()
-
         return result
 
     def run_command(self, name, /, **kwargs):
-        # Adjust error handling or provide custom implementation for full control?
+        # TODO: Provide custom implementation for full control
         return gs.run_command(name, **kwargs, env=self._env)
 
     def parse_command(self, name, /, **kwargs):
+        # TODO: Provide custom implementation for full control
         return gs.parse_command(name, **kwargs, env=self._env)
 
     # Make this an overload of run.
-    def run_from_list(self, command, tool_kwargs=None, stdin=None, **popen_options):
+    def no_nonsense_run_from_list(
+        self, command, tool_kwargs=None, stdin=None, **popen_options
+    ):
         # alternatively use dev null as default or provide it as convenient settings
         if self._capture_output:
             stdout_pipe = gs.PIPE
