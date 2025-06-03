@@ -48,7 +48,7 @@ class ParallelModuleQueue:
     >>> from grass.pygrass.modules import Module, MultiModule, ParallelModuleQueue
     >>> mapcalc_list = []
 
-    Setting run_ to False is important, otherwise a parallel processing is not possible
+    Setting ``run_`` to False is important, otherwise a parallel processing is not possible
 
     >>> mapcalc = Module("r.mapcalc", overwrite=True, run_=False)
     >>> queue = ParallelModuleQueue(nprocs=3)
@@ -227,11 +227,11 @@ class ParallelModuleQueue:
     def put(self, module):
         r"""Put the next Module or MultiModule object in the queue
 
-        To run the Module objects in parallel the run\_ and finish\_ options
+        To run the Module objects in parallel the ``run_`` and ``finish_`` options
         of the Module must be set to False.
 
         :param module: a preconfigured Module or MultiModule object that were configured
-                       with run\_ and finish\_ set to False,
+                       with ``run_`` and ``finish_`` set to False,
         :type module: Module or MultiModule object
         """
         self._list[self._proc_count] = module
@@ -480,7 +480,7 @@ class Module:
     'r.colors map=test_a color=byg offset=0.0 scale=1.0'
 
     Often in the Module class you can find ``*args`` and ``kwargs`` annotation
-    in methods, like in the __call__ method.
+    in methods, like in the ``__call__`` method.
     Python allow developers to not specify all the arguments and
     keyword arguments of a method or function.
 
@@ -622,10 +622,10 @@ class Module:
         self.__call__.__func__.__doc__ = self.__doc__
 
     def __call__(self, *args, **kargs):
-        """Set module parameters to the class and, if run_ is True execute the
+        """Set module parameters to the class and, if ``run_`` is True execute the
         module, therefore valid parameters are all the module parameters
-        plus some extra parameters that are: run_, stdin_, stdout_, stderr_,
-        env_ and finish_.
+        plus some extra parameters that are: ``run_``, ``stdin_``, ``stdout_``, ``stderr_``,
+        ``env_`` and ``finish_``.
         """
         if not args and not kargs:
             self.run()
@@ -645,8 +645,8 @@ class Module:
         """Update module parameters and selected object attributes.
 
         Valid parameters are all the module parameters
-        and additional parameters, namely: run_, stdin_, stdout_, stderr_,
-        env_, and finish_.
+        and additional parameters, namely: ``run_``, ``stdin_``, ``stdout_``, ``stderr_``,
+        ``env_``, and ``finish_``.
         """
         #
         # check for extra kargs, set attribute and remove from dictionary
@@ -832,7 +832,7 @@ class Module:
 
     def wait(self):
         """Wait for the module to finish. Call this method if
-        the run() call was performed with self.false_ = False.
+        the run() call was performed with :code:`self.false_ = False`.
 
         :return: A reference to this object
         """
@@ -1007,15 +1007,15 @@ class MultiModule:
         return self.module_list
 
     def run(self):
-        """Start the modules in the list. If self.finished_ is set True
+        """Start the modules in the list. If ``self.finished_`` is set True
         this method will return after all processes finished.
 
-        If self.finish_ is set False, this method will return
+        If ``self.finish_`` is set False, this method will return
         after the process list was started for execution.
         In a background process, the processes in the list will
         be run one after the another.
 
-        :return: None in case of self.finish_ is True,
+        :return: None in case of ``self.finish_`` is True,
                  otherwise a multiprocessing.Process object that invokes the modules
         """
 
