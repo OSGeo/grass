@@ -196,3 +196,37 @@ void G_rgb_to_hsv(int r, int g, int b, float *h, float *s, float *v)
 
     *v = cmax * 100.0f;
 }
+
+/*!
+   \brief Parse red,green,blue and set color string
+
+   \param r red component of RGB color
+   \param g green component of RGB color
+   \param b blue component of RGB color
+   \param clr_frmt color format to be used (RGB, HEX, HSV, TRIPLET).
+   \param[out] str color string
+ */
+void G_color_to_str(int r, int g, int b, ColorFormat clr_frmt, char *str)
+{
+    float h, s, v;
+
+    switch (clr_frmt) {
+    case RGB:
+        snprintf(str, COLOR_STRING_LENGTH, "rgb(%d, %d, %d)", r, g, b);
+        break;
+
+    case HEX:
+        snprintf(str, COLOR_STRING_LENGTH, "#%02X%02X%02X", r, g, b);
+        break;
+
+    case HSV:
+        G_rgb_to_hsv(r, g, b, &h, &s, &v);
+        snprintf(str, COLOR_STRING_LENGTH, "hsv(%d, %d, %d)", (int)h, (int)s,
+                 (int)v);
+        break;
+
+    case TRIPLET:
+        snprintf(str, COLOR_STRING_LENGTH, "%d:%d:%d", r, g, b);
+        break;
+    }
+}
