@@ -1317,7 +1317,7 @@ class Node:
     def to_wkb(self):
         """Return a "well know binary" (WKB) geometry array.
 
-        TODO: Must be implemented
+        .. TODO:: Must be implemented
         """
         msg = "Not implemented"
         raise Exception(msg)
@@ -1520,7 +1520,7 @@ class Isle(Geo):
 
         For now the outer ring is returned
 
-        TODO: Implement inner rings detected from isles
+        .. TODO:: Implement inner rings detected from isles
         """
         line = self.points()
 
