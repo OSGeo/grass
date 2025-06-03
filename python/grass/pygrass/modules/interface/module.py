@@ -872,7 +872,7 @@ class MultiModule:
                       region environment, hence invoking g.region will not alter the
                       current region or the region of other MultiModule runs.
 
-                      Note:
+                      .. note::
 
                           Modules run in asynchronous mode can only be accessed via the
                           wait() method. The wait() method will return all finished
@@ -971,8 +971,7 @@ g.region format=plain -p ; g.region format=plain -p'
                                 run, hence region settings in the process list will not
                                 affect the current computation region.
 
-                                Note:
-
+                                .. note::
                                     This flag is only available in asynchronous mode!
         :return:
         """
@@ -989,7 +988,7 @@ g.region format=plain -p ; g.region format=plain -p'
     def get_modules(self):
         """Return the list of modules that have been run in synchronous mode
 
-        Note: Asynchronously run module can only be accessed via the wait() method.
+        .. note:: Asynchronously run module can only be accessed via the wait() method.
 
         :return: The list of modules
         """

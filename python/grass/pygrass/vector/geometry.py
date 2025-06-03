@@ -1001,7 +1001,7 @@ class Line(Geo):
                   Point(1.000000, 1.000000),
                   Point(2.000000, 2.000000)])
 
-        .. warning ::
+        .. warning::
 
             prune_thresh is not working yet.
         """
