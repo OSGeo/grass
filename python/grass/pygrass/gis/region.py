@@ -373,7 +373,7 @@ class Region:
     def zoom(self, raster_name):
         """Shrink region until it meets non-NULL data from this raster map
 
-        Warning: This will change the user GRASS region settings
+        .. warning:: This will change the user GRASS region settings
 
         :param raster_name: the name of raster
         :type raster_name: str
@@ -384,7 +384,7 @@ class Region:
     def align(self, raster_name):
         """Adjust region cells to cleanly align with this raster map
 
-        Warning: This will change the user GRASS region settings
+        .. warning:: This will change the user GRASS region settings
 
         :param raster_name: the name of raster
         :type raster_name: str
