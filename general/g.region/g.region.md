@@ -20,12 +20,6 @@ projection. Each region also has associated with it the specific
 east-west and north-south resolutions of its smallest units (rectangular
 units called "cells").
 
-The region extent is common between 2D and 3D maps.
-However, the 2D resolution, used for 2D raster maps, is set separately
-from the 3D resolution, used for 3D raster maps.
-Updating the 2D resolution of the region will not affect its 3D resolution,
-and vice versa.
-
 The region's boundaries are given as the northernmost, southernmost,
 easternmost, westernmost, bottommost, and topmost points that define
 its extent (cell edges). The north and south boundaries are commonly
@@ -71,6 +65,17 @@ geographic region. Users may also access saved region definitions stored
 under other mapsets in the current project, if these mapsets are
 included in the user's mapset search path or the '@' operator is used
 (`region_name@mapset`).
+
+### 3D region
+
+The region extent is common between 2D and 3D maps.
+However, the 3D resolution, used for 3D raster maps, is set separately
+from the 2D resolution that is used for 2D raster maps.
+Updating the 2D resolution of the region will not affect its 3D resolution,
+and vice versa.
+
+Therefore, people working with 3D raster maps should take care to adjust the
+3D resolution of the region using the **res3** and **tbres** parameters.
 
 ## NOTES
 
