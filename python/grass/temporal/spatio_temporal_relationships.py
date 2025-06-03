@@ -796,13 +796,12 @@ def count_temporal_topology_relationships(maps1, maps2=None, dbif=None):
     """Count the temporal relations of a single list of maps or between two
     lists of maps
 
-
-     :param maps1: A list of abstract_dataset
-                   objects with initiated temporal extent
-     :param maps2: A list of abstract_dataset
-                   objects with initiated temporal extent
-     :param dbif: The database interface to be used
-     :return: A dictionary with counted temporal relationships
+    :param maps1: A list of abstract_dataset
+                objects with initiated temporal extent
+    :param maps2: A list of abstract_dataset
+                objects with initiated temporal extent
+    :param dbif: The database interface to be used
+    :return: A dictionary with counted temporal relationships
     """
 
     tb = SpatioTemporalTopologyBuilder()
@@ -843,153 +842,162 @@ def create_temporal_relation_sql_where_statement(
     """Create a SQL WHERE statement for temporal relation selection of maps in
     space time datasets
 
-     :param start: The start time
-     :param end: The end time
-     :param use_start: Select maps of which the start time is located in
-                       the selection granule:
+    :param start: The start time
+    :param end: The end time
+    :param use_start: Select maps of which the start time is located in
+                        the selection granule:
 
-                       .. code-block:: output
-                           map    :        s
-                           granule:  s-----------------e
+                        .. code-block:: output
 
-                           map    :        s--------------------e
-                           granule:  s-----------------e
+                            map    :        s
+                            granule:  s-----------------e
 
-                           map    :        s--------e
-                           granule:  s-----------------e
-     :param use_during: Select maps which are temporal during the selection
+                            map    :        s--------------------e
+                            granule:  s-----------------e
+
+                            map    :        s--------e
+                            granule:  s-----------------e
+    :param use_during: Select maps which are temporal during the selection
                         granule:
 
                         .. code-block:: output
+
                             map    :     s-----------e
                             granule:  s-----------------e
-     :param use_overlap: Select maps which temporal overlap the selection
-                         granule:
+    :param use_overlap: Select maps which temporal overlap the selection
+                        granule:
 
-                         .. code-block:: output
-                             map    :     s-----------e
-                             granule:        s-----------------e
+                        .. code-block:: output
 
-                             map    :     s-----------e
-                             granule:  s----------e
-     :param use_contain: Select maps which temporally contain the selection
-                         granule:
+                            map    :     s-----------e
+                            granule:        s-----------------e
 
-                         .. code-block:: output
-                             map    :  s-----------------e
-                             granule:     s-----------e
-     :param use_equal: Select maps which temporally equal to the selection
-                       granule:
+                            map    :     s-----------e
+                            granule:  s----------e
+    :param use_contain: Select maps which temporally contain the selection
+                        granule:
 
-                       .. code-block:: output
-                           map    :  s-----------e
-                           granule:  s-----------e
-     :param use_follows: Select maps which temporally follow the selection
-                         granule:
+                        .. code-block:: output
 
-                         .. code-block:: output
-                             map    :              s-----------e
-                             granule:  s-----------e
-     :param use_precedes: Select maps which temporally precedes the
-                          selection granule:
+                            map    :  s-----------------e
+                            granule:     s-----------e
+    :param use_equal: Select maps which temporally equal to the selection
+                        granule:
 
-                          .. code-block:: output
-                              map    :  s-----------e
-                              granule:              s-----------e
+                        .. code-block:: output
 
-     Usage:
+                            map    :  s-----------e
+                            granule:  s-----------e
+    :param use_follows: Select maps which temporally follow the selection
+                        granule:
 
-     .. code-block:: python
+                        .. code-block:: output
 
-         >>> # Relative time
-         >>> start = 1
-         >>> end = 2
-         >>> create_temporal_relation_sql_where_statement(start, end, use_start=False)
-         >>> create_temporal_relation_sql_where_statement(start, end)
-         '((start_time >= 1 and start_time < 2) )'
-         >>> create_temporal_relation_sql_where_statement(start, end, use_start=True)
-         '((start_time >= 1 and start_time < 2) )'
-         >>> create_temporal_relation_sql_where_statement(
-         ...     start, end, use_start=False, use_during=True
-         ... )
-         '(((start_time > 1 and end_time < 2) OR (start_time >= 1 and end_time < 2) OR (start_time > 1 and end_time <= 2)))'
-         >>> create_temporal_relation_sql_where_statement(
-         ...     start, end, use_start=False, use_overlap=True
-         ... )
-         '(((start_time < 1 and end_time > 1 and end_time < 2) OR (start_time < 2 and start_time > 1 and end_time > 2)))'
-         >>> create_temporal_relation_sql_where_statement(
-         ...     start, end, use_start=False, use_contain=True
-         ... )
-         '(((start_time < 1 and end_time > 2) OR (start_time <= 1 and end_time > 2) OR (start_time < 1 and end_time >= 2)))'
-         >>> create_temporal_relation_sql_where_statement(
-         ...     start, end, use_start=False, use_equal=True
-         ... )
-         '((start_time = 1 and end_time = 2))'
-         >>> create_temporal_relation_sql_where_statement(
-         ...     start, end, use_start=False, use_follows=True
-         ... )
-         '((start_time = 2))'
-         >>> create_temporal_relation_sql_where_statement(
-         ...     start, end, use_start=False, use_precedes=True
-         ... )
-         '((end_time = 1))'
-         >>> create_temporal_relation_sql_where_statement(
-         ...     start,
-         ...     end,
-         ...     use_start=True,
-         ...     use_during=True,
-         ...     use_overlap=True,
-         ...     use_contain=True,
-         ...     use_equal=True,
-         ...     use_follows=True,
-         ...     use_precedes=True,
-         ... )
-         '((start_time >= 1 and start_time < 2)  OR ((start_time > 1 and end_time < 2) OR (start_time >= 1 and end_time < 2) OR (start_time > 1 and end_time <= 2)) OR ((start_time < 1 and end_time > 1 and end_time < 2) OR (start_time < 2 and start_time > 1 and end_time > 2)) OR ((start_time < 1 and end_time > 2) OR (start_time <= 1 and end_time > 2) OR (start_time < 1 and end_time >= 2)) OR (start_time = 1 and end_time = 2) OR (start_time = 2) OR (end_time = 1))'
+                            map    :              s-----------e
+                            granule:  s-----------e
+    :param use_precedes: Select maps which temporally precedes the
+                        selection granule:
 
-         >>> # Absolute time
-         >>> start = datetime(2001, 1, 1, 12, 30)
-         >>> end = datetime(2001, 3, 31, 14, 30)
-         >>> create_temporal_relation_sql_where_statement(start, end, use_start=False)
-         >>> create_temporal_relation_sql_where_statement(start, end)
-         "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00') )"
-         >>> create_temporal_relation_sql_where_statement(start, end, use_start=True)
-         "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00') )"
-         >>> create_temporal_relation_sql_where_statement(
-         ...     start, end, use_start=False, use_during=True
-         ... )
-         "(((start_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time >= '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time > '2001-01-01 12:30:00' and end_time <= '2001-03-31 14:30:00')))"
-         >>> create_temporal_relation_sql_where_statement(
-         ...     start, end, use_start=False, use_overlap=True
-         ... )
-         "(((start_time < '2001-01-01 12:30:00' and end_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time < '2001-03-31 14:30:00' and start_time > '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00')))"
-         >>> create_temporal_relation_sql_where_statement(
-         ...     start, end, use_start=False, use_contain=True
-         ... )
-         "(((start_time < '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time <= '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time < '2001-01-01 12:30:00' and end_time >= '2001-03-31 14:30:00')))"
-         >>> create_temporal_relation_sql_where_statement(
-         ...     start, end, use_start=False, use_equal=True
-         ... )
-         "((start_time = '2001-01-01 12:30:00' and end_time = '2001-03-31 14:30:00'))"
-         >>> create_temporal_relation_sql_where_statement(
-         ...     start, end, use_start=False, use_follows=True
-         ... )
-         "((start_time = '2001-03-31 14:30:00'))"
-         >>> create_temporal_relation_sql_where_statement(
-         ...     start, end, use_start=False, use_precedes=True
-         ... )
-         "((end_time = '2001-01-01 12:30:00'))"
-         >>> create_temporal_relation_sql_where_statement(
-         ...     start,
-         ...     end,
-         ...     use_start=True,
-         ...     use_during=True,
-         ...     use_overlap=True,
-         ...     use_contain=True,
-         ...     use_equal=True,
-         ...     use_follows=True,
-         ...     use_precedes=True,
-         ... )
-         "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00')  OR ((start_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time >= '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time > '2001-01-01 12:30:00' and end_time <= '2001-03-31 14:30:00')) OR ((start_time < '2001-01-01 12:30:00' and end_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time < '2001-03-31 14:30:00' and start_time > '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00')) OR ((start_time < '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time <= '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time < '2001-01-01 12:30:00' and end_time >= '2001-03-31 14:30:00')) OR (start_time = '2001-01-01 12:30:00' and end_time = '2001-03-31 14:30:00') OR (start_time = '2001-03-31 14:30:00') OR (end_time = '2001-01-01 12:30:00'))"
+                        .. code-block:: output
+
+                            map    :  s-----------e
+                            granule:              s-----------e
+
+    Usage:
+
+    .. code-block:: pycon
+
+        >>> # Relative time
+        >>> start = 1
+        >>> end = 2
+        >>> create_temporal_relation_sql_where_statement(start, end, use_start=False)
+        >>> create_temporal_relation_sql_where_statement(start, end)
+        '((start_time >= 1 and start_time < 2) )'
+        >>> create_temporal_relation_sql_where_statement(start, end, use_start=True)
+        '((start_time >= 1 and start_time < 2) )'
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start, end, use_start=False, use_during=True
+        ... )
+        '(((start_time > 1 and end_time < 2) OR (start_time >= 1 and end_time < 2) OR (start_time > 1 and end_time <= 2)))'
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start, end, use_start=False, use_overlap=True
+        ... )
+        '(((start_time < 1 and end_time > 1 and end_time < 2) OR (start_time < 2 and start_time > 1 and end_time > 2)))'
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start, end, use_start=False, use_contain=True
+        ... )
+        '(((start_time < 1 and end_time > 2) OR (start_time <= 1 and end_time > 2) OR (start_time < 1 and end_time >= 2)))'
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start, end, use_start=False, use_equal=True
+        ... )
+        '((start_time = 1 and end_time = 2))'
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start, end, use_start=False, use_follows=True
+        ... )
+        '((start_time = 2))'
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start, end, use_start=False, use_precedes=True
+        ... )
+        '((end_time = 1))'
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start,
+        ...     end,
+        ...     use_start=True,
+        ...     use_during=True,
+        ...     use_overlap=True,
+        ...     use_contain=True,
+        ...     use_equal=True,
+        ...     use_follows=True,
+        ...     use_precedes=True,
+        ... )
+        '((start_time >= 1 and start_time < 2)  OR ((start_time > 1 and end_time < 2) OR (start_time >= 1 and end_time < 2) OR (start_time > 1 and end_time <= 2)) OR ((start_time < 1 and end_time > 1 and end_time < 2) OR (start_time < 2 and start_time > 1 and end_time > 2)) OR ((start_time < 1 and end_time > 2) OR (start_time <= 1 and end_time > 2) OR (start_time < 1 and end_time >= 2)) OR (start_time = 1 and end_time = 2) OR (start_time = 2) OR (end_time = 1))'
+
+    .. code-block:: pycon
+
+        >>> # Absolute time
+        >>> start = datetime(2001, 1, 1, 12, 30)
+        >>> end = datetime(2001, 3, 31, 14, 30)
+        >>> create_temporal_relation_sql_where_statement(start, end, use_start=False)
+        >>> create_temporal_relation_sql_where_statement(start, end)
+        "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00') )"
+        >>> create_temporal_relation_sql_where_statement(start, end, use_start=True)
+        "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00') )"
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start, end, use_start=False, use_during=True
+        ... )
+        "(((start_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time >= '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time > '2001-01-01 12:30:00' and end_time <= '2001-03-31 14:30:00')))"
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start, end, use_start=False, use_overlap=True
+        ... )
+        "(((start_time < '2001-01-01 12:30:00' and end_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time < '2001-03-31 14:30:00' and start_time > '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00')))"
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start, end, use_start=False, use_contain=True
+        ... )
+        "(((start_time < '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time <= '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time < '2001-01-01 12:30:00' and end_time >= '2001-03-31 14:30:00')))"
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start, end, use_start=False, use_equal=True
+        ... )
+        "((start_time = '2001-01-01 12:30:00' and end_time = '2001-03-31 14:30:00'))"
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start, end, use_start=False, use_follows=True
+        ... )
+        "((start_time = '2001-03-31 14:30:00'))"
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start, end, use_start=False, use_precedes=True
+        ... )
+        "((end_time = '2001-01-01 12:30:00'))"
+        >>> create_temporal_relation_sql_where_statement(
+        ...     start,
+        ...     end,
+        ...     use_start=True,
+        ...     use_during=True,
+        ...     use_overlap=True,
+        ...     use_contain=True,
+        ...     use_equal=True,
+        ...     use_follows=True,
+        ...     use_precedes=True,
+        ... )
+        "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00')  OR ((start_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time >= '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time > '2001-01-01 12:30:00' and end_time <= '2001-03-31 14:30:00')) OR ((start_time < '2001-01-01 12:30:00' and end_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time < '2001-03-31 14:30:00' and start_time > '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00')) OR ((start_time < '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time <= '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time < '2001-01-01 12:30:00' and end_time >= '2001-03-31 14:30:00')) OR (start_time = '2001-01-01 12:30:00' and end_time = '2001-03-31 14:30:00') OR (start_time = '2001-03-31 14:30:00') OR (end_time = '2001-01-01 12:30:00'))"
 
     """  # noqa: E501
 

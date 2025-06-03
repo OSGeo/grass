@@ -543,22 +543,22 @@ def init(raise_fatal_error: bool = False, skip_db_version_check: bool = False):
 
     The following environmental variables are checked:
 
-     - GRASS_TGIS_PROFILE (True, False, 1, 0)
-     - GRASS_TGIS_RAISE_ON_ERROR (True, False, 1, 0)
+    - GRASS_TGIS_PROFILE (True, False, 1, 0)
+    - GRASS_TGIS_RAISE_ON_ERROR (True, False, 1, 0)
 
-     .. warning::
+    .. warning::
 
-         This functions must be called before any spatio-temporal processing
-         can be started
+        This functions must be called before any spatio-temporal processing
+        can be started
 
-     :param raise_fatal_error: Set this True to assure that the init()
+    :param raise_fatal_error: Set this True to assure that the init()
                                function does not kill a persistent process
                                like the GUI. If set True a
                                grass.pygrass.messages.FatalError
                                exception will be raised in case a fatal
                                error occurs in the init process, otherwise
                                sys.exit(1) will be called.
-     :param skip_db_version_check: Set this True to skip mismatch temporal
+    :param skip_db_version_check: Set this True to skip mismatch temporal
                                    database version check.
                                    Recommended to be used only for
                                    upgrade_temporal_database().
@@ -1229,15 +1229,15 @@ class DBConnection:
 
     The following DBMS are supported:
 
-      - sqlite via the sqlite3 standard library
-      - postgresql via psycopg2
+    - sqlite via the sqlite3 standard library
+    - postgresql via psycopg2
     """
 
     def __init__(self, backend=None, dbstring: str | None = None) -> None:
         """Constructor of a database connection
 
-        param backend:The database backend sqlite or pg
-        param dbstring: The database connection string
+        :param backend: The database backend sqlite or pg
+        :param dbstring: The database connection string
         """
         self.connected = False
         if backend is None:
