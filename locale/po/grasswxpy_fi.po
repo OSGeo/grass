@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_fi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-23 22:56+0000\n"
+"POT-Creation-Date: 2025-06-04 10:56+0000\n"
 "PO-Revision-Date: 2015-08-17 22:18+0300\n"
 "Last-Translator: Kari Salovaara <kari.salovaara@pp1.inet.fi>\n"
 "Language-Team: Finnish <grass-translations@lists.osgeo.org>\n"
@@ -199,9 +199,9 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:415
 #: ../gui/wxpython/gmodeler/preferences.py:730
-#: ../gui/wxpython/gui_core/gselect.py:1619
-#: ../gui/wxpython/gui_core/gselect.py:1636
-#: ../gui/wxpython/gui_core/gselect.py:1637
+#: ../gui/wxpython/gui_core/gselect.py:1629
+#: ../gui/wxpython/gui_core/gselect.py:1646
+#: ../gui/wxpython/gui_core/gselect.py:1647
 #: ../gui/wxpython/gui_core/widgets.py:1437
 #: ../gui/wxpython/vnet/dialogs.py:1679
 msgid "Name:"
@@ -249,13 +249,13 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:1224
 #: ../gui/wxpython/animation/dialogs.py:1247
 #: ../gui/wxpython/animation/dialogs.py:1278
-#: ../gui/wxpython/gui_core/forms.py:2010
-#: ../gui/wxpython/gui_core/forms.py:2121
-#: ../gui/wxpython/gui_core/gselect.py:1235
-#: ../gui/wxpython/gui_core/gselect.py:1551
-#: ../gui/wxpython/gui_core/gselect.py:1568
-#: ../gui/wxpython/gui_core/gselect.py:1621
-#: ../gui/wxpython/gui_core/gselect.py:1656
+#: ../gui/wxpython/gui_core/forms.py:2009
+#: ../gui/wxpython/gui_core/forms.py:2120
+#: ../gui/wxpython/gui_core/gselect.py:1245
+#: ../gui/wxpython/gui_core/gselect.py:1561
+#: ../gui/wxpython/gui_core/gselect.py:1578
+#: ../gui/wxpython/gui_core/gselect.py:1631
+#: ../gui/wxpython/gui_core/gselect.py:1666
 #: ../gui/wxpython/location_wizard/wizard.py:1446
 #: ../gui/wxpython/location_wizard/wizard.py:1801
 #: ../gui/wxpython/modules/import_export.py:860
@@ -453,8 +453,8 @@ msgid "File format:"
 msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:1194
-#: ../gui/wxpython/gui_core/gselect.py:1566
-#: ../gui/wxpython/gui_core/gselect.py:1654
+#: ../gui/wxpython/gui_core/gselect.py:1576
+#: ../gui/wxpython/gui_core/gselect.py:1664
 msgid "Directory:"
 msgstr ""
 
@@ -893,7 +893,7 @@ msgstr ""
 msgid "Unable to execute command: '%s'"
 msgstr ""
 
-#: ../gui/wxpython/core/gcmd.py:778 ../gui/wxpython/gui_core/forms.py:2992
+#: ../gui/wxpython/core/gcmd.py:778 ../gui/wxpython/gui_core/forms.py:2991
 #, python-format
 msgid "Error in %s"
 msgstr ""
@@ -1299,7 +1299,7 @@ msgstr ""
 msgid "Unable to create file '{name}': {error}\n"
 msgstr "Vektorikarttaa ei voida päivittää."
 
-#: ../gui/wxpython/core/utils.py:945 ../gui/wxpython/gui_core/forms.py:1918
+#: ../gui/wxpython/core/utils.py:945 ../gui/wxpython/gui_core/forms.py:1917
 msgid "Select Color"
 msgstr ""
 
@@ -2246,7 +2246,7 @@ msgid "Data type"
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/base.py:3042 ../gui/wxpython/dbmgr/base.py:3194
-#: ../gui/wxpython/dbmgr/base.py:3462 ../gui/wxpython/gui_core/gselect.py:1469
+#: ../gui/wxpython/dbmgr/base.py:3462 ../gui/wxpython/gui_core/gselect.py:1479
 msgid "Database"
 msgstr ""
 
@@ -3612,13 +3612,13 @@ msgid "Delete all"
 msgstr "Poista kaikki"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:983
-#: ../gui/wxpython/gui_core/gselect.py:2284
+#: ../gui/wxpython/gui_core/gselect.py:2294
 #: ../gui/wxpython/location_wizard/wizard.py:981
 msgid "No"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/dialogs.py:983
-#: ../gui/wxpython/gui_core/gselect.py:2284
+#: ../gui/wxpython/gui_core/gselect.py:2294
 #: ../gui/wxpython/location_wizard/wizard.py:981
 msgid "Yes"
 msgstr ""
@@ -3633,7 +3633,7 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/dialogs.py:1212
 #: ../gui/wxpython/gmodeler/panels.py:1598
-#: ../gui/wxpython/gui_core/forms.py:605
+#: ../gui/wxpython/gui_core/forms.py:604
 #: ../gui/wxpython/modules/mcalc_builder.py:170
 msgid "&Run"
 msgstr ""
@@ -3644,7 +3644,7 @@ msgid "Variables"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/frame.py:31 ../gui/wxpython/gmodeler/panels.py:106
-#: ../gui/wxpython/gui_core/forms.py:1500 ../gui/wxpython/lmgr/toolbars.py:208
+#: ../gui/wxpython/gui_core/forms.py:1499 ../gui/wxpython/lmgr/toolbars.py:208
 #: ../gui/wxpython/main_window/frame.py:907
 msgid "Graphical Modeler"
 msgstr ""
@@ -3750,7 +3750,7 @@ msgid "Script editor"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/panels.py:194
-#: ../gui/wxpython/gui_core/forms.py:2512
+#: ../gui/wxpython/gui_core/forms.py:2511
 msgid "Command output"
 msgstr ""
 
@@ -3960,7 +3960,7 @@ msgid "mapset"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/panels.py:1372
-#: ../gui/wxpython/gui_core/forms.py:2009
+#: ../gui/wxpython/gui_core/forms.py:2008
 msgid "file"
 msgstr ""
 
@@ -4603,166 +4603,166 @@ msgstr ""
 msgid "Example"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:565
+#: ../gui/wxpython/gui_core/forms.py:564
 msgid "Enter parameters for '"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:577
+#: ../gui/wxpython/gui_core/forms.py:576
 msgid "Close this window without executing the command (Ctrl+Q)"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:606
+#: ../gui/wxpython/gui_core/forms.py:605
 msgid "Run the command (Ctrl+R)"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:618
+#: ../gui/wxpython/gui_core/forms.py:617
 #: ../gui/wxpython/modules/mcalc_builder.py:177
 msgid "Copy"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:620
+#: ../gui/wxpython/gui_core/forms.py:619
 #: ../gui/wxpython/modules/mcalc_builder.py:178
 msgid "Copy the current command string to the clipboard"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:629
+#: ../gui/wxpython/gui_core/forms.py:628
 msgid "Show manual page of the command (Ctrl+H)"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:667
+#: ../gui/wxpython/gui_core/forms.py:666
 msgid "Add created map(s) into layer tree"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:689
+#: ../gui/wxpython/gui_core/forms.py:688
 #: ../gui/wxpython/modules/import_export.py:119
 msgid "Close dialog on finish"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:696
+#: ../gui/wxpython/gui_core/forms.py:695
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:894
+#: ../gui/wxpython/gui_core/forms.py:893
 #, python-format
 msgid "'%s' copied to clipboard"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:994 ../gui/wxpython/gui_core/forms.py:1009
+#: ../gui/wxpython/gui_core/forms.py:993 ../gui/wxpython/gui_core/forms.py:1008
 msgid "Required"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:997 ../gui/wxpython/gui_core/forms.py:1010
+#: ../gui/wxpython/gui_core/forms.py:996 ../gui/wxpython/gui_core/forms.py:1009
 msgid "Optional"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:1084
-#: ../gui/wxpython/gui_core/forms.py:2316
+#: ../gui/wxpython/gui_core/forms.py:1083
+#: ../gui/wxpython/gui_core/forms.py:2315
 msgid "Parameterized in model"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:1150
+#: ../gui/wxpython/gui_core/forms.py:1149
 #: ../gui/wxpython/location_wizard/wizard.py:214
 msgid "This option is required"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:1168
+#: ../gui/wxpython/gui_core/forms.py:1167
 msgid "[multiple]"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:1230
+#: ../gui/wxpython/gui_core/forms.py:1229
 msgid "valid range"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:1379
-#: ../gui/wxpython/gui_core/forms.py:2953
+#: ../gui/wxpython/gui_core/forms.py:1378
+#: ../gui/wxpython/gui_core/forms.py:2952
 #: ../gui/wxpython/gui_core/toolbars.py:70
 msgid "Select font"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:1508
+#: ../gui/wxpython/gui_core/forms.py:1507
 #: ../gui/wxpython/gui_core/preferences.py:873
 #: ../gui/wxpython/mapdisp/frame.py:83
 msgid "Map Display"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:1661
+#: ../gui/wxpython/gui_core/forms.py:1660
 msgid "Show graphical representation of temporal extent of dataset(s)."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:1970
+#: ../gui/wxpython/gui_core/forms.py:1969
 #: ../gui/wxpython/gui_core/preferences.py:1466
 #: ../gui/wxpython/gui_core/preferences.py:1500
 msgid "Transparent"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:2008
-#: ../gui/wxpython/gui_core/forms.py:2119
+#: ../gui/wxpython/gui_core/forms.py:2007
+#: ../gui/wxpython/gui_core/forms.py:2118
 #, python-format
 msgid "Choose %s"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:2064
+#: ../gui/wxpython/gui_core/forms.py:2063
 #: ../gui/wxpython/modules/mcalc_builder.py:175
 msgid "&Load"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:2066
+#: ../gui/wxpython/gui_core/forms.py:2065
 msgid "Load and edit content of a file"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:2069
+#: ../gui/wxpython/gui_core/forms.py:2068
 msgid "&Save as"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:2071
+#: ../gui/wxpython/gui_core/forms.py:2070
 msgid "Save content to a file for further use"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:2077
+#: ../gui/wxpython/gui_core/forms.py:2076
 msgid "or enter values directly:"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:2081
+#: ../gui/wxpython/gui_core/forms.py:2080
 msgid "Enter file content directly instead of specifying a file. Temporary file will be automatically created."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:2120
-#: ../gui/wxpython/gui_core/gselect.py:1465
+#: ../gui/wxpython/gui_core/forms.py:2119
+#: ../gui/wxpython/gui_core/gselect.py:1475
 msgid "Directory"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:2256
+#: ../gui/wxpython/gui_core/forms.py:2255
 #: ../gui/wxpython/modules/import_export.py:86
 #: ../gui/wxpython/modules/import_export.py:979
 msgid "Layer id"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:2257
+#: ../gui/wxpython/gui_core/forms.py:2256
 #: ../gui/wxpython/modules/import_export.py:87
 msgid "Layer name"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:2258
+#: ../gui/wxpython/gui_core/forms.py:2257
 #: ../gui/wxpython/modules/import_export.py:91
 #: ../gui/wxpython/psmap/dialogs.py:2272
 msgid "Feature type"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:2259
+#: ../gui/wxpython/gui_core/forms.py:2258
 #: ../gui/wxpython/modules/import_export.py:92
 #: ../gui/wxpython/modules/import_export.py:94
 msgid "Projection match"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:2522
+#: ../gui/wxpython/gui_core/forms.py:2521
 msgid "Manual"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:2562
+#: ../gui/wxpython/gui_core/forms.py:2561
 msgid "Nothing to load."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:2571
+#: ../gui/wxpython/gui_core/forms.py:2570
 #, python-format
 msgid ""
 "Unable to load file.\n"
@@ -4770,31 +4770,31 @@ msgid ""
 "Reason: %s"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:2592
+#: ../gui/wxpython/gui_core/forms.py:2591
 #: ../gui/wxpython/modules/colorrules.py:687
 msgid "Nothing to save."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:2597
+#: ../gui/wxpython/gui_core/forms.py:2596
 msgid "Save input as..."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:2936
+#: ../gui/wxpython/gui_core/forms.py:2935
 msgid "No dataset given."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:3104
-#: ../gui/wxpython/gui_core/forms.py:3123
+#: ../gui/wxpython/gui_core/forms.py:3103
+#: ../gui/wxpython/gui_core/forms.py:3122
 #, python-format
 msgid "Unable to parse command '%s'"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:3131
+#: ../gui/wxpython/gui_core/forms.py:3130
 #, python-format
 msgid "%(cmd)s: parameter '%(key)s' not available"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:3217
+#: ../gui/wxpython/gui_core/forms.py:3216
 msgid "Try to set up GRASS_ADDON_PATH or GRASS_ADDON_BASE variable."
 msgstr ""
 
@@ -5022,182 +5022,182 @@ msgstr ""
 msgid "No table linked to layer <{}>."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1234
+#: ../gui/wxpython/gui_core/gselect.py:1244
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:1015
 msgid "Choose GIS Data Directory"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1446
+#: ../gui/wxpython/gui_core/gselect.py:1456
 msgid "Output settings"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1448
+#: ../gui/wxpython/gui_core/gselect.py:1458
 msgid "Source input"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1455
+#: ../gui/wxpython/gui_core/gselect.py:1465
 msgid "Native"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1461
+#: ../gui/wxpython/gui_core/gselect.py:1471
 #: ../gui/wxpython/lmgr/workspace.py:518
 msgid "File"
 msgstr "Tiedosto"
 
-#: ../gui/wxpython/gui_core/gselect.py:1473
+#: ../gui/wxpython/gui_core/gselect.py:1483
 msgid "Protocol"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1484
+#: ../gui/wxpython/gui_core/gselect.py:1494
 msgid "Output type"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1486
+#: ../gui/wxpython/gui_core/gselect.py:1496
 msgid "Source type"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1504
+#: ../gui/wxpython/gui_core/gselect.py:1514
 msgid "All files"
 msgstr "Kaikki tiedostot"
 
-#: ../gui/wxpython/gui_core/gselect.py:1534
+#: ../gui/wxpython/gui_core/gselect.py:1544
 msgid "ZIP files"
 msgstr "ZIP tiedostot"
 
-#: ../gui/wxpython/gui_core/gselect.py:1535
+#: ../gui/wxpython/gui_core/gselect.py:1545
 msgid "GZIP files"
 msgstr "GZIP tiedostot"
 
-#: ../gui/wxpython/gui_core/gselect.py:1536
+#: ../gui/wxpython/gui_core/gselect.py:1546
 msgid "TAR files"
 msgstr "TAR tiedostot"
 
-#: ../gui/wxpython/gui_core/gselect.py:1540
+#: ../gui/wxpython/gui_core/gselect.py:1550
 msgid "TARGZ files"
 msgstr "TARGZ tiedostot"
 
-#: ../gui/wxpython/gui_core/gselect.py:1549
+#: ../gui/wxpython/gui_core/gselect.py:1559
 msgid "File:"
 msgstr "Tiedosto:"
 
-#: ../gui/wxpython/gui_core/gselect.py:1550
+#: ../gui/wxpython/gui_core/gselect.py:1560
 msgid "Choose file to import"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1567
-#: ../gui/wxpython/gui_core/gselect.py:1655
+#: ../gui/wxpython/gui_core/gselect.py:1577
+#: ../gui/wxpython/gui_core/gselect.py:1665
 msgid "Choose input directory"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1588
+#: ../gui/wxpython/gui_core/gselect.py:1598
 msgid "Extension:"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1620
+#: ../gui/wxpython/gui_core/gselect.py:1630
 msgid "Choose file"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1641
-#: ../gui/wxpython/gui_core/gselect.py:2765
+#: ../gui/wxpython/gui_core/gselect.py:1651
+#: ../gui/wxpython/gui_core/gselect.py:2775
 msgid "Feature type:"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1642
+#: ../gui/wxpython/gui_core/gselect.py:1652
 msgid "simple features"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1642
+#: ../gui/wxpython/gui_core/gselect.py:1652
 msgid "topological"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1759
-#: ../gui/wxpython/gui_core/gselect.py:1799
-#: ../gui/wxpython/gui_core/gselect.py:1861
-#: ../gui/wxpython/gui_core/gselect.py:1906
+#: ../gui/wxpython/gui_core/gselect.py:1769
+#: ../gui/wxpython/gui_core/gselect.py:1809
+#: ../gui/wxpython/gui_core/gselect.py:1871
+#: ../gui/wxpython/gui_core/gselect.py:1916
 msgid "Creation options:"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1776
-#: ../gui/wxpython/gui_core/gselect.py:1822
-#: ../gui/wxpython/gui_core/gselect.py:1887
+#: ../gui/wxpython/gui_core/gselect.py:1786
+#: ../gui/wxpython/gui_core/gselect.py:1832
+#: ../gui/wxpython/gui_core/gselect.py:1897
 msgid "Format:"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1895
+#: ../gui/wxpython/gui_core/gselect.py:1905
 msgid "Protocol:"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1924
+#: ../gui/wxpython/gui_core/gselect.py:1934
 msgid "No settings available"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2056
+#: ../gui/wxpython/gui_core/gselect.py:2066
 #: ../gui/wxpython/web_services/dialogs.py:301
 msgid "No data source defined, settings are not saved."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2088
+#: ../gui/wxpython/gui_core/gselect.py:2098
 msgid "PostgreSQL/PostGIS login was not set. Set it via <db.login> module, please."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2243
+#: ../gui/wxpython/gui_core/gselect.py:2253
 #, python-brace-format
 msgid "Getting raster <{table}> SRID from PostgreSQL DB <{db}>, host <{host}> failed. {error}."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2498
+#: ../gui/wxpython/gui_core/gselect.py:2508
 #, python-brace-format
 msgid "Getting list of tables from PostgreSQL DB <{db}>, host <{host}> failed. {error}."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2587
+#: ../gui/wxpython/gui_core/gselect.py:2597
 #, python-brace-format
 msgid "Getting list of tables columns data types from PostGIS DB <{db}>, host <{host}> failed. {error}."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2618
+#: ../gui/wxpython/gui_core/gselect.py:2628
 #, python-brace-format
 msgid "PostgreSQL DB <{psql}> program was not found. Please, install it."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2636
+#: ../gui/wxpython/gui_core/gselect.py:2646
 #: ../gui/wxpython/modules/import_export.py:504
 msgid "The Python GDAL package is missing. Please install it."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2757
+#: ../gui/wxpython/gui_core/gselect.py:2767
 msgid "LineString"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2757
+#: ../gui/wxpython/gui_core/gselect.py:2767
 #: ../gui/wxpython/psmap/dialogs.py:6221 ../gui/wxpython/psmap/toolbars.py:103
 #: ../gui/wxpython/vdigit/preferences.py:729
 msgid "Point"
 msgstr "Piste"
 
-#: ../gui/wxpython/gui_core/gselect.py:2757
+#: ../gui/wxpython/gui_core/gselect.py:2767
 msgid "Polygon"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2970
+#: ../gui/wxpython/gui_core/gselect.py:2980
 msgid "No vector map selected in layer manager. Operation canceled."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2989
+#: ../gui/wxpython/gui_core/gselect.py:2999
 msgid "Input vector map is not selected"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2993
+#: ../gui/wxpython/gui_core/gselect.py:3003
 #, python-format
 msgid "Input vector map <%s> and selected map <%s> in layer manager are different. Operation canceled."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:3109
+#: ../gui/wxpython/gui_core/gselect.py:3119
 #, python-format
 msgid "Unable to import C imagery library functions: %s\n"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:3187
+#: ../gui/wxpython/gui_core/gselect.py:3197
 msgid "No vector map selected"
 msgstr ""
 
