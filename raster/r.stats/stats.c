@@ -328,10 +328,16 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
                 if (node->values[i] == NULL_CELL) {
                     switch (format) {
                     case JSON:
-                        json_object_set_null(category, "category");
-                        json_object_set_string(
-                            category, "label",
-                            Rast_get_c_cat(&null_cell, &labels[i]));
+                        if (raw_output || !is_fp[i] || as_int)
+                            json_object_set_null(category, "category");
+                        else if (averaged)
+                            json_object_set_null(category, "average");
+                        else
+                            json_object_set_null(category, "range");
+                        if (with_labels && !(raw_output && is_fp[i]))
+                            json_object_set_string(
+                                category, "label",
+                                Rast_get_c_cat(&null_cell, &labels[i]));
                         break;
                     case PLAIN:
                         fprintf(stdout, "%s%s", i ? fs : "", no_data_str);
@@ -396,9 +402,9 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
                     else {
                         switch (format) {
                         case JSON:
-                            json_object_dotset_number(category, "range.low",
+                            json_object_dotset_number(category, "range.from",
                                                       dLow);
-                            json_object_dotset_number(category, "range.high",
+                            json_object_dotset_number(category, "range.to",
                                                       dHigh);
                             break;
                         case PLAIN:
