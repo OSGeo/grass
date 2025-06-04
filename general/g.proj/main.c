@@ -88,10 +88,11 @@ int main(int argc, char *argv[])
     shellinfo = G_define_flag();
     shellinfo->key = 'g';
     shellinfo->guisection = _("Print");
-    shellinfo->description =
-        _("[DEPRECATED] Print projection information in shell script style. "
-          "This flag is obsolete and will be removed in a future release. Use "
-          "format=shell instead.");
+    shellinfo->label =
+        _("Print projection information in shell script style [deprecated]");
+    shellinfo->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=shell instead.");
 
     datuminfo = G_define_flag();
     datuminfo->key = 'd';
@@ -102,10 +103,11 @@ int main(int argc, char *argv[])
     printproj4 = G_define_flag();
     printproj4->key = 'j';
     printproj4->guisection = _("Print");
-    printproj4->description =
-        _("[DEPRECATED] Print projection information in PROJ.4 format. "
-          "This flag is obsolete and will be removed in a future release. Use "
-          "format=proj4 instead.");
+    printproj4->label =
+        _("Print projection information in PROJ.4 format [deprecated]");
+    printproj4->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=proj4 instead.");
 
     dontprettify = G_define_flag();
     dontprettify->key = 'f';
@@ -122,10 +124,11 @@ int main(int argc, char *argv[])
     printwkt = G_define_flag();
     printwkt->key = 'w';
     printwkt->guisection = _("Print");
-    printwkt->description =
-        _("[DEPRECATED] Print projection information in WKT format. "
-          "This flag is obsolete and will be removed in a future release. Use "
-          "format=wkt instead.");
+    printwkt->label =
+        _("Print projection information in WKT format [deprecated]");
+    printwkt->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=wkt instead.");
 
     esristyle = G_define_flag();
     esristyle->key = 'e';
@@ -268,18 +271,21 @@ int main(int argc, char *argv[])
     }
 
     if (shellinfo->answer) {
-        G_warning(_("Flag 'g' is deprecated and will be removed in a future "
-                    "release. Please use format=shell instead."));
+        G_verbose_message(
+            _("Flag 'g' is deprecated and will be removed in a future "
+              "release. Please use format=shell instead."));
         outputFormat = SHELL;
     }
     else if (printproj4->answer) {
-        G_warning(_("Flag 'j' is deprecated and will be removed in a future "
-                    "release. Please use format=proj4 instead."));
+        G_verbose_message(
+            _("Flag 'j' is deprecated and will be removed in a future "
+              "release. Please use format=proj4 instead."));
         outputFormat = PROJ4;
     }
     else if (printwkt->answer) {
-        G_warning(_("Flag 'w' is deprecated and will be removed in a future "
-                    "release. Please use format=wkt instead."));
+        G_verbose_message(
+            _("Flag 'w' is deprecated and will be removed in a future "
+              "release. Please use format=wkt instead."));
         outputFormat = WKT;
     }
 
