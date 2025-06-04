@@ -998,7 +998,7 @@ def tempdir(env=None):
 
 
 def tempname(length: int, lowercase: bool = False) -> str:
-    """Generate a GRASS and SQL compliant random name starting with tmp_
+    """Generate a GRASS and SQL compliant random name starting with ``tmp_``
     followed by a random part of length "length"
 
     :param length: length of the random part of the name to generate
