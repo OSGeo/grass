@@ -1,6 +1,8 @@
 #ifndef GRASS_COLORSDEFS_H
 #define GRASS_COLORSDEFS_H
 
+#include <grass/gis.h>
+
 int G_num_standard_colors(void);
 struct color_rgb G_standard_color_rgb(int);
 int G_num_standard_color_names(void);
