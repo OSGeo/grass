@@ -63,8 +63,8 @@ static int do_value(const char *buf, RASTER_MAP_TYPE type,
                 break;
 
             case JSON:
-                json_object_set_string(color_object, "value", "*");
-                json_object_set_string(color_object, "color", "*");
+                json_object_set_null(color_object, "value");
+                json_object_set_null(color_object, "color");
                 json_array_append_value(root_array, color_value);
                 break;
             }
@@ -78,7 +78,7 @@ static int do_value(const char *buf, RASTER_MAP_TYPE type,
 
             case JSON:
                 json_object_set_number(color_object, "value", ival);
-                json_object_set_string(color_object, "color", "*");
+                json_object_set_null(color_object, "color");
                 json_array_append_value(root_array, color_value);
                 break;
             }
@@ -115,8 +115,8 @@ static int do_value(const char *buf, RASTER_MAP_TYPE type,
                 break;
 
             case JSON:
-                json_object_set_string(color_object, "value", "*");
-                json_object_set_string(color_object, "color", "*");
+                json_object_set_null(color_object, "value");
+                json_object_set_null(color_object, "color");
                 json_array_append_value(root_array, color_value);
                 break;
             }
@@ -130,7 +130,7 @@ static int do_value(const char *buf, RASTER_MAP_TYPE type,
 
             case JSON:
                 json_object_set_number(color_object, "value", fval);
-                json_object_set_string(color_object, "color", "*");
+                json_object_set_null(color_object, "color");
                 json_array_append_value(root_array, color_value);
                 break;
             }
@@ -206,11 +206,15 @@ int main(int argc, char **argv)
     opt.format->type = TYPE_STRING;
     opt.format->required = NO;
     opt.format->answer = "%d:%d:%d";
-    opt.format->description = _("[DEPRECATED] Output format (printf-style);"
-                                "plain;Plain text output;"
-                                "json;JSON (JavaScript Object Notation);");
+    opt.format->label =
+        _("Output format ('plain', 'json', or printf-style string)");
+    opt.format->description = _("Output format printf-style is deprecated, use "
+                                "'color_format' option instead.");
 
     opt.color_format = G_define_standard_option(G_OPT_C_FORMAT);
+    opt.color_format->description =
+        _("Color format for output values. Applies only when format is set to "
+          "'plain' or 'json'.");
     opt.color_format->guisection = _("Color");
 
     flag.i = G_define_flag();
@@ -255,18 +259,7 @@ int main(int argc, char **argv)
     }
 
     if (strcmp(fmt, "plain") == 0 || strcmp(fmt, "json") == 0) {
-        if (strcmp(opt.color_format->answer, "rgb") == 0) {
-            colorFormat = RGB;
-        }
-        else if (strcmp(opt.color_format->answer, "triplet") == 0) {
-            colorFormat = TRIPLET;
-        }
-        else if (strcmp(opt.color_format->answer, "hsv") == 0) {
-            colorFormat = HSV;
-        }
-        else {
-            colorFormat = HEX;
-        }
+        colorFormat = G_option_to_color_format(opt.color_format);
     }
 
     if (flag.i->answer) {

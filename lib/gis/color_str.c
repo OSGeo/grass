@@ -17,6 +17,7 @@
 #include <string.h>
 
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include <grass/colors.h>
 
 /* The order in this table is important! It will be indexed by color number */
@@ -229,4 +230,41 @@ void G_color_to_str(int r, int g, int b, ColorFormat clr_frmt, char *str)
         snprintf(str, COLOR_STRING_LENGTH, "%d:%d:%d", r, g, b);
         break;
     }
+}
+
+/*!
+   \brief Get color format from the option.
+
+   \code
+   ColorFormat colorFormat;
+   struct Option *color_format;
+
+   color_format = G_define_standard_option(G_OPT_C_FORMAT);
+
+   if (G_parser(argc, argv))
+   exit(EXIT_FAILURE);
+
+   colorFormat = G_option_to_color_format(color_format);
+   \endcode
+
+   \param option pointer to color format option
+
+   \return allocated ColorFormat
+ */
+ColorFormat G_option_to_color_format(const struct Option *option)
+{
+    if (strcmp(option->answer, "rgb") == 0) {
+        return RGB;
+    }
+    if (strcmp(option->answer, "triplet") == 0) {
+        return TRIPLET;
+    }
+    if (strcmp(option->answer, "hsv") == 0) {
+        return HSV;
+    }
+    if (strcmp(option->answer, "hex") == 0) {
+        return HEX;
+    }
+
+    G_fatal_error(_("Unknown color format '%s'"), option->answer);
 }

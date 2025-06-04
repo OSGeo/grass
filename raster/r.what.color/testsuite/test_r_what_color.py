@@ -197,12 +197,12 @@ class TestRWhatColor(TestCase):
         self.assertModule(module)
         result = json.loads(module.outputs.stdout)
         expected = [
-            {"color": "*", "value": 50},
+            {"color": None, "value": 50},
             {"color": "255:229:0", "value": 100},
             {"color": "255:128:0", "value": 116.029},
             {"color": "195:127:59", "value": 135},
             {"color": "23:22:21", "value": 156},
-            {"color": "*", "value": "*"},
+            {"color": None, "value": None},
         ]
 
         self.assertListEqual(
@@ -224,12 +224,12 @@ class TestRWhatColor(TestCase):
         self.assertModule(module)
         result = json.loads(module.outputs.stdout)
         expected = [
-            {"color": "*", "value": 50},
+            {"color": None, "value": 50},
             {"color": "rgb(255, 229, 0)", "value": 100},
             {"color": "rgb(255, 128, 0)", "value": 116.029},
             {"color": "rgb(195, 127, 59)", "value": 135},
             {"color": "rgb(23, 22, 21)", "value": 156},
-            {"color": "*", "value": "*"},
+            {"color": None, "value": None},
         ]
 
         self.assertListEqual(
@@ -251,12 +251,12 @@ class TestRWhatColor(TestCase):
         self.assertModule(module)
         result = json.loads(module.outputs.stdout)
         expected = [
-            {"color": "*", "value": 50},
+            {"color": None, "value": 50},
             {"color": "#FFE500", "value": 100},
             {"color": "#FF8000", "value": 116.029},
             {"color": "#C37F3B", "value": 135},
             {"color": "#171615", "value": 156},
-            {"color": "*", "value": "*"},
+            {"color": None, "value": None},
         ]
         self.assertListEqual(
             result,
@@ -293,12 +293,12 @@ class TestRWhatColor(TestCase):
         self.assertModule(module)
         result = json.loads(module.outputs.stdout)
         expected = [
-            {"color": "*", "value": 50},
+            {"color": None, "value": 50},
             {"color": "hsv(53, 100, 100)", "value": 100},
             {"color": "hsv(30, 100, 100)", "value": 116.029},
             {"color": "hsv(30, 69, 76)", "value": 135},
             {"color": "hsv(30, 8, 9)", "value": 156},
-            {"color": "*", "value": "*"},
+            {"color": None, "value": None},
         ]
 
         self.assertListEqual(

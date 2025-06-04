@@ -37,7 +37,7 @@ as an integer (no decimal point), otherwise it will be written in
 floating point format (*printf("%.15g")* format).
 
 If the lookup fails for a value, the color will be output as an
-asterisk, e.g.:
+asterisk (or as `null` in JSON), e.g.:
 
 ```sh
 r.what.color input=elevation.dem value=9999
@@ -52,13 +52,13 @@ r.what.color input=elevation.dem value=9999 format=json
 [
     {
         "value": 9999,
-        "color": "*"
+        "color": null
     }
 ]
 ```
 
 If a value cannot be parsed, both the value and the color will be output
-as an asterisk, e.g.:
+as an asterisk (or as `null` in JSON), e.g.:
 
 ```sh
 r.what.color input=elevation.dem value=bogus
@@ -72,8 +72,8 @@ r.what.color input=elevation.dem value=bogus format=plain
 r.what.color input=elevation.dem value=bogus format=json
 [
     {
-        "value": "*",
-        "color": "*"
+        "value": null,
+        "color": null
     }
 ]
 ```
