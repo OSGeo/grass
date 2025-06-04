@@ -313,14 +313,15 @@ class TemporalOperatorParser:
         """Parse the expression and fill the object variables
 
         :param expression:
-        :param optype: The parameter optype can be of type:
-                       - select   { :, during,   r}
-                       - boolean  {&&, contains, |}
-                       - raster   { *, equal,    |}
-                       - overlay  { |, starts,   &}
-                       - hash     { #, during,   l}
-                       - relation {during}
-        :return:
+        :param optype: The parameter optype can be
+            of type:
+
+            - select   { :, during,   r}
+            - boolean  {&&, contains, \\|}
+            - raster   { \\*, equal,    \\|}
+            - overlay  { \\|, starts,   &}
+            - hash     { #, during,   l}
+            - relation {during}
         """
         self.optype = optype
 

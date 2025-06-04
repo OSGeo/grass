@@ -760,7 +760,7 @@ class DatasetBase(SQLDatabaseInterface):
         """Convenient method to get the unique map identifier
         without layer information
 
-        :return: the name of the vector map as "name@mapset"
+        :return: The name of the vector map as "name@mapset"
                or None in case the id was not set
         """
         if self.id:

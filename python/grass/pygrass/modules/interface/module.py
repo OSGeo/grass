@@ -482,11 +482,13 @@ class Module:
     Often in the Module class you can find ``*args`` and ``kwargs`` annotation
     in methods, like in the __call__ method.
     Python allow developers to not specify all the arguments and
-    keyword arguments of a method or function. ::
+    keyword arguments of a method or function.
+
+    .. code-block:: python
 
         def f(*args):
             for arg in args:
-                print arg
+                print(arg)
 
     therefore if we call the function like:
 
@@ -503,13 +505,15 @@ class Module:
     gis
     modules
 
-    we can do the same with keyword arguments, rewrite the above function: ::
+    we can do the same with keyword arguments, rewrite the above function
+
+    .. code-block:: python
 
         def f(*args, **kargs):
             for arg in args:
-                print arg
+                print(arg)
             for key, value in kargs.items():
-                print "%s = %r" % (key, value)
+                print("%s = %r" % (key, value))
 
     now we can use the new function, with:
 

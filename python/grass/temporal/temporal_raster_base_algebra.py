@@ -231,7 +231,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         :param compare_cmd: Boolean for comparing command list values based on
                         related map list and comparison operator.
         :param compop: Comparison operator, && or ||.
-        :param aggregate: Aggregation operator for relation map list, & or |.
+        :param aggregate: Aggregation operator for relation map list, & or \\|.
         :param new: Boolean if new temporary maps should be created.
         :param convert: Boolean if conditional values should be converted to
                     r.mapcalc command strings.
@@ -438,7 +438,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         :param temporal_relations: List of temporal relation to map_i.
         :param temporal_topo_list: List of strings for given temporal relations.
         :param compop: Comparison operator, && or ||.
-        :param aggregate: Aggregation operator for relation map list, & or |.
+        :param aggregate: Aggregation operator for relation map list, & or \\|.
         :param convert: Boolean if conditional values should be converted to
                         r.mapcalc command strings.
 
@@ -505,7 +505,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         """Function to evaluate two map lists by given arithmetic operator.
 
         :param map_i: Map object with temporal extent.
-        :param operator: Arithmetic operator, +-*/%.
+        :param operator: Arithmetic operator, +-\\*/%.
         :param temporal_topo_list: List of strings for given temporal relations.
         :param spatial_topo_list: List of strings for given spatial relations.
 
