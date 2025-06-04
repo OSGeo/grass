@@ -259,7 +259,7 @@ def main():
         )
     # destination projection
     if not options["destproj"]:
-        dest_proj = gcore.read_command("g.proj", quiet=True, flags="jf")
+        dest_proj = gcore.read_command("g.proj", quiet=True, flags="fp", format="proj4")
         dest_proj = decode(dest_proj).rstrip("\n")
         if not dest_proj:
             gcore.fatal(_("g.proj failed"))
@@ -269,7 +269,7 @@ def main():
 
     # projection scale
     if not options["destscale"]:
-        ret = gcore.parse_command("g.proj", quiet=True, flags="j")
+        ret = gcore.parse_command("g.proj", quiet=True, flags="p", format="proj4")
         if not ret:
             gcore.fatal(_("g.proj failed"))
 

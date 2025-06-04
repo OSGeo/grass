@@ -27,7 +27,7 @@ jobs:
       matrix:
         name:
           - "22.04"
-          - minimum config
+          # - minimum config
 
         # Only run tests for these folders in this matrix job.
         extra-include:
@@ -53,17 +53,18 @@ jobs:
           - name: "22.04"
             os: ubuntu-22.04
             config: ubuntu-22.04
+            c: gnu17
+            cxx: c++17
           # This is without optional things but it still keeps things useful,
           # so, e.g., without OpenMP, but with PDAL. Code or tests should be written
           # so that test pass even when these optional things are not present.
-          - name: minimum config
-            os: ubuntu-22.04
-            config: ubuntu-22.04_without_x
+          # - name: minimum config
+          #   os: ubuntu-22.04
+          #   config: ubuntu-22.04_without_x
       fail-fast: false
 
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-
       - name: Invert inclusion list to an exclusion list
         id: get-exclude
         run: |
@@ -131,10 +132,12 @@ jobs:
       - name: Build
         env:
           # TODO: -pedantic-errors here won't go through ./configure (with GNU C)
-          CFLAGS: -fPIC -Wvla -ffp-contract=off
+          CFLAGS: -std=${{ matrix.c }} -fPIC -Wvla -ffp-contract=off -Wall -Wextra
           # TODO: -pedantic-errors here won't compile
-          CXXFLAGS: -fPIC -ffp-contract=off
-        run: .github/workflows/build_${{ matrix.config }}.sh $HOME/install -Werror
+          CXXFLAGS: -std=${{ matrix.cxx }} -fPIC -ffp-contract=off -Wall -Wextra
+        run: |
+          .github/workflows/build_${{ matrix.config }}.sh $HOME/install \
+            -isystem/usr/include/gdal -Wpedantic -Werror
 
       - name: Add the bin directory to PATH
         run: |

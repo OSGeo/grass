@@ -73,8 +73,7 @@ COPY t1 FROM 'filename' USING DELIMITERS ',';
 ## Geometry import from PostgreSQL table into GRASS
 
 *[v.in.db](v.in.db.md)* creates a new vector (points) map from a
-database table containing coordinates. See [here](v.in.db.md) for
-examples.
+database table containing coordinates.
 
 ## PostGIS: PostgreSQL with vector geometry
 

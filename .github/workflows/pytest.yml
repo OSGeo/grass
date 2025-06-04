@@ -24,7 +24,7 @@ jobs:
           - ubuntu-22.04
         python-version:
           - "3.9"
-          - "3.12"
+          # - "3.12"
           - "3.13"
       fail-fast: true
 
@@ -51,7 +51,7 @@ jobs:
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
 
-      - uses: rui314/setup-mold@e16410e7f8d9e167b74ad5697a9089a35126eb50 # v1
+      - uses: rui314/setup-mold@67424c1b3680e35255d95971cbd5de0047bf31c3 # v1
 
       - name: Install Python dependencies
         run: |

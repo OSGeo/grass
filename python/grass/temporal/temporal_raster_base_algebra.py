@@ -9,7 +9,7 @@ for details.
 
 :authors: Thomas Leppelt and Soeren Gebbert
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> p = TemporalRasterAlgebraLexer()
     >>> p.build()
@@ -265,11 +265,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         ...     )
         ...     mapsA.append(mapA)
         ...     mapsB.append(mapB)
-        ...
         >>> resultlist = l.build_spatio_temporal_topology_list(mapsA, mapsB)
         >>> for map in resultlist:
         ...     print(map.get_id())
-        ...
         a5@B
         a6@B
         a7@B
