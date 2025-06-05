@@ -109,7 +109,7 @@ class TestEvapoPMDetailed(TestCase):
         )
         stats = gs.parse_command("r.univar", map="evapo_zeroed", format="json")
         self.assertEqual(
-            stats[0]["min"], 0, msg="Minimum value not clamped to zero with -z flag"
+            stats["min"], 0, msg="Minimum value not clamped to zero with -z flag"
         )
         self.assertRasterFitsUnivar(
             raster="evapo_zeroed",
@@ -164,14 +164,14 @@ class TestEvapoPMDetailed(TestCase):
             "r.univar", map="evapo_night", flags="g", format="json"
         )
         self.assertGreater(
-            stats_day[0]["mean"],
-            stats_night[0]["mean"],
+            stats_day["mean"],
+            stats_night["mean"],
             msg="Daytime ET mean is not greater than nighttime ET mean",
         )
         self.assertGreater(
-            stats_diff[0]["mean"],
+            stats_diff["mean"],
             0.05,
-            msg=f"Insignificant mean day-night difference: {stats_diff[0]['mean']}",
+            msg=f"Insignificant mean day-night difference: {stats_diff['mean']}",
         )
 
     def test_netradiation_dependency(self):
@@ -209,8 +209,8 @@ class TestEvapoPMDetailed(TestCase):
             "r.univar", map="evapo_netrad_high", flags="g", format="json"
         )
         self.assertGreater(
-            stats_high[0]["mean"],
-            stats_low[0]["mean"],
+            stats_high["mean"],
+            stats_low["mean"],
             msg="Higher net radiation did not yield higher ET output as expected",
         )
 
@@ -250,8 +250,8 @@ class TestEvapoPMDetailed(TestCase):
             "r.univar", map="evapo_rh_high", flags="g", format="json"
         )
         self.assertGreater(
-            stats_low[0]["mean"],
-            stats_high[0]["mean"],
+            stats_low["mean"],
+            stats_high["mean"],
             msg="Lower relative humidity did not yield higher ET output as expected",
         )
 
@@ -284,13 +284,13 @@ class TestEvapoPMDetailed(TestCase):
             )
         mean_10 = gs.parse_command(
             "r.univar", map="evapo_netrad_10", flags="g", format="json"
-        )[0]["mean"]
+        )["mean"]
         mean_15 = gs.parse_command(
             "r.univar", map="evapo_netrad_15", flags="g", format="json"
-        )[0]["mean"]
+        )["mean"]
         mean_20 = gs.parse_command(
             "r.univar", map="evapo_netrad_20", flags="g", format="json"
-        )[0]["mean"]
+        )["mean"]
         self.assertAlmostEqual(
             2 * mean_15,
             mean_10 + mean_20,

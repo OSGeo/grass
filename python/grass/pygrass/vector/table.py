@@ -553,7 +553,7 @@ class Columns:
         'float8'
         >>> remove("mycensus", "vect")
 
-        .. warning ::
+        .. warning::
 
            It is not possible to cast a column with sqlite
 

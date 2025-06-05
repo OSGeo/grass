@@ -27,7 +27,28 @@ To print the name of the current mapset, use the **-p** command as shown
 below:
 
 ```sh
+# In plain format:
 g.mapset -p
+
+# In JSON format:
+g.mapset -p format=json
+```
+
+To print the name of the current mapset in JSON format using python:
+
+```python
+import grass.script as gs
+
+# Run the g.mapset command with -p flag to print the current mapset using JSON
+# output format
+data = gs.parse_command(
+    "g.mapset",
+    flags="p",
+    format="json",
+)
+
+print(f"project: {data['project']}")
+print(f"mapset: {data['mapset']}")
 ```
 
 ### List available mapsets
@@ -35,11 +56,32 @@ g.mapset -p
 To list available mapsets, use the **-l** command as shown below:
 
 ```sh
+# In plain format:
 g.mapset -l
+
+# In JSON format:
+g.mapset -l format=json
 ```
 
 This should list all the mapsets, such as: "landsat new PERMANENT
 user1."
+
+To print the list of available mapsets in JSON format using python:
+
+```python
+import grass.script as gs
+
+# Run the g.mapset command with -l flag to list available mapsets using JSON
+# output format
+data = gs.parse_command(
+    "g.mapset",
+    flags="l",
+    format="json",
+)
+
+print(f"project: {data['project']}")
+print(f"mapsets: {' '.join(data['mapsets'])}")
+```
 
 ### Change the current mapset
 

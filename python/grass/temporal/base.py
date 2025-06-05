@@ -5,7 +5,7 @@ serialization and de-serialization and the sql database interface.
 
 Usage:
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> import grass.temporal as tgis
     >>> tgis.init()
@@ -51,7 +51,7 @@ class DictSQLSerializer:
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> init()
             >>> t = DictSQLSerializer()
@@ -70,10 +70,10 @@ class DictSQLSerializer:
             >>> t.serialize(type="UPDATE ALL", table="raster_base")
             ('UPDATE raster_base SET  name = ?  ,creator = ?  ,creation_time = ?  ,modification_time = ?  ,mapset = ?  ,id = ? ;\\n', ('soil', 'soeren', datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0), 'PERMANENT', 'soil@PERMANENT'))
 
-            :param type: must be SELECT. INSERT, UPDATE
-            :param table: The name of the table to select, insert or update
-            :param where: The optional where statement
-            :return: a tuple containing the SQL string and the arguments
+        :param type: must be SELECT. INSERT, UPDATE
+        :param table: The name of the table to select, insert or update
+        :param where: The optional where statement
+        :return: a tuple containing the SQL string and the arguments
 
         """  # noqa: E501
 
@@ -213,35 +213,35 @@ class SQLDatabaseInterface(DictSQLSerializer):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
-         >>> init()
-         >>> t = SQLDatabaseInterface("raster", "soil@PERMANENT")
-         >>> t.mapset = get_current_mapset()
-         >>> t.D["name"] = "soil"
-         >>> t.D["mapset"] = "PERMANENT"
-         >>> t.D["creator"] = "soeren"
-         >>> t.D["creation_time"] = datetime(2001, 1, 1)
-         >>> t.get_delete_statement()
-         "DELETE FROM raster WHERE id = 'soil@PERMANENT';\\n"
-         >>> t.get_is_in_db_statement()
-         "SELECT id FROM raster WHERE id = 'soil@PERMANENT';\\n"
-         >>> t.get_select_statement()
-         ("SELECT  creation_time  , mapset  , name  , creator  FROM raster WHERE id = 'soil@PERMANENT';\\n", ())
-         >>> t.get_select_statement_mogrified()
-         "SELECT  creation_time  , mapset  , name  , creator  FROM raster WHERE id = 'soil@PERMANENT';\\n"
-         >>> t.get_insert_statement()
-         ('INSERT INTO raster ( creation_time  ,mapset  ,name  ,creator ) VALUES (? ,? ,? ,?) ;\\n', (datetime.datetime(2001, 1, 1, 0, 0), 'PERMANENT', 'soil', 'soeren'))
-         >>> t.get_insert_statement_mogrified()
-         "INSERT INTO raster ( creation_time  ,mapset  ,name  ,creator ) VALUES ('2001-01-01 00:00:00' ,'PERMANENT' ,'soil' ,'soeren') ;\\n"
-         >>> t.get_update_statement()
-         ("UPDATE raster SET  creation_time = ?  ,mapset = ?  ,name = ?  ,creator = ? WHERE id = 'soil@PERMANENT';\\n", (datetime.datetime(2001, 1, 1, 0, 0), 'PERMANENT', 'soil', 'soeren'))
-         >>> t.get_update_statement_mogrified()
-         "UPDATE raster SET  creation_time = '2001-01-01 00:00:00'  ,mapset = 'PERMANENT'  ,name = 'soil'  ,creator = 'soeren' WHERE id = 'soil@PERMANENT';\\n"
-         >>> t.get_update_all_statement()
-         ("UPDATE raster SET  creation_time = ?  ,mapset = ?  ,name = ?  ,creator = ? WHERE id = 'soil@PERMANENT';\\n", (datetime.datetime(2001, 1, 1, 0, 0), 'PERMANENT', 'soil', 'soeren'))
-         >>> t.get_update_all_statement_mogrified()
-         "UPDATE raster SET  creation_time = '2001-01-01 00:00:00'  ,mapset = 'PERMANENT'  ,name = 'soil'  ,creator = 'soeren' WHERE id = 'soil@PERMANENT';\\n"
+        >>> init()
+        >>> t = SQLDatabaseInterface("raster", "soil@PERMANENT")
+        >>> t.mapset = get_current_mapset()
+        >>> t.D["name"] = "soil"
+        >>> t.D["mapset"] = "PERMANENT"
+        >>> t.D["creator"] = "soeren"
+        >>> t.D["creation_time"] = datetime(2001, 1, 1)
+        >>> t.get_delete_statement()
+        "DELETE FROM raster WHERE id = 'soil@PERMANENT';\\n"
+        >>> t.get_is_in_db_statement()
+        "SELECT id FROM raster WHERE id = 'soil@PERMANENT';\\n"
+        >>> t.get_select_statement()
+        ("SELECT  creation_time  , mapset  , name  , creator  FROM raster WHERE id = 'soil@PERMANENT';\\n", ())
+        >>> t.get_select_statement_mogrified()
+        "SELECT  creation_time  , mapset  , name  , creator  FROM raster WHERE id = 'soil@PERMANENT';\\n"
+        >>> t.get_insert_statement()
+        ('INSERT INTO raster ( creation_time  ,mapset  ,name  ,creator ) VALUES (? ,? ,? ,?) ;\\n', (datetime.datetime(2001, 1, 1, 0, 0), 'PERMANENT', 'soil', 'soeren'))
+        >>> t.get_insert_statement_mogrified()
+        "INSERT INTO raster ( creation_time  ,mapset  ,name  ,creator ) VALUES ('2001-01-01 00:00:00' ,'PERMANENT' ,'soil' ,'soeren') ;\\n"
+        >>> t.get_update_statement()
+        ("UPDATE raster SET  creation_time = ?  ,mapset = ?  ,name = ?  ,creator = ? WHERE id = 'soil@PERMANENT';\\n", (datetime.datetime(2001, 1, 1, 0, 0), 'PERMANENT', 'soil', 'soeren'))
+        >>> t.get_update_statement_mogrified()
+        "UPDATE raster SET  creation_time = '2001-01-01 00:00:00'  ,mapset = 'PERMANENT'  ,name = 'soil'  ,creator = 'soeren' WHERE id = 'soil@PERMANENT';\\n"
+        >>> t.get_update_all_statement()
+        ("UPDATE raster SET  creation_time = ?  ,mapset = ?  ,name = ?  ,creator = ? WHERE id = 'soil@PERMANENT';\\n", (datetime.datetime(2001, 1, 1, 0, 0), 'PERMANENT', 'soil', 'soeren'))
+        >>> t.get_update_all_statement_mogrified()
+        "UPDATE raster SET  creation_time = '2001-01-01 00:00:00'  ,mapset = 'PERMANENT'  ,name = 'soil'  ,creator = 'soeren' WHERE id = 'soil@PERMANENT';\\n"
 
     """  # noqa: E501
 
@@ -266,12 +266,14 @@ class SQLDatabaseInterface(DictSQLSerializer):
     def get_table_name(self):
         """Return the name of the table in which the internal
         data are inserted, updated or selected
+
         :return: The name of the table
         """
         return self.table
 
     def get_delete_statement(self):
         """Return the delete string
+
         :return: The DELETE string
         """
         return (
@@ -305,6 +307,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
     def get_is_in_db_statement(self):
         """Return the selection string that checks if this object is registered in the
         temporal database
+
         :return: The SELECT string
         """
         return (
@@ -349,6 +352,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
     def get_select_statement(self):
         """Return the sql statement and the argument list in
         database specific style
+
         :return: The SELECT string
         """
         return self.serialize(
@@ -416,7 +420,9 @@ class SQLDatabaseInterface(DictSQLSerializer):
     def get_insert_statement(self):
         """Return the sql statement and the argument
         list in database specific style
-        :return: The INSERT string"""
+
+        :return: The INSERT string
+        """
         return self.serialize("INSERT", self.get_table_name())
 
     def get_insert_statement_mogrified(self, dbif=None):
@@ -462,7 +468,6 @@ class SQLDatabaseInterface(DictSQLSerializer):
 
         :param ident: The identifier to be updated, useful for renaming
         :return: The UPDATE string
-
         """
         if ident:
             return self.serialize(
@@ -553,9 +558,9 @@ class SQLDatabaseInterface(DictSQLSerializer):
         """Serialize the content of this object, including None objects,
         and update it in the temporal database using the internal identifier
 
-           :param dbif: The database interface to be used,
-                        if None a temporary connection will be established
-           :param ident: The identifier to be updated, useful for renaming
+        :param dbif: The database interface to be used,
+                    if None a temporary connection will be established
+        :param ident: The identifier to be updated, useful for renaming
         """
         if self.ident is None:
             self.msgr.fatal(_("Missing identifier"))
@@ -585,7 +590,7 @@ class DatasetBase(SQLDatabaseInterface):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> t = DatasetBase(
@@ -755,7 +760,7 @@ class DatasetBase(SQLDatabaseInterface):
         """Convenient method to get the unique map identifier
         without layer information
 
-        :return: the name of the vector map as "name@mapset"
+        :return: The name of the vector map as "name@mapset"
                or None in case the id was not set
         """
         if self.id:
@@ -778,35 +783,45 @@ class DatasetBase(SQLDatabaseInterface):
 
     def get_name(self):
         """Get the name of the dataset
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "name" in self.D:
             return self.D["name"]
         return None
 
     def get_mapset(self):
         """Get the name of mapset of this dataset
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "mapset" in self.D:
             return self.D["mapset"]
         return None
 
     def get_creator(self):
         """Get the creator of the dataset
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "creator" in self.D:
             return self.D["creator"]
         return None
 
     def get_ctime(self):
         """Get the creation time of the dataset, datatype is datetime
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "creation_time" in self.D:
             return self.D["creation_time"]
         return None
 
     def get_ttype(self):
         """Get the temporal type of the map
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "temporal_type" in self.D:
             return self.D["temporal_type"]
         return None
@@ -946,7 +961,7 @@ class STDSBase(DatasetBase):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> t = STDSBase(
@@ -1014,6 +1029,7 @@ class STDSBase(DatasetBase):
 
     def get_semantic_type(self):
         """Get the semantic type of the space time dataset
+
         :return: None if not found
         """
         if "semantic_type" in self.D:
@@ -1134,16 +1150,16 @@ class AbstractSTDSRegister(SQLDatabaseInterface):
     """This is the base class for all maps to store the space time datasets
     as comma separated string in which they are registered
 
-     Usage:
+    Usage:
 
-     .. code-block:: python
+    .. code-block:: pycon
 
-         >>> init()
-         >>> t = AbstractSTDSRegister("raster", "soil@PERMANENT", "A@P,B@P,C@P")
-         >>> t.id
-         'soil@PERMANENT'
-         >>> t.registered_stds
-         'A@P,B@P,C@P'
+        >>> init()
+        >>> t = AbstractSTDSRegister("raster", "soil@PERMANENT", "A@P,B@P,C@P")
+        >>> t.id
+        'soil@PERMANENT'
+        >>> t.registered_stds
+        'A@P,B@P,C@P'
 
     """
 

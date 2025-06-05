@@ -1675,7 +1675,7 @@ def install_extension_win(name):
 def download_source_code_svn(url, name, outdev, directory=None):
     """Download source code from a Subversion repository
 
-    .. note:
+    .. note::
         Stdout is passed to to *outdev* while stderr is will be just printed.
 
     :param url: URL of the repository
@@ -1704,7 +1704,7 @@ def download_source_code_svn(url, name, outdev, directory=None):
 def download_source_code_official_github(url, name, branch, directory=None):
     """Download source code from a official GitHub repository
 
-    .. note:
+    .. note::
         Stdout is passed to to *outdev* while stderr is just printed.
 
     :param url: URL of the repository

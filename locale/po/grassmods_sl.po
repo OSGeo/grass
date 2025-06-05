@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_sl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-23 22:56+0000\n"
+"POT-Creation-Date: 2025-06-04 10:56+0000\n"
 "PO-Revision-Date: 2025-03-12 12:06+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Slovenian <https://weblate.osgeo.org/projects/grass-gis/grassmods/sl/>\n"
@@ -156,24 +156,24 @@ msgstr ""
 #: ../display/d.mon/main.c:130 ../general/g.list/main.c:102
 #: ../general/g.list/main.c:114 ../general/g.list/main.c:136
 #: ../general/g.list/main.c:142 ../general/g.list/main.c:147
-#: ../general/g.list/main.c:152 ../general/g.mapset/main.c:77
-#: ../general/g.mapset/main.c:83 ../general/g.mapsets/main.c:109
-#: ../general/g.mapsets/main.c:113 ../general/g.mapsets/main.c:119
-#: ../general/g.mapsets/main.c:125 ../general/g.proj/main.c:85
-#: ../general/g.proj/main.c:90 ../general/g.proj/main.c:98
-#: ../general/g.proj/main.c:104 ../general/g.proj/main.c:112
-#: ../general/g.proj/main.c:124 ../general/g.proj/main.c:132
-#: ../general/g.proj/main.c:188 ../general/g.proj/main.c:241
-#: ../general/g.region/main.c:91 ../general/g.region/main.c:97
-#: ../general/g.region/main.c:102 ../general/g.region/main.c:108
-#: ../general/g.region/main.c:113 ../general/g.region/main.c:118
-#: ../general/g.region/main.c:124 ../general/g.region/main.c:132
-#: ../general/g.region/main.c:137 ../general/g.region/main.c:143
-#: ../general/g.region/main.c:148 ../general/g.region/main.c:154
-#: ../general/g.region/main.c:371 ../imagery/i.group/main.c:85
-#: ../imagery/i.group/main.c:90 ../imagery/i.group/main.c:95
-#: ../imagery/i.signatures/main.c:122 ../imagery/i.signatures/main.c:128
-#: ../imagery/i.signatures/main.c:160
+#: ../general/g.list/main.c:152 ../general/g.mapset/main.c:88
+#: ../general/g.mapset/main.c:100 ../general/g.mapset/main.c:106
+#: ../general/g.mapsets/main.c:109 ../general/g.mapsets/main.c:113
+#: ../general/g.mapsets/main.c:119 ../general/g.mapsets/main.c:125
+#: ../general/g.proj/main.c:85 ../general/g.proj/main.c:90
+#: ../general/g.proj/main.c:98 ../general/g.proj/main.c:104
+#: ../general/g.proj/main.c:112 ../general/g.proj/main.c:124
+#: ../general/g.proj/main.c:132 ../general/g.proj/main.c:188
+#: ../general/g.proj/main.c:241 ../general/g.region/main.c:91
+#: ../general/g.region/main.c:97 ../general/g.region/main.c:102
+#: ../general/g.region/main.c:108 ../general/g.region/main.c:113
+#: ../general/g.region/main.c:118 ../general/g.region/main.c:124
+#: ../general/g.region/main.c:132 ../general/g.region/main.c:137
+#: ../general/g.region/main.c:143 ../general/g.region/main.c:148
+#: ../general/g.region/main.c:154 ../general/g.region/main.c:371
+#: ../imagery/i.group/main.c:85 ../imagery/i.group/main.c:90
+#: ../imagery/i.group/main.c:95 ../imagery/i.signatures/main.c:122
+#: ../imagery/i.signatures/main.c:128 ../imagery/i.signatures/main.c:160
 #: ../locale/scriptstrings/g.extension_to_translate.c:17
 #: ../locale/scriptstrings/g.extension_to_translate.c:19
 #: ../locale/scriptstrings/g.extension_to_translate.c:21
@@ -399,8 +399,9 @@ msgid "Lists all databases for a given driver and location."
 msgstr "Navedi vse baze podatkov za določeni gonilnik in lokacijo"
 
 #: ../db/db.describe/main.c:54 ../db/db.describe/main.c:59
-#: ../raster/r.category/main.c:131 ../raster/r.describe/dumplist.c:47
-#: ../raster/r.proj/main.c:343 ../raster/r.univar/stats.c:94
+#: ../general/g.mapset/main.c:173 ../raster/r.category/main.c:131
+#: ../raster/r.describe/dumplist.c:47 ../raster/r.proj/main.c:343
+#: ../raster/r.univar/stats.c:94 ../raster/r.univar/stats.c:323
 #: ../raster/r.what/main.c:280 ../vector/v.category/main.c:253
 #: ../vector/v.category/main.c:318 ../vector/v.info/print.c:859
 #, fuzzy
@@ -413,7 +414,7 @@ msgstr "Ne morem izračunati centroida območja."
 #: ../raster/r.mask.status/main.c:111 ../raster/r.object.geometry/main.c:401
 #: ../raster/r.profile/main.c:276 ../raster/r.proj/main.c:368
 #: ../raster/r.proj/main.c:543 ../raster/r.report/prt_json.c:200
-#: ../raster/r.univar/stats.c:400 ../raster/r.what/main.c:619
+#: ../raster/r.univar/stats.c:419 ../raster/r.what/main.c:619
 #: ../vector/v.category/main.c:305 ../vector/v.category/main.c:952
 #: ../vector/v.distance/main.c:1786 ../vector/v.info/main.c:106
 #: ../vector/v.info/print.c:284 ../vector/v.info/print.c:900
@@ -643,7 +644,7 @@ msgstr ""
 #: ../raster/r.quantile/main.c:346 ../raster/r.regression.line/main.c:77
 #: ../raster/r.regression.multi/main.c:171
 #: ../raster/r.stats.quantile/main.c:368 ../raster/r.stats/main.c:226
-#: ../raster/r.univar/r.univar_main.c:179
+#: ../raster/r.univar/r.univar_main.c:180
 #: ../raster/r.univar/r3.univar_main.c:133 ../raster/r.what/main.c:193
 #: ../vector/v.db.select/main.c:182
 #, fuzzy, c-format
@@ -1824,7 +1825,7 @@ msgstr ""
 
 #: ../display/d.colorlist/main.c:35 ../display/d.font/main.c:46
 #: ../display/d.fontlist/main.c:46 ../general/g.gisenv/main.c:43
-#: ../general/g.mapset/main.c:50 ../general/g.mapsets/main.c:87
+#: ../general/g.mapset/main.c:70 ../general/g.mapsets/main.c:87
 #: ../general/g.region/main.c:66 ../temporal/t.connect/main.c:35
 #, fuzzy
 msgid "settings"
@@ -1966,7 +1967,7 @@ msgstr ""
 #: ../raster/r.to.rast3/main.c:197 ../raster/r.to.rast3elev/main.c:375
 #: ../raster/r.to.vect/main.c:77 ../raster/r.topidx/main.c:37
 #: ../raster/r.topmodel/main.c:48 ../raster/r.transect/main.c:102
-#: ../raster/r.univar/r.univar_main.c:151 ../raster/r.uslek/main.c:52
+#: ../raster/r.univar/r.univar_main.c:152 ../raster/r.uslek/main.c:52
 #: ../raster/r.usler/main.c:52 ../raster/r.viewshed/main.cpp:103
 #: ../raster/r.volume/main.c:80 ../raster/r.walk/main.c:212
 #: ../raster/r.water.outlet/main.c:58 ../raster/r.watershed/front/main.c:75
@@ -2817,7 +2818,7 @@ msgstr "Zapisujem novo datoteko...\n"
 #: ../raster/r.statistics/main.c:54 ../raster/r.stats.quantile/main.c:566
 #: ../raster/r.stats.zonal/main.c:105 ../raster/r.stats/main.c:104
 #: ../raster/r.support.stats/main.c:36 ../raster/r.surf.area/main.c:77
-#: ../raster/r.texture/main.c:99 ../raster/r.univar/r.univar_main.c:152
+#: ../raster/r.texture/main.c:99 ../raster/r.univar/r.univar_main.c:153
 #: ../raster/r.univar/r3.univar_main.c:103 ../raster3d/r3.in.lidar/main.c:162
 #: ../raster3d/r3.neighbors/main.c:207 ../raster3d/r3.stats/main.c:48
 #: ../vector/v.class/main.c:47 ../vector/v.kcv/main.c:54
@@ -5552,8 +5553,8 @@ msgstr "Ime obstoječega rastrskega sloja."
 #: ../raster/r.sim/simlib/output.c:397 ../raster/r.sim/simlib/output.c:425
 #: ../raster/r.sim/simlib/output.c:434 ../raster/r.sim/simlib/output.c:476
 #: ../raster/r.sim/simlib/output.c:492 ../raster/r.sim/simlib/output.c:513
-#: ../raster/r.sim/simlib/output.c:555 ../raster/r.sim/simlib/output.c:595
-#: ../raster/r.sim/simlib/output.c:762
+#: ../raster/r.sim/simlib/output.c:567 ../raster/r.sim/simlib/output.c:627
+#: ../raster/r.sim/simlib/output.c:805
 #: ../raster/r.smooth.edgepreserve/main.c:144 ../raster/r.spread/main.c:445
 #: ../raster/r.spread/main.c:448 ../raster/r.spread/main.c:451
 #: ../raster/r.spread/main.c:455 ../raster/r.spread/main.c:458
@@ -5561,7 +5562,7 @@ msgstr "Ime obstoječega rastrskega sloja."
 #: ../raster/r.stream.extract/main.c:173 ../raster/r.stream.extract/main.c:178
 #: ../raster/r.terraflow/main.cpp:207 ../raster/r.terraflow/main.cpp:354
 #: ../raster/r.terraflow/main.cpp:390 ../raster/r.tile/main.c:84
-#: ../raster/r.univar/r.univar_main.c:313 ../raster/r.walk/main.c:467
+#: ../raster/r.univar/r.univar_main.c:314 ../raster/r.walk/main.c:467
 #: ../raster/r.walk/main.c:495 ../raster/r.walk/main.c:500
 #: ../raster/r.walk/main.c:872 ../scripts/d.correlate/d.correlate.py:46
 #: ../scripts/d.polar/d.polar.py:57 ../scripts/d.rast.leg/d.rast.leg.py:95
@@ -5650,7 +5651,7 @@ msgstr ""
 #: ../general/g.filename/main.c:40 ../general/g.findetc/main.c:27
 #: ../general/g.findfile/main.c:39 ../general/g.gisenv/main.c:42
 #: ../general/g.gui/main.c:38 ../general/g.list/main.c:62
-#: ../general/g.mapset/main.c:49 ../general/g.mapsets/main.c:86
+#: ../general/g.mapset/main.c:69 ../general/g.mapsets/main.c:86
 #: ../general/g.message/main.c:37 ../general/g.mkfontcap/main.c:63
 #: ../general/g.pnmcomp/main.c:281 ../general/g.ppmtopng/main.c:114
 #: ../general/g.proj/main.c:71 ../general/g.region/main.c:65
@@ -6242,130 +6243,131 @@ msgstr "Ne morem odpreti cellfile za [%s]"
 msgid "Mapset <%s> does not exist"
 msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
 
-#: ../general/g.mapset/main.c:51
+#: ../general/g.mapset/main.c:37 ../general/g.mapsets/list.c:34
+msgid "Failed to serialize JSON to pretty format."
+msgstr ""
+
+#: ../general/g.mapset/main.c:71
 #, fuzzy
 msgid "Changes/reports current mapset."
 msgstr "Uporabi nastavitve trenutne regije"
 
-#: ../general/g.mapset/main.c:52
+#: ../general/g.mapset/main.c:72
 msgid "Optionally create new mapset or list available mapsets in given project (location)."
 msgstr ""
 
-#: ../general/g.mapset/main.c:57
+#: ../general/g.mapset/main.c:77
 #, fuzzy
 msgid "Name of mapset where to switch"
 msgstr "Ime izhodnega vektorskega sloja"
 
-#: ../general/g.mapset/main.c:58 ../general/g.mapset/main.c:62
-#: ../general/g.mapset/main.c:65
+#: ../general/g.mapset/main.c:78 ../general/g.mapset/main.c:82
+#: ../general/g.mapset/main.c:85
 #, fuzzy
 msgid "Mapset"
 msgstr ""
 "polje: %d\n"
 "kategorija: %d\n"
 
-#: ../general/g.mapset/main.c:69
+#: ../general/g.mapset/main.c:92
 #, fuzzy
 msgid "Create mapset if it doesn't exist"
 msgstr "dig_att datoteka ne obstaja."
 
-#: ../general/g.mapset/main.c:71 ../general/g.proj/main.c:231
+#: ../general/g.mapset/main.c:94 ../general/g.proj/main.c:231
 #: ../locale/scriptstrings/r.mask_to_translate.c:20
 #, fuzzy
 msgid "Create"
 msgstr "Korelacija"
 
-#: ../general/g.mapset/main.c:76
+#: ../general/g.mapset/main.c:99
 #, fuzzy
 msgid "List available mapsets and exit"
 msgstr "Izpiši podprte formate in končaj"
 
-#: ../general/g.mapset/main.c:82
+#: ../general/g.mapset/main.c:105
 #, fuzzy
 msgid "Print current mapset and exit"
 msgstr "Izpiši trenutne parametre povezave in končaj"
 
-#: ../general/g.mapset/main.c:137
+#: ../general/g.mapset/main.c:117 ../general/g.mapsets/list.c:13
+#: ../general/g.proj/output.c:54 ../general/g.proj/output.c:360
+#: ../general/g.region/main.c:441 ../raster/r.describe/dumplist.c:37
+#: ../raster/r.proj/main.c:485 ../raster/r.univar/stats.c:152
+#: ../raster/r.univar/stats.c:341 ../vector/v.category/main.c:246
+#: ../vector/v.category/main.c:913 ../vector/v.info/print.c:817
+#: ../vector/v.info/print.c:853 ../vector/v.univar/main.c:609
+#, fuzzy
+msgid "Failed to initialize JSON object. Out of memory?"
+msgstr "Ime izhodnega rastrskega sloja"
+
+#: ../general/g.mapset/main.c:213
 #, fuzzy, c-format
 msgid "<%s> is already the current mapset"
 msgstr "Ime izhodnega rastrskega sloja"
 
-#: ../general/g.mapset/main.c:146
+#: ../general/g.mapset/main.c:222
 #, c-format
 msgid "You don't have permission to use the mapset <%s>"
 msgstr ""
 
-#: ../general/g.mapset/main.c:154
+#: ../general/g.mapset/main.c:230
 #, fuzzy, c-format
 msgid "Unable to create new mapset <%s>"
 msgstr "Ime izhodnega rastrskega sloja"
 
-#: ../general/g.mapset/main.c:159
+#: ../general/g.mapset/main.c:235
 #, fuzzy, c-format
 msgid "Mapset <%s> does not exist. Use -c flag to create it."
 msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
 
-#: ../general/g.mapset/main.c:169
+#: ../general/g.mapset/main.c:245
 #, fuzzy
 msgid "Unable to read GIS_LOCK environment variable"
 msgstr "Ne morem opisati tabele"
 
-#: ../general/g.mapset/main.c:185
+#: ../general/g.mapset/main.c:261
 #, fuzzy, c-format
 msgid "Lock file of mapset <%s> cannot be checked"
 msgstr "Ne najdem vhodnega vektorja <%s>"
 
-#: ../general/g.mapset/main.c:188
+#: ../general/g.mapset/main.c:264
 #, c-format
 msgid "There appears to be an active GRASS session in selected mapset <%s>"
 msgstr ""
 
-#: ../general/g.mapset/main.c:195
+#: ../general/g.mapset/main.c:271
 #, fuzzy
 msgid "Cleaning up temporary files..."
 msgstr "Vrednost, ki bo prirejena NULL vrednosti"
 
-#: ../general/g.mapset/main.c:212
+#: ../general/g.mapset/main.c:288
 #, fuzzy
 msgid "Mapset switched."
 msgstr ""
 "polje: %d\n"
 "kategorija: %d\n"
 
-#: ../general/g.mapset/main.c:215
+#: ../general/g.mapset/main.c:291
 msgid "Mapset switched. Your shell continues to use the history for the old mapset"
 msgstr ""
 
-#: ../general/g.mapset/main.c:219
+#: ../general/g.mapset/main.c:295
 #, c-format
 msgid ""
 "You can switch the history by commands:\n"
 "history -S; history -L %s/.history; setenv histfile=%s/.history"
 msgstr ""
 
-#: ../general/g.mapset/main.c:225
+#: ../general/g.mapset/main.c:301
 #, fuzzy, c-format
 msgid "Your current mapset is <%s>"
 msgstr "Izpiši trenutne parametre povezave in končaj"
-
-#: ../general/g.mapsets/list.c:13 ../general/g.proj/output.c:54
-#: ../general/g.proj/output.c:360 ../general/g.region/main.c:441
-#: ../raster/r.describe/dumplist.c:37 ../raster/r.proj/main.c:485
-#: ../vector/v.category/main.c:246 ../vector/v.category/main.c:913
-#: ../vector/v.info/print.c:817 ../vector/v.info/print.c:853
-#: ../vector/v.univar/main.c:609
-#, fuzzy
-msgid "Failed to initialize JSON object. Out of memory?"
-msgstr "Ime izhodnega rastrskega sloja"
 
 #: ../general/g.mapsets/list.c:22
 #, fuzzy
 msgid "Failed to initialize mapsets array. Out of memory?"
 msgstr "Ne morem izračunati centroida območja."
-
-#: ../general/g.mapsets/list.c:34
-msgid "Failed to serialize JSON to pretty format."
-msgstr ""
 
 #: ../general/g.mapsets/list.c:45
 #, fuzzy
@@ -16924,7 +16926,7 @@ msgstr "Izračuna univariatne statistične parametre za ne NULL celice rastrskeg
 #: ../raster/r.series/main.c:156 ../raster/r.sim/r.sim.sediment/main.c:119
 #: ../raster/r.sim/r.sim.water/main.c:118 ../raster/r.slope.aspect/main.c:171
 #: ../raster/r.smooth.edgepreserve/main.c:49 ../raster/r.sun/main.c:245
-#: ../raster/r.texture/main.c:101 ../raster/r.univar/r.univar_main.c:155
+#: ../raster/r.texture/main.c:101 ../raster/r.univar/r.univar_main.c:156
 #: ../vector/v.surf.rst/main.c:153
 #, fuzzy
 msgid "parallel"
@@ -18014,7 +18016,7 @@ msgid "Calculates univariate statistics from a raster map based on a vector map 
 msgstr "Izračuna univariatne statistične parametre za ne NULL celice rastrskega sloja."
 
 #: ../locale/scriptstrings/v.rast.stats_to_translate.c:5
-#: ../raster/r.resamp.stats/main.c:264 ../raster/r.univar/r.univar_main.c:153
+#: ../raster/r.resamp.stats/main.c:264 ../raster/r.univar/r.univar_main.c:154
 #: ../raster/r.univar/r3.univar_main.c:104 ../vector/v.univar/main.c:96
 #: ../vector/v.vect.stats/main.c:131
 #, fuzzy
@@ -18023,7 +18025,7 @@ msgstr "Ime rastrskega sloja, ki bo uporabljen za <%s>"
 
 #: ../locale/scriptstrings/v.rast.stats_to_translate.c:6
 #: ../raster/r.statistics/main.c:55 ../raster/r.stats.quantile/main.c:567
-#: ../raster/r.stats.zonal/main.c:106 ../raster/r.univar/r.univar_main.c:154
+#: ../raster/r.stats.zonal/main.c:106 ../raster/r.univar/r.univar_main.c:155
 #: ../vector/v.vect.stats/main.c:132
 #, fuzzy
 msgid "zonal statistics"
@@ -25261,7 +25263,7 @@ msgstr "Število točk najbližjih točk, ki bodo upoštevane"
 #: ../raster/r.mfilter/main.c:131 ../raster/r.neighbors/main.c:309
 #: ../raster/r.patch/main.c:112 ../raster/r.resamp.filter/main.c:493
 #: ../raster/r.resamp.interp/main.c:131 ../raster/r.series/main.c:228
-#: ../raster/r.slope.aspect/main.c:308 ../raster/r.univar/r.univar_main.c:203
+#: ../raster/r.slope.aspect/main.c:308 ../raster/r.univar/r.univar_main.c:204
 msgid "GRASS is compiled without OpenMP support. Ignoring threads setting."
 msgstr ""
 
@@ -25270,7 +25272,7 @@ msgstr ""
 #: ../raster/r.resamp.interp/main.c:136 ../raster/r.series/main.c:233
 #: ../raster/r.sim/r.sim.sediment/main.c:374
 #: ../raster/r.sim/r.sim.water/main.c:424 ../raster/r.slope.aspect/main.c:313
-#: ../raster/r.sun/main.c:594 ../raster/r.univar/r.univar_main.c:196
+#: ../raster/r.sun/main.c:594 ../raster/r.univar/r.univar_main.c:197
 #: ../vector/v.surf.rst/main.c:427
 msgid "Parallel processing disabled due to active mask."
 msgstr ""
@@ -26316,7 +26318,7 @@ msgstr "Naslov izhodnega rastrskega sloja"
 msgid "Converting <%s>..."
 msgstr "Zapisujem novo datoteko...\n"
 
-#: ../raster/r.out.png/main.c:280 ../raster/r.univar/r.univar_main.c:277
+#: ../raster/r.out.png/main.c:280 ../raster/r.univar/r.univar_main.c:278
 #, fuzzy, c-format
 msgid "Raster <%s> type mismatch"
 msgstr "dig_att datoteka ne obstaja."
@@ -26717,7 +26719,7 @@ msgid "Do not create color and category files"
 msgstr "Ne morem ustvariti indeksa"
 
 #: ../raster/r.patch/main.c:107 ../raster/r.series/main.c:221
-#: ../raster/r.slope.aspect/main.c:302 ../raster/r.univar/r.univar_main.c:194
+#: ../raster/r.slope.aspect/main.c:302 ../raster/r.univar/r.univar_main.c:195
 #, fuzzy, c-format
 msgid "<%d> is not valid number of nprocs."
 msgstr "Število točk najbližjih točk, ki bodo upoštevane"
@@ -29625,36 +29627,40 @@ msgstr ""
 msgid "Mean flow velocity \t= %f m/s\n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:339
+#: ../raster/r.sim/simlib/input.c:342
 #, c-format
 msgid "Mean Mannings \t= %f\n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:343
+#: ../raster/r.sim/simlib/input.c:344
+msgid "Mean Mannings \t= undefined (chmean is zero)\n"
+msgstr ""
+
+#: ../raster/r.sim/simlib/input.c:348
 #, fuzzy, c-format
 msgid "Number of iterations \t= %d cell\n"
 msgid_plural "Number of iterations \t= %d cells\n"
 msgstr[0] "Število točk najbližjih točk, ki bodo upoštevane"
 msgstr[1] "Število točk najbližjih točk, ki bodo upoštevane"
 
-#: ../raster/r.sim/simlib/input.c:346
+#: ../raster/r.sim/simlib/input.c:351
 #, c-format
 msgid "Time step \t= %.2f s\n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:348
+#: ../raster/r.sim/simlib/input.c:353
 #, c-format
 msgid ""
 "Sigmax \t= %f\n"
 "Max velocity \t= %f m/s\n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:349
+#: ../raster/r.sim/simlib/input.c:354
 #, c-format
 msgid "Time step used \t= %.2f s\n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:402
+#: ../raster/r.sim/simlib/input.c:407
 #, fuzzy
 msgid "Unable to write et file"
 msgstr "Vrednost, ki bo prirejena NULL vrednosti"
@@ -32845,19 +32851,26 @@ msgstr ""
 msgid "Use the native resolution and extent of the raster map, instead of the current region"
 msgstr "Uporabi trenutno regijo"
 
-#: ../raster/r.univar/r.univar_main.c:157
+#: ../raster/r.univar/r.univar_main.c:158
 msgid "Calculates univariate statistics from the non-null cells of a raster map."
 msgstr "Izračuna univariatne statistične parametre za ne NULL celice rastrskega sloja."
 
-#: ../raster/r.univar/r.univar_main.c:160
+#: ../raster/r.univar/r.univar_main.c:161
 #: ../raster/r.univar/r3.univar_main.c:109
 msgid "Statistics include number of cells counted, minimum and maximum cell values, range, arithmetic mean, population variance, standard deviation, coefficient of variation, and sum."
 msgstr ""
 
-#: ../raster/r.univar/r.univar_main.c:173
+#: ../raster/r.univar/r.univar_main.c:174
 #, fuzzy
 msgid "zones option and region flag -r are mutually exclusive"
 msgstr "Uporabiš lahko ali 'from_table' ali 'select'"
+
+#: ../raster/r.univar/r.univar_main.c:506
+#: ../raster/r.univar/r.univar_main.c:615
+#, fuzzy
+#| msgid "Unknown type"
+msgid "Unknown map type"
+msgstr "Nepoznan tip"
 
 #: ../raster/r.univar/r3.univar_main.c:37
 msgid "3D Raster map used for zoning, must be of type CELL"
@@ -39411,91 +39424,91 @@ msgstr ""
 msgid "Failed to copy attribute table to output vector map"
 msgstr "Ime izhodnega rastrskega sloja"
 
-#: ../vector/v.clean/main.c:351 ../vector/v.clean/main.c:362
+#: ../vector/v.clean/main.c:344
 #, fuzzy
 msgid "Rebuilding parts of topology..."
 msgstr "Gradim prostorski indeks ..."
 
-#: ../vector/v.clean/main.c:371 ../vector/v.clean/main.c:416
-#: ../vector/v.clean/main.c:464
+#: ../vector/v.clean/main.c:357 ../vector/v.clean/main.c:402
+#: ../vector/v.clean/main.c:450
 #, fuzzy
 msgid "Tool: Split lines"
 msgstr "Rišem ..."
 
-#: ../vector/v.clean/main.c:374 ../vector/v.clean/main.c:420
-#: ../vector/v.clean/main.c:470
+#: ../vector/v.clean/main.c:360 ../vector/v.clean/main.c:406
+#: ../vector/v.clean/main.c:456
 msgid "Tool: Break lines at intersections"
 msgstr ""
 
-#: ../vector/v.clean/main.c:377 ../vector/v.clean/main.c:386
-#: ../vector/v.clean/main.c:422 ../vector/v.clean/main.c:437
-#: ../vector/v.clean/main.c:472
+#: ../vector/v.clean/main.c:363 ../vector/v.clean/main.c:372
+#: ../vector/v.clean/main.c:408 ../vector/v.clean/main.c:423
+#: ../vector/v.clean/main.c:458
 msgid "Tool: Remove duplicates"
 msgstr ""
 
-#: ../vector/v.clean/main.c:380 ../vector/v.clean/main.c:428
-#: ../vector/v.clean/main.c:477
+#: ../vector/v.clean/main.c:366 ../vector/v.clean/main.c:414
+#: ../vector/v.clean/main.c:463
 #, fuzzy
 msgid "Tool: Merge lines"
 msgstr "Zapisujem novo datoteko...\n"
 
-#: ../vector/v.clean/main.c:390
+#: ../vector/v.clean/main.c:376
 msgid "Tool: Remove dangles"
 msgstr ""
 
-#: ../vector/v.clean/main.c:394
+#: ../vector/v.clean/main.c:380
 msgid "Tool: Change type of boundary dangles"
 msgstr ""
 
-#: ../vector/v.clean/main.c:398
+#: ../vector/v.clean/main.c:384
 msgid "Tool: Remove bridges"
 msgstr ""
 
-#: ../vector/v.clean/main.c:402
+#: ../vector/v.clean/main.c:388
 msgid "Tool: Change type of boundary bridges"
 msgstr ""
 
-#: ../vector/v.clean/main.c:406
+#: ../vector/v.clean/main.c:392
 #, fuzzy
 msgid "Tool: Remove duplicate area centroids"
 msgstr "Ne morem izračunati centroida območja."
 
-#: ../vector/v.clean/main.c:410
+#: ../vector/v.clean/main.c:396
 msgid "Tool: Snap line to vertex in threshold"
 msgstr ""
 
-#: ../vector/v.clean/main.c:424 ../vector/v.clean/main.c:456
-#: ../vector/v.clean/main.c:474
+#: ../vector/v.clean/main.c:410 ../vector/v.clean/main.c:442
+#: ../vector/v.clean/main.c:460
 msgid "Tool: Remove small angles at nodes"
 msgstr ""
 
-#: ../vector/v.clean/main.c:434
+#: ../vector/v.clean/main.c:420
 msgid "Tool: Break polygons"
 msgstr ""
 
-#: ../vector/v.clean/main.c:442
+#: ../vector/v.clean/main.c:428
 msgid "Tool: Prune lines/boundaries"
 msgstr ""
 
-#: ../vector/v.clean/main.c:446
+#: ../vector/v.clean/main.c:432
 msgid "Tool: Remove small areas"
 msgstr ""
 
-#: ../vector/v.clean/main.c:451
+#: ../vector/v.clean/main.c:437
 #, fuzzy
 msgid "Tool: Merge boundaries"
 msgstr "Zapisujem novo datoteko...\n"
 
-#: ../vector/v.clean/main.c:484
+#: ../vector/v.clean/main.c:470
 msgid "Tool: Remove all lines and boundaries of zero length"
 msgstr ""
 
-#: ../vector/v.clean/main.c:493
+#: ../vector/v.clean/main.c:479
 #, fuzzy
 msgid "Rebuilding topology for output vector map..."
 msgstr "Berem dig_att datoteko...\n"
 
-#: ../vector/v.clean/main.c:504
+#: ../vector/v.clean/main.c:490
 #, fuzzy
 msgid "Building topology for error vector map..."
 msgstr "Berem dig_att datoteko...\n"

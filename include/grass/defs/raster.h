@@ -4,6 +4,7 @@
 #include <stdbool.h>
 
 #include <grass/gis.h>
+#include <grass/colors.h>
 
 /* --- ANSI prototypes for the lib/raster functions --- */
 

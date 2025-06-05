@@ -362,7 +362,10 @@ g.region -p format=json
 
 ```sh
 {
-    "projection": "99 (Lambert Conformal Conic)",
+    "projection": {
+        "code": 99,
+        "name": "Lambert Conformal Conic"
+    },
     "zone": 0,
     "datum": "nad83",
     "ellipsoid": "a=6378137 es=0.006694380022900787",
@@ -408,6 +411,47 @@ g.region -l format=json
     "rows": 165,
     "cols": 179
 }
+```
+
+### Python example
+
+To get the latitude and longitude coordinates of the region center using
+Python, use the `format=json` option along with the `-l` flag:
+
+```python
+import grass.script as gs
+
+# Run the g.region command with the -l flag and JSON output format
+data = gs.parse_command(
+    "g.region",
+    flags="l",
+    format="json",
+)
+
+print(f"center longitude: {data['center_long']}")
+print(f"center latitude: {data['center_lat']}")
+```
+
+```text
+center longitude: -78.679022655614958
+center latitude: 35.736431420327719
+```
+
+To convert region bbox to wgs84 decimal degrees bbox, use the **g.region**
+command with the `-bg` flags and JSON output format:
+
+```python
+import grass.script as gs
+
+# Get WGS84 bounding box
+region = gs.parse_command(
+    "g.region",
+    flags="bg",
+    format="json",
+)
+bbox = [region[k] for k in ("ll_w", "ll_s", "ll_e", "ll_n")]
+
+print(f"Region bbox to wgs84 decimal degrees bbox: {bbox}")
 ```
 
 ## SEE ALSO

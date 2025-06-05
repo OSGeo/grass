@@ -4,7 +4,7 @@ SQL database and to establish a connection to the database.
 
 Usage:
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> import grass.temporal as tgis
     >>> # Create the temporal database
@@ -211,7 +211,7 @@ def get_enable_mapset_check():
     database.
     Overwrite this global variable by: g.gisenv set="TGIS_DISABLE_MAPSET_CHECK=True"
 
-    ..warning::
+    .. warning::
 
         Be aware to face corrupted temporal database in case this
         global variable is set to False. This feature is highly
@@ -231,7 +231,7 @@ def get_enable_timestamp_write():
     the temporal database using the C-library timestamp interface.
     Overwrite this global variable by: g.gisenv set="TGIS_DISABLE_TIMESTAMP_WRITE=True"
 
-    ..warning::
+    .. warning::
 
         Be aware that C-libraries can not access timestamp information if
         they are not written as spatial database metadata, hence modules
@@ -314,7 +314,7 @@ def set_raise_on_error(raise_exp: bool = True):
     :param raise_exp: True to raise a FatalError exception instead of calling
                       sys.exit(1) when using the tgis messenger interface
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> import grass.temporal as tgis
         >>> tgis.init()
@@ -364,6 +364,7 @@ def get_raise_on_error():
 
 def get_tgis_version():
     """Get the supported version of the temporal framework
+
     :returns: The version number of the temporal framework as integer
     """
     global tgis_version
@@ -375,6 +376,7 @@ def get_tgis_version():
 
 def get_tgis_db_version():
     """Get the supported version of the temporal database
+
     :returns: The version number of the temporal database as integer
     """
     global tgis_db_version
@@ -541,22 +543,22 @@ def init(raise_fatal_error: bool = False, skip_db_version_check: bool = False):
 
     The following environmental variables are checked:
 
-     - GRASS_TGIS_PROFILE (True, False, 1, 0)
-     - GRASS_TGIS_RAISE_ON_ERROR (True, False, 1, 0)
+    - GRASS_TGIS_PROFILE (True, False, 1, 0)
+    - GRASS_TGIS_RAISE_ON_ERROR (True, False, 1, 0)
 
-     ..warning::
+    .. warning::
 
-         This functions must be called before any spatio-temporal processing
-         can be started
+        This functions must be called before any spatio-temporal processing
+        can be started
 
-     :param raise_fatal_error: Set this True to assure that the init()
+    :param raise_fatal_error: Set this True to assure that the init()
                                function does not kill a persistent process
                                like the GUI. If set True a
                                grass.pygrass.messages.FatalError
                                exception will be raised in case a fatal
                                error occurs in the init process, otherwise
                                sys.exit(1) will be called.
-     :param skip_db_version_check: Set this True to skip mismatch temporal
+    :param skip_db_version_check: Set this True to skip mismatch temporal
                                    database version check.
                                    Recommended to be used only for
                                    upgrade_temporal_database().
@@ -1227,15 +1229,15 @@ class DBConnection:
 
     The following DBMS are supported:
 
-      - sqlite via the sqlite3 standard library
-      - postgresql via psycopg2
+    - sqlite via the sqlite3 standard library
+    - postgresql via psycopg2
     """
 
     def __init__(self, backend=None, dbstring: str | None = None) -> None:
         """Constructor of a database connection
 
-        param backend:The database backend sqlite or pg
-        param dbstring: The database connection string
+        :param backend: The database backend sqlite or pg
+        :param dbstring: The database connection string
         """
         self.connected = False
         if backend is None:
@@ -1358,7 +1360,7 @@ class DBConnection:
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> init()
             >>> dbif = SQLDatabaseInterfaceConnection()
