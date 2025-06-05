@@ -1820,6 +1820,7 @@ def create_project(
     :param desc: description of the project (creates MYNAME file)
     :param bool overwrite: True to overwrite project if exists (WARNING:
                            ALL DATA from existing project ARE DELETED!)
+    :raises ~grass.exceptions.ScriptError: Raise ScriptError on error
     """
     # Add default mapset to project path if needed
     if not name:
@@ -1955,10 +1956,10 @@ def _set_location_description(path, location, text):
 def _create_location_xy(database, location):
     """Create unprojected location
 
-    Raise ScriptError on error.
 
     :param database: GRASS database where to create new location
     :param location: location name
+    :raises grass.exceptions.ScriptError: Raise ScriptError on error.
     """
     cur_dir = Path.cwd()
     try:
