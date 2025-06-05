@@ -284,7 +284,8 @@ void print_python_example(FILE *file, const char *python_function,
                     type = "string";
                     break;
                 }
-            if (opt->required || first_required_rule_option == opt) {
+            if (opt->required || first_required_rule_option == opt ||
+                (strcmp(opt->key, "format") == 0 && output_format_default)) {
                 fprintf(file, ", %s=", opt->key);
                 if (output_format_default && strcmp(opt->key, "format") == 0) {
                     fprintf(file, "\"%s\"", output_format_default);
