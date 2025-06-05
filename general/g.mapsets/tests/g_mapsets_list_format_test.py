@@ -56,7 +56,7 @@ def test_plain_print_output(simple_dataset, separator):
 
 
 def test_json_list_output(simple_dataset):
-    """Chekc list of mapsets in JSON format"""
+    """Check list of mapsets in JSON format"""
     text = gs.read_command("g.mapsets", format="json", flags="l")
     data = json.loads(text)
     assert list(data.keys()) == ["mapsets"]
