@@ -746,11 +746,11 @@ def message(msg, flag=None, env=None):
 
 
 def debug(msg, debug=1, env=None):
-    """Display a debugging message using `g.message -d`.
+    """Display a debugging message using ``g.message -d``.
 
     The visibility of a debug message at runtime is controlled by
-    setting the corresponding DEBUG level with `g.gisenv set="DEBUG=X"`
-    (with `X` set to the debug level specified in the function call).
+    setting the corresponding DEBUG level with ``g.gisenv set="DEBUG=X"``
+    (with ``X`` set to the debug level specified in the function call).
 
     :param str msg: debugging message to be displayed
     :param str debug: debug level (0-5) with the following recommended levels:
@@ -768,7 +768,7 @@ def debug(msg, debug=1, env=None):
 
 
 def verbose(msg, env=None):
-    """Display a verbose message using `g.message -v`
+    """Display a verbose message using ``g.message -v``
 
     :param str msg: verbose message to be displayed
     :param env: dictionary with system environment variables (`os.environ` by default)
@@ -777,7 +777,7 @@ def verbose(msg, env=None):
 
 
 def info(msg, env=None):
-    """Display an informational message using `g.message -i`
+    """Display an informational message using ``g.message -i``
 
     :param str msg: informational message to be displayed
     :param env: dictionary with system environment variables (`os.environ` by default)
@@ -786,7 +786,7 @@ def info(msg, env=None):
 
 
 def percent(i, n, s, env=None):
-    """Display a progress info message using `g.message -p`
+    """Display a progress info message using ``g.message -p``
 
     .. code-block:: python
 
@@ -805,7 +805,7 @@ def percent(i, n, s, env=None):
 
 
 def warning(msg, env=None):
-    """Display a warning message using `g.message -w`
+    """Display a warning message using ``g.message -w``
 
     :param str msg: warning message to be displayed
     :param env: dictionary with system environment variables (`os.environ` by default)
@@ -814,7 +814,7 @@ def warning(msg, env=None):
 
 
 def error(msg, env=None):
-    """Display an error message using `g.message -e`
+    """Display an error message using ``g.message -e``
 
     This function does not end the execution of the program.
     The right action after the error is up to the caller.
@@ -827,7 +827,7 @@ def error(msg, env=None):
 
 
 def fatal(msg, env=None):
-    """Display an error message using `g.message -e`, then abort or raise
+    """Display an error message using ``g.message -e``, then abort or raise
 
     Raises exception when module global raise_on_error is 'True', abort
     (calls exit) otherwise.
@@ -1090,7 +1090,7 @@ def _text_to_key_value_dict(
     checkunits: bool = False,
 ) -> KeyValue[list[int | float | str]]:
     """Convert a key-value text file, where entries are separated by newlines
-    and the key and value are separated by `sep', into a key-value dictionary
+    and the key and value are separated by ``sep``, into a key-value dictionary
     and discover/use the correct data types (float, int or string) for values.
 
     :param filename: The name or name and path of the text file to convert
