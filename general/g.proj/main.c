@@ -243,6 +243,8 @@ int main(int argc, char *argv[])
                              "proj4;PROJ.4 style text output;");
     format->guisection = _("Print");
 
+    G_option_exclusive(printinfo, datuminfo, create, NULL);
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
@@ -282,11 +284,14 @@ int main(int argc, char *argv[])
               "release. Please use format=proj4 instead."));
         outputFormat = PROJ4;
     }
-    else if (printwkt->answer) {
-        G_verbose_message(
-            _("Flag 'w' is deprecated and will be removed in a future "
-              "release. Please use format=wkt instead."));
+    else if (printwkt->answer || esristyle->answer) {
         outputFormat = WKT;
+
+        if (printwkt->answer) {
+            G_verbose_message(
+                _("Flag 'w' is deprecated and will be removed in a future "
+                  "release. Please use format=wkt instead."));
+        }
     }
 
     /* list codes for given authority */
@@ -366,26 +371,6 @@ int main(int argc, char *argv[])
     set_datumtrans(atoi(dtrans->answer), forcedatumtrans->answer);
 
     /* Output */
-    /* Only allow one output format at a time, to reduce confusion */
-    formats = ((printinfo->answer ? 1 : 0) + (shellinfo->answer ? 1 : 0) +
-               (datuminfo->answer ? 1 : 0) + (printproj4->answer ? 1 : 0) +
-#ifdef HAVE_OGR
-               (printwkt->answer ? 1 : 0) +
-#endif
-               (create->answer ? 1 : 0));
-    if (formats > 1) {
-#ifdef HAVE_OGR
-        G_fatal_error(_("Only one of -%c, -%c, -%c, -%c, -%c"
-                        " or -%c flags may be specified"),
-                      printinfo->key, shellinfo->key, datuminfo->key,
-                      printproj4->key, printwkt->key, create->key);
-#else
-        G_fatal_error(_("Only one of -%c, -%c, -%c, -%c"
-                        " or -%c flags may be specified"),
-                      printinfo->key, shellinfo->key, datuminfo->key,
-                      printproj4->key, create->key);
-#endif
-    }
     if ((printinfo->answer && outputFormat == PLAIN) || outputFormat == SHELL ||
         outputFormat == JSON)
         print_projinfo(outputFormat);
