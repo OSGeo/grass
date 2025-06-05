@@ -490,8 +490,8 @@ def run_command(*args, **kwargs):
     The behavior on error can be changed using *errors* parameter
     which is passed to the :func:`handle_errors()` function.
 
-    :param *args: unnamed arguments passed to :func:`start_command()`
-    :param **kwargs: named arguments passed to :func:`start_command()`
+    :param args: unnamed arguments passed to :func:`start_command()`
+    :param kwargs: named arguments passed to :func:`start_command()`
     :param str errors: passed to :func:`handle_errors()`
 
     .. versionchanged:: 8.0
