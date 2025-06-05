@@ -462,17 +462,17 @@ class Region:
         Attention: All raster objects must be closed or the
                    process will be terminated.
 
-        The Raster library C function Rast_set_window() is called.
+        The Raster library C function :c:func:`Rast_set_window()` is called.
 
         """
         libraster.Rast_set_window(self.byref())
 
     def get_current(self):
         """Get the current working region of this process
-        and store it into this Region object
+        and store it into this :py:class:`Region` object
 
-        Previous calls to set_current() affects values returned by this function.
-        Previous calls to read() affects values returned by this function
+        Previous calls to :py:meth:`.set_current()` affects values returned by this function.
+        Previous calls to :py:meth:`.read()` affects values returned by this function
         only if the current working region is not initialized.
 
         :Example:
@@ -496,7 +496,7 @@ class Region:
         """Set the current working region from this region object
 
         This function adjusts the values before setting the region
-        so you don't have to call G_adjust_Cell_head().
+        so you don't have to call :c:func:`G_adjust_Cell_head()`.
 
         Attention: Only the current process is affected.
                    The GRASS computational region is not affected.
@@ -546,7 +546,7 @@ class Region:
         mapset into region.
 
         3D values are set to defaults if not available in WIND file.  An
-        error message is printed and exit() is called if there is a problem
+        error message is printed and :py:func:`exit()` is called if there is a problem
         reading the region.
 
         .. warning::
@@ -554,7 +554,7 @@ class Region:
             should not use this routine since its use implies that the active
             module region will not be used. Programs that read or write raster
             map data (or vector data) can query the active module region using
-            Rast_window_rows() and Rast_window_cols().
+            :c:func:`Rast_window_rows()` and :c:func:`Rast_window_cols()`.
 
         :param force_read: If True the WIND file of the current mapset
                            is re-readed, otherwise the initial region
@@ -612,7 +612,7 @@ class Region:
         """
         Get the default region
 
-        Reads the default region for the location in this Region object.
+        Reads the default region for the location in this :py:class:`Region` object.
         3D values are set to defaults if not available in WIND file.
 
         An error message is printed and exit() is called if there is a
@@ -644,10 +644,10 @@ class Region:
         )
 
     def set_bbox(self, bbox):
-        """Set region extent from Bbox
+        """Set region extent from :py:class:`~grass.pygrass.vector.basic.Bbox`
 
-        :param bbox: a Bbox object to set the extent
-        :type bbox: Bbox object
+        :param bbox: a py:class:`~grass.pygrass.vector.basic.Bbox` object to set the extent
+        :type bbox: :py:class:`~grass.pygrass.vector.basic.Bbox` object
 
         .. code-block:: pycon
 
