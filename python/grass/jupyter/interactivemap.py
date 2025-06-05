@@ -357,7 +357,7 @@ class InteractiveMap:
 
         .. note:: This will only work if the raster is located in the current mapset.
         To change the color table of a raster located outside the current mapset,
-        switch to that mapset with `g.mapset`, modify the color table with `r.color`
+        switch to that mapset with ``g.mapset``, modify the color table with ``r.color``
         then switch back to the initial mapset and run this function.
 
         :param str name: name of raster to add to display; positional-only parameter
@@ -372,7 +372,8 @@ class InteractiveMap:
 
         A Layer Control is added by default. Call this function to customize
         layer control object. Accepts keyword arguments to be passed to leaflet
-        layer control object"""
+        layer control object
+        """
 
         if self._folium:
             self.layer_control_object = self._folium.LayerControl(**kwargs)
