@@ -123,13 +123,13 @@ Import the geometry feature class and add two points:
 Write the two points to the map:
 
     >>> new.write(point0, cat=1, attrs=('pub',))
-    >>> new.write(point1, cat=2, attrs=('resturant',))
+    >>> new.write(point1, cat=2, attrs=('restaurant',))
 
 Commit the DB changes (attributes):
 
     >>> new.table.conn.commit()
     >>> new.table.execute().fetchall()
-    [(1, u'pub'), (2, u'resturnat')]
+    [(1, u'pub'), (2, u'restaurant')]
 
 Close the vector map:
 
@@ -147,7 +147,7 @@ Now we can play with the map:
     >>> new.read(1).attrs['name']
     u'pub'
     >>> new.read(2).attrs['name']
-    u'resturnat'
+    u'restaurant'
     >>> new.close()
     >>> new.remove()
 

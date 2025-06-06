@@ -61,16 +61,18 @@ class Popen(subprocess.Popen):
         return arg
 
     def __init__(self, args, **kwargs):
+        # If env is provided and is not None, use it.
+        path = kwargs["env"].get("PATH") if kwargs.get("env") else None
+        cmd = shutil.which(args[0], path=path)
+        if cmd is None:
+            raise OSError(_("Cannot find the executable {0}").format(args[0]))
+        args = [cmd] + args[1:]
         if (
             sys.platform == "win32"
             and isinstance(args, list)
             and not kwargs.get("shell")
             and kwargs.get("executable") is None
         ):
-            cmd = shutil.which(args[0])
-            if cmd is None:
-                raise OSError(_("Cannot find the executable {0}").format(args[0]))
-            args = [cmd] + args[1:]
             name, ext = os.path.splitext(cmd)
             if ext.lower() not in self._builtin_exts:
                 kwargs["shell"] = True
@@ -660,8 +662,8 @@ def write_command(*args, **kwargs):
     The behavior on error can be changed using *errors* parameter
     which is passed to the :func:`handle_errors()` function.
 
-    :param *args: unnamed arguments passed to ``start_command()``
-    :param **kwargs: named arguments passed to ``start_command()``
+    :param args: unnamed arguments passed to ``start_command()``
+    :param kwargs: named arguments passed to ``start_command()``
 
     :returns: 0 with default parameters for backward compatibility only
 
@@ -997,19 +999,18 @@ def tempdir(env=None):
     return tmp
 
 
-def tempname(length, lowercase=False):
-    """Generate a GRASS and SQL compliant random name starting with tmp_
+def tempname(length: int, lowercase: bool = False) -> str:
+    """Generate a GRASS and SQL compliant random name starting with ``tmp_``
     followed by a random part of length "length"
 
-    :param int length: length of the random part of the name to generate
-    :param bool lowercase: use only lowercase characters to generate name
-    :returns: String with a random name of length "length" starting with a letter
-    :rtype: str
+    :param length: length of the random part of the name to generate
+    :param lowercase: use only lowercase characters to generate name
+    :return: String with a random name of length "length" starting with a letter
 
     :Example:
 
-    >>> tempname(12)
-    'tmp_MxMa1kAS13s9'
+        >>> tempname(12)
+        'tmp_MxMa1kAS13s9'
 
     .. seealso:: functions :func:`append_uuid()`, :func:`append_random()`
     """
@@ -2026,7 +2027,7 @@ def legal_name(s):
 
     This is the Python implementation of :func:`G_legal_filename()` function.
 
-    ..note::
+    .. note::
 
         It is not clear when exactly use this function, but it might be
         useful anyway for checking map names and column names.

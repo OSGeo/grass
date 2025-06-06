@@ -118,7 +118,7 @@ def db_connection(force=False, env=None):
     >>> db_connection()
     {'group': '', 'schema': '', 'driver': 'sqlite', 'database': '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'}
 
-    :param force True to set up default DB connection if not defined
+    :param force: True to set up default DB connection if not defined
     :param env: environment
 
     :return: parsed output of db.connect
@@ -139,8 +139,8 @@ def db_connection(force=False, env=None):
 def db_select(sql=None, filename=None, table=None, env=None, **args):
     """Perform SQL select statement
 
-    Note: one of <em>sql</em>, <em>filename</em>, or <em>table</em>
-    arguments must be provided.
+    .. note:: One of **sql**, **filename**, or **table**
+        arguments must be provided.
 
     Examples:
 
@@ -149,7 +149,7 @@ def db_select(sql=None, filename=None, table=None, env=None, **args):
     >>> db_select(sql="SELECT cat,CITY FROM myfirestations WHERE cat < 4")
     (('1', 'Morrisville'), ('2', 'Morrisville'), ('3', 'Apex'))
 
-    Simplified usage (it performs <tt>SELECT * FROM myfirestations</tt>.)
+    Simplified usage (it performs ``SELECT * FROM myfirestations``.)
 
     >>> db_select(table="myfirestations")  # doctest: +ELLIPSIS
     (('1', '24', 'Morrisville #3', ... 'HS2A', '1.37'))

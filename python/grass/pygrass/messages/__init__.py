@@ -121,14 +121,14 @@ class Messenger:
     C-library message functions like: G_message(), G_warning(),
     G_important_message(), G_verbose_message(), G_percent() and G_debug().
 
-    Note:
+    .. note::
 
-    The C-library message functions a called via ctypes in a subprocess
-    using a pipe (multiprocessing.Pipe) to transfer the text messages.
-    Hence, the process that uses the Messenger interface will not be
-    exited, if a G_fatal_error() was invoked in the subprocess.
-    In this case the Messenger object will simply start a new subprocess
-    and restarts the pipeline.
+        The C-library message functions a called via ctypes in a subprocess
+        using a pipe (multiprocessing.Pipe) to transfer the text messages.
+        Hence, the process that uses the Messenger interface will not be
+        exited, if a G_fatal_error() was invoked in the subprocess.
+        In this case the Messenger object will simply start a new subprocess
+        and restarts the pipeline.
 
 
     Usage:

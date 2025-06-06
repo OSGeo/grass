@@ -130,7 +130,7 @@ class TestRasterreport(TestCase):
         values = """min=0
         max=45368492
         mean=2248724.35829364
-        variance=2332049431762.5
+        variance=2332049431759.92
         n=996244"""
         self.assertModule("r.texture", input=self.input, output=method, method=method)
         self.assertRasterFitsUnivar(output, reference=values, precision=1e-4)

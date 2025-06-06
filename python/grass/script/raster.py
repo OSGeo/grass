@@ -32,6 +32,7 @@ from .core import (
     tempfile,
     run_command,
     read_command,
+    region_env,
     write_command,
     feed_command,
     warning,
@@ -405,3 +406,176 @@ class MaskManager:
                 env=self.env,
                 quiet=True,
             )
+
+
+class RegionManager:
+    """Context manager for temporarily setting the computational region.
+
+    This context manager makes it possible to safely modify the computational region
+    (for example via `g.region`) within a `with` block. When the context exits, the original region
+    settings are automatically restored. This is useful in scripts or functions that need to
+    work with a specific region without permanently altering the user's working environment.
+
+    The new region can be defined by passing `g.region` parameters when initializing the context,
+    or by calling `g.region` directly within the context.
+
+    The original region is saved at the beginning of the context and restored at the end.
+
+    Example with explicit region parameters:
+
+    >>> with gs.RegionManager(n=226000, s=222000, w=634000, e=638000):
+    ...     gs.parse_command("r.univar", map="elevation", format="json")
+
+    Example matching a raster map's region:
+
+    >>> with gs.RegionManager(raster="elevation"):
+    ...     gs.run_command("r.slope.aspect", elevation="elevation", slope="slope")
+
+    Example using g.region:
+
+    >>> with gs.RegionManager():
+    ...     gs.run_command("g.region", n=226000, s=222000, w=634000, e=638000)
+    ...     gs.parse_command("r.univar", map="elevation", format="json")
+
+    Example using set_region():
+
+    >>> with gs.RegionManager() as manager:
+    ...     manager.set_region(n=226000, s=222000, w=634000, e=638000)
+    ...     gs.parse_command("r.univar", map="elevation", format="json")
+
+    If no environment is provided, the global environment is used. When running parallel
+    processes in the same mapset that modify region settings, it is useful to use a copy
+    of the global environment. The following code creates the copy of the global environment
+    and lets the manager modify it. The copy is then available as the _env_ attribute.
+
+    >>> with gs.RegionManager(raster="elevation", env=os.environ.copy()) as manager:
+    ...     gs.run_command("r.univar", map="elevation", env=manager.env)
+
+    In the background, this class manages the `WIND_OVERRIDE` environment variable
+    that holds the unique name of the saved region to use.
+    """
+
+    def __init__(self, env: dict[str, str] | None = None, **kwargs):
+        """
+        Initializes the MaskManager.
+
+        :param env: Environment to use. Defaults to modifying os.environ.
+        :param kwargs: Keyword arguments passed to `g.region`
+        """
+        self.env = env if env is not None else os.environ
+        self._original_value = None
+        self.region_name = append_uuid(append_node_pid("region"))
+        self._region_inputs = kwargs or {}
+
+    def set_region(self, **kwargs):
+        """Sets region.
+
+        :param kwargs: Keyword arguments with g.region parameters
+        """
+        run_command("g.region", **kwargs, env=self.env)
+
+    def __enter__(self):
+        """Sets the `WIND_OVERRIDE` environment variable to the generated region name.
+
+        :return: Returns the RegionManager instance.
+        """
+        self._original_value = self.env.get("WIND_OVERRIDE")
+        run_command(
+            "g.region", save=self.region_name, env=self.env, **self._region_inputs
+        )
+        self.env["WIND_OVERRIDE"] = self.region_name
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Restore the previous region state.
+
+        Restores the original value of `WIND_OVERRIDE`.
+
+        :param exc_type: Exception type, if any.
+        :param exc_val: Exception value, if any.
+        :param exc_tb: Traceback, if any.
+        """
+        if self._original_value is not None:
+            self.env["WIND_OVERRIDE"] = self._original_value
+        else:
+            self.env.pop("WIND_OVERRIDE", None)
+            run_command(
+                "g.remove",
+                flags="f",
+                quiet=True,
+                type="region",
+                name=self.region_name,
+                env=self.env,
+            )
+
+
+class RegionManagerEnv:
+    """Context manager for temporarily setting the computational region.
+
+    See :class:`RegionManager`. Unlike :class:`RegionManager`, this class uses
+    `GRASS_REGION` instead of `WIND_OVERRIDE`. The advantage is no files are written to disk.
+    The disadvantage is that simply calling `g.region` within the context will not affect
+    the temporary region, but the global one, which can be confusing.
+
+    Example with explicit region parameters:
+
+    >>> with gs.RegionManagerEnv(n=226000, s=222000, w=634000, e=638000):
+    ...     gs.parse_command("r.univar", map="elevation", format="json")
+
+    Example with set_region():
+
+    >>> with gs.RegionManagerEnv() as manager:
+    ...     manager.set_region(n=226000, s=222000, w=634000, e=638000)
+    ...     gs.parse_command("r.univar", map="elevation", format="json")
+
+    This is identical to:
+
+    >>> with gs.RegionManagerEnv() as manager:
+            manager.env["GRASS_REGION"] = gs.region_env()
+    ...     gs.parse_command("r.univar", map="elevation", format="json")
+
+    .. caution::
+
+        To set region within the context, do not call `g.region`, use `set_region` instead.
+    """
+
+    def __init__(self, env: dict[str, str] | None = None, **kwargs):
+        """
+        Initializes the MaskManager.
+
+        :param env: Environment to use. Defaults to modifying os.environ.
+        :param kwargs: Keyword arguments passed to `g.region`
+        """
+        self.env = env if env is not None else os.environ
+        self._original_value = None
+        self._region_inputs = kwargs or {}
+
+    def set_region(self, **kwargs):
+        """Sets region.
+
+        :param kwargs: Keyword arguments with g.region parameters
+        """
+        self.env["GRASS_REGION"] = region_env(**kwargs, env=self.env)
+
+    def __enter__(self):
+        """Sets the `GRASS_REGION` environment variable to the generated region name.
+
+        :return: Returns the RegionManagerEnv instance.
+        """
+        self._original_value = self.env.get("GRASS_REGION")
+        self.env["GRASS_REGION"] = region_env(**self._region_inputs, env=self.env)
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Restore the previous region state.
+
+        Restores the original value of `WIND_OVERRIDE`.
+
+        :param exc_type: Exception type, if any.
+        :param exc_val: Exception value, if any.
+        :param exc_tb: Traceback, if any.
+        """
+        if self._original_value is not None:
+            self.env["GRASS_REGION"] = self._original_value
+        else:
+            self.env.pop("GRASS_REGION", None)

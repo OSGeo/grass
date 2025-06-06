@@ -74,9 +74,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         """Get dataset name including semantic label filter if enabled.
 
         :param bool semantic_label: True to return dataset name
-        including semantic label filter if defined
-        (eg. "landsat.L8_1") otherwise dataset name is returned only
-        (eg. "landsat").
+          including semantic label filter if defined
+          (eg. "landsat.L8_1") otherwise dataset name is returned only
+          (eg. "landsat").
 
         :return str: dataset name
 
@@ -115,6 +115,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
     @abstractmethod
     def get_map_register(self):
         """Return the name of the map register table
+
         :return: The map register table name
         """
 
@@ -192,14 +193,14 @@ class AbstractSpaceTimeDataset(AbstractDataset):
     ) -> None:
         """Set the initial values of the space time dataset
 
-         In addition the command creation string is generated
-         an inserted into the metadata object.
+        In addition the command creation string is generated
+        an inserted into the metadata object.
 
-         This method only modifies this object and does not commit
-         the modifications to the temporal database.
+        This method only modifies this object and does not commit
+        the modifications to the temporal database.
 
-         The insert() function must be called to commit
-         this content into the temporal database.
+        The insert() function must be called to commit
+        this content into the temporal database.
 
         :param temporal_type: The temporal type of this space
                              time dataset (absolute or relative)
@@ -290,6 +291,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
     def get_semantic_type(self):
         """Return the semantic type of this dataset
+
         :return: The semantic type
         """
         return self.base.get_semantic_type()
@@ -677,6 +679,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                  located in the selection granule:
 
                  .. code-block:: output
+
                      map    :        s
                      granule:  s-----------------e
 
@@ -690,6 +693,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                  during the selection granule:
 
                  .. code-block:: output
+
                      map    :     s-----------e
                      granule:  s-----------------e
 
@@ -698,6 +702,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                  overlapped:
 
                  .. code-block:: output
+
                      map    :     s-----------e
                      granule:        s-----------------e
 
@@ -708,6 +713,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                  the selection granule:
 
                  .. code-block:: output
+
                      map    :  s-----------------e
                      granule:     s-----------e
 
@@ -715,6 +721,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                  to the selection granule:
 
                  .. code-block:: output
+
                      map    :  s-----------e
                      granule:  s-----------e
 
@@ -722,6 +729,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                  the selection granule:
 
                  .. code-block:: output
+
                      map    :              s-----------e
                      granule:  s-----------e
 
@@ -729,6 +737,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                  the selection granule:
 
                  .. code-block:: output
+
                      map    :  s-----------e
                      granule:              s-----------e
 
@@ -899,6 +908,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                  located in the selection granule:
 
                  .. code-block:: output
+
                      map    :        s
                      granule:  s-----------------e
 
@@ -912,6 +922,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                  during the selection granule:
 
                  .. code-block:: output
+
                      map    :     s-----------e
                      granule:  s-----------------e
 
@@ -920,6 +931,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                  overlapped:
 
                  .. code-block:: output
+
                      map    :     s-----------e
                      granule:        s-----------------e
 
@@ -930,6 +942,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                  the selection granule:
 
                  .. code-block:: output
+
                      map    :  s-----------------e
                      granule:     s-----------e
 
@@ -937,6 +950,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                  to the selection granule:
 
                  .. code-block:: output
+
                      map    :  s-----------e
                      granule:  s-----------e
 
@@ -944,6 +958,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                  the selection granule:
 
                  .. code-block:: output
+
                      map    :              s-----------e
                      granule:  s-----------e
 
@@ -951,6 +966,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                  the selection granule:
 
                  .. code-block:: output
+
                      map    :  s-----------e
                      granule:              s-----------e
 
@@ -1215,118 +1231,113 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         Usage:
 
-         .. code-block:: python
+        .. code-block:: pycon
 
-             >>> import grass.temporal as tgis
-             >>> maps = []
-             >>> for i in range(3):
-             ...     map = tgis.RasterDataset("map%i@PERMANENT" % i)
-             ...     check = map.set_relative_time(i + 2, i + 3, "days")
-             ...     maps.append(map)
-             ...
-             >>> grans = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity(
-             ...     maps, 0, 8, 1
-             ... )
-             >>> for map_list in grans:
-             ...     print(
-             ...         map_list[0].get_id(),
-             ...         map_list[0].get_temporal_extent_as_tuple(),
-             ...     )
-             ...
-             None (0, 1)
-             None (1, 2)
-             map0@PERMANENT (2, 3)
-             map1@PERMANENT (3, 4)
-             map2@PERMANENT (4, 5)
-             None (5, 6)
-             None (6, 7)
-             None (7, 8)
+            >>> import grass.temporal as tgis
+            >>> maps = []
+            >>> for i in range(3):
+            ...     map = tgis.RasterDataset("map%i@PERMANENT" % i)
+            ...     check = map.set_relative_time(i + 2, i + 3, "days")
+            ...     maps.append(map)
+            >>> grans = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity(
+            ...     maps, 0, 8, 1
+            ... )
+            >>> for map_list in grans:
+            ...     print(
+            ...         map_list[0].get_id(),
+            ...         map_list[0].get_temporal_extent_as_tuple(),
+            ...     )
+            None (0, 1)
+            None (1, 2)
+            map0@PERMANENT (2, 3)
+            map1@PERMANENT (3, 4)
+            map2@PERMANENT (4, 5)
+            None (5, 6)
+            None (6, 7)
+            None (7, 8)
 
-             >>> maps = []
-             >>> map1 = tgis.RasterDataset("map1@PERMANENT")
-             >>> check = map1.set_relative_time(2, 6, "days")
-             >>> maps.append(map1)
-             >>> map2 = tgis.RasterDataset("map2@PERMANENT")
-             >>> check = map2.set_relative_time(7, 13, "days")
-             >>> maps.append(map2)
-             >>> grans = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity(
-             ...     maps, 0, 16, 2
-             ... )
-             >>> for map_list in grans:
-             ...     print(
-             ...         map_list[0].get_id(),
-             ...         map_list[0].get_temporal_extent_as_tuple(),
-             ...     )
-             ...
-             None (0, 2)
-             map1@PERMANENT (2, 4)
-             map1@PERMANENT (4, 6)
-             map2@PERMANENT (6, 8)
-             map2@PERMANENT (8, 10)
-             map2@PERMANENT (10, 12)
-             map2@PERMANENT (12, 14)
-             None (14, 16)
+            >>> maps = []
+            >>> map1 = tgis.RasterDataset("map1@PERMANENT")
+            >>> check = map1.set_relative_time(2, 6, "days")
+            >>> maps.append(map1)
+            >>> map2 = tgis.RasterDataset("map2@PERMANENT")
+            >>> check = map2.set_relative_time(7, 13, "days")
+            >>> maps.append(map2)
+            >>> grans = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity(
+            ...     maps, 0, 16, 2
+            ... )
+            >>> for map_list in grans:
+            ...     print(
+            ...         map_list[0].get_id(),
+            ...         map_list[0].get_temporal_extent_as_tuple(),
+            ...     )
+            None (0, 2)
+            map1@PERMANENT (2, 4)
+            map1@PERMANENT (4, 6)
+            map2@PERMANENT (6, 8)
+            map2@PERMANENT (8, 10)
+            map2@PERMANENT (10, 12)
+            map2@PERMANENT (12, 14)
+            None (14, 16)
 
-             >>> maps = []
-             >>> map1 = tgis.RasterDataset("map1@PERMANENT")
-             >>> check = map1.set_relative_time(2, None, "days")
-             >>> maps.append(map1)
-             >>> map2 = tgis.RasterDataset("map2@PERMANENT")
-             >>> check = map2.set_relative_time(7, None, "days")
-             >>> maps.append(map2)
-             >>> grans = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity(
-             ...     maps, 0, 16, 2
-             ... )
-             >>> for map_list in grans:
-             ...     print(
-             ...         map_list[0].get_id(),
-             ...         map_list[0].get_temporal_extent_as_tuple(),
-             ...     )
-             ...
-             None (0, 2)
-             map1@PERMANENT (2, 4)
-             None (4, 6)
-             map2@PERMANENT (6, 8)
-             None (8, 10)
-             None (10, 12)
-             None (12, 14)
-             None (14, 16)
+            >>> maps = []
+            >>> map1 = tgis.RasterDataset("map1@PERMANENT")
+            >>> check = map1.set_relative_time(2, None, "days")
+            >>> maps.append(map1)
+            >>> map2 = tgis.RasterDataset("map2@PERMANENT")
+            >>> check = map2.set_relative_time(7, None, "days")
+            >>> maps.append(map2)
+            >>> grans = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity(
+            ...     maps, 0, 16, 2
+            ... )
+            >>> for map_list in grans:
+            ...     print(
+            ...         map_list[0].get_id(),
+            ...         map_list[0].get_temporal_extent_as_tuple(),
+            ...     )
+            None (0, 2)
+            map1@PERMANENT (2, 4)
+            None (4, 6)
+            map2@PERMANENT (6, 8)
+            None (8, 10)
+            None (10, 12)
+            None (12, 14)
+            None (14, 16)
 
-             >>> maps = []
-             >>> map1 = tgis.RasterDataset("map1@PERMANENT")
-             >>> check = map1.set_absolute_time(
-             ...     datetime(2000, 4, 1), datetime(2000, 6, 1)
-             ... )
-             >>> maps.append(map1)
-             >>> map2 = tgis.RasterDataset("map2@PERMANENT")
-             >>> check = map2.set_absolute_time(
-             ...     datetime(2000, 8, 1), datetime(2000, 12, 1)
-             ... )
-             >>> maps.append(map2)
-             >>> grans = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity(
-             ...     maps, datetime(2000, 1, 1), datetime(2001, 4, 1), "1 month"
-             ... )
-             >>> for map_list in grans:
-             ...     print(
-             ...         map_list[0].get_id(),
-             ...         map_list[0].get_temporal_extent_as_tuple(),
-             ...     )
-             ...
-             None (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2000, 2, 1, 0, 0))
-             None (datetime.datetime(2000, 2, 1, 0, 0), datetime.datetime(2000, 3, 1, 0, 0))
-             None (datetime.datetime(2000, 3, 1, 0, 0), datetime.datetime(2000, 4, 1, 0, 0))
-             map1@PERMANENT (datetime.datetime(2000, 4, 1, 0, 0), datetime.datetime(2000, 5, 1, 0, 0))
-             map1@PERMANENT (datetime.datetime(2000, 5, 1, 0, 0), datetime.datetime(2000, 6, 1, 0, 0))
-             None (datetime.datetime(2000, 6, 1, 0, 0), datetime.datetime(2000, 7, 1, 0, 0))
-             None (datetime.datetime(2000, 7, 1, 0, 0), datetime.datetime(2000, 8, 1, 0, 0))
-             map2@PERMANENT (datetime.datetime(2000, 8, 1, 0, 0), datetime.datetime(2000, 9, 1, 0, 0))
-             map2@PERMANENT (datetime.datetime(2000, 9, 1, 0, 0), datetime.datetime(2000, 10, 1, 0, 0))
-             map2@PERMANENT (datetime.datetime(2000, 10, 1, 0, 0), datetime.datetime(2000, 11, 1, 0, 0))
-             map2@PERMANENT (datetime.datetime(2000, 11, 1, 0, 0), datetime.datetime(2000, 12, 1, 0, 0))
-             None (datetime.datetime(2000, 12, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0))
-             None (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2001, 2, 1, 0, 0))
-             None (datetime.datetime(2001, 2, 1, 0, 0), datetime.datetime(2001, 3, 1, 0, 0))
-             None (datetime.datetime(2001, 3, 1, 0, 0), datetime.datetime(2001, 4, 1, 0, 0))
+            >>> maps = []
+            >>> map1 = tgis.RasterDataset("map1@PERMANENT")
+            >>> check = map1.set_absolute_time(
+            ...     datetime(2000, 4, 1), datetime(2000, 6, 1)
+            ... )
+            >>> maps.append(map1)
+            >>> map2 = tgis.RasterDataset("map2@PERMANENT")
+            >>> check = map2.set_absolute_time(
+            ...     datetime(2000, 8, 1), datetime(2000, 12, 1)
+            ... )
+            >>> maps.append(map2)
+            >>> grans = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity(
+            ...     maps, datetime(2000, 1, 1), datetime(2001, 4, 1), "1 month"
+            ... )
+            >>> for map_list in grans:
+            ...     print(
+            ...         map_list[0].get_id(),
+            ...         map_list[0].get_temporal_extent_as_tuple(),
+            ...     )
+            None (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2000, 2, 1, 0, 0))
+            None (datetime.datetime(2000, 2, 1, 0, 0), datetime.datetime(2000, 3, 1, 0, 0))
+            None (datetime.datetime(2000, 3, 1, 0, 0), datetime.datetime(2000, 4, 1, 0, 0))
+            map1@PERMANENT (datetime.datetime(2000, 4, 1, 0, 0), datetime.datetime(2000, 5, 1, 0, 0))
+            map1@PERMANENT (datetime.datetime(2000, 5, 1, 0, 0), datetime.datetime(2000, 6, 1, 0, 0))
+            None (datetime.datetime(2000, 6, 1, 0, 0), datetime.datetime(2000, 7, 1, 0, 0))
+            None (datetime.datetime(2000, 7, 1, 0, 0), datetime.datetime(2000, 8, 1, 0, 0))
+            map2@PERMANENT (datetime.datetime(2000, 8, 1, 0, 0), datetime.datetime(2000, 9, 1, 0, 0))
+            map2@PERMANENT (datetime.datetime(2000, 9, 1, 0, 0), datetime.datetime(2000, 10, 1, 0, 0))
+            map2@PERMANENT (datetime.datetime(2000, 10, 1, 0, 0), datetime.datetime(2000, 11, 1, 0, 0))
+            map2@PERMANENT (datetime.datetime(2000, 11, 1, 0, 0), datetime.datetime(2000, 12, 1, 0, 0))
+            None (datetime.datetime(2000, 12, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0))
+            None (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2001, 2, 1, 0, 0))
+            None (datetime.datetime(2001, 2, 1, 0, 0), datetime.datetime(2001, 3, 1, 0, 0))
+            None (datetime.datetime(2001, 3, 1, 0, 0), datetime.datetime(2001, 4, 1, 0, 0))
 
         """  # noqa: E501
 
@@ -1422,15 +1433,16 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         :param dbif: The database interface to be used
         :param spatial_extent: Spatial extent dict and projection information
             e.g. from g.region -ug3 with GRASS GIS region keys
-            "n", "s", "e", "w", "b", "t", and  "projection".
+            "n", "s", "e", "w", "b", "t", and "projection".
         :param spatial_relation: Spatial relation to the provided
             spatial extent as a string with one of the following values:
-            "overlaps": maps that spatially overlap ("intersect")
-                        within the provided spatial extent
-            "is_contained": maps that are fully within the provided spatial extent
-            "contains": maps that contain (fully cover) the provided spatial extent
 
-        :return: ordered object list, in case nothing found None is returned
+            - "overlaps": maps that spatially overlap ("intersect")
+              within the provided spatial extent
+            - "is_contained": maps that are fully within the provided spatial extent
+            - "contains": maps that contain (fully cover) the provided spatial extent
+
+        :return: Ordered object list, in case nothing found None is returned
         """
 
         dbif, connection_state_changed = init_dbif(dbif)
@@ -1500,10 +1512,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             "n", "s", "e", "w", "b", "t", and  "projection".
         :param spatial_relation: Spatial relation to the provided
             spatial extent as a string with one of the following values:
-            "overlaps": maps that spatially overlap ("intersect")
-                        within the provided spatial extent
-            "is_contained": maps that are fully within the provided spatial extent
-            "contains": maps that contain (fully cover) the provided spatial extent
+
+            - "overlaps": maps that spatially overlap ("intersect")
+              within the provided spatial extent
+            - "is_contained": maps that are fully within the provided spatial extent
+            - "contains": maps that contain (fully cover) the provided spatial extent
 
         :return: The ordered map object list,
                 In case nothing found None is returned
@@ -1551,15 +1564,16 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         :param dbif: The database interface to be used
         :param spatial_extent: Spatial extent dict and projection information
             e.g. from g.region -ug3 with GRASS GIS region keys
-            "n", "s", "e", "w", "b", "t", and  "projection".
+            "n", "s", "e", "w", "b", "t", and "projection".
         :param spatial_relation: Spatial relation to the provided
             spatial extent as a string with one of the following values:
-            "overlaps": maps that spatially overlap ("intersect")
-                        within the provided spatial extent
-            "is_contained": maps that are fully within the provided spatial extent
-            "contains": maps that contain (fully cover) the provided spatial extent
 
-        :return: The ordered map object list,
+            - "overlaps": maps that spatially overlap ("intersect")
+              within the provided spatial extent
+            - "is_contained": maps that are fully within the provided spatial extent
+            - "contains": maps that contain (fully cover) the provided spatial extent
+
+        :return: The ordered map object list.
                 In case nothing is found, an empty list is returned
         """
 
@@ -1715,21 +1729,23 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             e.g. from g.region -ug3
         :param str spatial_relation: Spatial relation to the provided
             spatial extent as a string with one of the following values:
-            "overlaps": maps that spatially overlap ("intersect")
-                        within the provided spatial extent
-            "is_contained": maps that are fully within the provided spatial extent
-            "contains": maps that contain (fully cover) the provided spatial extent
+
+            - "overlaps": maps that spatially overlap ("intersect")
+              within the provided spatial extent
+            - "is_contained": maps that are fully within the provided spatial extent
+            - "contains": maps that contain (fully cover) the provided spatial extent
 
         :return: updated SQL WHERE statement
 
-        .. code-block:: python
-             >>> import grass.script as gs
-             >>> where = None
-             >>> spatial_extent = gs.parse_command("g.region", flags="ug3")
-             >>> _update_where_statement_by_spatial_extent(
-             ...     where, spatial_extent, "overlaps"
-             ... )
-             ((north > 0 AND south < 1 AND east > 0 AND west < 1))
+        .. code-block:: pycon
+
+            >>> import grass.script as gs
+            >>> where = None
+            >>> spatial_extent = gs.parse_command("g.region", flags="ug3")
+            >>> _update_where_statement_by_spatial_extent(
+            ...     where, spatial_extent, "overlaps"
+            ... )
+            ((north > 0 AND south < 1 AND east > 0 AND west < 1))
         """
 
         # initialized WHERE statement
@@ -1817,7 +1833,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         function is useful to retrieve e.g. granules from an STRDS
         with satellite imagery where scene consists of different bands
         that have different semantic_labels but equal an temporal extend
-        (group=["strat_time", "end_time"]).
+        (group=["start_time", "end_time"]).
         The returned SQL rows of grouped output contain the selected
         columns plus the columns in the group option. If no columns
         are selected only the "id" column is returned. Content of the
@@ -1838,10 +1854,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             "n", "s", "e", "w", "b", "t", and  "projection".
         :param spatial_relation: Spatial relation to the provided
             spatial extent as a string with one of the following values:
-            "overlaps": maps that spatially overlap ("intersect")
-                        within the provided spatial extent
-            "is_contained": maps that are fully within the provided spatial extent
-            "contains": maps that contain (fully cover) the provided spatial extent
+
+            - "overlaps": maps that spatially overlap ("intersect")
+              within the provided spatial extent
+            - "is_contained": maps that are fully within the provided spatial extent
+            - "contains": maps that contain (fully cover) the provided spatial extent
         :param dbif: The database interface to be used
 
         :return: SQL rows of all registered maps grouped by the columns given in
@@ -1933,7 +1950,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         :return: The modified map list, None if nothing to shift or wrong
                 granularity
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> import grass.temporal as tgis
             >>> maps = []
@@ -1944,10 +1961,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             ...     else:
             ...         check = map.set_relative_time(i, None, "years")
             ...     maps.append(map)
-            ...
             >>> for map in maps:
             ...     map.temporal_extent.print_info()
-            ...
              +-------------------- Relative time -----------------------------------------+
              | Start time:................. 0
              | End time:................... 1
@@ -1971,7 +1986,6 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             >>> maps = tgis.AbstractSpaceTimeDataset.shift_map_list(maps, 5)
             >>> for map in maps:
             ...     map.temporal_extent.print_info()
-            ...
              +-------------------- Relative time -----------------------------------------+
              | Start time:................. 5
              | End time:................... 6
@@ -2088,7 +2102,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> import grass.temporal as tgis
             >>> maps = []
@@ -2099,10 +2113,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             ...     else:
             ...         check = map.set_relative_time(i, None, "years")
             ...     maps.append(map)
-            ...
             >>> for map in maps:
             ...     map.temporal_extent.print_info()
-            ...
              +-------------------- Relative time -----------------------------------------+
              | Start time:................. 0
              | End time:................... 1
@@ -2126,7 +2138,6 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             >>> maps = tgis.AbstractSpaceTimeDataset.snap_map_list(maps)
             >>> for map in maps:
             ...     map.temporal_extent.print_info()
-            ...
              +-------------------- Relative time -----------------------------------------+
              | Start time:................. 0
              | End time:................... 1
@@ -2489,13 +2500,13 @@ class AbstractSpaceTimeDataset(AbstractDataset):
     def register_map(self, map, dbif=None) -> bool:
         """Register a map in the space time dataset.
 
-         This method takes care of the registration of a map
-         in a space time dataset.
+        This method takes care of the registration of a map
+        in a space time dataset.
 
-         In case the map is already registered this function
-         will break with a warning and return False.
+        In case the map is already registered this function
+        will break with a warning and return False.
 
-         This method raises a FatalError exception in case of a fatal error
+        This method raises a FatalError exception in case of a fatal error
 
         :param map: The AbstractMapDataset object that should be registered
         :param dbif: The database interface to be used
