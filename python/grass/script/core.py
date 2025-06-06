@@ -731,8 +731,8 @@ def message(msg, flag=None, env=None):
     :param env: dictionary with system environment variables (`os.environ` by default)
     """
     try:
-        run_command("g.message", flags=flag, message=msg, errors="raise", env=env)
-    except (OSError, CalledModuleError) as error:
+        run_command("g.message", flags=flag, message=msg, errors="ignore", env=env)
+    except OSError as error:
         # Trying harder to show something, even when not adding the right message
         # prefix. This allows for showing the original message to the user even when
         # the tool cannot be found or errored for some reason.
