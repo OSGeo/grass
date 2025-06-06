@@ -13,7 +13,7 @@ import grass.benchmark as bm
 def main():
     results = []
     metrics = ["time", "speedup", "efficiency"]
-    mapsizes = [10e6, 20e6]
+    mapsizes = [10e6, 50e6, 100e6]
 
     # run benchmarks
 
@@ -21,7 +21,6 @@ def main():
         benchmark(
             size=int(mapsize**0.5),
             step=0,
-            label=f"r.mapcalc{int(mapsize / 1e6)}M",
             results=results,
         )
 
@@ -30,12 +29,13 @@ def main():
     for metric in metrics:
         bm.nprocs_plot(
             results,
+            filename=f"r_mapcalc_{metric}.svg",
             title=f"r.mapcalc {metric}",
             metric=metric,
         )
 
 
-def benchmark(size, step, label, results):
+def benchmark(size, step, results):
     map1 = "benchmark_r_mapcalc_map1"
     map2 = "benchmark_r_mapcalc_map2"
     output = "benchmark_r_mapcalc"
@@ -44,11 +44,46 @@ def benchmark(size, step, label, results):
     generate_map(rows=size, cols=size, fname=map2)
     module = Module(
         "r.mapcalc",
-        expression=f"{output}=({map1} + {map2} - 2*{map2} + {map1}*{map2} - {map1}/{map2})/2",
+        expression=f"{output}=({map1} + {map2})",
         overwrite=True,
     )
 
-    results.append(bm.benchmark_nprocs(module, label=label, max_nprocs=8, repeat=3))
+    results.append(
+        bm.benchmark_nprocs(
+            module,
+            label=f"r.mapcalc_simple_{int((size * size) / 1e6)}M",
+            max_nprocs=12,
+            repeat=5,
+        )
+    )
+
+    module = Module(
+        "r.mapcalc",
+        expression=f"{output}=({map1} + {map2} - 2*{map2} + {map1}*{map2} - {map1}/{map2})/2",
+        overwrite=True,
+    )
+    results.append(
+        bm.benchmark_nprocs(
+            module,
+            label=f"r.mapcalc_complex_{int((size * size) / 1e6)}M",
+            max_nprocs=12,
+            repeat=5,
+        )
+    )
+
+    module = Module(
+        "r.mapcalc",
+        expression=f"{output}= if (({map1}[5, 5] + {map2}[-5, -5]) > 0, 1.6, 0.1)",
+        overwrite=True,
+    )
+    results.append(
+        bm.benchmark_nprocs(
+            module,
+            label=f"r.mapcalc_neighbor_{int((size * size) / 1e6)}M",
+            max_nprocs=12,
+            repeat=5,
+        )
+    )
     Module(
         "g.remove", quiet=True, flags="f", type="raster", pattern="benchmark_r_mapcalc*"
     )
