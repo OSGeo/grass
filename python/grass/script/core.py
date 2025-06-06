@@ -1804,21 +1804,27 @@ def create_project(
     if not os.path.exists(mapset_path.directory):
         os.mkdir(mapset_path.directory)
 
-    # Lazy-importing to avoid circular dependencies.
-    # pylint: disable=import-outside-toplevel
-    if os.environ.get("GISBASE"):
-        env = os.environ
-    else:
-        from grass.script.setup import setup_runtime_env
+    env = None
+    tmp_gisrc = None
 
-        env = os.environ.copy()
-        setup_runtime_env(env=env)
+    def local_env():
+        """Create runtime environment and session"""
+        # Rather than simply caching, we use local variables to have an indicator of
+        # whether the session file has been created or not.
+        nonlocal env, tmp_gisrc
+        if not env:
+            # Lazy-importing to avoid circular dependencies.
+            # pylint: disable=import-outside-toplevel
+            from grass.script.setup import ensure_runtime_env
 
-    # Even g.proj and g.message need GISRC to be present.
-    # The names don't really matter here.
-    tmp_gisrc, env = create_environment(
-        mapset_path.directory, mapset_path.location, mapset_path.mapset, env=env
-    )
+            env = os.environ.copy()
+            ensure_runtime_env(env=env)
+            # Even g.proj and g.message need GISRC to be present.
+            # The specific names used don't really matter here.
+            tmp_gisrc, env = create_environment(
+                mapset_path.directory, mapset_path.location, mapset_path.mapset, env=env
+            )
+        return env
 
     # check if location already exists
     if Path(mapset_path.directory, mapset_path.location).exists():
@@ -1826,12 +1832,12 @@ def create_project(
             fatal(
                 _("Location <%s> already exists. Operation canceled.")
                 % mapset_path.location,
-                env=env,
+                env=local_env(),
             )
         warning(
             _("Location <%s> already exists and will be overwritten")
             % mapset_path.location,
-            env=env,
+            env=local_env(),
         )
         shutil.rmtree(os.path.join(mapset_path.directory, mapset_path.location))
 
@@ -1851,7 +1857,7 @@ def create_project(
             epsg=epsg,
             project=mapset_path.location,
             stderr=PIPE,
-            env=env,
+            env=local_env(),
             **kwargs,
         )
     elif proj4:
@@ -1862,7 +1868,7 @@ def create_project(
             proj4=proj4,
             project=mapset_path.location,
             stderr=PIPE,
-            env=env,
+            env=local_env(),
             **kwargs,
         )
     elif filename:
@@ -1872,7 +1878,7 @@ def create_project(
             georef=filename,
             project=mapset_path.location,
             stderr=PIPE,
-            env=env,
+            env=local_env(),
         )
     elif wkt:
         if os.path.isfile(wkt):
@@ -1882,7 +1888,7 @@ def create_project(
                 wkt=wkt,
                 project=mapset_path.location,
                 stderr=PIPE,
-                env=env,
+                env=local_env(),
             )
         else:
             ps = pipe_command(
@@ -1892,7 +1898,7 @@ def create_project(
                 project=mapset_path.location,
                 stderr=PIPE,
                 stdin=PIPE,
-                env=env,
+                env=local_env(),
             )
             stdin = encode(wkt)
     else:
@@ -1901,10 +1907,15 @@ def create_project(
     if ps is not None and (epsg or proj4 or filename or wkt):
         error = ps.communicate(stdin)[1]
         try_remove(tmp_gisrc)
+        tmp_gisrc = None
 
         if ps.returncode != 0 and error:
             raise ScriptError(repr(error))
 
+    # If a session was created for messages, but not used for subprocesses,
+    # we still need to clean it up.
+    if tmp_gisrc:
+        try_remove(tmp_gisrc)
     _set_location_description(mapset_path.directory, mapset_path.location, desc)
 
 
