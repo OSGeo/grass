@@ -99,10 +99,10 @@ int main(int argc, char *argv[])
     parm.format->required = NO;
     parm.format->label = _("Output format ('plain', 'json')");
     parm.format->description =
-        _("Deprecated parameter for default label or format string for dynamic "
-          "labeling. Used when no explicit label exists for the category."
-          "This behavior will be removed in a future release. Use parameter "
-          "label_format instead.");
+        _("When the value is not 'plain' or 'json', the value is used as a "
+          "default label or format string for dynamic labeling. "
+          "This usage is deprecated and will be removed in a future release. "
+          "Use parameter 'label_format' instead.");
     parm.format->guisection = _("Print");
 
     parm.fmt_str = G_define_option();
