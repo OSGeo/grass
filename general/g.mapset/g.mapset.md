@@ -6,6 +6,9 @@ as location), or GISDBASE (directory with one or more projects).
 With *g.mapset*, the shell history (i.e. `.bash_history` file of the
 initial project will be used to record the command history.
 
+The *g.mapset* tool can also report the current mapset and all mapsets in
+the current project.
+
 ## NOTES
 
 By default, the shell continues to use the history for the old mapset.
@@ -18,6 +21,10 @@ history -w
 history -r /"$GISDBASE/$LOCATION/$MAPSET"/.bash_history
 HISTFILE=/"$GISDBASE/$LOCATION/$MAPSET"/.bash_history
 ```
+
+For parsing the outputs, always use the JSON output. The current *plain* format
+may change in a future major release. Please, open an issue if you need a
+stable parsable format which is not JSON.
 
 ## EXAMPLES
 

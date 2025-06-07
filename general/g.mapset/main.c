@@ -68,8 +68,9 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("settings"));
-    module->label = _("Changes/reports current mapset.");
-    module->description = _("Optionally create new mapset or list available "
+    G_add_keyword(_("project"));
+    module->label = _("Changes or reports current mapset.");
+    module->description = _("Optionally, creates new mapset or lists available "
                             "mapsets in given project (location).");
 
     opt.mapset = G_define_standard_option(G_OPT_M_MAPSET);
