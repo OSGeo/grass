@@ -267,10 +267,10 @@ def make_command(
 
     :param str prog: GRASS module
     :param str flags: flags to be used (given as a string)
-    :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
-    :param bool quiet: True to run quietly (<tt>--q</tt>)
-    :param bool superquiet: True to run extra quietly (<tt>--qq</tt>)
-    :param bool verbose: True to run verbosely (<tt>--v</tt>)
+    :param bool overwrite: True to enable overwriting the output (``--o``)
+    :param bool quiet: True to run quietly (``--q``)
+    :param bool superquiet: True to run extra quietly (``--qq``)
+    :param bool verbose: True to run verbosely (``--v``)
     :param options: module's parameters
 
     :return: list of arguments
@@ -444,10 +444,10 @@ def start_command(
 
     :param str prog: GRASS module
     :param str flags: flags to be used (given as a string)
-    :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
-    :param bool quiet: True to run quietly (<tt>--q</tt>)
-    :param bool superquiet: True to run extra quietly (<tt>--qq</tt>)
-    :param bool verbose: True to run verbosely (<tt>--v</tt>)
+    :param bool overwrite: True to enable overwriting the output (``--o``)
+    :param bool quiet: True to run quietly (``--q``)
+    :param bool superquiet: True to run extra quietly (``--qq``)
+    :param bool verbose: True to run verbosely (``--v``)
     :param kwargs: module's parameters
 
     :return: Popen object
@@ -717,11 +717,12 @@ def exec_command(
 
     :param str prog: GRASS module
     :param str flags: flags to be used (given as a string)
-    :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
-    :param bool quiet: True to run quietly (<tt>--q</tt>)
-    :param bool superquiet: True to run quietly (<tt>--qq</tt>)
-    :param bool verbose: True to run verbosely (<tt>--v</tt>)
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param bool overwrite: True to enable overwriting the output (``--o``)
+    :param bool quiet: True to run quietly (``--q``)
+    :param bool superquiet: True to run quietly (``--qq``)
+    :param bool verbose: True to run verbosely (``--v``)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     :param list kwargs: module's parameters
 
     """

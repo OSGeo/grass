@@ -125,10 +125,10 @@ def mapcalc(
     """Interface to r.mapcalc.
 
     :param str exp: expression
-    :param bool quiet: True to run quietly (<tt>--q</tt>)
-    :param bool superquiet: True to run extra quietly (<tt>--qq</tt>)
-    :param bool verbose: True to run verbosely (<tt>--v</tt>)
-    :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
+    :param bool quiet: True to run quietly (``--q``)
+    :param bool superquiet: True to run extra quietly (``--qq``)
+    :param bool verbose: True to run verbosely (``--v``)
+    :param bool overwrite: True to enable overwriting the output (``--o``)
     :param seed: an integer used to seed the random-number generator for the
                  rand() function, or 'auto' to generate a random seed
     :param dict env: dictionary of environment variables for child process
@@ -187,10 +187,10 @@ def mapcalc_start(
     >>> run_command("g.remove", flags="f", type="raster", name=output)
 
     :param str exp: expression
-    :param bool quiet: True to run quietly (<tt>--q</tt>)
-    :param bool superquiet: True to run extra quietly (<tt>--qq</tt>)
-    :param bool verbose: True to run verbosely (<tt>--v</tt>)
-    :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
+    :param bool quiet: True to run quietly (``--q``)
+    :param bool superquiet: True to run extra quietly (``--qq``)
+    :param bool verbose: True to run verbosely (``--v``)
+    :param bool overwrite: True to enable overwriting the output (``--o``)
     :param seed: an integer used to seed the random-number generator for the
                  rand() function, or 'auto' to generate a random seed
     :param dict env: dictionary of environment variables for child process
