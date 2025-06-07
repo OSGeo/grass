@@ -84,16 +84,27 @@ void free_univar_stat_struct(univar_stat *stats)
 /* *************************************************************** */
 int print_stats(univar_stat *stats, enum OutputFormat format)
 {
-    JSON_Value *root_value, *zone_value;
-    JSON_Array *root_array;
-    JSON_Object *zone_object;
+    JSON_Value *root_value = NULL, *zone_value = NULL;
+    JSON_Array *root_array = NULL;
+    JSON_Object *zone_object = NULL;
 
-    if (format == JSON && zone_info.n_zones) {
-        root_value = json_value_init_array();
-        if (root_value == NULL) {
-            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+    if (format == JSON) {
+        if (zone_info.n_zones) {
+            root_value = json_value_init_array();
+            if (root_value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON array. Out of memory?"));
+            }
+            root_array = json_array(root_value);
         }
-        root_array = json_array(root_value);
+        else {
+            zone_value = json_value_init_object();
+            if (zone_value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON object. Out of memory?"));
+            }
+            zone_object = json_object(zone_value);
+        }
     }
 
     int z, n_zones = zone_info.n_zones;
@@ -145,7 +156,7 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
         }
 
         if (param.shell_style->answer || format == JSON) {
-            if (format == JSON) {
+            if (format == JSON && zone_info.n_zones) {
                 zone_value = json_value_init_object();
                 if (zone_value == NULL) {
                     G_fatal_error(
@@ -312,9 +323,10 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
                     break;
                 }
 
-                JSON_Value *percentiles_array_value, *percentile_value;
-                JSON_Array *percentiles_array;
-                JSON_Object *percentile_object;
+                JSON_Value *percentiles_array_value = NULL,
+                           *percentile_value = NULL;
+                JSON_Array *percentiles_array = NULL;
+                JSON_Object *percentile_object = NULL;
 
                 if (format == JSON) {
                     percentiles_array_value = json_value_init_array();
