@@ -8,13 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-04 10:56+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2025-06-05 14:39+0000\n"
+"Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
+"Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/"
+"grasswxpy/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: ../gui/wxpython/animation/controller.py:244
 #: ../gui/wxpython/animation/dialogs.py:858
@@ -24,8 +27,12 @@ msgstr "Maximalt antal animationer är %d."
 
 #: ../gui/wxpython/animation/controller.py:270
 #: ../gui/wxpython/animation/dialogs.py:911
-msgid "More animations are using one window. Please select different window for each animation."
-msgstr "Fler animationer använder samma fönster. Välj olika fönster för varje animation."
+msgid ""
+"More animations are using one window. Please select different window for "
+"each animation."
+msgstr ""
+"Fler animationer använder samma fönster. Välj olika fönster för varje "
+"animation."
 
 #: ../gui/wxpython/animation/controller.py:309
 #: ../gui/wxpython/animation/dialogs.py:755
@@ -202,6 +209,9 @@ msgstr "Välj 2D- eller 3D-vy"
 #: ../gui/wxpython/gui_core/gselect.py:1647
 #: ../gui/wxpython/gui_core/widgets.py:1437
 #: ../gui/wxpython/vnet/dialogs.py:1679
+#: ../gui/wxpython/gui_core/gselect.py:1619
+#: ../gui/wxpython/gui_core/gselect.py:1636
+#: ../gui/wxpython/gui_core/gselect.py:1637
 msgid "Name:"
 msgstr "Namn:"
 
@@ -261,7 +271,13 @@ msgstr "Välj arbetsytafil för att importera 3D-vyparametrar"
 #: ../gui/wxpython/modules/import_export.py:860
 #: ../gui/wxpython/nviz/tools.py:676 ../gui/wxpython/psmap/dialogs.py:2749
 #: ../gui/wxpython/psmap/dialogs.py:3055 ../gui/wxpython/psmap/dialogs.py:5796
-#: ../gui/wxpython/tplot/frame.py:376
+#: ../gui/wxpython/tplot/frame.py:376 ../gui/wxpython/gui_core/forms.py:2010
+#: ../gui/wxpython/gui_core/forms.py:2121
+#: ../gui/wxpython/gui_core/gselect.py:1235
+#: ../gui/wxpython/gui_core/gselect.py:1551
+#: ../gui/wxpython/gui_core/gselect.py:1568
+#: ../gui/wxpython/gui_core/gselect.py:1621
+#: ../gui/wxpython/gui_core/gselect.py:1656
 msgid "Browse"
 msgstr "Bläddra"
 
@@ -271,7 +287,7 @@ msgstr "Parameter för animering:"
 
 #: ../gui/wxpython/animation/dialogs.py:527
 msgid "Set spatial extent in 2D view"
-msgstr "Ställ in rumslig utsträckning i 2D-vy"
+msgstr "Ställ in spatial utsträckning i 2D-vy"
 
 #: ../gui/wxpython/animation/dialogs.py:531
 msgid "Use saved region:"
@@ -373,11 +389,14 @@ msgstr "Lägg till tidsstämpel"
 
 #: ../gui/wxpython/animation/dialogs.py:1049
 msgid "Add time stamp, image or text decoration by one of the buttons above."
-msgstr "Lägg till tidsstämpel, bild eller textdekoration med en av knapparna ovan."
+msgstr ""
+"Lägg till tidsstämpel, bild eller textdekoration med en av knapparna ovan."
 
 #: ../gui/wxpython/animation/dialogs.py:1052
 msgid "Add image or text decoration by one of the buttons above."
-msgstr "Lägg till bild- eller textdekoration genom att klicka på en av knapparna ovan."
+msgstr ""
+"Lägg till bild- eller textdekoration genom att klicka på en av knapparna "
+"ovan."
 
 #: ../gui/wxpython/animation/dialogs.py:1066
 msgid "Font settings:"
@@ -408,7 +427,9 @@ msgstr "Text:"
 
 #: ../gui/wxpython/animation/dialogs.py:1126
 msgid "Placement as percentage of screen coordinates (X: 0, Y: 0 is top left):"
-msgstr "Placering i procent av skärmkoordinaterna (X: 0, Y: 0 är längst upp till vänster):"
+msgstr ""
+"Placering i procent av skärmkoordinaterna (X: 0, Y: 0 är längst upp till "
+"vänster):"
 
 #: ../gui/wxpython/animation/dialogs.py:1142
 #: ../gui/wxpython/psmap/dialogs.py:320
@@ -455,6 +476,8 @@ msgstr "Filformat:"
 #: ../gui/wxpython/animation/dialogs.py:1194
 #: ../gui/wxpython/gui_core/gselect.py:1576
 #: ../gui/wxpython/gui_core/gselect.py:1664
+#: ../gui/wxpython/gui_core/gselect.py:1566
+#: ../gui/wxpython/gui_core/gselect.py:1654
 msgid "Directory:"
 msgstr "Directory:"
 
@@ -499,8 +522,12 @@ msgid "Additional options:"
 msgstr "Ytterligare alternativ:"
 
 #: ../gui/wxpython/animation/dialogs.py:1290
-msgid "Consider adding '-sameq' or '-qscale 1' if not satisfied with video quality. Options depend on ffmpeg version."
-msgstr "Överväg att lägga till \"-sameq\" eller \"-qscale 1\" om du inte är nöjd med videokvaliteten. Alternativen beror på ffmpeg-versionen."
+msgid ""
+"Consider adding '-sameq' or '-qscale 1' if not satisfied with video quality. "
+"Options depend on ffmpeg version."
+msgstr ""
+"Överväg att lägga till \"-sameq\" eller \"-qscale 1\" om du inte är nöjd med "
+"videokvaliteten. Alternativen beror på ffmpeg-versionen."
 
 #: ../gui/wxpython/animation/dialogs.py:1322
 #, python-format
@@ -553,7 +580,8 @@ msgstr "Exportfil saknas."
 #: ../gui/wxpython/animation/dialogs.py:1569
 #, python-brace-format
 msgid "Exported animation file <{file}> exists. Do you want to overwrite it?"
-msgstr "Den exporterade animationsfilen <{file}> finns. Vill du skriva över den?"
+msgstr ""
+"Den exporterade animationsfilen <{file}> finns. Vill du skriva över den?"
 
 #: ../gui/wxpython/animation/dialogs.py:1574
 #: ../gui/wxpython/datacatalog/tree.py:160 ../gui/wxpython/gcp/manager.py:1737
@@ -637,8 +665,12 @@ msgid "Absolute time format:"
 msgstr "Absolut tidsformat:"
 
 #: ../gui/wxpython/animation/dialogs.py:2004
-msgid "Click and then press key up or down to preview different date and time formats. Type custom format string."
-msgstr "Klicka och tryck sedan på tangenten upp eller ner för att förhandsgranska olika datum- och tidsformat. Skriv in en anpassad formatsträng."
+msgid ""
+"Click and then press key up or down to preview different date and time "
+"formats. Type custom format string."
+msgstr ""
+"Klicka och tryck sedan på tangenten upp eller ner för att förhandsgranska "
+"olika datum- och tidsformat. Skriv in en anpassad formatsträng."
 
 #: ../gui/wxpython/animation/dialogs.py:2022
 msgid "Learn more about formatting options"
@@ -649,8 +681,13 @@ msgid "Display instances with no data"
 msgstr "Visa instanser utan data"
 
 #: ../gui/wxpython/animation/dialogs.py:2039
-msgid "When animating instant-based data which have irregular timestamps you can display 'no data frame' (checked option) or keep last frame."
-msgstr "När du animerar ögonblicksbaserade data som har oregelbundna tidsstämplar kan du visa \"ingen dataram\" (markerat alternativ) eller behålla den senaste ramen."
+msgid ""
+"When animating instant-based data which have irregular timestamps you can "
+"display 'no data frame' (checked option) or keep last frame."
+msgstr ""
+"När du animerar ögonblicksbaserade data som har oregelbundna tidsstämplar "
+"kan du visa \"ingen dataram\" (markerat alternativ) eller behålla den "
+"senaste ramen."
 
 #: ../gui/wxpython/animation/dialogs.py:2070
 msgid "Invalid"
@@ -733,8 +770,12 @@ msgid "Directory {t} not removed."
 msgstr "Katalog {t} inte borttagen."
 
 #: ../gui/wxpython/animation/temporal_manager.py:109
-msgid "It is not allowed to display data with different temporal types (absolute and relative)."
-msgstr "Det är inte tillåtet att visa data med olika temporala typer (absolut och relativ)."
+msgid ""
+"It is not allowed to display data with different temporal types (absolute "
+"and relative)."
+msgstr ""
+"Det är inte tillåtet att visa data med olika temporala typer (absolut och "
+"relativ)."
 
 #: ../gui/wxpython/animation/temporal_manager.py:123
 #, python-format
@@ -742,8 +783,14 @@ msgid "It is not allowed to display data with different units (%s)."
 msgstr "Det är inte tillåtet att visa data med olika enheter (%s)."
 
 #: ../gui/wxpython/animation/temporal_manager.py:136
-msgid "You are going to display data with different temporal types of maps (interval and point). It is recommended to use data of one temporal type to avoid confusion."
-msgstr "Du kommer att visa data med olika temporala karttyper (intervall och punkt). Vi rekommenderar att du använder data av en enda tidstyp för att undvika förvirring."
+msgid ""
+"You are going to display data with different temporal types of maps "
+"(interval and point). It is recommended to use data of one temporal type to "
+"avoid confusion."
+msgstr ""
+"Du kommer att visa data med olika temporala karttyper (intervall och punkt). "
+"Vi rekommenderar att du använder data av en enda tidstyp för att undvika "
+"förvirring."
 
 #: ../gui/wxpython/animation/temporal_manager.py:249
 #: ../gui/wxpython/animation/utils.py:72 ../gui/wxpython/animation/utils.py:80
@@ -809,24 +856,35 @@ msgid "The number of maps in space-time datasets has to be the same."
 msgstr "Antalet kartor i rum-tid-dataset måste vara detsamma."
 
 #: ../gui/wxpython/animation/utils.py:193
-msgid "The temporal type (absolute/relative) of space-time datasets has to be the same."
-msgstr "Den temporala typen (absolut/relativ) av rumtidsdataset måste vara densamma."
+msgid ""
+"The temporal type (absolute/relative) of space-time datasets has to be the "
+"same."
+msgstr ""
+"Den temporala typen (absolut/relativ) av rumtidsdataset måste vara densamma."
 
 #: ../gui/wxpython/animation/utils.py:201
-msgid "The map type (point/interval) of space-time datasets has to be the same."
+msgid ""
+"The map type (point/interval) of space-time datasets has to be the same."
 msgstr "Karttypen (punkt/intervall) för rum-tid-dataset måste vara densamma."
 
 #: ../gui/wxpython/animation/utils.py:209
-msgid "The temporal extents of maps in space-time datasets have to be the same."
-msgstr "Den tidsmässiga omfattningen av kartor i rumtidsdataset måste vara densamma."
+msgid ""
+"The temporal extents of maps in space-time datasets have to be the same."
+msgstr ""
+"Den tidsmässiga omfattningen av kartor i rumtidsdataset måste vara densamma."
 
 #: ../gui/wxpython/animation/utils.py:219
 msgid "The number of maps to animate has to be the same for each map series."
-msgstr "Antalet kartor som ska animeras måste vara detsamma för varje kartserie."
+msgstr ""
+"Antalet kartor som ska animeras måste vara detsamma för varje kartserie."
 
 #: ../gui/wxpython/animation/utils.py:227
-msgid "The number of maps to animate has to be the same as the number of maps in temporal dataset."
-msgstr "Antalet kartor som ska animeras måste vara detsamma som antalet kartor i temporal dataset."
+msgid ""
+"The number of maps to animate has to be the same as the number of maps in "
+"temporal dataset."
+msgstr ""
+"Antalet kartor som ska animeras måste vara detsamma som antalet kartor i "
+"temporal dataset."
 
 #: ../gui/wxpython/core/debug.py:46
 #, python-brace-format
@@ -835,8 +893,11 @@ msgstr "Wx felsökningsnivå {0}."
 
 #: ../gui/wxpython/core/debug.py:51
 #, python-brace-format
-msgid "WARNING: Ignoring unsupported wx debug level (must be >=0 and <=5). {0}\n"
-msgstr "VARNING: Ignorerar icke-stödd wx-felsökningsnivå (måste vara >=0 och <=5). {0}\n"
+msgid ""
+"WARNING: Ignoring unsupported wx debug level (must be >=0 and <=5). {0}\n"
+msgstr ""
+"VARNING: Ignorerar icke-stödd wx-felsökningsnivå (måste vara >=0 och <=5). "
+"{0}\n"
 
 #: ../gui/wxpython/core/gcmd.py:123 ../gui/wxpython/core/workspace.py:1742
 #: ../gui/wxpython/gmodeler/panels.py:690
@@ -899,6 +960,7 @@ msgid "Unable to execute command: '%s'"
 msgstr "Det gick inte att utföra kommandot: '%s'"
 
 #: ../gui/wxpython/core/gcmd.py:778 ../gui/wxpython/gui_core/forms.py:2991
+#: ../gui/wxpython/gui_core/forms.py:2992
 #, python-format
 msgid "Error in %s"
 msgstr "Fel i %s"
@@ -940,8 +1002,10 @@ msgid "unknown"
 msgstr "okänd"
 
 #: ../gui/wxpython/core/gconsole.py:771
-msgid "Please note that the data are left in inconsistent state and may be corrupted"
-msgstr "Observera att data lämnas i inkonsekvent tillstånd och kan vara skadade"
+msgid ""
+"Please note that the data are left in inconsistent state and may be corrupted"
+msgstr ""
+"Observera att data lämnas i inkonsekvent tillstånd och kan vara skadade"
 
 #: ../gui/wxpython/core/gconsole.py:775
 msgid "Command aborted"
@@ -1009,7 +1073,9 @@ msgstr "Försöker återhämta sig från standardregionen..."
 #: ../gui/wxpython/core/render.py:851
 #, python-format
 msgid "GRASS tool '%s' not found. Unable to start map display window."
-msgstr "GRASS-verktyget '%s' hittades inte. Det går inte att starta kartvisningsfönstret."
+msgstr ""
+"GRASS-verktyget '%s' hittades inte. Det går inte att starta "
+"kartvisningsfönstret."
 
 #: ../gui/wxpython/core/render.py:890
 #, python-format
@@ -1023,7 +1089,9 @@ msgstr ""
 #: ../gui/wxpython/core/render.py:897
 #, python-format
 msgid "Error: Unable to open '%(file)s'. Reason: %(ret)s. wxGUI exited.\n"
-msgstr "Felmeddelande: Det gick inte att öppna '%(file)s'. Orsak: %(ret)s. wxGUI avslutades.\n"
+msgstr ""
+"Felmeddelande: Det gick inte att öppna '%(file)s'. Orsak: %(ret)s. wxGUI "
+"avslutades.\n"
 
 #: ../gui/wxpython/core/render.py:1089
 #, python-format
@@ -1041,8 +1109,12 @@ msgid "Unable to zoom to 3d raster map <%s>."
 msgstr "Det går inte att zooma till 3d-rasterkarta <%s>."
 
 #: ../gui/wxpython/core/render.py:1110
-msgid "Unable to get current geographic extent. Force quitting wxGUI. Please manually run g.region to fix the problem."
-msgstr "Det går inte att få aktuell geografisk utsträckning. Tvinga fram avslutning av wxGUI. Kör g.region manuellt för att åtgärda problemet."
+msgid ""
+"Unable to get current geographic extent. Force quitting wxGUI. Please "
+"manually run g.region to fix the problem."
+msgstr ""
+"Det går inte att få aktuell geografisk utsträckning. Tvinga fram avslutning "
+"av wxGUI. Kör g.region manuellt för att åtgärda problemet."
 
 #: ../gui/wxpython/core/settings.py:439
 msgid "Segment break"
@@ -1193,7 +1265,8 @@ msgid ""
 "\t\tDetails: %(detail)s\n"
 "\t\tLine: '%(line)s'\n"
 msgstr ""
-"Fel vid läsning: Läsning av inställningar från filen <%(file)s> misslyckades.\n"
+"Fel vid läsning: Läsning av inställningar från filen <%(file)s> "
+"misslyckades.\n"
 "\t\tDetaljerad information: %(detail)s\n"
 "\t\tRad: '%(line)s'\n"
 
@@ -1223,7 +1296,9 @@ msgstr "Det gick inte att tolka inställningarna '%s'"
 
 #: ../gui/wxpython/core/toolboxes.py:197
 msgid "Unable to parse user toolboxes XML files. Default files will be loaded."
-msgstr "XML-filer för användarens verktygslådor kan inte tolkas. Standardfiler kommer att läsas in."
+msgstr ""
+"XML-filer för användarens verktygslådor kan inte tolkas. Standardfiler "
+"kommer att läsas in."
 
 #: ../gui/wxpython/core/toolboxes.py:240
 msgid "Unable to create toolboxes directory."
@@ -1235,8 +1310,11 @@ msgstr "Anpassade verktygslådor"
 
 #: ../gui/wxpython/core/toolboxes.py:485
 #, python-format
-msgid "List of addons cannot be obtained because g.extension failed. Details: %s"
-msgstr "Lista över tillägg kan inte erhållas eftersom g.extension misslyckades. Detaljerad information: %s"
+msgid ""
+"List of addons cannot be obtained because g.extension failed. Details: %s"
+msgstr ""
+"Lista över tillägg kan inte erhållas eftersom g.extension misslyckades. "
+"Detaljerad information: %s"
 
 #: ../gui/wxpython/core/toolboxes.py:545
 msgid "Addons"
@@ -1321,6 +1399,7 @@ msgid "Unable to create file '{name}': {error}\n"
 msgstr "Det går inte att skapa filen '{name}': {error}\n"
 
 #: ../gui/wxpython/core/utils.py:945 ../gui/wxpython/gui_core/forms.py:1917
+#: ../gui/wxpython/gui_core/forms.py:1918
 msgid "Select Color"
 msgstr "Välj färg"
 
@@ -1465,13 +1544,22 @@ msgstr "Läs mer"
 #: ../gui/wxpython/datacatalog/infomanager.py:40
 #, python-brace-format
 msgid ""
-"GRASS GIS helps you organize your data using projects (locations) which contain mapsets (subprojects). All data in one project is in the same coordinate reference system (CRS).\n"
+"GRASS GIS helps you organize your data using projects (locations) which "
+"contain mapsets (subprojects). All data in one project is in the same "
+"coordinate reference system (CRS).\n"
 "\n"
-"You are currently in mapset PERMANENT in default project {loc} which uses WGS 84 (EPSG:4326). Consider creating a new project with a CRS specific to your area. You can do it now or anytime later from the toolbar above."
+"You are currently in mapset PERMANENT in default project {loc} which uses "
+"WGS 84 (EPSG:4326). Consider creating a new project with a CRS specific to "
+"your area. You can do it now or anytime later from the toolbar above."
 msgstr ""
-"GRASS GIS hjälper dig att organisera dina data med hjälp av projekt (platser) som innehåller kartuppsättningar (underprojekt). Alla data i ett projekt är i samma koordinatreferenssystem (CRS).\n"
+"GRASS GIS hjälper dig att organisera dina data med hjälp av projekt "
+"(platser) som innehåller kartuppsättningar (underprojekt). Alla data i ett "
+"projekt är i samma koordinatreferenssystem (CRS).\n"
 "\n"
-"Du befinner dig för närvarande i kartuppsättningen PERMANENT i standardprojektet {loc} som använder WGS 84 (EPSG:4326). Överväg att skapa ett nytt projekt med ett CRS som är specifikt för ditt område. Du kan göra det nu eller när som helst senare från verktygsfältet ovan."
+"Du befinner dig för närvarande i kartuppsättningen PERMANENT i "
+"standardprojektet {loc} som använder WGS 84 (EPSG:4326). Överväg att skapa "
+"ett nytt projekt med ett CRS som är specifikt för ditt område. Du kan göra "
+"det nu eller när som helst senare från verktygsfältet ovan."
 
 #: ../gui/wxpython/datacatalog/infomanager.py:54
 #: ../gui/wxpython/modules/import_export.py:600
@@ -1486,17 +1574,32 @@ msgstr "Importera rasterdata"
 #: ../gui/wxpython/datacatalog/infomanager.py:58
 #, python-brace-format
 msgid ""
-"You have successfully created a new project {loc}. Currently you are in its PERMANENT mapset which is used for storing your base maps to make them readily available in other mapsets. You can create new mapsets for different tasks by right clicking on the project name.\n"
+"You have successfully created a new project {loc}. Currently you are in its "
+"PERMANENT mapset which is used for storing your base maps to make them "
+"readily available in other mapsets. You can create new mapsets for different "
+"tasks by right clicking on the project name.\n"
 "\n"
 "To import data, go to the toolbar above or use the buttons below."
 msgstr ""
-"Du har framgångsrikt skapat ett nytt projekt {loc}. För närvarande befinner du dig i dess PERMANENT-kartuppsättning som används för att lagra dina baskartor för att göra dem lättillgängliga i andra kartuppsättningar. Du kan skapa nya kartuppsättningar för olika uppgifter genom att högerklicka på projektnamnet.\n"
+"Du har framgångsrikt skapat ett nytt projekt {loc}. För närvarande befinner "
+"du dig i dess PERMANENT-kartuppsättning som används för att lagra dina "
+"baskartor för att göra dem lättillgängliga i andra kartuppsättningar. Du kan "
+"skapa nya kartuppsättningar för olika uppgifter genom att högerklicka på "
+"projektnamnet.\n"
 "\n"
-"För att importera data, gå till verktygsfältet ovan eller använd knapparna nedan."
+"För att importera data, gå till verktygsfältet ovan eller använd knapparna "
+"nedan."
 
 #: ../gui/wxpython/datacatalog/infomanager.py:70
-msgid "Loading of Data catalog content took rather long. To prevent delay, you can enable loading of current mapset only. You can change that later in GUI Settings, General tab."
-msgstr "Inläsningen av innehållet i datakatalogen tog ganska lång tid. För att förhindra fördröjning kan du aktivera inläsning av endast aktuell kartuppsättning. Du kan ändra detta senare i GUI-inställningar, fliken Allmänt."
+msgid ""
+"Loading of Data catalog content took rather long. To prevent delay, you can "
+"enable loading of current mapset only. You can change that later in GUI "
+"Settings, General tab."
+msgstr ""
+"Inläsningen av innehållet i datakatalogen tog ganska lång tid. För att "
+"förhindra fördröjning kan du aktivera inläsning av endast aktuell "
+"kartuppsättning. Du kan ändra detta senare i GUI-inställningar, fliken "
+"Allmänt."
 
 #: ../gui/wxpython/datacatalog/infomanager.py:75
 msgid "Enable loading current mapset only"
@@ -1508,8 +1611,12 @@ msgstr "Ingen förändring, fråga mig inte igen"
 
 #: ../gui/wxpython/datacatalog/infomanager.py:84
 #, python-brace-format
-msgid "{string} GRASS GIS has started in a temporary project. To continue, use Data Catalog below to switch to a different project."
-msgstr "{string} GRASS GIS har startat i ett tillfälligt projekt. För att fortsätta, använd Datakatalogen nedan för att byta till ett annat projekt."
+msgid ""
+"{string} GRASS GIS has started in a temporary project. To continue, use Data "
+"Catalog below to switch to a different project."
+msgstr ""
+"{string} GRASS GIS har startat i ett tillfälligt projekt. För att fortsätta, "
+"använd Datakatalogen nedan för att byta till ett annat projekt."
 
 #: ../gui/wxpython/datacatalog/infomanager.py:94
 msgid "Switch to last used mapset"
@@ -1517,8 +1624,16 @@ msgstr "Byt till senast använda mapset"
 
 #: ../gui/wxpython/datacatalog/infomanager.py:96
 #, python-brace-format
-msgid "Last used mapset in path '{mapsetpath}' is currently in use. GRASS GIS has started in a temporary project. To continue, use Data Catalog below to switch to a different project or remove lock file and switch to the last used mapset."
-msgstr "Senast använda kartset i sökvägen '{mapsetpath}' används för närvarande. GRASS GIS har startat i ett tillfälligt projekt. För att fortsätta, använd datakatalogen nedan för att byta till ett annat projekt eller ta bort låsfilen och byt till den senast använda kartuppsättningen."
+msgid ""
+"Last used mapset in path '{mapsetpath}' is currently in use. GRASS GIS has "
+"started in a temporary project. To continue, use Data Catalog below to "
+"switch to a different project or remove lock file and switch to the last "
+"used mapset."
+msgstr ""
+"Senast använda kartset i sökvägen '{mapsetpath}' används för närvarande. "
+"GRASS GIS har startat i ett tillfälligt projekt. För att fortsätta, använd "
+"datakatalogen nedan för att byta till ett annat projekt eller ta bort "
+"låsfilen och byt till den senast använda kartuppsättningen."
 
 #: ../gui/wxpython/datacatalog/infomanager.py:109
 #, python-brace-format
@@ -1533,7 +1648,8 @@ msgstr "Senast använda mapset i sökväg '{mapsetpath}' är ogiltigt."
 #: ../gui/wxpython/datacatalog/infomanager.py:118
 #, python-brace-format
 msgid "Last used mapset in path '{mapsetpath}' has different owner {owner}."
-msgstr "Senast använda kartset i sökväg '{mapsetpath}' har annan ägare {owner}."
+msgstr ""
+"Senast använda kartset i sökväg '{mapsetpath}' har annan ägare {owner}."
 
 #: ../gui/wxpython/datacatalog/toolbars.py:23
 msgid "Reload GRASS projects"
@@ -1586,8 +1702,12 @@ msgid "Search"
 msgstr "Sök"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:80
-msgid "Type to search database by map type or name. Use Python regular expressions to refine your search."
-msgstr "Typ för att söka i databasen efter karttyp eller namn. Använd Pythons reguljära uttryck för att förfina din sökning."
+msgid ""
+"Type to search database by map type or name. Use Python regular expressions "
+"to refine your search."
+msgstr ""
+"Typ för att söka i databasen efter karttyp eller namn. Använd Pythons "
+"reguljära uttryck för att förfina din sökning."
 
 #: ../gui/wxpython/datacatalog/tree.py:96
 #, python-brace-format
@@ -1601,8 +1721,12 @@ msgstr "Misslyckades med att läsa kartor från projekt <{l}>."
 
 #: ../gui/wxpython/datacatalog/tree.py:157
 #, python-brace-format
-msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
-msgstr "Karta av typ {elem} <{name}> finns redan i mapset <{mapset}>. Vill du skriva över den?"
+msgid ""
+"Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want "
+"to overwrite it?"
+msgstr ""
+"Karta av typ {elem} <{name}> finns redan i mapset <{mapset}>. Vill du skriva "
+"över den?"
 
 #: ../gui/wxpython/datacatalog/tree.py:184
 msgid "name unknown"
@@ -1636,11 +1760,15 @@ msgstr "{name}"
 #: ../gui/wxpython/datacatalog/tree.py:874
 #, python-brace-format
 msgid ""
-"Map <{map_name}@{map_mapset}> is not in the current project. To be able to display it you need to switch to <{map_location}> project. Note that if you switch there all current Map Displays will be closed.\n"
+"Map <{map_name}@{map_mapset}> is not in the current project. To be able to "
+"display it you need to switch to <{map_location}> project. Note that if you "
+"switch there all current Map Displays will be closed.\n"
 "\n"
 "Do you want to switch anyway?"
 msgstr ""
-"Karta <{map_name}@{map_mapset}> finns inte i det aktuella projektet. För att kunna visa den måste du växla till <{map_location}>-projektet. Observera att om du växlar dit kommer alla aktuella kartvisningar att stängas.\n"
+"Karta <{map_name}@{map_mapset}> finns inte i det aktuella projektet. För att "
+"kunna visa den måste du växla till <{map_location}>-projektet. Observera att "
+"om du växlar dit kommer alla aktuella kartvisningar att stängas.\n"
 "\n"
 "Vill du byta ändå?"
 
@@ -1773,11 +1901,17 @@ msgstr "Radera {name}..."
 
 #: ../gui/wxpython/datacatalog/tree.py:1720
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
-msgstr "För att flytta eller kopiera kartor till andra kartuppsättningar, låsa upp redigering av andra kartuppsättningar"
+msgstr ""
+"För att flytta eller kopiera kartor till andra kartuppsättningar, låsa upp "
+"redigering av andra kartuppsättningar"
 
 #: ../gui/wxpython/datacatalog/tree.py:1734
-msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
-msgstr "Om du vill flytta eller kopiera kartor till ett annat projekt drar du dem till ett mapset i destinationsprojektet"
+msgid ""
+"To move or copy maps to other project, please drag them to a mapset in the "
+"destination project"
+msgstr ""
+"Om du vill flytta eller kopiera kartor till ett annat projekt drar du dem "
+"till ett mapset i destinationsprojektet"
 
 #: ../gui/wxpython/datacatalog/tree.py:2061
 msgid "&Cut"
@@ -1889,12 +2023,16 @@ msgstr "Inga tillgängliga alternativ"
 
 #: ../gui/wxpython/dbmgr/base.py:176 ../gui/wxpython/iscatt/controllers.py:146
 msgid "Loading data..."
-msgstr "Läser in data …"
+msgstr "Laddar data …"
 
 #: ../gui/wxpython/dbmgr/base.py:185
 #, python-format
-msgid "Attribute table <%s> not found. For creating the table switch to 'Manage layers' tab."
-msgstr "Attributtabell <%s> hittades inte. För att skapa tabellen växlar du till fliken \"Hantera lager\"."
+msgid ""
+"Attribute table <%s> not found. For creating the table switch to 'Manage "
+"layers' tab."
+msgstr ""
+"Attributtabell <%s> hittades inte. För att skapa tabellen växlar du till "
+"fliken \"Hantera lager\"."
 
 #: ../gui/wxpython/dbmgr/base.py:201
 #, python-format
@@ -1907,13 +2045,25 @@ msgstr "Kan endast visa 256 kolumner."
 
 #: ../gui/wxpython/dbmgr/base.py:316
 #, python-brace-format
-msgid "Incorrect encoding {enc} used. Set encoding in GUI Settings or set GRASS_DB_ENCODING variable."
-msgstr "Felaktig kodning {enc} användes. Ställ in kodning i GUI-inställningarna eller ställ in variabeln GRASS_DB_ENCODING."
+msgid ""
+"Incorrect encoding {enc} used. Set encoding in GUI Settings or set "
+"GRASS_DB_ENCODING variable."
+msgstr ""
+"Felaktig kodning {enc} användes. Ställ in kodning i GUI-inställningarna "
+"eller ställ in variabeln GRASS_DB_ENCODING."
 
 #: ../gui/wxpython/dbmgr/base.py:336
 #, python-brace-format
-msgid "Unable to read the table <{table}> from the database due to seemingly inconsistent number of columns in the data transfer. Check row: {row}... Likely, a newline character is present in the attribute value starting with: '{value}' Use the v.db.select module to investigate."
-msgstr "Det går inte att läsa tabellen <{table}> från databasen på grund av ett till synes inkonsekvent antal kolumner i dataöverföringen. Kontrollera rad: {row}... Det är troligt att det finns ett tecken för ny rad i attributvärdet som börjar med: '{value}' Använd modulen v.db.select för att undersöka detta."
+msgid ""
+"Unable to read the table <{table}> from the database due to seemingly "
+"inconsistent number of columns in the data transfer. Check row: {row}... "
+"Likely, a newline character is present in the attribute value starting with: "
+"'{value}' Use the v.db.select module to investigate."
+msgstr ""
+"Det går inte att läsa tabellen <{table}> från databasen på grund av ett till "
+"synes inkonsekvent antal kolumner i dataöverföringen. Kontrollera rad: "
+"{row}... Det är troligt att det finns ett tecken för ny rad i attributvärdet "
+"som börjar med: '{value}' Använd modulen v.db.select för att undersöka detta."
 
 #: ../gui/wxpython/dbmgr/base.py:352
 msgid "Viewing limit: 100000 records."
@@ -1932,16 +2082,20 @@ msgstr "Okänt värde"
 
 #: ../gui/wxpython/dbmgr/base.py:406
 msgid "Unable to decode value. Set encoding in GUI preferences ('Attributes')."
-msgstr "Det går inte att avkoda värdet. Ange kodning i GUI-inställningarna ('Attribut')."
+msgstr ""
+"Det går inte att avkoda värdet. Ange kodning i GUI-inställningarna "
+"('Attribut')."
 
 #: ../gui/wxpython/dbmgr/base.py:419
 #, python-format
 msgid ""
-"Error loading attribute data. Record number: %(rec)d. Unable to convert value '%(val)s' in key column (%(key)s) to integer.\n"
+"Error loading attribute data. Record number: %(rec)d. Unable to convert "
+"value '%(val)s' in key column (%(key)s) to integer.\n"
 "\n"
 "Details: %(detail)s"
 msgstr ""
-"Fel vid inläsning av attributdata. Postnummer: %(rec)d. Det gick inte att konvertera värdet '%(val)s' i nyckelkolumnen (%(key)s) till heltal.\n"
+"Fel vid inläsning av attributdata. Postnummer: %(rec)d. Det gick inte att "
+"konvertera värdet '%(val)s' i nyckelkolumnen (%(key)s) till heltal.\n"
 "\n"
 "Detaljerad information: %(detail)s"
 
@@ -2013,7 +2167,9 @@ msgstr "Lägg till kolumn i tabellen <%s>"
 
 #: ../gui/wxpython/dbmgr/base.py:1062
 msgid "Unable to add column to the table. No column name defined."
-msgstr "Det går inte att lägga till en kolumn i tabellen. Inget kolumnnamn definierat."
+msgstr ""
+"Det går inte att lägga till en kolumn i tabellen. Inget kolumnnamn "
+"definierat."
 
 #: ../gui/wxpython/dbmgr/base.py:1076
 #, python-format
@@ -2152,8 +2308,12 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/base.py:1749
 #, python-format
-msgid "Selected data records (%d) will be permanently deleted from table. Do you want to delete them?"
-msgstr "Valda dataposter (%d) kommer att raderas permanent från tabellen. Vill du radera dem?"
+msgid ""
+"Selected data records (%d) will be permanently deleted from table. Do you "
+"want to delete them?"
+msgstr ""
+"Valda dataposter (%d) kommer att raderas permanent från tabellen. Vill du "
+"radera dem?"
 
 #: ../gui/wxpython/dbmgr/base.py:1753 ../gui/wxpython/dbmgr/base.py:1803
 msgid "Delete records"
@@ -2161,8 +2321,12 @@ msgstr "Radera poster"
 
 #: ../gui/wxpython/dbmgr/base.py:1799
 #, python-format
-msgid "All data records (%d) will be permanently deleted from table. Do you want to delete them?"
-msgstr "Alla dataposter (%d) kommer att raderas permanent från tabellen. Vill du radera dem?"
+msgid ""
+"All data records (%d) will be permanently deleted from table. Do you want to "
+"delete them?"
+msgstr ""
+"Alla dataposter (%d) kommer att raderas permanent från tabellen. Vill du "
+"radera dem?"
 
 #: ../gui/wxpython/dbmgr/base.py:1992
 msgid "Nothing to extract."
@@ -2233,13 +2397,21 @@ msgstr "Det går inte att byta namn på kolumnen. Inget kolumnnamn definierat."
 
 #: ../gui/wxpython/dbmgr/base.py:2597
 #, python-format
-msgid "Unable to rename column <%(column)s> to <%(columnTo)s>. Column already exists in the table <%(table)s>."
-msgstr "Det går inte att byta namn på kolumn <%(column)s> till <%(columnTo)s>. Kolumnen finns redan i tabellen <%(table)s>."
+msgid ""
+"Unable to rename column <%(column)s> to <%(columnTo)s>. Column already "
+"exists in the table <%(table)s>."
+msgstr ""
+"Det går inte att byta namn på kolumn <%(column)s> till <%(columnTo)s>. "
+"Kolumnen finns redan i tabellen <%(table)s>."
 
 #: ../gui/wxpython/dbmgr/base.py:2620
 #, python-format
-msgid "Unable to rename column. Column <%(column)s> doesn't exist in the table <%(table)s>."
-msgstr "Det går inte att byta namn på kolumnen. Kolumn <%(column)s> finns inte i tabellen <%(table)s>."
+msgid ""
+"Unable to rename column. Column <%(column)s> doesn't exist in the table "
+"<%(table)s>."
+msgstr ""
+"Det går inte att byta namn på kolumnen. Kolumn <%(column)s> finns inte i "
+"tabellen <%(table)s>."
 
 #: ../gui/wxpython/dbmgr/base.py:2652
 msgid "Drop selected column"
@@ -2251,8 +2423,12 @@ msgstr "Släpp alla kolumner"
 
 #: ../gui/wxpython/dbmgr/base.py:2690
 #, python-format
-msgid "Selected %s will PERMANENTLY removed from table. Do you want to drop the column?"
-msgstr "Vald %s kommer PERMANENT att tas bort från tabellen. Vill du ta bort kolumnen?"
+msgid ""
+"Selected %s will PERMANENTLY removed from table. Do you want to drop the "
+"column?"
+msgstr ""
+"Vald %s kommer PERMANENT att tas bort från tabellen. Vill du ta bort "
+"kolumnen?"
 
 #: ../gui/wxpython/dbmgr/base.py:2694 ../gui/wxpython/dbmgr/base.py:2743
 msgid "Drop column(s)"
@@ -2294,6 +2470,7 @@ msgstr "Datatyp"
 
 #: ../gui/wxpython/dbmgr/base.py:3042 ../gui/wxpython/dbmgr/base.py:3194
 #: ../gui/wxpython/dbmgr/base.py:3462 ../gui/wxpython/gui_core/gselect.py:1479
+#: ../gui/wxpython/gui_core/gselect.py:1469
 msgid "Database"
 msgstr "Databas"
 
@@ -2385,17 +2562,24 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/base.py:3683
 msgid "Unable to create new table. Table name or key column name is missing."
-msgstr "Det går inte att skapa en ny tabell. Tabellnamn eller namn på nyckelkolumn saknas."
+msgstr ""
+"Det går inte att skapa en ny tabell. Tabellnamn eller namn på nyckelkolumn "
+"saknas."
 
 #: ../gui/wxpython/dbmgr/base.py:3693
 #, python-format
 msgid "Unable to create new table. Table <%s> already exists in the database."
-msgstr "Det går inte att skapa en ny tabell. Tabell <%s> finns redan i databasen."
+msgstr ""
+"Det går inte att skapa en ny tabell. Tabell <%s> finns redan i databasen."
 
 #: ../gui/wxpython/dbmgr/base.py:3738
 #, python-format
-msgid "Unable to add new layer to vector map <%(vector)s>. Layer %(layer)d already exists."
-msgstr "Det går inte att lägga till ett nytt lager i vektorkartan <%(vector)s>. Lagret %(layer)d finns redan."
+msgid ""
+"Unable to add new layer to vector map <%(vector)s>. Layer %(layer)d already "
+"exists."
+msgstr ""
+"Det går inte att lägga till ett nytt lager i vektorkartan <%(vector)s>. "
+"Lagret %(layer)d finns redan."
 
 #: ../gui/wxpython/dbmgr/base.py:3926
 msgid "Field statistics"
@@ -2415,8 +2599,10 @@ msgstr "Det går inte att beräkna statistik."
 
 #: ../gui/wxpython/dbmgr/base.py:4047
 #, python-format
-msgid "Unable to calculate statistics. Invalid number of lines %d (should be %d)."
-msgstr "Det går inte att beräkna statistik. Ogiltigt antal rader %d (ska vara %d)."
+msgid ""
+"Unable to calculate statistics. Invalid number of lines %d (should be %d)."
+msgstr ""
+"Det går inte att beräkna statistik. Ogiltigt antal rader %d (ska vara %d)."
 
 #: ../gui/wxpython/dbmgr/base.py:4074
 msgid "Unable to calculate standard deviation."
@@ -2432,11 +2618,13 @@ msgstr "Fältstatistik <%s>"
 msgid ""
 "No attribute table found.\n"
 "\n"
-"Do you want to create a new attribute table and defined a link to vector map <%s>?"
+"Do you want to create a new attribute table and defined a link to vector map "
+"<%s>?"
 msgstr ""
 "Ingen attributtabell hittades.\n"
 "\n"
-"Vill du skapa en ny attributtabell och definiera en länk till vektorkarta <%s>?"
+"Vill du skapa en ny attributtabell och definiera en länk till vektorkarta "
+"<%s>?"
 
 #: ../gui/wxpython/dbmgr/dialogs.py:85
 msgid "Create table?"
@@ -2515,8 +2703,12 @@ msgstr "{document} (skrivskyddad)"
 
 #: ../gui/wxpython/dbmgr/manager.py:114
 #, python-format
-msgid "Database connection for vector map <%s> is not defined in DB file. You can define new connection in 'Manage layers' tab."
-msgstr "Databasanslutning för vektorkarta <%s> är inte definierad i DB-filen. Du kan definiera en ny anslutning på fliken \"Hantera lager\"."
+msgid ""
+"Database connection for vector map <%s> is not defined in DB file. You can "
+"define new connection in 'Manage layers' tab."
+msgstr ""
+"Databasanslutning för vektorkarta <%s> är inte definierad i DB-filen. Du kan "
+"definiera en ny anslutning på fliken \"Hantera lager\"."
 
 #: ../gui/wxpython/dbmgr/manager.py:123
 msgid "Please wait, loading attribute data..."
@@ -2719,7 +2911,8 @@ msgstr "Du måste välja en giltig plats innan du väljer en mapset"
 #: ../gui/wxpython/gcp/manager.py:503
 #: ../gui/wxpython/image2target/ii2t_manager.py:525
 msgid "You must select a valid location and mapset in order to continue"
-msgstr "Du måste välja en giltig plats och ett giltigt mapset för att kunna fortsätta"
+msgstr ""
+"Du måste välja en giltig plats och ett giltigt mapset för att kunna fortsätta"
 
 #: ../gui/wxpython/gcp/manager.py:524
 #: ../gui/wxpython/image2target/ii2t_manager.py:546
@@ -2894,12 +3087,14 @@ msgstr "Läsning av filen POINTS misslyckades"
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1051
 #, python-format
 msgid ""
-"Insufficient points defined and active (checked) for selected rectification method (order: %d).\n"
+"Insufficient points defined and active (checked) for selected rectification "
+"method (order: %d).\n"
 "3+ points needed for 1st order,\n"
 "6+ points for 2nd order, and\n"
 "10+ points for 3rd order."
 msgstr ""
-"Otillräckliga punkter definierade och aktiva (markerade) för vald korrigeringsmetod (ordning: %d).\n"
+"Otillräckliga punkter definierade och aktiva (markerade) för vald "
+"korrigeringsmetod (ordning: %d).\n"
 "3+ punkter behövs för 1:a ordningen,\n"
 "6+ punkter för 2:a ordningen, och\n"
 "10+ punkter för 3:e ordningen."
@@ -3094,8 +3289,11 @@ msgstr "Tillämpa ändringar för den aktuella sessionen"
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1996
 #: ../gui/wxpython/vnet/dialogs.py:1326 ../gui/wxpython/wxplot/dialogs.py:814
 #: ../gui/wxpython/wxplot/dialogs.py:1323
-msgid "Apply and save changes to user settings file (default for next sessions)"
-msgstr "Tillämpa och spara ändringar i filen med användarinställningar (standard för nästa session)"
+msgid ""
+"Apply and save changes to user settings file (default for next sessions)"
+msgstr ""
+"Tillämpa och spara ändringar i filen med användarinställningar (standard för "
+"nästa session)"
 
 #: ../gui/wxpython/gcp/manager.py:2881
 #: ../gui/wxpython/image2target/ii2t_manager.py:2843
@@ -3320,7 +3518,8 @@ msgstr "Inget att återge (tom karta). Operationen avbruten."
 #: ../gui/wxpython/modules/histogram.py:474
 #: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:443
 msgid "Choose a file name to save the image (no need to add extension)"
-msgstr "Välj ett filnamn för att spara bilden (du behöver inte ange något tillägg)"
+msgstr ""
+"Välj ett filnamn för att spara bilden (du behöver inte ange något tillägg)"
 
 #: ../gui/wxpython/gcp/mapdisplay.py:489
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:479
@@ -3676,7 +3875,8 @@ msgstr "Lista över objekt i \"else\"-blocket"
 #: ../gui/wxpython/gmodeler/dialogs.py:845
 #, python-format
 msgid "Variable <%s> already exists in the model. Adding variable failed."
-msgstr "Variabel <%s> finns redan i modellen. Att lägga till variabel misslyckades."
+msgstr ""
+"Variabel <%s> finns redan i modellen. Att lägga till variabel misslyckades."
 
 #: ../gui/wxpython/gmodeler/dialogs.py:878
 msgid "Do you want to delete all variables from the model?"
@@ -3700,12 +3900,14 @@ msgstr "Radera alla"
 #: ../gui/wxpython/gmodeler/dialogs.py:983
 #: ../gui/wxpython/gui_core/gselect.py:2294
 #: ../gui/wxpython/location_wizard/wizard.py:981
+#: ../gui/wxpython/gui_core/gselect.py:2284
 msgid "No"
 msgstr "Nej"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:983
 #: ../gui/wxpython/gui_core/gselect.py:2294
 #: ../gui/wxpython/location_wizard/wizard.py:981
+#: ../gui/wxpython/gui_core/gselect.py:2284
 msgid "Yes"
 msgstr "Ja"
 
@@ -3721,6 +3923,7 @@ msgstr "Ta bort mellanliggande data när du är klar"
 #: ../gui/wxpython/gmodeler/panels.py:1598
 #: ../gui/wxpython/gui_core/forms.py:604
 #: ../gui/wxpython/modules/mcalc_builder.py:170
+#: ../gui/wxpython/gui_core/forms.py:605
 msgid "&Run"
 msgstr "&Run"
 
@@ -3732,6 +3935,7 @@ msgstr "Variabler"
 #: ../gui/wxpython/gmodeler/frame.py:31 ../gui/wxpython/gmodeler/panels.py:106
 #: ../gui/wxpython/gui_core/forms.py:1499 ../gui/wxpython/lmgr/toolbars.py:208
 #: ../gui/wxpython/main_window/frame.py:907
+#: ../gui/wxpython/gui_core/forms.py:1500
 msgid "Graphical Modeler"
 msgstr "Grafisk modellerare"
 
@@ -3807,8 +4011,14 @@ msgstr "Detaljer: taggnamnet '{0}' stöds inte."
 
 #: ../gui/wxpython/gmodeler/model_convert.py:233
 #, python-brace-format
-msgid "Module {task_name} in your model contains parameterized flags. Actinia does not support parameterized flags. The following flags are therefore not being written in the generated JSON: {flags}"
-msgstr "Modul {task_name} i din modell innehåller parametriserade flaggor. Actinia stöder inte parametriserade flaggor. Följande flaggor skrivs därför inte in i den genererade JSON: {flags}"
+msgid ""
+"Module {task_name} in your model contains parameterized flags. Actinia does "
+"not support parameterized flags. The following flags are therefore not being "
+"written in the generated JSON: {flags}"
+msgstr ""
+"Modul {task_name} i din modell innehåller parametriserade flaggor. Actinia "
+"stöder inte parametriserade flaggor. Följande flaggor skrivs därför inte in "
+"i den genererade JSON: {flags}"
 
 #: ../gui/wxpython/gmodeler/model_items.py:673
 msgid "<not defined>"
@@ -3840,6 +4050,7 @@ msgstr "Skriptredigerare"
 
 #: ../gui/wxpython/gmodeler/panels.py:194
 #: ../gui/wxpython/gui_core/forms.py:2511
+#: ../gui/wxpython/gui_core/forms.py:2512
 msgid "Command output"
 msgstr "Kommandoutgång"
 
@@ -3890,8 +4101,12 @@ msgstr "Fil <%s> kan inte öppnas för skrivning."
 
 #: ../gui/wxpython/gmodeler/panels.py:797
 #: ../gui/wxpython/gmodeler/panels.py:938
-msgid "Current model is not empty. Do you want to store current settings to model file?"
-msgstr "Aktuell modell är inte tom. Vill du lagra aktuella inställningar i modellfilen?"
+msgid ""
+"Current model is not empty. Do you want to store current settings to model "
+"file?"
+msgstr ""
+"Aktuell modell är inte tom. Vill du lagra aktuella inställningar i "
+"modellfilen?"
 
 #: ../gui/wxpython/gmodeler/panels.py:801
 #: ../gui/wxpython/gmodeler/panels.py:942
@@ -4057,6 +4272,7 @@ msgstr "kartset"
 
 #: ../gui/wxpython/gmodeler/panels.py:1372
 #: ../gui/wxpython/gui_core/forms.py:2008
+#: ../gui/wxpython/gui_core/forms.py:2009
 msgid "file"
 msgstr "fil"
 
@@ -4124,8 +4340,12 @@ msgid "Python script type:"
 msgstr "Python-skript typ:"
 
 #: ../gui/wxpython/gmodeler/panels.py:1688
-msgid "{} script is locally modified. Refresh will discard all changes. Do you really want to continue?"
-msgstr "{} skriptet är lokalt modifierat. Uppdatering kommer att förkasta alla ändringar. Vill du verkligen fortsätta?"
+msgid ""
+"{} script is locally modified. Refresh will discard all changes. Do you "
+"really want to continue?"
+msgstr ""
+"{} skriptet är lokalt modifierat. Uppdatering kommer att förkasta alla "
+"ändringar. Vill du verkligen fortsätta?"
 
 #: ../gui/wxpython/gmodeler/panels.py:1692
 msgid "Update"
@@ -4259,7 +4479,7 @@ msgstr "Vektor:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:359
 msgid "Table:"
-msgstr "Bord:"
+msgstr "Tabell:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:455
 msgid "Loop"
@@ -4454,8 +4674,12 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:526
 #, python-format
-msgid "Vector map <%s> already exists in the current mapset. Do you want to overwrite it?"
-msgstr "Vektorkarta <%s> finns redan i den aktuella kartuppsättningen. Vill du skriva över den?"
+msgid ""
+"Vector map <%s> already exists in the current mapset. Do you want to "
+"overwrite it?"
+msgstr ""
+"Vektorkarta <%s> finns redan i den aktuella kartuppsättningen. Vill du "
+"skriva över den?"
 
 #: ../gui/wxpython/gui_core/dialogs.py:609
 msgid "Load region:"
@@ -4466,8 +4690,13 @@ msgid "Save region:"
 msgstr "Spara region:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:668
-msgid "Name cannot begin with '.' and must not contain space, quotes, '/', ''', '@', ',', '=', '*', and all other non-alphanumeric characters."
-msgstr "Namnet får inte börja med '.' och får inte innehålla mellanslag, citattecken, '/', ''', '@', ',', '=', '*' eller andra icke-alfanumeriska tecken."
+msgid ""
+"Name cannot begin with '.' and must not contain space, quotes, '/', ''', "
+"'@', ',', '=', '*', and all other non-alphanumeric characters."
+msgstr ""
+"Namnet får inte börja med '.' och får inte innehålla mellanslag, "
+"citattecken, '/', ''', '@', ',', '=', '*' eller andra icke-alfanumeriska "
+"tecken."
 
 #: ../gui/wxpython/gui_core/dialogs.py:690
 msgid "Create or edit imagery groups"
@@ -4487,8 +4716,12 @@ msgstr "Stäng dialogrutan, ändringarna tillämpas inte"
 
 #: ../gui/wxpython/gui_core/dialogs.py:777
 #: ../gui/wxpython/gui_core/dialogs.py:1542
-msgid "Put here a regular expression. Characters '.*' stand for anything, character '^' stands for the beginning and '$' for the end."
-msgstr "Ange här ett reguljärt uttryck. Tecknen '.*' står för vad som helst, tecknet '^' står för början och '$' för slutet."
+msgid ""
+"Put here a regular expression. Characters '.*' stand for anything, character "
+"'^' stands for the beginning and '$' for the end."
+msgstr ""
+"Ange här ett reguljärt uttryck. Tecknen '.*' står för vad som helst, tecknet "
+"'^' står för början och '$' för slutet."
 
 #: ../gui/wxpython/gui_core/dialogs.py:788
 msgid "Select existing group or enter name of new group:"
@@ -4699,166 +4932,206 @@ msgstr "Fontstorlek:"
 msgid "Example"
 msgstr "Exempel"
 
-#: ../gui/wxpython/gui_core/forms.py:564
+#: ../gui/wxpython/gui_core/forms.py:564 ../gui/wxpython/gui_core/forms.py:565
 msgid "Enter parameters for '"
 msgstr "Ange parametrar för '"
 
-#: ../gui/wxpython/gui_core/forms.py:576
+#: ../gui/wxpython/gui_core/forms.py:576 ../gui/wxpython/gui_core/forms.py:577
 msgid "Close this window without executing the command (Ctrl+Q)"
 msgstr "Stäng detta fönster utan att utföra kommandot (Ctrl+Q)"
 
-#: ../gui/wxpython/gui_core/forms.py:605
+#: ../gui/wxpython/gui_core/forms.py:605 ../gui/wxpython/gui_core/forms.py:606
 msgid "Run the command (Ctrl+R)"
 msgstr "Kör kommandot (Ctrl+R)"
 
 #: ../gui/wxpython/gui_core/forms.py:617
 #: ../gui/wxpython/modules/mcalc_builder.py:177
+#: ../gui/wxpython/gui_core/forms.py:618
 msgid "Copy"
 msgstr "Kopiera"
 
 #: ../gui/wxpython/gui_core/forms.py:619
 #: ../gui/wxpython/modules/mcalc_builder.py:178
+#: ../gui/wxpython/gui_core/forms.py:620
 msgid "Copy the current command string to the clipboard"
 msgstr "Kopiera den aktuella kommandosträngen till urklipp"
 
-#: ../gui/wxpython/gui_core/forms.py:628
+#: ../gui/wxpython/gui_core/forms.py:628 ../gui/wxpython/gui_core/forms.py:629
 msgid "Show manual page of the command (Ctrl+H)"
 msgstr "Visa manuell sida för kommandot (Ctrl+H)"
 
-#: ../gui/wxpython/gui_core/forms.py:666
+#: ../gui/wxpython/gui_core/forms.py:666 ../gui/wxpython/gui_core/forms.py:667
 msgid "Add created map(s) into layer tree"
 msgstr "Lägg till skapad(a) karta(r) i lagerträdet"
 
 #: ../gui/wxpython/gui_core/forms.py:688
 #: ../gui/wxpython/modules/import_export.py:119
+#: ../gui/wxpython/gui_core/forms.py:689
 msgid "Close dialog on finish"
 msgstr "Stäng dialogrutan när du är klar"
 
-#: ../gui/wxpython/gui_core/forms.py:695
-msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
-msgstr "Stäng dialogrutan när kommandot är slutfört. Ändra dessa inställningar i dialogrutan Inställningar (fliken \"Kommando\")."
+#: ../gui/wxpython/gui_core/forms.py:695 ../gui/wxpython/gui_core/forms.py:696
+msgid ""
+"Close dialog when command is successfully finished. Change this settings in "
+"Preferences dialog ('Command' tab)."
+msgstr ""
+"Stäng dialogrutan när kommandot är slutfört. Ändra dessa inställningar i "
+"dialogrutan Inställningar (fliken \"Kommando\")."
 
-#: ../gui/wxpython/gui_core/forms.py:893
+#: ../gui/wxpython/gui_core/forms.py:893 ../gui/wxpython/gui_core/forms.py:894
 #, python-format
 msgid "'%s' copied to clipboard"
 msgstr "'%s' kopierat till urklipp"
 
 #: ../gui/wxpython/gui_core/forms.py:993 ../gui/wxpython/gui_core/forms.py:1008
+#: ../gui/wxpython/gui_core/forms.py:994 ../gui/wxpython/gui_core/forms.py:1009
 msgid "Required"
 msgstr "Obligatorisk"
 
 #: ../gui/wxpython/gui_core/forms.py:996 ../gui/wxpython/gui_core/forms.py:1009
+#: ../gui/wxpython/gui_core/forms.py:997 ../gui/wxpython/gui_core/forms.py:1010
 msgid "Optional"
 msgstr "Valfritt"
 
 #: ../gui/wxpython/gui_core/forms.py:1083
 #: ../gui/wxpython/gui_core/forms.py:2315
+#: ../gui/wxpython/gui_core/forms.py:1084
+#: ../gui/wxpython/gui_core/forms.py:2316
 msgid "Parameterized in model"
 msgstr "Parametriserad i modellen"
 
 #: ../gui/wxpython/gui_core/forms.py:1149
 #: ../gui/wxpython/location_wizard/wizard.py:214
+#: ../gui/wxpython/gui_core/forms.py:1150
 msgid "This option is required"
 msgstr "Detta alternativ är obligatoriskt"
 
 #: ../gui/wxpython/gui_core/forms.py:1167
+#: ../gui/wxpython/gui_core/forms.py:1168
 msgid "[multiple]"
 msgstr "[flera]"
 
 #: ../gui/wxpython/gui_core/forms.py:1229
+#: ../gui/wxpython/gui_core/forms.py:1230
 msgid "valid range"
 msgstr "giltigt intervall"
 
 #: ../gui/wxpython/gui_core/forms.py:1378
 #: ../gui/wxpython/gui_core/forms.py:2952
 #: ../gui/wxpython/gui_core/toolbars.py:70
+#: ../gui/wxpython/gui_core/forms.py:1379
+#: ../gui/wxpython/gui_core/forms.py:2953
 msgid "Select font"
 msgstr "Välj teckensnitt"
 
 #: ../gui/wxpython/gui_core/forms.py:1507
 #: ../gui/wxpython/gui_core/preferences.py:873
-#: ../gui/wxpython/mapdisp/frame.py:83
+#: ../gui/wxpython/mapdisp/frame.py:83 ../gui/wxpython/gui_core/forms.py:1508
 msgid "Map Display"
 msgstr "Kartdesign"
 
 #: ../gui/wxpython/gui_core/forms.py:1660
+#: ../gui/wxpython/gui_core/forms.py:1661
 msgid "Show graphical representation of temporal extent of dataset(s)."
-msgstr "Visa en grafisk representation av datasetens/datasetens tidsmässiga omfattning."
+msgstr ""
+"Visa en grafisk representation av datasetens/datasetens tidsmässiga "
+"omfattning."
 
 #: ../gui/wxpython/gui_core/forms.py:1969
 #: ../gui/wxpython/gui_core/preferences.py:1466
 #: ../gui/wxpython/gui_core/preferences.py:1500
+#: ../gui/wxpython/gui_core/forms.py:1970
 msgid "Transparent"
 msgstr "Genomskinlig"
 
 #: ../gui/wxpython/gui_core/forms.py:2007
 #: ../gui/wxpython/gui_core/forms.py:2118
+#: ../gui/wxpython/gui_core/forms.py:2008
+#: ../gui/wxpython/gui_core/forms.py:2119
 #, python-format
 msgid "Choose %s"
 msgstr "Välj %s"
 
 #: ../gui/wxpython/gui_core/forms.py:2063
 #: ../gui/wxpython/modules/mcalc_builder.py:175
+#: ../gui/wxpython/gui_core/forms.py:2064
 msgid "&Load"
 msgstr "&Läs in"
 
 #: ../gui/wxpython/gui_core/forms.py:2065
+#: ../gui/wxpython/gui_core/forms.py:2066
 msgid "Load and edit content of a file"
 msgstr "Läs in och redigera innehållet i en fil"
 
 #: ../gui/wxpython/gui_core/forms.py:2068
+#: ../gui/wxpython/gui_core/forms.py:2069
 msgid "&Save as"
 msgstr "&Spara som"
 
 #: ../gui/wxpython/gui_core/forms.py:2070
+#: ../gui/wxpython/gui_core/forms.py:2071
 msgid "Save content to a file for further use"
 msgstr "Spara innehåll till en fil för vidare användning"
 
 #: ../gui/wxpython/gui_core/forms.py:2076
+#: ../gui/wxpython/gui_core/forms.py:2077
 msgid "or enter values directly:"
 msgstr "eller ange värden direkt:"
 
 #: ../gui/wxpython/gui_core/forms.py:2080
-msgid "Enter file content directly instead of specifying a file. Temporary file will be automatically created."
-msgstr "Ange filinnehållet direkt i stället för att ange en fil. En temporär fil skapas automatiskt."
+#: ../gui/wxpython/gui_core/forms.py:2081
+msgid ""
+"Enter file content directly instead of specifying a file. Temporary file "
+"will be automatically created."
+msgstr ""
+"Ange filinnehållet direkt i stället för att ange en fil. En temporär fil "
+"skapas automatiskt."
 
 #: ../gui/wxpython/gui_core/forms.py:2119
 #: ../gui/wxpython/gui_core/gselect.py:1475
+#: ../gui/wxpython/gui_core/forms.py:2120
+#: ../gui/wxpython/gui_core/gselect.py:1465
 msgid "Directory"
 msgstr "Katalog"
 
 #: ../gui/wxpython/gui_core/forms.py:2255
 #: ../gui/wxpython/modules/import_export.py:86
 #: ../gui/wxpython/modules/import_export.py:979
+#: ../gui/wxpython/gui_core/forms.py:2256
 msgid "Layer id"
 msgstr "Lager id"
 
 #: ../gui/wxpython/gui_core/forms.py:2256
 #: ../gui/wxpython/modules/import_export.py:87
+#: ../gui/wxpython/gui_core/forms.py:2257
 msgid "Layer name"
 msgstr "Namn på lager"
 
 #: ../gui/wxpython/gui_core/forms.py:2257
 #: ../gui/wxpython/modules/import_export.py:91
-#: ../gui/wxpython/psmap/dialogs.py:2272
+#: ../gui/wxpython/psmap/dialogs.py:2272 ../gui/wxpython/gui_core/forms.py:2258
 msgid "Feature type"
 msgstr "Typ av funktion"
 
 #: ../gui/wxpython/gui_core/forms.py:2258
 #: ../gui/wxpython/modules/import_export.py:92
 #: ../gui/wxpython/modules/import_export.py:94
+#: ../gui/wxpython/gui_core/forms.py:2259
 msgid "Projection match"
 msgstr "Projektion matchning"
 
 #: ../gui/wxpython/gui_core/forms.py:2521
+#: ../gui/wxpython/gui_core/forms.py:2522
 msgid "Manual"
 msgstr "Manuell"
 
 #: ../gui/wxpython/gui_core/forms.py:2561
+#: ../gui/wxpython/gui_core/forms.py:2562
 msgid "Nothing to load."
 msgstr "Inget att läsa in."
 
 #: ../gui/wxpython/gui_core/forms.py:2570
+#: ../gui/wxpython/gui_core/forms.py:2571
 #, python-format
 msgid ""
 "Unable to load file.\n"
@@ -4871,31 +5144,39 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/forms.py:2591
 #: ../gui/wxpython/modules/colorrules.py:687
+#: ../gui/wxpython/gui_core/forms.py:2592
 msgid "Nothing to save."
 msgstr "Inget att spara."
 
 #: ../gui/wxpython/gui_core/forms.py:2596
+#: ../gui/wxpython/gui_core/forms.py:2597
 msgid "Save input as..."
 msgstr "Spara inmatning som..."
 
 #: ../gui/wxpython/gui_core/forms.py:2935
+#: ../gui/wxpython/gui_core/forms.py:2936
 msgid "No dataset given."
 msgstr "Ingen dataset angiven."
 
 #: ../gui/wxpython/gui_core/forms.py:3103
 #: ../gui/wxpython/gui_core/forms.py:3122
+#: ../gui/wxpython/gui_core/forms.py:3104
+#: ../gui/wxpython/gui_core/forms.py:3123
 #, python-format
 msgid "Unable to parse command '%s'"
 msgstr "Det gick inte att tolka kommandot '%s'"
 
 #: ../gui/wxpython/gui_core/forms.py:3130
+#: ../gui/wxpython/gui_core/forms.py:3131
 #, python-format
 msgid "%(cmd)s: parameter '%(key)s' not available"
 msgstr "%(cmd)s: parameter '%(key)s' inte tillgänglig"
 
 #: ../gui/wxpython/gui_core/forms.py:3216
+#: ../gui/wxpython/gui_core/forms.py:3217
 msgid "Try to set up GRASS_ADDON_PATH or GRASS_ADDON_BASE variable."
-msgstr "Försök att ställa in variabeln GRASS_ADDON_PATH eller GRASS_ADDON_BASE."
+msgstr ""
+"Försök att ställa in variabeln GRASS_ADDON_PATH eller GRASS_ADDON_BASE."
 
 #: ../gui/wxpython/gui_core/ghelp.py:64
 msgid "About GRASS GIS"
@@ -4972,8 +5253,12 @@ msgstr "%s fil saknas"
 
 #: ../gui/wxpython/gui_core/ghelp.py:336
 #, python-brace-format
-msgid "Unable to provide citation suggestion, see GRASS GIS website instead. The error was: {0}"
-msgstr "Kan inte ge förslag på referens, se GRASS GIS webbplats istället. Felet var: {0}"
+msgid ""
+"Unable to provide citation suggestion, see GRASS GIS website instead. The "
+"error was: {0}"
+msgstr ""
+"Kan inte ge förslag på referens, se GRASS GIS webbplats istället. Felet var: "
+"{0}"
 
 #: ../gui/wxpython/gui_core/ghelp.py:416 ../gui/wxpython/gui_core/ghelp.py:488
 #, python-format
@@ -5028,7 +5313,7 @@ msgstr "%d översatt"
 #: ../gui/wxpython/gui_core/ghelp.py:660
 #, python-format
 msgid "File <%s> not found"
-msgstr "Filen <%s> hittades inte"
+msgstr "Fil <%s> hittades inte"
 
 #: ../gui/wxpython/gui_core/ghelp.py:832
 msgid "&Next"
@@ -5129,89 +5414,112 @@ msgstr "Ingen tabell kopplad till lager <{}>."
 
 #: ../gui/wxpython/gui_core/gselect.py:1244
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:1015
+#: ../gui/wxpython/gui_core/gselect.py:1234
 msgid "Choose GIS Data Directory"
 msgstr "Välj GIS-datakatalog"
 
 #: ../gui/wxpython/gui_core/gselect.py:1456
+#: ../gui/wxpython/gui_core/gselect.py:1446
 msgid "Output settings"
 msgstr "Inställningar för utmatning"
 
 #: ../gui/wxpython/gui_core/gselect.py:1458
+#: ../gui/wxpython/gui_core/gselect.py:1448
 msgid "Source input"
 msgstr "Ingång för källa"
 
 #: ../gui/wxpython/gui_core/gselect.py:1465
+#: ../gui/wxpython/gui_core/gselect.py:1455
 msgid "Native"
 msgstr "Inbyggd"
 
 #: ../gui/wxpython/gui_core/gselect.py:1471
 #: ../gui/wxpython/lmgr/workspace.py:518
+#: ../gui/wxpython/gui_core/gselect.py:1461
 msgid "File"
 msgstr "Arkiv"
 
 #: ../gui/wxpython/gui_core/gselect.py:1483
+#: ../gui/wxpython/gui_core/gselect.py:1473
 msgid "Protocol"
 msgstr "Protokoll"
 
 #: ../gui/wxpython/gui_core/gselect.py:1494
+#: ../gui/wxpython/gui_core/gselect.py:1484
 msgid "Output type"
 msgstr "Utmatningstyp"
 
 #: ../gui/wxpython/gui_core/gselect.py:1496
+#: ../gui/wxpython/gui_core/gselect.py:1486
 msgid "Source type"
 msgstr "Källtyp"
 
 #: ../gui/wxpython/gui_core/gselect.py:1514
+#: ../gui/wxpython/gui_core/gselect.py:1504
 msgid "All files"
 msgstr "Alla filer"
 
 #: ../gui/wxpython/gui_core/gselect.py:1544
+#: ../gui/wxpython/gui_core/gselect.py:1534
 msgid "ZIP files"
 msgstr "ZIP-filer"
 
 #: ../gui/wxpython/gui_core/gselect.py:1545
+#: ../gui/wxpython/gui_core/gselect.py:1535
 msgid "GZIP files"
 msgstr "GZIP-filer"
 
 #: ../gui/wxpython/gui_core/gselect.py:1546
+#: ../gui/wxpython/gui_core/gselect.py:1536
 msgid "TAR files"
 msgstr "TAR-filer"
 
 #: ../gui/wxpython/gui_core/gselect.py:1550
+#: ../gui/wxpython/gui_core/gselect.py:1540
 msgid "TARGZ files"
 msgstr "TARGZ-filer"
 
 #: ../gui/wxpython/gui_core/gselect.py:1559
+#: ../gui/wxpython/gui_core/gselect.py:1549
 msgid "File:"
 msgstr "Fil:"
 
 #: ../gui/wxpython/gui_core/gselect.py:1560
+#: ../gui/wxpython/gui_core/gselect.py:1550
 msgid "Choose file to import"
 msgstr "Välj fil att importera"
 
 #: ../gui/wxpython/gui_core/gselect.py:1577
 #: ../gui/wxpython/gui_core/gselect.py:1665
+#: ../gui/wxpython/gui_core/gselect.py:1567
+#: ../gui/wxpython/gui_core/gselect.py:1655
 msgid "Choose input directory"
 msgstr "Välj katalog för inmatning"
 
 #: ../gui/wxpython/gui_core/gselect.py:1598
+#: ../gui/wxpython/gui_core/gselect.py:1588
 msgid "Extension:"
 msgstr "Förlängning:"
 
 #: ../gui/wxpython/gui_core/gselect.py:1630
+#: ../gui/wxpython/gui_core/gselect.py:1620
 msgid "Choose file"
 msgstr "Välj fil"
 
 #: ../gui/wxpython/gui_core/gselect.py:1651
 #: ../gui/wxpython/gui_core/gselect.py:2775
+#: ../gui/wxpython/gui_core/gselect.py:1641
+#: ../gui/wxpython/gui_core/gselect.py:2765
 msgid "Feature type:"
 msgstr "Typ av funktion:"
 
 #: ../gui/wxpython/gui_core/gselect.py:1652
+#: ../gui/wxpython/gui_core/gselect.py:1642
 msgid "simple features"
 msgstr "enkla funktioner"
 
 #: ../gui/wxpython/gui_core/gselect.py:1652
+#: ../gui/wxpython/gui_core/gselect.py:1642
 msgid "topological"
 msgstr "topologisk"
 
@@ -5219,90 +5527,134 @@ msgstr "topologisk"
 #: ../gui/wxpython/gui_core/gselect.py:1809
 #: ../gui/wxpython/gui_core/gselect.py:1871
 #: ../gui/wxpython/gui_core/gselect.py:1916
+#: ../gui/wxpython/gui_core/gselect.py:1759
+#: ../gui/wxpython/gui_core/gselect.py:1799
+#: ../gui/wxpython/gui_core/gselect.py:1861
+#: ../gui/wxpython/gui_core/gselect.py:1906
 msgid "Creation options:"
 msgstr "Alternativ för skapande:"
 
 #: ../gui/wxpython/gui_core/gselect.py:1786
 #: ../gui/wxpython/gui_core/gselect.py:1832
 #: ../gui/wxpython/gui_core/gselect.py:1897
+#: ../gui/wxpython/gui_core/gselect.py:1776
+#: ../gui/wxpython/gui_core/gselect.py:1822
+#: ../gui/wxpython/gui_core/gselect.py:1887
 msgid "Format:"
 msgstr "Format:"
 
 #: ../gui/wxpython/gui_core/gselect.py:1905
+#: ../gui/wxpython/gui_core/gselect.py:1895
 msgid "Protocol:"
 msgstr "Protokoll:"
 
 #: ../gui/wxpython/gui_core/gselect.py:1934
+#: ../gui/wxpython/gui_core/gselect.py:1924
 msgid "No settings available"
 msgstr "Inga inställningar tillgängliga"
 
 #: ../gui/wxpython/gui_core/gselect.py:2066
 #: ../gui/wxpython/web_services/dialogs.py:301
+#: ../gui/wxpython/gui_core/gselect.py:2056
 msgid "No data source defined, settings are not saved."
 msgstr "Ingen datakälla definierad, inställningarna sparas inte."
 
 #: ../gui/wxpython/gui_core/gselect.py:2098
-msgid "PostgreSQL/PostGIS login was not set. Set it via <db.login> module, please."
-msgstr "PostgreSQL / PostGIS-inloggning var inte inställd. Ställ in den via <db.login> -modulen, tack."
+#: ../gui/wxpython/gui_core/gselect.py:2088
+msgid ""
+"PostgreSQL/PostGIS login was not set. Set it via <db.login> module, please."
+msgstr ""
+"PostgreSQL / PostGIS-inloggning var inte inställd. Ställ in den via <db."
+"login> -modulen, tack."
 
 #: ../gui/wxpython/gui_core/gselect.py:2253
+#: ../gui/wxpython/gui_core/gselect.py:2243
 #, python-brace-format
-msgid "Getting raster <{table}> SRID from PostgreSQL DB <{db}>, host <{host}> failed. {error}."
-msgstr "Att få raster <{table}> SRID från PostgreSQL DB <{db}>, värd <{host}> misslyckades. {error}."
+msgid ""
+"Getting raster <{table}> SRID from PostgreSQL DB <{db}>, host <{host}> "
+"failed. {error}."
+msgstr ""
+"Att få raster <{table}> SRID från PostgreSQL DB <{db}>, värd <{host}> "
+"misslyckades. {error}."
 
 #: ../gui/wxpython/gui_core/gselect.py:2508
+#: ../gui/wxpython/gui_core/gselect.py:2498
 #, python-brace-format
-msgid "Getting list of tables from PostgreSQL DB <{db}>, host <{host}> failed. {error}."
-msgstr "Att få en lista över tabeller från PostgreSQL DB <{db}>, värd <{host}> misslyckades. {error}."
+msgid ""
+"Getting list of tables from PostgreSQL DB <{db}>, host <{host}> failed. "
+"{error}."
+msgstr ""
+"Att få en lista över tabeller från PostgreSQL DB <{db}>, värd <{host}> "
+"misslyckades. {error}."
 
 #: ../gui/wxpython/gui_core/gselect.py:2597
+#: ../gui/wxpython/gui_core/gselect.py:2587
 #, python-brace-format
-msgid "Getting list of tables columns data types from PostGIS DB <{db}>, host <{host}> failed. {error}."
-msgstr "Hämta lista över tabeller kolumner datatyper från PostGIS DB <{db}>, värd <{host}> misslyckades. {error}."
+msgid ""
+"Getting list of tables columns data types from PostGIS DB <{db}>, host "
+"<{host}> failed. {error}."
+msgstr ""
+"Hämta lista över tabeller kolumner datatyper från PostGIS DB <{db}>, värd "
+"<{host}> misslyckades. {error}."
 
 #: ../gui/wxpython/gui_core/gselect.py:2628
+#: ../gui/wxpython/gui_core/gselect.py:2618
 #, python-brace-format
 msgid "PostgreSQL DB <{psql}> program was not found. Please, install it."
-msgstr "PostgreSQL DB <{psql}> -programmet hittades inte. Snälla, installera det."
+msgstr ""
+"PostgreSQL DB <{psql}> -programmet hittades inte. Snälla, installera det."
 
 #: ../gui/wxpython/gui_core/gselect.py:2646
 #: ../gui/wxpython/modules/import_export.py:504
+#: ../gui/wxpython/gui_core/gselect.py:2636
 msgid "The Python GDAL package is missing. Please install it."
 msgstr "Python GDAL-paketet saknas. Installera det."
 
 #: ../gui/wxpython/gui_core/gselect.py:2767
+#: ../gui/wxpython/gui_core/gselect.py:2757
 msgid "LineString"
 msgstr "LinjeString"
 
 #: ../gui/wxpython/gui_core/gselect.py:2767
 #: ../gui/wxpython/psmap/dialogs.py:6221 ../gui/wxpython/psmap/toolbars.py:103
 #: ../gui/wxpython/vdigit/preferences.py:729
+#: ../gui/wxpython/gui_core/gselect.py:2757
 msgid "Point"
 msgstr "Punkt"
 
 #: ../gui/wxpython/gui_core/gselect.py:2767
+#: ../gui/wxpython/gui_core/gselect.py:2757
 msgid "Polygon"
 msgstr "Polygon"
 
 #: ../gui/wxpython/gui_core/gselect.py:2980
+#: ../gui/wxpython/gui_core/gselect.py:2970
 msgid "No vector map selected in layer manager. Operation canceled."
 msgstr "Ingen vektorkarta vald i lagerhanteraren. Åtgärden avbröts."
 
 #: ../gui/wxpython/gui_core/gselect.py:2999
+#: ../gui/wxpython/gui_core/gselect.py:2989
 msgid "Input vector map is not selected"
 msgstr "Ingångsvektorkarta är inte vald"
 
 #: ../gui/wxpython/gui_core/gselect.py:3003
+#: ../gui/wxpython/gui_core/gselect.py:2993
 #, python-format
-msgid "Input vector map <%s> and selected map <%s> in layer manager are different. Operation canceled."
-msgstr "Inmatad vektorkarta <%s> och vald karta <%s> i lagerhanteraren är olika. Åtgärden avbröts."
+msgid ""
+"Input vector map <%s> and selected map <%s> in layer manager are different. "
+"Operation canceled."
+msgstr ""
+"Inmatad vektorkarta <%s> och vald karta <%s> i lagerhanteraren är olika. "
+"Åtgärden avbröts."
 
 #: ../gui/wxpython/gui_core/gselect.py:3119
+#: ../gui/wxpython/gui_core/gselect.py:3109
 #, python-format
 msgid "Unable to import C imagery library functions: %s\n"
 msgstr "Det går inte att importera funktioner från C-bildbiblioteket: %s\n"
 
 #: ../gui/wxpython/gui_core/gselect.py:3197
+#: ../gui/wxpython/gui_core/gselect.py:3187
 msgid "No vector map selected"
 msgstr "Ingen vektorkarta vald"
 
@@ -5310,7 +5662,9 @@ msgstr "Ingen vektorkarta vald"
 #: ../gui/wxpython/mapdisp/test_mapdisp.py:93
 #, python-format
 msgid "GRASS module '%s' not found. Unable to start map display window."
-msgstr "GRASS-modulen '%s' hittades inte. Det går inte att starta kartvisningsfönstret."
+msgstr ""
+"GRASS-modulen '%s' hittades inte. Det går inte att starta "
+"kartvisningsfönstret."
 
 #: ../gui/wxpython/gui_core/menu.py:189
 msgid "Adva&nced search..."
@@ -5407,16 +5761,24 @@ msgid "Save current window layout as default"
 msgstr "Spara aktuell fönsterlayout som standard"
 
 #: ../gui/wxpython/gui_core/preferences.py:368
-msgid "Save current position and size of Layer Manager window and opened Map Display window(s) and use as default for next sessions."
-msgstr "Spara aktuell position och storlek för Layer Manager-fönstret och öppnade Map Display-fönster och använd som standard för nästa session."
+msgid ""
+"Save current position and size of Layer Manager window and opened Map "
+"Display window(s) and use as default for next sessions."
+msgstr ""
+"Spara aktuell position och storlek för Layer Manager-fönstret och öppnade "
+"Map Display-fönster och använd som standard för nästa session."
 
 #: ../gui/wxpython/gui_core/preferences.py:381
 msgid "Save current single window panes layout as default"
 msgstr "Spara aktuell layout för enstaka fönsterrutor som standard"
 
 #: ../gui/wxpython/gui_core/preferences.py:394
-msgid "Save current position and size of single-window mode panes and use as default for next sessions."
-msgstr "Spara aktuell position och storlek för rutor i enfönsterläge och använd som standard för nästa session."
+msgid ""
+"Save current position and size of single-window mode panes and use as "
+"default for next sessions."
+msgstr ""
+"Spara aktuell position och storlek för rutor i enfönsterläge och använd som "
+"standard för nästa session."
 
 #: ../gui/wxpython/gui_core/preferences.py:415
 #: ../gui/wxpython/gui_core/preferences.py:429
@@ -5442,7 +5804,8 @@ msgstr "Inställningar för datakatalog"
 
 #: ../gui/wxpython/gui_core/preferences.py:464
 msgid "At startup load maps from current mapset only (in the Data tab)"
-msgstr "Vid start läses kartor in endast från aktuell kartuppsättning (i fliken Data)"
+msgstr ""
+"Vid start läses kartor in endast från aktuell kartuppsättning (i fliken Data)"
 
 #: ../gui/wxpython/gui_core/preferences.py:479
 msgid "Workspace settings"
@@ -5672,7 +6035,7 @@ msgstr "Fråga vid borttagning av datapost(er) från tabell"
 
 #: ../gui/wxpython/gui_core/preferences.py:1749
 msgid "Create table"
-msgstr "Skapa bord"
+msgstr "Skapa tabell"
 
 #: ../gui/wxpython/gui_core/preferences.py:1783
 msgid "Projection"
@@ -5685,15 +6048,21 @@ msgstr "Inställningar för statusfältet för projektion"
 #: ../gui/wxpython/gui_core/preferences.py:1805
 msgid ""
 "\n"
-"Note: This only controls the coordinates displayed in the lower-left of the Map Display\n"
-"window's status bar. It is purely cosmetic and does not affect the working project's\n"
-"coordinate reference system in any way. You will need to enable the Projection check box in the drop-down\n"
+"Note: This only controls the coordinates displayed in the lower-left of the "
+"Map Display\n"
+"window's status bar. It is purely cosmetic and does not affect the working "
+"project's\n"
+"coordinate reference system in any way. You will need to enable the "
+"Projection check box in the drop-down\n"
 "menu located at the bottom of the Map Display window.\n"
 msgstr ""
 "\n"
-"Obs: Detta styr endast de koordinater som visas längst ned till vänster i Map Display-fönstrets\n"
-"fönstrets statusfält. Det är rent kosmetiskt och påverkar inte arbetsprojektets\n"
-"koordinatreferenssystem på något sätt. Du måste aktivera kryssrutan Projection i rullgardinsmenyn längst ner i\n"
+"Obs: Detta styr endast de koordinater som visas längst ned till vänster i "
+"Map Display-fönstrets\n"
+"fönstrets statusfält. Det är rent kosmetiskt och påverkar inte "
+"arbetsprojektets\n"
+"koordinatreferenssystem på något sätt. Du måste aktivera kryssrutan "
+"Projection i rullgardinsmenyn längst ner i\n"
 "menyn längst ned i fönstret Map Display.\n"
 
 #: ../gui/wxpython/gui_core/preferences.py:1819
@@ -5709,8 +6078,11 @@ msgid "EPSG file:"
 msgstr "EPSG-fil:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1875
-msgid "Load EPSG codes (be patient), enter EPSG code or insert PROJ string directly."
-msgstr "Läs in EPSG-koder (ha tålamod), ange EPSG-kod eller infoga PROJ-sträng direkt."
+msgid ""
+"Load EPSG codes (be patient), enter EPSG code or insert PROJ string directly."
+msgstr ""
+"Läs in EPSG-koder (ha tålamod), ange EPSG-kod eller infoga PROJ-sträng "
+"direkt."
 
 #: ../gui/wxpython/gui_core/preferences.py:1882
 msgid "&Load EPSG codes"
@@ -5752,7 +6124,9 @@ msgstr "Välj standardteckensnitt för displayen"
 
 #: ../gui/wxpython/gui_core/preferences.py:2127
 msgid "Failed to set default display font. Try different font."
-msgstr "Misslyckades med att ange standardteckensnitt för visning. Prova ett annat teckensnitt."
+msgstr ""
+"Misslyckades med att ange standardteckensnitt för visning. Prova ett annat "
+"teckensnitt."
 
 #: ../gui/wxpython/gui_core/preferences.py:2149
 msgid "Select default output font"
@@ -5770,7 +6144,8 @@ msgid ""
 "    - You may only write to the current mapset.\n"
 "    - You may only write to mapsets which you own."
 msgstr ""
-"Markera en mapset för att göra den tillgänglig, avmarkera den för att dölja den.\n"
+"Markera en mapset för att göra den tillgänglig, avmarkera den för att dölja "
+"den.\n"
 "  Anmärkningar:\n"
 "    - Den aktuella kartuppsättningen är alltid tillgänglig.\n"
 "    - Du kan bara skriva till den aktuella kartuppsättningen.\n"
@@ -5812,7 +6187,8 @@ msgstr "Öppna fil"
 #: ../gui/wxpython/gui_core/pyedit.py:511
 #, python-brace-format
 msgid "File <{path}> doesn't exist. It was probably moved or deleted."
-msgstr "Filen <{path}> finns inte. Den har förmodligen flyttats eller raderats."
+msgstr ""
+"Filen <{path}> finns inte. Den har förmodligen flyttats eller raderats."
 
 #: ../gui/wxpython/gui_core/pyedit.py:579
 msgid "Replace the content by the template?"
@@ -6036,7 +6412,8 @@ msgstr "Olika zoomalternativ"
 
 #: ../gui/wxpython/gui_core/toolbars.py:61
 msgid "Zoom to default or saved region, save to named region, ..."
-msgstr "Zooma till standard- eller sparad region, spara till namngiven region, ..."
+msgstr ""
+"Zooma till standard- eller sparad region, spara till namngiven region, ..."
 
 #: ../gui/wxpython/gui_core/toolbars.py:63
 msgid "Zoom to selected map layer(s)"
@@ -6163,8 +6540,12 @@ msgstr " (...)"
 
 #: ../gui/wxpython/gui_core/widgets.py:885
 #, python-format
-msgid "Name <%(name)s> is not a valid name for GRASS map. Please use only ASCII characters excluding %(chars)s and space."
-msgstr "Namnet <%(name)s> är inte ett giltigt namn för GRASS-kartan. Använd endast ASCII-tecken exklusive %(chars)s och mellanslag."
+msgid ""
+"Name <%(name)s> is not a valid name for GRASS map. Please use only ASCII "
+"characters excluding %(chars)s and space."
+msgstr ""
+"Namnet <%(name)s> är inte ett giltigt namn för GRASS-kartan. Använd endast "
+"ASCII-tecken exklusive %(chars)s och mellanslag."
 
 #: ../gui/wxpython/gui_core/widgets.py:889
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:1184
@@ -6344,7 +6725,8 @@ msgstr "Region match"
 
 #: ../gui/wxpython/history/browser.py:292
 msgid "Set current computational region to the region of executed command"
-msgstr "Ställ in aktuell beräkningsregion till regionen för det utförda kommandot"
+msgstr ""
+"Ställ in aktuell beräkningsregion till regionen för det utförda kommandot"
 
 #: ../gui/wxpython/history/browser.py:357
 msgid "History browser"
@@ -6559,8 +6941,12 @@ msgid "Vector <%s> exists"
 msgstr "Vektor <%s> finns"
 
 #: ../gui/wxpython/iclass/digit.py:77
-msgid "You are trying to create a training area outside the computational region. Please, use g.region to set the appropriate region first."
-msgstr "Du försöker skapa ett träningsområde utanför beräkningsregionen. Använd g.region för att ställa in lämplig region först."
+msgid ""
+"You are trying to create a training area outside the computational region. "
+"Please, use g.region to set the appropriate region first."
+msgstr ""
+"Du försöker skapa ett träningsområde utanför beräkningsregionen. Använd g."
+"region för att ställa in lämplig region först."
 
 #: ../gui/wxpython/iclass/digit.py:90
 msgid ""
@@ -6646,7 +7032,8 @@ msgstr "Inga områden i vektorkarta <%s>.\n"
 #: ../gui/wxpython/iclass/frame.py:672
 #, python-format
 msgid "Vector map <%s> contains points or lines, these features are ignored."
-msgstr "Vektorkarta <%s> innehåller punkter eller linjer, dessa funktioner ignoreras."
+msgstr ""
+"Vektorkarta <%s> innehåller punkter eller linjer, dessa funktioner ignoreras."
 
 #: ../gui/wxpython/iclass/frame.py:700
 #, python-format
@@ -6676,8 +7063,12 @@ msgid "Failed to create temporary vector map."
 msgstr "Misslyckades med att skapa en tillfällig vektorkarta."
 
 #: ../gui/wxpython/iclass/frame.py:1154
-msgid "There was an error initializing signatures. Check GUI console for any error messages."
-msgstr "Det uppstod ett fel vid initiering av signaturer. Kontrollera GUI-konsolen för eventuella felmeddelanden."
+msgid ""
+"There was an error initializing signatures. Check GUI console for any error "
+"messages."
+msgstr ""
+"Det uppstod ett fel vid initiering av signaturer. Kontrollera GUI-konsolen "
+"för eventuella felmeddelanden."
 
 #: ../gui/wxpython/iclass/frame.py:1205
 #, python-format
@@ -6697,8 +7088,12 @@ msgid "No imagery group selected."
 msgstr "Ingen bildgrupp vald."
 
 #: ../gui/wxpython/iclass/frame.py:1230
-msgid "Due to recent changes in classes, signatures can be outdated and should be recalculated. Do you still want to continue?"
-msgstr "På grund av de senaste ändringarna i klasserna kan signaturerna vara föråldrade och bör räknas om. Vill du fortfarande fortsätta?"
+msgid ""
+"Due to recent changes in classes, signatures can be outdated and should be "
+"recalculated. Do you still want to continue?"
+msgstr ""
+"På grund av de senaste ändringarna i klasserna kan signaturerna vara "
+"föråldrade och bör räknas om. Vill du fortfarande fortsätta?"
 
 #: ../gui/wxpython/iclass/frame.py:1234
 msgid "Outdated signatures"
@@ -6706,7 +7101,8 @@ msgstr "Föråldrade signaturer"
 
 #: ../gui/wxpython/iclass/frame.py:1247
 msgid "Signatures are not valid. Recalculate them and then try again."
-msgstr "Underskrifterna är inte giltiga. Beräkna dem igen och försök sedan igen."
+msgstr ""
+"Underskrifterna är inte giltiga. Beräkna dem igen och försök sedan igen."
 
 #: ../gui/wxpython/iclass/frame.py:1259
 #, python-format
@@ -6723,8 +7119,12 @@ msgstr "Ingen bildgrupp vald. Operationen avbruten."
 
 #: ../gui/wxpython/iclass/frame.py:1321
 #, python-format
-msgid "Group <%(group)s> does not have enough files (it has %(files)d files). Operation canceled."
-msgstr "Grupp <%(group)s> har inte tillräckligt med filer (den har %(files)d filer). Åtgärden avbröts."
+msgid ""
+"Group <%(group)s> does not have enough files (it has %(files)d files). "
+"Operation canceled."
+msgstr ""
+"Grupp <%(group)s> har inte tillräckligt med filer (den har %(files)d filer). "
+"Åtgärden avbröts."
 
 #: ../gui/wxpython/iclass/frame.py:1330
 msgid "No areas given. Operation canceled."
@@ -6787,7 +7187,8 @@ msgid ""
 msgstr ""
 "Funktionen för spridningsdiagram är inaktiverad.\n"
 "\n"
-"Orsak till detta: Det gick inte att importera de paket som behövs för spridningsdiagram.\n"
+"Orsak till detta: Det gick inte att importera de paket som behövs för "
+"spridningsdiagram.\n"
 "%s"
 
 #: ../gui/wxpython/iclass/statistics.py:43
@@ -6867,12 +7268,20 @@ msgid "GRASS GIS database directory contains Locations."
 msgstr "GRASS GIS-databasens katalog innehåller platser."
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:158
-msgid "All data in one Location is in the same  coordinate reference system (projection). One Location can be one project. Location contains Mapsets."
-msgstr "Alla data på en plats är i samma koordinatreferenssystem (projektion). En Location kan vara ett projekt. En plats innehåller Mapsets."
+msgid ""
+"All data in one Location is in the same  coordinate reference system "
+"(projection). One Location can be one project. Location contains Mapsets."
+msgstr ""
+"Alla data på en plats är i samma koordinatreferenssystem (projektion). En "
+"Location kan vara ett projekt. En plats innehåller Mapsets."
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:170
-msgid "Mapset contains GIS data related to one project, task within one project, subregion or user."
-msgstr "Mapset innehåller GIS-data som är relaterade till ett projekt, en uppgift inom ett projekt, en delregion eller en användare."
+msgid ""
+"Mapset contains GIS data related to one project, task within one project, "
+"subregion or user."
+msgstr ""
+"Mapset innehåller GIS-data som är relaterade till ett projekt, en uppgift "
+"inom ett projekt, en delregion eller en användare."
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:188
 msgid "Start &GRASS session"
@@ -6897,8 +7306,12 @@ msgid "N&ew"
 msgstr "N&ew"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:212
-msgid "Create a new location using location wizard. After location is created successfully, GRASS session is started."
-msgstr "Skapa en ny plats med hjälp av platsguiden. När platsen har skapats framgångsrikt startas GRASS-sessionen."
+msgid ""
+"Create a new location using location wizard. After location is created "
+"successfully, GRASS session is started."
+msgstr ""
+"Skapa en ny plats med hjälp av platsguiden. När platsen har skapats "
+"framgångsrikt startas GRASS-sessionen."
 
 #. GTC Rename location
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:221
@@ -6942,7 +7355,9 @@ msgstr "Gå in i GRASS-sessionen"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:326
 msgid "Unable to set GRASS database. Check your locale settings."
-msgstr "Det går inte att ställa in GRASS-databasen. Kontrollera dina lokala inställningar."
+msgstr ""
+"Det går inte att ställa in GRASS-databasen. Kontrollera dina lokala "
+"inställningar."
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:346
 #, python-format
@@ -6997,8 +7412,12 @@ msgstr ""
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:676
 #, python-format
-msgid "Data file <%(name)s> imported successfully. The location's default region was set from this imported map."
-msgstr "Datafil <%(name)s> importerades framgångsrikt. Platsens standardregion ställdes in från den här importerade kartan."
+msgid ""
+"Data file <%(name)s> imported successfully. The location's default region "
+"was set from this imported map."
+msgstr ""
+"Datafil <%(name)s> importerades framgångsrikt. Platsens standardregion "
+"ställdes in från den här importerade kartan."
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:692
 msgid ""
@@ -7079,11 +7498,13 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:806
 #, python-format
 msgid ""
-"Do you want to continue with deleting mapset <%(mapset)s> from location <%(location)s>?\n"
+"Do you want to continue with deleting mapset <%(mapset)s> from location "
+"<%(location)s>?\n"
 "\n"
 "ALL MAPS included in this mapset will be PERMANENTLY DELETED!"
 msgstr ""
-"Vill du fortsätta med att radera mapset <%(mapset)s> från plats <%(location)s>?\n"
+"Vill du fortsätta med att radera mapset <%(mapset)s> från plats "
+"<%(location)s>?\n"
 "\n"
 "ALLA KARTOR som ingår i denna kartuppsättning kommer att raderas PERMANENT!"
 
@@ -7111,12 +7532,18 @@ msgstr "Det går inte att ta bort platsen: %s"
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:866
 #, python-brace-format
 msgid "Unicode error detected. Check your locale settings. Details: {0}"
-msgstr "Unicode-fel upptäcktes. Kontrollera dina lokala inställningar. Detaljerad information: {0}"
+msgstr ""
+"Unicode-fel upptäcktes. Kontrollera dina lokala inställningar. Detaljerad "
+"information: {0}"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:881
 #, python-format
-msgid "No GRASS Location found in '%s'. Create a new Location or choose different GRASS database directory."
-msgstr "Ingen GRASS-plats hittades i '%s'. Skapa en ny plats eller välj en annan katalog för GRASS-databasen."
+msgid ""
+"No GRASS Location found in '%s'. Create a new Location or choose different "
+"GRASS database directory."
+msgstr ""
+"Ingen GRASS-plats hittades i '%s'. Skapa en ny plats eller välj en annan "
+"katalog för GRASS-databasen."
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:1001
 #, python-format
@@ -7135,11 +7562,13 @@ msgstr "Mapset <%s> finns redan."
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:1050
 #, python-format
 msgid ""
-"Mapset <%s> is reserved for direct read access to OGR layers. Please consider to use another name for your mapset.\n"
+"Mapset <%s> is reserved for direct read access to OGR layers. Please "
+"consider to use another name for your mapset.\n"
 "\n"
 "Are you really sure that you want to create this mapset?"
 msgstr ""
-"Mapset <%s> är reserverat för direkt läsåtkomst till OGR-skikt. Tänk på att använda ett annat namn för din mapset.\n"
+"Mapset <%s> är reserverat för direkt läsåtkomst till OGR-skikt. Tänk på att "
+"använda ett annat namn för din mapset.\n"
 "\n"
 "Är du verkligen säker på att du vill skapa denna mapset?"
 
@@ -7160,14 +7589,16 @@ msgid ""
 "\n"
 "Concurrent use not allowed.\n"
 "\n"
-"Do you want to try to remove .gislock (note that you need permission for this operation) and continue?"
+"Do you want to try to remove .gislock (note that you need permission for "
+"this operation) and continue?"
 msgstr ""
 "GRASS körs redan i den valda kartuppsättningen <%(mapset)s>\n"
 "(fil %(lock)s hittades).\n"
 "\n"
 "Samtidig användning är inte tillåten.\n"
 "\n"
-"Vill du försöka ta bort .gislock (notera att du behöver tillstånd för den här åtgärden) och fortsätta?"
+"Vill du försöka ta bort .gislock (notera att du behöver tillstånd för den "
+"här åtgärden) och fortsätta?"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:1107
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:1124
@@ -7178,11 +7609,13 @@ msgstr "Låsfil hittades"
 msgid ""
 "ARE YOU REALLY SURE?\n"
 "\n"
-"If you really are running another GRASS session doing this could corrupt your data. Have another look in the processor manager just to be sure..."
+"If you really are running another GRASS session doing this could corrupt "
+"your data. Have another look in the processor manager just to be sure..."
 msgstr ""
 "ÄR DU VERKLIGEN SÄKER?\n"
 "\n"
-"Om du verkligen kör en annan GRASS-session kan detta korrumpera dina data. Ta en titt i processorhanteraren igen bara för att vara säker..."
+"Om du verkligen kör en annan GRASS-session kan detta korrumpera dina data. "
+"Ta en titt i processorhanteraren igen bara för att vara säker..."
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:1136
 #, python-format
@@ -7197,12 +7630,22 @@ msgstr ""
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:1180
 #, python-format
-msgid "Name <%(name)s> is not a valid name for location or mapset. Please use only ASCII characters excluding %(chars)s and space."
-msgstr "Namn <%(name)s> är inte ett giltigt namn för plats eller kartset. Använd endast ASCII-tecken exklusive %(chars)s och mellanslag."
+msgid ""
+"Name <%(name)s> is not a valid name for location or mapset. Please use only "
+"ASCII characters excluding %(chars)s and space."
+msgstr ""
+"Namn <%(name)s> är inte ett giltigt namn för plats eller kartset. Använd "
+"endast ASCII-tecken exklusive %(chars)s och mellanslag."
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:1257
-msgid "GRASS needs a directory (GRASS database) in which to store its data. Create one now if you have not already done so. A popular choice is \"grassdata\", located in your home directory. Press Browse button to select the directory."
-msgstr "GRASS behöver en katalog (GRASS-databas) för att lagra sina data. Skapa en nu om du inte redan har gjort det. Ett populärt val är \"grassdata\", som finns i din hemkatalog. Tryck på Browse-knappen för att välja katalog."
+msgid ""
+"GRASS needs a directory (GRASS database) in which to store its data. Create "
+"one now if you have not already done so. A popular choice is \"grassdata\", "
+"located in your home directory. Press Browse button to select the directory."
+msgstr ""
+"GRASS behöver en katalog (GRASS-databas) för att lagra sina data. Skapa en "
+"nu om du inte redan har gjort det. Ett populärt val är \"grassdata\", som "
+"finns i din hemkatalog. Tryck på Browse-knappen för att välja katalog."
 
 #: ../gui/wxpython/image2target/ii2t_manager.py:565
 msgid "Select group:"
@@ -7267,33 +7710,44 @@ msgstr "Inga uppgifter."
 #, python-format
 msgid ""
 "Interactive Scatter Plot Tool can not be used.\n"
-"Number of cells (rows*cols) <%d> in current regionis higher than maximum limit <%d>.\n"
+"Number of cells (rows*cols) <%d> in current regionis higher than maximum "
+"limit <%d>.\n"
 "\n"
 "You can reduce number of cells in current region using <g.region> command."
 msgstr ""
 "Det interaktiva verktyget för spridningsdiagram kan inte användas.\n"
-"Antalet celler (rader*koller) <%d> i aktuell region är högre än maxgränsen <%d>.\n"
+"Antalet celler (rader*koller) <%d> i aktuell region är högre än maxgränsen "
+"<%d>.\n"
 "\n"
-"Du kan minska antalet celler i den aktuella regionen med kommandot <g.region>."
+"Du kan minska antalet celler i den aktuella regionen med kommandot <g."
+"region>."
 
 #: ../gui/wxpython/iscatt/controllers.py:242
 #, python-format
 msgid ""
-"Number of cells (rows*cols) <%d> in current region is higher than recommended threshold <%d>.\n"
-"It is strongly advised to reduce number of cells in current region below recommend threshold.\n"
+"Number of cells (rows*cols) <%d> in current region is higher than "
+"recommended threshold <%d>.\n"
+"It is strongly advised to reduce number of cells in current region below "
+"recommend threshold.\n"
 " It can be done by <g.region> command.\n"
 "\n"
 "Do you want to continue using Interactive Scatter Plot Tool with this region?"
 msgstr ""
-"Antalet celler (rader*kolumner) <%d> i den aktuella regionen är högre än det rekommenderade tröskelvärdet <%d>.\n"
-"Det är starkt rekommenderat att minska antalet celler i den aktuella regionen under det rekommenderade tröskelvärdet.\n"
+"Antalet celler (rader*kolumner) <%d> i den aktuella regionen är högre än det "
+"rekommenderade tröskelvärdet <%d>.\n"
+"Det är starkt rekommenderat att minska antalet celler i den aktuella "
+"regionen under det rekommenderade tröskelvärdet.\n"
 " Det kan göras med kommandot <g.region>.\n"
 "\n"
 "Vill du fortsätta använda Interactive Scatter Plot Tool med den här regionen?"
 
 #: ../gui/wxpython/iscatt/controllers.py:302
-msgid "Scatter plot with same band combination (regardless x y order) is already displayed."
-msgstr "Spridningsdiagram med samma bandkombination (oavsett x y-ordning) visas redan."
+msgid ""
+"Scatter plot with same band combination (regardless x y order) is already "
+"displayed."
+msgstr ""
+"Spridningsdiagram med samma bandkombination (oavsett x y-ordning) visas "
+"redan."
 
 #: ../gui/wxpython/iscatt/controllers.py:317
 #, python-format
@@ -7308,21 +7762,27 @@ msgstr "Det går inte att lägga till spridningsdiagram.\n"
 #, python-format
 msgid ""
 "Scatter plot cannot be added.\n"
-"Multiple of bands ranges <%s:%d * %s:%d = %d> is higher than maximum limit <%d>.\n"
+"Multiple of bands ranges <%s:%d * %s:%d = %d> is higher than maximum limit "
+"<%d>.\n"
 msgstr ""
 "Det går inte att lägga till spridningsdiagram.\n"
-"Multipeln av bandintervallen <%s:%d * %s:%d = %d> är högre än maxgränsen <%d>.\n"
+"Multipeln av bandintervallen <%s:%d * %s:%d = %d> är högre än maxgränsen "
+"<%d>.\n"
 
 #: ../gui/wxpython/iscatt/controllers.py:348
 #, python-format
 msgid ""
-"Multiple of bands ranges <%s:%d * %s:%d = %d> is higher than recommended limit <%d>.\n"
-"It is strongly advised to reduce range extend of bands(e. g. using r.rescale) below recommended threshold.\n"
+"Multiple of bands ranges <%s:%d * %s:%d = %d> is higher than recommended "
+"limit <%d>.\n"
+"It is strongly advised to reduce range extend of bands(e. g. using r."
+"rescale) below recommended threshold.\n"
 "\n"
 "Do you really want to add this scatter plot?"
 msgstr ""
-"Multipel av bandintervall <%s:%d * %s:%d = %d> är högre än rekommenderad gräns <%d>.\n"
-"Det är starkt rekommenderat att minska intervallet extend of bands (t.ex. med hjälp av r.rescale) under det rekommenderade tröskelvärdet.\n"
+"Multipel av bandintervall <%s:%d * %s:%d = %d> är högre än rekommenderad "
+"gräns <%d>.\n"
+"Det är starkt rekommenderat att minska intervallet extend of bands (t.ex. "
+"med hjälp av r.rescale) under det rekommenderade tröskelvärdet.\n"
 "\n"
 "Vill du verkligen lägga till det här spridningsdiagrammet?"
 
@@ -7332,7 +7792,8 @@ msgid ""
 "\n"
 "There is no class yet, do you want to create one?"
 msgstr ""
-"För att kunna välja arrea i spridningsdiagrammet måste du först välja klass.\n"
+"För att kunna välja arrea i spridningsdiagrammet måste du först välja "
+"klass.\n"
 "\n"
 "Det finns ingen klass ännu, vill du skapa en?"
 
@@ -7353,7 +7814,8 @@ msgstr "Exportera spridningsdiagram raster av klass <%s>"
 #: ../gui/wxpython/iscatt/controllers.py:805
 #, python-format
 msgid "Scatter plot raster of class <%s> exported to raster map <%s>."
-msgstr "Spridningsdiagramraster av klass <%s> exporterat till rasterkarta <%s>."
+msgstr ""
+"Spridningsdiagramraster av klass <%s> exporterat till rasterkarta <%s>."
 
 #: ../gui/wxpython/iscatt/controllers.py:810
 #, python-format
@@ -7361,7 +7823,8 @@ msgid ""
 "Export of scatter plot raster of class <%s> to map <%s> failed.\n"
 "%s"
 msgstr ""
-"Export av spridningsdiagramraster av klass <%s> till karta <%s> misslyckades.\n"
+"Export av spridningsdiagramraster av klass <%s> till karta <%s> "
+"misslyckades.\n"
 "%s"
 
 #: ../gui/wxpython/iscatt/core_c.py:42
@@ -7398,8 +7861,12 @@ msgid "Selected bands must be different."
 msgstr "Utvalda band måste vara olika."
 
 #: ../gui/wxpython/iscatt/dialogs.py:204
-msgid "Scatter plot with same bands combination (regardless x y order) has been already added into the list."
-msgstr "Spridningsdiagram med samma bandkombination (oavsett x y-ordning) har redan lagts till i listan."
+msgid ""
+"Scatter plot with same bands combination (regardless x y order) has been "
+"already added into the list."
+msgstr ""
+"Spridningsdiagram med samma bandkombination (oavsett x y-ordning) har redan "
+"lagts till i listan."
 
 #: ../gui/wxpython/iscatt/dialogs.py:328
 #, python-format
@@ -7538,8 +8005,12 @@ msgstr ""
 
 #: ../gui/wxpython/iscatt/plots.py:45
 #, python-brace-format
-msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
-msgstr "Scatterplot Tool kräver att paketet \"matplotlib\" (python-matplotlib) är installerat. {0}"
+msgid ""
+"The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to "
+"be installed. {0}"
+msgstr ""
+"Scatterplot Tool kräver att paketet \"matplotlib\" (python-matplotlib) är "
+"installerat. {0}"
 
 #: ../gui/wxpython/iscatt/plots.py:609
 msgid "Zoom to scatter plot extend"
@@ -7562,8 +8033,12 @@ msgid "Zoom mode for scatter plots (left mouse button, wheel)"
 msgstr "Zoom-läge för spridningsdiagram (vänster musknapp, hjul)"
 
 #: ../gui/wxpython/iscatt/toolbars.py:71
-msgid "Zoom to scatter plot data extend mode (click on scatter plot for zooming to extend)"
-msgstr "Utökat läge för zoomning till spridningsdiagramdata (klicka på spridningsdiagrammet för att utöka zoomningen)"
+msgid ""
+"Zoom to scatter plot data extend mode (click on scatter plot for zooming to "
+"extend)"
+msgstr ""
+"Utökat läge för zoomning till spridningsdiagramdata (klicka på "
+"spridningsdiagrammet för att utöka zoomningen)"
 
 #: ../gui/wxpython/iscatt/toolbars.py:76
 msgid "Show/hide class manager"
@@ -7593,7 +8068,8 @@ msgstr "Skapa urvalspolygon"
 
 #: ../gui/wxpython/iscatt/toolbars.py:228
 msgid "Add new vertex between last and first points of the boundary"
-msgstr "Lägg till en ny toppunkt mellan den sista och den första punkten i gränsen"
+msgstr ""
+"Lägg till en ny toppunkt mellan den sista och den första punkten i gränsen"
 
 #: ../gui/wxpython/iscatt/toolbars.py:232
 msgid "Move vertex"
@@ -7613,7 +8089,8 @@ msgstr "Ta bort gränsvertex"
 
 #: ../gui/wxpython/iscatt/toolbars.py:243
 msgid "Remove polygon (click on scatter plot for removing it's polygon)"
-msgstr "Ta bort polygon (klicka på spridningsdiagrammet för att ta bort dess polygon)"
+msgstr ""
+"Ta bort polygon (klicka på spridningsdiagrammet för att ta bort dess polygon)"
 
 #: ../gui/wxpython/iscatt/toolbars.py:343
 msgid "Add class"
@@ -7672,8 +8149,12 @@ msgstr "Välj modell för att köra"
 
 #: ../gui/wxpython/lmgr/frame.py:998 ../gui/wxpython/main_window/frame.py:1140
 #, python-format
-msgid "Command '%s' not yet implemented in the WxGUI. Try adding it as a command layer instead."
-msgstr "Kommandot '%s' är ännu inte implementerat i WxGUI. Försök att lägga till det som ett kommandolager istället."
+msgid ""
+"Command '%s' not yet implemented in the WxGUI. Try adding it as a command "
+"layer instead."
+msgstr ""
+"Kommandot '%s' är ännu inte implementerat i WxGUI. Försök att lägga till det "
+"som ett kommandolager istället."
 
 #: ../gui/wxpython/lmgr/frame.py:1180 ../gui/wxpython/lmgr/frame.py:1858
 #: ../gui/wxpython/main_window/frame.py:1336
@@ -7683,7 +8164,9 @@ msgstr "Valt kartlager är inte vektor."
 
 #: ../gui/wxpython/lmgr/frame.py:1187 ../gui/wxpython/main_window/frame.py:1343
 msgid "Editing is allowed only for vector maps from the current mapset."
-msgstr "Redigering är endast tillåten för vektorkartor från den aktuella kartuppsättningen."
+msgstr ""
+"Redigering är endast tillåten för vektorkartor från den aktuella "
+"kartuppsättningen."
 
 #: ../gui/wxpython/lmgr/frame.py:1214 ../gui/wxpython/main_window/frame.py:1370
 msgid "Choose script file to run"
@@ -7700,8 +8183,12 @@ msgstr "Skriptfilen '%s' finns inte. Åtgärden avbröts."
 
 #: ../gui/wxpython/lmgr/frame.py:1239 ../gui/wxpython/main_window/frame.py:1395
 #, python-format
-msgid "Script <%s> is not executable. Do you want to set the permissions that allows you to run this script (note that you must be the owner of the file)?"
-msgstr "Skript <%s> är inte körbart. Vill du ange de behörigheter som gör att du kan köra det här skriptet (observera att du måste vara ägare till filen)?"
+msgid ""
+"Script <%s> is not executable. Do you want to set the permissions that "
+"allows you to run this script (note that you must be the owner of the file)?"
+msgstr ""
+"Skript <%s> är inte körbart. Vill du ange de behörigheter som gör att du kan "
+"köra det här skriptet (observera att du måste vara ägare till filen)?"
 
 #: ../gui/wxpython/lmgr/frame.py:1245 ../gui/wxpython/main_window/frame.py:1401
 msgid "Set permission?"
@@ -7713,8 +8200,12 @@ msgstr "Det går inte att ange behörighet. Åtgärden avbröts."
 
 #: ../gui/wxpython/lmgr/frame.py:1268 ../gui/wxpython/main_window/frame.py:1424
 #, python-format
-msgid "Directory '%s' is not defined in GRASS_ADDON_PATH. Do you want add this directory to GRASS_ADDON_PATH?"
-msgstr "Katalogen '%s' är inte definierad i GRASS_ADDON_PATH. Vill du lägga till denna katalog i GRASS_ADDON_PATH?"
+msgid ""
+"Directory '%s' is not defined in GRASS_ADDON_PATH. Do you want add this "
+"directory to GRASS_ADDON_PATH?"
+msgstr ""
+"Katalogen '%s' är inte definierad i GRASS_ADDON_PATH. Vill du lägga till "
+"denna katalog i GRASS_ADDON_PATH?"
 
 #: ../gui/wxpython/lmgr/frame.py:1272 ../gui/wxpython/main_window/frame.py:1428
 msgid "Update Addons path?"
@@ -7755,8 +8246,12 @@ msgid "Without parameters it opens a dialog."
 msgstr "Utan parametrar öppnas en dialogruta."
 
 #: ../gui/wxpython/lmgr/frame.py:1383 ../gui/wxpython/main_window/frame.py:1539
-msgid "If ~ (tilde) is present as the first directory on the path, it is replaced by user's home directory."
-msgstr "Om ~ (tilde) finns som första katalog på sökvägen ersätts den med användarens hemkatalog."
+msgid ""
+"If ~ (tilde) is present as the first directory on the path, it is replaced "
+"by user's home directory."
+msgstr ""
+"Om ~ (tilde) finns som första katalog på sökvägen ersätts den med "
+"användarens hemkatalog."
 
 #: ../gui/wxpython/lmgr/frame.py:1402 ../gui/wxpython/main_window/frame.py:1558
 msgid "More than one parameter provided."
@@ -7833,8 +8328,12 @@ msgid "Unsupported map layer type <%s>."
 msgstr "Kartskiktstyp <%s> stöds inte."
 
 #: ../gui/wxpython/lmgr/frame.py:2119 ../gui/wxpython/main_window/frame.py:2262
-msgid "Note that cell values can only be displayed for regions of less than 10,000 cells."
-msgstr "Observera att cellvärden endast kan visas för regioner med färre än 10.000 celler."
+msgid ""
+"Note that cell values can only be displayed for regions of less than 10,000 "
+"cells."
+msgstr ""
+"Observera att cellvärden endast kan visas för regioner med färre än 10.000 "
+"celler."
 
 #: ../gui/wxpython/lmgr/frame.py:2214 ../gui/wxpython/lmgr/layertree.py:2128
 #: ../gui/wxpython/main_window/frame.py:2338
@@ -7865,8 +8364,14 @@ msgid "Quit GRASS GUI"
 msgstr "Avsluta GRASS GUI"
 
 #: ../gui/wxpython/lmgr/frame.py:2330 ../gui/wxpython/main_window/frame.py:2438
-msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
-msgstr "Skärmupplösningen är för närvarande inte begränsad till beräkningsinställningarna. Det föreslås att kartan begränsas till regiongeometri. Vill du begränsa upplösningen?"
+msgid ""
+"Display resolution is currently not constrained to computational settings. "
+"It's suggested to constrain map to region geometry. Do you want to constrain "
+"the resolution?"
+msgstr ""
+"Skärmupplösningen är för närvarande inte begränsad till "
+"beräkningsinställningarna. Det föreslås att kartan begränsas till "
+"regiongeometri. Vill du begränsa upplösningen?"
 
 #: ../gui/wxpython/lmgr/frame.py:2341 ../gui/wxpython/main_window/frame.py:2449
 msgid "Constrain map to region geometry?"
@@ -7991,11 +8496,11 @@ msgstr "Gör en kopia i den aktuella kartuppsättningen"
 #: ../gui/wxpython/lmgr/layertree.py:673 ../gui/wxpython/lmgr/layertree.py:806
 #: ../gui/wxpython/lmgr/layertree.py:863
 msgid "Set color table"
-msgstr "Ställ in färgbordet"
+msgstr "Ställ in färgtabell"
 
 #: ../gui/wxpython/lmgr/layertree.py:677 ../gui/wxpython/lmgr/layertree.py:810
 msgid "Set color table interactively"
-msgstr "Ställ in färgbordet interaktivt"
+msgstr "Ställ in färgtabellen interaktivt"
 
 #: ../gui/wxpython/lmgr/layertree.py:682
 msgid "Show attribute data"
@@ -8069,8 +8574,11 @@ msgstr "Gör en kopia av %s <%s>"
 
 #: ../gui/wxpython/lmgr/layertree.py:1081
 #, python-format
-msgid "%s <%s> already exists in the current mapset. Do you want to overwrite it?"
-msgstr "%s <%s> finns redan i den aktuella kartuppsättningen. Vill du skriva över den?"
+msgid ""
+"%s <%s> already exists in the current mapset. Do you want to overwrite it?"
+msgstr ""
+"%s <%s> finns redan i den aktuella kartuppsättningen. Vill du skriva över "
+"den?"
 
 #: ../gui/wxpython/lmgr/layertree.py:1094
 #, python-format
@@ -8080,11 +8588,14 @@ msgstr "Det går inte att göra en kopia av <%s>"
 #: ../gui/wxpython/lmgr/layertree.py:1101
 #, python-format
 msgid "Unable to make copy of <%s>. Mapset <%s> is not current mapset."
-msgstr "Det går inte att göra en kopia av <%s>. Kartset <%s> är inte aktuellt kartset."
+msgstr ""
+"Det går inte att göra en kopia av <%s>. Kartset <%s> är inte aktuellt "
+"kartset."
 
 #: ../gui/wxpython/lmgr/layertree.py:1123
 msgid "Unable to display histogram of raster map. No map name defined."
-msgstr "Det går inte att visa histogram för rasterkarta. Inget kartnamn definierat."
+msgstr ""
+"Det går inte att visa histogram för rasterkarta. Inget kartnamn definierat."
 
 #: ../gui/wxpython/lmgr/layertree.py:1180 ../gui/wxpython/mapdisp/frame.py:316
 #, python-format
@@ -8326,8 +8837,12 @@ msgid "Show 3D view mode manual"
 msgstr "Visa 3D-visningsläge manuell"
 
 #: ../gui/wxpython/lmgr/workspace.py:74
-msgid "Current workspace is not empty. Do you want to store current settings to workspace file?"
-msgstr "Den aktuella arbetsytan är inte tom. Vill du lagra aktuella inställningar i arbetsytans fil?"
+msgid ""
+"Current workspace is not empty. Do you want to store current settings to "
+"workspace file?"
+msgstr ""
+"Den aktuella arbetsytan är inte tom. Vill du lagra aktuella inställningar i "
+"arbetsytans fil?"
 
 #: ../gui/wxpython/lmgr/workspace.py:78
 msgid "Create new workspace?"
@@ -8354,7 +8869,8 @@ msgid ""
 "\n"
 "Do you want to proceed with opening the workspace anyway?"
 msgstr ""
-"Det går inte att ändra till den plats och det mapset som anges i arbetsytan.\n"
+"Det går inte att ändra till den plats och det mapset som anges i "
+"arbetsytan.\n"
 "Orsak: {reason}\n"
 "Detaljerad information: {details}\n"
 "\n"
@@ -8395,7 +8911,8 @@ msgstr "Välj fil för att spara aktuell arbetsyta"
 #: ../gui/wxpython/lmgr/workspace.py:390 ../gui/wxpython/lmgr/workspace.py:413
 #, python-format
 msgid "Workspace file <%s> already exists. Do you want to overwrite this file?"
-msgstr "Arbetsområdesfilen <%s> finns redan. Vill du skriva över den här filen?"
+msgstr ""
+"Arbetsområdesfilen <%s> finns redan. Vill du skriva över den här filen?"
 
 #: ../gui/wxpython/lmgr/workspace.py:443
 #, python-format
@@ -8553,20 +9070,32 @@ msgid "Project will be created in GRASS database:"
 msgstr "Projektet kommer att skapas i GRASS-databasen:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:296
-msgid "Name '{}' is not a valid name for project. Please use only ASCII characters excluding characters {} and space."
-msgstr "Namnet '{}' är inte ett giltigt namn för projektet. Använd endast ASCII-tecken exklusive tecken {} och mellanslag."
+msgid ""
+"Name '{}' is not a valid name for project. Please use only ASCII characters "
+"excluding characters {} and space."
+msgstr ""
+"Namnet '{}' är inte ett giltigt namn för projektet. Använd endast ASCII-"
+"tecken exklusive tecken {} och mellanslag."
 
 #: ../gui/wxpython/location_wizard/wizard.py:308
-msgid "Project '{}' already exists. Please consider using another name for your project."
-msgstr "Projekt '{}' finns redan. Överväg att använda ett annat namn för ditt projekt."
+msgid ""
+"Project '{}' already exists. Please consider using another name for your "
+"project."
+msgstr ""
+"Projekt '{}' finns redan. Överväg att använda ett annat namn för ditt "
+"projekt."
 
 #: ../gui/wxpython/location_wizard/wizard.py:311
 msgid "Existing project path"
 msgstr "Befintlig projektväg"
 
 #: ../gui/wxpython/location_wizard/wizard.py:346
-msgid "Title of the project is limited only to one line and 256 characters. The rest of the text will be ignored."
-msgstr "Projektets titel är begränsad till endast en rad och 256 tecken. Resten av texten kommer att ignoreras."
+msgid ""
+"Title of the project is limited only to one line and 256 characters. The "
+"rest of the text will be ignored."
+msgstr ""
+"Projektets titel är begränsad till endast en rad och 256 tecken. Resten av "
+"texten kommer att ignoreras."
 
 #: ../gui/wxpython/location_wizard/wizard.py:357
 msgid "Select Coordinate Reference System (CRS)"
@@ -8779,7 +9308,8 @@ msgid ""
 "\n"
 "Details: %(err)s"
 msgstr ""
-"Det går inte att skapa ett nytt projekt. Projekt <%(loc)s> har inte skapats.\n"
+"Det går inte att skapa ett nytt projekt. Projekt <%(loc)s> har inte "
+"skapats.\n"
 "\n"
 "Detaljerad information: %(err)s"
 
@@ -8914,8 +9444,11 @@ msgstr "Inget raster- eller vektorkartlager har valts för sökning."
 
 #: ../gui/wxpython/mapdisp/frame.py:1115
 #, python-brace-format
-msgid "Failed to query vector map(s) <{maps}>. Check database settings and topology."
-msgstr "Misslyckades med att fråga efter vektorkarta(er) <{maps}>. Kontrollera databasinställningar och topologi."
+msgid ""
+"Failed to query vector map(s) <{maps}>. Check database settings and topology."
+msgstr ""
+"Misslyckades med att fråga efter vektorkarta(er) <{maps}>. Kontrollera "
+"databasinställningar och topologi."
 
 #: ../gui/wxpython/mapdisp/frame.py:1535
 msgid "Set computational region extent from display"
@@ -8946,7 +9479,8 @@ msgstr "Kommando som inte stöds %s."
 #: ../gui/wxpython/mapdisp/main.py:288
 #, python-format
 msgid "Unable to read cmdfile '%(cmd)s'. Details: %(det)s"
-msgstr "Det gick inte att läsa cmdfile '%(cmd)s'. Detaljerad information: %(det)s"
+msgstr ""
+"Det gick inte att läsa cmdfile '%(cmd)s'. Detaljerad information: %(det)s"
 
 #: ../gui/wxpython/mapdisp/main.py:654
 #, python-format
@@ -8969,28 +9503,48 @@ msgid "Enable/disable auto-rendering"
 msgstr "Aktivera/avaktivera automatisk rendering"
 
 #: ../gui/wxpython/mapdisp/properties.py:119
-msgid "Align region extent based on display size from center point. Default value for new map displays can be set up in 'User GUI settings' dialog."
-msgstr "Rikta in regionens utsträckning baserat på visningsstorlek från mittpunkten. Standardvärdet för nya kartvisningar kan ställas in i dialogrutan \"Inställningar för användargränssnitt\"."
+msgid ""
+"Align region extent based on display size from center point. Default value "
+"for new map displays can be set up in 'User GUI settings' dialog."
+msgstr ""
+"Rikta in regionens utsträckning baserat på visningsstorlek från mittpunkten. "
+"Standardvärdet för nya kartvisningar kan ställas in i dialogrutan "
+"\"Inställningar för användargränssnitt\"."
 
 #: ../gui/wxpython/mapdisp/properties.py:157
-msgid "Constrain display resolution to computational region settings. Default value for new map displays can be set up in 'User GUI settings' dialog."
-msgstr "Begränsa visningsupplösningen till inställningarna för beräkningsregionen. Standardvärdet för nya kartvisningar kan ställas in i dialogrutan \"Inställningar för användargränssnitt\"."
+msgid ""
+"Constrain display resolution to computational region settings. Default value "
+"for new map displays can be set up in 'User GUI settings' dialog."
+msgstr ""
+"Begränsa visningsupplösningen till inställningarna för beräkningsregionen. "
+"Standardvärdet för nya kartvisningar kan ställas in i dialogrutan "
+"\"Inställningar för användargränssnitt\"."
 
 #: ../gui/wxpython/mapdisp/properties.py:195
 msgid "Show computational extent"
 msgstr "Visa beräkningsomfattning"
 
 #: ../gui/wxpython/mapdisp/properties.py:201
-msgid "Show/hide computational region extent (set with g.region). Display region drawn as a blue box inside the computational region, computational region inside a display region as a red box)."
-msgstr "Visa/dölj beräkningsregionens utsträckning (ställs in med g.region). Visningsregion ritad som en blå box inuti beräkningsregionen, beräkningsregion inuti en visningsregion som en röd box)."
+msgid ""
+"Show/hide computational region extent (set with g.region). Display region "
+"drawn as a blue box inside the computational region, computational region "
+"inside a display region as a red box)."
+msgstr ""
+"Visa/dölj beräkningsregionens utsträckning (ställs in med g.region). "
+"Visningsregion ritad som en blå box inuti beräkningsregionen, "
+"beräkningsregion inuti en visningsregion som en röd box)."
 
 #: ../gui/wxpython/mapdisp/properties.py:242
 msgid "Display coordinates in different CRS"
 msgstr "Visa koordinater i olika CRS"
 
 #: ../gui/wxpython/mapdisp/properties.py:248
-msgid "Reproject coordinates displayed in the statusbar. Coordinate reference system can be specified in GUI preferences dialog (tab 'Projection')"
-msgstr "Återprojicerar koordinater som visas i statusfältet. Referenssystemet för koordinater kan anges i dialogrutan GUI-inställningar (fliken \"Projektion\")"
+msgid ""
+"Reproject coordinates displayed in the statusbar. Coordinate reference "
+"system can be specified in GUI preferences dialog (tab 'Projection')"
+msgstr ""
+"Återprojicerar koordinater som visas i statusfältet. Referenssystemet för "
+"koordinater kan anges i dialogrutan GUI-inställningar (fliken \"Projektion\")"
 
 #: ../gui/wxpython/mapdisp/properties.py:273
 #, python-brace-format
@@ -9010,8 +9564,12 @@ msgid "Map scale"
 msgstr "Kartans skala"
 
 #: ../gui/wxpython/mapdisp/statusbar.py:463
-msgid "As everyone's monitors and resolutions are set differently these values are not true map scales, but should get you into the right neighborhood."
-msgstr "Eftersom allas skärmar och upplösningar är olika inställda är dessa värden inte riktiga kartskalor, men de bör ge dig en uppfattning om vad som är rätt."
+msgid ""
+"As everyone's monitors and resolutions are set differently these values are "
+"not true map scales, but should get you into the right neighborhood."
+msgstr ""
+"Eftersom allas skärmar och upplösningar är olika inställda är dessa värden "
+"inte riktiga kartskalor, men de bör ge dig en uppfattning om vad som är rätt."
 
 #: ../gui/wxpython/mapdisp/statusbar.py:518
 msgid "Go to XY coordinates"
@@ -9156,8 +9714,10 @@ msgid "Fly-through mode"
 msgstr "Fly-through-läge"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:70
-msgid "Drag with mouse, hold Ctrl down for different mode or Shift to accelerate"
-msgstr "Dra med musen, håll ned Ctrl för olika lägen eller Shift för att accelerera"
+msgid ""
+"Drag with mouse, hold Ctrl down for different mode or Shift to accelerate"
+msgstr ""
+"Dra med musen, håll ned Ctrl för olika lägen eller Shift för att accelerera"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:73
 msgid "Click mouse to zoom"
@@ -9182,8 +9742,16 @@ msgid "Vector digitizer not available"
 msgstr "Vektordigitalisator inte tillgänglig"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:122
-msgid "Note that the wxGUI's vector digitizer is disabled in this installation.Please keep an eye out for updated versions of GRASS. In the meantime you can use \"v.edit\" for non-interactive editing from the Develop vector map menu."
-msgstr "Observera att wxGUI:s vektordigitalisator är inaktiverad i den här installationen. Håll utkik efter uppdaterade versioner av GRASS. Under tiden kan du använda \"v.edit\" för icke-interaktiv redigering från menyn Develop vector map."
+msgid ""
+"Note that the wxGUI's vector digitizer is disabled in this installation."
+"Please keep an eye out for updated versions of GRASS. In the meantime you "
+"can use \"v.edit\" for non-interactive editing from the Develop vector map "
+"menu."
+msgstr ""
+"Observera att wxGUI:s vektordigitalisator är inaktiverad i den här "
+"installationen. Håll utkik efter uppdaterade versioner av GRASS. Under tiden "
+"kan du använda \"v.edit\" för icke-interaktiv redigering från menyn Develop "
+"vector map."
 
 #: ../gui/wxpython/mapswipe/dialogs.py:52
 #: ../gui/wxpython/mapswipe/toolbars.py:28
@@ -9273,8 +9841,12 @@ msgstr "Mätning klar"
 #: ../gui/wxpython/mapwin/analysis.py:245
 #: ../gui/wxpython/mapwin/analysis.py:370
 #, python-format
-msgid "Click and drag with left mouse button to measure.%sDouble click with left button to clear."
-msgstr "Klicka och dra med vänster musknapp för att mäta.%sDubbelklicka med vänster musknapp för att rensa."
+msgid ""
+"Click and drag with left mouse button to measure.%sDouble click with left "
+"button to clear."
+msgstr ""
+"Klicka och dra med vänster musknapp för att mäta.%sDubbelklicka med vänster "
+"musknapp för att rensa."
 
 #: ../gui/wxpython/mapwin/analysis.py:253
 msgid "Measuring distance"
@@ -9523,7 +10095,8 @@ msgstr "Uppdatera standardtabellen"
 
 #: ../gui/wxpython/modules/colorrules.py:588
 msgid "Show preview of map (current Map Display extent is used)."
-msgstr "Visa förhandsgranskning av kartan (aktuell kartvisningsomfattning används)."
+msgstr ""
+"Visa förhandsgranskning av kartan (aktuell kartvisningsomfattning används)."
 
 #: ../gui/wxpython/modules/colorrules.py:623
 #: ../gui/wxpython/modules/colorrules.py:1899
@@ -9566,7 +10139,8 @@ msgstr "intervall"
 #: ../gui/wxpython/modules/colorrules.py:969
 #, python-format
 msgid "Enter raster category values or percents (%(range)s = %(min)d-%(max)d)"
-msgstr "Ange värden för rasterkategori eller procent (%(range)s = %(min)d-%(max)d)"
+msgstr ""
+"Ange värden för rasterkategori eller procent (%(range)s = %(min)d-%(max)d)"
 
 #: ../gui/wxpython/modules/colorrules.py:1076
 msgid "Create new color rules for vector map"
@@ -9633,8 +10207,12 @@ msgstr "Importera eller exportera färgtabell"
 
 #: ../gui/wxpython/modules/colorrules.py:1239
 #, python-format
-msgid "Database connection for vector map <%s> is not defined in DB file.  Do you want to create and connect new attribute table?"
-msgstr "Databasanslutning för vector map <%s> är inte definierad i DB-filen.  Vill du skapa och ansluta en ny attributtabell?"
+msgid ""
+"Database connection for vector map <%s> is not defined in DB file.  Do you "
+"want to create and connect new attribute table?"
+msgstr ""
+"Databasanslutning för vector map <%s> är inte definierad i DB-filen.  Vill "
+"du skapa och ansluta en ny attributtabell?"
 
 #: ../gui/wxpython/modules/colorrules.py:1244
 msgid "No database connection defined"
@@ -9642,8 +10220,12 @@ msgstr "Ingen databasanslutning definierad"
 
 #: ../gui/wxpython/modules/colorrules.py:1320
 #, python-format
-msgid "Selected map <%(map)s> is not in current mapset <%(mapset)s>. Attribute table cannot be edited."
-msgstr "Vald karta <%(map)s> finns inte i aktuell kartuppsättning <%(mapset)s>. Attributtabellen kan inte redigeras."
+msgid ""
+"Selected map <%(map)s> is not in current mapset <%(mapset)s>. Attribute "
+"table cannot be edited."
+msgstr ""
+"Vald karta <%(map)s> finns inte i aktuell kartuppsättning <%(mapset)s>. "
+"Attributtabellen kan inte redigeras."
 
 #: ../gui/wxpython/modules/colorrules.py:1503
 #, python-format
@@ -9656,8 +10238,13 @@ msgstr "Vänta, läser in data från attributtabellen..."
 
 #: ../gui/wxpython/modules/colorrules.py:1606
 #, python-format
-msgid "Number of loaded records reached %d, displaying all the records will be time-consuming and may lead to computer freezing, do you still want to continue?"
-msgstr "Antalet inlästa poster har nått %d, att visa alla poster kommer att vara tidskrävande och kan leda till att datorn fryser, vill du fortfarande fortsätta?"
+msgid ""
+"Number of loaded records reached %d, displaying all the records will be time-"
+"consuming and may lead to computer freezing, do you still want to continue?"
+msgstr ""
+"Antalet inlästa poster har nått %d, att visa alla poster kommer att vara "
+"tidskrävande och kan leda till att datorn fryser, vill du fortfarande "
+"fortsätta?"
 
 #: ../gui/wxpython/modules/colorrules.py:1612
 msgid "Too many records"
@@ -9820,7 +10407,8 @@ msgstr "Namn för GRASS-kartan (redigerbart)"
 
 #: ../gui/wxpython/modules/import_export.py:102
 msgid "Override projection check (use current location's projection)"
-msgstr "Åsidosätt projektionskontroll (använd den aktuella platsens projektion)"
+msgstr ""
+"Åsidosätt projektionskontroll (använd den aktuella platsens projektion)"
 
 #: ../gui/wxpython/modules/import_export.py:134
 #: ../gui/wxpython/modules/import_export.py:457
@@ -9927,8 +10515,12 @@ msgid "Name for output GRASS map"
 msgstr "Namn för utmatad GRASS-karta"
 
 #: ../gui/wxpython/modules/import_export.py:1001
-msgid "Projection of following layers do not match with projection of current location. "
-msgstr "Projektionen av följande lager stämmer inte överens med projektionen av den aktuella platsen. "
+msgid ""
+"Projection of following layers do not match with projection of current "
+"location. "
+msgstr ""
+"Projektionen av följande lager stämmer inte överens med projektionen av den "
+"aktuella platsen. "
 
 #: ../gui/wxpython/modules/import_export.py:1006
 msgid "Layers to be reprojected"
@@ -10134,13 +10726,22 @@ msgid "'{cmd}' copied to clipboard"
 msgstr "'{cmd}' kopierat till urklipp"
 
 #: ../gui/wxpython/nviz/mapwindow.py:261
-msgid "Opening 3D view was not successful. Please try to change the value of depth buffer in GUI Settings dialog > tab Map Display > Advanced and restart GUI."
-msgstr "Det gick inte att öppna 3D-vyn. Försök att ändra värdet för djupbufferten i dialogrutan GUI-inställningar > fliken Kartvisning > Avancerat och starta om GUI."
+msgid ""
+"Opening 3D view was not successful. Please try to change the value of depth "
+"buffer in GUI Settings dialog > tab Map Display > Advanced and restart GUI."
+msgstr ""
+"Det gick inte att öppna 3D-vyn. Försök att ändra värdet för djupbufferten i "
+"dialogrutan GUI-inställningar > fliken Kartvisning > Avancerat och starta om "
+"GUI."
 
 #: ../gui/wxpython/nviz/mapwindow.py:539
 #, python-format
-msgid "Image is too large, your OpenGL implementation supports maximum texture size %d px."
-msgstr "Bilden är för stor, din OpenGL-implementering stöder maximal texturstorlek %d px."
+msgid ""
+"Image is too large, your OpenGL implementation supports maximum texture size "
+"%d px."
+msgstr ""
+"Bilden är för stor, din OpenGL-implementering stöder maximal texturstorlek "
+"%d px."
 
 #: ../gui/wxpython/nviz/mapwindow.py:1096
 msgid "Easting"
@@ -10454,8 +11055,12 @@ msgid "Tilt:"
 msgstr "Tilt:"
 
 #: ../gui/wxpython/nviz/tools.py:390
-msgid "Adjusts the viewing height above the surface (angle of view automatically adjusts to maintain the same center of view)"
-msgstr "Justerar visningshöjden över ytan (visningsvinkeln justeras automatiskt för att bibehålla samma syncentrum)"
+msgid ""
+"Adjusts the viewing height above the surface (angle of view automatically "
+"adjusts to maintain the same center of view)"
+msgstr ""
+"Justerar visningshöjden över ytan (visningsvinkeln justeras automatiskt för "
+"att bibehålla samma syncentrum)"
 
 #: ../gui/wxpython/nviz/tools.py:403
 msgid "Adjusts the relative height of features above the plane of the surface"
@@ -10470,8 +11075,12 @@ msgid "here"
 msgstr "här"
 
 #: ../gui/wxpython/nviz/tools.py:470
-msgid "Allows you to select a point on the surface that becomes the new center of view. Click on the button and then on the surface."
-msgstr "Gör det möjligt att välja en punkt på ytan som blir det nya syncentrumet. Klicka på knappen och sedan på ytan."
+msgid ""
+"Allows you to select a point on the surface that becomes the new center of "
+"view. Click on the button and then on the surface."
+msgstr ""
+"Gör det möjligt att välja en punkt på ytan som blir det nya syncentrumet. "
+"Klicka på knappen och sedan på ytan."
 
 #: ../gui/wxpython/nviz/tools.py:479
 msgid "center"
@@ -10486,8 +11095,12 @@ msgid "top"
 msgstr "topp"
 
 #: ../gui/wxpython/nviz/tools.py:492
-msgid "Sets the viewer directly over the scene's center position. This top view orients approximately north south."
-msgstr "Placerar betraktaren direkt över scenens mittposition. Denna toppvy orienterar ungefär norr-söder."
+msgid ""
+"Sets the viewer directly over the scene's center position. This top view "
+"orients approximately north south."
+msgstr ""
+"Placerar betraktaren direkt över scenens mittposition. Denna toppvy "
+"orienterar ungefär norr-söder."
 
 #: ../gui/wxpython/nviz/tools.py:498
 msgid "reset"
@@ -10498,8 +11111,13 @@ msgid "Reset to default view"
 msgstr "Återställ till standardvy"
 
 #: ../gui/wxpython/nviz/tools.py:562
-msgid "Press 'Record' button and start changing the view. It is recommended to use fly-through mode (Map Display toolbar) to achieve smooth motion."
-msgstr "Tryck på \"Record\"-knappen och börja ändra vyn. Vi rekommenderar att du använder fly-through-läget (verktygsfältet Map Display) för att få en jämn rörelse."
+msgid ""
+"Press 'Record' button and start changing the view. It is recommended to use "
+"fly-through mode (Map Display toolbar) to achieve smooth motion."
+msgstr ""
+"Tryck på \"Record\"-knappen och börja ändra vyn. Vi rekommenderar att du "
+"använder fly-through-läget (verktygsfältet Map Display) för att få en jämn "
+"rörelse."
 
 #: ../gui/wxpython/nviz/tools.py:574
 msgid "Record"
@@ -10534,8 +11152,10 @@ msgid "Choose a directory for images"
 msgstr "Välj en katalog för bilder"
 
 #: ../gui/wxpython/nviz/tools.py:689
-msgid "Generated files names will look like this: prefix_1.ppm, prefix_2.ppm, ..."
-msgstr "Genererade filnamn kommer att se ut så här: prefix_1.ppm, prefix_2.ppm, ..."
+msgid ""
+"Generated files names will look like this: prefix_1.ppm, prefix_2.ppm, ..."
+msgstr ""
+"Genererade filnamn kommer att se ut så här: prefix_1.ppm, prefix_2.ppm, ..."
 
 #: ../gui/wxpython/nviz/tools.py:754 ../gui/wxpython/nviz/tools.py:1436
 msgid "Constant surface"
@@ -10673,8 +11293,12 @@ msgid "Rotates the current cutting plane about horizontal axis"
 msgstr "Roterar det aktuella skärplanet runt den horisontella axeln"
 
 #: ../gui/wxpython/nviz/tools.py:1377
-msgid "Sets the Z coordinate of the current cutting plane (only meaningful when tilt is not 0)"
-msgstr "Ställer in Z-koordinaten för det aktuella skärplanet (endast meningsfullt när tilt inte är 0)"
+msgid ""
+"Sets the Z coordinate of the current cutting plane (only meaningful when "
+"tilt is not 0)"
+msgstr ""
+"Ställer in Z-koordinaten för det aktuella skärplanet (endast meningsfullt "
+"när tilt inte är 0)"
 
 #: ../gui/wxpython/nviz/tools.py:1448
 msgid "New"
@@ -11032,12 +11656,24 @@ msgid "Adjusts the distance and direction of the image viewpoint"
 msgstr "Justerar avstånd och riktning för bildens betraktningspunkt"
 
 #: ../gui/wxpython/nviz/tools.py:5845
-msgid "Adjusts the light direction. Click and drag the puck to change the light direction."
-msgstr "Justerar ljusets riktning. Klicka och dra i pucken för att ändra ljusets riktning."
+msgid ""
+"Adjusts the light direction. Click and drag the puck to change the light "
+"direction."
+msgstr ""
+"Justerar ljusets riktning. Klicka och dra i pucken för att ändra ljusets "
+"riktning."
 
 #: ../gui/wxpython/nviz/wxnviz.py:246
-msgid "This module requires the NumPy module, which could not be imported. It probably is not installed (it's not part of the standard Python distribution). See the Numeric Python site (https://numpy.org) for information on downloading source or binaries."
-msgstr "Den här modulen kräver modulen NumPy, som inte kunde importeras. Den är förmodligen inte installerad (den är inte en del av standarddistributionen av Python). Se Numeric Python-webbplatsen (https://numpy.org) för information om hämtning av källkod eller binärfiler."
+msgid ""
+"This module requires the NumPy module, which could not be imported. It "
+"probably is not installed (it's not part of the standard Python "
+"distribution). See the Numeric Python site (https://numpy.org) for "
+"information on downloading source or binaries."
+msgstr ""
+"Den här modulen kräver modulen NumPy, som inte kunde importeras. Den är "
+"förmodligen inte installerad (den är inte en del av standarddistributionen "
+"av Python). Se Numeric Python-webbplatsen (https://numpy.org) för "
+"information om hämtning av källkod eller binärfiler."
 
 #: ../gui/wxpython/nviz/wxnviz.py:787 ../gui/wxpython/nviz/wxnviz.py:798
 #, python-format
@@ -11605,7 +12241,7 @@ msgstr "rita rutan \"inga uppgifter\""
 
 #: ../gui/wxpython/psmap/dialogs.py:3549
 msgid "draw ticks across color table"
-msgstr "dra tickor över färgbordet"
+msgstr "dra tickor över färgtabellen"
 
 #: ../gui/wxpython/psmap/dialogs.py:3620
 msgid "Vector legend"
@@ -11904,16 +12540,26 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/frame.py:306
 #, python-format
-msgid "Characters on position %s are not supported by ISO-8859-1 (Latin 1) encoding which is required by module ps.map."
-msgstr "Tecken på position %s stöds inte av ISO-8859-1 (Latin 1)-kodning, vilket krävs av modulen ps.map."
+msgid ""
+"Characters on position %s are not supported by ISO-8859-1 (Latin 1) encoding "
+"which is required by module ps.map."
+msgstr ""
+"Tecken på position %s stöds inte av ISO-8859-1 (Latin 1)-kodning, vilket "
+"krävs av modulen ps.map."
 
 #: ../gui/wxpython/psmap/frame.py:314
-msgid "Not all characters are supported by ISO-8859-1 (Latin 1) encoding which is required by module ps.map."
-msgstr "Alla tecken stöds inte av ISO-8859-1 (Latin 1)-kodningen som krävs av modulen ps.map."
+msgid ""
+"Not all characters are supported by ISO-8859-1 (Latin 1) encoding which is "
+"required by module ps.map."
+msgstr ""
+"Alla tecken stöds inte av ISO-8859-1 (Latin 1)-kodningen som krävs av "
+"modulen ps.map."
 
 #: ../gui/wxpython/psmap/frame.py:345
 msgid "Program ps2pdf is not available. Please install it first to create PDF."
-msgstr "Programmet ps2pdf är inte tillgängligt. Installera det först för att skapa PDF."
+msgstr ""
+"Programmet ps2pdf är inte tillgängligt. Installera det först för att skapa "
+"PDF."
 
 #: ../gui/wxpython/psmap/frame.py:394
 msgid "Generating PDF..."
@@ -11981,8 +12627,12 @@ msgid "Preview not available"
 msgstr "Förhandsgranskning ej tillgänglig"
 
 #: ../gui/wxpython/psmap/frame.py:528
-msgid "Preview is not available probably because Ghostscript is not installed or not on PATH."
-msgstr "Förhandsgranskning är inte tillgänglig förmodligen för att Ghostscript inte är installerat eller inte finns på PATH."
+msgid ""
+"Preview is not available probably because Ghostscript is not installed or "
+"not on PATH."
+msgstr ""
+"Förhandsgranskning är inte tillgänglig förmodligen för att Ghostscript inte "
+"är installerat eller inte finns på PATH."
 
 #: ../gui/wxpython/psmap/frame.py:533
 #, python-brace-format
@@ -12008,7 +12658,8 @@ msgstr "Scalebar är inte lämpligt för denna projektion"
 
 #: ../gui/wxpython/psmap/frame.py:1327
 msgid "Press button with green triangle icon to generate preview."
-msgstr "Tryck på knappen med grön triangelikon för att generera förhandsgranskning."
+msgstr ""
+"Tryck på knappen med grön triangelikon för att generera förhandsgranskning."
 
 #: ../gui/wxpython/psmap/frame.py:1342
 msgid "wxGUI Cartographic Composer"
@@ -12146,7 +12797,8 @@ msgstr "Misslyckades med att läsa instruktion %s."
 #: ../gui/wxpython/psmap/instructions.py:1136
 #, python-format
 msgid "Failed to read instruction %(inst)s: file %(file)s not found."
-msgstr "Misslyckades med att läsa instruktion %(inst)s: fil %(file)s hittades inte."
+msgstr ""
+"Misslyckades med att läsa instruktion %(inst)s: fil %(file)s hittades inte."
 
 #: ../gui/wxpython/psmap/toolbars.py:52
 msgid "Select graphics tool"
@@ -12288,7 +12940,8 @@ msgstr "Spara ändringar i rasterkartan"
 
 #: ../gui/wxpython/rdigit/controller.py:383
 msgid "Failed to create backup copy of edited raster map."
-msgstr "Misslyckades med att skapa en säkerhetskopia av en redigerad rasterkarta."
+msgstr ""
+"Misslyckades med att skapa en säkerhetskopia av en redigerad rasterkarta."
 
 #: ../gui/wxpython/rdigit/controller.py:420
 #: ../gui/wxpython/rdigit/controller.py:436
@@ -12326,8 +12979,12 @@ msgstr "Ange namn för en ny rasterkarta"
 
 #: ../gui/wxpython/rdigit/dialogs.py:109
 #, python-format
-msgid "Raster map <%s> already exists in the current mapset. Do you want to overwrite it?"
-msgstr "Rasterkarta <%s> finns redan i den aktuella kartuppsättningen. Vill du skriva över den?"
+msgid ""
+"Raster map <%s> already exists in the current mapset. Do you want to "
+"overwrite it?"
+msgstr ""
+"Rasterkarta <%s> finns redan i den aktuella kartuppsättningen. Vill du "
+"skriva över den?"
 
 #: ../gui/wxpython/rdigit/g.gui.rdigit.py:196
 msgid "Raster map <{}> not found in current mapset."
@@ -12374,8 +13031,12 @@ msgid "Cell value:"
 msgstr "Cellvärde:"
 
 #: ../gui/wxpython/rdigit/toolbars.py:86
-msgid "Width of currently digitized line or diameter of a digitized point in map units."
-msgstr "Bredden på en digitaliserad linje eller diametern på en digitaliserad punkt i kartenheter."
+msgid ""
+"Width of currently digitized line or diameter of a digitized point in map "
+"units."
+msgstr ""
+"Bredden på en digitaliserad linje eller diametern på en digitaliserad punkt "
+"i kartenheter."
 
 #: ../gui/wxpython/rdigit/toolbars.py:168
 msgid "New raster map"
@@ -12451,7 +13112,9 @@ msgstr "Ta bort den nya konfigurationsfilen r.li?"
 
 #: ../gui/wxpython/rlisetup/frame.py:274
 #, python-format
-msgid "Set the new name for %s \"                                            \"configuration file"
+msgid ""
+"Set the new name for %s \"                                            "
+"\"configuration file"
 msgstr "Ange det nya namnet för %s \" \"konfigurationsfilen"
 
 #: ../gui/wxpython/rlisetup/frame.py:278
@@ -12466,8 +13129,12 @@ msgstr "Polygonen verkar ha 0 områden"
 #: ../gui/wxpython/rlisetup/functions.py:152
 #: ../gui/wxpython/rlisetup/wizard.py:1858
 #, python-format
-msgid "The raster map <%s> already exists. Please remove or rename the maps with the prefix '%s' or select the option to overwrite existing maps"
-msgstr "Rasterkartan <%s> finns redan. Ta bort eller byt namn på kartorna med prefixet '%s' eller välj alternativet att skriva över befintliga kartor"
+msgid ""
+"The raster map <%s> already exists. Please remove or rename the maps with "
+"the prefix '%s' or select the option to overwrite existing maps"
+msgstr ""
+"Rasterkartan <%s> finns redan. Ta bort eller byt namn på kartorna med "
+"prefixet '%s' eller välj alternativet att skriva över befintliga kartor"
 
 #: ../gui/wxpython/rlisetup/g.gui.rlisetup.py:48
 msgid "Setup for r.li modules - GRASS GIS"
@@ -12520,7 +13187,9 @@ msgstr "Rita provtagningsregion"
 
 #: ../gui/wxpython/rlisetup/sampling_frame.py:451
 msgid "Draw sampling region by polygon. Right Double click to end drawing"
-msgstr "Rita provtagningsregionen med polygon. Höger dubbelklicka för att avsluta ritningen"
+msgstr ""
+"Rita provtagningsregionen med polygon. Höger dubbelklicka för att avsluta "
+"ritningen"
 
 #: ../gui/wxpython/rlisetup/wizard.py:72
 msgid "Create new configuration file for r.li modules"
@@ -12594,7 +13263,7 @@ msgstr "Vektor %s har inga områden, välj en annan vektor"
 #: ../gui/wxpython/rlisetup/wizard.py:724
 #, python-format
 msgid "Vector %s has no table connected, please select another vector"
-msgstr "Vektor %s har inget bord anslutet, välj en annan vektor"
+msgstr "Vektor %s har ingen tabell ansluten, välj en annan vektor"
 
 #: ../gui/wxpython/rlisetup/wizard.py:763
 msgid "Insert sampling frame parameter"
@@ -13012,7 +13681,8 @@ msgid ""
 "\n"
 "All maps included in these mapsets will be permanently deleted!"
 msgstr ""
-"Vill du fortsätta med att radera en eller flera av följande kartuppsättningar?\n"
+"Vill du fortsätta med att radera en eller flera av följande "
+"kartuppsättningar?\n"
 "\n"
 "{deletes}\n"
 "\n"
@@ -13063,7 +13733,8 @@ msgstr "Det går inte att ta bort valda projekt"
 #: ../gui/wxpython/startup/guiutils.py:476
 #, python-brace-format
 msgid ""
-"Do you want to continue with deleting one or more of the following projects?\n"
+"Do you want to continue with deleting one or more of the following "
+"projects?\n"
 "\n"
 "{deletes}\n"
 "\n"
@@ -13163,14 +13834,17 @@ msgid ""
 "\n"
 "Concurrent use not allowed.\n"
 "\n"
-"Do you want to stay in the current mapset or remove .gislock and switch to selected mapset?"
+"Do you want to stay in the current mapset or remove .gislock and switch to "
+"selected mapset?"
 msgstr ""
-"Användare {user} kör redan GRASS i vald kartuppsättning <{mapset}> (fil {lockpath} skapad {timestamp} hittad)\n"
+"Användare {user} kör redan GRASS i vald kartuppsättning <{mapset}> (fil "
+"{lockpath} skapad {timestamp} hittad)\n"
 " (fil {lockpath} skapad {timestamp} hittad).\n"
 "\n"
 "Samtidig användning är inte tillåten.\n"
 "\n"
-"Vill du stanna kvar i den aktuella kartuppsättningen eller ta bort .gislock och byta till vald kartuppsättning?"
+"Vill du stanna kvar i den aktuella kartuppsättningen eller ta bort .gislock "
+"och byta till vald kartuppsättning?"
 
 #: ../gui/wxpython/startup/guiutils.py:600
 msgid "Mapset is in use"
@@ -13193,8 +13867,12 @@ msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:659
 #, python-format
-msgid "Data file <%(name)s> imported successfully. The project's default region was set from this imported map."
-msgstr "Datafil <%(name)s> importerades framgångsrikt. Projektets standardregion ställdes in från denna importerade karta."
+msgid ""
+"Data file <%(name)s> imported successfully. The project's default region was "
+"set from this imported map."
+msgstr ""
+"Datafil <%(name)s> importerades framgångsrikt. Projektets standardregion "
+"ställdes in från denna importerade karta."
 
 #: ../gui/wxpython/startup/guiutils.py:690
 #, python-format
@@ -13227,8 +13905,12 @@ msgstr "Hämtning pågår, vänta tills den är klar 0%"
 
 #: ../gui/wxpython/startup/locdownload.py:161
 #, python-brace-format
-msgid "Download in progress, wait until it is finished {0}%, {1} MB, {2} KB/s, {3:.0f} seconds passed"
-msgstr "Hämtning pågår, vänta tills den är klar {0}%, {1} MB, {2} KB/s, {3:.0f} sekunder passerade"
+msgid ""
+"Download in progress, wait until it is finished {0}%, {1} MB, {2} KB/s, "
+"{3:.0f} seconds passed"
+msgstr ""
+"Hämtning pågår, vänta tills den är klar {0}%, {1} MB, {2} KB/s, {3:.0f} "
+"sekunder passerade"
 
 #: ../gui/wxpython/startup/locdownload.py:183
 msgid "Downloaded project is not valid"
@@ -13278,8 +13960,12 @@ msgid "Download failed: %s"
 msgstr "Hämtningen misslyckades: %s"
 
 #: ../gui/wxpython/startup/locdownload.py:343
-msgid "Download completed. The downloaded sample data is available now in the data tree"
-msgstr "Hämtningen slutförd. Detta hämtade exempeldata finns nu tillgängliga i dataträdet"
+msgid ""
+"Download completed. The downloaded sample data is available now in the data "
+"tree"
+msgstr ""
+"Hämtningen slutförd. Detta hämtade exempeldata finns nu tillgängliga i "
+"dataträdet"
 
 #: ../gui/wxpython/startup/locdownload.py:384
 #, python-brace-format
@@ -13299,8 +13985,12 @@ msgid "Do you want to cancel dataset download?"
 msgstr "Vill du avbryta hämtningen av dataset?"
 
 #: ../gui/wxpython/timeline/frame.py:43
-msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {}"
-msgstr "Timeline Tool kräver att paketet \"matplotlib\" (python-matplotlib och på vissa system även python-matplotlib-wx) installeras. {}"
+msgid ""
+"The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some "
+"systems also python-matplotlib-wx) package(s) to be installed. {}"
+msgstr ""
+"Timeline Tool kräver att paketet \"matplotlib\" (python-matplotlib och på "
+"vissa system även python-matplotlib-wx) installeras. {}"
 
 #: ../gui/wxpython/timeline/frame.py:76
 msgid "Timeline Tool"
@@ -13312,11 +14002,11 @@ msgstr "Hjälp"
 
 #: ../gui/wxpython/timeline/frame.py:144
 msgid "3D plot of spatio-temporal extents"
-msgstr "3D-plott av rumslig-temporal utbredning"
+msgstr "3D-plott av spatio-temporal utbredning"
 
 #: ../gui/wxpython/timeline/frame.py:149
 msgid "3D plot of spatio-temporal extents (matplotlib >= 1.0.0)"
-msgstr "3D-plott av rumslig-temporala utbredningar (matplotlib >= 1.0.0)"
+msgstr "3D-plott av spatio-temporala utbredningar (matplotlib >= 1.0.0)"
 
 #: ../gui/wxpython/timeline/frame.py:155
 msgid "Select space time dataset(s):"
@@ -13330,8 +14020,12 @@ msgstr "Dataset <%s> hittades inte i temporal databas"
 
 #: ../gui/wxpython/timeline/frame.py:201 ../gui/wxpython/tplot/frame.py:456
 #: ../gui/wxpython/tplot/frame.py:594
-msgid "Datasets have different temporal type (absolute x relative), which is not allowed."
-msgstr "Dataset har olika temporala typer (absolut x relativ), vilket inte är tillåtet."
+msgid ""
+"Datasets have different temporal type (absolute x relative), which is not "
+"allowed."
+msgstr ""
+"Dataset har olika temporala typer (absolut x relativ), vilket inte är "
+"tillåtet."
 
 #: ../gui/wxpython/timeline/frame.py:222 ../gui/wxpython/tplot/frame.py:478
 #: ../gui/wxpython/tplot/frame.py:607
@@ -13428,8 +14122,12 @@ msgstr "Verktyg för tidslinje - GRASS GIS"
 
 #: ../gui/wxpython/tplot/frame.py:48
 #, python-brace-format
-msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
-msgstr "Temporal Plot Tool kräver att paketet \"matplotlib\" (python-matplotlib) är installerat. {0}"
+msgid ""
+"The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package "
+"to be installed. {0}"
+msgstr ""
+"Temporal Plot Tool kräver att paketet \"matplotlib\" (python-matplotlib) är "
+"installerat. {0}"
 
 #: ../gui/wxpython/tplot/frame.py:104
 msgid "Temporal Plot Tool"
@@ -13448,7 +14146,8 @@ msgid "X and Y coordinates separated by comma:"
 msgstr "X- och Y-koordinater åtskilda med kommatecken:"
 
 #: ../gui/wxpython/tplot/frame.py:226
-msgid "Coordinates can be obtained for example by right-clicking on Map Display."
+msgid ""
+"Coordinates can be obtained for example by right-clicking on Map Display."
 msgstr "Koordinater kan t.ex. erhållas genom att högerklicka på Map Display."
 
 #: ../gui/wxpython/tplot/frame.py:233 ../gui/wxpython/tplot/frame.py:299
@@ -13516,19 +14215,27 @@ msgstr "Ogiltiga inmatade koordinater"
 #: ../gui/wxpython/tplot/frame.py:525
 #, python-brace-format
 msgid "Category {ca} is not on vector map {ma} and it will be not used"
-msgstr "Kategori {ca} finns inte på vektorkartan {ma} och den kommer inte att användas"
+msgstr ""
+"Kategori {ca} finns inte på vektorkartan {ma} och den kommer inte att "
+"användas"
 
 #: ../gui/wxpython/tplot/frame.py:547
-msgid "Both coordinates and categories are set, coordinates will be used. The use categories remove text from coordinate form"
-msgstr "Om både koordinater och kategorier anges kommer koordinaterna att användas. Användningskategorierna tar bort text från koordinatform"
+msgid ""
+"Both coordinates and categories are set, coordinates will be used. The use "
+"categories remove text from coordinate form"
+msgstr ""
+"Om både koordinater och kategorier anges kommer koordinaterna att användas. "
+"Användningskategorierna tar bort text från koordinatform"
 
 #: ../gui/wxpython/tplot/frame.py:557
 msgid "With Vector temporal dataset you have to select an attribute column"
 msgstr "Med Vector temporal dataset måste du välja en attributkolumn"
 
 #: ../gui/wxpython/tplot/frame.py:627
-msgid "Difference number of vector layers and maps in the vector temporal dataset"
-msgstr "Skillnad i antal vektorlager och kartor i det temporala vektordatasetet"
+msgid ""
+"Difference number of vector layers and maps in the vector temporal dataset"
+msgstr ""
+"Skillnad i antal vektorlager och kartor i det temporala vektordatasetet"
 
 #: ../gui/wxpython/tplot/frame.py:671
 #, python-brace-format
@@ -13541,17 +14248,27 @@ msgid "Temporal resolution: %s"
 msgstr "Temporal upplösning: %s"
 
 #: ../gui/wxpython/tplot/frame.py:852
-msgid "Problem getting data from raster temporal dataset. Empty list of values."
-msgstr "Problem med att hämta data från raster temporal dataset. Tom lista med värden."
+msgid ""
+"Problem getting data from raster temporal dataset. Empty list of values."
+msgstr ""
+"Problem med att hämta data från raster temporal dataset. Tom lista med "
+"värden."
 
 #: ../gui/wxpython/tplot/frame.py:911
 #, python-brace-format
-msgid "Problem getting data from vector temporal dataset. Empty list of values for cat {ca}."
-msgstr "Problem med att hämta data från vektor temporal dataset. Tom lista med värden för katt {ca}."
+msgid ""
+"Problem getting data from vector temporal dataset. Empty list of values for "
+"cat {ca}."
+msgstr ""
+"Problem med att hämta data från vektor temporal dataset. Tom lista med "
+"värden för katt {ca}."
 
 #: ../gui/wxpython/tplot/frame.py:968
-msgid "Problem getting data from vector temporal dataset. Empty list of values."
-msgstr "Problem med att hämta data från vektor temporal dataset. Tom lista med värden."
+msgid ""
+"Problem getting data from vector temporal dataset. Empty list of values."
+msgstr ""
+"Problem med att hämta data från vektor temporal dataset. Tom lista med "
+"värden."
 
 #: ../gui/wxpython/tplot/frame.py:1003
 #, python-brace-format
@@ -13604,8 +14321,12 @@ msgid "With stvds you have to set 'attr' option"
 msgstr "Med stvds måste du ställa in alternativet \"attr"
 
 #: ../gui/wxpython/tplot/g.gui.tplot.py:151
-msgid "With stvds it is not possible to use 'coordinates' and 'cats' options together"
-msgstr "Med stvds är det inte möjligt att använda alternativen 'coordinates' och 'cats' samtidigt"
+msgid ""
+"With stvds it is not possible to use 'coordinates' and 'cats' options "
+"together"
+msgstr ""
+"Med stvds är det inte möjligt att använda alternativen 'coordinates' och "
+"'cats' samtidigt"
 
 #: ../gui/wxpython/tplot/g.gui.tplot.py:156
 msgid "With stvds you have to use 'coordinates' or 'cats' option"
@@ -13639,7 +14360,8 @@ msgid ""
 "Layer and category number must be integer.\n"
 "Layer number must be greater than zero."
 msgstr ""
-"Det går inte att lägga till ett nytt lager/en ny kategori <%(layer)s/%(category)s>.\n"
+"Det går inte att lägga till ett nytt lager/en ny kategori <%(layer)s/"
+"%(category)s>.\n"
 "Lager- och kategorinummer måste vara heltal.\n"
 "Lagernumret måste vara större än noll."
 
@@ -13683,8 +14405,12 @@ msgstr "Vektordigitalisator inte tillgänglig. %s"
 
 #: ../gui/wxpython/vdigit/g.gui.vdigit.py:124
 #, python-format
-msgid "Vector map <%s> not found in current mapset. New vector map can be created by providing '-c' flag."
-msgstr "Vektorkarta <%s> hittades inte i aktuell kartuppsättning. En ny vektorkarta kan skapas genom att ange flaggan '-c'."
+msgid ""
+"Vector map <%s> not found in current mapset. New vector map can be created "
+"by providing '-c' flag."
+msgstr ""
+"Vektorkarta <%s> hittades inte i aktuell kartuppsättning. En ny vektorkarta "
+"kan skapas genom att ange flaggan '-c'."
 
 #: ../gui/wxpython/vdigit/g.gui.vdigit.py:130
 #, python-format
@@ -13711,7 +14437,8 @@ msgstr "Ingen vektorkarta vald för redigering."
 
 #: ../gui/wxpython/vdigit/mapwindow.py:701
 msgid "Nothing to do. Choose appropriate tool from digitizer toolbar."
-msgstr "Inget att göra. Välj lämpligt verktyg från digitaliseringsverktygsfältet."
+msgstr ""
+"Inget att göra. Välj lämpligt verktyg från digitaliseringsverktygsfältet."
 
 #: ../gui/wxpython/vdigit/mapwindow.py:1244
 msgid "Z bulk-labeling dialog"
@@ -13727,7 +14454,8 @@ msgstr "Tillämpa ändringar för denna session"
 
 #: ../gui/wxpython/vdigit/preferences.py:62
 msgid "Close dialog and save changes to user settings file"
-msgstr "Stäng dialogrutan och spara ändringarna i filen med användarinställningar"
+msgstr ""
+"Stäng dialogrutan och spara ändringarna i filen med användarinställningar"
 
 #: ../gui/wxpython/vdigit/preferences.py:141
 #: ../gui/wxpython/wxplot/dialogs.py:1017
@@ -13771,8 +14499,10 @@ msgid "Select only features inside of selection bounding box"
 msgstr "Välj endast funktioner inom urvalets avgränsningsbox"
 
 #: ../gui/wxpython/vdigit/preferences.py:305
-msgid "By default are selected all features overlapping selection bounding box "
-msgstr "Som standard väljs alla funktioner som överlappar urvalets avgränsningsbox "
+msgid ""
+"By default are selected all features overlapping selection bounding box "
+msgstr ""
+"Som standard väljs alla funktioner som överlappar urvalets avgränsningsbox "
 
 #: ../gui/wxpython/vdigit/preferences.py:311
 msgid "Check for duplicates"
@@ -13890,8 +14620,12 @@ msgid "perimeter"
 msgstr "perimeter"
 
 #: ../gui/wxpython/vdigit/preferences.py:689
-msgid "Note: These settings are stored in the workspace not in the vector digitizer preferences."
-msgstr "Obs: Dessa inställningar lagras i arbetsytan, inte i vektordigitalisatorns inställningar."
+msgid ""
+"Note: These settings are stored in the workspace not in the vector digitizer "
+"preferences."
+msgstr ""
+"Obs: Dessa inställningar lagras i arbetsytan, inte i vektordigitalisatorns "
+"inställningar."
 
 #: ../gui/wxpython/vdigit/preferences.py:725
 msgid "Digitize new line segment"
@@ -13960,7 +14694,8 @@ msgstr "Snapping inaktiverad"
 #: ../gui/wxpython/vdigit/preferences.py:812
 #, python-format
 msgid "Snapping threshold is %(value).1f %(units)s (based on comp. resolution)"
-msgstr "Snapping-tröskel är %(value).1f %(units)s (baserat på komp. upplösning)"
+msgstr ""
+"Snapping-tröskel är %(value).1f %(units)s (baserat på komp. upplösning)"
 
 #: ../gui/wxpython/vdigit/preferences.py:870
 #, python-format
@@ -13989,7 +14724,8 @@ msgstr "Digitalisera ny rad (Ctrl+L)"
 #: ../gui/wxpython/vdigit/toolbars.py:165
 #: ../gui/wxpython/vdigit/toolbars.py:210
 msgid "Left: new point; Ctrl+Left: undo last point; Right: close line"
-msgstr "Vänster: ny punkt; Ctrl+Vänster: ångra sista punkten; Höger: stäng linjen"
+msgstr ""
+"Vänster: ny punkt; Ctrl+Vänster: ångra sista punkten; Höger: stäng linjen"
 
 #: ../gui/wxpython/vdigit/toolbars.py:163
 msgid "Digitize new boundary (Ctrl+B)"
@@ -14018,8 +14754,10 @@ msgid "Left: Select; Ctrl+Left: Unselect; Right: Confirm"
 msgstr "Vänster: Markera; Ctrl+Vänster: Avmarkera; Höger: Bekräfta"
 
 #: ../gui/wxpython/vdigit/toolbars.py:186
-msgid "Delete selected point(s), line(s), boundary(ies) or centroid(s) (Ctrl+D)"
-msgstr "Ta bort markerade punkter, linjer, gränser eller tyngdpunkt(er) (Ctrl+D)"
+msgid ""
+"Delete selected point(s), line(s), boundary(ies) or centroid(s) (Ctrl+D)"
+msgstr ""
+"Ta bort markerade punkter, linjer, gränser eller tyngdpunkt(er) (Ctrl+D)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:193
 msgid "Delete selected area(s) (Ctrl+F)"
@@ -14044,7 +14782,8 @@ msgstr "Redigera markerad linje/gräns (Ctrl+E)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:216
 msgid "Move selected point(s), line(s), boundary(ies) or centroid(s) (Ctrl+M)"
-msgstr "Flytta markerad(a) punkt(er), linje(r), gräns(er) eller centroid(er) (Ctrl+M)"
+msgstr ""
+"Flytta markerad(a) punkt(er), linje(r), gräns(er) eller centroid(er) (Ctrl+M)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:223
 msgid "Move selected vertex (Ctrl+G)"
@@ -14095,8 +14834,12 @@ msgid "Redo previous change"
 msgstr "Återställ tidigare ändring"
 
 #: ../gui/wxpython/vdigit/toolbars.py:441
-msgid "No vector map is open for editing. Please select firsta vector map from the combo box."
-msgstr "Ingen vektorkarta är öppen för redigering. Välj första vektorkartan från kombinationsrutan."
+msgid ""
+"No vector map is open for editing. Please select firsta vector map from the "
+"combo box."
+msgstr ""
+"Ingen vektorkarta är öppen för redigering. Välj första vektorkartan från "
+"kombinationsrutan."
 
 #: ../gui/wxpython/vdigit/toolbars.py:712
 msgid "Break selected lines/boundaries at intersection"
@@ -14157,11 +14900,15 @@ msgstr "Vektorkartan är inte 3D. Operationen avbruten."
 #: ../gui/wxpython/vdigit/toolbars.py:1053
 #, python-format
 msgid ""
-"Topology for vector map <%s> is not available. Topology is required by digitizer.\n"
-"Do you want to rebuild topology (takes some time) and open the vector map for editing?"
+"Topology for vector map <%s> is not available. Topology is required by "
+"digitizer.\n"
+"Do you want to rebuild topology (takes some time) and open the vector map "
+"for editing?"
 msgstr ""
-"Topologi för vektorkarta <%s> är inte tillgänglig. Topologin krävs av digitaliseraren.\n"
-"Vill du bygga upp topologin igen (tar lite tid) och öppna vektorkartan för redigering?"
+"Topologi för vektorkarta <%s> är inte tillgänglig. Topologin krävs av "
+"digitaliseraren.\n"
+"Vill du bygga upp topologin igen (tar lite tid) och öppna vektorkartan för "
+"redigering?"
 
 #: ../gui/wxpython/vdigit/toolbars.py:1059
 msgid "Digitizer error"
@@ -14174,8 +14921,11 @@ msgstr "Vänta, öppnar vektorkarta <%s> för redigering..."
 
 #: ../gui/wxpython/vdigit/toolbars.py:1136
 #, python-format
-msgid "Unsupported feature type '%(type)s'. Unable to edit OGR layer <%(layer)s>."
-msgstr "Funktionstyp '%(type)s' stöds inte. Det går inte att redigera OGR-lager <%(layer)s>."
+msgid ""
+"Unsupported feature type '%(type)s'. Unable to edit OGR layer <%(layer)s>."
+msgstr ""
+"Funktionstyp '%(type)s' stöds inte. Det går inte att redigera OGR-lager "
+"<%(layer)s>."
 
 #: ../gui/wxpython/vdigit/toolbars.py:1207
 #, python-format
@@ -14189,7 +14939,8 @@ msgstr "Spara ändringarna?"
 #: ../gui/wxpython/vdigit/toolbars.py:1218
 #, python-format
 msgid "Please wait, closing and rebuilding topology of vector map <%s>..."
-msgstr "Vänta, stängning och återuppbyggnad av topologin för vektorkarta <%s>..."
+msgstr ""
+"Vänta, stängning och återuppbyggnad av topologin för vektorkarta <%s>..."
 
 #: ../gui/wxpython/vdigit/toolbars.py:1234
 #, python-format
@@ -14246,8 +14997,11 @@ msgstr "Det gick inte att starta databasdrivrutinen <%s>. Åtgärden avbröts."
 
 #: ../gui/wxpython/vdigit/wxdigit.py:236
 #, python-format
-msgid "Unable to open database <%(db)s> by driver <%(driver)s>. Operation canceled."
-msgstr "Det gick inte att öppna databas <%(db)s> med drivrutin <%(driver)s>. Åtgärden avbröts."
+msgid ""
+"Unable to open database <%(db)s> by driver <%(driver)s>. Operation canceled."
+msgstr ""
+"Det gick inte att öppna databas <%(db)s> med drivrutin <%(driver)s>. "
+"Åtgärden avbröts."
 
 #: ../gui/wxpython/vdigit/wxdigit.py:247
 #, python-format
@@ -14274,13 +15028,23 @@ msgid "Not enough points for line"
 msgstr "Inte tillräckligt med punkter för linje"
 
 #: ../gui/wxpython/vdigit/wxdisplay.py:443
-msgid "WARNING: Zero-length line or boundary drawing skipped. Use v.clean to remove it."
-msgstr "VARNING: Linje eller gränsdragning med noll längd har hoppats över. Använd v.clean för att ta bort den."
+msgid ""
+"WARNING: Zero-length line or boundary drawing skipped. Use v.clean to remove "
+"it."
+msgstr ""
+"VARNING: Linje eller gränsdragning med noll längd har hoppats över. Använd v."
+"clean för att ta bort den."
 
 #: ../gui/wxpython/vdigit/wxdisplay.py:1086
 #, python-format
-msgid "Topology for vector map <%s> is not available. Topology is required by digitizer. Do you want to rebuild topology (takes some time) and open the vector map for editing?"
-msgstr "Topologi för vektorkarta <%s> är inte tillgänglig. Topologin krävs av digitaliseraren. Vill du bygga upp topologin igen (tar lite tid) och öppna vektorkartan för redigering?"
+msgid ""
+"Topology for vector map <%s> is not available. Topology is required by "
+"digitizer. Do you want to rebuild topology (takes some time) and open the "
+"vector map for editing?"
+msgstr ""
+"Topologi för vektorkarta <%s> är inte tillgänglig. Topologin krävs av "
+"digitaliseraren. Vill du bygga upp topologin igen (tar lite tid) och öppna "
+"vektorkartan för redigering?"
 
 #: ../gui/wxpython/vdigit/wxdisplay.py:1092
 msgid "Topology missing"
@@ -14483,10 +15247,12 @@ msgstr "Det går inte att utföra analys."
 #: ../gui/wxpython/vnet/vnet_core.py:228
 #, python-format
 msgid ""
-"Temporary map '%s' with result was changed outside vector network analysis tool.\n"
+"Temporary map '%s' with result was changed outside vector network analysis "
+"tool.\n"
 "Showed result may not correspond original analysis result."
 msgstr ""
-"Temporär karta '%s' med resultat ändrades utanför analysverktyget för vektornätverk.\n"
+"Temporär karta '%s' med resultat ändrades utanför analysverktyget för "
+"vektornätverk.\n"
 "Visat resultat kanske inte motsvarar det ursprungliga analysresultatet."
 
 #: ../gui/wxpython/vnet/vnet_core.py:234
@@ -14530,10 +15296,12 @@ msgstr "Välj minst två punkter."
 #: ../gui/wxpython/vnet/vnet_core.py:930
 #, python-format
 msgid ""
-"Input map '%s' for analysis was changed outside vector network analysis tool.\n"
+"Input map '%s' for analysis was changed outside vector network analysis "
+"tool.\n"
 "Topology column may not correspond to changed situation."
 msgstr ""
-"Indatakartan '%s' för analys ändrades utanför verktyget för analys av vektornätverk.\n"
+"Indatakartan '%s' för analys ändrades utanför verktyget för analys av "
+"vektornätverk.\n"
 "Topologikolumnen kanske inte motsvarar den ändrade situationen."
 
 #: ../gui/wxpython/vnet/vnet_core.py:936
@@ -14617,8 +15385,12 @@ msgstr "Välj befintlig %s.\n"
 
 #: ../gui/wxpython/vnet/vnet_data.py:195
 #, python-format
-msgid "Chosen column '%s' does not exist in attribute table of layer '%s' of vector map '%s'.\n"
-msgstr "Den valda kolumnen '%s' finns inte i attributtabellen för skiktet '%s' i vektorkartan '%s'.\n"
+msgid ""
+"Chosen column '%s' does not exist in attribute table of layer '%s' of vector "
+"map '%s'.\n"
+msgstr ""
+"Den valda kolumnen '%s' finns inte i attributtabellen för skiktet '%s' i "
+"vektorkartan '%s'.\n"
 
 #: ../gui/wxpython/vnet/vnet_data.py:252
 msgid "topology"
@@ -14919,7 +15691,8 @@ msgstr "Kubisk spline-interpolering"
 
 #: ../gui/wxpython/web_services/widgets.py:291
 msgid "Maximum columns to request from server at time:"
-msgstr "Maximalt antal kolumner som kan begäras från servern vid ett tillfälle:"
+msgstr ""
+"Maximalt antal kolumner som kan begäras från servern vid ett tillfälle:"
 
 #: ../gui/wxpython/web_services/widgets.py:300
 msgid "Maximum rows to request from server at time:"
@@ -14981,7 +15754,8 @@ msgid ""
 "User defined server with same name as default server <%s> already exists.\n"
 "Keeping user defined server"
 msgstr ""
-"Användardefinierad server med samma namn som standardserver <%s> finns redan.\n"
+"Användardefinierad server med samma namn som standardserver <%s> finns "
+"redan.\n"
 "Behålla användardefinierad server"
 
 #: ../gui/wxpython/wxplot/base.py:36
@@ -15160,8 +15934,11 @@ msgid "Scale"
 msgstr "Skala"
 
 #: ../gui/wxpython/wxplot/dialogs.py:1208
-msgid "Automatic axis scaling, custom max and min, or scale matches data range (min)"
-msgstr "Automatisk axelskalning, anpassad max och min, eller skala som matchar dataområdet (min)"
+msgid ""
+"Automatic axis scaling, custom max and min, or scale matches data range (min)"
+msgstr ""
+"Automatisk axelskalning, anpassad max och min, eller skala som matchar "
+"dataområdet (min)"
 
 #: ../gui/wxpython/wxplot/dialogs.py:1216
 msgid "Custom min"

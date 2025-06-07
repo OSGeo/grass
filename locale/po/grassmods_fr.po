@@ -13,9 +13,10 @@ msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-04 10:56+0000\n"
-"PO-Revision-Date: 2025-03-14 18:43+0000\n"
+"PO-Revision-Date: 2025-06-05 04:00+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
-"Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grassmods/fr/>\n"
+"Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/"
+"grassmods/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -410,7 +411,7 @@ msgstr ""
 
 #: ../db/db.describe/main.c:186
 msgid "json"
-msgstr ""
+msgstr "json"
 
 #: ../db/db.describe/main.c:188
 msgid "Describes a table in detail."
@@ -1304,7 +1305,7 @@ msgstr ""
 #: ../db/drivers/sqlite/db.c:209
 #, c-format
 msgid "Database name <%s> is too long"
-msgstr ""
+msgstr "Le nom de base de données <%s> est trop long"
 
 #: ../db/drivers/sqlite/db.c:104
 #, c-format
@@ -4124,14 +4125,14 @@ msgid "No graphics device selected. Use d.mon to select graphics device."
 msgstr ""
 
 #: ../display/d.redraw/main.c:61
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open file '%s' for reading."
-msgstr "Impossible d'ouvrir <%s> en écriture"
+msgstr "Impossible d'ouvrir le fichier '%s' en lecture."
 
 #: ../display/d.redraw/main.c:100
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open file '%s' for writing."
-msgstr "Impossible d'ouvrir <%s> en écriture"
+msgstr "Impossible d'ouvrir le fichier '%s' en écriture."
 
 #: ../display/d.rgb/main.c:59
 msgid "Displays three user-specified raster maps as red, green, and blue overlays in the active graphics frame."
@@ -4570,7 +4571,7 @@ msgstr ""
 
 #: ../display/d.vect.thematic/main.c:212 ../display/d.vect.thematic/main.c:233
 msgid "DEPRECATED"
-msgstr ""
+msgstr "OBSOLÈTE"
 
 #: ../display/d.vect.thematic/main.c:213
 msgid "Output legend file"
@@ -6507,6 +6508,9 @@ msgstr "Vérifier l'information de datum et afficher les paramètres de transfor
 #: ../general/g.proj/main.c:106
 msgid "[DEPRECATED] Print projection information in PROJ.4 format. This flag is obsolete and will be removed in a future release. Use format=proj4 instead."
 msgstr ""
+"[OBSOLÈTE] Afficher l'information de projection au format PROJ.4. Cette "
+"option est obsolète et sera retirée dans une prochaine version. Utiliser "
+"plutôt format=proj4."
 
 #: ../general/g.proj/main.c:114
 msgid "Print 'flat' output with no linebreaks (applies to WKT and PROJ.4 output)"
@@ -6520,6 +6524,9 @@ msgstr "Afficher une sortie 'à plat' sans sauts de ligne (s'applique à la sort
 #: ../general/g.proj/main.c:126
 msgid "[DEPRECATED] Print projection information in WKT format. This flag is obsolete and will be removed in a future release. Use format=wkt instead."
 msgstr ""
+"[OBSOLÈTE] Afficher l'information de projection au format WKT. Cette option "
+"est obsolète et sera retirée dans une prochaine version. Utiliser plutôt "
+"format=wkt."
 
 #: ../general/g.proj/main.c:134
 msgid "Use ESRI-style format (applies to WKT output only)"
@@ -8067,7 +8074,7 @@ msgstr ""
 #: ../imagery/i.smap/parse.c:61
 #, c-format
 msgid "Group <%s> not found in current mapset"
-msgstr ""
+msgstr "Groupe <%s> non trouvé dans le jeu de cartes courant"
 
 #: ../imagery/i.cluster/main.c:178 ../imagery/i.gensig/parse.c:50
 #: ../imagery/i.gensigset/parse.c:58 ../imagery/i.maxlik/main.c:106
@@ -11130,10 +11137,9 @@ msgid "Use thin plate spline"
 msgstr ""
 
 #: ../imagery/i.rectify/main.c:158 ../vector/v.rectify/main.c:130
-#, fuzzy, c-format
-#| msgid "Group <%s> not found"
+#, c-format
 msgid "Group name <%s> is too long"
-msgstr "Groupe <%s> non trouvé"
+msgstr "Nom de groupe <%s> est trop long"
 
 #: ../imagery/i.rectify/main.c:162
 #, fuzzy, c-format
@@ -11530,15 +11536,14 @@ msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:197 ../raster/r.kappa/main.c:170
 #: ../raster/r.kappa/stats.c:29 ../raster/r.kappa/stats.c:36
-#, fuzzy, c-format
-#| msgid "Raster map <%s> is not CELL"
+#, c-format
 msgid "Raster map name <%s> is too long"
-msgstr "La carte raster <%s> n'est pas en CELL"
+msgstr "Le nom de carte raster <%s> est trop long"
 
 #: ../imagery/i.segment/parse_args.c:213
 #, c-format
 msgid "Group <%s> not found in the current mapset"
-msgstr ""
+msgstr "Groupe <%s> non trouvé dans le jeu de cartes courant"
 
 #: ../imagery/i.segment/parse_args.c:217
 #, c-format
@@ -11867,9 +11872,9 @@ msgid "Invalid subgroup <%s> provided"
 msgstr ""
 
 #: ../imagery/i.svm.predict/main.c:107 ../imagery/i.svm.train/main.c:247
-#, fuzzy, c-format
+#, c-format
 msgid "Group <%s> not found in mapset <%s>"
-msgstr "Groupe <%s> non trouvé"
+msgstr "Groupe <%s> non trouvé dans le jeu de cartes <%s>"
 
 #: ../imagery/i.svm.predict/main.c:112 ../imagery/i.svm.train/main.c:252
 #, fuzzy, c-format
@@ -12238,7 +12243,7 @@ msgstr ""
 #: ../imagery/i.topo.corr/main.c:130
 #, c-format
 msgid "Output name <%s> is too long"
-msgstr ""
+msgstr "Nom de sortie <%s> est trop long"
 
 #: ../imagery/i.topo.corr/main.c:167 ../raster/r.resamp.interp/main.c:119
 #, c-format
@@ -12257,7 +12262,7 @@ msgstr ""
 #: ../imagery/i.topo.corr/main.c:180
 #, c-format
 msgid "Band name <%s> is too long"
-msgstr ""
+msgstr "Nom de bande <%s> est trop long"
 
 #: ../imagery/i.topo.corr/main.c:190
 #, c-format
@@ -13030,14 +13035,13 @@ msgid "Print stats in shell script style"
 msgstr "Afficher les statistiques en style script shell"
 
 #: ../locale/scriptstrings/g.download.location_to_translate.c:1
-#, fuzzy
 msgid "Download GRASS project (location) from the web"
-msgstr "Nom du nouveau Secteur à créer"
+msgstr "Télécharger un projet (secteur) GRASS depuis le web"
 
 #: ../locale/scriptstrings/g.download.location_to_translate.c:2
 #: ../locale/scriptstrings/g.download.project_to_translate.c:2
 msgid "Get GRASS project from an URL or file path"
-msgstr ""
+msgstr "Obtenir un projet GRASS à partir d'un URL ou un chemin de fichier"
 
 #: ../locale/scriptstrings/g.download.location_to_translate.c:4
 #: ../locale/scriptstrings/g.download.project_to_translate.c:4
@@ -13052,9 +13056,8 @@ msgstr "télécharger"
 
 #: ../locale/scriptstrings/g.download.location_to_translate.c:7
 #: ../locale/scriptstrings/g.download.project_to_translate.c:7
-#, fuzzy
 msgid "URL of the archive with a project to be downloaded"
-msgstr "Nom de la carte raster à recoder"
+msgstr "URL de l'archive avec un projet à télécharger"
 
 #: ../locale/scriptstrings/g.download.location_to_translate.c:8
 #: ../locale/scriptstrings/g.download.project_to_translate.c:8
@@ -13063,7 +13066,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/g.download.project_to_translate.c:1
 msgid "Download GRASS project from the web"
-msgstr ""
+msgstr "Télécharger un projet GRASS à partir du web"
 
 #: ../locale/scriptstrings/g.extension.all_to_translate.c:1
 msgid "Rebuilds or removes all locally installed GRASS Addons extensions."
@@ -14188,10 +14191,8 @@ msgid "Case sensitive variable names"
 msgstr ""
 
 #: ../locale/scriptstrings/r.mask_to_translate.c:1
-#, fuzzy
-#| msgid "Creates a MASK for limiting raster operation."
 msgid "Creates a raster mask for limiting raster operation."
-msgstr "Créer un masque pour limiter les opérations raster."
+msgstr "Créer un masque raster pour limiter les opérations raster."
 
 #: ../locale/scriptstrings/r.mask_to_translate.c:3
 #: ../raster/r.mask.status/main.c:36 ../raster3d/r3.mask/main.c:132
@@ -17996,7 +17997,7 @@ msgstr ""
 
 #: ../ps/ps.map/r_instructions.c:369
 msgid "group not found"
-msgstr ""
+msgstr "Groupe non trouvé"
 
 #: ../ps/ps.map/r_instructions.c:411
 msgid "illegal grid spacing"
@@ -18574,7 +18575,7 @@ msgstr ""
 
 #: ../raster/r.coin/main.c:82
 msgid "Unit of measure"
-msgstr ""
+msgstr "Unité de mesure"
 
 #: ../raster/r.coin/main.c:84
 msgid "c(ells), p(ercent), x(percent of category [column]), y(percent of category [row]), a(cres), h(ectares), k(square kilometers), m(square miles)"
@@ -19278,7 +19279,7 @@ msgstr ""
 
 #: ../raster/r.cost/main.c:467 ../raster/r.walk/main.c:600
 msgid "Creating some temporary files..."
-msgstr ""
+msgstr "Création de fichiers temporaires..."
 
 #: ../raster/r.cost/main.c:471 ../raster/r.cost/main.c:476
 #: ../raster/r.cost/main.c:484 ../raster/r.resamp.bspline/main.c:317
@@ -27153,10 +27154,8 @@ msgstr ""
 
 #: ../raster/r.sim/r.sim.sediment/main.c:299
 #: ../raster/r.sim/r.sim.water/main.c:334
-#, fuzzy
-#| msgid "Number of threads for parallel computing"
 msgid "Number of threads which will be used for parallel computation."
-msgstr "Nombre de threads pour le calcul parallèle"
+msgstr "Nombre de threads qui seront utilisés pour le calcul en parallèle"
 
 #: ../raster/r.sim/r.sim.sediment/main.c:307
 #: ../raster/r.sim/r.sim.water/main.c:342
@@ -27565,7 +27564,7 @@ msgstr "Carte raster de pente N-S <%s> terminée"
 #: ../raster/r.slope.aspect/main.c:1500
 #, c-format
 msgid "Dxx raster map <%s> complete"
-msgstr "Carte raster dxx  <%s> terminée"
+msgstr "Carte raster dxx <%s> terminée"
 
 #: ../raster/r.slope.aspect/main.c:1524
 #, c-format
@@ -27628,23 +27627,19 @@ msgstr ""
 #, fuzzy
 #| msgid "computational region"
 msgid "Wrong computational region"
-msgstr "région de calculs"
+msgstr "Mauvaise région de calculs"
 
 #: ../raster/r.smooth.edgepreserve/main.c:154
-#, fuzzy
-#| msgid "computational region"
 msgid "Computational region is too small!"
-msgstr "région de calculs"
+msgstr "La région de calculs est trop petite!"
 
 #: ../raster/r.smooth.edgepreserve/main.c:157
-#, fuzzy
-#| msgid "computational region"
 msgid "Computational region is too large!"
-msgstr "région de calculs"
+msgstr "La région de calculs est trop grande!"
 
 #: ../raster/r.smooth.edgepreserve/main.c:205
 msgid "Smoothed map"
-msgstr ""
+msgstr "Carte lissée"
 
 #: ../raster/r.smooth.edgepreserve/row_cache.c:32
 #, fuzzy, c-format
@@ -27664,10 +27659,13 @@ msgstr ""
 #: ../raster/r.smooth.edgepreserve/row_cache.c:111
 msgid "Insufficient memory to hold processed data. Either increase available memory with the \"memory\" parameter or reduce size of the computational region."
 msgstr ""
+"Mémoire insuffisante pour accueillir les données traitées. Veuillez "
+"augmenter la mémoire disponible avec le paramètre \"memory\", ou réduire la "
+"taille de la région de calculs."
 
 #: ../raster/r.smooth.edgepreserve/row_cache.c:115
 msgid "Using disk for temporary data storage"
-msgstr ""
+msgstr "Stockage des données temporaires sur le disque"
 
 #: ../raster/r.smooth.edgepreserve/row_cache.c:123
 #, c-format
@@ -27681,7 +27679,7 @@ msgstr "Arguments de l'erreur de scanning"
 
 #: ../raster/r.smooth.edgepreserve/row_cache.c:135
 msgid "Keeping temporary data in RAM"
-msgstr ""
+msgstr "Stockage des données temporaires en mémoire vive"
 
 #: ../raster/r.smooth.edgepreserve/row_cache.c:155
 #, fuzzy, c-format
@@ -28494,7 +28492,7 @@ msgstr "Va nécessiter jusqu'à %.2f Go (%.0f Mo) d'espace disque"
 
 #: ../raster/r.stream.extract/main.c:323
 msgid "Creating temporary files..."
-msgstr "Création des fichiers temporaires ..."
+msgstr "Création des fichiers temporaires..."
 
 #: ../raster/r.stream.extract/main.c:343
 msgid "Unable to load input raster map(s)"
@@ -28793,9 +28791,9 @@ msgid "Using Linke map <%s>"
 msgstr ""
 
 #: ../raster/r.sun/main.c:705
-#, c-format
+#, c-format, fuzzy
 msgid "Using albedo constant: %lf"
-msgstr ""
+msgstr "Utilisation de la constante albédo: %lf"
 
 #: ../raster/r.sun/main.c:708
 #, c-format
@@ -30326,10 +30324,8 @@ msgstr ""
 
 #: ../raster/r.univar/r.univar_main.c:506
 #: ../raster/r.univar/r.univar_main.c:615
-#, fuzzy
-#| msgid "Unknown type"
 msgid "Unknown map type"
-msgstr "Type inconnu"
+msgstr "Type de carte inconnu"
 
 #: ../raster/r.univar/r3.univar_main.c:37
 msgid "3D Raster map used for zoning, must be of type CELL"
@@ -33727,6 +33723,8 @@ msgstr ""
 #: ../scripts/i.in.spotvgt/i.in.spotvgt.py:126
 msgid "'gdalinfo' not found, install GDAL tools first (https://gdal.org)"
 msgstr ""
+"Impossible de trouver 'gdalinfo', veuillez d'abord installer les outils GDAL "
+"(https://gdal.org)"
 
 #: ../scripts/i.in.spotvgt/i.in.spotvgt.py:138
 #, python-format
@@ -34190,9 +34188,9 @@ msgid "Coordinate reference system not available for input <%s>"
 msgstr ""
 
 #: ../scripts/r.import/r.import.py:276
-#, fuzzy, python-format
+#, python-format
 msgid "Importing <%s> to temporary project..."
-msgstr "Création des fichiers temporaires ..."
+msgstr "Importation de <%s> dans un projet temporaire..."
 
 #: ../scripts/r.import/r.import.py:310
 msgid "Input contains GCPs, rectification is required"
@@ -45017,16 +45015,16 @@ msgstr ""
 #: ../vector/v.rectify/main.c:207
 #, c-format
 msgid "target project %s, mapset %s:"
-msgstr ""
+msgstr "projet cible %s, jeu de cartes %s:"
 
 #: ../vector/v.rectify/main.c:209
 msgid "Rectification cancelled."
 msgstr ""
 
 #: ../vector/v.rectify/target.c:30
-#, fuzzy, c-format
+#, c-format
 msgid "Target project <%s> not found"
-msgstr "Jeu de cartes <%s> non trouvé"
+msgstr "Projet cible <%s> non trouvé"
 
 #: ../vector/v.rectify/target.c:46
 msgid "Please run i.target for group."
@@ -46478,7 +46476,7 @@ msgstr ""
 
 #: ../vector/v.to.rast3/main.c:110
 msgid "Unable to create output map"
-msgstr ""
+msgstr "Impossible de créer la couche de sortie"
 
 #: ../vector/v.to.rast3/main.c:162
 msgid "Unable to close new 3d raster map"
@@ -46976,7 +46974,7 @@ msgstr ""
 #: ../vector/v.vol.rst/user1.c:221
 #, c-format
 msgid "Can't insert %lf,%lf,%lf,%lf,%lf a=%d"
-msgstr ""
+msgstr "Impossible d'insérer %lf,%lf,%lf,%lf,%lf a=%d"
 
 #: ../vector/v.vol.rst/user1.c:270
 msgid "Strip exists with insufficient data"
@@ -47573,7 +47571,7 @@ msgstr ""
 
 #: ../visualization/ximgview/main.c:124 ../visualization/ximgview/main.c:130
 msgid "gettimeofday failed"
-msgstr ""
+msgstr "Échec de gettimeofday"
 
 #: ../visualization/ximgview/main.c:256
 msgid "Unable to open image file"
