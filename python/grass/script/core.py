@@ -1,9 +1,8 @@
 """
 Core functions to be used in Python scripts.
 
-Usage:
-
-::
+:Usage:
+  .. code-block:: python
 
     from grass.script import core as grass
 
@@ -254,11 +253,13 @@ def make_command(
     **options,
 ):
     """Return a list of strings suitable for use as the args parameter to
-    Popen() or call(). Example:
+    Popen() or call().
 
+    :Example:
+      .. code-block:: pycon
 
-    >>> make_command("g.message", flags="w", message="this is a warning")
-    ['g.message', '-w', 'message=this is a warning']
+        >>> make_command("g.message", flags="w", message="this is a warning")
+        ['g.message', '-w', 'message=this is a warning']
 
 
     :param str prog: GRASS module
@@ -1016,7 +1017,6 @@ def tempname(length: int, lowercase: bool = False) -> str:
     :return: String with a random name of length "length" starting with a letter
 
     :Example:
-
       .. code-block:: pycon
 
         >>> tempname(12)
@@ -1228,7 +1228,6 @@ def gisenv(env: _Env | None = None) -> KeyValue[str | None]:
     dictionary.
 
     :Example:
-
       .. code-block:: pycon
 
         >>> env = gisenv()
@@ -1258,13 +1257,10 @@ def locn_is_latlong(env: _Env | None = None) -> bool:
 
 def region(region3d=False, complete=False, env=None):
     """Returns the output from running "g.region -gu", as a
-    dictionary. Example:
+    dictionary.
 
-    :param bool region3d: True to get 3D region
-    :param bool complete:
-    :param env: dictionary with system environment variables (`os.environ` by default)
-
-    .. code-block:: pycon
+    :Example:
+      .. code-block:: pycon
 
         >>> curent_region = region()
         >>> # obtain n, s, e and w values
@@ -1274,6 +1270,10 @@ def region(region3d=False, complete=False, env=None):
         >>> (curent_region["nsres"], curent_region["ewres"])  # doctest: +ELLIPSIS
         (..., ...)
 
+    :param bool region3d: True to get 3D region
+    :param bool complete:
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     :return: dictionary of region values
     """
     flgs = "gu"
@@ -1440,7 +1440,6 @@ def find_file(name, element="cell", mapset=None, env=None):
     "raster_3d": "grid3",
 
     :Example:
-
       .. code-block:: pycon
 
         >>> result = find_file("elevation", element="cell")
@@ -1554,10 +1553,13 @@ def list_grouped(
 
     Returns the output from running g.list, as a dictionary where the
     keys are mapset names and the values are lists of maps in that
-    mapset. Example:
+    mapset.
 
-    >>> list_grouped("vect", pattern="*roads*")["PERMANENT"]
-    ['railroads', 'roadsmajor']
+    :Example:
+      .. code-block:: pycon
+
+        >>> list_grouped("vect", pattern="*roads*")["PERMANENT"]
+        ['railroads', 'roadsmajor']
 
     :param str type: element type (raster, vector, raster_3d, region, ...)
                      or list of elements
@@ -1664,7 +1666,6 @@ def parse_color(
     and 1.
 
     :Example:
-
       .. code-block:: pycon
 
         >>> parse_color("red")
@@ -1731,7 +1732,6 @@ def find_program(pgm, *args):
     valid do-little option is usually "--version".
 
     :Example:
-
       .. code-block:: pycon
 
         >>> find_program("r.sun", "--help")

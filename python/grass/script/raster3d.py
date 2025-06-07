@@ -1,9 +1,9 @@
 """
 Raster3d related functions to be used in Python scripts.
 
-Usage:
+:Usage:
 
-::
+  .. code-block:: python
 
     from grass.script import raster3d as grass
 
@@ -32,13 +32,14 @@ from grass.exceptions import CalledModuleError
 def raster3d_info(map, env=None):
     """Return information about a raster3d map (interface to `r3.info`).
 
-    Example:
+    :Example:
+      .. code-block:: pycon
 
-    >>> mapcalc3d("volume = row() + col() + depth()")
-    >>> raster3d_info("volume")  # doctest: +ELLIPSIS
-    {'vertical_units': '"units"', 'tbres': 1.0, ... 'south': 185000.0}
-    >>> run_command("g.remove", flags="f", type="raster_3d", name="volume")
-    0
+        >>> mapcalc3d("volume = row() + col() + depth()")
+        >>> raster3d_info("volume")  # doctest: +ELLIPSIS
+        {'vertical_units': '"units"', 'tbres': 1.0, ... 'south': 185000.0}
+        >>> run_command("g.remove", flags="f", type="raster_3d", name="volume")
+        0
 
     :param str map: map name
     :param env: environment
