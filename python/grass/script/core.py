@@ -1665,7 +1665,7 @@ def parse_color(
     val: str, dflt: tuple[float, float, float] | None = None
 ) -> tuple[float, float, float] | None:
     """Parses the string "val" as a GRASS colour, which can be either one of
-    the named colours or an R:G:B tuple e.g. 255:255:255. Returns an
+    the named colours or an ``R:G:B`` tuple e.g. ``255:255:255``. Returns an
     (r,g,b) triple whose components are floating point values between 0
     and 1.
 
@@ -1716,7 +1716,7 @@ def verbosity():
 
     2 all messages will be printed
 
-    3 also verbose messages will be printed. Triggered by "--v" or "--verbose" flag.
+    3 also verbose messages will be printed. Triggered by "``--v``" or "``--verbose``" flag.
     """
     vbstr = os.getenv("GRASS_VERBOSE")
     if vbstr:
@@ -1732,8 +1732,8 @@ def find_program(pgm, *args):
 
     You must call the program in a way that will return a successful
     exit code. For GRASS modules this means you need to pass it some
-    valid CLI option, like "--help". For other programs a common
-    valid do-little option is usually "--version".
+    valid CLI option, like "``--help``". For other programs a common
+    valid do-little option is usually "``--version``".
 
     :Example:
       .. code-block:: pycon
