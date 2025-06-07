@@ -333,7 +333,7 @@ def handle_errors(returncode, result, args, kwargs):
     handling mechanism is not desirable or the return code has some
     meaning not necessarily interpreted as an error by the caller.
 
-    For ``errors="exit"``, ``sys.exit()`` is called with the
+    For ``errors="exit"``, :external:py:func:`sys.exit()` is called with the
     *returncode*, so it behaves similarly to a Bash script with
     ``set -e``. No additional error message or exception is produced.
     This might be useful for a simple script where error message
@@ -471,7 +471,7 @@ def run_command(*args, **kwargs):
 
     This function passes all arguments to ``start_command()``,
     then waits for the process to complete. It is similar to
-    ``subprocess.check_call()``, but with the :func:`make_command()`
+    :external:py:func:`subprocess.check_call()`, but with the :func:`make_command()`
     interface. By default, an exception is raised in case of a non-zero
     return code by default.
 
@@ -709,7 +709,8 @@ def exec_command(
     :param bool quiet: True to run quietly (<tt>--q</tt>)
     :param bool superquiet: True to run quietly (<tt>--qq</tt>)
     :param bool verbose: True to run verbosely (<tt>--v</tt>)
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     :param list kwargs: module's parameters
 
     """
@@ -728,7 +729,8 @@ def message(msg, flag=None, env=None):
 
     :param str msg: message to be displayed
     :param str flag: flags (given as string)
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     """
     run_command("g.message", flags=flag, message=msg, errors="ignore", env=env)
 
@@ -741,11 +743,13 @@ def debug(msg, debug=1, env=None):
     (with `X` set to the debug level specified in the function call).
 
     :param str msg: debugging message to be displayed
-    :param str debug: debug level (0-5) with the following recommended levels:
-        Use 1 for messages generated once of few times,
-        3 for messages generated for each raster row or vector line,
-        5 for messages generated for each raster cell or vector point.
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param str debug: debug level (0-5) with the following recommended
+        levels:
+        - Use 1 for messages generated once of few times,
+        - 3 for messages generated for each raster row or vector line,
+        - 5 for messages generated for each raster cell or vector point.
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     """
     if debug_level() >= debug:
         # TODO: quite a random hack here, do we need it somewhere else too?
@@ -759,7 +763,8 @@ def verbose(msg, env=None):
     """Display a verbose message using `g.message -v`
 
     :param str msg: verbose message to be displayed
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     """
     message(msg, flag="v", env=env)
 
@@ -768,7 +773,8 @@ def info(msg, env=None):
     """Display an informational message using `g.message -i`
 
     :param str msg: informational message to be displayed
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     """
     message(msg, flag="i", env=env)
 
@@ -787,7 +793,8 @@ def percent(i, n, s, env=None):
     :param int i: current item
     :param int n: total number of items
     :param int s: increment size
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     """
     message("%d %d %d" % (i, n, s), flag="p", env=env)
 
@@ -796,7 +803,8 @@ def warning(msg, env=None):
     """Display a warning message using `g.message -w`
 
     :param str msg: warning message to be displayed
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     """
     message(msg, flag="w", env=env)
 
@@ -809,7 +817,8 @@ def error(msg, env=None):
     For error handling using the standard mechanism use :func:`fatal()`.
 
     :param str msg: error message to be displayed
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     """
     message(msg, flag="e", env=env)
 
@@ -818,11 +827,12 @@ def fatal(msg, env=None):
     """Display an error message using `g.message -e`, then abort or raise
 
     Raises exception when module global raise_on_error is 'True', abort
-    (calls exit) otherwise.
+    (calls :external:py:func:`sys.exit`) otherwise.
     Use :func:`set_raise_on_error()` to set the behavior.
 
     :param str msg: error message to be displayed
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     """
     global raise_on_error
     if raise_on_error:
@@ -835,8 +845,9 @@ def fatal(msg, env=None):
 def set_raise_on_error(raise_exp=True):
     """Define behaviour on fatal error (fatal() called)
 
-    :param bool raise_exp: True to raise ScriptError instead of calling
-                           sys.exit(1) in fatal()
+    :param bool raise_exp: True to raise :py:exc:`~grass.exceptions.ScriptError`
+        instead of calling :external:py:func:`sys.exit(1) <sys.exit>`
+        in :py:func:`~grass.script.core.fatal`
 
     :return: current status
     """
@@ -847,8 +858,9 @@ def set_raise_on_error(raise_exp=True):
 
 
 def get_raise_on_error():
-    """Return True if a ScriptError exception is raised instead of calling
-    sys.exit(1) in case a fatal error was invoked with fatal()
+    """Return True if a :py:exc:`~grass.exceptions.ScriptError` exception is raised
+    instead of calling :external:py:func:`sys.exit(1) <sys.exit>` in case a fatal error
+    was invoked with :py:func:`~grass.script.core.fatal`.
     """
     global raise_on_error
     return raise_on_error
@@ -860,10 +872,10 @@ def set_capture_stderr(capture=True):
 
     By default, standard error output (stderr) of child processes shows
     in the same place as output of the parent process. This may not
-    always be the same place as ``sys.stderr`` is written.
-    After calling this function, functions in the ``grass.script``
+    always be the same place as :external:py:data:`sys.stderr` is written.
+    After calling this function, functions in the :py:mod:`grass.script`
     package will capture the stderr of child processes and pass it
-    to ``sys.stderr`` if there is an error.
+    to :external:py:data:`sys.stderr` if there is an error.
 
     .. note::
 
@@ -1220,7 +1232,8 @@ def gisenv(env: _Env | None = None) -> KeyValue[str | None]:
     >>> print(env["GISDBASE"])  # doctest: +SKIP
     /opt/grass-data
 
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     :return: list of GRASS variables
     """
     s = read_command("g.gisenv", flags="n", env=env)
@@ -1247,7 +1260,8 @@ def region(region3d=False, complete=False, env=None):
 
     :param bool region3d: True to get 3D region
     :param bool complete:
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
 
     >>> curent_region = region()
     >>> # obtain n, s, e and w values
@@ -1299,7 +1313,8 @@ def region_env(
 
     :param region3d: True to get 3D region
     :param flags: for example 'a'
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     :param kwargs: g.region's parameters like 'raster', 'vector' or 'region'
 
     ::

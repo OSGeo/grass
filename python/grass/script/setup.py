@@ -395,7 +395,8 @@ class SessionHandle:
             # ... use GRASS modules here
         # session ends automatically here
 
-    The example above is modifying the global, process environment (`os.environ`).
+    The example above is modifying the global, process environment
+    (:external:py:data:`os.environ`).
     If you don't want to modify the global environment, use the _env_ parameter
     for the _init_ function to modify the provided environment instead.
     This environment is then available as an attribute of the session object.
