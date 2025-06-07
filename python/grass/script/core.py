@@ -1317,19 +1317,19 @@ def region_env(
     See also :func:`use_temp_region()` for alternative method how to define
     temporary region used for raster-based computation.
 
-    :param region3d: True to get 3D region
-    :param flags: for example 'a'
-    :param env: dictionary with system environment variables (`os.environ` by default)
-    :param kwargs: g.region's parameters like 'raster', 'vector' or 'region'
-
-    .. code-block:: python
+    :Example:
+      .. code-block:: python
 
         os.environ["GRASS_REGION"] = grass.region_env(region="detail")
         grass.mapcalc("map=1", overwrite=True)
         os.environ.pop("GRASS_REGION")
 
-    :return: string with region values
-    :return: empty string on error
+    :param region3d: True to get 3D region
+    :param flags: for example 'a'
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
+    :param kwargs: g.region's parameters like 'raster', 'vector' or 'region'
+    :return: string with region values, or empty string on error
     """
     # read proj/zone from WIND file
     gis_env: KeyValue[str | None] = gisenv(env)
