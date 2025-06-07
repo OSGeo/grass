@@ -254,9 +254,9 @@ def make_command(
     superquiet=False,
     errors=None,
     **options,
-):
+) -> list[str]:
     """Return a list of strings suitable for use as the args parameter to
-    Popen() or call().
+    :class:`~grass.script.core.Popen()` or :func:`~grass.script.core.call`.
 
     :Example:
       .. code-block:: pycon
@@ -329,7 +329,7 @@ def handle_errors(returncode, result, args, kwargs):
     The value ``errors="raise"`` is a default in which case a
     ``CalledModuleError`` exception is raised.
 
-    For ``errors="fatal"``, the function calls :func:`fatal()`
+    For ``errors="fatal"``, the function calls :func:`~grass.script.core.fatal()`
     which has its own rules on what happens next.
 
     For ``errors="status"``, the *returncode* will be returned.
@@ -392,7 +392,7 @@ def popen_args_command(
 
     Does the splitting based on known Popen parameter names, and then does the
     transformation from Python parameters to a list of command line arguments
-    for Popen.
+    for :py:class:`~grass.script.core.Popen`.
     """
     options = {}
     popen_kwargs = {}
@@ -422,8 +422,9 @@ def start_command(
     superquiet=False,
     **kwargs,
 ):
-    """Returns a Popen object with the command created by make_command.
-    Accepts any of the arguments which Popen() accepts apart from "args"
+    """Returns a :class:`~grass.script.core.Popen` object with the command created by
+    :py:func:`~grass.script.core.make_command`.
+    Accepts any of the arguments which :py:class:`Popen()` accepts apart from "args"
     and "shell".
 
     .. code-block:: pycon
@@ -451,6 +452,7 @@ def start_command(
     :param kwargs: module's parameters
 
     :return: Popen object
+    :rtype: ~grass.script.core.Popen
     """
     args, popts = popen_args_command(
         prog,
@@ -475,7 +477,7 @@ def start_command(
 def run_command(*args, **kwargs):
     """Execute a module synchronously
 
-    This function passes all arguments to ``start_command()``,
+    This function passes all arguments to :func:`~grass.script.core.start_command`,
     then waits for the process to complete. It is similar to
     ``subprocess.check_call()``, but with the :func:`make_command()`
     interface. By default, an exception is raised in case of a non-zero
@@ -531,8 +533,8 @@ def run_command(*args, **kwargs):
 
 
 def pipe_command(*args, **kwargs):
-    """Passes all arguments to start_command(), but also adds
-    "stdout = PIPE". Returns the Popen object.
+    """Passes all arguments to :func:`start_command()`, but also adds
+    "stdout = PIPE". Returns the :class:`~grass.script.core.Popen` object.
 
     .. code-block:: pycon
 
@@ -546,37 +548,39 @@ def pipe_command(*args, **kwargs):
         GUI='text';
         MONITOR='x0';
 
-    :param list args: list of unnamed arguments (see start_command() for details)
-    :param list kwargs: list of named arguments (see start_command() for details)
+    :param list args: list of unnamed arguments (see :func:`start_command` for details)
+    :param list kwargs: list of named arguments (see :func:`start_command` for details)
 
     :return: Popen object
+    :rtype: grass.script.core.Popen
     """
     kwargs["stdout"] = PIPE
     return start_command(*args, **kwargs)
 
 
 def feed_command(*args, **kwargs):
-    """Passes all arguments to start_command(), but also adds
-    "stdin = PIPE". Returns the Popen object.
+    """Passes all arguments to :func:`start_command()`, but also adds
+    "stdin = PIPE". Returns the :class:`~grass.script.core.Popen` object.
 
-    :param list args: list of unnamed arguments (see start_command() for details)
-    :param list kwargs: list of named arguments (see start_command() for details)
+    :param list args: list of unnamed arguments (see :func:`start_command` for details)
+    :param list kwargs: list of named arguments (see :func:`start_command` for details)
 
     :return: Popen object
+    :rtype: grass.script.core.Popen
     """
     kwargs["stdin"] = PIPE
     return start_command(*args, **kwargs)
 
 
 def read_command(*args, **kwargs):
-    """Passes all arguments to pipe_command, then waits for the process to
-    complete, returning its stdout (i.e. similar to shell `backticks`).
+    """Passes all arguments to :func:`~grass.script.core.pipe_command`, then waits for
+    the process to complete, returning its stdout (i.e. similar to shell `backticks`).
 
     The behavior on error can be changed using *errors* parameter
     which is passed to the :func:`handle_errors()` function.
 
-    :param list args: list of unnamed arguments (see start_command() for details)
-    :param list kwargs: list of named arguments (see start_command() for details)
+    :param list args: list of unnamed arguments (see :func:`start_command` for details)
+    :param list kwargs: list of named arguments (see :func:`start_command` for details)
 
     :return: stdout
     """
@@ -601,28 +605,33 @@ def read_command(*args, **kwargs):
 
 def parse_command(*args, **kwargs):
     """Passes all arguments to read_command, then parses the output
-    by default with parse_key_val().
+    by default with :func:`~grass.script.utils.parse_key_val`.
 
-    If the command has parameter <em>format</em> and is called with
-    <em>format=json</em>, the output will be parsed into a dictionary.
-    Similarly, with <em>format=csv</em> the output will be parsed into
+    If the command has parameter ``format`` and is called with
+    ``format="json"``, the output will be parsed into a dictionary.
+    Similarly, with ``format="csv"`` the output will be parsed into
     a list of lists (CSV rows).
 
     .. code-block:: python
 
         parse_command("v.db.select", ..., format="json")
 
-    Custom parsing function can be optionally given by <em>parse</em> parameter
+    Custom parsing function can be optionally given by ``parse`` parameter
     including its arguments, e.g.
 
     .. code-block:: python
 
         parse_command(..., parse=(gs.parse_key_val, {"sep": ":"}))
 
-    Parameter <em>delimiter</em> is deprecated.
+    Parameter ``delimiter`` is deprecated.
 
-    :param args: list of unnamed arguments (see start_command() for details)
-    :param kwargs: list of named arguments (see start_command() for details)
+    :param args: list of unnamed arguments (see :func:`start_command()` for details)
+    :param kwargs: list of named arguments
+        (see :func:`start_command()` for details)
+
+        .. deprecated:: 8.4.0
+            Parameter ``delimiter`` is deprecated. Use the command's ``format="json"``
+            or ``format="csv"`` parameter instead
 
     :return: parsed module output
     """
@@ -656,7 +665,7 @@ def parse_command(*args, **kwargs):
 def write_command(*args, **kwargs):
     """Execute a module with standard input given by *stdin* parameter.
 
-    Passes all arguments to ``feed_command()``, with the string specified
+    Passes all arguments to :py:func:`feed_command()`, with the string specified
     by the *stdin* argument fed to the process' standard input.
 
     .. code-block:: pycon
@@ -669,13 +678,13 @@ def write_command(*args, **kwargs):
         ... )
         0
 
-    See ``start_command()`` for details about parameters and usage.
+    See :func:`start_command()` for details about parameters and usage.
 
     The behavior on error can be changed using *errors* parameter
     which is passed to the :func:`handle_errors()` function.
 
-    :param args: unnamed arguments passed to ``start_command()``
-    :param kwargs: named arguments passed to ``start_command()``
+    :param args: unnamed arguments passed to :func:`start_command()`
+    :param kwargs: named arguments passed to :func:`start_command()`
 
     :returns: 0 with default parameters for backward compatibility only
 
@@ -845,7 +854,7 @@ def fatal(msg, env=None):
 
 
 def set_raise_on_error(raise_exp=True):
-    """Define behaviour on fatal error (fatal() called)
+    """Define behavior on fatal error (:py:func:`~grass.script.core.fatal` called)
 
     :param bool raise_exp: True to raise ScriptError instead of calling
                            sys.exit(1) in fatal()
@@ -883,8 +892,8 @@ def set_capture_stderr(capture=True):
         and interactive notebooks such as Jupyter Notebook.
 
     The capturing can be applied only in certain cases, for example
-    in case of run_command() it is applied because run_command() nor
-    its callers do not handle the streams, however feed_command()
+    in case of :func:`run_command` it is applied because :func:`run_command` nor
+    its callers do not handle the streams, however :func:`feed_command`
     cannot do capturing because its callers handle the streams.
 
     The previous state is returned. Passing ``False`` disables the
@@ -1025,7 +1034,8 @@ def tempname(length: int, lowercase: bool = False) -> str:
         >>> tempname(12)
         'tmp_MxMa1kAS13s9'
 
-    .. seealso:: functions :func:`append_uuid()`, :func:`append_random()`
+    .. seealso:: functions :func:`~grass.script.utils.append_uuid()`,
+        :func:`~grass.script.utils.append_random()`
     """
 
     chars = string.ascii_lowercase + string.digits
