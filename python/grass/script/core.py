@@ -151,11 +151,12 @@ def get_commands(*, env=None):
     :return: list of commands (set) and directory of scripts (collected
              by extension - MS Windows only)
 
-    >>> cmds = list(get_commands()[0])
-    >>> cmds.sort()
-    >>> cmds[:5]
-    ['d.barscale', 'd.colorlist', 'd.colortable', 'd.correlate', 'd.erase']
+    .. code-block:: pycon
 
+        >>> cmds = list(get_commands()[0])
+        >>> cmds.sort()
+        >>> cmds[:5]
+        ['d.barscale', 'd.colorlist', 'd.colortable', 'd.correlate', 'd.erase']
     """
     if not env:
         env = os.environ
@@ -220,8 +221,10 @@ def get_real_command(cmd):
     For other cases it just returns a module (name).
     So, you can just use this function for all without further check.
 
-    >>> get_real_command("g.region")
-    'g.region'
+    .. code-block:: pycon
+
+        >>> get_real_command("g.region")
+        'g.region'
 
     :param cmd: the command
     """
@@ -605,14 +608,14 @@ def parse_command(*args, **kwargs):
     Similarly, with <em>format=csv</em> the output will be parsed into
     a list of lists (CSV rows).
 
-    ::
+    .. code-block:: python
 
         parse_command("v.db.select", ..., format="json")
 
     Custom parsing function can be optionally given by <em>parse</em> parameter
     including its arguments, e.g.
 
-    ::
+    .. code-block:: python
 
         parse_command(..., parse=(gs.parse_key_val, {"sep": ":"}))
 
