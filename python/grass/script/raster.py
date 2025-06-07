@@ -459,7 +459,8 @@ class RegionManager:
         """
         Initializes the MaskManager.
 
-        :param env: Environment to use. Defaults to modifying os.environ.
+        :param env: Environment to use.
+                    Defaults to modifying :external:py:data:`os.environ`.
         :param kwargs: Keyword arguments passed to `g.region`
         """
         self.env = env if env is not None else os.environ
@@ -543,7 +544,8 @@ class RegionManagerEnv:
         """
         Initializes the MaskManager.
 
-        :param env: Environment to use. Defaults to modifying os.environ.
+        :param env: Environment to use.
+                    Defaults to modifying :external:py:data:`os.environ`.
         :param kwargs: Keyword arguments passed to `g.region`
         """
         self.env = env if env is not None else os.environ
