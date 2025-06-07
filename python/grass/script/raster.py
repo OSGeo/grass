@@ -437,7 +437,7 @@ class RegionManager:
     ...     gs.run_command("g.region", n=226000, s=222000, w=634000, e=638000)
     ...     gs.parse_command("r.univar", map="elevation", format="json")
 
-    Example using set_region():
+    Example using :py:func:`.set_region`:
 
     >>> with gs.RegionManager() as manager:
     ...     manager.set_region(n=226000, s=222000, w=634000, e=638000)
@@ -477,7 +477,7 @@ class RegionManager:
     def __enter__(self):
         """Sets the `WIND_OVERRIDE` environment variable to the generated region name.
 
-        :return: Returns the RegionManager instance.
+        :return: Returns the :class:`RegionManager` instance.
         """
         self._original_value = self.env.get("WIND_OVERRIDE")
         run_command(
@@ -522,7 +522,7 @@ class RegionManagerEnv:
     >>> with gs.RegionManagerEnv(n=226000, s=222000, w=634000, e=638000):
     ...     gs.parse_command("r.univar", map="elevation", format="json")
 
-    Example with set_region():
+    Example with :py:meth:`.set_region`:
 
     >>> with gs.RegionManagerEnv() as manager:
     ...     manager.set_region(n=226000, s=222000, w=634000, e=638000)
@@ -536,7 +536,8 @@ class RegionManagerEnv:
 
     .. caution::
 
-        To set region within the context, do not call `g.region`, use `set_region` instead.
+        To set region within the context, do not call `g.region`,
+        use :py:meth:`.set_region` instead.
     """
 
     def __init__(self, env: dict[str, str] | None = None, **kwargs):
@@ -560,7 +561,7 @@ class RegionManagerEnv:
     def __enter__(self):
         """Sets the `GRASS_REGION` environment variable to the generated region name.
 
-        :return: Returns the RegionManagerEnv instance.
+        :return: Returns the :class:`RegionManagerEnv` instance.
         """
         self._original_value = self.env.get("GRASS_REGION")
         self.env["GRASS_REGION"] = region_env(**self._region_inputs, env=self.env)
