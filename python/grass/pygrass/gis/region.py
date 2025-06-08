@@ -407,7 +407,6 @@ class Region:
         :type vector_name: str
 
         :Example:
-
           .. code-block:: pycon
 
             >>> reg = Region()
@@ -437,7 +436,6 @@ class Region:
         Call C function :c:func:`Rast_get_cellhd`
 
         :Example:
-
           .. code-block:: pycon
 
             >>> reg = Region()
@@ -478,7 +476,6 @@ class Region:
         only if the current working region is not initialized.
 
         :Example:
-
           .. code-block:: pycon
 
             >>> r = Region()
@@ -505,7 +502,6 @@ class Region:
                    The GRASS computational region is not affected.
 
         :Example:
-
           .. code-block:: pycon
 
             >>> r = Region()
@@ -581,7 +577,6 @@ class Region:
         was changed and would expect that only g.region will do this.
 
         :Example:
-
           .. code-block:: pycon
 
             >>> from copy import deepcopy

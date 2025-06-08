@@ -2,7 +2,6 @@
 Raster3d related functions to be used in Python scripts.
 
 :Usage:
-
   .. code-block:: python
 
     from grass.script import raster3d as grass
