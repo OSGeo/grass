@@ -594,8 +594,8 @@ class Point(Geo):
         :type dist_y: num
         :param angle: the angle between 0x and major axis
         :type angle: num
-        :param round_: to make corners round
-        :type round_: bool
+        :param round\\_: to make corners round
+        :type round\\_: bool
         :param tol: fix the maximum distance between theoretical arc and output segments
         :type tol: float
         :returns: the buffer as Area object
@@ -1173,8 +1173,8 @@ class Line(Geo):
         :type dist_y: num
         :param angle: the angle between 0x and major axis
         :type angle: num
-        :param round_: to make corners round
-        :type round_: bool
+        :param round\\_: to make corners round
+        :type round\\_: bool
         :param tol: fix the maximum distance between theoretical arc and output segments
         :type tol: float
         :returns: the buffer as Area object
@@ -1734,8 +1734,8 @@ class Area(Geo):
         :type dist_y: num
         :param angle: the angle between 0x and major axis
         :type angle: num
-        :param round_: to make corners round
-        :type round_: bool
+        :param round\\_: to make corners round
+        :type round\\_: bool
         :param tol: fix the maximum distance between theoretical arc and output segments
         :type tol: float
         :returns: the buffer as line, centroid, isles object tuple

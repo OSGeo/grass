@@ -193,7 +193,7 @@ def decode(bytes_: AnyStr, encoding: str | None = None) -> str:
 
     No-op if parameter is not bytes (assumed unicode string).
 
-    :param bytes bytes_: the bytes to decode
+    :param bytes bytes\\_: the bytes to decode
     :param encoding: encoding to be used, default value is None
 
     Example
