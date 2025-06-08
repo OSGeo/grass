@@ -1,9 +1,8 @@
 """
 Imagery related functions to be used in Python scripts.
 
-Usage:
-
-::
+:Usage:
+  .. code-block:: python
 
     import grass.script as gs
 

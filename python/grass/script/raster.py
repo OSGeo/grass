@@ -1,9 +1,8 @@
 """
 Raster related functions to be used in Python scripts.
 
-Usage:
-
-::
+:Usage:
+  .. code-block:: python
 
     from grass.script import raster as grass
 
