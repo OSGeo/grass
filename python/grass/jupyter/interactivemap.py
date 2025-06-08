@@ -63,12 +63,12 @@ class Layer:  # pylint: disable=too-few-public-methods
     ):
         """Reproject GRASS raster, export to PNG, and compute bounding box.
 
-        param str name: layer name
-        param str title: title of layer to display in layer control legend
-        param bool use_region: use computational region of current mapset
-        param str saved_region: name of saved computation region
-        param renderer: instance of ReprojectionRenderer
-        **kwargs: keyword arguments passed to folium/ipyleaflet layer instance
+        :param str name: layer name
+        :param str title: title of layer to display in layer control legend
+        :param bool use_region: use computational region of current mapset
+        :param str saved_region: name of saved computation region
+        :param renderer: instance of ReprojectionRenderer
+        :param kwargs: keyword arguments passed to folium/ipyleaflet layer instance
         """
         self._name = name
         self._layer_kwargs = kwargs
