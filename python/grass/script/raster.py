@@ -437,7 +437,7 @@ class RegionManager:
     ...     gs.run_command("g.region", n=226000, s=222000, w=634000, e=638000)
     ...     gs.parse_command("r.univar", map="elevation", format="json")
 
-    Example using :py:func:`.set_region`:
+    Example using :py:func:`~grass.script.raster.RegionManager.set_region`:
 
     >>> with gs.RegionManager() as manager:
     ...     manager.set_region(n=226000, s=222000, w=634000, e=638000)

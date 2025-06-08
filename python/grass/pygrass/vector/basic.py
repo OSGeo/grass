@@ -554,7 +554,7 @@ class CatsList:
         """Convert ordered array of integers to cat_list structure.
 
         :param array: the input array containing the cats
-        :type array: array
+        :type array: ~grass.script.array.array
         """
         # Vect_array_to_cat_list(const int *vals, int nvals, ***)
         # TODO: it's not working

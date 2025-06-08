@@ -142,7 +142,7 @@ class RasterRow(RasterAbstractBase):
         :param row: the number of row to obtain
         :type row: int
         :param row_buffer: Buffer object instance with the right dim and type
-        :type row_buffer: Buffer
+        :type row_buffer: ~grass.pygrass.raster.buffer.Buffer
 
         >>> elev = RasterRow(test_raster_name)
         >>> elev.open()
