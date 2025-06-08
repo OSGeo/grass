@@ -50,7 +50,7 @@ libgis date: 2024-04-27T09:38:49+00:00
 ### Full info in shell script style
 
 ```sh
-g.version -rge
+g.version -re format=shell
 
 version=8.4.0
 date=2024
@@ -71,6 +71,53 @@ the `git` program was not available during compilation of GRASS GIS and
 the source code did not contain the `.git/` subdirectory (requires e.g.
 to `git clone` the GRASS GIS [software
 repository](https://github.com/OSGeo/grass/).)
+
+### Full info in JSON format
+
+```sh
+g.version -re format=json
+
+{
+    "version": "8.4.0",
+    "date": "2024",
+    "revision": "d57f40906",
+    "build_date": "2024-05-23",
+    "build_platform": "x86_64-pc-linux-gnu",
+    "build_off_t_size": 8,
+    "libgis_revision": "c9e8576cf",
+    "libgis_date": "2024-04-27T09:38:49+00:00",
+    "proj": "8.2.1",
+    "gdal": "3.4.3",
+    "geos": "3.9.2",
+    "sqlite": "3.36.0"
+}
+```
+
+### Using g.version JSON output with python
+
+Print basic info in JSON format using Python:
+
+```python
+import grass.script as gs
+
+# Run the g.version command using JSON output format
+data = gs.parse_command(
+    "g.version",
+    format="json",
+)
+
+for key, value in data.items():
+    print(f"{key}: {value}")
+```
+
+```text
+version: 8.4.0
+date: 2024
+revision: d57f40906
+build_date: 2024-05-23
+build_platform: x86_64-pc-linux-gnu
+build_off_t_size: 8
+```
 
 ## Citing GRASS GIS
 
