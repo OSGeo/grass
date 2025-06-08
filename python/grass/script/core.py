@@ -1188,7 +1188,7 @@ def compare_key_value_text_files(
         d : hello,8,0.1
 
     :param str filename_a: name of the first key-value text file
-    :param str filenmae_b: name of the second key-value text file
+    :param str filename_b: name of the second key-value text file
     :param str sep: character that separates the keys and values, default is ":"
     :param str val_sep: character that separates the values of a single key,
                         default is ","
