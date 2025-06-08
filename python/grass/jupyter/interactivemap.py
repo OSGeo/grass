@@ -87,14 +87,16 @@ class Layer:  # pylint: disable=too-few-public-methods
 class Raster(Layer):
     """Overlays rasters on a folium or ipyleaflet map.
 
-    Basic Usage:
-    >>> m = folium.Map()
-    >>> gj.Raster("elevation", opacity=0.5).add_to(m)
-    >>> m
+    :Basic usage:
+      .. code-block:: pycon
 
-    >>> m = ipyleaflet.Map()
-    >>> gj.Raster("elevation", opacity=0.5).add_to(m)
-    >>> m
+        >>> m = folium.Map()
+        >>> gj.Raster("elevation", opacity=0.5).add_to(m)
+        >>> m
+
+        >>> m = ipyleaflet.Map()
+        >>> gj.Raster("elevation", opacity=0.5).add_to(m)
+        >>> m
     """
 
     def __init__(
@@ -145,14 +147,16 @@ class Raster(Layer):
 class Vector(Layer):
     """Adds vectors to a folium or ipyleaflet map.
 
-    Basic Usage:
-    >>> m = folium.Map()
-    >>> gj.Vector("roadsmajor").add_to(m)
-    >>> m
+    :Basic usage:
+      .. code-block:: pycon
 
-    >>> m = ipyleaflet.Map()
-    >>> gj.Vector("roadsmajor").add_to(m)
-    >>> m
+        >>> m = folium.Map()
+        >>> gj.Vector("roadsmajor").add_to(m)
+        >>> m
+
+        >>> m = ipyleaflet.Map()
+        >>> gj.Vector("roadsmajor").add_to(m)
+        >>> m
     """
 
     def __init__(
@@ -198,12 +202,13 @@ class Vector(Layer):
 class InteractiveMap:
     """This class creates interactive GRASS maps with folium or ipyleaflet.
 
-    Basic Usage:
+    :Basic usage:
+      .. code-block:: pycon
 
-    >>> m = InteractiveMap()
-    >>> m.add_vector("streams")
-    >>> m.add_raster("elevation")
-    >>> m.show()
+        >>> m = InteractiveMap()
+        >>> m.add_vector("streams")
+        >>> m.add_raster("elevation")
+        >>> m.show()
     """
 
     def __init__(
