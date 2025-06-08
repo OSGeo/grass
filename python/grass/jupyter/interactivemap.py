@@ -355,10 +355,11 @@ class InteractiveMap:
         Color table for the raster can be modified with `r.colors` before calling
         this function.
 
-        .. note:: This will only work if the raster is located in the current mapset.
-        To change the color table of a raster located outside the current mapset,
-        switch to that mapset with ``g.mapset``, modify the color table with ``r.color``
-        then switch back to the initial mapset and run this function.
+        .. note::
+            This will only work if the raster is located in the current mapset.
+            To change the color table of a raster located outside the current mapset,
+            switch to that mapset with ``g.mapset``, modify the color table with ``r.color``
+            then switch back to the initial mapset and run this function.
 
         :param str name: name of raster to add to display; positional-only parameter
         :param str title: raster name for layer control
