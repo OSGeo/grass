@@ -29,6 +29,68 @@ only the visible light bands of Landsat-7:
 i.group group=vis_bands subgroup=vis_bands input=lsat7_2000_10,lsat7_2000_20,lsat7_2000_30
 ```
 
+To list files in the `vis_bands` subgroup under the `vis_bands` group:
+
+```sh
+# In shell format
+i.group group=vis_bands subgroup=vis_bands -l format=shell
+lsat7_2000_10@PERMANENT
+lsat7_2000_20@PERMANENT
+lsat7_2000_30@PERMANENT
+
+# In JSON format
+i.group group=vis_bands subgroup=vis_bands -l format=json
+{
+    "group": "vis_bands",
+    "subgroup": "vis_bands",
+    "maps": [
+        "lsat7_2000_10@PERMANENT",
+        "lsat7_2000_20@PERMANENT",
+        "lsat7_2000_30@PERMANENT"
+    ]
+}
+```
+
+To list maps in the `vis_bands` group using Python:
+
+```python
+import grass.script as gs
+
+# Run i.group with JSON output and the -l flag
+data = gs.parse_command(
+    "i.group",
+    group="vis_bands",
+    flags="l",
+    format="json",
+)
+
+for item in data["maps"]:
+    print(item)
+```
+
+```text
+lsat7_2000_10@PERMANENT
+lsat7_2000_20@PERMANENT
+lsat7_2000_30@PERMANENT
+```
+
+To list subgroups in the `vis_bands` group:
+
+```sh
+# In shell format
+i.group group=vis_bands -s format=shell
+vis_bands
+
+# In JSON format
+i.group group=vis_bands -s format=json
+{
+    "group": "vis_bands",
+    "subgroups": [
+        "vis_bands"
+    ]
+}
+```
+
 ## SEE ALSO
 
 The GRASS 4 *[Image Processing
