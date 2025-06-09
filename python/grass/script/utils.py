@@ -153,15 +153,18 @@ class KeyValue(dict[str, VT]):
     """A general-purpose key-value store.
 
     KeyValue is a subclass of dict, but also allows entries to be read and
-    written using attribute syntax. Example:
+    written using attribute syntax.
 
-    >>> reg = KeyValue()
-    >>> reg["north"] = 489
-    >>> reg.north
-    489
-    >>> reg.south = 205
-    >>> reg["south"]
-    205
+    :Example:
+      .. code-block:: pycon
+
+        >>> reg = KeyValue()
+        >>> reg["north"] = 489
+        >>> reg.north
+        489
+        >>> reg.south = 205
+        >>> reg["south"]
+        205
 
     The keys of KeyValue are strings. To use other key types, use other mapping types.
     To use the attribute syntax, the keys must be valid Python attribute names.
