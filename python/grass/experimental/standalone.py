@@ -88,9 +88,25 @@ class StandaloneTools:
             # We create session and an empty XY project in one step.
             self._create_session()
 
+        rows_columns = object_parameter_handler.input_rows_columns()
+        if rows_columns:
+            # Reset the region for every run or keep it persistent?
+            # Also, we now set that even for an existing session, this is
+            # consistent with behavior without a provided session.
+            # We could use env to pass the regions which would allow for the change
+            # while not touching the underlying session.
+            rows, cols = rows_columns
+            gs.run_command(
+                "g.region",
+                rows=rows,
+                cols=cols,
+                env=self._session.env,
+            )
+
         object_parameter_handler.translate_objects_to_data(
             kwargs, parameters, env=self._session.env
         )
+
         # We approximate tool_kwargs as original kwargs.
         result = self.run_from_list(
             args,

@@ -47,12 +47,11 @@ def test_pack_input_output(rows_raster_file3x3):
     assert os.path.exists("file.grass_raster")
 
 
-# NumPy is not implemented for standalone
-def test_numpy_multiple_inputs_one_output(xy_dataset_session):
+def test_numpy_multiple_inputs_one_output():
     """Check that a NumPy array works for multiple inputs"""
     import numpy as np
 
-    tools = StandaloneTools(session=xy_dataset_session)
+    tools = StandaloneTools()
     tools.g_region(rows=2, cols=3)
     result = tools.r_mapcalc_simple(
         expression="A + B", a=np.full((2, 3), 2), b=np.full((2, 3), 5), output=np.array

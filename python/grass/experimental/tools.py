@@ -101,6 +101,7 @@ class ObjectParameterHandler:
     def __init__(self):
         self._numpy_inputs = {}
         self._numpy_outputs = {}
+        self._numpy_inputs_ordered = []
         self.stdin = None
 
     def process_parameters(self, kwargs):
@@ -108,6 +109,7 @@ class ObjectParameterHandler:
             if isinstance(value, np.ndarray):
                 kwargs[key] = gs.append_uuid("tmp_serialized_input_array")
                 self._numpy_inputs[key] = value
+                self._numpy_inputs_ordered.append(value)
             elif value in (np.ndarray, np.array, garray.array):
                 # We test for class or the function.
                 kwargs[key] = gs.append_uuid("tmp_serialized_output_array")
@@ -123,6 +125,11 @@ class ObjectParameterHandler:
                     map2d = garray.array(env=env)
                     map2d[:] = self._numpy_inputs[param["param"]]
                     map2d.write(kwargs[param["param"]])
+
+    def input_rows_columns(self):
+        if not len(self._numpy_inputs_ordered):
+            return None
+        return self._numpy_inputs_ordered[0].shape
 
     def translate_data_to_objects(self, kwargs, parameters, env):
         output_arrays = []
