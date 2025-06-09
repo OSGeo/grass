@@ -130,7 +130,7 @@ class StandaloneTools:
             )
         )
 
-        pack_importer_exporter = PackImporterExporter(env=self._session.env)
+        pack_importer_exporter = PackImporterExporter(run_function=self.no_nonsense_run)
         pack_importer_exporter.modify_and_ingest_argument_list(command, parameters)
 
         if not self._crs_initialized:
@@ -149,7 +149,22 @@ class StandaloneTools:
                 raster=pack_importer_exporter.input_rasters[0].stem,
                 env=self._session.env,
             )
+        result = self.no_nonsense_run_from_list(command)
+        pack_importer_exporter.export_data()
+        return result
 
+    def no_nonsense_run(self, name, /, *, tool_kwargs=None, stdin=None, **kwargs):
+        args, popen_options = gs.popen_args_command(name, **kwargs)
+        self.no_nonsense_run_from_list(
+            args, tool_kwargs=tool_kwargs, stdin=stdin, **popen_options
+        )
+
+    def no_nonsense_run_from_list(
+        self, command, tool_kwargs=None, stdin=None, **popen_options
+    ):
+        if not self._session:
+            # We create session and an empty XY project in one step.
+            self._create_session()
         if not self._tools:
             self._tools = Tools(
                 overwrite=True,
@@ -161,11 +176,7 @@ class StandaloneTools:
                 capture_output=self._capture_output,
                 session=self._session,
             )
-        result = self._tools.no_nonsense_run_from_list(command)
-
-        pack_importer_exporter.export_data()
-
-        return result
+        return self._tools.no_nonsense_run_from_list(command)
 
     def _create_session(self):
         # Temporary folder for all our files

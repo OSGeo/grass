@@ -29,7 +29,8 @@ from grass.exceptions import CalledModuleError
 
 
 class PackImporterExporter:
-    def __init__(self, *, env):
+    def __init__(self, *, run_function, env=None):
+        self._run_function = run_function
         self._env = env
 
     @classmethod
@@ -64,7 +65,7 @@ class PackImporterExporter:
     def import_rasters(self):
         for raster_file in self.input_rasters:
             # Currently we override the projection check.
-            gs.run_command(
+            self._run_function(
                 "r.unpack",
                 input=raster_file,
                 output=raster_file.stem,
@@ -79,7 +80,8 @@ class PackImporterExporter:
         for raster in self.output_rasters:
             # Overwriting a file is a warning, so to avoid it, we delete the file first.
             Path(raster).unlink(missing_ok=True)
-            gs.run_command(
+
+            self._run_function(
                 "r.pack",
                 input=raster.stem,
                 output=raster,
@@ -438,7 +440,7 @@ class Tools:
                 )
             processed_parameters = json.loads(interface_result.stdout)
 
-        pack_importer_exporter = PackImporterExporter(env=self._env)
+        pack_importer_exporter = PackImporterExporter(run_function=self.no_nonsense_run)
         pack_importer_exporter.modify_and_ingest_argument_list(
             command, processed_parameters
         )
@@ -461,6 +463,12 @@ class Tools:
     def parse_command(self, name, /, **kwargs):
         # TODO: Provide custom implementation for full control
         return gs.parse_command(name, **kwargs, env=self._env)
+
+    def no_nonsense_run(self, name, /, *, tool_kwargs=None, stdin=None, **kwargs):
+        args, popen_options = gs.popen_args_command(name, **kwargs)
+        self.no_nonsense_run_from_list(
+            args, tool_kwargs=tool_kwargs, stdin=stdin, **popen_options
+        )
 
     # Make this an overload of run.
     def no_nonsense_run_from_list(
