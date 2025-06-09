@@ -35,7 +35,7 @@ class PackImporterExporter:
 
     @classmethod
     def is_raster_pack_file(cls, value):
-        return value.endswith((".grass_raster", ".pack", ".rpack"))
+        return value.endswith((".grass_raster", ".pack", ".rpack", ".grr"))
 
     def modify_and_ingest_argument_list(self, args, parameters):
         # Uses parameters, but modifies the command, generates list of rasters and vectors.
