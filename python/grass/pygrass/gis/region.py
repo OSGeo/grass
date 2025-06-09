@@ -19,7 +19,9 @@ test_raster_name = "Region_test_raster"
 
 class Region:
     """This class is design to easily access and modify GRASS computational
-    region. ::
+    region.
+
+    .. code-block:: pycon
 
         >>> r = Region()
         >>> r.north
@@ -98,7 +100,6 @@ class Region:
         >>> r.nsres
         0.04
 
-    ..
     """
 
     def __init__(self, default=False):
@@ -302,18 +303,18 @@ class Region:
         return self.__unicode__()
 
     def __eq__(self, reg):
-        """Compare two region. ::
+        """Compare two regions.
 
-        >>> r0 = Region()
-        >>> r1 = Region()
-        >>> r2 = Region()
-        >>> r2.nsres = 5
-        >>> r0 == r1
-        True
-        >>> r1 == r2
-        False
+        .. code-block:: pycon
 
-        ..
+            >>> r0 = Region()
+            >>> r1 = Region()
+            >>> r2 = Region()
+            >>> r2.nsres = 5
+            >>> r0 == r1
+            True
+            >>> r1 == r2
+            False
         """
         attrs = [
             "north",
@@ -340,13 +341,13 @@ class Region:
     __hash__ = object.__hash__
 
     def keys(self):
-        """Return a list of valid keys. ::
+        """Return a list of valid keys.
+
+        .. code-block:: pycon
 
             >>> reg = Region()
             >>> reg.keys()  # doctest: +ELLIPSIS
             ['proj', 'zone', ..., 'cols', 'cells']
-
-        ..
         """
         return [
             "proj",
@@ -405,17 +406,16 @@ class Region:
         :param vector_name: the name of vector
         :type vector_name: str
 
-        Example ::
+        :Example:
+          .. code-block:: pycon
 
-        >>> reg = Region()
-        >>> reg.from_vect(test_vector_name)
-        >>> reg.get_bbox()
-        Bbox(6.0, 0.0, 14.0, 0.0)
-        >>> reg.read()
-        >>> reg.get_bbox()
-        Bbox(40.0, 0.0, 40.0, 0.0)
-
-        ..
+            >>> reg = Region()
+            >>> reg.from_vect(test_vector_name)
+            >>> reg.get_bbox()
+            Bbox(6.0, 0.0, 14.0, 0.0)
+            >>> reg.read()
+            >>> reg.get_bbox()
+            Bbox(40.0, 0.0, 40.0, 0.0)
         """
         from grass.pygrass.vector import VectorTopo
 
@@ -433,19 +433,18 @@ class Region:
         :param mapset: the mapset of raster
         :type mapset: str
 
-        call C function `Rast_get_cellhd`
+        Call C function :c:func:`Rast_get_cellhd`
 
-        Example ::
+        :Example:
+          .. code-block:: pycon
 
-        >>> reg = Region()
-        >>> reg.from_rast(test_raster_name)
-        >>> reg.get_bbox()
-        Bbox(50.0, 0.0, 60.0, 0.0)
-        >>> reg.read()
-        >>> reg.get_bbox()
-        Bbox(40.0, 0.0, 40.0, 0.0)
-
-        ..
+            >>> reg = Region()
+            >>> reg.from_rast(test_raster_name)
+            >>> reg.get_bbox()
+            Bbox(50.0, 0.0, 60.0, 0.0)
+            >>> reg.read()
+            >>> reg.get_bbox()
+            Bbox(40.0, 0.0, 40.0, 0.0)
         """
         if not raster_name:
             msg = "Raster name or mapset are invalid"
@@ -476,18 +475,19 @@ class Region:
         Previous calls to read() affects values returned by this function
         only if the current working region is not initialized.
 
-         Example:
+        :Example:
+          .. code-block:: pycon
 
-         >>> r = Region()
-         >>> r.north
-         40.0
+            >>> r = Region()
+            >>> r.north
+            40.0
 
-         >>> r.north = 30
-         >>> r.north
-         30.0
-         >>> r.get_current()
-         >>> r.north
-         40.0
+            >>> r.north = 30
+            >>> r.north
+            30.0
+            >>> r.get_current()
+            >>> r.north
+            40.0
 
         """
         libgis.G_get_set_window(self.byref())
@@ -501,38 +501,39 @@ class Region:
         Attention: Only the current process is affected.
                    The GRASS computational region is not affected.
 
-         Example::
+        :Example:
+          .. code-block:: pycon
 
-         >>> r = Region()
-         >>> r.north
-         40.0
-         >>> r.south
-         0.0
+            >>> r = Region()
+            >>> r.north
+            40.0
+            >>> r.south
+            0.0
 
-         >>> r.north = 30
-         >>> r.south = 20
-         >>> r.set_current()
-         >>> r.north
-         30.0
-         >>> r.south
-         20.0
-         >>> r.get_current()
-         >>> r.north
-         30.0
-         >>> r.south
-         20.0
+            >>> r.north = 30
+            >>> r.south = 20
+            >>> r.set_current()
+            >>> r.north
+            30.0
+            >>> r.south
+            20.0
+            >>> r.get_current()
+            >>> r.north
+            30.0
+            >>> r.south
+            20.0
 
-         >>> r.read(force_read=False)
-         >>> r.north
-         40.0
-         >>> r.south
-         0.0
+            >>> r.read(force_read=False)
+            >>> r.north
+            40.0
+            >>> r.south
+            0.0
 
-         >>> r.read(force_read=True)
-         >>> r.north
-         40.0
-         >>> r.south
-         0.0
+            >>> r.read(force_read=True)
+            >>> r.north
+            40.0
+            >>> r.south
+            0.0
 
         """
         libgis.G_set_window(self.byref())
@@ -575,32 +576,32 @@ class Region:
         carefully used, since the user will ot notice if his region
         was changed and would expect that only g.region will do this.
 
-         Example ::
+        :Example:
+          .. code-block:: pycon
 
-         >>> from copy import deepcopy
-         >>> r = Region()
-         >>> rn = deepcopy(r)
-         >>> r.north = 20
-         >>> r.south = 10
+            >>> from copy import deepcopy
+            >>> r = Region()
+            >>> rn = deepcopy(r)
+            >>> r.north = 20
+            >>> r.south = 10
 
-         >>> r.write()
-         >>> r.read()
-         >>> r.north
-         20.0
-         >>> r.south
-         10.0
+            >>> r.write()
+            >>> r.read()
+            >>> r.north
+            20.0
+            >>> r.south
+            10.0
 
-         >>> rn.write()
-         >>> r.read()
-         >>> r.north
-         40.0
-         >>> r.south
-         0.0
+            >>> rn.write()
+            >>> r.read()
+            >>> r.north
+            40.0
+            >>> r.south
+            0.0
 
-         >>> r.read_default()
-         >>> r.write()
+            >>> r.read_default()
+            >>> r.write()
 
-         ..
         """
         self.adjust()
         if libgis.G_put_window(self.byref()) < 0:
@@ -620,13 +621,16 @@ class Region:
         libgis.G_get_default_window(self.byref())
 
     def get_bbox(self):
-        """Return a Bbox object with the extension of the region. ::
+        """Return a :py:class:`~grass.pygrass.vector.basic.Bbox` object with the extension of the region.
+
+        :returns: A :py:class:`~grass.pygrass.vector.basic.Bbox` object
+        :rtype: ~grass.pygrass.vector.basic.Bbox
+
+        .. code-block:: pycon
 
             >>> reg = Region()
             >>> reg.get_bbox()
             Bbox(40.0, 0.0, 40.0, 0.0)
-
-        ..
         """
         from grass.pygrass.vector.basic import Bbox
 
@@ -645,7 +649,7 @@ class Region:
         :param bbox: a Bbox object to set the extent
         :type bbox: Bbox object
 
-        ::
+        .. code-block:: pycon
 
             >>> from grass.pygrass.vector.basic import Bbox
             >>> b = Bbox(230963.640878, 212125.562878, 645837.437393, 628769.374393)
@@ -654,8 +658,6 @@ class Region:
             >>> reg.get_bbox()
             Bbox(230963.640878, 212125.562878, 645837.437393, 628769.374393)
             >>> reg.get_current()
-
-        ..
         """
         self.north = bbox.north
         self.south = bbox.south

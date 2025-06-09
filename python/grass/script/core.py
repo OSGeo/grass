@@ -1,9 +1,8 @@
 """
 Core functions to be used in Python scripts.
 
-Usage:
-
-::
+:Usage:
+  .. code-block:: python
 
     from grass.script import core as grass
 
@@ -152,11 +151,12 @@ def get_commands(*, env=None):
     :return: list of commands (set) and directory of scripts (collected
              by extension - MS Windows only)
 
-    >>> cmds = list(get_commands()[0])
-    >>> cmds.sort()
-    >>> cmds[:5]
-    ['d.barscale', 'd.colorlist', 'd.colortable', 'd.correlate', 'd.erase']
+    .. code-block:: pycon
 
+        >>> cmds = list(get_commands()[0])
+        >>> cmds.sort()
+        >>> cmds[:5]
+        ['d.barscale', 'd.colorlist', 'd.colortable', 'd.correlate', 'd.erase']
     """
     if not env:
         env = os.environ
@@ -221,8 +221,10 @@ def get_real_command(cmd):
     For other cases it just returns a module (name).
     So, you can just use this function for all without further check.
 
-    >>> get_real_command("g.region")
-    'g.region'
+    .. code-block:: pycon
+
+        >>> get_real_command("g.region")
+        'g.region'
 
     :param cmd: the command
     """
@@ -254,11 +256,13 @@ def make_command(
     **options,
 ):
     """Return a list of strings suitable for use as the args parameter to
-    Popen() or call(). Example:
+    Popen() or call().
 
+    :Example:
+      .. code-block:: pycon
 
-    >>> make_command("g.message", flags="w", message="this is a warning")
-    ['g.message', '-w', 'message=this is a warning']
+        >>> make_command("g.message", flags="w", message="this is a warning")
+        ['g.message', '-w', 'message=this is a warning']
 
 
     :param str prog: GRASS module
@@ -422,15 +426,17 @@ def start_command(
     Accepts any of the arguments which Popen() accepts apart from "args"
     and "shell".
 
-    >>> p = start_command("g.gisenv", stdout=subprocess.PIPE)
-    >>> print(p)  # doctest: +ELLIPSIS
-    <...Popen object at 0x...>
-    >>> print(p.communicate()[0])  # doctest: +SKIP
-    GISDBASE='/opt/grass-data';
-    LOCATION_NAME='spearfish60';
-    MAPSET='glynn';
-    GUI='text';
-    MONITOR='x0';
+    .. code-block:: pycon
+
+        >>> p = start_command("g.gisenv", stdout=subprocess.PIPE)
+        >>> print(p)  # doctest: +ELLIPSIS
+        <...Popen object at 0x...>
+        >>> print(p.communicate()[0])  # doctest: +SKIP
+        GISDBASE='/opt/grass-data';
+        LOCATION_NAME='spearfish60';
+        MAPSET='glynn';
+        GUI='text';
+        MONITOR='x0';
 
     If the module parameter is the same as Python keyword, add
     underscore at the end of the parameter. For example, use
@@ -475,7 +481,9 @@ def run_command(*args, **kwargs):
     interface. By default, an exception is raised in case of a non-zero
     return code by default.
 
-    >>> run_command("g.region", raster="elevation")
+    .. code-block:: pycon
+
+        >>> run_command("g.region", raster="elevation")
 
     See :func:`start_command()` for details about parameters and usage.
 
@@ -526,15 +534,17 @@ def pipe_command(*args, **kwargs):
     """Passes all arguments to start_command(), but also adds
     "stdout = PIPE". Returns the Popen object.
 
-    >>> p = pipe_command("g.gisenv")
-    >>> print(p)  # doctest: +ELLIPSIS
-    <....Popen object at 0x...>
-    >>> print(p.communicate()[0])  # doctest: +SKIP
-    GISDBASE='/opt/grass-data';
-    LOCATION_NAME='spearfish60';
-    MAPSET='glynn';
-    GUI='text';
-    MONITOR='x0';
+    .. code-block:: pycon
+
+        >>> p = pipe_command("g.gisenv")
+        >>> print(p)  # doctest: +ELLIPSIS
+        <....Popen object at 0x...>
+        >>> print(p.communicate()[0])  # doctest: +SKIP
+        GISDBASE='/opt/grass-data';
+        LOCATION_NAME='spearfish60';
+        MAPSET='glynn';
+        GUI='text';
+        MONITOR='x0';
 
     :param list args: list of unnamed arguments (see start_command() for details)
     :param list kwargs: list of named arguments (see start_command() for details)
@@ -598,14 +608,14 @@ def parse_command(*args, **kwargs):
     Similarly, with <em>format=csv</em> the output will be parsed into
     a list of lists (CSV rows).
 
-    ::
+    .. code-block:: python
 
         parse_command("v.db.select", ..., format="json")
 
     Custom parsing function can be optionally given by <em>parse</em> parameter
     including its arguments, e.g.
 
-    ::
+    .. code-block:: python
 
         parse_command(..., parse=(gs.parse_key_val, {"sep": ":"}))
 
@@ -649,13 +659,15 @@ def write_command(*args, **kwargs):
     Passes all arguments to ``feed_command()``, with the string specified
     by the *stdin* argument fed to the process' standard input.
 
-    >>> write_command(
-    ...     "v.in.ascii",
-    ...     input="-",
-    ...     stdin="%s|%s" % (635818.8, 221342.4),
-    ...     output="view_point",
-    ... )
-    0
+    .. code-block:: pycon
+
+        >>> write_command(
+        ...     "v.in.ascii",
+        ...     input="-",
+        ...     stdin="%s|%s" % (635818.8, 221342.4),
+        ...     output="view_point",
+        ... )
+        0
 
     See ``start_command()`` for details about parameters and usage.
 
@@ -776,7 +788,7 @@ def info(msg, env=None):
 def percent(i, n, s, env=None):
     """Display a progress info message using `g.message -p`
 
-    ::
+    .. code-block:: python
 
         message(_("Percent complete..."))
         n = 100
@@ -932,7 +944,7 @@ def _parse_opts(lines: list) -> tuple[dict[str, str], dict[str, bool]]:
 def parser() -> tuple[dict[str, str], dict[str, bool]]:
     """Interface to g.parser, intended to be run from the top-level, e.g.:
 
-    ::
+    .. code-block:: python
 
         if __name__ == "__main__":
             options, flags = grass.parser()
@@ -1008,6 +1020,7 @@ def tempname(length: int, lowercase: bool = False) -> str:
     :return: String with a random name of length "length" starting with a letter
 
     :Example:
+      .. code-block:: pycon
 
         >>> tempname(12)
         'tmp_MxMa1kAS13s9'
@@ -1090,7 +1103,8 @@ def _text_to_key_value_dict(
     :return: The dictionary
 
     A text file with this content:
-    ::
+
+    .. code-block:: none
 
         a: Hello
         b: 1.0
@@ -1099,7 +1113,7 @@ def _text_to_key_value_dict(
 
     Will be represented as this dictionary:
 
-    ::
+    .. code-block:: python
 
         {"a": ["Hello"], "c": [1, 2, 3, 4, 5], "b": [1.0], "d": ["hello", 8, 0.1]}
 
@@ -1165,7 +1179,7 @@ def compare_key_value_text_files(
 
     An example key-value text file may have this content:
 
-    ::
+    .. code-block:: none
 
         a: Hello
         b: 1.0
@@ -1214,11 +1228,14 @@ def compare_key_value_text_files(
 
 def gisenv(env: _Env | None = None) -> KeyValue[str | None]:
     """Returns the output from running g.gisenv (with no arguments), as a
-    dictionary. Example:
+    dictionary.
 
-    >>> env = gisenv()
-    >>> print(env["GISDBASE"])  # doctest: +SKIP
-    /opt/grass-data
+    :Example:
+      .. code-block:: pycon
+
+        >>> env = gisenv()
+        >>> print(env["GISDBASE"])  # doctest: +SKIP
+        /opt/grass-data
 
     :param env: dictionary with system environment variables (`os.environ` by default)
     :return: list of GRASS variables
@@ -1243,20 +1260,23 @@ def locn_is_latlong(env: _Env | None = None) -> bool:
 
 def region(region3d=False, complete=False, env=None):
     """Returns the output from running "g.region -gu", as a
-    dictionary. Example:
+    dictionary.
+
+    :Example:
+      .. code-block:: pycon
+
+        >>> curent_region = region()
+        >>> # obtain n, s, e and w values
+        >>> [curent_region[key] for key in "nsew"]  # doctest: +ELLIPSIS
+        [..., ..., ..., ...]
+        >>> # obtain ns and ew resolutions
+        >>> (curent_region["nsres"], curent_region["ewres"])  # doctest: +ELLIPSIS
+        (..., ...)
 
     :param bool region3d: True to get 3D region
     :param bool complete:
-    :param env: dictionary with system environment variables (`os.environ` by default)
-
-    >>> curent_region = region()
-    >>> # obtain n, s, e and w values
-    >>> [curent_region[key] for key in "nsew"]  # doctest: +ELLIPSIS
-    [..., ..., ..., ...]
-    >>> # obtain ns and ew resolutions
-    >>> (curent_region["nsres"], curent_region["ewres"])  # doctest: +ELLIPSIS
-    (..., ...)
-
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     :return: dictionary of region values
     """
     flgs = "gu"
@@ -1297,19 +1317,19 @@ def region_env(
     See also :func:`use_temp_region()` for alternative method how to define
     temporary region used for raster-based computation.
 
-    :param region3d: True to get 3D region
-    :param flags: for example 'a'
-    :param env: dictionary with system environment variables (`os.environ` by default)
-    :param kwargs: g.region's parameters like 'raster', 'vector' or 'region'
-
-    ::
+    :Example:
+      .. code-block:: python
 
         os.environ["GRASS_REGION"] = grass.region_env(region="detail")
         grass.mapcalc("map=1", overwrite=True)
         os.environ.pop("GRASS_REGION")
 
-    :return: string with region values
-    :return: empty string on error
+    :param region3d: True to get 3D region
+    :param flags: for example 'a'
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
+    :param kwargs: g.region's parameters like 'raster', 'vector' or 'region'
+    :return: string with region values, or empty string on error
     """
     # read proj/zone from WIND file
     gis_env: KeyValue[str | None] = gisenv(env)
@@ -1422,18 +1442,19 @@ def find_file(name, element="cell", mapset=None, env=None):
     "raster3d": "grid3",
     "raster_3d": "grid3",
 
-    Example:
+    :Example:
+      .. code-block:: pycon
 
-    >>> result = find_file("elevation", element="cell")
-    >>> print(result["fullname"])
-    elevation@PERMANENT
-    >>> print(result["file"])  # doctest: +ELLIPSIS
-    /.../PERMANENT/cell/elevation
-    >>> result = find_file("elevation", element="raster")
-    >>> print(result["fullname"])
-    elevation@PERMANENT
-    >>> print(result["file"])  # doctest: +ELLIPSIS
-    /.../PERMANENT/cell/elevation
+        >>> result = find_file("elevation", element="cell")
+        >>> print(result["fullname"])
+        elevation@PERMANENT
+        >>> print(result["file"])  # doctest: +ELLIPSIS
+        /.../PERMANENT/cell/elevation
+        >>> result = find_file("elevation", element="raster")
+        >>> print(result["fullname"])
+        elevation@PERMANENT
+        >>> print(result["file"])  # doctest: +ELLIPSIS
+        /.../PERMANENT/cell/elevation
 
 
     :param str name: file name
@@ -1535,10 +1556,13 @@ def list_grouped(
 
     Returns the output from running g.list, as a dictionary where the
     keys are mapset names and the values are lists of maps in that
-    mapset. Example:
+    mapset.
 
-    >>> list_grouped("vect", pattern="*roads*")["PERMANENT"]
-    ['railroads', 'roadsmajor']
+    :Example:
+      .. code-block:: pycon
+
+        >>> list_grouped("vect", pattern="*roads*")["PERMANENT"]
+        ['railroads', 'roadsmajor']
 
     :param str type: element type (raster, vector, raster_3d, region, ...)
                      or list of elements
@@ -1642,12 +1666,15 @@ def parse_color(
     """Parses the string "val" as a GRASS colour, which can be either one of
     the named colours or an R:G:B tuple e.g. 255:255:255. Returns an
     (r,g,b) triple whose components are floating point values between 0
-    and 1. Example:
+    and 1.
 
-    >>> parse_color("red")
-    (1.0, 0.0, 0.0)
-    >>> parse_color("255:0:0")
-    (1.0, 0.0, 0.0)
+    :Example:
+      .. code-block:: pycon
+
+        >>> parse_color("red")
+        (1.0, 0.0, 0.0)
+        >>> parse_color("255:0:0")
+        (1.0, 0.0, 0.0)
 
     :param val: color value
     :param dflt: default color value
@@ -1707,12 +1734,13 @@ def find_program(pgm, *args):
     valid CLI option, like "--help". For other programs a common
     valid do-little option is usually "--version".
 
-    Example:
+    :Example:
+      .. code-block:: pycon
 
-    >>> find_program("r.sun", "--help")
-    True
-    >>> find_program("ls", "--version")
-    True
+        >>> find_program("r.sun", "--help")
+        True
+        >>> find_program("ls", "--version")
+        True
 
     :param str pgm: program name
     :param args: list of arguments
@@ -1976,7 +2004,7 @@ def _create_location_xy(database, location):
 def version():
     """Get GRASS version as dictionary
 
-    ::
+    .. code-block:: pycon
 
         >>> print(version())
         {'proj4': '4.8.0', 'geos': '3.3.5', 'libgis_revision': '52468',
