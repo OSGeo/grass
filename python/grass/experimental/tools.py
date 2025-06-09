@@ -140,6 +140,79 @@ class ObjectParameterHandler:
         return False
 
 
+class ToolFunctionNameHelper:
+    def __init__(self, *, run_function, env, prefix=None):
+        self._run_function = run_function
+        self._env = env
+        self._prefix = prefix
+
+    # def __getattr__(self, name):
+    #    self.get_function(name, exception_type=AttributeError)
+
+    def get_function(self, name, exception_type):
+        """Parse attribute to GRASS display module. Attribute should be in
+        the form 'd_module_name'. For example, 'd.rast' is called with 'd_rast'.
+        """
+        if self._prefix:
+            name = f"{self._prefix}.{name}"
+        # Reformat string
+        tool_name = name.replace("_", ".")
+        # Assert module exists
+        if not shutil.which(tool_name, path=self._env["PATH"]):
+            suggestions = self.suggest_tools(tool_name)
+            if suggestions:
+                msg = (
+                    f"Tool {tool_name} not found. "
+                    f"Did you mean: {', '.join(suggestions)}?"
+                )
+                raise AttributeError(msg)
+            msg = (
+                f"Tool or attribute {name} not found. "
+                "If you are executing a tool, is the session set up and the tool on path? "
+                "If you are looking for an attribute, is it in the documentation?"
+            )
+            raise AttributeError(msg)
+
+        def wrapper(**kwargs):
+            # Run module
+            return self._run_function(tool_name, **kwargs)
+
+        return wrapper
+
+    @staticmethod
+    def levenshtein_distance(text1: str, text2: str) -> int:
+        if len(text1) < len(text2):
+            return ToolFunctionNameHelper.levenshtein_distance(text2, text1)
+
+        if len(text2) == 0:
+            return len(text1)
+
+        previous_row = list(range(len(text2) + 1))
+        for i, char1 in enumerate(text1):
+            current_row = [i + 1]
+            for j, char2 in enumerate(text2):
+                insertions = previous_row[j + 1] + 1
+                deletions = current_row[j] + 1
+                substitutions = previous_row[j] + (char1 != char2)
+                current_row.append(min(insertions, deletions, substitutions))
+            previous_row = current_row
+
+        return previous_row[-1]
+
+    @staticmethod
+    def suggest_tools(tool):
+        # TODO: cache commands also for dir
+        all_names = list(gs.get_commands()[0])
+        result = []
+        max_suggestions = 10
+        for name in all_names:
+            if ToolFunctionNameHelper.levenshtein_distance(tool, name) < len(tool) / 2:
+                result.append(name)
+            if len(result) >= max_suggestions:
+                break
+        return result
+
+
 class ExecutedTool:
     """Result returned after executing a tool"""
 
@@ -273,6 +346,7 @@ class Tools:
         self._errors = errors
         self._capture_output = capture_output
         self._prefix = prefix
+        self._name_helper = None
 
     # These could be public, not protected.
     def _freeze_region(self):
@@ -451,66 +525,17 @@ class Tools:
         """Get a new object which will ignore errors of the called tools"""
         return Tools(env=self._env, errors="ignore")
 
-    def levenshtein_distance(self, text1: str, text2: str) -> int:
-        if len(text1) < len(text2):
-            return self.levenshtein_distance(text2, text1)
-
-        if len(text2) == 0:
-            return len(text1)
-
-        previous_row = list(range(len(text2) + 1))
-        for i, char1 in enumerate(text1):
-            current_row = [i + 1]
-            for j, char2 in enumerate(text2):
-                insertions = previous_row[j + 1] + 1
-                deletions = current_row[j] + 1
-                substitutions = previous_row[j] + (char1 != char2)
-                current_row.append(min(insertions, deletions, substitutions))
-            previous_row = current_row
-
-        return previous_row[-1]
-
-    def suggest_tools(self, tool):
-        # TODO: cache commands also for dir
-        all_names = list(gs.get_commands()[0])
-        result = []
-        max_suggestions = 10
-        for name in all_names:
-            if self.levenshtein_distance(tool, name) < len(tool) / 2:
-                result.append(name)
-            if len(result) >= max_suggestions:
-                break
-        return result
-
     def __getattr__(self, name):
         """Parse attribute to GRASS display module. Attribute should be in
         the form 'd_module_name'. For example, 'd.rast' is called with 'd_rast'.
         """
-        if self._prefix:
-            name = f"{self._prefix}.{name}"
-        # Reformat string
-        tool_name = name.replace("_", ".")
-        # Assert module exists
-        if not shutil.which(tool_name, path=self._env["PATH"]):
-            suggesions = self.suggest_tools(tool_name)
-            if suggesions:
-                msg = (
-                    f"Tool {tool_name} not found. "
-                    f"Did you mean: {', '.join(suggesions)}?"
-                )
-                raise AttributeError(msg)
-            msg = (
-                f"Tool or attribute {name} not found. "
-                "If you are executing a tool, is the session set up and the tool on path? "
-                "If you are looking for an attribute, is it in the documentation?"
+        if not self._name_helper:
+            self._name_helper = ToolFunctionNameHelper(
+                run_function=self.run,
+                env=self.env,
+                prefix=self._prefix,
             )
-            raise AttributeError(msg)
-
-        def wrapper(**kwargs):
-            # Run module
-            return self.run(tool_name, **kwargs)
-
-        return wrapper
+        return self._name_helper.get_function(name, exception_type=AttributeError)
 
 
 def _test():

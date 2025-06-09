@@ -24,22 +24,21 @@ import weakref
 from pathlib import Path
 
 import grass.script as gs
-from .tools import Tools, PackImporterExporter, ObjectParameterHandler
+from .tools import (
+    Tools,
+    PackImporterExporter,
+    ObjectParameterHandler,
+    ToolFunctionNameHelper,
+)
 
 
 # Using inheritance to get the getattr behavior and other functionality,
 # but the session and env really make it more seem like a case for composition.
-class StandaloneTools(Tools):
+class StandaloneTools:
     def __init__(self, session=None, work_dir=None, errors=None, capture_output=True):
-        super().__init__(
-            overwrite=False,
-            quiet=False,
-            verbose=False,
-            superquiet=False,
-            stdin=None,
-            errors=errors,
-            capture_output=capture_output,
-        )
+        self._tools = None
+        self._errors = errors
+        self._capture_output = capture_output
         self._crs_initialized = False
         self._work_dir = work_dir
         self._tmp_dir = None
@@ -53,6 +52,7 @@ class StandaloneTools(Tools):
         # to have the runtime?
         self._errors = errors
         self._capture_output = capture_output
+        self._name_helper = None
 
     def _process_parameters(self, command, popen_options):
         if not self._session:
@@ -150,7 +150,18 @@ class StandaloneTools(Tools):
                 env=self._session.env,
             )
 
-        result = super().no_nonsense_run_from_list(command, env=self._session.env)
+        if not self._tools:
+            self._tools = Tools(
+                overwrite=True,
+                quiet=False,
+                verbose=False,
+                superquiet=False,
+                stdin=None,
+                errors=self._errors,
+                capture_output=self._capture_output,
+                session=self._session,
+            )
+        result = self._tools.no_nonsense_run_from_list(command)
 
         pack_importer_exporter.export_data()
 
@@ -220,3 +231,18 @@ class StandaloneTools(Tools):
         Finishes the existing session.
         """
         self.cleanup()
+
+    def __getattr__(self, name):
+        """Parse attribute to GRASS display module. Attribute should be in
+        the form 'd_module_name'. For example, 'd.rast' is called with 'd_rast'.
+        """
+        if not self._session:
+            # We create session and an empty XY project in one step.
+            self._create_session()
+        if not self._name_helper:
+            self._name_helper = ToolFunctionNameHelper(
+                run_function=self.run,
+                env=self._session.env,
+                prefix=None,
+            )
+        return self._name_helper.get_function(name, exception_type=AttributeError)
