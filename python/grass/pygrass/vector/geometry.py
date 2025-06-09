@@ -892,6 +892,7 @@ class Line(Geo):
 
         :param pnt: the point to calculate distance
         :type pnt: a Point object or a tuple with the coordinates
+        :rtype: LineDist
 
         Return a namedtuple with:
 
