@@ -2,6 +2,8 @@
 
 import os
 
+import numpy as np
+import pytest
 
 from grass.experimental.standalone import StandaloneTools
 
@@ -146,7 +148,6 @@ def test_pack_manual_region_read_but_not_set(rows_raster_file3x3):
 def test_pack_region_manually_changed(rows_raster_file3x3, rows_raster_file4x5):
     """Check that global overwrite is not used when separate env is used"""
     tools = StandaloneTools()
-    assert os.path.exists(rows_raster_file3x3)
     tools.r_slope_aspect(
         elevation=rows_raster_file3x3,
         aspect="file.grass_raster",
@@ -168,31 +169,112 @@ def test_pack_region_manually_changed(rows_raster_file3x3, rows_raster_file4x5):
     assert region["cols"] == 2
 
 
+def test_pack_workflow(rows_raster_file4x5):
+    tools = StandaloneTools()
+    tools.r_slope_aspect(
+        elevation=rows_raster_file4x5, slope="slope.grr", aspect="aspect"
+    )
+    tools.r_flow(
+        elevation=rows_raster_file4x5.stem,
+        aspect="aspect",
+        flowaccumulation="flow_accumulation.grr",
+        flags=3,
+    )
+    assert os.path.exists(rows_raster_file4x5)
+    assert os.path.exists("slope.grr")
+    assert os.path.exists("flow_accumulation.grr")
+    assert not os.path.exists("aspect.grr")
+    assert not os.path.exists("elevation.grr")
+
+
+def test_regions_independent():
+    """Check that global overwrite is not used when separate env is used"""
+    tools1 = StandaloneTools()
+    tools1.g_region(rows=3, cols=3)
+    tools2 = StandaloneTools()
+    tools2.g_region(rows=4, cols=5)
+    region = tools1.g_region(flags="p", format="json")
+    assert region["rows"] == 3
+    assert region["cols"] == 3
+    region = tools2.g_region(flags="p", format="json")
+    assert region["rows"] == 4
+    assert region["cols"] == 5
+
+
+def test_region_changed_for_session(xy_session):
+    """Check that global overwrite is not used when separate env is used"""
+    tools1 = StandaloneTools(session=xy_session)
+    tools1.g_region(rows=4, cols=5)
+    tools2 = StandaloneTools(session=xy_session)
+    region = tools2.g_region(flags="p", format="json")
+    assert region["rows"] == 4
+    assert region["cols"] == 5
+
+
 def test_numpy_multiple_inputs_one_output():
     """Check that a NumPy array works for multiple inputs"""
-    import numpy as np
-
     tools = StandaloneTools()
     result = tools.r_mapcalc_simple(
         expression="A + B", a=np.full((2, 3), 2), b=np.full((2, 3), 5), output=np.array
     )
+    # Size of output
     assert result.shape == (2, 3)
     assert np.all(result == np.full((2, 3), 7))
-
-
-def test_numpy_initial_region_set():
-    """Check that a NumPy array works for multiple inputs"""
-    import numpy as np
-
-    tools = StandaloneTools()
-    result = tools.r_mapcalc_simple(
-        expression="A + B", a=np.full((2, 3), 2), b=np.full((2, 3), 5), output=np.array
-    )
+    # Computational region
     region = tools.g_region(flags="p", format="json")
     assert region["rows"] == 2
     assert region["cols"] == 3
+    result = tools.r_mapcalc_simple(expression="int(10)", output=np.array)
     assert result.shape == (2, 3)
-    assert np.all(result == np.full((2, 3), 7))
+    assert np.all(result == np.full((2, 3), 10))
+
+
+def test_numpy_manual_region_mismatch():
+    """Check that a NumPy array works for multiple inputs"""
+    tools = StandaloneTools()
+    result = tools.r_mapcalc_simple(
+        expression="A + B", a=np.full((2, 3), 2), b=np.full((2, 3), 5), output=np.array
+    )
+    assert result.shape == (2, 3)
+    region = tools.g_region(rows=2, cols=2)
+    region = tools.g_region(flags="p", format="json")
+    assert region["rows"] == 2
+    assert region["cols"] == 2
+    with pytest.raises(ValueError, match=r"broadcast.*shape.*\(2.*3\).*\(2.*2\)"):
+        tools.r_mapcalc_simple(
+            expression="A + B",
+            a=np.full((2, 3), 2),
+            b=np.full((2, 3), 5),
+            output=np.array,
+        )
+
+
+def test_numpy_workflow_region_mismatch():
+    """Check that a NumPy array works for multiple inputs"""
+    tools = StandaloneTools()
+    result = tools.r_mapcalc_simple(
+        expression="A + B", a=np.full((2, 3), 2), b=np.full((2, 3), 5), output=np.array
+    )
+    assert result.shape == (2, 3)
+    with pytest.raises(ValueError, match=r"broadcast.*shape.*\(4.*5\).*\(2.*3\)"):
+        tools.r_mapcalc_simple(
+            expression="A + B",
+            a=np.full((4, 5), 2),
+            b=np.full((4, 5), 5),
+            output=np.array,
+        )
+
+
+def test_numpy_inputs_region_mismatch():
+    """Check that a NumPy array works for multiple inputs"""
+    tools = StandaloneTools()
+    with pytest.raises(ValueError, match=r"broadcast.*shape.*\(4.*5\).*\(2.*3\)"):
+        tools.r_mapcalc_simple(
+            expression="A + B",
+            a=np.full((2, 3), 2),
+            b=np.full((4, 5), 5),
+            output=np.array,
+        )
 
 
 # May fail depending on the order of the tests because of the session setup.
