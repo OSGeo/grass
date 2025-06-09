@@ -1,9 +1,8 @@
 """
 Raster related functions to be used in Python scripts.
 
-Usage:
-
-::
+:Usage:
+  .. code-block:: python
 
     from grass.script import raster as grass
 
@@ -84,16 +83,17 @@ def raster_history(map, overwrite=False, env=None):
 
 def raster_info(map, env=None):
     """Return information about a raster map (interface to
-    `r.info -gre`). Example:
+    `r.info -gre`).
 
-    >>> raster_info("elevation")  # doctest: +ELLIPSIS
-    {'creator': '"helena"', 'cols': '1500' ... 'south': 215000.0}
+    :Example:
+      .. code-block:: pycon
+
+        >>> raster_info("elevation")  # doctest: +ELLIPSIS
+        {'creator': '"helena"', 'cols': '1500' ... 'south': 215000.0}
 
     :param str map: map name
     :param env: environment
-
     :return: parsed raster info
-
     """
 
     def float_or_null(s):
