@@ -50,6 +50,9 @@ class StandaloneTools:
         # Because we don't setup a session here, we don't have runtime available for
         # tools to be called through method calls. Should we just start session here
         # to have the runtime?
+        self._region_is_set = False
+        self._region_file = None
+        self._region_modified_time = None
         self._errors = errors
         self._capture_output = capture_output
         self._name_helper = None
@@ -89,19 +92,20 @@ class StandaloneTools:
             self._create_session()
 
         rows_columns = object_parameter_handler.input_rows_columns()
-        if rows_columns:
+        if not self._is_region_modified() and rows_columns:
             # Reset the region for every run or keep it persistent?
             # Also, we now set that even for an existing session, this is
             # consistent with behavior without a provided session.
             # We could use env to pass the regions which would allow for the change
             # while not touching the underlying session.
             rows, cols = rows_columns
-            gs.run_command(
+            self.no_nonsense_run(
                 "g.region",
                 rows=rows,
                 cols=cols,
                 env=self._session.env,
             )
+            self._region_is_set = True
 
         object_parameter_handler.translate_objects_to_data(
             kwargs, parameters, env=self._session.env
@@ -154,24 +158,25 @@ class StandaloneTools:
 
         pack_importer_exporter.import_data()
 
-        if pack_importer_exporter.input_rasters:
+        if not self._is_region_modified() and pack_importer_exporter.input_rasters:
             # Reset the region for every run or keep it persistent?
             # Also, we now set that even for an existing session, this is
             # consistent with behavior without a provided session.
             # We could use env to pass the regions which would allow for the change
             # while not touching the underlying session.
-            gs.run_command(
+            self.no_nonsense_run(
                 "g.region",
                 raster=pack_importer_exporter.input_rasters[0].stem,
                 env=self._session.env,
             )
+            self._region_is_set = True
         result = self.no_nonsense_run_from_list(command)
         pack_importer_exporter.export_data()
         return result
 
     def no_nonsense_run(self, name, /, *, tool_kwargs=None, stdin=None, **kwargs):
         args, popen_options = gs.popen_args_command(name, **kwargs)
-        self.no_nonsense_run_from_list(
+        return self.no_nonsense_run_from_list(
             args, tool_kwargs=tool_kwargs, stdin=stdin, **popen_options
         )
 
@@ -213,14 +218,16 @@ class StandaloneTools:
         project_name = "project"
         project_path = Path(base_dir) / project_name
         gs.create_project(project_path)
+        self._region_file = project_path / "PERMANENT" / "WIND"
+        self._region_modified_time = self._region_file.stat().st_mtime
         self._session = gs.setup.init(project_path)
 
     def _initialize_crs(self, rasters):
         # Get the mapset path
-        mapset_path = gs.read_command(
+        mapset_path = self.no_nonsense_run(
             "g.gisenv", get="GISDBASE,LOCATION_NAME,MAPSET", sep="/"
-        )
-        mapset_path = Path(mapset_path.strip())
+        ).text
+        mapset_path = Path(mapset_path)
 
         if rasters:
             with tarfile.TarFile(rasters[0]) as tar:
@@ -238,6 +245,24 @@ class StandaloneTools:
                     Path(mapset_path / name).write_bytes(
                         tar.extractfile(tar_info).read()
                     )
+
+    def _is_region_modified(self):
+        if self._region_is_set:
+            return True
+        if not self._region_file:
+            if self._session:
+                self._region_file = (
+                    Path(
+                        self.no_nonsense_run(
+                            "g.gisenv", get="GISDBASE,LOCATION_NAME", sep="/"
+                        ).text
+                    )
+                    / "PERMANENT"
+                    / "WIND"
+                )
+                self._region_modified_time = self._region_file.stat().st_mtime
+            return False
+        return self._region_file.stat().st_mtime > self._region_modified_time
 
     def cleanup(self):
         if self._tmp_dir_finalizer:

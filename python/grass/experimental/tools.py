@@ -473,7 +473,7 @@ class Tools:
 
     def no_nonsense_run(self, name, /, *, tool_kwargs=None, stdin=None, **kwargs):
         args, popen_options = gs.popen_args_command(name, **kwargs)
-        self.no_nonsense_run_from_list(
+        return self.no_nonsense_run_from_list(
             args, tool_kwargs=tool_kwargs, stdin=stdin, **popen_options
         )
 
