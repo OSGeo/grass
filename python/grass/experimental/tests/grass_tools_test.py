@@ -225,7 +225,7 @@ def test_with_context_managers(tmpdir):
             tools.r_random_surface(output="surface", seed=42, env=mapset.env)
             with gs.MaskManager(env=mapset.env) as mask:
                 # TODO: Do actual test
-                tools.r_univar(map="surface", env=mask.env, format="json")[0]["mean"]
+                tools.r_univar(map="surface", env=mask.env, format="json")["mean"]
 
 
 def test_misspelling(xy_dataset_session):
