@@ -409,7 +409,8 @@ class SessionHandle:
             pass
         # session ends automatically here when outside of the "with" block
 
-    The example above is modifying the global, process environment (`os.environ`).
+    The example above is modifying the global, process environment
+    (:external:py:data:`os.environ`).
     If you don't want to modify the global environment, use the _env_ parameter
     for the _init_ function to modify the provided environment instead.
     This environment is then available as an attribute of the session object.

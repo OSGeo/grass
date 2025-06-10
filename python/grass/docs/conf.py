@@ -104,6 +104,7 @@ copy("_templates/layout.html.template", "_templates/layout.html")
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.doctest",
+    "sphinx.ext.intersphinx",
     "sphinx.ext.todo",
     "sphinx.ext.coverage",
     "sphinx.ext.mathjax",
@@ -498,3 +499,9 @@ sitemap_excludes = [
     "search.html",
     "genindex.html",
 ]
+
+# Intersphinx config
+intersphinx_mapping = {
+    "numpy": ("https://numpy.org/doc/stable/", None),
+    "python": ("https://docs.python.org/3", None),
+}
