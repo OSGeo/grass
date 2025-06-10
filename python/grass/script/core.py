@@ -574,7 +574,7 @@ def feed_command(*args, **kwargs):
 
 def read_command(*args, **kwargs):
     """Passes all arguments to :func:`~grass.script.core.pipe_command`, then waits for
-    the process to complete, returning its stdout (i.e. similar to shell `backticks`).
+    the process to complete, returning its stdout (i.e. similar to shell ``backticks``).
 
     The behavior on error can be changed using *errors* parameter
     which is passed to the :func:`handle_errors()` function.
