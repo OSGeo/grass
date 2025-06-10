@@ -121,7 +121,7 @@ int main(int argc, char **argv)
         (gflag->answer || rflag->answer || sflag->answer || eflag->answer))
         G_fatal_error(_("Flags -%c and -%c/%c/%c/%c are mutually exclusive"),
                       hflag->key, gflag->key, rflag->key, eflag->key,
-                      sflag->answer);
+                      sflag->key);
 
     // If no format option is specified, preserve backward compatibility
     if (fopt->answer == NULL || fopt->answer[0] == '\0') {
@@ -530,13 +530,13 @@ int main(int argc, char **argv)
                 fprintf(out, "Rows: %d\n", cellhd.rows);
                 fprintf(out, "Columns: %d\n", cellhd.cols);
 
-                fprintf(out, "Total Cells: %" PRId64 "\n", total_cells);
+                fprintf(out, "Total cells: %" PRId64 "\n", total_cells);
 
-                fprintf(out, "Datatype: %s\n", data_type_f);
+                fprintf(out, "Data type: %s\n", data_type_f);
 
                 if (cats_ok)
                     format_double((double)cats.num, tmp4);
-                fprintf(out, "Number of Categories: %s\n",
+                fprintf(out, "Number of categories: %s\n",
                         cats_ok ? tmp4 : "??");
                 break;
 
@@ -689,7 +689,7 @@ int main(int argc, char **argv)
                 /* always report total number of cells */
                 switch (format) {
                 case PLAIN:
-                    fprintf(out, "Total Cells: %" PRId64 "\n", total_cells);
+                    fprintf(out, "Total cells: %" PRId64 "\n", total_cells);
                     break;
                 case SHELL:
                     fprintf(out, "cells=%" PRId64 "\n", total_cells);
@@ -729,7 +729,7 @@ int main(int argc, char **argv)
                 case PLAIN:
                     fprintf(out, "N: %" PRId64 "\n", rstats.count);
                     fprintf(out, "Mean: %.15g\n", mean);
-                    fprintf(out, "Standard Deviation: %.15g\n", sd);
+                    fprintf(out, "Standard deviation: %.15g\n", sd);
                     fprintf(out, "Sum: %.15g\n", rstats.sum);
                     break;
                 case SHELL:
@@ -751,7 +751,7 @@ int main(int argc, char **argv)
                 case PLAIN:
                     fprintf(out, "N: 0\n");
                     fprintf(out, "Mean: NULL\n");
-                    fprintf(out, "Standard Deviation: NULL\n");
+                    fprintf(out, "Standard deviation: NULL\n");
                     fprintf(out, "Sum: NULL\n");
                     break;
                 case SHELL:
@@ -848,14 +848,14 @@ int main(int argc, char **argv)
 
             switch (format) {
             case PLAIN:
-                fprintf(out, "Data Units: %s\n", units ? units : "none");
+                fprintf(out, "Data units: %s\n", units ? units : "none");
                 fprintf(out, "Vertical datum: %s\n", vdatum ? vdatum : "none");
                 fprintf(out, "Semantic label: %s\n",
                         semantic_label ? semantic_label : "none");
-                fprintf(out, "Data Source:\n");
+                fprintf(out, "Data source:\n");
                 fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_DATSRC_1));
                 fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_DATSRC_2));
-                fprintf(out, "Data Description:\n");
+                fprintf(out, "Data description:\n");
                 fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_KEYWRD));
                 if (Rast_history_length(&hist)) {
                     fprintf(out, "Comments:\n");
