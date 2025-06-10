@@ -49,6 +49,7 @@ libgis date: 2024-04-27T09:38:49+00:00
 
 ### Full info
 
+<!-- markdownlint-disable MD046 -->
 === "Command line"
 
     ```sh
@@ -104,6 +105,7 @@ libgis date: 2024-04-27T09:38:49+00:00
     geos: 3.9.2
     sqlite: 3.36.0
     ```
+<!-- markdownlint-restore -->
 
 Note: if `revision=exported` is reported instead of the git hash then
 the `git` program was not available during compilation of GRASS GIS and
