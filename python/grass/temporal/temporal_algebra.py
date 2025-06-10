@@ -2275,11 +2275,9 @@ class TemporalAlgebraParser:
              - [True,  '&&', False]              -> False
              - [False, '||', True]               -> True
 
-        :param tvarexpr: List of GlobalTemporalVar objects and map lists.
-                     The list is constructed by the TemporalAlgebraParser
-                     in order of expression evaluation in the parser.
-
-        :return: Map list with conditional values for all temporal expressions.
+        :param maplist: A list of maps
+        :param inverse:
+        :return: Map list with conditional values evaluated
         """
 
         def recurse_compare(conditionlist):
