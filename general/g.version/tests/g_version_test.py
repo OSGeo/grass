@@ -25,10 +25,13 @@ def curly_brackets_paired(text):
 
 def test_g_version_no_flag(session):
     """Test that g.version output contains the word 'GRASS'."""
-    output = gs.read_command("g.version", format="plain", env=session.env).strip()
+    output = gs.read_command("g.version", env=session.env).strip()
     assert "GRASS" in output, (
         "Expected 'GRASS' in g.version output, but it was not found."
     )
+
+    plain_output = gs.read_command("g.version", format="plain", env=session.env).strip()
+    assert output == plain_output, "Mismatch in plain output"
 
 
 def test_c_flag(session):

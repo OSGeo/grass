@@ -122,6 +122,7 @@ int main(int argc, char *argv[])
     shell->guisection = _("Shell");
 
     fopt = G_define_standard_option(G_OPT_F_FORMAT);
+    fopt->required = NO;
     fopt->options = "plain,shell,json";
     fopt->descriptions = _("plain;Human readable text output;"
                            "shell;shell script style text output;"
