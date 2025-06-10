@@ -130,9 +130,10 @@ int main(int argc, char **argv)
             // Warn when the user specifies -g, -r, -s, or -e without
             // format=shell option.
             G_verbose_message(
-                _("Using flags -g, -r, -s, or -e without specifying a "
-                  "format=shell option is deprecated. Please specify a "
-                  "format option when using these flags."));
+                _("The output format for flags -g, -r, -s, and -e currently "
+                  "defaults to 'shell', but this will change to 'plain' in a "
+                  "future release. To avoid unexpected behaviour, specify the "
+                  "format explicitly."));
             fopt->answer = "shell";
         }
         else {
