@@ -40,15 +40,11 @@ lsat7_2000_30@PERMANENT
 
 # In JSON format
 i.group group=vis_bands subgroup=vis_bands -l format=json
-{
-    "group": "vis_bands",
-    "subgroup": "vis_bands",
-    "maps": [
-        "lsat7_2000_10@PERMANENT",
-        "lsat7_2000_20@PERMANENT",
-        "lsat7_2000_30@PERMANENT"
-    ]
-}
+[
+    "lsat7_2000_10@PERMANENT",
+    "lsat7_2000_20@PERMANENT",
+    "lsat7_2000_30@PERMANENT"
+]
 ```
 
 To list maps in the `vis_bands` group using Python:
@@ -64,14 +60,11 @@ data = gs.parse_command(
     format="json",
 )
 
-for item in data["maps"]:
-    print(item)
+print(data)
 ```
 
 ```text
-lsat7_2000_10@PERMANENT
-lsat7_2000_20@PERMANENT
-lsat7_2000_30@PERMANENT
+['lsat7_2000_10@PERMANENT', 'lsat7_2000_20@PERMANENT', 'lsat7_2000_30@PERMANENT']
 ```
 
 To list subgroups in the `vis_bands` group:
@@ -83,12 +76,9 @@ vis_bands
 
 # In JSON format
 i.group group=vis_bands -s format=json
-{
-    "group": "vis_bands",
-    "subgroups": [
-        "vis_bands"
-    ]
-}
+[
+    "vis_bands"
+]
 ```
 
 ## SEE ALSO

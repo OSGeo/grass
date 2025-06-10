@@ -23,7 +23,7 @@
 #include <grass/gis.h>
 #include <grass/imagery.h>
 #include <grass/glocale.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 
 enum OutputFormat { PLAIN, JSON, SHELL };
 
@@ -37,8 +37,8 @@ static int remove_subgroup_files(char group[INAME_LEN],
                                  char subgroup[INAME_LEN], char **rasters,
                                  int k);
 static void print_subgroups(const char *group, const char *mapset,
-                            enum OutputFormat format, JSON_Object *root_object);
-static void list_files_json(const struct Ref *ref, JSON_Object *root_object);
+                            enum OutputFormat format, JSON_Array *root_array);
+static void list_files_json(const struct Ref *ref, JSON_Array *root_array);
 
 int main(int argc, char *argv[])
 {
@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     enum OutputFormat format;
 
     JSON_Value *root_value = NULL;
-    JSON_Object *root_object = NULL;
+    JSON_Array *root_array = NULL;
 
     G_gisinit(argv[0]);
 
@@ -119,12 +119,11 @@ int main(int argc, char *argv[])
 
     if (strcmp(frmt->answer, "json") == 0) {
         format = JSON;
-        root_value = json_value_init_object();
+        root_value = G_json_value_init_array();
         if (root_value == NULL) {
-            G_fatal_error(
-                _("Failed to initialize JSON object. Out of memory?"));
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
         }
-        root_object = json_object(root_value);
+        root_array = G_json_array(root_value);
     }
     else if (strcmp(frmt->answer, "shell") == 0) {
         format = SHELL;
@@ -138,7 +137,7 @@ int main(int argc, char *argv[])
             _("Flag 'g' is deprecated and will be removed in a future "
               "release. Please use format=shell instead."));
         if (format == JSON) {
-            json_value_free(root_value);
+            G_json_value_free(root_value);
             G_fatal_error(_("Cannot use the -g flag with format=json; "
                             "please select only one option."));
         }
@@ -241,15 +240,12 @@ int main(int argc, char *argv[])
                     I_list_subgroup(group, sgrp->answer, &ref, stdout);
                     break;
                 case JSON:
-                    json_object_set_string(root_object, "group", group);
-                    json_object_set_string(root_object, "subgroup",
-                                           sgrp->answer);
-                    list_files_json(&ref, root_object);
+                    list_files_json(&ref, root_array);
                     break;
                 }
             }
             else if (s->answer) {
-                print_subgroups(group, mapset, format, root_object);
+                print_subgroups(group, mapset, format, root_array);
             }
             else {
                 /* list group files */
@@ -265,8 +261,7 @@ int main(int argc, char *argv[])
                     I_list_group(group, &ref, stdout);
                     break;
                 case JSON:
-                    json_object_set_string(root_object, "group", group);
-                    list_files_json(&ref, root_object);
+                    list_files_json(&ref, root_array);
                     break;
                 }
             }
@@ -301,13 +296,13 @@ int main(int argc, char *argv[])
 
     if (format == JSON) {
         char *serialized_string = NULL;
-        serialized_string = json_serialize_to_string_pretty(root_value);
+        serialized_string = G_json_serialize_to_string_pretty(root_value);
         if (serialized_string == NULL) {
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         }
         puts(serialized_string);
-        json_free_serialized_string(serialized_string);
-        json_value_free(root_value);
+        G_json_free_serialized_string(serialized_string);
+        G_json_value_free(root_value);
     }
 
     return EXIT_SUCCESS;
@@ -511,22 +506,12 @@ static int remove_subgroup_files(char group[INAME_LEN],
 }
 
 static void print_subgroups(const char *group, const char *mapset,
-                            enum OutputFormat format, JSON_Object *root_object)
+                            enum OutputFormat format, JSON_Array *root_array)
 {
     int subgs_num, i;
     int len, tot_len;
     int max;
     char **subgs;
-    JSON_Value *list_value = NULL;
-    JSON_Array *list_array = NULL;
-
-    if (format == JSON) {
-        list_value = json_value_init_array();
-        if (list_value == NULL) {
-            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
-        }
-        list_array = json_array(list_value);
-    }
 
     subgs = I_list_subgroups2(group, mapset, &subgs_num);
     switch (format) {
@@ -564,11 +549,8 @@ static void print_subgroups(const char *group, const char *mapset,
         fprintf(stdout, "-------------\n");
         break;
     case JSON:
-        json_object_set_string(root_object, "group", group);
         for (i = 0; i < subgs_num; i++)
-            json_array_append_string(list_array, subgs[i]);
-
-        json_object_set_value(root_object, "subgroups", list_value);
+            G_json_array_append_string(root_array, subgs[i]);
         break;
     }
     G_free(subgs);
@@ -581,24 +563,16 @@ static void print_subgroups(const char *group, const char *mapset,
  * List map in map@mapset form.
  *
  * \param ref group reference (set with I_get_group_ref())
- * \param root_object JSON object to which data will be appended.
+ * \param root_array JSON array to which data will be appended.
  */
-static void list_files_json(const struct Ref *ref, JSON_Object *root_object)
+static void list_files_json(const struct Ref *ref, JSON_Array *root_array)
 {
     int i;
     char map_str[1024];
 
-    JSON_Value *list_value = json_value_init_array();
-    if (list_value == NULL) {
-        G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
-    }
-    JSON_Array *list_array = json_array(list_value);
-
     for (i = 0; i < ref->nfiles; i++) {
         snprintf(map_str, sizeof(map_str), "%s@%s", ref->file[i].name,
                  ref->file[i].mapset);
-        json_array_append_string(list_array, map_str);
+        G_json_array_append_string(root_array, map_str);
     }
-
-    json_object_set_value(root_object, "maps", list_value);
 }

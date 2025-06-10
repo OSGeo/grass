@@ -170,7 +170,7 @@ class TestIGroup(TestCase):
         )
 
         # Test listing of test_subgroup_1 files in json format.
-        subgroup = gs.parse_command(
+        maps = gs.parse_command(
             "i.group",
             group=self.test_group,
             subgroup=self.test_subgroup1,
@@ -178,14 +178,12 @@ class TestIGroup(TestCase):
             format="json",
         )
 
-        self.assertEqual(subgroup["group"], self.test_group)
-        self.assertEqual(subgroup["subgroup"], self.test_subgroup1)
-        self.assertTrue(any("raster1" in m for m in subgroup["maps"]))
-        self.assertTrue(any("raster2" in m for m in subgroup["maps"]))
-        self.assertTrue(all("raster3" not in m for m in subgroup["maps"]))
+        self.assertTrue(any("raster1" in m for m in maps))
+        self.assertTrue(any("raster2" in m for m in maps))
+        self.assertTrue(all("raster3" not in m for m in maps))
 
         # Test listing of test_subgroup2 files in json format.
-        subgroup = gs.parse_command(
+        maps = gs.parse_command(
             "i.group",
             group=self.test_group,
             subgroup=self.test_subgroup2,
@@ -193,31 +191,21 @@ class TestIGroup(TestCase):
             format="json",
         )
 
-        expected_subgroup = {
-            "group": "test_group",
-            "subgroup": "test_subgroup_2",
-            "maps": [
-                "raster3@PERMANENT",
-            ],
-        }
-        self.assertEqual(subgroup["group"], self.test_group)
-        self.assertEqual(subgroup["subgroup"], self.test_subgroup2)
-        self.assertTrue(all("raster1" not in m for m in subgroup["maps"]))
-        self.assertTrue(all("raster2" not in m for m in subgroup["maps"]))
-        self.assertTrue(any("raster3" in m for m in subgroup["maps"]))
+        self.assertTrue(all("raster1" not in m for m in maps))
+        self.assertTrue(all("raster2" not in m for m in maps))
+        self.assertTrue(any("raster3" in m for m in maps))
 
         # Test listing of group files in json format.
-        group = gs.parse_command(
+        maps = gs.parse_command(
             "i.group",
             group=self.test_group,
             flags="l",
             format="json",
         )
 
-        self.assertEqual(group["group"], self.test_group)
-        self.assertTrue(any("raster1" in m for m in group["maps"]))
-        self.assertTrue(any("raster2" in m for m in group["maps"]))
-        self.assertTrue(any("raster3" in m for m in group["maps"]))
+        self.assertTrue(any("raster1" in m for m in maps))
+        self.assertTrue(any("raster2" in m for m in maps))
+        self.assertTrue(any("raster3" in m for m in maps))
 
     def test_list_subgroups_shell(self):
         """Test listing of subgroups in group using shell format."""
@@ -265,10 +253,9 @@ class TestIGroup(TestCase):
             flags="s",
             format="json",
         )
+        expected_subgroups = [self.test_subgroup1, self.test_subgroup2]
 
-        self.assertEqual(subgroups["group"], self.test_group)
-        self.assertTrue(any(self.test_subgroup1 in m for m in subgroups["subgroups"]))
-        self.assertTrue(any(self.test_subgroup2 in m for m in subgroups["subgroups"]))
+        self.assertEqual(expected_subgroups, subgroups)
 
 
 if __name__ == "__main__":
