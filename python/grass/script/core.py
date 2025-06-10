@@ -267,10 +267,10 @@ def make_command(
 
     :param str prog: GRASS module
     :param str flags: flags to be used (given as a string)
-    :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
-    :param bool quiet: True to run quietly (<tt>--q</tt>)
-    :param bool superquiet: True to run extra quietly (<tt>--qq</tt>)
-    :param bool verbose: True to run verbosely (<tt>--v</tt>)
+    :param bool overwrite: True to enable overwriting the output (``--o``)
+    :param bool quiet: True to run quietly (``--q``)
+    :param bool superquiet: True to run extra quietly (``--qq``)
+    :param bool verbose: True to run verbosely (``--v``)
     :param options: module's parameters
 
     :return: list of arguments
@@ -337,7 +337,7 @@ def handle_errors(returncode, result, args, kwargs):
     handling mechanism is not desirable or the return code has some
     meaning not necessarily interpreted as an error by the caller.
 
-    For ``errors="exit"``, ``sys.exit()`` is called with the
+    For ``errors="exit"``, :external:py:func:`sys.exit()` is called with the
     *returncode*, so it behaves similarly to a Bash script with
     ``set -e``. No additional error message or exception is produced.
     This might be useful for a simple script where error message
@@ -445,10 +445,10 @@ def start_command(
 
     :param str prog: GRASS module
     :param str flags: flags to be used (given as a string)
-    :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
-    :param bool quiet: True to run quietly (<tt>--q</tt>)
-    :param bool superquiet: True to run extra quietly (<tt>--qq</tt>)
-    :param bool verbose: True to run verbosely (<tt>--v</tt>)
+    :param bool overwrite: True to enable overwriting the output (``--o``)
+    :param bool quiet: True to run quietly (``--q``)
+    :param bool superquiet: True to run extra quietly (``--qq``)
+    :param bool verbose: True to run verbosely (``--v``)
     :param kwargs: module's parameters
 
     :return: Popen object
@@ -479,7 +479,7 @@ def run_command(*args, **kwargs):
 
     This function passes all arguments to :func:`~grass.script.core.start_command`,
     then waits for the process to complete. It is similar to
-    ``subprocess.check_call()``, but with the :func:`make_command()`
+    :external:py:func:`subprocess.check_call()`, but with the :func:`make_command()`
     interface. By default, an exception is raised in case of a non-zero
     return code by default.
 
@@ -492,8 +492,8 @@ def run_command(*args, **kwargs):
     The behavior on error can be changed using *errors* parameter
     which is passed to the :func:`handle_errors()` function.
 
-    :param *args: unnamed arguments passed to :func:`start_command()`
-    :param **kwargs: named arguments passed to :func:`start_command()`
+    :param args: unnamed arguments passed to :func:`start_command()`
+    :param kwargs: named arguments passed to :func:`start_command()`
     :param str errors: passed to :func:`handle_errors()`
 
     .. versionchanged:: 8.0
@@ -726,11 +726,12 @@ def exec_command(
 
     :param str prog: GRASS module
     :param str flags: flags to be used (given as a string)
-    :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
-    :param bool quiet: True to run quietly (<tt>--q</tt>)
-    :param bool superquiet: True to run quietly (<tt>--qq</tt>)
-    :param bool verbose: True to run verbosely (<tt>--v</tt>)
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param bool overwrite: True to enable overwriting the output (``--o``)
+    :param bool quiet: True to run quietly (``--q``)
+    :param bool superquiet: True to run quietly (``--qq``)
+    :param bool verbose: True to run verbosely (``--v``)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     :param list kwargs: module's parameters
 
     """
@@ -749,24 +750,27 @@ def message(msg, flag=None, env=None):
 
     :param str msg: message to be displayed
     :param str flag: flags (given as string)
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     """
     run_command("g.message", flags=flag, message=msg, errors="ignore", env=env)
 
 
 def debug(msg, debug=1, env=None):
-    """Display a debugging message using `g.message -d`.
+    """Display a debugging message using ``g.message -d``.
 
     The visibility of a debug message at runtime is controlled by
-    setting the corresponding DEBUG level with `g.gisenv set="DEBUG=X"`
-    (with `X` set to the debug level specified in the function call).
+    setting the corresponding DEBUG level with ``g.gisenv set="DEBUG=X"``
+    (with ``X`` set to the debug level specified in the function call).
 
     :param str msg: debugging message to be displayed
-    :param str debug: debug level (0-5) with the following recommended levels:
-        Use 1 for messages generated once of few times,
-        3 for messages generated for each raster row or vector line,
-        5 for messages generated for each raster cell or vector point.
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param str debug: debug level (0-5) with the following recommended
+        levels:
+        - Use 1 for messages generated once of few times,
+        - 3 for messages generated for each raster row or vector line,
+        - 5 for messages generated for each raster cell or vector point.
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     """
     if debug_level() >= debug:
         # TODO: quite a random hack here, do we need it somewhere else too?
@@ -777,25 +781,27 @@ def debug(msg, debug=1, env=None):
 
 
 def verbose(msg, env=None):
-    """Display a verbose message using `g.message -v`
+    """Display a verbose message using ``g.message -v``
 
     :param str msg: verbose message to be displayed
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     """
     message(msg, flag="v", env=env)
 
 
 def info(msg, env=None):
-    """Display an informational message using `g.message -i`
+    """Display an informational message using ``g.message -i``
 
     :param str msg: informational message to be displayed
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     """
     message(msg, flag="i", env=env)
 
 
 def percent(i, n, s, env=None):
-    """Display a progress info message using `g.message -p`
+    """Display a progress info message using ``g.message -p``
 
     .. code-block:: python
 
@@ -808,42 +814,46 @@ def percent(i, n, s, env=None):
     :param int i: current item
     :param int n: total number of items
     :param int s: increment size
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     """
     message("%d %d %d" % (i, n, s), flag="p", env=env)
 
 
 def warning(msg, env=None):
-    """Display a warning message using `g.message -w`
+    """Display a warning message using ``g.message -w``
 
     :param str msg: warning message to be displayed
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     """
     message(msg, flag="w", env=env)
 
 
 def error(msg, env=None):
-    """Display an error message using `g.message -e`
+    """Display an error message using ``g.message -e``
 
     This function does not end the execution of the program.
     The right action after the error is up to the caller.
     For error handling using the standard mechanism use :func:`fatal()`.
 
     :param str msg: error message to be displayed
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     """
     message(msg, flag="e", env=env)
 
 
 def fatal(msg, env=None):
-    """Display an error message using `g.message -e`, then abort or raise
+    """Display an error message using ``g.message -e``, then abort or raise
 
     Raises exception when module global raise_on_error is 'True', abort
-    (calls exit) otherwise.
+    (calls :external:py:func:`sys.exit`) otherwise.
     Use :func:`set_raise_on_error()` to set the behavior.
 
     :param str msg: error message to be displayed
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     """
     global raise_on_error
     if raise_on_error:
@@ -856,8 +866,9 @@ def fatal(msg, env=None):
 def set_raise_on_error(raise_exp=True):
     """Define behavior on fatal error (:py:func:`~grass.script.core.fatal` called)
 
-    :param bool raise_exp: True to raise ScriptError instead of calling
-                           sys.exit(1) in fatal()
+    :param bool raise_exp: True to raise :py:exc:`~grass.exceptions.ScriptError`
+        instead of calling :external:py:func:`sys.exit(1) <sys.exit>`
+        in :py:func:`~grass.script.core.fatal`
 
     :return: current status
     """
@@ -868,8 +879,9 @@ def set_raise_on_error(raise_exp=True):
 
 
 def get_raise_on_error():
-    """Return True if a ScriptError exception is raised instead of calling
-    sys.exit(1) in case a fatal error was invoked with fatal()
+    """Return True if a :py:exc:`~grass.exceptions.ScriptError` exception is raised
+    instead of calling :external:py:func:`sys.exit(1) <sys.exit>` in case a fatal error
+    was invoked with :py:func:`~grass.script.core.fatal`.
     """
     global raise_on_error
     return raise_on_error
@@ -881,10 +893,10 @@ def set_capture_stderr(capture=True):
 
     By default, standard error output (stderr) of child processes shows
     in the same place as output of the parent process. This may not
-    always be the same place as ``sys.stderr`` is written.
-    After calling this function, functions in the ``grass.script``
+    always be the same place as :external:py:data:`sys.stderr` is written.
+    After calling this function, functions in the :py:mod:`grass.script`
     package will capture the stderr of child processes and pass it
-    to ``sys.stderr`` if there is an error.
+    to :external:py:data:`sys.stderr` if there is an error.
 
     .. note::
 
@@ -1100,7 +1112,7 @@ def _text_to_key_value_dict(
     checkunits: bool = False,
 ) -> KeyValue[list[int | float | str]]:
     """Convert a key-value text file, where entries are separated by newlines
-    and the key and value are separated by `sep', into a key-value dictionary
+    and the key and value are separated by ``sep``, into a key-value dictionary
     and discover/use the correct data types (float, int or string) for values.
 
     :param filename: The name or name and path of the text file to convert
@@ -1197,7 +1209,7 @@ def compare_key_value_text_files(
         d : hello,8,0.1
 
     :param str filename_a: name of the first key-value text file
-    :param str filenmae_b: name of the second key-value text file
+    :param str filename_b: name of the second key-value text file
     :param str sep: character that separates the keys and values, default is ":"
     :param str val_sep: character that separates the values of a single key,
                         default is ","
@@ -1247,7 +1259,8 @@ def gisenv(env: _Env | None = None) -> KeyValue[str | None]:
         >>> print(env["GISDBASE"])  # doctest: +SKIP
         /opt/grass-data
 
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     :return: list of GRASS variables
     """
     s = read_command("g.gisenv", flags="n", env=env)
@@ -1674,7 +1687,7 @@ def parse_color(
     val: str, dflt: tuple[float, float, float] | None = None
 ) -> tuple[float, float, float] | None:
     """Parses the string "val" as a GRASS colour, which can be either one of
-    the named colours or an R:G:B tuple e.g. 255:255:255. Returns an
+    the named colours or an ``R:G:B`` tuple e.g. ``255:255:255``. Returns an
     (r,g,b) triple whose components are floating point values between 0
     and 1.
 
@@ -1725,7 +1738,7 @@ def verbosity():
 
     2 all messages will be printed
 
-    3 also verbose messages will be printed. Triggered by "--v" or "--verbose" flag.
+    3 also verbose messages will be printed. Triggered by "``--v``" or "``--verbose``" flag.
     """
     vbstr = os.getenv("GRASS_VERBOSE")
     if vbstr:
@@ -1741,8 +1754,8 @@ def find_program(pgm, *args):
 
     You must call the program in a way that will return a successful
     exit code. For GRASS modules this means you need to pass it some
-    valid CLI option, like "--help". For other programs a common
-    valid do-little option is usually "--version".
+    valid CLI option, like "``--help``". For other programs a common
+    valid do-little option is usually "``--version``".
 
     :Example:
       .. code-block:: pycon

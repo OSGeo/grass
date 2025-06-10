@@ -31,7 +31,7 @@ class AbstractFinder:
         :type c_mapinfo: ctypes pointer to mapinfo structure
         :param table: Attribute table of the vector layer
         :type table: ~grass.pygrass.vector.table.Table
-        :param writable: True or False
+        :param writeable: True or False
         """
         self.c_mapinfo = c_mapinfo
         self.table: Table | None = table

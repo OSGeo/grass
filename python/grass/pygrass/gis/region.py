@@ -459,7 +459,7 @@ class Region:
         """Set the computational region (window) for all raster maps in the current
         process.
 
-        Attention: All raster objects must be closed or the
+        .. Attention:: All raster objects must be closed or the
                    process will be terminated.
 
         The Raster library C function :c:func:`Rast_set_window()` is called.
@@ -498,7 +498,7 @@ class Region:
         This function adjusts the values before setting the region
         so you don't have to call :c:func:`G_adjust_Cell_head()`.
 
-        Attention: Only the current process is affected.
+        .. Attention:: Only the current process is affected.
                    The GRASS computational region is not affected.
 
         :Example:

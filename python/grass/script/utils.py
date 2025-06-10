@@ -193,7 +193,7 @@ def decode(bytes_: AnyStr, encoding: str | None = None) -> str:
 
     No-op if parameter is not bytes (assumed unicode string).
 
-    :param bytes bytes_: the bytes to decode
+    :param bytes\\_: the bytes to decode
     :param encoding: encoding to be used, default value is None
 
     Example
@@ -248,6 +248,10 @@ def encode(string: AnyStr, encoding: str | None = None) -> bytes:
 def text_to_string(text: AnyStr, encoding: str | None = None) -> str:
     """Convert text to str. Useful when passing text into environments,
     in Python 2 it needs to be bytes on Windows, in Python 3 in needs unicode.
+
+    :param text: The text to convert to string
+    :param encoding: The encoding to be used to decode the text that will be converted
+    :returns: A (unicode) string
     """
     return decode(text, encoding=encoding)
 

@@ -693,7 +693,7 @@ def numpy2raster(array, mtype, rastname, overwrite=False):
 
     :param obj array: a numpy array
     :param obj mtype: the datatype of array
-    :param str rastername: the name of output map
+    :param str rastname: the name of output map
     :param bool overwrite: True to overwrite existing map
     """
     reg = Region()
