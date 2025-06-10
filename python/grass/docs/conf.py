@@ -104,6 +104,7 @@ copy("_templates/layout.html.template", "_templates/layout.html")
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.doctest",
+    "sphinx.ext.intersphinx",
     "sphinx.ext.todo",
     "sphinx.ext.coverage",
     "sphinx.ext.mathjax",
@@ -485,6 +486,8 @@ epub_exclude_files = ["search.html"]
 
 # Where class documentation comes from (class or __init__ docstring).
 autoclass_content = "both"
+# Render todo boxes instead of hiding them
+todo_include_todos = True
 
 # sphinx-sitemap extension config
 # https://sphinx-sitemap.readthedocs.io/en/latest/advanced-configuration.html
@@ -496,3 +499,9 @@ sitemap_excludes = [
     "search.html",
     "genindex.html",
 ]
+
+# Intersphinx config
+intersphinx_mapping = {
+    "numpy": ("https://numpy.org/doc/stable/", None),
+    "python": ("https://docs.python.org/3", None),
+}

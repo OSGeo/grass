@@ -198,8 +198,8 @@ class BoxList:
         """Append a Bbox object to a Boxlist object, using the
         ``Vect_boxlist_append`` C function.
 
-        :param bbox: the bounding box to add to the list
-        :param bbox: a Bbox object
+        :param box: the bounding box to add to the list
+        :type box: a Bbox object
 
         >>> box0 = Bbox()
         >>> box1 = Bbox(1, 2, 3, 4)
