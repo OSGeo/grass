@@ -230,7 +230,9 @@ int main(int argc, char *argv[])
     if (kappasd_opt->answer) {
         init_info->kappa_var = atof(kappasd_opt->answer) * deg2rad;
     }
-    init_info->status = use_flag->answer != 0;
+    if (use_flag->answer) {
+        init_info->status = 1; // update only if -r is passed
+    }
 
     if (print_flag->answer) {
         /* do not translate, scripts might want to parse the output */
