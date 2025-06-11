@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-04 10:56+0000\n"
-"PO-Revision-Date: 2025-03-12 12:05+0000\n"
+"PO-Revision-Date: 2025-06-05 04:00+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs/fr/>\n"
 "Language: fr\n"
@@ -543,7 +543,7 @@ msgstr ""
 
 #: ../lib/external/parson/test/test_main.c:57
 msgid "json"
-msgstr ""
+msgstr "json"
 
 #: ../lib/external/parson/test/test_main.c:58
 #: ../lib/raster3d/test/test_main.c:104
@@ -7042,10 +7042,9 @@ msgid "Unable to close cursor %s"
 msgstr "Impossible de fermer le curseur %s"
 
 #: ../lib/vector/Vlib/color_read.c:53
-#, fuzzy, c-format
-#| msgid "Vector map <%s> is not opened"
+#, c-format
 msgid "Vector map name <%s> is too long"
-msgstr "La carte vecteur <%s> n'est pas ouverte"
+msgstr "Le nom de la carte vectorielle <%s> est trop long"
 
 #: ../lib/vector/Vlib/constraint.c:150
 msgid "Layer constraint ignored for non-native vector formats"
@@ -7438,7 +7437,7 @@ msgstr "Segment en dehors de la ligne, non créé"
 
 #: ../lib/vector/Vlib/map.c:140 ../lib/vector/Vlib/map.c:245
 msgid "Vector map name is not SQL compliant"
-msgstr "Le nom de la couche  vectorielle n'est pas compatible avec le SQL"
+msgstr "Le nom de la couche vectorielle n'est pas compatible avec le SQL"
 
 #: ../lib/vector/Vlib/map.c:144
 #, c-format
