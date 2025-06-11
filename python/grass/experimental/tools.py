@@ -18,7 +18,6 @@ import json
 import os
 import shutil
 import subprocess
-from pathlib import Path
 from io import StringIO
 
 import numpy as np
@@ -26,75 +25,6 @@ import numpy as np
 import grass.script as gs
 import grass.script.array as garray
 from grass.exceptions import CalledModuleError
-
-
-class PackImporterExporter:
-    def __init__(self, *, run_function, env=None):
-        self._run_function = run_function
-        self._env = env
-
-    @classmethod
-    def is_raster_pack_file(cls, value):
-        return value.endswith((".grass_raster", ".pack", ".rpack", ".grr"))
-
-    def modify_and_ingest_argument_list(self, args, parameters):
-        # Uses parameters, but modifies the command, generates list of rasters and vectors.
-        self.input_rasters = []
-        if "inputs" in parameters:
-            for item in parameters["inputs"]:
-                if self.is_raster_pack_file(item["value"]):
-                    self.input_rasters.append(Path(item["value"]))
-                    # No need to change that for the original kwargs.
-                    # kwargs[item["param"]] = Path(item["value"]).stem
-                    # Actual parameters to execute are now a list.
-                    for i, arg in enumerate(args):
-                        if arg.startswith(f"{item['param']}="):
-                            arg = arg.replace(item["value"], Path(item["value"]).stem)
-                            args[i] = arg
-        self.output_rasters = []
-        if "outputs" in parameters:
-            for item in parameters["outputs"]:
-                if self.is_raster_pack_file(item["value"]):
-                    self.output_rasters.append(Path(item["value"]))
-                    # kwargs[item["param"]] = Path(item["value"]).stem
-                    for i, arg in enumerate(args):
-                        if arg.startswith(f"{item['param']}="):
-                            arg = arg.replace(item["value"], Path(item["value"]).stem)
-                            args[i] = arg
-
-    def import_rasters(self):
-        for raster_file in self.input_rasters:
-            # Currently we override the projection check.
-            self._run_function(
-                "r.unpack",
-                input=raster_file,
-                output=raster_file.stem,
-                overwrite=True,
-                superquiet=True,
-                # flags="o",
-                env=self._env,
-            )
-
-    def export_rasters(self):
-        # Pack the output raster
-        for raster in self.output_rasters:
-            # Overwriting a file is a warning, so to avoid it, we delete the file first.
-            Path(raster).unlink(missing_ok=True)
-
-            self._run_function(
-                "r.pack",
-                input=raster.stem,
-                output=raster,
-                flags="c",
-                overwrite=True,
-                superquiet=True,
-            )
-
-    def import_data(self):
-        self.import_rasters()
-
-    def export_data(self):
-        self.export_rasters()
 
 
 class ObjectParameterHandler:
@@ -447,21 +377,13 @@ class Tools:
                 )
             processed_parameters = json.loads(interface_result.stdout)
 
-        pack_importer_exporter = PackImporterExporter(run_function=self.no_nonsense_run)
-        pack_importer_exporter.modify_and_ingest_argument_list(
-            command, processed_parameters
-        )
-        pack_importer_exporter.import_data()
-
         # We approximate tool_kwargs as original kwargs.
-        result = self.no_nonsense_run_from_list(
+        return self.no_nonsense_run_from_list(
             command,
             tool_kwargs=tool_kwargs,
             stdin=stdin,
             **popen_options,
         )
-        pack_importer_exporter.export_data()
-        return result
 
     def run_command(self, name, /, **kwargs):
         # TODO: Provide custom implementation for full control
