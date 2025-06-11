@@ -299,8 +299,11 @@ void print_python_example(FILE *file, const char *python_function,
                     }
                 }
                 else {
-                    if (opt->type == TYPE_INTEGER || opt->type == TYPE_DOUBLE) {
-                        fprintf(file, "%s", type);
+                    if (opt->type == TYPE_INTEGER) {
+                        fprintf(file, "0");
+                    }
+                    else if (opt->type == TYPE_DOUBLE) {
+                        fprintf(file, "0.0");
                     }
                     else {
                         fprintf(file, "\"%s\"", type);
