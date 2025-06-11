@@ -18,83 +18,11 @@ import json
 import os
 import shutil
 import subprocess
-from pathlib import Path
 from io import StringIO
 
-import numpy as np
 
 import grass.script as gs
-import grass.script.array as garray
 from grass.exceptions import CalledModuleError
-
-
-class PackImporterExporter:
-    def __init__(self, *, run_function, env=None):
-        self._run_function = run_function
-        self._env = env
-
-    @classmethod
-    def is_raster_pack_file(cls, value):
-        return value.endswith((".grass_raster", ".pack", ".rpack", ".grr"))
-
-    def modify_and_ingest_argument_list(self, args, parameters):
-        # Uses parameters, but modifies the command, generates list of rasters and vectors.
-        self.input_rasters = []
-        if "inputs" in parameters:
-            for item in parameters["inputs"]:
-                if self.is_raster_pack_file(item["value"]):
-                    self.input_rasters.append(Path(item["value"]))
-                    # No need to change that for the original kwargs.
-                    # kwargs[item["param"]] = Path(item["value"]).stem
-                    # Actual parameters to execute are now a list.
-                    for i, arg in enumerate(args):
-                        if arg.startswith(f"{item['param']}="):
-                            arg = arg.replace(item["value"], Path(item["value"]).stem)
-                            args[i] = arg
-        self.output_rasters = []
-        if "outputs" in parameters:
-            for item in parameters["outputs"]:
-                if self.is_raster_pack_file(item["value"]):
-                    self.output_rasters.append(Path(item["value"]))
-                    # kwargs[item["param"]] = Path(item["value"]).stem
-                    for i, arg in enumerate(args):
-                        if arg.startswith(f"{item['param']}="):
-                            arg = arg.replace(item["value"], Path(item["value"]).stem)
-                            args[i] = arg
-
-    def import_rasters(self):
-        for raster_file in self.input_rasters:
-            # Currently we override the projection check.
-            self._run_function(
-                "r.unpack",
-                input=raster_file,
-                output=raster_file.stem,
-                overwrite=True,
-                superquiet=True,
-                # flags="o",
-                env=self._env,
-            )
-
-    def export_rasters(self):
-        # Pack the output raster
-        for raster in self.output_rasters:
-            # Overwriting a file is a warning, so to avoid it, we delete the file first.
-            Path(raster).unlink(missing_ok=True)
-
-            self._run_function(
-                "r.pack",
-                input=raster.stem,
-                output=raster,
-                flags="c",
-                overwrite=True,
-                superquiet=True,
-            )
-
-    def import_data(self):
-        self.import_rasters()
-
-    def export_data(self):
-        self.export_rasters()
 
 
 class ObjectParameterHandler:
@@ -106,47 +34,9 @@ class ObjectParameterHandler:
 
     def process_parameters(self, kwargs):
         for key, value in kwargs.items():
-            if isinstance(value, np.ndarray):
-                kwargs[key] = gs.append_uuid("tmp_serialized_input_array")
-                self._numpy_inputs[key] = value
-                self._numpy_inputs_ordered.append(value)
-            elif value in (np.ndarray, np.array, garray.array):
-                # We test for class or the function.
-                kwargs[key] = gs.append_uuid("tmp_serialized_output_array")
-                self._numpy_outputs[key] = value
-            elif isinstance(value, StringIO):
+            if isinstance(value, StringIO):
                 kwargs[key] = "-"
                 self.stdin = value.getvalue()
-
-    def translate_objects_to_data(self, kwargs, parameters, env):
-        if "inputs" in parameters:
-            for param in parameters["inputs"]:
-                if param["param"] in self._numpy_inputs:
-                    map2d = garray.array(env=env)
-                    map2d[:] = self._numpy_inputs[param["param"]]
-                    map2d.write(kwargs[param["param"]])
-
-    def input_rows_columns(self):
-        if not len(self._numpy_inputs_ordered):
-            return None
-        return self._numpy_inputs_ordered[0].shape
-
-    def translate_data_to_objects(self, kwargs, parameters, env):
-        output_arrays = []
-        if "outputs" in parameters:
-            for param in parameters["outputs"]:
-                if param["param"] not in self._numpy_outputs:
-                    continue
-                output_array = garray.array(kwargs[param["param"]], env=env)
-                output_arrays.append(output_array)
-        if len(output_arrays) == 1:
-            self.result = output_arrays[0]
-            return True
-        if len(output_arrays) > 1:
-            self.result = tuple(output_arrays)
-            return True
-        self.result = None
-        return False
 
 
 class ToolFunctionNameHelper:
@@ -406,24 +296,15 @@ class Tools:
                 handler="raise",
             )
         parameters = json.loads(interface_result.stdout)
-        object_parameter_handler.translate_objects_to_data(
-            kwargs, parameters, env=self._env
-        )
 
         # We approximate tool_kwargs as original kwargs.
-        result = self.run_from_list(
+        return self.run_from_list(
             args,
             tool_kwargs=kwargs,
             processed_parameters=parameters,
             stdin=object_parameter_handler.stdin,
             **popen_options,
         )
-        use_objects = object_parameter_handler.translate_data_to_objects(
-            kwargs, parameters, env=self._env
-        )
-        if use_objects:
-            result = object_parameter_handler.result
-        return result
 
     def run_from_list(
         self,
@@ -447,21 +328,13 @@ class Tools:
                 )
             processed_parameters = json.loads(interface_result.stdout)
 
-        pack_importer_exporter = PackImporterExporter(run_function=self.no_nonsense_run)
-        pack_importer_exporter.modify_and_ingest_argument_list(
-            command, processed_parameters
-        )
-        pack_importer_exporter.import_data()
-
         # We approximate tool_kwargs as original kwargs.
-        result = self.no_nonsense_run_from_list(
+        return self.no_nonsense_run_from_list(
             command,
             tool_kwargs=tool_kwargs,
             stdin=stdin,
             **popen_options,
         )
-        pack_importer_exporter.export_data()
-        return result
 
     def run_command(self, name, /, **kwargs):
         # TODO: Provide custom implementation for full control
