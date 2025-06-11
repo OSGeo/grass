@@ -140,7 +140,7 @@ def get_config(start_directory, config_file):
 
     :raises OSError: if file is not accessible, e.g., if it exists,
         but there is an issue with permissions.
-    :raises ValueError: If both start_directory and config_file are not set.
+    :raises ValueError: If neither start_directory nor config_file are set.
     """
     config_parser = configparser.ConfigParser()
     if config_file:
