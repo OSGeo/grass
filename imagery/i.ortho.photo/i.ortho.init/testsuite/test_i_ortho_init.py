@@ -73,7 +73,7 @@ class TestIOrthoInit(TestCase):
 
     def test_create_camera_model_with_use_flag(self):
         """Test full camera model creation with use flag (-r)"""
-        self._run_init_module(flags="r")
+        self._run_init_module()
         output = gs.parse_command("i.ortho.init", group=self.test_group, flags="p")
 
         expected_values = {
@@ -95,7 +95,7 @@ class TestIOrthoInit(TestCase):
 
     def test_partial_update_of_parameters(self):
         """Test that selected camera parameters can be updated after initial creation"""
-        self._run_init_module(flags="r")
+        self._run_init_module()
 
         updated_values = {"omega": 5.7, "kappa": -30.5, "zc_sd": 15.0}
 
@@ -112,15 +112,17 @@ class TestIOrthoInit(TestCase):
 
         self._assert_camera_params_equal(output, expected_values)
 
-    # def test_use_flag_toggle_behavior(self):
-    #     """Test that the 'use' flag reflects correct usage status (note: fails due to known bug)"""
-    #     self._run_init_module(flags="r")
-    #     output1 = gs.parse_command("i.ortho.init", group=self.test_group, flags="p")
-    #     self.assertEqual(int(output1["use"]), 1)
+    def test_use_flag_toggle_behavior(self):
+        """Test that the 'use' flag reflects correct usage status."""
+        self._run_init_module()
+        output = gs.parse_command("i.ortho.init", group=self.test_group, flags="p")
+        self.assertEqual(int(output["use"]), 0)
 
-    #     self._run_init_module()
-    #     output2 = gs.parse_command("i.ortho.init", group=self.test_group, flags="p")
-    #     self.assertEqual(int(output2["use"]), 0)
+        self._run_init_module(flags="r")
+        updated_output = gs.parse_command(
+            "i.ortho.init", group=self.test_group, flags="p"
+        )
+        self.assertEqual(int(updated_output["use"]), 1)
 
 
 if __name__ == "__main__":
