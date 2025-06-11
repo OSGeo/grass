@@ -1098,8 +1098,8 @@ def _convert_timestamp_from_grass(ts):
     In case of relative time a tuple with start time, end time and the
     relative unit (start, end, unit) will be returned.
 
-    Note:
-    The end time will be set to None in case of a time instance.
+    .. note::
+        The end time will be set to None in case of a time instance.
 
     :param ts grass.lib.gis.TimeStamp object created by G_read_*_timestamp
     """
@@ -1264,7 +1264,7 @@ class CLibrariesInterface(RPCServerBase):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> import grass.script as gscript
         >>> import grass.temporal as tgis
@@ -1350,7 +1350,6 @@ class CLibrariesInterface(RPCServerBase):
         ...     if res[0]:
         ...         print(str(res[1][0]), str(res[1][0]))
         ...         ciface.remove_raster_timestamp("test", tgis.get_current_mapset())
-        ...
         1995-03-12 10:34:40 1995-03-12 10:34:40
         1
         >>> ciface.has_raster_timestamp("test", tgis.get_current_mapset())
@@ -1377,7 +1376,6 @@ class CLibrariesInterface(RPCServerBase):
         ...     if res[0]:
         ...         print(str(res[1][0]), str(res[1][0]))
         ...         ciface.remove_raster3d_timestamp("test", tgis.get_current_mapset())
-        ...
         1995-03-12 10:34:40 1995-03-12 10:34:40
         1
         >>> ciface.has_raster3d_timestamp("test", tgis.get_current_mapset())
@@ -1423,7 +1421,6 @@ class CLibrariesInterface(RPCServerBase):
         ...     if res[0]:
         ...         print(str(res[1][0]), str(res[1][0]))
         ...         ciface.remove_vector_timestamp("test", tgis.get_current_mapset())
-        ...
         1995-03-12 10:34:40 1995-03-12 10:34:40
         1
         >>> ciface.has_vector_timestamp("test", tgis.get_current_mapset())
@@ -1599,7 +1596,7 @@ class CLibrariesInterface(RPCServerBase):
         Please have a look at the documentation G_write_raster_timestamp
         for the return values description.
 
-        Note:
+        .. note::
             Only timestamps of maps from the current mapset can written.
 
         :param name: The name of the map
@@ -1651,7 +1648,7 @@ class CLibrariesInterface(RPCServerBase):
     def write_raster_semantic_label(self, name, mapset, semantic_label):
         """Write a file based raster semantic label
 
-        Note:
+        .. note::
             Only semantic labels of maps from the current mapset can be written.
 
         :param name: The name of the map
@@ -1773,7 +1770,7 @@ class CLibrariesInterface(RPCServerBase):
         Please have a look at the documentation G_write_raster3d_timestamp
         for the return values description.
 
-        Note:
+        .. note::
             Only timestamps of maps from the current mapset can written.
 
         :param name: The name of the map
@@ -1913,7 +1910,7 @@ class CLibrariesInterface(RPCServerBase):
         Please have a look at the documentation G_write_vector_timestamp
         for the return values description.
 
-        Note:
+        .. note::
             Only timestamps pf maps from the current mapset can written.
 
         :param name: The name of the map

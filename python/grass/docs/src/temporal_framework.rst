@@ -423,4 +423,4 @@ References
 
 :Authors: Soeren Gebbert
 
-:TODO: add more documentation
+.. TODO:: add more documentation

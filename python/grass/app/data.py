@@ -207,7 +207,8 @@ def acquire_mapset_lock(
     :param env: system environment variables
 
     The function assumes the `GISBASE` variable is in the environment. The variable is
-    used to find the lock program. If *env* is not provided, `os.environ` is used.
+    used to find the lock program. If *env* is not provided,
+    :external:py:data:`os.environ` is used.
     """
     if process_id is None:
         process_id = os.getpid()
