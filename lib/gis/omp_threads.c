@@ -33,15 +33,16 @@ int G_set_omp_num_threads(struct Option *opt)
     int threads = atoi(opt->answer);
 #if defined(_OPENMP)
     if (threads == 0) {
-        return omp_get_max_threads();
+        threads = omp_get_max_threads();
     }
-
-    int num_logic_procs = omp_get_num_procs();
-    if (threads < 1) {
-        threads += num_logic_procs;
-        threads = (threads < 1) ? 1 : threads;
+    else {
+        int num_logic_procs = omp_get_num_procs();
+        if (threads < 1) {
+            threads += num_logic_procs;
+            threads = (threads < 1) ? 1 : threads;
+        }
+        omp_set_num_threads(threads);
     }
-    omp_set_num_threads(threads);
     G_verbose_message(n_("One thread is set up for parallel computing.",
                          "%d threads are set up for parallel computing.",
                          threads),
