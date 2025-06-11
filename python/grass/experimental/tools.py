@@ -21,10 +21,8 @@ import subprocess
 from pathlib import Path
 from io import StringIO
 
-import numpy as np
 
 import grass.script as gs
-import grass.script.array as garray
 from grass.exceptions import CalledModuleError
 
 
@@ -99,54 +97,13 @@ class PackImporterExporter:
 
 class ObjectParameterHandler:
     def __init__(self):
-        self._numpy_inputs = {}
-        self._numpy_outputs = {}
-        self._numpy_inputs_ordered = []
         self.stdin = None
 
     def process_parameters(self, kwargs):
         for key, value in kwargs.items():
-            if isinstance(value, np.ndarray):
-                kwargs[key] = gs.append_uuid("tmp_serialized_input_array")
-                self._numpy_inputs[key] = value
-                self._numpy_inputs_ordered.append(value)
-            elif value in (np.ndarray, np.array, garray.array):
-                # We test for class or the function.
-                kwargs[key] = gs.append_uuid("tmp_serialized_output_array")
-                self._numpy_outputs[key] = value
-            elif isinstance(value, StringIO):
+            if isinstance(value, StringIO):
                 kwargs[key] = "-"
                 self.stdin = value.getvalue()
-
-    def translate_objects_to_data(self, kwargs, parameters, env):
-        if "inputs" in parameters:
-            for param in parameters["inputs"]:
-                if param["param"] in self._numpy_inputs:
-                    map2d = garray.array(env=env)
-                    map2d[:] = self._numpy_inputs[param["param"]]
-                    map2d.write(kwargs[param["param"]])
-
-    def input_rows_columns(self):
-        if not len(self._numpy_inputs_ordered):
-            return None
-        return self._numpy_inputs_ordered[0].shape
-
-    def translate_data_to_objects(self, kwargs, parameters, env):
-        output_arrays = []
-        if "outputs" in parameters:
-            for param in parameters["outputs"]:
-                if param["param"] not in self._numpy_outputs:
-                    continue
-                output_array = garray.array(kwargs[param["param"]], env=env)
-                output_arrays.append(output_array)
-        if len(output_arrays) == 1:
-            self.result = output_arrays[0]
-            return True
-        if len(output_arrays) > 1:
-            self.result = tuple(output_arrays)
-            return True
-        self.result = None
-        return False
 
 
 class ToolFunctionNameHelper:
@@ -406,24 +363,15 @@ class Tools:
                 handler="raise",
             )
         parameters = json.loads(interface_result.stdout)
-        object_parameter_handler.translate_objects_to_data(
-            kwargs, parameters, env=self._env
-        )
 
         # We approximate tool_kwargs as original kwargs.
-        result = self.run_from_list(
+        return self.run_from_list(
             args,
             tool_kwargs=kwargs,
             processed_parameters=parameters,
             stdin=object_parameter_handler.stdin,
             **popen_options,
         )
-        use_objects = object_parameter_handler.translate_data_to_objects(
-            kwargs, parameters, env=self._env
-        )
-        if use_objects:
-            result = object_parameter_handler.result
-        return result
 
     def run_from_list(
         self,
