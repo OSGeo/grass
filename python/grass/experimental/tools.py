@@ -17,8 +17,8 @@
 import json
 import os
 import shutil
-import subprocess
 from io import StringIO
+from types import SimpleNamespace
 
 
 import grass.script as gs
@@ -266,9 +266,21 @@ class Tools:
     def _process_parameters(self, command, popen_options):
         env = popen_options.get("env", self._env)
 
-        return subprocess.run(
-            [*command, "--json"], text=True, capture_output=True, env=env
+        process = gs.Popen(
+            [*command, "--json"],
+            stdin=None,
+            stdout=gs.PIPE,
+            stderr=gs.PIPE,
+            env=env,
         )
+        stdout, stderr = process.communicate()
+        if stdout:
+            stdout = gs.utils.decode(stdout)
+        if stderr:
+            stderr = gs.utils.decode(stderr)
+        returncode = process.poll()
+
+        return SimpleNamespace(returncode=returncode, stdout=stdout, stderr=stderr)
 
     def run(self, name, /, **kwargs):
         """Run modules from the GRASS display family (modules starting with "d.").
