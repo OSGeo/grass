@@ -86,7 +86,7 @@ def mapcalc3d(
     :param bool verbose: True to run verbosely (``--v``)
     :param bool overwrite: True to enable overwriting the output (``--o``)
     :param seed: an integer used to seed the random-number generator for the
-                 rand() function, or 'auto' to generate a random seed
+                 :py:func:`rand()` function, or 'auto' to generate a random seed
     :param dict env: dictionary of environment variables for child process
     :param kwargs:
     """
