@@ -1451,14 +1451,11 @@ class DBConnection:
         """Check if a table exists in the temporal database
 
         :param table_name: The name of the table to be checked for existence
-        :param mapset: The mapset of the abstract dataset or temporal
-                       database location, if None the current mapset
-                       will be used
         :returns: True if the table exists, False otherwise
 
-        TODO:
-        There may be several temporal databases in a location, hence
-        the mapset is used to query the correct temporal database.
+        .. TODO::
+            There may be several temporal databases in a location, hence
+            the mapset is used to query the correct temporal database.
         """
         table_exists = False
         connected = False
