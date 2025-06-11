@@ -912,6 +912,7 @@ def set_capture_stderr(capture=True):
     capturing.
 
     .. versionadded:: 7.4
+    .. seealso:: :func:`get_capture_stderr`
     """
     global _capture_stderr
     tmp = _capture_stderr
@@ -922,7 +923,7 @@ def set_capture_stderr(capture=True):
 def get_capture_stderr():
     """Return True if stderr is captured, False otherwise.
 
-    See set_capture_stderr().
+    .. seealso:: :func:`set_capture_stderr`.
     """
     global _capture_stderr
     return _capture_stderr
@@ -1016,6 +1017,9 @@ def tempfile(create=True, env=None):
     :param env: environment
 
     :return: path to a tmp file
+
+    .. seealso:: The ``g.tempfile`` tool, and the :py:func:`~grass.script.core.tempdir`
+        and :py:func:`~grass.script.core.tempname` functions
     """
     flags = ""
     if not create:
@@ -1025,7 +1029,11 @@ def tempfile(create=True, env=None):
 
 
 def tempdir(env=None):
-    """Returns the name of a temporary dir, created with g.tempfile."""
+    """Returns the name of a temporary dir, created with g.tempfile.
+
+    .. seealso:: The ``g.tempfile`` tool, and the :py:func:`~grass.script.core.tempfile`
+        and :py:func:`~grass.script.core.tempname` functions
+    """
     tmp = tempfile(create=False, env=env)
     os.mkdir(tmp)
 
@@ -1047,7 +1055,9 @@ def tempname(length: int, lowercase: bool = False) -> str:
         'tmp_MxMa1kAS13s9'
 
     .. seealso:: functions :func:`~grass.script.utils.append_uuid()`,
-        :func:`~grass.script.utils.append_random()`
+        :func:`~grass.script.utils.append_random()`,
+        the ``g.tempfile`` tool, and the :py:func:`~grass.script.core.tempfile`
+        and :py:func:`~grass.script.core.tempdir` functions
     """
 
     chars = string.ascii_lowercase + string.digits
@@ -1275,6 +1285,8 @@ def locn_is_latlong(env: _Env | None = None) -> bool:
     by checking the "g.region -pu" projection code.
 
     :return: True for a lat/long region, False otherwise
+
+    .. seealso:: The ``g.region`` tool
     """
     s = read_command("g.region", flags="pu", env=env)
     kv: KeyValue[str | None] = parse_key_val(s, ":")
@@ -1301,6 +1313,8 @@ def region(region3d=False, complete=False, env=None):
     :param env: dictionary with system environment variables
                 (:external:py:data:`os.environ` by default)
     :return: dictionary of region values
+
+    .. seealso:: The ``g.region`` tool
     """
     flgs = "gu"
     if region3d:
@@ -1337,8 +1351,9 @@ def region_env(
     If no 'kwargs' are given then the current region is used. Note
     that this function doesn't modify the current region!
 
-    See also :func:`use_temp_region()` for alternative method how to define
-    temporary region used for raster-based computation.
+    .. seealso::
+        See also :func:`use_temp_region()` for alternative method how to define
+        temporary region used for raster-based computation.
 
     :Example:
       .. code-block:: python
@@ -1431,6 +1446,8 @@ def use_temp_region():
     """Copies the current region to a temporary region with "g.region save=",
     then sets WIND_OVERRIDE to refer to that region. Installs an atexit
     handler to delete the temporary region upon termination.
+
+    .. seealso:: The ``g.region`` tool
     """
     name = "tmp.%s.%d" % (os.path.basename(sys.argv[0]), os.getpid())
     run_command("g.region", flags="u", save=name, overwrite=True)
@@ -1439,7 +1456,10 @@ def use_temp_region():
 
 
 def del_temp_region():
-    """Unsets WIND_OVERRIDE and removes any region named by it."""
+    """Unsets WIND_OVERRIDE and removes any region named by it.
+
+    .. seealso:: The ``g.remove`` tool
+    """
     try:
         name = os.environ.pop("WIND_OVERRIDE")
         run_command("g.remove", flags="f", quiet=True, type="region", name=name)
@@ -1486,6 +1506,8 @@ def find_file(name, element="cell", mapset=None, env=None):
     :param env: environment
 
     :return: parsed output of g.findfile
+
+    .. seealso:: The ``g.findfile`` tool
     """
     element_translation = {
         "rast": "cell",
@@ -1531,6 +1553,8 @@ def list_strings(type, pattern=None, mapset=None, exclude=None, flag="", env=Non
     :param env: environment
 
     :return: list of elements
+
+    .. seealso:: The ``g.list`` tool
     """
     if type == "cell":
         verbose(_('Element type should be "raster" and not "%s"') % type, env=env)
@@ -1565,6 +1589,8 @@ def list_pairs(type, pattern=None, mapset=None, exclude=None, flag="", env=None)
     :param env: environment
 
     :return: list of elements
+
+    .. seealso:: The ``g.list`` tool
     """
     return [
         tuple(map.split("@", 1))
@@ -1598,6 +1624,8 @@ def list_grouped(
     :param env: environment
 
     :return: directory of mapsets/elements
+
+    .. seealso:: The ``g.list`` tool
     """
     if isinstance(type, str) or len(type) == 1:
         types = [type]
@@ -1792,6 +1820,8 @@ def mapsets(search_path=False, env=None):
     :param bool search_path: True to list mapsets only in search path
 
     :return: list of mapsets
+
+    .. seealso:: The ``g.mapsets`` tool
     """
     flags = "p" if search_path else "l"
     mapsets = read_command("g.mapsets", flags=flags, sep="newline", quiet=True, env=env)
