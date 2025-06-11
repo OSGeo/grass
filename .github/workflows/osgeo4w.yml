@@ -26,7 +26,7 @@ jobs:
     strategy:
       matrix:
         os:
-          - windows-2019
+          - windows-2022
       fail-fast: false
 
     steps:
@@ -36,6 +36,7 @@ jobs:
           git config --global core.eol lf
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: msys2/setup-msys2@61f9e5e925871ba6c9e3e8da24ede83ea27fa91f # v2.27.0
+        id: msys2
         with:
           path-type: inherit
           location: D:\
@@ -105,6 +106,8 @@ jobs:
         shell: msys2 {0}
         run: |
           .github/workflows/build_osgeo4w.sh
+        env:
+          MSYS2_LOCATION: ${{ steps.msys2.outputs.msys2-location }}
 
       - name: Print installed versions
         if: always()
