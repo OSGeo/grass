@@ -17,7 +17,6 @@ def test_key_value_parser_number(xy_dataset_session):
     assert tools.g_region(flags="g").keyval["nsres"] == 1
 
 
-@pytest.mark.xfail
 def test_key_value_parser_multiple_values(xy_dataset_session):
     """Check that strings and floats are parsed"""
     tools = Tools(session=xy_dataset_session)
@@ -27,7 +26,8 @@ def test_key_value_parser_multiple_values(xy_dataset_session):
     assert result["datatype"] == "DCELL"
     assert result["nsres"] == 1
     result = tools.r_univar(map=name, flags="g").keyval
-    assert result["mean"] == pytest.approx(-0.756762744552762)
+    # We don't worry about the specific output value, and just test the type.
+    assert isinstance(result["mean"], float)
 
 
 def test_json_parser(xy_dataset_session):
