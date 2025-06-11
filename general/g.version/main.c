@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
         fprintf(stdout, "revision=%s\n", GRASS_VERSION_GIT);
         fprintf(stdout, "build_date=%d-%02d-%02d\n", YEAR, MONTH, DAY);
         fprintf(stdout, "build_platform=%s\n", ARCH);
-        fprintf(stdout, "build_off_t_size=%lu\n", sizeof(off_t));
+        fprintf(stdout, "build_off_t_size=%zu\n", sizeof(off_t));
     }
     else {
         fprintf(stdout, "GRASS %s (%s)\n", GRASS_VERSION_NUMBER,

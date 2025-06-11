@@ -208,10 +208,6 @@ class UpdateThread(Thread):
 
             # @todo: replace name by isinstance() and signals
 
-            pBind = self.task.get_param(uid, element="wxId", raiseError=False)
-            if pBind:
-                pBind["value"] = ""
-
             # set appropriate types in t.* modules and g.list/remove element
             # selections
             if name == "Select":
@@ -336,6 +332,7 @@ class UpdateThread(Thread):
                         "vector": map,
                         "layer": layer,
                         "dbInfo": cparams[map]["dbInfo"],
+                        "setDefaultValue": False,
                     }
                 # table
                 elif driver and db:
@@ -343,10 +340,12 @@ class UpdateThread(Thread):
                         "table": pTable.get("value"),
                         "driver": driver,
                         "database": db,
+                        "setDefaultValue": False,
                     }
                 elif pTable:
                     self.data[win.GetParent().InsertTableColumns] = {
-                        "table": pTable.get("value")
+                        "table": pTable.get("value"),
+                        "setDefaultValue": False,
                     }
 
             elif name == "SubGroupSelect":
