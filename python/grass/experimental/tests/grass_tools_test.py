@@ -288,19 +288,19 @@ def test_with_context_managers(tmpdir):
 
 def test_misspelling(xy_dataset_session):
     tools = Tools(session=xy_dataset_session)
-    with pytest.raises(AttributeError, match=r"r\.slope\.aspect"):
+    with pytest.raises(AttributeError, match=r"r_slope_aspect"):
         tools.r_sloppy_respect()
 
 
 def test_multiple_suggestions(xy_dataset_session):
     tools = Tools(session=xy_dataset_session)
-    with pytest.raises(AttributeError, match=r"v\.db\.univar|db\.univar"):
+    with pytest.raises(AttributeError, match=r"v_db_univar|db_univar"):
         tools.db_v_uni_var()
 
 
 def test_tool_group_vs_model_name(xy_dataset_session):
     tools = Tools(session=xy_dataset_session)
-    with pytest.raises(AttributeError, match=r"r\.sim\.water"):
+    with pytest.raises(AttributeError, match=r"r_sim_water"):
         tools.rSIMWEwater()
 
 
@@ -355,3 +355,27 @@ def test_stdin_as_stringio_object(xy_dataset_session):
         flags="n",
     )
     assert tools.v_info(map="points", format="json")["points"] == 1
+
+
+def test_tool_attribute_access_c_tools():
+    tools = Tools()
+    assert "g_region" in dir(tools)
+    assert "r_slope_aspect" in dir(tools)
+
+
+def test_tool_attribute_access_python_tools():
+    tools = Tools()
+    assert "g_search_modules" in dir(tools)
+    assert "r_mask" in dir(tools)
+
+
+def test_tool_doc_access_c_tools():
+    tools = Tools()
+    assert tools.g_region.__doc__
+    assert tools.r_slope_aspect.__doc__
+
+
+def test_tool_doc_access_python_tools():
+    tools = Tools()
+    assert tools.g_search_modules.__doc__
+    assert tools.r_mask.__doc__

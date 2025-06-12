@@ -45,6 +45,7 @@ class ToolFunctionNameHelper:
         self._run_function = run_function
         self._env = env
         self._prefix = prefix
+        self._names = None
 
     # def __getattr__(self, name):
     #    self.get_function(name, exception_type=AttributeError)
@@ -54,15 +55,20 @@ class ToolFunctionNameHelper:
         the form 'd_module_name'. For example, 'd.rast' is called with 'd_rast'.
         """
         if self._prefix:
-            name = f"{self._prefix}.{name}"
-        # Reformat string
+            name = f"{self._prefix}_{name}"
+        # Snake case attribute name to dotted tool name
         tool_name = name.replace("_", ".")
-        # Assert module exists
-        if not shutil.which(tool_name, path=self._env["PATH"]):
+        # We first try to find the tool on path which is much faster than getting
+        # and checking the names, but if the tool is not found, likely because runtime
+        # is not set up, we check the names.
+        if (
+            not shutil.which(tool_name, path=self._env["PATH"])
+            and name not in self.names()
+        ):
             suggestions = self.suggest_tools(tool_name)
             if suggestions:
                 msg = (
-                    f"Tool {tool_name} not found. "
+                    f"Tool {name} ({tool_name}) not found. "
                     f"Did you mean: {', '.join(suggestions)}?"
                 )
                 raise AttributeError(msg)
@@ -74,8 +80,9 @@ class ToolFunctionNameHelper:
             raise AttributeError(msg)
 
         def wrapper(**kwargs):
-            # Run module
             return self._run_function(tool_name, **kwargs)
+
+        wrapper.__doc__ = f"Run {tool_name} as function"
 
         return wrapper
 
@@ -99,18 +106,22 @@ class ToolFunctionNameHelper:
 
         return previous_row[-1]
 
-    @staticmethod
-    def suggest_tools(tool):
+    def suggest_tools(self, tool):
         # TODO: cache commands also for dir
-        all_names = list(gs.get_commands()[0])
         result = []
         max_suggestions = 10
-        for name in all_names:
+        for name in self.names():
             if ToolFunctionNameHelper.levenshtein_distance(tool, name) < len(tool) / 2:
                 result.append(name)
             if len(result) >= max_suggestions:
                 break
         return result
+
+    def names(self):
+        if self._names:
+            return self._names
+        self._names = [name.replace(".", "_") for name in gs.get_commands()[0]]
+        return self._names
 
 
 class ExecutedTool:
@@ -441,6 +452,17 @@ class Tools:
                 prefix=self._prefix,
             )
         return self._name_helper.get_function(name, exception_type=AttributeError)
+
+    def __dir__(self):
+        if not self._name_helper:
+            self._name_helper = ToolFunctionNameHelper(
+                run_function=self.run,
+                env=self.env,
+                prefix=self._prefix,
+            )
+        # Collect instance and class attributes
+        static_attrs = set(dir(type(self))) | set(self.__dict__.keys())
+        return list(static_attrs) + self._name_helper.names()
 
 
 def _test():
