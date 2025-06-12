@@ -280,7 +280,9 @@ class Tools:
     def _process_parameters(self, command, **popen_options):
         popen_options["stdin"] = None
         popen_options["stdout"] = gs.PIPE
-        popen_options["stderr"] = gs.PIPE
+        # We respect whatever is in the stderr option because that's what the user
+        # asked for and will expect to get in case of error (we pretend that it was
+        # the intended run, not our special run before the actual run).
         return self.no_nonsense_run_from_list([*command, "--json"], **popen_options)
 
     def run(self, name, /, **kwargs):
