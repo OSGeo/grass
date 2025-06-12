@@ -117,10 +117,6 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    if (hflag->answer && eflag->answer)
-        G_fatal_error(_("Flags -%c and -%c are mutually exclusive"), hflag->key,
-                      eflag->key);
-
     // If no format option is specified, preserve backward compatibility
     if (fopt->answer == NULL || fopt->answer[0] == '\0') {
         if (gflag->answer || rflag->answer || sflag->answer || eflag->answer) {
@@ -933,7 +929,7 @@ int main(int argc, char **argv)
             }
         }
 
-        if (hflag->answer) {
+        if (hflag->answer && !eflag->answer) {
             if (hist_ok) {
                 switch (format) {
                 case PLAIN:
