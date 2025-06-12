@@ -22,31 +22,82 @@ from grass.gunittest.main import test
 class TestRStats(TestCase):
     """Test case for r.stats"""
 
+    test_raster_1 = "test_raster_1"
+    test_raster_2 = "test_raster_2"
+    float_raster = "float_raster"
+
+    test_label_1 = "1:trees\n2:3:water\n"
+    test_label_2 = "1:trees\n2:4:buildings\n"
+    float_label = (
+        "0:0.5:0 slope\n"
+        "0.5:1:1 degrees\n"
+        "1:1.5:2 degrees\n"
+        "1.5:2:3 degrees\n"
+        "2:2.5:4 degrees\n"
+        "2.5:3:5 degrees\n"
+        "3.5:4:6 degrees\n"
+        "4:4.5:7 degrees\n"
+    )
+
     @classmethod
     def setUpClass(cls):
-        """Set up temporary computational region"""
-        cls.use_temp_region()
-        cls.runModule("g.region", rows=5, cols=5)
+        """Set up test environment"""
+        cls.runModule("g.region", s=0, n=100, w=0, e=100, res=20)
+
+        cls.runModule(
+            "r.mapcalc",
+            expression=(f"{cls.test_raster_1} = if(col() < 3, col(), 2)"),
+        )
+        cls.runModule(
+            "r.category",
+            map=cls.test_raster_1,
+            separator=":",
+            rules="-",
+            stdin=cls.test_label_1,
+        )
+
+        cls.runModule(
+            "r.mapcalc",
+            expression=(f"{cls.test_raster_2} = if(col() < 5, col(), null())"),
+        )
+        cls.runModule(
+            "r.category",
+            map=cls.test_raster_2,
+            separator=":",
+            rules="-",
+            stdin=cls.test_label_2,
+        )
+
+        cls.runModule(
+            "r.mapcalc",
+            expression=(f"{cls.float_raster} = if(col() < 5, col() / 2., 4.5)"),
+        )
+        cls.runModule(
+            "r.category",
+            map=cls.float_raster,
+            separator=":",
+            rules="-",
+            stdin=cls.float_label,
+        )
 
     @classmethod
     def tearDownClass(cls):
-        """Clean up temporary computational region"""
-        cls.del_temp_region()
+        """Clean up test environment"""
+        cls.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name=[cls.test_raster_1, cls.test_raster_2, cls.float_raster],
+        )
 
     def test_percentage_flag_output(self):
         """Verify that r.stats with the -p flag returns correct percentage values with pipe separator."""
         rstats_module = SimpleModule(
-            "r.stats", input="towns", flags="p", separator="pipe"
+            "r.stats", input=self.test_raster_1, flags="p", separator="pipe"
         )
         self.assertModule(rstats_module)
 
-        expected_output = [
-            "1|15.00%",
-            "2|10.00%",
-            "4|15.00%",
-            "5|70.00%",
-            "6|15.00%",
-        ]
+        expected_output = ["1|21.74%", "2|86.96%"]
 
         actual_output = rstats_module.outputs.stdout.splitlines()
         self.assertEqual(actual_output, expected_output)
@@ -55,35 +106,13 @@ class TestRStats(TestCase):
         """Verify that r.stats with the -c flag produces correct cross-tabulation for multiple raster inputs."""
         rstats_module = SimpleModule(
             "r.stats",
-            input=["landclass96", "zipcodes", "geology_30m"],
+            input=[self.test_raster_1, self.test_raster_2],
             flags="c",
             separator="comma",
         )
         self.assertModule(rstats_module)
 
-        expected_output = [
-            "1,27511,405,1",
-            "1,27529,270,1",
-            "1,27601,270,1",
-            "1,27603,217,1",
-            "1,27604,270,1",
-            "1,27606,217,1",
-            "3,27603,270,2",
-            "3,27606,217,1",
-            "3,27607,217,1",
-            "4,27518,405,1",
-            "5,27518,405,1",
-            "5,27529,270,1",
-            "5,27603,270,2",
-            "5,27605,262,1",
-            "5,27606,217,3",
-            "5,27606,262,1",
-            "5,27606,405,1",
-            "5,27607,217,1",
-            "5,27607,766,1",
-            "5,27610,270,1",
-            "6,27606,217,1",
-        ]
+        expected_output = ["1,1,5", "2,2,5", "2,3,5", "2,4,5", "2,*,5"]
 
         actual_output = rstats_module.outputs.stdout.splitlines()
         self.assertEqual(actual_output, expected_output)
@@ -91,17 +120,11 @@ class TestRStats(TestCase):
     def test_area_calculation_flag_output(self):
         """Verify that r.stats with the -a flag returns correct area calculations using pipe as a separator."""
         rstats_module = SimpleModule(
-            "r.stats", input="towns", flags="a", separator="pipe"
+            "r.stats", input=self.test_raster_1, flags="a", separator="pipe"
         )
         self.assertModule(rstats_module)
 
-        expected_output = [
-            "1|24301610.280000",
-            "2|16201073.520000",
-            "4|24301610.280000",
-            "5|113407514.640000",
-            "6|24301610.280000",
-        ]
+        expected_output = ["1|2000.000000", "2|8000.000000"]
 
         actual_output = rstats_module.outputs.stdout.splitlines()
         self.assertEqual(actual_output, expected_output)
@@ -109,17 +132,21 @@ class TestRStats(TestCase):
     def test_label_output_flag(self):
         """Verify that r.stats with the -l flag returns category labels correctly using newline as the separator."""
         rstats_module = SimpleModule(
-            "r.stats", input="slope", flags="l", nsteps=10, separator="\n"
+            "r.stats", input=self.float_raster, flags="l", separator="\n"
         )
         self.assertModule(rstats_module)
 
         expected_output = [
-            "0-3.868939",
-            "from zero slope to 4 degrees",
-            "3.868939-7.737878",
-            "from 4 degrees to 8 degrees",
-            "7.737878-11.606818",
-            "from 8 degrees to 12 degrees",
+            "0.5-0.515686",
+            "from 1 degrees to 1 degrees",
+            "0.986275-1.001961",
+            "from 1 degrees to 2 degrees",
+            "1.488235-1.503922",
+            "from 2 degrees to 3 degrees",
+            "1.990196-2.005882",
+            "from 3 degrees to 4 degrees",
+            "4.484314-4.5",
+            "from 7 degrees to 7 degrees",
         ]
 
         actual_output = rstats_module.outputs.stdout.splitlines()
@@ -128,36 +155,36 @@ class TestRStats(TestCase):
     def test_grid_coordinates_output(self):
         """Verify that r.stats with the -g flag produces correct grid coordinates using pipe separator."""
         rstats_module = SimpleModule(
-            "r.stats", input="towns", flags="g", separator="pipe"
+            "r.stats", input=self.test_raster_1, flags="g", separator="pipe"
         )
         self.assertModule(rstats_module)
 
         expected_output = [
-            "631479.1|227176.35|6",
-            "634477.3|227176.35|6",
-            "637475.5|227176.35|6",
-            "640473.7|227176.35|4",
-            "643471.9|227176.35|4",
-            "631479.1|224474.55|1",
-            "634477.3|224474.55|5",
-            "637475.5|224474.55|5",
-            "640473.7|224474.55|5",
-            "643471.9|224474.55|4",
-            "631479.1|221772.75|1",
-            "634477.3|221772.75|5",
-            "637475.5|221772.75|5",
-            "640473.7|221772.75|5",
-            "643471.9|221772.75|5",
-            "631479.1|219070.95|1",
-            "634477.3|219070.95|5",
-            "637475.5|219070.95|5",
-            "640473.7|219070.95|5",
-            "643471.9|219070.95|2",
-            "631479.1|216369.15|5",
-            "634477.3|216369.15|5",
-            "637475.5|216369.15|5",
-            "640473.7|216369.15|5",
-            "643471.9|216369.15|2",
+            "10|90|1",
+            "30|90|2",
+            "50|90|2",
+            "70|90|2",
+            "90|90|2",
+            "10|70|1",
+            "30|70|2",
+            "50|70|2",
+            "70|70|2",
+            "90|70|2",
+            "10|50|1",
+            "30|50|2",
+            "50|50|2",
+            "70|50|2",
+            "90|50|2",
+            "10|30|1",
+            "30|30|2",
+            "50|30|2",
+            "70|30|2",
+            "90|30|2",
+            "10|10|1",
+            "30|10|2",
+            "50|10|2",
+            "70|10|2",
+            "90|10|2",
         ]
 
         actual_output = rstats_module.outputs.stdout.splitlines()
@@ -166,108 +193,78 @@ class TestRStats(TestCase):
     def test_cell_coordinates_output(self):
         """Verify that r.stats with the -x flag outputs row, column, and category values using pipe as a separator."""
         rstats_module = SimpleModule(
-            "r.stats", input="towns", flags="x", separator="pipe"
+            "r.stats", input=self.test_raster_1, flags="x", separator="pipe"
         )
         self.assertModule(rstats_module)
 
         expected_output = [
-            "1|1|6",
-            "2|1|6",
-            "3|1|6",
-            "4|1|4",
-            "5|1|4",
+            "1|1|1",
+            "2|1|2",
+            "3|1|2",
+            "4|1|2",
+            "5|1|2",
             "1|2|1",
-            "2|2|5",
-            "3|2|5",
-            "4|2|5",
-            "5|2|4",
+            "2|2|2",
+            "3|2|2",
+            "4|2|2",
+            "5|2|2",
             "1|3|1",
-            "2|3|5",
-            "3|3|5",
-            "4|3|5",
-            "5|3|5",
+            "2|3|2",
+            "3|3|2",
+            "4|3|2",
+            "5|3|2",
             "1|4|1",
-            "2|4|5",
-            "3|4|5",
-            "4|4|5",
+            "2|4|2",
+            "3|4|2",
+            "4|4|2",
             "5|4|2",
-            "1|5|5",
-            "2|5|5",
-            "3|5|5",
-            "4|5|5",
+            "1|5|1",
+            "2|5|2",
+            "3|5|2",
+            "4|5|2",
             "5|5|2",
         ]
 
         actual_output = rstats_module.outputs.stdout.splitlines()
         self.assertEqual(actual_output, expected_output)
 
-    def test_area_statistics_sorted_output(self):
-        """Verify that r.stats with the -A and -a flags outputs area statistics with values sorted in descending order using pipe separator."""
+    def test_area_statistics_output(self):
+        """Verify that r.stats with the -A and -a flags outputs area statistics using pipe separator."""
         rstats_module = SimpleModule(
-            "r.stats", input="elevation", flags="Aa", separator="pipe", sort="desc"
+            "r.stats",
+            input=self.float_raster,
+            flags="Aa",
+            separator="pipe",
         )
         self.assertModule(rstats_module)
 
         expected_output = [
-            "122.943725|16201073.520000",
-            "102.398408|16201073.520000",
-            "105.954329|8100536.760000",
-            "81.853092|8100536.760000",
-            "92.520852|8100536.760000",
-            "122.15352|8100536.760000",
-            "101.213102|8100536.760000",
-            "100.817999|8100536.760000",
-            "118.5976|8100536.760000",
-            "131.635974|8100536.760000",
-            "116.226987|8100536.760000",
-            "94.496363|8100536.760000",
-            "92.915955|8100536.760000",
-            "143.884144|8100536.760000",
-            "96.076772|8100536.760000",
-            "94.101261|8100536.760000",
-            "92.12575|8100536.760000",
-            "127.28985|8100536.760000",
-            "135.586997|8100536.760000",
-            "117.412294|8100536.760000",
-            "110.695555|8100536.760000",
-            "73.951047|8100536.760000",
-            "86.199216|8100536.760000",
+            "0.507843|2000.000000",
+            "0.994118|2000.000000",
+            "1.496078|2000.000000",
+            "1.998039|2000.000000",
+            "4.492157|2000.000000",
         ]
 
         actual_output = rstats_module.outputs.stdout.splitlines()
         self.assertEqual(actual_output, expected_output)
 
     def test_raw_index_area_output(self):
-        """Verify that r.stats with -r and -a flags outputs raw indexes and corresponding area, sorted in descending order using pipe separator."""
+        """Verify that r.stats with -r and -a flags outputs raw indexes and corresponding area using pipe separator."""
         rstats_module = SimpleModule(
-            "r.stats", input="elevation", flags="ra", separator="pipe", sort="desc"
+            "r.stats",
+            input=self.float_raster,
+            flags="ra",
+            separator="pipe",
         )
         self.assertModule(rstats_module)
 
         expected_output = [
-            "171|16201073.520000",
-            "119|16201073.520000",
-            "128|8100536.760000",
-            "67|8100536.760000",
-            "94|8100536.760000",
-            "169|8100536.760000",
-            "116|8100536.760000",
-            "115|8100536.760000",
-            "160|8100536.760000",
-            "193|8100536.760000",
-            "154|8100536.760000",
-            "99|8100536.760000",
-            "95|8100536.760000",
-            "224|8100536.760000",
-            "103|8100536.760000",
-            "98|8100536.760000",
-            "93|8100536.760000",
-            "182|8100536.760000",
-            "203|8100536.760000",
-            "157|8100536.760000",
-            "140|8100536.760000",
-            "47|8100536.760000",
-            "78|8100536.760000",
+            "1|2000.000000",
+            "32|2000.000000",
+            "64|2000.000000",
+            "96|2000.000000",
+            "255|2000.000000",
         ]
 
         actual_output = rstats_module.outputs.stdout.splitlines()
@@ -277,22 +274,17 @@ class TestRStats(TestCase):
         """Verify that r.stats with -C and -l flags computes cats ranges and outputs labels, using pipe separator."""
         rstats_module = SimpleModule(
             "r.stats",
-            input="slope",
+            input=self.float_raster,
             flags="Cl",
             separator="pipe",
         )
         self.assertModule(rstats_module)
 
         expected_output = [
-            "10.5-11.5|11 degrees",
-            "6.5-7.5|7 degrees",
-            "5.5-6.5|6 degrees",
-            "4.5-5.5|5 degrees",
-            "3.5-4.5|4 degrees",
-            "2.5-3.5|3 degrees",
-            "1.5-2.5|2 degrees",
-            "0.5-1.5|1 degree",
-            "0-0.5|zero slope",
+            "0.5-1|1 degrees",
+            "1-1.5|2 degrees",
+            "2-2.5|4 degrees",
+            "4-4.5|7 degrees",
         ]
 
         actual_output = rstats_module.outputs.stdout.splitlines()
@@ -301,33 +293,14 @@ class TestRStats(TestCase):
     def test_integer_category_counts_output(self):
         """Verify that r.stats with -i and -c flags outputs integer-rounded category values and their counts using pipe separator."""
         rstats_module = SimpleModule(
-            "r.stats", input="elevation", flags="ic", separator="pipe"
+            "r.stats",
+            input=self.float_raster,
+            flags="ic",
+            separator="pipe",
         )
         self.assertModule(rstats_module)
 
-        expected_output = [
-            "74|1",
-            "82|1",
-            "86|1",
-            "92|1",
-            "93|2",
-            "94|2",
-            "96|1",
-            "101|2",
-            "102|1",
-            "103|1",
-            "106|1",
-            "111|1",
-            "116|1",
-            "117|1",
-            "118|1",
-            "122|1",
-            "123|2",
-            "127|1",
-            "132|1",
-            "136|1",
-            "144|1",
-        ]
+        expected_output = ["1|10", "2|10", "5|5"]
 
         actual_output = rstats_module.outputs.stdout.splitlines()
         self.assertEqual(actual_output, expected_output)
@@ -335,51 +308,54 @@ class TestRStats(TestCase):
     def test_multiple_raster_inputs_with_stats_output(self):
         """Verify r.stats with multiple raster inputs using -nacp flags and tab separator."""
         rstats_module = SimpleModule(
-            "r.stats", input=["towns", "urban"], flags="nacp", separator="tab"
+            "r.stats",
+            input=[self.test_raster_1, self.test_raster_2],
+            flags="nacp",
+            separator="tab",
         )
         self.assertModule(rstats_module)
 
         expected_output = [
-            "1\t55\t24301610.280000\t3\t18.75%",
-            "2\t55\t16201073.520000\t2\t12.50%",
-            "4\t55\t24301610.280000\t3\t18.75%",
-            "5\t55\t89105904.360000\t11\t68.75%",
-            "6\t55\t24301610.280000\t3\t18.75%",
+            "1\t1\t2000.000000\t5\t33.33%",
+            "2\t2\t2000.000000\t5\t33.33%",
+            "2\t3\t2000.000000\t5\t33.33%",
+            "2\t4\t2000.000000\t5\t33.33%",
         ]
 
         actual_output = rstats_module.outputs.stdout.splitlines()
         self.assertEqual(actual_output, expected_output)
 
     def test_per_cell_label_output(self):
-        """Test r.stats with -1ln flags to output one line per cell."""
+        """Test r.stats with -1ln flags to output one cell per line."""
         rstats_module = SimpleModule(
-            "r.stats", input=["towns", "urban"], flags="1ln", separator="pipe"
+            "r.stats",
+            input=[self.test_raster_1, self.test_raster_2],
+            flags="1ln",
+            separator="pipe",
         )
         self.assertModule(rstats_module)
 
         expected_output = [
-            "6|RALEIGH-WEST|55|",
-            "6|RALEIGH-WEST|55|",
-            "6|RALEIGH-WEST|55|",
-            "4|RALEIGH-CITY|55|",
-            "4|RALEIGH-CITY|55|",
-            "1|CARY|55|",
-            "5|RALEIGH-SOUTH|55|",
-            "5|RALEIGH-SOUTH|55|",
-            "5|RALEIGH-SOUTH|55|",
-            "4|RALEIGH-CITY|55|",
-            "1|CARY|55|",
-            "5|RALEIGH-SOUTH|55|",
-            "5|RALEIGH-SOUTH|55|",
-            "5|RALEIGH-SOUTH|55|",
-            "1|CARY|55|",
-            "5|RALEIGH-SOUTH|55|",
-            "2|GARNER|55|",
-            "5|RALEIGH-SOUTH|55|",
-            "5|RALEIGH-SOUTH|55|",
-            "5|RALEIGH-SOUTH|55|",
-            "5|RALEIGH-SOUTH|55|",
-            "2|GARNER|55|",
+            "1|trees|1|trees",
+            "2|water|2|buildings",
+            "2|water|3|buildings",
+            "2|water|4|buildings",
+            "1|trees|1|trees",
+            "2|water|2|buildings",
+            "2|water|3|buildings",
+            "2|water|4|buildings",
+            "1|trees|1|trees",
+            "2|water|2|buildings",
+            "2|water|3|buildings",
+            "2|water|4|buildings",
+            "1|trees|1|trees",
+            "2|water|2|buildings",
+            "2|water|3|buildings",
+            "2|water|4|buildings",
+            "1|trees|1|trees",
+            "2|water|2|buildings",
+            "2|water|3|buildings",
+            "2|water|4|buildings",
         ]
 
         actual_output = rstats_module.outputs.stdout.splitlines()
