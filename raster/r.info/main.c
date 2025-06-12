@@ -117,11 +117,9 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    if (hflag->answer &&
-        (gflag->answer || rflag->answer || sflag->answer || eflag->answer))
-        G_fatal_error(_("Flags -%c and -%c/%c/%c/%c are mutually exclusive"),
-                      hflag->key, gflag->key, rflag->key, eflag->key,
-                      sflag->key);
+    if (hflag->answer && eflag->answer)
+        G_fatal_error(_("Flags -%c and -%c are mutually exclusive"), hflag->key,
+                      eflag->key);
 
     // If no format option is specified, preserve backward compatibility
     if (fopt->answer == NULL || fopt->answer[0] == '\0') {
