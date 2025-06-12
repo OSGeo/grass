@@ -23,7 +23,7 @@ On large maps, the total number of cells in the map may not be displayed
 with an accurate number. This is only cosmetic.
 
 Some standards (ISO-C90) and compilers do not support the 'long long'
-type as a 64-bit type. In the case that GRASS GIS was built with such a
+type as a 64-bit type. In the case that GRASS was built with such a
 compiler, an accuracy message may be displayed in the output of *r.info*
 after Total Cells.
 

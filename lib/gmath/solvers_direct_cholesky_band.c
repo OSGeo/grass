@@ -124,7 +124,7 @@ void G_math_cholesky_sband_substitution(double **T, double *x, double *b,
 }
 
 /*--------------------------------------------------------------------------------------*/
-/* Tcholetsky matrix invertion */
+/* Tcholetsky matrix inversion */
 
 void G_math_cholesky_sband_invert(double **A, double *invAdiag, int rows,
                                   int bandwidth)
@@ -140,12 +140,12 @@ void G_math_cholesky_sband_invert(double **A, double *invAdiag, int rows,
     /* T computation                */
     G_math_cholesky_sband_decomposition(A, T, rows, bandwidth);
 
-    /* T Diagonal invertion */
+    /* T Diagonal inversion */
     for (i = 0; i < rows; i++) {
         T[i][0] = 1.0 / T[i][0];
     }
 
-    /* A Diagonal invertion */
+    /* A Diagonal inversion */
     for (i = 0; i < rows; i++) {
         vect[0] = T[i][0];
         invAdiag[i] = vect[0] * vect[0];
@@ -169,7 +169,7 @@ void G_math_cholesky_sband_invert(double **A, double *invAdiag, int rows,
 }
 
 /*--------------------------------------------------------------------------------------*/
-/* Tcholetsky matrix solution and invertion */
+/* Tcholetsky matrix solution and inversion */
 
 void G_math_solver_cholesky_sband_invert(double **A, double *x, double *b,
                                          double *invAdiag, int rows,
@@ -188,12 +188,12 @@ void G_math_solver_cholesky_sband_invert(double **A, double *x, double *b,
     G_math_cholesky_sband_decomposition(A, T, rows, bandwidth);
     G_math_cholesky_sband_substitution(T, x, b, rows, bandwidth);
 
-    /* T Diagonal invertion */
+    /* T Diagonal inversion */
     for (i = 0; i < rows; i++) {
         T[i][0] = 1.0 / T[i][0];
     }
 
-    /* A Diagonal invertion */
+    /* A Diagonal inversion */
     for (i = 0; i < rows; i++) {
         vect[0] = T[i][0];
         invAdiag[i] = vect[0] * vect[0];
