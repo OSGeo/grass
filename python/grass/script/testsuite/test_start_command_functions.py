@@ -8,7 +8,6 @@ from grass.gunittest.utils import xfail_windows
 
 from grass.script.core import start_command, PIPE, run_command, write_command
 from grass.script.core import read_command, find_program
-from grass.script.utils import encode
 
 
 class TestPythonKeywordsInParameters(TestCase):
@@ -115,7 +114,7 @@ class TestPythonModuleWithStdinStdout(TestCase):
         res = read_command(
             "r.category", map=self.raster, separator=":", encoding=None
         ).strip()
-        self.assertEqual(res, encode("1:kůň\n2:kráva\n3:ovečka\n4:býk"))
+        self.assertEqual(res, "1:kůň\n2:kráva\n3:ovečka\n4:býk")
         self.assertIsInstance(res, bytes)
 
 

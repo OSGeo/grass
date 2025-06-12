@@ -441,7 +441,9 @@ def get_interface_description(cmd):
         When unable to fetch the interface description for a command.
     """
     try:
-        p = Popen([cmd, "--interface-description"], stdout=PIPE, stderr=PIPE)
+        p = Popen(
+            [cmd, "--interface-description"], stdout=PIPE, stderr=PIPE, text=False
+        )
         cmdout, cmderr = p.communicate()
 
         # TODO: do it better (?)
