@@ -80,9 +80,6 @@ int G_begin_distance_calculations(void)
  */
 double G_distance(double e1, double n1, double e2, double n2)
 {
-    if (st->projection == PROJECTION_LL)
-        return G_geodesic_distance(e1, n1, e2, n2);
-
     if (st->projection == PROJECTION_LL) {
         double ps12 = 0, pazi1 = 0, pazi2 = 0;
 
