@@ -14,11 +14,12 @@
 
 """API to call GRASS tools (modules) as Python functions"""
 
+from __future__ import annotations
+
 import json
 import os
 import shutil
 from io import StringIO
-from types import SimpleNamespace
 
 
 import grass.script as gs
@@ -115,26 +116,31 @@ class ToolFunctionNameHelper:
 class ExecutedTool:
     """Result returned after executing a tool"""
 
-    def __init__(self, name, kwargs, stdout, stderr):
+    def __init__(self, *, name, kwargs, returncode, stdout, stderr):
         self._name = name
         self._kwargs = kwargs
+        self.returncode = returncode
         self._stdout = stdout
         self._stderr = stderr
-        if self._stdout is not None:
-            self._decoded_stdout = gs.decode(self._stdout)
-        else:
-            self._decoded_stdout = None
+        self._text = None
         self._cached_json = None
 
     @property
-    def text(self) -> str:
+    def text(self) -> str | None:
         """Text output as decoded string"""
-        if self._decoded_stdout is None:
+        if self._text is not None:
+            return self._text
+        if self._stdout is None:
             return None
-        return self._decoded_stdout.strip()
+        if isinstance(self._stdout, bytes):
+            decoded_stdout = gs.decode(self._stdout)
+        else:
+            decoded_stdout = self._stdout
+        self._text = decoded_stdout.strip()
+        return self._text
 
     @property
-    def json(self):
+    def json(self) -> dict:
         """Text output read as JSON
 
         This returns the nested structure of dictionaries and lists or fails when
@@ -145,7 +151,7 @@ class ExecutedTool:
         return self._cached_json
 
     @property
-    def keyval(self):
+    def keyval(self) -> dict:
         """Text output read as key-value pairs separated by equal signs"""
 
         def conversion(value):
@@ -163,23 +169,31 @@ class ExecutedTool:
         return gs.parse_key_val(self._stdout, val_type=conversion)
 
     @property
-    def comma_items(self):
+    def comma_items(self) -> list:
         """Text output read as comma-separated list"""
         return self.text_split(",")
 
     @property
-    def space_items(self):
+    def space_items(self) -> list:
         """Text output read as whitespace-separated list"""
         return self.text_split(None)
 
-    def text_split(self, separator=None):
+    def text_split(self, separator=None) -> list:
         """Parse text output read as list separated by separators
 
         Any leading or trailing newlines are removed prior to parsing.
         """
         # The use of strip is assuming that the output is one line which
         # ends with a newline character which is for display only.
-        return self._decoded_stdout.strip("\n").split(separator)
+        return self.text.split(separator)
+
+    @property
+    def stdout(self) -> str | bytes:
+        return self._stdout
+
+    @property
+    def stderr(self) -> str | bytes:
+        return self._stderr
 
     def __getitem__(self, name):
         if self._stdout:
@@ -263,24 +277,11 @@ class Tools:
         """Internally used environment (reference to it, not a copy)"""
         return self._env
 
-    def _process_parameters(self, command, popen_options):
-        env = popen_options.get("env", self._env)
-
-        process = gs.Popen(
-            [*command, "--json"],
-            stdin=None,
-            stdout=gs.PIPE,
-            stderr=gs.PIPE,
-            env=env,
-        )
-        stdout, stderr = process.communicate()
-        if stdout:
-            stdout = gs.utils.decode(stdout)
-        if stderr:
-            stderr = gs.utils.decode(stderr)
-        returncode = process.poll()
-
-        return SimpleNamespace(returncode=returncode, stdout=stdout, stderr=stderr)
+    def _process_parameters(self, command, **popen_options):
+        popen_options["stdin"] = None
+        popen_options["stdout"] = gs.PIPE
+        popen_options["stderr"] = gs.PIPE
+        return self.no_nonsense_run_from_list([*command, "--json"], **popen_options)
 
     def run(self, name, /, **kwargs):
         """Run modules from the GRASS display family (modules starting with "d.").
@@ -296,7 +297,7 @@ class Tools:
 
         args, popen_options = gs.popen_args_command(name, **kwargs)
 
-        interface_result = self._process_parameters(args, popen_options)
+        interface_result = self._process_parameters(args, **popen_options)
         if interface_result.returncode != 0:
             # This is only for the error states.
             return gs.handle_errors(
@@ -327,7 +328,7 @@ class Tools:
         **popen_options,
     ):
         if not processed_parameters:
-            interface_result = self._process_parameters(command, popen_options)
+            interface_result = self._process_parameters(command, **popen_options)
             if interface_result.returncode != 0:
                 # This is only for the error states.
                 return gs.handle_errors(
@@ -366,22 +367,22 @@ class Tools:
     def no_nonsense_run_from_list(
         self, command, tool_kwargs=None, stdin=None, **popen_options
     ):
-        # alternatively use dev null as default or provide it as convenient settings
         if self._capture_output:
-            stdout_pipe = gs.PIPE
-            stderr_pipe = gs.PIPE
-        else:
-            stdout_pipe = None
-            stderr_pipe = None
+            if "stdout" not in popen_options:
+                popen_options["stdout"] = gs.PIPE
+            if "stderr" not in popen_options:
+                popen_options["stderr"] = gs.PIPE
         if self._stdin:
             stdin_pipe = gs.PIPE
-            stdin = gs.utils.encode(self._stdin)
+            stdin = self._stdin
         elif stdin:
             stdin_pipe = gs.PIPE
-            stdin = gs.utils.encode(stdin)
         else:
             stdin_pipe = None
             stdin = None
+        # Use text mode by default
+        if "text" not in popen_options and "universal_newlines" not in popen_options:
+            popen_options["text"] = True
         # Allowing to overwrite env, but that's just to have maximum flexibility when
         # the session is actually set up, but it may be confusing.
         if "env" not in popen_options:
@@ -389,8 +390,6 @@ class Tools:
         process = gs.Popen(
             command,
             stdin=stdin_pipe,
-            stdout=stdout_pipe,
-            stderr=stderr_pipe,
             **popen_options,
         )
         stdout, stderr = process.communicate(input=stdin)
@@ -407,7 +406,11 @@ class Tools:
         # TODO: solve tool_kwargs is None
         # We don't have the keyword arguments to pass to the resulting object.
         return ExecutedTool(
-            name=command[0], kwargs=tool_kwargs, stdout=stdout, stderr=stderr
+            name=command[0],
+            kwargs=tool_kwargs,
+            returncode=returncode,
+            stdout=stdout,
+            stderr=stderr,
         )
 
     def feed_input_to(self, stdin, /):

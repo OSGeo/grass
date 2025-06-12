@@ -57,6 +57,46 @@ def test_json_with_subprocess_run_like_call(xy_dataset_session):
     )
 
 
+def test_help_call_no_parameters(xy_dataset_session):
+    """Check that JSON is parsed with a name-and-parameters style call"""
+    tools = Tools(session=xy_dataset_session)
+    assert (
+        "r.slope.aspect"
+        in tools.no_nonsense_run_from_list(["r.slope.aspect", "--help"]).stderr
+    )
+
+
+def test_help_call_with_parameters(xy_dataset_session):
+    """Check that JSON is parsed with a name-and-parameters style call"""
+    tools = Tools(session=xy_dataset_session)
+    assert (
+        "r.slope.aspect"
+        in tools.no_nonsense_run_from_list(
+            ["r.slope.aspect", "elevation=dem", "slope=slope", "--help"]
+        ).stderr
+    )
+
+
+def test_json_call_with_low_level_call(xy_dataset_session):
+    """Check that --json call works including JSON data parsing"""
+    tools = Tools(session=xy_dataset_session)
+    data = tools.no_nonsense_run_from_list(
+        ["r.slope.aspect", "elevation=dem", "slope=slope", "--json"]
+    ).json
+    assert "inputs" in data
+    assert data["inputs"][0]["value"] == "dem"
+
+
+def test_json_call_with_high_level_call(xy_dataset_session):
+    """Check that --json call works including JSON data parsing"""
+    tools = Tools(session=xy_dataset_session)
+    data = tools.run_from_list(
+        ["r.slope.aspect", "elevation=dem", "slope=slope", "--json"]
+    ).json
+    assert "inputs" in data
+    assert data["inputs"][0]["value"] == "dem"
+
+
 def test_json_direct_access(xy_dataset_session):
     """Check that JSON is parsed"""
     tools = Tools(session=xy_dataset_session)
@@ -110,14 +150,33 @@ def test_stdout_split_space(xy_dataset_session):
     """Check that the split function works with space"""
     tools = Tools(session=xy_dataset_session)
     # Not a good example usage, but it tests the functionality.
-    assert tools.g_mapset(flags="l").text_split(" ") == ["PERMANENT", ""]
+    assert tools.g_mapset(flags="l").text_split(" ") == ["PERMANENT"]
 
 
 def test_stdout_without_capturing(xy_dataset_session):
     """Check that text is not present when not capturing it"""
     tools = Tools(session=xy_dataset_session, capture_output=False)
-    assert not tools.g_mapset(flags="p").text
-    assert tools.g_mapset(flags="p").text is None
+    result = tools.g_mapset(flags="p")
+    assert not result.stdout
+    assert result.stdout is None
+    assert not result.text
+    assert result.text is None
+
+
+def test_capturing_stderr(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, errors="ignore")
+    result = tools.g_mapset(mapset="does_not_exist")
+    assert result.stderr
+    assert "does_not_exist" in result.stderr
+
+
+def test_stderr_without_capturing(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, capture_output=False, errors="ignore")
+    result = tools.g_mapset(mapset="does_not_exist")
+    assert not result.stderr
+    assert result.stderr is None
 
 
 def test_direct_overwrite(xy_dataset_session):
