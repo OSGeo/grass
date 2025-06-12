@@ -85,25 +85,32 @@ libgis date: 2024-04-27T09:38:49+00:00
         format="json",
     )
 
-    for key, value in data.items():
-        print(f"{key}: {value}")
+    print(data["version"])
     ```
 
     Possible output:
 
     ```text
-    version: 8.4.0
-    date: 2024
-    revision: d57f40906
-    build_date: 2024-05-23
-    build_platform: x86_64-pc-linux-gnu
-    build_off_t_size: 8
-    libgis_revision: c9e8576cf
-    libgis_date: 2024-04-27T09:38:49+00:00
-    proj: 8.2.1
-    gdal: 3.4.3
-    geos: 3.9.2
-    sqlite: 3.36.0
+    8.4.0
+    ```
+
+    The whole JSON may look like this:
+
+    ```json
+    {
+        "version": "8.4.0",
+        "date": "2024",
+        "revision": "d57f40906",
+        "build_date": "2024-05-23",
+        "build_platform": "x86_64-pc-linux-gnu",
+        "build_off_t_size": 8,
+        "libgis_revision": "c9e8576cf",
+        "libgis_date": "2024-04-27T09:38:49+00:00",
+        "proj": "8.2.1",
+        "gdal": "3.4.3",
+        "geos": "3.9.2",
+        "sqlite": "3.36.0"
+    }
     ```
 <!-- markdownlint-restore -->
 
