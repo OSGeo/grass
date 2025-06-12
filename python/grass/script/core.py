@@ -274,6 +274,8 @@ def make_command(
     :param options: module's parameters
 
     :return: list of arguments
+
+    :raises ~grass.exceptions.ScriptError: If the invalid flag '``-``' is given.
     """
     args = [_make_val(prog)]
     if overwrite:
@@ -327,7 +329,7 @@ def handle_errors(returncode, result, args, kwargs):
     If *kwargs* dictionary contains key ``errors``, the value is used
     to determine the return value and the behavior on error.
     The value ``errors="raise"`` is a default in which case a
-    ``CalledModuleError`` exception is raised.
+    :py:exc:`~grass.exceptions.CalledModuleError` exception is raised.
 
     For ``errors="fatal"``, the function calls :func:`~grass.script.core.fatal()`
     which has its own rules on what happens next.
@@ -346,6 +348,11 @@ def handle_errors(returncode, result, args, kwargs):
 
     Finally, for ``errors="ignore"``, the value of *result* will be
     passed in any case regardless of the *returncode*.
+
+    :raises ~grass.exceptions.CalledModuleError:
+      - If there is an error, and the ``errors`` parameter is not given
+      - If the ``errors`` parameter is given and it is not
+        ``status``, ``ignore``, ``fatal``, nor ``exit``.
     """
 
     def get_module_and_code(args, kwargs):
@@ -510,7 +517,7 @@ def run_command(*args, **kwargs):
         more expected default behavior for Python programmers. The
         change was backported to 7.0 series.
 
-    :raises: ``CalledModuleError`` when module returns non-zero return code
+    :raises ~grass.exceptions.CalledModuleError: When module returns non-zero return code.
     """
     encoding = "default"
     if "encoding" in kwargs:
@@ -688,7 +695,7 @@ def write_command(*args, **kwargs):
 
     :returns: 0 with default parameters for backward compatibility only
 
-    :raises: ``CalledModuleError`` when module returns non-zero return code
+    :raises ~grass.exceptions.CalledModuleError: When module returns non-zero return code
     """
     encoding = "default"
     if "encoding" in kwargs:
@@ -847,13 +854,16 @@ def error(msg, env=None):
 def fatal(msg, env=None):
     """Display an error message using ``g.message -e``, then abort or raise
 
-    Raises exception when module global raise_on_error is 'True', abort
+    Raises exception when module global :py:data:`raise_on_error` is 'True', abort
     (calls :external:py:func:`sys.exit`) otherwise.
     Use :func:`set_raise_on_error()` to set the behavior.
 
     :param str msg: error message to be displayed
     :param env: dictionary with system environment variables
                 (:external:py:data:`os.environ` by default)
+
+    :raises ~grass.exceptions.ScriptError:
+        Raises exception when module global :py:data:`raise_on_error` is 'True'
     """
     global raise_on_error
     if raise_on_error:
@@ -1858,8 +1868,6 @@ def create_project(
 ):
     """Create new project
 
-    Raise ScriptError on error.
-
     :param str path: path to GRASS database or project; if path to database, project
                      name must be specified with name parameter
     :param str name: project name to create
@@ -1873,7 +1881,9 @@ def create_project(
     :param desc: description of the project (creates MYNAME file)
     :param bool overwrite: True to overwrite project if exists (WARNING:
                            ALL DATA from existing project ARE DELETED!)
-    :raises ~grass.exceptions.ScriptError: Raise ScriptError on error
+
+    :raises ~grass.exceptions.ScriptError:
+        Raise :py:exc:`~grass.exceptions.ScriptError` on error
     """
     # Add default mapset to project path if needed
     if not name:
@@ -1991,7 +2001,11 @@ def create_project(
 
 
 def _set_location_description(path, location, text):
-    """Set description (aka title aka MYNAME) for a location"""
+    """Set description (aka title aka MYNAME) for a location
+
+    :raises ~grass.exceptions.ScriptError:
+        Raise :py:exc:`~grass.exceptions.ScriptError` on error.
+    """
     try:
         with codecs.open(
             os.path.join(path, location, "PERMANENT", "MYNAME"),
@@ -2012,7 +2026,8 @@ def _create_location_xy(database, location):
 
     :param database: GRASS database where to create new location
     :param location: location name
-    :raises grass.exceptions.ScriptError: Raise ScriptError on error.
+    :raises ~grass.exceptions.ScriptError:
+        Raise :py:exc:`~grass.exceptions.ScriptError` on error.
     """
     cur_dir = Path.cwd()
     try:

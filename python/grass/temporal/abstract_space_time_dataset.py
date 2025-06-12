@@ -2506,11 +2506,13 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         In case the map is already registered this function
         will break with a warning and return False.
 
-        This method raises a FatalError exception in case of a fatal error
-
         :param map: The AbstractMapDataset object that should be registered
         :param dbif: The database interface to be used
         :return: True if success, False otherwise
+
+        :raises ~grass.exceptions.FatalError:
+            This method raises a :exc:`~grass.exceptions.FatalError` exception
+            in case of a fatal error
         """
 
         # only modify database in current mapset
