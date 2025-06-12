@@ -195,9 +195,12 @@ void print_columns(struct Map_info *Map, const char *input_opt,
             input_opt);
     }
 
-    G_message(_("Displaying column types/names for database connection of "
-                "layer <%s>:"),
-              field_opt);
+    if (format == PLAIN) {
+        fprintf(stdout,
+                _("Column names and types for database connection of "
+                  "layer <%s>:\n"),
+                field_opt);
+    }
 
     if ((fi = Vect_get_field2(Map, field_opt)) == NULL) {
         Vect_close(Map);
@@ -242,6 +245,10 @@ void print_columns(struct Map_info *Map, const char *input_opt,
     for (col = 0; col < ncols; col++) {
         switch (format) {
         case SHELL:
+            fprintf(stdout, "%s|%s\n",
+                    db_sqltype_name(
+                        db_get_column_sqltype(db_get_table_column(table, col))),
+                    db_get_column_name(db_get_table_column(table, col)));
             break;
 
         case JSON:
@@ -266,10 +273,10 @@ void print_columns(struct Map_info *Map, const char *input_opt,
             break;
 
         case PLAIN:
-            fprintf(stdout, "%s|%s\n",
-                    db_sqltype_name(
-                        db_get_column_sqltype(db_get_table_column(table, col))),
-                    db_get_column_name(db_get_table_column(table, col)));
+            fprintf(stdout, "%s: %s\n",
+                    db_get_column_name(db_get_table_column(table, col)),
+                    db_sqltype_name(db_get_column_sqltype(
+                        db_get_table_column(table, col))));
             break;
         }
     }
