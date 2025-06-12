@@ -64,7 +64,7 @@ To list files in the `vis_bands` subgroup under the `vis_bands` group:
 
     Possible output:
 
-    ```json
+    ```text
     ['lsat7_2000_10@PERMANENT', 'lsat7_2000_20@PERMANENT', 'lsat7_2000_30@PERMANENT']
     ```
 
@@ -131,7 +131,7 @@ To list subgroups in the `vis_bands` group:
 
     Possible output:
 
-    ```json
+    ```text
     ['vis_bands']
     ```
 <!-- markdownlint-restore -->
