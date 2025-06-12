@@ -31,9 +31,9 @@ only the visible light bands of Landsat-7:
 i.group group=vis_bands subgroup=vis_bands input=lsat7_2000_10,lsat7_2000_20,lsat7_2000_30
 ```
 
-### Get files from subgroup
+### List maps from a subgroup
 
-To list files in the `vis_bands` subgroup under the `vis_bands` group:
+To list maps in the `vis_bands` subgroup under the `vis_bands` group:
 
 <!-- markdownlint-disable MD046 -->
 === "Command line"
@@ -68,7 +68,7 @@ To list files in the `vis_bands` subgroup under the `vis_bands` group:
     ['lsat7_2000_10@PERMANENT', 'lsat7_2000_20@PERMANENT', 'lsat7_2000_30@PERMANENT']
     ```
 
-### Get files from group
+### List maps in a group
 
 To list maps in the `vis_bands` group:
 
@@ -102,7 +102,7 @@ To list maps in the `vis_bands` group:
     ['lsat7_2000_10@PERMANENT', 'lsat7_2000_20@PERMANENT', 'lsat7_2000_30@PERMANENT']
     ```
 
-### Get subgroups from group
+### List subgroups in a group
 
 To list subgroups in the `vis_bands` group:
 
