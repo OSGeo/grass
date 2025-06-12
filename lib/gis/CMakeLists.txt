@@ -21,6 +21,7 @@ build_module(
   DEPENDS
   grass_datetime
   ZLIB::ZLIB
+  PROJ::proj
   OPTIONAL_DEPENDS
   BZip2::BZip2
   Iconv::Iconv
