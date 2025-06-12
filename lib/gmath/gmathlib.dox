@@ -192,7 +192,7 @@ The wrapper integrates the ccmath library functions into the gmath
 structure. Hence only gmath memory allocation function should be used to create
 vector and matrix structures used by ccmath.
 
-This is the documentation of the linear algebra part of the the ccmath library used by GRASS.
+This is the documentation of the linear algebra part of the ccmath library used by GRASS.
 It was written by Daniel A. Atkinson and provides a detailed description of the available
 linear algebra functions.
 \verbatim

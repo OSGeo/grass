@@ -96,7 +96,7 @@ class Flag:
     def __doc__(self):
         """Return a documentation string, something like:
 
-        {name}: {default}, suppress required {supress}
+        {name}: {default}, suppress required {suppress}
             {description}
 
         >>>  flag = Flag(diz=dict(name='a', description='Flag description',
@@ -115,5 +115,5 @@ class Flag:
             name=self.name,
             default=repr(self.default),
             description=self.description,
-            supress=("suppress required" if self.suppress_required else ""),
+            suppress=("suppress required" if self.suppress_required else ""),
         )

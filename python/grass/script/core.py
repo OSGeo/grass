@@ -1,9 +1,8 @@
 """
 Core functions to be used in Python scripts.
 
-Usage:
-
-::
+:Usage:
+  .. code-block:: python
 
     from grass.script import core as grass
 
@@ -61,16 +60,18 @@ class Popen(subprocess.Popen):
         return arg
 
     def __init__(self, args, **kwargs):
+        # If env is provided and is not None, use it.
+        path = kwargs["env"].get("PATH") if kwargs.get("env") else None
+        cmd = shutil.which(args[0], path=path)
+        if cmd is None:
+            raise OSError(_("Cannot find the executable {0}").format(args[0]))
+        args = [cmd] + args[1:]
         if (
             sys.platform == "win32"
             and isinstance(args, list)
             and not kwargs.get("shell")
             and kwargs.get("executable") is None
         ):
-            cmd = shutil.which(args[0])
-            if cmd is None:
-                raise OSError(_("Cannot find the executable {0}").format(args[0]))
-            args = [cmd] + args[1:]
             name, ext = os.path.splitext(cmd)
             if ext.lower() not in self._builtin_exts:
                 kwargs["shell"] = True
@@ -150,11 +151,12 @@ def get_commands(*, env=None):
     :return: list of commands (set) and directory of scripts (collected
              by extension - MS Windows only)
 
-    >>> cmds = list(get_commands()[0])
-    >>> cmds.sort()
-    >>> cmds[:5]
-    ['d.barscale', 'd.colorlist', 'd.colortable', 'd.correlate', 'd.erase']
+    .. code-block:: pycon
 
+        >>> cmds = list(get_commands()[0])
+        >>> cmds.sort()
+        >>> cmds[:5]
+        ['d.barscale', 'd.colorlist', 'd.colortable', 'd.correlate', 'd.erase']
     """
     if not env:
         env = os.environ
@@ -219,8 +221,10 @@ def get_real_command(cmd):
     For other cases it just returns a module (name).
     So, you can just use this function for all without further check.
 
-    >>> get_real_command("g.region")
-    'g.region'
+    .. code-block:: pycon
+
+        >>> get_real_command("g.region")
+        'g.region'
 
     :param cmd: the command
     """
@@ -250,24 +254,28 @@ def make_command(
     superquiet=False,
     errors=None,
     **options,
-):
+) -> list[str]:
     """Return a list of strings suitable for use as the args parameter to
-    Popen() or call(). Example:
+    :class:`~grass.script.core.Popen()` or :func:`~grass.script.core.call`.
 
+    :Example:
+      .. code-block:: pycon
 
-    >>> make_command("g.message", flags="w", message="this is a warning")
-    ['g.message', '-w', 'message=this is a warning']
+        >>> make_command("g.message", flags="w", message="this is a warning")
+        ['g.message', '-w', 'message=this is a warning']
 
 
     :param str prog: GRASS module
     :param str flags: flags to be used (given as a string)
-    :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
-    :param bool quiet: True to run quietly (<tt>--q</tt>)
-    :param bool superquiet: True to run extra quietly (<tt>--qq</tt>)
-    :param bool verbose: True to run verbosely (<tt>--v</tt>)
+    :param bool overwrite: True to enable overwriting the output (``--o``)
+    :param bool quiet: True to run quietly (``--q``)
+    :param bool superquiet: True to run extra quietly (``--qq``)
+    :param bool verbose: True to run verbosely (``--v``)
     :param options: module's parameters
 
     :return: list of arguments
+
+    :raises ~grass.exceptions.ScriptError: If the invalid flag '``-``' is given.
     """
     args = [_make_val(prog)]
     if overwrite:
@@ -321,9 +329,9 @@ def handle_errors(returncode, result, args, kwargs):
     If *kwargs* dictionary contains key ``errors``, the value is used
     to determine the return value and the behavior on error.
     The value ``errors="raise"`` is a default in which case a
-    ``CalledModuleError`` exception is raised.
+    :py:exc:`~grass.exceptions.CalledModuleError` exception is raised.
 
-    For ``errors="fatal"``, the function calls :func:`fatal()`
+    For ``errors="fatal"``, the function calls :func:`~grass.script.core.fatal()`
     which has its own rules on what happens next.
 
     For ``errors="status"``, the *returncode* will be returned.
@@ -331,7 +339,7 @@ def handle_errors(returncode, result, args, kwargs):
     handling mechanism is not desirable or the return code has some
     meaning not necessarily interpreted as an error by the caller.
 
-    For ``errors="exit"``, ``sys.exit()`` is called with the
+    For ``errors="exit"``, :external:py:func:`sys.exit()` is called with the
     *returncode*, so it behaves similarly to a Bash script with
     ``set -e``. No additional error message or exception is produced.
     This might be useful for a simple script where error message
@@ -340,6 +348,11 @@ def handle_errors(returncode, result, args, kwargs):
 
     Finally, for ``errors="ignore"``, the value of *result* will be
     passed in any case regardless of the *returncode*.
+
+    :raises ~grass.exceptions.CalledModuleError:
+      - If there is an error, and the ``errors`` parameter is not given
+      - If the ``errors`` parameter is given and it is not
+        ``status``, ``ignore``, ``fatal``, nor ``exit``.
     """
 
     def get_module_and_code(args, kwargs):
@@ -386,7 +399,7 @@ def popen_args_command(
 
     Does the splitting based on known Popen parameter names, and then does the
     transformation from Python parameters to a list of command line arguments
-    for Popen.
+    for :py:class:`~grass.script.core.Popen`.
     """
     options = {}
     popen_kwargs = {}
@@ -416,19 +429,22 @@ def start_command(
     superquiet=False,
     **kwargs,
 ):
-    """Returns a Popen object with the command created by make_command.
-    Accepts any of the arguments which Popen() accepts apart from "args"
+    """Returns a :class:`~grass.script.core.Popen` object with the command created by
+    :py:func:`~grass.script.core.make_command`.
+    Accepts any of the arguments which :py:class:`Popen()` accepts apart from "args"
     and "shell".
 
-    >>> p = start_command("g.gisenv", stdout=subprocess.PIPE)
-    >>> print(p)  # doctest: +ELLIPSIS
-    <...Popen object at 0x...>
-    >>> print(p.communicate()[0])  # doctest: +SKIP
-    GISDBASE='/opt/grass-data';
-    LOCATION_NAME='spearfish60';
-    MAPSET='glynn';
-    GUI='text';
-    MONITOR='x0';
+    .. code-block:: pycon
+
+        >>> p = start_command("g.gisenv", stdout=subprocess.PIPE)
+        >>> print(p)  # doctest: +ELLIPSIS
+        <...Popen object at 0x...>
+        >>> print(p.communicate()[0])  # doctest: +SKIP
+        GISDBASE='/opt/grass-data';
+        LOCATION_NAME='spearfish60';
+        MAPSET='glynn';
+        GUI='text';
+        MONITOR='x0';
 
     If the module parameter is the same as Python keyword, add
     underscore at the end of the parameter. For example, use
@@ -436,13 +452,14 @@ def start_command(
 
     :param str prog: GRASS module
     :param str flags: flags to be used (given as a string)
-    :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
-    :param bool quiet: True to run quietly (<tt>--q</tt>)
-    :param bool superquiet: True to run extra quietly (<tt>--qq</tt>)
-    :param bool verbose: True to run verbosely (<tt>--v</tt>)
+    :param bool overwrite: True to enable overwriting the output (``--o``)
+    :param bool quiet: True to run quietly (``--q``)
+    :param bool superquiet: True to run extra quietly (``--qq``)
+    :param bool verbose: True to run verbosely (``--v``)
     :param kwargs: module's parameters
 
     :return: Popen object
+    :rtype: ~grass.script.core.Popen
     """
     args, popts = popen_args_command(
         prog,
@@ -467,21 +484,23 @@ def start_command(
 def run_command(*args, **kwargs):
     """Execute a module synchronously
 
-    This function passes all arguments to ``start_command()``,
+    This function passes all arguments to :func:`~grass.script.core.start_command`,
     then waits for the process to complete. It is similar to
-    ``subprocess.check_call()``, but with the :func:`make_command()`
+    :external:py:func:`subprocess.check_call()`, but with the :func:`make_command()`
     interface. By default, an exception is raised in case of a non-zero
     return code by default.
 
-    >>> run_command("g.region", raster="elevation")
+    .. code-block:: pycon
+
+        >>> run_command("g.region", raster="elevation")
 
     See :func:`start_command()` for details about parameters and usage.
 
     The behavior on error can be changed using *errors* parameter
     which is passed to the :func:`handle_errors()` function.
 
-    :param *args: unnamed arguments passed to :func:`start_command()`
-    :param **kwargs: named arguments passed to :func:`start_command()`
+    :param args: unnamed arguments passed to :func:`start_command()`
+    :param kwargs: named arguments passed to :func:`start_command()`
     :param str errors: passed to :func:`handle_errors()`
 
     .. versionchanged:: 8.0
@@ -498,7 +517,7 @@ def run_command(*args, **kwargs):
         more expected default behavior for Python programmers. The
         change was backported to 7.0 series.
 
-    :raises: ``CalledModuleError`` when module returns non-zero return code
+    :raises ~grass.exceptions.CalledModuleError: When module returns non-zero return code.
     """
     encoding = "default"
     if "encoding" in kwargs:
@@ -521,50 +540,54 @@ def run_command(*args, **kwargs):
 
 
 def pipe_command(*args, **kwargs):
-    """Passes all arguments to start_command(), but also adds
-    "stdout = PIPE". Returns the Popen object.
+    """Passes all arguments to :func:`start_command()`, but also adds
+    "stdout = PIPE". Returns the :class:`~grass.script.core.Popen` object.
 
-    >>> p = pipe_command("g.gisenv")
-    >>> print(p)  # doctest: +ELLIPSIS
-    <....Popen object at 0x...>
-    >>> print(p.communicate()[0])  # doctest: +SKIP
-    GISDBASE='/opt/grass-data';
-    LOCATION_NAME='spearfish60';
-    MAPSET='glynn';
-    GUI='text';
-    MONITOR='x0';
+    .. code-block:: pycon
 
-    :param list args: list of unnamed arguments (see start_command() for details)
-    :param list kwargs: list of named arguments (see start_command() for details)
+        >>> p = pipe_command("g.gisenv")
+        >>> print(p)  # doctest: +ELLIPSIS
+        <....Popen object at 0x...>
+        >>> print(p.communicate()[0])  # doctest: +SKIP
+        GISDBASE='/opt/grass-data';
+        LOCATION_NAME='spearfish60';
+        MAPSET='glynn';
+        GUI='text';
+        MONITOR='x0';
+
+    :param list args: list of unnamed arguments (see :func:`start_command` for details)
+    :param list kwargs: list of named arguments (see :func:`start_command` for details)
 
     :return: Popen object
+    :rtype: grass.script.core.Popen
     """
     kwargs["stdout"] = PIPE
     return start_command(*args, **kwargs)
 
 
 def feed_command(*args, **kwargs):
-    """Passes all arguments to start_command(), but also adds
-    "stdin = PIPE". Returns the Popen object.
+    """Passes all arguments to :func:`start_command()`, but also adds
+    "stdin = PIPE". Returns the :class:`~grass.script.core.Popen` object.
 
-    :param list args: list of unnamed arguments (see start_command() for details)
-    :param list kwargs: list of named arguments (see start_command() for details)
+    :param list args: list of unnamed arguments (see :func:`start_command` for details)
+    :param list kwargs: list of named arguments (see :func:`start_command` for details)
 
     :return: Popen object
+    :rtype: grass.script.core.Popen
     """
     kwargs["stdin"] = PIPE
     return start_command(*args, **kwargs)
 
 
 def read_command(*args, **kwargs):
-    """Passes all arguments to pipe_command, then waits for the process to
-    complete, returning its stdout (i.e. similar to shell `backticks`).
+    """Passes all arguments to :func:`~grass.script.core.pipe_command`, then waits for
+    the process to complete, returning its stdout (i.e. similar to shell ``backticks``).
 
     The behavior on error can be changed using *errors* parameter
     which is passed to the :func:`handle_errors()` function.
 
-    :param list args: list of unnamed arguments (see start_command() for details)
-    :param list kwargs: list of named arguments (see start_command() for details)
+    :param list args: list of unnamed arguments (see :func:`start_command` for details)
+    :param list kwargs: list of named arguments (see :func:`start_command` for details)
 
     :return: stdout
     """
@@ -589,28 +612,33 @@ def read_command(*args, **kwargs):
 
 def parse_command(*args, **kwargs):
     """Passes all arguments to read_command, then parses the output
-    by default with parse_key_val().
+    by default with :func:`~grass.script.utils.parse_key_val`.
 
-    If the command has parameter <em>format</em> and is called with
-    <em>format=json</em>, the output will be parsed into a dictionary.
-    Similarly, with <em>format=csv</em> the output will be parsed into
+    If the command has parameter ``format`` and is called with
+    ``format="json"``, the output will be parsed into a dictionary.
+    Similarly, with ``format="csv"`` the output will be parsed into
     a list of lists (CSV rows).
 
-    ::
+    .. code-block:: python
 
         parse_command("v.db.select", ..., format="json")
 
-    Custom parsing function can be optionally given by <em>parse</em> parameter
+    Custom parsing function can be optionally given by ``parse`` parameter
     including its arguments, e.g.
 
-    ::
+    .. code-block:: python
 
         parse_command(..., parse=(gs.parse_key_val, {"sep": ":"}))
 
-    Parameter <em>delimiter</em> is deprecated.
+    Parameter ``delimiter`` is deprecated.
 
-    :param args: list of unnamed arguments (see start_command() for details)
-    :param kwargs: list of named arguments (see start_command() for details)
+    :param args: list of unnamed arguments (see :func:`start_command()` for details)
+    :param kwargs: list of named arguments
+        (see :func:`start_command()` for details)
+
+        .. deprecated:: 8.4.0
+            Parameter ``delimiter`` is deprecated. Use the command's ``format="json"``
+            or ``format="csv"`` parameter instead
 
     :return: parsed module output
     """
@@ -644,28 +672,30 @@ def parse_command(*args, **kwargs):
 def write_command(*args, **kwargs):
     """Execute a module with standard input given by *stdin* parameter.
 
-    Passes all arguments to ``feed_command()``, with the string specified
+    Passes all arguments to :py:func:`feed_command()`, with the string specified
     by the *stdin* argument fed to the process' standard input.
 
-    >>> write_command(
-    ...     "v.in.ascii",
-    ...     input="-",
-    ...     stdin="%s|%s" % (635818.8, 221342.4),
-    ...     output="view_point",
-    ... )
-    0
+    .. code-block:: pycon
 
-    See ``start_command()`` for details about parameters and usage.
+        >>> write_command(
+        ...     "v.in.ascii",
+        ...     input="-",
+        ...     stdin="%s|%s" % (635818.8, 221342.4),
+        ...     output="view_point",
+        ... )
+        0
+
+    See :func:`start_command()` for details about parameters and usage.
 
     The behavior on error can be changed using *errors* parameter
     which is passed to the :func:`handle_errors()` function.
 
-    :param *args: unnamed arguments passed to ``start_command()``
-    :param **kwargs: named arguments passed to ``start_command()``
+    :param args: unnamed arguments passed to :func:`start_command()`
+    :param kwargs: named arguments passed to :func:`start_command()`
 
     :returns: 0 with default parameters for backward compatibility only
 
-    :raises: ``CalledModuleError`` when module returns non-zero return code
+    :raises ~grass.exceptions.CalledModuleError: When module returns non-zero return code
     """
     encoding = "default"
     if "encoding" in kwargs:
@@ -703,11 +733,12 @@ def exec_command(
 
     :param str prog: GRASS module
     :param str flags: flags to be used (given as a string)
-    :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
-    :param bool quiet: True to run quietly (<tt>--q</tt>)
-    :param bool superquiet: True to run quietly (<tt>--qq</tt>)
-    :param bool verbose: True to run verbosely (<tt>--v</tt>)
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param bool overwrite: True to enable overwriting the output (``--o``)
+    :param bool quiet: True to run quietly (``--q``)
+    :param bool superquiet: True to run quietly (``--qq``)
+    :param bool verbose: True to run verbosely (``--v``)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     :param list kwargs: module's parameters
 
     """
@@ -726,24 +757,27 @@ def message(msg, flag=None, env=None):
 
     :param str msg: message to be displayed
     :param str flag: flags (given as string)
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     """
     run_command("g.message", flags=flag, message=msg, errors="ignore", env=env)
 
 
 def debug(msg, debug=1, env=None):
-    """Display a debugging message using `g.message -d`.
+    """Display a debugging message using ``g.message -d``.
 
     The visibility of a debug message at runtime is controlled by
-    setting the corresponding DEBUG level with `g.gisenv set="DEBUG=X"`
-    (with `X` set to the debug level specified in the function call).
+    setting the corresponding DEBUG level with ``g.gisenv set="DEBUG=X"``
+    (with ``X`` set to the debug level specified in the function call).
 
     :param str msg: debugging message to be displayed
-    :param str debug: debug level (0-5) with the following recommended levels:
-        Use 1 for messages generated once of few times,
-        3 for messages generated for each raster row or vector line,
-        5 for messages generated for each raster cell or vector point.
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param str debug: debug level (0-5) with the following recommended
+        levels:
+        - Use 1 for messages generated once of few times,
+        - 3 for messages generated for each raster row or vector line,
+        - 5 for messages generated for each raster cell or vector point.
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     """
     if debug_level() >= debug:
         # TODO: quite a random hack here, do we need it somewhere else too?
@@ -754,27 +788,29 @@ def debug(msg, debug=1, env=None):
 
 
 def verbose(msg, env=None):
-    """Display a verbose message using `g.message -v`
+    """Display a verbose message using ``g.message -v``
 
     :param str msg: verbose message to be displayed
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     """
     message(msg, flag="v", env=env)
 
 
 def info(msg, env=None):
-    """Display an informational message using `g.message -i`
+    """Display an informational message using ``g.message -i``
 
     :param str msg: informational message to be displayed
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     """
     message(msg, flag="i", env=env)
 
 
 def percent(i, n, s, env=None):
-    """Display a progress info message using `g.message -p`
+    """Display a progress info message using ``g.message -p``
 
-    ::
+    .. code-block:: python
 
         message(_("Percent complete..."))
         n = 100
@@ -785,42 +821,49 @@ def percent(i, n, s, env=None):
     :param int i: current item
     :param int n: total number of items
     :param int s: increment size
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     """
     message("%d %d %d" % (i, n, s), flag="p", env=env)
 
 
 def warning(msg, env=None):
-    """Display a warning message using `g.message -w`
+    """Display a warning message using ``g.message -w``
 
     :param str msg: warning message to be displayed
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     """
     message(msg, flag="w", env=env)
 
 
 def error(msg, env=None):
-    """Display an error message using `g.message -e`
+    """Display an error message using ``g.message -e``
 
     This function does not end the execution of the program.
     The right action after the error is up to the caller.
     For error handling using the standard mechanism use :func:`fatal()`.
 
     :param str msg: error message to be displayed
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     """
     message(msg, flag="e", env=env)
 
 
 def fatal(msg, env=None):
-    """Display an error message using `g.message -e`, then abort or raise
+    """Display an error message using ``g.message -e``, then abort or raise
 
-    Raises exception when module global raise_on_error is 'True', abort
-    (calls exit) otherwise.
+    Raises exception when module global :py:data:`raise_on_error` is 'True', abort
+    (calls :external:py:func:`sys.exit`) otherwise.
     Use :func:`set_raise_on_error()` to set the behavior.
 
     :param str msg: error message to be displayed
-    :param env: dictionary with system environment variables (`os.environ` by default)
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
+
+    :raises ~grass.exceptions.ScriptError:
+        Raises exception when module global :py:data:`raise_on_error` is 'True'
     """
     global raise_on_error
     if raise_on_error:
@@ -831,10 +874,11 @@ def fatal(msg, env=None):
 
 
 def set_raise_on_error(raise_exp=True):
-    """Define behaviour on fatal error (fatal() called)
+    """Define behavior on fatal error (:py:func:`~grass.script.core.fatal` called)
 
-    :param bool raise_exp: True to raise ScriptError instead of calling
-                           sys.exit(1) in fatal()
+    :param bool raise_exp: True to raise :py:exc:`~grass.exceptions.ScriptError`
+        instead of calling :external:py:func:`sys.exit(1) <sys.exit>`
+        in :py:func:`~grass.script.core.fatal`
 
     :return: current status
     """
@@ -845,8 +889,9 @@ def set_raise_on_error(raise_exp=True):
 
 
 def get_raise_on_error():
-    """Return True if a ScriptError exception is raised instead of calling
-    sys.exit(1) in case a fatal error was invoked with fatal()
+    """Return True if a :py:exc:`~grass.exceptions.ScriptError` exception is raised
+    instead of calling :external:py:func:`sys.exit(1) <sys.exit>` in case a fatal error
+    was invoked with :py:func:`~grass.script.core.fatal`.
     """
     global raise_on_error
     return raise_on_error
@@ -858,10 +903,10 @@ def set_capture_stderr(capture=True):
 
     By default, standard error output (stderr) of child processes shows
     in the same place as output of the parent process. This may not
-    always be the same place as ``sys.stderr`` is written.
-    After calling this function, functions in the ``grass.script``
+    always be the same place as :external:py:data:`sys.stderr` is written.
+    After calling this function, functions in the :py:mod:`grass.script`
     package will capture the stderr of child processes and pass it
-    to ``sys.stderr`` if there is an error.
+    to :external:py:data:`sys.stderr` if there is an error.
 
     .. note::
 
@@ -869,14 +914,15 @@ def set_capture_stderr(capture=True):
         and interactive notebooks such as Jupyter Notebook.
 
     The capturing can be applied only in certain cases, for example
-    in case of run_command() it is applied because run_command() nor
-    its callers do not handle the streams, however feed_command()
+    in case of :func:`run_command` it is applied because :func:`run_command` nor
+    its callers do not handle the streams, however :func:`feed_command`
     cannot do capturing because its callers handle the streams.
 
     The previous state is returned. Passing ``False`` disables the
     capturing.
 
     .. versionadded:: 7.4
+    .. seealso:: :func:`get_capture_stderr`
     """
     global _capture_stderr
     tmp = _capture_stderr
@@ -887,7 +933,7 @@ def set_capture_stderr(capture=True):
 def get_capture_stderr():
     """Return True if stderr is captured, False otherwise.
 
-    See set_capture_stderr().
+    .. seealso:: :func:`set_capture_stderr`.
     """
     global _capture_stderr
     return _capture_stderr
@@ -930,7 +976,7 @@ def _parse_opts(lines: list) -> tuple[dict[str, str], dict[str, bool]]:
 def parser() -> tuple[dict[str, str], dict[str, bool]]:
     """Interface to g.parser, intended to be run from the top-level, e.g.:
 
-    ::
+    .. code-block:: python
 
         if __name__ == "__main__":
             options, flags = grass.parser()
@@ -981,6 +1027,9 @@ def tempfile(create=True, env=None):
     :param env: environment
 
     :return: path to a tmp file
+
+    .. seealso:: The ``g.tempfile`` tool, and the :py:func:`~grass.script.core.tempdir`
+        and :py:func:`~grass.script.core.tempname` functions
     """
     flags = ""
     if not create:
@@ -990,28 +1039,35 @@ def tempfile(create=True, env=None):
 
 
 def tempdir(env=None):
-    """Returns the name of a temporary dir, created with g.tempfile."""
+    """Returns the name of a temporary dir, created with g.tempfile.
+
+    .. seealso:: The ``g.tempfile`` tool, and the :py:func:`~grass.script.core.tempfile`
+        and :py:func:`~grass.script.core.tempname` functions
+    """
     tmp = tempfile(create=False, env=env)
     os.mkdir(tmp)
 
     return tmp
 
 
-def tempname(length, lowercase=False):
-    """Generate a GRASS and SQL compliant random name starting with tmp_
+def tempname(length: int, lowercase: bool = False) -> str:
+    """Generate a GRASS and SQL compliant random name starting with ``tmp_``
     followed by a random part of length "length"
 
-    :param int length: length of the random part of the name to generate
-    :param bool lowercase: use only lowercase characters to generate name
-    :returns: String with a random name of length "length" starting with a letter
-    :rtype: str
+    :param length: length of the random part of the name to generate
+    :param lowercase: use only lowercase characters to generate name
+    :return: String with a random name of length "length" starting with a letter
 
     :Example:
+      .. code-block:: pycon
 
-    >>> tempname(12)
-    'tmp_MxMa1kAS13s9'
+        >>> tempname(12)
+        'tmp_MxMa1kAS13s9'
 
-    .. seealso:: functions :func:`append_uuid()`, :func:`append_random()`
+    .. seealso:: functions :func:`~grass.script.utils.append_uuid()`,
+        :func:`~grass.script.utils.append_random()`,
+        the ``g.tempfile`` tool, and the :py:func:`~grass.script.core.tempfile`
+        and :py:func:`~grass.script.core.tempdir` functions
     """
 
     chars = string.ascii_lowercase + string.digits
@@ -1076,7 +1132,7 @@ def _text_to_key_value_dict(
     checkunits: bool = False,
 ) -> KeyValue[list[int | float | str]]:
     """Convert a key-value text file, where entries are separated by newlines
-    and the key and value are separated by `sep', into a key-value dictionary
+    and the key and value are separated by ``sep``, into a key-value dictionary
     and discover/use the correct data types (float, int or string) for values.
 
     :param filename: The name or name and path of the text file to convert
@@ -1089,7 +1145,8 @@ def _text_to_key_value_dict(
     :return: The dictionary
 
     A text file with this content:
-    ::
+
+    .. code-block:: none
 
         a: Hello
         b: 1.0
@@ -1098,7 +1155,7 @@ def _text_to_key_value_dict(
 
     Will be represented as this dictionary:
 
-    ::
+    .. code-block:: python
 
         {"a": ["Hello"], "c": [1, 2, 3, 4, 5], "b": [1.0], "d": ["hello", 8, 0.1]}
 
@@ -1164,7 +1221,7 @@ def compare_key_value_text_files(
 
     An example key-value text file may have this content:
 
-    ::
+    .. code-block:: none
 
         a: Hello
         b: 1.0
@@ -1172,7 +1229,7 @@ def compare_key_value_text_files(
         d : hello,8,0.1
 
     :param str filename_a: name of the first key-value text file
-    :param str filenmae_b: name of the second key-value text file
+    :param str filename_b: name of the second key-value text file
     :param str sep: character that separates the keys and values, default is ":"
     :param str val_sep: character that separates the values of a single key,
                         default is ","
@@ -1213,13 +1270,17 @@ def compare_key_value_text_files(
 
 def gisenv(env: _Env | None = None) -> KeyValue[str | None]:
     """Returns the output from running g.gisenv (with no arguments), as a
-    dictionary. Example:
+    dictionary.
 
-    >>> env = gisenv()
-    >>> print(env["GISDBASE"])  # doctest: +SKIP
-    /opt/grass-data
+    :Example:
+      .. code-block:: pycon
 
-    :param env: dictionary with system environment variables (`os.environ` by default)
+        >>> env = gisenv()
+        >>> print(env["GISDBASE"])  # doctest: +SKIP
+        /opt/grass-data
+
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     :return: list of GRASS variables
     """
     s = read_command("g.gisenv", flags="n", env=env)
@@ -1234,6 +1295,8 @@ def locn_is_latlong(env: _Env | None = None) -> bool:
     by checking the "g.region -pu" projection code.
 
     :return: True for a lat/long region, False otherwise
+
+    .. seealso:: The ``g.region`` tool
     """
     s = read_command("g.region", flags="pu", env=env)
     kv: KeyValue[str | None] = parse_key_val(s, ":")
@@ -1242,21 +1305,26 @@ def locn_is_latlong(env: _Env | None = None) -> bool:
 
 def region(region3d=False, complete=False, env=None):
     """Returns the output from running "g.region -gu", as a
-    dictionary. Example:
+    dictionary.
+
+    :Example:
+      .. code-block:: pycon
+
+        >>> curent_region = region()
+        >>> # obtain n, s, e and w values
+        >>> [curent_region[key] for key in "nsew"]  # doctest: +ELLIPSIS
+        [..., ..., ..., ...]
+        >>> # obtain ns and ew resolutions
+        >>> (curent_region["nsres"], curent_region["ewres"])  # doctest: +ELLIPSIS
+        (..., ...)
 
     :param bool region3d: True to get 3D region
     :param bool complete:
-    :param env: dictionary with system environment variables (`os.environ` by default)
-
-    >>> curent_region = region()
-    >>> # obtain n, s, e and w values
-    >>> [curent_region[key] for key in "nsew"]  # doctest: +ELLIPSIS
-    [..., ..., ..., ...]
-    >>> # obtain ns and ew resolutions
-    >>> (curent_region["nsres"], curent_region["ewres"])  # doctest: +ELLIPSIS
-    (..., ...)
-
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
     :return: dictionary of region values
+
+    .. seealso:: The ``g.region`` tool
     """
     flgs = "gu"
     if region3d:
@@ -1293,22 +1361,23 @@ def region_env(
     If no 'kwargs' are given then the current region is used. Note
     that this function doesn't modify the current region!
 
-    See also :func:`use_temp_region()` for alternative method how to define
-    temporary region used for raster-based computation.
+    .. seealso::
+        See also :func:`use_temp_region()` for alternative method how to define
+        temporary region used for raster-based computation.
 
-    :param region3d: True to get 3D region
-    :param flags: for example 'a'
-    :param env: dictionary with system environment variables (`os.environ` by default)
-    :param kwargs: g.region's parameters like 'raster', 'vector' or 'region'
-
-    ::
+    :Example:
+      .. code-block:: python
 
         os.environ["GRASS_REGION"] = grass.region_env(region="detail")
         grass.mapcalc("map=1", overwrite=True)
         os.environ.pop("GRASS_REGION")
 
-    :return: string with region values
-    :return: empty string on error
+    :param region3d: True to get 3D region
+    :param flags: for example 'a'
+    :param env: dictionary with system environment variables
+                (:external:py:data:`os.environ` by default)
+    :param kwargs: g.region's parameters like 'raster', 'vector' or 'region'
+    :return: string with region values, or empty string on error
     """
     # read proj/zone from WIND file
     gis_env: KeyValue[str | None] = gisenv(env)
@@ -1387,6 +1456,8 @@ def use_temp_region():
     """Copies the current region to a temporary region with "g.region save=",
     then sets WIND_OVERRIDE to refer to that region. Installs an atexit
     handler to delete the temporary region upon termination.
+
+    .. seealso:: The ``g.region`` tool
     """
     name = "tmp.%s.%d" % (os.path.basename(sys.argv[0]), os.getpid())
     run_command("g.region", flags="u", save=name, overwrite=True)
@@ -1395,7 +1466,10 @@ def use_temp_region():
 
 
 def del_temp_region():
-    """Unsets WIND_OVERRIDE and removes any region named by it."""
+    """Unsets WIND_OVERRIDE and removes any region named by it.
+
+    .. seealso:: The ``g.remove`` tool
+    """
     try:
         name = os.environ.pop("WIND_OVERRIDE")
         run_command("g.remove", flags="f", quiet=True, type="region", name=name)
@@ -1421,18 +1495,19 @@ def find_file(name, element="cell", mapset=None, env=None):
     "raster3d": "grid3",
     "raster_3d": "grid3",
 
-    Example:
+    :Example:
+      .. code-block:: pycon
 
-    >>> result = find_file("elevation", element="cell")
-    >>> print(result["fullname"])
-    elevation@PERMANENT
-    >>> print(result["file"])  # doctest: +ELLIPSIS
-    /.../PERMANENT/cell/elevation
-    >>> result = find_file("elevation", element="raster")
-    >>> print(result["fullname"])
-    elevation@PERMANENT
-    >>> print(result["file"])  # doctest: +ELLIPSIS
-    /.../PERMANENT/cell/elevation
+        >>> result = find_file("elevation", element="cell")
+        >>> print(result["fullname"])
+        elevation@PERMANENT
+        >>> print(result["file"])  # doctest: +ELLIPSIS
+        /.../PERMANENT/cell/elevation
+        >>> result = find_file("elevation", element="raster")
+        >>> print(result["fullname"])
+        elevation@PERMANENT
+        >>> print(result["file"])  # doctest: +ELLIPSIS
+        /.../PERMANENT/cell/elevation
 
 
     :param str name: file name
@@ -1441,6 +1516,8 @@ def find_file(name, element="cell", mapset=None, env=None):
     :param env: environment
 
     :return: parsed output of g.findfile
+
+    .. seealso:: The ``g.findfile`` tool
     """
     element_translation = {
         "rast": "cell",
@@ -1486,6 +1563,8 @@ def list_strings(type, pattern=None, mapset=None, exclude=None, flag="", env=Non
     :param env: environment
 
     :return: list of elements
+
+    .. seealso:: The ``g.list`` tool
     """
     if type == "cell":
         verbose(_('Element type should be "raster" and not "%s"') % type, env=env)
@@ -1520,6 +1599,8 @@ def list_pairs(type, pattern=None, mapset=None, exclude=None, flag="", env=None)
     :param env: environment
 
     :return: list of elements
+
+    .. seealso:: The ``g.list`` tool
     """
     return [
         tuple(map.split("@", 1))
@@ -1534,10 +1615,13 @@ def list_grouped(
 
     Returns the output from running g.list, as a dictionary where the
     keys are mapset names and the values are lists of maps in that
-    mapset. Example:
+    mapset.
 
-    >>> list_grouped("vect", pattern="*roads*")["PERMANENT"]
-    ['railroads', 'roadsmajor']
+    :Example:
+      .. code-block:: pycon
+
+        >>> list_grouped("vect", pattern="*roads*")["PERMANENT"]
+        ['railroads', 'roadsmajor']
 
     :param str type: element type (raster, vector, raster_3d, region, ...)
                      or list of elements
@@ -1550,6 +1634,8 @@ def list_grouped(
     :param env: environment
 
     :return: directory of mapsets/elements
+
+    .. seealso:: The ``g.list`` tool
     """
     if isinstance(type, str) or len(type) == 1:
         types = [type]
@@ -1639,14 +1725,17 @@ def parse_color(
     val: str, dflt: tuple[float, float, float] | None = None
 ) -> tuple[float, float, float] | None:
     """Parses the string "val" as a GRASS colour, which can be either one of
-    the named colours or an R:G:B tuple e.g. 255:255:255. Returns an
+    the named colours or an ``R:G:B`` tuple e.g. ``255:255:255``. Returns an
     (r,g,b) triple whose components are floating point values between 0
-    and 1. Example:
+    and 1.
 
-    >>> parse_color("red")
-    (1.0, 0.0, 0.0)
-    >>> parse_color("255:0:0")
-    (1.0, 0.0, 0.0)
+    :Example:
+      .. code-block:: pycon
+
+        >>> parse_color("red")
+        (1.0, 0.0, 0.0)
+        >>> parse_color("255:0:0")
+        (1.0, 0.0, 0.0)
 
     :param val: color value
     :param dflt: default color value
@@ -1687,7 +1776,7 @@ def verbosity():
 
     2 all messages will be printed
 
-    3 also verbose messages will be printed. Triggered by "--v" or "--verbose" flag.
+    3 also verbose messages will be printed. Triggered by "``--v``" or "``--verbose``" flag.
     """
     vbstr = os.getenv("GRASS_VERBOSE")
     if vbstr:
@@ -1703,15 +1792,16 @@ def find_program(pgm, *args):
 
     You must call the program in a way that will return a successful
     exit code. For GRASS modules this means you need to pass it some
-    valid CLI option, like "--help". For other programs a common
-    valid do-little option is usually "--version".
+    valid CLI option, like "``--help``". For other programs a common
+    valid do-little option is usually "``--version``".
 
-    Example:
+    :Example:
+      .. code-block:: pycon
 
-    >>> find_program("r.sun", "--help")
-    True
-    >>> find_program("ls", "--version")
-    True
+        >>> find_program("r.sun", "--help")
+        True
+        >>> find_program("ls", "--version")
+        True
 
     :param str pgm: program name
     :param args: list of arguments
@@ -1740,6 +1830,8 @@ def mapsets(search_path=False, env=None):
     :param bool search_path: True to list mapsets only in search path
 
     :return: list of mapsets
+
+    .. seealso:: The ``g.mapsets`` tool
     """
     flags = "p" if search_path else "l"
     mapsets = read_command("g.mapsets", flags=flags, sep="newline", quiet=True, env=env)
@@ -1776,8 +1868,6 @@ def create_project(
 ):
     """Create new project
 
-    Raise ScriptError on error.
-
     :param str path: path to GRASS database or project; if path to database, project
                      name must be specified with name parameter
     :param str name: project name to create
@@ -1791,6 +1881,9 @@ def create_project(
     :param desc: description of the project (creates MYNAME file)
     :param bool overwrite: True to overwrite project if exists (WARNING:
                            ALL DATA from existing project ARE DELETED!)
+
+    :raises ~grass.exceptions.ScriptError:
+        Raise :py:exc:`~grass.exceptions.ScriptError` on error
     """
     # Add default mapset to project path if needed
     if not name:
@@ -1908,7 +2001,11 @@ def create_project(
 
 
 def _set_location_description(path, location, text):
-    """Set description (aka title aka MYNAME) for a location"""
+    """Set description (aka title aka MYNAME) for a location
+
+    :raises ~grass.exceptions.ScriptError:
+        Raise :py:exc:`~grass.exceptions.ScriptError` on error.
+    """
     try:
         with codecs.open(
             os.path.join(path, location, "PERMANENT", "MYNAME"),
@@ -1926,10 +2023,11 @@ def _set_location_description(path, location, text):
 def _create_location_xy(database, location):
     """Create unprojected location
 
-    Raise ScriptError on error.
 
     :param database: GRASS database where to create new location
     :param location: location name
+    :raises ~grass.exceptions.ScriptError:
+        Raise :py:exc:`~grass.exceptions.ScriptError` on error.
     """
     cur_dir = Path.cwd()
     try:
@@ -1975,7 +2073,7 @@ def _create_location_xy(database, location):
 def version():
     """Get GRASS version as dictionary
 
-    ::
+    .. code-block:: pycon
 
         >>> print(version())
         {'proj4': '4.8.0', 'geos': '3.3.5', 'libgis_revision': '52468',
@@ -2026,7 +2124,7 @@ def legal_name(s):
 
     This is the Python implementation of :func:`G_legal_filename()` function.
 
-    ..note::
+    .. note::
 
         It is not clear when exactly use this function, but it might be
         useful anyway for checking map names and column names.

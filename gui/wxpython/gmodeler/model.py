@@ -7,7 +7,6 @@ Classes:
  - model::Model
  - model::ProcessModelFile
  - model::WriteModelFile
- - model::ModelParamDialog
 
 (C) 2010-2024 by the GRASS Development Team
 
@@ -30,7 +29,6 @@ from xml.sax import saxutils
 
 import wx
 
-from core import globalvar
 from core import utils
 from core.gcmd import (
     GMessage,
@@ -50,11 +48,9 @@ from gmodeler.model_items import (
     ModelLoop,
     ModelRelation,
 )
+from gmodeler.dialogs import ModelParamDialog
 from core.giface import StandaloneGrassInterface
-from gui_core.forms import GUI, CmdPanel
-from gui_core.widgets import GNotebook
-from gui_core.wrap import Button
-from gmodeler.giface import GraphicalModelerGrassInterface
+from gui_core.forms import GUI
 
 from grass.script import task as gtask
 
@@ -475,7 +471,7 @@ class Model:
         errList = []
 
         variables = self.GetVariables().keys()
-        pattern = re.compile(r"(.*)(%.+\s?)(.*)")
+        pattern = re.compile(r"(.*)(%\{.+})(.*)")
         for action in self.GetItems(objType=ModelAction):
             cmd = action.GetLog(string=False)
 
@@ -490,7 +486,7 @@ class Model:
                 sval = pattern.search(value)
                 if not sval:
                     continue
-                var = sval.group(2).strip()[1:]  # strip '%' from beginning
+                var = sval.group(2).strip()[2:-1]  # strip '%{...}'
                 found = False
                 for v in variables:
                     if var.startswith(v):
@@ -543,7 +539,7 @@ class Model:
             write = False
             variables = self.GetVariables()
             for variable in variables:
-                pattern = re.compile("%" + variable)
+                pattern = re.compile("%{" + variable + "}")
                 value = ""
                 if params and "variables" in params:
                     for p in params["variables"]["params"]:
@@ -561,10 +557,10 @@ class Model:
                 if not checkOnly:
                     write = True
 
-            pattern = re.compile(r"(.*)(%.+\s?)(.*)")
+            pattern = re.compile(r"(.*)(%\{.+})(.*)")
             sval = pattern.search(data)
             if sval:
-                var = sval.group(2).strip()[1:]  # ignore '%'
+                var = sval.group(2).strip()[2:-1]  # ignore '%{...}'
                 cmd = item.GetLog(string=False)[0]
                 errList.append(cmd + ": " + _("undefined variable '%s'") % var)
 
@@ -694,7 +690,7 @@ class Model:
                 # substitute variables in condition
                 variables = self.GetVariables()
                 for variable in variables:
-                    pattern = re.compile("%" + variable)
+                    pattern = re.compile("%{" + variable + "}")
                     if not pattern.search(cond):
                         continue
                     value = ""
@@ -717,7 +713,7 @@ class Model:
                 # split condition
                 # TODO: this part needs some better solution
                 condVar, condText = (x.strip() for x in re.split(r"\s* in \s*", cond))
-                pattern = re.compile("%" + condVar)
+                pattern = re.compile("%{" + condVar + "}")
                 # for vars()[condVar] in eval(condText): ?
                 vlist = []
                 if condText[0] == "`" and condText[-1] == "`":
@@ -1215,7 +1211,7 @@ class WriteModelFile:
         """Escapes value to be stored in XML.
 
         :param value: string to be escaped as XML
-        :return: a XML-valid string
+        :return: an XML-valid string
         """
         return saxutils.escape(value)
 
@@ -1502,124 +1498,3 @@ class WriteModelFile:
                 comment.GetLabel(),
             )
         )
-
-
-class ModelParamDialog(wx.Dialog):
-    def __init__(
-        self,
-        parent,
-        model,
-        giface,
-        params,
-        id=wx.ID_ANY,
-        title=_("Model parameters"),
-        style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
-        **kwargs,
-    ):
-        """Model parameters dialog"""
-        self.parent = parent
-        self._model = model
-        self._giface = giface
-        self.params = params
-        self.tasks = []  # list of tasks/pages
-
-        wx.Dialog.__init__(
-            self, parent=parent, id=id, title=title, style=style, **kwargs
-        )
-
-        self.notebook = GNotebook(parent=self, style=globalvar.FNPageDStyle)
-
-        panel = self._createPages()
-        wx.CallAfter(self.notebook.SetSelection, 0)
-
-        # intermediate data?
-        self.interData = wx.CheckBox(
-            parent=self, label=_("Delete intermediate data when finish")
-        )
-        self.interData.SetValue(True)
-        rast, vect, rast3d, msg = self._model.GetIntermediateData()
-        if not rast and not vect and not rast3d:
-            self.interData.Hide()
-
-        self.btnCancel = Button(parent=self, id=wx.ID_CANCEL)
-        self.btnRun = Button(parent=self, id=wx.ID_OK, label=_("&Run"))
-        self.btnRun.SetDefault()
-
-        self._layout()
-
-        size = self.GetBestSize()
-        self.SetMinSize(size)
-        self.SetSize(
-            (size.width, size.height + panel.constrained_size[1] - panel.panelMinHeight)
-        )
-
-    def _layout(self):
-        btnSizer = wx.StdDialogButtonSizer()
-        btnSizer.AddButton(self.btnCancel)
-        btnSizer.AddButton(self.btnRun)
-        btnSizer.Realize()
-
-        mainSizer = wx.BoxSizer(wx.VERTICAL)
-        mainSizer.Add(self.notebook, proportion=1, flag=wx.EXPAND)
-        if self.interData.IsShown():
-            mainSizer.Add(
-                self.interData,
-                proportion=0,
-                flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER,
-                border=5,
-            )
-
-            mainSizer.Add(
-                wx.StaticLine(parent=self, id=wx.ID_ANY, style=wx.LI_HORIZONTAL),
-                proportion=0,
-                flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
-                border=5,
-            )
-
-        mainSizer.Add(btnSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
-
-        self.SetSizer(mainSizer)
-        mainSizer.Fit(self)
-
-    def _createPages(self):
-        """Create for each parameterized module its own page"""
-        nameOrdered = [""] * len(self.params.keys())
-        for name, params in self.params.items():
-            nameOrdered[params["idx"]] = name
-        for name in nameOrdered:
-            params = self.params[name]
-            panel = self._createPage(name, params)
-            if name == "variables":
-                name = _("Variables")
-            self.notebook.AddPage(page=panel, text=name)
-
-        return panel
-
-    def _createPage(self, name, params):
-        """Define notebook page"""
-        if name in globalvar.grassCmd:
-            task = gtask.grassTask(name)
-        else:
-            task = gtask.grassTask()
-        task.flags = params["flags"]
-        task.params = params["params"]
-
-        panel = CmdPanel(
-            parent=self,
-            id=wx.ID_ANY,
-            task=task,
-            giface=GraphicalModelerGrassInterface(
-                model=self._model, giface=self._giface
-            ),
-        )
-        self.tasks.append(task)
-
-        return panel
-
-    def GetErrors(self):
-        """Check for errors, get list of messages"""
-        return [err for task in self.tasks for err in task.get_cmd_error()]
-
-    def DeleteIntermediateData(self) -> bool:
-        """Check if to delete intermediate data"""
-        return bool(self.interData.IsShown() and self.interData.IsChecked())

@@ -677,7 +677,7 @@ build_program_in_subdir(r.water.outlet DEPENDS grass_gis grass_raster)
 build_program_in_subdir(r.what DEPENDS grass_gis grass_raster grass_vector
                         grass_parson)
 
-build_program_in_subdir(r.what.color DEPENDS grass_gis grass_raster)
+build_program_in_subdir(r.what.color DEPENDS grass_gis grass_raster grass_parson)
 
 build_program_in_subdir(
   r.in.lidar
