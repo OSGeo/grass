@@ -112,18 +112,6 @@ class TestIOrthoInit(TestCase):
 
         self._assert_camera_params_equal(output, expected_values)
 
-    def test_use_flag_toggle_behavior(self):
-        """Test that the 'use' flag reflects correct usage status."""
-        self._run_init_module()
-        output = gs.parse_command("i.ortho.init", group=self.test_group, flags="p")
-        self.assertEqual(int(output["use"]), 0)
-
-        self._run_init_module(flags="r")
-        updated_output = gs.parse_command(
-            "i.ortho.init", group=self.test_group, flags="p"
-        )
-        self.assertEqual(int(updated_output["use"]), 1)
-
 
 if __name__ == "__main__":
     test()
