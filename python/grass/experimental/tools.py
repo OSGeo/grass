@@ -54,22 +54,33 @@ class ToolFunctionNameHelper:
         """Parse attribute to GRASS display module. Attribute should be in
         the form 'd_module_name'. For example, 'd.rast' is called with 'd_rast'.
         """
+        # Convert snake case attribute name to dotted tool name,
+        # and apply prefix is provided.
+        dotted_name = name.replace("_", ".")
         if self._prefix:
-            name = f"{self._prefix}_{name}"
-        # Snake case attribute name to dotted tool name
-        tool_name = name.replace("_", ".")
+            # Allow trailing underscore (now dot) with prefix usage to avoid conflict
+            # with Python keywords.
+            dotted_name = dotted_name.removesuffix(".")
+            search_name = name.removesuffix("_")
+            tool_name = f"{self._prefix}.{dotted_name}"
+        else:
+            tool_name = dotted_name
+            search_name = name
         # We first try to find the tool on path which is much faster than getting
         # and checking the names, but if the tool is not found, likely because runtime
         # is not set up, we check the names.
         if (
             not shutil.which(tool_name, path=self._env["PATH"])
-            and name not in self.names()
+            and search_name not in self.names()
         ):
             suggestions = self.suggest_tools(tool_name)
             if suggestions:
+                # While Python may automatically suggest the closest match,
+                # we show more matches. We also show single match more often
+                # (this may change in the future).
                 msg = (
-                    f"Tool {name} ({tool_name}) not found. "
-                    f"Did you mean: {', '.join(suggestions)}?"
+                    f"Tool {name} ({tool_name}) not found"
+                    f" (but found {', '.join(suggestions)})"
                 )
                 raise AttributeError(msg)
             msg = (
@@ -109,7 +120,7 @@ class ToolFunctionNameHelper:
     def suggest_tools(self, tool):
         # TODO: cache commands also for dir
         result = []
-        max_suggestions = 10
+        max_suggestions = 5
         for name in self.names():
             if ToolFunctionNameHelper.levenshtein_distance(tool, name) < len(tool) / 2:
                 result.append(name)
@@ -120,7 +131,14 @@ class ToolFunctionNameHelper:
     def names(self):
         if self._names:
             return self._names
-        self._names = [name.replace(".", "_") for name in gs.get_commands()[0]]
+        if self._prefix:
+            self._names = [
+                name.replace(f"{self._prefix}.", "").replace(".", "_")
+                for name in gs.get_commands()[0]
+                if name.startswith(f"{self._prefix}.")
+            ]
+        else:
+            self._names = [name.replace(".", "_") for name in gs.get_commands()[0]]
         return self._names
 
 

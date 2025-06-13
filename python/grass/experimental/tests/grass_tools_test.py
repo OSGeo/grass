@@ -310,39 +310,6 @@ def test_wrong_attribute(xy_dataset_session):
         tools.execute_big_command()
 
 
-def test_tool_groups_raster(xy_dataset_session):
-    """Check that global overwrite is not used when separate env is used"""
-    raster = Tools(session=xy_dataset_session, prefix="r")
-    raster.mapcalc(expression="streams = if(row() > 1, 1, null())")
-    raster.buffer(input="streams", output="buffer", distance=1)
-    assert raster.info(map="streams", format="json")["datatype"] == "CELL"
-
-
-def test_tool_groups_vector(xy_dataset_session):
-    """Check that global overwrite is not used when separate env is used"""
-    vector = Tools(prefix="v")
-    vector.edit(map="points", type="point", tool="create", env=xy_dataset_session.env)
-    # Here, the feed_input_to style does not make sense, but we are not using StringIO
-    # here to test the feed_input_to functionality and avoid dependence on the StringIO
-    # functionality.
-    # The ASCII format is for one point with no categories.
-    vector.feed_input_to("P 1 0\n  10 20").edit(
-        map="points",
-        type="point",
-        tool="add",
-        input="-",
-        flags="n",
-        env=xy_dataset_session.env,
-    )
-    vector.buffer(
-        input="points", output="buffer", distance=1, env=xy_dataset_session.env
-    )
-    assert (
-        vector.info(map="buffer", format="json", env=xy_dataset_session.env)["areas"]
-        == 1
-    )
-
-
 def test_stdin_as_stringio_object(xy_dataset_session):
     """Check that global overwrite is not used when separate env is used"""
     tools = Tools(session=xy_dataset_session)
@@ -379,3 +346,72 @@ def test_tool_doc_access_python_tools():
     tools = Tools()
     assert tools.g_search_modules.__doc__
     assert tools.r_mask.__doc__
+
+
+# Prefixes
+
+
+def test_tool_attribute_access_with_prefix():
+    raster = Tools(prefix="r")
+    assert "slope_aspect" in dir(raster)
+    assert "mask" in dir(raster)
+
+
+def test_tool_attribute_access_with_long_prefix():
+    simwe = Tools(prefix="r.sim")
+    assert "water" in dir(simwe)
+    assert "sediment" in dir(simwe)
+
+
+def test_tool_doc_access_with_prefix():
+    raster = Tools(prefix="r")
+    assert raster.slope_aspect.__doc__
+    assert raster.mask.__doc__
+
+
+def test_tool_which_is_keyword_with_prefix_applied():
+    """Check that when prefix is applied we support trailing underscore"""
+    vector = Tools(prefix="v")
+    raster = Tools(prefix="r")
+    assert vector.import_.__doc__
+    assert raster.import_.__doc__
+
+
+def test_tool_by_prefix_shows_full_tool_name_in_error():
+    """Check that when prefix is applied we support trailing underscore"""
+    raster = Tools(prefix="r")
+    with pytest.raises(AttributeError, match=r"r\.sloppy\.respect"):
+        assert raster.sloppy_respect(map="surface")
+
+
+def test_tool_prefix_raster(xy_dataset_session):
+    """Check that global overwrite is not used when separate env is used"""
+    raster = Tools(session=xy_dataset_session, prefix="r")
+    raster.mapcalc(expression="streams = if(row() > 1, 1, null())")
+    raster.buffer(input="streams", output="buffer", distance=1)
+    assert raster.info(map="streams", format="json")["datatype"] == "CELL"
+
+
+def test_tool_prefix_vector(xy_dataset_session):
+    """Check that global overwrite is not used when separate env is used"""
+    vector = Tools(prefix="v")
+    vector.edit(map="points", type="point", tool="create", env=xy_dataset_session.env)
+    # Here, the feed_input_to style does not make sense, but we are not using StringIO
+    # here to test the feed_input_to functionality and avoid dependence on the StringIO
+    # functionality.
+    # The ASCII format is for one point with no categories.
+    vector.feed_input_to("P 1 0\n  10 20").edit(
+        map="points",
+        type="point",
+        tool="add",
+        input="-",
+        flags="n",
+        env=xy_dataset_session.env,
+    )
+    vector.buffer(
+        input="points", output="buffer", distance=1, env=xy_dataset_session.env
+    )
+    assert (
+        vector.info(map="buffer", format="json", env=xy_dataset_session.env)["areas"]
+        == 1
+    )
