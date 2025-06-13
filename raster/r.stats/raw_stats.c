@@ -88,9 +88,8 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
             case JSON:
                 if (with_coordinates) {
                     json_object_set_number(
-                        object, "easting",
-                        Rast_col_to_easting(col + .5, &window));
-                    json_object_set_number(object, "northing", northing);
+                        object, "east", Rast_col_to_easting(col + .5, &window));
+                    json_object_set_number(object, "north", northing);
                 }
                 if (with_xy) {
                     json_object_set_number(object, "col", col + 1);
