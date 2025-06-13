@@ -77,49 +77,47 @@ class TestIEbSoilHeatFlux(TestCase):
 
         self._run_soilheatflux(ndvi="ndvi_low", output="g0_low")
         self.tmp_rasters.append("g0_low")
-        g0_low = gs.parse_command("r.univar", map="g0_low", flags="g", format="json")[0]
+        g0_low = gs.parse_command("r.univar", map="g0_low", flags="g", format="json")
 
         self._create_raster("ndvi_high", "0.8")
         self.tmp_rasters.append("ndvi_high")
 
         self._run_soilheatflux(ndvi="ndvi_high", output="g0_high")
         self.tmp_rasters.append("g0_high")
-        g0_high = gs.parse_command("r.univar", map="g0_high", flags="g", format="json")[
-            0
-        ]
+        g0_high = gs.parse_command("r.univar", map="g0_high", flags="g", format="json")
 
         self.assertGreater(
-            g0_low["mean"],
-            g0_high["mean"],
+            float(g0_low["mean"]),
+            float(g0_high["mean"]),
             "Expected lower soil heat flux for higher NDVI.",
         )
 
     def test_heatflux_increases_with_time(self):
-        """Test that the -r flag applies the expected correction."""
+        """Check that soil heat flux increases with local overpass time."""
         self._create_raster("time_early", "8.0")
-        self._create_raster("time_noon", "12.0")
-        self.tmp_rasters.extend(["time_early", "time_noon"])
+        self.tmp_rasters.append("time_early")
 
         self._run_soilheatflux(time="time_early", output="g0_early")
         self.tmp_rasters.append("g0_early")
         g0_early = gs.parse_command(
             "r.univar", map="g0_early", flags="g", format="json"
-        )[0]
+        )
+
+        self._create_raster("time_noon", "12.0")
+        self.tmp_rasters.append("time_noon")
 
         self._run_soilheatflux(time="time_noon", output="g0_noon")
         self.tmp_rasters.append("g0_noon")
-        g0_noon = gs.parse_command("r.univar", map="g0_noon", flags="g", format="json")[
-            0
-        ]
+        g0_noon = gs.parse_command("r.univar", map="g0_noon", flags="g", format="json")
 
         self.assertGreater(
-            g0_noon["mean"],
-            g0_early["mean"],
+            float(g0_noon["mean"]),
+            float(g0_early["mean"]),
             "Soil heat flux should be higher at noon.",
         )
 
     def test_roerink_correction_flag(self):
-        """Verify that correction flag (-r) applies expected linear transformation."""
+        """Test that the -r flag applies the expected correction."""
         self._run_soilheatflux(output="g0_base")
         self.tmp_rasters.append("g0_base")
 
@@ -138,7 +136,7 @@ class TestIEbSoilHeatFlux(TestCase):
         )
         self.tmp_rasters.extend(["g0_expected", "g0_diff"])
 
-        stats = gs.parse_command("r.univar", map="g0_diff", flags="g", format="json")[0]
+        stats = gs.parse_command("r.univar", map="g0_diff", flags="g", format="json")
         self.assertLess(
             float(stats["max"]),
             1e-6,
