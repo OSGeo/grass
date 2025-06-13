@@ -117,6 +117,15 @@ class TestRegion(TestCase):
             else:
                 self.assertEqual(value, output_json[key])
 
+    def test_2d_region(self):
+        region_before = gs.region()
+        test_nsres = region_before["nsres"] / 2
+        test_ewres = region_before["ewres"] / 2
+        self.runModule("g.region", nsres=test_nsres, ewres=test_ewres)
+        region_after = gs.region()
+        self.assertAlmostEqual(test_nsres, region_after["nsres"])
+        self.assertAlmostEqual(test_ewres, region_after["ewres"])
+
     def test_3d_region(self):
         region_before = deepcopy(gs.region(region3d=True))
         test_nsres3 = 1.5
