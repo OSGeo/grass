@@ -1,5 +1,7 @@
 """Test functions in grass.script.utils"""
 
+import pytest
+
 import grass.script as gs
 
 
@@ -21,3 +23,28 @@ def test_backslash_separators():
 def test_unrecognized_separator():
     """Check that unknown strings are just passed through"""
     assert gs.separator("apple") == "apple"
+
+
+def test_KeyValue():
+    """Check that KeyValue class works as expected"""
+    kv = gs.KeyValue()
+    kv["key1"] = "value1"
+    kv["key2"] = "value2"
+
+    assert kv["key1"] == "value1"
+    assert kv.key1 == "value1"
+    assert kv["key2"] == "value2"
+    assert kv.key2 == "value2"
+
+    # Check that it raises KeyError for non-existing keys
+    with pytest.raises(KeyError):
+        _ = kv["non_existing_key"]
+
+    # Check that it raises AttributeError for non-existing attribute
+    with pytest.raises(AttributeError):
+        _ = kv.non_existing_key
+
+    # Deep copy works correctly
+    from copy import deepcopy
+
+    _ = deepcopy(gs.KeyValue())
