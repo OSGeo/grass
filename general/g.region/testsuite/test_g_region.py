@@ -127,16 +127,18 @@ class TestRegion(TestCase):
         self.assertAlmostEqual(test_ewres, region_after["ewres"])
 
     def test_3d_region(self):
+        # Make sure extent is default
+        self.runModule("g.region", flags="d")
         region_before = deepcopy(gs.region(region3d=True))
-        test_nsres3 = 1.5
-        test_ewres3 = 3.2
-        test_tbres = 2.5
-        precision = 2
+        test_nsres3 = region_before["nsres3"] / 5
+        test_ewres3 = region_before["ewres3"] / 2
+        test_tbres = region_before["tbres"] / 4
+        precision = 7
         self.runModule(
             "g.region", nsres3=test_nsres3, ewres3=test_ewres3, tbres=test_tbres
         )
         region_after = gs.region(region3d=True)
-        # Setting 3D resolution do not change the extent or 2D resolution
+        # Setting 3D resolution does not change the extent or 2D resolution
         self.assertEqual(region_before["n"], region_after["n"])
         self.assertEqual(region_before["s"], region_after["s"])
         self.assertEqual(region_before["e"], region_after["e"])
