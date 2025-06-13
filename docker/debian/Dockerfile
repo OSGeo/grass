@@ -226,4 +226,8 @@ RUN grass --tmp-project EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" outp
 
 WORKDIR /grassdb
 VOLUME /grassdb
-CMD ["$GRASSBIN", "--version"]
+CMD grass --version \
+    && printf "\nUsage:\n" \
+    && printf " - Shell: docker run -it [IMAGE] /bin/bash\n" \
+    && printf " - GRASS: docker run [IMAGE] grass [...args]\n" \
+    && printf "\nSee https://github.com/OSGeo/grass/blob/main/docker/README.md for more information.\n"
