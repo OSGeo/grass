@@ -33,27 +33,33 @@ def test_key_value_parser_multiple_values(xy_dataset_session):
 def test_json_parser(xy_dataset_session):
     """Check that JSON is parsed"""
     tools = Tools(session=xy_dataset_session)
-    assert (
-        tools.g_search_modules(keyword="random", flags="j").json[0]["name"]
-        == "r.random"
-    )
+    assert tools.g_region(flags="p", format="json").json["cols"] == 1
 
 
 def test_json_with_name_and_parameter_call(xy_dataset_session):
     """Check that JSON is parsed with a name-and-parameters style call"""
     tools = Tools(session=xy_dataset_session)
-    assert (
-        tools.run("g.search.modules", keyword="random", flags="j")[0]["name"]
-        == "r.random"
-    )
+    assert tools.run("g.region", flags="p", format="json").json["cols"] == 1
+
+
+def test_json_with_direct_name_and_parameter_call(xy_dataset_session):
+    """Check that JSON is parsed with a name-and-parameters style call"""
+    tools = Tools(session=xy_dataset_session)
+    assert tools.no_nonsense_run("g.region", flags="p", format="json").json["cols"] == 1
 
 
 def test_json_with_subprocess_run_like_call(xy_dataset_session):
     """Check that JSON is parsed with a name-and-parameters style call"""
     tools = Tools(session=xy_dataset_session)
+    assert tools.run_from_list(["g.region", "format=json", "-p"]).json["cols"] == 1
+
+
+def test_json_with_direct_subprocess_run_like_call(xy_dataset_session):
+    """Check that JSON is parsed with a name-and-parameters style call"""
+    tools = Tools(session=xy_dataset_session)
     assert (
-        tools.run_from_list(["g.search.modules", "keyword=random", "-j"])[0]["name"]
-        == "r.random"
+        tools.no_nonsense_run_from_list(["g.region", "format=json", "-p"]).json["cols"]
+        == 1
     )
 
 

@@ -84,9 +84,8 @@ class ToolFunctionNameHelper:
                 )
                 raise AttributeError(msg)
             msg = (
-                f"Tool or attribute {name} not found. "
-                "If you are executing a tool, is the session set up and the tool on path? "
-                "If you are looking for an attribute, is it in the documentation?"
+                f"Tool or attribute {name} ({tool_name}) not found"
+                " (check session setup and documentation for tool and attribute names)"
             )
             raise AttributeError(msg)
 
