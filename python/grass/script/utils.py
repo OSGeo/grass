@@ -171,7 +171,10 @@ class KeyValue(dict[str, VT]):
     """
 
     def __getattr__(self, key: str) -> VT:
-        return self[key]
+        try:
+            return self[key]
+        except KeyError:
+            raise AttributeError(key)
 
     def __setattr__(self, key: str, value: VT) -> None:
         self[key] = value
