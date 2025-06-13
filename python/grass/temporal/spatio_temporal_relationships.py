@@ -36,9 +36,8 @@ class SpatioTemporalTopologyBuilder:
     The abstract dataset objects must be provided as a single list, or in
     two lists.
 
-    Example:
-
-    .. code-block:: python
+    :Example:
+      .. code-block:: python
 
         # We have a space time raster dataset and build a map list
         # from all registered maps ordered by start time
@@ -74,7 +73,7 @@ class SpatioTemporalTopologyBuilder:
         # Dictionary like accessed
         map = tb["name@mapset"]
 
-    .. code-block:: pycon
+      .. code-block:: pycon
 
         >>> # Example with two lists of maps
         >>> import grass.temporal as tgis
