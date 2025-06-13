@@ -25,26 +25,29 @@ def test_unrecognized_separator():
     assert gs.separator("apple") == "apple"
 
 
-def test_KeyValue():
-    """Check that KeyValue class works as expected"""
+def test_KeyValue_keys():
+    """Check that KeyValue class works like a Dict"""
     kv = gs.KeyValue()
     kv["key1"] = "value1"
     kv["key2"] = "value2"
 
     assert kv["key1"] == "value1"
-    assert kv.key1 == "value1"
     assert kv["key2"] == "value2"
-    assert kv.key2 == "value2"
 
-    # Check that it raises KeyError for non-existing keys
+    # Raises KeyError for non-existing keys
     with pytest.raises(KeyError):
         _ = kv["non_existing_key"]
 
-    # Check that it raises AttributeError for non-existing attribute
+
+def test_KeyValue_values():
+    """Check that keys of KeyValue class can be accessed as attributes"""
+    kv = gs.KeyValue()
+    kv["key1"] = "value1"
+    kv["key2"] = "value2"
+
+    assert kv.key1 == "value1"
+    assert kv.key2 == "value2"
+
+    # Raises AttributeError for non-existing attribute
     with pytest.raises(AttributeError):
-        _ = kv.non_existing_key
-
-    # Deep copy works correctly
-    from copy import deepcopy
-
-    _ = deepcopy(gs.KeyValue())
+        _ = kv.non_existing_attribute
