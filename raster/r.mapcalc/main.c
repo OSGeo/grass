@@ -184,31 +184,24 @@ int main(int argc, char **argv)
     }
 
     pre_exec();
-    threads = atoi(nprocs->answer);
 
-/* Determine the number of threads */
-#if defined(_OPENMP)
-    if ((strcmp(argv[0], "r3.mapcalc") == 0) && (threads > 1)) {
+    /* Determine the number of threads */
+    threads = atoi(nprocs->answer);
+    if ((strcmp(argv[0], "r3.mapcalc") == 0) && (threads != 1)) {
         threads = 1;
         G_verbose_message(_("r3.mapcalc does not support parallel execution."));
     }
-    else if (seeded) {
+    else if ((seeded) && (threads != 1)) {
         threads = 1;
         G_verbose_message(
             _("Parallel execution is not supported for random seed."));
     }
     else {
-        /* make the maximum num of threads be 4 to avoid I/O overheads from too
-         * many threads */
-        threads = threads > 4 ? 4 : threads;
-        G_verbose_message(_("The default number of threads is %d."), threads);
+        threads = G_set_omp_num_threads(nprocs);
+        threads = Rast_disable_omp_on_mask(threads);
+        if (threads < 1)
+            G_fatal_error(_("<%d> is not valid number of nprocs."), threads);
     }
-    omp_set_num_threads(threads);
-    G_verbose_message(_("Compute in paralell. Number of threads set to %d."),
-                      threads);
-#else
-    G_verbose_message(_("Compute in searial. OpenMP is not available."));
-#endif
 
     execute(result);
     post_exec();
