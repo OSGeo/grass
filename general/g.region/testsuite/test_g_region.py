@@ -127,7 +127,7 @@ class TestRegion(TestCase):
         self.assertAlmostEqual(test_ewres, region_after["ewres"])
 
     def test_3d_region(self):
-        # Make sure extent is default
+        # Make sure region is default
         self.runModule("g.region", flags="d")
         region_before = deepcopy(gs.region(region3d=True))
         test_nsres3 = region_before["nsres3"] / 5
