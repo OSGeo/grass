@@ -51,6 +51,7 @@ build_program_in_subdir(
   g.version
   DEPENDS
   grass_gis
+  grass_parson
   OPTIONAL_DEPENDS
   GDAL::GDAL
   GEOS::geos_c

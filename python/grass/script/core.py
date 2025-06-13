@@ -274,6 +274,8 @@ def make_command(
     :param options: module's parameters
 
     :return: list of arguments
+
+    :raises ~grass.exceptions.ScriptError: If the invalid flag '``-``' is given.
     """
     args = [_make_val(prog)]
     if overwrite:
@@ -327,7 +329,7 @@ def handle_errors(returncode, result, args, kwargs, handler=None, stderr=None):
     If *kwargs* dictionary contains key ``errors``, the value is used
     to determine the return value and the behavior on error.
     The value ``errors="raise"`` is a default in which case a
-    ``CalledModuleError`` exception is raised.
+    :py:exc:`~grass.exceptions.CalledModuleError` exception is raised.
 
     For ``errors="fatal"``, the function calls :func:`~grass.script.core.fatal()`
     which has its own rules on what happens next.
@@ -346,6 +348,11 @@ def handle_errors(returncode, result, args, kwargs, handler=None, stderr=None):
 
     Finally, for ``errors="ignore"``, the value of *result* will be
     passed in any case regardless of the *returncode*.
+
+    :raises ~grass.exceptions.CalledModuleError:
+      - If there is an error, and the ``errors`` parameter is not given
+      - If the ``errors`` parameter is given and it is not
+        ``status``, ``ignore``, ``fatal``, nor ``exit``.
     """
 
     def get_module_and_code(args, kwargs):
@@ -513,7 +520,7 @@ def run_command(*args, **kwargs):
         more expected default behavior for Python programmers. The
         change was backported to 7.0 series.
 
-    :raises: ``CalledModuleError`` when module returns non-zero return code
+    :raises ~grass.exceptions.CalledModuleError: When module returns non-zero return code.
     """
     encoding = "default"
     if "encoding" in kwargs:
@@ -691,7 +698,7 @@ def write_command(*args, **kwargs):
 
     :returns: 0 with default parameters for backward compatibility only
 
-    :raises: ``CalledModuleError`` when module returns non-zero return code
+    :raises ~grass.exceptions.CalledModuleError: When module returns non-zero return code
     """
     encoding = "default"
     if "encoding" in kwargs:
@@ -850,13 +857,16 @@ def error(msg, env=None):
 def fatal(msg, env=None):
     """Display an error message using ``g.message -e``, then abort or raise
 
-    Raises exception when module global raise_on_error is 'True', abort
+    Raises exception when module global :py:data:`raise_on_error` is 'True', abort
     (calls :external:py:func:`sys.exit`) otherwise.
     Use :func:`set_raise_on_error()` to set the behavior.
 
     :param str msg: error message to be displayed
     :param env: dictionary with system environment variables
                 (:external:py:data:`os.environ` by default)
+
+    :raises ~grass.exceptions.ScriptError:
+        Raises exception when module global :py:data:`raise_on_error` is 'True'
     """
     global raise_on_error
     if raise_on_error:
@@ -915,6 +925,7 @@ def set_capture_stderr(capture=True):
     capturing.
 
     .. versionadded:: 7.4
+    .. seealso:: :func:`get_capture_stderr`
     """
     global _capture_stderr
     tmp = _capture_stderr
@@ -925,7 +936,7 @@ def set_capture_stderr(capture=True):
 def get_capture_stderr():
     """Return True if stderr is captured, False otherwise.
 
-    See set_capture_stderr().
+    .. seealso:: :func:`set_capture_stderr`.
     """
     global _capture_stderr
     return _capture_stderr
@@ -1019,6 +1030,9 @@ def tempfile(create=True, env=None):
     :param env: environment
 
     :return: path to a tmp file
+
+    .. seealso:: The ``g.tempfile`` tool, and the :py:func:`~grass.script.core.tempdir`
+        and :py:func:`~grass.script.core.tempname` functions
     """
     flags = ""
     if not create:
@@ -1028,7 +1042,11 @@ def tempfile(create=True, env=None):
 
 
 def tempdir(env=None):
-    """Returns the name of a temporary dir, created with g.tempfile."""
+    """Returns the name of a temporary dir, created with g.tempfile.
+
+    .. seealso:: The ``g.tempfile`` tool, and the :py:func:`~grass.script.core.tempfile`
+        and :py:func:`~grass.script.core.tempname` functions
+    """
     tmp = tempfile(create=False, env=env)
     os.mkdir(tmp)
 
@@ -1050,7 +1068,9 @@ def tempname(length: int, lowercase: bool = False) -> str:
         'tmp_MxMa1kAS13s9'
 
     .. seealso:: functions :func:`~grass.script.utils.append_uuid()`,
-        :func:`~grass.script.utils.append_random()`
+        :func:`~grass.script.utils.append_random()`,
+        the ``g.tempfile`` tool, and the :py:func:`~grass.script.core.tempfile`
+        and :py:func:`~grass.script.core.tempdir` functions
     """
 
     chars = string.ascii_lowercase + string.digits
@@ -1278,6 +1298,8 @@ def locn_is_latlong(env: _Env | None = None) -> bool:
     by checking the "g.region -pu" projection code.
 
     :return: True for a lat/long region, False otherwise
+
+    .. seealso:: The ``g.region`` tool
     """
     s = read_command("g.region", flags="pu", env=env)
     kv: KeyValue[str | None] = parse_key_val(s, ":")
@@ -1304,6 +1326,8 @@ def region(region3d=False, complete=False, env=None):
     :param env: dictionary with system environment variables
                 (:external:py:data:`os.environ` by default)
     :return: dictionary of region values
+
+    .. seealso:: The ``g.region`` tool
     """
     flgs = "gu"
     if region3d:
@@ -1340,8 +1364,9 @@ def region_env(
     If no 'kwargs' are given then the current region is used. Note
     that this function doesn't modify the current region!
 
-    See also :func:`use_temp_region()` for alternative method how to define
-    temporary region used for raster-based computation.
+    .. seealso::
+        See also :func:`use_temp_region()` for alternative method how to define
+        temporary region used for raster-based computation.
 
     :Example:
       .. code-block:: python
@@ -1434,6 +1459,8 @@ def use_temp_region():
     """Copies the current region to a temporary region with "g.region save=",
     then sets WIND_OVERRIDE to refer to that region. Installs an atexit
     handler to delete the temporary region upon termination.
+
+    .. seealso:: The ``g.region`` tool
     """
     name = "tmp.%s.%d" % (os.path.basename(sys.argv[0]), os.getpid())
     run_command("g.region", flags="u", save=name, overwrite=True)
@@ -1442,7 +1469,10 @@ def use_temp_region():
 
 
 def del_temp_region():
-    """Unsets WIND_OVERRIDE and removes any region named by it."""
+    """Unsets WIND_OVERRIDE and removes any region named by it.
+
+    .. seealso:: The ``g.remove`` tool
+    """
     try:
         name = os.environ.pop("WIND_OVERRIDE")
         run_command("g.remove", flags="f", quiet=True, type="region", name=name)
@@ -1489,6 +1519,8 @@ def find_file(name, element="cell", mapset=None, env=None):
     :param env: environment
 
     :return: parsed output of g.findfile
+
+    .. seealso:: The ``g.findfile`` tool
     """
     element_translation = {
         "rast": "cell",
@@ -1534,6 +1566,8 @@ def list_strings(type, pattern=None, mapset=None, exclude=None, flag="", env=Non
     :param env: environment
 
     :return: list of elements
+
+    .. seealso:: The ``g.list`` tool
     """
     if type == "cell":
         verbose(_('Element type should be "raster" and not "%s"') % type, env=env)
@@ -1568,6 +1602,8 @@ def list_pairs(type, pattern=None, mapset=None, exclude=None, flag="", env=None)
     :param env: environment
 
     :return: list of elements
+
+    .. seealso:: The ``g.list`` tool
     """
     return [
         tuple(map.split("@", 1))
@@ -1601,6 +1637,8 @@ def list_grouped(
     :param env: environment
 
     :return: directory of mapsets/elements
+
+    .. seealso:: The ``g.list`` tool
     """
     if isinstance(type, str) or len(type) == 1:
         types = [type]
@@ -1795,6 +1833,8 @@ def mapsets(search_path=False, env=None):
     :param bool search_path: True to list mapsets only in search path
 
     :return: list of mapsets
+
+    .. seealso:: The ``g.mapsets`` tool
     """
     flags = "p" if search_path else "l"
     mapsets = read_command("g.mapsets", flags=flags, sep="newline", quiet=True, env=env)
@@ -1831,8 +1871,6 @@ def create_project(
 ):
     """Create new project
 
-    Raise ScriptError on error.
-
     :param str path: path to GRASS database or project; if path to database, project
                      name must be specified with name parameter
     :param str name: project name to create
@@ -1846,7 +1884,9 @@ def create_project(
     :param desc: description of the project (creates MYNAME file)
     :param bool overwrite: True to overwrite project if exists (WARNING:
                            ALL DATA from existing project ARE DELETED!)
-    :raises ~grass.exceptions.ScriptError: Raise ScriptError on error
+
+    :raises ~grass.exceptions.ScriptError:
+        Raise :py:exc:`~grass.exceptions.ScriptError` on error
     """
     # Add default mapset to project path if needed
     if not name:
@@ -1964,7 +2004,11 @@ def create_project(
 
 
 def _set_location_description(path, location, text):
-    """Set description (aka title aka MYNAME) for a location"""
+    """Set description (aka title aka MYNAME) for a location
+
+    :raises ~grass.exceptions.ScriptError:
+        Raise :py:exc:`~grass.exceptions.ScriptError` on error.
+    """
     try:
         with codecs.open(
             os.path.join(path, location, "PERMANENT", "MYNAME"),
@@ -1985,7 +2029,8 @@ def _create_location_xy(database, location):
 
     :param database: GRASS database where to create new location
     :param location: location name
-    :raises grass.exceptions.ScriptError: Raise ScriptError on error.
+    :raises ~grass.exceptions.ScriptError:
+        Raise :py:exc:`~grass.exceptions.ScriptError` on error.
     """
     cur_dir = Path.cwd()
     try:

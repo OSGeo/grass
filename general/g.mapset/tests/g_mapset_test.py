@@ -18,7 +18,7 @@ def test_plain_print_output(simple_dataset):
     assert text.strip() == simple_dataset.current_mapset
 
 
-def test_json_list_ouput(simple_dataset):
+def test_json_list_output(simple_dataset):
     """Test g.mapset with list flag and JSON format"""
     mapsets = simple_dataset.mapsets
     data = gs.parse_command("g.mapset", format="json", flags="l")
@@ -29,7 +29,7 @@ def test_json_list_ouput(simple_dataset):
         assert mapset in data["mapsets"]
 
 
-def test_json_print_ouput(simple_dataset):
+def test_json_print_output(simple_dataset):
     """Test g.mapset with print flag and JSON format"""
     data = gs.parse_command("g.mapset", format="json", flags="p")
     assert list(data.keys()) == ["project", "mapset"]
