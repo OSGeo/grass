@@ -41,10 +41,9 @@ class ObjectParameterHandler:
 
 
 class ToolFunctionNameHelper:
-    def __init__(self, *, run_function, env, prefix=None):
+    def __init__(self, *, run_function, env):
         self._run_function = run_function
         self._env = env
-        self._prefix = prefix
         self._names = None
 
     # def __getattr__(self, name):
@@ -54,24 +53,14 @@ class ToolFunctionNameHelper:
         """Parse attribute to GRASS display module. Attribute should be in
         the form 'd_module_name'. For example, 'd.rast' is called with 'd_rast'.
         """
-        # Convert snake case attribute name to dotted tool name,
-        # and apply prefix is provided.
-        dotted_name = name.replace("_", ".")
-        if self._prefix:
-            # Allow trailing underscore (now dot) with prefix usage to avoid conflict
-            # with Python keywords.
-            dotted_name = dotted_name.removesuffix(".")
-            search_name = name.removesuffix("_")
-            tool_name = f"{self._prefix}.{dotted_name}"
-        else:
-            tool_name = dotted_name
-            search_name = name
+        # Convert snake case attribute name to dotted tool name.
+        tool_name = name.replace("_", ".")
         # We first try to find the tool on path which is much faster than getting
         # and checking the names, but if the tool is not found, likely because runtime
         # is not set up, we check the names.
         if (
             not shutil.which(tool_name, path=self._env["PATH"])
-            and search_name not in self.names()
+            and name not in self.names()
         ):
             suggestions = self.suggest_tools(tool_name)
             if suggestions:
@@ -130,14 +119,7 @@ class ToolFunctionNameHelper:
     def names(self):
         if self._names:
             return self._names
-        if self._prefix:
-            self._names = [
-                name.replace(f"{self._prefix}.", "").replace(".", "_")
-                for name in gs.get_commands()[0]
-                if name.startswith(f"{self._prefix}.")
-            ]
-        else:
-            self._names = [name.replace(".", "_") for name in gs.get_commands()[0]]
+        self._names = [name.replace(".", "_") for name in gs.get_commands()[0]]
         return self._names
 
 
@@ -260,7 +242,6 @@ class Tools:
         stdin=None,
         errors=None,
         capture_output=True,
-        prefix=None,
     ):
         if env:
             self._env = env.copy()
@@ -286,7 +267,6 @@ class Tools:
         self._set_stdin(stdin)
         self._errors = errors
         self._capture_output = capture_output
-        self._prefix = prefix
         self._name_helper = None
 
     # These could be public, not protected.
@@ -451,7 +431,6 @@ class Tools:
             freeze_region=self._region_is_frozen,
             errors=self._errors,
             capture_output=self._capture_output,
-            prefix=self._prefix,
         )
 
     def ignore_errors_of(self):
@@ -466,7 +445,6 @@ class Tools:
             self._name_helper = ToolFunctionNameHelper(
                 run_function=self.run,
                 env=self.env,
-                prefix=self._prefix,
             )
         return self._name_helper.get_function(name, exception_type=AttributeError)
 
@@ -475,7 +453,6 @@ class Tools:
             self._name_helper = ToolFunctionNameHelper(
                 run_function=self.run,
                 env=self.env,
-                prefix=self._prefix,
             )
         # Collect instance and class attributes
         static_attrs = set(dir(type(self))) | set(self.__dict__.keys())
