@@ -63,103 +63,430 @@ different units than are available here should use
 
 ## EXAMPLES
 
-### Report area for each category
+### Report sorted number of cells and area for each category
 
-Report area for each category in the single raster map:
+Report sorted number of cells and area for each category
+in a single raster map:
 
-```sh
-g.region raster=geology_30m
-r.stats -a in=geology_30m nv=no-data sep=tab
+<!-- markdownlint-disable MD046 -->
+=== "Command line"
 
-217     71960000.000000
-262     19760000.000000
-270     67760000.000000
-405     25120000.000000
-583     2520000.000000
-720     480000.000000
-766     840000.000000
-862     6560000.000000
-910     4360000.000000
-921     1200000.000000
-946     360000.000000
-948     80000.000000
-no-data 33375200000.000004
-```
+    ```sh
+    g.region raster=geology_30m
+    r.stats -ac input=geology_30m sort=desc sep=tab
+    ```
 
-### Report sorted number of cells for each category
+    Output (category, area, cell count):
 
-Report sorted number of cells for each category in the single raster map
-(suppress NULL data):
 
-```sh
-g.region raster=geology_30m
-r.stats -cn input=geology_30m sort=desc
+    ```text
+    217 72556200.000000 80618
+    270 68937300.000000 76597
+    405 25371000.000000 28190
+    262 19868400.000000 22076
+    862 6172200.000000  6858
+    910 4496400.000000  4996
+    583 2160900.000000  2401
+    921 1252800.000000  1392
+    766 707400.000000   786
+    720 482400.000000   536
+    946 406800.000000   452
+    948 87300.000000    97
+    945 900.000000      1
+    ```
 
-217 1799
-270 1694
-405 628
-262 494
-862 164
-910 109
-583 63
-921 30
-766 21
-720 12
-946 9
-948 2
-```
+=== "Python (grass.script)"
+
+    ```python
+    import grass.script as gs
+
+    gs.run_command("g.region", raster="geology_30m")
+    data = gs.parse_command("r.stats", flags="a", input="geology_30m", format="json")
+    for record in data:
+        cat = record['categories'][0]['category']
+        print(f"Category {cat}: {record['count']} cells and {record['area'] / 1e6} km2")
+    ```
+
+    Output:
+
+    ```text
+    Category 217: 80618 cells and 72.5562 km2
+    Category 270: 76597 cells and 68.9373 km2
+    Category 405: 28190 cells and 25.371 km2
+    Category 262: 22076 cells and 19.8684 km2
+    Category 862: 6858 cells and 6.1722 km2
+    Category 910: 4996 cells and 4.4964 km2
+    Category 583: 2401 cells and 2.1609 km2
+    Category 921: 1392 cells and 1.2528 km2
+    Category 766: 786 cells and 0.7074 km2
+    Category 720: 536 cells and 0.4824 km2
+    Category 946: 452 cells and 0.4068 km2
+    Category 948: 97 cells and 0.0873 km2
+    Category 945: 1 cells and 0.0009 km2
+    ```
+
+    The JSON output looks like:
+
+    ```json
+    [
+        {
+            "categories": [
+                {
+                    "category": 217
+                }
+            ],
+            "area": 72556200,
+            "count": 80618
+        },
+        {
+            "categories": [
+                {
+                    "category": 270
+                }
+            ],
+            "area": 68937300,
+            "count": 76597
+        },
+    ...
+    ]
+    ```
 
 ### Report area, number of cells, and percents in multiple raster maps
 
 Report area, number of cells, and percents (separated by tabs) for each
 category in multiple raster maps (suppress NULL data):
 
-```sh
-g.region raster=towns
-r.stats -nacp input=towns,urban separator=tab
+=== "Command line"
 
-1       55      23840000.000000 596     11.89%
-2       55      13680000.000000 342     6.82%
-3       55      1360000.000000  34      0.68%
-4       55      16040000.000000 401     8.00%
-5       55      98240000.000000 2456    48.98%
-6       55      19760000.000000 494     9.85%
-```
+    ```sh
+    g.region raster=towns
+    r.stats -nacp input=towns,urban separator=tab
+    ```
+
+    Output (town, urban, area, number of cells, percent):
+
+    ```text
+    1 55 23475900.000000 234759 11.65%
+    2 55 14142700.000000 141427 7.02%
+    3 55 1519700.000000  15197  0.75%
+    4 55 16051400.000000 160514 7.97%
+    5 55 99004400.000000 990044 49.14%
+    6 55 19888500.000000 198885 9.87%
+    ```
+
+=== "Python (grass.script)"
+
+    ```python
+    import grass.script as gs
+
+    gs.run_command("g.region", raster="towns")
+    data = gs.parse_command("r.stats", flags="nacp", input=["towns", "urban"], format="json")
+    for record in data:
+        categories = [str(cat["category"]) for cat in record["categories"]]
+        print(f"Categories {' and '.join(categories)}: {record['percent']:.2f} %")
+    ```
+
+    Output:
+
+    ```text
+    Categories 1 and 55: 11.65 %
+    Categories 2 and 55: 7.02 %
+    Categories 3 and 55: 0.75 %
+    Categories 4 and 55: 7.97 %
+    Categories 5 and 55: 49.14 %
+    Categories 6 and 55: 9.87 %
+    ```
+
+    The JSON output looks like:
+
+    ```json
+    [
+        {
+            "categories": [
+                {
+                    "category": 1
+                },
+                {
+                    "category": 55
+                }
+            ],
+            "area": 23475900,
+            "count": 234759,
+            "percent": 11.651235678463038
+        },
+        {
+            "categories": [
+                {
+                    "category": 2
+                },
+                {
+                    "category": 55
+                }
+            ],
+            "area": 14142700,
+            "count": 141427,
+            "percent": 7.0191102718021128
+        },
+    ...
+    ]
+    ```
 
 ### Report sorted area intervals of floating-point raster map
 
 Report sorted area for each interval of floating-point input raster map.
 Number of intervals are given by **nsteps** option.
 
-```sh
-g.region raster=elevation
-r.stats -an input=elevation nsteps=10 sort=desc separator=tab
+=== "Command line"
 
-95.879221-105.954329    36440000.000000
-85.804114-95.879221     30800000.000000
-105.954329-116.029436   30080000.000000
-116.029436-126.104543   27960000.000000
-126.104543-136.17965    26440000.000000
-136.17965-146.254757    20880000.000000
-75.729007-85.804114     15880000.000000
-65.6539-75.729007       6040000.000000
-146.254757-156.329865   5720000.000000
-55.578793-65.6539       760000.000000
-```
+    ```sh
+    g.region raster=elevation
+    r.stats -an input=elevation nsteps=5 sort=desc separator=tab
+    ```
+
+    Output:
+
+    ```text
+    95.879221-116.029436  67133500.000000
+    116.029436-136.17965  54757900.000000
+    75.729007-95.879221   47817700.000000
+    136.17965-156.329865  26061600.000000
+    55.578793-75.729007   6729300.000000
+    ```
+
+=== "Python (grass.script)"
+
+    ```python
+    import grass.script as gs
+
+    gs.run_command("g.region", raster="elevation")
+    data = gs.parse_command("r.stats", flags="an", input="elevation", nsteps=5, sort="desc", format="json")
+    for record in data:
+        from_to = record['categories'][0]['range']
+        print(f"Elevation {from_to['from']:.2f}-{from_to['to']:.2f}: {record['area'] / 1e6:.2f} km2")
+
+    ```
+
+    Output: 
+
+    ```text
+    Elevation 95.88-116.03: 67.13 km2
+    Elevation 116.03-136.18: 54.76 km2
+    Elevation 75.73-95.88: 47.82 km2
+    Elevation 136.18-156.33: 26.06 km2
+    Elevation 55.58-75.73: 6.73 km2
+    ```
+
+    The JSON output looks like:
+
+    ```json
+    [
+        {
+            "categories": [
+                {
+                    "range": {
+                        "from": 95.879221343994146,
+                        "to": 105.9543285369873
+                    }
+                }
+            ],
+            "area": 37063800
+        },
+        {
+            "categories": [
+                {
+                    "range": {
+                        "from": 85.804114151000974,
+                        "to": 95.879221343994146
+                    }
+                }
+            ],
+            "area": 30826100
+        },
+    ...
+    ]
+    ```
+
+### Report grid coordinates and category values of a raster map
+
+Report category and east, north and row, column of a rasterized firestations map:
+
+=== "Command line"
+
+    ```sh
+    g.region region=wake_30m
+    v.to.rast input=firestations output=firestations use=cat
+    r.stats input=firestations -gxn
+    ```
+
+    Output (east, north, column, row, category):
+
+    ```text
+    641835 253485 1033 155 42
+    644715 247785 1129 345 41
+    654045 246915 1440 374 38
+    641865 243615 1034 484 40
+    638055 243285 907 495 43
+    ...
+    ```
+
+=== "Python (grass.script)"
+
+    ```python
+    import grass.script as gs
+
+    gs.run_command("g.region", region="wake_30m")
+    gs.run_command("v.to.rast", input="firestations", output="firestations", use="cat")
+    data = gs.parse_command("r.stats", flags="gxn", input="firestations", format="json")
+    print(data[0])
+    ```
+
+    Output:
+
+    ```text
+    {'east': 641835, 'north': 253485, 'col': 1033, 'row': 155, 'categories': [{'category': 42}]}
+    ```
+
+    The JSON output looks like:
+
+    ```json
+    [
+        {
+            "east": 641835,
+            "north": 253485,
+            "col": 1033,
+            "row": 155,
+            "categories": [
+                {
+                    "category": 42
+                }
+            ]
+        },
+        {
+            "east": 644715,
+            "north": 247785,
+            "col": 1129,
+            "row": 345,
+            "categories": [
+                {
+                    "category": 41
+                }
+            ]
+        },
+    ...
+    ```
 
 ### Report raster cell counts in multiple raster maps
 
 Report raster cell counts of landuse and geological categories within
 zipcode areas:
 
-```sh
-g.region raster=zipcodes
-# landuse/landcover and zipcodes
-r.stats -c input=landclass96,zipcodes separator=comma
+=== "Command line"
 
-# landuse/landcover, geology and zipcodes with category labels
-r.stats -c input=landclass96,zipcodes,geology_30m separator=comma -l
+    ```sh
+    g.region raster=zipcodes
+    # landuse/landcover, geology and zipcodes with category labels
+    r.stats -c input=landclass96,zipcodes,geology_30m separator=comma -l
+    ```
+
+    Output:
+
+    ```text
+    1,developed,27511,CARY,405,CZbg,18410
+    1,developed,27511,CARY,583,CZve,1298
+    1,developed,27511,CARY,862,CZam,86
+    1,developed,27513,CARY,405,CZbg,2287
+    1,developed,27513,CARY,583,CZve,971
+    1,developed,27518,CARY,217,CZfg,5724
+    1,developed,27518,CARY,405,CZbg,3910
+    1,developed,27518,CARY,862,CZam,1012
+    1,developed,27529,GARNER,270,CZig,61497
+    1,developed,27539,APEX,921,Km,246
+    ...
+    ```
+
+=== "Python (grass.script)"
+
+    ```python
+    import grass.script as gs
+
+    gs.run_command("g.region", raster="zipcodes")
+    # landuse/landcover, geology and zipcodes with category labels
+    data = gs.parse_command("r.stats", flags="c", input=["landclass96", "zipcodes", "geology_30m"], format="json")
+    print(data[0])
+    ```
+
+    Output:
+
+    ```text
+    {'categories': [{'category': 1}, {'category': 27511}, {'category': 405}], 'count': 18410}
+    ```
+
+    The JSON output looks like:
+
+    ```json
+    [
+        {
+            "categories": [
+                {
+                    "category": 1,
+                    "label": "developed"
+                },
+                {
+                    "category": 27511,
+                    "label": "CARY"
+                },
+                {
+                    "category": 405,
+                    "label": "CZbg"
+                }
+            ],
+            "count": 18410
+        },
+    ...
+    ]
+    ```
+
+### Read r.stats results into a Pandas DataFrame
+
+```python
+import pandas as pd
+import grass.script as gs
+
+
+gs.run_command("g.region", raster="zipcodes")
+maps = ["landclass96", "zipcodes", "geology_30m"]
+data = gs.parse_command("r.stats", flags="an", input=maps, format="json")
+
+# Map to raster names
+for item in data:
+    for i, name in enumerate(maps):
+        item[name] = item["categories"][i]["category"]
+
+# Create DataFrame and drop the original 'categories'
+df = pd.DataFrame(data).drop(columns="categories")
+print(df)
 ```
+
+Output:
+
+```text
+        area  landclass96  zipcodes  geology_30m
+0    1841000            1     27511          405
+1     129800            1     27511          583
+2       8600            1     27511          862
+3     228700            1     27513          405
+4      97100            1     27513          583
+..       ...          ...       ...          ...
+165    64400            6     27607          217
+166     7000            6     27607          262
+167    19200            6     27610          270
+168   106600            7     27603          270
+169    54400            7     27607          217
+
+[170 rows x 4 columns]
+```
+
+<!-- markdown-restore -->
 
 ## SEE ALSO
 

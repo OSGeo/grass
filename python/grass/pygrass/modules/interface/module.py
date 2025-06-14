@@ -40,173 +40,187 @@ class ParallelModuleQueue:
     will not raise a GrassError in case of failure. This must be manually checked
     by accessing finished modules by calling :py:meth:`get_finished_modules`.
 
-    Usage:
+    :Usage:
 
-    Check with a queue size of 3 and 5 processes
+      Check with a queue size of 3 and 5 processes
 
-    >>> import copy
-    >>> from grass.pygrass.modules import Module, MultiModule, ParallelModuleQueue
-    >>> mapcalc_list = []
+      .. code-block:: pycon
 
-    Setting ``run_`` to False is important, otherwise a parallel processing is not possible
+        >>> import copy
+        >>> from grass.pygrass.modules import Module, MultiModule, ParallelModuleQueue
+        >>> mapcalc_list = []
 
-    >>> mapcalc = Module("r.mapcalc", overwrite=True, run_=False)
-    >>> queue = ParallelModuleQueue(nprocs=3)
-    >>> for i in range(5):
-    ...     new_mapcalc = copy.deepcopy(mapcalc)
-    ...     mapcalc_list.append(new_mapcalc)
-    ...     m = new_mapcalc(expression="test_pygrass_%i = %i" % (i, i))
-    ...     queue.put(m)
-    >>> queue.wait()
-    >>> mapcalc_list = queue.get_finished_modules()
-    >>> queue.get_num_run_procs()
-    0
-    >>> queue.get_max_num_procs()
-    3
-    >>> for mapcalc in mapcalc_list:
-    ...     print(mapcalc.returncode)
-    0
-    0
-    0
-    0
-    0
+      Setting ``run_`` to False is important, otherwise a parallel processing is not possible
 
-    Check with a queue size of 8 and 5 processes
+      .. code-block:: pycon
 
-    >>> queue = ParallelModuleQueue(nprocs=8)
-    >>> mapcalc_list = []
-    >>> for i in range(5):
-    ...     new_mapcalc = copy.deepcopy(mapcalc)
-    ...     mapcalc_list.append(new_mapcalc)
-    ...     m = new_mapcalc(expression="test_pygrass_%i = %i" % (i, i))
-    ...     queue.put(m)
-    >>> queue.wait()
-    >>> mapcalc_list = queue.get_finished_modules()
-    >>> queue.get_num_run_procs()
-    0
-    >>> queue.get_max_num_procs()
-    8
-    >>> for mapcalc in mapcalc_list:
-    ...     print(mapcalc.returncode)
-    0
-    0
-    0
-    0
-    0
+        >>> mapcalc = Module("r.mapcalc", overwrite=True, run_=False)
+        >>> queue = ParallelModuleQueue(nprocs=3)
+        >>> for i in range(5):
+        ...     new_mapcalc = copy.deepcopy(mapcalc)
+        ...     mapcalc_list.append(new_mapcalc)
+        ...     m = new_mapcalc(expression="test_pygrass_%i = %i" % (i, i))
+        ...     queue.put(m)
+        >>> queue.wait()
+        >>> mapcalc_list = queue.get_finished_modules()
+        >>> queue.get_num_run_procs()
+        0
+        >>> queue.get_max_num_procs()
+        3
+        >>> for mapcalc in mapcalc_list:
+        ...     print(mapcalc.returncode)
+        0
+        0
+        0
+        0
+        0
 
-    Check MultiModule approach with three by two processes running in a background process
+      Check with a queue size of 8 and 5 processes
 
-    >>> gregion = Module("g.region", flags="p", run_=False)
-    >>> queue = ParallelModuleQueue(nprocs=3)
-    >>> proc_list = []
-    >>> for i in range(3):
-    ...     new_gregion = copy.deepcopy(gregion)
-    ...     proc_list.append(new_gregion)
-    ...     new_mapcalc = copy.deepcopy(mapcalc)
-    ...     m = new_mapcalc(expression="test_pygrass_%i = %i" % (i, i))
-    ...     proc_list.append(new_mapcalc)
-    ...     mm = MultiModule(
-    ...         module_list=[new_gregion, new_mapcalc], sync=False, set_temp_region=True
-    ...     )
-    ...     queue.put(mm)
-    >>> queue.wait()
-    >>> proc_list = queue.get_finished_modules()
-    >>> queue.get_num_run_procs()
-    0
-    >>> queue.get_max_num_procs()
-    3
-    >>> for proc in proc_list:
-    ...     print(proc.returncode)
-    0
-    0
-    0
-    0
-    0
-    0
+      .. code-block:: pycon
 
-    Check with a queue size of 8 and 4 processes
+        >>> queue = ParallelModuleQueue(nprocs=8)
+        >>> mapcalc_list = []
+        >>> for i in range(5):
+        ...     new_mapcalc = copy.deepcopy(mapcalc)
+        ...     mapcalc_list.append(new_mapcalc)
+        ...     m = new_mapcalc(expression="test_pygrass_%i = %i" % (i, i))
+        ...     queue.put(m)
+        >>> queue.wait()
+        >>> mapcalc_list = queue.get_finished_modules()
+        >>> queue.get_num_run_procs()
+        0
+        >>> queue.get_max_num_procs()
+        8
+        >>> for mapcalc in mapcalc_list:
+        ...     print(mapcalc.returncode)
+        0
+        0
+        0
+        0
+        0
 
-    >>> queue = ParallelModuleQueue(nprocs=8)
-    >>> mapcalc_list = []
-    >>> new_mapcalc = copy.deepcopy(mapcalc)
-    >>> mapcalc_list.append(new_mapcalc)
-    >>> m = new_mapcalc(expression="test_pygrass_1 =1")
-    >>> queue.put(m)
-    >>> queue.get_num_run_procs()
-    1
-    >>> new_mapcalc = copy.deepcopy(mapcalc)
-    >>> mapcalc_list.append(new_mapcalc)
-    >>> m = new_mapcalc(expression="test_pygrass_2 =2")
-    >>> queue.put(m)
-    >>> queue.get_num_run_procs()
-    2
-    >>> new_mapcalc = copy.deepcopy(mapcalc)
-    >>> mapcalc_list.append(new_mapcalc)
-    >>> m = new_mapcalc(expression="test_pygrass_3 =3")
-    >>> queue.put(m)
-    >>> queue.get_num_run_procs()
-    3
-    >>> new_mapcalc = copy.deepcopy(mapcalc)
-    >>> mapcalc_list.append(new_mapcalc)
-    >>> m = new_mapcalc(expression="test_pygrass_4 =4")
-    >>> queue.put(m)
-    >>> queue.get_num_run_procs()
-    4
-    >>> queue.wait()
-    >>> mapcalc_list = queue.get_finished_modules()
-    >>> queue.get_num_run_procs()
-    0
-    >>> queue.get_max_num_procs()
-    8
-    >>> for mapcalc in mapcalc_list:
-    ...     print(mapcalc.returncode)
-    0
-    0
-    0
-    0
+      Check MultiModule approach with three by two processes running in a background process
 
-    Check with a queue size of 3 and 4 processes
+      .. code-block:: pycon
 
-    >>> queue = ParallelModuleQueue(nprocs=3)
-    >>> mapcalc_list = []
-    >>> new_mapcalc = copy.deepcopy(mapcalc)
-    >>> mapcalc_list.append(new_mapcalc)
-    >>> m = new_mapcalc(expression="test_pygrass_1 =1")
-    >>> queue.put(m)
-    >>> queue.get_num_run_procs()
-    1
-    >>> new_mapcalc = copy.deepcopy(mapcalc)
-    >>> mapcalc_list.append(new_mapcalc)
-    >>> m = new_mapcalc(expression="test_pygrass_2 =2")
-    >>> queue.put(m)
-    >>> queue.get_num_run_procs()
-    2
-    >>> new_mapcalc = copy.deepcopy(mapcalc)
-    >>> mapcalc_list.append(new_mapcalc)
-    >>> m = new_mapcalc(expression="test_pygrass_3 =3")
-    >>> queue.put(
-    ...     m
-    ... )  # Now it will wait until all procs finish and set the counter back to 0
-    >>> queue.get_num_run_procs()
-    0
-    >>> new_mapcalc = copy.deepcopy(mapcalc)
-    >>> mapcalc_list.append(new_mapcalc)
-    >>> m = new_mapcalc(expression="test_pygrass_%i = %i" % (i, i))
-    >>> queue.put(m)
-    >>> queue.get_num_run_procs()
-    1
-    >>> queue.wait()
-    >>> mapcalc_list = queue.get_finished_modules()
-    >>> queue.get_num_run_procs()
-    0
-    >>> queue.get_max_num_procs()
-    3
-    >>> for mapcalc in mapcalc_list:
-    ...     print(mapcalc.returncode)
-    0
-    0
-    0
-    0
+        >>> gregion = Module("g.region", flags="p", run_=False)
+        >>> queue = ParallelModuleQueue(nprocs=3)
+        >>> proc_list = []
+        >>> for i in range(3):
+        ...     new_gregion = copy.deepcopy(gregion)
+        ...     proc_list.append(new_gregion)
+        ...     new_mapcalc = copy.deepcopy(mapcalc)
+        ...     m = new_mapcalc(expression="test_pygrass_%i = %i" % (i, i))
+        ...     proc_list.append(new_mapcalc)
+        ...     mm = MultiModule(
+        ...         module_list=[new_gregion, new_mapcalc],
+        ...         sync=False,
+        ...         set_temp_region=True,
+        ...     )
+        ...     queue.put(mm)
+        >>> queue.wait()
+        >>> proc_list = queue.get_finished_modules()
+        >>> queue.get_num_run_procs()
+        0
+        >>> queue.get_max_num_procs()
+        3
+        >>> for proc in proc_list:
+        ...     print(proc.returncode)
+        0
+        0
+        0
+        0
+        0
+        0
+
+      Check with a queue size of 8 and 4 processes
+
+      .. code-block:: pycon
+
+        >>> queue = ParallelModuleQueue(nprocs=8)
+        >>> mapcalc_list = []
+        >>> new_mapcalc = copy.deepcopy(mapcalc)
+        >>> mapcalc_list.append(new_mapcalc)
+        >>> m = new_mapcalc(expression="test_pygrass_1 =1")
+        >>> queue.put(m)
+        >>> queue.get_num_run_procs()
+        1
+        >>> new_mapcalc = copy.deepcopy(mapcalc)
+        >>> mapcalc_list.append(new_mapcalc)
+        >>> m = new_mapcalc(expression="test_pygrass_2 =2")
+        >>> queue.put(m)
+        >>> queue.get_num_run_procs()
+        2
+        >>> new_mapcalc = copy.deepcopy(mapcalc)
+        >>> mapcalc_list.append(new_mapcalc)
+        >>> m = new_mapcalc(expression="test_pygrass_3 =3")
+        >>> queue.put(m)
+        >>> queue.get_num_run_procs()
+        3
+        >>> new_mapcalc = copy.deepcopy(mapcalc)
+        >>> mapcalc_list.append(new_mapcalc)
+        >>> m = new_mapcalc(expression="test_pygrass_4 =4")
+        >>> queue.put(m)
+        >>> queue.get_num_run_procs()
+        4
+        >>> queue.wait()
+        >>> mapcalc_list = queue.get_finished_modules()
+        >>> queue.get_num_run_procs()
+        0
+        >>> queue.get_max_num_procs()
+        8
+        >>> for mapcalc in mapcalc_list:
+        ...     print(mapcalc.returncode)
+        0
+        0
+        0
+        0
+
+      Check with a queue size of 3 and 4 processes
+
+      .. code-block:: pycon
+
+        >>> queue = ParallelModuleQueue(nprocs=3)
+        >>> mapcalc_list = []
+        >>> new_mapcalc = copy.deepcopy(mapcalc)
+        >>> mapcalc_list.append(new_mapcalc)
+        >>> m = new_mapcalc(expression="test_pygrass_1 =1")
+        >>> queue.put(m)
+        >>> queue.get_num_run_procs()
+        1
+        >>> new_mapcalc = copy.deepcopy(mapcalc)
+        >>> mapcalc_list.append(new_mapcalc)
+        >>> m = new_mapcalc(expression="test_pygrass_2 =2")
+        >>> queue.put(m)
+        >>> queue.get_num_run_procs()
+        2
+        >>> new_mapcalc = copy.deepcopy(mapcalc)
+        >>> mapcalc_list.append(new_mapcalc)
+        >>> m = new_mapcalc(expression="test_pygrass_3 =3")
+        >>> queue.put(
+        ...     m
+        ... )  # Now it will wait until all procs finish and set the counter back to 0
+        >>> queue.get_num_run_procs()
+        0
+        >>> new_mapcalc = copy.deepcopy(mapcalc)
+        >>> mapcalc_list.append(new_mapcalc)
+        >>> m = new_mapcalc(expression="test_pygrass_%i = %i" % (i, i))
+        >>> queue.put(m)
+        >>> queue.get_num_run_procs()
+        1
+        >>> queue.wait()
+        >>> mapcalc_list = queue.get_finished_modules()
+        >>> queue.get_num_run_procs()
+        0
+        >>> queue.get_max_num_procs()
+        3
+        >>> for mapcalc in mapcalc_list:
+        ...     print(mapcalc.returncode)
+        0
+        0
+        0
+        0
 
     """  # noqa: E501
 
@@ -337,6 +351,7 @@ class Module:
     >>> neighbors.outputs.output = "mapB"
     >>> neighbors.inputs.size = 5
     >>> neighbors.inputs.quantile = 0.5
+    >>> neighbors.inputs.nprocs = 1
     >>> neighbors.get_bash()
     'r.neighbors input=mapA size=5 method=average weighting_function=none quantile=0.5 nprocs=1 memory=300 output=mapB'
 
@@ -344,6 +359,7 @@ class Module:
     >>> new_neighbors1.inputs.input = "mapD"
     >>> new_neighbors1.inputs.size = 3
     >>> new_neighbors1.inputs.quantile = 0.5
+    >>> new_neighbors1.inputs.nprocs = 1
     >>> new_neighbors1.get_bash()
     'r.neighbors input=mapD size=3 method=average weighting_function=none quantile=0.5 nprocs=1 memory=300 output=mapB'
 
@@ -355,13 +371,13 @@ class Module:
 
     >>> neighbors = Module("r.neighbors")
     >>> neighbors.get_bash()
-    'r.neighbors size=3 method=average weighting_function=none nprocs=1 memory=300'
+    'r.neighbors size=3 method=average weighting_function=none nprocs=0 memory=300'
 
     >>> new_neighbors3 = copy.deepcopy(neighbors)
     >>> new_neighbors3(input="mapA", size=3, output="mapB", run_=False)
     Module('r.neighbors')
     >>> new_neighbors3.get_bash()
-    'r.neighbors input=mapA size=3 method=average weighting_function=none nprocs=1 memory=300 output=mapB'
+    'r.neighbors input=mapA size=3 method=average weighting_function=none nprocs=0 memory=300 output=mapB'
 
     >>> mapcalc = Module(
     ...     "r.mapcalc", expression="test_a = 1", overwrite=True, run_=False

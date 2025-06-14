@@ -2,7 +2,7 @@
 #
 # MODULE:       Test of g.mapsets
 # AUTHOR(S):    Corey White <smortopahri gmail com>
-# PURPOSE:      Test parsing and structure of CSV and JSON outputs
+# PURPOSE:      Test parsing and structure of outputs
 # COPYRIGHT:    (C) 2022 by Corey White the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
@@ -11,7 +11,7 @@
 #
 #############################################################################
 
-"""Test parsing and structure of CSV and JSON outputs from g.mapsets"""
+"""Test parsing and structure of outputs from g.mapsets"""
 
 import json
 import sys
@@ -55,8 +55,8 @@ def test_plain_print_output(simple_dataset, separator):
     _check_parsed_list(mapsets, text, gutils.separator(separator))
 
 
-def test_json_list_ouput(simple_dataset):
-    """JSON format"""
+def test_json_list_output(simple_dataset):
+    """Check list of mapsets in JSON format"""
     text = gs.read_command("g.mapsets", format="json", flags="l")
     data = json.loads(text)
     assert list(data.keys()) == ["mapsets"]
@@ -66,8 +66,8 @@ def test_json_list_ouput(simple_dataset):
         assert mapset in data["mapsets"]
 
 
-def test_json_print_ouput(simple_dataset):
-    """JSON format"""
+def test_json_print_output(simple_dataset):
+    """Check search path mapsets in JSON format"""
     text = gs.read_command("g.mapsets", format="json", flags="p")
     data = json.loads(text)
     assert list(data.keys()) == ["mapsets"]

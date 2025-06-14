@@ -580,9 +580,8 @@ class AbstractDatasetComparisonKeyStartTime:
     """This comparison key can be used to sort lists of abstract datasets
     by start time
 
-    Example:
-
-    .. code-block:: python
+    :Example:
+      .. code-block:: python
 
         # Return all maps in a space time raster dataset as map objects
         map_list = strds.get_registered_maps_as_objects()
@@ -632,9 +631,8 @@ class AbstractDatasetComparisonKeyEndTime:
     """This comparison key can be used to sort lists of abstract datasets
     by end time
 
-    Example:
-
-    .. code-block:: python
+    :Example:
+      .. code-block:: python
 
         # Return all maps in a space time raster dataset as map objects
         map_list = strds.get_registered_maps_as_objects()
