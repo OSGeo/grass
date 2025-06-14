@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_ko\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-14 18:45+0000\n"
-"PO-Revision-Date: 2025-03-12 12:05+0000\n"
+"PO-Revision-Date: 2025-06-14 21:07+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Korean <https://weblate.osgeo.org/projects/grass-gis/grasslibs/ko/>\n"
 "Language: ko\n"
@@ -3798,7 +3798,7 @@ msgstr ""
 #: ../lib/init/grass.py:874
 #, fuzzy
 msgid "Creating new GRASS project <{}>..."
-msgstr "새 GRASS GIS 로케이션/지도세트를 생성하는 중입니다..."
+msgstr "새 GRASS 로케이션/지도세트를 생성하는 중입니다..."
 
 #: ../lib/init/grass.py:885
 #, python-brace-format
@@ -3817,7 +3817,7 @@ msgstr ""
 #: ../lib/init/grass.py:910
 #, fuzzy
 msgid "Creating new GRASS mapset <{}>..."
-msgstr "새 GRASS GIS 로케이션/지도세트를 생성하는 중입니다..."
+msgstr "새 GRASS 로케이션/지도세트를 생성하는 중입니다..."
 
 #: ../lib/init/grass.py:934
 msgid "GRASS database directory, project and mapset not set properly. Use GUI or command line to set them."
@@ -3873,13 +3873,13 @@ msgstr "GUI를 닫을 수 없습니다. {0}"
 #, fuzzy, python-format
 #| msgid "Welcome to GRASS GIS %s"
 msgid "Welcome to GRASS %s"
-msgstr "GRASS GIS %s에 오신 것을 환영합니다"
+msgstr "GRASS %s에 오신 것을 환영합니다"
 
 #: ../lib/init/grass.py:1515
 #, fuzzy
 #| msgid "GRASS GIS homepage:"
 msgid "GRASS homepage:"
-msgstr "GRASS GIS 홈페이지:"
+msgstr "GRASS 홈페이지:"
 
 #. GTC Running through: SHELL NAME
 #: ../lib/init/grass.py:1517
@@ -3936,13 +3936,13 @@ msgstr "완료."
 #, fuzzy
 #| msgid "Goodbye from GRASS GIS"
 msgid "Goodbye from GRASS"
-msgstr "GRASS GIS를 종료합니다"
+msgstr "GRASS를 종료합니다"
 
 #: ../lib/init/grass.py:1823
 #, fuzzy
 #| msgid "Please install the GRASS GIS development package"
 msgid "Please install the GRASS development package"
-msgstr "GRASS GIS 개발 패키지를 설치하세요"
+msgstr "GRASS 개발 패키지를 설치하세요"
 
 #: ../lib/init/grass.py:1869
 #, python-format
@@ -4029,7 +4029,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Starting GRASS GIS..."
 msgid "Starting GRASS..."
-msgstr "GRASS GIS를 시작하는 중입니다..."
+msgstr "GRASS를 시작하는 중입니다..."
 
 #: ../lib/init/grass.py:2288
 msgid "Failed to start GRASS, grassdata directory cannot be found or created."
