@@ -41,6 +41,9 @@
 #include <string.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <string.h>
+#include <errno.h>
+
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
@@ -162,6 +165,13 @@ static int process(char *name, int uncompress)
         data_fd = G_open_old("cell", name, G_mapset());
 
     oldsize = lseek(data_fd, (off_t)0, SEEK_END);
+    if (oldsize == (off_t)-1) {
+        int err = errno;
+        /* GTC seek refers to reading/writing from a different position
+         * in a file */
+        G_warning(_("Unable to seek: %d %s"), err, strerror(err));
+        return 1;
+    }
     close(data_fd);
 
     if (doit(name, uncompress, map_type))
@@ -188,6 +198,13 @@ static int process(char *name, int uncompress)
         data_fd = G_open_old("cell", name, G_mapset());
 
     newsize = lseek(data_fd, (off_t)0, SEEK_END);
+    if (newsize == (off_t)-1) {
+        int err = errno;
+        /* GTC seek refers to reading/writing from a different position
+         * in a file */
+        G_warning(_("Unable to seek: %d %s"), err, strerror(err));
+        return 1;
+    }
     close(data_fd);
 
     sizestr = "bytes";
