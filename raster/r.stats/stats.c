@@ -428,8 +428,12 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
                                     labels[i].labels[node->values[i]]);
                             }
                             else {
-                                json_object_set_string(category, "label",
-                                                       "from to");
+                                json_object_dotset_string(
+                                    category, "label.from",
+                                    Rast_get_d_cat(&dLow, &labels[i]));
+                                json_object_dotset_string(
+                                    category, "label.to",
+                                    Rast_get_d_cat(&dHigh, &labels[i]));
                             }
                         }
                         break;
