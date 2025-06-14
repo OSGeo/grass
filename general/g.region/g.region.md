@@ -75,7 +75,8 @@ Updating the 2D resolution of the region will not affect its 3D resolution,
 and vice versa.
 
 Therefore, people working with 3D raster maps should take care to adjust the
-3D resolution of the region using the **res3** and **tbres** parameters.
+3D resolution of the region using the **res3**, **nsres3**, **ewres3**,
+or **tbres** parameters.
 
 ## NOTES
 
