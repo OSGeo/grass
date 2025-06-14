@@ -174,8 +174,8 @@ build_library_in_subdir(
 build_library_in_subdir(
   raster3d
   NAME
-  grass_raster3d 
-  DEPENDS 
+  grass_raster3d
+  DEPENDS
   ${LIBM}
   grass_raster
   grass_gis)
