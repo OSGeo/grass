@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-04 10:56+0000\n"
-"PO-Revision-Date: 2025-06-11 17:59+0000\n"
+"PO-Revision-Date: 2025-06-14 16:47+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/sv/>\n"
 "Language: sv\n"
@@ -1674,11 +1674,11 @@ msgstr "Verbose modulutdata"
 #: ../lib/gis/parser_interface.c:351 ../lib/gis/parser_md_cli.c:326
 #: ../lib/gis/parser_md_python.c:478 ../lib/gis/parser_rest.c:165
 msgid "Quiet module output"
-msgstr "Tyst modulutgång"
+msgstr "Tyst modulutdata"
 
 #: ../lib/gis/parser_help.c:227
 msgid "Super quiet module output"
-msgstr "Super tyst modulutgång"
+msgstr "Supertyst modulutdata"
 
 #: ../lib/gis/parser_help.c:228 ../lib/gis/parser_html.c:198
 #: ../lib/gis/parser_md_cli.c:332
@@ -1741,7 +1741,7 @@ msgstr "Tillåtna värden"
 
 #: ../lib/gis/parser_md_cli.c:329 ../lib/gis/parser_md_python.c:483
 msgid "Very quiet module output"
-msgstr "Mycket tyst modulutgång"
+msgstr "Mycket tyst modulutdata"
 
 #: ../lib/gis/parser_md_python.c:168
 msgid "Used as"
@@ -1989,10 +1989,7 @@ msgid ""
 "Vector features can have category values in different layers. This number "
 "determines which layer to use. When used with direct OGR access this is the "
 "layer name."
-msgstr ""
-"Vektorfunktioner kan ha kategorivärden i olika lager. Detta nummer avgör "
-"vilket skikt som ska användas. När det används med direkt OGR-åtkomst är "
-"detta skiktets namn."
+msgstr "Vektorfunktioner kan ha kategorivärden i olika lager. Detta nummer avgör vilket lager som ska användas. När det används med direkt OGR-åtkomst är detta lagrets namn."
 
 #: ../lib/gis/parser_standard_options.c:560
 msgid "Layer number or name ('-1' for all layers)"
@@ -2003,10 +2000,7 @@ msgid ""
 "A single vector map can be connected to multiple database tables. This "
 "number determines which table to use. When used with direct OGR access this "
 "is the layer name."
-msgstr ""
-"En enda vektorkarta kan anslutas till flera databastabeller. Detta nummer "
-"avgör vilken tabell som ska användas. När den används med direkt OGR-åtkomst "
-"är detta skiktets namn."
+msgstr "En enda vektorkarta kan anslutas till flera databastabeller. Detta nummer avgör vilken tabell som ska användas. När den används med direkt OGR-åtkomst är detta lagrets namn."
 
 #: ../lib/gis/parser_standard_options.c:571
 msgid "Category value"
@@ -2261,7 +2255,7 @@ msgstr "Fördelaktigt vid hantering av ett stort antal punkter"
 
 #: ../lib/gis/parser_wps.c:517
 msgid "Multiple outputs are not supported by WPS 1.0.0"
-msgstr "Flera utgångar stöds inte av WPS 1.0.0"
+msgstr "Flera utmatningar stöds inte av WPS 1.0.0"
 
 #: ../lib/gis/paths.c:201
 #, c-format
@@ -2963,7 +2957,7 @@ msgstr "Inmatningsmatris och vektor har olika dimensioner1"
 
 #: ../lib/gmath/la.c:927 ../lib/gmath/la.c:1042 ../lib/gmath/la.c:1321
 msgid "Output vector is uninitialized"
-msgstr "Utgångsvektorn är inte initialiserad"
+msgstr "Utdatavektorn är inte initialiserad"
 
 #: ../lib/gmath/la.c:1047 ../lib/gmath/la.c:1326
 msgid "Vectors are not of the same type"
@@ -2971,7 +2965,7 @@ msgstr "Vektorerna är inte av samma typ"
 
 #: ../lib/gmath/la.c:1052
 msgid "Output vector is of incorrect type"
-msgstr "Utgångsvektorn är av fel typ"
+msgstr "Utdatavektorn är av fel typ"
 
 #: ../lib/gmath/la.c:1057 ../lib/gmath/la.c:1336
 msgid "Matrices not allowed"
@@ -2983,7 +2977,7 @@ msgstr "Vektorer har olika dimensioner"
 
 #: ../lib/gmath/la.c:1069 ../lib/gmath/la.c:1348
 msgid "Output vector has incorrect dimension"
-msgstr "Utgångsvektorn har fel dimension"
+msgstr "Utdatavektorn har fel dimension"
 
 #: ../lib/gmath/la.c:1115
 msgid "Vector dimensions out of range"
@@ -2995,7 +2989,7 @@ msgstr "Rad/kolumn utanför intervallet"
 
 #: ../lib/gmath/la.c:1331
 msgid "Output vector is not the same type as others"
-msgstr "Utgångsvektorn är inte av samma typ som de andra"
+msgstr "Utdatavektorn är inte av samma typ som de andra"
 
 #: ../lib/gmath/la.c:1391
 msgid "Vector structure is not initialised"
@@ -4939,7 +4933,7 @@ msgstr "CRS-ingång inte tillgänglig för '%s'"
 #: ../lib/proj/do_proj.c:599
 #, c-format
 msgid "Output CRS not available for '%s'"
-msgstr "CRS-utgång inte tillgänglig för '%s'"
+msgstr "CRS-utdata inte tillgänglig för '%s'"
 
 #: ../lib/proj/do_proj.c:625
 #, c-format
@@ -5033,7 +5027,7 @@ msgstr "proj_trans() misslyckades: %s"
 
 #: ../lib/proj/do_proj.c:1153
 msgid "No output projection"
-msgstr "Ingen utgångsprojektion"
+msgstr "Ingen utdataprojektion"
 
 #: ../lib/proj/do_proj.c:1182 ../lib/proj/do_proj.c:1463
 #: ../lib/proj/do_proj.c:1591 ../lib/proj/do_proj.c:1755
@@ -6068,7 +6062,7 @@ msgstr "Rast3d_get_standard3d_params: ogiltigt precisionsvärde"
 
 #: ../lib/raster3d/param.c:105
 msgid "Rast3d_get_standard3d_params: tile dimension value invalid"
-msgstr "Rast3d_get_standard3d_params: värdet för kakeldimensionen är ogiltigt"
+msgstr "Rast3d_get_standard3d_params: värdet för plattdimensionen är ogiltigt"
 
 #: ../lib/raster3d/param.c:129
 msgid "Window replacing the default"
@@ -7267,7 +7261,7 @@ msgstr ""
 #: ../lib/vector/Vlib/copy.c:111
 #, c-format
 msgid "Unable to create PostGIS layer <%s>"
-msgstr "Det går inte att skapa PostGIS-skikt <%s>"
+msgstr "Det går inte att skapa PostGIS-lager <%s>"
 
 #: ../lib/vector/Vlib/copy.c:148
 #, c-format
@@ -7292,7 +7286,7 @@ msgstr "Skrivning av ny funktion misslyckades"
 #: ../lib/vector/Vlib/copy.c:385
 #, c-format
 msgid "%d features without category or from different layer skipped"
-msgstr "%d funktioner utan kategori eller från annat skikt hoppas över"
+msgstr "%d funktioner utan kategori eller från annat lager hoppas över"
 
 #: ../lib/vector/Vlib/copy.c:419
 msgid "Exporting nodes..."
@@ -7621,7 +7615,7 @@ msgstr "Utmatningsvektorkartans namn <%s> är inte SQL-kompatibelt"
 #: ../lib/vector/Vlib/legal_vname.c:165 ../lib/vector/Vlib/legal_vname.c:169
 #, c-format
 msgid "Output vector map <%s> is used as input"
-msgstr "Utgångsvektorkarta <%s> används som indata"
+msgstr "Utdatavektorkarta <%s> används som indata"
 
 #: ../lib/vector/Vlib/level.c:34
 msgid "Map structure was never initialized"
@@ -8013,7 +8007,7 @@ msgstr ""
 #: ../lib/vector/Vlib/open.c:466
 #, c-format
 msgid "Building topology for OGR layer <%s> from datasource '%s'..."
-msgstr "Skapar topologi för OGR-skiktet <%s> från datakällan '%s'..."
+msgstr "Skapar topologi för OGR-lagret <%s> från datakällan '%s'..."
 
 #: ../lib/vector/Vlib/open.c:475
 #, c-format
@@ -8091,7 +8085,7 @@ msgstr "Filen OGR kan inte öppnas"
 
 #: ../lib/vector/Vlib/open.c:1381
 msgid "OGR output also detected, using OGR"
-msgstr "OGR-utgången upptäcks också, med hjälp av OGR"
+msgstr "OGR-utdata upptäcks också, med hjälp av OGR"
 
 #: ../lib/vector/Vlib/open_nat.c:57
 #, c-format
@@ -8120,7 +8114,7 @@ msgstr "OGR-datakälla inte definierad"
 
 #: ../lib/vector/Vlib/open_ogr.c:65 ../lib/vector/Vlib/write_ogr.c:129
 msgid "OGR layer not defined"
-msgstr "OGR-skikt ej definierat"
+msgstr "OGR-lager inte definierat"
 
 #: ../lib/vector/Vlib/open_ogr.c:97
 #, c-format
@@ -8160,7 +8154,7 @@ msgstr "Det går inte att ta bort OGR-lager <%s>"
 #: ../lib/vector/Vlib/open_ogr.c:232
 #, c-format
 msgid "OGR layer <%s> already exists in datasource '%s'"
-msgstr "OGR-skiktet <%s> finns redan i datakällan '%s'"
+msgstr "OGR-lagret <%s> finns redan i datakällan '%s'"
 
 #: ../lib/vector/Vlib/open_ogr.c:293
 #, c-format
@@ -8207,17 +8201,17 @@ msgstr "Topologischema hittades inte."
 #: ../lib/vector/Vlib/open_pg.c:282
 #, c-format
 msgid "PostGIS layer <%s.%s> already exists and will be overwritten"
-msgstr "PostGIS-skiktet <%s.%s> finns redan och kommer att skrivas över"
+msgstr "PostGIS-lagret <%s.%s> finns redan och kommer att skrivas över"
 
 #: ../lib/vector/Vlib/open_pg.c:286
 #, c-format
 msgid "Unable to delete PostGIS layer <%s>"
-msgstr "Det går inte att ta bort PostGIS-skiktet <%s>"
+msgstr "Det går inte att ta bort PostGIS-lagret <%s>"
 
 #: ../lib/vector/Vlib/open_pg.c:293
 #, c-format
 msgid "PostGIS layer <%s.%s> already exists in database '%s'"
-msgstr "PostGIS-skiktet <%s.%s> finns redan i databasen '%s'"
+msgstr "PostGIS-lagret <%s.%s> finns redan i databasen '%s'"
 
 #: ../lib/vector/Vlib/open_pg.c:401
 msgid "No key column detected."
