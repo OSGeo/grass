@@ -186,6 +186,7 @@ CMakeUserPresets.json
 # End of https://www.toptal.com/developers/gitignore/api/cmake
 
 # Auto-generated sphinx source files for python library docs
+python/grass/docs/_templates/layout.html
 python/grass/docs/src/exceptions.rst
 python/grass/docs/src/grass.app.rst
 python/grass/docs/src/grass.benchmark.rst
