@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-14 18:45+0000\n"
-"PO-Revision-Date: 2025-03-12 12:05+0000\n"
+"PO-Revision-Date: 2025-06-14 22:43+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Italian <https://weblate.osgeo.org/projects/grass-gis/grasslibs/it/>\n"
 "Language: it\n"
@@ -3805,7 +3805,7 @@ msgstr ""
 #: ../lib/init/grass.py:874
 #, fuzzy
 msgid "Creating new GRASS project <{}>..."
-msgstr "Sto creando una nuova location/mapset GRASS GIS"
+msgstr "Sto creando una nuova location/mapset GRASS"
 
 #: ../lib/init/grass.py:885
 #, python-brace-format
@@ -3824,7 +3824,7 @@ msgstr ""
 #: ../lib/init/grass.py:910
 #, fuzzy
 msgid "Creating new GRASS mapset <{}>..."
-msgstr "Sto creando una nuova location/mapset GRASS GIS"
+msgstr "Sto creando una nuova location/mapset GRASS"
 
 #: ../lib/init/grass.py:934
 msgid "GRASS database directory, project and mapset not set properly. Use GUI or command line to set them."
@@ -3882,13 +3882,13 @@ msgstr "Impossibile chiudere la GUI. {0}"
 #, fuzzy, python-format
 #| msgid "Welcome to GRASS GIS %s"
 msgid "Welcome to GRASS %s"
-msgstr "Benvenuto in GRASS GIS%s"
+msgstr "Benvenuto in GRASS %s"
 
 #: ../lib/init/grass.py:1515
 #, fuzzy
 #| msgid "GRASS GIS homepage:"
 msgid "GRASS homepage:"
-msgstr "Homepage di GRASS GIS:"
+msgstr "Homepage di GRASS:"
 
 #. GTC Running through: SHELL NAME
 #: ../lib/init/grass.py:1517
@@ -3945,13 +3945,13 @@ msgstr "Fatto."
 #, fuzzy
 #| msgid "Goodbye from GRASS GIS"
 msgid "Goodbye from GRASS"
-msgstr "Arrivederci da GRASS GIS"
+msgstr "Arrivederci da GRASS"
 
 #: ../lib/init/grass.py:1823
 #, fuzzy
 #| msgid "Please install the GRASS GIS development package"
 msgid "Please install the GRASS development package"
-msgstr "Installare il pacchetto di sviluppo di GRASS GIS"
+msgstr "Installare il pacchetto di sviluppo di GRASS"
 
 #: ../lib/init/grass.py:1869
 #, python-format
@@ -4040,7 +4040,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Starting GRASS GIS..."
 msgid "Starting GRASS..."
-msgstr "Sto avviando GRASS GIS..."
+msgstr "Sto avviando GRASS..."
 
 #: ../lib/init/grass.py:2288
 msgid "Failed to start GRASS, grassdata directory cannot be found or created."

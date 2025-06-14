@@ -7,15 +7,15 @@ msgstr ""
 "Project-Id-Version: grasslibs_ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-14 18:45+0000\n"
-"PO-Revision-Date: 2023-06-28 19:08+0000\n"
-"Last-Translator: Sergey Kazorin <kazorin@basealt.ru>\n"
+"PO-Revision-Date: 2025-06-14 21:41+0000\n"
+"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Russian <https://weblate.osgeo.org/projects/grass-gis/grasslibs/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.16.4\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: ../lib/arraystats/class.c:22
 #, c-format
@@ -3875,7 +3875,7 @@ msgstr "Для создания области необходимо предос
 #: ../lib/init/grass.py:874
 #, fuzzy
 msgid "Creating new GRASS project <{}>..."
-msgstr "Создание нового набора GRASS GIS <{}>…"
+msgstr "Создание нового набора GRASS <{}>…"
 
 #: ../lib/init/grass.py:885
 #, python-brace-format
@@ -3895,12 +3895,12 @@ msgstr "Для создания набора не требуется CRS. Вер
 #, fuzzy
 #| msgid "Creating new GRASS GIS mapset <{}>..."
 msgid "Creating new GRASS mapset <{}>..."
-msgstr "Создание нового набора GRASS GIS <{}>…"
+msgstr "Создание нового набора GRASS <{}>…"
 
 #: ../lib/init/grass.py:934
 #, fuzzy
 msgid "GRASS database directory, project and mapset not set properly. Use GUI or command line to set them."
-msgstr "Каталог базы данных, область и набор GRASS GIS заданы неверно. Задайте их в графическом интерфейсе или командной строке."
+msgstr "Каталог базы данных, область и набор GRASS заданы неверно. Задайте их в графическом интерфейсе или командной строке."
 
 #: ../lib/init/grass.py:994
 #, python-brace-format
@@ -3960,13 +3960,13 @@ msgstr "Не удалось закрыть графический интерфе
 #, fuzzy, python-format
 #| msgid "Welcome to GRASS GIS %s"
 msgid "Welcome to GRASS %s"
-msgstr "Добро пожаловать в GRASS GIS %s"
+msgstr "Добро пожаловать в GRASS %s"
 
 #: ../lib/init/grass.py:1515
 #, fuzzy
 #| msgid "GRASS GIS homepage:"
 msgid "GRASS homepage:"
-msgstr "Домашняя страница GRASS GIS:"
+msgstr "Домашняя страница GRASS:"
 
 #. GTC Running through: SHELL NAME
 #: ../lib/init/grass.py:1517
@@ -4023,13 +4023,13 @@ msgstr "Готово."
 #, fuzzy
 #| msgid "Goodbye from GRASS GIS"
 msgid "Goodbye from GRASS"
-msgstr "До новых встреч с GRASS GIS"
+msgstr "До новых встреч с GRASS"
 
 #: ../lib/init/grass.py:1823
 #, fuzzy
 #| msgid "Please install the GRASS GIS development package"
 msgid "Please install the GRASS development package"
-msgstr "Установите пакет для разработки GRASS GIS"
+msgstr "Установите пакет для разработки GRASS"
 
 #: ../lib/init/grass.py:1869
 #, python-format
@@ -4118,7 +4118,7 @@ msgid ""
 "     {cmd_name} --help\n"
 "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 msgstr ""
-"Не удалось запустить GRASS GIS. В этом случае можно попробовать:\n"
+"Не удалось запустить GRASS. В этом случае можно попробовать:\n"
 " — Запустить графический интерфейс с ключом «--gui»\n"
 "     {cmd_name} --gui\n"
 " — Запустить с указанием пути к области или набору в качестве аргумента\n"
@@ -4135,18 +4135,18 @@ msgstr ""
 #, fuzzy
 #| msgid "Starting GRASS GIS..."
 msgid "Starting GRASS..."
-msgstr "Запуск GRASS GIS…"
+msgstr "Запуск GRASS…"
 
 #: ../lib/init/grass.py:2288
 #, fuzzy
 #| msgid "Failed to start GRASS GIS, grassdata directory cannot be found or created."
 msgid "Failed to start GRASS, grassdata directory cannot be found or created."
-msgstr "При запуске GRASS GIS возникла ошибка, каталог grassdata не может быть найден или удалён."
+msgstr "При запуске GRASS возникла ошибка, каталог grassdata не может быть найден или удалён."
 
 #: ../lib/init/grass.py:2295
 #, fuzzy
 msgid "Failed to start GRASS, no default project to copy in the installation or copying failed."
-msgstr "Ошибка при запуске GRASS GIS, отсутствует область по умолчанию для копирования в место установки или произошла ошибка копирования."
+msgstr "Ошибка при запуске GRASS, отсутствует область по умолчанию для копирования в место установки или произошла ошибка копирования."
 
 #: ../lib/init/grass.py:2400
 #, python-format

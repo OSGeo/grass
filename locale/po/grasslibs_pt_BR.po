@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: grasslibs_pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-14 18:45+0000\n"
-"PO-Revision-Date: 2023-04-29 23:52+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2025-06-14 20:52+0000\n"
+"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.osgeo.org/projects/grass-gis/grasslibs/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.16.4\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: ../lib/arraystats/class.c:22
 #, c-format
@@ -3838,7 +3838,7 @@ msgstr "Não é possível criar objeto PROJ"
 #: ../lib/init/grass.py:874
 #, fuzzy
 msgid "Creating new GRASS project <{}>..."
-msgstr "Criando novo mapset GRASS GIS <{}>..."
+msgstr "Criando novo mapset GRASS <{}>..."
 
 #: ../lib/init/grass.py:885
 #, python-brace-format
@@ -3858,12 +3858,12 @@ msgstr ""
 #, fuzzy
 #| msgid "Creating new GRASS GIS mapset <{}>..."
 msgid "Creating new GRASS mapset <{}>..."
-msgstr "Criando novo mapset GRASS GIS <{}>..."
+msgstr "Criando novo mapset GRASS <{}>..."
 
 #: ../lib/init/grass.py:934
 #, fuzzy
 msgid "GRASS database directory, project and mapset not set properly. Use GUI or command line to set them."
-msgstr "Diretório do banco de dados GRASS GIS, location e mapset não definidos de modo apropriado. Use GUI ou a linha de comando para defini-los."
+msgstr "Diretório do banco de dados GRASS, location e mapset não definidos de modo apropriado. Use GUI ou a linha de comando para defini-los."
 
 #: ../lib/init/grass.py:994
 #, python-brace-format
@@ -3923,13 +3923,13 @@ msgstr "Não foi possível fechar a GUI. {0}"
 #, fuzzy, python-format
 #| msgid "Welcome to GRASS GIS %s"
 msgid "Welcome to GRASS %s"
-msgstr "Bem-vindo ao GRASS GIS %s"
+msgstr "Bem-vindo ao GRASS %s"
 
 #: ../lib/init/grass.py:1515
 #, fuzzy
 #| msgid "GRASS GIS homepage:"
 msgid "GRASS homepage:"
-msgstr "GRASS GIS homepage:"
+msgstr "GRASS homepage:"
 
 #. GTC Running through: SHELL NAME
 #: ../lib/init/grass.py:1517
@@ -3988,7 +3988,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Please install the GRASS GIS development package"
 msgid "Please install the GRASS development package"
-msgstr "Por favor instale o pacote de desenvolvimento GRASS GIS"
+msgstr "Por favor instale o pacote de desenvolvimento GRASS"
 
 #: ../lib/init/grass.py:1869
 #, python-format
@@ -4074,7 +4074,7 @@ msgid ""
 "     {cmd_name} --help\n"
 "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 msgstr ""
-"Não foi possível iniciar GRASS GIS. Você tem a opção de:\n"
+"Não foi possível iniciar GRASS. Você tem a opção de:\n"
 "- Iniciar a interface gráfica do usuário com a opção '--gui'\n"
 "{cmd_name} --gui\n"
 "- Iniciar com o caminho para location/mapset como um argumento\n"
@@ -4091,7 +4091,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Starting GRASS GIS..."
 msgid "Starting GRASS..."
-msgstr "Iniciando GRASS GIS..."
+msgstr "Iniciando GRASS..."
 
 #: ../lib/init/grass.py:2288
 msgid "Failed to start GRASS, grassdata directory cannot be found or created."
