@@ -37,7 +37,7 @@ from tempfile import NamedTemporaryFile
 from pathlib import Path
 from typing import TYPE_CHECKING, TypeVar
 
-from .utils import KeyValue, parse_key_val, basename, encode, decode, try_remove
+from .utils import KeyValue, parse_key_val, basename, decode, try_remove
 from grass.exceptions import ScriptError, CalledModuleError
 from grass.grassdb.manage import resolve_mapset_path
 
@@ -66,6 +66,11 @@ class Popen(subprocess.Popen):
         if cmd is None:
             raise OSError(_("Cannot find the executable {0}").format(args[0]))
         args = [cmd] + args[1:]
+
+        # Use text mode by default
+        if "text" not in kwargs and "universal_newlines" not in kwargs:
+            kwargs["text"] = True
+
         if (
             sys.platform == "win32"
             and isinstance(args, list)
@@ -702,10 +707,6 @@ def write_command(*args, **kwargs):
         encoding = kwargs["encoding"]
     # TODO: should we delete it from kwargs?
     stdin = kwargs["stdin"]
-    if encoding is None or encoding == "default":
-        stdin = encode(stdin)
-    else:
-        stdin = encode(stdin, encoding=encoding)
     if _capture_stderr and "stderr" not in kwargs.keys():
         kwargs["stderr"] = PIPE
     process = feed_command(*args, **kwargs)
@@ -1986,7 +1987,7 @@ def create_project(
                 stdin=PIPE,
                 env=env,
             )
-            stdin = encode(wkt)
+            stdin = wkt
     else:
         _create_location_xy(mapset_path.directory, mapset_path.location)
 
