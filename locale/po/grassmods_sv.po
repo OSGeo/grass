@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-04 10:56+0000\n"
-"PO-Revision-Date: 2025-06-11 17:59+0000\n"
+"PO-Revision-Date: 2025-06-14 16:47+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
 "Language: sv\n"
@@ -22,7 +22,7 @@ msgstr ""
 #: ../db/db.describe/main.c:65 ../db/db.select/main.c:52
 #, c-format
 msgid "Table <%s> not found in database <%s> using driver <%s>"
-msgstr "Tabell <%s> hittades inte i databas <%s> med drivrutin <%s>"
+msgstr "Tabell <%s> hittades inte i databas <%s> med drivaren <%s>"
 
 #: ../db/db.columns/main.c:47 ../db/db.createdb/main.c:38
 #: ../db/db.databases/main.c:47 ../db/db.describe/main.c:71
@@ -1080,7 +1080,7 @@ msgstr "Det går inte att öppna OGR-datakällan"
 #: ../db/drivers/ogr/describe.c:54
 #, c-format
 msgid "OGR layer <%s> does not exist\n"
-msgstr "OGR-skiktet <%s> finns inte\n"
+msgstr "OGR-lagret <%s> finns inte\n"
 
 #: ../db/drivers/ogr/describe.c:62 ../db/drivers/ogr/select.c:58
 msgid "Unable to describe table\n"
@@ -2639,13 +2639,11 @@ msgstr "färgomvandling"
 msgid ""
 "Displays the result obtained by combining hue, intensity, and saturation "
 "(HIS) values from user-specified input raster map layers."
-msgstr ""
-"Visar det resultat som erhålls genom att kombinera värden för nyans, "
-"intensitet och mättnad (HIS) från användarspecifika rasterkartskikt."
+msgstr "Visar det resultat som erhålls genom att kombinera värden för nyans, intensitet och mättnad (HIS) från användarspecifika rasterkartlager."
 
 #: ../display/d.his/main.c:76 ../raster/r.his/main.c:81
 msgid "Name of layer to be used for hue"
-msgstr "Namn på skikt som ska användas för färgton"
+msgstr "Namn på lager som ska användas för färgton"
 
 #: ../display/d.his/main.c:83 ../raster/r.his/main.c:88
 msgid "Name of layer to be used for intensity"
@@ -3856,7 +3854,7 @@ msgstr "Typ av båge"
 #: ../vector/v.net.spanningtree/main.c:58 ../vector/v.net.steiner/main.c:376
 #: ../vector/v.net.timetable/main.c:269 ../vector/v.net/args.c:55
 msgid "Arc layer"
-msgstr "Bågskikt"
+msgstr "Båglager"
 
 #: ../display/d.path/main.c:74 ../vector/v.net.alloc/main.c:106
 #: ../vector/v.net.allpairs/main.c:80 ../vector/v.net.bridge/main.c:65
@@ -5642,7 +5640,7 @@ msgstr "Namn på inmatningsfil(er)"
 
 #: ../general/g.cairocomp/main.c:215
 msgid "Output Visual XID"
-msgstr "Utgång Visuell XID"
+msgstr "Mata ut visuell XID"
 
 #: ../general/g.cairocomp/main.c:221
 msgid "Output screen"
@@ -5650,7 +5648,7 @@ msgstr "Utmatningsskärm"
 
 #: ../general/g.cairocomp/main.c:227 ../general/g.pnmcomp/main.c:301
 msgid "Layer opacities"
-msgstr "Skiktets opacitet"
+msgstr "Lagrets opacitet"
 
 #: ../general/g.cairocomp/main.c:233 ../general/g.pnmcomp/main.c:314
 msgid "Image width"
@@ -5792,7 +5790,7 @@ msgstr "Lägg inte till citat"
 
 #: ../general/g.findfile/main.c:74
 msgid "List available elements and exit"
-msgstr "Lista tillgängliga element och utgång"
+msgstr "Lista tillgängliga element och avsluta"
 
 #: ../general/g.findfile/main.c:98
 #, c-format
@@ -8038,7 +8036,7 @@ msgstr ""
 
 #: ../imagery/i.aster.toar/main.c:109
 msgid "Names of ASTER DN layers (15 layers)"
-msgstr "Namn på ASTER DN-skikt (15 skikt)"
+msgstr "Namn på ASTER DN-lager (15 lager)"
 
 #: ../imagery/i.aster.toar/main.c:115
 msgid "Day of Year of satellite overpass [0-366]"
@@ -8107,7 +8105,7 @@ msgstr "Kontrollera aerosolmätningar eller planets höjd"
 #: ../imagery/i.atcorr/computations.cpp:454
 #: ../imagery/i.atcorr/computations.cpp:1020
 msgid "Position of the plane layer could not be determined"
-msgstr "Planskiktets position kunde inte fastställas"
+msgstr "Planlagrets position kunde inte fastställas"
 
 #: ../imagery/i.atcorr/geomcond.cpp:91
 msgid "The sun is not raised"
@@ -9064,7 +9062,7 @@ msgstr "Namn på kartan över solens zenitvinkel [grader]"
 
 #: ../imagery/i.eb.netrad/main.c:98
 msgid "Name of the output net radiation layer"
-msgstr "Namn på det utgående nettostrålningsskiktet"
+msgstr "Namn på det utgående nettostrålningslagret"
 
 #: ../imagery/i.eb.soilheatflux/main.c:51
 msgid "soil heat flux"
@@ -9100,7 +9098,7 @@ msgstr "Namn på NDVI-kartan [-]"
 
 #: ../imagery/i.emissivity/main.c:55
 msgid "Name of the output emissivity layer"
-msgstr "Namn på det utgående emissivitetsskiktet"
+msgstr "Namn på det utgående emissivitetslagret"
 
 #: ../imagery/i.evapo.mh/main.c:69 ../imagery/i.evapo.pm/main.c:59
 #: ../imagery/i.evapo.pt/main.c:66 ../imagery/i.evapo.time/main.c:74
@@ -10250,7 +10248,7 @@ msgstr "Extraherar kvalitetskontrollparametrar från MODIS QC-lager."
 
 #: ../imagery/i.modis.qc/main.c:180
 msgid "Name of input surface reflectance QC layer [bit array]"
-msgstr "Namn på QC-skikt för inmatad ytreflektans [bitmatris]"
+msgstr "Namn på QC-lager för inmatad ytreflektans [bitmatris]"
 
 #: ../imagery/i.modis.qc/main.c:184
 msgid "Name for output QC type classification layer"
@@ -12429,7 +12427,7 @@ msgstr "Kartor med funktionsvärden (attribut)"
 
 #: ../imagery/i.svm.predict/main.c:76
 msgid "Output map with predicted class or calculated value"
-msgstr "Utgångskarta med predikterad klass eller beräknat värde"
+msgstr "Mata ut karta med predikterad klass eller beräknat värde"
 
 #: ../imagery/i.svm.predict/main.c:85 ../imagery/i.svm.train/main.c:137
 msgid "LIBSVM kernel cache size in MB"
@@ -12792,7 +12790,7 @@ msgstr "Topografisk korrigeringsmetod"
 
 #: ../imagery/i.topo.corr/main.c:89
 msgid "Output sun illumination terrain model"
-msgstr "Utgång solbelysning terrängmodell"
+msgstr "Mata ut solbelysning med terrängmodell"
 
 #: ../imagery/i.topo.corr/main.c:93
 msgid "Scale output to input and copy color rules"
@@ -14199,7 +14197,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/m.proj_to_translate.c:20
 msgid "Use current location as input and LL WGS84 as output projection"
-msgstr "Använd aktuell position som indata och LL WGS84 som utgångsprojektion"
+msgstr "Använd aktuell position som indata och LL WGS84 som utdataprojektion"
 
 #: ../locale/scriptstrings/m.proj_to_translate.c:22
 msgid ""
@@ -14236,7 +14234,7 @@ msgstr "Namn på den andra rasterkartan för blandning"
 
 #: ../locale/scriptstrings/r.blend_to_translate.c:6
 msgid "Basename for red, green and blue output raster maps"
-msgstr "Basnamn för rasterkartor med röd, grön och blå utgång"
+msgstr "Basnamn för rasterkartor med röd, grön och blå utdata"
 
 #: ../locale/scriptstrings/r.blend_to_translate.c:7
 msgid "Percentage weight of first map for color blending"
@@ -14558,7 +14556,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.import_to_translate.c:14
 msgid "Output raster map extent"
-msgstr "Utgångsrasterkartans utsträckning"
+msgstr "Mata ut rasterkartans utsträckning"
 
 #: ../locale/scriptstrings/r.import_to_translate.c:15
 msgid "region;extent of current region;input;extent of input map"
@@ -15224,11 +15222,11 @@ msgstr "Destinationsprojektion, standard är den här platsens projektion"
 
 #: ../locale/scriptstrings/r.tileset_to_translate.c:11
 msgid "Maximum number of columns for a tile in the source projection"
-msgstr "Maximalt antal kolumner för en kakelplatta i källprojektionen"
+msgstr "Maximalt antal kolumner för en platta i källprojektionen"
 
 #: ../locale/scriptstrings/r.tileset_to_translate.c:12
 msgid "Maximum number of rows for a tile in the source projection"
-msgstr "Maximalt antal rader för en kakelplatta i källprojektionen"
+msgstr "Maximalt antal rader för en platta i källprojektionen"
 
 #: ../locale/scriptstrings/r.tileset_to_translate.c:13
 msgid "Number of cells tiles should overlap in each direction"
@@ -16325,7 +16323,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast.export_to_translate.c:18
 #: ../raster/r.out.gdal/main.c:229
 msgid "Assign a specified nodata value to output bands"
-msgstr "Tilldela ett specificerat nodata-värde till utgångsbanden"
+msgstr "Tilldela ett specificerat nodata-värde till utdatabanden"
 
 #: ../locale/scriptstrings/t.rast.export_to_translate.c:19
 #: ../raster/r.out.gdal/main.c:231
@@ -17100,11 +17098,11 @@ msgstr "topologi"
 
 #: ../locale/scriptstrings/t.topology_to_translate.c:7
 msgid "Print temporal topological relationships and exit"
-msgstr "Skriv ut tidsmässiga topologiska relationer och utgång"
+msgstr "Skriv ut tidsmässiga topologiska relationer och avsluta"
 
 #: ../locale/scriptstrings/t.topology_to_translate.c:8
 msgid "Print spatio-temporal topological relationships and exit"
-msgstr "Skriv ut spatiala och tidsmässiga topologiska relationer och utgång"
+msgstr "Skriv ut spatiala och tidsmässiga topologiska relationer och avsluta"
 
 #: ../locale/scriptstrings/t.unregister_to_translate.c:1
 msgid ""
@@ -17669,8 +17667,7 @@ msgstr "Namn på OGR-datakälla som ska importeras"
 #: ../locale/scriptstrings/v.import_to_translate.c:7
 #: ../vector/v.in.ogr/main.c:251
 msgid "OGR layer name. If not given, all available layers are imported"
-msgstr ""
-"OGR-skiktets namn. Om det inte anges importeras alla tillgängliga lager"
+msgstr "OGR-lagrets namn. Om det inte anges importeras alla tillgängliga lager"
 
 #: ../locale/scriptstrings/v.import_to_translate.c:9
 #: ../vector/v.proj/main.c:113
@@ -17679,7 +17676,7 @@ msgstr "Namn för utmatningsvektorkarta (standard: input)"
 
 #: ../locale/scriptstrings/v.import_to_translate.c:11
 msgid "Output vector map extent"
-msgstr "Utgångsvektor för kartans utsträckning"
+msgstr "Mata ut vektor för kartans utsträckning"
 
 #: ../locale/scriptstrings/v.import_to_translate.c:12
 msgid "input;extent of input map;region;extent of current region"
@@ -17717,7 +17714,7 @@ msgstr "Lista över OGR-format som stöds och avsluta"
 #: ../locale/scriptstrings/v.import_to_translate.c:26
 #: ../vector/v.in.ogr/main.c:357
 msgid "List available OGR layers in data source and exit"
-msgstr "Lista tillgängliga OGR-lager i datakälla och utgång"
+msgstr "Lista tillgängliga OGR-lager i datakälla och avsluta"
 
 #: ../locale/scriptstrings/v.in.e00_to_translate.c:1
 msgid "Imports E00 file into a vector map."
@@ -18974,9 +18971,7 @@ msgstr "Skapa EPS (Encapsulated PostScript) istället för PostScript-fil"
 msgid ""
 "Describe map-box's position on the page and exit (inches from top-left of "
 "paper)"
-msgstr ""
-"Beskriv kartboxens position på sidan och utgång (tum från papperets övre "
-"vänstra kant)"
+msgstr "Beskriv kartrutans position på sidan och avsluta (tum från papperets övre vänstra kant)"
 
 #: ../ps/ps.map/main.c:119
 msgid "File containing mapping instructions"
@@ -19828,9 +19823,7 @@ msgstr "Omnumrering av kvarvarande %d klumpar..."
 msgid ""
 "Tabulates the mutual occurrence (coincidence) of categories for two raster "
 "map layers."
-msgstr ""
-"Tabulerar den ömsesidiga förekomsten (sammanfallande) av kategorier för två "
-"rasterkartskikt."
+msgstr "Tabulerar den ömsesidiga förekomsten (sammanfallande) av kategorier för två rasterkartlager."
 
 #: ../raster/r.coin/main.c:72
 msgid "Name of first input raster map"
@@ -20468,7 +20461,7 @@ msgstr "Namn för rasterkarta med närmaste startpunkt för utdata"
 #: ../raster/r.cost/main.c:273 ../raster/r.walk/main.c:245
 #: ../raster/r.walk/main.c:252 ../raster/r.walk/main.c:359
 msgid "Optional outputs"
-msgstr "Valfria utgångar"
+msgstr "Valfria utmatningar"
 
 #: ../raster/r.cost/main.c:196 ../raster/r.walk/main.c:251
 msgid "Name for output raster map to contain movement directions"
@@ -20622,7 +20615,7 @@ msgstr ""
 
 #: ../raster/r.cost/main.c:569 ../raster/r.walk/main.c:730
 msgid "Initializing directional output..."
-msgstr "Initialisering av riktningsutgång..."
+msgstr "Initialisering av riktningsutdata..."
 
 #: ../raster/r.cost/main.c:601 ../raster/r.drain/main.c:280
 #: ../raster/r.path/main.c:323 ../raster/r.walk/main.c:762
@@ -20727,9 +20720,7 @@ msgstr "Varning, ignorerar punkt utanför fönster: %g, %g"
 msgid ""
 "Outputs a covariance/correlation matrix for user-specified raster map "
 "layer(s)."
-msgstr ""
-"Ger ut en kovarians-/korrelationsmatris för användarspecificerade "
-"rasterkartskikt."
+msgstr "Ger ut en kovarians-/korrelationsmatris för användarspecificerade rasterkartlager."
 
 #: ../raster/r.covar/main.c:57
 msgid "Print correlation matrix"
@@ -20749,7 +20740,7 @@ msgstr "%s: STEG 1 … "
 msgid ""
 "Creates a cross product of the category values from multiple raster map "
 "layers."
-msgstr "Skapar en korsprodukt av kategorivärdena från flera rasterkartskikt."
+msgstr "Skapar en korsprodukt av kategorivärdena från flera rasterkartlager."
 
 #: ../raster/r.cross/main.c:76
 #, c-format
@@ -20791,9 +20782,7 @@ msgstr "Läser <%s> ..."
 
 #: ../raster/r.describe/main.c:56
 msgid "Prints terse list of category values found in a raster map layer."
-msgstr ""
-"Skriver ut en kortfattad lista över kategorivärden som finns i ett "
-"rasterkartskikt."
+msgstr "Skriver ut en kortfattad lista över kategorivärden som finns i ett rasterkartlager."
 
 #: ../raster/r.describe/main.c:70
 msgid "Number of quantization steps"
@@ -21476,7 +21465,7 @@ msgstr "Namn på resultatutmatningskarta"
 
 #: ../raster/r.fill.stats/main.c:789
 msgid "Name of uncertainty output map"
-msgstr "Namn på karta för osäkerhetsutgång"
+msgstr "Namn på karta för osäkerhetsutdata"
 
 #: ../raster/r.fill.stats/main.c:798
 msgid "Distance threshold (default: in cells) for interpolation"
@@ -21524,7 +21513,7 @@ msgstr "Skriv bara ut uppskattad minnesanvändning"
 
 #: ../raster/r.fill.stats/main.c:869
 msgid "Single precision floating point output"
-msgstr "Flyttalsutgång med enkel precision"
+msgstr "Flyttalsutdata med enkel precision"
 
 #: ../raster/r.fill.stats/main.c:881
 msgid "You are working with lat/lon data."
@@ -21725,7 +21714,7 @@ msgstr "Namn för utflödeslinje vektorkarta"
 #: ../raster/r.flow/main.c:464 ../raster/r.stream.extract/main.c:143
 #: ../raster/r.stream.extract/main.c:150 ../raster/r.stream.extract/main.c:157
 msgid "Output maps"
-msgstr "Utgångskartor"
+msgstr "Mata ut kartor"
 
 #: ../raster/r.flow/main.c:457
 msgid "Name for output flow path length raster map"
@@ -21879,7 +21868,7 @@ msgstr "Misslyckades med att analysera <%s>"
 #: ../raster/r.geomorphon/main.c:227
 #, c-format
 msgid "At least one output is required, e.g. %s"
-msgstr "Minst en utgång krävs, t.ex. %s"
+msgstr "Minst en utmatning krävs, t.ex. %s"
 
 #: ../raster/r.geomorphon/main.c:251
 msgid "The coordinates are outside of the computational region"
@@ -22207,9 +22196,7 @@ msgid ""
 "Generates red, green and blue (RGB) raster map layers combining hue, "
 "intensity and saturation (HIS) values from user-specified input raster map "
 "layers."
-msgstr ""
-"Genererar röda, gröna och blå (RGB) rasterkartskikt som kombinerar nyans-, "
-"intensitets- och mättnadsvärden (HIS) från användarspecifika rasterkartskikt."
+msgstr "Genererar röda, gröna och blå (RGB) rasterkartlager som kombinerar nyans-, intensitets- och mättnadsvärden (HIS) från användarspecifika rasterkartlager."
 
 #: ../raster/r.his/main.c:102
 msgid "Name of output layer to be used for red"
@@ -22603,7 +22590,7 @@ msgstr "Fel vid läsning av data"
 
 #: ../raster/r.in.bin/main.c:287
 msgid "Import a binary raster file into a GRASS raster map layer."
-msgstr "Importera en binär rasterfil till ett GRASS-rasterkartskikt."
+msgstr "Importera en binär rasterfil till ett GRASS-rasterkartlager."
 
 #: ../raster/r.in.bin/main.c:292
 msgid "Import as floating-point data (default: integer)"
@@ -22631,7 +22618,7 @@ msgstr "Namn på den binära rasterfil som ska importeras"
 
 #: ../raster/r.in.bin/main.c:319
 msgid "Output name or prefix if several bands are imported"
-msgstr "Utgångsnamn eller prefix om flera band importeras"
+msgstr "Mata ut namn eller prefix om flera band importeras"
 
 #: ../raster/r.in.bin/main.c:333 ../raster/r.out.bin/main.c:331
 msgid "Number of bytes per cell"
@@ -22907,7 +22894,7 @@ msgstr "Skriv ut antal band och avsluta"
 
 #: ../raster/r.in.gdal/main.c:345
 msgid "You have to specify a target project different from output project"
-msgstr "Du måste ange ett målprojekt som skiljer sig från utgångsprojektet"
+msgstr "Du måste ange ett målprojekt som skiljer sig från utdataprojektet"
 
 #: ../raster/r.in.gdal/main.c:350
 msgid "You need to specify valid project name."
@@ -23017,7 +23004,7 @@ msgstr "* Inmatad projektion för GCP-tabell: %s"
 #: ../raster/r.in.gdal/main.c:923
 #, c-format
 msgid "* Output projection for GCP table: %s"
-msgstr "* Utgångsprojektion för GCP-tabell: %s"
+msgstr "* Mata ut projektion för GCP-tabell: %s"
 
 #: ../raster/r.in.gdal/main.c:945
 #, c-format
@@ -24397,7 +24384,7 @@ msgstr "Namn för rasterkarta med latitud eller longitud som matas ut"
 
 #: ../raster/r.latlong/main.c:70
 msgid "Longitude output"
-msgstr "Longitudutgång"
+msgstr "Longitudutdata"
 
 #: ../raster/r.latlong/main.c:101
 msgid "Unable to get projection info of current location"
@@ -25025,7 +25012,7 @@ msgstr "Täckningskarta"
 
 #: ../raster/r.mode/main.c:76
 msgid "Output map"
-msgstr "Utgångskarta"
+msgstr "Mata ut karta"
 
 #: ../raster/r.mode/main.c:89
 #, c-format
@@ -25067,10 +25054,7 @@ msgid ""
 "Makes each cell category value a function of the category values assigned to "
 "the cells around it, and stores new cell values in an output raster map "
 "layer."
-msgstr ""
-"Gör varje cellkategorivärde till en funktion av de kategorivärden som "
-"tilldelats cellerna runt omkring och lagrar nya cellvärden i ett "
-"rasterkartskikt."
+msgstr "Gör varje cellkategorivärde till en funktion av de kategorivärden som tilldelats cellerna runt omkring och lagrar nya cellvärden i ett rasterkartlager."
 
 #: ../raster/r.neighbors/main.c:228
 msgid "Neighborhood operation"
@@ -25312,7 +25296,7 @@ msgstr "Skriva utdata"
 
 #: ../raster/r.out.ascii/main.c:58
 msgid "Converts a raster map layer into a GRASS ASCII text file."
-msgstr "Konverterar ett rasterkartskikt till en GRASS ASCII-textfil."
+msgstr "Konverterar ett rasterkartlager till en GRASS ASCII-textfil."
 
 #: ../raster/r.out.ascii/main.c:67
 msgid "Name for output ASCII grid map (use out=- for stdout)"
@@ -25416,7 +25400,7 @@ msgstr "Generera BIL-världs- och header-filer"
 
 #: ../raster/r.out.bin/main.c:359
 msgid "Byte swap output"
-msgstr "Byte-swap-utgång"
+msgstr "Byte-swap-utdata"
 
 #: ../raster/r.out.bin/main.c:367 ../raster3d/r3.out.bin/main.c:269
 msgid "Invalid value for null (integers only)"
@@ -25689,11 +25673,11 @@ msgstr "Antal översikter som ska skapas för utdatasetet"
 
 #: ../raster/r.out.gdal/main.c:253
 msgid "Assign a specified offset value to output bands"
-msgstr "Tilldela ett specificerat offsetvärde till utgångsbanden"
+msgstr "Tilldela ett specificerat förskjutningsvärde till utdatabanden"
 
 #: ../raster/r.out.gdal/main.c:261
 msgid "Assign a specified scale value to output bands"
-msgstr "Tilldela ett specificerat skalvärde till utgångsbanden"
+msgstr "Tilldela ett specificerat skalvärde till utdatabanden"
 
 #: ../raster/r.out.gdal/main.c:291
 #, c-format
@@ -26211,8 +26195,7 @@ msgstr "Skriva VTK ImageData\n"
 
 #: ../raster/r.out.vtk/main.c:231
 msgid "Wrong RGB maps. Maps should have the same type! RGB output not added!"
-msgstr ""
-"Fel RGB-kartor. Kartor ska ha samma typ! RGB-utgång har inte lagts till!"
+msgstr "Fel RGB-kartor. Kartor ska ha samma typ! RGB-utdata har inte lagts till!"
 
 #: ../raster/r.out.vtk/main.c:260
 msgid "Writing VTK Vector Data\n"
@@ -26398,10 +26381,7 @@ msgstr "lappning"
 msgid ""
 "Creates a composite raster map layer by using known category values from one "
 "(or more) map layer(s) to fill in areas of \"no data\" in another map layer."
-msgstr ""
-"Skapar ett sammansatt rasterkartskikt genom att använda kända kategorivärden "
-"från ett (eller flera) kartskikt för att fylla i områden med \"inga data\" i "
-"ett annat kartskikt."
+msgstr "Skapar ett sammansatt rasterkartlager genom att använda kända kategorivärden från ett (eller flera) kartlager för att fylla i områden med \"inga data\" i ett annat kartlager."
 
 #: ../raster/r.patch/main.c:84
 msgid "Name of raster maps to be patched together"
@@ -26620,9 +26600,7 @@ msgstr "transekt"
 
 #: ../raster/r.profile/main.c:59
 msgid "Outputs the raster map layer values lying on user-defined line(s)."
-msgstr ""
-"Utmatning av rasterkartans skiktvärden som ligger på användardefinierade "
-"linjer."
+msgstr "Utmatning av rasterkartans lagervärden som ligger på användardefinierade linjer."
 
 #: ../raster/r.profile/main.c:78
 msgid "Name of input file containing coordinate pairs"
@@ -26824,7 +26802,7 @@ msgstr "Inmatnings- och utmatningsplatserna kan inte vara desamma"
 
 #: ../raster/r.proj/main.c:296
 msgid "Input and output projects are the same"
-msgstr "Ingångs- och utgångsprojekt är desamma"
+msgstr "Indatas- och utdataprojekt är desamma"
 
 #: ../raster/r.proj/main.c:306
 msgid "Unable to get projection info of output raster map"
@@ -26932,7 +26910,7 @@ msgstr "NS-res: %f"
 
 #: ../raster/r.proj/main.c:664
 msgid "Output:"
-msgstr "Utgång:"
+msgstr "Utdata:"
 
 #: ../raster/r.proj/main.c:715
 msgid "Projecting..."
@@ -28422,7 +28400,7 @@ msgstr "Vikt enligt yta (långsammare)"
 
 #: ../raster/r.resample/main.c:57
 msgid "GRASS raster map layer data resampling capability."
-msgstr "Möjlighet till omsampling av data från GRASS rasterkartskikt."
+msgstr "Möjlighet till omsampling av data från GRASS rasterkartlager."
 
 #: ../raster/r.resample/main.c:66
 msgid "Name of an input layer"
@@ -28449,9 +28427,7 @@ msgstr "skala om"
 msgid ""
 "Rescales histogram equalized the range of category values in a raster map "
 "layer."
-msgstr ""
-"Omskalning av histogram utjämnar intervallet för kategorivärden i ett "
-"rasterkartskikt."
+msgstr "Omskalning av histogram utjämnar intervallet för kategorivärden i ett rasterkartlager."
 
 #: ../raster/r.rescale.eq/main.c:62 ../raster/r.rescale/main.c:56
 msgid "The name of the raster map to be rescaled"
@@ -28482,7 +28458,7 @@ msgstr "Rescale %s[%d,%d] till %s[%d,%d]"
 
 #: ../raster/r.rescale/main.c:50
 msgid "Rescales the range of category values in a raster map layer."
-msgstr "Skalar om intervallet för kategorivärden i ett rasterkartskikt."
+msgstr "Skalar om intervallet för kategorivärden i ett rasterkartlager."
 
 #: ../raster/r.rescale/main.c:109
 #, c-format
@@ -28548,10 +28524,7 @@ msgid ""
 "Name of an existing raster map layer in the user's current mapset search "
 "path containing the 1-hour (<.25\") fuel moisture (percentage content "
 "multiplied by 100)."
-msgstr ""
-"Namn på ett befintligt rasterkartskikt i användarens aktuella sökväg för "
-"kartset som innehåller 1-timmes (<.25\") bränslefuktighet (procentuell halt "
-"multiplicerad med 100)."
+msgstr "Namn på ett befintligt rasterkartlager i användarens aktuella sökväg för kartset som innehåller 1-timmes (<.25\") bränslefuktighet (procentuell halt multiplicerad med 100)."
 
 #: ../raster/r.ros/main.c:245
 msgid "Raster map containing the 10-hour fuel moisture (%)"
@@ -28562,10 +28535,7 @@ msgid ""
 "Name of an existing raster map layer in the user's current mapset search "
 "path containing the 10-hour (.25-1\") fuel moisture (percentage content "
 "multiplied by 100)."
-msgstr ""
-"Namn på ett befintligt rasterkartskikt i användarens aktuella sökväg för "
-"kartset som innehåller 10-timmars (.25-1\") bränslefuktighet (procentuell "
-"halt multiplicerad med 100)."
+msgstr "Namn på ett befintligt rasterkartlager i användarens aktuella sökväg för kartset som innehåller 10-timmars (.25-1\") bränslefuktighet (procentuell halt multiplicerad med 100)."
 
 #: ../raster/r.ros/main.c:256
 msgid "Raster map containing the 100-hour fuel moisture (%)"
@@ -28576,10 +28546,7 @@ msgid ""
 "Name of an existing raster map layer in the user's current mapset search "
 "path containing the 100-hour (1-3\") fuel moisture (percentage content "
 "multiplied by 100)."
-msgstr ""
-"Namn på ett befintligt rasterkartskikt i användarens aktuella sökväg för "
-"kartset som innehåller 100-timmars (1-3\") bränslefuktighet (procentuell "
-"halt multiplicerad med 100)."
+msgstr "Namn på ett befintligt rasterkartlager i användarens aktuella sökväg för kartset som innehåller 100-timmars (1-3\") bränslefuktighet (procentuell halt multiplicerad med 100)."
 
 #: ../raster/r.ros/main.c:265
 msgid "Raster map containing live fuel moisture (%)"
@@ -28590,10 +28557,7 @@ msgid ""
 "Name of an existing raster map layer in the user's current mapset search "
 "path containing live (herbaceous) fuel moisture (percentage content "
 "multiplied by 100)."
-msgstr ""
-"Namn på ett befintligt rasterkartskikt i användarens aktuella sökväg för "
-"kartset som innehåller fukt i levande (örtartat) bränsle (procentuell halt "
-"multiplicerad med 100)."
+msgstr "Namn på ett befintligt rasterkartlager i användarens aktuella sökväg för kartset som innehåller fukt i levande (örtartat) bränsle (procentuell halt multiplicerad med 100)."
 
 #: ../raster/r.ros/main.c:275
 msgid "Raster map containing midflame wind velocities (ft/min)"
@@ -28605,10 +28569,7 @@ msgid ""
 "Name of an existing raster map layer in the user's current mapset search "
 "path containing wind velocities at half of the average flame height (feet/"
 "minute)."
-msgstr ""
-"Namn på ett befintligt rasterkartskikt i användarens aktuella sökväg för "
-"kartset som innehåller vindhastigheter vid hälften av den genomsnittliga "
-"flamhöjden (fot/minut)."
+msgstr "Namn på ett befintligt rasterkartlager i användarens aktuella sökväg för kartset som innehåller vindhastigheter vid hälften av den genomsnittliga flamhöjden (fot/minut)."
 
 #: ../raster/r.ros/main.c:286
 msgid "Name of raster map containing wind directions (degree)"
@@ -28618,9 +28579,7 @@ msgstr "Namn på rasterkarta som innehåller vindriktningar (grader)"
 msgid ""
 "Name of an existing raster map layer in the user's current mapset search "
 "path containing wind direction, clockwise from north (degree)."
-msgstr ""
-"Namn på ett befintligt rasterkartskikt i användarens aktuella sökväg för "
-"kartset som innehåller vindriktning, medurs från norr (grader)."
+msgstr "Namn på ett befintligt rasterkartlager i användarens aktuella sökväg för kartset som innehåller vindriktning, medurs från norr (grader)."
 
 #: ../raster/r.ros/main.c:295
 msgid "Name of raster map containing slope (degree)"
@@ -28630,9 +28589,7 @@ msgstr "Namn på rasterkarta som innehåller lutning (grad)"
 msgid ""
 "Name of an existing raster map layer in the user's current mapset search "
 "path containing topographic slope (degree)."
-msgstr ""
-"Namn på ett befintligt rasterkartskikt i användarens aktuella sökväg för "
-"kartset som innehåller topografisk lutning (grad)."
+msgstr "Namn på ett befintligt rasterkartlager i användarens aktuella sökväg för kartset som innehåller topografisk lutning (grad)."
 
 #: ../raster/r.ros/main.c:304
 msgid "Raster map containing aspect (degree, CCW from E)"
@@ -28643,10 +28600,7 @@ msgid ""
 "Name of an existing raster map layer in the user's current mapset search "
 "path containing topographic aspect, counterclockwise from east (GRASS "
 "convention) in degrees."
-msgstr ""
-"Namn på ett befintligt rasterkartskikt i användarens aktuella sökväg för "
-"kartset som innehåller topografisk aspekt, moturs från öster (GRASS-"
-"konvention) i grader."
+msgstr "Namn på ett befintligt rasterkartlager i användarens aktuella sökväg för kartset som innehåller topografisk aspekt, moturs från öster (GRASS-konvention) i grader."
 
 #: ../raster/r.ros/main.c:314
 msgid "Raster map containing elevation (m, required for spotting)"
@@ -28657,10 +28611,7 @@ msgid ""
 "Name of an existing raster map layer in the user's current mapset search "
 "path containing elevation (meters). Option is required from spotting "
 "distance computation (when spotting_distance option is provided)"
-msgstr ""
-"Namn på ett befintligt rasterkartskikt i användarens aktuella sökväg för "
-"kartset som innehåller höjd (meter). Alternativet krävs för beräkning av "
-"spottingavstånd (när alternativet spotting_distance tillhandahålls)"
+msgstr "Namn på ett befintligt rasterkartlager i användarens aktuella sökväg för kartset som innehåller höjd (meter). Alternativet krävs för beräkning av spottingavstånd (när alternativet spotting_distance tillhandahålls)"
 
 #: ../raster/r.ros/main.c:325
 msgid "Output raster map containing base ROS (cm/min)"
@@ -28703,35 +28654,31 @@ msgstr ""
 msgid ""
 "No dead fuel moisture is given. At least one of the 1-h, 10-h, 100-h "
 "moisture layers is required."
-msgstr ""
-"Ingen fukthalt för dött bränsle anges. Minst ett av fuktskikten 1-h, 10-h, "
-"100-h krävs."
+msgstr "Ingen fukthalt för dött bränsle anges. Minst ett av fuktlageren 1-h, 10-h, 100-h krävs."
 
 #: ../raster/r.ros/main.c:390
 #, c-format
 msgid ""
 "A wind direction layer should be given if the wind velocity layer <%s> has "
 "been given"
-msgstr ""
-"Ett vindriktningsskikt bör anges om vindhastighetsskiktet <%s> har angetts"
+msgstr "Ett vindriktningslager bör anges om vindhastighetslagret <%s> har angetts"
 
 #: ../raster/r.ros/main.c:395
 #, c-format
 msgid ""
 "A wind velocity layer should be given if the wind direction layer <%s> has "
 "been given"
-msgstr ""
-"Ett vindhastighetsskikt bör anges om vindriktningsskiktet <%s> har angetts"
+msgstr "Ett vindhastighetslager bör anges om vindriktningslagret <%s> har angetts"
 
 #: ../raster/r.ros/main.c:409
 #, c-format
 msgid "An aspect layer should be given if the slope layer <%s> has been given"
-msgstr "Ett aspektskikt bör anges om lutningsskiktet <%s> har angetts"
+msgstr "Ett aspektlager bör anges om lutningslagret <%s> har angetts"
 
 #: ../raster/r.ros/main.c:414
 #, c-format
 msgid "A slope layer should be given if the aspect layer <%s> has been given"
-msgstr "Ett sluttningsskikt bör anges om aspektskiktet <%s> har angetts"
+msgstr "Ett sluttningslager bör anges om aspektlagret <%s> har angetts"
 
 #: ../raster/r.ros/main.c:429
 msgid "An elevation layer should be given if considering spotting"
@@ -29437,7 +29384,7 @@ msgstr "Namn för rasterkarta med utmatad lutning"
 #: ../vector/v.vol.rst/main.c:371 ../vector/v.vol.rst/main.c:378
 #: ../vector/v.vol.rst/main.c:385 ../vector/v.vol.rst/main.c:391
 msgid "Outputs"
-msgstr "Utgångar"
+msgstr "Utmatningar"
 
 #: ../raster/r.slope.aspect/main.c:187 ../vector/v.surf.rst/main.c:213
 msgid "Name for output aspect raster map"
@@ -29903,11 +29850,7 @@ msgid ""
 "path containing the ROS values in the directions perpendicular to maximum "
 "ROSes' (cm/minute). These ROSes are also the ones without the effect of "
 "directional factors."
-msgstr ""
-"Namn på ett befintligt rasterkartskikt i användarens aktuella sökväg för "
-"kartset som innehåller ROS-värdena i riktningarna vinkelrätt mot maximala "
-"ROS-värden (cm/minut). Dessa ROS-värden är också de som inte påverkas av "
-"riktningsfaktorer."
+msgstr "Namn på ett befintligt rasterkartlager i användarens aktuella sökväg för kartset som innehåller ROS-värdena i riktningarna vinkelrätt mot maximala ROS-värden (cm/minut). Dessa ROS-värden är också de som inte påverkas av riktningsfaktorer."
 
 #: ../raster/r.spread/main.c:137
 msgid "Raster map containing maximal ROS (cm/min)"
@@ -29917,9 +29860,7 @@ msgstr "Rasterkarta som innehåller maximal ROS (cm/min)"
 msgid ""
 "Name of an existing raster map layer in the user's current mapset search "
 "path containing the maximum ROS values (cm/minute)."
-msgstr ""
-"Namn på ett befintligt rasterkartskikt i användarens aktuella sökväg för "
-"kartset som innehåller de maximala ROS-värdena (cm/minut)."
+msgstr "Namn på ett befintligt rasterkartlager i användarens aktuella sökväg för kartset som innehåller de maximala ROS-värdena (cm/minut)."
 
 #: ../raster/r.spread/main.c:149
 msgid "Raster map containing directions of maximal ROS (degree)"
@@ -29930,10 +29871,7 @@ msgid ""
 "Name of an existing raster map layer in the user's current mapset search "
 "path containing directions of the maximum ROSes, clockwise from north "
 "(degree)."
-msgstr ""
-"Namn på ett befintligt rasterkartskikt i användarens aktuella sökväg för "
-"kartset som innehåller riktningar för de maximala ROS-värdena, medurs från "
-"norr (grader)."
+msgstr "Namn på ett befintligt rasterkartlager i användarens aktuella sökväg för kartset som innehåller riktningar för de maximala ROS-värdena, medurs från norr (grader)."
 
 #: ../raster/r.spread/main.c:163
 msgid "Raster map containing starting sources"
@@ -29958,9 +29896,7 @@ msgstr ""
 msgid ""
 "Name of an existing raster map layer in the user's current mapset search "
 "path containing the maximum potential spotting distances (meters)."
-msgstr ""
-"Namn på ett befintligt rasterkartskikt i användarens aktuella sökväg för "
-"kartset som innehåller de maximala potentiella spottingavstånden (meter)."
+msgstr "Namn på ett befintligt rasterkartlager i användarens aktuella sökväg för kartset som innehåller de maximala potentiella spottingavstånden (meter)."
 
 #: ../raster/r.spread/main.c:189
 msgid "Raster map containing midflame wind speed (ft/min, required with -s)"
@@ -30054,9 +29990,7 @@ msgid ""
 "Name of an existing raster map layer in the user's current mapset search "
 "path to be used as the background on which the \"live\" movement will be "
 "shown."
-msgstr ""
-"Namn på ett befintligt rasterkartskikt i användarens aktuella sökväg för "
-"kartset som ska användas som bakgrund för att visa \"live\"-rörelsen."
+msgstr "Namn på ett befintligt rasterkartlager i användarens aktuella sökväg för kartset som ska användas som bakgrund för att visa \"live\"-rörelsen."
 
 #: ../raster/r.spread/main.c:288
 msgid "Raster map to contain output spread time (min)"
@@ -30067,10 +30001,7 @@ msgid ""
 "Name of the new raster map layer to contain the results of the cumulative "
 "spread time needed for a phenomenon to reach each cell from the starting "
 "sources (minutes)."
-msgstr ""
-"Namn på det nya rasterkartskikt som ska innehålla resultaten av den "
-"kumulativa spridningstid som krävs för att ett fenomen ska nå varje cell "
-"från startkällorna (minuter)."
+msgstr "Namn på det nya rasterkartlager som ska innehålla resultaten av den kumulativa spridningstid som krävs för att ett fenomen ska nå varje cell från startkällorna (minuter)."
 
 #: ../raster/r.spread/main.c:299
 msgid "Name of raster map to contain X back coordinates"
@@ -30080,9 +30011,7 @@ msgstr "Namn på rasterkarta som ska innehålla X-backkoordinater"
 msgid ""
 "Name of the new raster map layer to contain the results of backlink "
 "information in UTM easting coordinates for each cell."
-msgstr ""
-"Namn på det nya rasterkartskiktet som ska innehålla resultaten av backlink-"
-"information i UTM-östkoordinater för varje cell."
+msgstr "Namn på det nya rasterkartlageret som ska innehålla resultaten av backlink-information i UTM-östkoordinater för varje cell."
 
 #: ../raster/r.spread/main.c:310
 msgid "Name of raster map to contain Y back coordinates"
@@ -30092,9 +30021,7 @@ msgstr "Namn på rasterkarta som ska innehålla Y-backkoordinater"
 msgid ""
 "Name of the new raster map layer to contain the results of backlink "
 "information in UTM northing coordinates for each cell."
-msgstr ""
-"Namn på det nya rasterkartskiktet som ska innehålla resultaten av backlink-"
-"information i UTM-nordlig koordinat för varje cell."
+msgstr "Namn på det nya rasterkartlageret som ska innehålla resultaten av backlink-information i UTM-nordlig koordinat för varje cell."
 
 #: ../raster/r.spread/main.c:319
 msgid "DISPLAY 'live' spread process on screen"
@@ -30896,9 +30823,7 @@ msgstr "Utmatning av rasterkarta över infallsvinkel (endast läge 1)"
 msgid ""
 "Output beam irradiance [W.m-2] (mode 1) or irradiation raster map [Wh.m-2."
 "day-1] (mode 2)"
-msgstr ""
-"Strålning från utgångsstrålen [W.m-2] (läge 1) eller rasterkarta över "
-"strålning [Wh.m-2.day-1] (läge 2)"
+msgstr "Mata ut strålning från strålen [W.m-2] (läge 1) eller rasterkarta över strålning [Wh.m-2.day-1] (läge 2)"
 
 #: ../raster/r.sun/main.c:417
 msgid ""
@@ -32034,7 +31959,7 @@ msgstr "Metod för mätning av textur"
 
 #: ../raster/r.texture/main.c:151
 msgid "Separate output for each angle (0, 45, 90, 135)"
-msgstr "Separat utgång för varje vinkel (0, 45, 90, 135)"
+msgstr "Separat utdata för varje vinkel (0, 45, 90, 135)"
 
 #: ../raster/r.texture/main.c:153
 msgid ""
@@ -32127,7 +32052,7 @@ msgstr "Det gick inte att skapa en temporär fil <%s> -- errno = %d"
 #: ../raster/r.thin/io.c:181
 #, c-format
 msgid "Output map %s X %s"
-msgstr "Utgångskarta %s X %s"
+msgstr "Mata ut karta %s X %s"
 
 #. GTC %s will be replaced with number of rows and columns
 #: ../raster/r.thin/io.c:192
@@ -32137,9 +32062,7 @@ msgstr "Fönster %s X %s"
 
 #: ../raster/r.thin/main.c:57
 msgid "Thins non-null cells that denote linear features in a raster map layer."
-msgstr ""
-"Rensar bort icke-nullceller som betecknar linjära funktioner i ett "
-"rasterkartskikt."
+msgstr "Rensar bort icke-nullceller som betecknar linjära funktioner i ett rasterkartlager."
 
 #: ../raster/r.thin/main.c:69
 msgid "Maximal number of iterations"
@@ -32240,7 +32163,7 @@ msgstr "2D-rasterkartor som representerar skivorna"
 
 #: ../raster/r.to.rast3/main.c:84 ../raster/r.to.rast3elev/main.c:184
 msgid "The maximum tile size in kilo bytes. Default is 32KB."
-msgstr "Den maximala storleken på brickan i kilo bytes. Standard är 32KB."
+msgstr "Den maximala storleken på plattan i kilobyte. Standard är 32KB."
 
 #: ../raster/r.to.rast3/main.c:94
 msgid "Use 3D raster mask (if exists) with output map"
@@ -32652,7 +32575,7 @@ msgstr "Det går inte att köra %s"
 #: ../raster/r.topmodel/topmodel.c:74
 #, c-format
 msgid "Invalid %s output"
-msgstr "Ogiltig %s utgång"
+msgstr "Ogiltig %s utdata"
 
 #: ../raster/r.transect/main.c:84
 #, c-format
@@ -32662,9 +32585,7 @@ msgstr "Slutkoordinat: %.15g, %.15g"
 #: ../raster/r.transect/main.c:105
 msgid ""
 "Outputs raster map layer values lying along user defined transect line(s)."
-msgstr ""
-"Utmatning av värden från rasterkartskikt som ligger längs "
-"användardefinierade transektlinjer."
+msgstr "Utmatning av värden från rasterkartlager som ligger längs användardefinierade transektlinjer."
 
 #: ../raster/r.transect/main.c:109
 msgid "Raster map to be queried"
@@ -33516,7 +33437,7 @@ msgstr "Beautify flat areas stöds ännu inte för diskbytesläge"
 #: ../raster/r.watershed/front/main.c:314
 #, c-format
 msgid "Subprocess failed with exit code %d"
-msgstr "Underprocessen misslyckades med utgångskod %d"
+msgstr "Underprocessen misslyckades med avslutskod %d"
 
 #: ../raster/r.watershed/ram/close_maps2.c:35
 #: ../raster/r.watershed/seg/close_maps2.c:39
@@ -34106,8 +34027,7 @@ msgstr ""
 #: ../raster/r.watershed/shed/com_line.c:138
 msgid ""
 "The user can create a map layer with potential overland flow values, and"
-msgstr ""
-"Användaren kan skapa ett kartskikt med värden för potentiellt överflöd och"
+msgstr "Användaren kan skapa ett kartlager med värden för potentiellt överflöd och"
 
 #: ../raster/r.watershed/shed/com_line.c:140
 #, c-format
@@ -34152,7 +34072,7 @@ msgid ""
 "%s must create a map layer of watershed basins"
 msgstr ""
 "\n"
-"%s måste skapa ett kartskikt över avrinningsområden"
+"%s måste skapa ett kartlager över avrinningsområden"
 
 #: ../raster/r.watershed/shed/com_line.c:228
 #: ../raster/r.watershed/shed/com_line.c:249
@@ -34246,8 +34166,7 @@ msgstr ""
 #: ../raster/r.watershed/shed/com_line.c:376
 #, c-format
 msgid "disturbed land.  %s reflects this with an optional map layer or value"
-msgstr ""
-"störd mark.  %s återspeglar detta med ett valfritt kartskikt eller värde"
+msgstr "störd mark.  %s återspeglar detta med ett valfritt kartlager eller värde"
 
 #: ../raster/r.watershed/shed/com_line.c:379
 msgid ""
@@ -34964,7 +34883,7 @@ msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:211 ../raster3d/r3.in.lidar/main.c:221
 msgid "Proportional output"
-msgstr "Proportionell utgång"
+msgstr "Proportionell utdata"
 
 #: ../raster3d/r3.in.lidar/main.c:217
 msgid "3D raster map of proportional sum of values"
@@ -35256,7 +35175,7 @@ msgstr "Skriv ut grass6-kompatibelt format. Flaggorna -d och -r ignoreras."
 
 #: ../raster3d/r3.out.ascii/main.c:309
 msgid "Converts a 3D raster map layer into a ASCII text file."
-msgstr "Konverterar ett 3D-rasterkartskikt till en ASCII-textfil."
+msgstr "Konverterar ett 3D-rasterkartlager till en ASCII-textfil."
 
 #: ../raster3d/r3.out.ascii/main.c:373
 msgid "Unable to close new ASCII file"
@@ -35528,7 +35447,7 @@ msgstr ""
 
 #: ../raster3d/r3.retile/main.c:139
 msgid "Rast3d_get_standard3d_params: tile dimension value invalid"
-msgstr "Rast3d_get_standard3d_params: värdet för kakeldimensionen är ogiltigt"
+msgstr "Rast3d_get_standard3d_params: värdet för plattdimensionen är ogiltigt"
 
 #: ../raster3d/r3.retile/main.c:152
 msgid "Error closing 3D raster map"
@@ -36563,7 +36482,7 @@ msgstr "Obs: En snökarta kan extraheras med kategori 252 (d.rast %s cat=252)"
 
 #: ../scripts/i.in.spotvgt/i.in.spotvgt.py:264
 msgid "Filtering NDVI map by Status Map quality layer..."
-msgstr "Filtrering av NDVI-karta efter Status Map-kvalitetsskikt ..."
+msgstr "Filtrering av NDVI-karta efter Status Map-kvalitetslager ..."
 
 #: ../scripts/i.in.spotvgt/i.in.spotvgt.py:275
 #, python-format
@@ -37350,7 +37269,7 @@ msgid ""
 "Unable to parse tile service file. \n"
 "                                 Tag <%s> was not found."
 msgstr ""
-"Det gick inte att tolka servicefilen för kakel.\n"
+"Det gick inte att tolka tjänstefilen för platta.\n"
 "                                 Taggen <%s> hittades inte."
 
 #: ../scripts/r.in.wms/wms_drv.py:30 ../scripts/r.in.wms/wms_gdal_drv.py:23
@@ -37390,7 +37309,7 @@ msgid ""
 "Server refused to send data for a tile.\n"
 "Request will be repeated after %d s."
 msgstr ""
-"Servern vägrade att skicka data för en kakelplatta.\n"
+"Servern vägrade att skicka data för en platta.\n"
 "Begäran kommer att upprepas efter %d s."
 
 #: ../scripts/r.in.wms/wms_drv.py:153
@@ -37450,7 +37369,7 @@ msgid ""
 "Unable to parse tile service file.\n"
 "%s\n"
 msgstr ""
-"Det gick inte att tolka servicefilen för kakel.\n"
+"Det gick inte att tolka tjänstefilen för platta.\n"
 "%s\n"
 
 #: ../scripts/r.in.wms/wms_drv.py:673
@@ -37469,13 +37388,13 @@ msgid ""
 "Unable to parse tile service file. \n"
 " No tag '%s' was found."
 msgstr ""
-"Det gick inte att tolka servicefilen för kakel.\n"
+"Det gick inte att tolka tjänstefilen för platta.\n"
 " Ingen tagg '%s' hittades."
 
 #: ../scripts/r.in.wms/wms_drv.py:941
 #, python-format
 msgid "Tiled group '%s' was not found in tile service file"
-msgstr "Kakelgruppen '%s' hittades inte i filen för kakelservice"
+msgstr "Plattad grupp '%s' hittades inte i filen för plattjänst"
 
 #: ../scripts/r.in.wms/wms_drv.py:1033
 #, python-format
@@ -37489,7 +37408,7 @@ msgstr ""
 #: ../scripts/r.in.wms/wms_drv.py:1058
 #, python-format
 msgid "Parameter '%s' in '%s' is not variable in tile pattern url."
-msgstr "Parametern '%s' i '%s' är inte en variabel i url:en för kakelmönster."
+msgstr "Parametern '%s' i '%s' är inte en variabel i url:en för plattmönster."
 
 #: ../scripts/r.in.wms/wms_drv.py:1065
 #, python-format
@@ -37782,10 +37701,7 @@ msgstr "Skala (%s) hittades inte, antar '1'"
 msgid ""
 "There are no tiles available. Probably the output projection system it is "
 "not compatible with the projection of the current location"
-msgstr ""
-"Det finns inga plattor tillgängliga. Förmodligen är "
-"utgångsprojektionssystemet inte kompatibelt med projektionen av den aktuella "
-"platsen"
+msgstr "Det finns inga plattor tillgängliga. Förmodligen är utdataprojektionssystemet inte kompatibelt med projektionen av den aktuella platsen"
 
 #: ../scripts/r.tileset/r.tileset.py:359
 msgid "Computing tiling..."
@@ -38003,8 +37919,7 @@ msgstr "Använda namn på vektorkarta som tabellnamn: <%s>"
 #: ../scripts/v.db.addtable/v.db.addtable.py:85
 #, python-format
 msgid "Using vector map name extended by layer number as table name: <%s>"
-msgstr ""
-"Använda namn på vektorkarta utökat med skiktnummer som tabellnamn: <%s>"
+msgstr "Använda namn på vektorkarta utökat med lagernummer som tabellnamn: <%s>"
 
 #: ../scripts/v.db.addtable/v.db.addtable.py:89
 #, python-format
@@ -38374,7 +38289,7 @@ msgstr ""
 #, python-format
 msgid ""
 "Invalid layer number (%d). Parameter '%s' specified, assuming layer '1'."
-msgstr "Ogiltigt skiktnummer (%d). Parameter '%s' angiven, antar lager '1'."
+msgstr "Ogiltigt lagernummer (%d). Parameter '%s' angiven, antar lager '1'."
 
 #: ../scripts/v.dissolve/v.dissolve.py:618
 msgid "Key column must be of type integer or string"
@@ -38985,9 +38900,7 @@ msgstr ""
 msgid ""
 "Invalid layer number (%d). Parameter '%s' or '%s' specified, assuming layer "
 "'1'."
-msgstr ""
-"Ogiltigt skiktnummer (%d). Parameter '%s' eller '%s' angiven, antar lager "
-"'1'."
+msgstr "Ogiltigt lagernummer (%d). Parameter '%s' eller '%s' angiven, antar lager '1'."
 
 #: ../vector/v.buffer/main.c:354
 msgid "The column option requires a valid layer."
@@ -39390,7 +39303,7 @@ msgstr[1] "%d fel i id-alternativet"
 
 #: ../vector/v.category/main.c:349
 msgid "Output vector wasn't entered"
-msgstr "Utgångsvektorn var inte inmatad"
+msgstr "Utdatavektorn var inte inmatad"
 
 #: ../vector/v.category/main.c:401
 msgid "Too many layers for this operation"
@@ -39620,7 +39533,7 @@ msgstr "Standard: 0.0[,0.0,...])"
 
 #: ../vector/v.clean/main.c:137
 msgid "Do not build topology for the output vector"
-msgstr "Bygg inte topologi för utgångsvektorn"
+msgstr "Bygg inte topologi för utdatavektorn"
 
 #: ../vector/v.clean/main.c:142
 msgid "Combine tools with recommended follow-up tools"
@@ -40222,7 +40135,7 @@ msgstr ""
 
 #: ../vector/v.db.connect/main.c:78
 msgid "Format: layer number[/layer name]"
-msgstr "Format: skiktnummer[/skiktnamn]"
+msgstr "Format: lagernummer[/lagernamn]"
 
 #: ../vector/v.db.connect/main.c:82
 msgid "Field separator for shell script style output"
@@ -40240,7 +40153,7 @@ msgstr ""
 
 #: ../vector/v.db.connect/main.c:95
 msgid "Format: layer[/layer name] table key database driver"
-msgstr "Format: skikt[/skiktnamn] tabell nyckel databas drivrutin"
+msgstr "Format: lager[/lagernamn] tabell nyckel databas drivrutin"
 
 #: ../vector/v.db.connect/main.c:100
 msgid "Print types/names of table columns for specified layer and exit"
@@ -41586,7 +41499,7 @@ msgstr "Namn på OGR- eller PostGIS-datakälla för inmatning"
 
 #: ../vector/v.external/args.c:30
 msgid "Name of OGR layer or PostGIS feature table to be linked"
-msgstr "Namn på OGR-skiktet eller PostGIS feature table som ska länkas"
+msgstr "Namn på OGR-lagret eller PostGIS feature table som ska länkas"
 
 #: ../vector/v.external/args.c:31
 msgid ""
@@ -41610,11 +41523,11 @@ msgstr "Lista tillgängliga lager i datakällan och avsluta"
 
 #: ../vector/v.external/args.c:72
 msgid "List available layers including feature type in data source and exit"
-msgstr "Lista tillgängliga lager inklusive funktionstyp i datakälla och utgång"
+msgstr "Lista tillgängliga lager inklusive funktionstyp i datakälla och avsluta"
 
 #: ../vector/v.external/args.c:75
 msgid "Format: layer name,type,projection check,geometry"
-msgstr "Format: skiktnamn,typ,projektionskontroll,geometri"
+msgstr "Format: lagernamn,typ,projektionskontroll,geometri"
 
 #: ../vector/v.external/dsn.c:21 ../vector/v.in.ogr/dsn.c:28
 #: ../vector/v.out.ogr/dsn.c:27
@@ -41661,9 +41574,7 @@ msgstr[1] "Datakälla <%s> (format '%s) innehåller %d lager:"
 msgid ""
 "Unable to convert input map projection to GRASS format. Projection check "
 "cannot be provided for OGR layer <%s>"
-msgstr ""
-"Det går inte att konvertera inmatad kartprojektion till GRASS-format. "
-"Projektionskontroll kan inte tillhandahållas för OGR-skiktet <%s>"
+msgstr "Det går inte att konvertera inmatad kartprojektion till GRASS-format. Projektionskontroll kan inte tillhandahållas för OGR-lagret <%s>"
 
 #: ../vector/v.external/list.c:332
 #, c-format
@@ -41674,9 +41585,7 @@ msgstr "Ogiltig geometrikolumn %d"
 msgid ""
 "Creates a new pseudo-vector map as a link to an OGR-supported layer or a "
 "PostGIS feature table."
-msgstr ""
-"Skapar en ny pseudovektorkarta som en länk till ett OGR-stött skikt eller en "
-"PostGIS-funktionstabell."
+msgstr "Skapar en ny pseudovektorkarta som en länk till ett OGR-stött lager eller en PostGIS-funktionstabell."
 
 #: ../vector/v.external/main.c:123 ../vector/v.in.ogr/main.c:635
 #, c-format
@@ -41711,15 +41620,13 @@ msgstr "Länk till vektorkarta <%s> skapad."
 #: ../vector/v.in.ogr/proj.c:36
 #, c-format
 msgid "Geometry column <%s> not found in input layer <%s>"
-msgstr "Geometrikolumn <%s> hittades inte i ingångsskiktet <%s>"
+msgstr "Geometrikolumn <%s> hittades inte i ingångslagret <%s>"
 
 #: ../vector/v.external/proj.c:49 ../vector/v.in.ogr/proj.c:50
 msgid ""
 "Unable to convert input layer projection information to GRASS format for "
 "checking"
-msgstr ""
-"Det gick inte att konvertera projektionsinformation för inmatningsskikt till "
-"GRASS-format för kontroll"
+msgstr "Det gick inte att konvertera projektionsinformation för inmatningslager till GRASS-format för kontroll"
 
 #: ../vector/v.external/proj.c:55 ../vector/v.external/proj.c:85
 #: ../vector/v.in.ogr/proj.c:56 ../vector/v.in.ogr/proj.c:86
@@ -41744,7 +41651,7 @@ msgstr "Ingen projektionsinformation tillgänglig för lager <%s>"
 #: ../vector/v.external/proj.c:78 ../vector/v.in.ogr/proj.c:79
 #, c-format
 msgid "Projection for layer <%s> does not contain a valid SRS"
-msgstr "Projektionen för skikt <%s> innehåller inte en giltig SRS"
+msgstr "Projektionen för lager <%s> innehåller inte en giltig SRS"
 
 #: ../vector/v.extract/extract.c:202
 #, c-format
@@ -41962,9 +41869,7 @@ msgstr "Namn på attributkolumn med egenskapshöjd"
 msgid ""
 "Invalid layer number (%d). Parameter '%s', '%s' or '%s' specified, assuming "
 "layer '1'."
-msgstr ""
-"Ogiltigt skiktnummer (%d). Parameter '%s', '%s' eller '%s' angiven, antar "
-"lager '1'."
+msgstr "Ogiltigt lagernummer (%d). Parameter '%s', '%s' eller '%s' angiven, antar lager '1'."
 
 #: ../vector/v.extrude/main.c:234
 #, c-format
@@ -42669,7 +42574,7 @@ msgstr "Namn på kolumn som innehåller z-koordinat"
 #: ../vector/v.random/main.c:148 ../vector/v.random/main.c:155
 #: ../vector/v.random/main.c:165 ../vector/v.random/main.c:170
 msgid "3D output"
-msgstr "3D-utgång"
+msgstr "3D-utdata"
 
 #: ../vector/v.in.db/main.c:89
 msgid "Name of column containing category number"
@@ -42812,7 +42717,7 @@ msgstr "DXF-filen kan inte öppnas <%s>"
 
 #: ../vector/v.in.dxf/main.c:130
 msgid "Layer number: layer name / GRASS compliant name"
-msgstr "Skiktnummer: skiktnamn / GRASS-kompatibelt namn"
+msgstr "Lagernummer: lagernamn / GRASS-kompatibelt namn"
 
 #: ../vector/v.in.dxf/main.c:164
 msgid "Building topology failed"
@@ -42902,7 +42807,7 @@ msgstr "Lagernummer för att lagra klassnummer som kategori"
 
 #: ../vector/v.in.lidar/main.c:176 ../vector/v.in.pdal/main.cpp:169
 msgid "Layer number where RBG colors are stored as category"
-msgstr "Skiktnummer där RBG-färgerna lagras som kategori"
+msgstr "Lagernummer där RBG-färgerna lagras som kategori"
 
 #: ../vector/v.in.lidar/main.c:187 ../vector/v.in.ogr/main.c:268
 #: ../vector/v.in.pdal/main.cpp:181
@@ -43002,9 +42907,7 @@ msgstr "ID-lager krävs för att lagra attributtabell"
 msgid ""
 "Storing generated point IDs as categories in the layer <%d>, consequently no "
 "more than %d points can be imported"
-msgstr ""
-"Lagring av genererade punkt-ID:n som kategorier i skiktet <%d>, vilket "
-"innebär att högst %d punkter kan importeras"
+msgstr "Lagring av genererade punkt-ID:n som kategorier i lagret <%d>, vilket innebär att högst %d punkter kan importeras"
 
 #: ../vector/v.in.lidar/main.c:457 ../vector/v.in.ogr/main.c:724
 #: ../vector/v.in.ogr/main.c:2170
@@ -43368,9 +43271,7 @@ msgstr "Datakälla <%s> (format '%s) innehåller %d lager:"
 msgid ""
 "Detected different projections of input layers. Input layers must be "
 "imported separately."
-msgstr ""
-"Upptäckte olika projektioner av inmatningsskikt. Ingångsskikten måste "
-"importeras separat."
+msgstr "Upptäckte olika projektioner av inmatningslager. Ingångslageren måste importeras separat."
 
 #: ../vector/v.in.ogr/main.c:689
 #, c-format
@@ -43404,7 +43305,7 @@ msgstr "Geometrikolumn <%s> hittades inte i OGR-lager <%s>"
 #: ../vector/v.in.ogr/main.c:804
 #, c-format
 msgid "Check if OGR layer <%s> contains polygons..."
-msgstr "Kontrollera om OGR-skiktet <%s> innehåller polygoner..."
+msgstr "Kontrollera om OGR-lagret <%s> innehåller polygoner..."
 
 #: ../vector/v.in.ogr/main.c:852
 #, c-format
@@ -43424,7 +43325,7 @@ msgstr "Nyckelkolumn '%s' hittades inte i inmatningslagret <%s>"
 #: ../vector/v.in.ogr/main.c:940
 #, c-format
 msgid "Key column '%s' in input layer <%s> is not integer"
-msgstr "Nyckelkolumnen '%s' i ingångsskiktet <%s> är inte ett heltal"
+msgstr "Nyckelkolumnen '%s' i ingångslagret <%s> är inte ett heltal"
 
 #: ../vector/v.in.ogr/main.c:952
 #, c-format
@@ -43478,12 +43379,12 @@ msgstr "Importerar %lld funktioner (OGR-lager <%s>)..."
 #: ../vector/v.in.ogr/main.c:1357
 #, c-format
 msgid "Cannot insert new row for input layer <%s>: %s"
-msgstr "Det går inte att infoga en ny rad för ingångsskiktet <%s>: %s"
+msgstr "Det går inte att infoga en ny rad för ingångslagret <%s>: %s"
 
 #: ../vector/v.in.ogr/main.c:1373
 #, c-format
 msgid "%d %s without geometry in input layer <%s> skipped"
-msgstr "%d %s utan geometri i ingångsskiktet <%s> hoppades över"
+msgstr "%d %s utan geometri i ingångslagret <%s> hoppades över"
 
 #: ../vector/v.in.ogr/main.c:1374
 msgid "feature"
@@ -43532,7 +43433,7 @@ msgstr "Hitta centroider för OGR-lager <%s>..."
 #: ../vector/v.in.ogr/main.c:1597
 #, c-format
 msgid "The order of features in input layer <%s> has changed"
-msgstr "Ordningen på funktionerna i ingångsskiktet <%s> har ändrats"
+msgstr "Ordningen på funktionerna i ingångslagret <%s> har ändrats"
 
 #: ../vector/v.in.ogr/main.c:1628 ../vector/v.overlay/area_area.c:294
 msgid "Writing centroids..."
@@ -43634,11 +43535,7 @@ msgid ""
 "in input layer(s). Such areas are linked to more than 1 row in attribute "
 "table. The number of features for those areas is stored as category in layer "
 "%d"
-msgstr ""
-"%d områden representerar flera (överlappande) egenskaper, eftersom "
-"polygonerna överlappar varandra i indataskikten. Sådana områden är kopplade "
-"till mer än 1 rad i attributtabellen. Antalet funktioner för dessa områden "
-"lagras som kategori i skiktet %d"
+msgstr "%d områden representerar flera (överlappande) egenskaper, eftersom polygonerna överlappar varandra i indatalageren. Sådana områden är kopplade till mer än 1 rad i attributtabellen. Antalet funktioner för dessa områden lagras som kategori i lagret %d"
 
 #: ../vector/v.in.ogr/main.c:1893
 msgid ""
@@ -43665,8 +43562,7 @@ msgstr "Tröskelvärdet för snapping %g kan vara för stort."
 
 #: ../vector/v.in.ogr/main.c:1938
 msgid "Try to reduce the snapping threshold or clean the output manually."
-msgstr ""
-"Försök att sänka tröskelvärdet för snapping eller rengör utgången manuellt."
+msgstr "Försök att sänka tröskelvärdet för snäppning eller städa utdata manuellt."
 
 #: ../vector/v.in.ogr/main.c:1989
 msgid ""
@@ -43693,8 +43589,7 @@ msgstr "ymin är större än ymax i \"spatial\"-parametrar"
 #, c-format
 msgid ""
 "The spatial filter does not overlap with OGR layer <%s>. Nothing to import."
-msgstr ""
-"Det spatiala filtret överlappar inte OGR-skiktet <%s>. Inget att importera."
+msgstr "Det spatiala filtret överlappar inte OGR-lagret <%s>. Inget att importera."
 
 #: ../vector/v.in.ogr/proj.c:168
 msgid "Layer projections are unreadable"
@@ -44758,7 +44653,7 @@ msgstr ""
 
 #: ../vector/v.lidar.growing/main.c:79
 msgid "Input vector (v.lidar.edgedetection output)"
-msgstr "Ingångsvektor (v.lidar.edgedetection-utgång)"
+msgstr "Indatavektor (v.lidar.edgedetection-utdata)"
 
 #: ../vector/v.lidar.growing/main.c:89
 msgid "Name of the first pulse vector map"
@@ -44823,7 +44718,7 @@ msgstr "Vektorkarta för utdata där orienterade linjer är skrivna"
 
 #: ../vector/v.lrs/v.lrs.create/main.c:141
 msgid "Output vector map of errors"
-msgstr "Utgångsvektorkarta över fel"
+msgstr "Utdatavektorkarta över fel"
 
 #: ../vector/v.lrs/v.lrs.create/main.c:145
 msgid "Input vector map containing reference points"
@@ -45020,7 +44915,7 @@ msgstr "Skapar stationering från inmatningslinjer och linjärt referenssystem."
 
 #: ../vector/v.lrs/v.lrs.label/main.c:114
 msgid "Output vector map where stationing will be written"
-msgstr "Utgångsvektorkarta där stationeringen kommer att skrivas"
+msgstr "Utdatavektorkarta där stationeringen kommer att skrivas"
 
 #: ../vector/v.lrs/v.lrs.label/main.c:140
 #: ../vector/v.lrs/v.lrs.segment/main.c:108
@@ -45051,7 +44946,7 @@ msgstr "Textens radbredd"
 #: ../vector/v.lrs/v.lrs.label/main.c:197
 #: ../vector/v.lrs/v.lrs.label/main.c:210
 msgid "Only for d.label output"
-msgstr "Endast för d.label-utgång"
+msgstr "Endast för d.label-utdata"
 
 #: ../vector/v.lrs/v.lrs.label/main.c:209
 msgid "Line width of highlight color"
@@ -45102,7 +44997,7 @@ msgstr ""
 
 #: ../vector/v.lrs/v.lrs.segment/main.c:82
 msgid "Output vector map where segments will be written"
-msgstr "Utgångsvektorkarta där segmenten kommer att skrivas"
+msgstr "Utdatavektorkarta där segmenten kommer att skrivas"
 
 #: ../vector/v.lrs/v.lrs.segment/main.c:113
 msgid "Name of file containing segment rules. If not given, read from stdin."
@@ -45593,7 +45488,7 @@ msgstr "Skivspelare"
 #: ../vector/v.net.alloc/main.c:132 ../vector/v.net.iso/main.c:155
 #: ../vector/v.net.path/main.c:117 ../vector/v.net.salesman/main.c:188
 msgid "Layer with turntable"
-msgstr "Skikt med skivspelare"
+msgstr "Lager med skivspelare"
 
 #: ../vector/v.net.alloc/main.c:133 ../vector/v.net.alloc/main.c:140
 #: ../vector/v.net.iso/main.c:156 ../vector/v.net.iso/main.c:163
@@ -46132,8 +46027,7 @@ msgstr ""
 
 #: ../vector/v.net.salesman/main.c:141
 msgid "Categories of points ('cities') on nodes (layer is specified by nlayer)"
-msgstr ""
-"Kategorier av punkter (\"städer\") på noder (skiktet specificeras av nlayer)"
+msgstr "Kategorier av punkter (\"städer\") på noder (lagret specificeras av nlayer)"
 
 #: ../vector/v.net.salesman/main.c:161
 msgid "Node layer (used for cities)"
@@ -46520,10 +46414,7 @@ msgid ""
 "Layer with unique categories for every line in arc_layer and point on every "
 "node.  The categories are used in turntable. Format: layer number[/layer "
 "name]. Required for operation 'turntable'."
-msgstr ""
-"Lager med unika kategorier för varje linje i arc_layer och punkt på varje "
-"nod.  Kategorierna används i skivspelaren. Format: skiktnummer[/skiktnamn]. "
-"Krävs för operationen 'turntable'."
+msgstr "Lager med unika kategorier för varje linje i arc_layer och punkt på varje nod.  Kategorierna används i skivspelaren. Format: lagernummer[/lagernamn]. Krävs för operationen 'turntable'."
 
 #: ../vector/v.net/args.c:145
 msgid "Unknown operation"
@@ -46599,7 +46490,7 @@ msgstr "Det gick inte att skapa vektorkarta <%s>."
 #: ../vector/v.net/turntable.c:686
 #, c-format
 msgid "Arc layer <%s> does not exist in map <%s>."
-msgstr "Arc-skikt <%s> finns inte i karta <%s>."
+msgstr "Arc-lager <%s> finns inte i karta <%s>."
 
 #: ../vector/v.net/turntable.c:690
 #, c-format
@@ -47076,7 +46967,7 @@ msgstr "Alternativ för skapande av OGR-dataset (formatspecifikt, NAME=VALUE)"
 
 #: ../vector/v.out.ogr/args.c:77
 msgid "OGR layer creation option (format specific, NAME=VALUE)"
-msgstr "Alternativ för skapande av OGR-skikt (formatspecifikt, NAME=VALUE)"
+msgstr "Alternativ för skapande av OGR-lager (formatspecifikt, NAME=VALUE)"
 
 #: ../vector/v.out.ogr/args.c:86
 msgid ""
@@ -47141,7 +47032,7 @@ msgstr ""
 
 #: ../vector/v.out.ogr/args.c:146
 msgid "List supported output formats and exit"
-msgstr "Lista över stödda utdataformat och utgångar"
+msgstr "Lista över utdataformat som stöds och avsluta"
 
 #: ../vector/v.out.ogr/attrb.c:51 ../vector/v.out.ogr/export_areas_fast.c:182
 #: ../vector/v.out.ogr/export_areas_fast.c:407
@@ -47245,13 +47136,11 @@ msgstr "Kategoriindexet är inte sorterat stigande efter katt!"
 
 #: ../vector/v.out.ogr/main.c:88
 msgid "Exports a vector map layer to any of the supported OGR vector formats."
-msgstr ""
-"Exporterar ett vektorkartskikt till något av de OGR-vektorformat som stöds."
+msgstr "Exporterar ett vektorkartlager till något av de OGR-vektorformat som stöds."
 
 #: ../vector/v.out.ogr/main.c:91
 msgid "By default a vector map layer is exported to OGC GeoPackage format."
-msgstr ""
-"Som standard exporteras ett vektorkartskikt till OGC GeoPackage-format."
+msgstr "Som standard exporteras ett vektorkartlager till OGC GeoPackage-format."
 
 #: ../vector/v.out.ogr/main.c:176
 msgid "Volumes will be exported as sets of faces"
@@ -47446,7 +47335,7 @@ msgstr "OGR-lager <%s> finns redan och kommer att skrivas över"
 #: ../vector/v.out.ogr/main.c:586
 #, c-format
 msgid "OGR layer <%s> doesn't exists, creating new OGR layer instead"
-msgstr "OGR-skiktet <%s> finns inte, nytt OGR-skikt skapas istället"
+msgstr "OGR-lagret <%s> finns inte, nytt OGR-lager skapas istället"
 
 #: ../vector/v.out.ogr/main.c:616
 msgid "Overriding existing user-defined 'SHPT=' LCO."
@@ -47670,7 +47559,7 @@ msgstr "enkla funktioner"
 
 #: ../vector/v.out.postgis/main.c:53
 msgid "Exports a vector map layer to PostGIS feature table."
-msgstr "Exporterar ett vektorkartskikt till PostGIS feature table."
+msgstr "Exporterar ett vektorkartlager till PostGIS feature table."
 
 #: ../vector/v.out.postgis/main.c:104
 #, c-format
@@ -47686,7 +47575,7 @@ msgstr "Det går inte att öppna vektorkarta <%s> på topologisk nivå"
 #: ../vector/v.out.postgis/main.c:136
 #, c-format
 msgid "Unable to create PostGIS layer <%s>"
-msgstr "Det går inte att skapa PostGIS-skikt <%s>"
+msgstr "Det går inte att skapa PostGIS-lager <%s>"
 
 #: ../vector/v.out.postgis/main.c:160
 #, c-format
@@ -47710,7 +47599,7 @@ msgstr "Byggnad %s topologi misslyckades"
 #: ../vector/v.out.postgis/main.c:192
 #, c-format
 msgid "No features exported. PostGIS layer <%s> not created."
-msgstr "Inga funktioner exporterade. PostGIS-skiktet <%s> har inte skapats."
+msgstr "Inga funktioner exporterade. PostGIS-lagret <%s> har inte skapats."
 
 #: ../vector/v.out.postgis/main.c:196
 #, c-format
@@ -48071,7 +47960,7 @@ msgstr "Namn på inmatad vektorkarta (A)"
 
 #: ../vector/v.overlay/main.c:78
 msgid "Layer number or name (vector map A)"
-msgstr "Skiktets nummer eller namn (vektorkarta A)"
+msgstr "Lagrets nummer eller namn (vektorkarta A)"
 
 #: ../vector/v.overlay/main.c:82 ../vector/v.select/args.c:22
 msgid "Feature type (vector map A)"
@@ -48083,7 +47972,7 @@ msgstr "Namn på inmatningsvektorkarta (B)"
 
 #: ../vector/v.overlay/main.c:92
 msgid "Layer number or name (vector map B)"
-msgstr "Skiktets nummer eller namn (vektorkarta B)"
+msgstr "Lagrets nummer eller namn (vektorkarta B)"
 
 #: ../vector/v.overlay/main.c:96 ../vector/v.select/args.c:37
 msgid "Feature type (vector map B)"
@@ -48494,7 +48383,7 @@ msgstr "Används för att välja endast en linje från profileringslinjekartan"
 
 #: ../vector/v.profile/main.c:270
 msgid "Profiling line map layer"
-msgstr "Kartskikt för profileringslinje"
+msgstr "Kartlager för profileringslinje"
 
 #: ../vector/v.profile/main.c:294
 msgid "Layer 0 not supported"
@@ -48592,7 +48481,7 @@ msgstr "Vektorkarta <%s> har inte katten definierad på lager %d"
 
 #: ../vector/v.profile/main.c:757
 msgid "Can not write data portion to provided output"
-msgstr "Kan inte skriva datapartier till den angivna utgången"
+msgstr "Kan inte skriva datapartier till angiven utdata"
 
 #: ../vector/v.proj/main.c:78
 msgid "Re-projects a vector map from one project to the current project."
@@ -48637,7 +48526,7 @@ msgstr "Endast Latlon-utdata, standard är -180,180"
 
 #: ../vector/v.proj/main.c:138
 msgid "Disable wrapping to -180,180 for latlon output"
-msgstr "Inaktivera omslag till -180,180 för latlonutgång"
+msgstr "Inaktivera omslag till -180,180 för latlonutdata"
 
 #: ../vector/v.proj/main.c:144
 msgid "Recommended for massive point projection"
@@ -49134,7 +49023,7 @@ msgstr "Ingångsvektorkarta från vilken man kan välja funktioner (A)"
 
 #: ../vector/v.select/args.c:17
 msgid "Layer number (vector map A)"
-msgstr "Skiktnummer (vektorkarta A)"
+msgstr "Lagernummer (vektorkarta A)"
 
 #: ../vector/v.select/args.c:28
 msgid "Query vector map (B)"
@@ -49142,7 +49031,7 @@ msgstr "Vektorkarta för frågor (B)"
 
 #: ../vector/v.select/args.c:32
 msgid "Layer number (vector map B)"
-msgstr "Skiktnummer (vektorkarta B)"
+msgstr "Lagernummer (vektorkarta B)"
 
 #: ../vector/v.select/args.c:50
 msgid "Operator defines required relation between features"
@@ -49889,7 +49778,7 @@ msgstr "Vertikal utsträckning av vektorkartan <%s>: B: %f T: %f"
 #: ../vector/v.to.3d/trans2.c:43 ../vector/v.to.3d/trans3.c:46
 #, c-format
 msgid "Invalid layer number %d, assuming 1"
-msgstr "Ogiltigt skiktnummer %d, antagande 1"
+msgstr "Ogiltigt lagernummer %d, antagande 1"
 
 #: ../vector/v.to.3d/trans2.c:67 ../vector/v.to.3d/trans3.c:70
 msgid "Column must be numeric"
@@ -50321,9 +50210,7 @@ msgstr "Flagga -%c ignorerad (orsak %s=%s)"
 msgid ""
 "%d features without category in layer <%d> skipped. Note that features "
 "without category (usually boundaries) are not skipped when '%s=-1' is given."
-msgstr ""
-"%d objekt utan kategori i skikt <%d> hoppas över. Observera att objekt utan "
-"kategori (vanligtvis gränser) inte hoppas över när '%s=-1' anges."
+msgstr "%d objekt utan kategori i lager <%d> hoppas över. Observera att objekt utan kategori (vanligtvis gränser) inte hoppas över när '%s=-1' anges."
 
 #: ../vector/v.to.points/main.c:339
 #, c-format
@@ -50814,7 +50701,7 @@ msgstr "WHERE-villkor i SQL-satsen utan nyckelordet \"where\" för punktkarta"
 
 #: ../vector/v.vect.stats/main.c:173
 msgid "Layer number for area map"
-msgstr "Skiktnummer för områdeskarta"
+msgstr "Lagernummer för områdeskarta"
 
 #: ../vector/v.vect.stats/main.c:178
 msgid "Category values for area map"
@@ -51230,7 +51117,7 @@ msgstr "Söker efter topologifel..."
 
 #: ../vector/v.voronoi/clean_topo.c:77
 msgid "Cleaning output topology"
-msgstr "Topologi för rengöringsutgång"
+msgstr "Städar utdatatopologi"
 
 #: ../vector/v.voronoi/clean_topo.c:113
 msgid "Removing incorrect boundaries from output"
