@@ -199,6 +199,8 @@ int main(int argc, char **argv)
     else {
         threads = G_set_omp_num_threads(nprocs);
         threads = Rast_disable_omp_on_mask(threads);
+        if (strcmp(nprocs->answer, "0"))
+            G_free(nprocs->answer);
         if (threads < 1)
             G_fatal_error(_("<%d> is not valid number of nprocs."), threads);
     }
@@ -208,10 +210,6 @@ int main(int argc, char **argv)
 
     all_ok = 1;
 
-    // Free nprocs->answer if it is not the default value, "1"
-    if (threads > 1) {
-        G_free(nprocs->answer);
-    }
     G_free(p);
     p = NULL;
 
