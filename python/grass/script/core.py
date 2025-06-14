@@ -760,7 +760,18 @@ def message(msg, flag=None, env=None):
     :param env: dictionary with system environment variables
                 (:external:py:data:`os.environ` by default)
     """
-    run_command("g.message", flags=flag, message=msg, errors="ignore", env=env)
+    try:
+        run_command("g.message", flags=flag, message=msg, errors="ignore", env=env)
+    except OSError as error:
+        # Trying harder to show something, even when not adding the right message
+        # prefix. This allows for showing the original message to the user even when
+        # the tool cannot be found or errored for some reason.
+        print(
+            _(
+                "{message} (Additionally, there was an error: {additional_error})"
+            ).format(message=msg, additional_error=error),
+            file=sys.stderr,
+        )
 
 
 def debug(msg, debug=1, env=None):
