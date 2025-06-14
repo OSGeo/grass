@@ -35,9 +35,9 @@ def run_in_subprocess(function):
 @pytest.mark.parametrize("processes", list(range(1, max_processes() + 1)) + [None])
 def test_processes(tmp_path, processes):
     """Check that running with multiple processes works"""
-    location = "test"
-    gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with gs.setup.init(tmp_path / location):
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with gs.setup.init(project):
         gs.run_command("g.region", s=0, n=50, w=0, e=50, res=1)
 
         surface = "surface"
@@ -70,9 +70,9 @@ def test_processes(tmp_path, processes):
 @pytest.mark.parametrize("height", [5, 10, 50])
 def test_tiling_schemes(tmp_path, width, height):
     """Check that different shapes of tiles work"""
-    location = "test"
-    gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with gs.setup.init(tmp_path / location):
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with gs.setup.init(project):
         gs.run_command("g.region", s=0, n=50, w=0, e=50, res=1)
 
         surface = "surface"
@@ -101,9 +101,9 @@ def test_tiling_schemes(tmp_path, width, height):
 @pytest.mark.parametrize("overlap", [0, 1, 2, 5])
 def test_overlaps(tmp_path, overlap):
     """Check that overlap accepts different values"""
-    location = "test"
-    gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with gs.setup.init(tmp_path / location):
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with gs.setup.init(project):
         gs.run_command("g.region", s=0, n=50, w=0, e=50, res=1)
         surface = "surface"
         gs.run_command("r.surf.fractal", output=surface)
@@ -132,10 +132,10 @@ def test_overlaps(tmp_path, overlap):
 @pytest.mark.parametrize("surface", ["surface", "non_exist_surface"])
 def test_cleans(tmp_path, clean, surface):
     """Check that temporary mapsets are cleaned when appropriate"""
-    location = "test"
+    project = tmp_path / "test"
     mapset_prefix = "abc"
-    gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with gs.setup.init(tmp_path / location):
+    gs.create_project(project)
+    with gs.setup.init(project):
         gs.run_command("g.region", s=0, n=50, w=0, e=50, res=1)
         if surface == "surface":
             gs.run_command("r.surf.fractal", output=surface)
@@ -156,9 +156,8 @@ def test_cleans(tmp_path, clean, surface):
 
         run_in_subprocess(run_grid_module)
 
-        path = tmp_path / location
         prefixed = 0
-        for item in path.iterdir():
+        for item in project.iterdir():
             if item.is_dir():
                 if clean:
                     # We know right away something is wrong.
@@ -174,9 +173,9 @@ def test_cleans(tmp_path, clean, surface):
 @pytest.mark.parametrize("patch_backend", [None, "r.patch", "RasterRow"])
 def test_patching_backend(tmp_path, patch_backend):
     """Check patching backend works"""
-    location = "test"
-    gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with gs.setup.init(tmp_path / location):
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with gs.setup.init(project):
         gs.run_command("g.region", s=0, n=50, w=0, e=50, res=1)
 
         points = "points"
@@ -219,9 +218,9 @@ def test_patching_backend(tmp_path, patch_backend):
 )
 def test_tiling(tmp_path, width, height, processes):
     """Check auto adjusted tile size based on processes"""
-    location = "test"
-    gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with gs.setup.init(tmp_path / location):
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with gs.setup.init(project):
         gs.run_command("g.region", s=0, n=50, w=0, e=50, res=1)
 
         surface = "surface"
@@ -260,9 +259,9 @@ def test_tiling(tmp_path, width, height, processes):
 )
 def test_patching_error(tmp_path, processes, backend):
     """Check auto adjusted tile size based on processes"""
-    location = "test"
-    gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with gs.setup.init(tmp_path / location):
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with gs.setup.init(project):
         gs.run_command("g.region", s=0, n=10, w=0, e=10, res=0.1)
         surface = "fractal"
 
