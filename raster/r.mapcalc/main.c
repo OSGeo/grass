@@ -189,8 +189,13 @@ int main(int argc, char **argv)
     threads = atoi(nprocs->answer);
 
     /* Check if the program name is r3.mapcalc */
+    /* Handle both Unix and Windows path separators */
     const char *progname = strrchr(argv[0], '/');
+    const char *win_progname = strrchr(argv[0], '\\');
+    if (!progname || (win_progname && win_progname > progname)) 
+        progname = win_progname;
     progname = progname ? progname + 1 : argv[0];
+
 
     if ((strcmp(progname, "r3.mapcalc") == 0) && (threads != 1)) {
         threads = 1;
