@@ -192,7 +192,7 @@ int main(int argc, char **argv)
     /* Handle both Unix and Windows path separators */
     const char *progname = strrchr(argv[0], '/');
     const char *win_progname = strrchr(argv[0], '\\');
-    if (!progname || (win_progname && win_progname > progname)) 
+    if (!progname || (win_progname && win_progname > progname))
         progname = win_progname;
     progname = progname ? progname + 1 : argv[0];
 
