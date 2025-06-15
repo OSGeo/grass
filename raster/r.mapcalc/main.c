@@ -196,7 +196,6 @@ int main(int argc, char **argv)
         progname = win_progname;
     progname = progname ? progname + 1 : argv[0];
 
-
     if ((strcmp(progname, "r3.mapcalc") == 0) && (threads != 1)) {
         threads = 1;
         nprocs->answer = "1";
