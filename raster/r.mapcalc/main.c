@@ -187,24 +187,31 @@ int main(int argc, char **argv)
 
     /* Determine the number of threads */
     threads = atoi(nprocs->answer);
-    if ((strcmp(argv[0], "r3.mapcalc") == 0) && (threads != 1)) {
+
+    /* Check if the program name is r3.mapcalc */
+    const char *progname = strrchr(argv[0], '/');
+    progname = progname ? progname + 1 : argv[0];
+
+    if ((strcmp(progname, "r3.mapcalc") == 0) && (threads != 1)) {
         threads = 1;
+        nprocs->answer = "1";
         G_verbose_message(_("r3.mapcalc does not support parallel execution."));
     }
     else if ((seeded) && (threads != 1)) {
         threads = 1;
+        nprocs->answer = "1";
         G_verbose_message(
             _("Parallel execution is not supported for random seed."));
     }
-    else {
-        threads = G_set_omp_num_threads(nprocs);
-        threads = Rast_disable_omp_on_mask(threads);
-        if (strcmp(nprocs->answer, "0"))
-            G_free(nprocs->answer);
-        if (threads < 1)
-            G_fatal_error(_("<%d> is not valid number of nprocs."), threads);
-    }
 
+    /* Ensure the proper number of threads is assigned */
+    threads = G_set_omp_num_threads(nprocs);
+    if (threads > 1)
+        threads = Rast_disable_omp_on_mask(threads);
+    if (threads < 1)
+        G_fatal_error(_("<%d> is not valid number of nprocs."), threads);
+
+    /* Execute calculations */
     execute(result);
     post_exec();
 
