@@ -58,6 +58,9 @@ class TestIGroup(TestCase):
         self.assertIn("raster2", groups)
         self.assertIn("raster3", groups)
 
+        groups_shell = gs.read_command("i.group", group=self.test_group, format="shell")
+        self.assertEqual(groups_shell, groups)
+
         self.assertModule(
             "i.group",
             group=self.test_group,
@@ -66,6 +69,9 @@ class TestIGroup(TestCase):
         )
         groups = gs.read_command("i.group", group=self.test_group, flags="g")
         self.assertNotIn("raster2", groups)
+
+        groups_shell = gs.read_command("i.group", group=self.test_group, format="shell")
+        self.assertEqual(groups_shell, groups)
 
     def test_subgroup_handling(self):
         """Test subgroup creation and listing of subgroup members.(-s flag)"""
@@ -94,6 +100,162 @@ class TestIGroup(TestCase):
         self.assertNotIn("raster1", subgroup2)
         self.assertNotIn("raster2", subgroup2)
         self.assertIn("raster3", subgroup2)
+
+    def test_list_files_shell(self):
+        """Test listing of (sub)group files in shell format."""
+        self.assertModule(
+            "i.group",
+            group=self.test_group,
+            subgroup=self.test_subgroup1,
+            input="raster1,raster2",
+        )
+        self.assertModule(
+            "i.group",
+            group=self.test_group,
+            subgroup=self.test_subgroup2,
+            input="raster3",
+        )
+
+        # Test listing of test_subgroup1 files in shell format.
+        subgroup = gs.read_command(
+            "i.group",
+            group=self.test_group,
+            subgroup=self.test_subgroup1,
+            flags="l",
+            format="shell",
+        )
+
+        self.assertIn("raster1", subgroup)
+        self.assertIn("raster2", subgroup)
+        self.assertNotIn("raster3", subgroup)
+
+        # Test listing of test_subgroup2 files in shell format.
+        subgroup = gs.read_command(
+            "i.group",
+            group=self.test_group,
+            subgroup=self.test_subgroup2,
+            flags="l",
+            format="shell",
+        )
+
+        self.assertNotIn("raster1", subgroup)
+        self.assertNotIn("raster2", subgroup)
+        self.assertIn("raster3", subgroup)
+
+        # Test listing of group files in shell format.
+        group = gs.read_command(
+            "i.group",
+            group=self.test_group,
+            flags="l",
+            format="shell",
+        )
+
+        self.assertIn("raster1", group)
+        self.assertIn("raster2", group)
+        self.assertIn("raster3", group)
+
+    def test_list_files_json(self):
+        """Test listing of (sub)group files in json format."""
+        self.assertModule(
+            "i.group",
+            group=self.test_group,
+            subgroup=self.test_subgroup1,
+            input="raster1,raster2",
+        )
+        self.assertModule(
+            "i.group",
+            group=self.test_group,
+            subgroup=self.test_subgroup2,
+            input="raster3",
+        )
+
+        # Test listing of test_subgroup_1 files in json format.
+        maps = gs.parse_command(
+            "i.group",
+            group=self.test_group,
+            subgroup=self.test_subgroup1,
+            flags="l",
+            format="json",
+        )
+
+        self.assertTrue(any("raster1" in m for m in maps))
+        self.assertTrue(any("raster2" in m for m in maps))
+        self.assertTrue(all("raster3" not in m for m in maps))
+
+        # Test listing of test_subgroup2 files in json format.
+        maps = gs.parse_command(
+            "i.group",
+            group=self.test_group,
+            subgroup=self.test_subgroup2,
+            flags="l",
+            format="json",
+        )
+
+        self.assertTrue(all("raster1" not in m for m in maps))
+        self.assertTrue(all("raster2" not in m for m in maps))
+        self.assertTrue(any("raster3" in m for m in maps))
+
+        # Test listing of group files in json format.
+        maps = gs.parse_command(
+            "i.group",
+            group=self.test_group,
+            flags="l",
+            format="json",
+        )
+
+        self.assertTrue(any("raster1" in m for m in maps))
+        self.assertTrue(any("raster2" in m for m in maps))
+        self.assertTrue(any("raster3" in m for m in maps))
+
+    def test_list_subgroups_shell(self):
+        """Test listing of subgroups in group using shell format."""
+        self.assertModule(
+            "i.group",
+            group=self.test_group,
+            subgroup=self.test_subgroup1,
+            input="raster1,raster2",
+        )
+        self.assertModule(
+            "i.group",
+            group=self.test_group,
+            subgroup=self.test_subgroup2,
+            input="raster3",
+        )
+
+        subgroups = gs.read_command(
+            "i.group",
+            group=self.test_group,
+            flags="s",
+            format="shell",
+        )
+
+        self.assertIn(self.test_subgroup1, subgroups)
+        self.assertIn(self.test_subgroup2, subgroups)
+
+    def test_list_subgroups_json(self):
+        """Test listing of subgroups in group using json format."""
+        self.assertModule(
+            "i.group",
+            group=self.test_group,
+            subgroup=self.test_subgroup1,
+            input="raster1,raster2",
+        )
+        self.assertModule(
+            "i.group",
+            group=self.test_group,
+            subgroup=self.test_subgroup2,
+            input="raster3",
+        )
+
+        subgroups = gs.parse_command(
+            "i.group",
+            group=self.test_group,
+            flags="s",
+            format="json",
+        )
+        expected_subgroups = [self.test_subgroup1, self.test_subgroup2]
+
+        self.assertEqual(expected_subgroups, subgroups)
 
 
 if __name__ == "__main__":
