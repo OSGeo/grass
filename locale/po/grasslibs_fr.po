@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-14 18:45+0000\n"
-"PO-Revision-Date: 2025-06-05 04:00+0000\n"
+"PO-Revision-Date: 2025-06-14 20:39+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs/fr/>\n"
 "Language: fr\n"
@@ -4134,16 +4134,12 @@ msgid "Starting GRASS..."
 msgstr "Démarrage du SIG GRASS ..."
 
 #: ../lib/init/grass.py:2288
-#, fuzzy
-#| msgid "Failed to start GRASS GIS, no default project to copy in the installation or copying failed."
 msgid "Failed to start GRASS, grassdata directory cannot be found or created."
-msgstr "Le démarrage de GRASS GIS a échoué, il n'y a pas de projet par défaut à copier dans l'installation, ou la copie a échoué."
+msgstr "Le démarrage de GRASS a échoué, le dossier grassdata est introuvable ou ne peut pas être créé."
 
 #: ../lib/init/grass.py:2295
-#, fuzzy
-#| msgid "Failed to start GRASS GIS, no default project to copy in the installation or copying failed."
 msgid "Failed to start GRASS, no default project to copy in the installation or copying failed."
-msgstr "Le démarrage de GRASS GIS a échoué, il n'y a pas de projet par défaut à copier dans l'installation, ou la copie a échoué."
+msgstr "Le démarrage de GRASS a échoué, il n'y a pas de projet par défaut à copier dans l'installation, ou la copie a échoué."
 
 #: ../lib/init/grass.py:2400
 #, python-format
