@@ -22,13 +22,13 @@ def run_in_subprocess(file):
 
 def test_init_finish(tmp_path):
     """Check that init function works with an explicit session finish"""
-    location = "test"
+    project = tmp_path / "test"
     script = f"""
 import os
 import grass.script as gs
 import grass.jupyter as gj
-gs.core._create_location_xy(r"{tmp_path}", r"{location}")
-session = gj.init(r"{tmp_path / location}")
+gs.create_project(r"{project}")
+session = gj.init(r"{project}")
 gs.read_command("g.region", flags="p")
 print(os.environ["GISRC"])
 session.finish()
@@ -44,13 +44,13 @@ session.finish()
 
 def test_init_with_auto_finish(tmp_path):
     """Check that init function works with an implicit session finish"""
-    location = "test"
+    project = tmp_path / "test"
     script = f"""
 import os
 import grass.script as gs
 import grass.jupyter as gj
-gs.core._create_location_xy(r"{tmp_path}", r"{location}")
-session = gj.init(r"{tmp_path / location}")
+gs.create_project(r"{project}")
+session = gj.init(r"{project}")
 print(os.environ["GISRC"])
 """
 
