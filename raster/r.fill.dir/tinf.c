@@ -1,8 +1,13 @@
 #include <limits.h>
 #include <float.h>
 #include <math.h>
+#include <string.h>
+#include <errno.h>
+
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/glocale.h>
+
 #include "tinf.h"
 
 /* To add a new multitype function, use the function below to initialize
@@ -396,7 +401,12 @@ int retreat_band3(int fh, struct band3 *bnd)
         rc = 0;
     else {
         rc = read(fh, bnd->b[0], bnd->sz);
-        lseek(fh, (off_t)-2 * bnd->sz, SEEK_CUR);
+        if (lseek(fh, (off_t)-2 * bnd->sz, SEEK_CUR) == (off_t)-1) {
+            int err = errno;
+            /* GTC seek refers to reading/writing from a different position
+             * in a file */
+            G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+        }
     }
     return rc;
 }

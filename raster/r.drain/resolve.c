@@ -106,7 +106,12 @@ void resolve(int fd, int nl, struct band3 *bnd)
     isz = sizeof(CELL);
 
     /* select a direction when there are multiple non-flat links */
-    lseek(fd, bnd->sz, SEEK_SET);
+    if (lseek(fd, bnd->sz, SEEK_SET) == (off_t)-1) {
+        int err = errno;
+        /* GTC seek refers to reading/writing from a different position
+         * in a file */
+        G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+    }
     for (i = 1; i < nl - 1; i += 1) {
         read(fd, bnd->b[0], bnd->sz);
         for (j = 1; j < bnd->ns - 1; j += 1) {
@@ -118,7 +123,12 @@ void resolve(int fd, int nl, struct band3 *bnd)
                 cvalue = select_dir(cvalue);
             memcpy(bnd->b[0] + offset, &cvalue, isz);
         }
-        lseek(fd, -bnd->sz, SEEK_CUR);
+        if (lseek(fd, -bnd->sz, SEEK_CUR) == (off_t)-1) {
+            int err = errno;
+            /* GTC seek refers to reading/writing from a different position
+             * in a file */
+            G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+        }
         write(fd, bnd->b[0], bnd->sz);
     }
 
@@ -133,11 +143,21 @@ void resolve(int fd, int nl, struct band3 *bnd)
 
         activity = 0;
 
-        lseek(fd, 0, SEEK_SET);
+        if (lseek(fd, 0, SEEK_SET) == (off_t)-1) {
+            int err = errno;
+            /* GTC seek refers to reading/writing from a different position
+             * in a file */
+            G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+        }
         advance_band3(fd, bnd);
         advance_band3(fd, bnd);
         for (i = 1; i < nl - 1; i++) {
-            lseek(fd, (off_t)(i + 1) * bnd->sz, SEEK_SET);
+            if (lseek(fd, (off_t)(i + 1) * bnd->sz, SEEK_SET) == (off_t)-1) {
+                int err = errno;
+                /* GTC seek refers to reading/writing from a different position
+                 * in a file */
+                G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+            }
             advance_band3(fd, bnd);
 
             if (!active[i])
@@ -156,7 +176,12 @@ void resolve(int fd, int nl, struct band3 *bnd)
                 }
             } while (goagain);
 
-            lseek(fd, (off_t)i * bnd->sz, SEEK_SET);
+            if (lseek(fd, (off_t)i * bnd->sz, SEEK_SET) == (off_t)-1) {
+                int err = errno;
+                /* GTC seek refers to reading/writing from a different position
+                 * in a file */
+                G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+            }
             write(fd, bnd->b[1], bnd->sz);
         }
 
@@ -167,11 +192,21 @@ void resolve(int fd, int nl, struct band3 *bnd)
 
         activity = 0;
 
-        lseek(fd, (off_t)(nl - 1) * bnd->sz, SEEK_SET);
+        if (lseek(fd, (off_t)(nl - 1) * bnd->sz, SEEK_SET) == (off_t)-1) {
+            int err = errno;
+            /* GTC seek refers to reading/writing from a different position
+             * in a file */
+            G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+        }
         retreat_band3(fd, bnd);
         retreat_band3(fd, bnd);
         for (i = nl - 2; i >= 1; i -= 1) {
-            lseek(fd, (off_t)(i - 1) * bnd->sz, SEEK_SET);
+            if (lseek(fd, (off_t)(i - 1) * bnd->sz, SEEK_SET) == (off_t)-1) {
+                int err = errno;
+                /* GTC seek refers to reading/writing from a different position
+                 * in a file */
+                G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+            }
             retreat_band3(fd, bnd);
 
             if (!active[i])
@@ -190,7 +225,12 @@ void resolve(int fd, int nl, struct band3 *bnd)
                 }
             } while (goagain);
 
-            lseek(fd, (off_t)i * bnd->sz, SEEK_SET);
+            if (lseek(fd, (off_t)i * bnd->sz, SEEK_SET) == (off_t)-1) {
+                int err = errno;
+                /* GTC seek refers to reading/writing from a different position
+                 * in a file */
+                G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+            }
             write(fd, bnd->b[1], bnd->sz);
         }
 
