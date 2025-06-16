@@ -1,14 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# Daniel Nylander <daniel@danielnylander.se>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-14 18:45+0000\n"
-"PO-Revision-Date: 2025-06-14 16:47+0000\n"
+"PO-Revision-Date: 2025-06-16 10:31+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/sv/>\n"
 "Language: sv\n"
@@ -12999,7 +12998,7 @@ msgstr ""
 "\n"
 "{reasons}\n"
 "\n"
-"Inga mapsets kommer att tas bort."
+"Inga kartuppsättningar kommer att tas bort."
 
 #: ../gui/wxpython/startup/guiutils.py:375
 msgid "Unable to delete selected mapsets"

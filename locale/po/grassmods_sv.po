@@ -1,14 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# Daniel Nylander <daniel@danielnylander.se>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-14 18:45+0000\n"
-"PO-Revision-Date: 2025-06-14 16:47+0000\n"
+"PO-Revision-Date: 2025-06-16 10:31+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
 "Language: sv\n"
@@ -5818,7 +5817,7 @@ msgstr "Skriv ut datatyper"
 
 #: ../general/g.list/main.c:141
 msgid "Print fully-qualified map names (including mapsets)"
-msgstr "Skriv ut fullständigt kvalificerade kartnamn (inklusive mapsets)"
+msgstr "Skriv ut fullständigt kvalificerade kartnamn (inklusive kartuppsättningar)"
 
 #: ../general/g.list/main.c:146
 msgid "Pretty printing in human readable format"
@@ -5844,22 +5843,16 @@ msgid "Failed to serialize JSON to pretty format."
 msgstr "Misslyckades med att serialisera JSON till pretty-format."
 
 #: ../general/g.mapset/main.c:71 ../general/g.mapsets/main.c:88
-#, fuzzy
-#| msgid "projection"
 msgid "project"
-msgstr "projektion"
+msgstr "projekt"
 
 #: ../general/g.mapset/main.c:72
-#, fuzzy
-#| msgid "Changes/reports current mapset."
 msgid "Changes or reports current mapset."
-msgstr "Ändrar/rapporterar aktuell mapset."
+msgstr "Ändrar eller rapporterar aktuell mapset."
 
 #: ../general/g.mapset/main.c:73
-#, fuzzy
-#| msgid "Optionally create new mapset or list available mapsets in given project (location)."
 msgid "Optionally, creates new mapset or lists available mapsets in given project (location)."
-msgstr "Skapa eventuellt en ny kartuppsättning eller lista tillgängliga kartuppsättningar i ett visst projekt (plats)."
+msgstr "Skapar valfritt nya kartuppsättningar eller listar tillgängliga kartuppsättningar i ett givet projekt (plats)."
 
 #: ../general/g.mapset/main.c:78
 msgid "Name of mapset where to switch"
@@ -5986,10 +5979,8 @@ msgid "search path"
 msgstr "sökväg"
 
 #: ../general/g.mapsets/main.c:91
-#, fuzzy
-#| msgid "Modifies/prints the user's current mapset search path."
 msgid "Modifies or reports the user's current mapset search path."
-msgstr "Ändrar/skriver ut användarens aktuella sökväg för mapset."
+msgstr "Ändrar eller rapporterar användarens aktuella sökväg för kartuppsättningar."
 
 #: ../general/g.mapsets/main.c:92
 msgid "Affects the user's access to data existing under the other mapsets in the current project."
@@ -7444,16 +7435,12 @@ msgid "GDAL/OGR, PROJ, GEOS"
 msgstr "GDAL/OGR, PROJ, GEOS"
 
 #: ../general/g.version/main.c:117
-#, fuzzy
-#| msgid "Print info in shell script style (including Git reference commit)"
 msgid "Print info in shell script style (including Git reference commit) [deprecated]"
-msgstr "Skriv ut information i skalskriptstil (inklusive Git-referens commit)"
+msgstr "Skriv ut information i skalskriptstil (inklusive Git-referenskommando) [föråldrad]"
 
 #: ../general/g.version/main.c:120
-#, fuzzy
-#| msgid "Flag 'g' is deprecated and will be removed in a future release. Please use format=shell instead."
 msgid "This flag is deprecated and will be removed in a future release. Use format=shell instead."
-msgstr "Flaggan \"g\" är föråldrad och kommer att tas bort i en framtida version. Använd format=skal istället."
+msgstr "Denna flagga är föråldrad och kommer att tas bort i en framtida version. Använd istället format=shell."
 
 #: ../general/g.version/main.c:122
 msgid "Shell"
@@ -7467,7 +7454,7 @@ msgstr "vanlig;mänsklig läsbar textutmatning;skal;textutmatning i skalskriptst
 
 #: ../general/g.version/main.c:157
 msgid "Cannot use the -g flag with format=json; please select only one option."
-msgstr ""
+msgstr "Flaggan -g kan inte användas med format=json. Välj endast ett alternativ."
 
 #: ../general/g.version/main.c:268
 #, c-format
@@ -22488,22 +22475,16 @@ msgid "Outputs basic information about a raster map."
 msgstr "Utmatar grundläggande information om en rasterkarta."
 
 #: ../raster/r.info/main.c:90
-#, fuzzy
-#| msgid "Print also the build information"
 msgid "Print raster array information"
-msgstr "Skriv också ut byggnadsinformationen"
+msgstr "Skriv ut information om raster array"
 
 #: ../raster/r.info/main.c:94
-#, fuzzy
-#| msgid "Input range"
 msgid "Print range"
-msgstr "Inmatningsområde"
+msgstr "Utskriftsintervall"
 
 #: ../raster/r.info/main.c:98
-#, fuzzy
-#| msgid "Print data types"
 msgid "Print stats"
-msgstr "Skriv ut datatyper"
+msgstr "Skriv ut statistik"
 
 #: ../raster/r.info/main.c:106 ../raster3d/r3.info/main.c:96
 msgid "Print raster history instead of info"
@@ -22511,7 +22492,7 @@ msgstr "Skriv ut rasterhistorik istället för information"
 
 #: ../raster/r.info/main.c:127
 msgid "The output format for flags -g, -r, -s, and -e currently defaults to 'shell', but this will change to 'plain' in a future release. To avoid unexpected behaviour, specify the format explicitly."
-msgstr ""
+msgstr "Utmatningsformatet för flaggorna -g, -r, -s och -e är för närvarande standardinställt på ’shell’, men detta kommer att ändras till ’plain’ i en kommande version. För att undvika oväntat beteende bör du ange formatet explicit."
 
 #: ../raster/r.info/main.c:403 ../raster/r.info/main.c:1021
 #: ../raster3d/r3.info/main.c:140 ../raster3d/r3.info/main.c:147
@@ -31687,20 +31668,16 @@ msgid "Values to query colors for"
 msgstr "Värden att fråga efter färger för"
 
 #: ../raster/r.what.color/main.c:210
-#, fuzzy
-#| msgid "Output format (printf-style)"
 msgid "Output format ('plain', 'json', or printf-style string)"
-msgstr "Utmatningsformat (printf-stil)"
+msgstr "Utmatningsformat (’plain’, ’json’ eller printf-stil sträng)"
 
 #: ../raster/r.what.color/main.c:211
 msgid "Output format printf-style is deprecated, use 'color_format' option instead."
-msgstr ""
+msgstr "Utdataformatet printf-style är föråldrat, använd istället alternativet ’color_format’."
 
 #: ../raster/r.what.color/main.c:216
-#, fuzzy
-#| msgid "Color format for output values or none."
 msgid "Color format for output values. Applies only when format is set to 'plain' or 'json'."
-msgstr "Färgformat för utdatavärden eller inget."
+msgstr "Färgformat för utdata. Gäller endast när formatet är inställt på ”plain” eller ”json”."
 
 #: ../raster/r.what.color/main.c:222
 msgid "Read values from stdin"
@@ -31711,10 +31688,8 @@ msgid "Either \"-i\" or \"value=\" must be given"
 msgstr "Antingen \"-i\" eller \"value=\" måste anges"
 
 #: ../raster/r.what.color/main.c:255
-#, fuzzy
-#| msgid "Flag 'j' is deprecated and will be removed in a future release. Please use format=proj4 instead."
 msgid "The printf-style output format is deprecated and will be removed in a future release. Please use the 'color_format' option instead, along with 'format=plain'."
-msgstr "Flaggan 'j' är föråldrad och kommer att tas bort i en framtida version. Använd format=proj4 istället."
+msgstr "Utdataformatet i printf-stil är föråldrat och kommer att tas bort i en framtida version. Använd istället alternativet ’color_format’ tillsammans med ’format=plain’."
 
 #: ../raster/r.what/main.c:115
 msgid "Queries raster maps on their category values and category labels."
