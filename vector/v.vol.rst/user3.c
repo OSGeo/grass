@@ -60,6 +60,7 @@ int secpar_loop(int ngstc UNUSED, int nszc UNUSED, int i)
     double gradmin;
     int bmask = 1;
     static int first_t = 1;
+    curn = 0.0;
 
     ro = M_R2D;
     gradmin = 0.0;
@@ -659,7 +660,7 @@ int POINT(int n_points, struct quadruple *points, struct point_3d skip_point)
 {
     double errmax, h, xx, yy, r2, hz, zz, ww, err, xmm, ymm, zmm, /* wmm, */ r,
         etar;
-    int n1, mm, m, mmax = 0, inside;
+    int n1, mm, m, mmax, inside;
 
     errmax = .0;
     n1 = n_points + 1;
