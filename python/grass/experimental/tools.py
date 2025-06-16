@@ -23,7 +23,6 @@ from io import StringIO
 
 
 import grass.script as gs
-from grass.exceptions import CalledModuleError
 
 
 class ObjectParameterHandler:
@@ -308,16 +307,6 @@ class Tools:
         args, popen_options = gs.popen_args_command(name, **kwargs)
 
         interface_result = self._process_parameters(args, **popen_options)
-        if interface_result.returncode != 0:
-            # This is only for the error states.
-            return gs.handle_errors(
-                interface_result.returncode,
-                result=None,
-                args=[name],
-                kwargs=kwargs,
-                stderr=interface_result.stderr,
-                handler="raise",
-            )
         parameters = json.loads(interface_result.stdout)
 
         # We approximate tool_kwargs as original kwargs.
@@ -339,16 +328,6 @@ class Tools:
     ):
         if not processed_parameters:
             interface_result = self._process_parameters(command, **popen_options)
-            if interface_result.returncode != 0:
-                # This is only for the error states.
-                return gs.handle_errors(
-                    interface_result.returncode,
-                    result=None,
-                    args=[command],
-                    kwargs=tool_kwargs,
-                    stderr=interface_result.stderr,
-                    handler="raise",
-                )
             processed_parameters = json.loads(interface_result.stdout)
 
         # We approximate tool_kwargs as original kwargs.
@@ -358,14 +337,6 @@ class Tools:
             stdin=stdin,
             **popen_options,
         )
-
-    def run_command(self, name, /, **kwargs):
-        # TODO: Provide custom implementation for full control
-        return gs.run_command(name, **kwargs, env=self._env)
-
-    def parse_command(self, name, /, **kwargs):
-        # TODO: Provide custom implementation for full control
-        return gs.parse_command(name, **kwargs, env=self._env)
 
     def no_nonsense_run(self, name, /, *, tool_kwargs=None, stdin=None, **kwargs):
         args, popen_options = gs.popen_args_command(name, **kwargs)
@@ -406,22 +377,26 @@ class Tools:
         if stderr:
             stderr = gs.utils.decode(stderr)
         returncode = process.poll()
-        if returncode and self._errors != "ignore":
-            raise CalledModuleError(
-                command[0],
-                code=" ".join(command),
-                returncode=returncode,
-                errors=stderr,
-            )
         # TODO: solve tool_kwargs is None
         # We don't have the keyword arguments to pass to the resulting object.
-        return ExecutedTool(
+        result = ExecutedTool(
             name=command[0],
             kwargs=tool_kwargs,
             returncode=returncode,
             stdout=stdout,
             stderr=stderr,
         )
+        if returncode != 0:
+            # This is only for the error states.
+            return gs.handle_errors(
+                returncode,
+                result=result,
+                args=[command],  # whole command of type list is the first arg
+                kwargs=tool_kwargs or {},
+                stderr=stderr,
+                handler=self._errors,
+            )
+        return result
 
     def feed_input_to(self, stdin, /):
         """Get a new object which will feed text input to a tool or tools"""
@@ -432,10 +407,6 @@ class Tools:
             errors=self._errors,
             capture_output=self._capture_output,
         )
-
-    def ignore_errors_of(self):
-        """Get a new object which will ignore errors of the called tools"""
-        return Tools(env=self._env, errors="ignore")
 
     def __getattr__(self, name):
         """Parse attribute to GRASS display module. Attribute should be in
@@ -504,8 +475,6 @@ def _test():
         input="-", output="point", separator=","
     )
     print(tools_pro.v_info(map="point", flags="t").keyval["points"])
-
-    print(tools_pro.ignore_errors_of().g_version(flags="rge").keyval)
 
     elevation = "elevation"
     exaggerated = "exaggerated"

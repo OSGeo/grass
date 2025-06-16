@@ -185,6 +185,65 @@ def test_stderr_without_capturing(xy_dataset_session):
     assert result.stderr is None
 
 
+def test_error_handler_default(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session)
+    with pytest.raises(CalledModuleError, match="does_not_exist"):
+        tools.g_mapset(mapset="does_not_exist")
+    # Works after errors as usual.
+    assert tools.g_mapset(flags="p").text == "PERMANENT"
+
+
+def test_error_handler_none(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, errors=None)
+    with pytest.raises(CalledModuleError, match="does_not_exist"):
+        tools.g_mapset(mapset="does_not_exist")
+    # Works after errors as usual.
+    assert tools.g_mapset(flags="p").text == "PERMANENT"
+
+
+def test_error_handler_raise(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, errors="raise")
+    with pytest.raises(CalledModuleError, match="does_not_exist"):
+        tools.g_mapset(mapset="does_not_exist")
+    # Works after errors as usual.
+    assert tools.g_mapset(flags="p").text == "PERMANENT"
+
+
+def test_error_handler_ignore(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, errors="ignore")
+    tools.g_mapset(mapset="does_not_exist")
+    tools.g_region(raster="does_not_exist")
+    # Works after errors as usual.
+    assert tools.g_mapset(flags="p").text == "PERMANENT"
+
+
+def test_error_handler_check_returncode(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, errors="ignore")
+    assert tools.g_mapset(mapset="does_not_exist").returncode == 1
+    assert tools.g_region(raster="does_not_exist").returncode == 1
+    # Works after errors as usual with return code.
+    assert tools.g_mapset(flags="p").returncode == 0
+
+
+def test_error_handler_fatal(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, errors="fatal")
+    with pytest.raises(SystemExit):
+        assert tools.g_mapset(mapset="does_not_exist")
+
+
+def test_error_handler_exit(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, errors="exit")
+    with pytest.raises(SystemExit):
+        assert tools.g_mapset(mapset="does_not_exist")
+
+
 def test_direct_overwrite(xy_dataset_session):
     """Check overwrite as a parameter"""
     tools = Tools(session=xy_dataset_session)
@@ -257,26 +316,6 @@ def test_raises(xy_dataset_session):
             output="point",
             format=wrong_name,
         )
-
-
-def test_run_command(xy_dataset_session):
-    """Check run_command and its overwrite parameter"""
-    tools = Tools(session=xy_dataset_session)
-    tools.run_command("r.random.surface", output="surface", seed=42)
-    tools.run_command("r.random.surface", output="surface", seed=42, overwrite=True)
-
-
-def test_parse_command_key_value(xy_dataset_session):
-    tools = Tools(session=xy_dataset_session)
-    assert tools.parse_command("g.region", flags="g")["nsres"] == "1"
-
-
-def test_parse_command_json(xy_dataset_session):
-    tools = Tools(session=xy_dataset_session)
-    assert (
-        tools.parse_command("g.region", flags="g", format="json")["region"]["ns-res"]
-        == 1
-    )
 
 
 def test_with_context_managers(tmpdir):
