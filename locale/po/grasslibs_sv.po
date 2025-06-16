@@ -1,15 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# Daniel Nylander <daniel@danielnylander.se>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-14 18:45+0000\n"
-"PO-Revision-Date: 2025-06-14 20:34+0000\n"
-"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
+"PO-Revision-Date: 2025-06-16 10:31+0000\n"
+"Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -952,10 +951,9 @@ msgid "Unable to open color descriptions"
 msgstr "Det går inte att öppna färgbeskrivningar"
 
 #: ../lib/gis/color_str.c:269
-#, fuzzy, c-format
-#| msgid "Unknown algorithm '%s'"
+#, c-format
 msgid "Unknown color format '%s'"
-msgstr "Okänd algoritm '%s'"
+msgstr "Okänt färgformat ’%s’"
 
 #: ../lib/gis/compress.c:143 ../lib/gis/compress.c:205
 #: ../lib/gis/compress.c:222 ../lib/gis/compress.c:237
@@ -1292,11 +1290,10 @@ msgid "Option key is NULL."
 msgstr "Alternativnyckeln är NULL."
 
 #: ../lib/gis/omp_threads.c:46
-#, fuzzy, c-format
-#| msgid "%d threads are set up for parallel computing."
+#, c-format
 msgid "One thread is set up for parallel computing."
 msgid_plural "%d threads are set up for parallel computing."
-msgstr[0] "%d trådar är konfigurerade för parallella beräkningar."
+msgstr[0] "En tråd är konfigurerad för parallella beräkningar."
 msgstr[1] "%d trådar är konfigurerade för parallella beräkningar."
 
 #: ../lib/gis/omp_threads.c:52
@@ -2073,7 +2070,7 @@ msgstr "Antal trådar för parallella beräkningar"
 
 #: ../lib/gis/parser_standard_options.c:788
 msgid "0: use OpenMP default; >0: use nprocs; <0: use MAX-nprocs"
-msgstr ""
+msgstr "0: använd OpenMP-standard; >0: använd nprocs; <0: använd MAX-nprocs"
 
 #: ../lib/gis/parser_standard_options.c:796
 msgid "Seed value for the random number generator"
@@ -5313,7 +5310,7 @@ msgstr "ej känd"
 
 #: ../lib/raster/mask_info.c:219
 msgid "Single thread processing enforced due to raster mask being present."
-msgstr ""
+msgstr "Enkel trådbehandling tillämpas på grund av att rastermask finns."
 
 #: ../lib/raster/null_val.c:64
 msgid "EmbedGivenNulls: wrong data type"
