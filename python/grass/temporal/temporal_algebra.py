@@ -1378,8 +1378,8 @@ class TemporalAlgebraParser:
         :return: A tuple of spatial and temporal topology lists
                 (temporal_topo_list, spatial_topo_list)
 
-        :raises: This method will raise a syntax error in case the topology name is
-                 unknown
+        :raises SyntaxError:
+            This method will raise a syntax error in case the topology name is unknown
         """
         temporal_topo_list = []
         spatial_topo_list = []
@@ -1904,6 +1904,7 @@ class TemporalAlgebraParser:
             a9@B - start: 8 end: 10
             a8@B - start: 8 end: 10
 
+        :raises SyntaxError: If an unpermitted temporal relation name is used in ``topolist``
         """
         topologylist = [
             "EQUAL",
@@ -2275,11 +2276,9 @@ class TemporalAlgebraParser:
              - [True,  '&&', False]              -> False
              - [False, '||', True]               -> True
 
-        :param tvarexpr: List of GlobalTemporalVar objects and map lists.
-                     The list is constructed by the TemporalAlgebraParser
-                     in order of expression evaluation in the parser.
-
-        :return: Map list with conditional values for all temporal expressions.
+        :param maplist: A list of maps
+        :param inverse:
+        :return: Map list with conditional values evaluated
         """
 
         def recurse_compare(conditionlist):

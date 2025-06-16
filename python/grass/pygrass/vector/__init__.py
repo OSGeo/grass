@@ -538,28 +538,30 @@ class VectorTopo(Vector):
 
         :param int feature_id: the id of feature to obtain
 
-        >>> test_vect = VectorTopo(test_vector_name)
-        >>> test_vect.open(mode="r")
-        >>> feature1 = test_vect.read(0)  # doctest: +ELLIPSIS
-        Traceback (most recent call last):
-            ...
-        ValueError: The index must be >0, 0 given.
-        >>> feature1 = test_vect.read(5)
-        >>> feature1
-        Line([Point(12.000000, 4.000000), Point(12.000000, 2.000000), Point(12.000000, 0.000000)])
-        >>> feature1.length()
-        4.0
-        >>> test_vect.read(-1)
-        Centroid(7.500000, 3.500000)
-        >>> len(test_vect)
-        21
-        >>> test_vect.read(21)
-        Centroid(7.500000, 3.500000)
-        >>> test_vect.read(22)  # doctest: +ELLIPSIS
-        Traceback (most recent call last):
-          ...
-        IndexError: Index out of range
-        >>> test_vect.close()
+        .. code-block:: pycon
+
+            >>> test_vect = VectorTopo(test_vector_name)
+            >>> test_vect.open(mode="r")
+            >>> feature1 = test_vect.read(0)  # doctest: +ELLIPSIS
+            Traceback (most recent call last):
+                ...
+            ValueError: The index must be >0, 0 given.
+            >>> feature1 = test_vect.read(5)
+            >>> feature1
+            Line([Point(12.000000, 4.000000), Point(12.000000, 2.000000), Point(12.000000, 0.000000)])
+            >>> feature1.length()
+            4.0
+            >>> test_vect.read(-1)
+            Centroid(7.500000, 3.500000)
+            >>> len(test_vect)
+            21
+            >>> test_vect.read(21)
+            Centroid(7.500000, 3.500000)
+            >>> test_vect.read(22)  # doctest: +ELLIPSIS
+            Traceback (most recent call last):
+              ...
+            IndexError: Index out of range
+            >>> test_vect.close()
 
         """  # noqa: E501
         return read_line(
@@ -759,7 +761,9 @@ class VectorTopo(Vector):
 
         The well known binary are stored in byte arrays.
 
-         Examples:
+        Examples:
+
+        .. code-block:: pycon
 
          >>> from grass.pygrass.vector import VectorTopo
          >>> from grass.pygrass.vector.basic import Bbox
@@ -880,7 +884,9 @@ class VectorTopo(Vector):
 
         The well known binary are stored in byte arrays.
 
-         Examples:
+        Examples:
+
+        .. code-block:: pycon
 
          >>> from grass.pygrass.vector import VectorTopo
          >>> from grass.pygrass.vector.basic import Bbox
@@ -911,8 +917,6 @@ class VectorTopo(Vector):
          (4, 3, 141)
 
          >>> test_vect.close()
-
-
         """
         if bbox is None:
             bbox = self.bbox()

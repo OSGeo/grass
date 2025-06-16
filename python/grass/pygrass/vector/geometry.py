@@ -594,8 +594,8 @@ class Point(Geo):
         :type dist_y: num
         :param angle: the angle between 0x and major axis
         :type angle: num
-        :param round_: to make corners round
-        :type round_: bool
+        :param round\\_: to make corners round
+        :type round\\_: bool
         :param tol: fix the maximum distance between theoretical arc and output segments
         :type tol: float
         :returns: the buffer as Area object
@@ -892,6 +892,7 @@ class Line(Geo):
 
         :param pnt: the point to calculate distance
         :type pnt: a Point object or a tuple with the coordinates
+        :rtype: LineDist
 
         Return a namedtuple with:
 
@@ -1173,8 +1174,8 @@ class Line(Geo):
         :type dist_y: num
         :param angle: the angle between 0x and major axis
         :type angle: num
-        :param round_: to make corners round
-        :type round_: bool
+        :param round\\_: to make corners round
+        :type round\\_: bool
         :param tol: fix the maximum distance between theoretical arc and output segments
         :type tol: float
         :returns: the buffer as Area object
@@ -1317,7 +1318,7 @@ class Node:
     def to_wkb(self):
         """Return a "well know binary" (WKB) geometry array.
 
-        TODO: Must be implemented
+        .. TODO:: Must be implemented
         """
         msg = "Not implemented"
         raise Exception(msg)
@@ -1520,7 +1521,7 @@ class Isle(Geo):
 
         For now the outer ring is returned
 
-        TODO: Implement inner rings detected from isles
+        .. TODO:: Implement inner rings detected from isles
         """
         line = self.points()
 
@@ -1734,8 +1735,8 @@ class Area(Geo):
         :type dist_y: num
         :param angle: the angle between 0x and major axis
         :type angle: num
-        :param round_: to make corners round
-        :type round_: bool
+        :param round\\_: to make corners round
+        :type round\\_: bool
         :param tol: fix the maximum distance between theoretical arc and output segments
         :type tol: float
         :returns: the buffer as line, centroid, isles object tuple

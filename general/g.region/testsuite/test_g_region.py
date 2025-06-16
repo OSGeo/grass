@@ -4,6 +4,7 @@
 """
 
 import json
+from copy import deepcopy
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import call_module
@@ -115,6 +116,70 @@ class TestRegion(TestCase):
                 self.assertAlmostEqual(value, output_json[key], places=6)
             else:
                 self.assertEqual(value, output_json[key])
+
+    def test_2d_region(self):
+        region_before = gs.region()
+        test_nsres = region_before["nsres"] / 2
+        test_ewres = region_before["ewres"] / 2
+        self.runModule("g.region", nsres=test_nsres, ewres=test_ewres)
+        region_after = gs.region()
+        self.assertAlmostEqual(test_nsres, region_after["nsres"])
+        self.assertAlmostEqual(test_ewres, region_after["ewres"])
+
+    def test_3d_region(self):
+        # Make sure region is default
+        self.runModule("g.region", flags="d")
+        region_before = deepcopy(gs.region(region3d=True))
+        test_nsres3 = region_before["nsres3"] / 5
+        test_ewres3 = region_before["ewres3"] / 2
+        test_tbres = region_before["tbres"] / 4
+        precision = 7
+        self.runModule(
+            "g.region", nsres3=test_nsres3, ewres3=test_ewres3, tbres=test_tbres
+        )
+        region_after = gs.region(region3d=True)
+        # Setting 3D resolution does not change the extent or 2D resolution
+        self.assertEqual(region_before["n"], region_after["n"])
+        self.assertEqual(region_before["s"], region_after["s"])
+        self.assertEqual(region_before["e"], region_after["e"])
+        self.assertEqual(region_before["w"], region_after["w"])
+        self.assertEqual(region_before["t"], region_after["t"])
+        self.assertEqual(region_before["b"], region_after["b"])
+        self.assertEqual(region_before["nsres"], region_after["nsres"])
+        self.assertEqual(region_before["ewres"], region_after["ewres"])
+
+        # 3D resolution settings are applied correctly
+        self.assertAlmostEqual(region_after["nsres3"], test_nsres3, places=precision)
+        self.assertAlmostEqual(region_after["ewres3"], test_ewres3, places=precision)
+        self.assertAlmostEqual(region_after["tbres"], test_tbres, places=precision)
+
+        # res3 is applied to all 3D resolutions
+        test_res3 = 2
+        self.runModule("g.region", res3=test_res3)
+        region_after = gs.region(region3d=True)
+        self.assertAlmostEqual(region_after["nsres3"], test_res3, places=precision)
+        self.assertAlmostEqual(region_after["ewres3"], test_res3, places=precision)
+        self.assertAlmostEqual(region_after["tbres"], test_res3, places=precision)
+
+        # res3 is overridden by individual settings
+        # tbres
+        self.runModule("g.region", res3=test_res3, tbres=test_tbres)
+        region_after = gs.region(region3d=True)
+        self.assertAlmostEqual(region_after["nsres3"], test_res3, places=precision)
+        self.assertAlmostEqual(region_after["ewres3"], test_res3, places=precision)
+        self.assertAlmostEqual(region_after["tbres"], test_tbres, places=precision)
+        # ewres3
+        self.runModule("g.region", res3=test_res3, ewres3=test_ewres3)
+        region_after = gs.region(region3d=True)
+        self.assertAlmostEqual(region_after["nsres3"], test_res3, places=precision)
+        self.assertAlmostEqual(region_after["ewres3"], test_ewres3, places=precision)
+        self.assertAlmostEqual(region_after["tbres"], test_res3, places=precision)
+        # nsres3
+        self.runModule("g.region", res3=test_res3, nsres3=test_nsres3)
+        region_after = gs.region(region3d=True)
+        self.assertAlmostEqual(region_after["nsres3"], test_nsres3, places=precision)
+        self.assertAlmostEqual(region_after["ewres3"], test_res3, places=precision)
+        self.assertAlmostEqual(region_after["tbres"], test_res3, places=precision)
 
 
 if __name__ == "__main__":

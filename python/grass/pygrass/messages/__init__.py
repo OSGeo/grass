@@ -131,46 +131,47 @@ class Messenger:
         and restarts the pipeline.
 
 
-    Usage:
+    :Usage:
+      .. code-block:: pycon
 
-    >>> msgr = Messenger()
-    >>> msgr.debug(0, "debug 0")
-    >>> msgr.verbose("verbose message")
-    >>> msgr.message("message")
-    >>> msgr.important("important message")
-    >>> msgr.percent(1, 1, 1)
-    >>> msgr.warning("Ohh")
-    >>> msgr.error("Ohh no")
+        >>> msgr = Messenger()
+        >>> msgr.debug(0, "debug 0")
+        >>> msgr.verbose("verbose message")
+        >>> msgr.message("message")
+        >>> msgr.important("important message")
+        >>> msgr.percent(1, 1, 1)
+        >>> msgr.warning("Ohh")
+        >>> msgr.error("Ohh no")
 
-    >>> msgr = Messenger()
-    >>> msgr.fatal("Ohh no no no!")
-    Traceback (most recent call last):
-      File "__init__.py", line 239, in fatal
-        sys.exit(1)
-    SystemExit: 1
+        >>> msgr = Messenger()
+        >>> msgr.fatal("Ohh no no no!")
+        Traceback (most recent call last):
+          File "__init__.py", line 239, in fatal
+            sys.exit(1)
+        SystemExit: 1
 
-    >>> msgr = Messenger(raise_on_error=True)
-    >>> msgr.fatal("Ohh no no no!")
-    Traceback (most recent call last):
-      File "__init__.py", line 241, in fatal
-        raise FatalError(message)
-    grass.exceptions.FatalError: Ohh no no no!
+        >>> msgr = Messenger(raise_on_error=True)
+        >>> msgr.fatal("Ohh no no no!")
+        Traceback (most recent call last):
+          File "__init__.py", line 241, in fatal
+            raise FatalError(message)
+        grass.exceptions.FatalError: Ohh no no no!
 
-    >>> msgr = Messenger(raise_on_error=True)
-    >>> msgr.set_raise_on_error(False)
-    >>> msgr.fatal("Ohh no no no!")
-    Traceback (most recent call last):
-      File "__init__.py", line 239, in fatal
-        sys.exit(1)
-    SystemExit: 1
+        >>> msgr = Messenger(raise_on_error=True)
+        >>> msgr.set_raise_on_error(False)
+        >>> msgr.fatal("Ohh no no no!")
+        Traceback (most recent call last):
+          File "__init__.py", line 239, in fatal
+            sys.exit(1)
+        SystemExit: 1
 
-    >>> msgr = Messenger(raise_on_error=False)
-    >>> msgr.set_raise_on_error(True)
-    >>> msgr.fatal("Ohh no no no!")
-    Traceback (most recent call last):
-      File "__init__.py", line 241, in fatal
-        raise FatalError(message)
-    grass.exceptions.FatalError: Ohh no no no!
+        >>> msgr = Messenger(raise_on_error=False)
+        >>> msgr.set_raise_on_error(True)
+        >>> msgr.fatal("Ohh no no no!")
+        Traceback (most recent call last):
+          File "__init__.py", line 241, in fatal
+            raise FatalError(message)
+        grass.exceptions.FatalError: Ohh no no no!
 
     """
 

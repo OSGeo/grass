@@ -99,7 +99,7 @@ bounding box):
 
 ```sh
 g.region raster=elevation.10m
-r.random input=elevation.10m n=5000 vector=random3d -d
+r.random input=elevation.10m n=5000 vector=random3d -z
 d.mon start=x0
 # display as black points
 d.vect map=random3d
