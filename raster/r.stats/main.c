@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <grass/parson.h>
 #include <grass/glocale.h>
 
 #include "global.h"
@@ -55,6 +56,10 @@ int main(int argc, char *argv[])
     int with_areas;
     int with_labels;
     int do_sort;
+
+    enum OutputFormat format;
+    JSON_Array *root_array;
+    JSON_Value *root_value;
 
     /* printf format */
     char fmt[20];
@@ -95,6 +100,7 @@ int main(int argc, char *argv[])
                                   explicit fp ranges in cats or when the map
                                   is int, nsteps is ignored */
         struct Option *sort;   /* sort by cell counts */
+        struct Option *format;
     } option;
 
     G_gisinit(argv[0]);
@@ -144,6 +150,9 @@ int main(int argc, char *argv[])
                _("Sort by cell counts in ascending order"),
                _("Sort by cell counts in descending order"));
     option.sort->guisection = _("Formatting");
+
+    option.format = G_define_standard_option(G_OPT_F_FORMAT);
+    option.format->guisection = _("Print");
 
     /* Define the different flags */
 
@@ -233,6 +242,16 @@ int main(int argc, char *argv[])
                   option.nsteps->key, option.nsteps->key);
         nsteps = 255;
     }
+
+    if (strcmp(option.format->answer, "json") == 0) {
+        format = JSON;
+        root_value = json_value_init_array();
+        root_array = json_array(root_value);
+    }
+    else {
+        format = PLAIN;
+    }
+
     cat_ranges = flag.C->answer;
 
     averaged = flag.A->answer;
@@ -376,10 +395,22 @@ int main(int argc, char *argv[])
         snprintf(fmt, sizeof(fmt), "%%.%dlf", dp);
 
     if (raw_data)
-        raw_stats(fd, with_coordinates, with_xy, with_labels);
+        raw_stats(fd, with_coordinates, with_xy, with_labels, format,
+                  root_array);
     else
         cell_stats(fd, with_percents, with_counts, with_areas, do_sort,
-                   with_labels, fmt);
+                   with_labels, fmt, format, root_array);
+
+    if (format == JSON) {
+        char *serialized_string = NULL;
+        serialized_string = json_serialize_to_string_pretty(root_value);
+        if (serialized_string == NULL) {
+            G_fatal_error(_("Failed to initialize pretty JSON string."));
+        }
+        puts(serialized_string);
+        json_free_serialized_string(serialized_string);
+        json_value_free(root_value);
+    }
 
     exit(EXIT_SUCCESS);
 }
