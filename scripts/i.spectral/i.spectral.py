@@ -92,7 +92,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-
 def cleanup():
     try_rmdir(tmp_dir)
 
@@ -226,6 +225,7 @@ def draw_linegraph(what):
         y_title=_("DN Value"),
     )
 
+
 def draw_pyplot(what, xlabels, coord_legend):
     """
     Draw using pyplot
@@ -237,17 +237,14 @@ def draw_pyplot(what, xlabels, coord_legend):
         y = [float(val) for val in row[3:]]  # data points
         x = np.arange(1, len(y) + 1)
         max_len = max(max_len, len(y))
-        if coord_legend:
-            label = str(tuple(row[0:2]))
-        else:
-            label = f"Pick {i + 1}"
-        plt.plot(x, y, marker='', label=label)
-    
+        label = str(tuple(row[0:2])) if coord_legend else f"Pick {i + 1}"
+        plt.plot(x, y, marker="", label=label)
+
     # Assume 'what' is your data as given
     row = what[0]  # or any row you want to use
     num_bands = len(row) - 3  # subtract the first three elements (coords/meta)
     # Generate xlabels: ['Band1', 'Band2', ..., 'BandN']
-    xlabels = [f'B{i+1}' for i in range(num_bands)]
+    xlabels = [f"B{i + 1}" for i in range(num_bands)]
     # Determine up to 10 evenly spaced tick positions
     max_ticks = 10
     if num_bands <= max_ticks:
@@ -263,8 +260,10 @@ def draw_pyplot(what, xlabels, coord_legend):
     # Plot data
     y = row[3:]
     x = np.arange(1, num_bands + 1)
-    plt.xticks(ticks=x[tick_indices], labels=[xlabels[i] for i in tick_indices], rotation=40)
-    plt.grid(True, linestyle=':', linewidth=0.7, color='gray', alpha=0.7)
+    plt.xticks(
+        ticks=x[tick_indices], labels=[xlabels[i] for i in tick_indices], rotation=40
+    )
+    plt.grid(True, linestyle=":", linewidth=0.7, color="gray", alpha=0.7)
     plt.title("Spectral signatures")
     plt.xlabel("Bands")
     plt.ylabel("DN Value")
