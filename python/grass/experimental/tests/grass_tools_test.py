@@ -413,23 +413,14 @@ def test_parent_overwrite_after_call(xy_dataset_session):
     tools.r_random_surface(output="surface", seed=42)
 
 
-def test_stdin(xy_dataset_session):
-    """Test that stdin is accepted"""
-    tools = Tools(session=xy_dataset_session)
-    tools.feed_input_to("13.45,29.96,200").v_in_ascii(
-        input="-", output="point", separator=","
-    )
-
-
 def test_raises(xy_dataset_session):
     """Test that exception is raised for wrong parameter value"""
     tools = Tools(session=xy_dataset_session)
-    wrong_name = "wrong_standard"
+    wrong_name = "does_not_exist"
     with pytest.raises(CalledModuleError, match=wrong_name):
-        tools.feed_input_to("13.45,29.96,200").v_in_ascii(
-            input="-",
-            output="point",
-            format=wrong_name,
+        tools.r_slope_aspect(
+            elevation=wrong_name,
+            slope="slope",
         )
 
 

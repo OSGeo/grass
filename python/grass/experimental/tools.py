@@ -237,7 +237,6 @@ class Tools:
         verbose=None,
         quiet=None,
         superquiet=None,
-        stdin=None,
         errors=None,
         capture_output=True,
     ):
@@ -263,7 +262,6 @@ class Tools:
         self._verbose = verbose
         self._quiet = quiet
         self._superquiet = superquiet
-        self._set_stdin(stdin)
         self._errors = errors
         self._capture_output = capture_output
         self._name_helper = None
@@ -305,9 +303,6 @@ class Tools:
             set_or_unset(env, "3", self._verbose)
 
         return env or self._original_env
-
-    def _set_stdin(self, stdin, /):
-        self._stdin = stdin
 
     def _process_parameters(self, command, **popen_options):
         popen_options["stdin"] = None
@@ -392,10 +387,7 @@ class Tools:
                 popen_options["stdout"] = gs.PIPE
             if "stderr" not in popen_options:
                 popen_options["stderr"] = gs.PIPE
-        if self._stdin:
-            stdin_pipe = gs.PIPE
-            stdin = self._stdin
-        elif stdin:
+        if stdin:
             stdin_pipe = gs.PIPE
         else:
             stdin_pipe = None
@@ -437,15 +429,6 @@ class Tools:
                 handler=self._errors,
             )
         return result
-
-    def feed_input_to(self, stdin, /):
-        """Get a new object which will feed text input to a tool or tools"""
-        return Tools(
-            env=self._original_env,
-            stdin=stdin,
-            errors=self._errors,
-            capture_output=self._capture_output,
-        )
 
     def __getattr__(self, name):
         """Parse attribute to GRASS display module. Attribute should be in
