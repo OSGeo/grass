@@ -1,6 +1,5 @@
 """Test grass.experimental.Tools class"""
 
-import os
 import io
 
 import pytest
@@ -244,8 +243,75 @@ def test_error_handler_exit(xy_dataset_session):
         assert tools.g_mapset(mapset="does_not_exist")
 
 
+def test_verbose(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, verbose=True)
+    tools.g_mapset(mapset="test1", flags="c")
+    tools.g_mapset(mapset="test2", flags="c")
+    result = tools.g_mapsets(mapset="test1")
+    assert "test1" in result.stderr
+
+
+def test_quiet(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, quiet=True)
+    result = tools.g_mapsets(mapset="PERMANENT")
+    # Expecting an important message about no modification.
+    assert result.stderr
+
+
+def test_superquiet(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, superquiet=True)
+    result = tools.g_mapsets(mapset="PERMANENT")
+    assert not result.stderr
+
+
+def test_superquiet_verbose(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, superquiet=True)
+    result = tools.g_mapsets(mapset="PERMANENT", verbose=True)
+    assert result.stderr
+
+
+def test_verbose_superquiet(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, verbose=True)
+    result = tools.g_mapsets(mapset="PERMANENT", superquiet=True)
+    assert not result.stderr
+
+
+def test_superquiet_false(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    xy_dataset_session.env["GRASS_VERBOSE"] = "0"
+    tools = Tools(session=xy_dataset_session, superquiet=False)
+    result = tools.g_mapsets(mapset="PERMANENT")
+    assert result.stderr
+    assert "GRASS_VERBOSE" in xy_dataset_session.env
+    assert xy_dataset_session.env["GRASS_VERBOSE"] == "0"
+    assert "GRASS_VERBOSE" not in tools._modified_env_if_needed(), (
+        f"GRASS_VERBOSE has value {tools._modified_env_if_needed()['GRASS_VERBOSE']}"
+    )  # pylint: disable=protected-access
+
+
+def test_verbose_false(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    xy_dataset_session.env["GRASS_VERBOSE"] = "3"
+    tools = Tools(session=xy_dataset_session, verbose=False)
+    tools.g_mapset(mapset="test1", flags="c")
+    tools.g_mapset(mapset="test2", flags="c")
+    result = tools.g_mapsets(mapset="test1")
+    assert not result.stderr
+    assert "GRASS_VERBOSE" in xy_dataset_session.env
+    assert xy_dataset_session.env["GRASS_VERBOSE"] == "3"
+    assert "GRASS_VERBOSE" not in tools._modified_env_if_needed(), (
+        f"GRASS_VERBOSE has value {tools._modified_env_if_needed()['GRASS_VERBOSE']}"
+    )  # pylint: disable=protected-access
+
+
 def test_direct_overwrite(xy_dataset_session):
     """Check overwrite as a parameter"""
+    assert "GRASS_OVERWRITE" not in xy_dataset_session.env
     tools = Tools(session=xy_dataset_session)
     tools.r_random_surface(output="surface", seed=42)
     tools.r_random_surface(output="surface", seed=42, overwrite=True)
@@ -253,49 +319,98 @@ def test_direct_overwrite(xy_dataset_session):
 
 def test_object_overwrite(xy_dataset_session):
     """Check overwrite as parameter of the tools object"""
+    assert "GRASS_OVERWRITE" not in xy_dataset_session.env
     tools = Tools(session=xy_dataset_session, overwrite=True)
     tools.r_random_surface(output="surface", seed=42)
     tools.r_random_surface(output="surface", seed=42)
 
 
-def test_no_overwrite(xy_dataset_session):
+def test_no_overwrite(xy_session):
     """Check that it fails without overwrite"""
-    tools = Tools(session=xy_dataset_session)
+    assert "GRASS_OVERWRITE" not in xy_session.env
+    tools = Tools(session=xy_session)
     tools.r_random_surface(output="surface", seed=42)
     with pytest.raises(CalledModuleError, match="overwrite"):
         tools.r_random_surface(output="surface", seed=42)
+
+
+def test_overwrite_true_in_call(xy_session):
+    """Check that it fails without overwrite"""
+    assert "GRASS_OVERWRITE" not in xy_session.env
+    tools = Tools(session=xy_session, overwrite=False)
+    tools.r_random_surface(output="surface", seed=42)
+    tools.r_random_surface(output="surface", seed=42, overwrite=True)
+    with pytest.raises(CalledModuleError, match="overwrite"):
+        tools.r_random_surface(output="surface", seed=42)
+
+
+def test_overwrite_false_in_call(xy_session):
+    """Individual overwrite is not used when global is True and individual is False
+
+    We simply test for the current behavior.
+    """
+    assert "GRASS_OVERWRITE" not in xy_session.env
+    tools = Tools(session=xy_session, overwrite=True)
+    tools.r_random_surface(output="surface", seed=42)
+    tools.r_random_surface(output="surface", seed=42, overwrite=False)
 
 
 def test_env_overwrite(xy_dataset_session):
     """Check that overwrite from env parameter is used"""
-    # env = xy_dataset_session.env.copy()  # ideally
-    env = os.environ.copy()  # for now
+    assert "GRASS_OVERWRITE" not in xy_dataset_session.env
+    env = xy_dataset_session.env.copy()
     env["GRASS_OVERWRITE"] = "1"
-    tools = Tools(session=xy_dataset_session, env=env)
+    tools = Tools(env=env)
     tools.r_random_surface(output="surface", seed=42)
     tools.r_random_surface(output="surface", seed=42)
 
 
-def test_global_overwrite_vs_env(xy_dataset_session):
-    """Check that global overwrite is not used when separate env is used"""
-    # env = xy_dataset_session.env.copy()  # ideally
-    env = os.environ.copy()  # for now
-    os.environ["GRASS_OVERWRITE"] = "1"  # change to xy_dataset_session.env
-    tools = Tools(session=xy_dataset_session, env=env)
-    tools.r_random_surface(output="surface", seed=42)
-    with pytest.raises(CalledModuleError, match="overwrite"):
-        tools.r_random_surface(output="surface", seed=42)
-    del os.environ["GRASS_OVERWRITE"]  # check or ideally remove this
-
-
-def test_global_overwrite_vs_init(xy_dataset_session):
-    """Check that global overwrite is not used when separate env is used"""
+def test_session_overwrite(xy_dataset_session):
+    """Check that overwrite from env parameter is used"""
+    assert "GRASS_OVERWRITE" not in xy_dataset_session.env
+    xy_dataset_session.env["GRASS_OVERWRITE"] = "1"
     tools = Tools(session=xy_dataset_session)
-    os.environ["GRASS_OVERWRITE"] = "1"  # change to xy_dataset_session.env
+    tools.r_random_surface(output="surface", seed=42)
+    tools.r_random_surface(output="surface", seed=42)
+
+
+def test_parent_overwrite_vs_env(xy_dataset_session):
+    """Check that parent overwrite is not used when separate env is used"""
+    assert "GRASS_OVERWRITE" not in xy_dataset_session.env
+    env = xy_dataset_session.env.copy()
+    xy_dataset_session.env["GRASS_OVERWRITE"] = "1"
+    tools = Tools(session=xy_dataset_session, env=env)
     tools.r_random_surface(output="surface", seed=42)
     with pytest.raises(CalledModuleError, match="overwrite"):
         tools.r_random_surface(output="surface", seed=42)
-    del os.environ["GRASS_OVERWRITE"]  # check or ideally remove this
+
+
+def test_parent_overwrite_vs_init(xy_dataset_session):
+    """Check that parent overwrite is not used when separate env is used"""
+    assert "GRASS_OVERWRITE" not in xy_dataset_session.env
+    tools = Tools(session=xy_dataset_session, overwrite=False)
+    xy_dataset_session.env["GRASS_OVERWRITE"] = "1"
+    tools.r_random_surface(output="surface", seed=42)
+    with pytest.raises(CalledModuleError, match="overwrite"):
+        tools.r_random_surface(output="surface", seed=42)
+
+
+def test_parent_overwrite_vs_call(xy_dataset_session):
+    """Check that parent overwrite is not used when separate env is used"""
+    assert "GRASS_OVERWRITE" not in xy_dataset_session.env
+    tools = Tools(session=xy_dataset_session)
+    xy_dataset_session.env["GRASS_OVERWRITE"] = "0"
+    tools.r_random_surface(output="surface", seed=42)
+    tools.r_random_surface(output="surface", seed=42, overwrite=True)
+
+
+def test_parent_overwrite_after_call(xy_dataset_session):
+    """Check that parent overwrite is not used when separate env is used"""
+    assert "GRASS_OVERWRITE" not in xy_dataset_session.env
+    tools = Tools(session=xy_dataset_session)
+    tools.r_random_surface(output="surface", seed=42)
+    xy_dataset_session.env["GRASS_OVERWRITE"] = "1"
+    tools.r_random_surface(output="surface", seed=42)
 
 
 def test_stdin(xy_dataset_session):
@@ -378,7 +493,9 @@ def test_migration_from_run_command_family(xy_dataset_session):
 
     # parse_command
     # original (numbers are strings):
-    assert gs.parse_command("g.region", flags="c", format="shell") == {
+    assert gs.parse_command(
+        "g.region", flags="c", format="shell", env=xy_dataset_session.env
+    ) == {
         "center_easting": "0.500000",
         "center_northing": "0.500000",
     }
@@ -395,7 +512,9 @@ def test_migration_from_run_command_family(xy_dataset_session):
 
     # parse_command storing JSON output in a variable and accessing individual values
     # original:
-    data = gs.parse_command("g.region", flags="c", format="shell")
+    data = gs.parse_command(
+        "g.region", flags="c", format="shell", env=xy_dataset_session.env
+    )
     assert float(data["center_easting"]) == 0.5
     assert float(data["center_northing"]) == 0.5
     # replacement:
@@ -405,7 +524,7 @@ def test_migration_from_run_command_family(xy_dataset_session):
 
     # mapcalc wrapper of r.mapcalc
     # original:
-    gs.mapcalc("a = 1")
+    gs.mapcalc("a = 1", env=xy_dataset_session.env)
     # replacement for short expressions:
     tools.r_mapcalc(expression="b = 1")
     # replacement for long expression:
@@ -414,7 +533,7 @@ def test_migration_from_run_command_family(xy_dataset_session):
     # all other wrappers
     # Wrappers in grass.script usually parse shell-script style key-value pairs,
     # and convert values from strings to numbers, e.g. g.region:
-    assert gs.region()["rows"] == 1
+    assert gs.region(env=xy_dataset_session.env)["rows"] == 1
     # Conversion is done automatically in Tools, and syntax is more lightweight,
     # so for tools which have JSON output, the only thing which need is the format
     # (this also benefits from better defaults and more consistent tool behavior):
@@ -427,7 +546,7 @@ def test_with_context_managers(tmpdir):
     with gs.setup.init(project) as session:
         tools = Tools(session=session)
         tools.r_random_surface(output="surface", seed=42)
-        with TemporaryMapsetSession(env=tools.env) as mapset:
+        with TemporaryMapsetSession(env=session.env) as mapset:
             tools.r_random_surface(output="surface", seed=42, env=mapset.env)
             with gs.MaskManager(env=mapset.env) as mask:
                 # TODO: Do actual test

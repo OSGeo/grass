@@ -233,56 +233,81 @@ class Tools:
         *,
         session=None,
         env=None,
-        overwrite=False,
-        quiet=False,
-        verbose=False,
-        superquiet=False,
-        freeze_region=False,
+        overwrite=None,
+        verbose=None,
+        quiet=None,
+        superquiet=None,
         stdin=None,
         errors=None,
         capture_output=True,
     ):
+        """
+        If env is provided, it is used to execute tools. If both session and env are
+        provided, env is used to execute tools and session is ignored.
+        However, session and env interaction may change in the future.
+
+        If overwrite is provided, a global overwrite is set for all the tools.
+        When overwrite is set to False, individual tool calls can set overwrite
+        to True. If overwrite is set in the session or env, it is used.
+        Note that once overwrite is set to True globally, an individual tool call
+        cannot set it back to False.
+        """
         if env:
-            self._env = env.copy()
+            self._original_env = env
         elif session and hasattr(session, "env"):
-            self._env = session.env.copy()
+            self._original_env = session.env
         else:
-            self._env = os.environ.copy()
-        self._region_is_frozen = False
-        if freeze_region:
-            self._freeze_region()
-        if overwrite:
-            self._overwrite()
-        # This hopefully sets the numbers directly. An alternative implementation would
-        # be to pass the parameter every time.
-        # Does not check for multiple set at the same time, but the most verbose wins
-        # for safety.
-        if superquiet:
-            self._env["GRASS_VERBOSE"] = "0"
-        if quiet:
-            self._env["GRASS_VERBOSE"] = "1"
-        if verbose:
-            self._env["GRASS_VERBOSE"] = "3"
+            self._original_env = os.environ
+        self._modified_env = None
+        self._overwrite = overwrite
+        self._verbose = verbose
+        self._quiet = quiet
+        self._superquiet = superquiet
         self._set_stdin(stdin)
         self._errors = errors
         self._capture_output = capture_output
         self._name_helper = None
 
-    # These could be public, not protected.
-    def _freeze_region(self):
-        self._env["GRASS_REGION"] = gs.region_env(env=self._env)
-        self._region_is_frozen = True
+    def _modified_env_if_needed(self):
+        env = None
+        if self._overwrite is not None:
+            env = env or self._original_env.copy()
+            if self._overwrite:
+                env["GRASS_OVERWRITE"] = "1"
+            else:
+                env["GRASS_OVERWRITE"] = "0"
 
-    def _overwrite(self):
-        self._env["GRASS_OVERWRITE"] = "1"
+        if (
+            self._verbose is not None
+            or self._quiet is not None
+            or self._superquiet is not None
+        ):
+            env = env or self._original_env.copy()
+
+            def set_or_unset(env, variable_value, state):
+                """
+                Set the variable the corresponding value if state is True. If it is
+                False and the variable is set to the corresponding value, unset it.
+                """
+                if state:
+                    env["GRASS_VERBOSE"] = variable_value
+                elif (
+                    state is False
+                    and "GRASS_VERBOSE" in env
+                    and env["GRASS_VERBOSE"] == variable_value
+                ):
+                    del env["GRASS_VERBOSE"]
+
+            # This does not check for multiple ones set at the same time,
+            # but the most verbose one wins for safety.
+            set_or_unset(env, "0", self._superquiet)
+            set_or_unset(env, "1", self._quiet)
+            set_or_unset(env, "3", self._verbose)
+
+        return env or self._original_env
 
     def _set_stdin(self, stdin, /):
         self._stdin = stdin
-
-    @property
-    def env(self):
-        """Internally used environment (reference to it, not a copy)"""
-        return self._env
 
     def _process_parameters(self, command, **popen_options):
         popen_options["stdin"] = None
@@ -300,11 +325,16 @@ class Tools:
 
         :param str module: name of GRASS module
         :param `**kwargs`: named arguments passed to run_command()"""
-
+        # Object parameters are handled first before the conversion of the call to a
+        # list of strings happens.
         object_parameter_handler = ObjectParameterHandler()
         object_parameter_handler.process_parameters(kwargs)
 
+        # Get a fixed env parameter at at the beginning of each execution,
+        # but repeat it every time in case the referenced environment is modified.
         args, popen_options = gs.popen_args_command(name, **kwargs)
+        if "env" not in popen_options:
+            popen_options["env"] = self._modified_env_if_needed()
 
         interface_result = self._process_parameters(args, **popen_options)
         parameters = json.loads(interface_result.stdout)
@@ -326,6 +356,8 @@ class Tools:
         processed_parameters=None,
         **popen_options,
     ):
+        if "env" not in popen_options:
+            popen_options["env"] = self._modified_env_if_needed()
         if not processed_parameters:
             interface_result = self._process_parameters(command, **popen_options)
             processed_parameters = json.loads(interface_result.stdout)
@@ -340,6 +372,8 @@ class Tools:
 
     def no_nonsense_run(self, name, /, *, tool_kwargs=None, stdin=None, **kwargs):
         args, popen_options = gs.popen_args_command(name, **kwargs)
+        if "env" not in popen_options:
+            popen_options["env"] = self._modified_env_if_needed()
         return self.no_nonsense_run_from_list(
             args, tool_kwargs=tool_kwargs, stdin=stdin, **popen_options
         )
@@ -348,6 +382,11 @@ class Tools:
     def no_nonsense_run_from_list(
         self, command, tool_kwargs=None, stdin=None, **popen_options
     ):
+        # We need to pass our own env parameter, but through that we are also allowing
+        # the user to overwrite env, which allows for maximum flexibility
+        # with some potential confusion when the user a broken environment.
+        if "env" not in popen_options:
+            popen_options["env"] = self._modified_env_if_needed()
         if self._capture_output:
             if "stdout" not in popen_options:
                 popen_options["stdout"] = gs.PIPE
@@ -364,10 +403,6 @@ class Tools:
         # Use text mode by default
         if "text" not in popen_options and "universal_newlines" not in popen_options:
             popen_options["text"] = True
-        # Allowing to overwrite env, but that's just to have maximum flexibility when
-        # the session is actually set up, but it may be confusing.
-        if "env" not in popen_options:
-            popen_options["env"] = self._env
         process = gs.Popen(
             command,
             stdin=stdin_pipe,
@@ -390,8 +425,9 @@ class Tools:
             # This is only for the error states.
             # The handle_errors function handles also the run_command functions
             # and may use some overall review to make the handling of the tool name
-            # and parameters more clear.
-            args = [command[0]] if tool_kwargs else command
+            # and parameters more clear, but currently, the first item in args is a
+            # list if it is a whole command.
+            args = [command[0]] if tool_kwargs else [command]
             return gs.handle_errors(
                 returncode,
                 result=result,
@@ -405,9 +441,8 @@ class Tools:
     def feed_input_to(self, stdin, /):
         """Get a new object which will feed text input to a tool or tools"""
         return Tools(
-            env=self._env,
+            env=self._original_env,
             stdin=stdin,
-            freeze_region=self._region_is_frozen,
             errors=self._errors,
             capture_output=self._capture_output,
         )
@@ -419,7 +454,7 @@ class Tools:
         if not self._name_helper:
             self._name_helper = ToolFunctionNameHelper(
                 run_function=self.run,
-                env=self.env,
+                env=self._original_env,
             )
         return self._name_helper.get_function(name, exception_type=AttributeError)
 
@@ -427,7 +462,7 @@ class Tools:
         if not self._name_helper:
             self._name_helper = ToolFunctionNameHelper(
                 run_function=self.run,
-                env=self.env,
+                env=self._original_env,
             )
         # Collect instance and class attributes
         static_attrs = set(dir(type(self))) | set(self.__dict__.keys())
@@ -467,13 +502,7 @@ def _test():
     )
     print(coarse_computation.r_info(map="slope", flags="g").keyval)
 
-    independent_computation = Tools(session=session, freeze_region=True)
-    tools.g_region(res=500)  # we would do this for another computation elsewhere
-    print(independent_computation.g_region(flags="g").keyval["ewres"])
-
-    tools_pro = Tools(
-        session=session, freeze_region=True, overwrite=True, superquiet=True
-    )
+    tools_pro = Tools(session=session, overwrite=True, superquiet=True)
     tools_pro.r_slope_aspect(elevation="elevation", slope="slope")
     tools_pro.feed_input_to("13.45,29.96,200").v_in_ascii(
         input="-", output="point", separator=","
