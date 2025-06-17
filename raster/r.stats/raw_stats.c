@@ -52,7 +52,7 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
         }
 
         double northing;
-        if (with_coordinates || format == JSON) {
+        if (with_coordinates) {
             northing = Rast_row_to_northing(row + .5, &window);
             G_format_northing(northing, nbuf,
                               G_projection() == PROJECTION_LL ? -1 : 0);
