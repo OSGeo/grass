@@ -318,6 +318,109 @@ def test_raises(xy_dataset_session):
         )
 
 
+def test_migration_from_run_command_family(xy_dataset_session):
+    # run_command
+    # original:
+    gs.run_command(
+        "r.random.surface", output="surface", seed=42, env=xy_dataset_session.env
+    )
+    # replacement:
+    tools = Tools(env=xy_dataset_session.env)
+    tools.run("r.random.surface", output="surface2", seed=42)
+    tools.r_random_surface(output="surface3", seed=42)
+
+    # run_command with returncode
+    # original:
+    assert (
+        gs.run_command(
+            "r.mask.status", flags="t", env=xy_dataset_session.env, errors="status"
+        )
+        == 1
+    )
+    # replacement:
+    tools = Tools(errors="ignore", env=xy_dataset_session.env)
+    assert tools.run("r.mask.status", flags="t").returncode == 1
+
+    # write_command
+    # original:
+    gs.write_command(
+        "v.in.ascii",
+        input="-",
+        output="point1",
+        separator=",",
+        env=xy_dataset_session.env,
+        stdin="13.45,29.96,200\n",
+    )
+    # replacement:
+    tools = Tools(env=xy_dataset_session.env)
+    tools.run(
+        "v.in.ascii",
+        input=io.StringIO("13.45,29.96,200\n"),
+        output="point2",
+        separator=",",
+    )
+
+    # read_command
+    # original:
+    assert (
+        gs.read_command("g.region", flags="c", env=xy_dataset_session.env)
+        == "center easting:  0.500000\ncenter northing: 0.500000\n"
+    )
+    # replacement:
+    assert (
+        tools.run("g.region", flags="c").stdout
+        == "center easting:  0.500000\ncenter northing: 0.500000\n"
+    )
+    assert (
+        tools.g_region(flags="c").text
+        == "center easting:  0.500000\ncenter northing: 0.500000"
+    )
+
+    # parse_command
+    # original (numbers are strings):
+    assert gs.parse_command("g.region", flags="c", format="shell") == {
+        "center_easting": "0.500000",
+        "center_northing": "0.500000",
+    }
+    # replacement (numbers are actual numbers, not strings, if they convert to Python float or int):
+    assert tools.run("g.region", flags="c", format="shell").keyval == {
+        "center_easting": 0.5,
+        "center_northing": 0.5,
+    }
+    # parse_command with JSON
+    assert tools.run("g.region", flags="c", format="json").json == {
+        "center_easting": 0.5,
+        "center_northing": 0.5,
+    }
+
+    # parse_command storing JSON output in a variable and accessing individual values
+    # original:
+    data = gs.parse_command("g.region", flags="c", format="shell")
+    assert float(data["center_easting"]) == 0.5
+    assert float(data["center_northing"]) == 0.5
+    # replacement:
+    data = tools.run("g.region", flags="c", format="json")
+    assert data["center_easting"] == 0.5
+    assert data["center_northing"] == 0.5
+
+    # mapcalc wrapper of r.mapcalc
+    # original:
+    gs.mapcalc("a = 1")
+    # replacement for short expressions:
+    tools.r_mapcalc(expression="b = 1")
+    # replacement for long expression:
+    tools.r_mapcalc(file=io.StringIO("c = 1"), overwrite=True)
+
+    # all other wrappers
+    # Wrappers in grass.script usually parse shell-script style key-value pairs,
+    # and convert values from strings to numbers, e.g. g.region:
+    assert gs.region()["rows"] == 1
+    # Conversion is done automatically in Tools, and syntax is more lightweight,
+    # so for tools which have JSON output, the only thing which need is the format
+    # (this also benefits from better defaults and more consistent tool behavior):
+    assert tools.g_region(flags="p", format="json")["rows"] == 1
+
+
 def test_with_context_managers(tmpdir):
     project = tmpdir / "project"
     gs.create_project(project)

@@ -388,10 +388,14 @@ class Tools:
         )
         if returncode != 0:
             # This is only for the error states.
+            # The handle_errors function handles also the run_command functions
+            # and may use some overall review to make the handling of the tool name
+            # and parameters more clear.
+            args = [command[0]] if tool_kwargs else command
             return gs.handle_errors(
                 returncode,
                 result=result,
-                args=[command],  # whole command of type list is the first arg
+                args=args,
                 kwargs=tool_kwargs or {},
                 stderr=stderr,
                 handler=self._errors,
