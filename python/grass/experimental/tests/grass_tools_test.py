@@ -62,6 +62,15 @@ def test_json_with_direct_subprocess_run_like_call(xy_dataset_session):
     )
 
 
+def test_json_as_list(xy_dataset_session):
+    """Check that JSON is parsed"""
+    tools = Tools(session=xy_dataset_session)
+    result = tools.g_search_modules(keyword="random", flags="j")
+    for item in result:
+        assert "name" in item
+    assert len(result)
+
+
 def test_help_call_no_parameters(xy_dataset_session):
     """Check that JSON is parsed with a name-and-parameters style call"""
     tools = Tools(session=xy_dataset_session)

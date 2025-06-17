@@ -204,12 +204,12 @@ class ExecutedTool:
     def stderr(self) -> str | bytes:
         return self._stderr
 
-    def __getitem__(self, name):
+    def _json_or_error(self):
         if self._stdout:
             # We are testing just std out and letting rest to the parse and the user.
             # This makes no assumption about how JSON is produced by the tool.
             try:
-                return self.json[name]
+                return self.json
             except json.JSONDecodeError as error:
                 if self._kwargs.get("format") == "json":
                     raise
@@ -220,6 +220,12 @@ class ExecutedTool:
                 raise ValueError(msg) from error
         msg = f"No text output for {self._name} to be parsed as JSON"
         raise ValueError(msg)
+
+    def __getitem__(self, name):
+        return self._json_or_error()[name]
+
+    def __len__(self):
+        return len(self._json_or_error())
 
 
 class Tools:
