@@ -48,6 +48,7 @@ import http.client
 import atexit
 import signal
 import sys
+import shutil
 
 
 class JupyterServerInstance:
@@ -112,7 +113,7 @@ class JupyterServerInstance:
         :return: A free port number (int).
         """
         with socket.socket() as sock:
-            sock.bind(("", 0))
+            sock.bind(("127.0.0.1", 0))
             return sock.getsockname()[1]
 
     def is_server_running(self, retries=10, delay=0.2):
@@ -183,6 +184,9 @@ class JupyterServerInstance:
 
         # Check if the process with the given PID is a Jupyter server
         try:
+            ps_cmd = shutil.which("ps")
+            if not ps_cmd:
+                raise RuntimeError(_("Unable to find 'ps' command in PATH."))
             proc_name = (
                 subprocess.check_output(["ps", "-p", str(self.pid), "-o", "args="])
                 .decode()
@@ -194,12 +198,17 @@ class JupyterServerInstance:
                         "Process with PID {} is not a Jupyter server: found '{}'."
                     ).format(self.pid, proc_name)
                 )
-        except subprocess.CalledProcessError:
-            raise RuntimeError(_("No process found with PID {}.").format(self.pid))
+        except subprocess.CalledProcessError as e:
+            raise RuntimeError(
+                _("No process found with PID {}.").format(self.pid)
+            ) from e
 
         # Attempt to terminate the server process
         if self.is_server_running(self.port):
             try:
+                kill_cmd = shutil.which("kill")
+                if not kill_cmd:
+                    raise RuntimeError(_("Unable to find 'kill' command in PATH."))
                 subprocess.check_call(["kill", str(self.pid)])
             except subprocess.CalledProcessError as e:
                 raise RuntimeError(
