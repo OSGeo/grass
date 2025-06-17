@@ -14,14 +14,16 @@ This program is free software under the GNU General Public License
 @author Linda Karlovska <linda.karlovska seznam.cz>
 """
 
-import wx
 from pathlib import Path
 
-from .notebook import JupyterAuiNotebook
-from .toolbars import JupyterToolbar
+import wx
+
 from main_window.page import MainPageBase
 from grass.workflows.directory import JupyterDirectoryManager
 from grass.workflows.server import JupyterServerInstance, JupyterServerRegistry
+
+from .notebook import JupyterAuiNotebook
+from .toolbars import JupyterToolbar
 
 
 class JupyterPanel(wx.Panel, MainPageBase):
