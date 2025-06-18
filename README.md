@@ -34,7 +34,7 @@ and is hosted by the Open Source Geospatial Foundation ([OSGeo](https://www.osge
 GRASS uses a [custom governance model](./GOVERNANCE.md)
 and is fiscally sponsored by [NumFOCUS](https://numfocus.org/). Consider making
 a [tax-deductible donation](https://numfocus.org/donate-to-grass) to help the project
-pay for developer time, professional services, travel,workshops,
+pay for developer time, professional services, travel, workshops,
 and a variety of other needs.
 
 <!-- markdownlint-disable MD033 -->
