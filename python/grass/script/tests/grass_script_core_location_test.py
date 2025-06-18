@@ -117,8 +117,7 @@ def test_with_different_path(tmp_path):
 
 
 def test_path_only(tmp_path):
-    desired = "desired"
-    full_path = tmp_path / desired
+    full_path = tmp_path / "desired"
     gs.create_location(full_path, epsg="3358")
     mapset_path = full_path / "PERMANENT"
     wkt_file = mapset_path / "PROJ_WKT"
