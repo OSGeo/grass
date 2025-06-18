@@ -92,14 +92,14 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     }
     str = G_find_key_value("name", in_proj_keys);
     if (str != NULL) {
-        sprintf(proj_in, "%s", str);
+        snprintf(proj_in, sizeof(proj_in), "%s", str);
     }
     str = G_find_key_value("proj", in_proj_keys);
     if (str != NULL) {
-        sprintf(info->proj, "%s", str);
+        snprintf(info->proj, sizeof(info->proj), "%s", str);
     }
     if (strlen(info->proj) <= 0)
-        sprintf(info->proj, "ll");
+        snprintf(info->proj, sizeof(info->proj), "ll");
     str = G_find_key_value("init", in_proj_keys);
     if (str != NULL) {
         info->srid = G_store(str);
@@ -143,20 +143,21 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
         }
         else if (strcmp(in_proj_keys->key[i], "proj") == 0) {
             if (strcmp(in_proj_keys->value[i], "ll") == 0)
-                sprintf(buffa, "proj=longlat");
+                snprintf(buffa, sizeof(buffa), "proj=longlat");
             else
-                sprintf(buffa, "proj=%s", in_proj_keys->value[i]);
+                snprintf(buffa, sizeof(buffa), "proj=%s",
+                         in_proj_keys->value[i]);
 
             /* 'One-sided' PROJ.4 flags will have the value in
              * the key-value pair set to 'defined' and only the
              * key needs to be passed on. */
         }
         else if (strcmp(in_proj_keys->value[i], "defined") == 0)
-            sprintf(buffa, "%s", in_proj_keys->key[i]);
+            snprintf(buffa, sizeof(buffa), "%s", in_proj_keys->key[i]);
 
         else
-            sprintf(buffa, "%s=%s", in_proj_keys->key[i],
-                    in_proj_keys->value[i]);
+            snprintf(buffa, sizeof(buffa), "%s=%s", in_proj_keys->key[i],
+                     in_proj_keys->value[i]);
 
         alloc_options(buffa);
     }
@@ -172,11 +173,11 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
             info->zone = -info->zone;
 
             if (G_find_key_value("south", in_proj_keys) == NULL) {
-                sprintf(buffa, "south");
+                snprintf(buffa, sizeof(buffa), "south");
                 alloc_options(buffa);
             }
         }
-        sprintf(buffa, "zone=%d", info->zone);
+        snprintf(buffa, sizeof(buffa), "zone=%d", info->zone);
         alloc_options(buffa);
     }
 
@@ -185,30 +186,30 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
         /* Default values were returned but an ellipsoid name not recognised
          * by GRASS is present---perhaps it will be recognised by
          * PROJ.4 even though it wasn't by GRASS */
-        sprintf(buffa, "ellps=%s", str);
+        snprintf(buffa, sizeof(buffa), "ellps=%s", str);
         alloc_options(buffa);
     }
     else {
-        sprintf(buffa, "a=%.16g", a);
+        snprintf(buffa, sizeof(buffa), "a=%.16g", a);
         alloc_options(buffa);
         /* Cannot use es directly because the OSRImportFromProj4()
          * function in OGR only accepts b or rf as the 2nd parameter */
         if (es == 0)
-            sprintf(buffa, "b=%.16g", a);
+            snprintf(buffa, sizeof(buffa), "b=%.16g", a);
         else
-            sprintf(buffa, "rf=%.16g", rf);
+            snprintf(buffa, sizeof(buffa), "rf=%.16g", rf);
         alloc_options(buffa);
     }
     /* Workaround to stop PROJ reading values from defaults file when
      * rf (and sometimes ellps) is not specified */
     if (G_find_key_value("no_defs", in_proj_keys) == NULL) {
-        sprintf(buffa, "no_defs");
+        snprintf(buffa, sizeof(buffa), "no_defs");
         alloc_options(buffa);
     }
 
     /* If datum parameters are present in the PROJ_INFO keys, pass them on */
     if (GPJ__get_datum_params(in_proj_keys, &datum, &params) == 2) {
-        sprintf(buffa, "%s", params);
+        snprintf(buffa, sizeof(buffa), "%s", params);
         alloc_options(buffa);
         G_free(params);
 
@@ -218,7 +219,7 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     else if (datum != NULL) {
 
         if (GPJ_get_default_datum_params_by_name(datum, &params) > 0) {
-            sprintf(buffa, "%s", params);
+            snprintf(buffa, sizeof(buffa), "%s", params);
             alloc_options(buffa);
             returnval = 2;
             G_free(params);
@@ -227,7 +228,7 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
              * PROJ.4 even though it isn't recognised by GRASS */
         }
         else {
-            sprintf(buffa, "datum=%s", datum);
+            snprintf(buffa, sizeof(buffa), "datum=%s", datum);
             alloc_options(buffa);
             returnval = 3;
         }
@@ -259,7 +260,7 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
         for (i = 0; i < nopt; i++) {
             char err[50];
 
-            sprintf(err, " +%s", opt_in[i]);
+            snprintf(err, sizeof(err), " +%s", opt_in[i]);
             strcat(buffa, err);
         }
         G_warning("%s", buffa);
@@ -294,12 +295,12 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
 
     info->def = G_malloc(deflen + 1);
 
-    sprintf(buffa, "+%s ", opt_in[0]);
+    snprintf(buffa, sizeof(buffa), "+%s ", opt_in[0]);
     strcpy(info->def, buffa);
     G_free(opt_in[0]);
 
     for (i = 1; i < nopt; i++) {
-        sprintf(buffa, "+%s ", opt_in[i]);
+        snprintf(buffa, sizeof(buffa), "+%s ", opt_in[i]);
         strcat(info->def, buffa);
         G_free(opt_in[i]);
     }
@@ -309,11 +310,11 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
 
 static void alloc_options(char *buffa)
 {
-    int nsize;
+    size_t nsize;
 
-    nsize = strlen(buffa);
-    opt_in[nopt++] = (char *)G_malloc(nsize + 1);
-    sprintf(opt_in[nopt - 1], "%s", buffa);
+    nsize = strlen(buffa) + 1;
+    opt_in[nopt++] = (char *)G_malloc(nsize);
+    snprintf(opt_in[nopt - 1], nsize, "%s", buffa);
     return;
 }
 
@@ -363,8 +364,8 @@ int pj_get_string(struct pj_info *info, char *str)
         /* Null Pointer or empty string is supplied for parameters,
          * implying latlong projection; just need to set proj
          * parameter and call pj_init PK */
-        sprintf(info->proj, "ll");
-        sprintf(buffa, "proj=latlong ellps=WGS84");
+        snprintf(info->proj, sizeof(info->proj), "ll");
+        snprintf(buffa, sizeof(buffa), "proj=latlong ellps=WGS84");
         alloc_options(buffa);
     }
     else {
@@ -389,7 +390,7 @@ int pj_get_string(struct pj_info *info, char *str)
                     }
 
                     if (strncmp("zone=", s, 5) == 0) {
-                        sprintf(zonebuff, "%s", s + 5);
+                        snprintf(zonebuff, sizeof(zonebuff), "%s", s + 5);
                         sscanf(zonebuff, "%d", &(info->zone));
                     }
 
@@ -398,14 +399,14 @@ int pj_get_string(struct pj_info *info, char *str)
                     }
 
                     if (strncmp("proj=", s, 5) == 0) {
-                        sprintf(info->proj, "%s", s + 5);
+                        snprintf(info->proj, sizeof(info->proj), "%s", s + 5);
                         if (strcmp(info->proj, "ll") == 0)
-                            sprintf(buffa, "proj=latlong");
+                            snprintf(buffa, sizeof(buffa), "proj=latlong");
                         else
-                            sprintf(buffa, "%s", s);
+                            snprintf(buffa, sizeof(buffa), "%s", s);
                     }
                     else {
-                        sprintf(buffa, "%s", s);
+                        snprintf(buffa, sizeof(buffa), "%s", s);
                     }
                     alloc_options(buffa);
                 }
@@ -455,12 +456,12 @@ int pj_get_string(struct pj_info *info, char *str)
 
     info->def = G_malloc(deflen + 1);
 
-    sprintf(buffa, "+%s ", opt_in[0]);
+    snprintf(buffa, sizeof(buffa), "+%s ", opt_in[0]);
     strcpy(info->def, buffa);
     G_free(opt_in[0]);
 
     for (i = 1; i < nopt; i++) {
-        sprintf(buffa, "+%s ", opt_in[i]);
+        snprintf(buffa, sizeof(buffa), "+%s ", opt_in[i]);
         strcat(info->def, buffa);
         G_free(opt_in[i]);
     }
@@ -497,7 +498,7 @@ int GPJ_get_equivalent_latlong(struct pj_info *pjnew, struct pj_info *pjold)
     pjnew->meters = 1.;
     pjnew->zone = 0;
     pjnew->def = NULL;
-    sprintf(pjnew->proj, "ll");
+    snprintf(pjnew->proj, sizeof(pjnew->proj), "ll");
     if ((pjnew->pj = pj_latlong_from_proj(pjold->pj)) == NULL)
         return -1;
 
@@ -535,7 +536,7 @@ const char *set_proj_share(const char *name)
         buf = G_malloc(buf_len);
     }
 
-    sprintf(buf, "%s/%s", projshare, name);
+    snprintf(buf, buf_len, "%s/%s", projshare, name);
 
     return buf;
 }

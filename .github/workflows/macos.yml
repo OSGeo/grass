@@ -65,7 +65,7 @@ jobs:
           cp ./macos/files/conda-requirements-dev-arm64.txt "${RUNNER_TEMP}/macos_dependencies.txt"
           echo "$test_dependencies" | sed "s/ /\n/g" >> "${RUNNER_TEMP}/macos_dependencies.txt"
       - name: Setup Mamba
-        uses: mamba-org/setup-micromamba@0dea6379afdaffa5d528b3d1dabc45da37f443fc # v2.0.4
+        uses: mamba-org/setup-micromamba@b09ef9b599704322748535812ca03efb2625677b # v2.0.5
         with:
           init-shell: bash
           environment-file: ${{ runner.temp }}/macos_dependencies.txt
@@ -97,7 +97,8 @@ jobs:
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
           pytest \
             @.github/workflows/pytest_args_ci.txt \
-            @.github/workflows/pytest_args_parallel.txt
+            @.github/workflows/pytest_args_parallel.txt \
+            -k 'not testsuite'
       - name: Run pytest with a single worker (for tests marked with needs_solo_run)
         shell: micromamba-shell {0}
         run: |
@@ -105,7 +106,15 @@ jobs:
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
           pytest \
             @.github/workflows/pytest_args_ci.txt \
-            @.github/workflows/pytest_args_not_parallel.txt
+            @.github/workflows/pytest_args_not_parallel.txt \
+            -k 'not testsuite'
+      - name: Run pytest with a single worker (for gunittest-based tests)
+        shell: micromamba-shell {0}
+        run: |
+          export PYTHONPATH=$(grass --config python_path):$PYTHONPATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
+          pytest \
+            @.github/workflows/pytest_args_gunittest.txt
 
       - name: Cache GRASS Sample Dataset
         id: cached-data

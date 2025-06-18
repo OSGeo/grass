@@ -1,25 +1,25 @@
-PyGRASS documentation
+PyGRASS API
 =====================
 
 Python is a programming language which is more powerful than shell
 scripting but easier and more forgiving than C. *PyGRASS* is an
 object-oriented Python Application Programming Interface (API) for
-GRASS GIS. *PyGRASS* offers interfaces to GRASS modules and
+GRASS. *PyGRASS* offers interfaces to GRASS modules and
 functionality, as well as to vector and raster data. For details,
 see Zambelli et al. (2013) in the references below. *PyGRASS*
-improves the integration between GRASS GIS and Python, making the
+improves the integration between GRASS and Python, making the
 use of Python under GRASS more consistent with the language itself.
 Furthermore, it simplifies GRASS scripting and programming and more
 natural for the user.
 
-Background: In 2006, GRASS GIS developers started to adopt Python
+Background: In 2006, GRASS developers started to adopt Python
 for the new GUI. Due to this Python became more and more important
 and developers converted all shell scripts from GRASS GIS 6 to Python
 for GRASS GIS 7.
 
 To work with *PyGRASS* you need an up-to-date version of GRASS
 GIS. The only action before starting to work with *PyGRASS* is
-to launch GRASS GIS 8 and from the console launch *python* or
+to launch GRASS 8 and from the console launch *python* or
 *ipython* (the second one is the recommended way).
 
 

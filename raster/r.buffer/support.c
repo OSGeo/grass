@@ -36,7 +36,8 @@ int make_support_files(char *output, char *units)
                    &pcats);
     for (i = 0; i < ndist; i++) {
         if (i == 0)
-            sprintf(label, "0-%s %s", distances[i].label, units);
+            snprintf(label, sizeof(label), "0-%s %s", distances[i].label,
+                     units);
         else {
             /* improved next, but it would be perfect to achieve (example):
              * 0-100.55 meters
@@ -48,8 +49,8 @@ int make_support_files(char *output, char *units)
              *
              *but it's better that the original code. MN 1/2002
              */
-            sprintf(label, "%s-%s %s", distances[i - 1].label,
-                    distances[i].label, units);
+            snprintf(label, sizeof(label), "%s-%s %s", distances[i - 1].label,
+                     distances[i].label, units);
         }
 
         cat = i + ZONE_INCR;

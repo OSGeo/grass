@@ -266,14 +266,14 @@ SYMBOL *S_read(const char *sname)
     G_debug(3, "  group: '%s' name: '%s'", group, name);
 
     /* Search in mapsets */
-    sprintf(buf, "symbol/%s", group);
+    snprintf(buf, sizeof(buf), "symbol/%s", group);
     ms = G_find_file(buf, name, NULL);
 
     if (ms != NULL) { /* Found in mapsets */
         fp = G_fopen_old(buf, name, ms);
     }
     else { /* Search in GISBASE */
-        sprintf(buf, "%s/etc/symbol/%s", G_gisbase(), sname);
+        snprintf(buf, sizeof(buf), "%s/etc/symbol/%s", G_gisbase(), sname);
         fp = fopen(buf, "r");
     }
 
@@ -300,13 +300,14 @@ SYMBOL *S_read(const char *sname)
 
         if (strcmp(key, "VERSION") == 0) {
             if (strcmp(data, "1.0") != 0) {
-                sprintf(buf, "Wrong symbol version: '%s'", data);
+                snprintf(buf, sizeof(buf), "Wrong symbol version: '%s'", data);
                 return (err(fp, symb, buf));
             }
         }
         else if (strcmp(key, "BOX") == 0) {
             if (sscanf(data, "%lf %lf %lf %lf", &x, &y, &x2, &y2) != 4) {
-                sprintf(buf, "Incorrect box definition: '%s'", data);
+                snprintf(buf, sizeof(buf), "Incorrect box definition: '%s'",
+                         data);
                 return (err(fp, symb, buf));
             }
             symb->xscale = 1 / (x2 - x);
@@ -350,7 +351,8 @@ SYMBOL *S_read(const char *sname)
             ret = sscanf(data, "%lf %lf %lf %lf %lf %c", &x, &y, &rad, &ang1,
                          &ang2, &clock);
             if (ret < 5) {
-                sprintf(buf2, "Incorrect arc definition: '%s'", buf);
+                snprintf(buf2, sizeof(buf2), "Incorrect arc definition: '%s'",
+                         buf);
                 return (err(fp, symb, buf2));
             }
             if (ret == 6 && (clock == 'c' || clock == 'C'))
@@ -433,7 +435,8 @@ SYMBOL *S_read(const char *sname)
             }
         }
         else {
-            sprintf(buf2, "Unknown keyword in symbol: '%s'", buf);
+            snprintf(buf2, sizeof(buf2), "Unknown keyword in symbol: '%s'",
+                     buf);
             return (err(fp, symb, buf2));
             break;
         }

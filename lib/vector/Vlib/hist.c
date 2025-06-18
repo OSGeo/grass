@@ -41,12 +41,12 @@ int Vect_hist_command(struct Map_info *Map)
     if (0 > Vect_hist_write(Map, "\n"))
         return -1;
 
-    sprintf(buf, "GISDBASE: %s\n", G_gisdbase()); /* Needed ? */
+    snprintf(buf, sizeof(buf), "GISDBASE: %s\n", G_gisdbase()); /* Needed ? */
     if (0 > Vect_hist_write(Map, buf))
         return -1;
 
-    sprintf(buf, "LOCATION: %s MAPSET: %s USER: %s DATE: %s\n", G_location(),
-            G_mapset(), G_whoami(), G_date()); /* Needed ? */
+    snprintf(buf, sizeof(buf), "LOCATION: %s MAPSET: %s USER: %s DATE: %s\n",
+             G_location(), G_mapset(), G_whoami(), G_date()); /* Needed ? */
     if (0 > Vect_hist_write(Map, buf))
         return -1;
 

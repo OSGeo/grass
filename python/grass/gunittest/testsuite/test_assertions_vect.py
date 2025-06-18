@@ -180,7 +180,7 @@ class TestVectorGeometryAssertions(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        # TODO: this should be decided globaly by cleanup variable
+        # TODO: this should be decided globally by cleanup variable
         # perhaps cls.gremove() wheoul be the right option
         # when invoking separately, no need to delete maps since mapset
         # is deleted

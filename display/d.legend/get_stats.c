@@ -22,7 +22,7 @@ void run_stats(const char *mapname, int nsteps, const char *tempfile,
     argv[argc++] = "-c";
     argv[argc++] = mapname;
 
-    sprintf(buf, "nsteps=%d", nsteps);
+    snprintf(buf, sizeof(buf), "nsteps=%d", nsteps);
     argv[argc++] = buf;
 
     argv[argc++] = SF_REDIRECT_FILE;

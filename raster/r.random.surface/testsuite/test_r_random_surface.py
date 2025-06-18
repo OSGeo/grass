@@ -129,9 +129,9 @@ class TestRRandomSurface(TestCase):
         )
         stats = gs.parse_command("r.univar", map=self.output_raster, format="json")
 
-        n = stats[0]["n"]
-        mean = stats[0]["mean"]
-        stddev = stats[0]["stddev"]
+        n = stats["n"]
+        mean = stats["mean"]
+        stddev = stats["stddev"]
 
         self.assertGreater(n, 0, "No valid cells in output")
         self.assertTrue(0 <= mean <= 255, "Mean outside expected range")
@@ -146,8 +146,8 @@ class TestRRandomSurface(TestCase):
 
         stats = gs.parse_command("r.univar", map=self.output_raster, format="json")
 
-        actual_min = stats[0]["min"]
-        actual_max = stats[0]["max"]
+        actual_min = stats["min"]
+        actual_max = stats["max"]
 
         self.assertGreaterEqual(
             actual_min, 0, f"Minimum value {actual_min} is less than 0"
@@ -219,10 +219,10 @@ class TestRRandomSurface(TestCase):
 
         stats = gs.parse_command("r.univar", map=self.output_raster, format="json")
 
-        n = stats[0]["n"]
-        min_val = stats[0]["min"]
-        max_val = stats[0]["max"]
-        mean = stats[0]["mean"]
+        n = stats["n"]
+        min_val = stats["min"]
+        max_val = stats["max"]
+        mean = stats["mean"]
 
         expected_mean = (min_val + max_val) / 2
         mean_tolerance = 25  # Kept high to account for randomness
@@ -249,7 +249,7 @@ class TestRRandomSurface(TestCase):
             tmp_map = f"tmp_range_{i}"
             self.runModule("r.mapcalc", expression=f"{tmp_map} = {expr}", quiet=True)
             stats = gs.parse_command("r.univar", map=tmp_map, format="json")
-            counts.append(stats[0]["sum"])
+            counts.append(stats["sum"])
 
             self.runModule(
                 "g.remove", type="raster", name=tmp_map, flags="f", quiet=True
