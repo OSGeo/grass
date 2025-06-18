@@ -254,9 +254,9 @@ def make_command(
     superquiet=False,
     errors=None,
     **options,
-):
+) -> list[str]:
     """Return a list of strings suitable for use as the args parameter to
-    Popen() or call().
+    :class:`~grass.script.core.Popen()` or :func:`~grass.script.core.call`.
 
     :Example:
       .. code-block:: pycon
@@ -274,6 +274,8 @@ def make_command(
     :param options: module's parameters
 
     :return: list of arguments
+
+    :raises ~grass.exceptions.ScriptError: If the invalid flag '``-``' is given.
     """
     args = [_make_val(prog)]
     if overwrite:
@@ -327,9 +329,9 @@ def handle_errors(returncode, result, args, kwargs):
     If *kwargs* dictionary contains key ``errors``, the value is used
     to determine the return value and the behavior on error.
     The value ``errors="raise"`` is a default in which case a
-    ``CalledModuleError`` exception is raised.
+    :py:exc:`~grass.exceptions.CalledModuleError` exception is raised.
 
-    For ``errors="fatal"``, the function calls :func:`fatal()`
+    For ``errors="fatal"``, the function calls :func:`~grass.script.core.fatal()`
     which has its own rules on what happens next.
 
     For ``errors="status"``, the *returncode* will be returned.
@@ -346,6 +348,11 @@ def handle_errors(returncode, result, args, kwargs):
 
     Finally, for ``errors="ignore"``, the value of *result* will be
     passed in any case regardless of the *returncode*.
+
+    :raises ~grass.exceptions.CalledModuleError:
+      - If there is an error, and the ``errors`` parameter is not given
+      - If the ``errors`` parameter is given and it is not
+        ``status``, ``ignore``, ``fatal``, nor ``exit``.
     """
 
     def get_module_and_code(args, kwargs):
@@ -392,7 +399,7 @@ def popen_args_command(
 
     Does the splitting based on known Popen parameter names, and then does the
     transformation from Python parameters to a list of command line arguments
-    for Popen.
+    for :py:class:`~grass.script.core.Popen`.
     """
     options = {}
     popen_kwargs = {}
@@ -422,8 +429,9 @@ def start_command(
     superquiet=False,
     **kwargs,
 ):
-    """Returns a Popen object with the command created by make_command.
-    Accepts any of the arguments which Popen() accepts apart from "args"
+    """Returns a :class:`~grass.script.core.Popen` object with the command created by
+    :py:func:`~grass.script.core.make_command`.
+    Accepts any of the arguments which :py:class:`Popen()` accepts apart from "args"
     and "shell".
 
     .. code-block:: pycon
@@ -451,6 +459,7 @@ def start_command(
     :param kwargs: module's parameters
 
     :return: Popen object
+    :rtype: ~grass.script.core.Popen
     """
     args, popts = popen_args_command(
         prog,
@@ -475,7 +484,7 @@ def start_command(
 def run_command(*args, **kwargs):
     """Execute a module synchronously
 
-    This function passes all arguments to ``start_command()``,
+    This function passes all arguments to :func:`~grass.script.core.start_command`,
     then waits for the process to complete. It is similar to
     :external:py:func:`subprocess.check_call()`, but with the :func:`make_command()`
     interface. By default, an exception is raised in case of a non-zero
@@ -508,7 +517,7 @@ def run_command(*args, **kwargs):
         more expected default behavior for Python programmers. The
         change was backported to 7.0 series.
 
-    :raises: ``CalledModuleError`` when module returns non-zero return code
+    :raises ~grass.exceptions.CalledModuleError: When module returns non-zero return code.
     """
     encoding = "default"
     if "encoding" in kwargs:
@@ -531,8 +540,8 @@ def run_command(*args, **kwargs):
 
 
 def pipe_command(*args, **kwargs):
-    """Passes all arguments to start_command(), but also adds
-    "stdout = PIPE". Returns the Popen object.
+    """Passes all arguments to :func:`start_command()`, but also adds
+    "stdout = PIPE". Returns the :class:`~grass.script.core.Popen` object.
 
     .. code-block:: pycon
 
@@ -546,37 +555,39 @@ def pipe_command(*args, **kwargs):
         GUI='text';
         MONITOR='x0';
 
-    :param list args: list of unnamed arguments (see start_command() for details)
-    :param list kwargs: list of named arguments (see start_command() for details)
+    :param list args: list of unnamed arguments (see :func:`start_command` for details)
+    :param list kwargs: list of named arguments (see :func:`start_command` for details)
 
     :return: Popen object
+    :rtype: grass.script.core.Popen
     """
     kwargs["stdout"] = PIPE
     return start_command(*args, **kwargs)
 
 
 def feed_command(*args, **kwargs):
-    """Passes all arguments to start_command(), but also adds
-    "stdin = PIPE". Returns the Popen object.
+    """Passes all arguments to :func:`start_command()`, but also adds
+    "stdin = PIPE". Returns the :class:`~grass.script.core.Popen` object.
 
-    :param list args: list of unnamed arguments (see start_command() for details)
-    :param list kwargs: list of named arguments (see start_command() for details)
+    :param list args: list of unnamed arguments (see :func:`start_command` for details)
+    :param list kwargs: list of named arguments (see :func:`start_command` for details)
 
     :return: Popen object
+    :rtype: grass.script.core.Popen
     """
     kwargs["stdin"] = PIPE
     return start_command(*args, **kwargs)
 
 
 def read_command(*args, **kwargs):
-    """Passes all arguments to pipe_command, then waits for the process to
-    complete, returning its stdout (i.e. similar to shell `backticks`).
+    """Passes all arguments to :func:`~grass.script.core.pipe_command`, then waits for
+    the process to complete, returning its stdout (i.e. similar to shell ``backticks``).
 
     The behavior on error can be changed using *errors* parameter
     which is passed to the :func:`handle_errors()` function.
 
-    :param list args: list of unnamed arguments (see start_command() for details)
-    :param list kwargs: list of named arguments (see start_command() for details)
+    :param list args: list of unnamed arguments (see :func:`start_command` for details)
+    :param list kwargs: list of named arguments (see :func:`start_command` for details)
 
     :return: stdout
     """
@@ -601,28 +612,33 @@ def read_command(*args, **kwargs):
 
 def parse_command(*args, **kwargs):
     """Passes all arguments to read_command, then parses the output
-    by default with parse_key_val().
+    by default with :func:`~grass.script.utils.parse_key_val`.
 
-    If the command has parameter <em>format</em> and is called with
-    <em>format=json</em>, the output will be parsed into a dictionary.
-    Similarly, with <em>format=csv</em> the output will be parsed into
+    If the command has parameter ``format`` and is called with
+    ``format="json"``, the output will be parsed into a dictionary.
+    Similarly, with ``format="csv"`` the output will be parsed into
     a list of lists (CSV rows).
 
     .. code-block:: python
 
         parse_command("v.db.select", ..., format="json")
 
-    Custom parsing function can be optionally given by <em>parse</em> parameter
+    Custom parsing function can be optionally given by ``parse`` parameter
     including its arguments, e.g.
 
     .. code-block:: python
 
         parse_command(..., parse=(gs.parse_key_val, {"sep": ":"}))
 
-    Parameter <em>delimiter</em> is deprecated.
+    Parameter ``delimiter`` is deprecated.
 
-    :param args: list of unnamed arguments (see start_command() for details)
-    :param kwargs: list of named arguments (see start_command() for details)
+    :param args: list of unnamed arguments (see :func:`start_command()` for details)
+    :param kwargs: list of named arguments
+        (see :func:`start_command()` for details)
+
+        .. deprecated:: 8.4.0
+            Parameter ``delimiter`` is deprecated. Use the command's ``format="json"``
+            or ``format="csv"`` parameter instead
 
     :return: parsed module output
     """
@@ -656,7 +672,7 @@ def parse_command(*args, **kwargs):
 def write_command(*args, **kwargs):
     """Execute a module with standard input given by *stdin* parameter.
 
-    Passes all arguments to ``feed_command()``, with the string specified
+    Passes all arguments to :py:func:`feed_command()`, with the string specified
     by the *stdin* argument fed to the process' standard input.
 
     .. code-block:: pycon
@@ -669,17 +685,17 @@ def write_command(*args, **kwargs):
         ... )
         0
 
-    See ``start_command()`` for details about parameters and usage.
+    See :func:`start_command()` for details about parameters and usage.
 
     The behavior on error can be changed using *errors* parameter
     which is passed to the :func:`handle_errors()` function.
 
-    :param args: unnamed arguments passed to ``start_command()``
-    :param kwargs: named arguments passed to ``start_command()``
+    :param args: unnamed arguments passed to :func:`start_command()`
+    :param kwargs: named arguments passed to :func:`start_command()`
 
     :returns: 0 with default parameters for backward compatibility only
 
-    :raises: ``CalledModuleError`` when module returns non-zero return code
+    :raises ~grass.exceptions.CalledModuleError: When module returns non-zero return code
     """
     encoding = "default"
     if "encoding" in kwargs:
@@ -744,7 +760,18 @@ def message(msg, flag=None, env=None):
     :param env: dictionary with system environment variables
                 (:external:py:data:`os.environ` by default)
     """
-    run_command("g.message", flags=flag, message=msg, errors="ignore", env=env)
+    try:
+        run_command("g.message", flags=flag, message=msg, errors="ignore", env=env)
+    except OSError as error:
+        # Trying harder to show something, even when not adding the right message
+        # prefix. This allows for showing the original message to the user even when
+        # the tool cannot be found or errored for some reason.
+        print(
+            _(
+                "{message} (Additionally, there was an error: {additional_error})"
+            ).format(message=msg, additional_error=error),
+            file=sys.stderr,
+        )
 
 
 def debug(msg, debug=1, env=None):
@@ -838,13 +865,16 @@ def error(msg, env=None):
 def fatal(msg, env=None):
     """Display an error message using ``g.message -e``, then abort or raise
 
-    Raises exception when module global raise_on_error is 'True', abort
+    Raises exception when module global :py:data:`raise_on_error` is 'True', abort
     (calls :external:py:func:`sys.exit`) otherwise.
     Use :func:`set_raise_on_error()` to set the behavior.
 
     :param str msg: error message to be displayed
     :param env: dictionary with system environment variables
                 (:external:py:data:`os.environ` by default)
+
+    :raises ~grass.exceptions.ScriptError:
+        Raises exception when module global :py:data:`raise_on_error` is 'True'
     """
     global raise_on_error
     if raise_on_error:
@@ -855,7 +885,7 @@ def fatal(msg, env=None):
 
 
 def set_raise_on_error(raise_exp=True):
-    """Define behaviour on fatal error (fatal() called)
+    """Define behavior on fatal error (:py:func:`~grass.script.core.fatal` called)
 
     :param bool raise_exp: True to raise :py:exc:`~grass.exceptions.ScriptError`
         instead of calling :external:py:func:`sys.exit(1) <sys.exit>`
@@ -895,14 +925,15 @@ def set_capture_stderr(capture=True):
         and interactive notebooks such as Jupyter Notebook.
 
     The capturing can be applied only in certain cases, for example
-    in case of run_command() it is applied because run_command() nor
-    its callers do not handle the streams, however feed_command()
+    in case of :func:`run_command` it is applied because :func:`run_command` nor
+    its callers do not handle the streams, however :func:`feed_command`
     cannot do capturing because its callers handle the streams.
 
     The previous state is returned. Passing ``False`` disables the
     capturing.
 
     .. versionadded:: 7.4
+    .. seealso:: :func:`get_capture_stderr`
     """
     global _capture_stderr
     tmp = _capture_stderr
@@ -913,7 +944,7 @@ def set_capture_stderr(capture=True):
 def get_capture_stderr():
     """Return True if stderr is captured, False otherwise.
 
-    See set_capture_stderr().
+    .. seealso:: :func:`set_capture_stderr`.
     """
     global _capture_stderr
     return _capture_stderr
@@ -1007,6 +1038,9 @@ def tempfile(create=True, env=None):
     :param env: environment
 
     :return: path to a tmp file
+
+    .. seealso:: The ``g.tempfile`` tool, and the :py:func:`~grass.script.core.tempdir`
+        and :py:func:`~grass.script.core.tempname` functions
     """
     flags = ""
     if not create:
@@ -1016,7 +1050,11 @@ def tempfile(create=True, env=None):
 
 
 def tempdir(env=None):
-    """Returns the name of a temporary dir, created with g.tempfile."""
+    """Returns the name of a temporary dir, created with g.tempfile.
+
+    .. seealso:: The ``g.tempfile`` tool, and the :py:func:`~grass.script.core.tempfile`
+        and :py:func:`~grass.script.core.tempname` functions
+    """
     tmp = tempfile(create=False, env=env)
     os.mkdir(tmp)
 
@@ -1037,7 +1075,10 @@ def tempname(length: int, lowercase: bool = False) -> str:
         >>> tempname(12)
         'tmp_MxMa1kAS13s9'
 
-    .. seealso:: functions :func:`append_uuid()`, :func:`append_random()`
+    .. seealso:: functions :func:`~grass.script.utils.append_uuid()`,
+        :func:`~grass.script.utils.append_random()`,
+        the ``g.tempfile`` tool, and the :py:func:`~grass.script.core.tempfile`
+        and :py:func:`~grass.script.core.tempdir` functions
     """
 
     chars = string.ascii_lowercase + string.digits
@@ -1265,6 +1306,8 @@ def locn_is_latlong(env: _Env | None = None) -> bool:
     by checking the "g.region -pu" projection code.
 
     :return: True for a lat/long region, False otherwise
+
+    .. seealso:: The ``g.region`` tool
     """
     s = read_command("g.region", flags="pu", env=env)
     kv: KeyValue[str | None] = parse_key_val(s, ":")
@@ -1291,6 +1334,8 @@ def region(region3d=False, complete=False, env=None):
     :param env: dictionary with system environment variables
                 (:external:py:data:`os.environ` by default)
     :return: dictionary of region values
+
+    .. seealso:: The ``g.region`` tool
     """
     flgs = "gu"
     if region3d:
@@ -1327,8 +1372,9 @@ def region_env(
     If no 'kwargs' are given then the current region is used. Note
     that this function doesn't modify the current region!
 
-    See also :func:`use_temp_region()` for alternative method how to define
-    temporary region used for raster-based computation.
+    .. seealso::
+        See also :func:`use_temp_region()` for alternative method how to define
+        temporary region used for raster-based computation.
 
     :Example:
       .. code-block:: python
@@ -1421,6 +1467,8 @@ def use_temp_region():
     """Copies the current region to a temporary region with "g.region save=",
     then sets WIND_OVERRIDE to refer to that region. Installs an atexit
     handler to delete the temporary region upon termination.
+
+    .. seealso:: The ``g.region`` tool
     """
     name = "tmp.%s.%d" % (os.path.basename(sys.argv[0]), os.getpid())
     run_command("g.region", flags="u", save=name, overwrite=True)
@@ -1429,7 +1477,10 @@ def use_temp_region():
 
 
 def del_temp_region():
-    """Unsets WIND_OVERRIDE and removes any region named by it."""
+    """Unsets WIND_OVERRIDE and removes any region named by it.
+
+    .. seealso:: The ``g.remove`` tool
+    """
     try:
         name = os.environ.pop("WIND_OVERRIDE")
         run_command("g.remove", flags="f", quiet=True, type="region", name=name)
@@ -1476,6 +1527,8 @@ def find_file(name, element="cell", mapset=None, env=None):
     :param env: environment
 
     :return: parsed output of g.findfile
+
+    .. seealso:: The ``g.findfile`` tool
     """
     element_translation = {
         "rast": "cell",
@@ -1521,6 +1574,8 @@ def list_strings(type, pattern=None, mapset=None, exclude=None, flag="", env=Non
     :param env: environment
 
     :return: list of elements
+
+    .. seealso:: The ``g.list`` tool
     """
     if type == "cell":
         verbose(_('Element type should be "raster" and not "%s"') % type, env=env)
@@ -1555,6 +1610,8 @@ def list_pairs(type, pattern=None, mapset=None, exclude=None, flag="", env=None)
     :param env: environment
 
     :return: list of elements
+
+    .. seealso:: The ``g.list`` tool
     """
     return [
         tuple(map.split("@", 1))
@@ -1588,6 +1645,8 @@ def list_grouped(
     :param env: environment
 
     :return: directory of mapsets/elements
+
+    .. seealso:: The ``g.list`` tool
     """
     if isinstance(type, str) or len(type) == 1:
         types = [type]
@@ -1782,6 +1841,8 @@ def mapsets(search_path=False, env=None):
     :param bool search_path: True to list mapsets only in search path
 
     :return: list of mapsets
+
+    .. seealso:: The ``g.mapsets`` tool
     """
     flags = "p" if search_path else "l"
     mapsets = read_command("g.mapsets", flags=flags, sep="newline", quiet=True, env=env)
@@ -1818,8 +1879,6 @@ def create_project(
 ):
     """Create new project
 
-    Raise ScriptError on error.
-
     :param str path: path to GRASS database or project; if path to database, project
                      name must be specified with name parameter
     :param str name: project name to create
@@ -1833,6 +1892,9 @@ def create_project(
     :param desc: description of the project (creates MYNAME file)
     :param bool overwrite: True to overwrite project if exists (WARNING:
                            ALL DATA from existing project ARE DELETED!)
+
+    :raises ~grass.exceptions.ScriptError:
+        Raise :py:exc:`~grass.exceptions.ScriptError` on error
     """
     # Add default mapset to project path if needed
     if not name:
@@ -1950,7 +2012,11 @@ def create_project(
 
 
 def _set_location_description(path, location, text):
-    """Set description (aka title aka MYNAME) for a location"""
+    """Set description (aka title aka MYNAME) for a location
+
+    :raises ~grass.exceptions.ScriptError:
+        Raise :py:exc:`~grass.exceptions.ScriptError` on error.
+    """
     try:
         with codecs.open(
             os.path.join(path, location, "PERMANENT", "MYNAME"),
@@ -1968,10 +2034,11 @@ def _set_location_description(path, location, text):
 def _create_location_xy(database, location):
     """Create unprojected location
 
-    Raise ScriptError on error.
 
     :param database: GRASS database where to create new location
     :param location: location name
+    :raises ~grass.exceptions.ScriptError:
+        Raise :py:exc:`~grass.exceptions.ScriptError` on error.
     """
     cur_dir = Path.cwd()
     try:
