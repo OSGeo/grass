@@ -562,7 +562,7 @@ build_program_in_subdir(r.stats.zonal DEPENDS grass_gis grass_raster ${LIBM})
 
 build_program_in_subdir(r.stats.quantile DEPENDS grass_gis grass_raster ${LIBM})
 
-build_program_in_subdir(r.stats DEPENDS grass_gis grass_raster ${LIBM})
+build_program_in_subdir(r.stats DEPENDS grass_gis grass_raster grass_parson ${LIBM})
 
 build_program_in_subdir(
   r.stream.extract
@@ -677,7 +677,7 @@ build_program_in_subdir(r.water.outlet DEPENDS grass_gis grass_raster)
 build_program_in_subdir(r.what DEPENDS grass_gis grass_raster grass_vector
                         grass_parson)
 
-build_program_in_subdir(r.what.color DEPENDS grass_gis grass_raster)
+build_program_in_subdir(r.what.color DEPENDS grass_gis grass_raster grass_parson)
 
 build_program_in_subdir(
   r.in.lidar

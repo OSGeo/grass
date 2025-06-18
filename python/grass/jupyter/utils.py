@@ -214,7 +214,7 @@ def query_raster(coord, raster_list):
     :param coord: Coordinates given as a tuple (latitude, longitude).
     :param list raster_list: List of raster names to query.
 
-    :return: str: HTML formatted string containing the results of the raster queries.
+    :return str: HTML formatted string containing the results of the raster queries.
     """
     output_list = ["""<table>"""]
 

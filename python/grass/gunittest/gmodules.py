@@ -97,7 +97,7 @@ def call_module(
     :returns: module standard output (stdout) as string or None
               if capture_stdout is False
 
-    :raises CalledModuleError: if module return code is non-zero
+    :raises ~grass.exceptions.CalledModuleError: if module return code is non-zero
     :raises ValueError: if the parameters are not correct
 
     .. note::

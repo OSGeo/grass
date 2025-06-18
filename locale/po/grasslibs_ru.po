@@ -6,16 +6,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-23 22:56+0000\n"
-"PO-Revision-Date: 2023-06-28 19:08+0000\n"
-"Last-Translator: Sergey Kazorin <kazorin@basealt.ru>\n"
+"POT-Creation-Date: 2025-06-14 18:45+0000\n"
+"PO-Revision-Date: 2025-06-14 21:41+0000\n"
+"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Russian <https://weblate.osgeo.org/projects/grass-gis/grasslibs/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.16.4\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: ../lib/arraystats/class.c:22
 #, c-format
@@ -966,6 +966,12 @@ msgstr "диапазон: от %g до %g"
 msgid "Unable to open color descriptions"
 msgstr "Не удалось открыть описания цветов"
 
+#: ../lib/gis/color_str.c:269
+#, fuzzy, c-format
+#| msgid "Unknown algorithm '%s'"
+msgid "Unknown color format '%s'"
+msgstr "Неизвестный алгоритм «%s»"
+
 #: ../lib/gis/compress.c:143 ../lib/gis/compress.c:205
 #: ../lib/gis/compress.c:222 ../lib/gis/compress.c:237
 msgid "Request for unsupported compressor"
@@ -1292,24 +1298,27 @@ msgstr "Не распознан режим доступа: %o"
 msgid "This location has no description."
 msgstr "У этой области отсутствует описание."
 
-#: ../lib/gis/omp_threads.c:23
+#: ../lib/gis/omp_threads.c:29
 #, fuzzy
 #| msgid "Options"
 msgid "Option is NULL."
 msgstr "Опции"
 
-#: ../lib/gis/omp_threads.c:25
+#: ../lib/gis/omp_threads.c:31
 msgid "Option key is NULL."
 msgstr ""
 
-#: ../lib/gis/omp_threads.c:35
+#: ../lib/gis/omp_threads.c:46
 #, fuzzy, c-format
 #| msgid "Number of threads for parallel computing"
-msgid "%d threads are set up for parallel computing."
-msgstr "Число потоков для параллельного вычисления"
+msgid "One thread is set up for parallel computing."
+msgid_plural "%d threads are set up for parallel computing."
+msgstr[0] "Число потоков для параллельного вычисления"
+msgstr[1] "Число потоков для параллельного вычисления"
+msgstr[2] "Число потоков для параллельного вычисления"
 
-#: ../lib/gis/omp_threads.c:39
-msgid "GRASS GIS is not compiled with OpenMP support, parallel computation is disabled. Only one thread will be used."
+#: ../lib/gis/omp_threads.c:52
+msgid "GRASS is not compiled with OpenMP support, parallel computation is disabled. Only one thread will be used."
 msgstr ""
 
 #: ../lib/gis/open.c:69
@@ -1620,7 +1629,7 @@ msgstr "Флаги:"
 
 #: ../lib/gis/parser_help.c:222 ../lib/gis/parser_html.c:185
 #: ../lib/gis/parser_interface.c:329 ../lib/gis/parser_md_cli.c:313
-#: ../lib/gis/parser_md_python.c:469 ../lib/gis/parser_rest.c:158
+#: ../lib/gis/parser_md_python.c:473 ../lib/gis/parser_rest.c:158
 msgid "Allow output files to overwrite existing files"
 msgstr "Разрешать перезаписывать файлы вывода поверх существующих"
 
@@ -1631,13 +1640,13 @@ msgstr "Печатать сводку по использованию"
 
 #: ../lib/gis/parser_help.c:225 ../lib/gis/parser_html.c:192
 #: ../lib/gis/parser_interface.c:344 ../lib/gis/parser_md_cli.c:323
-#: ../lib/gis/parser_md_python.c:474 ../lib/gis/parser_rest.c:162
+#: ../lib/gis/parser_md_python.c:478 ../lib/gis/parser_rest.c:162
 msgid "Verbose module output"
 msgstr "Подробный вывод модуля"
 
 #: ../lib/gis/parser_help.c:226 ../lib/gis/parser_html.c:195
 #: ../lib/gis/parser_interface.c:351 ../lib/gis/parser_md_cli.c:326
-#: ../lib/gis/parser_md_python.c:478 ../lib/gis/parser_rest.c:165
+#: ../lib/gis/parser_md_python.c:482 ../lib/gis/parser_rest.c:165
 msgid "Quiet module output"
 msgstr "Краткое описание работы модуля"
 
@@ -1706,7 +1715,7 @@ msgstr "Строка не распознана: <%s>. Несколько сим�
 msgid "Allowed values"
 msgstr "Неправильная величина строки"
 
-#: ../lib/gis/parser_md_cli.c:329 ../lib/gis/parser_md_python.c:483
+#: ../lib/gis/parser_md_cli.c:329 ../lib/gis/parser_md_python.c:487
 #, fuzzy
 #| msgid "Super quiet module output"
 msgid "Very quiet module output"
@@ -2089,119 +2098,123 @@ msgstr "Имя сохранённого фрагмента"
 msgid "Number of threads for parallel computing"
 msgstr "Число потоков для параллельного вычисления"
 
-#: ../lib/gis/parser_standard_options.c:794
+#: ../lib/gis/parser_standard_options.c:788
+msgid "0: use OpenMP default; >0: use nprocs; <0: use MAX-nprocs"
+msgstr ""
+
+#: ../lib/gis/parser_standard_options.c:796
 #, fuzzy
 #| msgid "Pseudo-random number generator not seeded"
 msgid "Seed value for the random number generator"
 msgstr "Для генератора псевдослучайных чисел не задано случайное число"
 
-#: ../lib/gis/parser_standard_options.c:796
+#: ../lib/gis/parser_standard_options.c:798
 msgid "Using the same seed ensures identical results, while a randomly generated seed produces different outcomes in each run."
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:808
+#: ../lib/gis/parser_standard_options.c:810
 msgid "Name of the input space time dataset"
 msgstr "Имя входного пространственно-временного набора данных"
 
-#: ../lib/gis/parser_standard_options.c:817
+#: ../lib/gis/parser_standard_options.c:819
 msgid "Name of the input space time datasets"
 msgstr "Имя входных пространственно-временных наборов данных"
 
-#: ../lib/gis/parser_standard_options.c:825
+#: ../lib/gis/parser_standard_options.c:827
 msgid "Name of the output space time dataset"
 msgstr "Имя выходного пространственно-временного набора данных"
 
-#: ../lib/gis/parser_standard_options.c:833
+#: ../lib/gis/parser_standard_options.c:835
 msgid "Name of the input space time raster dataset"
 msgstr "Имя входного пространственно-временного растрового набора данных"
 
-#: ../lib/gis/parser_standard_options.c:842
+#: ../lib/gis/parser_standard_options.c:844
 msgid "Name of the input space time raster datasets"
 msgstr "Имя входных пространственно-временных растровых наборов данных"
 
-#: ../lib/gis/parser_standard_options.c:850
+#: ../lib/gis/parser_standard_options.c:852
 msgid "Name of the output space time raster dataset"
 msgstr "Имя выходного пространственно-временного растрового набора данных"
 
-#: ../lib/gis/parser_standard_options.c:859
+#: ../lib/gis/parser_standard_options.c:861
 msgid "Name of the output space time raster datasets"
 msgstr "Имя выходных пространственно-временных растровых наборов данных"
 
-#: ../lib/gis/parser_standard_options.c:867
+#: ../lib/gis/parser_standard_options.c:869
 msgid "Name of the input space time vector dataset"
 msgstr "Имя входного пространственно-временного векторного набора данных"
 
-#: ../lib/gis/parser_standard_options.c:876
+#: ../lib/gis/parser_standard_options.c:878
 msgid "Name of the input space time vector datasets"
 msgstr "Имя входных пространственно-временных векторных наборов данных"
 
-#: ../lib/gis/parser_standard_options.c:884
+#: ../lib/gis/parser_standard_options.c:886
 msgid "Name of the output space time vector dataset"
 msgstr "Имя выходного пространственно-временного векторного набора данных"
 
-#: ../lib/gis/parser_standard_options.c:892
+#: ../lib/gis/parser_standard_options.c:894
 msgid "Name of the input space time raster3d dataset"
 msgstr "Имя входного пространственно-временного трёхмерного растрового набора данных"
 
-#: ../lib/gis/parser_standard_options.c:901
+#: ../lib/gis/parser_standard_options.c:903
 msgid "Name of the input space time raster3d datasets"
 msgstr "Имя входных пространственно-временных трёхмерных растровых наборов данных"
 
-#: ../lib/gis/parser_standard_options.c:909
+#: ../lib/gis/parser_standard_options.c:911
 msgid "Name of the output space time raster3d dataset"
 msgstr "Имя выходного пространственно-временного трёхмерного растрового набора данных"
 
-#: ../lib/gis/parser_standard_options.c:918
+#: ../lib/gis/parser_standard_options.c:920
 msgid "Type of the input space time dataset"
 msgstr "Тип входного пространственно-временного набора данных"
 
-#: ../lib/gis/parser_standard_options.c:926
+#: ../lib/gis/parser_standard_options.c:928
 msgid "Name of the input map"
 msgstr "Имя входной карты"
 
-#: ../lib/gis/parser_standard_options.c:935
+#: ../lib/gis/parser_standard_options.c:937
 msgid "Name of the input maps"
 msgstr "Имя входных карт"
 
-#: ../lib/gis/parser_standard_options.c:944
+#: ../lib/gis/parser_standard_options.c:946
 msgid "Type of the input map"
 msgstr "Тип входной карты"
 
-#: ../lib/gis/parser_standard_options.c:953
+#: ../lib/gis/parser_standard_options.c:955
 msgid "The temporal type of the space time dataset"
 msgstr "Временной тип пространственно-временного набора данных"
 
-#: ../lib/gis/parser_standard_options.c:960
+#: ../lib/gis/parser_standard_options.c:962
 msgid "WHERE conditions of SQL statement without 'where' keyword used in the temporal GIS framework"
 msgstr "Условия WHERE для инструкции SQL без использования ключевого слова «where»во временной среде GIS"
 
-#: ../lib/gis/parser_standard_options.c:962
+#: ../lib/gis/parser_standard_options.c:964
 msgid "Example: start_time > '2001-01-01 12:30:00'"
 msgstr "Пример: start_time > '2001-01-01 12:30:00'"
 
-#: ../lib/gis/parser_standard_options.c:973
+#: ../lib/gis/parser_standard_options.c:975
 msgid "The method to be used for sampling the input dataset"
 msgstr "Метод, используемый для выборки входного набора данных"
 
-#: ../lib/gis/parser_standard_options.c:980
+#: ../lib/gis/parser_standard_options.c:982
 #, fuzzy
 #| msgid "Unsupported input format"
 msgid "Output format"
 msgstr "Входной формат не поддерживается"
 
-#: ../lib/gis/parser_standard_options.c:983
+#: ../lib/gis/parser_standard_options.c:985
 msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:1018
+#: ../lib/gis/parser_standard_options.c:1020
 msgid "Do not create attribute table"
 msgstr "Не создавать таблицу атрибутов"
 
-#: ../lib/gis/parser_standard_options.c:1022
+#: ../lib/gis/parser_standard_options.c:1024
 msgid "Do not build topology"
 msgstr "Не выполнять построение топологии"
 
-#: ../lib/gis/parser_standard_options.c:1024
+#: ../lib/gis/parser_standard_options.c:1026
 msgid "Advantageous when handling a large number of points"
 msgstr "Удобно при обработке большого количества точек"
 
@@ -3862,7 +3875,7 @@ msgstr "Для создания области необходимо предос
 #: ../lib/init/grass.py:874
 #, fuzzy
 msgid "Creating new GRASS project <{}>..."
-msgstr "Создание нового набора GRASS GIS <{}>…"
+msgstr "Создание нового набора GRASS <{}>…"
 
 #: ../lib/init/grass.py:885
 #, python-brace-format
@@ -3882,12 +3895,12 @@ msgstr "Для создания набора не требуется CRS. Вер
 #, fuzzy
 #| msgid "Creating new GRASS GIS mapset <{}>..."
 msgid "Creating new GRASS mapset <{}>..."
-msgstr "Создание нового набора GRASS GIS <{}>…"
+msgstr "Создание нового набора GRASS <{}>…"
 
 #: ../lib/init/grass.py:934
 #, fuzzy
 msgid "GRASS database directory, project and mapset not set properly. Use GUI or command line to set them."
-msgstr "Каталог базы данных, область и набор GRASS GIS заданы неверно. Задайте их в графическом интерфейсе или командной строке."
+msgstr "Каталог базы данных, область и набор GRASS заданы неверно. Задайте их в графическом интерфейсе или командной строке."
 
 #: ../lib/init/grass.py:994
 #, python-brace-format
@@ -3947,13 +3960,13 @@ msgstr "Не удалось закрыть графический интерфе
 #, fuzzy, python-format
 #| msgid "Welcome to GRASS GIS %s"
 msgid "Welcome to GRASS %s"
-msgstr "Добро пожаловать в GRASS GIS %s"
+msgstr "Добро пожаловать в GRASS %s"
 
 #: ../lib/init/grass.py:1515
 #, fuzzy
 #| msgid "GRASS GIS homepage:"
 msgid "GRASS homepage:"
-msgstr "Домашняя страница GRASS GIS:"
+msgstr "Домашняя страница GRASS:"
 
 #. GTC Running through: SHELL NAME
 #: ../lib/init/grass.py:1517
@@ -4010,13 +4023,13 @@ msgstr "Готово."
 #, fuzzy
 #| msgid "Goodbye from GRASS GIS"
 msgid "Goodbye from GRASS"
-msgstr "До новых встреч с GRASS GIS"
+msgstr "До новых встреч с GRASS"
 
 #: ../lib/init/grass.py:1823
 #, fuzzy
 #| msgid "Please install the GRASS GIS development package"
 msgid "Please install the GRASS development package"
-msgstr "Установите пакет для разработки GRASS GIS"
+msgstr "Установите пакет для разработки GRASS"
 
 #: ../lib/init/grass.py:1869
 #, python-format
@@ -4105,7 +4118,7 @@ msgid ""
 "     {cmd_name} --help\n"
 "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 msgstr ""
-"Не удалось запустить GRASS GIS. В этом случае можно попробовать:\n"
+"Не удалось запустить GRASS. В этом случае можно попробовать:\n"
 " — Запустить графический интерфейс с ключом «--gui»\n"
 "     {cmd_name} --gui\n"
 " — Запустить с указанием пути к области или набору в качестве аргумента\n"
@@ -4122,18 +4135,18 @@ msgstr ""
 #, fuzzy
 #| msgid "Starting GRASS GIS..."
 msgid "Starting GRASS..."
-msgstr "Запуск GRASS GIS…"
+msgstr "Запуск GRASS…"
 
 #: ../lib/init/grass.py:2288
 #, fuzzy
 #| msgid "Failed to start GRASS GIS, grassdata directory cannot be found or created."
 msgid "Failed to start GRASS, grassdata directory cannot be found or created."
-msgstr "При запуске GRASS GIS возникла ошибка, каталог grassdata не может быть найден или удалён."
+msgstr "При запуске GRASS возникла ошибка, каталог grassdata не может быть найден или удалён."
 
 #: ../lib/init/grass.py:2295
 #, fuzzy
 msgid "Failed to start GRASS, no default project to copy in the installation or copying failed."
-msgstr "Ошибка при запуске GRASS GIS, отсутствует область по умолчанию для копирования в место установки или произошла ошибка копирования."
+msgstr "Ошибка при запуске GRASS, отсутствует область по умолчанию для копирования в место установки или произошла ошибка копирования."
 
 #: ../lib/init/grass.py:2400
 #, python-format
@@ -5351,33 +5364,37 @@ msgstr "Эта версия GRASS не поддерживает сжатие %s,
 msgid "Unknown interpolation method: %s"
 msgstr "Неизвестный метод интерполяции: %s"
 
-#: ../lib/raster/json_color_out.c:112 ../lib/raster/json_color_out.c:196
-#: ../lib/raster/json_color_out.c:210
+#: ../lib/raster/json_color_out.c:69 ../lib/raster/json_color_out.c:157
+#: ../lib/raster/json_color_out.c:172
 msgid "Failed to initialize JSON object. Out of memory?"
 msgstr ""
 
-#: ../lib/raster/json_color_out.c:144
+#: ../lib/raster/json_color_out.c:103
 #, fuzzy
 #| msgid "Error while adding point to array. Out of memory"
 msgid "Failed to initialize JSON array. Out of memory?"
 msgstr "Ошибка добавления точки в массив. Не хватает памяти"
 
-#: ../lib/raster/json_color_out.c:223
+#: ../lib/raster/json_color_out.c:186
 msgid "Failed to serialize JSON to pretty format."
 msgstr ""
 
-#: ../lib/raster/mask_info.c:43
+#: ../lib/raster/mask_info.c:47
 #, c-format
 msgid "<%s> in mapset <%s>"
 msgstr "<%s> в наборе <%s>"
 
-#: ../lib/raster/mask_info.c:46
+#: ../lib/raster/mask_info.c:50
 msgid "none"
 msgstr "нет"
 
-#: ../lib/raster/mask_info.c:49
+#: ../lib/raster/mask_info.c:53
 msgid "not known"
 msgstr "неизвестно"
+
+#: ../lib/raster/mask_info.c:219
+msgid "Single thread processing enforced due to raster mask being present."
+msgstr ""
 
 #: ../lib/raster/null_val.c:64
 msgid "EmbedGivenNulls: wrong data type"

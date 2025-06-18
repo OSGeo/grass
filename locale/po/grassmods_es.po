@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-23 22:56+0000\n"
+"POT-Creation-Date: 2025-06-14 18:45+0000\n"
 "PO-Revision-Date: 2025-03-12 12:05+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grassmods/es/>\n"
@@ -157,21 +157,22 @@ msgstr "Sustituir variables en la configuración de la base de datos"
 #: ../display/d.mon/main.c:130 ../general/g.list/main.c:102
 #: ../general/g.list/main.c:114 ../general/g.list/main.c:136
 #: ../general/g.list/main.c:142 ../general/g.list/main.c:147
-#: ../general/g.list/main.c:152 ../general/g.mapset/main.c:77
-#: ../general/g.mapset/main.c:83 ../general/g.mapsets/main.c:109
-#: ../general/g.mapsets/main.c:113 ../general/g.mapsets/main.c:119
-#: ../general/g.mapsets/main.c:125 ../general/g.proj/main.c:85
-#: ../general/g.proj/main.c:90 ../general/g.proj/main.c:98
-#: ../general/g.proj/main.c:104 ../general/g.proj/main.c:112
-#: ../general/g.proj/main.c:124 ../general/g.proj/main.c:132
-#: ../general/g.proj/main.c:188 ../general/g.proj/main.c:241
-#: ../general/g.region/main.c:91 ../general/g.region/main.c:97
-#: ../general/g.region/main.c:102 ../general/g.region/main.c:108
-#: ../general/g.region/main.c:113 ../general/g.region/main.c:118
-#: ../general/g.region/main.c:124 ../general/g.region/main.c:132
-#: ../general/g.region/main.c:137 ../general/g.region/main.c:143
-#: ../general/g.region/main.c:148 ../general/g.region/main.c:154
-#: ../general/g.region/main.c:371 ../imagery/i.group/main.c:85
+#: ../general/g.list/main.c:152 ../general/g.mapset/main.c:89
+#: ../general/g.mapset/main.c:101 ../general/g.mapset/main.c:107
+#: ../general/g.mapsets/main.c:111 ../general/g.mapsets/main.c:115
+#: ../general/g.mapsets/main.c:121 ../general/g.mapsets/main.c:127
+#: ../general/g.proj/main.c:85 ../general/g.proj/main.c:90
+#: ../general/g.proj/main.c:98 ../general/g.proj/main.c:104
+#: ../general/g.proj/main.c:112 ../general/g.proj/main.c:124
+#: ../general/g.proj/main.c:132 ../general/g.proj/main.c:188
+#: ../general/g.proj/main.c:241 ../general/g.region/main.c:91
+#: ../general/g.region/main.c:97 ../general/g.region/main.c:102
+#: ../general/g.region/main.c:108 ../general/g.region/main.c:113
+#: ../general/g.region/main.c:118 ../general/g.region/main.c:124
+#: ../general/g.region/main.c:132 ../general/g.region/main.c:137
+#: ../general/g.region/main.c:143 ../general/g.region/main.c:148
+#: ../general/g.region/main.c:154 ../general/g.region/main.c:371
+#: ../general/g.version/main.c:130 ../imagery/i.group/main.c:85
 #: ../imagery/i.group/main.c:90 ../imagery/i.group/main.c:95
 #: ../imagery/i.signatures/main.c:122 ../imagery/i.signatures/main.c:128
 #: ../imagery/i.signatures/main.c:160
@@ -188,12 +189,12 @@ msgstr "Sustituir variables en la configuración de la base de datos"
 #: ../raster/r.external.out/main.c:272 ../raster/r.external.out/main.c:283
 #: ../raster/r.external/main.c:97 ../raster/r.external/main.c:136
 #: ../raster/r.in.gdal/main.c:238 ../raster/r.in.gdal/main.c:272
-#: ../raster/r.info/main.c:111 ../raster/r.object.geometry/main.c:95
+#: ../raster/r.info/main.c:115 ../raster/r.object.geometry/main.c:95
 #: ../raster/r.out.gdal/main.c:142 ../raster/r.profile/main.c:110
 #: ../raster/r.proj/main.c:208 ../raster/r.proj/main.c:221
 #: ../raster/r.proj/main.c:233 ../raster/r.proj/main.c:241
-#: ../raster/r.sunmask/main.c:233 ../raster/r.sunmask/main.c:239
-#: ../raster/r.univar/r.univar_main.c:114
+#: ../raster/r.stats/main.c:155 ../raster/r.sunmask/main.c:233
+#: ../raster/r.sunmask/main.c:239 ../raster/r.univar/r.univar_main.c:114
 #: ../raster/r.univar/r3.univar_main.c:70 ../raster/r.what/main.c:134
 #: ../raster/r.what/main.c:142 ../raster/r.what/main.c:145
 #: ../raster/r.what/main.c:159 ../raster/r.what/main.c:164
@@ -384,25 +385,29 @@ msgid "Lists all databases for a given driver and location."
 msgstr "Lista todas las bases de datos para un controlador y Localización dados."
 
 #: ../db/db.describe/main.c:54 ../db/db.describe/main.c:59
-#: ../raster/r.category/main.c:131 ../raster/r.describe/dumplist.c:47
-#: ../raster/r.proj/main.c:343 ../raster/r.univar/stats.c:94
-#: ../raster/r.what/main.c:280 ../vector/v.category/main.c:253
-#: ../vector/v.category/main.c:318 ../vector/v.info/print.c:859
+#: ../general/g.mapset/main.c:174 ../raster/r.category/main.c:131
+#: ../raster/r.describe/dumplist.c:47 ../raster/r.proj/main.c:343
+#: ../raster/r.univar/stats.c:96 ../raster/r.univar/stats.c:335
+#: ../raster/r.what.color/main.c:246 ../raster/r.what/main.c:280
+#: ../vector/v.category/main.c:253 ../vector/v.category/main.c:318
+#: ../vector/v.info/print.c:859
 #, fuzzy
 msgid "Failed to initialize JSON array. Out of memory?"
 msgstr "Falla al inicializar superficie de salida"
 
 #: ../db/db.describe/main.c:140 ../general/g.proj/output.c:382
-#: ../general/g.region/main.c:940 ../raster/r.category/main.c:389
-#: ../raster/r.describe/dumplist.c:69 ../raster/r.info/main.c:845
-#: ../raster/r.mask.status/main.c:111 ../raster/r.object.geometry/main.c:401
-#: ../raster/r.profile/main.c:276 ../raster/r.proj/main.c:368
-#: ../raster/r.proj/main.c:543 ../raster/r.report/prt_json.c:200
-#: ../raster/r.univar/stats.c:400 ../raster/r.what/main.c:619
-#: ../vector/v.category/main.c:305 ../vector/v.category/main.c:952
-#: ../vector/v.distance/main.c:1786 ../vector/v.info/main.c:106
-#: ../vector/v.info/print.c:284 ../vector/v.info/print.c:900
-#: ../vector/v.to.db/report.c:500 ../vector/v.univar/main.c:797
+#: ../general/g.region/main.c:940 ../general/g.version/main.c:411
+#: ../raster/r.category/main.c:389 ../raster/r.describe/dumplist.c:69
+#: ../raster/r.info/main.c:997 ../raster/r.mask.status/main.c:111
+#: ../raster/r.object.geometry/main.c:401 ../raster/r.profile/main.c:276
+#: ../raster/r.proj/main.c:368 ../raster/r.proj/main.c:543
+#: ../raster/r.report/prt_json.c:200 ../raster/r.stats/main.c:408
+#: ../raster/r.univar/stats.c:431 ../raster/r.what.color/main.c:290
+#: ../raster/r.what/main.c:619 ../vector/v.category/main.c:305
+#: ../vector/v.category/main.c:952 ../vector/v.distance/main.c:1786
+#: ../vector/v.info/main.c:106 ../vector/v.info/print.c:284
+#: ../vector/v.info/print.c:900 ../vector/v.to.db/report.c:500
+#: ../vector/v.univar/main.c:797
 #, fuzzy
 msgid "Failed to initialize pretty JSON string."
 msgstr "Falla al inicializar superficie de salida"
@@ -609,8 +614,8 @@ msgstr "conseguido"
 #: ../db/db.select/main.c:140 ../raster/r.object.geometry/main.c:118
 #: ../raster/r.quantile/main.c:346 ../raster/r.regression.line/main.c:77
 #: ../raster/r.regression.multi/main.c:171
-#: ../raster/r.stats.quantile/main.c:368 ../raster/r.stats/main.c:226
-#: ../raster/r.univar/r.univar_main.c:179
+#: ../raster/r.stats.quantile/main.c:368 ../raster/r.stats/main.c:235
+#: ../raster/r.univar/r.univar_main.c:180
 #: ../raster/r.univar/r3.univar_main.c:133 ../raster/r.what/main.c:193
 #: ../vector/v.db.select/main.c:182
 #, c-format
@@ -651,7 +656,7 @@ msgstr "Separador de registros vertical (necesita la opción -v)"
 #: ../db/db.select/main.c:239 ../locale/scriptstrings/i.oif_to_translate.c:5
 #: ../locale/scriptstrings/r.out.xyz_to_translate.c:7
 #: ../raster/r.quantile/main.c:331 ../raster/r.stats.quantile/main.c:605
-#: ../raster/r.stats/main.c:115 ../raster/r.univar/r.univar_main.c:78
+#: ../raster/r.stats/main.c:121 ../raster/r.univar/r.univar_main.c:78
 #: ../raster/r.univar/r3.univar_main.c:42 ../raster/r.what/main.c:139
 #: ../vector/v.db.select/main.c:150
 msgid "Name for output file (if omitted or \"-\" output to stdout)"
@@ -1665,7 +1670,7 @@ msgstr "%s no funciona con una localización latitud-longitud"
 
 #: ../display/d.colorlist/main.c:35 ../display/d.font/main.c:46
 #: ../display/d.fontlist/main.c:46 ../general/g.gisenv/main.c:43
-#: ../general/g.mapset/main.c:50 ../general/g.mapsets/main.c:87
+#: ../general/g.mapset/main.c:70 ../general/g.mapsets/main.c:87
 #: ../general/g.region/main.c:66 ../temporal/t.connect/main.c:35
 msgid "settings"
 msgstr "configuraciones"
@@ -1793,7 +1798,7 @@ msgstr ""
 #: ../raster/r.solute.transport/main.c:228 ../raster/r.spread/main.c:102
 #: ../raster/r.spreadpath/main.c:77 ../raster/r.statistics/main.c:53
 #: ../raster/r.stats.quantile/main.c:565 ../raster/r.stats.zonal/main.c:104
-#: ../raster/r.stats/main.c:103 ../raster/r.stream.extract/main.c:76
+#: ../raster/r.stats/main.c:109 ../raster/r.stream.extract/main.c:76
 #: ../raster/r.sun/main.c:241 ../raster/r.sunhours/main.c:70
 #: ../raster/r.sunmask/main.c:118 ../raster/r.support.stats/main.c:35
 #: ../raster/r.support/main.c:54 ../raster/r.surf.area/main.c:75
@@ -1805,11 +1810,11 @@ msgstr ""
 #: ../raster/r.to.rast3/main.c:197 ../raster/r.to.rast3elev/main.c:375
 #: ../raster/r.to.vect/main.c:77 ../raster/r.topidx/main.c:37
 #: ../raster/r.topmodel/main.c:48 ../raster/r.transect/main.c:102
-#: ../raster/r.univar/r.univar_main.c:151 ../raster/r.uslek/main.c:52
+#: ../raster/r.univar/r.univar_main.c:152 ../raster/r.uslek/main.c:52
 #: ../raster/r.usler/main.c:52 ../raster/r.viewshed/main.cpp:103
 #: ../raster/r.volume/main.c:80 ../raster/r.walk/main.c:212
 #: ../raster/r.water.outlet/main.c:58 ../raster/r.watershed/front/main.c:75
-#: ../raster/r.what.color/main.c:88 ../raster/r.what/main.c:111
+#: ../raster/r.what.color/main.c:190 ../raster/r.what/main.c:111
 #: ../raster3d/r3.cross.rast/main.c:231 ../raster3d/r3.to.rast/main.c:259
 #: ../vector/v.neighbors/main.c:121 ../vector/v.sample/main.c:75
 #: ../vector/v.to.rast/main.c:47 ../vector/v.what.rast/main.c:72
@@ -1822,7 +1827,7 @@ msgstr "ráster"
 #: ../locale/scriptstrings/t.rast.colors_to_translate.c:3
 #: ../raster/r.colors.out/raster3d_main.c:47
 #: ../raster/r.colors.out/raster_main.c:46 ../raster/r.colors/edit_colors.c:87
-#: ../raster/r.what.color/main.c:90 ../vector/v.colors.out/main.c:49
+#: ../raster/r.what.color/main.c:192 ../vector/v.colors.out/main.c:49
 #: ../vector/v.colors/main.c:58
 msgid "color table"
 msgstr "tabla de colores"
@@ -2419,7 +2424,8 @@ msgstr "Color de cuadrícula"
 #: ../display/d.grid/main.c:93 ../display/d.grid/main.c:98
 #: ../display/d.grid/main.c:104 ../display/d.grid/main.c:110
 #: ../raster/r.colors.out/raster3d_main.c:64
-#: ../raster/r.colors.out/raster_main.c:63 ../vector/v.colors.out/main.c:74
+#: ../raster/r.colors.out/raster_main.c:63 ../raster/r.what.color/main.c:218
+#: ../vector/v.colors.out/main.c:74
 msgid "Color"
 msgstr "Color"
 
@@ -2534,7 +2540,7 @@ msgid "Geo-grid option only available for LL projection, use without -g/-w"
 msgstr "Opción geomalla disponible solamente para proyección LL, usar sin -g/-w"
 
 #: ../display/d.grid/plot.c:578 ../display/d.where/main.c:111
-#: ../ps/ps.map/do_geogrid.c:279 ../raster/r.horizon/main.c:589
+#: ../ps/ps.map/do_geogrid.c:279 ../raster/r.horizon/main.c:590
 msgid "Can't get projection key values of current location"
 msgstr "No se pueden obtener los valores clave de la proyección de la localización actual"
 
@@ -2553,7 +2559,7 @@ msgstr "No se pueden establecer los parámetros de la proyección latitud/longit
 #: ../display/d.grid/plot.c:625 ../display/d.where/main.c:159
 #: ../general/g.region/printwindow.c:338 ../general/g.region/printwindow.c:639
 #: ../general/g.region/printwindow.c:752 ../ps/ps.map/do_geogrid.c:288
-#: ../raster/r.horizon/main.c:598 ../raster/r.in.gdal/main.c:1146
+#: ../raster/r.horizon/main.c:599 ../raster/r.in.gdal/main.c:1146
 #: ../raster/r.latlong/main.c:115 ../raster/r.proj/main.c:464
 #: ../raster/r.proj/main.c:569 ../raster/r.proj/main.c:615
 #: ../raster/r.proj/main.c:698 ../raster/r.sun/main.c:819
@@ -2617,9 +2623,9 @@ msgstr "histograma"
 #: ../raster/r.regression.line/main.c:46
 #: ../raster/r.regression.multi/main.c:130 ../raster/r.report/main.c:68
 #: ../raster/r.statistics/main.c:54 ../raster/r.stats.quantile/main.c:566
-#: ../raster/r.stats.zonal/main.c:105 ../raster/r.stats/main.c:104
+#: ../raster/r.stats.zonal/main.c:105 ../raster/r.stats/main.c:110
 #: ../raster/r.support.stats/main.c:36 ../raster/r.surf.area/main.c:77
-#: ../raster/r.texture/main.c:99 ../raster/r.univar/r.univar_main.c:152
+#: ../raster/r.texture/main.c:99 ../raster/r.univar/r.univar_main.c:153
 #: ../raster/r.univar/r3.univar_main.c:103 ../raster3d/r3.in.lidar/main.c:162
 #: ../raster3d/r3.neighbors/main.c:207 ../raster3d/r3.stats/main.c:48
 #: ../vector/v.class/main.c:47 ../vector/v.kcv/main.c:54
@@ -2774,7 +2780,7 @@ msgstr "No se puede abrir el archivo de etiquetas <%s>"
 #: ../imagery/i.group/main.c:122 ../raster/r.buildvrt/main.c:125
 #: ../raster/r.in.mat/main.c:126 ../raster/r.in.xyz/main.c:586
 #: ../raster/r.mapcalc/main.c:48 ../raster/r.series.accumulate/main.c:222
-#: ../raster/r.series/main.c:266 ../raster/r.support/main.c:209
+#: ../raster/r.series/main.c:257 ../raster/r.support/main.c:209
 #: ../raster/r.topmodel/file_io.c:28 ../raster/r.topmodel/file_io.c:136
 #: ../raster/r.topmodel/file_io.c:161 ../raster3d/r3.support/main.c:169
 #: ../vector/v.lrs/v.lrs.segment/main.c:131 ../vector/v.net.path/path.c:48
@@ -3457,8 +3463,8 @@ msgstr ""
 msgid "Flag -%c has effect only for wx monitors (%s=wx0-7)"
 msgstr ""
 
-#: ../display/d.mon/main.c:177 ../general/g.mapsets/main.c:183
-#: ../general/g.mapsets/main.c:185 ../general/g.mapsets/main.c:201
+#: ../display/d.mon/main.c:177 ../general/g.mapsets/main.c:185
+#: ../general/g.mapsets/main.c:187 ../general/g.mapsets/main.c:203
 #, c-format
 msgid "Flag -%c ignored"
 msgstr "Opción -%c ignorada"
@@ -3486,8 +3492,8 @@ msgstr " Ningún monitor seleccionado"
 msgid "Either <%s>, <%s> or <%s> must be given"
 msgstr "Se debe dar <%s>, <%s> o <%s>"
 
-#: ../display/d.mon/main.c:222 ../general/g.mapsets/main.c:187
-#: ../general/g.mapsets/main.c:203 ../general/g.mapsets/main.c:217
+#: ../display/d.mon/main.c:222 ../general/g.mapsets/main.c:189
+#: ../general/g.mapsets/main.c:205 ../general/g.mapsets/main.c:219
 #, c-format
 msgid "Option <%s> ignored"
 msgstr "Opción <%s> ignorada"
@@ -3579,7 +3585,7 @@ msgstr "No se puede borrar el directorio <%s>"
 #: ../general/g.pnmcomp/main.c:260 ../imagery/i.atcorr/6s.cpp:54
 #: ../imagery/i.ortho.photo/i.ortho.transform/main.c:413
 #: ../misc/m.nviz.script/main.c:198 ../misc/m.transform/main.c:273
-#: ../raster/r.category/main.c:215 ../raster/r.horizon/main.c:429
+#: ../raster/r.category/main.c:215 ../raster/r.horizon/main.c:430
 #: ../raster/r.in.lidar/main.c:670 ../raster/r.out.ascii/main.c:152
 #: ../raster/r.out.ppm3/main.c:134 ../raster/r.profile/main.c:190
 #: ../raster/r.recode/main.c:89 ../raster3d/r3.out.vtk/main.c:422
@@ -5097,7 +5103,7 @@ msgstr "posición"
 #: ../locale/scriptstrings/v.rast.stats_to_translate.c:8
 #: ../locale/scriptstrings/v.what.strds_to_translate.c:6
 #: ../locale/scriptstrings/v.what.vect_to_translate.c:6
-#: ../raster/r.what.color/main.c:89 ../raster/r.what/main.c:112
+#: ../raster/r.what.color/main.c:191 ../raster/r.what/main.c:112
 #: ../vector/v.what.rast/main.c:74 ../vector/v.what.rast3/main.c:69
 #: ../vector/v.what/main.c:62
 msgid "querying"
@@ -5139,11 +5145,11 @@ msgstr "Solicitud ambigua para los elipsoides lat/long"
 msgid "Please specify a lat/long ellipsoid with -l or -w"
 msgstr "Por favor especifique un elipsoide de lat/long con -l o -w"
 
-#: ../display/d.where/main.c:104 ../raster/r.horizon/main.c:583
+#: ../display/d.where/main.c:104 ../raster/r.horizon/main.c:584
 msgid "Can't get projection info of current location"
 msgstr "No se puede obtener información de la proyección de la localización actual"
 
-#: ../display/d.where/main.c:107 ../raster/r.horizon/main.c:586
+#: ../display/d.where/main.c:107 ../raster/r.horizon/main.c:587
 msgid "Can't get projection units of current location"
 msgstr "No se pueden obtener unidades de la proyección de la localización actual"
 
@@ -5189,7 +5195,7 @@ msgstr "Mi primer módulo ráster"
 #: ../raster/r.cross/main.c:101 ../raster/r.distance/parse.c:70
 #: ../raster/r.distance/parse.c:79 ../raster/r.fill.stats/main.c:1026
 #: ../raster/r.flow/flow_io.c:67 ../raster/r.flow/flow_io.c:245
-#: ../raster/r.geomorphon/memory.c:47 ../raster/r.info/main.c:123
+#: ../raster/r.geomorphon/memory.c:47 ../raster/r.info/main.c:140
 #: ../raster/r.kappa/main.c:173 ../raster/r.kappa/stats.c:33
 #: ../raster/r.kappa/stats.c:40 ../raster/r.mapcalc/map.c:514
 #: ../raster/r.mapcalc/map.c:812 ../raster/r.mapcalc/map3.c:712
@@ -5203,8 +5209,8 @@ msgstr "Mi primer módulo ráster"
 #: ../raster/r.sim/simlib/output.c:397 ../raster/r.sim/simlib/output.c:425
 #: ../raster/r.sim/simlib/output.c:434 ../raster/r.sim/simlib/output.c:476
 #: ../raster/r.sim/simlib/output.c:492 ../raster/r.sim/simlib/output.c:513
-#: ../raster/r.sim/simlib/output.c:555 ../raster/r.sim/simlib/output.c:595
-#: ../raster/r.sim/simlib/output.c:762
+#: ../raster/r.sim/simlib/output.c:567 ../raster/r.sim/simlib/output.c:627
+#: ../raster/r.sim/simlib/output.c:805
 #: ../raster/r.smooth.edgepreserve/main.c:144 ../raster/r.spread/main.c:445
 #: ../raster/r.spread/main.c:448 ../raster/r.spread/main.c:451
 #: ../raster/r.spread/main.c:455 ../raster/r.spread/main.c:458
@@ -5212,7 +5218,7 @@ msgstr "Mi primer módulo ráster"
 #: ../raster/r.stream.extract/main.c:173 ../raster/r.stream.extract/main.c:178
 #: ../raster/r.terraflow/main.cpp:207 ../raster/r.terraflow/main.cpp:354
 #: ../raster/r.terraflow/main.cpp:390 ../raster/r.tile/main.c:84
-#: ../raster/r.univar/r.univar_main.c:313 ../raster/r.walk/main.c:467
+#: ../raster/r.univar/r.univar_main.c:304 ../raster/r.walk/main.c:467
 #: ../raster/r.walk/main.c:495 ../raster/r.walk/main.c:500
 #: ../raster/r.walk/main.c:872 ../scripts/d.correlate/d.correlate.py:46
 #: ../scripts/d.polar/d.polar.py:57 ../scripts/d.rast.leg/d.rast.leg.py:95
@@ -5299,13 +5305,13 @@ msgstr ""
 #: ../general/g.filename/main.c:40 ../general/g.findetc/main.c:27
 #: ../general/g.findfile/main.c:39 ../general/g.gisenv/main.c:42
 #: ../general/g.gui/main.c:38 ../general/g.list/main.c:62
-#: ../general/g.mapset/main.c:49 ../general/g.mapsets/main.c:86
+#: ../general/g.mapset/main.c:69 ../general/g.mapsets/main.c:86
 #: ../general/g.message/main.c:37 ../general/g.mkfontcap/main.c:63
 #: ../general/g.pnmcomp/main.c:281 ../general/g.ppmtopng/main.c:114
 #: ../general/g.proj/main.c:71 ../general/g.region/main.c:65
 #: ../general/g.remove/main.c:69 ../general/g.rename/main.c:44
 #: ../general/g.setproj/main.c:77 ../general/g.tempfile/main.c:38
-#: ../general/g.version/main.c:69
+#: ../general/g.version/main.c:74
 #: ../locale/scriptstrings/g.download.location_to_translate.c:3
 #: ../locale/scriptstrings/g.download.project_to_translate.c:3
 #: ../locale/scriptstrings/g.extension.all_to_translate.c:3
@@ -5846,88 +5852,113 @@ msgstr "No ha sido posible compilar patrón <%s>"
 msgid "Mapset <%s> does not exist"
 msgstr "El directorio de mapas <%s> no existe"
 
-#: ../general/g.mapset/main.c:51
-msgid "Changes/reports current mapset."
+#: ../general/g.mapset/main.c:37 ../general/g.mapsets/list.c:34
+msgid "Failed to serialize JSON to pretty format."
+msgstr ""
+
+#: ../general/g.mapset/main.c:71 ../general/g.mapsets/main.c:88
+#, fuzzy
+#| msgid "projection"
+msgid "project"
+msgstr "proyección"
+
+#: ../general/g.mapset/main.c:72
+#, fuzzy
+#| msgid "Changes/reports current mapset."
+msgid "Changes or reports current mapset."
 msgstr "Cambios/reportes del Directorio de mapas actual."
 
-#: ../general/g.mapset/main.c:52
+#: ../general/g.mapset/main.c:73
 #, fuzzy
-msgid "Optionally create new mapset or list available mapsets in given project (location)."
+msgid "Optionally, creates new mapset or lists available mapsets in given project (location)."
 msgstr "Opcionalmente crear nuevo directorio de mapas o lista disponible de directorios de mapas en una posición dada."
 
-#: ../general/g.mapset/main.c:57
+#: ../general/g.mapset/main.c:78
 msgid "Name of mapset where to switch"
 msgstr "Nombre del Directorio de mapas al cual cambiar"
 
-#: ../general/g.mapset/main.c:58 ../general/g.mapset/main.c:62
-#: ../general/g.mapset/main.c:65
+#: ../general/g.mapset/main.c:79 ../general/g.mapset/main.c:83
+#: ../general/g.mapset/main.c:86
 msgid "Mapset"
 msgstr "Directorio de mapas"
 
-#: ../general/g.mapset/main.c:69
+#: ../general/g.mapset/main.c:93
 msgid "Create mapset if it doesn't exist"
 msgstr "Crear directorio de mapas si no existe"
 
-#: ../general/g.mapset/main.c:71 ../general/g.proj/main.c:231
+#: ../general/g.mapset/main.c:95 ../general/g.proj/main.c:231
 #: ../locale/scriptstrings/r.mask_to_translate.c:20
 msgid "Create"
 msgstr "Crear"
 
-#: ../general/g.mapset/main.c:76
+#: ../general/g.mapset/main.c:100
 msgid "List available mapsets and exit"
 msgstr "Enlistar directorios de mapas disponibles y salir"
 
-#: ../general/g.mapset/main.c:82
+#: ../general/g.mapset/main.c:106
 msgid "Print current mapset and exit"
 msgstr "Mostrar directorio de mapas actual y salir"
 
-#: ../general/g.mapset/main.c:137
+#: ../general/g.mapset/main.c:118 ../general/g.mapsets/list.c:13
+#: ../general/g.proj/output.c:54 ../general/g.proj/output.c:360
+#: ../general/g.region/main.c:441 ../general/g.version/main.c:140
+#: ../raster/r.describe/dumplist.c:37 ../raster/r.info/main.c:147
+#: ../raster/r.proj/main.c:485 ../raster/r.univar/stats.c:104
+#: ../raster/r.univar/stats.c:163 ../raster/r.univar/stats.c:353
+#: ../raster/r.what.color/main.c:52 ../vector/v.category/main.c:246
+#: ../vector/v.category/main.c:913 ../vector/v.info/print.c:817
+#: ../vector/v.info/print.c:853 ../vector/v.univar/main.c:609
+#, fuzzy
+msgid "Failed to initialize JSON object. Out of memory?"
+msgstr "Falla al inicializar superficie de salida"
+
+#: ../general/g.mapset/main.c:214
 #, c-format
 msgid "<%s> is already the current mapset"
 msgstr "<%s> ya es el directorio de mapas actual"
 
-#: ../general/g.mapset/main.c:146
+#: ../general/g.mapset/main.c:223
 #, c-format
 msgid "You don't have permission to use the mapset <%s>"
 msgstr "No tiene permiso para usar el Directorio de mapas <%s>"
 
-#: ../general/g.mapset/main.c:154
+#: ../general/g.mapset/main.c:231
 #, c-format
 msgid "Unable to create new mapset <%s>"
 msgstr "No ha sido posible crear nuevo Directorio de mapas <%s>"
 
-#: ../general/g.mapset/main.c:159
+#: ../general/g.mapset/main.c:236
 #, c-format
 msgid "Mapset <%s> does not exist. Use -c flag to create it."
 msgstr "El directorio de mapas <%s> no existe. Use la opción -c para crearlo."
 
-#: ../general/g.mapset/main.c:169
+#: ../general/g.mapset/main.c:246
 msgid "Unable to read GIS_LOCK environment variable"
 msgstr "No se puede leer la variable de entorno GIS_LOCK"
 
-#: ../general/g.mapset/main.c:185
+#: ../general/g.mapset/main.c:262
 #, c-format
 msgid "Lock file of mapset <%s> cannot be checked"
 msgstr "Archivo de bloqueo del directorio de mapas <%s> no puede ser comprobado"
 
-#: ../general/g.mapset/main.c:188
+#: ../general/g.mapset/main.c:265
 #, c-format
 msgid "There appears to be an active GRASS session in selected mapset <%s>"
 msgstr "Parece ser que hay una sesión de GRASS activa en el directorio de mapas seleccionado <%s>"
 
-#: ../general/g.mapset/main.c:195
+#: ../general/g.mapset/main.c:272
 msgid "Cleaning up temporary files..."
 msgstr " Limpiando archivos temporales..."
 
-#: ../general/g.mapset/main.c:212
+#: ../general/g.mapset/main.c:289
 msgid "Mapset switched."
 msgstr ""
 
-#: ../general/g.mapset/main.c:215
+#: ../general/g.mapset/main.c:292
 msgid "Mapset switched. Your shell continues to use the history for the old mapset"
 msgstr "Directorio de mapas cambiado. Su consola continúa usando el histórico para el Directorio de mapas antiguo"
 
-#: ../general/g.mapset/main.c:219
+#: ../general/g.mapset/main.c:296
 #, c-format
 msgid ""
 "You can switch the history by commands:\n"
@@ -5936,29 +5967,15 @@ msgstr ""
 "Puede cambiar el histórico mediante comandos:\n"
 "history -S; history -L %s/.history; setenv histfile=%s/.history"
 
-#: ../general/g.mapset/main.c:225
+#: ../general/g.mapset/main.c:302
 #, c-format
 msgid "Your current mapset is <%s>"
 msgstr "El actual directorio de mapas es <%s>"
-
-#: ../general/g.mapsets/list.c:13 ../general/g.proj/output.c:54
-#: ../general/g.proj/output.c:360 ../general/g.region/main.c:441
-#: ../raster/r.describe/dumplist.c:37 ../raster/r.proj/main.c:485
-#: ../vector/v.category/main.c:246 ../vector/v.category/main.c:913
-#: ../vector/v.info/print.c:817 ../vector/v.info/print.c:853
-#: ../vector/v.univar/main.c:609
-#, fuzzy
-msgid "Failed to initialize JSON object. Out of memory?"
-msgstr "Falla al inicializar superficie de salida"
 
 #: ../general/g.mapsets/list.c:22
 #, fuzzy
 msgid "Failed to initialize mapsets array. Out of memory?"
 msgstr "Falla al inicializar superficie de salida"
-
-#: ../general/g.mapsets/list.c:34
-msgid "Failed to serialize JSON to pretty format."
-msgstr ""
 
 #: ../general/g.mapsets/list.c:45
 msgid "Available mapsets:"
@@ -5978,24 +5995,26 @@ msgstr ""
 msgid "The option %s is not allowed with %s=%s. %s"
 msgstr ""
 
-#: ../general/g.mapsets/main.c:88
+#: ../general/g.mapsets/main.c:89
 msgid "search path"
 msgstr "ruta de búsqueda"
 
-#: ../general/g.mapsets/main.c:89
-msgid "Modifies/prints the user's current mapset search path."
+#: ../general/g.mapsets/main.c:91
+#, fuzzy
+#| msgid "Modifies/prints the user's current mapset search path."
+msgid "Modifies or reports the user's current mapset search path."
 msgstr "Modifica/muestra la actual ruta de búsqueda del directorio de mapas actual del usuario."
 
-#: ../general/g.mapsets/main.c:90
+#: ../general/g.mapsets/main.c:92
 #, fuzzy
 msgid "Affects the user's access to data existing under the other mapsets in the current project."
 msgstr "Afecta al acceso del usuario a datos existentes bajo otros directorios de mapas en la localización actual."
 
-#: ../general/g.mapsets/main.c:97
+#: ../general/g.mapsets/main.c:99
 msgid "Name(s) of existing mapset(s) to add/remove or set"
 msgstr "Nombre(s) de los Directorio(s) de mapas existentes a añadir/eliminar o definir"
 
-#: ../general/g.mapsets/main.c:105
+#: ../general/g.mapsets/main.c:107
 #: ../locale/scriptstrings/g.extension.all_to_translate.c:6
 #: ../locale/scriptstrings/g.extension_to_translate.c:10
 #: ../locale/scriptstrings/i.band.library_to_translate.c:7
@@ -6004,63 +6023,63 @@ msgstr "Nombre(s) de los Directorio(s) de mapas existentes a añadir/eliminar o 
 msgid "Operation to be performed"
 msgstr "Operación a realizar"
 
-#: ../general/g.mapsets/main.c:118
+#: ../general/g.mapsets/main.c:120
 msgid "List all available mapsets in alphabetical order"
 msgstr "Listar todos los directorios de mapas disponibles en orden alfabético"
 
-#: ../general/g.mapsets/main.c:124
+#: ../general/g.mapsets/main.c:126
 msgid "Print mapsets in current search path"
 msgstr "Imprimir la ruta de búsqueda del directorio de mapas actual"
 
-#: ../general/g.mapsets/main.c:130
+#: ../general/g.mapsets/main.c:132
 msgid "Launch mapset selection GUI dialog"
 msgstr "Lanzar cuadro de diálogo GUI de selección de Directorio de mapas"
 
-#: ../general/g.mapsets/main.c:153
+#: ../general/g.mapsets/main.c:155
 #, c-format
 msgid "Unknown operation '%s'"
 msgstr "Operación '%s' desconocida"
 
-#: ../general/g.mapsets/main.c:164
+#: ../general/g.mapsets/main.c:166
 #, fuzzy
 msgid "Separator is part of the format."
 msgstr "Introduzca una regla en uno de estos formatos:"
 
-#: ../general/g.mapsets/main.c:234 ../general/g.mapsets/main.c:269
+#: ../general/g.mapsets/main.c:236 ../general/g.mapsets/main.c:271
 #, c-format
 msgid "Mapset <%s> not found"
 msgstr "Directorio de mapas <%s> no encontrado"
 
-#: ../general/g.mapsets/main.c:241 ../general/g.mapsets/main.c:300
+#: ../general/g.mapsets/main.c:243 ../general/g.mapsets/main.c:302
 #, c-format
 msgid "Current mapset (<%s>) must always included in the search path"
 msgstr "Directorio de mapas actual (<%s>) debe ser siempre incluido en la ruta de búsqueda"
 
-#: ../general/g.mapsets/main.c:264
+#: ../general/g.mapsets/main.c:266
 #, c-format
 msgid "Mapset <%s> already in the path"
 msgstr "Directorio de mapas <%s> ya está en la ruta de búsqueda"
 
-#: ../general/g.mapsets/main.c:271
+#: ../general/g.mapsets/main.c:273
 #, c-format
 msgid "Mapset <%s> added to search path"
 msgstr "Directorio de mapas <%s> añadido a la ruta de búsqueda"
 
-#: ../general/g.mapsets/main.c:304
+#: ../general/g.mapsets/main.c:306
 #, c-format
 msgid "Mapset <%s> removed from search path"
 msgstr "Directorio de mapas <%s> eliminado de la ruta de búsqueda"
 
-#: ../general/g.mapsets/main.c:316
+#: ../general/g.mapsets/main.c:318
 msgid "Search path not modified"
 msgstr "Ruta de búsqueda no modificada"
 
-#: ../general/g.mapsets/main.c:334
+#: ../general/g.mapsets/main.c:336
 msgid "Unable to open SEARCH_PATH for write"
 msgstr "No ha sido posible abrir SEARCH_PATH para escritura"
 
 #: ../general/g.message/main.c:38 ../general/g.tempfile/main.c:39
-#: ../general/g.version/main.c:70
+#: ../general/g.version/main.c:75
 msgid "support"
 msgstr "soportar"
 
@@ -6635,8 +6654,8 @@ msgstr ""
 msgid "The format option can only be used with -%c flag"
 msgstr "El archivo de configuración se puede usar solamente con el mapa ráster <%s>"
 
-#: ../general/g.proj/main.c:271 ../raster/r.proj/main.c:268
-#: ../vector/v.category/main.c:230
+#: ../general/g.proj/main.c:271 ../general/g.version/main.c:153
+#: ../raster/r.proj/main.c:268 ../vector/v.category/main.c:230
 msgid "Flag 'g' is deprecated and will be removed in a future release. Please use format=shell instead."
 msgstr ""
 
@@ -7405,96 +7424,111 @@ msgstr "Id del proceso que será usado cuando se nombre el archivo temporal"
 msgid "Dry run - don't create a file, just prints it's file name"
 msgstr ""
 
-#: ../general/g.version/main.c:71
+#: ../general/g.version/main.c:76
 msgid "citing"
 msgstr "forma de citar"
 
-#: ../general/g.version/main.c:72
+#: ../general/g.version/main.c:77
 msgid "copyright"
 msgstr "derechos de autor"
 
-#: ../general/g.version/main.c:73
+#: ../general/g.version/main.c:78
 msgid "version"
 msgstr "versión"
 
-#: ../general/g.version/main.c:74
+#: ../general/g.version/main.c:79
 msgid "license"
 msgstr "licencia"
 
-#: ../general/g.version/main.c:75
+#: ../general/g.version/main.c:80
 msgid "Displays GRASS GIS version info."
 msgstr "Muestra información de versión de GRASS GIS."
 
-#: ../general/g.version/main.c:77
+#: ../general/g.version/main.c:82
 msgid "Optionally also prints build or copyright information."
 msgstr "Opcionalmente "
 
-#: ../general/g.version/main.c:81
+#: ../general/g.version/main.c:86
 msgid "Print also the copyright message"
 msgstr "Imprimir también el mensaje de copyright"
 
-#: ../general/g.version/main.c:82 ../general/g.version/main.c:87
-#: ../general/g.version/main.c:92 ../general/g.version/main.c:102
-#: ../general/g.version/main.c:108
+#: ../general/g.version/main.c:87 ../general/g.version/main.c:92
+#: ../general/g.version/main.c:97 ../general/g.version/main.c:107
+#: ../general/g.version/main.c:113
 msgid "Additional info"
 msgstr "Información adicional"
 
-#: ../general/g.version/main.c:86
+#: ../general/g.version/main.c:91
 msgid "Print also the citation options"
 msgstr "Mostrar también las opciones para citar"
 
-#: ../general/g.version/main.c:91
+#: ../general/g.version/main.c:96
 msgid "Print also the build information"
 msgstr ""
 
-#: ../general/g.version/main.c:101
+#: ../general/g.version/main.c:106
 msgid "Print also the GIS library revision number and date"
 msgstr ""
 
-#: ../general/g.version/main.c:106
+#: ../general/g.version/main.c:111
 msgid "Print also extended info for additional libraries"
 msgstr ""
 
-#: ../general/g.version/main.c:107
+#: ../general/g.version/main.c:112
 msgid "GDAL/OGR, PROJ, GEOS"
 msgstr ""
 
-#: ../general/g.version/main.c:113
-msgid "Print info in shell script style (including Git reference commit)"
+#: ../general/g.version/main.c:117
+#, fuzzy
+msgid "Print info in shell script style (including Git reference commit) [deprecated]"
+msgstr "Estilo de script de consola, actualmente sólo para informes"
+
+#: ../general/g.version/main.c:120
+msgid "This flag is deprecated and will be removed in a future release. Use format=shell instead."
 msgstr ""
 
-#: ../general/g.version/main.c:114
+#: ../general/g.version/main.c:122
 msgid "Shell"
 msgstr "Consola de comandos"
 
-#: ../general/g.version/main.c:176
+#: ../general/g.version/main.c:127 ../raster/r.info/main.c:112
+#: ../raster/r.proj/main.c:205 ../vector/v.category/main.c:166
+#: ../vector/v.info/parse.c:47
+msgid "plain;Human readable text output;shell;shell script style text output;json;JSON (JavaScript Object Notation);"
+msgstr ""
+
+#: ../general/g.version/main.c:157
+msgid "Cannot use the -g flag with format=json; please select only one option."
+msgstr ""
+
+#: ../general/g.version/main.c:268
 #, c-format
 msgid "Cannot determine GRASS libgis version and date number. The GRASS build might be broken. Report this to developers or packagers.\n"
 msgstr "No se puede determinar versión GRASS libgis y número de fecha. La construcción GRASS puede estar rota. Reporte esto a los desarrolladores o a quienes se encargan de los paquetes.\n"
 
-#: ../general/g.version/main.c:182
+#: ../general/g.version/main.c:281
 msgid "GRASS GIS libgis version and date number don't have the expected format. Trying to print the original strings..."
 msgstr ""
 
-#: ../general/g.version/main.c:185
+#: ../general/g.version/main.c:284
 #, c-format
 msgid "GIS_H_VERSION=\"%s\""
 msgstr "GIS_H_VERSION=\"%s\""
 
-#: ../general/g.version/main.c:186
+#: ../general/g.version/main.c:285
 #, c-format
 msgid "GIS_H_DATE=\"%s\""
 msgstr "GIS_H_DATE=\"%s\""
 
-#: ../general/g.version/main.c:221
+#: ../general/g.version/main.c:347
 msgid "GRASS not compiled with GDAL/OGR support"
 msgstr "GRASS no está compilado con soporte GDAL/OGR"
 
-#: ../general/g.version/main.c:232
+#: ../general/g.version/main.c:372
 msgid "GRASS not compiled with GEOS support"
 msgstr "GRASS no está compilado con soporte GEOS"
 
-#: ../general/g.version/main.c:244
+#: ../general/g.version/main.c:398
 msgid "GRASS not compiled with SQLite support"
 msgstr "GRASS no está compilado con soporte SQLite"
 
@@ -13080,7 +13114,6 @@ msgstr "Estadísticas ampliadas (cuartiles y percentiles 90)"
 
 #: ../locale/scriptstrings/db.univar_to_translate.c:10
 #: ../locale/scriptstrings/v.db.univar_to_translate.c:10
-#: ../raster/r.info/main.c:99
 msgid "Print stats in shell script style"
 msgstr "Mostrar las estadísticas en estilo de script de consola de comandos"
 
@@ -13339,6 +13372,7 @@ msgid "Semantic label search pattern (examples: L, S2, .*_2, S2_1)"
 msgstr ""
 
 #: ../locale/scriptstrings/i.band.library_to_translate.c:8
+#: ../raster/r.info/main.c:102
 msgid "Print extended metadata information"
 msgstr ""
 
@@ -14988,8 +15022,8 @@ msgstr "Ordenar el conjunto de datos espacio temporales por categoría"
 #: ../raster/r.report/parse.c:82 ../raster/r.report/parse.c:105
 #: ../raster/r.report/parse.c:108 ../raster/r.report/parse.c:113
 #: ../raster/r.report/parse.c:118 ../raster/r.report/parse.c:123
-#: ../raster/r.stats.quantile/main.c:609 ../raster/r.stats/main.c:119
-#: ../raster/r.stats/main.c:123 ../raster/r.stats/main.c:146
+#: ../raster/r.stats.quantile/main.c:609 ../raster/r.stats/main.c:125
+#: ../raster/r.stats/main.c:129 ../raster/r.stats/main.c:152
 #: ../raster/r.univar/r.univar_main.c:95 ../raster/r.univar/r.univar_main.c:100
 #: ../raster/r.univar/r.univar_main.c:111
 msgid "Formatting"
@@ -15761,7 +15795,7 @@ msgstr "Calcula estadísticas univariadas a partir de celdas no nulas para cada 
 #: ../raster/r.series/main.c:156 ../raster/r.sim/r.sim.sediment/main.c:119
 #: ../raster/r.sim/r.sim.water/main.c:118 ../raster/r.slope.aspect/main.c:171
 #: ../raster/r.smooth.edgepreserve/main.c:49 ../raster/r.sun/main.c:245
-#: ../raster/r.texture/main.c:101 ../raster/r.univar/r.univar_main.c:155
+#: ../raster/r.texture/main.c:101 ../raster/r.univar/r.univar_main.c:156
 #: ../vector/v.surf.rst/main.c:153
 #, fuzzy
 msgid "parallel"
@@ -16732,7 +16766,7 @@ msgid "Calculates univariate statistics from a raster map based on a vector map 
 msgstr "Calcula estadísticas univariadas a partir de un mapa ráster a partir de un mapa vectorial y carga estadísticas a nueva columna de atributos."
 
 #: ../locale/scriptstrings/v.rast.stats_to_translate.c:5
-#: ../raster/r.resamp.stats/main.c:264 ../raster/r.univar/r.univar_main.c:153
+#: ../raster/r.resamp.stats/main.c:264 ../raster/r.univar/r.univar_main.c:154
 #: ../raster/r.univar/r3.univar_main.c:104 ../vector/v.univar/main.c:96
 #: ../vector/v.vect.stats/main.c:131
 msgid "univariate statistics"
@@ -16740,7 +16774,7 @@ msgstr "estadísticas univariadas"
 
 #: ../locale/scriptstrings/v.rast.stats_to_translate.c:6
 #: ../raster/r.statistics/main.c:55 ../raster/r.stats.quantile/main.c:567
-#: ../raster/r.stats.zonal/main.c:106 ../raster/r.univar/r.univar_main.c:154
+#: ../raster/r.stats.zonal/main.c:106 ../raster/r.univar/r.univar_main.c:155
 #: ../vector/v.vect.stats/main.c:132
 msgid "zonal statistics"
 msgstr "estadísticas de zona"
@@ -18225,14 +18259,14 @@ msgstr ""
 #: ../raster/r.mapcalc/main.c:134 ../raster/r.series.accumulate/main.c:207
 #: ../raster/r.series.interp/main.c:132 ../raster/r.series.interp/main.c:136
 #: ../raster/r.series.interp/main.c:148 ../raster/r.series.interp/main.c:152
-#: ../raster/r.series/main.c:244 ../vector/v.colors/main.c:222
+#: ../raster/r.series/main.c:235 ../vector/v.colors/main.c:222
 #, c-format
 msgid "%s= and %s= are mutually exclusive"
 msgstr "%s= y %s son mutuamente excluyentes"
 
 #: ../raster/r.buildvrt/main.c:112 ../raster/r.series.accumulate/main.c:211
 #: ../raster/r.series.interp/main.c:140 ../raster/r.series.interp/main.c:156
-#: ../raster/r.series/main.c:248
+#: ../raster/r.series/main.c:239
 #, c-format
 msgid "Please specify %s= or %s="
 msgstr "Por favor especifique %s= o %s="
@@ -18252,7 +18286,7 @@ msgid "Input map <%s@%s> is all NULL, skipping"
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:175 ../raster/r.series.accumulate/main.c:256
-#: ../raster/r.series/main.c:339
+#: ../raster/r.series/main.c:330
 msgid "No raster map name found in input file"
 msgstr "No se encontró nombre del mapa raster en el archivo de entrada"
 
@@ -18261,7 +18295,7 @@ msgid "Only one raster map name found in input file"
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:186 ../raster/r.series.accumulate/main.c:266
-#: ../raster/r.series/main.c:351 ../raster/r.stats/main.c:284
+#: ../raster/r.series/main.c:342 ../raster/r.stats/main.c:303
 msgid "Raster map not found"
 msgstr "Mapa ráster no encontrado"
 
@@ -19106,7 +19140,7 @@ msgstr "Niveles de contorno"
 msgid "Either <%s> or <%s> option must be specified"
 msgstr ""
 
-#: ../raster/r.contour/main.c:149 ../raster/r.stats/main.c:333
+#: ../raster/r.contour/main.c:149 ../raster/r.stats/main.c:352
 #, c-format
 msgid "Unable to read fp range of raster map <%s>"
 msgstr "No se puede leer el intervalo fp del mapa raster <%s>"
@@ -20926,93 +20960,93 @@ msgstr "Escribir salida en grados (por defecto son radianes)"
 msgid "Write output in compass orientation (default is CCW, East=0)"
 msgstr "Escribir salida en orientación de brújula (el predeterminado es CCW, Este=0)"
 
-#: ../raster/r.horizon/main.c:375
+#: ../raster/r.horizon/main.c:376
 msgid "Note: In latitude-longitude coordinate system specify buffers in degree unit"
 msgstr "Nota: en sistema de coordenadas latitud-longitud especifique el buffer en unidad de grado"
 
-#: ../raster/r.horizon/main.c:404
+#: ../raster/r.horizon/main.c:405
 msgid "Can't read the coordinates from the \"coordinate\" option."
 msgstr "No puede leer las coordenadas de la opción \"coordinate\"."
 
-#: ../raster/r.horizon/main.c:410
+#: ../raster/r.horizon/main.c:411
 msgid "Coordinates are outside of the current region"
 msgstr ""
 
-#: ../raster/r.horizon/main.c:441
+#: ../raster/r.horizon/main.c:442
 msgid "You didn't specify a direction value or step size. Aborting."
 msgstr "No se especificó un valor de dirección o de tamaño de paso. Abortando."
 
-#: ../raster/r.horizon/main.c:447
+#: ../raster/r.horizon/main.c:448
 msgid "You didn't specify a horizon raster name. Aborting."
 msgstr "No se especificó un nombre de horizonte raster. Abortando."
 
-#: ../raster/r.horizon/main.c:462
+#: ../raster/r.horizon/main.c:463
 msgid "Negative values of start angle are not allowed. Aborting."
 msgstr "Los valores negativos del ángulo de inicio no están permitidos. Abortando."
 
-#: ../raster/r.horizon/main.c:465
+#: ../raster/r.horizon/main.c:466
 msgid "End angle is not between 0 and 360. Aborting."
 msgstr "Ángulo final no está entre 0 y 360. Abortando."
 
-#: ../raster/r.horizon/main.c:469
+#: ../raster/r.horizon/main.c:470
 msgid "You specify a start grater than the end angle. Aborting."
 msgstr "Debe especificar un inicial mayor que el ángulo final. Abortando."
 
-#: ../raster/r.horizon/main.c:478
+#: ../raster/r.horizon/main.c:479
 msgid "You didn't specify an angle step size. Aborting."
 msgstr "No se especificó un ángulo de tamaño de paso. Abortando."
 
-#: ../raster/r.horizon/main.c:490
+#: ../raster/r.horizon/main.c:491
 msgid "Could not read bufferzone size. Aborting."
 msgstr "No se pudo leer el tamaño de la zona buffer. Abortando."
 
-#: ../raster/r.horizon/main.c:495 ../raster/r.horizon/main.c:501
-#: ../raster/r.horizon/main.c:507 ../raster/r.horizon/main.c:513
+#: ../raster/r.horizon/main.c:496 ../raster/r.horizon/main.c:502
+#: ../raster/r.horizon/main.c:508 ../raster/r.horizon/main.c:514
 #, c-format
 msgid "Could not read %s bufferzone size. Aborting."
 msgstr "No se podía leer tamaño de bufferzone %s. Abortando."
 
-#: ../raster/r.horizon/main.c:496
+#: ../raster/r.horizon/main.c:497
 msgid "east"
 msgstr "este"
 
-#: ../raster/r.horizon/main.c:502
+#: ../raster/r.horizon/main.c:503
 msgid "west"
 msgstr "oeste"
 
-#: ../raster/r.horizon/main.c:508
+#: ../raster/r.horizon/main.c:509
 msgid "south"
 msgstr "sur"
 
-#: ../raster/r.horizon/main.c:514
+#: ../raster/r.horizon/main.c:515
 msgid "north"
 msgstr "norte"
 
-#: ../raster/r.horizon/main.c:521
+#: ../raster/r.horizon/main.c:522
 msgid "Could not read maximum distance. Aborting."
 msgstr "No se pudo leer una distancia máxima. Cancelando."
 
-#: ../raster/r.horizon/main.c:534
+#: ../raster/r.horizon/main.c:535
 msgid "The distance value must be 0.5-1.5. Aborting."
 msgstr "Los valores de distancia deben ser 0.5-1.5. Abortando."
 
-#: ../raster/r.horizon/main.c:724 ../raster/r.in.ascii/main.c:187
+#: ../raster/r.horizon/main.c:725 ../raster/r.in.ascii/main.c:187
 #, c-format
 msgid "OOPS: rows changed from %d to %d"
 msgstr "OOPS: cambiadas filas desde %d hasta %d"
 
-#: ../raster/r.horizon/main.c:728 ../raster/r.in.ascii/main.c:190
+#: ../raster/r.horizon/main.c:729 ../raster/r.in.ascii/main.c:190
 #, c-format
 msgid "OOPS: cols changed from %d to %d"
 msgstr "OOPS: cambiadas columnas desde %d hasta %d"
 
-#: ../raster/r.horizon/main.c:760 ../raster/r.horizon/main.c:775
+#: ../raster/r.horizon/main.c:761 ../raster/r.horizon/main.c:776
 #: ../raster/r.proj/main.c:633 ../raster/r.proj/main.c:739
 #, c-format
 msgid "Error in %s"
 msgstr ""
 
-#: ../raster/r.horizon/main.c:1189
+#: ../raster/r.horizon/main.c:1190
 #, c-format
 msgid "Calculating map %01d of %01d (angle %.2f, raster map <%s>)"
 msgstr "Calculando mapa %01d de %01d (ángulo %.2f, mapa ráster <%s>)"
@@ -21273,7 +21307,7 @@ msgid "Option %s must be >= 0"
 msgstr "Opción %s debe ser >= 0"
 
 #: ../raster/r.in.bin/main.c:451 ../raster/r.in.bin/main.c:457
-#: ../raster/r.neighbors/main.c:318 ../raster/r.out.bin/main.c:390
+#: ../raster/r.neighbors/main.c:307 ../raster/r.out.bin/main.c:390
 #: ../raster/r.stats.quantile/main.c:638
 #, c-format
 msgid "-%c and %s= are mutually exclusive"
@@ -22635,28 +22669,32 @@ msgstr "historia"
 msgid "Outputs basic information about a raster map."
 msgstr "Muestra información básica sobre un mapa ráster"
 
-#: ../raster/r.info/main.c:91
-msgid "Print raster array information in shell script style"
-msgstr "Mostrar información de matriz ráster en estilo de script de consola de comandos"
+#: ../raster/r.info/main.c:90
+#, fuzzy
+#| msgid "Print attribute information"
+msgid "Print raster array information"
+msgstr "Imprimir información de atributos"
 
-#: ../raster/r.info/main.c:95
-msgid "Print range in shell script style"
-msgstr "Mostrar rango en estilo de script de consola de comandos"
+#: ../raster/r.info/main.c:94
+#, fuzzy
+msgid "Print range"
+msgstr "Mapas de entrada"
 
-#: ../raster/r.info/main.c:104
-msgid "Print extended metadata information in shell script style"
-msgstr "Mostrar iformación extendida de metadatos en estilo de script de consola de comandos"
+#: ../raster/r.info/main.c:98
+#, fuzzy
+#| msgid "Print data types"
+msgid "Print stats"
+msgstr "Imprimir tipos de datos"
 
-#: ../raster/r.info/main.c:108 ../raster3d/r3.info/main.c:96
+#: ../raster/r.info/main.c:106 ../raster3d/r3.info/main.c:96
 msgid "Print raster history instead of info"
 msgstr "Imprimir histórico del ráster en vez de información"
 
-#: ../raster/r.info/main.c:118
-#, c-format
-msgid "Flags -%c and -%c/%c/%c are mutually exclusive"
-msgstr "Las baderas -%c y -%c/%c/%c son mutuamente excluyentes"
+#: ../raster/r.info/main.c:127
+msgid "The output format for flags -g, -r, -s, and -e currently defaults to 'shell', but this will change to 'plain' in a future release. To avoid unexpected behaviour, specify the format explicitly."
+msgstr ""
 
-#: ../raster/r.info/main.c:369 ../raster/r.info/main.c:869
+#: ../raster/r.info/main.c:403 ../raster/r.info/main.c:1021
 #: ../raster3d/r3.info/main.c:140 ../raster3d/r3.info/main.c:147
 #: ../raster3d/r3.info/main.c:152 ../raster3d/r3.info/main.c:157
 #: ../raster3d/r3.info/main.c:164 ../raster3d/r3.info/main.c:169
@@ -23415,31 +23453,16 @@ msgstr "Título de mapa ráster de salida"
 msgid "Apply filter only to null data values"
 msgstr "Aplicar filtro sólo a valores de datos nulos"
 
-#: ../raster/r.mfilter/main.c:125 ../raster/r.neighbors/main.c:303
-#: ../raster/r.resamp.filter/main.c:487 ../raster/r.resamp.interp/main.c:125
+#: ../raster/r.mfilter/main.c:127 ../raster/r.neighbors/main.c:304
+#: ../raster/r.patch/main.c:108 ../raster/r.resamp.filter/main.c:488
+#: ../raster/r.resamp.interp/main.c:126 ../raster/r.series/main.c:222
+#: ../raster/r.slope.aspect/main.c:303 ../raster/r.texture/main.c:318
+#: ../raster/r.univar/r.univar_main.c:196
 #, fuzzy, c-format
-msgid "<%d> is not valid number of threads."
+msgid "<%d> is not valid number of nprocs."
 msgstr "<%s=%s> número de puntos no válido"
 
-#: ../raster/r.mfilter/main.c:131 ../raster/r.neighbors/main.c:309
-#: ../raster/r.patch/main.c:112 ../raster/r.resamp.filter/main.c:493
-#: ../raster/r.resamp.interp/main.c:131 ../raster/r.series/main.c:228
-#: ../raster/r.slope.aspect/main.c:308 ../raster/r.univar/r.univar_main.c:203
-#, fuzzy
-msgid "GRASS is compiled without OpenMP support. Ignoring threads setting."
-msgstr "GRASS no está compilado con soporte OGR"
-
-#: ../raster/r.mfilter/main.c:136 ../raster/r.neighbors/main.c:314
-#: ../raster/r.patch/main.c:117 ../raster/r.resamp.filter/main.c:498
-#: ../raster/r.resamp.interp/main.c:136 ../raster/r.series/main.c:233
-#: ../raster/r.sim/r.sim.sediment/main.c:374
-#: ../raster/r.sim/r.sim.water/main.c:424 ../raster/r.slope.aspect/main.c:313
-#: ../raster/r.sun/main.c:594 ../raster/r.univar/r.univar_main.c:196
-#: ../vector/v.surf.rst/main.c:427
-msgid "Parallel processing disabled due to active mask."
-msgstr ""
-
-#: ../raster/r.mfilter/main.c:154
+#: ../raster/r.mfilter/main.c:144
 msgid "Raster map too small for the size of the filter"
 msgstr "El mapa ráster es demasiado pequeño para el tamaño del filtro"
 
@@ -23473,8 +23496,8 @@ msgstr "Mapa de salida"
 msgid "%s: Unable to read category labels"
 msgstr "%s: no se pueden leer las etiquetas de categoría"
 
-#: ../raster/r.mode/main.c:142 ../raster/r.resamp.filter/main.c:690
-#: ../raster/r.resamp.interp/main.c:475 ../raster/r.resamp.stats/main.c:401
+#: ../raster/r.mode/main.c:142 ../raster/r.resamp.filter/main.c:679
+#: ../raster/r.resamp.interp/main.c:464 ../raster/r.resamp.stats/main.c:401
 #: ../raster/r.tile/main.c:208
 #, c-format
 msgid "Unable to read color table for %s"
@@ -23543,31 +23566,31 @@ msgstr "El tamaño del vecindario debe ser positivo"
 msgid "Neighborhood size must be odd"
 msgstr "El tamaño del vecindario debe ser impar"
 
-#: ../raster/r.neighbors/main.c:323
+#: ../raster/r.neighbors/main.c:312
 msgid "File with weighting matrix is missing."
 msgstr ""
 
-#: ../raster/r.neighbors/main.c:329
+#: ../raster/r.neighbors/main.c:318
 #, c-format
 msgid "Weighting function '%s' requires a %s."
 msgstr ""
 
-#: ../raster/r.neighbors/main.c:360
+#: ../raster/r.neighbors/main.c:349
 #, c-format
 msgid "%s= and %s= must have the same number of values"
 msgstr "%s= y %s= deben tener el mismo número de valores"
 
-#: ../raster/r.neighbors/main.c:395
+#: ../raster/r.neighbors/main.c:384
 #, c-format
 msgid "Computing %s weights..."
 msgstr ""
 
-#: ../raster/r.neighbors/main.c:421
+#: ../raster/r.neighbors/main.c:410
 #, c-format
 msgid "Method %s not compatible with weighing window, using weight mask instead"
 msgstr "Método %s no compatible con ventana ponderada, usando en su lugar máscara de pesos"
 
-#: ../raster/r.neighbors/main.c:470
+#: ../raster/r.neighbors/main.c:459
 #, c-format
 msgid "Opening selection map <%s>"
 msgstr "Abriendo mapa de selección <%s>"
@@ -24403,7 +24426,7 @@ msgstr ""
 msgid "Converting <%s>..."
 msgstr "Convirtiendo <%s>..."
 
-#: ../raster/r.out.png/main.c:280 ../raster/r.univar/r.univar_main.c:277
+#: ../raster/r.out.png/main.c:280 ../raster/r.univar/r.univar_main.c:268
 #, c-format
 msgid "Raster <%s> type mismatch"
 msgstr "Tipo de raster <%s> que no encaja"
@@ -24766,24 +24789,18 @@ msgstr "Usar cero (0) para transparencia en vez de NULO"
 msgid "Do not create color and category files"
 msgstr "No crear archivos de color y categoría"
 
-#: ../raster/r.patch/main.c:107 ../raster/r.series/main.c:221
-#: ../raster/r.slope.aspect/main.c:302 ../raster/r.univar/r.univar_main.c:194
-#, fuzzy, c-format
-msgid "<%d> is not valid number of nprocs."
-msgstr "<%s=%s> número de puntos no válido"
-
-#: ../raster/r.patch/main.c:132
+#: ../raster/r.patch/main.c:121
 msgid "The minimum number of input raster maps is two"
 msgstr "El número mínimo de mapas ráster de entrada es dos"
 
-#: ../raster/r.patch/main.c:205 ../raster/r.relief/main.c:292
+#: ../raster/r.patch/main.c:194 ../raster/r.relief/main.c:292
 #: ../raster/r.series.accumulate/main.c:319
-#: ../raster/r.series.interp/main.c:377 ../raster/r.series/main.c:510
-#: ../raster/r.slope.aspect/main.c:570
+#: ../raster/r.series.interp/main.c:377 ../raster/r.series/main.c:501
+#: ../raster/r.slope.aspect/main.c:560
 msgid "Percent complete..."
 msgstr "Porcentaje completo..."
 
-#: ../raster/r.patch/main.c:293
+#: ../raster/r.patch/main.c:282
 #, c-format
 msgid "Creating support files for raster map <%s>..."
 msgstr "Creando archivos de soporte para mapa ráster <%s>..."
@@ -25103,11 +25120,6 @@ msgstr "Objetivo"
 #: ../raster/r.proj/main.c:200
 msgid "Resolution of output raster map"
 msgstr "Resolución de mapa ráster de salida"
-
-#: ../raster/r.proj/main.c:205 ../vector/v.category/main.c:166
-#: ../vector/v.info/parse.c:47
-msgid "plain;Human readable text output;shell;shell script style text output;json;JSON (JavaScript Object Notation);"
-msgstr ""
 
 #: ../raster/r.proj/main.c:215 ../vector/v.proj/main.c:121
 msgid "PROJ pipeline for coordinate transformation"
@@ -25817,7 +25829,7 @@ msgstr "No se puede leer f_range para el mapa %s"
 msgid "Data range of %s is %s to %s (entire map)"
 msgstr "El rango de datos de %s es de %s a %s (mapa completo)"
 
-#: ../raster/r.recode/read_rules.c:35 ../raster/r.stats/main.c:360
+#: ../raster/r.recode/read_rules.c:35 ../raster/r.stats/main.c:379
 #, c-format
 msgid "Unable to read range for map <%s>"
 msgstr "No se puede leer el intervalo para el mapa <%s>"
@@ -25984,7 +25996,7 @@ msgid "survey feet"
 msgstr ""
 
 #: ../raster/r.relief/main.c:180 ../raster/r.relief/main.c:186
-#: ../raster/r.slope.aspect/main.c:369
+#: ../raster/r.slope.aspect/main.c:359
 #, c-format
 msgid "%s=%s - must be a non-negative number"
 msgstr "%s = %s -- debe ser mayor que no sea negativoo"
@@ -25994,7 +26006,7 @@ msgstr "%s = %s -- debe ser mayor que no sea negativoo"
 msgid "%s=%s - must not be zero"
 msgstr "%s=%s - no debe ser cero"
 
-#: ../raster/r.relief/main.c:199 ../raster/r.slope.aspect/main.c:363
+#: ../raster/r.relief/main.c:199 ../raster/r.slope.aspect/main.c:353
 #, c-format
 msgid "%s=%s - must be a positive number"
 msgstr "%s = %s -- de ser un número posiivollll"
@@ -26012,7 +26024,7 @@ msgstr "El tamaño de página es demasiado pequeño"
 msgid "Reports statistics for raster maps."
 msgstr "Reporta estadísticas para mapas ráster."
 
-#: ../raster/r.report/parse.c:37 ../raster/r.stats/main.c:110
+#: ../raster/r.report/parse.c:37 ../raster/r.stats/main.c:116
 msgid "Name of raster map(s) to report on"
 msgstr "Nombre de mapa(s) ráster sobre el cual reportar"
 
@@ -26048,8 +26060,8 @@ msgstr "cantidad de celdas"
 msgid "percent cover"
 msgstr "porcentaje de cobertura"
 
-#: ../raster/r.report/parse.c:56 ../raster/r.stats/main.c:153
-#: ../raster/r.stats/main.c:158 ../raster/r.stats/main.c:164
+#: ../raster/r.report/parse.c:56 ../raster/r.stats/main.c:162
+#: ../raster/r.stats/main.c:167 ../raster/r.stats/main.c:173
 #: ../vector/v.vect.stats/main.c:202 ../vector/v.vect.stats/main.c:209
 #: ../vector/v.vect.stats/main.c:218 ../vector/v.vect.stats/main.c:226
 msgid "Statistics"
@@ -26071,30 +26083,30 @@ msgstr "Longitud de página"
 msgid "Page width"
 msgstr "Anchura de página"
 
-#: ../raster/r.report/parse.c:91 ../raster/r.stats/main.c:132
+#: ../raster/r.report/parse.c:91 ../raster/r.stats/main.c:138
 msgid "Number of floating-point subranges to collect stats from"
 msgstr "Número de rangos de punto flotante de los cuales colectar estadísticas"
 
 #: ../raster/r.report/parse.c:92 ../raster/r.report/parse.c:139
-#: ../raster/r.report/parse.c:145 ../raster/r.stats/main.c:133
-#: ../raster/r.stats/main.c:190 ../raster/r.stats/main.c:196
-#: ../raster/r.stats/main.c:212 ../raster/r.stats/main.c:218
+#: ../raster/r.report/parse.c:145 ../raster/r.stats/main.c:139
+#: ../raster/r.stats/main.c:199 ../raster/r.stats/main.c:205
+#: ../raster/r.stats/main.c:221 ../raster/r.stats/main.c:227
 msgid "Floating point"
 msgstr "Punto flotante"
 
-#: ../raster/r.report/parse.c:99 ../raster/r.stats/main.c:140
+#: ../raster/r.report/parse.c:99 ../raster/r.stats/main.c:146
 msgid "Sort output statistics by cell counts"
 msgstr "Ordenar estadísticas por cantidad de celdas"
 
-#: ../raster/r.report/parse.c:100 ../raster/r.stats/main.c:141
+#: ../raster/r.report/parse.c:100 ../raster/r.stats/main.c:147
 msgid "Default: sorted by categories or intervals"
 msgstr "Predeterminado: ordener por categorías o intervalos"
 
-#: ../raster/r.report/parse.c:103 ../raster/r.stats/main.c:144
+#: ../raster/r.report/parse.c:103 ../raster/r.stats/main.c:150
 msgid "Sort by cell counts in ascending order"
 msgstr "Ordenar por conteo de celdas en orden ascendente"
 
-#: ../raster/r.report/parse.c:104 ../raster/r.stats/main.c:145
+#: ../raster/r.report/parse.c:104 ../raster/r.stats/main.c:151
 msgid "Sort by cell counts in descending order"
 msgstr "Ordenar por conteo de celdas en orden descendente"
 
@@ -26110,24 +26122,24 @@ msgstr ""
 msgid "Scientific format"
 msgstr "Formato científico"
 
-#: ../raster/r.report/parse.c:127 ../raster/r.stats/main.c:200
+#: ../raster/r.report/parse.c:127 ../raster/r.stats/main.c:209
 msgid "Do not report no data value"
 msgstr "No reportar valor sin datos"
 
 #: ../raster/r.report/parse.c:128 ../raster/r.report/parse.c:133
-#: ../raster/r.stats/main.c:201 ../raster/r.stats/main.c:206
+#: ../raster/r.stats/main.c:210 ../raster/r.stats/main.c:215
 msgid "No data"
 msgstr "No hay datos"
 
-#: ../raster/r.report/parse.c:132 ../raster/r.stats/main.c:205
+#: ../raster/r.report/parse.c:132 ../raster/r.stats/main.c:214
 msgid "Do not report cells where all maps have no data"
 msgstr "No reportar celdas en las que todos los mapas carecen de datos"
 
-#: ../raster/r.report/parse.c:138 ../raster/r.stats/main.c:211
+#: ../raster/r.report/parse.c:138 ../raster/r.stats/main.c:220
 msgid "Report for cats floating-point ranges (floating-point maps only)"
 msgstr "Reportar cats para rangos de punto flotante (solamente mapas de punto flotante)"
 
-#: ../raster/r.report/parse.c:144 ../raster/r.stats/main.c:217
+#: ../raster/r.report/parse.c:144 ../raster/r.stats/main.c:226
 msgid "Read floating-point map as integer (use map's quant rules)"
 msgstr "Leer mapa de punto flotante como mapa de enteros (usar reglas quant del mapa)"
 
@@ -26439,31 +26451,31 @@ msgstr "Radio de filtro (horizontal)"
 msgid "Filter radius (vertical)"
 msgstr "Radio de filtro (vertical)"
 
-#: ../raster/r.resamp.filter/main.c:503 ../vector/v.external.out/args.c:96
+#: ../raster/r.resamp.filter/main.c:492 ../vector/v.external.out/args.c:96
 #, c-format
 msgid "%s= and %s=/%s= are mutually exclusive"
 msgstr "%s= y %s=/%s= son mutuamente excluyentes"
 
-#: ../raster/r.resamp.filter/main.c:509
+#: ../raster/r.resamp.filter/main.c:498
 #, c-format
 msgid "Either %s= or %s=/%s= required"
 msgstr "Se requiere ya sea %s= o %s=/%s"
 
-#: ../raster/r.resamp.filter/main.c:512
+#: ../raster/r.resamp.filter/main.c:501
 #, c-format
 msgid "Both %s= and %s= required"
 msgstr "Se necesitan ambas opciones %s= y %s="
 
-#: ../raster/r.resamp.filter/main.c:536
+#: ../raster/r.resamp.filter/main.c:525
 msgid "Differing number of values for filter= and [xy_]radius="
 msgstr "Número diferente de valores para filter= y [xy_]radius="
 
-#: ../raster/r.resamp.filter/main.c:539
+#: ../raster/r.resamp.filter/main.c:528
 #, c-format
 msgid "Too many filters (max: %d)"
 msgstr "Demasiados filtros (máx: %d)"
 
-#: ../raster/r.resamp.filter/main.c:558
+#: ../raster/r.resamp.filter/main.c:547
 msgid "At least one filter must be finite"
 msgstr "Al menos un filtro debe ser finito"
 
@@ -27075,29 +27087,29 @@ msgstr "Agregar operación"
 msgid "Weighting factor for each input map, default value is 1.0 for each input map"
 msgstr "Factor de ponderación para cada mapa de entrada, el valor predeterminado es 1.0 para cada mapa de entrada"
 
-#: ../raster/r.series/main.c:294 ../raster/r.series/main.c:378
+#: ../raster/r.series/main.c:285 ../raster/r.series/main.c:369
 msgid "Weights must be positive"
 msgstr "Los pesos deben ser positivos"
 
-#: ../raster/r.series/main.c:317 ../raster/r.series/main.c:385
+#: ../raster/r.series/main.c:308 ../raster/r.series/main.c:376
 #, c-format
 msgid "Reading raster map <%s> using weight %f..."
 msgstr "Leyendo mapa ráster <%s> usando peso %f..."
 
-#: ../raster/r.series/main.c:321 ../raster/r.series/main.c:389
+#: ../raster/r.series/main.c:312 ../raster/r.series/main.c:380
 #, c-format
 msgid "Unable to open input raster <%s>"
 msgstr ""
 
-#: ../raster/r.series/main.c:363
+#: ../raster/r.series/main.c:354
 msgid "input= and weights= must have the same number of values"
 msgstr "input= y weights= deben tener el mismo número de valores"
 
-#: ../raster/r.series/main.c:424
+#: ../raster/r.series/main.c:415
 msgid "output= and method= must have the same number of values"
 msgstr "salida= y método= tienen que tener el mismo número de valores"
 
-#: ../raster/r.series/main.c:467
+#: ../raster/r.series/main.c:458
 #, c-format
 msgid "Method %s not compatible with weights, using unweighed version instead"
 msgstr "Método %s no compatible con pesos, usando en su lugar versión sin pesos"
@@ -27269,6 +27281,12 @@ msgstr ""
 msgid "<%d> is not valid number of threads. Number of threads will be set on <%d>"
 msgstr ""
 
+#: ../raster/r.sim/r.sim.sediment/main.c:374
+#: ../raster/r.sim/r.sim.water/main.c:424 ../raster/r.sun/main.c:594
+#: ../vector/v.surf.rst/main.c:427
+msgid "Parallel processing disabled due to active mask."
+msgstr ""
+
 #: ../raster/r.sim/r.sim.sediment/main.c:382
 #: ../raster/r.sim/r.sim.water/main.c:432
 #, c-format
@@ -27433,24 +27451,28 @@ msgstr "Tasa media de entrada (exceso de precipitación o sedimentación)\t= %f 
 msgid "Mean flow velocity \t= %f m/s\n"
 msgstr "Media de la velocidad de flujo \t= %f m/s\n"
 
-#: ../raster/r.sim/simlib/input.c:339
+#: ../raster/r.sim/simlib/input.c:342
 #, c-format
 msgid "Mean Mannings \t= %f\n"
 msgstr "Manning promedio \t= %f\n"
 
-#: ../raster/r.sim/simlib/input.c:343
+#: ../raster/r.sim/simlib/input.c:344
+msgid "Mean Mannings \t= undefined (chmean is zero)\n"
+msgstr ""
+
+#: ../raster/r.sim/simlib/input.c:348
 #, c-format
 msgid "Number of iterations \t= %d cell\n"
 msgid_plural "Number of iterations \t= %d cells\n"
 msgstr[0] "Número de iteraciones \t= %d celda\n"
 msgstr[1] "Número de iteraciones \t= %d celdas\n"
 
-#: ../raster/r.sim/simlib/input.c:346
+#: ../raster/r.sim/simlib/input.c:351
 #, c-format
 msgid "Time step \t= %.2f s\n"
 msgstr "Tiempo \t= %.2f s\n"
 
-#: ../raster/r.sim/simlib/input.c:348
+#: ../raster/r.sim/simlib/input.c:353
 #, c-format
 msgid ""
 "Sigmax \t= %f\n"
@@ -27459,12 +27481,12 @@ msgstr ""
 "Sigmax \t= %f\n"
 "Max velocidad \t= %f m/s\n"
 
-#: ../raster/r.sim/simlib/input.c:349
+#: ../raster/r.sim/simlib/input.c:354
 #, c-format
 msgid "Time step used \t= %.2f s\n"
 msgstr "Tiempo utilizado \t= %.2f s\n"
 
-#: ../raster/r.sim/simlib/input.c:402
+#: ../raster/r.sim/simlib/input.c:407
 msgid "Unable to write et file"
 msgstr "No se puede escribir ni archivar"
 
@@ -27601,71 +27623,71 @@ msgstr ""
 msgid "Default: degrees counter-clockwise from East, with flat = 0"
 msgstr ""
 
-#: ../raster/r.slope.aspect/main.c:399
+#: ../raster/r.slope.aspect/main.c:389
 #, c-format
 msgid "Wrong raster type: %s"
 msgstr "Tipo de raster incorrecto: %s"
 
-#: ../raster/r.slope.aspect/main.c:437
+#: ../raster/r.slope.aspect/main.c:427
 msgid "r.slope.aspect does not convert horizontal units to meters in this version, see manual page."
 msgstr "r.slope.aspect no convierte unidades horizontales a metros en esta versión, ver página del manual."
 
-#: ../raster/r.slope.aspect/main.c:1099
+#: ../raster/r.slope.aspect/main.c:1089
 #, c-format
 msgid "Elevation products for mapset <%s> in <%s>"
 msgstr "Productos de elevación para el directorio de mapas <%s> en <%s>"
 
-#: ../raster/r.slope.aspect/main.c:1120
+#: ../raster/r.slope.aspect/main.c:1110
 #, c-format
 msgid "Min computed aspect %.4f, max computed aspect %.4f"
 msgstr "Orientación mínima procesada %.4f  orientación máxima procesada %.4f"
 
-#: ../raster/r.slope.aspect/main.c:1225
+#: ../raster/r.slope.aspect/main.c:1215
 #, c-format
 msgid "Aspect raster map <%s> complete"
 msgstr "Orientación del mapa raster <%s> terminada"
 
-#: ../raster/r.slope.aspect/main.c:1281
+#: ../raster/r.slope.aspect/main.c:1271
 #, c-format
 msgid "Min computed slope %.4f, max computed slope %.4f"
 msgstr "Pendiente mínima procesada %.4f  pendiente máxima procesada %.4f"
 
-#: ../raster/r.slope.aspect/main.c:1335
+#: ../raster/r.slope.aspect/main.c:1325
 #, c-format
 msgid "Slope raster map <%s> complete"
 msgstr "Mapa raster de pendientes <%s> terminado"
 
-#: ../raster/r.slope.aspect/main.c:1401
+#: ../raster/r.slope.aspect/main.c:1391
 #, c-format
 msgid "Profile curve raster map <%s> complete"
 msgstr "Perfil del mapa raster de curvas <%s> terminado"
 
-#: ../raster/r.slope.aspect/main.c:1428
+#: ../raster/r.slope.aspect/main.c:1418
 #, c-format
 msgid "Tangential curve raster map <%s> complete"
 msgstr "Curva tangencial del mapa raster <%s> terminada"
 
-#: ../raster/r.slope.aspect/main.c:1452
+#: ../raster/r.slope.aspect/main.c:1442
 #, c-format
 msgid "E-W slope raster map <%s> complete"
 msgstr "Pendiente este-oeste (E-W) del mapa ráster <%s> terminada"
 
-#: ../raster/r.slope.aspect/main.c:1476
+#: ../raster/r.slope.aspect/main.c:1466
 #, c-format
 msgid "N-S slope raster map <%s> complete"
 msgstr "Pendiente N-S del mapa raster <%s> terminada"
 
-#: ../raster/r.slope.aspect/main.c:1500
+#: ../raster/r.slope.aspect/main.c:1490
 #, c-format
 msgid "Dxx raster map <%s> complete"
 msgstr "Mapa ráster Dxx <%s> terminado"
 
-#: ../raster/r.slope.aspect/main.c:1524
+#: ../raster/r.slope.aspect/main.c:1514
 #, c-format
 msgid "Dyy raster map <%s> complete"
 msgstr "Mapa ráster Dyy  <%s> terminado"
 
-#: ../raster/r.slope.aspect/main.c:1548
+#: ../raster/r.slope.aspect/main.c:1538
 #, c-format
 msgid "Dxy raster map <%s> complete"
 msgstr "Mapa ráster Dxy <%s>terminado"
@@ -28260,75 +28282,75 @@ msgstr "Generando mapa reclasificado"
 msgid "Writing output map"
 msgstr "Escribiendo mapa de salida..."
 
-#: ../raster/r.stats/main.c:105
+#: ../raster/r.stats/main.c:111
 msgid "Generates area statistics for raster map."
 msgstr "Genera estadísticas de mapa ráster"
 
-#: ../raster/r.stats/main.c:152
+#: ../raster/r.stats/main.c:161
 msgid "Print area totals in square meters"
 msgstr "Mostrar total de área en metros cuadrados"
 
-#: ../raster/r.stats/main.c:157
+#: ../raster/r.stats/main.c:166
 msgid "Print cell counts (sortable)"
 msgstr "Mostrar conteo de celdas (es ordenable)"
 
-#: ../raster/r.stats/main.c:163
+#: ../raster/r.stats/main.c:172
 msgid "Print approximate (total percent may not be 100%) percents"
 msgstr "Mostrar porcentajes aproximados (porcentaje total no puede mayor que 100%)"
 
-#: ../raster/r.stats/main.c:168
+#: ../raster/r.stats/main.c:177
 msgid "Print category labels"
 msgstr "Imprimir etiquetas de categorías"
 
-#: ../raster/r.stats/main.c:172
+#: ../raster/r.stats/main.c:181
 msgid "One cell (range) per line"
 msgstr "Una celda (rango) por línea"
 
-#: ../raster/r.stats/main.c:176
+#: ../raster/r.stats/main.c:185
 msgid "Print grid coordinates (east and north)"
 msgstr "Imprimir coordenadas de cuadrícula (Este y Norte)"
 
-#: ../raster/r.stats/main.c:177 ../raster/r.stats/main.c:184
+#: ../raster/r.stats/main.c:186 ../raster/r.stats/main.c:193
 msgid "Coordinates"
 msgstr "Coordenadas"
 
-#: ../raster/r.stats/main.c:181
+#: ../raster/r.stats/main.c:190
 msgid "Print x and y (column and row)"
 msgstr "Imprimir X e Y (columna y fila)"
 
-#: ../raster/r.stats/main.c:183
+#: ../raster/r.stats/main.c:192
 msgid "Indexing starts with 1: first column and row are 1"
 msgstr ""
 
-#: ../raster/r.stats/main.c:188
+#: ../raster/r.stats/main.c:197
 msgid "Print averaged values instead of intervals (floating-point maps only)"
 msgstr ""
 
-#: ../raster/r.stats/main.c:194
+#: ../raster/r.stats/main.c:203
 msgid "Print raw indexes of floating-point ranges (floating-point maps only)"
 msgstr ""
 
-#: ../raster/r.stats/main.c:232
+#: ../raster/r.stats/main.c:241
 #, c-format
 msgid "'%s' must be greater than zero; using %s=255"
 msgstr "'%s' tiene que ser más grande que cero; utilizando %s=255"
 
-#: ../raster/r.stats/main.c:302
+#: ../raster/r.stats/main.c:321
 #, c-format
 msgid "Raster map <%s> is reading as integer map! Flag '-%c' and/or '%s' option will be ignored."
 msgstr "El mapa raster <%s> está leyendo como un mapa integer! Flag '-%c' y/o '%s' la opción será ignorada."
 
-#: ../raster/r.stats/main.c:318
+#: ../raster/r.stats/main.c:337
 #, c-format
 msgid "Cats for raster map <%s> are either missing or have no explicit labels. Using %s=%d."
 msgstr "Las Cats para el mapa raster <%s> o faltan o no tienen etiquetas explícitas. Utilizando %s=%d. "
 
-#: ../raster/r.stats/main.c:325
+#: ../raster/r.stats/main.c:344
 #, c-format
 msgid "Flag '-%c' was given, using cats fp ranges of raster map <%s>, ignoring '%s' option"
 msgstr "Se dio Flag '-%c' , utilizando rangos fp de categorías mapa raster <%s>, ignorando '%s' opción "
 
-#: ../raster/r.stats/raw_stats.c:114
+#: ../raster/r.stats/raw_stats.c:202
 msgid "Invalid map type"
 msgstr "Tipo de mapa no válido"
 
@@ -30417,18 +30439,25 @@ msgstr "Formato de salida de tabla en lugar de formato estándar de salida"
 msgid "Use the native resolution and extent of the raster map, instead of the current region"
 msgstr "Usar la resolución y extensión original del mapa ráster de entrada, independientemente de la configuración de la región actual"
 
-#: ../raster/r.univar/r.univar_main.c:157
+#: ../raster/r.univar/r.univar_main.c:158
 msgid "Calculates univariate statistics from the non-null cells of a raster map."
 msgstr "Calcula estadísticas univariantes a partir de celdas no nulas de un mapa ráster."
 
-#: ../raster/r.univar/r.univar_main.c:160
+#: ../raster/r.univar/r.univar_main.c:161
 #: ../raster/r.univar/r3.univar_main.c:109
 msgid "Statistics include number of cells counted, minimum and maximum cell values, range, arithmetic mean, population variance, standard deviation, coefficient of variation, and sum."
 msgstr "Las estadísticas incluyen el número de celdas contadas, valores de las celdas mínimo y máximo, rango, media aritmética, varianza poblacional, desviación estandar, coeficiente de variación, y suma."
 
-#: ../raster/r.univar/r.univar_main.c:173
+#: ../raster/r.univar/r.univar_main.c:174
 msgid "zones option and region flag -r are mutually exclusive"
 msgstr "la opción zonas y la bandera región -r son mutuamente excluyentes"
+
+#: ../raster/r.univar/r.univar_main.c:496
+#: ../raster/r.univar/r.univar_main.c:605
+#, fuzzy
+#| msgid "Unknown type"
+msgid "Unknown map type"
+msgstr "Tipo desconocido"
 
 #: ../raster/r.univar/r3.univar_main.c:37
 msgid "3D Raster map used for zoning, must be of type CELL"
@@ -31910,25 +31939,41 @@ msgstr "no se puede abrir mapa de cuenca/semicuenca"
 msgid "accum file missing in valid_basins()"
 msgstr "falta el archivo de acumulación en valid_basins()"
 
-#: ../raster/r.what.color/main.c:91
+#: ../raster/r.what.color/main.c:193
 msgid "Queries colors for a raster map layer."
 msgstr "Consulta colores de una capa da mapa ráster."
 
-#: ../raster/r.what.color/main.c:100
+#: ../raster/r.what.color/main.c:202
 msgid "Values to query colors for"
 msgstr "Valores para los que consultar colores"
 
-#: ../raster/r.what.color/main.c:107
-msgid "Output format (printf-style)"
+#: ../raster/r.what.color/main.c:210
+#, fuzzy
+#| msgid "Output format (printf-style)"
+msgid "Output format ('plain', 'json', or printf-style string)"
 msgstr "Formato de salida (printf -style)"
 
-#: ../raster/r.what.color/main.c:111
+#: ../raster/r.what.color/main.c:211
+msgid "Output format printf-style is deprecated, use 'color_format' option instead."
+msgstr ""
+
+#: ../raster/r.what.color/main.c:216
+#, fuzzy
+#| msgid "Format for output vector data"
+msgid "Color format for output values. Applies only when format is set to 'plain' or 'json'."
+msgstr "Formato de salida para datos vectoriales"
+
+#: ../raster/r.what.color/main.c:222
 msgid "Read values from stdin"
 msgstr "Leer valores de stdin"
 
-#: ../raster/r.what.color/main.c:117
+#: ../raster/r.what.color/main.c:228
 msgid "Either \"-i\" or \"value=\" must be given"
 msgstr "Se debe dar \"-i\" o \"valor=\""
+
+#: ../raster/r.what.color/main.c:255
+msgid "The printf-style output format is deprecated and will be removed in a future release. Please use the 'color_format' option instead, along with 'format=plain'."
+msgstr ""
 
 #: ../raster/r.what/main.c:115
 msgid "Queries raster maps on their category values and category labels."
@@ -36656,85 +36701,85 @@ msgstr "Limpiado topología funciona mejor con formato vectorial GRASS nativo"
 msgid "Failed to copy attribute table to output vector map"
 msgstr "Ha ocurrido un fallo al copia tabla de atributos al mapa vectorial de salida"
 
-#: ../vector/v.clean/main.c:351 ../vector/v.clean/main.c:362
+#: ../vector/v.clean/main.c:344
 msgid "Rebuilding parts of topology..."
 msgstr "Reconstruyendo partes de la topología..."
 
-#: ../vector/v.clean/main.c:371 ../vector/v.clean/main.c:416
-#: ../vector/v.clean/main.c:464
+#: ../vector/v.clean/main.c:357 ../vector/v.clean/main.c:402
+#: ../vector/v.clean/main.c:450
 msgid "Tool: Split lines"
 msgstr "Herramienta: dividir líneas"
 
-#: ../vector/v.clean/main.c:374 ../vector/v.clean/main.c:420
-#: ../vector/v.clean/main.c:470
+#: ../vector/v.clean/main.c:360 ../vector/v.clean/main.c:406
+#: ../vector/v.clean/main.c:456
 msgid "Tool: Break lines at intersections"
 msgstr "Herramienta: romper líneas en las intersecciones"
 
-#: ../vector/v.clean/main.c:377 ../vector/v.clean/main.c:386
-#: ../vector/v.clean/main.c:422 ../vector/v.clean/main.c:437
-#: ../vector/v.clean/main.c:472
+#: ../vector/v.clean/main.c:363 ../vector/v.clean/main.c:372
+#: ../vector/v.clean/main.c:408 ../vector/v.clean/main.c:423
+#: ../vector/v.clean/main.c:458
 msgid "Tool: Remove duplicates"
 msgstr "Herramienta: eliminar duplicados"
 
-#: ../vector/v.clean/main.c:380 ../vector/v.clean/main.c:428
-#: ../vector/v.clean/main.c:477
+#: ../vector/v.clean/main.c:366 ../vector/v.clean/main.c:414
+#: ../vector/v.clean/main.c:463
 msgid "Tool: Merge lines"
 msgstr "Herramienta: unir líneas"
 
-#: ../vector/v.clean/main.c:390
+#: ../vector/v.clean/main.c:376
 msgid "Tool: Remove dangles"
 msgstr "Herramienta: eliminar balanceos"
 
-#: ../vector/v.clean/main.c:394
+#: ../vector/v.clean/main.c:380
 msgid "Tool: Change type of boundary dangles"
 msgstr "Herramienta: Cambiar tipo de nodos colgados de controno"
 
-#: ../vector/v.clean/main.c:398
+#: ../vector/v.clean/main.c:384
 msgid "Tool: Remove bridges"
 msgstr "Herramienta: eliminar puentes"
 
-#: ../vector/v.clean/main.c:402
+#: ../vector/v.clean/main.c:388
 msgid "Tool: Change type of boundary bridges"
 msgstr "Herramienta: cambiar tipo de puentes de los límites"
 
-#: ../vector/v.clean/main.c:406
+#: ../vector/v.clean/main.c:392
 msgid "Tool: Remove duplicate area centroids"
 msgstr "Herramienta: eliminar centroides de área duplicados"
 
-#: ../vector/v.clean/main.c:410
+#: ../vector/v.clean/main.c:396
 msgid "Tool: Snap line to vertex in threshold"
 msgstr "Herramienta: ensamblar línea a vértice en umbral"
 
-#: ../vector/v.clean/main.c:424 ../vector/v.clean/main.c:456
-#: ../vector/v.clean/main.c:474
+#: ../vector/v.clean/main.c:410 ../vector/v.clean/main.c:442
+#: ../vector/v.clean/main.c:460
 msgid "Tool: Remove small angles at nodes"
 msgstr "Herramienta: eliminar ángulos y nodos pequeños"
 
-#: ../vector/v.clean/main.c:434
+#: ../vector/v.clean/main.c:420
 msgid "Tool: Break polygons"
 msgstr "Herramienta: romper polígonos"
 
-#: ../vector/v.clean/main.c:442
+#: ../vector/v.clean/main.c:428
 msgid "Tool: Prune lines/boundaries"
 msgstr "Herramienta: recortar líneas/límites"
 
-#: ../vector/v.clean/main.c:446
+#: ../vector/v.clean/main.c:432
 msgid "Tool: Remove small areas"
 msgstr "Herramienta: eliminar áreas pequeñas"
 
-#: ../vector/v.clean/main.c:451
+#: ../vector/v.clean/main.c:437
 msgid "Tool: Merge boundaries"
 msgstr "Herramienta: unir contornos"
 
-#: ../vector/v.clean/main.c:484
+#: ../vector/v.clean/main.c:470
 msgid "Tool: Remove all lines and boundaries of zero length"
 msgstr "Herramienta: eliminar todas las líneas y contornos de longitud cero"
 
-#: ../vector/v.clean/main.c:493
+#: ../vector/v.clean/main.c:479
 msgid "Rebuilding topology for output vector map..."
 msgstr "Reconstruyendo topología para el vectorial de salida..."
 
-#: ../vector/v.clean/main.c:504
+#: ../vector/v.clean/main.c:490
 msgid "Building topology for error vector map..."
 msgstr "Construyendo topología para el mapa vectorial de errores..."
 
@@ -47949,6 +47994,10 @@ msgstr "Archivo de imagen"
 #~ msgid "6S Parameters"
 #~ msgstr "Parámetros"
 
+#, fuzzy, c-format
+#~ msgid "<%d> is not valid number of threads."
+#~ msgstr "<%s=%s> número de puntos no válido"
+
 #~ msgid "<%s> already exists. File not copied."
 #~ msgstr "<%s> ya existe. Archivo no copiado."
 
@@ -49743,6 +49792,10 @@ msgstr "Archivo de imagen"
 #~ msgid "First date to download"
 #~ msgstr "Número máximo de elementos a descargar"
 
+#, c-format
+#~ msgid "Flags -%c and -%c/%c/%c are mutually exclusive"
+#~ msgstr "Las baderas -%c y -%c/%c/%c son mutuamente excluyentes"
+
 #, fuzzy
 #~ msgid "Flier color"
 #~ msgstr "Color de la franja"
@@ -49865,6 +49918,10 @@ msgstr "Archivo de imagen"
 #, fuzzy
 #~ msgid "GPSBabel supported output format"
 #~ msgstr "Formato de salida soportado por GpsBabel"
+
+#, fuzzy
+#~ msgid "GRASS is compiled without OpenMP support. Ignoring threads setting."
+#~ msgstr "GRASS no está compilado con soporte OGR"
 
 #~ msgid "GRASS named color or R:G:B triplet. Set color scheme to single color"
 #~ msgstr "Nombre de color de GRASS o triplete R:G:B. Establecer esquema de color a un color."
@@ -53843,9 +53900,8 @@ msgstr "Archivo de imagen"
 #~ msgid "Print available layer"
 #~ msgstr "Listar las capas disponibles y salir"
 
-#, fuzzy
-#~ msgid "Print in shell script style (currently only NDI via -e)"
-#~ msgstr "Estilo de script de consola, actualmente sólo para informes"
+#~ msgid "Print extended metadata information in shell script style"
+#~ msgstr "Mostrar iformación extendida de metadatos en estilo de script de consola de comandos"
 
 #~ msgid "Print input map's bounds in the current projection and exit (shell style)"
 #~ msgstr "Imprimir los límites del mapa de entrada en la proyección actual y salir (en el estilo de la consola de comandos UNIX)"
@@ -53906,6 +53962,12 @@ msgstr "Archivo de imagen"
 
 #~ msgid "Print projection information in shell script style"
 #~ msgstr "Muestra información de proyección en formato de script de la consola"
+
+#~ msgid "Print range in shell script style"
+#~ msgstr "Mostrar rango en estilo de script de consola de comandos"
+
+#~ msgid "Print raster array information in shell script style"
+#~ msgstr "Mostrar información de matriz ráster en estilo de script de consola de comandos"
 
 #, fuzzy
 #~ msgid "Print raster data to be imported and exit"
