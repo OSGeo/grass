@@ -46,7 +46,6 @@ def test_reading_respects_change_of_session(tmp_path):
 
         names = []
         for project_name in ["test1", "test2", "abc"]:
-            # pylint: disable=protected-access
             gs.create_project(tmp_path / project_name)
             with gs.setup.init(tmp_path / project_name):
                 libgis.G__read_gisrc_path()

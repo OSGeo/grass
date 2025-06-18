@@ -35,7 +35,7 @@ def create_and_get_srid(tmp_path):
     """Create location on the same path as the current one"""
     bootstrap = "bootstrap"
     desired = "desired"
-    gs.create_project(tmp_path / bootstrap)  # pylint: disable=protected-access
+    gs.create_project(tmp_path / bootstrap)
     with gs.setup.init(tmp_path / bootstrap, env=os.environ.copy()) as session:
         gs.create_location(tmp_path / desired, epsg="3358")
         assert (tmp_path / desired).exists()

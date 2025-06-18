@@ -22,7 +22,7 @@ def simple_dataset(tmp_path_factory):
     tmp_path = tmp_path_factory.mktemp("simple_dataset")
     project_name = "test"
     project = tmp_path / project_name
-    gs.create_project(project)  # pylint: disable=protected-access
+    gs.create_project(project)
     with gs.setup.init(project):
         gs.run_command("g.proj", flags="c", epsg=26917)
         gs.run_command("g.region", s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10)
