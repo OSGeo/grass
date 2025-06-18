@@ -237,7 +237,10 @@ def main():
     tgtloc = grassenv["LOCATION_NAME"]
 
     # make sure target is not xy
-    if gs.parse_command("g.proj", flags="g")["name"] == "xy_location_unprojected":
+    if (
+        gs.parse_command("g.proj", flags="p", format="shell")["name"]
+        == "xy_location_unprojected"
+    ):
         gs.fatal(
             _("Coordinate reference system not available for current project <%s>")
             % tgtloc
@@ -297,7 +300,10 @@ def main():
     gs.verbose(gs.read_command("g.proj", flags="p").rstrip(os.linesep))
 
     # make sure input is not xy
-    if gs.parse_command("g.proj", flags="g")["name"] == "xy_location_unprojected":
+    if (
+        gs.parse_command("g.proj", flags="p", format="shell")["name"]
+        == "xy_location_unprojected"
+    ):
         gs.fatal(
             _("Coordinate reference system not available for input <%s>")
             % OGRdatasource

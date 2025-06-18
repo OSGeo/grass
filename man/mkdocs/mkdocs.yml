@@ -1,6 +1,6 @@
 ---
 # Project information
-site_author: The GRASS Development Team  # Default author to all pages
+site_author: The GRASS Development Team # Default author to all pages
 site_name: !ENV SITE_NAME
 site_url: https://grass.osgeo.org/grass-stable/manuals/
 
@@ -32,7 +32,6 @@ theme:
     - search.suggest
     - search.highlight
     - navigation.footer
-    - navigation.indexes
     - navigation.instant
     - navigation.instant.progress
     - navigation.tabs

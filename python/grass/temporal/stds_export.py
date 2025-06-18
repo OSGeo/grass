@@ -7,13 +7,13 @@ Usage:
 
     import grass.temporal as tgis
 
-    input="temp_1950_2012@PERMANENT"
-    output="/tmp/temp_1950_2012.tar.gz"
-    compression="gzip"
-    directory="/tmp"
-    where=None
-    format_="GTiff"
-    type_="strds"
+    input = "temp_1950_2012@PERMANENT"
+    output = "/tmp/temp_1950_2012.tar.gz"
+    compression = "gzip"
+    directory = "/tmp"
+    where = None
+    format_ = "GTiff"
+    type_ = "strds"
     tgis.export_stds(input, output, compression, directory, where, format_, type_)
 
 
@@ -328,7 +328,7 @@ def export_stds(
     :param directory: The working directory used for extraction and packing
     :param where: The temporal WHERE SQL statement to select a subset
                   of maps from the space time dataset
-    :param format_: The export format:
+    :param format\\_: The export format:
 
           - "GTiff" Geotiff format, only for raster maps
           - "AAIGrid" Arc/Info ASCII Grid format, only for raster maps
@@ -339,7 +339,7 @@ def export_stds(
           - "GPKG" GPKG file export format, only for vector maps,
                   v.out.ogr export option
 
-    :param type_: The space time dataset type
+    :param type\\_: The space time dataset type
 
           - "strds" Space time raster dataset
           - "str3ds" Space time 3D raster dataset
@@ -394,7 +394,7 @@ def export_stds(
                 _export_raster3d_maps(rows, tar, list_file, new_cwd, fs)
 
     # Write projection and metadata
-    proj = gs.read_command("g.proj", flags="j")
+    proj = gs.read_command("g.proj", flags="p", format="proj4")
 
     Path(proj_file_name).write_text(proj)
 

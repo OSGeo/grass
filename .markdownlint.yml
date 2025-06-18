@@ -1,5 +1,4 @@
 ---
-
 default: true
 
 # Fix any fixable errors (depending on the markdownlint wrapper tool used)

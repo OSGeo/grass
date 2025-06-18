@@ -23,8 +23,7 @@ The OGR library supports many various formats including:
 
 The list of supported formats is printed with the *-l* flag.
 
-For further available other supported formats go
-[here](https://gdal.org/en/stable/drivers/vector/).
+For further available formats view the [GDAL vector drivers documentation](https://gdal.org/en/stable/drivers/vector/).
 
 ## NOTES
 

@@ -128,7 +128,7 @@ int Vect_save_fidx(struct Map_info *Map, struct Format_info_offset *offset)
 
     length = 9;
 
-    sprintf(elem, "%s/%s", GV_DIRECTORY, Map->name);
+    snprintf(elem, sizeof(elem), "%s/%s", GV_DIRECTORY, Map->name);
     Vect__get_element_path(fname, Map, GV_FIDX_ELEMENT);
     G_debug(4, "Open fidx: %s", fname);
     dig_file_init(&fp);

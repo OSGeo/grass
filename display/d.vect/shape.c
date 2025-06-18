@@ -252,7 +252,8 @@ int get_table_color(int cat, int line, struct Colors *colors,
 
     /* read RGB colors from db for current area # */
     if (cvarr && db_CatValArray_get_value(cvarr, cat, &cv) == DB_OK) {
-        sprintf(colorstring, "%s", db_get_string(cv->val.s));
+        snprintf(colorstring, sizeof(colorstring), "%s",
+                 db_get_string(cv->val.s));
         if (*colorstring != '\0') {
             G_debug(3, "element %d: colorstring: %s", line, colorstring);
 

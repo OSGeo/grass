@@ -393,7 +393,7 @@ raster. See benchmark scripts in source code. (Intel Core i9-10940X CPU
 @ 3.30GHz x 28)*
 
 To reduce the memory requirements to minimum, set option **memory** to
-zero. To take advantage of the parallelization, GRASS GIS needs to be
+zero. To take advantage of the parallelization, GRASS needs to be
 compiled with OpenMP enabled.
 
 ## EXAMPLES

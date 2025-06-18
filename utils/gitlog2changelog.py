@@ -59,7 +59,7 @@ with open("ChangeLog", "w") as fout:
         # Match the author line and extract the part we want
         # (Don't use startswith to allow Author override inside commit message.)
         elif "Author:" in line:
-            authorList = re.split(r": ", line, 1)
+            authorList = re.split(r": ", line, maxsplit=1)
             try:
                 author = authorList[1]
                 author = author[0 : len(author) - 1]
@@ -69,7 +69,7 @@ with open("ChangeLog", "w") as fout:
 
         # Match the date line
         elif line.startswith("Date:"):
-            dateList = re.split(r":   ", line, 1)
+            dateList = re.split(r":   ", line, maxsplit=1)
             try:
                 date = dateList[1]
                 date = date[0 : len(date) - 1]
@@ -103,7 +103,7 @@ with open("ChangeLog", "w") as fout:
             continue
         # Collect the files for this commit. FIXME: Still need to add +/- to files
         elif authorFound & dateFound & messageFound:
-            fileList = re.split(r" \| ", line, 2)
+            fileList = re.split(r" \| ", line, maxsplit=2)
             if len(fileList) > 1:
                 if len(files) > 0:
                     files = files + ", " + fileList[0].strip()

@@ -388,8 +388,7 @@ reserved SQL word (here: 'ORDER' and 'DESC' respectively). A different
 column name has to be used in this case. The **columns** parameter can
 be used to assign different column names on the fly in order to avoid
 using reserved SQL words. For a list of SQL reserved words for SQLite
-(the default driver), see
-[here](https://www.sqlite.org/lang_keywords.html).
+(the default driver), see the [SQLite Keywords](https://www.sqlite.org/lang_keywords.html).
 
 ### Projection errors
 

@@ -6,6 +6,7 @@ Usage:
 ::
 
     from grass.script import vector as grass
+
     grass.vector_db(map)
 
 (C) 2008-2010 by the GRASS Development Team
@@ -33,10 +34,13 @@ from grass.exceptions import CalledModuleError, ScriptError
 
 def vector_db(map, env=None, **kwargs):
     """Return the database connection details for a vector map
-    (interface to `v.db.connect -g`). Example:
+    (interface to `v.db.connect -g`).
 
-    >>> vector_db("geology")  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
-    {1: {'layer': 1, ... 'table': 'geology'}}
+    :Example:
+      .. code-block:: pycon
+
+        >>> vector_db("geology")  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
+        {1: {'layer': 1, ... 'table': 'geology'}}
 
     :param str map: vector map
     :param kwargs: other v.db.connect's arguments
@@ -164,12 +168,13 @@ def vector_history(map, replace=False, env=None):
 def vector_info_topo(map, layer=1, env=None):
     """Return information about a vector map (interface to `v.info -t`).
 
-    Example:
+    :Example:
+      .. code-block:: pycon
 
-    >>> vector_info_topo("geology")  # doctest: +NORMALIZE_WHITESPACE
-    {'lines': 0, 'centroids': 1832, 'boundaries': 3649, 'points': 0,
-    'primitives': 5481, 'islands': 907, 'nodes': 2724, 'map3d': False,
-    'areas': 1832}
+        >>> vector_info_topo("geology")  # doctest: +NORMALIZE_WHITESPACE
+        {'lines': 0, 'centroids': 1832, 'boundaries': 3649, 'points': 0,
+        'primitives': 5481, 'islands': 907, 'nodes': 2724, 'map3d': False,
+        'areas': 1832}
 
     :param str map: map name
     :param int layer: layer number
@@ -187,10 +192,13 @@ def vector_info_topo(map, layer=1, env=None):
 
 def vector_info(map, layer=1, env=None):
     """Return information about a vector map (interface to
-    `v.info`). Example:
+    `v.info`).
 
-    >>> vector_info("geology")  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
-    {'comment': '', 'projection': 'Lambert Conformal Conic' ... 'south': 10875.8272320917}
+    :Example:
+      .. code-block:: pycon
+
+        >>> vector_info("geology")  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
+        {'comment': '', 'projection': 'Lambert Conformal Conic' ... 'south': 10875.8272320917}
 
     :param str map: map name
     :param int layer: layer number
@@ -230,14 +238,17 @@ def vector_db_select(map, layer=1, env=None, **kwargs):
     """Get attribute data of selected vector map layer.
 
     Function returns list of columns and dictionary of values ordered by
-    key column value. Example:
+    key column value.
 
-    >>> print(vector_db_select("geology")["columns"])
-    ['cat', 'onemap_pro', 'PERIMETER', 'GEOL250_', 'GEOL250_ID', 'GEO_NAME', 'SHAPE_area', 'SHAPE_len']
-    >>> print(vector_db_select("geology")["values"][3])
-    ['3', '579286.875', '3335.55835', '4', '3', 'Zml', '579286.829631', '3335.557182']
-    >>> print(vector_db_select("geology", columns="GEO_NAME")["values"][3])
-    ['Zml']
+    :Example:
+      .. code-block:: pycon
+
+        >>> print(vector_db_select("geology")["columns"])
+        ['cat', 'onemap_pro', 'PERIMETER', 'GEOL250_', 'GEOL250_ID', 'GEO_NAME', 'SHAPE_area', 'SHAPE_len']
+        >>> print(vector_db_select("geology")["values"][3])
+        ['3', '579286.875', '3335.55835', '4', '3', 'Zml', '579286.829631', '3335.557182']
+        >>> print(vector_db_select("geology", columns="GEO_NAME")["values"][3])
+        ['Zml']
 
     :param str map: map name
     :param int layer: layer number

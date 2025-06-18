@@ -44,8 +44,8 @@ int read_color_rules(FILE *fp, struct Colors *colors, DCELL min, DCELL max,
         if (is_fp) {
             char minstr[64], maxstr[64];
 
-            sprintf(minstr, "%.15g", (double)min);
-            sprintf(maxstr, "%.15g", (double)max);
+            snprintf(minstr, sizeof(minstr), "%.15g", (double)min);
+            snprintf(maxstr, sizeof(maxstr), "%.15g", (double)max);
             G_trim_decimal(minstr);
             G_trim_decimal(maxstr);
             fprintf(stderr, _("fp: Data range is %s to %s\n"), minstr, maxstr);

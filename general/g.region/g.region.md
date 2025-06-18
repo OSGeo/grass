@@ -21,9 +21,9 @@ east-west and north-south resolutions of its smallest units (rectangular
 units called "cells").
 
 The region's boundaries are given as the northernmost, southernmost,
-easternmost, and westernmost points that define its extent (cell edges).
-The north and south boundaries are commonly called *northings*, while
-the east and west boundaries are called *eastings*.
+easternmost, westernmost, bottommost, and topmost points that define
+its extent (cell edges). The north and south boundaries are commonly
+called *northings*, while the east and west boundaries are called *eastings*.
 
 The region's cell resolution defines the size of the smallest piece of
 data recognized (imported, analyzed, displayed, stored, etc.) by GRASS
@@ -66,6 +66,18 @@ under other mapsets in the current project, if these mapsets are
 included in the user's mapset search path or the '@' operator is used
 (`region_name@mapset`).
 
+### 3D region
+
+The region extent is common between 2D and 3D maps.
+However, the 3D resolution, used for 3D raster maps, is set separately
+from the 2D resolution that is used for 2D raster maps.
+Updating the 2D resolution of the region will not affect its 3D resolution,
+and vice versa.
+
+Therefore, people working with 3D raster maps should take care to adjust the
+3D resolution of the region using the **res3**, **nsres3**, **ewres3**,
+or **tbres** parameters.
+
 ## NOTES
 
 After all updates have been applied, the current region's southern and
@@ -99,7 +111,7 @@ options for changing region is used (**res=**, **raster=**, etc). This
 can be used for example to print modified region values for further use
 without actually modifying the current region. Similarly, **-o** flag
 forces to update current region file even when e.g., only printing was
-specified. Flag **-o** was added in GRASS GIS version 8 to simulate
+specified. Flag **-o** was added in GRASS version 8 to simulate
 *g.region* behavior in prior versions when current region file was
 always updated unless **-u** was specified.
 
@@ -362,7 +374,10 @@ g.region -p format=json
 
 ```sh
 {
-    "projection": "99 (Lambert Conformal Conic)",
+    "projection": {
+        "code": 99,
+        "name": "Lambert Conformal Conic"
+    },
     "zone": 0,
     "datum": "nad83",
     "ellipsoid": "a=6378137 es=0.006694380022900787",
@@ -408,6 +423,47 @@ g.region -l format=json
     "rows": 165,
     "cols": 179
 }
+```
+
+### Python example
+
+To get the latitude and longitude coordinates of the region center using
+Python, use the `format=json` option along with the `-l` flag:
+
+```python
+import grass.script as gs
+
+# Run the g.region command with the -l flag and JSON output format
+data = gs.parse_command(
+    "g.region",
+    flags="l",
+    format="json",
+)
+
+print(f"center longitude: {data['center_long']}")
+print(f"center latitude: {data['center_lat']}")
+```
+
+```text
+center longitude: -78.679022655614958
+center latitude: 35.736431420327719
+```
+
+To convert region bbox to wgs84 decimal degrees bbox, use the **g.region**
+command with the `-bg` flags and JSON output format:
+
+```python
+import grass.script as gs
+
+# Get WGS84 bounding box
+region = gs.parse_command(
+    "g.region",
+    flags="bg",
+    format="json",
+)
+bbox = [region[k] for k in ("ll_w", "ll_s", "ll_e", "ll_n")]
+
+print(f"Region bbox to wgs84 decimal degrees bbox: {bbox}")
 ```
 
 ## SEE ALSO
