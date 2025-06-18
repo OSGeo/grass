@@ -165,6 +165,15 @@ def test_files(tmp_path):
         assert description_file.read_text(encoding="utf-8").strip() == description
 
 
+def test_project_overwrite(tmp_path):
+    """Check that project can be overwritten"""
+    project = tmp_path / "project"
+    gs.create_project(project)
+    assert project.exists()
+    gs.create_project(project, overwrite=True)
+    assert project.exists()
+
+
 def set_and_test_description(tmp_path, text):
     """Set text as description and check the result"""
     name = "test"
