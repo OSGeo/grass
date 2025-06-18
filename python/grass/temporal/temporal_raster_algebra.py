@@ -9,12 +9,12 @@ for details.
 
 :authors: Thomas Leppelt and Soeren Gebbert
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> p = TemporalRasterAlgebraLexer()
     >>> p.build()
     >>> p.debug = True
-    >>> expression =  'R = A[0,1,0] / B[0,0,1] * 20 + C[0,1,1] - 2.45'
+    >>> expression = "R = A[0,1,0] / B[0,0,1] * 20 + C[0,1,1] - 2.45"
     >>> p.test(expression)
     R = A[0,1,0] / B[0,0,1] * 20 + C[0,1,1] - 2.45
     LexToken(NAME,'R',1,0)

@@ -111,8 +111,8 @@ class TestIZC(TestCase):
         low_stats_str = gs.parse_command("r.univar", map=low_thresh, format="json")
         high_stats_str = gs.parse_command("r.univar", map=high_thresh, format="json")
 
-        low_edge_count = low_stats_str[0]["sum"]
-        high_edge_count = high_stats_str[0]["sum"]
+        low_edge_count = low_stats_str["sum"]
+        high_edge_count = high_stats_str["sum"]
 
         self.assertGreater(low_edge_count, high_edge_count)
         self.runModule("g.region", n=16, s=0, e=16, w=0, rows=16, cols=16)
@@ -155,8 +155,8 @@ class TestIZC(TestCase):
         low_stats_str = gs.parse_command("r.univar", map=low_width, format="json")
         high_stats_str = gs.parse_command("r.univar", map=high_width, format="json")
 
-        low_edge_count = low_stats_str[0]["sum"]
-        high_edge_count = high_stats_str[0]["sum"]
+        low_edge_count = low_stats_str["sum"]
+        high_edge_count = high_stats_str["sum"]
 
         self.assertGreater(low_edge_count, high_edge_count)
         self.runModule("g.region", n=16, s=0, e=16, w=0, rows=16, cols=16)

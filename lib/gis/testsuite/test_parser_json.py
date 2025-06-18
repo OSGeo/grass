@@ -35,7 +35,7 @@ class TestParserJson(TestCase):
             {"param": "precision", "value": "FCELL"},
             {"param": "zscale", "value": "1.0"},
             {"param": "min_slope", "value": "0.0"},
-            {"param": "nprocs", "value": "1"},
+            {"param": "nprocs", "value": "0"},
             {"param": "memory", "value": "300"},
         ]
 

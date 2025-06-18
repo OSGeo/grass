@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-23 22:56+0000\n"
-"PO-Revision-Date: 2025-03-12 12:05+0000\n"
+"POT-Creation-Date: 2025-06-14 18:45+0000\n"
+"PO-Revision-Date: 2025-06-14 20:39+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs/fr/>\n"
 "Language: fr\n"
@@ -543,7 +543,7 @@ msgstr ""
 
 #: ../lib/external/parson/test/test_main.c:57
 msgid "json"
-msgstr ""
+msgstr "json"
 
 #: ../lib/external/parson/test/test_main.c:58
 #: ../lib/raster3d/test/test_main.c:104
@@ -973,6 +973,12 @@ msgstr "plage : %g à %g"
 msgid "Unable to open color descriptions"
 msgstr "Impossible d'ouvrir les descriptions des couleurs"
 
+#: ../lib/gis/color_str.c:269
+#, fuzzy, c-format
+#| msgid "Unknown algorithm '%s'"
+msgid "Unknown color format '%s'"
+msgstr "Algorithme '%s' inconnu"
+
 #: ../lib/gis/compress.c:143 ../lib/gis/compress.c:205
 #: ../lib/gis/compress.c:222 ../lib/gis/compress.c:237
 msgid "Request for unsupported compressor"
@@ -1300,24 +1306,26 @@ msgstr "Mode d'accès non reconnu : %o"
 msgid "This location has no description."
 msgstr "Ce secteur n'a pas de description."
 
-#: ../lib/gis/omp_threads.c:23
+#: ../lib/gis/omp_threads.c:29
 #, fuzzy
 #| msgid "Options"
 msgid "Option is NULL."
 msgstr "Options"
 
-#: ../lib/gis/omp_threads.c:25
+#: ../lib/gis/omp_threads.c:31
 msgid "Option key is NULL."
 msgstr ""
 
-#: ../lib/gis/omp_threads.c:35
+#: ../lib/gis/omp_threads.c:46
 #, fuzzy, c-format
 #| msgid "Number of threads for parallel computing"
-msgid "%d threads are set up for parallel computing."
-msgstr "Nombre de threads pour le calcul parallèle"
+msgid "One thread is set up for parallel computing."
+msgid_plural "%d threads are set up for parallel computing."
+msgstr[0] "Nombre de threads pour le calcul parallèle"
+msgstr[1] "Nombre de threads pour le calcul parallèle"
 
-#: ../lib/gis/omp_threads.c:39
-msgid "GRASS GIS is not compiled with OpenMP support, parallel computation is disabled. Only one thread will be used."
+#: ../lib/gis/omp_threads.c:52
+msgid "GRASS is not compiled with OpenMP support, parallel computation is disabled. Only one thread will be used."
 msgstr ""
 
 #: ../lib/gis/open.c:69
@@ -1628,7 +1636,7 @@ msgstr "Options :"
 
 #: ../lib/gis/parser_help.c:222 ../lib/gis/parser_html.c:185
 #: ../lib/gis/parser_interface.c:329 ../lib/gis/parser_md_cli.c:313
-#: ../lib/gis/parser_md_python.c:469 ../lib/gis/parser_rest.c:158
+#: ../lib/gis/parser_md_python.c:473 ../lib/gis/parser_rest.c:158
 msgid "Allow output files to overwrite existing files"
 msgstr "Autoriser la sortie à écraser les fichiers existants"
 
@@ -1639,13 +1647,13 @@ msgstr "Afficher le résumé d'utilisation"
 
 #: ../lib/gis/parser_help.c:225 ../lib/gis/parser_html.c:192
 #: ../lib/gis/parser_interface.c:344 ../lib/gis/parser_md_cli.c:323
-#: ../lib/gis/parser_md_python.c:474 ../lib/gis/parser_rest.c:162
+#: ../lib/gis/parser_md_python.c:478 ../lib/gis/parser_rest.c:162
 msgid "Verbose module output"
 msgstr "Sortie du module en mode bavard"
 
 #: ../lib/gis/parser_help.c:226 ../lib/gis/parser_html.c:195
 #: ../lib/gis/parser_interface.c:351 ../lib/gis/parser_md_cli.c:326
-#: ../lib/gis/parser_md_python.c:478 ../lib/gis/parser_rest.c:165
+#: ../lib/gis/parser_md_python.c:482 ../lib/gis/parser_rest.c:165
 msgid "Quiet module output"
 msgstr "Sortie du module en mode silence"
 
@@ -1714,7 +1722,7 @@ msgstr ""
 msgid "Allowed values"
 msgstr "Valeur de ligne illégale"
 
-#: ../lib/gis/parser_md_cli.c:329 ../lib/gis/parser_md_python.c:483
+#: ../lib/gis/parser_md_cli.c:329 ../lib/gis/parser_md_python.c:487
 #, fuzzy
 #| msgid "Super quiet module output"
 msgid "Very quiet module output"
@@ -2097,119 +2105,123 @@ msgstr "Nom de la région enregistrée"
 msgid "Number of threads for parallel computing"
 msgstr "Nombre de threads pour le calcul parallèle"
 
-#: ../lib/gis/parser_standard_options.c:794
+#: ../lib/gis/parser_standard_options.c:788
+msgid "0: use OpenMP default; >0: use nprocs; <0: use MAX-nprocs"
+msgstr ""
+
+#: ../lib/gis/parser_standard_options.c:796
 #, fuzzy
 #| msgid "Pseudo-random number generator not seeded"
 msgid "Seed value for the random number generator"
 msgstr "Générateur de nombres pseudo-aléatoires sans graine"
 
-#: ../lib/gis/parser_standard_options.c:796
+#: ../lib/gis/parser_standard_options.c:798
 msgid "Using the same seed ensures identical results, while a randomly generated seed produces different outcomes in each run."
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:808
+#: ../lib/gis/parser_standard_options.c:810
 msgid "Name of the input space time dataset"
 msgstr "Nom du jeu de données temporel en entrée"
 
-#: ../lib/gis/parser_standard_options.c:817
+#: ../lib/gis/parser_standard_options.c:819
 msgid "Name of the input space time datasets"
 msgstr "Noms des jeux de données temporels en entrée"
 
-#: ../lib/gis/parser_standard_options.c:825
+#: ../lib/gis/parser_standard_options.c:827
 msgid "Name of the output space time dataset"
 msgstr "Nom du jeu de données temporel en sortie"
 
-#: ../lib/gis/parser_standard_options.c:833
+#: ../lib/gis/parser_standard_options.c:835
 msgid "Name of the input space time raster dataset"
 msgstr "Nom du jeu de données raster temporel en entrée"
 
-#: ../lib/gis/parser_standard_options.c:842
+#: ../lib/gis/parser_standard_options.c:844
 msgid "Name of the input space time raster datasets"
 msgstr "Noms des jeux de données raster temporels en entrée"
 
-#: ../lib/gis/parser_standard_options.c:850
+#: ../lib/gis/parser_standard_options.c:852
 msgid "Name of the output space time raster dataset"
 msgstr "Nom du jeu de données raster temporel en sortie"
 
-#: ../lib/gis/parser_standard_options.c:859
+#: ../lib/gis/parser_standard_options.c:861
 msgid "Name of the output space time raster datasets"
 msgstr "Nom du jeu de données raster temporel en sortie"
 
-#: ../lib/gis/parser_standard_options.c:867
+#: ../lib/gis/parser_standard_options.c:869
 msgid "Name of the input space time vector dataset"
 msgstr "Nom du jeu de données vecteur temporel en entrée"
 
-#: ../lib/gis/parser_standard_options.c:876
+#: ../lib/gis/parser_standard_options.c:878
 msgid "Name of the input space time vector datasets"
 msgstr "Noms des jeux de données vecteur temporels en entrée"
 
-#: ../lib/gis/parser_standard_options.c:884
+#: ../lib/gis/parser_standard_options.c:886
 msgid "Name of the output space time vector dataset"
 msgstr "Nom du jeu de données vecteur temporel en sortie"
 
-#: ../lib/gis/parser_standard_options.c:892
+#: ../lib/gis/parser_standard_options.c:894
 msgid "Name of the input space time raster3d dataset"
 msgstr "Nom du jeu de données raster3d temporel en entrée"
 
-#: ../lib/gis/parser_standard_options.c:901
+#: ../lib/gis/parser_standard_options.c:903
 msgid "Name of the input space time raster3d datasets"
 msgstr "Noms des jeux de données raster3d temporels en entrée"
 
-#: ../lib/gis/parser_standard_options.c:909
+#: ../lib/gis/parser_standard_options.c:911
 msgid "Name of the output space time raster3d dataset"
 msgstr "Nom du jeu de donées raster3d temporel en sortie"
 
-#: ../lib/gis/parser_standard_options.c:918
+#: ../lib/gis/parser_standard_options.c:920
 msgid "Type of the input space time dataset"
 msgstr "Type du jeu de données temporel en entrée"
 
-#: ../lib/gis/parser_standard_options.c:926
+#: ../lib/gis/parser_standard_options.c:928
 msgid "Name of the input map"
 msgstr "Nom de la carte en entrée"
 
-#: ../lib/gis/parser_standard_options.c:935
+#: ../lib/gis/parser_standard_options.c:937
 msgid "Name of the input maps"
 msgstr "Noms des cartes en entrée"
 
-#: ../lib/gis/parser_standard_options.c:944
+#: ../lib/gis/parser_standard_options.c:946
 msgid "Type of the input map"
 msgstr "Type de la carte en entrée"
 
-#: ../lib/gis/parser_standard_options.c:953
+#: ../lib/gis/parser_standard_options.c:955
 msgid "The temporal type of the space time dataset"
 msgstr "Le type temporel du jeu de données temporel"
 
-#: ../lib/gis/parser_standard_options.c:960
+#: ../lib/gis/parser_standard_options.c:962
 msgid "WHERE conditions of SQL statement without 'where' keyword used in the temporal GIS framework"
 msgstr "WHERE conditions d'une clause SQL sans le mot-clef 'where'"
 
-#: ../lib/gis/parser_standard_options.c:962
+#: ../lib/gis/parser_standard_options.c:964
 msgid "Example: start_time > '2001-01-01 12:30:00'"
 msgstr "Exemple : start_time > '2001-01-01 12:30:00'"
 
-#: ../lib/gis/parser_standard_options.c:973
+#: ../lib/gis/parser_standard_options.c:975
 msgid "The method to be used for sampling the input dataset"
 msgstr "La méthode à utiliser pour échantillonner le jeu de donénes en entrée"
 
-#: ../lib/gis/parser_standard_options.c:980
+#: ../lib/gis/parser_standard_options.c:982
 #, fuzzy
 #| msgid "Unsupported input format"
 msgid "Output format"
 msgstr "Format d'entrée non supporté"
 
-#: ../lib/gis/parser_standard_options.c:983
+#: ../lib/gis/parser_standard_options.c:985
 msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:1018
+#: ../lib/gis/parser_standard_options.c:1020
 msgid "Do not create attribute table"
 msgstr "Ne pas créer la table d'attributs"
 
-#: ../lib/gis/parser_standard_options.c:1022
+#: ../lib/gis/parser_standard_options.c:1024
 msgid "Do not build topology"
 msgstr "Ne pas construire la topologie"
 
-#: ../lib/gis/parser_standard_options.c:1024
+#: ../lib/gis/parser_standard_options.c:1026
 msgid "Advantageous when handling a large number of points"
 msgstr "Avantageux lors de la gestion d'un grand nombre de points"
 
@@ -4122,16 +4134,12 @@ msgid "Starting GRASS..."
 msgstr "Démarrage du SIG GRASS ..."
 
 #: ../lib/init/grass.py:2288
-#, fuzzy
-#| msgid "Failed to start GRASS GIS, no default project to copy in the installation or copying failed."
 msgid "Failed to start GRASS, grassdata directory cannot be found or created."
-msgstr "Le démarrage de GRASS GIS a échoué, il n'y a pas de projet par défaut à copier dans l'installation, ou la copie a échoué."
+msgstr "Le démarrage de GRASS a échoué, le dossier grassdata est introuvable ou ne peut pas être créé."
 
 #: ../lib/init/grass.py:2295
-#, fuzzy
-#| msgid "Failed to start GRASS GIS, no default project to copy in the installation or copying failed."
 msgid "Failed to start GRASS, no default project to copy in the installation or copying failed."
-msgstr "Le démarrage de GRASS GIS a échoué, il n'y a pas de projet par défaut à copier dans l'installation, ou la copie a échoué."
+msgstr "Le démarrage de GRASS a échoué, il n'y a pas de projet par défaut à copier dans l'installation, ou la copie a échoué."
 
 #: ../lib/init/grass.py:2400
 #, python-format
@@ -5349,33 +5357,37 @@ msgstr "Cette version de GRASS ne supporte pas la compression %s, utilisation de
 msgid "Unknown interpolation method: %s"
 msgstr "Méthode d'interpolation inconnue : %s"
 
-#: ../lib/raster/json_color_out.c:112 ../lib/raster/json_color_out.c:196
-#: ../lib/raster/json_color_out.c:210
+#: ../lib/raster/json_color_out.c:69 ../lib/raster/json_color_out.c:157
+#: ../lib/raster/json_color_out.c:172
 msgid "Failed to initialize JSON object. Out of memory?"
 msgstr ""
 
-#: ../lib/raster/json_color_out.c:144
+#: ../lib/raster/json_color_out.c:103
 #, fuzzy
 #| msgid "Error while adding point to array. Out of memory"
 msgid "Failed to initialize JSON array. Out of memory?"
 msgstr "Erreur lors de l'ajout du point au tableau. Dépassement de mémoire"
 
-#: ../lib/raster/json_color_out.c:223
+#: ../lib/raster/json_color_out.c:186
 msgid "Failed to serialize JSON to pretty format."
 msgstr ""
 
-#: ../lib/raster/mask_info.c:43
+#: ../lib/raster/mask_info.c:47
 #, c-format
 msgid "<%s> in mapset <%s>"
 msgstr "<%s> dans le jeu de données (mapset) <%s>"
 
-#: ../lib/raster/mask_info.c:46
+#: ../lib/raster/mask_info.c:50
 msgid "none"
 msgstr "aucun"
 
-#: ../lib/raster/mask_info.c:49
+#: ../lib/raster/mask_info.c:53
 msgid "not known"
 msgstr "inconnu"
+
+#: ../lib/raster/mask_info.c:219
+msgid "Single thread processing enforced due to raster mask being present."
+msgstr ""
 
 #: ../lib/raster/null_val.c:64
 msgid "EmbedGivenNulls: wrong data type"
@@ -7042,10 +7054,9 @@ msgid "Unable to close cursor %s"
 msgstr "Impossible de fermer le curseur %s"
 
 #: ../lib/vector/Vlib/color_read.c:53
-#, fuzzy, c-format
-#| msgid "Vector map <%s> is not opened"
+#, c-format
 msgid "Vector map name <%s> is too long"
-msgstr "La carte vecteur <%s> n'est pas ouverte"
+msgstr "Le nom de la carte vectorielle <%s> est trop long"
 
 #: ../lib/vector/Vlib/constraint.c:150
 msgid "Layer constraint ignored for non-native vector formats"
@@ -7438,7 +7449,7 @@ msgstr "Segment en dehors de la ligne, non créé"
 
 #: ../lib/vector/Vlib/map.c:140 ../lib/vector/Vlib/map.c:245
 msgid "Vector map name is not SQL compliant"
-msgstr "Le nom de la couche  vectorielle n'est pas compatible avec le SQL"
+msgstr "Le nom de la couche vectorielle n'est pas compatible avec le SQL"
 
 #: ../lib/vector/Vlib/map.c:144
 #, c-format

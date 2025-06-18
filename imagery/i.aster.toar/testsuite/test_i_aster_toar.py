@@ -167,8 +167,8 @@ class TestASTERToarRegression(TestCase):
             flags="ab",
         )
 
-        stats_45 = gs.parse_command("r.univar", map=f"{output_45}.1", format="json")[0]
-        stats_60 = gs.parse_command("r.univar", map=f"{output_60}.1", format="json")[0]
+        stats_45 = gs.parse_command("r.univar", map=f"{output_45}.1", format="json")
+        stats_60 = gs.parse_command("r.univar", map=f"{output_60}.1", format="json")
 
         ratio = stats_60["sum"] / stats_45["sum"]
         expected_ratio = math.cos(math.radians(45)) / math.cos(math.radians(30))
