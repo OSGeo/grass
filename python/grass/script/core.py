@@ -54,6 +54,40 @@ _Env = Mapping[str, str]
 class Popen(subprocess.Popen):
     _builtin_exts = {".com", ".exe", ".bat", ".cmd"}
 
+    class StdinWrapper:
+        """
+        Decodes bytes into str if writing failed and text mode was automatically set.
+
+        Remove for version 9
+        """
+
+        def __init__(self, stdin, implied_text):
+            self._stdin = stdin
+            self._implied_text = implied_text
+
+        def write(self, data):
+            try:
+                self._stdin.write(data)
+            except TypeError:
+                if self._implied_text:
+                    self._stdin.write(decode(data))
+                else:
+                    raise
+
+        def flush(self):
+            if self._stdin:
+                self._stdin.flush()
+
+        def close(self):
+            if self._stdin:
+                self._stdin.close()
+
+        def __getattr__(self, name):
+            # Forward everything else to the original stdin
+            if self._stdin:
+                return getattr(self._stdin, name)
+            return None
+
     @staticmethod
     def _escape_for_shell(arg):
         # TODO: what are cmd.exe's parsing rules?
@@ -68,8 +102,10 @@ class Popen(subprocess.Popen):
         args = [cmd] + args[1:]
 
         # Use text mode by default
+        self._implied_text = False
         if "text" not in kwargs and "universal_newlines" not in kwargs:
             kwargs["text"] = True
+            self._implied_text = True
 
         if (
             sys.platform == "win32"
@@ -89,6 +125,14 @@ class Popen(subprocess.Popen):
             kwargs["startupinfo"] = si
 
         subprocess.Popen.__init__(self, args, **kwargs)
+
+    @property
+    def stdin(self):
+        return self._wrapped_stdin
+
+    @stdin.setter
+    def stdin(self, value):
+        self._wrapped_stdin = Popen.StdinWrapper(value, self._implied_text)
 
 
 PIPE = subprocess.PIPE
