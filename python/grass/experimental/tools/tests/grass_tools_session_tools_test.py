@@ -1,4 +1,4 @@
-"""Test grass.experimental.Tools class"""
+"""Test grass.experimental.tools.Tools class"""
 
 import io
 
@@ -44,22 +44,19 @@ def test_json_with_name_and_parameter_call(xy_dataset_session):
 def test_json_with_direct_name_and_parameter_call(xy_dataset_session):
     """Check that JSON is parsed with a name-and-parameters style call"""
     tools = Tools(session=xy_dataset_session)
-    assert tools.no_nonsense_run("g.region", flags="p", format="json").json["cols"] == 1
+    assert tools.call("g.region", flags="p", format="json").json["cols"] == 1
 
 
 def test_json_with_subprocess_run_like_call(xy_dataset_session):
     """Check that JSON is parsed with a name-and-parameters style call"""
     tools = Tools(session=xy_dataset_session)
-    assert tools.run_from_list(["g.region", "format=json", "-p"]).json["cols"] == 1
+    assert tools.run_cmd(["g.region", "format=json", "-p"]).json["cols"] == 1
 
 
 def test_json_with_direct_subprocess_run_like_call(xy_dataset_session):
     """Check that JSON is parsed with a name-and-parameters style call"""
     tools = Tools(session=xy_dataset_session)
-    assert (
-        tools.no_nonsense_run_from_list(["g.region", "format=json", "-p"]).json["cols"]
-        == 1
-    )
+    assert tools.call_cmd(["g.region", "format=json", "-p"]).json["cols"] == 1
 
 
 def test_json_as_list(xy_dataset_session):
@@ -74,10 +71,7 @@ def test_json_as_list(xy_dataset_session):
 def test_help_call_no_parameters(xy_dataset_session):
     """Check that JSON is parsed with a name-and-parameters style call"""
     tools = Tools(session=xy_dataset_session)
-    assert (
-        "r.slope.aspect"
-        in tools.no_nonsense_run_from_list(["r.slope.aspect", "--help"]).stderr
-    )
+    assert "r.slope.aspect" in tools.call_cmd(["r.slope.aspect", "--help"]).stderr
 
 
 def test_help_call_with_parameters(xy_dataset_session):
@@ -85,7 +79,7 @@ def test_help_call_with_parameters(xy_dataset_session):
     tools = Tools(session=xy_dataset_session)
     assert (
         "r.slope.aspect"
-        in tools.no_nonsense_run_from_list(
+        in tools.call_cmd(
             ["r.slope.aspect", "elevation=dem", "slope=slope", "--help"]
         ).stderr
     )
@@ -94,7 +88,7 @@ def test_help_call_with_parameters(xy_dataset_session):
 def test_json_call_with_low_level_call(xy_dataset_session):
     """Check that --json call works including JSON data parsing"""
     tools = Tools(session=xy_dataset_session)
-    data = tools.no_nonsense_run_from_list(
+    data = tools.call_cmd(
         ["r.slope.aspect", "elevation=dem", "slope=slope", "--json"]
     ).json
     assert "inputs" in data
@@ -104,7 +98,7 @@ def test_json_call_with_low_level_call(xy_dataset_session):
 def test_json_call_with_high_level_call(xy_dataset_session):
     """Check that --json call works including JSON data parsing"""
     tools = Tools(session=xy_dataset_session)
-    data = tools.run_from_list(
+    data = tools.run_cmd(
         ["r.slope.aspect", "elevation=dem", "slope=slope", "--json"]
     ).json
     assert "inputs" in data
@@ -165,6 +159,17 @@ def test_stdout_split_space(xy_dataset_session):
     tools = Tools(session=xy_dataset_session)
     # Not a good example usage, but it tests the functionality.
     assert tools.g_mapset(flags="l").text_split(" ") == ["PERMANENT"]
+
+
+def test_stdout_comma_items(xy_dataset_session):
+    """Check that the split function works with space"""
+    tools = Tools(session=xy_dataset_session)
+    result = tools.g_gisenv(
+        get="GISDBASE,LOCATION_NAME,MAPSET", sep="comma"
+    ).comma_items
+    assert len(result) == 3
+    for item in result:
+        assert item
 
 
 def test_stdout_without_capturing(xy_dataset_session):
@@ -334,32 +339,32 @@ def test_object_overwrite(xy_dataset_session):
     tools.r_random_surface(output="surface", seed=42)
 
 
-def test_no_overwrite(xy_session):
+def test_no_overwrite(xy_dataset_session):
     """Check that it fails without overwrite"""
-    assert "GRASS_OVERWRITE" not in xy_session.env
-    tools = Tools(session=xy_session)
+    assert "GRASS_OVERWRITE" not in xy_dataset_session.env
+    tools = Tools(session=xy_dataset_session)
     tools.r_random_surface(output="surface", seed=42)
     with pytest.raises(CalledModuleError, match="overwrite"):
         tools.r_random_surface(output="surface", seed=42)
 
 
-def test_overwrite_true_in_call(xy_session):
+def test_overwrite_true_in_call(xy_dataset_session):
     """Check that it fails without overwrite"""
-    assert "GRASS_OVERWRITE" not in xy_session.env
-    tools = Tools(session=xy_session, overwrite=False)
+    assert "GRASS_OVERWRITE" not in xy_dataset_session.env
+    tools = Tools(session=xy_dataset_session, overwrite=False)
     tools.r_random_surface(output="surface", seed=42)
     tools.r_random_surface(output="surface", seed=42, overwrite=True)
     with pytest.raises(CalledModuleError, match="overwrite"):
         tools.r_random_surface(output="surface", seed=42)
 
 
-def test_overwrite_false_in_call(xy_session):
+def test_overwrite_false_in_call(xy_dataset_session):
     """Individual overwrite is not used when global is True and individual is False
 
     We simply test for the current behavior.
     """
-    assert "GRASS_OVERWRITE" not in xy_session.env
-    tools = Tools(session=xy_session, overwrite=True)
+    assert "GRASS_OVERWRITE" not in xy_dataset_session.env
+    tools = Tools(session=xy_dataset_session, overwrite=True)
     tools.r_random_surface(output="surface", seed=42)
     tools.r_random_surface(output="surface", seed=42, overwrite=False)
 

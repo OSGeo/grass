@@ -1,4 +1,4 @@
-"""Fixtures for grass.script"""
+"""Fixtures for grass.experimental"""
 
 import uuid
 import os
@@ -30,14 +30,6 @@ def xy_session_for_module(tmp_path_factory):
     location = "xy_test"
     gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
     with gs.setup.init(tmp_path / location, env=os.environ.copy()) as session:
-        yield session
-
-
-@pytest.fixture
-def xy_dataset_session(tmp_path):
-    """Creates a session with a mapset which has vector with a float column"""
-    gs.core._create_location_xy(tmp_path, "test")  # pylint: disable=protected-access
-    with gs.setup.init(tmp_path / "test", env=os.environ.copy()) as session:
         yield session
 
 
