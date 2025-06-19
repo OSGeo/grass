@@ -236,6 +236,23 @@ def setup_runtime_env(gisbase=None, *, env=None):
     )
     set_python_path_variable(install_path=gisbase, env=env)
     set_path_to_python_executable(env=env)
+    if sys.platform.startswith("win32"):
+        # pylint: disable=import-outside-toplevel
+        from .core import start_command, PIPE, create_environment
+        from .utils import try_remove
+
+        # On Windows, first call to an executable fails, but the following ones work.
+        # Let's do the first call here and ignore the result.
+        # While g.message does not theoretically need a project, g.gisenv is called for
+        # debug level which is stored in gisrc.
+        gisrc, full_env = create_environment(
+            "test_db", "test_project", "test_mapset", env=env
+        )
+        process = start_command(
+            "g.message", message="test", stdout=PIPE, stderr=PIPE, env=full_env
+        )
+        unused_stdout, unused_stderr = process.communicate()
+        try_remove(gisrc)
 
 
 def init(

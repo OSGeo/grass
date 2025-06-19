@@ -471,10 +471,10 @@ def start_command(
         **kwargs,
     )
 
-    if debug_level() > 0:
+    if debug_level(env=kwargs.get("env")) > 0:
         sys.stderr.write(
             "D1/{}: {}.start_command(): {}\n".format(
-                debug_level(), __name__, " ".join(args)
+                debug_level(env=kwargs.get("env")), __name__, " ".join(args)
             )
         )
         sys.stderr.flush()
@@ -790,7 +790,7 @@ def debug(msg, debug=1, env=None):
     :param env: dictionary with system environment variables
                 (:external:py:data:`os.environ` by default)
     """
-    if debug_level() >= debug:
+    if debug_level(env=env) >= debug:
         # TODO: quite a random hack here, do we need it somewhere else too?
         if sys.platform == "win32":
             msg = msg.replace("&", "^&")
@@ -1798,7 +1798,7 @@ def verbosity():
 # Various utilities, not specific to GRASS
 
 
-def find_program(pgm, *args):
+def find_program(pgm, *args, env: _Env = None):
     """Attempt to run a program, with optional arguments.
 
     You must call the program in a way that will return a successful
@@ -1816,6 +1816,7 @@ def find_program(pgm, *args):
 
     :param str pgm: program name
     :param args: list of arguments
+    :param env: environment
 
     :return: False if the attempt failed due to a missing executable
             or non-zero return code
@@ -1824,7 +1825,9 @@ def find_program(pgm, *args):
     with open(os.devnull, "w+") as nuldev:
         try:
             # TODO: the doc or impl is not correct, any return code is accepted
-            call([pgm] + list(args), stdin=nuldev, stdout=nuldev, stderr=nuldev)
+            call(
+                [pgm] + list(args), stdin=nuldev, stdout=nuldev, stderr=nuldev, env=env
+            )
             found = True
         except Exception:
             found = False
@@ -2104,14 +2107,18 @@ def version():
 _debug_level = None
 
 
-def debug_level(force=False):
+def debug_level(force: bool = False, *, env: _Env = None):
     global _debug_level
     if not force and _debug_level is not None:
         return _debug_level
     _debug_level = 0
-    if find_program("g.gisenv", "--help"):
+    if find_program("g.gisenv", "--help", env=env):
         try:
-            _debug_level = int(gisenv().get("DEBUG", 0))
+            # try:
+            _debug_level = int(gisenv(env=env).get("DEBUG", 0))
+            # except CalledModuleError:
+            #     raise
+            #     _debug_level = 0
             if _debug_level < 0 or _debug_level > 5:
                 raise ValueError(_("Debug level {0}").format(_debug_level))
         except ValueError as e:
