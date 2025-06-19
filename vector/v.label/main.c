@@ -302,12 +302,12 @@ int main(int argc, char **argv)
         /* Read label from database */
 
         if (whereopt->answer) {
-            sprintf(buf, "select %s from %s where %s = %d and %s",
-                    Colopt->answer, fi->table, fi->key, cat, whereopt->answer);
+            snprintf(buf, sizeof(buf), "select %s from %s where %s = %d and %s",
+                     Colopt->answer, fi->table, fi->key, cat, whereopt->answer);
         }
         else {
-            sprintf(buf, "select %s from %s where %s = %d", Colopt->answer,
-                    fi->table, fi->key, cat);
+            snprintf(buf, sizeof(buf), "select %s from %s where %s = %d",
+                     Colopt->answer, fi->table, fi->key, cat);
         }
         G_debug(3, "SQL: %s", buf);
         db_set_string(&stmt, buf);
@@ -398,10 +398,11 @@ int main(int argc, char **argv)
                     rotate = rotate * 180 / PI;
 
                     if (direction == 0) {
-                        sprintf(buf, "%c", txt[i]);
+                        snprintf(buf, sizeof(buf), "%c", txt[i]);
                     }
                     else {
-                        sprintf(buf, "%c", txt[txtlength - i - 1]);
+                        snprintf(buf, sizeof(buf), "%c",
+                                 txt[txtlength - i - 1]);
                         rotate += 180;
                     }
                     print_label(labels, x, y, rotate, buf);

@@ -149,8 +149,8 @@ label_t *labels_init(struct params *p, int *n_labels)
 
         sql = (char *)G_malloc(sql_len);
         /* Read label from database */
-        sprintf(sql, "select %s from %s where %s = %d", p->column->answer,
-                fi->table, fi->key, cat);
+        snprintf(sql, sql_len, "select %s from %s where %s = %d",
+                 p->column->answer, fi->table, fi->key, cat);
         G_debug(3, "SQL: %s", sql);
         db_init_string(&query);
         db_set_string(&query, sql);

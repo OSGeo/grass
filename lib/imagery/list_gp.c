@@ -108,11 +108,11 @@ void I__list_group_name_fit(char *buf, const char *name, const char *mapset)
         frmt = "<%.33s...@%.32s...>";
     }
     else if (name_length > 35) {
-        sprintf(fr, "<%%.%ds...@%%s>", 68 - mapset_length);
+        snprintf(fr, sizeof(fr), "<%%.%ds...@%%s>", 68 - mapset_length);
         frmt = fr;
     }
     else {
-        sprintf(fr, "<%%s@%%.%ds...>", 68 - name_length);
+        snprintf(fr, sizeof(fr), "<%%s@%%.%ds...>", 68 - name_length);
         frmt = fr;
     }
     snprintf(buf, 75, frmt, name, mapset);

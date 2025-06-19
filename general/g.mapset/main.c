@@ -23,14 +23,31 @@
 #include <unistd.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
+#include <grass/parson.h>
 #include <grass/spawn.h>
+
+enum OutputFormat { PLAIN, JSON };
+
+// Function to serialize and print JSON value
+static void serialize_and_print_json_object(JSON_Value *root_value)
+{
+    char *serialized_string = json_serialize_to_string_pretty(root_value);
+    if (!serialized_string) {
+        json_value_free(root_value);
+        G_fatal_error(_("Failed to serialize JSON to pretty format."));
+    }
+
+    puts(serialized_string);
+    json_free_serialized_string(serialized_string);
+    json_value_free(root_value);
+}
 
 int main(int argc, char *argv[])
 {
     int ret;
     struct GModule *module;
     struct {
-        struct Option *gisdbase, *location, *mapset;
+        struct Option *gisdbase, *location, *mapset, *format;
     } opt;
     struct {
         struct Flag *add, *list, *curr;
@@ -42,14 +59,18 @@ int main(int argc, char *argv[])
     char *lock_prog;
     const char *shell;
     char path[GPATH_MAX];
+    enum OutputFormat format;
+    JSON_Object *root_object = NULL;
+    JSON_Value *root_value = NULL;
 
     G_gisinit(argv[0]);
 
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("settings"));
-    module->label = _("Changes/reports current mapset.");
-    module->description = _("Optionally create new mapset or list available "
+    G_add_keyword(_("project"));
+    module->label = _("Changes or reports current mapset.");
+    module->description = _("Optionally, creates new mapset or lists available "
                             "mapsets in given project (location).");
 
     opt.mapset = G_define_standard_option(G_OPT_M_MAPSET);
@@ -63,6 +84,9 @@ int main(int argc, char *argv[])
 
     opt.gisdbase = G_define_standard_option(G_OPT_M_DBASE);
     opt.gisdbase->guisection = _("Mapset");
+
+    opt.format = G_define_standard_option(G_OPT_F_FORMAT);
+    opt.format->guisection = _("Print");
 
     flag.add = G_define_flag();
     flag.add->key = 'c';
@@ -85,13 +109,37 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
+    if (strcmp(opt.format->answer, "json") == 0) {
+        format = JSON;
+
+        root_value = json_value_init_object();
+        if (root_value == NULL) {
+            G_fatal_error(
+                _("Failed to initialize JSON object. Out of memory?"));
+        }
+        root_object = json_object(root_value);
+    }
+    else {
+        format = PLAIN;
+    }
+
     /* Store original values */
     gisdbase_old = G_getenv_nofatal("GISDBASE");
     location_old = G_getenv_nofatal("LOCATION_NAME");
     mapset_old = G_getenv_nofatal("MAPSET");
 
     if (flag.curr->answer) {
-        fprintf(stdout, "%s\n", mapset_old);
+        switch (format) {
+        case PLAIN:
+            fprintf(stdout, "%s\n", mapset_old);
+            break;
+
+        case JSON:
+            json_object_set_string(root_object, "project", location_old);
+            json_object_set_string(root_object, "mapset", mapset_old);
+            serialize_and_print_json_object(root_value);
+            break;
+        }
         exit(EXIT_SUCCESS);
     }
 
@@ -112,18 +160,47 @@ int main(int argc, char *argv[])
     if (flag.list->answer) {
         char **ms;
         int nmapsets;
+        JSON_Array *mapsets_array = NULL;
+        JSON_Value *mapsets_value = NULL;
 
         G_setenv_nogisrc("LOCATION_NAME", location_new);
         G_setenv_nogisrc("GISDBASE", gisdbase_new);
 
         ms = G_get_available_mapsets();
+        if (format == JSON) {
+            mapsets_value = json_value_init_array();
+            if (mapsets_value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON array. Out of memory?"));
+            }
+            mapsets_array = json_array(mapsets_value);
+
+            json_object_set_string(root_object, "project", location_new);
+        }
 
         for (nmapsets = 0; ms[nmapsets]; nmapsets++) {
             if (G_mapset_permissions(ms[nmapsets]) > 0) {
-                fprintf(stdout, "%s ", ms[nmapsets]);
+                switch (format) {
+                case PLAIN:
+                    fprintf(stdout, "%s ", ms[nmapsets]);
+                    break;
+
+                case JSON:
+                    json_array_append_string(mapsets_array, ms[nmapsets]);
+                    break;
+                }
             }
         }
-        fprintf(stdout, "\n");
+        switch (format) {
+        case PLAIN:
+            fprintf(stdout, "\n");
+            break;
+
+        case JSON:
+            json_object_set_value(root_object, "mapsets", mapsets_value);
+            serialize_and_print_json_object(root_value);
+            break;
+        }
 
         exit(EXIT_SUCCESS);
     }
@@ -170,7 +247,7 @@ int main(int argc, char *argv[])
 
     G_asprintf(&lock_prog, "%s/etc/lock", G_gisbase());
 
-    sprintf(path, "%s/.gislock", mapset_new_path);
+    snprintf(path, sizeof(path), "%s/.gislock", mapset_new_path);
     G_debug(2, "%s", path);
 
     ret = G_spawn(lock_prog, lock_prog, path, gis_lock, NULL);
@@ -191,7 +268,7 @@ int main(int argc, char *argv[])
     }
 
     /* Clean temporary directory */
-    sprintf(path, "%s/etc/clean_temp", G_gisbase());
+    snprintf(path, sizeof(path), "%s/etc/clean_temp", G_gisbase());
     G_verbose_message(_("Cleaning up temporary files..."));
     G_spawn(path, "clean_temp", NULL);
 
@@ -201,7 +278,7 @@ int main(int argc, char *argv[])
     G_setenv("MAPSET", mapset_new);
 
     /* Remove old lock */
-    sprintf(path, "%s/.gislock", mapset_old_path);
+    snprintf(path, sizeof(path), "%s/.gislock", mapset_old_path);
     remove(path);
 
     G_free(mapset_old_path);

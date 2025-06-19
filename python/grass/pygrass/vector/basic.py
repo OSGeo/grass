@@ -126,7 +126,7 @@ class Bbox:
         :type point: a Point object or a tuple with the coordinates
 
         >>> from grass.pygrass.vector.geometry import Point
-        >>> poi = Point(5,5)
+        >>> poi = Point(5, 5)
         >>> bbox = Bbox(north=10, south=0, west=0, east=10)
         >>> bbox.contains(poi)
         True
@@ -198,12 +198,12 @@ class BoxList:
         """Append a Bbox object to a Boxlist object, using the
         ``Vect_boxlist_append`` C function.
 
-        :param bbox: the bounding box to add to the list
-        :param bbox: a Bbox object
+        :param box: the bounding box to add to the list
+        :type box: a Bbox object
 
         >>> box0 = Bbox()
-        >>> box1 = Bbox(1,2,3,4)
-        >>> box2 = Bbox(5,6,7,8)
+        >>> box1 = Bbox(1, 2, 3, 4)
+        >>> box2 = Bbox(5, 6, 7, 8)
         >>> boxlist = BoxList([box0, box1])
         >>> boxlist
         Boxlist([Bbox(0.0, 0.0, 0.0, 0.0), Bbox(1.0, 2.0, 3.0, 4.0)])
@@ -257,9 +257,7 @@ class BoxList:
         :param indx: the index value of the Bbox to remove
         :param indx: int
 
-        >>> boxlist = BoxList([Bbox(),
-        ...                    Bbox(1, 0, 0, 1),
-        ...                    Bbox(1, -1, -1, 1)])
+        >>> boxlist = BoxList([Bbox(), Bbox(1, 0, 0, 1), Bbox(1, -1, -1, 1)])
         >>> boxlist.remove(0)
         >>> boxlist
         Boxlist([Bbox(1.0, 0.0, 0.0, 1.0), Bbox(1.0, -1.0, -1.0, 1.0)])
@@ -277,9 +275,7 @@ class BoxList:
         """Reset the c_boxlist C struct, using the ``Vect_reset_boxlist`` C
         function.
 
-        >>> boxlist = BoxList([Bbox(),
-        ...                    Bbox(1, 0, 0, 1),
-        ...                    Bbox(1, -1, -1, 1)])
+        >>> boxlist = BoxList([Bbox(), Bbox(1, 0, 0, 1), Bbox(1, -1, -1, 1)])
         >>> len(boxlist)
         3
         >>> boxlist.reset()
@@ -378,7 +374,8 @@ class Cats:
     to the C line_cats struct.
 
     >>> cats = Cats()
-    >>> for cat in range(100, 110): cats.set(cat, layer=cat-50)
+    >>> for cat in range(100, 110):
+    ...     cats.set(cat, layer=cat - 50)
     >>> cats.n_cats
     10
     >>> cats.cat
@@ -557,7 +554,7 @@ class CatsList:
         """Convert ordered array of integers to cat_list structure.
 
         :param array: the input array containing the cats
-        :type array: array
+        :type array: ~grass.script.array.array
         """
         # Vect_array_to_cat_list(const int *vals, int nvals, ***)
         # TODO: it's not working
