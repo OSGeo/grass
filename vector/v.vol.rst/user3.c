@@ -60,6 +60,7 @@ int secpar_loop(int ngstc UNUSED, int nszc UNUSED, int i)
     double gradmin;
     int bmask = 1;
     static int first_t = 1;
+    curn = 0.0;
 
     ro = M_R2D;
     gradmin = 0.0;
