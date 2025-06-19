@@ -3,7 +3,7 @@ import grass.script as gs
 import pytest
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def simple_dataset(tmp_path_factory):
     """Set up a GRASS session for the tests."""
     tmp_path = tmp_path_factory.mktemp("simple_dataset")
