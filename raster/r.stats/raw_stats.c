@@ -222,6 +222,9 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
     }
 
     G_percent(row, nrows, 2);
+    G_free(map_type);
+    G_free(rastp);
+    G_free(rast);
 
     return 0;
 }
