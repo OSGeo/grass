@@ -37,13 +37,13 @@
 const char *Vect_get_column_names(struct Map_info *Map, int field)
 {
     int num_dblinks, ncols, col;
-    struct field_info *fi;
+    struct field_info *fi = NULL;
     dbDriver *driver = NULL;
     dbHandle handle;
     dbString table_name;
     dbTable *table;
     const char **col_names;
-    char *list;
+    char *list = NULL;
 
     num_dblinks = Vect_get_num_dblinks(Map);
     if (num_dblinks <= 0)
@@ -54,16 +54,20 @@ const char *Vect_get_column_names(struct Map_info *Map, int field)
     if ((fi = Vect_get_field(Map, field)) == NULL)
         return (NULL);
     driver = db_start_driver(fi->driver);
-    if (driver == NULL)
+    if (driver == NULL) {
+        Vect_destroy_field_info(fi);
         return (NULL);
+    }
     db_init_handle(&handle);
     db_set_handle(&handle, fi->database, NULL);
-    if (db_open_database(driver, &handle) != DB_OK)
-        return (NULL);
+    if (db_open_database(driver, &handle) != DB_OK) {
+        goto cleanup;
+    }
     db_init_string(&table_name);
     db_set_string(&table_name, fi->table);
-    if (db_describe_table(driver, &table_name, &table) != DB_OK)
-        return (NULL);
+    if (db_describe_table(driver, &table_name, &table) != DB_OK) {
+        goto cleanup;
+    }
 
     ncols = db_get_table_number_of_columns(table);
     col_names = G_malloc(ncols * sizeof(char *));
@@ -74,8 +78,9 @@ const char *Vect_get_column_names(struct Map_info *Map, int field)
     G_free(col_names);
     G_debug(3, "%s", list);
 
-    db_close_database(driver);
-    db_shutdown_driver(driver);
+cleanup:
+    Vect_destroy_field_info(fi);
+    db_close_database_shutdown_driver(driver);
 
     return list;
 }
@@ -92,13 +97,13 @@ const char *Vect_get_column_names(struct Map_info *Map, int field)
 const char *Vect_get_column_types(struct Map_info *Map, int field)
 {
     int num_dblinks, ncols, col;
-    struct field_info *fi;
+    struct field_info *fi = NULL;
     dbDriver *driver = NULL;
     dbHandle handle;
     dbString table_name;
     dbTable *table;
     const char **sqltype_names;
-    char *list;
+    char *list = NULL;
 
     num_dblinks = Vect_get_num_dblinks(Map);
     if (num_dblinks <= 0)
@@ -109,16 +114,20 @@ const char *Vect_get_column_types(struct Map_info *Map, int field)
     if ((fi = Vect_get_field(Map, field)) == NULL)
         return (NULL);
     driver = db_start_driver(fi->driver);
-    if (driver == NULL)
+    if (driver == NULL) {
+        Vect_destroy_field_info(fi);
         return (NULL);
+    }
     db_init_handle(&handle);
     db_set_handle(&handle, fi->database, NULL);
-    if (db_open_database(driver, &handle) != DB_OK)
-        return (NULL);
+    if (db_open_database(driver, &handle) != DB_OK) {
+        goto cleanup;
+    } 
     db_init_string(&table_name);
     db_set_string(&table_name, fi->table);
-    if (db_describe_table(driver, &table_name, &table) != DB_OK)
-        return (NULL);
+    if (db_describe_table(driver, &table_name, &table) != DB_OK) {
+        goto cleanup;
+    }
 
     ncols = db_get_table_number_of_columns(table);
     sqltype_names = G_malloc(ncols * sizeof(char *));
@@ -130,8 +139,9 @@ const char *Vect_get_column_types(struct Map_info *Map, int field)
     G_free(sqltype_names);
     G_debug(3, "%s", list);
 
-    db_close_database(driver);
-    db_shutdown_driver(driver);
+cleanup:
+    Vect_destroy_field_info(fi);
+    db_close_database_shutdown_driver(driver);
 
     return list;
 }
@@ -149,13 +159,13 @@ const char *Vect_get_column_types(struct Map_info *Map, int field)
 const char *Vect_get_column_names_types(struct Map_info *Map, int field)
 {
     int num_dblinks, ncols, col;
-    struct field_info *fi;
+    struct field_info *fi = NULL;
     dbDriver *driver = NULL;
     dbHandle handle;
     dbString table_name;
     dbTable *table;
     char **col_type_names;
-    char *list;
+    char *list = NULL;
 
     num_dblinks = Vect_get_num_dblinks(Map);
     if (num_dblinks <= 0)
@@ -166,16 +176,20 @@ const char *Vect_get_column_names_types(struct Map_info *Map, int field)
     if ((fi = Vect_get_field(Map, field)) == NULL)
         return (NULL);
     driver = db_start_driver(fi->driver);
-    if (driver == NULL)
+    if (driver == NULL) {
+        Vect_destroy_field_info(fi);
         return (NULL);
+    }
     db_init_handle(&handle);
     db_set_handle(&handle, fi->database, NULL);
-    if (db_open_database(driver, &handle) != DB_OK)
-        return (NULL);
+    if (db_open_database(driver, &handle) != DB_OK) {
+        goto cleanup;
+    }
     db_init_string(&table_name);
     db_set_string(&table_name, fi->table);
-    if (db_describe_table(driver, &table_name, &table) != DB_OK)
-        return (NULL);
+    if (db_describe_table(driver, &table_name, &table) != DB_OK) {
+        goto cleanup;
+    }
 
     ncols = db_get_table_number_of_columns(table);
     col_type_names = G_malloc(ncols * sizeof(char *));
@@ -198,8 +212,9 @@ const char *Vect_get_column_names_types(struct Map_info *Map, int field)
     G_free(col_type_names);
     G_debug(3, "%s", list);
 
-    db_close_database(driver);
-    db_shutdown_driver(driver);
+cleanup:
+    Vect_destroy_field_info(fi);
+    db_close_database_shutdown_driver(driver);
 
     return list;
 }
