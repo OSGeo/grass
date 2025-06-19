@@ -122,7 +122,7 @@ const char *Vect_get_column_types(struct Map_info *Map, int field)
     db_set_handle(&handle, fi->database, NULL);
     if (db_open_database(driver, &handle) != DB_OK) {
         goto cleanup;
-    } 
+    }
     db_init_string(&table_name);
     db_set_string(&table_name, fi->table);
     if (db_describe_table(driver, &table_name, &table) != DB_OK) {
