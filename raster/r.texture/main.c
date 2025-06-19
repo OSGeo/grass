@@ -313,6 +313,10 @@ int main(int argc, char *argv[])
     out_set.flag_ind = flag.ind;
 
     threads = G_set_omp_num_threads(parm.nproc);
+    threads = Rast_disable_omp_on_mask(threads);
+    if (threads < 1)
+        G_fatal_error(_("<%d> is not valid number of nprocs."), threads);
+
     execute_texture(data, &dim, measure_menu, measure_idx, &out_set, threads);
 
     for (i = 0; i < dim.n_outputs; i++) {

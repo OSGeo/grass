@@ -156,6 +156,7 @@ class grassTask:
         Raises ValueError when the flag is not found.
 
         :param str aFlag: name of the flag
+        :raises ValueError: When the flag is not found.
         """
         for f in self.flags:
             if f["name"] == aFlag:
@@ -196,6 +197,8 @@ class grassTask:
         :param bool ignoreRequired: True to ignore required flags, otherwise
                                     '@<required@>' is shown
         :param bool ignoreDefault: True to ignore parameters with default values
+
+        :raises ValueError: When ``ignoreErrors=False`` and there are errors
         """
         cmd = [self.get_name()]
 
@@ -434,6 +437,8 @@ def get_interface_description(cmd):
     otherwise the parser will not succeed.
 
     :param cmd: command (name of GRASS module)
+    :raises ~grass.exceptions.ScriptError:
+        When unable to fetch the interface description for a command.
     """
     try:
         p = Popen([cmd, "--interface-description"], stdout=PIPE, stderr=PIPE)
@@ -493,12 +498,15 @@ def parse_interface(name, parser=processTask, blackList=None):
     :param str name: name of GRASS module to be parsed
     :param parser:
     :param blackList:
+
+    :raises ~grass.exceptions.ScriptError:
+        When the interface description of a module cannot be parsed.
     """
     try:
         tree = ET.fromstring(get_interface_description(name))
     except ETREE_EXCEPTIONS as error:
         raise ScriptError(
-            _("Cannot parse interface description of<{name}> module: {error}").format(
+            _("Cannot parse interface description of <{name}> module: {error}").format(
                 name=name, error=error
             )
         )
