@@ -101,7 +101,6 @@ class TestParserJson(TestCase):
         inputs = [
             {"param": "map", "value": "hospitals@PERMANENT"},
             {"param": "layer", "value": "1"},
-            {"param": "format", "value": "plain"},
         ]
 
         stdout, stderr = subprocess.Popen(args, stdout=subprocess.PIPE).communicate()
