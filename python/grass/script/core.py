@@ -2040,15 +2040,14 @@ def _create_location_xy(database, location):
     :raises ~grass.exceptions.ScriptError:
         Raise :py:exc:`~grass.exceptions.ScriptError` on error.
     """
-    cur_dir = Path.cwd()
     try:
-        os.chdir(database)
-        permanent_dir = Path(location, "PERMANENT")
+        base_path = Path(database)
+        project_dir = base_path / location
+        permanent_dir = project_dir / "PERMANENT"
         default_wind_path = permanent_dir / "DEFAULT_WIND"
         wind_path = permanent_dir / "WIND"
-        os.mkdir(location)
+        project_dir.mkdir()
         permanent_dir.mkdir()
-
         # create DEFAULT_WIND and WIND files
         regioninfo = [
             "proj:       0",
@@ -2070,10 +2069,8 @@ def _create_location_xy(database, location):
             "n-s resol3: 1",
             "t-b resol:  1",
         ]
-
         default_wind_path.write_text("\n".join(regioninfo))
         shutil.copy(default_wind_path, wind_path)
-        os.chdir(cur_dir)
     except OSError as e:
         raise ScriptError(repr(e))
 
