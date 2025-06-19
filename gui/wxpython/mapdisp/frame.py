@@ -1099,13 +1099,11 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 map=raster, coord=(east, north), localized=True, env=env
             )
         if vect:
-            encoding = UserSettings.Get(group="atm", key="encoding", subkey="value")
             try:
                 vectQuery = gs.vector_what(
                     map=vect,
                     coord=(east, north),
                     distance=qdist,
-                    encoding=encoding,
                     multiple=True,
                 )
             except ScriptError:
