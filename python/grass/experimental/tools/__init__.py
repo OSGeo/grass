@@ -7,4 +7,4 @@ def __getattr__(name):
     raise AttributeError(msg)
 
 
-__all__ = ["Tools"]
+__all__ = ["Tools"]  # pylint: disable=undefined-all-variable
