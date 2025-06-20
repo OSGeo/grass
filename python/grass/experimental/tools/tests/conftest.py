@@ -9,7 +9,7 @@ import grass.script as gs
 
 @pytest.fixture
 def xy_dataset_session(tmp_path):
-    """Creates a session with a mapset which has vector with a float column"""
-    gs.core._create_location_xy(tmp_path, "test")  # pylint: disable=protected-access
+    """Creates a session with XY project"""
+    gs.create_project(tmp_path / "test")
     with gs.setup.init(tmp_path / "test", env=os.environ.copy()) as session:
         yield session
