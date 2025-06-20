@@ -84,7 +84,8 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
                 continue;
             }
             G_warning(_("Error reading ASCII file: (bad type) [%s]"), buff);
-            return -1;
+            n_lines = -1;
+            goto cleanup;
         }
         if (ctype == '#') {
             G_debug(2, "a2b: Skipping commented line");
@@ -122,7 +123,8 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
             break;
         default: {
             G_warning(_("Error reading ASCII file: (unknown type) [%s]"), buff);
-            return -1;
+            n_lines = -1;
+            goto cleanup;
         }
         }
         G_debug(5, "feature type = %d", type);
@@ -155,18 +157,21 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
                 if (sscanf(buff, " %s %s %lf", east_str, north_str, z) < 2) {
                     G_warning(_("Error reading ASCII file: (bad point) [%s]"),
                               buff);
-                    return -1;
+                    n_lines = -1;
+                    goto cleanup;
                 }
                 else {
                     if (!G_scan_easting(east_str, x, G_projection())) {
                         G_warning(_("Unparsable longitude value: [%s]"),
                                   east_str);
-                        return -1;
+                        n_lines = -1;
+                        goto cleanup;
                     }
                     if (!G_scan_northing(north_str, y, G_projection())) {
                         G_warning(_("Unparsable latitude value: [%s]"),
                                   north_str);
-                        return -1;
+                        n_lines = -1;
+                        goto cleanup;
                     }
                 }
             }
@@ -210,7 +215,8 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
 
             if (sscanf(buff, "%d%d", &catn, &cat) != 2) {
                 G_warning(_("Error reading categories: [%s]"), buff);
-                return -1;
+                n_lines = -1;
+                goto cleanup;
             }
 
             Vect_cat_set(Cats, catn, cat);
@@ -223,12 +229,14 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
         if (0 >
             Vect_copy_xyz_to_pnts(Points, xarray, yarray, zarray, n_points)) {
             G_warning(_("Unable to copy points"));
-            return -1;
+            n_lines = -1;
+            goto cleanup;
         }
 
         if (type > 0) {
             if (-1 == Vect_write_line(Map, type, Points, Cats)) {
-                return -1;
+                n_lines = -1;
+                goto cleanup;
             }
             n_lines++;
         }
@@ -238,9 +246,12 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
         G_warning(_("Vector map <%s> is 2D. %d 3D features (faces or kernels) "
                     "skipped."),
                   Vect_get_name(Map), nskipped_3d);
-
+cleanup:
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);
+    G_free(xarray);
+    G_free(yarray);
+    G_free(zarray);
 
     return n_lines;
 }
@@ -427,6 +438,8 @@ int Vect_write_ascii(FILE *ascii, FILE *att, struct Map_info *Map, int ver,
             db_set_string(&dbstring, Fi->table);
             if (db_describe_table(driver, &dbstring, &Table) != DB_OK) {
                 G_warning(_("Unable to describe table <%s>"), Fi->table);
+                db_close_database_shutdown_driver(driver);
+                Vect_destroy_field_info(Fi);
                 return -1;
             }
 
@@ -476,6 +489,8 @@ int Vect_write_ascii(FILE *ascii, FILE *att, struct Map_info *Map, int ver,
                             G_warning(_("Export cancelled"));
                             db_close_database(driver);
                             db_shutdown_driver(driver);
+                            Vect_destroy_field_info(Fi);
+                            G_free(columns);
                             return -1;
                         }
                     }
@@ -510,6 +525,11 @@ int Vect_write_ascii(FILE *ascii, FILE *att, struct Map_info *Map, int ver,
                         G_warning(
                             _("Unknown type of column <%s>, export cancelled"),
                             columns[i]);
+                        Vect_destroy_field_info(Fi);
+                        G_free(cats);
+                        G_free(all_columns);
+                        G_free(coltypes);
+                        G_free(columns);
                         return -1;
                     }
                     if (i > 0) {
@@ -577,6 +597,10 @@ int Vect_write_ascii(FILE *ascii, FILE *att, struct Map_info *Map, int ver,
                     column_names && strcmp(column_names[0], "*") == 0 ? columns
                                                                       : NULL);
             }
+            Vect_destroy_cats_struct(ACats);
+            Vect_destroy_list(fcats);
+            Vect_destroy_field_info(Fi);
+            G_free(cats);
 
             return -1;
         }
@@ -920,6 +944,9 @@ int Vect_write_ascii(FILE *ascii, FILE *att, struct Map_info *Map, int ver,
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);
     Vect_destroy_cats_struct(ACats);
+    Vect_destroy_list(fcats);
+    Vect_destroy_field_info(Fi);
+    G_free(cats);
 
     return count;
 }
