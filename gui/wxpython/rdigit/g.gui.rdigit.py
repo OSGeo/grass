@@ -99,7 +99,7 @@ def main():
 
             # set system icon
             parent.SetIcon(
-                wx.Icon(os.path.join(ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO)
+                wx.Icon(os.path.join(ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
             )
 
             # bindings
