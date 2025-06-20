@@ -2119,12 +2119,12 @@ def debug_level(force: bool = False, *, env: _Env = None):
             try:
                 _debug_level = int(gisenv(env=env).get("DEBUG", 0))
             except (CalledModuleError, OSError):
-                # We continute in case of an error. Default value is already set.
+                # We continue in case of an error. Default value is already set.
                 pass
             if _debug_level < 0 or _debug_level > 5:
                 raise ValueError(_("Debug level {0}").format(_debug_level))
         except ValueError as e:
-            # The exeception may come from the conversion or from the range,
+            # The exception may come from the conversion or from the range,
             # so we handle both in the same way.
             _debug_level = 0
             sys.stderr.write(
