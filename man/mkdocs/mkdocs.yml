@@ -29,7 +29,6 @@ theme:
     - content.code.copy
     - content.tabs.link
     - content.tooltips
-    - search.suggest
     - search.share
     - search.highlight
     - navigation.footer

@@ -289,17 +289,6 @@
   color: var(--gs-secondary-alt-color);
 }
 
-/* Search */
-[dir="ltr"] .md-search__suggest {
-	padding-left: 2.1rem;
-}
-
-@media screen and (min-width: 60em) {
-  [dir="ltr"] .md-search__suggest {
-	  padding-left: 2.1rem;
-  }
-}
-
 /* Typesets */
 .md-typeset h1 {
   color: var(--gs-secondary-alt-color);
