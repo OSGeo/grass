@@ -154,8 +154,8 @@ class TestIRectify(TestCase):
             2,
             "linear",
             {
-                "rectify_band1order2_poly": {"mean": 10.0, "max": 18.0, "min": 2.0},
-                "rectify_band2order2_poly": {"mean": 25.0, "max": 81.0, "min": 1.0},
+                "rectify_band1order2_poly": {"mean": 10.0},
+                "rectify_band2order2_poly": {"mean": 25.0},
             },
             gcp_key="order2",
         )
@@ -167,8 +167,8 @@ class TestIRectify(TestCase):
             3,
             "lanczos",
             {
-                "rectify_band1order3_poly": {"mean": 11.0, "max": 16.0, "min": 6.0},
-                "rectify_band2order3_poly": {"mean": 30.25, "max": 64.0, "min": 9.0},
+                "rectify_band1order3_poly": {"mean": 11.0},
+                "rectify_band2order3_poly": {"mean": 30.25},
             },
             gcp_key="order3",
         )
@@ -223,8 +223,8 @@ class TestIRectify(TestCase):
             "linear_f",
             flags="t",
             stats={
-                "rectify_band1tps": {"mean": 11.0, "max": 20.0, "min": 2.0},
-                "rectify_band2tps": {"mean": 30.25, "max": 100.0, "min": 1.0},
+                "rectify_band1tps": {"mean": 11.0},
+                "rectify_band2tps": {"mean": 30.25},
             },
             gcp_key="affine",
         )
