@@ -336,7 +336,7 @@ def handle_errors(
     For ``errors="fatal"``, the function calls :func:`~grass.script.core.fatal()`
     which has its own rules on what happens next. In this case,
     *env* parameter should also be provided unless the caller code relies on
-    a global session.
+    a global session. Besides the *env* parameter, env can be also provided in kwargs.
 
     For ``errors="status"``, the *returncode* will be returned.
     This is useful, e.g., for cases when the exception-based error
@@ -356,6 +356,12 @@ def handle_errors(
     If *stderr* is provided, it is passed to ``CalledModuleError`` to build
     an error message with ``errors="raise"``. With ``errors="exit"``,
     it is printed to ``sys.stderr``.
+
+    This function is intended to be used as an error handler or handler of potential
+    errors in code which wraps calling of tools as subprocesses.
+    Typically, this function is not called directly in user code or in a tool code
+    unless the tools are handed directly, e.g., with :class:`Popen` as opposed
+    to :func:`run_command()`.
     """
 
     def get_module_and_code(args, kwargs):
@@ -367,6 +373,10 @@ def handle_errors(
         module = args[0] if args else None
         code = " ".join(args)
         return module, code
+
+    # If env is not provided, use the one from kwargs (if any).
+    if not env:
+        env = kwargs.get("env")
 
     if handler is None:
         handler = kwargs.get("errors", "raise")
