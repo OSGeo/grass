@@ -5,8 +5,8 @@ import pytest
 TEST_MAPSETS = ["test_1", "test_2"]
 
 
-@pytest.fixture
-def simple_dataset(tmp_path_factory, monkeypatch):
+@pytest.fixture(scope="module")
+def simple_dataset(tmp_path_factory):
     """Set up a GRASS session for the tests."""
     tmp_path = tmp_path_factory.mktemp("simple_dataset")
     project = "test_project"
@@ -16,9 +16,6 @@ def simple_dataset(tmp_path_factory, monkeypatch):
 
     # Initialize the GRASS session
     with gs.setup.init(tmp_path / project, env=os.environ.copy()) as session:
-        for key, value in session.env.items():
-            monkeypatch.setenv(key, value)
-
         gs.run_command("g.region", rows=3, cols=3, env=session.env)
 
         # Create Mock Mapsets and data in each
