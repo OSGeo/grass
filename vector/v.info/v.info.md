@@ -1,220 +1,274 @@
 ## DESCRIPTION
 
-*v.info* reports some basic information (metadata) about a
-user-specified vector map and its topology status.
+The *v.info* tool reports basic information about a
+vector map, including its topology status.
 
-If topology info is not available (i.e., vector map cannot be opened on
-level 2), vector map extends and number of features need to be counted
-on the fly which may take some time.
+When the attribute database connection is defined, the
+information about it is included in the JSON and *shell* outputs.
+If the connection is not defined for the given layer,
+no fields related to attribute database are included in the output
+except `num_dblinks`. To work with multiple layers within one vector map or
+attribute tables connected to other layer than the first layer,
+use *v.info* together with the *v.db.connect* tool.
 
-Note that the flag **-c** only works when the vector map is connected to
-one or several attribute table(s). This connection can be shown or set
-with *v.db.connect*.
+If the vector map is connected to one or more attribute tables, the **-c**
+flag can be used to obtain the names and types of the attribute columns.
+The columns are always printed for the attribute table linked to the layer
+specified as a parameter. If the given layer is not connected to attribute table
+database, the tools produces and error.
+The current attribute database connections can be displayed or configured using
+*v.db.connect*.
 
-## EXAMPLE
+If the topology information is unavailable (i.e., the vector map cannot be
+opened at level 2), the spatial extent and number of features must be
+calculated on the fly, which may take some time with large amounts of data.
 
-### Basic metadata information
+Flags **-g**, **-e**, **-t** can be used to retrieve only a subset of
+information. Use one or more of these flags together with the *format* set to
+"json" or "shell". For example, you can retrieve non-spatial metadata with
+the **-g** flag without calculating the spatial extent and number of features
+when they are unavailable (see above).
+Providing all three of these flags is the same as not providing any.
 
-```sh
-v.info map=geology
+## NOTES
 
- +----------------------------------------------------------------------------+
- | Name:            geology                                                   |
- | Mapset:          PERMANENT                                                 |
- | Project:         nc_spm_08                                                 |
- | Database:        /home/martin/grassdata                                    |
- | Title:           North Carolina geology map (polygon map)                  |
- | Map scale:       1:1                                                       |
- | Map format:      native                                                    |
- | Name of creator: helena                                                    |
- | Organization:    NC OneMap                                                 |
- | Source date:     Mon Nov  6 15:48:53 2006                                  |
- |----------------------------------------------------------------------------|
- |   Type of map: vector (level: 2)                                           |
- |                                                                            |
- |   Number of points:       0               Number of centroids:  1832       |
- |   Number of lines:        0               Number of boundaries: 3649       |
- |   Number of areas:        1832            Number of islands:    907        |
- |                                                                            |
- |   Map is 3D:              No                                               |
- |   Number of dblinks:      1                                                |
- |                                                                            |
- |   Projection: Lambert Conformal Conic                                      |
- |                                                                            |
- |               N:   318117.43741634    S:    10875.82723209                 |
- |               E:   930172.31282271    W:   123971.19498978                 |
- |                                                                            |
- |   Digitization threshold: 0                                                |
- |   Comment:                                                                 |
- |                                                                            |
- +----------------------------------------------------------------------------+
-```
+For backwards compatibility reasons,
+using flags **-g**, **-e**, **-t**, **-c**, **-h** without *format*,
+automatically switches to the *shell* format. In the next major release, this may
+be changed to keep the *plain* format output to best serve interactive use.
+Specify format *shell* or *json* explicitly for scripting.
+
+For history (**-h** flag), always use JSON output (`format="json"`).
+Do not rely on parsing the *shell* format output which is currently
+fully dependent on the internal storage format. In the next major release, the
+*shell* format may be changed dramatically.
+
+## EXAMPLES
+
+### Metadata information
+
+Get all the basic information such as title and topology information:
+
+=== "Command line"
+
+    ```sh
+    v.info map=geology
+    ```
+
+    Possible output:
+
+    ```text
+    +----------------------------------------------------------------------------+
+    | Name:            geology                                                   |
+    | Mapset:          PERMANENT                                                 |
+    | Project:         nc_spm_08                                                 |
+    | Database:        /home/martin/grassdata                                    |
+    | Title:           North Carolina geology map (polygon map)                  |
+    | Map scale:       1:1                                                       |
+    | Map format:      native                                                    |
+    | Name of creator: helena                                                    |
+    | Organization:    NC OneMap                                                 |
+    | Source date:     Mon Nov  6 15:48:53 2006                                  |
+    |----------------------------------------------------------------------------|
+    |   Type of map: vector (level: 2)                                           |
+    |                                                                            |
+    |   Number of points:       0               Number of centroids:  1832       |
+    |   Number of lines:        0               Number of boundaries: 3649       |
+    |   Number of areas:        1832            Number of islands:    907        |
+    |                                                                            |
+    |   Map is 3D:              No                                               |
+    |   Number of dblinks:      1                                                |
+    |                                                                            |
+    |   Projection: Lambert Conformal Conic                                      |
+    |                                                                            |
+    |               N:   318117.43741634    S:    10875.82723209                 |
+    |               E:   930172.31282271    W:   123971.19498978                 |
+    |                                                                            |
+    |   Digitization threshold: 0                                                |
+    |   Comment:                                                                 |
+    |                                                                            |
+    +----------------------------------------------------------------------------+
+    ```
+
+=== "Python (grass.script)"
+
+    ```python
+    import grass.script as gs
+
+    data = gs.parse_command("v.info", map="geology", format="json")
+    print(data["title"])
+    ```
+
+    Possible output:
+
+    ```text
+    North Carolina hospitals (points map)
+    ```
+
+    The whole JSON may look like this:
+
+    ```json
+    {
+        "name": "geology",
+        "mapset": "PERMANENT",
+        "project": "nc_spm_08",
+        "database": "\/home\/martin\/grassdata",
+        "title": "North Carolina geology map (polygon map)",
+        "scale": "1:1",
+        "creator": "helena",
+        "organization": "NC OneMap",
+        "source_date": "Mon Nov  6 15:48:53 2006",
+        "timestamp": null,
+        "format": "native",
+        "level": 2,
+        "num_dblinks": 1,
+        "attribute_layer_number": 1,
+        "attribute_layer_name": "geology",
+        "attribute_database": "\/home\/martin\/grassdata\/nc_spm_08\/PERMANENT\/sqlite\/sqlite.db",
+        "attribute_database_driver": "sqlite",
+        "attribute_table": "geology",
+        "attribute_primary_key": "cat",
+        "projection": "Lambert Conformal Conic",
+        "digitization_threshold": 0,
+        "comment": "",
+        "north": 318117.43741634465,
+        "south": 10875.827232091688,
+        "east": 930172.31282271142,
+        "west": 123971.19498978264,
+        "top": 0,
+        "bottom": 0,
+        "nodes": 2724,
+        "points": 0,
+        "lines": 0,
+        "boundaries": 3649,
+        "centroids": 1832,
+        "areas": 1832,
+        "islands": 907,
+        "primitives": 5481,
+        "map3d": false
+    }
+    ```
+
+### Attribute table columns
+
+The tool returns attribute column for a specified layer within the vector map.
+The default layer is layer 1 which is usually the one connected to an attribute
+table database, so leaving the default value produces the expected result:
+
+=== "Command line"
+
+    ```sh
+    v.info -c map=geology format=shell
+    ```
+
+    Possible output:
+
+    ```
+    INTEGER|cat
+    DOUBLE PRECISION|onemap_pro
+    DOUBLE PRECISION|PERIMETER
+    INTEGER|GEOL250_
+    INTEGER|GEOL250_ID
+    CHARACTER|GEO_NAME
+    DOUBLE PRECISION|SHAPE_area
+    DOUBLE PRECISION|SHAPE_len
+    ```
+
+=== "Python (grass.script)"
+
+    ```python
+    import grass.script as gs
+
+    data = gs.parse_command("v.info", map="geology", flags="c", format="json")
+    print("names:", ", ".join(column["name"] for column in data["columns"]))
+    ```
+
+    Possible output:
+
+    ```text
+    names: cat, onemap_pro, PERIMETER, GEOL250_, GEOL250_ID, GEO_NAME, SHAPE_area, SHAPE_len
+    ```
 
 ### Map history
 
-```sh
-v.info -h map=geology
+=== "Command line"
 
-COMMAND: v.in.ogr input="geol.shp" output="geology" min_area=0.0001 snap=-1
-GISDBASE: /bigdata/grassdata05
-LOCATION: ncfromfile MAPSET: PERMANENT USER: helena DATE: Mon Nov  6 15:48:53 2006
----------------------------------------------------------------------------------
-1832 input polygons
-total area: 1.276093e+11 (1832 areas)
-overlapping area: 0.000000e+00 (0 areas)
-area without category: 0.000000e+00 (0 areas)
----------------------------------------------------------------------------------
-```
+    ```sh
+    v.info -h map=geology
+    ```
 
-Note that while "project" is used by *v.info* elsewhere, history output
-uses the legacy term "location" because "LOCATION" is currently a part
-of the native vector format.
+    Possible output:
 
-### Attribute columns for given layer
+    ```text
+    COMMAND: v.in.ogr input="geol.shp" output="geology" min_area=0.0001 snap=-1
+    GISDBASE: /bigdata/grassdata05
+    LOCATION: ncfromfile MAPSET: PERMANENT USER: helena DATE: Mon Nov  6 15:48:53 2006
+    ---------------------------------------------------------------------------------
+    1832 input polygons
+    total area: 1.276093e+11 (1832 areas)
+    overlapping area: 0.000000e+00 (0 areas)
+    area without category: 0.000000e+00 (0 areas)
+    ---------------------------------------------------------------------------------
+    ```
 
-```sh
-v.info -c map=geology
+    Note that while "project" is used by *v.info* elsewhere, history output
+    uses the legacy term "location" because "LOCATION" is currently a part
+    of the native vector format.
 
-Displaying column types/names for database connection of layer <1>:
-INTEGER|cat
-DOUBLE PRECISION|onemap_pro
-DOUBLE PRECISION|PERIMETER
-INTEGER|GEOL250_
-INTEGER|GEOL250_ID
-CHARACTER|GEO_NAME
-DOUBLE PRECISION|SHAPE_area
-DOUBLE PRECISION|SHAPE_len
-```
+=== "Python (grass.script)"
 
-### Basic metadata information in shell script style
+    ```python
+    import grass.script as gs
 
-```sh
-v.info -get map=geology
+    data = gs.parse_command("v.info", map="hospitals", flags="h", format="json")
+    for record in data["records"]:
+        print(record["command"])
+    ```
 
-name=geology
-mapset=PERMANENT
-project=nc_spm_08
-database=/home/martin/grassdata
-title=North Carolina geology map (polygon map)
-scale=1:1
-format=native
-creator=helena
-organization=NC OneMap
-source_date=Mon Nov  6 15:48:53 2006
-level=2
-map3d=0
-num_dblinks=1
-projection=Lambert Conformal Conic
-digitization_threshold=0.000000
-comment=
-north=318117.43741634
-south=10875.82723209
-east=930172.31282271
-west=123971.19498978
-top=0.000000
-bottom=0.000000
-nodes=4556
-points=0
-lines=0
-boundaries=3649
-centroids=1832
-areas=1832
-islands=907
-primitives=5481
-```
+    Possible output:
 
-```sh
-v.info -g map=geology
+    ```text
+    v.in.ogr dsn="hls.shp" output="hospitals" min_area=0.0001 snap=-1
+    v.db.connect -o map="hospitals@PERMANENT" driver="sqlite" database="$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db" table="hospitals" key="cat" layer="1" separator="|"
+    ```
 
-north=318117.43741634
-south=10875.82723209
-east=930172.31282271
-west=123971.19498978
-top=0.000000
-bottom=0.000000
-```
+### Limiting the output
 
-### Output in JSON format
+=== "Command line"
 
-```json
-{
-    "name": "geology",
-    "mapset": "PERMANENT",
-    "project": "nc_spm_08_grass7",
-    "database": "\/grassdata",
-    "title": "North Carolina geology map (polygon map)",
-    "scale": 1,
-    "creator": "helena",
-    "organization": "NC OneMap",
-    "source_date": "Mon Nov  6 15:48:53 2006",
-    "timestamp": null,
-    "format": "native",
-    "level": 2,
-    "num_dblinks": 1,
-    "attribute_layer_number": 1,
-    "attribute_layer_name": "geology",
-    "attribute_database": "\/grassdata\/nc_spm_08_grass7\/PERMANENT\/sqlite\/sqlite.db",
-    "attribute_database_driver": "sqlite",
-    "attribute_table": "geology",
-    "attribute_primary_key": "cat",
-    "projection": "Lambert Conformal Conic",
-    "digitization_threshold": 0,
-    "comment": "",
-    "north": 318117.43741634465,
-    "south": 10875.827232091688,
-    "east": 930172.31282271142,
-    "west": 123971.19498978264,
-    "top": 0,
-    "bottom": 0,
-    "nodes": 2724,
-    "points": 0,
-    "lines": 0,
-    "boundaries": 3649,
-    "centroids": 1832,
-    "areas": 1832,
-    "islands": 907,
-    "primitives": 5481,
-    "map3d": false
-}
-```
+    ```sh
+    v.info -g map=geology
+    ```
 
-## PYTHON
+    Possible output:
 
-See *[Python Scripting
-Library](https://grass.osgeo.org/grass-stable/manuals/libpython/)* for
-more info.
+    ```text
+    north=318117.43741634
+    south=10875.82723209
+    east=930172.31282271
+    west=123971.19498978
+    top=0.000000
+    bottom=0.000000
+    ```
 
-Note: The Python tab in the *wxGUI* can be used for entering the
-following code:
+=== "Python (grass.script)"
 
-```python
-import grass.script as gs
+    ```python
+    import grass.script as gs
 
-gs.vector_columns('geology')   # for `v.info -c`
-gs.vector_info_topo('geology') # for `v.info shell=topo`
-```
+    data = gs.parse_command("v.info", map="geology", flags="g", format="json")
+    print(data)
+    ```
 
-Here is an example of how the JSON output format can be used to
-integrate Grass with other python libraries easily.
+    Possible output:
 
-```python
-import grass.script as gs
-import pandas as pd
-
-# Run v.info command
-busstops = gs.run_command("v.info", map="busstopsall", format="json")
-
-# Load data into dataframe
-df = pd.DataFrame([busstops])
-
-# Display the DataFrame
-print(df)
-```
+    ```text
+    {'north': 318117.43741634465, 'south': 10875.827232091688, 'east': 930172.3128227114, 'west': 123971.19498978264, 'top': 0, 'bottom': 0}
+    ```
 
 ## SEE ALSO
 
-*[r.info](r.info.md), [r3.info](r3.info.md), [t.info](t.info.md),
-[v.db.connect](v.db.connect.md)*
+*[v.db.connect](v.db.connect.md), [v.category](v.category.md), [r.info](r.info.md), [r3.info](r3.info.md), [t.info](t.info.md)*
 
 ## AUTHORS
 
