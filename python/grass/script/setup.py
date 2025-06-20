@@ -238,6 +238,38 @@ def setup_runtime_env(gisbase=None, *, env=None):
     set_path_to_python_executable(env=env)
 
 
+def runtime_env_is_active(env=None):
+    """Check that GRASS runtime environment is set up.
+
+    On a best-effort basis, it determines whether the GRASS runtime environment
+    is set up. If so, it returns True; otherwise, it returns False.
+
+    If *env* is not provided, uses the global environment (os.environ).
+    """
+    if not env:
+        env = os.environ
+    gisbase = env.get("GISBASE")
+    if not gisbase:
+        return False
+    # Check also path to tools.
+    return gisbase in env["PATH"]
+
+
+def ensure_runtime_env(env=None):
+    """Ensure that GRASS runtime environment is set up.
+
+    If the environment is set up, does nothing. Otherwise, it modifies the
+    environment to activate the runtime environment.
+    It does not start a session connected to a project.
+
+    If *env* is not provided, uses the global environment (os.environ).
+    """
+    if not env:
+        env = os.environ
+    if not runtime_env_is_active(env=env):
+        setup_runtime_env(env=env)
+
+
 def init(
     path,
     location=None,
