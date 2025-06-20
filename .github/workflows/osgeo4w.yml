@@ -151,6 +151,7 @@ jobs:
             @.github/workflows/pytest_args_ci.txt ^
             --maxfail=10 ^
             -k "not testsuite"
+        shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}""
       - name: Run pytest with a single worker III
         continue-on-error: true
         run: |
@@ -161,6 +162,7 @@ jobs:
             @.github/workflows/pytest_args_ci.txt ^
             --maxfail=10 ^
             -k "not testsuite"
+        shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}""
       - name: Run pytest with a single worker IV
         continue-on-error: true
         run: |
