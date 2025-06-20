@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-14 18:45+0000\n"
-"PO-Revision-Date: 2025-06-16 10:31+0000\n"
+"PO-Revision-Date: 2025-06-20 00:15+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
 "Language: sv\n"
@@ -840,7 +840,7 @@ msgstr "Värdeoperand för NOT"
 #: ../db/drivers/dbf/dbfexe.c:955 ../db/drivers/dbf/dbfexe.c:1156
 #, c-format
 msgid "Unknown operator %d"
-msgstr "Okänd operatör %d"
+msgstr "Okänd operator %d"
 
 #: ../db/drivers/dbf/dbfexe.c:1064
 msgid "Arithmetical operation with strings is not allowed"
@@ -11108,7 +11108,7 @@ msgstr "Inte tillräckligt med aktiva kontrollpunkter för aktuell order, %d kr�
 
 #: ../imagery/i.rectify/cp.c:60 ../vector/v.rectify/cp.c:365
 msgid "Invalid order"
-msgstr "Ogiltig beställning"
+msgstr "Ogiltig ordning"
 
 #: ../imagery/i.rectify/get_wind.c:181
 #, c-format
@@ -44147,7 +44147,7 @@ msgstr "Typ av objekt (vektorkarta B)"
 
 #: ../vector/v.overlay/main.c:107
 msgid "Operator defines features written to output vector map"
-msgstr "Operatören definierar funktioner som skrivs till utmatningsvektorkartan"
+msgstr "Operatorn definierar funktioner som skrivs till utmatningsvektorkartan"
 
 #: ../vector/v.overlay/main.c:110
 msgid "Feature is written to output if the result of operation 'ainput operator binput' is true. Input feature is considered to be true, if category of given layer is defined."
@@ -45122,7 +45122,7 @@ msgstr "Lagernummer (vektorkarta B)"
 
 #: ../vector/v.select/args.c:50
 msgid "Operator defines required relation between features"
-msgstr "Operatör definierar önskad relation mellan funktioner"
+msgstr "Operatorn definierar önskad relation mellan funktioner"
 
 #: ../vector/v.select/args.c:52
 msgid "A feature is written to output if the result of operation 'ainput operator binput' is true. An input feature is considered to be true, if category of given layer is defined."
@@ -45170,7 +45170,7 @@ msgstr "objekt A är spatialt relaterat till objekt B (med GEOS, kräver alterna
 
 #: ../vector/v.select/args.c:98
 msgid "Intersection Matrix Pattern used for 'relate' operator"
-msgstr "Intersection Matrix Mönster som används för operatören \"relate"
+msgstr "Intersection-matrismönster som används för operatorn \"relate\""
 
 #: ../vector/v.select/args.c:105
 msgid "Do not skip features without category"
@@ -45187,7 +45187,7 @@ msgstr "Väljer objekt från vektorkarta (A) med objekt från annan vektorkarta 
 
 #: ../vector/v.select/main.c:104
 msgid "Operator can only be 'overlap'"
-msgstr "Operatören kan bara vara \"överlappning"
+msgstr "Operatorn kan bara vara \"overlap\""
 
 #: ../vector/v.select/main.c:160
 msgid "Output from v.select"

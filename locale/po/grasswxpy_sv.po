@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-14 18:45+0000\n"
-"PO-Revision-Date: 2025-06-16 10:31+0000\n"
+"PO-Revision-Date: 2025-06-20 00:15+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/sv/>\n"
 "Language: sv\n"
@@ -4182,7 +4182,7 @@ msgstr "Inaktiverad:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:88
 msgid "Python editor"
-msgstr "Python-editor"
+msgstr "Python-redigerare"
 
 #: ../gui/wxpython/gmodeler/preferences.py:95
 msgid "GRASS API:"
@@ -5861,7 +5861,7 @@ msgstr "Avaktivera överskrivning"
 
 #: ../gui/wxpython/gui_core/pyedit.py:876
 msgid "Simple Python Editor"
-msgstr "Enkel Python Editor"
+msgstr "Enkel Python-redigerare"
 
 #: ../gui/wxpython/gui_core/query.py:32
 msgid "Query results"
@@ -9953,7 +9953,7 @@ msgstr "mapcalc uttalande"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:153
 msgid "Operators"
-msgstr "Operatörer"
+msgstr "Operatorer"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:156
 #: ../gui/wxpython/vnet/dialogs.py:368
