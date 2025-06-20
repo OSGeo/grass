@@ -85,7 +85,6 @@ class TestPythonModuleWithStdinStdout(TestCase):
     def tearDownClass(cls):
         cls.runModule("g.remove", type="raster", name=cls.raster, flags="f")
 
-    @xfail_windows
     def test_write_read_labels_str(self):
         """This tests if standard string works"""
         write_command(
