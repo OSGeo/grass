@@ -95,11 +95,14 @@ FONTCAP = etc/fontcap
 TMPGISRC = demolocation/.grassrc$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
 PLATMAKE = include/Make/Platform.make
 GRASSMAKE = include/Make/Grass.make
+RESOURCE_PATHS = etc/python/grass/app/resource_paths.py
 
 real-install: | $(DESTDIR) $(DESTDIR)$(INST_DIR) $(DESTDIR)$(UNIX_BIN)
 	-tar cBCf $(GISBASE) - . | tar xBCf $(DESTDIR)$(INST_DIR) - 2>/dev/null
 	-rm $(DESTDIR)$(INST_DIR)/$(GRASS_NAME).tmp
+	-rm $(DESTDIR)$(INST_DIR)/$(RESOURCE_PATHS)
 	$(MAKE) $(STARTUP)
+	$(MAKE) $(DESTDIR)$(INST_DIR)/$(RESOURCE_PATHS)
 
 	-rm $(DESTDIR)$(INST_DIR)/$(FONTCAP)
 	$(MAKE) $(DESTDIR)$(INST_DIR)/$(FONTCAP)
@@ -122,11 +125,16 @@ $(DESTDIR)$(INST_DIR) $(DESTDIR)$(UNIX_BIN):
 	$(MAKE_DIR_CMD) $@
 
 $(STARTUP): $(ARCH_DISTDIR)/$(GRASS_NAME).tmp
-	sed -e 's#'@GISBASE_INSTALL_PATH@'#'$(INST_DIR)'#g' \
+	sed -e 's#'@GRASS_PREFIX@'#'$(INST_DIR)'#g' \
 	    -e 's#'@LD_LIBRARY_PATH_VAR@'#'$(LD_LIBRARY_PATH_VAR)'#g' \
 	    -e 's#'@CONFIG_PROJSHARE@'#'$(PROJSHARE)'#g' \
 	    $< > $@
 	-$(CHMOD) a+x $@
+
+$(DESTDIR)$(INST_DIR)/$(RESOURCE_PATHS): $(ARCH_DISTDIR)/resource_paths.py
+	sed -e 's#'@GRASS_PREFIX@'#'$(INST_DIR)'#g' \
+	    -e 's#'@GISBASE_INSTALL_PATH@'##g' \
+	    $< > $@
 
 define fix_gisbase
 sed -e 's#$(GISBASE)#$(INST_DIR)#g' $< > $@

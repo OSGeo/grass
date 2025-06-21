@@ -77,6 +77,8 @@ endif
 	-e 's#@LD_LIBRARY_PATH_VAR@#$(LD_LIBRARY_PATH_VAR)#' \
 	-e 's#@START_UP@#$(START_UP)#' \
 	-e 's#@CONFIG_PROJSHARE@#$(PROJSHARE)#' \
+	-e 's#@GRASS_PREFIX@#$(RUN_GISBASE)#' \
+	-e 's#@GRASS_PYDIR@#etc/python#' \
 	$< > $@
 	chmod +x $@
 
@@ -91,6 +93,7 @@ $(ARCH_DISTDIR)/$(START_UP).tmp: grass.py
 	-e 's#@GRASS_CONFIG_DIR@#$(GRASS_CONFIG_DIR)#' \
 	-e 's#@LD_LIBRARY_PATH_VAR@#$(LD_LIBRARY_PATH_VAR)#' \
 	-e 's#@CONFIG_PROJSHARE@#$(PROJSHARE)#' \
+	-e 's#@GRASS_PYDIR@#etc/python#' \
 	$< > $@
 
 $(ETC)/echo$(EXE) $(ETC)/run$(EXE): $(ETC)/%$(EXE): $(OBJDIR)/%.o

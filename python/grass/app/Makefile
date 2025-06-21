@@ -14,7 +14,20 @@ MODULES = \
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)
 
-default: $(PYFILES) $(PYCFILES)
+PYFILES := $(filter-out resource_paths.py,$(PYFILES))
+PYCFILES := $(filter-out resource_paths.pyc,$(PYCFILES))
+
+default: $(PYFILES) $(PYCFILES) $(DSTDIR)/resource_paths.py $(ARCH_DISTDIR)/resource_paths.py
+
+$(DSTDIR)/resource_paths.py: resource_paths.py
+	rm -f $@
+	sed \
+	-e 's#@GRASS_PREFIX@#$(RUN_GISBASE)#' \
+	-e 's#@GISBASE_INSTALL_PATH@##' \
+	$< > $@
+
+$(ARCH_DISTDIR)/resource_paths.py:
+	cp resource_paths.py $@
 
 $(DSTDIR):
 	$(MKDIR) $@
