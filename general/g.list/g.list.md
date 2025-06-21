@@ -9,6 +9,12 @@ The output of *g.list* may be useful for other programs' parameter input
 (e.g. time series for *[r.series](r.series.md)*) when used with
 *separator=comma*.
 
+The flags `-m` and `-t` apply only to shell format output.
+
+The flags `-p` and `-f` apply only to plain format output, but they are now
+deprecated and will be removed in a future release. Instead of using those, use
+`format=plain` to obtain human-readable plain text output.
+
 ## EXAMPLES
 
 List all raster maps as continuous, sorted list:
@@ -27,7 +33,7 @@ g.list type=vector -m
 List all raster and vector maps ordered by mapset:
 
 ```sh
-g.list type=raster -p
+g.list type=raster format=plain
 ```
 
 List all raster and vector maps as continuous, sorted list:
@@ -42,6 +48,21 @@ List all available GRASS data base files:
 g.list type=all
 ```
 
+List all raster and vector maps using Python:
+
+```python
+import grass.script as gs
+
+data = gs.parse_command("g.list", type=["rast", "vect"], format="json")
+print(data)
+```
+
+Possible output:
+
+```text
+[{'mapset': 'PERMANENT', 'name': 'aspect', 'type': 'raster', 'fullname': 'aspect@PERMANENT'}, {'mapset': 'PERMANENT', 'name': 'zipcodes_wake', 'type': 'vector', 'fullname': 'zipcodes_wake@PERMANENT'}]
+```
+
 ### Mapset search path
 
 If **mapset** is not specified, then *g.list* searches for data files in
@@ -49,7 +70,7 @@ the mapsets that are included in the search path (defined by
 *[g.mapsets](g.mapsets.md)*). See `g.mapsets -p`.
 
 ```sh
-g.list rast -p
+g.list rast format=plain
 
 raster map(s) available in mapset <user1>:
 dmt
@@ -72,7 +93,7 @@ available mapsets also including those that are not listed in the
 current search path (see `g.mapsets -l`).
 
 ```sh
-g.list rast mapset=* -p
+g.list rast mapset=* format=plain
 
 raster map(s) available in mapset <landsat>:
 lsat5_1987_10
