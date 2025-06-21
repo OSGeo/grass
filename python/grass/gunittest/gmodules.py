@@ -11,7 +11,7 @@ for details.
 
 import subprocess
 from grass.script.core import start_command
-from grass.script.utils import encode, decode
+from grass.script.utils import decode
 from grass.exceptions import CalledModuleError
 from grass.pygrass.modules import Module
 
@@ -134,7 +134,7 @@ def call_module(
     # for no stdout, output is None which is out interface
     # for stderr=STDOUT or no stderr, errors is None
     # which is fine for CalledModuleError
-    output, errors = process.communicate(input=encode(decode(stdin)) if stdin else None)
+    output, errors = process.communicate(input=decode(stdin) if stdin else None)
     returncode = process.poll()
     if returncode:
         raise CalledModuleError(module, kwargs, returncode, errors)
