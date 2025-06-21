@@ -260,7 +260,7 @@ static int seek_only(int fd, off_t nbytes)
 
     G_debug(3, "Using new segmentation code...");
     errno = 0;
-    if (lseek(fd, nbytes - 1, SEEK_CUR) < 0) {
+    if (lseek(fd, nbytes - 1, SEEK_CUR) == (off_t)-1) {
         int err = errno;
 
         G_warning("segment zero_fill(): Unable to seek (%s)", strerror(err));
