@@ -1,0 +1,620 @@
+"""Test grass.experimental.tools.Tools class"""
+
+import io
+
+import pytest
+
+import grass.script as gs
+from grass.experimental.mapset import TemporaryMapsetSession
+from grass.experimental.tools import Tools
+from grass.exceptions import CalledModuleError
+
+
+def test_key_value_parser_number(xy_dataset_session):
+    """Check that numbers are parsed as numbers"""
+    tools = Tools(session=xy_dataset_session)
+    assert tools.g_region(flags="g").keyval["nsres"] == 1
+
+
+def test_key_value_parser_multiple_values(xy_dataset_session):
+    """Check that strings and floats are parsed"""
+    tools = Tools(session=xy_dataset_session)
+    name = "surface"
+    tools.r_surf_gauss(output=name)  # needs seed
+    result = tools.r_info(map=name, flags="g").keyval
+    assert result["datatype"] == "DCELL"
+    assert result["nsres"] == 1
+    result = tools.r_univar(map=name, flags="g").keyval
+    # We don't worry about the specific output value, and just test the type.
+    assert isinstance(result["mean"], float)
+
+
+def test_json_parser(xy_dataset_session):
+    """Check that JSON is parsed"""
+    tools = Tools(session=xy_dataset_session)
+    assert tools.g_region(flags="p", format="json").json["cols"] == 1
+
+
+def test_json_with_name_and_parameter_call(xy_dataset_session):
+    """Check that JSON is parsed with a name-and-parameters style call"""
+    tools = Tools(session=xy_dataset_session)
+    assert tools.run("g.region", flags="p", format="json").json["cols"] == 1
+
+
+def test_json_with_direct_name_and_parameter_call(xy_dataset_session):
+    """Check that JSON is parsed with a name-and-parameters style call"""
+    tools = Tools(session=xy_dataset_session)
+    assert tools.call("g.region", flags="p", format="json").json["cols"] == 1
+
+
+def test_json_with_subprocess_run_like_call(xy_dataset_session):
+    """Check that JSON is parsed with a name-and-parameters style call"""
+    tools = Tools(session=xy_dataset_session)
+    assert tools.run_cmd(["g.region", "format=json", "-p"]).json["cols"] == 1
+
+
+def test_json_with_direct_subprocess_run_like_call(xy_dataset_session):
+    """Check that JSON is parsed with a name-and-parameters style call"""
+    tools = Tools(session=xy_dataset_session)
+    assert tools.call_cmd(["g.region", "format=json", "-p"]).json["cols"] == 1
+
+
+def test_json_as_list(xy_dataset_session):
+    """Check that JSON is parsed"""
+    tools = Tools(session=xy_dataset_session)
+    result = tools.g_search_modules(keyword="random", flags="j")
+    for item in result:
+        assert "name" in item
+    assert len(result)
+
+
+def test_help_call_no_parameters(xy_dataset_session):
+    """Check that JSON is parsed with a name-and-parameters style call"""
+    tools = Tools(session=xy_dataset_session)
+    assert "r.slope.aspect" in tools.call_cmd(["r.slope.aspect", "--help"]).stderr
+
+
+def test_help_call_with_parameters(xy_dataset_session):
+    """Check that JSON is parsed with a name-and-parameters style call"""
+    tools = Tools(session=xy_dataset_session)
+    assert (
+        "r.slope.aspect"
+        in tools.call_cmd(
+            ["r.slope.aspect", "elevation=dem", "slope=slope", "--help"]
+        ).stderr
+    )
+
+
+def test_json_call_with_low_level_call(xy_dataset_session):
+    """Check that --json call works including JSON data parsing"""
+    tools = Tools(session=xy_dataset_session)
+    data = tools.call_cmd(
+        ["r.slope.aspect", "elevation=dem", "slope=slope", "--json"]
+    ).json
+    assert "inputs" in data
+    assert data["inputs"][0]["value"] == "dem"
+
+
+def test_json_call_with_high_level_call(xy_dataset_session):
+    """Check that --json call works including JSON data parsing"""
+    tools = Tools(session=xy_dataset_session)
+    data = tools.run_cmd(
+        ["r.slope.aspect", "elevation=dem", "slope=slope", "--json"]
+    ).json
+    assert "inputs" in data
+    assert data["inputs"][0]["value"] == "dem"
+
+
+def test_json_direct_access(xy_dataset_session):
+    """Check that JSON is parsed"""
+    tools = Tools(session=xy_dataset_session)
+    assert tools.g_search_modules(keyword="random", flags="j")[0]["name"] == "r.random"
+
+
+def test_json_direct_access_bad_key_type(xy_dataset_session):
+    """Check that JSON is parsed"""
+    tools = Tools(session=xy_dataset_session)
+    with pytest.raises(TypeError):
+        tools.g_search_modules(keyword="random", flags="j")["name"]
+
+
+def test_json_direct_access_bad_key_value(xy_dataset_session):
+    """Check that JSON is parsed"""
+    tools = Tools(session=xy_dataset_session)
+    high_number = 100_000_000
+    with pytest.raises(IndexError):
+        tools.g_search_modules(keyword="random", flags="j")[high_number]
+
+
+def test_json_direct_access_not_json(xy_dataset_session):
+    """Check that JSON parsing creates an ValueError
+
+    Specifically, this tests the case when format="json" is not set.
+    """
+    tools = Tools(session=xy_dataset_session)
+    with pytest.raises(ValueError, match=r"format.*json"):
+        tools.g_search_modules(keyword="random")[0]["name"]
+
+
+def test_stdout_as_text(xy_dataset_session):
+    """Check that simple text is parsed and has no whitespace"""
+    tools = Tools(session=xy_dataset_session)
+    assert tools.g_mapset(flags="p").text == "PERMANENT"
+
+
+def test_stdout_as_space_items(xy_dataset_session):
+    """Check that whitespace-separated items are parsed"""
+    tools = Tools(session=xy_dataset_session)
+    assert tools.g_mapset(flags="l").space_items == ["PERMANENT"]
+
+
+def test_stdout_split_whitespace(xy_dataset_session):
+    """Check that whitespace-based split function works"""
+    tools = Tools(session=xy_dataset_session)
+    assert tools.g_mapset(flags="l").text_split() == ["PERMANENT"]
+
+
+def test_stdout_split_space(xy_dataset_session):
+    """Check that the split function works with space"""
+    tools = Tools(session=xy_dataset_session)
+    # Not a good example usage, but it tests the functionality.
+    assert tools.g_mapset(flags="l").text_split(" ") == ["PERMANENT"]
+
+
+def test_stdout_comma_items(xy_dataset_session):
+    """Check that the split function works with space"""
+    tools = Tools(session=xy_dataset_session)
+    result = tools.g_gisenv(
+        get="GISDBASE,LOCATION_NAME,MAPSET", sep="comma"
+    ).comma_items
+    assert len(result) == 3
+    for item in result:
+        assert item
+
+
+def test_stdout_without_capturing(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, capture_output=False)
+    result = tools.g_mapset(flags="p")
+    assert not result.stdout
+    assert result.stdout is None
+    assert not result.text
+    assert result.text is None
+
+
+def test_capturing_stderr(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, errors="ignore")
+    result = tools.g_mapset(mapset="does_not_exist")
+    assert result.stderr
+    assert "does_not_exist" in result.stderr
+
+
+def test_stderr_without_capturing(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, capture_output=False, errors="ignore")
+    result = tools.g_mapset(mapset="does_not_exist")
+    assert not result.stderr
+    assert result.stderr is None
+
+
+def test_error_handler_default(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session)
+    with pytest.raises(CalledModuleError, match="does_not_exist"):
+        tools.g_mapset(mapset="does_not_exist")
+    # Works after errors as usual.
+    assert tools.g_mapset(flags="p").text == "PERMANENT"
+
+
+def test_error_handler_none(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, errors=None)
+    with pytest.raises(CalledModuleError, match="does_not_exist"):
+        tools.g_mapset(mapset="does_not_exist")
+    # Works after errors as usual.
+    assert tools.g_mapset(flags="p").text == "PERMANENT"
+
+
+def test_error_handler_raise(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, errors="raise")
+    with pytest.raises(CalledModuleError, match="does_not_exist"):
+        tools.g_mapset(mapset="does_not_exist")
+    # Works after errors as usual.
+    assert tools.g_mapset(flags="p").text == "PERMANENT"
+
+
+def test_error_handler_ignore(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, errors="ignore")
+    tools.g_mapset(mapset="does_not_exist")
+    tools.g_region(raster="does_not_exist")
+    # Works after errors as usual.
+    assert tools.g_mapset(flags="p").text == "PERMANENT"
+
+
+def test_error_handler_check_returncode(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, errors="ignore")
+    assert tools.g_mapset(mapset="does_not_exist").returncode == 1
+    assert tools.g_region(raster="does_not_exist").returncode == 1
+    # Works after errors as usual with return code.
+    assert tools.g_mapset(flags="p").returncode == 0
+
+
+def test_error_handler_fatal(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, errors="fatal")
+    with pytest.raises(SystemExit):
+        assert tools.g_mapset(mapset="does_not_exist")
+
+
+def test_error_handler_exit(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, errors="exit")
+    with pytest.raises(SystemExit):
+        assert tools.g_mapset(mapset="does_not_exist")
+
+
+def test_verbose(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, verbose=True)
+    tools.g_mapset(mapset="test1", flags="c")
+    tools.g_mapset(mapset="test2", flags="c")
+    result = tools.g_mapsets(mapset="test1")
+    assert "test1" in result.stderr
+
+
+def test_quiet(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, quiet=True)
+    result = tools.g_mapsets(mapset="PERMANENT")
+    # Expecting an important message about no modification.
+    assert result.stderr
+
+
+def test_superquiet(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, superquiet=True)
+    result = tools.g_mapsets(mapset="PERMANENT")
+    assert not result.stderr
+
+
+def test_superquiet_verbose(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, superquiet=True)
+    result = tools.g_mapsets(mapset="PERMANENT", verbose=True)
+    assert result.stderr
+
+
+def test_verbose_superquiet(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, verbose=True)
+    result = tools.g_mapsets(mapset="PERMANENT", superquiet=True)
+    assert not result.stderr
+
+
+def test_superquiet_false(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    xy_dataset_session.env["GRASS_VERBOSE"] = "0"
+    tools = Tools(session=xy_dataset_session, superquiet=False)
+    result = tools.g_mapsets(mapset="PERMANENT")
+    assert result.stderr
+    assert "GRASS_VERBOSE" in xy_dataset_session.env
+    assert xy_dataset_session.env["GRASS_VERBOSE"] == "0"
+    assert "GRASS_VERBOSE" not in tools._modified_env_if_needed(), (
+        f"GRASS_VERBOSE has value {tools._modified_env_if_needed()['GRASS_VERBOSE']}"
+    )  # pylint: disable=protected-access
+
+
+def test_verbose_false(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    xy_dataset_session.env["GRASS_VERBOSE"] = "3"
+    tools = Tools(session=xy_dataset_session, verbose=False)
+    tools.g_mapset(mapset="test1", flags="c")
+    tools.g_mapset(mapset="test2", flags="c")
+    result = tools.g_mapsets(mapset="test1")
+    assert not result.stderr
+    assert "GRASS_VERBOSE" in xy_dataset_session.env
+    assert xy_dataset_session.env["GRASS_VERBOSE"] == "3"
+    assert "GRASS_VERBOSE" not in tools._modified_env_if_needed(), (
+        f"GRASS_VERBOSE has value {tools._modified_env_if_needed()['GRASS_VERBOSE']}"
+    )  # pylint: disable=protected-access
+
+
+def test_direct_overwrite(xy_dataset_session):
+    """Check overwrite as a parameter"""
+    assert "GRASS_OVERWRITE" not in xy_dataset_session.env
+    tools = Tools(session=xy_dataset_session)
+    tools.r_random_surface(output="surface", seed=42)
+    tools.r_random_surface(output="surface", seed=42, overwrite=True)
+
+
+def test_object_overwrite(xy_dataset_session):
+    """Check overwrite as parameter of the tools object"""
+    assert "GRASS_OVERWRITE" not in xy_dataset_session.env
+    tools = Tools(session=xy_dataset_session, overwrite=True)
+    tools.r_random_surface(output="surface", seed=42)
+    tools.r_random_surface(output="surface", seed=42)
+
+
+def test_no_overwrite(xy_dataset_session):
+    """Check that it fails without overwrite"""
+    assert "GRASS_OVERWRITE" not in xy_dataset_session.env
+    tools = Tools(session=xy_dataset_session)
+    tools.r_random_surface(output="surface", seed=42)
+    with pytest.raises(CalledModuleError, match="overwrite"):
+        tools.r_random_surface(output="surface", seed=42)
+
+
+def test_overwrite_true_in_call(xy_dataset_session):
+    """Check that it fails without overwrite"""
+    assert "GRASS_OVERWRITE" not in xy_dataset_session.env
+    tools = Tools(session=xy_dataset_session, overwrite=False)
+    tools.r_random_surface(output="surface", seed=42)
+    tools.r_random_surface(output="surface", seed=42, overwrite=True)
+    with pytest.raises(CalledModuleError, match="overwrite"):
+        tools.r_random_surface(output="surface", seed=42)
+
+
+def test_overwrite_false_in_call(xy_dataset_session):
+    """Individual overwrite is not used when global is True and individual is False
+
+    We simply test for the current behavior.
+    """
+    assert "GRASS_OVERWRITE" not in xy_dataset_session.env
+    tools = Tools(session=xy_dataset_session, overwrite=True)
+    tools.r_random_surface(output="surface", seed=42)
+    tools.r_random_surface(output="surface", seed=42, overwrite=False)
+
+
+def test_env_overwrite(xy_dataset_session):
+    """Check that overwrite from env parameter is used"""
+    assert "GRASS_OVERWRITE" not in xy_dataset_session.env
+    env = xy_dataset_session.env.copy()
+    env["GRASS_OVERWRITE"] = "1"
+    tools = Tools(env=env)
+    tools.r_random_surface(output="surface", seed=42)
+    tools.r_random_surface(output="surface", seed=42)
+
+
+def test_session_overwrite(xy_dataset_session):
+    """Check that overwrite from env parameter is used"""
+    assert "GRASS_OVERWRITE" not in xy_dataset_session.env
+    xy_dataset_session.env["GRASS_OVERWRITE"] = "1"
+    tools = Tools(session=xy_dataset_session)
+    tools.r_random_surface(output="surface", seed=42)
+    tools.r_random_surface(output="surface", seed=42)
+
+
+def test_parent_overwrite_vs_env(xy_dataset_session):
+    """Check that parent overwrite is not used when separate env is used"""
+    assert "GRASS_OVERWRITE" not in xy_dataset_session.env
+    env = xy_dataset_session.env.copy()
+    xy_dataset_session.env["GRASS_OVERWRITE"] = "1"
+    tools = Tools(session=xy_dataset_session, env=env)
+    tools.r_random_surface(output="surface", seed=42)
+    with pytest.raises(CalledModuleError, match="overwrite"):
+        tools.r_random_surface(output="surface", seed=42)
+
+
+def test_parent_overwrite_vs_init(xy_dataset_session):
+    """Check that parent overwrite is not used when separate env is used"""
+    assert "GRASS_OVERWRITE" not in xy_dataset_session.env
+    tools = Tools(session=xy_dataset_session, overwrite=False)
+    xy_dataset_session.env["GRASS_OVERWRITE"] = "1"
+    tools.r_random_surface(output="surface", seed=42)
+    with pytest.raises(CalledModuleError, match="overwrite"):
+        tools.r_random_surface(output="surface", seed=42)
+
+
+def test_parent_overwrite_vs_call(xy_dataset_session):
+    """Check that parent overwrite is not used when separate env is used"""
+    assert "GRASS_OVERWRITE" not in xy_dataset_session.env
+    tools = Tools(session=xy_dataset_session)
+    xy_dataset_session.env["GRASS_OVERWRITE"] = "0"
+    tools.r_random_surface(output="surface", seed=42)
+    tools.r_random_surface(output="surface", seed=42, overwrite=True)
+
+
+def test_parent_overwrite_after_call(xy_dataset_session):
+    """Check that parent overwrite is not used when separate env is used"""
+    assert "GRASS_OVERWRITE" not in xy_dataset_session.env
+    tools = Tools(session=xy_dataset_session)
+    tools.r_random_surface(output="surface", seed=42)
+    xy_dataset_session.env["GRASS_OVERWRITE"] = "1"
+    tools.r_random_surface(output="surface", seed=42)
+
+
+def test_raises(xy_dataset_session):
+    """Test that exception is raised for wrong parameter value"""
+    tools = Tools(session=xy_dataset_session)
+    wrong_name = "does_not_exist"
+    with pytest.raises(CalledModuleError, match=wrong_name):
+        tools.r_slope_aspect(
+            elevation=wrong_name,
+            slope="slope",
+        )
+
+
+def test_migration_from_run_command_family(xy_dataset_session):
+    # run_command
+    # original:
+    gs.run_command(
+        "r.random.surface", output="surface", seed=42, env=xy_dataset_session.env
+    )
+    # replacement:
+    tools = Tools(env=xy_dataset_session.env)
+    tools.run("r.random.surface", output="surface2", seed=42)
+    tools.r_random_surface(output="surface3", seed=42)
+
+    # run_command with returncode
+    # original:
+    assert (
+        gs.run_command(
+            "r.mask.status", flags="t", env=xy_dataset_session.env, errors="status"
+        )
+        == 1
+    )
+    # replacement:
+    tools = Tools(errors="ignore", env=xy_dataset_session.env)
+    assert tools.run("r.mask.status", flags="t").returncode == 1
+
+    # write_command
+    # original:
+    gs.write_command(
+        "v.in.ascii",
+        input="-",
+        output="point1",
+        separator=",",
+        env=xy_dataset_session.env,
+        stdin="13.45,29.96,200\n",
+    )
+    # replacement:
+    tools = Tools(env=xy_dataset_session.env)
+    tools.run(
+        "v.in.ascii",
+        input=io.StringIO("13.45,29.96,200\n"),
+        output="point2",
+        separator=",",
+    )
+
+    # read_command
+    # original:
+    assert (
+        gs.read_command("g.region", flags="c", env=xy_dataset_session.env)
+        == "center easting:  0.500000\ncenter northing: 0.500000\n"
+    )
+    # replacement:
+    assert (
+        tools.run("g.region", flags="c").stdout
+        == "center easting:  0.500000\ncenter northing: 0.500000\n"
+    )
+    assert (
+        tools.g_region(flags="c").text
+        == "center easting:  0.500000\ncenter northing: 0.500000"
+    )
+
+    # parse_command
+    # original (numbers are strings):
+    assert gs.parse_command(
+        "g.region", flags="c", format="shell", env=xy_dataset_session.env
+    ) == {
+        "center_easting": "0.500000",
+        "center_northing": "0.500000",
+    }
+    # replacement (numbers are actual numbers, not strings, if they convert to Python float or int):
+    assert tools.run("g.region", flags="c", format="shell").keyval == {
+        "center_easting": 0.5,
+        "center_northing": 0.5,
+    }
+    # parse_command with JSON
+    assert tools.run("g.region", flags="c", format="json").json == {
+        "center_easting": 0.5,
+        "center_northing": 0.5,
+    }
+
+    # parse_command storing JSON output in a variable and accessing individual values
+    # original:
+    data = gs.parse_command(
+        "g.region", flags="c", format="shell", env=xy_dataset_session.env
+    )
+    assert float(data["center_easting"]) == 0.5
+    assert float(data["center_northing"]) == 0.5
+    # replacement:
+    data = tools.run("g.region", flags="c", format="json")
+    assert data["center_easting"] == 0.5
+    assert data["center_northing"] == 0.5
+
+    # mapcalc wrapper of r.mapcalc
+    # original:
+    gs.mapcalc("a = 1", env=xy_dataset_session.env)
+    # replacement for short expressions:
+    tools.r_mapcalc(expression="b = 1")
+    # replacement for long expression:
+    tools.r_mapcalc(file=io.StringIO("c = 1"), overwrite=True)
+
+    # all other wrappers
+    # Wrappers in grass.script usually parse shell-script style key-value pairs,
+    # and convert values from strings to numbers, e.g. g.region:
+    assert gs.region(env=xy_dataset_session.env)["rows"] == 1
+    # Conversion is done automatically in Tools, and syntax is more lightweight,
+    # so for tools which have JSON output, the only thing which need is the format
+    # (this also benefits from better defaults and more consistent tool behavior):
+    assert tools.g_region(flags="p", format="json")["rows"] == 1
+
+
+def test_with_context_managers(tmpdir):
+    project = tmpdir / "project"
+    gs.create_project(project)
+    with gs.setup.init(project) as session:
+        tools = Tools(session=session)
+        tools.r_random_surface(output="surface", seed=42)
+        with TemporaryMapsetSession(env=session.env) as mapset:
+            tools.r_random_surface(output="surface", seed=42, env=mapset.env)
+            with gs.MaskManager(env=mapset.env) as mask:
+                # TODO: Do actual test
+                tools.r_univar(map="surface", env=mask.env, format="json")["mean"]
+
+
+def test_misspelling(xy_dataset_session):
+    tools = Tools(session=xy_dataset_session)
+    with pytest.raises(AttributeError, match=r"r_slope_aspect"):
+        tools.r_sloppy_respect()
+
+
+def test_multiple_suggestions(xy_dataset_session):
+    tools = Tools(session=xy_dataset_session)
+    with pytest.raises(AttributeError, match=r"v_db_univar|db_univar"):
+        tools.db_v_uni_var()
+
+
+def test_tool_group_vs_model_name(xy_dataset_session):
+    tools = Tools(session=xy_dataset_session)
+    with pytest.raises(AttributeError, match=r"r_sim_water"):
+        tools.rSIMWEwater()
+
+
+def test_wrong_attribute(xy_dataset_session):
+    tools = Tools(session=xy_dataset_session)
+    with pytest.raises(AttributeError, match="execute_big_command"):
+        tools.execute_big_command()
+
+
+def test_stdin_as_stringio_object(xy_dataset_session):
+    """Check that global overwrite is not used when separate env is used"""
+    tools = Tools(session=xy_dataset_session)
+    tools.v_edit(map="points", type="point", tool="create")
+    tools.v_edit(
+        map="points",
+        type="point",
+        tool="add",
+        input=io.StringIO("P 1 0\n  10 20"),
+        flags="n",
+    )
+    assert tools.v_info(map="points", format="json")["points"] == 1
+
+
+def test_tool_attribute_access_c_tools():
+    tools = Tools()
+    assert "g_region" in dir(tools)
+    assert "r_slope_aspect" in dir(tools)
+
+
+def test_tool_attribute_access_python_tools():
+    tools = Tools()
+    assert "g_search_modules" in dir(tools)
+    assert "r_mask" in dir(tools)
+
+
+def test_tool_doc_access_c_tools():
+    tools = Tools()
+    assert tools.g_region.__doc__
+    assert tools.r_slope_aspect.__doc__
+
+
+def test_tool_doc_access_python_tools():
+    tools = Tools()
+    assert tools.g_search_modules.__doc__
+    assert tools.r_mask.__doc__

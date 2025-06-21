@@ -20,10 +20,47 @@ import argparse
 import tempfile
 import os
 import sys
+import subprocess
 from pathlib import Path
+
 
 import grass.script as gs
 from grass.app.data import lock_mapset, unlock_mapset, MapsetLockingException
+from grass.experimental.tools import Tools
+
+# Special flags supported besides help and --json which does not need special handling:
+SPECIAL_FLAGS = [
+    "--interface-description",
+    "--md-description",
+    "--wps-process-description",
+    "--script",
+]
+# To make this list shorter, we don't support outdated special flags:
+# --help-text --html-description --rst-description
+
+
+def subcommand_run_tool(args, tool_args: list, help: bool):
+    command = [args.tool, *tool_args]
+    with tempfile.TemporaryDirectory() as tmp_dir_name:
+        project_name = "project"
+        project_path = Path(tmp_dir_name) / project_name
+        gs.create_project(project_path)
+        with gs.setup.init(project_path) as session:
+            tools = Tools(session=session, capture_output=False)
+            try:
+                if help:
+                    # We consumed the help flag, so we need to add it explicitly.
+                    tools.no_nonsense_run_from_list([*command, "--help"])
+                elif any(item in command for item in SPECIAL_FLAGS):
+                    # This is here basically because of how --json behaves,
+                    # two JSON flags are accepted, but --json currently overridden by
+                    # other special flags, so later use of --json in tools will fail
+                    # with the other flags active.
+                    tools.no_nonsense_run_from_list(command)
+                else:
+                    tools.run_from_list(command)
+            except subprocess.CalledProcessError as error:
+                return error.returncode
 
 
 def subcommand_lock_mapset(args):
@@ -73,9 +110,21 @@ def main(args=None, program=None):
         description="Experimental low-level CLI interface to GRASS. Consult developers before using it.",
         prog=program,
     )
-    subparsers = parser.add_subparsers(title="subcommands", required=True)
+    subparsers = parser.add_subparsers(
+        title="subcommands", dest="subcommand", required=True
+    )
 
     # Subcommand parsers
+
+    run_subparser = subparsers.add_parser(
+        "run",
+        help="run a tool",
+        add_help=False,
+        epilog="Tool name is followed by it parameters.",
+    )
+    run_subparser.add_argument("tool", type=str, nargs="?", help="name of a tool")
+    run_subparser.add_argument("--help", action="store_true")
+    run_subparser.set_defaults(func=subcommand_run_tool)
 
     subparser = subparsers.add_parser("lock", help="lock a mapset")
     subparser.add_argument("mapset_path", type=str)
@@ -120,5 +169,12 @@ def main(args=None, program=None):
     subparser.add_argument("page", type=str)
     subparser.set_defaults(func=subcommand_show_man)
 
-    parsed_args = parser.parse_args(args)
+    # Parsing
+    parsed_args, other_args = parser.parse_known_args(args)
+    # Standard help already exited, but we need to handle tools separately.
+    if parsed_args.subcommand == "run":
+        if parsed_args.tool is None and parsed_args.help:
+            run_subparser.print_help()
+            return 0
+        return parsed_args.func(parsed_args, other_args, help=parsed_args.help)
     return parsed_args.func(parsed_args)
