@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-14 18:45+0000\n"
-"PO-Revision-Date: 2025-06-16 10:31+0000\n"
+"PO-Revision-Date: 2025-06-20 00:15+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/sv/>\n"
 "Language: sv\n"
@@ -7958,7 +7958,7 @@ msgstr "Inkonsekvens i topologin: antal centroider %d (borde vara %d)"
 
 #: ../lib/vector/Vlib/overlay.c:74
 msgid "unknown operator"
-msgstr "okänd operatör"
+msgstr "okänd operator"
 
 #: ../lib/vector/Vlib/overlay.c:128
 msgid "Overlay: line/boundary types not supported by AND operator"
@@ -7966,7 +7966,7 @@ msgstr "Överlagring: linje-/gränstyper som inte stöds av AND-operatorn"
 
 #: ../lib/vector/Vlib/overlay.c:132
 msgid "Overlay: area x area types not supported by AND operator"
-msgstr "Overlay: område x område typer som inte stöds av AND-operatören"
+msgstr "Overlay: område x område typer som inte stöds av AND-operatorn"
 
 #: ../lib/vector/Vlib/poly.c:264
 msgid "Unable to find point in polygon"
