@@ -304,6 +304,7 @@ html_use_index = True
 
 # If true, links to the reST sources are added to the pages.
 html_show_sourcelink = True
+html_copy_source = True
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
 html_show_sphinx = True
@@ -506,3 +507,6 @@ intersphinx_mapping = {
     "numpy": ("https://numpy.org/doc/stable/", None),
     "python": ("https://docs.python.org/3", None),
 }
+
+# Options for sphinx-last-updated-by-git extension
+git_untracked_show_sourcelink = True
