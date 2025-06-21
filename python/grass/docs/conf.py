@@ -102,6 +102,7 @@ copy("_templates/layout.html.template", "_templates/layout.html")
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    "sphinx_last_updated_by_git",  # Included in sphinx_sitemap 2.7.0
     "sphinx.ext.autodoc",
     "sphinx.ext.doctest",
     "sphinx.ext.intersphinx",
