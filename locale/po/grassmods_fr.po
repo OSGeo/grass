@@ -8,12 +8,13 @@
 # Eve (alias 'phyto') <dendrosociology[a]yahoo.co.uk>, 2005, 2006
 # Vincent Bain <bain toraval.fr>, 2012.
 # Sylvain Maillard <sylvain.maillard@gmail.com>, 2012, 2013.
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-21 12:47+0000\n"
-"PO-Revision-Date: 2025-06-11 17:59+0000\n"
+"PO-Revision-Date: 2025-06-21 19:54+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grassmods/fr/>\n"
 "Language: fr\n"
@@ -442,7 +443,7 @@ msgid "Removes an existing database."
 msgstr "Supprimer une base de données existante."
 
 #: ../db/db.execute/main.c:55 ../db/db.select/main.c:62
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open file <%s>: %s"
 msgstr "Impossible d'ouvrir le fichier <%s> : %s"
 
@@ -5161,7 +5162,7 @@ msgstr ""
 
 #: ../doc/examples/raster/r.example/main.c:86
 msgid "My first raster module"
-msgstr "Mon module raster de départ"
+msgstr "Mon premier module raster"
 
 #: ../doc/examples/raster/r.example/main.c:105 ../general/g.region/main.c:499
 #: ../general/g.region/main.c:885 ../general/g.region/main.c:894
@@ -6886,16 +6887,12 @@ msgid "East-west 2D grid resolution"
 msgstr "Résolution est-ouest de la grille 2D"
 
 #: ../general/g.region/main.c:318
-#, fuzzy
-#| msgid "North-south 2D grid resolution"
 msgid "North-south 3D grid resolution"
-msgstr "Résolution nord-sud de la grille 2D"
+msgstr "Résolution nord-sud de la grille 3D"
 
 #: ../general/g.region/main.c:327
-#, fuzzy
-#| msgid "East-west 2D grid resolution"
 msgid "East-west 3D grid resolution"
-msgstr "Résolution est-ouest de la grille 2D"
+msgstr "Résolution est-ouest de la grille 3D"
 
 #: ../general/g.region/main.c:336
 msgid "Top-bottom 3D grid resolution"
@@ -8185,7 +8182,7 @@ msgstr ""
 #: ../imagery/i.cluster/main.c:254
 #, c-format
 msgid " %s%s"
-msgstr ""
+msgstr " %s%s"
 
 #: ../imagery/i.cluster/main.c:258
 #, c-format
@@ -9119,10 +9116,8 @@ msgid "List subgroups from specified group"
 msgstr ""
 
 #: ../imagery/i.group/main.c:111
-#, fuzzy
-#| msgid "Print in shell script style"
 msgid "Print in shell script style [deprecated]"
-msgstr "Afficher en style script shell"
+msgstr "Afficher en style script shell [obsolète]"
 
 #: ../imagery/i.group/main.c:195
 msgid "No input raster map(s) specified"
@@ -11886,7 +11881,7 @@ msgstr "projection"
 #: ../imagery/i.svm.predict/main.c:54 ../raster/r.regression.line/main.c:47
 #: ../raster/r.regression.multi/main.c:131
 msgid "regression"
-msgstr ""
+msgstr "régression"
 
 #: ../imagery/i.svm.predict/main.c:55
 msgid "Predict with a SVM"
@@ -13686,7 +13681,7 @@ msgstr "hydrologie"
 #: ../raster/r.drain/main.c:112 ../raster/r.path/main.c:151
 #: ../raster/r.walk/main.c:213
 msgid "cost surface"
-msgstr ""
+msgstr "surface de coût"
 
 #: ../locale/scriptstrings/r.drain_to_translate.c:5
 #: ../raster/r.drain/main.c:117
@@ -19970,13 +19965,13 @@ msgstr "Le PROJ_INFO du jeu de données est : \n"
 #: ../raster/r.in.pdal/projection.c:87 ../raster3d/r3.in.lidar/projection.c:90
 #: ../vector/v.external/proj.c:360 ../vector/v.in.lidar/projection.c:87
 #: ../vector/v.in.ogr/proj.c:492 ../vector/v.in.pdal/projection.c:87
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "In case of no significant differences in the coordinate reference system definitions, use the -o flag to ignore them and use current project definition.\n"
 msgstr ""
 "\n"
-"Si les définitions des systèmes de référence des coordonnées ne présentent pas de différences significatives, l'option -o permet de les ignorer et d'utiliser la définition actuelle du projet.\n"
+"Si les définitions des systèmes de référence des coordonnées ne présentent pas de différences significatives, utilisez l'option -o pour les ignorer et utiliser la définition du projet actuel.\n"
 
 #: ../raster/r.external/proj.c:328 ../raster/r.in.gdal/proj.c:327
 #: ../vector/v.external/proj.c:364 ../vector/v.in.ogr/proj.c:496
@@ -40286,20 +40281,16 @@ msgid "Outputs basic information about a vector map."
 msgstr "Affiche les métadonnées d'une carte vecteur."
 
 #: ../vector/v.info/parse.c:20
-#, fuzzy
-#| msgid "Print raster history instead of info"
 msgid "Print attribute table columns instead of info"
-msgstr "Afficher l'historique du raster à la place des informations générales"
+msgstr "Afficher les colonnes de la table attributaire à la place des informations générales"
 
 #: ../vector/v.info/parse.c:22
 msgid "Column names and types are printed for the specified layer if it has an attribute table database connection"
 msgstr ""
 
 #: ../vector/v.info/parse.c:28
-#, fuzzy
-#| msgid "Print raster history instead of info"
 msgid "Print data history instead of info"
-msgstr "Afficher l'historique du raster à la place des informations générales"
+msgstr "Afficher l'historique des données à la place des informations générales"
 
 #: ../vector/v.info/parse.c:33
 #, fuzzy
@@ -40307,10 +40298,8 @@ msgid "Print only metadata info"
 msgstr "Afficher le nom du cadre actuel et sortir"
 
 #: ../vector/v.info/parse.c:38
-#, fuzzy
-#| msgid "Print projection information in WKT format"
 msgid "Print only region info"
-msgstr "Afficher l'information de projection au format WKT"
+msgstr "Afficher les informations de région seulement"
 
 #: ../vector/v.info/parse.c:43
 msgid "Print only topology info"
@@ -40327,10 +40316,9 @@ msgid "Database connection for map <%s> is not defined in DB file"
 msgstr "La connexion à la base de données pour la couche <%s> n'a pas été définie dans le fichier Base de données"
 
 #: ../vector/v.info/print.c:200
-#, fuzzy, c-format
-#| msgid "No database connection for layer <%s>"
+#, c-format
 msgid "Column names and types for database connection of layer <%s>:\n"
-msgstr "Connexion à la base de données non définie pour la couche <%s>"
+msgstr "Nom et types de colonnes pour la connexion à la base de données de la couche <%s>\n"
 
 #: ../vector/v.info/print.c:208
 #, fuzzy, c-format

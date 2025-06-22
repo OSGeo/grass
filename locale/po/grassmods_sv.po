@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-21 12:47+0000\n"
-"PO-Revision-Date: 2025-06-20 00:15+0000\n"
+"PO-Revision-Date: 2025-06-21 18:59+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
 "Language: sv\n"
@@ -6884,16 +6884,12 @@ msgid "East-west 2D grid resolution"
 msgstr "Upplösning i 2D-rutnät i öst-västlig riktning"
 
 #: ../general/g.region/main.c:318
-#, fuzzy
-#| msgid "North-south 2D grid resolution"
 msgid "North-south 3D grid resolution"
-msgstr "Nord-sydlig 2D-rutnätsupplösning"
+msgstr "Nord-sydlig 3D-rutnätsupplösning"
 
 #: ../general/g.region/main.c:327
-#, fuzzy
-#| msgid "East-west 2D grid resolution"
 msgid "East-west 3D grid resolution"
-msgstr "Upplösning i 2D-rutnät i öst-västlig riktning"
+msgstr "Upplösning i 3D-rutnät i öst-västlig riktning"
 
 #: ../general/g.region/main.c:336
 msgid "Top-bottom 3D grid resolution"
@@ -9104,10 +9100,8 @@ msgid "List subgroups from specified group"
 msgstr "Lista undergrupper från angiven grupp"
 
 #: ../imagery/i.group/main.c:111
-#, fuzzy
-#| msgid "Print in shell script style"
 msgid "Print in shell script style [deprecated]"
-msgstr "Skriv ut i skal script-stil"
+msgstr "Skriv ut i skalskriptstil [föråldrat]"
 
 #: ../imagery/i.group/main.c:195
 msgid "No input raster map(s) specified"
@@ -37481,7 +37475,7 @@ msgstr "Utskrift som kvadratisk matris (endast möjligt för en enda uppladdning
 
 #: ../vector/v.distance/main.c:319
 msgid "The format option requires the -p flag; please re-run with -p to enable output."
-msgstr ""
+msgstr "Formatalternativet kräver flaggan -p. Kör igen med -p för att aktivera utmatning."
 
 #: ../vector/v.distance/main.c:324
 msgid "Updating the from= table is not supported with -a"
@@ -40213,36 +40207,28 @@ msgid "Outputs basic information about a vector map."
 msgstr "Utmatar grundläggande information om en vektorkarta."
 
 #: ../vector/v.info/parse.c:20
-#, fuzzy
-#| msgid "Print raster history instead of info"
 msgid "Print attribute table columns instead of info"
-msgstr "Skriv ut rasterhistorik istället för information"
+msgstr "Skriv ut kolumner i attributtabellen istället för information"
 
 #: ../vector/v.info/parse.c:22
 msgid "Column names and types are printed for the specified layer if it has an attribute table database connection"
-msgstr ""
+msgstr "Kolumnnamn och typer skrivs ut för det angivna lagret om det har en databasanslutning till en attributtabell."
 
 #: ../vector/v.info/parse.c:28
-#, fuzzy
-#| msgid "Print raster history instead of info"
 msgid "Print data history instead of info"
-msgstr "Skriv ut rasterhistorik istället för information"
+msgstr "Skriv ut datahistorik istället för information"
 
 #: ../vector/v.info/parse.c:33
-#, fuzzy
-#| msgid "Print output metadata info"
 msgid "Print only metadata info"
-msgstr "Skriv ut metadatainformation för utdata"
+msgstr "Skriv endast ut metadatainformation"
 
 #: ../vector/v.info/parse.c:38
-#, fuzzy
-#| msgid "Print projection information"
 msgid "Print only region info"
-msgstr "Skriv ut projektionsinformation"
+msgstr "Skriv endast ut regionsinformation"
 
 #: ../vector/v.info/parse.c:43
 msgid "Print only topology info"
-msgstr ""
+msgstr "Skriv endast ut topologiinformation"
 
 #: ../vector/v.info/print.c:32 ../vector/v.info/print.c:34
 #, c-format
@@ -40255,10 +40241,9 @@ msgid "Database connection for map <%s> is not defined in DB file"
 msgstr "Databasanslutning för map <%s> är inte definierad i DB-filen"
 
 #: ../vector/v.info/print.c:200
-#, fuzzy, c-format
-#| msgid "Displaying column types/names for database connection of layer <%s>:"
+#, c-format
 msgid "Column names and types for database connection of layer <%s>:\n"
-msgstr "Visning av kolumntyper/namn för databasanslutning i lager <%s>:"
+msgstr "Kolumnnamn och typer för databasanslutning för lagret <%s>:\n"
 
 #: ../vector/v.info/print.c:208
 #, c-format
