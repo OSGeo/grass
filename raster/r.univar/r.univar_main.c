@@ -228,7 +228,8 @@ int main(int argc, char *argv[])
     }
 
     /* count the input rasters given */
-    for (infile = (char **)param.inputfile->answers, rasters = 0; *infile; infile++, rasters++)
+    for (infile = (char **)param.inputfile->answers, rasters = 0; *infile;
+         infile++, rasters++)
         ;
 
     /* process all input rasters */
