@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
 
     char *input_opt, *field_opt;
-    int hist_flag, col_flag, shell_flag;
+    int hist_flag, col_flag, print_content;
 
     enum OutputFormat format;
 
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     G_debug(1, "LFS is %s", sizeof(off_t) == 8 ? "available" : "not available");
 
     parse_args(argc, argv, &input_opt, &field_opt, &hist_flag, &col_flag,
-               &shell_flag, &format);
+               &print_content, &format);
 
     /* try to open head-only on level 2 */
     if (Vect_open_old_head2(&Map, input_opt, "", field_opt) < 2) {
@@ -87,16 +87,16 @@ int main(int argc, char *argv[])
         root_object = json_value_get_object(root_value);
     }
 
-    if ((shell_flag & SHELL_BASIC) || format == JSON) {
+    if ((print_content & PRINT_CONTENT_TEXT)) {
         print_shell(&Map, field_opt, format, root_object);
     }
-    if ((shell_flag & SHELL_REGION) || format == JSON) {
+    if ((print_content & PRINT_CONTENT_REGION)) {
         print_region(&Map, format, root_object);
     }
-    if ((shell_flag & SHELL_TOPO) || format == JSON) {
+    if ((print_content & PRINT_CONTENT_TOPO)) {
         print_topo(&Map, format, root_object);
     }
-    if (shell_flag == 0 && format == PLAIN) {
+    if (print_content == PRINT_CONTENT_UNSET && format == PLAIN) {
         print_info(&Map);
     }
 

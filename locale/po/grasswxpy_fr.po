@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-04 10:56+0000\n"
-"PO-Revision-Date: 2025-02-10 17:33+0000\n"
+"POT-Creation-Date: 2025-06-21 12:47+0000\n"
+"PO-Revision-Date: 2025-06-11 17:59+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/fr/>\n"
 "Language: fr\n"
@@ -1245,9 +1245,8 @@ msgid "Addons"
 msgstr "Extensions"
 
 #: ../gui/wxpython/core/toolboxes.py:617
-#, fuzzy
 msgid "Module not installed"
-msgstr "Style des boîtes de dialogue des modules"
+msgstr "Module non installé"
 
 #: ../gui/wxpython/core/units.py:34 ../gui/wxpython/vdigit/preferences.py:196
 msgid "map units"
@@ -1314,16 +1313,14 @@ msgid "Duplicated key: %s\n"
 msgstr "Paramètre en double : %s\n"
 
 #: ../gui/wxpython/core/utils.py:846
-#, fuzzy, python-brace-format
-#| msgid "Unable to open file '%s'\n"
+#, python-brace-format
 msgid "Unable to open file '{name}': {error}\n"
-msgstr "Impossible d'ouvrir le fichier '%s'\n"
+msgstr "Impossible d'ouvrir le fichier '{name}': {error}\n"
 
 #: ../gui/wxpython/core/utils.py:871
-#, fuzzy, python-brace-format
-#| msgid "Unable to create file '%s'\n"
+#, python-brace-format
 msgid "Unable to create file '{name}': {error}\n"
-msgstr "Impossible de créer le fichier '%s'\n"
+msgstr "Impossible de créer le fichier '{name}': {error}\n"
 
 #: ../gui/wxpython/core/utils.py:945 ../gui/wxpython/gui_core/forms.py:1917
 msgid "Select Color"
@@ -1462,9 +1459,8 @@ msgid "Data Catalog - GRASS GIS"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/infomanager.py:36
-#, fuzzy
 msgid "Create new project"
-msgstr "Créer un pack"
+msgstr "Créer un nouveau projet"
 
 #: ../gui/wxpython/datacatalog/infomanager.py:37
 msgid "Learn more"
@@ -1538,9 +1534,8 @@ msgid "Last used mapset in path '{mapsetpath}' has different owner {owner}."
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:23
-#, fuzzy
 msgid "Reload GRASS projects"
-msgstr "Recharger les secteurs GRASS"
+msgstr "Recharger les projets GRASS"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:24
 msgid "Reload current GRASS mapset only"
@@ -1559,9 +1554,8 @@ msgid "Add existing or create new database"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:35
-#, fuzzy
 msgid "Create new mapset in current project"
-msgstr "Créer un nouveau jeu de cartes dans le secteur choisi"
+msgstr "Créer un nouveau jeu de cartes dans le projet choisi"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:39
 #, fuzzy
@@ -1738,10 +1732,8 @@ msgid "Moving <{name}>..."
 msgstr "Déplacement de <{name}> ..."
 
 #: ../gui/wxpython/datacatalog/tree.py:1340
-#, fuzzy
-#| msgid "g.copy completed"
 msgid "Copying completed"
-msgstr "g.copy terminé"
+msgstr "Copie terminé"
 
 #: ../gui/wxpython/datacatalog/tree.py:1346
 #, fuzzy
@@ -2041,9 +2033,8 @@ msgid "Table"
 msgstr "Table"
 
 #: ../gui/wxpython/dbmgr/base.py:1182 ../gui/wxpython/dbmgr/base.py:2327
-#, fuzzy
 msgid " (read-only)"
-msgstr " (lecture-seule)"
+msgstr " (lecture seule)"
 
 #: ../gui/wxpython/dbmgr/base.py:1199
 msgid "SQL Query"
@@ -4132,8 +4123,9 @@ msgid "PyWPS"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/panels.py:1617
+#, fuzzy
 msgid "actinia"
-msgstr ""
+msgstr "actinia"
 
 #: ../gui/wxpython/gmodeler/panels.py:1638
 #, fuzzy
@@ -4157,7 +4149,7 @@ msgstr "Script Python (*.py)|*.py"
 
 #: ../gui/wxpython/gmodeler/panels.py:1724
 msgid "JSON file (*.json)|*.json"
-msgstr ""
+msgstr "Fichier JSON (*.json)|*.json"
 
 #: ../gui/wxpython/gmodeler/panels.py:1728
 #: ../gui/wxpython/gui_core/pyedit.py:398
@@ -4397,19 +4389,16 @@ msgid "Required item is not set."
 msgstr "L'objet requis n'est pas défini."
 
 #: ../gui/wxpython/gui_core/dialogs.py:123
-#, fuzzy
 msgid "Select GRASS project and mapset"
-msgstr "Choisir un secteur GRASS et un jeu de cartes"
+msgstr "Sélectionner un projet GRASS et un jeu de cartes"
 
 #: ../gui/wxpython/gui_core/dialogs.py:143
-#, fuzzy
 msgid "Project or mapset is not defined."
-msgstr "Le secteur ou le jeux de donnée ne sont pas définis."
+msgstr "Le projet ou le jeu de cartes ne sont pas définis."
 
 #: ../gui/wxpython/gui_core/dialogs.py:151
-#, fuzzy
 msgid "Name of GRASS project:"
-msgstr "Nom du secteur GRASS :"
+msgstr "Nom du projet GRASS :"
 
 #: ../gui/wxpython/gui_core/dialogs.py:162
 #: ../gui/wxpython/gui_core/dialogs.py:219
@@ -5451,9 +5440,8 @@ msgstr "Enregistrer les positions et tailles actuelles de la fenêtre de gestion
 #: ../gui/wxpython/gui_core/preferences.py:415
 #: ../gui/wxpython/gui_core/preferences.py:429
 #: ../gui/wxpython/gui_core/preferences.py:443
-#, fuzzy
 msgid "Hide '{}' tab (requires GUI restart)"
-msgstr "Cacher l'onglet '%s' (requiert le redémarrage du GUI)"
+msgstr "Cacher l'onglet '{}' (requiert le redémarrage du GUI)"
 
 #: ../gui/wxpython/gui_core/preferences.py:415
 #: ../gui/wxpython/gui_core/preferences.py:1198
@@ -5837,10 +5825,8 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:361
 #: ../gui/wxpython/gui_core/pyedit.py:371
-#, fuzzy
-#| msgid "Unable to launch Python script. %s"
 msgid " Unable to launch Python script."
-msgstr "Impossible d'exécuter le script Python. %s"
+msgstr " Impossible d'exécuter le script Python."
 
 #: ../gui/wxpython/gui_core/pyedit.py:469
 msgid "Open file"
@@ -6322,39 +6308,32 @@ msgid "Status:"
 msgstr "Afficher la barre de status"
 
 #: ../gui/wxpython/history/browser.py:43
-#, fuzzy
 msgid "Mask 2D:"
-msgstr "Masque"
+msgstr "Masque 2D :"
 
 #: ../gui/wxpython/history/browser.py:44
-#, fuzzy
 msgid "Mask 3D:"
-msgstr "Masque"
+msgstr "Masque 3D :"
 
 #: ../gui/wxpython/history/browser.py:45
-#, fuzzy
 msgid "North:"
-msgstr "Nord"
+msgstr "Nord :"
 
 #: ../gui/wxpython/history/browser.py:46
-#, fuzzy
 msgid "South:"
-msgstr "Sud"
+msgstr "Sud :"
 
 #: ../gui/wxpython/history/browser.py:47
-#, fuzzy
 msgid "West:"
-msgstr "Ouest"
+msgstr "Ouest :"
 
 #: ../gui/wxpython/history/browser.py:48
-#, fuzzy
 msgid "East:"
-msgstr "Est"
+msgstr "Est :"
 
 #: ../gui/wxpython/history/browser.py:49
-#, fuzzy
 msgid "North-south resolution:"
-msgstr "Résolution Nord-Sud"
+msgstr "Résolution Nord-Sud:"
 
 #: ../gui/wxpython/history/browser.py:50
 #, fuzzy
@@ -6362,9 +6341,8 @@ msgid "East-west resolution:"
 msgstr "Résolution estimée :"
 
 #: ../gui/wxpython/history/browser.py:51
-#, fuzzy
 msgid "Number of rows:"
-msgstr "Nombre de segments :"
+msgstr "Nombre de lignes:"
 
 #: ../gui/wxpython/history/browser.py:52
 #, fuzzy
@@ -6425,12 +6403,11 @@ msgstr "Exporter une carte vecteur vers un fichier SVG."
 #: ../gui/wxpython/history/browser.py:463
 #, fuzzy, python-brace-format
 msgid "{json} (*.json)|*.txt|{files} (*)|*"
-msgstr "%(txt)s (*.txt)|*.txt|%(files)s (*)|*"
+msgstr "{json} (*.json)|*.txt|{files} (*)|*"
 
 #: ../gui/wxpython/history/browser.py:464
-#, fuzzy
 msgid "JSON files"
-msgstr "Enregistrer le fichier sous"
+msgstr "Fichiers JSON"
 
 #: ../gui/wxpython/history/browser.py:468
 #, fuzzy, python-brace-format
@@ -6454,17 +6431,17 @@ msgstr ""
 #: ../gui/wxpython/history/tree.py:92
 #, python-brace-format
 msgid "{base_date} (today)"
-msgstr ""
+msgstr "{base_date} (aujourd'hui)"
 
 #: ../gui/wxpython/history/tree.py:94
 #, python-brace-format
 msgid "{base_date} (yesterday)"
-msgstr ""
+msgstr "{base_date} (hier)"
 
 #: ../gui/wxpython/history/tree.py:96
 #, python-brace-format
 msgid "{base_date} (this week)"
-msgstr ""
+msgstr "{base_date} (cette semaine)"
 
 #: ../gui/wxpython/history/tree.py:98
 #, python-brace-format
@@ -6510,10 +6487,8 @@ msgid "<{}> removed"
 msgstr ""
 
 #: ../gui/wxpython/history/tree.py:680
-#, fuzzy
-#| msgid "'{cmd}' copied to clipboard"
 msgid "Command <{}> copied to clipboard"
-msgstr "'{cmd}' copiée dans le presse-papier"
+msgstr "Commande <{}> copiée dans le presse-papier"
 
 #: ../gui/wxpython/history/tree.py:685
 #, fuzzy
@@ -8178,9 +8153,8 @@ msgstr ""
 "Détails: %s"
 
 #: ../gui/wxpython/lmgr/layertree.py:1244
-#, fuzzy
 msgid "Set opacity of <{}>"
-msgstr "Régler l'opacité de <%s>"
+msgstr "Régler l'opacité de <{}>"
 
 #: ../gui/wxpython/lmgr/layertree.py:1483
 msgid "Layer group:"
@@ -8634,9 +8608,8 @@ msgid "(optional)"
 msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:228
-#, fuzzy
 msgid "Name of project directory in GIS Data Directory"
-msgstr "Nom du répertoire du secteur dans le dossier GIS DATA"
+msgstr "Nom du répertoire du projet dans le dossier GIS Data"
 
 #: ../gui/wxpython/location_wizard/wizard.py:250
 #, fuzzy
@@ -8649,22 +8622,20 @@ msgid "Project will be created in GRASS database:"
 msgstr "Impossible de créer la nouvelle base de données GRASS"
 
 #: ../gui/wxpython/location_wizard/wizard.py:296
-#, fuzzy
 msgid "Name '{}' is not a valid name for project. Please use only ASCII characters excluding characters {} and space."
-msgstr "Le nom <%(name)s> n'est pas un nom valide pour un secteur. Merci de n'utiliser que des caractères ASCII à l'exclusion de %(chars)s et des espaces."
+msgstr "Le nom <{}> n'est pas un nom valide pour un projet. Merci de n'utiliser que des caractères ASCII à l'exclusion de %(chars)s et des espaces."
 
 #: ../gui/wxpython/location_wizard/wizard.py:308
 msgid "Project '{}' already exists. Please consider using another name for your project."
-msgstr ""
+msgstr "Le projet '{}' existe déjà. Veuillez considérer l'utilisation d'un autre nom pour votre projet."
 
 #: ../gui/wxpython/location_wizard/wizard.py:311
 msgid "Existing project path"
 msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:346
-#, fuzzy
 msgid "Title of the project is limited only to one line and 256 characters. The rest of the text will be ignored."
-msgstr "Le titre du secteur est limité à une ligne et 256 caractères. Le reste du texte sera ignoré."
+msgstr "Le titre du projet est limité à une ligne et è 256 caractères. Le reste du texte sera ignoré."
 
 #: ../gui/wxpython/location_wizard/wizard.py:357
 msgid "Select Coordinate Reference System (CRS)"
@@ -8850,9 +8821,8 @@ msgid "GRASS Database:"
 msgstr "Base de données GRASS :"
 
 #: ../gui/wxpython/location_wizard/wizard.py:2231
-#, fuzzy
 msgid "Project Name:"
-msgstr "Code de la projection "
+msgstr "Nom du projet:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:2252
 msgid "Projection:"
@@ -8872,25 +8842,23 @@ msgid "custom"
 msgstr "Personnalisé"
 
 #: ../gui/wxpython/location_wizard/wizard.py:2531
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Unable to create new project. Project <%(loc)s> not created.\n"
 "\n"
 "Details: %(err)s"
 msgstr ""
-"Impossible de créer le nouveau secteur. Secteur <%(loc)s> non crée.\n"
+"Impossible de créer le nouveau projet. Secteur <%(loc)s> non crée.\n"
 "\n"
 "Détails: %(err)s"
 
 #: ../gui/wxpython/location_wizard/wizard.py:2652
-#, fuzzy
 msgid "Unable to create new project"
-msgstr "Impossible de créer le nouveau secteur"
+msgstr "Impossible de créer le nouveau projet"
 
 #: ../gui/wxpython/location_wizard/wizard.py:2654
-#, fuzzy
 msgid "Project already exists in GRASS Database."
-msgstr "Le secteur existe déjà dans la base de données GRASS."
+msgstr "Le projet existe déjà dans la base de données GRASS."
 
 #: ../gui/wxpython/location_wizard/wizard.py:2671
 #, python-brace-format
@@ -13006,9 +12974,8 @@ msgid "Invalid mapset name"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:112
-#, fuzzy
 msgid "Invalid project name"
-msgstr "Non de secteur invalide"
+msgstr "Nom de projet invalide"
 
 #: ../gui/wxpython/startup/guiutils.py:133
 msgid "Name for the new mapset:"
@@ -13019,9 +12986,8 @@ msgid "Unable to create new mapset: {}"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:172
-#, fuzzy
 msgid "Do you want to import {} to the newly created project?"
-msgstr "Voulez-vous importer {} dans le nouveau secteur ?"
+msgstr "Voulez-vous importer {} dans le nouveau projet ?"
 
 #: ../gui/wxpython/startup/guiutils.py:227
 #, python-brace-format
@@ -13258,12 +13224,12 @@ msgstr ""
 "Le jeu de cartes courant est <%(mapset)s>."
 
 #: ../gui/wxpython/startup/guiutils.py:708
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Current project is <%(loc)s>.\n"
 "Current mapset is <%(mapset)s>."
 msgstr ""
-"Le secteur courant est <%(loc)s>.\n"
+"Le projet courant est <%(loc)s>.\n"
 "Le jeu de cartes courant est <%(mapset)s>."
 
 #: ../gui/wxpython/startup/guiutils.py:719
@@ -13281,9 +13247,8 @@ msgid "Download in progress, wait until it is finished {0}%, {1} MB, {2} KB/s, {
 msgstr ""
 
 #: ../gui/wxpython/startup/locdownload.py:183
-#, fuzzy
 msgid "Downloaded project is not valid"
-msgstr "Le Secteur téléchargé n'est pas valide"
+msgstr "Le projet téléchargé n'est pas valide"
 
 #: ../gui/wxpython/startup/locdownload.py:227
 msgid "Abort"
@@ -13295,9 +13260,8 @@ msgid "Abort download"
 msgstr "Annuler le téléchargement"
 
 #: ../gui/wxpython/startup/locdownload.py:231
-#, fuzzy
 msgid "Select sample project to download:"
-msgstr "Sélectionner le secteur d'exemple à télécharger : "
+msgstr "Sélectionner le projet d'exemple à télécharger :"
 
 #: ../gui/wxpython/startup/locdownload.py:295
 #: ../gui/wxpython/startup/locdownload.py:305
@@ -13306,9 +13270,8 @@ msgid "Do&wnload"
 msgstr "Télécharger"
 
 #: ../gui/wxpython/startup/locdownload.py:295
-#, fuzzy
 msgid "Download selected project"
-msgstr "Télécharger le Secteur sélectionné"
+msgstr "Télécharger le projet sélectionné"
 
 #: ../gui/wxpython/startup/locdownload.py:305
 #: ../gui/wxpython/startup/locdownload.py:388
@@ -13323,7 +13286,7 @@ msgstr "Téléchargement en cours, attendez qu'il soit terminé"
 #: ../gui/wxpython/startup/locdownload.py:328
 #, fuzzy, python-brace-format
 msgid "Project name {name} already exists in {path}, download canceled"
-msgstr "Le Secteur <%s> existe déjà, téléchargement annulé"
+msgstr "Le projet <%s> existe déjà, téléchargement annulé"
 
 #: ../gui/wxpython/startup/locdownload.py:338
 #, python-format

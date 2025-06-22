@@ -11,16 +11,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-04 10:56+0000\n"
-"PO-Revision-Date: 2024-02-09 11:45+0000\n"
-"Last-Translator: Markus <neteler@osgeo.org>\n"
+"POT-Creation-Date: 2025-06-21 12:47+0000\n"
+"PO-Revision-Date: 2025-06-14 21:41+0000\n"
+"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: ../gui/wxpython/animation/controller.py:244
 #: ../gui/wxpython/animation/dialogs.py:858
@@ -4205,7 +4205,7 @@ msgstr "Python Editor"
 #: ../gui/wxpython/gmodeler/preferences.py:95
 #, fuzzy
 msgid "GRASS API:"
-msgstr "GRASS GIS Hilfe"
+msgstr "GRASS Hilfe"
 
 #: ../gui/wxpython/gmodeler/preferences.py:140
 #: ../gui/wxpython/gmodeler/preferences.py:459

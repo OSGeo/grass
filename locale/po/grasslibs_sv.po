@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# Daniel Nylander <daniel@danielnylander.se>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-04 10:56+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"POT-Creation-Date: 2025-06-21 12:47+0000\n"
+"PO-Revision-Date: 2025-06-20 00:15+0000\n"
+"Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
+"Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: ../lib/arraystats/class.c:22
 #, c-format
@@ -367,7 +367,7 @@ msgstr "skicka data: ogiltig C-typ"
 #: ../lib/vector/Vlib/write_pg.c:685
 #, c-format
 msgid "Unable to describe table <%s>"
-msgstr "Det går inte att beskriva bordet <%s>"
+msgstr "Det går inte att beskriva tabellen <%s>"
 
 #: ../lib/db/dbmi_client/copy_tab.c:92
 #, c-format
@@ -950,6 +950,11 @@ msgstr "intervall: %g till %g"
 msgid "Unable to open color descriptions"
 msgstr "Det går inte att öppna färgbeskrivningar"
 
+#: ../lib/gis/color_str.c:269
+#, c-format
+msgid "Unknown color format '%s'"
+msgstr "Okänt färgformat ’%s’"
+
 #: ../lib/gis/compress.c:143 ../lib/gis/compress.c:205
 #: ../lib/gis/compress.c:222 ../lib/gis/compress.c:237
 msgid "Request for unsupported compressor"
@@ -1276,22 +1281,24 @@ msgstr "Oigenkänt åtkomstläge: %o"
 msgid "This location has no description."
 msgstr "Denna plats har ingen beskrivning."
 
-#: ../lib/gis/omp_threads.c:23
+#: ../lib/gis/omp_threads.c:29
 msgid "Option is NULL."
 msgstr "Alternativet är NULL."
 
-#: ../lib/gis/omp_threads.c:25
+#: ../lib/gis/omp_threads.c:31
 msgid "Option key is NULL."
 msgstr "Alternativnyckeln är NULL."
 
-#: ../lib/gis/omp_threads.c:35
+#: ../lib/gis/omp_threads.c:46
 #, c-format
-msgid "%d threads are set up for parallel computing."
-msgstr "%d trådar är konfigurerade för parallella beräkningar."
+msgid "One thread is set up for parallel computing."
+msgid_plural "%d threads are set up for parallel computing."
+msgstr[0] "En tråd är konfigurerad för parallella beräkningar."
+msgstr[1] "%d trådar är konfigurerade för parallella beräkningar."
 
-#: ../lib/gis/omp_threads.c:39
-msgid "GRASS GIS is not compiled with OpenMP support, parallel computation is disabled. Only one thread will be used."
-msgstr "GRASS GIS är inte kompilerat med OpenMP-stöd, parallellberäkning är inaktiverad. Endast en tråd kommer att användas."
+#: ../lib/gis/omp_threads.c:52
+msgid "GRASS is not compiled with OpenMP support, parallel computation is disabled. Only one thread will be used."
+msgstr "GRASS är inte kompilerat med OpenMP-stöd, parallellberäkning är inaktiverad. Endast en tråd kommer att användas."
 
 #: ../lib/gis/open.c:69
 #, c-format
@@ -1600,7 +1607,7 @@ msgstr "Flaggor:"
 
 #: ../lib/gis/parser_help.c:222 ../lib/gis/parser_html.c:185
 #: ../lib/gis/parser_interface.c:329 ../lib/gis/parser_md_cli.c:313
-#: ../lib/gis/parser_md_python.c:469 ../lib/gis/parser_rest.c:158
+#: ../lib/gis/parser_md_python.c:473 ../lib/gis/parser_rest.c:158
 msgid "Allow output files to overwrite existing files"
 msgstr "Tillåt utdatafiler att skriva över befintliga filer"
 
@@ -1611,19 +1618,19 @@ msgstr "Skriv ut användningsöversikt"
 
 #: ../lib/gis/parser_help.c:225 ../lib/gis/parser_html.c:192
 #: ../lib/gis/parser_interface.c:344 ../lib/gis/parser_md_cli.c:323
-#: ../lib/gis/parser_md_python.c:474 ../lib/gis/parser_rest.c:162
+#: ../lib/gis/parser_md_python.c:478 ../lib/gis/parser_rest.c:162
 msgid "Verbose module output"
 msgstr "Verbose modulutdata"
 
 #: ../lib/gis/parser_help.c:226 ../lib/gis/parser_html.c:195
 #: ../lib/gis/parser_interface.c:351 ../lib/gis/parser_md_cli.c:326
-#: ../lib/gis/parser_md_python.c:478 ../lib/gis/parser_rest.c:165
+#: ../lib/gis/parser_md_python.c:482 ../lib/gis/parser_rest.c:165
 msgid "Quiet module output"
-msgstr "Tyst modulutgång"
+msgstr "Tyst modulutdata"
 
 #: ../lib/gis/parser_help.c:227
 msgid "Super quiet module output"
-msgstr "Super tyst modulutgång"
+msgstr "Supertyst modulutdata"
 
 #: ../lib/gis/parser_help.c:228 ../lib/gis/parser_html.c:198
 #: ../lib/gis/parser_md_cli.c:332
@@ -1684,9 +1691,9 @@ msgstr "Inmatningssträngen förstods inte: <%s>. Flera '@'-tecken?"
 msgid "Allowed values"
 msgstr "Tillåtna värden"
 
-#: ../lib/gis/parser_md_cli.c:329 ../lib/gis/parser_md_python.c:483
+#: ../lib/gis/parser_md_cli.c:329 ../lib/gis/parser_md_python.c:487
 msgid "Very quiet module output"
-msgstr "Mycket tyst modulutgång"
+msgstr "Mycket tyst modulutdata"
 
 #: ../lib/gis/parser_md_python.c:168
 msgid "Used as"
@@ -1920,7 +1927,7 @@ msgstr "Lagrets nummer eller namn"
 
 #: ../lib/gis/parser_standard_options.c:550
 msgid "Vector features can have category values in different layers. This number determines which layer to use. When used with direct OGR access this is the layer name."
-msgstr "Vektorfunktioner kan ha kategorivärden i olika lager. Detta nummer avgör vilket skikt som ska användas. När det används med direkt OGR-åtkomst är detta skiktets namn."
+msgstr "Vektorfunktioner kan ha kategorivärden i olika lager. Detta nummer avgör vilket lager som ska användas. När det används med direkt OGR-åtkomst är detta lagrets namn."
 
 #: ../lib/gis/parser_standard_options.c:560
 msgid "Layer number or name ('-1' for all layers)"
@@ -1928,7 +1935,7 @@ msgstr "Nummer eller namn på lagret ('-1' för alla lager)"
 
 #: ../lib/gis/parser_standard_options.c:562
 msgid "A single vector map can be connected to multiple database tables. This number determines which table to use. When used with direct OGR access this is the layer name."
-msgstr "En enda vektorkarta kan anslutas till flera databastabeller. Detta nummer avgör vilken tabell som ska användas. När den används med direkt OGR-åtkomst är detta skiktets namn."
+msgstr "En enda vektorkarta kan anslutas till flera databastabeller. Detta nummer avgör vilken tabell som ska användas. När den används med direkt OGR-åtkomst är detta lagrets namn."
 
 #: ../lib/gis/parser_standard_options.c:571
 msgid "Category value"
@@ -2061,121 +2068,125 @@ msgstr "Namn på sparad region"
 msgid "Number of threads for parallel computing"
 msgstr "Antal trådar för parallella beräkningar"
 
-#: ../lib/gis/parser_standard_options.c:794
+#: ../lib/gis/parser_standard_options.c:788
+msgid "0: use OpenMP default; >0: use nprocs; <0: use MAX-nprocs"
+msgstr "0: använd OpenMP-standard; >0: använd nprocs; <0: använd MAX-nprocs"
+
+#: ../lib/gis/parser_standard_options.c:796
 msgid "Seed value for the random number generator"
 msgstr "Seed-värde för slumptalsgeneratorn"
 
-#: ../lib/gis/parser_standard_options.c:796
+#: ../lib/gis/parser_standard_options.c:798
 msgid "Using the same seed ensures identical results, while a randomly generated seed produces different outcomes in each run."
 msgstr "Om man använder samma frö får man identiska resultat, medan ett slumpmässigt genererat frö ger olika resultat i varje körning."
 
-#: ../lib/gis/parser_standard_options.c:808
+#: ../lib/gis/parser_standard_options.c:810
 msgid "Name of the input space time dataset"
 msgstr "Namn på den ingående datasetet för rymdtid"
 
-#: ../lib/gis/parser_standard_options.c:817
+#: ../lib/gis/parser_standard_options.c:819
 msgid "Name of the input space time datasets"
 msgstr "Namn på de ingående dataseten för rymdtid"
 
-#: ../lib/gis/parser_standard_options.c:825
+#: ../lib/gis/parser_standard_options.c:827
 msgid "Name of the output space time dataset"
 msgstr "Namn på utdatasetet för rymdtid"
 
-#: ../lib/gis/parser_standard_options.c:833
+#: ../lib/gis/parser_standard_options.c:835
 msgid "Name of the input space time raster dataset"
 msgstr "Namn på den ingående rasterdatasetet för rymd och tid"
 
-#: ../lib/gis/parser_standard_options.c:842
+#: ../lib/gis/parser_standard_options.c:844
 msgid "Name of the input space time raster datasets"
 msgstr "Namn på de ingående rasterdataseten för rymdtid"
 
-#: ../lib/gis/parser_standard_options.c:850
+#: ../lib/gis/parser_standard_options.c:852
 msgid "Name of the output space time raster dataset"
 msgstr "Namn på rasterdatasetet för rymdtid som matas ut"
 
-#: ../lib/gis/parser_standard_options.c:859
+#: ../lib/gis/parser_standard_options.c:861
 msgid "Name of the output space time raster datasets"
 msgstr "Namn på rasterdataset för utdata för rymdtid"
 
-#: ../lib/gis/parser_standard_options.c:867
+#: ../lib/gis/parser_standard_options.c:869
 msgid "Name of the input space time vector dataset"
 msgstr "Namn på datasetet med tidsvektorer för inmatningsutrymmet"
 
-#: ../lib/gis/parser_standard_options.c:876
+#: ../lib/gis/parser_standard_options.c:878
 msgid "Name of the input space time vector datasets"
 msgstr "Namn på tidsvektordataset för inmatningsutrymmet"
 
-#: ../lib/gis/parser_standard_options.c:884
+#: ../lib/gis/parser_standard_options.c:886
 msgid "Name of the output space time vector dataset"
 msgstr "Namn på datasetet med tidsvektorer för utdatarummet"
 
-#: ../lib/gis/parser_standard_options.c:892
+#: ../lib/gis/parser_standard_options.c:894
 msgid "Name of the input space time raster3d dataset"
 msgstr "Namn på den ingående raster3d-datauppsättningen för rymdtid"
 
-#: ../lib/gis/parser_standard_options.c:901
+#: ../lib/gis/parser_standard_options.c:903
 msgid "Name of the input space time raster3d datasets"
 msgstr "Namn på de ingående raster3d-datauppsättningarna för rymdtid"
 
-#: ../lib/gis/parser_standard_options.c:909
+#: ../lib/gis/parser_standard_options.c:911
 msgid "Name of the output space time raster3d dataset"
 msgstr "Namn på utmatad raster3d-datauppsättning för rymdtid"
 
-#: ../lib/gis/parser_standard_options.c:918
+#: ../lib/gis/parser_standard_options.c:920
 msgid "Type of the input space time dataset"
 msgstr "Typ av inmatad dataset för rymdtid"
 
-#: ../lib/gis/parser_standard_options.c:926
+#: ../lib/gis/parser_standard_options.c:928
 msgid "Name of the input map"
 msgstr "Namn på inmatningskartan"
 
-#: ../lib/gis/parser_standard_options.c:935
+#: ../lib/gis/parser_standard_options.c:937
 msgid "Name of the input maps"
 msgstr "Namn på inmatningskartorna"
 
-#: ../lib/gis/parser_standard_options.c:944
+#: ../lib/gis/parser_standard_options.c:946
 msgid "Type of the input map"
 msgstr "Typ av inmatningskarta"
 
-#: ../lib/gis/parser_standard_options.c:953
+#: ../lib/gis/parser_standard_options.c:955
 msgid "The temporal type of the space time dataset"
 msgstr "Den temporala typen av rumtidsdataset"
 
-#: ../lib/gis/parser_standard_options.c:960
+#: ../lib/gis/parser_standard_options.c:962
 msgid "WHERE conditions of SQL statement without 'where' keyword used in the temporal GIS framework"
 msgstr "WHERE-betingelser i SQL-satsen utan nyckelordet \"where\" som används i det temporala GIS-ramverket"
 
-#: ../lib/gis/parser_standard_options.c:962
+#: ../lib/gis/parser_standard_options.c:964
 msgid "Example: start_time > '2001-01-01 12:30:00'"
 msgstr "Exempel: start_time > '2001-01-01 12:30:00'"
 
-#: ../lib/gis/parser_standard_options.c:973
+#: ../lib/gis/parser_standard_options.c:975
 msgid "The method to be used for sampling the input dataset"
 msgstr "Den metod som ska användas för provtagning av indatasetet"
 
-#: ../lib/gis/parser_standard_options.c:980
+#: ../lib/gis/parser_standard_options.c:982
 msgid "Output format"
 msgstr "Utdata format"
 
-#: ../lib/gis/parser_standard_options.c:983
+#: ../lib/gis/parser_standard_options.c:985
 msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);"
 msgstr "plain;Vanlig textutskrift;json;JSON (JavaScript Object Notation);"
 
-#: ../lib/gis/parser_standard_options.c:1018
+#: ../lib/gis/parser_standard_options.c:1020
 msgid "Do not create attribute table"
 msgstr "Skapa inte attributtabell"
 
-#: ../lib/gis/parser_standard_options.c:1022
+#: ../lib/gis/parser_standard_options.c:1024
 msgid "Do not build topology"
 msgstr "Bygg inte upp topologin"
 
-#: ../lib/gis/parser_standard_options.c:1024
+#: ../lib/gis/parser_standard_options.c:1026
 msgid "Advantageous when handling a large number of points"
 msgstr "Fördelaktigt vid hantering av ett stort antal punkter"
 
 #: ../lib/gis/parser_wps.c:517
 msgid "Multiple outputs are not supported by WPS 1.0.0"
-msgstr "Flera utgångar stöds inte av WPS 1.0.0"
+msgstr "Flera utmatningar stöds inte av WPS 1.0.0"
 
 #: ../lib/gis/paths.c:201
 #, c-format
@@ -2872,7 +2883,7 @@ msgstr "Inmatningsmatris och vektor har olika dimensioner1"
 
 #: ../lib/gmath/la.c:927 ../lib/gmath/la.c:1042 ../lib/gmath/la.c:1321
 msgid "Output vector is uninitialized"
-msgstr "Utgångsvektorn är inte initialiserad"
+msgstr "Utdatavektorn är inte initialiserad"
 
 #: ../lib/gmath/la.c:1047 ../lib/gmath/la.c:1326
 msgid "Vectors are not of the same type"
@@ -2880,7 +2891,7 @@ msgstr "Vektorerna är inte av samma typ"
 
 #: ../lib/gmath/la.c:1052
 msgid "Output vector is of incorrect type"
-msgstr "Utgångsvektorn är av fel typ"
+msgstr "Utdatavektorn är av fel typ"
 
 #: ../lib/gmath/la.c:1057 ../lib/gmath/la.c:1336
 msgid "Matrices not allowed"
@@ -2892,7 +2903,7 @@ msgstr "Vektorer har olika dimensioner"
 
 #: ../lib/gmath/la.c:1069 ../lib/gmath/la.c:1348
 msgid "Output vector has incorrect dimension"
-msgstr "Utgångsvektorn har fel dimension"
+msgstr "Utdatavektorn har fel dimension"
 
 #: ../lib/gmath/la.c:1115
 msgid "Vector dimensions out of range"
@@ -2904,7 +2915,7 @@ msgstr "Rad/kolumn utanför intervallet"
 
 #: ../lib/gmath/la.c:1331
 msgid "Output vector is not the same type as others"
-msgstr "Utgångsvektorn är inte av samma typ som de andra"
+msgstr "Utdatavektorn är inte av samma typ som de andra"
 
 #: ../lib/gmath/la.c:1391
 msgid "Vector structure is not initialised"
@@ -4656,11 +4667,11 @@ msgstr "OGR kan inte hämta parametersträng i WKT-stil (OGR-felkoden var %d)"
 #: ../lib/proj/convert.c:470
 #, c-format
 msgid "Updating spatial reference with embedded proj4 definition failed. Proj4 definition: <%s>"
-msgstr "Uppdatering av rumslig referens med inbäddad proj4-definition misslyckades. Proj4 definition: <%s>"
+msgstr "Uppdatering av spatial referens med inbäddad proj4-definition misslyckades. Proj4 definition: <%s>"
 
 #: ../lib/proj/convert.c:481
 msgid "Updating spatial reference with embedded proj4 definition"
-msgstr "Uppdatering av rumslig referens med inbäddad proj4-definition"
+msgstr "Uppdatering av spatial referens med inbäddad proj4-definition"
 
 #: ../lib/proj/convert.c:619
 msgid "No projection name! Projection parameters likely to be meaningless."
@@ -4754,7 +4765,7 @@ msgstr "CRS-ingång inte tillgänglig för '%s'"
 #: ../lib/proj/do_proj.c:599
 #, c-format
 msgid "Output CRS not available for '%s'"
-msgstr "CRS-utgång inte tillgänglig för '%s'"
+msgstr "CRS-utdata inte tillgänglig för '%s'"
 
 #: ../lib/proj/do_proj.c:625
 #, c-format
@@ -4848,7 +4859,7 @@ msgstr "proj_trans() misslyckades: %s"
 
 #: ../lib/proj/do_proj.c:1153
 msgid "No output projection"
-msgstr "Ingen utgångsprojektion"
+msgstr "Ingen utdataprojektion"
 
 #: ../lib/proj/do_proj.c:1182 ../lib/proj/do_proj.c:1463
 #: ../lib/proj/do_proj.c:1591 ../lib/proj/do_proj.c:1755
@@ -5271,31 +5282,35 @@ msgstr "Denna GRASS-version har inte stöd för %s komprimering, utan använder 
 msgid "Unknown interpolation method: %s"
 msgstr "Okänd interpoleringsmetod: %s"
 
-#: ../lib/raster/json_color_out.c:112 ../lib/raster/json_color_out.c:196
-#: ../lib/raster/json_color_out.c:210
+#: ../lib/raster/json_color_out.c:69 ../lib/raster/json_color_out.c:157
+#: ../lib/raster/json_color_out.c:172
 msgid "Failed to initialize JSON object. Out of memory?"
 msgstr "Misslyckades med att initiera JSON-objekt. Har du slut på minne?"
 
-#: ../lib/raster/json_color_out.c:144
+#: ../lib/raster/json_color_out.c:103
 msgid "Failed to initialize JSON array. Out of memory?"
 msgstr "Misslyckades med att initiera JSON-array. Har du slut på minne?"
 
-#: ../lib/raster/json_color_out.c:223
+#: ../lib/raster/json_color_out.c:186
 msgid "Failed to serialize JSON to pretty format."
 msgstr "Misslyckades med att serialisera JSON till pretty-format."
 
-#: ../lib/raster/mask_info.c:43
+#: ../lib/raster/mask_info.c:47
 #, c-format
 msgid "<%s> in mapset <%s>"
 msgstr "<%s> i kartset <%s>"
 
-#: ../lib/raster/mask_info.c:46
+#: ../lib/raster/mask_info.c:50
 msgid "none"
 msgstr "ingen"
 
-#: ../lib/raster/mask_info.c:49
+#: ../lib/raster/mask_info.c:53
 msgid "not known"
 msgstr "ej känd"
+
+#: ../lib/raster/mask_info.c:219
+msgid "Single thread processing enforced due to raster mask being present."
+msgstr "Enkel trådbehandling tillämpas på grund av att rastermask finns."
 
 #: ../lib/raster/null_val.c:64
 msgid "EmbedGivenNulls: wrong data type"
@@ -5825,7 +5840,7 @@ msgstr "Rast3d_get_standard3d_params: ogiltigt precisionsvärde"
 
 #: ../lib/raster3d/param.c:105
 msgid "Rast3d_get_standard3d_params: tile dimension value invalid"
-msgstr "Rast3d_get_standard3d_params: värdet för kakeldimensionen är ogiltigt"
+msgstr "Rast3d_get_standard3d_params: värdet för plattdimensionen är ogiltigt"
 
 #: ../lib/raster3d/param.c:129
 msgid "Window replacing the default"
@@ -6217,7 +6232,7 @@ msgstr "Det går inte att kopiera punkter"
 #: ../lib/vector/Vlib/ascii.c:238
 #, c-format
 msgid "Vector map <%s> is 2D. %d 3D features (faces or kernels) skipped."
-msgstr "Vektorkarta <%s> är 2D. %d 3D-funktioner (ansikten eller kärnor) hoppas över."
+msgstr "Vektorkarta <%s> är 2D. %d 3D-funktioner (ytor eller kärnor) hoppas över."
 
 #: ../lib/vector/Vlib/ascii.c:271
 #, c-format
@@ -6499,7 +6514,7 @@ msgstr "Antal redundanta hål: %d"
 #: ../lib/vector/Vlib/open.c:905
 #, c-format
 msgid "Unable to open spatial index file for vector map <%s>"
-msgstr "Det gick inte att öppna en rumslig indexfil för vektorkarta <%s>"
+msgstr "Det gick inte att öppna en spatial indexfil för vektorkarta <%s>"
 
 #: ../lib/vector/Vlib/build.c:892
 #, c-format
@@ -6543,7 +6558,7 @@ msgstr "Antal centroider: %d"
 #: ../lib/vector/Vlib/build.c:929
 #, c-format
 msgid "Number of faces: %d"
-msgstr "Antal ansikten: %d"
+msgstr "Antal ytor: %d"
 
 #: ../lib/vector/Vlib/build.c:932
 #, c-format
@@ -6604,7 +6619,7 @@ msgstr "Fel vid utskrivning av topofilen"
 
 #: ../lib/vector/Vlib/build.c:1234
 msgid "Unable to build spatial index from topology, vector map is not opened at topology level 2"
-msgstr "Det går inte att bygga ett rumsligt index från topologin, vektorkartan öppnas inte på topologinivå 2"
+msgstr "Det går inte att bygga ett spatialt index från topologin, vektorkartan öppnas inte på topologinivå 2"
 
 #: ../lib/vector/Vlib/build.c:1257
 #, c-format
@@ -6618,7 +6633,7 @@ msgstr "Spatialt index inte tillgängligt, kan inte sparas"
 #: ../lib/vector/Vlib/build.c:1293
 #, c-format
 msgid "Unable to create spatial index file for vector map <%s>"
-msgstr "Det gick inte att skapa en rumslig indexfil för vektorkarta <%s>"
+msgstr "Det gick inte att skapa en spatial indexfil för vektorkarta <%s>"
 
 #: ../lib/vector/Vlib/build.c:1302
 msgid "Error writing out spatial index file"
@@ -6722,7 +6737,7 @@ msgstr "Städning av topologi-schema..."
 
 #: ../lib/vector/Vlib/build_pg.c:297
 msgid "Updating faces..."
-msgstr "Uppdaterar ansikten..."
+msgstr "Uppdaterar ytor..."
 
 #: ../lib/vector/Vlib/build_pg.c:330
 msgid "Updating edges..."
@@ -6977,7 +6992,7 @@ msgstr "Det går inte att kopiera funktioner. Inmatningsvektorkarta <%s> är int
 #: ../lib/vector/Vlib/copy.c:111
 #, c-format
 msgid "Unable to create PostGIS layer <%s>"
-msgstr "Det går inte att skapa PostGIS-skikt <%s>"
+msgstr "Det går inte att skapa PostGIS-lager <%s>"
 
 #: ../lib/vector/Vlib/copy.c:148
 #, c-format
@@ -7000,7 +7015,7 @@ msgstr "Skrivning av ny funktion misslyckades"
 #: ../lib/vector/Vlib/copy.c:385
 #, c-format
 msgid "%d features without category or from different layer skipped"
-msgstr "%d funktioner utan kategori eller från annat skikt hoppas över"
+msgstr "%d funktioner utan kategori eller från annat lager hoppas över"
 
 #: ../lib/vector/Vlib/copy.c:419
 msgid "Exporting nodes..."
@@ -7305,7 +7320,7 @@ msgstr "Utmatningsvektorkartans namn <%s> är inte SQL-kompatibelt"
 #: ../lib/vector/Vlib/legal_vname.c:165 ../lib/vector/Vlib/legal_vname.c:169
 #, c-format
 msgid "Output vector map <%s> is used as input"
-msgstr "Utgångsvektorkarta <%s> används som indata"
+msgstr "Utdatavektorkarta <%s> används som indata"
 
 #: ../lib/vector/Vlib/level.c:34
 msgid "Map structure was never initialized"
@@ -7656,7 +7671,7 @@ msgstr "Det gick inte att öppna vektorkarta <%s> på nivå %d. Försök att åt
 #: ../lib/vector/Vlib/open.c:466
 #, c-format
 msgid "Building topology for OGR layer <%s> from datasource '%s'..."
-msgstr "Skapar topologi för OGR-skiktet <%s> från datakällan '%s'..."
+msgstr "Skapar topologi för OGR-lagret <%s> från datakällan '%s'..."
 
 #: ../lib/vector/Vlib/open.c:475
 #, c-format
@@ -7729,7 +7744,7 @@ msgstr "Filen OGR kan inte öppnas"
 
 #: ../lib/vector/Vlib/open.c:1381
 msgid "OGR output also detected, using OGR"
-msgstr "OGR-utgången upptäcks också, med hjälp av OGR"
+msgstr "OGR-utdata upptäcks också, med hjälp av OGR"
 
 #: ../lib/vector/Vlib/open_nat.c:57
 #, c-format
@@ -7739,7 +7754,7 @@ msgstr "Det går inte att öppna filen coor för vector map <%s>"
 #: ../lib/vector/Vlib/open_nat.c:155
 #, c-format
 msgid "Coor file of vector map <%s@%s> is larger than it should be (%<PRId64> bytes excess)"
-msgstr "Coor-filen för vektorkartan &lt;%s@%s&gt; är större än den borde vara (%<PRId64> bytes överskott)"
+msgstr "Coor-filen för vektorkartan &lt;%s@%s&gt; är större än den borde vara (%<PRId64> byte överskott)"
 
 #: ../lib/vector/Vlib/open_nat.c:160
 #, c-format
@@ -7752,7 +7767,7 @@ msgstr "OGR-datakälla inte definierad"
 
 #: ../lib/vector/Vlib/open_ogr.c:65 ../lib/vector/Vlib/write_ogr.c:129
 msgid "OGR layer not defined"
-msgstr "OGR-skikt ej definierat"
+msgstr "OGR-lager inte definierat"
 
 #: ../lib/vector/Vlib/open_ogr.c:97
 #, c-format
@@ -7792,7 +7807,7 @@ msgstr "Det går inte att ta bort OGR-lager <%s>"
 #: ../lib/vector/Vlib/open_ogr.c:232
 #, c-format
 msgid "OGR layer <%s> already exists in datasource '%s'"
-msgstr "OGR-skiktet <%s> finns redan i datakällan '%s'"
+msgstr "OGR-lagret <%s> finns redan i datakällan '%s'"
 
 #: ../lib/vector/Vlib/open_ogr.c:293
 #, c-format
@@ -7831,17 +7846,17 @@ msgstr "Topologischema hittades inte."
 #: ../lib/vector/Vlib/open_pg.c:282
 #, c-format
 msgid "PostGIS layer <%s.%s> already exists and will be overwritten"
-msgstr "PostGIS-skiktet <%s.%s> finns redan och kommer att skrivas över"
+msgstr "PostGIS-lagret <%s.%s> finns redan och kommer att skrivas över"
 
 #: ../lib/vector/Vlib/open_pg.c:286
 #, c-format
 msgid "Unable to delete PostGIS layer <%s>"
-msgstr "Det går inte att ta bort PostGIS-skiktet <%s>"
+msgstr "Det går inte att ta bort PostGIS-lagret <%s>"
 
 #: ../lib/vector/Vlib/open_pg.c:293
 #, c-format
 msgid "PostGIS layer <%s.%s> already exists in database '%s'"
-msgstr "PostGIS-skiktet <%s.%s> finns redan i databasen '%s'"
+msgstr "PostGIS-lagret <%s.%s> finns redan i databasen '%s'"
 
 #: ../lib/vector/Vlib/open_pg.c:401
 msgid "No key column detected."
@@ -7943,7 +7958,7 @@ msgstr "Inkonsekvens i topologin: antal centroider %d (borde vara %d)"
 
 #: ../lib/vector/Vlib/overlay.c:74
 msgid "unknown operator"
-msgstr "okänd operatör"
+msgstr "okänd operator"
 
 #: ../lib/vector/Vlib/overlay.c:128
 msgid "Overlay: line/boundary types not supported by AND operator"
@@ -7951,7 +7966,7 @@ msgstr "Överlagring: linje-/gränstyper som inte stöds av AND-operatorn"
 
 #: ../lib/vector/Vlib/overlay.c:132
 msgid "Overlay: area x area types not supported by AND operator"
-msgstr "Overlay: område x område typer som inte stöds av AND-operatören"
+msgstr "Overlay: område x område typer som inte stöds av AND-operatorn"
 
 #: ../lib/vector/Vlib/poly.c:264
 msgid "Unable to find point in polygon"
@@ -8185,7 +8200,7 @@ msgstr "Borttagna dubbletter: %d"
 #: ../lib/vector/Vlib/select.c:116
 #, c-format
 msgid "Unable to delete item %d from spatial index"
-msgstr "Det går inte att ta bort objektet %d från det rumsliga indexet"
+msgstr "Det går inte att ta bort objektet %d från det spatiala indexet"
 
 #: ../lib/vector/Vlib/simple_features.c:228
 #, c-format
@@ -8347,7 +8362,7 @@ msgstr "Objektet är inte en polygon. Hoppar över."
 
 #: ../lib/vector/Vlib/write_ogr.c:448
 msgid "Feature is not a face. Skipping."
-msgstr "Feature är inte ett ansikte. Hoppar över."
+msgstr "Funktionen är inte en yta. Hoppar över."
 
 #: ../lib/vector/Vlib/write_ogr.c:454
 #, c-format
@@ -8405,7 +8420,7 @@ msgstr "Gränsen är inte stängd. Hoppar över."
 #: ../lib/vector/Vlib/write_pg.c:791
 #, c-format
 msgid "Building spatial index on <%s>..."
-msgstr "Bygga rumsligt index på <%s>..."
+msgstr "Bygger spatialt index på <%s>..."
 
 #: ../lib/vector/Vlib/write_pg.c:859
 #, c-format
@@ -8453,7 +8468,7 @@ msgstr "Gränsen har hoppats över (typ av utmatningsfunktion: %s)"
 #: ../lib/vector/Vlib/write_pg.c:1316
 #, c-format
 msgid "Face skipped (output feature type: %s)"
-msgstr "Ansiktet hoppades över (typ av utmatningsfunktion: %s)"
+msgstr "Ytan hoppades över (typ av utmatningsfunktion: %s)"
 
 #: ../lib/vector/Vlib/write_pg.c:1401
 #, c-format
@@ -8524,7 +8539,7 @@ msgstr "Kan inte bestämma nästa vänster/högerkant"
 
 #: ../lib/vector/Vlib/write_pg.c:2823
 msgid "Unable to create new face"
-msgstr "Oförmåga att skapa ett nytt ansikte"
+msgstr "Kan inte skapa ny yta"
 
 #: ../lib/vector/Vlib/write_pg.c:2964 ../lib/vector/Vlib/write_pg.c:2977
 #, c-format
@@ -8717,12 +8732,12 @@ msgstr "Det går inte att hitta '%x' i %s"
 #: ../lib/vector/diglib/spindex.c:457
 #, c-format
 msgid "Unable to delete node %d from spatial index"
-msgstr "Det går inte att ta bort nod %d från rumsligt index"
+msgstr "Det går inte att ta bort nod %d från spatialt index"
 
 #: ../lib/vector/diglib/spindex.c:500
 #, c-format
 msgid "Unable to delete line %d from spatial index"
-msgstr "Det går inte att ta bort rad %d från ett rumsligt index"
+msgstr "Det går inte att ta bort rad %d från ett spatialt index"
 
 #: ../lib/vector/diglib/spindex.c:536
 msgid "Attempt to delete sidx for dead area"
@@ -8731,26 +8746,26 @@ msgstr "Försök att ta bort sidx för dött område"
 #: ../lib/vector/diglib/spindex.c:553
 #, c-format
 msgid "Unable to delete area %d from spatial index"
-msgstr "Det går inte att ta bort område %d från det rumsliga indexet"
+msgstr "Det går inte att ta bort område %d från det spatiala indexet"
 
 #: ../lib/vector/diglib/spindex.c:602
 #, c-format
 msgid "Unable to delete isle %d from spatial index"
-msgstr "Det går inte att ta bort ö %d från det rumsliga indexet"
+msgstr "Det går inte att ta bort ö %d från det spatiala indexet"
 
 #: ../lib/vector/diglib/spindex_rw.c:100 ../lib/vector/diglib/spindex_rw.c:109
 msgid "Topology file must be written before spatial index file"
-msgstr "Topologifilen måste skrivas före den rumsliga indexfilen"
+msgstr "Topologifilen måste skrivas före den spatiala indexfilen"
 
 #: ../lib/vector/diglib/spindex_rw.c:301
 #, c-format
 msgid "This version of GRASS (%d.%d) is too old to read this spatial index format. Try to rebuild topology or upgrade GRASS to at least version %d."
-msgstr "Den här versionen av GRASS (%d.%d) är för gammal för att läsa detta rumsliga indexformat. Försök att bygga om topologin eller uppgradera GRASS till minst version %d."
+msgstr "Den här versionen av GRASS (%d.%d) är för gammal för att läsa detta spatiala indexformat. Försök att bygga om topologin eller uppgradera GRASS till minst version %d."
 
 #: ../lib/vector/diglib/spindex_rw.c:310
 #, c-format
 msgid "Your GRASS version does not fully support spatial index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
-msgstr "Din GRASS-version har inte fullt stöd för det rumsliga indexformatet %d.%d för vektorn. Överväg att bygga om topologin eller uppgradera GRASS."
+msgstr "Din GRASS-version har inte fullt stöd för det spatiala indexformatet %d.%d för vektorn. Överväg att bygga om topologin eller uppgradera GRASS."
 
 #: ../lib/vector/diglib/spindex_rw.c:320
 #, c-format

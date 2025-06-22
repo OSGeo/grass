@@ -274,6 +274,8 @@ def make_command(
     :param options: module's parameters
 
     :return: list of arguments
+
+    :raises ~grass.exceptions.ScriptError: If the invalid flag '``-``' is given.
     """
     args = [_make_val(prog)]
     if overwrite:
@@ -331,7 +333,7 @@ def handle_errors(
     If *kwargs* dictionary contains key ``errors``, the value is used
     to determine the return value and the behavior on error.
     The value ``errors="raise"`` is a default in which case a
-    ``CalledModuleError`` exception is raised.
+    :py:exc:`~grass.exceptions.CalledModuleError` exception is raised.
 
     For ``errors="fatal"``, the function calls :func:`~grass.script.core.fatal()`
     which has its own rules on what happens next. In this case,
@@ -362,6 +364,11 @@ def handle_errors(
     Typically, this function is not called directly in user code or in a tool code
     unless the tools are handed directly, e.g., with :class:`Popen` as opposed
     to :func:`run_command()`.
+
+    :raises ~grass.exceptions.CalledModuleError:
+      - If there is an error, and the ``errors`` parameter is not given
+      - If the ``errors`` parameter is given and it is not
+        ``status``, ``ignore``, ``fatal``, nor ``exit``.
     """
 
     def get_module_and_code(args, kwargs):
@@ -490,10 +497,10 @@ def start_command(
         **kwargs,
     )
 
-    if debug_level() > 0:
+    if debug_level(env=kwargs.get("env")) > 0:
         sys.stderr.write(
             "D1/{}: {}.start_command(): {}\n".format(
-                debug_level(), __name__, " ".join(args)
+                debug_level(env=kwargs.get("env")), __name__, " ".join(args)
             )
         )
         sys.stderr.flush()
@@ -536,7 +543,7 @@ def run_command(*args, **kwargs):
         more expected default behavior for Python programmers. The
         change was backported to 7.0 series.
 
-    :raises: ``CalledModuleError`` when module returns non-zero return code
+    :raises ~grass.exceptions.CalledModuleError: When module returns non-zero return code.
     """
     encoding = "default"
     if "encoding" in kwargs:
@@ -714,7 +721,7 @@ def write_command(*args, **kwargs):
 
     :returns: 0 with default parameters for backward compatibility only
 
-    :raises: ``CalledModuleError`` when module returns non-zero return code
+    :raises ~grass.exceptions.CalledModuleError: When module returns non-zero return code
     """
     encoding = "default"
     if "encoding" in kwargs:
@@ -779,7 +786,18 @@ def message(msg, flag=None, env=None):
     :param env: dictionary with system environment variables
                 (:external:py:data:`os.environ` by default)
     """
-    run_command("g.message", flags=flag, message=msg, errors="ignore", env=env)
+    try:
+        run_command("g.message", flags=flag, message=msg, errors="ignore", env=env)
+    except OSError as error:
+        # Trying harder to show something, even when not adding the right message
+        # prefix. This allows for showing the original message to the user even when
+        # the tool cannot be found or errored for some reason.
+        print(
+            _(
+                "{message} (Additionally, there was an error: {additional_error})"
+            ).format(message=msg, additional_error=error),
+            file=sys.stderr,
+        )
 
 
 def debug(msg, debug=1, env=None):
@@ -798,7 +816,7 @@ def debug(msg, debug=1, env=None):
     :param env: dictionary with system environment variables
                 (:external:py:data:`os.environ` by default)
     """
-    if debug_level() >= debug:
+    if debug_level(env=env) >= debug:
         # TODO: quite a random hack here, do we need it somewhere else too?
         if sys.platform == "win32":
             msg = msg.replace("&", "^&")
@@ -873,13 +891,16 @@ def error(msg, env=None):
 def fatal(msg, env=None):
     """Display an error message using ``g.message -e``, then abort or raise
 
-    Raises exception when module global raise_on_error is 'True', abort
+    Raises exception when module global :py:data:`raise_on_error` is 'True', abort
     (calls :external:py:func:`sys.exit`) otherwise.
     Use :func:`set_raise_on_error()` to set the behavior.
 
     :param str msg: error message to be displayed
     :param env: dictionary with system environment variables
                 (:external:py:data:`os.environ` by default)
+
+    :raises ~grass.exceptions.ScriptError:
+        Raises exception when module global :py:data:`raise_on_error` is 'True'
     """
     global raise_on_error
     if raise_on_error:
@@ -938,6 +959,7 @@ def set_capture_stderr(capture=True):
     capturing.
 
     .. versionadded:: 7.4
+    .. seealso:: :func:`get_capture_stderr`
     """
     global _capture_stderr
     tmp = _capture_stderr
@@ -948,7 +970,7 @@ def set_capture_stderr(capture=True):
 def get_capture_stderr():
     """Return True if stderr is captured, False otherwise.
 
-    See set_capture_stderr().
+    .. seealso:: :func:`set_capture_stderr`.
     """
     global _capture_stderr
     return _capture_stderr
@@ -1042,6 +1064,9 @@ def tempfile(create=True, env=None):
     :param env: environment
 
     :return: path to a tmp file
+
+    .. seealso:: The ``g.tempfile`` tool, and the :py:func:`~grass.script.core.tempdir`
+        and :py:func:`~grass.script.core.tempname` functions
     """
     flags = ""
     if not create:
@@ -1051,7 +1076,11 @@ def tempfile(create=True, env=None):
 
 
 def tempdir(env=None):
-    """Returns the name of a temporary dir, created with g.tempfile."""
+    """Returns the name of a temporary dir, created with g.tempfile.
+
+    .. seealso:: The ``g.tempfile`` tool, and the :py:func:`~grass.script.core.tempfile`
+        and :py:func:`~grass.script.core.tempname` functions
+    """
     tmp = tempfile(create=False, env=env)
     os.mkdir(tmp)
 
@@ -1073,7 +1102,9 @@ def tempname(length: int, lowercase: bool = False) -> str:
         'tmp_MxMa1kAS13s9'
 
     .. seealso:: functions :func:`~grass.script.utils.append_uuid()`,
-        :func:`~grass.script.utils.append_random()`
+        :func:`~grass.script.utils.append_random()`,
+        the ``g.tempfile`` tool, and the :py:func:`~grass.script.core.tempfile`
+        and :py:func:`~grass.script.core.tempdir` functions
     """
 
     chars = string.ascii_lowercase + string.digits
@@ -1301,6 +1332,8 @@ def locn_is_latlong(env: _Env | None = None) -> bool:
     by checking the "g.region -pu" projection code.
 
     :return: True for a lat/long region, False otherwise
+
+    .. seealso:: The ``g.region`` tool
     """
     s = read_command("g.region", flags="pu", env=env)
     kv: KeyValue[str | None] = parse_key_val(s, ":")
@@ -1327,6 +1360,8 @@ def region(region3d=False, complete=False, env=None):
     :param env: dictionary with system environment variables
                 (:external:py:data:`os.environ` by default)
     :return: dictionary of region values
+
+    .. seealso:: The ``g.region`` tool
     """
     flgs = "gu"
     if region3d:
@@ -1363,8 +1398,9 @@ def region_env(
     If no 'kwargs' are given then the current region is used. Note
     that this function doesn't modify the current region!
 
-    See also :func:`use_temp_region()` for alternative method how to define
-    temporary region used for raster-based computation.
+    .. seealso::
+        See also :func:`use_temp_region()` for alternative method how to define
+        temporary region used for raster-based computation.
 
     :Example:
       .. code-block:: python
@@ -1457,6 +1493,8 @@ def use_temp_region():
     """Copies the current region to a temporary region with "g.region save=",
     then sets WIND_OVERRIDE to refer to that region. Installs an atexit
     handler to delete the temporary region upon termination.
+
+    .. seealso:: The ``g.region`` tool
     """
     name = "tmp.%s.%d" % (os.path.basename(sys.argv[0]), os.getpid())
     run_command("g.region", flags="u", save=name, overwrite=True)
@@ -1465,7 +1503,10 @@ def use_temp_region():
 
 
 def del_temp_region():
-    """Unsets WIND_OVERRIDE and removes any region named by it."""
+    """Unsets WIND_OVERRIDE and removes any region named by it.
+
+    .. seealso:: The ``g.remove`` tool
+    """
     try:
         name = os.environ.pop("WIND_OVERRIDE")
         run_command("g.remove", flags="f", quiet=True, type="region", name=name)
@@ -1512,6 +1553,8 @@ def find_file(name, element="cell", mapset=None, env=None):
     :param env: environment
 
     :return: parsed output of g.findfile
+
+    .. seealso:: The ``g.findfile`` tool
     """
     element_translation = {
         "rast": "cell",
@@ -1557,6 +1600,8 @@ def list_strings(type, pattern=None, mapset=None, exclude=None, flag="", env=Non
     :param env: environment
 
     :return: list of elements
+
+    .. seealso:: The ``g.list`` tool
     """
     if type == "cell":
         verbose(_('Element type should be "raster" and not "%s"') % type, env=env)
@@ -1591,6 +1636,8 @@ def list_pairs(type, pattern=None, mapset=None, exclude=None, flag="", env=None)
     :param env: environment
 
     :return: list of elements
+
+    .. seealso:: The ``g.list`` tool
     """
     return [
         tuple(map.split("@", 1))
@@ -1624,6 +1671,8 @@ def list_grouped(
     :param env: environment
 
     :return: directory of mapsets/elements
+
+    .. seealso:: The ``g.list`` tool
     """
     if isinstance(type, str) or len(type) == 1:
         types = [type]
@@ -1775,7 +1824,7 @@ def verbosity():
 # Various utilities, not specific to GRASS
 
 
-def find_program(pgm, *args):
+def find_program(pgm, *args, env: _Env = None):
     """Attempt to run a program, with optional arguments.
 
     You must call the program in a way that will return a successful
@@ -1793,6 +1842,7 @@ def find_program(pgm, *args):
 
     :param str pgm: program name
     :param args: list of arguments
+    :param env: environment
 
     :return: False if the attempt failed due to a missing executable
             or non-zero return code
@@ -1801,7 +1851,9 @@ def find_program(pgm, *args):
     with open(os.devnull, "w+") as nuldev:
         try:
             # TODO: the doc or impl is not correct, any return code is accepted
-            call([pgm] + list(args), stdin=nuldev, stdout=nuldev, stderr=nuldev)
+            call(
+                [pgm] + list(args), stdin=nuldev, stdout=nuldev, stderr=nuldev, env=env
+            )
             found = True
         except Exception:
             found = False
@@ -1818,6 +1870,8 @@ def mapsets(search_path=False, env=None):
     :param bool search_path: True to list mapsets only in search path
 
     :return: list of mapsets
+
+    .. seealso:: The ``g.mapsets`` tool
     """
     flags = "p" if search_path else "l"
     mapsets = read_command("g.mapsets", flags=flags, sep="newline", quiet=True, env=env)
@@ -1854,8 +1908,6 @@ def create_project(
 ):
     """Create new project
 
-    Raise ScriptError on error.
-
     :param str path: path to GRASS database or project; if path to database, project
                      name must be specified with name parameter
     :param str name: project name to create
@@ -1869,7 +1921,9 @@ def create_project(
     :param desc: description of the project (creates MYNAME file)
     :param bool overwrite: True to overwrite project if exists (WARNING:
                            ALL DATA from existing project ARE DELETED!)
-    :raises ~grass.exceptions.ScriptError: Raise ScriptError on error
+
+    :raises ~grass.exceptions.ScriptError:
+        Raise :py:exc:`~grass.exceptions.ScriptError` on error
     """
     # Add default mapset to project path if needed
     if not name:
@@ -1882,21 +1936,27 @@ def create_project(
     if not os.path.exists(mapset_path.directory):
         os.mkdir(mapset_path.directory)
 
-    # Lazy-importing to avoid circular dependencies.
-    # pylint: disable=import-outside-toplevel
-    if os.environ.get("GISBASE"):
-        env = os.environ
-    else:
-        from grass.script.setup import setup_runtime_env
+    env = None
+    tmp_gisrc = None
 
-        env = os.environ.copy()
-        setup_runtime_env(env=env)
+    def local_env():
+        """Create runtime environment and session"""
+        # Rather than simply caching, we use local variables to have an indicator of
+        # whether the session file has been created or not.
+        nonlocal env, tmp_gisrc
+        if not env:
+            # Lazy-importing to avoid circular dependencies.
+            # pylint: disable=import-outside-toplevel
+            from grass.script.setup import ensure_runtime_env
 
-    # Even g.proj and g.message need GISRC to be present.
-    # The names don't really matter here.
-    tmp_gisrc, env = create_environment(
-        mapset_path.directory, mapset_path.location, mapset_path.mapset, env=env
-    )
+            env = os.environ.copy()
+            ensure_runtime_env(env=env)
+            # Even g.proj and g.message need GISRC to be present.
+            # The specific names used don't really matter here.
+            tmp_gisrc, env = create_environment(
+                mapset_path.directory, mapset_path.location, mapset_path.mapset, env=env
+            )
+        return env
 
     # check if location already exists
     if Path(mapset_path.directory, mapset_path.location).exists():
@@ -1904,12 +1964,12 @@ def create_project(
             fatal(
                 _("Location <%s> already exists. Operation canceled.")
                 % mapset_path.location,
-                env=env,
+                env=local_env(),
             )
         warning(
             _("Location <%s> already exists and will be overwritten")
             % mapset_path.location,
-            env=env,
+            env=local_env(),
         )
         shutil.rmtree(os.path.join(mapset_path.directory, mapset_path.location))
 
@@ -1929,7 +1989,7 @@ def create_project(
             epsg=epsg,
             project=mapset_path.location,
             stderr=PIPE,
-            env=env,
+            env=local_env(),
             **kwargs,
         )
     elif proj4:
@@ -1940,7 +2000,7 @@ def create_project(
             proj4=proj4,
             project=mapset_path.location,
             stderr=PIPE,
-            env=env,
+            env=local_env(),
             **kwargs,
         )
     elif filename:
@@ -1950,7 +2010,7 @@ def create_project(
             georef=filename,
             project=mapset_path.location,
             stderr=PIPE,
-            env=env,
+            env=local_env(),
         )
     elif wkt:
         if os.path.isfile(wkt):
@@ -1960,7 +2020,7 @@ def create_project(
                 wkt=wkt,
                 project=mapset_path.location,
                 stderr=PIPE,
-                env=env,
+                env=local_env(),
             )
         else:
             ps = pipe_command(
@@ -1970,7 +2030,7 @@ def create_project(
                 project=mapset_path.location,
                 stderr=PIPE,
                 stdin=PIPE,
-                env=env,
+                env=local_env(),
             )
             stdin = encode(wkt)
     else:
@@ -1979,15 +2039,24 @@ def create_project(
     if ps is not None and (epsg or proj4 or filename or wkt):
         error = ps.communicate(stdin)[1]
         try_remove(tmp_gisrc)
+        tmp_gisrc = None
 
         if ps.returncode != 0 and error:
             raise ScriptError(repr(error))
 
+    # If a session was created for messages, but not used for subprocesses,
+    # we still need to clean it up.
+    if tmp_gisrc:
+        try_remove(tmp_gisrc)
     _set_location_description(mapset_path.directory, mapset_path.location, desc)
 
 
 def _set_location_description(path, location, text):
-    """Set description (aka title aka MYNAME) for a location"""
+    """Set description (aka title aka MYNAME) for a location
+
+    :raises ~grass.exceptions.ScriptError:
+        Raise :py:exc:`~grass.exceptions.ScriptError` on error.
+    """
     try:
         with codecs.open(
             os.path.join(path, location, "PERMANENT", "MYNAME"),
@@ -2008,17 +2077,17 @@ def _create_location_xy(database, location):
 
     :param database: GRASS database where to create new location
     :param location: location name
-    :raises grass.exceptions.ScriptError: Raise ScriptError on error.
+    :raises ~grass.exceptions.ScriptError:
+        Raise :py:exc:`~grass.exceptions.ScriptError` on error.
     """
-    cur_dir = Path.cwd()
     try:
-        os.chdir(database)
-        permanent_dir = Path(location, "PERMANENT")
+        base_path = Path(database)
+        project_dir = base_path / location
+        permanent_dir = project_dir / "PERMANENT"
         default_wind_path = permanent_dir / "DEFAULT_WIND"
         wind_path = permanent_dir / "WIND"
-        os.mkdir(location)
+        project_dir.mkdir()
         permanent_dir.mkdir()
-
         # create DEFAULT_WIND and WIND files
         regioninfo = [
             "proj:       0",
@@ -2040,10 +2109,8 @@ def _create_location_xy(database, location):
             "n-s resol3: 1",
             "t-b resol:  1",
         ]
-
         default_wind_path.write_text("\n".join(regioninfo))
         shutil.copy(default_wind_path, wind_path)
-        os.chdir(cur_dir)
     except OSError as e:
         raise ScriptError(repr(e))
 
@@ -2074,17 +2141,25 @@ def version():
 _debug_level = None
 
 
-def debug_level(force=False):
+def debug_level(force: bool = False, *, env: _Env = None):
     global _debug_level
     if not force and _debug_level is not None:
         return _debug_level
     _debug_level = 0
-    if find_program("g.gisenv", "--help"):
+    # We attempt to access the environment only when there is a chance
+    # it will work.
+    if find_program("g.gisenv", "--help", env=env):
         try:
-            _debug_level = int(gisenv().get("DEBUG", 0))
+            try:
+                _debug_level = int(gisenv(env=env).get("DEBUG", 0))
+            except (CalledModuleError, OSError):
+                # We continue in case of an error. Default value is already set.
+                pass
             if _debug_level < 0 or _debug_level > 5:
                 raise ValueError(_("Debug level {0}").format(_debug_level))
         except ValueError as e:
+            # The exception may come from the conversion or from the range,
+            # so we handle both in the same way.
             _debug_level = 0
             sys.stderr.write(
                 _(

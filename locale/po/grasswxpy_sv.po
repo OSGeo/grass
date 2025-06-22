@@ -1,20 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# Daniel Nylander <daniel@danielnylander.se>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-04 10:56+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"POT-Creation-Date: 2025-06-21 12:47+0000\n"
+"PO-Revision-Date: 2025-06-20 00:15+0000\n"
+"Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
+"Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: ../gui/wxpython/animation/controller.py:244
 #: ../gui/wxpython/animation/dialogs.py:858
@@ -271,7 +272,7 @@ msgstr "Parameter för animering:"
 
 #: ../gui/wxpython/animation/dialogs.py:527
 msgid "Set spatial extent in 2D view"
-msgstr "Ställ in rumslig utsträckning i 2D-vy"
+msgstr "Ställ in spatial utsträckning i 2D-vy"
 
 #: ../gui/wxpython/animation/dialogs.py:531
 msgid "Use saved region:"
@@ -979,7 +980,7 @@ msgstr "Mer information: %s\n"
 #: ../gui/wxpython/core/render.py:284
 #, python-format
 msgid "Unsupported map layer type '%s'"
-msgstr "Kartskiktstyp '%s' stöds inte"
+msgstr "Kartlagertypen '%s' stöds inte"
 
 #: ../gui/wxpython/core/render.py:694
 #, python-format
@@ -1889,7 +1890,7 @@ msgstr "Inga tillgängliga alternativ"
 
 #: ../gui/wxpython/dbmgr/base.py:176 ../gui/wxpython/iscatt/controllers.py:146
 msgid "Loading data..."
-msgstr "Läser in data …"
+msgstr "Laddar data …"
 
 #: ../gui/wxpython/dbmgr/base.py:185
 #, python-format
@@ -3841,7 +3842,7 @@ msgstr "Skriptredigerare"
 #: ../gui/wxpython/gmodeler/panels.py:194
 #: ../gui/wxpython/gui_core/forms.py:2511
 msgid "Command output"
-msgstr "Kommandoutgång"
+msgstr "Kommandoutdata"
 
 #: ../gui/wxpython/gmodeler/panels.py:274 ../gui/wxpython/gui_core/pystc.py:264
 msgid "{} script contains local modifications"
@@ -4181,7 +4182,7 @@ msgstr "Inaktiverad:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:88
 msgid "Python editor"
-msgstr "Python-editor"
+msgstr "Python-redigerare"
 
 #: ../gui/wxpython/gmodeler/preferences.py:95
 msgid "GRASS API:"
@@ -4259,7 +4260,7 @@ msgstr "Vektor:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:359
 msgid "Table:"
-msgstr "Bord:"
+msgstr "Tabell:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:455
 msgid "Loop"
@@ -4613,7 +4614,7 @@ msgstr "Dynamisk serie (%s)"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1783
 msgid "Set Map Layer Opacity"
-msgstr "Ställ in kartskiktets opacitet"
+msgstr "Ställ in kartlagrets opacitet"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1812
 #: ../gui/wxpython/psmap/dialogs.py:6324 ../gui/wxpython/psmap/dialogs.py:6339
@@ -5028,7 +5029,7 @@ msgstr "%d översatt"
 #: ../gui/wxpython/gui_core/ghelp.py:660
 #, python-format
 msgid "File <%s> not found"
-msgstr "Filen <%s> hittades inte"
+msgstr "Fil <%s> hittades inte"
 
 #: ../gui/wxpython/gui_core/ghelp.py:832
 msgid "&Next"
@@ -5531,7 +5532,7 @@ msgstr "Standardinställningar för visning"
 
 #: ../gui/wxpython/gui_core/preferences.py:917
 msgid "Display driver:"
-msgstr "Displayförare:"
+msgstr "Skärmdrivare:"
 
 #: ../gui/wxpython/gui_core/preferences.py:943
 msgid "Statusbar mode:"
@@ -5672,7 +5673,7 @@ msgstr "Fråga vid borttagning av datapost(er) från tabell"
 
 #: ../gui/wxpython/gui_core/preferences.py:1749
 msgid "Create table"
-msgstr "Skapa bord"
+msgstr "Skapa tabell"
 
 #: ../gui/wxpython/gui_core/preferences.py:1783
 msgid "Projection"
@@ -5860,7 +5861,7 @@ msgstr "Avaktivera överskrivning"
 
 #: ../gui/wxpython/gui_core/pyedit.py:876
 msgid "Simple Python Editor"
-msgstr "Enkel Python Editor"
+msgstr "Enkel Python-redigerare"
 
 #: ../gui/wxpython/gui_core/query.py:32
 msgid "Query results"
@@ -5961,11 +5962,11 @@ msgstr "Flytta markerade lager nedåt"
 #: ../gui/wxpython/gui_core/simplelmgr.py:526
 #: ../gui/wxpython/gui_core/simplelmgr.py:527
 msgid "Edit layer properties"
-msgstr "Redigera skiktets egenskaper"
+msgstr "Redigera lagrets egenskaper"
 
 #: ../gui/wxpython/gui_core/simplelmgr.py:530
 msgid "Change layer opacity"
-msgstr "Ändra skiktets opacitet"
+msgstr "Ändra lagrets opacitet"
 
 #: ../gui/wxpython/gui_core/simplelmgr.py:530
 msgid "Change opacity"
@@ -6068,11 +6069,11 @@ msgstr "Avsluta"
 
 #: ../gui/wxpython/gui_core/toolbars.py:73 ../gui/wxpython/lmgr/layertree.py:57
 msgid "Add raster map layer"
-msgstr "Lägg till rasterkartskikt"
+msgstr "Lägg till rasterkartlager"
 
 #: ../gui/wxpython/gui_core/toolbars.py:74 ../gui/wxpython/lmgr/layertree.py:65
 msgid "Add vector map layer"
-msgstr "Lägg till vektorkartskikt"
+msgstr "Lägg till vektorkartlager"
 
 #: ../gui/wxpython/gui_core/toolbars.py:77
 msgid "Add map elements"
@@ -7139,7 +7140,7 @@ msgid ""
 "\n"
 "Are you really sure that you want to create this mapset?"
 msgstr ""
-"Mapset <%s> är reserverat för direkt läsåtkomst till OGR-skikt. Tänk på att använda ett annat namn för din mapset.\n"
+"Mapset <%s> är reserverat för direkt läsåtkomst till OGR-lager. Tänk på att använda ett annat namn för din mapset.\n"
 "\n"
 "Är du verkligen säker på att du vill skapa denna mapset?"
 
@@ -7830,7 +7831,7 @@ msgstr "Lägg till markerade kartlager i lagerträdet"
 #: ../gui/wxpython/main_window/frame.py:2138
 #, python-format
 msgid "Unsupported map layer type <%s>."
-msgstr "Kartskiktstyp <%s> stöds inte."
+msgstr "Kartlagertypen <%s> stöds inte."
 
 #: ../gui/wxpython/lmgr/frame.py:2119 ../gui/wxpython/main_window/frame.py:2262
 msgid "Note that cell values can only be displayed for regions of less than 10,000 cells."
@@ -7858,7 +7859,7 @@ msgstr "Vill du ta bort valda kartlager från lagerträdet?"
 
 #: ../gui/wxpython/lmgr/frame.py:2234 ../gui/wxpython/main_window/frame.py:2358
 msgid "Remove map layer"
-msgstr "Ta bort kartskikt"
+msgstr "Ta bort kartlager"
 
 #: ../gui/wxpython/lmgr/frame.py:2292 ../gui/wxpython/main_window/frame.py:2400
 msgid "Quit GRASS GUI"
@@ -7886,7 +7887,7 @@ msgstr "Lägg till HIS kartlager"
 
 #: ../gui/wxpython/lmgr/layertree.py:61
 msgid "Add shaded relief map layer"
-msgstr "Lägg till skuggat reliefkartskikt"
+msgstr "Lägg till skuggat reliefkartlager"
 
 #: ../gui/wxpython/lmgr/layertree.py:63
 msgid "Add raster flow arrows"
@@ -7898,7 +7899,7 @@ msgstr "Lägg till rastercellnummer"
 
 #: ../gui/wxpython/lmgr/layertree.py:67
 msgid "Add thematic (choropleth) vector map layer"
-msgstr "Lägg till tematiskt (choropleth) vektorkartskikt"
+msgstr "Lägg till tematiskt (choropleth) vektorkartlager"
 
 #: ../gui/wxpython/lmgr/layertree.py:70
 msgid "Add thematic chart layer"
@@ -7938,7 +7939,7 @@ msgstr "Vektorkarta i bakgrunden"
 
 #: ../gui/wxpython/lmgr/layertree.py:161 ../gui/wxpython/lmgr/layertree.py:1661
 msgid "Map Layers"
-msgstr "Kartskikt"
+msgstr "Kartlager"
 
 #: ../gui/wxpython/lmgr/layertree.py:456 ../gui/wxpython/rlisetup/frame.py:161
 msgid "Rename"
@@ -7991,11 +7992,11 @@ msgstr "Gör en kopia i den aktuella kartuppsättningen"
 #: ../gui/wxpython/lmgr/layertree.py:673 ../gui/wxpython/lmgr/layertree.py:806
 #: ../gui/wxpython/lmgr/layertree.py:863
 msgid "Set color table"
-msgstr "Ställ in färgbordet"
+msgstr "Ställ in färgtabell"
 
 #: ../gui/wxpython/lmgr/layertree.py:677 ../gui/wxpython/lmgr/layertree.py:810
 msgid "Set color table interactively"
-msgstr "Ställ in färgbordet interaktivt"
+msgstr "Ställ in färgtabellen interaktivt"
 
 #: ../gui/wxpython/lmgr/layertree.py:682
 msgid "Show attribute data"
@@ -8137,7 +8138,7 @@ msgstr "Ta bort all text från skalet"
 
 #: ../gui/wxpython/lmgr/pyshell.py:78
 msgid "Simple &editor"
-msgstr "Enkel &redaktör"
+msgstr "Enkel &redigerare"
 
 #: ../gui/wxpython/lmgr/pyshell.py:80 ../gui/wxpython/lmgr/toolbars.py:215
 msgid "Open a simple Python code editor"
@@ -9932,7 +9933,7 @@ msgstr "Projektionen av följande lager stämmer inte överens med projektionen 
 
 #: ../gui/wxpython/modules/import_export.py:1006
 msgid "Layers to be reprojected"
-msgstr "Skikt som ska återprojiceras"
+msgstr "Lager som ska återprojiceras"
 
 #: ../gui/wxpython/modules/import_export.py:1019
 msgid "&Import && reproject"
@@ -9952,7 +9953,7 @@ msgstr "mapcalc uttalande"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:153
 msgid "Operators"
-msgstr "Operatörer"
+msgstr "Operatorer"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:156
 #: ../gui/wxpython/vnet/dialogs.py:368
@@ -11605,7 +11606,7 @@ msgstr "rita rutan \"inga uppgifter\""
 
 #: ../gui/wxpython/psmap/dialogs.py:3549
 msgid "draw ticks across color table"
-msgstr "dra tickor över färgbordet"
+msgstr "dra tickor över färgtabellen"
 
 #: ../gui/wxpython/psmap/dialogs.py:3620
 msgid "Vector legend"
@@ -12557,7 +12558,7 @@ msgstr "Vektorkarta att använda för att välja områden"
 
 #: ../gui/wxpython/rlisetup/wizard.py:574
 msgid "Vector map layer to use to select areas"
-msgstr "Vektorkartskikt att använda för att välja områden"
+msgstr "Vektorkartlager att använda för att välja områden"
 
 #: ../gui/wxpython/rlisetup/wizard.py:593
 msgid "Define sampling region (region for analysis)"
@@ -12566,7 +12567,7 @@ msgstr "Definiera provtagningsregion (region för analys)"
 #: ../gui/wxpython/rlisetup/wizard.py:595
 #: ../gui/wxpython/rlisetup/wizard.py:982
 msgid "Whole map layer"
-msgstr "Hela kartskiktet"
+msgstr "Hela kartlagret"
 
 #: ../gui/wxpython/rlisetup/wizard.py:596
 msgid "Keyboard setting"
@@ -12594,7 +12595,7 @@ msgstr "Vektor %s har inga områden, välj en annan vektor"
 #: ../gui/wxpython/rlisetup/wizard.py:724
 #, python-format
 msgid "Vector %s has no table connected, please select another vector"
-msgstr "Vektor %s har inget bord anslutet, välj en annan vektor"
+msgstr "Vektor %s har ingen tabell ansluten, välj en annan vektor"
 
 #: ../gui/wxpython/rlisetup/wizard.py:763
 msgid "Insert sampling frame parameter"
@@ -12997,7 +12998,7 @@ msgstr ""
 "\n"
 "{reasons}\n"
 "\n"
-"Inga mapsets kommer att tas bort."
+"Inga kartuppsättningar kommer att tas bort."
 
 #: ../gui/wxpython/startup/guiutils.py:375
 msgid "Unable to delete selected mapsets"
@@ -13312,11 +13313,11 @@ msgstr "Hjälp"
 
 #: ../gui/wxpython/timeline/frame.py:144
 msgid "3D plot of spatio-temporal extents"
-msgstr "3D-plott av rumslig-temporal utbredning"
+msgstr "3D-plott av spatio-temporal utbredning"
 
 #: ../gui/wxpython/timeline/frame.py:149
 msgid "3D plot of spatio-temporal extents (matplotlib >= 1.0.0)"
-msgstr "3D-plott av rumslig-temporala utbredningar (matplotlib >= 1.0.0)"
+msgstr "3D-plott av spatio-temporala utbredningar (matplotlib >= 1.0.0)"
 
 #: ../gui/wxpython/timeline/frame.py:155
 msgid "Select space time dataset(s):"
@@ -14591,7 +14592,7 @@ msgstr "Vektorkarta valdes inte."
 
 #: ../gui/wxpython/vnet/vnet_data.py:172
 msgid "arc layer"
-msgstr "bågskikt"
+msgstr "båglager"
 
 #: ../gui/wxpython/vnet/vnet_data.py:173
 msgid "node layer"
@@ -14618,7 +14619,7 @@ msgstr "Välj befintlig %s.\n"
 #: ../gui/wxpython/vnet/vnet_data.py:195
 #, python-format
 msgid "Chosen column '%s' does not exist in attribute table of layer '%s' of vector map '%s'.\n"
-msgstr "Den valda kolumnen '%s' finns inte i attributtabellen för skiktet '%s' i vektorkartan '%s'.\n"
+msgstr "Den valda kolumnen '%s' finns inte i attributtabellen för lagret '%s' i vektorkartan '%s'.\n"
 
 #: ../gui/wxpython/vnet/vnet_data.py:252
 msgid "topology"
@@ -14718,7 +14719,7 @@ msgstr "Kostnad isolinjer %s"
 
 #: ../gui/wxpython/vnet/vnet_data.py:867
 msgid "Overwrite map layer"
-msgstr "Skriva över kartskikt"
+msgstr "Skriv över kartlager"
 
 #: ../gui/wxpython/vnet/widgets.py:400
 msgid "Invalid value inserted. Operation canceled."
@@ -14758,7 +14759,7 @@ msgstr " Inställningar för Lagerhanterare "
 
 #: ../gui/wxpython/web_services/dialogs.py:138
 msgid "Output layer name:"
-msgstr "Namn på utmatningsskikt:"
+msgstr "Namn på utmatningslager:"
 
 #: ../gui/wxpython/web_services/dialogs.py:264
 msgid "Username:"
@@ -14797,7 +14798,7 @@ msgstr "Lägg till valda webbtjänstlager som kartlager i lagerträdet"
 
 #: ../gui/wxpython/web_services/dialogs.py:645
 msgid "Web service layer properties"
-msgstr "Egenskaper för webbtjänstskiktet"
+msgstr "Egenskaper för webbtjänstslager"
 
 #: ../gui/wxpython/web_services/dialogs.py:694
 msgid "&OK"
@@ -14853,7 +14854,7 @@ msgstr "Saknar utmatningsraster."
 
 #: ../gui/wxpython/web_services/dialogs.py:1018
 msgid "Output map can be added only to current mapset."
-msgstr "Utgångskartan kan endast läggas till i den aktuella kartuppsättningen."
+msgstr "Utdatakartan kan endast läggas till i den aktuella kartuppsättningen."
 
 #: ../gui/wxpython/web_services/dialogs.py:1024
 #, python-format

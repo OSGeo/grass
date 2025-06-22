@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-04 10:56+0000\n"
+"POT-Creation-Date: 2025-06-21 12:47+0000\n"
 "PO-Revision-Date: 2025-03-12 12:05+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Czech <https://weblate.osgeo.org/projects/grass-gis/grasslibs/cs/>\n"
@@ -956,6 +956,11 @@ msgstr ""
 msgid "Unable to open color descriptions"
 msgstr ""
 
+#: ../lib/gis/color_str.c:269
+#, c-format
+msgid "Unknown color format '%s'"
+msgstr ""
+
 #: ../lib/gis/compress.c:143 ../lib/gis/compress.c:205
 #: ../lib/gis/compress.c:222 ../lib/gis/compress.c:237
 msgid "Request for unsupported compressor"
@@ -1282,23 +1287,26 @@ msgstr ""
 msgid "This location has no description."
 msgstr "Lokace nemá popisek."
 
-#: ../lib/gis/omp_threads.c:23
+#: ../lib/gis/omp_threads.c:29
 #, fuzzy
 #| msgid "Options"
 msgid "Option is NULL."
 msgstr "Volby"
 
-#: ../lib/gis/omp_threads.c:25
+#: ../lib/gis/omp_threads.c:31
 msgid "Option key is NULL."
 msgstr ""
 
-#: ../lib/gis/omp_threads.c:35
+#: ../lib/gis/omp_threads.c:46
 #, c-format
-msgid "%d threads are set up for parallel computing."
-msgstr ""
+msgid "One thread is set up for parallel computing."
+msgid_plural "%d threads are set up for parallel computing."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
-#: ../lib/gis/omp_threads.c:39
-msgid "GRASS GIS is not compiled with OpenMP support, parallel computation is disabled. Only one thread will be used."
+#: ../lib/gis/omp_threads.c:52
+msgid "GRASS is not compiled with OpenMP support, parallel computation is disabled. Only one thread will be used."
 msgstr ""
 
 #: ../lib/gis/open.c:69
@@ -1598,7 +1606,7 @@ msgstr "Přepínače:"
 
 #: ../lib/gis/parser_help.c:222 ../lib/gis/parser_html.c:185
 #: ../lib/gis/parser_interface.c:329 ../lib/gis/parser_md_cli.c:313
-#: ../lib/gis/parser_md_python.c:469 ../lib/gis/parser_rest.c:158
+#: ../lib/gis/parser_md_python.c:473 ../lib/gis/parser_rest.c:158
 msgid "Allow output files to overwrite existing files"
 msgstr "Povolit výstupním souborům přepsat existující soubory"
 
@@ -1609,13 +1617,13 @@ msgstr ""
 
 #: ../lib/gis/parser_help.c:225 ../lib/gis/parser_html.c:192
 #: ../lib/gis/parser_interface.c:344 ../lib/gis/parser_md_cli.c:323
-#: ../lib/gis/parser_md_python.c:474 ../lib/gis/parser_rest.c:162
+#: ../lib/gis/parser_md_python.c:478 ../lib/gis/parser_rest.c:162
 msgid "Verbose module output"
 msgstr "Rozšířený výpis"
 
 #: ../lib/gis/parser_help.c:226 ../lib/gis/parser_html.c:195
 #: ../lib/gis/parser_interface.c:351 ../lib/gis/parser_md_cli.c:326
-#: ../lib/gis/parser_md_python.c:478 ../lib/gis/parser_rest.c:165
+#: ../lib/gis/parser_md_python.c:482 ../lib/gis/parser_rest.c:165
 msgid "Quiet module output"
 msgstr "Redukovaný výpis"
 
@@ -1684,7 +1692,7 @@ msgstr ""
 msgid "Allowed values"
 msgstr "Neplatná hodnota řádku"
 
-#: ../lib/gis/parser_md_cli.c:329 ../lib/gis/parser_md_python.c:483
+#: ../lib/gis/parser_md_cli.c:329 ../lib/gis/parser_md_python.c:487
 #, fuzzy
 #| msgid "Quiet module output"
 msgid "Very quiet module output"
@@ -2063,117 +2071,121 @@ msgstr ""
 msgid "Number of threads for parallel computing"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:794
-msgid "Seed value for the random number generator"
+#: ../lib/gis/parser_standard_options.c:788
+msgid "0: use OpenMP default; >0: use nprocs; <0: use MAX-nprocs"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:796
+msgid "Seed value for the random number generator"
+msgstr ""
+
+#: ../lib/gis/parser_standard_options.c:798
 msgid "Using the same seed ensures identical results, while a randomly generated seed produces different outcomes in each run."
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:808
+#: ../lib/gis/parser_standard_options.c:810
 msgid "Name of the input space time dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:817
+#: ../lib/gis/parser_standard_options.c:819
 msgid "Name of the input space time datasets"
 msgstr "Název datových množin vstupních prostoročasů"
 
-#: ../lib/gis/parser_standard_options.c:825
+#: ../lib/gis/parser_standard_options.c:827
 msgid "Name of the output space time dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:833
+#: ../lib/gis/parser_standard_options.c:835
 msgid "Name of the input space time raster dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:842
+#: ../lib/gis/parser_standard_options.c:844
 msgid "Name of the input space time raster datasets"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:850
+#: ../lib/gis/parser_standard_options.c:852
 msgid "Name of the output space time raster dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:859
+#: ../lib/gis/parser_standard_options.c:861
 msgid "Name of the output space time raster datasets"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:867
+#: ../lib/gis/parser_standard_options.c:869
 msgid "Name of the input space time vector dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:876
+#: ../lib/gis/parser_standard_options.c:878
 msgid "Name of the input space time vector datasets"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:884
+#: ../lib/gis/parser_standard_options.c:886
 msgid "Name of the output space time vector dataset"
 msgstr "Název vektorové datové množiny výstupního prostoru"
 
-#: ../lib/gis/parser_standard_options.c:892
+#: ../lib/gis/parser_standard_options.c:894
 msgid "Name of the input space time raster3d dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:901
+#: ../lib/gis/parser_standard_options.c:903
 msgid "Name of the input space time raster3d datasets"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:909
+#: ../lib/gis/parser_standard_options.c:911
 msgid "Name of the output space time raster3d dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:918
+#: ../lib/gis/parser_standard_options.c:920
 msgid "Type of the input space time dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:926
+#: ../lib/gis/parser_standard_options.c:928
 msgid "Name of the input map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:935
+#: ../lib/gis/parser_standard_options.c:937
 msgid "Name of the input maps"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:944
+#: ../lib/gis/parser_standard_options.c:946
 msgid "Type of the input map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:953
+#: ../lib/gis/parser_standard_options.c:955
 msgid "The temporal type of the space time dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:960
+#: ../lib/gis/parser_standard_options.c:962
 msgid "WHERE conditions of SQL statement without 'where' keyword used in the temporal GIS framework"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:962
+#: ../lib/gis/parser_standard_options.c:964
 msgid "Example: start_time > '2001-01-01 12:30:00'"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:973
+#: ../lib/gis/parser_standard_options.c:975
 msgid "The method to be used for sampling the input dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:980
+#: ../lib/gis/parser_standard_options.c:982
 #, fuzzy
 #| msgid "Input format error"
 msgid "Output format"
 msgstr "Chyba vstupního formátu"
 
-#: ../lib/gis/parser_standard_options.c:983
+#: ../lib/gis/parser_standard_options.c:985
 msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:1018
+#: ../lib/gis/parser_standard_options.c:1020
 msgid "Do not create attribute table"
 msgstr "Nevytvářet atributovou tabulku"
 
-#: ../lib/gis/parser_standard_options.c:1022
+#: ../lib/gis/parser_standard_options.c:1024
 msgid "Do not build topology"
 msgstr "Nevytvářet topologii"
 
-#: ../lib/gis/parser_standard_options.c:1024
+#: ../lib/gis/parser_standard_options.c:1026
 msgid "Advantageous when handling a large number of points"
 msgstr ""
 
@@ -5218,33 +5230,37 @@ msgstr ""
 msgid "Unknown interpolation method: %s"
 msgstr ""
 
-#: ../lib/raster/json_color_out.c:112 ../lib/raster/json_color_out.c:196
-#: ../lib/raster/json_color_out.c:210
+#: ../lib/raster/json_color_out.c:69 ../lib/raster/json_color_out.c:157
+#: ../lib/raster/json_color_out.c:172
 msgid "Failed to initialize JSON object. Out of memory?"
 msgstr ""
 
-#: ../lib/raster/json_color_out.c:144
+#: ../lib/raster/json_color_out.c:103
 #, fuzzy
 #| msgid "Error while adding point to array. Out of memory"
 msgid "Failed to initialize JSON array. Out of memory?"
 msgstr "Chyba při vkládání bodu do pole. Nedostatek paměti "
 
-#: ../lib/raster/json_color_out.c:223
+#: ../lib/raster/json_color_out.c:186
 msgid "Failed to serialize JSON to pretty format."
 msgstr ""
 
-#: ../lib/raster/mask_info.c:43
+#: ../lib/raster/mask_info.c:47
 #, c-format
 msgid "<%s> in mapset <%s>"
 msgstr "<%s> v mapsetu <%s>"
 
-#: ../lib/raster/mask_info.c:46
+#: ../lib/raster/mask_info.c:50
 msgid "none"
 msgstr "nic"
 
-#: ../lib/raster/mask_info.c:49
+#: ../lib/raster/mask_info.c:53
 msgid "not known"
 msgstr "neznámý"
+
+#: ../lib/raster/mask_info.c:219
+msgid "Single thread processing enforced due to raster mask being present."
+msgstr ""
 
 #: ../lib/raster/null_val.c:64
 msgid "EmbedGivenNulls: wrong data type"
