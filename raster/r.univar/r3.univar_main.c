@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
     unsigned int rows, cols, depths;
     unsigned int x, y, z;
     double dmin, dmax;
-    int zone, n_zones /* , use_zone = 0 */;
+    int zone /* , use_zone = 0 */;
     const char *mapset, *name;
 
     enum OutputFormat format;
