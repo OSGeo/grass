@@ -40,6 +40,7 @@ void set_params(void)
     param.output_file->required = NO;
     param.output_file->description =
         _("Name for output file (if omitted or \"-\" output to stdout)");
+    param.output_file->guisection = _("Output settings");
 
     param.percentile = G_define_option();
     param.percentile->key = "percentile";
@@ -50,21 +51,26 @@ void set_params(void)
     param.percentile->answer = "90";
     param.percentile->description =
         _("Percentile to calculate (requires extended statistics flag)");
+    param.percentile->guisection = _("Extended");
 
     param.separator = G_define_standard_option(G_OPT_F_SEP);
+    param.separator->guisection = _("Formatting");
 
     param.shell_style = G_define_flag();
     param.shell_style->key = 'g';
     param.shell_style->description = _("Print the stats in shell script style");
+    param.shell_style->guisection = _("Formatting");
 
     param.extended = G_define_flag();
     param.extended->key = 'e';
     param.extended->description = _("Calculate extended statistics");
+    param.extended->guisection = _("Extended");
 
     param.table = G_define_flag();
     param.table->key = 't';
     param.table->description =
         _("Table output format instead of standard output format");
+    param.table->guisection = _("Formatting");
 
     param.format = G_define_standard_option(G_OPT_F_FORMAT);
     param.format->guisection = _("Print");
