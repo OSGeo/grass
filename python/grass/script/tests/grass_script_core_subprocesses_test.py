@@ -1,5 +1,7 @@
 """Tests for grass.script.core basic subprocess functionality"""
 
+from __future__ import annotations
+
 import pytest
 
 import grass.script as gs
@@ -51,6 +53,15 @@ def test_handle_errors_handler_exit():
     """Test the plain exit handler which calls sys.exit"""
     with pytest.raises(SystemExit):
         gs.handle_errors(1, None, ["g.region"], {}, handler="exit")
+
+
+def test_handle_errors_handler_exit_with_stderr(capsys: pytest.CaptureFixture[str]):
+    """Test that stderr argument is printed to stderr with the exit handler"""
+    stderr = "mock message"
+    with pytest.raises(SystemExit):
+        gs.handle_errors(1, None, ["g.region"], {}, handler="exit", stderr=stderr)
+    captured = capsys.readouterr()
+    assert captured.err == stderr + "\n"
 
 
 def test_handle_errors_handler_fatal(empty_session):
