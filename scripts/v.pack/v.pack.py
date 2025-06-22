@@ -83,7 +83,11 @@ def main():
             )
             try_remove(outfile)
         else:
-            grass.fatal(_("option <%s>: <%s> exists.") % ("output", outfile))
+            grass.fatal(
+                _("option <{key}>: <{value}> exists.").format(
+                    key="output", value=outfile
+                )
+            )
 
     # prepare for packing
     grass.verbose(_("Packing <%s>...") % (gfile["fullname"]))
