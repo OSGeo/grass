@@ -22,7 +22,7 @@ builtins = ["_"]
 
 # In addition to the standard set of exclusions, omit the following files or folders.
 extend-exclude = [
-    "python/grass/temporal/ply",
+    "python/grass/temporal/ply",           # External code
     "python/libgrass_interface_generator",
 ]
 
@@ -401,6 +401,7 @@ ignore-paths = [
     "bin[.].*",
     "dist[.].*",
     "gui/wxpython/menustrings.py",
+    "python/grass/temporal/ply",           # External code
     "python/libgrass_interface_generator",
 ]
 
