@@ -549,6 +549,7 @@ build_program_in_subdir(
   grass_gis
   grass_raster
   grass_rowio
+  ${LIBM}
   OPTIONAL_DEPENDS
   OPENMP)
 
