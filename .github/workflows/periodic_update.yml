@@ -11,9 +11,9 @@ on:
         default: false
         description: If true, also update .po files.
   schedule:
-    # At 10:32 on every first Wednesday of the month.
-    # See https://crontab.guru/#32_10_*/100,1-7_*_WED
-    - cron: "32 10 */100,1-7 * WED"
+    # At 15:32 (UTC) on Saturday.
+    # See https://crontab.guru/#32_15_*_*_SAT
+    - cron: "32 15 * * SAT"
 
 permissions: {}
 
