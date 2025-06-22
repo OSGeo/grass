@@ -25,7 +25,7 @@
 
 #define SVG_NS       "http://www.w3.org/2000/svg"
 #define XLINK_NS     "http://www.w3.org/1999/xlink"
-#define GRASS_NS     "http:/grass.itc.it/2006/gg"
+#define GRASS_NS     "http://grass.itc.it/2006/gg"
 #define RADIUS_SCALE .003
 #define WIDTH_SCALE  .001
 #define G_Areas      "G_Areas"
@@ -389,7 +389,8 @@ static int mk_attribs(int cat, struct field_info *Fi, dbDriver *Driver,
     /* create SQL-string and query attribs */
     db_init_string(&dbstring);
 
-    sprintf(buf, "SELECT * FROM %s WHERE %s = %d", Fi->table, Fi->key, cat);
+    snprintf(buf, sizeof(buf), "SELECT * FROM %s WHERE %s = %d", Fi->table,
+             Fi->key, cat);
 
     db_set_string(&dbstring, buf);
 

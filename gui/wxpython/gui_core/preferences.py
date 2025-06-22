@@ -2186,8 +2186,7 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         dlg = wx.FontDialog(self, fontdata)
 
-        "FIXME: native font dialog does not initialize with current font"
-
+        # FIXME: native font dialog does not initialize with current font
         if dlg.ShowModal() == wx.ID_OK:
             outdata = dlg.GetFontData()
             font = outdata.GetChosenFont()
@@ -2268,10 +2267,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         """Enable/disable wheel zoom mode control"""
         choiceId = self.winId["display:mouseWheelZoom:selection"]
         choice = self.FindWindowById(choiceId)
-        if choice.GetSelection() == 2:
-            enable = False
-        else:
-            enable = True
+        enable = choice.GetSelection() != 2
         scrollId = self.winId["display:scrollDirection:selection"]
         self.FindWindowById(scrollId).Enable(enable)
 

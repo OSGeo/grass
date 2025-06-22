@@ -169,9 +169,10 @@ int main(int argc, char *argv[])
             G_important_message(
                 _("Column <%s> not found in the table <%s>. Creating..."),
                 opt.col->answer, Fi->table);
-            sprintf(buf, "ALTER TABLE \"%s\" ADD COLUMN \"%s\" %s", Fi->table,
-                    opt.col->answer,
-                    out_type == CELL_TYPE ? "INTEGER" : "DOUBLE PRECISION");
+            snprintf(buf, sizeof(buf),
+                     "ALTER TABLE \"%s\" ADD COLUMN \"%s\" %s", Fi->table,
+                     opt.col->answer,
+                     out_type == CELL_TYPE ? "INTEGER" : "DOUBLE PRECISION");
             db_set_string(&stmt, buf);
             if (db_execute_immediate(driver, &stmt) != DB_OK)
                 G_fatal_error(_("Unable to add column <%s> to table <%s>"),
@@ -616,33 +617,36 @@ int main(int argc, char *argv[])
                 continue;
             }
 
-            sprintf(buf, "update %s set %s = ", Fi->table, opt.col->answer);
+            snprintf(buf, sizeof(buf), "update %s set %s = ", Fi->table,
+                     opt.col->answer);
 
             db_set_string(&stmt, buf);
 
             if (out_type == CELL_TYPE) {
                 if (cache[point].count > 1 ||
                     Rast_is_c_null_value(&cache[point].value)) {
-                    sprintf(buf, "NULL");
+                    snprintf(buf, sizeof(buf), "NULL");
                 }
                 else
-                    sprintf(buf, "%d ", cache[point].value);
+                    snprintf(buf, sizeof(buf), "%d ", cache[point].value);
             }
             else { /* FCELL or DCELL */
                 if (cache[point].count > 1 ||
                     Rast_is_d_null_value(&cache[point].dvalue)) {
-                    sprintf(buf, "NULL");
+                    snprintf(buf, sizeof(buf), "NULL");
                 }
                 else
-                    sprintf(buf, "%.*g", width, cache[point].dvalue);
+                    snprintf(buf, sizeof(buf), "%.*g", width,
+                             cache[point].dvalue);
             }
             db_append_string(&stmt, buf);
 
-            sprintf(buf, " where %s = %d", Fi->key, cache[point].cat);
+            snprintf(buf, sizeof(buf), " where %s = %d", Fi->key,
+                     cache[point].cat);
             db_append_string(&stmt, buf);
             /* user provides where condition: */
             if (opt.where->answer) {
-                sprintf(buf, " AND %s", opt.where->answer);
+                snprintf(buf, sizeof(buf), " AND %s", opt.where->answer);
                 db_append_string(&stmt, buf);
             }
             G_debug(3, "%s", db_get_string(&stmt));

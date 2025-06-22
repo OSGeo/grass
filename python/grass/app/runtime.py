@@ -36,16 +36,17 @@ def get_grass_config_dir(major_version, minor_version, env):
 
     config_dir = env.get(env_dirname)
     if config_dir is None:
-        raise RuntimeError(
-            f"The {env_dirname} variable is not set, ask your operating"
-            " system support"
+        msg = (
+            f"The {env_dirname} variable is not set, ask your operating system support"
         )
+        raise RuntimeError(msg)
 
     if not os.path.isdir(config_dir):
-        raise NotADirectoryError(
+        msg = (
             f"The {env_dirname} variable points to directory which does"
             " not exist, ask your operating system support"
         )
+        raise NotADirectoryError(msg)
 
     if WINDOWS:
         config_dirname = f"GRASS{major_version}"
@@ -79,10 +80,7 @@ def append_left_addon_paths(paths, config_dir, env):
     # addons (base)
     addon_base = env.get("GRASS_ADDON_BASE")
     if not addon_base:
-        if MACOS:
-            name = "Addons"
-        else:
-            name = "addons"
+        name = "addons" if not MACOS else "Addons"
         addon_base = os.path.join(config_dir, name)
         env["GRASS_ADDON_BASE"] = addon_base
 
@@ -174,20 +172,14 @@ def set_python_path_variable(install_path, env):
     """Set PYTHONPATH to find GRASS Python package in subprocesses"""
     path = env.get("PYTHONPATH")
     etcpy = os.path.join(install_path, "etc", "python")
-    if path:
-        path = etcpy + os.pathsep + path
-    else:
-        path = etcpy
+    path = etcpy + os.pathsep + path if path else etcpy
     env["PYTHONPATH"] = path
 
 
 def set_path_to_python_executable(env):
     """Set GRASS_PYTHON environment variable"""
     if not env.get("GRASS_PYTHON"):
-        if WINDOWS:
-            env["GRASS_PYTHON"] = "python3.exe"
-        else:
-            env["GRASS_PYTHON"] = "python3"
+        env["GRASS_PYTHON"] = sys.executable
 
 
 def set_defaults(config_projshare_path):

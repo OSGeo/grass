@@ -67,8 +67,8 @@ class _JupyterGlobalSession:
         When location and mapset are provided using the additional parameters,
         the *path* parameter is path to a database.
 
-        Raises ValueError if the mapset does not exist (e.g., when the name is
-        misspelled or the mapset is invalid).
+        :raises ValueError: if the mapset does not exist (e.g., when the name is
+            misspelled or the mapset is invalid).
         """
         # The method could be a function, but this is more general (would work even for
         # a non-global session).
@@ -87,8 +87,8 @@ class _JupyterGlobalSession:
         gisenv = gs.gisenv()
         if (
             not location
-            and not mapset
-            and len(Path(path).parts) == 1
+            and (not mapset)
+            and (len(Path(path).parts) == 1)
             and mapset_exists(
                 path=gisenv["GISDBASE"], location=gisenv["LOCATION_NAME"], mapset=path
             )

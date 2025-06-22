@@ -30,7 +30,7 @@ class MainPageBase:
 
         self.canCloseCallback = None
 
-        # distinquishes whether map panel is dockable (Single-Window)
+        # distinguishes whether map panel is dockable (Single-Window)
         self._dockable = dockable
 
         # distinguishes whether map panel is docked or not
@@ -48,8 +48,11 @@ class MainPageBase:
         # Emitted when renaming page.
         self.renamingPage = Signal("MainPage.renamingPage")
 
+    def OnCloseWindow(self, event=None):
+        raise NotImplementedError
+
     def _pgnumDict(self):
-        """Get dictionary containg page index"""
+        """Get dictionary containing page index"""
         return {"mainnotebook": self._mainnotebook.GetPageIndex(self)}
 
     def SetUpPage(
@@ -88,7 +91,7 @@ class MainPageBase:
             self._docked = not self._docked
             self._docking_callback(self)
 
-    def _onCloseWindow(self, event):
+    def _onCloseWindow(self, event=None):
         """Close window"""
         if self.canCloseCallback:
             pgnum_dict = self.canCloseCallback()

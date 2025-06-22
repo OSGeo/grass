@@ -36,13 +36,13 @@ class TreeModel:
     >>> n111 = tree.AppendNode(parent=n11, data={"label": "node111", "xxx": 4})
     >>> n12 = tree.AppendNode(parent=n1, data={"label": "node12", "xxx": 2})
     >>> n21 = tree.AppendNode(parent=n2, data={"label": "node21", "xxx": 1})
-    >>> [node.label for node in tree.SearchNodes(key='xxx', value=1)]
+    >>> [node.label for node in tree.SearchNodes(key="xxx", value=1)]
     ['node11', 'node21']
-    >>> [node.label for node in tree.SearchNodes(key='xxx', value=5)]
+    >>> [node.label for node in tree.SearchNodes(key="xxx", value=5)]
     []
     >>> tree.GetIndexOfNode(n111)
     [0, 0, 0]
-    >>> tree.GetNodeByIndex((0,1)).label
+    >>> tree.GetNodeByIndex((0, 1)).label
     'node12'
     >>> print(tree)
     node1
@@ -137,8 +137,7 @@ class TreeModel:
     def _getNode(self, node, index):
         if len(index) == 1:
             return node.children[index[0]]
-        else:
-            return self._getNode(node.children[index[0]], index[1:])
+        return self._getNode(node.children[index[0]], index[1:])
 
     def RemoveNode(self, node):
         """Removes node. If node is root, removes root's children, root is kept."""
@@ -257,7 +256,7 @@ class DictFilterNode(DictNode):
 
         if method == "exact":
             return self._match_exact(**kwargs)
-        elif method == "filtering":
+        if method == "filtering":
             return self._match_filtering(**kwargs)
 
     def _match_exact(self, **kwargs):
@@ -295,15 +294,12 @@ class ModuleNode(DictNode):
     def label(self):
         return self._label
 
-    def match(self, key, value, case_sensitive=False):
+    def match(self, key, value, case_sensitive=False) -> bool:
         """Method used for searching according to command,
         keywords or description."""
         if not self.data:
             return False
-        if isinstance(key, str):
-            keys = [key]
-        else:
-            keys = key
+        keys = [key] if isinstance(key, str) else key
 
         for key in keys:
             if key not in {"command", "keywords", "description"}:

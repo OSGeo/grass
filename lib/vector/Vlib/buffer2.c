@@ -118,7 +118,7 @@ static void elliptic_tangent(double x, double y, double da, double db,
 
 /*
  * !!! This is not line in GRASS' sense. See
- * http://en.wikipedia.org/wiki/Line_%28mathematics%29
+ * https://en.wikipedia.org/wiki/Line_%28mathematics%29
  */
 static void line_coefficients(double x1, double y1, double x2, double y2,
                               double *a, double *b, double *c)
@@ -948,7 +948,7 @@ static void buffer_lines(struct line_pnts *area_outer,
                 }
 
                 /* we need to check if the area is in the buffer.
-                   I've simplfied convolution_line(), so that it runs faster,
+                   I've simplified convolution_line(), so that it runs faster,
                    however that leads to occasional problems */
                 if (check_poly &&
                     Vect_point_in_poly(cPoints->x[0], cPoints->y[0],

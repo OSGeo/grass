@@ -67,8 +67,7 @@ NvizIcons = {
         img="flythrough",
         label=_("Fly-through mode"),
         desc=_(
-            "Drag with mouse, hold Ctrl down for different mode"
-            " or Shift to accelerate"
+            "Drag with mouse, hold Ctrl down for different mode or Shift to accelerate"
         ),
     ),
     "zoomIn": BaseIcons["zoomIn"].SetLabel(desc=_("Click mouse to zoom")),
@@ -285,10 +284,7 @@ class MapToolbar(BaseToolbar):
 
     def ChangeToolsDesc(self, mode2d):
         """Change description of zoom tools for 2D/3D view"""
-        if mode2d:
-            icons = BaseIcons
-        else:
-            icons = NvizIcons
+        icons = BaseIcons if mode2d else NvizIcons
         for i, data in enumerate(self.controller.data):
             for tool in ("zoomIn", "zoomOut"):
                 if data[0] == tool:

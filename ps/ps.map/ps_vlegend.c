@@ -193,7 +193,7 @@ int PS_vlegend(void)
                             /* load pattern */
                             eps_bbox(vector.layer[i].pat, &llx, &lly, &urx,
                                      &ury);
-                            sprintf(pat, "APATTEPS%d", i);
+                            snprintf(pat, sizeof(pat), "APATTEPS%d", i);
                             pat_save(PS.fp, vector.layer[i].pat, pat);
 
                             fprintf(PS.fp, "<<  /PatternType 1\n    /PaintType "
@@ -210,7 +210,7 @@ int PS_vlegend(void)
                             fprintf(PS.fp, "        %s\n", pat);
                             fprintf(PS.fp, "        end\n");
                             fprintf(PS.fp, "      } bind\n>>\n");
-                            sprintf(pat, "APATT%d", i);
+                            snprintf(pat, sizeof(pat), "APATT%d", i);
                             fprintf(PS.fp,
                                     " matrix\n makepattern /%s exch def\n",
                                     pat);
@@ -281,5 +281,9 @@ int PS_vlegend(void)
     if (PS.min_y > y)
         PS.min_y = y;
 
+    G_free(nvec);
+    for (i = 0; i < vector.count; i++)
+        G_free(vec[i]);
+    G_free(vec);
     return 0;
 }

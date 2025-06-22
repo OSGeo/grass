@@ -23,7 +23,7 @@
 #include <errno.h>
 #include <sys/types.h>
 
-#ifndef __MINGW32__
+#ifndef _WIN32
 #include <sys/wait.h>
 #else
 #include <windows.h>
@@ -68,7 +68,7 @@ struct signal {
     int action;
     int signum;
     int valid;
-#ifndef __MINGW32__
+#ifndef _WIN32
     struct sigaction old_act;
     sigset_t old_mask;
 #endif
@@ -95,7 +95,7 @@ struct spawn {
 static void parse_arglist(struct spawn *sp, va_list va);
 static void parse_argvec(struct spawn *sp, const char **va);
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 
 struct buffer {
     char *str;
@@ -212,7 +212,8 @@ static char *check_program(const char *pgm, const char *dir, const char *ext)
 {
     char pathname[GPATH_MAX];
 
-    sprintf(pathname, "%s%s%s%s", dir, *dir ? "\\" : "", pgm, ext);
+    snprintf(pathname, sizeof(pathname), "%s%s%s%s", dir, *dir ? "\\" : "", pgm,
+             ext);
     return access(pathname, 0) == 0 ? G_store(pathname) : NULL;
 }
 
@@ -445,11 +446,12 @@ static void do_redirects(struct redirect *redirects, int num_redirects,
 
 static void add_binding(const char **env, int *pnum, const struct binding *b)
 {
-    char *str = G_malloc(strlen(b->var) + strlen(b->val) + 2);
+    size_t bufsize = strlen(b->var) + strlen(b->val) + 2;
+    char *str = G_malloc(bufsize);
     int n = *pnum;
     int i;
 
-    sprintf(str, "%s=%s", b->var, b->val);
+    snprintf(str, bufsize, "%s=%s", b->var, b->val);
 
     for (i = 0; i < n; i++)
         if (G_strcasecmp(env[i], b->var) == 0) {
@@ -640,9 +642,10 @@ static void do_bindings(const struct binding *bindings, int num_bindings)
 
     for (i = 0; i < num_bindings; i++) {
         const struct binding *b = &bindings[i];
-        char *str = G_malloc(strlen(b->var) + strlen(b->val) + 2);
+        size_t bufsize = strlen(b->var) + strlen(b->val) + 2;
+        char *str = G_malloc(bufsize);
 
-        sprintf(str, "%s=%s", b->var, b->val);
+        snprintf(str, bufsize, "%s=%s", b->var, b->val);
         putenv(str);
     }
 }
@@ -937,7 +940,7 @@ int G_spawn(const char *command, ...)
 
     status =
         G_spawn_ex(command,
-#ifndef __MINGW32__
+#ifndef _WIN32
                    SF_SIGNAL, SST_PRE, SSA_IGNORE, SIGINT, SF_SIGNAL, SST_PRE,
                    SSA_IGNORE, SIGQUIT, SF_SIGNAL, SST_PRE, SSA_BLOCK, SIGCHLD,
 #endif
@@ -948,7 +951,7 @@ int G_spawn(const char *command, ...)
 
 int G_wait(int i_pid)
 {
-#ifdef __MINGW32__
+#ifdef _WIN32
     DWORD rights = PROCESS_QUERY_INFORMATION | SYNCHRONIZE;
     HANDLE hProcess = OpenProcess(rights, FALSE, (DWORD)i_pid);
     DWORD exitcode;

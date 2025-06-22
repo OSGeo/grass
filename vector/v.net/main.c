@@ -135,8 +135,8 @@ int main(int argc, char **argv)
 
             nnodes = nodes(In, Out, opt.cats_flag->answer, nfield);
 
-            sprintf(message, _("%d new points (nodes) written to output."),
-                    nnodes);
+            snprintf(message, sizeof(message),
+                     _("%d new points (nodes) written to output."), nnodes);
         }
         else { /* connect or arcs */
             int narcs;
@@ -147,8 +147,8 @@ int main(int argc, char **argv)
             else
                 narcs = create_arcs(file_arcs, Points, Out, afield, nfield);
 
-            sprintf(message, _("%d lines (network arcs) written to output."),
-                    narcs);
+            snprintf(message, sizeof(message),
+                     _("%d lines (network arcs) written to output."), narcs);
         }
 
         if (In) {

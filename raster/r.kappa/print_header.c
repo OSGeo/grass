@@ -18,10 +18,11 @@ void print_header(void)
 
     /* print header */
     fprintf(fd, "\t\t\t%s\n", title);
-    sprintf(buf, "LOCATION: %s\t\t\t\t%s", G_location(), G_date());
+    snprintf(buf, sizeof(buf), "LOCATION: %s\t\t\t\t%s", G_location(),
+             G_date());
     fprintf(fd, "%s\n", buf);
     if ((mask = maskinfo()))
-        sprintf(buf, "MASK: %s", mask);
+        snprintf(buf, sizeof(buf), "MASK: %s", mask);
 
     fprintf(fd, "%s\n", buf);
     fprintf(fd, "MAPS: ");
@@ -34,8 +35,8 @@ void print_header(void)
             G_strip(titles);
         if (titles == NULL || *titles == 0)
             titles = "(untitled)";
-        sprintf(buf, "%*s%-*s%d = %s (%s in %s)", i * 6, "", len, label, i + 1,
-                titles, layers[i].name, layers[i].mapset);
+        snprintf(buf, sizeof(buf), "%*s%-*s%d = %s (%s in %s)", i * 6, "", len,
+                 label, i + 1, titles, layers[i].name, layers[i].mapset);
         fprintf(fd, "%s\n", buf);
     }
 

@@ -393,23 +393,22 @@ class RasterAbstractBase:
         if isinstance(key, slice):
             # Get the start, stop, and step from the slice
             return (self.get_row(ii) for ii in range(*key.indices(len(self))))
-        elif isinstance(key, tuple):
+        if isinstance(key, tuple):
             x, y = key
             return self.get(x, y)
-        elif isinstance(key, int):
+        if isinstance(key, int):
             if not self.is_open():
-                raise IndexError("Can not operate on a closed map. Call open() first.")
+                msg = "Can not operate on a closed map. Call open() first."
+                raise IndexError(msg)
             if key < 0:  # Handle negative indices
                 key += self._rows
             if key >= self._rows:
-                raise IndexError(
-                    "The row index {0} is out of range [0, {1}).".format(
-                        key, self._rows
-                    )
+                msg = "The row index {0} is out of range [0, {1}).".format(
+                    key, self._rows
                 )
+                raise IndexError(msg)
             return self.get_row(key)
-        else:
-            fatal("Invalid argument type.")
+        fatal("Invalid argument type.")
 
     def __iter__(self):
         """Return a constructor of the class"""
@@ -428,14 +427,13 @@ class RasterAbstractBase:
         >>> ele.exist()
         True
         """
-        if self.name:
-            if self.mapset == "":
-                mapset = utils.get_mapset_raster(self.name, self.mapset)
-                self.mapset = mapset or ""
-                return bool(mapset)
-            return bool(utils.get_mapset_raster(self.name, self.mapset))
-        else:
+        if not self.name:
             return False
+        if self.mapset == "":
+            mapset = utils.get_mapset_raster(self.name, self.mapset)
+            self.mapset = mapset or ""
+            return bool(mapset)
+        return bool(utils.get_mapset_raster(self.name, self.mapset))
 
     def is_open(self):
         """Return True if the map is open False otherwise.
@@ -485,8 +483,7 @@ class RasterAbstractBase:
 
         if mapset and mapset != gis_env["MAPSET"]:
             return "{name}@{mapset}".format(name=name, mapset=mapset)
-        else:
-            return name
+        return name
 
     def rename(self, newname):
         """Rename the map"""
@@ -634,7 +631,7 @@ if __name__ == "__main__":
 
     doctest.testmod()
 
-    """Remove the generated vector map, if exist"""
     mset = utils.get_mapset_raster(test_raster_name, mapset="")
     if mset:
+        # Remove the generated vector map, if exists
         Module("g.remove", flags="f", type="raster", name=test_raster_name)

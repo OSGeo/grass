@@ -41,7 +41,6 @@
 # % description: Either a numerical suffix or the start time (s-flag) separated by an underscore will be attached to create a unique identifier
 # % required: yes
 # % multiple: no
-# % gisprompt:
 # %end
 
 # %option
@@ -218,10 +217,7 @@ def main():
             dbif,
             gs.overwrite(),
         )
-        if register_null:
-            register_null = False
-        else:
-            register_null = True
+        register_null = not register_null
 
         tgis.register_map_object_list(
             "rast",

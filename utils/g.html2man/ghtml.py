@@ -225,8 +225,7 @@ class HTMLParser(base.HTMLParser):
     def top(self):
         if self.tag_stack == []:
             return None
-        else:
-            return self.tag_stack[-1][0]
+        return self.tag_stack[-1][0]
 
     def pop(self):
         self.excluded = self.excluded_stack.pop()

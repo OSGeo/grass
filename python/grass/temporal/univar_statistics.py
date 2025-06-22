@@ -13,7 +13,7 @@ Usage:
 
 ..
 
-(C) 2012-2013 by the GRASS Development Team
+(C) 2012-2024 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -34,7 +34,9 @@ from .open_stds import open_old_stds
 ###############################################################################
 
 
-def compute_univar_stats(registered_map_info, stats_module, fs, rast_region=False):
+def compute_univar_stats(
+    registered_map_info, stats_module, fs, rast_region: bool = False
+):
     """Compute univariate statistics for a map of a space time raster or raster3d
     dataset
 
@@ -57,7 +59,7 @@ def compute_univar_stats(registered_map_info, stats_module, fs, rast_region=Fals
     )
 
     stats_module.inputs.map = id
-    if rast_region:
+    if rast_region and (stats_module.inputs.zones or stats_module.name == "r3.univar"):
         stats_module.env = gs.region_env(raster=id)
     stats_module.run()
 
@@ -90,20 +92,20 @@ def compute_univar_stats(registered_map_info, stats_module, fs, rast_region=Fals
                 eol = "\n"
             else:
                 eol = ""
-        string += f'{fs}{stats["mean"]}{fs}{stats["min"]}'
-        string += f'{fs}{stats["max"]}{fs}{stats["mean_of_abs"]}'
-        string += f'{fs}{stats["stddev"]}{fs}{stats["variance"]}'
-        string += f'{fs}{stats["coeff_var"]}{fs}{stats["sum"]}'
-        string += f'{fs}{stats["null_cells"]}{fs}{stats["n"]}'
-        string += f'{fs}{stats["n"]}'
+        string += f"{fs}{stats['mean']}{fs}{stats['min']}"
+        string += f"{fs}{stats['max']}{fs}{stats['mean_of_abs']}"
+        string += f"{fs}{stats['stddev']}{fs}{stats['variance']}"
+        string += f"{fs}{stats['coeff_var']}{fs}{stats['sum']}"
+        string += f"{fs}{stats['null_cells']}{fs}{stats['n']}"
+        string += f"{fs}{stats['n']}"
         if "median" in stats:
-            string += f'{fs}{stats["first_quartile"]}{fs}{stats["median"]}'
-            string += f'{fs}{stats["third_quartile"]}'
+            string += f"{fs}{stats['first_quartile']}{fs}{stats['median']}"
+            string += f"{fs}{stats['third_quartile']}"
             if stats_module.inputs.percentile:
                 for perc in stats_module.inputs.percentile:
                     perc_value = stats[
                         "percentile_"
-                        f"{str(perc).rstrip('0').rstrip('.').replace('.','_')}"
+                        f"{str(perc).rstrip('0').rstrip('.').replace('.', '_')}"
                     ]
                     string += f"{fs}{perc_value}"
         string += eol
@@ -116,15 +118,16 @@ def print_gridded_dataset_univar_statistics(
     output,
     where,
     extended,
-    no_header=False,
-    fs="|",
-    rast_region=False,
+    no_header: bool = False,
+    fs: str = "|",
+    rast_region: bool = False,
     region_relation=None,
     zones=None,
     percentile=None,
-    nprocs=1,
-):
+    nprocs: int = 1,
+) -> None:
     """Print univariate statistics for a space time raster or raster3d dataset.
+
     Returns None if the space time raster dataset is empty or if applied
     filters (where, region_relation) do not return any maps to process.
 
@@ -139,13 +142,13 @@ def print_gridded_dataset_univar_statistics(
     :param nprocs: Number of cores to use for processing
     :param rast_region: If set True ignore the current region settings
            and use the raster map regions for univar statistical calculation.
-           Only available for strds.
     :param region_relation: Process only maps with the given spatial relation
            to the computational region. A string with one of the following values:
-           "overlaps": maps that spatially overlap ("intersect")
-                       within the provided spatial extent
-           "is_contained": maps that are fully within the provided spatial extent
-           "contains": maps that contain (fully cover) the provided spatial extent
+
+           - "overlaps": maps that spatially overlap ("intersect")
+             within the provided spatial extent
+           - "is_contained": maps that are fully within the provided spatial extent
+           - "contains": maps that contain (fully cover) the provided spatial extent
     :param zones: raster map with zones to calculate statistics for
     """
     # We need a database interface
@@ -153,9 +156,6 @@ def print_gridded_dataset_univar_statistics(
     dbif.connect()
 
     sp = open_old_stds(input, type, dbif)
-
-    if output is not None:
-        out_file = open(output, "w")
 
     spatial_extent = None
     if region_relation:
@@ -187,9 +187,10 @@ def print_gridded_dataset_univar_statistics(
             ).format(type=sp.get_new_map_instance(None).get_type(), id=sp.get_id())
         )
 
-        if output is not None:
-            out_file.close()
         return
+
+    if output is not None:
+        out_file = open(output, "w")
 
     if no_header is False:
         cols = (
@@ -220,7 +221,7 @@ def print_gridded_dataset_univar_statistics(
                 cols.extend(
                     [
                         "percentile_"
-                        f"{str(perc).rstrip('0').rstrip('.').replace('.','_')}"
+                        f"{str(perc).rstrip('0').rstrip('.').replace('.', '_')}"
                         for perc in percentile
                     ]
                 )
@@ -235,7 +236,7 @@ def print_gridded_dataset_univar_statistics(
     flag = "g"
     if extended is True:
         flag += "e"
-    if type == "strds" and rast_region is True:
+    if type == "strds" and rast_region is True and not zones:
         flag += "r"
 
     # Setup pygrass module to use for computation
@@ -248,6 +249,7 @@ def print_gridded_dataset_univar_statistics(
         run_=False,
     )
 
+    nprocs = max(nprocs, 1)
     if nprocs == 1:
         strings = [
             compute_univar_stats(
@@ -278,8 +280,17 @@ def print_gridded_dataset_univar_statistics(
 
 
 def print_vector_dataset_univar_statistics(
-    input, output, twhere, layer, type, column, where, extended, no_header=False, fs="|"
-):
+    input,
+    output,
+    twhere,
+    layer,
+    type,
+    column,
+    where,
+    extended,
+    no_header: bool = False,
+    fs: str = "|",
+) -> None:
     """Print univariate statistics for a space time vector dataset
 
     :param input: The name of the space time dataset
@@ -304,10 +315,7 @@ def print_vector_dataset_univar_statistics(
 
     mapset = get_current_mapset()
 
-    if input.find("@") >= 0:
-        id = input
-    else:
-        id = input + "@" + mapset
+    id = input if input.find("@") >= 0 else input + "@" + mapset
 
     sp = dataset_factory("stvds", id)
 

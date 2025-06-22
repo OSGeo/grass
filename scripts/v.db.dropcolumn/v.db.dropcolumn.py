@@ -86,7 +86,7 @@ def main():
 
         if driver == "sqlite":
             # echo "Using special trick for SQLite"
-            # http://www.sqlite.org/faq.html#q11
+            # https://www.sqlite.org/faq.html#q11
             colnames = []
             coltypes = []
             for f in gs.db_describe(table, database=database, driver=driver)["cols"]:
@@ -106,12 +106,12 @@ def main():
             cmds = [
                 "BEGIN TRANSACTION",
                 "CREATE TEMPORARY TABLE ${table}_backup (${coldef})",
-                "INSERT INTO ${table}_backup SELECT ${colnames} FROM ${table}",
-                "DROP TABLE ${table}",
+                "INSERT INTO ${table}_backup SELECT ${colnames} FROM ${table}",  # noqa: RUF027
+                "DROP TABLE ${table}",  # noqa: RUF027
                 "CREATE TABLE ${table}(${coldef})",
-                "INSERT INTO ${table} SELECT ${colnames} FROM ${table}_backup",
-                "CREATE UNIQUE INDEX ${table}_cat ON ${table} (${keycol} )",
-                "DROP TABLE ${table}_backup",
+                "INSERT INTO ${table} SELECT ${colnames} FROM ${table}_backup",  # noqa: RUF027
+                "CREATE UNIQUE INDEX ${table}_cat ON ${table} (${keycol} )",  # noqa: RUF027
+                "DROP TABLE ${table}_backup",  # noqa: RUF027
                 "COMMIT",
             ]
             tmpl = string.Template(";\n".join(cmds))

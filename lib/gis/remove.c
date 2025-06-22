@@ -129,7 +129,7 @@ int G_recursive_remove(const char *path)
             continue;
         if (strlen(path) + strlen(dp->d_name) + 2 > sizeof(path2))
             continue;
-        sprintf(path2, "%s/%s", path, dp->d_name);
+        snprintf(path2, sizeof(path2), "%s/%s", path, dp->d_name);
         G_recursive_remove(path2);
     }
     closedir(dirp);

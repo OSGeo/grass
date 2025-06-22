@@ -23,11 +23,12 @@ class TestRasterUnivar(TestCase):
         cls.del_temp_region()
 
     def tearDown(self):
-        self.runModule("g.remove", flags="f", type="raster", name="map_a")
-        self.runModule("g.remove", flags="f", type="raster", name="map_b")
-        self.runModule("g.remove", flags="f", type="raster", name="map_negative")
-        self.runModule("g.remove", flags="f", type="raster", name="zone_map")
-        self.runModule("g.remove", flags="f", type="raster", name="zone_map_with_gap")
+        self.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name="map_a,map_b,map_negative,zone_map,zone_map_with_gap",
+        )
 
     def setUp(self):
         """Create input data"""
@@ -75,7 +76,7 @@ class TestRasterUnivar(TestCase):
         sum=1547100"""
 
         self.assertRasterFitsUnivar(
-            raster="map_a", reference=univar_string, precision=6
+            raster="map_a", reference=univar_string, precision=1e-10
         )
         self.assertModuleKeyValue(
             module="r.univar",
@@ -83,7 +84,7 @@ class TestRasterUnivar(TestCase):
             flags="g",
             nprocs=4,
             reference=univar_string,
-            precision=6,
+            precision=1e-10,
             sep="=",
         )
 
@@ -101,7 +102,7 @@ class TestRasterUnivar(TestCase):
 
         self.runModule("g.region", res=10)
         self.assertRasterFitsUnivar(
-            raster="map_a", reference=univar_string, precision=6
+            raster="map_a", reference=univar_string, precision=1e-10
         )
         self.assertModuleKeyValue(
             module="r.univar",
@@ -109,7 +110,7 @@ class TestRasterUnivar(TestCase):
             flags="g",
             nprocs=4,
             reference=univar_string,
-            precision=6,
+            precision=1e-10,
             sep="=",
         )
 
@@ -135,7 +136,7 @@ class TestRasterUnivar(TestCase):
             map="map_a",
             flags="rg",
             reference=univar_string,
-            precision=6,
+            precision=1e-10,
             sep="=",
         )
         self.assertModuleKeyValue(
@@ -144,7 +145,7 @@ class TestRasterUnivar(TestCase):
             flags="rg",
             nprocs=4,
             reference=univar_string,
-            precision=6,
+            precision=1e-10,
             sep="=",
         )
 
@@ -173,12 +174,12 @@ class TestRasterUnivar(TestCase):
             flags="ge",
             nprocs=1,
             reference=univar_string_float,
-            precision=6,
+            precision=1e-10,
             sep="=",
         )
 
         univar_string_double = """
-        n=8101
+        n=8100
         null_cells=0
         cells=8100
         min=402
@@ -201,7 +202,7 @@ class TestRasterUnivar(TestCase):
             flags="ge",
             nprocs=1,
             reference=univar_string_double,
-            precision=6,
+            precision=1e-10,
             sep="=",
         )
 
@@ -222,7 +223,7 @@ class TestRasterUnivar(TestCase):
             map=["map_a", "map_b"],
             flags="rg",
             reference=univar_string,
-            precision=6,
+            precision=1e-10,
             sep="=",
         )
         self.assertModuleKeyValue(
@@ -231,7 +232,7 @@ class TestRasterUnivar(TestCase):
             flags="rg",
             nprocs=4,
             reference=univar_string,
-            precision=6,
+            precision=1e-10,
             sep="=",
         )
 
@@ -243,8 +244,8 @@ class TestRasterUnivar(TestCase):
         min=112
         max=372
         range=260
-        mean=241
-        mean_of_abs=241
+        mean=242
+        mean_of_abs=242
         sum=39204"""
 
         self.runModule("g.region", res=10)
@@ -253,7 +254,7 @@ class TestRasterUnivar(TestCase):
             map=["map_a", "map_b"],
             flags="g",
             reference=univar_string,
-            precision=6,
+            precision=1e-10,
             sep="=",
         )
         self.assertModuleKeyValue(
@@ -262,7 +263,7 @@ class TestRasterUnivar(TestCase):
             flags="g",
             nprocs=4,
             reference=univar_string,
-            precision=6,
+            precision=1e-10,
             sep="=",
         )
 
@@ -289,7 +290,7 @@ class TestRasterUnivar(TestCase):
             map=["map_a", "map_b"],
             flags="rg",
             reference=univar_string,
-            precision=6,
+            precision=1e-10,
             sep="=",
         )
         self.assertModuleKeyValue(
@@ -298,7 +299,7 @@ class TestRasterUnivar(TestCase):
             flags="rg",
             nprocs=4,
             reference=univar_string,
-            precision=6,
+            precision=1e-10,
             sep="=",
         )
 
@@ -327,7 +328,7 @@ class TestRasterUnivar(TestCase):
             map="map_negative",
             flags="rg",
             reference=univar_string,
-            precision=6,
+            precision=1e-10,
             sep="=",
         )
         self.assertModuleKeyValue(
@@ -336,7 +337,7 @@ class TestRasterUnivar(TestCase):
             flags="rg",
             nprocs=4,
             reference=univar_string,
-            precision=6,
+            precision=1e-10,
             sep="=",
         )
 
@@ -375,7 +376,7 @@ class TestRasterUnivar(TestCase):
             zones="zone_map",
             flags="g",
             reference=univar_string,
-            precision=6,
+            precision=1e-10,
             sep="=",
         )
         self.assertModuleKeyValue(
@@ -385,7 +386,7 @@ class TestRasterUnivar(TestCase):
             flags="g",
             nprocs=4,
             reference=univar_string,
-            precision=6,
+            precision=1e-10,
             sep="=",
         )
 
@@ -429,7 +430,7 @@ class TestRasterUnivar(TestCase):
             zones="zone_map",
             flags="g",
             reference=univar_string,
-            precision=6,
+            precision=1e-10,
             sep="=",
         )
         self.assertModuleKeyValue(
@@ -439,7 +440,7 @@ class TestRasterUnivar(TestCase):
             flags="g",
             nprocs=4,
             reference=univar_string,
-            precision=6,
+            precision=1e-10,
             sep="=",
         )
 
@@ -491,7 +492,7 @@ class TestRasterUnivar(TestCase):
             zones="zone_map",
             flags="ge",
             reference=univar_string,
-            precision=6,
+            precision=1e-10,
             sep="=",
         )
         self.assertModuleKeyValue(
@@ -501,7 +502,7 @@ class TestRasterUnivar(TestCase):
             flags="ge",
             nprocs=4,
             reference=univar_string,
-            precision=6,
+            precision=1e-10,
             sep="=",
         )
 
@@ -553,7 +554,7 @@ class TestRasterUnivar(TestCase):
             zones="zone_map_with_gap",
             flags="ge",
             reference=univar_string,
-            precision=6,
+            precision=1e-10,
             sep="=",
         )
         self.assertModuleKeyValue(
@@ -563,15 +564,50 @@ class TestRasterUnivar(TestCase):
             flags="ge",
             nprocs=4,
             reference=univar_string,
-            precision=6,
+            precision=1e-10,
             sep="=",
         )
 
     def test_json(self):
+        reference = {
+            "n": 16200,
+            "null_cells": 0,
+            "cells": 16200,
+            "min": 102,
+            "max": 380,
+            "range": 278,
+            "mean": 241,
+            "mean_of_abs": 241,
+            "stddev": 62.04702517714555,
+            "variance": 3849.8333333333335,
+            "coeff_var": 25.745653600475332,
+            "sum": 3904200,
+            "first_quartile": 191,
+            "median": 241,
+            "third_quartile": 291,
+            "percentiles": [{"percentile": 90, "value": 324}],
+        }
+
+        module = SimpleModule(
+            "r.univar",
+            map=["map_a", "map_b"],
+            flags="e",
+            format="json",
+        )
+        self.runModule(module)
+        output = json.loads(module.outputs.stdout)
+
+        for ref_key, ref_val in reference.items():
+            if isinstance(ref_val, float):
+                self.assertAlmostEqual(ref_val, output[ref_key], places=6)
+            else:
+                self.assertEqual(ref_val, output[ref_key])
+
+    def test_json_zone(self):
         reference = [
             {
-                "zone_number": 1,
-                "zone_category": "",
+                "zone": 1,
+                "zone_label": "",
                 "n": 3420,
                 "null_cells": 0,
                 "cells": 3420,
@@ -590,8 +626,8 @@ class TestRasterUnivar(TestCase):
                 "third_quartile": 255,
             },
             {
-                "zone_number": 2,
-                "zone_category": "",
+                "zone": 2,
+                "zone_label": "",
                 "n": 12780,
                 "null_cells": 0,
                 "cells": 12780,
@@ -615,7 +651,7 @@ class TestRasterUnivar(TestCase):
             "r.univar",
             map=["map_a", "map_b"],
             zones="zone_map",
-            flags="ge",
+            flags="e",
             format="json",
         )
         self.runModule(module)

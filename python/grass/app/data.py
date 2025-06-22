@@ -1,6 +1,6 @@
 """Provides functions for the main GRASS GIS executable
 
-(C) 2020 by Vaclav Petras and the GRASS Development Team
+(C) 2020-2025 by Vaclav Petras and the GRASS Development Team
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -17,6 +17,7 @@ import tempfile
 import getpass
 import subprocess
 import sys
+import time
 from shutil import copytree, ignore_patterns
 from pathlib import Path
 
@@ -172,20 +173,125 @@ class MapsetLockingException(Exception):
     pass
 
 
-def lock_mapset(mapset_path, force_lock_removal, message_callback):
+def acquire_mapset_lock(
+    mapset_path,
+    *,
+    process_id=None,
+    timeout=30,
+    initial_sleep=1,
+    message_callback=None,
+    env=None,
+):
+    """
+    Lock a mapset and return lock process return code and name of new lock file
+
+    Acquires a lock for a mapset by calling the lock program. Returns lock process
+    return code and name of new lock file.
+
+    When locking fails, it will re-attempt locking again until it succeeds
+    or it times out. The initial sleep time is used the first time and then
+    it is doubled after each failed attempt. However, the sleep time is limited
+    to thousand times the initial sleep time, so for longer timeouts, the attempts
+    will start happening in equal intervals.
+
+    A *timeout* is the maximum time to wait for the lock to be released in seconds.
+
+    A *process_id* is the process ID of the process locking the mapset. If not
+    given, the current process ID is used.
+
+    :param mapset_path: full path to the mapset
+    :param process_id: process id to use for locking
+    :param timeout: give up in *timeout* in seconds
+    :param initial_sleep: initial sleep time in seconds
+    :param message_callback: callback to show messages when locked
+    :param env: system environment variables
+
+    The function assumes the `GISBASE` variable is in the environment. The variable is
+    used to find the lock program. If *env* is not provided,
+    :external:py:data:`os.environ` is used.
+    """
+    if process_id is None:
+        process_id = os.getpid()
+    if not env:
+        env = os.environ
+    lock_file = os.path.join(mapset_path, ".gislock")
+    locker_path = os.path.join(env["GISBASE"], "etc", "lock")
+    total_sleep = 0
+    try_number = 0
+    initial_sleep = min(initial_sleep, timeout)
+    sleep_time = initial_sleep
+    start_time = time.time()
+    while True:
+        return_code = subprocess.run(
+            [locker_path, lock_file, f"{process_id}"], check=False
+        ).returncode
+        elapsed_time = time.time() - start_time
+        if return_code == 0 or elapsed_time >= timeout or total_sleep >= timeout:
+            # If we successfully acquired the lock or we did our last attempt,
+            # stop the loop and report whatever the result is.
+            break
+        try_number += 1
+        if message_callback:
+            # Show project and mapset name, but not the whole path.
+            display_mapset = Path("...").joinpath(*(Path(mapset_path).parts[-2:]))
+            message_callback(
+                _(
+                    "Mapset <{mapset}> locked "
+                    "(attempt {try_number}), "
+                    "but will retry in {sleep_time:.2f} seconds..."
+                ).format(
+                    mapset=display_mapset,
+                    try_number=try_number,
+                    sleep_time=sleep_time,
+                )
+            )
+        time.sleep(sleep_time)
+        total_sleep += sleep_time
+        # New sleep time as double of the old one, but limited by the initial one.
+        # Don't sleep longer than the timeout allows.
+        sleep_time = min(
+            2 * sleep_time,
+            1000 * initial_sleep,
+            timeout - elapsed_time,
+            timeout - total_sleep,
+        )
+    return return_code, lock_file
+
+
+def lock_mapset(
+    mapset_path,
+    *,
+    force_lock_removal,
+    timeout,
+    message_callback,
+    process_id=None,
+    env=None,
+):
     """Acquire a lock for a mapset and return name of new lock file
 
-    Raises MapsetLockingException when it is not possible to acquire a lock for the
+    Raises :py:exc:`MapsetLockingException` when it is not possible to acquire a lock for the
     given mapset either because of existing lock or due to insufficient permissions.
     A corresponding localized message is given in the exception.
+
+    The *timeout*, *process_id*, and *env* parameters are the same as for the
+    :func:`acquire_mapset_lock` function. *force_lock_removal* implies zero *timeout*.
 
     A *message_callback* is a function which will be called to report messages about
     certain states. Specifically, the function is called when forcibly unlocking the
     mapset.
 
     Assumes that the runtime is set up (specifically that GISBASE is in
-    the environment).
+    the environment). Environment can be provided as *env*.
+
+    :raises ~grass.app.MapsetLockingException:
+        Raised when it is not possible to acquire a lock for the
+        given mapset either because of existing lock or due to insufficient permissions.
+        A corresponding localized message is given in the exception.
     """
+    if process_id is None:
+        process_id = os.getpid()
+    if not env:
+        env = os.environ
     if not os.path.exists(mapset_path):
         raise MapsetLockingException(_("Path '{}' doesn't exist").format(mapset_path))
     if not os.access(mapset_path, os.W_OK):
@@ -198,37 +304,64 @@ def lock_mapset(mapset_path, force_lock_removal, message_callback):
                 detail=_("You are not the owner of '{}'.").format(mapset_path),
             )
         raise MapsetLockingException(error)
-    # Check for concurrent use
-    lockfile = os.path.join(mapset_path, ".gislock")
-    locker_path = os.path.join(os.environ["GISBASE"], "etc", "lock")
-    ret = subprocess.run(
-        [locker_path, lockfile, "%d" % os.getpid()], check=False
-    ).returncode
+    if force_lock_removal:
+        # Do not wait when removing the lock anyway.
+        timeout = 0
+    ret, lockfile = acquire_mapset_lock(
+        mapset_path,
+        timeout=timeout,
+        message_callback=message_callback,
+        process_id=process_id,
+        env=env,
+    )
     msg = None
     if ret == 2:
+        lock_info = _("File {file} owned by {user} found.").format(
+            user=Path(lockfile).owner(), file=lockfile
+        )
         if not force_lock_removal:
+            cli_solution = _(
+                "On the command line, you can force GRASS to start by using the -f flag."
+            )
+            python_solution = _(
+                "In Python, you can start a session with force_unlock=True."
+            )
             msg = _(
-                "{user} is currently running GRASS in selected mapset"
-                " (file {file} found). Concurrent use of one mapset not allowed.\n"
-                "You can force launching GRASS using -f flag"
-                " (assuming your have sufficient access permissions)."
-                " Confirm in a process manager "
-                "that there is no other process using the mapset."
-            ).format(user=Path(lockfile).owner(), file=lockfile)
+                "Selected mapset is currently being used by another GRASS session. "
+                "{lock_info} "
+                "Concurrent access to a mapset is not allowed. However, you can either "
+                "use another mapset within the same project or remove the lock if you "
+                "are sure that no other session is active.\n"
+                "{cli_solution}\n"
+                "{python_solution}\n"
+                "Make sure you have sufficient access permissions to remove the lock "
+                "file. You may want to use a process manager "
+                "to check that no other process is using the mapset."
+            ).format(
+                lock_info=lock_info,
+                cli_solution=cli_solution,
+                python_solution=python_solution,
+            )
         else:
             message_callback(
-                _(
-                    "{user} is currently running GRASS in selected mapset"
-                    " (file {file} found), but forcing to launch GRASS anyway..."
-                ).format(user=Path(lockfile).owner(), file=lockfile)
+                _("Removing lock in the selected mapset: {lock_info}").format(
+                    lock_info=lock_info
+                )
             )
             gs.try_remove(lockfile)
     elif ret != 0:
         msg = _(
-            "Unable to properly access lock file '{name}'.\n"
-            "Please resolve this with your system administrator."
-        ).format(name=lockfile)
+            "Unable to properly access lock file '{name}' or run the lock program.\n"
+            "Please resolve this with your system administrator. "
+            "(Lock program return code: {returncode})"
+        ).format(name=lockfile, returncode=ret)
 
     if msg:
         raise MapsetLockingException(msg)
     return lockfile
+
+
+def unlock_mapset(mapset_path):
+    """Unlock a mapset"""
+    lockfile = os.path.join(mapset_path, ".gislock")
+    gs.try_remove(lockfile)

@@ -1,4 +1,4 @@
-"Session or subsession for mapsets (subprojects)"
+"""Session or subsession for mapsets (subprojects)"""
 
 import shutil
 import os
@@ -14,7 +14,7 @@ from grass.experimental.create import (
 class MapsetSession:
     """Session in another mapset in the same location
 
-    By default, it assumes that the mapset exists and raises ValueError otherwise.
+    By default, it assumes that the mapset exists and raises :exc:`ValueError` otherwise.
     Use *create* to create a new mapset and add *overwrite* to delete an existing
     one of the same name (with all the data in it) before the new one is created.
     To use an existing mapset if it exist and create it if it doesn't exist,
@@ -90,9 +90,12 @@ class MapsetSession:
         If not used as a context manager, call explicitly to clean and close the mapset
         and finish the session. No GRASS modules can be called afterwards with
         the environment obtained from this object.
+
+        :raises ValueError: When attempting to finish an already finished session
         """
         if not self.active:
-            raise ValueError("Attempt to finish an already finished session")
+            msg = "Attempt to finish an already finished session"
+            raise ValueError(msg)
         os.remove(self._session_file)
         self._active = False
 
@@ -102,11 +105,12 @@ class MapsetSession:
         Notably, the session is activated in its *__init__* function.
 
         :returns: reference to the object (self)
+        :raises ValueError:
+            When attempting to use inactive (finished) session as a context manager
         """
         if not self.active:
-            raise ValueError(
-                "Attempt to use inactive (finished) session as a context manager"
-            )
+            msg = "Attempt to use inactive (finished) session as a context manager"
+            raise ValueError(msg)
         return self
 
     def __exit__(self, type, value, traceback):  # pylint: disable=redefined-builtin
@@ -120,7 +124,7 @@ class MapsetSession:
 class TemporaryMapsetSession:
     """Session in another mapset in the same location
 
-    By default, it assumes that the mapset exists and raises ValueError otherwise.
+    By default, it assumes that the mapset exists and raises :exc:`ValueError` otherwise.
     Use *create* to create a new mapset and add *overwrite* to delete an existing
     one of the same name (with all the data in it) before the new one is created.
     To use an existing mapset if it exist and create it if it doesn't exist,
@@ -209,9 +213,12 @@ class TemporaryMapsetSession:
         If not used as a context manager, call explicitly to clean and close the mapset
         and finish the session. No GRASS modules can be called afterwards with
         the environment obtained from this object.
+
+        :raises ValueError: When attempting to finish an already finished session
         """
         if not self.active:
-            raise ValueError("Attempt to finish an already finished session")
+            msg = "Attempt to finish an already finished session"
+            raise ValueError(msg)
         self._active = False
         os.remove(self._session_file)
         shutil.rmtree(self._path.path, ignore_errors=True)
@@ -222,11 +229,12 @@ class TemporaryMapsetSession:
         Notably, the session is activated in its *__init__* function.
 
         :returns: reference to the object (self)
+        :raises ValueError:
+            When attempting to use inactive (finished) session as a context manager
         """
         if not self.active:
-            raise ValueError(
-                "Attempt to use inactive (finished) session as a context manager"
-            )
+            msg = "Attempt to use inactive (finished) session as a context manager"
+            raise ValueError(msg)
         return self
 
     def __exit__(self, type, value, traceback):  # pylint: disable=redefined-builtin

@@ -158,12 +158,9 @@ def main():
                 raster_maps = (new_map.get_id(),)
 
             for rastermap in raster_maps:
-                if column:
-                    col_name = column
-                else:
-                    # Create a new column with the SQL compliant
-                    # name of the sampled raster map
-                    col_name = rastermap.split("@")[0].replace(".", "_")
+                # Create a new column with the SQL compliant
+                # name of the sampled raster map if not column
+                col_name = column or rastermap.split("@")[0].replace(".", "_")
 
                 coltype = "DOUBLE PRECISION"
                 # Get raster type

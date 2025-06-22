@@ -59,11 +59,11 @@ def get_translated_value(key, value):
     if key == "timestamp":
         exec_datetime = datetime.fromisoformat(value)
         return exec_datetime.strftime("%Y-%m-%d %H:%M:%S")
-    elif key == "runtime":
+    if key == "runtime":
         return _("{} sec").format(value)
-    elif key == "status":
+    if key == "status":
         return _(value.capitalize())
-    elif key in {"mask2d", "mask3d"}:
+    if key in {"mask2d", "mask3d"}:
         return _(str(value))
 
 
@@ -326,11 +326,11 @@ class HistoryInfoPanel(SP.ScrolledPanel):
 
     def _get_history_region(self):
         """Get computational region settings of executed command."""
-        history_region = {}
-        for key, value in self.region_settings.items():
-            if self._region_settings_filter(key):
-                history_region[key] = value
-        return history_region
+        return {
+            key: value
+            for key, value in self.region_settings.items()
+            if self._region_settings_filter(key)
+        }
 
     def OnUpdateRegion(self, event):
         """Set current region to the region of executed command."""

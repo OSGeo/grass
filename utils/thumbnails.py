@@ -15,6 +15,9 @@
 
 import os
 import atexit
+import sys
+from pathlib import Path
+
 import grass.script as gs
 
 
@@ -23,21 +26,19 @@ tmp_grad_rel = None
 
 
 def cleanup():
+    names = []
     if tmp_grad_rel:
-        gs.run_command(
-            "g.remove", flags="f", type="raster", name=tmp_grad_rel, quiet=True
-        )
+        names.append(tmp_grad_rel)
     if tmp_grad_abs:
+        names.append(tmp_grad_abs)
+    if len(names) > 0:
         gs.run_command(
-            "g.remove", flags="f", type="raster", name=tmp_grad_abs, quiet=True
+            "g.remove", flags="f", type="raster", name=",".join(names), quiet=True
         )
 
 
 def make_gradient(path):
-    fh = open(path)
-    text = fh.read()
-    fh.close()
-
+    text = Path(path).read_text()
     lines = text.splitlines()
     records = []
     for line in lines:
@@ -106,7 +107,7 @@ def make_gradient(path):
 
 
 def make_image(output_dir, table, grad, height, width):
-    outfile = os.path.join(output_dir, "colortables", "%s.png" % table)
+    outfile = os.path.join(output_dir, "%s.png" % table)
     os.environ["GRASS_RENDER_FILE"] = outfile
 
     gs.run_command("r.colors", map=grad, color=table, quiet=True)
@@ -158,7 +159,7 @@ def main():
     os.environ["GRASS_OVERWRITE"] = "1"
 
     color_dir = os.path.join(os.environ["GISBASE"], "etc", "colors")
-    output_dir = os.path.join(os.environ["GISBASE"], "docs", "html")
+    output_dir = sys.argv[1]
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -200,9 +201,10 @@ def main():
 
     gs.mapcalc("$grad = float(col())", grad=tmp_grad_rel, quiet=True)
 
-    for table in os.listdir(color_dir):
-        path = os.path.join(color_dir, table)
-        grad = make_gradient(path)
+    color_dir_path = Path(color_dir)
+    for table_path in color_dir_path.iterdir():
+        table = table_path.name
+        grad = make_gradient(table_path)
         make_image(output_dir, table, grad, height=height, width=width)
 
     gs.mapcalc("$grad = col()", grad=tmp_grad_abs, quiet=True)

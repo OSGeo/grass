@@ -81,10 +81,9 @@ def langDefinition(fil):
     f.close()
     if len(lang) == 2:
         return " ".join(lang)
-    elif len(lang) == 1:
+    if len(lang) == 1:
         return lang[0]
-    else:
-        return ""
+    return ""
 
 
 def get_stats(languages, directory):

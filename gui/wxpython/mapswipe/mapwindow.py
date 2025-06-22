@@ -17,13 +17,15 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
-import wx
+from __future__ import annotations
 
+from typing import Literal
+
+import wx
 from core.debug import Debug
 from core.settings import UserSettings
+from gui_core.wrap import NewId, Rect
 from mapwin.buffered import BufferedMapWindow
-from gui_core.wrap import Rect, NewId
-
 
 EVT_MY_MOUSE_EVENTS = wx.NewEventType()
 EVT_MY_MOTION = wx.NewEventType()
@@ -38,17 +40,17 @@ class SwipeBufferedWindow(BufferedMapWindow):
     Special mouse events with changed coordinates are used.
     """
 
-    def __init__(self, parent, giface, Map, properties, **kwargs):
+    def __init__(self, parent, giface, Map, properties, **kwargs) -> None:
         BufferedMapWindow.__init__(
             self, parent=parent, giface=giface, Map=Map, properties=properties, **kwargs
         )
         Debug.msg(2, "SwipeBufferedWindow.__init__()")
 
-        self.specialSize = super().GetClientSize()
+        self.specialSize: wx.Size = super().GetClientSize()
         self.specialCoords = [0, 0]
         self.imageId = 99
         self.movingSash = False
-        self._mode = "swipe"
+        self._mode: Literal["swipe", "mirror"] = "swipe"
         self.lineid = NewId()
 
     def _bindMouseEvents(self):
@@ -77,19 +79,18 @@ class SwipeBufferedWindow(BufferedMapWindow):
     def _mouseMotion(self, event):
         self._RaiseMouseEvent(event, EVT_MY_MOTION)
 
-    def GetClientSize(self):
+    def GetClientSize(self) -> wx.Size:
         """Overridden method which returns simulated window size."""
         if self._mode == "swipe":
             return self.specialSize
-        else:
-            return super().GetClientSize()
+        return super().GetClientSize()
 
-    def SetClientSize(self, size):
+    def SetClientSize(self, size: wx.Size) -> None:
         """Overridden method which sets simulated window size."""
         Debug.msg(3, "SwipeBufferedWindow.SetClientSize(): size = %s" % size)
         self.specialSize = size
 
-    def SetMode(self, mode):
+    def SetMode(self, mode: Literal["swipe", "mirror"]) -> None:
         """Sets mode of the window.
 
         :param mode: mode can be 'swipe' or 'mirror'
@@ -100,10 +101,9 @@ class SwipeBufferedWindow(BufferedMapWindow):
         """Returns coordinates of rendered image"""
         if self._mode == "swipe":
             return self.specialCoords
-        else:
-            return (0, 0)
+        return (0, 0)
 
-    def SetImageCoords(self, coords):
+    def SetImageCoords(self, coords) -> None:
         """Sets coordinates of rendered image"""
         Debug.msg(
             3,
