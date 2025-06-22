@@ -97,8 +97,8 @@ int PNG_Graph_set(void)
     p = getenv("GRASS_RENDER_TRUECOLOR");
     png.true_color = !p || strcmp(p, "FALSE") != 0;
 
-    G_verbose_message(_("png: truecolor status %s"),
-                      png.true_color ? _("enabled") : _("disabled"));
+    G_verbose_message(png.true_color ? _("png: truecolor status enabled")
+                                     : _("png: truecolor status disabled"));
 
     p = getenv("GRASS_RENDER_FILE_MAPPED");
     do_map = p && strcmp(p, "TRUE") == 0;

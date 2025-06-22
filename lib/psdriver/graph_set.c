@@ -193,8 +193,8 @@ int PS_Graph_set(void)
     p = getenv("GRASS_RENDER_PS_TRAILER");
     ps.no_trailer = p && strcmp(p, "FALSE") == 0;
 
-    G_verbose_message(_("ps: truecolor status %s"),
-                      ps.true_color ? _("enabled") : _("disabled"));
+    G_verbose_message(ps.true_color ? _("ps: truecolor status enabled")
+                                    : _("ps: truecolor status disabled"));
 
     get_paper();
 
