@@ -93,7 +93,6 @@ int main(int argc, char *argv[])
     univar_stat *stats;
     char *infile, *zonemap;
     void *map, *zmap = NULL;
-    unsigned int i;
     unsigned int rows, cols, depths;
     unsigned int x, y, z;
     double dmin, dmax;
