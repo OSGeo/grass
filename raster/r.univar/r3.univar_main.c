@@ -86,19 +86,17 @@ int main(int argc, char *argv[])
     FCELL val_f; /* for misc use */
     DCELL val_d; /* for misc use */
     int map_type, zmap_type;
+    RASTER3D_Region region;
+    struct GModule *module;
     univar_stat *stats;
-
     char *infile, *zonemap;
     void *map, *zmap = NULL;
-    RASTER3D_Region region;
     unsigned int i;
     unsigned int rows, cols, depths;
     unsigned int x, y, z;
     double dmin, dmax;
     int zone, n_zones /* , use_zone = 0 */;
     const char *mapset, *name;
-
-    struct GModule *module;
 
     enum OutputFormat format;
 
