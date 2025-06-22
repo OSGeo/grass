@@ -78,6 +78,8 @@ void set_params(void)
     return;
 }
 
+static univar_stat *univar_stat_with_percentiles(int map_type);
+
 /* *************************************************************** */
 /* **** the main functions for r3.univar ************************* */
 /* *************************************************************** */
@@ -205,24 +207,7 @@ int main(int argc, char *argv[])
         Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"), infile);
 
     map_type = Rast3d_tile_type_map(map);
-
-    i = 0;
-    while (param.percentile->answers[i])
-        i++;
-
-    n_zones = zone_info.n_zones;
-
-    if (n_zones == 0)
-        n_zones = 1;
-
-    stats = create_univar_stat_struct(map_type, i);
-    for (i = 0; i < (unsigned int)n_zones; i++) {
-        unsigned int j;
-
-        for (j = 0; j < stats[i].n_perc; j++) {
-            sscanf(param.percentile->answers[j], "%lf", &(stats[i].perc[j]));
-        }
-    }
+    stats = univar_stat_with_percentiles(map_type);
 
     for (z = 0; z < depths; z++) { /* From the bottom to the top */
         if (!(param.shell_style->answer))
@@ -340,4 +325,26 @@ int main(int argc, char *argv[])
     free_univar_stat_struct(stats);
 
     exit(EXIT_SUCCESS);
+}
+
+static univar_stat *univar_stat_with_percentiles(int map_type)
+{
+    univar_stat *stats;
+    unsigned int i, j;
+    unsigned int n_zones = zone_info.n_zones;
+
+    if (n_zones == 0)
+        n_zones = 1;
+
+    i = 0;
+    while (param.percentile->answers[i])
+        i++;
+    stats = create_univar_stat_struct(map_type, i);
+    for (i = 0; i < n_zones; i++) {
+        for (j = 0; j < stats[i].n_perc; j++) {
+            sscanf(param.percentile->answers[j], "%lf", &(stats[i].perc[j]));
+        }
+    }
+
+    return stats;
 }
