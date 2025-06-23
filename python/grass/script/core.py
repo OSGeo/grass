@@ -471,10 +471,10 @@ def start_command(
         **kwargs,
     )
 
-    if debug_level() > 0:
+    if debug_level(env=kwargs.get("env")) > 0:
         sys.stderr.write(
             "D1/{}: {}.start_command(): {}\n".format(
-                debug_level(), __name__, " ".join(args)
+                debug_level(env=kwargs.get("env")), __name__, " ".join(args)
             )
         )
         sys.stderr.flush()
@@ -760,7 +760,18 @@ def message(msg, flag=None, env=None):
     :param env: dictionary with system environment variables
                 (:external:py:data:`os.environ` by default)
     """
-    run_command("g.message", flags=flag, message=msg, errors="ignore", env=env)
+    try:
+        run_command("g.message", flags=flag, message=msg, errors="ignore", env=env)
+    except OSError as error:
+        # Trying harder to show something, even when not adding the right message
+        # prefix. This allows for showing the original message to the user even when
+        # the tool cannot be found or errored for some reason.
+        print(
+            _(
+                "{message} (Additionally, there was an error: {additional_error})"
+            ).format(message=msg, additional_error=error),
+            file=sys.stderr,
+        )
 
 
 def debug(msg, debug=1, env=None):
@@ -779,7 +790,7 @@ def debug(msg, debug=1, env=None):
     :param env: dictionary with system environment variables
                 (:external:py:data:`os.environ` by default)
     """
-    if debug_level() >= debug:
+    if debug_level(env=env) >= debug:
         # TODO: quite a random hack here, do we need it somewhere else too?
         if sys.platform == "win32":
             msg = msg.replace("&", "^&")
@@ -1787,7 +1798,7 @@ def verbosity():
 # Various utilities, not specific to GRASS
 
 
-def find_program(pgm, *args):
+def find_program(pgm, *args, env: _Env = None):
     """Attempt to run a program, with optional arguments.
 
     You must call the program in a way that will return a successful
@@ -1805,6 +1816,7 @@ def find_program(pgm, *args):
 
     :param str pgm: program name
     :param args: list of arguments
+    :param env: environment
 
     :return: False if the attempt failed due to a missing executable
             or non-zero return code
@@ -1813,7 +1825,9 @@ def find_program(pgm, *args):
     with open(os.devnull, "w+") as nuldev:
         try:
             # TODO: the doc or impl is not correct, any return code is accepted
-            call([pgm] + list(args), stdin=nuldev, stdout=nuldev, stderr=nuldev)
+            call(
+                [pgm] + list(args), stdin=nuldev, stdout=nuldev, stderr=nuldev, env=env
+            )
             found = True
         except Exception:
             found = False
@@ -1896,21 +1910,27 @@ def create_project(
     if not os.path.exists(mapset_path.directory):
         os.mkdir(mapset_path.directory)
 
-    # Lazy-importing to avoid circular dependencies.
-    # pylint: disable=import-outside-toplevel
-    if os.environ.get("GISBASE"):
-        env = os.environ
-    else:
-        from grass.script.setup import setup_runtime_env
+    env = None
+    tmp_gisrc = None
 
-        env = os.environ.copy()
-        setup_runtime_env(env=env)
+    def local_env():
+        """Create runtime environment and session"""
+        # Rather than simply caching, we use local variables to have an indicator of
+        # whether the session file has been created or not.
+        nonlocal env, tmp_gisrc
+        if not env:
+            # Lazy-importing to avoid circular dependencies.
+            # pylint: disable=import-outside-toplevel
+            from grass.script.setup import ensure_runtime_env
 
-    # Even g.proj and g.message need GISRC to be present.
-    # The names don't really matter here.
-    tmp_gisrc, env = create_environment(
-        mapset_path.directory, mapset_path.location, mapset_path.mapset, env=env
-    )
+            env = os.environ.copy()
+            ensure_runtime_env(env=env)
+            # Even g.proj and g.message need GISRC to be present.
+            # The specific names used don't really matter here.
+            tmp_gisrc, env = create_environment(
+                mapset_path.directory, mapset_path.location, mapset_path.mapset, env=env
+            )
+        return env
 
     # check if location already exists
     if Path(mapset_path.directory, mapset_path.location).exists():
@@ -1918,12 +1938,12 @@ def create_project(
             fatal(
                 _("Location <%s> already exists. Operation canceled.")
                 % mapset_path.location,
-                env=env,
+                env=local_env(),
             )
         warning(
             _("Location <%s> already exists and will be overwritten")
             % mapset_path.location,
-            env=env,
+            env=local_env(),
         )
         shutil.rmtree(os.path.join(mapset_path.directory, mapset_path.location))
 
@@ -1943,7 +1963,7 @@ def create_project(
             epsg=epsg,
             project=mapset_path.location,
             stderr=PIPE,
-            env=env,
+            env=local_env(),
             **kwargs,
         )
     elif proj4:
@@ -1954,7 +1974,7 @@ def create_project(
             proj4=proj4,
             project=mapset_path.location,
             stderr=PIPE,
-            env=env,
+            env=local_env(),
             **kwargs,
         )
     elif filename:
@@ -1964,7 +1984,7 @@ def create_project(
             georef=filename,
             project=mapset_path.location,
             stderr=PIPE,
-            env=env,
+            env=local_env(),
         )
     elif wkt:
         if os.path.isfile(wkt):
@@ -1974,7 +1994,7 @@ def create_project(
                 wkt=wkt,
                 project=mapset_path.location,
                 stderr=PIPE,
-                env=env,
+                env=local_env(),
             )
         else:
             ps = pipe_command(
@@ -1984,7 +2004,7 @@ def create_project(
                 project=mapset_path.location,
                 stderr=PIPE,
                 stdin=PIPE,
-                env=env,
+                env=local_env(),
             )
             stdin = encode(wkt)
     else:
@@ -1993,10 +2013,15 @@ def create_project(
     if ps is not None and (epsg or proj4 or filename or wkt):
         error = ps.communicate(stdin)[1]
         try_remove(tmp_gisrc)
+        tmp_gisrc = None
 
         if ps.returncode != 0 and error:
             raise ScriptError(repr(error))
 
+    # If a session was created for messages, but not used for subprocesses,
+    # we still need to clean it up.
+    if tmp_gisrc:
+        try_remove(tmp_gisrc)
     _set_location_description(mapset_path.directory, mapset_path.location, desc)
 
 
@@ -2029,15 +2054,14 @@ def _create_location_xy(database, location):
     :raises ~grass.exceptions.ScriptError:
         Raise :py:exc:`~grass.exceptions.ScriptError` on error.
     """
-    cur_dir = Path.cwd()
     try:
-        os.chdir(database)
-        permanent_dir = Path(location, "PERMANENT")
+        base_path = Path(database)
+        project_dir = base_path / location
+        permanent_dir = project_dir / "PERMANENT"
         default_wind_path = permanent_dir / "DEFAULT_WIND"
         wind_path = permanent_dir / "WIND"
-        os.mkdir(location)
+        project_dir.mkdir()
         permanent_dir.mkdir()
-
         # create DEFAULT_WIND and WIND files
         regioninfo = [
             "proj:       0",
@@ -2059,10 +2083,8 @@ def _create_location_xy(database, location):
             "n-s resol3: 1",
             "t-b resol:  1",
         ]
-
         default_wind_path.write_text("\n".join(regioninfo))
         shutil.copy(default_wind_path, wind_path)
-        os.chdir(cur_dir)
     except OSError as e:
         raise ScriptError(repr(e))
 
@@ -2093,17 +2115,25 @@ def version():
 _debug_level = None
 
 
-def debug_level(force=False):
+def debug_level(force: bool = False, *, env: _Env = None):
     global _debug_level
     if not force and _debug_level is not None:
         return _debug_level
     _debug_level = 0
-    if find_program("g.gisenv", "--help"):
+    # We attempt to access the environment only when there is a chance
+    # it will work.
+    if find_program("g.gisenv", "--help", env=env):
         try:
-            _debug_level = int(gisenv().get("DEBUG", 0))
+            try:
+                _debug_level = int(gisenv(env=env).get("DEBUG", 0))
+            except (CalledModuleError, OSError):
+                # We continue in case of an error. Default value is already set.
+                pass
             if _debug_level < 0 or _debug_level > 5:
                 raise ValueError(_("Debug level {0}").format(_debug_level))
         except ValueError as e:
+            # The exception may come from the conversion or from the range,
+            # so we handle both in the same way.
             _debug_level = 0
             sys.stderr.write(
                 _(
