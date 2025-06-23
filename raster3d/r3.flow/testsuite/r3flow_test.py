@@ -63,15 +63,13 @@ class FlowlineTest(TestCase):
             "g.remove",
             flags="f",
             type="raster_3d",
-            name=",".join(
-                ["map_1", "map_2", "map_3", "map_4", "map_5", "test_flowaccum"]
-            ),
+            name="map_1,map_2,map_3,map_4,map_5,test_flowaccum",
         )
         cls.runModule(
             "g.remove",
             flags="f",
             type="vector",
-            name=",".join(["test_flowline", "test_seeds"]),
+            name="test_flowline,test_seeds",
         )
         os.remove("./data/flowline_tmp.ascii")
 

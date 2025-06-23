@@ -42,7 +42,6 @@ avl_tree avl_make(const generic_cell k, const long n)
     root = G_malloc(sizeof(avl_node));
     if (root == NULL) {
         G_fatal_error("avl.c: avl_make: malloc error");
-        return NULL;
     }
 
     /* initialize root */
@@ -117,7 +116,6 @@ int avl_add(avl_tree *root, const generic_cell k, const long n)
 
     if ((root == NULL) || (*root == NULL)) {
         G_fatal_error("\navl.c: avl_add: param NULL");
-        return AVL_ERR;
     }
 
     /* search position where insert the new node */
@@ -131,7 +129,6 @@ int avl_add(avl_tree *root, const generic_cell k, const long n)
     node_temp = avl_make(k, n);
     if (node_temp == NULL) {
         G_fatal_error("\navl.c:  avl_add: create node error");
-        return AVL_ERR;
     }
 
     /* link the new node */
@@ -147,7 +144,6 @@ int avl_add(avl_tree *root, const generic_cell k, const long n)
         else {
             G_free(node_temp);
             G_fatal_error("avl.c: avl_add: new node position unknown");
-            return AVL_ERR;
         }
     }
 
@@ -172,7 +168,6 @@ int avl_add(avl_tree *root, const generic_cell k, const long n)
         break;
     default:
         G_fatal_error("avl, avl_add: balancing error\n");
-        return AVL_ERR;
     }
 
     /* if after rotation the root is changed modufy the pointer to the root */
@@ -227,11 +222,9 @@ static avl_node *avl_individua(const avl_tree root, const generic_cell k,
     }
     case GC_DIFFERENT_TYPE: {
         G_fatal_error("\avl.c: avl_individua: different type");
-        return NULL;
     }
     default: {
         G_fatal_error("\avl.c: avl_individua: error");
-        return NULL;
     }
     }
 }

@@ -498,13 +498,13 @@ int main(int argc, char *argv[])
     Vect_set_zone(&Out_Map, G_zone());
 
     /* Read and write header info */
-    sprintf(date, "%s", G_date());
+    snprintf(date, sizeof(date), "%s", G_date());
     sscanf(date, "%*s%s%d%*s%d", mon, &day, &yr);
     if (yr < 2000)
         yr = yr - 1900;
     else
         yr = yr - 2000;
-    sprintf(date, "%s %d %d", mon, day, yr);
+    snprintf(date, sizeof(date), "%s %d %d", mon, day, yr);
     Vect_set_date(&Out_Map, date);
 
     /* line densification works only with vector topology */

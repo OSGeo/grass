@@ -362,7 +362,7 @@ def info_plot(x, xticks, xlabels, results, filename, style):
     fig.savefig(filename)
 
 
-# TODO: solve the directory inconsitencies, implement None
+# TODO: solve the directory inconsistencies, implement None
 def main_page(
     results, filename, images, captions, title="Test reports", directory=None
 ):
@@ -413,13 +413,13 @@ def main_page(
                 )
             )
         page.write("</tbody></table>")
-        for image, caption in itertools.izip(images, captions):
-            page.write(
-                "<h3>{caption}<h3>"
-                '<img src="{image}" alt="{caption}" title="{caption}">'.format(
-                    image=image, caption=caption
-                )
+        page.writelines(
+            "<h3>{caption}<h3>"
+            '<img src="{image}" alt="{caption}" title="{caption}">'.format(
+                image=image, caption=caption
             )
+            for image, caption in itertools.izip(images, captions)
+        )
         page.write("</body></html>")
 
 

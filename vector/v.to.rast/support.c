@@ -135,7 +135,7 @@ int update_dbcolors(const char *rast_name, const char *vector_map, int field,
             G_warning(_("No records selected"));
             continue;
         }
-        sprintf(colorstring, "%s", value.s.string);
+        snprintf(colorstring, sizeof(colorstring), "%s", value.s.string);
 
         /* convert color string to three color integers */
         if (*colorstring != '\0') {
@@ -316,11 +316,11 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
             /* switch the column type */
             switch (col_type) {
             case DB_C_TYPE_DOUBLE:
-                sprintf(tmp, "%lf", db_get_value_double(&value));
+                snprintf(tmp, sizeof(tmp), "%lf", db_get_value_double(&value));
                 db_set_string(&my_labels_rules[i].label, tmp);
                 break;
             case DB_C_TYPE_INT:
-                sprintf(tmp, "%d", db_get_value_int(&value));
+                snprintf(tmp, sizeof(tmp), "%d", db_get_value_int(&value));
                 db_set_string(&my_labels_rules[i].label, tmp);
                 break;
             case DB_C_TYPE_STRING:
@@ -464,7 +464,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
             Rast_read_range(rast_name, G_mapset(), &range);
             Rast_get_range_min_max(&range, &min, &max);
 
-            sprintf(msg, "Value %d", val);
+            snprintf(msg, sizeof(msg), "Value %d", val);
             Rast_set_cat(&min, &max, msg, &rast_cats, map_type);
         }
         else {
@@ -473,7 +473,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
             Rast_read_fp_range(rast_name, G_mapset(), &fprange);
             Rast_get_fp_range_min_max(&fprange, &fmin, &fmax);
 
-            sprintf(msg, "Value %.4f", (double)val);
+            snprintf(msg, sizeof(msg), "Value %.4f", (double)val);
             Rast_set_cat(&fmin, &fmax, msg, &rast_cats, map_type);
         }
 
@@ -543,11 +543,11 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
                 /* switch the column type */
                 switch (col_type) {
                 case DB_C_TYPE_DOUBLE:
-                    sprintf(tmp, "%lf", cvarr.value[i].val.d);
+                    snprintf(tmp, sizeof(tmp), "%lf", cvarr.value[i].val.d);
                     db_set_string(&my_labels_rules[i].label, tmp);
                     break;
                 case DB_C_TYPE_INT:
-                    sprintf(tmp, "%d", cvarr.value[i].val.i);
+                    snprintf(tmp, sizeof(tmp), "%d", cvarr.value[i].val.i);
                     db_set_string(&my_labels_rules[i].label, tmp);
                     break;
                 case DB_C_TYPE_STRING:
@@ -621,7 +621,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
         Rast_write_units(rast_name, "degrees CCW from +x");
 
         for (i = 1; i <= 360; i++) {
-            sprintf(msg, "%d degrees", i);
+            snprintf(msg, sizeof(msg), "%d degrees", i);
 
             if (i == 360) {
                 fmin = 359.5;

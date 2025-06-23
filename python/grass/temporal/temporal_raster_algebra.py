@@ -9,12 +9,12 @@ for details.
 
 :authors: Thomas Leppelt and Soeren Gebbert
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> p = TemporalRasterAlgebraLexer()
     >>> p.build()
     >>> p.debug = True
-    >>> expression =  'R = A[0,1,0] / B[0,0,1] * 20 + C[0,1,1] - 2.45'
+    >>> expression = "R = A[0,1,0] / B[0,0,1] * 20 + C[0,1,1] - 2.45"
     >>> p.test(expression)
     R = A[0,1,0] / B[0,0,1] * 20 + C[0,1,1] - 2.45
     LexToken(NAME,'R',1,0)
@@ -168,7 +168,7 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
                 # Get map index and temporal extent.
                 map_index = maplist.index(map_i)
                 new_index = map_index + t_neighbour
-                if new_index < max_index and new_index >= 0:
+                if 0 <= new_index < max_index:
                     map_i_t_extent = map_i.get_temporal_extent()
                     # Get neighbouring map and set temporal extent.
                     map_n = maplist[new_index]

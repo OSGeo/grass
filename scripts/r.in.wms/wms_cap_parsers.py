@@ -88,7 +88,7 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
             If the capabilities file cannot be parsed if it raises
             xml.etree.ElementTree.ParseError.
 
-        The class manges inheritance in 'Layer' elements. Inherited elements
+        The class manages inheritance in 'Layer' elements. Inherited elements
         are added to 'Layer' element.
         The class also removes elements which are in invalid form and are needed
         by wxGUI capabilities dialog.

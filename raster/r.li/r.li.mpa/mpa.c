@@ -82,7 +82,6 @@ int meanPixelAttribute(int fd, char **par UNUSED, struct area_entry *ad,
     }
     default: {
         G_fatal_error("data type unknown");
-        return RLI_ERRORE;
     }
     }
     if (ris != RLI_OK) {
@@ -109,12 +108,11 @@ int calculate(int fd, struct area_entry *ad, double *result)
     if (ad->mask == 1) {
         if ((mask_fd = open(ad->mask_name, O_RDONLY, 0755)) < 0) {
             G_fatal_error("can't open mask");
-            return RLI_ERRORE;
         }
         mask_buf = G_malloc(ad->cl * sizeof(int));
         if (mask_buf == NULL) {
+            close(mask_fd);
             G_fatal_error("malloc mask_buf failed");
-            return RLI_ERRORE;
         }
         masked = TRUE;
     }
@@ -124,8 +122,8 @@ int calculate(int fd, struct area_entry *ad, double *result)
 
         if (masked) {
             if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
+                close(mask_fd);
                 G_fatal_error("mask read failed");
-                return RLI_ERRORE;
             }
         }
 
@@ -168,12 +166,11 @@ int calculateD(int fd, struct area_entry *ad, double *result)
     if (ad->mask == 1) {
         if ((mask_fd = open(ad->mask_name, O_RDONLY, 0755)) < 0) {
             G_fatal_error("can't open mask");
-            return RLI_ERRORE;
         }
         mask_buf = G_malloc(ad->cl * sizeof(int));
         if (mask_buf == NULL) {
+            close(mask_fd);
             G_fatal_error("malloc mask_buf failed");
-            return RLI_ERRORE;
         }
         masked = TRUE;
     }
@@ -183,8 +180,8 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 
         if (masked) {
             if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
+                close(mask_fd);
                 G_fatal_error("mask read failed");
-                return RLI_ERRORE;
             }
         }
 
@@ -227,12 +224,11 @@ int calculateF(int fd, struct area_entry *ad, double *result)
     if (ad->mask == 1) {
         if ((mask_fd = open(ad->mask_name, O_RDONLY, 0755)) < 0) {
             G_fatal_error("can't open mask");
-            return RLI_ERRORE;
         }
         mask_buf = G_malloc(ad->cl * sizeof(int));
         if (mask_buf == NULL) {
+            close(mask_fd);
             G_fatal_error("malloc mask_buf failed");
-            return RLI_ERRORE;
         }
         masked = TRUE;
     }
@@ -242,8 +238,8 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 
         if (masked) {
             if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
+                close(mask_fd);
                 G_fatal_error("mask read failed");
-                return RLI_ERRORE;
             }
         }
 

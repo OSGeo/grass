@@ -9,7 +9,7 @@ Created on Thu Aug  9 14:04:12 2012
 """
 # utilities for generating REST indices
 # utilities for generating HTML indices
-# (C) 2003-2024 by Luca Delucchi and the GRASS Development Team
+# (C) 2003-2025 by Luca Delucchi and the GRASS Development Team
 
 import os
 import string
@@ -30,7 +30,7 @@ exclude_mods = [
 # these modules don't use G_parser()
 
 desc_override = {
-    "g.parser": "Provides automated parser, GUI, and help support for GRASS scipts.",
+    "g.parser": "Provides automated parser, GUI, and help support for GRASS scripts.",
     "r.li.daemon": "Support module for r.li landscape index calculations.",
 }
 
@@ -79,7 +79,6 @@ Quick Introduction
         Intro vector map processing and network analysis <vectorintro>
         Intro database management <databaseintro>
         Intro temporal data processing <temporalintro>
-        Intro Graphical User Interface <wxguiintro>
 
 Display/Graphical User Interfaces
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -171,7 +170,7 @@ footer_tmpl = string.Template(
 --------------
 
 :doc:`Manual main page <index>` \| :doc:`Full Index <full_index>`
- 2003-2024 `GRASS Development Team <https://grass.osgeo.org>`_, GRASS GIS ${grass_version} Reference Manual
+ 2003-2025 `GRASS Development Team <https://grass.osgeo.org>`_, GRASS GIS ${grass_version} Reference Manual
 """  # noqa: E501
 )
 

@@ -23,9 +23,9 @@ int db__driver_list_tables(dbString **tlist, int *tcount, int system)
 
     /* Execute SQL */
     if (system)
-        sprintf(ttype, "SYSTEM TABLE");
+        snprintf(ttype, sizeof(ttype), "SYSTEM TABLE");
     else
-        sprintf(ttype, "TABLE, VIEW");
+        snprintf(ttype, sizeof(ttype), "TABLE, VIEW");
 
     ret = SQLTables(c->stmt, NULL, 0, NULL, 0, NULL, 0, (SQLCHAR *)ttype,
                     sizeof(ttype));

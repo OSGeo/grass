@@ -36,16 +36,17 @@ def get_grass_config_dir(major_version, minor_version, env):
 
     config_dir = env.get(env_dirname)
     if config_dir is None:
-        raise RuntimeError(
-            f"The {env_dirname} variable is not set, ask your operating"
-            " system support"
+        msg = (
+            f"The {env_dirname} variable is not set, ask your operating system support"
         )
+        raise RuntimeError(msg)
 
     if not os.path.isdir(config_dir):
-        raise NotADirectoryError(
+        msg = (
             f"The {env_dirname} variable points to directory which does"
             " not exist, ask your operating system support"
         )
+        raise NotADirectoryError(msg)
 
     if WINDOWS:
         config_dirname = f"GRASS{major_version}"
@@ -178,10 +179,7 @@ def set_python_path_variable(install_path, env):
 def set_path_to_python_executable(env):
     """Set GRASS_PYTHON environment variable"""
     if not env.get("GRASS_PYTHON"):
-        if WINDOWS:
-            env["GRASS_PYTHON"] = "python3.exe"
-        else:
-            env["GRASS_PYTHON"] = "python3"
+        env["GRASS_PYTHON"] = sys.executable
 
 
 def set_defaults(config_projshare_path):

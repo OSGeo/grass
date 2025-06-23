@@ -213,8 +213,9 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
 
     /* Query input maps */
     for (input = 0; input < 2; input++) {
-        G_message(_("Querying vector map <%s>..."),
-                  Vect_get_full_name(&(In[input])));
+        const char *mname = Vect_get_full_name(&(In[input]));
+        G_message(_("Querying vector map <%s>..."), mname);
+        G_free((void *)mname);
 
         nareas = Vect_get_num_areas(&(In[input]));
         G_percent(0, nareas, 1);
@@ -350,8 +351,8 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                     if (driver) {
                         ATTR *at;
 
-                        sprintf(buf, "insert into %s values ( %d", Fi->table,
-                                out_cat);
+                        snprintf(buf, sizeof(buf), "insert into %s values ( %d",
+                                 Fi->table, out_cat);
                         db_set_string(&stmt, buf);
 
                         /* cata */
@@ -369,8 +370,8 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                                                      attr[0].null_values);
                             }
                             else {
-                                sprintf(buf, ", %d",
-                                        Centr[area].cat[0]->cat[i]);
+                                snprintf(buf, sizeof(buf), ", %d",
+                                         Centr[area].cat[0]->cat[i]);
                                 db_append_string(&stmt, buf);
                             }
                         }
@@ -379,7 +380,7 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                                 db_append_string(&stmt, attr[0].null_values);
                             }
                             else {
-                                sprintf(buf, ", null");
+                                snprintf(buf, sizeof(buf), ", null");
                                 db_append_string(&stmt, buf);
                             }
                         }
@@ -399,8 +400,8 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                                                      attr[1].null_values);
                             }
                             else {
-                                sprintf(buf, ", %d",
-                                        Centr[area].cat[1]->cat[j]);
+                                snprintf(buf, sizeof(buf), ", %d",
+                                         Centr[area].cat[1]->cat[j]);
                                 db_append_string(&stmt, buf);
                             }
                         }
@@ -409,7 +410,7 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                                 db_append_string(&stmt, attr[1].null_values);
                             }
                             else {
-                                sprintf(buf, ", null");
+                                snprintf(buf, sizeof(buf), ", null");
                                 db_append_string(&stmt, buf);
                             }
                         }
@@ -491,6 +492,15 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
         if (centr[0] || centr[1])
             Vect_write_line(Out, GV_BOUNDARY, Points, Cats);
     }
+    G_free(Centr);
+    if (IPoints) {
+        for (isle = 0; isle < nisles_alloc; isle++) {
+            if (IPoints[isle])
+                Vect_destroy_line_struct(IPoints[isle]);
+        }
+        G_free(IPoints);
+    }
+    Vect_destroy_line_struct(APoints);
 
     return 0;
 }

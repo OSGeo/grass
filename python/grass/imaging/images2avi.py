@@ -28,7 +28,7 @@
 #
 # changes of this file GRASS (PNG instead of JPG) by Anna Petrasova 2013
 
-""" Module images2avi
+"""Module images2avi
 
 Uses ffmpeg to read and write AVI files. Requires PIL
 
@@ -77,8 +77,9 @@ def writeAvi(
     between 0 and 1 for float types.
 
     Requires the "ffmpeg" application:
-      * Most linux users can install using their package manager
-      * There is a windows installer on the visvis website
+
+    * Most linux users can install using their package manager
+    * There is a windows installer on the visvis website
 
     :param str filename: output filename
     :param images:
@@ -180,21 +181,22 @@ def readAvi(filename, asNumpy=True):
 
     # Run ffmpeg
     command = "ffmpeg -i input.avi im%d.jpg"
-    S = subprocess.Popen(
-        command, shell=True, cwd=tempDir, stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    )
-
-    # Show what mencodec has to say
-    outPut = S.stdout.read()
-
-    if S.wait():
-        # An error occurred, show
-        print(outPut)
-        print(S.stderr.read())
-        # Clean up
-        _cleanDir(tempDir)
-        raise RuntimeError("Could not read avi.")
-
+    with subprocess.Popen(
+        command,
+        cwd=tempDir,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    ) as S:
+        # Show what mencodec has to say
+        outPut = S.stdout.read()
+        if S.wait():
+            # An error occurred, show
+            print(outPut)
+            print(S.stderr.read())
+            # Clean up
+            _cleanDir(tempDir)
+            msg = "Could not read avi."
+            raise RuntimeError(msg)
     # Read images
     images = images2ims.readIms(os.path.join(tempDir, "im*.jpg"), asNumpy)
     # Clean up

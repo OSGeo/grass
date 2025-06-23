@@ -19,8 +19,9 @@ int m_mult(MATRIX *a, MATRIX *b, MATRIX *c)
 
     /* check for conformity */
     if (a->ncols != b->nrows) {
-        sprintf(message, "*: matrices not conformable, %d x %d * %d x %d\n",
-                a->nrows, a->ncols, b->nrows, b->ncols);
+        snprintf(message, sizeof(message),
+                 "*: matrices not conformable, %d x %d * %d x %d\n", a->nrows,
+                 a->ncols, b->nrows, b->ncols);
         fprintf(stderr, "%s", message);
         return error(message);
     }

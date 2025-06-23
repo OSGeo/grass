@@ -25,7 +25,7 @@ static void run_stats(const char *mapname, const char *tempfile)
     argv[argc++] = mapname;
 
     if (!cat_ranges) {
-        sprintf(buf, "nsteps=%d", nsteps);
+        snprintf(buf, sizeof(buf), "nsteps=%d", nsteps);
         argv[argc++] = buf;
     }
 
@@ -85,7 +85,7 @@ int get_stats(const char *mapname, struct stat_list *dist_stats)
         if (fgets(buf, sizeof(buf), fd) != NULL) {
             /* WARNING!!!!!!
              * this will be very wrong if type!=COUNT
-             * since the stat prodcued by r.stats will be a floating point value
+             * since the stat produced by r.stats will be a floating point value
              * possibly less than 1 (shapiro)
              */
             if (sscanf(buf, "* %ld", &stat) == 1) {

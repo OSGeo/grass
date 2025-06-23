@@ -35,8 +35,8 @@ void ppupdate(int fe, int fb, int nl, int nbasins, struct band3 *elev,
     CELL *here;
     CELL that_basin;
     void *barrier_height;
-    void *this_elev;
-    void *that_elev;
+    void *this_elev = NULL;
+    void *that_elev = NULL;
 
     struct links *list;
 
@@ -151,6 +151,9 @@ void ppupdate(int fe, int fb, int nl, int nbasins, struct band3 *elev,
         } /* end cell */
 
     } /* end row */
+
+    if (!this_elev || !that_elev)
+        G_fatal_error(_("Unexpected NULL pointer in %s"), __func__);
 
     /* Look for pairs of basins that drain to each other */
     for (i = 1; i <= nbasins; i += 1) {

@@ -8,12 +8,15 @@ on:
       - releasebranch_*
   pull_request:
 
+permissions: {}
+
 jobs:
   build:
     name: ${{ matrix.os }} build and tests
 
     concurrency:
-      group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{
+      group: >-
+        ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{
         matrix.os }}
       cancel-in-progress: true
 
@@ -23,7 +26,7 @@ jobs:
     strategy:
       matrix:
         os:
-          - windows-2019
+          - windows-2022
       fail-fast: false
 
     steps:
@@ -32,18 +35,38 @@ jobs:
           git config --global core.autocrlf false
           git config --global core.eol lf
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: msys2/setup-msys2@c52d1fa9c7492275e60fe763540fb601f5f232a1 # v2.25.0
+      - uses: msys2/setup-msys2@40677d36a502eb2cf0fb808cc9dec31bf6152638 # v2.28.0
+        id: msys2
         with:
           path-type: inherit
           location: D:\
           update: true
           msystem: MINGW64
-          install: tar libintl make bison flex diffutils git dos2unix zip mingw-w64-x86_64-toolchain
-            mingw-w64-x86_64-fftw mingw-w64-x86_64-openblas mingw-w64-x86_64-pkgconf
-            mingw-w64-x86_64-gcc mingw-w64-x86_64-ccache mingw-w64-x86_64-zlib mingw-w64-x86_64-libiconv
-            mingw-w64-x86_64-bzip2 mingw-w64-x86_64-gettext mingw-w64-x86_64-libsystre
-            mingw-w64-x86_64-libtre-git mingw-w64-x86_64-libwinpthread-git mingw-w64-x86_64-libpng
-            mingw-w64-x86_64-pcre
+          install: >-
+            bison
+            diffutils
+            dos2unix
+            flex
+            git
+            libintl
+            make
+            tar
+            zip
+          pacboy: >-
+            bzip2
+            ccache
+            fftw
+            gcc
+            gettext
+            libiconv
+            libsystre
+            libtre-git
+            libwinpthread-git
+            openblas
+            pcre
+            pkgconf
+            toolchain
+            zlib
 
       - name: Setup OSGeo4W environment
         uses: echoix/setup-OSGeo4W@f4311523e39f2c8b10e34ebbc3f2ff437ecfb9ed # v0.2.0
@@ -52,20 +75,15 @@ jobs:
           package-dir: "D:/OSGeo4W_pkg"
           packages: |
             cairo-devel
-            fftw
             freetype-devel
             gdal-devel
-            gdal-ecw
-            gdal-mrsid
             geos-devel
+            libjpeg-turbo-devel
             liblas-devel
             libpng-devel
             libpq-devel
             libtiff-devel
-            libxdr
             netcdf-devel
-            pdal-devel
-            pdcurses
             proj-devel
             python3-core
             python3-jupyter
@@ -73,10 +91,10 @@ jobs:
             python3-numpy
             python3-pip
             python3-ply
-            python3-pytest
             python3-pywin32
+            python3-six
             python3-wxpython
-            regex-devel
+            sqlite3-devel
             zstd-devel
 
       - name: Set number of cores for compilation
@@ -87,9 +105,9 @@ jobs:
       - name: Compile GRASS GIS
         shell: msys2 {0}
         run: |
-          export CFLAGS="${CFLAGS} -pipe"
-          export CXXFLAGS="${CXXFLAGS} -pipe"
           .github/workflows/build_osgeo4w.sh
+        env:
+          MSYS2_LOCATION: ${{ steps.msys2.outputs.msys2-location }}
 
       - name: Print installed versions
         if: always()
@@ -105,17 +123,30 @@ jobs:
         shell: msys2 {0}
         run: .github/workflows/test_simple.sh
 
-      - name: Install pytest plugins
-        run: python -m pip install pytest-timeout
+      - name: Install additional python packages
+        run: |
+          python -m pip install ^
+            pytest ^
+            pytest-timeout
         shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}""
       - name: Run pytest with a single worker
         run: |
           call %OSGEO4W_ROOT%\opt\grass\etc\env.bat
           set PYTHONPATH=%GISBASE%\etc\python;%PYTHONPATH%
           path %GISBASE%\lib;%GISBASE%\bin;%PATH%
-          pytest --verbose --color=yes ^
-            --durations=0 --durations-min=0.5 ^
-            -ra .
+          pytest ^
+            @.github/workflows/pytest_args_ci.txt ^
+            -k "not testsuite"
+        shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}""
+      - name: Run pytest with a single worker (for gunittest-based tests)
+        run: |
+          call %OSGEO4W_ROOT%\opt\grass\etc\env.bat
+          set PYTHONPATH=%GISBASE%\etc\python;%PYTHONPATH%
+          path %GISBASE%\lib;%GISBASE%\bin;%PATH%;%OSGEO4W_ROOT%\opt\grass
+          pytest ^
+            @.github/workflows/pytest_args_ci.txt ^
+            @.github/workflows/pytest_args_deselect.txt ^
+            @.github/workflows/pytest_args_gunittest.txt
         shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}""
 
       - name: Run tests
@@ -125,7 +156,7 @@ jobs:
 
       - name: Make HTML test report available
         if: ${{ always() }}
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: testreport-${{ matrix.os }}
           path: testreport

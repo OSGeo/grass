@@ -135,7 +135,7 @@ skewness: 0.801646"""
         )
 
     def test_json(self):
-        """Testing output in JSON fomrat"""
+        """Testing output in JSON format"""
         module = SimpleModule(
             "v.univar", map="geology", column="PERIMETER", flags="e", format="json"
         )

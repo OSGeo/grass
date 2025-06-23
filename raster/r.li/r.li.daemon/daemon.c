@@ -23,7 +23,7 @@
 #include <errno.h>
 #include <math.h>
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 #include <process.h>
 #else
 #include <sys/wait.h>
@@ -67,17 +67,17 @@ int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
     char testpath[GPATH_MAX];
 
     /* conf files go into ~/.grass8/r.li/ */
-    sprintf(rlipath, "%s%c%s%c", G_config_path(), HOST_DIRSEP, "r.li",
-            HOST_DIRSEP);
+    snprintf(rlipath, sizeof(rlipath), "%s%c%s%c", G_config_path(), HOST_DIRSEP,
+             "r.li", HOST_DIRSEP);
 
-    sprintf(testpath, "%s%c%s%c", G_config_path(), HOST_DIRSEP, "r.li",
-            HOST_DIRSEP);
+    snprintf(testpath, sizeof(testpath), "%s%c%s%c", G_config_path(),
+             HOST_DIRSEP, "r.li", HOST_DIRSEP);
     if (strncmp(file, testpath, strlen(testpath)) == 0)
         file += strlen(testpath);
 
     /* TODO: check if this path is portable */
     /* TODO: use G_rc_path() */
-    sprintf(pathSetup, "%s%s", rlipath, file);
+    snprintf(pathSetup, sizeof(pathSetup), "%s%s", rlipath, file);
     G_debug(1, "r.li.daemon pathSetup: [%s]", pathSetup);
     parsed = parseSetup(pathSetup, l, g, raster);
 
@@ -99,13 +99,13 @@ int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
     else {
         /* text file output */
         /* check if ~/.grass8/ exists */
-        sprintf(out, "%s", G_config_path());
+        snprintf(out, sizeof(out), "%s", G_config_path());
         doneDir = G_mkdir(out);
         if (doneDir == -1 && errno != EEXIST)
             G_fatal_error(_("Cannot create %s directory"), out);
 
         /* check if ~/.grass8/r.li/ exists */
-        sprintf(out, "%s", rlipath);
+        snprintf(out, sizeof(out), "%s", rlipath);
         doneDir = G_mkdir(out);
         if (doneDir == -1 && errno != EEXIST)
             G_fatal_error(_("Cannot create %s directory"), out);
@@ -180,8 +180,12 @@ int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
     }
     else {
         /* text file output */
+        close(res);
         G_done_msg("Result written to text file <%s>", out);
     }
+
+    G_free(g);
+    G_free(l);
 
     /* This is only return in this function, so the documented 1 is
        actually never returned. */
@@ -214,12 +218,16 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
         G_fatal_error(_("Cannot read setup file"));
 
     letti = read(setup, buf, s.st_size);
-    if (letti < s.st_size)
+    if (letti < s.st_size) {
+        close(setup);
         G_fatal_error(_("Cannot read setup file"));
+    }
 
     token = strtok(buf, " ");
-    if (strcmp("SAMPLINGFRAME", token) != 0)
+    if (strcmp("SAMPLINGFRAME", token) != 0) {
+        close(setup);
         G_fatal_error(_("Unable to parse configuration file (sampling frame)"));
+    }
 
     rel_x = atof(strtok(NULL, "|"));
     rel_y = atof(strtok(NULL, "|"));
@@ -294,7 +302,10 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
                 g->count = 1;
                 g->maskname = NULL;
 
-                return disposeAreas(l, g, strtok(NULL, "\n"));
+                int res = disposeAreas(l, g, strtok(NULL, "\n"));
+                close(setup);
+                G_free(buf);
+                return res;
             }
             else {
                 msg m;
@@ -335,6 +346,7 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
                  strcmp(token, "SAMPLEAREA") == 0);
 
         close(setup);
+        G_free(buf);
         return toReturn;
     }
     else if (strcmp("MASKEDSAMPLEAREA", token) == 0) {
@@ -371,7 +383,11 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
                 g->cl = sa_cl;
                 g->count = 1;
                 g->maskname = maskname;
-                return disposeAreas(l, g, strtok(NULL, "\n"));
+
+                int res = disposeAreas(l, g, strtok(NULL, "\n"));
+                close(setup);
+                G_free(buf);
+                return res;
             }
             else {
                 /*read file and create list */
@@ -413,6 +429,7 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
                strcmp(token, "MASKEDSAMPLEAREA") == 0);
 
         close(setup);
+        G_free(buf);
         return NORMAL;
     }
     else if (strcmp("MASKEDOVERLAYAREA", token) == 0) {
@@ -486,12 +503,14 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
                             "with the <%s> raster map"),
                           token);
         close(setup);
+        G_free(buf);
         return NORMAL;
     }
     else
         G_fatal_error(_("Unable to parse configuration file (sample area)"));
 
     close(setup);
+    G_free(buf);
     return ERROR;
 }
 
@@ -566,6 +585,7 @@ int disposeAreas(struct list *l, struct g_area *g, char *def)
                 }
             }
         }
+        G_free(assigned);
         return NORMAL;
     }
     else if (strcmp(token, "SYSTEMATICCONTIGUOUS") == 0) {
@@ -661,9 +681,10 @@ int print_Output(int out, msg m)
         int len;
 
         if (Rast_is_d_null_value(&m.f.f_d.res))
-            sprintf(s, "RESULT %i|NULL\n", m.f.f_d.aid);
+            snprintf(s, sizeof(s), "RESULT %i|NULL\n", m.f.f_d.aid);
         else
-            sprintf(s, "RESULT %i|%.15g\n", m.f.f_d.aid, m.f.f_d.res);
+            snprintf(s, sizeof(s), "RESULT %i|%.15g\n", m.f.f_d.aid,
+                     m.f.f_d.res);
         len = strlen(s);
 
         if (write(out, s, len) == len)
@@ -680,7 +701,7 @@ int error_Output(int out, msg m)
     else {
         char s[100];
 
-        sprintf(s, "ERROR %i", m.f.f_d.aid);
+        snprintf(s, sizeof(s), "ERROR %i", m.f.f_d.aid);
 
         if (write(out, s, strlen(s)) == (ssize_t)strlen(s))
             return 1;

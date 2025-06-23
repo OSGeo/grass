@@ -172,7 +172,7 @@ int gethead(FILE *fd, struct Cell_head *cellhd, RASTER_MAP_TYPE *d_type,
 
         if (strcmp(label, "multiplier") == 0) {
             if (Rast_is_d_null_value(
-                    mult)) { /* if mult not set on commant line */
+                    mult)) { /* if mult not set on command line */
                 if (sscanf(value, "%lf", mult) != 1) {
                     G_warning(_("illegal multiplier field: using 1.0"));
                     *mult = 1.0;
