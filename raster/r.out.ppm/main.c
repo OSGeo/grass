@@ -78,8 +78,10 @@ int main(int argc, char *argv[])
 
     if (strcmp(ppm_file->answer, "<rasterfilename>.ppm")) {
         if (strcmp(ppm_file->answer, "-")) {
-            if (G_strlcpy(ofile, ppm_file->answer, sizeof(ofile)) >= sizeof(ofile))
-                G_fatal_error(_("Output file name <%s> is too long"), ppm_file->answer);
+            if (G_strlcpy(ofile, ppm_file->answer, sizeof(ofile)) >=
+                sizeof(ofile))
+                G_fatal_error(_("Output file name <%s> is too long"),
+                              ppm_file->answer);
         }
         else
             do_stdout = 1;
@@ -94,7 +96,7 @@ int main(int argc, char *argv[])
         if (G_strlcpy(ofile, map, sizeof(ofile)) >= sizeof(ofile))
             G_fatal_error(_("File name <%s> is too long"), map);
         if (G_strlcat(ofile, ".ppm", sizeof(ofile)) >= sizeof(ofile))
-            G_fatal_error(_("File name <%s> is too long after appending .ppm"), map);
+            G_fatal_error(_("File name <%s> is too long"), map);
 
     }
 
