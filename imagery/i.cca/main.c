@@ -204,10 +204,9 @@ int main(int argc, char *argv[])
         outbandmax[i] = (CELL)0;
         outbandmin[i] = (CELL)0;
 
-        datafds[i] =
-            Rast_open_old(refs.file[i].name, refs.file[i].mapset);
+        datafds[i] = Rast_open_old(refs.file[i].name, refs.file[i].mapset);
 
-        snprintf(tempname, sizeof(tempname), "%s.%d", out_opt->answer, i);
+        snprintf(tempname, sizeof(tempname), "%s.%d", out_opt->answer, i + 1);
         outfds[i] = Rast_open_c_new(tempname);
     }
 
@@ -226,11 +225,11 @@ int main(int argc, char *argv[])
         if (outbandmin[i] < (CELL)0 || outbandmax[i] > (CELL)255) {
             G_warning(_("The output cell map <%s.%d> has values "
                         "outside the 0-255 range."),
-                      out_opt->answer, i+1);
+                      out_opt->answer, i + 1);
         }
 
         Rast_make_grey_scale_colors(&color_tbl, 0, outbandmax[i]);
-        snprintf(tempname, sizeof(tempname), "%s.%d", out_opt->answer, i+1);
+        snprintf(tempname, sizeof(tempname), "%s.%d", out_opt->answer, i + 1);
 
         /* write a color table */
         Rast_write_colors(tempname, G_mapset(), &color_tbl);
