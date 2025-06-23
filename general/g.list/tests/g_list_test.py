@@ -245,14 +245,14 @@ def test_json_output(simple_dataset):
     )
     expected = [
         {
-            "mapset": "test_1",
             "name": "raster_test_1",
+            "mapset": "test_1",
             "type": "raster",
             "fullname": "raster_test_1@test_1",
         },
         {
-            "mapset": "test_1",
             "name": "vector_test_1",
+            "mapset": "test_1",
             "type": "vector",
             "fullname": "vector_test_1@test_1",
         },
@@ -265,26 +265,26 @@ def test_json_output(simple_dataset):
     )
     expected = [
         {
-            "mapset": "test_1",
             "name": "raster_test_1",
+            "mapset": "test_1",
             "type": "raster",
             "fullname": "raster_test_1@test_1",
         },
         {
-            "mapset": "test_2",
             "name": "raster_test_2",
+            "mapset": "test_2",
             "type": "raster",
             "fullname": "raster_test_2@test_2",
         },
         {
-            "mapset": "test_1",
             "name": "vector_test_1",
+            "mapset": "test_1",
             "type": "vector",
             "fullname": "vector_test_1@test_1",
         },
         {
-            "mapset": "test_2",
             "name": "vector_test_2",
+            "mapset": "test_2",
             "type": "vector",
             "fullname": "vector_test_2@test_2",
         },

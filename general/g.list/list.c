@@ -124,8 +124,8 @@ void print_list(FILE *fp, struct elist *el, int count, const char *separator,
             snprintf(fullname, sizeof(fullname), "%s@%s", el[i].name,
                      el[i].mapset);
 
-            G_json_object_set_string(map_object, "mapset", el[i].mapset);
             G_json_object_set_string(map_object, "name", el[i].name);
+            G_json_object_set_string(map_object, "mapset", el[i].mapset);
             G_json_object_set_string(map_object, "type", el[i].type);
             G_json_object_set_string(map_object, "fullname", fullname);
             G_json_array_append_value(root_array, map_value);

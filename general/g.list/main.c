@@ -156,15 +156,18 @@ int main(int argc, char *argv[])
     flag.pretty->label =
         _("Pretty printing in human readable format [deprecated]");
     flag.pretty->description = _(
-        "This flag is deprecated and will be removed in a future release. Use "
-        "format=plain instead.");
+        "This flag is deprecated and will be removed in a future release. The "
+        "plain format will become the default. Use format=\"plain\" to set it "
+        "explicitly in a script.");
     flag.pretty->guisection = _("Print");
 
     flag.full = G_define_flag();
     flag.full->key = 'f';
     flag.full->label = _("Verbose listing (also list map titles) [deprecated]");
     flag.full->description =
-        _("This flag is deprecated and will be removed in a future release.");
+        _("This flag is deprecated and will be removed in a future release. "
+          " Use the type-specific tool to obtain metadata, such as r.info "
+          "and v.info.");
     flag.full->guisection = _("Print");
 
     G_option_excludes(opt.region, flag.pretty, flag.full, NULL);
@@ -177,14 +180,21 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
 
     if (flag.full->answer || flag.pretty->answer) {
-        if (flag.pretty->answer)
+        if (flag.pretty->answer) {
+            // Do not switch this to a warning until v9. The depreciation is
+            // documented, but warning would be too distracting given the
+            // likely interactive use of this flag. In v9.0, either remove it
+            // or make this into a warning and remove it in v9.1.
             G_verbose_message(
                 _("Flag 'p' is deprecated and will be removed in a future "
-                  "release. Please use format=plain instead."));
-        else
+                  "release where plain will be the default format. Use "
+                  "format=\"plain\" to set plain format for scripting."));
+        }
+        else {
             G_verbose_message(
                 _("Flag 'f' is deprecated and will be removed in a future "
                   "release."));
+        }
 
         if (opt.format->answer == NULL || opt.format->answer[0] == '\0') {
             opt.format->answer = "plain";

@@ -13,7 +13,10 @@ The flags `-m` and `-t` apply only to shell format output.
 
 The flags `-p` and `-f` apply only to plain format output, but they are now
 deprecated and will be removed in a future release. Instead of using those, use
-`format=plain` to obtain human-readable plain text output.
+`format="plain"` to obtain human-readable, plain text output. The plain format
+will become the default in a future release.
+
+To obtain machine readable output use `format="shell"` or `format="json"`.
 
 ## EXAMPLES
 
@@ -30,10 +33,10 @@ fully-qualified map names):
 g.list type=vector -m
 ```
 
-List all raster and vector maps ordered by mapset:
+List all raster and vector maps grouped by mapset in plain format:
 
 ```sh
-g.list type=raster format=plain
+g.list type=raster,vector -p
 ```
 
 List all raster and vector maps as continuous, sorted list:
@@ -53,14 +56,14 @@ List all raster and vector maps using Python:
 ```python
 import grass.script as gs
 
-data = gs.parse_command("g.list", type=["rast", "vect"], format="json")
+data = gs.parse_command("g.list", type=["raster", "vector"], format="json")
 print(data)
 ```
 
 Possible output:
 
 ```text
-[{'mapset': 'PERMANENT', 'name': 'aspect', 'type': 'raster', 'fullname': 'aspect@PERMANENT'}, {'mapset': 'PERMANENT', 'name': 'zipcodes_wake', 'type': 'vector', 'fullname': 'zipcodes_wake@PERMANENT'}]
+[{'name': 'aspect', 'mapset': 'PERMANENT', 'type': 'raster', 'fullname': 'aspect@PERMANENT'}, {'name': 'zipcodes_wake', 'mapset': 'PERMANENT', 'type': 'vector', 'fullname': 'zipcodes_wake@PERMANENT'}]
 ```
 
 ### Mapset search path
@@ -70,7 +73,7 @@ the mapsets that are included in the search path (defined by
 *[g.mapsets](g.mapsets.md)*). See `g.mapsets -p`.
 
 ```sh
-g.list rast format=plain
+g.list rast -p
 
 raster map(s) available in mapset <user1>:
 dmt
@@ -93,7 +96,7 @@ available mapsets also including those that are not listed in the
 current search path (see `g.mapsets -l`).
 
 ```sh
-g.list rast mapset=* format=plain
+g.list rast mapset=* -p
 
 raster map(s) available in mapset <landsat>:
 lsat5_1987_10
