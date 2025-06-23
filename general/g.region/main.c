@@ -14,6 +14,7 @@
  ****************************************************************************/
 
 #include <string.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
@@ -54,8 +55,8 @@ int main(int argc, char *argv[])
     } flag;
     struct {
         struct Option *north, *south, *east, *west, *top, *bottom, *res, *nsres,
-            *ewres, *res3, *tbres, *rows, *cols, *save, *region, *raster,
-            *raster3d, *align, *zoom, *vect, *grow, *format;
+            *ewres, *res3, *nsres3, *ewres3, *tbres, *rows, *cols, *save,
+            *region, *raster, *raster3d, *align, *zoom, *vect, *grow, *format;
     } parm;
 
     G_gisinit(argv[0]);
@@ -308,6 +309,24 @@ int main(int argc, char *argv[])
     parm.ewres->description = _("East-west 2D grid resolution");
     parm.ewres->guisection = _("Resolution");
 
+    parm.nsres3 = G_define_option();
+    parm.nsres3->key = "nsres3";
+    parm.nsres3->key_desc = "value";
+    parm.nsres3->required = NO;
+    parm.nsres3->multiple = NO;
+    parm.nsres3->type = TYPE_STRING;
+    parm.nsres3->description = _("North-south 3D grid resolution");
+    parm.nsres3->guisection = _("Resolution");
+
+    parm.ewres3 = G_define_option();
+    parm.ewres3->key = "ewres3";
+    parm.ewres3->key_desc = "value";
+    parm.ewres3->required = NO;
+    parm.ewres3->multiple = NO;
+    parm.ewres3->type = TYPE_STRING;
+    parm.ewres3->description = _("East-west 3D grid resolution");
+    parm.ewres3->guisection = _("Resolution");
+
     parm.tbres = G_define_option();
     parm.tbres->key = "tbres";
     parm.tbres->key_desc = "value";
@@ -369,14 +388,15 @@ int main(int argc, char *argv[])
                                   "json;JSON (JavaScript Object Notation);");
     parm.format->guisection = _("Print");
 
-    G_option_required(
-        flag.dflt, flag.savedefault, flag.print, flag.lprint, flag.eprint,
-        flag.center, flag.gmt_style, flag.wms_style, flag.dist_res, flag.nangle,
-        flag.z, flag.bbox, flag.gprint, flag.res_set, flag.noupdate,
-        parm.region, parm.raster, parm.raster3d, parm.vect, parm.north,
-        parm.south, parm.east, parm.west, parm.top, parm.bottom, parm.rows,
-        parm.cols, parm.res, parm.res3, parm.nsres, parm.ewres, parm.tbres,
-        parm.zoom, parm.align, parm.save, parm.grow, NULL);
+    G_option_required(flag.dflt, flag.savedefault, flag.print, flag.lprint,
+                      flag.eprint, flag.center, flag.gmt_style, flag.wms_style,
+                      flag.dist_res, flag.nangle, flag.z, flag.bbox,
+                      flag.gprint, flag.res_set, flag.noupdate, parm.region,
+                      parm.raster, parm.raster3d, parm.vect, parm.north,
+                      parm.south, parm.east, parm.west, parm.top, parm.bottom,
+                      parm.rows, parm.cols, parm.res, parm.res3, parm.nsres,
+                      parm.ewres, parm.nsres3, parm.ewres3, parm.tbres,
+                      parm.zoom, parm.align, parm.save, parm.grow, NULL);
     G_option_exclusive(flag.noupdate, flag.force, NULL);
     G_option_requires(flag.noupdate, flag.savedefault, flag.print, flag.lprint,
                       flag.eprint, flag.center, flag.gmt_style, flag.wms_style,
@@ -778,7 +798,7 @@ int main(int argc, char *argv[])
     if ((value = parm.res3->answer)) {
         update_file = true;
         if (!G_scan_resolution(value, &x, window.proj))
-            die(parm.res);
+            die(parm.res3);
         window.ns_res3 = x;
         window.ew_res3 = x;
         window.tb_res = x;
@@ -808,6 +828,22 @@ int main(int argc, char *argv[])
             window.east = ceil(window.east / x) * x;
             window.west = floor(window.west / x) * x;
         }
+    }
+
+    /* nsres3= */
+    if ((value = parm.nsres3->answer)) {
+        update_file = true;
+        if (sscanf(value, "%lf", &x) != 1)
+            die(parm.nsres3);
+        window.ns_res3 = x;
+    }
+
+    /* ewres3= */
+    if ((value = parm.ewres3->answer)) {
+        update_file = true;
+        if (sscanf(value, "%lf", &x) != 1)
+            die(parm.ewres3);
+        window.ew_res3 = x;
     }
 
     /* tbres= */
@@ -905,17 +941,15 @@ int main(int argc, char *argv[])
             }
         }
     }
+    G_adjust_Cell_head3(&window, row_flag, col_flag, 0);
 
     /* save= */
     if ((name = parm.save->answer)) {
         update_file = false;
-        temp_window = window;
-        G_adjust_Cell_head3(&temp_window, 0, 0, 0);
-        if (G_put_element_window(&temp_window, "windows", name) < 0)
+        if (G_put_element_window(&window, "windows", name) < 0)
             G_fatal_error(_("Unable to set region <%s>"), name);
     }
 
-    G_adjust_Cell_head3(&window, row_flag, col_flag, 0);
     if (flag.force->answer || (update_file && !flag.noupdate->answer)) {
         if (G_put_window(&window) < 0)
             G_fatal_error(_("Unable to update current region"));

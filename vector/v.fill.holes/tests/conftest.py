@@ -225,13 +225,13 @@ def import_data(path, areas_name, areas_with_space_in_between, env):
 def area_dataset(tmp_path_factory):
     """Create a session and fill mapset with data"""
     tmp_path = tmp_path_factory.mktemp("area_dataset")
-    location = "test"
+    project = tmp_path / "test"
 
     areas_name = "test_areas"
     areas_with_space_in_between = "areas_with_space_in_between"
 
-    gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with gs.setup.init(tmp_path / location, env=os.environ.copy()) as session:
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy()) as session:
         import_data(
             path=tmp_path,
             areas_name=areas_name,

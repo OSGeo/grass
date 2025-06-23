@@ -37,7 +37,7 @@ int add_column(int tab, int type, char *name, int width, int decimals)
     if (strlen(name) > DBF_COL_NAME - 1) {
         char buf[2000];
 
-        sprintf(buf, "DBMI-DBF driver: column name '%s'", name);
+        snprintf(buf, sizeof(buf), "DBMI-DBF driver: column name '%s'", name);
         name[DBF_COL_NAME - 1] = '\0';
         sprintf(buf + strlen(buf), " truncated to '%s'", name);
         G_warning("%s", buf);

@@ -126,6 +126,7 @@ static int open_raster(const char *infile);
 static univar_stat *univar_stat_with_percentiles(int map_type);
 static void process_raster(univar_stat *stats, thread_workspace *tw,
                            const struct Cell_head *region, int nprocs);
+static void kahan_sum(double *sum, double *c, double x);
 
 /* *************************************************************** */
 /* **** the main functions for r.univar ************************** */
@@ -189,21 +190,11 @@ int main(int argc, char *argv[])
 
     /* set nprocs parameter */
     int nprocs;
-    sscanf(param.nprocs->answer, "%d", &nprocs);
+    nprocs = G_set_omp_num_threads(param.nprocs);
+    nprocs = Rast_disable_omp_on_mask(nprocs);
     if (nprocs < 1)
         G_fatal_error(_("<%d> is not valid number of nprocs."), nprocs);
-    if (nprocs > 1 && Rast_mask_is_present()) {
-        G_warning(_("Parallel processing disabled due to active mask."));
-        nprocs = 1;
-    }
-#if defined(_OPENMP)
-    omp_set_num_threads(nprocs);
-#else
-    if (nprocs != 1)
-        G_warning(_("GRASS is compiled without OpenMP support. Ignoring "
-                    "threads setting."));
-    nprocs = 1;
-#endif
+
     /* table field separator */
     zone_info.sep = G_option_to_separator(param.separator);
 
@@ -354,6 +345,11 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
     const int n_zones = zone_info.n_zones;
     const int n_alloc = n_zones ? n_zones : 1;
 
+    /* initialize for KhanSum through rows */
+    double c_sum = 0.0;
+    double c_sumsq = 0.0;
+    double c_sum_abs = 0.0;
+
     for (int t = 0; t < nprocs; t++) {
         tw[t].raster_row = Rast_allocate_buf(map_type);
         if (n_zones) {
@@ -372,9 +368,12 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
     int computed = 0;
     int row;
 
-#pragma omp parallel
+#pragma omp parallel private(row, c_sum, c_sumsq, c_sum_abs)
     {
         int t_id = 0;
+        c_sum = 0;
+        c_sumsq = 0;
+        c_sum_abs = 0;
 #if defined(_OPENMP)
         t_id = omp_get_thread_num();
 #endif
@@ -470,18 +469,31 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
                     bucket->nextp = G_incr_void_ptr(bucket->nextp, value_sz);
                 }
 
-                double val = ((map_type == DCELL_TYPE)   ? *((DCELL *)ptr)
-                              : (map_type == FCELL_TYPE) ? *((FCELL *)ptr)
-                                                         : *((CELL *)ptr));
-
-                zd->sum += val;
-                zd->sumsq += val * val;
-                zd->sum_abs += fabs(val);
-
-                if (val > zd->max)
-                    zd->max = val;
-                if (val < zd->min)
-                    zd->min = val;
+                if ((map_type == DCELL_TYPE) || (map_type == FCELL_TYPE)) {
+                    /* use Kaham sum for floating point */
+                    double val = ((map_type == DCELL_TYPE) ? *((DCELL *)ptr)
+                                                           : *((FCELL *)ptr));
+                    kahan_sum(&zd->sum, &c_sum, val);
+                    kahan_sum(&zd->sumsq, &c_sumsq, val * val);
+                    kahan_sum(&zd->sum_abs, &c_sum_abs, fabs(val));
+                    if (val > zd->max)
+                        zd->max = val;
+                    if (val < zd->min)
+                        zd->min = val;
+                }
+                else if (map_type == CELL_TYPE) {
+                    /* integer does not have floating point error */
+                    int val = *((CELL *)ptr);
+                    zd->sum += val;
+                    zd->sumsq += val * val;
+                    zd->sum_abs += abs(val);
+                    if (val > zd->max)
+                        zd->max = val;
+                    if (val < zd->min)
+                        zd->min = val;
+                }
+                else
+                    G_fatal_error(_("Unknown map type"));
 
                 ptr = G_incr_void_ptr(ptr, value_sz);
                 if (n_zones)
@@ -494,6 +506,11 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
                 G_percent(computed, rows, 2);
             }
         } /* end row loop */
+
+        /* initialize for KhanSum through threads */
+        c_sum = 0.0;
+        c_sumsq = 0.0;
+        c_sum_abs = 0.0;
 
         for (int z = 0; z < n_alloc; z++) {
             zone_workspace *zd = &zw[z];
@@ -570,12 +587,23 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
             }
 #pragma omp atomic update
             stats[z].size += zd->size;
-#pragma omp atomic update
-            stats[z].sum += zd->sum;
-#pragma omp atomic update
-            stats[z].sumsq += zd->sumsq;
-#pragma omp atomic update
-            stats[z].sum_abs += zd->sum_abs;
+#pragma omp critical
+            {
+                if ((map_type == DCELL_TYPE) || (map_type == FCELL_TYPE)) {
+                    /* use Kahan sum for floating point */
+                    kahan_sum(&stats[z].sum, &c_sum, zd->sum);
+                    kahan_sum(&stats[z].sumsq, &c_sumsq, zd->sumsq);
+                    kahan_sum(&stats[z].sum_abs, &c_sum_abs, zd->sum_abs);
+                }
+                else if (map_type == CELL_TYPE) {
+                    /* integer does not have floating point error */
+                    stats[z].sum += zd->sum;
+                    stats[z].sumsq += zd->sumsq;
+                    stats[z].sum_abs += zd->sum_abs;
+                }
+                else
+                    G_fatal_error(_("Unknown map type"));
+            }
 
 #if defined(_OPENMP)
             omp_set_lock(&minmax[z]);
@@ -623,4 +651,13 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
     }
     if (!(param.shell_style->answer))
         G_percent(rows, rows, 2);
+}
+
+/* Use Kahan sum to avoid floating point error from lots of summations */
+static void kahan_sum(double *sum, double *c, double x)
+{
+    double y = x - *c;
+    double t = *sum + y;
+    *c = (t - *sum) - y; /* (t - sum) recovers the high-order part of y; */
+    *sum = t;            /* Algebraically, c should always be zero. */
 }

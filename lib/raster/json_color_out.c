@@ -22,8 +22,6 @@
 #include <grass/glocale.h>
 #include <grass/raster.h>
 
-#define COLOR_STRING_LENGTH 30
-
 /*!
    \brief Closes the file if it is not stdout.
 
@@ -33,47 +31,6 @@ static void close_file(FILE *fp)
 {
     if (fp != stdout)
         fclose(fp);
-}
-
-/*!
-   \brief Writes color entry in JSON in specified clr_frmt.
-
-   \param r red component of RGB color
-   \param g green component of RGB color
-   \param b blue component of RGB color
-   \param clr_frmt color format to be used (RGB, HEX, HSV, TRIPLET).
-   \param color_object pointer to the JSON object
- */
-static void set_color(int r, int g, int b, ColorFormat clr_frmt,
-                      JSON_Object *color_object)
-{
-    char color_string[COLOR_STRING_LENGTH];
-    float h, s, v;
-
-    switch (clr_frmt) {
-    case RGB:
-        snprintf(color_string, sizeof(color_string), "rgb(%d, %d, %d)", r, g,
-                 b);
-        G_json_object_set_string(color_object, "color", color_string);
-        break;
-
-    case HEX:
-        snprintf(color_string, sizeof(color_string), "#%02X%02X%02X", r, g, b);
-        G_json_object_set_string(color_object, "color", color_string);
-        break;
-
-    case HSV:
-        G_rgb_to_hsv(r, g, b, &h, &s, &v);
-        snprintf(color_string, sizeof(color_string), "hsv(%d, %d, %d)", (int)h,
-                 (int)s, (int)v);
-        G_json_object_set_string(color_object, "color", color_string);
-        break;
-
-    case TRIPLET:
-        snprintf(color_string, sizeof(color_string), "%d:%d:%d", r, g, b);
-        G_json_object_set_string(color_object, "color", color_string);
-        break;
-    }
 }
 
 /*!
@@ -120,7 +77,9 @@ static void write_json_rule(DCELL *val, DCELL *min, DCELL *max, int r, int g,
     else
         G_json_object_set_number(color_object, "value", *val);
 
-    set_color(r, g, b, clr_frmt, color_object);
+    char color_str[COLOR_STRING_LENGTH];
+    G_color_to_str(r, g, b, clr_frmt, color_str);
+    G_json_object_set_string(color_object, "color", color_str);
 
     G_json_array_append_value(root_array, color_value);
 }
@@ -144,6 +103,8 @@ void Rast_print_json_colors(struct Colors *colors, DCELL min, DCELL max,
         G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
     }
     JSON_Array *root_array = G_json_array(root_value);
+
+    char color_str[COLOR_STRING_LENGTH];
 
     if (colors->version < 0) {
         /* 3.0 format */
@@ -197,7 +158,8 @@ void Rast_print_json_colors(struct Colors *colors, DCELL min, DCELL max,
         }
         JSON_Object *nv_object = G_json_object(nv_value);
         G_json_object_set_string(nv_object, "value", "nv");
-        set_color(r, g, b, clr_frmt, nv_object);
+        G_color_to_str(r, g, b, clr_frmt, color_str);
+        G_json_object_set_string(nv_object, "color", color_str);
         G_json_array_append_value(root_array, nv_value);
 
         // Get RGB color for default values and create JSON entry
@@ -211,7 +173,8 @@ void Rast_print_json_colors(struct Colors *colors, DCELL min, DCELL max,
         }
         JSON_Object *default_object = G_json_object(default_value);
         G_json_object_set_string(default_object, "value", "default");
-        set_color(r, g, b, clr_frmt, default_object);
+        G_color_to_str(r, g, b, clr_frmt, color_str);
+        G_json_object_set_string(default_object, "color", color_str);
         G_json_array_append_value(root_array, default_value);
     }
 

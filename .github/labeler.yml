@@ -27,7 +27,7 @@ database:
           - db/**
           - lib/db/**
           - scripts/db.*/**
-          - '**.sql'
+          - "**.sql"
 display:
   - changed-files:
       - any-glob-to-any-file:
@@ -123,8 +123,8 @@ docker:
   - changed-files:
       - any-glob-to-any-file:
           - docker/**
-          - '**/*Dockerfile*'
-          - '**/*dockerfile*'
+          - "**/*Dockerfile*"
+          - "**/*dockerfile*"
           - .dockerignore
 nix:
   - changed-files:
@@ -140,17 +140,17 @@ docs:
           - any-glob-to-any-file:
               - doc/**
               - man/**
-              - '**/*.md'
-              - '**/*.rst'
-              - '**/*.html'
-              - '**/*.dox'
-              - '**/*.png'
-              - '**.cff'
+              - "**/*.md"
+              - "**/*.rst"
+              - "**/*.html"
+              - "**/*.dox"
+              - "**/*.png"
+              - "**.cff"
               - CITING
               - AUTHORS
               - TODO
           - all-globs-to-all-files:
-              - '!doc/development/rfc/**'
+              - "!doc/development/rfc/**"
 RFC:
   - changed-files:
       - any-glob-to-any-file:
@@ -163,29 +163,29 @@ translation:
 Python:
   - changed-files:
       - any-glob-to-any-file:
-          - '**/*.py'
-          - '**/pyproject.toml'
+          - "**/*.py"
+          - "**/pyproject.toml"
 notebook:
   - changed-files:
       - any-glob-to-any-file:
-          - '**/*.ipynb'
+          - "**/*.ipynb"
           - doc/examples/notebooks/**
           - python/grass/jupyter/**
 C:
   - changed-files:
-      - any-glob-to-any-file: '**/*.c'
+      - any-glob-to-any-file: "**/*.c"
 C++:
   - changed-files:
-      - any-glob-to-any-file: '**/*.cpp'
+      - any-glob-to-any-file: "**/*.cpp"
 CSS:
   - changed-files:
-      - any-glob-to-any-file: '**/*.css'
+      - any-glob-to-any-file: "**/*.css"
 HTML:
   - changed-files:
-      - any-glob-to-any-file: '**/*.html'
+      - any-glob-to-any-file: "**/*.html"
 JavaScript:
   - changed-files:
-      - any-glob-to-any-file: '**/*.js'
+      - any-glob-to-any-file: "**/*.js"
 markdown:
   - changed-files:
       - any-glob-to-any-file:

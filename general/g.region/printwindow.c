@@ -93,19 +93,19 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
     /* flag.dist_res */
     if (print_flag & PRINT_METERS) {
         d_ewres = ((ew_dist1 + ew_dist2) / 2) / window->cols;
-        sprintf(ewres, "%.8f", d_ewres);
+        snprintf(ewres, sizeof(ewres), "%.8f", d_ewres);
         G_trim_decimal(ewres);
         d_ewres3 = ((ew_dist1 + ew_dist2) / 2) / window->cols3;
-        sprintf(ewres3, "%.8f", d_ewres3);
+        snprintf(ewres3, sizeof(ewres3), "%.8f", d_ewres3);
         G_trim_decimal(ewres3);
         d_nsres = ((ns_dist1 + ns_dist2) / 2) / window->rows;
-        sprintf(nsres, "%.8f", d_nsres);
+        snprintf(nsres, sizeof(nsres), "%.8f", d_nsres);
         G_trim_decimal(nsres);
         d_nsres3 = ((ns_dist1 + ns_dist2) / 2) / window->rows3;
-        sprintf(nsres3, "%.8f", d_nsres3);
+        snprintf(nsres3, sizeof(nsres3), "%.8f", d_nsres3);
         G_trim_decimal(nsres3);
         d_tbres = (window->top - window->bottom) / window->depths;
-        sprintf(tbres, "%.8f", d_tbres);
+        snprintf(tbres, sizeof(tbres), "%.8f", d_tbres);
         G_trim_decimal(tbres);
     }
 

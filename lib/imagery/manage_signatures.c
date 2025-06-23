@@ -294,9 +294,9 @@ static int list_by_type(I_SIGFILE_TYPE type, const char *mapset, int base,
 
     *out_list = (char **)G_realloc(*out_list, (base + count) * sizeof(char *));
     for (int i = 0; i < count; i++) {
-        (*out_list)[base + i] = (char *)G_malloc(
-            (strlen(dirlist[i]) + 1 + mapset_len + 1) * sizeof(char));
-        sprintf((*out_list)[base + i], "%s@%s", dirlist[i], mapset);
+        size_t len = (strlen(dirlist[i]) + 1 + mapset_len + 1) * sizeof(char);
+        (*out_list)[base + i] = (char *)G_malloc(len);
+        snprintf((*out_list)[base + i], len, "%s@%s", dirlist[i], mapset);
         G_free(dirlist[i]);
     }
     G_free(dirlist);

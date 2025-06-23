@@ -20,7 +20,7 @@ def require_create_ensure_mapset(
 ):
     """Checks that mapsets exists or creates it in a specified location
 
-    By default, it checks that the mapset exists and raises a ValueError otherwise.
+    By default, it checks that the mapset exists and raises a :exc:`ValueError` otherwise.
     If *create* is True and the mapset does not exists, it creates it.
     If it exists and *overwrite* is True, it deletes the existing mapset
     (with all the data in it). If *ensure* is True, existing mapset is used
@@ -29,8 +29,13 @@ def require_create_ensure_mapset(
     Where the mapset is specified by a full path or by location name and path
     to the directory where the location is.
 
-    The path argument is positional-only. Location and mapset are recommend to be used
-    as positional.
+    The path argument is positional-only. Location and mapset are recommended to be used
+    as positional arguments.
+
+    :raises ValueError:
+      - If the mapset already exists and ``create=True`` and ``overwrite=False`` was used
+      - If the mapset does not exist or if the mapset is invalid when not creating it
+        or not ensuring it exists.
     """
     path = resolve_mapset_path(
         path,
