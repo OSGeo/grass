@@ -414,6 +414,7 @@ int main(int argc, char *argv[])
     if (flag.flprint->answer) {
         print_flag |= PRINT_SH;
         flat_flag = 1;
+        parm.format->answer = "shell";
     }
 
     if (flag.print->answer)

@@ -49,6 +49,22 @@ class TestRegion(TestCase):
         line = call_module("g.region", flags="flecn3", capture_stdout=True)
         self.assertEqual(1, len(line.splitlines()))
 
+        # Test that the -f flag ignores the format option
+        plain_result = call_module(
+            "g.region", flags="flecn3", format="plain", capture_stdout=True
+        )
+        self.assertEqual(plain_result, line)
+
+        shell_result = call_module(
+            "g.region", flags="flecn3", format="shell", capture_stdout=True
+        )
+        self.assertEqual(shell_result, line)
+
+        json_result = call_module(
+            "g.region", flags="flecn3", format="json", capture_stdout=True
+        )
+        self.assertEqual(json_result, line)
+
     def test_plain_format(self):
         """Test plain format with plectwmn3b flags"""
         actual = call_module(
