@@ -363,7 +363,7 @@ int input_epsg(int epsg_num)
     ret = GPJ_osr_to_grass(&cellhd, &projinfo, &projunits, hSRS, 0);
 
     /* EPSG code */
-    sprintf(epsgstr, "%d", epsg_num);
+    snprintf(epsgstr, sizeof(epsgstr), "%d", epsg_num);
     projepsg = G_create_key_value();
     G_set_key_value("epsg", epsgstr, projepsg);
     /* srid as AUTHORITY:CODE */

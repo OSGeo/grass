@@ -1,10 +1,10 @@
-GRASS GIS Temporal Framework
+Temporal Framework
 ================================
 
 Introduction
 ------------
 
-The GRASS GIS Temporal Framework implements the temporal GIS functionality of GRASS GIS
+The GRASS Temporal Framework implements the temporal GIS functionality of GRASS
 and provides an API to implement spatio-temporal processing modules. The framework
 introduces space time datasets that represent time series of raster, 3D raster or vector maps.
 This framework provides the following functionalities:
@@ -86,7 +86,7 @@ the SQL object serialization, all classes that represent table entries, datetime
 :mod:`~temporal.metadata`
 """""""""""""""""""""""""
 
-    Implements the metadata base classes and datatype specific derivatives fpr all datasets [#allds]_.
+    Implements the metadata base classes and datatype specific derivatives for all datasets [#allds]_.
 
 :mod:`~temporal.spatial_topology_dataset_connector`
 """""""""""""""""""""""""""""""""""""""""""""""""""
@@ -135,7 +135,7 @@ temporal processing algorithms and temporal GRASS modules.
 """""""""""""""""""""""""""""""""
 
     - Implements the base class for all datasets [#allds]_ :class:`~temporal.abstract_dataset.AbstractDataset`.
-    - Implements the the select, insert and update functionality as well as
+    - Implements the select, insert and update functionality as well as
       convenient functions to access the base, extent and metadata information
 
 :mod:`~temporal.abstract_map_dataset`
@@ -423,4 +423,4 @@ References
 
 :Authors: Soeren Gebbert
 
-:TODO: add more documentation
+.. TODO:: add more documentation

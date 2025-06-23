@@ -1,8 +1,8 @@
 # Contributing
 
-There is more than one way of contributing to GRASS GIS.
+There is more than one way of contributing to GRASS.
 Here we will focus on contributions centered
-around the main GRASS GIS source code.
+around the main GRASS source code.
 You can also report issues, plan new features,
 or explore <https://grass.osgeo.org/get-involved/>.
 
@@ -55,10 +55,10 @@ Please see our dedicated wiki:
 
 ## About source code
 
-GRASS GIS is written in more than one programming language, but you need
+GRASS is written in more than one programming language, but you need
 to know only the language relevant to your contribution. While much
 of the source code is written in C, a significant portion is written in Python.
 A compiler is needed to convert the C and C++ source code into executable
 files ("binaries"). In contrast, Python is an interpreted language that
 can only be executed with Python software. There is also documentation
-in HTML files and other files in the GRASS GIS source code.
+in HTML files and other files in the GRASS source code.

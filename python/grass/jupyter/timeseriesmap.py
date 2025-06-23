@@ -115,12 +115,13 @@ class TimeSeriesMap(BaseSeriesMap):
     """Creates visualizations of time-space raster and vector datasets in Jupyter
     Notebooks.
 
-    Basic usage::
+    :Basic usage:
+      .. code-block:: pycon
 
-    >>> img = TimeSeriesMap("series_name")
-    >>> img.d_legend()  # Add legend
-    >>> img.show()  # Create TimeSlider
-    >>> img.save("image.gif")
+        >>> img = TimeSeriesMap("series_name")
+        >>> img.d_legend()  # Add legend
+        >>> img.show()  # Create TimeSlider
+        >>> img.save("image.gif")
 
     This class of grass.jupyter is experimental and under development. The API can
     change at anytime.

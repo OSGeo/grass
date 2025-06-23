@@ -59,7 +59,7 @@ class TestEvapotranspirationPT(TestCase):
         self.run_evapo_pt(output=self.output_map, flags="z")
         stats = gs.parse_command(
             "r.univar", map=self.output_map, flags="g", format="json"
-        )[0]
+        )
         self.assertGreaterEqual(stats["min"], 0)
 
     def test_default_alpha(self):

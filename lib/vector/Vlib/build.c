@@ -840,8 +840,8 @@ void Vect__build_downgrade(struct Map_info *Map, int build)
    - GV_BUILD_CENTROIDS - assign centroids to areas, build category index;
    - GV_BUILD_ALL - top level, the same as GV_BUILD_CENTROIDS.
 
-   If functions is called with build lower than current value of the
-   Map, the level is downgraded to requested value.
+   If the function is called with build level lower than the current value of
+   the Map, the level is downgraded to the requested value.
 
    All calls to Vect_write_line(), Vect_rewrite_line(),
    Vect_delete_line() respect the last value of build used in this

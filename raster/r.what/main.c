@@ -19,6 +19,7 @@
  *
  *****************************************************************************/
 #define NFILES 400
+#define BUFSZ  256
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -36,10 +37,10 @@ struct order {
     int row;
     int col;
     int cat;
-    char north_buf[256];
-    char east_buf[256];
-    char lab_buf[256];
-    char clr_buf[NFILES][256];
+    char north_buf[BUFSZ];
+    char east_buf[BUFSZ];
+    char lab_buf[BUFSZ];
+    char clr_buf[NFILES][BUFSZ];
     CELL value[NFILES];
     DCELL dvalue[NFILES];
 };
@@ -356,10 +357,10 @@ int main(int argc, char *argv[])
                                 north = Points->y[0];
                                 cat = Cats->cat[0];
                                 cache[point_cnt].cat = cat;
-                                sprintf(cache[point_cnt].east_buf, "%.15g",
-                                        east);
-                                sprintf(cache[point_cnt].north_buf, "%.15g",
-                                        north);
+                                snprintf(cache[point_cnt].east_buf, BUFSZ,
+                                         "%.15g", east);
+                                snprintf(cache[point_cnt].north_buf, BUFSZ,
+                                         "%.15g", north);
                             }
                         }
                         else {
@@ -482,8 +483,8 @@ int main(int argc, char *argv[])
                         Rast_get_d_color(&(cache[point].dvalue[i]), &red,
                                          &green, &blue, &ncolor[i]);
 
-                    sprintf(cache[point].clr_buf[i], "%03d:%03d:%03d", red,
-                            green, blue);
+                    snprintf(cache[point].clr_buf[i], BUFSZ, "%03d:%03d:%03d",
+                             red, green, blue);
                 }
             }
         } /* point loop */
@@ -530,9 +531,11 @@ int main(int argc, char *argv[])
                             continue;
                         }
                         if (out_type[i] == FCELL_TYPE)
-                            sprintf(tmp_buf, "%.7g", cache[point].dvalue[i]);
+                            snprintf(tmp_buf, sizeof(tmp_buf), "%.7g",
+                                     cache[point].dvalue[i]);
                         else /* DCELL */
-                            sprintf(tmp_buf, "%.15g", cache[point].dvalue[i]);
+                            snprintf(tmp_buf, sizeof(tmp_buf), "%.15g",
+                                     cache[point].dvalue[i]);
                         G_trim_decimal(tmp_buf); /* not needed with %g? */
                         fprintf(stdout, "%s%s", fs, tmp_buf);
                     }

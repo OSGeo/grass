@@ -56,7 +56,8 @@ static void write_prolog(void)
 
     strftime(date_str, sizeof(date_str), DATE_FORMAT, tm);
 
-    sprintf(prolog_file, "%s/etc/psdriver.ps", G_gisbase());
+    snprintf(prolog_file, sizeof(prolog_file), "%s/etc/psdriver.ps",
+             G_gisbase());
 
     prolog_fp = fopen(prolog_file, "r");
     if (!prolog_fp)

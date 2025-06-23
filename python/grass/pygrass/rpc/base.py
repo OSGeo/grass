@@ -57,40 +57,41 @@ class RPCServerBase:
     """This is the base class for send and receive RPC server
     It uses a Pipe for IPC.
 
+    .. code-block:: pycon
 
-     >>> import grass.script as gscript
-     >>> from grass.pygrass.rpc.base import RPCServerBase
-     >>> import time
-     >>> provider = RPCServerBase()
+        >>> import grass.script as gscript
+        >>> from grass.pygrass.rpc.base import RPCServerBase
+        >>> import time
+        >>> provider = RPCServerBase()
 
-     >>> provider.is_server_alive()
-     True
+        >>> provider.is_server_alive()
+        True
 
-     >>> provider.is_check_thread_alive()
-     True
+        >>> provider.is_check_thread_alive()
+        True
 
-     >>> provider.stop()
-     >>> time.sleep(1)
-     >>> provider.is_server_alive()
-     False
+        >>> provider.stop()
+        >>> time.sleep(1)
+        >>> provider.is_server_alive()
+        False
 
-     >>> provider.is_check_thread_alive()
-     False
+        >>> provider.is_check_thread_alive()
+        False
 
-     >>> provider = RPCServerBase()
-     >>> provider.is_server_alive()
-     True
-     >>> provider.is_check_thread_alive()
-     True
+        >>> provider = RPCServerBase()
+        >>> provider.is_server_alive()
+        True
+        >>> provider.is_check_thread_alive()
+        True
 
-     Kill the server process with an exception, it should restart
+        Kill the server process with an exception, it should restart
 
-     >>> provider.client_conn.send([1])
-     >>> provider.is_server_alive()
-     True
+        >>> provider.client_conn.send([1])
+        >>> provider.is_server_alive()
+        True
 
-     >>> provider.is_check_thread_alive()
-     True
+        >>> provider.is_check_thread_alive()
+        True
 
     """
 

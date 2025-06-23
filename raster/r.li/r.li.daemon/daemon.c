@@ -67,17 +67,17 @@ int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
     char testpath[GPATH_MAX];
 
     /* conf files go into ~/.grass8/r.li/ */
-    sprintf(rlipath, "%s%c%s%c", G_config_path(), HOST_DIRSEP, "r.li",
-            HOST_DIRSEP);
+    snprintf(rlipath, sizeof(rlipath), "%s%c%s%c", G_config_path(), HOST_DIRSEP,
+             "r.li", HOST_DIRSEP);
 
-    sprintf(testpath, "%s%c%s%c", G_config_path(), HOST_DIRSEP, "r.li",
-            HOST_DIRSEP);
+    snprintf(testpath, sizeof(testpath), "%s%c%s%c", G_config_path(),
+             HOST_DIRSEP, "r.li", HOST_DIRSEP);
     if (strncmp(file, testpath, strlen(testpath)) == 0)
         file += strlen(testpath);
 
     /* TODO: check if this path is portable */
     /* TODO: use G_rc_path() */
-    sprintf(pathSetup, "%s%s", rlipath, file);
+    snprintf(pathSetup, sizeof(pathSetup), "%s%s", rlipath, file);
     G_debug(1, "r.li.daemon pathSetup: [%s]", pathSetup);
     parsed = parseSetup(pathSetup, l, g, raster);
 
@@ -99,13 +99,13 @@ int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
     else {
         /* text file output */
         /* check if ~/.grass8/ exists */
-        sprintf(out, "%s", G_config_path());
+        snprintf(out, sizeof(out), "%s", G_config_path());
         doneDir = G_mkdir(out);
         if (doneDir == -1 && errno != EEXIST)
             G_fatal_error(_("Cannot create %s directory"), out);
 
         /* check if ~/.grass8/r.li/ exists */
-        sprintf(out, "%s", rlipath);
+        snprintf(out, sizeof(out), "%s", rlipath);
         doneDir = G_mkdir(out);
         if (doneDir == -1 && errno != EEXIST)
             G_fatal_error(_("Cannot create %s directory"), out);
@@ -681,9 +681,10 @@ int print_Output(int out, msg m)
         int len;
 
         if (Rast_is_d_null_value(&m.f.f_d.res))
-            sprintf(s, "RESULT %i|NULL\n", m.f.f_d.aid);
+            snprintf(s, sizeof(s), "RESULT %i|NULL\n", m.f.f_d.aid);
         else
-            sprintf(s, "RESULT %i|%.15g\n", m.f.f_d.aid, m.f.f_d.res);
+            snprintf(s, sizeof(s), "RESULT %i|%.15g\n", m.f.f_d.aid,
+                     m.f.f_d.res);
         len = strlen(s);
 
         if (write(out, s, len) == len)
@@ -700,7 +701,7 @@ int error_Output(int out, msg m)
     else {
         char s[100];
 
-        sprintf(s, "ERROR %i", m.f.f_d.aid);
+        snprintf(s, sizeof(s), "ERROR %i", m.f.f_d.aid);
 
         if (write(out, s, strlen(s)) == (ssize_t)strlen(s))
             return 1;
