@@ -264,9 +264,13 @@ def make_command(
         >>> make_command("g.message", flags="w", message="this is a warning")
         ['g.message', '-w', 'message=this is a warning']
 
+    The single-character flags are supplied as a string, *flags*, containing
+    individual flag characters. While an integer for a single flag and a leading dash
+    are also accepted, the best practice is to provide the characters as
+    a string without a leading dash.
 
     :param str prog: GRASS module
-    :param str flags: flags to be used (given as a string)
+    :param str flags: flags to be used (given as a string of flag characters)
     :param bool overwrite: True to enable overwriting the output (``--o``)
     :param bool quiet: True to run quietly (``--q``)
     :param bool superquiet: True to run extra quietly (``--qq``)
@@ -274,8 +278,6 @@ def make_command(
     :param options: module's parameters
 
     :return: list of arguments
-
-    :raises ~grass.exceptions.ScriptError: If the invalid flag '``-``' is given.
     """
     args = [_make_val(prog)]
     if overwrite:
@@ -288,10 +290,16 @@ def make_command(
         args.append("--qq")
     if flags:
         flags = _make_val(flags)
-        if "-" in flags:
-            msg = "'-' is not a valid flag"
-            raise ScriptError(msg)
-        args.append("-" + flags)
+        # We allow a leading dash in the flags or add one if it is not provided.
+        # In any case, the rest is passed as is, so any additional dashes will
+        # be processed and rejected by the underlying tool.
+        # While conceptually a dash is not extraneous in a function call,
+        # we allow the dash to align with the command line uses it where a leading dash
+        # is required, and with some of the documentation or messages which use a dash.
+        if not flags.startswith("-"):
+            # In any case, if dash is missing, we need to add it.
+            flags = "-" + flags
+        args.append(flags)
     for opt, val in options.items():
         if opt in _popen_args:
             continue
