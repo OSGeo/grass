@@ -223,8 +223,12 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
 
     G_percent(row, nrows, 2);
     G_free(map_type);
-    G_free(rastp);
+    for (i = 0; i < nfiles; i++) {
+        G_free(rast[i]);
+    }
     G_free(rast);
+    G_free(rastp);
+    
 
     return 0;
 }
