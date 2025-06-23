@@ -170,10 +170,11 @@ int main(int argc, char *argv[])
 
     shell = G_define_flag();
     shell->key = 'g';
-    shell->label = _("Shell script style, currently only for report");
-    shell->description = _(
-        "[DEPRECATED] Format: layer type count min max. This flag is obsolete "
-        "and will be removed in a future release. Use format=shell instead.");
+    shell->label =
+        _("Shell script style, currently only for report [deprecated]");
+    shell->description =
+        _("Format: layer type count min max. This flag is deprecated "
+          "and will be removed in a future release. Use format=shell instead.");
 
     notab = G_define_standard_flag(G_FLG_V_TABLE);
     notab->description = _("Do not copy attribute table(s)");
@@ -227,8 +228,9 @@ int main(int argc, char *argv[])
         break;
     }
     if (shell->answer) {
-        G_warning(_("Flag 'g' is deprecated and will be removed in a future "
-                    "release. Please use format=shell instead."));
+        G_verbose_message(
+            _("Flag 'g' is deprecated and will be removed in a future "
+              "release. Please use format=shell instead."));
         if (format == JSON) {
             G_fatal_error(_(
                 "JSON output and shell output cannot be used simultaneously."));
