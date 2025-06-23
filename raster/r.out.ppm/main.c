@@ -97,7 +97,6 @@ int main(int argc, char *argv[])
             G_fatal_error(_("File name <%s> is too long"), map);
         if (G_strlcat(ofile, ".ppm", sizeof(ofile)) >= sizeof(ofile))
             G_fatal_error(_("File name <%s> is too long"), map);
-
     }
 
     /*G_get_set_window (&w); */ /* 10/99 MN: check for current region */
