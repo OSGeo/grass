@@ -4,9 +4,7 @@
 char *explain_perms(int group, int other, int will)
 {
     static char buf[256];
-    char *msg = "Cannot explain access permissions for mapset %s";
-
-    msg = _("Cannot explain access permissions for mapset %s");
+    char *msg = _("Cannot explain access permissions for mapset <%s>");
 
     if (group && other) {
         msg = will ? _("Everyone will have access to mapset %s")
