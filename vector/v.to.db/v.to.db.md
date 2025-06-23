@@ -180,22 +180,22 @@ The whole JSON may look like this:
 
 ```json
 {
-   "units":{
-      "length":"meters"
-   },
-   "totals":{
-      "length":10426.657857419743
-   },
-   "records":[
-      {
-         "category":1,
-         "length":4554.943058982206
-      },
-      {
-         "category":2,
-         "length":5871.714798437538
-      }
-   ]
+    "units": {
+        "length": "meters"
+    },
+    "totals": {
+        "length": 10426.657857419743
+    },
+    "records": [
+        {
+            "category": 1,
+            "length": 4554.943058982206
+        },
+        {
+            "category": 2,
+            "length": 5871.714798437538
+        }
+    ]
 }
 ```
 
