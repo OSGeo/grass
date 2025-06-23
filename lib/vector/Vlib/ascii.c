@@ -85,7 +85,7 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
             }
             G_warning(_("Error reading ASCII file: (bad type) [%s]"), buff);
             n_lines = -1;
-            goto cleanup;
+            goto cleanup_exit;
         }
         if (ctype == '#') {
             G_debug(2, "a2b: Skipping commented line");
@@ -124,7 +124,7 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
         default: {
             G_warning(_("Error reading ASCII file: (unknown type) [%s]"), buff);
             n_lines = -1;
-            goto cleanup;
+            goto cleanup_exit;
         }
         }
         G_debug(5, "feature type = %d", type);
@@ -158,20 +158,20 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
                     G_warning(_("Error reading ASCII file: (bad point) [%s]"),
                               buff);
                     n_lines = -1;
-                    goto cleanup;
+                    goto cleanup_exit;
                 }
                 else {
                     if (!G_scan_easting(east_str, x, G_projection())) {
                         G_warning(_("Unparsable longitude value: [%s]"),
                                   east_str);
                         n_lines = -1;
-                        goto cleanup;
+                        goto cleanup_exit;
                     }
                     if (!G_scan_northing(north_str, y, G_projection())) {
                         G_warning(_("Unparsable latitude value: [%s]"),
                                   north_str);
                         n_lines = -1;
-                        goto cleanup;
+                        goto cleanup_exit;
                     }
                 }
             }
@@ -216,7 +216,7 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
             if (sscanf(buff, "%d%d", &catn, &cat) != 2) {
                 G_warning(_("Error reading categories: [%s]"), buff);
                 n_lines = -1;
-                goto cleanup;
+                goto cleanup_exit;
             }
 
             Vect_cat_set(Cats, catn, cat);
@@ -230,13 +230,13 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
             Vect_copy_xyz_to_pnts(Points, xarray, yarray, zarray, n_points)) {
             G_warning(_("Unable to copy points"));
             n_lines = -1;
-            goto cleanup;
+            goto cleanup_exit;
         }
 
         if (type > 0) {
             if (-1 == Vect_write_line(Map, type, Points, Cats)) {
                 n_lines = -1;
-                goto cleanup;
+                goto cleanup_exit;
             }
             n_lines++;
         }
@@ -246,7 +246,7 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
         G_warning(_("Vector map <%s> is 2D. %d 3D features (faces or kernels) "
                     "skipped."),
                   Vect_get_name(Map), nskipped_3d);
-cleanup:
+cleanup_exit:
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);
     G_free(xarray);
@@ -490,7 +490,7 @@ int Vect_write_ascii(FILE *ascii, FILE *att, struct Map_info *Map, int ver,
                             db_close_database(driver);
                             db_shutdown_driver(driver);
                             Vect_destroy_field_info(Fi);
-                            G_free(columns);
+                            free_col_arrays(NULL, NULL, columns);
                             return -1;
                         }
                     }
@@ -527,9 +527,7 @@ int Vect_write_ascii(FILE *ascii, FILE *att, struct Map_info *Map, int ver,
                             columns[i]);
                         Vect_destroy_field_info(Fi);
                         G_free(cats);
-                        G_free(all_columns);
-                        G_free(coltypes);
-                        G_free(columns);
+                        free_col_arrays(coltypes, all_columns, columns);
                         return -1;
                     }
                     if (i > 0) {
@@ -541,7 +539,7 @@ int Vect_write_ascii(FILE *ascii, FILE *att, struct Map_info *Map, int ver,
             }
             else {
                 /* no column or only key column selected */
-                G_free(columns);
+                free_col_arrays(NULL, NULL, columns);
                 columns = NULL;
 
                 db_close_database(driver);
