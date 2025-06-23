@@ -20,21 +20,19 @@ class TestVToDb(TestCase):
             else:
                 self.assertEqual(d1[k1], d2[k1])
 
-    def _assert_json_equal(self, module, reference, has_totals=True):
+    def _assert_json_equal(self, module, reference):
         self.runModule(module)
         result = json.loads(module.outputs.stdout)
 
         self.assertCountEqual(list(reference.keys()), list(result.keys()))
-        if "unit" in reference:
-            self.assertEqual(reference["unit"], result["unit"])
-        if has_totals:
-            self._assert_dict_almost_equal(reference["totals"], result["totals"])
+        self._assert_dict_almost_equal(reference["units"], result["units"])
+        self._assert_dict_almost_equal(reference["totals"], result["totals"])
         for record1, record2 in zip_longest(reference["records"], result["records"]):
             self._assert_dict_almost_equal(record1, record2)
 
     def test_json_length(self):
         reference = {
-            "unit": "feet",
+            "units": {"length": "feet"},
             "totals": {"length": 34208.19507027471},
             "records": [
                 {"category": 1, "length": 14944.03890742192},
@@ -54,7 +52,8 @@ class TestVToDb(TestCase):
 
     def test_json_coor(self):
         reference = {
-            "unit": "",
+            "units": {},
+            "totals": {},
             "records": [
                 {
                     "category": 11,
@@ -145,11 +144,11 @@ class TestVToDb(TestCase):
         module = SimpleModule(
             "v.to.db", "P079218", flags="p", option="coor", type="point", format="json"
         )
-        self._assert_json_equal(module, reference, has_totals=False)
+        self._assert_json_equal(module, reference)
 
     def test_json_count(self):
         reference = {
-            "unit": "",
+            "units": {},
             "totals": {"count": 2},
             "records": [{"category": 1, "count": 1}, {"category": 2, "count": 1}],
         }
@@ -165,7 +164,8 @@ class TestVToDb(TestCase):
 
     def test_json_start(self):
         reference = {
-            "unit": "",
+            "units": {},
+            "totals": {},
             "records": [
                 {
                     "category": 1,
@@ -189,11 +189,12 @@ class TestVToDb(TestCase):
             type="line",
             format="json",
         )
-        self._assert_json_equal(module, reference, has_totals=False)
+        self._assert_json_equal(module, reference)
 
     def test_json_end(self):
         reference = {
-            "unit": "",
+            "units": {},
+            "totals": {},
             "records": [
                 {
                     "category": 1,
@@ -217,11 +218,12 @@ class TestVToDb(TestCase):
             type="line",
             format="json",
         )
-        self._assert_json_equal(module, reference, has_totals=False)
+        self._assert_json_equal(module, reference)
 
     def test_json_perimeter(self):
         reference = {
-            "unit": "meters",
+            "units": {"perimeter": "meters"},
+            "totals": {},
             "records": [
                 {"category": 1, "perimeter": 24598.86577244935},
                 {"category": 2, "perimeter": 9468.4353925819196},
@@ -277,11 +279,11 @@ class TestVToDb(TestCase):
             type="boundary",
             format="json",
         )
-        self._assert_json_equal(module, reference, has_totals=False)
+        self._assert_json_equal(module, reference)
 
     def test_json_area(self):
         reference = {
-            "unit": "square meters",
+            "units": {"area": "square meters"},
             "totals": {"area": 2219442027.2203522},
             "records": [
                 {"category": 1, "area": 24375323.127803534},
@@ -339,11 +341,12 @@ class TestVToDb(TestCase):
             columns="area_size",
             format="json",
         )
-        self._assert_json_equal(module, reference, has_totals=False)
+        self._assert_json_equal(module, reference)
 
     def test_json_fd(self):
         reference = {
-            "unit": "",
+            "units": {},
+            "totals": {},
             "records": [
                 {"category": 1, "fd": 1.1888302630715635},
                 {"category": 2, "fd": 1.2294863225467458},
@@ -399,11 +402,12 @@ class TestVToDb(TestCase):
             type="boundary",
             format="json",
         )
-        self._assert_json_equal(module, reference, has_totals=False)
+        self._assert_json_equal(module, reference)
 
     def test_json_compact(self):
         reference = {
-            "unit": "",
+            "units": {},
+            "totals": {},
             "records": [
                 {"category": 1, "compact": 3.6753703182945565},
                 {"category": 2, "compact": 4.5652125910941628},
@@ -523,11 +527,12 @@ class TestVToDb(TestCase):
             type="point",
             format="json",
         )
-        self._assert_json_equal(module, reference, has_totals=False)
+        self._assert_json_equal(module, reference)
 
     def test_json_azimuth(self):
         reference = {
-            "unit": "radians",
+            "units": {"azimuth": "radians"},
+            "totals": {},
             "records": [
                 {"category": 1, "azimuth": 0.15552736300202469},
                 {"category": 2, "azimuth": 6.2611444061916544},
@@ -895,10 +900,11 @@ class TestVToDb(TestCase):
             units="radians",
             format="json",
         )
-        self._assert_json_equal(module, reference, has_totals=False)
+        self._assert_json_equal(module, reference)
 
         reference_deg = {
-            "unit": "degrees",
+            "units": {"azimuth": "degrees"},
+            "totals": {},
             "records": [
                 {"category": 1, "azimuth": 8.9110614988151244},
                 {"category": 2, "azimuth": 358.73714939672578},
@@ -1266,11 +1272,12 @@ class TestVToDb(TestCase):
             units="degrees",
             format="json",
         )
-        self._assert_json_equal(module, reference_deg, has_totals=False)
+        self._assert_json_equal(module, reference_deg)
 
     def test_json_sinuous(self):
         reference = {
-            "unit": "",
+            "units": {},
+            "totals": {},
             "records": [
                 {"category": 1, "sinuous": 1.0003414320997843},
                 {"category": 2, "sinuous": 1.0176449991654128},
@@ -1636,7 +1643,7 @@ class TestVToDb(TestCase):
             option="sinuous",
             format="json",
         )
-        self._assert_json_equal(module, reference, has_totals=False)
+        self._assert_json_equal(module, reference)
 
 
 if __name__ == "__main__":
