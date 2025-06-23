@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-21 12:47+0000\n"
-"PO-Revision-Date: 2025-06-21 19:54+0000\n"
+"PO-Revision-Date: 2025-06-23 10:46+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs/fr/>\n"
 "Language: fr\n"
@@ -453,12 +453,12 @@ msgstr "Type de colonne inconnu (colonne <%s>)"
 #: ../lib/db/dbmi_client/delete_tab.c:41 ../lib/db/dbmi_client/table.c:47
 #, c-format
 msgid "Unable open database <%s> by driver <%s>"
-msgstr "Impossible d'ouvrir la base de données <%s> avec le driver <%s>"
+msgstr "Impossible d'ouvrir la base de données <%s> par le pilote <%s>"
 
 #: ../lib/db/dbmi_client/delete_tab.c:54
 #, c-format
 msgid "Unable to drop table: '%s'"
-msgstr "Impossible de dupprimer la table: '%s'"
+msgstr "Impossible de supprimer la table : '%s'"
 
 #: ../lib/db/dbmi_client/select.c:119 ../lib/db/dbmi_client/select.c:221
 #: ../lib/db/dbmi_client/select.c:289
@@ -540,7 +540,7 @@ msgstr "%s: Aucun fichier de définition de police"
 
 #: ../lib/external/parson/test/test_main.c:56
 msgid "general"
-msgstr ""
+msgstr "général"
 
 #: ../lib/external/parson/test/test_main.c:57
 msgid "json"
@@ -958,7 +958,7 @@ msgstr "pas de description"
 
 #: ../lib/gis/color_rules.c:291
 msgid "Unable to open color rule"
-msgstr "Impossible d'ouvrir les règles de couleur"
+msgstr "Impossible d'ouvrir la règle de couleur"
 
 #: ../lib/gis/color_rules.c:340 ../lib/gis/color_rules.c:351
 #: ../lib/gis/color_rules.c:355 ../lib/gis/color_rules.c:359
@@ -1400,6 +1400,7 @@ msgid "Sorry <%s> is not a valid option"
 msgstr "Désolé, <%s> n'est pas une option valide"
 
 #: ../lib/gis/parser.c:628
+#, fuzzy
 msgid "Your installation doesn't include GUI, exiting."
 msgstr "Votre installation n'inclu pas d'interface graphique. Sortie."
 
@@ -1509,7 +1510,7 @@ msgid ""
 "Required parameter <%s> not set:\n"
 "\t(%s)"
 msgstr ""
-"Le paramètre obligatoire <%s> n'est pas défini :\n"
+"Paramètre requis <%s> non défini :\n"
 "\t(%s)"
 
 #: ../lib/gis/parser.c:1670
@@ -1790,6 +1791,7 @@ msgid "Name of input imagery group"
 msgstr "Nom du groupe d'image en entrée"
 
 #: ../lib/gis/parser_standard_options.c:250
+#, fuzzy
 msgid "Name of input imagery subgroup"
 msgstr "Nom du groupe d'image en entrée"
 
@@ -1830,6 +1832,7 @@ msgid "Name of base raster map"
 msgstr "Nom de la couche matricielle de base"
 
 #: ../lib/gis/parser_standard_options.c:335
+#, fuzzy
 msgid "Name of cover raster map"
 msgstr "Nom de la couche matricielle de drapage"
 
@@ -5181,7 +5184,7 @@ msgstr "Le pilote <%s> ne gère pas l'écriture directe. Utiliser le pilote MEM 
 
 #: ../lib/raster/gdal.c:334
 msgid "Unable to get in-memory raster driver"
-msgstr "Impossible de charger le pilote raster en-mémoire"
+msgstr "Impossible de charger le pilote raster en mémoire"
 
 #: ../lib/raster/gdal.c:341
 #, c-format
@@ -5189,7 +5192,7 @@ msgid "Unable to create <%s> dataset using memory driver"
 msgstr "Impossible de créer le jeu de données <%s> avec le pilote mémoire"
 
 #: ../lib/raster/gdal.c:344
-#, c-format
+#, c-format, fuzzy
 msgid "Driver <%s> does not support creating rasters"
 msgstr "Le pilote <%s> ne gère pas la création de raster"
 
@@ -6670,14 +6673,14 @@ msgid "Number of incorrect boundaries: %d"
 msgstr "Nombre de contours incorrects: %d"
 
 #: ../lib/vector/Vlib/build.c:996
-#, c-format
+#, c-format, fuzzy
 msgid "Number of centroids outside area: %d"
 msgstr "Nombre de centroïdes en dehors de surfaces: %d"
 
 #: ../lib/vector/Vlib/build.c:999
-#, c-format
+#, c-format, fuzzy
 msgid "Number of duplicate centroids: %d"
-msgstr "Nombre de centroïdes dupliqués:   %d"
+msgstr "Nombre de centroïdes en double : %d"
 
 #: ../lib/vector/Vlib/build.c:1002
 msgid "Number of areas: -"
@@ -7127,7 +7130,7 @@ msgstr "Impossible de copier la table <%s> pour la couche %d de <%s> à <%s>"
 #: ../lib/vector/Vlib/copy.c:780
 #, c-format
 msgid "Unable to add database link for vector map <%s>"
-msgstr "Impossible de lier la base de données à la carte vectorielle <%s>"
+msgstr "Impossible d'ajouter un lien vers la base de données pour la carte vectorielle <%s>"
 
 #: ../lib/vector/Vlib/copy.c:803
 #, c-format
@@ -7724,7 +7727,7 @@ msgstr "Le programmeur a demandé accès à un niveau inconnu %d"
 #: ../lib/vector/Vlib/open.c:243
 #, c-format
 msgid "Vector map <%s> not found in current mapset"
-msgstr "Carte vecteur <%s> non trouvé dans le jeu de données courant"
+msgstr "Carte vecteur <%s> non trouvé dans le jeu de cartes courant"
 
 #: ../lib/vector/Vlib/open.c:264
 msgid "Temporary vector maps can be accessed only in the current mapset"
