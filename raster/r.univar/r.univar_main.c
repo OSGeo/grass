@@ -220,7 +220,7 @@ int main(int argc, char *argv[])
             G_fatal_error("Can not read range for zoning raster");
         Rast_get_range_min_max(&zone_range, &min, &max);
         if (Rast_read_cats(z, mapset, &(zone_info.cats)))
-            G_warning("no category support for zoning raster");
+            G_warning("No category support for zoning raster");
 
         zone_info.min = min;
         zone_info.max = max;
