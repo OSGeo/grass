@@ -77,14 +77,14 @@ class TestIEbSoilHeatFlux(TestCase):
 
         self._run_soilheatflux(ndvi="ndvi_low", output="g0_low")
         self.tmp_rasters.append("g0_low")
-        g0_low = gs.parse_command("r.univar", map="g0_low", format="json")[0]
+        g0_low = gs.parse_command("r.univar", map="g0_low", format="json")
 
         self._create_raster("ndvi_high", "0.8")
         self.tmp_rasters.append("ndvi_high")
 
         self._run_soilheatflux(ndvi="ndvi_high", output="g0_high")
         self.tmp_rasters.append("g0_high")
-        g0_high = gs.parse_command("r.univar", map="g0_high", format="json")[0]
+        g0_high = gs.parse_command("r.univar", map="g0_high", format="json")
 
         self.assertGreater(
             g0_low["mean"],
@@ -99,14 +99,14 @@ class TestIEbSoilHeatFlux(TestCase):
 
         self._run_soilheatflux(time="time_early", output="g0_early")
         self.tmp_rasters.append("g0_early")
-        g0_early = gs.parse_command("r.univar", map="g0_early", format="json")[0]
+        g0_early = gs.parse_command("r.univar", map="g0_early", format="json")
 
         self._create_raster("time_noon", "12.0")
         self.tmp_rasters.append("time_noon")
 
         self._run_soilheatflux(time="time_noon", output="g0_noon")
         self.tmp_rasters.append("g0_noon")
-        g0_noon = gs.parse_command("r.univar", map="g0_noon", format="json")[0]
+        g0_noon = gs.parse_command("r.univar", map="g0_noon", format="json")
 
         self.assertGreater(
             g0_noon["mean"],
@@ -134,7 +134,7 @@ class TestIEbSoilHeatFlux(TestCase):
         )
         self.tmp_rasters.extend(["g0_expected", "g0_diff"])
 
-        stats = gs.parse_command("r.univar", map="g0_diff", format="json")[0]
+        stats = gs.parse_command("r.univar", map="g0_diff", format="json")
         self.assertLess(
             stats["max"],
             1e-6,
