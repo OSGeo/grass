@@ -18,8 +18,6 @@ divide into the input raster map.
 
 ## NOTES
 
-### Flags
-
 If the user selects the **-r** flag, a range of category values found in
 the raster map layer will be printed. The range is divided into three
 groups: negative, positive, and zero. If negative values occur, the
