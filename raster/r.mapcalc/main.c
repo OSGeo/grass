@@ -191,15 +191,19 @@ int main(int argc, char **argv)
     /* Check if the program name is r3.mapcalc */
     /* Handle both Unix and Windows path separators */
     const char *progname = strrchr(argv[0], '/');
-    const char *win_progname = strrchr(argv[0], '\\');
-    if (!progname || (win_progname && win_progname > progname))
-        progname = win_progname;
+    if (!progname)
+        progname = strrchr(argv[0], '\\');
     progname = progname ? progname + 1 : argv[0];
+    // const char *progname = strrchr(argv[0], '/');
+    // const char *win_progname = strrchr(argv[0], '\\');
+    // if (!progname || (win_progname && win_progname > progname))
+    //     progname = win_progname;
+    // progname = progname ? progname + 1 : argv[0];
 
-    if ((strcmp(progname, "r3.mapcalc") == 0) && (threads != 1)) {
+    if ((strcmp(progname, "r3.mapcalc", 10) == 0) && (threads != 1)) {
         threads = 1;
         nprocs->answer = "1";
-        G_verbose_message(_("r3.mapcalc does not support parallel execution."));
+        G_warning(_("r3.mapcalc does not support parallel execution."));
     }
     else if ((seeded) && (threads != 1)) {
         threads = 1;
