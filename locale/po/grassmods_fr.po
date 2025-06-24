@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-21 12:47+0000\n"
-"PO-Revision-Date: 2025-06-21 19:54+0000\n"
+"PO-Revision-Date: 2025-06-23 10:46+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grassmods/fr/>\n"
 "Language: fr\n"
@@ -272,11 +272,11 @@ msgstr ""
 
 #: ../db/db.connect/main.c:183
 msgid "Default driver is not set"
-msgstr ""
+msgstr "Le pilote par défaut n'est pas défini"
 
 #: ../db/db.connect/main.c:186
 msgid "Default database is not set"
-msgstr ""
+msgstr "La base de données par défaut n'est pas définie"
 
 #: ../db/db.connect/main.c:222
 msgid "Unable to set default database connection"
@@ -1091,7 +1091,7 @@ msgstr "Type inconnu"
 #: ../db/drivers/ogr/execute.c:58 ../vector/v.out.ogr/main.c:670
 #, c-format
 msgid "OGR layer <%s> not found"
-msgstr ""
+msgstr "Couche OGR <%s> non trouvée"
 
 #: ../db/drivers/ogr/execute.c:71 ../scripts/db.univar/db.univar.py:131
 #: ../scripts/v.db.renamecolumn/v.db.renamecolumn.py:104
@@ -1105,7 +1105,7 @@ msgstr ""
 #: ../vector/v.vect.stats/main.c:446
 #, c-format, python-format
 msgid "Column <%s> not found in table <%s>"
-msgstr ""
+msgstr "Colonne <%s> non trouvée dans la table <%s>"
 
 #: ../db/drivers/ogr/execute.c:113
 #, c-format
@@ -1209,7 +1209,7 @@ msgstr ""
 #: ../vector/v.patch/main.c:387 ../vector/v.random/main.c:302
 #: ../vector/v.select/copy_tabs.c:84
 msgid "Unable to create index"
-msgstr ""
+msgstr "Impossible de créer l'index"
 
 #: ../db/drivers/postgres/listdb.c:35 ../db/drivers/sqlite/listdb.c:45
 msgid "No path given"
@@ -1400,7 +1400,7 @@ msgstr ""
 #: ../db/drivers/sqlite/listdb.c:98
 #, c-format
 msgid "Unable to open directory '%s'"
-msgstr ""
+msgstr "Impossible d'ouvrir le répertoire '%s'"
 
 #: ../db/drivers/sqlite/listdb.c:118
 #, c-format
@@ -1423,7 +1423,7 @@ msgstr ""
 #: ../display/d.barscale/draw_scale.c:216 ../display/d.barscale/main.c:250
 #: ../display/d.barscale/main.c:267
 msgid "Programmer error"
-msgstr ""
+msgstr "Erreur de programmation"
 
 #: ../display/d.barscale/draw_scale.c:614
 #: ../display/d.northarrow/draw_n_arrow.c:198
@@ -4413,7 +4413,7 @@ msgstr "Impossible d'ouvrir la base de données <%s> avec le pilote <%s>"
 #: ../vector/v.in.db/main.c:229
 #, c-format
 msgid "Unable to open select cursor: '%s'"
-msgstr ""
+msgstr "Impossible d'ouvrir le curseur de sélection: '%s'"
 
 #: ../display/d.vect.thematic/display.c:51 ../display/d.vect/lines.c:99
 #: ../display/d.vect/lines.c:328
@@ -4890,7 +4890,7 @@ msgstr ""
 #: ../display/d.vect/main.c:266 ../display/d.vect/main.c:272
 #: ../display/d.vect/main.c:278 ../display/d.vect/main.c:286
 msgid "Labels"
-msgstr ""
+msgstr "Étiquettes"
 
 #: ../display/d.vect/main.c:229
 msgid "Layer number for labels (default: the given layer number)"
@@ -5367,12 +5367,12 @@ msgstr "Impossible de modifier les permissions du jeu de cartes"
 #: ../scripts/v.in.lines/v.in.lines.py:63
 #, c-format, python-format
 msgid "Unable to read input file <%s>"
-msgstr ""
+msgstr "Impossible de lire le fichier d'entrée <%s>"
 
 #: ../general/g.cairocomp/main.c:52
 #, c-format
 msgid "Unable to parse input file <%s>"
-msgstr ""
+msgstr "Impossible d'analyser le fichier d'entrée <%s>"
 
 #: ../general/g.cairocomp/main.c:66 ../raster/r.colors.out/raster3d_main.c:86
 #: ../raster/r.colors.out/raster_main.c:85 ../raster/r.out.mat/main.c:92
@@ -5386,7 +5386,7 @@ msgstr "Impossible d'ouvrir le fichier de sortie <%s>"
 #: ../general/g.cairocomp/main.c:71
 #, c-format
 msgid "Unable to write output file <%s>"
-msgstr ""
+msgstr "Impossible d'écrire le fichier de sortie <%s>"
 
 #: ../general/g.cairocomp/main.c:89 ../general/g.cairocomp/main.c:259
 #: ../visualization/ximgview/main.c:62
@@ -5395,7 +5395,7 @@ msgstr "Impossible d'ouvrir l'affichage"
 
 #: ../general/g.cairocomp/main.c:116
 msgid "Unable to obtain visual"
-msgstr ""
+msgstr "Impossible d'ouvrir un visuel"
 
 #: ../general/g.cairocomp/main.c:133
 msgid "Failed to initialize output surface"
@@ -5714,8 +5714,9 @@ msgid "Nothing to do. For setting up <%s> as default UI use -%c flag."
 msgstr ""
 
 #: ../general/g.gui/main.c:110
+#, fuzzy
 msgid "Your installation doesn't include GUI, exiting."
-msgstr ""
+msgstr "Votre installation n'inclu pas d'interface graphique. Sortie."
 
 #: ../general/g.gui/main.c:113
 #, c-format
@@ -5725,7 +5726,7 @@ msgstr ""
 #: ../general/g.gui/main.c:124
 #, c-format
 msgid "Launching <%s> GUI in the background, please wait..."
-msgstr ""
+msgstr "Lancement de l'interface graphique <%s> en tâche de fond, merci de patienter ..."
 
 #: ../general/g.list/list.c:123 ../general/g.region/main.c:532
 #, c-format
@@ -6297,7 +6298,7 @@ msgstr ""
 #: ../general/g.ppmtopng/main.c:71 ../general/g.ppmtopng/main.c:75
 #: ../raster/r.in.png/main.c:282 ../raster/r.in.png/main.c:286
 msgid "Unable to allocate PNG structure"
-msgstr ""
+msgstr "Allocation de structure PNG impossible"
 
 #: ../general/g.ppmtopng/main.c:78
 msgid "Error writing PNG file"
@@ -7252,7 +7253,7 @@ msgstr ""
 
 #: ../general/g.setproj/main.c:198
 msgid "Unknown projection"
-msgstr ""
+msgstr "Projection inconnue"
 
 #: ../general/g.setproj/main.c:205
 #, c-format
@@ -7961,8 +7962,9 @@ msgid "Canonical components analysis (CCA) program for image processing."
 msgstr "Analyse d'image par composante canonique (CCA)."
 
 #: ../imagery/i.cca/main.c:94
+#, fuzzy
 msgid "Name of input imagery subgroup"
-msgstr ""
+msgstr "Nom du groupe d'image en entrée"
 
 #: ../imagery/i.cca/main.c:102
 msgid "File containing spectral signatures"
@@ -10666,9 +10668,9 @@ msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:288
 #: ../imagery/i.rectify/main.c:275
-#, c-format
+#, c-format, fuzzy
 msgid "Extension <%s> is illegal"
-msgstr ""
+msgstr "L'extension <%s> est illégale"
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:291
 #: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:300
@@ -17808,6 +17810,8 @@ msgid ""
 "Required parameter <%s> not set:\n"
 "\t(%s)"
 msgstr ""
+"Paramètre requis <%s> non défini :\n"
+"\t(%s)"
 
 #: ../ps/ps.map/main.c:215 ../ps/ps.map/r_instructions.c:129
 msgid "illegal copies request"
@@ -18814,7 +18818,7 @@ msgstr ""
 
 #: ../raster/r.colors/rules.c:81
 msgid "Unable to open color rule"
-msgstr ""
+msgstr "Impossible d'ouvrir la règle de couleur"
 
 #: ../raster/r.colors/rules.c:176 ../raster/r.reclass/parse.c:41
 #, c-format
@@ -18859,7 +18863,7 @@ msgstr ""
 #: ../raster/r.colors/rules.c:212
 #, c-format
 msgid "bad rule (%s): [%s]"
-msgstr ""
+msgstr "mauvaise règle (%s): [%s]"
 
 #: ../raster/r.colors/stats.c:41
 #, c-format
@@ -18907,7 +18911,7 @@ msgstr "Utiliser la couleur la plus proche"
 #: ../raster/r.composite/main.c:160
 #, c-format
 msgid "Unable to read color file of raster map <%s>"
-msgstr ""
+msgstr "Impossible de lire le fichier de couleur de la carte raster <%s>"
 
 #: ../raster/r.composite/main.c:280
 msgid "Creating color table for output raster map..."
@@ -19776,12 +19780,12 @@ msgstr ""
 #: ../raster/r.external/link.c:158
 #, c-format
 msgid "Unable to create cell_misc/%s/gdal file"
-msgstr ""
+msgstr "Impossible de créer le fichier cell_misc/%s/gdal"
 
 #: ../raster/r.external/link.c:161
 #, c-format
 msgid "Error writing cell_misc/%s/gdal file"
-msgstr ""
+msgstr "Erreur d'écriture du fichier cell_misc/%s/gdal"
 
 #: ../raster/r.external/link.c:256
 #, c-format
@@ -20498,7 +20502,7 @@ msgstr ""
 #: ../raster/r.geomorphon/main.c:178 ../raster/r.geomorphon/main.c:187
 #: ../raster/r.geomorphon/main.c:197
 msgid "Profile"
-msgstr ""
+msgstr "Profil"
 
 #: ../raster/r.geomorphon/main.c:186
 msgid "Profile output file name (\"-\" for stdout)"
@@ -20972,7 +20976,7 @@ msgstr "OOPS : colonnes changées de %d vers %d"
 #: ../raster/r.proj/main.c:633 ../raster/r.proj/main.c:739
 #, c-format
 msgid "Error in %s"
-msgstr ""
+msgstr "Erreur dans %s"
 
 #: ../raster/r.horizon/main.c:1190
 #, c-format
@@ -24041,21 +24045,21 @@ msgstr ""
 #: ../raster/r.out.gdal/main.c:375
 #, c-format
 msgid "Unable to get <%s> driver"
-msgstr ""
+msgstr "Impossible de charger le pilote <%s>"
 
 #: ../raster/r.out.gdal/main.c:381
 #, c-format
 msgid "Driver <%s> does not support direct writing. Using MEM driver for intermediate dataset."
-msgstr ""
+msgstr "Le pilote <%s> ne gère pas l'écriture directe. Utiliser le pilote MEM pour les données intermédiaires."
 
 #: ../raster/r.out.gdal/main.c:386
 msgid "Unable to get in-memory raster driver"
-msgstr ""
+msgstr "Impossible de charger le pilote raster en mémoire"
 
 #: ../raster/r.out.gdal/main.c:389
-#, c-format
+#, c-format, fuzzy
 msgid "Driver <%s> does not support creating rasters"
-msgstr ""
+msgstr "Le pilote <%s> ne gère pas la création de raster"
 
 #: ../raster/r.out.gdal/main.c:464
 #, c-format
@@ -24120,11 +24124,11 @@ msgstr ""
 #: ../raster/r.out.gdal/main.c:678
 #, c-format
 msgid "Unable to create <%s> dataset using <%s> driver"
-msgstr ""
+msgstr "Impossible de créer le jeu de données <%s> avec le pilote <%s>"
 
 #: ../raster/r.out.gdal/main.c:693
 msgid "Unable to set geo transform"
-msgstr ""
+msgstr "Impossible de définir la transformation géographique"
 
 #: ../raster/r.out.gdal/main.c:701
 msgid "Unable to set projection"
@@ -25449,7 +25453,7 @@ msgstr "Génère une surface aléatoire avec une dépendance spatiale."
 
 #: ../raster/r.random.surface/main.c:67
 msgid "Name for output raster map(s)"
-msgstr ""
+msgstr "Nom de la carte raster en sortie"
 
 #: ../raster/r.random.surface/main.c:84
 msgid "Distance decay exponent (value > 0.0)"
@@ -25484,8 +25488,9 @@ msgid "Creates a raster map and vector point map containing randomly located cel
 msgstr ""
 
 #: ../raster/r.random/main.c:70
+#, fuzzy
 msgid "Name of cover raster map"
-msgstr ""
+msgstr "Nom de la couche matricielle de drapage"
 
 #: ../raster/r.random/main.c:78
 msgid "The number of points (or cells) to generate"
@@ -26189,13 +26194,13 @@ msgstr ""
 
 #: ../raster/r.resamp.bspline/main.c:127 ../vector/v.surf.bspline/main.c:172
 msgid "Bicubic interpolation"
-msgstr ""
+msgstr "Interpolation bicubique"
 
 #: ../raster/r.resamp.bspline/main.c:127
 #: ../vector/v.lidar.correction/main.c:415 ../vector/v.outlier/main.c:423
 #: ../vector/v.surf.bspline/main.c:172
 msgid "Bilinear interpolation"
-msgstr ""
+msgstr "Interpolation bilinéaire"
 
 #: ../raster/r.resamp.bspline/main.c:140
 msgid "Only interpolate null cells in input raster map"
@@ -26313,7 +26318,7 @@ msgstr ""
 
 #: ../raster/r.resamp.filter/main.c:430
 msgid "box"
-msgstr ""
+msgstr "rectangulaire"
 
 #: ../raster/r.resamp.filter/main.c:431
 msgid "gauss"
@@ -33448,7 +33453,7 @@ msgstr ""
 #: ../scripts/g.extension/g.extension.py:1163
 #, python-format
 msgid "Extension <%s> already installed. Re-installing..."
-msgstr ""
+msgstr "Extension <%s> déjà installée. Réinstallation..."
 
 #: ../scripts/g.extension/g.extension.py:1174
 #, python-format
@@ -33631,7 +33636,7 @@ msgstr ""
 #: ../scripts/g.extension/g.extension.py:2264
 #, python-format
 msgid "Extension <%s> not found"
-msgstr ""
+msgstr "Extension <%s> non trouvée"
 
 #: ../scripts/g.extension/g.extension.py:2368
 #, python-brace-format
@@ -33641,7 +33646,7 @@ msgstr ""
 #: ../scripts/g.extension/g.extension.py:2387
 #, python-format
 msgid "Unable to create '%s': %s"
-msgstr ""
+msgstr "Impossible de créer '%s' : %s"
 
 #: ../scripts/g.extension/g.extension.py:2415
 #, python-format
@@ -35062,7 +35067,7 @@ msgstr "Erreur d'ajout de colonnes {}"
 #: ../scripts/v.rast.stats/v.rast.stats.py:123
 #, python-format
 msgid "Vector map <%s> not found in current mapset"
-msgstr ""
+msgstr "Carte vecteur <%s> non trouvé dans le jeu de cartes courant"
 
 #: ../scripts/v.db.addtable/v.db.addtable.py:79
 #, python-format
@@ -35102,7 +35107,7 @@ msgstr ""
 #: ../vector/v.sample/main.c:189
 #, c-format, python-format
 msgid "Unable to create table <%s>"
-msgstr ""
+msgstr "Impossible de créer la table <%s>"
 
 #: ../scripts/v.db.addtable/v.db.addtable.py:143
 #, python-format
@@ -35220,7 +35225,7 @@ msgstr ""
 #: ../vector/v.generalize/misc.c:180 ../vector/v.to.points/main.c:187
 #, c-format, python-format
 msgid "Unable to copy table <%s>"
-msgstr ""
+msgstr "Impossible de copier la table <%s>"
 
 #: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:160
 #, python-format
@@ -35230,7 +35235,7 @@ msgstr ""
 #: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:173
 #, python-format
 msgid "Unable to drop table <%s>"
-msgstr ""
+msgstr "Impossible de supprimer la table <%s>"
 
 #: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:183
 #, python-format
@@ -35700,7 +35705,7 @@ msgstr ""
 #: ../scripts/v.unpack/v.unpack.py:112 ../vector/v.in.lidar/main.c:553
 #, c-format, python-format
 msgid "Vector map <%s> already exists and will be overwritten"
-msgstr ""
+msgstr "La couche vectorielle <%s> existe déjà et va être écrasé"
 
 #: ../scripts/v.unpack/v.unpack.py:138
 #, python-format
@@ -36074,7 +36079,7 @@ msgstr ""
 #: ../vector/v.buffer/main.c:941
 #, c-format
 msgid "Unable to calculate centroid for area %d"
-msgstr ""
+msgstr "Impossible de calculer le centroïde pour la surface %d"
 
 #: ../vector/v.build.polylines/main.c:117 ../vector/v.edit/main.c:59
 #: ../vector/v.segment/main.c:63 ../vector/v.split/main.c:56
@@ -36868,7 +36873,7 @@ msgstr ""
 #: ../vector/v.to.db/query.c:23 ../vector/v.to.rast/do_lines.c:34
 #: ../vector/v.voronoi/main.c:207
 msgid "Reading features..."
-msgstr ""
+msgstr "Lecture des entités ..."
 
 #: ../vector/v.colors/main.c:60
 msgid "Creates/modifies the color table associated with a vector map."
@@ -37213,7 +37218,7 @@ msgstr ""
 #: ../vector/v.reclass/main.c:266
 #, c-format
 msgid "Unable to fetch data from table <%s>"
-msgstr ""
+msgstr "Impossible de récupérer les données depuis la table <%s>"
 
 #: ../vector/v.db.select/main.c:485
 #, c-format
@@ -37239,7 +37244,7 @@ msgstr ""
 #: ../vector/v.vect.stats/main.c:350 ../vector/v.vect.stats/main.c:435
 #, c-format
 msgid "Unable to open database <%s> with driver <%s>"
-msgstr ""
+msgstr "Impossible d'ouvrir la base de données <%s> avec le pilote <%s>"
 
 #: ../vector/v.decimate/main.c:118 ../vector/v.generalize/main.c:77
 msgid "generalization"
@@ -38334,11 +38339,11 @@ msgstr ""
 
 #: ../vector/v.external/list.c:114
 msgid "GRASS is not compiled with PostgreSQL support"
-msgstr ""
+msgstr "GRASS n'est pas compilé avec le support de PostgreSQL"
 
 #: ../vector/v.external/list.c:120
 msgid "GRASS is not compiled with OGR support"
-msgstr ""
+msgstr "GRASS n'est pas compilé avec le support de OGR"
 
 #: ../vector/v.external/list.c:162
 msgid "Connection to PostgreSQL database failed."
@@ -38346,7 +38351,7 @@ msgstr ""
 
 #: ../vector/v.external/list.c:173
 msgid "No feature tables found in database."
-msgstr ""
+msgstr "Pas de table d'entité trouvée dans la base de données."
 
 #: ../vector/v.external/list.c:185
 #, c-format
@@ -38461,7 +38466,7 @@ msgstr ""
 #: ../vector/v.extract/extract.c:271 ../vector/v.extract/main.c:319
 #, c-format
 msgid "Loading categories from table <%s>..."
-msgstr ""
+msgstr "Chargement des catégories depuis la table <%s> ..."
 
 #: ../vector/v.extract/extract.c:289
 msgid "Topology level required for extracting areas for OGR layers. Areas will be not processed."
@@ -38553,7 +38558,7 @@ msgstr "Entrée texte ignorée: %s"
 #: ../vector/v.extract/main.c:330
 #, c-format
 msgid "Unable select records from table <%s>"
-msgstr ""
+msgstr "Impossible de sélectionner les enregistrements depuis la table <%s>"
 
 #: ../vector/v.extract/main.c:333
 #, c-format
@@ -38631,7 +38636,7 @@ msgstr ""
 #: ../vector/v.extrude/main.c:234
 #, c-format
 msgid "Column <%s> does not exist"
-msgstr ""
+msgstr "La colonne <%s> n'existe pas"
 
 #: ../vector/v.extrude/main.c:242
 #, c-format
@@ -39292,7 +39297,7 @@ msgstr ""
 
 #: ../vector/v.in.db/main.c:90
 msgid "Must refer to an integer column"
-msgstr ""
+msgstr "Doit se référer à une colonne d'entier"
 
 #: ../vector/v.in.db/main.c:100
 msgid "Use imported table as attribute table for new map"
@@ -39448,12 +39453,12 @@ msgstr ""
 #: ../vector/v.in.dxf/write_vect.c:247
 #, c-format
 msgid "Unable to add database link for vector map <%s>"
-msgstr ""
+msgstr "Impossible d'ajouter un lien vers la base de données pour la carte vectorielle <%s>"
 
 #: ../vector/v.in.lidar/attributes.c:129
 #, c-format
 msgid "Unable open database <%s> by driver <%s>"
-msgstr ""
+msgstr "Impossible d'ouvrir la base de données <%s> par le pilote <%s>"
 
 #: ../vector/v.in.lidar/main.c:47 ../vector/v.in.pdal/main.cpp:60
 #, c-format
@@ -40020,7 +40025,7 @@ msgstr ""
 #: ../vector/v.in.ogr/main.c:1397
 #, c-format
 msgid "Unable to drop table: '%s'"
-msgstr ""
+msgstr "Impossible de supprimer la table : '%s'"
 
 #: ../vector/v.in.ogr/main.c:1438
 msgid "Cleaning polygons"
@@ -40117,14 +40122,14 @@ msgid "Number of incorrect boundaries: %d"
 msgstr ""
 
 #: ../vector/v.in.ogr/main.c:1836
-#, c-format
+#, c-format, fuzzy
 msgid "Number of centroids outside area: %d"
-msgstr ""
+msgstr "Nombre de centroïdes en dehors de surfaces: %d"
 
 #: ../vector/v.in.ogr/main.c:1842
-#, c-format
+#, c-format, fuzzy
 msgid "Number of duplicate centroids: %d"
-msgstr ""
+msgstr "Nombre de centroïdes en double : %d"
 
 #: ../vector/v.in.ogr/main.c:1846 ../vector/v.in.ogr/main.c:1942
 msgid "The input could be cleaned by snapping vertices to each other."
@@ -40757,12 +40762,12 @@ msgstr "Valeur maximum dans la couche de sortie : %e"
 #: ../vector/v.label.sa/font.c:54
 #, c-format
 msgid "%s: Unable to read font definition file; use the default"
-msgstr ""
+msgstr "%s: Impossible de lire le fichier de définition de police, utilisation de celle par défaut"
 
 #: ../vector/v.label.sa/font.c:60
 #, c-format
 msgid "%s: No font definition file"
-msgstr ""
+msgstr "%s: Aucun fichier de définition de police"
 
 #: ../vector/v.label.sa/labels.c:68
 #, c-format
@@ -42793,7 +42798,7 @@ msgstr ""
 
 #: ../vector/v.net/args.c:83
 msgid "Name of input file"
-msgstr ""
+msgstr "Nom du fichier en entrée"
 
 #: ../vector/v.net/args.c:85
 msgid "Required for operation 'arcs' ('-' for standard input)"
@@ -42970,7 +42975,7 @@ msgstr ""
 #: ../vector/v.normal/main.c:190
 #, c-format
 msgid "Number of points: %d"
-msgstr ""
+msgstr "Nombre de points: %d"
 
 #: ../vector/v.normal/main.c:196
 msgid "Too small sample"
@@ -43624,7 +43629,7 @@ msgstr ""
 #: ../vector/v.out.ogr/main.c:558
 #, c-format
 msgid "Unable to open OGR data source '%s'"
-msgstr ""
+msgstr "Impossible d'ouvrir la source de données OGR '%s'"
 
 #: ../vector/v.out.ogr/main.c:573
 #, c-format
@@ -43634,7 +43639,7 @@ msgstr ""
 #: ../vector/v.out.ogr/main.c:578
 #, c-format
 msgid "OGR layer <%s> already exists and will be overwritten"
-msgstr ""
+msgstr "La couche OGR <%s> existe déjà et sera écrasée"
 
 #: ../vector/v.out.ogr/main.c:586
 #, c-format
@@ -44436,7 +44441,7 @@ msgstr ""
 #: ../vector/v.patch/main.c:592
 #, c-format
 msgid "Building topology for vector map <%s>..."
-msgstr ""
+msgstr "Construction de la topologie pour la carte vectorielle <%s>..."
 
 #: ../vector/v.patch/main.c:598
 msgid "Intersections at borders will have to be snapped"
@@ -45411,7 +45416,7 @@ msgstr ""
 #: ../vector/v.support/main.c:189
 #, c-format
 msgid "Unable to open history file for vector map <%s>"
-msgstr ""
+msgstr "Impossible d'ouvrir le fichier d'historique pour la couche vectorielle <%s>"
 
 #: ../vector/v.surf.bspline/crosscorr.c:82
 #, c-format
@@ -46538,7 +46543,7 @@ msgstr ""
 
 #: ../vector/v.transform/main.c:105
 msgid "Do not build topology"
-msgstr ""
+msgstr "Ne pas construire la topologie"
 
 #: ../vector/v.transform/main.c:110 ../vector/v.transform/main.c:121
 #: ../vector/v.transform/main.c:130 ../vector/v.transform/main.c:139
@@ -47008,7 +47013,7 @@ msgstr "Impossible d'insérer %lf,%lf,%lf,%lf,%lf a=%d"
 
 #: ../vector/v.vol.rst/user1.c:270
 msgid "Strip exists with insufficient data"
-msgstr ""
+msgstr "Les données de la bande sont insuffisantes"
 
 #: ../vector/v.vol.rst/user1.c:280
 msgid "Zero segments!"
@@ -47041,7 +47046,7 @@ msgstr ""
 
 #: ../vector/v.vol.rst/user1.c:390
 msgid "Bitmap mask created"
-msgstr ""
+msgstr "Masque bitmap créé"
 
 #: ../vector/v.vol.rst/user1.c:423 ../vector/v.vol.rst/user1.c:456
 #: ../vector/v.vol.rst/user1.c:511 ../vector/v.vol.rst/user1.c:565
@@ -47056,7 +47061,7 @@ msgstr ""
 #: ../vector/v.vol.rst/user1.c:770
 #, c-format
 msgid "Unable to open %s for writing"
-msgstr ""
+msgstr "Impossible d'ouvrir %s en écriture"
 
 #: ../vector/v.vol.rst/user1.c:474 ../vector/v.vol.rst/user1.c:529
 #: ../vector/v.vol.rst/user1.c:583 ../vector/v.vol.rst/user1.c:637
