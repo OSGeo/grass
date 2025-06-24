@@ -180,11 +180,11 @@ class TestIRectify(TestCase):
         self._run_and_check("cflag", 1, "nearest", flags="c", gcp_key="affine")
         for name in self.input_maps:
             rectified = f"{name}cflag"
-            info = gs.parse_command("r.info", map=rectified, flags="g")
-            self.assertEqual(float(info["north"]), 5.0)
-            self.assertEqual(float(info["south"]), 0.0)
-            self.assertEqual(float(info["east"]), 5.0)
-            self.assertEqual(float(info["west"]), 0.0)
+            info = gs.parse_command("r.info", map=rectified, format="json")
+            self.assertEqual(info["north"], 5.0)
+            self.assertEqual(info["south"], 0.0)
+            self.assertEqual(info["east"], 5.0)
+            self.assertEqual(info["west"], 0.0)
         self.del_temp_region()
 
     def test_c_flag_with_resolution_override(self):
@@ -196,9 +196,9 @@ class TestIRectify(TestCase):
         )
         for name in self.input_maps:
             rectified = f"{name}cflag_res"
-            info = gs.parse_command("r.info", map=rectified, flags="g")
-            self.assertEqual(float(info["nsres"]), 5.0)
-            self.assertEqual(float(info["ewres"]), 5.0)
+            info = gs.parse_command("r.info", map=rectified, format="json")
+            self.assertEqual(info["nsres"], 5.0)
+            self.assertEqual(info["ewres"], 5.0)
         self.del_temp_region()
 
     def test_automatic_rectification(self):
