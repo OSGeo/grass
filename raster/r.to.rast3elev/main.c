@@ -408,7 +408,7 @@ int main(int argc, char *argv[])
 
     /*Set the upper value */
     if (param.upper->answer) {
-        if (sscanf(param.upper->answer, "%lf", &db.upper))
+        if (sscanf(param.upper->answer, "%lf", &db.upper) == 1)
             db.useUpperVal = 2;
         else
             G_fatal_error(_("The upper value is not valid"));
@@ -419,7 +419,7 @@ int main(int argc, char *argv[])
 
     /*Set the lower value */
     if (param.lower->answer) {
-        if (sscanf(param.lower->answer, "%lf", &db.lower))
+        if (sscanf(param.lower->answer, "%lf", &db.lower) == 1)
             db.useLowerVal = 2;
         else
             G_fatal_error(_("The lower value is not valid"));
