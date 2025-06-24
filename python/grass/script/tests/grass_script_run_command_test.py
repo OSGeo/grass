@@ -158,15 +158,18 @@ def test_parse_command_key_value(session_2x2):
     Values are always strings even for numbers.
     """
     assert (
-        gs.parse_command("g.region", flags="g", env=session_2x2.env)["nsres"] == "0.5"
+        gs.parse_command("g.region", flags="p", format="shell", env=session_2x2.env)[
+            "nsres"
+        ]
+        == "0.5"
     )
 
 
 def test_parse_command_json(session_2x2):
     """Check parse_command parses JSON output"""
     assert (
-        gs.parse_command("g.region", flags="g", format="json", env=session_2x2.env)[
-            "region"
-        ]["ns-res"]
+        gs.parse_command("g.region", flags="p", format="json", env=session_2x2.env)[
+            "nsres"
+        ]
         == 0.5
     )
