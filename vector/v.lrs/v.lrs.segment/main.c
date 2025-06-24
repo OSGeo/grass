@@ -392,6 +392,7 @@ int find_line(struct Map_info *Map, int lfield, int lcat)
         if (cat == lcat)
             return i;
     }
+    Vect_destroy_cats_struct(Cats);
 
     return 0;
 }
