@@ -29,7 +29,7 @@ int __creat(const char *, int);
 }
 #endif
 
-#include <io.h>
+#include <io.h> // Also for _S_IREAD and _S_IWRITE
 #define open      __open
 #define creat     __creat
 
@@ -37,7 +37,6 @@ int __creat(const char *, int);
 #define O_ACCMODE (_O_RDONLY | _O_WRONLY | _O_RDWR)
 
 #if defined(_WIN32)
-#include <io.h> // _S_IREAD _S_IWRITE
 #ifndef S_IRUSR
 #define S_IRUSR _S_IREAD
 #endif // S_IRUSR
