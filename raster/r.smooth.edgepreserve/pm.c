@@ -75,8 +75,9 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
             rc = rb;
             rb = row_cache->get(prow + 1, row_cache);
 
+            int pcol;
 #pragma omp parallel for
-            for (int pcol = 1; pcol <= pm_params->ncols; pcol++) {
+            for (pcol = 1; pcol <= pm_params->ncols; pcol++) {
                 // N
                 gradients[0][pcol - 1] =
                     (ra[pcol] - rc[pcol]) * pm_params->vert_cor;
@@ -122,8 +123,9 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
             /* Calculate diffusivity coefficient */
             if (pm_params->conditional == 3) {
                 /* Black et al. 1998 Tukey's biweight function */
+                int col;
 #pragma omp parallel for
-                for (int col = 0; col < pm_params->ncols; col++) {
+                for (col = 0; col < pm_params->ncols; col++) {
                     /* Both variations of impact of scale are two ways
                      * how to read 17th formula of Black et al. */
                     if (pm_params->preserve) {
@@ -165,9 +167,10 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
                 }
             }
             else if (pm_params->conditional == 1) {
-/* Perona & Malik 1st diffusivity function = exponential */
+                /* Perona & Malik 1st diffusivity function = exponential */
+                int col;
 #pragma omp parallel for
-                for (int col = 0; col < pm_params->ncols; col++) {
+                for (col = 0; col < pm_params->ncols; col++) {
 #pragma GCC unroll 8
                     for (int i = 0; i < 8; i++) {
                         divs[i][col] =
@@ -179,9 +182,10 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
                 }
             }
             else if (pm_params->conditional == 2) {
-/* Perona & Malik 2nd diffusivity function = quadratic */
+                /* Perona & Malik 2nd diffusivity function = quadratic */
+                int col;
 #pragma omp parallel for
-                for (int col = 0; col < pm_params->ncols; col++) {
+                for (col = 0; col < pm_params->ncols; col++) {
 #pragma GCC unroll 8
                     for (int i = 0; i < 8; i++) {
                         divs[i][col] =
@@ -192,9 +196,10 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
                 }
             }
 
-/* Calculate new values and add padding */
+            /* Calculate new values and add padding */
+            int col;
 #pragma omp parallel for
-            for (int col = 0; col < pm_params->ncols; col++) {
+            for (col = 0; col < pm_params->ncols; col++) {
                 di[col] = divs[0][col] + divs[1][col] + divs[2][col] +
                           divs[3][col] + divs[4][col] + divs[5][col] +
                           divs[6][col] + divs[7][col];
