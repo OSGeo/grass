@@ -234,9 +234,9 @@ class TestIRectify(TestCase):
         self._run_and_check(
             "res2", 1, "lanczos_f", resolution=2, single_input=True, gcp_key="affine"
         )
-        info = gs.parse_command("r.info", map="rectify_band1res2", flags="g")
-        self.assertEqual(float(info["nsres"]), 2.0)
-        self.assertEqual(float(info["ewres"]), 2.0)
+        info = gs.parse_command("r.info", map="rectify_band1res2", format="json")
+        self.assertEqual(info["nsres"], 2.0)
+        self.assertEqual(info["ewres"], 2.0)
 
 
 if __name__ == "__main__":
