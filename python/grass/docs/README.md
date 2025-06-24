@@ -10,6 +10,7 @@ Install the following dependencies from the `requirements.txt` file: in
 * [sphinx (v8.1.3)](https://www.sphinx-doc.org/en/master/changes/8.1.html)
 * [sphinx-material (v0.0.36)](https://bashtage.github.io/sphinx-material/)
 * [sphinx-sitemap (v2.6.0)](https://sphinx-sitemap.readthedocs.io/en/latest/)
+* [sphinx-last-updated-by-git](hhttps://github.com/mgeier/sphinx-last-updated-by-git/)
 
 ```bash
 pip install -r python/grass/docs/requirements.txt

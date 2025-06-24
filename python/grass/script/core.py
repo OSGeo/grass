@@ -264,9 +264,13 @@ def make_command(
         >>> make_command("g.message", flags="w", message="this is a warning")
         ['g.message', '-w', 'message=this is a warning']
 
+    The single-character flags are supplied as a string, *flags*, containing
+    individual flag characters. While an integer for a single flag and a leading dash
+    are also accepted, the best practice is to provide the characters as
+    a string without a leading dash.
 
     :param str prog: GRASS module
-    :param str flags: flags to be used (given as a string)
+    :param str flags: flags to be used (given as a string of flag characters)
     :param bool overwrite: True to enable overwriting the output (``--o``)
     :param bool quiet: True to run quietly (``--q``)
     :param bool superquiet: True to run extra quietly (``--qq``)
@@ -274,8 +278,6 @@ def make_command(
     :param options: module's parameters
 
     :return: list of arguments
-
-    :raises ~grass.exceptions.ScriptError: If the invalid flag '``-``' is given.
     """
     args = [_make_val(prog)]
     if overwrite:
@@ -288,10 +290,16 @@ def make_command(
         args.append("--qq")
     if flags:
         flags = _make_val(flags)
-        if "-" in flags:
-            msg = "'-' is not a valid flag"
-            raise ScriptError(msg)
-        args.append("-" + flags)
+        # We allow a leading dash in the flags or add one if it is not provided.
+        # In any case, the rest is passed as is, so any additional dashes will
+        # be processed and rejected by the underlying tool.
+        # While conceptually a dash is not extraneous in a function call,
+        # we allow the dash to align with the command line uses it where a leading dash
+        # is required, and with some of the documentation or messages which use a dash.
+        if not flags.startswith("-"):
+            # In any case, if dash is missing, we need to add it.
+            flags = "-" + flags
+        args.append(flags)
     for opt, val in options.items():
         if opt in _popen_args:
             continue
@@ -315,13 +323,17 @@ def make_command(
     return args
 
 
-def handle_errors(returncode, result, args, kwargs, handler=None, stderr=None):
+def handle_errors(
+    returncode, result, args, kwargs, handler=None, stderr=None, env=None
+):
     """Error handler for :func:`run_command()` and similar functions
 
     The functions which are using this function to handle errors,
     can be typically called with an *errors* parameter.
     This function can handle one of the following values: raise,
     fatal, status, exit, and ignore. The value raise is a default.
+    Alternatively, when this function is called explicitly, the parameter
+    *handler* can be specified with the same values as *errors*.
 
     If returncode is 0, *result* is returned, unless
     ``errors="status"`` is set.
@@ -332,7 +344,9 @@ def handle_errors(returncode, result, args, kwargs, handler=None, stderr=None):
     :py:exc:`~grass.exceptions.CalledModuleError` exception is raised.
 
     For ``errors="fatal"``, the function calls :func:`~grass.script.core.fatal()`
-    which has its own rules on what happens next.
+    which has its own rules on what happens next. In this case,
+    *env* parameter should also be provided unless the caller code relies on
+    a global session. Besides the *env* parameter, env can be also provided in kwargs.
 
     For ``errors="status"``, the *returncode* will be returned.
     This is useful, e.g., for cases when the exception-based error
@@ -348,6 +362,16 @@ def handle_errors(returncode, result, args, kwargs, handler=None, stderr=None):
 
     Finally, for ``errors="ignore"``, the value of *result* will be
     passed in any case regardless of the *returncode*.
+
+    If *stderr* is provided, it is passed to ``CalledModuleError`` to build
+    an error message with ``errors="raise"``. With ``errors="exit"``,
+    it is printed to ``sys.stderr``.
+
+    This function is intended to be used as an error handler or handler of potential
+    errors in code which wraps calling of tools as subprocesses.
+    Typically, this function is not called directly in user code or in a tool code
+    unless the tools are handed directly, e.g., with :class:`Popen` as opposed
+    to :func:`run_command()`.
 
     :raises ~grass.exceptions.CalledModuleError:
       - If there is an error, and the ``errors`` parameter is not given
@@ -365,6 +389,10 @@ def handle_errors(returncode, result, args, kwargs, handler=None, stderr=None):
         code = " ".join(args)
         return module, code
 
+    # If env is not provided, use the one from kwargs (if any).
+    if not env:
+        env = kwargs.get("env")
+
     if handler is None:
         handler = kwargs.get("errors", "raise")
     if handler.lower() == "status":
@@ -378,9 +406,12 @@ def handle_errors(returncode, result, args, kwargs, handler=None, stderr=None):
         fatal(
             _(
                 "Module {module} ({code}) failed with non-zero return code {returncode}"
-            ).format(module=module, code=code, returncode=returncode)
+            ).format(module=module, code=code, returncode=returncode),
+            env=env,
         )
     elif handler.lower() == "exit":
+        if stderr:
+            print(stderr, file=sys.stderr)
         sys.exit(returncode)
     else:
         module, code = get_module_and_code(args, kwargs)
@@ -474,10 +505,10 @@ def start_command(
         **kwargs,
     )
 
-    if debug_level() > 0:
+    if debug_level(env=kwargs.get("env")) > 0:
         sys.stderr.write(
             "D1/{}: {}.start_command(): {}\n".format(
-                debug_level(), __name__, " ".join(args)
+                debug_level(env=kwargs.get("env")), __name__, " ".join(args)
             )
         )
         sys.stderr.flush()
@@ -793,7 +824,7 @@ def debug(msg, debug=1, env=None):
     :param env: dictionary with system environment variables
                 (:external:py:data:`os.environ` by default)
     """
-    if debug_level() >= debug:
+    if debug_level(env=env) >= debug:
         # TODO: quite a random hack here, do we need it somewhere else too?
         if sys.platform == "win32":
             msg = msg.replace("&", "^&")
@@ -1801,7 +1832,7 @@ def verbosity():
 # Various utilities, not specific to GRASS
 
 
-def find_program(pgm, *args):
+def find_program(pgm, *args, env: _Env = None):
     """Attempt to run a program, with optional arguments.
 
     You must call the program in a way that will return a successful
@@ -1819,6 +1850,7 @@ def find_program(pgm, *args):
 
     :param str pgm: program name
     :param args: list of arguments
+    :param env: environment
 
     :return: False if the attempt failed due to a missing executable
             or non-zero return code
@@ -1827,7 +1859,9 @@ def find_program(pgm, *args):
     with open(os.devnull, "w+") as nuldev:
         try:
             # TODO: the doc or impl is not correct, any return code is accepted
-            call([pgm] + list(args), stdin=nuldev, stdout=nuldev, stderr=nuldev)
+            call(
+                [pgm] + list(args), stdin=nuldev, stdout=nuldev, stderr=nuldev, env=env
+            )
             found = True
         except Exception:
             found = False
@@ -2115,17 +2149,25 @@ def version():
 _debug_level = None
 
 
-def debug_level(force=False):
+def debug_level(force: bool = False, *, env: _Env = None):
     global _debug_level
     if not force and _debug_level is not None:
         return _debug_level
     _debug_level = 0
-    if find_program("g.gisenv", "--help"):
+    # We attempt to access the environment only when there is a chance
+    # it will work.
+    if find_program("g.gisenv", "--help", env=env):
         try:
-            _debug_level = int(gisenv().get("DEBUG", 0))
+            try:
+                _debug_level = int(gisenv(env=env).get("DEBUG", 0))
+            except (CalledModuleError, OSError):
+                # We continue in case of an error. Default value is already set.
+                pass
             if _debug_level < 0 or _debug_level > 5:
                 raise ValueError(_("Debug level {0}").format(_debug_level))
         except ValueError as e:
+            # The exception may come from the conversion or from the range,
+            # so we handle both in the same way.
             _debug_level = 0
             sys.stderr.write(
                 _(

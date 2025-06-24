@@ -71,7 +71,7 @@ static void map_file(void)
    started-up, or otherwise initialized happens here.  This is called only at
    the startup of the graphics driver.
 
-   The external variables define the pixle limits of the graphics surface.  The
+   The external variables define the pixel limits of the graphics surface.  The
    coordinate system used by the applications programs has the (0,0) origin
    in the upper left-hand corner.  Hence,
    screen_left < screen_right
@@ -97,8 +97,8 @@ int PNG_Graph_set(void)
     p = getenv("GRASS_RENDER_TRUECOLOR");
     png.true_color = !p || strcmp(p, "FALSE") != 0;
 
-    G_verbose_message(_("png: truecolor status %s"),
-                      png.true_color ? _("enabled") : _("disabled"));
+    G_verbose_message(png.true_color ? _("png: truecolor status enabled")
+                                     : _("png: truecolor status disabled"));
 
     p = getenv("GRASS_RENDER_FILE_MAPPED");
     do_map = p && strcmp(p, "TRUE") == 0;

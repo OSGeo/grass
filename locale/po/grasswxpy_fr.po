@@ -5,12 +5,13 @@
 # Eve (alias 'phyto') <dendrosociology[a]yahoo.co.uk>, 2006.
 # Vincent Bain <bain toraval.fr>, 2007, 2012.
 # Sylvain Maillard <sylvain.maillard gmail.com>, 2011-2015, 2017.
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-14 18:45+0000\n"
-"PO-Revision-Date: 2025-06-11 17:59+0000\n"
+"POT-Creation-Date: 2025-06-21 12:47+0000\n"
+"PO-Revision-Date: 2025-06-23 10:46+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/fr/>\n"
 "Language: fr\n"
@@ -312,7 +313,7 @@ msgstr "Seulement une série ou jeu de données temporel est accepté dans le mo
 
 #: ../gui/wxpython/animation/dialogs.py:692
 msgid "No map series or space-time dataset added."
-msgstr "Pas de séries de carte ou de jeux de données temporels ajoutés."
+msgstr "Pas de séries de carte ou de jeux de données spatiotemporels ajoutés."
 
 #: ../gui/wxpython/animation/dialogs.py:732
 #: ../gui/wxpython/animation/dialogs.py:744
@@ -721,7 +722,7 @@ msgstr "Merci de n'ajouter qu'une seule couche dans la liste."
 
 #: ../gui/wxpython/animation/nviztask.py:305
 msgid "No map series nor space-time dataset is added."
-msgstr "Pas de séries de carte ou de jeux de données temporels ajoutés."
+msgstr "Pas de séries de carte ou de jeux de données spatiotemporels ajoutés."
 
 #: ../gui/wxpython/animation/provider.py:444
 msgid "Rendering map layers"
@@ -1134,7 +1135,7 @@ msgstr "Molette arrière pour zoomer"
 
 #: ../gui/wxpython/core/settings.py:866 ../gui/wxpython/core/settings.py:880
 msgid "box"
-msgstr "boite"
+msgstr "rectangulaire"
 
 #: ../gui/wxpython/core/settings.py:867
 msgid "sphere"
@@ -1282,11 +1283,11 @@ msgstr ""
 
 #: ../gui/wxpython/core/units.py:45
 msgid "acres"
-msgstr ""
+msgstr "acres"
 
 #: ../gui/wxpython/core/units.py:46
 msgid "hectares"
-msgstr ""
+msgstr "hectares"
 
 #: ../gui/wxpython/core/utils.py:60
 #, python-format
@@ -5501,7 +5502,7 @@ msgstr "Thème d'icônes (requiert le redémarrage du GUI)"
 
 #: ../gui/wxpython/gui_core/preferences.py:575
 msgid "Use single-window mode instead of multi-window mode"
-msgstr ""
+msgstr "Utiliser le mode fenêtre unique au lieu du mode multi-fenêtres"
 
 #: ../gui/wxpython/gui_core/preferences.py:597
 msgid "Font for command output:"
@@ -6391,9 +6392,8 @@ msgid "History browser"
 msgstr "Navigateur de données"
 
 #: ../gui/wxpython/history/browser.py:394
-#, fuzzy
 msgid "&Export history"
-msgstr "Exporter vers :"
+msgstr "&Exporter l'historique"
 
 #: ../gui/wxpython/history/browser.py:396
 #, fuzzy
@@ -8888,7 +8888,7 @@ msgstr ""
 
 #: ../gui/wxpython/main_window/frame.py:1450
 msgid "No project provided. Operation canceled."
-msgstr "Aucun projet sélectionné. Opération annulée."
+msgstr "Aucun projet fourni. Opération annulée."
 
 #: ../gui/wxpython/main_window/frame.py:2000
 #, fuzzy
@@ -9714,7 +9714,7 @@ msgstr "La connexion à une base de données pour la carte vecteur <%s> n'est pa
 
 #: ../gui/wxpython/modules/colorrules.py:1244
 msgid "No database connection defined"
-msgstr "Pas de connexion à une base de données définie"
+msgstr "Aucune connexion à une base de données définie"
 
 #: ../gui/wxpython/modules/colorrules.py:1320
 #, python-format
@@ -9984,7 +9984,7 @@ msgstr "Définir un format externe et fermer la boite de dialogue"
 
 #: ../gui/wxpython/modules/import_export.py:822
 msgid "No data source selected."
-msgstr "Pas de source de données sélectionnée."
+msgstr "Aucune source de données sélectionnée."
 
 #: ../gui/wxpython/modules/import_export.py:846
 msgid "Import DXF layers"
@@ -13449,7 +13449,7 @@ msgstr ""
 #: ../gui/wxpython/tplot/frame.py:48
 #, python-brace-format
 msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
-msgstr "L'outil de graphiques temporels nécessite que le paquet 'matplotlib' (python-matplotlib) soit installé. {0}"
+msgstr "L'outil d'affichage temporel nécessite que le paquet 'matplotlib' (python-matplotlib) soit installé. {0}"
 
 #: ../gui/wxpython/tplot/frame.py:104
 #, fuzzy
@@ -14708,7 +14708,7 @@ msgstr "arc"
 
 #: ../gui/wxpython/vnet/vnet_data.py:720
 msgid "Node cost column:"
-msgstr "Colonne de coût des noeuds : "
+msgstr "Colonne de coût des nœuds :"
 
 #: ../gui/wxpython/vnet/vnet_data.py:720
 msgid "node"
@@ -14874,7 +14874,7 @@ msgstr "L'emprise et la résolution sont basées sur la région de calcul."
 
 #: ../gui/wxpython/web_services/dialogs.py:884
 msgid "Extent and resolution are based on named region."
-msgstr "L'emprise et la résolution sont basées sur la région enregistrée."
+msgstr "L'emprise et la résolution sont basées sur la région nommée."
 
 #: ../gui/wxpython/web_services/dialogs.py:889
 msgid "Overwrite existing raster map"
@@ -14882,7 +14882,7 @@ msgstr "Écraser la carte raster existante"
 
 #: ../gui/wxpython/web_services/dialogs.py:894
 msgid "Choose named region:"
-msgstr "Choisir une région :"
+msgstr "Choisir une région nommée :"
 
 #: ../gui/wxpython/web_services/dialogs.py:908
 msgid "&Save layer"
@@ -15166,7 +15166,7 @@ msgstr "Tailles de texte du graphique enregistrées dans le fichier '%s'."
 
 #: ../gui/wxpython/wxplot/dialogs.py:939
 msgid "No map or image group selected to plot."
-msgstr "Pas de carte ou d'image sélectionné pour le graphique."
+msgstr "Aucune carte ou groupe d'image sélectionnée pour le graphique."
 
 #: ../gui/wxpython/wxplot/dialogs.py:981
 msgid "Map/image plotted"
