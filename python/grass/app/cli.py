@@ -20,10 +20,31 @@ import argparse
 import tempfile
 import os
 import sys
+import subprocess
 from pathlib import Path
+
 
 import grass.script as gs
 from grass.app.data import lock_mapset, unlock_mapset, MapsetLockingException
+from grass.experimental.standalone import StandaloneTools
+
+
+def subcommand_run_tool(args, tool_args: list, help: bool):
+    command = [args.tool_name, *tool_args]
+    if help:
+        with tempfile.TemporaryDirectory() as tmp_dir_name:
+            project_name = "project"
+            project_path = Path(tmp_dir_name) / project_name
+            gs.create_project(project_path)
+            with gs.setup.init(project_path) as session:
+                result = subprocess.run(command, env=session.env)
+        return result.returncode
+
+    with StandaloneTools(capture_output=False) as tools:
+        try:
+            tools.run_from_list(command)
+        except subprocess.CalledProcessError as error:
+            return error.returncode
 
 
 def subcommand_lock_mapset(args):
@@ -73,9 +94,15 @@ def main(args=None, program=None):
         description="Experimental low-level CLI interface to GRASS. Consult developers before using it.",
         prog=program,
     )
-    subparsers = parser.add_subparsers(title="subcommands", required=True)
+    subparsers = parser.add_subparsers(
+        title="subcommands", dest="subcommand", required=True
+    )
 
     # Subcommand parsers
+
+    subparser = subparsers.add_parser("run", help="run a tool")
+    subparser.add_argument("tool_name", type=str)
+    subparser.set_defaults(func=subcommand_run_tool)
 
     subparser = subparsers.add_parser("lock", help="lock a mapset")
     subparser.add_argument("mapset_path", type=str)
@@ -120,5 +147,27 @@ def main(args=None, program=None):
     subparser.add_argument("page", type=str)
     subparser.set_defaults(func=subcommand_show_man)
 
-    parsed_args = parser.parse_args(args)
+    # Parsing
+
+    if not args:
+        args = sys.argv[1:]
+    raw_args = args.copy()
+    add_back = None
+    if len(raw_args) > 2 and raw_args[0] == "run":
+        # Getting the --help of tools needs to work around the standard help mechanism
+        # of argparse.
+        # Maybe a better workaround is to use custom --help, action="help", print_help,
+        # and dedicated tool help function complimentary with g.manual subcommand
+        # interface.
+        if "--help" in raw_args[2:]:
+            raw_args.remove("--help")
+            add_back = "--help"
+        elif "--h" in raw_args[2:]:
+            raw_args.remove("--h")
+            add_back = "--h"
+    parsed_args, other_args = parser.parse_known_args(raw_args)
+    if parsed_args.subcommand == "run":
+        if add_back:
+            other_args.append(add_back)
+        return parsed_args.func(parsed_args, other_args, help=bool(add_back))
     return parsed_args.func(parsed_args)
