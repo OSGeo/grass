@@ -198,7 +198,7 @@ int main(int argc, char **argv)
     if ((strncmp(progname, "r3.mapcalc", 10) == 0) && (threads != 1)) {
         threads = 1;
         nprocs->answer = "1";
-        G_warning(_("r3.mapcalc does not support parallel execution."));
+        G_verbose_message(_("r3.mapcalc does not support parallel execution."));
     }
     else if ((seeded) && (threads != 1)) {
         threads = 1;
