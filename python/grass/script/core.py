@@ -315,13 +315,17 @@ def make_command(
     return args
 
 
-def handle_errors(returncode, result, args, kwargs):
+def handle_errors(
+    returncode, result, args, kwargs, handler=None, stderr=None, env=None
+):
     """Error handler for :func:`run_command()` and similar functions
 
     The functions which are using this function to handle errors,
     can be typically called with an *errors* parameter.
     This function can handle one of the following values: raise,
     fatal, status, exit, and ignore. The value raise is a default.
+    Alternatively, when this function is called explicitly, the parameter
+    *handler* can be specified with the same values as *errors*.
 
     If returncode is 0, *result* is returned, unless
     ``errors="status"`` is set.
@@ -332,7 +336,9 @@ def handle_errors(returncode, result, args, kwargs):
     :py:exc:`~grass.exceptions.CalledModuleError` exception is raised.
 
     For ``errors="fatal"``, the function calls :func:`~grass.script.core.fatal()`
-    which has its own rules on what happens next.
+    which has its own rules on what happens next. In this case,
+    *env* parameter should also be provided unless the caller code relies on
+    a global session. Besides the *env* parameter, env can be also provided in kwargs.
 
     For ``errors="status"``, the *returncode* will be returned.
     This is useful, e.g., for cases when the exception-based error
@@ -348,6 +354,16 @@ def handle_errors(returncode, result, args, kwargs):
 
     Finally, for ``errors="ignore"``, the value of *result* will be
     passed in any case regardless of the *returncode*.
+
+    If *stderr* is provided, it is passed to ``CalledModuleError`` to build
+    an error message with ``errors="raise"``. With ``errors="exit"``,
+    it is printed to ``sys.stderr``.
+
+    This function is intended to be used as an error handler or handler of potential
+    errors in code which wraps calling of tools as subprocesses.
+    Typically, this function is not called directly in user code or in a tool code
+    unless the tools are handed directly, e.g., with :class:`Popen` as opposed
+    to :func:`run_command()`.
 
     :raises ~grass.exceptions.CalledModuleError:
       - If there is an error, and the ``errors`` parameter is not given
@@ -365,7 +381,12 @@ def handle_errors(returncode, result, args, kwargs):
         code = " ".join(args)
         return module, code
 
-    handler = kwargs.get("errors", "raise")
+    # If env is not provided, use the one from kwargs (if any).
+    if not env:
+        env = kwargs.get("env")
+
+    if handler is None:
+        handler = kwargs.get("errors", "raise")
     if handler.lower() == "status":
         return returncode
     if returncode == 0:
@@ -377,13 +398,18 @@ def handle_errors(returncode, result, args, kwargs):
         fatal(
             _(
                 "Module {module} ({code}) failed with non-zero return code {returncode}"
-            ).format(module=module, code=code, returncode=returncode)
+            ).format(module=module, code=code, returncode=returncode),
+            env=env,
         )
     elif handler.lower() == "exit":
+        if stderr:
+            print(stderr, file=sys.stderr)
         sys.exit(returncode)
     else:
         module, code = get_module_and_code(args, kwargs)
-        raise CalledModuleError(module=module, code=code, returncode=returncode)
+        raise CalledModuleError(
+            module=module, code=code, returncode=returncode, errors=stderr
+        )
 
 
 def popen_args_command(
