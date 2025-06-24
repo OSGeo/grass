@@ -228,7 +228,6 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
     }
     G_free(rast);
     G_free(rastp);
-    
 
     return 0;
 }
