@@ -151,8 +151,8 @@ int I_signatures_copy(I_SIGFILE_TYPE type, const char *old_name,
 
     if (G_recursive_copy(old_path, new_path) != 0) {
         char *mname = G_fully_qualified_name(old_name, smapset);
-        G_warning(_("Unable to copy <%s> to current mapset as <%s>"),
-                  mname, tname);
+        G_warning(_("Unable to copy <%s> to current mapset as <%s>"), mname,
+                  tname);
         G_free(mname);
         return 1;
     }
