@@ -389,10 +389,12 @@ int find_line(struct Map_info *Map, int lfield, int lcat)
         if (!(type & GV_LINE))
             continue;
         Vect_cat_get(Cats, lfield, &cat);
-        if (cat == lcat)
+        if (cat == lcat) {
+            Vect_destroy_cats_struct(Cats);
             return i;
+        }
     }
-
+    Vect_destroy_cats_struct(Cats);
     return 0;
 }
 
