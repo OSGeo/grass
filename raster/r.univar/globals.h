@@ -59,7 +59,7 @@ typedef struct {
 extern param_type param;
 extern zone_type zone_info;
 
-enum OutputFormat { PLAIN, JSON };
+enum OutputFormat { PLAIN, JSON, SHELL, CSV };
 
 /* fn prototypes */
 void heapsort_double(double *data, size_t n);
