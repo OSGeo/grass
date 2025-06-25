@@ -139,9 +139,7 @@ class TestIEbNetrad(TestCase):
         self.runModule("r.mapcalc", expression="zenith_low = 10.0", overwrite=True)
         self.run_netrad("rn_low_zen", sunzenithangle="zenith_low")
         self.tmp_rasters.extend(["zenith_low", "rn_low_zen"])
-        stats_low = gs.parse_command(
-            "r.univar", map="rn_low_zen", flags="g", format="json"
-        )
+        stats_low = gs.parse_command("r.univar", map="rn_low_zen", format="json")
 
         self.runModule("r.mapcalc", expression="zenith_high = 70.0", overwrite=True)
         self.run_netrad("rn_high_zen", sunzenithangle="zenith_high")
