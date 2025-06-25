@@ -9,6 +9,15 @@ The output of *g.list* may be useful for other programs' parameter input
 (e.g. time series for *[r.series](r.series.md)*) when used with
 *separator=comma*.
 
+The flags `-m` and `-t` apply only to shell format output.
+
+The flags `-p` and `-f` apply only to plain format output, but they are now
+deprecated and will be removed in a future release. Instead of using those, use
+`format="plain"` to obtain human-readable, plain text output. The plain format
+will become the default in a future release.
+
+To obtain machine readable output use `format="shell"` or `format="json"`.
+
 ## EXAMPLES
 
 List all raster maps as continuous, sorted list:
@@ -24,10 +33,10 @@ fully-qualified map names):
 g.list type=vector -m
 ```
 
-List all raster and vector maps ordered by mapset:
+List all raster and vector maps grouped by mapset in plain format:
 
 ```sh
-g.list type=raster -p
+g.list type=raster,vector -p
 ```
 
 List all raster and vector maps as continuous, sorted list:
@@ -40,6 +49,21 @@ List all available GRASS data base files:
 
 ```sh
 g.list type=all
+```
+
+List all raster and vector maps using Python:
+
+```python
+import grass.script as gs
+
+data = gs.parse_command("g.list", type=["raster", "vector"], format="json")
+print(data)
+```
+
+Possible output:
+
+```text
+[{'name': 'aspect', 'mapset': 'PERMANENT', 'type': 'raster', 'fullname': 'aspect@PERMANENT'}, {'name': 'zipcodes_wake', 'mapset': 'PERMANENT', 'type': 'vector', 'fullname': 'zipcodes_wake@PERMANENT'}]
 ```
 
 ### Mapset search path
