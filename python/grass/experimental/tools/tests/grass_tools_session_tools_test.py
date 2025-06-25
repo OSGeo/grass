@@ -535,15 +535,36 @@ def test_migration_from_run_command_family(xy_dataset_session):
     # replacement for long expression:
     tools.r_mapcalc(file=io.StringIO("c = 1"))
 
-    # g.list
+    # g.list wrappers
+    # test data preparation (for comparison of the results):
+    names = ["a", "b", "c", "surface", "surface2", "surface3"]
+    # original:
+    assert gs.list_grouped("raster", env=xy_dataset_session.env)["PERMANENT"] == names
+    # replacement (using the JSON output of g.list):
+    assert [
+        item["name"]
+        for item in tools.g_list(type="raster", format="json")
+        if item["mapset"] == "PERMANENT"
+    ] == names
+    # original and replacement (directly comparing the results):
+    assert gs.list_strings("raster", env=xy_dataset_session.env) == [
+        item["fullname"] for item in tools.g_list(type="raster", format="json")
+    ]
+    # original and replacement (directly comparing the results):
+    assert gs.list_pairs("raster", env=xy_dataset_session.env) == [
+        (item["name"], item["mapset"])
+        for item in tools.g_list(type="raster", format="json")
+    ]
 
     # all other wrappers
     # Wrappers in grass.script usually parse shell-script style key-value pairs,
     # and convert values from strings to numbers, e.g. g.region:
     assert gs.region(env=xy_dataset_session.env)["rows"] == 1
-    # Conversion is done automatically in Tools, and syntax is more lightweight,
-    # so for tools which have JSON output, the only thing which need is the format
-    # (this also benefits from better defaults and more consistent tool behavior):
+    # Conversion is done automatically in Tools and/or with JSON, and the basic tool
+    # call syntax is more lightweight, so the direct tool call is not that different
+    # from a wrapper. Direct tool calling also benefits from better defaults (e.g.,
+    # printing more in JSON) and more consistent tool behavior (e.g., tools accepting
+    # format="json"). So, direct call of g.region to obtain the number of rows:
     assert tools.g_region(flags="p", format="json")["rows"] == 1
 
     # run_command with returncode
