@@ -126,7 +126,7 @@ class Tools:
         interface_result = self.call_cmd([*command, "--json"], **popen_options)
         return json.loads(interface_result.stdout)
 
-    def run(self, name, /, **kwargs):
+    def run(self, name: str, /, **kwargs):
         """Run a tool by specifying its name as a string and passing named arguments.
 
         :param name: name of the GRASS tool
@@ -143,25 +143,34 @@ class Tools:
         if "env" not in popen_options:
             popen_options["env"] = self._modified_env_if_needed()
 
-        parameters = self._process_parameters(args, **popen_options)
+        processed_parameters = self._process_parameters(args, **popen_options)
 
         # We approximate tool_kwargs as original kwargs.
         return self.run_cmd(
             args,
             tool_kwargs=kwargs,
-            processed_parameters=parameters,
-            stdin=object_parameter_handler.stdin,
+            processed_parameters=processed_parameters,
+            input=object_parameter_handler.stdin,
             **popen_options,
         )
 
     def run_cmd(
         self,
         command: list[str],
+        *,
+        input: str | bytes | None = None,
         tool_kwargs=None,
-        stdin=None,
         processed_parameters=None,
         **popen_options,
     ):
+        """Run a tool by passing a list of strings as the command.
+
+        The function may perform additional processing on the parameters.
+
+        :param command: list of strings to execute as the command
+        :param tool_kwargs: original named tool arguments used for error reporting
+        :param input: text input for the standard input of the tool
+        """
         if "env" not in popen_options:
             popen_options["env"] = self._modified_env_if_needed()
         if not processed_parameters:
@@ -171,20 +180,20 @@ class Tools:
         return self.call_cmd(
             command,
             tool_kwargs=tool_kwargs,
-            stdin=stdin,
+            input=input,
             **popen_options,
         )
 
-    def call(self, name: str, /, *, tool_kwargs=None, stdin=None, **kwargs):
+    def call(self, name: str, /, *, tool_kwargs=None, input=None, **kwargs):
         args, popen_options = gs.popen_args_command(name, **kwargs)
         if "env" not in popen_options:
             popen_options["env"] = self._modified_env_if_needed()
         return self.call_cmd(
-            args, tool_kwargs=tool_kwargs, stdin=stdin, **popen_options
+            args, tool_kwargs=tool_kwargs, input=input, **popen_options
         )
 
     # Make this an overload of run.
-    def call_cmd(self, command, tool_kwargs=None, stdin=None, **popen_options):
+    def call_cmd(self, command, tool_kwargs=None, input=None, **popen_options):
         # We need to pass our own env parameter, but through that we are also allowing
         # the user to overwrite env, which allows for maximum flexibility
         # with some potential confusion when the user a broken environment.
@@ -195,20 +204,18 @@ class Tools:
                 popen_options["stdout"] = gs.PIPE
             if "stderr" not in popen_options:
                 popen_options["stderr"] = gs.PIPE
-        if stdin:
-            stdin_pipe = gs.PIPE
+        if input is not None:
+            popen_options["stdin"] = gs.PIPE
         else:
-            stdin_pipe = None
-            stdin = None
+            popen_options["stdin"] = None
         # Use text mode by default
         if "text" not in popen_options and "universal_newlines" not in popen_options:
             popen_options["text"] = True
         process = gs.Popen(
             command,
-            stdin=stdin_pipe,
             **popen_options,
         )
-        stdout, stderr = process.communicate(input=stdin)
+        stdout, stderr = process.communicate(input=input)
         if stderr:
             stderr = gs.utils.decode(stderr)
         returncode = process.poll()
