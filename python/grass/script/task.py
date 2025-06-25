@@ -460,6 +460,7 @@ def get_interface_description(cmd):
                 [sys.executable, get_real_command(cmd), "--interface-description"],
                 stdout=PIPE,
                 stderr=PIPE,
+                text=False,
             )
             cmdout, cmderr = p.communicate()
 
