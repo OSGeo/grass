@@ -109,7 +109,6 @@ class ToolFunctionResolver:
         return previous_row[-1]
 
     def suggest_tools(self, tool):
-        # TODO: cache commands also for dir
         result = []
         max_suggestions = 5
         for name in self.names():

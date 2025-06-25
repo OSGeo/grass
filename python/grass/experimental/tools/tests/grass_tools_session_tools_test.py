@@ -1,6 +1,7 @@
 """Test grass.experimental.tools.Tools class"""
 
 import io
+import os
 
 import pytest
 
@@ -445,21 +446,9 @@ def test_migration_from_run_command_family(xy_dataset_session):
         "r.random.surface", output="surface", seed=42, env=xy_dataset_session.env
     )
     # replacement:
-    tools = Tools(env=xy_dataset_session.env)
-    tools.run("r.random.surface", output="surface2", seed=42)
-    tools.r_random_surface(output="surface3", seed=42)
-
-    # run_command with returncode
-    # original:
-    assert (
-        gs.run_command(
-            "r.mask.status", flags="t", env=xy_dataset_session.env, errors="status"
-        )
-        == 1
-    )
-    # replacement:
-    tools = Tools(errors="ignore", env=xy_dataset_session.env)
-    assert tools.run("r.mask.status", flags="t").returncode == 1
+    tools = Tools(env=xy_dataset_session.env)  # same for one or multiple calls
+    tools.run("r.random.surface", output="surface2", seed=42)  # name as a string
+    tools.r_random_surface(output="surface3", seed=42)  # name as a function
 
     # write_command
     # original:
@@ -472,11 +461,15 @@ def test_migration_from_run_command_family(xy_dataset_session):
         stdin="13.45,29.96,200\n",
     )
     # replacement:
-    tools = Tools(env=xy_dataset_session.env)
     tools.run(
         "v.in.ascii",
         input=io.StringIO("13.45,29.96,200\n"),
         output="point2",
+        separator=",",
+    )
+    tools.v_in_ascii(
+        input=io.StringIO("13.45,29.96,200\n"),
+        output="point3",
         separator=",",
     )
 
@@ -504,13 +497,20 @@ def test_migration_from_run_command_family(xy_dataset_session):
         "center_easting": "0.500000",
         "center_northing": "0.500000",
     }
-    # replacement (numbers are actual numbers, not strings, if they convert to Python float or int):
+    assert gs.parse_command(
+        "g.region", flags="c", format="json", env=xy_dataset_session.env
+    ) == {
+        "center_easting": 0.5,
+        "center_northing": 0.5,
+    }
+    # replacement with format=shell (numbers are not strings, but actual numbers as in JSON
+    # if they convert to Python int or float):
     assert tools.run("g.region", flags="c", format="shell").keyval == {
         "center_easting": 0.5,
         "center_northing": 0.5,
     }
-    # parse_command with JSON
-    assert tools.run("g.region", flags="c", format="json").json == {
+    # parse_command with JSON and the function call syntax:
+    assert tools.g_region(flags="c", format="json").json == {
         "center_easting": 0.5,
         "center_northing": 0.5,
     }
@@ -518,12 +518,12 @@ def test_migration_from_run_command_family(xy_dataset_session):
     # parse_command storing JSON output in a variable and accessing individual values
     # original:
     data = gs.parse_command(
-        "g.region", flags="c", format="shell", env=xy_dataset_session.env
+        "g.region", flags="c", format="json", env=xy_dataset_session.env
     )
-    assert float(data["center_easting"]) == 0.5
-    assert float(data["center_northing"]) == 0.5
+    assert data["center_easting"] == 0.5
+    assert data["center_northing"] == 0.5
     # replacement:
-    data = tools.run("g.region", flags="c", format="json")
+    data = tools.g_region(flags="c", format="json")
     assert data["center_easting"] == 0.5
     assert data["center_northing"] == 0.5
 
@@ -533,7 +533,9 @@ def test_migration_from_run_command_family(xy_dataset_session):
     # replacement for short expressions:
     tools.r_mapcalc(expression="b = 1")
     # replacement for long expression:
-    tools.r_mapcalc(file=io.StringIO("c = 1"), overwrite=True)
+    tools.r_mapcalc(file=io.StringIO("c = 1"))
+
+    # g.list
 
     # all other wrappers
     # Wrappers in grass.script usually parse shell-script style key-value pairs,
@@ -544,18 +546,86 @@ def test_migration_from_run_command_family(xy_dataset_session):
     # (this also benefits from better defaults and more consistent tool behavior):
     assert tools.g_region(flags="p", format="json")["rows"] == 1
 
+    # run_command with returncode
+    # original:
+    assert (
+        gs.run_command(
+            "r.mask.status", flags="t", env=xy_dataset_session.env, errors="status"
+        )
+        == 1
+    )
+    # replacement:
+    tools = Tools(errors="ignore", env=xy_dataset_session.env)
+    assert tools.run("r.mask.status", flags="t").returncode == 1
+    assert tools.r_mask_status(flags="t").returncode == 1
 
-def test_with_context_managers(tmpdir):
+    # run_command with overwrite
+    # original:
+    gs.run_command(
+        "r.random.surface",
+        output="surface",
+        seed=42,
+        overwrite=True,
+        env=xy_dataset_session.env,
+    )
+    # replacement:
+    tools.r_random_surface(output="surface", seed=42, overwrite=True)
+    # or with global overwrite:
+    tools = Tools(overwrite=True, env=xy_dataset_session.env)
+    tools.r_random_surface(output="surface", seed=42)
+
+
+def test_with_context_managers_explicit_env(tmpdir):
     project = tmpdir / "project"
     gs.create_project(project)
-    with gs.setup.init(project) as session:
+    with gs.setup.init(project, env=os.environ.copy()) as session:
         tools = Tools(session=session)
         tools.r_random_surface(output="surface", seed=42)
         with TemporaryMapsetSession(env=session.env) as mapset:
             tools.r_random_surface(output="surface", seed=42, env=mapset.env)
-            with gs.MaskManager(env=mapset.env) as mask:
-                # TODO: Do actual test
-                tools.r_univar(map="surface", env=mask.env, format="json")["mean"]
+            with gs.MaskManager(env=mapset.env.copy()) as mask:
+                tools.r_mask(raster="surface", env=mask.env)
+                assert tools.r_mask_status(format="json", env=mask.env)["present"]
+                with gs.RegionManager(
+                    rows=100, cols=100, env=mask.env.copy()
+                ) as region:
+                    assert (
+                        tools.g_region(flags="p", format="json", env=region.env)["rows"]
+                        == 100
+                    )
+
+
+def test_with_context_managers_session_env(tmpdir):
+    project = tmpdir / "project"
+    gs.create_project(project)
+    with (
+        gs.setup.init(project, env=os.environ.copy()) as main_session,
+        TemporaryMapsetSession(env=main_session.env) as mapset_session,
+    ):
+        # TemporaryMapsetSession does not modify like the others, but creates its own env.
+        tools = Tools(session=mapset_session)
+        tools.r_random_surface(output="surface", seed=42)
+        with gs.MaskManager(env=mapset_session.env):
+            tools.r_mask(raster="surface")
+            assert tools.r_mask_status(format="json")["present"]
+            with gs.RegionManager(rows=100, cols=100, env=mapset_session.env):
+                assert tools.g_region(flags="p", format="json")["rows"] == 100
+
+
+def test_with_context_managers_session_env_one_block(tmpdir):
+    project = tmpdir / "project"
+    gs.create_project(project)
+    with (
+        gs.setup.init(project, env=os.environ.copy()) as main_session,
+        TemporaryMapsetSession(env=main_session.env) as mapset_session,
+        gs.MaskManager(env=mapset_session.env),
+        gs.RegionManager(rows=100, cols=100, env=mapset_session.env),
+    ):
+        tools = Tools(session=mapset_session)
+        tools.r_random_surface(output="surface", seed=42)
+        tools.r_mask(raster="surface")
+        assert tools.r_mask_status(format="json")["present"]
+        assert tools.g_region(flags="p", format="json")["rows"] == 100
 
 
 def test_misspelling(xy_dataset_session):
