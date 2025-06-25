@@ -129,8 +129,9 @@ class ToolFunctionResolver:
 class ToolResult:
     """Result returned after executing a tool"""
 
-    def __init__(self, *, name, kwargs, returncode, stdout, stderr):
+    def __init__(self, *, name, command, kwargs, returncode, stdout, stderr):
         self._name = name
+        self._command = command
         self._kwargs = kwargs
         self.returncode = returncode
         self._stdout = stdout
@@ -215,7 +216,9 @@ class ToolResult:
             try:
                 return self.json
             except json.JSONDecodeError as error:
-                if self._kwargs.get("format") == "json":
+                if self._kwargs and self._kwargs.get("format") == "json":
+                    raise
+                if self._command and "format=json" in self._command:
                     raise
                 msg = (
                     f"Output of {self._name} cannot be parsed as JSON. "

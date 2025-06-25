@@ -14,7 +14,6 @@
 
 from __future__ import annotations
 
-import json
 import os
 
 import grass.script as gs
@@ -116,16 +115,6 @@ class Tools:
 
         return env or self._original_env
 
-    def _process_parameters(self, command: list[str], **popen_options):
-        """Get processed parameters from the tool itself"""
-        popen_options["stdin"] = None
-        popen_options["stdout"] = gs.PIPE
-        # We respect whatever is in the stderr option because that's what the user
-        # asked for and will expect to get in case of error (we pretend that it was
-        # the intended run, not our special run before the actual run).
-        interface_result = self.call_cmd([*command, "--json"], **popen_options)
-        return json.loads(interface_result.stdout)
-
     def run(self, name: str, /, **kwargs):
         """Run a tool by specifying its name as a string and passing named arguments.
 
@@ -140,16 +129,10 @@ class Tools:
         # Get a fixed env parameter at at the beginning of each execution,
         # but repeat it every time in case the referenced environment is modified.
         args, popen_options = gs.popen_args_command(name, **kwargs)
-        if "env" not in popen_options:
-            popen_options["env"] = self._modified_env_if_needed()
-
-        processed_parameters = self._process_parameters(args, **popen_options)
-
         # We approximate tool_kwargs as original kwargs.
         return self.run_cmd(
             args,
             tool_kwargs=kwargs,
-            processed_parameters=processed_parameters,
             input=object_parameter_handler.stdin,
             **popen_options,
         )
@@ -160,7 +143,6 @@ class Tools:
         *,
         input: str | bytes | None = None,
         tool_kwargs=None,
-        processed_parameters=None,
         **popen_options,
     ):
         """Run a tool by passing a list of strings as the command.
@@ -171,11 +153,6 @@ class Tools:
         :param tool_kwargs: original named tool arguments used for error reporting
         :param input: text input for the standard input of the tool
         """
-        if "env" not in popen_options:
-            popen_options["env"] = self._modified_env_if_needed()
-        if not processed_parameters:
-            processed_parameters = self._process_parameters(command, **popen_options)
-
         # We approximate tool_kwargs as original kwargs.
         return self.call_cmd(
             command,
@@ -184,13 +161,9 @@ class Tools:
             **popen_options,
         )
 
-    def call(self, name: str, /, *, tool_kwargs=None, input=None, **kwargs):
+    def call(self, name: str, /, **kwargs):
         args, popen_options = gs.popen_args_command(name, **kwargs)
-        if "env" not in popen_options:
-            popen_options["env"] = self._modified_env_if_needed()
-        return self.call_cmd(
-            args, tool_kwargs=tool_kwargs, input=input, **popen_options
-        )
+        return self.call_cmd(args, **popen_options)
 
     # Make this an overload of run.
     def call_cmd(self, command, tool_kwargs=None, input=None, **popen_options):
@@ -219,10 +192,10 @@ class Tools:
         if stderr:
             stderr = gs.utils.decode(stderr)
         returncode = process.poll()
-        # TODO: solve tool_kwargs is None
         # We don't have the keyword arguments to pass to the resulting object.
         result = ToolResult(
             name=command[0],
+            command=command,
             kwargs=tool_kwargs,
             returncode=returncode,
             stdout=stdout,
