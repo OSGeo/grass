@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-21 12:47+0000\n"
-"PO-Revision-Date: 2025-06-23 10:46+0000\n"
+"POT-Creation-Date: 2025-06-24 17:02+0000\n"
+"PO-Revision-Date: 2025-06-25 01:40+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs/fr/>\n"
 "Language: fr\n"
@@ -370,7 +370,7 @@ msgstr "chargement : la table a le mauvais nombre de colonnes"
 msgid "send data: invalid C-type"
 msgstr "envoi de données : type C invalide"
 
-#: ../lib/db/dbmi_client/column.c:136 ../lib/vector/Vlib/ascii.c:429
+#: ../lib/db/dbmi_client/column.c:136 ../lib/vector/Vlib/ascii.c:440
 #: ../lib/vector/Vlib/write_pg.c:685
 #, c-format
 msgid "Unable to describe table <%s>"
@@ -382,7 +382,7 @@ msgid "Array of values to select from column <%s> is empty"
 msgstr "La liste de valeurs à sélectionner depuis la colonne <%s> est vide"
 
 #: ../lib/db/dbmi_client/copy_tab.c:109 ../lib/db/dbmi_client/copy_tab.c:129
-#: ../lib/db/dbmi_client/db.c:40 ../lib/vector/Vlib/ascii.c:405
+#: ../lib/db/dbmi_client/db.c:40 ../lib/vector/Vlib/ascii.c:416
 #: ../lib/vector/Vlib/write_ogr.c:192 ../lib/vector/Vlib/write_pg.c:3035
 #, c-format
 msgid "Unable to start driver <%s>"
@@ -391,7 +391,7 @@ msgstr "Impossible de démarrer le pilote <%s>"
 #: ../lib/db/dbmi_client/copy_tab.c:114 ../lib/db/dbmi_client/copy_tab.c:135
 #: ../lib/db/dbmi_client/db.c:45 ../lib/ogsf/gp3.c:219 ../lib/ogsf/gv3.c:356
 #: ../lib/rst/interp_float/vinput2d.c:107 ../lib/vector/Vlib/array.c:275
-#: ../lib/vector/Vlib/ascii.c:411 ../lib/vector/Vlib/cats.c:601
+#: ../lib/vector/Vlib/ascii.c:422 ../lib/vector/Vlib/cats.c:601
 #: ../lib/vector/Vlib/close_nat.c:165 ../lib/vector/Vlib/map.c:339
 #: ../lib/vector/Vlib/net_build.c:159 ../lib/vector/Vlib/net_build.c:209
 #: ../lib/vector/Vlib/net_build.c:503 ../lib/vector/Vlib/net_build.c:800
@@ -975,10 +975,9 @@ msgid "Unable to open color descriptions"
 msgstr "Impossible d'ouvrir les descriptions des couleurs"
 
 #: ../lib/gis/color_str.c:269
-#, fuzzy, c-format
-#| msgid "Unknown algorithm '%s'"
+#, c-format
 msgid "Unknown color format '%s'"
-msgstr "Algorithme '%s' inconnu"
+msgstr "Format de couleur inconnu '%s'"
 
 #: ../lib/gis/compress.c:143 ../lib/gis/compress.c:205
 #: ../lib/gis/compress.c:222 ../lib/gis/compress.c:237
@@ -1318,16 +1317,15 @@ msgid "Option key is NULL."
 msgstr ""
 
 #: ../lib/gis/omp_threads.c:46
-#, fuzzy, c-format
-#| msgid "Number of threads for parallel computing"
+#, c-format
 msgid "One thread is set up for parallel computing."
 msgid_plural "%d threads are set up for parallel computing."
-msgstr[0] "Nombre de threads pour le calcul parallèle"
-msgstr[1] "Nombre de threads pour le calcul parallèle"
+msgstr[0] "Un thread est défini pour le calcul parallèle."
+msgstr[1] "%d threads sont définis pour le calcul parallèle."
 
 #: ../lib/gis/omp_threads.c:52
 msgid "GRASS is not compiled with OpenMP support, parallel computation is disabled. Only one thread will be used."
-msgstr ""
+msgstr "GRASS n'est pas compilé avec le support OpenMP, le calcul parallèle est désactivé. Un seul thread sera utilisé."
 
 #: ../lib/gis/open.c:69
 #, c-format
@@ -2111,7 +2109,7 @@ msgstr "Nombre de threads pour le calcul parallèle"
 
 #: ../lib/gis/parser_standard_options.c:788
 msgid "0: use OpenMP default; >0: use nprocs; <0: use MAX-nprocs"
-msgstr ""
+msgstr "0 : utiliser la valeur par défaut d'OpenMP ; >0 : utiliser nprocs ; <0 : utiliser MAX-nprocs"
 
 #: ../lib/gis/parser_standard_options.c:796
 #, fuzzy
@@ -2568,181 +2566,225 @@ msgstr "Horodatage invalide pour la carte vecteur <%s@%s>"
 msgid "parse error"
 msgstr "erreur d'analyse"
 
-#: ../lib/gis/units.c:209
-msgid "square unit"
-msgstr "unité carrée"
-
-#: ../lib/gis/units.c:209
+#. GTC: localized area units
+#: ../lib/gis/units.c:211
 msgid "square units"
 msgstr "unités carrés"
 
-#: ../lib/gis/units.c:211
-msgid "unit"
-msgstr "unité"
+#. GTC: localized area units
+#: ../lib/gis/units.c:213
+msgid "square unit"
+msgstr "unité carrée"
 
-#: ../lib/gis/units.c:211
+#. GTC: localized units
+#: ../lib/gis/units.c:217
 msgid "units"
 msgstr "unités"
 
-#: ../lib/gis/units.c:216
-msgid "square meter"
-msgstr "mètre carré"
+#. GTC: localized units
+#: ../lib/gis/units.c:219
+msgid "unit"
+msgstr "unité"
 
-#: ../lib/gis/units.c:216
+#. GTC: localized area units
+#: ../lib/gis/units.c:226
 msgid "square meters"
 msgstr "mètres carrés"
 
-#: ../lib/gis/units.c:218
-msgid "meter"
-msgstr "mètre"
+#. GTC: localized area units
+#: ../lib/gis/units.c:228
+msgid "square meter"
+msgstr "mètre carré"
 
-#: ../lib/gis/units.c:218
+#. GTC: localized units
+#: ../lib/gis/units.c:232
 msgid "meters"
 msgstr "mètres"
 
-#: ../lib/gis/units.c:223
-msgid "square kilometer"
-msgstr "kilomètre carré"
+#. GTC: localized units
+#: ../lib/gis/units.c:234
+msgid "meter"
+msgstr "mètre"
 
-#: ../lib/gis/units.c:223
+#. GTC: localized area units
+#: ../lib/gis/units.c:241
 msgid "square kilometers"
 msgstr "kilomètres carrés"
 
-#: ../lib/gis/units.c:225
-msgid "kilometer"
-msgstr "kilomètre"
+#. GTC: localized area units
+#: ../lib/gis/units.c:243
+msgid "square kilometer"
+msgstr "kilomètre carré"
 
-#: ../lib/gis/units.c:225
+#. GTC: localized units
+#: ../lib/gis/units.c:247
 msgid "kilometers"
 msgstr "kilomètres"
 
-#: ../lib/gis/units.c:230
-msgid "acre"
-msgstr "acre"
+#. GTC: localized units
+#: ../lib/gis/units.c:249
+msgid "kilometer"
+msgstr "kilomètre"
 
-#: ../lib/gis/units.c:230
+#. GTC: localized area units
+#: ../lib/gis/units.c:256
 msgid "acres"
 msgstr "acres"
 
-#: ../lib/gis/units.c:238
-msgid "hectare"
-msgstr "hectare"
+#. GTC: localized area units
+#: ../lib/gis/units.c:258
+msgid "acre"
+msgstr "acre"
 
-#: ../lib/gis/units.c:238
+#. GTC: localized area units
+#: ../lib/gis/units.c:268
 msgid "hectares"
 msgstr "hectares"
 
-#: ../lib/gis/units.c:246
-msgid "square mile"
-msgstr "mile carré"
+#. GTC: localized area units
+#: ../lib/gis/units.c:270
+msgid "hectare"
+msgstr "hectare"
 
-#: ../lib/gis/units.c:246
+#. GTC: localized area units
+#: ../lib/gis/units.c:280
 msgid "square miles"
 msgstr "miles carrés"
 
-#: ../lib/gis/units.c:248
-msgid "mile"
-msgstr "mile"
+#. GTC: localized area units
+#: ../lib/gis/units.c:282
+msgid "square mile"
+msgstr "mile carré"
 
-#: ../lib/gis/units.c:248
+#. GTC: localized units
+#: ../lib/gis/units.c:286
 msgid "miles"
 msgstr "miles"
 
-#: ../lib/gis/units.c:253
+#. GTC: localized units
+#: ../lib/gis/units.c:288
+msgid "mile"
+msgstr "mile"
+
+#. GTC: localized area units, do not confuse with US feet
+#: ../lib/gis/units.c:295
 msgid "square feet"
 msgstr "pieds carrés"
 
-#: ../lib/gis/units.c:253
+#. GTC: localized area units, do not confuse with US foot
+#: ../lib/gis/units.c:297
 msgid "square foot"
 msgstr "pied carré"
 
-#: ../lib/gis/units.c:255
+#. GTC: localized units, do not confuse with US feet
+#: ../lib/gis/units.c:301
 msgid "feet"
 msgstr "pieds"
 
-#: ../lib/gis/units.c:255
+#. GTC: localized units, do not confuse with US foot
+#: ../lib/gis/units.c:303
 msgid "foot"
 msgstr "pied"
 
-#: ../lib/gis/units.c:260
+#. GTC: localized area units, do not confuse with feet
+#: ../lib/gis/units.c:310
 msgid "square US feet"
 msgstr "pieds US carrés"
 
-#: ../lib/gis/units.c:260
+#. GTC: localized area units, do not confuse with foot
+#: ../lib/gis/units.c:312
 msgid "square US foot"
 msgstr "pied US carré"
 
-#: ../lib/gis/units.c:262
+#. GTC: localized units, do not confuse with feet
+#: ../lib/gis/units.c:316
 msgid "US feet"
 msgstr "pieds US"
 
-#: ../lib/gis/units.c:262
+#. GTC: localized units, do not confuse with foot
+#: ../lib/gis/units.c:318
 msgid "US foot"
 msgstr "pied US"
 
-#: ../lib/gis/units.c:267
-msgid "square degree"
-msgstr "degré carré"
-
-#: ../lib/gis/units.c:267
+#. GTC: localized area units
+#: ../lib/gis/units.c:325
 msgid "square degrees"
 msgstr "degrés carrés"
 
-#: ../lib/gis/units.c:269
-msgid "degree"
-msgstr "degré"
+#. GTC: localized area units
+#: ../lib/gis/units.c:327
+msgid "square degree"
+msgstr "degré carré"
 
-#: ../lib/gis/units.c:269
+#. GTC: localized units
+#: ../lib/gis/units.c:331
 msgid "degrees"
 msgstr "degrés"
 
-#: ../lib/gis/units.c:273
-msgid "year"
-msgstr "année"
+#. GTC: localized units
+#: ../lib/gis/units.c:333
+msgid "degree"
+msgstr "degré"
 
-#: ../lib/gis/units.c:273
+#. GTC: localized time units
+#: ../lib/gis/units.c:339
 msgid "years"
 msgstr "années"
 
-#: ../lib/gis/units.c:277
-msgid "month"
-msgstr "mois"
+#. GTC: localized time units
+#: ../lib/gis/units.c:341
+msgid "year"
+msgstr "année"
 
-#: ../lib/gis/units.c:277
+#. GTC: localized time units
+#: ../lib/gis/units.c:347
 msgid "months"
 msgstr "mois"
 
-#: ../lib/gis/units.c:281
-msgid "day"
-msgstr "jour"
+#. GTC: localized time units
+#: ../lib/gis/units.c:349
+msgid "month"
+msgstr "mois"
 
-#: ../lib/gis/units.c:281
+#. GTC: localized time units
+#: ../lib/gis/units.c:355
 msgid "days"
 msgstr "jours"
 
-#: ../lib/gis/units.c:285
-msgid "hour"
-msgstr "heure"
+#. GTC: localized time units
+#: ../lib/gis/units.c:357
+msgid "day"
+msgstr "jour"
 
-#: ../lib/gis/units.c:285
+#. GTC: localized time units
+#: ../lib/gis/units.c:363
 msgid "hours"
 msgstr "heures"
 
-#: ../lib/gis/units.c:289
-msgid "minute"
-msgstr "minute"
+#. GTC: localized time units
+#: ../lib/gis/units.c:365
+msgid "hour"
+msgstr "heure"
 
-#: ../lib/gis/units.c:289
+#. GTC: localized time units
+#: ../lib/gis/units.c:371
 msgid "minutes"
 msgstr "minutes"
 
-#: ../lib/gis/units.c:293
-msgid "second"
-msgstr "seconde"
+#. GTC: localized time units
+#: ../lib/gis/units.c:373
+msgid "minute"
+msgstr "minute"
 
-#: ../lib/gis/units.c:293
+#. GTC: localized time units
+#: ../lib/gis/units.c:379
 msgid "seconds"
 msgstr "secondes"
+
+#. GTC: localized time units
+#: ../lib/gis/units.c:381
+msgid "second"
+msgstr "seconde"
 
 #: ../lib/gis/view.c:169
 #, c-format
@@ -4432,7 +4474,7 @@ msgstr "Carte vecteur <%s> chargée (%d points)"
 
 #: ../lib/ogsf/gp3.c:213 ../lib/ogsf/gv3.c:350
 #: ../lib/rst/interp_float/vinput2d.c:98 ../lib/vector/Vlib/array.c:269
-#: ../lib/vector/Vlib/ascii.c:399 ../lib/vector/Vlib/cats.c:592
+#: ../lib/vector/Vlib/ascii.c:410 ../lib/vector/Vlib/cats.c:592
 #: ../lib/vector/Vlib/copy.c:649 ../lib/vector/Vlib/copy.c:764
 #: ../lib/vector/Vlib/map.c:300 ../lib/vector/Vlib/map.c:433
 #: ../lib/vector/Vlib/net_build.c:153 ../lib/vector/Vlib/net_build.c:204
@@ -4639,17 +4681,12 @@ msgid "Tried to pop an empty stack"
 msgstr "A tenté de dépiler une mémoire vide"
 
 #: ../lib/pngdriver/graph_set.c:100
-#, c-format
-msgid "png: truecolor status %s"
-msgstr "png : statut truecolor %s"
+msgid "png: truecolor status enabled"
+msgstr "png : statut truecolor activé"
 
-#: ../lib/pngdriver/graph_set.c:101 ../lib/psdriver/graph_set.c:197
-msgid "disabled"
-msgstr "désactivé"
-
-#: ../lib/pngdriver/graph_set.c:101 ../lib/psdriver/graph_set.c:197
-msgid "enabled"
-msgstr "activé"
+#: ../lib/pngdriver/graph_set.c:101
+msgid "png: truecolor status disabled"
+msgstr "png : statut truecolor désactivé"
 
 #: ../lib/pngdriver/graph_set.c:149
 #, c-format
@@ -5007,9 +5044,12 @@ msgid "Output Unit Factor"
 msgstr "Facteur unité de sortie"
 
 #: ../lib/psdriver/graph_set.c:196
-#, c-format
-msgid "ps: truecolor status %s"
-msgstr "ps : statut truecolor %s"
+msgid "ps: truecolor status enabled"
+msgstr "ps : statut truecolor activé"
+
+#: ../lib/psdriver/graph_set.c:197
+msgid "ps: truecolor status disabled"
+msgstr "ps : statut truecolor désactivé"
 
 #: ../lib/psdriver/graph_set.c:215
 #, c-format
@@ -5192,7 +5232,7 @@ msgid "Unable to create <%s> dataset using memory driver"
 msgstr "Impossible de créer le jeu de données <%s> avec le pilote mémoire"
 
 #: ../lib/raster/gdal.c:344
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Driver <%s> does not support creating rasters"
 msgstr "Le pilote <%s> ne gère pas la création de raster"
 
@@ -5391,7 +5431,7 @@ msgstr "inconnu"
 
 #: ../lib/raster/mask_info.c:219
 msgid "Single thread processing enforced due to raster mask being present."
-msgstr ""
+msgstr "Le traitement à un seul thread est imposé en raison de la présence d'un masque raster."
 
 #: ../lib/raster/null_val.c:64
 msgid "EmbedGivenNulls: wrong data type"
@@ -6273,49 +6313,49 @@ msgstr "Impossible de sélectionner un enregistrement depuis la table <%s> (clef
 msgid "Error reading ASCII file: (bad type) [%s]"
 msgstr "Erreur de lecture du fichier ASCII : (mauvais type) [%s]"
 
-#: ../lib/vector/Vlib/ascii.c:124
+#: ../lib/vector/Vlib/ascii.c:125
 #, c-format
 msgid "Error reading ASCII file: (unknown type) [%s]"
 msgstr "Erreur de lecture du fichier ASCII : (type inconnu) [%s]"
 
-#: ../lib/vector/Vlib/ascii.c:144
+#: ../lib/vector/Vlib/ascii.c:146
 msgid "End of ASCII file reached before end of coordinates"
 msgstr "Fin du fichier ASCII atteinte avant la fin des coordonnées"
 
-#: ../lib/vector/Vlib/ascii.c:156
+#: ../lib/vector/Vlib/ascii.c:158
 #, c-format
 msgid "Error reading ASCII file: (bad point) [%s]"
 msgstr "Erreur de lecture du fichier ASCII : (mauvais point) [%s]"
 
-#: ../lib/vector/Vlib/ascii.c:162
+#: ../lib/vector/Vlib/ascii.c:165
 #, c-format
 msgid "Unparsable longitude value: [%s]"
 msgstr "Valeur de latitude non analysable : [%s]"
 
-#: ../lib/vector/Vlib/ascii.c:167
+#: ../lib/vector/Vlib/ascii.c:171
 #, c-format
 msgid "Unparsable latitude value: [%s]"
 msgstr "Valeur de latitude non analysable : [%s]"
 
-#: ../lib/vector/Vlib/ascii.c:201
+#: ../lib/vector/Vlib/ascii.c:206
 msgid "End of ASCII file reached before end of categories"
 msgstr "Fin du fichier ASCII atteinte avant la fin des catégories"
 
-#: ../lib/vector/Vlib/ascii.c:212
+#: ../lib/vector/Vlib/ascii.c:217
 #, c-format
 msgid "Error reading categories: [%s]"
 msgstr "Erreur de lecture des catégories : [%s]"
 
-#: ../lib/vector/Vlib/ascii.c:225
+#: ../lib/vector/Vlib/ascii.c:231
 msgid "Unable to copy points"
 msgstr "Impossible de copier les points"
 
-#: ../lib/vector/Vlib/ascii.c:238
+#: ../lib/vector/Vlib/ascii.c:246
 #, c-format
 msgid "Vector map <%s> is 2D. %d 3D features (faces or kernels) skipped."
 msgstr "La carte vecteur <%s> est 2D. %d entités 3D (faces ou noyaux) sautés."
 
-#: ../lib/vector/Vlib/ascii.c:271
+#: ../lib/vector/Vlib/ascii.c:282
 #, c-format
 msgid ""
 "Unexpected data in vector header:\n"
@@ -6324,54 +6364,54 @@ msgstr ""
 "Données inatendues dans l'en-tête du vecteur :\n"
 "[%s]"
 
-#: ../lib/vector/Vlib/ascii.c:307
+#: ../lib/vector/Vlib/ascii.c:318
 #, c-format
 msgid "Unknown keyword <%s> in vector head"
 msgstr "Mot-clef <%s> inconnu dans l'en-tête vecteur"
 
-#: ../lib/vector/Vlib/ascii.c:468
+#: ../lib/vector/Vlib/ascii.c:481
 #, c-format
 msgid "Column <%s> does not exist"
 msgstr "La colonne <%s> n'existe pas"
 
-#: ../lib/vector/Vlib/ascii.c:470
+#: ../lib/vector/Vlib/ascii.c:483
 msgid "Available columns:"
 msgstr "Colonnes disponibles :"
 
-#: ../lib/vector/Vlib/ascii.c:476
+#: ../lib/vector/Vlib/ascii.c:489
 msgid "Export cancelled"
 msgstr "Export annulé"
 
-#: ../lib/vector/Vlib/ascii.c:511
+#: ../lib/vector/Vlib/ascii.c:526
 #, c-format
 msgid "Unknown type of column <%s>, export cancelled"
 msgstr "Type de colonne <%s> inconnu, export annulé"
 
-#: ../lib/vector/Vlib/ascii.c:544
+#: ../lib/vector/Vlib/ascii.c:562
 #, c-format
 msgid "Unable to select record from table <%s> (key %s, column %s)"
 msgstr "Impossible de sélectionner des enregistrements depuis la table <%s> (clef %s, colonne %s)"
 
-#: ../lib/vector/Vlib/ascii.c:672
+#: ../lib/vector/Vlib/ascii.c:694
 #, c-format
 msgid "Unknown feature type %d"
 msgstr "Type d'objet %d inconnu"
 
-#: ../lib/vector/Vlib/ascii.c:712
+#: ../lib/vector/Vlib/ascii.c:734
 #, c-format
 msgid "Feature has more categories. Only one category (%d) is exported."
 msgstr "L'objet a plus de catégories. Seulement une catégorie (%d) est exportée."
 
-#: ../lib/vector/Vlib/ascii.c:732
+#: ../lib/vector/Vlib/ascii.c:754
 #, c-format
 msgid "Cannot select attributes for cat = %d"
 msgstr "Impossible de sélectionner les attributs pour cat = %d"
 
-#: ../lib/vector/Vlib/ascii.c:737
+#: ../lib/vector/Vlib/ascii.c:759
 msgid "Unable to fetch data from table"
 msgstr "Impossible de récupérer les données depuis la table"
 
-#: ../lib/vector/Vlib/ascii.c:771 ../lib/vector/Vlib/net_build.c:214
+#: ../lib/vector/Vlib/ascii.c:793 ../lib/vector/Vlib/net_build.c:214
 #: ../lib/vector/Vlib/net_build.c:508 ../lib/vector/Vlib/net_build.c:526
 #: ../lib/vector/Vlib/net_build.c:805 ../lib/vector/Vlib/net_build.c:823
 #: ../lib/vector/Vlib/net_build.c:981
@@ -6379,30 +6419,30 @@ msgstr "Impossible de récupérer les données depuis la table"
 msgid "Column <%s> not found in table <%s>"
 msgstr "Colonne <%s> non trouvée dans la table <%s>"
 
-#: ../lib/vector/Vlib/ascii.c:775
+#: ../lib/vector/Vlib/ascii.c:797
 #, c-format
 msgid "Column <%s>: unsupported data type"
 msgstr "Colonne <%s> : type de données non supporté"
 
-#: ../lib/vector/Vlib/ascii.c:862
+#: ../lib/vector/Vlib/ascii.c:884
 msgid "Unknown format"
 msgstr "Format inconnu"
 
-#: ../lib/vector/Vlib/ascii.c:872
+#: ../lib/vector/Vlib/ascii.c:894
 msgid "Topology not available, unable to process areas"
 msgstr "Topologie non disponible, impossible de traiter les surfaces"
 
-#: ../lib/vector/Vlib/ascii.c:885
+#: ../lib/vector/Vlib/ascii.c:907
 #, c-format
 msgid "Unable to get boundary of area id %d"
 msgstr "Impossible d'obtenir le contour pour la surface d'id %d"
 
-#: ../lib/vector/Vlib/ascii.c:899
+#: ../lib/vector/Vlib/ascii.c:921
 #, c-format
 msgid "Unable to get boundary of isle id %d (area id %d)"
 msgstr "Impossible d'obtenir les limites de l'île d'id %d (id de la surface %d)"
 
-#: ../lib/vector/Vlib/ascii.c:916
+#: ../lib/vector/Vlib/ascii.c:938
 #, c-format
 msgid "%d features without category skipped. To export also features without category use '%s=-1'."
 msgstr "%d objets sans catégories sautés. Pour exporter également les objets sans catégories, utiliser '%s=-1'."
@@ -6673,12 +6713,12 @@ msgid "Number of incorrect boundaries: %d"
 msgstr "Nombre de contours incorrects: %d"
 
 #: ../lib/vector/Vlib/build.c:996
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Number of centroids outside area: %d"
 msgstr "Nombre de centroïdes en dehors de surfaces: %d"
 
 #: ../lib/vector/Vlib/build.c:999
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Number of duplicate centroids: %d"
 msgstr "Nombre de centroïdes en double : %d"
 
@@ -8990,6 +9030,12 @@ msgstr "Surface %d sans contours"
 #: ../lib/vector/vedit/select.c:231
 msgid "Unknown query tool"
 msgstr "Outil de recherche inconnu"
+
+#~ msgid "disabled"
+#~ msgstr "désactivé"
+
+#~ msgid "enabled"
+#~ msgstr "activé"
 
 #, python-format
 #~ msgid ""
