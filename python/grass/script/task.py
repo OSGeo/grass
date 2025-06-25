@@ -414,13 +414,19 @@ class processTask:
 
 def convert_xml_to_utf8(xml_text):
     # enc = locale.getdefaultlocale()[1]
-
+    if xml_text is None:
+        return None
     # modify: fetch encoding from the interface description text(xml)
     # e.g. <?xml version="1.0" encoding="GBK"?>
     pattern = re.compile(rb'<\?xml[^>]*\Wencoding="([^"]*)"[^>]*\?>')
     m = re.match(pattern, xml_text)
     if m is None:
-        return xml_text.encode("utf-8") if xml_text else None
+        try:
+            xml_text.decode("utf-8", errors="strict")
+            return xml_text
+        except UnicodeDecodeError:
+            return decode(xml_text).encode("utf-8")
+
     enc = m.groups()[0]
 
     # modify: change the encoding to "utf-8", for correct parsing
