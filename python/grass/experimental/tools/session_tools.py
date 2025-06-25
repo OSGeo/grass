@@ -74,6 +74,11 @@ class Tools:
         self._name_resolver = None
 
     def _modified_env_if_needed(self):
+        """Get the environment for subprocesses
+
+        Creates a modified copy if needed based on the parameters,
+        but returns the original environment otherwise.
+        """
         env = None
         if self._overwrite is not None:
             env = env or self._original_env.copy()
@@ -111,22 +116,22 @@ class Tools:
 
         return env or self._original_env
 
-    def _process_parameters(self, command, **popen_options):
+    def _process_parameters(self, command: list[str], **popen_options):
+        """Get processed parameters from the tool itself"""
         popen_options["stdin"] = None
         popen_options["stdout"] = gs.PIPE
         # We respect whatever is in the stderr option because that's what the user
         # asked for and will expect to get in case of error (we pretend that it was
         # the intended run, not our special run before the actual run).
-        return self.call_cmd([*command, "--json"], **popen_options)
+        interface_result = self.call_cmd([*command, "--json"], **popen_options)
+        return json.loads(interface_result.stdout)
 
     def run(self, name, /, **kwargs):
-        """Run modules from the GRASS display family (modules starting with "d.").
+        """Run a tool by specifying its name as a string and passing named arguments.
 
-         This function passes arguments directly to grass.script.run_command()
-         so the syntax is the same.
-
-        :param str module: name of GRASS module
-        :param `**kwargs`: named arguments passed to run_command()"""
+        :param name: name of the GRASS tool
+        :param kwargs: named tool arguments
+        """
         # Object parameters are handled first before the conversion of the call to a
         # list of strings happens.
         object_parameter_handler = ParameterConverter()
@@ -138,8 +143,7 @@ class Tools:
         if "env" not in popen_options:
             popen_options["env"] = self._modified_env_if_needed()
 
-        interface_result = self._process_parameters(args, **popen_options)
-        parameters = json.loads(interface_result.stdout)
+        parameters = self._process_parameters(args, **popen_options)
 
         # We approximate tool_kwargs as original kwargs.
         return self.run_cmd(
@@ -152,7 +156,7 @@ class Tools:
 
     def run_cmd(
         self,
-        command,
+        command: list[str],
         tool_kwargs=None,
         stdin=None,
         processed_parameters=None,
@@ -161,8 +165,7 @@ class Tools:
         if "env" not in popen_options:
             popen_options["env"] = self._modified_env_if_needed()
         if not processed_parameters:
-            interface_result = self._process_parameters(command, **popen_options)
-            processed_parameters = json.loads(interface_result.stdout)
+            processed_parameters = self._process_parameters(command, **popen_options)
 
         # We approximate tool_kwargs as original kwargs.
         return self.call_cmd(
@@ -172,7 +175,7 @@ class Tools:
             **popen_options,
         )
 
-    def call(self, name, /, *, tool_kwargs=None, stdin=None, **kwargs):
+    def call(self, name: str, /, *, tool_kwargs=None, stdin=None, **kwargs):
         args, popen_options = gs.popen_args_command(name, **kwargs)
         if "env" not in popen_options:
             popen_options["env"] = self._modified_env_if_needed()
@@ -236,8 +239,10 @@ class Tools:
         return result
 
     def __getattr__(self, name):
-        """Parse attribute to GRASS display module. Attribute should be in
-        the form 'd_module_name'. For example, 'd.rast' is called with 'd_rast'.
+        """Get a function representing a GRASS tool.
+
+        Attribute should be in the form 'r_example_name'. For example, 'r.slope.aspect'
+        is used trough attribute 'r_slope_aspect'.
         """
         if not self._name_resolver:
             self._name_resolver = ToolFunctionResolver(
@@ -247,6 +252,7 @@ class Tools:
         return self._name_resolver.get_function(name, exception_type=AttributeError)
 
     def __dir__(self):
+        """List available tools and standard attributes."""
         if not self._name_resolver:
             self._name_resolver = ToolFunctionResolver(
                 run_function=self.run,
