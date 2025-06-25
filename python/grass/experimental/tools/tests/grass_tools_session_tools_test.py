@@ -532,7 +532,7 @@ def test_migration_from_run_command_family(xy_dataset_session):
     gs.mapcalc("a = 1", env=xy_dataset_session.env)
     # replacement for short expressions:
     tools.r_mapcalc(expression="b = 1")
-    # replacement for long expression:
+    # replacement for long expressions:
     tools.r_mapcalc(file=io.StringIO("c = 1"))
 
     # g.list wrappers
