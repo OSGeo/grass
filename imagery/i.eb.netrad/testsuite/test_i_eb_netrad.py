@@ -125,14 +125,12 @@ class TestIEbNetrad(TestCase):
         self.runModule("r.mapcalc", expression="albedo_low = 0.1", overwrite=True)
         self.run_netrad("rn_low", albedo="albedo_low")
         self.tmp_rasters.extend(["albedo_low", "rn_low"])
-        stats_low = gs.parse_command("r.univar", map="rn_low", flags="g", format="json")
+        stats_low = gs.parse_command("r.univar", map="rn_low", format="json")
 
         self.runModule("r.mapcalc", expression="albedo_high = 0.5", overwrite=True)
         self.run_netrad("rn_high", albedo="albedo_high")
         self.tmp_rasters.extend(["albedo_high", "rn_high"])
-        stats_high = gs.parse_command(
-            "r.univar", map="rn_high", flags="g", format="json"
-        )
+        stats_high = gs.parse_command("r.univar", map="rn_high", format="json")
 
         self.assertGreater(stats_low["mean"], stats_high["mean"])
 
@@ -141,16 +139,12 @@ class TestIEbNetrad(TestCase):
         self.runModule("r.mapcalc", expression="zenith_low = 10.0", overwrite=True)
         self.run_netrad("rn_low_zen", sunzenithangle="zenith_low")
         self.tmp_rasters.extend(["zenith_low", "rn_low_zen"])
-        stats_low = gs.parse_command(
-            "r.univar", map="rn_low_zen", flags="g", format="json"
-        )
+        stats_low = gs.parse_command("r.univar", map="rn_low_zen", format="json")
 
         self.runModule("r.mapcalc", expression="zenith_high = 70.0", overwrite=True)
         self.run_netrad("rn_high_zen", sunzenithangle="zenith_high")
         self.tmp_rasters.extend(["zenith_high", "rn_high_zen"])
-        stats_high = gs.parse_command(
-            "r.univar", map="rn_high_zen", flags="g", format="json"
-        )
+        stats_high = gs.parse_command("r.univar", map="rn_high_zen", format="json")
 
         self.assertGreater(stats_low["mean"], stats_high["mean"])
 
