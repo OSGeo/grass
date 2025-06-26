@@ -1,5 +1,6 @@
 """Test grass.script.core.get_commands function"""
 
+import os
 import sys
 
 import pytest
@@ -42,6 +43,6 @@ def test_in_session(tmp_path):
     # TODO: Use env=os.environ.copy()
     project = tmp_path / "project"
     gs.create_project(project)
-    with gs.setup.init(project) as session:
+    with gs.setup.init(project, env=os.environ.copy()) as session:
         executables_set, scripts_dict = gs.get_commands(env=session.env)
     common_test_code(executables_set, scripts_dict)
