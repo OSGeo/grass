@@ -605,10 +605,12 @@ int main(int argc, char *argv[])
 
     G_message("-----------------------------------------------------");
     if (total_input != 0 && total_input != total_output)
-        G_done_msg(_("Number of vertices for selected features %s from %d to "
-                     "%d (%d%% remaining)"),
-                   simplification ? _("reduced") : _("changed"), total_input,
-                   total_output, (total_output * 100) / total_input);
+        G_done_msg(
+            simplification ? _("Number of vertices for selected features "
+                               "reduced from %d to %d (%d%% remaining)")
+                           : _("Number of vertices for selected features "
+                               "changed from %d to %d (%d%% remaining)"),
+            total_input, total_output, (total_output * 100) / total_input);
     else
         G_done_msg(" ");
 

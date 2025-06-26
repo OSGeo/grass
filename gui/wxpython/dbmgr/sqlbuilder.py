@@ -57,9 +57,7 @@ class SQLBuilder(wx.Frame):
         wx.Frame.__init__(self, parent, id, title)
 
         self.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_sql.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
 
         self.parent = parent

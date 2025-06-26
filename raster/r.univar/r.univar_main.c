@@ -190,21 +190,11 @@ int main(int argc, char *argv[])
 
     /* set nprocs parameter */
     int nprocs;
-    sscanf(param.nprocs->answer, "%d", &nprocs);
+    nprocs = G_set_omp_num_threads(param.nprocs);
+    nprocs = Rast_disable_omp_on_mask(nprocs);
     if (nprocs < 1)
         G_fatal_error(_("<%d> is not valid number of nprocs."), nprocs);
-    if (nprocs > 1 && Rast_mask_is_present()) {
-        G_warning(_("Parallel processing disabled due to active mask."));
-        nprocs = 1;
-    }
-#if defined(_OPENMP)
-    omp_set_num_threads(nprocs);
-#else
-    if (nprocs != 1)
-        G_warning(_("GRASS is compiled without OpenMP support. Ignoring "
-                    "threads setting."));
-    nprocs = 1;
-#endif
+
     /* table field separator */
     zone_info.sep = G_option_to_separator(param.separator);
 
@@ -230,7 +220,7 @@ int main(int argc, char *argv[])
             G_fatal_error("Can not read range for zoning raster");
         Rast_get_range_min_max(&zone_range, &min, &max);
         if (Rast_read_cats(z, mapset, &(zone_info.cats)))
-            G_warning("no category support for zoning raster");
+            G_warning("No category support for zoning raster");
 
         zone_info.min = min;
         zone_info.max = max;

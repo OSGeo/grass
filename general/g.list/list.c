@@ -71,34 +71,78 @@ void make_list(struct elist **el, int *lcount, int *lalloc,
 }
 
 void print_list(FILE *fp, struct elist *el, int count, const char *separator,
-                int add_type, int add_mapset)
+                int add_type, int add_mapset, enum OutputFormat format)
 {
     int i;
+    char fullname[1024];
+    JSON_Array *root_array = NULL;
+    JSON_Value *root_value = NULL;
+    JSON_Object *map_object = NULL;
+    JSON_Value *map_value = NULL;
 
     if (!count)
         return;
+
+    if (format == JSON) {
+        root_value = G_json_value_init_array();
+        if (root_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
+        root_array = G_json_array(root_value);
+    }
 
     qsort(el, count, sizeof(struct elist), compare_elist);
 
     for (i = 0; i < count; i++) {
         int need_mapset = 0;
 
-        if (i != 0)
-            fprintf(fp, "%s", separator);
+        if (format == SHELL) {
+            if (i != 0)
+                fprintf(fp, "%s", separator);
 
-        if (add_type)
-            fprintf(fp, "%s/", el[i].type);
+            if (add_type)
+                fprintf(fp, "%s/", el[i].type);
 
-        fprintf(fp, "%s", el[i].name);
+            fprintf(fp, "%s", el[i].name);
 
-        if (!add_mapset) {
-            if (i + 1 < count)
-                need_mapset = strcmp(el[i].name, el[i + 1].name) == 0;
-            if (!need_mapset && i > 0)
-                need_mapset = strcmp(el[i].name, el[i - 1].name) == 0;
+            if (!add_mapset) {
+                if (i + 1 < count)
+                    need_mapset = strcmp(el[i].name, el[i + 1].name) == 0;
+                if (!need_mapset && i > 0)
+                    need_mapset = strcmp(el[i].name, el[i - 1].name) == 0;
+            }
+            if (add_mapset || need_mapset)
+                fprintf(fp, "@%s", el[i].mapset);
         }
-        if (add_mapset || need_mapset)
-            fprintf(fp, "@%s", el[i].mapset);
+        else {
+            map_value = G_json_value_init_object();
+            if (map_value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON object. Out of memory?"));
+            }
+            map_object = G_json_object(map_value);
+            snprintf(fullname, sizeof(fullname), "%s@%s", el[i].name,
+                     el[i].mapset);
+
+            G_json_object_set_string(map_object, "name", el[i].name);
+            G_json_object_set_string(map_object, "mapset", el[i].mapset);
+            G_json_object_set_string(map_object, "type", el[i].type);
+            G_json_object_set_string(map_object, "fullname", fullname);
+            G_json_array_append_value(root_array, map_value);
+        }
+    }
+
+    if (format == JSON) {
+        char *json_string = G_json_serialize_to_string_pretty(root_value);
+        if (!json_string) {
+            G_json_value_free(root_value);
+            G_fatal_error(_("Failed to serialize JSON to pretty format."));
+        }
+
+        fputs(json_string, fp);
+
+        G_json_free_serialized_string(json_string);
+        G_json_value_free(root_value);
     }
 
     fflush(fp);

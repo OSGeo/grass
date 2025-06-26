@@ -247,7 +247,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                 "Nothing to draw! (no categories with labels? out of range?)"));
         }
 
-        /* Figure number of lines, number of pixles per line and text size */
+        /* Figure number of lines, number of pixels per line and text size */
         dots_per_line = ((y1 - y0) / lines);
 
         /* switch to a smooth legend for CELL maps with too many cats */

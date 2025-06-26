@@ -351,6 +351,7 @@ class Module:
     >>> neighbors.outputs.output = "mapB"
     >>> neighbors.inputs.size = 5
     >>> neighbors.inputs.quantile = 0.5
+    >>> neighbors.inputs.nprocs = 1
     >>> neighbors.get_bash()
     'r.neighbors input=mapA size=5 method=average weighting_function=none quantile=0.5 nprocs=1 memory=300 output=mapB'
 
@@ -358,6 +359,7 @@ class Module:
     >>> new_neighbors1.inputs.input = "mapD"
     >>> new_neighbors1.inputs.size = 3
     >>> new_neighbors1.inputs.quantile = 0.5
+    >>> new_neighbors1.inputs.nprocs = 1
     >>> new_neighbors1.get_bash()
     'r.neighbors input=mapD size=3 method=average weighting_function=none quantile=0.5 nprocs=1 memory=300 output=mapB'
 
@@ -369,13 +371,13 @@ class Module:
 
     >>> neighbors = Module("r.neighbors")
     >>> neighbors.get_bash()
-    'r.neighbors size=3 method=average weighting_function=none nprocs=1 memory=300'
+    'r.neighbors size=3 method=average weighting_function=none nprocs=0 memory=300'
 
     >>> new_neighbors3 = copy.deepcopy(neighbors)
     >>> new_neighbors3(input="mapA", size=3, output="mapB", run_=False)
     Module('r.neighbors')
     >>> new_neighbors3.get_bash()
-    'r.neighbors input=mapA size=3 method=average weighting_function=none nprocs=1 memory=300 output=mapB'
+    'r.neighbors input=mapA size=3 method=average weighting_function=none nprocs=0 memory=300 output=mapB'
 
     >>> mapcalc = Module(
     ...     "r.mapcalc", expression="test_a = 1", overwrite=True, run_=False

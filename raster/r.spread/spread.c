@@ -236,7 +236,7 @@ int cumulative(struct costHa *pres_cell, struct cell_ptrHa *to_cell,
     return 0;
 }
 
-/****** function for updating the cumulative cost/time, possibaly     ********
+/****** function for updating the cumulative cost/time, possibly      ********
  ****** back path x,y coordinates, both in the output(s) and the heap ********/
 
 void update(struct costHa *pres_cell, int row, int col, double angle,

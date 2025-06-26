@@ -637,8 +637,9 @@ class VNETAnalyses:
                 if len(catPts[cat[0]]) < 1:
                     GMessage(
                         parent=self,
-                        message=_("Please choose '%s' and '%s' point.")
-                        % (cats[0][1], cats[1][1]),
+                        message=_("Please choose '{0}' and '{1}' point.").format(
+                            cats[0][1], cats[1][1]
+                        ),
                     )
                     return False
         else:

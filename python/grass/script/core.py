@@ -313,9 +313,13 @@ def make_command(
         >>> make_command("g.message", flags="w", message="this is a warning")
         ['g.message', '-w', 'message=this is a warning']
 
+    The single-character flags are supplied as a string, *flags*, containing
+    individual flag characters. While an integer for a single flag and a leading dash
+    are also accepted, the best practice is to provide the characters as
+    a string without a leading dash.
 
     :param str prog: GRASS module
-    :param str flags: flags to be used (given as a string)
+    :param str flags: flags to be used (given as a string of flag characters)
     :param bool overwrite: True to enable overwriting the output (``--o``)
     :param bool quiet: True to run quietly (``--q``)
     :param bool superquiet: True to run extra quietly (``--qq``)
@@ -323,8 +327,6 @@ def make_command(
     :param options: module's parameters
 
     :return: list of arguments
-
-    :raises ~grass.exceptions.ScriptError: If the invalid flag '``-``' is given.
     """
     args = [_make_val(prog)]
     if overwrite:
@@ -337,10 +339,16 @@ def make_command(
         args.append("--qq")
     if flags:
         flags = _make_val(flags)
-        if "-" in flags:
-            msg = "'-' is not a valid flag"
-            raise ScriptError(msg)
-        args.append("-" + flags)
+        # We allow a leading dash in the flags or add one if it is not provided.
+        # In any case, the rest is passed as is, so any additional dashes will
+        # be processed and rejected by the underlying tool.
+        # While conceptually a dash is not extraneous in a function call,
+        # we allow the dash to align with the command line uses it where a leading dash
+        # is required, and with some of the documentation or messages which use a dash.
+        if not flags.startswith("-"):
+            # In any case, if dash is missing, we need to add it.
+            flags = "-" + flags
+        args.append(flags)
     for opt, val in options.items():
         if opt in _popen_args:
             continue
@@ -364,13 +372,17 @@ def make_command(
     return args
 
 
-def handle_errors(returncode, result, args, kwargs):
+def handle_errors(
+    returncode, result, args, kwargs, handler=None, stderr=None, env=None
+):
     """Error handler for :func:`run_command()` and similar functions
 
     The functions which are using this function to handle errors,
     can be typically called with an *errors* parameter.
     This function can handle one of the following values: raise,
     fatal, status, exit, and ignore. The value raise is a default.
+    Alternatively, when this function is called explicitly, the parameter
+    *handler* can be specified with the same values as *errors*.
 
     If returncode is 0, *result* is returned, unless
     ``errors="status"`` is set.
@@ -381,7 +393,9 @@ def handle_errors(returncode, result, args, kwargs):
     :py:exc:`~grass.exceptions.CalledModuleError` exception is raised.
 
     For ``errors="fatal"``, the function calls :func:`~grass.script.core.fatal()`
-    which has its own rules on what happens next.
+    which has its own rules on what happens next. In this case,
+    *env* parameter should also be provided unless the caller code relies on
+    a global session. Besides the *env* parameter, env can be also provided in kwargs.
 
     For ``errors="status"``, the *returncode* will be returned.
     This is useful, e.g., for cases when the exception-based error
@@ -397,6 +411,16 @@ def handle_errors(returncode, result, args, kwargs):
 
     Finally, for ``errors="ignore"``, the value of *result* will be
     passed in any case regardless of the *returncode*.
+
+    If *stderr* is provided, it is passed to ``CalledModuleError`` to build
+    an error message with ``errors="raise"``. With ``errors="exit"``,
+    it is printed to ``sys.stderr``.
+
+    This function is intended to be used as an error handler or handler of potential
+    errors in code which wraps calling of tools as subprocesses.
+    Typically, this function is not called directly in user code or in a tool code
+    unless the tools are handed directly, e.g., with :class:`Popen` as opposed
+    to :func:`run_command()`.
 
     :raises ~grass.exceptions.CalledModuleError:
       - If there is an error, and the ``errors`` parameter is not given
@@ -414,7 +438,12 @@ def handle_errors(returncode, result, args, kwargs):
         code = " ".join(args)
         return module, code
 
-    handler = kwargs.get("errors", "raise")
+    # If env is not provided, use the one from kwargs (if any).
+    if not env:
+        env = kwargs.get("env")
+
+    if handler is None:
+        handler = kwargs.get("errors", "raise")
     if handler.lower() == "status":
         return returncode
     if returncode == 0:
@@ -426,13 +455,18 @@ def handle_errors(returncode, result, args, kwargs):
         fatal(
             _(
                 "Module {module} ({code}) failed with non-zero return code {returncode}"
-            ).format(module=module, code=code, returncode=returncode)
+            ).format(module=module, code=code, returncode=returncode),
+            env=env,
         )
     elif handler.lower() == "exit":
+        if stderr:
+            print(stderr, file=sys.stderr)
         sys.exit(returncode)
     else:
         module, code = get_module_and_code(args, kwargs)
-        raise CalledModuleError(module=module, code=code, returncode=returncode)
+        raise CalledModuleError(
+            module=module, code=code, returncode=returncode, errors=stderr
+        )
 
 
 def popen_args_command(
@@ -520,10 +554,10 @@ def start_command(
         **kwargs,
     )
 
-    if debug_level() > 0:
+    if debug_level(env=kwargs.get("env")) > 0:
         sys.stderr.write(
             "D1/{}: {}.start_command(): {}\n".format(
-                debug_level(), __name__, " ".join(args)
+                debug_level(env=kwargs.get("env")), __name__, " ".join(args)
             )
         )
         sys.stderr.flush()
@@ -805,7 +839,18 @@ def message(msg, flag=None, env=None):
     :param env: dictionary with system environment variables
                 (:external:py:data:`os.environ` by default)
     """
-    run_command("g.message", flags=flag, message=msg, errors="ignore", env=env)
+    try:
+        run_command("g.message", flags=flag, message=msg, errors="ignore", env=env)
+    except OSError as error:
+        # Trying harder to show something, even when not adding the right message
+        # prefix. This allows for showing the original message to the user even when
+        # the tool cannot be found or errored for some reason.
+        print(
+            _(
+                "{message} (Additionally, there was an error: {additional_error})"
+            ).format(message=msg, additional_error=error),
+            file=sys.stderr,
+        )
 
 
 def debug(msg, debug=1, env=None):
@@ -824,7 +869,7 @@ def debug(msg, debug=1, env=None):
     :param env: dictionary with system environment variables
                 (:external:py:data:`os.environ` by default)
     """
-    if debug_level() >= debug:
+    if debug_level(env=env) >= debug:
         # TODO: quite a random hack here, do we need it somewhere else too?
         if sys.platform == "win32":
             msg = msg.replace("&", "^&")
@@ -1832,7 +1877,7 @@ def verbosity():
 # Various utilities, not specific to GRASS
 
 
-def find_program(pgm, *args):
+def find_program(pgm, *args, env: _Env = None):
     """Attempt to run a program, with optional arguments.
 
     You must call the program in a way that will return a successful
@@ -1850,6 +1895,7 @@ def find_program(pgm, *args):
 
     :param str pgm: program name
     :param args: list of arguments
+    :param env: environment
 
     :return: False if the attempt failed due to a missing executable
             or non-zero return code
@@ -1858,7 +1904,9 @@ def find_program(pgm, *args):
     with open(os.devnull, "w+") as nuldev:
         try:
             # TODO: the doc or impl is not correct, any return code is accepted
-            call([pgm] + list(args), stdin=nuldev, stdout=nuldev, stderr=nuldev)
+            call(
+                [pgm] + list(args), stdin=nuldev, stdout=nuldev, stderr=nuldev, env=env
+            )
             found = True
         except Exception:
             found = False
@@ -1941,21 +1989,27 @@ def create_project(
     if not os.path.exists(mapset_path.directory):
         os.mkdir(mapset_path.directory)
 
-    # Lazy-importing to avoid circular dependencies.
-    # pylint: disable=import-outside-toplevel
-    if os.environ.get("GISBASE"):
-        env = os.environ
-    else:
-        from grass.script.setup import setup_runtime_env
+    env = None
+    tmp_gisrc = None
 
-        env = os.environ.copy()
-        setup_runtime_env(env=env)
+    def local_env():
+        """Create runtime environment and session"""
+        # Rather than simply caching, we use local variables to have an indicator of
+        # whether the session file has been created or not.
+        nonlocal env, tmp_gisrc
+        if not env:
+            # Lazy-importing to avoid circular dependencies.
+            # pylint: disable=import-outside-toplevel
+            from grass.script.setup import ensure_runtime_env
 
-    # Even g.proj and g.message need GISRC to be present.
-    # The names don't really matter here.
-    tmp_gisrc, env = create_environment(
-        mapset_path.directory, mapset_path.location, mapset_path.mapset, env=env
-    )
+            env = os.environ.copy()
+            ensure_runtime_env(env=env)
+            # Even g.proj and g.message need GISRC to be present.
+            # The specific names used don't really matter here.
+            tmp_gisrc, env = create_environment(
+                mapset_path.directory, mapset_path.location, mapset_path.mapset, env=env
+            )
+        return env
 
     # check if location already exists
     if Path(mapset_path.directory, mapset_path.location).exists():
@@ -1963,12 +2017,12 @@ def create_project(
             fatal(
                 _("Location <%s> already exists. Operation canceled.")
                 % mapset_path.location,
-                env=env,
+                env=local_env(),
             )
         warning(
             _("Location <%s> already exists and will be overwritten")
             % mapset_path.location,
-            env=env,
+            env=local_env(),
         )
         shutil.rmtree(os.path.join(mapset_path.directory, mapset_path.location))
 
@@ -1988,7 +2042,7 @@ def create_project(
             epsg=epsg,
             project=mapset_path.location,
             stderr=PIPE,
-            env=env,
+            env=local_env(),
             **kwargs,
         )
     elif proj4:
@@ -1999,7 +2053,7 @@ def create_project(
             proj4=proj4,
             project=mapset_path.location,
             stderr=PIPE,
-            env=env,
+            env=local_env(),
             **kwargs,
         )
     elif filename:
@@ -2009,7 +2063,7 @@ def create_project(
             georef=filename,
             project=mapset_path.location,
             stderr=PIPE,
-            env=env,
+            env=local_env(),
         )
     elif wkt:
         if os.path.isfile(wkt):
@@ -2019,7 +2073,7 @@ def create_project(
                 wkt=wkt,
                 project=mapset_path.location,
                 stderr=PIPE,
-                env=env,
+                env=local_env(),
             )
         else:
             ps = pipe_command(
@@ -2029,7 +2083,7 @@ def create_project(
                 project=mapset_path.location,
                 stderr=PIPE,
                 stdin=PIPE,
-                env=env,
+                env=local_env(),
             )
             stdin = wkt
     else:
@@ -2038,10 +2092,15 @@ def create_project(
     if ps is not None and (epsg or proj4 or filename or wkt):
         error = ps.communicate(stdin)[1]
         try_remove(tmp_gisrc)
+        tmp_gisrc = None
 
         if ps.returncode != 0 and error:
             raise ScriptError(repr(error))
 
+    # If a session was created for messages, but not used for subprocesses,
+    # we still need to clean it up.
+    if tmp_gisrc:
+        try_remove(tmp_gisrc)
     _set_location_description(mapset_path.directory, mapset_path.location, desc)
 
 
@@ -2074,15 +2133,14 @@ def _create_location_xy(database, location):
     :raises ~grass.exceptions.ScriptError:
         Raise :py:exc:`~grass.exceptions.ScriptError` on error.
     """
-    cur_dir = Path.cwd()
     try:
-        os.chdir(database)
-        permanent_dir = Path(location, "PERMANENT")
+        base_path = Path(database)
+        project_dir = base_path / location
+        permanent_dir = project_dir / "PERMANENT"
         default_wind_path = permanent_dir / "DEFAULT_WIND"
         wind_path = permanent_dir / "WIND"
-        os.mkdir(location)
+        project_dir.mkdir()
         permanent_dir.mkdir()
-
         # create DEFAULT_WIND and WIND files
         regioninfo = [
             "proj:       0",
@@ -2104,10 +2162,8 @@ def _create_location_xy(database, location):
             "n-s resol3: 1",
             "t-b resol:  1",
         ]
-
         default_wind_path.write_text("\n".join(regioninfo))
         shutil.copy(default_wind_path, wind_path)
-        os.chdir(cur_dir)
     except OSError as e:
         raise ScriptError(repr(e))
 
@@ -2138,17 +2194,25 @@ def version():
 _debug_level = None
 
 
-def debug_level(force=False):
+def debug_level(force: bool = False, *, env: _Env = None):
     global _debug_level
     if not force and _debug_level is not None:
         return _debug_level
     _debug_level = 0
-    if find_program("g.gisenv", "--help"):
+    # We attempt to access the environment only when there is a chance
+    # it will work.
+    if find_program("g.gisenv", "--help", env=env):
         try:
-            _debug_level = int(gisenv().get("DEBUG", 0))
+            try:
+                _debug_level = int(gisenv(env=env).get("DEBUG", 0))
+            except (CalledModuleError, OSError):
+                # We continue in case of an error. Default value is already set.
+                pass
             if _debug_level < 0 or _debug_level > 5:
                 raise ValueError(_("Debug level {0}").format(_debug_level))
         except ValueError as e:
+            # The exception may come from the conversion or from the range,
+            # so we handle both in the same way.
             _debug_level = 0
             sys.stderr.write(
                 _(

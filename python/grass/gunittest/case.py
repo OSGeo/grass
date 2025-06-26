@@ -307,6 +307,7 @@ class TestCase(unittest.TestCase):
             msg=msg,
             sep="=",
             precision=precision,
+            nprocs=1,
         )
 
     def assertRasterFitsInfo(self, raster, reference, precision=None, msg=None):
