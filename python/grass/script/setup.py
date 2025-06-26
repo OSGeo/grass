@@ -456,7 +456,9 @@ class SessionHandle:
 
         import grass.script as gs
 
-        with gs.setup.init("~/grassdata/nc_spm_08/user1", env=os.environ.copy()):
+        with gs.setup.init(
+            "~/grassdata/nc_spm_08/user1", env=os.environ.copy()
+        ) as session:
             # ... use GRASS modules here with env parameter
             gs.run_command("g.region", flags="p", env=session.env)
         # session ends automatically here, global environment was never modified
