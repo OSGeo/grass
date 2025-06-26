@@ -25,7 +25,7 @@ def simple_dataset(tmp_path_factory):
             )
 
         # Set current mapset to test1
-        gs.run_command("g.mapset", project=project, mapset="test1")
+        gs.run_command("g.mapset", project=project, mapset="test1", env=session.env)
 
         yield SimpleNamespace(
             session=session,
