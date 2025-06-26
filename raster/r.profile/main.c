@@ -40,11 +40,12 @@ int main(int argc, char *argv[])
     struct Cell_head window;
     struct {
         struct Option *opt1, *profile, *res, *output, *null_str, *coord_file,
-            *units, *format;
+            *units, *format, *color_format;
         struct Flag *g, *c, *m;
     } parm;
     struct GModule *module;
     enum OutputFormat format;
+    ColorFormat clr_frmt;
     JSON_Value *array_value;
     JSON_Array *array;
 
@@ -97,7 +98,9 @@ int main(int argc, char *argv[])
     parm.c = G_define_flag();
     parm.c->key = 'c';
     parm.c->description =
-        _("Output RRR:GGG:BBB color values for each profile point");
+        _("Output color values for each profile point (format controlled by "
+          "color_format option; default is 'triplet' for plain output, 'hex' "
+          "for JSON)");
 
     parm.units = G_define_standard_option(G_OPT_M_UNITS);
     parm.units->options = "meters,kilometers,feet,miles";
@@ -107,7 +110,12 @@ int main(int argc, char *argv[])
           "Meters are used by default in geographic (latlon) projects.");
 
     parm.format = G_define_standard_option(G_OPT_F_FORMAT);
-    parm.units->guisection = _("Print");
+    parm.format->guisection = _("Print");
+
+    parm.color_format = G_define_standard_option(G_OPT_C_FORMAT);
+    parm.color_format->required = NO;
+    parm.color_format->answer = NULL;
+    parm.color_format->guisection = _("Color");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -161,9 +169,21 @@ int main(int argc, char *argv[])
     }
     else {
         format = PLAIN;
+
+        G_message(_("Using resolution: %g [%s]"), res / factor, unit);
     }
 
-    G_message(_("Using resolution: %g [%s]"), res / factor, unit);
+    if (clr) {
+        if (parm.color_format->answer == NULL ||
+            parm.color_format->answer[0] == '\0') {
+            if (format == JSON)
+                parm.color_format->answer = "hex";
+            else
+                parm.color_format->answer = "triplet";
+        }
+
+        clr_frmt = G_option_to_color_format(parm.color_format);
+    }
 
     G_begin_distance_calculations();
 
@@ -226,7 +246,7 @@ int main(int argc, char *argv[])
 
             if (havefirst)
                 do_profile(e1, e2, n1, n2, coords, res, fd, data_type, fp,
-                           null_string, unit, factor, format, name, array);
+                           null_string, unit, factor, format, array, clr_frmt);
             e1 = e2;
             n1 = n2;
             havefirst = TRUE;
@@ -251,7 +271,7 @@ int main(int argc, char *argv[])
 
             /* Get profile info */
             do_profile(e1, e2, n1, n2, coords, res, fd, data_type, fp,
-                       null_string, unit, factor, format, name, array);
+                       null_string, unit, factor, format, array, clr_frmt);
         }
         else {
             for (i = 0; i <= k - 2; i += 2) {
@@ -265,7 +285,7 @@ int main(int argc, char *argv[])
 
                 /* Get profile info */
                 do_profile(e1, e2, n1, n2, coords, res, fd, data_type, fp,
-                           null_string, unit, factor, format, name, array);
+                           null_string, unit, factor, format, array, clr_frmt);
             }
         }
     }
@@ -294,7 +314,7 @@ int main(int argc, char *argv[])
 int do_profile(double e1, double e2, double n1, double n2, int coords,
                double res, int fd, int data_type, FILE *fp, char *null_string,
                const char *unit, double factor, enum OutputFormat format,
-               char *name, JSON_Array *array)
+               JSON_Array *array, ColorFormat clr_frmt)
 {
     double rows, cols, LEN;
     double Y, X, k;
@@ -303,7 +323,8 @@ int do_profile(double e1, double e2, double n1, double n2, int coords,
     rows = n1 - n2;
 
     LEN = G_distance(e1, n1, e2, n2);
-    G_message(_("Approx. transect length: %f [%s]"), LEN / factor, unit);
+    if (format == PLAIN)
+        G_message(_("Approx. transect length: %f [%s]"), LEN / factor, unit);
 
     if (!G_point_in_region(e2, n2))
         G_warning(
@@ -315,7 +336,7 @@ int do_profile(double e1, double e2, double n1, double n2, int coords,
         e = e1;
         n = n1;
         read_rast(e, n, dist / factor, fd, coords, data_type, fp, null_string,
-                  format, name, array);
+                  format, array, clr_frmt);
     }
 
     k = res / hypot(rows, cols);
@@ -334,7 +355,7 @@ int do_profile(double e1, double e2, double n1, double n2, int coords,
         /* SE Quad or due east */
         for (e = e1, n = n1; e < e2 || n > n2; e += X, n -= Y) {
             read_rast(e, n, dist / factor, fd, coords, data_type, fp,
-                      null_string, format, name, array);
+                      null_string, format, array, clr_frmt);
             /* d+=res; */
             dist += G_distance(e - X, n + Y, e, n);
         }
@@ -344,7 +365,7 @@ int do_profile(double e1, double e2, double n1, double n2, int coords,
         /* NE Quad  or due north */
         for (e = e1, n = n1; e < e2 || n < n2; e += X, n += Y) {
             read_rast(e, n, dist / factor, fd, coords, data_type, fp,
-                      null_string, format, name, array);
+                      null_string, format, array, clr_frmt);
             /* d+=res; */
             dist += G_distance(e - X, n - Y, e, n);
         }
@@ -354,7 +375,7 @@ int do_profile(double e1, double e2, double n1, double n2, int coords,
         /* SW Quad or due south */
         for (e = e1, n = n1; e > e2 || n > n2; e -= X, n -= Y) {
             read_rast(e, n, dist / factor, fd, coords, data_type, fp,
-                      null_string, format, name, array);
+                      null_string, format, array, clr_frmt);
             /* d+=res; */
             dist += G_distance(e + X, n + Y, e, n);
         }
@@ -364,7 +385,7 @@ int do_profile(double e1, double e2, double n1, double n2, int coords,
         /* NW Quad  or due west */
         for (e = e1, n = n1; e > e2 || n < n2; e -= X, n += Y) {
             read_rast(e, n, dist / factor, fd, coords, data_type, fp,
-                      null_string, format, name, array);
+                      null_string, format, array, clr_frmt);
             /* d+=res; */
             dist += G_distance(e + X, n - Y, e, n);
         }

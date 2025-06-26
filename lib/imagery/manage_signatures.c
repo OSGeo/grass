@@ -150,8 +150,10 @@ int I_signatures_copy(I_SIGFILE_TYPE type, const char *old_name,
     G_file_name(new_path, dir, tname, G_mapset());
 
     if (G_recursive_copy(old_path, new_path) != 0) {
-        G_warning(_("Unable to copy <%s> to current mapset as <%s>"),
-                  G_fully_qualified_name(old_name, smapset), tname);
+        char *mname = G_fully_qualified_name(old_name, smapset);
+        G_warning(_("Unable to copy <%s> to current mapset as <%s>"), mname,
+                  tname);
+        G_free(mname);
         return 1;
     }
     return 0;
@@ -286,8 +288,10 @@ static int list_by_type(I_SIGFILE_TYPE type, const char *mapset, int base,
     }
 
     dirlist = G_ls2(path, &count);
-    if (count == 0)
+    if (count == 0) {
+        G_free(dirlist);
         return count;
+    }
 
     /* Make items fully qualified names */
     int mapset_len = strlen(mapset);

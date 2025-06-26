@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-21 12:47+0000\n"
-"PO-Revision-Date: 2025-06-20 00:15+0000\n"
+"POT-Creation-Date: 2025-06-24 17:02+0000\n"
+"PO-Revision-Date: 2025-06-25 06:07+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/sv/>\n"
 "Language: sv\n"
@@ -363,7 +363,7 @@ msgstr "hämta: tabellen har fel antal kolumner"
 msgid "send data: invalid C-type"
 msgstr "skicka data: ogiltig C-typ"
 
-#: ../lib/db/dbmi_client/column.c:136 ../lib/vector/Vlib/ascii.c:429
+#: ../lib/db/dbmi_client/column.c:136 ../lib/vector/Vlib/ascii.c:440
 #: ../lib/vector/Vlib/write_pg.c:685
 #, c-format
 msgid "Unable to describe table <%s>"
@@ -375,7 +375,7 @@ msgid "Array of values to select from column <%s> is empty"
 msgstr "Array med värden som ska väljas från kolumn <%s> är tom"
 
 #: ../lib/db/dbmi_client/copy_tab.c:109 ../lib/db/dbmi_client/copy_tab.c:129
-#: ../lib/db/dbmi_client/db.c:40 ../lib/vector/Vlib/ascii.c:405
+#: ../lib/db/dbmi_client/db.c:40 ../lib/vector/Vlib/ascii.c:416
 #: ../lib/vector/Vlib/write_ogr.c:192 ../lib/vector/Vlib/write_pg.c:3035
 #, c-format
 msgid "Unable to start driver <%s>"
@@ -384,7 +384,7 @@ msgstr "Det går inte att starta drivrutinen <%s>"
 #: ../lib/db/dbmi_client/copy_tab.c:114 ../lib/db/dbmi_client/copy_tab.c:135
 #: ../lib/db/dbmi_client/db.c:45 ../lib/ogsf/gp3.c:219 ../lib/ogsf/gv3.c:356
 #: ../lib/rst/interp_float/vinput2d.c:107 ../lib/vector/Vlib/array.c:275
-#: ../lib/vector/Vlib/ascii.c:411 ../lib/vector/Vlib/cats.c:601
+#: ../lib/vector/Vlib/ascii.c:422 ../lib/vector/Vlib/cats.c:601
 #: ../lib/vector/Vlib/close_nat.c:165 ../lib/vector/Vlib/map.c:339
 #: ../lib/vector/Vlib/net_build.c:159 ../lib/vector/Vlib/net_build.c:209
 #: ../lib/vector/Vlib/net_build.c:503 ../lib/vector/Vlib/net_build.c:800
@@ -2523,181 +2523,225 @@ msgstr "Ogiltig tidsstämpel angiven för vektormapp <%s@%s>"
 msgid "parse error"
 msgstr "parse-fel"
 
-#: ../lib/gis/units.c:209
-msgid "square unit"
-msgstr "kvadratisk enhet"
-
-#: ../lib/gis/units.c:209
+#. GTC: localized area units
+#: ../lib/gis/units.c:211
 msgid "square units"
 msgstr "kvadratiska enheter"
 
-#: ../lib/gis/units.c:211
-msgid "unit"
-msgstr "enhet"
+#. GTC: localized area units
+#: ../lib/gis/units.c:213
+msgid "square unit"
+msgstr "kvadratisk enhet"
 
-#: ../lib/gis/units.c:211
+#. GTC: localized units
+#: ../lib/gis/units.c:217
 msgid "units"
 msgstr "enheter"
 
-#: ../lib/gis/units.c:216
-msgid "square meter"
-msgstr "kvadratmeter"
+#. GTC: localized units
+#: ../lib/gis/units.c:219
+msgid "unit"
+msgstr "enhet"
 
-#: ../lib/gis/units.c:216
+#. GTC: localized area units
+#: ../lib/gis/units.c:226
 msgid "square meters"
 msgstr "kvadratmeter"
 
-#: ../lib/gis/units.c:218
-msgid "meter"
-msgstr "mätare"
+#. GTC: localized area units
+#: ../lib/gis/units.c:228
+msgid "square meter"
+msgstr "kvadratmeter"
 
-#: ../lib/gis/units.c:218
+#. GTC: localized units
+#: ../lib/gis/units.c:232
 msgid "meters"
 msgstr "meter"
 
-#: ../lib/gis/units.c:223
-msgid "square kilometer"
-msgstr "kvadratkilometer"
+#. GTC: localized units
+#: ../lib/gis/units.c:234
+msgid "meter"
+msgstr "mätare"
 
-#: ../lib/gis/units.c:223
+#. GTC: localized area units
+#: ../lib/gis/units.c:241
 msgid "square kilometers"
 msgstr "kvadratkilometer"
 
-#: ../lib/gis/units.c:225
-msgid "kilometer"
-msgstr "kilometer"
+#. GTC: localized area units
+#: ../lib/gis/units.c:243
+msgid "square kilometer"
+msgstr "kvadratkilometer"
 
-#: ../lib/gis/units.c:225
+#. GTC: localized units
+#: ../lib/gis/units.c:247
 msgid "kilometers"
 msgstr "kilometer"
 
-#: ../lib/gis/units.c:230
-msgid "acre"
-msgstr "tunnland"
+#. GTC: localized units
+#: ../lib/gis/units.c:249
+msgid "kilometer"
+msgstr "kilometer"
 
-#: ../lib/gis/units.c:230
+#. GTC: localized area units
+#: ../lib/gis/units.c:256
 msgid "acres"
 msgstr "tunnland"
 
-#: ../lib/gis/units.c:238
-msgid "hectare"
-msgstr "hektar"
+#. GTC: localized area units
+#: ../lib/gis/units.c:258
+msgid "acre"
+msgstr "tunnland"
 
-#: ../lib/gis/units.c:238
+#. GTC: localized area units
+#: ../lib/gis/units.c:268
 msgid "hectares"
 msgstr "hektar"
 
-#: ../lib/gis/units.c:246
-msgid "square mile"
-msgstr "kvadratkilometer"
+#. GTC: localized area units
+#: ../lib/gis/units.c:270
+msgid "hectare"
+msgstr "hektar"
 
-#: ../lib/gis/units.c:246
+#. GTC: localized area units
+#: ../lib/gis/units.c:280
 msgid "square miles"
 msgstr "kvadratkilometer"
 
-#: ../lib/gis/units.c:248
-msgid "mile"
-msgstr "mil"
+#. GTC: localized area units
+#: ../lib/gis/units.c:282
+msgid "square mile"
+msgstr "kvadratkilometer"
 
-#: ../lib/gis/units.c:248
+#. GTC: localized units
+#: ../lib/gis/units.c:286
 msgid "miles"
 msgstr "mil"
 
-#: ../lib/gis/units.c:253
+#. GTC: localized units
+#: ../lib/gis/units.c:288
+msgid "mile"
+msgstr "mil"
+
+#. GTC: localized area units, do not confuse with US feet
+#: ../lib/gis/units.c:295
 msgid "square feet"
 msgstr "kvadratfot"
 
-#: ../lib/gis/units.c:253
+#. GTC: localized area units, do not confuse with US foot
+#: ../lib/gis/units.c:297
 msgid "square foot"
 msgstr "kvadratfot"
 
-#: ../lib/gis/units.c:255
+#. GTC: localized units, do not confuse with US feet
+#: ../lib/gis/units.c:301
 msgid "feet"
 msgstr "fot"
 
-#: ../lib/gis/units.c:255
+#. GTC: localized units, do not confuse with US foot
+#: ../lib/gis/units.c:303
 msgid "foot"
 msgstr "fot"
 
-#: ../lib/gis/units.c:260
+#. GTC: localized area units, do not confuse with feet
+#: ../lib/gis/units.c:310
 msgid "square US feet"
 msgstr "kvadrat US fot"
 
-#: ../lib/gis/units.c:260
+#. GTC: localized area units, do not confuse with foot
+#: ../lib/gis/units.c:312
 msgid "square US foot"
 msgstr "kvadrat US fot"
 
-#: ../lib/gis/units.c:262
+#. GTC: localized units, do not confuse with feet
+#: ../lib/gis/units.c:316
 msgid "US feet"
 msgstr "Amerikansk fot"
 
-#: ../lib/gis/units.c:262
+#. GTC: localized units, do not confuse with foot
+#: ../lib/gis/units.c:318
 msgid "US foot"
 msgstr "Amerikansk fot"
 
-#: ../lib/gis/units.c:267
-msgid "square degree"
-msgstr "kvadratgrad"
-
-#: ../lib/gis/units.c:267
+#. GTC: localized area units
+#: ../lib/gis/units.c:325
 msgid "square degrees"
 msgstr "kvadratgrader"
 
-#: ../lib/gis/units.c:269
-msgid "degree"
-msgstr "grad"
+#. GTC: localized area units
+#: ../lib/gis/units.c:327
+msgid "square degree"
+msgstr "kvadratgrad"
 
-#: ../lib/gis/units.c:269
+#. GTC: localized units
+#: ../lib/gis/units.c:331
 msgid "degrees"
 msgstr "grader"
 
-#: ../lib/gis/units.c:273
-msgid "year"
-msgstr "år"
+#. GTC: localized units
+#: ../lib/gis/units.c:333
+msgid "degree"
+msgstr "grad"
 
-#: ../lib/gis/units.c:273
+#. GTC: localized time units
+#: ../lib/gis/units.c:339
 msgid "years"
 msgstr "år"
 
-#: ../lib/gis/units.c:277
-msgid "month"
-msgstr "månad"
+#. GTC: localized time units
+#: ../lib/gis/units.c:341
+msgid "year"
+msgstr "år"
 
-#: ../lib/gis/units.c:277
+#. GTC: localized time units
+#: ../lib/gis/units.c:347
 msgid "months"
 msgstr "månader"
 
-#: ../lib/gis/units.c:281
-msgid "day"
-msgstr "dag"
+#. GTC: localized time units
+#: ../lib/gis/units.c:349
+msgid "month"
+msgstr "månad"
 
-#: ../lib/gis/units.c:281
+#. GTC: localized time units
+#: ../lib/gis/units.c:355
 msgid "days"
 msgstr "dagar"
 
-#: ../lib/gis/units.c:285
-msgid "hour"
-msgstr "timme"
+#. GTC: localized time units
+#: ../lib/gis/units.c:357
+msgid "day"
+msgstr "dag"
 
-#: ../lib/gis/units.c:285
+#. GTC: localized time units
+#: ../lib/gis/units.c:363
 msgid "hours"
 msgstr "timmar"
 
-#: ../lib/gis/units.c:289
-msgid "minute"
-msgstr "minut"
+#. GTC: localized time units
+#: ../lib/gis/units.c:365
+msgid "hour"
+msgstr "timme"
 
-#: ../lib/gis/units.c:289
+#. GTC: localized time units
+#: ../lib/gis/units.c:371
 msgid "minutes"
 msgstr "minuter"
 
-#: ../lib/gis/units.c:293
-msgid "second"
-msgstr "sekund"
+#. GTC: localized time units
+#: ../lib/gis/units.c:373
+msgid "minute"
+msgstr "minut"
 
-#: ../lib/gis/units.c:293
+#. GTC: localized time units
+#: ../lib/gis/units.c:379
 msgid "seconds"
 msgstr "sekunder"
+
+#. GTC: localized time units
+#: ../lib/gis/units.c:381
+msgid "second"
+msgstr "sekund"
 
 #: ../lib/gis/view.c:169
 #, c-format
@@ -4358,7 +4402,7 @@ msgstr "Vektorkarta <%s> laddad (%d punkter)"
 
 #: ../lib/ogsf/gp3.c:213 ../lib/ogsf/gv3.c:350
 #: ../lib/rst/interp_float/vinput2d.c:98 ../lib/vector/Vlib/array.c:269
-#: ../lib/vector/Vlib/ascii.c:399 ../lib/vector/Vlib/cats.c:592
+#: ../lib/vector/Vlib/ascii.c:410 ../lib/vector/Vlib/cats.c:592
 #: ../lib/vector/Vlib/copy.c:649 ../lib/vector/Vlib/copy.c:764
 #: ../lib/vector/Vlib/map.c:300 ../lib/vector/Vlib/map.c:433
 #: ../lib/vector/Vlib/net_build.c:153 ../lib/vector/Vlib/net_build.c:204
@@ -4561,17 +4605,12 @@ msgid "Tried to pop an empty stack"
 msgstr "Försökte öppna en tom stack"
 
 #: ../lib/pngdriver/graph_set.c:100
-#, c-format
-msgid "png: truecolor status %s"
-msgstr "png: Truecolor-status %s"
+msgid "png: truecolor status enabled"
+msgstr "png: truecolor-status aktiverad"
 
-#: ../lib/pngdriver/graph_set.c:101 ../lib/psdriver/graph_set.c:197
-msgid "disabled"
-msgstr "inaktiverad"
-
-#: ../lib/pngdriver/graph_set.c:101 ../lib/psdriver/graph_set.c:197
-msgid "enabled"
-msgstr "aktiverad"
+#: ../lib/pngdriver/graph_set.c:101
+msgid "png: truecolor status disabled"
+msgstr "png: truecolor-status inaktiverad"
 
 #: ../lib/pngdriver/graph_set.c:149
 #, c-format
@@ -4760,7 +4799,7 @@ msgstr "Det går inte att fastställa intresseområdet för '%s'"
 #: ../lib/proj/do_proj.c:578
 #, c-format
 msgid "Input CRS not available for '%s'"
-msgstr "CRS-ingång inte tillgänglig för '%s'"
+msgstr "CRS-inmatning inte tillgänglig för '%s'"
 
 #: ../lib/proj/do_proj.c:599
 #, c-format
@@ -4929,9 +4968,12 @@ msgid "Output Unit Factor"
 msgstr "Faktor för utmatningsenhet"
 
 #: ../lib/psdriver/graph_set.c:196
-#, c-format
-msgid "ps: truecolor status %s"
-msgstr "ps: Truecolor-status %s"
+msgid "ps: truecolor status enabled"
+msgstr "ps: truecolor-status aktiverad"
+
+#: ../lib/psdriver/graph_set.c:197
+msgid "ps: truecolor status disabled"
+msgstr "ps: truecolor-status inaktiverad"
 
 #: ../lib/psdriver/graph_set.c:215
 #, c-format
@@ -6192,49 +6234,49 @@ msgstr "Det går inte att välja post från tabellen <%s> (nyckel %s, där %s)"
 msgid "Error reading ASCII file: (bad type) [%s]"
 msgstr "Fel vid läsning av ASCII-fil: (dålig typ) [%s]"
 
-#: ../lib/vector/Vlib/ascii.c:124
+#: ../lib/vector/Vlib/ascii.c:125
 #, c-format
 msgid "Error reading ASCII file: (unknown type) [%s]"
 msgstr "Fel vid läsning av ASCII-fil: (okänd typ) [%s]"
 
-#: ../lib/vector/Vlib/ascii.c:144
+#: ../lib/vector/Vlib/ascii.c:146
 msgid "End of ASCII file reached before end of coordinates"
 msgstr "Slutet av ASCII-filen nås före slutet av koordinaterna"
 
-#: ../lib/vector/Vlib/ascii.c:156
+#: ../lib/vector/Vlib/ascii.c:158
 #, c-format
 msgid "Error reading ASCII file: (bad point) [%s]"
 msgstr "Fel vid läsning av ASCII-fil: (dålig punkt) [%s]"
 
-#: ../lib/vector/Vlib/ascii.c:162
+#: ../lib/vector/Vlib/ascii.c:165
 #, c-format
 msgid "Unparsable longitude value: [%s]"
 msgstr "Oläsligt longitudvärde: [%s]"
 
-#: ../lib/vector/Vlib/ascii.c:167
+#: ../lib/vector/Vlib/ascii.c:171
 #, c-format
 msgid "Unparsable latitude value: [%s]"
 msgstr "Oparerbart latitudvärde: [%s]"
 
-#: ../lib/vector/Vlib/ascii.c:201
+#: ../lib/vector/Vlib/ascii.c:206
 msgid "End of ASCII file reached before end of categories"
 msgstr "Slutet på ASCII-filen nås före slutet av kategorierna"
 
-#: ../lib/vector/Vlib/ascii.c:212
+#: ../lib/vector/Vlib/ascii.c:217
 #, c-format
 msgid "Error reading categories: [%s]"
 msgstr "Fel vid läsning av kategorier: [%s]"
 
-#: ../lib/vector/Vlib/ascii.c:225
+#: ../lib/vector/Vlib/ascii.c:231
 msgid "Unable to copy points"
 msgstr "Det går inte att kopiera punkter"
 
-#: ../lib/vector/Vlib/ascii.c:238
+#: ../lib/vector/Vlib/ascii.c:246
 #, c-format
 msgid "Vector map <%s> is 2D. %d 3D features (faces or kernels) skipped."
 msgstr "Vektorkarta <%s> är 2D. %d 3D-funktioner (ytor eller kärnor) hoppas över."
 
-#: ../lib/vector/Vlib/ascii.c:271
+#: ../lib/vector/Vlib/ascii.c:282
 #, c-format
 msgid ""
 "Unexpected data in vector header:\n"
@@ -6243,54 +6285,54 @@ msgstr ""
 "Oväntade data i vektorhuvudet:\n"
 "[%s]"
 
-#: ../lib/vector/Vlib/ascii.c:307
+#: ../lib/vector/Vlib/ascii.c:318
 #, c-format
 msgid "Unknown keyword <%s> in vector head"
 msgstr "Okänt nyckelord <%s> i vektorhuvud"
 
-#: ../lib/vector/Vlib/ascii.c:468
+#: ../lib/vector/Vlib/ascii.c:481
 #, c-format
 msgid "Column <%s> does not exist"
 msgstr "Kolumn <%s> finns inte"
 
-#: ../lib/vector/Vlib/ascii.c:470
+#: ../lib/vector/Vlib/ascii.c:483
 msgid "Available columns:"
 msgstr "Tillgängliga kolumner:"
 
-#: ../lib/vector/Vlib/ascii.c:476
+#: ../lib/vector/Vlib/ascii.c:489
 msgid "Export cancelled"
 msgstr "Export avbruten"
 
-#: ../lib/vector/Vlib/ascii.c:511
+#: ../lib/vector/Vlib/ascii.c:526
 #, c-format
 msgid "Unknown type of column <%s>, export cancelled"
 msgstr "Okänd typ av kolumn <%s>, export avbruten"
 
-#: ../lib/vector/Vlib/ascii.c:544
+#: ../lib/vector/Vlib/ascii.c:562
 #, c-format
 msgid "Unable to select record from table <%s> (key %s, column %s)"
 msgstr "Det går inte att välja post från tabell <%s> (nyckel %s, kolumn %s)"
 
-#: ../lib/vector/Vlib/ascii.c:672
+#: ../lib/vector/Vlib/ascii.c:694
 #, c-format
 msgid "Unknown feature type %d"
 msgstr "Okänd typ av funktion %d"
 
-#: ../lib/vector/Vlib/ascii.c:712
+#: ../lib/vector/Vlib/ascii.c:734
 #, c-format
 msgid "Feature has more categories. Only one category (%d) is exported."
 msgstr "Funktionen har fler kategorier. Endast en kategori (%d) exporteras."
 
-#: ../lib/vector/Vlib/ascii.c:732
+#: ../lib/vector/Vlib/ascii.c:754
 #, c-format
 msgid "Cannot select attributes for cat = %d"
 msgstr "Det går inte att välja attribut för cat = %d"
 
-#: ../lib/vector/Vlib/ascii.c:737
+#: ../lib/vector/Vlib/ascii.c:759
 msgid "Unable to fetch data from table"
 msgstr "Det går inte att hämta data från tabellen"
 
-#: ../lib/vector/Vlib/ascii.c:771 ../lib/vector/Vlib/net_build.c:214
+#: ../lib/vector/Vlib/ascii.c:793 ../lib/vector/Vlib/net_build.c:214
 #: ../lib/vector/Vlib/net_build.c:508 ../lib/vector/Vlib/net_build.c:526
 #: ../lib/vector/Vlib/net_build.c:805 ../lib/vector/Vlib/net_build.c:823
 #: ../lib/vector/Vlib/net_build.c:981
@@ -6298,30 +6340,30 @@ msgstr "Det går inte att hämta data från tabellen"
 msgid "Column <%s> not found in table <%s>"
 msgstr "Kolumn <%s> finns inte i tabell <%s>"
 
-#: ../lib/vector/Vlib/ascii.c:775
+#: ../lib/vector/Vlib/ascii.c:797
 #, c-format
 msgid "Column <%s>: unsupported data type"
 msgstr "Kolumn <%s>: datatyp som inte stöds"
 
-#: ../lib/vector/Vlib/ascii.c:862
+#: ../lib/vector/Vlib/ascii.c:884
 msgid "Unknown format"
 msgstr "Okänt format"
 
-#: ../lib/vector/Vlib/ascii.c:872
+#: ../lib/vector/Vlib/ascii.c:894
 msgid "Topology not available, unable to process areas"
 msgstr "Topologi inte tillgänglig, kan inte bearbeta områden"
 
-#: ../lib/vector/Vlib/ascii.c:885
+#: ../lib/vector/Vlib/ascii.c:907
 #, c-format
 msgid "Unable to get boundary of area id %d"
 msgstr "Det går inte att få fram gränsen för områdes-ID %d"
 
-#: ../lib/vector/Vlib/ascii.c:899
+#: ../lib/vector/Vlib/ascii.c:921
 #, c-format
 msgid "Unable to get boundary of isle id %d (area id %d)"
 msgstr "Det går inte att få fram gränsen för ö-id %d (områdes-id %d)"
 
-#: ../lib/vector/Vlib/ascii.c:916
+#: ../lib/vector/Vlib/ascii.c:938
 #, c-format
 msgid "%d features without category skipped. To export also features without category use '%s=-1'."
 msgstr "%d funktioner utan kategori överhoppade. För att exportera även funktioner utan kategori, använd '%s=-1'."
@@ -8905,3 +8947,9 @@ msgstr "Område %d har inga gränser"
 #: ../lib/vector/vedit/select.c:231
 msgid "Unknown query tool"
 msgstr "Okänt frågeverktyg"
+
+#~ msgid "disabled"
+#~ msgstr "inaktiverad"
+
+#~ msgid "enabled"
+#~ msgstr "aktiverad"
