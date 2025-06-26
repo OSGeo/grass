@@ -181,16 +181,11 @@ class Tools:
             popen_options["stdin"] = gs.PIPE
         else:
             popen_options["stdin"] = None
-        # Use text mode by default
-        if "text" not in popen_options and "universal_newlines" not in popen_options:
-            popen_options["text"] = True
         process = gs.Popen(
             command,
             **popen_options,
         )
         stdout, stderr = process.communicate(input=input)
-        if stderr:
-            stderr = gs.utils.decode(stderr)
         returncode = process.poll()
         # We don't have the keyword arguments to pass to the resulting object.
         result = ToolResult(
