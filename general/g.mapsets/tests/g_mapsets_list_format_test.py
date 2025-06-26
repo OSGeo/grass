@@ -39,7 +39,13 @@ def _check_parsed_list(mapsets, text, sep="|"):
 def test_plain_list_output(simple_dataset, separator):
     """Test that the separators are properly applied with list flag"""
     mapsets = simple_dataset.mapsets
-    text = gs.read_command("g.mapsets", format="plain", separator=separator, flags="l")
+    text = gs.read_command(
+        "g.mapsets",
+        format="plain",
+        separator=separator,
+        flags="l",
+        env=simple_dataset.session.env,
+    )
     _check_parsed_list(mapsets, text, gutils.separator(separator))
 
 
@@ -51,13 +57,21 @@ def test_plain_list_output(simple_dataset, separator):
 def test_plain_print_output(simple_dataset, separator):
     """Test that the separators are properly applied with print flag"""
     mapsets = simple_dataset.accessible_mapsets
-    text = gs.read_command("g.mapsets", format="plain", separator=separator, flags="p")
+    text = gs.read_command(
+        "g.mapsets",
+        format="plain",
+        separator=separator,
+        flags="p",
+        env=simple_dataset.session.env,
+    )
     _check_parsed_list(mapsets, text, gutils.separator(separator))
 
 
 def test_json_list_output(simple_dataset):
     """Check list of mapsets in JSON format"""
-    text = gs.read_command("g.mapsets", format="json", flags="l")
+    text = gs.read_command(
+        "g.mapsets", format="json", flags="l", env=simple_dataset.session.env
+    )
     data = json.loads(text)
     assert list(data.keys()) == ["mapsets"]
     assert isinstance(data["mapsets"], list)
@@ -68,7 +82,9 @@ def test_json_list_output(simple_dataset):
 
 def test_json_print_output(simple_dataset):
     """Check search path mapsets in JSON format"""
-    text = gs.read_command("g.mapsets", format="json", flags="p")
+    text = gs.read_command(
+        "g.mapsets", format="json", flags="p", env=simple_dataset.session.env
+    )
     data = json.loads(text)
     assert list(data.keys()) == ["mapsets"]
     assert isinstance(data["mapsets"], list)
