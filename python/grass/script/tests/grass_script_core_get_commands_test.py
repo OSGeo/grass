@@ -19,7 +19,7 @@ def common_test_code(executables_set, scripts_dict):
         assert len(scripts_dict.items())
         # Just in case this is not a standard dictionary object.
         assert len(scripts_dict.keys()) == len(scripts_dict.items())
-        assert "r.shade" in scripts_dict["py"]
+        assert "r.shade" in scripts_dict[".py"]
     else:
         assert "r.shade" in executables_set
 
