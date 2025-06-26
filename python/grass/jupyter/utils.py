@@ -72,15 +72,12 @@ def reproject_region(region, from_proj, to_proj):
         stdout=gs.PIPE,
         stderr=gs.PIPE,
     )
-    proc.stdin.write(gs.encode(proj_input))
-    proc.stdin.close()
-    proc.stdin = None
-    proj_output, stderr = proc.communicate()
+    proj_output, stderr = proc.communicate(proj_input)
     if proc.returncode:
         raise RuntimeError(
             _("Encountered error while running m.proj: {}").format(stderr)
         )
-    output = gs.decode(proj_output).splitlines()
+    output = proj_output.splitlines()
     # get the largest bbox
     latitude_list = []
     longitude_list = []
