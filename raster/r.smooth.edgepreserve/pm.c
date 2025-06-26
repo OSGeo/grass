@@ -75,6 +75,7 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
             rc = rb;
             rb = row_cache->get(prow + 1, row_cache);
 
+            int col;
             int pcol;
 #pragma omp parallel for
             for (pcol = 1; pcol <= pm_params->ncols; pcol++) {
@@ -122,8 +123,7 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
 
             /* Calculate diffusivity coefficient */
             if (pm_params->conditional == 3) {
-                /* Black et al. 1998 Tukey's biweight function */
-                int col;
+/* Black et al. 1998 Tukey's biweight function */
 #pragma omp parallel for
                 for (col = 0; col < pm_params->ncols; col++) {
                     /* Both variations of impact of scale are two ways
@@ -167,8 +167,7 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
                 }
             }
             else if (pm_params->conditional == 1) {
-                /* Perona & Malik 1st diffusivity function = exponential */
-                int col;
+/* Perona & Malik 1st diffusivity function = exponential */
 #pragma omp parallel for
                 for (col = 0; col < pm_params->ncols; col++) {
 #pragma GCC unroll 8
@@ -182,8 +181,7 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
                 }
             }
             else if (pm_params->conditional == 2) {
-                /* Perona & Malik 2nd diffusivity function = quadratic */
-                int col;
+/* Perona & Malik 2nd diffusivity function = quadratic */;
 #pragma omp parallel for
                 for (col = 0; col < pm_params->ncols; col++) {
 #pragma GCC unroll 8
@@ -196,8 +194,7 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
                 }
             }
 
-            /* Calculate new values and add padding */
-            int col;
+/* Calculate new values and add padding */
 #pragma omp parallel for
             for (col = 0; col < pm_params->ncols; col++) {
                 di[col] = divs[0][col] + divs[1][col] + divs[2][col] +
