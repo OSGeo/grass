@@ -20,10 +20,8 @@ def common_test_code(executables_set, scripts_dict):
         # Just in case this is not a standard dictionary object.
         assert len(scripts_dict.keys()) == len(scripts_dict.items())
         assert "r.shade" in scripts_dict["py"]
-        assert "d.rast3d" in scripts_dict["py"]
     else:
         assert "r.shade" in executables_set
-        assert "d.rast3d" in executables_set
 
 
 def test_no_explicit_session():

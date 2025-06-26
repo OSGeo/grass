@@ -188,11 +188,6 @@ def get_commands(*, env=None):
     for directory in ("bin", "scripts"):
         scan(gisbase, directory)
 
-    # scan gui/scripts/
-    gui_path = os.path.join(gisbase, "gui", "scripts")
-    if os.path.exists(gui_path):
-        scan(gisbase, "gui/scripts")
-
     return set(cmd), scripts
 
 
