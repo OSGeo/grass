@@ -189,10 +189,9 @@ def get_commands(*, env=None):
         scan(gisbase, directory)
 
     # scan gui/scripts/
-    gui_path = os.path.join(gisbase, "etc", "gui", "scripts")
+    gui_path = os.path.join(gisbase, "gui", "scripts")
     if os.path.exists(gui_path):
-        os.environ["PATH"] = os.getenv("PATH") + os.pathsep + gui_path
-        cmd += os.listdir(gui_path)
+        scan(gisbase, "gui/scripts")
 
     return set(cmd), scripts
 

@@ -1,5 +1,6 @@
 """Test grass.script.core.get_commands function"""
 
+import os
 import sys
 
 import pytest
@@ -19,8 +20,10 @@ def common_test_code(executables_set, scripts_dict):
         # Just in case this is not a standard dictionary object.
         assert len(scripts_dict.keys()) == len(scripts_dict.items())
         assert "r.shade" in scripts_dict["py"]
+        assert "d.rast3d" in scripts_dict["py"]
     else:
         assert "r.shade" in executables_set
+        assert "d.rast3d" in executables_set
 
 
 def test_no_explicit_session():
@@ -34,6 +37,25 @@ def test_no_session_mocked():
     """Test with mocked no session"""
     executables_set, scripts_dict = gs.get_commands()
     common_test_code(executables_set, scripts_dict)
+
+
+@pytest.mark.usefixtures("mock_no_session")
+def test_env_not_modified():
+    """Check that no environment is modified"""
+    original = os.environ.copy()
+    env = os.environ.copy()
+    executables_set, scripts_dict = gs.get_commands(env=env)
+    common_test_code(executables_set, scripts_dict)
+    session_variables = ["GISRC", "GISBASE", "PATH"]
+    for variable in session_variables:
+        if variable in original:
+            # The provided environment was not modified.
+            assert original[variable] == env[variable]
+            # The global environment was not modified.
+            assert original[variable] == os.environ[variable]
+        else:
+            assert variable not in env
+            assert variable not in os.environ
 
 
 @pytest.mark.usefixtures("mock_no_session")
