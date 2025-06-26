@@ -596,6 +596,22 @@ def test_migration_from_run_command_family(xy_dataset_session):
     tools.r_random_surface(output="surface", seed=42)
 
 
+def test_as_context_manager(xy_dataset_session):
+    """Test usage of as a context manager"""
+    with Tools(session=xy_dataset_session) as tools:
+        tools.r_random_surface(output="surface1", seed=42)
+    # There is no limit on entering the context manager multiple times.
+    with tools:
+        tools.r_random_surface(output="surface2", seed=42)
+    # Neither there is limit on using it after exiting the context.
+    tools.r_random_surface(output="surface3", seed=42)
+    assert [item["name"] for item in tools.g_list(type="raster", format="json")] == [
+        "surface1",
+        "surface2",
+        "surface3",
+    ]
+
+
 def test_with_context_managers_explicit_env(tmpdir):
     project = tmpdir / "project"
     gs.create_project(project)
@@ -641,8 +657,8 @@ def test_with_context_managers_session_env_one_block(tmpdir):
         TemporaryMapsetSession(env=main_session.env) as mapset_session,
         gs.MaskManager(env=mapset_session.env),
         gs.RegionManager(rows=100, cols=100, env=mapset_session.env),
+        Tools(session=mapset_session) as tools,
     ):
-        tools = Tools(session=mapset_session)
         tools.r_random_surface(output="surface", seed=42)
         tools.r_mask(raster="surface")
         assert tools.r_mask_status(format="json")["present"]

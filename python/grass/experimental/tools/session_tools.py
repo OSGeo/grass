@@ -236,3 +236,13 @@ class Tools:
         # Collect instance and class attributes
         static_attrs = set(dir(type(self))) | set(self.__dict__.keys())
         return list(static_attrs) + self._name_resolver.names()
+
+    def __enter__(self):
+        """Enter the context manager context.
+
+        :returns: reference to the object (self)
+        """
+        return self
+
+    def __exit__(self, type, value, traceback):
+        """Exit the context manager context."""
