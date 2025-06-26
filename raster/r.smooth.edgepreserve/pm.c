@@ -181,7 +181,7 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
                 }
             }
             else if (pm_params->conditional == 2) {
-/* Perona & Malik 2nd diffusivity function = quadratic */;
+/* Perona & Malik 2nd diffusivity function = quadratic */
 #pragma omp parallel for
                 for (col = 0; col < pm_params->ncols; col++) {
 #pragma GCC unroll 8
