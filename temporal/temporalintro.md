@@ -1,9 +1,9 @@
 ---
-description: Temporal data processing in GRASS GIS
+description: Temporal data processing in GRASS
 index: temporal
 ---
 
-# Temporal data processing in GRASS GIS
+# Temporal data processing in GRASS
 
 The temporal enabled GRASS introduces three new data types that are
 designed to handle time series data:
@@ -19,7 +19,7 @@ designed to handle time series data:
   *t.vect*.
 
 These new data types can be managed, analyzed and processed with
-temporal modules that are based on the GRASS GIS temporal framework.
+temporal modules that are based on the GRASS temporal framework.
 
 ## Temporal data management in general
 
@@ -240,7 +240,7 @@ their raster pendants, but with 3D raster map layers:
 - Gebbert, S., Pebesma, E. 2014. *TGRASS: A temporal GIS for field based
   environmental modeling*. Environmental Modelling & Software 53, 1-12
   ([DOI](https://doi.org/10.1016/j.envsoft.2013.11.001)) - [preprint
-  PDF](http://ifgi.uni-muenster.de/~epebe_01/tgrass.pdf)
+  PDF](https://ifgi.uni-muenster.de/~epebe_01/tgrass.pdf)
 - Gebbert, S., Pebesma, E. 2017. *The GRASS GIS temporal framework*.
   International Journal of Geographical Information Science 31,
   1273-1292 ([DOI](https://doi.org/10.1080/13658816.2017.1306862))
@@ -253,9 +253,9 @@ their raster pendants, but with 3D raster map layers:
 - Vaclav Petras, Anna Petrasova, Helena Mitasova, Markus Neteler,
   **FOSS4G 2014 workshop**:  
   [Spatio-temporal data handling and visualization in GRASS
-  GIS](http://fatra.cnr.ncsu.edu/temporal-grass-workshop/)
+  GIS](https://ncsu-geoforall-lab.github.io/grass-temporal-workshop/)
 - [GEOSTAT 2012 GRASS
-  Course](http://www.geostat-course.org/Topic_Gebbert)
+  Course](https://www.geostat-course.org/Topic_Gebbert)
 
 <!-- -->
 
