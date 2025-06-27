@@ -347,6 +347,8 @@ type of the result is indicated in the last column. *F* means that the
 functions always results in a floating point value, *I* means that the
 function gives an integer result, and *\** indicates that the result is
 float if any of the arguments to the function are floating point values
+and integer if all arguments are integer.
+
 | Function / Variable         | Description                                                      | Type |
 |----------------------------|------------------------------------------------------------------|------|
 | abs(x)                     | Return absolute value of x                                       | *    |
@@ -422,6 +424,7 @@ value range. The following table reports precision and value range info
 on AMD64 (x86-64) architectures compiled with GCC/CLANG. Note that
 although this setting is the most frequent one, the ranges could differ
 for different architectures.
+
 | Data Type | Precision and Value Range Info |
 |-----------|-------------------------------|
 | **int**   | 32-bit integer with a range from -2,147,483,647 to +2,147,483,647. The value -2,147,483,648 is reserved for NODATA. |
