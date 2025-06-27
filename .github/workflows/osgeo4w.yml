@@ -90,7 +90,6 @@ jobs:
             python3-matplotlib
             python3-numpy
             python3-pip
-            python3-ply
             python3-pywin32
             python3-six
             python3-wxpython

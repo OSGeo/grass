@@ -10,6 +10,7 @@ target-version = ['py39', 'py310', 'py311', 'py312', 'py313']
 # 'extend-exclude' excludes files or directories in addition to the defaults
 extend-exclude = '''
 (
+    python/grass/temporal/ply/|
     python/libgrass_interface_generator/
 )
 '''
@@ -20,7 +21,10 @@ required-version = ">=0.8.0"
 builtins = ["_"]
 
 # In addition to the standard set of exclusions, omit the following files or folders.
-extend-exclude = ["python/libgrass_interface_generator"]
+extend-exclude = [
+    "python/grass/temporal/ply",           # External code
+    "python/libgrass_interface_generator",
+]
 
 [tool.ruff.lint]
 # See https://docs.astral.sh/ruff/rules/
@@ -397,6 +401,7 @@ ignore-paths = [
     "bin[.].*",
     "dist[.].*",
     "gui/wxpython/menustrings.py",
+    "python/grass/temporal/ply",           # External code
     "python/libgrass_interface_generator",
 ]
 
