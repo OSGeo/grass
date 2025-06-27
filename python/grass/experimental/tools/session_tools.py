@@ -38,6 +38,7 @@ class Tools:
         superquiet=None,
         errors=None,
         capture_output=True,
+        capture_stderr=None,
     ):
         """
         If session is provided and has an env attribute, it is used to execute tools.
@@ -70,6 +71,10 @@ class Tools:
         self._superquiet = superquiet
         self._errors = errors
         self._capture_output = capture_output
+        if capture_stderr is None:
+            self._capture_stderr = capture_output
+        else:
+            self._capture_stderr = capture_stderr
         self._name_resolver = None
 
     def _modified_env_if_needed(self):
@@ -175,6 +180,7 @@ class Tools:
         if self._capture_output:
             if "stdout" not in popen_options:
                 popen_options["stdout"] = gs.PIPE
+        if self._capture_stderr:
             if "stderr" not in popen_options:
                 popen_options["stderr"] = gs.PIPE
         if input is not None:

@@ -12,9 +12,9 @@ from grass.exceptions import CalledModuleError
 
 
 def test_key_value_parser_number(xy_dataset_session):
-    """Check that numbers are parsed as numbers"""
+    """Check that numbers are parsed as numbers from key-value (shell) output"""
     tools = Tools(session=xy_dataset_session)
-    assert tools.g_region(flags="g").keyval["nsres"] == 1
+    assert tools.g_region(flags="p", format="shell").keyval["nsres"] == 1
 
 
 def test_key_value_parser_multiple_values(xy_dataset_session):
@@ -22,7 +22,7 @@ def test_key_value_parser_multiple_values(xy_dataset_session):
     tools = Tools(session=xy_dataset_session)
     name = "surface"
     tools.r_surf_gauss(output=name)  # needs seed
-    result = tools.r_info(map=name, flags="g").keyval
+    result = tools.r_info(map=name, format="shell").keyval
     assert result["datatype"] == "DCELL"
     assert result["nsres"] == 1
     result = tools.r_univar(map=name, flags="g").keyval
@@ -61,8 +61,9 @@ def test_json_with_direct_subprocess_run_like_call(xy_dataset_session):
 
 
 def test_json_as_list(xy_dataset_session):
-    """Check that JSON is parsed"""
+    """Check that a JSON result behaves as a list"""
     tools = Tools(session=xy_dataset_session)
+    # This also tests JSON parsing with a format option.
     result = tools.g_search_modules(keyword="random", flags="j")
     for item in result:
         assert "name" in item
@@ -89,6 +90,7 @@ def test_help_call_with_parameters(xy_dataset_session):
 def test_json_call_with_low_level_call(xy_dataset_session):
     """Check that --json call works including JSON data parsing"""
     tools = Tools(session=xy_dataset_session)
+    # This also tests JSON parsing with a format option.
     data = tools.call_cmd(
         ["r.slope.aspect", "elevation=dem", "slope=slope", "--json"]
     ).json
@@ -107,20 +109,20 @@ def test_json_call_with_high_level_call(xy_dataset_session):
 
 
 def test_json_direct_access(xy_dataset_session):
-    """Check that JSON is parsed"""
+    """Check that JSON data can be directly accessed"""
     tools = Tools(session=xy_dataset_session)
-    assert tools.g_search_modules(keyword="random", flags="j")[0]["name"] == "r.random"
+    assert tools.g_region(flags="p", format="json")["cols"] == 1
 
 
 def test_json_direct_access_bad_key_type(xy_dataset_session):
-    """Check that JSON is parsed"""
+    """Check that JSON indexing fails when using a wrong type"""
     tools = Tools(session=xy_dataset_session)
     with pytest.raises(TypeError):
         tools.g_search_modules(keyword="random", flags="j")["name"]
 
 
 def test_json_direct_access_bad_key_value(xy_dataset_session):
-    """Check that JSON is parsed"""
+    """Check that JSON indexing fails when using a wrong value"""
     tools = Tools(session=xy_dataset_session)
     high_number = 100_000_000
     with pytest.raises(IndexError):
@@ -163,7 +165,7 @@ def test_stdout_split_space(xy_dataset_session):
 
 
 def test_stdout_comma_items(xy_dataset_session):
-    """Check that the split function works with space"""
+    """Check that the comma-separated split works"""
     tools = Tools(session=xy_dataset_session)
     result = tools.g_gisenv(
         get="GISDBASE,LOCATION_NAME,MAPSET", sep="comma"
@@ -181,22 +183,64 @@ def test_stdout_without_capturing(xy_dataset_session):
     assert result.stdout is None
     assert not result.text
     assert result.text is None
+    assert not result.stderr
+    assert result.stderr is None
 
 
-def test_capturing_stderr(xy_dataset_session):
+def test_capturing_stdout_and_stderr(xy_dataset_session):
     """Check that text is not present when not capturing it"""
-    tools = Tools(session=xy_dataset_session, errors="ignore")
+    tools = Tools(session=xy_dataset_session, capture_output=True, errors="ignore")
+    result = tools.g_mapset(flags="l")
+    assert result.stdout
+    assert result.stdout is not None
+    assert "PERMANENT" in result.stdout
     result = tools.g_mapset(mapset="does_not_exist")
     assert result.stderr
+    assert result.stderr is not None
     assert "does_not_exist" in result.stderr
 
 
-def test_stderr_without_capturing(xy_dataset_session):
+def test_capturing_stdout_without_stderr(xy_dataset_session):
     """Check that text is not present when not capturing it"""
-    tools = Tools(session=xy_dataset_session, capture_output=False, errors="ignore")
+    tools = Tools(
+        session=xy_dataset_session,
+        capture_output=True,
+        capture_stderr=False,
+        errors="ignore",
+    )
+    result = tools.g_mapset(flags="l")
+    assert result.stdout
+    assert result.stdout is not None
+    assert "PERMANENT" in result.stdout
     result = tools.g_mapset(mapset="does_not_exist")
     assert not result.stderr
     assert result.stderr is None
+
+
+def test_capturing_stderr_without_stdout(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(
+        session=xy_dataset_session,
+        capture_output=False,
+        capture_stderr=True,
+        errors="ignore",
+    )
+    result = tools.g_mapset(flags="p")
+    assert not result.stdout
+    assert result.stdout is None
+    result = tools.g_mapset(mapset="does_not_exist")
+    assert result.stderr
+    assert result.stderr is not None
+    assert "does_not_exist" in result.stderr
+
+
+def test_capturing_stderr_for_exception_without_stdout(xy_dataset_session):
+    """Check that text is not present when not capturing it"""
+    tools = Tools(session=xy_dataset_session, capture_output=False, capture_stderr=True)
+    # Testing the actual English message here because that is really generated by the
+    # tool itself rather than the message containing the tool parameters.
+    with pytest.raises(CalledModuleError, match="does not exist"):
+        tools.g_mapset(mapset="does_not_exist")
 
 
 def test_error_handler_default(xy_dataset_session):
@@ -576,9 +620,9 @@ def test_migration_from_run_command_family(xy_dataset_session):
         == 1
     )
     # replacement:
-    tools = Tools(errors="ignore", env=xy_dataset_session.env)
-    assert tools.run("r.mask.status", flags="t").returncode == 1
-    assert tools.r_mask_status(flags="t").returncode == 1
+    tools_with_returncode = Tools(errors="ignore", env=xy_dataset_session.env)
+    assert tools_with_returncode.run("r.mask.status", flags="t").returncode == 1
+    assert tools_with_returncode.r_mask_status(flags="t").returncode == 1
 
     # run_command with overwrite
     # original:
@@ -590,6 +634,7 @@ def test_migration_from_run_command_family(xy_dataset_session):
         env=xy_dataset_session.env,
     )
     # replacement:
+    tools = Tools(env=xy_dataset_session.env)
     tools.r_random_surface(output="surface", seed=42, overwrite=True)
     # or with global overwrite:
     tools = Tools(overwrite=True, env=xy_dataset_session.env)
