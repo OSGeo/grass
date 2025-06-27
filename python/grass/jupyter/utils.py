@@ -37,7 +37,7 @@ def get_region(env=None):
 
 def get_location_proj_string(env=None):
     """Returns projection of environment in PROJ.4 format"""
-    out = gs.read_command("g.proj", flags="jf", env=env)
+    out = gs.read_command("g.proj", flags="fp", format="proj4", env=env)
     return out.strip()
 
 
@@ -72,15 +72,12 @@ def reproject_region(region, from_proj, to_proj):
         stdout=gs.PIPE,
         stderr=gs.PIPE,
     )
-    proc.stdin.write(gs.encode(proj_input))
-    proc.stdin.close()
-    proc.stdin = None
-    proj_output, stderr = proc.communicate()
+    proj_output, stderr = proc.communicate(proj_input)
     if proc.returncode:
         raise RuntimeError(
             _("Encountered error while running m.proj: {}").format(stderr)
         )
-    output = gs.decode(proj_output).splitlines()
+    output = proj_output.splitlines()
     # get the largest bbox
     latitude_list = []
     longitude_list = []
@@ -214,7 +211,7 @@ def query_raster(coord, raster_list):
     :param coord: Coordinates given as a tuple (latitude, longitude).
     :param list raster_list: List of raster names to query.
 
-    :return: str: HTML formatted string containing the results of the raster queries.
+    :return str: HTML formatted string containing the results of the raster queries.
     """
     output_list = ["""<table>"""]
 

@@ -32,9 +32,9 @@ int I_get_group_camera(char *group, char *camera)
     fd = I_fopen_group_camera_old(group);
     G_suppress_warnings(0);
     if (!fd) {
-        sprintf(buf,
-                _("Unable to open camera file for group <%s> in mapset <%s>"),
-                group, G_mapset());
+        snprintf(buf, sizeof(buf),
+                 _("Unable to open camera file for group <%s> in mapset <%s>"),
+                 group, G_mapset());
         G_warning("%s", buf);
         return 0;
     }

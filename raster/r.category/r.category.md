@@ -88,7 +88,7 @@ will become:
 `1 meter` (for category 1)  
 `2 meters` (for category 2), etc.
 
-`format='Elevation: $1.2 to $2.2 feet' ## Format Statement`  
+`label_format='Elevation: $1.2 to $2.2 feet' ## Format Statement`  
 `coefficients="5.0,1000,5.0,1005" ## Coefficients`
 
 The format and coefficients above would be used to generate the
@@ -149,7 +149,7 @@ and `4`, but uses "`,`" (instead of a tab) as the character separating
 the category values from the category values in the output.
 
 ```sh
-r.category map=landclass96 cats=3,4 output_format=json
+r.category map=landclass96 cats=3,4 format=json
 ```
 
 generates the following JSON output:
@@ -158,11 +158,11 @@ generates the following JSON output:
 [
     {
         "category": 3,
-        "description": "herbaceous"
+        "label": "herbaceous"
     },
     {
         "category": 4,
-        "description": "shrubland"
+        "label": "shrubland"
     }
 ]
 ```

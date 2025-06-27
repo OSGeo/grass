@@ -244,7 +244,7 @@ int save_table(int t)
 
     /* Construct our temp name because shapelib doesn't like '.' in name */
     G_temp_element(element);
-    sprintf(fname, "%d.dbf", getpid());
+    snprintf(fname, sizeof(fname), "%d.dbf", getpid());
     G_file_name(name, element, fname, G_mapset());
     G_debug(2, "Write table to tempfile: '%s'", name);
 

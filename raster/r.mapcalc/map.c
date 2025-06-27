@@ -765,7 +765,7 @@ void create_history(const char *dst, expression *e)
     if (seeded) {
         char buf[RECORD_LEN];
 
-        sprintf(buf, "random seed = %ld", seed_value);
+        snprintf(buf, sizeof(buf), "random seed = %ld", seed_value);
         Rast_append_history(&hist, buf);
     }
 

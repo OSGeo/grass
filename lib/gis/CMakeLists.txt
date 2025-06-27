@@ -27,6 +27,7 @@ build_module(
   Intl::Intl
   PostgreSQL::PostgreSQL
   Threads::Threads
+  OPENMP
   ZSTD
   DEFS
   "${grass_gis_DEFS}")

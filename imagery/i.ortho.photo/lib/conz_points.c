@@ -100,9 +100,9 @@ int I_get_con_points(char *group, struct Ortho_Control_Points *cp)
 
     fd = I_fopen_group_file_old(group, POINT_FILE);
     if (fd == NULL) {
-        sprintf(msg,
-                "unable to open control point (Z) file for group [%s in %s]",
-                group, G_mapset());
+        snprintf(msg, sizeof(msg),
+                 "unable to open control point (Z) file for group [%s in %s]",
+                 group, G_mapset());
         G_warning("%s", msg);
         G_sleep(4);
         return 0;
@@ -111,8 +111,9 @@ int I_get_con_points(char *group, struct Ortho_Control_Points *cp)
     stat = I_read_con_points(fd, cp);
     fclose(fd);
     if (stat < 0) {
-        sprintf(msg, "bad format in control point file for group [%s in %s]",
-                group, G_mapset());
+        snprintf(msg, sizeof(msg),
+                 "bad format in control point file for group [%s in %s]", group,
+                 G_mapset());
         G_warning("%s", msg);
         G_sleep(4);
         return 0;
@@ -127,8 +128,9 @@ int I_put_con_points(char *group, struct Ortho_Control_Points *cp)
 
     fd = I_fopen_group_file_new(group, POINT_FILE);
     if (fd == NULL) {
-        sprintf(msg, "unable to create control point file for group [%s in %s]",
-                group, G_mapset());
+        snprintf(msg, sizeof(msg),
+                 "unable to create control point file for group [%s in %s]",
+                 group, G_mapset());
         G_warning("%s", msg);
         G_sleep(4);
         return 0;
@@ -150,9 +152,9 @@ int I_convert_con_points(char *group, struct Ortho_Control_Points *con_cp,
 
     fd = I_fopen_group_file_old(group, POINT_FILE);
     if (fd == NULL) {
-        sprintf(msg,
-                "unable to open control point (Z) file for group [%s in %s]",
-                group, G_mapset());
+        snprintf(msg, sizeof(msg),
+                 "unable to open control point (Z) file for group [%s in %s]",
+                 group, G_mapset());
         G_warning("%s", msg);
         G_sleep(4);
         return 0;
@@ -161,8 +163,9 @@ int I_convert_con_points(char *group, struct Ortho_Control_Points *con_cp,
     stat = I_read_con_points(fd, con_cp);
     fclose(fd);
     if (stat < 0) {
-        sprintf(msg, "bad format in control point file for group [%s in %s]",
-                group, G_mapset());
+        snprintf(msg, sizeof(msg),
+                 "bad format in control point file for group [%s in %s]", group,
+                 G_mapset());
         G_warning("%s", msg);
         G_sleep(4);
         return 0;

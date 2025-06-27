@@ -167,9 +167,9 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
 
     i = 0;
     while (files[i]) {
-        sprintf(buf, "%s/%s", in, files[i]);
+        snprintf(buf, sizeof(buf), "%s/%s", in, files[i]);
         G_file_name(old_path, GV_DIRECTORY, buf, mapset);
-        sprintf(buf, "%s/%s", out, files[i]);
+        snprintf(buf, sizeof(buf), "%s/%s", out, files[i]);
         G_file_name(new_path, GV_DIRECTORY, buf, G_mapset());
 
         if (access(old_path, F_OK) == 0) { /* file exists? */

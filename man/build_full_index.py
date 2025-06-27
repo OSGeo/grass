@@ -41,6 +41,7 @@ the main tool categories:
 | `t.`   | [Temporal](temporal.md)           | Temporal data processing tools     |
 | `db.`  | [Database](database.md)           | Database management tools          |
 | `d.`   | [Display](display.md)             | Display and visualization tools    |
+| `m.`   | [Miscellaneous](miscellaneous.md) | Miscellaneous tools                |
 """
 
 ADDONS_TEXT = """\

@@ -1,11 +1,12 @@
 #include <grass/vector.h>
 #include <grass/parson.h>
 
-#define SHELL_NO     0x00
-#define SHELL_BASIC  0x02
-#define SHELL_REGION 0x04
-#define SHELL_TOPO   0x08
-#define STR_LEN      1024
+#define PRINT_CONTENT_UNSET  0x00
+#define PRINT_CONTENT_TEXT   0x02
+#define PRINT_CONTENT_REGION 0x04
+#define PRINT_CONTENT_TOPO   0x08
+#define STR_LEN              1024
+#define BUFSZ                256
 
 enum OutputFormat { PLAIN, SHELL, JSON };
 
@@ -17,7 +18,7 @@ void parse_args(int, char **, char **, char **, int *, int *, int *,
                 enum OutputFormat *);
 
 /* print.c */
-void format_double(double, char *);
+void format_double(double, char[BUFSZ]);
 void print_region(struct Map_info *, enum OutputFormat, JSON_Object *);
 void print_topo(struct Map_info *, enum OutputFormat, JSON_Object *);
 void print_columns(struct Map_info *, const char *, const char *,

@@ -32,7 +32,14 @@ void G__usage_markdown(void)
     /* print metadata used by man/build*.py */
     fprintf(stdout, "---\n");
     fprintf(stdout, "name: %s\n", st->pgm_name);
-    fprintf(stdout, "description: %s\n", st->module_info.description);
+    fprintf(stdout, "description: ");
+    if (st->module_info.label)
+        fprintf(stdout, "%s", st->module_info.label);
+    if (st->module_info.label && st->module_info.description)
+        fprintf(stdout, " ");
+    if (st->module_info.description)
+        fprintf(stdout, "%s", st->module_info.description);
+    fprintf(stdout, "\n");
     fprintf(stdout, "keywords: [ ");
     G__print_keywords(stdout, NULL, FALSE);
     fprintf(stdout, " ]");

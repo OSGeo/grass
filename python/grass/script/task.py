@@ -8,7 +8,8 @@ Usage:
 ::
 
     from grass.script import task as gtask
-    gtask.command_info('r.info')
+
+    gtask.command_info("r.info")
 
 (C) 2011 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -38,8 +39,10 @@ class grassTask:
 
     ::
 
-        blackList = {'items' : {'d.legend' : { 'flags' : ['m'], 'params' : [] }},
-                     'enabled': True}
+        blackList = {
+            "items": {"d.legend": {"flags": ["m"], "params": []}},
+            "enabled": True,
+        }
 
     :param str path: full path
     :param blackList: hide some options in the GUI (dictionary)
@@ -153,13 +156,14 @@ class grassTask:
         Raises ValueError when the flag is not found.
 
         :param str aFlag: name of the flag
+        :raises ValueError: When the flag is not found.
         """
         for f in self.flags:
             if f["name"] == aFlag:
                 return f
         raise ValueError(_("Flag not found: %s") % aFlag)
 
-    def get_cmd_error(self):
+    def get_cmd_error(self) -> list[str]:
         """Get error string produced by get_cmd(ignoreErrors = False)
 
         :return: list of errors
@@ -193,6 +197,8 @@ class grassTask:
         :param bool ignoreRequired: True to ignore required flags, otherwise
                                     '@<required@>' is shown
         :param bool ignoreDefault: True to ignore parameters with default values
+
+        :raises ValueError: When ``ignoreErrors=False`` and there are errors
         """
         cmd = [self.get_name()]
 
@@ -408,13 +414,19 @@ class processTask:
 
 def convert_xml_to_utf8(xml_text):
     # enc = locale.getdefaultlocale()[1]
-
+    if xml_text is None:
+        return None
     # modify: fetch encoding from the interface description text(xml)
     # e.g. <?xml version="1.0" encoding="GBK"?>
     pattern = re.compile(rb'<\?xml[^>]*\Wencoding="([^"]*)"[^>]*\?>')
     m = re.match(pattern, xml_text)
     if m is None:
-        return xml_text.encode("utf-8") if xml_text else None
+        try:
+            xml_text.decode("utf-8", errors="strict")
+            return xml_text
+        except UnicodeDecodeError:
+            return decode(xml_text).encode("utf-8")
+
     enc = m.groups()[0]
 
     # modify: change the encoding to "utf-8", for correct parsing
@@ -431,9 +443,13 @@ def get_interface_description(cmd):
     otherwise the parser will not succeed.
 
     :param cmd: command (name of GRASS module)
+    :raises ~grass.exceptions.ScriptError:
+        When unable to fetch the interface description for a command.
     """
     try:
-        p = Popen([cmd, "--interface-description"], stdout=PIPE, stderr=PIPE)
+        p = Popen(
+            [cmd, "--interface-description"], stdout=PIPE, stderr=PIPE, text=False
+        )
         cmdout, cmderr = p.communicate()
 
         # TODO: do it better (?)
@@ -450,6 +466,7 @@ def get_interface_description(cmd):
                 [sys.executable, get_real_command(cmd), "--interface-description"],
                 stdout=PIPE,
                 stderr=PIPE,
+                text=False,
             )
             cmdout, cmderr = p.communicate()
 
@@ -490,12 +507,15 @@ def parse_interface(name, parser=processTask, blackList=None):
     :param str name: name of GRASS module to be parsed
     :param parser:
     :param blackList:
+
+    :raises ~grass.exceptions.ScriptError:
+        When the interface description of a module cannot be parsed.
     """
     try:
         tree = ET.fromstring(get_interface_description(name))
     except ETREE_EXCEPTIONS as error:
         raise ScriptError(
-            _("Cannot parse interface description of<{name}> module: {error}").format(
+            _("Cannot parse interface description of <{name}> module: {error}").format(
                 name=name, error=error
             )
         )
@@ -515,7 +535,7 @@ def command_info(cmd):
     with entries for description, keywords, usage, flags, and
     parameters, e.g.
 
-    >>> command_info('g.tempfile') # doctest: +NORMALIZE_WHITESPACE
+    >>> command_info("g.tempfile")  # doctest: +NORMALIZE_WHITESPACE
     {'keywords': ['general', 'support'], 'params': [{'gisprompt': False,
     'multiple': False, 'name': 'pid', 'guidependency': '', 'default': '',
     'age': None, 'required': True, 'value': '', 'label': '', 'guisection': '',
@@ -534,7 +554,7 @@ def command_info(cmd):
     file and prints it's file name.", 'usage': 'g.tempfile pid=integer [--help]
     [--verbose] [--quiet]'}
 
-    >>> command_info('v.buffer')
+    >>> command_info("v.buffer")
     ['vector', 'geometry', 'buffer']
 
     :param str cmd: the command to query

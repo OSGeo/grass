@@ -6,6 +6,8 @@ include $(MODULE_TOPDIR)/include/Make/Python.make
 DSTDIR = $(ETC)/python/grass/app
 
 MODULES = \
+	__main__ \
+	cli \
 	data \
 	runtime
 

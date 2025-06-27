@@ -460,7 +460,8 @@ int db_table_to_sql(dbTable *table, dbString *sql)
          * INTEGER, NUMERIC, REAL, SMALLINT, VARCHAR, CHAR */
         switch (sqltype) {
         case DB_SQL_TYPE_CHARACTER:
-            sprintf(buf, "varchar(%d)", db_get_column_length(column));
+            snprintf(buf, sizeof(buf), "varchar(%d)",
+                     db_get_column_length(column));
             db_append_string(sql, buf);
             break;
         case DB_SQL_TYPE_TEXT:
