@@ -25,7 +25,7 @@ def test_key_value_parser_multiple_values(xy_dataset_session):
     result = tools.r_info(map=name, format="shell").keyval
     assert result["datatype"] == "DCELL"
     assert result["nsres"] == 1
-    result = tools.r_univar(map=name, flags="g").keyval
+    result = tools.r_univar(map=name, format="shell").keyval
     # We don't worry about the specific output value, and just test the type.
     assert isinstance(result["mean"], float)
 
