@@ -349,7 +349,7 @@ function gives an integer result, and *\** indicates that the result is
 float if any of the arguments to the function are floating point values
 and integer if all arguments are integer.
 
-| Function / Variable         | Description                                                      | Type |
+| Function / Variable        | Description                                                     | Type |
 |----------------------------|------------------------------------------------------------------|------|
 | abs(x)                     | Return absolute value of x                                       | *    |
 | acos(x)                    | Inverse cosine of x (result is in degrees)                       | F    |
@@ -394,7 +394,7 @@ and integer if all arguments are integer.
 | tan(x)                     | Tangent of x (x is in degrees)                                   | F    |
 | xor(x, y)                  | Exclusive-or (XOR) of x and y                                    | I    |
 
-**Internal variables:**
+### Internal variables
 
 | Variable      | Description                                         | Type |
 |---------------|-----------------------------------------------------|------|
