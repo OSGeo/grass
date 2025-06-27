@@ -13,19 +13,13 @@ The "@...@" variables are being substituted during build process
 
 """
 
-import os
+GRASS_VERSION = "@GRASS_VERSION_NUMBER@"
+GRASS_VERSION_MAJOR = "@GRASS_VERSION_MAJOR@"
+GRASS_VERSION_MINOR = "@GRASS_VERSION_MINOR@"
+LD_LIBRARY_PATH_VAR = "@LD_LIBRARY_PATH_VAR@"
+CONFIG_PROJSHARE = "@CONFIG_PROJSHARE@"
+GRASS_EXE_NAME = "@START_UP@"
+GRASS_VERSION_GIT = "@GRASS_VERSION_GIT@"
 
-GRASS_PREFIX = None
-GISBASE = None
-
-
-def set_resource_paths():
-    global GRASS_PREFIX, GISBASE
-
-    GRASS_PREFIX = "@GRASS_PREFIX@"
-
-    if "GISBASE" in os.environ and len(os.getenv("GISBASE")) > 0:
-        GISBASE = os.path.normpath(os.environ["GISBASE"])
-    else:
-        GISBASE = os.path.normpath(os.path.join(GRASS_PREFIX, "@GISBASE_INSTALL_PATH@"))
-        os.environ["GISBASE"] = GISBASE
+GRASS_PREFIX = "@GRASS_PREFIX@"
+GISBASE = "@GISBASE_INSTALL_PATH@"

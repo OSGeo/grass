@@ -82,14 +82,13 @@ if ENCODING is None:
     ENCODING = "UTF-8"
     print("Default locale not found, using UTF-8")  # intentionally not translatable
 
-# The "@...@" variables are being substituted during build process
-
-CMD_NAME = "@START_UP@"
-GRASS_VERSION = "@GRASS_VERSION_NUMBER@"
-GRASS_VERSION_MAJOR = "@GRASS_VERSION_MAJOR@"
-GRASS_VERSION_MINOR = "@GRASS_VERSION_MINOR@"
-LD_LIBRARY_PATH_VAR = "@LD_LIBRARY_PATH_VAR@"
-CONFIG_PROJSHARE = os.environ.get("GRASS_PROJSHARE", "@CONFIG_PROJSHARE@")
+CMD_NAME = None
+GRASS_VERSION = None
+GRASS_VERSION_MAJOR = None
+GRASS_VERSION_MINOR = None
+LD_LIBRARY_PATH_VAR = None
+CONFIG_PROJSHARE = None
+GRASS_VERSION_GIT = None
 
 # Get the system name
 WINDOWS = sys.platform.startswith("win")
@@ -1826,7 +1825,7 @@ def print_params(params) -> None:
             val = grep("CC", linesplat)
             sys.stdout.write("%s\n" % val[0].split("=")[1].strip())
         elif arg == "revision":
-            sys.stdout.write("@GRASS_VERSION_GIT@\n")
+            sys.stdout.write(f"{GRASS_VERSION_GIT}\n")
         elif arg == "svn_revision":
             with open(gpath("etc", "VERSIONNUMBER")) as filerev:
                 linerev = filerev.readline().rstrip("\n")
@@ -2087,13 +2086,13 @@ def validate_cmdline(params: Parameters) -> None:
 
 def find_grass_python_package() -> None:
     """Find path to grass package and add it to path"""
-    GRASS_PREFIX = "@GRASS_PREFIX@"
+
+    # The "@...@" variables are being substituted during build process
 
     if "GRASS_PYDIR" in os.environ and len(os.getenv("GRASS_PYDIR")) > 0:
         GRASS_PYDIR = os.path.normpath(os.environ["GRASS_PYDIR"])
     else:
-        GRASS_PYDIR = os.path.normpath(os.path.join(GRASS_PREFIX, "@GRASS_PYDIR@"))
-        os.environ["GRASS_PYDIR"] = GRASS_PYDIR
+        GRASS_PYDIR = os.path.normpath("@GRASS_PYDIR@")
 
     if os.path.exists(GRASS_PYDIR):
         sys.path.append(GRASS_PYDIR)
@@ -2106,12 +2105,6 @@ def find_grass_python_package() -> None:
         )
         raise RuntimeError(msg)
 
-    from grass.app import resource_paths
-
-    resource_paths.set_resource_paths()
-    global GISBASE
-    GISBASE = resource_paths.GISBASE
-
 
 def main() -> None:
     """The main function which does the whole setup and run procedure
@@ -2123,6 +2116,38 @@ def main() -> None:
     # Subsequent functions are using _() calls and
     # thus must be called only after Language has been set.
     find_grass_python_package()
+
+    from grass.app.runtime import (
+        grass_exe_name,
+        grass_version_git,
+        ld_library_path_var,
+        RuntimePaths,
+        version,
+        version_major,
+        version_minor,
+    )
+
+    global \
+        CMD_NAME, \
+        GRASS_VERSION, \
+        GRASS_VERSION_MAJOR, \
+        GRASS_VERSION_MINOR, \
+        LD_LIBRARY_PATH_VAR, \
+        GRASS_VERSION_GIT, \
+        GISBASE, \
+        CONFIG_PROJSHARE
+
+    CMD_NAME = grass_exe_name
+    GRASS_VERSION = version
+    GRASS_VERSION_MAJOR = version_major
+    GRASS_VERSION_MINOR = version_minor
+    LD_LIBRARY_PATH_VAR = ld_library_path_var
+    GRASS_VERSION_GIT = grass_version_git
+
+    runtime_paths = RuntimePaths()
+    GISBASE = runtime_paths.gisbase
+    CONFIG_PROJSHARE = runtime_paths.config_projshare
+
     grass_config_dir = create_grass_config_dir()
     set_language(grass_config_dir)
 

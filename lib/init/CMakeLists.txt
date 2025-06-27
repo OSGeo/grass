@@ -11,7 +11,7 @@ if(WITH_DOCS)
 endif()
 
 # START_UP is the variable used in grass.py, grass.sh.in and grass.bat.in
-set(START_UP "grass")
+set(START_UP ${PROJECT_NAME_LOWER})
 if(WIN32)
   set(START_UP "${START_UP}.py")
   set(script_file_name "grass.bat")
@@ -20,21 +20,6 @@ else()
   set(script_file_name "grass")
   set(script_input_file_name ${script_file_name}.sh.in)
 endif()
-
-file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR}/bin BINARY_DIR)
-set(CONFIG_PROJSHARE)
-get_filename_component(PROJ_INSTALL_PREFIX ${PROJ_INCLUDE_DIRS} PATH)
-if(DEFINED ENV{PROJSHARE})
-  message(WARNING "External PROJ directory not specified; default will be used")
-  set(CONFIG_PROJSHARE "$ENV{PROJSHARE}")
-else()
-  set(CONFIG_PROJSHARE "${PROJ_INSTALL_PREFIX}/share/proj")
-  if(EXISTS ${CONFIG_PROJSHARE}/epsg)
-    message(STATUS "PROJ directory ${CONFIG_PROJSHARE}")
-  endif()
-endif()
-file(TO_NATIVE_PATH "${PROJ_INSTALL_PREFIX}/share/proj" PROJ_LIB)
-file(TO_NATIVE_PATH ${CONFIG_PROJSHARE} GRASS_PROJSHARE)
 
 find_path(gdal_share_dir "gdal" PATH_SUFFIXES share)
 if(NOT gdal_share_dir)
@@ -59,14 +44,11 @@ elseif(WIN32)
 endif()
 
 # configure and install grass.py
-set(GRASS_PREFIX ${OUTDIR})
 set(GRASS_PYDIR ${GRASS_INSTALL_PYDIR})
 configure_file(grass.py ${OUTDIR}/${CMAKE_INSTALL_BINDIR}/${START_UP} @ONLY)
 
-set(GRASS_PREFIX ${CMAKE_INSTALL_PREFIX})
 configure_file(grass.py ${CMAKE_CURRENT_BINARY_DIR}/${START_UP} @ONLY)
 unset(GRASS_PYDIR)
-unset(GRASS_PREFIX)
 
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${START_UP}
         DESTINATION ${CMAKE_INSTALL_BINDIR})
