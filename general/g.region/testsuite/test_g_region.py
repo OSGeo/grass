@@ -46,70 +46,205 @@ class TestRegion(TestCase):
         self.assertEqual(res_default, region["nsres"])
 
     def test_f_flag(self):
-        line = call_module("g.region", flags="fglecn3", capture_stdout=True)
+        line = call_module("g.region", flags="flecn3", capture_stdout=True)
         self.assertEqual(1, len(line.splitlines()))
 
+        # Test that the -f flag ignores the format option
+        plain_result = call_module(
+            "g.region", flags="flecn3", format="plain", capture_stdout=True
+        )
+        self.assertEqual(plain_result, line)
+
+        shell_result = call_module(
+            "g.region", flags="flecn3", format="shell", capture_stdout=True
+        )
+        self.assertEqual(shell_result, line)
+
+        json_result = call_module(
+            "g.region", flags="flecn3", format="json", capture_stdout=True
+        )
+        self.assertEqual(json_result, line)
+
+    def test_plain_format(self):
+        """Test plain format with plectwmn3b flags"""
+        actual = call_module(
+            "g.region", flags="plectwmn3b", capture_stdout=True
+        ).splitlines()
+        expected = [
+            "projection:         99 (Lambert Conformal Conic)",
+            "zone:               0",
+            "datum:              nad83",
+            "ellipsoid:          a=6378137 es=0.006694380022900787",
+            "north:              320000",
+            "south:              10000",
+            "west:               120000",
+            "east:               935000",
+            "top:                500.00000000",
+            "bottom:             -500.00000000",
+            "nsres:              500",
+            "nsres3:             1000",
+            "ewres:              500",
+            "ewres3:             1000",
+            "tbres:              100",
+            "rows:               620",
+            "rows3:              310",
+            "cols:               1630",
+            "cols3:              815",
+            "depths:             10",
+            "cells:              1010600",
+            "cells3:             2526500",
+            "north-west corner:  long: 84:28:04.377741W lat: 36:30:46.34437N",
+            "north-east corner:  long: 75:21:49.978849W lat: 36:34:50.504N",
+            "south-east corner:  long: 75:29:11.170792W lat: 33:47:17.613554N",
+            "south-west corner:  long: 84:17:01.637788W lat: 33:43:21.583472N",
+            "center longitude:   79:54:07.438969W",
+            "center latitude:    35:14:02.62575N",
+            "north-south extent: 310000.000000",
+            "east-west extent:   815000.000000",
+            "center easting:     527500.000000",
+            "center northing:    165000.000000",
+            "120000/935000/10000/320000",
+            "bbox=120000,10000,935000,320000",
+            "convergence angle:  -0.520646",
+            "north latitude:      36:38:03.826722N",
+            "south latitude:      33:43:21.583472N",
+            "west longitude:      84:28:04.377741W",
+            "east longitude:      75:21:49.978849W",
+            "center longitude:   79:54:57.178295W",
+            "center latitude:     35:10:42.705097N",
+        ]
+        self.assertEqual(actual, expected)
+
+        plain_actual = call_module(
+            "g.region", flags="plectwmn3b", format="plain", capture_stdout=True
+        ).splitlines()
+        self.assertEqual(plain_actual, actual)
+
+    def test_shell_format(self):
+        """Test shell format with plectwmn3b flags"""
+        actual = call_module(
+            "g.region", flags="gplectwmn3b", capture_stdout=True
+        ).splitlines()
+        expected = [
+            "projection=99",
+            "zone=0",
+            "n=320000",
+            "s=10000",
+            "w=120000",
+            "e=935000",
+            "t=500",
+            "b=-500",
+            "nsres=500",
+            "nsres3=1000",
+            "ewres=500",
+            "ewres3=1000",
+            "tbres=100",
+            "rows=620",
+            "rows3=310",
+            "cols=1630",
+            "cols3=815",
+            "depths=10",
+            "cells=1010600",
+            "cells3=2526500",
+            "nw_long=-84.46788271",
+            "nw_lat=36.51287344",
+            "ne_long=-75.36388301",
+            "ne_lat=36.58069556",
+            "se_long=-75.48643633",
+            "se_lat=33.78822599",
+            "sw_long=-84.28378827",
+            "sw_lat=33.72266208",
+            "center_long=-79.90206638",
+            "center_lat=35.23406271",
+            "ns_extent=310000.000000",
+            "ew_extent=815000.000000",
+            "center_easting=527500.000000",
+            "center_northing=165000.000000",
+            "120000/935000/10000/320000",
+            "bbox=120000,10000,935000,320000",
+            "converge_angle=-0.520646",
+            "ll_n=36.63439631",
+            "ll_s=33.72266208",
+            "ll_w=-84.46788271",
+            "ll_e=-75.36388301",
+            "ll_clon=-79.91588286",
+            "ll_clat=35.17852919",
+        ]
+        self.assertEqual(actual, expected)
+
+        shell_actual = call_module(
+            "g.region", flags="plectwmn3b", format="shell", capture_stdout=True
+        ).splitlines()
+        self.assertEqual(shell_actual, actual)
+
     def test_format_json(self):
-        """Test json format"""
+        """Test default json format output"""
         expected = {
-            "projection": {"code": 99, "name": "Lambert Conformal Conic"},
-            "zone": 0,
-            "datum": "nad83",
-            "ellipsoid": "a=6378137 es=0.006694380022900787",
-            "region": {
-                "north": 320000,
-                "south": 10000,
-                "west": 120000,
-                "east": 935000,
-                "ns-res": 500,
-                "ns-res3": 1000,
-                "ew-res": 500,
-                "ew-res3": 1000,
-            },
+            "north": 320000,
+            "south": 10000,
+            "west": 120000,
+            "east": 935000,
+            "nsres": 500,
+            "ewres": 500,
+            "rows": 620,
+            "cols": 1630,
+            "cells": 1010600,
+        }
+
+        output = call_module("g.region", flags="p", format="json")
+        output_json = json.loads(output)
+
+        self.assertEqual(expected, output_json)
+
+    def test_json_with_flags(self):
+        """Test json format with plectwmn3b flags"""
+        expected = {
+            "north": 320000,
+            "south": 10000,
+            "west": 120000,
+            "east": 935000,
+            "nsres": 500,
+            "ewres": 500,
+            "rows": 620,
+            "cols": 1630,
+            "nsres3": 1000,
+            "ewres3": 1000,
             "top": 500,
             "bottom": -500,
-            "tbres": 100,
-            "rows": 620,
             "rows3": 310,
-            "cols": 1630,
             "cols3": 815,
+            "tbres": 100,
             "depths": 10,
             "cells": 1010600,
             "cells3": 2526500,
+            "nw_long": -84.46788270593447,
+            "nw_lat": 36.51287343603797,
+            "ne_long": -75.36388301356145,
+            "ne_lat": 36.58069555564893,
+            "se_long": -75.48643633119754,
+            "se_lat": 33.788225987168964,
+            "sw_long": -84.28378827453474,
+            "sw_lat": 33.72266207547134,
+            "center_long": -79.90206638014922,
+            "center_lat": 35.23406270825776,
+            "ns_extent": 310000,
+            "ew_extent": 815000,
+            "center_easting": 527500,
+            "center_northing": 165000,
             "GMT": "120000/935000/10000/320000",
             "WMS": "bbox=120000,10000,935000,320000",
-            "se_lat": 33.78822598716895,
-            "se_long": -75.48643633119754,
-            "sw_lat": 33.722662075471355,
-            "sw_long": -84.28378827453474,
-            "ew_extent": 815000,
-            "ll_clat": 35.17852919352316,
-            "ll_clon": -79.91588285974797,
-            "ll_e": -75.36388301356145,
-            "ll_n": 36.634396311574974,
-            "ll_s": 33.722662075471355,
+            "converge_angle": -0.5206458828749483,
+            "ll_n": 36.634396311574996,
+            "ll_s": 33.72266207547134,
             "ll_w": -84.46788270593447,
-            "ne_lat": 36.58069555564894,
-            "ne_long": -75.36388301356145,
-            "ns_extent": 310000,
-            "nw_lat": 36.51287343603797,
-            "nw_long": -84.46788270593447,
-            "center_easting": 527500,
-            "center_lat": 35.23406270825775,
-            "center_long": -79.90206638014922,
-            "center_northing": 165000,
-            "converge_angle": -0.5206458828734528,
+            "ll_e": -75.36388301356145,
+            "ll_clon": -79.91588285974797,
+            "ll_clat": 35.17852919352317,
         }
 
         output = call_module("g.region", flags="plectwmn3b", format="json")
         output_json = json.loads(output)
 
-        expected_ellps = expected.pop("ellipsoid").split(" ")
-        received_ellps = output_json.pop("ellipsoid").split(" ")
-        self.assertEqual(expected_ellps[0], received_ellps[0])
-        self.assertAlmostEqual(
-            float(expected_ellps[1][3:]), float(received_ellps[1][3:]), places=6
-        )
         self.assertCountEqual(list(expected.keys()), list(output_json.keys()))
         for key, value in expected.items():
             if isinstance(value, float):

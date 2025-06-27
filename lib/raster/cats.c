@@ -212,7 +212,7 @@ static CELL read_cats(const char *element, const char *name, const char *mapset,
     if (!full) {
         fclose(fd);
         if (num < 0)
-            return 0; /* coorect */
+            return 0; /* correct */
         return (CELL)num;
     }
 

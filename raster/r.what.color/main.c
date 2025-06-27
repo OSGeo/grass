@@ -251,7 +251,7 @@ int main(int argc, char **argv)
         outputFormat = PLAIN;
 
         if (strcmp(fmt, "plain") != 0) {
-            G_warning(
+            G_verbose_message(
                 _("The printf-style output format is deprecated and will "
                   "be removed in a future release. Please use the "
                   "'color_format' option instead, along with 'format=plain'."));

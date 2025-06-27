@@ -36,6 +36,7 @@ int main(int argc, char *argv[])
         struct Option *mapset;
         struct Option *region;
         struct Option *output;
+        struct Option *format;
     } opt;
     struct {
         struct Flag *ignorecase;
@@ -55,6 +56,7 @@ int main(int argc, char *argv[])
     struct Cell_head window;
     struct elist *el;
     int lcount, lalloc;
+    enum OutputFormat format;
 
     G_gisinit(argv[0]);
 
@@ -113,6 +115,14 @@ int main(int argc, char *argv[])
     opt.output->description = _("If not given or '-' then standard output");
     opt.output->guisection = _("Print");
 
+    opt.format = G_define_standard_option(G_OPT_F_FORMAT);
+    opt.format->options = "plain,shell,json";
+    opt.format->required = NO;
+    opt.format->answer = NULL;
+    opt.format->descriptions = _("plain;Human readable text output;"
+                                 "shell;shell script style text output;"
+                                 "json;JSON (JavaScript Object Notation);");
+
     flag.ignorecase = G_define_flag();
     flag.ignorecase->key = 'i';
     flag.ignorecase->description = _("Ignore case");
@@ -143,12 +153,21 @@ int main(int argc, char *argv[])
 
     flag.pretty = G_define_flag();
     flag.pretty->key = 'p';
-    flag.pretty->description = _("Pretty printing in human readable format");
+    flag.pretty->label =
+        _("Pretty printing in human readable format [deprecated]");
+    flag.pretty->description = _(
+        "This flag is deprecated and will be removed in a future release. The "
+        "plain format will become the default. Use format=\"plain\" to set it "
+        "explicitly in a script.");
     flag.pretty->guisection = _("Print");
 
     flag.full = G_define_flag();
     flag.full->key = 'f';
-    flag.full->description = _("Verbose listing (also list map titles)");
+    flag.full->label = _("Verbose listing (also list map titles) [deprecated]");
+    flag.full->description =
+        _("This flag is deprecated and will be removed in a future release. "
+          " Use the type-specific tool to obtain metadata, such as r.info "
+          "and v.info.");
     flag.full->guisection = _("Print");
 
     G_option_excludes(opt.region, flag.pretty, flag.full, NULL);
@@ -159,6 +178,57 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
+
+    if (flag.full->answer || flag.pretty->answer) {
+        if (flag.pretty->answer) {
+            // Do not switch this to a warning until v9. The depreciation is
+            // documented, but warning would be too distracting given the
+            // likely interactive use of this flag. In v9.0, either remove it
+            // or make this into a warning and remove it in v9.1.
+            G_verbose_message(
+                _("Flag 'p' is deprecated and will be removed in a future "
+                  "release where plain will be the default format. Use "
+                  "format=\"plain\" to set plain format for scripting."));
+        }
+        else {
+            G_verbose_message(
+                _("Flag 'f' is deprecated and will be removed in a future "
+                  "release."));
+        }
+
+        if (opt.format->answer == NULL || opt.format->answer[0] == '\0') {
+            opt.format->answer = "plain";
+        }
+        else if (strcmp(opt.format->answer, "plain") != 0) {
+            G_fatal_error(_("Cannot use the -p or -f flag with format=%s."),
+                          opt.format->answer);
+        }
+    }
+
+    if (flag.mapset->answer || flag.type->answer) {
+        if (opt.format->answer == NULL || opt.format->answer[0] == '\0') {
+            opt.format->answer = "shell";
+        }
+        else if (strcmp(opt.format->answer, "shell") != 0) {
+            G_fatal_error(_("Cannot use the -m or -t flag with format=%s."),
+                          opt.format->answer);
+        }
+    }
+
+    // If no format option is specified, preserve backward compatibility
+    if (opt.format->answer == NULL || opt.format->answer[0] == '\0') {
+        opt.format->answer = "shell";
+    }
+
+    if (strcmp(opt.format->answer, "json") == 0) {
+        format = JSON;
+    }
+    else if (strcmp(opt.format->answer, "shell") == 0) {
+        format = SHELL;
+    }
+    else {
+        format = PLAIN;
+    }
 
     if (opt.pattern->answer) {
         if (flag.regex->answer || flag.extended->answer)
@@ -281,7 +351,7 @@ int main(int argc, char *argv[])
     else
         fp = G_open_option_file(opt.output);
 
-    if (flag.pretty->answer || flag.full->answer)
+    if (format == PLAIN)
         dup2(fileno(fp), STDOUT_FILENO);
 
     lcount = 0;
@@ -319,7 +389,7 @@ int main(int argc, char *argv[])
             else
                 M_do_list(n, "");
         }
-        else if (flag.pretty->answer)
+        else if (format == PLAIN)
             M_do_list(n, "");
         else {
             const char *mapset;
@@ -330,17 +400,17 @@ int main(int argc, char *argv[])
         }
     }
 
-    if (!flag.pretty->answer && !flag.full->answer) {
+    if (format != PLAIN) {
         print_list(fp, el, lcount, separator, flag.type->answer,
-                   flag.mapset->answer);
+                   flag.mapset->answer, format);
     }
 
     if (el)
         G_free(el);
 
-    if (flag.pretty->answer || flag.full->answer)
+    if (format == PLAIN)
         fclose(stdout);
-    else if (lcount)
+    else if (lcount && format != JSON)
         fprintf(fp, "\n");
 
     if (use_pager)

@@ -132,483 +132,443 @@ output5 = """
 635746.431136 222663.350636 508.676634 117.672462
 """
 
+output6 = """
+ 0.000000 88.370453 159:255:000
+ 10.000000 88.397057 160:255:000
+ 20.000000 89.526253 174:255:000
+ 30.000000 89.677551 176:255:000
+ 40.000000 91.297195 197:255:000
+ 50.000000 91.297195 197:255:000
+ 60.000000 92.330658 210:255:000
+ 70.000000 93.069199 219:255:000
+ 80.000000 94.768280 240:255:000
+ 90.000000 95.524551 250:255:000
+ 100.000000 96.770805 255:250:000
+ 110.000000 96.770805 255:250:000
+ 120.000000 97.418869 255:246:000
+"""
+
+output7 = """
+ 0.000000 88.370453 #9FFF00
+ 10.000000 88.397057 #A0FF00
+ 20.000000 89.526253 #AEFF00
+ 30.000000 89.677551 #B0FF00
+ 40.000000 91.297195 #C5FF00
+ 50.000000 91.297195 #C5FF00
+ 60.000000 92.330658 #D2FF00
+ 70.000000 93.069199 #DBFF00
+ 80.000000 94.768280 #F0FF00
+ 90.000000 95.524551 #FAFF00
+ 100.000000 96.770805 #FFFA00
+ 110.000000 96.770805 #FFFA00
+ 120.000000 97.418869 #FFF600
+"""
+
+output8 = """
+ 0.000000 88.370453 rgb(159, 255, 0)
+ 10.000000 88.397057 rgb(160, 255, 0)
+ 20.000000 89.526253 rgb(174, 255, 0)
+ 30.000000 89.677551 rgb(176, 255, 0)
+ 40.000000 91.297195 rgb(197, 255, 0)
+ 50.000000 91.297195 rgb(197, 255, 0)
+ 60.000000 92.330658 rgb(210, 255, 0)
+ 70.000000 93.069199 rgb(219, 255, 0)
+ 80.000000 94.768280 rgb(240, 255, 0)
+ 90.000000 95.524551 rgb(250, 255, 0)
+ 100.000000 96.770805 rgb(255, 250, 0)
+ 110.000000 96.770805 rgb(255, 250, 0)
+ 120.000000 97.418869 rgb(255, 246, 0)
+"""
+
+output9 = """
+ 0.000000 88.370453 hsv(82, 100, 100)
+ 10.000000 88.397057 hsv(82, 100, 100)
+ 20.000000 89.526253 hsv(79, 100, 100)
+ 30.000000 89.677551 hsv(78, 100, 100)
+ 40.000000 91.297195 hsv(73, 100, 100)
+ 50.000000 91.297195 hsv(73, 100, 100)
+ 60.000000 92.330658 hsv(70, 100, 100)
+ 70.000000 93.069199 hsv(68, 100, 100)
+ 80.000000 94.768280 hsv(63, 100, 100)
+ 90.000000 95.524551 hsv(61, 100, 100)
+ 100.000000 96.770805 hsv(58, 100, 100)
+ 110.000000 96.770805 hsv(58, 100, 100)
+ 120.000000 97.418869 hsv(57, 100, 100)
+"""
+
 output_json_with_color = [
     {
-        "easting": 635747,
-        "northing": 222664,
+        "easting": 637656,
+        "northing": 224222,
         "distance": 0,
-        "elevation": 117.67246246337891,
-        "red": 250,
-        "green": 127,
-        "blue": 5,
+        "value": 88.37045288085938,
+        "color": "#9FFF00",
     },
     {
-        "easting": 635738.87009513902,
-        "northing": 222669.8227696977,
-        "distance": 10.000000000050347,
-        "elevation": 116.41721343994141,
-        "red": 254,
-        "green": 127,
-        "blue": 1,
+        "easting": 637664.5404859307,
+        "northing": 224227.20193233964,
+        "distance": 9.99999999997167,
+        "value": 88.39705657958984,
+        "color": "#A0FF00",
     },
     {
-        "easting": 635730.74019027804,
-        "northing": 222675.64553939539,
-        "distance": 20.000000000100695,
-        "elevation": 115.63948059082031,
-        "red": 255,
-        "green": 130,
-        "blue": 0,
+        "easting": 637673.0809718615,
+        "northing": 224232.40386467928,
+        "distance": 19.99999999994334,
+        "value": 89.52625274658203,
+        "color": "#AEFF00",
     },
     {
-        "easting": 635722.61028541706,
-        "northing": 222681.46830909309,
-        "distance": 30.00000000015104,
-        "elevation": 112.83534240722656,
-        "red": 255,
-        "green": 148,
-        "blue": 0,
+        "easting": 637681.6214577922,
+        "northing": 224237.6057970189,
+        "distance": 29.999999999915012,
+        "value": 89.67755126953125,
+        "color": "#B0FF00",
     },
     {
-        "easting": 635714.48038055608,
-        "northing": 222687.29107879079,
-        "distance": 40.000000000201389,
-        "elevation": 111.32489013671875,
-        "red": 255,
-        "green": 157,
-        "blue": 0,
+        "easting": 637690.161943723,
+        "northing": 224242.80772935855,
+        "distance": 39.99999999988668,
+        "value": 91.29719543457031,
+        "color": "#C5FF00",
     },
     {
-        "easting": 635706.3504756951,
-        "northing": 222693.11384848849,
-        "distance": 50.000000000251738,
-        "elevation": 108.61228179931641,
-        "red": 255,
-        "green": 175,
-        "blue": 0,
+        "easting": 637698.7024296537,
+        "northing": 224248.0096616982,
+        "distance": 49.99999999985835,
+        "value": 91.29719543457031,
+        "color": "#C5FF00",
     },
     {
-        "easting": 635698.22057083412,
-        "northing": 222698.93661818618,
-        "distance": 60.000000000302087,
-        "elevation": 106.31334686279297,
-        "red": 255,
-        "green": 189,
-        "blue": 0,
+        "easting": 637707.2429155845,
+        "northing": 224253.21159403783,
+        "distance": 59.999999999830024,
+        "value": 92.33065795898438,
+        "color": "#D2FF00",
     },
     {
-        "easting": 635690.09066597314,
-        "northing": 222704.75938788388,
-        "distance": 70.000000000352429,
-        "elevation": 104.91566467285156,
-        "red": 255,
-        "green": 198,
-        "blue": 0,
+        "easting": 637715.7834015152,
+        "northing": 224258.41352637747,
+        "distance": 69.9999999998017,
+        "value": 93.06919860839844,
+        "color": "#DBFF00",
     },
     {
-        "easting": 635681.96076111216,
-        "northing": 222710.58215758158,
-        "distance": 80.000000000402778,
-        "elevation": 102.87860107421875,
-        "red": 255,
-        "green": 211,
-        "blue": 0,
+        "easting": 637724.323887446,
+        "northing": 224263.6154587171,
+        "distance": 79.99999999977337,
+        "value": 94.76828002929688,
+        "color": "#F0FF00",
     },
     {
-        "easting": 635673.83085625118,
-        "northing": 222716.40492727928,
-        "distance": 90.000000000453127,
-        "elevation": 102.93507385253906,
-        "red": 255,
-        "green": 211,
-        "blue": 0,
+        "easting": 637732.8643733767,
+        "northing": 224268.81739105674,
+        "distance": 89.99999999974503,
+        "value": 95.52455139160156,
+        "color": "#FAFF00",
     },
     {
-        "easting": 635673,
-        "northing": 222717,
-        "distance": 91.021975368588883,
-        "elevation": 102.93507385253906,
-        "red": 255,
-        "green": 211,
-        "blue": 0,
+        "easting": 637741.4048593075,
+        "northing": 224274.01932339638,
+        "distance": 99.99999999971669,
+        "value": 96.77080535888672,
+        "color": "#FFFA00",
     },
     {
-        "easting": 635665.01745017618,
-        "northing": 222710.97680331473,
-        "distance": 101.02197536855223,
-        "elevation": 102.93221282958984,
-        "red": 255,
-        "green": 211,
-        "blue": 0,
+        "easting": 637749.9453452382,
+        "northing": 224279.22125573602,
+        "distance": 109.99999999968836,
+        "value": 96.77080535888672,
+        "color": "#FFFA00",
     },
     {
-        "easting": 635657.03490035236,
-        "northing": 222704.95360662945,
-        "distance": 111.02197536851558,
-        "elevation": 102.93115234375,
-        "red": 255,
-        "green": 211,
-        "blue": 0,
+        "easting": 637758.485831169,
+        "northing": 224284.42318807566,
+        "distance": 119.99999999966002,
+        "value": 97.41886901855469,
+        "color": "#FFF600",
+    },
+]
+
+output_json_with_color_rgb = [
+    {
+        "easting": 637656,
+        "northing": 224222,
+        "distance": 0,
+        "value": 88.37045288085938,
+        "color": "rgb(159, 255, 0)",
     },
     {
-        "easting": 635649.05235052854,
-        "northing": 222698.93040994418,
-        "distance": 121.02197536847893,
-        "elevation": 102.93221282958984,
-        "red": 255,
-        "green": 211,
-        "blue": 0,
+        "easting": 637664.5404859307,
+        "northing": 224227.20193233964,
+        "distance": 9.99999999997167,
+        "value": 88.39705657958984,
+        "color": "rgb(160, 255, 0)",
     },
     {
-        "easting": 635641.06980070472,
-        "northing": 222692.90721325891,
-        "distance": 131.02197536844227,
-        "elevation": 102.93221282958984,
-        "red": 255,
-        "green": 211,
-        "blue": 0,
+        "easting": 637673.0809718615,
+        "northing": 224232.40386467928,
+        "distance": 19.99999999994334,
+        "value": 89.52625274658203,
+        "color": "rgb(174, 255, 0)",
     },
     {
-        "easting": 635633.0872508809,
-        "northing": 222686.88401657363,
-        "distance": 141.02197536840561,
-        "elevation": 102.93164825439453,
-        "red": 255,
-        "green": 211,
-        "blue": 0,
+        "easting": 637681.6214577922,
+        "northing": 224237.6057970189,
+        "distance": 29.999999999915012,
+        "value": 89.67755126953125,
+        "color": "rgb(176, 255, 0)",
     },
     {
-        "easting": 635625.10470105708,
-        "northing": 222680.86081988836,
-        "distance": 151.02197536836894,
-        "elevation": 102.936767578125,
-        "red": 255,
-        "green": 211,
-        "blue": 0,
+        "easting": 637690.161943723,
+        "northing": 224242.80772935855,
+        "distance": 39.99999999988668,
+        "value": 91.29719543457031,
+        "color": "rgb(197, 255, 0)",
     },
     {
-        "easting": 635617.12215123326,
-        "northing": 222674.83762320309,
-        "distance": 161.02197536833228,
-        "elevation": 102.90335845947266,
-        "red": 255,
-        "green": 211,
-        "blue": 0,
+        "easting": 637698.7024296537,
+        "northing": 224248.0096616982,
+        "distance": 49.99999999985835,
+        "value": 91.29719543457031,
+        "color": "rgb(197, 255, 0)",
     },
     {
-        "easting": 635609.13960140944,
-        "northing": 222668.81442651781,
-        "distance": 171.02197536829561,
-        "elevation": 105.44782257080078,
-        "red": 255,
-        "green": 195,
-        "blue": 0,
+        "easting": 637707.2429155845,
+        "northing": 224253.21159403783,
+        "distance": 59.999999999830024,
+        "value": 92.33065795898438,
+        "color": "rgb(210, 255, 0)",
     },
     {
-        "easting": 635601.15705158561,
-        "northing": 222662.79122983254,
-        "distance": 181.02197536825895,
-        "elevation": 105.44782257080078,
-        "red": 255,
-        "green": 195,
-        "blue": 0,
+        "easting": 637715.7834015152,
+        "northing": 224258.41352637747,
+        "distance": 69.9999999998017,
+        "value": 93.06919860839844,
+        "color": "rgb(219, 255, 0)",
     },
     {
-        "easting": 635593.17450176179,
-        "northing": 222656.76803314727,
-        "distance": 191.02197536822229,
-        "elevation": 108.42352294921875,
-        "red": 255,
-        "green": 176,
-        "blue": 0,
+        "easting": 637724.323887446,
+        "northing": 224263.6154587171,
+        "distance": 79.99999999977337,
+        "value": 94.76828002929688,
+        "color": "rgb(240, 255, 0)",
     },
     {
-        "easting": 635585.19195193797,
-        "northing": 222650.74483646199,
-        "distance": 201.02197536818562,
-        "elevation": 109.19235992431641,
-        "red": 255,
-        "green": 171,
-        "blue": 0,
+        "easting": 637732.8643733767,
+        "northing": 224268.81739105674,
+        "distance": 89.99999999974503,
+        "value": 95.52455139160156,
+        "color": "rgb(250, 255, 0)",
     },
     {
-        "easting": 635577.20940211415,
-        "northing": 222644.72163977672,
-        "distance": 211.02197536814896,
-        "elevation": 112.04276275634766,
-        "red": 255,
-        "green": 153,
-        "blue": 0,
+        "easting": 637741.4048593075,
+        "northing": 224274.01932339638,
+        "distance": 99.99999999971669,
+        "value": 96.77080535888672,
+        "color": "rgb(255, 250, 0)",
     },
     {
-        "easting": 635569.22685229033,
-        "northing": 222638.69844309145,
-        "distance": 221.02197536811229,
-        "elevation": 114.32113647460938,
-        "red": 255,
-        "green": 138,
-        "blue": 0,
+        "easting": 637749.9453452382,
+        "northing": 224279.22125573602,
+        "distance": 109.99999999968836,
+        "value": 96.77080535888672,
+        "color": "rgb(255, 250, 0)",
     },
     {
-        "easting": 635563,
-        "northing": 222634,
-        "distance": 228.82255591888975,
-        "elevation": 114.32113647460938,
-        "red": 255,
-        "green": 138,
-        "blue": 0,
+        "easting": 637758.485831169,
+        "northing": 224284.42318807566,
+        "distance": 119.99999999966002,
+        "value": 97.41886901855469,
+        "color": "rgb(255, 246, 0)",
+    },
+]
+
+output_json_with_color_triplet = [
+    {
+        "easting": 637656,
+        "northing": 224222,
+        "distance": 0,
+        "value": 88.37045288085938,
+        "color": "159:255:0",
     },
     {
-        "easting": 635569.50791373453,
-        "northing": 222626.40743397636,
-        "distance": 238.82255591886044,
-        "elevation": 115.35729217529297,
-        "red": 255,
-        "green": 132,
-        "blue": 0,
+        "easting": 637664.5404859307,
+        "northing": 224227.20193233964,
+        "distance": 9.99999999997167,
+        "value": 88.39705657958984,
+        "color": "160:255:0",
     },
     {
-        "easting": 635576.01582746906,
-        "northing": 222618.81486795272,
-        "distance": 248.82255591883114,
-        "elevation": 114.60910034179688,
-        "red": 255,
-        "green": 137,
-        "blue": 0,
+        "easting": 637673.0809718615,
+        "northing": 224232.40386467928,
+        "distance": 19.99999999994334,
+        "value": 89.52625274658203,
+        "color": "174:255:0",
     },
     {
-        "easting": 635582.52374120359,
-        "northing": 222611.22230192908,
-        "distance": 258.82255591880187,
-        "elevation": 111.63629150390625,
-        "red": 255,
-        "green": 155,
-        "blue": 0,
+        "easting": 637681.6214577922,
+        "northing": 224237.6057970189,
+        "distance": 29.999999999915012,
+        "value": 89.67755126953125,
+        "color": "176:255:0",
     },
     {
-        "easting": 635589.03165493812,
-        "northing": 222603.62973590544,
-        "distance": 268.82255591877259,
-        "elevation": 112.35543060302734,
-        "red": 255,
-        "green": 151,
-        "blue": 0,
+        "easting": 637690.161943723,
+        "northing": 224242.80772935855,
+        "distance": 39.99999999988668,
+        "value": 91.29719543457031,
+        "color": "197:255:0",
     },
     {
-        "easting": 635595.53956867266,
-        "northing": 222596.03716988181,
-        "distance": 278.82255591874332,
-        "elevation": 110.162841796875,
-        "red": 255,
-        "green": 165,
-        "blue": 0,
+        "easting": 637698.7024296537,
+        "northing": 224248.0096616982,
+        "distance": 49.99999999985835,
+        "value": 91.29719543457031,
+        "color": "197:255:0",
     },
     {
-        "easting": 635602.04748240719,
-        "northing": 222588.44460385817,
-        "distance": 288.82255591871404,
-        "elevation": 109.17266845703125,
-        "red": 255,
-        "green": 171,
-        "blue": 0,
+        "easting": 637707.2429155845,
+        "northing": 224253.21159403783,
+        "distance": 59.999999999830024,
+        "value": 92.33065795898438,
+        "color": "210:255:0",
     },
     {
-        "easting": 635608.55539614172,
-        "northing": 222580.85203783453,
-        "distance": 298.82255591868477,
-        "elevation": 109.17266845703125,
-        "red": 255,
-        "green": 171,
-        "blue": 0,
+        "easting": 637715.7834015152,
+        "northing": 224258.41352637747,
+        "distance": 69.9999999998017,
+        "value": 93.06919860839844,
+        "color": "219:255:0",
     },
     {
-        "easting": 635615.06330987625,
-        "northing": 222573.25947181089,
-        "distance": 308.8225559186555,
-        "elevation": 108.03054046630859,
-        "red": 255,
-        "green": 178,
-        "blue": 0,
+        "easting": 637724.323887446,
+        "northing": 224263.6154587171,
+        "distance": 79.99999999977337,
+        "value": 94.76828002929688,
+        "color": "240:255:0",
     },
     {
-        "easting": 635621.57122361078,
-        "northing": 222565.66690578725,
-        "distance": 318.82255591862622,
-        "elevation": 105.67011260986328,
-        "red": 255,
-        "green": 193,
-        "blue": 0,
+        "easting": 637732.8643733767,
+        "northing": 224268.81739105674,
+        "distance": 89.99999999974503,
+        "value": 95.52455139160156,
+        "color": "250:255:0",
     },
     {
-        "easting": 635628.07913734531,
-        "northing": 222558.07433976361,
-        "distance": 328.82255591859695,
-        "elevation": 105.77028656005859,
-        "red": 255,
-        "green": 193,
-        "blue": 0,
+        "easting": 637741.4048593075,
+        "northing": 224274.01932339638,
+        "distance": 99.99999999971669,
+        "value": 96.77080535888672,
+        "color": "255:250:0",
     },
     {
-        "easting": 635634.58705107984,
-        "northing": 222550.48177373997,
-        "distance": 338.82255591856767,
-        "elevation": 105.16993713378906,
-        "red": 255,
-        "green": 196,
-        "blue": 0,
+        "easting": 637749.9453452382,
+        "northing": 224279.22125573602,
+        "distance": 109.99999999968836,
+        "value": 96.77080535888672,
+        "color": "255:250:0",
     },
     {
-        "easting": 635641,
-        "northing": 222543,
-        "distance": 348.67663386369753,
-        "elevation": 105.41686248779297,
-        "red": 255,
-        "green": 195,
-        "blue": 0,
+        "easting": 637758.485831169,
+        "northing": 224284.42318807566,
+        "distance": 119.99999999966002,
+        "value": 97.41886901855469,
+        "color": "255:246:0",
+    },
+]
+
+output_json_with_color_hsv = [
+    {
+        "easting": 637656,
+        "northing": 224222,
+        "distance": 0,
+        "value": 88.37045288085938,
+        "color": "hsv(82, 100, 100)",
     },
     {
-        "easting": 635647.58944598527,
-        "northing": 222550.52191475674,
-        "distance": 358.67663386372163,
-        "elevation": 105.01118469238281,
-        "red": 255,
-        "green": 197,
-        "blue": 0,
+        "easting": 637664.5404859307,
+        "northing": 224227.20193233964,
+        "distance": 9.99999999997167,
+        "value": 88.39705657958984,
+        "color": "hsv(82, 100, 100)",
     },
     {
-        "easting": 635654.17889197054,
-        "northing": 222558.04382951348,
-        "distance": 368.67663386374574,
-        "elevation": 104.85426330566406,
-        "red": 255,
-        "green": 198,
-        "blue": 0,
+        "easting": 637673.0809718615,
+        "northing": 224232.40386467928,
+        "distance": 19.99999999994334,
+        "value": 89.52625274658203,
+        "color": "hsv(79, 100, 100)",
     },
     {
-        "easting": 635660.76833795581,
-        "northing": 222565.56574427022,
-        "distance": 378.67663386376984,
-        "elevation": 104.57392120361328,
-        "red": 255,
-        "green": 200,
-        "blue": 0,
+        "easting": 637681.6214577922,
+        "northing": 224237.6057970189,
+        "distance": 29.999999999915012,
+        "value": 89.67755126953125,
+        "color": "hsv(78, 100, 100)",
     },
     {
-        "easting": 635667.35778394109,
-        "northing": 222573.08765902696,
-        "distance": 388.67663386379394,
-        "elevation": 103.41336059570312,
-        "red": 255,
-        "green": 208,
-        "blue": 0,
+        "easting": 637690.161943723,
+        "northing": 224242.80772935855,
+        "distance": 39.99999999988668,
+        "value": 91.29719543457031,
+        "color": "hsv(73, 100, 100)",
     },
     {
-        "easting": 635673.94722992636,
-        "northing": 222580.6095737837,
-        "distance": 398.67663386381804,
-        "elevation": 105.48558807373047,
-        "red": 255,
-        "green": 194,
-        "blue": 0,
+        "easting": 637698.7024296537,
+        "northing": 224248.0096616982,
+        "distance": 49.99999999985835,
+        "value": 91.29719543457031,
+        "color": "hsv(73, 100, 100)",
     },
     {
-        "easting": 635680.53667591163,
-        "northing": 222588.13148854044,
-        "distance": 408.67663386384214,
-        "elevation": 109.791015625,
-        "red": 255,
-        "green": 167,
-        "blue": 0,
+        "easting": 637707.2429155845,
+        "northing": 224253.21159403783,
+        "distance": 59.999999999830024,
+        "value": 92.33065795898438,
+        "color": "hsv(70, 100, 100)",
     },
     {
-        "easting": 635687.1261218969,
-        "northing": 222595.65340329718,
-        "distance": 418.67663386386624,
-        "elevation": 109.70148468017578,
-        "red": 255,
-        "green": 168,
-        "blue": 0,
+        "easting": 637715.7834015152,
+        "northing": 224258.41352637747,
+        "distance": 69.9999999998017,
+        "value": 93.06919860839844,
+        "color": "hsv(68, 100, 100)",
     },
     {
-        "easting": 635693.71556788217,
-        "northing": 222603.17531805392,
-        "distance": 428.67663386389034,
-        "elevation": 112.1043701171875,
-        "red": 255,
-        "green": 152,
-        "blue": 0,
+        "easting": 637724.323887446,
+        "northing": 224263.6154587171,
+        "distance": 79.99999999977337,
+        "value": 94.76828002929688,
+        "color": "hsv(63, 100, 100)",
     },
     {
-        "easting": 635700.30501386744,
-        "northing": 222610.69723281066,
-        "distance": 438.67663386391445,
-        "elevation": 113.68403625488281,
-        "red": 255,
-        "green": 142,
-        "blue": 0,
+        "easting": 637732.8643733767,
+        "northing": 224268.81739105674,
+        "distance": 89.99999999974503,
+        "value": 95.52455139160156,
+        "color": "hsv(61, 100, 100)",
     },
     {
-        "easting": 635706.89445985272,
-        "northing": 222618.2191475674,
-        "distance": 448.67663386393855,
-        "elevation": 113.68403625488281,
-        "red": 255,
-        "green": 142,
-        "blue": 0,
+        "easting": 637741.4048593075,
+        "northing": 224274.01932339638,
+        "distance": 99.99999999971669,
+        "value": 96.77080535888672,
+        "color": "hsv(58, 100, 100)",
     },
     {
-        "easting": 635713.48390583799,
-        "northing": 222625.74106232414,
-        "distance": 458.67663386396265,
-        "elevation": 114.25257873535156,
-        "red": 255,
-        "green": 139,
-        "blue": 0,
+        "easting": 637749.9453452382,
+        "northing": 224279.22125573602,
+        "distance": 109.99999999968836,
+        "value": 96.77080535888672,
+        "color": "hsv(58, 100, 100)",
     },
     {
-        "easting": 635720.07335182326,
-        "northing": 222633.26297708089,
-        "distance": 468.67663386398675,
-        "elevation": 114.11537933349609,
-        "red": 255,
-        "green": 140,
-        "blue": 0,
-    },
-    {
-        "easting": 635726.66279780853,
-        "northing": 222640.78489183763,
-        "distance": 478.67663386401085,
-        "elevation": 114.12395477294922,
-        "red": 255,
-        "green": 140,
-        "blue": 0,
-    },
-    {
-        "easting": 635733.2522437938,
-        "northing": 222648.30680659437,
-        "distance": 488.67663386403495,
-        "elevation": 115.76699829101562,
-        "red": 255,
-        "green": 129,
-        "blue": 0,
-    },
-    {
-        "easting": 635739.84168977907,
-        "northing": 222655.82872135111,
-        "distance": 498.67663386405906,
-        "elevation": 116.54743957519531,
-        "red": 254,
-        "green": 127,
-        "blue": 1,
-    },
-    {
-        "easting": 635746.43113576435,
-        "northing": 222663.35063610785,
-        "distance": 508.67663386408316,
-        "elevation": 117.67246246337891,
-        "red": 250,
-        "green": 127,
-        "blue": 5,
+        "easting": 637758.485831169,
+        "northing": 224284.42318807566,
+        "distance": 119.99999999966002,
+        "value": 97.41886901855469,
+        "color": "hsv(57, 100, 100)",
     },
 ]
 
@@ -700,29 +660,78 @@ class TestProfileNCSPM(TestCase):
         self.assertModule(rprofile)
         self.assertMultiLineEqual(rprofile.outputs.stdout.strip(), output5.strip())
 
+    def test_profile_color(self):
+        rprofile = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="c",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.assertModule(rprofile)
+        self.assertMultiLineEqual(rprofile.outputs.stdout.strip(), output6.strip())
+
+        rprofile = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="c",
+            color_format="triplet",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.assertModule(rprofile)
+        self.assertMultiLineEqual(rprofile.outputs.stdout.strip(), output6.strip())
+
+        rprofile = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="c",
+            color_format="hex",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.assertModule(rprofile)
+        self.assertMultiLineEqual(rprofile.outputs.stdout.strip(), output7.strip())
+
+        rprofile = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="c",
+            color_format="rgb",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.assertModule(rprofile)
+        self.assertMultiLineEqual(rprofile.outputs.stdout.strip(), output8.strip())
+
+        rprofile = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="c",
+            color_format="hsv",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.assertModule(rprofile)
+        self.assertMultiLineEqual(rprofile.outputs.stdout.strip(), output9.strip())
+
+    def _assert_json_equal(self, expected, result, has_color=True):
+        for entry1, entry2 in zip_longest(expected, result):
+            self.assertAlmostEqual(entry1["easting"], entry2["easting"], places=6)
+            self.assertAlmostEqual(entry1["northing"], entry2["northing"], places=6)
+            self.assertAlmostEqual(entry1["distance"], entry2["distance"], places=6)
+            self.assertAlmostEqual(entry1["value"], entry2["value"], places=6)
+            if has_color:
+                self.assertEqual(entry1["color"], entry2["color"])
+
     def test_profile_json(self):
         module = SimpleModule(
             "r.profile",
             input="elevation",
             flags="g",
             format="json",
-            coordinates=[
-                635747,
-                222664,
-                635673,
-                222717,
-                635563,
-                222634,
-                635641,
-                222543,
-                635747,
-                222664,
-            ],
+            coordinates=[637656, 224222, 637766, 224289],
         )
         self.runModule(module)
+        self.assertEqual("", module.outputs.stderr)
 
         expected = []
-        lines = output5.strip().split("\n")
+        lines = output2.strip().split("\n")
         for line in lines:
             parts = line.split(" ")
             expected.append(
@@ -730,16 +739,11 @@ class TestProfileNCSPM(TestCase):
                     "easting": float(parts[0]),
                     "northing": float(parts[1]),
                     "distance": float(parts[2]),
-                    "elevation": float(parts[3]),
+                    "value": float(parts[3]),
                 }
             )
         result = json.loads(module.outputs.stdout)
-
-        for entry1, entry2 in zip_longest(expected, result):
-            self.assertAlmostEqual(entry1["easting"], entry2["easting"], places=6)
-            self.assertAlmostEqual(entry1["northing"], entry2["northing"], places=6)
-            self.assertAlmostEqual(entry1["distance"], entry2["distance"], places=6)
-            self.assertAlmostEqual(entry1["elevation"], entry2["elevation"], places=6)
+        self._assert_json_equal(expected, result, has_color=False)
 
     def test_profile_json_color(self):
         module = SimpleModule(
@@ -747,31 +751,74 @@ class TestProfileNCSPM(TestCase):
             input="elevation",
             flags="gc",
             format="json",
-            coordinates=[
-                635747,
-                222664,
-                635673,
-                222717,
-                635563,
-                222634,
-                635641,
-                222543,
-                635747,
-                222664,
-            ],
+            coordinates=[637656, 224222, 637766, 224289],
         )
         self.runModule(module)
+        self.assertEqual("", module.outputs.stderr)
 
         expected = output_json_with_color
         result = json.loads(module.outputs.stdout)
-        for entry1, entry2 in zip_longest(expected, result):
-            self.assertAlmostEqual(entry1["easting"], entry2["easting"], places=6)
-            self.assertAlmostEqual(entry1["northing"], entry2["northing"], places=6)
-            self.assertAlmostEqual(entry1["distance"], entry2["distance"], places=6)
-            self.assertAlmostEqual(entry1["elevation"], entry2["elevation"], places=6)
-            self.assertEqual(entry1["red"], entry2["red"])
-            self.assertEqual(entry1["blue"], entry2["blue"])
-            self.assertEqual(entry1["green"], entry2["green"])
+        self._assert_json_equal(expected, result)
+
+        module = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="gc",
+            format="json",
+            color_format="hex",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.runModule(module)
+        self.assertEqual("", module.outputs.stderr)
+
+        expected = output_json_with_color
+        result = json.loads(module.outputs.stdout)
+        self._assert_json_equal(expected, result)
+
+        module = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="gc",
+            format="json",
+            color_format="rgb",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.runModule(module)
+        self.assertEqual("", module.outputs.stderr)
+
+        expected = output_json_with_color_rgb
+        result = json.loads(module.outputs.stdout)
+        self._assert_json_equal(expected, result)
+
+        module = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="gc",
+            format="json",
+            color_format="triplet",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.runModule(module)
+        self.assertEqual("", module.outputs.stderr)
+
+        expected = output_json_with_color_triplet
+        result = json.loads(module.outputs.stdout)
+        self._assert_json_equal(expected, result)
+
+        module = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="gc",
+            format="json",
+            color_format="hsv",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.runModule(module)
+        self.assertEqual("", module.outputs.stderr)
+
+        expected = output_json_with_color_hsv
+        result = json.loads(module.outputs.stdout)
+        self._assert_json_equal(expected, result)
 
 
 if __name__ == "__main__":

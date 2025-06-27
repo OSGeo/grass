@@ -234,9 +234,10 @@ int main(int argc, char **argv)
 
     gprint_bounds = G_define_flag();
     gprint_bounds->key = 'g';
+    gprint_bounds->label = _("Print input map's bounds in the current "
+                             "projection in shell script style [deprecated]");
     gprint_bounds->description =
-        _("[DEPRECATED] Print input map's bounds in the current "
-          "projection and exit (shell style). This flag is obsolete and will "
+        _("This flag is deprecated and will "
           "be removed in a future release. Use format=shell instead.");
     gprint_bounds->guisection = _("Print");
 
@@ -265,8 +266,9 @@ int main(int argc, char **argv)
     }
 
     if (gprint_bounds->answer) {
-        G_warning(_("Flag 'g' is deprecated and will be removed in a future "
-                    "release. Please use format=shell instead."));
+        G_verbose_message(
+            _("Flag 'g' is deprecated and will be removed in a future "
+              "release. Please use format=shell instead."));
         outputFormat = SHELL;
     }
 

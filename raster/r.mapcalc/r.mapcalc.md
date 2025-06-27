@@ -775,7 +775,7 @@ initialised to a specific value using the **seed** option. This can be
 used to replicate a previous calculation.
 
 Alternatively, it can be initialised from the system time and the PID
-using the **-r** flag. This should result in a different seed being used
+using the **-s** flag. This should result in a different seed being used
 each time.
 
 In either case, the seed will be written to the map's history, and can
