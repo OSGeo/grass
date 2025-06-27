@@ -176,15 +176,32 @@ def test_stdout_comma_items(xy_dataset_session):
 
 
 def test_stdout_without_capturing(xy_dataset_session):
-    """Check that text is not present when not capturing it"""
+    """Check that stdout and stderr are not present when not capturing it"""
     tools = Tools(session=xy_dataset_session, capture_output=False)
     result = tools.g_mapset(flags="p")
     assert not result.stdout
     assert result.stdout is None
-    assert not result.text
-    assert result.text is None
     assert not result.stderr
     assert result.stderr is None
+
+
+def test_attributes_without_stdout(xy_dataset_session):
+    """Check that attributes behave as expected when not capturing stdout"""
+    tools = Tools(session=xy_dataset_session, capture_output=False)
+    result = tools.run_cmd(["g.region", "format=json", "-p"])
+    assert not result.text
+    assert result.text is None
+    # We pretend like we want the value. That makes for more natural syntax
+    # for the test and also makes code analysis happy.
+    value = None
+    with pytest.raises(ValueError, match="No text output"):
+        value = result.json
+    with pytest.raises(ValueError, match="No text output"):
+        value = result["cols"]
+    assert not result.keyval
+    with pytest.raises(KeyError):
+        value = result.keyval["cols"]
+    assert value is None
 
 
 def test_capturing_stdout_and_stderr(xy_dataset_session):

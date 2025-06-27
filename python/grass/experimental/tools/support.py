@@ -153,17 +153,6 @@ class ToolResult:
         return self._text
 
     @property
-    def json(self) -> dict:
-        """Text output read as JSON
-
-        This returns the nested structure of dictionaries and lists or fails when
-        the output is not JSON.
-        """
-        if self._cached_json is None:
-            self._cached_json = json.loads(self._stdout)
-        return self._cached_json
-
-    @property
     def keyval(self) -> dict:
         """Text output read as key-value pairs separated by equal signs"""
 
@@ -209,11 +198,14 @@ class ToolResult:
         return self._stderr
 
     def _json_or_error(self):
+        if self._cached_json is not None:
+            return self._cached_json
         if self._stdout:
             # We are testing just std out and letting rest to the parse and the user.
             # This makes no assumption about how JSON is produced by the tool.
             try:
-                return self.json
+                self._cached_json = json.loads(self._stdout)
+                return self._cached_json
             except json.JSONDecodeError as error:
                 if self._kwargs and self._kwargs.get("format") == "json":
                     raise
@@ -226,6 +218,15 @@ class ToolResult:
                 raise ValueError(msg) from error
         msg = f"No text output for {self._name} to be parsed as JSON"
         raise ValueError(msg)
+
+    @property
+    def json(self) -> dict:
+        """Text output read as JSON
+
+        This returns the nested structure of dictionaries and lists or fails when
+        the output is not JSON.
+        """
+        return self._json_or_error()
 
     def __getitem__(self, name):
         return self._json_or_error()[name]
