@@ -192,6 +192,18 @@ int main(int argc, char *argv[])
     G_math_egvorder(eigval, eigmat, bands);
     G_math_d_AB(eigmat, w, q, bands, bands, bands);
 
+    /**Normalize each row (eigenvector) of the transformation matrix q */
+    for (i = 0; i < bands; i++) {
+        double norm = 0.0;
+        for (j = 0; j < bands; j++)
+            norm += q[i][j] * q[i][j];
+        norm = sqrt(norm);
+        if (norm > 0.0) {
+            for (j = 0; j < bands; j++)
+                q[i][j] /= norm;
+        }
+    }
+
     for (i = 0; i < bands; i++) {
         G_verbose_message("%i. eigen value: %+6.5f", i, eigval[i]);
         G_verbose_message("eigen vector:");
@@ -207,7 +219,7 @@ int main(int argc, char *argv[])
         datafds[i] = Rast_open_old(refs.file[i].name, refs.file[i].mapset);
 
         snprintf(tempname, sizeof(tempname), "%s.%d", out_opt->answer, i + 1);
-        outfds[i] = Rast_open_c_new(tempname);
+        outfds[i] = Rast_open_new(tempname, DCELL_TYPE);
     }
 
     /* do the transform */
