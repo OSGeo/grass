@@ -11,10 +11,12 @@ parameters.
   <li>EVI2: Enhanced Vegetation Index 2</li>
   <li>GARI: Green atmospherically resistant vegetation index</li>
   <li>GEMI: Global Environmental Monitoring Index</li>
+  <li>GNDVI: Green Normalized Vegetation Index</li>
   <li>GVI: Green Vegetation Index</li>
   <li>IPVI: Infrared Percentage Vegetation Index</li>
   <li>MSAVI2: second Modified Soil Adjusted Vegetation Index</li>
   <li>MSAVI: Modified Soil Adjusted Vegetation Index</li>
+  <li>NDRE: Normalized Difference Red Edge</li>
   <li>NDVI: Normalized Difference Vegetation Index</li>
   <li>NDWI: Normalized Difference Water Index</li>
   <li>PVI: Perpendicular Vegetation Index</li>
@@ -173,6 +175,15 @@ GEMI = (( (2*((nirchan * nirchan)-(redchan * redchan)) +
 </pre></div>
 
 <p>
+<b>GNDVI: Green Normalized Vegetation Index</b>
+
+<div class="code"><pre>
+ndvi( greenchan, nirchan)
+
+GNDVI = ( greenchan - nirchan ) / ( greenchan + nirchan)
+</pre></div>
+
+<p>
 <b>GVI: Green Vegetation Index</b>
 
 <div class="code"><pre>
@@ -214,6 +225,15 @@ where a is the soil line intercept, s is the
 soil line slope, and X 	is an adjustment factor
 which is set to minimize soil noise (0.08 in
 original papers).
+
+<p>
+<b>NDVI: Normalized Difference Vegetation Index</b>
+
+<div class="code"><pre>
+ndvi( rededgechan, nirchan )
+
+NDVI = (NIR - RedEdge) / (NIR + RedEdge)
+</pre></div>
 
 <p>
 <b>NDVI: Normalized Difference Vegetation Index</b>
@@ -362,6 +382,18 @@ i.vi red=band.3 nir=band.4 viname=gemi output=gemi
 r.univar -e gemi
 </pre></div>
 
+<h3>Calculation of GNDVI</h3>
+
+The calculation of GNDVI (Green Normalized Difference Vegetation Index - Tasseled Cap) from the
+reflectance values is done as follows:
+
+<div class="code"><pre>
+g.region raster=band.3 -p
+# assuming Landsat-7
+i.vi green=band.2 nir=band.4 viname=gndvi output=gndvi
+r.univar -e gndvi
+</pre></div>
+
 <h3>Calculation of GVI</h3>
 
 The calculation of GVI (Green Vegetation Index - Tasseled Cap) from the
@@ -406,6 +438,16 @@ i.vi red=band.3 nir=band.4 viname=msavi2 output=msavi2 \
 r.univar -e msavi2
 </pre></div>
 -->
+
+<h3>Calculation of NDRE</h3>
+
+The calculation of NDRE from the reflectance values is done as follows:
+
+<div class="code"><pre>
+g.region raster=NIRband -p
+i.vi red=RedEdgeband nir=NIRband viname=ndre output=ndre
+r.univar -e ndre
+</pre></div>
 
 <h3>Calculation of NDVI</h3>
 
