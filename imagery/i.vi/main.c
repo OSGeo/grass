@@ -106,18 +106,19 @@ int main(int argc, char *argv[])
     opt.viname->description = _("Type of vegetation index");
     desc = NULL;
     G_asprintf(&desc,
-               "arvi;%s;ci;%s;dvi;%s;evi;%s;evi2;%s;gvi;%s;gari;%s;gemi;%s;"
-               "ipvi;%s;msavi;%s;"
-               "msavi2;%s;ndvi;%s;ndwi;%s;pvi;%s;savi;%s;sr;%s;vari;%s;wdvi;%s",
+               "arvi;%s;ci;%s;dvi;%s;evi;%s;evi2;%s;gndvi;%s;gvi;%s;"
+	       "gari;%s;gemi;%s;ipvi;%s;msavi;%s;msavi2;%s;ndre;%s;ndvi;%s;"
+	       "ndwi;%s;pvi;%s;savi;%s;sr;%s;vari;%s;wdvi;%s",
                _("Atmospherically Resistant Vegetation Index"),
                _("Crust Index"), _("Difference Vegetation Index"),
                _("Enhanced Vegetation Index"), _("Enhanced Vegetation Index 2"),
-               _("Green Vegetation Index"),
+               _("Green Normalized Difference Vegetation Index"),
                _("Green Atmospherically Resistant Vegetation Index"),
                _("Global Environmental Monitoring Index"),
                _("Infrared Percentage Vegetation Index"),
                _("Modified Soil Adjusted Vegetation Index"),
                _("second Modified Soil Adjusted Vegetation Index"),
+               _("Normalized Difference Red Edge"),
                _("Normalized Difference Vegetation Index"),
                _("Normalized Difference Water Index"),
                _("Perpendicular Vegetation Index"),
@@ -125,8 +126,8 @@ int main(int argc, char *argv[])
                _("Visible Atmospherically Resistant Index"),
                _("Weighted Difference Vegetation Index"));
     opt.viname->descriptions = desc;
-    opt.viname->options = "arvi,ci,dvi,evi,evi2,gvi,gari,gemi,ipvi,msavi,"
-                          "msavi2,ndvi,ndwi,pvi,savi,sr,vari,wdvi";
+    opt.viname->options = "arvi,ci,dvi,evi,evi2,gndvi,gvi,gari,gemi,ipvi,msavi,"
+                          "msavi2,ndre,ndvi,ndwi,pvi,savi,sr,vari,wdvi";
     opt.viname->answer = "ndvi";
     opt.viname->key_desc = _("type");
 
@@ -180,7 +181,7 @@ int main(int argc, char *argv[])
     opt.sl_slope->required = NO;
     opt.sl_slope->description =
         _("Value of the slope of the soil line (MSAVI and PVI only)");
-    opt.sl_slope->guisection = _("MSAVI settings");
+    opt.sl_slope->guisection = _("MSAVI/PVI settings");
 
     opt.sl_int = G_define_option();
     opt.sl_int->key = "soil_line_intercept";
@@ -236,6 +237,10 @@ int main(int argc, char *argv[])
 
     if (!strcasecmp(viflag, "sr") && (!(opt.red->answer) || !(opt.nir->answer)))
         G_fatal_error(_("sr index requires red and nir maps"));
+
+    if (!strcasecmp(viflag, "ndre") &&
+        (!(opt.red->answer) || !(opt.nir->answer)))
+        G_fatal_error(_("ndre index requires red (for red edge) and nir maps"));
 
     if (!strcasecmp(viflag, "ndvi") &&
         (!(opt.red->answer) || !(opt.nir->answer)))
@@ -300,6 +305,10 @@ int main(int argc, char *argv[])
         (!(opt.red->answer) || !(opt.nir->answer) || !(opt.green->answer) ||
          !(opt.blue->answer)))
         G_fatal_error(_("gari index requires blue, green, red and nir maps"));
+
+    if (!strcasecmp(viflag, "gndvi") &&
+        (!(opt.green->answer) || !(opt.nir->answer)))
+        G_fatal_error(_("ndvi index requires green and nir maps"));
 
     if (!strcasecmp(viflag, "gvi") &&
         (!(opt.red->answer) || !(opt.nir->answer) || !(opt.green->answer) ||
@@ -494,9 +503,17 @@ int main(int argc, char *argv[])
                 if (!strcasecmp(viflag, "sr"))
                     outrast[col] = s_r(d_redchan, d_nirchan);
 
+                /* calculate gndvi                    */
+                if (!strcasecmp(viflag, "gndvi")) {
+                    if (d_greenchan + d_nirchan < 0.001) /* TODO: why this? Because of INF */
+                        Rast_set_f_null_value(&outrast[col], 1);
+                    else
+                        outrast[col] = nd_vi(d_greenchan, d_nirchan);
+                }
+
                 /* calculate ndvi                    */
-                if (!strcasecmp(viflag, "ndvi")) {
-                    if (d_redchan + d_nirchan < 0.001) /* TODO: why this? */
+                if (!strcasecmp(viflag, "ndvi") || !strcasecmp(viflag, "ndre")) {
+                    if (d_redchan + d_nirchan < 0.001) /* TODO: why this? Because of INF */
                         Rast_set_f_null_value(&outrast[col], 1);
                     else
                         outrast[col] = nd_vi(d_redchan, d_nirchan);
@@ -582,8 +599,16 @@ int main(int argc, char *argv[])
 
     G_free(outrast);
     Rast_close(outfd);
-
-    if (!strcasecmp(viflag, "ndvi")) {
+    
+    if ( !strcasecmp(viflag, "arvi") || !strcasecmp(viflag, "ci") 
+	|| !strcasecmp(viflag, "dvi") || !strcasecmp(viflag, "evi") 
+	|| !strcasecmp(viflag, "evi2") || !strcasecmp(viflag, "gndvi") 
+	|| !strcasecmp(viflag, "gvi") || !strcasecmp(viflag, "gari") 
+	|| !strcasecmp(viflag, "gemi") || !strcasecmp(viflag, "ipvi") 
+	|| !strcasecmp(viflag, "msavi") || !strcasecmp(viflag, "msavi2") 
+	|| !strcasecmp(viflag, "ndre") || !strcasecmp(viflag, "ndvi") 
+	|| !strcasecmp(viflag, "pvi") || !strcasecmp(viflag, "savi") 
+	|| !strcasecmp(viflag, "sr") || !strcasecmp(viflag, "vari")) {
         /* apply predefined NDVI color table */
         const char *style = "ndvi";
 
@@ -593,7 +618,7 @@ int main(int argc, char *argv[])
         else
             G_fatal_error(_("Unknown color request '%s'"), style);
     }
-    else if (!strcasecmp(viflag, "ndwi")) {
+    else if (!strcasecmp(viflag, "ndwi") || !strcasecmp(viflag, "wdvi")) {
         /* apply predefined NDWI color table */
         const char *style = "ndwi";
 
