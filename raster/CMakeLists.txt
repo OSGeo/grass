@@ -571,7 +571,7 @@ build_program_in_subdir(r.statistics DEPENDS grass_gis grass_raster ${LIBM})
 
 build_program_in_subdir(r.stats.zonal DEPENDS grass_gis grass_raster ${LIBM})
 
-build_program_in_subdir(r.stats.quantile DEPENDS grass_gis grass_raster ${LIBM})
+build_program_in_subdir(r.stats.quantile DEPENDS grass_gis grass_raster grass_parson ${LIBM})
 
 build_program_in_subdir(r.stats DEPENDS grass_gis grass_raster grass_parson ${LIBM})
 
