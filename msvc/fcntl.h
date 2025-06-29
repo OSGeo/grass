@@ -29,20 +29,11 @@ int __creat(const char *, int);
 }
 #endif
 
-#include <io.h> // Also for _S_IREAD and _S_IWRITE
+#include <io.h>
 #define open      __open
 #define creat     __creat
 
 #define O_TMPFILE O_TEMPORARY
 #define O_ACCMODE (_O_RDONLY | _O_WRONLY | _O_RDWR)
-
-#if defined(_WIN32)
-#ifndef S_IRUSR
-#define S_IRUSR _S_IREAD
-#endif // S_IRUSR
-#ifndef S_IWUSR
-#define S_IWUSR _S_IWRITE
-#endif // S_IWUSR
-#endif
 
 #endif
