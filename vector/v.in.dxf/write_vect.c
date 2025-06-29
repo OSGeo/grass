@@ -243,9 +243,12 @@ static int get_field_cat(struct Map_info *Map, char *layer, int *field,
                   Fi[i]->table, Fi[i]->key);
 
     if (Vect_map_add_dblink(Map, *field, field_name, Fi[i]->table,
-                            GV_KEY_COLUMN, Fi[i]->database, Fi[i]->driver))
+                            GV_KEY_COLUMN, Fi[i]->database, Fi[i]->driver)) {
+        const char *map_name = Vect_get_full_name(Map);
         G_warning(_("Unable to add database link for vector map <%s>"),
-                  Vect_get_full_name(Map));
+                  map_name);
+        G_free((void *)map_name);
+    }
 
     return i;
 }
