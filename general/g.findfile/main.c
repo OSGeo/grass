@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <grass/gis.h>
+#include <grass/manage.h>
 #include <grass/glocale.h>
 
 #include "local_proto.h"
@@ -112,19 +113,32 @@ int main(int argc, char *argv[])
         }
     }
 
-    mapset = G_find_file2(elem_opt->answer, name, search_mapset);
+    const struct list *element;
+    int n;
+    M_read_list(FALSE, &n);
+    n = M_get_element(elem_opt->answer);
+    char *main_element;
+    if (n >= 0) {
+        element = M_get_list(n);
+        main_element = G_store(element->mainelem);
+    }
+    else {
+        main_element = G_store(elem_opt->answer);
+    }
+    mapset = G_find_file2(main_element, name, search_mapset);
     if (mapset) {
         char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
         const char *qchar = n_flag->answer ? "" : "'";
         const char *qual = G_fully_qualified_name(name, mapset);
 
         G_unqualified_name(name, mapset, xname, xmapset);
-        G_file_name(file, elem_opt->answer, name, mapset);
+        G_file_name(file, main_element, name, mapset);
         fprintf(stdout, "name=%s%s%s\n", qchar, xname, qchar);
         fprintf(stdout, "mapset=%s%s%s\n", qchar, xmapset, qchar);
         fprintf(stdout, "fullname=%s%s%s\n", qchar, qual, qchar);
         fprintf(stdout, "file=%s%s%s\n", qchar, file, qchar);
 
+        G_free(main_element);
         return EXIT_SUCCESS;
     }
     else {
@@ -134,5 +148,6 @@ int main(int argc, char *argv[])
         fprintf(stdout, "file=\n");
     }
 
+    G_free(main_element);
     return EXIT_FAILURE;
 }

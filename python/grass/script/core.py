@@ -1605,10 +1605,8 @@ def find_file(name, element="cell", mapset=None, env=None):
     """
     element_translation = {
         "rast": "cell",
-        "raster": "cell",
         "rast3d": "grid3",
         "raster3d": "grid3",
-        "raster_3d": "grid3",
     }
 
     if element in element_translation:
