@@ -1,10 +1,8 @@
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-from grass.gunittest.gmodules import call_module
 from grass.gunittest.gmodules import SimpleModule
 
-reference_str = """\
-27511:0:33.333333:134.717331
+reference_str_1 = """27511:0:33.333333:134.717331
 27511:1:66.666667:143.985499
 27513:0:33.333333:140.669418
 27513:1:66.666667:146.279022
@@ -29,7 +27,63 @@ reference_str = """\
 27608:0:33.333333:91.426587
 27608:1:66.666667:104.532201
 27610:0:33.333333:81.664024
-27610:1:66.666667:92.704079
+27610:1:66.666667:92.704079"""
+
+reference_str_2 = """27511:0:50.000000:139.625984
+27511:1:60.000000:142.374435
+27511:2:70.000000:144.753278
+27513:0:50.000000:143.704910
+27513:1:60.000000:145.188040
+27513:2:70.000000:146.847707
+27518:0:50.000000:122.534378
+27518:1:60.000000:126.608752
+27518:2:70.000000:131.621115
+27529:0:50.000000:100.000465
+27529:1:60.000000:102.160379
+27529:2:70.000000:104.277072
+27539:0:50.000000:128.539337
+27539:1:60.000000:131.724411
+27539:2:70.000000:134.259715
+27601:0:50.000000:94.191139
+27601:1:60.000000:96.736372
+27601:2:70.000000:99.186425
+27603:0:50.000000:97.599670
+27603:1:60.000000:101.081412
+27603:2:70.000000:104.792902
+27604:0:50.000000:82.088058
+27604:1:60.000000:85.149146
+27604:2:70.000000:87.923511
+27605:0:50.000000:108.045738
+27605:1:60.000000:110.635651
+27605:2:70.000000:113.597951
+27606:0:50.000000:116.578697
+27606:1:60.000000:121.248445
+27606:2:70.000000:126.099172
+27607:0:50.000000:130.293945
+27607:1:60.000000:133.615195
+27607:2:70.000000:136.992752
+27608:0:50.000000:97.371792
+27608:1:60.000000:101.015968
+27608:2:70.000000:106.343367
+27610:0:50.000000:87.330147
+27610:1:60.000000:90.682228
+27610:2:70.000000:93.667923
+"""
+
+reference_str_3 = """cat:50.000000:60.000000:70.000000
+27511:139.625984:142.374435:144.753278
+27513:143.704910:145.188040:146.847707
+27518:122.534378:126.608752:131.621115
+27529:100.000465:102.160379:104.277072
+27539:128.539337:131.724411:134.259715
+27601:94.191139:96.736372:99.186425
+27603:97.599670:101.081412:104.792902
+27604:82.088058:85.149146:87.923511
+27605:108.045738:110.635651:113.597951
+27606:116.578697:121.248445:126.099172
+27607:130.293945:133.615195:136.992752
+27608:97.371792:101.015968:106.343367
+27610:87.330147:90.682228:93.667923
 """
 
 
@@ -39,33 +93,51 @@ class TestStatsQuantile(TestCase):
 
     def setUp(self):
         self.use_temp_region()
-        call_module("g.region", raster="elevation")
+        self.runModule("g.region", raster="elevation")
 
     def tearDown(self):
         self.del_temp_region()
-        call_module(
-            "g.remove",
-            flags="f",
-            type_="raster",
-            name=[self.base, self.cover],
-        )
 
     def test_quantiles(self):
-        self.assertModule(
+        module = SimpleModule(
             "r.stats.quantile",
             base=self.base,
             cover=self.cover,
             quantiles=3,
             flags="p",
         )
-
-    def test_flagp(self):
-        """Testing flag p with map zipcodes and elevation"""
-        module = SimpleModule(
-            "r.stats.quantile", base=self.base, cover=self.cover, quantiles=3, flags="p"
+        self.assertModule(module)
+        self.assertLooksLike(
+            actual=str(module.outputs.stdout), reference=reference_str_1
         )
-        module.run()
-        self.assertLooksLike(actual=str(module.outputs.stdout), reference=reference_str)
+
+    def test_plain_format(self):
+        """Test flag p."""
+        module = SimpleModule(
+            "r.stats.quantile",
+            base=self.base,
+            cover=self.cover,
+            percentiles=["50", "60", "70"],
+            flags="p",
+        )
+        self.assertModule(module)
+        self.assertLooksLike(
+            actual=str(module.outputs.stdout), reference=reference_str_2
+        )
+
+    def test_table_format(self):
+        """Test t flag."""
+        module = SimpleModule(
+            "r.stats.quantile",
+            base=self.base,
+            cover=self.cover,
+            percentiles=["50", "60", "70"],
+            flags="t",
+        )
+        self.assertModule(module)
+        self.assertLooksLike(
+            actual=str(module.outputs.stdout), reference=reference_str_3
+        )
 
 
 if __name__ == "__main__":
