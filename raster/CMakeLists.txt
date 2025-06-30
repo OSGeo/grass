@@ -90,6 +90,7 @@ set(raster_modules_list
     r.series.interp
     r.sim
     r.slope.aspect
+    r.smooth.edgepreserve
     r.solute.transport
     r.spread
     r.spreadpath
@@ -538,6 +539,16 @@ build_program_in_subdir(
   DEPENDS
   grass_gis
   grass_raster
+  ${LIBM}
+  OPTIONAL_DEPENDS
+  OPENMP)
+
+build_program_in_subdir(
+  r.smooth.edgepreserve
+  DEPENDS
+  grass_gis
+  grass_raster
+  grass_rowio
   ${LIBM}
   OPTIONAL_DEPENDS
   OPENMP)

@@ -10,6 +10,14 @@ def test_default_output(simple_dataset):
     expected = ["raster_test_1", "vector_test_1"]
     assert actual == expected
 
+    shell_actual = gs.read_command(
+        "g.list",
+        type="all",
+        format="shell",
+        env=simple_dataset.env,
+    ).splitlines()
+    assert actual == shell_actual
+
     # All mapsets
     actual = gs.read_command(
         "g.list", type="all", mapset="*", env=simple_dataset.env
@@ -22,6 +30,15 @@ def test_default_output(simple_dataset):
     ]
     assert actual == expected
 
+    shell_actual = gs.read_command(
+        "g.list",
+        type="all",
+        mapset="*",
+        format="shell",
+        env=simple_dataset.env,
+    ).splitlines()
+    assert actual == shell_actual
+
 
 def test_data_types_output(simple_dataset):
     """Test g.list with t flag."""
@@ -31,6 +48,15 @@ def test_data_types_output(simple_dataset):
     ).splitlines()
     expected = ["raster/raster_test_1", "vector/vector_test_1"]
     assert actual == expected
+
+    shell_actual = gs.read_command(
+        "g.list",
+        type="all",
+        flags="t",
+        format="shell",
+        env=simple_dataset.env,
+    ).splitlines()
+    assert actual == shell_actual
 
     # All mapsets
     actual = gs.read_command(
@@ -44,6 +70,16 @@ def test_data_types_output(simple_dataset):
     ]
     assert actual == expected
 
+    shell_actual = gs.read_command(
+        "g.list",
+        type="all",
+        flags="t",
+        mapset="*",
+        format="shell",
+        env=simple_dataset.env,
+    ).splitlines()
+    assert actual == shell_actual
+
 
 def test_full_map_output(simple_dataset):
     """Test g.list with m flag."""
@@ -53,6 +89,15 @@ def test_full_map_output(simple_dataset):
     ).splitlines()
     expected = ["raster_test_1@test_1", "vector_test_1@test_1"]
     assert actual == expected
+
+    shell_actual = gs.read_command(
+        "g.list",
+        type="all",
+        flags="m",
+        format="shell",
+        env=simple_dataset.env,
+    ).splitlines()
+    assert actual == shell_actual
 
     # All mapsets
     actual = gs.read_command(
@@ -65,6 +110,16 @@ def test_full_map_output(simple_dataset):
         "vector_test_2@test_2",
     ]
     assert actual == expected
+
+    shell_actual = gs.read_command(
+        "g.list",
+        type="all",
+        flags="m",
+        mapset="*",
+        format="shell",
+        env=simple_dataset.env,
+    ).splitlines()
+    assert actual == shell_actual
 
 
 def test_human_readable_output(simple_dataset):
@@ -86,6 +141,11 @@ def test_human_readable_output(simple_dataset):
     for line in expected:
         assert line in actual, f"Expected line not found: {line}"
 
+    plain_actual = gs.read_command(
+        "g.list", type="all", format="plain", env=simple_dataset.env
+    ).splitlines()
+    assert actual == plain_actual
+
     # All mapsets
     actual = gs.read_command(
         "g.list", type="all", flags="p", mapset="*", env=simple_dataset.env
@@ -106,6 +166,11 @@ def test_human_readable_output(simple_dataset):
     ]
     for line in expected:
         assert line in actual, f"Expected line not found: {line}"
+
+    plain_actual = gs.read_command(
+        "g.list", type="all", mapset="*", format="plain", env=simple_dataset.env
+    ).splitlines()
+    assert actual == plain_actual
 
 
 @pytest.mark.xfail(
@@ -133,6 +198,11 @@ def test_verbose_listing_output(simple_dataset):
     for line in expected:
         assert line in actual, f"Expected line not found: {line}"
 
+    plain_actual = gs.read_command(
+        "g.list", type="all", flags="f", format="plain", env=simple_dataset.env
+    ).splitlines()
+    assert actual == plain_actual
+
     # All mapsets
     actual = gs.read_command(
         "g.list", type="all", flags="f", mapset="*", env=simple_dataset.env
@@ -155,3 +225,68 @@ def test_verbose_listing_output(simple_dataset):
     ]
     for line in expected:
         assert line in actual, f"Expected line not found: {line}"
+
+    plain_actual = gs.read_command(
+        "g.list",
+        type="all",
+        flags="f",
+        mapset="*",
+        format="plain",
+        env=simple_dataset.env,
+    ).splitlines()
+    assert actual == plain_actual
+
+
+def test_json_output(simple_dataset):
+    """Test JSON output of g.list."""
+    # Current mapset only
+    actual = gs.parse_command(
+        "g.list", type="all", format="json", env=simple_dataset.env
+    )
+    expected = [
+        {
+            "name": "raster_test_1",
+            "mapset": "test_1",
+            "type": "raster",
+            "fullname": "raster_test_1@test_1",
+        },
+        {
+            "name": "vector_test_1",
+            "mapset": "test_1",
+            "type": "vector",
+            "fullname": "vector_test_1@test_1",
+        },
+    ]
+    assert actual == expected
+
+    # All mapsets
+    actual = gs.parse_command(
+        "g.list", type="all", mapset="*", format="json", env=simple_dataset.env
+    )
+    expected = [
+        {
+            "name": "raster_test_1",
+            "mapset": "test_1",
+            "type": "raster",
+            "fullname": "raster_test_1@test_1",
+        },
+        {
+            "name": "raster_test_2",
+            "mapset": "test_2",
+            "type": "raster",
+            "fullname": "raster_test_2@test_2",
+        },
+        {
+            "name": "vector_test_1",
+            "mapset": "test_1",
+            "type": "vector",
+            "fullname": "vector_test_1@test_1",
+        },
+        {
+            "name": "vector_test_2",
+            "mapset": "test_2",
+            "type": "vector",
+            "fullname": "vector_test_2@test_2",
+        },
+    ]
+    assert actual == expected

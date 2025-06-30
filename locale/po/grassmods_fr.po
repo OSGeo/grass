@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-21 12:47+0000\n"
-"PO-Revision-Date: 2025-06-21 19:54+0000\n"
+"POT-Creation-Date: 2025-06-24 17:02+0000\n"
+"PO-Revision-Date: 2025-06-25 01:22+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grassmods/fr/>\n"
 "Language: fr\n"
@@ -160,16 +160,16 @@ msgstr ""
 #: ../general/g.mapsets/main.c:111 ../general/g.mapsets/main.c:115
 #: ../general/g.mapsets/main.c:121 ../general/g.mapsets/main.c:127
 #: ../general/g.proj/main.c:85 ../general/g.proj/main.c:90
-#: ../general/g.proj/main.c:98 ../general/g.proj/main.c:104
-#: ../general/g.proj/main.c:112 ../general/g.proj/main.c:124
-#: ../general/g.proj/main.c:132 ../general/g.proj/main.c:188
-#: ../general/g.proj/main.c:241 ../general/g.region/main.c:91
+#: ../general/g.proj/main.c:99 ../general/g.proj/main.c:105
+#: ../general/g.proj/main.c:114 ../general/g.proj/main.c:126
+#: ../general/g.proj/main.c:135 ../general/g.proj/main.c:191
+#: ../general/g.proj/main.c:244 ../general/g.region/main.c:91
 #: ../general/g.region/main.c:97 ../general/g.region/main.c:102
 #: ../general/g.region/main.c:108 ../general/g.region/main.c:113
 #: ../general/g.region/main.c:118 ../general/g.region/main.c:124
 #: ../general/g.region/main.c:132 ../general/g.region/main.c:137
-#: ../general/g.region/main.c:143 ../general/g.region/main.c:148
-#: ../general/g.region/main.c:154 ../general/g.region/main.c:389
+#: ../general/g.region/main.c:143 ../general/g.region/main.c:151
+#: ../general/g.region/main.c:157 ../general/g.region/main.c:392
 #: ../general/g.version/main.c:130 ../imagery/i.group/main.c:91
 #: ../imagery/i.group/main.c:102 ../imagery/i.group/main.c:107
 #: ../imagery/i.group/main.c:115 ../imagery/i.signatures/main.c:122
@@ -181,7 +181,7 @@ msgstr ""
 #: ../locale/scriptstrings/r.unpack_to_translate.c:12
 #: ../locale/scriptstrings/t.rast.colors_to_translate.c:18
 #: ../locale/scriptstrings/v.unpack_to_translate.c:13
-#: ../raster/r.category/main.c:116 ../raster/r.colors.out/raster3d_main.c:61
+#: ../raster/r.category/main.c:106 ../raster/r.colors.out/raster3d_main.c:61
 #: ../raster/r.colors.out/raster_main.c:60 ../raster/r.colors/edit_colors.c:164
 #: ../raster/r.colors/edit_colors.c:172 ../raster/r.describe/main.c:73
 #: ../raster/r.external.out/main.c:272 ../raster/r.external.out/main.c:283
@@ -190,7 +190,7 @@ msgstr ""
 #: ../raster/r.info/main.c:115 ../raster/r.object.geometry/main.c:95
 #: ../raster/r.out.gdal/main.c:142 ../raster/r.profile/main.c:110
 #: ../raster/r.proj/main.c:208 ../raster/r.proj/main.c:221
-#: ../raster/r.proj/main.c:233 ../raster/r.proj/main.c:241
+#: ../raster/r.proj/main.c:233 ../raster/r.proj/main.c:242
 #: ../raster/r.stats/main.c:155 ../raster/r.sunmask/main.c:233
 #: ../raster/r.sunmask/main.c:239 ../raster/r.univar/r.univar_main.c:114
 #: ../raster/r.univar/r3.univar_main.c:70 ../raster/r.what/main.c:134
@@ -272,11 +272,11 @@ msgstr ""
 
 #: ../db/db.connect/main.c:183
 msgid "Default driver is not set"
-msgstr ""
+msgstr "Le pilote par défaut n'est pas défini"
 
 #: ../db/db.connect/main.c:186
 msgid "Default database is not set"
-msgstr ""
+msgstr "La base de données par défaut n'est pas définie"
 
 #: ../db/db.connect/main.c:222
 msgid "Unable to set default database connection"
@@ -384,28 +384,28 @@ msgstr "Lister toutes les bases de données pour un pilote et un secteur donnés
 
 #: ../db/db.describe/main.c:54 ../db/db.describe/main.c:59
 #: ../general/g.mapset/main.c:174 ../imagery/i.group/main.c:124
-#: ../raster/r.category/main.c:131 ../raster/r.describe/dumplist.c:47
-#: ../raster/r.proj/main.c:343 ../raster/r.univar/stats.c:96
+#: ../raster/r.category/main.c:143 ../raster/r.describe/dumplist.c:47
+#: ../raster/r.proj/main.c:345 ../raster/r.univar/stats.c:96
 #: ../raster/r.univar/stats.c:335 ../raster/r.what.color/main.c:246
-#: ../raster/r.what/main.c:280 ../vector/v.category/main.c:253
-#: ../vector/v.category/main.c:318 ../vector/v.distance/main.c:310
+#: ../raster/r.what/main.c:280 ../vector/v.category/main.c:255
+#: ../vector/v.category/main.c:320 ../vector/v.distance/main.c:310
 #: ../vector/v.info/print.c:866
 msgid "Failed to initialize JSON array. Out of memory?"
 msgstr ""
 
 #: ../db/db.describe/main.c:140 ../general/g.proj/output.c:382
-#: ../general/g.region/main.c:975 ../general/g.version/main.c:411
-#: ../imagery/i.group/main.c:301 ../raster/r.category/main.c:389
+#: ../general/g.region/main.c:986 ../general/g.version/main.c:411
+#: ../imagery/i.group/main.c:301 ../raster/r.category/main.c:412
 #: ../raster/r.describe/dumplist.c:69 ../raster/r.info/main.c:997
 #: ../raster/r.mask.status/main.c:111 ../raster/r.object.geometry/main.c:401
-#: ../raster/r.profile/main.c:276 ../raster/r.proj/main.c:368
-#: ../raster/r.proj/main.c:543 ../raster/r.report/prt_json.c:200
+#: ../raster/r.profile/main.c:276 ../raster/r.proj/main.c:370
+#: ../raster/r.proj/main.c:545 ../raster/r.report/prt_json.c:200
 #: ../raster/r.stats/main.c:408 ../raster/r.univar/stats.c:431
 #: ../raster/r.what.color/main.c:290 ../raster/r.what/main.c:619
-#: ../vector/v.category/main.c:305 ../vector/v.category/main.c:952
+#: ../vector/v.category/main.c:307 ../vector/v.category/main.c:954
 #: ../vector/v.distance/main.c:1799 ../vector/v.info/main.c:106
 #: ../vector/v.info/print.c:291 ../vector/v.info/print.c:907
-#: ../vector/v.to.db/report.c:500 ../vector/v.univar/main.c:797
+#: ../vector/v.to.db/report.c:514 ../vector/v.univar/main.c:797
 #, fuzzy
 msgid "Failed to initialize pretty JSON string."
 msgstr "Impossible de fermer la couche : couche d'entrée introuvable"
@@ -474,7 +474,7 @@ msgid "Name of file containing SQL statement(s)"
 msgstr ""
 
 #: ../db/db.execute/main.c:149 ../db/db.select/main.c:206
-#: ../general/g.proj/main.c:153 ../general/g.proj/main.c:171
+#: ../general/g.proj/main.c:156 ../general/g.proj/main.c:174
 #: ../locale/scriptstrings/m.proj_to_translate.c:8
 #: ../raster/r.in.ascii/main.c:78 ../raster/r.reclass/main.c:67
 #: ../raster/r.recode/main.c:60 ../raster3d/r3.in.ascii/main.c:87
@@ -595,19 +595,12 @@ msgid "The password was stored in file (%s%cdblogin)"
 msgstr ""
 
 #: ../db/db.select/main.c:104
-#, fuzzy, c-format
-msgid "Test %s."
-msgstr "Test %s."
+msgid "Test failed."
+msgstr "Test échoué."
 
 #: ../db/db.select/main.c:104
-#: ../imagery/i.ortho.photo/i.ortho.rectify/report.c:10
-#: ../imagery/i.rectify/report.c:10
-msgid "failed"
-msgstr "échoué"
-
-#: ../db/db.select/main.c:104
-msgid "succeeded"
-msgstr "à réussi"
+msgid "Test succeeded."
+msgstr "Test réussi."
 
 #: ../db/db.select/main.c:140 ../raster/r.object.geometry/main.c:118
 #: ../raster/r.quantile/main.c:346 ../raster/r.regression.line/main.c:77
@@ -1091,10 +1084,9 @@ msgstr "Type inconnu"
 #: ../db/drivers/ogr/execute.c:58 ../vector/v.out.ogr/main.c:670
 #, c-format
 msgid "OGR layer <%s> not found"
-msgstr ""
+msgstr "Couche OGR <%s> non trouvée"
 
 #: ../db/drivers/ogr/execute.c:71 ../scripts/db.univar/db.univar.py:131
-#: ../scripts/v.db.renamecolumn/v.db.renamecolumn.py:104
 #: ../vector/v.colors.out/make_colors.c:42 ../vector/v.colors/scan_attr.c:34
 #: ../vector/v.db.connect/main.c:292 ../vector/v.distance/main.c:574
 #: ../vector/v.distance/main.c:616 ../vector/v.in.db/main.c:188
@@ -1105,7 +1097,7 @@ msgstr ""
 #: ../vector/v.vect.stats/main.c:446
 #, c-format, python-format
 msgid "Column <%s> not found in table <%s>"
-msgstr ""
+msgstr "Colonne <%s> non trouvée dans la table <%s>"
 
 #: ../db/drivers/ogr/execute.c:113
 #, c-format
@@ -1207,9 +1199,9 @@ msgstr ""
 #: ../vector/v.extract/copy_tab.c:121 ../vector/v.mkgrid/main.c:368
 #: ../vector/v.mkgrid/main.c:429 ../vector/v.overlay/main.c:621
 #: ../vector/v.patch/main.c:387 ../vector/v.random/main.c:302
-#: ../vector/v.select/copy_tabs.c:84
+#: ../vector/v.select/copy_tabs.c:85
 msgid "Unable to create index"
-msgstr ""
+msgstr "Impossible de créer l'index"
 
 #: ../db/drivers/postgres/listdb.c:35 ../db/drivers/sqlite/listdb.c:45
 msgid "No path given"
@@ -1400,7 +1392,7 @@ msgstr ""
 #: ../db/drivers/sqlite/listdb.c:98
 #, c-format
 msgid "Unable to open directory '%s'"
-msgstr ""
+msgstr "Impossible d'ouvrir le répertoire '%s'"
 
 #: ../db/drivers/sqlite/listdb.c:118
 #, c-format
@@ -1423,7 +1415,7 @@ msgstr ""
 #: ../display/d.barscale/draw_scale.c:216 ../display/d.barscale/main.c:250
 #: ../display/d.barscale/main.c:267
 msgid "Programmer error"
-msgstr ""
+msgstr "Erreur de programmation"
 
 #: ../display/d.barscale/draw_scale.c:614
 #: ../display/d.northarrow/draw_n_arrow.c:198
@@ -1734,7 +1726,7 @@ msgstr ""
 #: ../misc/m.nviz.image/main.c:51 ../misc/m.nviz.script/main.c:69
 #: ../raster/r.basins.fill/main.c:52 ../raster/r.buffer/main.c:65
 #: ../raster/r.buildvrt/main.c:76 ../raster/r.carve/main.c:70
-#: ../raster/r.category/main.c:58 ../raster/r.circle/main.c:49
+#: ../raster/r.category/main.c:59 ../raster/r.circle/main.c:49
 #: ../raster/r.clump/main.c:58 ../raster/r.coin/main.c:65
 #: ../raster/r.colors.out/raster_main.c:45 ../raster/r.colors/edit_colors.c:83
 #: ../raster/r.composite/main.c:70 ../raster/r.compress/main.c:67
@@ -2059,7 +2051,7 @@ msgid "No graphics device selected"
 msgstr "Aucune sortie graphique n'est sélectionnée"
 
 #: ../display/d.extract/main.c:96 ../doc/examples/vector/v.example/main.c:76
-#: ../general/g.region/main.c:554 ../misc/m.nviz.image/vector.c:83
+#: ../general/g.region/main.c:565 ../misc/m.nviz.image/vector.c:83
 #: ../raster/r.carve/main.c:153 ../raster/r.cost/main.c:357
 #: ../raster/r.walk/main.c:460 ../scripts/r.mask/r.mask.py:174
 #: ../scripts/v.db.univar/v.db.univar.py:79
@@ -2083,7 +2075,7 @@ msgstr "Carte vecteur <%s> non trouvée"
 
 #: ../display/d.extract/main.c:101 ../display/d.path/main.c:190
 #: ../display/d.vect.chart/main.c:244
-#: ../doc/examples/vector/v.example/main.c:88 ../general/g.region/main.c:564
+#: ../doc/examples/vector/v.example/main.c:88 ../general/g.region/main.c:575
 #: ../general/manage/lister/vector.c:32 ../misc/m.nviz.image/vector.c:301
 #: ../raster/r.carve/main.c:157 ../raster/r.cost/main.c:599
 #: ../raster/r.cost/main.c:666 ../raster/r.drain/main.c:277
@@ -2552,12 +2544,12 @@ msgid "Unable to set up lat/long projection parameters"
 msgstr "Impossible de fixer les paramètres de projection latitude/longitude"
 
 #: ../display/d.grid/plot.c:625 ../display/d.where/main.c:159
-#: ../general/g.region/printwindow.c:338 ../general/g.region/printwindow.c:639
-#: ../general/g.region/printwindow.c:752 ../ps/ps.map/do_geogrid.c:288
+#: ../general/g.region/printwindow.c:331 ../general/g.region/printwindow.c:632
+#: ../general/g.region/printwindow.c:745 ../ps/ps.map/do_geogrid.c:288
 #: ../raster/r.horizon/main.c:599 ../raster/r.in.gdal/main.c:1146
-#: ../raster/r.latlong/main.c:115 ../raster/r.proj/main.c:464
-#: ../raster/r.proj/main.c:569 ../raster/r.proj/main.c:615
-#: ../raster/r.proj/main.c:698 ../raster/r.sun/main.c:819
+#: ../raster/r.latlong/main.c:115 ../raster/r.proj/main.c:466
+#: ../raster/r.proj/main.c:571 ../raster/r.proj/main.c:617
+#: ../raster/r.proj/main.c:700 ../raster/r.sun/main.c:819
 #: ../raster/r.sunhours/main.c:237 ../raster/r.sunmask/g_solposition.c:125
 #: ../vector/v.proj/main.c:361
 msgid "Unable to initialize coordinate transformation"
@@ -3185,7 +3177,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast.colors_to_translate.c:22
 #: ../locale/scriptstrings/t.rast.colors_to_translate.c:24
 #: ../locale/scriptstrings/t.rast.colors_to_translate.c:26
-#: ../raster/r.category/main.c:86 ../raster/r.category/main.c:93
+#: ../raster/r.category/main.c:87 ../raster/r.category/main.c:94
 #: ../raster/r.colors/edit_colors.c:110 ../raster/r.colors/edit_colors.c:116
 #: ../raster/r.colors/edit_colors.c:122 ../raster/r.colors/edit_colors.c:129
 #: ../raster/r.colors/edit_colors.c:138 ../raster/r.colors/edit_colors.c:147
@@ -3509,7 +3501,7 @@ msgid "File <%s> already exists and will be overwritten"
 msgstr ""
 
 #: ../display/d.mon/start.c:55 ../misc/m.nviz.image/main.c:77
-#: ../raster/r.proj/main.c:286 ../vector/v.external/main.c:136
+#: ../raster/r.proj/main.c:288 ../vector/v.external/main.c:136
 #: ../vector/v.proj/main.c:163
 #, c-format
 msgid "option <%s>: <%s> exists. To overwrite, use the --overwrite flag"
@@ -3579,7 +3571,7 @@ msgstr ""
 #: ../general/g.pnmcomp/main.c:260 ../imagery/i.atcorr/6s.cpp:54
 #: ../imagery/i.ortho.photo/i.ortho.transform/main.c:413
 #: ../misc/m.nviz.script/main.c:198 ../misc/m.transform/main.c:273
-#: ../raster/r.category/main.c:215 ../raster/r.horizon/main.c:430
+#: ../raster/r.category/main.c:239 ../raster/r.horizon/main.c:430
 #: ../raster/r.in.lidar/main.c:670 ../raster/r.out.ascii/main.c:152
 #: ../raster/r.out.ppm3/main.c:134 ../raster/r.profile/main.c:190
 #: ../raster/r.recode/main.c:89 ../raster3d/r3.out.vtk/main.c:422
@@ -4022,7 +4014,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.vect.univar_to_translate.c:6
 #: ../locale/scriptstrings/t.vect.univar_to_translate.c:7
 #: ../locale/scriptstrings/v.report_to_translate.c:5
-#: ../raster/r.category/main.c:67 ../raster/r.category/main.c:76
+#: ../raster/r.category/main.c:68 ../raster/r.category/main.c:77
 #: ../raster/r.in.lidar/main.c:197 ../raster/r.in.lidar/main.c:213
 #: ../raster/r.in.lidar/main.c:266 ../raster/r.in.lidar/main.c:276
 #: ../raster/r.in.lidar/main.c:344 ../raster/r.in.pdal/main.cpp:198
@@ -4394,7 +4386,7 @@ msgstr "La connexion à la base de données n'a pas été définie pour la couch
 #: ../vector/v.patch/main.c:450 ../vector/v.profile/main.c:440
 #: ../vector/v.profile/main.c:605 ../vector/v.random/main.c:243
 #: ../vector/v.random/main.c:273 ../vector/v.reclass/main.c:133
-#: ../vector/v.sample/main.c:175 ../vector/v.select/copy_tabs.c:79
+#: ../vector/v.sample/main.c:175 ../vector/v.select/copy_tabs.c:80
 #: ../vector/v.surf.bspline/crosscorr.c:132 ../vector/v.surf.bspline/main.c:389
 #: ../vector/v.surf.idw/read_sites.c:59 ../vector/v.surf.rst/main.c:640
 #: ../vector/v.to.3d/trans2.c:55 ../vector/v.to.3d/trans3.c:58
@@ -4413,7 +4405,7 @@ msgstr "Impossible d'ouvrir la base de données <%s> avec le pilote <%s>"
 #: ../vector/v.in.db/main.c:229
 #, c-format
 msgid "Unable to open select cursor: '%s'"
-msgstr ""
+msgstr "Impossible d'ouvrir le curseur de sélection: '%s'"
 
 #: ../display/d.vect.thematic/display.c:51 ../display/d.vect/lines.c:99
 #: ../display/d.vect/lines.c:328
@@ -4890,7 +4882,7 @@ msgstr ""
 #: ../display/d.vect/main.c:266 ../display/d.vect/main.c:272
 #: ../display/d.vect/main.c:278 ../display/d.vect/main.c:286
 msgid "Labels"
-msgstr ""
+msgstr "Étiquettes"
 
 #: ../display/d.vect/main.c:229
 msgid "Layer number for labels (default: the given layer number)"
@@ -5164,14 +5156,14 @@ msgstr ""
 msgid "My first raster module"
 msgstr "Mon premier module raster"
 
-#: ../doc/examples/raster/r.example/main.c:105 ../general/g.region/main.c:499
-#: ../general/g.region/main.c:885 ../general/g.region/main.c:894
+#: ../doc/examples/raster/r.example/main.c:105 ../general/g.region/main.c:510
+#: ../general/g.region/main.c:896 ../general/g.region/main.c:905
 #: ../imagery/i.gensig/parse.c:38 ../imagery/i.gensigset/parse.c:45
 #: ../imagery/i.ortho.photo/i.ortho.elev/main.c:219 ../imagery/i.pca/main.c:132
 #: ../imagery/i.segment/parse_args.c:202 ../imagery/i.svm.train/main.c:260
 #: ../misc/m.nviz.image/surface.c:51 ../misc/m.nviz.image/surface.c:107
 #: ../raster/r.buffer/main.c:110 ../raster/r.carve/main.c:160
-#: ../raster/r.category/main.c:161 ../raster/r.category/main.c:181
+#: ../raster/r.category/main.c:185 ../raster/r.category/main.c:205
 #: ../raster/r.coin/main.c:119 ../raster/r.coin/main.c:121
 #: ../raster/r.colors/edit_colors.c:506 ../raster/r.compress/main.c:124
 #: ../raster/r.compress/main.c:318 ../raster/r.cost/main.c:364
@@ -5243,46 +5235,50 @@ msgstr "Aucun enregistrement pour la catégorie cat = %d"
 msgid "Unable to copy attribute table to vector map <%s>"
 msgstr "Impossible de copier la table d'attributs vers la carte vecteur <%s>"
 
-#: ../general/g.access/exp_perms.c:11 ../general/g.access/exp_perms.c:29
-msgid "have"
-msgstr ""
+#: ../general/g.access/exp_perms.c:7
+#, c-format
+msgid "Cannot explain access permissions for mapset <%s>"
+msgstr "Impossible d'expliquer les autorisations d'accès pour le jeu de cartes <%s>"
 
-#: ../general/g.access/exp_perms.c:12
-msgid "read "
-msgstr "lecture"
+#: ../general/g.access/exp_perms.c:10
+#, c-format
+msgid "Everyone will have access to mapset <%s>"
+msgstr "Tout le monde aura accès au jeu de cartes <%s>"
 
-#: ../general/g.access/exp_perms.c:15
-msgid "Everyone"
-msgstr "Tout le monde"
+#: ../general/g.access/exp_perms.c:11
+#, c-format
+msgid "Everyone now has access to mapset <%s>"
+msgstr "Tout le monde a désormais accès au jeu de cartes <%s>"
+
+#: ../general/g.access/exp_perms.c:14
+#, c-format
+msgid "Only users in your group will have access to mapset <%s>"
+msgstr "Seuls les utilisateurs de votre groupe auront accès au jeu de cartes <%s>"
 
 #: ../general/g.access/exp_perms.c:16
-msgid "has"
-msgstr ""
+#, c-format
+msgid "Only users in your group now have access to mapset <%s>"
+msgstr "Seulement les utilisateurs dans votre groupe ont désormais accès au jeu de cartes <%s>"
 
-#: ../general/g.access/exp_perms.c:19
-msgid "Only users in your group"
-msgstr "Seulement les utilisateurs dans votre groupe"
+#: ../general/g.access/exp_perms.c:20
+#, c-format
+msgid "Only users outside your group will have access to mapset <%s>"
+msgstr "Seulement les utilisateurs en dehors de votre groupe auront accès au jeu de cartes <%s>"
 
 #: ../general/g.access/exp_perms.c:22
-msgid "Only users outside your group"
-msgstr "Seulement les utilisateurs en dehors de votre groupe"
-
-#: ../general/g.access/exp_perms.c:25
-msgid "Only you"
-msgstr "Seulement vous"
-
-#: ../general/g.access/exp_perms.c:31
 #, c-format
-msgid "%s %s %s %saccess to mapset %s"
-msgstr "%s %s %s %s accès au jeu de cartes %s"
+msgid "Only users outside your group now have access to mapset <%s>"
+msgstr "Seulement les utilisateurs en dehors de votre groupe ont désormais accès au jeu de cartes <%s>"
 
-#: ../general/g.access/exp_perms.c:32
-msgid "now"
-msgstr "maintenant"
+#: ../general/g.access/exp_perms.c:26
+#, c-format
+msgid "Only you will have access to mapset <%s>"
+msgstr "Vous seul aurez accès au jeu de cartes <%s>"
 
-#: ../general/g.access/exp_perms.c:32
-msgid "will"
-msgstr ""
+#: ../general/g.access/exp_perms.c:27
+#, c-format
+msgid "Only you now have access to mapset <%s>"
+msgstr "Vous seul avez désormais accès au jeu de cartes <%s>"
 
 #: ../general/g.access/main.c:39 ../general/g.cairocomp/main.c:199
 #: ../general/g.copy/main.c:41 ../general/g.dirseps/main.c:33
@@ -5367,12 +5363,12 @@ msgstr "Impossible de modifier les permissions du jeu de cartes"
 #: ../scripts/v.in.lines/v.in.lines.py:63
 #, c-format, python-format
 msgid "Unable to read input file <%s>"
-msgstr ""
+msgstr "Impossible de lire le fichier d'entrée <%s>"
 
 #: ../general/g.cairocomp/main.c:52
 #, c-format
 msgid "Unable to parse input file <%s>"
-msgstr ""
+msgstr "Impossible d'analyser le fichier d'entrée <%s>"
 
 #: ../general/g.cairocomp/main.c:66 ../raster/r.colors.out/raster3d_main.c:86
 #: ../raster/r.colors.out/raster_main.c:85 ../raster/r.out.mat/main.c:92
@@ -5386,7 +5382,7 @@ msgstr "Impossible d'ouvrir le fichier de sortie <%s>"
 #: ../general/g.cairocomp/main.c:71
 #, c-format
 msgid "Unable to write output file <%s>"
-msgstr ""
+msgstr "Impossible d'écrire le fichier de sortie <%s>"
 
 #: ../general/g.cairocomp/main.c:89 ../general/g.cairocomp/main.c:259
 #: ../visualization/ximgview/main.c:62
@@ -5395,7 +5391,7 @@ msgstr "Impossible d'ouvrir l'affichage"
 
 #: ../general/g.cairocomp/main.c:116
 msgid "Unable to obtain visual"
-msgstr ""
+msgstr "Impossible d'ouvrir un visuel"
 
 #: ../general/g.cairocomp/main.c:133
 msgid "Failed to initialize output surface"
@@ -5714,8 +5710,9 @@ msgid "Nothing to do. For setting up <%s> as default UI use -%c flag."
 msgstr ""
 
 #: ../general/g.gui/main.c:110
+#, fuzzy
 msgid "Your installation doesn't include GUI, exiting."
-msgstr ""
+msgstr "Votre installation n'inclu pas d'interface graphique. Sortie."
 
 #: ../general/g.gui/main.c:113
 #, c-format
@@ -5725,9 +5722,9 @@ msgstr ""
 #: ../general/g.gui/main.c:124
 #, c-format
 msgid "Launching <%s> GUI in the background, please wait..."
-msgstr ""
+msgstr "Lancement de l'interface graphique <%s> en tâche de fond, merci de patienter ..."
 
-#: ../general/g.list/list.c:123 ../general/g.region/main.c:532
+#: ../general/g.list/list.c:123 ../general/g.region/main.c:543
 #, c-format
 msgid "Unable to read header of 3D raster map <%s@%s>"
 msgstr "Impossible de lire l'en-tête de la carte raster 3D <%s@%s>"
@@ -5798,15 +5795,15 @@ msgstr "si non fourni ou '-' alors sortie standard"
 
 #: ../general/g.list/main.c:118 ../general/g.remove/main.c:115
 msgid "Ignore case"
-msgstr ""
+msgstr "Ignorer la case"
 
 #: ../general/g.list/main.c:124 ../general/g.remove/main.c:121
 msgid "Use basic regular expressions instead of wildcards"
-msgstr ""
+msgstr "Utiliser des expressions régulières de base au lieu de caractères génériques"
 
 #: ../general/g.list/main.c:130 ../general/g.remove/main.c:127
 msgid "Use extended regular expressions instead of wildcards"
-msgstr ""
+msgstr "Utiliser des expressions régulières étendues au lieu de caractères génériques"
 
 #: ../general/g.list/main.c:135
 msgid "Print data types"
@@ -5840,10 +5837,8 @@ msgid "Failed to serialize JSON to pretty format."
 msgstr ""
 
 #: ../general/g.mapset/main.c:71 ../general/g.mapsets/main.c:88
-#, fuzzy
-#| msgid "projection"
 msgid "project"
-msgstr "projection"
+msgstr "projet"
 
 #: ../general/g.mapset/main.c:72
 #, fuzzy
@@ -5853,7 +5848,7 @@ msgstr "'.' pour le jeu de cartes courant"
 
 #: ../general/g.mapset/main.c:73
 msgid "Optionally, creates new mapset or lists available mapsets in given project (location)."
-msgstr ""
+msgstr "Optionnellement, créé un nouveau jeu de cartes ou liste les jeux de cartes disponibles dans un projet (secteur) donné."
 
 #: ../general/g.mapset/main.c:78
 msgid "Name of mapset where to switch"
@@ -5868,7 +5863,7 @@ msgstr "Jeu de cartes"
 msgid "Create mapset if it doesn't exist"
 msgstr ""
 
-#: ../general/g.mapset/main.c:95 ../general/g.proj/main.c:231
+#: ../general/g.mapset/main.c:95 ../general/g.proj/main.c:234
 #: ../locale/scriptstrings/r.mask_to_translate.c:20
 msgid "Create"
 msgstr "Créer"
@@ -5883,12 +5878,12 @@ msgstr ""
 
 #: ../general/g.mapset/main.c:118 ../general/g.mapsets/list.c:13
 #: ../general/g.proj/output.c:54 ../general/g.proj/output.c:360
-#: ../general/g.region/main.c:460 ../general/g.version/main.c:140
+#: ../general/g.region/main.c:471 ../general/g.version/main.c:140
 #: ../raster/r.describe/dumplist.c:37 ../raster/r.info/main.c:147
-#: ../raster/r.proj/main.c:485 ../raster/r.univar/stats.c:104
+#: ../raster/r.proj/main.c:487 ../raster/r.univar/stats.c:104
 #: ../raster/r.univar/stats.c:163 ../raster/r.univar/stats.c:353
-#: ../raster/r.what.color/main.c:52 ../vector/v.category/main.c:246
-#: ../vector/v.category/main.c:913 ../vector/v.distance/main.c:1578
+#: ../raster/r.what.color/main.c:52 ../vector/v.category/main.c:248
+#: ../vector/v.category/main.c:915 ../vector/v.distance/main.c:1578
 #: ../vector/v.info/print.c:824 ../vector/v.info/print.c:860
 #: ../vector/v.univar/main.c:609
 msgid "Failed to initialize JSON object. Out of memory?"
@@ -6297,7 +6292,7 @@ msgstr ""
 #: ../general/g.ppmtopng/main.c:71 ../general/g.ppmtopng/main.c:75
 #: ../raster/r.in.png/main.c:282 ../raster/r.in.png/main.c:286
 msgid "Unable to allocate PNG structure"
-msgstr ""
+msgstr "Allocation de structure PNG impossible"
 
 #: ../general/g.ppmtopng/main.c:78
 msgid "Error writing PNG file"
@@ -6514,156 +6509,160 @@ msgid "Print projection information"
 msgstr "Afficher l'information de projection au format WKT"
 
 #: ../general/g.proj/main.c:92
-msgid "[DEPRECATED] Print projection information in shell script style. This flag is obsolete and will be removed in a future release. Use format=shell instead."
-msgstr ""
+msgid "Print projection information in shell script style [deprecated]"
+msgstr "Afficher les informations de projection en style script shell [obsolète]"
 
-#: ../general/g.proj/main.c:100
+#: ../general/g.proj/main.c:94 ../general/g.region/main.c:149
+#: ../general/g.version/main.c:120 ../imagery/i.group/main.c:113
+#: ../raster/r.proj/main.c:240
+msgid "This flag is deprecated and will be removed in a future release. Use format=shell instead."
+msgstr "Cette option est obsolète et sera retirée dans une prochaine version. Utiliser plutôt format=shell."
+
+#: ../general/g.proj/main.c:101
 msgid "Verify datum information and print transformation parameters"
 msgstr "Vérifier l'information de datum et afficher les paramètres de transformation"
 
-#: ../general/g.proj/main.c:106
-msgid "[DEPRECATED] Print projection information in PROJ.4 format. This flag is obsolete and will be removed in a future release. Use format=proj4 instead."
-msgstr "[OBSOLÈTE] Afficher l'information de projection au format PROJ.4. Cette option est obsolète et sera retirée dans une prochaine version. Utiliser plutôt format=proj4."
+#: ../general/g.proj/main.c:107
+msgid "Print projection information in PROJ.4 format [deprecated]"
+msgstr "Afficher les informations de projection au format PROJ.4 [obsolète]"
 
-#: ../general/g.proj/main.c:114
+#: ../general/g.proj/main.c:109
+msgid "This flag is deprecated and will be removed in a future release. Use format=proj4 instead."
+msgstr "Cette option est obsolète et sera retirée dans une prochaine version. Utiliser plutôt format=proj4."
+
+#: ../general/g.proj/main.c:116
 msgid "Print 'flat' output with no linebreaks (applies to WKT and PROJ.4 output)"
 msgstr "Afficher une sortie 'à plat' sans sauts de ligne (s'applique à la sortie WKT et PROJ.4)"
 
-#: ../general/g.proj/main.c:118
+#: ../general/g.proj/main.c:120
 #, fuzzy
 msgid "Print 'flat' output with no linebreaks (applies to PROJ.4 output)"
 msgstr "Afficher une sortie 'à plat' sans sauts de ligne (s'applique à la sortie WKT et PROJ.4)"
 
-#: ../general/g.proj/main.c:126
-msgid "[DEPRECATED] Print projection information in WKT format. This flag is obsolete and will be removed in a future release. Use format=wkt instead."
-msgstr "[OBSOLÈTE] Afficher l'information de projection au format WKT. Cette option est obsolète et sera retirée dans une prochaine version. Utiliser plutôt format=wkt."
+#: ../general/g.proj/main.c:128
+msgid "Print projection information in WKT format [deprecated]"
+msgstr "Afficher les informations de projection au format WKT [obsolète]"
 
-#: ../general/g.proj/main.c:134
+#: ../general/g.proj/main.c:130
+msgid "This flag is deprecated and will be removed in a future release. Use format=wkt instead."
+msgstr "Cette option est obsolète et sera retirée dans une prochaine version. Utiliser plutôt format=wkt."
+
+#: ../general/g.proj/main.c:137
 msgid "Use ESRI-style format (applies to WKT output only)"
 msgstr "Utilisez le format style-ESRI (s'applique à la sortie WKT seulement)"
 
-#: ../general/g.proj/main.c:141 ../general/g.proj/main.c:150
-#: ../general/g.proj/main.c:160 ../general/g.proj/main.c:169
-#: ../general/g.proj/main.c:179
+#: ../general/g.proj/main.c:144 ../general/g.proj/main.c:153
+#: ../general/g.proj/main.c:163 ../general/g.proj/main.c:172
+#: ../general/g.proj/main.c:182
 msgid "Specification"
 msgstr ""
 
-#: ../general/g.proj/main.c:142
+#: ../general/g.proj/main.c:145
 msgid "Name of georeferenced data file to read projection information from"
 msgstr ""
 
-#: ../general/g.proj/main.c:151
+#: ../general/g.proj/main.c:154
 msgid "Name of ASCII file containing a WKT projection description"
 msgstr ""
 
-#: ../general/g.proj/main.c:161
+#: ../general/g.proj/main.c:164
 msgid "Spatial reference ID with authority name and code"
 msgstr ""
 
-#: ../general/g.proj/main.c:162
+#: ../general/g.proj/main.c:165
 msgid "E.g. EPSG:4326 or urn:ogc:def:crs:EPSG::4326"
 msgstr ""
 
-#: ../general/g.proj/main.c:170
+#: ../general/g.proj/main.c:173
 msgid "PROJ.4 projection description"
 msgstr ""
 
-#: ../general/g.proj/main.c:180
+#: ../general/g.proj/main.c:183
 #: ../locale/scriptstrings/v.import_to_translate.c:21
 msgid "EPSG projection code"
 msgstr "Code de projection EPSG"
 
-#: ../general/g.proj/main.c:190
+#: ../general/g.proj/main.c:193
 msgid "List codes for given authority, e.g. EPSG, and exit"
 msgstr ""
 
-#: ../general/g.proj/main.c:197 ../general/g.proj/main.c:210
-#: ../general/g.proj/main.c:216
+#: ../general/g.proj/main.c:200 ../general/g.proj/main.c:213
+#: ../general/g.proj/main.c:219
 msgid "Datum"
 msgstr ""
 
-#: ../general/g.proj/main.c:199
+#: ../general/g.proj/main.c:202
 msgid "Datum (overrides any datum specified in input co-ordinate system)"
 msgstr ""
 
-#: ../general/g.proj/main.c:201
+#: ../general/g.proj/main.c:204
 msgid "Accepts standard GRASS datum codes, or \"list\" to list and exit"
 msgstr ""
 
-#: ../general/g.proj/main.c:211
+#: ../general/g.proj/main.c:214
 #: ../locale/scriptstrings/v.import_to_translate.c:23
 msgid "Index number of datum transform parameters"
 msgstr "Numéro d'index du paramètre de transformation"
 
-#: ../general/g.proj/main.c:212
+#: ../general/g.proj/main.c:215
 msgid "\"0\" for unspecified or \"-1\" to list and exit"
 msgstr ""
 
-#: ../general/g.proj/main.c:218
+#: ../general/g.proj/main.c:221
 msgid "Force override of datum transformation information in input co-ordinate system"
 msgstr ""
 
-#: ../general/g.proj/main.c:223 ../raster/r.null/main.c:75
+#: ../general/g.proj/main.c:226 ../raster/r.null/main.c:75
 #: ../raster/r.null/main.c:83
 msgid "Modify"
 msgstr "Modifier"
 
-#: ../general/g.proj/main.c:224
+#: ../general/g.proj/main.c:227
 msgid "Modify current project's projection files"
 msgstr ""
 
-#: ../general/g.proj/main.c:232
+#: ../general/g.proj/main.c:235
 msgid "Name of new project (location) to create"
 msgstr "Nom du nouveau projet (secteur) à créer"
 
-#: ../general/g.proj/main.c:236
+#: ../general/g.proj/main.c:239
 msgid "plain;Human readable text output;shell;shell script style text output;json;JSON (JavaScript Object Notation);wkt;Well-known text output;proj4;PROJ.4 style text output;"
 msgstr ""
 
-#: ../general/g.proj/main.c:266
+#: ../general/g.proj/main.c:271
 #, c-format
 msgid "The format option can only be used with -%c flag"
 msgstr ""
 
-#: ../general/g.proj/main.c:271 ../general/g.version/main.c:153
-#: ../imagery/i.group/main.c:137 ../raster/r.proj/main.c:268
-#: ../vector/v.category/main.c:230
+#: ../general/g.proj/main.c:277 ../general/g.region/main.c:427
+#: ../general/g.version/main.c:153 ../imagery/i.group/main.c:137
+#: ../raster/r.proj/main.c:270 ../vector/v.category/main.c:232
 msgid "Flag 'g' is deprecated and will be removed in a future release. Please use format=shell instead."
 msgstr ""
 
-#: ../general/g.proj/main.c:276
+#: ../general/g.proj/main.c:283
 msgid "Flag 'j' is deprecated and will be removed in a future release. Please use format=proj4 instead."
 msgstr ""
 
-#: ../general/g.proj/main.c:281
+#: ../general/g.proj/main.c:292
 msgid "Flag 'w' is deprecated and will be removed in a future release. Please use format=wkt instead."
 msgstr ""
 
-#: ../general/g.proj/main.c:301
+#: ../general/g.proj/main.c:312
 #, c-format
 msgid "Only one of '%s', '%s', '%s', '%s' or '%s' options may be specified"
 msgstr ""
 
-#: ../general/g.proj/main.c:353
+#: ../general/g.proj/main.c:364
 msgid "Projection files missing"
 msgstr "Fichiers de projection manquant"
 
-#: ../general/g.proj/main.c:372
-#, c-format
-msgid "Only one of -%c, -%c, -%c, -%c, -%c or -%c flags may be specified"
-msgstr ""
-
-#: ../general/g.proj/main.c:377
-#, c-format
-msgid "Only one of -%c, -%c, -%c, -%c or -%c flags may be specified"
-msgstr ""
-
-#: ../general/g.proj/main.c:401
+#: ../general/g.proj/main.c:392
 #, c-format
 msgid "No output format specified. Define one of the options: plain, shell, json, wkt, or proj4 using the -%c flag."
 msgstr ""
 
-#: ../general/g.proj/main.c:406
+#: ../general/g.proj/main.c:397
 #, c-format
 msgid "No output format specified. Define one of the options: plain, shell, json, or proj4 using the -%c flag."
 msgstr ""
@@ -6704,8 +6703,8 @@ msgid "Set from default region"
 msgstr "Définir à partir de la région par défaut"
 
 #: ../general/g.region/main.c:79 ../general/g.region/main.c:86
-#: ../general/g.region/main.c:177 ../general/g.region/main.c:184
-#: ../general/g.region/main.c:193 ../general/g.region/main.c:201
+#: ../general/g.region/main.c:180 ../general/g.region/main.c:187
+#: ../general/g.region/main.c:196 ../general/g.region/main.c:204
 #: ../raster/r.region/main.c:56 ../raster/r.region/main.c:61
 #: ../raster/r.region/main.c:68 ../raster/r.region/main.c:83
 #: ../raster/r.region/main.c:90 ../raster/r.region/main.c:97
@@ -6765,27 +6764,24 @@ msgstr "Afficher également les paramètres 3D"
 msgid "Print the maximum bounding box in lat/long on WGS84"
 msgstr "Afficher la boite englobante maximale en lat/long WGS84"
 
-#: ../general/g.region/main.c:147
-#: ../locale/scriptstrings/i.oif_to_translate.c:6
-#: ../locale/scriptstrings/t.info_to_translate.c:9
-#: ../raster/r.regression.line/main.c:69
-#: ../raster/r.regression.multi/main.c:163
-msgid "Print in shell script style"
+#: ../general/g.region/main.c:147 ../imagery/i.group/main.c:111
+msgid "Print in shell script style [deprecated]"
+msgstr "Afficher en style script shell [obsolète]"
+
+#: ../general/g.region/main.c:155
+#, fuzzy
+msgid "Print in one line (flat) in shell script style (ignores format parameter)"
 msgstr "Afficher en style script shell"
 
-#: ../general/g.region/main.c:153
-msgid "Print in shell script style, but in one line (flat)"
-msgstr ""
-
-#: ../general/g.region/main.c:159
+#: ../general/g.region/main.c:162
 msgid "Align region to resolution (default = align to bounds, works only for 2D resolution)"
 msgstr "Aligner la région sur la résolution (par défaut = aligner les bords, fonctionne seulement en résolution 2D)"
 
-#: ../general/g.region/main.c:161 ../general/g.region/main.c:210
-#: ../general/g.region/main.c:219 ../general/g.region/main.c:228
-#: ../general/g.region/main.c:237 ../general/g.region/main.c:246
-#: ../general/g.region/main.c:255 ../general/g.region/main.c:348
-#: ../general/g.region/main.c:359 ../general/g.region/main.c:371
+#: ../general/g.region/main.c:164 ../general/g.region/main.c:213
+#: ../general/g.region/main.c:222 ../general/g.region/main.c:231
+#: ../general/g.region/main.c:240 ../general/g.region/main.c:249
+#: ../general/g.region/main.c:258 ../general/g.region/main.c:351
+#: ../general/g.region/main.c:362 ../general/g.region/main.c:374
 #: ../raster/r.in.bin/main.c:312 ../raster/r.in.bin/main.c:367
 #: ../raster/r.in.bin/main.c:375 ../raster/r.in.bin/main.c:383
 #: ../raster/r.in.bin/main.c:391 ../raster/r.in.bin/main.c:398
@@ -6799,135 +6795,135 @@ msgstr "Aligner la région sur la résolution (par défaut = aligner les bords, 
 msgid "Bounds"
 msgstr "Limites"
 
-#: ../general/g.region/main.c:165
+#: ../general/g.region/main.c:168
 msgid "Do not update the current region"
 msgstr "Ne pas modifier la région courante"
 
-#: ../general/g.region/main.c:166 ../general/g.region/main.c:171
-#: ../general/g.region/main.c:382 ../vector/v.label/main.c:89
+#: ../general/g.region/main.c:169 ../general/g.region/main.c:174
+#: ../general/g.region/main.c:385 ../vector/v.label/main.c:89
 #: ../vector/v.label/main.c:94 ../vector/v.label/main.c:169
 #: ../vector/v.label/main.c:182
 msgid "Effects"
 msgstr "Effets"
 
-#: ../general/g.region/main.c:170
+#: ../general/g.region/main.c:173
 msgid "Force update of the current region"
 msgstr ""
 
-#: ../general/g.region/main.c:176
+#: ../general/g.region/main.c:179
 msgid "Set current region from named region"
 msgstr "Définir la région actuelle à partir de la région spécifiée"
 
-#: ../general/g.region/main.c:183
+#: ../general/g.region/main.c:186
 msgid "Set region to match raster map(s)"
 msgstr "Définir la région pour correspondre à la(es) carte(s) raster"
 
-#: ../general/g.region/main.c:191
+#: ../general/g.region/main.c:194
 msgid "Set region to match 3D raster map(s) (both 2D and 3D values)"
 msgstr "Définir la réfion pour correspondre à la(es) carte(s) raster 3D (valeurs 2D et 3D)"
 
-#: ../general/g.region/main.c:199
+#: ../general/g.region/main.c:202
 msgid "Set region to match vector map(s)"
 msgstr "Définir la région pour correspondre à la(es) carte(s) vecteur"
 
-#: ../general/g.region/main.c:209 ../raster/r.region/main.c:105
+#: ../general/g.region/main.c:212 ../raster/r.region/main.c:105
 msgid "Value for the northern edge"
 msgstr "Valeur de la limite nord"
 
-#: ../general/g.region/main.c:218 ../raster/r.region/main.c:114
+#: ../general/g.region/main.c:221 ../raster/r.region/main.c:114
 msgid "Value for the southern edge"
 msgstr "Valeur de la limite sud"
 
-#: ../general/g.region/main.c:227 ../raster/r.region/main.c:123
+#: ../general/g.region/main.c:230 ../raster/r.region/main.c:123
 msgid "Value for the eastern edge"
 msgstr "Valeur de la limite est"
 
-#: ../general/g.region/main.c:236 ../raster/r.region/main.c:132
+#: ../general/g.region/main.c:239 ../raster/r.region/main.c:132
 msgid "Value for the western edge"
 msgstr "Valeur de la limite ouest"
 
-#: ../general/g.region/main.c:245
+#: ../general/g.region/main.c:248
 msgid "Value for the top edge"
 msgstr "Valeur de la limite supérieure (haut)"
 
-#: ../general/g.region/main.c:254
+#: ../general/g.region/main.c:257
 msgid "Value for the bottom edge"
 msgstr "Valeur de la limite inférieure (bas)"
 
-#: ../general/g.region/main.c:263
+#: ../general/g.region/main.c:266
 msgid "Number of rows in the new region"
 msgstr "Nombre de lignes dans ma nouvelle région"
 
-#: ../general/g.region/main.c:264 ../general/g.region/main.c:273
-#: ../general/g.region/main.c:282 ../general/g.region/main.c:292
-#: ../general/g.region/main.c:301 ../general/g.region/main.c:310
-#: ../general/g.region/main.c:319 ../general/g.region/main.c:328
-#: ../general/g.region/main.c:337
+#: ../general/g.region/main.c:267 ../general/g.region/main.c:276
+#: ../general/g.region/main.c:285 ../general/g.region/main.c:295
+#: ../general/g.region/main.c:304 ../general/g.region/main.c:313
+#: ../general/g.region/main.c:322 ../general/g.region/main.c:331
+#: ../general/g.region/main.c:340
 msgid "Resolution"
 msgstr "Résolution"
 
-#: ../general/g.region/main.c:272
+#: ../general/g.region/main.c:275
 msgid "Number of columns in the new region"
 msgstr "Nombre de colonnes dans la nouvelle région"
 
-#: ../general/g.region/main.c:281
+#: ../general/g.region/main.c:284
 msgid "2D grid resolution (north-south and east-west)"
 msgstr "Résolution de la grille 2D (nord-sud et est-ouest)"
 
-#: ../general/g.region/main.c:291
+#: ../general/g.region/main.c:294
 msgid "3D grid resolution (north-south, east-west and top-bottom)"
 msgstr "Résolution de la grille 3D (nord-sud, est-ouest et haut-bas)"
 
-#: ../general/g.region/main.c:300
+#: ../general/g.region/main.c:303
 msgid "North-south 2D grid resolution"
 msgstr "Résolution nord-sud de la grille 2D"
 
-#: ../general/g.region/main.c:309
+#: ../general/g.region/main.c:312
 msgid "East-west 2D grid resolution"
 msgstr "Résolution est-ouest de la grille 2D"
 
-#: ../general/g.region/main.c:318
+#: ../general/g.region/main.c:321
 msgid "North-south 3D grid resolution"
 msgstr "Résolution nord-sud de la grille 3D"
 
-#: ../general/g.region/main.c:327
+#: ../general/g.region/main.c:330
 msgid "East-west 3D grid resolution"
 msgstr "Résolution est-ouest de la grille 3D"
 
-#: ../general/g.region/main.c:336
+#: ../general/g.region/main.c:339
 msgid "Top-bottom 3D grid resolution"
 msgstr "Résolution haut-bas de la grille 3D"
 
-#: ../general/g.region/main.c:346
+#: ../general/g.region/main.c:349
 msgid "Shrink region until it meets non-NULL data from this raster map"
 msgstr "Réduire la région jusqu'à ce qu'elle rencontre des données non-NULL de cette carte raster"
 
-#: ../general/g.region/main.c:357
+#: ../general/g.region/main.c:360
 msgid "Adjust region cells to cleanly align with this raster map"
 msgstr "Ajuster les cellules de la région pour s'aligner proprement avec cette carte raster"
 
-#: ../general/g.region/main.c:368
+#: ../general/g.region/main.c:371
 msgid "Number of cells to add to each side of the current region extent"
 msgstr ""
 
-#: ../general/g.region/main.c:370
+#: ../general/g.region/main.c:373
 msgid "A negative number shrinks the current region extent"
 msgstr ""
 
-#: ../general/g.region/main.c:380
+#: ../general/g.region/main.c:383
 msgid "Save current region settings in named region file"
 msgstr "Enregistrer les paramètres de la région courante dans un nom de région"
 
-#: ../general/g.region/main.c:386
+#: ../general/g.region/main.c:389
 msgid "plain;Plain text output;shell;shell script style output;json;JSON (JavaScript Object Notation);"
 msgstr ""
 
-#: ../general/g.region/main.c:483 ../scripts/r.in.wms/r.in.wms.py:225
+#: ../general/g.region/main.c:494 ../scripts/r.in.wms/r.in.wms.py:225
 #, c-format, python-format
 msgid "Region <%s> not found"
 msgstr "Région <%s> non trouvée"
 
-#: ../general/g.region/main.c:529 ../raster/r.colors/edit_colors.c:515
+#: ../general/g.region/main.c:540 ../raster/r.colors/edit_colors.c:515
 #: ../raster/r.univar/r3.univar_main.c:156
 #: ../raster/r.univar/r3.univar_main.c:194 ../raster3d/r3.cross.rast/main.c:246
 #: ../raster3d/r3.flow/main.c:87 ../raster3d/r3.mask/main.c:53
@@ -6942,61 +6938,61 @@ msgstr "Région <%s> non trouvée"
 msgid "3D raster map <%s> not found"
 msgstr "carte raster 3D <%s> non trouvée"
 
-#: ../general/g.region/main.c:574
+#: ../general/g.region/main.c:585
 msgid "Unable to get map bounding box"
 msgstr ""
 
-#: ../general/g.region/main.c:908
+#: ../general/g.region/main.c:919
 #, c-format
 msgid "'%s' option not used with <%s> because a coordinate would become invalid"
 msgstr ""
 
-#: ../general/g.region/main.c:918 ../general/g.region/main.c:928
-#: ../general/g.region/main.c:938
+#: ../general/g.region/main.c:929 ../general/g.region/main.c:939
+#: ../general/g.region/main.c:949
 #, c-format
 msgid "'%s' option not used with <%s> because <%s> would become minor than <%s>"
 msgstr ""
 
-#: ../general/g.region/main.c:950
+#: ../general/g.region/main.c:961
 #, c-format
 msgid "Unable to set region <%s>"
 msgstr "Impossible de définir la région <%s>"
 
-#: ../general/g.region/main.c:955
+#: ../general/g.region/main.c:966
 msgid "Unable to update current region"
 msgstr "Impossible de mettre à jour la région courante"
 
-#: ../general/g.region/main.c:963
+#: ../general/g.region/main.c:974
 msgid "Unable to change default region. The current mapset is not <PERMANENT>."
 msgstr "Impossible de modifier la région par défaut. Le jeu de carte courant n'est pas <PERMANENT>."
 
-#: ../general/g.region/main.c:990 ../raster/r.in.lidar/main.c:540
+#: ../general/g.region/main.c:1001 ../raster/r.in.lidar/main.c:540
 #: ../raster/r.in.pdal/main.cpp:646
 #, c-format
 msgid "Invalid input <%s=%s>"
 msgstr "Entrée <%s=%s> invalide"
 
-#: ../general/g.region/printwindow.c:320 ../general/g.region/printwindow.c:621
-#: ../general/g.region/printwindow.c:701 ../raster/r.sun/main.c:803
+#: ../general/g.region/printwindow.c:313 ../general/g.region/printwindow.c:614
+#: ../general/g.region/printwindow.c:694 ../raster/r.sun/main.c:803
 msgid "Can't get projection info of current project"
 msgstr "Impossible d'obtenir les informations de projection pour le projet courant"
 
-#: ../general/g.region/printwindow.c:324 ../general/g.region/printwindow.c:625
-#: ../general/g.region/printwindow.c:710 ../raster/r.sun/main.c:806
+#: ../general/g.region/printwindow.c:317 ../general/g.region/printwindow.c:618
+#: ../general/g.region/printwindow.c:703 ../raster/r.sun/main.c:806
 msgid "Can't get projection units of current project"
 msgstr "Impossible d'obtenir les unités de projection pour le projet courant"
 
-#: ../general/g.region/printwindow.c:328 ../general/g.region/printwindow.c:629
-#: ../general/g.region/printwindow.c:714 ../raster/r.sun/main.c:810
+#: ../general/g.region/printwindow.c:321 ../general/g.region/printwindow.c:622
+#: ../general/g.region/printwindow.c:707 ../raster/r.sun/main.c:810
 msgid "Can't get projection key values of current project"
 msgstr "Impossible d'obtenir les valeurs clefs de projection pour le projet courant"
 
-#: ../general/g.region/printwindow.c:353 ../general/g.region/printwindow.c:365
-#: ../general/g.region/printwindow.c:377 ../general/g.region/printwindow.c:389
-#: ../general/g.region/printwindow.c:403 ../general/g.region/printwindow.c:649
-#: ../general/g.region/printwindow.c:762 ../general/g.region/printwindow.c:777
-#: ../general/g.region/printwindow.c:797 ../general/g.region/printwindow.c:818
-#: ../general/g.region/printwindow.c:836 ../raster/r.latlong/main.c:134
+#: ../general/g.region/printwindow.c:346 ../general/g.region/printwindow.c:358
+#: ../general/g.region/printwindow.c:370 ../general/g.region/printwindow.c:382
+#: ../general/g.region/printwindow.c:396 ../general/g.region/printwindow.c:642
+#: ../general/g.region/printwindow.c:755 ../general/g.region/printwindow.c:770
+#: ../general/g.region/printwindow.c:790 ../general/g.region/printwindow.c:811
+#: ../general/g.region/printwindow.c:829 ../raster/r.latlong/main.c:134
 #: ../raster/r.sun/main.c:1900 ../raster/r.sunhours/main.c:306
 #: ../raster/r.sunhours/main.c:404 ../raster/r.sunmask/g_solposition.c:133
 #: ../vector/v.proj/main.c:427 ../vector/v.proj/main.c:440
@@ -7006,25 +7002,25 @@ msgstr "Impossible d'obtenir les valeurs clefs de projection pour le projet cour
 msgid "Error in %s (projection of input coordinate pair)"
 msgstr ""
 
-#: ../general/g.region/printwindow.c:488
+#: ../general/g.region/printwindow.c:481
 msgid "You are already in Lat/Long. Use the -p flag instead."
 msgstr "Vous êtes déjà en Lat/Long. Utilisez l'option -p à la place."
 
-#: ../general/g.region/printwindow.c:491
+#: ../general/g.region/printwindow.c:484
 #, fuzzy
 msgid "You are in a simple XY project, projection to Lat/Lon is not possible. Use the -p flag instead."
 msgstr "Vous êtes dans un Secteur XY simple, la projection en Lat/Long n'est pas possible. Utilisez l'option -p à la place."
 
-#: ../general/g.region/printwindow.c:728
+#: ../general/g.region/printwindow.c:721
 #, fuzzy
 msgid "WGS84 output not possible as this project does not contain datum transformation parameters. Try running g.setproj."
 msgstr "Impossible de projeter les données en WGS84 étant donné que ce Secteur ne possède pas de paramètres de transformation de datum. Essayez de lancer g.setproj."
 
-#: ../general/g.region/printwindow.c:741
+#: ../general/g.region/printwindow.c:734
 msgid "Unable to update lat/long projection parameters"
 msgstr "Impossible de mettre à jour les paramètres de projection lat/lon"
 
-#: ../general/g.region/printwindow.c:901
+#: ../general/g.region/printwindow.c:894
 msgid "Lat/Long calculations are not possible from a simple XY system"
 msgstr "Les calculs Lat/Long ne sont pas possibles dans un systme XY simple"
 
@@ -7252,7 +7248,7 @@ msgstr ""
 
 #: ../general/g.setproj/main.c:198
 msgid "Unknown projection"
-msgstr ""
+msgstr "Projection inconnue"
 
 #: ../general/g.setproj/main.c:205
 #, c-format
@@ -7453,12 +7449,6 @@ msgstr ""
 msgid "Print info in shell script style (including Git reference commit) [deprecated]"
 msgstr "Afficher en style script shell"
 
-#: ../general/g.version/main.c:120 ../imagery/i.group/main.c:113
-#, fuzzy
-#| msgid "[DEPRECATED] Print projection information in WKT format. This flag is obsolete and will be removed in a future release. Use format=wkt instead."
-msgid "This flag is deprecated and will be removed in a future release. Use format=shell instead."
-msgstr "[OBSOLÈTE] Afficher l'information de projection au format WKT. Cette option est obsolète et sera retirée dans une prochaine version. Utiliser plutôt format=wkt."
-
 #: ../general/g.version/main.c:122
 msgid "Shell"
 msgstr ""
@@ -7471,7 +7461,7 @@ msgstr ""
 
 #: ../general/g.version/main.c:157 ../imagery/i.group/main.c:141
 msgid "Cannot use the -g flag with format=json; please select only one option."
-msgstr ""
+msgstr "Impossible d'utiliser l'option -g avec format=json ; veuillez sélectionner une seule option."
 
 #: ../general/g.version/main.c:268
 #, c-format
@@ -7549,7 +7539,7 @@ msgstr ""
 
 #: ../imagery/i.albedo/main.c:97 ../imagery/i.aster.toar/main.c:99
 #: ../imagery/i.atcorr/main.cpp:468 ../imagery/i.landsat.toar/main.c:73
-#: ../imagery/i.landsat.toar/main.c:578 ../imagery/i.modis.qc/main.c:169
+#: ../imagery/i.modis.qc/main.c:169
 msgid "reflectance"
 msgstr ""
 
@@ -7631,7 +7621,7 @@ msgid "radiometric conversion"
 msgstr ""
 
 #: ../imagery/i.aster.toar/main.c:98 ../imagery/i.atcorr/main.cpp:467
-#: ../imagery/i.landsat.toar/main.c:72 ../imagery/i.landsat.toar/main.c:576
+#: ../imagery/i.landsat.toar/main.c:72
 msgid "radiance"
 msgstr ""
 
@@ -7961,8 +7951,9 @@ msgid "Canonical components analysis (CCA) program for image processing."
 msgstr "Analyse d'image par composante canonique (CCA)."
 
 #: ../imagery/i.cca/main.c:94
+#, fuzzy
 msgid "Name of input imagery subgroup"
-msgstr ""
+msgstr "Nom du groupe d'image en entrée"
 
 #: ../imagery/i.cca/main.c:102
 msgid "File containing spectral signatures"
@@ -9115,10 +9106,6 @@ msgstr ""
 msgid "List subgroups from specified group"
 msgstr ""
 
-#: ../imagery/i.group/main.c:111
-msgid "Print in shell script style [deprecated]"
-msgstr "Afficher en style script shell [obsolète]"
-
 #: ../imagery/i.group/main.c:195
 msgid "No input raster map(s) specified"
 msgstr ""
@@ -9710,14 +9697,20 @@ msgstr ""
 msgid "Raster map <%s> exists. Skipping."
 msgstr ""
 
-#: ../imagery/i.landsat.toar/main.c:575
+#: ../imagery/i.landsat.toar/main.c:576
 #, c-format
-msgid "Writing %s of <%s> to <%s>..."
-msgstr ""
+msgid "Writing radiance of <%s> to <%s>..."
+msgstr "Écriture de la luminance énergétique (radiance) de <%s> à <%s>..."
 
-#: ../imagery/i.landsat.toar/main.c:577
-msgid "temperature"
-msgstr ""
+#: ../imagery/i.landsat.toar/main.c:578
+#, c-format
+msgid "Writing temperature of <%s> to <%s>..."
+msgstr "Écriture de la température de <%s> à <%s>..."
+
+#: ../imagery/i.landsat.toar/main.c:579
+#, c-format
+msgid "Writing reflectance of <%s> to <%s>..."
+msgstr "Écriture de la réflectance de <%s> à <%s>..."
 
 #: ../imagery/i.maxlik/invert.c:28
 #, c-format
@@ -10616,7 +10609,7 @@ msgid "Enable panorama camera correction"
 msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:149
-#: ../imagery/i.rectify/main.c:151 ../raster/r.proj/main.c:279
+#: ../imagery/i.rectify/main.c:151 ../raster/r.proj/main.c:281
 #: ../raster/r.statistics/main.c:118 ../raster/r.stats.zonal/main.c:168
 #: ../vector/v.neighbors/main.c:193 ../vector/v.vect.stats/main.c:318
 #, c-format
@@ -10666,9 +10659,9 @@ msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:288
 #: ../imagery/i.rectify/main.c:275
-#, c-format
+#, fuzzy, c-format
 msgid "Extension <%s> is illegal"
-msgstr ""
+msgstr "L'extension <%s> est illégale"
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:291
 #: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:300
@@ -10784,6 +10777,11 @@ msgstr ""
 msgid "complete"
 msgstr ""
 
+#: ../imagery/i.ortho.photo/i.ortho.rectify/report.c:10
+#: ../imagery/i.rectify/report.c:10
+msgid "failed"
+msgstr "échoué"
+
 #: ../imagery/i.ortho.photo/i.ortho.rectify/report.c:20
 #: ../imagery/i.rectify/report.c:20
 #, c-format
@@ -10830,14 +10828,14 @@ msgstr "Jeu de cartes <%s> dans le Secteur en entrée <%s> - %s"
 #: ../imagery/i.ortho.photo/i.ortho.rectify/target.c:36
 #: ../imagery/i.ortho.photo/i.ortho.transform/main.c:117
 #: ../imagery/i.rectify/target.c:35 ../raster/r.in.gdal/main.c:1154
-#: ../raster/r.proj/main.c:330 ../vector/v.rectify/target.c:44
+#: ../raster/r.proj/main.c:332 ../vector/v.rectify/target.c:44
 msgid "not found"
 msgstr "non trouvé"
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/target.c:36
 #: ../imagery/i.ortho.photo/i.ortho.transform/main.c:117
 #: ../imagery/i.rectify/target.c:35 ../raster/r.in.gdal/main.c:1154
-#: ../raster/r.proj/main.c:329 ../vector/v.rectify/target.c:44
+#: ../raster/r.proj/main.c:331 ../vector/v.rectify/target.c:44
 msgid "permission denied"
 msgstr "permission refusée"
 
@@ -11718,17 +11716,16 @@ msgid "Region size is %d, should be %d"
 msgstr ""
 
 #: ../imagery/i.segment/region_growing.c:1385
-#, c-format
-msgid "Candidate flag is already %s"
-msgstr ""
+#, fuzzy
+#| msgid "dig_att file already exist"
+msgid "Candidate flag is already set"
+msgstr "Le drapeau candidat est déjà défini"
 
 #: ../imagery/i.segment/region_growing.c:1386
-msgid "set"
-msgstr ""
-
-#: ../imagery/i.segment/region_growing.c:1386
-msgid "unset"
-msgstr "non défini"
+#, fuzzy
+#| msgid "dig_att file already exist"
+msgid "Candidate flag is already unset"
+msgstr "Le drapeau candidat est déjà non défini"
 
 #: ../imagery/i.segment/region_growing.c:1629
 #, c-format
@@ -13405,6 +13402,13 @@ msgstr "Calcule la table de facteur d'index optimal pour les bandes spectrales"
 #: ../locale/scriptstrings/i.spectral_to_translate.c:5
 msgid "multispectral"
 msgstr "multispectral"
+
+#: ../locale/scriptstrings/i.oif_to_translate.c:6
+#: ../locale/scriptstrings/t.info_to_translate.c:9
+#: ../raster/r.regression.line/main.c:69
+#: ../raster/r.regression.multi/main.c:163
+msgid "Print in shell script style"
+msgstr "Afficher en style script shell"
 
 #: ../locale/scriptstrings/i.pansharpen_to_translate.c:1
 msgid "Image fusion algorithms to sharpen multispectral with high-res panchromatic channels"
@@ -16180,7 +16184,7 @@ msgid "Adds missing centroids to closed boundaries."
 msgstr "Ajoute les centroïdes manquants aux contours fermés."
 
 #: ../locale/scriptstrings/v.centroids_to_translate.c:3
-#: ../vector/v.category/main.c:834
+#: ../vector/v.category/main.c:836
 msgid "centroid"
 msgstr " centroïde"
 
@@ -16189,7 +16193,7 @@ msgstr " centroïde"
 #: ../locale/scriptstrings/v.dissolve_to_translate.c:4
 #: ../locale/scriptstrings/v.to.lines_to_translate.c:4
 #: ../misc/m.measure/main.c:48 ../vector/v.buffer/main.c:219
-#: ../vector/v.category/main.c:840 ../vector/v.in.ascii/main.c:71
+#: ../vector/v.category/main.c:842 ../vector/v.in.ascii/main.c:71
 #: ../vector/v.to.db/main.c:40 ../vector/v.type/main.c:41
 msgid "area"
 msgstr "surface"
@@ -16440,7 +16444,7 @@ msgstr "dissoudre"
 #: ../locale/scriptstrings/v.in.lines_to_translate.c:4
 #: ../locale/scriptstrings/v.to.lines_to_translate.c:5
 #: ../vector/v.buffer/main.c:222 ../vector/v.build.polylines/main.c:116
-#: ../vector/v.category/main.c:823 ../vector/v.edit/main.c:58
+#: ../vector/v.category/main.c:825 ../vector/v.edit/main.c:58
 #: ../vector/v.in.ascii/main.c:72 ../vector/v.parallel/main.c:51
 #: ../vector/v.to.points/main.c:55 ../vector/v.type/main.c:42
 msgid "line"
@@ -16599,7 +16603,7 @@ msgstr "Importer des coordonnées ASCII x,y[,z] en tant que séries de lignes."
 
 #: ../locale/scriptstrings/v.in.lines_to_translate.c:5
 #: ../locale/scriptstrings/v.to.lines_to_translate.c:6
-#: ../vector/v.category/main.c:818 ../vector/v.edit/main.c:60
+#: ../vector/v.category/main.c:820 ../vector/v.edit/main.c:60
 #: ../vector/v.in.ascii/main.c:73 ../vector/v.segment/main.c:64
 #: ../vector/v.to.points/main.c:58 ../vector/v.type/main.c:43
 msgid "point"
@@ -17808,6 +17812,8 @@ msgid ""
 "Required parameter <%s> not set:\n"
 "\t(%s)"
 msgstr ""
+"Paramètre requis <%s> non défini :\n"
+"\t(%s)"
 
 #: ../ps/ps.map/main.c:215 ../ps/ps.map/r_instructions.c:129
 msgid "illegal copies request"
@@ -18336,94 +18342,106 @@ msgstr ""
 msgid "Reading <%s> in <%s>"
 msgstr "Lecture de <%s> dans <%s>"
 
-#: ../raster/r.category/main.c:59 ../vector/v.category/main.c:99
+#: ../raster/r.category/main.c:60 ../vector/v.category/main.c:99
 #: ../vector/v.to.db/main.c:43
 msgid "category"
 msgstr "catégorie"
 
-#: ../raster/r.category/main.c:60
+#: ../raster/r.category/main.c:61
 msgid "Manages category values and labels associated with user-specified raster map layers."
 msgstr "Gérer les valeurs de catégories et les étiquettes associées aux cartes raster spécifiées."
 
-#: ../raster/r.category/main.c:74
+#: ../raster/r.category/main.c:75
 msgid "Comma separated value list"
 msgstr "Liste de valeurs séparées par des virgules"
 
-#: ../raster/r.category/main.c:75
+#: ../raster/r.category/main.c:76
 msgid "Example: 1.4,3.8,13"
 msgstr "Exemple : 1.4,3.8,13"
 
-#: ../raster/r.category/main.c:85 ../raster/r.support/main.c:123
+#: ../raster/r.category/main.c:86 ../raster/r.support/main.c:123
 #: ../raster3d/r3.support/main.c:110
 msgid "Raster map from which to copy category table"
 msgstr "Carte raster à partir de laquelle copier la table de catégories"
 
-#: ../raster/r.category/main.c:92
+#: ../raster/r.category/main.c:93
 msgid "File containing category label rules (or \"-\" to read from stdin)"
 msgstr "Fichier contenant les règles d'étiquettes de catégories (ou \"-\" pour lire depuis stdin)"
 
 #: ../raster/r.category/main.c:100
-msgid "Default label or format string for dynamic labeling"
-msgstr "Étiquette ou format de chaine par défaut pour l'étiquettage dynamique"
+msgid "Output format ('plain', 'json')"
+msgstr "Format de sortie ('plain', 'json')"
 
 #: ../raster/r.category/main.c:102
+msgid "When the value is not 'plain' or 'json', the value is used as a default label or format string for dynamic labeling. This usage is deprecated and will be removed in a future release. Use parameter 'label_format' instead."
+msgstr "Lorsque la valeur n'est pas 'plain' (ordinaire) ou 'json', la valeur est utilisée comme étiquette ou chaîne de format par défaut pour l'étiquetage dynamique. Cette utilisation est obsolète et sera retirée dans une prochaine version. Utilisez plutôt le paramètre 'label_format'."
+
+#: ../raster/r.category/main.c:113
+msgid "Default label or format string for dynamic labeling"
+msgstr "Étiquette ou format de chaine par défaut pour l'étiquetage dynamique"
+
+#: ../raster/r.category/main.c:115
 msgid "Used when no explicit label exists for the category"
 msgstr "Utilisé lorsque aucune étiquette explicite n'existe pour la catégorie"
 
-#: ../raster/r.category/main.c:110
+#: ../raster/r.category/main.c:123
 msgid "Dynamic label coefficients"
 msgstr "Coefficient d'étiquette dynamique"
 
-#: ../raster/r.category/main.c:112
+#: ../raster/r.category/main.c:125
 msgid "Two pairs of category multiplier and offsets, for $1 and $2"
 msgstr "Deux paires de multiplicateurs et décalage de catégorie, for $1 et $2"
 
-#: ../raster/r.category/main.c:122
+#: ../raster/r.category/main.c:131
 #, fuzzy
 #| msgid "Graphics format for output file"
 msgid "Color format for output values or none."
 msgstr "Format graphique du fichier en sortie"
 
-#: ../raster/r.category/main.c:171 ../raster/r.support/main.c:174
+#: ../raster/r.category/main.c:157
+msgid "The usage of 'format' for dynamic labeling is deprecated and will be removed in a future release. Please use the 'label_format' parameter instead."
+msgstr "L'utilisation du paramètre 'format' pour l'étiquetage dynamique est obsolète et sera retirée dans une prochaine version. Utilisez plutôt le paramètre 'label_format'."
+
+#: ../raster/r.category/main.c:195 ../raster/r.support/main.c:174
 #, c-format
 msgid "Raster map <%s> not found in current mapset"
 msgstr "Carte raster <%s> non trouvée dans le jeu de cartes courant"
 
-#: ../raster/r.category/main.c:190 ../raster/r.category/main.c:283
+#: ../raster/r.category/main.c:214 ../raster/r.category/main.c:307
 #: ../raster/r.mapcalc/map.c:231 ../raster/r.mapcalc/map3.c:189
 #: ../raster/r.report/parse.c:297
 #, c-format
 msgid "Unable to read category file of raster map <%s@%s>"
 msgstr "Impossible de lire le fichier de catégories pour la carte raster <%s@%s>"
 
-#: ../raster/r.category/main.c:194
+#: ../raster/r.category/main.c:218
 #, c-format
 msgid "Category table for <%s> set from <%s>"
 msgstr "Table de catégories pour <%s> définie depuis <%s>"
 
-#: ../raster/r.category/main.c:261
+#: ../raster/r.category/main.c:285
 #, c-format
 msgid ""
 "Incorrect format of input rules. Is the first column numeric? Or check separators. Invalid line is:\n"
 "%s"
 msgstr ""
 
-#: ../raster/r.category/main.c:321
+#: ../raster/r.category/main.c:344
 #, c-format
 msgid "Unable to read category file of raster map <%s> in <%s>"
 msgstr "Impossible de lire le fichier de catégorie de la carte raster <%s> dans <%s>"
 
-#: ../raster/r.category/main.c:327
+#: ../raster/r.category/main.c:350
 #, fuzzy, c-format
 #| msgid "Unable to read color table for raster map <%s>"
 msgid "Unable to read colors for input map %s"
 msgstr "Impossible de lire la table de couleur pour la carte raster <%s>"
 
-#: ../raster/r.category/main.c:344
+#: ../raster/r.category/main.c:367
 msgid "The map is floating point! Ignoring cats list, using values list"
 msgstr ""
 
-#: ../raster/r.category/main.c:366
+#: ../raster/r.category/main.c:389
 msgid "Parameter 'values' is required for floating point map!"
 msgstr ""
 
@@ -18814,7 +18832,7 @@ msgstr ""
 
 #: ../raster/r.colors/rules.c:81
 msgid "Unable to open color rule"
-msgstr ""
+msgstr "Impossible d'ouvrir la règle de couleur"
 
 #: ../raster/r.colors/rules.c:176 ../raster/r.reclass/parse.c:41
 #, c-format
@@ -18859,7 +18877,7 @@ msgstr ""
 #: ../raster/r.colors/rules.c:212
 #, c-format
 msgid "bad rule (%s): [%s]"
-msgstr ""
+msgstr "mauvaise règle (%s): [%s]"
 
 #: ../raster/r.colors/stats.c:41
 #, c-format
@@ -18907,7 +18925,7 @@ msgstr "Utiliser la couleur la plus proche"
 #: ../raster/r.composite/main.c:160
 #, c-format
 msgid "Unable to read color file of raster map <%s>"
-msgstr ""
+msgstr "Impossible de lire le fichier de couleur de la carte raster <%s>"
 
 #: ../raster/r.composite/main.c:280
 msgid "Creating color table for output raster map..."
@@ -19100,7 +19118,7 @@ msgstr "Impossible de créer la table : '%s'"
 
 #: ../raster/r.contour/main.c:187 ../raster3d/r3.flow/main.c:68
 #: ../vector/v.in.ascii/main.c:548 ../vector/v.in.dxf/write_vect.c:242
-#: ../vector/v.in.lidar/attributes.c:139 ../vector/v.in.ogr/main.c:1390
+#: ../vector/v.in.lidar/attributes.c:139 ../vector/v.in.ogr/main.c:1392
 #: ../vector/v.reclass/main.c:322 ../vector/v.to.points/main.c:219
 #, c-format
 msgid "Unable to create index for table <%s>, key <%s>"
@@ -19115,7 +19133,7 @@ msgstr "Impossible de créer l'index sur la table <%s>, clef <%s>"
 #: ../vector/v.mkgrid/main.c:372 ../vector/v.mkgrid/main.c:433
 #: ../vector/v.overlay/main.c:625 ../vector/v.patch/main.c:391
 #: ../vector/v.random/main.c:307 ../vector/v.reclass/main.c:327
-#: ../vector/v.sample/main.c:196 ../vector/v.select/copy_tabs.c:87
+#: ../vector/v.sample/main.c:196 ../vector/v.select/copy_tabs.c:88
 #: ../vector/v.to.points/main.c:224
 #, c-format
 msgid "Unable to grant privileges on table <%s>"
@@ -19776,12 +19794,12 @@ msgstr ""
 #: ../raster/r.external/link.c:158
 #, c-format
 msgid "Unable to create cell_misc/%s/gdal file"
-msgstr ""
+msgstr "Impossible de créer le fichier cell_misc/%s/gdal"
 
 #: ../raster/r.external/link.c:161
 #, c-format
 msgid "Error writing cell_misc/%s/gdal file"
-msgstr ""
+msgstr "Erreur d'écriture du fichier cell_misc/%s/gdal"
 
 #: ../raster/r.external/link.c:256
 #, c-format
@@ -19998,12 +20016,12 @@ msgid "Applying vertical flip"
 msgstr ""
 
 #: ../raster/r.external/window.c:94 ../raster/r.in.gdal/main.c:1089
-#: ../vector/v.in.ogr/main.c:1981
+#: ../vector/v.in.ogr/main.c:1983
 msgid "Default region for this project updated"
 msgstr ""
 
 #: ../raster/r.external/window.c:97 ../raster/r.in.gdal/main.c:1092
-#: ../vector/v.in.ogr/main.c:1984
+#: ../vector/v.in.ogr/main.c:1986
 msgid "Region for the current mapset updated"
 msgstr ""
 
@@ -20498,7 +20516,7 @@ msgstr ""
 #: ../raster/r.geomorphon/main.c:178 ../raster/r.geomorphon/main.c:187
 #: ../raster/r.geomorphon/main.c:197
 msgid "Profile"
-msgstr ""
+msgstr "Profil"
 
 #: ../raster/r.geomorphon/main.c:186
 msgid "Profile output file name (\"-\" for stdout)"
@@ -20969,10 +20987,10 @@ msgid "OOPS: cols changed from %d to %d"
 msgstr "OOPS : colonnes changées de %d vers %d"
 
 #: ../raster/r.horizon/main.c:761 ../raster/r.horizon/main.c:776
-#: ../raster/r.proj/main.c:633 ../raster/r.proj/main.c:739
+#: ../raster/r.proj/main.c:635 ../raster/r.proj/main.c:741
 #, c-format
 msgid "Error in %s"
-msgstr ""
+msgstr "Erreur dans %s"
 
 #: ../raster/r.horizon/main.c:1190
 #, c-format
@@ -22590,15 +22608,12 @@ msgid "Print raster array information"
 msgstr "Affiche l'information attributaire"
 
 #: ../raster/r.info/main.c:94
-#, fuzzy
 msgid "Print range"
-msgstr "Cartes d'entrée"
+msgstr "Afficher la plage de valeurs"
 
 #: ../raster/r.info/main.c:98
-#, fuzzy
-#| msgid "Print data types"
 msgid "Print stats"
-msgstr "Afficher les types de données"
+msgstr "Afficher les statistiques"
 
 #: ../raster/r.info/main.c:106 ../raster3d/r3.info/main.c:96
 msgid "Print raster history instead of info"
@@ -24041,21 +24056,21 @@ msgstr ""
 #: ../raster/r.out.gdal/main.c:375
 #, c-format
 msgid "Unable to get <%s> driver"
-msgstr ""
+msgstr "Impossible de charger le pilote <%s>"
 
 #: ../raster/r.out.gdal/main.c:381
 #, c-format
 msgid "Driver <%s> does not support direct writing. Using MEM driver for intermediate dataset."
-msgstr ""
+msgstr "Le pilote <%s> ne gère pas l'écriture directe. Utiliser le pilote MEM pour les données intermédiaires."
 
 #: ../raster/r.out.gdal/main.c:386
 msgid "Unable to get in-memory raster driver"
-msgstr ""
+msgstr "Impossible de charger le pilote raster en mémoire"
 
 #: ../raster/r.out.gdal/main.c:389
-#, c-format
+#, fuzzy, c-format
 msgid "Driver <%s> does not support creating rasters"
-msgstr ""
+msgstr "Le pilote <%s> ne gère pas la création de raster"
 
 #: ../raster/r.out.gdal/main.c:464
 #, c-format
@@ -24120,11 +24135,11 @@ msgstr ""
 #: ../raster/r.out.gdal/main.c:678
 #, c-format
 msgid "Unable to create <%s> dataset using <%s> driver"
-msgstr ""
+msgstr "Impossible de créer le jeu de données <%s> avec le pilote <%s>"
 
 #: ../raster/r.out.gdal/main.c:693
 msgid "Unable to set geo transform"
-msgstr ""
+msgstr "Impossible de définir la transformation géographique"
 
 #: ../raster/r.out.gdal/main.c:701
 msgid "Unable to set projection"
@@ -25046,47 +25061,47 @@ msgstr ""
 msgid "Print input map's bounds in the current projection and exit"
 msgstr "Afficher les limites de la carte en entrée dans la projection actuelle et sortir"
 
-#: ../raster/r.proj/main.c:238
-msgid "[DEPRECATED] Print input map's bounds in the current projection and exit (shell style). This flag is obsolete and will be removed in a future release. Use format=shell instead."
-msgstr ""
+#: ../raster/r.proj/main.c:237
+msgid "Print input map's bounds in the current projection in shell script style [deprecated]"
+msgstr "Afficher les limites de la carte en entrée dans la projection actuelle en style shell [obsolète]"
 
-#: ../raster/r.proj/main.c:263
+#: ../raster/r.proj/main.c:264
 #, c-format
 msgid "The format option can only be used with -%c or -%c flags"
 msgstr ""
 
-#: ../raster/r.proj/main.c:294
+#: ../raster/r.proj/main.c:296
 msgid "Input and output locations can not be the same"
 msgstr "Les Secteurs d'entrée et de sortie ne peuvent pas être les mêmes"
 
-#: ../raster/r.proj/main.c:296
+#: ../raster/r.proj/main.c:298
 #, fuzzy
 msgid "Input and output projects are the same"
 msgstr "Les Secteurs d'entrée et de sortie sont les mêmes"
 
-#: ../raster/r.proj/main.c:306
+#: ../raster/r.proj/main.c:308
 msgid "Unable to get projection info of output raster map"
 msgstr "Impossible d'obtenir les infos de projection de la carte raster en sortie"
 
-#: ../raster/r.proj/main.c:309
+#: ../raster/r.proj/main.c:311
 msgid "Unable to get projection units of output raster map"
 msgstr "Impossible d'obtenir les unités de projection de la carte raster en sortie"
 
-#: ../raster/r.proj/main.c:313
+#: ../raster/r.proj/main.c:315
 msgid "Unable to get projection key values of output raster map"
 msgstr "Impossible d'obtenir les valeurs de clef de projection pour la carte raster en sortie"
 
-#: ../raster/r.proj/main.c:327
+#: ../raster/r.proj/main.c:329
 #, fuzzy, c-format
 msgid "Mapset <%s> in input project <%s> - %s"
 msgstr "Jeu de cartes <%s> dans le Secteur en entrée <%s> - %s"
 
-#: ../raster/r.proj/main.c:348 ../vector/v.proj/main.c:231
+#: ../raster/r.proj/main.c:350 ../vector/v.proj/main.c:231
 #, fuzzy, c-format
 msgid "Checking project <%s> mapset <%s>"
 msgstr "Vérification du Secteur <%s> jeu de cartes <%s>"
 
-#: ../raster/r.proj/main.c:381 ../scripts/d.frame/d.frame.py:311
+#: ../raster/r.proj/main.c:383 ../scripts/d.frame/d.frame.py:311
 #: ../vector/v.edit/main.c:89 ../vector/v.external/main.c:109
 #: ../vector/v.in.ogr/main.c:454 ../vector/v.net/args.c:150
 #: ../vector/v.net/args.c:156 ../vector/v.net/args.c:162
@@ -25097,81 +25112,81 @@ msgstr "Vérification du Secteur <%s> jeu de cartes <%s>"
 msgid "Required parameter <%s> not set"
 msgstr "Le paramètre <%s> est requis mais non défini"
 
-#: ../raster/r.proj/main.c:385
+#: ../raster/r.proj/main.c:387
 #, fuzzy, c-format
 msgid "Raster map <%s> in project <%s> in mapset <%s> not found"
 msgstr "Carte raster <%s> du Secteur <%s> dans le jeu de cartes <%s> non trouvée"
 
-#: ../raster/r.proj/main.c:393
+#: ../raster/r.proj/main.c:395
 msgid "Unable to get projection info of input map"
 msgstr "Impossible d'obtenir les informations de projection de la carte en entrée"
 
-#: ../raster/r.proj/main.c:404
+#: ../raster/r.proj/main.c:406
 msgid "Unable to get projection units of input map"
 msgstr "Impossible d'obtenir les unités de projection de la carte en entrée"
 
-#: ../raster/r.proj/main.c:407
+#: ../raster/r.proj/main.c:409
 msgid "Unable to get projection key values of input map"
 msgstr "Impossible d'obtenir les valeurs de clef de projection de la carte en entrée"
 
-#: ../raster/r.proj/main.c:431
+#: ../raster/r.proj/main.c:433
 msgid "Unable to work with unprojected data (xy project)"
 msgstr "Impossible de travailler sur des données non projetées (projet xy)"
 
-#: ../raster/r.proj/main.c:452
+#: ../raster/r.proj/main.c:454
 #, fuzzy, c-format
 msgid "Input map <%s@%s> in project <%s>:"
 msgstr "Carte en entrée <%s@%s> dans le Secteur <%s> :"
 
-#: ../raster/r.proj/main.c:653
+#: ../raster/r.proj/main.c:655
 msgid "Input:"
 msgstr "Entrée : "
 
-#: ../raster/r.proj/main.c:654 ../raster/r.proj/main.c:665
+#: ../raster/r.proj/main.c:656 ../raster/r.proj/main.c:667
 #, c-format
 msgid "Cols: %d (original: %d)"
 msgstr ""
 
-#: ../raster/r.proj/main.c:655 ../raster/r.proj/main.c:666
+#: ../raster/r.proj/main.c:657 ../raster/r.proj/main.c:668
 #, c-format
 msgid "Rows: %d (original: %d)"
 msgstr ""
 
-#: ../raster/r.proj/main.c:656 ../raster/r.proj/main.c:667
+#: ../raster/r.proj/main.c:658 ../raster/r.proj/main.c:669
 #, c-format
 msgid "North: %f (original: %f)"
 msgstr ""
 
-#: ../raster/r.proj/main.c:657 ../raster/r.proj/main.c:668
+#: ../raster/r.proj/main.c:659 ../raster/r.proj/main.c:670
 #, c-format
 msgid "South: %f (original: %f)"
 msgstr ""
 
-#: ../raster/r.proj/main.c:658 ../raster/r.proj/main.c:669
+#: ../raster/r.proj/main.c:660 ../raster/r.proj/main.c:671
 #, c-format
 msgid "West: %f (original: %f)"
 msgstr ""
 
-#: ../raster/r.proj/main.c:659 ../raster/r.proj/main.c:670
+#: ../raster/r.proj/main.c:661 ../raster/r.proj/main.c:672
 #, c-format
 msgid "East: %f (original: %f)"
 msgstr ""
 
-#: ../raster/r.proj/main.c:660 ../raster/r.proj/main.c:671
+#: ../raster/r.proj/main.c:662 ../raster/r.proj/main.c:673
 #, c-format
 msgid "EW-res: %f"
 msgstr "res-EO : %f"
 
-#: ../raster/r.proj/main.c:661 ../raster/r.proj/main.c:672
+#: ../raster/r.proj/main.c:663 ../raster/r.proj/main.c:674
 #, c-format
 msgid "NS-res: %f"
 msgstr "res-NS : %f"
 
-#: ../raster/r.proj/main.c:664
+#: ../raster/r.proj/main.c:666
 msgid "Output:"
 msgstr "Sortie :"
 
-#: ../raster/r.proj/main.c:715
+#: ../raster/r.proj/main.c:717
 msgid "Projecting..."
 msgstr "Reprojection ..."
 
@@ -25449,7 +25464,7 @@ msgstr "Génère une surface aléatoire avec une dépendance spatiale."
 
 #: ../raster/r.random.surface/main.c:67
 msgid "Name for output raster map(s)"
-msgstr ""
+msgstr "Nom de la carte raster en sortie"
 
 #: ../raster/r.random.surface/main.c:84
 msgid "Distance decay exponent (value > 0.0)"
@@ -25484,8 +25499,9 @@ msgid "Creates a raster map and vector point map containing randomly located cel
 msgstr ""
 
 #: ../raster/r.random/main.c:70
+#, fuzzy
 msgid "Name of cover raster map"
-msgstr ""
+msgstr "Nom de la couche matricielle de drapage"
 
 #: ../raster/r.random/main.c:78
 msgid "The number of points (or cells) to generate"
@@ -26189,13 +26205,13 @@ msgstr ""
 
 #: ../raster/r.resamp.bspline/main.c:127 ../vector/v.surf.bspline/main.c:172
 msgid "Bicubic interpolation"
-msgstr ""
+msgstr "Interpolation bicubique"
 
 #: ../raster/r.resamp.bspline/main.c:127
 #: ../vector/v.lidar.correction/main.c:415 ../vector/v.outlier/main.c:423
 #: ../vector/v.surf.bspline/main.c:172
 msgid "Bilinear interpolation"
-msgstr ""
+msgstr "Interpolation bilinéaire"
 
 #: ../raster/r.resamp.bspline/main.c:140
 msgid "Only interpolate null cells in input raster map"
@@ -26313,7 +26329,7 @@ msgstr ""
 
 #: ../raster/r.resamp.filter/main.c:430
 msgid "box"
-msgstr ""
+msgstr "rectangulaire"
 
 #: ../raster/r.resamp.filter/main.c:431
 msgid "gauss"
@@ -27361,8 +27377,9 @@ msgid "Mean Mannings \t= %f\n"
 msgstr ""
 
 #: ../raster/r.sim/simlib/input.c:344
+#, fuzzy
 msgid "Mean Mannings \t= undefined (chmean is zero)\n"
-msgstr ""
+msgstr "Mannings moyens \t= indéfini (chmean est zéro)\n"
 
 #: ../raster/r.sim/simlib/input.c:348
 #, c-format
@@ -27605,11 +27622,11 @@ msgstr "détection des nuages"
 
 #: ../raster/r.smooth.edgepreserve/main.c:50
 msgid "denoise"
-msgstr ""
+msgstr "Débruitage"
 
 #: ../raster/r.smooth.edgepreserve/main.c:51
 msgid "Smoothing with anisotropic diffusion"
-msgstr ""
+msgstr "Lissage par diffusion anisotrope"
 
 #: ../raster/r.smooth.edgepreserve/main.c:61
 msgid "Gradient magnitude threshold (in map units)"
@@ -27619,19 +27636,18 @@ msgstr ""
 #: ../raster/r.smooth.edgepreserve/main.c:71
 #: ../raster/r.smooth.edgepreserve/main.c:80
 #: ../raster/r.smooth.edgepreserve/main.c:98
-#, fuzzy
-#| msgid "fusion"
 msgid "Diffusion"
-msgstr "fusion"
+msgstr "Diffusion"
 
 #: ../raster/r.smooth.edgepreserve/main.c:70
+#, fuzzy
 msgid "Rate of diffusion"
-msgstr ""
+msgstr "Taux de diffusion"
 
 #: ../raster/r.smooth.edgepreserve/main.c:79
 #, fuzzy
 msgid "Number of diffusion steps"
-msgstr "Nombre de points d'interpolation"
+msgstr "Nombre de pas de diffusion"
 
 #: ../raster/r.smooth.edgepreserve/main.c:88
 msgid "Diffusivity function"
@@ -27642,8 +27658,6 @@ msgid "Preserve details with Tukey"
 msgstr ""
 
 #: ../raster/r.smooth.edgepreserve/main.c:149
-#, fuzzy
-#| msgid "computational region"
 msgid "Wrong computational region"
 msgstr "Mauvaise région de calculs"
 
@@ -27660,19 +27674,19 @@ msgid "Smoothed map"
 msgstr "Carte lissée"
 
 #: ../raster/r.smooth.edgepreserve/row_cache.c:32
-#, fuzzy, c-format
-#| msgid "Error reading temporary file"
+#, c-format
 msgid "There was an error reading data from a temporary file. %d: %s"
-msgstr "Erreur de lecture du fichier temporaire"
+msgstr "Une erreur s'est produite lors de la lecture des données d'un fichier temporaire. %d: %s"
 
 #: ../raster/r.smooth.edgepreserve/row_cache.c:46
-#, fuzzy, c-format
+#, c-format
 msgid "There was an error writing data from a temporary file. %d: %s"
-msgstr "Erreur lors de la lecture du fichier dbmscap\n"
+msgstr "Une erreur s'est produite lors de l'écriture des données d'un fichier temporaire. %d: %s"
 
 #: ../raster/r.smooth.edgepreserve/row_cache.c:59
+#, fuzzy
 msgid "Error fetching data from a disk cache"
-msgstr ""
+msgstr "Erreur d'extraction de données d'un cache de disque"
 
 #: ../raster/r.smooth.edgepreserve/row_cache.c:111
 msgid "Insufficient memory to hold processed data. Either increase available memory with the \"memory\" parameter or reduce size of the computational region."
@@ -27683,14 +27697,14 @@ msgid "Using disk for temporary data storage"
 msgstr "Stockage des données temporaires sur le disque"
 
 #: ../raster/r.smooth.edgepreserve/row_cache.c:123
-#, c-format
+#, c-format, fuzzy
 msgid "Error creating row cache. %d: %s"
-msgstr ""
+msgstr "Erreur lors de la création du cache de ligne. %d: %s"
 
 #: ../raster/r.smooth.edgepreserve/row_cache.c:129
 #, fuzzy
 msgid "Error creating row cache"
-msgstr "Arguments de l'erreur de scanning"
+msgstr "Erreur en créant le cache des lignes."
 
 #: ../raster/r.smooth.edgepreserve/row_cache.c:135
 msgid "Keeping temporary data in RAM"
@@ -27699,7 +27713,7 @@ msgstr "Stockage des données temporaires en mémoire vive"
 #: ../raster/r.smooth.edgepreserve/row_cache.c:155
 #, fuzzy, c-format
 msgid "Error cleaning up row cache. %d: %s"
-msgstr "Erreur en fermant le fichier de sortie %s"
+msgstr "Erreur de nettoyage du cache de lignes. %d: %s"
 
 #: ../raster/r.solute.transport/main.c:56
 msgid "The initial concentration in [kg/m^3]"
@@ -30016,8 +30030,8 @@ msgstr "Écriture des lignes..."
 msgid "No area for centroid %d"
 msgstr ""
 
-#: ../raster/r.to.vect/areas_io.c:344 ../vector/v.category/main.c:490
-#: ../vector/v.delaunay/main.c:172 ../vector/v.in.ogr/main.c:1539
+#: ../raster/r.to.vect/areas_io.c:344 ../vector/v.category/main.c:492
+#: ../vector/v.delaunay/main.c:172 ../vector/v.in.ogr/main.c:1541
 msgid "Unable to calculate area centroid"
 msgstr ""
 
@@ -31832,13 +31846,11 @@ msgstr ""
 
 #: ../raster/r.what.color/main.c:211
 msgid "Output format printf-style is deprecated, use 'color_format' option instead."
-msgstr ""
+msgstr "Le format de sortie de style printf est obsolète. Utilisez plutôt le paramètre 'color_format'."
 
 #: ../raster/r.what.color/main.c:216
-#, fuzzy
-#| msgid "Graphics format for output file"
 msgid "Color format for output values. Applies only when format is set to 'plain' or 'json'."
-msgstr "Format graphique du fichier en sortie"
+msgstr "Format de couleur pour les valeurs de sortie. S'applique uniquement lorsque le format est défini à 'plain' ou 'json'."
 
 #: ../raster/r.what.color/main.c:222
 msgid "Read values from stdin"
@@ -31850,7 +31862,7 @@ msgstr ""
 
 #: ../raster/r.what.color/main.c:255
 msgid "The printf-style output format is deprecated and will be removed in a future release. Please use the 'color_format' option instead, along with 'format=plain'."
-msgstr ""
+msgstr "Le format de sortie de style printf est obsolète et sera retiré dans une prochaine version. Utilisez plutôt le paramètre 'color_format', avec 'format=plain'."
 
 #: ../raster/r.what/main.c:115
 msgid "Queries raster maps on their category values and category labels."
@@ -33448,7 +33460,7 @@ msgstr ""
 #: ../scripts/g.extension/g.extension.py:1163
 #, python-format
 msgid "Extension <%s> already installed. Re-installing..."
-msgstr ""
+msgstr "Extension <%s> déjà installée. Réinstallation..."
 
 #: ../scripts/g.extension/g.extension.py:1174
 #, python-format
@@ -33631,7 +33643,7 @@ msgstr ""
 #: ../scripts/g.extension/g.extension.py:2264
 #, python-format
 msgid "Extension <%s> not found"
-msgstr ""
+msgstr "Extension <%s> non trouvée"
 
 #: ../scripts/g.extension/g.extension.py:2368
 #, python-brace-format
@@ -33641,7 +33653,7 @@ msgstr ""
 #: ../scripts/g.extension/g.extension.py:2387
 #, python-format
 msgid "Unable to create '%s': %s"
-msgstr ""
+msgstr "Impossible de créer '%s' : %s"
 
 #: ../scripts/g.extension/g.extension.py:2415
 #, python-format
@@ -34250,7 +34262,7 @@ msgstr ""
 msgid "Using current region resolution for input band <{out}>: nsres={ns}, ewres={ew}"
 msgstr ""
 
-#: ../scripts/r.import/r.import.py:445 ../scripts/v.import/v.import.py:380
+#: ../scripts/r.import/r.import.py:445 ../scripts/v.import/v.import.py:382
 #, python-format
 msgid "Reprojecting <%s>..."
 msgstr ""
@@ -35062,7 +35074,7 @@ msgstr "Erreur d'ajout de colonnes {}"
 #: ../scripts/v.rast.stats/v.rast.stats.py:123
 #, python-format
 msgid "Vector map <%s> not found in current mapset"
-msgstr ""
+msgstr "Carte vecteur <%s> non trouvé dans le jeu de cartes courant"
 
 #: ../scripts/v.db.addtable/v.db.addtable.py:79
 #, python-format
@@ -35102,7 +35114,7 @@ msgstr ""
 #: ../vector/v.sample/main.c:189
 #, c-format, python-format
 msgid "Unable to create table <%s>"
-msgstr ""
+msgstr "Impossible de créer la table <%s>"
 
 #: ../scripts/v.db.addtable/v.db.addtable.py:143
 #, python-format
@@ -35220,7 +35232,7 @@ msgstr ""
 #: ../vector/v.generalize/misc.c:180 ../vector/v.to.points/main.c:187
 #, c-format, python-format
 msgid "Unable to copy table <%s>"
-msgstr ""
+msgstr "Impossible de copier la table <%s>"
 
 #: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:160
 #, python-format
@@ -35230,7 +35242,7 @@ msgstr ""
 #: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:173
 #, python-format
 msgid "Unable to drop table <%s>"
-msgstr ""
+msgstr "Impossible de supprimer la table <%s>"
 
 #: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:183
 #, python-format
@@ -35282,6 +35294,11 @@ msgstr ""
 #, python-format
 msgid "Cannot rename column <%s> as it is needed to keep table <%s> connected to the input vector map"
 msgstr ""
+
+#: ../scripts/v.db.renamecolumn/v.db.renamecolumn.py:105
+#, python-brace-format
+msgid "Column <{column_name}> not found in table <{table_name}>"
+msgstr "Colonne <{column_name}> non trouvée dans la table <{table_name}>"
 
 #: ../scripts/v.db.univar/v.db.univar.py:84
 #, python-format
@@ -35411,12 +35428,12 @@ msgstr ""
 msgid "Unable to import OGR datasource <%s>"
 msgstr ""
 
-#: ../scripts/v.import/v.import.py:374 ../scripts/v.pack/v.pack.py:86
-#, python-format
-msgid "option <%s>: <%s> exists."
-msgstr ""
+#: ../scripts/v.import/v.import.py:375 ../scripts/v.pack/v.pack.py:87
+#, python-brace-format
+msgid "option <{key}>: <{value}> exists."
+msgstr "option <{key}>: <{value}> existe."
 
-#: ../scripts/v.import/v.import.py:390
+#: ../scripts/v.import/v.import.py:392
 #, python-format
 msgid "Unable to to reproject vector <%s>"
 msgstr ""
@@ -35560,17 +35577,17 @@ msgstr ""
 msgid "Unable to pack vector map <%s>. Only native format supported."
 msgstr ""
 
-#: ../scripts/v.pack/v.pack.py:89
+#: ../scripts/v.pack/v.pack.py:93
 #, python-format
 msgid "Packing <%s>..."
 msgstr ""
 
-#: ../scripts/v.pack/v.pack.py:102
+#: ../scripts/v.pack/v.pack.py:106
 #, python-format
 msgid "There is not database connected with vector map <%s>"
 msgstr ""
 
-#: ../scripts/v.pack/v.pack.py:130
+#: ../scripts/v.pack/v.pack.py:134
 #, python-format
 msgid "Pack file <%s> created"
 msgstr ""
@@ -35682,7 +35699,7 @@ msgstr ""
 msgid "Error removing table from layer 1"
 msgstr ""
 
-#: ../scripts/v.to.lines/v.to.lines.py:192 ../vector/v.select/copy_tabs.c:51
+#: ../scripts/v.to.lines/v.to.lines.py:192 ../vector/v.select/copy_tabs.c:52
 #, c-format, python-format
 msgid "No table for layer %d"
 msgstr ""
@@ -35700,7 +35717,7 @@ msgstr ""
 #: ../scripts/v.unpack/v.unpack.py:112 ../vector/v.in.lidar/main.c:553
 #, c-format, python-format
 msgid "Vector map <%s> already exists and will be overwritten"
-msgstr ""
+msgstr "La couche vectorielle <%s> existe déjà et va être écrasé"
 
 #: ../scripts/v.unpack/v.unpack.py:138
 #, python-format
@@ -36016,19 +36033,19 @@ msgstr ""
 msgid "Snapping boundaries..."
 msgstr ""
 
-#: ../vector/v.buffer/main.c:797 ../vector/v.in.ogr/main.c:1459
+#: ../vector/v.buffer/main.c:797 ../vector/v.in.ogr/main.c:1461
 #: ../vector/v.patch/main.c:534
 msgid "Breaking polygons..."
 msgstr ""
 
 #: ../vector/v.buffer/main.c:800 ../vector/v.buffer/main.c:807
-#: ../vector/v.delaunay/main.c:144 ../vector/v.in.ogr/main.c:1465
-#: ../vector/v.in.ogr/main.c:1480 ../vector/v.overlay/area_area.c:127
+#: ../vector/v.delaunay/main.c:144 ../vector/v.in.ogr/main.c:1467
+#: ../vector/v.in.ogr/main.c:1482 ../vector/v.overlay/area_area.c:127
 #: ../vector/v.patch/main.c:538 ../vector/v.patch/main.c:555
 msgid "Removing duplicates..."
 msgstr ""
 
-#: ../vector/v.buffer/main.c:804 ../vector/v.in.ogr/main.c:1476
+#: ../vector/v.buffer/main.c:804 ../vector/v.in.ogr/main.c:1478
 #: ../vector/v.patch/main.c:551
 msgid "Breaking boundaries..."
 msgstr ""
@@ -36037,12 +36054,12 @@ msgstr ""
 msgid "Cleaning boundaries at nodes"
 msgstr ""
 
-#: ../vector/v.buffer/main.c:819 ../vector/v.in.ogr/main.c:1500
+#: ../vector/v.buffer/main.c:819 ../vector/v.in.ogr/main.c:1502
 #: ../vector/v.patch/main.c:570 ../vector/v.voronoi/clean_topo.c:85
 msgid "Removing dangles..."
 msgstr ""
 
-#: ../vector/v.buffer/main.c:822 ../vector/v.in.ogr/main.c:1515
+#: ../vector/v.buffer/main.c:822 ../vector/v.in.ogr/main.c:1517
 #: ../vector/v.patch/main.c:576 ../vector/v.voronoi/clean_topo.c:87
 msgid "Removing bridges..."
 msgstr ""
@@ -36074,7 +36091,7 @@ msgstr ""
 #: ../vector/v.buffer/main.c:941
 #, c-format
 msgid "Unable to calculate centroid for area %d"
-msgstr ""
+msgstr "Impossible de calculer le centroïde pour la surface %d"
 
 #: ../vector/v.build.polylines/main.c:117 ../vector/v.edit/main.c:59
 #: ../vector/v.segment/main.c:63 ../vector/v.split/main.c:56
@@ -36126,7 +36143,7 @@ msgid_plural "%d polylines stored in output vector map"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../vector/v.build.polylines/main.c:243 ../vector/v.category/main.c:964
+#: ../vector/v.build.polylines/main.c:243 ../vector/v.category/main.c:966
 #: ../vector/v.net/main.c:157 ../vector/v.proj/main.c:615
 #: ../vector/v.rectify/main.c:280 ../vector/v.transform/main.c:314
 #: ../vector/v.type/main.c:152
@@ -36239,112 +36256,116 @@ msgstr ""
 msgid "print only layer numbers"
 msgstr ""
 
-#: ../vector/v.category/main.c:173
-msgid "Shell script style, currently only for report"
-msgstr ""
+#: ../vector/v.category/main.c:174
+#, fuzzy
+#| msgid "Print in shell script style [deprecated]"
+msgid "Shell script style, currently only for report [deprecated]"
+msgstr "Style script shell, actuellement uniquement pour le rapport [obsolète]"
 
-#: ../vector/v.category/main.c:175
-msgid "[DEPRECATED] Format: layer type count min max. This flag is obsolete and will be removed in a future release. Use format=shell instead."
-msgstr ""
+#: ../vector/v.category/main.c:176
+#, fuzzy
+#| msgid "[DEPRECATED] Print projection information in WKT format. This flag is obsolete and will be removed in a future release. Use format=wkt instead."
+msgid "Format: layer type count min max. This flag is deprecated and will be removed in a future release. Use format=shell instead."
+msgstr "[OBSOLÈTE] Afficher l'information de projection au format WKT. Cette option est obsolète et sera retirée dans une prochaine version. Utiliser plutôt format=wkt."
 
-#: ../vector/v.category/main.c:179
+#: ../vector/v.category/main.c:180
 msgid "Do not copy attribute table(s)"
 msgstr ""
 
-#: ../vector/v.category/main.c:197
+#: ../vector/v.category/main.c:198
 msgid "Database connection and attribute tables for concerned layers are not changed"
 msgstr ""
 
-#: ../vector/v.category/main.c:234
+#: ../vector/v.category/main.c:236
 msgid "JSON output and shell output cannot be used simultaneously."
 msgstr ""
 
-#: ../vector/v.category/main.c:266 ../vector/v.category/main.c:373
-#: ../vector/v.category/main.c:383 ../vector/v.kcv/main.c:96
+#: ../vector/v.category/main.c:268 ../vector/v.category/main.c:375
+#: ../vector/v.category/main.c:385 ../vector/v.kcv/main.c:96
 #: ../vector/v.kcv/main.c:188
 #, c-format
 msgid "Unable to open vector map <%s> at topological level %d"
 msgstr ""
 
-#: ../vector/v.category/main.c:329
+#: ../vector/v.category/main.c:331
 msgid "Invalid category number (must be equal to or greater than 0). Normally category number starts at 1."
 msgstr ""
 
-#: ../vector/v.category/main.c:339
+#: ../vector/v.category/main.c:341
 #, c-format
 msgid "%d error in id option"
 msgid_plural "%d errors in id option"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../vector/v.category/main.c:349
+#: ../vector/v.category/main.c:351
 msgid "Output vector wasn't entered"
 msgstr ""
 
-#: ../vector/v.category/main.c:401
+#: ../vector/v.category/main.c:403
 msgid "Too many layers for this operation"
 msgstr "Trop de couches pour cette opération"
 
-#: ../vector/v.category/main.c:404 ../vector/v.category/main.c:407
+#: ../vector/v.category/main.c:406 ../vector/v.category/main.c:409
 msgid "2 layers must be specified"
 msgstr "2 couches doivent être spécifiées"
 
-#: ../vector/v.category/main.c:415
+#: ../vector/v.category/main.c:417
 #, c-format
 msgid "Categories already exist in layer %d"
 msgstr ""
 
-#: ../vector/v.category/main.c:459 ../vector/v.drape/main.c:175
+#: ../vector/v.category/main.c:461 ../vector/v.drape/main.c:175
 #: ../vector/v.select/select.c:48
 msgid "Processing features..."
 msgstr ""
 
-#: ../vector/v.category/main.c:504
+#: ../vector/v.category/main.c:506
 #, c-format
 msgid "%d new centroid placed in output map"
 msgid_plural "%d new centroids placed in output map"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../vector/v.category/main.c:811
+#: ../vector/v.category/main.c:813
 msgid "Layer/table"
 msgstr ""
 
-#: ../vector/v.category/main.c:815
+#: ../vector/v.category/main.c:817
 msgid "Layer"
 msgstr "Couche"
 
-#: ../vector/v.category/main.c:817
+#: ../vector/v.category/main.c:819
 #, c-format
 msgid "type       count        min        max\n"
 msgstr ""
 
-#: ../vector/v.category/main.c:828
+#: ../vector/v.category/main.c:830
 msgid "boundary"
 msgstr "contour"
 
-#: ../vector/v.category/main.c:845
+#: ../vector/v.category/main.c:847
 msgid "face"
 msgstr "face"
 
-#: ../vector/v.category/main.c:850
+#: ../vector/v.category/main.c:852
 msgid "kernel"
 msgstr ""
 
-#: ../vector/v.category/main.c:856
+#: ../vector/v.category/main.c:858
 msgid "all"
 msgstr ""
 
-#: ../vector/v.category/main.c:962 ../vector/v.rectify/main.c:278
+#: ../vector/v.category/main.c:964 ../vector/v.rectify/main.c:278
 msgid "Copying attribute table(s)..."
 msgstr ""
 
-#: ../vector/v.category/main.c:973
+#: ../vector/v.category/main.c:975
 #, c-format
 msgid "Categories copied from layer %d to layer %d"
 msgstr ""
 
-#: ../vector/v.category/main.c:978
+#: ../vector/v.category/main.c:980
 #, c-format
 msgid "%d feature modified."
 msgid_plural "%d features modified."
@@ -36868,7 +36889,7 @@ msgstr ""
 #: ../vector/v.to.db/query.c:23 ../vector/v.to.rast/do_lines.c:34
 #: ../vector/v.voronoi/main.c:207
 msgid "Reading features..."
-msgstr ""
+msgstr "Lecture des entités ..."
 
 #: ../vector/v.colors/main.c:60
 msgid "Creates/modifies the color table associated with a vector map."
@@ -37213,7 +37234,7 @@ msgstr ""
 #: ../vector/v.reclass/main.c:266
 #, c-format
 msgid "Unable to fetch data from table <%s>"
-msgstr ""
+msgstr "Impossible de récupérer les données depuis la table <%s>"
 
 #: ../vector/v.db.select/main.c:485
 #, c-format
@@ -37239,7 +37260,7 @@ msgstr ""
 #: ../vector/v.vect.stats/main.c:350 ../vector/v.vect.stats/main.c:435
 #, c-format
 msgid "Unable to open database <%s> with driver <%s>"
-msgstr ""
+msgstr "Impossible d'ouvrir la base de données <%s> avec le pilote <%s>"
 
 #: ../vector/v.decimate/main.c:118 ../vector/v.generalize/main.c:77
 msgid "generalization"
@@ -37566,8 +37587,9 @@ msgid "Print output as square matrix (only possible for one single upload variab
 msgstr ""
 
 #: ../vector/v.distance/main.c:319
+#, fuzzy
 msgid "The format option requires the -p flag; please re-run with -p to enable output."
-msgstr ""
+msgstr "L'option format requiert l'option -p; veuillez exécuter à nouveau avec -p pour activer la sortie."
 
 #: ../vector/v.distance/main.c:324
 msgid "Updating the from= table is not supported with -a"
@@ -38334,11 +38356,11 @@ msgstr ""
 
 #: ../vector/v.external/list.c:114
 msgid "GRASS is not compiled with PostgreSQL support"
-msgstr ""
+msgstr "GRASS n'est pas compilé avec le support de PostgreSQL"
 
 #: ../vector/v.external/list.c:120
 msgid "GRASS is not compiled with OGR support"
-msgstr ""
+msgstr "GRASS n'est pas compilé avec le support de OGR"
 
 #: ../vector/v.external/list.c:162
 msgid "Connection to PostgreSQL database failed."
@@ -38346,7 +38368,7 @@ msgstr ""
 
 #: ../vector/v.external/list.c:173
 msgid "No feature tables found in database."
-msgstr ""
+msgstr "Pas de table d'entité trouvée dans la base de données."
 
 #: ../vector/v.external/list.c:185
 #, c-format
@@ -38461,7 +38483,7 @@ msgstr ""
 #: ../vector/v.extract/extract.c:271 ../vector/v.extract/main.c:319
 #, c-format
 msgid "Loading categories from table <%s>..."
-msgstr ""
+msgstr "Chargement des catégories depuis la table <%s> ..."
 
 #: ../vector/v.extract/extract.c:289
 msgid "Topology level required for extracting areas for OGR layers. Areas will be not processed."
@@ -38553,7 +38575,7 @@ msgstr "Entrée texte ignorée: %s"
 #: ../vector/v.extract/main.c:330
 #, c-format
 msgid "Unable select records from table <%s>"
-msgstr ""
+msgstr "Impossible de sélectionner les enregistrements depuis la table <%s>"
 
 #: ../vector/v.extract/main.c:333
 #, c-format
@@ -38631,7 +38653,7 @@ msgstr ""
 #: ../vector/v.extrude/main.c:234
 #, c-format
 msgid "Column <%s> does not exist"
-msgstr ""
+msgstr "La colonne <%s> n'existe pas"
 
 #: ../vector/v.extrude/main.c:242
 #, c-format
@@ -38918,18 +38940,15 @@ msgstr ""
 msgid "%d lines/boundaries were not modified due to over-simplification"
 msgstr ""
 
-#: ../vector/v.generalize/main.c:608
+#: ../vector/v.generalize/main.c:609
 #, c-format
-msgid "Number of vertices for selected features %s from %d to %d (%d%% remaining)"
-msgstr ""
+msgid "Number of vertices for selected features reduced from %d to %d (%d%% remaining)"
+msgstr "Nombre de sommets pour les entités sélectionnés réduit de %d à %d (%d%% restant)"
 
-#: ../vector/v.generalize/main.c:610
-msgid "changed"
-msgstr ""
-
-#: ../vector/v.generalize/main.c:610
-msgid "reduced"
-msgstr ""
+#: ../vector/v.generalize/main.c:611
+#, c-format
+msgid "Number of vertices for selected features changed from %d to %d (%d%% remaining)"
+msgstr "Nombre de sommets pour les entités sélectionnés est passé de %d à %d (%d%% restant)"
 
 #: ../vector/v.generalize/misc.c:163
 #, c-format
@@ -39192,7 +39211,7 @@ msgid "Unable to close attribute table. The DBMI driver did not accept all attri
 msgstr ""
 
 #: ../vector/v.in.ascii/main.c:578 ../vector/v.in.ascii/main.c:581
-#: ../vector/v.in.ogr/main.c:1953
+#: ../vector/v.in.ogr/main.c:1955
 msgid "Import failed"
 msgstr ""
 
@@ -39292,7 +39311,7 @@ msgstr ""
 
 #: ../vector/v.in.db/main.c:90
 msgid "Must refer to an integer column"
-msgstr ""
+msgstr "Doit se référer à une colonne d'entier"
 
 #: ../vector/v.in.db/main.c:100
 msgid "Use imported table as attribute table for new map"
@@ -39448,12 +39467,12 @@ msgstr ""
 #: ../vector/v.in.dxf/write_vect.c:247
 #, c-format
 msgid "Unable to add database link for vector map <%s>"
-msgstr ""
+msgstr "Impossible d'ajouter un lien vers la base de données pour la carte vectorielle <%s>"
 
 #: ../vector/v.in.lidar/attributes.c:129
 #, c-format
 msgid "Unable open database <%s> by driver <%s>"
-msgstr ""
+msgstr "Impossible d'ouvrir la base de données <%s> par le pilote <%s>"
 
 #: ../vector/v.in.lidar/main.c:47 ../vector/v.in.pdal/main.cpp:60
 #, c-format
@@ -39589,11 +39608,11 @@ msgid "Storing generated point IDs as categories in the layer <%d>, consequently
 msgstr ""
 
 #: ../vector/v.in.lidar/main.c:457 ../vector/v.in.ogr/main.c:724
-#: ../vector/v.in.ogr/main.c:2170
+#: ../vector/v.in.ogr/main.c:2172
 msgid "Select either the current region flag or the spatial option, not both"
 msgstr ""
 
-#: ../vector/v.in.lidar/main.c:487 ../vector/v.in.ogr/main.c:2198
+#: ../vector/v.in.lidar/main.c:487 ../vector/v.in.ogr/main.c:2200
 msgid "4 parameters required for 'spatial' parameter"
 msgstr ""
 
@@ -39919,7 +39938,7 @@ msgstr ""
 msgid "When creating a new project, the current region can not be used as spatial filter, disabling"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:751 ../vector/v.in.ogr/main.c:2056
+#: ../vector/v.in.ogr/main.c:751 ../vector/v.in.ogr/main.c:2058
 #, c-format
 msgid "Error setting attribute filter '%s'"
 msgstr ""
@@ -40004,199 +40023,193 @@ msgstr ""
 msgid "Cannot insert new row for input layer <%s>: %s"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1373
+#: ../vector/v.in.ogr/main.c:1374
 #, c-format
-msgid "%d %s without geometry in input layer <%s> skipped"
-msgstr ""
+msgid "%d feature without geometry in input layer <%s> skipped"
+msgid_plural "%d features without geometry in input layer <%s> skipped"
+msgstr[0] "%d entité sans géométrie dans la couche d'entrée <%s> ignoré"
+msgstr[1] "%d entités sans géométrie dans la couche d'entrée <%s> ignoré"
 
-#: ../vector/v.in.ogr/main.c:1374
-msgid "feature"
-msgstr ""
-
-#: ../vector/v.in.ogr/main.c:1374
-msgid "features"
-msgstr ""
-
-#: ../vector/v.in.ogr/main.c:1397
+#: ../vector/v.in.ogr/main.c:1399
 #, c-format
 msgid "Unable to drop table: '%s'"
-msgstr ""
+msgstr "Impossible de supprimer la table : '%s'"
 
-#: ../vector/v.in.ogr/main.c:1438
+#: ../vector/v.in.ogr/main.c:1440
 msgid "Cleaning polygons"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1442 ../vector/v.patch/main.c:529
+#: ../vector/v.in.ogr/main.c:1444 ../vector/v.patch/main.c:529
 #, c-format
 msgid "Snapping boundaries (threshold = %.3e)..."
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1484 ../vector/v.overlay/area_area.c:130
+#: ../vector/v.in.ogr/main.c:1486 ../vector/v.overlay/area_area.c:130
 #: ../vector/v.patch/main.c:559
 msgid "Cleaning boundaries at nodes..."
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1490 ../vector/v.patch/main.c:566
+#: ../vector/v.in.ogr/main.c:1492 ../vector/v.patch/main.c:566
 msgid "Merging boundaries..."
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1496
+#: ../vector/v.in.ogr/main.c:1498
 msgid "Changing boundary dangles to lines..."
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1509
+#: ../vector/v.in.ogr/main.c:1511
 msgid "Changing boundary bridges to lines..."
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1558
+#: ../vector/v.in.ogr/main.c:1560
 #, c-format
 msgid "Finding centroids for OGR layer <%s>..."
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1597
+#: ../vector/v.in.ogr/main.c:1599
 #, c-format
 msgid "The order of features in input layer <%s> has changed"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1628 ../vector/v.overlay/area_area.c:294
+#: ../vector/v.in.ogr/main.c:1630 ../vector/v.overlay/area_area.c:294
 msgid "Writing centroids..."
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1674
+#: ../vector/v.in.ogr/main.c:1676
 #, c-format
 msgid "%d input polygons\n"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1675
+#: ../vector/v.in.ogr/main.c:1677
 #, c-format
 msgid "%d input polygons"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1678
+#: ../vector/v.in.ogr/main.c:1680
 #, c-format
 msgid "Total area: %G (%d areas)\n"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1680
+#: ../vector/v.in.ogr/main.c:1682
 #, c-format
 msgid "Total area: %G (%d areas)"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1683
+#: ../vector/v.in.ogr/main.c:1685
 #, c-format
 msgid "Overlapping area: %G (%d areas)\n"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1686
+#: ../vector/v.in.ogr/main.c:1688
 #, c-format
 msgid "Overlapping area: %G (%d areas)"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1691
+#: ../vector/v.in.ogr/main.c:1693
 #, c-format
 msgid "Area without category: %G (%d areas)\n"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1694
+#: ../vector/v.in.ogr/main.c:1696
 #, c-format
 msgid "Area without category: %G (%d areas)"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1820
+#: ../vector/v.in.ogr/main.c:1822
 msgid "The output contains topological errors:"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1824
+#: ../vector/v.in.ogr/main.c:1826
 #, c-format
 msgid "Unable to calculate a centroid for %d areas"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1830
+#: ../vector/v.in.ogr/main.c:1832
 #, c-format
 msgid "Number of incorrect boundaries: %d"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1836
-#, c-format
+#: ../vector/v.in.ogr/main.c:1838
+#, fuzzy, c-format
 msgid "Number of centroids outside area: %d"
-msgstr ""
+msgstr "Nombre de centroïdes en dehors de surfaces: %d"
 
-#: ../vector/v.in.ogr/main.c:1842
-#, c-format
+#: ../vector/v.in.ogr/main.c:1844
+#, fuzzy, c-format
 msgid "Number of duplicate centroids: %d"
-msgstr ""
+msgstr "Nombre de centroïdes en double : %d"
 
-#: ../vector/v.in.ogr/main.c:1846 ../vector/v.in.ogr/main.c:1942
+#: ../vector/v.in.ogr/main.c:1848 ../vector/v.in.ogr/main.c:1944
 msgid "The input could be cleaned by snapping vertices to each other."
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1851 ../vector/v.in.ogr/main.c:1898
-#: ../vector/v.in.ogr/main.c:1935 ../vector/v.in.ogr/main.c:1945
+#: ../vector/v.in.ogr/main.c:1853 ../vector/v.in.ogr/main.c:1900
+#: ../vector/v.in.ogr/main.c:1937 ../vector/v.in.ogr/main.c:1947
 #, c-format
 msgid "Estimated range of snapping threshold: [%g, %g]"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1864 ../vector/v.in.ogr/main.c:1875
-#: ../vector/v.in.ogr/main.c:1911
+#: ../vector/v.in.ogr/main.c:1866 ../vector/v.in.ogr/main.c:1877
+#: ../vector/v.in.ogr/main.c:1913
 #, c-format
 msgid "Try to import again, snapping with %g: 'snap=%g'"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1868 ../vector/v.in.ogr/main.c:1904
+#: ../vector/v.in.ogr/main.c:1870 ../vector/v.in.ogr/main.c:1906
 #, c-format
 msgid "Try to import again, snapping with at least %g: 'snap=%g'"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1880 ../vector/v.in.ogr/main.c:1916
+#: ../vector/v.in.ogr/main.c:1882 ../vector/v.in.ogr/main.c:1918
 msgid "Manual cleaning may be needed."
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1884
+#: ../vector/v.in.ogr/main.c:1886
 #, c-format
 msgid "%d areas represent multiple (overlapping) features, because polygons overlap in input layer(s). Such areas are linked to more than 1 row in attribute table. The number of features for those areas is stored as category in layer %d"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1893
+#: ../vector/v.in.ogr/main.c:1895
 msgid "If overlapping is not desired, the input data can be cleaned by snapping vertices to each other."
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1923
+#: ../vector/v.in.ogr/main.c:1925
 #, c-format
 msgid "%d input polygons got lost during import."
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1928
+#: ../vector/v.in.ogr/main.c:1930
 #, c-format
 msgid "%d additional areas where created during import."
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1933
+#: ../vector/v.in.ogr/main.c:1935
 #, c-format
 msgid "The snapping threshold %g might be too large."
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1938
+#: ../vector/v.in.ogr/main.c:1940
 msgid "Try to reduce the snapping threshold or clean the output manually."
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1989
+#: ../vector/v.in.ogr/main.c:1991
 msgid "Input data contains 3D features. Created vector is 2D only, disable -2 flag to import 3D vector."
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:2009
+#: ../vector/v.in.ogr/main.c:2011
 #, c-format
 msgid "Using GDAL 2.2+ style interleaved reading for GDAL version %d.%d.%d"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:2201
+#: ../vector/v.in.ogr/main.c:2203
 msgid "xmin is larger than xmax in 'spatial' parameters"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:2204
+#: ../vector/v.in.ogr/main.c:2206
 msgid "ymin is larger than ymax in 'spatial' parameters"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:2224
+#: ../vector/v.in.ogr/main.c:2226
 #, c-format
 msgid "The spatial filter does not overlap with OGR layer <%s>. Nothing to import."
 msgstr ""
@@ -40293,9 +40306,8 @@ msgid "Print data history instead of info"
 msgstr "Afficher l'historique des données à la place des informations générales"
 
 #: ../vector/v.info/parse.c:33
-#, fuzzy
 msgid "Print only metadata info"
-msgstr "Afficher le nom du cadre actuel et sortir"
+msgstr "Afficher uniquement les métadonnées"
 
 #: ../vector/v.info/parse.c:38
 msgid "Print only region info"
@@ -40303,7 +40315,7 @@ msgstr "Afficher les informations de région seulement"
 
 #: ../vector/v.info/parse.c:43
 msgid "Print only topology info"
-msgstr ""
+msgstr "Afficher uniquement les informations sur la topologie"
 
 #: ../vector/v.info/print.c:32 ../vector/v.info/print.c:34
 #, c-format
@@ -40757,12 +40769,12 @@ msgstr "Valeur maximum dans la couche de sortie : %e"
 #: ../vector/v.label.sa/font.c:54
 #, c-format
 msgid "%s: Unable to read font definition file; use the default"
-msgstr ""
+msgstr "%s: Impossible de lire le fichier de définition de police, utilisation de celle par défaut"
 
 #: ../vector/v.label.sa/font.c:60
 #, c-format
 msgid "%s: No font definition file"
-msgstr ""
+msgstr "%s: Aucun fichier de définition de police"
 
 #: ../vector/v.label.sa/labels.c:68
 #, c-format
@@ -42793,7 +42805,7 @@ msgstr ""
 
 #: ../vector/v.net/args.c:83
 msgid "Name of input file"
-msgstr ""
+msgstr "Nom du fichier en entrée"
 
 #: ../vector/v.net/args.c:85
 msgid "Required for operation 'arcs' ('-' for standard input)"
@@ -42970,7 +42982,7 @@ msgstr ""
 #: ../vector/v.normal/main.c:190
 #, c-format
 msgid "Number of points: %d"
-msgstr ""
+msgstr "Nombre de points: %d"
 
 #: ../vector/v.normal/main.c:196
 msgid "Too small sample"
@@ -43624,7 +43636,7 @@ msgstr ""
 #: ../vector/v.out.ogr/main.c:558
 #, c-format
 msgid "Unable to open OGR data source '%s'"
-msgstr ""
+msgstr "Impossible d'ouvrir la source de données OGR '%s'"
 
 #: ../vector/v.out.ogr/main.c:573
 #, c-format
@@ -43634,7 +43646,7 @@ msgstr ""
 #: ../vector/v.out.ogr/main.c:578
 #, c-format
 msgid "OGR layer <%s> already exists and will be overwritten"
-msgstr ""
+msgstr "La couche OGR <%s> existe déjà et sera écrasée"
 
 #: ../vector/v.out.ogr/main.c:586
 #, c-format
@@ -44436,7 +44448,7 @@ msgstr ""
 #: ../vector/v.patch/main.c:592
 #, c-format
 msgid "Building topology for vector map <%s>..."
-msgstr ""
+msgstr "Construction de la topologie pour la carte vectorielle <%s>..."
 
 #: ../vector/v.patch/main.c:598
 msgid "Intersections at borders will have to be snapped"
@@ -45246,7 +45258,7 @@ msgstr ""
 msgid "Do not skip features without category"
 msgstr ""
 
-#: ../vector/v.select/copy_tabs.c:68
+#: ../vector/v.select/copy_tabs.c:69
 #, c-format
 msgid "Unable to copy table for layer %d"
 msgstr ""
@@ -45411,7 +45423,7 @@ msgstr ""
 #: ../vector/v.support/main.c:189
 #, c-format
 msgid "Unable to open history file for vector map <%s>"
-msgstr ""
+msgstr "Impossible d'ouvrir le fichier d'historique pour la couche vectorielle <%s>"
 
 #: ../vector/v.surf.bspline/crosscorr.c:82
 #, c-format
@@ -45751,8 +45763,8 @@ msgstr "Le calcul risque de durer trop longtemps - nous vous suggérons de chois
 #: ../vector/v.vol.rst/main.c:713 ../vector/v.vol.rst/main.c:736
 #: ../vector/v.vol.rst/main.c:759 ../vector/v.vol.rst/main.c:782
 #: ../vector/v.vol.rst/user2.c:112 ../vector/v.vol.rst/user2.c:222
-#: ../vector/v.vol.rst/user3.c:264 ../vector/v.vol.rst/user3.c:270
-#: ../vector/v.vol.rst/user3.c:276
+#: ../vector/v.vol.rst/user3.c:265 ../vector/v.vol.rst/user3.c:271
+#: ../vector/v.vol.rst/user3.c:277
 #, c-format
 msgid "Not enough memory for %s"
 msgstr ""
@@ -46167,41 +46179,41 @@ msgstr ""
 msgid "Unable to fetch record"
 msgstr ""
 
-#: ../vector/v.to.db/report.c:32
+#: ../vector/v.to.db/report.c:40
 msgid "No totals for selected option"
-msgstr ""
-
-#: ../vector/v.to.db/report.c:520
-#, c-format
-msgid "%d categories read from vector map (layer %d)"
-msgstr ""
-
-#: ../vector/v.to.db/report.c:524
-#, c-format
-msgid "%d records selected from table (layer %d)"
-msgstr ""
-
-#: ../vector/v.to.db/report.c:527
-#, c-format
-msgid "%d categories read from vector map exist in selection from table"
-msgstr ""
-
-#: ../vector/v.to.db/report.c:531
-#, c-format
-msgid "%d categories read from vector map don't exist in selection from table"
 msgstr ""
 
 #: ../vector/v.to.db/report.c:534
 #, c-format
+msgid "%d categories read from vector map (layer %d)"
+msgstr ""
+
+#: ../vector/v.to.db/report.c:538
+#, c-format
+msgid "%d records selected from table (layer %d)"
+msgstr ""
+
+#: ../vector/v.to.db/report.c:541
+#, c-format
+msgid "%d categories read from vector map exist in selection from table"
+msgstr ""
+
+#: ../vector/v.to.db/report.c:545
+#, c-format
+msgid "%d categories read from vector map don't exist in selection from table"
+msgstr ""
+
+#: ../vector/v.to.db/report.c:548
+#, c-format
 msgid "%d records updated/inserted (layer %d)"
 msgstr ""
 
-#: ../vector/v.to.db/report.c:537
+#: ../vector/v.to.db/report.c:551
 #, c-format
 msgid "%d update/insert errors (layer %d)"
 msgstr ""
 
-#: ../vector/v.to.db/report.c:540
+#: ../vector/v.to.db/report.c:554
 #, c-format
 msgid "%d categories with more points (coordinates not loaded)"
 msgstr ""
@@ -46538,7 +46550,7 @@ msgstr ""
 
 #: ../vector/v.transform/main.c:105
 msgid "Do not build topology"
-msgstr ""
+msgstr "Ne pas construire la topologie"
 
 #: ../vector/v.transform/main.c:110 ../vector/v.transform/main.c:121
 #: ../vector/v.transform/main.c:130 ../vector/v.transform/main.c:139
@@ -47008,7 +47020,7 @@ msgstr "Impossible d'insérer %lf,%lf,%lf,%lf,%lf a=%d"
 
 #: ../vector/v.vol.rst/user1.c:270
 msgid "Strip exists with insufficient data"
-msgstr ""
+msgstr "Les données de la bande sont insuffisantes"
 
 #: ../vector/v.vol.rst/user1.c:280
 msgid "Zero segments!"
@@ -47041,7 +47053,7 @@ msgstr ""
 
 #: ../vector/v.vol.rst/user1.c:390
 msgid "Bitmap mask created"
-msgstr ""
+msgstr "Masque bitmap créé"
 
 #: ../vector/v.vol.rst/user1.c:423 ../vector/v.vol.rst/user1.c:456
 #: ../vector/v.vol.rst/user1.c:511 ../vector/v.vol.rst/user1.c:565
@@ -47056,7 +47068,7 @@ msgstr ""
 #: ../vector/v.vol.rst/user1.c:770
 #, c-format
 msgid "Unable to open %s for writing"
-msgstr ""
+msgstr "Impossible d'ouvrir %s en écriture"
 
 #: ../vector/v.vol.rst/user1.c:474 ../vector/v.vol.rst/user1.c:529
 #: ../vector/v.vol.rst/user1.c:583 ../vector/v.vol.rst/user1.c:637
@@ -47094,14 +47106,14 @@ msgstr ""
 msgid "Cannot allocate w"
 msgstr ""
 
-#: ../vector/v.vol.rst/user3.c:542
+#: ../vector/v.vol.rst/user3.c:543
 msgid "Secpar_loop failed"
 msgstr ""
 
-#: ../vector/v.vol.rst/user3.c:580 ../vector/v.vol.rst/user3.c:589
-#: ../vector/v.vol.rst/user3.c:598 ../vector/v.vol.rst/user3.c:607
-#: ../vector/v.vol.rst/user3.c:616 ../vector/v.vol.rst/user3.c:625
-#: ../vector/v.vol.rst/user3.c:634 ../vector/v.vol.rst/user3.c:643
+#: ../vector/v.vol.rst/user3.c:581 ../vector/v.vol.rst/user3.c:590
+#: ../vector/v.vol.rst/user3.c:599 ../vector/v.vol.rst/user3.c:608
+#: ../vector/v.vol.rst/user3.c:617 ../vector/v.vol.rst/user3.c:626
+#: ../vector/v.vol.rst/user3.c:635 ../vector/v.vol.rst/user3.c:644
 msgid "Not enough disk space--cannot write files"
 msgstr ""
 
@@ -47626,6 +47638,31 @@ msgstr "Visionner des images BMP avec le pilote PNG."
 #: ../visualization/ximgview/main.c:298
 msgid "Image file"
 msgstr ""
+
+#, fuzzy, c-format
+#~ msgid "Test %s."
+#~ msgstr "Test %s."
+
+#~ msgid "read "
+#~ msgstr "lecture"
+
+#~ msgid "Everyone"
+#~ msgstr "Tout le monde"
+
+#~ msgid "Only you"
+#~ msgstr "Seulement vous"
+
+#~ msgid "now"
+#~ msgstr "maintenant"
+
+#~ msgid "[DEPRECATED] Print projection information in PROJ.4 format. This flag is obsolete and will be removed in a future release. Use format=proj4 instead."
+#~ msgstr "[OBSOLÈTE] Afficher l'information de projection au format PROJ.4. Cette option est obsolète et sera retirée dans une prochaine version. Utiliser plutôt format=proj4."
+
+#~ msgid "[DEPRECATED] Print projection information in WKT format. This flag is obsolete and will be removed in a future release. Use format=wkt instead."
+#~ msgstr "[OBSOLÈTE] Afficher l'information de projection au format WKT. Cette option est obsolète et sera retirée dans une prochaine version. Utiliser plutôt format=wkt."
+
+#~ msgid "unset"
+#~ msgstr "non défini"
 
 #~ msgid ""
 #~ "\n"
@@ -52144,9 +52181,6 @@ msgstr ""
 #~ msgid "Print available layer"
 #~ msgstr "Lister les couches disponibles et quitter"
 
-#~ msgid "Print input map's bounds in the current projection and exit (shell style)"
-#~ msgstr "Afficher les limites de la carte en entrée dans la projection actuelle et sortir (style shell)"
-
 #, fuzzy
 #~ msgid "Print list of biogeographic regions"
 #~ msgstr "Limite est de la région géographique (bord extérieur)"
@@ -52194,9 +52228,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Print projection info in WKT format"
 #~ msgstr "Afficher l'information de projection au format WKT"
-
-#~ msgid "Print projection information in PROJ.4 format"
-#~ msgstr "Afficher l'information de projection au format PROJ.4"
 
 #, fuzzy
 #~ msgid "Print raster data to be imported and exit"
@@ -54368,3 +54399,18 @@ msgstr ""
 #, fuzzy
 #~ msgid "width of the boxplot median line"
 #~ msgstr "Format des fichiers en sortie"
+
+msgctxt "1"
+msgid "radiance"
+msgstr "radiance"
+
+msgctxt "2"
+msgid "radiance"
+msgstr "luminance énergétique"
+
+msgctxt "1"
+msgid "reflectance"
+msgstr "réflectance"
+
+msgid "dynamic labeling"
+msgstr "étiquetage dynamique"

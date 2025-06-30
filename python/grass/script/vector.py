@@ -380,6 +380,9 @@ def vector_what(
     :param multiple: find multiple features within threshold distance
     :param env: environment
 
+        .. deprecated:: 8.5.0
+            Parameter ``encoding`` is deprecated.
+
     :return: parsed list
     """
     if not env:
@@ -449,9 +452,6 @@ def vector_what(
             orderedDict = dict
 
     kwargs = {}
-    if encoding:
-        kwargs["encoding"] = encoding
-
     kwargs["object_pairs_hook"] = orderedDict
 
     try:

@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 {
     int i;
     int print_flag = 0;
-    int flat_flag;
+    int flat_flag = 0;
     double x, xs, ys, zs;
     int ival;
     int row_flag = 0, col_flag = 0;
@@ -144,13 +144,16 @@ int main(int argc, char *argv[])
 
     flag.gprint = G_define_flag();
     flag.gprint->key = 'g';
-    flag.gprint->description = _("Print in shell script style");
+    flag.gprint->label = _("Print in shell script style [deprecated]");
+    flag.gprint->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=shell instead.");
     flag.gprint->guisection = _("Print");
 
     flag.flprint = G_define_flag();
     flag.flprint->key = 'f';
-    flag.flprint->description =
-        _("Print in shell script style, but in one line (flat)");
+    flag.flprint->description = _("Print in one line (flat) in shell script "
+                                  "style (ignores format parameter)");
     flag.flprint->guisection = _("Print");
 
     flag.res_set = G_define_flag();
@@ -388,34 +391,42 @@ int main(int argc, char *argv[])
                                   "json;JSON (JavaScript Object Notation);");
     parm.format->guisection = _("Print");
 
-    G_option_required(flag.dflt, flag.savedefault, flag.print, flag.lprint,
-                      flag.eprint, flag.center, flag.gmt_style, flag.wms_style,
-                      flag.dist_res, flag.nangle, flag.z, flag.bbox,
-                      flag.gprint, flag.res_set, flag.noupdate, parm.region,
-                      parm.raster, parm.raster3d, parm.vect, parm.north,
-                      parm.south, parm.east, parm.west, parm.top, parm.bottom,
-                      parm.rows, parm.cols, parm.res, parm.res3, parm.nsres,
-                      parm.ewres, parm.nsres3, parm.ewres3, parm.tbres,
-                      parm.zoom, parm.align, parm.save, parm.grow, NULL);
+    G_option_required(
+        flag.dflt, flag.savedefault, flag.print, flag.lprint, flag.eprint,
+        flag.center, flag.gmt_style, flag.wms_style, flag.dist_res, flag.nangle,
+        flag.z, flag.bbox, flag.gprint, flag.res_set, flag.noupdate,
+        flag.flprint, parm.region, parm.raster, parm.raster3d, parm.vect,
+        parm.north, parm.south, parm.east, parm.west, parm.top, parm.bottom,
+        parm.rows, parm.cols, parm.res, parm.res3, parm.nsres, parm.ewres,
+        parm.nsres3, parm.ewres3, parm.tbres, parm.zoom, parm.align, parm.save,
+        parm.grow, NULL);
     G_option_exclusive(flag.noupdate, flag.force, NULL);
     G_option_requires(flag.noupdate, flag.savedefault, flag.print, flag.lprint,
                       flag.eprint, flag.center, flag.gmt_style, flag.wms_style,
                       flag.dist_res, flag.nangle, flag.z, flag.bbox,
-                      flag.gprint, parm.save, NULL);
-    G_option_requires(flag.flprint, flag.gprint, NULL);
+                      flag.gprint, flag.flprint, parm.save, NULL);
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
     G_get_default_window(&window);
 
-    flat_flag = flag.flprint->answer;
+    if (flag.flprint->answer) {
+        print_flag |= PRINT_SH;
+        flat_flag = 1;
+        parm.format->answer = "shell";
+    }
 
     if (flag.print->answer)
         print_flag |= PRINT_REG;
 
-    if (flag.gprint->answer)
+    if (flag.gprint->answer) {
         print_flag |= PRINT_SH;
+
+        G_verbose_message(
+            _("Flag 'g' is deprecated and will be removed in a future "
+              "release. Please use format=shell instead."));
+    }
 
     if (flag.lprint->answer)
         print_flag |= PRINT_LL;

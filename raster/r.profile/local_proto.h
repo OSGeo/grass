@@ -10,12 +10,12 @@ enum OutputFormat { PLAIN, JSON };
 
 /* main.c */
 int do_profile(double, double, double, double, int, double, int, int, FILE *,
-               char *, const char *, double, enum OutputFormat, char *,
-               JSON_Array *);
+               char *, const char *, double, enum OutputFormat, JSON_Array *,
+               ColorFormat);
 
 /* read_rast.c */
 int read_rast(double, double, double, int, int, RASTER_MAP_TYPE, FILE *, char *,
-              enum OutputFormat, char *, JSON_Array *);
+              enum OutputFormat, JSON_Array *, ColorFormat);
 
 /* input.c */
 int input(char *, char *, char *, char *, char *, FILE *);
