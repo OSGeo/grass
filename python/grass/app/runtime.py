@@ -17,10 +17,46 @@ import shutil
 import subprocess
 import sys
 
+import grass.app.resource_paths
+
 # Get the system name
 WINDOWS = sys.platform.startswith("win")
 CYGWIN = sys.platform.startswith("cygwin")
 MACOS = sys.platform.startswith("darwin")
+
+
+version = grass.app.resource_paths.GRASS_VERSION
+version_major = grass.app.resource_paths.GRASS_VERSION_MAJOR
+version_minor = grass.app.resource_paths.GRASS_VERSION_MINOR
+ld_library_path_var = grass.app.resource_paths.LD_LIBRARY_PATH_VAR
+grass_exe_name = grass.app.resource_paths.GRASS_EXE_NAME
+grass_version_git = grass.app.resource_paths.GRASS_VERSION_GIT
+
+
+class RuntimePaths:
+    def __init__(self, env=os.environ):
+        self.env = env
+
+    def __getattr__(self, name):
+        if name == "gisbase":
+            return self.__get_dir("GISBASE")
+        if name == "prefix":
+            return self.__get_dir("GRASS_PREFIX")
+        if name == "config_projshare":
+            return self.env.get(
+                "GRASS_PROJSHARE", grass.app.resource_paths.CONFIG_PROJSHARE
+            )
+
+    def __get_dir(self, env_var):
+        if env_var in self.env and len(self.env[env_var]) > 0:
+            res = os.path.normpath(self.env[env_var])
+        else:
+            path = getattr(__import__("grass").app.resource_paths, env_var)
+            res = os.path.normpath(
+                os.path.join(grass.app.resource_paths.GRASS_PREFIX, path)
+            )
+            self.env[env_var] = res
+        return res
 
 
 def get_grass_config_dir(major_version, minor_version, env):
