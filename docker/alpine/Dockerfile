@@ -1,4 +1,4 @@
-FROM alpine:3.21@sha256:a8560b36e8b8210634f77d9f7f9efd7ffa463e380b75e2e74aff4511df3ef88c as common
+FROM alpine:3.21@sha256:a8560b36e8b8210634f77d9f7f9efd7ffa463e380b75e2e74aff4511df3ef88c AS common
 
 # Based on:
 # https://github.com/mundialis/docker-grass-gis/blob/master/Dockerfile
@@ -229,4 +229,8 @@ RUN ln -sf /usr/local/grass /usr/local/grass85; \
 WORKDIR /grassdb
 VOLUME /grassdb
 
-CMD ["$GRASSBIN", "--version"]
+CMD grass --version \
+    && printf "\nUsage:\n" \
+    && printf " - Shell: docker run -it [IMAGE] /bin/bash\n" \
+    && printf " - GRASS: docker run [IMAGE] grass [...args]\n" \
+    && printf "\nSee https://github.com/OSGeo/grass/blob/main/docker/README.md for more information.\n"
