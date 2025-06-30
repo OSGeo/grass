@@ -704,11 +704,11 @@ def test_with_context_managers_session_env(tmpdir):
         # TemporaryMapsetSession does not modify like the others, but creates its own env.
         tools = Tools(session=mapset_session)
         tools.r_random_surface(output="surface", seed=42)
-        with gs.MaskManager(env=mapset_session.env):
-            tools.r_mask(raster="surface")
-            assert tools.r_mask_status(format="json")["present"]
-            with gs.RegionManager(rows=100, cols=100, env=mapset_session.env):
-                assert tools.g_region(flags="p", format="json")["rows"] == 100
+        with gs.RegionManager(rows=100, cols=100, env=mapset_session.env):
+            assert tools.g_region(flags="p", format="json")["rows"] == 100
+            with gs.MaskManager(env=mapset_session.env):
+                tools.r_mask(raster="surface")
+                assert tools.r_mask_status(format="json")["present"]
 
 
 def test_with_context_managers_session_env_one_block(tmpdir):
@@ -717,8 +717,8 @@ def test_with_context_managers_session_env_one_block(tmpdir):
     with (
         gs.setup.init(project, env=os.environ.copy()) as main_session,
         TemporaryMapsetSession(env=main_session.env) as mapset_session,
-        gs.MaskManager(env=mapset_session.env),
         gs.RegionManager(rows=100, cols=100, env=mapset_session.env),
+        gs.MaskManager(env=mapset_session.env),
         Tools(session=mapset_session) as tools,
     ):
         tools.r_random_surface(output="surface", seed=42)
