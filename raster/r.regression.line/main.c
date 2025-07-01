@@ -201,15 +201,64 @@ int main(int argc, char *argv[])
         break;
 
     case JSON:
-        G_json_object_set_number(root_object, "a", A);
-        G_json_object_set_number(root_object, "b", B);
-        G_json_object_set_number(root_object, "R", R);
+        if (isfinite(A)) {
+            G_json_object_set_number(root_object, "a", A);
+        }
+        else {
+            G_json_object_set_null(root_object, "a");
+        }
+
+        if (isfinite(B)) {
+            G_json_object_set_number(root_object, "b", B);
+        }
+        else {
+            G_json_object_set_null(root_object, "b");
+        }
+
+        if (isfinite(R)) {
+            G_json_object_set_number(root_object, "R", R);
+        }
+        else {
+            G_json_object_set_null(root_object, "R");
+        }
+
         G_json_object_set_number(root_object, "N", count);
-        G_json_object_set_number(root_object, "F", F);
-        G_json_object_set_number(root_object, "x_mean", meanX);
-        G_json_object_set_number(root_object, "x_stddev", sdX);
-        G_json_object_set_number(root_object, "y_mean", meanY);
-        G_json_object_set_number(root_object, "y_stddev", sdY);
+
+        if (isfinite(F)) {
+            G_json_object_set_number(root_object, "F", F);
+        }
+        else {
+            G_json_object_set_null(root_object, "F");
+        }
+
+        if (isfinite(meanX)) {
+            G_json_object_set_number(root_object, "x_mean", meanX);
+        }
+        else {
+            G_json_object_set_null(root_object, "x_mean");
+        }
+
+        if (isfinite(sdX)) {
+            G_json_object_set_number(root_object, "x_stddev", sdX);
+        }
+        else {
+            G_json_object_set_null(root_object, "x_stddev");
+        }
+
+        if (isfinite(meanY)) {
+            G_json_object_set_number(root_object, "y_mean", meanY);
+        }
+        else {
+            G_json_object_set_null(root_object, "y_mean");
+        }
+
+        if (isfinite(sdY)) {
+            G_json_object_set_number(root_object, "y_stddev", sdY);
+        }
+        else {
+            G_json_object_set_null(root_object, "y_stddev");
+        }
+
         break;
     }
 
