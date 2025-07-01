@@ -770,9 +770,7 @@ Use the following header in your source code.
 #
 # COPYRIGHT: (C) 2024 by John Doe and the GRASS Development Team
 #
-#            This program is free software under the GNU General Public
-#            License (>=v2). Read the file COPYING that comes with GRASS
-#            for details.
+# SPDX-License-Identifier: GPL-2.0-or-later
 ##############################################################################
 ```
 
@@ -964,8 +962,7 @@ Classes:
 
 (C) 2024 by the GRASS Development Team
 
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author First Author <first somewhere.com>
 @author Second Author <second somewhere.com>
@@ -1083,9 +1080,7 @@ original work remains, it must be properly cited.
  * PURPOSE:      Provide short description of module here...
  * COPYRIGHT:    (C) 2010 by John Doe, and the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the COPYING file that comes with GRASS
- *               for details.
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 ```
