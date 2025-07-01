@@ -309,16 +309,18 @@ int main(int argc, char *argv[])
     DCELL d_Rah_dry = 0.0, d_Roh_dry = 0.0;
     DCELL d_t0dem_dry = 0.0, d_t0dem_wet = 0.0;
 
-    /* Always read t0dem, z0m, and eact into the arrays */
-    for (row = 0; row < nrows; row++) {
-        Rast_get_d_row(infd_t0dem, inrast_t0dem, row);
-        Rast_get_d_row(infd_z0m, inrast_z0m, row);
-        Rast_get_d_row(infd_eact, inrast_eact, row);
+    /* Read t0dem, z0m, and eact into the arrays when doing manual selection */
+    if (!flag2->answer) {
+        for (row = 0; row < nrows; row++) {
+            Rast_get_d_row(infd_t0dem, inrast_t0dem, row);
+            Rast_get_d_row(infd_z0m, inrast_z0m, row);
+            Rast_get_d_row(infd_eact, inrast_eact, row);
 
-        for (col = 0; col < ncols; col++) {
-            d_t0dem[row][col] = ((DCELL *)inrast_t0dem)[col];
-            d_z0m[row][col] = ((DCELL *)inrast_z0m)[col];
-            d_eact[row][col] = ((DCELL *)inrast_eact)[col];
+            for (col = 0; col < ncols; col++) {
+                d_t0dem[row][col] = ((DCELL *)inrast_t0dem)[col];
+                d_z0m[row][col] = ((DCELL *)inrast_z0m)[col];
+                d_eact[row][col] = ((DCELL *)inrast_eact)[col];
+            }
         }
     }
 
