@@ -31,44 +31,48 @@ def test_find_raster(session):
     found = gs.read_command(
         "g.findfile",
         element="raster",
-        name="test_raster",
+        file="test_raster",
+        flags="n",
         errors="ignore",
         env=session.env,
     )
-    result = gs.parse_key_val(found, env=session.env)
+    result = gs.parse_key_val(found)
     assert result["name"] == "test_raster"
-    assert result["file"] == path / "cell" / "test_raster"
+    assert result["file"] == str(path / "cell" / "test_raster")
 
     found = gs.read_command(
         "g.findfile",
         element="cell",
-        name="test_raster",
+        file="test_raster",
+        flags="n",
         errors="ignore",
         env=session.env,
     )
-    result = gs.parse_key_val(found, env=session.env)
+    result = gs.parse_key_val(found)
     assert result["name"] == "test_raster"
-    assert result["file"] == path / "cell" / "test_raster"
+    assert result["file"] == str(path / "cell" / "test_raster")
 
     found = gs.read_command(
         "g.findfile",
         element="cats",
-        name="test_raster",
+        file="test_raster",
+        flags="n",
         errors="ignore",
         env=session.env,
     )
-    result = gs.parse_key_val(found, env=session.env)
+    result = gs.parse_key_val(found)
     assert result["name"] == "test_raster"
-    assert result["file"] == path / "cats" / "test_raster"
+    assert result["file"] == str(path / "cats" / "test_raster")
 
     found = gs.read_command(
         "g.findfile",
         element="cell",
-        name="test_vector",
+        file="test_vector",
+        flags="n",
         errors="ignore",
         env=session.env,
     )
-    result = gs.parse_key_val(found, env=session.env)
+    result = gs.parse_key_val(found)
     assert result["name"] == ""
     assert result["file"] == ""
 
@@ -80,22 +84,24 @@ def test_find_vector(session):
     found = gs.read_command(
         "g.findfile",
         element="vector",
-        name="test_vector",
+        file="test_vector",
+        flags="n",
         errors="ignore",
         env=session.env,
     )
-    result = gs.parse_key_val(found, env=session.env)
+    result = gs.parse_key_val(found)
     assert result["name"] == "test_vector"
-    assert result["file"] == path / "vector" / "test_vector"
+    assert result["file"] == str(path / "vector" / "test_vector")
 
     found = gs.read_command(
         "g.findfile",
         element="vector",
-        name="test_raster",
+        file="test_raster",
+        flags="n",
         errors="ignore",
         env=session.env,
     )
-    result = gs.parse_key_val(found, env=session.env)
+    result = gs.parse_key_val(found)
     assert result["name"] == ""
     assert result["file"] == ""
 
@@ -106,34 +112,37 @@ def test_find_raster_3d(session):
     path = Path(gisenv["GISDBASE"]) / gisenv["LOCATION_NAME"] / gisenv["MAPSET"]
     found = gs.read_command(
         "g.findfile",
-        element="raster3d",
-        name="test_raster_3d",
+        element="raster_3d",
+        file="test_raster_3d",
+        flags="n",
         errors="ignore",
         env=session.env,
     )
-    result = gs.parse_key_val(found, env=session.env)
+    result = gs.parse_key_val(found)
     assert result["name"] == "test_raster_3d"
-    assert result["file"] == path / "grid3" / "test_raster_3d"
+    assert result["file"] == str(path / "grid3" / "test_raster_3d")
 
     found = gs.read_command(
         "g.findfile",
         element="grid3",
-        name="test_raster_3d",
+        file="test_raster_3d",
+        flags="n",
         errors="ignore",
         env=session.env,
     )
-    result = gs.parse_key_val(found, env=session.env)
+    result = gs.parse_key_val(found)
     assert result["name"] == "test_raster_3d"
-    assert result["file"] == path / "grid3" / "test_raster_3d"
+    assert result["file"] == str(path / "grid3" / "test_raster_3d")
 
     found = gs.read_command(
         "g.findfile",
         element="grid3",
-        name="test_raster",
+        file="test_raster",
+        flags="n",
         errors="ignore",
         env=session.env,
     )
-    result = gs.parse_key_val(found, env=session.env)
+    result = gs.parse_key_val(found)
     assert result["name"] == ""
     assert result["file"] == ""
 
@@ -145,32 +154,57 @@ def test_find_region(session):
     found = gs.read_command(
         "g.findfile",
         element="region",
-        name="test_region",
+        file="test_region",
+        flags="n",
         errors="ignore",
         env=session.env,
     )
-    result = gs.parse_key_val(found, env=session.env)
-    assert result["name"] == "test_raster_3d"
-    assert result["file"] == path / "windows" / "test_region"
+    result = gs.parse_key_val(found)
+    assert result["name"] == "test_region"
+    assert result["file"] == str(path / "windows" / "test_region")
 
     found = gs.read_command(
         "g.findfile",
         element="windows",
-        name="test_region",
+        file="test_region",
+        flags="n",
         errors="ignore",
         env=session.env,
     )
-    result = gs.parse_key_val(found, env=session.env)
+    result = gs.parse_key_val(found)
     assert result["name"] == "test_region"
-    assert result["file"] == path / "windows" / "test_region"
+    assert result["file"] == str(path / "windows" / "test_region")
 
     found = gs.read_command(
         "g.findfile",
-        element="grid3",
-        name="test_raster",
+        element="windows",
+        file="test_raster",
+        flags="n",
         errors="ignore",
         env=session.env,
     )
-    result = gs.parse_key_val(found, env=session.env)
+    result = gs.parse_key_val(found)
     assert result["name"] == ""
     assert result["file"] == ""
+
+
+def test_t_flag(session):
+    found = gs.run_command(
+        "g.findfile",
+        element="region",
+        file="test_region",
+        flags="t",
+        errors="status",
+        env=session.env,
+    )
+    assert found == 0
+
+    found = gs.run_command(
+        "g.findfile",
+        element="region",
+        file="test_raster",
+        flags="t",
+        errors="status",
+        env=session.env,
+    )
+    assert found == 1
