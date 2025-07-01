@@ -46,7 +46,7 @@ class Tools:
         provided, env is used to execute tools and session is ignored.
         However, session and env interaction may change in the future.
 
-        If overwrite is provided, a global overwrite is set for all the tools.
+        If overwrite is provided, a an overwrite is set for all the tools.
         When overwrite is set to False, individual tool calls can set overwrite
         to True. If overwrite is set in the session or env, it is used.
         Note that once overwrite is set to True globally, an individual tool call
@@ -121,10 +121,16 @@ class Tools:
         return env or self._original_env
 
     def run(self, name: str, /, **kwargs):
-        """Run a tool by specifying its name as a string and passing named arguments.
+        """Run a tool by specifying its name as a string and parameters.
 
-        :param name: name of the GRASS tool
-        :param kwargs: named tool arguments
+        The parameters tool are tool name as a string and parameters as keyword
+        arguments. The keyword arguments may include an argument *flags* which is a
+        string of one-character tool flags.
+
+        The function may perform additional processing on the parameters.
+
+        :param name: name of a GRASS tool
+        :param kwargs: tool parameters
         """
         # Object parameters are handled first before the conversion of the call to a
         # list of strings happens.
@@ -134,7 +140,7 @@ class Tools:
         # Get a fixed env parameter at at the beginning of each execution,
         # but repeat it every time in case the referenced environment is modified.
         args, popen_options = gs.popen_args_command(name, **kwargs)
-        # We approximate tool_kwargs as original kwargs.
+        # We approximate original kwargs with the possibly-modified kwargs.
         return self.run_cmd(
             args,
             tool_kwargs=kwargs,
@@ -147,18 +153,18 @@ class Tools:
         command: list[str],
         *,
         input: str | bytes | None = None,
-        tool_kwargs=None,
+        tool_kwargs: dict | None = None,
         **popen_options,
     ):
-        """Run a tool by passing a list of strings as the command.
+        """Run a tool by passing its name and parameters a list of strings.
 
         The function may perform additional processing on the parameters.
 
         :param command: list of strings to execute as the command
-        :param tool_kwargs: original named tool arguments used for error reporting
         :param input: text input for the standard input of the tool
+        :param tool_kwargs: named tool arguments used for error reporting (experimental)
+        :param **popen_options: additional options for :py:func:`subprocess.Popen`
         """
-        # We approximate tool_kwargs as original kwargs.
         return self.call_cmd(
             command,
             tool_kwargs=tool_kwargs,
@@ -167,14 +173,35 @@ class Tools:
         )
 
     def call(self, name: str, /, **kwargs):
+        """Run a tool by specifying its name as a string and parameters.
+
+        The parameters tool are tool name as a string and parameters as keyword
+        arguments. The keyword arguments may include an argument *flags* which is a
+        string of one-character tool flags.
+
+        The function will directly execute the tool without any major processing of
+        the parameters, but numbers, lists, and tuples will still be translated to
+        strings for execution.
+
+        :param name: name of a GRASS tool
+        :param **kwargs: tool parameters
+        """
         args, popen_options = gs.popen_args_command(name, **kwargs)
         return self.call_cmd(args, **popen_options)
 
-    # Make this an overload of run.
     def call_cmd(self, command, tool_kwargs=None, input=None, **popen_options):
-        # We need to pass our own env parameter, but through that we are also allowing
-        # the user to overwrite env, which allows for maximum flexibility
-        # with some potential confusion when the user a broken environment.
+        """Run a tool by passing its name and parameters as a list of strings.
+
+        The function is similar to :py:func:`subprocess.run` but with different
+        defaults and return value.
+
+        :param command: list of strings to execute as the command
+        :param tool_kwargs: named tool arguments used for error reporting (experimental)
+        :param input: text input for the standard input of the tool
+        :param **popen_options: additional options for :py:func:`subprocess.Popen`
+        """
+        # We allow the user to overwrite env, which allows for maximum flexibility
+        # with some potential for confusion when the user uses a broken environment.
         if "env" not in popen_options:
             popen_options["env"] = self._modified_env_if_needed()
         if self._capture_output:
