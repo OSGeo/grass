@@ -241,3 +241,12 @@ class ToolResult:
 
     def __len__(self):
         return len(self._json_or_error())
+
+    def __repr__(self):
+        parameters = []
+        parameters.append(f"returncode={self.returncode}")
+        if self._stdout is not None:
+            parameters.append(f"stdout='{self._stdout}'")
+        if self._stderr is not None:
+            parameters.append(f"stderr='{self._stderr}'")
+        return f"{self.__class__.__name__}({', '.join(parameters)})"

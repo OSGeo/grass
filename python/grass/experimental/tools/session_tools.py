@@ -25,6 +25,32 @@ class Tools:
     """Use GRASS tools through function calls
 
     GRASS tools (modules) can be executed as methods of this class.
+
+    The tools can be used in an active GRASS session (this skipped when writing
+    a GRASS tool):
+
+    >>> import grass.script as gs
+    >>> gs.create_project("xy_project")
+    >>> session = gs.setup.init("xy_project")
+
+    Multiple tools can be accessed through a single *Tools* object:
+
+    >>> from grass.experimental.tools import Tools
+    >>> tools = Tools(session=session)
+    >>> tools.g_region(rows=100, cols=100)  # doctest: +ELLIPSIS
+    ToolResult(...)
+    >>> tools.r_random_surface(output="surface", seed=42)
+    ToolResult(...)
+
+    For tools outputting JSON, the results can be accessed directly:
+
+    >>> print("cells:", tools.g_region(flags="p", format="json")["cells"])
+    cells: 10000
+
+    Resulting text or other output can be accessed through attributes of
+    the *ToolResult* object:
+
+    >>> tools.g_region(flags="p").text  # doctest: +SKIP
     """
 
     def __init__(
