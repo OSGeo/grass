@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-24 17:02+0000\n"
+"POT-Creation-Date: 2025-06-28 15:41+0000\n"
 "PO-Revision-Date: 2023-06-28 19:08+0000\n"
 "Last-Translator: Sergey Kazorin <kazorin@basealt.ru>\n"
 "Language-Team: Russian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/ru/>\n"
@@ -3394,14 +3394,14 @@ msgstr "Задать масштаб до расчетного фрагмента
 
 #: ../gui/wxpython/gcp/mapdisplay.py:539
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:529
-#: ../gui/wxpython/mapdisp/frame.py:1531
+#: ../gui/wxpython/mapdisp/frame.py:1529
 #: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:521
 msgid "Zoom to default region"
 msgstr "Задать масштаб до фрагмента по умолчанию"
 
 #: ../gui/wxpython/gcp/mapdisplay.py:543
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:533
-#: ../gui/wxpython/mapdisp/frame.py:1532
+#: ../gui/wxpython/mapdisp/frame.py:1530
 #: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:525
 msgid "Zoom to saved region"
 msgstr "Задать масштаб до сохранённого фрагмента"
@@ -3414,7 +3414,7 @@ msgstr "Установить расчетный фрагмент в границ
 
 #: ../gui/wxpython/gcp/mapdisplay.py:554
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:544
-#: ../gui/wxpython/mapdisp/frame.py:1544
+#: ../gui/wxpython/mapdisp/frame.py:1542
 #: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:536
 msgid "Save display geometry to named region"
 msgstr "Сохранить геометрию отображения во фрагмент с именем"
@@ -9050,29 +9050,29 @@ msgstr "Векторная карта <%s> открыта для редакти�
 msgid "No raster or vector map layer selected for querying."
 msgstr "Для запроса не был выбран ни растровый, ни векторный слой карты."
 
-#: ../gui/wxpython/mapdisp/frame.py:1115
+#: ../gui/wxpython/mapdisp/frame.py:1113
 #, python-brace-format
 msgid "Failed to query vector map(s) <{maps}>. Check database settings and topology."
 msgstr "Ошибка запроса к векторной карте (картам) <{maps}>. Проверьте настройки и топологию базы данных."
 
-#: ../gui/wxpython/mapdisp/frame.py:1535
+#: ../gui/wxpython/mapdisp/frame.py:1533
 msgid "Set computational region extent from display"
 msgstr "Задайте охват расчётного фрагмента из отображения"
 
-#: ../gui/wxpython/mapdisp/frame.py:1539
+#: ../gui/wxpython/mapdisp/frame.py:1537
 msgid "Set computational region extent interactively"
 msgstr "Задайте охват расчётного фрагмента в интерактивном режиме"
 
-#: ../gui/wxpython/mapdisp/frame.py:1542
+#: ../gui/wxpython/mapdisp/frame.py:1540
 #: ../gui/wxpython/mapwin/buffered.py:2095
 msgid "Set computational region from named region"
 msgstr "Задать расчётный фрагмент от именованного фрагмента"
 
-#: ../gui/wxpython/mapdisp/frame.py:1545
+#: ../gui/wxpython/mapdisp/frame.py:1543
 msgid "Save computational region to named region"
 msgstr "Сохраните охват расчётного фрагмента из именованного фрагмента"
 
-#: ../gui/wxpython/mapdisp/frame.py:1656
+#: ../gui/wxpython/mapdisp/frame.py:1654
 msgid "Raster Digitizer Toolbar"
 msgstr "Панель инструментов средства оцифровки растра"
 

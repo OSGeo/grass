@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-24 17:02+0000\n"
-"PO-Revision-Date: 2025-06-25 01:40+0000\n"
+"POT-Creation-Date: 2025-06-28 15:41+0000\n"
+"PO-Revision-Date: 2025-06-29 17:50+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs/fr/>\n"
 "Language: fr\n"
@@ -521,7 +521,7 @@ msgstr "La commande GRASS_NOTIFY <%s> a échoué"
 #: ../lib/display/tran_colr.c:44
 #, c-format
 msgid "String <%s> is too long"
-msgstr ""
+msgstr "La chaîne de caractères <%s> est trop longue"
 
 #: ../lib/display/tran_colr.c:111 ../lib/display/tran_colr.c:113
 #, c-format
@@ -552,46 +552,32 @@ msgid "unit test"
 msgstr "test unitaire"
 
 #: ../lib/external/parson/test/test_main.c:59
-#, fuzzy
-#| msgid "Performs unit and integration tests for the dbmi base library"
 msgid "Performs unit tests for the gjson library"
-msgstr "Effectue les tests unitaires et d'intégration pour la librairie dbmi"
+msgstr "Effectue les tests unitaires pour la librairie gjson"
 
 #: ../lib/external/parson/test/test_parson_wrapper.c:35
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "++ Running ccmath wrapper unit tests ++"
 msgid ""
 "\n"
 "++ Running gjson wrapper unit tests ++"
 msgstr ""
 "\n"
-"++ Éxécution des tests unitaires ccmath ++"
+"++ Exécution des tests unitaires gjson ++"
 
 #: ../lib/external/parson/test/test_parson_wrapper.c:40
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "-- ccmath wrapper unit tests failure --"
 msgid ""
 "\n"
 "-- gjson wrapper unit tests failure --"
 msgstr ""
 "\n"
-"-- Échec des tests unitaires ccmath --"
+"-- Échec des tests unitaires gjson --"
 
 #: ../lib/external/parson/test/test_parson_wrapper.c:42
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "-- ccmath wrapper unit tests finished successfully --"
 msgid ""
 "\n"
 "-- gjson wrapper unit tests finished successfully --"
 msgstr ""
 "\n"
-"-- tests unitaires ccmath terminés avec succès --"
+"-- tests unitaires gjson terminés avec succès --"
 
 #: ../lib/gis/adj_cellhd.c:57 ../lib/gis/adj_cellhd.c:170
 #, c-format
@@ -599,9 +585,9 @@ msgid "Illegal n-s resolution value: %g"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:62 ../lib/gis/adj_cellhd.c:178
-#, c-format
+#, c-format, fuzzy
 msgid "Illegal number of rows: %d (resolution is %g)"
-msgstr ""
+msgstr "Nombre de lignes illégal : %d (la résolution est %g)."
 
 #: ../lib/gis/adj_cellhd.c:68 ../lib/gis/adj_cellhd.c:188
 #, c-format
@@ -1717,10 +1703,8 @@ msgid "Input string not understood: <%s>. Multiple '@' chars?"
 msgstr ""
 
 #: ../lib/gis/parser_md_cli.c:103 ../lib/gis/parser_md_python.c:197
-#, fuzzy
-#| msgid "Illegal row value"
 msgid "Allowed values"
-msgstr "Valeur de ligne illégale"
+msgstr "Valeurs autorisées"
 
 #: ../lib/gis/parser_md_cli.c:329 ../lib/gis/parser_md_python.c:487
 #, fuzzy
@@ -1729,8 +1713,9 @@ msgid "Very quiet module output"
 msgstr "Sortie du module en mode super silencieux"
 
 #: ../lib/gis/parser_md_python.c:168
+#, fuzzy
 msgid "Used as"
-msgstr ""
+msgstr "Utilisé comme"
 
 #: ../lib/gis/parser_standard_options.c:154
 msgid "SQL SELECT statement"
@@ -2024,30 +2009,28 @@ msgid "Either a standard color name, R:G:B triplet, or \"none\""
 msgstr "Soit un nom de couleur standard, soit un triplet R:G:B, ou \"none\""
 
 #: ../lib/gis/parser_standard_options.c:665
-#, fuzzy
-#| msgid "Unknown format"
 msgid "Color format"
-msgstr "Format inconnu"
+msgstr "Format de couleur"
 
 #: ../lib/gis/parser_standard_options.c:666
 msgid "Color format for output values."
-msgstr ""
+msgstr "Format de couleur pour les valeurs de sortie."
 
 #: ../lib/gis/parser_standard_options.c:669
 msgid "output color in HEX format"
-msgstr ""
+msgstr "couleur de sortie au format HEX (hexadécimal)"
 
 #: ../lib/gis/parser_standard_options.c:669
 msgid "output color in RGB format"
-msgstr ""
+msgstr "couleur de sortie au format RVB"
 
 #: ../lib/gis/parser_standard_options.c:670
 msgid "output color in HSV format (experimental)"
-msgstr ""
+msgstr "couleur de sortie au format HSV (expérimental)"
 
 #: ../lib/gis/parser_standard_options.c:671
 msgid "output color in colon-separated RGB format"
-msgstr ""
+msgstr "couleur de sortie au format RVB séparé par deux points"
 
 #: ../lib/gis/parser_standard_options.c:682
 msgid "Name of input directory"
@@ -2206,10 +2189,8 @@ msgid "The method to be used for sampling the input dataset"
 msgstr "La méthode à utiliser pour échantillonner le jeu de donénes en entrée"
 
 #: ../lib/gis/parser_standard_options.c:982
-#, fuzzy
-#| msgid "Unsupported input format"
 msgid "Output format"
-msgstr "Format d'entrée non supporté"
+msgstr "Format de sortie"
 
 #: ../lib/gis/parser_standard_options.c:985
 msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);"
@@ -3579,8 +3560,8 @@ msgid "subgroup <%s> of group <%s> references the following raster maps\n"
 msgstr "Le sous-groupe <%s> du groupe <%s> référence les cartes raster suivantes\n"
 
 #: ../lib/imagery/manage_signatures.c:85 ../lib/imagery/manage_signatures.c:129
-#: ../lib/imagery/manage_signatures.c:185
-#: ../lib/imagery/manage_signatures.c:194
+#: ../lib/imagery/manage_signatures.c:187
+#: ../lib/imagery/manage_signatures.c:196
 #, c-format
 msgid "%s is not in the current mapset (%s)"
 msgstr "%s n'est pas dans le jeu de cartes courant (%s)"
@@ -3597,20 +3578,20 @@ msgid "Unable to remove %s signature"
 msgstr ""
 
 #: ../lib/imagery/manage_signatures.c:97 ../lib/imagery/manage_signatures.c:139
-#: ../lib/imagery/manage_signatures.c:204 ../lib/manage/do_copy.c:62
+#: ../lib/imagery/manage_signatures.c:206 ../lib/manage/do_copy.c:62
 #: ../lib/manage/do_remove.c:86 ../lib/manage/do_remove.c:108
 #: ../lib/manage/do_rename.c:84 ../lib/manage/do_rename.c:107
 #, c-format
 msgid "%s is missing"
 msgstr "%s est manquant"
 
-#: ../lib/imagery/manage_signatures.c:153 ../lib/manage/do_copy.c:51
+#: ../lib/imagery/manage_signatures.c:154 ../lib/manage/do_copy.c:51
 #: ../lib/manage/do_copy.c:68
 #, c-format
 msgid "Unable to copy <%s> to current mapset as <%s>"
 msgstr "Impossible de copier <%s> vers <%s> dans le jeu de cartes courant"
 
-#: ../lib/imagery/manage_signatures.c:215
+#: ../lib/imagery/manage_signatures.c:217
 #, c-format
 msgid "Unable to rename <%s> to <%s>"
 msgstr "Impossible de renommer <%s> en <%s>"
@@ -3825,10 +3806,8 @@ msgid "time for which the process will attempt to get a lock in seconds"
 msgstr ""
 
 #: ../lib/init/grass.py:414
-#, fuzzy
-#| msgid "Failed to create configuration directory '%s' with error: %s"
 msgid "Failed to create configuration directory '{}' with error: {}"
-msgstr "Échec de création du répertoire de configuration '%s' avec l'erreur : %s"
+msgstr "Échec de création du répertoire de configuration '{}' avec l'erreur : {}"
 
 #: ../lib/init/grass.py:456
 #, python-brace-format
@@ -3919,9 +3898,8 @@ msgid "Provide CRS to create a project"
 msgstr ""
 
 #: ../lib/init/grass.py:874
-#, fuzzy
 msgid "Creating new GRASS project <{}>..."
-msgstr "Création du nouveau jeux de cartes GRASS <{}> ..."
+msgstr "Création du nouveau projet GRASS <{}>…"
 
 #: ../lib/init/grass.py:885
 #, python-brace-format
@@ -3938,15 +3916,12 @@ msgid "No CRS is needed for creating mapset <{mapset}>, but <{geofile}> was prov
 msgstr ""
 
 #: ../lib/init/grass.py:910
-#, fuzzy
-#| msgid "Creating new GRASS GIS mapset <{}>..."
 msgid "Creating new GRASS mapset <{}>..."
-msgstr "Création du nouveau jeux de cartes GRASS <{}> ..."
+msgstr "Création du nouveau jeu de cartes GRASS <{}>…"
 
 #: ../lib/init/grass.py:934
-#, fuzzy
 msgid "GRASS database directory, project and mapset not set properly. Use GUI or command line to set them."
-msgstr "Répertoire de base de données GRASS, Secteur et jeu de cartes non définis correctement. Utiliser l'interface graphique ou la ligne de commande pour les définir."
+msgstr "Répertoire de base de données GRASS, projet et jeu de cartes non définis correctement. Utiliser l'interface graphique ou la ligne de commande pour les définir."
 
 #: ../lib/init/grass.py:994
 #, python-brace-format
@@ -4003,16 +3978,13 @@ msgid "Unable to close GUI. {0}"
 msgstr "Impossible de fermer l'interface graphique. {0}"
 
 #: ../lib/init/grass.py:1489
-#, fuzzy, python-format
-#| msgid "Welcome to GRASS GIS %s"
+#, python-format
 msgid "Welcome to GRASS %s"
-msgstr "Bienvenue dans le SIG GRASS %s"
+msgstr "Bienvenue dans GRASS %s"
 
 #: ../lib/init/grass.py:1515
-#, fuzzy
-#| msgid "GRASS GIS homepage:"
 msgid "GRASS homepage:"
-msgstr "Page d'accueil du SIG GRASS :"
+msgstr "Page d'accueil de GRASS :"
 
 #. GTC Running through: SHELL NAME
 #: ../lib/init/grass.py:1517
@@ -4044,22 +4016,16 @@ msgid "When ready to quit enter:"
 msgstr "Lors prêt pour la fermeture entrer :"
 
 #: ../lib/init/grass.py:1713
-#, fuzzy
-#| msgid "2D and 3D raster MASKs present"
 msgid "2D and 3D raster masks present"
-msgstr "MASKs raster 2D et 3D présents"
+msgstr "Masques raster 2D et 3D présents"
 
 #: ../lib/init/grass.py:1714
-#, fuzzy
-#| msgid "Raster MASK present"
 msgid "Raster mask present"
-msgstr "MASK raster présent"
+msgstr "Masque raster présent"
 
 #: ../lib/init/grass.py:1715
-#, fuzzy
-#| msgid "3D raster MASK present"
 msgid "3D raster mask present"
-msgstr "MASK raster 3D présent"
+msgstr "Masque raster 3D présent"
 
 #: ../lib/init/grass.py:1760
 msgid "Done."
@@ -4072,10 +4038,8 @@ msgid "Goodbye from GRASS"
 msgstr "GRASS vous dit au revoir"
 
 #: ../lib/init/grass.py:1823
-#, fuzzy
-#| msgid "Please install the GRASS GIS development package"
 msgid "Please install the GRASS development package"
-msgstr "Merci d'installer le paquet développement de GRASS"
+msgstr "Veuillez installer le paquet développement de GRASS"
 
 #: ../lib/init/grass.py:1869
 #, python-format
@@ -4090,7 +4054,7 @@ msgstr ""
 #: ../lib/init/grass.py:1924
 #, python-format
 msgid "use temporary mapset in project %(metavar)s"
-msgstr ""
+msgstr "utiliser un jeu de cartes temporaire dans le projet %(metavar)s"
 
 #: ../lib/init/grass.py:1932
 #, fuzzy
@@ -4104,7 +4068,7 @@ msgstr "utiliser un jeu de cartes temporaire"
 #: ../lib/init/grass.py:1942
 #, python-format
 msgid "use temporary project with %(metavar)s (EPSG, georeferenced file, ...)"
-msgstr ""
+msgstr "utiliser un projet temporaire avec %(metavar)s (EPSG, fichier géo-référencé, ...)"
 
 #: ../lib/init/grass.py:1956
 #, fuzzy
@@ -4117,13 +4081,12 @@ msgid "remove lock if present"
 msgstr ""
 
 #: ../lib/init/grass.py:1976
-#, fuzzy
 msgid "Option --tmp-location is deprecated, use --tmp-project instead\n"
 msgstr "L'option --tmp-location est obsolète, utilisez --tmp-project à la place.\n"
 
 #: ../lib/init/grass.py:2021
 msgid "execute module or script (followed by executable with arguments)"
-msgstr ""
+msgstr "exécuter un module ou un script (suivi d'un exécutable avec des arguments)"
 
 #: ../lib/init/grass.py:2077
 msgid "Flag -e requires also flag -c"
@@ -4135,12 +4098,11 @@ msgstr "L'option -c requiert le nom du projet ou du jeu de cartes."
 
 #: ../lib/init/grass.py:2082
 msgid "Either --tmp-project or --tmp-mapset can be used, not both"
-msgstr ""
+msgstr "Soit --tmp-project ou --tmp-mapset peuvent être utilisés, pas les deux"
 
 #: ../lib/init/grass.py:2089
-#, fuzzy
 msgid "Coordinate reference system argument (e.g. EPSG) is needed for --tmp-project"
-msgstr "L'argument du système de coordonnées de référence (ex EPSG) est nécessaire pour --tmp-location"
+msgstr "L'argument du système de coordonnées de référence (ex EPSG) est nécessaire pour --tmp-project"
 
 #: ../lib/init/grass.py:2096
 #, fuzzy
@@ -4148,7 +4110,7 @@ msgid "Only one argument (e.g. EPSG) is needed for --tmp-project, mapset name <{
 msgstr "Un seul argument (ex EPSG) est nécessaire pour --tmp-location, le jeu de cartes <{}> est déjà fourni"
 
 #: ../lib/init/grass.py:2218
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Unable to start GRASS. You have the choice to:\n"
 " - Launch the graphical user interface with the '--gui' switch\n"
@@ -4164,20 +4126,21 @@ msgid ""
 "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 msgstr ""
 "Impossible de démarrer GRASS. Vous avez le choix de :\n"
-"- Lancer l'interface graphique avec l'option '--gui'\n"
+" - Lancer l'interface graphique avec l'option '--gui'\n"
 "     {cmd_name} --gui\n"
-"- Lancer avec le chemin vers le Secteur/jeu_de_cartes en argument\n"
-"     {cmd_name} /chemin/vers/Secteur/jeu_de_cartes`\n"
-"- Créer manuellement le fichier GISRC ({gisrcrc})\n"
-"- Utiliser l'option '--help' pour plus d'options\n"
+" - Lancer avec le chemin vers le projet/jeu_de_cartes en argument\n"
+"     {cmd_name} /chemin/vers/projet/jeu_de_cartes`\n"
+" - Créer un projet avec '-c' et le lancer dans son jeu de cartes PERMANENT\n"
+"     {cmd_name} -c EPSG:nombre /chemin/vers/projet\n"
+"     {cmd_name} -c geofile /chemin/vers/projet\n"
+" - Créer manuellement le fichier GISRC ({gisrcrc})\n"
+" - Utiliser l'option '--help' pour plus d'options\n"
 "     {cmd_name} --help\n"
 "Voir également : https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 
 #: ../lib/init/grass.py:2239
-#, fuzzy
-#| msgid "Starting GRASS GIS..."
 msgid "Starting GRASS..."
-msgstr "Démarrage du SIG GRASS ..."
+msgstr "Démarrage de GRASS..."
 
 #: ../lib/init/grass.py:2288
 msgid "Failed to start GRASS, grassdata directory cannot be found or created."
@@ -4230,9 +4193,9 @@ msgid "<%s> has not been created in database."
 msgstr "<%s> n'a pas été créé dans la base de données."
 
 #: ../lib/manage/do_copy.c:44
-#, c-format
+#, c-format, fuzzy
 msgid "Copying %s <%s> to current mapset as <%s>"
-msgstr ""
+msgstr "Copie de %s <%s> vers le jeu de cartes actuel en tant que <%s>"
 
 #: ../lib/manage/do_copy.c:73
 #, c-format
@@ -4551,8 +4514,6 @@ msgid "Translating colors from raster map <%s>..."
 msgstr "Traduction des couleurs à partir de la carte raster <%s>..."
 
 #: ../lib/ogsf/gs3.c:966
-#, fuzzy
-#| msgid "View not saved by this program,there may be some inconsistancies"
 msgid "View not saved by this program,there may be some inconsistencies"
 msgstr "Vue non sauvegardée par ce programme, il peut y avoir des incohérences"
 
@@ -4619,10 +4580,8 @@ msgid "gsd_rot(): %c is an invalid axis specification. Rotation ignored. Please 
 msgstr "gsd_rot(): %c est une spécification d'axe non valide. Rotation ignorée. Merci d'avertir les développeurs GRASS de cette erreur"
 
 #: ../lib/ogsf/gsd_surf.c:1737
-#, fuzzy
-#| msgid "Cut-plane points mis-match between surfaces. Check resolution(s)."
 msgid "Cut-plane points mismatch between surfaces. Check resolution(s)."
-msgstr "Non concordance des points de surfaces de coupe. Vérifiez les résolutions."
+msgstr "Non-concordance des points de surfaces de coupe. Vérifiez les résolutions."
 
 #: ../lib/ogsf/gsdrape.c:206
 msgid "Unable to process vector map - out of memory"
@@ -5067,10 +5026,9 @@ msgid "Rast__null_bitstream_size: cols (%d) is negative"
 msgstr "Rast__null_bitstream_size : la colonne (%d) est négative"
 
 #: ../lib/raster/auto_mask.c:70
-#, fuzzy, c-format
-#| msgid "Unable to open vector map <%s>"
+#, c-format
 msgid "Unable to open automatic mask <%s>"
-msgstr "Impossible d'ouvrir la couche vectorielle <%s>"
+msgstr "Impossible d'ouvrir le masque automatique <%s>"
 
 #: ../lib/raster/cats.c:109
 #, c-format
@@ -5404,17 +5362,15 @@ msgstr "Méthode d'interpolation inconnue : %s"
 #: ../lib/raster/json_color_out.c:69 ../lib/raster/json_color_out.c:157
 #: ../lib/raster/json_color_out.c:172
 msgid "Failed to initialize JSON object. Out of memory?"
-msgstr ""
+msgstr "Échec de l'initialisation de l'objet JSON. Mémoire insuffisante ?"
 
 #: ../lib/raster/json_color_out.c:103
-#, fuzzy
-#| msgid "Error while adding point to array. Out of memory"
 msgid "Failed to initialize JSON array. Out of memory?"
-msgstr "Erreur lors de l'ajout du point au tableau. Dépassement de mémoire"
+msgstr "Échec de l'initialisation du tableau JSON. Mémoire insuffisante ?"
 
 #: ../lib/raster/json_color_out.c:186
 msgid "Failed to serialize JSON to pretty format."
-msgstr ""
+msgstr "Échec de la sérialisation du format JSON avec mis en forme (pretty format)."
 
 #: ../lib/raster/mask_info.c:47
 #, c-format
@@ -6497,10 +6453,9 @@ msgid "Break polygons: Bug in binary tree!"
 msgstr "Coupure de polygones : bug dans l'arbre binaire !"
 
 #: ../lib/vector/Vlib/break_polygons.c:143
-#, fuzzy, c-format
-#| msgid "Attempt to create read-only temporary file"
+#, c-format
 msgid "Failed to create xpnt temporary file: %s"
-msgstr "Tentative de création d'un fichier temporaire en lecture-seule"
+msgstr "Impossible de créer le fichier temporaire xpnt : %s"
 
 #: ../lib/vector/Vlib/break_polygons.c:164
 #: ../lib/vector/Vlib/break_polygons.c:452
@@ -6776,11 +6731,11 @@ msgstr[1] "%d primitives référencées"
 
 #: ../lib/vector/Vlib/build_nat.c:122 ../lib/vector/Vlib/build_sfa.c:381
 #: ../lib/vector/Vlib/build_sfa.c:668
-#, c-format
+#, c-format, fuzzy
 msgid "One vertex registered"
-msgid_plural "%<PRId64> vertices registered"
-msgstr[0] ""
-msgstr[1] ""
+msgid_plural "%d vertices registered"
+msgstr[0] "%d sommet enregistré"
+msgstr[1] "%d sommets enregistrés"
 
 #: ../lib/vector/Vlib/build_nat.c:137
 msgid "Building areas..."
@@ -7561,7 +7516,7 @@ msgstr "Impossible d'ouvrir le répertoire '%s'"
 #: ../lib/vector/Vlib/open.c:1507
 #, c-format
 msgid "Filepath '%s/%s' exceeds max length"
-msgstr ""
+msgstr "Le chemin d'accès au fichier '%s/%s' dépasse la longueur maximale"
 
 #: ../lib/vector/Vlib/map.c:501
 #, c-format
@@ -7731,8 +7686,7 @@ msgid "Database record for line %d (cat = %d, forward/both direction(s)) not fou
 msgstr "Enregistrement pour la ligne %d (cat = %d, avant/toutes directions) non trouvé (coût défini à 0)"
 
 #: ../lib/vector/Vlib/net_build.c:604
-#, fuzzy, c-format
-#| msgid "Database record for line %d (cat = %d, backword direction) not found(cost was set to 0)"
+#, c-format
 msgid "Database record for line %d (cat = %d, backward direction) not found(cost was set to 0)"
 msgstr "Enregistrement pour la ligne %d (cat = %d, direction arrière) non trouvé (coût défini à 0)"
 
@@ -7750,8 +7704,7 @@ msgid "Database record for line %d (cat = %d, forward/both direction(s)) not fou
 msgstr "L'enregistrement de la base de données de la ligne %d (cat = %d, avant/toutes directions) introuvable (avant/toutes directions de la ligne sautée)"
 
 #: ../lib/vector/Vlib/net_build.c:890
-#, fuzzy, c-format
-#| msgid "Database record for line %d (cat = %d, backword direction) not found(direction of line skipped)"
+#, c-format
 msgid "Database record for line %d (cat = %d, backward direction) not found(direction of line skipped)"
 msgstr "L'enregistrement de la base de données de la ligne %d (cat = %d, direction arrière) introuvable (direction de la ligne sautée)"
 
@@ -8706,10 +8659,9 @@ msgid "Vector format not recognized: %s"
 msgstr "Format vecteur non reconnu : %s"
 
 #: ../lib/vector/diglib/frmt.c:53 ../lib/vector/diglib/frmt.c:109
-#, fuzzy, c-format
-#| msgid "Field <%s> missing"
+#, c-format
 msgid "Line <%s> is too long"
-msgstr "Champ <%s> manquant"
+msgstr "Ligne <%s> trop longue"
 
 #: ../lib/vector/diglib/frmt.c:85 ../lib/vector/diglib/frmt.c:94
 #, c-format
