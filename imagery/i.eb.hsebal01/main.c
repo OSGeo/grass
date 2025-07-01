@@ -209,11 +209,22 @@ int main(int argc, char *argv[])
         m_col_wet = atof(input_col_wet->answer);
         m_row_dry = atof(input_row_dry->answer);
         m_col_dry = atof(input_col_dry->answer);
+        /*
+         * If the -c flag is not set, interpret the provided wet/dry pixel
+         * coordinates as integer row/column indices.
+         */
+        if (!flag3->answer) {
+            rowWet = (int)m_row_wet;
+            colWet = (int)m_col_wet;
+            rowDry = (int)m_row_dry;
+            colDry = (int)m_col_dry;
+        }
         /*If pixels locations are in projected coordinates */
-        if (flag3->answer)
+        if (flag3->answer) {
             G_verbose_message(_("Manual wet/dry pixels in image coordinates"));
-        G_verbose_message(_("Wet Pixel=> x:%f y:%f"), m_col_wet, m_row_wet);
-        G_verbose_message(_("Dry Pixel=> x:%f y:%f"), m_col_dry, m_row_dry);
+            G_verbose_message(_("Wet Pixel=> x:%f y:%f"), m_col_wet, m_row_wet);
+            G_verbose_message(_("Dry Pixel=> x:%f y:%f"), m_col_dry, m_row_dry);
+        }
     }
     /*If not automatic & missing any of the pixel location, Fatal Error */
     else {
@@ -297,6 +308,19 @@ int main(int argc, char *argv[])
     DCELL d_Rn_dry = 0.0, d_g0_dry = 0.0;
     DCELL d_Rah_dry = 0.0, d_Roh_dry = 0.0;
     DCELL d_t0dem_dry = 0.0, d_t0dem_wet = 0.0;
+
+    /* Always read t0dem, z0m, and eact into the arrays */
+    for (row = 0; row < nrows; row++) {
+        Rast_get_d_row(infd_t0dem, inrast_t0dem, row);
+        Rast_get_d_row(infd_z0m, inrast_z0m, row);
+        Rast_get_d_row(infd_eact, inrast_eact, row);
+
+        for (col = 0; col < ncols; col++) {
+            d_t0dem[row][col] = ((DCELL *)inrast_t0dem)[col];
+            d_z0m[row][col] = ((DCELL *)inrast_z0m)[col];
+            d_eact[row][col] = ((DCELL *)inrast_eact)[col];
+        }
+    }
 
     if (flag2->answer) {
         /* Process tempk min / max pixels */
