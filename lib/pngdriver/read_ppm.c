@@ -16,6 +16,7 @@
 #include <string.h>
 
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include "pngdriver.h"
 
 void read_ppm(void)
@@ -38,7 +39,6 @@ void read_ppm(void)
 
     if (fgetc(input) == EOF)
         G_fatal_error(_("PNG: unexpected EOF reading %s"), png.file_name);
-
 
     if (i_width != png.width || i_height != png.height)
         G_fatal_error("PNG: input file has incorrect dimensions: expected: "
