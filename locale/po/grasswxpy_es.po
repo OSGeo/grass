@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-24 17:02+0000\n"
+"POT-Creation-Date: 2025-06-28 15:41+0000\n"
 "PO-Revision-Date: 2022-05-22 05:04+0000\n"
 "Last-Translator: Veronica <veroandreo@gmail.com>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/es/>\n"
@@ -3376,14 +3376,14 @@ msgstr "Acercamiento a la región computacional (definida mediante g.region)."
 
 #: ../gui/wxpython/gcp/mapdisplay.py:539
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:529
-#: ../gui/wxpython/mapdisp/frame.py:1531
+#: ../gui/wxpython/mapdisp/frame.py:1529
 #: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:521
 msgid "Zoom to default region"
 msgstr "Acercamiento a la región predeterminada"
 
 #: ../gui/wxpython/gcp/mapdisplay.py:543
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:533
-#: ../gui/wxpython/mapdisp/frame.py:1532
+#: ../gui/wxpython/mapdisp/frame.py:1530
 #: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:525
 msgid "Zoom to saved region"
 msgstr "Acercamiento a una región guardada"
@@ -3396,7 +3396,7 @@ msgstr "Establecer la región computacional desde la visualización"
 
 #: ../gui/wxpython/gcp/mapdisplay.py:554
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:544
-#: ../gui/wxpython/mapdisp/frame.py:1544
+#: ../gui/wxpython/mapdisp/frame.py:1542
 #: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:536
 msgid "Save display geometry to named region"
 msgstr "Guardar la geometría de la visualización a la región nombrada"
@@ -9019,29 +9019,29 @@ msgstr "Mapa vectorial <%s> abierto para edición -saltado."
 msgid "No raster or vector map layer selected for querying."
 msgstr "No se ha seleccionado ningún mapa ráster o vectorial para ser consultado."
 
-#: ../gui/wxpython/mapdisp/frame.py:1115
+#: ../gui/wxpython/mapdisp/frame.py:1113
 #, python-brace-format
 msgid "Failed to query vector map(s) <{maps}>. Check database settings and topology."
 msgstr "No se pudo consultar mapa(s) <{maps}>. Revise base la configuración de la base de datos y topología."
 
-#: ../gui/wxpython/mapdisp/frame.py:1535
+#: ../gui/wxpython/mapdisp/frame.py:1533
 msgid "Set computational region extent from display"
 msgstr "Definir región computacional a partir de la visualización"
 
-#: ../gui/wxpython/mapdisp/frame.py:1539
+#: ../gui/wxpython/mapdisp/frame.py:1537
 msgid "Set computational region extent interactively"
 msgstr "Definir extensión de la región computacional de manera interactiva"
 
-#: ../gui/wxpython/mapdisp/frame.py:1542
+#: ../gui/wxpython/mapdisp/frame.py:1540
 #: ../gui/wxpython/mapwin/buffered.py:2095
 msgid "Set computational region from named region"
 msgstr "Definir región computacional desde la región nombrada"
 
-#: ../gui/wxpython/mapdisp/frame.py:1545
+#: ../gui/wxpython/mapdisp/frame.py:1543
 msgid "Save computational region to named region"
 msgstr "Guardar región computacional con nombre"
 
-#: ../gui/wxpython/mapdisp/frame.py:1656
+#: ../gui/wxpython/mapdisp/frame.py:1654
 msgid "Raster Digitizer Toolbar"
 msgstr "Barra de herramientas del digitalizador ráster"
 

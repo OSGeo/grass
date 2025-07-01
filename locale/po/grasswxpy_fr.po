@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-24 17:02+0000\n"
-"PO-Revision-Date: 2025-06-25 01:22+0000\n"
+"POT-Creation-Date: 2025-06-28 15:41+0000\n"
+"PO-Revision-Date: 2025-06-29 03:57+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/fr/>\n"
 "Language: fr\n"
@@ -1457,7 +1457,7 @@ msgstr "Fermer le catalogue de données du SIG GRASS"
 
 #: ../gui/wxpython/datacatalog/g.gui.datacatalog.py:50
 msgid "Data Catalog - GRASS GIS"
-msgstr ""
+msgstr "Catalogue de données - GRASS GIS"
 
 #: ../gui/wxpython/datacatalog/infomanager.py:36
 msgid "Create new project"
@@ -1548,7 +1548,7 @@ msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:29
 msgid "Allow edits outside of the current mapset"
-msgstr ""
+msgstr "Autoriser les modifications en dehors du jeu de cartes actuel"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:32
 msgid "Add existing or create new database"
@@ -3362,14 +3362,14 @@ msgstr "Zoomer sur la région de calcul (définie avec g.region)"
 
 #: ../gui/wxpython/gcp/mapdisplay.py:539
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:529
-#: ../gui/wxpython/mapdisp/frame.py:1531
+#: ../gui/wxpython/mapdisp/frame.py:1529
 #: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:521
 msgid "Zoom to default region"
 msgstr "Zoom sur la région par défaut"
 
 #: ../gui/wxpython/gcp/mapdisplay.py:543
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:533
-#: ../gui/wxpython/mapdisp/frame.py:1532
+#: ../gui/wxpython/mapdisp/frame.py:1530
 #: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:525
 msgid "Zoom to saved region"
 msgstr "Zoom sur la région enregistrée"
@@ -3382,7 +3382,7 @@ msgstr "Définir la région calculée à partir de celle de l'écran"
 
 #: ../gui/wxpython/gcp/mapdisplay.py:554
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:544
-#: ../gui/wxpython/mapdisp/frame.py:1544
+#: ../gui/wxpython/mapdisp/frame.py:1542
 #: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:536
 msgid "Save display geometry to named region"
 msgstr "Enregistrer la géométrie de l'écran dans un nom de région"
@@ -3465,7 +3465,7 @@ msgstr "Définir la trame de carte pour"
 #: ../gui/wxpython/image2target/ii2t_toolbars.py:117
 #: ../gui/wxpython/photo2image/ip2i_toolbars.py:117
 msgid " / Zoom to map"
-msgstr ""
+msgstr " / Zoomer sur la carte"
 
 #: ../gui/wxpython/gcp/toolbars.py:134
 #: ../gui/wxpython/image2target/ii2t_toolbars.py:134
@@ -7139,10 +7139,9 @@ msgstr ""
 "TOUTES LES CARTES incluses dans ce jeu de cartes seront DÉFINITIVEMENT SUPPRIMÉES !"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:822
-#, fuzzy, python-format
-#| msgid "Unable to delete mapset"
+#, python-format
 msgid "Unable to delete mapset: %s"
-msgstr "Impossible d'effacer le jeu de cartes"
+msgstr "Impossible d'effacer le jeu de cartes : %s"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:836
 #, python-format
@@ -7417,10 +7416,9 @@ msgstr ""
 "%s"
 
 #: ../gui/wxpython/iscatt/core_c.py:42
-#, fuzzy, python-format
-#| msgid "Loading ctypes libs failed"
+#, python-format
 msgid "Loading ctypes libs failed: %s"
-msgstr "Échec du chargement de la librairie ctypes"
+msgstr "Échec du chargement de la librairie ctypes : %s"
 
 #: ../gui/wxpython/iscatt/dialogs.py:36
 msgid "Add scatter plots"
@@ -7581,16 +7579,13 @@ msgstr ""
 "%s"
 
 #: ../gui/wxpython/iscatt/iscatt_core.py:319
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "v.to.rast failed:\n"
-#| "%s"
+#, python-brace-format
 msgid ""
 "v.to.rast failed:\n"
 "{messages}"
 msgstr ""
 "v.to.rast a échoué :\n"
-"%s"
+"{messages}"
 
 #: ../gui/wxpython/iscatt/plots.py:45
 #, python-brace-format
@@ -8221,20 +8216,16 @@ msgid "Mask"
 msgstr "Masque"
 
 #: ../gui/wxpython/lmgr/statusbar.py:84
-#, fuzzy
-#| msgid "Please select first the raster map"
 msgid "Left mouse click to remove the raster mask"
-msgstr "Merci de commencer par sélectionner la carte raster"
+msgstr "Cliquez avec le bouton gauche de la souris pour retirer le masque raster"
 
 #: ../gui/wxpython/lmgr/statusbar.py:139
 msgid "Are you sure that you want to remove the current raster mask?"
-msgstr ""
+msgstr "Êtes-vous sûr de vouloir retirer le masque raster actuel ?"
 
 #: ../gui/wxpython/lmgr/statusbar.py:140
-#, fuzzy
-#| msgid "Save raster map"
 msgid "Remove raster mask"
-msgstr "Enregistrer la carte raster"
+msgstr "Retirer le masque raster"
 
 #: ../gui/wxpython/lmgr/toolbars.py:46
 msgid "Create new workspace (Ctrl+N)"
@@ -8440,17 +8431,15 @@ msgstr ""
 "Le jeu de cartes courant est <%(mapset)s>."
 
 #: ../gui/wxpython/lmgr/workspace.py:181
-#, fuzzy, python-format
-#| msgid ""
-#| "Reading workspace file <%s> failed.\n"
-#| "Invalid file, unable to parse XML document."
+#, python-format
 msgid ""
 "Reading workspace file <%s> failed.\n"
 "Invalid file, unable to parse XML document.\n"
 "Error details: %s"
 msgstr ""
 "Lecture du fichier d'environnement <%s> impossible.\n"
-"Fichier non valide, impossible d'analyser le document XML."
+"Fichier non valide, impossible d'analyser le document XML.\n"
+"Détails de l’erreur : %s"
 
 #: ../gui/wxpython/lmgr/workspace.py:194
 msgid "Please wait, loading workspace..."
@@ -8891,9 +8880,8 @@ msgid "No project provided. Operation canceled."
 msgstr "Aucun projet fourni. Opération annulée."
 
 #: ../gui/wxpython/main_window/frame.py:2000
-#, fuzzy
 msgid "Code editor"
-msgstr "Éditeur Python"
+msgstr "Éditeur de code"
 
 #: ../gui/wxpython/mapdisp/frame.py:171
 #, python-format
@@ -8982,29 +8970,29 @@ msgstr "Carte vectorielle <%s> ouverte pour édition - sautée."
 msgid "No raster or vector map layer selected for querying."
 msgstr "Pas de carte raster ou couche de carte vecteur sélectionnée pour interrogation."
 
-#: ../gui/wxpython/mapdisp/frame.py:1115
+#: ../gui/wxpython/mapdisp/frame.py:1113
 #, python-brace-format
 msgid "Failed to query vector map(s) <{maps}>. Check database settings and topology."
 msgstr "L'interrogation de la carte vecteur <{maps}> a échoué. Vérifier les paramètres de base de données et de topologie."
 
-#: ../gui/wxpython/mapdisp/frame.py:1535
+#: ../gui/wxpython/mapdisp/frame.py:1533
 msgid "Set computational region extent from display"
 msgstr "Définir la région calculée à partir de celle de l'écran"
 
-#: ../gui/wxpython/mapdisp/frame.py:1539
+#: ../gui/wxpython/mapdisp/frame.py:1537
 msgid "Set computational region extent interactively"
 msgstr "Définir l'emprise de la région de calcul de manière interactive"
 
-#: ../gui/wxpython/mapdisp/frame.py:1542
+#: ../gui/wxpython/mapdisp/frame.py:1540
 #: ../gui/wxpython/mapwin/buffered.py:2095
 msgid "Set computational region from named region"
 msgstr "Définir la région de calcul à partir d'une région enregistrée"
 
-#: ../gui/wxpython/mapdisp/frame.py:1545
+#: ../gui/wxpython/mapdisp/frame.py:1543
 msgid "Save computational region to named region"
 msgstr "Enregistrer la région calculée vers un nom de région"
 
-#: ../gui/wxpython/mapdisp/frame.py:1656
+#: ../gui/wxpython/mapdisp/frame.py:1654
 msgid "Raster Digitizer Toolbar"
 msgstr "Barre d'outils de numérisation de raster"
 
@@ -9535,10 +9523,9 @@ msgid "Enter vector attribute values"
 msgstr "Entrer les valeurs d'attributs"
 
 #: ../gui/wxpython/modules/colorrules.py:320
-#, fuzzy, python-format
-#| msgid "Bad color format. Use color format '0:0:0'"
+#, python-format
 msgid "Bad color format '%s'. Use color format '0:0:0'"
-msgstr "Mauvais format de couleur. Utiliser le format '0:0:0'"
+msgstr "Mauvais format de couleur « %s ». Utilisez le format « 0:0:0 »"
 
 #: ../gui/wxpython/modules/colorrules.py:420
 #: ../gui/wxpython/wxplot/dialogs.py:442
@@ -9930,7 +9917,7 @@ msgstr ""
 
 #: ../gui/wxpython/modules/import_export.py:290
 msgid "Dialog cannot be closed while command is running."
-msgstr ""
+msgstr "La boîte de dialogue ne peut pas être fermée pendant l'exécution de la commande."
 
 #: ../gui/wxpython/modules/import_export.py:436
 msgid "Link external raster data"
@@ -11887,10 +11874,9 @@ msgstr ""
 "manquant"
 
 #: ../gui/wxpython/psmap/dialogs.py:5999
-#, fuzzy, python-format
-#| msgid "Unable to read file %s"
+#, python-format
 msgid "Unable to read file %s: %s"
-msgstr "Impossible de lire le fichier %s"
+msgstr "Impossible de lire le fichier %s : %s"
 
 #: ../gui/wxpython/psmap/dialogs.py:6062
 #, python-format
