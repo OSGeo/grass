@@ -60,7 +60,9 @@ int stats(void)
     argv[argc++] = NULL;
 
     if (G_vspawn_ex(argv[0], argv) != 0) {
-        remove(stats_file);
+        if (remove(stats_file) != 0) {
+            G_warning("Failed to remove file");
+        }
         G_fatal_error("error running r.stats");
     }
 
