@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-24 17:02+0000\n"
+"POT-Creation-Date: 2025-06-28 15:41+0000\n"
 "PO-Revision-Date: 2025-06-14 22:43+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Latvian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/lv/>\n"
@@ -3332,14 +3332,14 @@ msgstr "Tuvināt līdz aprēķinu reģionam"
 
 #: ../gui/wxpython/gcp/mapdisplay.py:539
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:529
-#: ../gui/wxpython/mapdisp/frame.py:1531
+#: ../gui/wxpython/mapdisp/frame.py:1529
 #: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:521
 msgid "Zoom to default region"
 msgstr ""
 
 #: ../gui/wxpython/gcp/mapdisplay.py:543
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:533
-#: ../gui/wxpython/mapdisp/frame.py:1532
+#: ../gui/wxpython/mapdisp/frame.py:1530
 #: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:525
 msgid "Zoom to saved region"
 msgstr ""
@@ -3352,7 +3352,7 @@ msgstr "Iestatīt aprēķinu reģionu no kartes skata"
 
 #: ../gui/wxpython/gcp/mapdisplay.py:554
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:544
-#: ../gui/wxpython/mapdisp/frame.py:1544
+#: ../gui/wxpython/mapdisp/frame.py:1542
 #: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:536
 msgid "Save display geometry to named region"
 msgstr ""
@@ -8831,29 +8831,29 @@ msgstr ""
 msgid "No raster or vector map layer selected for querying."
 msgstr ""
 
-#: ../gui/wxpython/mapdisp/frame.py:1115
+#: ../gui/wxpython/mapdisp/frame.py:1113
 #, python-brace-format
 msgid "Failed to query vector map(s) <{maps}>. Check database settings and topology."
 msgstr ""
 
-#: ../gui/wxpython/mapdisp/frame.py:1535
+#: ../gui/wxpython/mapdisp/frame.py:1533
 msgid "Set computational region extent from display"
 msgstr "Iestatīt aprēķinu reģiona apjomu no kartes skata"
 
-#: ../gui/wxpython/mapdisp/frame.py:1539
+#: ../gui/wxpython/mapdisp/frame.py:1537
 msgid "Set computational region extent interactively"
 msgstr "Interaktīvi iestatīt aprēķinu reģiona apjomu"
 
-#: ../gui/wxpython/mapdisp/frame.py:1542
+#: ../gui/wxpython/mapdisp/frame.py:1540
 #: ../gui/wxpython/mapwin/buffered.py:2095
 msgid "Set computational region from named region"
 msgstr ""
 
-#: ../gui/wxpython/mapdisp/frame.py:1545
+#: ../gui/wxpython/mapdisp/frame.py:1543
 msgid "Save computational region to named region"
 msgstr ""
 
-#: ../gui/wxpython/mapdisp/frame.py:1656
+#: ../gui/wxpython/mapdisp/frame.py:1654
 msgid "Raster Digitizer Toolbar"
 msgstr "Rastra digitizēšanas rīkjosla"
 

@@ -451,7 +451,7 @@ build_program_in_subdir(r.recode DEPENDS grass_gis grass_raster)
 
 build_program_in_subdir(r.region DEPENDS grass_gis grass_raster grass_vector)
 
-build_program_in_subdir(r.regression.line DEPENDS grass_gis grass_raster
+build_program_in_subdir(r.regression.line DEPENDS grass_gis grass_raster grass_parson
                         ${LIBM})
 
 build_program_in_subdir(r.regression.multi DEPENDS grass_gis grass_raster
