@@ -684,11 +684,12 @@ def test_as_context_manager(xy_dataset_session):
 
 
 def test_with_context_managers_explicit_env(tmpdir):
+    """Test with other context managers while passing the environment to functions"""
     project = tmpdir / "project"
     gs.create_project(project)
     with gs.setup.init(project, env=os.environ.copy()) as session:
-        tools = Tools(session=session)
-        tools.r_random_surface(output="surface", seed=42)
+        tools = Tools()
+        tools.r_random_surface(output="surface", seed=42, env=session.env)
         with TemporaryMapsetSession(env=session.env) as mapset:
             tools.r_random_surface(output="surface", seed=42, env=mapset.env)
             with gs.MaskManager(env=mapset.env.copy()) as mask:
@@ -704,6 +705,7 @@ def test_with_context_managers_explicit_env(tmpdir):
 
 
 def test_with_context_managers_session_env(tmpdir):
+    """Test with other context managers while using environment from a session"""
     project = tmpdir / "project"
     gs.create_project(project)
     with (
@@ -721,6 +723,7 @@ def test_with_context_managers_session_env(tmpdir):
 
 
 def test_with_context_managers_session_env_one_block(tmpdir):
+    """Check behavior in a single with statement with other context managers"""
     project = tmpdir / "project"
     gs.create_project(project)
     with (
@@ -737,31 +740,38 @@ def test_with_context_managers_session_env_one_block(tmpdir):
 
 
 def test_misspelling(xy_dataset_session):
+    """Check a misspelled tool name as a function name results in a right suggestion"""
     tools = Tools(session=xy_dataset_session)
     with pytest.raises(AttributeError, match=r"r_slope_aspect"):
         tools.r_sloppy_respect()
 
 
 def test_multiple_suggestions(xy_dataset_session):
+    """Check a confused tool name results in multiple suggestions"""
     tools = Tools(session=xy_dataset_session)
-    with pytest.raises(AttributeError, match=r"v_db_univar|db_univar"):
-        tools.db_v_uni_var()
+    with pytest.raises(
+        AttributeError,
+        match=r".*".join(sorted(["v_univar", "v_db_univar", "db_univar"])),
+    ):
+        tools.db_v_univar()
 
 
 def test_tool_group_vs_model_name(xy_dataset_session):
+    """Check a confused tool group name as a function name results in a right suggestion"""
     tools = Tools(session=xy_dataset_session)
     with pytest.raises(AttributeError, match=r"r_sim_water"):
         tools.rSIMWEwater()
 
 
 def test_wrong_attribute(xy_dataset_session):
+    """Check a wrong attribute results in an exception with its name"""
     tools = Tools(session=xy_dataset_session)
     with pytest.raises(AttributeError, match="execute_big_command"):
         tools.execute_big_command()
 
 
 def test_stdin_as_stringio_object(xy_dataset_session):
-    """Check that global overwrite is not used when separate env is used"""
+    """Check that StringIO interface for stdin works"""
     tools = Tools(session=xy_dataset_session)
     tools.v_edit(map="points", type="point", tool="create")
     tools.v_edit(
@@ -775,24 +785,28 @@ def test_stdin_as_stringio_object(xy_dataset_session):
 
 
 def test_tool_attribute_access_c_tools():
+    """Check C tool names can be listed without a session"""
     tools = Tools()
     assert "g_region" in dir(tools)
     assert "r_slope_aspect" in dir(tools)
 
 
 def test_tool_attribute_access_python_tools():
+    """Check Python tool names can be listed without a session"""
     tools = Tools()
     assert "g_search_modules" in dir(tools)
     assert "r_mask" in dir(tools)
 
 
 def test_tool_doc_access_c_tools():
+    """Check C tools have doc strings without a session"""
     tools = Tools()
     assert tools.g_region.__doc__
     assert tools.r_slope_aspect.__doc__
 
 
 def test_tool_doc_access_python_tools():
+    """Check Python tools have doc strings without a session"""
     tools = Tools()
     assert tools.g_search_modules.__doc__
     assert tools.r_mask.__doc__

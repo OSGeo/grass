@@ -108,14 +108,22 @@ class ToolFunctionResolver:
 
         return previous_row[-1]
 
-    def suggest_tools(self, tool):
+    def suggest_tools(self, text):
+        """Suggest matching tool names based on provided text.
+
+        The first five tools matching the condition are returned,
+        so this always returns at most five names, but it may not be the best matches.
+        The returned names are sorted alphabetically (not by priority).
+        This specific behavior may change in the future versions.
+        """
         result = []
         max_suggestions = 5
         for name in self.names():
-            if ToolFunctionResolver.levenshtein_distance(tool, name) < len(tool) / 2:
+            if ToolFunctionResolver.levenshtein_distance(text, name) < len(text) / 2:
                 result.append(name)
             if len(result) >= max_suggestions:
                 break
+        result.sort()
         return result
 
     def names(self):
