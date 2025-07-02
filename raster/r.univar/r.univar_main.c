@@ -364,28 +364,6 @@ static int open_raster(const char *infile)
     return fd;
 }
 
-static univar_stat *univar_stat_with_percentiles(int map_type)
-{
-    univar_stat *stats;
-    unsigned int i, j;
-    unsigned int n_zones = zone_info.n_zones;
-
-    if (n_zones == 0)
-        n_zones = 1;
-
-    i = 0;
-    while (param.percentile->answers[i])
-        i++;
-    stats = create_univar_stat_struct(map_type, i);
-    for (i = 0; i < n_zones; i++) {
-        for (j = 0; j < stats[i].n_perc; j++) {
-            sscanf(param.percentile->answers[j], "%lf", &(stats[i].perc[j]));
-        }
-    }
-
-    return stats;
-}
-
 static void process_raster(univar_stat *stats, thread_workspace *tw,
                            const struct Cell_head *region, int nprocs,
                            enum OutputFormat format)

@@ -69,5 +69,6 @@ int print_stats(univar_stat *stats, enum OutputFormat format);
 int print_stats_table(univar_stat *stats);
 univar_stat *create_univar_stat_struct(int map_type, int n_perc);
 void free_univar_stat_struct(univar_stat *stats);
+univar_stat *univar_stat_with_percentiles(int map_type);
 
 #endif
