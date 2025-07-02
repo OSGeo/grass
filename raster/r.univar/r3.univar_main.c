@@ -89,8 +89,6 @@ void set_params(void)
     return;
 }
 
-static univar_stat *univar_stat_with_percentiles(int map_type);
-
 /* *************************************************************** */
 /* **** the main functions for r3.univar ************************* */
 /* *************************************************************** */

@@ -137,7 +137,6 @@ void set_params(void)
 }
 
 static int open_raster(const char *infile);
-static univar_stat *univar_stat_with_percentiles(int map_type);
 static void process_raster(univar_stat *stats, thread_workspace *tw,
                            const struct Cell_head *region, int nprocs,
                            enum OutputFormat format);
