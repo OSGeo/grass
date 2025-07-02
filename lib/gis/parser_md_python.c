@@ -29,7 +29,7 @@ static void print_python_option(FILE *file, const struct Option *opt,
                                 const char *indent);
 static void print_python_example(FILE *file, const char *python_function,
                                  const char *output_format_default,
-                                 const char *indent);
+                                 const char *indent, bool tools_api);
 static void print_python_tuple(FILE *file, const char *type, int num_items);
 
 void print_python_short_flag(FILE *file, const char *key, const char *label,
@@ -251,12 +251,19 @@ void print_python_option(FILE *file, const struct Option *opt,
 }
 
 void print_python_example(FILE *file, const char *python_function,
-                          const char *output_format_default, const char *indent)
+                          const char *output_format_default, const char *indent,
+                          bool tools_api)
 {
     fprintf(file, "\n%sExample:\n", indent);
 
     fprintf(file, "\n%s```python\n", indent);
-    fprintf(file, "%sgs.%s(\"%s\"", indent, python_function, st->pgm_name);
+    if (tools_api) {
+        fprintf(file, "%stools = Tools()\n", indent);
+        fprintf(file, "%stools.%s(", indent, st->pgm_name);
+    }
+    else {
+        fprintf(file, "%sgs.%s(\"%s\"", indent, python_function, st->pgm_name);
+    }
 
     const struct Option *first_required_rule_option =
         G__first_required_option_from_rules();
@@ -316,7 +323,8 @@ void print_python_example(FILE *file, const char *python_function,
     fprintf(file, ")\n%s```\n", indent);
 }
 
-void G__md_print_python_short_version(FILE *file, const char *indent)
+void G__md_print_python_short_version(FILE *file, const char *indent,
+                                      bool tools_api)
 {
     struct Option *opt;
     struct Flag *flag;
@@ -362,18 +370,25 @@ void G__md_print_python_short_version(FILE *file, const char *indent)
             flag = flag->next_flag;
         }
     }
-    if (output_format_option || (!new_prompt && shell_eval_flag)) {
-        python_function = "parse_command";
-        // We know this is can be parsed, but we can't detect just plain file
-        // because we can't distinguish between plain text outputs and
-        // modifications of data.
+    if (tools_api) {
+        fprintf(file, "%s*grass.tools.Tools.%s*(", indent,
+                G_strchg(st->pgm_name, '.', '_'));
+        fprintf(file, "\n");
     }
     else {
-        python_function = "run_command";
+        if (output_format_option || (!new_prompt && shell_eval_flag)) {
+            python_function = "parse_command";
+            // We know this is can be parsed, but we can't detect just plain
+            // file because we can't distinguish between plain text outputs and
+            // modifications of data.
+        }
+        else {
+            python_function = "run_command";
+        }
+        fprintf(file, "%s*grass.script.%s*(\"***%s***\",", indent,
+                python_function, st->pgm_name);
+        fprintf(file, "\n");
     }
-    fprintf(file, "%s*grass.script.%s*(\"***%s***\",", indent, python_function,
-            st->pgm_name);
-    fprintf(file, "\n");
 
     if (st->n_opts) {
         opt = &st->first_option;
@@ -419,7 +434,14 @@ void G__md_print_python_short_version(FILE *file, const char *indent)
     fprintf(file, "%s    **quiet**=*False*,\n", indent);
     fprintf(file, "%s    **superquiet**=*False*)\n", indent);
 
-    print_python_example(file, python_function, output_format_default, indent);
+    print_python_example(file, python_function, output_format_default, indent,
+                         tools_api);
+    if (tools_api) {
+        fprintf(file,
+                "This API is experimental in version 8.5 and expected to be "
+                "stable in version 8.6.\n",
+                indent);
+    }
 }
 
 void G__md_print_python_long_version(FILE *file, const char *indent)
