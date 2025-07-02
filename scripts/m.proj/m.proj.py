@@ -101,6 +101,7 @@ COPYRIGHT: (c) 2006-2019 Hamish Bowman, and the GRASS Development Team
 import sys
 import os
 import threading
+from pathlib import Path
 from grass.script.utils import separator, parse_key_val, encode, decode
 from grass.script import core as gcore
 
@@ -212,28 +213,24 @@ def main():
     if coords:
         x, y = coords.split(",")
         tmpfile = gcore.tempfile()
-        fd = open(tmpfile, "w")
-        fd.write("%s%s%s\n" % (x, ifs, y))
-        fd.close()
-        inf = open(tmpfile)
+        Path(tmpfile).write_text("%s%s%s\n" % (x, ifs, y))
+        input_file_path = tmpfile
     elif input == "-":
-        infile = None
+        input_file_path = None
         inf = sys.stdin
     else:
-        infile = input
-        if not os.path.exists(infile):
+        input_file_path = input
+        if not os.path.exists(input_file_path):
             gcore.fatal(_("Unable to read input data"))
-        inf = open(infile)
-        gcore.debug("input file=[%s]" % infile)
+        gcore.debug("input file=[%s]" % input_file_path)
 
     # set up output file
     if not output:
-        outfile = None
+        output_file_path = None
         outf = sys.stdout
     else:
-        outfile = output
-        outf = open(outfile, "w")
-        gcore.debug("output file=[%s]" % outfile)
+        output_file_path = output
+        gcore.debug("output file=[%s]" % output_file_path)
 
     # set up output style
     outfmt = ["-w5"] if not decimal else ["-f", "%.8f"]
@@ -245,48 +242,185 @@ def main():
 
     cmd = ["cs2cs"] + copyinp + outfmt + in_proj.split() + ["+to"] + out_proj.split()
 
-    p = gcore.Popen(cmd, stdin=gcore.PIPE, stdout=gcore.PIPE, text=False)
+    if input_file_path is not None and output_file_path is not None:
+        with open(input_file_path) as inf, open(output_file_path, "w") as outf:
+            p = gcore.Popen(cmd, stdin=gcore.PIPE, stdout=gcore.PIPE, text=False)
+            tr = TrThread(ifs, inf, p.stdin)
+            tr.start()
 
-    tr = TrThread(ifs, inf, p.stdin)
-    tr.start()
+            if not copy_input:
+                if include_header:
+                    outf.write("x%sy%sz\n" % (ofs, ofs))
+                for line in p.stdout:
+                    try:
+                        xy, z = decode(line).split(" ", 1)
+                        x, y = xy.split("\t")
+                    except ValueError:
+                        gcore.fatal(line)
 
-    if not copy_input:
-        if include_header:
-            outf.write("x%sy%sz\n" % (ofs, ofs))
-        for line in p.stdout:
-            try:
-                xy, z = decode(line).split(" ", 1)
-                x, y = xy.split("\t")
-            except ValueError:
-                gcore.fatal(line)
-
-            outf.write("%s%s%s%s%s\n" % (x.strip(), ofs, y.strip(), ofs, z.strip()))
-    else:
-        if include_header:
-            outf.write("input_x%sinput_y%sx%sy%sz\n" % (ofs, ofs, ofs, ofs))
-        for line in p.stdout:
-            inXYZ, x, rest = decode(line).split("\t")
-            inX, inY = inXYZ.split(" ")[:2]
-            y, z = rest.split(" ", 1)
-            outf.write(
-                "%s%s%s%s%s%s%s%s%s\n"
-                % (
-                    inX.strip(),
-                    ofs,
-                    inY.strip(),
-                    ofs,
-                    x.strip(),
-                    ofs,
-                    y.strip(),
-                    ofs,
-                    z.strip(),
+                    outf.write(
+                        "%s%s%s%s%s\n" % (x.strip(), ofs, y.strip(), ofs, z.strip())
+                    )
+            else:
+                if include_header:
+                    outf.write("input_x%sinput_y%sx%sy%sz\n" % (ofs, ofs, ofs, ofs))
+                for line in p.stdout:
+                    inXYZ, x, rest = decode(line).split("\t")
+                    inX, inY = inXYZ.split(" ")[:2]
+                    y, z = rest.split(" ", 1)
+                    outf.write(
+                        "%s%s%s%s%s%s%s%s%s\n"
+                        % (
+                            inX.strip(),
+                            ofs,
+                            inY.strip(),
+                            ofs,
+                            x.strip(),
+                            ofs,
+                            y.strip(),
+                            ofs,
+                            z.strip(),
+                        )
+                    )
+            p.wait()
+            if p.returncode != 0:
+                gcore.warning(
+                    _("Projection transform probably failed, please investigate")
                 )
-            )
+    elif input_file_path is not None and output_file_path is None:
+        with open(input_file_path) as inf:
+            outf = sys.stdout
+            p = gcore.Popen(cmd, stdin=gcore.PIPE, stdout=gcore.PIPE, text=False)
+            tr = TrThread(ifs, inf, p.stdin)
+            tr.start()
 
-    p.wait()
+            if not copy_input:
+                if include_header:
+                    outf.write("x%sy%sz\n" % (ofs, ofs))
+                for line in p.stdout:
+                    try:
+                        xy, z = decode(line).split(" ", 1)
+                        x, y = xy.split("\t")
+                    except ValueError:
+                        gcore.fatal(line)
 
-    if p.returncode != 0:
-        gcore.warning(_("Projection transform probably failed, please investigate"))
+                    outf.write(
+                        "%s%s%s%s%s\n" % (x.strip(), ofs, y.strip(), ofs, z.strip())
+                    )
+            else:
+                if include_header:
+                    outf.write("input_x%sinput_y%sx%sy%sz\n" % (ofs, ofs, ofs, ofs))
+                for line in p.stdout:
+                    inXYZ, x, rest = decode(line).split("\t")
+                    inX, inY = inXYZ.split(" ")[:2]
+                    y, z = rest.split(" ", 1)
+                    outf.write(
+                        "%s%s%s%s%s%s%s%s%s\n"
+                        % (
+                            inX.strip(),
+                            ofs,
+                            inY.strip(),
+                            ofs,
+                            x.strip(),
+                            ofs,
+                            y.strip(),
+                            ofs,
+                            z.strip(),
+                        )
+                    )
+            p.wait()
+            if p.returncode != 0:
+                gcore.warning(
+                    _("Projection transform probably failed, please investigate")
+                )
+    elif input_file_path is None and output_file_path is not None:
+        inf = sys.stdin
+        with open(output_file_path, "w") as outf:
+            p = gcore.Popen(cmd, stdin=gcore.PIPE, stdout=gcore.PIPE, text=False)
+            tr = TrThread(ifs, inf, p.stdin)
+            tr.start()
+
+            if not copy_input:
+                if include_header:
+                    outf.write("x%sy%sz\n" % (ofs, ofs))
+                for line in p.stdout:
+                    try:
+                        xy, z = decode(line).split(" ", 1)
+                        x, y = xy.split("\t")
+                    except ValueError:
+                        gcore.fatal(line)
+
+                    outf.write(
+                        "%s%s%s%s%s\n" % (x.strip(), ofs, y.strip(), ofs, z.strip())
+                    )
+            else:
+                if include_header:
+                    outf.write("input_x%sinput_y%sx%sy%sz\n" % (ofs, ofs, ofs, ofs))
+                for line in p.stdout:
+                    inXYZ, x, rest = decode(line).split("\t")
+                    inX, inY = inXYZ.split(" ")[:2]
+                    y, z = rest.split(" ", 1)
+                    outf.write(
+                        "%s%s%s%s%s%s%s%s%s\n"
+                        % (
+                            inX.strip(),
+                            ofs,
+                            inY.strip(),
+                            ofs,
+                            x.strip(),
+                            ofs,
+                            y.strip(),
+                            ofs,
+                            z.strip(),
+                        )
+                    )
+            p.wait()
+            if p.returncode != 0:
+                gcore.warning(
+                    _("Projection transform probably failed, please investigate")
+                )
+    else:
+        inf = sys.stdin
+        outf = sys.stdout
+        p = gcore.Popen(cmd, stdin=gcore.PIPE, stdout=gcore.PIPE, text=False)
+        tr = TrThread(ifs, inf, p.stdin)
+        tr.start()
+
+        if not copy_input:
+            if include_header:
+                outf.write("x%sy%sz\n" % (ofs, ofs))
+            for line in p.stdout:
+                try:
+                    xy, z = decode(line).split(" ", 1)
+                    x, y = xy.split("\t")
+                except ValueError:
+                    gcore.fatal(line)
+
+                outf.write("%s%s%s%s%s\n" % (x.strip(), ofs, y.strip(), ofs, z.strip()))
+        else:
+            if include_header:
+                outf.write("input_x%sinput_y%sx%sy%sz\n" % (ofs, ofs, ofs, ofs))
+            for line in p.stdout:
+                inXYZ, x, rest = decode(line).split("\t")
+                inX, inY = inXYZ.split(" ")[:2]
+                y, z = rest.split(" ", 1)
+                outf.write(
+                    "%s%s%s%s%s%s%s%s%s\n"
+                    % (
+                        inX.strip(),
+                        ofs,
+                        inY.strip(),
+                        ofs,
+                        x.strip(),
+                        ofs,
+                        y.strip(),
+                        ofs,
+                        z.strip(),
+                    )
+                )
+        p.wait()
+        if p.returncode != 0:
+            gcore.warning(_("Projection transform probably failed, please investigate"))
 
 
 if __name__ == "__main__":
