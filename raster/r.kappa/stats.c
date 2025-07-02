@@ -61,9 +61,9 @@ int stats(void)
 
     if (G_vspawn_ex(argv[0], argv) != 0) {
         if (remove(stats_file) != 0) {
-            G_warning("Failed to remove file");
+            G_warning(_("Failed to remove file"));
         }
-        G_fatal_error("error running r.stats");
+        G_fatal_error(_("error running r.stats"));
     }
 
     fd = fopen(stats_file, "r");
