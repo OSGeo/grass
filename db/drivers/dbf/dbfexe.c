@@ -661,7 +661,7 @@ int sel(SQLPSTMT *st, int tab, int **selset)
  */
 double eval_node(SQLPNODE *nptr, int tab, int row, SQLPVALUE *value)
 {
-    int left = NODE_ERROR, right = NODE_ERROR;
+    int left = NODE_FALSE, right = NODE_FALSE;
     SQLPVALUE left_value, right_value;
     int ccol;
     COLUMN *col;
@@ -1010,7 +1010,7 @@ double eval_node(SQLPNODE *nptr, int tab, int row, SQLPVALUE *value)
  */
 int eval_node_type(SQLPNODE *nptr, int tab)
 {
-    int left = -1, right = -1;
+    int left = 0, right = 0;
     int ccol;
     COLUMN *col = NULL;
 
