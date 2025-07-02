@@ -212,17 +212,54 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
             json_object_set_number(zone_object, "null_cells",
                                    stats[z].size - stats[z].n);
             json_object_set_number(zone_object, "cells", stats[z].size);
-            json_object_set_number(zone_object, "min", stats[z].min);
-            json_object_set_number(zone_object, "max", stats[z].max);
-            json_object_set_number(zone_object, "range",
-                                   stats[z].max - stats[z].min);
-            json_object_set_number(zone_object, "mean", mean);
-            json_object_set_number(zone_object, "mean_of_abs",
-                                   stats[z].sum_abs / stats[z].n);
-            json_object_set_number(zone_object, "stddev", stdev);
-            json_object_set_number(zone_object, "variance", variance);
-            json_object_set_number(zone_object, "coeff_var", var_coef);
-            json_object_set_number(zone_object, "sum", stats[z].sum);
+
+            if (isfinite(stats[z].min))
+                json_object_set_number(zone_object, "min", stats[z].min);
+            else
+                json_object_set_null(zone_object, "min");
+
+            if (isfinite(stats[z].max))
+                json_object_set_number(zone_object, "max", stats[z].max);
+            else
+                json_object_set_null(zone_object, "max");
+
+            if (isfinite(stats[z].max - stats[z].min))
+                json_object_set_number(zone_object, "range",
+                                       stats[z].max - stats[z].min);
+            else
+                json_object_set_null(zone_object, "range");
+
+            if (isfinite(mean))
+                json_object_set_number(zone_object, "mean", mean);
+            else
+                json_object_set_null(zone_object, "mean");
+
+            if (isfinite(stats[z].sum_abs / stats[z].n))
+                json_object_set_number(zone_object, "mean_of_abs",
+                                       stats[z].sum_abs / stats[z].n);
+            else
+                json_object_set_null(zone_object, "mean_of_abs");
+
+            if (isfinite(stdev))
+                json_object_set_number(zone_object, "stddev", stdev);
+            else
+                json_object_set_null(zone_object, "stddev");
+
+            if (isfinite(variance))
+                json_object_set_number(zone_object, "variance", variance);
+            else
+                json_object_set_null(zone_object, "variance");
+
+            if (isfinite(var_coef))
+                json_object_set_number(zone_object, "coeff_var", var_coef);
+            else
+                json_object_set_null(zone_object, "coeff_var");
+
+            if (isfinite(stats[z].sum))
+                json_object_set_number(zone_object, "sum", stats[z].sum);
+            else
+                json_object_set_null(zone_object, "sum");
+
             break;
         case CSV:
             /* already addressed in print_stats_table */
@@ -324,11 +361,23 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
                 fprintf(stdout, "third_quartile=%g\n", quartile_75);
                 break;
             case JSON:
-                json_object_set_number(zone_object, "first_quartile",
-                                       quartile_25);
-                json_object_set_number(zone_object, "median", median);
-                json_object_set_number(zone_object, "third_quartile",
-                                       quartile_75);
+                if (isfinite(quartile_25))
+                    json_object_set_number(zone_object, "first_quartile",
+                                           quartile_25);
+                else
+                    json_object_set_null(zone_object, "first_quartile");
+
+                if (isfinite(median))
+                    json_object_set_number(zone_object, "median", median);
+                else
+                    json_object_set_null(zone_object, "median");
+
+                if (isfinite(quartile_75))
+                    json_object_set_number(zone_object, "third_quartile",
+                                           quartile_75);
+                else
+                    json_object_set_null(zone_object, "third_quartile");
+
                 break;
             case CSV:
                 /* already addressed in print_stats_table */
@@ -391,10 +440,19 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
                                         "Out of memory?"));
                     }
                     percentile_object = json_object(percentile_value);
-                    json_object_set_number(percentile_object, "percentile",
-                                           stats[z].perc[i]);
-                    json_object_set_number(percentile_object, "value",
-                                           quartile_perc[i]);
+
+                    if (isfinite(stats[z].perc[i]))
+                        json_object_set_number(percentile_object, "percentile",
+                                               stats[z].perc[i]);
+                    else
+                        json_object_set_null(percentile_object, "percentile");
+
+                    if (isfinite(quartile_perc[i]))
+                        json_object_set_number(percentile_object, "value",
+                                               quartile_perc[i]);
+                    else
+                        json_object_set_null(percentile_object, "value");
+
                     json_array_append_value(percentiles_array,
                                             percentile_value);
                     break;

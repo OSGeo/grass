@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-24 17:02+0000\n"
-"PO-Revision-Date: 2025-06-25 06:07+0000\n"
+"POT-Creation-Date: 2025-06-28 15:41+0000\n"
+"PO-Revision-Date: 2025-06-30 17:58+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/sv/>\n"
 "Language: sv\n"
@@ -3536,8 +3536,8 @@ msgid "subgroup <%s> of group <%s> references the following raster maps\n"
 msgstr "undergrupp <%s> i grupp <%s> refererar till följande rasterkartor\n"
 
 #: ../lib/imagery/manage_signatures.c:85 ../lib/imagery/manage_signatures.c:129
-#: ../lib/imagery/manage_signatures.c:185
-#: ../lib/imagery/manage_signatures.c:194
+#: ../lib/imagery/manage_signatures.c:187
+#: ../lib/imagery/manage_signatures.c:196
 #, c-format
 msgid "%s is not in the current mapset (%s)"
 msgstr "%s finns inte i den aktuella kartuppsättningen (%s)"
@@ -3554,20 +3554,20 @@ msgid "Unable to remove %s signature"
 msgstr "Det går inte att ta bort %s signatur"
 
 #: ../lib/imagery/manage_signatures.c:97 ../lib/imagery/manage_signatures.c:139
-#: ../lib/imagery/manage_signatures.c:204 ../lib/manage/do_copy.c:62
+#: ../lib/imagery/manage_signatures.c:206 ../lib/manage/do_copy.c:62
 #: ../lib/manage/do_remove.c:86 ../lib/manage/do_remove.c:108
 #: ../lib/manage/do_rename.c:84 ../lib/manage/do_rename.c:107
 #, c-format
 msgid "%s is missing"
 msgstr "%s saknas"
 
-#: ../lib/imagery/manage_signatures.c:153 ../lib/manage/do_copy.c:51
+#: ../lib/imagery/manage_signatures.c:154 ../lib/manage/do_copy.c:51
 #: ../lib/manage/do_copy.c:68
 #, c-format
 msgid "Unable to copy <%s> to current mapset as <%s>"
 msgstr "Det går inte att kopiera <%s> till aktuell mapset som <%s>"
 
-#: ../lib/imagery/manage_signatures.c:215
+#: ../lib/imagery/manage_signatures.c:217
 #, c-format
 msgid "Unable to rename <%s> to <%s>"
 msgstr "Det går inte att byta namn på <%s> till <%s>"
@@ -6698,9 +6698,9 @@ msgstr[1] "%d primitiver registrerade"
 #: ../lib/vector/Vlib/build_sfa.c:668
 #, c-format
 msgid "One vertex registered"
-msgid_plural "%<PRId64> vertices registered"
-msgstr[0] "En topp registrerad"
-msgstr[1] "%<PRId64> registrerade hörn"
+msgid_plural "%d vertices registered"
+msgstr[0] "Ett hörn registrerat"
+msgstr[1] "%d registrerade hörn"
 
 #: ../lib/vector/Vlib/build_nat.c:137
 msgid "Building areas..."
