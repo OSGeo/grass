@@ -38,7 +38,7 @@ void read_ppm(void)
         G_fatal_error("PNG: invalid input file %s", png.file_name);
 
     if (fgetc(input) == EOF)
-        G_fatal_error(_("PNG: unexpected EOF reading %s"), png.file_name);
+        G_fatal_error(_("PNG: invalid input file %s"), png.file_name);
 
     if (i_width != png.width || i_height != png.height)
         G_fatal_error("PNG: input file has incorrect dimensions: expected: "
@@ -89,7 +89,7 @@ void read_pgm(void)
         G_fatal_error("PNG: invalid input mask file %s", mask_name);
 
     if (fgetc(input) == EOF)
-        G_fatal_error(_("PNG: unexpected EOF reading mask %s"), mask_name);
+        G_fatal_error(_("PNG: invalid input mask file %s"), mask_name);
 
     if (i_width != png.width || i_height != png.height)
         G_fatal_error("PNG: input mask file has incorrect dimensions: "
