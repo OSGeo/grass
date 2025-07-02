@@ -22,9 +22,10 @@ from .support import ToolResult, ParameterConverter, ToolFunctionResolver
 
 
 class Tools:
-    """Use GRASS tools through function calls
+    """Use GRASS tools through function calls (experimental)
 
     GRASS tools (modules) can be executed as methods of this class.
+    This API is experimental in version 8.5 and is expected to be stable in version 8.6.
 
     The tools can be used in an active GRASS session (this skipped when writing
     a GRASS tool):

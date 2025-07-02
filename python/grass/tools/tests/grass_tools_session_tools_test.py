@@ -1,4 +1,4 @@
-"""Test grass.experimental.tools.Tools class"""
+"""Test grass.tools.Tools class"""
 
 import io
 import os
@@ -7,7 +7,7 @@ import pytest
 
 import grass.script as gs
 from grass.experimental.mapset import TemporaryMapsetSession
-from grass.experimental.tools import Tools
+from grass.tools import Tools
 from grass.exceptions import CalledModuleError
 
 

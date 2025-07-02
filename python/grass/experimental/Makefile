@@ -5,9 +5,6 @@ include $(MODULE_TOPDIR)/include/Make/Dir.make
 
 DSTDIR = $(ETC)/python/grass/experimental
 
-SUBDIRS = \
-	tools
-
 MODULES = \
 	create \
 	mapset

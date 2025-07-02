@@ -1,4 +1,4 @@
-MODULE_TOPDIR = ../../../..
+MODULE_TOPDIR = ../../..
 
 include $(MODULE_TOPDIR)/include/Make/Other.make
 include $(MODULE_TOPDIR)/include/Make/Python.make
