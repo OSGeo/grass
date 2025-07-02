@@ -17,14 +17,19 @@
 
 static const char *get_g_env(const char *);
 
-const char *G_share_dir(void)
+const char *G_colors_dir(void)
 {
-    return get_g_env("GRASS_SHAREDIR");
+    return get_g_env("GRASS_COLORSDIR");
 }
 
-const char *G_locale_dir(void)
+const char *G_etcbin_dir(void)
 {
-    return get_g_env("GRASS_LOCALEDIR");
+    return get_g_env("GRASS_ETCBINDIR");
+}
+
+const char *G_etc_dir(void)
+{
+    return get_g_env("GRASS_ETCDIR");
 }
 
 const char *G_fonts_dir(void)
@@ -32,14 +37,14 @@ const char *G_fonts_dir(void)
     return get_g_env("GRASS_FONTSDIR");
 }
 
-const char *G_colors_dir(void)
+const char *G_locale_dir(void)
 {
-    return get_g_env("GRASS_COLORSDIR");
+    return get_g_env("GRASS_LOCALEDIR");
 }
 
-const char *G_etc_dir(void)
+const char *G_share_dir(void)
 {
-    return get_g_env("GRASS_ETCDIR");
+    return get_g_env("GRASS_SHAREDIR");
 }
 
 static const char *get_g_env(const char *env_var)

@@ -233,7 +233,7 @@ struct ellps_list *read_ellipsoid_table(int fatal)
     struct ellps_list *current = NULL, *outputlist = NULL;
     double a, e2, rf;
 
-    snprintf(file, sizeof(file), "%s%s", G_share_dir(), ELLIPSOIDTABLE);
+    snprintf(file, sizeof(file), "%s%s", G_etc_dir(), ELLIPSOIDTABLE);
     fd = fopen(file, "r");
 
     if (!fd) {

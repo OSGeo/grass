@@ -84,8 +84,7 @@ int get_stp_num(void)
     int record, icode, reccnt = 0, special_case;
     char STabbr[50], COname[50];
 
-    snprintf(FIPSfile, sizeof(FIPSfile), "%s/etc/proj/FIPS.code",
-             G_share_dir());
+    snprintf(FIPSfile, sizeof(FIPSfile), "%s/proj/FIPS.code", G_etc_dir());
 
     for (;;) {
 
