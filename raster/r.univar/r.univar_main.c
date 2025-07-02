@@ -102,7 +102,6 @@ void set_params(void)
     param.shell_style->description = _(
         "This flag is deprecated and will be removed in a future release. Use "
         "format=shell instead.");
-
     param.shell_style->guisection = _("Formatting");
 
     param.extended = G_define_flag();

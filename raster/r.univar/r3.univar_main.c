@@ -64,6 +64,7 @@ void set_params(void)
     param.shell_style->description = _(
         "This flag is deprecated and will be removed in a future release. Use "
         "format=shell instead.");
+    param.shell_style->guisection = _("Formatting");
 
     param.extended = G_define_flag();
     param.extended->key = 'e';
@@ -77,6 +78,7 @@ void set_params(void)
     param.table->description = _(
         "This flag is deprecated and will be removed in a future release. Use "
         "format=csv instead.");
+    param.table->guisection = _("Formatting");
 
     param.format = G_define_standard_option(G_OPT_F_FORMAT);
     param.format->options = "plain,shell,csv,json";
