@@ -24,6 +24,7 @@ from .utils import parse_key_val
 from .core import (
     run_command,
     read_command,
+    parse_command,
     error,
     fatal,
     debug,
@@ -275,30 +276,33 @@ def vector_db_select(map, layer=1, env=None, **kwargs):
             debug("Adding key column to the output", env=env)
             kwargs["columns"] += "," + key
 
-    ret = read_command("v.db.select", map=map, layer=layer, env=env, **kwargs)
-
-    if not ret:
+    if "format" in kwargs:
+        kwargs.pop("format")
+    if "separator" in kwargs:
+        kwargs.pop("separator")
+    try:
+        data = parse_command(
+            "v.db.select", map=map, layer=layer, env=env, format="csv", **kwargs
+        )
+    except CalledModuleError:
         error(_("vector_db_select() failed"), env=env)
         return {"columns": [], "values": {}}
 
-    columns = []
-    values = {}
-    for line in ret.splitlines():
-        if not columns:
-            columns = line.split("|")
-            key_index = columns.index(key)
-            # discard key column
-            if not include_key:
-                columns = columns[:-1]
-            continue
+    if len(data) == 0:
+        return {"columns": [], "values": {}}
 
-        value = line.split("|")
-        key_value = int(value[key_index])
-        if not include_key:
-            # discard key column
-            values[key_value] = value[:-1]
-        else:
-            values[key_value] = value
+    columns = list(data[0].keys())
+    # user didn't provide key in columns, so we added it at the end
+    # and need to remove it now
+    if not include_key:
+        columns = columns[:-1]
+
+    values = {}
+    if not include_key:
+        for record in data:
+            values[int(record[key])] = [v for k, v in record.items() if k != key]
+    else:
+        values = {int(record[key]): list(record.values()) for record in data}
 
     return {"columns": columns, "values": values}
 
