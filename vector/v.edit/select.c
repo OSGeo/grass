@@ -260,7 +260,8 @@ int sel_by_cat(struct Map_info *Map, struct cat_list *cl_orig, int layer,
     }
 
     Vect_destroy_list(List_tmp1);
-    Vect_destroy_cat_list(cl);
+    if (cl_orig == NULL)
+        Vect_destroy_cat_list(cl);
 
     return List->n_values;
 }
