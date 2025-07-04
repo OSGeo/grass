@@ -3,7 +3,7 @@ MODULE_TOPDIR = ../../..
 include $(MODULE_TOPDIR)/include/Make/Other.make
 include $(MODULE_TOPDIR)/include/Make/Python.make
 
-DSTDIR = $(ETC)/python/grass/experimental/tools
+DSTDIR = $(ETC)/python/grass/tools
 
 MODULES = \
 	session_tools \
