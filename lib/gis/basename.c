@@ -86,17 +86,18 @@ char *G_double_to_basename_format(double number, size_t ndigits,
     char *result;
 
     if (ndigits != 0) {
-        sprintf(intfmt, "%%0%zud", ndigits);
+        snprintf(intfmt, sizeof(intfmt), "%%0%zud", ndigits);
     }
-    sprintf(intstr, intfmt, (int)integer);
+    snprintf(intstr, sizeof(intstr), intfmt, (int)integer);
 
     if (ndecimals != 0) {
-        sprintf(decfmt, "_%%0%zud", ndecimals);
+        snprintf(decfmt, sizeof(decfmt), "_%%0%zud", ndecimals);
         decimal = ((number - integer) * pow(10., (double)ndecimals));
-        sprintf(decstr, decfmt, (int)decimal);
+        snprintf(decstr, sizeof(decstr), decfmt, (int)decimal);
     }
-    result = G_malloc(strlen(intstr) + strlen(decstr) + 1);
-    sprintf(result, "%s%s", intstr, decstr);
+    size_t len = strlen(intstr) + strlen(decstr) + 1;
+    result = G_malloc(len);
+    snprintf(result, len, "%s%s", intstr, decstr);
     return result;
 }
 
@@ -167,10 +168,10 @@ char *G_generate_basename(const char *basename, double number, size_t ndigits,
     separator = G_get_basename_separator();
     numberstr = G_double_to_basename_format(number, ndigits, ndecimals);
 
-    result =
-        G_malloc(strlen(basename) + strlen(separator) + strlen(numberstr) + 1);
+    size_t len = strlen(basename) + strlen(separator) + strlen(numberstr) + 1;
+    result = G_malloc(len);
 
     if (result)
-        sprintf(result, "%s%s%s", basename, separator, numberstr);
+        snprintf(result, len, "%s%s%s", basename, separator, numberstr);
     return result;
 }

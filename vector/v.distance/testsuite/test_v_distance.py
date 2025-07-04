@@ -1,5 +1,4 @@
 import json
-from itertools import zip_longest
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -13,18 +12,14 @@ class TestVDistance(TestCase):
             {
                 "from_cat": 1,
                 "to_cat": 112,
-                "distances": [
-                    {"value": 0.1428123184481199, "name": "dist"},
-                    {"value": "8,A", "name": "to_attr"},
-                ],
+                "dist": 0.1428123184481199,
+                "to_attr": "8,A",
             },
             {
                 "from_cat": 2,
                 "to_cat": 44,
-                "distances": [
-                    {"value": 0.10232660032693719, "name": "dist"},
-                    {"value": "9,A", "name": "to_attr"},
-                ],
+                "dist": 0.10232660032693719,
+                "to_attr": "9,A",
             },
         ]
 
@@ -40,13 +35,15 @@ class TestVDistance(TestCase):
         self.runModule(module)
         received = json.loads(module.outputs.stdout)
 
-        for first, second in zip_longest(reference, received):
-            self.assertEqual(first["from_cat"], second["from_cat"])
-            self.assertEqual(first["to_cat"], second["to_cat"])
-            for f_d, s_d in zip_longest(first["distances"], second["distances"]):
-                self.assertEqual(f_d["name"], s_d["name"])
-                self.assertAlmostEqual(f_d["value"], s_d["value"], places=6)
-            self.assertEqual(reference, received)
+        self.assertEqual(len(reference), len(received))
+        for expected, actual in zip(reference, received):
+            for key, expected_value in expected.items():
+                self.assertIn(key, actual)
+                actual_value = actual[key]
+                if isinstance(expected_value, float):
+                    self.assertAlmostEqual(expected_value, actual_value, places=6)
+                else:
+                    self.assertEqual(expected_value, actual_value)
 
 
 if __name__ == "__main__":

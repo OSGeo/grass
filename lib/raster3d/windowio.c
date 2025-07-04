@@ -66,7 +66,7 @@ static void Rast3d_getFullWindowPath(char *path, const char *windowName)
         windowName++;
 
     if (strchr(windowName, GRASS_DIRSEP) || strchr(windowName, HOST_DIRSEP)) {
-        sprintf(path, "%s", windowName);
+        snprintf(path, GPATH_MAX, "%s", windowName);
         return;
     }
 

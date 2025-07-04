@@ -36,9 +36,6 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
     double ew_dist1, ew_dist2, ns_dist1, ns_dist2;
     double longitude, latitude;
 
-    JSON_Value *region_value;
-    JSON_Object *region;
-
     if (print_flag & PRINT_SH) {
         x = G_projection() == PROJECTION_LL ? -1 : 0;
         if (flat_flag)
@@ -93,19 +90,19 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
     /* flag.dist_res */
     if (print_flag & PRINT_METERS) {
         d_ewres = ((ew_dist1 + ew_dist2) / 2) / window->cols;
-        sprintf(ewres, "%.8f", d_ewres);
+        snprintf(ewres, sizeof(ewres), "%.8f", d_ewres);
         G_trim_decimal(ewres);
         d_ewres3 = ((ew_dist1 + ew_dist2) / 2) / window->cols3;
-        sprintf(ewres3, "%.8f", d_ewres3);
+        snprintf(ewres3, sizeof(ewres3), "%.8f", d_ewres3);
         G_trim_decimal(ewres3);
         d_nsres = ((ns_dist1 + ns_dist2) / 2) / window->rows;
-        sprintf(nsres, "%.8f", d_nsres);
+        snprintf(nsres, sizeof(nsres), "%.8f", d_nsres);
         G_trim_decimal(nsres);
         d_nsres3 = ((ns_dist1 + ns_dist2) / 2) / window->rows3;
-        sprintf(nsres3, "%.8f", d_nsres3);
+        snprintf(nsres3, sizeof(nsres3), "%.8f", d_nsres3);
         G_trim_decimal(nsres3);
         d_tbres = (window->top - window->bottom) / window->depths;
-        sprintf(tbres, "%.8f", d_tbres);
+        snprintf(tbres, sizeof(tbres), "%.8f", d_tbres);
         G_trim_decimal(tbres);
     }
 
@@ -126,10 +123,6 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
             fprintf(stdout, "%-*s %d\n", width, "zone:", window->zone);
             break;
         case JSON:
-            json_object_dotset_number(root_object, "projection.code",
-                                      window->proj);
-            json_object_dotset_string(root_object, "projection.name", prj);
-            json_object_set_number(root_object, "zone", window->zone);
             break;
         }
 
@@ -166,8 +159,6 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
 
             switch (format) {
             case JSON:
-                json_object_set_string(root_object, "datum", datum);
-                json_object_set_string(root_object, "ellipsoid", ellps);
                 break;
             default:
                 if (!(print_flag & PRINT_SH)) {
@@ -267,38 +258,40 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
 #endif
             break;
         case JSON:
-            region_value = json_value_init_object();
-            region = json_object(region_value);
-            json_object_set_number(region, "north", window->north);
-            json_object_set_number(region, "south", window->south);
-            json_object_set_number(region, "west", window->west);
-            json_object_set_number(region, "east", window->east);
-            json_object_set_number(region, "ns-res", d_nsres);
-            json_object_set_number(region, "ns-res3", d_nsres3);
-            json_object_set_number(region, "ew-res", d_ewres);
-            json_object_set_number(region, "ew-res3", d_ewres3);
-            json_object_set_value(root_object, "region", region_value);
-            json_object_set_number(root_object, "top", window->top);
-            json_object_set_number(root_object, "bottom", window->bottom);
-            json_object_set_number(root_object, "tbres", d_tbres);
+            json_object_set_number(root_object, "north", window->north);
+            json_object_set_number(root_object, "south", window->south);
+            json_object_set_number(root_object, "west", window->west);
+            json_object_set_number(root_object, "east", window->east);
+            json_object_set_number(root_object, "nsres", d_nsres);
+            json_object_set_number(root_object, "ewres", d_ewres);
             json_object_set_number(root_object, "rows", window->rows);
-            json_object_set_number(root_object, "rows3", window->rows3);
             json_object_set_number(root_object, "cols", window->cols);
-            json_object_set_number(root_object, "cols3", window->cols3);
-            json_object_set_number(root_object, "depths", window->depths);
+
+            if (print_flag & PRINT_3D) {
+                json_object_set_number(root_object, "nsres3", d_nsres3);
+                json_object_set_number(root_object, "ewres3", d_ewres3);
+                json_object_set_number(root_object, "top", window->top);
+                json_object_set_number(root_object, "bottom", window->bottom);
+                json_object_set_number(root_object, "rows3", window->rows3);
+                json_object_set_number(root_object, "cols3", window->cols3);
+                json_object_set_number(root_object, "tbres", d_tbres);
+                json_object_set_number(root_object, "depths", window->depths);
+            }
 
 #ifdef HAVE_LONG_LONG_INT
             json_object_set_number(root_object, "cells",
                                    (long long)window->rows * window->cols);
-            json_object_set_number(root_object, "cells3",
-                                   (long long)window->rows3 * window->cols3 *
-                                       window->depths);
+            if (print_flag & PRINT_3D)
+                json_object_set_number(root_object, "cells3",
+                                       (long long)window->rows3 *
+                                           window->cols3 * window->depths);
 #else
             json_object_set_number(root_object, "cells",
                                    (long)window->rows * window->cols);
-            json_object_set_number(root_object, "cells3",
-                                   (long)window->rows3 * window->cols3 *
-                                       window->depths);
+            if (print_flag & PRINT_3D)
+                json_object_set_number(root_object, "cells3",
+                                       (long)window->rows3 * window->cols3 *
+                                           window->depths);
 #endif
             break;
         }

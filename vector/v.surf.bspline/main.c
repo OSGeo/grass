@@ -234,10 +234,10 @@ int main(int argc, char *argv[])
     /* Set auxiliary table's name */
     if (vector) {
         if (G_name_is_fully_qualified(out_opt->answer, xname, xmapset)) {
-            sprintf(table_name, "%s_aux", xname);
+            snprintf(table_name, sizeof(table_name), "%s_aux", xname);
         }
         else
-            sprintf(table_name, "%s_aux", out_opt->answer);
+            snprintf(table_name, sizeof(table_name), "%s_aux", out_opt->answer);
     }
 
     /* Something went wrong in a previous v.surf.bspline execution */
@@ -920,8 +920,9 @@ int main(int argc, char *argv[])
 
         Segment_close(&out_seg); /* close segment structure  */
         /* set map title */
-        sprintf(title, "%s interpolation with Tykhonov regularization",
-                type_opt->answer);
+        snprintf(title, sizeof(title),
+                 "%s interpolation with Tykhonov regularization",
+                 type_opt->answer);
         Rast_put_cell_title(out_map_opt->answer, title);
         /* write map history */
         Rast_short_history(out_map_opt->answer, "raster", &history);

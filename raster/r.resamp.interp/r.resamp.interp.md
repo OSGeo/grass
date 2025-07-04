@@ -42,7 +42,7 @@ By specifying the number of parallel processes with **nprocs** option,
 See benchmark scripts in source code.*
 
 To reduce the memory requirements to minimum, set option **memory** to
-zero. To take advantage of the parallelization, GRASS GIS needs to
+zero. To take advantage of the parallelization, GRASS needs to
 compiled with OpenMP enabled.
 
 ## EXAMPLE

@@ -22,7 +22,7 @@ footer_tmpl = string.Template(
 | <a href="../keywords.html">Keywords Index</a>
 | <a href="../full_index.html">Full Index</a></p>
 <p>&copy; 2003-${year} <a href="https://grass.osgeo.org">GRASS Development Team</a>,
-GRASS GIS ${grass_version} Reference Manual</p>
+GRASS ${grass_version} Documentation</p>
 {% endblock %}
 """
 )
@@ -264,7 +264,7 @@ texinfo_documents = [
         project,
         "GRASS Development Team",
         "wxGUI",
-        "Documentation for GRASS GIS wxGUI Python code.",
+        "Documentation for GRASS wxGUI Python code.",
         "Miscellaneous",
     ),
 ]

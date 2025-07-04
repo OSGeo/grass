@@ -221,22 +221,26 @@ const char *Vect_get_mapset(struct Map_info *Map)
 const char *Vect_get_full_name(struct Map_info *Map)
 {
     char *ptr;
+    size_t len;
 
     if (Map->format == GV_FORMAT_OGR_DIRECT && Map->fInfo.ogr.dsn &&
         Map->fInfo.ogr.layer_name) {
-        ptr = (char *)G_malloc(strlen(Map->fInfo.ogr.layer_name) +
-                               strlen(Map->fInfo.ogr.dsn) + 2);
-        sprintf(ptr, "%s@%s", Map->fInfo.ogr.layer_name, Map->fInfo.ogr.dsn);
+        len =
+            strlen(Map->fInfo.ogr.layer_name) + strlen(Map->fInfo.ogr.dsn) + 2;
+        ptr = (char *)G_malloc(len);
+        snprintf(ptr, len, "%s@%s", Map->fInfo.ogr.layer_name,
+                 Map->fInfo.ogr.dsn);
 
         return ptr;
     }
 
-    ptr = (char *)G_malloc(strlen(Map->name) + strlen(Map->mapset) + 2);
+    len = strlen(Map->name) + strlen(Map->mapset) + 2;
+    ptr = (char *)G_malloc(len);
     if (strlen(Map->mapset) > 0) {
-        sprintf(ptr, "%s@%s", Map->name, Map->mapset);
+        snprintf(ptr, len, "%s@%s", Map->name, Map->mapset);
     }
     else {
-        sprintf(ptr, "%s", Map->name);
+        snprintf(ptr, len, "%s", Map->name);
     }
 
     return ptr;

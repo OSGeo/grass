@@ -559,7 +559,7 @@ int main(int argc, char *argv[])
     }
 
     /* open output vector */
-    sprintf(buf, "%s", out_opt->answer);
+    snprintf(buf, sizeof(buf), "%s", out_opt->answer);
     /* strip any @mapset from vector output name */
     G_find_vector(buf, G_mapset());
     if (Vect_open_new(&Map, out_opt->answer, 1) < 0)

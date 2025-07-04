@@ -45,7 +45,6 @@ void main_loop(const Setup *setup, const Geometry *geometry,
 {
     int i, l, k;
     int iblock;
-    int iter1;
     double conn;
     double addac;
 
@@ -117,9 +116,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
         for (i = 1; i <= setup->miter;
              i++) { /* iteration loop depending on simulation time and deltap */
             G_percent(i, setup->miter, 1);
-            iter1 = i / setup->iterout;
-            iter1 *= setup->iterout;
-            if (iter1 == i) {
+            if (setup->iterout > 0 && i % setup->iterout == 0) {
                 /* nfiterw = i / iterout + 10;
                    nfiterh = i / iterout + 40; */
                 G_debug(2, "iblock=%d i=%d miter=%d nwalk=%d nwalka=%d", iblock,
@@ -294,7 +291,9 @@ void main_loop(const Setup *setup, const Geometry *geometry,
              * output implementation */
             /* Save all walkers located within the computational region and with
                valid z coordinates */
-            if (outputs->outwalk != NULL && (i == setup->miter || i == iter1)) {
+            if (outputs->outwalk != NULL &&
+                (i == setup->miter ||
+                 (setup->iterout > 0 && i % setup->iterout == 0))) {
                 sim->nstack = 0;
 
                 for (lw = 0; lw < sim->nwalk; lw++) {
@@ -325,7 +324,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                 } /* lw loop */
             }
 
-            if (i == iter1 && settings->ts) {
+            if (settings->ts && setup->iterout > 0 && i % setup->iterout == 0) {
                 /* call output for iteration output */
                 if (outputs->erdep != NULL)
                     erod(grids->gama, setup, geometry,

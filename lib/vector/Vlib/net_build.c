@@ -602,7 +602,7 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
                     }
                     if (ret != DB_OK) {
                         G_warning(_("Database record for line %d (cat = %d, "
-                                    "backword direction) not found"
+                                    "backward direction) not found"
                                     "(cost was set to 0)"),
                                   i, cat);
                     }
@@ -888,7 +888,7 @@ int Vect_net_build_graph(struct Map_info *Map, int ltype, int afield,
                     }
                     if (ret != DB_OK) {
                         G_warning(_("Database record for line %d (cat = %d, "
-                                    "backword direction) not found"
+                                    "backward direction) not found"
                                     "(direction of line skipped)"),
                                   i, cat);
                         dobw = 0;

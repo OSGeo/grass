@@ -4,7 +4,7 @@
    \brief Macros for diglib (part of vector library
  */
 
-/* ALIVE MACROS take a pointer the the structure in question */
+/* ALIVE MACROS take a pointer of the structure in question */
 /*  and return 0 or non-zero */
 #define LINE_ALIVE(p)   ((p)->type < 16) /* assume DEAD are .GT. 1 << 3 */
 #define NODE_ALIVE(p)   ((p)->alive) /* simple enuf                         */

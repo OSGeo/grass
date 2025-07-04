@@ -500,7 +500,8 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
                     /* use name of the projection as name for the coordinate
                      * system */
 
-                    sprintf(path, "%s/etc/proj/projections", G_gisbase());
+                    snprintf(path, sizeof(path), "%s/etc/proj/projections",
+                             G_gisbase());
                     if (G_lookup_key_value_from_file(path, pszProj, name,
                                                      sizeof(name)) > 0)
                         G_set_key_value("name", name, *projinfo);
@@ -635,7 +636,8 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 
             /* use name of the projection as name for the coordinate system */
 
-            sprintf(path, "%s/etc/proj/projections", G_gisbase());
+            snprintf(path, sizeof(path), "%s/etc/proj/projections",
+                     G_gisbase());
             if (G_lookup_key_value_from_file(path, pszProj, name,
                                              sizeof(name)) > 0)
                 G_set_key_value("name", name, *projinfo);
@@ -811,7 +813,7 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 
                 G_set_key_value("a", (char *)pszSemiMajor, *projinfo);
 
-                sprintf(es_str, "%.16g", es);
+                snprintf(es_str, sizeof(es_str), "%.16g", es);
                 G_set_key_value("es", es_str, *projinfo);
             }
             else {
@@ -827,9 +829,9 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
         if (GPJ__get_ellipsoid_params(temp_projinfo_ext, &a, &es, &rf)) {
             char parmstr[100];
 
-            sprintf(parmstr, "%.16g", a);
+            snprintf(parmstr, sizeof(parmstr), "%.16g", a);
             G_set_key_value("a", parmstr, *projinfo);
-            sprintf(parmstr, "%.16g", es);
+            snprintf(parmstr, sizeof(parmstr), "%.16g", es);
             G_set_key_value("es", parmstr, *projinfo);
         }
     }
@@ -926,7 +928,7 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
         G_set_key_value("units", pszUnitsPlural, *projunits);
         G_free(pszUnitsPlural);
 
-        sprintf(szFormatBuf, "%.16g", dfToMeters);
+        snprintf(szFormatBuf, sizeof(szFormatBuf), "%.16g", dfToMeters);
         G_set_key_value("meters", szFormatBuf, *projunits);
     }
 

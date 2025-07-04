@@ -34,11 +34,12 @@
     for (i = 0; i < 76; i++) \
         fprintf(out, "-");   \
     fprintf(out, "%c\n", x)
+#define TMPBUF_SZ 100
 
-enum OutputFormat { PLAIN, JSON };
+enum OutputFormat { PLAIN, JSON, SHELL };
 
 /* local prototypes */
-static void format_double(const double, char *);
+static void format_double(const double, char[100]);
 static void compose_line(FILE *, const char *, ...);
 static char *history_as_string(struct History *hist);
 
@@ -46,7 +47,7 @@ int main(int argc, char **argv)
 {
     const char *name, *mapset;
     const char *title;
-    char tmp1[100], tmp2[100], tmp3[100], tmp4[100];
+    char tmp1[TMPBUF_SZ], tmp2[TMPBUF_SZ], tmp3[TMPBUF_SZ], tmp4[TMPBUF_SZ];
     char timebuff[256];
     char *units, *vdatum, *semantic_label;
     int i;
@@ -69,8 +70,8 @@ int main(int argc, char **argv)
     struct Flag *gflag, *rflag, *eflag, *hflag, *sflag;
     enum OutputFormat format;
 
-    JSON_Value *root_value;
-    JSON_Object *root_object;
+    JSON_Value *root_value = NULL;
+    JSON_Object *root_object = NULL;
 
     /* Initialize GIS Engine */
     G_gisinit(argv[0]);
@@ -86,36 +87,53 @@ int main(int argc, char **argv)
 
     gflag = G_define_flag();
     gflag->key = 'g';
-    gflag->description =
-        _("Print raster array information in shell script style");
+    gflag->description = _("Print raster array information");
 
     rflag = G_define_flag();
     rflag->key = 'r';
-    rflag->description = _("Print range in shell script style");
+    rflag->description = _("Print range");
 
     sflag = G_define_flag();
     sflag->key = 's';
-    sflag->description = _("Print stats in shell script style");
+    sflag->description = _("Print stats");
 
     eflag = G_define_flag();
     eflag->key = 'e';
-    eflag->description =
-        _("Print extended metadata information in shell script style");
+    eflag->description = _("Print extended metadata information");
 
     hflag = G_define_flag();
     hflag->key = 'h';
     hflag->description = _("Print raster history instead of info");
 
     fopt = G_define_standard_option(G_OPT_F_FORMAT);
+    fopt->required = NO;
+    fopt->answer = NULL;
+    fopt->options = "plain,shell,json";
+    fopt->descriptions = _("plain;Human readable text output;"
+                           "shell;shell script style text output;"
+                           "json;JSON (JavaScript Object Notation);");
     fopt->guisection = _("Print");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    if (hflag->answer &&
-        (gflag->answer || rflag->answer || sflag->answer || eflag->answer))
-        G_fatal_error(_("Flags -%c and -%c/%c/%c are mutually exclusive"),
-                      hflag->key, gflag->key, rflag->key, eflag->key);
+    // If no format option is specified, preserve backward compatibility
+    if (fopt->answer == NULL || fopt->answer[0] == '\0') {
+        if (gflag->answer || rflag->answer || sflag->answer || eflag->answer) {
+            // In the new behavior, "plain" will be the default format.
+            // Warn when the user specifies -g, -r, -s, or -e without
+            // format=shell option.
+            G_verbose_message(
+                _("The output format for flags -g, -r, -s, and -e currently "
+                  "defaults to 'shell', but this will change to 'plain' in a "
+                  "future release. To avoid unexpected behaviour, specify the "
+                  "format explicitly."));
+            fopt->answer = "shell";
+        }
+        else {
+            fopt->answer = "plain";
+        }
+    }
 
     name = G_store(opt1->answer);
     if ((mapset = G_find_raster2(name, "")) == NULL)
@@ -124,10 +142,27 @@ int main(int argc, char **argv)
     if (strcmp(fopt->answer, "json") == 0) {
         format = JSON;
         root_value = json_value_init_object();
-        root_object = json_value_get_object(root_value);
+        if (root_value == NULL) {
+            G_fatal_error(
+                _("Failed to initialize JSON object. Out of memory?"));
+        }
+        root_object = json_object(root_value);
+    }
+    else if (strcmp(fopt->answer, "shell") == 0) {
+        format = SHELL;
     }
     else {
         format = PLAIN;
+    }
+
+    // If no metadata-selection flags are specified and the format is not plain,
+    // enable all flags so that all information is printed.
+    if (!gflag->answer && !rflag->answer && !sflag->answer && !eflag->answer &&
+        !hflag->answer && format != PLAIN) {
+        gflag->answer = 1;
+        rflag->answer = 1;
+        sflag->answer = 1;
+        eflag->answer = 1;
     }
 
     Rast_get_cellhd(name, "", &cellhd);
@@ -383,7 +418,7 @@ int main(int argc, char **argv)
     else { /* g, r, s, e, or h flags */
         int need_range, have_range, need_stats, have_stats;
 
-        need_range = rflag->answer || format == JSON;
+        need_range = rflag->answer;
         need_stats = sflag->answer;
         if (need_stats)
             need_range = 1;
@@ -460,7 +495,7 @@ int main(int argc, char **argv)
             }
         }
 
-        if (gflag->answer || format == JSON) {
+        if (gflag->answer) {
             const char *data_type_f =
                 (data_type == CELL_TYPE
                      ? "CELL"
@@ -471,6 +506,36 @@ int main(int argc, char **argv)
 
             switch (format) {
             case PLAIN:
+                G_format_northing(cellhd.north, tmp1, -1);
+                G_format_northing(cellhd.south, tmp2, -1);
+                fprintf(out, "North: %s\n", tmp1);
+                fprintf(out, "South: %s\n", tmp2);
+
+                G_format_easting(cellhd.east, tmp1, -1);
+                G_format_easting(cellhd.west, tmp2, -1);
+                fprintf(out, "East: %s\n", tmp1);
+                fprintf(out, "West: %s\n", tmp2);
+
+                G_format_resolution(cellhd.ns_res, tmp3, -1);
+                fprintf(out, "North-south resolution: %s\n", tmp3);
+
+                G_format_resolution(cellhd.ew_res, tmp3, -1);
+                fprintf(out, "East-west resolution: %s\n", tmp3);
+
+                fprintf(out, "Rows: %d\n", cellhd.rows);
+                fprintf(out, "Columns: %d\n", cellhd.cols);
+
+                fprintf(out, "Total cells: %" PRId64 "\n", total_cells);
+
+                fprintf(out, "Data type: %s\n", data_type_f);
+
+                if (cats_ok)
+                    format_double((double)cats.num, tmp4);
+                fprintf(out, "Number of categories: %s\n",
+                        cats_ok ? tmp4 : "??");
+                break;
+
+            case SHELL:
                 G_format_northing(cellhd.north, tmp1, -1);
                 G_format_northing(cellhd.south, tmp2, -1);
                 fprintf(out, "north=%s\n", tmp1);
@@ -522,7 +587,7 @@ int main(int argc, char **argv)
             }
         }
 
-        if (rflag->answer || sflag->answer || format == JSON) {
+        if (rflag->answer || sflag->answer) {
             if (data_type == CELL_TYPE) {
                 CELL min, max;
 
@@ -530,6 +595,10 @@ int main(int argc, char **argv)
                 if (Rast_is_c_null_value(&min)) {
                     switch (format) {
                     case PLAIN:
+                        fprintf(out, "Minimum: NULL\n");
+                        fprintf(out, "Maximum: NULL\n");
+                        break;
+                    case SHELL:
                         fprintf(out, "min=NULL\n");
                         fprintf(out, "max=NULL\n");
                         break;
@@ -542,6 +611,10 @@ int main(int argc, char **argv)
                 else {
                     switch (format) {
                     case PLAIN:
+                        fprintf(out, "Minimum: %i\n", min);
+                        fprintf(out, "Maximum: %i\n", max);
+                        break;
+                    case SHELL:
                         fprintf(out, "min=%i\n", min);
                         fprintf(out, "max=%i\n", max);
                         break;
@@ -559,6 +632,10 @@ int main(int argc, char **argv)
                 if (Rast_is_d_null_value(&min)) {
                     switch (format) {
                     case PLAIN:
+                        fprintf(out, "Minimum: NULL\n");
+                        fprintf(out, "Maximum: NULL\n");
+                        break;
+                    case SHELL:
                         fprintf(out, "min=NULL\n");
                         fprintf(out, "max=NULL\n");
                         break;
@@ -571,6 +648,16 @@ int main(int argc, char **argv)
                 else {
                     switch (format) {
                     case PLAIN:
+                        if (data_type == FCELL_TYPE) {
+                            fprintf(out, "Minimum: %.7g\n", min);
+                            fprintf(out, "Maximum: %.7g\n", max);
+                        }
+                        else {
+                            fprintf(out, "Minimum: %.15g\n", min);
+                            fprintf(out, "Maximum: %.15g\n", max);
+                        }
+                        break;
+                    case SHELL:
                         if (data_type == FCELL_TYPE) {
                             fprintf(out, "min=%.7g\n", min);
                             fprintf(out, "max=%.7g\n", max);
@@ -597,6 +684,9 @@ int main(int argc, char **argv)
                 /* always report total number of cells */
                 switch (format) {
                 case PLAIN:
+                    fprintf(out, "Total cells: %" PRId64 "\n", total_cells);
+                    break;
+                case SHELL:
                     fprintf(out, "cells=%" PRId64 "\n", total_cells);
                     break;
                 case JSON:
@@ -632,6 +722,12 @@ int main(int argc, char **argv)
 
                 switch (format) {
                 case PLAIN:
+                    fprintf(out, "N: %" PRId64 "\n", rstats.count);
+                    fprintf(out, "Mean: %.15g\n", mean);
+                    fprintf(out, "Standard deviation: %.15g\n", sd);
+                    fprintf(out, "Sum: %.15g\n", rstats.sum);
+                    break;
+                case SHELL:
                     fprintf(out, "n=%" PRId64 "\n", rstats.count);
                     fprintf(out, "mean=%.15g\n", mean);
                     fprintf(out, "stddev=%.15g\n", sd);
@@ -648,6 +744,12 @@ int main(int argc, char **argv)
             else {
                 switch (format) {
                 case PLAIN:
+                    fprintf(out, "N: 0\n");
+                    fprintf(out, "Mean: NULL\n");
+                    fprintf(out, "Standard deviation: NULL\n");
+                    fprintf(out, "Sum: NULL\n");
+                    break;
+                case SHELL:
                     fprintf(out, "n=0\n");
                     fprintf(out, "mean=NULL\n");
                     fprintf(out, "stddev=NULL\n");
@@ -663,7 +765,7 @@ int main(int argc, char **argv)
             }
         }
 
-        if (eflag->answer || format == JSON) {
+        if (eflag->answer) {
             char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
             const char *maptype, *date, *creator;
 
@@ -675,6 +777,17 @@ int main(int argc, char **argv)
 
             switch (format) {
             case PLAIN:
+                fprintf(out, "Map: %s\n", xname);
+                fprintf(out, "Maptype: %s\n", maptype);
+                fprintf(out, "Mapset: %s\n", mapset);
+                fprintf(out, "Location: %s\n", G_location());
+                fprintf(out, "Project: %s\n", G_location());
+                fprintf(out, "Database: %s\n", G_gisdbase());
+                fprintf(out, "Date: %s\n", date);
+                fprintf(out, "Creator: %s\n", creator);
+                fprintf(out, "Title: %s\n", title);
+                break;
+            case SHELL:
                 fprintf(out, "map=%s\n", xname);
                 fprintf(out, "maptype=%s\n", maptype);
                 fprintf(out, "mapset=%s\n", mapset);
@@ -703,6 +816,10 @@ int main(int argc, char **argv)
                 switch (format) {
                 case PLAIN:
                     /*Create the r.info timestamp string */
+                    fprintf(out, "Timestamp: %s\n", timebuff);
+                    break;
+                case SHELL:
+                    /*Create the r.info timestamp string */
                     fprintf(out, "timestamp=\"%s\"\n", timebuff);
                     break;
                 case JSON:
@@ -713,6 +830,9 @@ int main(int argc, char **argv)
             else {
                 switch (format) {
                 case PLAIN:
+                    fprintf(out, "Timestamp: none\n");
+                    break;
+                case SHELL:
                     fprintf(out, "timestamp=\"none\"\n");
                     break;
                 case JSON:
@@ -723,6 +843,22 @@ int main(int argc, char **argv)
 
             switch (format) {
             case PLAIN:
+                fprintf(out, "Data units: %s\n", units ? units : "none");
+                fprintf(out, "Vertical datum: %s\n", vdatum ? vdatum : "none");
+                fprintf(out, "Semantic label: %s\n",
+                        semantic_label ? semantic_label : "none");
+                fprintf(out, "Data source:\n");
+                fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_DATSRC_1));
+                fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_DATSRC_2));
+                fprintf(out, "Data description:\n");
+                fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_KEYWRD));
+                if (Rast_history_length(&hist)) {
+                    fprintf(out, "Comments:\n");
+                    for (i = 0; i < Rast_history_length(&hist); i++)
+                        fprintf(out, "   %s\n", Rast_history_line(&hist, i));
+                }
+                break;
+            case SHELL:
                 fprintf(out, "units=%s\n", units ? units : "\"none\"");
                 fprintf(out, "vdatum=%s\n", vdatum ? vdatum : "\"none\"");
                 fprintf(out, "semantic_label=%s\n",
@@ -793,7 +929,7 @@ int main(int argc, char **argv)
             }
         }
 
-        if (hflag->answer) {
+        if (hflag->answer && !eflag->answer) {
             if (hist_ok) {
                 switch (format) {
                 case PLAIN:
@@ -810,6 +946,23 @@ int main(int argc, char **argv)
                         for (i = 0; i < Rast_history_length(&hist); i++)
                             fprintf(out, "   %s\n",
                                     Rast_history_line(&hist, i));
+                    }
+                    break;
+                case SHELL:
+                    fprintf(out, "source1=\"%s\"\n",
+                            hist_ok ? Rast_get_history(&hist, HIST_DATSRC_1)
+                                    : "\"none\"");
+                    fprintf(out, "source2=\"%s\"\n",
+                            hist_ok ? Rast_get_history(&hist, HIST_DATSRC_2)
+                                    : "\"none\"");
+                    fprintf(out, "description=\"%s\"\n",
+                            hist_ok ? Rast_get_history(&hist, HIST_KEYWRD)
+                                    : "\"none\"");
+                    if (Rast_history_length(&hist)) {
+                        fprintf(out, "comments=\"");
+                        for (i = 0; i < Rast_history_length(&hist); i++)
+                            fprintf(out, "%s", Rast_history_line(&hist, i));
+                        fprintf(out, "\"\n");
                     }
                     break;
                 case JSON:
@@ -851,9 +1004,9 @@ int main(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
-static void format_double(const double value, char *buf)
+static void format_double(const double value, char buf[100])
 {
-    sprintf(buf, "%.8f", value);
+    snprintf(buf, TMPBUF_SZ, "%.8f", value);
     G_trim_decimal(buf);
 }
 

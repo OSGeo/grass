@@ -40,6 +40,7 @@ from .core import (
     parser,
     percent,
     pipe_command,
+    popen_args_command,
     read_command,
     region,
     region_env,
@@ -75,6 +76,8 @@ from .raster import (
     raster_info,
     raster_what,
     MaskManager,
+    RegionManager,
+    RegionManagerEnv,
 )
 from .raster3d import mapcalc3d, raster3d_info
 from .utils import (
@@ -117,6 +120,8 @@ __all__ = [
     "KeyValue",
     "MaskManager",
     "Popen",
+    "RegionManager",
+    "RegionManagerEnv",
     "append_node_pid",
     "append_random",
     "append_uuid",
@@ -179,6 +184,7 @@ __all__ = [
     "parser",
     "percent",
     "pipe_command",
+    "popen_args_command",
     "raster3d_info",
     "raster_history",
     "raster_info",

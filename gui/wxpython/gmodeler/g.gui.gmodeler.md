@@ -200,7 +200,9 @@ window with *Save* and *Run* option are shown in the figures below.
 *Figure: Items with Script editor window.*
 
 For convenience, this model for the Graphical Modeler is also available
-for download [here](g_gui_gmodeler_zipcodes_avg_elevation.gxm).
+for download.
+
+- Download: [Example Model](g_gui_gmodeler_zipcodes_avg_elevation.gxm).
 
 The model is run by clicking the *Run* button ![run](icons/execute.png).
 When all inputs are set, the results can be displayed as shown in the
@@ -239,13 +241,13 @@ there are `Variables`.
 ![Model with variable inputs](g_gui_gmodeler_variables_run.png)  
 *Figure: Model with variable inputs.*
 
-The key point is the usage of `%` before the substituting variable and
-settings in the `Variables` dialog. For example, in the case of a model
-variable `raster` that points to an input file path and which value is
-required to be used as one of inputs for a particular model, it should
-be specified in the `Variables` dialog with its respective name
-(`raster`), data type, default value and description. Then it should be
-set in the module dialog as input called `%raster`.
+The key point is enclosing the substituting variable into `%{...}` and
+setting the value in the `Variables` dialog. For example, in the case
+of a model variable `raster` that points to an input file path and
+which value is required to be used as one of inputs for a particular
+model, it should be specified in the `Variables` dialog with its
+respective name (`raster`), data type, default value and description.
+Then it should be set in the module dialog as input called `%{raster}`.
 
 ![Example of raster file variable settings](g_gui_gmodeler_variables.png)  
 *Figure: Example of raster file variable settings.*
@@ -323,8 +325,8 @@ represent real *ndvi values*. Moreover, GRASS GIS provides a predefined
 color table called `ndvi` to represent *ndvi data*. In this case it is
 not necessary to work with every image separately.  
 The Graphical Modeler is an appropriate tool to process data in an
-effective way using loop and variables (`%map` for a particular MODIS
-image in mapset and `%ndvi` for original data name suffix). After the
+effective way using loop and variables (`%{map}` for a particular MODIS
+image in mapset and `%{ndvi}` for original data name suffix). After the
 loop component is added to model, it is necessary to define series of
 maps with required settings of map type, mapset, etc.
 
@@ -356,11 +358,11 @@ be as follows:
 # note that the white space usage differs from the standard command line usage
 
 # rename original image with preselected suffix
-g.rename raster = %map,%map.%ndvi
+g.rename raster = %{map},%{map}.%{ndvi}
 # convert integer values
-r.mapcalc expression = %map = %map.%ndvi * 0.0001
+r.mapcalc expression = %{map} = %{map}.%{ndvi} * 0.0001
 # set color table appropriate for nvdi data
-r.colors = map = %map color = ndvi
+r.colors = map = %{map} color = ndvi
 ```
 
 ## SEE ALSO

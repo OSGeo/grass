@@ -8,7 +8,7 @@
 #               Vaclav Petras <wenzeslaus gmail com> (support for general sources)
 # PURPOSE:      Tool to download and install extensions into local installation
 #
-# COPYRIGHT:    (C) 2009-2021 by Markus Neteler, and the GRASS Development Team
+# COPYRIGHT:    (C) 2009-2025 by Markus Neteler, and the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -1004,7 +1004,7 @@ def get_wxgui_extensions(url):
 
 
 def cleanup():
-    """Cleanup after the downloads and copilation"""
+    """Cleanup after the downloads and compilation"""
     if REMOVE_TMPDIR:
         try_rmdir(TMPDIR)
 
@@ -1675,7 +1675,7 @@ def install_extension_win(name):
 def download_source_code_svn(url, name, outdev, directory=None):
     """Download source code from a Subversion repository
 
-    .. note:
+    .. note::
         Stdout is passed to to *outdev* while stderr is will be just printed.
 
     :param url: URL of the repository
@@ -1704,7 +1704,7 @@ def download_source_code_svn(url, name, outdev, directory=None):
 def download_source_code_official_github(url, name, branch, directory=None):
     """Download source code from a official GitHub repository
 
-    .. note:
+    .. note::
         Stdout is passed to to *outdev* while stderr is just printed.
 
     :param url: URL of the repository
@@ -2146,14 +2146,14 @@ def remove_extension(force=False):
                 if ename in edict:
                     # modules installed by this extension
                     mnode = tnode.find("modules")
-                    if mnode:
+                    if mnode is not None:
                         for fnode in mnode.findall("module"):
                             mname = fnode.text.strip()
                             edict[ename]["mlist"].append(mname)
                             mlist.append(mname)
                     # files installed by this extension
                     bnode = tnode.find("binary")
-                    if bnode:
+                    if bnode is not None:
                         for fnode in bnode.findall("file"):
                             bname = fnode.text.strip()
                             edict[ename]["flist"].append(bname)
@@ -2186,7 +2186,7 @@ def remove_extension(force=False):
                     mlist.append(ename)
                     # files installed by this extension
                     bnode = tnode.find("binary")
-                    if bnode:
+                    if bnode is not None:
                         for fnode in bnode.findall("file"):
                             bname = fnode.text.strip()
                             edict[ename]["flist"].append(bname)

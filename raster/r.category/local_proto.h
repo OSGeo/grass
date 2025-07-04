@@ -20,8 +20,6 @@
 
 #include <grass/parson.h>
 
-#define COLOR_STRING_LENGTH 30
-
 enum OutputFormat { PLAIN, JSON };
 enum ColorOutput { NONE, RGB_OUTPUT, HEX_OUTPUT, TRIPLET_OUTPUT, HSV_OUTPUT };
 

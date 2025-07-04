@@ -2206,9 +2206,9 @@ class VPropertiesDialog(Dialog):
         gisbase = os.getenv("GISBASE")
         self.symbolPath = os.path.join(gisbase, "etc", "symbol")
         self.symbols = []
-        for dir in os.listdir(self.symbolPath):
-            for symbol in os.listdir(os.path.join(self.symbolPath, dir)):
-                self.symbols.append(os.path.join(dir, symbol))
+        for dir in Path(self.symbolPath).iterdir():
+            for symbol in Path(self.symbolPath).joinpath(dir.name).iterdir():
+                self.symbols.append(os.path.join(dir.name, symbol.name))
         self.patternPath = os.path.join(gisbase, "etc", "paint", "patterns")
 
         # notebook
@@ -5929,7 +5929,7 @@ class ImageDialog(PsmapDialog):
         """Image directory changed"""
         path = self.imagePanel.image["dir"].GetValue()
         try:
-            files = os.listdir(path)
+            files = [file.name for file in Path(path).iterdir()]
         except OSError:  # no such directory
             files = []
         imageList = []

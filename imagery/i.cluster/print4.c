@@ -16,10 +16,12 @@ int print_centroids(FILE *fd, struct Cluster *C)
         fprintf(fd, _("band %d"), band + 1);
         for (cat = 0; cat < C->nclasses; cat++) {
             if (C->count[cat])
-                sprintf(buf, FMT1, C->sum[band][cat], C->count[cat],
-                        (double)C->sum[band][cat] / (double)C->count[cat]);
+                snprintf(buf, sizeof(buf), FMT1, C->sum[band][cat],
+                         C->count[cat],
+                         (double)C->sum[band][cat] / (double)C->count[cat]);
             else
-                sprintf(buf, FMT2, C->sum[band][cat], C->count[cat]);
+                snprintf(buf, sizeof(buf), FMT2, C->sum[band][cat],
+                         C->count[cat]);
             fprintf(fd, "%s %-18s", cat % 4 ? "" : HOST_NEWLINE, buf);
         }
         fprintf(fd, "%s", HOST_NEWLINE);

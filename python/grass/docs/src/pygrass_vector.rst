@@ -73,7 +73,7 @@ To begin using a vector map, it must first be opened: ::
 
 The ``open()`` method supports a number of option arguments (see the
 :class:`~pygrass.vector.abstract.Info` documentation for a complete
-list). In particular, the mode argument can take a a value of:
+list). In particular, the mode argument can take a value of:
 
 * 'r': read-only mode, vector features are read-only (attribute table
   is modifiable since are handle by a database);
@@ -123,13 +123,13 @@ Import the geometry feature class and add two points:
 Write the two points to the map:
 
     >>> new.write(point0, cat=1, attrs=('pub',))
-    >>> new.write(point1, cat=2, attrs=('resturant',))
+    >>> new.write(point1, cat=2, attrs=('restaurant',))
 
 Commit the DB changes (attributes):
 
     >>> new.table.conn.commit()
     >>> new.table.execute().fetchall()
-    [(1, u'pub'), (2, u'resturnat')]
+    [(1, u'pub'), (2, u'restaurant')]
 
 Close the vector map:
 
@@ -147,7 +147,7 @@ Now we can play with the map:
     >>> new.read(1).attrs['name']
     u'pub'
     >>> new.read(2).attrs['name']
-    u'resturnat'
+    u'restaurant'
     >>> new.close()
     >>> new.remove()
 

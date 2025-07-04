@@ -1,6 +1,8 @@
 ---
 ci:
   skip: [flake8]
+default_language_version:
+  node: lts
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
@@ -38,19 +40,19 @@ repos:
           )
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
-    rev: v0.9.10
+    rev: v0.12.1
     hooks:
       # Run the linter.
-      - id: ruff
+      - id: ruff-check
         args: [--fix, --preview]
       # Run the formatter.
       - id: ruff-format
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.44.0
+    rev: v0.45.0
     hooks:
       - id: markdownlint-fix
   - repo: https://github.com/pycqa/flake8
-    rev: 7.1.2
+    rev: 7.3.0
     hooks:
       - id: flake8
         exclude: |
@@ -69,6 +71,6 @@ repos:
                 .*\.ipynb$
           )
   - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.35.1
+    rev: v1.37.1
     hooks:
       - id: yamllint

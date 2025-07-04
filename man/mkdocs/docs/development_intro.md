@@ -5,17 +5,17 @@ authors:
 title: Development Introduction
 ---
 
-## C
+## API reference and documentation
 
-- C: [Developers Manual](https://grass.osgeo.org/programming8/)
-
-## Python
-
-- Python: [Python Library](https://grass.osgeo.org/grass-stable/manuals/libpython/index.html)
+- [Python library](https://grass.osgeo.org/grass-stable/manuals/libpython/index.html)
+- [C API reference and developer manual](https://grass.osgeo.org/programming8/)
+- [Tools](full_index.md)
+- [Standard parser options](parser_standard_options.md)
+  (for writing new or custom tools)
 
 ## Testing
 
-- Testing: [Testing](https://grass.osgeo.org/grass-stable/manuals/libpython/gunittest_testing.html)
+- [Testing](https://grass.osgeo.org/grass-stable/manuals/libpython/gunittest_testing.html)
 
 ## Addons
 
@@ -25,4 +25,11 @@ repository and are a great place to plubish and share custom tools, models, and 
 The addons are maintained by the GRASS community and are a great way to extend the
 functionality of GRASS.
 
-- Addons: [Addons](https://grass.osgeo.org/grass-stable/manuals/addons/)
+- [Addons](https://grass.osgeo.org/grass-stable/manuals/addons/)
+
+## Contributing
+
+- [Style guide](style_guide.md)
+- [GitHub guide](github_guide.md)
+- [Investigating code history](investigating_history.md)
+- [CONTRIBUTING file on GitHub](https://github.com/OSGeo/grass/blob/main/CONTRIBUTING.md)

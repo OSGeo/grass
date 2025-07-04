@@ -182,10 +182,10 @@ const char *Vect_get_column_names_types(struct Map_info *Map, int field)
     for (col = 0; col < ncols; col++) {
         col_type_names[col] = (char *)G_calloc(256, sizeof(char));
 
-        sprintf(col_type_names[col], "%s(%s)",
-                db_get_column_name(db_get_table_column(table, col)),
-                db_sqltype_name(
-                    db_get_column_sqltype(db_get_table_column(table, col))));
+        snprintf(col_type_names[col], 256, "%s(%s)",
+                 db_get_column_name(db_get_table_column(table, col)),
+                 db_sqltype_name(
+                     db_get_column_sqltype(db_get_table_column(table, col))));
     }
 
     if ((list = G_str_concat((const char **)col_type_names, ncols, ",",

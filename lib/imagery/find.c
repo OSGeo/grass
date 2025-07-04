@@ -92,7 +92,7 @@ int I_find_subgroup(const char *group, const char *subgroup)
     if (subgroup == NULL || *subgroup == 0)
         return 0;
 
-    sprintf(element, "subgroup%c%s", HOST_DIRSEP, subgroup);
+    snprintf(element, sizeof(element), "subgroup%c%s", HOST_DIRSEP, subgroup);
     G_debug(5, "I_find_subgroup() element: %s", element);
 
     return G_find_file2_misc("group", element, group, G_mapset()) != NULL;
@@ -117,7 +117,7 @@ int I_find_subgroup2(const char *group, const char *subgroup,
     if (subgroup == NULL || *subgroup == 0)
         return 0;
 
-    sprintf(element, "subgroup%c%s", HOST_DIRSEP, subgroup);
+    snprintf(element, sizeof(element), "subgroup%c%s", HOST_DIRSEP, subgroup);
     G_debug(5, "I_find_subgroup2() element: %s", element);
 
     return G_find_file2_misc("group", element, group, mapset) != NULL;
@@ -143,8 +143,8 @@ int I_find_subgroup_file(const char *group, const char *subgroup,
     if (file == NULL || *file == 0)
         return 0;
 
-    sprintf(element, "subgroup%c%s%c%s", HOST_DIRSEP, subgroup, HOST_DIRSEP,
-            file);
+    snprintf(element, sizeof(element), "subgroup%c%s%c%s", HOST_DIRSEP,
+             subgroup, HOST_DIRSEP, file);
     G_debug(5, "I_find_subgroup_file() element: %s", element);
 
     return G_find_file2_misc("group", element, group, G_mapset()) != NULL;
@@ -171,8 +171,8 @@ int I_find_subgroup_file2(const char *group, const char *subgroup,
     if (file == NULL || *file == 0)
         return 0;
 
-    sprintf(element, "subgroup%c%s%c%s", HOST_DIRSEP, subgroup, HOST_DIRSEP,
-            file);
+    snprintf(element, sizeof(element), "subgroup%c%s%c%s", HOST_DIRSEP,
+             subgroup, HOST_DIRSEP, file);
     G_debug(5, "I_find_subgroup_file2() element: %s", element);
 
     return G_find_file2_misc("group", element, group, mapset) != NULL;

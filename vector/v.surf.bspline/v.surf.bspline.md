@@ -22,7 +22,7 @@ step is defined by **ew_step** for the east-west direction and
 length of spline step should be no less than the distance between
 observation points. Each vector point observation is modeled as a linear
 function of the non-zero splines in the area around the observation. The
-least squares regression predicts the the coefficients of these linear
+least squares regression predicts the coefficients of these linear
 functions. Regularization avoids the need to have one observation and
 one coefficient for each spline (in order to avoid instability).
 

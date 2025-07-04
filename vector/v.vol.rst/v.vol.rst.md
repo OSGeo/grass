@@ -13,7 +13,7 @@ the crossection of the interpolated volume with a surface defined by
 interpolation, geometric parameters of the interpolated phenomenon can
 be computed (magnitude of gradient, direction of gradient defined by
 horizontal and vertical angles), change of gradient, Gauss-Kronecker
-curvature, or mean curvature). These geometric parameteres are saved as
+curvature, or mean curvature). These geometric parameters are saved as
 3D raster maps **gradient, aspect_horizontal, aspect_vertical,
 ncurvature, gcurvature, mcurvature**, respectively. Maps
 **aspect_horizontal** and **aspect_vertical** are in degrees.

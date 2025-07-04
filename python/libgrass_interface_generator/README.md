@@ -20,6 +20,24 @@ Currently installed version:
 It is highly encouraged to report [upstreams](https://github.com/ctypesgen/ctypesgen)
 necessary patches for GRASS.
 
+#### Add `bool` ctypes type map for C23 support
+
+Add bool to ctypes type map. This change is needed for C23 support, where
+_Bool is not necessarily defined by default.
+
+```diff
+--- python/libgrass_interface_generator/ctypesgen/ctypedescs.py.orig
++++ python/libgrass_interface_generator/ctypesgen/ctypedescs.py
+@@ -58,6 +58,7 @@
+     ("__uint64", False, 0): "c_uint64",
+     ("__uint64_t", False, 0): "c_uint64",
+     ("_Bool", True, 0): "c_bool",
++    ("bool", True, 0): "c_bool",
+ }
+ 
+ ctypes_type_map_python_builtin = {
+```
+
 #### Ctypes "unnamed structure member with 0 bit size"-patch
 
 Using unnamed zero bit sized structure members, e.g.:

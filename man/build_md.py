@@ -12,55 +12,13 @@ author: GRASS Development Team
 """
 )
 
-macosx_tmpl = string.Template(
-    r"""
-AppleTitle: GRASS GIS ${grass_version}
-AppleIcon: GRASS-${grass_mmver}/grass_icon.png
-"""
-)
-
-header2_tmpl = string.Template(
-    r"""# GRASS GIS ${grass_version} Reference Manual
-
-**Geographic Resources Analysis Support System**, commonly
-referred to as [GRASS GIS](https://grass.osgeo.org), is a
-[Geographic Information System](https://en.wikipedia.org/wiki/Geographic_information_system)
-(GIS) used for geospatial data management and
-analysis, image processing, graphics/maps production, spatial
-modeling, and visualization. GRASS is currently used in academic and
-commercial settings around the world, as well as by many governmental
-agencies and environmental consulting companies.
-
-This reference manual details the use of modules distributed with
-Geographic Resources Analysis Support System (GRASS), an open source
-([GNU GPLed](https://www.gnu.org/licenses/gpl.html), image
-processing and geographic information system (GIS).
-
-"""
-)
-
-# footer_tmpl = string.Template(
-#     r"""
-# ____
-# [Main index](${index_url}) |
-# [Topics index](topics.md) |
-# [Keywords index](keywords.md) |
-# [Graphical index](graphical_index.md) |
-# [Full index](full_index.md)
-
-# &copy; 2003-${year}
-# [GRASS Development Team](https://grass.osgeo.org),
-# GRASS GIS ${grass_version} Reference Manual
-# """
-# )
-# replaced by footer
-footer_tmpl = string.Template("")
+header2_tmpl = string.Template(r"""""")
 
 cmd2_tmpl = string.Template(
     r"""
-### ${cmd_label} commands (${cmd}.*)
+### ${cmd_label} tools (${cmd}.)
 
-| Module | Description |
+| Name | Description |
 |--------|-------------|
 """
 )
@@ -71,16 +29,15 @@ desc1_tmpl = string.Template(
 )
 
 modclass_intro_tmpl = string.Template(
-    r"""Go to [${modclass} introduction](${modclass_lower}intro.md) | [topics](topics.md)
+    r"""# ${modclass} tools
+
+To learn more about these tool in general, go to [${modclass} introduction](${modclass_lower}intro.md).
 """
 )
-# "
-
 
 modclass_tmpl = string.Template(
-    r"""Go [back to help overview](index.md)
-### ${modclass} commands
-| Module | Description |
+    r"""
+| Name | Description |
 |--------|-------------|
 """
 )
@@ -99,13 +56,13 @@ moduletopics_tmpl = string.Template(
 headertopics_tmpl = r"""# Topics
 """
 
-headerkeywords_tmpl = r"""# Keywords - Index of GRASS GIS modules
+headerkeywords_tmpl = r"""# Keywords - Index of GRASS tools
 """
 
 headerkey_tmpl = string.Template(
     r"""# Topic: ${keyword}
 
-| Module | Description |
+| Tool | Description |
 |--------|-------------|
 """
 )
@@ -115,7 +72,7 @@ headerpso_tmpl = r"""
 # Standard Parser Options
 """
 
-header_graphical_index_tmpl = """# Graphical index of GRASS GIS modules
+header_graphical_index_tmpl = """# Graphical index of tools
 """
 
 ############################################################################

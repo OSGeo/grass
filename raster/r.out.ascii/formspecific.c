@@ -46,12 +46,14 @@ int write_GRASS(int fd, FILE *fp, int nrows, int ncols, int out_type, int dp,
                     fprintf(fp, "%d", *((CELL *)ptr));
 
                 else if (out_type == FCELL_TYPE) {
-                    sprintf(cell_buf, "%.*f", dp, *((FCELL *)ptr));
+                    snprintf(cell_buf, sizeof(cell_buf), "%.*f", dp,
+                             *((FCELL *)ptr));
                     G_trim_decimal(cell_buf);
                     fprintf(fp, "%s", cell_buf);
                 }
                 else if (out_type == DCELL_TYPE) {
-                    sprintf(cell_buf, "%.*f", dp, *((DCELL *)ptr));
+                    snprintf(cell_buf, sizeof(cell_buf), "%.*f", dp,
+                             *((DCELL *)ptr));
                     G_trim_decimal(cell_buf);
                     fprintf(fp, "%s", cell_buf);
                 }
@@ -182,12 +184,14 @@ int write_GSGRID(int fd, FILE *fp, int nrows, int ncols, int out_type, int dp,
                 if (out_type == CELL_TYPE)
                     fprintf(fp, "%d", *((CELL *)ptr));
                 else if (out_type == FCELL_TYPE) {
-                    sprintf(cell_buf, "%.*f", dp, *((FCELL *)ptr));
+                    snprintf(cell_buf, sizeof(cell_buf), "%.*f", dp,
+                             *((FCELL *)ptr));
                     G_trim_decimal(cell_buf);
                     fprintf(fp, "%s", cell_buf);
                 }
                 else if (out_type == DCELL_TYPE) {
-                    sprintf(cell_buf, "%.*f", dp, *((DCELL *)ptr));
+                    snprintf(cell_buf, sizeof(cell_buf), "%.*f", dp,
+                             *((DCELL *)ptr));
                     G_trim_decimal(cell_buf);
                     fprintf(fp, "%s", cell_buf);
                 }

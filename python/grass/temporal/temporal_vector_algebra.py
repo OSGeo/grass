@@ -9,7 +9,7 @@ for details.
 
 :authors: Thomas Leppelt and Soeren Gebbert
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> import grass.temporal as tgis
     >>> tgis.init(True)
@@ -217,7 +217,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         :param compare_cmd: Boolean for comparing command list values based on
                           related map list and comparison operator.
         :param compop: Comparison operator, && or ||.
-        :param aggregate: Aggregation operator for relation map list, & or |.
+        :param aggregate: Aggregation operator for relation map list, & or \\|.
         :param new: Boolean if new temporary maps should be created.
         :param convert: Boolean if conditional values should be converted to
                       r.mapcalc command strings.

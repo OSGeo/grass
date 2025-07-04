@@ -25,7 +25,7 @@ static void run_stats(const char *mapname, const char *tempfile)
     argv[argc++] = mapname;
 
     if (!cat_ranges) {
-        sprintf(buf, "nsteps=%d", nsteps);
+        snprintf(buf, sizeof(buf), "nsteps=%d", nsteps);
         argv[argc++] = buf;
     }
 

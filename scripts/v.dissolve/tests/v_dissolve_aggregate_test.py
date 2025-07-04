@@ -366,7 +366,7 @@ def test_sql_expressions_accepted(dataset):
 
 
 def test_no_methods_with_univar_and_result_columns_fail(dataset):
-    """Omitting methods as for sql backend is forbiden for univar"""
+    """Omitting methods as for sql backend is forbidden for univar"""
     dissolved_vector = "test_no_method_univar_fails"
 
     aggregate_columns = dataset.float_column_name

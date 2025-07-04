@@ -14,7 +14,12 @@
  */
 
 #include <string.h>
+#include <stdbool.h>
 #include <stdlib.h>
+
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -39,7 +44,7 @@ char *Rast_mask_info(void)
 
     switch (Rast__mask_info(name, mapset)) {
     case 1:
-        sprintf(text, _("<%s> in mapset <%s>"), name, mapset);
+        snprintf(text, sizeof(text), _("<%s> in mapset <%s>"), name, mapset);
         break;
     case -1:
         strcpy(text, _("none"));
@@ -194,4 +199,30 @@ bool Rast_mask_is_present(void)
     char *name = Rast_mask_name();
     bool present = G_find_raster2(name, "") != NULL;
     return present;
+}
+
+/**
+ * \brief Disable OpenMP if raster mask is present
+ *
+ * This helper function can be removed when raster reading is made
+ * thread safe.
+ *
+ * \param nprocs number of threads to use
+ * \return number of threads in use
+ */
+int Rast_disable_omp_on_mask(int nprocs)
+{
+
+#if defined(_OPENMP)
+    if (nprocs > 1 && Rast_mask_is_present()) {
+        omp_set_num_threads(1);
+        G_verbose_message(_("Single thread processing enforced due to "
+                            "raster mask being present."));
+        nprocs = 1;
+    }
+#else
+    nprocs = 1;
+#endif
+
+    return nprocs;
 }
