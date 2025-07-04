@@ -127,15 +127,10 @@ int main(int argc, char *argv[])
 
     null_str = parm.null->answer;
 
-    if (flag.surfer->answer && flag.noheader->answer)
-        G_fatal_error(_("Both -s and -h doesn't make sense"));
-
-    if (flag.surfer->answer && flag.modflow->answer)
-        G_fatal_error(_("Use -m or -s, not both"));
-    if (flag.surfer->answer && flag.lisflood->answer)
-        G_fatal_error(_("Use -l or -s, not both"));
-    if (flag.lisflood->answer && flag.modflow->answer)
-        G_fatal_error(_("Use -m or -l, not both"));
+    G_option_exclusive(flag.surfer, flag.noheader, NULL);
+    G_option_exclusive(flag.surfer, flag.modflow, NULL);
+    G_option_exclusive(flag.surfer, flag.lisflood, NULL);
+    G_option_exclusive(flag.lisflood, flag.modflow, NULL);
 
     name = parm.map->answer;
 
