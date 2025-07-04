@@ -1055,13 +1055,10 @@ class VectMap:
         try:
             with open(headPath) as head:
                 for line in head:
-                    i = line.find(
-                        "MAP DATE:",
-                    )
+                    i = line.find("MAP DATE:")
                     if i == 0:
                         return line.split(":", 1)[1].strip()
-
-                return ""
+            return ""
         except OSError:
             return ""
 
