@@ -1,4 +1,4 @@
-"""Fixtures for grass.script"""
+"""Fixtures for grass.experimental"""
 
 import uuid
 import os
