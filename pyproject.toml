@@ -286,7 +286,6 @@ ignore = [
 "**.py" = ["PYI066"]
 "*/testsuite/**.py" = ["PT009", "PT027"]
 "gui/wxpython/iclass/statistics.py" = ["A005"]
-"gui/wxpython/vnet/vnet_data.py" = ["SIM115"]
 "gui/wxpython/wxplot/profile.py" = ["A005", "SIM115"]
 "lib/imagery/testsuite/test_imagery_sigsetfile.py" = ["FURB152"]
 "lib/init/grass.py" = ["SIM115"]
