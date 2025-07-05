@@ -155,7 +155,13 @@ int G_open_update_misc(const char *dir, const char *element, const char *name)
 
     fd = G__open_misc(dir, element, name, G_mapset(), 2);
     if (fd >= 0)
-        lseek(fd, 0L, SEEK_END);
+        if (lseek(fd, 0L, SEEK_END) == (off_t)-1) {
+            int err = errno;
+            /* GTC seek refers to reading/writing from a different position
+             * in a file */
+            G_warning(_("Unable to seek: %d %s"), err, strerror(err));
+            return -1;
+        }
 
     return fd;
 }
@@ -222,7 +228,13 @@ FILE *G_fopen_append_misc(const char *dir, const char *element,
     fd = G__open_misc(dir, element, name, G_mapset(), 2);
     if (fd < 0)
         return (FILE *)0;
-    lseek(fd, 0L, SEEK_END);
+    if (lseek(fd, 0L, SEEK_END) == (off_t)-1) {
+        int err = errno;
+        /* GTC seek refers to reading/writing from a different position
+         * in a file */
+        G_warning(_("Unable to seek: %d %s"), err, strerror(err));
+        return (FILE *)-1;
+    }
 
     return fdopen(fd, "a");
 }
@@ -235,7 +247,13 @@ FILE *G_fopen_modify_misc(const char *dir, const char *element,
     fd = G__open_misc(dir, element, name, G_mapset(), 2);
     if (fd < 0)
         return (FILE *)0;
-    lseek(fd, 0L, SEEK_END);
+    if (lseek(fd, 0L, SEEK_END) == (off_t)-1) {
+        int err = errno;
+        /* GTC seek refers to reading/writing from a different position
+         * in a file */
+        G_warning(_("Unable to seek: %d %s"), err, strerror(err));
+        return (FILE *)-1;
+    }
 
     return fdopen(fd, "r+");
 }
