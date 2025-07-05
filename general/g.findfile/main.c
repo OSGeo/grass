@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <grass/gis.h>
+#include <grass/manage.h>
 #include <grass/glocale.h>
 
 #include "local_proto.h"
@@ -32,7 +33,7 @@ int main(int argc, char *argv[])
     struct Option *elem_opt;
     struct Option *mapset_opt;
     struct Option *file_opt;
-    struct Flag *n_flag, *l_flag;
+    struct Flag *n_flag, *l_flag, *t_flag;
     size_t len;
 
     module = G_define_module();
@@ -74,6 +75,12 @@ int main(int argc, char *argv[])
     l_flag->description = _("List available elements and exit");
     l_flag->suppress_required = YES;
 
+    t_flag = G_define_flag();
+    t_flag->key = 't';
+    t_flag->label = _("Return code 0 when file found, 1 otherwise");
+    t_flag->description =
+        _("Behave like the test utility, 0 for true, 1 for false, no output");
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
@@ -112,19 +119,39 @@ int main(int argc, char *argv[])
         }
     }
 
-    mapset = G_find_file2(elem_opt->answer, name, search_mapset);
+    const struct list *element;
+    int n;
+    M_read_list(FALSE, &n);
+    n = M_get_element(elem_opt->answer);
+    char *main_element;
+    if (n >= 0) {
+        element = M_get_list(n);
+        main_element = G_store(element->mainelem);
+    }
+    else {
+        main_element = G_store(elem_opt->answer);
+    }
+    mapset = G_find_file2(main_element, name, search_mapset);
+
+    if (t_flag->answer) {
+        if (mapset)
+            return 0;
+        else
+            return 1;
+    }
     if (mapset) {
         char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
         const char *qchar = n_flag->answer ? "" : "'";
         const char *qual = G_fully_qualified_name(name, mapset);
 
         G_unqualified_name(name, mapset, xname, xmapset);
-        G_file_name(file, elem_opt->answer, name, mapset);
+        G_file_name(file, main_element, name, mapset);
         fprintf(stdout, "name=%s%s%s\n", qchar, xname, qchar);
         fprintf(stdout, "mapset=%s%s%s\n", qchar, xmapset, qchar);
         fprintf(stdout, "fullname=%s%s%s\n", qchar, qual, qchar);
         fprintf(stdout, "file=%s%s%s\n", qchar, file, qchar);
 
+        G_free(main_element);
         return EXIT_SUCCESS;
     }
     else {
@@ -134,5 +161,9 @@ int main(int argc, char *argv[])
         fprintf(stdout, "file=\n");
     }
 
+    G_free(main_element);
+    G_verbose_message(_("In the next major release, g.findfile will no longer "
+                        "return exit code 1 when a file is not found. Please "
+                        "use the -t flag instead to get the error code."));
     return EXIT_FAILURE;
 }
