@@ -2,12 +2,11 @@ cff-version: 1.2.0
 title: GRASS GIS
 message: If you use this software, please cite it using the metadata from this file.
 version: 8.4.0
-abstract: GRASS GIS (Geographic Resources Analysis Support System) is a free and open source Geographic Information System (GIS) software used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization.
+abstract: "GRASS, Geographic Resources Analysis Support System, is a powerful computational engine for raster, vector, and geospatial processing. It supports terrain and ecosystem modeling, hydrology, data management, and imagery processing. With a built-in temporal framework and Python API, it enables advanced time series analysis and rapid geospatial programming, optimized for large-scale analysis on various hardware configurations."
 type: software
 authors:
-  - family-names: GRASS Development Team
+  - name: "GRASS Development Team"
     email: grass-dev@lists.osgeo.org
-    affiliation: Open Source Geospatial Foundation (OSGeo)
   - given-names: Martin
     family-names: Landa
     affiliation: Czech Technical University in Prague
