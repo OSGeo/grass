@@ -9,24 +9,24 @@ authors:
     email: grass-dev@lists.osgeo.org
   - given-names: Martin
     family-names: Landa
-    affiliation: Czech Technical University in Prague
+    affiliation: "Czech Technical University in Prague"
     orcid: https://orcid.org/0000-0001-6869-3542
   - given-names: Markus
     family-names: Neteler
-    affiliation: mundialis GmbH & Co. KG
+    affiliation: "mundialis GmbH & Co. KG"
     orcid: https://orcid.org/0000-0003-1916-1966
   - given-names: Markus
     family-names: Metz
     email: metz@mundialis.de
-    affiliation: mundialis GmbH & Co. KG
+    affiliation: "mundialis GmbH & Co. KG"
     orcid: https://orcid.org/0000-0002-4038-8754
   - given-names: Anna
     family-names: Petrášová
-    affiliation: North Carolina State University
+    affiliation: "North Carolina State University"
     orcid: https://orcid.org/0000-0002-5120-5538
   - given-names: Vaclav
     family-names: Petráš
-    affiliation: North Carolina State University
+    affiliation: "North Carolina State University"
     orcid: https://orcid.org/0000-0001-5566-9236
   - given-names: Glynn
     family-names: Clements
@@ -43,7 +43,7 @@ authors:
   - given-names: Caitlin
     family-names: Haedrich
     email: caitlin.haedrich@gmail.com
-    affiliation: North Carolina State University
+    affiliation: "North Carolina State University"
     orcid: https://orcid.org/0000-0003-4373-5691
   - given-names: Stefan
     family-names: Blumentrath
@@ -70,7 +70,7 @@ authors:
     orcid: https://orcid.org/0000-0001-6622-7169
   - given-names: Luca
     family-names: Delucchi
-    affiliation: Fondazione Edmund Mach
+    affiliation: "Fondazione Edmund Mach"
     email: lucadeluge@gmail.com
     orcid: https://orcid.org/0000-0002-0493-3516
   - given-names: Pietro
