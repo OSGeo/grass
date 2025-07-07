@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 15:41+0000\n"
+"POT-Creation-Date: 2025-07-05 18:31+0000\n"
 "PO-Revision-Date: 2025-06-25 06:07+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/sv/>\n"
@@ -15314,7 +15314,7 @@ msgstr "Kommaseparerat värde (*.csv)|*.csv"
 msgid "Overwrite file?"
 msgstr "Skriva över fil?"
 
-#: ../gui/wxpython/wxplot/profile.py:445
+#: ../gui/wxpython/wxplot/profile.py:449
 #, python-format
 msgid ""
 "Unable to open file <%s> for writing.\n"
@@ -15323,7 +15323,7 @@ msgstr ""
 "Filen <%s> kunde inte öppnas för skrivning.\n"
 "Orsak: %s"
 
-#: ../gui/wxpython/wxplot/profile.py:460
+#: ../gui/wxpython/wxplot/profile.py:457
 #, python-format
 msgid ""
 "%d files created:\n"
@@ -15332,11 +15332,11 @@ msgstr ""
 "%d filer skapade:\n"
 "%s"
 
-#: ../gui/wxpython/wxplot/profile.py:462
+#: ../gui/wxpython/wxplot/profile.py:459
 msgid "No files generated."
 msgstr "Inga filer genererade."
 
-#: ../gui/wxpython/wxplot/profile.py:469
+#: ../gui/wxpython/wxplot/profile.py:466
 msgid "Statistics for Profile(s)"
 msgstr "Statistik för Profil(er)"
 

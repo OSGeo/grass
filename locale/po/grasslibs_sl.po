@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_sl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 15:41+0000\n"
+"POT-Creation-Date: 2025-07-05 18:31+0000\n"
 "PO-Revision-Date: 2025-03-12 12:05+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Slovenian <https://weblate.osgeo.org/projects/grass-gis/grasslibs/sl/>\n"
@@ -4815,6 +4815,16 @@ msgstr ""
 msgid "Input PNG file has invalid palette"
 msgstr ""
 
+#: ../lib/pngdriver/read_ppm.c:41
+#, fuzzy, c-format
+msgid "PNG: invalid input file %s"
+msgstr "Ne najdem vhodnega sloja '%s'"
+
+#: ../lib/pngdriver/read_ppm.c:92
+#, fuzzy, c-format
+msgid "PNG: invalid input mask file %s"
+msgstr "Ne najdem vhodnega sloja '%s'"
+
 #: ../lib/pngdriver/write_png.c:38
 #, fuzzy
 msgid "Unable to write PNG"
@@ -8541,7 +8551,7 @@ msgstr "Povezava ni uspela.\n"
 msgid "Unable to get number of simple features"
 msgstr "Ne morem odpreti temp datoteke"
 
-#: ../lib/vector/Vlib/simple_features.c:349
+#: ../lib/vector/Vlib/simple_features.c:350
 #, fuzzy, c-format
 msgid "Unable to report simple features for vector map <%s>"
 msgstr "ne morem spremeniti direktorija v %s"

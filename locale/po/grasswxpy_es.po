@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 15:41+0000\n"
+"POT-Creation-Date: 2025-07-05 18:31+0000\n"
 "PO-Revision-Date: 2022-05-22 05:04+0000\n"
 "Last-Translator: Veronica <veroandreo@gmail.com>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/es/>\n"
@@ -15399,7 +15399,7 @@ msgstr "Valor separado por comas (*.csv)|*.csv"
 msgid "Overwrite file?"
 msgstr "¿Sobreescribir archivo?"
 
-#: ../gui/wxpython/wxplot/profile.py:445
+#: ../gui/wxpython/wxplot/profile.py:449
 #, python-format
 msgid ""
 "Unable to open file <%s> for writing.\n"
@@ -15408,7 +15408,7 @@ msgstr ""
 "No es posible abrir el archivo <%s> para escribir.\n"
 "Razones: %s"
 
-#: ../gui/wxpython/wxplot/profile.py:460
+#: ../gui/wxpython/wxplot/profile.py:457
 #, python-format
 msgid ""
 "%d files created:\n"
@@ -15417,11 +15417,11 @@ msgstr ""
 "%d archivos creados:\n"
 "%s"
 
-#: ../gui/wxpython/wxplot/profile.py:462
+#: ../gui/wxpython/wxplot/profile.py:459
 msgid "No files generated."
 msgstr "No se generaron archivos."
 
-#: ../gui/wxpython/wxplot/profile.py:469
+#: ../gui/wxpython/wxplot/profile.py:466
 msgid "Statistics for Profile(s)"
 msgstr "Estadísticas para perfil(es)"
 
