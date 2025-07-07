@@ -22,15 +22,14 @@ mask.
 The **-f** flag has been deprecated and replaced by the **format=csv**
 option.
 
-To print the volume report, you now need to use the **-p** flag along with the
-**format** option to specify the desired output format. Currently, the volume
-report is printed even without this flag to maintain backward compatibility;
-however, this behavior may change in the future.
+To print the volume report, use the **-p** flag along with the **format** option
+to specify the desired output format. The volume report is printed even without
+this flag to maintain backward compatibility; however, this behavior may change
+in the future.
 
-The **separator** option has been introduced, with the default separator set to
-**:** for backward compatibility. However, if **format=csv** is specified, the
-default separator will be a **comma**, unless a different separator is
-explicitly provided.
+!!! note "Separator Option"
+    The default separator is set to **:** for backward compatibility.
+    However, if **format=csv** is specified, the default separator will be a **comma**.
 
 ### CENTROIDS
 
