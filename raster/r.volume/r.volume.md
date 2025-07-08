@@ -27,9 +27,8 @@ to specify the desired output format. The volume report is printed even without
 this flag to maintain backward compatibility; however, this behavior may change
 in the future.
 
-!!! note "Separator Option"
-    The default separator is set to **:** for backward compatibility.
-    However, if **format=csv** is specified, the default separator will be a **comma**.
+The default separator set to **:** for backward compatibility. However,
+if **format=csv** is specified, the default separator will be a **comma**.
 
 ### CENTROIDS
 
