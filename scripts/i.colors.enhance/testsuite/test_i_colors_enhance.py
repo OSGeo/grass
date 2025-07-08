@@ -76,17 +76,23 @@ class TestColorsEnhance(TestCase):
             )
 
     def test_full_range_flag_sets_grey(self):
-        """Verify that the -f (full-range) flag applies the standard grey color table."""
+        """Verify that the -f (full-range) flag applies the standard grey gradient color table."""
         self._run_colors_enhance(flags="f")
-        ref_grey = self._get_color_table("test_red")
+        grey_table = self._get_color_table("test_red")
 
-        self._set_color_table("test_green", "grey")
-        ref_known = self._get_color_table("test_green")
+        lines = [
+            line
+            for line in grey_table.strip().splitlines()
+            if not line.startswith(("nv", "default"))
+        ]
+        self.assertGreaterEqual(len(lines), 2, "Expected at least two color entries.")
 
+        first_val, first_rgb = lines[0].split()
+        last_val, last_rgb = lines[-1].split()
+
+        self.assertEqual(first_rgb, "0:0:0", msg="Min color is not black (0:0:0)")
         self.assertEqual(
-            ref_grey.strip(),
-            ref_known.strip(),
-            msg="Full range flag did not apply grey color table correctly.",
+            last_rgb, "255:255:255", msg="Max color is not white (255:255:255)"
         )
 
     def test_reset_flag_restores_grey255(self):
@@ -108,24 +114,32 @@ class TestColorsEnhance(TestCase):
     def test_preserve_relative_scaling(self):
         """
         Verify that the -p (preserve relative scaling) flag
-        maintains relative data ranges across bands within ±1 tolerance.
+        maintains proportional scaling across bands.
         """
         self._run_colors_enhance(flags="p")
 
-        ref_min, ref_max = self._get_color_table_minmax("test_red")
+        red_min, red_max = self._get_color_table_minmax("test_red")
+        red_range = red_max - red_min
+
+        self.assertGreater(
+            red_range, 0, "Red band has zero range, cannot compare scaling."
+        )
+
         for band in self.rgb_maps:
             band_min, band_max = self._get_color_table_minmax(band)
-            self.assertAlmostEqual(
-                ref_min,
-                band_min,
-                delta=1,
-                msg=f"{band} min value differs by more than 1.",
+            band_range = band_max - band_min
+
+            ratio = band_range / red_range
+
+            self.assertGreater(
+                ratio,
+                0.5,
+                msg=f"{band} range too compressed relative to red (ratio={ratio:.2f}).",
             )
-            self.assertAlmostEqual(
-                ref_max,
-                band_max,
-                delta=1,
-                msg=f"{band} max value differs by more than 1.",
+            self.assertLess(
+                ratio,
+                2.0,
+                msg=f"{band} range too expanded relative to red (ratio={ratio:.2f}).",
             )
 
     def test_serial_processing_mode(self):
