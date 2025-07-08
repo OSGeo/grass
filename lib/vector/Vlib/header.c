@@ -131,8 +131,7 @@ int Vect__read_head(struct Map_info *Map)
     head_fp = G_fopen_old(path, GV_HEAD_ELEMENT, Map->mapset);
     if (head_fp == NULL) {
         const char *map_name = Vect_get_full_name(Map);
-        G_warning(_("Unable to open header file of vector <%s>"),
-                  map_name);
+        G_warning(_("Unable to open header file of vector <%s>"), map_name);
         G_free((void *)map_name);
         return -1;
     }
