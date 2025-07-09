@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 15:41+0000\n"
+"POT-Creation-Date: 2025-07-05 18:31+0000\n"
 "PO-Revision-Date: 2025-06-14 20:49+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/grasslibs/de/>\n"
@@ -4668,6 +4668,16 @@ msgstr ""
 msgid "Input PNG file has invalid palette"
 msgstr ""
 
+#: ../lib/pngdriver/read_ppm.c:41
+#, fuzzy, c-format
+msgid "PNG: invalid input file %s"
+msgstr "Cairo: ungültige Eingabedatei <%s>"
+
+#: ../lib/pngdriver/read_ppm.c:92
+#, fuzzy, c-format
+msgid "PNG: invalid input mask file %s"
+msgstr "Cairo: Ungültige Eingabemasken-Datei <%s>"
+
 #: ../lib/pngdriver/write_png.c:38
 msgid "Unable to write PNG"
 msgstr "Kann PNG nicht schreiben"
@@ -8256,7 +8266,7 @@ msgstr "Keine Verbindung definiert"
 msgid "Unable to get number of simple features"
 msgstr ""
 
-#: ../lib/vector/Vlib/simple_features.c:349
+#: ../lib/vector/Vlib/simple_features.c:350
 #, c-format
 msgid "Unable to report simple features for vector map <%s>"
 msgstr ""

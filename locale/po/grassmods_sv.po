@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 15:41+0000\n"
-"PO-Revision-Date: 2025-06-30 18:03+0000\n"
+"POT-Creation-Date: 2025-07-05 18:31+0000\n"
+"PO-Revision-Date: 2025-07-06 05:49+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
 "Language: sv\n"
@@ -30,7 +30,7 @@ msgstr "Tabell <%s> hittades inte i databas <%s> med drivaren <%s>"
 #: ../display/d.vect.thematic/main.c:294 ../display/d.vect/opt.c:147
 #: ../doc/examples/vector/v.example/main.c:130
 #: ../raster/r.stream.extract/close.c:176 ../vector/v.db.connect/main.c:216
-#: ../vector/v.db.connect/main.c:285 ../vector/v.edit/select.c:502
+#: ../vector/v.db.connect/main.c:285 ../vector/v.edit/select.c:505
 #: ../vector/v.out.svg/main.c:152 ../vector/v.out.vtk/writeVTK.c:640
 #: ../vector/v.profile/main.c:434 ../vector/v.profile/main.c:600
 #, c-format
@@ -185,8 +185,8 @@ msgstr "Ersätta variabler i databasinställningar"
 #: ../raster/r.proj/main.c:208 ../raster/r.proj/main.c:221
 #: ../raster/r.proj/main.c:233 ../raster/r.proj/main.c:242
 #: ../raster/r.stats/main.c:155 ../raster/r.sunmask/main.c:233
-#: ../raster/r.sunmask/main.c:239 ../raster/r.univar/r.univar_main.c:128
-#: ../raster/r.univar/r3.univar_main.c:84 ../raster/r.what/main.c:134
+#: ../raster/r.sunmask/main.c:239 ../raster/r.univar/r.univar_main.c:127
+#: ../raster/r.univar/r3.univar_main.c:89 ../raster/r.what/main.c:134
 #: ../raster/r.what/main.c:142 ../raster/r.what/main.c:145
 #: ../raster/r.what/main.c:159 ../raster/r.what/main.c:164
 #: ../raster/r.what/main.c:169 ../raster/r.what/main.c:175
@@ -379,7 +379,8 @@ msgstr "Visar en lista över alla databaser för en viss drivrutin och plats."
 #: ../general/g.list/list.c:89 ../general/g.mapset/main.c:174
 #: ../imagery/i.group/main.c:124 ../raster/r.category/main.c:143
 #: ../raster/r.describe/dumplist.c:47 ../raster/r.proj/main.c:345
-#: ../raster/r.univar/stats.c:96 ../raster/r.univar/stats.c:347
+#: ../raster/r.stats.quantile/main.c:382 ../raster/r.stats.quantile/main.c:439
+#: ../raster/r.univar/stats.c:96 ../raster/r.univar/stats.c:396
 #: ../raster/r.what.color/main.c:246 ../raster/r.what/main.c:280
 #: ../vector/v.category/main.c:255 ../vector/v.category/main.c:320
 #: ../vector/v.distance/main.c:310 ../vector/v.info/print.c:866
@@ -393,7 +394,7 @@ msgstr "Misslyckades med att initiera JSON-array. Har du slut på minne?"
 #: ../raster/r.mask.status/main.c:111 ../raster/r.object.geometry/main.c:401
 #: ../raster/r.profile/main.c:296 ../raster/r.proj/main.c:370
 #: ../raster/r.proj/main.c:545 ../raster/r.report/prt_json.c:200
-#: ../raster/r.stats/main.c:408 ../raster/r.univar/stats.c:435
+#: ../raster/r.stats/main.c:408 ../raster/r.univar/stats.c:493
 #: ../raster/r.what.color/main.c:290 ../raster/r.what/main.c:619
 #: ../vector/v.category/main.c:307 ../vector/v.category/main.c:954
 #: ../vector/v.distance/main.c:1799 ../vector/v.info/main.c:106
@@ -595,11 +596,11 @@ msgid "Test succeeded."
 msgstr "Testet lyckades."
 
 #: ../db/db.select/main.c:140 ../raster/r.object.geometry/main.c:118
-#: ../raster/r.quantile/main.c:346 ../raster/r.regression.line/main.c:77
+#: ../raster/r.quantile/main.c:346 ../raster/r.regression.line/main.c:92
 #: ../raster/r.regression.multi/main.c:171
-#: ../raster/r.stats.quantile/main.c:368 ../raster/r.stats/main.c:235
-#: ../raster/r.univar/r.univar_main.c:195
-#: ../raster/r.univar/r3.univar_main.c:147 ../raster/r.what/main.c:193
+#: ../raster/r.stats.quantile/main.c:375 ../raster/r.stats/main.c:235
+#: ../raster/r.univar/r.univar_main.c:193
+#: ../raster/r.univar/r3.univar_main.c:149 ../raster/r.what/main.c:193
 #: ../vector/v.db.select/main.c:182
 #, c-format
 msgid "Unable to open file <%s> for writing"
@@ -638,7 +639,7 @@ msgstr "Vertikal skivavskiljare (kräver flaggan -v)"
 
 #: ../db/db.select/main.c:239 ../locale/scriptstrings/i.oif_to_translate.c:5
 #: ../locale/scriptstrings/r.out.xyz_to_translate.c:7
-#: ../raster/r.quantile/main.c:331 ../raster/r.stats.quantile/main.c:605
+#: ../raster/r.quantile/main.c:331 ../raster/r.stats.quantile/main.c:684
 #: ../raster/r.stats/main.c:121 ../raster/r.univar/r.univar_main.c:78
 #: ../raster/r.univar/r3.univar_main.c:42 ../raster/r.what/main.c:139
 #: ../vector/v.db.select/main.c:150
@@ -1768,7 +1769,7 @@ msgstr "Visar en lista över alla tillgängliga displayfärger."
 #: ../raster/r.quantile/main.c:297 ../raster/r.random.cells/main.c:49
 #: ../raster/r.random.surface/main.c:56 ../raster/r.random/main.c:53
 #: ../raster/r.reclass/main.c:51 ../raster/r.recode/main.c:47
-#: ../raster/r.region/main.c:45 ../raster/r.regression.line/main.c:45
+#: ../raster/r.region/main.c:45 ../raster/r.regression.line/main.c:51
 #: ../raster/r.regression.multi/main.c:129 ../raster/r.relief/main.c:104
 #: ../raster/r.report/main.c:67 ../raster/r.resamp.bspline/main.c:77
 #: ../raster/r.resamp.filter/main.c:422 ../raster/r.resamp.interp/main.c:85
@@ -1781,7 +1782,7 @@ msgstr "Visar en lista över alla tillgängliga displayfärger."
 #: ../raster/r.smooth.edgepreserve/main.c:46
 #: ../raster/r.solute.transport/main.c:228 ../raster/r.spread/main.c:102
 #: ../raster/r.spreadpath/main.c:77 ../raster/r.statistics/main.c:53
-#: ../raster/r.stats.quantile/main.c:565 ../raster/r.stats.zonal/main.c:104
+#: ../raster/r.stats.quantile/main.c:644 ../raster/r.stats.zonal/main.c:104
 #: ../raster/r.stats/main.c:109 ../raster/r.stream.extract/main.c:76
 #: ../raster/r.sun/main.c:241 ../raster/r.sunhours/main.c:70
 #: ../raster/r.sunmask/main.c:118 ../raster/r.support.stats/main.c:35
@@ -1794,7 +1795,7 @@ msgstr "Visar en lista över alla tillgängliga displayfärger."
 #: ../raster/r.to.rast3/main.c:197 ../raster/r.to.rast3elev/main.c:375
 #: ../raster/r.to.vect/main.c:77 ../raster/r.topidx/main.c:37
 #: ../raster/r.topmodel/main.c:48 ../raster/r.transect/main.c:102
-#: ../raster/r.univar/r.univar_main.c:167 ../raster/r.uslek/main.c:52
+#: ../raster/r.univar/r.univar_main.c:165 ../raster/r.uslek/main.c:52
 #: ../raster/r.usler/main.c:52 ../raster/r.viewshed/main.cpp:103
 #: ../raster/r.volume/main.c:80 ../raster/r.walk/main.c:212
 #: ../raster/r.water.outlet/main.c:58 ../raster/r.watershed/front/main.c:75
@@ -2604,13 +2605,13 @@ msgstr "histogram"
 #: ../raster/r.mfilter/main.c:67 ../raster/r.mode/main.c:54
 #: ../raster/r.neighbors/main.c:183 ../raster/r.object.geometry/main.c:77
 #: ../raster/r.quant/main.c:49 ../raster/r.quantile/main.c:299
-#: ../raster/r.regression.line/main.c:46
+#: ../raster/r.regression.line/main.c:52
 #: ../raster/r.regression.multi/main.c:130 ../raster/r.report/main.c:68
-#: ../raster/r.statistics/main.c:54 ../raster/r.stats.quantile/main.c:566
+#: ../raster/r.statistics/main.c:54 ../raster/r.stats.quantile/main.c:645
 #: ../raster/r.stats.zonal/main.c:105 ../raster/r.stats/main.c:110
 #: ../raster/r.support.stats/main.c:36 ../raster/r.surf.area/main.c:77
-#: ../raster/r.texture/main.c:99 ../raster/r.univar/r.univar_main.c:168
-#: ../raster/r.univar/r3.univar_main.c:117 ../raster3d/r3.in.lidar/main.c:162
+#: ../raster/r.texture/main.c:99 ../raster/r.univar/r.univar_main.c:166
+#: ../raster/r.univar/r3.univar_main.c:119 ../raster3d/r3.in.lidar/main.c:162
 #: ../raster3d/r3.neighbors/main.c:207 ../raster3d/r3.stats/main.c:48
 #: ../vector/v.class/main.c:47 ../vector/v.kcv/main.c:54
 #: ../vector/v.neighbors/main.c:120 ../vector/v.normal/main.c:71
@@ -4338,7 +4339,7 @@ msgstr "Skapa 3D-diagram"
 #: ../display/d.vect/shape.c:41 ../doc/examples/vector/v.example/main.c:110
 #: ../vector/v.buffer/main.c:422 ../vector/v.colors/read_rgb.c:23
 #: ../vector/v.colors/scan_attr.c:24 ../vector/v.colors/write_rgb.c:20
-#: ../vector/v.distance/main.c:590 ../vector/v.edit/select.c:496
+#: ../vector/v.distance/main.c:590 ../vector/v.edit/select.c:499
 #: ../vector/v.extrude/main.c:223 ../vector/v.generalize/misc.c:167
 #: ../vector/v.neighbors/main.c:219 ../vector/v.overlay/main.c:422
 #: ../vector/v.surf.bspline/crosscorr.c:123 ../vector/v.to.rast/support.c:101
@@ -4364,7 +4365,7 @@ msgstr "Databasanslutning inte definierad för lagret %d"
 #: ../vector/v.db.connect/main.c:334 ../vector/v.db.select/main.c:282
 #: ../vector/v.distance/main.c:562 ../vector/v.distance/main.c:595
 #: ../vector/v.distance/main.c:646 ../vector/v.distance/main.c:1395
-#: ../vector/v.distance/main.c:1415 ../vector/v.edit/select.c:509
+#: ../vector/v.distance/main.c:1415 ../vector/v.edit/select.c:512
 #: ../vector/v.extract/extract.c:276 ../vector/v.extract/main.c:226
 #: ../vector/v.extract/main.c:324 ../vector/v.extrude/main.c:228
 #: ../vector/v.in.ascii/main.c:359 ../vector/v.in.db/main.c:162
@@ -5197,7 +5198,7 @@ msgstr "Min första rastermodul"
 #: ../raster/r.stream.extract/main.c:173 ../raster/r.stream.extract/main.c:178
 #: ../raster/r.terraflow/main.cpp:207 ../raster/r.terraflow/main.cpp:354
 #: ../raster/r.terraflow/main.cpp:390 ../raster/r.tile/main.c:84
-#: ../raster/r.univar/r.univar_main.c:357 ../raster/r.walk/main.c:467
+#: ../raster/r.univar/r.univar_main.c:356 ../raster/r.walk/main.c:467
 #: ../raster/r.walk/main.c:495 ../raster/r.walk/main.c:500
 #: ../raster/r.walk/main.c:872 ../scripts/d.correlate/d.correlate.py:46
 #: ../scripts/d.polar/d.polar.py:57 ../scripts/d.rast.leg/d.rast.leg.py:95
@@ -5286,7 +5287,7 @@ msgstr "Endast du har nu åtkomst till mapset <%s>"
 #: ../general/g.access/main.c:39 ../general/g.cairocomp/main.c:199
 #: ../general/g.copy/main.c:41 ../general/g.dirseps/main.c:33
 #: ../general/g.filename/main.c:40 ../general/g.findetc/main.c:27
-#: ../general/g.findfile/main.c:39 ../general/g.gisenv/main.c:42
+#: ../general/g.findfile/main.c:40 ../general/g.gisenv/main.c:42
 #: ../general/g.gui/main.c:38 ../general/g.list/main.c:64
 #: ../general/g.mapset/main.c:69 ../general/g.mapsets/main.c:86
 #: ../general/g.message/main.c:37 ../general/g.mkfontcap/main.c:63
@@ -5308,7 +5309,7 @@ msgstr "allmänt"
 
 #: ../general/g.access/main.c:40 ../general/g.copy/main.c:42
 #: ../general/g.dirseps/main.c:34 ../general/g.filename/main.c:41
-#: ../general/g.findetc/main.c:28 ../general/g.findfile/main.c:40
+#: ../general/g.findetc/main.c:28 ../general/g.findfile/main.c:41
 #: ../general/g.list/main.c:65 ../general/g.remove/main.c:70
 #: ../general/g.rename/main.c:45 ../imagery/i.group/main.c:64
 #: ../imagery/i.target/main.c:45
@@ -5498,7 +5499,7 @@ msgid "Errors occurred during copying. See the warning messages above for detail
 msgstr "Fel inträffade under kopieringen. Se varningsmeddelandena ovan för mer information."
 
 #: ../general/g.dirseps/main.c:35 ../general/g.filename/main.c:42
-#: ../general/g.findetc/main.c:29 ../general/g.findfile/main.c:41
+#: ../general/g.findetc/main.c:29 ../general/g.findfile/main.c:42
 #: ../general/g.gisenv/main.c:45 ../general/g.message/main.c:39
 #: ../general/g.tempfile/main.c:40
 msgid "scripts"
@@ -5512,7 +5513,7 @@ msgstr "Internt GRASS-verktyg för konvertering av katalogseparatortecken."
 msgid "Prints GRASS data base file names."
 msgstr "Skriver ut filnamn för GRASS-databasen."
 
-#: ../general/g.filename/main.c:51 ../general/g.findfile/main.c:53
+#: ../general/g.filename/main.c:51 ../general/g.findfile/main.c:54
 msgid "Name of an element"
 msgstr "Namn på ett element"
 
@@ -5536,42 +5537,54 @@ msgstr "Om elementkatalogen för databasfilen inte finns, skapa den"
 msgid "List of available elements:"
 msgstr "Lista över tillgängliga element:"
 
-#: ../general/g.findfile/main.c:42
+#: ../general/g.findfile/main.c:43
 msgid "Searches for GRASS data base files and sets variables for the shell."
 msgstr "Söker efter GRASS-databasfiler och ställer in variabler för skalet."
 
-#: ../general/g.findfile/main.c:59
+#: ../general/g.findfile/main.c:60
 msgid "Name of an existing map"
 msgstr "Namn på en befintlig karta"
 
-#: ../general/g.findfile/main.c:65
+#: ../general/g.findfile/main.c:66
 msgid "Name of a mapset (default: search path)"
 msgstr "Namn på en mapset (standard: sökväg)"
 
-#: ../general/g.findfile/main.c:66
+#: ../general/g.findfile/main.c:67
 msgid "'.' for current mapset"
 msgstr "'.' för aktuellt kartset"
 
-#: ../general/g.findfile/main.c:70
+#: ../general/g.findfile/main.c:71
 msgid "Do not add quotes"
 msgstr "Lägg inte till citat"
 
-#: ../general/g.findfile/main.c:74
+#: ../general/g.findfile/main.c:75
 msgid "List available elements and exit"
 msgstr "Lista tillgängliga element och avsluta"
 
-#: ../general/g.findfile/main.c:98
+#: ../general/g.findfile/main.c:80
+msgid "Return code 0 when file found, 1 otherwise"
+msgstr "Returkod 0 när filen finns, 1 annars"
+
+#: ../general/g.findfile/main.c:82 ../raster/r.mask.status/main.c:61
+msgid "Behave like the test utility, 0 for true, 1 for false, no output"
+msgstr "Uppför sig som testverktyget, 0 för sant, 1 för falskt, ingen utdata"
+
+#: ../general/g.findfile/main.c:105
 #, c-format
 msgid "Parameter 'file' contains reference to <%s> mapset, but mapset parameter <%s> does not correspond"
 msgstr "Parameter 'file' innehåller referens till <%s> mapset, men mapset-parameter <%s> motsvarar inte"
 
-#: ../general/g.findfile/main.c:111
+#: ../general/g.findfile/main.c:118
 #: ../imagery/i.ortho.photo/i.ortho.photo/menu.c:90
 #: ../raster/r.out.mpeg/main.c:150 ../raster/r.path/main.c:240
 #: ../raster/r.path/main.c:247 ../raster/r.path/main.c:253
 #, c-format
 msgid "Name <%s> is too long"
 msgstr "Namnet <%s> är för långt"
+
+#: ../general/g.findfile/main.c:165
+msgid "In the next major release, g.findfile will no longer return exit code 1 when a file is not found. Please use the -t flag instead to get the error code."
+msgstr "I nästa större utgåva kommer g.findfile inte längre att returnera avslutskod 1 när en fil inte hittas. Använd istället flaggan -t för att få felkoden."
 
 #: ../general/g.gisenv/main.c:44
 msgid "variables"
@@ -5731,16 +5744,19 @@ msgstr "Startar <%s> grafiskt gränssnitt i bakgrunden, vänta..."
 #: ../general/g.proj/output.c:360 ../general/g.region/main.c:471
 #: ../general/g.version/main.c:140 ../raster/r.describe/dumplist.c:37
 #: ../raster/r.info/main.c:147 ../raster/r.proj/main.c:487
-#: ../raster/r.univar/stats.c:104 ../raster/r.univar/stats.c:148
-#: ../raster/r.univar/stats.c:390 ../raster/r.what.color/main.c:52
-#: ../vector/v.category/main.c:248 ../vector/v.category/main.c:915
-#: ../vector/v.distance/main.c:1578 ../vector/v.info/print.c:824
-#: ../vector/v.info/print.c:860 ../vector/v.univar/main.c:609
+#: ../raster/r.regression.line/main.c:101 ../raster/r.stats.quantile/main.c:430
+#: ../raster/r.stats.quantile/main.c:447 ../raster/r.univar/stats.c:104
+#: ../raster/r.univar/stats.c:148 ../raster/r.univar/stats.c:439
+#: ../raster/r.what.color/main.c:52 ../vector/v.category/main.c:248
+#: ../vector/v.category/main.c:915 ../vector/v.distance/main.c:1578
+#: ../vector/v.info/print.c:824 ../vector/v.info/print.c:860
+#: ../vector/v.univar/main.c:609
 msgid "Failed to initialize JSON object. Out of memory?"
 msgstr "Misslyckades med att initiera JSON-objekt. Har du slut på minne?"
 
 #: ../general/g.list/list.c:139 ../general/g.mapset/main.c:37
-#: ../general/g.mapsets/list.c:34
+#: ../general/g.mapsets/list.c:34 ../raster/r.regression.line/main.c:269
+#: ../raster/r.stats.quantile/main.c:472
 msgid "Failed to serialize JSON to pretty format."
 msgstr "Misslyckades med att serialisera JSON till pretty-format."
 
@@ -6546,8 +6562,9 @@ msgstr "Skriv ut projektionsinformation i skalskriptformat [föråldrat]"
 
 #: ../general/g.proj/main.c:94 ../general/g.region/main.c:149
 #: ../general/g.version/main.c:120 ../imagery/i.group/main.c:113
-#: ../raster/r.proj/main.c:240 ../raster/r.univar/r.univar_main.c:103
-#: ../raster/r.univar/r3.univar_main.c:63
+#: ../raster/r.proj/main.c:240 ../raster/r.regression.line/main.c:83
+#: ../raster/r.univar/r.univar_main.c:103
+#: ../raster/r.univar/r3.univar_main.c:65
 msgid "This flag is deprecated and will be removed in a future release. Use format=shell instead."
 msgstr "Denna flagga är föråldrad och kommer att tas bort i en framtida version. Använd istället format=shell."
 
@@ -6668,8 +6685,9 @@ msgstr "Formatalternativet kan endast användas med flaggan -%c"
 
 #: ../general/g.proj/main.c:277 ../general/g.region/main.c:427
 #: ../general/g.version/main.c:153 ../imagery/i.group/main.c:137
-#: ../raster/r.proj/main.c:270 ../raster/r.univar/r.univar_main.c:222
-#: ../raster/r.univar/r3.univar_main.c:174 ../vector/v.category/main.c:232
+#: ../raster/r.proj/main.c:270 ../raster/r.regression.line/main.c:114
+#: ../raster/r.univar/r.univar_main.c:220
+#: ../raster/r.univar/r3.univar_main.c:176 ../vector/v.category/main.c:232
 msgid "Flag 'g' is deprecated and will be removed in a future release. Please use format=shell instead."
 msgstr "Flaggan \"g\" är föråldrad och kommer att tas bort i en framtida version. Använd format=shell istället."
 
@@ -6798,6 +6816,7 @@ msgid "Print the maximum bounding box in lat/long on WGS84"
 msgstr "Skriv ut den maximala avgränsningsrutan i lat/long på WGS84"
 
 #: ../general/g.region/main.c:147 ../imagery/i.group/main.c:111
+#: ../raster/r.regression.line/main.c:81
 msgid "Print in shell script style [deprecated]"
 msgstr "Skriv ut i skalskriptstil [föråldrat]"
 
@@ -6956,8 +6975,8 @@ msgid "Region <%s> not found"
 msgstr "Region <%s> hittades inte"
 
 #: ../general/g.region/main.c:540 ../raster/r.colors/edit_colors.c:515
-#: ../raster/r.univar/r3.univar_main.c:208
-#: ../raster/r.univar/r3.univar_main.c:246 ../raster3d/r3.cross.rast/main.c:246
+#: ../raster/r.univar/r3.univar_main.c:210
+#: ../raster/r.univar/r3.univar_main.c:248 ../raster3d/r3.cross.rast/main.c:246
 #: ../raster3d/r3.flow/main.c:87 ../raster3d/r3.mask/main.c:53
 #: ../raster3d/r3.neighbors/main.c:225 ../raster3d/r3.null/main.c:93
 #: ../raster3d/r3.out.ascii/main.c:327 ../raster3d/r3.out.bin/main.c:312
@@ -8586,29 +8605,29 @@ msgstr "Automatisk våt/torr-pixel (var försiktig!)"
 msgid "Dry/Wet pixels coordinates are in image projection, not row/col"
 msgstr "Koordinaterna för torra/våta pixlar är i bildprojektion, inte rad/kol"
 
-#: ../imagery/i.eb.hsebal01/main.c:204
+#: ../imagery/i.eb.hsebal01/main.c:207
 msgid "Automatic mode selected"
 msgstr "Automatiskt läge valt"
 
-#: ../imagery/i.eb.hsebal01/main.c:214
+#: ../imagery/i.eb.hsebal01/main.c:227
 msgid "Manual wet/dry pixels in image coordinates"
 msgstr "Manuella våta/torra pixlar i bildkoordinater"
 
-#: ../imagery/i.eb.hsebal01/main.c:215
+#: ../imagery/i.eb.hsebal01/main.c:228
 #, c-format
 msgid "Wet Pixel=> x:%f y:%f"
 msgstr "Våt Pixel=> x:%f y:%f"
 
-#: ../imagery/i.eb.hsebal01/main.c:216
+#: ../imagery/i.eb.hsebal01/main.c:229
 #, c-format
 msgid "Dry Pixel=> x:%f y:%f"
 msgstr "Dry Pixel=> x:%f y:%f"
 
-#: ../imagery/i.eb.hsebal01/main.c:220
+#: ../imagery/i.eb.hsebal01/main.c:234
 msgid "Either auto-mode either wet/dry pixels coordinates should be provided!"
 msgstr "Antingen automatiskt läge eller våta/torra pixelkoordinater bör tillhandahållas!"
 
-#: ../imagery/i.eb.hsebal01/main.c:226
+#: ../imagery/i.eb.hsebal01/main.c:240
 #, c-format
 msgid "<%s> is an illegal name"
 msgstr "<%s> är ett olagligt namn"
@@ -10726,7 +10745,7 @@ msgstr "Ut!"
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/readcell.c:66
 #: ../imagery/i.rectify/readcell.c:55 ../raster/r.proj/readcell.c:59
-#: ../raster/r.proj/readcell.c:128 ../raster/r.stats.quantile/main.c:475
+#: ../raster/r.proj/readcell.c:128 ../raster/r.stats.quantile/main.c:553
 #: ../raster/r.stats.zonal/main.c:492
 msgid "Unable to open temporary file"
 msgstr "Det går inte att öppna en temporär fil"
@@ -11873,7 +11892,7 @@ msgstr "svm"
 msgid "prediction"
 msgstr "förutsägelse"
 
-#: ../imagery/i.svm.predict/main.c:54 ../raster/r.regression.line/main.c:47
+#: ../imagery/i.svm.predict/main.c:54 ../raster/r.regression.line/main.c:53
 #: ../raster/r.regression.multi/main.c:131
 msgid "regression"
 msgstr "regression"
@@ -13036,7 +13055,7 @@ msgstr "Namn på den attributkolumn som statistiken ska beräknas på (måste va
 #: ../locale/scriptstrings/db.univar_to_translate.c:6
 #: ../locale/scriptstrings/t.rast.univar_to_translate.c:8
 #: ../locale/scriptstrings/v.db.univar_to_translate.c:6
-#: ../raster/r.univar/r.univar_main.c:89 ../raster/r.univar/r3.univar_main.c:52
+#: ../raster/r.univar/r.univar_main.c:89 ../raster/r.univar/r3.univar_main.c:53
 #: ../vector/v.univar/main.c:125
 msgid "Percentile to calculate (requires extended statistics flag)"
 msgstr "Percentil att beräkna (kräver flagga för utökad statistik)"
@@ -13391,7 +13410,6 @@ msgstr "multispektral"
 
 #: ../locale/scriptstrings/i.oif_to_translate.c:6
 #: ../locale/scriptstrings/t.info_to_translate.c:9
-#: ../raster/r.regression.line/main.c:69
 #: ../raster/r.regression.multi/main.c:163
 msgid "Print in shell script style"
 msgstr "Skriv ut i skal script-stil"
@@ -14523,6 +14541,7 @@ msgstr "Namn för utgående rasterkarta (standard: hämtas från inmatningsfilen
 #: ../ps/ps.map/main.c:109 ../ps/ps.map/main.c:131 ../raster/r.kappa/main.c:90
 #: ../raster/r.kappa/main.c:98 ../raster/r.kappa/main.c:101
 #: ../raster/r.kappa/main.c:117 ../raster/r.univar/r.univar_main.c:79
+#: ../raster/r.univar/r3.univar_main.c:43
 msgid "Output settings"
 msgstr "Inställningar för utmatning"
 
@@ -14559,7 +14578,7 @@ msgstr "Skapa en 3D-rasterkarta från en samling av många koordinater med hjäl
 #: ../misc/m.nviz.image/main.c:53 ../misc/m.nviz.script/main.c:70
 #: ../raster/r.colors.out/raster3d_main.c:46
 #: ../raster/r.colors/edit_colors.c:78 ../raster/r.to.rast3elev/main.c:377
-#: ../raster/r.univar/r3.univar_main.c:116 ../raster3d/r3.cross.rast/main.c:229
+#: ../raster/r.univar/r3.univar_main.c:118 ../raster3d/r3.cross.rast/main.c:229
 #: ../raster3d/r3.flow/main.c:175 ../raster3d/r3.flow/test_main.c:42
 #: ../raster3d/r3.gradient/main.c:44 ../raster3d/r3.gwflow/main.c:166
 #: ../raster3d/r3.in.ascii/main.c:359 ../raster3d/r3.in.bin/main.c:265
@@ -14956,11 +14975,13 @@ msgstr "Sortera datasetet för rymdtid efter kategori"
 #: ../raster/r.report/parse.c:82 ../raster/r.report/parse.c:105
 #: ../raster/r.report/parse.c:108 ../raster/r.report/parse.c:113
 #: ../raster/r.report/parse.c:118 ../raster/r.report/parse.c:123
-#: ../raster/r.stats.quantile/main.c:609 ../raster/r.stats/main.c:125
+#: ../raster/r.stats.quantile/main.c:688 ../raster/r.stats/main.c:125
 #: ../raster/r.stats/main.c:129 ../raster/r.stats/main.c:152
-#: ../raster/r.univar/r.univar_main.c:96 ../raster/r.univar/r.univar_main.c:106
-#: ../raster/r.univar/r.univar_main.c:120
-#: ../raster/r.univar/r3.univar_main.c:56
+#: ../raster/r.univar/r.univar_main.c:96 ../raster/r.univar/r.univar_main.c:105
+#: ../raster/r.univar/r.univar_main.c:119
+#: ../raster/r.univar/r3.univar_main.c:58
+#: ../raster/r.univar/r3.univar_main.c:67
+#: ../raster/r.univar/r3.univar_main.c:81
 msgid "Formatting"
 msgstr "Formaterar"
 
@@ -15721,7 +15742,7 @@ msgstr "Beräknar univariat statistik från icke-nullcellerna för varje registr
 #: ../raster/r.series/main.c:156 ../raster/r.sim/r.sim.sediment/main.c:119
 #: ../raster/r.sim/r.sim.water/main.c:118 ../raster/r.slope.aspect/main.c:171
 #: ../raster/r.smooth.edgepreserve/main.c:49 ../raster/r.sun/main.c:245
-#: ../raster/r.texture/main.c:101 ../raster/r.univar/r.univar_main.c:171
+#: ../raster/r.texture/main.c:101 ../raster/r.univar/r.univar_main.c:169
 #: ../vector/v.surf.rst/main.c:153
 msgid "parallel"
 msgstr "parallell"
@@ -15734,8 +15755,8 @@ msgstr "Rasterkarta som används för zonindelning, måste vara av typen CELL"
 #: ../locale/scriptstrings/t.rast.univar_to_translate.c:14
 #: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:13
 #: ../locale/scriptstrings/t.vect.univar_to_translate.c:10
-#: ../raster/r.univar/r.univar_main.c:110
-#: ../raster/r.univar/r3.univar_main.c:68 ../vector/v.univar/main.c:133
+#: ../raster/r.univar/r.univar_main.c:109
+#: ../raster/r.univar/r3.univar_main.c:71 ../vector/v.univar/main.c:133
 msgid "Calculate extended statistics"
 msgstr "Beräkna utökad statistik"
 
@@ -16675,15 +16696,15 @@ msgid "Calculates univariate statistics from a raster map based on a vector map 
 msgstr "Beräknar univariat statistik från en rasterkarta baserat på en vektorkarta och laddar upp statistiken till nya attributkolumner."
 
 #: ../locale/scriptstrings/v.rast.stats_to_translate.c:5
-#: ../raster/r.resamp.stats/main.c:264 ../raster/r.univar/r.univar_main.c:169
-#: ../raster/r.univar/r3.univar_main.c:118 ../vector/v.univar/main.c:96
+#: ../raster/r.resamp.stats/main.c:264 ../raster/r.univar/r.univar_main.c:167
+#: ../raster/r.univar/r3.univar_main.c:120 ../vector/v.univar/main.c:96
 #: ../vector/v.vect.stats/main.c:131
 msgid "univariate statistics"
 msgstr "univariat statistik"
 
 #: ../locale/scriptstrings/v.rast.stats_to_translate.c:6
-#: ../raster/r.statistics/main.c:55 ../raster/r.stats.quantile/main.c:567
-#: ../raster/r.stats.zonal/main.c:106 ../raster/r.univar/r.univar_main.c:170
+#: ../raster/r.statistics/main.c:55 ../raster/r.stats.quantile/main.c:646
+#: ../raster/r.stats.zonal/main.c:106 ../raster/r.univar/r.univar_main.c:168
 #: ../vector/v.vect.stats/main.c:132
 msgid "zonal statistics"
 msgstr "zonindelad statistik"
@@ -21217,7 +21238,7 @@ msgstr "Alternativ %s måste vara >= 0"
 
 #: ../raster/r.in.bin/main.c:451 ../raster/r.in.bin/main.c:457
 #: ../raster/r.neighbors/main.c:307 ../raster/r.out.bin/main.c:390
-#: ../raster/r.stats.quantile/main.c:638
+#: ../raster/r.stats.quantile/main.c:734
 #, c-format
 msgid "-%c and %s= are mutually exclusive"
 msgstr "-%c och %s= är ömsesidigt uteslutande"
@@ -22645,6 +22666,14 @@ msgstr "Kan inte öppna filen <%s> för att skriva etikett"
 msgid "Problem reading r.stats output"
 msgstr "Problem med att läsa r.stats-utdata"
 
+#: ../raster/r.kappa/stats.c:64
+msgid "Failed to remove file"
+msgstr "Misslyckades med att ta bort fil"
+
+#: ../raster/r.kappa/stats.c:66
+msgid "error running r.stats"
+msgstr "fel vid körning av r.stats"
+
 #: ../raster/r.lake/main.c:154 ../raster/r.ros/main.c:211
 #: ../raster/r.spread/main.c:105
 msgid "hazard"
@@ -23193,10 +23222,6 @@ msgstr "Format för rapportering"
 msgid "Return code 0 when mask present, 1 otherwise"
 msgstr "Returkod 0 när mask finns, 1 annars"
 
-#: ../raster/r.mask.status/main.c:61
-msgid "Behave like the test utility, 0 for true, 1 for false, no output"
-msgstr "Uppför sig som testverktyget, 0 för sant, 1 för falskt, ingen utdata"
-
 #: ../raster/r.mask.status/main.c:152
 #, c-format
 msgid "Mask is active"
@@ -23307,7 +23332,7 @@ msgstr "Tillämpa filter endast på null-datavärden"
 #: ../raster/r.patch/main.c:108 ../raster/r.resamp.filter/main.c:488
 #: ../raster/r.resamp.interp/main.c:126 ../raster/r.series/main.c:222
 #: ../raster/r.slope.aspect/main.c:303 ../raster/r.texture/main.c:318
-#: ../raster/r.univar/r.univar_main.c:249
+#: ../raster/r.univar/r.univar_main.c:247
 #, c-format
 msgid "<%d> is not valid number of nprocs."
 msgstr "<%d> är inte ett giltigt antal nprocs."
@@ -24272,7 +24297,7 @@ msgstr "Utmatning av världsfil"
 msgid "Converting <%s>..."
 msgstr "Konvertering av <%s>..."
 
-#: ../raster/r.out.png/main.c:280 ../raster/r.univar/r.univar_main.c:321
+#: ../raster/r.out.png/main.c:280 ../raster/r.univar/r.univar_main.c:320
 #, c-format
 msgid "Raster <%s> type mismatch"
 msgstr "Raster <%s> typavvikelse"
@@ -24342,7 +24367,18 @@ msgstr "Utmatning av gråskala istället för färg"
 msgid "Suppress printing of PPM header"
 msgstr "Undertrycka utskrift av PPM-rubrik"
 
-#: ../raster/r.out.ppm/main.c:99 ../raster/r.out.ppm3/main.c:96
+#: ../raster/r.out.ppm/main.c:83
+#, c-format
+msgid "Output file name <%s> is too long"
+msgstr "Filnamnet för utdata <%s> är för långt"
+
+#: ../raster/r.out.ppm/main.c:97 ../raster/r.out.ppm/main.c:99
+#: ../raster3d/r3.mkdspf/r3_find.c:20
+#, c-format
+msgid "File name <%s> is too long"
+msgstr "Filnamnet <%s> är för långt"
+
+#: ../raster/r.out.ppm/main.c:105 ../raster/r.out.ppm3/main.c:96
 #, c-format
 msgid "row = %d"
 msgid_plural "rows = %d"
@@ -24350,23 +24386,23 @@ msgstr[0] "rad = %d"
 msgstr[1] "rader = %d"
 
 #. GTC Raster columns
-#: ../raster/r.out.ppm/main.c:100 ../raster/r.out.ppm3/main.c:98
+#: ../raster/r.out.ppm/main.c:106 ../raster/r.out.ppm3/main.c:98
 #, c-format
 msgid "column = %d"
 msgid_plural "columns = %d"
 msgstr[0] "kolumn = %d"
 msgstr[1] "kolumner = %d"
 
-#: ../raster/r.out.ppm/main.c:122
+#: ../raster/r.out.ppm/main.c:128
 #, c-format
 msgid "Unable to open file <%s> for write"
 msgstr "Det går inte att öppna filen <%s> för skrivning"
 
-#: ../raster/r.out.ppm/main.c:151
+#: ../raster/r.out.ppm/main.c:157
 msgid "Converting..."
 msgstr "Konverterar..."
 
-#: ../raster/r.out.ppm/main.c:234
+#: ../raster/r.out.ppm/main.c:240
 #, c-format
 msgid "File <%s> created"
 msgstr "Fil <%s> skapad"
@@ -25245,27 +25281,27 @@ msgstr "%s är inte en giltig regel"
 msgid "Computing histogram"
 msgstr "Beräkning av histogram"
 
-#: ../raster/r.quantile/main.c:129 ../raster/r.stats.quantile/main.c:208
+#: ../raster/r.quantile/main.c:129 ../raster/r.stats.quantile/main.c:211
 msgid "Computing bins"
 msgstr "Förvaringsfack för datorer"
 
-#: ../raster/r.quantile/main.c:182 ../raster/r.stats.quantile/main.c:280
+#: ../raster/r.quantile/main.c:182 ../raster/r.stats.quantile/main.c:283
 msgid "Binning data"
 msgstr "Binning av data"
 
-#: ../raster/r.quantile/main.c:227 ../raster/r.stats.quantile/main.c:336
+#: ../raster/r.quantile/main.c:227 ../raster/r.stats.quantile/main.c:339
 msgid "Sorting bins"
 msgstr "Sorteringsfack"
 
-#: ../raster/r.quantile/main.c:242 ../raster/r.stats.quantile/main.c:408
+#: ../raster/r.quantile/main.c:242 ../raster/r.stats.quantile/main.c:486
 msgid "Computing quantiles"
 msgstr "Beräkning av kvantiler"
 
-#: ../raster/r.quantile/main.c:300 ../raster/r.stats.quantile/main.c:568
+#: ../raster/r.quantile/main.c:300 ../raster/r.stats.quantile/main.c:647
 msgid "percentile"
 msgstr "percentil"
 
-#: ../raster/r.quantile/main.c:301 ../raster/r.stats.quantile/main.c:569
+#: ../raster/r.quantile/main.c:301 ../raster/r.stats.quantile/main.c:648
 msgid "quantile"
 msgstr "kvantil"
 
@@ -25273,15 +25309,15 @@ msgstr "kvantil"
 msgid "Compute quantiles using two passes."
 msgstr "Beräkna kvantiler med två genomgångar."
 
-#: ../raster/r.quantile/main.c:310 ../raster/r.stats.quantile/main.c:580
+#: ../raster/r.quantile/main.c:310 ../raster/r.stats.quantile/main.c:659
 msgid "Number of quantiles"
 msgstr "Antal kvantiler"
 
-#: ../raster/r.quantile/main.c:318 ../raster/r.stats.quantile/main.c:586
+#: ../raster/r.quantile/main.c:318 ../raster/r.stats.quantile/main.c:665
 msgid "List of percentiles"
 msgstr "Lista över percentiler"
 
-#: ../raster/r.quantile/main.c:324 ../raster/r.stats.quantile/main.c:593
+#: ../raster/r.quantile/main.c:324 ../raster/r.stats.quantile/main.c:672
 msgid "Number of bins to use"
 msgstr "Antal behållare som ska användas"
 
@@ -25735,24 +25771,28 @@ msgstr "Ställ in region för att matcha denna vektorkarta"
 msgid "Raster map to align to"
 msgstr "Rasterkarta att anpassa till"
 
-#: ../raster/r.regression.line/main.c:49
+#: ../raster/r.regression.line/main.c:55
 msgid "Calculates linear regression from two raster maps: y = a + b*x."
 msgstr "Beräknar linjär regression från två rasterkartor: y = a + b*x."
 
-#: ../raster/r.regression.line/main.c:54
+#: ../raster/r.regression.line/main.c:60
 #: ../raster/r.regression.multi/main.c:138
 msgid "Map for x coefficient"
 msgstr "Karta för x-koefficient"
 
-#: ../raster/r.regression.line/main.c:58
+#: ../raster/r.regression.line/main.c:64
 #: ../raster/r.regression.multi/main.c:142
 msgid "Map for y coefficient"
 msgstr "Karta för y-koefficient"
 
-#: ../raster/r.regression.line/main.c:64
+#: ../raster/r.regression.line/main.c:70
 #: ../raster/r.regression.multi/main.c:158
 msgid "ASCII file for storing regression coefficients (output to screen if file not specified)."
 msgstr "ASCII-fil för lagring av regressionskoefficienter (utmatning till skärmen om filen inte anges)."
+
+#: ../raster/r.regression.line/main.c:117
+msgid "The -g flag cannot be used with format=json. Please select only one output format."
+msgstr "Flaggan -g kan inte användas med format=json. Välj endast ett utdataformat."
 
 #: ../raster/r.regression.multi/main.c:59
 msgid "Matrix is unsolvable"
@@ -27996,66 +28036,80 @@ msgstr "o_skew: Inga data i matrisen"
 msgid "Reading r.stats output"
 msgstr "Läser utdata från r.stats"
 
-#: ../raster/r.stats.quantile/main.c:112
+#: ../raster/r.stats.quantile/main.c:115
 msgid "Computing histograms"
 msgstr "Beräkning av histogram"
 
-#: ../raster/r.stats.quantile/main.c:150
+#: ../raster/r.stats.quantile/main.c:153
 msgid "No cells found where both base and cover are not NULL"
 msgstr "Inga celler hittades där både bas och lock inte är NULL"
 
-#: ../raster/r.stats.quantile/main.c:364
+#: ../raster/r.stats.quantile/main.c:371
 msgid "Printing quantiles"
 msgstr "Utskrift av kvantiler"
 
-#: ../raster/r.stats.quantile/main.c:460
+#: ../raster/r.stats.quantile/main.c:538
 msgid "Generating reclass maps"
 msgstr "Generera kartor över omklassificering"
 
-#: ../raster/r.stats.quantile/main.c:504
+#: ../raster/r.stats.quantile/main.c:582
 msgid "Writing output maps"
 msgstr "Skriva utmatningskartor"
 
-#: ../raster/r.stats.quantile/main.c:570
+#: ../raster/r.stats.quantile/main.c:649
 msgid "Compute category quantiles using two passes."
 msgstr "Beräkna kategorikvantiler med två genomgångar."
 
-#: ../raster/r.stats.quantile/main.c:597
+#: ../raster/r.stats.quantile/main.c:676
 msgid "Resultant raster map(s)"
 msgstr "Resulterande rasterkarta(er)"
 
-#: ../raster/r.stats.quantile/main.c:614 ../raster/r.stats.zonal/main.c:152
+#: ../raster/r.stats.quantile/main.c:699 ../raster/r.stats.zonal/main.c:152
 msgid "Create reclass map with statistics as category labels"
 msgstr "Skapa omklassificeringskarta med statistik som kategoribeteckningar"
 
-#: ../raster/r.stats.quantile/main.c:618
+#: ../raster/r.stats.quantile/main.c:703
 msgid "Do not create output maps; just print statistics"
 msgstr "Skapa inte utdatakartor; skriv bara ut statistik"
 
-#: ../raster/r.stats.quantile/main.c:622
-msgid "Print statistics in table format"
-msgstr "Skriv ut statistik i tabellformat"
+#: ../raster/r.stats.quantile/main.c:707
+msgid "Print statistics in table format [deprecated]"
+msgstr "Skriv ut statistik i tabellformat [föråldrat]"
 
-#: ../raster/r.stats.quantile/main.c:634
+#: ../raster/r.stats.quantile/main.c:709 ../raster/r.univar/r.univar_main.c:117
+#: ../raster/r.univar/r3.univar_main.c:79
+msgid "This flag is deprecated and will be removed in a future release. Use format=csv instead."
+msgstr "Denna flagga är föråldrad och kommer att tas bort i en framtida version. Använd istället format=csv."
+
+#: ../raster/r.stats.quantile/main.c:730
 #, c-format
 msgid "Either -%c or %s= must be given"
 msgstr "Antingen -%c eller %s= måste anges"
 
-#: ../raster/r.stats.quantile/main.c:663
+#: ../raster/r.stats.quantile/main.c:749 ../raster/r.univar/r.univar_main.c:232
+#: ../raster/r.univar/r3.univar_main.c:188
+msgid "Flag 't' is deprecated and will be removed in a future release. Please use format=csv instead."
+msgstr "Flaggan ”t” är föråldrad och kommer att tas bort i en framtida version. Använd istället format=csv."
+
+#: ../raster/r.stats.quantile/main.c:752
+msgid "The -t flag cannot be used with format=json. Please select only one output format."
+msgstr "Flaggan -t kan inte användas med format=json. Välj endast ett utdataformat."
+
+#: ../raster/r.stats.quantile/main.c:780
 #, c-format
 msgid "Number of quantiles (%d) does not match number of output maps (%d)"
 msgstr "Antalet kvantiler (%d) stämmer inte överens med antalet utdatakartor (%d)"
 
-#: ../raster/r.stats.quantile/main.c:673 ../raster/r.stats.zonal/main.c:185
+#: ../raster/r.stats.quantile/main.c:790 ../raster/r.stats.zonal/main.c:185
 msgid "The base map must be an integer (CELL) map"
 msgstr "Baskartan måste vara en heltalskarta (CELL)"
 
-#: ../raster/r.stats.quantile/main.c:676 ../raster/r.stats.zonal/main.c:188
+#: ../raster/r.stats.quantile/main.c:793 ../raster/r.stats.zonal/main.c:188
 #, c-format
 msgid "Unable to read range of base map <%s>"
 msgstr "Det går inte att läsa intervallet för baskartan <%s>"
 
-#: ../raster/r.stats.quantile/main.c:681
+#: ../raster/r.stats.quantile/main.c:798
 #, c-format
 msgid "Base map <%s> has many categories (%d), computation might be slow and might need a lot of memory"
 msgstr "Baskartan <%s> har många kategorier (%d), beräkningen kan vara långsam och kan kräva mycket minne"
@@ -30210,59 +30264,51 @@ msgstr "Rasterkarta som ska efterfrågas"
 msgid "Transect definition"
 msgstr "Definition av transekt"
 
-#: ../raster/r.univar/r.univar_main.c:90 ../raster/r.univar/r.univar_main.c:111
+#: ../raster/r.univar/r.univar_main.c:90 ../raster/r.univar/r.univar_main.c:110
+#: ../raster/r.univar/r3.univar_main.c:54
+#: ../raster/r.univar/r3.univar_main.c:72
 msgid "Extended"
 msgstr "Utökad"
 
 #: ../raster/r.univar/r.univar_main.c:101
-#: ../raster/r.univar/r3.univar_main.c:61
+#: ../raster/r.univar/r3.univar_main.c:63
 msgid "Print the stats in shell script style [deprecated]"
 msgstr "Skriv ut statistiken i skalskriptformat [föråldrat]"
 
-#: ../raster/r.univar/r.univar_main.c:116
-#: ../raster/r.univar/r3.univar_main.c:73
+#: ../raster/r.univar/r.univar_main.c:115
+#: ../raster/r.univar/r3.univar_main.c:77
 msgid "Table output format instead of standard output format [deprecated]"
 msgstr "Tabellutmatningsformat istället för standardutdataformat [föråldrat]"
 
-#: ../raster/r.univar/r.univar_main.c:118
-#: ../raster/r.univar/r3.univar_main.c:75
-msgid "This flag is deprecated and will be removed in a future release. Use format=csv instead."
-msgstr "Denna flagga är föråldrad och kommer att tas bort i en framtida version. Använd istället format=csv."
-
-#: ../raster/r.univar/r.univar_main.c:133
+#: ../raster/r.univar/r.univar_main.c:132
 msgid "Use the native resolution and extent of the raster map, instead of the current region"
 msgstr "Använd den ursprungliga upplösningen och omfattningen för rasterkartan i stället för den aktuella regionen"
 
-#: ../raster/r.univar/r.univar_main.c:173
+#: ../raster/r.univar/r.univar_main.c:171
 msgid "Calculates univariate statistics from the non-null cells of a raster map."
 msgstr "Beräknar univariat statistik från de icke-nullceller som finns i en rasterkarta."
 
-#: ../raster/r.univar/r.univar_main.c:176
-#: ../raster/r.univar/r3.univar_main.c:123
+#: ../raster/r.univar/r.univar_main.c:174
+#: ../raster/r.univar/r3.univar_main.c:125
 msgid "Statistics include number of cells counted, minimum and maximum cell values, range, arithmetic mean, population variance, standard deviation, coefficient of variation, and sum."
 msgstr "Statistiken omfattar antal räknade celler, lägsta och högsta cellvärden, intervall, aritmetiskt medelvärde, populationsvarians, standardavvikelse, variationskoefficient och summa."
 
-#: ../raster/r.univar/r.univar_main.c:189
+#: ../raster/r.univar/r.univar_main.c:187
 msgid "zones option and region flag -r are mutually exclusive"
 msgstr "zonalternativet och regionflaggan -r utesluter varandra"
 
-#: ../raster/r.univar/r.univar_main.c:226
-#: ../raster/r.univar/r3.univar_main.c:178
+#: ../raster/r.univar/r.univar_main.c:224
+#: ../raster/r.univar/r3.univar_main.c:180
 msgid "The -g flag cannot be used with format=json or format=csv. Please select only one output format."
 msgstr "Flaggan -g kan inte användas med format=json eller format=csv. Välj endast ett utdataformat."
 
-#: ../raster/r.univar/r.univar_main.c:234
-#: ../raster/r.univar/r3.univar_main.c:186
-msgid "Flag 't' is deprecated and will be removed in a future release. Please use format=csv instead."
-msgstr "Flaggan ”t” är föråldrad och kommer att tas bort i en framtida version. Använd istället format=csv."
-
-#: ../raster/r.univar/r.univar_main.c:238
-#: ../raster/r.univar/r3.univar_main.c:190
+#: ../raster/r.univar/r.univar_main.c:236
+#: ../raster/r.univar/r3.univar_main.c:192
 msgid "The -t flag cannot be used with format=json or format=shell. Please select only one output format."
 msgstr "Flaggan -t kan inte användas med format=json eller format=shell. Välj endast ett utdataformat."
 
-#: ../raster/r.univar/r.univar_main.c:550
-#: ../raster/r.univar/r.univar_main.c:659
+#: ../raster/r.univar/r.univar_main.c:527
+#: ../raster/r.univar/r.univar_main.c:636
 msgid "Unknown map type"
 msgstr "Okänd karttyp"
 
@@ -30270,12 +30316,12 @@ msgstr "Okänd karttyp"
 msgid "3D Raster map used for zoning, must be of type CELL"
 msgstr "3D Rasterkarta som används för zonindelning, måste vara av typen CELL"
 
-#: ../raster/r.univar/r3.univar_main.c:120
+#: ../raster/r.univar/r3.univar_main.c:122
 msgid "Calculates univariate statistics from the non-null cells of a 3D raster map."
 msgstr "Beräknar univariat statistik från de icke-nullceller som finns i en 3D-rasterkarta."
 
-#: ../raster/r.univar/r3.univar_main.c:215
-#: ../raster/r.univar/r3.univar_main.c:253 ../raster3d/r3.cross.rast/main.c:278
+#: ../raster/r.univar/r3.univar_main.c:217
+#: ../raster/r.univar/r3.univar_main.c:255 ../raster3d/r3.cross.rast/main.c:278
 #: ../raster3d/r3.flow/main.c:115 ../raster3d/r3.flow/main.c:127
 #: ../raster3d/r3.flow/main.c:361 ../raster3d/r3.flow/main.c:372
 #: ../raster3d/r3.flow/test_main.c:78 ../raster3d/r3.gradient/main.c:113
@@ -32467,11 +32513,6 @@ msgstr "Det går inte att öppna filen <%s>"
 #, c-format
 msgid "Writing %s from %s..."
 msgstr "Skriva %s från %s..."
-
-#: ../raster3d/r3.mkdspf/r3_find.c:20
-#, c-format
-msgid "File name <%s> is too long"
-msgstr "Filnamnet <%s> är för långt"
 
 #: ../raster3d/r3.neighbors/main.c:134
 msgid "The size of the window in x, y and z direction, values must be odd integer numbers, eg: 3,3,3"
@@ -38139,7 +38180,7 @@ msgid_plural "%d of %d features selected from vector map <%s>"
 msgstr[0] "%d av %d funktion vald från vektorkarta <%s>"
 msgstr[1] "%d av %d funktioner valda från vektorkartan <%s>"
 
-#: ../vector/v.edit/select.c:490
+#: ../vector/v.edit/select.c:493
 msgid "Layer must be > 0 for 'where'"
 msgstr "Lagret måste vara > 0 för \"var"
 
@@ -39428,7 +39469,7 @@ msgstr "Följande DXF-lager hittades:"
 msgid "Layer %d: %s"
 msgstr "Lager %d: %s"
 
-#: ../vector/v.in.dxf/write_vect.c:247
+#: ../vector/v.in.dxf/write_vect.c:248
 #, c-format
 msgid "Unable to add database link for vector map <%s>"
 msgstr "Det går inte att lägga till databaslänk för vektorkarta <%s>"
