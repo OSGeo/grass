@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
 
     flag.report = G_define_flag();
     flag.report->key = 'f';
-    flag.report->description = flag.report->label = _(
+    flag.report->label = _(
         "Generate unformatted report (items separated by colon) [deprecated]");
     flag.report->description = _(
         "This flag is deprecated and will be removed in a future release. Use "
