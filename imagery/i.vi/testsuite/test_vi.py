@@ -30,7 +30,7 @@ class TestReport(TestCase):
             "g.remove",
             flags="f",
             type="raster",
-            name="ipvi,ndwi,dvi,sr,evi,evi2,gari,gemi",
+            name="ipvi,ndre,ndwi,dvi,sr,evi,evi2,gari,gemi,gndvi",
         )
         cls.del_temp_region()
 
@@ -157,6 +157,32 @@ class TestReport(TestCase):
             refmin=-221.69,
             refmax=0.97,
             msg="gemi in degrees must be between -221.69 and 0.97",
+        )
+
+    def test_vinamegndvi(self):
+        """Testing viname gndvi"""
+        map_output = "gndvi"
+        self.assertModule(
+            "i.vi", green=self.green, nir=self.nir, output=map_output, viname="gndvi"
+        )
+        self.assertRasterMinMax(
+            map=map_output,
+            refmin=-0.9230769,
+            refmax=0.704142,
+            msg="gndvi in percent must be between -0.9230769 and 0.704142",
+        )
+
+    def test_vinamendre(self):
+        """Testing viname ndre"""
+        map_output = "ndre"
+        self.assertModule(
+            "i.vi", red=self.red, nir=self.nir, output=map_output, viname="ndre"
+        )
+        self.assertRasterMinMax(
+            map=map_output,
+            refmin=-0.9090909,
+            refmax=0.8133333,
+            msg="ndre in percent must be between -0.9090909 and 0.8133333",
         )
 
 
