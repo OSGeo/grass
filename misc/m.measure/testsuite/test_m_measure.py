@@ -14,8 +14,8 @@ class TestMMeasure(TestCase):
         """Remove temporary region"""
         cls.del_temp_region()
 
-    def test_m_measure_plain(self):
-        # Test plain text output with length and area
+    def test_m_measure_plain_with_area(self):
+        """Test plain text output with length and area"""
         actual = read_command(
             "m.measure",
             coordinates=[
@@ -35,7 +35,8 @@ class TestMMeasure(TestCase):
         ]
         self.assertEqual(actual, expected)
 
-        # Test plain text output with length only
+    def test_m_measure_plain_without_area(self):
+        """Test plain text output with length only"""
         actual = read_command(
             "m.measure",
             coordinates=["631969", "227998", "643325", "220544", "634067", "216826"],
@@ -43,8 +44,8 @@ class TestMMeasure(TestCase):
         expected = ["Length:  23560.522461 meters"]
         self.assertEqual(actual, expected)
 
-    def test_m_measure_shell(self):
-        # Test shell-format output: units, length, and area
+    def test_m_measure_shell_with_area(self):
+        """Test shell-format output with length and area"""
         actual = read_command(
             "m.measure",
             coordinates=[
@@ -66,7 +67,8 @@ class TestMMeasure(TestCase):
         ]
         self.assertEqual(actual, expected)
 
-        # Test shell-format: units and length only
+    def test_m_measure_shell_without_area(self):
+        """Test shell-format output with length only"""
         actual = read_command(
             "m.measure",
             coordinates=["631969", "227998", "643325", "220544", "634067", "216826"],
