@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 15:41+0000\n"
+"POT-Creation-Date: 2025-07-05 18:31+0000\n"
 "PO-Revision-Date: 2025-06-14 21:41+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Russian <https://weblate.osgeo.org/projects/grass-gis/grasslibs/ru/>\n"
@@ -4741,6 +4741,18 @@ msgstr "Входной PNG-файл не является изображение
 msgid "Input PNG file has invalid palette"
 msgstr "Входной PNG-файл содержит недопустимую палитру"
 
+#: ../lib/pngdriver/read_ppm.c:41
+#, fuzzy, c-format
+#| msgid "Cairo: invalid input file <%s>"
+msgid "PNG: invalid input file %s"
+msgstr "Cairo: недопустимый входной файл <%s>"
+
+#: ../lib/pngdriver/read_ppm.c:92
+#, fuzzy, c-format
+#| msgid "Cairo: invalid input mask file <%s>"
+msgid "PNG: invalid input mask file %s"
+msgstr "Cairo: недопустимый входной файл маски <%s>"
+
 #: ../lib/pngdriver/write_png.c:38
 msgid "Unable to write PNG"
 msgstr "Не удалось записать PNG"
@@ -8368,7 +8380,7 @@ msgstr "Соединение не определено"
 msgid "Unable to get number of simple features"
 msgstr "Не удалось получить номер простых объектов"
 
-#: ../lib/vector/Vlib/simple_features.c:349
+#: ../lib/vector/Vlib/simple_features.c:350
 #, c-format
 msgid "Unable to report simple features for vector map <%s>"
 msgstr "Не удалось представить простые объекты для векторной карты <%s>"

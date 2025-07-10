@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 15:41+0000\n"
+"POT-Creation-Date: 2025-07-05 18:31+0000\n"
 "PO-Revision-Date: 2025-06-14 20:56+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/es/>\n"
@@ -4668,6 +4668,18 @@ msgstr "El archivo PNG de entrada no es del tipo color indexado."
 msgid "Input PNG file has invalid palette"
 msgstr "Archivo PNG de entrada tiene una paleta no válida"
 
+#: ../lib/pngdriver/read_ppm.c:41
+#, fuzzy, c-format
+#| msgid "Cairo: invalid input file <%s>"
+msgid "PNG: invalid input file %s"
+msgstr "Cairo: archivo de entrada <%s> no válido"
+
+#: ../lib/pngdriver/read_ppm.c:92
+#, fuzzy, c-format
+#| msgid "Cairo: invalid input mask file <%s>"
+msgid "PNG: invalid input mask file %s"
+msgstr "Cairo: archivo de máscara <%s> no válido"
+
 #: ../lib/pngdriver/write_png.c:38
 msgid "Unable to write PNG"
 msgstr "No ha sido posible escribir PNG"
@@ -8270,7 +8282,7 @@ msgstr "No se ha definido la conexión"
 msgid "Unable to get number of simple features"
 msgstr "No ha sido posible obtener la cantidad de elementos simples"
 
-#: ../lib/vector/Vlib/simple_features.c:349
+#: ../lib/vector/Vlib/simple_features.c:350
 #, c-format
 msgid "Unable to report simple features for vector map <%s>"
 msgstr "No ha sido posible reportar elementos simples de mapa vectorial <%s>"
