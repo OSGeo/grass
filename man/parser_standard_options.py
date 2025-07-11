@@ -14,7 +14,6 @@ import re
 import sys
 
 from typing import IO, TYPE_CHECKING
-from urllib.request import urlopen
 from collections import defaultdict
 
 if TYPE_CHECKING:
@@ -311,11 +310,6 @@ class OptTable:
 
 
 if __name__ == "__main__":
-    URL = (
-        "https://raw.githubusercontent.com/OSGeo/grass/main/"
-        "lib/gis/parser_standard_options.c"
-    )
-
     parser = argparse.ArgumentParser(
         description="Extract GRASS default options from link."
     )
@@ -328,18 +322,11 @@ if __name__ == "__main__":
         help="Define the output format",
     )
     parser.add_argument(
-        "-l",
-        "--link",
-        default=URL,
-        dest="url",
-        type=str,
-        help="Provide the url with the file to parse",
-    )
-    parser.add_argument(
         "-t",
         "--text",
         dest="text",
         help="Provide the file to parse",
+        required=True,
     )
     parser.add_argument(
         "-o",
@@ -371,7 +358,7 @@ if __name__ == "__main__":
             if args.output is not None
             else contextlib.nullcontext(sys.stdout)
         ) as outfile,
-        open(args.text) if args.text is not None else urlopen(args.url) as cfile,
+        open(args.text) as cfile,
     ):
         options = OptTable(parse_options(cfile.readlines(), startswith=args.startswith))
         outform = args.format
