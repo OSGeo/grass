@@ -79,6 +79,7 @@ exclude =
     # Test output directory
     testreport,
     # Not yet compliant
+    python/grass/temporal/ply,
     python/libgrass_interface_generator,
     # No tests checked for now
     testsuite,

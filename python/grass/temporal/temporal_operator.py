@@ -140,10 +140,7 @@ for details.
 
 """  # noqa: E501
 
-try:
-    from ply import lex, yacc
-except ImportError:
-    pass
+from .ply import lex, yacc
 
 
 class TemporalOperatorLexer:
@@ -269,9 +266,7 @@ class TemporalOperatorLexer:
 
     # Build the lexer
     def build(self, **kwargs) -> None:
-        self.lexer = lex.lex(
-            module=self, optimize=False, nowarn=True, debug=0, **kwargs
-        )
+        self.lexer = lex.lex(module=self, debug=0, **kwargs)
 
     # Just for testing
     def test(self, data) -> None:
@@ -294,7 +289,7 @@ class TemporalOperatorParser:
     def __init__(self) -> None:
         self.lexer = TemporalOperatorLexer()
         self.lexer.build()
-        self.parser = yacc.yacc(module=self, debug=0)
+        self.parser = yacc.yacc(module=self, debug=False)
         self.relations = None  # Temporal relations (equals, contain, during, ...)
         self.temporal = None  # Temporal operation (intersect, left, right, ...)
         self.function = None  # Actual operation (+, -, /, *, ... )
