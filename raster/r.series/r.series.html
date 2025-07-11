@@ -107,7 +107,7 @@ one row from each map at a time.
 The maximum number of raster maps that can be processed is given by the
 user-specific limit of the operating system. For example, the soft limits
 for users are typically 1024 files. The soft limit can be changed with e.g.
-<tt>ulimit -n 4096</tt> (UNIX-based operating systems) but it cannot be
+<code>ulimit -n 4096</code> (UNIX-based operating systems) but it cannot be
 higher than the hard limit. If the latter is too low, you can as superuser
 add an entry in:
 
@@ -163,7 +163,7 @@ computation.
      </div>
 
 <p>To reduce the memory requirements to minimum, set option <b>memory</b> to zero.
-To take advantage of the parallelization, GRASS GIS
+To take advantage of the parallelization, GRASS
 needs to compiled with OpenMP enabled.
 
 <h2>EXAMPLES</h2>

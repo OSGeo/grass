@@ -345,7 +345,7 @@ static void log_error(const char *msg, int fatal)
 
     /* get current working directory */
     if (getcwd(cwd, sizeof(cwd)) == NULL)
-        sprintf(cwd, "%s", _("unknown"));
+        snprintf(cwd, sizeof(cwd), "%s", _("unknown"));
 
     /* write the error log file */
     if ((gisbase = G_gisbase()))
@@ -493,13 +493,16 @@ static void print_sentence(FILE *fd, const int type, const char *msg)
 
     switch (type) {
     case MSG:
-        sprintf(prefix, "GRASS_INFO_MESSAGE(%d,%d): ", getpid(), id);
+        snprintf(prefix, sizeof(prefix),
+                 "GRASS_INFO_MESSAGE(%d,%d): ", getpid(), id);
         break;
     case WARN:
-        sprintf(prefix, "GRASS_INFO_WARNING(%d,%d): ", getpid(), id);
+        snprintf(prefix, sizeof(prefix),
+                 "GRASS_INFO_WARNING(%d,%d): ", getpid(), id);
         break;
     case ERR:
-        sprintf(prefix, "GRASS_INFO_ERROR(%d,%d): ", getpid(), id);
+        snprintf(prefix, sizeof(prefix), "GRASS_INFO_ERROR(%d,%d): ", getpid(),
+                 id);
         break;
     }
 

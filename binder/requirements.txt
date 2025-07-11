@@ -1,4 +1,5 @@
 folium
+ipyleaflet
 matplotlib
 numpy
 Pillow

@@ -21,7 +21,7 @@ from .abstract_dataset import (
     AbstractDatasetComparisonKeyStartTime,
 )
 from .core import init
-from .datetime_math import compute_datetime_delta, increment_datetime_by_string
+from .datetime_math import increment_datetime_by_string
 from .space_time_datasets import RasterDataset
 from .spatial_extent import SpatialExtent
 from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
@@ -221,349 +221,6 @@ def test_adjust_datetime_to_granularity() -> None:
 
 
 ###############################################################################
-
-
-def test_compute_datetime_delta() -> None:
-    print("Test 1")
-    start = datetime(2001, 1, 1, 0, 0, 0)
-    end = datetime(2001, 1, 1, 0, 0, 0)
-
-    comp = compute_datetime_delta(start, end)
-
-    result = comp["second"]
-    correct = 0
-
-    delta = correct - result
-
-    if delta != 0:
-        core.fatal("Compute datetime delta is wrong %s" % (delta))
-
-    print("Test 2")
-    start = datetime(2001, 1, 1, 0, 0, 14)
-    end = datetime(2001, 1, 1, 0, 0, 44)
-
-    comp = compute_datetime_delta(start, end)
-
-    result = comp["second"]
-    correct = 30
-
-    delta = correct - result
-
-    if delta != 0:
-        core.fatal("Compute datetime delta is wrong %s" % (delta))
-
-    print("Test 3")
-    start = datetime(2001, 1, 1, 0, 0, 44)
-    end = datetime(2001, 1, 1, 0, 1, 14)
-
-    comp = compute_datetime_delta(start, end)
-
-    result = comp["second"]
-    correct = 30
-
-    delta = correct - result
-
-    if delta != 0:
-        core.fatal("Compute datetime delta is wrong %s" % (delta))
-
-    print("Test 4")
-    start = datetime(2001, 1, 1, 0, 0, 30)
-    end = datetime(2001, 1, 1, 0, 5, 30)
-
-    comp = compute_datetime_delta(start, end)
-
-    result = comp["second"]
-    correct = 300
-
-    delta = correct - result
-
-    if delta != 0:
-        core.fatal("Compute datetime delta is wrong %s" % (delta))
-
-    print("Test 5")
-    start = datetime(2001, 1, 1, 0, 0, 0)
-    end = datetime(2001, 1, 1, 0, 1, 0)
-
-    comp = compute_datetime_delta(start, end)
-
-    result = comp["minute"]
-    correct = 1
-
-    delta = correct - result
-
-    if delta != 0:
-        core.fatal("Compute datetime delta is wrong %s" % (delta))
-
-    print("Test 6")
-    start = datetime(2011, 10, 31, 0, 45, 0)
-    end = datetime(2011, 10, 31, 1, 45, 0)
-
-    comp = compute_datetime_delta(start, end)
-
-    result = comp["minute"]
-    correct = 60
-
-    delta = correct - result
-
-    if delta != 0:
-        core.fatal("Compute datetime delta is wrong %s" % (delta))
-
-    print("Test 7")
-    start = datetime(2011, 10, 31, 0, 45, 0)
-    end = datetime(2011, 10, 31, 1, 15, 0)
-
-    comp = compute_datetime_delta(start, end)
-
-    result = comp["minute"]
-    correct = 30
-
-    delta = correct - result
-
-    if delta != 0:
-        core.fatal("Compute datetime delta is wrong %s" % (delta))
-
-    print("Test 8")
-    start = datetime(2011, 10, 31, 0, 45, 0)
-    end = datetime(2011, 10, 31, 12, 15, 0)
-
-    comp = compute_datetime_delta(start, end)
-
-    result = comp["minute"]
-    correct = 690
-
-    delta = correct - result
-
-    if delta != 0:
-        core.fatal("Compute datetime delta is wrong %s" % (delta))
-
-    print("Test 9")
-    start = datetime(2011, 10, 31, 0, 0, 0)
-    end = datetime(2011, 10, 31, 1, 0, 0)
-
-    comp = compute_datetime_delta(start, end)
-
-    result = comp["hour"]
-    correct = 1
-
-    delta = correct - result
-
-    if delta != 0:
-        core.fatal("Compute datetime delta is wrong %s" % (delta))
-
-    print("Test 10")
-    start = datetime(2011, 10, 31, 0, 0, 0)
-    end = datetime(2011, 11, 1, 1, 0, 0)
-
-    comp = compute_datetime_delta(start, end)
-
-    result = comp["hour"]
-    correct = 25
-
-    delta = correct - result
-
-    if delta != 0:
-        core.fatal("Compute datetime delta is wrong %s" % (delta))
-
-    print("Test 11")
-    start = datetime(2011, 10, 31, 12, 0, 0)
-    end = datetime(2011, 11, 1, 6, 0, 0)
-
-    comp = compute_datetime_delta(start, end)
-
-    result = comp["hour"]
-    correct = 18
-
-    delta = correct - result
-
-    if delta != 0:
-        core.fatal("Compute datetime delta is wrong %s" % (delta))
-
-    print("Test 12")
-    start = datetime(2011, 11, 1, 0, 0, 0)
-    end = datetime(2011, 12, 1, 1, 0, 0)
-
-    comp = compute_datetime_delta(start, end)
-
-    result = comp["hour"]
-    correct = 30 * 24 + 1
-
-    delta = correct - result
-
-    if delta != 0:
-        core.fatal("Compute datetime delta is wrong %s" % (delta))
-
-    print("Test 13")
-    start = datetime(2011, 11, 1, 0, 0, 0)
-    end = datetime(2011, 11, 5, 0, 0, 0)
-
-    comp = compute_datetime_delta(start, end)
-
-    result = comp["day"]
-    correct = 4
-
-    delta = correct - result
-
-    if delta != 0:
-        core.fatal("Compute datetime delta is wrong %s" % (delta))
-
-    print("Test 14")
-    start = datetime(2011, 10, 6, 0, 0, 0)
-    end = datetime(2011, 11, 5, 0, 0, 0)
-
-    comp = compute_datetime_delta(start, end)
-
-    result = comp["day"]
-    correct = 30
-
-    delta = correct - result
-
-    if delta != 0:
-        core.fatal("Compute datetime delta is wrong %s" % (delta))
-
-    print("Test 15")
-    start = datetime(2011, 12, 2, 0, 0, 0)
-    end = datetime(2012, 1, 1, 0, 0, 0)
-
-    comp = compute_datetime_delta(start, end)
-
-    result = comp["day"]
-    correct = 30
-
-    delta = correct - result
-
-    if delta != 0:
-        core.fatal("Compute datetime delta is wrong %s" % (delta))
-
-    print("Test 16")
-    start = datetime(2011, 1, 1, 0, 0, 0)
-    end = datetime(2011, 2, 1, 0, 0, 0)
-
-    comp = compute_datetime_delta(start, end)
-
-    result = comp["month"]
-    correct = 1
-
-    delta = correct - result
-
-    if delta != 0:
-        core.fatal("Compute datetime delta is wrong %s" % (delta))
-
-    print("Test 17")
-    start = datetime(2011, 12, 1, 0, 0, 0)
-    end = datetime(2012, 1, 1, 0, 0, 0)
-
-    comp = compute_datetime_delta(start, end)
-
-    result = comp["month"]
-    correct = 1
-
-    delta = correct - result
-
-    if delta != 0:
-        core.fatal("Compute datetime delta is wrong %s" % (delta))
-
-    print("Test 18")
-    start = datetime(2011, 12, 1, 0, 0, 0)
-    end = datetime(2012, 6, 1, 0, 0, 0)
-
-    comp = compute_datetime_delta(start, end)
-
-    result = comp["month"]
-    correct = 6
-
-    delta = correct - result
-
-    if delta != 0:
-        core.fatal("Compute datetime delta is wrong %s" % (delta))
-
-    print("Test 19")
-    start = datetime(2011, 6, 1, 0, 0, 0)
-    end = datetime(2021, 6, 1, 0, 0, 0)
-
-    comp = compute_datetime_delta(start, end)
-
-    result = comp["year"]
-    correct = 10
-
-    delta = correct - result
-
-    if delta != 0:
-        core.fatal("Compute datetime delta is wrong %s" % (delta))
-
-    print("Test 20")
-    start = datetime(2011, 6, 1, 0, 0, 0)
-    end = datetime(2012, 6, 1, 12, 0, 0)
-
-    comp = compute_datetime_delta(start, end)
-
-    result = comp["hour"]
-    d = end - start
-    correct = 12 + d.days * 24
-
-    delta = correct - result
-
-    if delta != 0:
-        core.fatal("Compute datetime delta is wrong %s" % (delta))
-
-    print("Test 21")
-    start = datetime(2011, 6, 1, 0, 0, 0)
-    end = datetime(2012, 6, 1, 12, 30, 0)
-
-    comp = compute_datetime_delta(start, end)
-
-    result = comp["minute"]
-    d = end - start
-    correct = d.days * 24 * 60 + 12 * 60 + 30
-
-    delta = correct - result
-
-    if delta != 0:
-        core.fatal("Compute datetime delta is wrong %s" % (delta))
-
-    print("Test 22")
-    start = datetime(2011, 6, 1, 0, 0, 0)
-    end = datetime(2012, 6, 1, 12, 0, 5)
-
-    comp = compute_datetime_delta(start, end)
-
-    result = comp["second"]
-    d = end - start
-    correct = 5 + 60 * 60 * 12 + d.days * 24 * 60 * 60
-
-    delta = correct - result
-
-    if delta != 0:
-        core.fatal("Compute datetime delta is wrong %s" % (delta))
-
-    print("Test 23")
-    start = datetime(2011, 6, 1, 0, 0, 0)
-    end = datetime(2012, 6, 1, 0, 30, 0)
-
-    comp = compute_datetime_delta(start, end)
-
-    result = comp["minute"]
-    d = end - start
-    correct = 30 + d.days * 24 * 60
-
-    delta = correct - result
-
-    if delta != 0:
-        core.fatal("Compute datetime delta is wrong %s" % (delta))
-
-    print("Test 24")
-    start = datetime(2011, 6, 1, 0, 0, 0)
-    end = datetime(2012, 6, 1, 0, 0, 5)
-
-    comp = compute_datetime_delta(start, end)
-
-    result = comp["second"]
-    d = end - start
-    correct = 5 + d.days * 24 * 60 * 60
-
-    delta = correct - result
-
-    if delta != 0:
-        core.fatal("Compute datetime delta is wrong %s" % (delta))
 
 
 def test_compute_absolute_time_granularity() -> None:
@@ -1355,53 +1012,53 @@ def test_spatial_relations() -> None:
 def test_temporal_topology_builder() -> None:
     map_listA = []
 
-    _map = RasterDataset(ident="1@a")
-    _map.set_absolute_time(datetime(2001, 1, 1), datetime(2001, 2, 1))
-    map_listA.append(copy.copy(_map))
-    _map = RasterDataset(ident="2@a")
-    _map.set_absolute_time(datetime(2001, 2, 1), datetime(2001, 3, 1))
-    map_listA.append(copy.copy(_map))
-    _map = RasterDataset(ident="3@a")
-    _map.set_absolute_time(datetime(2001, 3, 1), datetime(2001, 4, 1))
-    map_listA.append(copy.copy(_map))
-    _map = RasterDataset(ident="4@a")
-    _map.set_absolute_time(datetime(2001, 4, 1), datetime(2001, 5, 1))
-    map_listA.append(copy.copy(_map))
-    _map = RasterDataset(ident="5@a")
-    _map.set_absolute_time(datetime(2001, 5, 1), datetime(2001, 6, 1))
-    map_listA.append(copy.copy(_map))
+    map_ = RasterDataset(ident="1@a")
+    map_.set_absolute_time(datetime(2001, 1, 1), datetime(2001, 2, 1))
+    map_listA.append(copy.copy(map_))
+    map_ = RasterDataset(ident="2@a")
+    map_.set_absolute_time(datetime(2001, 2, 1), datetime(2001, 3, 1))
+    map_listA.append(copy.copy(map_))
+    map_ = RasterDataset(ident="3@a")
+    map_.set_absolute_time(datetime(2001, 3, 1), datetime(2001, 4, 1))
+    map_listA.append(copy.copy(map_))
+    map_ = RasterDataset(ident="4@a")
+    map_.set_absolute_time(datetime(2001, 4, 1), datetime(2001, 5, 1))
+    map_listA.append(copy.copy(map_))
+    map_ = RasterDataset(ident="5@a")
+    map_.set_absolute_time(datetime(2001, 5, 1), datetime(2001, 6, 1))
+    map_listA.append(copy.copy(map_))
 
     tb = SpatioTemporalTopologyBuilder()
     tb.build(map_listA)
 
     count = 0
-    for _map in tb:
-        print("[%s]" % (_map.get_name()))
-        _map.print_topology_info()
-        if _map.get_id() != map_listA[count].get_id():
+    for map_ in tb:
+        print("[%s]" % (map_.get_name()))
+        map_.print_topology_info()
+        if map_.get_id() != map_listA[count].get_id():
             core.fatal(
                 "Error building temporal topology <%s> != <%s>"
-                % (_map.get_id(), map_listA[count].get_id())
+                % (map_.get_id(), map_listA[count].get_id())
             )
         count += 1
 
     map_listB = []
 
-    _map = RasterDataset(ident="1@b")
-    _map.set_absolute_time(datetime(2001, 1, 14), datetime(2001, 3, 14))
-    map_listB.append(copy.copy(_map))
-    _map = RasterDataset(ident="2@b")
-    _map.set_absolute_time(datetime(2001, 2, 1), datetime(2001, 4, 1))
-    map_listB.append(copy.copy(_map))
-    _map = RasterDataset(ident="3@b")
-    _map.set_absolute_time(datetime(2001, 2, 14), datetime(2001, 4, 30))
-    map_listB.append(copy.copy(_map))
-    _map = RasterDataset(ident="4@b")
-    _map.set_absolute_time(datetime(2001, 4, 2), datetime(2001, 4, 30))
-    map_listB.append(copy.copy(_map))
-    _map = RasterDataset(ident="5@b")
-    _map.set_absolute_time(datetime(2001, 5, 1), datetime(2001, 5, 14))
-    map_listB.append(copy.copy(_map))
+    map_ = RasterDataset(ident="1@b")
+    map_.set_absolute_time(datetime(2001, 1, 14), datetime(2001, 3, 14))
+    map_listB.append(copy.copy(map_))
+    map_ = RasterDataset(ident="2@b")
+    map_.set_absolute_time(datetime(2001, 2, 1), datetime(2001, 4, 1))
+    map_listB.append(copy.copy(map_))
+    map_ = RasterDataset(ident="3@b")
+    map_.set_absolute_time(datetime(2001, 2, 14), datetime(2001, 4, 30))
+    map_listB.append(copy.copy(map_))
+    map_ = RasterDataset(ident="4@b")
+    map_.set_absolute_time(datetime(2001, 4, 2), datetime(2001, 4, 30))
+    map_listB.append(copy.copy(map_))
+    map_ = RasterDataset(ident="5@b")
+    map_.set_absolute_time(datetime(2001, 5, 1), datetime(2001, 5, 14))
+    map_listB.append(copy.copy(map_))
 
     tb = SpatioTemporalTopologyBuilder()
     tb.build(map_listB)
@@ -1417,13 +1074,13 @@ def test_temporal_topology_builder() -> None:
         core.fatal("Error building temporal topology")
 
     count = 0
-    for _map in tb:
-        print("[%s]" % (_map.get_map_id()))
-        _map.print_topology_shell_info()
-        if _map.get_id() != map_listB[count].get_id():
+    for map_ in tb:
+        print("[%s]" % (map_.get_map_id()))
+        map_.print_topology_shell_info()
+        if map_.get_id() != map_listB[count].get_id():
             core.fatal(
                 "Error building temporal topology <%s> != <%s>"
-                % (_map.get_id(), map_listB[count].get_id())
+                % (map_.get_id(), map_listB[count].get_id())
             )
         count += 1
 
@@ -1431,20 +1088,20 @@ def test_temporal_topology_builder() -> None:
     tb.build(map_listA, map_listB)
 
     count = 0
-    for _map in tb:
-        print("[%s]" % (_map.get_map_id()))
-        _map.print_topology_shell_info()
-        if _map.get_id() != map_listA[count].get_id():
+    for map_ in tb:
+        print("[%s]" % (map_.get_map_id()))
+        map_.print_topology_shell_info()
+        if map_.get_id() != map_listA[count].get_id():
             core.fatal(
                 "Error building temporal topology <%s> != <%s>"
-                % (_map.get_id(), map_listA[count].get_id())
+                % (map_.get_id(), map_listA[count].get_id())
             )
         count += 1
 
     count = 0
-    for _map in map_listB:
-        print("[%s]" % (_map.get_map_id()))
-        _map.print_topology_shell_info()
+    for map_ in map_listB:
+        print("[%s]" % (map_.get_map_id()))
+        map_.print_topology_shell_info()
 
     # Probing some relations
     if map_listA[3].get_follows()[0] != map_listB[1]:
@@ -1468,28 +1125,28 @@ def test_temporal_topology_builder() -> None:
 def test_map_list_sorting() -> None:
     map_list = []
 
-    _map = RasterDataset(ident="1@a")
-    _map.set_absolute_time(datetime(2001, 2, 1), datetime(2001, 3, 1))
-    map_list.append(copy.copy(_map))
-    _map = RasterDataset(ident="2@a")
-    _map.set_absolute_time(datetime(2001, 1, 1), datetime(2001, 2, 1))
-    map_list.append(copy.copy(_map))
-    _map = RasterDataset(ident="3@a")
-    _map.set_absolute_time(datetime(2001, 3, 1), datetime(2001, 4, 1))
-    map_list.append(copy.copy(_map))
+    map_ = RasterDataset(ident="1@a")
+    map_.set_absolute_time(datetime(2001, 2, 1), datetime(2001, 3, 1))
+    map_list.append(copy.copy(map_))
+    map_ = RasterDataset(ident="2@a")
+    map_.set_absolute_time(datetime(2001, 1, 1), datetime(2001, 2, 1))
+    map_list.append(copy.copy(map_))
+    map_ = RasterDataset(ident="3@a")
+    map_.set_absolute_time(datetime(2001, 3, 1), datetime(2001, 4, 1))
+    map_list.append(copy.copy(map_))
 
     print("Original")
-    for _map in map_list:
+    for map_ in map_list:
         print(
-            _map.get_temporal_extent_as_tuple()[0],
-            _map.get_temporal_extent_as_tuple()[1],
+            map_.get_temporal_extent_as_tuple()[0],
+            map_.get_temporal_extent_as_tuple()[1],
         )
     print("Sorted by start time")
     new_list = sorted(map_list, key=AbstractDatasetComparisonKeyStartTime)
-    for _map in new_list:
+    for map_ in new_list:
         print(
-            _map.get_temporal_extent_as_tuple()[0],
-            _map.get_temporal_extent_as_tuple()[1],
+            map_.get_temporal_extent_as_tuple()[0],
+            map_.get_temporal_extent_as_tuple()[1],
         )
 
     if new_list[0] != map_list[1]:
@@ -1501,10 +1158,10 @@ def test_map_list_sorting() -> None:
 
     print("Sorted by end time")
     new_list = sorted(map_list, key=AbstractDatasetComparisonKeyEndTime)
-    for _map in new_list:
+    for map_ in new_list:
         print(
-            _map.get_temporal_extent_as_tuple()[0],
-            _map.get_temporal_extent_as_tuple()[1],
+            map_.get_temporal_extent_as_tuple()[0],
+            map_.get_temporal_extent_as_tuple()[1],
         )
 
     if new_list[0] != map_list[1]:
@@ -1669,7 +1326,6 @@ if __name__ == "__main__":
     test_adjust_datetime_to_granularity()
     test_spatial_extent_intersection()
     test_compute_absolute_time_granularity()
-    test_compute_datetime_delta()
     test_spatial_extent_intersection()
     test_spatial_relations()
     test_temporal_topology_builder()

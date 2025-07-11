@@ -300,7 +300,7 @@ int GS_new_light(void)
 /*!
    \brief Set light position
 
-   \bug I think lights array doesnt match sgi_light array
+   \bug I think lights array doesn't match sgi_light array
 
    \param num light id (starts with 1)
    \param xpos,ypos,zpos coordinates (model)

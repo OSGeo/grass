@@ -46,26 +46,17 @@ cleanup()
  g.remove -f type=raster name=$TMPNAME > /dev/null
 }
 
-# check if a MASK is already present:
+# Create our own mask.
 MASKTMP=mask.$TMPNAME
-USERMASK=usermask_${MASKTMP}
-if test -f $MAPSET_PATH/cell/MASK
-then
- echo "A user raster mask (MASK) is present. Saving it..."
- g.rename raster=MASK,$USERMASK > /dev/null
-fi
+export GRASS_MASK=$MASKTMP
 
 finalcleanup()
 {
  echo "Restoring user region"
  g.region region=$TMPNAME
  g.remove -f type=region name=$TMPNAME > /dev/null
- #restore user mask if present:
- if test -f $MAPSET_PATH/cell/$USERMASK ; then
-  echo "Restoring user MASK"
-  g.remove -f type=raster name=MASK > /dev/null
-  g.rename raster=$USERMASK,MASK > /dev/null
- fi
+ # Remove our mask if present.
+ g.remove -f type=raster name=$MASKTMP > /dev/null
 }
 
 check_exit_status()
@@ -106,15 +97,10 @@ compare_result()
  fi
 }
 
-#check if a MASK is already present:
+# Deactivate the current mask, by using our own mask name,
+# but not creating any mask.
 MASKTMP=mask.$TMPNAME
-USERMASK=usermask_${MASKTMP}
-if test -f $MAPSET_PATH/cell/MASK
-then
- echo "A user raster mask (MASK) is present. Saving it..."
- g.rename raster=MASK,$USERMASK > /dev/null
- check_exit_status $?
-fi
+export GRASS_MASK=$MASKTMP
 
 echo "Saving current & setting test region."
 g.region save=$TMPNAME

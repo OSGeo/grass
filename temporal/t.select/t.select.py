@@ -68,7 +68,7 @@ def main():
     dry_run = flags["d"]
     stdstype = options["type"]
 
-    # Check for PLY istallation
+    # Check for PLY installation
     try:
         # Intentionally unused imports
         from ply import lex  # noqa: F401

@@ -109,9 +109,7 @@ def download_modules_xml_file(url, response_format, *args, **kwargs):
             desc = HTTP_STATUS_CODES[index].description
             gs.fatal(
                 _(
-                    "Download file from <{url}>, "
-                    "return status code {code}, "
-                    "{desc}"
+                    "Download file from <{url}>, return status code {code}, {desc}"
                 ).format(
                     url=url,
                     code=response.code,

@@ -11,8 +11,8 @@ system than before it was rectified). Supported transformation methods
 are first, second, and third order polynomial and thin plate spline.
 Thin plate spline is recommended for ungeoreferenced satellite imagery
 where ground control points (GCPs) are included. Examples are
-<a href="https://gdal.org/frmt_l1b.html">NOAA/AVHRR</a>
-and <a href="https://gdal.org/frmt_various.html#Envisat">ENVISAT</a>
+<a href="https://gdal.org/en/stable/drivers/raster/l1b.html">NOAA/AVHRR</a>
+and <a href="https://gdal.org/en/stable/drivers/raster/esat.html#raster-esat">ENVISAT</a>
 imagery which include throusands of GCPs.
 
 <p>
@@ -144,9 +144,9 @@ with categorical data, since the cell values will be altered.
 <p>In the bilinear, cubic and lanczos methods, if any of the surrounding cells used to
 interpolate the new cell value are NULL, the resulting cell will be NULL, even if
 the nearest cell is not NULL. This will cause some thinning along NULL borders,
-such as the coasts of land areas in a DEM. The bilinear_f, cubic_f and lanczos_f
-interpolation methods can be used if thinning along NULL edges is not desired.
-These methods "fall back" to simpler interpolation methods along NULL borders.
+such as the coasts of land areas in a DEM. The <em>bilinear_f</em>, <em>cubic_f</em>
+and <em>lanczos_f</em> interpolation methods can be used if thinning along NULL edges is
+not desired. These methods "fall back" to simpler interpolation methods along NULL borders.
 That is, from lanczos to cubic to bilinear to nearest.
 <p>If nearest neighbor assignment is used, the output map has the same raster
 format as the input map. If any of the other interpolations is used, the
@@ -161,9 +161,9 @@ mode.
 <h2>NOTES</h2>
 
 If <em>i.rectify</em> starts normally but after some time the following text is seen:
-<br><tt>
+<br><code>
 ERROR: Error writing segment file
-</tt><br>
+</code><br>
 the user may try the <b>-c</b> flag or the module needs more free space
 on the hard drive.
 

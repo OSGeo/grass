@@ -1,16 +1,16 @@
-# syntax=docker/dockerfile:1.12@sha256:db1ff77fb637a5955317c7a3a62540196396d565f3dd5742e76dddbb6d75c4c5
+# syntax=docker/dockerfile:1.17@sha256:38387523653efa0039f8e1c89bb74a30504e76ee9f565e25c9a09841f9427b05
 
 # Note: This file must be kept in sync in ./Dockerfile and ./docker/ubuntu/Dockerfile.
 #       Changes to this file must be copied over to the other file.
 
 ARG GUI=without
 
-FROM ubuntu:22.04@sha256:0e5e4a57c2499249aafc3b40fcd541e9a456aab7296681a3994d631587203f97 as common_start
+FROM ubuntu:22.04@sha256:3c61d3759c2639d4b836d32a2d3c83fa0214e36f195a3421018dbaaf79cbe37f AS common_start
 
 LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann,Stefan Blumentrath"
 LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 SHELL ["/bin/bash", "-c"]
 
@@ -144,12 +144,12 @@ ARG GRASS_PYTHON_PACKAGES="\
 ENV GRASS_PYTHON_PACKAGES=${GRASS_PYTHON_PACKAGES}
 
 
-FROM common_start as grass_without_gui
+FROM common_start AS grass_without_gui
 
 ARG GRASS_CONFIG="${GRASS_CONFIG} --without-opengl"
 ENV GRASS_CONFIG=${GRASS_CONFIG}
 
-FROM common_start as grass_with_gui
+FROM common_start AS grass_with_gui
 
 ARG GRASS_RUN_PACKAGES="${GRASS_RUN_PACKAGES} \
   adwaita-icon-theme-full \
@@ -203,10 +203,10 @@ ARG GRASS_PYTHON_PACKAGES="${GRASS_PYTHON_PACKAGES} wxPython"
 ENV NO_AT_BRIDGE=1
 
 
-FROM grass_${GUI}_gui as grass_gis
+FROM grass_${GUI}_gui AS grass_gis
 # Add ubuntugis unstable and fetch packages
 RUN apt-get update \
-    && apt-get install  -y --no-install-recommends --no-install-suggests \
+    && apt-get install -y --no-install-recommends --no-install-suggests \
     software-properties-common \
     gpg \
     gpg-agent \
@@ -228,7 +228,7 @@ WORKDIR /src
 
 # # Get datum grids
 # # Currently using https://proj.org/en/9.3/usage/network.html#how-to-enable-network-capabilities
-# FROM ubuntu:22.04 as datum_grids
+# FROM ubuntu:22.04 AS datum_grids
 
 # # See: https://github.com/OSGeo/PROJ-data
 # RUN apt-get update \
@@ -241,7 +241,7 @@ WORKDIR /src
 # RUN wget --no-check-certificate -r -l inf -A tif https://cdn.proj.org/
 
 # Start build stage
-FROM grass_gis as build
+FROM grass_gis AS build
 
 # Add build packages
 RUN apt-get update \
@@ -272,13 +272,13 @@ WORKDIR /src/grass_build
 
 # Set environmental variables for GRASS GIS compilation, without debug symbols
 # Set gcc/g++ environmental variables for GRASS GIS compilation, without debug symbols
-ENV MYCFLAGS "-O2 -std=gnu99 -m64"
-ENV MYLDFLAGS "-s"
+ENV MYCFLAGS="-O2 -std=gnu99"
+ENV MYLDFLAGS="-s"
 # CXX stuff:
-ENV LD_LIBRARY_PATH "/usr/local/lib"
-ENV LDFLAGS "$MYLDFLAGS"
-ENV CFLAGS "$MYCFLAGS"
-ENV CXXFLAGS "$MYCXXFLAGS"
+ENV LD_LIBRARY_PATH="/usr/local/lib"
+ENV LDFLAGS="$MYLDFLAGS"
+ENV CFLAGS="$MYCFLAGS"
+ENV CXXFLAGS="$MYCXXFLAGS"
 
 # Configure compile and install GRASS GIS
 ENV NUMTHREADS=4
@@ -295,18 +295,18 @@ RUN ./configure $GRASS_CONFIG \
     mv module_items.xml /usr/local/grass85/gui/wxpython/xml/module_items.xml;
 
 # Build the GDAL-GRASS plugin
-RUN git clone https://github.com/OSGeo/gdal-grass \
+# renovate: datasource=github-tags depName=OSGeo/gdal-grass
+ARG GDAL_GRASS_VERSION=1.0.4
+RUN git clone --branch $GDAL_GRASS_VERSION --depth 1 https://github.com/OSGeo/gdal-grass.git \
     && cd "gdal-grass" \
-    && ./configure \
-      --with-gdal=/usr/bin/gdal-config \
-      --with-grass=/usr/local/grass85 \
-    && make -j $NUMTHREADS \
-    && make install -j $NUMTHREADS \
+    && cmake -B build -DAUTOLOAD_DIR=/usr/lib/gdalplugins -DBUILD_TESTING=OFF \
+    && cmake --build build \
+    && cmake --install build \
     && cd /src \
     && rm -rf "gdal-grass"
 
 # Leave build stage
-FROM grass_gis as grass_gis_final
+FROM grass_gis AS grass_gis_final
 
 # GRASS GIS specific
 # allow work with MAPSETs that are not owned by current user
@@ -338,10 +338,10 @@ WORKDIR /scripts
 
 # enable GRASS GIS Python session support
 ## grass --config python-path
-ENV PYTHONPATH "/usr/local/grass/etc/python:${PYTHONPATH}"
+ENV PYTHONPATH="/usr/local/grass/etc/python:${PYTHONPATH}"
 # enable GRASS GIS ctypes imports
 ## grass --config path
-ENV LD_LIBRARY_PATH "/usr/local/grass/lib:$LD_LIBRARY_PATH"
+ENV LD_LIBRARY_PATH="/usr/local/grass/lib:$LD_LIBRARY_PATH"
 
 WORKDIR /tmp
 COPY docker/testdata/simple.laz .

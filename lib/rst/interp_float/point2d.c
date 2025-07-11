@@ -174,10 +174,10 @@ int IL_write_point_2d(struct triple point, double err)
     Vect_write_line(&Map2, GV_POINT, Pnts, Cats2);
 
     db_zero_string(&sql2);
-    sprintf(buf, "insert into %s values ( %d ", ff->table, count);
+    snprintf(buf, sizeof(buf), "insert into %s values ( %d ", ff->table, count);
     db_append_string(&sql2, buf);
 
-    sprintf(buf, ", %f", err);
+    snprintf(buf, sizeof(buf), ", %f", err);
     db_append_string(&sql2, buf);
     db_append_string(&sql2, ")");
     G_debug(3, "IL_check_at_points_2d: %s", db_get_string(&sql2));

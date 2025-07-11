@@ -25,8 +25,9 @@ static int test_path_file(const char *path, const char *file)
     int ret;
     char *buf;
 
-    buf = (char *)G_malloc(strlen(path) + strlen(file) + 2);
-    sprintf(buf, "%s/%s", path, file);
+    size_t len = strlen(path) + strlen(file) + 2;
+    buf = (char *)G_malloc(len);
+    snprintf(buf, len, "%s/%s", path, file);
 
     ret = access(buf, F_OK);
     G_free(buf);

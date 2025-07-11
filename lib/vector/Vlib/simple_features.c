@@ -333,8 +333,8 @@ int Vect_sfa_get_num_features(struct Map_info *Map)
             return -1;
         }
 
-        sprintf(stmt, "SELECT count(*) FROM \"%s\".\"%s\"",
-                pg_info->schema_name, pg_info->table_name);
+        snprintf(stmt, sizeof(stmt), "SELECT count(*) FROM \"%s\".\"%s\"",
+                 pg_info->schema_name, pg_info->table_name);
         nfeat = Vect__execute_get_value_pg(pg_info->conn, stmt);
         if (nfeat < 0) {
             G_warning(_("Unable to get number of simple features"));
@@ -346,8 +346,10 @@ int Vect_sfa_get_num_features(struct Map_info *Map)
 #endif
     }
     else {
+        const char *map_name = Vect_get_full_name(Map);
         G_warning(_("Unable to report simple features for vector map <%s>"),
-                  Vect_get_full_name(Map));
+                  map_name);
+        G_free((void *)map_name);
         return -1;
     }
 

@@ -207,7 +207,7 @@ void gk_follow_frames(Viewnode *view, int numsteps, Keylist *keys, int step,
             GS_set_fov((int)v->fields[KF_FOV]);
         }
 
-        /* Initilaize lights before drawing */
+        /* Initialize lights before drawing */
         num = 1;
         GS_getlight_position(num, &x, &y, &z, &w);
         GS_setlight_position(num, x, y, z, w);

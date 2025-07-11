@@ -45,7 +45,7 @@ char **format_list(int *count, size_t *len)
         list = G_realloc(list, ((*count) + 1) * sizeof(char *));
 
         /* chg white space to underscore in OGR driver names */
-        sprintf(buf, "%s", OGR_Dr_GetName(Ogr_driver));
+        snprintf(buf, sizeof(buf), "%s", OGR_Dr_GetName(Ogr_driver));
         G_strchg(buf, ' ', '_');
         list[(*count)++] = G_store(buf);
         if (len)

@@ -24,7 +24,7 @@
 # % keyword: general
 # % keyword: GUI
 # % keyword: temporal
-# % keywords: plot
+# % keyword: plot
 # %end
 # %option G_OPT_STDS_INPUTS
 # % required: no

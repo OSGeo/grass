@@ -12,7 +12,6 @@ from pathlib import Path
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
-from grass.gunittest.utils import xfail_windows
 
 
 class TestRasterUnivar(TestCase):
@@ -60,7 +59,6 @@ class TestRasterUnivar(TestCase):
         cls.runModule("g.remove", flags="f", type="raster_3d", name="zones")
         cls.del_temp_region()
 
-    @xfail_windows
     def test_with_all_maps(self):
         t_rast3d_univar = SimpleModule(
             "t.rast3d.univar",
@@ -85,7 +83,6 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000
                 res_line = res.split("|", 1)[1]
                 self.assertLooksLike(ref_line, res_line)
 
-    @xfail_windows
     def test_with_subset_of_maps(self):
         t_rast3d_univar = SimpleModule(
             "t.rast3d.univar",
@@ -170,7 +167,6 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000
         # No input
         self.assertModuleFail("t.rast3d.univar", output="out.txt")
 
-    @xfail_windows
     def test_with_zones(self):
         """Test use of zones"""
 
@@ -208,7 +204,6 @@ a_4@PERMANENT|2001-10-01 00:00:00|2002-01-01 00:00:00|3|400|400|400|400|0|0|0|14
                 res_line = res.split("|", 1)[1]
                 self.assertLooksLike(ref_line, res_line)
 
-    @xfail_windows
     def test_with_zones_parallel(self):
         """Test use of zones"""
 

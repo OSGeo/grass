@@ -9,7 +9,7 @@ for details.
 
 :authors: Thomas Leppelt and Soeren Gebbert
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> p = TemporalOperatorParser()
     >>> expression = "{equal|equivalent|cover|in|meet|contain|overlap}"
@@ -313,14 +313,15 @@ class TemporalOperatorParser:
         """Parse the expression and fill the object variables
 
         :param expression:
-        :param optype: The parameter optype can be of type:
-                       - select   { :, during,   r}
-                       - boolean  {&&, contains, |}
-                       - raster   { *, equal,    |}
-                       - overlay  { |, starts,   &}
-                       - hash     { #, during,   l}
-                       - relation {during}
-        :return:
+        :param optype: The parameter optype can be
+            of type:
+
+            - select   { :, during,   r}
+            - boolean  {&&, contains, \\|}
+            - raster   { \\*, equal,    \\|}
+            - overlay  { \\|, starts,   &}
+            - hash     { #, during,   l}
+            - relation {during}
         """
         self.optype = optype
 
@@ -350,7 +351,7 @@ class TemporalOperatorParser:
                  | CLPAREN relationlist CRPAREN
         """
         # Check for correct type.
-        if not self.optype == "relation":
+        if self.optype != "relation":
             raise SyntaxError('Wrong optype "%s" must be "relation"' % self.optype)
 
         # Set three operator components.
@@ -372,7 +373,7 @@ class TemporalOperatorParser:
                  | CLPAREN OR  OR  COMMA relationlist CRPAREN
                  | CLPAREN AND AND COMMA relationlist CRPAREN
         """
-        if not self.optype == "boolean":
+        if self.optype != "boolean":
             raise SyntaxError('Wrong optype "%s" must be "boolean"' % self.optype)
 
         # Set three operator components.
@@ -399,7 +400,7 @@ class TemporalOperatorParser:
                  | CLPAREN AND AND COMMA relationlist COMMA OR  CRPAREN
                  | CLPAREN AND AND COMMA relationlist COMMA AND CRPAREN
         """
-        if not self.optype == "boolean":
+        if self.optype != "boolean":
             raise SyntaxError('Wrong optype "%s" must be "boolean"' % self.optype)
 
         # Set three operator components.
@@ -422,7 +423,7 @@ class TemporalOperatorParser:
                  | CLPAREN OR  OR  COMMA relationlist COMMA temporal CRPAREN
                  | CLPAREN AND AND COMMA relationlist COMMA temporal CRPAREN
         """
-        if not self.optype == "boolean":
+        if self.optype != "boolean":
             raise SyntaxError('Wrong optype "%s" must be "boolean"' % self.optype)
 
         # Set three operator components.
@@ -449,7 +450,7 @@ class TemporalOperatorParser:
                  | CLPAREN AND AND COMMA relationlist COMMA OR  COMMA temporal CRPAREN
                  | CLPAREN AND AND COMMA relationlist COMMA AND COMMA temporal CRPAREN
         """
-        if not self.optype == "boolean":
+        if self.optype != "boolean":
             raise SyntaxError('Wrong optype "%s" must be "relation"' % self.optype)
 
         # Set three operator components.
@@ -475,7 +476,7 @@ class TemporalOperatorParser:
                  | CLPAREN select COMMA relation     COMMA temporal CRPAREN
                  | CLPAREN select COMMA relationlist COMMA temporal CRPAREN
         """
-        if not self.optype == "select":
+        if self.optype != "select":
             raise SyntaxError('Wrong optype "%s" must be "select"' % self.optype)
 
         if len(t) == 4:
@@ -512,7 +513,7 @@ class TemporalOperatorParser:
                  | CLPAREN HASH COMMA relation     COMMA temporal CRPAREN
                  | CLPAREN HASH COMMA relationlist COMMA temporal CRPAREN
         """
-        if not self.optype == "hash":
+        if self.optype != "hash":
             raise SyntaxError('Wrong optype "%s" must be "hash"' % self.optype)
 
         if len(t) == 4:
@@ -549,7 +550,7 @@ class TemporalOperatorParser:
                  | CLPAREN arithmetic COMMA relation     COMMA temporal CRPAREN
                  | CLPAREN arithmetic COMMA relationlist COMMA temporal CRPAREN
         """
-        if not self.optype == "raster":
+        if self.optype != "raster":
             raise SyntaxError('Wrong optype "%s" must be "raster"' % self.optype)
 
         if len(t) == 4:
@@ -586,7 +587,7 @@ class TemporalOperatorParser:
                  | CLPAREN overlay COMMA relation     COMMA temporal CRPAREN
                  | CLPAREN overlay COMMA relationlist COMMA temporal CRPAREN
         """
-        if not self.optype == "overlay":
+        if self.optype != "overlay":
             raise SyntaxError('Wrong optype "%s" must be "overlay"' % self.optype)
 
         if len(t) == 4:
@@ -635,7 +636,7 @@ class TemporalOperatorParser:
         t[0] = t[1]
 
     def p_over(self, t) -> None:
-        # The the over keyword
+        # The over keyword
         """
         relation : OVER
         """

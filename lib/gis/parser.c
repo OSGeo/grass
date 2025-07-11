@@ -476,7 +476,7 @@ int G_parser(int argc, char **argv)
         }
 
         /* If first arg is "--interface-description" then print out
-         * a xml description of the task */
+         * an xml description of the task */
         if (strcmp(argv[1], "--interface-description") == 0) {
             G__usage_xml();
             exit(EXIT_SUCCESS);
@@ -545,7 +545,8 @@ int G_parser(int argc, char **argv)
 
                 /* print everything: max verbosity level */
                 st->module_info.verbose = G_verbose_max();
-                sprintf(buff, "GRASS_VERBOSE=%d", G_verbose_max());
+                snprintf(buff, sizeof(buff), "GRASS_VERBOSE=%d",
+                         G_verbose_max());
                 putenv(G_store(buff));
                 if (st->quiet == 1) {
                     G_warning(_("Use either --quiet or --verbose flag, not "
@@ -560,7 +561,8 @@ int G_parser(int argc, char **argv)
 
                 /* print nothing, but errors and warnings */
                 st->module_info.verbose = G_verbose_min();
-                sprintf(buff, "GRASS_VERBOSE=%d", G_verbose_min());
+                snprintf(buff, sizeof(buff), "GRASS_VERBOSE=%d",
+                         G_verbose_min());
                 putenv(G_store(buff));
                 if (st->quiet == -1) {
                     G_warning(_("Use either --quiet or --verbose flag, not "
@@ -575,7 +577,8 @@ int G_parser(int argc, char **argv)
 
                 /* print nothing, but errors  */
                 st->module_info.verbose = G_verbose_min();
-                sprintf(buff, "GRASS_VERBOSE=%d", G_verbose_min());
+                snprintf(buff, sizeof(buff), "GRASS_VERBOSE=%d",
+                         G_verbose_min());
                 putenv(G_store(buff));
                 G_suppress_warnings(TRUE);
                 if (st->quiet == -1) {
@@ -985,7 +988,8 @@ int module_gui_wx(void)
     if (!st->pgm_path)
         G_fatal_error(_("Unable to determine program name"));
 
-    sprintf(script, "%s/gui/wxpython/gui_core/forms.py", getenv("GISBASE"));
+    snprintf(script, GPATH_MAX, "%s/gui/wxpython/gui_core/forms.py",
+             getenv("GISBASE"));
     if (access(script, F_OK) != -1)
         G_spawn(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), script,
                 G_recreate_command_original_path(), NULL);

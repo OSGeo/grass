@@ -450,7 +450,7 @@ int GPJ_init_transform(const struct pj_info *info_in,
     info_trans->pj = NULL;
     info_trans->meters = 1.;
     info_trans->zone = 0;
-    sprintf(info_trans->proj, "pipeline");
+    snprintf(info_trans->proj, sizeof(info_trans->proj), "pipeline");
 
     /* user-provided pipeline */
     if (info_trans->def) {
@@ -860,7 +860,7 @@ int GPJ_init_transform(const struct pj_info *info_in,
     info_trans->pj = NULL;
     info_trans->meters = 1.;
     info_trans->zone = 0;
-    sprintf(info_trans->proj, "pipeline");
+    snprintf(info_trans->proj, sizeof(info_trans->proj), "pipeline");
 
     /* user-provided pipeline */
     if (info_trans->def) {

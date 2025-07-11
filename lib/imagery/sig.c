@@ -43,7 +43,7 @@ int I_new_signature(struct Signature *S)
 
     S->sig[i].status = 0;
     S->sig[i].have_color = 0;
-    sprintf(S->sig[i].desc, "Class %d", i + 1);
+    snprintf(S->sig[i].desc, sizeof(S->sig[i].desc), "Class %d", i + 1);
     return S->nsigs;
 }
 

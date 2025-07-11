@@ -12,8 +12,13 @@
  *               for details.
  *
  *****************************************************************************/
-
+#ifdef _MSC_VER
+#include <windows.h>
+#include <time.h>
+#else
 #include <sys/time.h>
+#endif
+
 #include <string.h>
 #include <stdio.h>
 
@@ -21,7 +26,7 @@ int main(void)
 {
     struct timeval t;
 
-    if (gettimeofday(&t, NULL) == -1) {
+    if (gettimeofday(&t, NULL) != 0) {
         fprintf(stderr, "gettimeofday error");
         return 1;
     }

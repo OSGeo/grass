@@ -239,9 +239,7 @@ class BaseSeriesMap:
         if not self._layers_rendered:
             self.render()
 
-        input_files = []
-        for index in self._indices:
-            input_files.append(self._base_filename_dict[index])
+        input_files = [self._base_filename_dict[index] for index in self._indices]
 
         save_gif(
             input_files,

@@ -20,11 +20,13 @@ def find(node, tag, attr=None, val=None):
     if isinstance(node, tuple):
         node = node[2]
     if not isinstance(node, list):
-        raise ValueError("child not found")
+        msg = "child not found"
+        raise ValueError(msg)
     for child in node:
         if match(child, tag, attr, val):
             return child
-    raise ValueError("child not found")
+    msg = "child not found"
+    raise ValueError(msg)
 
 
 children = itemgetter(2)

@@ -8,6 +8,8 @@ on:
       - releasebranch_*
   pull_request:
 
+permissions: {}
+
 jobs:
   python-checks:
     name: Python Code Quality Checks
@@ -25,18 +27,16 @@ jobs:
 
     env:
       # renovate: datasource=python-version depName=python
-      PYTHON_VERSION: "3.10"
-      MIN_PYTHON_VERSION: "3.8"
-      # renovate: datasource=pypi depName=black
-      BLACK_VERSION: "24.10.0"
+      PYTHON_VERSION: "3.13"
+      MIN_PYTHON_VERSION: "3.9"
       # renovate: datasource=pypi depName=flake8
-      FLAKE8_VERSION: "7.1.1"
+      FLAKE8_VERSION: "7.3.0"
       # renovate: datasource=pypi depName=pylint
-      PYLINT_VERSION: "2.12.2"
+      PYLINT_VERSION: "3.3.7"
       # renovate: datasource=pypi depName=bandit
-      BANDIT_VERSION: "1.8.0"
+      BANDIT_VERSION: "1.8.6"
       # renovate: datasource=pypi depName=ruff
-      RUFF_VERSION: "0.8.1"
+      RUFF_VERSION: "0.12.2"
 
     runs-on: ${{ matrix.os }}
     permissions:
@@ -48,7 +48,6 @@ jobs:
           echo OS: ${{ matrix.os }}
           echo Python: ${{ env.PYTHON_VERSION }}
           echo Minimal Python version: ${{ env.MIN_PYTHON_VERSION }}
-          echo Black: ${{ env.BLACK_VERSION }}
           echo Flake8: ${{ env.FLAKE8_VERSION }}
           echo Pylint: ${{ env.PYLINT_VERSION }}
           echo Bandit: ${{ env.BANDIT_VERSION }}
@@ -57,7 +56,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Set up Python
-        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: pip
@@ -71,6 +70,14 @@ jobs:
         continue-on-error: true
       - name: Run Ruff (apply fixes for suggestions)
         run: ruff check . --preview --fix --unsafe-fixes
+      - name: Run `ruff format` showing diff without failing
+        continue-on-error: true
+        if: ${{ !cancelled() }}
+        run: ruff format --diff
+      - name: Run `ruff format` fixing files
+        # Run `ruff format` even when `ruff check` fixed files: fixes can require formatting
+        if: ${{ !cancelled() }}
+        run: ruff format
       - name: Create and uploads code suggestions to apply for Ruff
         # Will fail fast here if there are changes required
         id: diff-ruff
@@ -81,21 +88,6 @@ jobs:
           tool-name: ruff
           # To keep repo's file structure in formatted changes artifact
           extra-upload-changes: pyproject.toml
-
-      - name: Install Black only
-        run: pip install black[jupyter]==${{ env.BLACK_VERSION }}
-
-      - name: Run Black
-        run: black .
-
-      - name: Create and uploads code suggestions to apply for Black
-        # Will fail fast here if there are changes required
-        id: diff-black
-        uses: ./.github/actions/create-upload-suggestions
-        with:
-          tool-name: black
-          # To keep repo's file structure in formatted changes artifact
-          extra-upload-changes: .clang-format
 
       - name: Install non-Python dependencies
         run: |
@@ -129,13 +121,13 @@ jobs:
           bandit -c pyproject.toml -iii -r . -f sarif -o bandit.sarif --exit-zero
 
       - name: Upload Bandit Scan Results
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: bandit.sarif
           path: bandit.sarif
 
       - name: Upload SARIF File into Security Tab
-        uses: github/codeql-action/upload-sarif@f09c1c0a94de965c15400f5634aa42fac8fb8f88 # v3.27.5
+        uses: github/codeql-action/upload-sarif@181d5eefc20863364f96762470ba6f862bdef56b # v3.29.2
         with:
           sarif_file: bandit.sarif
 
@@ -147,7 +139,7 @@ jobs:
         run: |
           echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
 
-      - uses: rui314/setup-mold@b015f7e3f2938ad3a5ed6e5111a8c6c7c1d6db6e # v1
+      - uses: rui314/setup-mold@85c79d00377f0d32cdbae595a46de6f7c2fa6599 # v1
       - name: Build
         run: .github/workflows/build_${{ matrix.os }}.sh $HOME/install
 
@@ -156,56 +148,44 @@ jobs:
           echo "$HOME/install/bin" >> $GITHUB_PATH
 
       - name: Run Pylint on grass package
+        # Until slower checks (like similarity) are reenabled, running in one step is faster
+        if: false
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
-          cd python
           pylint --persistent=no --py-version=${{ env.MIN_PYTHON_VERSION }} --jobs=$(nproc) grass
 
-      - name: Run Pylint on wxGUI
-        run: |
-          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
-          cd gui/wxpython
-          pylint --persistent=no --py-version=${{ env.MIN_PYTHON_VERSION }} --jobs=$(nproc) *
-
       - name: Run Pylint on other files using pytest
+        # Until slower checks (like similarity) are reenabled, running in one step is faster
+        if: false
         run: |
-          pipx inject --include-apps pylint pytest==7.4.4
-          pipx inject pylint pytest-pylint==0.19 pytest-github-actions-annotate-failures
-          echo "::warning file=.github/workflows/python-code-quality.yml,line=149,col=42,endColumn=48::\
-            Temporarily downgraded pytest-pylint and pytest to allow merging other PRs.\
-            The errors reported with a newer version seem legitimite and should be fixed \
-            (2023-10-18, see https://github.com/OSGeo/grass/pull/3205)\
-            (2024-01-28, see https://github.com/OSGeo/grass/issues/3380)"
+          pipx inject --include-apps pylint pytest
+          pipx inject pylint pytest-pylint pytest-github-actions-annotate-failures pytest-timeout
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
-          pytest --pylint -m pylint --pylint-rcfile=.pylintrc --pylint-jobs=$(nproc) \
+          pytest --pylint -m pylint --pylint-jobs=$(nproc) \
             --pylint-ignore-patterns="${{ env.PylintIgnore }}"
         env:
-          PylintIgnore: "python/.*,gui/wxpython/.*,doc/.*,man/.*,utils/.*,locale/.*,raster/.*,\
-            imagery/.*,scripts/r.in.wms/wms_drv.py,scripts/g.extension/g.extension.py,\
-            temporal/t.rast.accdetect/t.rast.accdetect.py,temporal/t.rast.accumulate/t.rast.accumulate.py,\
-            scripts/d.rast.edit/d.rast.edit.py"
+          PylintIgnore: "python/.*,gui/.*"
+
+      - name: Run Pylint on wxGUI
+        # Until slower checks (like similarity) are reenabled, running in one step is faster
+        if: false
+        run: |
+          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
+          pylint --persistent=no --py-version=${{ env.MIN_PYTHON_VERSION }} --jobs=$(nproc) gui
+
+      - name: Run Pylint all in one pass
+        run: |
+          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
+          pylint --persistent=no --py-version=${{ env.MIN_PYTHON_VERSION }} --jobs=$(nproc) .
 
       - name: Test compiling example modules
         run: |
-          ( cd doc/raster/r.example/ && make )
-          ( cd doc/vector/v.example/ && make )
-
-      - name: Run Sphinx to check API documentation build
-        run: |
-          pip install sphinx
-          make sphinxdoclib
-          ARCH=$(cat include/Make/Platform.make | grep ^ARCH | cut -d'=' -f2 | xargs)
-          cp -rp dist.$ARCH/docs/html/libpython sphinx-grass
-
-      - name: Make Sphinx documentation available
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
-        with:
-          name: sphinx-grass
-          path: sphinx-grass
-          retention-days: 3
+          ( cd doc/examples/raster/r.example/ && make )
+          ( cd doc/examples/vector/v.example/ && make )
 
   python-success:
     name: Python Code Quality Result

@@ -1,5 +1,4 @@
-"""Python interface to launch GRASS GIS modules in scripts
-"""
+"""Python interface to launch GRASS GIS modules in scripts"""
 
 from . import setup
 from .core import (
@@ -34,12 +33,14 @@ from .core import (
     make_command,
     mapsets,
     message,
+    named_colors,
     overwrite,
     parse_color,
     parse_command,
     parser,
     percent,
     pipe_command,
+    popen_args_command,
     read_command,
     region,
     region_env,
@@ -67,7 +68,17 @@ from .db import (
     db_table_exist,
     db_table_in_vector,
 )
-from .raster import mapcalc, mapcalc_start, raster_history, raster_info, raster_what
+from .imagery import group_to_dict
+from .raster import (
+    mapcalc,
+    mapcalc_start,
+    raster_history,
+    raster_info,
+    raster_what,
+    MaskManager,
+    RegionManager,
+    RegionManagerEnv,
+)
 from .raster3d import mapcalc3d, raster3d_info
 from .utils import (
     KeyValue,
@@ -107,7 +118,10 @@ from .vector import (
 __all__ = [
     "PIPE",
     "KeyValue",
+    "MaskManager",
     "Popen",
+    "RegionManager",
+    "RegionManagerEnv",
     "append_node_pid",
     "append_random",
     "append_uuid",
@@ -145,6 +159,7 @@ __all__ = [
     "get_raise_on_error",
     "get_real_command",
     "gisenv",
+    "group_to_dict",
     "handle_errors",
     "info",
     "legal_name",
@@ -159,6 +174,7 @@ __all__ = [
     "mapcalc_start",
     "mapsets",
     "message",
+    "named_colors",
     "natural_sort",
     "naturally_sorted",
     "overwrite",
@@ -168,6 +184,7 @@ __all__ = [
     "parser",
     "percent",
     "pipe_command",
+    "popen_args_command",
     "raster3d_info",
     "raster_history",
     "raster_info",

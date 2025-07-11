@@ -94,7 +94,7 @@ int Rast3d_key_set_int(struct Key_Value *keys, const char *key, const int *i)
 {
     char keyValStr[200];
 
-    sprintf(keyValStr, "%d", *i);
+    snprintf(keyValStr, sizeof(keyValStr), "%d", *i);
     G_set_key_value(key, keyValStr, keys);
     return 1;
 }
@@ -106,7 +106,7 @@ int Rast3d_key_set_double(struct Key_Value *keys, const char *key,
 {
     char keyValStr[200];
 
-    sprintf(keyValStr, "%.50f", *d);
+    snprintf(keyValStr, sizeof(keyValStr), "%.50f", *d);
     G_set_key_value(key, keyValStr, keys);
     return 1;
 }

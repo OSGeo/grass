@@ -124,7 +124,7 @@ class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
                 # Get map index and temporal extent.
                 map_index = maplist.index(map_i)
                 new_index = map_index + t_neighbor
-                if new_index < max_index and new_index >= 0:
+                if 0 <= new_index < max_index:
                     map_i_t_extent = map_i.get_temporal_extent()
                     # Get neighboring map and set temporal extent.
                     map_n = maplist[new_index]

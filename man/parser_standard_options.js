@@ -1,3 +1,4 @@
+/* eslint-env jquery */
 $(document).ready(function() {
     $('#opts_table')
         .fixedHeaderTable(

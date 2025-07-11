@@ -100,7 +100,7 @@ char *G_tempfile_pid(int pid)
     do {
         int uniq = G_counter_next(&unique);
 
-        sprintf(name, "%d.%d", pid, uniq);
+        snprintf(name, sizeof(name), "%d.%d", pid, uniq);
         G_file_name(path, element, name, G_mapset());
     } while (access(path, F_OK) == 0);
 
@@ -130,7 +130,7 @@ char *G_tempfile_pid_basedir(int pid, const char *basedir)
     do {
         int uniq = G_counter_next(&unique);
 
-        sprintf(name, "%d.%d", pid, uniq);
+        snprintf(name, sizeof(name), "%d.%d", pid, uniq);
         G_file_name_basedir(path, element, name, G_mapset(), basedir);
     } while (access(path, F_OK) == 0);
 

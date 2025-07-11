@@ -241,21 +241,21 @@ char *substitute_variables(dbConnection *conn)
     c = (char *)strstr(buf, "$GISDBASE");
     if (c != NULL) {
         *c = '\0';
-        sprintf(database, "%s%s%s", buf, G_gisdbase(), c + 9);
+        snprintf(database, GPATH_MAX, "%s%s%s", buf, G_gisdbase(), c + 9);
     }
 
     strcpy(buf, database);
     c = (char *)strstr(buf, "$LOCATION_NAME");
     if (c != NULL) {
         *c = '\0';
-        sprintf(database, "%s%s%s", buf, G_location(), c + 14);
+        snprintf(database, GPATH_MAX, "%s%s%s", buf, G_location(), c + 14);
     }
 
     strcpy(buf, database);
     c = (char *)strstr(buf, "$MAPSET");
     if (c != NULL) {
         *c = '\0';
-        sprintf(database, "%s%s%s", buf, G_mapset(), c + 7);
+        snprintf(database, GPATH_MAX, "%s%s%s", buf, G_mapset(), c + 7);
     }
 #ifdef __MINGW32__
     if (strcmp(conn->driverName, "sqlite") == 0 ||

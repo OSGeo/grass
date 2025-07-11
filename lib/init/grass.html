@@ -72,7 +72,7 @@ project and deleted at the end of the execution
 <dl>
 <dt><b>GISDBASE</b>
 <dd> Initial database directory which should be a fully qualified path
-    (e.g., <tt>/usr/local/share/grassdata</tt>)
+    (e.g., <code>/usr/local/share/grassdata</code>)
 
 <dt><b>PROJECT</b>
 <dd> Initial project directory which is a subdirectory of GISDBASE
@@ -128,15 +128,15 @@ The flag <b>--config option</b> prints GRASS GIS configuration and
 version parameters, with the options:
 
 <ul>
-<li><b>arch</b>: system architecture (e.g., <tt>x86_64-pc-linux-gnu</tt>)</li>
-<li><b>build</b>: (e.g., <tt>./configure --with-cxx --enable-largefile --with-proj [...]</tt>)</li>
-<li><b>compiler</b>: (e.g., <tt>gcc</tt>)</li>
-<li><b>date</b>: (e.g., <tt>2024-04-10T11:44:54+00:00</tt>)</li>
-<li><b>path</b>: (e.g., <tt>/usr/lib64/grass</tt>)</li>
-<li><b>python_path</b>: (e.g., <tt>/usr/lib64/grass/etc/python</tt>)</li>
-<li><b>revision</b>: (e.g., <tt>745ee7ec9</tt>)</li>
-<li><b>svn_revision</b>: (e.g., <tt>062bffc8</tt>)</li>
-<li><b>version</b>: (e.g., <tt>8.4.0</tt>)</li>
+<li><b>arch</b>: system architecture (e.g., <code>x86_64-pc-linux-gnu</code>)</li>
+<li><b>build</b>: (e.g., <code>./configure --with-cxx --enable-largefile --with-proj [...]</code>)</li>
+<li><b>compiler</b>: (e.g., <code>gcc</code>)</li>
+<li><b>date</b>: (e.g., <code>2024-04-10T11:44:54+00:00</code>)</li>
+<li><b>path</b>: (e.g., <code>/usr/lib64/grass</code>)</li>
+<li><b>python_path</b>: (e.g., <code>/usr/lib64/grass/etc/python</code>)</li>
+<li><b>revision</b>: (e.g., <code>745ee7ec9</code>)</li>
+<li><b>svn_revision</b>: (e.g., <code>062bffc8</code>)</li>
+<li><b>version</b>: (e.g., <code>8.4.0</code>)</li>
 </ul>
 
 <h2>SAMPLE DATA</h2>
@@ -157,7 +157,7 @@ assist with automation and customization. Most users will not need to
 bother with these.
 
 <p>In addition to these shell environment variables GRASS maintains a
-number of GIS environment variables in the <tt>$HOME/.grass8/rc</tt>
+number of GIS environment variables in the <code>$HOME/.grass8/rc</code>
 file. User changes to this file will be read during the next startup
 of GRASS. If this file becomes corrupted the user may edit it by hand
 or remove it to start afresh.  See the list
@@ -167,7 +167,7 @@ shell environment variables.
 
 <p>Note that you will need to set these variables using the
 appropriate method required for the UNIX shell that you use (e.g. in a
-Bash shell you must <tt>export</tt> the variables for them to
+Bash shell you must <code>export</code> the variables for them to
 propagate).
 
 <h3>User Interface Environment Variable</h3>
@@ -176,8 +176,8 @@ propagate).
 environment variable called GRASS_GUI which indicates the type of user
 interface for GRASS to use. If this variable is not set
 when <em>grass</em> is run, then it will be created and then saved
-in the <tt>$HOME/.grass8/rc</tt> file for the next time GRASS is
-run. It can be set to <tt>text</tt>, <tt>gtext</tt> or <tt>gui</tt>.
+in the <code>$HOME/.grass8/rc</code> file for the next time GRASS is
+run. It can be set to <code>text</code>, <code>gtext</code> or <code>gui</code>.
 
 <p>There is an order of precedence in the way <em>grass</em>
 determines the user interface to use. The following is the hierarchy
@@ -185,19 +185,19 @@ from highest precedence to lowest.
 <ol>
   <li>Command line argument</li>
   <li>Environment variable GRASS_GUI</li>
-  <li>Value set in <tt>$HOME/.grass8/rc</tt> (GUI)</li>
-  <li>Default value - <tt>gui</tt></li>
+  <li>Value set in <code>$HOME/.grass8/rc</code> (GUI)</li>
+  <li>Default value - <code>gui</code></li>
 </ol>
 
 <h3>Python Environment Variables</h3>
 
 <p>If you choose to use <em><a href="wxGUI.html">wxGUI</a></em>
 interface, then the GRASS_PYTHON environment variable can be used to
-override your system default <tt>python</tt> command.
+override your system default <code>python</code> command.
 
 <p>Suppose for example your system has Python 3.6 installed and you
 install a personal version of the Python 3.8 binaries
-under <tt>$HOME/bin</tt>. You can use the above variables to have
+under <code>$HOME/bin</code>. You can use the above variables to have
 GRASS use the Python 3.8 binaries instead.
 
 <div class="code"><pre>
@@ -233,8 +233,8 @@ modules which are not distributed with the standard GRASS release.
 path environment.
 
 <p>If not defined by user, this variable is set by GRASS startup program
-to <tt>$HOME/.grass8/addons</tt> on GNU/Linux
-and <tt>%APPDATA%\Roaming\GRASS8\addons</tt> on MS Windows.
+to <code>$HOME/.grass8/addons</code> on GNU/Linux
+and <code>%APPDATA%\Roaming\GRASS8\addons</code> on MS Windows.
 
 <h3>HTML Browser Variable</h3>
 
@@ -455,20 +455,20 @@ output data before ending.
 
 
 <h4>Troubleshooting</h4>
-Importantly, to avoid an <tt>"[Errno 8] Exec format error"</tt> there must be a
+Importantly, to avoid an <code>"[Errno 8] Exec format error"</code> there must be a
 <a href="https://en.wikipedia.org/wiki/Shebang_%28Unix%29">shebang</a> line at the top of
-the script (like <tt>#!/bin/sh</tt>, <tt>#!/bin/bash</tt>, or <tt>#!/usr/bin/env python3</tt>)
+the script (like <code>#!/bin/sh</code>, <code>#!/bin/bash</code>, or <code>#!/usr/bin/env python3</code>)
 indicating which interpreter to be used for the script. The script file must
 have its executable bit set.
 
 <h2>CAVEAT</h2>
 
 If you start GRASS using the <em><a href="wxGUI.html">wxGUI</a></em>
-interface you must have a <tt>python</tt> command in your $PATH
+interface you must have a <code>python</code> command in your $PATH
 variable. That is, the command must be named
-<tt>python</tt> and not something like <tt>python3.6</tt>. Rarely some
-Python installations do not create a <tt>python</tt> command. In these
-cases you can override <tt>python</tt> by GRASS_PYTHON environmental
+<code>python</code> and not something like <code>python3.6</code>. Rarely some
+Python installations do not create a <code>python</code> command. In these
+cases you can override <code>python</code> by GRASS_PYTHON environmental
 variable.
 
 <p>Furthermore, if you have more than one version of Python installed,

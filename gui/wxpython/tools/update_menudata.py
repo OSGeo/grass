@@ -22,8 +22,8 @@ Usage: python support/update_menudata.py [-d]
 import os
 import sys
 import tempfile
-
 import xml.etree.ElementTree as ET
+from subprocess import DEVNULL
 
 from grass.script import core as grass
 from grass.script import task as gtask
@@ -71,9 +71,7 @@ def updateData(data, modules):
         if node.tag != "menuitem":
             continue
 
-        item = {}
-        for child in node:
-            item[child.tag] = child.text
+        item = {child.tag: child.text for child in node}
 
         if "command" not in item:
             continue
@@ -123,11 +121,8 @@ def writeData(data, file=None):
         return
 
     try:
-        f = open(file, "a")
-        try:
+        with open(file, "a") as f:
             f.write("\n")
-        finally:
-            f.close()
     except OSError:
         print("ERROR: Unable to write to menudata file.", file=sys.stderr)
 
@@ -142,9 +137,8 @@ def main(argv=None):
         print(sys.stderr, __doc__, file=sys.stderr)
         return 1
 
-    nuldev = open(os.devnull, "w+")
     grass.info("Step 1: running make...")
-    grass.call(["make"], stderr=nuldev)
+    grass.call(["make"], stderr=DEVNULL)
     grass.info("Step 2: parsing modules...")
     modules = {}
     modules = parseModules()
@@ -154,14 +148,13 @@ def main(argv=None):
     updateData(data, modules)
 
     if printDiff:
-        tempFile = tempfile.NamedTemporaryFile()
-        grass.info("Step 5: diff menu data...")
-        writeData(data, tempFile.name)
-
-        grass.call(
-            ["diff", "-u", os.path.join("xml", "menudata.xml"), tempFile.name],
-            stderr=nuldev,
-        )
+        with tempfile.NamedTemporaryFile() as tempFile:
+            grass.info("Step 5: diff menu data...")
+            writeData(data, tempFile.name)
+            grass.call(
+                ["diff", "-u", os.path.join("xml", "menudata.xml"), tempFile.name],
+                stderr=DEVNULL,
+            )
     else:
         grass.info("Step 5: writing menu data (menudata.xml)...")
         writeData(data)

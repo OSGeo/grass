@@ -55,7 +55,7 @@ FILE *fopen_subgroup_file_old(const char *group, const char *subgroup,
     }
 
     /* get subgroup element name */
-    sprintf(element, "subgroup/%s/%s", subgroup, file);
+    snprintf(element, sizeof(element), "subgroup/%s/%s", subgroup, file);
 
     fd = G_fopen_old_misc("group", element, group, mapset);
     if (!fd)
@@ -127,11 +127,11 @@ FILE *I_fopen_subgroup_file_new(const char *group, const char *subgroup,
     char element[GNAME_MAX * 2];
 
     /* create subgroup directory */
-    sprintf(element, "%s/subgroup/%s", group, subgroup);
+    snprintf(element, sizeof(element), "%s/subgroup/%s", group, subgroup);
     G__make_mapset_element_misc("group", element);
 
     /* get subgroup element name */
-    sprintf(element, "subgroup/%s/%s", subgroup, file);
+    snprintf(element, sizeof(element), "subgroup/%s/%s", subgroup, file);
 
     fd = G_fopen_new_misc("group", element, group);
     if (!fd)
@@ -149,11 +149,11 @@ FILE *I_fopen_subgroup_file_append(const char *group, const char *subgroup,
     char element[GNAME_MAX * 2];
 
     /* create subgroup directory */
-    sprintf(element, "%s/subgroup/%s", group, subgroup);
+    snprintf(element, sizeof(element), "%s/subgroup/%s", group, subgroup);
     G__make_mapset_element_misc("group", element);
 
     /* get subgroup element name */
-    sprintf(element, "subgroup/%s/%s", subgroup, file);
+    snprintf(element, sizeof(element), "subgroup/%s/%s", subgroup, file);
 
     fd = G_fopen_append_misc("group", element, group);
     if (!fd)

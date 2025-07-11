@@ -19,12 +19,12 @@ from grass.gunittest.utils import silent_rmtree
 class TestRasterExtraction(TestCase):
     mapsets_to_remove = []
     outfile = "rastlist.txt"
-    gisenv = SimpleModule("g.gisenv", get="MAPSET")
-    TestCase.runModule(gisenv, expecting_stdout=True)
-    old_mapset = gisenv.outputs.stdout.strip()
 
     @classmethod
     def setUpClass(cls):
+        gisenv = SimpleModule("g.gisenv", get="MAPSET")
+        TestCase.runModule(gisenv, expecting_stdout=True)
+        cls.old_mapset = gisenv.outputs.stdout.strip()
         os.putenv("GRASS_OVERWRITE", "1")
         for i in range(1, 7):
             mapset_name = "test%i" % i

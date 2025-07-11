@@ -62,11 +62,11 @@ class MenuBase:
                 label = child.label
                 subMenu = self._createMenu(child)
                 menu.AppendMenu(wx.ID_ANY, label, subMenu)
-            else:
-                data = child.data.copy()
-                data.pop("label")
+                continue
+            data = child.data.copy()
+            data.pop("label")
 
-                self._createMenuItem(menu, label=child.label, **data)
+            self._createMenuItem(menu, label=child.label, **data)
 
         return menu
 
@@ -342,8 +342,7 @@ class RecentFilesMenu:
                          written into the .recent_files file
     :param obj parent_menu: menu widget instance where be inserted
                             recent files menu on the specified position
-    :param int pos: position (index) where insert recent files menu in
-                    the parent menu
+    :param int pos: position (index) where insert recent files menu in the parent menu
     :param int history_len: the maximum number of file paths written
                             into the .recent_files file to app name group
     """

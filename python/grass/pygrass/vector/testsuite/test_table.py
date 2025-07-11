@@ -154,7 +154,6 @@ class DBconnection:
         self.cols = self.table.columns
 
     def tearDown(self):
-        """Remove the generated vector map, if exist"""
         self.table.drop(force=True)
         self.table = None
         self.cols = None
@@ -176,7 +175,6 @@ class TableInsertTestCase(DBconnection, TestCase):
         self.cols = self.table.columns
 
     def tearDown(self):
-        """Remove the generated vector map, if exist"""
         self.table.drop(force=True)
         self.table = None
         self.cols = None

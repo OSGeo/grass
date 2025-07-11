@@ -1,14 +1,16 @@
 # common functions used by mkmarkdown.py and mkhtml.py
 
-import sys
-import os
 import json
-import subprocess
+import os
 import re
+import shutil
+import subprocess
+import sys
+import tempfile
 import urllib.parse as urlparse
+from datetime import datetime
 from http import HTTPStatus
 from pathlib import Path
-from datetime import datetime
 from urllib import request as urlrequest
 from urllib.error import HTTPError, URLError
 
@@ -35,13 +37,25 @@ def read_file(name):
         return ""
 
 
+def set_proxy():
+    """Set proxy"""
+    proxy = os.getenv("GRASS_PROXY")
+    if proxy:
+        proxies = {}
+        for ptype, purl in (p.split("=") for p in proxy.split(",")):
+            proxies[ptype] = purl
+        urlrequest.install_opener(
+            urlrequest.build_opener(urlrequest.ProxyHandler(proxies))
+        )
+
+
 def get_version_branch(major_version, addons_git_repo_url):
     """Check if version branch for the current GRASS version exists,
     if not, take branch for the previous version
     For the official repo we assume that at least one version branch is present
 
     :param major_version int: GRASS GIS major version
-    :param addons_git_repo_url str: Addons Git ropository URL
+    :param addons_git_repo_url str: Addons Git repository URL
 
     :return version_branch str: version branch
     """
@@ -368,68 +382,76 @@ def get_addon_path(base_url, pgm, major_version):
     :return str|None: pgm path if pgm is addon else None
     """
     addons_base_dir = os.getenv("GRASS_ADDON_BASE")
-    if addons_base_dir and major_version:
-        grass_addons_dir = Path(addons_base_dir) / "grass-addons"
+    if not addons_base_dir or not major_version:
+        return None
+    grass_addons_dir = Path(addons_base_dir) / "grass-addons"
+    if gs:
+        call = gs.call
+        popen = gs.Popen
+        fatal = gs.fatal
+    else:
+        call = subprocess.call
+        popen = subprocess.Popen
+        fatal = sys.stderr.write
+    addons_branch = get_version_branch(
+        major_version=major_version,
+        addons_git_repo_url=urlparse.urljoin(base_url, "grass-addons/"),
+    )
+    if not Path(addons_base_dir).exists():
+        Path(addons_base_dir).mkdir(parents=True, exist_ok=True)
+    if not grass_addons_dir.exists():
+        try:
+            with tempfile.TemporaryDirectory(dir=addons_base_dir) as tmpdir:
+                tmp_clone_path = Path(tmpdir) / "grass-addons"
+                call(
+                    [
+                        "git",
+                        "clone",
+                        "-q",
+                        "--no-checkout",
+                        f"--branch={addons_branch}",
+                        "--filter=blob:none",
+                        urlparse.urljoin(base_url, "grass-addons/"),
+                        str(tmp_clone_path),
+                    ]
+                )
+                shutil.move(tmp_clone_path, grass_addons_dir)
+        except (shutil.Error, OSError):
+            if not grass_addons_dir.exists():
+                raise
+    addons_file_list = popen(
+        ["git", "ls-tree", "--name-only", "-r", addons_branch],
+        cwd=grass_addons_dir,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    addons_file_list, stderr = addons_file_list.communicate()
+    if stderr:
+        message = (
+            "Failed to get addons files list from the"
+            " Git repository <{repo_path}>.\n{error}"
+        )
         if gs:
-            call = gs.call
-            popen = gs.Popen
-            fatal = gs.fatal
+            fatal(
+                _(
+                    message,
+                ).format(
+                    repo_path=grass_addons_dir,
+                    error=gs.decode(stderr),
+                )
+            )
         else:
-            call = subprocess.call
-            popen = subprocess.Popen
-            fatal = sys.stderr.write
-        addons_branch = get_version_branch(
-            major_version=major_version,
-            addons_git_repo_url=urlparse.urljoin(base_url, "grass-addons/"),
-        )
-        if not Path(addons_base_dir).exists():
-            Path(addons_base_dir).mkdir(parents=True, exist_ok=True)
-        if not grass_addons_dir.exists():
-            call(
-                [
-                    "git",
-                    "clone",
-                    "-q",
-                    "--no-checkout",
-                    f"--branch={addons_branch}",
-                    "--filter=blob:none",
-                    urlparse.urljoin(base_url, "grass-addons/"),
-                ],
-                cwd=addons_base_dir,
-            )
-        addons_file_list = popen(
-            ["git", "ls-tree", "--name-only", "-r", addons_branch],
-            cwd=grass_addons_dir,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
-        addons_file_list, stderr = addons_file_list.communicate()
-        if stderr:
-            message = (
-                "Failed to get addons files list from the"
-                " Git repository <{repo_path}>.\n{error}"
-            )
-            if gs:
-                fatal(
-                    _(
-                        message,
-                    ).format(
-                        repo_path=grass_addons_dir,
-                        error=gs.decode(stderr),
-                    )
+            message += "\n"
+            fatal(
+                message.format(
+                    repo_path=grass_addons_dir,
+                    error=stderr.decode(),
                 )
-            else:
-                message += "\n"
-                fatal(
-                    message.format(
-                        repo_path=grass_addons_dir,
-                        error=stderr.decode(),
-                    )
-                )
-        addon_paths = re.findall(
-            rf".*{pgm}*.",
-            gs.decode(addons_file_list) if gs else addons_file_list.decode(),
-        )
-        for addon_path in addon_paths:
-            if pgm == Path(addon_path).name:
-                return addon_path
+            )
+    addon_paths = re.findall(
+        rf".*{pgm}*.",
+        gs.decode(addons_file_list) if gs else addons_file_list.decode(),
+    )
+    for addon_path in addon_paths:
+        if pgm == Path(addon_path).name:
+            return addon_path

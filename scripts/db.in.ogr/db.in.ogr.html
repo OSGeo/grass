@@ -12,11 +12,12 @@ added to the table.
 
 Limited type recognition can be done for Integer, Real, String, Date, Time and DateTime
 columns through a descriptive file with same name as the CSV file, but .csvt extension
-(see details <a href="https://gdal.org/drv_csv.html">here</a>).
+(see details <a href="https://gdal.org/en/stable/drivers/vector/csv.html">here</a>).
 
 <div class="code"><pre>
 # NOTE: create koeppen_gridcode.csvt first for automated type recognition
-db.in.ogr input=koeppen_gridcode.csv output=koeppen_gridcode
+db.in.ogr input=koeppen_gridcode.csv output=koeppen_gridcode gdal_doo="AUTODETECT_TYPE=YES"
+db.describe koeppen_gridcode -c
 db.select table=koeppen_gridcode
 </pre></div>
 
@@ -50,7 +51,7 @@ db.describe -c ecad_verona_tmean
 <h3>Import XLS file</h3>
 
 To force reading headers, define environmental
-variable <tt>OGR_XLS_HEADERS='FORCE'</tt>. Parameter <b>db_table</b>
+variable <code>OGR_XLS_HEADERS='FORCE'</code>. Parameter <b>db_table</b>
 refers to the list within XLS file.
 
 <div class="code"><pre>

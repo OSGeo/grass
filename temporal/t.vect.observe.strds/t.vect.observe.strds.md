@@ -1,0 +1,136 @@
+## DESCRIPTION
+
+The module *t.vect.observe.strds* is used to observe specific locations
+in a space time raster dataset over a period of time using vector
+points. The first input is a vector map layer with vector points. The
+second input is one or several space time raster datasets (STRDS) that
+should be sampled over time at the vector point positions. The space
+time raster dataset will be sampled over its whole temporal extent (from
+start to end). A column name must be specified for each input space time
+raster dataset.
+
+The result is a new space time vector dataset that contains a single
+(new) vector map which links to as many time-stamped attribute tables as
+raster map layers are present in the input space time raster dataset.
+Hence, for each time step in the space time raster dataset a new
+attribute table is created. The GRASS GIS Temporal Framework allows to
+time stamp attribute tables that can be linked to a single vector map
+layer.
+
+The module *v.what.rast* is used internally for sampling the time
+stamped raster map layers. All sampled values of a single time stamped
+raster map layer are written into a new time stamped attribute table.
+
+Use *t.vect.db.select* to print attribute values of the space time
+vector dataset to stdout.
+
+## EXAMPLE
+
+The example shows how to create a space time vector dataset and a vector
+layer starting from a point vector and a space time raster dataset:
+
+```sh
+t.vect.observe.strds input=precip_30ynormals_3d strds=tempmean_monthly \
+                     output=precip_stations vect=precip_stations_monthly \
+                     columns=month
+
+t.info precip_stations type=stvds
+ +-------------------- Space Time Vector Dataset -----------------------------+
+ |                                                                            |
+ +-------------------- Basic information -------------------------------------+
+ | Id: ........................ precip_stations@climate_2009_2012
+ | Name: ...................... precip_stations
+ | Mapset: .................... climate_2009_2012
+ | Creator: ................... lucadelu
+ | Temporal type: ............. absolute
+ | Creation time: ............. 2014-12-02 00:42:39.187615
+ | Modification time:.......... 2014-12-02 00:42:55.215169
+ | Semantic type:.............. mean
+ +-------------------- Absolute time -----------------------------------------+
+ | Start time:................. 2009-01-01 00:00:00
+ | End time:................... 2013-01-01 00:00:00
+ | Granularity:................ 1 month
+ | Temporal type of maps:...... interval
+ +-------------------- Spatial extent ----------------------------------------+
+ | North:...................... 306221.830194
+ | South:...................... 27606.895351
+ | East:.. .................... 917004.829165
+ | West:....................... 151768.568246
+ | Top:........................ 1615.44
+ | Bottom:..................... 2.4384
+ +-------------------- Metadata information ----------------------------------+
+ | Vector register table:...... vector_map_register_be074525097c4088997c9a1979f17065
+ | Number of points ........... 6664
+ | Number of lines ............ 0
+ | Number of boundaries ....... 0
+ | Number of centroids ........ 0
+ | Number of faces ............ 0
+ | Number of kernels .......... 0
+ | Number of primitives ....... 6664
+ | Number of nodes ............ 0
+ | Number of areas ............ 0
+ | Number of islands .......... 0
+ | Number of holes ............ 0
+ | Number of volumes .......... 0
+ | Number of registered maps:.. 49
+ |
+ | Title:
+ | Observaion of space time raster dataset(s) tempmean_monthly
+ | Description:
+ | Observation of space time raster dataset(s) tempmean_monthly with vector map precip_30ynormals_3d
+ | Command history:
+ | # 2014-12-02 00:42:39
+ | t.vect.observe.strds input="precip_30ynormals_3d"
+ |     strds="tempmean_monthly" output="precip_stations"
+ |     vect="precip_stations_monthly" columns="month"
+ |
+ +----------------------------------------------------------------------------+
+
+
+v.info precip_stations_monthly
+ +----------------------------------------------------------------------------+
+ | Name:            precip_stations_monthly                                   |
+ | Mapset:          climate_2009_2012                                         |
+ | Project:         nc_spm_temporal_workshop                                  |
+ | Database:        /grassdata                                                |
+ | Title:           North Carolina 30 year precipitation normals (3D)         |
+ | Map scale:       1:1                                                       |
+ | Name of creator: neteler                                                   |
+ | Organization:                                                              |
+ | Source date:     Wed May  9 14:32:39 2007                                  |
+ | Timestamp (first layer): none                                              |
+ |----------------------------------------------------------------------------|
+ | Map format:      native                                                    |
+ |----------------------------------------------------------------------------|
+ |   Type of map: vector (level: 2)                                           |
+ |                                                                            |
+ |   Number of points:       136             Number of centroids:  0          |
+ |   Number of lines:        0               Number of boundaries: 0          |
+ |   Number of areas:        0               Number of islands:    0          |
+ |   Number of faces:        0               Number of kernels:    0          |
+ |   Number of volumes:      0               Number of holes:      0          |
+ |                                                                            |
+ |   Map is 3D:              Yes                                              |
+ |   Number of dblinks:      49                                               |
+ |                                                                            |
+ |   Projection: Lambert Conformal Conic                                      |
+ |                                                                            |
+ |               N:     306221.830194    S:      27606.895351                 |
+ |               E:     917004.829165    W:     151768.568246                 |
+ |               B:            2.4384    T:           1615.44                 |
+ |                                                                            |
+ |   Digitization threshold: 0                                                |
+ |   Comment:                                                                 |
+ |                                                                            |
+ +----------------------------------------------------------------------------+
+```
+
+## SEE ALSO
+
+*[t.create](t.create.md), [t.info](t.info.md),
+[t.vect.db.select](t.vect.db.select.md),
+[t.vect.what.strds](t.vect.what.strds.md)*
+
+## AUTHOR
+
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture
