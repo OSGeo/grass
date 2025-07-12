@@ -14,13 +14,18 @@
  *****************************************************************************/
 
 #include <stdlib.h>
+#include <string.h>
 
 #include <grass/gis.h>
 #include <grass/dbmi.h>
+#include <grass/gjson.h>
 #include <grass/glocale.h>
+
+enum OutputFormat { PLAIN, JSON };
 
 struct {
     char *driver, *database, *table;
+    enum OutputFormat format;
 } parms;
 
 /* function prototypes */
@@ -33,6 +38,8 @@ int main(int argc, char **argv)
     dbTable *table;
     dbString table_name;
     int col, ncols;
+    JSON_Value *root_value = NULL;
+    JSON_Array *root_array = NULL;
 
     parse_command_line(argc, argv);
 
@@ -60,17 +67,49 @@ int main(int argc, char **argv)
     db_close_database(driver);
     db_shutdown_driver(driver);
 
+    if (parms.format == JSON) {
+        root_value = G_json_value_init_array();
+        if (root_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
+        root_array = G_json_array(root_value);
+    }
+
     ncols = db_get_table_number_of_columns(table);
-    for (col = 0; col < ncols; col++)
-        fprintf(stdout, "%s\n",
+    for (col = 0; col < ncols; col++) {
+        switch (parms.format) {
+        case PLAIN:
+            fprintf(stdout, "%s\n",
+                    db_get_column_name(db_get_table_column(table, col)));
+            break;
+
+        case JSON:
+            G_json_array_append_string(
+                root_array,
                 db_get_column_name(db_get_table_column(table, col)));
+            break;
+        }
+    }
+
+    if (parms.format == JSON) {
+        char *json_string = G_json_serialize_to_string_pretty(root_value);
+        if (!json_string) {
+            G_json_value_free(root_value);
+            G_fatal_error(_("Failed to serialize JSON to pretty format."));
+        }
+
+        puts(json_string);
+
+        G_json_free_serialized_string(json_string);
+        G_json_value_free(root_value);
+    }
 
     exit(EXIT_SUCCESS);
 }
 
 static void parse_command_line(int argc, char **argv)
 {
-    struct Option *driver, *database, *table;
+    struct Option *driver, *database, *table, *format;
     struct GModule *module;
     const char *drv, *db;
 
@@ -95,10 +134,20 @@ static void parse_command_line(int argc, char **argv)
     G_add_keyword(_("attribute table"));
     module->description = _("List all columns for a given table.");
 
+    format = G_define_standard_option(G_OPT_F_FORMAT);
+    format->guisection = _("Print");
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
     parms.driver = driver->answer;
     parms.database = database->answer;
     parms.table = table->answer;
+
+    if (strcmp(format->answer, "json") == 0) {
+        parms.format = JSON;
+    }
+    else {
+        parms.format = PLAIN;
+    }
 }

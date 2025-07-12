@@ -25,7 +25,7 @@ set(db_drivers grass_gis)
 add_subdirectory(drivers)
 
 build_program_in_subdir(db.columns DEPENDS grass_gis grass_dbmibase
-                        grass_dbmiclient grass_dbmidriver)
+                        grass_dbmiclient grass_dbmidriver grass_parson)
 add_dependencies(db.columns ${db_drivers})
 
 build_program_in_subdir(db.createdb DEPENDS grass_gis grass_dbmibase
