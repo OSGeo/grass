@@ -22,6 +22,51 @@ v.db.select samples
 db.univar samples column=heights
 ```
 
+### Python example with JSON output
+
+Using the example above, print the 90th percentile in Python:
+
+```python
+import grass.script as gs
+
+data = gs.parse_command(
+    "db.univar", table="samples", column="heights", format="json", flags="e"
+)
+print(data["percentiles"])
+```
+
+Output:
+
+```text
+[{'percentile': 90.0, 'value': 139.0807}]
+```
+
+The JSON will look like this:
+
+```json
+{
+    "n": 100,
+    "min": 62.71209,
+    "max": 147.2162,
+    "range": 84.50410999999998,
+    "mean": 110.95470289999996,
+    "mean_abs": 110.95470289999996,
+    "variance": 362.63393287085927,
+    "stddev": 19.042949689343278,
+    "coeff_var": 0.17162814366242862,
+    "sum": 11095.470289999996,
+    "first_quartile": 95.56498,
+    "median": 107.5519,
+    "third_quartile": 125.1526,
+    "percentiles": [
+        {
+            "percentile": 90.0,
+            "value": 139.0807
+        }
+    ]
+}
+```
+
 ## SEE ALSO
 
 *[v.db.univar](v.db.univar.md), [r.univar](r.univar.md),
