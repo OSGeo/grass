@@ -672,7 +672,8 @@ build_program_in_subdir(
   grass_vector
   grass_dbmibase
   grass_dbmiclient
-  grass_dbmidriver)
+  grass_dbmidriver
+  grass_parson)
 
 build_program_in_subdir(
   r.walk

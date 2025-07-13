@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 15:41+0000\n"
-"PO-Revision-Date: 2025-06-30 17:58+0000\n"
+"POT-Creation-Date: 2025-07-05 18:31+0000\n"
+"PO-Revision-Date: 2025-07-06 05:49+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/sv/>\n"
 "Language: sv\n"
@@ -4656,6 +4656,16 @@ msgstr "Inmatad PNG-fil är inte indexerad färg"
 msgid "Input PNG file has invalid palette"
 msgstr "Inmatad PNG-fil har ogiltig palett"
 
+#: ../lib/pngdriver/read_ppm.c:41
+#, c-format
+msgid "PNG: invalid input file %s"
+msgstr "PNG: ogiltig indatafil <%s>"
+
+#: ../lib/pngdriver/read_ppm.c:92
+#, c-format
+msgid "PNG: invalid input mask file %s"
+msgstr "PNG: ogiltig maskfil för inmatning <%s>"
+
 #: ../lib/pngdriver/write_png.c:38
 msgid "Unable to write PNG"
 msgstr "Det går inte att skriva PNG"
@@ -8259,7 +8269,7 @@ msgstr "Ingen anslutning definierad"
 msgid "Unable to get number of simple features"
 msgstr "Det går inte att få ett antal enkla funktioner"
 
-#: ../lib/vector/Vlib/simple_features.c:349
+#: ../lib/vector/Vlib/simple_features.c:350
 #, c-format
 msgid "Unable to report simple features for vector map <%s>"
 msgstr "Det går inte att rapportera enkla funktioner för vektorkarta <%s>"

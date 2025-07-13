@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 15:41+0000\n"
-"PO-Revision-Date: 2025-06-29 17:50+0000\n"
+"POT-Creation-Date: 2025-07-05 18:31+0000\n"
+"PO-Revision-Date: 2025-07-07 12:20+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs/fr/>\n"
 "Language: fr\n"
@@ -585,7 +585,7 @@ msgid "Illegal n-s resolution value: %g"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:62 ../lib/gis/adj_cellhd.c:178
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Illegal number of rows: %d (resolution is %g)"
 msgstr "Nombre de lignes illégal : %d (la résolution est %g)."
 
@@ -4193,7 +4193,7 @@ msgid "<%s> has not been created in database."
 msgstr "<%s> n'a pas été créé dans la base de données."
 
 #: ../lib/manage/do_copy.c:44
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Copying %s <%s> to current mapset as <%s>"
 msgstr "Copie de %s <%s> vers le jeu de cartes actuel en tant que <%s>"
 
@@ -4690,6 +4690,16 @@ msgstr "Le fichier PNG d'entrée n'a pas de couleur indexée"
 #: ../lib/pngdriver/read_png.c:105
 msgid "Input PNG file has invalid palette"
 msgstr "Le fichier PNG d'entrée a une palette invalide"
+
+#: ../lib/pngdriver/read_ppm.c:41
+#, c-format
+msgid "PNG: invalid input file %s"
+msgstr "PNG : fichier d'entrée %s invalide"
+
+#: ../lib/pngdriver/read_ppm.c:92
+#, c-format
+msgid "PNG: invalid input mask file %s"
+msgstr "PNG : fichier de masque en entrée %s invalide"
 
 #: ../lib/pngdriver/write_png.c:38
 msgid "Unable to write PNG"
@@ -6731,11 +6741,11 @@ msgstr[1] "%d primitives référencées"
 
 #: ../lib/vector/Vlib/build_nat.c:122 ../lib/vector/Vlib/build_sfa.c:381
 #: ../lib/vector/Vlib/build_sfa.c:668
-#, c-format, fuzzy
+#, c-format
 msgid "One vertex registered"
 msgid_plural "%d vertices registered"
-msgstr[0] "%d sommet enregistré"
-msgstr[1] "%d sommets enregistrés"
+msgstr[0] "%d sommet référencé"
+msgstr[1] "%d sommets référencés"
 
 #: ../lib/vector/Vlib/build_nat.c:137
 msgid "Building areas..."
@@ -8294,7 +8304,7 @@ msgstr "Pas de connexion définie"
 msgid "Unable to get number of simple features"
 msgstr "Impossible d'obtenir le nombre d'entités simples"
 
-#: ../lib/vector/Vlib/simple_features.c:349
+#: ../lib/vector/Vlib/simple_features.c:350
 #, c-format
 msgid "Unable to report simple features for vector map <%s>"
 msgstr "Impossible d'afficher les entités simples pour la carte vecteur <%s>"
