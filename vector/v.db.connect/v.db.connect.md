@@ -25,6 +25,9 @@ to your map, it is advisable to make a copy from those tables first and
 connect the copied tables to the vector map (see also
 [v.overlay](v.overlay.md)).
 
+The **-g** flag is deprecated and will be removed in a future release. Please
+use **format=csv** option with the **-p** flag instead.
+
 ## EXAMPLE
 
 Note: The default database backend setting is SQLite.
@@ -41,6 +44,38 @@ Print column types and names of table linked to vector map.
 
 ```sh
 v.db.connect -c map=roads
+```
+
+### Print database connection using Python
+
+Print all database connection parameters for vector map.
+
+```python
+import grass.script as gs
+
+data = gs.parse_command("v.db.connect", map="roadsmajor", flags="p", format="json")
+print(data)
+```
+
+Possible output:
+
+```text
+[{'layer': 1, 'name': 'roadsmajor', 'table': 'roadsmajor', 'key': 'cat', 'database': '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db', 'driver': 'sqlite'}]
+```
+
+Print column types and names of table linked to vector map.
+
+```python
+import grass.script as gs
+
+data = gs.parse_command("v.db.connect", map="roadsmajor", flags="c", format="json")
+print(data)
+```
+
+Possible output:
+
+```text
+[{'name': 'cat', 'type': 'INTEGER'}, {'name': 'MAJORRDS_', 'type': 'DOUBLE PRECISION'}, {'name': 'ROAD_NAME', 'type': 'CHARACTER'}, {'name': 'MULTILANE', 'type': 'CHARACTER'}, {'name': 'PROPYEAR', 'type': 'INTEGER'}, {'name': 'OBJECTID', 'type': 'INTEGER'}, {'name': 'SHAPE_LEN', 'type': 'DOUBLE PRECISION'}]
 ```
 
 ### Connect vector map to database (DBF driver)
