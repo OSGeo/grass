@@ -208,7 +208,7 @@ static void read_gdal_options(void)
     p = G_find_key_value("directory", key_val);
     if (!p)
         p = "gdal";
-    if (*p == '/') {
+    if (*p == HOST_DIRSEP) {
         st->opts.dir = G_store(p);
     }
     else {
