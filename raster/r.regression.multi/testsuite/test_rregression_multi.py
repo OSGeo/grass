@@ -1,3 +1,5 @@
+import json
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
@@ -18,7 +20,7 @@ class TestRRegressionMulti(TestCase):
         cls.del_temp_region()
 
     def test_shell_format(self):
-        """Test -g flag and default output formats."""
+        """Test shell, -g flag and default output formats."""
         expected = [
             "n=525000",
             "Rsq=0.115424",
@@ -71,6 +73,65 @@ class TestRRegressionMulti(TestCase):
         )
         self.assertModule(module)
         self.assertEqual(module.outputs.stdout.splitlines(), expected)
+
+        # Using format=shell
+        module = SimpleModule(
+            "r.regression.multi",
+            mapx=["elevation", "aspect", "slope"],
+            mapy="soils_Kfactor",
+            format="shell",
+        )
+        self.assertModule(module)
+        self.assertEqual(module.outputs.stdout.splitlines(), expected)
+
+    def test_json_format(self):
+        """Test JSON output format."""
+        module = SimpleModule(
+            "r.regression.multi",
+            mapx=["elevation", "aspect", "slope"],
+            mapy="soils_Kfactor",
+            format="json",
+        )
+        self.assertModule(module)
+
+        expected = {
+            "n": 525000,
+            "Rsq": 0.11542412808794023,
+            "Rsqadj": 0.11541907333015966,
+            "RMSE": 0.026784788790483356,
+            "MAE": 0.02004910663010291,
+            "F": 22834.74957652947,
+            "b0": 0.05020075834611028,
+            "AIC": -3800909.191798161,
+            "AICc": -3800909.191798161,
+            "BIC": -3800864.5071839946,
+            "predictor1": "elevation",
+            "b1": 0.001523404412774435,
+            "F1": 64152.65595722587,
+            "AIC1": -3740385.0467569917,
+            "AICc1": -3740385.0467569917,
+            "BIC1": -3740364.7044499083,
+            "predictor2": "aspect",
+            "b2": 2.226906672106333e-05,
+            "F2": 4922.48090838096,
+            "AIC2": -3796011.6074610753,
+            "AICc2": -3796011.6074610753,
+            "BIC2": -3795991.265153992,
+            "predictor3": "slope",
+            "b3": 0.0028529315695204355,
+            "F3": 11927.479105518147,
+            "AIC3": -3789117.0962874037,
+            "AICc3": -3789117.0962874037,
+            "BIC3": -3789096.753980321,
+        }
+        output_json = json.loads(module.outputs.stdout)
+
+        self.assertCountEqual(list(expected.keys()), list(output_json.keys()))
+        for key, value in expected.items():
+            if isinstance(value, float):
+                self.assertAlmostEqual(value, output_json[key], places=6)
+            else:
+                self.assertEqual(value, output_json[key])
 
 
 if __name__ == "__main__":
