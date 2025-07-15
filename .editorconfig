@@ -105,9 +105,8 @@ insert_final_newline = unset
 
 # TODO: remove when .editorconfig is properly set up
 [mswindows/**]
-trim_trailing_whitespace = unset
+# trim_trailing_whitespace = unset
 end_of_line = unset
-charset = unset
 insert_final_newline = unset
 
 # TODO: remove when fixed:
