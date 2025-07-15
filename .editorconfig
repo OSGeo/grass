@@ -20,6 +20,10 @@ indent_size = 2
 
 # Scripts
 [{*.sh,mswindows/osgeo4w/*config}]
+end_of_line = unset
+indent_size = unset
+
+[*.sh]
 end_of_line = lf
 indent_size = 4
 
@@ -94,7 +98,7 @@ insert_final_newline = unset
 trim_trailing_whitespace = false
 
 [mswindows/{generic.manifest,Installer-Files/*.url}]
-end_of_line = crlf
+end_of_line = unset
 
 # Binary files
 [**/PERMANENT/vector/*/{cidx,coor,sidx,topo}]
