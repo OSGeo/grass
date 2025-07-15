@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ro\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 15:41+0000\n"
+"POT-Creation-Date: 2025-07-12 15:42+0000\n"
 "PO-Revision-Date: 2013-07-17 21:26+0200\n"
 "Last-Translator: Andreea Marin <andreea.marin09 yahoo.com>\n"
 "Language-Team: GRASS Translation Team <grass-translations@lists.osgeo.org>\n"
@@ -15247,25 +15247,25 @@ msgstr "Valori separate prin virgulă (*.csv)|*.csv"
 msgid "Overwrite file?"
 msgstr "Suprascrieți fișierul?"
 
-#: ../gui/wxpython/wxplot/profile.py:445
+#: ../gui/wxpython/wxplot/profile.py:449
 #, python-format
 msgid ""
 "Unable to open file <%s> for writing.\n"
 "Reason: %s"
 msgstr ""
 
-#: ../gui/wxpython/wxplot/profile.py:460
+#: ../gui/wxpython/wxplot/profile.py:457
 #, python-format
 msgid ""
 "%d files created:\n"
 "%s"
 msgstr ""
 
-#: ../gui/wxpython/wxplot/profile.py:462
+#: ../gui/wxpython/wxplot/profile.py:459
 msgid "No files generated."
 msgstr "Nici un fișier generat."
 
-#: ../gui/wxpython/wxplot/profile.py:469
+#: ../gui/wxpython/wxplot/profile.py:466
 msgid "Statistics for Profile(s)"
 msgstr "Statistici pentru profil(e)"
 
