@@ -111,7 +111,8 @@ charset = unset
 insert_final_newline = unset
 
 # TODO: remove when fixed:
-[.github/workflows/test_thorough.bat]
+[.github/workflows/*.bat]
+end_of_line = unset
 insert_final_newline = unset
 
 # Binary files
