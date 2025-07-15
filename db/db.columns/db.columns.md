@@ -1,6 +1,6 @@
 ## DESCRIPTION
 
-*db.columns* lists all columns for a give table. Connection to databases
+*db.columns* lists all columns for a given table. Connection to databases
 are supported through dbf, shp, odbc and pg drivers.
 
 ## NOTE
@@ -38,7 +38,7 @@ Note that the SQLite backend is the default setting.
 db.columns driver=sqlite table=archsites database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
 ```
 
-### List columns of table using Python
+### List columns using Python
 
 ```python
 import grass.script as gs
