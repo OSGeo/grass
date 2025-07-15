@@ -135,8 +135,10 @@ int main(int argc, char *argv[])
 
     flag.print = G_define_flag();
     flag.print->key = 'p';
-    flag.print->answer = 1;
     flag.print->description = _("Print report");
+
+    // Uncomment for GRASS v9
+    // G_option_required(flag.print, opt.centroids, NULL);
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -192,12 +194,9 @@ int main(int argc, char *argv[])
         }
         format = CSV;
     }
-
-    print = flag.print->answer || flag.report->answer;
-    if (format != PLAIN && !print) {
-        G_fatal_error(
-            _("The -p flag is required when using the format option."));
-    }
+    // print = flag.print->answer;
+    // currently prints always, change for GRASS v9
+    print = 1;
 
     /*
      * see if raster mask or a separate "clumpmap" raster map is to be used
