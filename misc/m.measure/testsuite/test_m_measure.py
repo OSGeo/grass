@@ -160,7 +160,7 @@ class TestMMeasure(TestCase):
         expected = {
             "units": {"length": "meters", "area": "square meters"},
             "length": 23560.522460602522,
-            "area": None,
+            "area": 0,
         }
         self.assertEqual(actual, expected)
 

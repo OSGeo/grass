@@ -174,7 +174,7 @@ int main(int argc, char **argv)
 
     if (format == JSON) {
         if (npoints <= 3)
-            G_json_object_set_null(root_object, "area");
+            G_json_object_set_number(root_object, "area", 0);
 
         char *json_string = G_json_serialize_to_string_pretty(root_value);
         if (!json_string) {
