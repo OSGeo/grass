@@ -40,7 +40,7 @@ static char *G__find_etc(const char *name)
     /*
      * check application etc dir
      */
-    snprintf(path, sizeof(path), "%s/etc/%s", G_gisbase(), name);
+    snprintf(path, sizeof(path), "%s/%s", G_etc_dir(), name);
     if (access(path, 0) == 0)
         return G_store(path);
 

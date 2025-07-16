@@ -19,58 +19,40 @@ from shutil import copy
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-if not os.getenv("GISBASE"):
-    sys.exit("GISBASE not defined")
+if not os.getenv("GRASS_PYDIR"):
+    sys.exit("GRASS_PYDIR not defined")
+sys.path.insert(0, os.path.abspath(os.path.join(os.environ["GRASS_PYDIR"], "grass")))
 sys.path.insert(
-    0, os.path.abspath(os.path.join(os.environ["GISBASE"], "etc", "python", "grass"))
+    0,
+    os.path.abspath(os.path.join(os.environ["GRASS_PYDIR"], "grass", "ctypes")),
 )
 sys.path.insert(
     0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "ctypes")
-    ),
+    os.path.abspath(os.path.join(os.environ["GRASS_PYDIR"], "grass", "exceptions")),
 )
 sys.path.insert(
     0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "exceptions")
-    ),
+    os.path.abspath(os.path.join(os.environ["GRASS_PYDIR"], "grass", "gunittest")),
 )
 sys.path.insert(
     0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "gunittest")
-    ),
+    os.path.abspath(os.path.join(os.environ["GRASS_PYDIR"], "grass", "imaging")),
 )
 sys.path.insert(
     0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "imaging")
-    ),
+    os.path.abspath(os.path.join(os.environ["GRASS_PYDIR"], "grass", "pydispatch")),
 )
 sys.path.insert(
     0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "pydispatch")
-    ),
+    os.path.abspath(os.path.join(os.environ["GRASS_PYDIR"], "grass", "pygrass")),
 )
 sys.path.insert(
     0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "pygrass")
-    ),
+    os.path.abspath(os.path.join(os.environ["GRASS_PYDIR"], "grass", "script")),
 )
 sys.path.insert(
     0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "script")
-    ),
-)
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "temporal")
-    ),
+    os.path.abspath(os.path.join(os.environ["GRASS_PYDIR"], "grass", "temporal")),
 )
 
 from grass.script import core  # noqa: E402

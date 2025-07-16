@@ -86,13 +86,12 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
 
     if (!tostdout->answer) {
-        const char *gisbase = G_gisbase();
         const char *alt_file = getenv("GRASS_FONT_CAP");
 
         if (alt_file)
             fontcapfile = G_store(alt_file);
         else
-            G_asprintf(&fontcapfile, "%s/etc/fontcap", gisbase);
+            G_asprintf(&fontcapfile, "%s/fontcap", G_etc_dir());
 
         if (!access(fontcapfile, F_OK)) { /* File exists? */
             if (!G_get_overwrite())
