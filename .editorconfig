@@ -31,6 +31,10 @@ indent_size = 4
 [*.{bat,cmd,ps1}{.tmpl,}]
 end_of_line = crlf
 
+# TODO: remove when fixed
+[mswindows/{osgeo4w/,}*.{bat}{.tmpl,}]
+end_of_line = unset
+
 [*.{c,h,cpp,hpp}]
 indent_size = 2
 
