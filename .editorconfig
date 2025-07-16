@@ -100,11 +100,9 @@ trim_trailing_whitespace = false
 [mswindows/{generic.manifest,Installer-Files/*.url}]
 #trim_trailing_whitespace = unset
 end_of_line = unset
-#charset = unset
-#insert_final_newline = unset
 
 # TODO: remove when .editorconfig is properly set up
-[mswindows/**]
+[mswindows/external/**]
 end_of_line = unset
 insert_final_newline = unset
 
