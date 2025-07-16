@@ -35,7 +35,7 @@ jobs:
       - name: Get dependencies
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y wget git gawk findutils
+          sudo apt-get install -y wget git gawk findutils doxygen graphviz
           xargs -a <(awk '! /^ *(#|$)/' "grass/.github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
 
@@ -107,6 +107,21 @@ jobs:
 
       - name: Test executing of the grass command
         run: ./grass/.github/workflows/test_simple.sh
+
+      - name: Build Programmer's Manual with doxygen
+        run: |
+          cd grass
+          make htmldocs
+
+      - name: Make the doxygen results available
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: doxygen-site
+          if-no-files-found: error
+          path: |
+            grass/html
+            grass/latex
+          retention-days: 3
 
       - name: Compile addons
         run: |
