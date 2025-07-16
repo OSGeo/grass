@@ -105,11 +105,14 @@ insert_final_newline = unset
 
 # TODO: remove when .editorconfig is properly set up
 [mswindows/**]
-# trim_trailing_whitespace = unset
 end_of_line = unset
 insert_final_newline = unset
 
-# TODO: remove when fixed:
+# TODO: remove when fixed
+[mswindows/external/rbatch/*.bat]
+trim_trailing_whitespace = unset
+
+# TODO: remove when fixed
 [.github/workflows/*.bat]
 end_of_line = unset
 insert_final_newline = unset
