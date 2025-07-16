@@ -36,12 +36,12 @@ indent_size = 4
 end_of_line = crlf
 
 # TODO: remove when fixed
-[mswindows/osgeo4w/*.{bat}{.tmpl,}]
+[mswindows/GRASS-Packager.bat.tmpl]
 end_of_line = unset
 insert_final_newline = unset
 
 # TODO: remove when fixed
-[mswindows/*.{bat}{.tmpl,}]
+[mswindows/osgeo4w/*.{bat,bat.tmpl}]
 end_of_line = unset
 insert_final_newline = unset
 
