@@ -99,7 +99,10 @@ trim_trailing_whitespace = false
 
 [mswindows/{generic.manifest,Installer-Files/*.url}]
 #trim_trailing_whitespace = unset
-end_of_line = unset
+end_of_line = unset # TODO: remove when fixed
+insert_final_newline = unset # TODO: remove when fixed
+# TODO: To enable when files are fixed:
+# end_of_line = crlf
 
 # TODO: remove when .editorconfig is properly set up
 [mswindows/external/**]
