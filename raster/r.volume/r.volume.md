@@ -24,10 +24,10 @@ option.
 
 To print the volume report, use the **-p** flag along with the **format** option
 to specify the desired output format. The volume report is printed even without
-this flag to maintain backward compatibility; however, this behavior may change
+this flag to maintain backward compatibility; however, this behavior will change
 in the future.
 
-The default separator set to **:** for backward compatibility. However,
+The default separator is set to **:** for backward compatibility. However,
 if **format=csv** is specified, the default separator will be a **comma**.
 
 ### CENTROIDS
@@ -82,7 +82,7 @@ r.lake elevation=elev_lid792_1m water_level=113.7 lake=mylake coordinates=638684
 #  Lake volume 648.875328 cubic meters
 
 # compute water volume
-r.volume input=elev_lid792_1m clump=mylake
+r.volume input=elev_lid792_1m clump=mylake -p
 #
 # Category   Average   Data   # Cells        Centroid             Total
 # Number     in clump  Total  in clump   Easting     Northing     Volume
@@ -106,7 +106,7 @@ dataset):
 g.region raster=elevation -p
 
 # compute volume
-r.volume input=elevation clump=geology_30m
+r.volume input=elevation clump=geology_30m -p
 #
 # Volume report on data from <elevation> using clumps on <geology_30m> raster map
 #
