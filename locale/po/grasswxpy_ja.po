@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 15:41+0000\n"
+"POT-Creation-Date: 2025-07-12 15:42+0000\n"
 "PO-Revision-Date: 2012-03-08 17:45+0900\n"
 "Last-Translator: taniguchi <taniguti@apptec.co.jp>\n"
 "Language-Team: Japanese <grass-translations@lists.osgeo.org>\n"
@@ -15226,25 +15226,25 @@ msgstr "カンマ区切り値 (*.csv)|*.csv"
 msgid "Overwrite file?"
 msgstr ""
 
-#: ../gui/wxpython/wxplot/profile.py:445
+#: ../gui/wxpython/wxplot/profile.py:449
 #, python-format
 msgid ""
 "Unable to open file <%s> for writing.\n"
 "Reason: %s"
 msgstr ""
 
-#: ../gui/wxpython/wxplot/profile.py:460
+#: ../gui/wxpython/wxplot/profile.py:457
 #, python-format
 msgid ""
 "%d files created:\n"
 "%s"
 msgstr ""
 
-#: ../gui/wxpython/wxplot/profile.py:462
+#: ../gui/wxpython/wxplot/profile.py:459
 msgid "No files generated."
 msgstr ""
 
-#: ../gui/wxpython/wxplot/profile.py:469
+#: ../gui/wxpython/wxplot/profile.py:466
 msgid "Statistics for Profile(s)"
 msgstr ""
 

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 15:41+0000\n"
-"PO-Revision-Date: 2025-06-30 17:58+0000\n"
+"POT-Creation-Date: 2025-07-12 15:42+0000\n"
+"PO-Revision-Date: 2025-07-12 20:05+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/sv/>\n"
 "Language: sv\n"
@@ -70,6 +70,11 @@ msgstr "Okänd typ av yta i Kairo"
 #, c-format
 msgid "Failed to initialize Cairo surface (width: %d, height: %d): %s"
 msgstr "Kairoytan (bredd: %d, höjd: %d) kunde inte initieras: %s"
+
+#: ../lib/cairodriver/graph.c:399
+#, c-format
+msgid "Unable to open file: %s"
+msgstr "Kunde inte öppna filen: %s"
 
 #: ../lib/cairodriver/raster.c:107
 msgid "Failed to create cairo surface"
@@ -1374,7 +1379,7 @@ msgstr "Tyvärr är <%s> inte ett giltigt alternativ"
 msgid "Your installation doesn't include GUI, exiting."
 msgstr "Din installation innehåller inte grafiskt gränssnitt, avslutar."
 
-#: ../lib/gis/parser.c:651 ../lib/init/grass.py:166
+#: ../lib/gis/parser.c:651 ../lib/init/grass.py:149
 msgid "ERROR"
 msgstr "FEL"
 
@@ -1664,12 +1669,12 @@ msgid "SYNOPSIS"
 msgstr "SYNOPSIS"
 
 #: ../lib/gis/parser_html.c:159 ../lib/gis/parser_rest.c:140
-#: ../lib/init/grass.py:322
+#: ../lib/init/grass.py:305
 msgid "Flags"
 msgstr "Flaggor"
 
 #: ../lib/gis/parser_html.c:207 ../lib/gis/parser_md.c:69
-#: ../lib/gis/parser_rest.c:173 ../lib/init/grass.py:342
+#: ../lib/gis/parser_rest.c:173 ../lib/init/grass.py:325
 msgid "Parameters"
 msgstr "Parametrar"
 
@@ -2206,7 +2211,7 @@ msgstr "Latitud-Longitud"
 msgid "Other Projection"
 msgstr "Övrig projektion"
 
-#: ../lib/gis/proj3.c:132 ../lib/vector/Vlib/header.c:563
+#: ../lib/gis/proj3.c:132 ../lib/vector/Vlib/header.c:566
 msgid "Unknown projection"
 msgstr "Okänd projektion"
 
@@ -3612,191 +3617,191 @@ msgstr "Ogiltig signaturfil: Original klassvärde närvaro inte läsbar"
 msgid "Unable to read target file for group [%s]"
 msgstr "Det gick inte att läsa målfilen för grupp [%s]"
 
-#: ../lib/init/grass.py:162
+#: ../lib/init/grass.py:145
 msgid "WARNING"
 msgstr "VARNING"
 
-#: ../lib/init/grass.py:167 ../lib/init/grass.py:2363
+#: ../lib/init/grass.py:150 ../lib/init/grass.py:2376
 msgid "Exiting..."
 msgstr "Spännande..."
 
-#: ../lib/init/grass.py:321
+#: ../lib/init/grass.py:304
 msgid "Usage"
 msgstr "Användning"
 
-#: ../lib/init/grass.py:323
+#: ../lib/init/grass.py:306
 msgid "print this help message"
 msgstr "skriva ut detta hjälpmeddelande"
 
-#: ../lib/init/grass.py:324
+#: ../lib/init/grass.py:307
 msgid "show version information and exit"
 msgstr "visa versionsinformation och avsluta"
 
-#: ../lib/init/grass.py:325
+#: ../lib/init/grass.py:308
 msgid "create given database, project or mapset if it doesn't exist"
 msgstr "skapa en databas, ett projekt eller en mapset om den inte redan finns"
 
-#: ../lib/init/grass.py:326
+#: ../lib/init/grass.py:309
 msgid "exit after creation of project or mapset. Only with -c flag"
 msgstr "avsluta efter skapandet av ett projekt eller en mapset. Endast med flaggan -c"
 
-#: ../lib/init/grass.py:328
+#: ../lib/init/grass.py:311
 msgid "force removal of .gislock if exists (use with care!). Only with --text flag"
 msgstr "tvingar borttagning av .gislock om sådan finns (använd med försiktighet!). Endast med --text flagga"
 
-#: ../lib/init/grass.py:331
+#: ../lib/init/grass.py:314
 msgid "use text based interface (skip graphical welcome screen)"
 msgstr "använda textbaserat gränssnitt (hoppa över grafisk välkomstskärm)"
 
-#: ../lib/init/grass.py:332 ../lib/init/grass.py:334 ../lib/init/grass.py:336
+#: ../lib/init/grass.py:315 ../lib/init/grass.py:317 ../lib/init/grass.py:319
 msgid "and set as default"
 msgstr "och ställ in som standard"
 
-#: ../lib/init/grass.py:333
+#: ../lib/init/grass.py:316
 msgid "use text based interface (show graphical welcome screen)"
 msgstr "använda textbaserat gränssnitt (visa grafisk välkomstskärm)"
 
-#: ../lib/init/grass.py:335
+#: ../lib/init/grass.py:318
 msgid "use $DEFAULT_GUI graphical user interface"
 msgstr "använd $DEFAULT_GUI grafiskt användargränssnitt"
 
-#: ../lib/init/grass.py:337
+#: ../lib/init/grass.py:320
 msgid "print GRASS configuration parameters"
 msgstr "skriva ut GRASS-konfigurationsparametrar"
 
-#: ../lib/init/grass.py:339
+#: ../lib/init/grass.py:322
 msgid "options: arch,build,compiler,date,path,python_path,revision,svn_revision,version"
 msgstr "alternativ: arch,build,kompilator,datum,sökväg,python_ sökväg,revision,svn_revision,version"
 
-#: ../lib/init/grass.py:343
+#: ../lib/init/grass.py:326
 msgid "initial GRASS database directory"
 msgstr "initial GRASS-databas katalog"
 
-#: ../lib/init/grass.py:344
+#: ../lib/init/grass.py:327
 msgid "directory containing GRASS projects"
 msgstr "katalog som innehåller GRASS-projekt"
 
-#: ../lib/init/grass.py:345
+#: ../lib/init/grass.py:328
 msgid "initial GRASS project (location)"
 msgstr "inledande GRASS-projekt (plats)"
 
-#: ../lib/init/grass.py:347
+#: ../lib/init/grass.py:330
 msgid "directory containing mapsets with one common coordinate reference system"
 msgstr "katalog som innehåller kartor med ett gemensamt koordinatreferenssystem"
 
-#: ../lib/init/grass.py:350
+#: ../lib/init/grass.py:333
 msgid "initial GRASS mapset"
 msgstr "initial GRASS-kartuppsättning"
 
-#: ../lib/init/grass.py:351
+#: ../lib/init/grass.py:334
 msgid "fully qualified initial mapset directory"
 msgstr "fullt kvalificerad initial mapset-katalog"
 
-#: ../lib/init/grass.py:352
+#: ../lib/init/grass.py:335
 msgid "Environment variables relevant for startup"
 msgstr "Miljövariabler som är relevanta för uppstart"
 
-#: ../lib/init/grass.py:353
+#: ../lib/init/grass.py:336
 msgid "set root path for configuration directory"
 msgstr "ange rotsökväg för konfigurationskatalog"
 
-#: ../lib/init/grass.py:354
+#: ../lib/init/grass.py:337
 msgid "select GUI (text, gui, gtext)"
 msgstr "välj GUI (text, gui, gtext)"
 
-#: ../lib/init/grass.py:355
+#: ../lib/init/grass.py:338
 msgid "set html web browser for help pages"
 msgstr "ställa in html-webbläsare för hjälpsidor"
 
-#: ../lib/init/grass.py:357
+#: ../lib/init/grass.py:340
 msgid "set additional path(s) to local GRASS modules or user scripts"
 msgstr "ange ytterligare sökväg(ar) till lokala GRASS-moduler eller användarskript"
 
-#: ../lib/init/grass.py:360
+#: ../lib/init/grass.py:343
 msgid "set additional GISBASE for locally installed GRASS Addons"
 msgstr "ställa in ytterligare GISBASE för lokalt installerade GRASS Addons"
 
-#: ../lib/init/grass.py:362
+#: ../lib/init/grass.py:345
 msgid "set Python interpreter name to override 'python'"
 msgstr "ange Python-tolkens namn för att åsidosätta 'python'"
 
-#: ../lib/init/grass.py:363
+#: ../lib/init/grass.py:346
 msgid "execute GRASS module or script"
 msgstr "exekvera GRASS-modul eller -skript"
 
-#: ../lib/init/grass.py:364
+#: ../lib/init/grass.py:347
 msgid "provided executable will be executed in GRASS session"
 msgstr "den tillhandahållna körbara filen kommer att köras i GRASS-sessionen"
 
-#: ../lib/init/grass.py:365
+#: ../lib/init/grass.py:348
 msgid "GRASS module, script or any other executable"
 msgstr "GRASS-modul, skript eller någon annan körbar fil"
 
-#: ../lib/init/grass.py:366
+#: ../lib/init/grass.py:349
 msgid "parameters of the executable"
 msgstr "parametrar för den körbara filen"
 
-#: ../lib/init/grass.py:367
+#: ../lib/init/grass.py:350
 msgid "standard flags"
 msgstr "standardflaggor"
 
-#: ../lib/init/grass.py:368 ../lib/init/grass.py:1949
+#: ../lib/init/grass.py:351 ../lib/init/grass.py:1932
 msgid "deprecated, use --tmp-project instead"
 msgstr "föråldrad, använd --tmp-project istället"
 
-#: ../lib/init/grass.py:369
+#: ../lib/init/grass.py:352
 msgid "location was renamed to project"
 msgstr "platsen döptes om till projekt"
 
-#: ../lib/init/grass.py:370
+#: ../lib/init/grass.py:353
 msgid "create temporary project (use with the --exec flag)"
 msgstr "skapa ett tillfälligt projekt (använd med flaggan --exec)"
 
-#: ../lib/init/grass.py:372
+#: ../lib/init/grass.py:355
 msgid "created in a temporary directory and deleted at exit"
 msgstr "skapas i en tillfällig katalog och raderas vid avslutning"
 
-#: ../lib/init/grass.py:374
+#: ../lib/init/grass.py:357
 msgid "create temporary mapset (use with the --exec flag)"
 msgstr "skapa tillfällig kartuppsättning (använd med flaggan --exec)"
 
-#: ../lib/init/grass.py:375
+#: ../lib/init/grass.py:358
 msgid "created in the specified project and deleted at exit"
 msgstr "skapas i det angivna projektet och raderas vid avslut"
 
-#: ../lib/init/grass.py:376
+#: ../lib/init/grass.py:359
 msgid "timeout for acquiring a mapset lock"
 msgstr "timeout för att förvärva ett mapset-lås"
 
-#: ../lib/init/grass.py:378
+#: ../lib/init/grass.py:361
 msgid "time for which the process will attempt to get a lock in seconds"
 msgstr "tid under vilken processen kommer att försöka få ett lås i sekunder"
 
-#: ../lib/init/grass.py:414
+#: ../lib/init/grass.py:397
 msgid "Failed to create configuration directory '{}' with error: {}"
 msgstr "Misslyckades med att skapa konfigurationskatalogen '{}' med fel: {}"
 
-#: ../lib/init/grass.py:456
+#: ../lib/init/grass.py:439
 #, python-brace-format
 msgid "Unable to create temporary directory <{tmpdir_name}>! Exiting."
 msgstr "Det gick inte att skapa en tillfällig katalog <{tmpdir_name}>! Avslutar."
 
-#: ../lib/init/grass.py:514
+#: ../lib/init/grass.py:497
 #, python-brace-format
 msgid "Invalid line in RC file ({file}): '{line}' ({error})\n"
 msgstr "Ogiltig rad i filen RC ({file}): '{line}' ({error})\n"
 
-#: ../lib/init/grass.py:520
+#: ../lib/init/grass.py:503
 #, python-brace-format
 msgid "Empty RC file ({file})"
 msgstr "Fil RC tom ({file})"
 
-#: ../lib/init/grass.py:607
+#: ../lib/init/grass.py:590
 #, python-format
 msgid "GUI <%s> not supported in this version"
 msgstr "GUI <%s> stöds inte i den här versionen"
 
-#: ../lib/init/grass.py:643
+#: ../lib/init/grass.py:626
 msgid ""
 "The python command does not work as expected.\n"
 "Please check your installation or set the GRASS_PYTHON environment variable."
@@ -3804,11 +3809,11 @@ msgstr ""
 "Python-kommandot fungerar inte som förväntat.\n"
 "Kontrollera din installation eller ställ in miljövariabeln GRASS_PYTHON."
 
-#: ../lib/init/grass.py:648
+#: ../lib/init/grass.py:631
 msgid "GRASS GUI not found. Please check your installation."
 msgstr "GRASS GUI hittades inte. Vänligen kontrollera din installation."
 
-#: ../lib/init/grass.py:650
+#: ../lib/init/grass.py:633
 msgid ""
 "{}\n"
 "Switching to text based interface mode."
@@ -3816,7 +3821,7 @@ msgstr ""
 "{}\n"
 "Växlar till textbaserat gränssnittsläge."
 
-#: ../lib/init/grass.py:657
+#: ../lib/init/grass.py:640
 msgid ""
 "It appears that the X Windows system is not active.\n"
 "A graphical based user interface is not supported.\n"
@@ -3828,73 +3833,73 @@ msgstr ""
 "(Variabeln DISPLAY är inte inställd.)\n"
 "Växlar till textbaserat gränssnittsläge."
 
-#: ../lib/init/grass.py:730
+#: ../lib/init/grass.py:713
 #, python-brace-format
 msgid "Unable to create new project because the project <{location}> already exists."
 msgstr "Det går inte att skapa ett nytt projekt eftersom projektet <{location}> redan finns."
 
-#: ../lib/init/grass.py:736
+#: ../lib/init/grass.py:719
 #, python-brace-format
 msgid "Unable to create new project <{location}> because <{path}> is a file."
 msgstr "Det går inte att skapa ett nytt projekt <{location}> eftersom <{path}> är en fil."
 
-#: ../lib/init/grass.py:740
+#: ../lib/init/grass.py:723
 #, python-brace-format
 msgid "Unable to create new project <{location}> because the directory <{path}> already exists."
 msgstr "Det går inte att skapa ett nytt projekt <{location}> eftersom katalogen <{path}> redan finns."
 
-#: ../lib/init/grass.py:745
+#: ../lib/init/grass.py:728
 #, python-brace-format
 msgid "Unable to create new project in the directory <{path}> for an unknown reason."
 msgstr "Det går inte att skapa ett nytt projekt i katalogen <{path}> av okänd anledning."
 
-#: ../lib/init/grass.py:827
+#: ../lib/init/grass.py:810
 msgid "Mapset <{}> already exists. Unable to create a new temporary mapset of that name."
 msgstr "Mapset <{}> finns redan. Det går inte att skapa en ny tillfällig mapset med det namnet."
 
-#: ../lib/init/grass.py:832
+#: ../lib/init/grass.py:815
 msgid "Mapset <{}> already exists."
 msgstr "Mapset <{}> finns redan."
 
-#: ../lib/init/grass.py:840
+#: ../lib/init/grass.py:823
 msgid "A new mapset can be created using '-c' flag."
 msgstr "En ny mapset kan skapas med hjälp av flaggan \"-c\"."
 
-#: ../lib/init/grass.py:842
+#: ../lib/init/grass.py:825
 msgid "Maybe you meant a different directory."
 msgstr "Du kanske menade en annan katalog."
 
-#: ../lib/init/grass.py:870
+#: ../lib/init/grass.py:853
 msgid "Provide CRS to create a project"
 msgstr "Tillhandahålla CRS för att skapa ett projekt"
 
-#: ../lib/init/grass.py:874
+#: ../lib/init/grass.py:857
 msgid "Creating new GRASS project <{}>..."
 msgstr "Skapar nytt GRASS-projekt <{}>..."
 
-#: ../lib/init/grass.py:885
+#: ../lib/init/grass.py:868
 #, python-brace-format
 msgid "Unable to create new mapset <{mapset}> because <{path}> is a file."
 msgstr "Det går inte att skapa en ny kartuppsättning <{mapset}> eftersom <{path}> är en fil."
 
-#: ../lib/init/grass.py:894
+#: ../lib/init/grass.py:877
 msgid "The mapset <{}> is missing the WIND file (computational region). It will be fixed now. Note that this warning may become an error in future versions."
 msgstr "Kartuppsättningen <{}> saknar WIND-filen (beräkningsregion). Det kommer att åtgärdas nu. Observera att denna varning kan bli ett fel i framtida versioner."
 
-#: ../lib/init/grass.py:904
+#: ../lib/init/grass.py:887
 #, python-brace-format
 msgid "No CRS is needed for creating mapset <{mapset}>, but <{geofile}> was provided as CRS. Did you mean to create a new project?"
 msgstr "Ingen CRS behövs för att skapa mapset <{mapset}>, men <{geofile}> tillhandahölls som CRS. Menade du att skapa ett nytt projekt?"
 
-#: ../lib/init/grass.py:910
+#: ../lib/init/grass.py:893
 msgid "Creating new GRASS mapset <{}>..."
 msgstr "Skapar ny GRASS-kartmängd <{}>..."
 
-#: ../lib/init/grass.py:934
+#: ../lib/init/grass.py:917
 msgid "GRASS database directory, project and mapset not set properly. Use GUI or command line to set them."
 msgstr "GRASS-databasens katalog, projekt och mapset är inte korrekt inställda. Använd GUI eller kommandoraden för att ställa in dem."
 
-#: ../lib/init/grass.py:994
+#: ../lib/init/grass.py:977
 #, python-brace-format
 msgid ""
 "Error reading data path information from g.gisenv.\n"
@@ -3911,25 +3916,25 @@ msgstr ""
 "\n"
 "Kontrollera filen <{file}>."
 
-#: ../lib/init/grass.py:1286
+#: ../lib/init/grass.py:1269
 msgid "Building user fontcap..."
 msgstr "Byggnadsanvändare fontcap..."
 
-#: ../lib/init/grass.py:1352
+#: ../lib/init/grass.py:1335
 msgid "The SHELL variable is not set"
 msgstr "SHELL-variabeln är inte inställd"
 
-#: ../lib/init/grass.py:1369
+#: ../lib/init/grass.py:1352
 #, python-brace-format
 msgid "Unsupported shell <{sh}>: {env_file}"
 msgstr "Skal som inte stöds <{sh}>: {env_file}"
 
-#: ../lib/init/grass.py:1389
+#: ../lib/init/grass.py:1372
 #, python-format
 msgid "Executing <%s> ..."
 msgstr "Exekverar <%s> ..."
 
-#: ../lib/init/grass.py:1413
+#: ../lib/init/grass.py:1396
 #, python-brace-format
 msgid ""
 "Execution of <{cmd}> failed:\n"
@@ -3938,143 +3943,143 @@ msgstr ""
 "Exekvering av <{cmd}> misslyckades:\n"
 "{error}"
 
-#: ../lib/init/grass.py:1426
+#: ../lib/init/grass.py:1409
 #, python-format
 msgid "Execution of <%s> finished."
 msgstr "Exekvering av <%s> avslutad."
 
-#: ../lib/init/grass.py:1470
+#: ../lib/init/grass.py:1453
 #, python-brace-format
 msgid "Unable to close GUI. {0}"
 msgstr "Det går inte att stänga GUI. {0}"
 
-#: ../lib/init/grass.py:1489
+#: ../lib/init/grass.py:1472
 #, python-format
 msgid "Welcome to GRASS %s"
 msgstr "Välkommen till GRASS %s"
 
-#: ../lib/init/grass.py:1515
+#: ../lib/init/grass.py:1498
 msgid "GRASS homepage:"
 msgstr "GRASS hemsida:"
 
 #. GTC Running through: SHELL NAME
-#: ../lib/init/grass.py:1517
+#: ../lib/init/grass.py:1500
 msgid "This version running through:"
 msgstr "Denna version går igenom:"
 
-#: ../lib/init/grass.py:1520
+#: ../lib/init/grass.py:1503
 msgid "Help is available with the command:"
 msgstr "Hjälp finns tillgänglig med kommandot:"
 
-#: ../lib/init/grass.py:1521
+#: ../lib/init/grass.py:1504
 msgid "See the licence terms with:"
 msgstr "Se licensvillkoren med:"
 
-#: ../lib/init/grass.py:1522
+#: ../lib/init/grass.py:1505
 msgid "See citation options with:"
 msgstr "Se citeringsalternativ med:"
 
-#: ../lib/init/grass.py:1527
+#: ../lib/init/grass.py:1510
 msgid "If required, restart the GUI with:"
 msgstr "Om så krävs, starta om GUI med :"
 
-#: ../lib/init/grass.py:1529
+#: ../lib/init/grass.py:1512
 msgid "Start the GUI with:"
 msgstr "Starta GUI med:"
 
-#: ../lib/init/grass.py:1531
+#: ../lib/init/grass.py:1514
 msgid "When ready to quit enter:"
 msgstr "När du är redo att avsluta trycker du på :"
 
-#: ../lib/init/grass.py:1713
+#: ../lib/init/grass.py:1696
 msgid "2D and 3D raster masks present"
 msgstr "2D- och 3D-rastermasker närvarande"
 
-#: ../lib/init/grass.py:1714
+#: ../lib/init/grass.py:1697
 msgid "Raster mask present"
 msgstr "Rastermask närvarande"
 
-#: ../lib/init/grass.py:1715
+#: ../lib/init/grass.py:1698
 msgid "3D raster mask present"
 msgstr "3D-rastermask närvarande"
 
-#: ../lib/init/grass.py:1760
+#: ../lib/init/grass.py:1743
 msgid "Done."
 msgstr "Klar."
 
-#: ../lib/init/grass.py:1762
+#: ../lib/init/grass.py:1745
 msgid "Goodbye from GRASS"
 msgstr "Farväl från GRASS"
 
-#: ../lib/init/grass.py:1823
+#: ../lib/init/grass.py:1806
 msgid "Please install the GRASS development package"
 msgstr "Installera GRASS-utvecklingspaketet"
 
-#: ../lib/init/grass.py:1869
+#: ../lib/init/grass.py:1852
 #, python-format
 msgid "Parameter <%s> not supported"
 msgstr "Parameter <%s> stöds inte"
 
-#: ../lib/init/grass.py:1918
+#: ../lib/init/grass.py:1901
 #, python-format
 msgid "use mapset %(metavar)s"
 msgstr "använd mapset %(metavar)s"
 
-#: ../lib/init/grass.py:1924
+#: ../lib/init/grass.py:1907
 #, python-format
 msgid "use temporary mapset in project %(metavar)s"
 msgstr "använd tillfällig mapset i projektet %(metavar)s"
 
-#: ../lib/init/grass.py:1932
+#: ../lib/init/grass.py:1915
 msgid "path to mapset (or project if creating one)"
 msgstr "sökväg till mapset (eller projekt om ett sådant skapas)"
 
-#: ../lib/init/grass.py:1935
+#: ../lib/init/grass.py:1918
 msgid "use temporary mapset"
 msgstr "använda tillfällig mapset"
 
-#: ../lib/init/grass.py:1942
+#: ../lib/init/grass.py:1925
 #, python-format
 msgid "use temporary project with %(metavar)s (EPSG, georeferenced file, ...)"
 msgstr "använd tillfälligt projekt med %(metavar)s (EPSG, georefererad fil, ...)"
 
-#: ../lib/init/grass.py:1956
+#: ../lib/init/grass.py:1939
 msgid "mapset locking timeout in seconds"
 msgstr "tidsgräns för låsning av mapset i sekunder"
 
-#: ../lib/init/grass.py:1962
+#: ../lib/init/grass.py:1945
 msgid "remove lock if present"
 msgstr "avlägsna lås om sådant finns"
 
-#: ../lib/init/grass.py:1976
+#: ../lib/init/grass.py:1959
 msgid "Option --tmp-location is deprecated, use --tmp-project instead\n"
 msgstr "Alternativet --tmp-location är föråldrat, använd --tmp-project istället\n"
 
-#: ../lib/init/grass.py:2021
+#: ../lib/init/grass.py:2004
 msgid "execute module or script (followed by executable with arguments)"
 msgstr "exekvera modul eller skript (följt av körbar med argument)"
 
-#: ../lib/init/grass.py:2077
+#: ../lib/init/grass.py:2060
 msgid "Flag -e requires also flag -c"
 msgstr "Flagga -e kräver också flagga -c"
 
-#: ../lib/init/grass.py:2079
+#: ../lib/init/grass.py:2062
 msgid "Flag -c requires name of project or mapset"
 msgstr "Flagga -c kräver namn på projekt eller mapset"
 
-#: ../lib/init/grass.py:2082
+#: ../lib/init/grass.py:2065
 msgid "Either --tmp-project or --tmp-mapset can be used, not both"
 msgstr "Antingen --tmp-project eller --tmp-mapset kan användas, men inte båda"
 
-#: ../lib/init/grass.py:2089
+#: ../lib/init/grass.py:2072
 msgid "Coordinate reference system argument (e.g. EPSG) is needed for --tmp-project"
 msgstr "Argument för koordinatreferenssystem (t.ex. EPSG) behövs för --tmp-project"
 
-#: ../lib/init/grass.py:2096
+#: ../lib/init/grass.py:2079
 msgid "Only one argument (e.g. EPSG) is needed for --tmp-project, mapset name <{}> provided"
 msgstr "Endast ett argument (t.ex. EPSG) behövs för --tmp-project, mapset-namn <{}> anges"
 
-#: ../lib/init/grass.py:2218
+#: ../lib/init/grass.py:2231
 #, python-brace-format
 msgid ""
 "Unable to start GRASS. You have the choice to:\n"
@@ -4103,24 +4108,24 @@ msgstr ""
 "     {cmd_name} --hjälp\n"
 "Se även: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 
-#: ../lib/init/grass.py:2239
+#: ../lib/init/grass.py:2252
 msgid "Starting GRASS..."
 msgstr "Börjar med GRASS..."
 
-#: ../lib/init/grass.py:2288
+#: ../lib/init/grass.py:2301
 msgid "Failed to start GRASS, grassdata directory cannot be found or created."
 msgstr "Misslyckades med att starta GRASS, grassdata-katalogen kan inte hittas eller skapas."
 
-#: ../lib/init/grass.py:2295
+#: ../lib/init/grass.py:2308
 msgid "Failed to start GRASS, no default project to copy in the installation or copying failed."
 msgstr "GRASS kunde inte startas, inget standardprojekt att kopiera i installationen eller kopieringen misslyckades."
 
-#: ../lib/init/grass.py:2400
+#: ../lib/init/grass.py:2413
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr "Startar <%s> grafiskt gränssnitt i bakgrunden, vänta..."
 
-#: ../lib/init/grass.py:2438
+#: ../lib/init/grass.py:2451
 #, python-format
 msgid "Failed to start shell '%s'"
 msgstr "Misslyckades med att starta skalet '%s'"
@@ -4655,6 +4660,16 @@ msgstr "Inmatad PNG-fil är inte indexerad färg"
 #: ../lib/pngdriver/read_png.c:105
 msgid "Input PNG file has invalid palette"
 msgstr "Inmatad PNG-fil har ogiltig palett"
+
+#: ../lib/pngdriver/read_ppm.c:41
+#, c-format
+msgid "PNG: invalid input file %s"
+msgstr "PNG: ogiltig indatafil <%s>"
+
+#: ../lib/pngdriver/read_ppm.c:92
+#, c-format
+msgid "PNG: invalid input mask file %s"
+msgstr "PNG: ogiltig maskfil för inmatning <%s>"
 
 #: ../lib/pngdriver/write_png.c:38
 msgid "Unable to write PNG"
@@ -6368,7 +6383,7 @@ msgstr "Det går inte att få fram gränsen för ö-id %d (områdes-id %d)"
 msgid "%d features without category skipped. To export also features without category use '%s=-1'."
 msgstr "%d funktioner utan kategori överhoppade. För att exportera även funktioner utan kategori, använd '%s=-1'."
 
-#: ../lib/vector/Vlib/box.c:244 ../lib/vector/Vlib/read.c:181
+#: ../lib/vector/Vlib/box.c:244 ../lib/vector/Vlib/read.c:184
 #: ../lib/vector/Vlib/read_nat.c:144 ../lib/vector/Vlib/read_pg.c:341
 #: ../lib/vector/Vlib/read_sfa.c:50 ../lib/vector/Vlib/write_nat.c:188
 #: ../lib/vector/Vlib/write_nat.c:304 ../lib/vector/Vlib/write_nat.c:672
@@ -6698,9 +6713,9 @@ msgstr[1] "%d primitiver registrerade"
 #: ../lib/vector/Vlib/build_sfa.c:668
 #, c-format
 msgid "One vertex registered"
-msgid_plural "%d vertices registered"
+msgid_plural "%<PRId64> vertices registered"
 msgstr[0] "Ett hörn registrerat"
-msgstr[1] "%d registrerade hörn"
+msgstr[1] "%<PRId64> hörn registrerade"
 
 #: ../lib/vector/Vlib/build_nat.c:137
 msgid "Building areas..."
@@ -7287,22 +7302,22 @@ msgstr "Det går inte att lägga till nätverksbåge"
 msgid "dglShortestPath error: %s"
 msgstr "dglShortestPath-fel: %s"
 
-#: ../lib/vector/Vlib/header.c:87
+#: ../lib/vector/Vlib/header.c:88
 #, c-format
 msgid "Unable to create header file for vector map <%s>"
 msgstr "Det gick inte att skapa en header-fil för vector map <%s>"
 
-#: ../lib/vector/Vlib/header.c:131
+#: ../lib/vector/Vlib/header.c:134
 #, c-format
 msgid "Unable to open header file of vector <%s>"
 msgstr "Det gick inte att öppna header-filen för vektor <%s>"
 
-#: ../lib/vector/Vlib/header.c:139
+#: ../lib/vector/Vlib/header.c:142
 #, c-format
 msgid "Corrupted row in head: %s"
 msgstr "Korrumperad rad i huvudet: %s"
 
-#: ../lib/vector/Vlib/header.c:177
+#: ../lib/vector/Vlib/header.c:180
 #, c-format
 msgid "Unknown keyword '%s' in vector head"
 msgstr "Okänt nyckelord '%s' i vektorhuvud"
@@ -8025,28 +8040,28 @@ msgid "for this format/level not supported"
 msgstr "för detta format/denna nivå stöds inte"
 
 #: ../lib/vector/Vlib/read.c:102 ../lib/vector/Vlib/read.c:138
-#: ../lib/vector/Vlib/read.c:176
+#: ../lib/vector/Vlib/read.c:179
 msgid "Vector map is not open for reading"
 msgstr "Vektorkartan är inte öppen för läsning"
 
-#: ../lib/vector/Vlib/read.c:144 ../lib/vector/Vlib/read.c:188
+#: ../lib/vector/Vlib/read.c:145 ../lib/vector/Vlib/read.c:192
 #, c-format
 msgid "Unable to read feature %d from vector map <%s>"
 msgstr "Det gick inte att läsa feature %d från vector map <%s>"
 
-#: ../lib/vector/Vlib/read.c:208
+#: ../lib/vector/Vlib/read.c:214
 msgid "Line index is out of range"
 msgstr "Linjeindex är utanför intervallet"
 
-#: ../lib/vector/Vlib/read.c:232
+#: ../lib/vector/Vlib/read.c:238
 msgid "Node index is out of range"
 msgstr "Nodindex är utanför intervallet"
 
-#: ../lib/vector/Vlib/read.c:256
+#: ../lib/vector/Vlib/read.c:262
 msgid "Area index is out of range"
 msgstr "Områdesindex är utanför intervallet"
 
-#: ../lib/vector/Vlib/read.c:280
+#: ../lib/vector/Vlib/read.c:286
 msgid "Isle index is out of range"
 msgstr "Isle index är utanför intervallet"
 
@@ -8259,7 +8274,7 @@ msgstr "Ingen anslutning definierad"
 msgid "Unable to get number of simple features"
 msgstr "Det går inte att få ett antal enkla funktioner"
 
-#: ../lib/vector/Vlib/simple_features.c:349
+#: ../lib/vector/Vlib/simple_features.c:350
 #, c-format
 msgid "Unable to report simple features for vector map <%s>"
 msgstr "Det går inte att rapportera enkla funktioner för vektorkarta <%s>"

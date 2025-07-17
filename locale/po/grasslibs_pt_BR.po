@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 15:41+0000\n"
+"POT-Creation-Date: 2025-07-12 15:42+0000\n"
 "PO-Revision-Date: 2025-06-14 20:52+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.osgeo.org/projects/grass-gis/grasslibs/pt_BR/>\n"
@@ -71,6 +71,12 @@ msgstr "Tipo de superfície Cairo desconhecido"
 #, fuzzy, c-format
 msgid "Failed to initialize Cairo surface (width: %d, height: %d): %s"
 msgstr "Falha ao inicializar a superfície do Cairo"
+
+#: ../lib/cairodriver/graph.c:399
+#, fuzzy, c-format
+#| msgid "Unable to open %s file <%s>"
+msgid "Unable to open file: %s"
+msgstr "Incapaz de abrir %s arquivo <%s>"
 
 #: ../lib/cairodriver/raster.c:107
 msgid "Failed to create cairo surface"
@@ -1390,7 +1396,7 @@ msgstr "Desculpe <%s> não é uma opção válida"
 msgid "Your installation doesn't include GUI, exiting."
 msgstr "Sua instalação não possui GUI, saindo."
 
-#: ../lib/gis/parser.c:651 ../lib/init/grass.py:166
+#: ../lib/gis/parser.c:651 ../lib/init/grass.py:149
 msgid "ERROR"
 msgstr "ERRO"
 
@@ -1681,12 +1687,12 @@ msgid "SYNOPSIS"
 msgstr "SINOPSE"
 
 #: ../lib/gis/parser_html.c:159 ../lib/gis/parser_rest.c:140
-#: ../lib/init/grass.py:322
+#: ../lib/init/grass.py:305
 msgid "Flags"
 msgstr "Flags"
 
 #: ../lib/gis/parser_html.c:207 ../lib/gis/parser_md.c:69
-#: ../lib/gis/parser_rest.c:173 ../lib/init/grass.py:342
+#: ../lib/gis/parser_rest.c:173 ../lib/init/grass.py:325
 msgid "Parameters"
 msgstr "Parâmetros"
 
@@ -2235,7 +2241,7 @@ msgstr "Latitude-Longitude"
 msgid "Other Projection"
 msgstr "Outra projeção"
 
-#: ../lib/gis/proj3.c:132 ../lib/vector/Vlib/header.c:563
+#: ../lib/gis/proj3.c:132 ../lib/vector/Vlib/header.c:566
 msgid "Unknown projection"
 msgstr "Projeção desconhecida"
 
@@ -3619,218 +3625,218 @@ msgstr ""
 msgid "Unable to read target file for group [%s]"
 msgstr "Não foi possível ler o arquivo de destino para o grupo [%s]"
 
-#: ../lib/init/grass.py:162
+#: ../lib/init/grass.py:145
 msgid "WARNING"
 msgstr "ATENÇÃO: "
 
-#: ../lib/init/grass.py:167 ../lib/init/grass.py:2363
+#: ../lib/init/grass.py:150 ../lib/init/grass.py:2376
 msgid "Exiting..."
 msgstr "Saindo..."
 
-#: ../lib/init/grass.py:321
+#: ../lib/init/grass.py:304
 msgid "Usage"
 msgstr "Uso"
 
-#: ../lib/init/grass.py:323
+#: ../lib/init/grass.py:306
 msgid "print this help message"
 msgstr "imprime esta mensagem de ajuda"
 
-#: ../lib/init/grass.py:324
+#: ../lib/init/grass.py:307
 msgid "show version information and exit"
 msgstr "mostrar informações de versão e sair"
 
-#: ../lib/init/grass.py:325
+#: ../lib/init/grass.py:308
 #, fuzzy
 msgid "create given database, project or mapset if it doesn't exist"
 msgstr "cria determinado banco de dados, location ou mapset se não existir"
 
-#: ../lib/init/grass.py:326
+#: ../lib/init/grass.py:309
 #, fuzzy
 msgid "exit after creation of project or mapset. Only with -c flag"
 msgstr "sair após a criação da location ou mapset. Apenas com a flag -c"
 
-#: ../lib/init/grass.py:328
+#: ../lib/init/grass.py:311
 msgid "force removal of .gislock if exists (use with care!). Only with --text flag"
 msgstr "força a remoção do .gislock, se houver (use com cuidado!). Apenas com flag --text "
 
-#: ../lib/init/grass.py:331
+#: ../lib/init/grass.py:314
 msgid "use text based interface (skip graphical welcome screen)"
 msgstr "usa interface baseada em texto (pula tela gráfica de boas-vindas)"
 
-#: ../lib/init/grass.py:332 ../lib/init/grass.py:334 ../lib/init/grass.py:336
+#: ../lib/init/grass.py:315 ../lib/init/grass.py:317 ../lib/init/grass.py:319
 msgid "and set as default"
 msgstr "e define como padrão"
 
-#: ../lib/init/grass.py:333
+#: ../lib/init/grass.py:316
 msgid "use text based interface (show graphical welcome screen)"
 msgstr "usa interface baseada em texto (mostra tela gráfica de boas-vindas)"
 
-#: ../lib/init/grass.py:335
+#: ../lib/init/grass.py:318
 msgid "use $DEFAULT_GUI graphical user interface"
 msgstr "usa a interface gráfica do usuário $DEFAULT_GUI"
 
-#: ../lib/init/grass.py:337
+#: ../lib/init/grass.py:320
 msgid "print GRASS configuration parameters"
 msgstr "imprime parâmetros de configuração GRASS"
 
-#: ../lib/init/grass.py:339
+#: ../lib/init/grass.py:322
 #, fuzzy
 msgid "options: arch,build,compiler,date,path,python_path,revision,svn_revision,version"
 msgstr "opções: arch,build,compiler,date,path,revision,svn_revision,version"
 
-#: ../lib/init/grass.py:343
+#: ../lib/init/grass.py:326
 msgid "initial GRASS database directory"
 msgstr "Diretório do banco de dados GRASS inicial"
 
-#: ../lib/init/grass.py:344
+#: ../lib/init/grass.py:327
 #, fuzzy
 msgid "directory containing GRASS projects"
 msgstr "diretório contendo Locations"
 
-#: ../lib/init/grass.py:345
+#: ../lib/init/grass.py:328
 #, fuzzy
 msgid "initial GRASS project (location)"
 msgstr "Location GRASS inicial"
 
-#: ../lib/init/grass.py:347
+#: ../lib/init/grass.py:330
 #, fuzzy
 msgid "directory containing mapsets with one common coordinate reference system"
 msgstr "diretório contendo Mapsets com um sistema de coordenadas comum (projeção)"
 
-#: ../lib/init/grass.py:350
+#: ../lib/init/grass.py:333
 #, fuzzy
 msgid "initial GRASS mapset"
 msgstr "Mapset GRASS inicial"
 
-#: ../lib/init/grass.py:351
+#: ../lib/init/grass.py:334
 #, fuzzy
 msgid "fully qualified initial mapset directory"
 msgstr "diretório Mapset inicial totalmente qualificado"
 
-#: ../lib/init/grass.py:352
+#: ../lib/init/grass.py:335
 msgid "Environment variables relevant for startup"
 msgstr "Variáveis ​​de ambiente relevantes para a inicialização"
 
-#: ../lib/init/grass.py:353
+#: ../lib/init/grass.py:336
 msgid "set root path for configuration directory"
 msgstr ""
 
-#: ../lib/init/grass.py:354
+#: ../lib/init/grass.py:337
 msgid "select GUI (text, gui, gtext)"
 msgstr "seleciona GUI (text, gui, gtext)"
 
-#: ../lib/init/grass.py:355
+#: ../lib/init/grass.py:338
 msgid "set html web browser for help pages"
 msgstr "define navegador web html para páginas de ajuda"
 
-#: ../lib/init/grass.py:357
+#: ../lib/init/grass.py:340
 msgid "set additional path(s) to local GRASS modules or user scripts"
 msgstr "define caminho(s) adicional(is) para módulos GRASS locais ou scripts de usuário"
 
-#: ../lib/init/grass.py:360
+#: ../lib/init/grass.py:343
 msgid "set additional GISBASE for locally installed GRASS Addons"
 msgstr "define GISBASE adicional para complementos GRASS instalados localmente"
 
-#: ../lib/init/grass.py:362
+#: ../lib/init/grass.py:345
 msgid "set Python interpreter name to override 'python'"
 msgstr "define o nome do interpretador Python para substituir 'python'"
 
-#: ../lib/init/grass.py:363
+#: ../lib/init/grass.py:346
 msgid "execute GRASS module or script"
 msgstr "execute o módulo GRASS ou script"
 
-#: ../lib/init/grass.py:364
+#: ../lib/init/grass.py:347
 msgid "provided executable will be executed in GRASS session"
 msgstr "executável fornecido será executado na sessão GRASS"
 
-#: ../lib/init/grass.py:365
+#: ../lib/init/grass.py:348
 msgid "GRASS module, script or any other executable"
 msgstr "Módulo GRASS, script ou qualquer outro executável"
 
-#: ../lib/init/grass.py:366
+#: ../lib/init/grass.py:349
 msgid "parameters of the executable"
 msgstr "parâmetros do executável"
 
-#: ../lib/init/grass.py:367
+#: ../lib/init/grass.py:350
 msgid "standard flags"
 msgstr "flags padrão"
 
-#: ../lib/init/grass.py:368 ../lib/init/grass.py:1949
+#: ../lib/init/grass.py:351 ../lib/init/grass.py:1932
 msgid "deprecated, use --tmp-project instead"
 msgstr ""
 
-#: ../lib/init/grass.py:369
+#: ../lib/init/grass.py:352
 msgid "location was renamed to project"
 msgstr ""
 
-#: ../lib/init/grass.py:370
+#: ../lib/init/grass.py:353
 #, fuzzy
 msgid "create temporary project (use with the --exec flag)"
 msgstr "cria location temporário (use com a flag --exec)"
 
-#: ../lib/init/grass.py:372
+#: ../lib/init/grass.py:355
 msgid "created in a temporary directory and deleted at exit"
 msgstr ""
 
-#: ../lib/init/grass.py:374
+#: ../lib/init/grass.py:357
 msgid "create temporary mapset (use with the --exec flag)"
 msgstr ""
 
-#: ../lib/init/grass.py:375
+#: ../lib/init/grass.py:358
 msgid "created in the specified project and deleted at exit"
 msgstr ""
 
-#: ../lib/init/grass.py:376
+#: ../lib/init/grass.py:359
 msgid "timeout for acquiring a mapset lock"
 msgstr ""
 
-#: ../lib/init/grass.py:378
+#: ../lib/init/grass.py:361
 msgid "time for which the process will attempt to get a lock in seconds"
 msgstr ""
 
-#: ../lib/init/grass.py:414
+#: ../lib/init/grass.py:397
 #, fuzzy
 #| msgid "Failed to create configuration directory '%s' with error: %s"
 msgid "Failed to create configuration directory '{}' with error: {}"
 msgstr "Falhou na criação do diretório de configuração '%s' com erro: %s"
 
-#: ../lib/init/grass.py:456
+#: ../lib/init/grass.py:439
 #, python-brace-format
 msgid "Unable to create temporary directory <{tmpdir_name}>! Exiting."
 msgstr ""
 
-#: ../lib/init/grass.py:514
+#: ../lib/init/grass.py:497
 #, python-brace-format
 msgid "Invalid line in RC file ({file}): '{line}' ({error})\n"
 msgstr "Linha inválida no arquivo RC ({arquivo}): '{linha}' ({erro})\n"
 
-#: ../lib/init/grass.py:520
+#: ../lib/init/grass.py:503
 #, python-brace-format
 msgid "Empty RC file ({file})"
 msgstr "Arquivo RC vazio ({file})"
 
-#: ../lib/init/grass.py:607
+#: ../lib/init/grass.py:590
 #, python-format
 msgid "GUI <%s> not supported in this version"
 msgstr "GUI <%s> não suportado nesta versão"
 
-#: ../lib/init/grass.py:643
+#: ../lib/init/grass.py:626
 msgid ""
 "The python command does not work as expected.\n"
 "Please check your installation or set the GRASS_PYTHON environment variable."
 msgstr ""
 
-#: ../lib/init/grass.py:648
+#: ../lib/init/grass.py:631
 msgid "GRASS GUI not found. Please check your installation."
 msgstr "GRASS GUI não encontrado. Por favor verifique sua instalação."
 
-#: ../lib/init/grass.py:650
+#: ../lib/init/grass.py:633
 msgid ""
 "{}\n"
 "Switching to text based interface mode."
 msgstr ""
 
-#: ../lib/init/grass.py:657
+#: ../lib/init/grass.py:640
 msgid ""
 "It appears that the X Windows system is not active.\n"
 "A graphical based user interface is not supported.\n"
@@ -3838,78 +3844,78 @@ msgid ""
 "Switching to text based interface mode."
 msgstr ""
 
-#: ../lib/init/grass.py:730
+#: ../lib/init/grass.py:713
 #, fuzzy, python-brace-format
 msgid "Unable to create new project because the project <{location}> already exists."
 msgstr "Não foi possível criar um novo location porque o location <{location}> já existe."
 
-#: ../lib/init/grass.py:736
+#: ../lib/init/grass.py:719
 #, fuzzy, python-brace-format
 msgid "Unable to create new project <{location}> because <{path}> is a file."
 msgstr "Não foi possível criar um novo location <(location)> porque <{path}> é um arquivo."
 
-#: ../lib/init/grass.py:740
+#: ../lib/init/grass.py:723
 #, fuzzy, python-brace-format
 msgid "Unable to create new project <{location}> because the directory <{path}> already exists."
 msgstr "Não foi possível criar um novo location <{location}> porque o diretório <{path}> já existe."
 
-#: ../lib/init/grass.py:745
+#: ../lib/init/grass.py:728
 #, fuzzy, python-brace-format
 msgid "Unable to create new project in the directory <{path}> for an unknown reason."
 msgstr "Não foi possível criar um novo location no diretório <{path}> por um motivo desconhecido."
 
-#: ../lib/init/grass.py:827
+#: ../lib/init/grass.py:810
 msgid "Mapset <{}> already exists. Unable to create a new temporary mapset of that name."
 msgstr ""
 
-#: ../lib/init/grass.py:832
+#: ../lib/init/grass.py:815
 msgid "Mapset <{}> already exists."
 msgstr ""
 
-#: ../lib/init/grass.py:840
+#: ../lib/init/grass.py:823
 msgid "A new mapset can be created using '-c' flag."
 msgstr ""
 
-#: ../lib/init/grass.py:842
+#: ../lib/init/grass.py:825
 msgid "Maybe you meant a different directory."
 msgstr ""
 
-#: ../lib/init/grass.py:870
+#: ../lib/init/grass.py:853
 #, fuzzy
 msgid "Provide CRS to create a project"
 msgstr "Não é possível criar objeto PROJ"
 
-#: ../lib/init/grass.py:874
+#: ../lib/init/grass.py:857
 #, fuzzy
 msgid "Creating new GRASS project <{}>..."
 msgstr "Criando novo mapset GRASS <{}>..."
 
-#: ../lib/init/grass.py:885
+#: ../lib/init/grass.py:868
 #, python-brace-format
 msgid "Unable to create new mapset <{mapset}> because <{path}> is a file."
 msgstr "Não foi possível criar um novo mapset <{mapset}> porque <{path}> é um arquivo."
 
-#: ../lib/init/grass.py:894
+#: ../lib/init/grass.py:877
 msgid "The mapset <{}> is missing the WIND file (computational region). It will be fixed now. Note that this warning may become an error in future versions."
 msgstr "O mapset <{}> não contém o arquivo WIND (região computacional). Isso será consertado agora. Observe que este aviso pode se tornar um erro em versões futuras."
 
-#: ../lib/init/grass.py:904
+#: ../lib/init/grass.py:887
 #, python-brace-format
 msgid "No CRS is needed for creating mapset <{mapset}>, but <{geofile}> was provided as CRS. Did you mean to create a new project?"
 msgstr ""
 
-#: ../lib/init/grass.py:910
+#: ../lib/init/grass.py:893
 #, fuzzy
 #| msgid "Creating new GRASS GIS mapset <{}>..."
 msgid "Creating new GRASS mapset <{}>..."
 msgstr "Criando novo mapset GRASS <{}>..."
 
-#: ../lib/init/grass.py:934
+#: ../lib/init/grass.py:917
 #, fuzzy
 msgid "GRASS database directory, project and mapset not set properly. Use GUI or command line to set them."
 msgstr "Diretório do banco de dados GRASS, location e mapset não definidos de modo apropriado. Use GUI ou a linha de comando para defini-los."
 
-#: ../lib/init/grass.py:994
+#: ../lib/init/grass.py:977
 #, python-brace-format
 msgid ""
 "Error reading data path information from g.gisenv.\n"
@@ -3926,25 +3932,25 @@ msgstr ""
 "\n"
 "Verifique o arquivo <{file}>."
 
-#: ../lib/init/grass.py:1286
+#: ../lib/init/grass.py:1269
 msgid "Building user fontcap..."
 msgstr "Construindo o fontcap do usuário..."
 
-#: ../lib/init/grass.py:1352
+#: ../lib/init/grass.py:1335
 msgid "The SHELL variable is not set"
 msgstr "A variável SHELL não está definida"
 
-#: ../lib/init/grass.py:1369
+#: ../lib/init/grass.py:1352
 #, python-brace-format
 msgid "Unsupported shell <{sh}>: {env_file}"
 msgstr "Shell não suportado <{sh}>: {env_file}"
 
-#: ../lib/init/grass.py:1389
+#: ../lib/init/grass.py:1372
 #, python-format
 msgid "Executing <%s> ..."
 msgstr "Executando <%s> ..."
 
-#: ../lib/init/grass.py:1413
+#: ../lib/init/grass.py:1396
 #, python-brace-format
 msgid ""
 "Execution of <{cmd}> failed:\n"
@@ -3953,156 +3959,156 @@ msgstr ""
 "A execução de <{cmd}> falhou:\n"
 "{error}"
 
-#: ../lib/init/grass.py:1426
+#: ../lib/init/grass.py:1409
 #, python-format
 msgid "Execution of <%s> finished."
 msgstr "Execução de <%s> terminou."
 
-#: ../lib/init/grass.py:1470
+#: ../lib/init/grass.py:1453
 #, python-brace-format
 msgid "Unable to close GUI. {0}"
 msgstr "Não foi possível fechar a GUI. {0}"
 
-#: ../lib/init/grass.py:1489
+#: ../lib/init/grass.py:1472
 #, fuzzy, python-format
 #| msgid "Welcome to GRASS GIS %s"
 msgid "Welcome to GRASS %s"
 msgstr "Bem-vindo ao GRASS %s"
 
-#: ../lib/init/grass.py:1515
+#: ../lib/init/grass.py:1498
 #, fuzzy
 #| msgid "GRASS GIS homepage:"
 msgid "GRASS homepage:"
 msgstr "GRASS homepage:"
 
 #. GTC Running through: SHELL NAME
-#: ../lib/init/grass.py:1517
+#: ../lib/init/grass.py:1500
 msgid "This version running through:"
 msgstr "Esta versão em execução através de:"
 
-#: ../lib/init/grass.py:1520
+#: ../lib/init/grass.py:1503
 msgid "Help is available with the command:"
 msgstr "A ajuda está disponível com o comando:"
 
-#: ../lib/init/grass.py:1521
+#: ../lib/init/grass.py:1504
 msgid "See the licence terms with:"
 msgstr "Veja os termos de licença com:"
 
-#: ../lib/init/grass.py:1522
+#: ../lib/init/grass.py:1505
 msgid "See citation options with:"
 msgstr "Veja opções de citação com:"
 
-#: ../lib/init/grass.py:1527
+#: ../lib/init/grass.py:1510
 msgid "If required, restart the GUI with:"
 msgstr "Caso necessário, reinicie o GUI com:"
 
-#: ../lib/init/grass.py:1529
+#: ../lib/init/grass.py:1512
 msgid "Start the GUI with:"
 msgstr "Inicie o GUI com:"
 
-#: ../lib/init/grass.py:1531
+#: ../lib/init/grass.py:1514
 msgid "When ready to quit enter:"
 msgstr "Quando estiver pronto para sair, digite:"
 
-#: ../lib/init/grass.py:1713
+#: ../lib/init/grass.py:1696
 msgid "2D and 3D raster masks present"
 msgstr ""
 
-#: ../lib/init/grass.py:1714
+#: ../lib/init/grass.py:1697
 #, fuzzy
 #| msgid "Raster map <%s> is empty"
 msgid "Raster mask present"
 msgstr "O mapa raster <%s> está vazio"
 
-#: ../lib/init/grass.py:1715
+#: ../lib/init/grass.py:1698
 #, fuzzy
 #| msgid "3D raster map <%s> not found"
 msgid "3D raster mask present"
 msgstr "Mapa raster 3D <%s> não encontrado"
 
-#: ../lib/init/grass.py:1760
+#: ../lib/init/grass.py:1743
 msgid "Done."
 msgstr "Feito."
 
-#: ../lib/init/grass.py:1762
+#: ../lib/init/grass.py:1745
 msgid "Goodbye from GRASS"
 msgstr ""
 
-#: ../lib/init/grass.py:1823
+#: ../lib/init/grass.py:1806
 #, fuzzy
 #| msgid "Please install the GRASS GIS development package"
 msgid "Please install the GRASS development package"
 msgstr "Por favor instale o pacote de desenvolvimento GRASS"
 
-#: ../lib/init/grass.py:1869
+#: ../lib/init/grass.py:1852
 #, python-format
 msgid "Parameter <%s> not supported"
 msgstr "Parâmetro <%s> não suportado"
 
-#: ../lib/init/grass.py:1918
+#: ../lib/init/grass.py:1901
 #, python-format
 msgid "use mapset %(metavar)s"
 msgstr ""
 
-#: ../lib/init/grass.py:1924
+#: ../lib/init/grass.py:1907
 #, fuzzy, python-format
 msgid "use temporary mapset in project %(metavar)s"
 msgstr "usar mapset temporário"
 
-#: ../lib/init/grass.py:1932
+#: ../lib/init/grass.py:1915
 msgid "path to mapset (or project if creating one)"
 msgstr ""
 
-#: ../lib/init/grass.py:1935
+#: ../lib/init/grass.py:1918
 msgid "use temporary mapset"
 msgstr "usar mapset temporário"
 
-#: ../lib/init/grass.py:1942
+#: ../lib/init/grass.py:1925
 #, python-format
 msgid "use temporary project with %(metavar)s (EPSG, georeferenced file, ...)"
 msgstr ""
 
-#: ../lib/init/grass.py:1956
+#: ../lib/init/grass.py:1939
 #, fuzzy
 #| msgid "The calculation time in seconds"
 msgid "mapset locking timeout in seconds"
 msgstr "Cálculo do tempo em segundos"
 
-#: ../lib/init/grass.py:1962
+#: ../lib/init/grass.py:1945
 msgid "remove lock if present"
 msgstr ""
 
-#: ../lib/init/grass.py:1976
+#: ../lib/init/grass.py:1959
 msgid "Option --tmp-location is deprecated, use --tmp-project instead\n"
 msgstr ""
 
-#: ../lib/init/grass.py:2021
+#: ../lib/init/grass.py:2004
 msgid "execute module or script (followed by executable with arguments)"
 msgstr ""
 
-#: ../lib/init/grass.py:2077
+#: ../lib/init/grass.py:2060
 msgid "Flag -e requires also flag -c"
 msgstr "Flag -e também requer flag -c"
 
-#: ../lib/init/grass.py:2079
+#: ../lib/init/grass.py:2062
 msgid "Flag -c requires name of project or mapset"
 msgstr ""
 
-#: ../lib/init/grass.py:2082
+#: ../lib/init/grass.py:2065
 msgid "Either --tmp-project or --tmp-mapset can be used, not both"
 msgstr ""
 
-#: ../lib/init/grass.py:2089
+#: ../lib/init/grass.py:2072
 #, fuzzy
 msgid "Coordinate reference system argument (e.g. EPSG) is needed for --tmp-project"
 msgstr "O argumento do sistema de referência de coordenadas (por exemplo, EPSG) é necessário para --tmp-location"
 
-#: ../lib/init/grass.py:2096
+#: ../lib/init/grass.py:2079
 #, fuzzy
 msgid "Only one argument (e.g. EPSG) is needed for --tmp-project, mapset name <{}> provided"
 msgstr "Apenas um argumento (por exemplo, EPSG) é necessário para --tmp-location, mapset name <{}> fornecido"
 
-#: ../lib/init/grass.py:2218
+#: ../lib/init/grass.py:2231
 #, fuzzy, python-brace-format
 msgid ""
 "Unable to start GRASS. You have the choice to:\n"
@@ -4131,26 +4137,26 @@ msgstr ""
 "{cmd_name} --help\n"
 "Veja também: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 
-#: ../lib/init/grass.py:2239
+#: ../lib/init/grass.py:2252
 #, fuzzy
 #| msgid "Starting GRASS GIS..."
 msgid "Starting GRASS..."
 msgstr "Iniciando GRASS..."
 
-#: ../lib/init/grass.py:2288
+#: ../lib/init/grass.py:2301
 msgid "Failed to start GRASS, grassdata directory cannot be found or created."
 msgstr ""
 
-#: ../lib/init/grass.py:2295
+#: ../lib/init/grass.py:2308
 msgid "Failed to start GRASS, no default project to copy in the installation or copying failed."
 msgstr ""
 
-#: ../lib/init/grass.py:2400
+#: ../lib/init/grass.py:2413
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr "Iniciando <%s> GUI em segundo plano, por favor aguarde..."
 
-#: ../lib/init/grass.py:2438
+#: ../lib/init/grass.py:2451
 #, python-format
 msgid "Failed to start shell '%s'"
 msgstr "Falha ao iniciar o shell '%s'"
@@ -4693,6 +4699,18 @@ msgstr "O arquivo PNG de entrada não é de cor indexada"
 #: ../lib/pngdriver/read_png.c:105
 msgid "Input PNG file has invalid palette"
 msgstr "O arquivo PNG de entrada tem paleta inválida"
+
+#: ../lib/pngdriver/read_ppm.c:41
+#, fuzzy, c-format
+#| msgid "Cairo: invalid input file <%s>"
+msgid "PNG: invalid input file %s"
+msgstr "Cairo: arquivo de entrada inválido <%s>"
+
+#: ../lib/pngdriver/read_ppm.c:92
+#, fuzzy, c-format
+#| msgid "Cairo: invalid input mask file <%s>"
+msgid "PNG: invalid input mask file %s"
+msgstr "Cairo: arquivo de máscara de entrada inválido <%s>"
 
 #: ../lib/pngdriver/write_png.c:38
 msgid "Unable to write PNG"
@@ -6413,7 +6431,7 @@ msgstr "Não foi possível obter fronteira da ilha id %d (área id %d)"
 msgid "%d features without category skipped. To export also features without category use '%s=-1'."
 msgstr "%dfeições sem categoria ignoradas. Para exportar também feições sem categoria, use '%s= -1'."
 
-#: ../lib/vector/Vlib/box.c:244 ../lib/vector/Vlib/read.c:181
+#: ../lib/vector/Vlib/box.c:244 ../lib/vector/Vlib/read.c:184
 #: ../lib/vector/Vlib/read_nat.c:144 ../lib/vector/Vlib/read_pg.c:341
 #: ../lib/vector/Vlib/read_sfa.c:50 ../lib/vector/Vlib/write_nat.c:188
 #: ../lib/vector/Vlib/write_nat.c:304 ../lib/vector/Vlib/write_nat.c:672
@@ -6744,7 +6762,7 @@ msgstr[1] "%d primitivas registradas"
 #: ../lib/vector/Vlib/build_sfa.c:668
 #, c-format
 msgid "One vertex registered"
-msgid_plural "%d vertices registered"
+msgid_plural "%<PRId64> vertices registered"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -7334,22 +7352,22 @@ msgstr ""
 msgid "dglShortestPath error: %s"
 msgstr "dglShortestPath error: %s"
 
-#: ../lib/vector/Vlib/header.c:87
+#: ../lib/vector/Vlib/header.c:88
 #, c-format
 msgid "Unable to create header file for vector map <%s>"
 msgstr "Não foi possível criar o arquivo de cabeçalho para mapa vetorial <%s>"
 
-#: ../lib/vector/Vlib/header.c:131
+#: ../lib/vector/Vlib/header.c:134
 #, c-format
 msgid "Unable to open header file of vector <%s>"
 msgstr "Não foi possível abrir o arquivo de cabeçalho do vetor <%s>"
 
-#: ../lib/vector/Vlib/header.c:139
+#: ../lib/vector/Vlib/header.c:142
 #, c-format
 msgid "Corrupted row in head: %s"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:177
+#: ../lib/vector/Vlib/header.c:180
 #, c-format
 msgid "Unknown keyword '%s' in vector head"
 msgstr ""
@@ -8074,28 +8092,28 @@ msgid "for this format/level not supported"
 msgstr "para este formato/nível não é suportado"
 
 #: ../lib/vector/Vlib/read.c:102 ../lib/vector/Vlib/read.c:138
-#: ../lib/vector/Vlib/read.c:176
+#: ../lib/vector/Vlib/read.c:179
 msgid "Vector map is not open for reading"
 msgstr "O mapa vetorial não está aberto para leitura"
 
-#: ../lib/vector/Vlib/read.c:144 ../lib/vector/Vlib/read.c:188
+#: ../lib/vector/Vlib/read.c:145 ../lib/vector/Vlib/read.c:192
 #, c-format
 msgid "Unable to read feature %d from vector map <%s>"
 msgstr "Não foi possível ler feição %d do mapa vetorial <%s>"
 
-#: ../lib/vector/Vlib/read.c:208
+#: ../lib/vector/Vlib/read.c:214
 msgid "Line index is out of range"
 msgstr "O índice de linha está fora do intervalo"
 
-#: ../lib/vector/Vlib/read.c:232
+#: ../lib/vector/Vlib/read.c:238
 msgid "Node index is out of range"
 msgstr "O índice do nó está fora do intervalo"
 
-#: ../lib/vector/Vlib/read.c:256
+#: ../lib/vector/Vlib/read.c:262
 msgid "Area index is out of range"
 msgstr "O índice de área está fora do intervalo"
 
-#: ../lib/vector/Vlib/read.c:280
+#: ../lib/vector/Vlib/read.c:286
 msgid "Isle index is out of range"
 msgstr "O índice de ilhas está fora do intervalo"
 
@@ -8308,7 +8326,7 @@ msgstr "Nenhuma conexão definida"
 msgid "Unable to get number of simple features"
 msgstr "Não foi possível obter o número de feições simples"
 
-#: ../lib/vector/Vlib/simple_features.c:349
+#: ../lib/vector/Vlib/simple_features.c:350
 #, c-format
 msgid "Unable to report simple features for vector map <%s>"
 msgstr ""
@@ -10167,10 +10185,6 @@ msgstr "Ferramenta de consulta desconhecida"
 #, c-format
 #~ msgid "Unable to locate symbol <%s>"
 #~ msgstr "Não foi possível localizar o símbolo <%s>"
-
-#, c-format
-#~ msgid "Unable to open %s file <%s>"
-#~ msgstr "Incapaz de abrir %s arquivo <%s>"
 
 #~ msgid "Unable to open OGR DBMI driver"
 #~ msgstr "Não foi possível abrir o driver OGR DBMI"
