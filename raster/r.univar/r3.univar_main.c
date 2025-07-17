@@ -40,6 +40,7 @@ void set_params(void)
     param.output_file->required = NO;
     param.output_file->description =
         _("Name for output file (if omitted or \"-\" output to stdout)");
+    param.output_file->guisection = _("Output settings");
 
     param.percentile = G_define_option();
     param.percentile->key = "percentile";
@@ -50,6 +51,7 @@ void set_params(void)
     param.percentile->answer = "90";
     param.percentile->description =
         _("Percentile to calculate (requires extended statistics flag)");
+    param.percentile->guisection = _("Extended");
 
     param.separator = G_define_standard_option(G_OPT_F_SEP);
     param.separator->answer = NULL;
@@ -62,10 +64,12 @@ void set_params(void)
     param.shell_style->description = _(
         "This flag is deprecated and will be removed in a future release. Use "
         "format=shell instead.");
+    param.shell_style->guisection = _("Formatting");
 
     param.extended = G_define_flag();
     param.extended->key = 'e';
     param.extended->description = _("Calculate extended statistics");
+    param.extended->guisection = _("Extended");
 
     param.table = G_define_flag();
     param.table->key = 't';
@@ -74,6 +78,7 @@ void set_params(void)
     param.table->description = _(
         "This flag is deprecated and will be removed in a future release. Use "
         "format=csv instead.");
+    param.table->guisection = _("Formatting");
 
     param.format = G_define_standard_option(G_OPT_F_FORMAT);
     param.format->options = "plain,shell,csv,json";
@@ -94,19 +99,16 @@ int main(int argc, char *argv[])
     FCELL val_f; /* for misc use */
     DCELL val_d; /* for misc use */
     int map_type, zmap_type;
+    RASTER3D_Region region;
+    struct GModule *module;
     univar_stat *stats;
-
     char *infile, *zonemap;
     void *map, *zmap = NULL;
-    RASTER3D_Region region;
-    unsigned int i;
     unsigned int rows, cols, depths;
     unsigned int x, y, z;
     double dmin, dmax;
-    int zone, n_zones /* , use_zone = 0 */;
+    int zone /* , use_zone = 0 */;
     const char *mapset, *name;
-
-    struct GModule *module;
 
     enum OutputFormat format;
 
@@ -253,24 +255,7 @@ int main(int argc, char *argv[])
         Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"), infile);
 
     map_type = Rast3d_tile_type_map(map);
-
-    i = 0;
-    while (param.percentile->answers[i])
-        i++;
-
-    n_zones = zone_info.n_zones;
-
-    if (n_zones == 0)
-        n_zones = 1;
-
-    stats = create_univar_stat_struct(map_type, i);
-    for (i = 0; i < (unsigned int)n_zones; i++) {
-        unsigned int j;
-
-        for (j = 0; j < stats[i].n_perc; j++) {
-            sscanf(param.percentile->answers[j], "%lf", &(stats[i].perc[j]));
-        }
-    }
+    stats = univar_stat_with_percentiles(map_type);
 
     for (z = 0; z < depths; z++) { /* From the bottom to the top */
         if (format != SHELL)

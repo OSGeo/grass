@@ -140,9 +140,12 @@ int Vect_read_next_line(struct Map_info *Map, struct line_pnts *line_p,
     }
 
     ret = (*Read_next_line_array[Map->format][Map->level])(Map, line_p, line_c);
-    if (ret == -1)
+    if (ret == -1) {
+        const char *map_name = Vect_get_full_name(Map);
         G_warning(_("Unable to read feature %d from vector map <%s>"),
-                  Map->next_line, Vect_get_full_name(Map));
+                  Map->next_line, map_name);
+        G_free((void *)map_name);
+    }
 
     return ret;
 }
@@ -184,9 +187,12 @@ int Vect_read_line(struct Map_info *Map, struct line_pnts *line_p,
 
     ret = (*Read_line_array[Map->format])(Map, line_p, line_c, line);
 
-    if (ret == -1)
+    if (ret == -1) {
+        const char *map_name = Vect_get_full_name(Map);
         G_warning(_("Unable to read feature %d from vector map <%s>"), line,
-                  Vect_get_full_name(Map));
+                  map_name);
+        G_free((void *)map_name);
+    }
 
     return ret;
 }
