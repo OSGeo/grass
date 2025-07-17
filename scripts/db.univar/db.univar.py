@@ -357,12 +357,16 @@ def main():
         result["first_quartile"] = q25
         result["median"] = q50
         result["third_quartile"] = q75
+        # for backward compatibility we include the statistics key
+        statistics = result.copy()
         if options["percentile"]:
+            statistics["percentiles"] = perc
+            statistics["percentile_values"] = [pval[i] for i in range(len(perc))]
+            result["statistics"] = statistics
+
             result["percentiles"] = []
             for i in range(len(perc)):
                 result["percentiles"].append({"percentile": perc[i], "value": pval[i]})
-        # for backward compatibility we include the statistics key
-        result["statistics"] = result.copy()
         json.dump(result, sys.stdout, indent=4)
         sys.stdout.write("\n")
     else:
