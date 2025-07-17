@@ -1,0 +1,151 @@
+# EditorConfig: https://editorconfig.org
+# Rules are read from top to bottom, the most recent rule found applies
+# Some basic properties are supported by all editor plugins
+
+# top-most EditorConfig file
+root = true
+
+# General settings
+[*]
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+trim_trailing_whitespace = true
+
+[*.{htm,html,js,css,svg}]
+indent_size = 2
+
+[*.{xml,config}]
+indent_size = 2
+
+# Scripts
+[{*.sh,mswindows/osgeo4w/*config}]
+end_of_line = unset
+indent_size = unset
+# TODO: To enable when files are fixed:
+# end_of_line = lf
+# indent_size = 4
+
+# TODO: remove when the previous section is fixed
+[*.sh]
+end_of_line = lf
+indent_size = 4
+
+# These are explicitly windows files and should use crlf
+[*.{bat,cmd,ps1}{.tmpl,}]
+end_of_line = crlf
+
+# TODO: remove when fixed
+[mswindows/GRASS-Packager.bat.tmpl]
+end_of_line = unset
+insert_final_newline = unset
+
+# TODO: remove when fixed
+[mswindows/osgeo4w/*.{bat,bat.tmpl}]
+end_of_line = unset
+insert_final_newline = unset
+
+[*.{c,h,cpp,hpp}]
+indent_size = 2
+
+[{*.js,*.json,*.json5,*.mjs,*.cjs}]
+indent_style = space
+indent_size = 2
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.js]
+block_comment_start = /**
+block_comment = *
+block_comment_end = */
+
+[*.ipynb]
+end_of_line = lf
+
+[{*.py, *.pyi}]
+charset = utf-8
+indent_style = space
+# TODO: To enable when files are fixed:
+# indent_size = 4
+# max_line_length = 88
+
+[{Makefile,*.make,*.make.in}]
+# TODO: To enable when files are fixed:
+# indent_style = tab
+indent_size = 4
+
+[*.y{a,}ml]
+indent_style = space
+indent_size = 2
+
+# Patch files
+[*.patch]
+trim_trailing_whitespace = false
+
+# TODO: To enable when files are fixed:
+# # CSVs use CRLF as defined in RFC 4180
+# [*.csv]
+# end_of_line = crlf
+
+[*.md]
+# Two trailing whitespace in markdown means to create a line break
+# https://www.markdownguide.org/basic-syntax/#line-breaks
+trim_trailing_whitespace = false
+indent_style = space
+# TODO: To enable when files are fixed:
+# indent_size = 2
+
+# Exclude some files from rules
+[*.{ascii,asc,ref,po,ps,svg}]
+trim_trailing_whitespace = unset
+end_of_line = unset
+charset = unset
+insert_final_newline = unset
+
+[{**/testsuite/data/**,mswindows/osgeo4w/envdiff.sed}]
+trim_trailing_whitespace = unset
+end_of_line = unset
+charset = unset
+insert_final_newline = unset
+
+[python/libgrass_interface_generator/ctypesgen/parser/parsetab.py]
+trim_trailing_whitespace = false
+
+[mswindows/{generic.manifest,Installer-Files/*.url}]
+end_of_line = unset # TODO: remove when fixed
+insert_final_newline = unset # TODO: remove when fixed
+# TODO: To enable when files are fixed:
+# end_of_line = crlf
+
+# TODO: remove when .editorconfig is properly set up
+[mswindows/external/**]
+end_of_line = unset
+insert_final_newline = unset
+
+# TODO: remove when fixed
+[mswindows/external/rbatch/*.bat]
+trim_trailing_whitespace = unset
+
+# TODO: remove when fixed
+[.github/workflows/*.bat]
+end_of_line = unset
+insert_final_newline = unset
+
+# Binary files
+[**/PERMANENT/vector/*/{cidx,coor,sidx,topo}]
+trim_trailing_whitespace = unset
+end_of_line = unset
+charset = unset
+insert_final_newline = unset
+
+[*.{laz,raw,rgb}]
+trim_trailing_whitespace = unset
+end_of_line = unset
+charset = unset
+insert_final_newline = unset
+
+[{lib/vector/diglib/test*.ok,**/*.nib/keyedobjects.nib}]
+trim_trailing_whitespace = unset
+end_of_line = unset
+charset = unset
+insert_final_newline = unset
