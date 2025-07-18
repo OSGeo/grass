@@ -109,7 +109,6 @@ int main(int argc, char *argv[])
     double *meanX, meanY, *varX, varY, *sdX, sdY;
     double yest, yres; /* estimated y, residual */
     double /* sumYest, */ *SSerr_without;
-    char tmp[40];
 
     /* double SE; */
     /* double meanYest, meanYres, varYest, varYres, sdYest, sdYres; */
@@ -127,8 +126,10 @@ int main(int argc, char *argv[])
     struct Cell_head region;
     struct GModule *module;
     enum OutputFormat format;
-    JSON_Value *root_value = NULL;
-    JSON_Object *root_object = NULL;
+    JSON_Value *root_value = NULL, *predictors_value = NULL,
+               *predictor_value = NULL;
+    JSON_Object *root_object = NULL, *predictor_object = NULL;
+    JSON_Array *predictors_array = NULL;
 
     G_gisinit(argv[0]);
 
@@ -196,6 +197,12 @@ int main(int argc, char *argv[])
                 _("Failed to initialize JSON object. Out of memory?"));
         }
         root_object = G_json_object(root_value);
+
+        predictors_value = G_json_value_init_array();
+        if (predictors_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
+        predictors_array = G_json_array(predictors_value);
     }
     else {
         format = SHELL;
@@ -537,8 +544,7 @@ int main(int argc, char *argv[])
         G_json_object_set_number(root_object, "RMSE", sqrt(SSerr / count));
         G_json_object_set_number(root_object, "MAE", SAE / count);
         G_json_object_set_number(root_object, "F", F);
-        snprintf(tmp, sizeof(tmp), "b%d", i);
-        G_json_object_set_number(root_object, tmp, B[0][i]);
+        G_json_object_set_number(root_object, "b0", B[0][i]);
         G_json_object_set_number(root_object, "AIC", AIC);
         G_json_object_set_number(root_object, "AICc", AICc);
         G_json_object_set_number(root_object, "BIC", BIC);
@@ -554,11 +560,17 @@ int main(int argc, char *argv[])
             break;
 
         case JSON:
-            snprintf(tmp, sizeof(tmp), "predictor%d", i + 1);
-            G_json_object_set_string(root_object, tmp, input_mapx->answers[i]);
+            predictor_value = G_json_value_init_object();
+            if (predictor_value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON object. Out of memory?"));
+            }
+            predictor_object = G_json_object(predictor_value);
 
-            snprintf(tmp, sizeof(tmp), "b%d", i + 1);
-            G_json_object_set_number(root_object, tmp, B[0][i + 1]);
+            G_json_object_set_string(predictor_object, "name",
+                                     input_mapx->answers[i]);
+            G_json_object_set_number(predictor_object, "coefficient",
+                                     B[0][i + 1]);
             break;
         }
 
@@ -629,20 +641,22 @@ int main(int argc, char *argv[])
                 break;
 
             case JSON:
-                snprintf(tmp, sizeof(tmp), "F%d", i + 1);
-                G_json_object_set_number(root_object, tmp, F);
-
-                snprintf(tmp, sizeof(tmp), "AIC%d", i + 1);
-                G_json_object_set_number(root_object, tmp, AIC);
-
-                snprintf(tmp, sizeof(tmp), "AICc%d", i + 1);
-                G_json_object_set_number(root_object, tmp, AICc);
-
-                snprintf(tmp, sizeof(tmp), "BIC%d", i + 1);
-                G_json_object_set_number(root_object, tmp, BIC);
+                G_json_object_set_number(predictor_object, "F", F);
+                G_json_object_set_number(predictor_object, "AIC", AIC);
+                G_json_object_set_number(predictor_object, "AICc", AICc);
+                G_json_object_set_number(predictor_object, "BIC", BIC);
                 break;
             }
         }
+        else if (format == JSON) {
+            G_json_object_set_null(predictor_object, "F");
+            G_json_object_set_null(predictor_object, "AIC");
+            G_json_object_set_null(predictor_object, "AICc");
+            G_json_object_set_null(predictor_object, "BIC");
+        }
+
+        if (format == JSON)
+            G_json_array_append_value(predictors_array, predictor_value);
     }
 
     for (i = 0; i < n_predictors; i++) {
@@ -675,6 +689,8 @@ int main(int argc, char *argv[])
     }
 
     if (format == JSON) {
+        G_json_object_set_value(root_object, "predictors", predictors_value);
+
         char *json_string = G_json_serialize_to_string_pretty(root_value);
         if (!json_string) {
             G_json_value_free(root_value);
