@@ -76,7 +76,8 @@ void print_python_long_flag(FILE *file, const char *key, const char *label,
     }
     fprintf(file, "%s", indent);
     G__md_print_escaped(file, "\t");
-    fprintf(file, "Default: *False*");
+    const char *flag_default = "*None*";
+    fprintf(file, "Default: %s", flag_default);
 }
 
 void print_python_tuple(FILE *file, const char *type, int num_items)
@@ -412,12 +413,13 @@ void G__md_print_python_short_version(FILE *file, const char *indent)
         fprintf(file, "%s    **flags**=*None*,\n", indent);
     }
 
+    const char *flag_default = "*None*";
     if (new_prompt)
-        fprintf(file, "%s    **overwrite**=*False*,\n", indent);
+        fprintf(file, "%s    **overwrite**=%s,\n", indent, flag_default);
 
-    fprintf(file, "%s    **verbose**=*False*,\n", indent);
-    fprintf(file, "%s    **quiet**=*False*,\n", indent);
-    fprintf(file, "%s    **superquiet**=*False*)\n", indent);
+    fprintf(file, "%s    **verbose**=%s,\n", indent, flag_default);
+    fprintf(file, "%s    **quiet**=%s,\n", indent, flag_default);
+    fprintf(file, "%s    **superquiet**=%s)\n", indent, flag_default);
 
     print_python_example(file, python_function, output_format_default, indent);
 }
