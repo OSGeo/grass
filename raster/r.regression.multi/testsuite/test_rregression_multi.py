@@ -84,6 +84,22 @@ class TestRRegressionMulti(TestCase):
         self.assertModule(module)
         self.assertEqual(module.outputs.stdout.splitlines(), expected)
 
+    def assert_json_equal(self, expected, actual):
+        if isinstance(expected, dict):
+            self.assertIsInstance(actual, dict)
+            self.assertCountEqual(expected.keys(), actual.keys())
+            for key in expected:
+                self.assert_json_equal(expected[key], actual[key])
+        elif isinstance(expected, list):
+            self.assertIsInstance(actual, list)
+            self.assertEqual(len(expected), len(actual))
+            for exp_item, act_item in zip(expected, actual):
+                self.assert_json_equal(exp_item, act_item)
+        elif isinstance(expected, float):
+            self.assertAlmostEqual(expected, actual, places=6)
+        else:
+            self.assertEqual(expected, actual)
+
     def test_json_format_multiple_predictors(self):
         """Test JSON output format with multiple predictors."""
         module = SimpleModule(
@@ -108,7 +124,7 @@ class TestRRegressionMulti(TestCase):
             "predictors": [
                 {
                     "name": "elevation",
-                    "coefficient": 0.001523404412774435,
+                    "b": 0.001523404412774435,
                     "F": 64152.65595722587,
                     "AIC": -3740385.0467569917,
                     "AICc": -3740385.0467569917,
@@ -116,7 +132,7 @@ class TestRRegressionMulti(TestCase):
                 },
                 {
                     "name": "aspect",
-                    "coefficient": 2.2269066721063329e-05,
+                    "b": 2.2269066721063329e-05,
                     "F": 4922.4809083809596,
                     "AIC": -3796011.6074610753,
                     "AICc": -3796011.6074610753,
@@ -124,7 +140,7 @@ class TestRRegressionMulti(TestCase):
                 },
                 {
                     "name": "slope",
-                    "coefficient": 0.0028529315695204355,
+                    "b": 0.0028529315695204355,
                     "F": 11927.479105518147,
                     "AIC": -3789117.0962874037,
                     "AICc": -3789117.0962874037,
@@ -133,13 +149,7 @@ class TestRRegressionMulti(TestCase):
             ],
         }
         output_json = json.loads(module.outputs.stdout)
-
-        self.assertCountEqual(list(expected.keys()), list(output_json.keys()))
-        for key, value in expected.items():
-            if isinstance(value, float):
-                self.assertAlmostEqual(value, output_json[key], places=6)
-            else:
-                self.assertEqual(value, output_json[key])
+        self.assert_json_equal(expected, output_json)
 
     def test_json_format_single_predictors(self):
         """Test JSON output format with single predictor."""
@@ -165,7 +175,7 @@ class TestRRegressionMulti(TestCase):
             "predictors": [
                 {
                     "name": "elevation",
-                    "coefficient": 0.0012947818375504828,
+                    "b": 0.0012947818375504828,
                     "F": None,
                     "AIC": None,
                     "AICc": None,
@@ -174,13 +184,7 @@ class TestRRegressionMulti(TestCase):
             ],
         }
         output_json = json.loads(module.outputs.stdout)
-
-        self.assertCountEqual(list(expected.keys()), list(output_json.keys()))
-        for key, value in expected.items():
-            if isinstance(value, float):
-                self.assertAlmostEqual(value, output_json[key], places=6)
-            else:
-                self.assertEqual(value, output_json[key])
+        self.assert_json_equal(expected, output_json)
 
 
 if __name__ == "__main__":

@@ -569,8 +569,7 @@ int main(int argc, char *argv[])
 
             G_json_object_set_string(predictor_object, "name",
                                      input_mapx->answers[i]);
-            G_json_object_set_number(predictor_object, "coefficient",
-                                     B[0][i + 1]);
+            G_json_object_set_number(predictor_object, "b", B[0][i + 1]);
             break;
         }
 
