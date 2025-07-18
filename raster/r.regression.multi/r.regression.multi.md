@@ -114,7 +114,7 @@ Possible JSON Output:
  "predictors": [
   {
    "name": "elevation",
-   "coefficient": 0.001523,
+   "b": 0.001523,
    "F": 64152.655957,
    "AIC": -3740385.046757,
    "AICc": -3740385.046757,
@@ -122,7 +122,7 @@ Possible JSON Output:
   },
   {
    "name": "aspect",
-   "coefficient": 2.2e-05,
+   "b": 2.2e-05,
    "F": 4922.480908,
    "AIC": -3796011.607461,
    "AICc": -3796011.607461,
@@ -130,7 +130,7 @@ Possible JSON Output:
   },
   {
    "name": "slope",
-   "coefficient": 0.002853,
+   "b": 0.002853,
    "F": 11927.479106,
    "AIC": -3789117.096287,
    "AICc": -3789117.096287,
