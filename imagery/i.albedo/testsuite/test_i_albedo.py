@@ -114,13 +114,13 @@ class TestIAlbedo(TestCase):
         std_stats = gs.parse_command("r.univar", map="albedo_standard", format="json")
         agg_stats = gs.parse_command("r.univar", map="albedo_aggressive", format="json")
         self.assertLess(
-            agg_stats[0]["max"] - agg_stats[0]["min"],
-            std_stats[0]["max"] - std_stats[0]["min"],
+            agg_stats["max"] - agg_stats["min"],
+            std_stats["max"] - std_stats["min"],
             "Aggressive mode should reduce dynamic range",
         )
         self.assertNotAlmostEqual(
-            std_stats[0]["mean"],
-            agg_stats[0]["mean"],
+            std_stats["mean"],
+            agg_stats["mean"],
             places=3,
             msg="Aggressive mode should shift the mean",
         )
@@ -144,8 +144,8 @@ class TestIAlbedo(TestCase):
             "r.mapcalc", expression="diff=albedo_high-2*albedo_low", overwrite=True
         )
         diff_stats = gs.parse_command("r.univar", map="diff", format="json")
-        max_diff = diff_stats[0]["max"]
-        min_diff = diff_stats[0]["min"]
+        max_diff = diff_stats["max"]
+        min_diff = diff_stats["min"]
         self.assertAlmostEqual(
             max_diff,
             0.0,

@@ -207,7 +207,8 @@ def acquire_mapset_lock(
     :param env: system environment variables
 
     The function assumes the `GISBASE` variable is in the environment. The variable is
-    used to find the lock program. If *env* is not provided, `os.environ` is used.
+    used to find the lock program. If *env* is not provided,
+    :external:py:data:`os.environ` is used.
     """
     if process_id is None:
         process_id = os.getpid()
@@ -222,7 +223,7 @@ def acquire_mapset_lock(
     start_time = time.time()
     while True:
         return_code = subprocess.run(
-            [locker_path, lock_file, f"{process_id}"], check=False
+            [locker_path, lock_file, f"{process_id}"], check=False, env=env
         ).returncode
         elapsed_time = time.time() - start_time
         if return_code == 0 or elapsed_time >= timeout or total_sleep >= timeout:
@@ -268,7 +269,7 @@ def lock_mapset(
 ):
     """Acquire a lock for a mapset and return name of new lock file
 
-    Raises MapsetLockingException when it is not possible to acquire a lock for the
+    Raises :py:exc:`MapsetLockingException` when it is not possible to acquire a lock for the
     given mapset either because of existing lock or due to insufficient permissions.
     A corresponding localized message is given in the exception.
 
@@ -281,6 +282,11 @@ def lock_mapset(
 
     Assumes that the runtime is set up (specifically that GISBASE is in
     the environment). Environment can be provided as *env*.
+
+    :raises ~grass.app.MapsetLockingException:
+        Raised when it is not possible to acquire a lock for the
+        given mapset either because of existing lock or due to insufficient permissions.
+        A corresponding localized message is given in the exception.
     """
     if process_id is None:
         process_id = os.getpid()

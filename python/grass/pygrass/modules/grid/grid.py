@@ -410,8 +410,8 @@ class GridModule:
     :type mapset_prefix: str
     :param patch_backend: "r.patch", "RasterRow", or None for for default
     :type patch_backend: None or str
-    :param run_: if False only instantiate the object
-    :type run_: bool
+    :param run\\_: if False only instantiate the object
+    :type run\\_: bool
     :param args: give all the parameters to the command
     :param kargs: give all the parameters to the command
 

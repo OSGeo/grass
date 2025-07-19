@@ -153,22 +153,28 @@ class KeyValue(dict[str, VT]):
     """A general-purpose key-value store.
 
     KeyValue is a subclass of dict, but also allows entries to be read and
-    written using attribute syntax. Example:
+    written using attribute syntax.
 
-    >>> reg = KeyValue()
-    >>> reg["north"] = 489
-    >>> reg.north
-    489
-    >>> reg.south = 205
-    >>> reg["south"]
-    205
+    :Example:
+      .. code-block:: pycon
+
+        >>> reg = KeyValue()
+        >>> reg["north"] = 489
+        >>> reg.north
+        489
+        >>> reg.south = 205
+        >>> reg["south"]
+        205
 
     The keys of KeyValue are strings. To use other key types, use other mapping types.
     To use the attribute syntax, the keys must be valid Python attribute names.
     """
 
     def __getattr__(self, key: str) -> VT:
-        return self[key]
+        try:
+            return self[key]
+        except KeyError:
+            raise AttributeError(key)
 
     def __setattr__(self, key: str, value: VT) -> None:
         self[key] = value
@@ -190,7 +196,7 @@ def decode(bytes_: AnyStr, encoding: str | None = None) -> str:
 
     No-op if parameter is not bytes (assumed unicode string).
 
-    :param bytes bytes_: the bytes to decode
+    :param bytes\\_: the bytes to decode
     :param encoding: encoding to be used, default value is None
 
     Example
@@ -245,6 +251,10 @@ def encode(string: AnyStr, encoding: str | None = None) -> bytes:
 def text_to_string(text: AnyStr, encoding: str | None = None) -> str:
     """Convert text to str. Useful when passing text into environments,
     in Python 2 it needs to be bytes on Windows, in Python 3 in needs unicode.
+
+    :param text: The text to convert to string
+    :param encoding: The encoding to be used to decode the text that will be converted
+    :returns: A (unicode) string
     """
     return decode(text, encoding=encoding)
 
@@ -599,7 +609,7 @@ def append_node_pid(name):
 
     >>> append_node_pid("tmp_raster_1")
 
-    ..note::
+    .. note::
 
         Before you use this function for creating temporary files (i.e., normal
         files on disk, not maps and other mapset elements), see functions
@@ -632,7 +642,7 @@ def append_uuid(name):
 
     >>> append_uuid("tmp")
 
-    ..note::
+    .. note::
 
         See the note about creating temporary files in the
         :func:`append_node_pid()` description.
@@ -647,12 +657,12 @@ def append_random(name, suffix_length=None, total_length=None):
     >>> append_random("tmp", 8)
     >>> append_random("tmp", total_length=16)
 
-    ..note::
+    .. note::
 
         Note that this will be influenced by the random seed set for the Python
         random package.
 
-    ..note::
+    .. note::
 
         See the note about creating temporary files in the
         :func:`append_node_pid()` description.

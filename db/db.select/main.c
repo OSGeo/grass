@@ -101,7 +101,7 @@ int main(int argc, char **argv)
     }
 
     if (parms.test_only)
-        G_verbose_message(_("Test %s."), stat ? _("failed") : _("succeeded"));
+        G_verbose_message(stat ? _("Test failed.") : _("Test succeeded."));
 
     db_close_database(driver);
     db_shutdown_driver(driver);

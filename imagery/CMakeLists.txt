@@ -138,7 +138,7 @@ build_program_in_subdir(
   ${LIBM})
 
 build_program_in_subdir(i.group DEPENDS grass_imagery grass_raster grass_vector
-                        grass_gis)
+                        grass_gis grass_parson)
 
 build_program_in_subdir(i.his.rgb DEPENDS grass_imagery grass_raster
                         grass_vector grass_gis)

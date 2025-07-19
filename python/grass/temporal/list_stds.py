@@ -55,7 +55,7 @@ def get_dataset_list(
     :return: A dictionary with the rows of the SQL query for each
              available mapset
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> import grass.temporal as tgis
         >>> tgis.core.init()
@@ -78,7 +78,6 @@ def get_dataset_list(
         >>> for row in rows:
         ...     if row["name"] == name:
         ...         print(True)
-        ...
         True
         >>> stds_list = tgis.list_stds.get_dataset_list(
         ...     "strds",
@@ -90,7 +89,6 @@ def get_dataset_list(
         >>> for row in rows:
         ...     if row["name"] == name and row["mapset"] == mapset:
         ...         print(True)
-        ...
         True
         >>> check = sp.delete()
 
