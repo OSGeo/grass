@@ -24,7 +24,7 @@
 /* For rowio */
 int rowio_get_row(int fd, void *buf, int row, int buf_len)
 {
-    if (lseek(fd, ((off_t)row) * buf_len, SEEK_SET) == (off_t)-1) {
+    if (lseek(fd, ((off_t)row) * buf_len, SEEK_SET) == -1) {
         int err = errno;
         G_fatal_error(_("Seek error on temp file. %d: %s"), err, strerror(err));
     }
@@ -44,7 +44,7 @@ int rowio_get_row(int fd, void *buf, int row, int buf_len)
 int rowio_put_row(int fd, const void *buf, int row, int buf_len)
 {
     // can't use G_fseek, as rowio operates on file descriptors
-    if (lseek(fd, ((off_t)row) * buf_len, SEEK_SET) == (off_t)-1) {
+    if (lseek(fd, ((off_t)row) * buf_len, SEEK_SET) == -1) {
         int err = errno;
         G_fatal_error(_("Seek error on temp file. %d: %s"), err, strerror(err));
     }

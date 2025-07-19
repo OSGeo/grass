@@ -80,7 +80,7 @@ static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
 
     /* seek tile and read it into buffer */
 
-    if (lseek(map->cacheFD, offs, SEEK_SET) == (off_t)-1) {
+    if (lseek(map->cacheFD, offs, SEEK_SET) == -1) {
         Rast3d_error("cacheWrite_readFun: can't position file");
         return 0;
     }
@@ -107,7 +107,7 @@ static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
 
     offsLast = map->cachePosLast * (nBytes + sizeof(int));
 
-    if (lseek(map->cacheFD, offsLast, SEEK_SET) == (off_t)-1) {
+    if (lseek(map->cacheFD, offsLast, SEEK_SET) == -1) {
         Rast3d_error("cacheWrite_readFun: can't position file");
         return 0;
     }
@@ -117,7 +117,7 @@ static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
         return 0;
     }
 
-    if (lseek(map->cacheFD, offs, SEEK_SET) == (off_t)-1) {
+    if (lseek(map->cacheFD, offs, SEEK_SET) == -1) {
         Rast3d_error("cacheWrite_readFun: can't position file");
         return 0;
     }
@@ -152,7 +152,7 @@ static int cacheWrite_writeFun(int tileIndex, const void *tileBuf,
     nBytes = map->tileSize * map->numLengthIntern;
     offs = map->cachePosLast * (nBytes + sizeof(int));
 
-    if (lseek(map->cacheFD, offs, SEEK_SET) == (off_t)-1) {
+    if (lseek(map->cacheFD, offs, SEEK_SET) == -1) {
         Rast3d_error("cacheWrite_writeFun: can't position file");
         return 0;
     }
@@ -304,7 +304,7 @@ int Rast3d_flush_all_tiles(RASTER3D_Map *map)
     while (map->cachePosLast >= 0) {
         offs = map->cachePosLast * (nBytes + sizeof(int)) + nBytes;
 
-        if (lseek(map->cacheFD, offs, SEEK_SET) == (off_t)-1) {
+        if (lseek(map->cacheFD, offs, SEEK_SET) == -1) {
             Rast3d_error("Rast3d_flush_all_tiles: can't position file");
             return 0;
         }

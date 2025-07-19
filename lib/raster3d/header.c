@@ -445,8 +445,7 @@ int Rast3d_fill_header(RASTER3D_Map *map, int operation, int compression,
 
     map->offset = nofHeaderBytes;
 
-    if ((map->fileEndPtr = lseek(map->data_fd, (long)0, SEEK_END)) ==
-        (off_t)-1) {
+    if ((map->fileEndPtr = lseek(map->data_fd, (long)0, SEEK_END)) == -1) {
         Rast3d_error("Rast3d_fill_header: can't position file");
         return 0;
     }

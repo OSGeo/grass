@@ -54,12 +54,11 @@ void ppupdate(int fe, int fb, int nl, int nbasins, struct band3 *elev,
         list[i].trace = 0;
     }
 
-    if (lseek(fe, 0, SEEK_SET) == (off_t)-1 ||
-        lseek(fb, 0, SEEK_SET) == (off_t)-1) {
+    if (lseek(fe, 0, SEEK_SET) == -1 || lseek(fb, 0, SEEK_SET) == -1) {
         int err = errno;
         /* GTC seek refers to reading/writing from a different position
          * in a file */
-        G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+        G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
     }
 
     advance_band3(fb, basins);
@@ -209,12 +208,11 @@ void ppupdate(int fe, int fb, int nl, int nbasins, struct band3 *elev,
     }
 
     /* fill all basins up to the elevation of their lowest bounding elevation */
-    if (lseek(fe, 0, SEEK_SET) == (off_t)-1 ||
-        lseek(fb, 0, SEEK_SET) == (off_t)-1) {
+    if (lseek(fe, 0, SEEK_SET) == -1 || lseek(fb, 0, SEEK_SET) == -1) {
         int err = errno;
         /* GTC seek refers to reading/writing from a different position
          * in a file */
-        G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+        G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
     }
     for (i = 0; i < nl; i += 1) {
         if (read(fe, elev->b[1], elev->sz) < 0)
@@ -230,11 +228,11 @@ void ppupdate(int fe, int fb, int nl, int nbasins, struct band3 *elev,
             this_elev = elev->b[1] + j * bpe();
             memcpy(this_elev, get_max(this_elev, list[ii].pp), bpe());
         }
-        if (lseek(fe, -elev->sz, SEEK_CUR) == (off_t)-1) {
+        if (lseek(fe, -elev->sz, SEEK_CUR) == -1) {
             int err = errno;
             /* GTC seek refers to reading/writing from a different position
              * in a file */
-            G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+            G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
         }
         if (write(fe, elev->b[1], elev->sz) < 0)
             G_fatal_error(_("File writing error in %s() %d:%s"), __func__,

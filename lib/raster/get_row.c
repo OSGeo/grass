@@ -93,7 +93,7 @@ static void read_data_fp_compressed(int fd, int row, unsigned char *data_buf,
     size_t bufsize = fcb->cellhd.cols * fcb->nbytes;
     int ret;
 
-    if (lseek(fcb->data_fd, t1, SEEK_SET) == (off_t)-1)
+    if (lseek(fcb->data_fd, t1, SEEK_SET) == -1)
         G_fatal_error(
             _("Error seeking fp raster data file for row %d of <%s>: %s"), row,
             fcb->name, strerror(errno));
@@ -138,7 +138,7 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
     unsigned char *cmp, *cmp2;
     int n;
 
-    if (lseek(fcb->data_fd, t1, SEEK_SET) == (off_t)-1)
+    if (lseek(fcb->data_fd, t1, SEEK_SET) == -1)
         G_fatal_error(
             _("Error seeking raster data file for row %d of <%s>: %s"), row,
             fcb->name, strerror(errno));
@@ -192,7 +192,7 @@ static void read_data_uncompressed(int fd, int row, unsigned char *data_buf,
 
     *nbytes = fcb->nbytes;
 
-    if (lseek(fcb->data_fd, (off_t)row * bufsize, SEEK_SET) == (off_t)-1)
+    if (lseek(fcb->data_fd, (off_t)row * bufsize, SEEK_SET) == -1)
         G_fatal_error(_("Error reading raster data for row %d of <%s>"), row,
                       fcb->name);
 
@@ -854,7 +854,7 @@ static int read_null_bits_compressed(int null_fd, unsigned char *flags, int row,
     unsigned char *compressed_buf;
     int res;
 
-    if (lseek(null_fd, t1, SEEK_SET) == (off_t)-1)
+    if (lseek(null_fd, t1, SEEK_SET) == -1)
         G_fatal_error(
             _("Error seeking compressed null data for row %d of <%s>"), row,
             fcb->name);
@@ -914,7 +914,7 @@ int Rast__read_null_bits(int fd, int row, unsigned char *flags)
 
     offset = (off_t)size * R;
 
-    if (lseek(null_fd, offset, SEEK_SET) == (off_t)-1)
+    if (lseek(null_fd, offset, SEEK_SET) == -1)
         G_fatal_error(_("Error seeking null row %d for <%s>"), R, fcb->name);
 
     if (read(null_fd, flags, size) != size)

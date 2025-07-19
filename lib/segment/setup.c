@@ -14,7 +14,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
+#include <errno.h>
+
 #include <grass/gis.h>
+#include <grass/glocale.h>
+
 #include "local_proto.h"
 
 /**
@@ -48,6 +53,13 @@ int seg_setup(SEGMENT *SEG)
     /* This is close to the beginning of the file, so doesn't need to be an
      * off_t */
     SEG->offset = (int)lseek(SEG->fd, 0L, SEEK_CUR);
+    if (SEG->offset == -1) {
+        int err = errno;
+        /* GTC seek refers to reading/writing from a different position
+         * in a file */
+        G_warning(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+        return -1;
+    }
 
     SEG->spr = SEG->ncols / SEG->scols;
     SEG->spill = SEG->ncols % SEG->scols;

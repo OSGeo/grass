@@ -67,16 +67,22 @@ int put_a_row(int row, CELL *buf)
 
 static int read_row(int file, void *buf, int row, int buf_len)
 {
-    if (lseek(file, ((off_t)row) * buf_len, 0) == (off_t)-1) {
-        G_fatal_error(_("Unable to seek: %s"), strerror(errno));
+    if (lseek(file, ((off_t)row) * buf_len, 0) == -1) {
+        int err = errno;
+        /* GTC seek refers to reading/writing from a different position
+         * in a file */
+        G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
     }
     return (read(file, buf, buf_len) == buf_len);
 }
 
 static int write_row(int file, const void *buf, int row, int buf_len)
 {
-    if (lseek(file, ((off_t)row) * buf_len, 0) == (off_t)-1) {
-        G_fatal_error(_("Unable to seek: %s"), strerror(errno));
+    if (lseek(file, ((off_t)row) * buf_len, 0) == -1) {
+        int err = errno;
+        /* GTC seek refers to reading/writing from a different position
+         * in a file */
+        G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
     }
     return (write(file, buf, buf_len) == buf_len);
 }

@@ -775,11 +775,11 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
             if (val_row != stackp->row) {
                 if (lseek(val_fd,
                           (off_t)stackp->row * window->cols * sizeof(DCELL),
-                          SEEK_SET) == (off_t)-1) {
+                          SEEK_SET) == -1) {
                     int err = errno;
                     /* GTC seek refers to reading/writing from a different
                      * position in a file */
-                    G_fatal_error(_("Unable to seek: %d %s"), err,
+                    G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
                                   strerror(err));
                 }
                 if (read(val_fd, val_buf, window->cols * sizeof(DCELL)) !=
@@ -812,11 +812,11 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
             /* find direction from this point */
             if (dir_row != next_row) {
                 if (lseek(dir_fd, (off_t)next_row * window->cols * sizeof(CELL),
-                          SEEK_SET) == (off_t)-1) {
+                          SEEK_SET) == -1) {
                     int err = errno;
                     /* GTC seek refers to reading/writing from a different
                      * position in a file */
-                    G_fatal_error(_("Unable to seek: %d %s"), err,
+                    G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
                                   strerror(err));
                 }
                 if (read(dir_fd, dir_buf, window->cols * sizeof(CELL)) !=
@@ -946,12 +946,12 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
                             if (lseek(val_fd,
                                       (off_t)next_row * window->cols *
                                           sizeof(DCELL),
-                                      SEEK_SET) == (off_t)-1) {
+                                      SEEK_SET) == -1) {
                                 int err = errno;
                                 /* GTC seek refers to reading/writing from a
                                  * different position in a file */
-                                G_fatal_error(_("Unable to seek: %d %s"), err,
-                                              strerror(err));
+                                G_fatal_error(_("Unable to seek: %1$d %2$s"),
+                                              err, strerror(err));
                             }
                             if (read(val_fd, val_buf,
                                      window->cols * sizeof(DCELL)) !=
@@ -1065,11 +1065,11 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
             if (val_row != next_row) {
                 if (lseek(val_fd,
                           (off_t)next_row * window->cols * sizeof(DCELL),
-                          SEEK_SET) == (off_t)-1) {
+                          SEEK_SET) == -1) {
                     int err = errno;
                     /* GTC seek refers to reading/writing from a different
                      * position in a file */
-                    G_fatal_error(_("Unable to seek: %d %s"), err,
+                    G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
                                   strerror(err));
                 }
                 if (read(val_fd, val_buf, window->cols * sizeof(DCELL)) !=
@@ -1097,11 +1097,12 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
         /* find the direction recorded at row,col */
         if (dir_row != next_row) {
             if (lseek(dir_fd, (off_t)next_row * window->cols * sizeof(DCELL),
-                      SEEK_SET) == (off_t)-1) {
+                      SEEK_SET) == -1) {
                 int err = errno;
                 /* GTC seek refers to reading/writing from a different position
                  * in a file */
-                G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+                G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
+                              strerror(err));
             }
             if (read(dir_fd, dir_buf, window->cols * sizeof(DCELL)) !=
                 window->cols * (int)sizeof(DCELL)) {
@@ -1201,11 +1202,11 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
                         if (lseek(val_fd,
                                   (off_t)next_row * window->cols *
                                       sizeof(DCELL),
-                                  SEEK_SET) == (off_t)-1) {
+                                  SEEK_SET) == -1) {
                             int err = errno;
                             /* GTC seek refers to reading/writing from a
                              * different position in a file */
-                            G_fatal_error(_("Unable to seek: %d %s"), err,
+                            G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
                                           strerror(err));
                         }
                         if (read(val_fd, val_buf,

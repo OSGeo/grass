@@ -21,7 +21,7 @@ static int Rast3d_readIndex(RASTER3D_Map *map)
 
     indexLength = indexLast - map->indexOffset;
 
-    if (lseek(map->data_fd, map->indexOffset, SEEK_SET) == (off_t)-1) {
+    if (lseek(map->data_fd, map->indexOffset, SEEK_SET) == -1) {
         Rast3d_error("Rast3d_readIndex: can't position file");
         return 0;
     }

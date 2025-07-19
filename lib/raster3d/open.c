@@ -102,7 +102,7 @@ void *Rast3d_open_cell_old(const char *name, const char *mapset,
         return (void *)NULL;
     }
 
-    if (lseek(map->data_fd, (long)0, SEEK_SET) == (off_t)-1) {
+    if (lseek(map->data_fd, (long)0, SEEK_SET) == -1) {
         Rast3d_error(_("Rast3d_open_cell_old: can't rewind file"));
         return (void *)NULL;
     }
@@ -300,11 +300,11 @@ void *Rast3d_open_cell_new(const char *name, int typeIntern, int cache,
 
     /* can't use a constant since this depends on sizeof (long) */
     nofHeaderBytes = lseek(map->data_fd, (long)0, SEEK_CUR);
-    if (nofHeaderBytes == (off_t)-1) {
+    if (nofHeaderBytes == -1) {
         int err = errno;
         /* GTC seek refers to reading/writing from a different position
          * in a file */
-        Rast3d_error(_("Unable to seek: %d %s"), err, strerror(err));
+        Rast3d_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
         return (void *)NULL;
     }
 

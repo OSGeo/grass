@@ -91,7 +91,7 @@ static int close_cell_new(RASTER3D_Map *map)
     /* opening time */
 
     if (lseek(map->data_fd, (long)(map->offset - sizeof(int) - sizeof(long)),
-              SEEK_SET) == (off_t)-1) {
+              SEEK_SET) == -1) {
         G_warning(_("Unable to position file"));
         return 0;
     }

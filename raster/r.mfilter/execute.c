@@ -77,11 +77,11 @@ int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
     ccount = ncols - (size - 1);
 
     /* rewind output */
-    if (lseek(out[MASTER], 0L, SEEK_SET) == (off_t)-1) {
+    if (lseek(out[MASTER], 0L, SEEK_SET) == -1) {
         int err = errno;
         /* GTC seek refers to reading/writing from a different position
          * in a file */
-        G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+        G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
     }
 
     /* copy border rows to output */
@@ -110,12 +110,12 @@ int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
             end = rcount * (id + 1) / nprocs;
             cellp = cell[id];
             starty += start * dy;
-            if (lseek(out[id], (off_t)buflen * (mid + start), SEEK_SET) ==
-                (off_t)-1) {
+            if (lseek(out[id], (off_t)buflen * (mid + start), SEEK_SET) == -1) {
                 int err = errno;
                 /* GTC seek refers to reading/writing from a different position
                  * in a file */
-                G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+                G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
+                              strerror(err));
             }
         }
 #endif
@@ -163,12 +163,11 @@ int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
     }
     G_percent(work, rcount, 2);
     starty = rcount * dy;
-    if (lseek(out[MASTER], (off_t)buflen * (mid + rcount), SEEK_SET) ==
-        (off_t)-1) {
+    if (lseek(out[MASTER], (off_t)buflen * (mid + rcount), SEEK_SET) == -1) {
         int err = errno;
         /* GTC seek refers to reading/writing from a different position
          * in a file */
-        G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+        G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
     }
 
     /* copy border rows to output */

@@ -510,11 +510,12 @@ int main(int argc, char **argv)
                 thispoint = thispoint->next;
                 continue;
             }
-            if (lseek(fe, (off_t)thispoint->row * bsz, SEEK_SET) == (off_t)-1) {
+            if (lseek(fe, (off_t)thispoint->row * bsz, SEEK_SET) == -1) {
                 int err = errno;
                 /* GTC seek refers to reading/writing from a different position
                  * in a file */
-                G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+                G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
+                              strerror(err));
             }
             read(fe, in_buf, bsz);
             memcpy(&thispoint->value, (char *)in_buf + bpe() * thispoint->col,
@@ -634,12 +635,11 @@ struct point *drain(int fd, struct point *list, int nrow, int ncol)
     while (go) {
 
         /* find flow direction at this point */
-        if (lseek(fd, (off_t)list->row * ncol * sizeof(CELL), SEEK_SET) ==
-            (off_t)-1) {
+        if (lseek(fd, (off_t)list->row * ncol * sizeof(CELL), SEEK_SET) == -1) {
             int err = errno;
             /* GTC seek refers to reading/writing from a different position
              * in a file */
-            G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+            G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
         }
         read(fd, dir, ncol * sizeof(CELL));
         direction = *(dir + list->col);
@@ -712,11 +712,11 @@ struct point *drain_cost(int dir_fd, struct point *list, int nrow, int ncol)
          */
         /* find the direction recorded at row,col */
         if (lseek(dir_fd, (off_t)list->row * ncol * sizeof(DCELL), SEEK_SET) ==
-            (off_t)-1) {
+            -1) {
             int err = errno;
             /* GTC seek refers to reading/writing from a different position
              * in a file */
-            G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+            G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
         }
         read(dir_fd, dir_buf, ncol * sizeof(DCELL));
         direction = *(dir_buf + list->col);

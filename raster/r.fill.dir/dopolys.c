@@ -53,11 +53,11 @@ int dopolys(int fd, int fm, int nl, int ns)
 
     found = 0;
 
-    if (lseek(fd, bufsz, SEEK_SET) == (off_t)-1) {
+    if (lseek(fd, bufsz, SEEK_SET) == -1) {
         int err = errno;
         /* GTC seek refers to reading/writing from a different position
          * in a file */
-        G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+        G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
     }
     for (i = 1; i < nl - 1; i += 1) {
         if (read(fd, dir, bufsz) < 0)
@@ -94,11 +94,11 @@ int dopolys(int fd, int fm, int nl, int ns)
               flag);
 
     /* Compose a new raster map to contain the resulting assignments */
-    if (lseek(fm, 0, SEEK_SET) == (off_t)-1) {
+    if (lseek(fm, 0, SEEK_SET) == -1) {
         int err = errno;
         /* GTC seek refers to reading/writing from a different position
          * in a file */
-        G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+        G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
     }
     cnt = 0;
     for (i = 0; i < nl; i += 1) {

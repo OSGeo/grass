@@ -164,7 +164,7 @@ int Rast3d_read_tile(RASTER3D_Map *map, int tileIndex, void *tile, int type)
                                                     &cols, &depths, &xRedundant,
                                                     &yRedundant, &zRedundant);
 
-    if (lseek(map->data_fd, map->index[tileIndex], SEEK_SET) == (off_t)-1) {
+    if (lseek(map->data_fd, map->index[tileIndex], SEEK_SET) == -1) {
         Rast3d_error("Rast3d_read_tile: can't position file");
         return 0;
     }

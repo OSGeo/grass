@@ -107,11 +107,11 @@ void resolve(int fd, int nl, struct band3 *bnd)
     isz = sizeof(CELL);
 
     /* select a direction when there are multiple non-flat links */
-    if (lseek(fd, bnd->sz, SEEK_SET) == (off_t)-1) {
+    if (lseek(fd, bnd->sz, SEEK_SET) == -1) {
         int err = errno;
         /* GTC seek refers to reading/writing from a different position
          * in a file */
-        G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+        G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
     }
     for (i = 1; i < nl - 1; i += 1) {
         if (read(fd, bnd->b[0], bnd->sz) < 0)
@@ -126,11 +126,11 @@ void resolve(int fd, int nl, struct band3 *bnd)
                 cvalue = select_dir(cvalue);
             memcpy(bnd->b[0] + offset, &cvalue, isz);
         }
-        if (lseek(fd, -bnd->sz, SEEK_CUR) == (off_t)-1) {
+        if (lseek(fd, -bnd->sz, SEEK_CUR) == -1) {
             int err = errno;
             /* GTC seek refers to reading/writing from a different position
              * in a file */
-            G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+            G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
         }
         if (write(fd, bnd->b[0], bnd->sz) < 0)
             G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
@@ -149,20 +149,21 @@ void resolve(int fd, int nl, struct band3 *bnd)
         activity = 0;
         G_verbose_message(_("Downward pass %d"), pass);
 
-        if (lseek(fd, 0, SEEK_SET) == (off_t)-1) {
+        if (lseek(fd, 0, SEEK_SET) == -1) {
             int err = errno;
             /* GTC seek refers to reading/writing from a different position
              * in a file */
-            G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+            G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
         }
         advance_band3(fd, bnd);
         advance_band3(fd, bnd);
         for (i = 1; i < nl - 1; i++) {
-            if (lseek(fd, (off_t)(i + 1) * bnd->sz, SEEK_SET) == (off_t)-1) {
+            if (lseek(fd, (off_t)(i + 1) * bnd->sz, SEEK_SET) == -1) {
                 int err = errno;
                 /* GTC seek refers to reading/writing from a different position
                  * in a file */
-                G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+                G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
+                              strerror(err));
             }
             advance_band3(fd, bnd);
 
@@ -182,11 +183,12 @@ void resolve(int fd, int nl, struct band3 *bnd)
                 }
             } while (goagain);
 
-            if (lseek(fd, (off_t)i * bnd->sz, SEEK_SET) == (off_t)-1) {
+            if (lseek(fd, (off_t)i * bnd->sz, SEEK_SET) == -1) {
                 int err = errno;
                 /* GTC seek refers to reading/writing from a different position
                  * in a file */
-                G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+                G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
+                              strerror(err));
             }
             if (write(fd, bnd->b[1], bnd->sz) < 0)
                 G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
@@ -202,20 +204,21 @@ void resolve(int fd, int nl, struct band3 *bnd)
         activity = 0;
         G_verbose_message(_("Upward pass %d"), pass);
 
-        if (lseek(fd, (off_t)(nl - 1) * bnd->sz, SEEK_SET) == (off_t)-1) {
+        if (lseek(fd, (off_t)(nl - 1) * bnd->sz, SEEK_SET) == -1) {
             int err = errno;
             /* GTC seek refers to reading/writing from a different position
              * in a file */
-            G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+            G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
         }
         retreat_band3(fd, bnd);
         retreat_band3(fd, bnd);
         for (i = nl - 2; i >= 1; i -= 1) {
-            if (lseek(fd, (off_t)(i - 1) * bnd->sz, SEEK_SET) == (off_t)-1) {
+            if (lseek(fd, (off_t)(i - 1) * bnd->sz, SEEK_SET) == -1) {
                 int err = errno;
                 /* GTC seek refers to reading/writing from a different position
                  * in a file */
-                G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+                G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
+                              strerror(err));
             }
             retreat_band3(fd, bnd);
 
@@ -235,11 +238,12 @@ void resolve(int fd, int nl, struct band3 *bnd)
                 }
             } while (goagain);
 
-            if (lseek(fd, (off_t)i * bnd->sz, SEEK_SET) == (off_t)-1) {
+            if (lseek(fd, (off_t)i * bnd->sz, SEEK_SET) == -1) {
                 int err = errno;
                 /* GTC seek refers to reading/writing from a different position
                  * in a file */
-                G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+                G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
+                              strerror(err));
             }
             if (write(fd, bnd->b[1], bnd->sz) < 0)
                 G_fatal_error(_("File writing error in %s() %d:%s"), __func__,

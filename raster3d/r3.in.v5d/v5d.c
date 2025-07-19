@@ -1187,11 +1187,11 @@ static int read_comp_header(int f, v5dstruct *v)
     unsigned int id;
 
     /* reset file position to start of file */
-    if (lseek(f, 0, SEEK_SET) == (off_t)-1) {
+    if (lseek(f, 0, SEEK_SET) == -1) {
         int err = errno;
         /* GTC seek refers to reading/writing from a different position
          * in a file */
-        G_warning(_("Unable to seek: %d %s"), err, strerror(err));
+        G_warning(_("Unable to seek: %1$d %2$s"), err, strerror(err));
         return 0;
     }
 
@@ -1294,7 +1294,7 @@ static int read_comp_header(int f, v5dstruct *v)
                 read_float4(f, &gb);
 
                 /* skip ahead by 'gridsize' bytes */
-                if (lseek(f, gridsize, SEEK_CUR) == (off_t)-1) {
+                if (lseek(f, gridsize, SEEK_CUR) == -1) {
                     G_warning(_("Error: Unexpected end of file, file may be "
                                 "corrupted."));
                     return 0;
@@ -1439,11 +1439,11 @@ static int read_comp_grid(v5dstruct *v, int time, int var, float *ga, float *gb,
 
     /* move to position in file */
     pos = grid_position(v, time, var);
-    if (lseek(f, pos, SEEK_SET) == (off_t)-1) {
+    if (lseek(f, pos, SEEK_SET) == -1) {
         int err = errno;
         /* GTC seek refers to reading/writing from a different position
          * in a file */
-        G_warning(_("Unable to seek: %d %s"), err, strerror(err));
+        G_warning(_("Unable to seek: %1$d %2$s"), err, strerror(err));
         return 0;
     }
 
@@ -1518,15 +1518,15 @@ static int read_comp_grid(v5dstruct *v, int time, int var, float *ga, float *gb,
  */
 static int read_v5d_header(v5dstruct *v)
 {
-#define SKIP(N)                                                        \
-    do {                                                               \
-        if (lseek(f, N, SEEK_CUR) == (off_t) - 1) {                    \
-            int err = errno;                                           \
-            /* GTC seek refers to reading/writing from a               \
-             * different position in a file */                         \
-            G_warning(_("Unable to seek: %d %s"), err, strerror(err)); \
-            return 0;                                                  \
-        }                                                              \
+#define SKIP(N)                                                            \
+    do {                                                                   \
+        if (lseek(f, N, SEEK_CUR) == (off_t) - 1) {                        \
+            int err = errno;                                               \
+            /* GTC seek refers to reading/writing from a                   \
+             * different position in a file */                             \
+            G_warning(_("Unable to seek: %1$d %2$s"), err, strerror(err)); \
+            return 0;                                                      \
+        }                                                                  \
     } while (0)
     int end_of_header = 0;
     unsigned int id;
@@ -1846,11 +1846,11 @@ static int read_v5d_header(v5dstruct *v)
         case TAG_END:
             /* end of header */
             end_of_header = 1;
-            if (lseek(f, length, SEEK_CUR) == (off_t)-1) {
+            if (lseek(f, length, SEEK_CUR) == -1) {
                 int err = errno;
                 /* GTC seek refers to reading/writing from a different position
                  * in a file */
-                G_warning(_("Unable to seek: %d %s"), err, strerror(err));
+                G_warning(_("Unable to seek: %1$d %2$s"), err, strerror(err));
                 return 0;
             }
             break;
@@ -1858,8 +1858,11 @@ static int read_v5d_header(v5dstruct *v)
         default:
             /* unknown tag, skip to next tag */
             printf("Unknown tag: %d  length=%d\n", tag, length);
-            if (lseek(f, length, SEEK_CUR) == (off_t)-1) {
-                G_warning(_("Unable to seek: %s"), strerror(errno));
+            if (lseek(f, length, SEEK_CUR) == -1) {
+                int err = errno;
+                /* GTC seek refers to reading/writing from a different position
+                 * in a file */
+                G_warning(_("Unable to seek: %1$d %2$s"), err, strerror(err));
                 return 0;
             }
             break;
@@ -1951,11 +1954,11 @@ int v5dReadCompressedGrid(v5dstruct *v, int time, int var, float *ga, float *gb,
 
     /* move to position in file */
     pos = grid_position(v, time, var);
-    if (lseek(v->FileDesc, pos, SEEK_SET) == (off_t)-1) {
+    if (lseek(v->FileDesc, pos, SEEK_SET) == -1) {
         int err = errno;
         /* GTC seek refers to reading/writing from a different position
          * in a file */
-        G_warning(_("Unable to seek: %d %s"), err, strerror(err));
+        G_warning(_("Unable to seek: %1$d %2$s"), err, strerror(err));
         return 0;
     }
 
@@ -2109,11 +2112,11 @@ static int write_v5d_header(v5dstruct *v)
     }
 
     /* set file pointer to start of file */
-    if (lseek(f, 0, SEEK_SET) == (off_t)-1) {
+    if (lseek(f, 0, SEEK_SET) == -1) {
         int err = errno;
         /* GTC seek refers to reading/writing from a different position
          * in a file */
-        G_warning(_("Unable to seek: %d %s"), err, strerror(err));
+        G_warning(_("Unable to seek: %1$d %2$s"), err, strerror(err));
         return 0;
     }
     v->CurPos = 0;
@@ -2219,11 +2222,11 @@ static int write_v5d_header(v5dstruct *v)
         /* We're writing to a brand new file.  Reserve 10000 bytes */
         /* for future header growth. */
         WRITE_TAG(v, TAG_END, 10000);
-        if (lseek(f, 10000, SEEK_CUR) == (off_t)-1) {
+        if (lseek(f, 10000, SEEK_CUR) == -1) {
             int err = errno;
             /* GTC seek refers to reading/writing from a different position
              * in a file */
-            G_warning(_("Unable to seek: %d %s"), err, strerror(err));
+            G_warning(_("Unable to seek: %1$d %2$s"), err, strerror(err));
             return 0;
         }
 
@@ -2337,11 +2340,11 @@ int v5dWriteCompressedGrid(const v5dstruct *v, int time, int var,
 
     /* move to position in file */
     pos = grid_position(v, time, var);
-    if (lseek(v->FileDesc, pos, SEEK_SET) == (off_t)-1) {
+    if (lseek(v->FileDesc, pos, SEEK_SET) == -1) {
         int err = errno;
         /* GTC seek refers to reading/writing from a different position
          * in a file */
-        G_warning(_("Unable to seek: %d %s"), err, strerror(err));
+        G_warning(_("Unable to seek: %1$d %2$s"), err, strerror(err));
         return 0;
     }
 
@@ -2457,19 +2460,19 @@ int v5dCloseFile(v5dstruct *v)
     if (v->Mode == 'w') {
         /* rewrite header because writing grids updates the minval and */
         /* maxval fields */
-        if (lseek(v->FileDesc, 0, SEEK_SET) == (off_t)-1) {
+        if (lseek(v->FileDesc, 0, SEEK_SET) == -1) {
             int err = errno;
             /* GTC seek refers to reading/writing from a different position
              * in a file */
-            G_warning(_("Unable to seek: %d %s"), err, strerror(err));
+            G_warning(_("Unable to seek: %1$d %2$s"), err, strerror(err));
             return 0;
         }
         status = write_v5d_header(v);
-        if (lseek(v->FileDesc, 0, SEEK_END) == (off_t)-1) {
+        if (lseek(v->FileDesc, 0, SEEK_END) == -1) {
             int err = errno;
             /* GTC seek refers to reading/writing from a different position
              * in a file */
-            G_warning(_("Unable to seek: %d %s"), err, strerror(err));
+            G_warning(_("Unable to seek: %1$d %2$s"), err, strerror(err));
             return 0;
         }
         close(v->FileDesc);

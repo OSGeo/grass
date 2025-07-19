@@ -237,23 +237,22 @@ int main(int argc, char **argv)
     out_buf = Rast_allocate_c_buf();
     bufsz = ncols * sizeof(CELL);
 
-    if (lseek(fe, 0, SEEK_SET) == (off_t)-1 ||
-        lseek(fd, 0, SEEK_SET) == (off_t)-1) {
+    if (lseek(fe, 0, SEEK_SET) == -1 || lseek(fd, 0, SEEK_SET) == -1) {
         int err = errno;
         /* GTC seek refers to reading/writing from a different position
          * in a file */
-        G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+        G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
     }
 
     new_id = Rast_open_new(new_map_name, in_type);
     dir_id = Rast_open_new(dir_name, CELL_TYPE);
 
     if (opt5->answer != NULL) {
-        if (lseek(fm, 0, SEEK_SET) == (off_t)-1) {
+        if (lseek(fm, 0, SEEK_SET) == -1) {
             int err = errno;
             /* GTC seek refers to reading/writing from a different position
              * in a file */
-            G_fatal_error(_("Unable to seek: %d %s"), err, strerror(err));
+            G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
         }
         bas_id = Rast_open_new(bas_name, CELL_TYPE);
 
