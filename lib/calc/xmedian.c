@@ -44,10 +44,10 @@ static int dcmp(const void *aa, const void *bb)
 
 int f_median(int argc, const int *argt, void **args)
 {
-    static void *array;
-    static int alloc;
     int size = argc * Rast_cell_size(argt[0]);
     int i, j;
+    const int threshold = 32;
+    bool use_heap = false;
 
     if (argc < 1)
         return E_ARG_LO;
@@ -56,16 +56,18 @@ int f_median(int argc, const int *argt, void **args)
         if (argt[i] != argt[0])
             return E_ARG_TYPE;
 
-    if (size > alloc) {
-        alloc = size;
-        array = G_realloc(array, size);
-    }
-
     switch (argt[0]) {
     case CELL_TYPE: {
+        CELL stack_array[threshold];
+        CELL *a = stack_array;
+
+        if (argc > threshold) {
+            a = G_malloc(size);
+            use_heap = true;
+        }
+
         CELL *res = args[0];
         CELL **argv = (CELL **)&args[1];
-        CELL *a = array;
         CELL *a1 = &a[(argc - 1) / 2];
         CELL *a2 = &a[argc / 2];
 
@@ -87,12 +89,22 @@ int f_median(int argc, const int *argt, void **args)
             }
         }
 
+        if (use_heap) {
+            G_free(a);
+        }
         return 0;
     }
     case FCELL_TYPE: {
+        FCELL stack_array[threshold];
+        FCELL *a = stack_array;
+
+        if (argc > threshold) {
+            a = G_malloc(size);
+            use_heap = true;
+        }
+
         FCELL *res = args[0];
         FCELL **argv = (FCELL **)&args[1];
-        FCELL *a = array;
         FCELL *a1 = &a[(argc - 1) / 2];
         FCELL *a2 = &a[argc / 2];
 
@@ -114,12 +126,22 @@ int f_median(int argc, const int *argt, void **args)
             }
         }
 
+        if (use_heap) {
+            G_free(a);
+        }
         return 0;
     }
     case DCELL_TYPE: {
+        DCELL stack_array[threshold];
+        DCELL *a = stack_array;
+
+        if (argc > threshold) {
+            a = G_malloc(size);
+            use_heap = true;
+        }
+
         DCELL *res = args[0];
         DCELL **argv = (DCELL **)&args[1];
-        DCELL *a = array;
         DCELL *a1 = &a[(argc - 1) / 2];
         DCELL *a2 = &a[argc / 2];
 
@@ -141,6 +163,9 @@ int f_median(int argc, const int *argt, void **args)
             }
         }
 
+        if (use_heap) {
+            G_free(a);
+        }
         return 0;
     }
     default:
