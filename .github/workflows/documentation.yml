@@ -95,7 +95,31 @@ jobs:
       - name: Build core
         run: |
           cd grass
-          ../grass/.github/workflows/build_ubuntu-22.04.sh "$HOME/install"
+          export INSTALL_PREFIX="$HOME/install"
+          ./configure \
+            --enable-largefile \
+            --prefix="$INSTALL_PREFIX/" \
+            --with-blas \
+            --with-bzlib \
+            --with-cxx \
+            --with-fftw \
+            --with-freetype \
+            --with-freetype-includes="/usr/include/freetype2/" \
+            --with-geos \
+            --with-lapack \
+            --with-libsvm \
+            --with-netcdf \
+            --with-nls \
+            --with-openmp \
+            --with-pdal \
+            --with-proj-share=/usr/share/proj \
+            --with-pthread \
+            --with-readline \
+            --with-sqlite \
+            --with-tiff \
+            --with-zstd
+          make
+          make install
 
       - name: Add the bin directory to PATH
         run: |
