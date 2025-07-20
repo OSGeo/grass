@@ -116,7 +116,7 @@ jobs:
             --with-netcdf \
             --with-nls \
             --with-odbc \
-            --with-openmp \
+            --with-openmp=no \
             --with-pdal \
             --with-postgres --with-postgres-includes=/usr/include/postgresql \
             --with-proj-share=/usr/share/proj \
