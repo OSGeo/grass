@@ -151,6 +151,8 @@ jobs:
           if-no-files-found: error
           path: |
             grass/html
+            !grass/html/**.map
+            !grass/html/**.md5
           retention-days: 3
 
       - name: Make the doxygen results available (latex)
@@ -160,6 +162,8 @@ jobs:
           if-no-files-found: error
           path: |
             grass/latex
+            !grass/latex/**.map
+            !grass/latex/**.md5
           retention-days: 3
       - name: Compile addons
         run: |
