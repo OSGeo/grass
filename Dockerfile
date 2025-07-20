@@ -135,7 +135,6 @@ ARG GRASS_PYTHON_PACKAGES="\
     numpy \
     Pillow \
     pip \
-    ply \
     psycopg2 \
     python-dateutil \
     python-magic \
