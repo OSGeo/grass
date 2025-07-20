@@ -35,7 +35,11 @@ jobs:
       - name: Get dependencies
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y wget git gawk findutils doxygen graphviz gettext
+          sudo apt-get install -y wget git gawk findutils \
+            doxygen \
+            gettext \
+            graphviz \
+            libpq-dev
           xargs -a <(awk '! /^ *(#|$)/' "grass/.github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
 
@@ -112,6 +116,7 @@ jobs:
             --with-nls \
             --with-openmp \
             --with-pdal \
+            --with-postgres \
             --with-proj-share=/usr/share/proj \
             --with-pthread \
             --with-readline \
