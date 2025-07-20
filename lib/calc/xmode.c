@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -8,6 +9,8 @@
 mode(x1,x2,..,xn)
    return mode of arguments
 **********************************************************************/
+
+#define SIZE_THRESHOLD 32
 
 static int dcmp(const void *aa, const void *bb)
 {
@@ -56,8 +59,7 @@ static double mode(double *value, int argc)
 
 int f_mode(int argc, const int *argt, void **args)
 {
-    const int threshold = 32;
-    double stack_value[threshold];
+    double stack_value[SIZE_THRESHOLD];
     double *value = stack_value;
     bool use_heap = false;
     int size = argc * sizeof(double);
@@ -70,7 +72,7 @@ int f_mode(int argc, const int *argt, void **args)
         if (argt[i] != argt[0])
             return E_ARG_TYPE;
 
-    if (argc > threshold) {
+    if (argc > SIZE_THRESHOLD) {
         value = G_malloc(size);
         use_heap = true;
     }

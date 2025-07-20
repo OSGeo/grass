@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -9,6 +10,8 @@
 median(x1,x2,..,xn)
    return median of arguments
 **********************************************************************/
+
+#define SIZE_THRESHOLD 32
 
 static int icmp(const void *aa, const void *bb)
 {
@@ -46,7 +49,6 @@ int f_nmedian(int argc, const int *argt, void **args)
 {
     int size = argc * Rast_cell_size(argt[0]);
     int i, j;
-    const int threshold = 32;
     bool use_heap = false;
 
     if (argc < 1)
@@ -58,10 +60,10 @@ int f_nmedian(int argc, const int *argt, void **args)
 
     switch (argt[0]) {
     case CELL_TYPE: {
-        CELL stack_array[threshold];
+        CELL stack_array[SIZE_THRESHOLD];
         CELL *a = stack_array;
 
-        if (argc > threshold) {
+        if (argc > SIZE_THRESHOLD) {
             a = G_malloc(size);
             use_heap = true;
         }
@@ -102,10 +104,10 @@ int f_nmedian(int argc, const int *argt, void **args)
     }
 
     case FCELL_TYPE: {
-        FCELL stack_array[threshold];
+        FCELL stack_array[SIZE_THRESHOLD];
         FCELL *a = stack_array;
 
-        if (argc > threshold) {
+        if (argc > SIZE_THRESHOLD) {
             a = G_malloc(size);
             use_heap = true;
         }
@@ -146,10 +148,10 @@ int f_nmedian(int argc, const int *argt, void **args)
     }
 
     case DCELL_TYPE: {
-        DCELL stack_array[threshold];
+        DCELL stack_array[SIZE_THRESHOLD];
         DCELL *a = stack_array;
 
-        if (argc > threshold) {
+        if (argc > SIZE_THRESHOLD) {
             a = G_malloc(size);
             use_heap = true;
         }

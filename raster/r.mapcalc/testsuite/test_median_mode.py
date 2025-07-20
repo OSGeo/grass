@@ -26,12 +26,12 @@ class TestMedianMode(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        expression = "{o}=row()*col()".format(o=cls.input)
+        expression = f"{cls.input} = row()*col()"
         cls.use_temp_region()
         cls.runModule("g.region", n=3, s=0, e=3, w=0, res=1)
         cls.runModule("r.mapcalc", expression=expression, overwrite=True)
         cls.to_remove.append(cls.input)
-        expression = "{o}=null()".format(o=cls.input_null)
+        expression = f"{cls.input_null} = null()"
         cls.runModule("r.mapcalc", expression=expression, overwrite=True)
         cls.to_remove.append(cls.input_null)
 
@@ -46,9 +46,7 @@ class TestMedianMode(TestCase):
         )
 
     def test_median_cell(self):
-        expression = "{o} = median({i}, {i} + 1, {i} - 1, {i})".format(
-            o=self.output, i=self.input
-        )
+        expression = f"{self.output} = median({self.input}, {self.input} + 1, {self.input} - 1, {self.input})"
         self.assertModule("r.mapcalc", expression=expression, overwrite=True)
         self.assertRasterExists(self.output)
         self.to_remove.append(self.output)
@@ -57,9 +55,7 @@ class TestMedianMode(TestCase):
         )
 
     def test_median_dcell(self):
-        expression = "{o} = median(double({i}), double({i} + 1), double({i} - 1), double({i}))".format(
-            o=self.output, i=self.input
-        )
+        expression = f"{self.output} = median(double({self.input}), double({self.input} + 1), double({self.input} - 1), double({self.input}))"
         self.assertModule("r.mapcalc", expression=expression, overwrite=True)
         self.assertRasterExists(self.output)
         self.to_remove.append(self.output)
@@ -68,8 +64,8 @@ class TestMedianMode(TestCase):
         )
 
     def test_median_cell_many_numbers(self):
-        expression = "{o} = median({numbers})".format(
-            o=self.output, numbers=",".join([str(n) for n in list(range(1, 50))])
+        expression = (
+            f"{self.output} = median({','.join([str(n) for n in list(range(1, 50))])})"
         )
         self.assertModule("r.mapcalc", expression=expression, overwrite=True)
         self.assertRasterExists(self.output)
@@ -79,17 +75,13 @@ class TestMedianMode(TestCase):
         )
 
     def test_median_cell_many_numbers_null(self):
-        expression = "{o} = median({numbers}, null())".format(
-            o=self.output, numbers=",".join([str(n) for n in list(range(1, 50))])
-        )
+        expression = f"{self.output} = median({','.join([str(n) for n in list(range(1, 50))])}, null())"
         self.assertModule("r.mapcalc", expression=expression, overwrite=True)
         self.assertRasterExists(self.output)
         self.to_remove.append(self.output)
         self.assertRasterFitsUnivar(self.output, {"n": 0}, precision=1e-6)
 
-        expression = "{o} = nmedian({numbers}, null())".format(
-            o=self.output, numbers=",".join([str(n) for n in list(range(1, 50))])
-        )
+        expression = f"{self.output} = nmedian({','.join([str(n) for n in list(range(1, 50))])}, null())"
         self.assertModule("r.mapcalc", expression=expression, overwrite=True)
         self.assertRasterExists(self.output)
         self.assertRasterFitsUnivar(
@@ -97,9 +89,7 @@ class TestMedianMode(TestCase):
         )
 
     def test_mode_cell(self):
-        expression = "{o} = mode({i}, {i} + 1, {i} - 1, {i})".format(
-            o=self.output, i=self.input
-        )
+        expression = f"{self.output} = mode({self.input}, {self.input} + 1, {self.input} - 1, {self.input})"
         self.assertModule("r.mapcalc", expression=expression, overwrite=True)
         self.assertRasterExists(self.output)
         self.to_remove.append(self.output)
@@ -108,9 +98,7 @@ class TestMedianMode(TestCase):
         )
 
     def test_mode_dcell(self):
-        expression = "{o} = mode(double({i}), double({i} + 1), double({i} - 1), double({i}))".format(
-            o=self.output, i=self.input
-        )
+        expression = f"{self.output} = mode(double({self.input}), double({self.input} + 1), double({self.input} - 1), double({self.input}))"
         self.assertModule("r.mapcalc", expression=expression, overwrite=True)
         self.assertRasterExists(self.output)
         self.to_remove.append(self.output)
@@ -119,8 +107,8 @@ class TestMedianMode(TestCase):
         )
 
     def test_mode_cell_many_numbers(self):
-        expression = "{o} = mode(1, {numbers})".format(
-            o=self.output, numbers=",".join([str(n) for n in list(range(1, 50))])
+        expression = (
+            f"{self.output} = mode(1, {','.join([str(n) for n in list(range(1, 50))])})"
         )
         self.assertModule("r.mapcalc", expression=expression, overwrite=True)
         self.assertRasterExists(self.output)
@@ -130,17 +118,13 @@ class TestMedianMode(TestCase):
         )
 
     def test_mode_cell_many_numbers_null(self):
-        expression = "{o} = mode(1, {numbers}, null())".format(
-            o=self.output, numbers=",".join([str(n) for n in list(range(1, 50))])
-        )
+        expression = f"{self.output} = mode(1, {','.join([str(n) for n in list(range(1, 50))])}, null())"
         self.assertModule("r.mapcalc", expression=expression, overwrite=True)
         self.assertRasterExists(self.output)
         self.to_remove.append(self.output)
         self.assertRasterFitsUnivar(self.output, {"n": 0}, precision=1e-6)
 
-        expression = "{o} = nmode(1, {numbers}, null())".format(
-            o=self.output, numbers=",".join([str(n) for n in list(range(1, 50))])
-        )
+        expression = f"{self.output} = nmode(1, {','.join([str(n) for n in list(range(1, 50))])}, null())"
         self.assertModule("r.mapcalc", expression=expression, overwrite=True)
         self.assertRasterExists(self.output)
         self.assertRasterFitsUnivar(
