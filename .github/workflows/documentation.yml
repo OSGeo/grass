@@ -35,7 +35,7 @@ jobs:
       - name: Get dependencies
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y wget git gawk findutils doxygen graphviz
+          sudo apt-get install -y wget git gawk findutils doxygen graphviz gettext
           xargs -a <(awk '! /^ *(#|$)/' "grass/.github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
 
