@@ -105,7 +105,7 @@ jobs:
             --enable-largefile \
             --prefix="$INSTALL_PREFIX/" \
             --with-blas \
-            --with-bzlib \
+            --with-bzlib=no \
             --with-cxx \
             --with-fftw \
             --with-freetype \
