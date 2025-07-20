@@ -6,6 +6,7 @@ OBJ.*
 locale/scriptstrings/*
 *.o
 *.tmp.html
+*.tmp.md
 bin.*/*
 build
 /out/
