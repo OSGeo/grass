@@ -121,7 +121,7 @@ jobs:
             --with-postgres --with-postgres-includes=/usr/include/postgresql \
             --with-proj-share=/usr/share/proj \
             --with-pthread=no \
-            --with-readline \
+            --with-readline=no \
             --with-sqlite \
             --with-tiff \
             --with-zstd
