@@ -97,7 +97,7 @@ jobs:
         run: |
           echo "LD_LIBRARY_PATH=$HOME/install/lib" >> "$GITHUB_ENV"
 
-      - name: Configure core
+      - name: Build core
         run: |
           cd grass
           export INSTALL_PREFIX="$HOME/install"
@@ -125,6 +125,19 @@ jobs:
             --with-sqlite \
             --with-tiff \
             --with-zstd
+          make
+          make install
+
+      - name: Add the bin directory to PATH
+        run: |
+          echo "$HOME/install/bin" >> "$GITHUB_PATH"
+
+      - name: Print installed versions
+        if: always()
+        run: ./grass/.github/workflows/print_versions.sh
+
+      - name: Test executing of the grass command
+        run: ./grass/.github/workflows/test_simple.sh
 
       - name: Build Programmer's Manual with doxygen
         run: |
@@ -148,25 +161,6 @@ jobs:
           path: |
             grass/latex
           retention-days: 3
-
-      - name: Build core
-        run: |
-          cd grass
-          export INSTALL_PREFIX="$HOME/install"
-          make
-          make install
-
-      - name: Add the bin directory to PATH
-        run: |
-          echo "$HOME/install/bin" >> "$GITHUB_PATH"
-
-      - name: Print installed versions
-        if: always()
-        run: ./grass/.github/workflows/print_versions.sh
-
-      - name: Test executing of the grass command
-        run: ./grass/.github/workflows/test_simple.sh
-
       - name: Compile addons
         run: |
           ./grass-addons/utils/cronjobs_osgeo_lxd/compile_addons_git.sh \
