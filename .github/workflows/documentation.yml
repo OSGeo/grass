@@ -131,6 +131,16 @@ jobs:
           cd grass
           make htmldocs
 
+      - name: Make the doxygen results available
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: doxygen-site
+          if-no-files-found: error
+          path: |
+            grass/html
+            grass/latex
+          retention-days: 3
+
       - name: Build core
         run: |
           cd grass
@@ -148,16 +158,6 @@ jobs:
 
       - name: Test executing of the grass command
         run: ./grass/.github/workflows/test_simple.sh
-
-      - name: Make the doxygen results available
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        with:
-          name: doxygen-site
-          if-no-files-found: error
-          path: |
-            grass/html
-            grass/latex
-          retention-days: 3
 
       - name: Compile addons
         run: |
