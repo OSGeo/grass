@@ -120,7 +120,7 @@ jobs:
             --with-pdal \
             --with-postgres --with-postgres-includes=/usr/include/postgresql \
             --with-proj-share=/usr/share/proj \
-            --with-pthread \
+            --with-pthread=no \
             --with-readline \
             --with-sqlite \
             --with-tiff \
