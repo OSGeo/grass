@@ -44,13 +44,15 @@ class TestDbConnect(TestCase):
         """Test JSON output"""
         expected = {
             "driver": "sqlite",
+            "database_template": "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db",
             "database": r".+sqlite\.db",
-            "schema": "",
-            "group": "",
+            "schema": None,
+            "group": None,
         }
         actual = parse_command("db.connect", flags="p", format="json")
         self.assertEqual(list(actual.keys()), list(expected.keys()))
         self.assertEqual(actual["driver"], expected["driver"])
+        self.assertEqual(actual["database_template"], expected["database_template"])
         # Since the database path is system-dependent, we verify it using a regular expression
         self.assertRegex(actual["database"], expected["database"])
         self.assertEqual(actual["schema"], expected["schema"])

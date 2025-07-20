@@ -126,7 +126,7 @@ print(data)
 Possible output:
 
 ```text
-{'driver': 'sqlite', 'database': '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db', 'schema': '', 'group': ''}
+{'driver': 'sqlite', 'database_template': '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db', 'database': '/grassdata/PERMANENT/sqlite/sqlite.db', 'schema': None, 'group': None}
 ```
 
 ### DBF (local, not recommended)

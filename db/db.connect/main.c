@@ -54,7 +54,6 @@ int main(int argc, char *argv[])
     print = G_define_flag();
     print->key = 'p';
     print->label = _("Print current connection parameters and exit");
-    print->description = _("Substitute variables in database settings");
     print->guisection = _("Print");
 
     shell = G_define_flag();
@@ -199,17 +198,37 @@ int main(int argc, char *argv[])
                 break;
 
             case JSON:
-                G_json_object_set_string(root_object, "driver",
-                                         conn.driverName ? conn.driverName
-                                                         : "");
-                G_json_object_set_string(root_object, "database",
-                                         conn.databaseName ? conn.databaseName
-                                                           : "");
-                G_json_object_set_string(root_object, "schema",
-                                         conn.schemaName ? conn.schemaName
-                                                         : "");
-                G_json_object_set_string(root_object, "group",
-                                         conn.group ? conn.group : "");
+                databaseName = substitute_variables(&conn);
+
+                if (conn.driverName)
+                    G_json_object_set_string(root_object, "driver",
+                                             conn.driverName);
+                else
+                    G_json_object_set_null(root_object, "driver");
+
+                if (conn.databaseName)
+                    G_json_object_set_string(root_object, "database_template",
+                                             conn.databaseName);
+                else
+                    G_json_object_set_null(root_object, "database_template");
+
+                /* substitute variables */
+                if (databaseName)
+                    G_json_object_set_string(root_object, "database",
+                                             databaseName);
+                else
+                    G_json_object_set_null(root_object, "database");
+
+                if (conn.schemaName)
+                    G_json_object_set_string(root_object, "schema",
+                                             conn.schemaName);
+                else
+                    G_json_object_set_null(root_object, "schema");
+
+                if (conn.group)
+                    G_json_object_set_string(root_object, "group", conn.group);
+                else
+                    G_json_object_set_null(root_object, "group");
                 break;
             }
         }
