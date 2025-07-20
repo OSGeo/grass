@@ -4,6 +4,8 @@
 *.pyc
 OBJ.*
 locale/scriptstrings/*
+*.o
+*.tmp.html
 bin.*/*
 build
 /out/
@@ -46,7 +48,7 @@ daag*.s
 # notebook helper files
 .ipynb_checkpoints
 
-# python environment
+# Ignore Python virtual environment
 venv/
 env/
 .venv/
