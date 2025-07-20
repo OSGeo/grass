@@ -96,7 +96,7 @@ jobs:
         run: |
           echo "LD_LIBRARY_PATH=$HOME/install/lib" >> "$GITHUB_ENV"
 
-      - name: Build core
+      - name: Configure core
         run: |
           cd grass
           export INSTALL_PREFIX="$HOME/install"
@@ -123,6 +123,11 @@ jobs:
             --with-sqlite \
             --with-tiff \
             --with-zstd
+
+      - name: Build core
+        run: |
+          cd grass
+          export INSTALL_PREFIX="$HOME/install"
           make
           make install
 
