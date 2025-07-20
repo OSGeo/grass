@@ -479,7 +479,7 @@ int Vect_get_area_cat(struct Map_info *Map, int area, int field)
    \param Map pointer to Map_info struct
    \param lines array of boundary lines
    \param n_lines number of lines in array
-   \param[out] APoints pointer to output line_pnts struct
+   \param[out] BPoints pointer to output line_pnts struct
 
    \return number of points
    \return -1 on error
@@ -508,7 +508,7 @@ int Vect__get_area_points(struct Map_info *Map, const plus_t *lines,
    \param Map pointer to Map_info struct
    \param lines array of boundary lines
    \param n_lines number of lines in array
-   \param[out] APoints pointer to output line_pnts struct
+   \param[out] BPoints pointer to output line_pnts struct
 
    \return number of points
    \return -1 on error

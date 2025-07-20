@@ -154,9 +154,9 @@ char *G_join_basename_strings(const char **strings, size_t len)
  * \brief Generate the format string
  *
  * \param basename String with the basename
- * \param digits Number of digits number
- * \param decimals Number of decimal number
- * \param filler String used to fill, default is 0
+ * \param number The double number that will be converted to string
+ * \param ndigits The number of integer digits in the output string
+ * \param ndecimals The number of decimals in the output string
  *
  * \return Format string
  */
