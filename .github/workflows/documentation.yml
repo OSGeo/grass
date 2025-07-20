@@ -131,13 +131,21 @@ jobs:
           cd grass
           make htmldocs
 
-      - name: Make the doxygen results available
+      - name: Make the doxygen results available (html)
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: doxygen-site
           if-no-files-found: error
           path: |
             grass/html
+          retention-days: 3
+
+      - name: Make the doxygen results available (latex)
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: doxygen-site-latex
+          if-no-files-found: error
+          path: |
             grass/latex
           retention-days: 3
 
