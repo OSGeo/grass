@@ -1,5 +1,5 @@
 /*!
-   \file lib/imagery/manage_sinatures.c
+   \file lib/imagery/manage_signatures.c
 
    \brief Imagery Library - Signature file management functions
 
