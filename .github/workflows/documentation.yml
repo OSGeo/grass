@@ -39,7 +39,8 @@ jobs:
             doxygen \
             gettext \
             graphviz \
-            libpq-dev
+            libpq-dev \
+            unixodbc-dev
           xargs -a <(awk '! /^ *(#|$)/' "grass/.github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
 
@@ -114,6 +115,7 @@ jobs:
             --with-libsvm \
             --with-netcdf \
             --with-nls \
+            --with-odbc \
             --with-openmp \
             --with-pdal \
             --with-postgres --with-postgres-includes=/usr/include/postgresql \
