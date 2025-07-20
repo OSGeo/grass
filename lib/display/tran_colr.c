@@ -171,12 +171,14 @@ int D_use_color(int color)
  * Returns 1 if color can be used to draw (is good and
  * isn't 'none'), 0 otherwise.
  *
- *  \param color_number
- *  \param red
- *  \param green
- *  \param blue
+ * \param color The color number provided by D_parse_color to convert
+ *              into 0-255 RGB values.
+ * \param r Pointer to an integer where the red component will be stored.
+ * \param g Pointer to an integer where the green component will be stored.
+ * \param b Pointer to an integer where the blue component will be stored.
  *
- *  \return int
+ * \return Returns 1 if color can be used to draw (is good and
+ *         isn't 'none'), 0 otherwise.
  */
 int D_color_number_to_RGB(int color, int *r, int *g, int *b)
 {
