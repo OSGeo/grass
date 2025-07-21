@@ -494,7 +494,7 @@ int GS_transp_is_set(void)
 /*!
    \brief Retrieves coordinates for lighting model position, at center of view
 
-   \param pos[out] coordinates
+   \param[out] pos coordinates
  */
 void GS_get_modelposition1(float pos[])
 {
@@ -522,8 +522,8 @@ void GS_get_modelposition1(float pos[])
    know position to calculate size, have two dependent variables
    (nearclip * 2) from eye.
 
-   \param siz[out] size
-   \param pos[out] coordinates (X, Y, Z)
+   \param[out] siz size
+   \param[out] pos coordinates (X, Y, Z)
  */
 void GS_get_modelposition(float *siz, float *pos)
 {

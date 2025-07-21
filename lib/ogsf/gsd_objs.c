@@ -1213,7 +1213,8 @@ int gsd_scalebar(float *pos2, float len, GLuint fontbase, unsigned long bar_clr,
 
    Adapted from gsd_scalebar A.Kratochvilova 2011
 
-   \param pos2 scalebar position
+   \param pos scalebar position
+   \param len
    \param fontbase font-base (unused)
    \param bar_clr barscale color
    \param text_clr text color (unused)

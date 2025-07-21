@@ -155,7 +155,7 @@ void G_temp_element(char *element)
  *
  * \param[out] element element name
  * \param tmp TRUE to use G_make_mapset_element_tmp() instead of
- * G_make_mapset_element()
+ *            G_make_mapset_element()
  */
 void G__temp_element(char *element, int tmp)
 {

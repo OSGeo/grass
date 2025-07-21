@@ -1569,7 +1569,7 @@ mat_struct *G_matrix_resize(mat_struct *in, int rows, int cols)
 }
 
 /*!
- * \fn int G_matrix_read_stdin (mat_struct *out)
+ * \fn int G_matrix_stdin(mat_struct *out)
  *
  * \brief Read a matrix from standard input
  *
