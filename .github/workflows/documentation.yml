@@ -78,7 +78,7 @@ jobs:
           pip install -r grass/.github/workflows/python_requirements.txt
           pip install -r grass-addons/.github/workflows/requirements.txt
 
-      - uses: rui314/setup-mold@85c79d00377f0d32cdbae595a46de6f7c2fa6599 # v1
+      - uses: rui314/setup-mold@702b1908b5edf30d71a8d1666b724e0f0c6fa035 # v1
 
       - name: Create installation directory
         run: |

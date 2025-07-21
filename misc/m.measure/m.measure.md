@@ -38,6 +38,34 @@ length=3000.000000
 area=1000000.000000
 ```
 
+Measuring length and area using Python (JSON output):
+
+```python
+import grass.script as gs
+
+data = gs.parse_command(
+    "m.measure",
+    coordinates=[
+        "922000",
+        "2106000",
+        "923000",
+        "2106000",
+        "923000",
+        "2107000",
+        "922000",
+        "2107000",
+    ],
+    format="json",
+)
+print(data)
+```
+
+Possible output:
+
+```text
+{'units': {'length': 'meters', 'area': 'square meters'}, 'length': 3000, 'area': 1000000}
+```
+
 ## SEE ALSO
 
 *[d.geodesic](d.geodesic.md)*
