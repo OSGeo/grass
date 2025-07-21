@@ -200,7 +200,7 @@ void *Rast3d_open_cell_old(const char *name, const char *mapset,
  * structure ... if successful, NULL ... otherwise.
  *
  *  \param name
- *  \param type
+ *  \param typeIntern
  *  \param cache
  *  \param region
  *  \return void *

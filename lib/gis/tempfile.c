@@ -180,7 +180,7 @@ void G__temp_element(char *element, int tmp)
  * \brief Populates element with a path string (internal use only!)
  *
  * \param[out] element element name
- * \param tmp
+ * \param basedir
  */
 void G__temp_element_basedir(char *element, const char *basedir)
 {

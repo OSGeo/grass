@@ -300,7 +300,7 @@ void gsd_x(geosurf *gs, float *center, int colr, float siz)
 
    \param center center point
    \param colr color value
-   \param size size value
+   \param siz size value
  */
 void gsd_diamond(float *center, unsigned long colr, float siz)
 {

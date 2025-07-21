@@ -12,9 +12,9 @@
  * x, y, and z into region coordinates and returned the nearest neighbor.
  *
  *  \param map
- *  \param col
- *  \param row
- *  \param depth
+ *  \param x
+ *  \param y
+ *  \param z
  *  \param value
  *  \param type
  *  \return void

@@ -1524,7 +1524,7 @@ int GS_num_surfs(void)
 
    Must be freed when not needed!
 
-   \param[out] numsurf number of available surfaces
+   \param[out] numsurfs number of available surfaces
 
    \return pointer to surface array
    \return NULL on error
