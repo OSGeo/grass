@@ -47,7 +47,7 @@ static void map_file(void)
     if (!png.handle) {
         close(fd);
         return;
-    } 
+    }
     ptr = MapViewOfFile(png.handle, FILE_MAP_WRITE, 0, 0, size);
     if (!ptr) {
         close(fd);
