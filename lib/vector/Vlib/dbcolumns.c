@@ -61,12 +61,14 @@ const char *Vect_get_column_names(struct Map_info *Map, int field)
     db_init_handle(&handle);
     db_set_handle(&handle, fi->database, NULL);
     if (db_open_database(driver, &handle) != DB_OK) {
-        goto cleanup;
+        db_shutdown_driver(driver);
+        Vect_destroy_field_info(fi);
+        return (NULL);
     }
     db_init_string(&table_name);
     db_set_string(&table_name, fi->table);
     if (db_describe_table(driver, &table_name, &table) != DB_OK) {
-        goto cleanup;
+        goto cleanup_exit;
     }
 
     ncols = db_get_table_number_of_columns(table);
@@ -78,7 +80,7 @@ const char *Vect_get_column_names(struct Map_info *Map, int field)
     G_free(col_names);
     G_debug(3, "%s", list);
 
-cleanup:
+cleanup_exit:
     Vect_destroy_field_info(fi);
     db_close_database_shutdown_driver(driver);
 
@@ -121,12 +123,14 @@ const char *Vect_get_column_types(struct Map_info *Map, int field)
     db_init_handle(&handle);
     db_set_handle(&handle, fi->database, NULL);
     if (db_open_database(driver, &handle) != DB_OK) {
-        goto cleanup;
+        db_shutdown_driver(driver);
+        Vect_destroy_field_info(fi);
+        return (NULL);
     } 
     db_init_string(&table_name);
     db_set_string(&table_name, fi->table);
     if (db_describe_table(driver, &table_name, &table) != DB_OK) {
-        goto cleanup;
+        goto cleanup_exit;
     }
 
     ncols = db_get_table_number_of_columns(table);
@@ -139,7 +143,7 @@ const char *Vect_get_column_types(struct Map_info *Map, int field)
     G_free(sqltype_names);
     G_debug(3, "%s", list);
 
-cleanup:
+cleanup_exit:
     Vect_destroy_field_info(fi);
     db_close_database_shutdown_driver(driver);
 
@@ -183,12 +187,14 @@ const char *Vect_get_column_names_types(struct Map_info *Map, int field)
     db_init_handle(&handle);
     db_set_handle(&handle, fi->database, NULL);
     if (db_open_database(driver, &handle) != DB_OK) {
-        goto cleanup;
+        db_shutdown_driver(driver);
+        Vect_destroy_field_info(fi);
+        return (NULL);
     }
     db_init_string(&table_name);
     db_set_string(&table_name, fi->table);
     if (db_describe_table(driver, &table_name, &table) != DB_OK) {
-        goto cleanup;
+        goto cleanup_exit;
     }
 
     ncols = db_get_table_number_of_columns(table);
@@ -212,7 +218,7 @@ const char *Vect_get_column_names_types(struct Map_info *Map, int field)
     G_free(col_type_names);
     G_debug(3, "%s", list);
 
-cleanup:
+cleanup_exit:
     Vect_destroy_field_info(fi);
     db_close_database_shutdown_driver(driver);
 
