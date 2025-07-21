@@ -115,6 +115,7 @@ char *G_tempfile_pid(int pid)
  * See G_tempfile_basedir().
  *
  * \param pid
+ * \param basedir
  * \return pointer to string path
  */
 char *G_tempfile_pid_basedir(int pid, const char *basedir)

@@ -26,6 +26,7 @@
  <li> return the return value from <tt>datetime_check_type</tt>(dt)
  </li></ul>
  *
+ *  \param dt
  *  \param mode
  *  \param from
  *  \param to

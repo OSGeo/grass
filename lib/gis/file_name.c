@@ -148,6 +148,7 @@ char *G_file_name_tmp(char *path, const char *element, const char *name,
    \param element database element (eg, "cell", "cellhd", "vector", etc)
    \param name name of file to build path to (fully qualified names allowed)
    \param mapset mapset name
+   \param basedir
 
    \return pointer to <i>path</i> buffer
  */
