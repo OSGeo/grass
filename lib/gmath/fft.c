@@ -49,7 +49,7 @@
  * \brief Fast Fourier Transform for two-dimensional array.
  *
  * Fast Fourier Transform for two-dimensional array.<br>
- * <bNote:</b> If passing real data to fft() forward transform
+ * <b>Note:</b> If passing real data to fft() forward transform
  * (especially when using fft() in a loop), explicitly (re-)initialize
  * the imaginary part to zero (DATA[1][i] = 0.0). Returns 0.
  *
@@ -106,7 +106,7 @@ int fft2(int i_sign, double (*data)[2], int NN, int dimc, int dimr)
  * \brief Fast Fourier Transform for two-dimensional array.
  *
  * Fast Fourier Transform for two-dimensional array.<br>
- * <bNote:</b> If passing real data to fft() forward transform
+ * <b>Note:</b> If passing real data to fft() forward transform
  * (especially when using fft() in a loop), explicitly (re-)initialize
  * the imaginary part to zero (DATA[1][i] = 0.0). Returns 0.
  *
