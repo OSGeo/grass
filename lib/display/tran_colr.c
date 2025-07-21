@@ -97,7 +97,7 @@ static int translate_or_add_color(const char *str)
  * If the color is none and none_acceptable is not true exits with
  * a fatal error and message.
  *
- *  \param name_or_code
+ *  \param str Color name or color code, as a string
  *  \param none_acceptable
  *  \return int
  */
@@ -122,7 +122,7 @@ int D_parse_color(const char *str, int none_acceptable)
  * Returns 0 if color is not known. The color number returned is for lines and
  * text, not raster graphics.
  *
- *  \param name
+ *  \param str Color name as an ASCII string
  *  \return int
  */
 

@@ -21,7 +21,7 @@ float G_math_rand(void)
 /*!
  * \brief Seed the pseudo-random number generator
  *
- * \param seedval 32-bit integer used to seed the PRNG
+ * \param[in] seed 32-bit integer used to seed the PRNG
  */
 
 void G_math_srand(int seed)

@@ -1957,7 +1957,7 @@ FILE *G_open_option_file(const struct Option *option)
    \brief Close an input/output file returned by G_open_option_file(). If the
    file pointer is stdin, stdout, or stderr, nothing happens.
 
-   \param file pointer
+   \param fp file pointer
  */
 void G_close_option_file(FILE *fp)
 {
