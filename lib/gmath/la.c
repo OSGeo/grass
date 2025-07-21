@@ -1309,6 +1309,7 @@ double G_vector_norm1(vec_struct *vc)
  *
  * \param v1
  * \param v2
+ * \param out Output vector
  * \return vec_struct
  */
 

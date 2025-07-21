@@ -206,6 +206,8 @@ LZ4LIB_API int LZ4_compress_default(const char *src, char *dst, int srcSize,
                                     int dstCapacity);
 
 /*! LZ4_decompress_safe() :
+ * @param src
+ * @param dst
  * @param compressedSize is the exact complete size of the compressed block.
  * @param dstCapacity is the size of destination buffer (which must be already
  *                    allocated), presumed an upper bound of decompressed

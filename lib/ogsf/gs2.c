@@ -707,6 +707,8 @@ void GS_draw_line_onsurf(int id, float x1, float y1, float x2, float y2)
 
    \param id surface id
    \param x1,y1,x2,y2 line nodes
+   \param lasp
+   \param n
 
    \return number of points used
  */

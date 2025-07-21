@@ -1127,6 +1127,7 @@ void gsd_3darrow(float *center, unsigned long colr, float siz1, float siz2,
    Adapted from gsd_north_arrow Hamish Bowman Dec 2006
 
    \param pos2
+   \param len
    \param fontbase font-base
    \param bar_clr barscale color
    \param text_clr text color
