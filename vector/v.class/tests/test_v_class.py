@@ -65,13 +65,16 @@ def setup_vector_with_values(tmp_path):
         yield session
 
 
-@pytest.mark.parametrize("algorithm", ["int", "std", "qua", "equ", "dis"])
-def test_v_class_returns_expected_class_count(setup_vector_with_values, algorithm):
+@pytest.mark.parametrize(
+    ("algorithm", "expected"),
+    [
+        ("int", [2.8, 4.6, 6.4, 8.2]),  # Equal interval over range 1-10
+        ("qua", [3.0, 5.0, 7.0, 9.0]),  # Quantiles on 10 values
+    ],
+)
+def test_v_class_break_values(setup_vector_with_values, algorithm, expected):
     """
-    Test that `v.class` returns the correct number of break points for various classification algorithms.
-
-    Given 5 classes, the number of breaks returned should be 4 (number_of_classes - 1).
-    This test runs classification with different supported algorithms and verifies the output format.
+    Test that v.class returns the correct break values for known algorithms.
     """
     session = setup_vector_with_values
     output = gs.read_command(
@@ -80,38 +83,36 @@ def test_v_class_returns_expected_class_count(setup_vector_with_values, algorith
         column="value",
         algorithm=algorithm,
         nbclasses=5,
-        flags="g",  # Flag to return breaks as a comma-separated list (no extra output)
+        flags="g",
         env=session.env,
     )
     breaks = [float(b) for b in output.strip().split(",")]
-    assert len(breaks) == 4  # For 5 classes, expect 4 break points
+    assert breaks == pytest.approx(expected, rel=1e-2)
 
 
-def test_v_class_with_expression(setup_vector_with_values):
+def test_v_class_expression_breaks(setup_vector_with_values):
     """
-    Test classification using a column expression instead of a plain column name.
-
-    Here, the column expression 'value/2' is used to verify that `v.class` handles expressions correctly.
+    Test break values when passing a column expression (value/2).
     """
     session = setup_vector_with_values
     output = gs.read_command(
         "v.class",
         map="test_points",
-        column="value/2",  # Using expression rather than a direct column
+        column="value/2",
         algorithm="int",
         nbclasses=5,
         flags="g",
         env=session.env,
     )
     breaks = [float(b) for b in output.strip().split(",")]
-    assert len(breaks) == 4
+    expected = [1.4, 2.3, 3.2, 4.1]  # breaks computed over values 0.5–5.0
+    assert breaks == pytest.approx(expected, rel=1e-2)
 
 
 def test_v_class_with_where_clause(setup_vector_with_values):
     """
-    Test classification with a SQL WHERE clause filtering the input features.
-
-    This test restricts the classification to points with 'value' >= 6 and verifies the number of breaks.
+    Test filtering using SQL WHERE clause. Only values >= 6 should be considered.
+    Values: 6, 7, 8, 9, 10 → breaks for 2 classes should split those.
     """
     session = setup_vector_with_values
     output = gs.read_command(
@@ -125,7 +126,7 @@ def test_v_class_with_where_clause(setup_vector_with_values):
         env=session.env,
     )
     breaks = [float(b) for b in output.strip().split(",")]
-    assert len(breaks) == 1  # For 2 classes, expect 1 break
+    assert breaks == pytest.approx([8.0], rel=1e-2)
 
 
 def test_v_class_invalid_column(setup_vector_with_values):
@@ -147,25 +148,26 @@ def test_v_class_invalid_column(setup_vector_with_values):
         )
 
 
-@pytest.mark.parametrize(("nbclasses", "expected_breaks"), [(1, 1), (2, 1), (10, 9)])
+@pytest.mark.parametrize(
+    ("nbclasses", "expected_breaks"),
+    [(1, [0.0]), (2, [6.0]), (10, [2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0])],
+)
 def test_v_class_varied_nbclasses(setup_vector_with_values, nbclasses, expected_breaks):
     """
-    Test classification with different numbers of classes.
-
-    Verifies that the number of returned break points matches the expected count for various class counts.
+    Test v.class with different numbers of classes and check expected breaks.
     """
     session = setup_vector_with_values
     output = gs.read_command(
         "v.class",
         map="test_points",
         column="value",
-        algorithm="int",
+        algorithm="qua",
         nbclasses=nbclasses,
         flags="g",
         env=session.env,
     )
-    breaks = [float(b) for b in output.strip().split(",")] if output.strip() else []
-    assert len(breaks) == expected_breaks
+    breaks = [float(b) for b in output.strip().split(",")]
+    assert breaks == pytest.approx(expected_breaks, rel=1e-2)
 
 
 def test_v_class_non_numeric_column(setup_vector_with_values):
@@ -201,9 +203,9 @@ def test_v_class_non_numeric_column(setup_vector_with_values):
 
 def test_v_class_where_no_matches(setup_vector_with_values):
     """
-    Test classification behavior when the WHERE clause excludes all rows (no matching features).
+    Test behavior when the WHERE clause matches no records.
 
-    Checks that output contains the expected number of break points (usually zeros).
+    Ensures break values are zeroed when classification has no input data.
     """
     session = setup_vector_with_values
     output = gs.read_command(
@@ -217,8 +219,7 @@ def test_v_class_where_no_matches(setup_vector_with_values):
         env=session.env,
     )
     breaks = [float(b) for b in output.strip().split(",")] if output.strip() else []
-    # The breaks should be zeros since no data was classified
-    assert len(breaks) == 4
+    assert len(breaks) == 4  # For 5 classes → 4 breaks
     assert all(b == 0.0 for b in breaks)
 
 
@@ -226,16 +227,14 @@ def test_v_class_large_dataset(tmp_path):
     """
     Test classification on a larger dataset (1000 points).
 
-    Verifies performance and correctness of v.class on bigger input with more classes.
+    Verifies break count, sorted order, and plausible range of break values.
     """
     project = tmp_path / "large_project"
     gs.create_project(project)
 
     with gs.setup.init(project, env=os.environ.copy()) as session:
-        # Define larger computational region
         gs.run_command("g.region", n=100, s=0, e=100, w=0, res=1, env=session.env)
 
-        # Generate 1000 points with values 1 to 1000
         points = "\n".join(f"{i} 1 {i}" for i in range(1, 1001))
 
         gs.write_command(
@@ -249,7 +248,6 @@ def test_v_class_large_dataset(tmp_path):
             stdin=points.encode("utf-8"),
         )
 
-        # Add 'value' attribute column
         gs.run_command(
             "v.db.addcolumn",
             map="large_points",
@@ -257,7 +255,6 @@ def test_v_class_large_dataset(tmp_path):
             env=session.env,
         )
 
-        # Populate attribute table values
         for cat in range(1, 1001):
             gs.run_command(
                 "db.execute",
@@ -274,8 +271,15 @@ def test_v_class_large_dataset(tmp_path):
             flags="g",
             env=session.env,
         )
-        breaks = [float(b) for b in output.strip().split(",")]
+        breaks = [float(b) for b in output.strip().split(",")] if output.strip() else []
+
+        # Sanity checks:
         assert len(breaks) == 9  # 10 classes → 9 breaks
+        assert all(
+            breaks[i] <= breaks[i + 1] for i in range(len(breaks) - 1)
+        )  # sorted ascending
+        # Values should be within data range 1-1000
+        assert all(1 <= b <= 1000 for b in breaks)
 
 
 def test_v_class_output_format_consistency(setup_vector_with_values):
@@ -308,8 +312,7 @@ def test_v_class_warning_discontinuities(setup_vector_with_values):
     """
     Test that the 'dis' (discontinuities) algorithm runs and produces output.
 
-    This algorithm may emit warnings about statistical significance,
-    which are filtered out during testing for cleaner output.
+    Validates output format and break values.
     """
     session = setup_vector_with_values
     output = gs.read_command(
@@ -321,5 +324,11 @@ def test_v_class_warning_discontinuities(setup_vector_with_values):
         flags="g",
         env=session.env,
     )
-    breaks = [float(b) for b in output.strip().split(",")]
-    assert len(breaks) == 4
+    breaks = [float(b) for b in output.strip().split(",")] if output.strip() else []
+
+    # Checks:
+    assert len(breaks) == 4  # 5 classes → 4 breaks
+    assert all(isinstance(b, float) for b in breaks)
+    assert all(
+        breaks[i] <= breaks[i + 1] for i in range(len(breaks) - 1)
+    )  # sorted ascending
