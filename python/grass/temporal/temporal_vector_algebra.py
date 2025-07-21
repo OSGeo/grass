@@ -44,11 +44,6 @@ for details.
 
 from __future__ import annotations
 
-try:
-    from ply import yacc
-except ImportError:
-    pass
-
 import copy
 
 import grass.pygrass.modules as pygrass
@@ -56,6 +51,7 @@ import grass.pygrass.modules as pygrass
 from .abstract_dataset import AbstractDatasetComparisonKeyStartTime
 from .core import get_current_mapset, init_dbif
 from .open_stds import open_new_stds
+from .ply import yacc
 from .space_time_datasets import VectorDataset
 from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
 from .temporal_algebra import (
@@ -175,7 +171,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
         self.lexer = TemporalVectorAlgebraLexer()
         self.lexer.build()
-        self.parser = yacc.yacc(module=self, debug=self.debug, write_tables=False)
+        self.parser = yacc.yacc(module=self, debug=self.debug)
 
         self.overwrite = overwrite
         self.count = 0

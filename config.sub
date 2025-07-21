@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2006,SC2268,SC2162 # see below for rationale
 
-timestamp='2025-01-06'
+timestamp='2025-07-10'
 
 # This file is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
@@ -243,7 +243,6 @@ case $1 in
 					| rombug \
 					| semi \
 					| sequent* \
-					| siemens \
 					| sgi* \
 					| siemens \
 					| sim \
@@ -262,7 +261,7 @@ case $1 in
 						basic_machine=$field1-$field2
 						basic_os=
 						;;
-					zephyr*)
+					tock* | zephyr*)
 						basic_machine=$field1-unknown
 						basic_os=$field2
 						;;
@@ -1982,6 +1981,7 @@ case $os in
 	| atheos* \
 	| auroraux* \
 	| aux* \
+	| banan_os* \
 	| beos* \
 	| bitrig* \
 	| bme* \
@@ -2123,6 +2123,7 @@ case $os in
 	| sysv* \
 	| tenex* \
 	| tirtos* \
+	| tock* \
 	| toppers* \
 	| tops10* \
 	| tops20* \
@@ -2356,8 +2357,8 @@ echo "$cpu-$vendor${kernel:+-$kernel}${os:+-$os}${obj:+-$obj}"
 exit
 
 # Local variables:
-# eval: (add-hook 'before-save-hook 'time-stamp)
+# eval: (add-hook 'before-save-hook 'time-stamp nil t)
 # time-stamp-start: "timestamp='"
-# time-stamp-format: "%:y-%02m-%02d"
+# time-stamp-format: "%Y-%02m-%02d"
 # time-stamp-end: "'"
 # End:
