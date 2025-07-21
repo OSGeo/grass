@@ -95,7 +95,6 @@ int D_d_color(DCELL val, struct Colors *colors)
     return D_color_of_type(&val, colors, DCELL_TYPE);
 }
 
-
 /*!
  * \brief select color for line drawing
  *

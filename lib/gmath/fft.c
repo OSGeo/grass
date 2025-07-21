@@ -55,7 +55,7 @@
  *
  * \param[in] i_sign Direction of transform -1 is normal, +1 is inverse
  * \param[in,out] data Pointer to complex linear array in row major order
- * containing data and result
+ *                     containing data and result
  * \param[in] NN Value of DATA dimension (dimc * dimr)
  * \param[in] dimc Value of image column dimension (max power of 2)
  * \param[in] dimr Value of image row dimension (max power of 2)
@@ -112,7 +112,7 @@ int fft2(int i_sign, double (*data)[2], int NN, int dimc, int dimr)
  *
  * \param[in] i_sign Direction of transform -1 is normal, +1 is inverse
  * \param[in,out] DATA Pointer to complex linear array in row major order
- * containing data and result
+ *                     containing data and result
  * \param[in] NN Value of DATA dimension (dimc * dimr)
  * \param[in] dimc Value of image column dimension (max power of 2)
  * \param[in] dimr Value of image row dimension (max power of 2)
