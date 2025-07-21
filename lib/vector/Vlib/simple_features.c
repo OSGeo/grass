@@ -346,8 +346,10 @@ int Vect_sfa_get_num_features(struct Map_info *Map)
 #endif
     }
     else {
+        const char *map_name = Vect_get_full_name(Map);
         G_warning(_("Unable to report simple features for vector map <%s>"),
-                  Vect_get_full_name(Map));
+                  map_name);
+        G_free((void *)map_name);
         return -1;
     }
 

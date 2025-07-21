@@ -2015,9 +2015,7 @@ class SqlQueryFrame(wx.Frame):
 
         wx.Frame.__init__(self, parent=parent, id=id, title=title, *kwargs)
         self.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_sql.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 

@@ -1,9 +1,9 @@
 ---
-description: Raster data processing in GRASS GIS
+description: Raster data processing in GRASS
 index: raster
 ---
 
-# Raster data processing in GRASS GIS
+# Raster data processing in GRASS
 
 ## Raster maps in general
 
@@ -19,7 +19,7 @@ of the grid cells at the edge of the map, but along the edge of the map
 itself. i.e. the geographic extent of the map is described by the outer
 bounds of all cells within the map.
 
-As a general rule in GRASS GIS:
+As a general rule in GRASS:
 
 1. Raster output maps have their bounds and resolution equal to those
     of the current computational region.
@@ -76,7 +76,7 @@ explicitly resample the map with e.g.
 [r.resamp.interp](r.resamp.interp.md) or
 [r.resamp.stats](r.resamp.stats.md), then export the resampled map.
 
-GRASS GIS raster map exchange between different projects with the same
+GRASS raster map exchange between different projects with the same
 CRS can be done in a lossless way using the [r.pack](r.pack.md) and
 [r.unpack](r.unpack.md) modules.
 
@@ -238,7 +238,7 @@ available as [r.sim.sediment](r.sim.sediment.md),
 
 ## Raster format
 
-In GRASS GIS, raster data can be stored as 2D or 3D grids.
+In GRASS, raster data can be stored as 2D or 3D grids.
 
 ### 2D raster maps
 
@@ -250,7 +250,7 @@ semantics](https://grasswiki.osgeo.org/wiki/GRASS_raster_semantics)):
 - single-precision floating-point (FCELL), and
 - double-precision floating-point (DCELL).
 
-In most GRASS GIS resources, 2D raster maps are usually called "raster"
+In most GRASS resources, 2D raster maps are usually called "raster"
 maps.
 
 ### 3D raster maps
@@ -263,22 +263,22 @@ called "float", and the double-precision one "double".
 
 ### No-data management and data portability
 
-GRASS GIS distinguishes NULL and zero. When working with NULL data, it
+GRASS distinguishes NULL and zero. When working with NULL data, it
 is important to know that operations on NULL cells lead to NULL cells.
 
-The GRASS GIS raster format is architecture independent and portable
+The GRASS raster format is architecture independent and portable
 between 32bit and 64bit machines.
 
 ## Raster compression
 
-All GRASS GIS raster map types are by default ZSTD compressed if
+All GRASS raster map types are by default ZSTD compressed if
 available, otherwise ZLIB compressed. Through the environment variable
 `GRASS_COMPRESSOR` the compression method can be set to RLE, ZLIB, LZ4,
 BZIP2, or ZSTD.
 
 Important: the NULL file compression can be turned off with
 `export GRASS_COMPRESS_NULLS=0`. Raster maps with NULL file compression
-can only be opened with GRASS GIS 7.2.0 or later. NULL file compression
+can only be opened with GRASS 7.2.0 or later. NULL file compression
 for a particular raster map can be managed with **r.null -z**.
 
 Integer (CELL type) raster maps can be compressed with RLE if the
@@ -297,7 +297,7 @@ maps are never and have never been compressed with RLE.
 
 **ZLIB**  
 ZLIB's deflate is the default compression method for all raster maps, if
-ZSTD is not available. GRASS GIS 8 uses by default 1 as ZLIB compression
+ZSTD is not available. GRASS 8 uses by default 1 as ZLIB compression
 level which is the best compromise between speed and compression ratio,
 also when compared to other available compression methods. Valid levels
 are in the range \[1, 9\] and can be set with the environment variable

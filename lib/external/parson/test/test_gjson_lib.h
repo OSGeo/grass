@@ -19,11 +19,12 @@
 
 #include <grass/gjson.h>
 
-#define TEST_OBJECT_KEY   "key"
-#define TEST_OBJECT_VALUE "value"
-#define TEST_ARRAY_STRING "array"
-#define TEST_NUMBER       123.45
-#define TEST_BOOLEAN      1
+#define TEST_OBJECT_KEY     "key"
+#define TEST_OBJECT_VALUE   "value"
+#define TEST_ARRAY_STRING   "array"
+#define TEST_OBJECT_DOT_KEY "key.dot"
+#define TEST_NUMBER         123.45
+#define TEST_BOOLEAN        1
 
 /* parson wrapper tests */
 int unit_test_parson_wrapper(void);

@@ -36,7 +36,7 @@ class Map3D:
     :Basic usage:
       .. code-block:: pycon
 
-        >>> img = Map()
+        >>> img = Map3D()
         >>> img.render(elevation_map="elevation", color_map="elevation", perspective=20)
         >>> img.overlay.d_legend(raster="elevation", at=(60, 97, 87, 92))
         >>> img.show()

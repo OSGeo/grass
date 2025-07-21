@@ -223,7 +223,7 @@ def acquire_mapset_lock(
     start_time = time.time()
     while True:
         return_code = subprocess.run(
-            [locker_path, lock_file, f"{process_id}"], check=False
+            [locker_path, lock_file, f"{process_id}"], check=False, env=env
         ).returncode
         elapsed_time = time.time() - start_time
         if return_code == 0 or elapsed_time >= timeout or total_sleep >= timeout:

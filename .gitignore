@@ -4,6 +4,9 @@
 *.pyc
 OBJ.*
 locale/scriptstrings/*
+*.o
+*.tmp.html
+*.tmp.md
 bin.*/*
 build
 /out/
@@ -15,7 +18,10 @@ grass.pc
 autom4te.cache/
 macos/cache/*
 
-# ignore specific file generated during make
+# Ignore temporary files used in htmldox, latexdox and pdfdox targets
+*.dox.org
+
+# Ignore specific files generated during make
 gui/wxpython/menustrings.py
 gui/wxpython/xml/menudata.xml
 gui/wxpython/xml/module_tree_menudata.xml
@@ -46,7 +52,7 @@ daag*.s
 # notebook helper files
 .ipynb_checkpoints
 
-# python environment
+# Ignore Python virtual environment
 venv/
 env/
 .venv/
@@ -184,3 +190,15 @@ CMakeUserPresets.json
 *-prefix/
 
 # End of https://www.toptal.com/developers/gitignore/api/cmake
+
+# Auto-generated sphinx source files for python library docs
+python/grass/docs/_templates/layout.html
+python/grass/docs/src/exceptions.rst
+python/grass/docs/src/ctypes*.rst
+python/grass/docs/src/grass.*rst
+python/grass/docs/src/gunittest.rst
+python/grass/docs/src/imaging.rst
+python/grass/docs/src/pydispatch.rst
+python/grass/docs/src/pygrass.*rst
+python/grass/docs/src/script.rst
+python/grass/docs/src/temporal.rst
