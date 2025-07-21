@@ -18,7 +18,7 @@ import os
 
 import grass.script as gs
 
-from .support import ToolResult, ParameterConverter, ToolFunctionResolver
+from .support import ParameterConverter, ToolFunctionResolver, ToolResult
 
 
 class Tools:
@@ -304,5 +304,5 @@ class Tools:
         """
         return self
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, exc_type, exc_value, traceback):
         """Exit the context manager context."""

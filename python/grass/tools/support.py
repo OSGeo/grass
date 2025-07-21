@@ -25,7 +25,6 @@ import json
 import shutil
 from io import StringIO
 
-
 import grass.script as gs
 
 

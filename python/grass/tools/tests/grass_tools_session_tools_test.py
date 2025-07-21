@@ -6,9 +6,9 @@ import os
 import pytest
 
 import grass.script as gs
+from grass.exceptions import CalledModuleError
 from grass.experimental.mapset import TemporaryMapsetSession
 from grass.tools import Tools
-from grass.exceptions import CalledModuleError
 
 
 def test_key_value_parser_number(xy_dataset_session):
