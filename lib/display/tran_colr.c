@@ -99,7 +99,7 @@ static int translate_or_add_color(const char *str)
  *
  *  \param str Color name or color code, as a string
  *  \param none_acceptable
- *  \return int
+ *  \return int Returns a color number usable by D_use_color.
  */
 
 int D_parse_color(const char *str, int none_acceptable)
