@@ -142,7 +142,7 @@ char *G_file_name_tmp(char *path, const char *element, const char *name,
 
    By default the GRASS temporary directory is located at
    $LOCATION/$MAPSET/.tmp/$HOSTNAME/. If basedir is provided, the
-   temporary directory is located at <basedir>/.tmp/$HOSTNAME/.
+   temporary directory is located at \<basedir\>/.tmp/$HOSTNAME/.
 
    \param[out] path buffer to hold resultant full path to file
    \param element database element (eg, "cell", "cellhd", "vector", etc)
