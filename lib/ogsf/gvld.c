@@ -257,7 +257,7 @@ int gvld_isosurf(geovol *gvl)
             gsd_blend(0);
             gsd_zwritemask(0xffffffff);
             ret = -1;
-            goto cleanup;
+            goto cleanup_exit;
         }
 
         for (y = 0; y < rows - 1; y++) {
@@ -397,7 +397,7 @@ int gvld_isosurf(geovol *gvl)
     gsd_popmatrix();
     gsd_blend(0);
     gsd_zwritemask(0xffffffff);
-cleanup:
+cleanup_exit:
     G_free(e_dl);
     G_free(nz);
     G_free(pos);
