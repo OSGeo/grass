@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
         else
             G_fatal_error(_("Cannot allocate memory for string"));
 
-        if (G_asprintf(&line, "Location: %s", G_location()) > 0)
+        if (G_asprintf(&line, "Project: %s", G_location()) > 0)
             printline(line);
         else
             G_fatal_error(_("Cannot allocate memory for string"));

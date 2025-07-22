@@ -36,7 +36,7 @@ class TestR3Info(TestCase):
             " +----------------------------------------------------------------------------+",
             " | Layer:    test_raster3d                  Date:                             |",
             " | Mapset:                                  Login of Creator:                 |",
-            " | Location:                                                                  |",
+            " | Project:                                                                  |",
             " | DataBase:                                                                  |",
             " | Title:    test_raster3d                                                    |",
             " | Units:    none                                                             |",
@@ -77,11 +77,11 @@ class TestR3Info(TestCase):
             " +----------------------------------------------------------------------------+",
             "",
         ]
-        # Skip exact match for lines containing "Location:", "Date:", "Login of Creator:",
+        # Skip exact match for lines containing "Project:", "Date:", "Login of Creator:",
         # "DataBase:" or "Mapset:" because their values vary
         for i, component in enumerate(result):
             if (
-                "Location:" in component
+                "Project:" in component
                 or "DataBase:" in component
                 or "Login of Creator:" in component
                 or "Date:" in component
