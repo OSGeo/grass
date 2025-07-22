@@ -102,6 +102,7 @@ int I_create_cat_rast(struct Cell_head *cat_rast_region, const char *cat_rast)
     }
 
     fclose(f_cat_rast);
+    G_free(row_data);
     return 0;
 }
 
@@ -302,6 +303,7 @@ int I_insert_patch_to_cat_rast(const char *patch_rast,
 
         Rast_close(fd_patch_rast);
         fclose(f_cat_rast);
+        G_free(patch_data);
 
         return -1;
     }
@@ -334,6 +336,7 @@ int I_insert_patch_to_cat_rast(const char *patch_rast,
             Rast_close(fd_patch_rast);
             G_free(null_chunk_row);
             fclose(f_cat_rast);
+            G_free(patch_data);
 
             return -1;
         }
@@ -345,6 +348,7 @@ int I_insert_patch_to_cat_rast(const char *patch_rast,
             Rast_close(fd_patch_rast);
             G_free(null_chunk_row);
             fclose(f_cat_rast);
+            G_free(patch_data);
 
             return -1;
         }
@@ -353,6 +357,7 @@ int I_insert_patch_to_cat_rast(const char *patch_rast,
     Rast_close(fd_patch_rast);
     G_free(null_chunk_row);
     fclose(f_cat_rast);
+    G_free(patch_data);
     return 0;
 }
 
@@ -712,9 +717,12 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
     for (i_band = 0; i_band < n_bands; i_band++)
         bands_ids[i_band] = -1;
 
-    if (n_bands != scatts->n_bands || n_bands != scatt_conds->n_bands)
+    if (n_bands != scatts->n_bands || n_bands != scatt_conds->n_bands) {
+        free_compute_scatts_data(fd_bands, bands_rows, n_a_bands, bands_ids,
+                             b_needed_bands, fd_cats_rasts, f_cats_rasts_conds,
+                             scatt_conds->n_a_cats);
         return -1;
-
+    }
     for (i_cat = 0; i_cat < scatts->n_a_cats; i_cat++)
         fd_cats_rasts[i_cat] = -1;
 
@@ -750,6 +758,9 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 
             data_type = Rast_get_map_type(fd_bands[n_a_bands]);
             if (data_type != CELL_TYPE) {
+                free_compute_scatts_data(
+                    fd_bands, bands_rows, n_a_bands, bands_ids, b_needed_bands,
+                    fd_cats_rasts, f_cats_rasts_conds, scatt_conds->n_a_cats);
                 G_warning(_("Raster <%s> type is not <%s>"), bands[band_id],
                           "CELL");
                 return -1;
@@ -800,6 +811,9 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
     for (i_cat = 0; i_cat < scatt_conds->n_a_cats; i_cat++)
         if (f_cats_rasts_conds[i_cat])
             if (fseek(f_cats_rasts_conds[i_cat], head_nchars, SEEK_SET) != 0) {
+                free_compute_scatts_data(
+                    fd_bands, bands_rows, n_a_bands, bands_ids, b_needed_bands,
+                    fd_cats_rasts, f_cats_rasts_conds, scatt_conds->n_a_cats);
                 G_warning(_("Corrupted category raster conditions file (fseek "
                             "failed)"));
                 return -1;
@@ -956,6 +970,8 @@ int I_rasterize(double *polygon, int pol_n_pts, unsigned char val,
             G_warning(
                 _("prepare_signature: scan line %d has odd number of points."),
                 (i + 1) / 2);
+            Vect_destroy_line_struct(pol);
+            G_free(perimeter.points);
             return 1;
         }
 
@@ -964,6 +980,8 @@ int I_rasterize(double *polygon, int pol_n_pts, unsigned char val,
 
         if (x0 > x1) {
             G_warning(_("signature: perimeter points out of order."));
+            Vect_destroy_line_struct(pol);
+            G_free(perimeter.points);
             return 1;
         }
 
