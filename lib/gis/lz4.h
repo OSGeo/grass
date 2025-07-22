@@ -198,7 +198,7 @@ LZ4_versionString(void); /**< library version string; useful to check dll
  * @param srcSize max supported value is LZ4_MAX_INPUT_SIZE.
  * @param dstCapacity size of buffer 'dst' (which must be already allocated)
  * @return the number of bytes written into buffer 'dst' (necessarily <=
- *         dstCapacity)or 0 if compression fails
+ *         dstCapacity) or 0 if compression fails
  * Note : This function is protected against buffer overflow scenarios (never
  *        writes outside 'dst' buffer, nor read outside 'source' buffer).
  */
@@ -220,7 +220,7 @@ LZ4LIB_API int LZ4_compress_default(const char *src, char *dst, int srcSize,
  *         decoding and return a negative result.
  *
  * Note 1 : This function is protected against malicious data packets :
- *          it will never writes outside 'dst' buffer, nor read outside 'source'
+ *          it will never write outside 'dst' buffer, nor read outside 'source'
  *          buffer, even if the compressed block is maliciously modified to
  *          order the decoder to do these actions. In such case, the decoder
  *          stops immediately, andconsiders the compressed block malformed.
