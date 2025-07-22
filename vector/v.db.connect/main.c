@@ -51,6 +51,7 @@ int main(int argc, char **argv)
     JSON_Value *root_value = NULL, *conn_value = NULL;
     JSON_Array *root_array = NULL;
     JSON_Object *conn_object = NULL;
+    int skip_header = 0;
 
     /* set up the options and flags for the command line parser */
 
@@ -104,10 +105,10 @@ int main(int argc, char **argv)
 
     csv_print = G_define_flag();
     csv_print->key = 'g';
-    csv_print->label = _("Print all map connection parameters in csv "
-                         "style and exit [deprecated]");
+    csv_print->label = _(
+        "Print all map connection parameters in a legacy format [deprecated]");
     csv_print->description = _(
-        "Format: layer[/layer name] table key database driver"
+        "Order: layer[/layer name] table key database driver"
         "This flag is deprecated and will be removed in a future release. Use "
         "format=csv instead.");
     csv_print->guisection = _("Print");
@@ -130,8 +131,10 @@ int main(int argc, char **argv)
 
     // If no format option is specified, preserve backward compatibility
     if (format_opt->answer == NULL || format_opt->answer[0] == '\0') {
-        if (csv_print->answer || columns->answer)
+        if (csv_print->answer || columns->answer) {
             format_opt->answer = "csv";
+            skip_header = 1;
+        }
         else
             format_opt->answer = "plain";
     }
@@ -225,21 +228,43 @@ int main(int argc, char **argv)
                     fprintf(stdout, _("Vector map <%s> is connected by:\n"),
                             input);
                 }
+                if (!skip_header && format == CSV) {
+                    /* CSV Header */
+                    fprintf(stdout, "%s%s%s%s%s%s%s%s%s%s%s\n", "layer", sep,
+                            "layer_name", sep, "table", sep, "key", sep,
+                            "database", sep, "driver");
+                }
                 for (i = 0; i < num_dblinks; i++) {
                     if ((fi = Vect_get_dblink(&Map, i)) == NULL)
                         G_fatal_error(_("Database connection not defined"));
 
                     switch (format) {
                     case CSV:
-                        if (fi->name)
-                            fprintf(stdout, "%d/%s%s%s%s%s%s%s%s%s\n",
-                                    fi->number, fi->name, sep, fi->table, sep,
-                                    fi->key, sep, fi->database, sep,
-                                    fi->driver);
-                        else
-                            fprintf(stdout, "%d%s%s%s%s%s%s%s%s\n", fi->number,
-                                    sep, fi->table, sep, fi->key, sep,
-                                    fi->database, sep, fi->driver);
+                        if (skip_header) {
+                            /* For Backward compatibility */
+                            if (fi->name)
+                                fprintf(stdout, "%d/%s%s%s%s%s%s%s%s%s\n",
+                                        fi->number, fi->name, sep, fi->table,
+                                        sep, fi->key, sep, fi->database, sep,
+                                        fi->driver);
+                            else
+                                fprintf(stdout, "%d%s%s%s%s%s%s%s%s\n",
+                                        fi->number, sep, fi->table, sep,
+                                        fi->key, sep, fi->database, sep,
+                                        fi->driver);
+                        }
+                        else {
+                            if (fi->name)
+                                fprintf(stdout, "%d%s%s%s%s%s%s%s%s%s%s\n",
+                                        fi->number, sep, fi->name, sep,
+                                        fi->table, sep, fi->key, sep,
+                                        fi->database, sep, fi->driver);
+                            else
+                                fprintf(stdout, "%d%s%s%s%s%s%s%s%s%s%s\n",
+                                        fi->number, sep, "", sep, fi->table,
+                                        sep, fi->key, sep, fi->database, sep,
+                                        fi->driver);
+                        }
                         break;
 
                     case PLAIN:
@@ -272,10 +297,10 @@ int main(int argc, char **argv)
                         G_json_object_set_number(conn_object, "layer",
                                                  fi->number);
                         if (fi->name)
-                            G_json_object_set_string(conn_object, "name",
+                            G_json_object_set_string(conn_object, "layer_name",
                                                      fi->name);
                         else
-                            G_json_object_set_string(conn_object, "name", "");
+                            G_json_object_set_null(conn_object, "layer_name");
 
                         G_json_object_set_string(conn_object, "table",
                                                  fi->table);
@@ -315,6 +340,11 @@ int main(int argc, char **argv)
                     G_fatal_error(_("Unable to describe table <%s>"),
                                   fi->table);
 
+                if (!skip_header && format != JSON) {
+                    /* CSV Header */
+                    fprintf(stdout, "%s|%s\n", "sql_type", "name");
+                }
+
                 ncols = db_get_table_number_of_columns(table);
                 for (col = 0; col < ncols; col++) {
                     switch (format) {
@@ -339,10 +369,16 @@ int main(int argc, char **argv)
                             conn_object, "name",
                             db_get_column_name(
                                 db_get_table_column(table, col)));
-                        G_json_object_set_string(
-                            conn_object, "type",
-                            db_sqltype_name(db_get_column_sqltype(
-                                db_get_table_column(table, col))));
+
+                        int sql_type = db_get_column_sqltype(
+                            db_get_table_column(table, col));
+                        G_json_object_set_string(conn_object, "sql_type",
+                                                 db_sqltype_name(sql_type));
+
+                        int c_type = db_sqltype_to_Ctype(sql_type);
+                        G_json_object_set_boolean(conn_object, "is_number",
+                                                  (c_type == DB_C_TYPE_INT ||
+                                                   c_type == DB_C_TYPE_DOUBLE));
 
                         G_json_array_append_value(root_array, conn_value);
                         break;

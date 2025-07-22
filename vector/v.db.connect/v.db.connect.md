@@ -60,7 +60,7 @@ print(data)
 Possible output:
 
 ```text
-[{'layer': 1, 'name': 'roadsmajor', 'table': 'roadsmajor', 'key': 'cat', 'database': '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db', 'driver': 'sqlite'}]
+[{'layer': 1, 'layer_name': 'roadsmajor', 'table': 'roadsmajor', 'key': 'cat', 'database': '/grassdata/nc_spm_08_grass7/PERMANENT/sqlite/sqlite.db', 'driver': 'sqlite'}]
 ```
 
 Print column types and names of table linked to vector map.
@@ -75,7 +75,7 @@ print(data)
 Possible output:
 
 ```text
-[{'name': 'cat', 'type': 'INTEGER'}, {'name': 'MAJORRDS_', 'type': 'DOUBLE PRECISION'}, {'name': 'ROAD_NAME', 'type': 'CHARACTER'}, {'name': 'MULTILANE', 'type': 'CHARACTER'}, {'name': 'PROPYEAR', 'type': 'INTEGER'}, {'name': 'OBJECTID', 'type': 'INTEGER'}, {'name': 'SHAPE_LEN', 'type': 'DOUBLE PRECISION'}]
+[{'name': 'cat', 'sql_type': 'INTEGER', 'is_number': True}, {'name': 'MAJORRDS_', 'sql_type': 'DOUBLE PRECISION', 'is_number': True}, {'name': 'ROAD_NAME', 'sql_type': 'CHARACTER', 'is_number': False}, {'name': 'MULTILANE', 'sql_type': 'CHARACTER', 'is_number': False}, {'name': 'PROPYEAR', 'sql_type': 'INTEGER', 'is_number': True}, {'name': 'OBJECTID', 'sql_type': 'INTEGER', 'is_number': True}, {'name': 'SHAPE_LEN', 'sql_type': 'DOUBLE PRECISION', 'is_number': True}]
 ```
 
 ### Connect vector map to database (DBF driver)
