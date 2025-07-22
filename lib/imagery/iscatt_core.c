@@ -719,8 +719,8 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 
     if (n_bands != scatts->n_bands || n_bands != scatt_conds->n_bands) {
         free_compute_scatts_data(fd_bands, bands_rows, n_a_bands, bands_ids,
-                             b_needed_bands, fd_cats_rasts, f_cats_rasts_conds,
-                             scatt_conds->n_a_cats);
+                                 b_needed_bands, fd_cats_rasts,
+                                 f_cats_rasts_conds, scatt_conds->n_a_cats);
         return -1;
     }
     for (i_cat = 0; i_cat < scatts->n_a_cats; i_cat++)
