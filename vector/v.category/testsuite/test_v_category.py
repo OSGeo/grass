@@ -141,8 +141,8 @@ class TestVCategory(TestCase):
         for i, component in enumerate(result):
             self.assertEqual(component, expected[i], f"Mismatch at line {i + 1}")
 
-    def test_report_option_shell(self):
-        """Test v.category with the shell output format, and report option."""
+    def test_report_option_csv(self):
+        """Test v.category with the CSV output format, and report option."""
         expected = [
             "1 point 6 1 3",
             "1 all 6 1 3",
@@ -160,9 +160,9 @@ class TestVCategory(TestCase):
         for i, component in enumerate(result):
             self.assertEqual(component, expected[i], f"Mismatch at line {i + 1}")
 
-        # Test with 'format=shell' option
+        # Test with 'format=csv' option
         module = SimpleModule(
-            "v.category", input=self.test_vector, option="report", format="shell"
+            "v.category", input=self.test_vector, option="report", format="csv"
         )
         self.assertModule(module)
         result = module.outputs.stdout.strip().splitlines()
@@ -170,8 +170,8 @@ class TestVCategory(TestCase):
         for i, component in enumerate(result):
             self.assertEqual(component, expected[i], f"Mismatch at line {i + 1}")
 
-    def test_print_option_plain_and_shell(self):
-        """Test v.category with the plain and shell output format, and report option."""
+    def test_print_option_plain_and_csv(self):
+        """Test v.category with the plain and CSV output format, and report option."""
         expected = ["1|2", "2|", "1/3|3", "1/3|3/4"]
         module = SimpleModule(
             "v.category",
@@ -196,12 +196,12 @@ class TestVCategory(TestCase):
         self.assertModule(module)
         result = module.outputs.stdout.strip().splitlines()
 
-        # Test shell output format.
+        # Test CSV output format.
         for i, component in enumerate(result):
             self.assertEqual(component, expected[i], f"Mismatch at line {i + 1}")
 
-    def test_layers_option_plain_and_shell(self):
-        """Test v.category with the plain and shell output format, and layers option."""
+    def test_layers_option_plain_and_csv(self):
+        """Test v.category with the plain and CSV output format, and layers option."""
         expected = ["1", "2"]
         module = SimpleModule("v.category", input=self.test_vector, option="layers")
         self.assertModule(module)
@@ -217,7 +217,7 @@ class TestVCategory(TestCase):
         self.assertModule(module)
         result = module.outputs.stdout.strip().splitlines()
 
-        # Test shell output format.
+        # Test CSV output format.
         for i, component in enumerate(result):
             self.assertEqual(component, expected[i], f"Mismatch at line {i + 1}")
 

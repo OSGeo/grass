@@ -51,7 +51,7 @@ typedef struct {
     int min[FRTYPES], max[FRTYPES];
 } FREPORT;
 
-enum OutputFormat { PLAIN, SHELL, JSON };
+enum OutputFormat { PLAIN, CSV, JSON };
 
 void format_json_fr(FREPORT *freport, int fr_type, char *name,
                     JSON_Array *array)
@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *in_opt, *out_opt, *option_opt, *type_opt;
     struct Option *cat_opt, *field_opt, *step_opt, *id_opt, *format_opt;
-    struct Flag *shell, *notab;
+    struct Flag *csv, *notab;
     FREPORT **freps;
     int nfreps, rtype, fld;
     char *desc;
@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
           "value"),
         _("copy values from one layer to another (e.g. layer=1,2,3 copies "
           "values from layer 1 to layer 2 and 3)"),
-        _("print report (statistics), in shell style: layer type count min "
+        _("print report (statistics), in CSV style: layer type count min "
           "max"),
         _("print category values, layers are separated by '|', more cats in "
           "the same layer are separated by '/'"),
@@ -162,19 +162,18 @@ int main(int argc, char *argv[])
     step_opt->description = _("Category increment");
 
     format_opt = G_define_standard_option(G_OPT_F_FORMAT);
-    format_opt->options = "plain,shell,json";
+    format_opt->options = "plain,csv,json";
     format_opt->descriptions = _("plain;Human readable text output;"
-                                 "shell;shell script style text output;"
+                                 "csv;CSV (Comma Separated Values);"
                                  "json;JSON (JavaScript Object Notation);");
     format_opt->guisection = _("Print");
 
-    shell = G_define_flag();
-    shell->key = 'g';
-    shell->label =
-        _("Shell script style, currently only for report [deprecated]");
-    shell->description =
+    csv = G_define_flag();
+    csv->key = 'g';
+    csv->label = _("CSV style output, currently only for report [deprecated]");
+    csv->description =
         _("Format: layer type count min max. This flag is deprecated "
-          "and will be removed in a future release. Use format=shell instead.");
+          "and will be removed in a future release. Use format=csv instead.");
 
     notab = G_define_standard_flag(G_FLG_V_TABLE);
     notab->description = _("Do not copy attribute table(s)");
@@ -220,22 +219,22 @@ int main(int argc, char *argv[])
     case ('j'):
         format = JSON;
         break;
-    case ('s'):
-        format = SHELL;
+    case ('c'):
+        format = CSV;
         break;
     default:
         format = PLAIN;
         break;
     }
-    if (shell->answer) {
+    if (csv->answer) {
         G_verbose_message(
             _("Flag 'g' is deprecated and will be removed in a future "
-              "release. Please use format=shell instead."));
+              "release. Please use format=csv instead."));
         if (format == JSON) {
-            G_fatal_error(_(
-                "JSON output and shell output cannot be used simultaneously."));
+            G_fatal_error(
+                _("JSON output and CSV output cannot be used simultaneously."));
         }
-        format = SHELL;
+        format = CSV;
     }
 
     if (option == O_LYR) {
@@ -273,7 +272,7 @@ int main(int argc, char *argv[])
             for (i = 0; i < nfields; i++) {
                 if ((field = Vect_cidx_get_field_number(&In, i)) > 0) {
                     switch (format) {
-                    case SHELL:
+                    case CSV:
                     case PLAIN:
                         fprintf(stdout, "%d\n", field);
                         break;
@@ -287,7 +286,7 @@ int main(int argc, char *argv[])
         }
         else {
             switch (format) {
-            case SHELL:
+            case CSV:
             case PLAIN:
                 fprintf(stdout, "%s\n", field_opt->answer);
                 break;
@@ -743,7 +742,7 @@ int main(int argc, char *argv[])
         }
         for (i = 0; i < nfreps; i++) {
             switch (format) {
-            case SHELL:
+            case CSV:
                 if (freps[i]->count[FR_POINT] > 0)
                     fprintf(stdout, "%d point %d %d %d\n", freps[i]->field,
                             freps[i]->count[FR_POINT],
@@ -919,7 +918,7 @@ int main(int argc, char *argv[])
                         }
 
                         switch (format) {
-                        case SHELL:
+                        case CSV:
                         case PLAIN:
                             fprintf(stdout, "%d", Cats->cat[j]);
                             break;
