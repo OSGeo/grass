@@ -48,12 +48,9 @@ class ToolFunctionResolver:
         self._env = env
         self._names = None
 
-    # def __getattr__(self, name):
-    #    self.get_function(name, exception_type=AttributeError)
-
-    def get_function(self, name, exception_type):
+    def get_tool_name(self, name, exception_type):
         """Parse attribute to GRASS display module. Attribute should be in
-        the form 'd_module_name'. For example, 'd.rast' is called with 'd_rast'.
+        the form 'tool_name'. For example, 'r.info' is called with 'r_info'.
         """
         # Convert snake case attribute name to dotted tool name.
         tool_name = name.replace("_", ".")
@@ -73,12 +70,16 @@ class ToolFunctionResolver:
                     f"Tool {name} ({tool_name}) not found"
                     f" (but found {', '.join(suggestions)})"
                 )
-                raise AttributeError(msg)
+                raise exception_type(msg)
             msg = (
                 f"Tool or attribute {name} ({tool_name}) not found"
                 " (check session setup and documentation for tool and attribute names)"
             )
-            raise AttributeError(msg)
+            raise exception_type(msg)
+        return tool_name
+
+    def get_function(self, name, exception_type):
+        tool_name = self.get_tool_name(name, exception_type)
 
         def wrapper(**kwargs):
             return self._run_function(tool_name, **kwargs)
@@ -86,6 +87,9 @@ class ToolFunctionResolver:
         wrapper.__doc__ = f"Run {tool_name} as function"
 
         return wrapper
+
+    def __getattr__(self, name):
+        return self.get_function(name, exception_type=AttributeError)
 
     @staticmethod
     def levenshtein_distance(text1: str, text2: str) -> int:
@@ -161,7 +165,12 @@ class ToolResult:
 
     @property
     def keyval(self) -> dict:
-        """Text output read as key-value pairs separated by equal signs"""
+        """Text output read as key-value pairs separated by equal signs
+
+        If possible, values are converted to int or float. Empty values result in
+        an empty string value (there is no recognized null value).
+        Empty or no output results in an empty dictionary.
+        """
 
         def conversion(value):
             """Convert text to int or float if possible, otherwise return it as is"""
@@ -179,32 +188,44 @@ class ToolResult:
 
     @property
     def comma_items(self) -> list:
-        """Text output read as comma-separated list"""
+        """Text output read as comma-separated list
+
+        Empty or no output results in an empty dictionary.
+        """
         return self.text_split(",")
 
     @property
     def space_items(self) -> list:
-        """Text output read as whitespace-separated list"""
-        return self.text_split(None)
+        """Text output read as whitespace-separated list
+
+        Empty or no output results in an empty dictionary.
+        """
+        return self.text_split(separator=None)
 
     def text_split(self, separator=None) -> list:
         """Parse text output read as list separated by separators
 
         Any leading or trailing newlines are removed prior to parsing.
+        Empty or no output results in an empty dictionary.
         """
+        if not self.text:
+            # This provides consitent behavior with explicit separator including
+            # a single space and no separator which triggers general whitespace
+            # splitting which results in an empty list for an empty string.
+            return []
         # The use of strip is assuming that the output is one line which
         # ends with a newline character which is for display only.
         return self.text.split(separator)
 
     @property
-    def stdout(self) -> str | bytes:
+    def stdout(self) -> str | bytes | None:
         return self._stdout
 
     @property
-    def stderr(self) -> str | bytes:
+    def stderr(self) -> str | bytes | None:
         return self._stderr
 
-    def _json_or_error(self):
+    def _json_or_error(self) -> dict:
         if self._cached_json is not None:
             return self._cached_json
         if self._stdout:

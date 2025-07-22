@@ -36,7 +36,7 @@ class Tools:
 
     Multiple tools can be accessed through a single *Tools* object:
 
-    >>> from grass.experimental.tools import Tools
+    >>> from grass.tools import Tools
     >>> tools = Tools(session=session)
     >>> tools.g_region(rows=100, cols=100)  # doctest: +ELLIPSIS
     ToolResult(...)
