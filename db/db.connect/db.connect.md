@@ -12,11 +12,16 @@ The default database backend in GRASS GIS is [SQLite](grass-sqlite.md)
 Values are stored in the mapset's `VAR` file; the connection is not
 tested for validity.
 
-The **-p** flag will display the current connection parameters.
+The **-p** flag displays the current connection parameters. Use the **format** option
+to specify the output format—`plain`, `shell`, or `json`—with `plain` being the
+default.
 
 The **-c** flag will silently check if the connection parameters have
 been set, and if not will set them to use GRASS's default values.
 (useful in scripts before you attempt to create a new database table)
+
+The **-g** flag is deprecated and will be removed in a future release. Please
+use **format=shell** option with the **-p** flag instead.
 
 To connect a vector map to a database table, use
 *[v.db.connect](v.db.connect.md)* or
@@ -108,6 +113,21 @@ db.tables -p
 ```
 
 See [ODBC](grass-odbc.md) database driver for details.
+
+### Print current connection parameters using Python
+
+```python
+import grass.script as gs
+
+data = gs.parse_command("db.connect", flags="p", format="json")
+print(data)
+```
+
+Possible output:
+
+```text
+{'driver': 'sqlite', 'database_template': '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db', 'database': '/grassdata/PERMANENT/sqlite/sqlite.db', 'schema': None, 'group': None}
+```
 
 ### DBF (local, not recommended)
 
