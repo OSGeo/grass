@@ -58,14 +58,9 @@ int D_set_overlay_mode(int n)
  *
  * For use by programs such as d.colors.
  *
- * returns:
- *    0 error - in fixed mode,
- *              or cat not in min:max color range
- *    1 ok
- *
  * \param cat
  * \param colors
- * \return 1 if ok, or 0 in fixed mode, or cat not in min:max color range
+ * \return
  */
 int D_color(CELL cat, struct Colors *colors)
 {
