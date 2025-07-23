@@ -1,11 +1,12 @@
 import os
 import pytest
+import shutil
 import grass.script as gs
 from grass.exceptions import CalledModuleError
 
 
-@pytest.fixture
-def setup_vector_with_values(tmp_path):
+@pytest.fixture(scope="module")
+def setup_vector_with_values(tmp_path_factory):
     """
     Pytest fixture to create a temporary GRASS GIS project with a vector map
     containing sample points and associated attribute data.
@@ -17,14 +18,18 @@ def setup_vector_with_values(tmp_path):
     Yields:
         session: active GRASS GIS session with the prepared project and vector map.
     """
-    project = tmp_path / "v_class_project"
+    # Create a single temporary project directory once per module
+    project = tmp_path_factory.mktemp("v_class_project")
+
+    # Remove if exists (defensive cleanup)
+    if project.exists():
+        shutil.rmtree(project)
+
     gs.create_project(project)
 
     with gs.setup.init(project, env=os.environ.copy()) as session:
-        # Define the computational region (extent and resolution)
         gs.run_command("g.region", n=10, s=0, e=10, w=0, res=1, env=session.env)
 
-        # ASCII representation of 10 points with categories (cat) 1 to 10
         vector_input = """\
 1 1 1
 2 1 2
@@ -37,30 +42,31 @@ def setup_vector_with_values(tmp_path):
 9 1 9
 10 1 10
 """
-        # Import points into a new vector map named 'test_points'
         gs.write_command(
             "v.in.ascii",
-            input="-",  # Use '-' to read data from stdin
+            input="-",
             output="test_points",
             format="point",
             separator="space",
             overwrite=True,
             env=session.env,
-            stdin=vector_input.encode("utf-8"),  # Provide ASCII data as bytes to stdin
+            stdin=vector_input.encode("utf-8"),
         )
 
-        # Add a new attribute column 'value' of type double precision float
         gs.run_command(
             "v.db.addcolumn", map="test_points", columns="value double", env=session.env
         )
 
-        # Update each point's 'value' attribute to match its category (cat)
-        for cat, val in enumerate(range(1, 11), start=1):
-            gs.run_command(
-                "db.execute",
-                sql=f"UPDATE test_points SET value = {val} WHERE cat = {cat}",
-                env=session.env,
-            )
+        sql_statements = "\n".join(
+            f"UPDATE test_points SET value = {val} WHERE cat = {cat};"
+            for cat, val in zip(range(1, 11), range(1, 11))
+        )
+        gs.write_command(
+            "db.execute",
+            input="-",
+            stdin=sql_statements.encode("utf-8"),
+            env=session.env,
+        )
 
         yield session
 
@@ -182,12 +188,15 @@ def test_v_class_non_numeric_column(setup_vector_with_values):
     )
 
     # Populate 'name' with string values (all 'A')
-    for cat, val in zip(range(1, 11), ["A"] * 10):
-        gs.run_command(
-            "db.execute",
-            sql=f"UPDATE test_points SET name = '{val}' WHERE cat = {cat}",
-            env=session.env,
-        )
+    sql_statements = "\n".join(
+        f"UPDATE test_points SET name = 'A' WHERE cat = {cat};" for cat in range(1, 11)
+    )
+    gs.write_command(
+        "db.execute",
+        input="-",
+        stdin=sql_statements.encode("utf-8"),
+        env=session.env,
+    )
 
     with pytest.raises(CalledModuleError):
         gs.read_command(
@@ -255,12 +264,16 @@ def test_v_class_large_dataset(tmp_path):
             env=session.env,
         )
 
-        for cat in range(1, 1001):
-            gs.run_command(
-                "db.execute",
-                sql=f"UPDATE large_points SET value = {cat} WHERE cat = {cat}",
-                env=session.env,
-            )
+        sql_statements = "\n".join(
+            f"UPDATE large_points SET value = {cat} WHERE cat = {cat};"
+            for cat in range(1, 1001)
+        )
+        gs.write_command(
+            "db.execute",
+            input="-",
+            stdin=sql_statements.encode("utf-8"),
+            env=session.env,
+        )
 
         output = gs.read_command(
             "v.class",
