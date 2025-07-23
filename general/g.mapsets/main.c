@@ -85,8 +85,10 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("settings"));
+    G_add_keyword(_("project"));
     G_add_keyword(_("search path"));
-    module->label = _("Modifies/prints the user's current mapset search path.");
+    module->label =
+        _("Modifies or reports the user's current mapset search path.");
     module->description = _("Affects the user's access to data existing "
                             "under the other mapsets in the current project.");
 

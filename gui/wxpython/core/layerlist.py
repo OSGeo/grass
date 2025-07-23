@@ -172,12 +172,12 @@ class Layer:
         Traceback (most recent call last):
         ...
         ValueError: Opacity must be an integer between 0 and 100, not 0.1.
-        >>> layer.name = 'blablabla'
+        >>> layer.name = "blablabla"
         Traceback (most recent call last):
         ...
         ValueError: To set layer name, the type of layer must be specified.
-        >>> layer.mapType = 'raster'
-        >>> layer.name = 'blablabla'
+        >>> layer.mapType = "raster"
+        >>> layer.name = "blablabla"
         Traceback (most recent call last):
         ...
         ValueError: Map <blablabla> not found.

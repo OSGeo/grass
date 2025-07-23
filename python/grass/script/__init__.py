@@ -76,6 +76,8 @@ from .raster import (
     raster_info,
     raster_what,
     MaskManager,
+    RegionManager,
+    RegionManagerEnv,
 )
 from .raster3d import mapcalc3d, raster3d_info
 from .utils import (
@@ -118,6 +120,8 @@ __all__ = [
     "KeyValue",
     "MaskManager",
     "Popen",
+    "RegionManager",
+    "RegionManagerEnv",
     "append_node_pid",
     "append_random",
     "append_uuid",

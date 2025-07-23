@@ -777,14 +777,16 @@ struct Option *G_define_standard_option(int opt)
         Opt->type = TYPE_INTEGER;
         Opt->required = NO;
         Opt->multiple = NO;
-        Opt->answer = "1";
+        Opt->answer = "0";
         /* start dynamic answer */
         /* check NPROCS in GISRC, set with g.gisenv */
         memstr = G_store(G_getenv_nofatal("NPROCS"));
         if (memstr && *memstr)
             Opt->answer = memstr;
         /* end dynamic answer */
-        Opt->description = _("Number of threads for parallel computing");
+        Opt->label = _("Number of threads for parallel computing");
+        Opt->description = _("0: use OpenMP default; >0: use nprocs; "
+                             "<0: use MAX-nprocs");
         break;
 
     case G_OPT_M_SEED:

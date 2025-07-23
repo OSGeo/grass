@@ -26,7 +26,7 @@ jobs:
     strategy:
       matrix:
         os:
-          - windows-2019
+          - windows-2022
       fail-fast: false
 
     steps:
@@ -35,7 +35,8 @@ jobs:
           git config --global core.autocrlf false
           git config --global core.eol lf
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: msys2/setup-msys2@61f9e5e925871ba6c9e3e8da24ede83ea27fa91f # v2.27.0
+      - uses: msys2/setup-msys2@40677d36a502eb2cf0fb808cc9dec31bf6152638 # v2.28.0
+        id: msys2
         with:
           path-type: inherit
           location: D:\
@@ -89,7 +90,6 @@ jobs:
             python3-matplotlib
             python3-numpy
             python3-pip
-            python3-ply
             python3-pywin32
             python3-six
             python3-wxpython
@@ -105,6 +105,8 @@ jobs:
         shell: msys2 {0}
         run: |
           .github/workflows/build_osgeo4w.sh
+        env:
+          MSYS2_LOCATION: ${{ steps.msys2.outputs.msys2-location }}
 
       - name: Print installed versions
         if: always()
@@ -143,8 +145,7 @@ jobs:
           pytest ^
             @.github/workflows/pytest_args_ci.txt ^
             @.github/workflows/pytest_args_deselect.txt ^
-            @.github/workflows/pytest_args_gunittest.txt ^
-            --deselect=lib/init/testsuite/test_grass_tmp_mapset.py
+            @.github/workflows/pytest_args_gunittest.txt
         shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}""
 
       - name: Run tests

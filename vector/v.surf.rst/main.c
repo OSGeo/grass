@@ -287,7 +287,7 @@ int main(int argc, char *argv[])
     parm.rsm->required = NO;
     parm.rsm->label = _("Smoothing parameter");
     parm.rsm->description =
-        _("Smoothing is by default 0.5 unless smooth_column is specified");
+        _("Smoothing is by default 0.1 unless smooth_column is specified");
     parm.rsm->guisection = _("Parameters");
 
     parm.scol = G_define_option();
@@ -319,8 +319,10 @@ int main(int argc, char *argv[])
     parm.dmin->key = "dmin";
     parm.dmin->type = TYPE_DOUBLE;
     parm.dmin->required = NO;
-    parm.dmin->description = _(
-        "Minimum distance between points (to remove almost identical points)");
+    parm.dmin->description =
+        _("Minimum distance between points (to remove almost identical "
+          "points). Default value is half of "
+          " the smaller resolution of the current region");
     parm.dmin->guisection = _("Parameters");
 
     parm.dmax = G_define_option();

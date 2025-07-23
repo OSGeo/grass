@@ -133,7 +133,7 @@ For error handling, please refer to the [documentation](https://grass.osgeo.org/
     import os
     os.environ["GRASS_OVERWRITE"] = "1"
     ```
-    See related [best practices](style_guide.html#overwriting-existing-data)
+    See related [best practices](style_guide.md#overwriting-existing-data)
     when writing a Python tool.
 
 ### Helper functions
@@ -741,10 +741,10 @@ To learn more about the `Module` class, see the Full Documentation:
 
 When you are ready to take your scripts to the next level,
 such as turning them into GRASS addons, check out
-[GRASS Python development best practices](style_guide.html#developing-python-scripts).
+[GRASS Python development best practices](style_guide.md#developing-python-scripts).
 Following the gudelines ensures your tools integrate smoothly with the GRASS environment,
 and work in parallel processing workflows.
 To turn your script into an addon, see the [GRASS Addon Cookiecutter Template](https://github.com/OSGeo/grass-addon-cookiecutter).
 
 <!-- markdownlint-disable-next-line line-length -->
-[GRASS Python best practices :material-arrow-right-bold:](style_guide.html#developing-python-scripts){ .md-button }
+[GRASS Python best practices :material-arrow-right-bold:](style_guide.md#developing-python-scripts){ .md-button }

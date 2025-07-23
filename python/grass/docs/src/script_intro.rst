@@ -1,8 +1,8 @@
-GRASS GIS Python scripting with grass.script package
-====================================================
+Scripting API
+======================
 
-Parts of the API
-----------------
+Parts of the grass.script API
+-----------------------------
 
 .. toctree::
    :maxdepth: 2

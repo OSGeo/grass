@@ -11,8 +11,7 @@ column can be added to the table.
 
 Limited type recognition can be done for Integer, Real, String, Date,
 Time and DateTime columns through a descriptive file with same name as
-the CSV file, but .csvt extension (see details
-[here](https://gdal.org/en/stable/drivers/vector/csv.html)).
+the CSV file, but .csvt extension ([see details about the .csvt extension](https://gdal.org/en/stable/drivers/vector/csv.html)).
 
 ```sh
 # NOTE: create koeppen_gridcode.csvt first for automated type recognition

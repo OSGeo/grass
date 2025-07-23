@@ -103,7 +103,7 @@ are preserved. The equations for computation of these parameters and
 their interpretation is described in
 <a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/hmg.rev1.ps">
  Mitasova and Hofierka, 1993</a>
-or Neteler and Mitasova, 2004).
+or Neteler and Mitasova, 2004.
 Slopes and aspect are computed in degrees (0-90 and 1-360 respectively).
 The aspect raster map has value 0 assigned to flat areas (with slope less
 than 0.1%) and to singular points with undefined aspect. Aspect points
@@ -292,7 +292,9 @@ and when minimizing the predictive error is the goal.  The parameters
 found by minimizing the predictive (CV) error may not not be the best
 for for poorly sampled phenomena (result could be strongly smoothed
 with lost details and fluctuations) or when significant noise is
-present that needs to be smoothed out.
+present that needs to be smoothed out. The addon
+<a href="addons/v.surf.rst.cv.html">v.surf.rst.cv</a> provides an ease of use wrapper for the
+cross-validation procedure.
 
 <h3>Performance</h3>
 To enable parallel processing, the user can specify the number of threads

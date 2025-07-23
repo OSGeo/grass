@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
         else
             G_fatal_error(_("Cannot allocate memory for string"));
 
-        if (G_asprintf(&line, "Location: %s", G_location()) > 0)
+        if (G_asprintf(&line, "Project: %s", G_location()) > 0)
             printline(line);
         else
             G_fatal_error(_("Cannot allocate memory for string"));
@@ -462,7 +462,7 @@ int main(int argc, char *argv[])
                 fprintf(out, "max=%f\n", dmax);
         }
         if (hflag->answer) {
-            if (hist_ok && !gflag->answer) {
+            if (hist_ok && !gflag->answer && !rflag->answer) {
                 fprintf(out, "Title:\n");
                 fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_TITLE));
                 fprintf(out, "Data Source:\n");
@@ -476,7 +476,7 @@ int main(int argc, char *argv[])
                         fprintf(out, "   %s\n", Rast_history_line(&hist, i));
                 }
             }
-            else if (hist_ok && gflag->answer) {
+            else if (hist_ok) {
                 fprintf(out, "title=");
                 fprintf(out, "\"%s\"\n", Rast_get_history(&hist, HIST_TITLE));
                 fprintf(out, "source1=");

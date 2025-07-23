@@ -194,12 +194,44 @@ void print_cli_example(FILE *file, const char *indent)
             if (opt->required || first_required_rule_option == opt) {
                 fprintf(file, " ");
                 fprintf(file, "%s=", opt->key);
+
+                char *value = NULL;
                 if (opt->answer) {
-                    fprintf(file, "%s", opt->answer);
+                    value = G_store(opt->answer);
+                }
+                else if (opt->options && opt->type == TYPE_STRING) {
+                    // Get example value from allowed values, but only for
+                    // strings because numbers may have ranges and we don't
+                    // want to print a range.
+                    // Get allowed values as tokens.
+                    char **tokens;
+                    char delm[2];
+                    delm[0] = ',';
+                    delm[1] = '\0';
+                    tokens = G_tokenize(opt->options, delm);
+                    // We are interested in the first allowed value.
+                    if (tokens[0]) {
+                        G_chop(tokens[0]);
+                        value = G_store(tokens[0]);
+                    }
+                    G_free_tokens(tokens);
+                }
+
+                if (value) {
+                    fprintf(file, "%s", value);
                 }
                 else {
-                    fprintf(file, "%s", type);
+                    if (opt->type == TYPE_INTEGER) {
+                        fprintf(file, "0");
+                    }
+                    else if (opt->type == TYPE_DOUBLE) {
+                        fprintf(file, "0.0");
+                    }
+                    else {
+                        fprintf(file, "%s", type);
+                    }
                 }
+                G_free(value);
             }
             opt = opt->next_opt;
         }

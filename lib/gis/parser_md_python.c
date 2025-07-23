@@ -284,27 +284,55 @@ void print_python_example(FILE *file, const char *python_function,
                     type = "string";
                     break;
                 }
-            if (opt->required || first_required_rule_option == opt) {
+            if (opt->required || first_required_rule_option == opt ||
+                (strcmp(opt->key, "format") == 0 && output_format_default)) {
                 fprintf(file, ", %s=", opt->key);
+
+                char *value = NULL;
+                if (opt->answer) {
+                    value = G_store(opt->answer);
+                }
+                else if (opt->options && opt->type == TYPE_STRING) {
+                    // Get example value from allowed values, but only for
+                    // strings because numbers may have ranges and we don't
+                    // want to print a range.
+                    // Get allowed values as tokens.
+                    char **tokens;
+                    char delm[2];
+                    delm[0] = ',';
+                    delm[1] = '\0';
+                    tokens = G_tokenize(opt->options, delm);
+                    // We are interested in the first allowed value.
+                    if (tokens[0]) {
+                        G_chop(tokens[0]);
+                        value = G_store(tokens[0]);
+                    }
+                    G_free_tokens(tokens);
+                }
+
                 if (output_format_default && strcmp(opt->key, "format") == 0) {
                     fprintf(file, "\"%s\"", output_format_default);
                 }
-                else if (opt->answer) {
+                else if (value) {
                     if (opt->type == TYPE_INTEGER || opt->type == TYPE_DOUBLE) {
-                        fprintf(file, "%s", opt->answer);
+                        fprintf(file, "%s", value);
                     }
                     else {
-                        fprintf(file, "\"%s\"", opt->answer);
+                        fprintf(file, "\"%s\"", value);
                     }
                 }
                 else {
-                    if (opt->type == TYPE_INTEGER || opt->type == TYPE_DOUBLE) {
-                        fprintf(file, "%s", type);
+                    if (opt->type == TYPE_INTEGER) {
+                        fprintf(file, "0");
+                    }
+                    else if (opt->type == TYPE_DOUBLE) {
+                        fprintf(file, "0.0");
                     }
                     else {
                         fprintf(file, "\"%s\"", type);
                     }
                 }
+                G_free(value);
             }
             opt = opt->next_opt;
         }

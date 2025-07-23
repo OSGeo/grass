@@ -13,7 +13,7 @@ Classes:
  - forms::GrassGUIApp
 
 This program is just a coarse approach to automatically build a GUI
-from a xml-based GRASS user interface description.
+from an xml-based GRASS user interface description.
 
 You need to have Python 2.4, wxPython 2.8 and python-xml.
 
@@ -208,10 +208,6 @@ class UpdateThread(Thread):
 
             # @todo: replace name by isinstance() and signals
 
-            pBind = self.task.get_param(uid, element="wxId", raiseError=False)
-            if pBind:
-                pBind["value"] = ""
-
             # set appropriate types in t.* modules and g.list/remove element
             # selections
             if name == "Select":
@@ -336,6 +332,7 @@ class UpdateThread(Thread):
                         "vector": map,
                         "layer": layer,
                         "dbInfo": cparams[map]["dbInfo"],
+                        "setDefaultValue": False,
                     }
                 # table
                 elif driver and db:
@@ -343,10 +340,12 @@ class UpdateThread(Thread):
                         "table": pTable.get("value"),
                         "driver": driver,
                         "database": db,
+                        "setDefaultValue": False,
                     }
                 elif pTable:
                     self.data[win.GetParent().InsertTableColumns] = {
-                        "table": pTable.get("value")
+                        "table": pTable.get("value"),
+                        "setDefaultValue": False,
                     }
 
             elif name == "SubGroupSelect":
@@ -412,8 +411,8 @@ class UpdateQThread(Thread):
 
     requestId = 0
 
-    def __init__(self, parent, requestQ, resultQ, **kwds):
-        Thread.__init__(self, **kwds)
+    def __init__(self, parent, requestQ, resultQ, **kwargs):
+        Thread.__init__(self, **kwargs)
 
         self.parent = parent  # cmdPanel
         self.daemon = True
@@ -423,19 +422,19 @@ class UpdateQThread(Thread):
 
         self.start()
 
-    def Update(self, callable, *args, **kwds):
+    def Update(self, callable, *args, **kwargs):
         UpdateQThread.requestId += 1
 
         self.request = None
-        self.requestQ.put((UpdateQThread.requestId, callable, args, kwds))
+        self.requestQ.put((UpdateQThread.requestId, callable, args, kwargs))
 
         return UpdateQThread.requestId
 
     def run(self):
         while True:
-            requestId, callable, args, kwds = self.requestQ.get()
+            requestId, callable, args, kwargs = self.requestQ.get()
 
-            self.request = callable(*args, **kwds)
+            self.request = callable(*args, **kwargs)
 
             self.resultQ.put((requestId, self.request.run()))
 
@@ -502,9 +501,7 @@ class TaskFrame(wx.Frame):
 
         # icon
         self.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_dialog.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
 
         guisizer = wx.BoxSizer(wx.VERTICAL)
@@ -2297,6 +2294,9 @@ class CmdPanel(wx.Panel):
 
                 elif prompt == "sql_query":
                     win = gselect.SqlWhereSelect(parent=which_panel, param=p)
+                    value = self._getValue(p)
+                    if value:
+                        win.SetValue(value)  # parameter previously set
                     p["wxId"] = [win.GetTextWin().GetId()]
                     win.GetTextWin().Bind(wx.EVT_TEXT, self.OnSetValue)
                     which_sizer.Add(
@@ -3253,8 +3253,6 @@ if __name__ == "__main__":
             "forms.py opening form for: %s"
             % task.get_cmd(ignoreErrors=True, ignoreRequired=True),
         )
-        app = GrassGUIApp(task)
-        app.MainLoop()
     else:  # Test
         # Test grassTask from within a GRASS session
         if os.getenv("GISBASE") is not None:
@@ -3391,4 +3389,5 @@ if __name__ == "__main__":
             },
         ]
         q = wx.LogNull()
-        GrassGUIApp(task).MainLoop()
+
+    GrassGUIApp(task).MainLoop()
