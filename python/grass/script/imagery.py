@@ -1,9 +1,8 @@
 """
 Imagery related functions to be used in Python scripts.
 
-Usage:
-
-::
+:Usage:
+  .. code-block:: python
 
     import grass.script as gs
 
@@ -45,21 +44,22 @@ def group_to_dict(
     non-existing (or empty sub-group) is requested a warning is printed
     and an empty dictionary is returned (following the behavior of i.group).
 
-    Example::
+    :Example:
+      .. code-block:: pycon
 
-    >>> run_command("g.copy", raster="lsat7_2000_10,lsat7_2000_10")
-    >>> run_command("r.support", raster="lsat7_2000_10", semantic_label="L8_1")
-    >>> run_command("g.copy", raster="lsat7_2000_20,lsat7_2000_20")
-    >>> run_command("r.support", raster="lsat7_2000_20", semantic_label="L8_2")
-    >>> run_command("g.copy", raster="lsat7_2000_30,lsat7_2000_30")
-    >>> run_command("r.support", raster="lsat7_2000_30", semantic_label="L8_3")
-    >>> run_command("i.group", group="L8_group",
-    >>>             input="lsat7_2000_10,lsat7_2000_20,lsat7_2000_30")
-    >>> group_to_dict("L8_group")  # doctest: +ELLIPSIS
-    {"L8_1": "lsat7_2000_10", ... "L8_3": "lsat7_2000_30"}
-    >>> run_command("g.remove", flags="f", type="group", name="L8_group")
-    >>> run_command("g.remove", flags="f", type="raster",
-    >>>             name="lsat7_2000_10,lsat7_2000_20,lsat7_2000_30")
+        >>> run_command("g.copy", raster="lsat7_2000_10,lsat7_2000_10")
+        >>> run_command("r.support", raster="lsat7_2000_10", semantic_label="L8_1")
+        >>> run_command("g.copy", raster="lsat7_2000_20,lsat7_2000_20")
+        >>> run_command("r.support", raster="lsat7_2000_20", semantic_label="L8_2")
+        >>> run_command("g.copy", raster="lsat7_2000_30,lsat7_2000_30")
+        >>> run_command("r.support", raster="lsat7_2000_30", semantic_label="L8_3")
+        >>> run_command("i.group", group="L8_group",
+        >>>             input="lsat7_2000_10,lsat7_2000_20,lsat7_2000_30")
+        >>> group_to_dict("L8_group")  # doctest: +ELLIPSIS
+        {"L8_1": "lsat7_2000_10", ... "L8_3": "lsat7_2000_30"}
+        >>> run_command("g.remove", flags="f", type="group", name="L8_group")
+        >>> run_command("g.remove", flags="f", type="raster",
+        >>>             name="lsat7_2000_10,lsat7_2000_20,lsat7_2000_30")
 
     :param str imagery_group_name: Name of the imagery group to process (or None)
     :param str subgroup: Name of the imagery sub-group to process (or None)

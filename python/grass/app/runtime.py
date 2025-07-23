@@ -1,6 +1,6 @@
 """Provides functions for the main GRASS GIS executable
 
-(C) 2024 by Vaclav Petras and the GRASS Development Team
+(C) 2024-2025 by Vaclav Petras and the GRASS Development Team
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -17,10 +17,73 @@ import shutil
 import subprocess
 import sys
 
+from . import resource_paths as res_paths
+
 # Get the system name
 WINDOWS = sys.platform.startswith("win")
 CYGWIN = sys.platform.startswith("cygwin")
 MACOS = sys.platform.startswith("darwin")
+
+
+class RuntimePaths:
+    """Get runtime paths to resources and basic GRASS build properties
+
+    The resource paths are also set as environmental variables.
+    """
+
+    def __init__(self, env=None):
+        if env is None:
+            env = os.environ
+        self.env = env
+
+    @property
+    def version(self):
+        return res_paths.GRASS_VERSION
+
+    @property
+    def version_major(self):
+        return res_paths.GRASS_VERSION_MAJOR
+
+    @property
+    def version_minor(self):
+        return res_paths.GRASS_VERSION_MINOR
+
+    @property
+    def ld_library_path_var(self):
+        return res_paths.LD_LIBRARY_PATH_VAR
+
+    @property
+    def grass_exe_name(self):
+        return res_paths.GRASS_EXE_NAME
+
+    @property
+    def grass_version_git(self):
+        return res_paths.GRASS_VERSION_GIT
+
+    @property
+    def gisbase(self):
+        return self.__get_dir("GISBASE")
+
+    @property
+    def prefix(self):
+        return self.__get_dir("GRASS_PREFIX")
+
+    @property
+    def config_projshare(self):
+        return self.env.get("GRASS_PROJSHARE", res_paths.CONFIG_PROJSHARE)
+
+    def __get_dir(self, env_var):
+        """Get the directory stored in the environmental variable 'env_var'
+
+        If the environmental variable not yet set, it is retrived and
+        set from resource_paths."""
+        if env_var in self.env and len(self.env[env_var]) > 0:
+            res = os.path.normpath(self.env[env_var])
+        else:
+            path = getattr(res_paths, env_var)
+            res = os.path.normpath(os.path.join(res_paths.GRASS_PREFIX, path))
+            self.env[env_var] = res
+        return res
 
 
 def get_grass_config_dir(major_version, minor_version, env):

@@ -78,7 +78,7 @@ struct Key_Value *G_get_projinfo(void)
         const char *epsgstr = G_find_key_value("epsg", in_epsg_keys);
         char buf[4096];
 
-        sprintf(buf, "EPSG:%s", epsgstr);
+        snprintf(buf, sizeof(buf), "EPSG:%s", epsgstr);
         G_set_key_value("init", buf, in_proj_keys);
         G_free_key_value(in_epsg_keys);
     }

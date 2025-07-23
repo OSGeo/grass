@@ -46,9 +46,9 @@ VT = TypeVar("VT")  # Value type
 def float_or_dms(s) -> float:
     """Convert DMS to float.
 
-    >>> round(float_or_dms('26:45:30'), 5)
+    >>> round(float_or_dms("26:45:30"), 5)
     26.75833
-    >>> round(float_or_dms('26:0:0.1'), 5)
+    >>> round(float_or_dms("26:0:0.1"), 5)
     26.00003
 
     :param s: DMS value
@@ -64,15 +64,15 @@ def separator(sep: str) -> str:
     """Returns separator from G_OPT_F_SEP appropriately converted
     to character.
 
-    >>> separator('pipe')
+    >>> separator("pipe")
     '|'
-    >>> separator('comma')
+    >>> separator("comma")
     ','
 
     If the string does not match any of the separator keywords,
     it is returned as is:
 
-    >>> separator(', ')
+    >>> separator(", ")
     ', '
 
     :param str separator: character or separator keyword
@@ -153,22 +153,28 @@ class KeyValue(dict[str, VT]):
     """A general-purpose key-value store.
 
     KeyValue is a subclass of dict, but also allows entries to be read and
-    written using attribute syntax. Example:
+    written using attribute syntax.
 
-    >>> reg = KeyValue()
-    >>> reg['north'] = 489
-    >>> reg.north
-    489
-    >>> reg.south = 205
-    >>> reg['south']
-    205
+    :Example:
+      .. code-block:: pycon
+
+        >>> reg = KeyValue()
+        >>> reg["north"] = 489
+        >>> reg.north
+        489
+        >>> reg.south = 205
+        >>> reg["south"]
+        205
 
     The keys of KeyValue are strings. To use other key types, use other mapping types.
     To use the attribute syntax, the keys must be valid Python attribute names.
     """
 
     def __getattr__(self, key: str) -> VT:
-        return self[key]
+        try:
+            return self[key]
+        except KeyError:
+            raise AttributeError(key)
 
     def __setattr__(self, key: str, value: VT) -> None:
         self[key] = value
@@ -190,15 +196,15 @@ def decode(bytes_: AnyStr, encoding: str | None = None) -> str:
 
     No-op if parameter is not bytes (assumed unicode string).
 
-    :param bytes bytes_: the bytes to decode
+    :param bytes\\_: the bytes to decode
     :param encoding: encoding to be used, default value is None
 
     Example
     -------
 
-    >>> decode(b'S\xc3\xbcdtirol')
+    >>> decode(b"S\xc3\xbcdtirol")
     u'Südtirol'
-    >>> decode(u'Südtirol')
+    >>> decode("Südtirol")
     u'Südtirol'
     >>> decode(1234)
     u'1234'
@@ -225,9 +231,9 @@ def encode(string: AnyStr, encoding: str | None = None) -> bytes:
     Example
     -------
 
-    >>> encode(b'S\xc3\xbcdtirol')
+    >>> encode(b"S\xc3\xbcdtirol")
     b'S\xc3\xbcdtirol'
-    >>> decode(u'Südtirol')
+    >>> decode("Südtirol")
     b'S\xc3\xbcdtirol'
     >>> decode(1234)
     b'1234'
@@ -245,6 +251,10 @@ def encode(string: AnyStr, encoding: str | None = None) -> bytes:
 def text_to_string(text: AnyStr, encoding: str | None = None) -> str:
     """Convert text to str. Useful when passing text into environments,
     in Python 2 it needs to be bytes on Windows, in Python 3 in needs unicode.
+
+    :param text: The text to convert to string
+    :param encoding: The encoding to be used to decode the text that will be converted
+    :returns: A (unicode) string
     """
     return decode(text, encoding=encoding)
 
@@ -292,9 +302,9 @@ def parse_key_val(
     """Parse a string into a dictionary, where entries are separated
     by newlines and the key and value are separated by `sep` (default: `=`)
 
-    >>> parse_key_val('min=20\\nmax=50') == {'min': '20', 'max': '50'}
+    >>> parse_key_val("min=20\\nmax=50") == {"min": "20", "max": "50"}
     True
-    >>> parse_key_val('min=20\\nmax=50', val_type=float) == {'min': 20, 'max': 50}
+    >>> parse_key_val("min=20\\nmax=50", val_type=float) == {"min": 20, "max": 50}
     True
 
     :param s: string to be parsed
@@ -461,7 +471,7 @@ def get_lib_path(modname, libname=None):
 
 
 def set_path(modulename, dirname=None, path="."):
-    """Set sys.path looking in the the local directory GRASS directories.
+    """Set sys.path looking in the local directory GRASS directories.
 
     :param modulename: string with the name of the GRASS module
     :param dirname: string with the directory name containing the python
@@ -501,8 +511,8 @@ def set_path(modulename, dirname=None, path="."):
 
     in the source code the function is called with the following parameters: ::
 
-        set_path('r.green', 'libhydro', '..')
-        set_path('r.green', 'libgreen', os.path.join('..', '..'))
+        set_path("r.green", "libhydro", "..")
+        set_path("r.green", "libgreen", os.path.join("..", ".."))
 
     when we are executing the module: r.green.hydro.financial locally from
     the command line:  ::
@@ -599,7 +609,7 @@ def append_node_pid(name):
 
     >>> append_node_pid("tmp_raster_1")
 
-    ..note::
+    .. note::
 
         Before you use this function for creating temporary files (i.e., normal
         files on disk, not maps and other mapset elements), see functions
@@ -632,7 +642,7 @@ def append_uuid(name):
 
     >>> append_uuid("tmp")
 
-    ..note::
+    .. note::
 
         See the note about creating temporary files in the
         :func:`append_node_pid()` description.
@@ -647,12 +657,12 @@ def append_random(name, suffix_length=None, total_length=None):
     >>> append_random("tmp", 8)
     >>> append_random("tmp", total_length=16)
 
-    ..note::
+    .. note::
 
         Note that this will be influenced by the random seed set for the Python
         random package.
 
-    ..note::
+    .. note::
 
         See the note about creating temporary files in the
         :func:`append_node_pid()` description.

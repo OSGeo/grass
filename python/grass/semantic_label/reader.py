@@ -1,5 +1,4 @@
 import os
-import sys
 import json
 import glob
 import re
@@ -86,10 +85,8 @@ class SemanticLabelReader:
             print_kv(k, v, indent)
 
     def _print_label(self, semantic_label=None, tag=None):
-        sys.stdout.write(semantic_label)
-        if tag:
-            sys.stdout.write(" {}".format(tag))
-        sys.stdout.write(os.linesep)
+        tag_text = f" {tag}" if tag else ""
+        print(f"{semantic_label}{tag_text}")
 
     def print_info(self, shortcut=None, band=None, semantic_label=None, extended=False):
         """Prints semantic label information to stdout.

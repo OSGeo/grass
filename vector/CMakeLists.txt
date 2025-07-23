@@ -736,6 +736,7 @@ build_program_in_subdir(
   grass_dbmiclient
   grass_dbmidriver
   grass_gis
+  grass_parson
   grass_vector
   ${LIBM})
 

@@ -1,8 +1,8 @@
 ---
-description: Projections and spatial transformations in GRASS GIS
+description: Projections and spatial transformations in GRASS
 ---
 
-# Projections and spatial transformations in GRASS GIS
+# Projections and spatial transformations in GRASS
 
 ## Projection management in general
 

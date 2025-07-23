@@ -1,7 +1,7 @@
 ## DESCRIPTION
 
 *r.example* does practically do nothing, except for illustrating GRASS
-GIS raster programming. It copies over an existing raster map to a new
+raster programming. It copies over an existing raster map to a new
 raster map. See the source code for details.
 
 ## NOTES

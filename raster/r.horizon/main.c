@@ -335,7 +335,8 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    G_set_omp_num_threads(parm.nprocs);
+    int nprocs = G_set_omp_num_threads(parm.nprocs);
+    nprocs = Rast_disable_omp_on_mask(nprocs);
 
     struct Cell_head cellhd;
     struct Cell_head new_cellhd;

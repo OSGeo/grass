@@ -1,4 +1,4 @@
-FROM ubuntu:22.04@sha256:d80997daaa3811b175119350d84305e1ec9129e1799bba0bd1e3120da3ff52c3
+FROM ubuntu:22.04@sha256:1ec65b2719518e27d4d25f104d93f9fac60dc437f81452302406825c46fcc9cb
 
 LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann,Tomas Zigo"
 LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
@@ -92,7 +92,6 @@ RUN apt-get update && apt-get upgrade -y && \
     python3-numpy \
     python3-pil \
     python3-pip \
-    python3-ply \
     python3-setuptools \
     python3-venv \
     python3-wxgtk4.0 \

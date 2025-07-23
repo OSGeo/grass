@@ -33,12 +33,13 @@ class Map3D:
     placed on the image using the *overlay* attribute which is the 2D renderer, i.e.,
     has interface of the *Map* class.
 
-    Basic usage::
+    :Basic usage:
+      .. code-block:: pycon
 
-    >>> img = Map()
-    >>> img.render(elevation_map="elevation", color_map="elevation", perspective=20)
-    >>> img.overlay.d_legend(raster="elevation", at=(60, 97, 87, 92))
-    >>> img.show()
+        >>> img = Map3D()
+        >>> img.render(elevation_map="elevation", color_map="elevation", perspective=20)
+        >>> img.overlay.d_legend(raster="elevation", at=(60, 97, 87, 92))
+        >>> img.show()
 
     For the OpenGL rendering with *m.nviz.image* to work, a display (screen) is needed.
     This is not guaranteed on headless systems such as continuous integration (CI) or

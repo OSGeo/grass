@@ -698,8 +698,8 @@ int main(int argc, char *argv[])
         if (open3d == WITH_Z)
             fprintf(ascii, "%s%.*f", fs, dp, resultset[j].z);
         if (Fi != NULL) {
-            sprintf(sql, "select * from %s where %s=%d", Fi->table, Fi->key,
-                    resultset[j].cat);
+            snprintf(sql, sizeof(sql), "select * from %s where %s=%d",
+                     Fi->table, Fi->key, resultset[j].cat);
             G_debug(2, "SQL: \"%s\"", sql);
             db_set_string(&dbsql, sql);
             /* driver IS initialized here in case if Fi != NULL */

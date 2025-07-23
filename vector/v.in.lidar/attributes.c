@@ -64,56 +64,58 @@ void create_table_for_lidar(struct Map_info *vector_map, const char *name,
      * blue (int) (FORMAT 2, 3, 5)*/
 
     /* Create table */
-    sprintf(buf, "create table %s (%s integer", Fi->table, cat_col_name);
+    snprintf(buf, sizeof(buf), "create table %s (%s integer", Fi->table,
+             cat_col_name);
     db_set_string(&sql, buf);
 
     /* x, y, z */
-    sprintf(buf, ", x_coord double precision");
+    snprintf(buf, sizeof(buf), ", x_coord double precision");
     db_append_string(&sql, buf);
-    sprintf(buf, ", y_coord double precision");
+    snprintf(buf, sizeof(buf), ", y_coord double precision");
     db_append_string(&sql, buf);
-    sprintf(buf, ", z_coord double precision");
+    snprintf(buf, sizeof(buf), ", z_coord double precision");
     db_append_string(&sql, buf);
     /* intensity */
-    sprintf(buf, ", intensity integer");
+    snprintf(buf, sizeof(buf), ", intensity integer");
     db_append_string(&sql, buf);
     /* return number */
-    sprintf(buf, ", return integer");
+    snprintf(buf, sizeof(buf), ", return integer");
     db_append_string(&sql, buf);
     /* number of returns */
-    sprintf(buf, ", n_returns integer");
+    snprintf(buf, sizeof(buf), ", n_returns integer");
     db_append_string(&sql, buf);
     /* scan direction */
-    sprintf(buf, ", scan_dir integer");
+    snprintf(buf, sizeof(buf), ", scan_dir integer");
     db_append_string(&sql, buf);
     /* flight line edge */
-    sprintf(buf, ", edge integer");
+    snprintf(buf, sizeof(buf), ", edge integer");
     db_append_string(&sql, buf);
     /* classification type */
-    sprintf(buf, ", cl_type varchar(20)");
+    snprintf(buf, sizeof(buf), ", cl_type varchar(20)");
     db_append_string(&sql, buf);
     /* classification class */
-    sprintf(buf, ", class varchar(40)");
+    snprintf(buf, sizeof(buf), ", class varchar(40)");
     db_append_string(&sql, buf);
     /* GPS time */
     if (have_time) {
-        sprintf(buf, ", gps_time double precision");
+        snprintf(buf, sizeof(buf), ", gps_time double precision");
         db_append_string(&sql, buf);
     }
     /* scan angle */
-    sprintf(buf, ", angle integer");
+    snprintf(buf, sizeof(buf), ", angle integer");
     db_append_string(&sql, buf);
     /* source id */
-    sprintf(buf, ", src_id integer");
+    snprintf(buf, sizeof(buf), ", src_id integer");
     db_append_string(&sql, buf);
     /* user data */
-    sprintf(buf, ", usr_data integer");
+    snprintf(buf, sizeof(buf), ", usr_data integer");
     db_append_string(&sql, buf);
     /* colors */
     if (have_color) {
-        sprintf(buf, ", red integer, green integer, blue integer");
+        snprintf(buf, sizeof(buf),
+                 ", red integer, green integer, blue integer");
         db_append_string(&sql, buf);
-        sprintf(buf, ", GRASSRGB varchar(11)");
+        snprintf(buf, sizeof(buf), ", GRASSRGB varchar(11)");
         db_append_string(&sql, buf);
     }
 
@@ -166,55 +168,55 @@ void las_point_to_attributes(struct field_info *Fi, dbDriver *driver, int cat,
     /* use LASPoint_Validate (LASPointH hPoint) to check for
      * return number, number of returns, scan direction, flight line edge,
      * classification, scan angle rank */
-    sprintf(buf, "insert into %s values ( %d", Fi->table, cat);
+    snprintf(buf, sizeof(buf), "insert into %s values ( %d", Fi->table, cat);
     db_set_string(&sql, buf);
 
     /* x, y, z */
-    sprintf(buf, ", %f", x);
+    snprintf(buf, sizeof(buf), ", %f", x);
     db_append_string(&sql, buf);
-    sprintf(buf, ", %f", y);
+    snprintf(buf, sizeof(buf), ", %f", y);
     db_append_string(&sql, buf);
-    sprintf(buf, ", %f", z);
+    snprintf(buf, sizeof(buf), ", %f", z);
     db_append_string(&sql, buf);
     /* intensity */
-    sprintf(buf, ", %d", LASPoint_GetIntensity(LAS_point));
+    snprintf(buf, sizeof(buf), ", %d", LASPoint_GetIntensity(LAS_point));
     db_append_string(&sql, buf);
     /* return number */
-    sprintf(buf, ", %d", LASPoint_GetReturnNumber(LAS_point));
+    snprintf(buf, sizeof(buf), ", %d", LASPoint_GetReturnNumber(LAS_point));
     db_append_string(&sql, buf);
     /* number of returns */
-    sprintf(buf, ",  %d", LASPoint_GetNumberOfReturns(LAS_point));
+    snprintf(buf, sizeof(buf), ",  %d", LASPoint_GetNumberOfReturns(LAS_point));
     db_append_string(&sql, buf);
     /* scan direction */
-    sprintf(buf, ", %d", LASPoint_GetScanDirection(LAS_point));
+    snprintf(buf, sizeof(buf), ", %d", LASPoint_GetScanDirection(LAS_point));
     db_append_string(&sql, buf);
     /* flight line edge */
-    sprintf(buf, ",  %d", LASPoint_GetFlightLineEdge(LAS_point));
+    snprintf(buf, sizeof(buf), ",  %d", LASPoint_GetFlightLineEdge(LAS_point));
     db_append_string(&sql, buf);
     class_flag = LASPoint_GetClassification(LAS_point);
     /* classification type int or char ? */
     las_class_type = class_flag / 32;
-    sprintf(buf, ", \'%s\'", class_type[las_class_type].name);
+    snprintf(buf, sizeof(buf), ", \'%s\'", class_type[las_class_type].name);
     db_append_string(&sql, buf);
     /* classification class int or char ? */
     las_class = class_flag % 32;
     if (las_class > 13)
         las_class = 13;
-    sprintf(buf, ", \'%s\'", class_val[las_class].name);
+    snprintf(buf, sizeof(buf), ", \'%s\'", class_val[las_class].name);
     db_append_string(&sql, buf);
     /* GPS time */
     if (have_time) {
-        sprintf(buf, ", %f", LASPoint_GetTime(LAS_point));
+        snprintf(buf, sizeof(buf), ", %f", LASPoint_GetTime(LAS_point));
         db_append_string(&sql, buf);
     }
     /* scan angle */
-    sprintf(buf, ", %d", LASPoint_GetScanAngleRank(LAS_point));
+    snprintf(buf, sizeof(buf), ", %d", LASPoint_GetScanAngleRank(LAS_point));
     db_append_string(&sql, buf);
     /* source id */
-    sprintf(buf, ", %d", LASPoint_GetPointSourceId(LAS_point));
+    snprintf(buf, sizeof(buf), ", %d", LASPoint_GetPointSourceId(LAS_point));
     db_append_string(&sql, buf);
     /* user data */
-    sprintf(buf, ", %d", LASPoint_GetUserData(LAS_point));
+    snprintf(buf, sizeof(buf), ", %d", LASPoint_GetUserData(LAS_point));
     db_append_string(&sql, buf);
     /* colors */
     if (have_color) {
@@ -223,9 +225,9 @@ void las_point_to_attributes(struct field_info *Fi, dbDriver *driver, int cat,
         int green = LASColor_GetGreen(LAS_color);
         int blue = LASColor_GetBlue(LAS_color);
 
-        sprintf(buf, ", %d, %d, %d", red, green, blue);
+        snprintf(buf, sizeof(buf), ", %d, %d, %d", red, green, blue);
         db_append_string(&sql, buf);
-        sprintf(buf, ", \"%03d:%03d:%03d\"", red, green, blue);
+        snprintf(buf, sizeof(buf), ", \"%03d:%03d:%03d\"", red, green, blue);
         db_append_string(&sql, buf);
     }
     db_append_string(&sql, " )");

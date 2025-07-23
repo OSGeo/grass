@@ -295,7 +295,7 @@ class TimelineFrame(wx.Frame):
                 )
             )
 
-        params = gs.read_command("g.proj", flags="g")
+        params = gs.read_command("g.proj", flags="p", format="shell")
         params = gs.parse_key_val(params)
         if "unit" in params:
             self.axes3d.set_xlabel(_("X [%s]") % params["unit"])

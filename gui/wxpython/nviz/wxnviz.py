@@ -940,7 +940,7 @@ class Nviz:
     ) -> Literal[1, -1, -2]:
         """Set surface mask
 
-        ..todo::
+        .. todo::
             invert
 
         :param id: surface id
