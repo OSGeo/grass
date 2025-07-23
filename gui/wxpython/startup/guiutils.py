@@ -199,11 +199,9 @@ def create_location_interactively(guiparent, grassdb):
         )
         # Returns database and location created by user
         # and a mapset user may want to switch to
-        gWizard_output = (gWizard.grassdatabase, gWizard.location, mapset)
-    else:
-        # Returns PERMANENT mapset when user mapset not defined
-        gWizard_output = (gWizard.grassdatabase, gWizard.location, "PERMANENT")
-    return gWizard_output
+        return (gWizard.grassdatabase, gWizard.location, mapset)
+    # Returns PERMANENT mapset when user mapset not defined
+    return (gWizard.grassdatabase, gWizard.location, "PERMANENT")
 
 
 def rename_mapset_interactively(guiparent, grassdb, location, mapset):
@@ -707,8 +705,7 @@ def switch_mapset_interactively(
                 GMessage(
                     parent=guiparent,
                     message=_(
-                        "Current project is <%(loc)s>.\n"
-                        "Current mapset is <%(mapset)s>."
+                        "Current project is <%(loc)s>.\nCurrent mapset is <%(mapset)s>."
                     )
                     % {"loc": location, "mapset": mapset},
                 )

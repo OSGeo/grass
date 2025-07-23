@@ -26,6 +26,7 @@ Bug fix (9/12/2010) by Daniel:
       filter function short.
 
 """
+
 import os
 import sys
 import numpy as np
@@ -59,20 +60,15 @@ def read_input(csvfile):
     first column is wavelength
     values are those of the discrete band filter functions
     """
-    infile = open(csvfile)
+    with open(csvfile) as infile:
+        # get number of bands and band names
+        bands = infile.readline().strip().split(",")[1:]
 
-    # get number of bands and band names
-    bands = infile.readline().split(",")
-    bands.remove(bands[0])
-    bands[-1] = bands[-1].strip()
-    print(" > Number of bands found: %d" % len(bands))
-    infile.close()
+    print(f" > Number of bands found: {len(bands)}")
 
     # create converter dictionary for import
     # fix nodata or \n
-    conv = {}
-    for b in range(len(bands)):
-        conv[b + 1] = lambda s: float(s or 0)
+    conv = {b + 1: lambda s: float(s or 0) for b in range(len(bands))}
 
     values = np.loadtxt(csvfile, delimiter=",", skiprows=1, converters=conv)
 
@@ -87,16 +83,14 @@ def interpolate_band(values, step=2.5):
     and min, max wl values
     values must be numpy array with 2 columns
     """
-
     # removing nodata and invalid values
-    w = values[:, 1] >= 0
-    values_clean = values[w]
+    values_clean = values[values[:, 1] >= 0]
 
     wavelengths = values_clean[:, 0]  # 1st column of input array
     responses = values_clean[:, 1]  # 2nd column
-    assert len(wavelengths) == len(
-        responses
-    ), "Number of wavelength slots and spectral responses are not equal!"
+    assert len(wavelengths) == len(responses), (
+        "Number of wavelength slots and spectral responses are not equal!"
+    )
 
     # spectral responses are written out with .4f in pretty_print()
     # anything smaller than 0.0001 will become 0.0000 -> discard with ...
@@ -184,25 +178,25 @@ def pretty_print(filter_f):
     Create pretty string out of filter function
     8 values per line, with spaces, commas and all the rest
     """
-    pstring = ""
+    pstring = []
     for i in range(len(filter_f) + 1):
         if i % 8 == 0:
             if i != 0:
                 value_wo_leading_zero = ("%.4f" % (filter_f[i - 1])).lstrip("0")
-                pstring += value_wo_leading_zero
-            if i > 1 and i < len(filter_f):
-                pstring += ", "
-            if i != 1:
+                pstring.append(value_wo_leading_zero)
+            if i > 1:
+                if i < len(filter_f):
+                    pstring.append(", ")
                 # trim the trailing whitespace at the end of line
-                pstring = pstring.rstrip()
-            pstring += "\n        "
+                pstring[-1] = pstring[-1].rstrip()
+            pstring.append("\n        ")
         else:
             value_wo_leading_zero = ("%.4f" % (filter_f[i - 1])).lstrip("0")
-            pstring += value_wo_leading_zero
+            pstring.append(value_wo_leading_zero)
             if i < len(filter_f):
-                pstring += ", "
+                pstring.append(", ")
     # trim starting \n and trailing ,
-    return pstring.lstrip("\n").rstrip(", ")
+    return "".join(pstring).lstrip("\n").rstrip(", ")
 
 
 def write_cpp(bands, values, sensor, folder):
@@ -211,6 +205,24 @@ def write_cpp(bands, values, sensor, folder):
     create output file in cpp style
     needs other functions: interpolate_bands, pretty_print
     """
+
+    def get_min_wavelength(c, rthresh, fi):
+        """Get minimum wavelength rounded by threshold.
+
+        :param fi: filter function
+        """
+        while c > 0 and fi[c - 1] > rthresh:
+            c -= 1
+        return np.ceil(li[0] * 1000 + (2.5 * c))
+
+    def get_max_wavelength(c, rthresh, fi):
+        """Get maximum wavelength rounded by threshold.
+
+        :param fi: filter function
+        """
+        while c < len(fi) - 1 and fi[c + 1] > rthresh:
+            c += 1
+        return np.floor(li[0] * 1000 + (2.5 * c))
 
     # keep in sync with IWave::parse()
     rthresh = 0.01
@@ -225,17 +237,8 @@ def write_cpp(bands, values, sensor, folder):
         li = limits
         # Get wavelength range for spectral response in band
         maxresponse_idx = np.argmax(fi)
-        # Get minimum wavelength with spectral response
-        c = maxresponse_idx
-        while c > 0 and fi[c - 1] > rthresh:
-            c -= 1
-        min_wavelength = np.ceil(li[0] * 1000 + (2.5 * c))
-        # Get maximum wavelength with spectral response
-        c = maxresponse_idx
-        while c < len(fi) - 1 and fi[c + 1] > rthresh:
-            c += 1
-        max_wavelength = np.floor(li[0] * 1000 + (2.5 * c))
-        print("   %s (%inm - %inm)" % (bands[0], min_wavelength, max_wavelength))
+        min_wavelength = get_min_wavelength(maxresponse_idx, rthresh, fi)
+        max_wavelength = get_max_wavelength(maxresponse_idx, rthresh, fi)
 
     else:
         filter_f = []
@@ -247,89 +250,84 @@ def write_cpp(bands, values, sensor, folder):
 
             # Get wavelength range for spectral response in band
             maxresponse_idx = np.argmax(fi)
-            # Get minimum wavelength with spectral response
-            c = maxresponse_idx
-            while c > 0 and fi[c - 1] > rthresh:
-                c -= 1
-            min_wavelength = np.ceil(li[0] * 1000 + (2.5 * c))
-            # Get maximum wavelength with spectral response
-            c = maxresponse_idx
-            while c < len(fi) - 1 and fi[c + 1] > rthresh:
-                c += 1
-            max_wavelength = np.floor(li[0] * 1000 + (2.5 * c))
+            min_wavelength = get_min_wavelength(maxresponse_idx, rthresh, fi)
+            max_wavelength = get_max_wavelength(maxresponse_idx, rthresh, fi)
             print("   %s (%inm - %inm)" % (bands[b], min_wavelength, max_wavelength))
 
     # writing...
-    outfile = open(os.path.join(folder, sensor + "_cpp_template.txt"), "w")
-    outfile.write("/* Following filter function created using create_iwave.py */\n\n")
-
-    if len(bands) == 1:
-        outfile.write("void IWave::%s()\n{\n\n" % (sensor.lower()))
-    else:
-        outfile.write("void IWave::%s(int iwa)\n{\n\n" % (sensor.lower()))
-
-    # single band case
-    if len(bands) == 1:
-        outfile.write("    /* %s of %s */\n" % (bands[0], sensor))
-        outfile.write("    static const float sr[%i] = {" % (len(filter_f)))
-        filter_text = pretty_print(filter_f)
-        outfile.write(filter_text)
-
-        # calculate wl slot for band start
-        # slots range from 250 to 4000 at 2.5 increments (total 1500)
-        s_start = int((limits[0] * 1000 - 250) / 2.5)
-
-        outfile.write("\n")
-        outfile.write("    ffu.wlinf = %.4ff;\n" % (limits[0]))
-        outfile.write("    ffu.wlsup = %.4ff;\n" % (limits[1]))
-        outfile.write("    int i = 0;\n")
-        outfile.write("    for(i = 0; i < %i; i++)\tffu.s[i] = 0;\n" % (s_start))
+    outpath = os.path.join(folder, sensor + "_cpp_template.txt")
+    with open(outpath, "w") as outfile:
         outfile.write(
-            "    for(i = 0; i < %i; i++)\tffu.s[%i+i] = sr[i];\n"
-            % (len(filter_f), s_start)
+            "/* Following filter function created using create_iwave.py */\n\n"
         )
-        outfile.write(
-            "    for(i = %i; i < 1501; i++)\tffu.s[i] = 0;\n"
-            % (s_start + len(filter_f))
-        )
-        outfile.write("}\n")
 
-    else:  # more than 1 band
-        # writing bands
-        for b in range(len(bands)):
-            outfile.write("    /* %s of %s */\n" % (bands[b], sensor))
+        # single band case
+        if len(bands) == 1:
+            outfile.write("void IWave::%s()\n{\n\n" % (sensor.lower()))
+            outfile.write("    /* %s of %s */\n" % (bands[0], sensor))
+            outfile.write("    static const float sr[%i] = {" % (len(filter_f)))
+            filter_text = pretty_print(filter_f)
+            outfile.write(filter_text)
+
+            # calculate wl slot for band start
+            # slots range from 250 to 4000 at 2.5 increments (total 1500)
+            s_start = int((limits[0] * 1000 - 250) / 2.5)
+
+            outfile.write("\n")
+            outfile.write("    ffu.wlinf = %.4ff;\n" % (limits[0]))
+            outfile.write("    ffu.wlsup = %.4ff;\n" % (limits[1]))
+            outfile.write("    int i = 0;\n")
+            outfile.write("    for(i = 0; i < %i; i++)\tffu.s[i] = 0;\n" % (s_start))
             outfile.write(
-                "    static const float sr%i[%i] = {\n" % (b + 1, len(filter_f[b]))
+                "    for(i = 0; i < %i; i++)\tffu.s[%i+i] = sr[i];\n"
+                % (len(filter_f), s_start)
             )
-            filter_text = pretty_print(filter_f[b])
-            outfile.write(filter_text + "\n    };\n\t\n")
+            outfile.write(
+                "    for(i = %i; i < 1501; i++)\tffu.s[i] = 0;\n"
+                % (s_start + len(filter_f))
+            )
+            outfile.write("}\n")
 
-        # writing band limits
-        for b in range(len(bands)):
+        else:  # more than 1 band
+            outfile.write("void IWave::%s(int iwa)\n{\n\n" % (sensor.lower()))
+            # writing bands
+            for b in range(len(bands)):
+                outfile.write("    /* %s of %s */\n" % (bands[b], sensor))
+                outfile.write(
+                    "    static const float sr%i[%i] = {\n" % (b + 1, len(filter_f[b]))
+                )
+                filter_text = pretty_print(filter_f[b])
+                outfile.write(filter_text + "\n    };\n\t\n")
+
+            # writing band limits
             inf = ", ".join(["%.4f" % i[0] for i in limits])
             sup = ", ".join(["%.4f" % i[1] for i in limits])
 
-        outfile.write("    static const float wli[%i] = {%s};\n" % (len(bands), inf))
-        outfile.write("    static const float wls[%i] = {%s};\n" % (len(bands), sup))
-
-        outfile.write("\n")
-        outfile.write("    ffu.wlinf = (float)wli[iwa-1];\n")
-        outfile.write("    ffu.wlsup = (float)wls[iwa-1];\n\n")
-
-        outfile.write("    int i;\n")
-        outfile.write("    for(i = 0; i < 1501; i++) ffu.s[i] = 0;\n\n")
-
-        outfile.write("    switch(iwa)\n    {\n")
-
-        # now start of case part...
-        for b in range(len(bands)):
-            s_start = int((limits[b][0] * 1000 - 250) / 2.5)
             outfile.write(
-                "    case %i: for(i = 0; i < %i; i++)  ffu.s[%i+i] = sr%i[i];\n"
-                % ((b + 1), len(filter_f[b]), s_start, (b + 1))
+                "    static const float wli[%i] = {%s};\n" % (len(bands), inf)
             )
-            outfile.write("        break;\n")
-        outfile.write("    }\n}\n")
+            outfile.write(
+                "    static const float wls[%i] = {%s};\n" % (len(bands), sup)
+            )
+
+            outfile.write("\n")
+            outfile.write("    ffu.wlinf = (float)wli[iwa-1];\n")
+            outfile.write("    ffu.wlsup = (float)wls[iwa-1];\n\n")
+
+            outfile.write("    int i;\n")
+            outfile.write("    for(i = 0; i < 1501; i++) ffu.s[i] = 0;\n\n")
+
+            outfile.write("    switch(iwa)\n    {\n")
+
+            # now start of case part...
+            for b in range(len(bands)):
+                s_start = int((limits[b][0] * 1000 - 250) / 2.5)
+                outfile.write(
+                    "    case %i: for(i = 0; i < %i; i++)  ffu.s[%i+i] = sr%i[i];\n"
+                    % ((b + 1), len(filter_f[b]), s_start, (b + 1))
+                )
+                outfile.write("        break;\n")
+            outfile.write("    }\n}\n")
 
 
 def main():

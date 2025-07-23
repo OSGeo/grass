@@ -70,7 +70,7 @@ def parse_modules(fd):
 
 
 def get_module_metadata(name):
-    """
+    """Gets the module's metadata for a given module name
 
     >>> get_module_metadata("g.region")
     ('Manages the boundary definitions for the geographic region.', ['general', 'settings'])

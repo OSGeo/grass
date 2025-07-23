@@ -338,7 +338,7 @@ g.message "Generating LaTeX source (writing to \$GISBASE/etc/) ..."
 
 #### write header
 cat << EOF > "${TMP}.tex"
-%% Adapted from LyX 1.3 LaTeX export. (c) 2009 The GRASS Development Team
+%% Adapted from LyX 1.3 LaTeX export. (c) 2009 by the GRASS Development Team
 \documentclass[a4paper]{article}
 \usepackage{palatino}
 \usepackage[T1]{fontenc}

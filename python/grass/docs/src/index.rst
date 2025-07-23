@@ -1,43 +1,51 @@
-GRASS GIS Python library documentation
+Getting Started
 ==========================================
 
 Python, a widely used general-purpose, high-level programming language
 provides a powerful scripting interface. Being easy-to-use yet
 powerful, it enables users to efficiently exploit the capabilities
-of the `GRASS GIS` software. Python scripts for GRASS GIS can be written at
-high level (GRASS GIS modules) as well as at low level (GRASS GIS
+of the `GRASS` software. Python scripts for GRASS can be written at
+high level (GRASS modules) as well as at low level (GRASS
 libraries) through a dedicated interface. The graphical user interface
-and the GRASS GIS Temporal Framework are entirely written in Python.
+and the GRASS Temporal Framework are entirely written in Python.
 
 A set of packages is provided to the user in order to provide functionality
 at various levels:
 
-* **grass.script package** provides Python interface to launch GRASS GIS modules in scripts
-* **PyGRASS** is an object-oriented Python Application
-  Programming Interface (API) for GRASS GIS which uses the GRASS C API as
-  backend but additionally offers a convenient interface to the GRASS GIS
+* `grass.script package <script_intro.html>`_ provides Python interface to launch GRASS modules in scripts
+* `PyGRASS <pygrass_index.html>`_ is an object-oriented Python Application
+  Programming Interface (API) for GRASS which uses the GRASS C API as
+  backend but additionally offers a convenient interface to the GRASS
   modules
-* **GRASS GIS Temporal Framework** implements the temporal GIS functionality
-  of GRASS GIS and provides an API to implement spatio-temporal processing modules
-* **grass.jupyter package** offers classes and setup functions for
-  running GRASS GIS in Jupyter Notebooks
-* **Testing GRASS GIS source code and modules** using gunittest package
-* **exceptions package** contains exceptions used by other packages
-* **imaging package** is a library to create animated images and films
-* **pydispatch package** is a library for signal-dispatching
+* `GRASS Temporal Framework <temporal_framework.html>`_ implements the temporal GIS functionality
+  of GRASS and provides an API to implement spatio-temporal processing modules
+* `grass.jupyter package <grass.jupyter.html>`_ offers classes and setup functions for
+  running GRASS in Jupyter Notebooks
+* `Testing GRASS source code and modules <gunittest_testing.html>`_ using gunittest package
+* `exceptions package <exceptions.html>`_ contains exceptions used by other packages
+* `imaging package <imaging.html>`_ is a library to create animated images and films
+* `pydispatch package <pydispatch.html>`_ is a library for signal-dispatching
 
-Contents:
+--------------------
+Additional Resources
+--------------------
+* `GRASS Python introduction <manuals/python_intro.html>`_ provides a general overview of
+  the Python interface to GRASS.
+* `GRASS Jupyter notebooks introduction <manuals/jupyter_intro.html>`_ provides an overview of how to use the **grass.jupyter** module.
 
+.. _GRASS: https://grass.osgeo.org/
+
+--------------------
+Modules and Packages
+--------------------
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
+   index
    script_intro
    pygrass_index
-   temporal_framework
    grass.jupyter
    exceptions
    imaging
-   gunittest_testing
    pydispatch
-
-.. _GRASS GIS: https://grass.osgeo.org/
+   gunittest_testing

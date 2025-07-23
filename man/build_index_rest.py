@@ -21,11 +21,9 @@ from build_rest import (
 os.chdir(rest_dir)
 
 filename = "index.txt"
-f = open(filename + ".tmp", "w")
+with open(filename + ".tmp", "w") as f:
+    write_rest_header(f, "GRASS GIS %s Reference Manual" % grass_version, True)
+    write_rest_cmd_overview(f)
+    write_rest_footer(f, "index.txt")
 
-write_rest_header(f, "GRASS GIS %s Reference Manual" % grass_version, True)
-write_rest_cmd_overview(f)
-write_rest_footer(f, "index.txt")
-
-f.close()
 replace_file(filename)

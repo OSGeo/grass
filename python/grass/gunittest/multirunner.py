@@ -111,16 +111,16 @@ def main():
     # we assume that the start script is available and in the PATH
     # the shell=True is here because of MS Windows? (code taken from wiki)
     startcmd = grass_executable + " --config path"
-    p = subprocess.Popen(
+    with subprocess.Popen(
         startcmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    )
-    out, err = p.communicate()
-    if p.returncode != 0:
-        print(
-            "ERROR: Cannot find GRASS GIS start script (%s):\n%s" % (startcmd, err),
-            file=sys.stderr,
-        )
-        return 1
+    ) as p:
+        out, err = p.communicate()
+        if p.returncode != 0:
+            print(
+                "ERROR: Cannot find GRASS GIS start script (%s):\n%s" % (startcmd, err),
+                file=sys.stderr,
+            )
+            return 1
     gisbase = decode(out.strip())
 
     # set GISBASE environment variable
@@ -151,7 +151,7 @@ def main():
         # including also type to make it unique and preserve it for sure
         report = "report_for_" + location + "_" + location_type
         absreport = os.path.abspath(report)
-        p = subprocess.Popen(
+        with subprocess.Popen(
             [
                 sys.executable,
                 "-tt",
@@ -167,23 +167,24 @@ def main():
                 absreport,
             ],
             cwd=grasssrc,
-        )
-        returncode = p.wait()
-        reports.append(report)
+        ) as p2:
+            returncode = p2.wait()
+            reports.append(report)
 
     if main_report:
         # TODO: solve the path to source code (work now only for grass source code)
         arguments = [
             sys.executable,
-            grasssrc + "/python/grass/gunittest/" + "multireport.py",
-            "--timestapms",
+            grasssrc + "/python/grass/gunittest/multireport.py",
+            "--timestamps",
+            *reports,
         ]
-        arguments.extend(reports)
-        p = subprocess.Popen(arguments)
-        returncode = p.wait()
-        if returncode != 0:
-            print("ERROR: Creation of main report failed.", file=sys.stderr)
-            return 1
+
+        with subprocess.Popen(arguments) as p3:
+            returncode = p3.wait()
+            if returncode != 0:
+                print("ERROR: Creation of main report failed.", file=sys.stderr)
+                return 1
 
     return 0
 

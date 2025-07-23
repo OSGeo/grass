@@ -17,7 +17,6 @@ for details.
 """
 
 import wx
-import os
 
 from pathlib import Path
 
@@ -212,7 +211,7 @@ class DataCatalog(wx.Panel):
             grassdb_node = self.tree.InsertGrassDb(name=grassdatabase)
 
             # Offer to create a new location
-            if grassdb_node and not os.listdir(grassdatabase):
+            if grassdb_node and not any(Path(grassdatabase).iterdir()):
                 message = _(
                     "Do you want to create a new project (also known as location)?"
                 )

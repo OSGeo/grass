@@ -5,7 +5,7 @@ PostgreSQL server.
 
 <h2>Creating a PostgreSQL database</h2>
 
-A new database is created with <tt>createdb</tt>, see
+A new database is created with <code>createdb</code>, see
 the <a href="https://www.postgresql.org/docs/manuals/">PostgreSQL
 manual</a> for details.
 
@@ -76,7 +76,7 @@ coordinates. See <a href="v.in.db.html">here</a> for examples.
 
 <h2>PostGIS: PostgreSQL with vector geometry</h2>
 
-<a href="http://postgis.refractions.net/">PostGIS</a>:
+<a href="https://postgis.net/">PostGIS</a>:
 adds geographic object support to PostgreSQL.
 
 <h3>Example: Import from PostGIS</h3>
@@ -114,15 +114,15 @@ v.info -t test
 
 <h4>Geometry Converters</h4>
 <ul>
-<li><a href="http://postgis.refractions.net/download/">PostGIS with shp2pgsql</a>:<br>
- <tt>shp2pgsql -D lakespy2 lakespy2 test > lakespy2.sql</tt>
+<li><a href="https://postgis.net/workshops/postgis-intro/loading_data.html#loading-with-shp2pgsql">PostGIS with shp2pgsql</a>:<br>
+ <code>shp2pgsql -D lakespy2 lakespy2 test &gt; lakespy2.sql</code>
 </li>
-<li><a href="http://e00pg.sourceforge.net/">e00pg</a>: E00 to PostGIS filter,
+<li><a href="https://e00pg.sourceforge.net/">e00pg</a>: E00 to PostGIS filter,
 see also <em><a href="v.in.e00.html">v.in.e00</a></em>.
 </li>
 <li>GDAL/OGR <a href="https://gdal.org/">ogrinfo and ogr2ogr</a>:
 GIS vector format converter and library, e.g. ArcInfo or SHAPE to PostGIS.<br>
-  <tt>ogr2ogr -f "PostgreSQL" shapefile ??</tt>
+  <code>ogr2ogr -f "PostgreSQL" shapefile ??</code>
 </li>
 </ul>
 
@@ -143,6 +143,6 @@ GIS vector format converter and library, e.g. ArcInfo or SHAPE to PostGIS.<br>
 <ul>
 <li><a href="https://www.postgresql.org/">PostgreSQL web site</a></li>
 <li><a href="https://www.pgadmin.org/">pgAdmin graphical user interface</a></li>
-<li><a href="https://gdal.org/drv_pg.html">GDAL/OGR PostgreSQL
+<li><a href="https://gdal.org/en/stable/drivers/vector/pg.html">GDAL/OGR PostgreSQL
 driver documentation</a></li>
 </ul>

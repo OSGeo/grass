@@ -155,9 +155,9 @@ def test_create_multiple(xy_session):
     assert sorted(collected) == sorted(create_names)
     existing_mapsets = get_mapset_names(env=xy_session.env)
     assert sorted(existing_mapsets) == sorted(create_names + original_mapsets)
-    assert (
-        len(set(top_level_collected)) == 1
-    ), f"Top level mapset changed: {top_level_collected}"
+    assert len(set(top_level_collected)) == 1, (
+        f"Top level mapset changed: {top_level_collected}"
+    )
 
 
 def test_nested_top_env(xy_session):

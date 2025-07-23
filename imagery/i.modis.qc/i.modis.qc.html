@@ -498,12 +498,12 @@ standard QC (MOD09A1 in this module) since version 3, State-QA 500m images
 
 MOD11A2 quality control (QC) bands do not have a FillValue (No-data) according
 to <a href="https://lpdaac.usgs.gov/dataset_discovery/modis/modis_products_table/mod11a2_v006">MODIS Land Products site</a>.
-However, the metadata of the QC bands (i.e.: <tt>gdalinfo QC_band</tt>) shows <tt>No-data=0</tt>.
+However, the metadata of the QC bands (i.e.: <code>gdalinfo QC_band</code>) shows <code>No-data=0</code>.
 This value is then transformed into GRASS NULLs when data is imported through
 <a href="r.in.gdal.html">r.in.gdal</a>. Applying <em>i.modis.qc</em> on those QC bands
 will not give the expected range of values in the different QC bits. Therefore,
 before using <em>i.modis.qc</em>, the user needs to set the NULL value in QC bands
-back to zero (i.e.: <tt>r.null map=QC_band null=0</tt>) or just edit the metadata with GDAL
+back to zero (i.e.: <code>r.null map=QC_band null=0</code>) or just edit the metadata with GDAL
 utilities before importing into GRASS GIS. This is a known issue for MOD11A2
 (8-day LST product), but other MODIS products might be affected as well.
 
@@ -514,10 +514,10 @@ Add more daily products.
 <h2>REFERENCES</h2>
 
 <ul>
-<li> <a href="https://lpdaac.usgs.gov/dataset_discovery/modis/modis_products_table">MODIS Products</a>
+<li> <a href="https://lpdaac.usgs.gov/dataset_discovery/modis/modis_products_table">MODIS Products</a></li>
 <li> Vermote E.F., Kotchenova S.Y., Ray J.P. MODIS Surface Reflectance User's Guide.
  Version 1.2. June 2008. MODIS Land Surface Reflectance Science Computing Facility.
- <a href="http://modis-sr.ltdri.org">Homepage</a>
+ <a href="http://modis-sr.ltdri.org">Homepage</a></li>
 </ul>
 
 <h2>SEE ALSO</h2>

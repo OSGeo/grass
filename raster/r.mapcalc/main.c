@@ -104,11 +104,7 @@ int main(int argc, char **argv)
     file->description = _("File containing expression(s) to evaluate");
     file->guisection = _("Expression");
 
-    seed = G_define_option();
-    seed->key = "seed";
-    seed->type = TYPE_INTEGER;
-    seed->required = NO;
-    seed->description = _("Seed for rand() function");
+    seed = G_define_standard_option(G_OPT_M_SEED);
 
     random = G_define_flag();
     random->key = 's';

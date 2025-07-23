@@ -23,11 +23,11 @@ region settings as the spatial bounds
 
 <em>v.in.ogr</em> uses the OGR library which supports various vector
 data formats including
-<a href="https://gdal.org/drivers/vector/shapefile.html">ESRI Shapefile</a>,
-<a href="https://gdal.org/drivers/vector/mitab.html">Mapinfo File</a>, UK .NTF,
+<a href="https://gdal.org/en/stable/drivers/vector/shapefile.html">ESRI Shapefile</a>,
+<a href="https://gdal.org/en/stable/drivers/vector/mitab.html">Mapinfo File</a>, UK .NTF,
 SDTS, TIGER, IHO S-57 (ENC), DGN, GML, GPX, AVCBin, REC, Memory, OGDI,
 and PostgreSQL, depending on the local OGR installation. For details
-see the <a href="https://gdal.org/drivers/vector/">OGR format overview</a>.
+see the <a href="https://gdal.org/en/stable/drivers/vector/">OGR format overview</a>.
 The <b>-f</b> prints a list of the vector formats supported
 by the system's OGR (Simple Features Library). The OGR (Simple Features
 Library) is part of the <a href="https://gdal.org">GDAL</a> library,
@@ -142,7 +142,7 @@ string fields to UTF-8. LDID &quot;87 / 0x57&quot; is treated as
 ISO8859_1 which may not be appropriate for many
 languages. Unfortunately it is not clear what other values may be
 appropriate (see example below). To change encoding the user can set
-up <tt><a href="https://gdal.org/user/configoptions.html">SHAPE_ENCODING</a></tt>
+up <code><a href="https://gdal.org/en/stable/user/configoptions.html">SHAPE_ENCODING</a></code>
 environmental variable or simply to define
 encoding value using <b>encoding</b> parameter.
 
@@ -257,7 +257,7 @@ output=polygons type=boundary,centroid
 </pre></div>
 
 Generally, <em>v.in.ogr</em> just follows the
-<a href="https://gdal.org/drivers/vector/">format-specific</a>
+<a href="https://gdal.org/en/stable/drivers/vector/">format-specific</a>
 syntax defined by the OGR library.
 
 
@@ -265,14 +265,14 @@ syntax defined by the OGR library.
 <h3>Default connection settings as datasource (PostgreSQL only)</h3>
 
 If datasource (<b>input</b>) is specified as 'PG:' and the default DB
-driver is <a href="grass-pg.html">PostgreSQL</a> (<tt>pg</tt>) than
+driver is <a href="grass-pg.html">PostgreSQL</a> (<code>pg</code>) than
 the connection string is determined from the default DB settings, see
 examples below.
 
 <p>
 For schema support, first set a default schema with
 <em><a href="db.connect.html">db.connect</a></em>. If schema support
-is used the schema name must be specified whenever a <tt>db.*</tt>
+is used the schema name must be specified whenever a <code>db.*</code>
 module is called. User and password for connection to the database can
 be specified by <em><a href="db.login.html">db.login</a></em>.
 
@@ -301,27 +301,27 @@ db.select table=river
 
 <h3>OpenStreetMap (OSM)</h3>
 
-<a href="https://gdal.org/drivers/vector/osm.html">OSM data</a> are available in
+<a href="https://gdal.org/en/stable/drivers/vector/osm.html">OSM data</a> are available in
 .osm (XML based) and .pbf (optimized binary) formats. The .pbf format
 is recommended because file sizes are smaller. The OSM driver will
 categorize features into 5 layers :
 <ul>
-    <li><b>points</b>: "node" features that have significant tags attached.
-    <li><b>lines</b>: "way" features that are recognized as non-area.
+    <li><b>points</b>: "node" features that have significant tags attached.</li>
+    <li><b>lines</b>: "way" features that are recognized as non-area.</li>
     <li><b>multilinestrings</b>: "relation" features that form a
-multilinestring(type = 'multilinestring' or type = 'route').
+multilinestring(type = 'multilinestring' or type = 'route').</li>
     <li><b>multipolygons</b>: "relation" features that form a multipolygon (type
 = 'multipolygon' or type = 'boundary'), and "way" features that are
-recognized as area.
+recognized as area.</li>
     <li><b>other_relations</b>: "relation" features that do
-not belong to any of the above layers.
+not belong to any of the above layers.</li>
 </ul>
 
 It is recommended to import one layer at a time, and to select features
 with the <b>where</b> option, e.g. to import roads, use
 
 <div class="code"><pre>
-v.in.ogr where="highway <> ''"
+v.in.ogr where="highway &gt;&lt; ''"
 </pre></div>
 i.e. the OSM tag <em>highway</em> must be set.
 
@@ -357,8 +357,8 @@ v.in.ogr input=name.pbf layer=lines output=osm_data
 
 <h3>Oracle Spatial</h3>
 
-Note that you have to set the environment-variables <tt>ORACLE_BASE,
-ORACLE_SID, ORACLE_HOME</tt> and <tt>TNS_ADMIN</tt> accordingly.
+Note that you have to set the environment-variables <code>ORACLE_BASE,
+ORACLE_SID, ORACLE_HOME</code> and <code>TNS_ADMIN</code> accordingly.
 
 <div class="code"><pre>
 v.in.ogr input=OCI:username/password@database_instance output=grasslayer layer=roads_oci
@@ -461,7 +461,7 @@ with <em><a href="v.proj.html">v.proj</a></em>.
 
 <ul>
   <li><a href="https://gdal.org/">OGR vector library</a></li>
-  <li><a href="https://gdal.org/api/vector_c_api.html">OGR vector library C API</a> documentation</li>
+  <li><a href="https://gdal.org/en/stable/api/vector_c_api.html">OGR vector library C API</a> documentation</li>
 </ul>
 
 <h2>SEE ALSO</h2>

@@ -174,10 +174,10 @@ static int copy_table(const char *from_drvname, const char *from_dbname,
             if (p) {
                 char buf[GNAME_MAX];
 
-                sprintf(buf, "%s.%s",
-                        connection.schemaName ? connection.schemaName
-                                              : "public",
-                        to_tblname);
+                snprintf(buf, sizeof(buf), "%s.%s",
+                         connection.schemaName ? connection.schemaName
+                                               : "public",
+                         to_tblname);
                 if (strcmp(buf, tbl) == 0)
                     tblname_i = G_store(p + 1); /* skip dot */
             }
@@ -346,7 +346,7 @@ static int copy_table(const char *from_drvname, const char *from_dbname,
         if (!more)
             break;
 
-        sprintf(buf, "insert into %s values ( ", to_tblname);
+        snprintf(buf, sizeof(buf), "insert into %s values ( ", to_tblname);
         db_set_string(&sql, buf);
         select = 1;
         for (col = 0; col < ncols; col++) {

@@ -19,8 +19,8 @@ int get_height(const struct field_info *Fi, const char *hcolumn,
     dbValue *value;
 
     db_init_string(&sql);
-    sprintf(query, "SELECT %s FROM %s WHERE %s = %d", hcolumn, Fi->table,
-            Fi->key, cat);
+    snprintf(query, sizeof(query), "SELECT %s FROM %s WHERE %s = %d", hcolumn,
+             Fi->table, Fi->key, cat);
     G_debug(3, "SQL: %s", query);
     db_set_string(&sql, query);
     if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) != DB_OK)

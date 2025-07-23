@@ -34,7 +34,9 @@ from .open_stds import open_old_stds
 ###############################################################################
 
 
-def compute_univar_stats(registered_map_info, stats_module, fs, rast_region=False):
+def compute_univar_stats(
+    registered_map_info, stats_module, fs, rast_region: bool = False
+):
     """Compute univariate statistics for a map of a space time raster or raster3d
     dataset
 
@@ -90,15 +92,15 @@ def compute_univar_stats(registered_map_info, stats_module, fs, rast_region=Fals
                 eol = "\n"
             else:
                 eol = ""
-        string += f'{fs}{stats["mean"]}{fs}{stats["min"]}'
-        string += f'{fs}{stats["max"]}{fs}{stats["mean_of_abs"]}'
-        string += f'{fs}{stats["stddev"]}{fs}{stats["variance"]}'
-        string += f'{fs}{stats["coeff_var"]}{fs}{stats["sum"]}'
-        string += f'{fs}{stats["null_cells"]}{fs}{stats["n"]}'
-        string += f'{fs}{stats["n"]}'
+        string += f"{fs}{stats['mean']}{fs}{stats['min']}"
+        string += f"{fs}{stats['max']}{fs}{stats['mean_of_abs']}"
+        string += f"{fs}{stats['stddev']}{fs}{stats['variance']}"
+        string += f"{fs}{stats['coeff_var']}{fs}{stats['sum']}"
+        string += f"{fs}{stats['null_cells']}{fs}{stats['n']}"
+        string += f"{fs}{stats['n']}"
         if "median" in stats:
-            string += f'{fs}{stats["first_quartile"]}{fs}{stats["median"]}'
-            string += f'{fs}{stats["third_quartile"]}'
+            string += f"{fs}{stats['first_quartile']}{fs}{stats['median']}"
+            string += f"{fs}{stats['third_quartile']}"
             if stats_module.inputs.percentile:
                 for perc in stats_module.inputs.percentile:
                     perc_value = stats[
@@ -116,15 +118,16 @@ def print_gridded_dataset_univar_statistics(
     output,
     where,
     extended,
-    no_header=False,
-    fs="|",
-    rast_region=False,
+    no_header: bool = False,
+    fs: str = "|",
+    rast_region: bool = False,
     region_relation=None,
     zones=None,
     percentile=None,
-    nprocs=1,
-):
+    nprocs: int = 1,
+) -> None:
     """Print univariate statistics for a space time raster or raster3d dataset.
+
     Returns None if the space time raster dataset is empty or if applied
     filters (where, region_relation) do not return any maps to process.
 
@@ -141,10 +144,11 @@ def print_gridded_dataset_univar_statistics(
            and use the raster map regions for univar statistical calculation.
     :param region_relation: Process only maps with the given spatial relation
            to the computational region. A string with one of the following values:
-           "overlaps": maps that spatially overlap ("intersect")
-                       within the provided spatial extent
-           "is_contained": maps that are fully within the provided spatial extent
-           "contains": maps that contain (fully cover) the provided spatial extent
+
+           - "overlaps": maps that spatially overlap ("intersect")
+             within the provided spatial extent
+           - "is_contained": maps that are fully within the provided spatial extent
+           - "contains": maps that contain (fully cover) the provided spatial extent
     :param zones: raster map with zones to calculate statistics for
     """
     # We need a database interface
@@ -245,6 +249,7 @@ def print_gridded_dataset_univar_statistics(
         run_=False,
     )
 
+    nprocs = max(nprocs, 1)
     if nprocs == 1:
         strings = [
             compute_univar_stats(
@@ -275,8 +280,17 @@ def print_gridded_dataset_univar_statistics(
 
 
 def print_vector_dataset_univar_statistics(
-    input, output, twhere, layer, type, column, where, extended, no_header=False, fs="|"
-):
+    input,
+    output,
+    twhere,
+    layer,
+    type,
+    column,
+    where,
+    extended,
+    no_header: bool = False,
+    fs: str = "|",
+) -> None:
     """Print univariate statistics for a space time vector dataset
 
     :param input: The name of the space time dataset

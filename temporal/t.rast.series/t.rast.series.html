@@ -20,8 +20,7 @@ files exceeds this number, the <b>-z</b> flag will be invoked. Because this
 will slow down processing, the user can set a higher limit with the
 <b>file_limit</b> parameter. Note that <b>file_limit</b> limit should not exceed the
 user-specific limit on open files set by your operating system. See the
-<a
-href="https://grasswiki.osgeo.org/wiki/Large_raster_data_processing#Number_of_open_files_limitation">Wiki</a>
+<a href="https://grasswiki.osgeo.org/wiki/Large_raster_data_processing#Number_of_open_files_limitation">Wiki</a>
 for more information.
 
 <h2>Performance</h2>
@@ -49,7 +48,7 @@ Here the stack of input maps is limited to a certain period of time:
 
 <div class="code"><pre>
 t.rast.series input=tempmean_daily output=tempmean_season method=average \
-  where="start_time >= '2012-06' and start_time <= '2012-08'"
+  where="start_time &gt;= '2012-06' and start_time &lt;= '2012-08'"
 </pre></div>
 
 <h3>Climatology: single month in a multi-annual time series</h3>

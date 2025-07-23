@@ -159,57 +159,57 @@ from the background map.
   <dd>
     <ul>
       <li><em>Break selected lines/boundaries at intersection</em><br> Split
-	given vector line or boundary into two lines on given position
-	(based on <em><a href="v.clean.html">v.clean</a></em>,
-	<tt>tool=break</tt>).</li>
+      given vector line or boundary into two lines on given position
+      (based on <em><a href="v.clean.html">v.clean</a></em>,
+      <code>tool=break</code>).</li>
 
       <li><em>Connect two selected lines/boundaries</em><br> Connect selected
-	lines or boundaries, the first given line is connected to the
-	second one. The second line is broken if necessary on each intersection.
-	The lines are connected only if distance between them is not greater
-	than snapping threshold value.</li>
+      lines or boundaries, the first given line is connected to the
+      second one. The second line is broken if necessary on each intersection.
+      The lines are connected only if distance between them is not greater
+      than snapping threshold value.</li>
 
       <li><em>Copy categories</em><br>Copy category settings of
-	selected vector feature to other vector
-	features. Layer/category pairs of source vector features are
-	appended to the target feature category settings. Existing
-	layer/category pairs are not removed from category settings of
-	the target features.</li>
+      selected vector feature to other vector
+      features. Layer/category pairs of source vector features are
+      appended to the target feature category settings. Existing
+      layer/category pairs are not removed from category settings of
+      the target features.</li>
 
       <li><em>Copy features from (background) vector map</em><br> Make identical copy of
-	selected vector features. If a background vector map has been
-	selected from the Layer Manager, copy features from background
-	vector map, not from the currently modified vector map.</li>
+      selected vector features. If a background vector map has been
+      selected from the Layer Manager, copy features from background
+      vector map, not from the currently modified vector map.</li>
 
       <li><em>Copy attributes</em><br>Duplicate attributes settings of
-	selected vector feature to other vector features. New
-	category(ies) is appended to the target feature category
-	settings and attributes duplicated based on category settings
-	of source vector features. Existing layer/category pairs are
-	not removed from category settings of the target
-	features.</li>
+      selected vector feature to other vector features. New
+      category(ies) is appended to the target feature category
+      settings and attributes duplicated based on category settings
+      of source vector features. Existing layer/category pairs are
+      not removed from category settings of the target
+      features.</li>
 
       <li><em>Feature type conversion</em><br> Change feature type of selected
-	geometry features. Points are converted to centroids,
-	centroids to points, lines to boundaries and boundaries to
-	lines.</li>
+      geometry features. Points are converted to centroids,
+      centroids to points, lines to boundaries and boundaries to
+      lines.</li>
 
       <li><em>Flip selected lines/boundaries</em><br> Flip direction of
-	selected linear features (lines or boundaries).</li>
+      selected linear features (lines or boundaries).</li>
 
       <li><em>Merge selected lines/boundaries</em><br> Merge (at least two)
-	selected vector lines or boundaries. The geometry of the
-	merged vector lines can be changed. If the second line from
-	two selected lines is in opposite direction to the first, it
-	will be flipped. See also
-	module <em><a href="v.build.polylines.html">v.build.polylines</a></em>.</li>
+      selected vector lines or boundaries. The geometry of the
+      merged vector lines can be changed. If the second line from
+      two selected lines is in opposite direction to the first, it
+      will be flipped. See also
+      module <em><a href="v.build.polylines.html">v.build.polylines</a></em>.</li>
 
       <li><em>Snap selected lines/boundaries (only to nodes)</em><br> Snap
-	vector features in given threshold. See also
-	module <em><a href="v.clean.html">v.clean</a></em>. Note that
-	this tool supports only snapping to nodes. Snapping to vector
-	features from background vector map is not currently
-	supported.</li>
+      vector features in given threshold. See also
+      module <em><a href="v.clean.html">v.clean</a></em>. Note that
+      this tool supports only snapping to nodes. Snapping to vector
+      features from background vector map is not currently
+      supported.</li>
 
       <li><em>Split line/boundary</em><br>Split selected line or boundary on
       given position.</li>
@@ -218,7 +218,7 @@ from the background map.
         min/max length value (linear features or dangles).</li>
 
       <li><em>Z-bulk labeling of 3D lines</em><br> Assign z coordinate values to 3D
-	vector lines in bounding box. This is useful for labeling contour lines.</li>
+      vector lines in bounding box. This is useful for labeling contour lines.</li>
     </ul>
   </dd>
 
@@ -248,9 +248,9 @@ from the background map.
 <h2>NOTES</h2>
 
 <dl><dt><b>Mouse button functions:</b><dd>
-	<dt><i>Left</i>   - select or deselect features</dt>
-	<dt><i>Control+Left</i> - cancel action or undo vertex when digitizing lines</dt>
-	<dt><i>Right</i>  - confirm action</dt>
+      <dt><i>Left</i>   - select or deselect features</dt>
+      <dt><i>Control+Left</i> - cancel action or undo vertex when digitizing lines</dt>
+      <dt><i>Right</i>  - confirm action</dt>
 </dl>
 
 <p>
@@ -288,8 +288,8 @@ boundaries are automatically attached to the chosen points.
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="wxGUI.html">wxGUI</a><br>
-<a href="wxGUI.components.html">wxGUI components</a>
+  <a href="wxGUI.html">wxGUI</a>,
+  <a href="wxGUI.components.html">wxGUI components</a>
 </em>
 
 <p>

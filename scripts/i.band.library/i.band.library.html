@@ -159,15 +159,15 @@ internal data structure. A minimalistic example is shown below.
 
 Each series starts with an unique identifier (&quot;Sentinel2&quot;
 in example above). Required attributes are only two:
-a <tt>shortcut</tt> and <tt>bands</tt>. Note that a <i>shortcut</i>
+a <code>shortcut</code> and <code>bands</code>. Note that a <i>shortcut</i>
 must be unique in all band reference registry files. Number of other
 attributes is not defined or even limited (in example above
-only <tt>description</tt> and <tt>instruments</tt> attributes are
-defined). List of bands is defined by a <tt>bands</tt> attribute. Each
+only <code>description</code> and <code>instruments</code> attributes are
+defined). List of bands is defined by a <code>bands</code> attribute. Each
 band is defined by an identifier ("1", "2" in example above). List of
 attributes describing each band is not pre-defined or limited. In
-example above each band is described by a <tt>central wavelength
-(nm)</tt>, <tt>bandwidth (nm)</tt>, and a <tt>tag</tt>.
+example above each band is described by a <code>central wavelength
+(nm)</code>, <code>bandwidth (nm)</code>, and a <code>tag</code>.
 
 <p>
 Band reference identifier defined by <b>pattern</b> option is given by
@@ -177,7 +177,7 @@ identifier.
 
 <p>
 System-defined registry files are located in GRASS GIS installation
-directory (<tt>$GISBASE/etc/i.band.library</tt>). Note that
+directory (<code>$GISBASE/etc/i.band.library</code>). Note that
 currently <i>i.band.library</i> allows managing only system-defined registry
 files. Support for user-defined registry files is planned to be
 implemented, see <a href="#known-issues">KNOWN ISSUES</a> section for

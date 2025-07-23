@@ -1,0 +1,42 @@
+set(dig2_SRCS
+    allocation.c
+    cindex.c
+    frmt.c
+    line_dist.c
+    plus.c
+    plus_node.c
+    port_init.c
+    prune.c
+    struct_alloc.c
+    update.c
+    angle.c
+    cindex_rw.c
+    head.c
+    linecros.c
+    plus_area.c
+    plus_struct.c
+    spindex.c
+    box.c
+    file.c
+    inside.c
+    list.c
+    plus_line.c
+    poly.c
+    portable.c
+    spindex_rw.c
+    type.c)
+build_module(
+  NAME
+  grass_dig2
+  SOURCES
+  ${dig2_SRCS}
+  DEPENDS
+  grass_gmath
+  grass_gis
+  grass_rtree
+  GDAL::GDAL
+  ${LIBM})
+
+if(TARGET PostgreSQL::PostgreSQL)
+  target_include_directories(grass_dig2 PUBLIC ${PostgreSQL_INCLUDE_DIR})
+endif()

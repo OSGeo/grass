@@ -4,7 +4,7 @@ SQL database and to establish a connection to the database.
 
 Usage:
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> import grass.temporal as tgis
     >>> # Create the temporal database
@@ -30,6 +30,8 @@ for details.
 :author: Soeren Gebbert
 """
 
+from __future__ import annotations
+
 # import traceback
 import os
 from pathlib import Path
@@ -42,16 +44,17 @@ from .c_libraries_interface import CLibrariesInterface
 
 # Import all supported database backends
 # Ignore import errors since they are checked later
-try:
-    import sqlite3
-except ImportError:
-    pass
+
+import sqlite3
+
 # Postgresql is optional, existence is checked when needed
 try:
     import psycopg2
     import psycopg2.extras
-except:
-    pass
+
+    db_errors = (sqlite3.Error, psycopg2.Error)
+except ImportError:
+    db_errors = (sqlite3.Error,)
 
 import atexit
 from datetime import datetime
@@ -59,7 +62,7 @@ from datetime import datetime
 ###############################################################################
 
 
-def profile_function(func):
+def profile_function(func) -> None:
     """Profiling function provided by the temporal framework"""
     do_profiling = os.getenv("GRASS_TGIS_PROFILE")
 
@@ -208,7 +211,7 @@ def get_enable_mapset_check():
     database.
     Overwrite this global variable by: g.gisenv set="TGIS_DISABLE_MAPSET_CHECK=True"
 
-    ..warning::
+    .. warning::
 
         Be aware to face corrupted temporal database in case this
         global variable is set to False. This feature is highly
@@ -228,7 +231,7 @@ def get_enable_timestamp_write():
     the temporal database using the C-library timestamp interface.
     Overwrite this global variable by: g.gisenv set="TGIS_DISABLE_TIMESTAMP_WRITE=True"
 
-    ..warning::
+    .. warning::
 
         Be aware that C-libraries can not access timestamp information if
         they are not written as spatial database metadata, hence modules
@@ -246,7 +249,7 @@ def get_enable_timestamp_write():
 message_interface = None
 
 
-def _init_tgis_message_interface(raise_on_error=False):
+def _init_tgis_message_interface(raise_on_error: bool = False) -> None:
     """Initiate the global message interface
 
     :param raise_on_error: If True raise a FatalError exception in case of
@@ -276,7 +279,7 @@ def get_tgis_message_interface():
 c_library_interface = None
 
 
-def _init_tgis_c_library_interface():
+def _init_tgis_c_library_interface() -> None:
     """Set the global C-library interface variable that
     provides a fast and exit safe interface to the C-library libgis,
     libraster, libraster3d and libvector functions
@@ -302,7 +305,7 @@ def get_tgis_c_library_interface():
 raise_on_error = False
 
 
-def set_raise_on_error(raise_exp=True):
+def set_raise_on_error(raise_exp: bool = True):
     """Define behavior on fatal error, invoked using the tgis messenger
     interface (msgr.fatal())
 
@@ -311,7 +314,7 @@ def set_raise_on_error(raise_exp=True):
     :param raise_exp: True to raise a FatalError exception instead of calling
                       sys.exit(1) when using the tgis messenger interface
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> import grass.temporal as tgis
         >>> tgis.init()
@@ -361,6 +364,7 @@ def get_raise_on_error():
 
 def get_tgis_version():
     """Get the supported version of the temporal framework
+
     :returns: The version number of the temporal framework as integer
     """
     global tgis_version
@@ -372,6 +376,7 @@ def get_tgis_version():
 
 def get_tgis_db_version():
     """Get the supported version of the temporal database
+
     :returns: The version number of the temporal database as integer
     """
     global tgis_db_version
@@ -412,7 +417,7 @@ def get_tgis_metadata(dbif=None):
         statement = "SELECT * FROM tgis_metadata;\n"
         dbif.execute(statement)
         rows = dbif.fetchall()
-    except:
+    except Exception:
         rows = None
 
     if connection_state_changed:
@@ -451,7 +456,7 @@ def get_sql_template_path():
 ###############################################################################
 
 
-def stop_subprocesses():
+def stop_subprocesses() -> None:
     """Stop the messenger and C-interface subprocesses
     that are started by tgis.init()
     """
@@ -512,7 +517,7 @@ def get_available_temporal_mapsets():
 ###############################################################################
 
 
-def init(raise_fatal_error=False, skip_db_version_check=False):
+def init(raise_fatal_error: bool = False, skip_db_version_check: bool = False):
     """This function set the correct database backend from GRASS environmental
     variables and creates the grass temporal database structure for raster,
     vector and raster3d maps as well as for the space-time datasets strds,
@@ -538,22 +543,22 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
 
     The following environmental variables are checked:
 
-     - GRASS_TGIS_PROFILE (True, False, 1, 0)
-     - GRASS_TGIS_RAISE_ON_ERROR (True, False, 1, 0)
+    - GRASS_TGIS_PROFILE (True, False, 1, 0)
+    - GRASS_TGIS_RAISE_ON_ERROR (True, False, 1, 0)
 
-     ..warning::
+    .. warning::
 
-         This functions must be called before any spatio-temporal processing
-         can be started
+        This functions must be called before any spatio-temporal processing
+        can be started
 
-     :param raise_fatal_error: Set this True to assure that the init()
+    :param raise_fatal_error: Set this True to assure that the init()
                                function does not kill a persistent process
                                like the GUI. If set True a
                                grass.pygrass.messages.FatalError
                                exception will be raised in case a fatal
                                error occurs in the init process, otherwise
                                sys.exit(1) will be called.
-     :param skip_db_version_check: Set this True to skip mismatch temporal
+    :param skip_db_version_check: Set this True to skip mismatch temporal
                                    database version check.
                                    Recommended to be used only for
                                    upgrade_temporal_database().
@@ -600,8 +605,9 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
     msgr.debug(1, ("Raise on error id: %s" % str(raise_on_error)))
 
     ciface = get_tgis_c_library_interface()
-    driver_string = ciface.get_driver_name()
-    database_string = ciface.get_database_name()
+    current_mapset = decode(gs.gisenv().get("MAPSET"))
+    driver_string = ciface.get_driver_name(current_mapset)
+    database_string = ciface.get_database_name(current_mapset)
 
     # Set the mapset check and the timestamp write
     if "TGIS_DISABLE_MAPSET_CHECK" in grassenv:
@@ -628,8 +634,7 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
                 import sqlite3
             except ImportError:
                 msgr.error(
-                    "Unable to locate the sqlite SQL Python interface"
-                    " module sqlite3."
+                    "Unable to locate the sqlite SQL Python interface module sqlite3."
                 )
                 raise
             dbmi = sqlite3
@@ -655,8 +660,9 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
     else:
         # Set the default sqlite3 connection in case nothing was defined
         gs.run_command("t.connect", flags="d")
-        driver_string = ciface.get_driver_name()
-        database_string = ciface.get_database_name()
+        current_mapset = decode(gs.gisenv().get("MAPSET"))
+        driver_string = ciface.get_driver_name(current_mapset)
+        database_string = ciface.get_database_name(current_mapset)
         tgis_backend = driver_string
         try:
             import sqlite3
@@ -705,7 +711,7 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
         backup_howto = _(
             "Run t.upgrade command to upgrade your temporal database.\n"
             "Consider creating a backup of your temporal database to avoid "
-            "loosing data in case something goes wrong.\n"
+            "losing data in case something goes wrong.\n"
         )
     else:
         backup_howto = _(
@@ -787,7 +793,6 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
                         "not supported any more. {m}"
                     ).format(m=message)
                 )
-
         return
 
     create_temporal_database(dbif)
@@ -807,7 +812,7 @@ def get_database_info_string():
 ###############################################################################
 
 
-def _create_temporal_database_views(dbif):
+def _create_temporal_database_views(dbif) -> None:
     """Create all views in the temporal database (internal use only)
 
     Used by create_temporal_database() and upgrade_temporal_database().
@@ -828,7 +833,7 @@ def _create_temporal_database_views(dbif):
         dbif.execute_transaction(sql_filepath)
 
 
-def create_temporal_database(dbif):
+def create_temporal_database(dbif) -> None:
     """This function will create the temporal database
 
     It will create all tables and triggers that are needed to run
@@ -935,7 +940,7 @@ def create_temporal_database(dbif):
 ###############################################################################
 
 
-def upgrade_temporal_database(dbif):
+def upgrade_temporal_database(dbif) -> None:
     """This function will upgrade the temporal database if needed.
 
     It will update all tables and triggers that are requested by
@@ -998,7 +1003,7 @@ def upgrade_temporal_database(dbif):
 ###############################################################################
 
 
-def _create_tgis_metadata_table(content, dbif=None):
+def _create_tgis_metadata_table(content, dbif=None) -> None:
     """!Create the temporal gis metadata table which stores all metadata
     information about the temporal database.
 
@@ -1025,7 +1030,7 @@ def _create_tgis_metadata_table(content, dbif=None):
 
 
 class SQLDatabaseInterfaceConnection:
-    def __init__(self):
+    def __init__(self) -> None:
         self.tgis_mapsets = get_available_temporal_mapsets()
         self.current_mapset = get_current_mapset()
         self.connections = {}
@@ -1052,7 +1057,7 @@ class SQLDatabaseInterfaceConnection:
         mapset = decode(mapset)
         return self.connections[mapset].dbmi
 
-    def rollback(self, mapset=None):
+    def rollback(self, mapset=None) -> None:
         """
         Roll back the last transaction. This must be called
         in case a new query should be performed after a db error.
@@ -1062,7 +1067,7 @@ class SQLDatabaseInterfaceConnection:
         if mapset is None:
             mapset = self.current_mapset
 
-    def connect(self):
+    def connect(self) -> None:
         """Connect to the DBMI to execute SQL statements
 
         Supported backends are sqlite3 and postgresql
@@ -1078,7 +1083,7 @@ class SQLDatabaseInterfaceConnection:
     def is_connected(self):
         return self.connected
 
-    def close(self):
+    def close(self) -> None:
         """Close the DBMI connection
 
         There may be several temporal databases in a location, hence
@@ -1114,7 +1119,7 @@ class SQLDatabaseInterfaceConnection:
 
         return self.connections[mapset].mogrify_sql_statement(content)
 
-    def check_table(self, table_name, mapset=None):
+    def check_table(self, table_name: str, mapset=None):
         """Check if a table exists in the temporal database
 
         :param table_name: The name of the table to be checked for existence
@@ -1205,7 +1210,7 @@ class SQLDatabaseInterfaceConnection:
 
         return self.connections[mapset].execute_transaction(statement)
 
-    def _create_mapset_error_message(self, mapset):
+    def _create_mapset_error_message(self, mapset) -> str:
         return (
             "You have no permission to "
             "access mapset <%(mapset)s>, or "
@@ -1224,15 +1229,15 @@ class DBConnection:
 
     The following DBMS are supported:
 
-      - sqlite via the sqlite3 standard library
-      - postgresql via psycopg2
+    - sqlite via the sqlite3 standard library
+    - postgresql via psycopg2
     """
 
-    def __init__(self, backend=None, dbstring=None):
+    def __init__(self, backend=None, dbstring: str | None = None) -> None:
         """Constructor of a database connection
 
-        param backend:The database backend sqlite or pg
-        param dbstring: The database connection string
+        :param backend: The database backend sqlite or pg
+        :param dbstring: The database connection string
         """
         self.connected = False
         if backend is None:
@@ -1261,14 +1266,14 @@ class DBConnection:
             "\n  dbstring: %s" % (backend, self.dbstring),
         )
 
-    def __del__(self):
+    def __del__(self) -> None:
         if self.connected is True:
             self.close()
 
     def is_connected(self):
         return self.connected
 
-    def rollback(self):
+    def rollback(self) -> None:
         """
         Roll back the last transaction. This must be called
         in case a new query should be performed after a db error.
@@ -1279,7 +1284,7 @@ class DBConnection:
             if self.connected:
                 self.connection.rollback()
 
-    def connect(self, dbstring=None):
+    def connect(self, dbstring: str | None = None) -> None:
         """Connect to the DBMI to execute SQL statements
 
         Supported backends are sqlite3 and postgresql
@@ -1328,7 +1333,7 @@ class DBConnection:
                 )
             )
 
-    def close(self):
+    def close(self) -> None:
         """Close the DBMI connection
         TODO:
         There may be several temporal databases in a location, hence
@@ -1355,7 +1360,7 @@ class DBConnection:
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> init()
             >>> dbif = SQLDatabaseInterfaceConnection()
@@ -1442,18 +1447,15 @@ class DBConnection:
 
             return statement
 
-    def check_table(self, table_name):
+    def check_table(self, table_name: str):
         """Check if a table exists in the temporal database
 
         :param table_name: The name of the table to be checked for existence
-        :param mapset: The mapset of the abstract dataset or temporal
-                       database location, if None the current mapset
-                       will be used
         :returns: True if the table exists, False otherwise
 
-        TODO:
-        There may be several temporal databases in a location, hence
-        the mapset is used to query the correct temporal database.
+        .. TODO::
+            There may be several temporal databases in a location, hence
+            the mapset is used to query the correct temporal database.
         """
         table_exists = False
         connected = False
@@ -1499,7 +1501,7 @@ class DBConnection:
                 self.cursor.execute(statement, args)
             else:
                 self.cursor.execute(statement)
-        except:
+        except db_errors:
             if connected:
                 self.close()
             self.msgr.error(_("Unable to execute :\n %(sql)s") % {"sql": statement})
@@ -1542,7 +1544,7 @@ class DBConnection:
             else:
                 self.cursor.execute(statement)
             self.connection.commit()
-        except:
+        except db_errors:
             if connected:
                 self.close()
             self.msgr.error(

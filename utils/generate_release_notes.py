@@ -125,20 +125,20 @@ def print_by_category(changes, categories, file=None):
 def binder_badge(tag):
     """Get mybinder Binder badge from a given tag, hash, or branch"""
     binder_image_url = "https://mybinder.org/badge_logo.svg"
-    binder_url = f"https://mybinder.org/v2/gh/OSGeo/grass/{tag}?urlpath=lab%2Ftree%2Fdoc%2Fnotebooks%2Fjupyter_example.ipynb"  # noqa
+    binder_url = f"https://mybinder.org/v2/gh/OSGeo/grass/{tag}?urlpath=lab%2Ftree%2Fdoc%2Fexamples%2Fnotebooks%2Fjupyter_example.ipynb"
     return f"[![Binder]({binder_image_url})]({binder_url})"
 
 
 def print_support(file=None):
     url = "https://opencollective.com/grass/tiers/supporter/all.json"
-    response = requests.get(url=url)
+    response = requests.get(url=url, timeout=7)
     data = response.json()
     if data:
         print_section_heading_3("Monthly Financial Supporters", file=file)
         random.shuffle(data)
         supporters = []
         for member in data:
-            supporters.append(f"""[{member['name']}]({member['profile']})""")
+            supporters.append(f"""[{member["name"]}]({member["profile"]})""")
         print(", ".join(supporters))
         print()
 
@@ -263,7 +263,8 @@ def notes_from_git_log(start_tag, end_tag, categories, exclude):
     ).stdout
     commits = yaml.safe_load(text)
     if not commits:
-        raise RuntimeError("No commits retrieved from git log (try different tags)")
+        msg = "No commits retrieved from git log (try different tags)"
+        raise RuntimeError(msg)
 
     svn_name_by_git_author = csv_to_dict(
         CONFIG_DIRECTORY / "svn_name_git_author.csv",

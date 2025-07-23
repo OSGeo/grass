@@ -1,9 +1,9 @@
-FROM ubuntu:22.04@sha256:0e5e4a57c2499249aafc3b40fcd541e9a456aab7296681a3994d631587203f97
+FROM ubuntu:22.04@sha256:1ec65b2719518e27d4d25f104d93f9fac60dc437f81452302406825c46fcc9cb
 
 LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann,Tomas Zigo"
 LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 # define versions to be used (PDAL is not available on Ubuntu/Debian, so we compile it here)
 # https://github.com/PDAL/PDAL/releases
@@ -70,6 +70,7 @@ RUN apt-get update && apt-get upgrade -y && \
     libpython3-all-dev \
     libreadline-dev \
     librsvg2-common \
+    libsecret-1-0 \
     libsdl2-2.0-0 \
     libsqlite3-dev \
     libtiff-dev \
@@ -91,7 +92,6 @@ RUN apt-get update && apt-get upgrade -y && \
     python3-numpy \
     python3-pil \
     python3-pip \
-    python3-ply \
     python3-setuptools \
     python3-venv \
     python3-wxgtk4.0 \
@@ -176,13 +176,13 @@ RUN rm -f /src/grass_build/dist.*/demolocation/.grassrc*
 
 # Set environmental variables for GRASS GIS compilation, without debug symbols
 # Set gcc/g++ environmental variables for GRASS GIS compilation, without debug symbols
-ENV MYCFLAGS "-O2 -std=gnu99 -m64"
-ENV MYLDFLAGS "-s"
+ENV MYCFLAGS="-O2 -std=gnu99 -m64"
+ENV MYLDFLAGS="-s"
 # CXX stuff:
-ENV LD_LIBRARY_PATH "/usr/local/lib"
-ENV LDFLAGS "$MYLDFLAGS"
-ENV CFLAGS "$MYCFLAGS"
-ENV CXXFLAGS "$MYCXXFLAGS"
+ENV LD_LIBRARY_PATH="/usr/local/lib"
+ENV LDFLAGS="$MYLDFLAGS"
+ENV CFLAGS="$MYCFLAGS"
+ENV CXXFLAGS="$MYCXXFLAGS"
 
 # Configure compile and install GRASS GIS
 # wxGUI require
@@ -215,19 +215,19 @@ RUN /src/grass_build/configure \
     && make install && ldconfig
 
 # Unset environmental variables to avoid later compilation issues
-ENV INTEL ""
-ENV MYCFLAGS ""
-ENV MYLDFLAGS ""
-ENV MYCXXFLAGS ""
-ENV LD_LIBRARY_PATH ""
-ENV LDFLAGS ""
-ENV CFLAGS ""
-ENV CXXFLAGS ""
+ENV INTEL=""
+ENV MYCFLAGS=""
+ENV MYLDFLAGS=""
+ENV MYCXXFLAGS=""
+ENV LD_LIBRARY_PATH=""
+ENV LDFLAGS=""
+ENV CFLAGS=""
+ENV CXXFLAGS=""
 
 # set SHELL var to avoid /bin/sh fallback in interactive GRASS GIS sessions
-ENV SHELL /bin/bash
-ENV LC_ALL "en_US.UTF-8"
-ENV GRASS_SKIP_MAPSET_OWNER_CHECK 1
+ENV SHELL=/bin/bash
+ENV LC_ALL="en_US.UTF-8"
+ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1
 
 # https://proj.org/usage/environmentvars.html#envvar-PROJ_NETWORK
 ENV PROJ_NETWORK=ON
@@ -249,10 +249,10 @@ WORKDIR /scripts
 
 # enable GRASS GIS Python session support
 ## grass --config python-path
-ENV PYTHONPATH "/usr/local/grass/etc/python:${PYTHONPATH}"
+ENV PYTHONPATH="/usr/local/grass/etc/python:${PYTHONPATH}"
 # enable GRASS GIS ctypes imports
 ## grass --config path
-ENV LD_LIBRARY_PATH "/usr/local/grass/lib:$LD_LIBRARY_PATH"
+ENV LD_LIBRARY_PATH="/usr/local/grass/lib:$LD_LIBRARY_PATH"
 
 WORKDIR /tmp
 COPY docker/testdata/simple.laz .

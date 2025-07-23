@@ -3,7 +3,7 @@
 #include "pv.h"
 
 /*
- * Use centers of GRASS CELLS as vertexes for grid.
+ * Use centers of GRASS CELLS as vertices for grid.
  * Currently, grid space is "unitized" so that the
  * largest dimension of the current region in GRASS == 1.0
  */
@@ -59,7 +59,7 @@ void vrml_put_grid(FILE *vout, struct Cell_head *w, int elevfd, int colorfd,
                     *tf = 0.0;
                 coordy = *tf;
                 do_coordcnv(&coordy, 'y');
-                sprintf(str, "%f %f %f,", coordx, coordy, coordz);
+                snprintf(str, sizeof(str), "%f %f %f,", coordx, coordy, coordz);
                 vrml_putline(0, vout, str);
                 tf++;
             }
@@ -99,8 +99,8 @@ void vrml_put_grid(FILE *vout, struct Cell_head *w, int elevfd, int colorfd,
             Rast_lookup_f_colors(tf, red, green, blue, set, cols, colr);
 
             for (col = 0; col < cols; col++) {
-                sprintf(str, "%.3f %.3f %.3f,", red[col] / 255.,
-                        green[col] / 255., blue[col] / 255.);
+                snprintf(str, sizeof(str), "%.3f %.3f %.3f,", red[col] / 255.,
+                         green[col] / 255., blue[col] / 255.);
                 vrml_putline(0, vout, str);
             }
         }
@@ -133,8 +133,8 @@ void vrml_put_grid(FILE *vout, struct Cell_head *w, int elevfd, int colorfd,
             for (col = 0; col < cols - 1; col++) {
                 c1 = row * cols + col;
                 c2 = c1 + cols + 1;
-                sprintf(str, "%d, %d, %d, -1, %d, %d, %d, -1,", c1, c1 + cols,
-                        c1 + 1, c2, c2 - cols, c2 - 1);
+                snprintf(str, sizeof(str), "%d, %d, %d, -1, %d, %d, %d, -1,",
+                         c1, c1 + cols, c1 + 1, c2, c2 - cols, c2 - 1);
                 vrml_putline(0, vout, str);
             }
         }

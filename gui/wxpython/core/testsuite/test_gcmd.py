@@ -17,7 +17,6 @@ class Rcv:
 
 
 class Recv_SomeTest(TestCase):
-
     @xfail_windows
     def test_decode(self):
         """

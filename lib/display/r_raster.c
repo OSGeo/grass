@@ -103,7 +103,7 @@ int D_open_driver(void)
         }
 
         if (c)
-            sprintf(progname, "%s", c);
+            snprintf(progname, sizeof(progname), "%s", c);
         else { /* monitors managed by d.mon -> call default renderer */
             char element[GPATH_MAX];
 

@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include "global.h"
 
+#include <grass/parson.h>
+
 /* hash definitions (these should be prime numbers) ************* */
 #define HASHSIZE 7307
 #define HASHMOD  89
@@ -105,7 +107,7 @@ void fix_max_fp_val(CELL *cell, int ncols)
 
 /* we can't compute hash on null values, so we change all
  *  nulls to max+1, set NULL_CELL to max+1, and later compare
- *  with NULL_CELL to chack for nulls */
+ *  with NULL_CELL to check for nulls */
 void reset_null_vals(CELL *cell, int ncols)
 {
     while (ncols-- > 0) {
@@ -253,7 +255,8 @@ int print_node_count(void)
 }
 
 int print_cell_stats(char *fmt, int with_percents, int with_counts,
-                     int with_areas, int with_labels, char *fs)
+                     int with_areas, int with_labels, char *fs,
+                     enum OutputFormat format, JSON_Array *array)
 {
     int i, n, nulls_found;
     struct Node *node;
@@ -261,26 +264,43 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
     DCELL dLow, dHigh;
     char str1[50], str2[50];
 
+    JSON_Object *object, *category;
+    JSON_Array *categories;
+    JSON_Value *object_value, *category_value, *categories_value;
+
     if (no_nulls)
         total_count -= sorted_list[node_count - 1]->count;
 
     Rast_set_c_null_value(&null_cell, 1);
     if (node_count <= 0) {
-        fprintf(stdout, "0");
-        for (i = 1; i < nfiles; i++)
-            fprintf(stdout, "%s%s", fs, no_data_str);
-        if (with_areas)
-            fprintf(stdout, "%s0.0", fs);
-        if (with_counts)
-            fprintf(stdout, "%s0", fs);
-        if (with_percents)
-            fprintf(stdout, "%s0.00%%", fs);
-        if (with_labels)
-            fprintf(stdout, "%s%s", fs, Rast_get_c_cat(&null_cell, &labels[i]));
-        fprintf(stdout, "\n");
+        switch (format) {
+        case JSON:
+            break;
+        case PLAIN:
+            fprintf(stdout, "0");
+            for (i = 1; i < nfiles; i++)
+                fprintf(stdout, "%s%s", fs, no_data_str);
+            if (with_areas)
+                fprintf(stdout, "%s0.0", fs);
+            if (with_counts)
+                fprintf(stdout, "%s0", fs);
+            if (with_percents)
+                fprintf(stdout, "%s0.00%%", fs);
+            if (with_labels)
+                fprintf(stdout, "%s%s", fs,
+                        Rast_get_c_cat(&null_cell, &labels[i]));
+            fprintf(stdout, "\n");
+        }
     }
     else {
         for (n = 0; n < node_count; n++) {
+            if (format == JSON) {
+                object_value = json_value_init_object();
+                object = json_object(object_value);
+                categories_value = json_value_init_array();
+                categories = json_array(categories_value);
+            }
+
             node = sorted_list[n];
 
             if (no_nulls || no_nulls_all) {
@@ -301,19 +321,53 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
             }
 
             for (i = 0; i < nfiles; i++) {
+                if (format == JSON) {
+                    category_value = json_value_init_object();
+                    category = json_object(category_value);
+                }
                 if (node->values[i] == NULL_CELL) {
-                    fprintf(stdout, "%s%s", i ? fs : "", no_data_str);
-                    if (with_labels && !(raw_output && is_fp[i]))
-                        fprintf(stdout, "%s%s", fs,
+                    switch (format) {
+                    case JSON:
+                        if (raw_output || !is_fp[i] || as_int)
+                            json_object_set_null(category, "category");
+                        else if (averaged)
+                            json_object_set_null(category, "average");
+                        else
+                            json_object_set_null(category, "range");
+                        if (with_labels && !(raw_output && is_fp[i]))
+                            json_object_set_string(
+                                category, "label",
                                 Rast_get_c_cat(&null_cell, &labels[i]));
+                        break;
+                    case PLAIN:
+                        fprintf(stdout, "%s%s", i ? fs : "", no_data_str);
+                        if (with_labels && !(raw_output && is_fp[i]))
+                            fprintf(stdout, "%s%s", fs,
+                                    Rast_get_c_cat(&null_cell, &labels[i]));
+                        break;
+                    }
                 }
                 else if (raw_output || !is_fp[i] || as_int) {
-                    fprintf(stdout, "%s%ld", i ? fs : "",
-                            (long)node->values[i]);
-                    if (with_labels && !is_fp[i])
-                        fprintf(stdout, "%s%s", fs,
+                    switch (format) {
+                    case JSON:
+                        json_object_set_number(category, "category",
+                                               (long)node->values[i]);
+                        if (with_labels && !is_fp[i]) {
+                            json_object_set_string(
+                                category, "label",
                                 Rast_get_c_cat((CELL *)&(node->values[i]),
                                                &labels[i]));
+                        }
+                        break;
+                    case PLAIN:
+                        fprintf(stdout, "%s%ld", i ? fs : "",
+                                (long)node->values[i]);
+                        if (with_labels && !is_fp[i])
+                            fprintf(stdout, "%s%s", fs,
+                                    Rast_get_c_cat((CELL *)&(node->values[i]),
+                                                   &labels[i]));
+                        break;
+                    }
                 }
                 else { /* find out which floating point range to print */
 
@@ -331,42 +385,122 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
                     }
                     if (averaged) {
                         /* print averaged values */
-                        sprintf(str1, "%10f", (dLow + dHigh) / 2.0);
-                        G_trim_decimal(str1);
-                        G_strip(str1);
-                        fprintf(stdout, "%s%s", i ? fs : "", str1);
+                        double average = (dLow + dHigh) / 2.0;
+                        switch (format) {
+                        case JSON:
+                            json_object_set_number(category, "average",
+                                                   average);
+                            break;
+                        case PLAIN:
+                            snprintf(str1, sizeof(str1), "%10f", average);
+                            G_trim_decimal(str1);
+                            G_strip(str1);
+                            fprintf(stdout, "%s%s", i ? fs : "", str1);
+                            break;
+                        }
                     }
                     else {
-                        /* print intervals */
-                        sprintf(str1, "%10f", dLow);
-                        sprintf(str2, "%10f", dHigh);
-                        G_trim_decimal(str1);
-                        G_trim_decimal(str2);
-                        G_strip(str1);
-                        G_strip(str2);
-                        fprintf(stdout, "%s%s-%s", i ? fs : "", str1, str2);
+                        switch (format) {
+                        case JSON:
+                            json_object_dotset_number(category, "range.from",
+                                                      dLow);
+                            json_object_dotset_number(category, "range.to",
+                                                      dHigh);
+                            break;
+                        case PLAIN:
+                            /* print intervals */
+                            snprintf(str1, sizeof(str1), "%10f", dLow);
+                            snprintf(str2, sizeof(str2), "%10f", dHigh);
+                            G_trim_decimal(str1);
+                            G_trim_decimal(str2);
+                            G_strip(str1);
+                            G_strip(str2);
+                            fprintf(stdout, "%s%s-%s", i ? fs : "", str1, str2);
+                            break;
+                        }
                     }
-                    if (with_labels) {
-                        if (cat_ranges)
-                            fprintf(stdout, "%s%s", fs,
+                    switch (format) {
+                    case JSON:
+                        if (with_labels) {
+                            if (cat_ranges) {
+                                json_object_set_string(
+                                    category, "label",
                                     labels[i].labels[node->values[i]]);
-                        else
-                            fprintf(stdout, "%sfrom %s to %s", fs,
-                                    Rast_get_d_cat(&dLow, &labels[i]),
+                            }
+                            else {
+                                json_object_dotset_string(
+                                    category, "label.from",
+                                    Rast_get_d_cat(&dLow, &labels[i]));
+                                json_object_dotset_string(
+                                    category, "label.to",
                                     Rast_get_d_cat(&dHigh, &labels[i]));
+                            }
+                        }
+                        break;
+                    case PLAIN:
+                        if (with_labels) {
+                            if (cat_ranges)
+                                fprintf(stdout, "%s%s", fs,
+                                        labels[i].labels[node->values[i]]);
+                            else
+                                fprintf(stdout, "%sfrom %s to %s", fs,
+                                        Rast_get_d_cat(&dLow, &labels[i]),
+                                        Rast_get_d_cat(&dHigh, &labels[i]));
+                        }
+                        break;
                     }
                 }
+
+                if (format == JSON) {
+                    json_array_append_value(categories, category_value);
+                }
             }
+
+            if (format == JSON) {
+                json_object_set_value(object, "categories", categories_value);
+            }
+
             if (with_areas) {
-                fprintf(stdout, "%s", fs);
-                fprintf(stdout, fmt, node->area);
+                switch (format) {
+                case JSON:
+                    json_object_set_number(object, "area", node->area);
+                    break;
+                case PLAIN:
+                    fprintf(stdout, "%s", fs);
+                    fprintf(stdout, fmt, node->area);
+                    break;
+                }
             }
-            if (with_counts)
-                fprintf(stdout, "%s%ld", fs, (long)node->count);
-            if (with_percents)
-                fprintf(stdout, "%s%.2f%%", fs,
-                        (double)100 * node->count / total_count);
-            fprintf(stdout, "\n");
+            if (with_counts) {
+                switch (format) {
+                case JSON:
+                    json_object_set_number(object, "count", node->count);
+                    break;
+                case PLAIN:
+                    fprintf(stdout, "%s%ld", fs, (long)node->count);
+                    break;
+                }
+            }
+            if (with_percents) {
+                double percent = (double)100 * node->count / total_count;
+                switch (format) {
+                case JSON:
+                    json_object_set_number(object, "percent", percent);
+                    break;
+                case PLAIN:
+                    fprintf(stdout, "%s%.2f%%", fs, percent);
+                    break;
+                }
+            }
+
+            switch (format) {
+            case JSON:
+                json_array_append_value(array, object_value);
+                break;
+            case PLAIN:
+                fprintf(stdout, "\n");
+                break;
+            }
         }
     }
 

@@ -648,9 +648,8 @@ class RDigitController(wx.EvtHandler):
         :return: output raster map name as a result of digitization
         """
         output = "x" + str(uuid.uuid4())[:8]
-        asciiFile = tempfile.NamedTemporaryFile(mode="w", delete=False)
-        asciiFile.write("\n".join(text))
-        asciiFile.close()
+        with tempfile.NamedTemporaryFile(mode="w", delete=False) as asciiFile:
+            asciiFile.write("\n".join(text))
 
         if bufferDist:
             bufferDist /= 2.0

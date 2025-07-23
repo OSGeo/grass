@@ -520,7 +520,7 @@ int main(int argc, char *argv[])
         hDriver = GDALGetDriver(i);
         G_debug(2, "driver %d : %s", i, GDALGetDriverShortName(hDriver));
         /* chg white space to underscore in OGR driver names */
-        sprintf(buf, "%s", GDALGetDriverShortName(hDriver));
+        snprintf(buf, sizeof(buf), "%s", GDALGetDriverShortName(hDriver));
         G_strchg(buf, ' ', '_');
         if (strcmp(buf, options.format->answer) == 0) {
             drn = i;
@@ -597,11 +597,11 @@ int main(int argc, char *argv[])
         char shape_geom[20];
 
         if ((otype & GV_POINTS) || (otype & GV_KERNEL))
-            sprintf(shape_geom, "POINTZ");
+            snprintf(shape_geom, sizeof(shape_geom), "POINTZ");
         if ((otype & GV_LINES))
-            sprintf(shape_geom, "ARCZ");
+            snprintf(shape_geom, sizeof(shape_geom), "ARCZ");
         if ((otype & GV_AREA) || (otype & GV_FACE))
-            sprintf(shape_geom, "POLYGONZ");
+            snprintf(shape_geom, sizeof(shape_geom), "POLYGONZ");
         /* check if the right LCO is already present */
         const char *shpt;
 
@@ -820,11 +820,20 @@ int main(int argc, char *argv[])
                      Vect_get_num_primitives(&In, otype)),
                   Vect_get_num_primitives(&In, otype));
 
-        n_feat += export_lines(
-            &In, field, otype, flags.multi->answer ? TRUE : FALSE, donocat,
-            ftype == GV_BOUNDARY ? TRUE : FALSE, Ogr_featuredefn, Ogr_layer, Fi,
-            Driver, ncol, colctype, colname, doatt,
-            flags.nocat->answer ? TRUE : FALSE, &n_noatt, &n_nocat);
+        if (strcmp(options.method->answer, "slow") == 0) {
+            n_feat += export_lines(
+                &In, field, otype, flags.multi->answer ? TRUE : FALSE, donocat,
+                ftype == GV_BOUNDARY ? TRUE : FALSE, Ogr_featuredefn, Ogr_layer,
+                Fi, Driver, ncol, colctype, colname, doatt,
+                flags.nocat->answer ? TRUE : FALSE, &n_noatt, &n_nocat);
+        }
+        else {
+            n_feat += export_lines_fast(
+                &In, field, otype, flags.multi->answer ? TRUE : FALSE, donocat,
+                ftype == GV_BOUNDARY ? TRUE : FALSE, Ogr_featuredefn, Ogr_layer,
+                Fi, Driver, ncol, colctype, colname, doatt,
+                flags.nocat->answer ? TRUE : FALSE, &n_noatt, &n_nocat);
+        }
     }
 
     /* Areas (run always to count features of different type) */
@@ -834,11 +843,20 @@ int main(int argc, char *argv[])
                      Vect_get_num_areas(&In)),
                   Vect_get_num_areas(&In));
 
-        n_feat += export_areas(&In, field, flags.multi->answer ? TRUE : FALSE,
-                               donocat, Ogr_featuredefn, Ogr_layer, Fi, Driver,
-                               ncol, colctype, colname, doatt,
-                               flags.nocat->answer ? TRUE : FALSE, &n_noatt,
-                               &n_nocat, outer_ring_ccw);
+        if (strcmp(options.method->answer, "slow") == 0) {
+            n_feat += export_areas(
+                &In, field, flags.multi->answer ? TRUE : FALSE, donocat,
+                Ogr_featuredefn, Ogr_layer, Fi, Driver, ncol, colctype, colname,
+                doatt, flags.nocat->answer ? TRUE : FALSE, &n_noatt, &n_nocat,
+                outer_ring_ccw);
+        }
+        else {
+            n_feat += export_areas_fast(
+                &In, field, flags.multi->answer ? TRUE : FALSE, donocat,
+                Ogr_featuredefn, Ogr_layer, Fi, Driver, ncol, colctype, colname,
+                doatt, flags.nocat->answer ? TRUE : FALSE, &n_noatt, &n_nocat,
+                outer_ring_ccw);
+        }
     }
 
     /*

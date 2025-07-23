@@ -52,14 +52,10 @@ class TestBenchmarksRun(TestCase):
             },
         ]
         resolutions = [300, 200, 100]
-        results = []
-        for benchmark in benchmarks:
-            results.append(
-                benchmark_resolutions(
-                    **benchmark,
-                    resolutions=resolutions,
-                )
-            )
+        results = [
+            benchmark_resolutions(**benchmark, resolutions=resolutions)
+            for benchmark in benchmarks
+        ]
         plot_file = "test_res_plot.png"
         num_cells_plot(results, filename=plot_file)
         self.assertTrue(Path(plot_file).is_file())
@@ -76,9 +72,9 @@ class TestBenchmarksRun(TestCase):
                 "label": label,
             }
         ]
-        results = []
-        for benchmark in benchmarks:
-            results.append(benchmark_single(**benchmark, repeat=repeat))
+        results = [
+            benchmark_single(**benchmark, repeat=repeat) for benchmark in benchmarks
+        ]
         self.assertEqual(len(results), len(benchmarks))
         for result in results:
             self.assertTrue(hasattr(result, "all_times"))
@@ -100,9 +96,10 @@ class TestBenchmarksRun(TestCase):
                 "max_nprocs": 4,
             }
         ]
-        results = []
-        for benchmark in benchmarks:
-            results.append(benchmark_nprocs(**benchmark, repeat=repeat, shuffle=True))
+        results = [
+            benchmark_nprocs(**benchmark, repeat=repeat, shuffle=True)
+            for benchmark in benchmarks
+        ]
         self.assertEqual(len(results), len(benchmarks))
         for result in results:
             self.assertTrue(hasattr(result, "times"))

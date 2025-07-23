@@ -41,7 +41,6 @@
 # % description: Either a numerical suffix or the start time (s-flag) separated by an underscore will be attached to create a unique identifier
 # % required: yes
 # % multiple: no
-# % gisprompt:
 # %end
 
 # %option
