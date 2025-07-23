@@ -1612,7 +1612,7 @@ def find_file(name, element="cell", mapset=None, env=None):
     if element in element_translation:
         element = element_translation[element]
 
-    return parse_command(
+    result = parse_command(
         "g.findfile",
         element=element,
         file=name,
@@ -1620,6 +1620,9 @@ def find_file(name, element="cell", mapset=None, env=None):
         format="json",
         env=env,
     )
+
+    # For Backward compatibility
+    return {k: "" if v is None else v for k, v in result.items()}
 
 
 # interface to g.list
