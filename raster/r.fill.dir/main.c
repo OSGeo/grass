@@ -140,7 +140,8 @@ int main(int argc, char **argv)
         G_fatal_error(_("Output map name <%s> is too long"), opt2->answer);
     }
 
-    if (G_strlcpy(dir_name, opt4->answer, sizeof(dir_name)) >= sizeof(dir_name)) {
+    if (G_strlcpy(dir_name, opt4->answer, sizeof(dir_name)) >=
+        sizeof(dir_name)) {
         G_fatal_error(_("Direction map name <%s> is too long"), opt4->answer);
     }
 
