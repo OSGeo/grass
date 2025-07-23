@@ -92,7 +92,7 @@ Parsing JSON output:
 ```python
 import grass.script as gs
 
-data = gs.parse_command("g.findfile", file="elevation", element="cell", format="json")
+data = gs.parse_command("g.findfile", file="elevation", element="raster", format="json")
 print(data)
 ```
 

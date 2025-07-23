@@ -1612,19 +1612,14 @@ def find_file(name, element="cell", mapset=None, env=None):
     if element in element_translation:
         element = element_translation[element]
 
-    # g.findfile returns non-zero when file was not found
-    # so we ignore return code and just focus on stdout
-    process = start_command(
+    return parse_command(
         "g.findfile",
-        flags="n",
         element=element,
         file=name,
         mapset=mapset,
-        stdout=PIPE,
+        format="json",
         env=env,
     )
-    stdout = process.communicate()[0]
-    return parse_key_val(stdout)
 
 
 # interface to g.list
