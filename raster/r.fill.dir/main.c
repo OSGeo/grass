@@ -146,8 +146,9 @@ int main(int argc, char **argv)
     }
 
     if (opt5->answer != NULL) {
-    if (G_strlcpy(bas_name, opt5->answer, sizeof(bas_name)) >= sizeof(bas_name)) {
-        G_fatal_error(_("Areas map name <%s> is too long"), opt5->answer);
+        if (G_strlcpy(bas_name, opt5->answer, sizeof(bas_name)) >=
+            sizeof(bas_name)) {
+            G_fatal_error(_("Areas map name <%s> is too long"), opt5->answer);
         }
     }
 
