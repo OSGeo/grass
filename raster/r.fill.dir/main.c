@@ -136,7 +136,8 @@ int main(int argc, char **argv)
         G_fatal_error(_("Input map name <%s> is too long"), opt1->answer);
     }
 
-    if (G_strlcpy(new_map_name, opt2->answer, sizeof(new_map_name)) >= sizeof(new_map_name)) {
+    if (G_strlcpy(new_map_name, opt2->answer, sizeof(new_map_name)) >=
+        sizeof(new_map_name)) {
         G_fatal_error(_("Output map name <%s> is too long"), opt2->answer);
     }
 
