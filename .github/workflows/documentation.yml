@@ -35,7 +35,12 @@ jobs:
       - name: Get dependencies
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y wget git gawk findutils
+          sudo apt-get install -y wget git gawk findutils \
+            doxygen \
+            gettext \
+            graphviz \
+            libpq-dev \
+            unixodbc-dev
           xargs -a <(awk '! /^ *(#|$)/' "grass/.github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
 
@@ -95,7 +100,33 @@ jobs:
       - name: Build core
         run: |
           cd grass
-          ../grass/.github/workflows/build_ubuntu-22.04.sh "$HOME/install"
+          export INSTALL_PREFIX="$HOME/install"
+          ./configure \
+            --enable-largefile \
+            --prefix="$INSTALL_PREFIX/" \
+            --with-blas \
+            --with-bzlib=no \
+            --with-cxx \
+            --with-fftw \
+            --with-freetype \
+            --with-freetype-includes="/usr/include/freetype2/" \
+            --with-geos \
+            --with-lapack \
+            --with-libsvm \
+            --with-netcdf \
+            --with-nls \
+            --with-odbc \
+            --with-openmp=no \
+            --with-pdal \
+            --with-postgres --with-postgres-includes=/usr/include/postgresql \
+            --with-proj-share=/usr/share/proj \
+            --with-pthread=no \
+            --with-readline=no \
+            --with-sqlite \
+            --with-tiff \
+            --with-zstd
+          make
+          make install
 
       - name: Add the bin directory to PATH
         run: |
@@ -108,6 +139,32 @@ jobs:
       - name: Test executing of the grass command
         run: ./grass/.github/workflows/test_simple.sh
 
+      - name: Build Programmer's Manual with doxygen
+        run: |
+          cd grass
+          make htmldocs
+
+      - name: Make the doxygen results available (html)
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: doxygen-site
+          if-no-files-found: error
+          path: |
+            grass/html
+            !grass/html/**.map
+            !grass/html/**.md5
+          retention-days: 3
+
+      - name: Make the doxygen results available (latex)
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: doxygen-site-latex
+          if-no-files-found: error
+          path: |
+            grass/latex
+            !grass/latex/**.map
+            !grass/latex/**.md5
+          retention-days: 3
       - name: Compile addons
         run: |
           ./grass-addons/utils/cronjobs_osgeo_lxd/compile_addons_git.sh \
