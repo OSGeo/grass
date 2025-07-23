@@ -702,7 +702,7 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
     struct rast_row *bands_rows = G_malloc(n_bands * sizeof(struct rast_row));
 
     RASTER_MAP_TYPE data_type;
-    int nrows, i_band, n_a_bands, band_id;
+    int nrows, i_band, n_a_bands = 0, band_id;
     int i_row, head_nchars, i_cat, id_cat;
 
     int *fd_bands = G_malloc(n_bands * sizeof(int));
@@ -731,7 +731,7 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
     get_needed_bands(scatt_conds, &b_needed_bands[0]);
     get_needed_bands(scatts, &b_needed_bands[0]);
 
-    n_a_bands = 0;
+    
 
     /* open band rasters, which are needed for computation */
     for (band_id = 0; band_id < n_bands; band_id++) {
