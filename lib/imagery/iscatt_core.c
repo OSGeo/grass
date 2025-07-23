@@ -731,8 +731,6 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
     get_needed_bands(scatt_conds, &b_needed_bands[0]);
     get_needed_bands(scatts, &b_needed_bands[0]);
 
-    
-
     /* open band rasters, which are needed for computation */
     for (band_id = 0; band_id < n_bands; band_id++) {
         if (b_needed_bands[band_id]) {
