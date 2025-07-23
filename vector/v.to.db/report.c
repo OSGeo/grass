@@ -5,9 +5,13 @@
 
 int report(enum OutputFormat format)
 {
-    JSON_Value *records_value = NULL, *record_value = NULL, *root_value = NULL;
+    char unit_name[20];
+
+    JSON_Value *records_value = NULL, *record_value = NULL, *root_value = NULL,
+               *units_value = NULL, *totals_value = NULL;
     JSON_Array *records_array = NULL;
-    JSON_Object *record = NULL, *root_object = NULL;
+    JSON_Object *record = NULL, *root_object = NULL, *units_object = NULL,
+                *totals_object = NULL;
     // todo: add measurement unit
 
     if (format == JSON) {
@@ -16,9 +20,13 @@ int report(enum OutputFormat format)
         records_value = json_value_init_array();
         records_array = json_array(records_value);
 
-        char unit_name[20];
+        units_value = json_value_init_object();
+        units_object = json_object(units_value);
+
+        totals_value = json_value_init_object();
+        totals_object = json_object(totals_value);
+
         get_unit_name(unit_name);
-        json_object_set_string(root_object, "unit", unit_name);
     }
 
     int i, print_header = G_verbose() > G_verbose_min() || options.print_header;
@@ -80,7 +88,7 @@ int report(enum OutputFormat format)
                 json_array_append_value(records_array, record_value);
                 sum += Values[i].count1;
             }
-            json_object_dotset_number(root_object, "totals.count", sum);
+            json_object_set_number(totals_object, "count", sum);
             break;
         }
         break;
@@ -113,7 +121,8 @@ int report(enum OutputFormat format)
                 json_array_append_value(records_array, record_value);
                 fsum += Values[i].d1;
             }
-            json_object_dotset_number(root_object, "totals.area", fsum);
+            json_object_set_string(units_object, "area", unit_name);
+            json_object_set_number(totals_object, "area", fsum);
             break;
         }
         break;
@@ -203,6 +212,7 @@ int report(enum OutputFormat format)
                 json_object_set_number(record, "perimeter", Values[i].d1);
                 json_array_append_value(records_array, record_value);
             }
+            json_object_set_string(units_object, "perimeter", unit_name);
             break;
         }
         break;
@@ -263,7 +273,8 @@ int report(enum OutputFormat format)
                 json_array_append_value(records_array, record_value);
                 fsum += Values[i].d1;
             }
-            json_object_dotset_number(root_object, "totals.length", fsum);
+            json_object_set_string(units_object, "length", unit_name);
+            json_object_set_number(totals_object, "length", fsum);
             break;
         }
         break;
@@ -488,12 +499,15 @@ int report(enum OutputFormat format)
                 json_object_set_number(record, "azimuth", Values[i].d1);
                 json_array_append_value(records_array, record_value);
             }
+            json_object_set_string(units_object, "azimuth", unit_name);
             break;
         }
         break;
     }
 
     if (format == JSON) {
+        json_object_set_value(root_object, "units", units_value);
+        json_object_set_value(root_object, "totals", totals_value);
         json_object_set_value(root_object, "records", records_value);
         char *serialized_string = json_serialize_to_string_pretty(root_value);
         if (serialized_string == NULL) {

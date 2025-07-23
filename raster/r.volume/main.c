@@ -29,6 +29,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/gjson.h>
 #include <grass/raster.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>
@@ -44,7 +45,7 @@ int main(int argc, char *argv[])
     CELL i, max;
 
     int row, col, rows, cols;
-    int out_mode;
+    int print;
     bool use_mask;
     unsigned long *n, *e;
     long int *count;
@@ -67,11 +68,16 @@ int main(int argc, char *argv[])
 
     struct GModule *module;
     struct {
-        struct Option *input, *clump, *centroids, *output;
+        struct Option *input, *clump, *centroids, *output, *fs, *format;
     } opt;
     struct {
-        struct Flag *report;
+        struct Flag *report, *print;
     } flag;
+    char *fs;
+    enum OutputFormat format;
+    JSON_Value *root_value = NULL, *cat_value = NULL;
+    JSON_Array *root_array = NULL;
+    JSON_Object *cat_object = NULL;
 
     /* define parameters and flags */
     G_gisinit(argv[0]);
@@ -109,10 +115,30 @@ int main(int argc, char *argv[])
     opt.output->description =
         _("If no output file given report is printed to standard output");
 
+    opt.fs = G_define_standard_option(G_OPT_F_SEP);
+    opt.fs->answer = NULL;
+    opt.fs->guisection = _("Formatting");
+
+    opt.format = G_define_standard_option(G_OPT_F_FORMAT);
+    opt.format->options = "plain,csv,json";
+    opt.format->descriptions = ("plain;Human readable text output;"
+                                "csv;CSV (Comma Separated Values);"
+                                "json;JSON (JavaScript Object Notation);");
+
     flag.report = G_define_flag();
     flag.report->key = 'f';
-    flag.report->description =
-        _("Generate unformatted report (items separated by colon)");
+    flag.report->label = _(
+        "Generate unformatted report (items separated by colon) [deprecated]");
+    flag.report->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=csv instead.");
+
+    flag.print = G_define_flag();
+    flag.print->key = 'p';
+    flag.print->description = _("Print report");
+
+    // Uncomment for GRASS v9
+    // G_option_required(flag.print, opt.centroids, NULL);
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -134,7 +160,43 @@ int main(int argc, char *argv[])
         fd_centroids = G_malloc(sizeof(struct Map_info));
     }
 
-    out_mode = (!flag.report->answer);
+    /* For backward compatibility */
+    if (!opt.fs->answer) {
+        if (strcmp(opt.format->answer, "csv") == 0)
+            opt.fs->answer = "comma";
+        else
+            opt.fs->answer = ":";
+    }
+    fs = G_option_to_separator(opt.fs);
+
+    if (strcmp(opt.format->answer, "json") == 0) {
+        format = JSON;
+        root_value = G_json_value_init_array();
+        if (root_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
+        root_array = G_json_array(root_value);
+    }
+    else if (strcmp(opt.format->answer, "csv") == 0) {
+        format = CSV;
+    }
+    else {
+        format = PLAIN;
+    }
+
+    if (flag.report->answer) {
+        G_verbose_message(
+            _("Flag 'f' is deprecated and will be removed in a future "
+              "release. Please use format=csv instead."));
+        if (format == JSON) {
+            G_fatal_error(_("The -f flag cannot be used with format=json. "
+                            "Please select only one output format."));
+        }
+        format = CSV;
+    }
+    // print = flag.print->answer;
+    // currently prints always, change for GRASS v9
+    print = 1;
 
     /*
      * see if raster mask or a separate "clumpmap" raster map is to be used
@@ -278,7 +340,7 @@ int main(int argc, char *argv[])
     }
 
     /* print header */
-    if (out_mode) {
+    if (print && format == PLAIN) {
         fprintf(stdout,
                 _("\nVolume report on data from <%s> using clumps on <%s> "
                   "raster map"),
@@ -293,36 +355,65 @@ int main(int argc, char *argv[])
     total_vol = 0.0;
 
     /* print output, write centroids */
-    for (i = 1; i <= max; i++) {
-        if (count[i]) {
-            avg = sum[i] / (double)count[i];
-            vol = sum[i] * window.ew_res * window.ns_res;
-            total_vol += vol;
-            east = window.west + (e[i] + 0.5) * window.ew_res;
-            north = window.north - (n[i] + 0.5) * window.ns_res;
-            if (fd_centroids) { /* write centroids if requested */
-                Points->x[0] = east;
-                Points->y[0] = north;
-                Cats->cat[0] = i;
-                Vect_write_line(fd_centroids, GV_POINT, Points, Cats);
+    if (fd_centroids || print)
+        for (i = 1; i <= max; i++) {
+            if (count[i]) {
+                avg = sum[i] / (double)count[i];
+                vol = sum[i] * window.ew_res * window.ns_res;
+                total_vol += vol;
+                east = window.west + (e[i] + 0.5) * window.ew_res;
+                north = window.north - (n[i] + 0.5) * window.ns_res;
+                if (fd_centroids) { /* write centroids if requested */
+                    Points->x[0] = east;
+                    Points->y[0] = north;
+                    Cats->cat[0] = i;
+                    Vect_write_line(fd_centroids, GV_POINT, Points, Cats);
 
-                snprintf(buf, sizeof(buf),
-                         "insert into %s values (%d, %f, %f, %f, %ld)",
-                         Fi->table, i, vol, avg, sum[i], count[i]);
-                db_set_string(&sql, buf);
+                    snprintf(buf, sizeof(buf),
+                             "insert into %s values (%d, %f, %f, %f, %ld)",
+                             Fi->table, i, vol, avg, sum[i], count[i]);
+                    db_set_string(&sql, buf);
 
-                if (db_execute_immediate(driver, &sql) != DB_OK)
-                    G_fatal_error(_("Cannot insert new row: %s"),
-                                  db_get_string(&sql));
+                    if (db_execute_immediate(driver, &sql) != DB_OK)
+                        G_fatal_error(_("Cannot insert new row: %s"),
+                                      db_get_string(&sql));
+                }
+
+                if (print) {
+                    switch (format) {
+                    case PLAIN:
+                        fprintf(stdout,
+                                "%8d%10.2f%10.0f %7ld  %10.2f  %10.2f %16.2f\n",
+                                i, avg, sum[i], count[i], east, north, vol);
+                        break;
+                    case CSV:
+                        fprintf(stdout,
+                                "%d%s%.2f%s%.0f%s%ld%s%.2f%s%.2f%s%.2f\n", i,
+                                fs, avg, fs, sum[i], fs, count[i], fs, east, fs,
+                                north, fs, vol);
+                        break;
+                    case JSON:
+                        cat_value = G_json_value_init_object();
+                        if (cat_value == NULL) {
+                            G_fatal_error(_("Failed to initialize JSON object. "
+                                            "Out of memory?"));
+                        }
+                        cat_object = G_json_object(cat_value);
+
+                        G_json_object_set_number(cat_object, "category", i);
+                        G_json_object_set_number(cat_object, "average", avg);
+                        G_json_object_set_number(cat_object, "sum", sum[i]);
+                        G_json_object_set_number(cat_object, "cells", count[i]);
+                        G_json_object_set_number(cat_object, "volume", vol);
+                        G_json_object_set_number(cat_object, "easting", east);
+                        G_json_object_set_number(cat_object, "northing", north);
+
+                        G_json_array_append_value(root_array, cat_value);
+                        break;
+                    }
+                }
             }
-            if (out_mode)
-                fprintf(stdout, "%8d%10.2f%10.0f %7ld  %10.2f  %10.2f %16.2f\n",
-                        i, avg, sum[i], count[i], east, north, vol);
-            else
-                fprintf(stdout, "%d:%.2f:%.0f:%ld:%.2f:%.2f:%.2f\n", i, avg,
-                        sum[i], count[i], east, north, vol);
         }
-    }
 
     /* write centroid attributes and close the map */
     if (fd_centroids) {
@@ -332,10 +423,23 @@ int main(int argc, char *argv[])
     }
 
     /* print total value */
-    if (total_vol > 0.0 && out_mode) {
+    if (total_vol > 0.0 && print && format == PLAIN) {
         fprintf(stdout, "%s\n", SEP);
         fprintf(stdout, "%60s = %14.2f", _("Total Volume"), total_vol);
         fprintf(stdout, "\n");
+    }
+
+    if (format == JSON) {
+        char *json_string = G_json_serialize_to_string_pretty(root_value);
+        if (!json_string) {
+            G_json_value_free(root_value);
+            G_fatal_error(_("Failed to serialize JSON to pretty format."));
+        }
+
+        puts(json_string);
+
+        G_json_free_serialized_string(json_string);
+        G_json_value_free(root_value);
     }
 
     exit(EXIT_SUCCESS);

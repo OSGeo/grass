@@ -29,22 +29,24 @@ class Map:
 
     Elements are added to the display by calling GRASS display modules.
 
-    Basic usage::
+    :Basic usage:
+      .. code-block:: pycon
 
-    >>> m = Map()
-    >>> m.run("d.rast", map="elevation")
-    >>> m.run("d.legend", raster="elevation")
-    >>> m.show()
+        >>> m = Map()
+        >>> m.run("d.rast", map="elevation")
+        >>> m.run("d.legend", raster="elevation")
+        >>> m.show()
 
     GRASS display modules can also be called by using the name of module
     as a class method and replacing "." with "_" in the name.
 
-    Shortcut usage::
+    :Shortcut usage:
+      .. code-block:: pycon
 
-    >>> m = Map()
-    >>> m.d_rast(map="elevation")
-    >>> m.d_legend(raster="elevation")
-    >>> m.show()
+        >>> m = Map()
+        >>> m.d_rast(map="elevation")
+        >>> m.d_legend(raster="elevation")
+        >>> m.show()
 
     """
 

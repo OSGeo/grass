@@ -115,9 +115,9 @@ int main(int argc, char *argv[])
     dbColumn *column;
     char *sep;
     enum OutputFormat format;
-    JSON_Value *root_value, *object_value;
-    JSON_Array *root_array;
-    JSON_Object *root_object;
+    JSON_Value *root_value = NULL, *object_value = NULL;
+    JSON_Array *root_array = NULL;
+    JSON_Object *root_object = NULL;
 
     G_gisinit(argv[0]);
 
@@ -306,10 +306,18 @@ int main(int argc, char *argv[])
     if (strcmp(opt.format->answer, "json") == 0) {
         format = JSON;
         root_value = json_value_init_array();
+        if (root_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
         root_array = json_array(root_value);
     }
     else {
         format = PLAIN;
+    }
+
+    if (format == JSON && !print) {
+        G_fatal_error(_("The format option requires the -p flag; please re-run "
+                        "with -p to enable output."));
     }
 
     if (do_all && update_table)
@@ -1565,7 +1573,12 @@ int main(int argc, char *argv[])
                 break;
             case JSON:
                 object_value = json_value_init_object();
+                if (object_value == NULL) {
+                    G_fatal_error(
+                        _("Failed to initialize JSON object. Out of memory?"));
+                }
                 root_object = json_object(object_value);
+
                 json_object_set_number(root_object, "from_cat",
                                        Near[i].from_cat);
                 json_object_set_number(root_object, "to_cat", Near[i].to_cat);

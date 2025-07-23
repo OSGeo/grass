@@ -102,8 +102,10 @@ copy("_templates/layout.html.template", "_templates/layout.html")
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    "sphinx_last_updated_by_git",  # Included in sphinx_sitemap 2.7.0
     "sphinx.ext.autodoc",
     "sphinx.ext.doctest",
+    "sphinx.ext.intersphinx",
     "sphinx.ext.todo",
     "sphinx.ext.coverage",
     "sphinx.ext.mathjax",
@@ -302,6 +304,7 @@ html_use_index = True
 
 # If true, links to the reST sources are added to the pages.
 html_show_sourcelink = True
+html_copy_source = True
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
 html_show_sphinx = True
@@ -485,6 +488,8 @@ epub_exclude_files = ["search.html"]
 
 # Where class documentation comes from (class or __init__ docstring).
 autoclass_content = "both"
+# Render todo boxes instead of hiding them
+todo_include_todos = True
 
 # sphinx-sitemap extension config
 # https://sphinx-sitemap.readthedocs.io/en/latest/advanced-configuration.html
@@ -496,3 +501,12 @@ sitemap_excludes = [
     "search.html",
     "genindex.html",
 ]
+
+# Intersphinx config
+intersphinx_mapping = {
+    "numpy": ("https://numpy.org/doc/stable/", None),
+    "python": ("https://docs.python.org/3", None),
+}
+
+# Options for sphinx-last-updated-by-git extension
+git_untracked_show_sourcelink = True
