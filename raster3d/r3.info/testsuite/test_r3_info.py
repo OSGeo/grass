@@ -51,9 +51,9 @@ class TestR3Info(TestCase):
         result = read_command("r3.info", map=self.test_raster3d).splitlines()
         expected = [
             " +----------------------------------------------------------------------------+",
-            " | Layer:    test_raster3d                  Date:                             |",
+            " | Map:      test_raster3d                  Date:                             |",
             " | Mapset:                                  Login of Creator:                 |",
-            " | Project:                                                                  |",
+            " | Project:                                                                   |",
             " | DataBase:                                                                  |",
             " | Title:    test_raster3d                                                    |",
             " | Units:    none                                                             |",
@@ -119,19 +119,19 @@ class TestR3Info(TestCase):
             "r3.info", map=self.test_raster3d, format="shell"
         ).splitlines()
         expected = [
-            "layer=test_raster3d",
+            "map=test_raster3d",
             "date=",
             "mapset=",
             "creator=",
             "project=",
             "database=",
-            "title=test_raster3d",
-            "units=none",
-            "vertical_units=units",
+            'title="test_raster3d"',
+            'units="none"',
+            'vertical_units="units"',
             'timestamp="none"',
             "maptype=raster_3d",
             "ncats=0",
-            "datatype=DCELL",
+            'datatype="DCELL"',
             "rows=100",
             "cols=200",
             "depths=50",
@@ -146,8 +146,6 @@ class TestR3Info(TestCase):
             "tiledimx=29",
             "tiledimy=15",
             "tiledimz=9",
-            "projection=Lambert Conformal Conic",
-            "zone=0",
             "north=200",
             "south=100",
             "nsres=1",
@@ -178,7 +176,7 @@ class TestR3Info(TestCase):
         """Verify JSON output without flags."""
         result = parse_command("r3.info", map=self.test_raster3d, format="json")
         expected = {
-            "layer": "test_raster3d",
+            "map": "test_raster3d",
             "title": "test_raster3d",
             "units": "none",
             "vertical_units": "units",
@@ -200,8 +198,6 @@ class TestR3Info(TestCase):
             "tiledimx": 29,
             "tiledimy": 15,
             "tiledimz": 9,
-            "projection": "Lambert Conformal Conic",
-            "zone": 0,
             "north": 200,
             "south": 100,
             "nsres": 1,

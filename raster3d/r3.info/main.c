@@ -185,7 +185,7 @@ int main(int argc, char *argv[])
         case PLAIN:
             divider('+');
 
-            if (G_asprintf(&line, "Layer:    %-29.29s  Date: %s", name,
+            if (G_asprintf(&line, "Map:      %-29.29s  Date: %s", name,
                            hist_ok ? Rast_get_history(&hist, HIST_MAPID)
                                    : "??") > 0)
                 printline(line);
@@ -456,24 +456,24 @@ int main(int argc, char *argv[])
             break;
 
         case SHELL:
-            fprintf(out, "layer=%s\n", name);
-            fprintf(out, "date=%s\n",
+            fprintf(out, "map=%s\n", name);
+            fprintf(out, "date=\"%s\"\n",
                     hist_ok ? Rast_get_history(&hist, HIST_MAPID) : "??");
             fprintf(out, "mapset=%s\n", mapset);
-            fprintf(out, "creator=%s\n",
+            fprintf(out, "creator=\"%s\"\n",
                     hist_ok ? Rast_get_history(&hist, HIST_CREATOR) : "??");
             fprintf(out, "project=%s\n", G_location());
             fprintf(out, "database=%s\n", G_gisdbase());
-            fprintf(out, "title=%s\n",
+            fprintf(out, "title=\"%s\"\n",
                     hist_ok ? Rast_get_history(&hist, HIST_TITLE) : "??");
-            fprintf(out, "units=%s\n", Rast3d_get_unit(g3map));
-            fprintf(out, "vertical_units=%s\n",
+            fprintf(out, "units=\"%s\"\n", Rast3d_get_unit(g3map));
+            fprintf(out, "vertical_units=\"%s\"\n",
                     Rast3d_get_vertical_unit(g3map));
 
             /*This shows the TimeStamp */
             if (time_ok && (first_time_ok || second_time_ok)) {
                 G_format_timestamp(&ts, timebuff);
-                fprintf(out, "timestamp=%s\n", timebuff);
+                fprintf(out, "timestamp=\"%s\"\n", timebuff);
             }
             else {
                 fprintf(out, "timestamp=\"none\"\n");
@@ -485,7 +485,7 @@ int main(int argc, char *argv[])
 
             fprintf(out, "maptype=%s\n", "raster_3d");
             fprintf(out, "ncats=%s\n", cats_ok ? tmp1 : "??");
-            fprintf(out, "datatype=%s\n",
+            fprintf(out, "datatype=\"%s\"\n",
                     (data_type == FCELL_TYPE
                          ? "FCELL"
                          : (data_type == DCELL_TYPE ? "DCELL" : "??")));
@@ -524,9 +524,6 @@ int main(int argc, char *argv[])
                 fprintf(out, "tiledimx=%d\n", g3map->tileX);
                 fprintf(out, "tiledimy=%d\n", g3map->tileY);
                 fprintf(out, "tiledimz=%d\n", g3map->tileZ);
-
-                fprintf(out, "projection=%s\n", G_database_projection_name());
-                fprintf(out, "zone=%d\n", G_zone());
 
                 G_format_northing(cellhd.north, tmp1, cellhd.proj);
                 G_format_northing(cellhd.south, tmp2, cellhd.proj);
@@ -587,7 +584,7 @@ int main(int argc, char *argv[])
             break;
 
         case JSON:
-            G_json_object_set_string(root_object, "layer", name);
+            G_json_object_set_string(root_object, "map", name);
             G_json_object_set_string(
                 root_object, "date",
                 hist_ok ? Rast_get_history(&hist, HIST_MAPID) : "??");
@@ -666,10 +663,6 @@ int main(int argc, char *argv[])
                 G_json_object_set_number(root_object, "tiledimx", g3map->tileX);
                 G_json_object_set_number(root_object, "tiledimy", g3map->tileY);
                 G_json_object_set_number(root_object, "tiledimz", g3map->tileZ);
-
-                G_json_object_set_string(root_object, "projection",
-                                         G_database_projection_name());
-                G_json_object_set_number(root_object, "zone", G_zone());
 
                 G_json_object_set_number(root_object, "north", cellhd.north);
                 G_json_object_set_number(root_object, "south", cellhd.south);
