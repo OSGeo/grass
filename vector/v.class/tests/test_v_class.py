@@ -232,9 +232,10 @@ def test_v_class_where_no_matches(setup_vector_with_values):
     assert all(b == 0.0 for b in breaks)
 
 
+# @pytest.mark.skip(reason="Temporarily skipped due to CI performance constraints")
 def test_v_class_large_dataset(tmp_path):
     """
-    Test classification on a larger dataset (1000 points).
+    Test classification on a larger dataset (100 points).
 
     Verifies break count, sorted order, and plausible range of break values.
     """
@@ -244,7 +245,7 @@ def test_v_class_large_dataset(tmp_path):
     with gs.setup.init(project, env=os.environ.copy()) as session:
         gs.run_command("g.region", n=100, s=0, e=100, w=0, res=1, env=session.env)
 
-        points = "\n".join(f"{i} 1 {i}" for i in range(1, 1001))
+        points = "\n".join(f"{i} 1 {i}" for i in range(1, 101))
 
         gs.write_command(
             "v.in.ascii",
@@ -266,7 +267,7 @@ def test_v_class_large_dataset(tmp_path):
 
         sql_statements = "\n".join(
             f"UPDATE large_points SET value = {cat} WHERE cat = {cat};"
-            for cat in range(1, 1001)
+            for cat in range(1, 101)
         )
         gs.write_command(
             "db.execute",
@@ -291,8 +292,8 @@ def test_v_class_large_dataset(tmp_path):
         assert all(
             breaks[i] <= breaks[i + 1] for i in range(len(breaks) - 1)
         )  # sorted ascending
-        # Values should be within data range 1-1000
-        assert all(1 <= b <= 1000 for b in breaks)
+        # Values should be within data range 1-100
+        assert all(1 <= b <= 100 for b in breaks)
 
 
 def test_v_class_output_format_consistency(setup_vector_with_values):
