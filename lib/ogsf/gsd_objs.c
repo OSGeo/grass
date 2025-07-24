@@ -300,7 +300,7 @@ void gsd_x(geosurf *gs, float *center, int colr, float siz)
 
    \param center center point
    \param colr color value
-   \param size size value
+   \param siz size value
  */
 void gsd_diamond(float *center, unsigned long colr, float siz)
 {
@@ -1127,6 +1127,7 @@ void gsd_3darrow(float *center, unsigned long colr, float siz1, float siz2,
    Adapted from gsd_north_arrow Hamish Bowman Dec 2006
 
    \param pos2
+   \param len
    \param fontbase font-base
    \param bar_clr barscale color
    \param text_clr text color
@@ -1212,7 +1213,8 @@ int gsd_scalebar(float *pos2, float len, GLuint fontbase, unsigned long bar_clr,
 
    Adapted from gsd_scalebar A.Kratochvilova 2011
 
-   \param pos2 scalebar position
+   \param pos scalebar position
+   \param len
    \param fontbase font-base (unused)
    \param bar_clr barscale color
    \param text_clr text color (unused)

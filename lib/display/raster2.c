@@ -52,16 +52,16 @@ int D_set_overlay_mode(int n)
     return 0;
 }
 
-/* this routine modifies the hardware colormap
- * provided that we are not using fixed mode colors.
- * For use by programs such as d.colors
+/*!
+ * \brief this routine modifies the hardware colormap provided that we are not
+ * using fixed mode colors.
  *
- * returns:
- *    0 error - in fixed mode,
- *              or cat not in min:max color range
- *    1 ok
+ * For use by programs such as d.colors.
+ *
+ * \param cat
+ * \param colors
+ * \return
  */
-
 int D_color(CELL cat, struct Colors *colors)
 {
     return D_c_color(cat, colors);
@@ -73,16 +73,14 @@ int D_c_color(CELL cat, struct Colors *colors)
     return D_color_of_type(&cat, colors, CELL_TYPE);
 }
 
-/* select color for line drawing */
-
 /*!
- * \brief
+ * \brief select color for line drawing
  *
  * Same functionality as <tt>D_color()</tt> except that the <em>value</em> is
  * type <tt>DCELL</tt>.  This implies that the floating-point interfaces to the
  * <em>colors</em> are used by this routine.
  *
- *  \param value
+ *  \param val Value
  *  \param colors
  *  \return int
  */
@@ -92,21 +90,18 @@ int D_d_color(DCELL val, struct Colors *colors)
     return D_color_of_type(&val, colors, DCELL_TYPE);
 }
 
-/* select color for line drawing */
-
 /*!
- * \brief
+ * \brief select color for line drawing
  *
  * Same
  * functionality as <tt>D_color()</tt> except that the <em>value</em> is type
  * <tt>FCELL</tt>. This implies that the floating-point interfaces to the
  * <em>colors</em> are used by this routine.
  *
- *  \param value
+ *  \param val
  *  \param colors
  *  \return int
  */
-
 int D_f_color(FCELL val, struct Colors *colors)
 {
     return D_color_of_type(&val, colors, FCELL_TYPE);
@@ -122,12 +117,11 @@ int D_f_color(FCELL val, struct Colors *colors)
  * If the <em>data_type</em> is DCELL_TYPE, calls D_d_color((DCELL *value,
  * colors);
  *
- *  \param value
+ *  \param raster
  *  \param colors
  *  \param data_type
  *  \return int
  */
-
 int D_color_of_type(const void *raster, struct Colors *colors,
                     RASTER_MAP_TYPE data_type)
 {

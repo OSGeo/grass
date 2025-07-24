@@ -183,7 +183,7 @@ void Rast3d_set_unit(RASTER3D_Map *map, const char *unit)
  *  set Vertical unit from integer value defined in gis.h (U_METERS, ...)
  *
  *  \param map
- *  \param unit
+ *  \param vertical_unit
  *  \return void
  */
 
@@ -200,7 +200,7 @@ void Rast3d_set_vertical_unit2(RASTER3D_Map *map, int vertical_unit)
  *  set Vertical unit from string
  *
  *  \param map
- *  \param unit
+ *  \param vertical_unit
  *  \return void
  */
 
