@@ -130,8 +130,7 @@ def read(history_path):
     """Read the content of the history file.
 
     :param str history_path: path to the history log file
-    :return content_list: list of dictionaries
-    with 'command' and 'command_info' keys
+    :return content_list: list of dictionaries with 'command' and 'command_info' keys
     """
     if get_history_file_extension(history_path) == ".json":
         return _read_from_JSON(history_path)

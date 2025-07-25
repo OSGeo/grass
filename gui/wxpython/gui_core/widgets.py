@@ -566,11 +566,11 @@ class StaticWrapText(GenStaticText):
     """A Static Text widget that wraps its text to fit parents width,
     enlarging its height if necessary."""
 
-    def __init__(self, parent, id=wx.ID_ANY, label="", margin=0, *args, **kwds):
+    def __init__(self, parent, id=wx.ID_ANY, label="", margin=0, *args, **kwargs):
         self._margin = margin
         self._initialLabel = label
         self.init = False
-        GenStaticText.__init__(self, parent, id, label, *args, **kwds)
+        GenStaticText.__init__(self, parent, id, label, *args, **kwargs)
         self.Bind(wx.EVT_SIZE, self.OnSize)
 
     def DoGetBestSize(self):
@@ -1321,7 +1321,7 @@ class SearchModuleWidget(wx.Panel):
         """Search modules by keys
 
         :param keys: list of keys
-        :param value: patter to match
+        :param value: pattern to match
         """
         nodes = set()
         for key in keys:

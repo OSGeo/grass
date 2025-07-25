@@ -260,7 +260,8 @@ def text_to_keyvalue(
 # TODO: decide if None is valid, and use some default or no compare
 # TODO: is None a valid value for precision?
 def values_equal(value_a, value_b, precision: float = 0.000001) -> bool:
-    """
+    """Compare two values for equality within a given precision.
+
     >>> values_equal(1.022, 1.02, precision=0.01)
     True
     >>> values_equal([1.2, 5.3, 6.8], [1.1, 5.2, 6.9], precision=0.2)
@@ -271,7 +272,8 @@ def values_equal(value_a, value_b, precision: float = 0.000001) -> bool:
     True
     >>> values_equal("Hello", "hello")
     False
-    """  # noqa: D402; Add a summary
+    """  # noqa: D402
+    # Add a summary
     # each if body needs to handle only not equal state
 
     if isinstance(value_a, float) and isinstance(value_b, float):
@@ -364,7 +366,7 @@ def keyvalue_equals(
     :param key_equal: dictionary of functions used for comparison
         of specific keys, `def_equal` is used for the rest,
         keys in dictionary are keys in `dict_a` and `dict_b` dictionaries,
-        values are the functions used to comapare the given key
+        values are the functions used to compare the given key
     :param a_is_subset: `True` if `dict_a` is a subset of `dict_b`,
         `False` otherwise
 
@@ -506,7 +508,8 @@ def proj_units_equals(text_a, text_b):
 # TODO: change parameter order?
 # TODO: the behavior with last \n is strange but now using DOTALL and $
 def check_text_ellipsis(reference, actual) -> bool:
-    r"""
+    r"""Check if actual text matches reference text with ellipsis as wildcards.
+
     >>> check_text_ellipsis(
     ...     "Vector map <...> contains ... points.",
     ...     "Vector map <bridges> contains 5268 points.",
@@ -543,7 +546,8 @@ def check_text_ellipsis(reference, actual) -> bool:
 
     >>> check_text_ellipsis("Result: [569] (...)", "Result: 9 (too high)")
     False
-    """  # noqa: D402; Add a summary
+    """  # noqa: D402
+    # Add a summary
     ref_escaped = re.escape(reference)
     exp = re.compile(r"\\\.\\\.\\\.")  # matching escaped ...
     ref_regexp = exp.sub(".+", ref_escaped) + "$"
@@ -551,7 +555,8 @@ def check_text_ellipsis(reference, actual) -> bool:
 
 
 def check_text_ellipsis_doctest(reference, actual):
-    """
+    """Check if actual text matches reference with ellipsis using doctest's matching.
+
     >>> check_text_ellipsis_doctest(
     ...     "user: ...\\nname: elevation", "user: some_user\\nname: elevation"
     ... )
@@ -602,7 +607,8 @@ def check_text_ellipsis_doctest(reference, actual):
     ...     optionflags=doctest.ELLIPSIS,
     ... )
     False
-    """  # noqa: D402; Add a summary
+    """  # noqa: D402
+    # Add a summary
     # this can be also global
     checker = doctest.OutputChecker()
     return checker.check_output(reference, actual, optionflags=doctest.ELLIPSIS)

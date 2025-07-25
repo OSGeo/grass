@@ -1669,7 +1669,7 @@ class Map:
         del llist[:]
 
     def Clean(self):
-        """Clean layer stack - go trough all layers and remove them
+        """Clean layer stack - go through all layers and remove them
         from layer list.
 
         Removes also mapfile and maskfile.

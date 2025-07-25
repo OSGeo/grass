@@ -240,9 +240,10 @@ static int show(CELL low, CELL high, int *len, DCELL dmin, DCELL dmax,
     if (map_type != CELL_TYPE) {
         switch (format) {
         case PLAIN:
-            sprintf(text, "%f%s%f ", dmin + (low - 1) * (dmax - dmin) / nsteps,
-                    dmin < 0 ? " thru " : "-",
-                    dmin + high * (dmax - dmin) / nsteps);
+            snprintf(text, sizeof(text), "%f%s%f ",
+                     dmin + (low - 1) * (dmax - dmin) / nsteps,
+                     dmin < 0 ? " thru " : "-",
+                     dmin + high * (dmax - dmin) / nsteps);
             break;
         case JSON:
             json_object_set_number(cat_object, "min",
@@ -256,10 +257,10 @@ static int show(CELL low, CELL high, int *len, DCELL dmin, DCELL dmax,
         switch (format) {
         case PLAIN:
             if (low == high)
-                sprintf(text, "%ld ", (long)low);
+                snprintf(text, sizeof(text), "%ld ", (long)low);
             else
-                sprintf(text, "%ld%s%ld ", (long)low, low < 0 ? " thru " : "-",
-                        (long)high);
+                snprintf(text, sizeof(text), "%ld%s%ld ", (long)low,
+                         low < 0 ? " thru " : "-", (long)high);
             break;
         case JSON:
             json_object_set_number(cat_object, "min", (long)low);

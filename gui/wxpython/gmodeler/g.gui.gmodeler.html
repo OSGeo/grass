@@ -295,13 +295,13 @@ there are <code>Variables</code>.
 </center>
 
 <p>
-The key point is the usage of <code>%</code> before the substituting variable and
-settings in the <code>Variables</code> dialog. For example, in the case of a model variable
-<code>raster</code> that points to an input file path and which value is required to be
-used as one of inputs for a particular model, it should be specified in the
-<code>Variables</code> dialog with its respective name (<code>raster</code>), data type,
-default value and description. Then it should be set in the module dialog as
-input called <code>%raster</code>.
+The key point is enclosing the substituting variable into <code>%{...}</code> and setting
+the value in the <code>Variables</code> dialog. For example, in the case of a model
+variable <code>raster</code> that points to an input file path and which value is
+required to be used as one of inputs for a particular model, it should be specified in
+the <code>Variables</code> dialog with its respective name (<code>raster</code>), data
+type, default value and description. Then it should be set in the module dialog as
+input called <code>%{raster}</code>.
 
 <center>
 <a href="g_gui_gmodeler_variables.png">
@@ -401,8 +401,8 @@ provides a predefined color table called <code>ndvi</code> to represent <i>ndvi 
 In this case it is not necessary to work with every image separately.
 <br>
 The Graphical Modeler is an appropriate tool to
-process data in an effective way using loop and variables (<code>%map</code> for a
-particular MODIS image in mapset and <code>%ndvi</code> for original data name suffix).
+process data in an effective way using loop and variables (<code>%{map}</code> for a
+particular MODIS image in mapset and <code>%{ndvi}</code> for original data name suffix).
 After the loop component is added to model, it is necessary to define series of maps
 with required settings of map type, mapset, etc.
 
@@ -450,11 +450,11 @@ The steps to enter in the command console of the Graphical Modeler would be as f
 # note that the white space usage differs from the standard command line usage
 
 # rename original image with preselected suffix
-g.rename raster = %map,%map.%ndvi
+g.rename raster = %{map},%{map}.%{ndvi}
 # convert integer values
-r.mapcalc expression = %map = %map.%ndvi * 0.0001
+r.mapcalc expression = %{map} = %{map}.%{ndvi} * 0.0001
 # set color table appropriate for nvdi data
-r.colors = map = %map color = ndvi
+r.colors = map = %{map} color = ndvi
 </pre></div>
 
 <h2>SEE ALSO</h2>

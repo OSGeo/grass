@@ -21,12 +21,12 @@
 #include <grass/bitmap.h>
 #include <grass/linkm.h>
 
-#include <grass/waterglobs.h>
 #include <grass/simlib.h>
 
 /* divergence computation from a given field */
 
-void erod(double **hw, const Setup *setup, const Geometry *geometry)
+void erod(double **hw, const Setup *setup, const Geometry *geometry,
+          Grids *grids)
 {
     /* hw = sigma or gamma */
 
@@ -45,26 +45,31 @@ void erod(double **hw, const Setup *setup, const Geometry *geometry)
             kn = min(geometry->my - 1, k + 1);
             k2 = kn - 1;
 
-            if (zz[k][l] != UNDEF || zz[k][ln] != UNDEF || zz[kp][l] != UNDEF ||
-                zz[k][lp] != UNDEF || zz[k][l1] != UNDEF ||
-                zz[k1][l] != UNDEF || zz[kn][l] != UNDEF) { /* jh fix */
+            if (grids->zz[k][l] != UNDEF || grids->zz[k][ln] != UNDEF ||
+                grids->zz[kp][l] != UNDEF || grids->zz[k][lp] != UNDEF ||
+                grids->zz[k][l1] != UNDEF || grids->zz[k1][l] != UNDEF ||
+                grids->zz[kn][l] != UNDEF) { /* jh fix */
 
-                dxp = (v1[k][lp] * hw[k][lp] - v1[k][l1] * hw[k][l1]) /
+                dxp = (grids->v1[k][lp] * hw[k][lp] -
+                       grids->v1[k][l1] * hw[k][l1]) /
                       geometry->stepx;
-                dxn = (v1[k][l2] * hw[k][l2] - v1[k][ln] * hw[k][ln]) /
+                dxn = (grids->v1[k][l2] * hw[k][l2] -
+                       grids->v1[k][ln] * hw[k][ln]) /
                       geometry->stepx;
                 dxa = 0.5 * (dxp + dxn);
 
-                dyp = (v2[kp][l] * hw[kp][l] - v2[k1][l] * hw[k1][l]) /
+                dyp = (grids->v2[kp][l] * hw[kp][l] -
+                       grids->v2[k1][l] * hw[k1][l]) /
                       geometry->stepy;
-                dyn = (v2[k2][l] * hw[k2][l] - v2[kn][l] * hw[kn][l]) /
+                dyn = (grids->v2[k2][l] * hw[k2][l] -
+                       grids->v2[kn][l] * hw[kn][l]) /
                       geometry->stepy;
                 dya = 0.5 * (dyp + dyn);
 
-                er[k][l] = (dxa + dya) / setup->deltap;
+                grids->er[k][l] = (dxa + dya) / setup->deltap;
             }
             else
-                er[k][l] = UNDEF;
+                grids->er[k][l] = UNDEF;
         }
     }
 }

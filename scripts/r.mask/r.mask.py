@@ -73,7 +73,6 @@ import sys
 import atexit
 
 import grass.script as gs
-from grass.script.utils import encode
 from grass.exceptions import CalledModuleError
 
 
@@ -165,7 +164,7 @@ def main():
                 "r.reclass", input=raster, output=name, overwrite=True, rules="-"
             )
             res = "%s = 1" % maskcats
-            p.stdin.write(encode(res))
+            p.stdin.write(res)
             p.stdin.close()
             p.wait()
         elif vector:

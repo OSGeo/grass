@@ -23,11 +23,11 @@ char *maskinfo(void)
     if (!Rast_mask_status(mask_name, mask_mapset, NULL, NULL, NULL))
         return "none";
     if (Rast_get_reclass(mask_name, mask_mapset, &reclass) <= 0) {
-        sprintf(text, "%s in %s", mask_name, mask_mapset);
+        snprintf(text, sizeof(text), "%s in %s", mask_name, mask_mapset);
         return append(results, text);
     }
 
-    sprintf(text, "%s in %s", reclass.name, reclass.mapset);
+    snprintf(text, sizeof(text), "%s in %s", reclass.name, reclass.mapset);
     results = append(results, text);
     next = 0;
     first = 1;
@@ -82,9 +82,9 @@ static void do_text(char *text, long first, long last)
         strcat(text, " ");
 
     if (first == last)
-        sprintf(work, "%ld", first);
+        snprintf(work, sizeof(work), "%ld", first);
     else
-        sprintf(work, "%ld-%ld", first, last);
+        snprintf(work, sizeof(work), "%ld-%ld", first, last);
 
     strcat(text, work);
 }

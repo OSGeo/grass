@@ -173,9 +173,9 @@ mat_struct *G_matrix_copy(const mat_struct *A)
 /*!
  * \fn mat_struct *G_matrix_add (mat_struct *mt1, mat_struct *mt2)
  *
- * \brief Adds two matricies
+ * \brief Adds two matrices
  *
- *  Adds two matricies <b>mt1</b> and <b>mt2</b> and returns a
+ *  Adds two matrices <b>mt1</b> and <b>mt2</b> and returns a
  * resulting matrix. The return structure is automatically initialized.
  *
  * \param mt1
@@ -191,9 +191,9 @@ mat_struct *G_matrix_add(mat_struct *mt1, mat_struct *mt2)
 /*!
  * \fn mat_struct *G_matrix_subtract (mat_struct *mt1, mat_struct *mt2)
  *
- * \brief Subtract two matricies
+ * \brief Subtract two matrices
  *
- * Subtracts two matricies <b>mt1</b> and <b>mt2</b> and returns
+ * Subtracts two matrices <b>mt1</b> and <b>mt2</b> and returns
  * a resulting matrix. The return matrix is automatically initialized.
  *
  * \param mt1
@@ -346,7 +346,7 @@ mat_struct *G__matrix_add(mat_struct *mt1, mat_struct *mt2, const double c1,
 /*!
  * \fn mat_struct *G_matrix_product (mat_struct *mt1, mat_struct *mt2)
  *
- * \brief Returns product of two matricies
+ * \brief Returns product of two matrices
  *
  *  Returns a matrix with the product of matrix <b>mt1</b> and
  * <b>mt2</b>. The return matrix is automatically initialized.
@@ -1309,6 +1309,7 @@ double G_vector_norm1(vec_struct *vc)
  *
  * \param v1
  * \param v2
+ * \param out Output vector
  * \return vec_struct
  */
 
@@ -1568,7 +1569,7 @@ mat_struct *G_matrix_resize(mat_struct *in, int rows, int cols)
 }
 
 /*!
- * \fn int G_matrix_read_stdin (mat_struct *out)
+ * \fn int G_matrix_stdin(mat_struct *out)
  *
  * \brief Read a matrix from standard input
  *

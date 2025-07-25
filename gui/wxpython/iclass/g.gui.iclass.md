@@ -1,16 +1,11 @@
 ---
 description: wxGUI Supervised Classification Tool
 index: topic_GUI|GUI
+keywords: [display, GUI, imagery, classification, supervised classification]
+
 ---
 
 # wxGUI Supervised Classification Tool
-
-## KEYWORDS
-
-[display](display.md), [GUI](topic_GUI.md),
-[imagery](keywords.md#imagery),
-[classification](keywords.md#classification), [supervised
-classification](keywords.md#supervised-classification)
 
 ## DESCRIPTION
 

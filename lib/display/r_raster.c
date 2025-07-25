@@ -103,7 +103,7 @@ int D_open_driver(void)
         }
 
         if (c)
-            sprintf(progname, "%s", c);
+            snprintf(progname, sizeof(progname), "%s", c);
         else { /* monitors managed by d.mon -> call default renderer */
             char element[GPATH_MAX];
 
@@ -248,7 +248,7 @@ void D_encoding(const char *name)
   \brief Get font list
 
   \param[out] list list of font names
-  \param[out] number of items in the list
+  \param[out] count of items in the list
 */
 void D_font_list(char ***list, int *count)
 {
@@ -259,7 +259,7 @@ void D_font_list(char ***list, int *count)
   \brief Get font info
 
   \param[out] list list of font info
-  \param[out] number of items in the list
+  \param[out] count of items in the list
 */
 void D_font_info(char ***list, int *count)
 {

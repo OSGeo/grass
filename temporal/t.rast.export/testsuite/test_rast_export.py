@@ -16,11 +16,17 @@ from grass.gunittest.case import TestCase
 
 
 class TestRasterExport(TestCase):
-    tmp = gs.tempdir()
-    float_ = os.path.join(tmp, "geotiffloat")
-    int_ = os.path.join(tmp, "geotifint")
-    grid = os.path.join(tmp, "grid")
-    pack = os.path.join(tmp, "pack")
+    def setUp(self):
+        tmp = gs.tempdir()
+        self.addCleanup(gs.try_rmdir, tmp)
+        self.float_ = os.path.join(tmp, "geotiffloat")
+        self.addCleanup(gs.try_remove, self.float_)
+        self.int_ = os.path.join(tmp, "geotifint")
+        self.addCleanup(gs.try_remove, self.int_)
+        self.grid = os.path.join(tmp, "grid")
+        self.addCleanup(gs.try_remove, self.grid)
+        self.pack = os.path.join(tmp, "pack")
+        self.addCleanup(gs.try_remove, self.pack)
 
     @classmethod
     def setUpClass(cls):

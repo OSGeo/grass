@@ -129,7 +129,7 @@
 
 
 <!--	a potential value for a parameter. Hopefully
-	it does correpond to the parameter type.
+	it does correspond to the parameter type.
 	How to set up rules for that (same problem for
 	<default>)?
 -->

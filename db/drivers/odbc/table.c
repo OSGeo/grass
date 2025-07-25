@@ -76,12 +76,12 @@
 /* append the (precision, scale) or (length) if necessary */
 /*  switch (sql_type) {
    case DB_SQL_TYPE_CHARACTER:
-   sprintf(buf, "(%d)", db_get_column_length(col));
+   snprintf(buf, sizeof(buf), "(%d)", db_get_column_length(col));
    db_append_string(cmd, buf);
    break;
    case DB_SQL_TYPE_DECIMAL:
    case DB_SQL_TYPE_NUMERIC:
-   sprintf(buf, "(%d,%d)", db_get_column_precision(col),
+   snprintf(buf, sizeof(buf), "(%d,%d)", db_get_column_precision(col),
    db_get_column_scale(col));
    db_append_string(cmd, buf);
    break;
@@ -162,10 +162,10 @@ int db__driver_drop_table(dbString *name)
     ret = SQLGetData(c->stmt, 4, SQL_C_CHAR, ttype, sizeof(ttype), NULL);
 
     if (strcmp((const char *)ttype, "TABLE") == 0) {
-        sprintf(cmd, "DROP TABLE %s", tname);
+        snprintf(cmd, sizeof(cmd), "DROP TABLE %s", tname);
     }
     else if (strcmp((const char *)ttype, "VIEW") == 0) {
-        sprintf(cmd, "DROP VIEW %s", tname);
+        snprintf(cmd, sizeof(cmd), "DROP VIEW %s", tname);
     }
     else {
         db_d_append_error(_("Table %s isn't 'TABLE' or 'VIEW' but %s"), tname,

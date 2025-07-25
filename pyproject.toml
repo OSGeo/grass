@@ -10,6 +10,7 @@ target-version = ['py39', 'py310', 'py311', 'py312', 'py313']
 # 'extend-exclude' excludes files or directories in addition to the defaults
 extend-exclude = '''
 (
+    python/grass/temporal/ply/|
     python/libgrass_interface_generator/
 )
 '''
@@ -20,10 +21,15 @@ required-version = ">=0.8.0"
 builtins = ["_"]
 
 # In addition to the standard set of exclusions, omit the following files or folders.
-extend-exclude = ["python/libgrass_interface_generator"]
+extend-exclude = [
+    "python/grass/temporal/ply",           # External code
+    "python/libgrass_interface_generator",
+]
 
 [tool.ruff.lint]
 # See https://docs.astral.sh/ruff/rules/
+external = ["C2801"]
+
 select = [
     "A",      # flake8-builtins (A)
     "AIR",    # Airflow (AIR)
@@ -233,6 +239,7 @@ ignore = [
     "RUF012",  # mutable-class-default
     "RUF015",  # unnecessary-iterable-allocation-for-first-element
     "RUF019",  # unnecessary-key-check
+    "RUF059",  # unused-unpacked-variable
     "RUF100",  # unused-noqa
     "S101",    # assert
     "S108",    # hardcoded-temp-file
@@ -283,20 +290,7 @@ ignore = [
 "**.py" = ["PYI066"]
 "*/testsuite/**.py" = ["PT009", "PT027"]
 "gui/wxpython/iclass/statistics.py" = ["A005"]
-"gui/wxpython/icons/grass_icons.py" = ["PTH208"]
-"gui/wxpython/image2target/ii2t_manager.py" = ["PTH208", "SIM115"]
-"gui/wxpython/mapdisp/main.py" = ["SIM115"]
-"gui/wxpython/modules/colorrules.py" = ["SIM115"]
-"gui/wxpython/modules/mcalc_builder.py" = ["SIM115"]
-"gui/wxpython/photo2image/ip2i_manager.py" = ["SIM115"]
-"gui/wxpython/psmap/dialogs.py" = ["PTH208"]
-"gui/wxpython/psmap/instructions.py" = ["SIM115"]
-"gui/wxpython/rlisetup/frame.py" = ["PTH208"]
-"gui/wxpython/tools/update_menudata.py" = ["SIM115"]
-"gui/wxpython/vnet/vnet_data.py" = ["SIM115"]
-"gui/wxpython/web_services/dialogs.py" = ["SIM115"]
 "gui/wxpython/wxplot/profile.py" = ["A005", "SIM115"]
-"lib/imagery/testsuite/test_imagery_signature_management.py" = ["SIM115"]
 "lib/imagery/testsuite/test_imagery_sigsetfile.py" = ["FURB152"]
 "lib/init/grass.py" = ["SIM115"]
 "lib/init/testsuite/test_grass_tmp_mapset.py" = ["PTH208"]
@@ -343,35 +337,29 @@ ignore = [
 "scripts/d.correlate/d.correlate.py" = ["SIM115"]
 "scripts/d.frame/d.frame.py" = ["SIM115"]
 "scripts/d.polar/d.polar.py" = ["FURB154", "SIM115"]
-"scripts/db.in.ogr/db.in.ogr.py" = ["SIM115"]
 "scripts/db.test/db.test.py" = ["SIM115"]
-"scripts/db.univar/db.univar.py" = ["SIM115"]
 "scripts/g.download.project/g.download.project.py" = ["PTH208"]
 "scripts/g.extension.all/g.extension.all.py" = ["SIM115"]
 "scripts/g.extension/g.extension.py" = ["PTH208", "SIM115"]
-"scripts/g.extension/testsuite/test_addons_modules.py" = ["PTH208"]
-"scripts/g.search.modules/g.search.modules.py" = ["SIM115"]
-"scripts/i.in.spotvgt/i.in.spotvgt.py" = ["SIM115"]
 "scripts/i.oif/i.oif*.py" = ["SIM115"]
-"scripts/i.pansharpen/i.pansharpen.py" = ["SIM115"]
-"scripts/i.spectral/i.spectral.py" = ["SIM115"]
 "scripts/m.proj/m.proj.py" = ["SIM115"]
-"scripts/r.fillnulls/r.fillnulls.py" = ["SIM115"]
 "scripts/r.in.wms/wms_*.py" = ["SIM115"]
-"scripts/r.tileset/r.tileset.py" = ["SIM115"]
 "scripts/v.*/v.*.py" = ["SIM115"]
-"scripts/wxpyimgview/wxpyimgview_gui.py" = ["SIM115"]
 
 [tool.ruff.lint.flake8-import-conventions.extend-aliases]
 # Declare a custom aliases, checked with rule ICN001
 "grass.script" = "gs"
 "grass.temporal" = "tgis"
 
+[tool.ruff.format]
+docstring-code-format = true
+
 [tool.pytest.ini_options]
 addopts = """
     --ignore-glob='dist.*'
     --ignore-glob='bin.*'
     --ignore-glob='*/tests/data/*'
+    --ignore-glob='*/testsuite/data/**'
     --ignore-glob='*/grass/pygrass/tests/*'
     --doctest-glob='*doctest*.txt'
     --ignore='raster/r.category/test_rcategory_doctest.txt'
@@ -380,8 +368,12 @@ markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
     "needs_solo_run: marks tests that must be run without any other tests running in parallel",
 ]
-minversion = "6.0"
-python_files = "*/tests/*_test.py */tests/test_*.py"
+minversion = "8.2"
+python_files = """
+    */tests/*_test.py
+    */tests/test_*.py
+    **/testsuite/*test*.py
+"""
 timeout = 300
 
 
@@ -408,6 +400,7 @@ ignore-paths = [
     "bin[.].*",
     "dist[.].*",
     "gui/wxpython/menustrings.py",
+    "python/grass/temporal/ply",           # External code
     "python/libgrass_interface_generator",
 ]
 

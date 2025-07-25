@@ -1,9 +1,9 @@
-# How the GRASS GIS Webserver and related infrastructure works
+# How the GRASS Webserver and related infrastructure works
 
 Author: Markus Neteler
 Last update: Sep 2024
 
-## GRASS GIS Source code repository
+## GRASS Source code repository
 
 Maintainer: Markus Neteler, Martin Landa, OSGeo-SAC, <https://wiki.osgeo.org/wiki/SAC>
 
@@ -12,11 +12,12 @@ than in SVN).
 
 The GitHub repositories are:
 
-- GRASS GIS core (7+): <https://github.com/OSGeo/grass>
-- GRASS GIS legacy (3.x-6.x): <https://github.com/OSGeo/grass-legacy>
-- GRASS GIS Add-ons: <https://github.com/OSGeo/grass-addons>
-- GRASS GIS promotional material: <https://github.com/OSGeo/grass-promo>
-- GRASS GIS Website (Hugo site): <https://github.com/OSGeo/grass-website>
+- GRASS core (7+): <https://github.com/OSGeo/grass>
+- GRASS legacy (3.x-6.x): <https://github.com/OSGeo/grass-legacy>
+- GRASS Add-ons: <https://github.com/OSGeo/grass-addons>
+- GRASS promotional material: <https://github.com/OSGeo/grass-promo>
+- GRASS Website (Hugo site): <https://github.com/OSGeo/grass-website>
+- GRASS Tutorials (Quarto site): <https://github.com/OSGeo/grass-tutorials>
 - Github mirror at OSGeo (updated daily): <https://git.osgeo.org/gitea/grass_gis/grass>
 
 Git usage:
@@ -122,8 +123,8 @@ Available lists:
     (ABM)
   - grass-announce: GRASS announcements
   - grass-commit: Mailing list to distribute GRASS Github commits
-  - grass-dev: GRASS GIS Development mailing list
-  - grass-es: La lista de correo de GRASS GIS en español
+  - grass-dev: GRASS Development mailing list
+  - grass-es: La lista de correo de GRASS en español
   - grass-psc: GRASS-PSC: GRASS Project Steering Committee
   - grass-stats: GRASS and statistical software
   - grass-translations: Translation of GRASS (i18N)
@@ -182,7 +183,7 @@ Current bugtracker (Jan 2020 - today):
 
 Old bugtrackers: see <https://grasswiki.osgeo.org/wiki/Bug_tracking>
 
-## GRASS GIS Addons
+## GRASS Addons
 
 Maintainer: Martin Landa, Tomas Zigo, and Markus Neteler
 
@@ -254,7 +255,7 @@ CI secrets and the images pushed to Docker hub at:
 
 User settings:
 
-- The GRASS GIS CI user at Docker hub is "grassgis" (joined June 3, 2023),
+- The GRASS CI user at Docker hub is "grassgis" (joined June 3, 2023),
   see also <https://hub.docker.com/u/grassgis>
 - Docker Hub access token are managed via <grass-ci-admin@osgeo.org>.
 - The OSGeo Org membership is managed at <https://hub.docker.com/orgs>
@@ -268,12 +269,12 @@ Zenodo page with DOI (for all versions, shows latest release on top):
 [10.5281/zenodo.5176030](https://doi.org/10.5281/zenodo.5176030)
 
 **GitHub - Zenodo Integration**: The settings are accessible with any
-GitHub account which has write access to the GRASS GIS GitHub repo and
+GitHub account which has write access to the GRASS GitHub repo and
 they are managed here:
 
 <https://zenodo.org/account/settings/github/repository/OSGeo/grass>
 
-In the settings, the GRASS GIS GitHub repository needs to be enabled.
+In the settings, the GRASS GitHub repository needs to be enabled.
 
 Upcoming releases should automatically show up and get a DOI
 assigned.
@@ -296,7 +297,7 @@ Messages are extracted with `gettext` message macros.
 Translations may be done using the OSGeo Weblate platform:
 
 - Weblate: <https://weblate.osgeo.org/>
-  - GRASS GIS Weblate server: <https://weblate.osgeo.org/projects/grass-gis/>
+  - GRASS Weblate server: <https://weblate.osgeo.org/projects/grass-gis/>
 
 Anyone with OSGeo-LDAP access can work on the translations.
 
@@ -305,24 +306,24 @@ see <https://wiki.osgeo.org/wiki/SAC:Weblate>.
 
 ### How Weblate works
 
-When a developer makes a GRASS GIS repo commit on GitHub, GitHub then calls
+When a developer makes a GRASS repo commit on GitHub, GitHub then calls
 the webhook on Weblate which triggers a refresh of Weblate's git copy of the
-GRASS GIS repo.
+GRASS repo.
 
 For pushing translations back to GitHub, there is a setting in Weblate for that
 which defaults to 24 hrs (accumulates translations over a day). Then a pull
-request with the translations will be opened in the GRASS GIS GitHub repo.
+request with the translations will be opened in the GRASS GitHub repo.
 
 ### Weblate troubleshooting
 
-In case the Weblate's git copy of the GRASS GIS repo does not update due to
+In case the Weblate's git copy of the GRASS repo does not update due to
 a conflict or whatever reason:
 
 Log into Weblate (requires administrator rights) and switch to
 <https://weblate.osgeo.org/projects/grass-gis/#repository>. Therein click on
 "Manage" -> "Repository Maintenance", choose the "Update" button,
 "Update with merge without fast-forward". If successful, this will create
-another pull request in the GRASS GIS repo (trigger with "Push" button).
+another pull request in the GRASS repo (trigger with "Push" button).
 
 ## Related Wiki documents
 
@@ -330,7 +331,7 @@ another pull request in the GRASS GIS repo (trigger with "Push" button).
 
 ## Previous hosting sponsors
 
-Since 2010 the GRASS GIS project is hosted at the Oregon State University Open
+Since 2010 the GRASS project is hosted at the Oregon State University Open
 Source Lab (OSUOSL), Oregon, USA
 
 Numerous institutions have sponsored the GRASS Project with Hardware/Bandwidth

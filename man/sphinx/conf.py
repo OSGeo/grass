@@ -1,5 +1,5 @@
 #
-# GRASS GIS Python documentation build configuration file
+# GRASS Python documentation build configuration file
 # originally created by sphinx-quickstart.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -37,7 +37,7 @@ source_suffix = ".txt"
 master_doc = "index"
 
 # General information about the project.
-project = "GRASS GIS"
+project = "GRASS"
 copyright = "2025, GRASS Development Team"
 
 # The version info for the project you're documenting, acts as replacement for
@@ -234,11 +234,11 @@ man_pages = [
 texinfo_documents = [
     (
         "content",
-        "grass_gis",
+        "grass_python",
         project,
         "GRASS Development Team",
-        "grass_gis",
-        "Documentation for GRASS GIS in Sphinx",
+        "grass_python",
+        "Documentation for GRASS in Sphinx",
         "Miscellaneous",
     ),
 ]

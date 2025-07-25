@@ -21,7 +21,9 @@ class TestRSimSediment(TestCase):
     def setUpClass(cls):
         """Set up region, create necessary data"""
         cls.runModule("g.region", n=224000, s=223000, e=637000, w=636000, res=10)
-        cls.runModule("r.slope.aspect", elevation=cls.elevation, dx=cls.dx, dy=cls.dy)
+        cls.runModule(
+            "r.slope.aspect", elevation=cls.elevation, dx=cls.dx, dy=cls.dy, flags="e"
+        )
         cls.runModule(
             "r.unpack",
             input="data/depth_default.pack",

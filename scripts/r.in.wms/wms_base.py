@@ -120,12 +120,16 @@ class WMSBase:
             self.params["proj_name"] = "SRS"
 
         # read projection info
-        self.proj_location = gs.read_command("g.proj", flags="jf").rstrip("\n")
+        self.proj_location = gs.read_command(
+            "g.proj", flags="fp", format="proj4"
+        ).rstrip("\n")
         self.proj_location = self._modifyProj(self.proj_location)
 
         self.source_epsg = str(GetEpsg(self.params["srs"]))
         self.target_epsg = None
-        target_crs = gs.parse_command("g.proj", flags="g", delimiter="=")
+        target_crs = gs.parse_command(
+            "g.proj", flags="p", format="shell", delimiter="="
+        )
         if "epsg" in target_crs.keys():
             self.target_epsg = target_crs["epsg"]
             if self.source_epsg != self.target_epsg:
@@ -138,7 +142,7 @@ class WMSBase:
                 )
 
         self.proj_srs = gs.read_command(
-            "g.proj", flags="jf", epsg=str(GetEpsg(self.params["srs"]))
+            "g.proj", flags="fp", format="proj4", epsg=str(GetEpsg(self.params["srs"]))
         )
         self.proj_srs = self.proj_srs.rstrip("\n")
 

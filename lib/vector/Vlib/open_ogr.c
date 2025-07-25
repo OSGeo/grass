@@ -266,7 +266,7 @@ int Vect_open_fidx(struct Map_info *Map, struct Format_info_offset *offset)
     G_debug(1, "Vect_open_fidx(): name = %s mapset = %s format = %d", Map->name,
             Map->mapset, Map->format);
 
-    sprintf(elem, "%s/%s", GV_DIRECTORY, Map->name);
+    snprintf(elem, sizeof(elem), "%s/%s", GV_DIRECTORY, Map->name);
     dig_file_init(&fp);
     fp.file = G_fopen_old(elem, GV_FIDX_ELEMENT, Map->mapset);
     if (fp.file == NULL) {

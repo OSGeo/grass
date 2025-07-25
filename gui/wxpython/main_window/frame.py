@@ -55,6 +55,7 @@ from core.watchdog import (
     EVT_CURRENT_MAPSET_CHANGED,
     MapsetWatchdog,
 )
+from core.menutree import MenuTreeModelBuilder
 from gui_core.preferences import MapsetAccess, PreferencesDialog
 from lmgr.layertree import LayerTree, LMIcons
 from lmgr.menudata import LayerManagerMenuData, LayerManagerModuleTree
@@ -1980,14 +1981,23 @@ class GMFrame(wx.Frame):
 
     def OnSimpleEditor(self, event):
         # import on demand
-        from gui_core.pyedit import PyEditFrame
+        from gui_core.pyedit import PyEditPanel
 
         # we don't keep track of them and we don't care about open files
         # there when closing the main GUI
-        simpleEditor = PyEditFrame(parent=self, giface=self._giface)
-        simpleEditor.SetSize(self.GetSize())
-        simpleEditor.CenterOnScreen()
-        simpleEditor.Show()
+        simpleEditor = PyEditPanel(
+            parent=self, giface=self._giface, statusbar=self.statusbar, dockable=True
+        )
+        filename = os.path.join(globalvar.WXGUIDIR, "xml", "menudata_pyedit.xml")
+        simpleEditor.SetUpPage(
+            self,
+            self.mainnotebook,
+            menuModel=MenuTreeModelBuilder(filename).GetModel(separators=True),
+            menuName="&Editor",
+        )
+
+        # add map display panel to notebook and make it current
+        self.mainnotebook.AddPage(simpleEditor, _("Code editor"))
 
     def OnShowAttributeTable(self, event, selection=None):
         """Show attribute table of the given vector map layer"""
@@ -2037,7 +2047,7 @@ class GMFrame(wx.Frame):
         """Changes bookcontrol page to page associated with display."""
         # moved from mapdisp/frame.py
         # TODO: why it is called 3 times when getting focus?
-        # and one times when loosing focus?
+        # and one times when losing focus?
         pgnum = self.notebookLayers.GetPageIndex(notebookLayerPage)
         if pgnum > -1:
             self.notebookLayers.SetSelection(pgnum)

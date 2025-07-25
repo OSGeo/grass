@@ -300,7 +300,7 @@ void gsd_x(geosurf *gs, float *center, int colr, float siz)
 
    \param center center point
    \param colr color value
-   \param size size value
+   \param siz size value
  */
 void gsd_diamond(float *center, unsigned long colr, float siz)
 {
@@ -726,7 +726,7 @@ void gsd_3dcursor(float *pt)
 
    \param dir
    \param slope
-   \param ascpect
+   \param aspect
    \param degrees
  */
 void dir_to_slope_aspect(float *dir, float *slope, float *aspect, int degrees)
@@ -1127,6 +1127,7 @@ void gsd_3darrow(float *center, unsigned long colr, float siz1, float siz2,
    Adapted from gsd_north_arrow Hamish Bowman Dec 2006
 
    \param pos2
+   \param len
    \param fontbase font-base
    \param bar_clr barscale color
    \param text_clr text color
@@ -1176,20 +1177,20 @@ int gsd_scalebar(float *pos2, float len, GLuint fontbase, unsigned long bar_clr,
     /* format text in a nice way */
     if (strcmp("meters", G_database_unit_name(TRUE)) == 0) {
         if (len > 2500)
-            sprintf(txt, "%g km", len / 1000);
+            snprintf(txt, sizeof(txt), "%g km", len / 1000);
         else
-            sprintf(txt, "%g meters", len);
+            snprintf(txt, sizeof(txt), "%g meters", len);
     }
     else if (strcmp("feet", G_database_unit_name(TRUE)) == 0) {
         if (len > 5280)
-            sprintf(txt, "%g miles", len / 5280);
+            snprintf(txt, sizeof(txt), "%g miles", len / 5280);
         else if (len == 5280)
-            sprintf(txt, "1 mile");
+            snprintf(txt, sizeof(txt), "1 mile");
         else
-            sprintf(txt, "%g feet", len);
+            snprintf(txt, sizeof(txt), "%g feet", len);
     }
     else {
-        sprintf(txt, "%g %s", len, G_database_unit_name(TRUE));
+        snprintf(txt, sizeof(txt), "%g %s", len, G_database_unit_name(TRUE));
     }
 
     /* adjust position of text (In map units?!) */
@@ -1212,7 +1213,8 @@ int gsd_scalebar(float *pos2, float len, GLuint fontbase, unsigned long bar_clr,
 
    Adapted from gsd_scalebar A.Kratochvilova 2011
 
-   \param pos2 scalebar position
+   \param pos scalebar position
+   \param len
    \param fontbase font-base (unused)
    \param bar_clr barscale color
    \param text_clr text color (unused)

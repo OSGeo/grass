@@ -57,7 +57,7 @@ If one or both of the input vector maps are 3D, the user is notified
 accordingly.
 
 The *-p* flag prints the results to standard output. By default the
-output is in form of a linear matrix. If only only variable is upploaded
+output is in form of a linear matrix. If only only variable is uploaded
 and a square matrix is desired, the user can set the *-s* flag.
 
 ## EXAMPLES
@@ -217,37 +217,51 @@ from_cat to_cat       dist
 v.distance -p from=busroute_a to=busstopsall upload=dist,to_attr to_column=routes format=json
 ```
 
+Possible output:
+
 ```json
 [
     {
         "from_cat": 1,
         "to_cat": 112,
-        "distances": [
-            {
-                "value": 0.1428123184481199,
-                "name": "dist"
-            },
-            {
-                "value": "8,A",
-                "name": "to_attr"
-            }
-        ]
+        "dist": 0.1428123184481199,
+        "to_attr": "8,A"
     },
     {
         "from_cat": 2,
         "to_cat": 44,
-        "distances": [
-            {
-                "value": 0.10232660032693719,
-                "name": "dist"
-            },
-            {
-                "value": "9,A",
-                "name": "to_attr"
-            }
-        ]
+        "dist": 0.10232660032693719,
+        "to_attr": "9,A"
     }
 ]
+```
+
+### Print output as Pandas DataFrame
+
+```python
+import grass.script as gs
+import pandas as pd
+
+data = gs.parse_command(
+    "v.distance",
+    flags="p",
+    from_="busroute_a",
+    to="busstopsall",
+    upload="dist,to_attr",
+    to_column="routes",
+    format="json",
+)
+df = pd.DataFrame(data)
+
+print(df)
+```
+
+Possible output:
+
+```text
+   from_cat  to_cat      dist to_attr
+0         1     112  0.142812     8,A
+1         2      44  0.102327     9,A
 ```
 
 ## SEE ALSO

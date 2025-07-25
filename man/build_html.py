@@ -80,7 +80,6 @@ overview_tmpl = string.Template(
       </td>
       <td width="33%" valign="top" class="box"><h3>&nbsp;Graphical User Interface</h3>
        <ul>
-        <li class="box"><a href="wxguiintro.html">Intro: Graphical User Interface</a></li>
         <li class="box"><span><a href="wxGUI.html">wxGUI details</a></span></li>
         <li class="box"><a href="wxGUI.components.html">wxGUI components</a></li>
         <li class="box"><a href="wxGUI.toolboxes.html">wxGUI toolboxes</a></li>

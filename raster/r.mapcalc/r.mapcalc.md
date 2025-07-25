@@ -101,35 +101,33 @@ maps in an expression. Three modes are supported:
 
 The following operators are supported:
 
-```sh
-     Operator   Meaning                    Type        Precedence
-     --------------------------------------------------------------
-     -          negation                   Arithmetic  12
-     ~          one's complement           Bitwise     12
-     !          not                        Logical     12
-     ^          exponentiation             Arithmetic  11
-     %          modulus                    Arithmetic  10
-     /          division                   Arithmetic  10
-     *          multiplication             Arithmetic  10
-     +          addition                   Arithmetic   9
-     -          subtraction                Arithmetic   9
-     <<         left shift                 Bitwise      8
-     >>         right shift                Bitwise      8
-     >>>        right shift (unsigned)     Bitwise      8
-     >          greater than               Logical      7
-     >=         greater than or equal      Logical      7
-     <          less than                  Logical      7
-     <=         less than or equal         Logical      7
-     ==         equal                      Logical      6
-     !=         not equal                  Logical      6
-     &          bitwise and                Bitwise      5
-     |          bitwise or                 Bitwise      4
-     &&         logical and                Logical      3
-     &&&        logical and[1]             Logical      3
-     ||         logical or                 Logical      2
-     |||        logical or[1]              Logical      2
-     ?:         conditional                Logical      1
-```
+| Operator | Meaning                    | Type        | Precedence |
+|----------|----------------------------|-------------|------------|
+| -        | negation                   | Arithmetic  | 12         |
+| ~        | one's complement           | Bitwise     | 12         |
+| !        | not                        | Logical     | 12         |
+| ^        | exponentiation             | Arithmetic  | 11         |
+| %        | modulus                    | Arithmetic  | 10         |
+| /        | division                   | Arithmetic  | 10         |
+| *        | multiplication             | Arithmetic  | 10         |
+| +        | addition                   | Arithmetic  | 9          |
+| -        | subtraction                | Arithmetic  | 9          |
+| <<       | left shift                 | Bitwise     | 8          |
+| >>       | right shift                | Bitwise     | 8          |
+| >>>      | right shift (unsigned)     | Bitwise     | 8          |
+| >        | greater than               | Logical     | 7          |
+| >=       | greater than or equal      | Logical     | 7          |
+| <        | less than                  | Logical     | 7          |
+| <=       | less than or equal         | Logical     | 7          |
+| ==       | equal                      | Logical     | 6          |
+| !=       | not equal                  | Logical     | 6          |
+| &        | bitwise and                | Bitwise     | 5          |
+| \|       | bitwise or                 | Bitwise     | 4          |
+| &&       | logical and                | Logical     | 3          |
+| &&&      | logical and\[1\]           | Logical     | 3          |
+| \|\|     | logical or                 | Logical     | 2          |
+| \|\|\|   | logical or\[1\]            | Logical     | 2          |
+| ?:       | conditional                | Logical     | 1          |
 
 (modulus is the remainder upon division)
 
@@ -351,68 +349,70 @@ function gives an integer result, and *\** indicates that the result is
 float if any of the arguments to the function are floating point values
 and integer if all arguments are integer.
 
-```sh
-function                description                                     type
----------------------------------------------------------------------------
-abs(x)                  return absolute value of x                      *
-acos(x)                 inverse cosine of x (result is in degrees)      F
-asin(x)                 inverse sine of x (result is in degrees)        F
-atan(x)                 inverse tangent of x (result is in degrees)     F
-atan(x,y)               inverse tangent of y/x (result is in degrees)   F
-ceil(x)                 the smallest integral value not less than x     *
-cos(x)                  cosine of x (x is in degrees)                   F
-double(x)               convert x to double-precision floating point    F
-eval([x,y,...,]z)       evaluate values of listed expr, pass results to z
-exp(x)                  exponential function of x                       F
-exp(x,y)                x to the power y                                F
-float(x)                convert x to single-precision floating point    F
-floor(x)                the largest integral value not greater than x   *
-graph(x,x1,y1[x2,y2..]) convert the x to a y based on points in a graph F
-graph2(x,x1[,x2,..],y1[,y2..])
-                        alternative form of graph()                     F
-if                      decision options:                               *
-if(x)                   1 if x not zero, 0 otherwise
-if(x,a)                 a if x not zero, 0 otherwise
-if(x,a,b)               a if x not zero, b otherwise
-if(x,a,b,c)             a if x > 0, b if x is zero, c if x < 0
-int(x)                  convert x to integer [ truncates ]              I
-isnull(x)               check if x = NULL
-log(x)                  natural log of x                                F
-log(x,b)                log of x base b                                 F
-max(x,y[,z...])         largest value of those listed                   *
-median(x,y[,z...])      median value of those listed                    *
-min(x,y[,z...])         smallest value of those listed                  *
-mod(x,y)                return the modulus (the remainder) of x/y       *
-mode(x,y[,z...])        mode value of those listed                      *
-nmax(x,y[,z...])        largest value of those listed, excluding NULLs  *
-nmedian(x,y[,z...])     median value of those listed, excluding NULLs   *
-nmin(x,y[,z...])        smallest value of those listed, excluding NULLs *
-nmode(x,y[,z...])       mode value of those listed, excluding NULLs     *
-not(x)                  1 if x is zero, 0 otherwise
-pow(x,y)                x to the power y                                *
-rand(a,b)               random value x : a <= x < b                     *
-round(x)                round x to nearest integer                      I
-round(x,y)              round x to nearest multiple of y
-round(x,y,z)            round x to nearest y*i+z for some integer i
-sin(x)                  sine of x (x is in degrees)                     F
-sqrt(x)                 square root of x                                F
-tan(x)                  tangent of x (x is in degrees)                  F
-xor(x,y)                exclusive-or (XOR) of x and y                   I
-```
+| Function / Variable        | Description                                                     | Type |
+|----------------------------|------------------------------------------------------------------|------|
+| abs(x)                     | Return absolute value of x                                       | *    |
+| acos(x)                    | Inverse cosine of x (result is in degrees)                       | F    |
+| asin(x)                    | Inverse sine of x (result is in degrees)                         | F    |
+| atan(x)                    | Inverse tangent of x (result is in degrees)                      | F    |
+| atan(x, y)                 | Inverse tangent of y/x (result is in degrees)                    | F    |
+| ceil(x)                    | Smallest integral value not less than x                          | *    |
+| cos(x)                     | Cosine of x (x is in degrees)                                    | F    |
+| double(x)                  | Convert x to double-precision floating point                     | F    |
+| eval([x, y, ...,] z)       | Evaluate values of listed expr, pass results to z                |      |
+| exp(x)                     | Exponential function of x                                        | F    |
+| exp(x, y)                  | x to the power y                                                 | F    |
+| float(x)                   | Convert x to single-precision floating point                     | F    |
+| floor(x)                   | Largest integral value not greater than x                        | *    |
+| graph(x, x1, y1[, x2, y2...]) | Convert x to y based on points in a graph                     | F    |
+| graph2(x, x1[, x2...], y1[, y2...]) | Alternative form of graph()                             | F    |
+| if(x)                      | 1 if x not zero, 0 otherwise                                     | *    |
+| if(x, a)                   | a if x not zero, 0 otherwise                                     | *    |
+| if(x, a, b)                | a if x not zero, b otherwise                                     | *    |
+| if(x, a, b, c)             | a if x > 0, b if x is zero, c if x < 0                           | *    |
+| int(x)                     | Convert x to integer (truncates)                                 | I    |
+| isnull(x)                  | Check if x = NULL                                                |      |
+| log(x)                     | Natural log of x                                                 | F    |
+| log(x, b)                  | Log of x base b                                                  | F    |
+| max(x, y[, z...])          | Largest value of those listed                                    | *    |
+| median(x, y[, z...])       | Median value of those listed                                     | *    |
+| min(x, y[, z...])          | Smallest value of those listed                                   | *    |
+| mod(x, y)                  | Modulus (remainder) of x/y                                       | *    |
+| mode(x, y[, z...])         | Mode value of those listed                                       | *    |
+| nmax(x, y[, z...])         | Largest value, excluding NULLs                                   | *    |
+| nmedian(x, y[, z...])      | Median value, excluding NULLs                                    | *    |
+| nmin(x, y[, z...])         | Smallest value, excluding NULLs                                  | *    |
+| nmode(x, y[, z...])        | Mode value, excluding NULLs                                      | *    |
+| not(x)                     | 1 if x is zero, 0 otherwise                                      |      |
+| pow(x, y)                  | x to the power y                                                 | *    |
+| rand(a, b)                 | Random value x: a <= x < b                                       | *    |
+| round(x)                   | Round x to nearest integer                                       | I    |
+| round(x, y)                | Round x to nearest multiple of y                                 |      |
+| round(x, y, z)             | Round x to nearest y*i+z for some integer i                      |      |
+| sin(x)                     | Sine of x (x is in degrees)                                      | F    |
+| sqrt(x)                    | Square root of x                                                 | F    |
+| tan(x)                     | Tangent of x (x is in degrees)                                   | F    |
+| xor(x, y)                  | Exclusive-or (XOR) of x and y                                    | I    |
 
-```sh
-Internal variables:
- row()                  current row of moving window                    I
- col()                  current col of moving window                    I
- nrows()                number of rows in computation region            I
- ncols()                number of columns in computation region         I
- x()                    current x-coordinate of moving window           F
- y()                    current y-coordinate of moving window           F
- ewres()                current east-west resolution                    F
- nsres()                current north-south resolution                  F
- area()                 area of current cell in square meters           F
- null()                 NULL value
-```
+### Internal variables
+
+| Variable      | Description                                         | Type |
+|---------------|-----------------------------------------------------|------|
+| row()         | Current row of moving window                        | I    |
+| col()         | Current column of moving window                     | I    |
+| nrows()       | Number of rows in computation region                | I    |
+| ncols()       | Number of columns in computation region             | I    |
+| x()           | Current x-coordinate of moving window               | F    |
+| y()           | Current y-coordinate of moving window               | F    |
+| ewres()       | Current east-west resolution                        | F    |
+| nsres()       | Current north-south resolution                      | F    |
+| area()        | Area of current cell in square meters               | F    |
+| null()        | NULL value                                          |      |
+
+Type legend:  
+*F*: always floating point result  
+*I*: always integer result  
+**\***: float if any argument is float, integer if all arguments are integer
 
 Note, that the row() and col() indexing starts with 1.
 
@@ -425,21 +425,12 @@ on AMD64 (x86-64) architectures compiled with GCC/CLANG. Note that
 although this setting is the most frequent one, the ranges could differ
 for different architectures.
 
-```sh
-data type               precision and value range info
--------------------------------------------------------------------------------
- int                    a 32-bit integer with a range from -2,147,483,647 to
-                        +2,147,483,647. The value -2,147,483,648 is reserved
-                        for NODATA.
- float                  a 32-bit float (Float32) with a range from -3.4E38 to
-                        3.4E38. However, the integer precision can be only
-                        ensured between -16,777,216 and 16,777,216. If your
-                        raster overpasses this range, it is strongly suggested
-                        to use the type double instead.
- double                 a 64-bit float (Float64) with a range from -1.79E308 to
-                        1.79E308. It is 8 bytes, 15-17 digits precision.
- null                   NULL value. Refer to section "NULL support" below.
-```
+| Data Type | Precision and Value Range Info |
+|-----------|-------------------------------|
+| **int**   | 32-bit integer with a range from -2,147,483,647 to +2,147,483,647. The value -2,147,483,648 is reserved for NODATA. |
+| **float** | 32-bit float (Float32) with a range from -3.4E38 to 3.4E38. Integer precision is only ensured between -16,777,216 and 16,777,216. If your raster exceeds this range, it is strongly suggested to use the type double instead. |
+| **double**| 64-bit float (Float64) with a range from -1.79E308 to 1.79E308. It is 8 bytes, with 15-17 digits precision. |
+| **null**  | NULL value. Refer to section "NULL support" below. |
 
 Note that the value counter wraps around when the value overflows its
 range. E.g., if your expression is `a = int(2147483648)`, you will get
@@ -666,7 +657,7 @@ foo = 1
 EOF
 ```
 
-But unless you need compatibility with previous GRASS GIS versions, use
+But unless you need compatibility with previous GRASS versions, use
 `file=` explicitly, as stated above.
 
 When the map name contains uppercase letter(s) or a dot which are not
@@ -775,7 +766,7 @@ initialised to a specific value using the **seed** option. This can be
 used to replicate a previous calculation.
 
 Alternatively, it can be initialised from the system time and the PID
-using the **-r** flag. This should result in a different seed being used
+using the **-s** flag. This should result in a different seed being used
 each time.
 
 In either case, the seed will be written to the map's history, and can

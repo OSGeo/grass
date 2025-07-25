@@ -12,7 +12,6 @@ build_library_in_subdir(
   OPTIONAL_DEPENDS
   OPENMP
   HEADERS
-  "waterglobs.h"
   "simlib.h")
 
 build_program_in_subdir(

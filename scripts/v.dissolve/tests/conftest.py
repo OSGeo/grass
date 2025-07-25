@@ -49,7 +49,7 @@ def value_update_by_category(map_name, layer, column_name, cats, values, env):
 def dataset(tmp_path_factory):
     """Creates a session with a mapset which has vector with a float column"""
     tmp_path = tmp_path_factory.mktemp("dataset")
-    location = "test"
+    project = tmp_path / "test"
     point_map_name = "points"
     map_name = "areas"
     int_column_name = "int_value"
@@ -62,8 +62,8 @@ def dataset(tmp_path_factory):
     str_values = ["apples", "oranges", "oranges", "plumbs", "oranges", "plumbs"]
     num_points = len(cats)
 
-    gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with grass_setup.init(tmp_path / location, env=os.environ.copy()) as session:
+    gs.create_project(project)
+    with grass_setup.init(project, env=os.environ.copy()) as session:
         gs.run_command(
             "g.region",
             s=0,
@@ -136,7 +136,7 @@ def dataset(tmp_path_factory):
 def discontinuous_dataset(tmp_path_factory):
     """Creates a session with a mapset which has vector with a float column"""
     tmp_path = tmp_path_factory.mktemp("discontinuous_dataset")
-    location = "test"
+    project = tmp_path / "test"
     point_map_name = "points"
     map_name = "areas"
     int_column_name = "int_value"
@@ -149,8 +149,8 @@ def discontinuous_dataset(tmp_path_factory):
     str_values = ["apples", "plumbs", "apples", "plumbs", "oranges", "oranges"]
     num_points = len(cats)
 
-    gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with grass_setup.init(tmp_path / location, env=os.environ.copy()) as session:
+    gs.create_project(project)
+    with grass_setup.init(project, env=os.environ.copy()) as session:
         gs.run_command(
             "g.region",
             s=0,
@@ -223,7 +223,7 @@ def discontinuous_dataset(tmp_path_factory):
 def dataset_layer_2(tmp_path_factory):
     """Creates a session with a mapset which has vector with a float column"""
     tmp_path = tmp_path_factory.mktemp("dataset_layer_2")
-    location = "test"
+    project = tmp_path / "test"
     point_map_name = "points"
     point_map_name_layer_2 = "points2"
     map_name = "areas"
@@ -239,8 +239,8 @@ def dataset_layer_2(tmp_path_factory):
 
     layer = 2
 
-    gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with grass_setup.init(tmp_path / location, env=os.environ.copy()) as session:
+    gs.create_project(project)
+    with grass_setup.init(project, env=os.environ.copy()) as session:
         gs.run_command(
             "g.region",
             s=0,

@@ -9,7 +9,7 @@ for details.
 
 :authors: Thomas Leppelt and Soeren Gebbert
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> import grass.temporal as tgis
     >>> tgis.init(True)
@@ -443,11 +443,6 @@ from __future__ import annotations
 
 from typing import Literal
 
-try:
-    from ply import lex, yacc
-except ImportError:
-    pass
-
 import copy
 import os
 from datetime import datetime
@@ -472,6 +467,7 @@ from .datetime_math import (
 )
 from .factory import dataset_factory
 from .open_stds import open_new_stds, open_old_stds
+from .ply import lex, yacc
 from .space_time_datasets import RasterDataset
 from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
 from .temporal_granularity import (
@@ -692,9 +688,7 @@ class TemporalAlgebraLexer:
 
     # Build the lexer
     def build(self, **kwargs) -> None:
-        self.lexer = lex.lex(
-            module=self, optimize=False, nowarn=True, debug=0, **kwargs
-        )
+        self.lexer = lex.lex(module=self, debug=0, **kwargs)
 
     # Just for testing
     def test(self, data) -> None:
@@ -980,7 +974,7 @@ class TemporalAlgebraParser:
         """
         self.lexer = TemporalAlgebraLexer()
         self.lexer.build()
-        self.parser = yacc.yacc(module=self, debug=self.debug, write_tables=False)
+        self.parser = yacc.yacc(module=self, debug=self.debug)
 
         self.overwrite = overwrite
         self.count = 0
@@ -1378,8 +1372,8 @@ class TemporalAlgebraParser:
         :return: A tuple of spatial and temporal topology lists
                 (temporal_topo_list, spatial_topo_list)
 
-        :raises: This method will raise a syntax error in case the topology name is
-                 unknown
+        :raises SyntaxError:
+            This method will raise a syntax error in case the topology name is unknown
         """
         temporal_topo_list = []
         spatial_topo_list = []
@@ -1426,12 +1420,12 @@ class TemporalAlgebraParser:
         :param compare_bool: Boolean for comparing boolean map values based on
                              related map list and comparison operator.
         :param compop: Comparison operator, && or ||.
-        :param aggregate: Aggregation operator for relation map list, & or |.
+        :param aggregate: Aggregation operator for relation map list, & or \\|.
 
         :return: List of maps from maplistA that fulfil the topological relationships
                  to maplistB specified in topolist.
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> # Example with two lists of maps
             >>> import grass.temporal as tgis
@@ -1451,7 +1445,6 @@ class TemporalAlgebraParser:
             ...     check = mapB.set_relative_time(i, i + 1, "months")
             ...     mapsA.append(mapA)
             ...     mapsB.append(mapB)
-            ...
             >>> resultlist = l.build_spatio_temporal_topology_list(
             ...     mapsA, mapsB, ["EQUAL"]
             ... )
@@ -1462,7 +1455,6 @@ class TemporalAlgebraParser:
             ...             "Map %s has equal relation to map %s"
             ...             % (map.get_name(), relations[0].get_name())
             ...         )
-            ...
             Map a0 has equal relation to map b0
             Map a1 has equal relation to map b1
             Map a2 has equal relation to map b2
@@ -1492,7 +1484,6 @@ class TemporalAlgebraParser:
             ...     check = mapB.set_relative_time(i, i + 2, "months")
             ...     mapsA.append(mapA)
             ...     mapsB.append(mapB)
-            ...
             >>> resultlist = l.build_spatio_temporal_topology_list(
             ...     mapsA, mapsB, ["starts", "during"]
             ... )
@@ -1503,7 +1494,6 @@ class TemporalAlgebraParser:
             ...             "Map %s has start relation to map %s"
             ...             % (map.get_name(), relations[0].get_name())
             ...         )
-            ...
             Map a0 has start relation to map b0
             Map a1 has start relation to map b1
             Map a2 has start relation to map b2
@@ -1521,7 +1511,6 @@ class TemporalAlgebraParser:
             ...             "Map %s has during relation to map %s"
             ...             % (map.get_name(), relations[0].get_name())
             ...         )
-            ...
             Map a0 has during relation to map b0
             Map a1 has during relation to map b0
             Map a2 has during relation to map b1
@@ -1547,7 +1536,6 @@ class TemporalAlgebraParser:
             ...     mapB.map_value = True
             ...     mapsA.append(mapA)
             ...     mapsB.append(mapB)
-            ...
             >>> # Create two list of maps with equal time stamps
             >>> mapsA = []
             >>> mapsB = []
@@ -1568,11 +1556,9 @@ class TemporalAlgebraParser:
             ...     )
             ...     mapsA.append(mapA)
             ...     mapsB.append(mapB)
-            ...
             >>> resultlist = l.build_spatio_temporal_topology_list(mapsA, mapsB)
             >>> for map in resultlist:
             ...     print(map.get_id())
-            ...
             a5@B
             a6@B
             a7@B
@@ -1583,7 +1569,6 @@ class TemporalAlgebraParser:
             ... )
             >>> for map in resultlist:
             ...     print(map.get_id())
-            ...
 
         """
         # Check the topology definitions and return the list of temporal and spatial
@@ -1692,7 +1677,7 @@ class TemporalAlgebraParser:
 
         :param map_i: Map object with temporal extent.
         :param compop: Comparison operator, && or ||.
-        :param aggregate: Aggregation operator for relation map list, & or |.
+        :param aggregate: Aggregation operator for relation map list, & or \\|.
         :param temporal_topo_list: List of strings for given temporal relations.
         :param spatial_topo_list: List of strings for given spatial relations.
 
@@ -1749,21 +1734,20 @@ class TemporalAlgebraParser:
     def eval_toperator(self, operator, optype="relation"):
         """This function evaluates a string containing temporal operations.
 
-         :param operator: String of temporal operations, e.g. {!=,equal|during,l}.
-         :param optype: String to define operator type.
+        :param operator: String of temporal operations, e.g. {!=,equal|during,l}.
+        :param optype: String to define operator type.
+        :return: List of temporal relations (equal, during), the given function
+            (!:) and the interval/instances (l).
 
-         :return :List of temporal relations (equal, during), the given function
-          (!:) and the interval/instances (l).
+        .. code-block:: pycon
 
-        .. code-block:: python
-
-             >>> import grass.temporal as tgis
-             >>> tgis.init()
-             >>> p = tgis.TemporalOperatorParser()
-             >>> operator = "{+, during}"
-             >>> p.parse(operator, optype="raster")
-             >>> print((p.relations, p.temporal, p.function))
-             (['during'], 'l', '+')
+            >>> import grass.temporal as tgis
+            >>> tgis.init()
+            >>> p = tgis.TemporalOperatorParser()
+            >>> operator = "{+, during}"
+            >>> p.parse(operator, optype="raster")
+            >>> print((p.relations, p.temporal, p.function))
+            (['during'], 'l', '+')
 
         """
         p = TemporalOperatorParser()
@@ -1795,7 +1779,7 @@ class TemporalAlgebraParser:
 
         :return: List of selected maps from maplistA.
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> import grass.temporal as tgis
             >>> tgis.init()
@@ -1815,7 +1799,6 @@ class TemporalAlgebraParser:
             ...     check = mapB.set_relative_time(i + 5, i + 6, "months")
             ...     mapsA.append(mapA)
             ...     mapsB.append(mapB)
-            ...
             >>> resultlist = l.perform_temporal_selection(
             ...     mapsA, mapsB, ["EQUAL"], False
             ... )
@@ -1826,7 +1809,6 @@ class TemporalAlgebraParser:
             ...             "Map %s has equal relation to map %s"
             ...             % (map.get_name(), relations[0].get_name())
             ...         )
-            ...
             Map a5 has equal relation to map b0
             Map a6 has equal relation to map b1
             Map a7 has equal relation to map b2
@@ -1839,7 +1821,6 @@ class TemporalAlgebraParser:
             ...             "Map %s has no equal relation to mapset mapsB"
             ...             % (map.get_name())
             ...         )
-            ...
             Map a0 has no equal relation to mapset mapsB
             Map a1 has no equal relation to mapset mapsB
             Map a2 has no equal relation to mapset mapsB
@@ -1879,7 +1860,7 @@ class TemporalAlgebraParser:
 
         :return: List of maps with the new temporal extends.
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> import grass.temporal as tgis
             >>> tgis.init()
@@ -1898,7 +1879,6 @@ class TemporalAlgebraParser:
             ...     check = mapB.set_relative_time(i * 2, i * 2 + 2, "months")
             ...     mapsA.append(mapA)
             ...     mapsB.append(mapB)
-            ...
             >>> resultlist = p.set_granularity(
             ...     mapsA, mapsB, toperator="u", topolist=["during"]
             ... )
@@ -1907,7 +1887,6 @@ class TemporalAlgebraParser:
             ...     print(
             ...         map.get_id() + " - start: " + str(start) + " end: " + str(end)
             ...     )
-            ...
             a1@B - start: 0 end: 2
             a0@B - start: 0 end: 2
             a3@B - start: 2 end: 4
@@ -1919,6 +1898,7 @@ class TemporalAlgebraParser:
             a9@B - start: 8 end: 10
             a8@B - start: 8 end: 10
 
+        :raises SyntaxError: If an unpermitted temporal relation name is used in ``topolist``
         """
         topologylist = [
             "EQUAL",
@@ -2014,7 +1994,7 @@ class TemporalAlgebraParser:
 
         :return: Dictionary with temporal functions for given input map.
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> import grass.temporal as tgis
             >>> import datetime
@@ -2030,7 +2010,6 @@ class TemporalAlgebraParser:
             ...         datetime.datetime(2000, 1, 1), datetime.datetime(2000, 10, 1)
             ...     )
             ...     tfuncdict = l.get_temporal_func_dict(mapA)
-            ...
             >>> print(tfuncdict["START_YEAR"])
             2000
             >>> print(tfuncdict["START_TIME"])
@@ -2291,11 +2270,9 @@ class TemporalAlgebraParser:
              - [True,  '&&', False]              -> False
              - [False, '||', True]               -> True
 
-        :param tvarexpr: List of GlobalTemporalVar objects and map lists.
-                     The list is constructed by the TemporalAlgebraParser
-                     in order of expression evaluation in the parser.
-
-        :return: Map list with conditional values for all temporal expressions.
+        :param maplist: A list of maps
+        :param inverse:
+        :return: Map list with conditional values evaluated
         """
 
         def recurse_compare(conditionlist):
@@ -2849,7 +2826,7 @@ class TemporalAlgebraParser:
             comp_op = t[2]
             value = str(t[3])
             for map_i in maplist:
-                # Evaluate time diferences and hash operator statements for each map.
+                # Evaluate time differences and hash operator statements for each map.
                 try:
                     td = map_i.map_value[0].td
                     boolname = eval(str(td) + comp_op + value)

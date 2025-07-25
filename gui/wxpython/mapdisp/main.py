@@ -478,9 +478,7 @@ class DMonDisplay(FrameMixin, MapPanel):
         )
         # set system icon
         parent.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
 
         # bindings
@@ -492,13 +490,14 @@ class DMonDisplay(FrameMixin, MapPanel):
 
         # update env file
         width, height = self.MapWindow.GetClientSize()
-        for line in fileinput.input(monFile["env"], inplace=True):
-            if "GRASS_RENDER_WIDTH" in line:
-                print("GRASS_RENDER_WIDTH={0}".format(width))
-            elif "GRASS_RENDER_HEIGHT" in line:
-                print("GRASS_RENDER_HEIGHT={0}".format(height))
-            else:
-                print(line.rstrip("\n"))
+        with fileinput.input(monFile["env"], inplace=True) as file:
+            for line in file:
+                if "GRASS_RENDER_WIDTH" in line:
+                    print("GRASS_RENDER_WIDTH={0}".format(width))
+                elif "GRASS_RENDER_HEIGHT" in line:
+                    print("GRASS_RENDER_HEIGHT={0}".format(height))
+                else:
+                    print(line.rstrip("\n"))
 
         # add Map Display panel to Map Display frame
         sizer = wx.BoxSizer(wx.VERTICAL)

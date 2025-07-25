@@ -31,7 +31,7 @@ on the surface of the earth by matching the coordinate system of the
 aerial image in pixels (*image coordinate system*) and the coordinate
 system of the camera sensor in millimetres (*photo coordinate system*)
 for the interior orientation of the image, and further to the
-georeferenced coordinate system defined by projection parametres
+georeferenced coordinate system defined by projection parameters
 (*target coordinate system*) for exterior orientation.
 
 ## EXAMPLE
@@ -75,7 +75,7 @@ The steps to follow are described below:
     existing imagery group for the ortho-rectification. After choosing
     this option you will be prompted for the name of a new or existing
     imagery group. As a result, a new file
-    *mapset/group/name_of_group/**REF*** is created that contatins the
+    *mapset/group/name_of_group/**REF*** is created that contains the
     names of all images in a group.
 
     ```sh
@@ -94,7 +94,7 @@ The steps to follow are described below:
     and mapset where the ortho-rectified raster maps will reside. The
     target project is also the project from which the elevation model
     (raster map) will be selected (see Step 3). In Step 2, a new file
-    *mapset/group/name_of_group/**TARGET*** is created contatining the
+    *mapset/group/name_of_group/**TARGET*** is created containing the
     names of target project and mapset.
 
     ```sh
@@ -117,7 +117,7 @@ The steps to follow are described below:
     program. In Step 3 you will be prompted for the name of the raster
     map in the target project that you want to use as the elevation
     model. As a result of this step, a new file
-    *mapset/group/name_of_group/**ELEVATION*** is created contatining
+    *mapset/group/name_of_group/**ELEVATION*** is created containing
     the name and mapset of the chosen DEM.
 
     ```sh
@@ -142,9 +142,9 @@ The steps to follow are described below:
     Fiducial or reseau marks locations are required to compute the
     scanned image to photo coordinate transformation parameter (Step 5).
     Two new files are created in this step: a file
-    *mapset/group/name_of_group/**CAMERA***, contatining the name of the
+    *mapset/group/name_of_group/**CAMERA***, containing the name of the
     reference camera and a file *mapset/camera/**name_of_reference***,
-    contatining the camera parameters.
+    containing the camera parameters.
 
     ```sh
     CAMERA NAME   sony
@@ -169,7 +169,7 @@ The steps to follow are described below:
     interactive step you associate the scanned reference points
     (fiducials, reseau marks, etc.) with their known photo coordinates
     from the camera reference file. A new file
-    *mapset/group/name_of_group/**REF_POINTS*** is created, contatining
+    *mapset/group/name_of_group/**REF_POINTS*** is created, containing
     a list of pairs of coordinates in image and photo coordinate
     systems.
 
@@ -212,7 +212,7 @@ The steps to follow are described below:
     *Principle of pitch and yaw*
 
     In Step 6, a new file *mapset/group/name_of_group/**INIT_EXP*** is
-    created, contatining camera parameters.
+    created, containing camera parameters.
 
     ```sh
     INITIAL XC    215258.345387

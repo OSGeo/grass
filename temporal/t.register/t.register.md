@@ -269,8 +269,7 @@ prec_7|PERMANENT|2001-07-01 00:00:00|2001-08-01 00:00:00
 The European Climate Assessment & Dataset (ECA&D) project offers the
 E-OBS dataset which is a daily gridded observational dataset for
 precipitation, temperature and sea level pressure in Europe based on
-ECA&D information. Download and decompress mean temperature data from:
-[here](https://surfobs.climate.copernicus.eu/dataaccess/access_eobs.php#datafiles).
+ECA&D information. [Download and decompress mean temperature data here](https://surfobs.climate.copernicus.eu/dataaccess/access_eobs.php#datafiles).
 
 ```sh
 # import E-OBS V12 into a lat-long project (alternatively, use r.external)

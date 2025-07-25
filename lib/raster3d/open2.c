@@ -31,9 +31,11 @@
  *  \param doLzw Use the LZW compression algorithm
  *  \param doRle Use the Run-Length-Encoding algroithm for compression
  *  \param precision The precision used for the mantissa (0 - 52) or
- * RASTER3D_MAX_PRECISION \param tileX The number of cells in X direction of a
- * tile \param tileY The number of cells in Y direction of a tile \param tileZ
- * The number of cells in Z direction of a tile \return void *
+ *                   RASTER3D_MAX_PRECISION
+ *  \param tileX The number of cells in X direction of a tile
+ *  \param tileY The number of cells in Y direction of a tile
+ *  \param tileZ The number of cells in Z direction of a tile
+ *  \return void *
  */
 
 void *Rast3d_open_new_param(const char *name, int typeIntern, int cache,

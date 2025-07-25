@@ -680,8 +680,8 @@ class WSPropertiesDialog(WSDialogBase):
                 shutil.copyfile(f, self.revert_ws_cap_files[ws])
             else:
                 # delete file content
-                f_o = open(f, "w")
-                f_o.close()
+                with open(f, "w"):
+                    pass
 
     def _createWidgets(self):
         WSDialogBase._createWidgets(self)

@@ -1,6 +1,6 @@
-mkdocs
-mkdocs-glightbox
-mkdocs-material
-pymdown-extensions
-pyyaml-env-tag
-mkdocs-material[imaging]
+mkdocs==1.6.1
+mkdocs-glightbox==0.4.0
+mkdocs-material==9.6.15
+pymdown-extensions==10.16
+pyyaml-env-tag==1.1
+mkdocs-material[imaging]==9.6.15

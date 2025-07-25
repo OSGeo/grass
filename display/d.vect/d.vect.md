@@ -11,7 +11,7 @@ vector type, colors, data fields, SQL queries, label size and
 justification, etc.
 
 When *d.vect* is used with **where** parameter on MS Windows Command
-Prompt, it is important to use `ˆ` carret symbol for escaping special
+Prompt, it is important to use `ˆ` caret symbol for escaping special
 characters `< > ( ) & | , ; "`.
 
 ```sh
@@ -99,7 +99,7 @@ bounding box):
 
 ```sh
 g.region raster=elevation.10m
-r.random input=elevation.10m n=5000 vector=random3d -d
+r.random input=elevation.10m n=5000 vector=random3d -z
 d.mon start=x0
 # display as black points
 d.vect map=random3d

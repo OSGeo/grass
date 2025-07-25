@@ -369,8 +369,8 @@ int main(int argc, char *argv[])
             /* create count column */
             /* db_add_column() exists but is not implemented,
              * see lib/db/stubs/add_col.c */
-            sprintf(buf, "alter table %s add column %s integer", AFi->table,
-                    count_column_opt->answer);
+            snprintf(buf, sizeof(buf), "alter table %s add column %s integer",
+                     AFi->table, count_column_opt->answer);
             db_set_string(&stmt, buf);
             if (db_execute_immediate(Adriver, &stmt) != DB_OK)
                 G_fatal_error(_("Unable to add column <%s>"),
@@ -401,8 +401,9 @@ int main(int argc, char *argv[])
                 /* create stats column */
                 /* db_add_column() exists but is not implemented,
                  * see lib/db/stubs/add_col.c */
-                sprintf(buf, "alter table %s add column %s double", AFi->table,
-                        stats_column_opt->answer);
+                snprintf(buf, sizeof(buf),
+                         "alter table %s add column %s double", AFi->table,
+                         stats_column_opt->answer);
                 db_set_string(&stmt, buf);
                 if (db_execute_immediate(Adriver, &stmt) != DB_OK)
                     G_fatal_error(_("Unable to add column <%s>"),
@@ -742,18 +743,20 @@ int main(int argc, char *argv[])
             fprintf(stdout, "\n");
         }
         else {
-            sprintf(buf, "update %s set %s = %d", AFi->table,
-                    count_column_opt->answer, Area_cat[i].count);
+            snprintf(buf, sizeof(buf), "update %s set %s = %d", AFi->table,
+                     count_column_opt->answer, Area_cat[i].count);
             db_set_string(&stmt, buf);
             if (method_opt->answer) {
                 if (Area_cat[i].count > 0)
-                    sprintf(buf, " , %s = %.15g", stats_column_opt->answer,
-                            result);
+                    snprintf(buf, sizeof(buf), " , %s = %.15g",
+                             stats_column_opt->answer, result);
                 else
-                    sprintf(buf, " , %s = null", stats_column_opt->answer);
+                    snprintf(buf, sizeof(buf), " , %s = null",
+                             stats_column_opt->answer);
                 db_append_string(&stmt, buf);
             }
-            sprintf(buf, " where %s = %d", AFi->key, Area_cat[i].area_cat);
+            snprintf(buf, sizeof(buf), " where %s = %d", AFi->key,
+                     Area_cat[i].area_cat);
             db_append_string(&stmt, buf);
             G_debug(2, "SQL: %s", db_get_string(&stmt));
             if (db_execute_immediate(Adriver, &stmt) == DB_OK) {

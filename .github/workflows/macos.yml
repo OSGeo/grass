@@ -65,7 +65,7 @@ jobs:
           cp ./macos/files/conda-requirements-dev-arm64.txt "${RUNNER_TEMP}/macos_dependencies.txt"
           echo "$test_dependencies" | sed "s/ /\n/g" >> "${RUNNER_TEMP}/macos_dependencies.txt"
       - name: Setup Mamba
-        uses: mamba-org/setup-micromamba@0dea6379afdaffa5d528b3d1dabc45da37f443fc # v2.0.4
+        uses: mamba-org/setup-micromamba@b09ef9b599704322748535812ca03efb2625677b # v2.0.5
         with:
           init-shell: bash
           environment-file: ${{ runner.temp }}/macos_dependencies.txt
@@ -95,22 +95,30 @@ jobs:
         run: |
           export PYTHONPATH=$(grass --config python_path):$PYTHONPATH
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
-          pytest --verbose --color=yes --durations=0 --durations-min=0.5 \
-            --numprocesses auto \
-            -ra . \
-            -m 'not needs_solo_run'
+          pytest \
+            @.github/workflows/pytest_args_ci.txt \
+            @.github/workflows/pytest_args_parallel.txt \
+            -k 'not testsuite'
       - name: Run pytest with a single worker (for tests marked with needs_solo_run)
         shell: micromamba-shell {0}
         run: |
           export PYTHONPATH=$(grass --config python_path):$PYTHONPATH
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
-          pytest --verbose --color=yes --durations=0 --durations-min=0.5 \
-            -ra . \
-            -m 'needs_solo_run'
+          pytest \
+            @.github/workflows/pytest_args_ci.txt \
+            @.github/workflows/pytest_args_not_parallel.txt \
+            -k 'not testsuite'
+      - name: Run pytest with a single worker (for gunittest-based tests)
+        shell: micromamba-shell {0}
+        run: |
+          export PYTHONPATH=$(grass --config python_path):$PYTHONPATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
+          pytest \
+            @.github/workflows/pytest_args_gunittest.txt
 
       - name: Cache GRASS Sample Dataset
         id: cached-data
-        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: sample-data/nc_spm_full_v2alpha2.tar.gz
           key: nc_spm_full_v2alpha2.tar.gz
@@ -134,7 +142,7 @@ jobs:
 
       - name: Make HTML test report available
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: testreport-macOS
           path: testreport

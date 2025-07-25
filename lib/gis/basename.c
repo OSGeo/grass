@@ -67,7 +67,7 @@ size_t G_get_num_decimals(const char *str)
  * \brief Convert a double to a string substituting the dot with underscore
  *        12.3456 => '12_3456'
  *
- * \param number the double number that will be convert to string
+ * \param number the double number that will be converted to string
  * \param ndigits the number of integer digits in the output string
  * \param ndecimals the number of decimals in the output string
  *
@@ -86,17 +86,18 @@ char *G_double_to_basename_format(double number, size_t ndigits,
     char *result;
 
     if (ndigits != 0) {
-        sprintf(intfmt, "%%0%zud", ndigits);
+        snprintf(intfmt, sizeof(intfmt), "%%0%zud", ndigits);
     }
-    sprintf(intstr, intfmt, (int)integer);
+    snprintf(intstr, sizeof(intstr), intfmt, (int)integer);
 
     if (ndecimals != 0) {
-        sprintf(decfmt, "_%%0%zud", ndecimals);
+        snprintf(decfmt, sizeof(decfmt), "_%%0%zud", ndecimals);
         decimal = ((number - integer) * pow(10., (double)ndecimals));
-        sprintf(decstr, decfmt, (int)decimal);
+        snprintf(decstr, sizeof(decstr), decfmt, (int)decimal);
     }
-    result = G_malloc(strlen(intstr) + strlen(decstr) + 1);
-    sprintf(result, "%s%s", intstr, decstr);
+    size_t len = strlen(intstr) + strlen(decstr) + 1;
+    result = G_malloc(len);
+    snprintf(result, len, "%s%s", intstr, decstr);
     return result;
 }
 
@@ -153,9 +154,9 @@ char *G_join_basename_strings(const char **strings, size_t len)
  * \brief Generate the format string
  *
  * \param basename String with the basename
- * \param digits Number of digits number
- * \param decimals Number of decimal number
- * \param filler String used to fill, default is 0
+ * \param number The double number that will be converted to string
+ * \param ndigits The number of integer digits in the output string
+ * \param ndecimals The number of decimals in the output string
  *
  * \return Format string
  */
@@ -167,10 +168,10 @@ char *G_generate_basename(const char *basename, double number, size_t ndigits,
     separator = G_get_basename_separator();
     numberstr = G_double_to_basename_format(number, ndigits, ndecimals);
 
-    result =
-        G_malloc(strlen(basename) + strlen(separator) + strlen(numberstr) + 1);
+    size_t len = strlen(basename) + strlen(separator) + strlen(numberstr) + 1;
+    result = G_malloc(len);
 
     if (result)
-        sprintf(result, "%s%s%s", basename, separator, numberstr);
+        snprintf(result, len, "%s%s%s", basename, separator, numberstr);
     return result;
 }
