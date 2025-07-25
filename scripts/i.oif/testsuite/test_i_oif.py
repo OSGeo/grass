@@ -1,8 +1,9 @@
+import os
+from pathlib import Path
+
 import grass.script as gs
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-import os
-from pathlib import Path
 
 
 class TestOIF(TestCase):
