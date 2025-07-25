@@ -121,7 +121,7 @@ def main(args=None, program=None):
         "run",
         help="run a tool",
         add_help=False,
-        epilog="Tool name is followed by it parameters.",
+        epilog="Tool name is followed by its parameters.",
     )
     run_subparser.add_argument("tool", type=str, nargs="?", help="name of a tool")
     run_subparser.add_argument("--help", action="store_true")
@@ -177,5 +177,9 @@ def main(args=None, program=None):
         if parsed_args.tool is None and parsed_args.help:
             run_subparser.print_help()
             return 0
+        if parsed_args.tool is None:
+            run_subparser.print_usage()
+            # argparse gives 2 without parameters, so we behave the same.
+            return 2
         return parsed_args.func(parsed_args, other_args, print_help=parsed_args.help)
     return parsed_args.func(parsed_args)
