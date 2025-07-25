@@ -243,6 +243,10 @@ class ToolResult:
                     f"Output of {self._name} cannot be parsed as JSON. "
                     'Did you use format="json"?'
                 )
+                # We don't raise JSONDecodeError ourselves, but use more general
+                # ValueError when format is likely not set properly or when there is
+                # no output (see below).
+                # JSONDecodeError is ValueError, so users may just catch ValueError.
                 raise ValueError(msg) from error
         msg = f"No text output for {self._name} to be parsed as JSON"
         raise ValueError(msg)

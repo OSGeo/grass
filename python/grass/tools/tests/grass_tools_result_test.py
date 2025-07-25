@@ -1,5 +1,7 @@
 """Tests of grass.tools.support.ToolResult"""
 
+import json
+
 import pytest
 
 from grass.tools.support import ToolResult
@@ -99,3 +101,82 @@ def test_empty_text_keyval_numbers():
         name=None, command=None, kwargs=None, returncode=None, stdout=text, stderr=None
     )
     assert result.keyval == {"a": 1, "b": 1.0}
+
+
+def test_json_format_set_but_text_invalid_with_command():
+    """Check invalid format, but the format is set in command"""
+    text = "invalid format"
+    result = ToolResult(
+        name=None,
+        command=["test_tool", "format=json"],
+        kwargs=None,
+        returncode=None,
+        stdout=text,
+        stderr=None,
+    )
+    with pytest.raises(json.JSONDecodeError):
+        assert result.json
+
+
+def test_json_format_set_but_text_invalid_with_kwargs():
+    """Check invalid format, but the format is set in kwargs"""
+    text = "invalid format"
+    result = ToolResult(
+        name="test_tool",
+        command=None,
+        kwargs={"format": "json"},
+        returncode=None,
+        stdout=text,
+        stderr=None,
+    )
+    with pytest.raises(json.JSONDecodeError):
+        assert result.json
+
+
+def test_json_decode_error_exception_is_value_error():
+    """Check that ValueError is raised when JSON decoding fails
+
+    In the ocde, we assume that JSONDecodeError is a subclass of ValueError
+    which allows users to catch both JSONDecodeError and ValueError as ValueError,
+    so we test this behavior here by catching ValueError.
+    """
+    text = "invalid format"
+    result = ToolResult(
+        name="test_tool",
+        command=None,
+        kwargs={"format": "json"},
+        returncode=None,
+        stdout=text,
+        stderr=None,
+    )
+    with pytest.raises(ValueError, match="Expecting"):
+        assert result.json
+
+
+def test_json_format_not_set_and_text_invalid():
+    """Check format set to something else than JSON"""
+    text = "invalid format"
+    result = ToolResult(
+        name="test_tool",
+        command=None,
+        kwargs={"format": "csv"},
+        returncode=None,
+        stdout=text,
+        stderr=None,
+    )
+    with pytest.raises(ValueError, match=r"format.*json"):
+        assert result.json
+
+
+def test_json_format_correct_with_wrong_parameter():
+    """Check that parameter does not influence JSON parsing"""
+    text = '{"a": 1, "b": 1.0}'
+    result = ToolResult(
+        name="test_tool",
+        command=None,
+        kwargs={"format": "csv"},
+        returncode=None,
+        stdout=text,
+        stderr=None,
+    )
+    assert result.json == {"a": 1, "b": 1.0}

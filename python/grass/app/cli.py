@@ -39,7 +39,7 @@ SPECIAL_FLAGS = [
 # --help-text --html-description --rst-description
 
 
-def subcommand_run_tool(args, tool_args: list, help: bool):
+def subcommand_run_tool(args, tool_args: list, print_help: bool):
     command = [args.tool, *tool_args]
     with tempfile.TemporaryDirectory() as tmp_dir_name:
         project_name = "project"
@@ -48,17 +48,18 @@ def subcommand_run_tool(args, tool_args: list, help: bool):
         with gs.setup.init(project_path) as session:
             tools = Tools(session=session, capture_output=False)
             try:
-                if help:
+                # From here, we return the subprocess return code regardless of its
+                # value. Error states are handled through exceptions.
+                if print_help:
                     # We consumed the help flag, so we need to add it explicitly.
-                    tools.no_nonsense_run_from_list([*command, "--help"])
-                elif any(item in command for item in SPECIAL_FLAGS):
+                    return tools.call_cmd([*command, "--help"]).returncode
+                if any(item in command for item in SPECIAL_FLAGS):
                     # This is here basically because of how --json behaves,
                     # two JSON flags are accepted, but --json currently overridden by
                     # other special flags, so later use of --json in tools will fail
                     # with the other flags active.
-                    tools.no_nonsense_run_from_list(command)
-                else:
-                    tools.run_from_list(command)
+                    return tools.call_cmd(command).returncode
+                return tools.run_cmd(command).returncode
             except subprocess.CalledProcessError as error:
                 return error.returncode
 
@@ -176,5 +177,5 @@ def main(args=None, program=None):
         if parsed_args.tool is None and parsed_args.help:
             run_subparser.print_help()
             return 0
-        return parsed_args.func(parsed_args, other_args, help=parsed_args.help)
+        return parsed_args.func(parsed_args, other_args, print_help=parsed_args.help)
     return parsed_args.func(parsed_args)

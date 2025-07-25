@@ -2,6 +2,8 @@
 
 import pytest
 
+from grass.tools.support import ToolFunctionResolver
+
 
 class CustomException(Exception):
     pass
@@ -56,3 +58,14 @@ def test_names(echoing_resolver):
     assert "v_info" in echoing_resolver.names()
     assert "r.info" not in echoing_resolver.names()
     assert "v.info" not in echoing_resolver.names()
+
+
+def test_levenshtein_distance_empty_text():
+    empty_text = ""
+    non_empty_text = "abc"
+    ToolFunctionResolver.levenshtein_distance(empty_text, non_empty_text) == len(
+        non_empty_text
+    )
+    ToolFunctionResolver.levenshtein_distance(non_empty_text, empty_text) == len(
+        non_empty_text
+    )
