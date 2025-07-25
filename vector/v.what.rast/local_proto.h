@@ -11,6 +11,6 @@ struct order {
 };
 
 /* search.c */
-int by_row(const void *, const void *);
+int by_row_col(const void *, const void *);
 int by_cat(const void *, const void *);
 int srch_cat(const void *, const void *);
