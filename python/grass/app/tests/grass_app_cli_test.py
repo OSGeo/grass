@@ -6,7 +6,7 @@ from grass.app.cli import main
 
 
 def test_cli_help_runs():
-    """Check help the main command"""
+    """Check help of the main command"""
     with pytest.raises(SystemExit) as exception:
         main(["--help"])
     assert exception.value.code == 0
