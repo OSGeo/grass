@@ -180,3 +180,39 @@ def test_json_format_correct_with_wrong_parameter():
         stderr=None,
     )
     assert result.json == {"a": 1, "b": 1.0}
+
+
+def test_text_as_bytes():
+    stdout = b"a=1\nb=1.0"
+    result = ToolResult(
+        name=None,
+        command=None,
+        kwargs=None,
+        returncode=None,
+        stdout=stdout,
+        stderr=None,
+    )
+    # The stdout attribute should be untouched.
+    assert result.stdout == stdout
+    # The text attribute should be decoded.
+    assert result.text == stdout.decode()
+
+
+def test_text_strip():
+    stdout = "   a=1\nb=1.0  \n"
+    result = ToolResult(
+        name=None,
+        command=None,
+        kwargs=None,
+        returncode=None,
+        stdout=stdout,
+        stderr=None,
+    )
+    # The stdout attribute should be untouched.
+    assert result.stdout == stdout
+    # Different ways of asking the same thing.
+    # The repeated access should also trigger caching, but we don't test for
+    # that explicitly.
+    assert result.text == "a=1\nb=1.0"
+    assert result.text == result.text.strip()
+    assert result.text == stdout.strip()
