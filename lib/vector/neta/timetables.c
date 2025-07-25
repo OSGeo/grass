@@ -338,7 +338,7 @@ static neta_heap_data *new_heap_data(int conns, int v)
 /*!
    \brief Update Dijkstra structures
 
-   \param olc_conns old connection
+   \param old_conns old connection
    \param new_conns new connection
    \param to old 'to' node
    \param new_dst new 'to' node

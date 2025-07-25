@@ -64,7 +64,7 @@ int I_list_group(const char *group, const struct Ref *ref, FILE *fd)
  * \brief Prints maps in a group (simple version)
  *
  * Same as I_list_group(), but without all the fancy stuff.
- * Prints one map per line in map@mapset form.
+ * Prints one map per line in map\@mapset form.
  *
  * \param ref group reference (set with I_get_group_ref())
  * \param fd where to print (typically stdout)

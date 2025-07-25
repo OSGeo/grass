@@ -1,5 +1,5 @@
 /*!
-   \file include/ogsf.h
+   \file include/grass/ogsf.h
 
    \brief OGSF header file (structures)
 

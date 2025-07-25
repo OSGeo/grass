@@ -133,8 +133,8 @@ struct SubSig *I_NewSubSig(struct SigSet *S, struct ClassSig *C)
  * There is no need to initialise struct SigSet in advance, as this
  * function internally calls I_InitSigSet.
  *
- * \param pointer to FILE*
- * \param pointer to struct SigSet *S
+ * \param fd pointer to FILE*
+ * \param S pointer to struct SigSet *S
  *
  * \return 1 on success, -1 on failure
  */

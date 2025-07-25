@@ -91,7 +91,7 @@ int G_asprintf(char **out, const char *fmt, ...)
  * times in a loop.
  *
  * \param[out] out
- * \param[out] osize
+ * \param[out] size
  * \param[in] fmt
  * \param ap
  * \return number of bytes written

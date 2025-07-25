@@ -603,7 +603,7 @@ int Vect_open_old(struct Map_info *Map, const char *name, const char *mapset)
    \brief Open existing temporary vector map for reading
 
    Temporary vector maps are stored in the current mapset (directory
-   <tt>.tmp/<hostname>/vector</tt>).
+   <tt>.tmp/\<hostname\>/vector</tt>).
 
    Calls G_fatal_error() on failure.
 
@@ -671,7 +671,7 @@ int Vect_open_update(struct Map_info *Map, const char *name, const char *mapset)
    \brief Open existing temporary vector map for reading/writing
 
    Temporary vector maps are stored in the current mapset (directory
-   <tt>.tmp/<hostname>/vector</tt>).
+   <tt>.tmp/\<hostname\>/vector</tt>).
 
    By default list of updated features is not maintained, see
    Vect_set_updated() for details.
@@ -967,7 +967,7 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
    \brief Create new temporary vector map
 
    Temporary vector maps are stored in the current mapset (directory
-   <tt>.tmp/<hostname>/vector</tt>). If the map already exists, it is
+   <tt>.tmp/\<hostname\>/vector</tt>). If the map already exists, it is
    overwritten.
 
    Temporary vector maps are automatically deleted when closing the map
