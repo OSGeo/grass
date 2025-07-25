@@ -206,6 +206,11 @@ html_theme_options = {
     "localtoc_label_text": "Table of contents",
     "nav_links": [
         {
+            "href": "grass.tools",
+            "title": "Tools API",
+            "internal": True,
+        },
+        {
             "href": "script_intro",
             "title": "Scripting API",
             "internal": True,
