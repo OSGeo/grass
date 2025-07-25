@@ -8,9 +8,11 @@ authors:
 
 GRASS Python interface provides libraries to create GRASS scripts and access
 the internal data structures of GRASS. The Python interface consists of
-two main libraries:
+three main libraries:
+*[grass.tools](https://grass.osgeo.org/grass-stable/manuals/libpython/tools_index.html)*
+provides a Python interface to GRASS tools,
 *[grass.script](https://grass.osgeo.org/grass-stable/manuals/libpython/script_intro.html)*
-provides a Python interface to GRASS tools
+gives access to GRASS session in Python,
 and *[grass.pygrass](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_index.html)*
 enables access to the internal data structures of GRASS.
 
@@ -34,6 +36,7 @@ sys.path.append(
 )
 
 import grass.script as gs
+from grass.tools import Tools
 
 # Create a new project
 gs.create_project(path="path/to/my_project", epsg="3358")
@@ -42,66 +45,74 @@ gs.create_project(path="path/to/my_project", epsg="3358")
 with gs.setup.init("path/to/my_project") as session:
 
     # Run GRASS tools
-    gs.run_command("r.import", input="/path/to/elevation.tif", output="elevation")
-    gs.run_command("g.region", raster="elevation")
-    gs.run_command("r.slope.aspect", elevation="elevation", slope="slope")
+    tools = Tools(session=session)
+    tools.r_import_(input="/path/to/elevation.tif", output="elevation")
+    tools.g_region(raster="elevation")
+    tools.r_slope_aspect(elevation="elevation", slope="slope")
 ```
 
 If you are running a script in an already initialized GRASS session, you
 can run the tools right away (without the call to *init*):
 
 ```python
-import grass.script as gs
-
 # Run GRASS tools
-gs.run_command("g.import", input="/path/to/elevation.tif", output="elevation")
-gs.run_command("g.region", raster="elevation")
-gs.run_command("r.slope.aspect", elevation="elevation", slope="slope")
+tools = Tools()
+tools.r_import_(input="/path/to/elevation.tif", output="elevation")
+tools.g_region(raster="elevation")
+tools.r_slope_aspect(elevation="elevation", slope="slope")
 ```
 
 ### Running tools
 
-The *[gs.run_command](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.run_command)*,
-*[gs.parse_command](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.parse_command)*,
-*[gs.read_command](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.read_command)*,
-and *[gs.write_command](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.write_command)*
- functions are the four main *grass.script*
-functions used to execute GRASS tools with Python.
-
-The *[gs.run_command](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.run_command)*
-function is used to run a GRASS tool when you require
-no return value. For example, when computing raster slope with
-[r.slope.aspect](r.slope.aspect.md):
+Tools can be accessed through a *[grass.tool.Tools](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.tools.html#grass.tools.Tools)*
+object from *grass.tools* which is created either within an active GRASS
+session or with a session passed as a parameter (see above).
+Here, we create the *Tools* object assuming an active session:
 
 ```python
-gs.run_command("r.slope.aspect", elevation="elevation", slope="slope")
+from grass.tools import Tools
+
+tools = Tools()
 ```
 
-The *[gs.parse_command](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.parse_command)*
-function is useful when the tool returns
-machine-readable text output on the standard output.
-For example, use it to parse the output of [v.db.select](v.db.select.md#json)
-to represent attribute data in a Python dictionary:
+To run a GRASS tool which creates data, but does produce any return value,
+the tool can be accessed as method of the *Tools* object.
+The name uses underscores (snakecase) instead of dots (periods).
+For example, when computing raster slope with
+[r.slope.aspect](r.slope.aspect.md), we call the *r_slope_aspect* method:
 
 ```python
-data = gs.parse_command("v.db.select", map="hospitals", format="json")
+tools.r_slope_aspect(elevation="elevation", slope="slope")
 ```
 
-The *[gs.read_command](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.read_command)*
-function returns the text output of a GRASS tool.
-This can be useful when you want to print human-readable output of a tool.
-For example, when reading the output of [g.region](g.region.md):
+Many tools produce machine-readable text output, typically JSON,
+which can be then used in Python.
+For example, to get vector attribute data,
+we use JSON output of [v.db.select](v.db.select.md#json):
 
 ```python
-print(gs.read_command("g.region", flags="p"))
+data = tools.v_db_select(map="hospitals", format="json")
 ```
 
-The *[gs.write_command](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.write_command)*
-function is used to send data to a GRASS tool
-through the standard input. For example, when writing a custom color scheme to
+We can use additional attributes of the tool run result
+to get other output than JSON.
+This can be useful when you want to  of a tool.
+For example, to get human-readable output of [g.region](g.region.md) as is,
+we use the *text* attribute:
+
+```python
+print(tools.g_region(flags="p").text)
+```
+
+To send data to a GRASS tool through the standard input,
+a *StringIO* object from the standard package *io* can be
+in place of a filename.
+For example, when writing a custom color scheme to
 a raster map with [r.colors](r.colors.md):
 
 ```python
+from io import StringIO
+
 color_scheme = """
 20% #ffffd4
 40% #fed98e
@@ -109,14 +120,14 @@ color_scheme = """
 80% #d95f0e
 100% #993404
 """
-gs.write_command("r.colors",
-                 map="elevation",
-                 rules="-",  # Read from stdin
-                 stdin=color_scheme
-                )
+tools.r_colors(
+    map="elevation",
+    rules=StringIO(color_scheme)
+)
 ```
 
-For error handling, please refer to the [documentation](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.handle_errors).
+The methods will raise *CalledModuleError* if a tool fails.
+For customization of error handling, please refer to the [documentation](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html#grass.script.core.handle_errors).
 
 !!! grass-tip "Overwriting data"
     By default, GRASS prevents overwriting existing maps to protect your data,
@@ -125,18 +136,17 @@ For error handling, please refer to the [documentation](https://grass.osgeo.org/
     For a single call, use the overwrite parameter:
     <!-- markdownlint-disable-next-line MD046 -->
     ```python
-    gs.run_command("r.slope.aspect", elevation="elevation", slope="slope", overwrite=True)
+    tools.r_slope_aspect(elevation="elevation", slope="slope", overwrite=True)
     ```
-    For an entire script, set the environment variable before running any GRASS tools:
+    For multiple tool calls, set the overwrite parameter of Tools:
     <!-- markdownlint-disable-next-line MD046 -->
     ```python
-    import os
-    os.environ["GRASS_OVERWRITE"] = "1"
+    tools = Tools(overwrite=True)
     ```
     See related [best practices](style_guide.md#overwriting-existing-data)
     when writing a Python tool.
 
-### Helper functions
+### Accesing returned values
 
 The *grass.script* provides several helper functions to make scripting faster.
 The most common ones are:
@@ -156,15 +166,16 @@ The most common ones are:
 Here is an example how to use these helper functions:
 
 ```python
-# Get region resolution to get cell size (assuming projected CRS)
-region = gs.region()
+tools = Tools()
+
+# Get number of points in a vector map.
+# A single value can be accessed directly without storing it.
+num_points = tools.v_info("hospitals")["points"])
+
+# Get region resolution to get cell size (assuming projected CRS).
+# Result of a tool can be stored and access multiple times.
+region = tools.g_region(flags="p", ,format="json")
 cell_area = region["nsres"] * region["ewres"]
-
-# Compute volume with raster algebra (or use area())
-gs.mapcalc(f"volume = elevation * {cell_area}")
-
-# Get number of points in a vector map
-num_points = gs.vector_info_topo("hospitals")["points"])
 ```
 
 ### NumPy interface
