@@ -213,6 +213,7 @@ void Rast3d_mask_num(RASTER3D_Map *map, int x, int y, int z, void *value,
  *
  *  Same as <em>Rast3d_mask_num (x, y, z, value, FCELL_TYPE)</em>.
  *
+ *  \param map
  *  \param x
  *  \param y
  *  \param z

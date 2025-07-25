@@ -237,8 +237,8 @@ int I_read_signatures(FILE *fd, struct Signature *S)
  * I_fopen_signature_file_new()
  * It is up to caller to fclose the file stream afterwards.
  *
- * \param pointer to FILE*
- * \param pointer to struct Signature *S
+ * \param fd to FILE*
+ * \param S to struct Signature *S
  *
  * \return always 1
  */
@@ -314,8 +314,8 @@ int I_write_signatures(FILE *fd, struct Signature *S)
  * \code if (ret && ret[1]) printf("List of imagery group bands without
  * signatures: %s\n, ret[1]); \endcode
  *
- * \param *Signature existing signatures to check & sort
- * \param *Ref group reference
+ * \param S existing signatures to check & sort
+ * \param R group reference
  *
  * \return NULL successfully sorted
  * \return err_array two comma separated lists of mismatches

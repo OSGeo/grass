@@ -136,8 +136,8 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
  The following files must be added or updated when including a new external library.
 
  - <b>add:</b> lib/external/<b>newlib</b>
- - <b>add:</b> lib/external/<b>newlib</b>/*.c
- - <b>add:</b> lib/external/<b>newlib</b>/*.h
+ - <b>add:</b> lib/external/<b>newlib</b>/\*.c
+ - <b>add:</b> lib/external/<b>newlib</b>/\*.h
  - <b>add:</b> lib/external/<b>newlib</b>/LICENSE
  - <b>add:</b> lib/external/<b>newlib</b>/Makefile
  - <b>update:</b> lib/external/Makefile

@@ -480,19 +480,24 @@ int Vect_net_get_node_cost(struct Map_info *Map, int node, double *cost)
    \brief Find nearest node(s) on network.
 
    \param Map vector map with build graph (see Vect_net_ttb_build_graph and
-   Vect_net_build_graph) \param x,y,z point coordinates (z coordinate NOT USED
-   !) \param direction (GV_FORWARD - from point to net, GV_BACKWARD - from net
-   to point) \param maxdist maximum distance to the network \param[out] node1
-   pointer where to store the node number (or NULL) \param[out] node2 pointer
-   where to store the node number (or NULL) \param[out] ln    pointer where to
-   store the nearest line number (or NULL) \param[out] costs1 pointer where to
-   store costs on nearest line to node1 (not costs from x,y,z to the line) (or
-   NULL) \param[out] costs2 pointer where to store costs on nearest line to
-   node2 (not costs from x,y,z to the line) (or NULL) \param[out] Points1
-   pointer to structure where to store vertices on nearest line to node1 (or
-   NULL) \param[out] Points2 pointer to structure where to store vertices on
-   nearest line to node2 (or NULL) \param[out] pointer where to distance to the
-   line (or NULL) \param[out] distance
+              Vect_net_build_graph)
+   \param x,y,z point coordinates (z coordinate NOT USED!)
+   \param direction (GV_FORWARD - from point to net, GV_BACKWARD - from net
+                    to point)
+   \param maxdist maximum distance to the network
+   \param[out] node1 pointer where to store the node number (or NULL)
+   \param[out] node2 pointer where to store the node number (or NULL)
+   \param[out] ln    pointer where to store the nearest line number (or NULL)
+   \param[out] costs1 pointer where to store costs on nearest line to node1 (not
+                      costs from x,y,z to the line) (or NULL)
+   \param[out] costs2 pointer where to store costs on nearest line to node2
+                      (not costs from x,y,z to the line) (or NULL)
+   \param[out] Points1 pointer to structure where to store vertices on nearest
+                       line to node1 (or NULL)
+   \param[out] Points2 pointer to structure where to store vertices on nearest
+                       line to node2 (or NULL)
+  \param[out] pointer where to distance to the line (or NULL)
+  \param[out] distance
 
    \return number of nodes found (0,1,2)
  */

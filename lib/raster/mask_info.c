@@ -66,7 +66,7 @@ char *Rast_mask_info(void)
  * This function checks if an environment variable "GRASS_MASK" is set.
  * If it is set, the value of the environment variable is returned
  * as the mask name. If it is not set, the function will default to the
- * mask name "MASK@<mapset>", where <mapset> is the current mapset.
+ * mask name "MASK@<mapset>", where \<mapset\> is the current mapset.
  *
  * The memory for the returned mask name is dynamically allocated using
  * G_store(). It is the caller's responsibility to free the memory with
