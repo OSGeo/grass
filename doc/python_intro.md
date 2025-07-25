@@ -6,15 +6,15 @@ authors:
 
 # Python introduction
 
-GRASS Python interface provides libraries to create GRASS scripts and access
-the internal data structures of GRASS. The Python interface consists of
+GRASS Python interface provides libraries to use GRASS tools, create scripts,
+and access the GRASS data structures. The Python interface consists of
 three main libraries:
 *[grass.tools](https://grass.osgeo.org/grass-stable/manuals/libpython/tools_index.html)*
 provides a Python interface to GRASS tools,
 *[grass.script](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script_intro.html)*
 gives access to GRASS session in Python,
 and *[grass.pygrass](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_index.html)*
-enables access to the internal data structures of GRASS.
+enables a fine-grained access to the GRASS data structures.
 
 ## Scripting
 
@@ -142,7 +142,7 @@ For customization of error handling, please refer to the [documentation](https:/
     The API of *grass.tools* is recommended for new code, but not considered
     stable in version 8.5. Although no major changes for *grass.tools* are
     expected, if you require completely stable API, consider instead
-    *grass.script* [described below](#shell-like-tool-calling).
+    [other ways of accessing tools](#additional-ways-to-access-tools).
 
 Available tools and their parameters are listed in the tool documentation:
 
