@@ -190,7 +190,7 @@ class ToolResult:
     def comma_items(self) -> list:
         """Text output read as comma-separated list
 
-        Empty or no output results in an empty dictionary.
+        Empty or no output results in an empty list.
         """
         return self.text_split(",")
 
@@ -198,7 +198,7 @@ class ToolResult:
     def space_items(self) -> list:
         """Text output read as whitespace-separated list
 
-        Empty or no output results in an empty dictionary.
+        Empty or no output results in an empty list.
         """
         return self.text_split(separator=None)
 
@@ -206,7 +206,7 @@ class ToolResult:
         """Parse text output read as list separated by separators
 
         Any leading or trailing newlines are removed prior to parsing.
-        Empty or no output results in an empty dictionary.
+        Empty or no output results in an empty list.
         """
         if not self.text:
             # This provides consitent behavior with explicit separator including
