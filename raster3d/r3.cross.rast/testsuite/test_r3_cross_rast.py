@@ -70,8 +70,8 @@ class TestR3CrossRast(TestCase):
         )
         self.assertRasterExists("out_high")
         self.tmp_rasters.append("out_high")
-        stats = gs.parse_command("r.univar", map="out_high", format="json")
-        self.assertTrue(math.isnan(stats["min"]))
+        stats = gs.parse_command("r.univar", map="out_high", flags="g")
+        self.assertTrue(math.isnan(float(stats["min"])))
         self.assertEqual(stats["cells"], stats["null_cells"])
 
     def test_null_cells_in_elevation_propagate(self):
