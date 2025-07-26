@@ -63,6 +63,7 @@ int I_find_group_file(const char *group, const char *file)
  * \brief Searches for a group file in the specified mapset
  *
  * \param group
+ * \param mapset
  * \param file
  * \return int 1 if file was found, 0 otherwise
  */

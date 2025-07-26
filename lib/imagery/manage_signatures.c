@@ -1,5 +1,5 @@
 /*!
-   \file lib/imagery/manage_sinatures.c
+   \file lib/imagery/manage_signatures.c
 
    \brief Imagery Library - Signature file management functions
 
@@ -105,9 +105,9 @@ int I_signatures_remove(I_SIGFILE_TYPE type, const char *name)
  * It is safe to pass fully qualified names.
  *
  * \param type I_SIGFILE_TYPE signature type
- * \param name of old signature
- * \param mapset of old signature
- * \param name of new signature
+ * \param old_name of old signature
+ * \param old_mapset of old signature
+ * \param new_name of new signature
  * \return 0 on success
  * \return 1 on failure
  */
