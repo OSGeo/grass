@@ -12,7 +12,8 @@ and the GRASS Temporal Framework are entirely written in Python.
 A set of packages is provided to the user in order to provide functionality
 at various levels:
 
-* `grass.script package <script_intro.html>`_ provides Python interface to launch GRASS modules in scripts
+* `grass.tools package <grass.tools.html>`_ provides Python interface to launch GRASS tools in scripts
+* `grass.script package <script_intro.html>`_ provides additional tooling to use GRASS in scripts
 * `PyGRASS <pygrass_index.html>`_ is an object-oriented Python Application
   Programming Interface (API) for GRASS which uses the GRASS C API as
   backend but additionally offers a convenient interface to the GRASS
@@ -42,6 +43,7 @@ Modules and Packages
    :maxdepth: 1
 
    index
+   grass.tools
    script_intro
    pygrass_index
    grass.jupyter
