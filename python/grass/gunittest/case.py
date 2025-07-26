@@ -16,6 +16,7 @@ import subprocess
 import hashlib
 import uuid
 import unittest
+from unittest.util import safe_repr
 
 from grass.pygrass.modules import Module
 from grass.exceptions import CalledModuleError
@@ -31,7 +32,6 @@ from .checkers import (
     text_file_md5,
     files_equal_md5,
 )
-from .utils import safe_repr
 from .gutils import is_map_in_mapset
 
 from io import StringIO
