@@ -15,7 +15,10 @@
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>
+
 #include <grass/gis.h>
+#include <grass/glocale.h>
+
 #include "local_proto.h"
 
 /**
@@ -34,7 +37,13 @@
 
 int seg_pageout(SEGMENT *SEG, int i)
 {
-    SEG->seek(SEG, SEG->scb[i].n, 0);
+    if (SEG->seek(SEG, SEG->scb[i].n, 0) == -1) {
+        int err = errno;
+        /* GTC seek refers to reading/writing from a different position
+         * in a file */
+        G_warning(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+        return -1;
+    }
     errno = 0;
     if (write(SEG->fd, SEG->scb[i].buf, SEG->size) != SEG->size) {
         int err = errno;

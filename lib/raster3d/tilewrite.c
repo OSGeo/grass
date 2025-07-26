@@ -2,9 +2,13 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <string.h>
+#include <errno.h>
 
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/glocale.h>
+
 #include "raster3d_intern.h"
 
 /*---------------------------------------------------------------------------*/
@@ -174,6 +178,12 @@ int Rast3d_write_tile(RASTER3D_Map *map, int tileIndex, const void *tile,
     /* compute the length */
     map->tileLength[tileIndex] =
         lseek(map->data_fd, (long)0, SEEK_END) - map->index[tileIndex];
+    if (map->tileLength[tileIndex] == -1) {
+        int err = errno;
+        /* GTC seek refers to reading/writing from a different position
+         * in a file */
+        G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+    }
 
     return 1;
 }
