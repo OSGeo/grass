@@ -98,6 +98,7 @@ jobs:
           pytest \
             @.github/workflows/pytest_args_ci.txt \
             @.github/workflows/pytest_args_parallel.txt \
+            --junitxml=pytest.xdist.junit.xml \
             -k 'not testsuite'
       - name: Run pytest with a single worker (for tests marked with needs_solo_run)
         shell: micromamba-shell {0}
@@ -107,6 +108,7 @@ jobs:
           pytest \
             @.github/workflows/pytest_args_ci.txt \
             @.github/workflows/pytest_args_not_parallel.txt \
+            --junitxml=pytest.needs_solo_run.junit.xml \
             -k 'not testsuite'
       - name: Run pytest with a single worker (for gunittest-based tests)
         shell: micromamba-shell {0}
@@ -114,7 +116,15 @@ jobs:
           export PYTHONPATH=$(grass --config python_path):$PYTHONPATH
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
           pytest \
-            @.github/workflows/pytest_args_gunittest.txt
+            @.github/workflows/pytest_args_gunittest.txt \
+            --junitxml=pytest.gunittest.junit.xml
+
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@47f89e9acb64b76debcd5ea40642d25a4adced9f # v1.1.1
+        with:
+          flags: macos-pytest-python
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Cache GRASS Sample Dataset
         id: cached-data
