@@ -80,8 +80,7 @@ void G_percent(long n, long d, int s)
             }
             else {
                 if (format == G_INFO_FORMAT_STANDARD) {
-                    // fprintf(stderr, "%4d%%\b\b\b\b\b", x);
-                    fprintf(stderr, "%d ", x);
+                    fprintf(stderr, "%4d%%\b\b\b\b\b", x);
                 }
                 else {
                     if (format == G_INFO_FORMAT_PLAIN) {
