@@ -123,6 +123,7 @@ jobs:
         if: ${{ !cancelled() }}
         uses: codecov/test-results-action@47f89e9acb64b76debcd5ea40642d25a4adced9f # v1.1.1
         with:
+          exclude: gui
           flags: macos-pytest-python
           token: ${{ secrets.CODECOV_TOKEN }}
 
