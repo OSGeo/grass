@@ -91,6 +91,7 @@ jobs:
             @.github/workflows/pytest_args_ci.txt \
             @.github/workflows/pytest_args_cov.txt \
             @.github/workflows/pytest_args_parallel.txt \
+            --junitxml=pytest.xdist.junit.xml \
             -k 'not testsuite'
 
       - name: Run pytest with a single worker (for tests marked with needs_solo_run)
@@ -103,6 +104,7 @@ jobs:
             @.github/workflows/pytest_args_ci.txt \
             @.github/workflows/pytest_args_cov.txt \
             @.github/workflows/pytest_args_not_parallel.txt \
+            --junitxml=pytest.needs_solo_run.junit.xml \
             -k 'not testsuite'
       - name: Run pytest with a single worker (for gunittest-based tests)
         run: |
@@ -112,7 +114,8 @@ jobs:
           export INITIAL_PWD="${PWD}"
           pytest \
             @.github/workflows/pytest_args_cov.txt \
-            @.github/workflows/pytest_args_gunittest.txt
+            @.github/workflows/pytest_args_gunittest.txt \
+            --junitxml=pytest.gunittest.junit.xml
       - name: Fix non-standard installed script paths in coverage data
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
@@ -123,6 +126,12 @@ jobs:
           coverage combine
           coverage html
 
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@47f89e9acb64b76debcd5ea40642d25a4adced9f # v1.1.1
+        with:
+          flags: pytest-python-${{ matrix.python-version }}
+          token: ${{ secrets.CODECOV_TOKEN }}
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@18283e04ce6e62d37312384ff67231eb8fd56d24 # v5.4.3
         with:
