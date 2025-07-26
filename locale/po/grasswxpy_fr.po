@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-12 15:42+0000\n"
-"PO-Revision-Date: 2025-06-29 03:57+0000\n"
+"POT-Creation-Date: 2025-07-19 15:42+0000\n"
+"PO-Revision-Date: 2025-07-24 17:41+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/fr/>\n"
 "Language: fr\n"
@@ -1175,7 +1175,7 @@ msgstr ""
 
 #: ../gui/wxpython/core/settings.py:886
 msgid "PyGRASS"
-msgstr ""
+msgstr "PyGRASS"
 
 #: ../gui/wxpython/core/settings.py:931
 #, python-brace-format
@@ -1365,9 +1365,8 @@ msgid "Do you want to create a new project (also known as location)?"
 msgstr "Voulez-vous créer un nouveau jeux de données ?"
 
 #: ../gui/wxpython/datacatalog/catalog.py:221
-#, fuzzy
 msgid "Create project?"
-msgstr "Créer un pack"
+msgstr "Créer un projet ?"
 
 #: ../gui/wxpython/datacatalog/catalog.py:318
 msgid "Link external raster data  [r.external]"
@@ -1407,7 +1406,7 @@ msgstr "Lier des données externes"
 
 #: ../gui/wxpython/datacatalog/catalog.py:372
 msgid "More options..."
-msgstr ""
+msgstr "Plus d'options…"
 
 #: ../gui/wxpython/datacatalog/dialogs.py:44
 #: ../gui/wxpython/modules/import_export.py:966
@@ -1449,7 +1448,7 @@ msgstr "Longueur maximale d'un segment :"
 
 #: ../gui/wxpython/datacatalog/frame.py:31
 msgid "Data Catalog"
-msgstr ""
+msgstr "Catalogue de données"
 
 #: ../gui/wxpython/datacatalog/frame.py:42
 msgid "Close GRASS GIS Data Catalog"
@@ -1465,7 +1464,7 @@ msgstr "Créer un nouveau projet"
 
 #: ../gui/wxpython/datacatalog/infomanager.py:37
 msgid "Learn more"
-msgstr ""
+msgstr "En savoir plus"
 
 #: ../gui/wxpython/datacatalog/infomanager.py:40
 #, python-brace-format
@@ -1676,7 +1675,7 @@ msgstr "Renommer la carte"
 
 #: ../gui/wxpython/datacatalog/tree.py:1185
 msgid "Cannot rename mapset"
-msgstr ""
+msgstr "Impossible de renommer le jeu de cartes"
 
 #: ../gui/wxpython/datacatalog/tree.py:1198
 #, python-brace-format
@@ -1740,7 +1739,7 @@ msgstr "Copie terminé"
 #, fuzzy
 #| msgid "g.remove completed"
 msgid "Moving completed"
-msgstr "g.remove terminé"
+msgstr "Déplacement terminé"
 
 #: ../gui/wxpython/datacatalog/tree.py:1362
 msgid "Reprojection is not implemented for 3D rasters"
@@ -3390,9 +3389,8 @@ msgstr "Enregistrer la géométrie de l'écran dans un nom de région"
 #: ../gui/wxpython/gcp/statusbar.py:36
 #: ../gui/wxpython/image2target/ii2t_statusbar.py:33
 #: ../gui/wxpython/photo2image/ip2i_statusbar.py:33
-#, fuzzy
 msgid "Pan to GCP by number"
-msgstr "Numéro de catégorie"
+msgstr ""
 
 #: ../gui/wxpython/gcp/statusbar.py:52
 #: ../gui/wxpython/image2target/ii2t_statusbar.py:49
@@ -4124,7 +4122,6 @@ msgid "PyWPS"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/panels.py:1617
-#, fuzzy
 msgid "actinia"
 msgstr "actinia"
 
@@ -4197,7 +4194,7 @@ msgstr "Éditeur Python"
 #: ../gui/wxpython/gmodeler/preferences.py:95
 #, fuzzy
 msgid "GRASS API:"
-msgstr "Aide GRASS"
+msgstr "API GRASS :"
 
 #: ../gui/wxpython/gmodeler/preferences.py:140
 #: ../gui/wxpython/gmodeler/preferences.py:459
@@ -5015,7 +5012,7 @@ msgstr "OSGeo_ID"
 
 #: ../gui/wxpython/gui_core/ghelp.py:445
 msgid "ORCID"
-msgstr ""
+msgstr "ORCID"
 
 #: ../gui/wxpython/gui_core/ghelp.py:522
 msgid "Nation"
@@ -5259,7 +5256,7 @@ msgstr "Pas de source de données définie, les paramètres ne sont pas enregist
 
 #: ../gui/wxpython/gui_core/gselect.py:2098
 msgid "PostgreSQL/PostGIS login was not set. Set it via <db.login> module, please."
-msgstr ""
+msgstr "La connexion PostgreSQL/PostGIS n'a pas été définie. Veuillez le définir via le module <db.login>."
 
 #: ../gui/wxpython/gui_core/gselect.py:2253
 #, python-brace-format
@@ -5279,7 +5276,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/gselect.py:2628
 #, python-brace-format
 msgid "PostgreSQL DB <{psql}> program was not found. Please, install it."
-msgstr ""
+msgstr "Le programme de BD PostgreSQL <{psql}> n'a pas été trouvé. Veuillez l'installer."
 
 #: ../gui/wxpython/gui_core/gselect.py:2646
 #: ../gui/wxpython/modules/import_export.py:504
@@ -5453,9 +5450,8 @@ msgstr "Outils"
 
 #: ../gui/wxpython/gui_core/preferences.py:429
 #: ../gui/wxpython/lmgr/frame.py:646 ../gui/wxpython/main_window/frame.py:707
-#, fuzzy
 msgid "History"
-msgstr "Histogramme"
+msgstr "Historique"
 
 #: ../gui/wxpython/gui_core/preferences.py:459
 msgid "Data Catalog settings"
@@ -5810,7 +5806,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:300
 msgid "Permission denied <{}>. Please change file permission for reading."
-msgstr ""
+msgstr "Permission refusée <{}>. Veuillez modifier les permissions du ficher pour autoriser la lecture."
 
 #: ../gui/wxpython/gui_core/pyedit.py:307
 msgid "Couldn't read file <{}>."
@@ -5818,7 +5814,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:326
 msgid "Permission denied <{}>. Please change file permission for writing.{}"
-msgstr ""
+msgstr "Permission refusée <{}>. Veuillez modifier les permissions du ficher pour autoriser l’écriture."
 
 #: ../gui/wxpython/gui_core/pyedit.py:337
 msgid "Couldn't write file <{}>.{}"
@@ -6286,7 +6282,7 @@ msgstr "&Fermer"
 
 #: ../gui/wxpython/gui_core/wrap.py:294
 msgid "Apply"
-msgstr ""
+msgstr "Appliquer"
 
 #: ../gui/wxpython/gui_core/wrap.py:296
 #: ../gui/wxpython/web_services/dialogs.py:689
@@ -6356,9 +6352,8 @@ msgid "Number of cells:"
 msgstr "Nombre de segments :"
 
 #: ../gui/wxpython/history/browser.py:63
-#, fuzzy
 msgid "{} sec"
-msgstr "%d sec"
+msgstr "{} sec"
 
 #: ../gui/wxpython/history/browser.py:117
 #, fuzzy
@@ -6387,9 +6382,8 @@ msgid "Set current computational region to the region of executed command"
 msgstr "Enregistrer la région de calcul vers un fichier de région"
 
 #: ../gui/wxpython/history/browser.py:357
-#, fuzzy
 msgid "History browser"
-msgstr "Navigateur de données"
+msgstr "Navigateur d'historique"
 
 #: ../gui/wxpython/history/browser.py:394
 msgid "&Export history"
@@ -6459,7 +6453,6 @@ msgid "Double-click to open the tool"
 msgstr "Double-clic pour exécuter le module sélectionné"
 
 #: ../gui/wxpython/history/tree.py:223
-#, fuzzy
 msgid "&Remove"
 msgstr "Supp&rimer"
 
@@ -6473,18 +6466,18 @@ msgid "Do you really want to remove <{}> command?"
 msgstr "Voulez-vous enregistrer les modifications ?"
 
 #: ../gui/wxpython/history/tree.py:602
-#, fuzzy
 msgid "Remove command"
-msgstr "Supprimer la légende"
+msgstr "Supprimer la commande"
 
 #: ../gui/wxpython/history/tree.py:605
 #, fuzzy
 msgid "Removing <{}>"
-msgstr "Déplacement de <{name}> ..."
+msgstr "Suppression de <{}>"
 
 #: ../gui/wxpython/history/tree.py:623
+#, fuzzy
 msgid "<{}> removed"
-msgstr ""
+msgstr "<{}> supprimé"
 
 #: ../gui/wxpython/history/tree.py:680
 msgid "Command <{}> copied to clipboard"
@@ -8240,14 +8233,12 @@ msgid "Save current workspace to file (Ctrl+S)"
 msgstr "Enregistrer l'espace de travail actuel dans un fichier (Ctrl+S)"
 
 #: ../gui/wxpython/lmgr/toolbars.py:58
-#, fuzzy
 msgid "New workspace"
-msgstr "Enregistrer l'espace de travail"
+msgstr "Nouvel espace de travail"
 
 #: ../gui/wxpython/lmgr/toolbars.py:63
-#, fuzzy
 msgid "Open workspace"
-msgstr "Enregistrer l'espace de travail"
+msgstr "Ouvrir l’espace de travail"
 
 #: ../gui/wxpython/lmgr/toolbars.py:68 ../gui/wxpython/lmgr/workspace.py:394
 #: ../gui/wxpython/lmgr/workspace.py:417
@@ -8594,7 +8585,7 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:217
 msgid "(optional)"
-msgstr ""
+msgstr "(optionnel)"
 
 #: ../gui/wxpython/location_wizard/wizard.py:228
 msgid "Name of project directory in GIS Data Directory"
@@ -9472,8 +9463,9 @@ msgid "Remove text"
 msgstr "Supprimer un texte"
 
 #: ../gui/wxpython/mapwin/decorations.py:204
+#, fuzzy
 msgid "Text properties"
-msgstr ""
+msgstr "Propriétés du texte"
 
 #: ../gui/wxpython/mapwin/decorations.py:221
 msgid "Remove scale bar"
@@ -9913,7 +9905,7 @@ msgstr ""
 #: ../gui/wxpython/modules/import_export.py:265
 #, python-format
 msgid "Output map name <%(name)s> exist. "
-msgstr ""
+msgstr "Nom de la carte en sortie <%(name)s> existe. "
 
 #: ../gui/wxpython/modules/import_export.py:290
 msgid "Dialog cannot be closed while command is running."
@@ -13296,7 +13288,7 @@ msgstr "Le Secteur <%s> existe déjà, commencez par le renommer"
 #: ../gui/wxpython/startup/locdownload.py:438
 #, fuzzy
 msgid "Dataset Download"
-msgstr "Télécharger"
+msgstr "Téléchargement de jeu de données"
 
 #: ../gui/wxpython/startup/locdownload.py:446
 #, fuzzy
@@ -13984,9 +13976,8 @@ msgid "Select area/boundary/centroid tool"
 msgstr "Sélectionner l'outil polygone/contour/centroïde"
 
 #: ../gui/wxpython/vdigit/toolbars.py:151
-#, fuzzy
 msgid "Digitize new point (Ctrl+P)"
-msgstr "Numériser un nouveau point"
+msgstr "Numériser un nouveau point (Ctrl+P)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:152
 #: ../gui/wxpython/vdigit/toolbars.py:171
@@ -13995,9 +13986,8 @@ msgid "Left: new point"
 msgstr "Gauche : nouveau point"
 
 #: ../gui/wxpython/vdigit/toolbars.py:156
-#, fuzzy
 msgid "Digitize new line (Ctrl+L)"
-msgstr "Numériser une nouvelle ligne"
+msgstr "Numériser une nouvelle ligne (Ctrl+L)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:158
 #: ../gui/wxpython/vdigit/toolbars.py:165
@@ -14006,24 +13996,20 @@ msgid "Left: new point; Ctrl+Left: undo last point; Right: close line"
 msgstr "Gauche : nouveau point ; Ctrl+gauche : annuler le dernier point ; Droite : fermer la ligne"
 
 #: ../gui/wxpython/vdigit/toolbars.py:163
-#, fuzzy
 msgid "Digitize new boundary (Ctrl+B)"
-msgstr "Numériser un nouveau contour"
+msgstr "Numériser un nouveau contour (Ctrl+B)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:170
-#, fuzzy
 msgid "Digitize new centroid (Ctrl+C)"
-msgstr "Numériser un nouveau centroïde"
+msgstr "Numériser un nouveau centroïde (Ctrl+C)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:175
-#, fuzzy
 msgid "Digitize new area (boundary without category) (Ctrl+A)"
-msgstr "Numériser une nouvelle surface (contour sans catégorie)"
+msgstr "Numériser une nouvelle surface (contour sans catégorie) (Ctrl+A)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:180
-#, fuzzy
 msgid "Add new vertex to line or boundary (Ctrl+V)"
-msgstr "Ajouter un nouveau sommet à la ligne ou au contour"
+msgstr "Ajouter un nouveau sommet à la ligne ou au contour (Ctrl+V)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:181
 #: ../gui/wxpython/vdigit/toolbars.py:189
@@ -14041,14 +14027,12 @@ msgid "Delete selected point(s), line(s), boundary(ies) or centroid(s) (Ctrl+D)"
 msgstr "Supprimer le(s) point(s), ligne(s), contour(s) ou centroïde(s) sélectionné(s)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:193
-#, fuzzy
 msgid "Delete selected area(s) (Ctrl+F)"
-msgstr "Supprimer la surface sélectionné(s)"
+msgstr "Supprimer la/les surface(s) sélectionnée(s) (Ctrl+F)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:198
-#, fuzzy
 msgid "Display/update attributes (Ctrl+K)"
-msgstr "Afficher/mettre à jour les attributs"
+msgstr "Afficher/mettre à jour les attributs (Ctrl+K)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:199
 #: ../gui/wxpython/vdigit/toolbars.py:204
@@ -14056,9 +14040,8 @@ msgid "Left: Select"
 msgstr "Gauche : Sélectionner "
 
 #: ../gui/wxpython/vdigit/toolbars.py:203
-#, fuzzy
 msgid "Display/update categories (Ctrl+J)"
-msgstr "Afficher/mettre à jour les catégories"
+msgstr "Afficher/mettre à jour les catégories (Ctrl+J)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:208
 #, fuzzy
@@ -14081,14 +14064,12 @@ msgid "Remove selected vertex (Ctrl+X)"
 msgstr "Supprimer le sommet sélectionné"
 
 #: ../gui/wxpython/vdigit/toolbars.py:232
-#, fuzzy
 msgid "Settings (Ctrl+T)"
-msgstr "Ouvrir (Ctrl+O)"
+msgstr "Paramètres (Ctrl+T)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:235
-#, fuzzy
 msgid "Quit (Ctrl+Q)"
-msgstr "Exécuter (Ctrl+R)"
+msgstr "Quitter (Ctrl+Q)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:236
 msgid "Quit digitizer and save changes"
@@ -14108,9 +14089,8 @@ msgid "Additional tools (copy, flip, connect, etc.)"
 msgstr "Outils additionnels (copier, retourner, connecter, ...)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:249
-#, fuzzy
 msgid "Undo (Ctrl+Z)"
-msgstr "Exécuter (Ctrl+R)"
+msgstr "Annuler (Ctrl+Z)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:250
 #, fuzzy
@@ -14118,9 +14098,8 @@ msgid "Undo previous change"
 msgstr "Annuler les changements précédents"
 
 #: ../gui/wxpython/vdigit/toolbars.py:254
-#, fuzzy
 msgid "Redo (Ctrl+Y)"
-msgstr "Exécuter (Ctrl+R)"
+msgstr "Rétablir (Ctrl+Y)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:255
 #, fuzzy
