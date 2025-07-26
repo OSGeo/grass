@@ -301,7 +301,7 @@ int GP_set_style(int id, int color, int width, float size, int symbol)
    \param width icon line width column name
    \param size icon size column name
    \param symbol icon symbol column name
-   \param colors pointer to Colors structure or NULL
+   \param color_rules pointer to Colors structure or NULL
 
    \return 1 on success
    \return -1 on error (point set not found)

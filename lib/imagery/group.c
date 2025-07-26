@@ -419,10 +419,10 @@ int I_add_file_to_group_ref(const char *name, const char *mapset,
  * This routine is used by <i>g.gui.gcp</i> to create the REF file for a
  * subgroup.
  *
- *  \param src
+ *  \param ref2 Source
  *  \param n
- *  \param dst
- *  \return int
+ *  \param ref1 Destination
+ *  \return int 0
  */
 int I_transfer_group_ref_file(const struct Ref *ref2, int n, struct Ref *ref1)
 {

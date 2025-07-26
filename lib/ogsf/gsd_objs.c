@@ -207,8 +207,6 @@ void gsd_line_onsurf(geosurf *gs, float *v1, float *v2)
    \param v2 second point
    \param pt
    \param n number of segments
-
-   \param number of vertices
  */
 int gsd_nline_onsurf(geosurf *gs, float *v1, float *v2, float *pt, int n)
 {
@@ -537,7 +535,7 @@ void gsd_draw_box(float *center, unsigned long colr, float siz)
 
    \param center center point
    \param colr color value
-   \param size size value
+   \param siz size value
  */
 void gsd_drawsphere(float *center, unsigned long colr, float siz)
 {
