@@ -172,23 +172,28 @@ void G_progress(long n, int s)
     if (format == G_INFO_FORMAT_SILENT || G_verbose() < 1)
         return;
 
-#pragma omp critical
     {
         if (n == s && n == 1) {
-            if (format == G_INFO_FORMAT_PLAIN)
-                fprintf(stderr, "\n");
-            else if (format != G_INFO_FORMAT_GUI)
-                fprintf(stderr, "\r");
+#pragma omp critical
+            {
+                if (format == G_INFO_FORMAT_PLAIN)
+                    fprintf(stderr, "\n");
+                else if (format != G_INFO_FORMAT_GUI)
+                    fprintf(stderr, "\r");
+            }
             return;
         }
 
         if (n % s == 0) {
-            if (format == G_INFO_FORMAT_PLAIN)
-                fprintf(stderr, "%ld..", n);
-            else if (format == G_INFO_FORMAT_GUI)
-                fprintf(stderr, "GRASS_INFO_PROGRESS: %ld\n", n);
-            else
-                fprintf(stderr, "%10ld\b\b\b\b\b\b\b\b\b\b", n);
+#pragma omp critical
+            {
+                if (format == G_INFO_FORMAT_PLAIN)
+                    fprintf(stderr, "%ld..", n);
+                else if (format == G_INFO_FORMAT_GUI)
+                    fprintf(stderr, "GRASS_INFO_PROGRESS: %ld\n", n);
+                else
+                    fprintf(stderr, "%10ld\b\b\b\b\b\b\b\b\b\b", n);
+            }
         }
     }
 }
