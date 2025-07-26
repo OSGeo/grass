@@ -6,7 +6,7 @@ from grass.gunittest.main import test
 
 
 class TestR3CrossRast(TestCase):
-    """Regression tests for the r3.cross.rast GRASS GIS module."""
+    """Regression tests for the r3.cross.rast GRASS module."""
 
     tmp_3d_rasters = []
     tmp_rasters = []
