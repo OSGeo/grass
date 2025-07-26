@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-12 15:42+0000\n"
-"PO-Revision-Date: 2025-07-14 22:40+0000\n"
+"POT-Creation-Date: 2025-07-19 15:42+0000\n"
+"PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs/fr/>\n"
 "Language: fr\n"
@@ -1041,9 +1041,9 @@ msgid "No active GRASS session: GISRC environment variable not set"
 msgstr "Aucune session GRASS active : La variable d'environnement GISRC n'est pas définie."
 
 #: ../lib/gis/env.c:367 ../lib/gis/env.c:393
-#, fuzzy, c-format
+#, c-format
 msgid "Incomplete GRASS session: Variable '%s' not set"
-msgstr "Variable '%s' non définie"
+msgstr "Session GRASS incomplète : Variable '%s' non définie"
 
 #: ../lib/gis/error.c:348
 msgid "unknown"
@@ -3609,7 +3609,7 @@ msgstr "Impossible de créer le fichier de points de contrôle pour le groupe [%
 
 #: ../lib/imagery/sig.c:157 ../lib/imagery/sigset.c:147
 msgid "Invalid signature file"
-msgstr ""
+msgstr "Fichier de signature non valide"
 
 #: ../lib/imagery/sig.c:162 ../lib/imagery/sigset.c:151
 msgid "Invalid signature file version"
@@ -3839,6 +3839,8 @@ msgid ""
 "{}\n"
 "Switching to text based interface mode."
 msgstr ""
+"{}\n"
+"Passage à l’interface textuelle."
 
 #: ../lib/init/grass.py:640
 msgid ""
@@ -3877,7 +3879,6 @@ msgid "Mapset <{}> already exists."
 msgstr "Le jeu de cartes <{}> existe déjà."
 
 #: ../lib/init/grass.py:823
-#, fuzzy
 msgid "A new mapset can be created using '-c' flag."
 msgstr "Un nouveau jeu de cartes peut être créé en utilisant l'option '-c'."
 
@@ -4040,7 +4041,7 @@ msgstr "Paramètres <%s> on supporté"
 #: ../lib/init/grass.py:1901
 #, python-format
 msgid "use mapset %(metavar)s"
-msgstr ""
+msgstr "utiliser le jeu de cartes %(metavar)s"
 
 #: ../lib/init/grass.py:1907
 #, python-format
@@ -4067,8 +4068,9 @@ msgid "mapset locking timeout in seconds"
 msgstr "délai de verrouillage de l'ensemble de cartes en secondes"
 
 #: ../lib/init/grass.py:1945
+#, fuzzy
 msgid "remove lock if present"
-msgstr ""
+msgstr "retirer le verrou s'il est présent"
 
 #: ../lib/init/grass.py:1959
 msgid "Option --tmp-location is deprecated, use --tmp-project instead\n"
@@ -5221,13 +5223,14 @@ msgid "However, that raster map is missing. Perhaps, it was deleted by mistake."
 msgstr "Cependant, cette carte raster est manquante. Elle a peut-être été supprimée par erreur."
 
 #: ../lib/raster/get_cellhd.c:67
+#, fuzzy
 msgid "However, header file of that raster map can't be opened. It seems that it was corrupted after creating the reclass raster map."
-msgstr ""
+msgstr "Cependant, le fichier d'en-tête de cette carte raster ne peut pas être ouvert. Il semble qu'il ait été corrompu après avoir créé la carte raster reclassée."
 
 #: ../lib/raster/get_cellhd.c:71
-#, c-format
+#, c-format, fuzzy
 msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s>. %s"
-msgstr ""
+msgstr "Impossible de lire le fichier d'en-tête de la carte raster <%s@%s>. Il s'agit d'une reclassification de la carte raster <%s@%s>. %s"
 
 #: ../lib/raster/get_cellhd.c:79
 #, c-format
@@ -5689,7 +5692,7 @@ msgstr "L'étiquette sémantique est trop longue"
 #: ../lib/raster/raster_metadata.c:170
 #, c-format
 msgid "Character '%c' not allowed in a semantic label."
-msgstr ""
+msgstr "Le caractère « %c » n'est pas autorisé dans une étiquette sémantique."
 
 #: ../lib/raster/raster_metadata.c:203
 #, c-format

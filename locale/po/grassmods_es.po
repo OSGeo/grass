@@ -9,12 +9,13 @@
 # Carlos Dávila <carluti@users.sourceforge.net>, 2007, 2008.
 # Joana Palahí/SIGTE-UdG <joana sigte.udg.edu>, 2011, 2014.
 # Daniel Torres <nobeeakon@gmail.com>, 2014, 2015, 2016.
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-12 15:42+0000\n"
-"PO-Revision-Date: 2025-03-12 12:05+0000\n"
+"POT-Creation-Date: 2025-07-19 15:42+0000\n"
+"PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grassmods/es/>\n"
 "Language: es\n"
@@ -26,13 +27,13 @@ msgstr ""
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: SPAIN\n"
 
-#: ../db/db.columns/main.c:40 ../db/db.copy/main.c:104
+#: ../db/db.columns/main.c:47 ../db/db.copy/main.c:104
 #: ../db/db.describe/main.c:65 ../db/db.select/main.c:52
 #, c-format
 msgid "Table <%s> not found in database <%s> using driver <%s>"
 msgstr "Tabla <%s> no encontrada en la base de datos <%s> usando el controlador <%s>"
 
-#: ../db/db.columns/main.c:47 ../db/db.createdb/main.c:38
+#: ../db/db.columns/main.c:54 ../db/db.createdb/main.c:38
 #: ../db/db.databases/main.c:47 ../db/db.describe/main.c:71
 #: ../db/db.dropdb/main.c:39 ../db/db.execute/main.c:68
 #: ../db/db.select/main.c:74 ../db/db.tables/main.c:45
@@ -46,7 +47,7 @@ msgstr "Tabla <%s> no encontrada en la base de datos <%s> usando el controlador 
 msgid "Unable to start driver <%s>"
 msgstr "No se puede iniciar el controlador <%s>"
 
-#: ../db/db.columns/main.c:52 ../db/db.describe/main.c:76
+#: ../db/db.columns/main.c:59 ../db/db.describe/main.c:76
 #: ../db/db.execute/main.c:74 ../db/db.select/main.c:80
 #: ../db/db.tables/main.c:50 ../display/d.vect.thematic/main.c:299
 #: ../display/d.vect/opt.c:152
@@ -54,7 +55,7 @@ msgstr "No se puede iniciar el controlador <%s>"
 msgid "Unable to open database <%s>"
 msgstr "No se puede abrir la base de datos <%s>"
 
-#: ../db/db.columns/main.c:58 ../db/db.describe/main.c:82
+#: ../db/db.columns/main.c:65 ../db/db.describe/main.c:82
 #: ../doc/examples/vector/v.example/main.c:143
 #: ../scripts/db.univar/db.univar.py:123 ../vector/v.db.connect/main.c:229
 #: ../vector/v.extract/main.c:233 ../vector/v.in.ascii/main.c:447
@@ -69,7 +70,28 @@ msgstr "No se puede abrir la base de datos <%s>"
 msgid "Unable to describe table <%s>"
 msgstr "No se puede describir la tabla<%s>"
 
-#: ../db/db.columns/main.c:94 ../db/db.connect/main.c:42
+#: ../db/db.columns/main.c:73 ../db/db.describe/main.c:54
+#: ../db/db.describe/main.c:59 ../general/g.list/list.c:89
+#: ../general/g.mapset/main.c:174 ../imagery/i.group/main.c:124
+#: ../raster/r.category/main.c:143 ../raster/r.describe/dumplist.c:47
+#: ../raster/r.proj/main.c:345 ../raster/r.stats.quantile/main.c:382
+#: ../raster/r.stats.quantile/main.c:439 ../raster/r.univar/stats.c:96
+#: ../raster/r.univar/stats.c:396 ../raster/r.volume/main.c:176
+#: ../raster/r.what.color/main.c:246 ../raster/r.what/main.c:280
+#: ../vector/v.category/main.c:255 ../vector/v.category/main.c:320
+#: ../vector/v.distance/main.c:310 ../vector/v.info/print.c:866
+#, fuzzy
+msgid "Failed to initialize JSON array. Out of memory?"
+msgstr "Falla al inicializar superficie de salida"
+
+#: ../db/db.columns/main.c:98 ../general/g.list/list.c:139
+#: ../general/g.mapset/main.c:37 ../general/g.mapsets/list.c:34
+#: ../misc/m.measure/main.c:182 ../raster/r.regression.line/main.c:269
+#: ../raster/r.stats.quantile/main.c:472 ../raster/r.volume/main.c:436
+msgid "Failed to serialize JSON to pretty format."
+msgstr ""
+
+#: ../db/db.columns/main.c:133 ../db/db.connect/main.c:42
 #: ../db/db.copy/main.c:34 ../db/db.createdb/main.c:66
 #: ../db/db.databases/main.c:94 ../db/db.describe/main.c:185
 #: ../db/db.drivers/main.c:68 ../db/db.dropdb/main.c:67
@@ -98,7 +120,7 @@ msgstr "No se puede describir la tabla<%s>"
 msgid "database"
 msgstr "base de datos"
 
-#: ../db/db.columns/main.c:95 ../db/db.connect/main.c:43
+#: ../db/db.columns/main.c:134 ../db/db.connect/main.c:43
 #: ../db/db.copy/main.c:35 ../db/db.createdb/main.c:67
 #: ../db/db.databases/main.c:95 ../db/db.describe/main.c:187
 #: ../db/db.dropdb/main.c:68 ../db/db.execute/main.c:135
@@ -130,52 +152,36 @@ msgstr "base de datos"
 msgid "attribute table"
 msgstr "tabla de atributos"
 
-#: ../db/db.columns/main.c:96
+#: ../db/db.columns/main.c:135
 msgid "List all columns for a given table."
 msgstr "Muestra todas las columnas de una tabla dada."
 
-#: ../db/db.connect/main.c:44 ../db/db.drivers/main.c:69
-#: ../db/db.login/main.c:40
-msgid "connection settings"
-msgstr "configuraciones de conexión"
-
-#: ../db/db.connect/main.c:46
-msgid "Prints/sets general DB connection for current mapset."
-msgstr "Muestra/establece la conexión general a la base de datos para el Directorio de mapas actual."
-
-#: ../db/db.connect/main.c:50 ../temporal/t.connect/main.c:42
-msgid "Print current connection parameters and exit"
-msgstr "Imprimir los parámetros de la conexión actual y salir"
-
-#: ../db/db.connect/main.c:51
-msgid "Substitute variables in database settings"
-msgstr "Sustituir variables en la configuración de la base de datos"
-
-#: ../db/db.connect/main.c:52 ../db/db.connect/main.c:58
-#: ../db/db.describe/main.c:181 ../db/db.login/main.c:90
-#: ../display/d.mon/main.c:118 ../display/d.mon/main.c:124
-#: ../display/d.mon/main.c:130 ../general/g.list/main.c:104
-#: ../general/g.list/main.c:116 ../general/g.list/main.c:146
-#: ../general/g.list/main.c:152 ../general/g.list/main.c:162
-#: ../general/g.list/main.c:171 ../general/g.mapset/main.c:89
-#: ../general/g.mapset/main.c:101 ../general/g.mapset/main.c:107
-#: ../general/g.mapsets/main.c:111 ../general/g.mapsets/main.c:115
-#: ../general/g.mapsets/main.c:121 ../general/g.mapsets/main.c:127
-#: ../general/g.proj/main.c:85 ../general/g.proj/main.c:90
-#: ../general/g.proj/main.c:99 ../general/g.proj/main.c:105
-#: ../general/g.proj/main.c:114 ../general/g.proj/main.c:126
-#: ../general/g.proj/main.c:135 ../general/g.proj/main.c:191
-#: ../general/g.proj/main.c:244 ../general/g.region/main.c:91
-#: ../general/g.region/main.c:97 ../general/g.region/main.c:102
-#: ../general/g.region/main.c:108 ../general/g.region/main.c:113
-#: ../general/g.region/main.c:118 ../general/g.region/main.c:124
-#: ../general/g.region/main.c:132 ../general/g.region/main.c:137
-#: ../general/g.region/main.c:143 ../general/g.region/main.c:151
-#: ../general/g.region/main.c:157 ../general/g.region/main.c:392
-#: ../general/g.version/main.c:130 ../imagery/i.group/main.c:91
-#: ../imagery/i.group/main.c:102 ../imagery/i.group/main.c:107
-#: ../imagery/i.group/main.c:115 ../imagery/i.signatures/main.c:122
-#: ../imagery/i.signatures/main.c:128 ../imagery/i.signatures/main.c:160
+#: ../db/db.columns/main.c:138 ../db/db.connect/main.c:52
+#: ../db/db.connect/main.c:58 ../db/db.describe/main.c:181
+#: ../db/db.login/main.c:90 ../display/d.mon/main.c:118
+#: ../display/d.mon/main.c:124 ../display/d.mon/main.c:130
+#: ../general/g.list/main.c:104 ../general/g.list/main.c:116
+#: ../general/g.list/main.c:146 ../general/g.list/main.c:152
+#: ../general/g.list/main.c:162 ../general/g.list/main.c:171
+#: ../general/g.mapset/main.c:89 ../general/g.mapset/main.c:101
+#: ../general/g.mapset/main.c:107 ../general/g.mapsets/main.c:111
+#: ../general/g.mapsets/main.c:115 ../general/g.mapsets/main.c:121
+#: ../general/g.mapsets/main.c:127 ../general/g.proj/main.c:85
+#: ../general/g.proj/main.c:90 ../general/g.proj/main.c:99
+#: ../general/g.proj/main.c:105 ../general/g.proj/main.c:114
+#: ../general/g.proj/main.c:126 ../general/g.proj/main.c:135
+#: ../general/g.proj/main.c:191 ../general/g.proj/main.c:244
+#: ../general/g.region/main.c:91 ../general/g.region/main.c:97
+#: ../general/g.region/main.c:102 ../general/g.region/main.c:108
+#: ../general/g.region/main.c:113 ../general/g.region/main.c:118
+#: ../general/g.region/main.c:124 ../general/g.region/main.c:132
+#: ../general/g.region/main.c:137 ../general/g.region/main.c:143
+#: ../general/g.region/main.c:151 ../general/g.region/main.c:157
+#: ../general/g.region/main.c:392 ../general/g.version/main.c:130
+#: ../imagery/i.group/main.c:91 ../imagery/i.group/main.c:102
+#: ../imagery/i.group/main.c:107 ../imagery/i.group/main.c:115
+#: ../imagery/i.signatures/main.c:122 ../imagery/i.signatures/main.c:128
+#: ../imagery/i.signatures/main.c:160
 #: ../locale/scriptstrings/g.extension_to_translate.c:17
 #: ../locale/scriptstrings/g.extension_to_translate.c:19
 #: ../locale/scriptstrings/g.extension_to_translate.c:21
@@ -183,7 +189,8 @@ msgstr "Sustituir variables en la configuración de la base de datos"
 #: ../locale/scriptstrings/r.unpack_to_translate.c:12
 #: ../locale/scriptstrings/t.rast.colors_to_translate.c:18
 #: ../locale/scriptstrings/v.unpack_to_translate.c:13
-#: ../raster/r.category/main.c:106 ../raster/r.colors.out/raster3d_main.c:61
+#: ../misc/m.measure/main.c:70 ../raster/r.category/main.c:106
+#: ../raster/r.colors.out/raster3d_main.c:61
 #: ../raster/r.colors.out/raster_main.c:60 ../raster/r.colors/edit_colors.c:164
 #: ../raster/r.colors/edit_colors.c:172 ../raster/r.describe/main.c:73
 #: ../raster/r.external.out/main.c:272 ../raster/r.external.out/main.c:283
@@ -221,6 +228,23 @@ msgstr "Sustituir variables en la configuración de la base de datos"
 #: ../vector/v.what/main.c:115
 msgid "Print"
 msgstr "Imprimir"
+
+#: ../db/db.connect/main.c:44 ../db/db.drivers/main.c:69
+#: ../db/db.login/main.c:40
+msgid "connection settings"
+msgstr "configuraciones de conexión"
+
+#: ../db/db.connect/main.c:46
+msgid "Prints/sets general DB connection for current mapset."
+msgstr "Muestra/establece la conexión general a la base de datos para el Directorio de mapas actual."
+
+#: ../db/db.connect/main.c:50 ../temporal/t.connect/main.c:42
+msgid "Print current connection parameters and exit"
+msgstr "Imprimir los parámetros de la conexión actual y salir"
+
+#: ../db/db.connect/main.c:51
+msgid "Substitute variables in database settings"
+msgstr "Sustituir variables en la configuración de la base de datos"
 
 #: ../db/db.connect/main.c:57
 msgid "Print current connection parameters using shell style and exit"
@@ -383,20 +407,6 @@ msgstr "Ruta para controlador SQLite, o string de conexión para controlador Pos
 #: ../db/db.databases/main.c:98
 msgid "Lists all databases for a given driver and location."
 msgstr "Lista todas las bases de datos para un controlador y Localización dados."
-
-#: ../db/db.describe/main.c:54 ../db/db.describe/main.c:59
-#: ../general/g.list/list.c:89 ../general/g.mapset/main.c:174
-#: ../imagery/i.group/main.c:124 ../raster/r.category/main.c:143
-#: ../raster/r.describe/dumplist.c:47 ../raster/r.proj/main.c:345
-#: ../raster/r.stats.quantile/main.c:382 ../raster/r.stats.quantile/main.c:439
-#: ../raster/r.univar/stats.c:96 ../raster/r.univar/stats.c:396
-#: ../raster/r.volume/main.c:174 ../raster/r.what.color/main.c:246
-#: ../raster/r.what/main.c:280 ../vector/v.category/main.c:255
-#: ../vector/v.category/main.c:320 ../vector/v.distance/main.c:310
-#: ../vector/v.info/print.c:866
-#, fuzzy
-msgid "Failed to initialize JSON array. Out of memory?"
-msgstr "Falla al inicializar superficie de salida"
 
 #: ../db/db.describe/main.c:140 ../general/g.proj/output.c:382
 #: ../general/g.region/main.c:986 ../general/g.version/main.c:411
@@ -2163,7 +2173,7 @@ msgstr "No se puede abrir el mapa vectorial <%s>"
 #: ../raster/r.path/main.c:260 ../raster/r.random/random.c:58
 #: ../raster/r.resamp.bspline/main.c:484 ../raster/r.sim/simlib/output.c:54
 #: ../raster/r.sim/simlib/output.c:61 ../raster/r.stream.extract/close.c:38
-#: ../raster/r.to.vect/main.c:170 ../raster/r.volume/main.c:229
+#: ../raster/r.to.vect/main.c:170 ../raster/r.volume/main.c:228
 #: ../raster3d/r3.flow/main.c:383 ../scripts/v.what.strds/v.what.strds.py:229
 #: ../vector/v.buffer/main.c:401 ../vector/v.build.polylines/main.c:157
 #: ../vector/v.build/main.c:156 ../vector/v.clean/main.c:296
@@ -2269,7 +2279,7 @@ msgstr "Enlista fuentes (por omisión; proveido para compatibilidad con d.font)"
 
 #: ../display/d.geodesic/main.c:46 ../display/d.rhumbline/main.c:43
 #: ../locale/scriptstrings/r.grow_to_translate.c:3 ../misc/m.cogo/main.c:216
-#: ../misc/m.measure/main.c:47 ../raster/r.distance/main.c:35
+#: ../misc/m.measure/main.c:54 ../raster/r.distance/main.c:35
 #: ../raster/r.grow.distance/main.c:146 ../vector/v.distance/main.c:126
 msgid "distance"
 msgstr "distancia"
@@ -4373,7 +4383,7 @@ msgstr "La conexión a la base de datos no ha sido definida para la capa %d"
 #: ../misc/m.nviz.image/vector.c:314 ../ps/ps.map/catval.c:53
 #: ../ps/ps.map/catval.c:115 ../ps/ps.map/catval.c:182
 #: ../raster/r.contour/main.c:170 ../raster/r.random/random.c:67
-#: ../raster/r.to.vect/main.c:200 ../raster/r.volume/main.c:319
+#: ../raster/r.to.vect/main.c:200 ../raster/r.volume/main.c:318
 #: ../raster3d/r3.flow/main.c:46 ../vector/v.buffer/main.c:427
 #: ../vector/v.class/main.c:113 ../vector/v.colors.out/make_colors.c:36
 #: ../vector/v.colors/read_rgb.c:27 ../vector/v.colors/scan_attr.c:28
@@ -5770,24 +5780,19 @@ msgstr "Lanzando GUI <%s> en el fondo, por favor espere..."
 #: ../general/g.list/list.c:121 ../general/g.mapset/main.c:118
 #: ../general/g.mapsets/list.c:13 ../general/g.proj/output.c:54
 #: ../general/g.proj/output.c:360 ../general/g.region/main.c:471
-#: ../general/g.version/main.c:140 ../raster/r.describe/dumplist.c:37
-#: ../raster/r.info/main.c:147 ../raster/r.proj/main.c:487
-#: ../raster/r.regression.line/main.c:101 ../raster/r.stats.quantile/main.c:430
-#: ../raster/r.stats.quantile/main.c:447 ../raster/r.univar/stats.c:104
-#: ../raster/r.univar/stats.c:148 ../raster/r.univar/stats.c:439
-#: ../raster/r.volume/main.c:399 ../raster/r.what.color/main.c:52
-#: ../vector/v.category/main.c:248 ../vector/v.category/main.c:915
-#: ../vector/v.distance/main.c:1578 ../vector/v.info/print.c:824
-#: ../vector/v.info/print.c:860 ../vector/v.univar/main.c:609
+#: ../general/g.version/main.c:140 ../misc/m.measure/main.c:87
+#: ../raster/r.describe/dumplist.c:37 ../raster/r.info/main.c:147
+#: ../raster/r.proj/main.c:487 ../raster/r.regression.line/main.c:101
+#: ../raster/r.stats.quantile/main.c:430 ../raster/r.stats.quantile/main.c:447
+#: ../raster/r.univar/stats.c:104 ../raster/r.univar/stats.c:148
+#: ../raster/r.univar/stats.c:439 ../raster/r.volume/main.c:398
+#: ../raster/r.what.color/main.c:52 ../vector/v.category/main.c:248
+#: ../vector/v.category/main.c:915 ../vector/v.distance/main.c:1578
+#: ../vector/v.info/print.c:824 ../vector/v.info/print.c:860
+#: ../vector/v.univar/main.c:609
 #, fuzzy
 msgid "Failed to initialize JSON object. Out of memory?"
 msgstr "Falla al inicializar superficie de salida"
-
-#: ../general/g.list/list.c:139 ../general/g.mapset/main.c:37
-#: ../general/g.mapsets/list.c:34 ../raster/r.regression.line/main.c:269
-#: ../raster/r.stats.quantile/main.c:472 ../raster/r.volume/main.c:437
-msgid "Failed to serialize JSON to pretty format."
-msgstr ""
 
 #: ../general/g.list/list.c:167 ../general/g.region/main.c:543
 #, c-format
@@ -6618,8 +6623,8 @@ msgstr "Muestra información de proyección en formato de script de la consola"
 
 #: ../general/g.proj/main.c:94 ../general/g.region/main.c:149
 #: ../general/g.version/main.c:120 ../imagery/i.group/main.c:113
-#: ../raster/r.proj/main.c:240 ../raster/r.regression.line/main.c:83
-#: ../raster/r.univar/r.univar_main.c:103
+#: ../misc/m.measure/main.c:76 ../raster/r.proj/main.c:240
+#: ../raster/r.regression.line/main.c:83 ../raster/r.univar/r.univar_main.c:103
 #: ../raster/r.univar/r3.univar_main.c:65
 msgid "This flag is deprecated and will be removed in a future release. Use format=shell instead."
 msgstr ""
@@ -6749,7 +6754,8 @@ msgstr "El archivo de configuración se puede usar solamente con el mapa ráster
 
 #: ../general/g.proj/main.c:277 ../general/g.region/main.c:427
 #: ../general/g.version/main.c:153 ../imagery/i.group/main.c:137
-#: ../raster/r.proj/main.c:270 ../raster/r.regression.line/main.c:114
+#: ../misc/m.measure/main.c:100 ../raster/r.proj/main.c:270
+#: ../raster/r.regression.line/main.c:114
 #: ../raster/r.univar/r.univar_main.c:220
 #: ../raster/r.univar/r3.univar_main.c:176 ../vector/v.category/main.c:232
 msgid "Flag 'g' is deprecated and will be removed in a future release. Please use format=shell instead."
@@ -7039,7 +7045,7 @@ msgstr ""
 msgid "Save current region settings in named region file"
 msgstr "Establecer la región actual a partir de la región nombrada"
 
-#: ../general/g.region/main.c:389
+#: ../general/g.region/main.c:389 ../misc/m.measure/main.c:67
 msgid "plain;Plain text output;shell;shell script style output;json;JSON (JavaScript Object Notation);"
 msgstr ""
 
@@ -13678,7 +13684,7 @@ msgid "Converts coordinates from one projection to another (cs2cs frontend)."
 msgstr "Convierte coordenadas de una proyección a otra (interfaz cs2cs)."
 
 #: ../locale/scriptstrings/m.proj_to_translate.c:2 ../misc/m.cogo/main.c:215
-#: ../misc/m.measure/main.c:45 ../misc/m.nviz.image/main.c:48
+#: ../misc/m.measure/main.c:52 ../misc/m.nviz.image/main.c:48
 #: ../misc/m.nviz.script/main.c:67 ../misc/m.transform/main.c:312
 msgid "miscellaneous"
 msgstr "miscelánea"
@@ -16353,7 +16359,7 @@ msgstr "centroide"
 #: ../locale/scriptstrings/v.clip_to_translate.c:4
 #: ../locale/scriptstrings/v.dissolve_to_translate.c:4
 #: ../locale/scriptstrings/v.to.lines_to_translate.c:4
-#: ../misc/m.measure/main.c:48 ../vector/v.buffer/main.c:219
+#: ../misc/m.measure/main.c:55 ../vector/v.buffer/main.c:219
 #: ../vector/v.category/main.c:842 ../vector/v.in.ascii/main.c:71
 #: ../vector/v.to.db/main.c:40 ../vector/v.type/main.c:41
 msgid "area"
@@ -17068,32 +17074,38 @@ msgstr "Convirtiendo el par de coordenadas de inicial"
 msgid "Input parse error on line %lu"
 msgstr ""
 
-#: ../misc/m.measure/main.c:44
+#: ../misc/m.measure/main.c:51
 msgid "Measures the lengths and areas of features."
 msgstr "Mide las distancias y áreas de los elementos."
 
-#: ../misc/m.measure/main.c:46
+#: ../misc/m.measure/main.c:53
 msgid "measurement"
 msgstr "medición"
 
-#: ../misc/m.measure/main.c:55
+#: ../misc/m.measure/main.c:62
 msgid "Units"
 msgstr "Unidades"
 
-#: ../misc/m.measure/main.c:56
+#: ../misc/m.measure/main.c:63
 #, fuzzy
 msgid "Default: project map units"
 msgstr "Predeterminado: unidades de mapa Localización"
 
-#: ../misc/m.measure/main.c:60
-msgid "Shell script style"
-msgstr "Script estilo consola de comandos"
+#: ../misc/m.measure/main.c:74
+#, fuzzy
+#| msgid "Print in shell script style"
+msgid "Shell script style [deprecated]"
+msgstr "Imprimir en estilo de script de consola"
 
-#: ../misc/m.measure/main.c:101
+#: ../misc/m.measure/main.c:103 ../raster/r.regression.line/main.c:117
+msgid "The -g flag cannot be used with format=json. Please select only one output format."
+msgstr ""
+
+#: ../misc/m.measure/main.c:147
 msgid "Length:"
 msgstr "Longitud:"
 
-#: ../misc/m.measure/main.c:111
+#: ../misc/m.measure/main.c:166
 msgid "Area:"
 msgstr "Área:"
 
@@ -26068,10 +26080,6 @@ msgstr "Mapa para el coeficiente Y"
 msgid "ASCII file for storing regression coefficients (output to screen if file not specified)."
 msgstr "Archivo ASCII para guardar los coeficientes de regresión (salida a pantalla si no se especifica ningún archivo)."
 
-#: ../raster/r.regression.line/main.c:117
-msgid "The -g flag cannot be used with format=json. Please select only one output format."
-msgstr ""
-
 #: ../raster/r.regression.multi/main.c:59
 msgid "Matrix is unsolvable"
 msgstr "La matriz no se puede resolver"
@@ -30305,7 +30313,7 @@ msgid "Unable to calculate area centroid"
 msgstr "No es posible calcular el centroide de área"
 
 #: ../raster/r.to.vect/areas_io.c:385 ../raster/r.to.vect/util.c:157
-#: ../raster/r.volume/main.c:379 ../vector/v.in.lidar/attributes.c:237
+#: ../raster/r.volume/main.c:378 ../vector/v.in.lidar/attributes.c:237
 #: ../vector/v.vol.rst/vector.c:75
 #, c-format
 msgid "Cannot insert new row: %s"
@@ -30410,7 +30418,7 @@ msgstr "El ráster no es CELL, se ignora la bandera '-v', los valores ráster se
 msgid "Categories will be unique sequence, raster values will be lost."
 msgstr "Categoría serán secuencia única, se perderán valores ráster."
 
-#: ../raster/r.to.vect/main.c:242 ../raster/r.volume/main.c:339
+#: ../raster/r.to.vect/main.c:242 ../raster/r.volume/main.c:338
 #: ../raster3d/r3.flow/main.c:65 ../vector/v.in.ascii/main.c:428
 #: ../vector/v.in.dxf/write_vect.c:234 ../vector/v.lrs/v.lrs.create/main.c:342
 #: ../vector/v.mkgrid/main.c:364 ../vector/v.mkgrid/main.c:425
@@ -31086,68 +31094,64 @@ msgstr "Nombre para mapa vectorial de puntos de salida que contiene los centroid
 msgid "Generate unformatted report (items separated by colon) [deprecated]"
 msgstr "Generar reporte sin formato (elementos separados por comas)"
 
-#: ../raster/r.volume/main.c:139
+#: ../raster/r.volume/main.c:138
 #, fuzzy
 msgid "Print report"
 msgstr "Mapas de entrada"
 
-#: ../raster/r.volume/main.c:187
+#: ../raster/r.volume/main.c:189
 msgid "Flag 'f' is deprecated and will be removed in a future release. Please use format=csv instead."
 msgstr ""
 
-#: ../raster/r.volume/main.c:190
+#: ../raster/r.volume/main.c:192
 msgid "The -f flag cannot be used with format=json. Please select only one output format."
 msgstr ""
 
-#: ../raster/r.volume/main.c:199
-msgid "The -p flag is required when using the format option."
-msgstr ""
-
-#: ../raster/r.volume/main.c:213
+#: ../raster/r.volume/main.c:212
 #, fuzzy, c-format
 #| msgid "No MASK found. If no clump map is given than the MASK is required. You need to define a clump raster map or create a MASK by r.mask command."
 msgid "No clump map <%s> given and no raster mask found. You need to define a clump raster map or create a raster mask using r.mask."
 msgstr "No se encontró MÁSCARA. Si no se da un mapa de agrupamiento entonces se necesita MÁSCARA. Usted necesita definir mapa ráster de agrupamiento o crear una MÁSACARA con el comando r.mask."
 
-#: ../raster/r.volume/main.c:219
+#: ../raster/r.volume/main.c:218
 #, fuzzy
 #| msgid "No clump map given, using MASK"
 msgid "No clump map given, using raster mask"
 msgstr "No se dio mapa de agrupamiento, usando MÁSCARA"
 
-#: ../raster/r.volume/main.c:273
+#: ../raster/r.volume/main.c:272
 #, c-format
 msgid "Invalid category value %d (max=%d): row=%d col=%d"
 msgstr "Valor de categoría no válido %d (máx=%d): fila=%d columna=%d"
 
-#: ../raster/r.volume/main.c:306
+#: ../raster/r.volume/main.c:305
 #, c-format
 msgid "Creating vector point map <%s>..."
 msgstr "Creando mapa vectorial de puntos <%s>"
 
-#: ../raster/r.volume/main.c:309
+#: ../raster/r.volume/main.c:308
 #, c-format
 msgid "From '%s' on raster map <%s> using clumps from <%s>"
 msgstr "Desde '%s' en mapa ráster <%s> usando grupos desde <%s>"
 
-#: ../raster/r.volume/main.c:346
+#: ../raster/r.volume/main.c:345
 #, c-format
 msgid ""
 "\n"
 "Volume report on data from <%s> using clumps on <%s> raster map"
 msgstr ""
 
-#: ../raster/r.volume/main.c:350
+#: ../raster/r.volume/main.c:349
 #, c-format
 msgid "Category   Average   Data   # Cells        Centroid             Total\n"
 msgstr "Categoría   Promedio   Datos   # Celdas        Centroide             Total\n"
 
-#: ../raster/r.volume/main.c:352
+#: ../raster/r.volume/main.c:351
 #, c-format
 msgid "Number     in clump  Total  in clump   Easting     Northing     Volume"
 msgstr ""
 
-#: ../raster/r.volume/main.c:429
+#: ../raster/r.volume/main.c:428
 msgid "Total Volume"
 msgstr "Volumen total"
 
@@ -48077,6 +48081,9 @@ msgstr "Ver imágenes BMP desde el controlador PNG."
 msgid "Image file"
 msgstr "Archivo de imagen"
 
+#~ msgid "Shell script style"
+#~ msgstr "Script estilo consola de comandos"
+
 #~ msgid "Output RRR:GGG:BBB color values for each profile point"
 #~ msgstr "Dar los valores de color RRR GGG BBB para cada punto del perfil"
 
@@ -57144,3 +57151,6 @@ msgstr "Archivo de imagen"
 #, fuzzy
 #~ msgid "x-y extent of the Gaussian filter (i.zc)"
 #~ msgstr "Extensión X-Y del filtro de Gauss"
+
+msgid "GRASS"
+msgstr ""
