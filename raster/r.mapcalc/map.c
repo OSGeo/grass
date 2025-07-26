@@ -1,3 +1,7 @@
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
+
 #include <grass/config.h>
 
 #include <stdlib.h>
@@ -59,7 +63,7 @@ struct map {
     struct Categories cats;
     struct Colors colors;
     BTREE btree;
-    struct row_cache cache;
+    struct row_cache *caches;
 #ifdef HAVE_PTHREAD_H
     pthread_mutex_t mutex;
 #endif
@@ -148,10 +152,7 @@ static void cache_release(struct row_cache *cache)
 static void *cache_get_raw(struct row_cache *cache, int row, int data_type)
 {
     struct sub_cache *sub;
-    void **tmp;
-    char *vtmp;
-    int i, j;
-    int newrow;
+    int i;
 
     if (!cache->sub[data_type])
         cache_sub_init(cache, data_type);
@@ -175,31 +176,11 @@ static void *cache_get_raw(struct row_cache *cache, int row, int data_type)
         return sub->buf[0];
     }
 
-    tmp = G_alloca(cache->nrows * sizeof(void *));
-    memcpy(tmp, sub->buf, cache->nrows * sizeof(void *));
-    vtmp = G_alloca(cache->nrows);
-    memcpy(vtmp, sub->valid, cache->nrows);
-
-    i = (i < 0) ? 0 : cache->nrows - 1;
-    newrow = row - i;
-
-    for (j = 0; j < cache->nrows; j++) {
-        int r = newrow + j;
-        int k = r - sub->row;
-        int l = (k + cache->nrows) % cache->nrows;
-
-        sub->buf[j] = tmp[l];
-        sub->valid[j] = k >= 0 && k < cache->nrows && vtmp[l];
+    else {
+        i = (i < 0) ? 0 : cache->nrows - 1;
+        read_row(cache->fd, sub->buf[i], row, data_type);
+        return sub->buf[i];
     }
-
-    sub->row = newrow;
-    G_freea(tmp);
-    G_freea(vtmp);
-
-    read_row(cache->fd, sub->buf[i], row, data_type);
-    sub->valid[i] = 1;
-
-    return sub->buf[i];
 }
 
 static void cache_get(struct row_cache *cache, void *buf, int row, int res_type)
@@ -382,13 +363,19 @@ static void translate_from_cats(struct map *m, CELL *cell, DCELL *xcell,
 static void setup_map(struct map *m)
 {
     int nrows = m->max_row - m->min_row + 1;
-
+    int threads = 1;
 #ifdef HAVE_PTHREAD_H
     pthread_mutex_init(&m->mutex, NULL);
 #endif
 
+#ifdef _OPENMP
+    threads = omp_get_max_threads();
+#endif
+    m->caches =
+        (struct row_cache *)G_malloc(threads * sizeof(struct row_cache));
     if (nrows > 1 && nrows <= max_rows_in_memory) {
-        cache_setup(&m->cache, m->fd, nrows);
+        for (int i = 0; i < threads; i++)
+            cache_setup(&m->caches[i], m->fd, nrows);
         m->use_rowio = 1;
     }
     else
@@ -425,17 +412,30 @@ static void read_map(struct map *m, void *buf, int res_type, int row, int col)
         return;
     }
 
+    int tid = 0;
+#ifdef _OPENMP
+    tid = omp_get_thread_num();
+#endif
+
     if (m->use_rowio)
-        cache_get(&m->cache, buf, row, res_type);
+        cache_get(&m->caches[tid], buf, row, res_type);
     else
         read_row(m->fd, buf, row, res_type);
 
+#ifdef _OPENMP
+    tid = omp_get_thread_num();
+#endif
     if (col)
         column_shift(buf, res_type, col);
 }
 
 static void close_map(struct map *m)
 {
+    int threads = 1;
+#ifdef _OPENMP
+    threads = omp_get_max_threads();
+#endif
+
     if (m->fd < 0)
         return;
 
@@ -457,7 +457,10 @@ static void close_map(struct map *m)
     }
 
     if (m->use_rowio) {
-        cache_release(&m->cache);
+        for (int i = 0; i < threads; i++)
+            cache_release(&m->caches[i]);
+        if (threads > 1)
+            G_free(m->caches);
         m->use_rowio = 0;
     }
 }
@@ -494,7 +497,6 @@ int map_type(const char *name, int mod)
 
 int open_map(const char *name, int mod, int row, int col)
 {
-    int i;
     const char *mapset;
     int use_cats = 0;
     int use_colors = 0;
@@ -530,26 +532,6 @@ int open_map(const char *name, int mod, int row, int col)
     default:
         G_fatal_error(_("Invalid map modifier: '%c'"), mod);
         break;
-    }
-
-    for (i = 0; i < num_maps; i++) {
-        m = &maps[i];
-
-        if (strcmp(m->name, name) != 0 || strcmp(m->mapset, mapset) != 0)
-            continue;
-
-        if (row < m->min_row)
-            m->min_row = row;
-        if (row > m->max_row)
-            m->max_row = row;
-
-        if (use_cats && !m->have_cats)
-            init_cats(m);
-
-        if (use_colors && !m->have_colors)
-            init_colors(m);
-
-        return i;
     }
 
     if (num_maps >= max_maps) {

@@ -863,6 +863,26 @@ X (map) values supplied and y (newmap) values returned:
 100, 50
 ```
 
+### Performance
+
+r.mapcalc is parallelized using OpenMP. The number of threads can be controlled
+with the **nprocs** parameter. Note that more complex expressions can benefit
+from more threads. By default (**nprocs=0**), r.mapcalc uses all available threads.
+Use the **--verbose** flag to display the number of threads in use.
+If you observe reduced performance when using many threads, try lowering ther number.
+
+Note: r.mapcalc may disable parallelization in certain cases, even when requested:
+
+- When a mask is active, because the current parallel implementation
+ does not support it.
+- When the rand() function is used, to ensure reproducible results.
+
+![Benchmark of r.mapcalc](r_mapcalc_benchmark_time.png)  
+*Figure: Benchmark shows execution time for different number of cells
+and different complexity of expressions.
+See benchmark script in the source code.
+(Intel Core i9-10940X CPU @ 3.30GHz x 28)*
+
 ## KNOWN ISSUES
 
 The *result* variable on the left hand side of the equation should not
