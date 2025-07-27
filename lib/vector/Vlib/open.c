@@ -33,14 +33,14 @@
 #include "pg_local_proto.h"
 #endif
 
-/*
-   \brief Number of levels
-
-   - 1 without topology
-   - 2 with 2D topology
-
-   \todo Implement
-   - 3 with 3D topology
+/**
+ * @brief Number of levels
+ *
+ * - 1 without topology
+ * - 2 with 2D topology
+ *
+ * @todo Implement
+ *   - 3 with 3D topology
  */
 #define MAX_OPEN_LEVEL 2
 

@@ -233,7 +233,8 @@ int I_signatures_rename(I_SIGFILE_TYPE type, const char *old_name,
  *
  * \param type I_SIGFILE_TYPE signature type
  * \param mapset optional mapset to search in or NULL
- * \param out_list pointer to array of found signature strings or NULL if none found
+ * \param out_list pointer to array of found signature strings or NULL if none
+ *                 found
  * \return count of signature strings in the array
  */
 int I_signatures_list_by_type(I_SIGFILE_TYPE type, const char *mapset,
