@@ -24,7 +24,6 @@
  * \param[in] msg string.  Cannot be NULL.
  * \return
  */
-
 void G_done_msg(const char *msg, ...)
 {
     char buffer[2000];

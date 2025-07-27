@@ -94,7 +94,6 @@ void Rast_set_output_window(struct Cell_head *window)
  *
  * \param window window to become operative window
  */
-
 void Rast_set_input_window(struct Cell_head *window)
 {
     Rast__init();

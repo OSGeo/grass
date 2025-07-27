@@ -43,7 +43,6 @@ static double compute_line_nodes_angle(struct line_pnts *points)
    \return lines angle
    \return -9.0 if line is defined by one point or has same start and end point
  */
-
 static double compute_lines_angle(struct line_pnts *line_pnts_from,
                                   int from_dir, struct line_pnts *line_pnts_to,
                                   int to_dir)

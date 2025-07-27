@@ -63,7 +63,6 @@ static int egcmp(const void *pa, const void *pb);
  * \param ldim
  * \return mat_struct
  */
-
 mat_struct *G_matrix_init(int rows, int cols, int ldim)
 {
     mat_struct *tmp_arry;
@@ -94,7 +93,6 @@ mat_struct *G_matrix_init(int rows, int cols, int ldim)
  * \param A
  * \return 0 on error; 1 on success
  */
-
 int G_matrix_zero(mat_struct *A)
 {
     if (!A->vals)
@@ -119,7 +117,6 @@ int G_matrix_zero(mat_struct *A)
  * \param ldim
  * \return int
  */
-
 int G_matrix_set(mat_struct *A, int rows, int cols, int ldim)
 {
     if (rows < 1 || cols < 1 || ldim < 0) {
@@ -149,7 +146,6 @@ int G_matrix_set(mat_struct *A, int rows, int cols, int ldim)
  * \param A
  * \return mat_struct
  */
-
 mat_struct *G_matrix_copy(const mat_struct *A)
 {
     mat_struct *B;
@@ -182,7 +178,6 @@ mat_struct *G_matrix_copy(const mat_struct *A)
  * \param mt2
  * \return mat_struct
  */
-
 mat_struct *G_matrix_add(mat_struct *mt1, mat_struct *mt2)
 {
     return G__matrix_add(mt1, mt2, 1, 1);
@@ -200,7 +195,6 @@ mat_struct *G_matrix_add(mat_struct *mt1, mat_struct *mt2)
  * \param mt2
  * \return mat_struct
  */
-
 mat_struct *G_matrix_subtract(mat_struct *mt1, mat_struct *mt2)
 {
     return G__matrix_add(mt1, mt2, 1, -1);
@@ -218,7 +212,6 @@ mat_struct *G_matrix_subtract(mat_struct *mt1, mat_struct *mt2)
  * \param A
  * \return mat_struct
  */
-
 mat_struct *G_matrix_scalar_mul(double scalar, mat_struct *matrix,
                                 mat_struct *out)
 {
@@ -261,7 +254,6 @@ mat_struct *G_matrix_scalar_mul(double scalar, mat_struct *matrix,
  * \param c
  * \return mat_struct
  */
-
 mat_struct *G_matrix_scale(mat_struct *mt1, const double c)
 {
     return G__matrix_add(mt1, NULL, c, 0);
@@ -282,7 +274,6 @@ mat_struct *G_matrix_scale(mat_struct *mt1, const double c)
  * \param c2
  * \return mat_struct
  */
-
 mat_struct *G__matrix_add(mat_struct *mt1, mat_struct *mt2, const double c1,
                           const double c2)
 {
@@ -355,7 +346,6 @@ mat_struct *G__matrix_add(mat_struct *mt1, mat_struct *mt2, const double c1,
  * \param mt2
  * \return mat_struct
  */
-
 mat_struct *G_matrix_product(mat_struct *mt1, mat_struct *mt2)
 {
     mat_struct *mt3;
@@ -404,7 +394,6 @@ mat_struct *G_matrix_product(mat_struct *mt1, mat_struct *mt2)
  * \param mt
  * \return mat_struct
  */
-
 mat_struct *G_matrix_transpose(mat_struct *mt)
 {
     mat_struct *mt1;
@@ -591,7 +580,6 @@ int G_matrix_LU_solve(const mat_struct *mt1, mat_struct **xmat0,
  * \param mt
  * \return mat_struct
  */
-
 mat_struct *G_matrix_inverse(mat_struct *mt)
 {
     mat_struct *mt0, *res;
@@ -645,7 +633,6 @@ mat_struct *G_matrix_inverse(mat_struct *mt)
  * \param mt
  * \return void
  */
-
 void G_matrix_free(mat_struct *mt)
 {
     if (mt->is_init)
@@ -664,7 +651,6 @@ void G_matrix_free(mat_struct *mt)
  *  \param mt
  *  \return void
  */
-
 void G_matrix_print(mat_struct *mt)
 {
     int i, j;
@@ -703,7 +689,6 @@ void G_matrix_print(mat_struct *mt)
  *  \param val
  *  \return int
  */
-
 int G_matrix_set_element(mat_struct *mt, int rowval, int colval, double val)
 {
     if (!mt->is_init) {
@@ -735,7 +720,6 @@ int G_matrix_set_element(mat_struct *mt, int rowval, int colval, double val)
  *  \param colval
  *  \return double
  */
-
 double G_matrix_get_element(mat_struct *mt, int rowval, int colval)
 {
     double val;
@@ -757,7 +741,6 @@ double G_matrix_get_element(mat_struct *mt, int rowval, int colval)
  * \param col
  * \return vec_struct
  */
-
 vec_struct *G_matvect_get_column(mat_struct *mt, int col)
 {
     int i; /* loop */
@@ -797,7 +780,6 @@ vec_struct *G_matvect_get_column(mat_struct *mt, int col)
  * \param row
  * \return vec_struct
  */
-
 vec_struct *G_matvect_get_row(mat_struct *mt, int row)
 {
     int i; /* loop */
@@ -839,7 +821,6 @@ vec_struct *G_matvect_get_row(mat_struct *mt, int row)
  * \param indx
  * \return int
  */
-
 int G_matvect_extract_vector(mat_struct *mt, vtype vt, int indx)
 {
     if (vt == RVEC && indx >= mt->rows) {
@@ -885,7 +866,6 @@ int G_matvect_extract_vector(mat_struct *mt, vtype vt, int indx)
  *  \param vc
  *  \return int
  */
-
 int G_matvect_retrieve_matrix(vec_struct *vc)
 {
     /* We have to take the integrity of the vector structure
@@ -910,7 +890,6 @@ int G_matvect_retrieve_matrix(vec_struct *vc)
  * \param b
  * \return vec_struct
  */
-
 vec_struct *G_matvect_product(mat_struct *A, vec_struct *b, vec_struct *out)
 {
     unsigned int i, m, n, j;
@@ -964,7 +943,6 @@ vec_struct *G_matvect_product(mat_struct *A, vec_struct *b, vec_struct *out)
  * \param vt
  * \return vec_struct
  */
-
 vec_struct *G_vector_init(int cells, int ldim, vtype vt)
 {
     vec_struct *tmp_arry;
@@ -1009,7 +987,6 @@ vec_struct *G_vector_init(int cells, int ldim, vtype vt)
  * \param v
  * \return void
  */
-
 void G_vector_free(vec_struct *v)
 {
     if (v->is_init)
@@ -1032,7 +1009,6 @@ void G_vector_free(vec_struct *v)
  * \param out
  * \return vec_struct
  */
-
 vec_struct *G_vector_sub(vec_struct *v1, vec_struct *v2, vec_struct *out)
 {
     int idx1, idx2, idx0;
@@ -1107,7 +1083,6 @@ vec_struct *G_vector_sub(vec_struct *v1, vec_struct *v2, vec_struct *out)
  * \param vindx
  * \return int
  */
-
 int G_vector_set(vec_struct *A, int cells, int ldim, vtype vt, int vindx)
 {
     if ((cells < 1) || (vt == RVEC && ldim < 1) ||
@@ -1156,7 +1131,6 @@ int G_vector_set(vec_struct *A, int cells, int ldim, vtype vt, int vindx)
  * \param vc
  * \return double
  */
-
 double G_vector_norm_euclid(vec_struct *vc)
 {
     int incr, Nval;
@@ -1202,7 +1176,6 @@ double G_vector_norm_euclid(vec_struct *vc)
  * \param vflag
  * \return double
  */
-
 double G_vector_norm_maxval(vec_struct *vc, int vflag)
 {
     double xval, *startpt, *curpt;
@@ -1273,7 +1246,6 @@ double G_vector_norm_maxval(vec_struct *vc, int vflag)
  * \param vc
  * \return double
  */
-
 double G_vector_norm1(vec_struct *vc)
 {
     double result = 0.0;
@@ -1312,7 +1284,6 @@ double G_vector_norm1(vec_struct *vc)
  * \param out Output vector
  * \return vec_struct
  */
-
 vec_struct *G_vector_product(vec_struct *v1, vec_struct *v2, vec_struct *out)
 {
     int idx1, idx2, idx0;
@@ -1380,7 +1351,6 @@ vec_struct *G_vector_product(vec_struct *v1, vec_struct *v2, vec_struct *out)
  * \param comp_flag
  * \return vec_struct
  */
-
 vec_struct *G_vector_copy(const vec_struct *vc1, int comp_flag)
 {
     vec_struct *tmp_arry;
@@ -1492,7 +1462,6 @@ vec_struct *G_vector_copy(const vec_struct *vc1, int comp_flag)
  * \param out
  * \return int
  */
-
 int G_matrix_read(FILE *fp, mat_struct *out)
 {
     char buff[100];
@@ -1545,7 +1514,6 @@ int G_matrix_read(FILE *fp, mat_struct *out)
  * \param cols
  * \return mat_struct
  */
-
 mat_struct *G_matrix_resize(mat_struct *in, int rows, int cols)
 {
     mat_struct *matrix;
@@ -1580,7 +1548,6 @@ mat_struct *G_matrix_resize(mat_struct *in, int rows, int cols)
  * \param out
  * \return int
  */
-
 int G_matrix_stdin(mat_struct *out)
 {
     return G_matrix_read(stdin, out);
@@ -1597,7 +1564,6 @@ int G_matrix_stdin(mat_struct *out)
  * \param m
  * \return int
  */
-
 int G_matrix_eigen_sort(vec_struct *d, mat_struct *m)
 {
     mat_struct tmp;

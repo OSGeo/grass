@@ -19,7 +19,6 @@
  *  \param type
  *  \return void
  */
-
 void Rast3d_nearest_neighbor(RASTER3D_Map *map, int x, int y, int z,
                              void *value, int type)
 {
@@ -86,7 +85,6 @@ void Rast3d_get_resampling_fun(RASTER3D_Map *map,
  *
  *  \return void
  */
-
 void Rast3d_get_nearest_neighbor_fun_ptr(void (**nnFunPtr)(RASTER3D_Map *, int,
                                                            int, int, void *,
                                                            int))

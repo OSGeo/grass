@@ -94,7 +94,6 @@ void getParams(char **input, char **output, int *decim UNUSED)
 /* Opens the output v5d file and writes the header.
  * Returns the file handle for the output file.
  */
-
 void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
 {
 
