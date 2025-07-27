@@ -225,6 +225,10 @@ int GP_get_sitename(int id, char **filename)
    \brief Get point set style
 
    \param id point set id
+   \param color
+   \param width
+   \param size
+   \param symbol
 
    \return 1 on success
    \return -1 on error (point set not found)
