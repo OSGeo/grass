@@ -129,7 +129,6 @@ static void Rast3d_getFullWindowPath(char *path, const char *windowName)
  *  \return 1 ... if successful
  *          0 ... otherwise.
  */
-
 int Rast3d_read_window(RASTER3D_Region *window, const char *windowName)
 {
     struct Cell_head win;

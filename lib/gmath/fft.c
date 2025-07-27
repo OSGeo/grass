@@ -61,7 +61,6 @@
  * \param[in] dimr Value of image row dimension (max power of 2)
  * \return int always returns 0
  */
-
 int fft2(int i_sign, double (*data)[2], int NN, int dimc, int dimr)
 {
 #ifdef HAVE_FFTW3_H
@@ -118,7 +117,6 @@ int fft2(int i_sign, double (*data)[2], int NN, int dimc, int dimr)
  * \param[in] dimr Value of image row dimension (max power of 2)
  * \return int always returns 0
  */
-
 int fft(int i_sign, double *DATA[2], int NN, int dimc, int dimr)
 {
     fftw_complex *data;

@@ -108,7 +108,6 @@ static int G__open_misc(const char *dir, const char *element, const char *name,
  *  \param name
  *  \return int
  */
-
 int G_open_new_misc(const char *dir, const char *element, const char *name)
 {
     return G__open_misc(dir, element, name, G_mapset(), 1);
@@ -130,7 +129,6 @@ int G_open_new_misc(const char *dir, const char *element, const char *name)
  *  \param mapset
  *  \return int
  */
-
 int G_open_old_misc(const char *dir, const char *element, const char *name,
                     const char *mapset)
 {
@@ -151,7 +149,6 @@ int G_open_old_misc(const char *dir, const char *element, const char *name,
  *  \param name
  *  \return int
  */
-
 int G_open_update_misc(const char *dir, const char *element, const char *name)
 {
     int fd;
@@ -178,7 +175,6 @@ int G_open_update_misc(const char *dir, const char *element, const char *name)
  *  \param name
  *  \return FILE *
  */
-
 FILE *G_fopen_new_misc(const char *dir, const char *element, const char *name)
 {
     int fd;
@@ -205,7 +201,6 @@ FILE *G_fopen_new_misc(const char *dir, const char *element, const char *name)
  *  \param mapset
  *  \return FILE *
  */
-
 FILE *G_fopen_old_misc(const char *dir, const char *element, const char *name,
                        const char *mapset)
 {

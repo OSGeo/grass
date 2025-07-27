@@ -508,7 +508,6 @@ int G_compare_projections(const struct Key_Value *proj_info1,
    \return 0 success
    \return -1 error writing
  */
-
 int G_write_projwkt(const char *location_name, const char *wktstring)
 {
     FILE *fp;
@@ -560,7 +559,6 @@ int G_write_projwkt(const char *location_name, const char *wktstring)
    \return 0 success
    \return -1 error writing
  */
-
 int G_write_projsrid(const char *location_name, const char *sridstring)
 {
     FILE *fp;

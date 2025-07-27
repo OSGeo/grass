@@ -57,7 +57,6 @@ static int seek_only(int, off_t);
  * \return -1 if unable to seek or write <b>fd</b>
  * \return -3 if illegal parameters are passed
  */
-
 int Segment_format(int fd, off_t nrows, off_t ncols, int srows, int scols,
                    int len)
 {
@@ -95,7 +94,6 @@ int Segment_format(int fd, off_t nrows, off_t ncols, int srows, int scols,
  * \return -1 if unable to seek or write <b>fd</b>
  * \return -3 if illegal parameters are passed
  */
-
 int Segment_format_nofill(int fd, off_t nrows, off_t ncols, int srows,
                           int scols, int len)
 {

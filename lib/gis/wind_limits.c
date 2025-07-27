@@ -29,7 +29,6 @@
  * \return 1 no change
  * \return 0 changed
  */
-
 int G_limit_east(double *east UNUSED, int proj UNUSED)
 {
     return 1;
@@ -49,7 +48,6 @@ int G_limit_east(double *east UNUSED, int proj UNUSED)
  * \return 1 no change
  * \return 0 changed
  */
-
 int G_limit_west(double *west UNUSED, int proj UNUSED)
 {
     return 1;
@@ -67,7 +65,6 @@ int G_limit_west(double *west UNUSED, int proj UNUSED)
  * \return 1 no change
  * \return 0 changed
  */
-
 int G_limit_north(double *north, int proj)
 {
     if (proj == PROJECTION_LL) {
@@ -96,7 +93,6 @@ int G_limit_north(double *north, int proj)
  * \return 1 no change
  * \return 0 changed
  */
-
 int G_limit_south(double *south, int proj)
 {
     if (proj == PROJECTION_LL) {

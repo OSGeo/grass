@@ -30,7 +30,6 @@
  * \return 1 if successful
  * \return -1 if SEGMENT is not available (not open)
  */
-
 int Segment_release(SEGMENT *SEG)
 {
     int i;

@@ -39,7 +39,6 @@ static int init(void);
  * \return always returns 0 on success
  * \return exit() is called on error
  */
-
 void Rast_init(void)
 {
     Rast__init();
@@ -50,7 +49,6 @@ void Rast_init(void)
  *
  * \return
  */
-
 void Rast__check_init(void)
 {
     if (initialized)

@@ -46,7 +46,6 @@ static int test_path_file(const char *path, const char *file)
  * \return 1 The directory is GISBASE
  * \return 0 The directory is not GISBASE
  */
-
 int G_is_gisbase(const char *path)
 {
     return test_path_file(path, "etc/element_list");
@@ -59,7 +58,6 @@ int G_is_gisbase(const char *path)
  * \return 1 The directory is location
  * \return 0 The directory is not location
  */
-
 int G_is_location(const char *path)
 {
     return test_path_file(path, "PERMANENT/DEFAULT_WIND");
@@ -72,7 +70,6 @@ int G_is_location(const char *path)
  * \return 1 The directory is mapset
  * \return 0 The directory is not mapset
  */
-
 int G_is_mapset(const char *path)
 {
     return test_path_file(path, "WIND");

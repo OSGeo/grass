@@ -328,7 +328,6 @@ void Nviz_delete_arrow(nv_data *data)
    \return pointer to allocated scalebar_data structure
    \return NULL on error
  */
-
 struct scalebar_data *Nviz_new_scalebar(nv_data *data, int bar_id,
                                         float *coords, float size,
                                         unsigned int color)
