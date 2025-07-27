@@ -167,13 +167,28 @@ class Tools:
         # Get a fixed env parameter at at the beginning of each execution,
         # but repeat it every time in case the referenced environment is modified.
         args, popen_options = gs.popen_args_command(name, **kwargs)
+
+        # Compute the environment for subprocesses and store it for later use.
+        if "env" not in popen_options:
+            popen_options["env"] = self._modified_env_if_needed()
+
+        object_parameter_handler.translate_objects_to_data(
+            kwargs, env=popen_options["env"]
+        )
+
         # We approximate original kwargs with the possibly-modified kwargs.
-        return self.run_cmd(
+        result = self.run_cmd(
             args,
             tool_kwargs=kwargs,
             input=object_parameter_handler.stdin,
             **popen_options,
         )
+        use_objects = object_parameter_handler.translate_data_to_objects(
+            kwargs, env=popen_options["env"]
+        )
+        if use_objects:
+            result = object_parameter_handler.result
+        return result
 
     def run_cmd(
         self,

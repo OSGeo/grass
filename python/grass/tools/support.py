@@ -25,21 +25,54 @@ import json
 import shutil
 from io import StringIO
 
+import numpy as np
+
 import grass.script as gs
+import grass.script.array as garray
 
 
 class ParameterConverter:
     def __init__(self):
         self._numpy_inputs = {}
-        self._numpy_outputs = {}
+        self._numpy_outputs = []
         self._numpy_inputs_ordered = []
         self.stdin = None
+        self.result = None
 
     def process_parameters(self, kwargs):
         for key, value in kwargs.items():
-            if isinstance(value, StringIO):
+            if isinstance(value, np.ndarray):
+                name = gs.append_uuid("tmp_serialized_input_array")
+                kwargs[key] = name
+                self._numpy_inputs[key] = (name, value)
+            elif value in (np.ndarray, np.array, garray.array):
+                # We test for class or the function.
+                name = gs.append_uuid("tmp_serialized_output_array")
+                kwargs[key] = name
+                self._numpy_outputs.append((name, value))
+            elif isinstance(value, StringIO):
                 kwargs[key] = "-"
                 self.stdin = value.getvalue()
+
+    def translate_objects_to_data(self, kwargs, env):
+        for name, value in self._numpy_inputs.values():
+            map2d = garray.array(env=env)
+            map2d[:] = value
+            map2d.write(name)
+
+    def translate_data_to_objects(self, kwargs, env):
+        output_arrays = []
+        for name, value in self._numpy_outputs:
+            output_array = garray.array(name, env=env)
+            output_arrays.append(output_array)
+        if len(output_arrays) == 1:
+            self.result = output_arrays[0]
+            return True
+        if len(output_arrays) > 1:
+            self.result = tuple(output_arrays)
+            return True
+        self.result = None
+        return False
 
 
 class ToolFunctionResolver:
