@@ -11,37 +11,6 @@ def test_numpy_one_input(xy_dataset_session):
     assert tools.r_info(map="slope", format="json")["datatype"] == "FCELL"
 
 
-# NumPy syntax for outputs
-# While inputs are straightforward, there is several possible ways how to handle
-# syntax for outputs.
-# Output is the type of function for creating NumPy arrays, return value is now the arrays:
-# tools.r_slope_aspect(elevation=np.ones((1, 1)), slope=np.ndarray, aspect=np.array)
-# Output is explicitly requested:
-# tools.r_slope_aspect(elevation=np.ones((1, 1)), slope="slope", aspect="aspect", force_numpy_for_output=True)
-# Output is explicitly requested at the object level:
-# Tools(force_numpy_for_output=True).r_slope_aspect(elevation=np.ones((1, 1)), slope="slope", aspect="aspect")
-# Output is always array or arrays when at least on input is an array:
-# tools.r_slope_aspect(elevation=np.ones((1, 1)), slope="slope", aspect="aspect")
-# An empty array is passed to signal the desired output:
-# tools.r_slope_aspect(elevation=np.ones((1, 1)), slope=np.nulls((0, 0)))
-# An array to be filled with data is passed, the return value is kept as is:
-# tools.r_slope_aspect(elevation=np.ones((1, 1)), slope=np.nulls((1, 1)))
-# NumPy universal function concept can be used explicitly to indicate,
-# possibly more easily allowing for nameless args as opposed to keyword arguments,
-# but outputs still need to be explicitly requested:
-# Returns by value (tuple: (np.array, np.array)):
-# tools.r_slope_aspect.ufunc(np.ones((1, 1)), slope=True, aspect=True)
-# Modifies its arguments in-place:
-# tools.r_slope_aspect.ufunc(np.ones((1, 1)), slope=True, aspect=True, out=(np.array((1, 1)), np.array((1, 1))))
-# Custom signaling classes or objects are passed (assuming empty classes AsNumpy and AsInput):
-# tools.r_slope_aspect(elevation=np.ones((1, 1)), slope=ToNumpy(), aspect=ToNumpy())
-# tools.r_slope_aspect(elevation=np.ones((1, 1)), slope=AsInput, aspect=AsInput)
-# NumPy functions usually return a tuple, for multiple outputs. Universal function does
-# unless the output is written to out parameter which is also provided as a tuple. We
-# have names, so generally, we can return a dictionary:
-# {"slope": np.array(...), "aspect": np.array(...) }.
-
-
 def test_numpy_one_input_one_output(xy_dataset_session):
     """Check that a NumPy array works as input and for signaling output
 

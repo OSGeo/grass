@@ -34,14 +34,6 @@ def xy_session_for_module(tmp_path_factory):
 
 
 @pytest.fixture
-def xy_dataset_session(tmp_path):
-    """Creates a session with a mapset which has vector with a float column"""
-    gs.core._create_location_xy(tmp_path, "test")  # pylint: disable=protected-access
-    with gs.setup.init(tmp_path / "test") as session:
-        yield session
-
-
-@pytest.fixture
 def unique_id():
     """A unique alphanumeric identifier"""
     return uuid.uuid4().hex
