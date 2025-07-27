@@ -20,6 +20,8 @@ set(PYDIRS
     script
     semantic_label
     temporal
+    temporal/ply
+    tools
     utils)
 
 set(PYDIR_GRASS ${GRASS_INSTALL_PYDIR}/grass)

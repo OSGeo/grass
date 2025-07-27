@@ -1309,6 +1309,7 @@ double G_vector_norm1(vec_struct *vc)
  *
  * \param v1
  * \param v2
+ * \param out Output vector
  * \return vec_struct
  */
 
@@ -1568,7 +1569,7 @@ mat_struct *G_matrix_resize(mat_struct *in, int rows, int cols)
 }
 
 /*!
- * \fn int G_matrix_read_stdin (mat_struct *out)
+ * \fn int G_matrix_stdin(mat_struct *out)
  *
  * \brief Read a matrix from standard input
  *

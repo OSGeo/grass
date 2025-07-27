@@ -263,6 +263,7 @@ int Vect_sfa_is_line_simple(const struct line_pnts *Points UNUSED,
 
    \param Points pointer to line_pnts structure
    \param type   feature type (GV_LINE or GV_BOUNDARY)
+   \param with_z
 
    \return 1  feature closed
    \return 0  feature not closed

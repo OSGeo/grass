@@ -76,7 +76,8 @@ void print_python_long_flag(FILE *file, const char *key, const char *label,
     }
     fprintf(file, "%s", indent);
     G__md_print_escaped(file, "\t");
-    fprintf(file, "Default: *False*");
+    const char *flag_default = "*None*";
+    fprintf(file, "Default: %s", flag_default);
 }
 
 void print_python_tuple(FILE *file, const char *type, int num_items)
@@ -307,25 +308,42 @@ void print_python_example(FILE *file, const char *python_function,
                 }
             if (opt->required || first_required_rule_option == opt ||
                 (strcmp(opt->key, "format") == 0 && output_format_default)) {
-                char age[KEYLENGTH];
-                char element[KEYLENGTH];
-                char desc[KEYLENGTH];
-                if (opt->gisprompt) {
-                    G__split_gisprompt(opt->gisprompt, age, element, desc);
-                }
                 if (first_parameter_printed) {
                     fprintf(file, ", ");
                 }
                 fprintf(file, "%s=", opt->key);
+
+                char *value = NULL;
+                if (opt->answer) {
+                    value = G_store(opt->answer);
+                }
+                else if (opt->options && opt->type == TYPE_STRING) {
+                    // Get example value from allowed values, but only for
+                    // strings because numbers may have ranges and we don't
+                    // want to print a range.
+                    // Get allowed values as tokens.
+                    char **tokens;
+                    char delm[2];
+                    delm[0] = ',';
+                    delm[1] = '\0';
+                    tokens = G_tokenize(opt->options, delm);
+                    // We are interested in the first allowed value.
+                    if (tokens[0]) {
+                        G_chop(tokens[0]);
+                        value = G_store(tokens[0]);
+                    }
+                    G_free_tokens(tokens);
+                }
+
                 if (output_format_default && strcmp(opt->key, "format") == 0) {
                     fprintf(file, "\"%s\"", output_format_default);
                 }
-                else if (opt->answer) {
+                else if (value) {
                     if (opt->type == TYPE_INTEGER || opt->type == TYPE_DOUBLE) {
-                        fprintf(file, "%s", opt->answer);
+                        fprintf(file, "%s", value);
                     }
                     else {
-                        fprintf(file, "\"%s\"", opt->answer);
+                        fprintf(file, "\"%s\"", value);
                     }
                 }
                 else {
@@ -340,6 +358,7 @@ void print_python_example(FILE *file, const char *python_function,
                     }
                 }
                 first_parameter_printed = true;
+                G_free(value);
             }
             opt = opt->next_opt;
         }
@@ -456,12 +475,13 @@ void G__md_print_python_short_version(FILE *file, const char *indent,
         fprintf(file, "%s    **flags**=*None*,\n", indent);
     }
 
+    const char *flag_default = "*None*";
     if (new_prompt)
-        fprintf(file, "%s    **overwrite**=*False*,\n", indent);
+        fprintf(file, "%s    **overwrite**=%s,\n", indent, flag_default);
 
-    fprintf(file, "%s    **verbose**=*False*,\n", indent);
-    fprintf(file, "%s    **quiet**=*False*,\n", indent);
-    fprintf(file, "%s    **superquiet**=*False*)\n", indent);
+    fprintf(file, "%s    **verbose**=%s,\n", indent, flag_default);
+    fprintf(file, "%s    **quiet**=%s,\n", indent, flag_default);
+    fprintf(file, "%s    **superquiet**=%s)\n", indent, flag_default);
 
     print_python_example(file, python_function, output_format_default, indent,
                          tools_api);

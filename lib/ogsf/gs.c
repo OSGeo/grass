@@ -350,7 +350,7 @@ void print_frto(float (*ft)[4])
 
    \todo G_debug ?
 
-   \param ft pointer to coordinates
+   \param rt pointer to coordinates
  */
 void print_realto(float *rt)
 {
@@ -364,7 +364,7 @@ void print_realto(float *rt)
 
    \todo G_debug ?
 
-   \param ft pointer to buffer
+   \param buff pointer to buffer
  */
 void print_256lookup(int *buff)
 {

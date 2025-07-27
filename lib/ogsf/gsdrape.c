@@ -684,6 +684,7 @@ int viewcell_tri_interp(geosurf *gs, typbuff *buf, Point3 pt, int check_mask)
    \brief ADD
 
    \param gs surface (geosurf)
+   \param pt
 
    \return 1
    \return 0

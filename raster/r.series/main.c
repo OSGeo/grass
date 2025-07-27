@@ -213,6 +213,9 @@ int main(int argc, char *argv[])
     flag.lazy->key = 'z';
     flag.lazy->description = _("Do not keep files open");
 
+    G_option_required(parm.input, parm.file, NULL);
+    G_option_exclusive(parm.input, parm.file, NULL);
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
@@ -230,14 +233,6 @@ int main(int argc, char *argv[])
         lo = atof(parm.range->answers[0]);
         hi = atof(parm.range->answers[1]);
     }
-
-    if (parm.input->answer && parm.file->answer)
-        G_fatal_error(_("%s= and %s= are mutually exclusive"), parm.input->key,
-                      parm.file->key);
-
-    if (!parm.input->answer && !parm.file->answer)
-        G_fatal_error(_("Please specify %s= or %s="), parm.input->key,
-                      parm.file->key);
 
     have_weights = 0;
 

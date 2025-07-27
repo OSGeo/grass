@@ -47,7 +47,7 @@ static int seeded;
 /*!
  * \brief Seed the pseudo-random number generator
  *
- * \param seedval 32-bit integer used to seed the PRNG
+ * \param[in] seedval 32-bit integer used to seed the PRNG
  */
 
 void G_srand48(long seedval)
