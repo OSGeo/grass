@@ -313,7 +313,7 @@ int GS_dv3norm(double *dv1)
    \brief Change v2 so that v1v2 is a unit vector
 
    \param v1 first vector
-   \param v2[in,out] second vector
+   \param[in,out] v2 second vector
 
    \return 0 if magnitude of dx is zero
    \return 1 if magnitude of dx > 0
