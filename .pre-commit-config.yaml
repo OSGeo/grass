@@ -20,6 +20,7 @@ repos:
                 .*\.po$|
                 .*\.ps$|
                 .*\.svg$|
+                python/grass/temporal/ply/|
                 python/libgrass_interface_generator/ctypesgen/|
                 lib/fonts/fonts/.*
           )
@@ -35,12 +36,13 @@ repos:
                 .*\.po$|
                 .*\.ps$|
                 .*\.svg$|
+                python/grass/temporal/ply/|
                 python/libgrass_interface_generator/ctypesgen/|
                 lib/fonts/fonts/.*
           )
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
-    rev: v0.11.13
+    rev: v0.12.5
     hooks:
       # Run the linter.
       - id: ruff-check
@@ -52,11 +54,12 @@ repos:
     hooks:
       - id: markdownlint-fix
   - repo: https://github.com/pycqa/flake8
-    rev: 7.2.0
+    rev: 7.3.0
     hooks:
       - id: flake8
         exclude: |
           (?x)^(
+                python/grass/temporal/ply/|
                 python/libgrass_interface_generator/|
                 .*/testsuite/.*
           )
@@ -74,3 +77,7 @@ repos:
     rev: v1.37.1
     hooks:
       - id: yamllint
+  - repo: https://github.com/editorconfig-checker/editorconfig-checker
+    rev: v3.3.0
+    hooks:
+      - id: editorconfig-checker

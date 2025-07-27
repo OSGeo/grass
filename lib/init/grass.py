@@ -71,6 +71,8 @@ _DEBUG = None
 # for wxpath
 _WXPYTHON_BASE = None
 
+GISBASE = None
+
 try:
     # Python >= 3.11
     ENCODING = locale.getencoding()
@@ -80,32 +82,13 @@ if ENCODING is None:
     ENCODING = "UTF-8"
     print("Default locale not found, using UTF-8")  # intentionally not translatable
 
-# The "@...@" variables are being substituted during build process
-#
-# TODO: should GISBASE be renamed to something like GRASS_PATH?
-# GISBASE marks complete runtime, so no need to get it here when
-# setting it up, possible scenario: existing runtime and starting
-# GRASS in that, we want to overwrite the settings, not to take it
-# possibly same for GRASS_PROJSHARE and others but maybe not
-#
-# We need to simultaneously make sure that:
-# - we get GISBASE from os.environ if it is defined (doesn't this mean that we are
-#   already inside a GRASS session? If we are, why do we need to run this script
-#   again???).
-# - GISBASE exists as an ENV variable
-#
-# pmav99: Ugly as hell, but that's what the code before the refactoring was doing.
-if "GISBASE" in os.environ and len(os.getenv("GISBASE")) > 0:
-    GISBASE = os.path.normpath(os.environ["GISBASE"])
-else:
-    GISBASE = os.path.normpath("@GISBASE_INSTALL_PATH@")
-    os.environ["GISBASE"] = GISBASE
-CMD_NAME = "@START_UP@"
-GRASS_VERSION = "@GRASS_VERSION_NUMBER@"
-GRASS_VERSION_MAJOR = "@GRASS_VERSION_MAJOR@"
-GRASS_VERSION_MINOR = "@GRASS_VERSION_MINOR@"
-LD_LIBRARY_PATH_VAR = "@LD_LIBRARY_PATH_VAR@"
-CONFIG_PROJSHARE = os.environ.get("GRASS_PROJSHARE", "@CONFIG_PROJSHARE@")
+CMD_NAME = None
+GRASS_VERSION = None
+GRASS_VERSION_MAJOR = None
+GRASS_VERSION_MINOR = None
+LD_LIBRARY_PATH_VAR = None
+CONFIG_PROJSHARE = None
+GRASS_VERSION_GIT = None
 
 # Get the system name
 WINDOWS = sys.platform.startswith("win")
@@ -1842,7 +1825,7 @@ def print_params(params) -> None:
             val = grep("CC", linesplat)
             sys.stdout.write("%s\n" % val[0].split("=")[1].strip())
         elif arg == "revision":
-            sys.stdout.write("@GRASS_VERSION_GIT@\n")
+            sys.stdout.write(f"{GRASS_VERSION_GIT}\n")
         elif arg == "svn_revision":
             with open(gpath("etc", "VERSIONNUMBER")) as filerev:
                 linerev = filerev.readline().rstrip("\n")
@@ -2103,9 +2086,16 @@ def validate_cmdline(params: Parameters) -> None:
 
 def find_grass_python_package() -> None:
     """Find path to grass package and add it to path"""
-    if os.path.exists(gpath("etc", "python")):
-        path_to_package = gpath("etc", "python")
-        sys.path.append(path_to_package)
+
+    # The "@...@" variables are being substituted during build process
+
+    if "GRASS_PYDIR" in os.environ and len(os.getenv("GRASS_PYDIR")) > 0:
+        GRASS_PYDIR = os.path.normpath(os.environ["GRASS_PYDIR"])
+    else:
+        GRASS_PYDIR = os.path.normpath("@GRASS_PYDIR@")
+
+    if os.path.exists(GRASS_PYDIR):
+        sys.path.append(GRASS_PYDIR)
         # now we can import stuff from grass package
     else:
         # Not translatable because we don't have translations loaded.
@@ -2126,6 +2116,29 @@ def main() -> None:
     # Subsequent functions are using _() calls and
     # thus must be called only after Language has been set.
     find_grass_python_package()
+
+    from grass.app.runtime import RuntimePaths
+
+    global \
+        CMD_NAME, \
+        GRASS_VERSION, \
+        GRASS_VERSION_MAJOR, \
+        GRASS_VERSION_MINOR, \
+        LD_LIBRARY_PATH_VAR, \
+        GRASS_VERSION_GIT, \
+        GISBASE, \
+        CONFIG_PROJSHARE
+
+    runtime_paths = RuntimePaths()
+    CMD_NAME = runtime_paths.grass_exe_name
+    GRASS_VERSION = runtime_paths.version
+    GRASS_VERSION_MAJOR = runtime_paths.version_major
+    GRASS_VERSION_MINOR = runtime_paths.version_minor
+    LD_LIBRARY_PATH_VAR = runtime_paths.ld_library_path_var
+    GRASS_VERSION_GIT = runtime_paths.grass_version_git
+    GISBASE = runtime_paths.gisbase
+    CONFIG_PROJSHARE = runtime_paths.config_projshare
+
     grass_config_dir = create_grass_config_dir()
     set_language(grass_config_dir)
 

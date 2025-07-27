@@ -263,6 +263,7 @@ int Vect_sfa_is_line_simple(const struct line_pnts *Points UNUSED,
 
    \param Points pointer to line_pnts structure
    \param type   feature type (GV_LINE or GV_BOUNDARY)
+   \param with_z
 
    \return 1  feature closed
    \return 0  feature not closed
@@ -346,8 +347,10 @@ int Vect_sfa_get_num_features(struct Map_info *Map)
 #endif
     }
     else {
+        const char *map_name = Vect_get_full_name(Map);
         G_warning(_("Unable to report simple features for vector map <%s>"),
-                  Vect_get_full_name(Map));
+                  map_name);
+        G_free((void *)map_name);
         return -1;
     }
 

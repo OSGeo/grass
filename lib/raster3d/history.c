@@ -59,7 +59,6 @@ void SimpleErrorMessage(FILE *fd, const char *name, const char *mapset)
  *  \param history
  *  \return int
  */
-
 int Rast3d_read_history(const char *name, const char *mapset,
                         struct History *hist)
 {
@@ -93,7 +92,6 @@ int Rast3d_read_history(const char *name, const char *mapset,
  *  \param history
  *  \return int
  */
-
 int Rast3d_write_history(const char *name, struct History *hist)
 /* This function is adapted from Rast_write_history */
 {

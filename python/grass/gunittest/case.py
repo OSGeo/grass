@@ -307,6 +307,7 @@ class TestCase(unittest.TestCase):
             msg=msg,
             sep="=",
             precision=precision,
+            nprocs=1,
         )
 
     def assertRasterFitsInfo(self, raster, reference, precision=None, msg=None):
@@ -1316,7 +1317,7 @@ class TestCase(unittest.TestCase):
         In terms of testing framework, this function causes a common error,
         not a test failure.
 
-        :raises CalledModuleError: if the module failed
+        :raises ~grass.exceptions.CalledModuleError: If the module failed
         """
         module = _module_from_parameters(module, **kwargs)
         _check_module_run_parameters(module)

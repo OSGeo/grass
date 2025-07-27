@@ -438,7 +438,11 @@ class ProfileFrame(BasePlotFrame):
                         continue
 
                 try:
-                    fd = open(pfile[-1], "w")
+                    with open(pfile[-1], "w") as fd:
+                        fd.writelines(
+                            "%.6f,%.6f\n" % (float(datapair[0]), float(datapair[1]))
+                            for datapair in self.raster[r]["datalist"]
+                        )
                 except OSError as e:
                     GError(
                         parent=self,
@@ -447,13 +451,6 @@ class ProfileFrame(BasePlotFrame):
                     )
                     dlg.Destroy()
                     return
-
-                fd.writelines(
-                    "%.6f,%.6f\n" % (float(datapair[0]), float(datapair[1]))
-                    for datapair in self.raster[r]["datalist"]
-                )
-
-                fd.close()
 
         dlg.Destroy()
         if pfile:

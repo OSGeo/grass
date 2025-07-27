@@ -37,7 +37,6 @@
  * \return 1 if successful
  * \return -1 if unable to seek or write segment file
  */
-
 int Segment_put_row(const SEGMENT *SEG, const void *buf, off_t row)
 {
     int size;

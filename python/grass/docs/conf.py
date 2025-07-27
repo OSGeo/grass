@@ -102,6 +102,7 @@ copy("_templates/layout.html.template", "_templates/layout.html")
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    "sphinx_last_updated_by_git",  # Included in sphinx_sitemap 2.7.0
     "sphinx.ext.autodoc",
     "sphinx.ext.doctest",
     "sphinx.ext.intersphinx",
@@ -303,6 +304,7 @@ html_use_index = True
 
 # If true, links to the reST sources are added to the pages.
 html_show_sourcelink = True
+html_copy_source = True
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
 html_show_sphinx = True
@@ -505,3 +507,6 @@ intersphinx_mapping = {
     "numpy": ("https://numpy.org/doc/stable/", None),
     "python": ("https://docs.python.org/3", None),
 }
+
+# Options for sphinx-last-updated-by-git extension
+git_untracked_show_sourcelink = True

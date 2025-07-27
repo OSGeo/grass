@@ -1,5 +1,5 @@
 /*!
-   \file include/vect/dig_structs.h
+   \file include/grass/vect/dig_structs.h
 
    \brief Data structures for \ref vectorlib
 

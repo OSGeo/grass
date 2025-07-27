@@ -17,6 +17,7 @@
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/gjson.h>
 #include <grass/glocale.h>
 #include <grass/spawn.h>
 
@@ -24,6 +25,8 @@ struct bin {
     unsigned long origin;
     int base, count;
 };
+
+enum OutputFormat { PLAIN, CSV, JSON };
 
 struct basecat {
     size_t *slots;
@@ -356,10 +359,14 @@ static void sort_bins(void)
     G_percent(cat, num_cats, 2);
 }
 
-static void print_quantiles(char *fs, char *name, int table_frmt)
+static void print_quantiles(char *fs, char *name, enum OutputFormat format)
 {
     int cat, quant;
     struct basecat *bc;
+    JSON_Value *root_value = NULL, *cat_value = NULL, *percentiles_value = NULL,
+               *percentile_value = NULL;
+    JSON_Array *root_array = NULL, *percentiles_array = NULL;
+    JSON_Object *cat_object = NULL, *percentile_object = NULL;
 
     G_message(_("Printing quantiles"));
 
@@ -369,7 +376,16 @@ static void print_quantiles(char *fs, char *name, int table_frmt)
         }
     }
 
-    if (!table_frmt) {
+    if (format == JSON) {
+        root_value = G_json_value_init_array();
+        if (root_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
+        root_array = G_json_array(root_value);
+    }
+
+    switch (format) {
+    case PLAIN:
         for (cat = 0; cat < num_cats; cat++) {
             bc = &basecats[cat];
 
@@ -380,8 +396,9 @@ static void print_quantiles(char *fs, char *name, int table_frmt)
                 fprintf(stdout, "%d%s%d%s%f%s%f\n", cmin + cat, fs, quant, fs,
                         100 * quants[quant], fs, bc->quants[quant]);
         }
-    }
-    else {
+        break;
+
+    case CSV:
         fprintf(stdout, "cat");
         for (quant = 0; quant < num_quants; quant++)
             fprintf(stdout, "%s%f", fs, 100 * quants[quant]);
@@ -398,6 +415,67 @@ static void print_quantiles(char *fs, char *name, int table_frmt)
                 fprintf(stdout, "%s%f", fs, bc->quants[quant]);
             fprintf(stdout, "\n");
         }
+        break;
+
+    case JSON:
+        for (cat = 0; cat < num_cats; cat++) {
+            bc = &basecats[cat];
+
+            if (bc->total == 0)
+                continue;
+
+            cat_value = G_json_value_init_object();
+            if (cat_value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON object. Out of memory?"));
+            }
+            cat_object = G_json_object(cat_value);
+
+            G_json_object_set_number(cat_object, "category", cmin + cat);
+
+            percentiles_value = G_json_value_init_array();
+            if (percentiles_value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON array. Out of memory?"));
+            }
+            percentiles_array = G_json_array(percentiles_value);
+
+            for (quant = 0; quant < num_quants; quant++) {
+                percentile_value = G_json_value_init_object();
+                if (percentile_value == NULL) {
+                    G_fatal_error(
+                        _("Failed to initialize JSON object. Out of memory?"));
+                }
+                percentile_object = G_json_object(percentile_value);
+
+                G_json_object_set_number(percentile_object, "percentile",
+                                         100 * quants[quant]);
+                G_json_object_set_number(percentile_object, "value",
+                                         bc->quants[quant]);
+
+                G_json_array_append_value(percentiles_array, percentile_value);
+            }
+
+            G_json_object_set_value(cat_object, "percentiles",
+                                    percentiles_value);
+
+            G_json_array_append_value(root_array, cat_value);
+        }
+
+        break;
+    }
+
+    if (format == JSON) {
+        char *json_string = G_json_serialize_to_string_pretty(root_value);
+        if (!json_string) {
+            G_json_value_free(root_value);
+            G_fatal_error(_("Failed to serialize JSON to pretty format."));
+        }
+
+        puts(json_string);
+
+        G_json_free_serialized_string(json_string);
+        G_json_value_free(root_value);
     }
 }
 
@@ -546,7 +624,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct {
         struct Option *quant, *perc, *slots, *basemap, *covermap, *output,
-            *file, *fs;
+            *file, *fs, *format;
     } opt;
     struct {
         struct Flag *r, *p, *t;
@@ -558,6 +636,7 @@ int main(int argc, char *argv[])
     struct Range range;
     struct FPRange fprange;
     int i;
+    enum OutputFormat format;
 
     G_gisinit(argv[0]);
 
@@ -605,8 +684,14 @@ int main(int argc, char *argv[])
         _("Name for output file (if omitted or \"-\" output to stdout)");
 
     opt.fs = G_define_standard_option(G_OPT_F_SEP);
-    opt.fs->answer = ":";
+    opt.fs->answer = NULL;
     opt.fs->guisection = _("Formatting");
+
+    opt.format = G_define_standard_option(G_OPT_F_FORMAT);
+    opt.format->options = "plain,csv,json";
+    opt.format->descriptions = ("plain;Human readable text output;"
+                                "csv;CSV (Comma Separated Values);"
+                                "json;JSON (JavaScript Object Notation);");
 
     flag.r = G_define_flag();
     flag.r->key = 'r';
@@ -619,7 +704,10 @@ int main(int argc, char *argv[])
 
     flag.t = G_define_flag();
     flag.t->key = 't';
-    flag.t->description = _("Print statistics in table format");
+    flag.t->label = _("Print statistics in table format [deprecated]");
+    flag.t->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=csv instead.");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -630,6 +718,14 @@ int main(int argc, char *argv[])
     reclass = flag.r->answer;
     print = flag.p->answer || flag.t->answer;
 
+    /* For backward compatibility */
+    if (!opt.fs->answer) {
+        if (strcmp(opt.format->answer, "csv") == 0)
+            opt.fs->answer = "comma";
+        else
+            opt.fs->answer = ":";
+    }
+
     if (!print && !opt.output->answers)
         G_fatal_error(_("Either -%c or %s= must be given"), flag.p->key,
                       opt.output->key);
@@ -637,6 +733,27 @@ int main(int argc, char *argv[])
     if (print && opt.output->answers)
         G_fatal_error(_("-%c and %s= are mutually exclusive"), flag.p->key,
                       opt.output->key);
+
+    if (strcmp(opt.format->answer, "json") == 0) {
+        format = JSON;
+    }
+    else if (strcmp(opt.format->answer, "csv") == 0) {
+        format = CSV;
+    }
+    else {
+        format = PLAIN;
+    }
+
+    if (flag.t->answer) {
+        G_verbose_message(
+            _("Flag 't' is deprecated and will be removed in a future "
+              "release. Please use format=csv instead."));
+        if (format == JSON) {
+            G_fatal_error(_("The -t flag cannot be used with format=json. "
+                            "Please select only one output format."));
+        }
+        format = CSV;
+    }
 
     num_slots = atoi(opt.slots->answer);
 
@@ -699,7 +816,7 @@ int main(int argc, char *argv[])
         /* get field separator */
         fs = G_option_to_separator(opt.fs);
 
-        print_quantiles(fs, opt.file->answer, flag.t->answer);
+        print_quantiles(fs, opt.file->answer, format);
     }
     else if (reclass)
         do_reclass(basemap, outputs);

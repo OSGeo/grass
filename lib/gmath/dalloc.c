@@ -35,7 +35,6 @@
  * \param[in] n size of vector to allocate
  * \return double *
  */
-
 double *G_alloc_vector(size_t n)
 {
     return (double *)G_calloc(n, sizeof(double));
@@ -53,7 +52,6 @@ double *G_alloc_vector(size_t n)
  * \param[in] cols number of columns in matrix
  * \return double **
  */
-
 double **G_alloc_matrix(int rows, int cols)
 {
     double **m;
@@ -77,7 +75,6 @@ double **G_alloc_matrix(int rows, int cols)
  * \param[in] n size of vector to allocate
  * \return float *
  */
-
 float *G_alloc_fvector(size_t n)
 {
     return (float *)G_calloc(n, sizeof(float));
@@ -95,7 +92,6 @@ float *G_alloc_fvector(size_t n)
  *  \param[in] cols number of columns in matrix
  *  \return float **
  */
-
 float **G_alloc_fmatrix(int rows, int cols)
 {
     float **m;
@@ -119,7 +115,6 @@ float **G_alloc_fmatrix(int rows, int cols)
  *  \param[in,out] v vector to free
  *  \return void
  */
-
 void G_free_vector(double *v)
 {
     G_free(v);
@@ -138,7 +133,6 @@ void G_free_vector(double *v)
  *  \param[in,out] v vector to free
  *  \return void
  */
-
 void G_free_fvector(float *v)
 {
     G_free(v);
@@ -157,7 +151,6 @@ void G_free_fvector(float *v)
  *  \param[in,out] m matrix to free
  *  \return void
  */
-
 void G_free_matrix(double **m)
 {
     G_free(m[0]);
@@ -177,7 +170,6 @@ void G_free_matrix(double **m)
  *  \param[in,out] m matrix to free
  *  \return void
  */
-
 void G_free_fmatrix(float **m)
 {
     G_free(m[0]);

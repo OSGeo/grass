@@ -37,7 +37,6 @@
  * \return 1 if successful
  * \return -1 if unable to seek or read segment file
  */
-
 int Segment_get_row(const SEGMENT *SEG, void *buf, off_t row)
 {
     int size;

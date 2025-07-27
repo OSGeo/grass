@@ -30,7 +30,6 @@ static int nalloc;
  *  \param suggested_color_index
  *  \return int
  */
-
 static int translate_or_add_color(const char *str)
 {
     int num_names = G_num_standard_color_names();
@@ -97,11 +96,10 @@ static int translate_or_add_color(const char *str)
  * If the color is none and none_acceptable is not true exits with
  * a fatal error and message.
  *
- *  \param name_or_code
+ *  \param str Color name or color code, as a string
  *  \param none_acceptable
- *  \return int
+ *  \return int Returns a color number usable by D_use_color.
  */
-
 int D_parse_color(const char *str, int none_acceptable)
 {
     int color;
@@ -122,10 +120,9 @@ int D_parse_color(const char *str, int none_acceptable)
  * Returns 0 if color is not known. The color number returned is for lines and
  * text, not raster graphics.
  *
- *  \param name
+ *  \param str Color name as an ASCII string
  *  \return int
  */
-
 int D_translate_color(const char *str)
 {
     return D_parse_color(str, 0);
@@ -141,7 +138,6 @@ int D_translate_color(const char *str)
  *  \param color
  *  \return int
  */
-
 int D_use_color(int color)
 {
     if (color <= 0)
@@ -171,12 +167,14 @@ int D_use_color(int color)
  * Returns 1 if color can be used to draw (is good and
  * isn't 'none'), 0 otherwise.
  *
- *  \param color_number
- *  \param red
- *  \param green
- *  \param blue
+ * \param color The color number provided by D_parse_color to convert
+ *              into 0-255 RGB values.
+ * \param r Pointer to an integer where the red component will be stored.
+ * \param g Pointer to an integer where the green component will be stored.
+ * \param b Pointer to an integer where the blue component will be stored.
  *
- *  \return int
+ * \return Returns 1 if color can be used to draw (is good and
+ *         isn't 'none'), 0 otherwise.
  */
 int D_color_number_to_RGB(int color, int *r, int *g, int *b)
 {
