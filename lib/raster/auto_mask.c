@@ -84,7 +84,6 @@ int Rast__check_for_auto_masking(void)
  *
  * \return
  */
-
 void Rast_suppress_masking(void)
 {
     Rast__init();
@@ -102,7 +101,6 @@ void Rast_suppress_masking(void)
  *
  * \return
  */
-
 void Rast_unsuppress_masking(void)
 {
     Rast__init();

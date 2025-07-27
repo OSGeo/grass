@@ -277,7 +277,6 @@ void D_font_info(char ***list, int *count)
  *  \param[out] r right edge of clip window
  *  \return ~
  */
-
 void D_get_clip_window(double *t, double *b, double *l, double *r)
 {
     COM_Get_window(t, b, l, r);
@@ -295,7 +294,6 @@ void D_get_clip_window(double *t, double *b, double *l, double *r)
  *  \param r right edge of clip window
  *  \return ~
  */
-
 void D_set_clip_window(double t, double b, double l, double r)
 {
     if (t < frame.t)
@@ -321,7 +319,6 @@ void D_set_clip_window(double t, double b, double l, double r)
  *  \param[out] r right edge of frame
  *  \return ~
  */
-
 void D_get_frame(double *t, double *b, double *l, double *r)
 {
     *t = frame.t;
@@ -341,7 +338,6 @@ void D_get_frame(double *t, double *b, double *l, double *r)
  *  \param[out] r right edge of screen
  *  \return ~
  */
-
 void D_get_screen(double *t, double *b, double *l, double *r)
 {
     *t = screen.t;
@@ -359,7 +355,6 @@ void D_get_screen(double *t, double *b, double *l, double *r)
  *  \param ~
  *  \return ~
  */
-
 void D_set_clip_window_to_map_window(void)
 {
     D_set_clip_window(D_get_d_north(), D_get_d_south(), D_get_d_west(),
@@ -375,7 +370,6 @@ void D_set_clip_window_to_map_window(void)
  *  \param ~
  *  \return ~
  */
-
 void D_set_clip_window_to_screen_window(void)
 {
     COM_Set_window(frame.t, frame.b, frame.l, frame.r);

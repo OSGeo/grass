@@ -45,7 +45,6 @@
 
    \return 0 on success, 1 on error
  */
-
 int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
                              int nfield, int tfield, int tucfield,
                              const char *afcol, const char *abcol,

@@ -929,7 +929,6 @@ int I_apply_colormap(unsigned char *vals, unsigned char *vals_mask,
    \return 0 on success
    \return 1 on failure
  */
-
 int I_rasterize(double *polygon, int pol_n_pts, unsigned char val,
                 struct Cell_head *rast_region, unsigned char *rast)
 {

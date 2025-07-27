@@ -26,7 +26,6 @@
  * \param[in] SEG segment
  * \return always returns 0
  */
-
 int Segment_flush(SEGMENT *SEG)
 {
     int i;
