@@ -196,6 +196,54 @@ output9 = """
  120.000000 97.418869 hsv(57, 100, 100)
 """
 
+output10 = """distance,value,color
+0.000000,88.370453,159:255:0
+10.000000,88.397057,160:255:0
+20.000000,89.526253,174:255:0
+30.000000,89.677551,176:255:0
+40.000000,91.297195,197:255:0
+50.000000,91.297195,197:255:0
+60.000000,92.330658,210:255:0
+70.000000,93.069199,219:255:0
+80.000000,94.768280,240:255:0
+90.000000,95.524551,250:255:0
+100.000000,96.770805,255:250:0
+110.000000,96.770805,255:250:0
+120.000000,97.418869,255:246:0
+"""
+
+output11 = """distance,value,color
+0.000000,88.370453,rgb(159, 255, 0)
+10.000000,88.397057,rgb(160, 255, 0)
+20.000000,89.526253,rgb(174, 255, 0)
+30.000000,89.677551,rgb(176, 255, 0)
+40.000000,91.297195,rgb(197, 255, 0)
+50.000000,91.297195,rgb(197, 255, 0)
+60.000000,92.330658,rgb(210, 255, 0)
+70.000000,93.069199,rgb(219, 255, 0)
+80.000000,94.768280,rgb(240, 255, 0)
+90.000000,95.524551,rgb(250, 255, 0)
+100.000000,96.770805,rgb(255, 250, 0)
+110.000000,96.770805,rgb(255, 250, 0)
+120.000000,97.418869,rgb(255, 246, 0)
+"""
+
+output12 = """easting,northing,distance,value,color
+637656.000000,224222.000000,0.000000,88.370453,hsv(82, 100, 100)
+637664.540486,224227.201932,10.000000,88.397057,hsv(82, 100, 100)
+637673.080972,224232.403865,20.000000,89.526253,hsv(79, 100, 100)
+637681.621458,224237.605797,30.000000,89.677551,hsv(78, 100, 100)
+637690.161944,224242.807729,40.000000,91.297195,hsv(73, 100, 100)
+637698.702430,224248.009662,50.000000,91.297195,hsv(73, 100, 100)
+637707.242916,224253.211594,60.000000,92.330658,hsv(70, 100, 100)
+637715.783402,224258.413526,70.000000,93.069199,hsv(68, 100, 100)
+637724.323887,224263.615459,80.000000,94.768280,hsv(63, 100, 100)
+637732.864373,224268.817391,90.000000,95.524551,hsv(61, 100, 100)
+637741.404859,224274.019323,100.000000,96.770805,hsv(58, 100, 100)
+637749.945345,224279.221256,110.000000,96.770805,hsv(58, 100, 100)
+637758.485831,224284.423188,120.000000,97.418869,hsv(57, 100, 100)
+"""
+
 output_json_with_color = [
     {
         "easting": 637656,
@@ -819,6 +867,109 @@ class TestProfileNCSPM(TestCase):
         expected = output_json_with_color_hsv
         result = json.loads(module.outputs.stdout)
         self._assert_json_equal(expected, result)
+
+    def test_profile_csv(self):
+        module = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="g",
+            format="csv",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.runModule(module)
+        self.assertEqual("", module.outputs.stderr)
+
+        expected = "easting,northing,distance,value\n" + "\n".join(
+            line.strip().replace(" ", ",") for line in output2.strip().splitlines()
+        )
+        result = module.outputs.stdout.strip()
+        self.assertMultiLineEqual(result, expected)
+
+    def test_profile_csv_color(self):
+        rprofile = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="c",
+            format="csv",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.assertModule(rprofile)
+        expected = "distance,value,color\n" + "\n".join(
+            line.strip().replace(" ", ",") for line in output7.strip().splitlines()
+        )
+        result = rprofile.outputs.stdout.strip()
+        self.assertMultiLineEqual(result, expected)
+
+        rprofile = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="c",
+            format="csv",
+            color_format="triplet",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.assertModule(rprofile)
+        expected = output10
+        result = rprofile.outputs.stdout
+        self.assertMultiLineEqual(result, expected)
+
+        rprofile = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="c",
+            format="csv",
+            color_format="hex",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.assertModule(rprofile)
+        expected = "distance,value,color\n" + "\n".join(
+            line.strip().replace(" ", ",") for line in output7.strip().splitlines()
+        )
+        result = rprofile.outputs.stdout.strip()
+        self.assertMultiLineEqual(result, expected)
+
+        rprofile = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="c",
+            format="csv",
+            color_format="rgb",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.assertModule(rprofile)
+        expected = output11
+        result = rprofile.outputs.stdout
+        self.assertMultiLineEqual(result, expected)
+
+        rprofile = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="gc",
+            format="csv",
+            color_format="hsv",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.assertModule(rprofile)
+        expected = output12
+        result = rprofile.outputs.stdout
+        self.assertMultiLineEqual(result, expected)
+
+    def test_profile_separator_csv(self):
+        module = SimpleModule(
+            "r.profile",
+            input="elevation",
+            format="csv",
+            null_value="nodata",
+            coordinates=[644914, 224579, 644986, 224627, 645091, 224549],
+            separator="|",
+        )
+        self.assertModule(module)
+
+        expected = "distance|value\n" + "\n".join(
+            line.strip().replace(" ", "|") for line in output3.strip().splitlines()
+        )
+        result = module.outputs.stdout.strip()
+        self.assertMultiLineEqual(result, expected)
 
 
 if __name__ == "__main__":
