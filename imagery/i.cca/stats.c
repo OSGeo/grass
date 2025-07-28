@@ -20,7 +20,7 @@ int within(int samptot, int nclass, double *nsamp, double ***cov, double **w,
 
     for (i = 0; i < bands; i++)
         for (j = 0; j < bands; j++)
-            w[i][j] = (1.0 / ((double)(samptot - nclass))) * w[i][j];
+            w[i][j] /= (samptot - nclass);
 
     return 0;
 }
@@ -37,20 +37,43 @@ int between(int samptot, int nclass, double *nsamp, double **mu, double **p,
     tmp2 = G_alloc_matrix(bands, bands);
     newvec = G_alloc_vector(bands);
 
+    /* Initialize to zero */
+    for (i = 0; i < bands; i++) {
+        newvec[i] = 0.0;
+        for (j = 0; j < bands; j++) {
+            tmp1[i][j] = 0.0;
+            tmp2[i][j] = 0.0;
+        }
+    }
+
+    /* Compute weighted sum for overall mean vector */
     for (i = 0; i < nclass; i++)
         for (j = 0; j < bands; j++)
             newvec[j] += nsamp[i] * mu[i][j];
-    for (i = 0; i < bands; i++)
-        for (j = 0; j < bands; j++)
-            tmp1[i][j] = (newvec[i] * newvec[j]) / samptot;
 
+    /* Compute N * mu_bar * mu_bar^T */
+    for (i = 0; i < bands; i++) {
+        double mu_bar_i = newvec[i] / samptot;
+        for (j = 0; j < bands; j++) {
+            double mu_bar_j = newvec[j] / samptot;
+            tmp1[i][j] = samptot * mu_bar_i * mu_bar_j;
+        }
+    }
+
+    /* Compute sum of n_i * mu_i * mu_i^T */
     for (k = 0; k < nclass; k++) {
         product(mu[k], nsamp[k], tmp0, bands);
         for (i = 0; i < bands; i++)
             for (j = 0; j < bands; j++)
-                tmp2[i][j] += tmp0[i][j] - tmp1[i][j];
+                tmp2[i][j] += tmp0[i][j];
     }
 
+    /* Subtract overall mean component */
+    for (i = 0; i < bands; i++)
+        for (j = 0; j < bands; j++)
+            tmp2[i][j] -= tmp1[i][j];
+
+    /* Normalize */
     for (i = 0; i < bands; i++)
         for (j = 0; j < bands; j++)
             p[i][j] = tmp2[i][j] / (nclass - 1);

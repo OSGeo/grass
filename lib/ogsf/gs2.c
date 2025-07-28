@@ -494,7 +494,7 @@ int GS_transp_is_set(void)
 /*!
    \brief Retrieves coordinates for lighting model position, at center of view
 
-   \param pos[out] coordinates
+   \param[out] pos coordinates
  */
 void GS_get_modelposition1(float pos[])
 {
@@ -522,8 +522,8 @@ void GS_get_modelposition1(float pos[])
    know position to calculate size, have two dependent variables
    (nearclip * 2) from eye.
 
-   \param siz[out] size
-   \param pos[out] coordinates (X, Y, Z)
+   \param[out] siz size
+   \param[out] pos coordinates (X, Y, Z)
  */
 void GS_get_modelposition(float *siz, float *pos)
 {
@@ -707,6 +707,8 @@ void GS_draw_line_onsurf(int id, float x1, float y1, float x2, float y2)
 
    \param id surface id
    \param x1,y1,x2,y2 line nodes
+   \param lasp
+   \param n
 
    \return number of points used
  */
@@ -1522,7 +1524,7 @@ int GS_num_surfs(void)
 
    Must be freed when not needed!
 
-   \param[out] numsurf number of available surfaces
+   \param[out] numsurfs number of available surfaces
 
    \return pointer to surface array
    \return NULL on error

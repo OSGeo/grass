@@ -26,7 +26,6 @@
  * \param[in] n number of bytes to write
  * \return
  */
-
 void G_write_zeros(int fd, size_t n)
 {
     char zeros[1024];

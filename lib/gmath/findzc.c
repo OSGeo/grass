@@ -49,7 +49,6 @@
  * \param[in] num_orients
  * \return int always returns 0
  */
-
 int G_math_findzc(double conv[], int size, double zc[], double thresh,
                   int num_orients)
 {

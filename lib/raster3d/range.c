@@ -105,7 +105,6 @@ int Rast3d_read_range(const char *name, const char *mapset,
  *  \return 1 ... if successful
  *          0 ... otherwise.
  */
-
 int Rast3d_range_load(RASTER3D_Map *map)
 {
     if (map->operation == RASTER3D_WRITE_DATA)
@@ -127,7 +126,6 @@ int Rast3d_range_load(RASTER3D_Map *map)
  *  \param min a pointer to a double to store minumim
  *  \param max a pointer to a double to store maximum
  */
-
 void Rast3d_range_min_max(RASTER3D_Map *map, double *min, double *max)
 {
     Rast_get_fp_range_min_max(&(map->range), min, max);

@@ -60,7 +60,6 @@ int Rast3d_mask_close(void)
  *
  *  \return int
  */
-
 int Rast3d_mask_file_exists(void)
 {
     return G_find_file_misc(RASTER3D_DIRECTORY, RASTER3D_CELL_ELEMENT,
@@ -133,7 +132,6 @@ static float Rast3d_getMaskFloat(RASTER3D_Map *map, int x, int y, int z)
  *  \return 1 ... if successful
  *          0 ... otherwise.
  */
-
 int Rast3d_mask_reopen(int cache)
 {
     int tmp;
@@ -171,7 +169,6 @@ int Rast3d_mask_reopen(int cache)
  *  \param z
  *  \return int
  */
-
 int Rast3d_is_masked(RASTER3D_Map *map, int x, int y, int z)
 {
     if (!Rast3d_maskMapExistsVar)
@@ -197,7 +194,6 @@ int Rast3d_is_masked(RASTER3D_Map *map, int x, int y, int z)
  *  \param type
  *  \return void
  */
-
 void Rast3d_mask_num(RASTER3D_Map *map, int x, int y, int z, void *value,
                      int type)
 {
@@ -213,13 +209,13 @@ void Rast3d_mask_num(RASTER3D_Map *map, int x, int y, int z, void *value,
  *
  *  Same as <em>Rast3d_mask_num (x, y, z, value, FCELL_TYPE)</em>.
  *
+ *  \param map
  *  \param x
  *  \param y
  *  \param z
  *  \param value
  *  \return void
  */
-
 void Rast3d_mask_float(RASTER3D_Map *map, int x, int y, int z, float *value)
 {
     if (!Rast3d_maskMapExistsVar)
@@ -240,7 +236,6 @@ void Rast3d_mask_float(RASTER3D_Map *map, int x, int y, int z, float *value)
  *  \param value
  *  \return void
  */
-
 void Rast3d_mask_double(RASTER3D_Map *map, int x, int y, int z, double *value)
 {
     if (!Rast3d_maskMapExistsVar)
@@ -266,7 +261,6 @@ void Rast3d_mask_double(RASTER3D_Map *map, int x, int y, int z, double *value)
  *  \param type
  *  \return void
  */
-
 void Rast3d_mask_tile(RASTER3D_Map *map, int tileIndex, void *tile, int type)
 {
     int nofNum, rows, cols, depths, xRedundant, yRedundant, zRedundant;
@@ -325,7 +319,6 @@ void Rast3d_mask_tile(RASTER3D_Map *map, int tileIndex, void *tile, int type)
  *  \param map
  *  \return void
  */
-
 void Rast3d_mask_on(RASTER3D_Map *map)
 {
     map->useMask = 1;
@@ -341,7 +334,6 @@ void Rast3d_mask_on(RASTER3D_Map *map)
  *  \param map
  *  \return void
  */
-
 void Rast3d_mask_off(RASTER3D_Map *map)
 {
     map->useMask = 0;
@@ -356,7 +348,6 @@ void Rast3d_mask_off(RASTER3D_Map *map)
  *  \param map
  *  \return int
  */
-
 int Rast3d_mask_is_on(RASTER3D_Map *map)
 {
     return map->useMask;
@@ -370,7 +361,6 @@ int Rast3d_mask_is_on(RASTER3D_Map *map)
  *  \param map
  *  \return int
  */
-
 int Rast3d_mask_is_off(RASTER3D_Map *map)
 {
     return !map->useMask;
@@ -383,7 +373,6 @@ int Rast3d_mask_is_off(RASTER3D_Map *map)
  *
  *  \return char *
  */
-
 const char *Rast3d_mask_file(void)
 {
     return RASTER3D_MASK_MAP;
@@ -396,7 +385,6 @@ const char *Rast3d_mask_file(void)
  *
  *  \return int
  */
-
 int Rast3d_mask_map_exists(void)
 {
     return Rast3d_maskMapExistsVar;

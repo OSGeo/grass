@@ -41,7 +41,6 @@
  * \return -5 if prepared file could not be read
  * \return -6 if out of memory
  */
-
 int Segment_open(SEGMENT *SEG, char *fname, off_t nrows, off_t ncols, int srows,
                  int scols, int len, int nseg)
 {
