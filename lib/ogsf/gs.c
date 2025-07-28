@@ -1306,7 +1306,7 @@ int gs_setall_norm_needupdate(void)
    \brief Check if point is masked
 
    \param gs pointer to geosurf struct
-   \param pt point coordinates (X,Y,Z)
+   \param[in] pt point coordinates (X,Y,Z)
 
    \return 1 masked
    \return 0 not masked
