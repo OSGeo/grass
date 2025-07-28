@@ -84,7 +84,7 @@ static typbuff *Ebuf; /* elevation buffer */
 static int Flat;
 
 /*!
-   \brief Initizalize
+   \brief Initialize
 
    \param[in] rows number of rows
    \param[in] cols number of columns
