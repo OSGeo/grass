@@ -12,7 +12,7 @@ three main libraries:
 *[grass.tools](https://grass.osgeo.org/grass-stable/manuals/libpython/tools_index.html)*
 provides a Python interface to GRASS tools,
 *[grass.script](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script_intro.html)*
-gives access to GRASS session in Python,
+handles GRASS projects and sessions in Python,
 and *[grass.pygrass](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_index.html)*
 enables a fine-grained access to the GRASS data structures.
 
@@ -86,7 +86,7 @@ tools.r_slope_aspect(elevation="elevation", slope="slope")
 ```
 
 Above, we used a GRASS tool which creates geospatial data in the current GRASS project,
-so we didn't do anything with the reteurned result in Python.
+so we didn't do anything with the returned result in Python.
 Many tools produce machine-readable text output, typically JSON,
 which can be then used in Python.
 For example, to get vector attribute data,
@@ -149,13 +149,13 @@ Available tools and their parameters are listed in the tool documentation:
 <!-- markdownlint-disable-next-line line-length -->
 [Documentation of tools :material-arrow-right-bold:](full_index.md){ .md-button }
 
-### Accesing returned values
+### Accessing returned values
 
-The object returned by a tool run provides several ways of accesing the result
+The object returned by a tool run provides several ways of accessing the result
 when a tool returns information as a text (as opposed to creating geospatial data
 in GRASS project or as files).
 
-The most common common output comes in JSON format. The result objectyou allows you
+The most common output format is JSON. The result object allows you
 to access the parsed JSON structure without explicitly processing
 the returned JSON data.
 You only need to ask the tool to produce JSON, typically with `format="json"`,
@@ -183,7 +183,7 @@ we can use the *text* attribute:
 print(tools.g_region(flags="p").text)
 ```
 
-The documentaion of *[grass.tool.support.ToolResult](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.tools.html#grass.tools.support.ToolResult)*
+The documentation of *[grass.tool.support.ToolResult](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.tools.html#grass.tools.support.ToolResult)*
 provides an overview of all the attributes and text processing functions,
 such as *text_split* function and *comma_items* attribute.
 

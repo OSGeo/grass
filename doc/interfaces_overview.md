@@ -41,7 +41,7 @@ three main libraries:
 *[grass.tools](https://grass.osgeo.org/grass-stable/manuals/libpython/tools_index.html)*
 provides a Python interface to GRASS tools,
 *[grass.script](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script_intro.html)*
-gives access to GRASS session in Python,
+handles GRASS projects and sessions in Python,
 and *[grass.pygrass](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_index.html)*
 enables a fine-grained access to the GRASS data structures.
 
