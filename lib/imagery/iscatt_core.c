@@ -720,7 +720,6 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 
     for (i_band = 0; i_band < n_bands; i_band++)
         bands_ids[i_band] = -1;
-    
     for (i_cat = 0; i_cat < scatts->n_a_cats; i_cat++)
         fd_cats_rasts[i_cat] = -1;
 
