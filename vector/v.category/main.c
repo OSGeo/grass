@@ -83,16 +83,17 @@ int main(int argc, char *argv[])
     double x, y;
     int cat, ocat, scat, *fields, nfields, field;
     struct GModule *module;
-    struct Option *in_opt, *out_opt, *option_opt, *type_opt;
+    struct Option *in_opt, *out_opt, *option_opt, *type_opt, *fs_opt;
     struct Option *cat_opt, *field_opt, *step_opt, *id_opt, *format_opt;
     struct Flag *csv, *notab;
     FREPORT **freps;
     int nfreps, rtype, fld;
-    char *desc;
+    char *desc, *fs;
     enum OutputFormat format;
     JSON_Array *root_array = NULL;
     JSON_Value *root_value = NULL;
     JSON_Object *root_object = NULL;
+    int skip_header = 0;
 
     module = G_define_module();
     G_add_keyword(_("vector"));
@@ -168,6 +169,10 @@ int main(int argc, char *argv[])
                                  "json;JSON (JavaScript Object Notation);");
     format_opt->guisection = _("Print");
 
+    fs_opt = G_define_standard_option(G_OPT_F_SEP);
+    fs_opt->answer = NULL;
+    fs_opt->guisection = _("Formatting");
+
     csv = G_define_flag();
     csv->key = 'g';
     csv->label = _("CSV style output, currently only for report [deprecated]");
@@ -214,6 +219,14 @@ int main(int argc, char *argv[])
         break;
     }
 
+    /* For backward compatibility */
+    if (!fs_opt->answer) {
+        if (strcmp(format_opt->answer, "csv") == 0)
+            fs_opt->answer = "comma";
+        else
+            fs_opt->answer = "space";
+    }
+
     /* read format */
     switch (format_opt->answer[0]) {
     case ('j'):
@@ -234,8 +247,13 @@ int main(int argc, char *argv[])
             G_fatal_error(
                 _("JSON output and CSV output cannot be used simultaneously."));
         }
+        else if (format == PLAIN)
+            skip_header = 1; /* For backward compatibility */
+
         format = CSV;
     }
+
+    fs = G_option_to_separator(fs_opt);
 
     if (option == O_LYR) {
         JSON_Array *layers_array = NULL;
@@ -267,6 +285,11 @@ int main(int argc, char *argv[])
                 _("Unable to open vector map <%s> at topological level %d"),
                 Vect_get_full_name(&In), 2);
         }
+
+        if (!skip_header && format == CSV) {
+            fprintf(stdout, "layer\n");
+        }
+
         if (In.format == GV_FORMAT_NATIVE) {
             nfields = Vect_cidx_get_num_fields(&In);
             for (i = 0; i < nfields; i++) {
@@ -740,71 +763,79 @@ int main(int argc, char *argv[])
                 }
             }
         }
+
+        if (!skip_header && format == CSV) {
+            fprintf(stdout, "%s%s%s%s%s%s%s%s%s\n", "layer", fs, "type", fs,
+                    "count", fs, "min", fs, "max");
+        }
+
         for (i = 0; i < nfreps; i++) {
             switch (format) {
             case CSV:
                 if (freps[i]->count[FR_POINT] > 0)
-                    fprintf(stdout, "%d point %d %d %d\n", freps[i]->field,
-                            freps[i]->count[FR_POINT],
+                    fprintf(stdout, "%d%spoint%s%d%s%d%s%d\n", freps[i]->field,
+                            fs, fs, freps[i]->count[FR_POINT], fs,
                             (freps[i]->min[FR_POINT] < 0
                                  ? 0
                                  : freps[i]->min[FR_POINT]),
-                            freps[i]->max[FR_POINT]);
+                            fs, freps[i]->max[FR_POINT]);
 
                 if (freps[i]->count[FR_LINE] > 0)
-                    fprintf(stdout, "%d line %d %d %d\n", freps[i]->field,
-                            freps[i]->count[FR_LINE],
+                    fprintf(stdout, "%d%sline%s%d%s%d%s%d\n", freps[i]->field,
+                            fs, fs, freps[i]->count[FR_LINE], fs,
                             (freps[i]->min[FR_LINE] < 0
                                  ? 0
                                  : freps[i]->min[FR_LINE]),
-                            freps[i]->max[FR_LINE]);
+                            fs, freps[i]->max[FR_LINE]);
 
                 if (freps[i]->count[FR_BOUNDARY] > 0)
-                    fprintf(stdout, "%d boundary %d %d %d\n", freps[i]->field,
-                            freps[i]->count[FR_BOUNDARY],
+                    fprintf(stdout, "%d%sboundary%s%d%s%d%s%d\n",
+                            freps[i]->field, fs, fs,
+                            freps[i]->count[FR_BOUNDARY], fs,
                             (freps[i]->min[FR_BOUNDARY] < 0
                                  ? 0
                                  : freps[i]->min[FR_BOUNDARY]),
-                            freps[i]->max[FR_BOUNDARY]);
+                            fs, freps[i]->max[FR_BOUNDARY]);
 
                 if (freps[i]->count[FR_CENTROID] > 0)
-                    fprintf(stdout, "%d centroid %d %d %d\n", freps[i]->field,
-                            freps[i]->count[FR_CENTROID],
+                    fprintf(stdout, "%d%scentroid%s%d%s%d%s%d\n",
+                            freps[i]->field, fs, fs,
+                            freps[i]->count[FR_CENTROID], fs,
                             (freps[i]->min[FR_BOUNDARY] < 0
                                  ? 0
                                  : freps[i]->min[FR_BOUNDARY]),
-                            freps[i]->max[FR_CENTROID]);
+                            fs, freps[i]->max[FR_CENTROID]);
 
                 if (freps[i]->count[FR_AREA] > 0)
-                    fprintf(stdout, "%d area %d %d %d\n", freps[i]->field,
-                            freps[i]->count[FR_AREA],
+                    fprintf(stdout, "%d%sarea%s%d%s%d%s%d\n", freps[i]->field,
+                            fs, fs, freps[i]->count[FR_AREA], fs,
                             (freps[i]->min[FR_AREA] < 0
                                  ? 0
                                  : freps[i]->min[FR_AREA]),
-                            freps[i]->max[FR_AREA]);
+                            fs, freps[i]->max[FR_AREA]);
 
                 if (freps[i]->count[FR_FACE] > 0)
-                    fprintf(stdout, "%d face %d %d %d\n", freps[i]->field,
-                            freps[i]->count[FR_FACE],
+                    fprintf(stdout, "%d%sface%s%d%s%d%s%d\n", freps[i]->field,
+                            fs, fs, freps[i]->count[FR_FACE], fs,
                             (freps[i]->min[FR_FACE] < 0
                                  ? 0
                                  : freps[i]->min[FR_FACE]),
-                            freps[i]->max[FR_FACE]);
+                            fs, freps[i]->max[FR_FACE]);
 
                 if (freps[i]->count[FR_KERNEL] > 0)
-                    fprintf(stdout, "%d kernel %d %d %d\n", freps[i]->field,
-                            freps[i]->count[FR_KERNEL],
+                    fprintf(stdout, "%d%skernel%s%d%s%d%s%d\n", freps[i]->field,
+                            fs, fs, freps[i]->count[FR_KERNEL], fs,
                             (freps[i]->min[FR_KERNEL] < 0
                                  ? 0
                                  : freps[i]->min[FR_KERNEL]),
-                            freps[i]->max[FR_KERNEL]);
+                            fs, freps[i]->max[FR_KERNEL]);
 
                 if (freps[i]->count[FR_ALL] > 0)
                     fprintf(
-                        stdout, "%d all %d %d %d\n", freps[i]->field,
-                        freps[i]->count[FR_ALL],
+                        stdout, "%d%sall%s%d%s%d%s%d\n", freps[i]->field, fs,
+                        fs, freps[i]->count[FR_ALL], fs,
                         (freps[i]->min[FR_ALL] < 0 ? 0 : freps[i]->min[FR_ALL]),
-                        freps[i]->max[FR_ALL]);
+                        fs, freps[i]->max[FR_ALL]);
                 break;
 
             case PLAIN:
@@ -873,6 +904,10 @@ int main(int argc, char *argv[])
         break;
 
     case (O_PRN):
+        if (format == CSV && !skip_header) {
+            fprintf(stdout, "%s%s%s%s%s\n", "id", fs, "layer", fs, "cat");
+        }
+
         while ((type = Vect_read_next_line(&In, Points, Cats)) > 0) {
             id++;
             int has = 0;
@@ -899,11 +934,13 @@ int main(int argc, char *argv[])
             for (i = 0; i < nfields; i++) {
                 int first = 1;
 
-                if (i > 0 && format != JSON)
+                if (i > 0 &&
+                    (format == PLAIN || (format == CSV && skip_header)))
                     fprintf(stdout, "|");
                 for (j = 0; j < Cats->n_cats; j++) {
                     if (Cats->field[j] == fields[i]) {
-                        if (!first && format != JSON)
+                        if (!first &&
+                            (format == PLAIN || (format == CSV && skip_header)))
                             fprintf(stdout, "/");
 
                         JSON_Object *cat_object = NULL;
@@ -919,6 +956,14 @@ int main(int argc, char *argv[])
 
                         switch (format) {
                         case CSV:
+                            if (skip_header) {
+                                fprintf(stdout, "%d", Cats->cat[j]);
+                            }
+                            else {
+                                fprintf(stdout, "%d%s%d%s%d\n", id, fs,
+                                        fields[i], fs, Cats->cat[j]);
+                            }
+                            break;
                         case PLAIN:
                             fprintf(stdout, "%d", Cats->cat[j]);
                             break;
@@ -939,7 +984,7 @@ int main(int argc, char *argv[])
                 }
             }
 
-            if (format != JSON) {
+            if (format == PLAIN || (format == CSV && skip_header)) {
                 fprintf(stdout, "\n");
             }
         }

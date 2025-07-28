@@ -160,9 +160,38 @@ class TestVCategory(TestCase):
         for i, component in enumerate(result):
             self.assertEqual(component, expected[i], f"Mismatch at line {i + 1}")
 
+        expected = [
+            "layer,type,count,min,max",
+            "1,point,6,1,3",
+            "1,all,6,1,3",
+            "2,point,4,2,4",
+            "2,all,4,2,4",
+        ]
         # Test with 'format=csv' option
         module = SimpleModule(
             "v.category", input=self.test_vector, option="report", format="csv"
+        )
+        self.assertModule(module)
+        result = module.outputs.stdout.strip().splitlines()
+
+        for i, component in enumerate(result):
+            self.assertEqual(component, expected[i], f"Mismatch at line {i + 1}")
+
+    def test_report_option_csv_separator(self):
+        """Test v.category with the CSV output format, report option and pipe separator."""
+        expected = [
+            "layer|type|count|min|max",
+            "1|point|6|1|3",
+            "1|all|6|1|3",
+            "2|point|4|2|4",
+            "2|all|4|2|4",
+        ]
+        module = SimpleModule(
+            "v.category",
+            input=self.test_vector,
+            option="report",
+            format="csv",
+            separator="pipe",
         )
         self.assertModule(module)
         result = module.outputs.stdout.strip().splitlines()
@@ -196,6 +225,33 @@ class TestVCategory(TestCase):
         self.assertModule(module)
         result = module.outputs.stdout.strip().splitlines()
 
+        # Test output format with -g flag.
+        for i, component in enumerate(result):
+            self.assertEqual(component, expected[i], f"Mismatch at line {i + 1}")
+
+        expected = [
+            "id,layer,cat",
+            "1,1,1",
+            "1,2,2",
+            "2,1,2",
+            "3,1,1",
+            "3,1,3",
+            "3,2,3",
+            "4,1,1",
+            "4,1,3",
+            "4,2,3",
+            "4,2,4",
+        ]
+        module = SimpleModule(
+            "v.category",
+            input=self.test_vector,
+            option="print",
+            layer="1,2",
+            format="csv",
+        )
+        self.assertModule(module)
+        result = module.outputs.stdout.strip().splitlines()
+
         # Test CSV output format.
         for i, component in enumerate(result):
             self.assertEqual(component, expected[i], f"Mismatch at line {i + 1}")
@@ -213,6 +269,21 @@ class TestVCategory(TestCase):
 
         module = SimpleModule(
             "v.category", input=self.test_vector, option="layers", flags="g"
+        )
+        self.assertModule(module)
+        result = module.outputs.stdout.strip().splitlines()
+
+        # Test output format with -g flag.
+        for i, component in enumerate(result):
+            self.assertEqual(component, expected[i], f"Mismatch at line {i + 1}")
+
+        expected = ["layer", "1", "2"]
+        module = SimpleModule(
+            "v.category",
+            input=self.test_vector,
+            option="layers",
+            flags="g",
+            format="csv",
         )
         self.assertModule(module)
         result = module.outputs.stdout.strip().splitlines()
