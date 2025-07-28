@@ -276,7 +276,7 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
         if (format == CSV) {
             /* CSV Header */
             for (i = 0; i < nfiles; i++) {
-                fprintf(stdout, "%s%s", i ? fs : "", "cat");
+                fprintf(stdout, "%s%s_%s", i ? fs : "", map_names[i], "cat");
             }
             if (with_areas) {
                 fprintf(stdout, "%s%s", fs, "area");
@@ -318,14 +318,17 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
             /* CSV Header */
             for (i = 0; i < nfiles; i++) {
                 if (raw_output || !is_fp[i] || as_int)
-                    fprintf(stdout, "%s%s", i ? fs : "", "cat");
+                    fprintf(stdout, "%s%s_%s", i ? fs : "", map_names[i],
+                            "cat");
                 else if (averaged)
-                    fprintf(stdout, "%s%s", i ? fs : "", "average");
+                    fprintf(stdout, "%s%s_%s", i ? fs : "", map_names[i],
+                            "average");
                 else
-                    fprintf(stdout, "%s%s", i ? fs : "", "range");
+                    fprintf(stdout, "%s%s_%s", i ? fs : "", map_names[i],
+                            "range");
 
                 if (with_labels)
-                    fprintf(stdout, "%s%s", fs, "label");
+                    fprintf(stdout, "%s%s_%s", fs, map_names[i], "label");
             }
 
             if (with_areas) {

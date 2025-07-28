@@ -48,9 +48,9 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
             fprintf(stdout, "%s%s%s%s", "col", fs, "row", fs);
 
         for (i = 0; i < nfiles; i++) {
-            fprintf(stdout, "%s%s", i ? fs : "", "cat");
+            fprintf(stdout, "%s%s_%s", i ? fs : "", map_names[i], "cat");
             if (with_labels)
-                fprintf(stdout, "%s%s", fs, "label");
+                fprintf(stdout, "%s%s_%s", fs, map_names[i], "label");
         }
         fprintf(stdout, "\n");
     }

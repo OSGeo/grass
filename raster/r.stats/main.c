@@ -40,6 +40,7 @@ CELL NULL_CELL;
 
 char *fs;
 struct Categories *labels;
+char **map_names; /* input map names */
 
 int main(int argc, char *argv[])
 {
@@ -325,8 +326,11 @@ int main(int argc, char *argv[])
         is_fp = (int *)G_realloc(is_fp, (nfiles + 1) * sizeof(int));
         DMAX = (DCELL *)G_realloc(DMAX, (nfiles + 1) * sizeof(DCELL));
         DMIN = (DCELL *)G_realloc(DMIN, (nfiles + 1) * sizeof(DCELL));
+        map_names =
+            (char **)G_realloc(map_names, (nfiles + 1) * sizeof(char *));
 
         fd[nfiles] = Rast_open_old(name, "");
+        map_names[nfiles] = G_store(name);
 
         if (!as_int)
             is_fp[nfiles] = Rast_map_is_fp(name, "");

@@ -818,7 +818,7 @@ class TestRStats(TestCase):
         )
         self.assertModule(rstats_module)
 
-        expected_output = ["cat,percent", "1,21.74%", "2,86.96%"]
+        expected_output = ["test_raster_1_cat,percent", "1,21.74%", "2,86.96%"]
 
         actual_output = rstats_module.outputs.stdout.splitlines()
         self.assertEqual(actual_output, expected_output)
@@ -833,7 +833,14 @@ class TestRStats(TestCase):
         )
         self.assertModule(rstats_module)
 
-        expected_output = ["cat,cat,count", "1,1,5", "2,2,5", "2,3,5", "2,4,5", "2,*,5"]
+        expected_output = [
+            "test_raster_1_cat,test_raster_2_cat,count",
+            "1,1,5",
+            "2,2,5",
+            "2,3,5",
+            "2,4,5",
+            "2,*,5",
+        ]
 
         actual_output = rstats_module.outputs.stdout.splitlines()
         self.assertEqual(actual_output, expected_output)
@@ -845,7 +852,7 @@ class TestRStats(TestCase):
         )
         self.assertModule(rstats_module)
 
-        expected_output = ["cat,area", "1,2000.000000", "2,8000.000000"]
+        expected_output = ["test_raster_1_cat,area", "1,2000.000000", "2,8000.000000"]
 
         actual_output = rstats_module.outputs.stdout.splitlines()
         self.assertEqual(actual_output, expected_output)
@@ -858,7 +865,7 @@ class TestRStats(TestCase):
         self.assertModule(rstats_module)
 
         expected_output = [
-            "range,label",
+            "float_raster_range,float_raster_label",
             "0.5-0.515686,from 1 degrees to 1 degrees",
             "0.986275-1.001961,from 1 degrees to 2 degrees",
             "1.488235-1.503922,from 2 degrees to 3 degrees",
@@ -877,7 +884,7 @@ class TestRStats(TestCase):
         self.assertModule(rstats_module)
 
         expected_output = [
-            "east,north,cat",
+            "east,north,test_raster_1_cat",
             "10,90,1",
             "30,90,2",
             "50,90,2",
@@ -916,7 +923,7 @@ class TestRStats(TestCase):
         self.assertModule(rstats_module)
 
         expected_output = [
-            "col,row,cat",
+            "col,row,test_raster_1_cat",
             "1,1,1",
             "2,1,2",
             "3,1,2",
@@ -958,7 +965,7 @@ class TestRStats(TestCase):
         self.assertModule(rstats_module)
 
         expected_output = [
-            "average,area",
+            "float_raster_average,area",
             "0.507843,2000.000000",
             "0.994118,2000.000000",
             "1.496078,2000.000000",
@@ -977,7 +984,7 @@ class TestRStats(TestCase):
         self.assertModule(rstats_module)
 
         expected_output = [
-            "cat,area",
+            "float_raster_cat,area",
             "1,2000.000000",
             "32,2000.000000",
             "64,2000.000000",
@@ -999,7 +1006,7 @@ class TestRStats(TestCase):
         self.assertModule(rstats_module)
 
         expected_output = [
-            "range,label",
+            "float_raster_range,float_raster_label",
             "0.5-1,1 degrees",
             "1-1.5,2 degrees",
             "2-2.5,4 degrees",
@@ -1019,7 +1026,7 @@ class TestRStats(TestCase):
         )
         self.assertModule(rstats_module)
 
-        expected_output = ["cat,count", "1,10", "2,10", "5,5"]
+        expected_output = ["float_raster_cat,count", "1,10", "2,10", "5,5"]
 
         actual_output = rstats_module.outputs.stdout.splitlines()
         self.assertEqual(actual_output, expected_output)
@@ -1035,7 +1042,7 @@ class TestRStats(TestCase):
         self.assertModule(rstats_module)
 
         expected_output = [
-            "cat,cat,area,count,percent",
+            "test_raster_1_cat,test_raster_2_cat,area,count,percent",
             "1,1,2000.000000,5,33.33%",
             "2,2,2000.000000,5,33.33%",
             "2,3,2000.000000,5,33.33%",
@@ -1056,7 +1063,7 @@ class TestRStats(TestCase):
         self.assertModule(rstats_module)
 
         expected_output = [
-            "cat,label,cat,label",
+            "test_raster_1_cat,test_raster_1_label,test_raster_2_cat,test_raster_2_label",
             "1,trees,1,trees",
             "2,water,2,buildings",
             "2,water,3,buildings",
