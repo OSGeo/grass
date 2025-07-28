@@ -136,7 +136,6 @@ static const char *get_renamed_option(const char *);
  * prompting.
  *
  */
-
 void G_disable_interactive(void)
 {
     st->no_interactive = 1;

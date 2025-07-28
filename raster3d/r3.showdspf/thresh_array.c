@@ -5,7 +5,6 @@
  **  return an array of struct cmndln_info of resulting
  **   thresholds based on  in_out flag
  */
-
 int build_thresh_arrays(D_spec, headp)
 struct dspec *D_spec;
 file_info *headp;

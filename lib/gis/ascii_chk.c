@@ -27,7 +27,6 @@
  * \param[in,out] string buffer to have non-ascii characters removed
  * \return
  */
-
 void G_ascii_check(char *string)
 {
     char *ptr1, *ptr2;

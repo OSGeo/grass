@@ -83,7 +83,6 @@ static void map_file(void)
    screen_left < screen_right
    screen_top  < screen_bottom
  */
-
 int PNG_Graph_set(void)
 {
     unsigned int red, grn, blu;

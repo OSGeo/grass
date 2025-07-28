@@ -108,7 +108,6 @@ int I_put_subgroup(const char *group, const char *subgroup)
  *  \param ref
  *  \return int
  */
-
 int I_get_group_ref(const char *group, struct Ref *ref)
 {
     return get_ref(group, "", NULL, ref);
@@ -126,7 +125,6 @@ int I_get_group_ref(const char *group, struct Ref *ref)
  *  \param ref
  *  \return int
  */
-
 int I_get_group_ref2(const char *group, const char *mapset, struct Ref *ref)
 {
     return get_ref(group, "", mapset, ref);
@@ -145,7 +143,6 @@ int I_get_group_ref2(const char *group, const char *mapset, struct Ref *ref)
  *  \param ref
  *  \return int
  */
-
 int I_get_subgroup_ref(const char *group, const char *subgroup, struct Ref *ref)
 {
     return get_ref(group, subgroup, NULL, ref);
@@ -306,7 +303,6 @@ int I_init_ref_color_nums(struct Ref *ref)
  *  \param ref
  *  \return int
  */
-
 int I_put_group_ref(const char *group, const struct Ref *ref)
 {
     return put_ref(group, "", ref);
@@ -327,7 +323,6 @@ int I_put_group_ref(const char *group, const struct Ref *ref)
  *  \param ref
  *  \return int
  */
-
 int I_put_subgroup_ref(const char *group, const char *subgroup,
                        const struct Ref *ref)
 {
@@ -382,7 +377,6 @@ static int put_ref(const char *group, const char *subgroup,
  *  \param ref
  *  \return int
  */
-
 int I_add_file_to_group_ref(const char *name, const char *mapset,
                             struct Ref *ref)
 {
@@ -430,7 +424,6 @@ int I_add_file_to_group_ref(const char *name, const char *mapset,
  *  \param dst
  *  \return int
  */
-
 int I_transfer_group_ref_file(const struct Ref *ref2, int n, struct Ref *ref1)
 {
     int k;
@@ -462,7 +455,6 @@ int I_transfer_group_ref_file(const struct Ref *ref2, int n, struct Ref *ref1)
  *  \param ref
  *  \return int
  */
-
 int I_init_group_ref(struct Ref *ref)
 {
     ref->nfiles = 0;
@@ -480,7 +472,6 @@ int I_init_group_ref(struct Ref *ref)
  *  \param ref
  *  \return int
  */
-
 int I_free_group_ref(struct Ref *ref)
 {
     if (ref->nfiles > 0)

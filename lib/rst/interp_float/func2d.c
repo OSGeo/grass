@@ -102,7 +102,6 @@ double IL_crst(double r, /**< distance squared */
  *
  * Derivatives of radial basis function - regularized spline with tension(d=2)
  */
-
 int IL_crstg(double r, /**< distance squared */
 
              double fi, /**< tension */

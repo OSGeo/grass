@@ -30,7 +30,6 @@
  * \return -1 if illegal parameters are passed in <b>SEG</b>
  * \return -2 if unable to allocate memory
  */
-
 int seg_setup(SEGMENT *SEG)
 {
     int i;

@@ -24,7 +24,6 @@
  * \param[in] is_cellhd 1 cell header; 0 window
  * \return
  */
-
 void G__write_Cell_head(FILE *fd, const struct Cell_head *cellhd, int is_cellhd)
 {
     char buf[1024];
@@ -70,7 +69,6 @@ void G__write_Cell_head(FILE *fd, const struct Cell_head *cellhd, int is_cellhd)
  * \param[in] is_cellhd 1 cell header; 0 window
  * \return
  */
-
 void G__write_Cell_head3(FILE *fd, const struct Cell_head *cellhd,
                          int is_cellhd)
 {

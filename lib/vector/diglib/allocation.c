@@ -29,7 +29,6 @@
  *   elements, size of chunks to allocate,  pointer to current array, sizeof
  *   an element.
  */
-
 void *dig_alloc_space(int n_wanted, int *n_elements, int chunk_size, void *ptr,
                       int element_size)
 {
