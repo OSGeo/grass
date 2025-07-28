@@ -13,7 +13,9 @@ void write_into_legfile(struct Map_info *Map, int type, const char *leglab,
     char *leg_file;
     char map[GNAME_MAX];
     char *ptr;
-    strcpy(map, name_map);
+    if (G_strlcpy(map, name_map, sizeof(map)) >= sizeof(map)) {
+        G_fatal_error(_("Map name <%s> is too long"), name_map);
+    }
 #ifdef _MSC_VER
     strtok_s(map, "@", &ptr);
 #else
