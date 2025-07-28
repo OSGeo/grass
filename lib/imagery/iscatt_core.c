@@ -94,6 +94,7 @@ int I_create_cat_rast(struct Cell_head *cat_rast_region, const char *cat_rast)
                (cat_rast_region->cols) / sizeof(unsigned char), f_cat_rast);
         if (ferror(f_cat_rast)) {
             fclose(f_cat_rast);
+            G_free(row_data);
             G_warning(
                 _("Unable to write into category raster condition file <%s>."),
                 cat_rast);
@@ -694,6 +695,9 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 {
     const char *mapset;
     char header[1024];
+    if (n_bands != scatts->n_bands || n_bands != scatt_conds->n_bands) {
+        return -1;
+    }
 
     int *fd_cats_rasts = G_malloc(scatt_conds->n_a_cats * sizeof(int));
     FILE **f_cats_rasts_conds =
@@ -717,12 +721,7 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
     for (i_band = 0; i_band < n_bands; i_band++)
         bands_ids[i_band] = -1;
 
-    if (n_bands != scatts->n_bands || n_bands != scatt_conds->n_bands) {
-        free_compute_scatts_data(fd_bands, bands_rows, n_a_bands, bands_ids,
-                                 b_needed_bands, fd_cats_rasts,
-                                 f_cats_rasts_conds, scatt_conds->n_a_cats);
-        return -1;
-    }
+    
     for (i_cat = 0; i_cat < scatts->n_a_cats; i_cat++)
         fd_cats_rasts[i_cat] = -1;
 
