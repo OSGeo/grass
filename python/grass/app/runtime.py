@@ -31,7 +31,7 @@ class RuntimePaths:
     The resource paths are also set as environmental variables.
     """
 
-    def __init__(self, env=None):
+    def __init__(self, env=None, init_env_vars=False):
         if env is None:
             env = os.environ
         self.env = env
