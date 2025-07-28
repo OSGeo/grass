@@ -423,9 +423,9 @@ void G__md_print_python_short_version(FILE *file, const char *indent,
     else {
         if (output_format_option || (!new_prompt && shell_eval_flag)) {
             python_function = "parse_command";
-            // We know this is can be parsed, but we can't detect just plain
-            // file because we can't distinguish between plain text outputs and
-            // modifications of data.
+            // We know this can be parsed, but we don't detect just plain
+            // text output to use read_command because we can't distinguish
+            // between plain text outputs and modifications of data.
         }
         else {
             python_function = "run_command";
@@ -486,11 +486,10 @@ void G__md_print_python_short_version(FILE *file, const char *indent,
     print_python_example(file, python_function, output_format_default, indent,
                          tools_api);
     if (tools_api) {
-        fprintf(
-            file,
-            "\n%sThis API is experimental in version 8.5 and expected to be "
-            "stable in version 8.6.\n",
-            indent);
+        fprintf(file,
+                "\n%sThis grass.tools API is experimental in version 8.5 "
+                "and expected to be stable in version 8.6.\n",
+                indent);
     }
 }
 
