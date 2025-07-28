@@ -44,6 +44,7 @@ int main(int argc, char *argv[])
         struct Flag *noheader;
         struct Flag *surfer;
         struct Flag *modflow;
+        struct Flag *lisflood;
         struct Flag *int_out;
     } flag;
 
@@ -54,6 +55,9 @@ int main(int argc, char *argv[])
     G_add_keyword(_("export"));
     G_add_keyword(_("output"));
     G_add_keyword("ASCII");
+    G_add_keyword("Surfer");
+    G_add_keyword("Modflow");
+    G_add_keyword("Lisflood");
     module->description =
         _("Converts a raster map layer into a GRASS ASCII text file.");
 
@@ -97,6 +101,10 @@ int main(int argc, char *argv[])
     flag.modflow->key = 'm';
     flag.modflow->description = _("Write MODFLOW (USGS) ASCII array");
 
+    flag.lisflood = G_define_flag();
+    flag.lisflood->key = 'l';
+    flag.lisflood->description = _("Write LISFLOOD (EU) ASCII array");
+
     flag.int_out = G_define_flag();
     flag.int_out->key = 'i';
     flag.int_out->description = _("Force output of integer values");
@@ -119,11 +127,10 @@ int main(int argc, char *argv[])
 
     null_str = parm.null->answer;
 
-    if (flag.surfer->answer && flag.noheader->answer)
-        G_fatal_error(_("Both -s and -h doesn't make sense"));
-
-    if (flag.surfer->answer && flag.modflow->answer)
-        G_fatal_error(_("Use -M or -s, not both"));
+    G_option_exclusive(flag.surfer, flag.noheader, NULL);
+    G_option_exclusive(flag.surfer, flag.modflow, NULL);
+    G_option_exclusive(flag.surfer, flag.lisflood, NULL);
+    G_option_exclusive(flag.lisflood, flag.modflow, NULL);
 
     name = parm.map->answer;
 
@@ -167,6 +174,11 @@ int main(int argc, char *argv[])
         if (!flag.noheader->answer)
             writeMFheader(fp, dp, width, out_type);
         rc = write_MODFLOW(fd, fp, nrows, ncols, out_type, dp, width);
+    }
+    else if (flag.lisflood->answer) {
+        if (!flag.noheader->answer)
+            writeLISFLOODheader(fp, null_str);
+        rc = write_GRASS(fd, fp, nrows, ncols, out_type, dp, null_str);
     }
     else {
         if (!flag.noheader->answer)
