@@ -37,7 +37,6 @@
  *  \param tileZ The number of cells in Z direction of a tile
  *  \return void *
  */
-
 void *Rast3d_open_new_param(const char *name, int typeIntern, int cache,
                             RASTER3D_Region *region, int type, int compression,
                             int precision, int tileX, int tileY, int tileZ)
@@ -92,7 +91,6 @@ void *Rast3d_open_new_param(const char *name, int typeIntern, int cache,
  *  \param maxSize The maximum size of a tile in kilo bytes
  *  \return void *
  */
-
 void *Rast3d_open_new_opt_tile_size(const char *name, int cache,
                                     RASTER3D_Region *region, int type,
                                     int maxSize)

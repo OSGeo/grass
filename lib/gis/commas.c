@@ -32,7 +32,6 @@
  * \return 1 if no commas inserted
  * \return 0 if commas inserted
  */
-
 int G_insert_commas(char *buf)
 {
     char number[100];
@@ -81,7 +80,6 @@ int G_insert_commas(char *buf)
  * \param[in,out] buf string
  * \return
  */
-
 void G_remove_commas(char *buf)
 {
     char *b;

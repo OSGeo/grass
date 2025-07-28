@@ -18,7 +18,6 @@ static int cmp_count(const void *, const void *);
  * \param  histogram
  * \return
  */
-
 void Rast_init_histogram(struct Histogram *histogram)
 {
     histogram->num = 0;
@@ -38,7 +37,6 @@ void Rast_init_histogram(struct Histogram *histogram)
  * \return 1  if successful,
  *         0  if no histogram file,
  */
-
 int Rast_read_histogram(const char *name, const char *mapset,
                         struct Histogram *histogram)
 {
@@ -83,7 +81,6 @@ int Rast_read_histogram(const char *name, const char *mapset,
  * \param histogram: struct for histogram
  * \return  void
  */
-
 void Rast_write_histogram(const char *name, const struct Histogram *histogram)
 {
     FILE *fp;
@@ -108,7 +105,6 @@ void Rast_write_histogram(const char *name, const struct Histogram *histogram)
  * \param statf: cell statistics
  * \return void
  */
-
 void Rast_write_histogram_cs(const char *name, struct Cell_stats *statf)
 {
     FILE *fp;
@@ -329,7 +325,6 @@ static FILE *fopen_histogram_new(const char *name)
  * \param name: name of map
  * \return
  */
-
 void Rast_remove_histogram(const char *name)
 {
     G_remove_misc("cell_misc", "histogram", name);

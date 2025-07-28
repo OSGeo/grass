@@ -30,7 +30,6 @@
  * \return 1 if overwrite
  * \return 0 if not overwrite
  */
-
 int G_check_overwrite(int argc, char **argv)
 {
     const char *overstr;

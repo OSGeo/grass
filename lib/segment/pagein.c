@@ -31,7 +31,6 @@
  * \return 1 if successful
  * \return -1 if unable to seek or read segment file
  */
-
 int seg_pagein(SEGMENT *SEG, int n)
 {
     int cur;
