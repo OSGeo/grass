@@ -89,7 +89,7 @@ class TestR3Info(TestCase):
             " |                                                                            |",
             " |   Comments:                                                                |",
             ' |    r3.mapcalc expression="test_raster3d = row() + col() + depth()" regi\\   |',
-            ' |    on="current nprocs=0"                                                   |',
+            ' |    on="current" nprocs=0                                                   |',
             " |                                                                            |",
             " +----------------------------------------------------------------------------+",
             "",
