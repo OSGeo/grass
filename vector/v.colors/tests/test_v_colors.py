@@ -1,26 +1,28 @@
 import os
 import re
 import pytest
+import json
+
 import grass.script as gs
 import grass.exceptions
 
 
-@pytest.fixture
-def simple_vector_map(tmp_path):
-    """Fixture to create a simple vector map with 3 points and a numeric attribute column 'val'."""
-    project = tmp_path / "v_colors_project"
+@pytest.fixture(scope="module")
+def simple_vector_map(tmp_path_factory):
+    """Fixture to create a vector map with attributes in one step (faster)."""
+    tmp_path = tmp_path_factory.mktemp("v_colors_project")
+    project = tmp_path / "grassdata"
     gs.create_project(project)
 
     with gs.setup.init(project, env=os.environ.copy()) as session:
-        # Set the computational region
         gs.run_command("g.region", n=10, s=0, e=10, w=0, res=1, env=session.env)
 
-        # Create a small ASCII file with coordinates
-        coords = "1|1\n2|2\n3|3"
+        # Create a single ASCII file with coordinates and attributes (standard format)
+        coords = "1|1|10\n2|2|20\n3|3|30"
         path = tmp_path / "coords.csv"
         path.write_text(coords)
 
-        # Import the points into a vector map
+        # Import the points with attribute column already defined
         gs.run_command(
             "v.in.ascii",
             input=str(path),
@@ -28,29 +30,9 @@ def simple_vector_map(tmp_path):
             separator="|",
             x=1,
             y=2,
-            overwrite=True,
+            columns="x DOUBLE PRECISION, y DOUBLE PRECISION, val DOUBLE PRECISION",
             env=session.env,
         )
-
-        # Add a new attribute table and column to hold numeric values
-        gs.run_command("v.db.addtable", map="test_points", env=session.env)
-        gs.run_command(
-            "v.db.addcolumn",
-            map="test_points",
-            columns="val DOUBLE PRECISION",
-            env=session.env,
-        )
-
-        # Update the 'val' column for each feature
-        for i, val in enumerate([10, 20, 30], start=1):
-            gs.run_command(
-                "v.db.update",
-                map="test_points",
-                column="val",
-                value=str(val),
-                where=f"cat = {i}",
-                env=session.env,
-            )
 
         yield "test_points", session
 
@@ -59,17 +41,26 @@ def test_color_by_category(simple_vector_map):
     """Test color assignment based on category (cat) values."""
     mapname, session = simple_vector_map
     gs.run_command("v.colors", map=mapname, use="cat", color="blues", env=session.env)
-    output = gs.read_command("v.colors.out", map=mapname, env=session.env)
-    lines = output.strip().splitlines()
-    actual_lines = [line.split()[0] for line in lines]
-    numeric_cats = [line for line in actual_lines if line.isdigit()]
+    output = gs.read_command(
+        "v.colors.out", map=mapname, format="json", env=session.env
+    )
+    data = json.loads(output)
 
-    assert any(line.startswith("1 ") for line in lines)
-    assert any(":" in line for line in lines)
-    assert any("default" in line for line in lines)
-    assert numeric_cats
-    assert "default" in actual_lines
-    assert "nv" in actual_lines
+    # Collect all values
+    values = [str(rule["value"]) for rule in data]
+
+    # Check there are numeric categories
+    numeric_cats = [v for v in values if v.isdigit()]
+
+    # Basic checks
+    assert numeric_cats, "No numeric categories found"
+    assert "default" in values, "'default' not found in values"
+    assert "nv" in values, "'nv' not found in values"
+
+    # Ensure colors have valid format (hex color code)
+    colors = [rule["color"] for rule in data]
+    for c in colors:
+        assert re.match(r"^#[0-9A-Fa-f]{6}$", c), f"Invalid color format: {c}"
 
 
 def test_color_by_attr_column(simple_vector_map):
@@ -78,15 +69,19 @@ def test_color_by_attr_column(simple_vector_map):
     gs.run_command(
         "v.colors", map=mapname, use="attr", column="val", color="ryg", env=session.env
     )
-    output = gs.read_command("v.colors.out", map=mapname, env=session.env)
+    output = gs.read_command(
+        "v.colors.out",
+        map=mapname,
+        format="json",
+        env=session.env,
+    )
 
-    lines = [
-        line
-        for line in output.strip().splitlines()
-        if line and not line.startswith(("default", "nv"))
-    ]
-    assert len(lines) >= 3
-    colors = [line.split()[1] for line in lines]
+    data = json.loads(output)
+
+    # Filter out rules with 'nv' or 'default' values
+    rules = [rule for rule in data if str(rule["value"]) not in ("nv", "default")]
+    assert len(rules) >= 3
+    colors = [rule["color"] for rule in rules]
     assert len(set(colors)) == len(colors)  # Ensure colors are distinct
 
 
@@ -171,11 +166,18 @@ def test_custom_rules_file(tmp_path, simple_vector_map):
         env=session.env,
     )
     out = gs.read_command(
-        "v.db.select", map=mapname, columns="GRASSRGB", env=session.env
+        "v.db.select", map=mapname, columns="GRASSRGB", format="json", env=session.env
     )
-    assert "255:0:0" in out
-    assert "0:255:0" in out
-    assert "0:0:255" in out
+    data = json.loads(out)
+
+    # Extract actual RGB values from the records
+    actual_colors = [record["GRASSRGB"] for record in data["records"]]
+
+    # Define expected mapping (order matters if tied to feature ID/class)
+    expected_colors = ["255:0:0", "0:255:0", "0:0:255"]
+
+    # Assert the actual matches the expected — order-sensitive
+    assert actual_colors == expected_colors
 
 
 def test_overwrite_rgb_column(simple_vector_map):
