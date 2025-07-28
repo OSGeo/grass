@@ -54,7 +54,6 @@ static struct state *st = &state;
  * \return 1 on success
  * \return 0 on error
  */
-
 int G_begin_rhumbline_equation(double lon1, double lat1, double lon2,
                                double lat2)
 {
@@ -93,7 +92,6 @@ int G_begin_rhumbline_equation(double lon1, double lat1, double lon2,
  * \param[in] lon longitude
  * \return double latitude in degrees
  */
-
 double G_rhumbline_lat_from_lon(double lon)
 {
     if (st->parallel)

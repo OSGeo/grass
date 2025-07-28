@@ -27,7 +27,6 @@
  * \param[in] cols number of columns in box
  * \return
  */
-
 void G_adjust_window_to_box(const struct Cell_head *src, struct Cell_head *dst,
                             int rows, int cols)
 {

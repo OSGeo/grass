@@ -31,7 +31,6 @@
  * \return 1 if successful
  * \return -1 on error
  */
-
 int seg_pageout(SEGMENT *SEG, int i)
 {
     SEG->seek(SEG, SEG->scb[i].n, 0);

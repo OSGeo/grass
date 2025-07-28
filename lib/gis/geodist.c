@@ -46,7 +46,6 @@ static struct state *st = &state;
  * \param a semi-major axis in meters
  * \param e2 ellipsoid eccentricity
  */
-
 void G_begin_geodesic_distance(double a, double e2)
 {
     st->al = a;
@@ -65,7 +64,6 @@ void G_begin_geodesic_distance(double a, double e2)
  * \param lat1 first latitude
  * \return
  */
-
 void G_set_geodesic_distance_lat1(double lat1)
 {
     st->t1r = atan(st->boa * tan(Radians(lat1)));

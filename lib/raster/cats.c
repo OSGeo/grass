@@ -912,7 +912,6 @@ int Rast_set_d_cat(const DCELL *rast1, const DCELL *rast2, const char *label,
  * \return 0 if null value detected
  * \return 1 on success
  */
-
 int Rast_set_cat(const void *rast1, const void *rast2, const char *label,
                  struct Categories *pcats, RASTER_MAP_TYPE data_type)
 {

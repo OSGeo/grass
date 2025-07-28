@@ -560,7 +560,7 @@ static void print_subgroups(const char *group, const char *mapset,
 /*!
  * \brief List files in a (sub)group (JSON)
  *
- * List map in map@mapset form.
+ * List map in map\@mapset form.
  *
  * \param ref group reference (set with I_get_group_ref())
  * \param root_array JSON array to which data will be appended.

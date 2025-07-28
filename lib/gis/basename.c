@@ -67,7 +67,7 @@ size_t G_get_num_decimals(const char *str)
  * \brief Convert a double to a string substituting the dot with underscore
  *        12.3456 => '12_3456'
  *
- * \param number the double number that will be convert to string
+ * \param number the double number that will be converted to string
  * \param ndigits the number of integer digits in the output string
  * \param ndecimals the number of decimals in the output string
  *
@@ -154,9 +154,9 @@ char *G_join_basename_strings(const char **strings, size_t len)
  * \brief Generate the format string
  *
  * \param basename String with the basename
- * \param digits Number of digits number
- * \param decimals Number of decimal number
- * \param filler String used to fill, default is 0
+ * \param number The double number that will be converted to string
+ * \param ndigits The number of integer digits in the output string
+ * \param ndecimals The number of decimals in the output string
  *
  * \return Format string
  */
