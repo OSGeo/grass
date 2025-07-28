@@ -61,12 +61,6 @@ def parse_markdown(content):
             )
             continue
 
-        if line.endswith("  "):
-            buffer += line  # Keep trailing spaces for markdown line breaks
-            processing_block.append(buffer)
-            buffer = ""
-            continue
-
         if line.strip().startswith("- ") or line.startswith("* "):
             if buffer:
                 processing_block.append(buffer)
@@ -98,6 +92,19 @@ def parse_markdown(content):
             processing_block.append(line)
             continue
 
+        if line.strip().startswith("|") and line.strip().endswith("|"):
+            if buffer:
+                processing_block.append(buffer)
+                buffer = ""
+            processing_block.append(line)
+            continue
+
+        if line.endswith("  "):
+            buffer += line  # Keep trailing spaces for markdown line breaks
+            processing_block.append(buffer)
+            buffer = ""
+            continue
+
         # empty line at the start and end of code, list blocks
         if line == "":
             if buffer:
@@ -112,7 +119,7 @@ def parse_markdown(content):
             processing_block.append(line)
             continue
 
-        buffer += line + " "
+        buffer += line.lstrip() + " "
 
     if buffer:
         processing_block.append(buffer)
@@ -120,7 +127,9 @@ def parse_markdown(content):
         processed_content.append(
             {"markdown": "\n".join(processing_block), "type": state}
         )
-
+    for each in processed_content:
+        print(each["type"], "\n")
+        print(each["markdown"])
     return processed_content
 
 
@@ -180,7 +189,7 @@ def process_links(line):
 
 def process_parameters(line):
     return re.sub(
-        r"^\*\*([a-z0-9_]*)\*\*=\*([a-z]*)\*( \*\*\[required\]\*\*)?",
+        r"^\*\*([a-z0-9_]*)\*\*=\*([a-z,]*)\*( \*\*\[required\]\*\*)?",
         r'.IP "**\1**=*\2*\3" 4m',
         line,
         flags=re.MULTILINE,
@@ -219,9 +228,33 @@ def process_code(markdown):
 
 
 def process_lists(markdown):
-    markdown = re.sub(
-        r"^(\d+)\.\s+(.*)", r".IP \\fB\1\\fR\n\2\n", markdown, flags=re.MULTILINE
+    # Match list items and their continuation lines
+    pattern = re.compile(
+        r"""
+        ^[ \t]*[-*+]                # Bullet list marker at start of line
+        [ \t]+                      # Space after bullet
+        .+                          # First line of text
+        (?:\n(?![ \t]*[-*+] )       # Continuation lines NOT starting with another bullet
+            [^\n]+)*                # Non-blank continuation lines
+    """,
+        re.MULTILINE | re.VERBOSE,
     )
+
+    matches = pattern.findall(markdown)
+    if not matches:
+        return markdown  # nothing to convert
+
+    # Build roff output
+    lines = [".RS 4n"]
+    for item in matches:
+        # Clean bullet
+        item_text = re.sub(r"^[ \t]*[-*][ \t]+", "", item, count=1)
+        lines.extend((".IP \\(bu 4n", item_text.strip()))
+    lines.append(".RE")
+    return "\n".join(lines)
+
+
+def process_olists(markdown):
     return re.sub(
         r"^(\d+)\.\s+(.*)", r".IP \\fB\1\\fR\n\2\n", markdown, flags=re.MULTILINE
     )
@@ -231,7 +264,8 @@ def process_non_code(markdown):
     markdown_text = process_parameters(markdown)
     markdown_text = process_flags(markdown_text)
     markdown_text = markdown_text.replace("&nbsp;&nbsp;&nbsp;&nbsp;", "")
-
+    # print(markdown_text)
+    markdown_text = process_table(markdown_text)
     markdown_text = re.sub(r"\\#", "#", markdown_text)
     markdown_text = re.sub(r"\\>", ">", markdown_text)
     markdown_text = re.sub(r"\\<", "<", markdown_text)
@@ -241,6 +275,46 @@ def process_non_code(markdown):
     markdown_text = process_formatting(markdown_text)
     markdown_text = process_links(markdown_text)
     return process_headings(markdown_text)
+
+
+def process_table(markdown: str) -> str:
+    def markdown_to_roff_table(md_table: str) -> str:
+        lines = md_table.strip().splitlines()
+        if len(lines) < 2:
+            return md_table  # not a valid table
+
+        # Remove divider line (2nd line)
+        header = lines[0].strip("|").split("|")
+        rows = [line.strip("|").split("|") for line in lines[2:]]
+
+        # Trim spaces in cells
+        header = [cell.strip() for cell in header]
+        header = [f"**{cell.strip()}**" for cell in header]
+        rows = [[cell.strip() for cell in row] for row in rows]
+
+        # Generate column format line (left aligned)
+        format_line = " ".join(["l"] * len(header)) + "."
+        # Build the roff table
+        lines = [".TS", "tab(|);", format_line, "|".join(header)]
+        for row in rows:
+            lines.append("|".join(row))
+        lines.extend((".TE", ".PP"))
+
+        return "\n".join(lines)
+
+    markdown_table_pattern = re.compile(
+        r"""
+    (                                   # full table match
+        ^\|.*\|\s*\n                    # header row: starts and ends with |
+        ^\|[:\-| ]+\|\s*\n              # divider row: like | --- | :--: |
+        (?:^\|.*\|\s*\n?)+              # one or more data rows
+    )
+    """,
+        re.MULTILINE | re.VERBOSE,
+    )
+    return markdown_table_pattern.sub(
+        lambda match: markdown_to_roff_table(match.group(0)), markdown
+    )
 
 
 def convert_line(line, in_paragraph, in_code_block):
@@ -279,8 +353,10 @@ def markdown_to_man(markdown_text):
     for block in blocks:
         if block["type"] == "code":
             result.append(process_code(block["markdown"]))
-        elif block["type"] == "list" or block["type"] == "olist":
+        elif block["type"] == "list":
             result.append(process_lists(block["markdown"]))
+        elif block["type"] == "olist":
+            result.append(process_olists(block["markdown"]))
         else:
             result.append(process_non_code(block["markdown"]))
     markdown_text = "\n".join(result)
@@ -300,7 +376,7 @@ def markdown_to_man(markdown_text):
     in_paragraph = False
     in_code_block = False
 
-    print(markdown_text)
+    # print(markdown_text)
 
     for line in lines:
         converted_line, in_paragraph, in_code_block = convert_line(
