@@ -6,7 +6,7 @@
 #define SORT_ASC     1
 #define SORT_DESC    2
 
-enum OutputFormat { PLAIN, JSON };
+enum OutputFormat { PLAIN, CSV, JSON };
 
 extern char *no_data_str;
 extern int nfiles;
