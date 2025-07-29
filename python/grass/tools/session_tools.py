@@ -52,6 +52,19 @@ class Tools:
     the *ToolResult* object:
 
     >>> tools.g_region(flags="p").text  # doctest: +SKIP
+
+    Raster input and outputs can be NumPy arrays:
+
+    >>> import numpy as np
+    >>> tools.g_region(rows=2, cols=3)
+    ToolResult(...)
+    >>> slope = tools.r_slope_aspect(elevation=np.ones((2, 3)), slope=np.ndarray)
+
+    When multiple outputs are returned, they are returned as a tuple:
+
+    >>> (slope, aspect) = tools.r_slope_aspect(
+    ...     elevation=np.ones((2, 3)), slope=np.array, aspect=np.array
+    ... )
     """
 
     def __init__(
