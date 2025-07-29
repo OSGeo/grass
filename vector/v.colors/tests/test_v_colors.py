@@ -177,10 +177,9 @@ def test_custom_rules_file(tmp_path, simple_vector_map):
     mapname, session = simple_vector_map
     tools = Tools(session=session)
 
-    rules_file = tmp_path / "rules.txt"
-    rules_file.write_text("1 red\n2 green\n3 blue\n")
+    rule = "1 red\n2 green\n3 blue\n"
 
-    tools.v_colors(map=mapname, rules=str(rules_file), rgb_column="GRASSRGB")
+    tools.v_colors(map=mapname, rules=io.StringIO(rule), rgb_column="GRASSRGB")
     result = tools.v_db_select(map=mapname, columns="GRASSRGB", format="json")
     data = json.loads(result.stdout)
 
