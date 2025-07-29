@@ -28,8 +28,9 @@
  *  \param cache The type of the caching
  *  \param region The region of the map
  *  \param type The type of the map (FCELL_TYPE, or DCELL_TYPE)
+ *  \param compression
  *  \param doLzw Use the LZW compression algorithm
- *  \param doRle Use the Run-Length-Encoding algroithm for compression
+ *  \param doRle Use the Run-Length-Encoding algorithm for compression
  *  \param precision The precision used for the mantissa (0 - 52) or
  *                   RASTER3D_MAX_PRECISION
  *  \param tileX The number of cells in X direction of a tile

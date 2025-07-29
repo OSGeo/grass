@@ -1222,7 +1222,7 @@ int gs_get_data_avg_zmax(float *azmax)
 /*!
    \brief Get data center point
 
-   \param[out] center (array X,Y,Z)
+   \param[out] cen center (array X,Y,Z)
 
    \return -1 on error
    \return 1 on success

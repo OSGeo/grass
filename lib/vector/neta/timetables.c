@@ -27,8 +27,8 @@
 
    \param driver DB driver
    \param sql SQl string
-   \param[out] list of lengths
-   \param[out] list of ids
+   \param[out] lengths list of lengths
+   \param[out] ids list of ids
 
    \return number of distinct elements
    \return -1 on failure
