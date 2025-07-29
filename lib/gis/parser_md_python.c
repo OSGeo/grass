@@ -26,10 +26,10 @@ static void print_python_long_flag(FILE *file, const char *key,
                                    const char *label, const char *description,
                                    const char *indent);
 static void print_python_option(FILE *file, const struct Option *opt,
-                                const char *indent);
+                                const char *indent, bool tools_api);
 static void print_python_example(FILE *file, const char *python_function,
                                  const char *output_format_default,
-                                 const char *indent);
+                                 const char *indent, bool tools_api);
 static void print_python_tuple(FILE *file, const char *type, int num_items);
 
 void print_python_short_flag(FILE *file, const char *key, const char *label,
@@ -90,7 +90,7 @@ void print_python_tuple(FILE *file, const char *type, int num_items)
 }
 
 void print_python_option(FILE *file, const struct Option *opt,
-                         const char *indent)
+                         const char *indent, bool tools_api)
 {
     const char *type;
 
@@ -108,6 +108,19 @@ void print_python_option(FILE *file, const struct Option *opt,
         type = "str";
         break;
     }
+
+    char age[KEYLENGTH];
+    char element[KEYLENGTH];
+    char prompt_description[KEYLENGTH];
+    if (opt->gisprompt) {
+        G__split_gisprompt(opt->gisprompt, age, element, prompt_description);
+        if (tools_api && !opt->multiple && opt->type == TYPE_STRING &&
+            G_strncasecmp("old", age, 3) == 0 &&
+            G_strncasecmp("file", element, 4) == 0) {
+            type = "str | io.StringIO";
+        }
+    }
+
     fprintf(file, "%s**%s** : ", indent, opt->key);
     int tuple_items = G__option_num_tuple_items(opt);
     if (opt->multiple) {
@@ -169,10 +182,6 @@ void print_python_option(FILE *file, const struct Option *opt,
         fprintf(file, "%s: ", _("Used as"));
     }
     if (opt->gisprompt) {
-        char age[KEYLENGTH];
-        char element[KEYLENGTH];
-        char desc[KEYLENGTH];
-        G__split_gisprompt(opt->gisprompt, age, element, desc);
         if (strcmp(age, "new") == 0)
             fprintf(file, "output, ");
         else if (strcmp(age, "old") == 0)
@@ -181,7 +190,7 @@ void print_python_option(FILE *file, const struct Option *opt,
         // used given that the parser may read that information, desc
         // is meant as a user-facing representation of the same
         // information.
-        fprintf(file, "%s", desc);
+        fprintf(file, "%s", prompt_description);
     }
     if (opt->gisprompt && opt->key_desc) {
         fprintf(file, ", ");
@@ -252,12 +261,24 @@ void print_python_option(FILE *file, const struct Option *opt,
 }
 
 void print_python_example(FILE *file, const char *python_function,
-                          const char *output_format_default, const char *indent)
+                          const char *output_format_default, const char *indent,
+                          bool tools_api)
 {
     fprintf(file, "\n%sExample:\n", indent);
 
     fprintf(file, "\n%s```python\n", indent);
-    fprintf(file, "%sgs.%s(\"%s\"", indent, python_function, st->pgm_name);
+    bool first_parameter_printed = false;
+    if (tools_api) {
+        char *tool_name = G_store(st->pgm_name);
+        G_strchg(tool_name, '.', '_');
+        fprintf(file, "%stools = Tools()\n", indent);
+        fprintf(file, "%stools.%s(", indent, tool_name);
+        G_free(tool_name);
+    }
+    else {
+        fprintf(file, "%sgs.%s(\"%s\"", indent, python_function, st->pgm_name);
+        first_parameter_printed = true;
+    }
 
     const struct Option *first_required_rule_option =
         G__first_required_option_from_rules();
@@ -287,7 +308,10 @@ void print_python_example(FILE *file, const char *python_function,
                 }
             if (opt->required || first_required_rule_option == opt ||
                 (strcmp(opt->key, "format") == 0 && output_format_default)) {
-                fprintf(file, ", %s=", opt->key);
+                if (first_parameter_printed) {
+                    fprintf(file, ", ");
+                }
+                fprintf(file, "%s=", opt->key);
 
                 char *value = NULL;
                 if (opt->answer) {
@@ -333,6 +357,7 @@ void print_python_example(FILE *file, const char *python_function,
                         fprintf(file, "\"%s\"", type);
                     }
                 }
+                first_parameter_printed = true;
                 G_free(value);
             }
             opt = opt->next_opt;
@@ -341,7 +366,8 @@ void print_python_example(FILE *file, const char *python_function,
     fprintf(file, ")\n%s```\n", indent);
 }
 
-void G__md_print_python_short_version(FILE *file, const char *indent)
+void G__md_print_python_short_version(FILE *file, const char *indent,
+                                      bool tools_api)
 {
     struct Option *opt;
     struct Flag *flag;
@@ -387,24 +413,36 @@ void G__md_print_python_short_version(FILE *file, const char *indent)
             flag = flag->next_flag;
         }
     }
-    if (output_format_option || (!new_prompt && shell_eval_flag)) {
-        python_function = "parse_command";
-        // We know this is can be parsed, but we can't detect just plain file
-        // because we can't distinguish between plain text outputs and
-        // modifications of data.
+    bool first_parameter_printed = false;
+    if (tools_api) {
+        char *tool_name = G_store(st->pgm_name);
+        G_strchg(tool_name, '.', '_');
+        fprintf(file, "%s*grass.tools.Tools.%s*(", indent, tool_name);
+        G_free(tool_name);
     }
     else {
-        python_function = "run_command";
+        if (output_format_option || (!new_prompt && shell_eval_flag)) {
+            python_function = "parse_command";
+            // We know this can be parsed, but we don't detect just plain
+            // text output to use read_command because we can't distinguish
+            // between plain text outputs and modifications of data.
+        }
+        else {
+            python_function = "run_command";
+        }
+        fprintf(file, "%s*grass.script.%s*(\"***%s***\",", indent,
+                python_function, st->pgm_name);
+        fprintf(file, "\n");
+        first_parameter_printed = true;
     }
-    fprintf(file, "%s*grass.script.%s*(\"***%s***\",", indent, python_function,
-            st->pgm_name);
-    fprintf(file, "\n");
 
     if (st->n_opts) {
         opt = &st->first_option;
 
         while (opt != NULL) {
-            fprintf(file, "%s    ", indent);
+            if (first_parameter_printed) {
+                fprintf(file, "%s    ", indent);
+            }
             if (!opt->required && !opt->answer) {
                 fprintf(file, "**%s**=*None*", opt->key);
             }
@@ -427,7 +465,7 @@ void G__md_print_python_short_version(FILE *file, const char *indent)
                 }
             }
             fprintf(file, ",\n");
-
+            first_parameter_printed = true;
             opt = opt->next_opt;
         }
     }
@@ -445,10 +483,18 @@ void G__md_print_python_short_version(FILE *file, const char *indent)
     fprintf(file, "%s    **quiet**=%s,\n", indent, flag_default);
     fprintf(file, "%s    **superquiet**=%s)\n", indent, flag_default);
 
-    print_python_example(file, python_function, output_format_default, indent);
+    print_python_example(file, python_function, output_format_default, indent,
+                         tools_api);
+    if (tools_api) {
+        fprintf(file,
+                "\n%sThis grass.tools API is experimental in version 8.5 "
+                "and expected to be stable in version 8.6.\n",
+                indent);
+    }
 }
 
-void G__md_print_python_long_version(FILE *file, const char *indent)
+void G__md_print_python_long_version(FILE *file, const char *indent,
+                                     bool tools_api)
 {
     struct Option *opt;
     struct Flag *flag;
@@ -460,7 +506,7 @@ void G__md_print_python_long_version(FILE *file, const char *indent)
     if (st->n_opts) {
         opt = &st->first_option;
         while (opt != NULL) {
-            print_python_option(file, opt, indent);
+            print_python_option(file, opt, indent, tools_api);
             opt = opt->next_opt;
             fprintf(file, MD_NEWLINE);
             fprintf(file, "\n");
