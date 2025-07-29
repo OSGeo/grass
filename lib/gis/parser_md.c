@@ -64,7 +64,9 @@ void G__usage_markdown(void)
     fprintf(stdout, "\n=== \"Command line\"\n\n");
     G__md_print_cli_short_version(stdout, tab_indent);
     fprintf(stdout, "\n=== \"Python (grass.script)\"\n\n");
-    G__md_print_python_short_version(stdout, tab_indent);
+    G__md_print_python_short_version(stdout, tab_indent, false);
+    fprintf(stdout, "\n=== \"Python (grass.tools)\"\n\n");
+    G__md_print_python_short_version(stdout, tab_indent, true);
 
     fprintf(stdout, "\n## %s\n", _("Parameters"));
 
@@ -72,5 +74,7 @@ void G__usage_markdown(void)
     fprintf(stdout, "\n=== \"Command line\"\n\n");
     G__md_print_cli_long_version(stdout, tab_indent);
     fprintf(stdout, "\n=== \"Python (grass.script)\"\n\n");
-    G__md_print_python_long_version(stdout, tab_indent);
+    G__md_print_python_long_version(stdout, tab_indent, false);
+    fprintf(stdout, "\n=== \"Python (grass.tools)\"\n\n");
+    G__md_print_python_long_version(stdout, tab_indent, true);
 }
