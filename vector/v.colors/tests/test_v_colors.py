@@ -11,11 +11,13 @@ from grass.tools import Tools
 @pytest.fixture(scope="module")
 def simple_vector_map(tmp_path_factory):
     """
-    Creates a basic GRASS GIS environment with a simple vector map containing attributes.
+    Fixture to create a basic GRASS GIS environment with a simple vector map containing attributes.
 
-    This fixture initializes a temporary GRASS project and region using `Tools`.
-    It imports three points with associated attribute values into a vector map
-    named 'test_points'.
+    Sets up a temporary GRASS project and region. Imports three points with attribute
+    values into a vector map named 'test_points'.
+
+    Yields:
+        tuple: (map name, GRASS session handle)
     """
     tmp_path = tmp_path_factory.mktemp("v_colors_project")
     project = tmp_path / "grassdata"
@@ -40,12 +42,12 @@ def simple_vector_map(tmp_path_factory):
 
 def test_color_by_category(simple_vector_map):
     """
-    Test assigning colors based on category (cat) values using 'v.colors'.
+    Test assigning colors based on vector category (cat) values using 'v.colors'.
 
     Verifies:
-    - At least one numeric category is present
-    - 'default' and 'nv' categories are present
-    - Colors are valid 6-digit hex codes
+    - At least one numeric category is present in the color rules.
+    - 'default' and 'nv' categories exist in the color rules.
+    - Each color is a valid 6-digit hexadecimal RGB code.
     """
     mapname, session = simple_vector_map
     tools = Tools(session=session)
@@ -56,22 +58,28 @@ def test_color_by_category(simple_vector_map):
 
     values = [str(rule["value"]) for rule in rules]
     assert any(v.isdigit() for v in values), (
-        "Expected at least one numeric category, found none."
+        "Expected at least one numeric category in color rules, found none."
     )
-    assert "default" in values, "'default' category not found in color rules."
-    assert "nv" in values, "'nv' (null value) category not found in color rules."
+    assert "default" in values, (
+        "Expected 'default' category in color rules, but not found."
+    )
+    assert "nv" in values, (
+        "Expected 'nv' (null value) category in color rules, but not found."
+    )
 
     for c in [rule["color"] for rule in rules]:
-        assert re.match(r"^#[0-9A-Fa-f]{6}$", c), f"Invalid hex RGB format: {c}"
+        assert re.match(r"^#[0-9A-Fa-f]{6}$", c), (
+            f"Invalid hex RGB color format detected: {c}"
+        )
 
 
 def test_color_by_attr_column(simple_vector_map):
     """
-    Test assigning colors based on attribute column 'val'.
+    Test assigning colors based on an attribute column ('val').
 
-    Ensures:
-    - Expected number of rules
-    - All colors are distinct
+    Checks:
+    - At least 3 distinct color rules are generated.
+    - All assigned colors are unique.
     """
     mapname, session = simple_vector_map
     tools = Tools(session=session)
@@ -82,19 +90,21 @@ def test_color_by_attr_column(simple_vector_map):
     filtered = [r for r in rules if str(r["value"]) not in ("nv", "default")]
 
     assert len(filtered) >= 3, (
-        f"Expected at least 3 color rules, found {len(filtered)}."
+        f"Expected at least 3 color rules for attributes, found {len(filtered)}."
     )
     colors = [r["color"] for r in filtered]
-    assert len(set(colors)) == len(colors), "Color values are not unique."
+    assert len(set(colors)) == len(colors), (
+        "Duplicate color values found in color rules."
+    )
 
 
 def test_rgb_column_assignment(simple_vector_map):
     """
-    Test whether the GRASSRGB column is correctly filled with RGB values.
+    Test if the RGB column (GRASSRGB) is correctly populated with RGB values after coloring.
 
-    Validates:
-    - RGB values are assigned
-    - Format matches 'R:G:B' format
+    Checks:
+    - The GRASSRGB column contains RGB values.
+    - RGB values conform to the 'R:G:B' format where R, G, B are 0-255 integers.
     """
     mapname, session = simple_vector_map
     tools = Tools(session=session)
@@ -106,16 +116,19 @@ def test_rgb_column_assignment(simple_vector_map):
     data = json.loads(result.stdout)
     rgbs = [r["GRASSRGB"] for r in data["records"]]
 
-    assert rgbs, "No RGB values found in GRASSRGB column."
+    assert rgbs, "No RGB values found in the GRASSRGB column after applying colors."
     for rgb in rgbs:
-        assert re.match(r"^\d{1,3}:\d{1,3}:\d{1,3}$", rgb), f"Invalid RGB format: {rgb}"
+        assert re.match(r"^\d{1,3}:\d{1,3}:\d{1,3}$", rgb), (
+            f"Invalid RGB format found: '{rgb}'"
+        )
 
 
 def test_remove_color_table(simple_vector_map):
     """
-    Test removal of color table using v.colors -r flag.
+    Test removal of the color table from a vector map using the -r flag of v.colors.
 
-    Ensures no color rules remain afterward.
+    Ensures:
+    - No color rules remain after removal.
     """
     mapname, session = simple_vector_map
     tools = Tools(session=session)
@@ -123,15 +136,15 @@ def test_remove_color_table(simple_vector_map):
     tools.v_colors(map=mapname, use="cat", color="blues")
     tools.v_colors(map=mapname, flags="r")
     result = tools.v_colors_out(map=mapname)
-    assert result.stdout.strip() == "", "Color table was not removed as expected."
+    assert result.stdout.strip() == "", "Color table was not successfully removed."
 
 
 def test_constant_attribute_value(simple_vector_map):
     """
-    Test behavior when all attribute values are the same.
+    Test color assignment when all attribute values in 'val' column are identical.
 
     Ensures:
-    - All resulting RGB values are identical
+    - All resulting RGB values in GRASSRGB column are identical.
     """
     mapname, session = simple_vector_map
     tools = Tools(session=session)
@@ -144,16 +157,17 @@ def test_constant_attribute_value(simple_vector_map):
     data = json.loads(result.stdout)
 
     rgbs = [r["GRASSRGB"] for r in data["records"]]
-    assert len(set(rgbs)) == 1, (
-        "Expected all RGB values to be identical, but found multiple."
+    unique_rgbs = set(rgbs)
+    assert len(unique_rgbs) == 1, (
+        f"Expected all RGB values to be identical but found multiple distinct values: {unique_rgbs}"
     )
 
 
 def test_invalid_column_error(simple_vector_map):
     """
-    Test that using a non-existent column raises an error.
+    Test that using a non-existent attribute column with v.colors raises a CalledModuleError.
 
-    Expects CalledModuleError from GRASS when column doesn't exist.
+    The error message should mention the missing column.
     """
     mapname, session = simple_vector_map
     tools = Tools(session=session)
@@ -170,9 +184,10 @@ def test_invalid_column_error(simple_vector_map):
 
 def test_custom_rules_file(tmp_path, simple_vector_map):
     """
-    Test use of custom color rules file.
+    Test applying colors from a custom rules file supplied as a file-like object.
 
-    Ensures RGB values in GRASSRGB column match explicit definitions.
+    Validates:
+    - The RGB column matches expected RGB values from the rules.
     """
     mapname, session = simple_vector_map
     tools = Tools(session=session)
@@ -185,14 +200,17 @@ def test_custom_rules_file(tmp_path, simple_vector_map):
 
     actual_colors = [r["GRASSRGB"] for r in data["records"]]
     expected = ["255:0:0", "0:255:0", "0:0:255"]
-    assert actual_colors == expected, f"Expected {expected}, but got {actual_colors}"
+    assert actual_colors == expected, (
+        f"Expected RGB colors {expected}, but got {actual_colors}"
+    )
 
 
 def test_overwrite_rgb_column(simple_vector_map):
     """
-    Test that RGB column is updated after applying a new color scheme.
+    Test that the RGB column is updated after applying a new color scheme.
 
-    Ensures the RGB values differ after second application.
+    Validates:
+    - RGB values before and after are different, indicating an update.
     """
     mapname, session = simple_vector_map
     tools = Tools(session=session)
@@ -216,9 +234,11 @@ def test_overwrite_rgb_column(simple_vector_map):
 
 def test_use_cat_column(simple_vector_map):
     """
-    Test RGB assignment using category values and RGB column.
+    Test RGB assignment using category values with RGB column.
 
-    Verifies valid RGB format and presence of values.
+    Verifies:
+    - Valid RGB format is present in the GRASSRGB column.
+    - At least one valid RGB value exists.
     """
     mapname, session = simple_vector_map
     tools = Tools(session=session)
@@ -232,14 +252,15 @@ def test_use_cat_column(simple_vector_map):
 
     assert valid, "No valid RGB values found in GRASSRGB column."
     for rgb in valid:
-        assert pattern.match(rgb), f"Invalid RGB format: {rgb}"
+        assert pattern.match(rgb), f"Invalid RGB format detected: {rgb}"
 
 
 def test_colors_out_from_attr(simple_vector_map):
     """
-    Test output of 'v.colors.out' for attribute-based rules.
+    Test output of 'v.colors.out' for attribute-based color rules.
 
-    Ensures output contains a rule for the first category.
+    Ensures:
+    - The output contains a rule for the first category.
     """
     mapname, session = simple_vector_map
     tools = Tools(session=session)
@@ -248,16 +269,16 @@ def test_colors_out_from_attr(simple_vector_map):
     result = tools.v_colors_out(
         map=mapname, column="val", format="plain", color_format="rgb"
     )
-    assert "1" in result.stdout, (
-        "Expected to find category value '1' in v.colors.out output."
-    )
+    assert "1" in result.stdout, "Expected category value '1' in v.colors.out output."
 
 
 def test_logarithmic_color_scale(simple_vector_map):
     """
-    Test use of logarithmic color scaling (flag -g).
+    Test use of logarithmic color scaling flag (-g) with v.colors.
 
-    Ensures RGB values remain in valid format and numeric range.
+    Validates:
+    - RGB values are correctly formatted.
+    - RGB values are within the valid range 0-255.
     """
     mapname, session = simple_vector_map
     tools = Tools(session=session)
@@ -278,4 +299,98 @@ def test_logarithmic_color_scale(simple_vector_map):
         rgb = rec.get("GRASSRGB", "").strip()
         assert rgb_pattern.match(rgb), f"Invalid RGB format: {rgb}"
         values = list(map(int, rgb.split(":")))
-        assert all(0 <= v <= 255 for v in values), f"RGB value out of range: {rgb}"
+        assert all(0 <= v <= 255 for v in values), (
+            f"RGB value out of 0-255 range: {rgb}"
+        )
+
+
+@pytest.mark.parametrize("color_table", ["viridis", "plasma", "terrain"])
+def test_v_colors_named_table(simple_vector_map, color_table):
+    """
+    Parametrized test for applying named color tables to a vector map.
+
+    Checks:
+    - GRASSRGB column is assigned values for each feature.
+    - The number of records is as expected.
+    """
+    mapname, session = simple_vector_map
+    tools = Tools(session=session)
+
+    tools.v_colors(map=mapname, column="val", color=color_table, rgb_column="GRASSRGB")
+
+    result = tools.v_db_select(map=mapname, columns="GRASSRGB", format="json")
+    data = json.loads(result.stdout)
+
+    assert len(data["records"]) == 3, f"Expected 3 records, got {len(data['records'])}."
+    for rec in data["records"]:
+        assert rec["GRASSRGB"], "GRASSRGB value is empty or null."
+
+
+def test_v_colors_missing_rule_file(simple_vector_map):
+    """
+    Test error raised when a non-existent rules file is specified.
+
+    Expects:
+    - CalledModuleError with message indicating inability to load the rules file.
+    """
+    mapname, session = simple_vector_map
+    tools = Tools(session=session)
+
+    missing_path = "/nonexistent/rules.txt"
+
+    with pytest.raises(
+        grass.exceptions.CalledModuleError, match=r"Unable to load rules file"
+    ):
+        tools.v_colors(map=mapname, rules=missing_path)
+
+
+def test_v_colors_invalid_rule_format(simple_vector_map):
+    """
+    Test error raised when rules file content is invalid.
+
+    Expects:
+    - CalledModuleError with message indicating bad rule format.
+    """
+    mapname, session = simple_vector_map
+    tools = Tools(session=session)
+
+    invalid_color_rule = "1 notacolor"
+
+    with pytest.raises(grass.exceptions.CalledModuleError, match=r"bad rule"):
+        tools.v_colors(map=mapname, column="val", rules=io.StringIO(invalid_color_rule))
+
+
+def test_v_colors_reversed_order_rules(simple_vector_map, tmp_path):
+    """
+    Test applying custom color rules from a file-like object with reversed category order.
+
+    Verifies:
+    - The RGB values in GRASSRGB column match the expected explicit RGB assignments.
+    """
+    mapname, session = simple_vector_map
+    tools = Tools(session=session)
+
+    # Reversed order: category 3 blue, 2 green, 1 red
+    rule_content = "3 0:0:255\n2 0:255:0\n1 255:0:0\n"
+
+    tools.v_colors(
+        map=mapname,
+        rules=io.StringIO(rule_content),
+        column="cat",
+        rgb_column="GRASSRGB",
+    )
+    result = tools.v_db_select(map=mapname, columns="cat,GRASSRGB", format="json")
+    data = json.loads(result.stdout)
+
+    expected = {
+        1: "255:0:0",
+        2: "0:255:0",
+        3: "0:0:255",
+    }
+
+    for row in data["records"]:
+        cat = row["cat"]
+        rgb = row["GRASSRGB"]
+        assert rgb == expected[cat], (
+            f"For category {cat}, expected RGB {expected[cat]} but got {rgb}"
+        )
