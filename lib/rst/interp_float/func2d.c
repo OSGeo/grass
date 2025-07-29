@@ -35,18 +35,18 @@
 #include <grass/gis.h>
 #include <grass/interpf.h>
 
-/* parameter description from DESCRIPTION.INTERP */
-/*!
- * Radial basis function
+/**
+ * @brief Radial basis function
  *
  * Radial basis function - completely regularized spline with tension (d=2)
  *
+ * parameter description from DESCRIPTION.INTERP
+ *
+ * @param r distance squared
+ * @param fi tension
+ * @return
  */
-
-double IL_crst(double r, /**< distance squared */
-
-               double fi /**< tension */
-)
+double IL_crst(double r, double fi)
 {
     double rfsta2 = fi * fi * r / 4.;
 
@@ -97,19 +97,18 @@ double IL_crst(double r, /**< distance squared */
     return (res);
 }
 
-/*!
- * Function for calculating derivatives (d=2)
+/**
+ * @brief Function for calculating derivatives (d=2)
  *
  * Derivatives of radial basis function - regularized spline with tension(d=2)
+ *
+ * @param r distance squared
+ * @param fi tension
+ * @param gd1 G1(r)
+ * @param gd2 G2(r)
+ * @return
  */
-int IL_crstg(double r, /**< distance squared */
-
-             double fi, /**< tension */
-
-             double *gd1, /**< G1(r) */
-
-             double *gd2 /**< G2(r) */
-)
+int IL_crstg(double r, double fi, double *gd1, double *gd2)
 {
     double r2 = r;
     double rfsta2 = fi * fi * r / 4.;
