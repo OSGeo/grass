@@ -188,6 +188,13 @@ class Tools:
         )
         if use_objects:
             result = object_parameter_handler.result
+        if object_parameter_handler.temporary_rasters:
+            self.call(
+                "g.remove",
+                type="raster",
+                name=object_parameter_handler.temporary_rasters,
+                flags="f",
+            )
         return result
 
     def run_cmd(

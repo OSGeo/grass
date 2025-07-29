@@ -38,6 +38,7 @@ class ParameterConverter:
         self._numpy_inputs_ordered = []
         self.stdin = None
         self.result = None
+        self.temporary_rasters = []
 
     def process_parameters(self, kwargs):
         for key, value in kwargs.items():
@@ -59,12 +60,14 @@ class ParameterConverter:
             map2d = garray.array(env=env)
             map2d[:] = value
             map2d.write(name)
+            self.temporary_rasters.append(name)
 
     def translate_data_to_objects(self, kwargs, env):
         output_arrays = []
         for name, value in self._numpy_outputs:
             output_array = garray.array(name, env=env)
             output_arrays.append(output_array)
+            self.temporary_rasters.append(name)
         if len(output_arrays) == 1:
             self.result = output_arrays[0]
             return True
