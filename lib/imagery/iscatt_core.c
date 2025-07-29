@@ -38,7 +38,7 @@ struct rast_row {
    These pgms have header in format created by this function.
 
    \param region region to be pgm header generated for
-   \param [out] header header of pgm file
+   \param[out] header header of pgm file
  */
 static int get_cat_rast_header(struct Cell_head *region, char *header)
 {
@@ -110,7 +110,7 @@ int I_create_cat_rast(struct Cell_head *cat_rast_region, const char *cat_rast)
 
    \param A pointer to intersected region
    \param B pointer to intersected region
-   \param [out] intersec pointer to intersection region of regions A B
+   \param[out] intersec pointer to intersection region of regions A B
    (relevant params of the region are: south, north, east, west)
 
    \return  0 if interaction exists
@@ -162,9 +162,9 @@ static int regions_intersecion(struct Cell_head *A, struct Cell_head *B,
 
    \param A pointer to intersected region
    \param B pointer to intersected region (A and B must have same resolution)
-   \param [out] A_bounds rows and cols numbers of A stored in
+   \param[out] A_bounds rows and cols numbers of A stored in
    south, north, east, west, which defines intersection of A and B
-   \param [out] B_bounds rows and cols numbers of B stored in
+   \param[out] B_bounds rows and cols numbers of B stored in
    south, north, east, west, which defines intersection of A and B
 
    \return  0 if interaction exists
@@ -363,7 +363,7 @@ int I_insert_patch_to_cat_rast(const char *patch_rast,
    \param bands_rows data represents data describig one row from raster band
    \param belongs_pix array which defines which pixels belongs to category
    (1 value) and which not (0 value)
-   \param [out] scatts pointer to scScatts struct of type SC_SCATT_DATA,
+   \param[out] scatts pointer to scScatts struct of type SC_SCATT_DATA,
    which are modified according to values in belongs_pix
    (represents scatter plot category)
  */

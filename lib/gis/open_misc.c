@@ -196,6 +196,7 @@ FILE *G_fopen_new_misc(const char *dir, const char *element, const char *name)
  * the file does not exist, the NULL pointer is returned. Otherwise the file
  * descriptor from the fopen( ) is returned.
  *
+ *  \param dir
  *  \param element
  *  \param name
  *  \param mapset

@@ -56,7 +56,7 @@ void SimpleErrorMessage(FILE *fd, const char *name, const char *mapset)
  *
  *  \param name
  *  \param mapset
- *  \param history
+ *  \param hist
  *  \return int
  */
 int Rast3d_read_history(const char *name, const char *mapset,
