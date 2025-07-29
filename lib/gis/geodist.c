@@ -61,7 +61,7 @@ void G_begin_geodesic_distance(double a, double e2)
  *
  * <b>Note:</b> Must be called first.
  *
- * \param lat1 first latitude
+ * \param[in] lat1 first latitude
  * \return
  */
 void G_set_geodesic_distance_lat1(double lat1)
@@ -76,7 +76,7 @@ void G_set_geodesic_distance_lat1(double lat1)
  *
  * <b>Note:</b> Must be called second.
  *
- * \param lat2 second latitidue
+ * \param[in] lat2 second latitude
  */
 void G_set_geodesic_distance_lat2(double lat2)
 {
@@ -111,8 +111,8 @@ void G_set_geodesic_distance_lat2(double lat2)
  * passed to G_set_geodesic_distance_latl() and <i>lat2</i> was the
  * latitude passed to G_set_geodesic_distance_lat2().
  *
- * \param lon1 first longitude
- * \param lon2 second longitude
+ * \param[in] lon1 first longitude
+ * \param[in] lon2 second longitude
  *
  * \return double distance in meters
  */
@@ -185,8 +185,8 @@ double G_geodesic_distance_lon_to_lon(double lon1, double lon2)
  * <b>Note:</b> The calculation of the geodesic distance is fairly
  * costly.
  *
- * \param lon1,lat1 longitude,latitude of first point
- * \param lon2,lat2 longitude,latitude of second point
+ * \param[in] lon1,lat1 longitude,latitude of first point
+ * \param[in] lon2,lat2 longitude,latitude of second point
  *
  * \return distance in meters
  */
