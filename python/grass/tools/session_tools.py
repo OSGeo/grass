@@ -52,6 +52,19 @@ class Tools:
     the *ToolResult* object:
 
     >>> tools.g_region(flags="p").text  # doctest: +SKIP
+
+    Raster input and outputs can be NumPy arrays:
+
+    >>> import numpy as np
+    >>> tools.g_region(rows=2, cols=3)
+    ToolResult(...)
+    >>> slope = tools.r_slope_aspect(elevation=np.ones((2, 3)), slope=np.ndarray)
+
+    When multiple outputs are returned, they are returned as a tuple:
+
+    >>> (slope, aspect) = tools.r_slope_aspect(
+    ...     elevation=np.ones((2, 3)), slope=np.array, aspect=np.array
+    ... )
     """
 
     def __init__(
@@ -167,13 +180,35 @@ class Tools:
         # Get a fixed env parameter at at the beginning of each execution,
         # but repeat it every time in case the referenced environment is modified.
         args, popen_options = gs.popen_args_command(tool_name_, **kwargs)
+
+        # Compute the environment for subprocesses and store it for later use.
+        if "env" not in popen_options:
+            popen_options["env"] = self._modified_env_if_needed()
+
+        object_parameter_handler.translate_objects_to_data(
+            kwargs, env=popen_options["env"]
+        )
+
         # We approximate original kwargs with the possibly-modified kwargs.
-        return self.run_cmd(
+        result = self.run_cmd(
             args,
             tool_kwargs=kwargs,
             input=object_parameter_handler.stdin,
             **popen_options,
         )
+        use_objects = object_parameter_handler.translate_data_to_objects(
+            kwargs, env=popen_options["env"]
+        )
+        if use_objects:
+            result = object_parameter_handler.result
+        if object_parameter_handler.temporary_rasters:
+            self.call(
+                "g.remove",
+                type="raster",
+                name=object_parameter_handler.temporary_rasters,
+                flags="f",
+            )
+        return result
 
     def run_cmd(
         self,

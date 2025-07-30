@@ -25,21 +25,80 @@ import json
 import shutil
 from io import StringIO
 
+import numpy as np
+
 import grass.script as gs
+import grass.script.array as garray
 
 
 class ParameterConverter:
+    """Converts parameter values to strings and facilitates flow of the data."""
+
     def __init__(self):
         self._numpy_inputs = {}
-        self._numpy_outputs = {}
+        self._numpy_outputs = []
         self._numpy_inputs_ordered = []
         self.stdin = None
+        self.result = None
+        self.temporary_rasters = []
 
     def process_parameters(self, kwargs):
+        """Converts high level parameter values to strings.
+
+        Converts io.StringIO to dash and stores the string in the *stdin* attribute.
+        Replaces NumPy arrays by temporary raster names and stores the arrays.
+        Replaces NumPy array types by temporary raster names.
+
+        Temporary names are accessible in the *temporary_rasters* attribute and need
+        to be cleaned.
+        The functions *translate_objects_to_data* and *translate_data_to_objects*
+        need to be called before and after the computation to do the translations
+        from NumPy arrays to GRASS data and from GRASS data to NumPy arrays.
+
+        Simple type conversions from numbers and iterables to strings are expected to
+        be done by lower level code.
+        """
         for key, value in kwargs.items():
-            if isinstance(value, StringIO):
+            if isinstance(value, np.ndarray):
+                name = gs.append_uuid("tmp_serialized_input_array")
+                kwargs[key] = name
+                self._numpy_inputs[key] = (name, value)
+            elif value in (np.ndarray, np.array, garray.array):
+                # We test for class or the function.
+                name = gs.append_uuid("tmp_serialized_output_array")
+                kwargs[key] = name
+                self._numpy_outputs.append((name, value))
+            elif isinstance(value, StringIO):
                 kwargs[key] = "-"
                 self.stdin = value.getvalue()
+
+    def translate_objects_to_data(self, kwargs, env):
+        """Convert NumPy arrays to GRASS data"""
+        for name, value in self._numpy_inputs.values():
+            map2d = garray.array(env=env)
+            map2d[:] = value
+            map2d.write(name)
+            self.temporary_rasters.append(name)
+
+    def translate_data_to_objects(self, kwargs, env):
+        """Convert GRASS data to NumPy arrays
+
+        Returns True if there is one or more output arrays, False otherwise.
+        The arrays are stored in the *result* attribute.
+        """
+        output_arrays = []
+        for name, value in self._numpy_outputs:
+            output_array = garray.array(name, env=env)
+            output_arrays.append(output_array)
+            self.temporary_rasters.append(name)
+        if len(output_arrays) == 1:
+            self.result = output_arrays[0]
+            return True
+        if len(output_arrays) > 1:
+            self.result = tuple(output_arrays)
+            return True
+        self.result = None
+        return False
 
 
 class ToolFunctionResolver:
