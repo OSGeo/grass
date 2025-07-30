@@ -84,10 +84,10 @@ static typbuff *Ebuf; /* elevation buffer */
 static int Flat;
 
 /*!
-   \brief Initizalize
+   \brief Initialize
 
-   \param rows number of rows
-   \param cols number of columns
+   \param[in] rows number of rows
+   \param[in] cols number of columns
 
    \return -1 on failure
    \return 1 on success
@@ -127,9 +127,9 @@ static int drape_line_init(int rows, int cols)
    \brief Get segments
 
    \param gs surface (geosurf)
-   \param bgn begin point
-   \param end end point
-   \param num
+   \param[in] bgn begin point
+   \param[in] end end point
+   \param[out] num
 
    \return pointer to Point3 struct
  */
@@ -172,8 +172,8 @@ static Point3 *_gsdrape_get_segments(geosurf *gs, float *bgn, float *end,
 /*!
    \brief Calculate 2D distance
 
-   \param p1 first point
-   \param p2 second point
+   \param[in] p1 first point
+   \param[in] p2 second point
 
    \return distance
  */
@@ -223,11 +223,12 @@ int gsdrape_set_surface(geosurf *gs)
    - if seg intersects
 
    \param gs surface (geosurf)
-   \param bgn begin point
-   \param end end point
+   \param[in,out] bgn begin point
+   \param[in,out] end end point
 
    \return 0 if segment doesn't intersect the viewregion, or intersects only at
-   corner \return otherwise returns 1
+           corner
+   \return otherwise returns 1
  */
 int seg_intersect_vregion(geosurf *gs, float *bgn, float *end)
 {
@@ -340,9 +341,9 @@ int seg_intersect_vregion(geosurf *gs, float *bgn, float *end)
    \brief ADD
 
    \param gs surface (geosurf)
-   \param bgn begin point (x,y)
-   \param end end point (x,y)
-   \param num
+   \param[in,out] bgn begin point (x,y)
+   \param[in,out] end end point (x,y)
+   \param[out] num
 
    \return pointer to Point3 struct
  */
@@ -390,9 +391,9 @@ Point3 *gsdrape_get_segments(geosurf *gs, float *bgn, float *end, int *num)
    \brief Get all segments
 
    \param gs surface (geosurf)
-   \param bgn begin point
-   \param end end point
-   \param num
+   \param[in,out] bgn begin point
+   \param[in,out] end end point
+   \param[out] num
 
    \return pointer to Point3 struct
  */
@@ -430,10 +431,10 @@ Point3 *gsdrape_get_allsegments(geosurf *gs, float *bgn, float *end, int *num)
    \brief ADD
 
    \param gs surface (geosurf)
-   \param bgn begin point
-   \param end end point
-   \param f first
-   \param l last
+   \param[in] bgn begin point
+   \param[in] end end point
+   \param[out] f first
+   \param[out] l last
  */
 void interp_first_last(geosurf *gs, float *bgn, float *end, Point3 f, Point3 l)
 {
@@ -458,7 +459,7 @@ void interp_first_last(geosurf *gs, float *bgn, float *end, Point3 f, Point3 l)
    \brief ADD
 
    \param gs surface (geosurf)
-   \param pt
+   \param[in,out] pt
  */
 int _viewcell_tri_interp(geosurf *gs, Point3 pt)
 {
@@ -496,6 +497,11 @@ int _viewcell_tri_interp(geosurf *gs, Point3 pt)
    pt has X & Y coordinates in it, we interpolate Z here
 
    This could probably be much shorter, but not much faster.
+
+   \param gs
+   \param buf
+   \param[in,out] pt
+   \param[in] check_mask
 
    \return 1 if point is in view region
    \return otherwise 0 (if masked)
@@ -684,7 +690,7 @@ int viewcell_tri_interp(geosurf *gs, typbuff *buf, Point3 pt, int check_mask)
    \brief ADD
 
    \param gs surface (geosurf)
-   \param pt
+   \param[in] pt
 
    \return 1
    \return 0
@@ -714,11 +720,11 @@ int in_vregion(geosurf *gs, float *pt)
    along the way and storing the result in I3d.
 
    \param gs surface (geosurf)
-   \param first first point
-   \param last last point
-   \param vi
-   \param hi
-   \param di
+   \param[in] first first point
+   \param[in] last last point
+   \param[in] vi
+   \param[in] hi
+   \param[in] di
 
    \return
  */
@@ -869,9 +875,9 @@ int order_intersects(geosurf *gs, Point3 first, Point3 last, int vi, int hi,
    Colinear already eliminated
 
    \param gs surface (geosurf)
-   \param bgn begin point
-   \param end end point
-   \param dir direction
+   \param[in] bgn begin point
+   \param[in] end end point
+   \param[in] dir direction
 
    \return
  */
@@ -963,9 +969,9 @@ int get_vert_intersects(geosurf *gs, float *bgn, float *end, float *dir)
    \brief Get horizontal intersects
 
    \param gs surface (geosurf)
-   \param bgn begin point
-   \param end end point
-   \param dir
+   \param[in] bgn begin point
+   \param[in] end end point
+   \param[in] dir
 
    \return number of intersects
  */
@@ -1058,8 +1064,8 @@ int get_horz_intersects(geosurf *gs, float *bgn, float *end, float *dir)
    Colinear already eliminated
 
    \param gs surface (geosurf)
-   \param bgn begin point
-   \param end end point
+   \param[in] bgn begin point
+   \param[in] end end point
    \param dir ? (unused)
 
    \return number of intersects
@@ -1192,8 +1198,8 @@ int get_diag_intersects(geosurf *gs, float *bgn, float *end, float *dir UNUSED)
    If the lines intersect, the output variables x, y are
    set to coordinates of the point of intersection.
 
-   \param x1,y1,x2,y2 coordinates of endpoints of one segment
-   \param x3,y3,x4,y4 coordinates of endpoints of other segment
+   \param[in] x1,y1,x2,y2 coordinates of endpoints of one segment
+   \param[in] x3,y3,x4,y4 coordinates of endpoints of other segment
    \param[out] x,y coordinates of intersection point
 
    \return 0 no intersection
@@ -1274,8 +1280,8 @@ int segs_intersect(float x1, float y1, float x2, float y2, float x3, float y3,
 
    Plane defined by three points here; user fills in unk[X] & unk[Y]
 
-   \param p1,p2,p3 points defining plane
-   \param unk point
+   \param[in,out] p1,p2,p3 points defining plane
+   \param[in,out] unk point
 
    \return 1 point on plane
    \return 0 point not on plane
@@ -1296,8 +1302,8 @@ int Point_on_plane(Point3 p1, Point3 p2, Point3 p3, Point3 unk)
 
    User fills in intersect[X] & intersect[Y]
 
-   \param[out] intersect intersect coordinates
-   \param plane plane definition
+   \param[in,out] intersect intersect coordinates
+   \param[in] plane plane definition
 
    \return 0 doesn't intersect
    \return 1 intesects
@@ -1320,7 +1326,7 @@ int XY_intersect_plane(float *intersect, float *plane)
 /*!
    \brief Define plane
 
-   \param p1,p2,p3 three point on plane
+   \param[in] p1,p2,p3 three point on plane
    \param[out] plane plane definition
 
    \return 1
@@ -1350,7 +1356,8 @@ int P3toPlane(Point3 p1, Point3 p2, Point3 p3, float *plane)
 /*!
    \brief Get cross product
 
-   \param a,b,c
+   \param[in] a,b
+   \param[out] c
 
    \return cross product c = a cross b
  */

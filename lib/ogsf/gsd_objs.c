@@ -28,16 +28,16 @@
 
 static void init_stuff(void);
 
-/*!
-   \brief vertices for octahedron
+/**
+ * @brief vertices for octahedron
  */
 float Octo[6][3] = {{1.0, 0.0, 0.0},  {0.0, 1.0, 0.0},  {0.0, 0.0, 1.0},
                     {-1.0, 0.0, 0.0}, {0.0, -1.0, 0.0}, {0.0, 0.0, -1.0}};
 
 #define ONORM .57445626
 
-/*!
-   \brief normals for flat-shaded octahedron
+/**
+ * @brief normals for flat-shaded octahedron
  */
 float OctoN[8][3] = {
     {ONORM, ONORM, ONORM},   {-ONORM, ONORM, ONORM},   {ONORM, -ONORM, ONORM},
@@ -69,13 +69,13 @@ float origin[3] = {0.0, 0.0, 0.0};
 #define DOWN_NORM Octo[5]
 #define ORIGIN    origin
 
-/*!
-   \brief vertices & normals for octagon in xy plane
+/**
+ * @brief vertices & normals for octagon in xy plane
  */
 float ogverts[8][3];
 
-/*!
-   \brief vertices for octagon in xy plane, z=1
+/**
+ * @brief vertices for octagon in xy plane, z=1
  */
 float ogvertsplus[8][3];
 
@@ -120,12 +120,16 @@ static void init_stuff(void)
     return;
 }
 
-/*!
-   \brief ADD
-
-   \param center center point
-   \param colr color value
-   \param siz size value
+/**
+ * @brief Draws a plus sign symbol at the specified center location.
+ *
+ * This function renders a plus sign ('+') symbol at the given center
+ * coordinates with the specified color and size.
+ *
+ * @param center Pointer to a float array representing the (x, y, z) coordinates
+ *               of the center point.
+ * @param colr   Integer representing the color to use for drawing the symbol.
+ * @param siz    Size of the symbol.
  */
 void gsd_plus(float *center, int colr, float siz)
 {
@@ -155,14 +159,14 @@ void gsd_plus(float *center, int colr, float siz)
     return;
 }
 
-/*!
-   \brief Line on surface, fix z-values
-
-   \todo remove fudge, instead fudge the Z buffer
-
-   \param gs surface (geosurf)
-   \param v1 first point
-   \param v2 second point
+/**
+ * @brief Line on surface, fix z-values
+ *
+ * @todo remove fudge, instead fudge the Z buffer
+ *
+ * @param gs surface (geosurf)
+ * @param v1 first point (X,Y)
+ * @param v2 second point (X,Y)
  */
 void gsd_line_onsurf(geosurf *gs, float *v1, float *v2)
 {
@@ -193,20 +197,21 @@ void gsd_line_onsurf(geosurf *gs, float *v1, float *v2)
     return;
 }
 
-/*!
-   \brief Multiline on surface, fix z-values
-
-   \todo remove fudge, instead fudge the Z buffer
-
-   Like above, except only draws first n points of line, or np,
-   whichever is less.  Returns number of points used. Fills
-   pt with last pt drawn.
-
-   \param gs surface (geosurf)
-   \param v1 first point
-   \param v2 second point
-   \param pt
-   \param n number of segments
+/**
+ * @brief Multiline on surface, fix z-values
+ *
+ * @todo remove fudge, instead fudge the Z buffer
+ *
+ * Like above, except only draws first n points of line, or np,
+ * whichever is less.  Returns number of points used. Fills
+ * pt with last pt drawn.
+ *
+ * @param gs surface (geosurf)
+ * @param v1 Pointer to a float array representing the first point as a vector.
+ * @param v2 Pointer to a float array representing the second point as a vector.
+ * @param[out] pt
+ * @param[in] n number of segments
+ * @return int
  */
 int gsd_nline_onsurf(geosurf *gs, float *v1, float *v2, float *pt, int n)
 {
@@ -241,15 +246,19 @@ int gsd_nline_onsurf(geosurf *gs, float *v1, float *v2, float *pt, int n)
     return (0);
 }
 
-/*!
-   \brief Draw X symbol
-
-   Note gs: NULL if flat
-
-   \param gs surface (geosurf)
-   \param center
-   \param colr color value
-   \param siz size value
+/**
+ * @brief Draws a X symbol at the specified center location.
+ *
+ * This function renders a x ('X') symbol at the given center
+ * coordinates with the specified color and size.
+ *
+ * Note gs: NULL if flat
+ *
+ * @param gs surface (geosurf)
+ * @param center Pointer to a float array representing the (x, y, z) coordinates
+ *               of the center point.
+ * @param colr   Integer representing the color to use for drawing the symbol.
+ * @param siz    Size of the symbol.
  */
 void gsd_x(geosurf *gs, float *center, int colr, float siz)
 {
@@ -293,12 +302,16 @@ void gsd_x(geosurf *gs, float *center, int colr, float siz)
     return;
 }
 
-/*!
-   \brief Draw diamond symbol
-
-   \param center center point
-   \param colr color value
-   \param siz size value
+/**
+ * @brief Draws a diamond symbol at the specified center location.
+ *
+ * This function renders a diamond symbol at the given center
+ * coordinates with the specified color and size.
+ *
+ * @param center Pointer to a float array representing the (x, y, z) coordinates
+ *               of the center point.
+ * @param colr   Integer representing the color to use for drawing the symbol.
+ * @param siz    Size of the symbol.
  */
 void gsd_diamond(float *center, unsigned long colr, float siz)
 {
@@ -393,14 +406,18 @@ void gsd_diamond(float *center, unsigned long colr, float siz)
     return;
 }
 
-/*!
-   \brief Draw cube
-
-   Added by Hamish Bowman Nov 2005
-
-   \param center center point
-   \param colr color value
-   \param siz size value
+/**
+ * @brief Draws a cube symbol at the specified center location.
+ *
+ * This function renders a cube symbol at the given center
+ * coordinates with the specified color and size.
+ *
+ * Added by Hamish Bowman Nov 2005
+ *
+ * @param center Pointer to a float array representing the (x, y, z) coordinates
+ *               of the center point.
+ * @param colr   Integer representing the color to use for drawing the symbol.
+ * @param siz    Size of the symbol.
  */
 void gsd_cube(float *center, unsigned long colr, float siz)
 {
@@ -469,14 +486,18 @@ void gsd_cube(float *center, unsigned long colr, float siz)
     return;
 }
 
-/*!
-   \brief Draw box
-
-   Added by Hamish Bowman Nov 2005
-
-   \param center center point
-   \param colr color value
-   \param siz size value
+/**
+ * @brief Draws a box symbol at the specified center location.
+ *
+ * This function renders a box symbol at the given center
+ * coordinates with the specified color and size.
+ *
+ * Added by Hamish Bowman Nov 2005
+ *
+ * @param center Pointer to a float array representing the (x, y, z) coordinates
+ *               of the center point.
+ * @param colr   Integer representing the color to use for drawing the symbol.
+ * @param siz    Size of the symbol.
  */
 void gsd_draw_box(float *center, unsigned long colr, float siz)
 {
@@ -530,12 +551,16 @@ void gsd_draw_box(float *center, unsigned long colr, float siz)
     return;
 }
 
-/*!
-   \brief Draw sphere
-
-   \param center center point
-   \param colr color value
-   \param siz size value
+/**
+ * @brief Draws a sphere at the specified center location.
+ *
+ * This function renders a sphere at the given center
+ * coordinates with the specified color and size.
+ *
+ * @param center Pointer to a float array representing the (x, y, z) coordinates
+ *               of the center point.
+ * @param colr   Integer representing the color to use for drawing the sphere.
+ * @param siz    Size of the sphere.
  */
 void gsd_drawsphere(float *center, unsigned long colr, float siz)
 {
@@ -569,12 +594,16 @@ void gsd_diamond_lines(void)
     return;
 }
 
-/*!
-   \brief Draw asterisk
-
-   \param center center point
-   \param colr color value
-   \param siz size value
+/**
+ * @brief Draws an asterisk symbol at the specified center location.
+ *
+ * This function renders an asterisk symbol at the given center
+ * coordinates with the specified color and size.
+ *
+ * @param center Pointer to a float array representing the (x, y, z) coordinates
+ *               of the center point.
+ * @param colr   Integer representing the color to use for drawing the symbol.
+ * @param siz    Size of the symbol.
  */
 void gsd_draw_asterisk(float *center, unsigned long colr, float siz)
 {
@@ -624,12 +653,16 @@ void gsd_draw_asterisk(float *center, unsigned long colr, float siz)
     return;
 }
 
-/*!
-   \brief Draw gyro
-
-   \param center center point
-   \param colr color value
-   \param siz size value
+/**
+ * @brief Draws a gyro symbol at the specified center location.
+ *
+ * This function renders a gyro symbol at the given center
+ * coordinates with the specified color and size.
+ *
+ * @param center Pointer to a float array representing the (x, y, z) coordinates
+ *               of the center point.
+ * @param colr   Integer representing the color to use for drawing the symbol.
+ * @param siz    Size of the symbol.
  */
 void gsd_draw_gyro(float *center, unsigned long colr, float siz)
 {
@@ -678,10 +711,10 @@ void gsd_draw_gyro(float *center, unsigned long colr, float siz)
     return;
 }
 
-/*!
-   \brief Draw 3d cursor
-
-   \param pt point
+/**
+ * @brief Draw 3d cursor
+ *
+ * @param[in] pt point
  */
 void gsd_3dcursor(float *pt)
 {
@@ -719,13 +752,26 @@ void gsd_3dcursor(float *pt)
     return;
 }
 
-/*!
-   \brief ADD
-
-   \param dir
-   \param slope
-   \param aspect
-   \param degrees
+/**
+ * @brief Converts a direction vector to slope and aspect angles.
+ *
+ * Given a 3D direction vector, this function computes the slope and aspect
+ * angles corresponding to the vector. The aspect is the compass direction
+ * (azimuth) of the projection of the vector onto the XY plane, and the slope
+ * is the angle between the vector and the vertical axis (Z).
+ *
+ * @param[in]  dir     Pointer to an array of 3 floats representing the
+ *                     direction vector [dx, dy, dz].
+ * @param[out] slope   Pointer to a float where the computed slope angle will be
+ *                     stored (in radians or degrees).
+ * @param[out] aspect  Pointer to a float where the computed aspect angle will
+ *                     be stored (in radians or degrees).
+ * @param[in]  degrees If non-zero, the output angles are converted to degrees;
+ *                     otherwise, they are in radians.
+ *
+ * The function handles edge cases where the direction vector is vertical or
+ * horizontal. Aspect is set to 0 if the vector has no horizontal component.
+ * Slope is negative for upward-pointing vectors, positive for downward.
  */
 void dir_to_slope_aspect(float *dir, float *slope, float *aspect, int degrees)
 {
@@ -785,19 +831,23 @@ void dir_to_slope_aspect(float *dir, float *slope, float *aspect, int degrees)
     return;
 }
 
-/*!
-   \brief Draw North Arrow takes OpenGL coords and size
-
-   \param pos2
-   \param len
-   \param fontbase
-   \param arw_clr north arrow color
-   \param text_clr text color
-
-   \return 1
+/**
+ * @brief Draw North Arrow
+ *
+ * Takes OpenGL coords and size
+ *
+ * @param pos2 Pointer to a float array representing the position as a
+ *             3D vector (X,Y,Z).
+ * @param len
+ * @param fontbase
+ * @param arw_clr north arrow color
+ * @param text_clr text color
+ *
+ * @return 1
+ *
+ * @todo Store arrow somewhere to enable it's removal/change.
+ * @todo Add option to specify north text and font.
  */
-/*TODO: Store arrow somewhere to enable it's removal/change.
-   Add option to specify north text and font. */
 int gsd_north_arrow(float *pos2, float len, GLuint fontbase,
                     unsigned long arw_clr, unsigned long text_clr)
 {
@@ -874,24 +924,26 @@ int gsd_north_arrow(float *pos2, float len, GLuint fontbase,
     return (1);
 }
 
-/*!
-   \brief ADD
-
-   siz is height, sz is global exag to correct for.
-
-   If onsurf in non-null, z component of dir is dropped and
-   line-on-suf is used, resulting in length of arrow being proportional
-   to slope
-
-   \param center center point
-   \param colr color value
-   \param siz size value
-   \param dir
-   \param sz
-   \param onsurf surface (geosurf)
-
-   \return 1 no surface given
-   \return 0 on surface
+/**
+ * @brief Draws an arrow
+ *
+ * siz is height, sz is global exag to correct for.
+ *
+ * If onsurf in non-null, z component of dir is dropped and
+ * line-on-suf is used, resulting in length of arrow being proportional
+ * to slope.
+ *
+ * @param center Pointer to a float array representing the (x, y, z) coordinates
+ *               of the center point.
+ * @param colr Integer representing the color to use for drawing the arrow.
+ * @param siz Size of the arrow.
+ * @param dir Direction of the arrow. Pointer to a float array representing the
+ *            3D vector (X,Y,Z).
+ * @param sz height, sz is global exag to correct for.
+ * @param onsurf surface (geosurf).
+ *
+ * @return 1 no surface given
+ * @return 0 on surface
  */
 int gsd_arrow(float *center, unsigned long colr, float siz, float *dir,
               float sz, geosurf *onsurf)
@@ -954,16 +1006,18 @@ int gsd_arrow(float *center, unsigned long colr, float siz, float *dir,
     return (1);
 }
 
-/*!
-   \brief Draw north arrow on surface
-
-   \param base
-   \param tip
-   \param colr
-   \param wid
-   \param gs surface (geosurf)
-
-   \return 0
+/**
+ * @brief Draw north arrow on surface
+ *
+ * @param base Pointer to a float array representing the base as a
+ *             2D vector (X,Y).
+ * @param tip Pointer to a float array representing the tip as a
+ *            2D vector (X,Y).
+ * @param colr Integer representing the color to use for drawing the arrow.
+ * @param wid Line width (see \ref gsd_linewidth)
+ * @param gs surface (geosurf)
+ *
+ * @return 0
  */
 int gsd_arrow_onsurf(float *base, float *tip, unsigned long colr, int wid,
                      geosurf *gs)
@@ -1042,15 +1096,17 @@ int gsd_arrow_onsurf(float *base, float *tip, unsigned long colr, int wid,
     return (0);
 }
 
-/*!
-   \brief Draw 3d north arrow
-
-   \param center center point
-   \param colr color value
-   \param siz1 height
-   \param siz2 is diameter
-   \param dir
-   \param sz
+/**
+ * @brief Draw 3d north arrow
+ *
+ * @param center Pointer to a float array representing the (x, y, z) coordinates
+ *               of the center point.
+ * @param colr Integer representing the color to use for drawing the arrow.
+ * @param siz1 size
+ * @param siz2 size
+ * @param dir Direction of the arrow. Pointer to a float array representing the
+ *            3D vector (X,Y,Z).
+ * @param sz height
  */
 void gsd_3darrow(float *center, unsigned long colr, float siz1, float siz2,
                  float *dir, float sz)
@@ -1119,18 +1175,20 @@ void gsd_3darrow(float *center, unsigned long colr, float siz1, float siz2,
     return;
 }
 
-/*!
-   \brief Draw Scalebar takes OpenGL coords and size
-
-   Adapted from gsd_north_arrow Hamish Bowman Dec 2006
-
-   \param pos2
-   \param len
-   \param fontbase font-base
-   \param bar_clr barscale color
-   \param text_clr text color
-
-   \return 1
+/**
+ * @brief Draw Scalebar takes OpenGL coords and size
+ *
+ * Adapted from gsd_north_arrow Hamish Bowman Dec 2006
+ *
+ * @param pos2 Pointer to a float array representing the scalebar position as a
+ *             3D vector (X,Y,Z).
+ * @param len
+ * @param fontbase font-base
+ * @param bar_clr barscale color.
+ *                Integer representing the color to use for the barscale.
+ * @param text_clr test color.
+ *                 Integer representing the color to use for the text.
+ * @return 1
  */
 int gsd_scalebar(float *pos2, float len, GLuint fontbase, unsigned long bar_clr,
                  unsigned long text_clr)
@@ -1206,18 +1264,20 @@ int gsd_scalebar(float *pos2, float len, GLuint fontbase, unsigned long bar_clr,
     return (1);
 }
 
-/*!
-   \brief Draw Scalebar (as lines)
-
-   Adapted from gsd_scalebar A.Kratochvilova 2011
-
-   \param pos scalebar position
-   \param len
-   \param fontbase font-base (unused)
-   \param bar_clr barscale color
-   \param text_clr text color (unused)
-
-   \return 1
+/**
+ * @brief Draw Scalebar (as lines)
+ *
+ * Adapted from gsd_scalebar A.Kratochvilova 2011
+ *
+ * @param pos Pointer to a float array representing the scalebar position as a
+ *            3D vector (X,Y,Z).
+ * @param len
+ * @param fontbase font-base (unused)
+ * @param bar_clr barscale color.
+ *                Integer representing the color to use for the barscale.
+ * @param text_clr Text color (unused).
+ *                 Integer representing the color to use for the text.
+ * @return 1
  */
 int gsd_scalebar_v2(float *pos, float len, GLuint fontbase UNUSED,
                     unsigned long bar_clr, unsigned long text_clr UNUSED)
@@ -1275,14 +1335,14 @@ int gsd_scalebar_v2(float *pos, float len, GLuint fontbase UNUSED,
     return 1;
 }
 
-/*!
-   \brief Primitives only called after transforms
-
-   Center is actually center at base of 8 sided cone
-
-   \param col color value
+/**
+ * @brief Primitives only called after transforms
+ *
+ * Center is actually center at base of 8 sided cone
+ *
+ * @param colr Integer representing the color to use for drawing the cone.
  */
-void primitive_cone(unsigned long col)
+void primitive_cone(unsigned long colr)
 {
     float tip[3];
     static int first = 1;
@@ -1296,30 +1356,30 @@ void primitive_cone(unsigned long col)
     tip[Z] = 1.0;
 
     gsd_bgntfan();
-    gsd_litvert_func2(UP_NORM, col, tip);
-    gsd_litvert_func2(ogverts[0], col, ogverts[0]);
-    gsd_litvert_func2(ogverts[1], col, ogverts[1]);
-    gsd_litvert_func2(ogverts[2], col, ogverts[2]);
-    gsd_litvert_func2(ogverts[3], col, ogverts[3]);
-    gsd_litvert_func2(ogverts[4], col, ogverts[4]);
-    gsd_litvert_func2(ogverts[5], col, ogverts[5]);
-    gsd_litvert_func2(ogverts[6], col, ogverts[6]);
-    gsd_litvert_func2(ogverts[7], col, ogverts[7]);
-    gsd_litvert_func2(ogverts[0], col, ogverts[0]);
+    gsd_litvert_func2(UP_NORM, colr, tip);
+    gsd_litvert_func2(ogverts[0], colr, ogverts[0]);
+    gsd_litvert_func2(ogverts[1], colr, ogverts[1]);
+    gsd_litvert_func2(ogverts[2], colr, ogverts[2]);
+    gsd_litvert_func2(ogverts[3], colr, ogverts[3]);
+    gsd_litvert_func2(ogverts[4], colr, ogverts[4]);
+    gsd_litvert_func2(ogverts[5], colr, ogverts[5]);
+    gsd_litvert_func2(ogverts[6], colr, ogverts[6]);
+    gsd_litvert_func2(ogverts[7], colr, ogverts[7]);
+    gsd_litvert_func2(ogverts[0], colr, ogverts[0]);
     gsd_endtfan();
 
     return;
 }
 
-/*!
-   \brief Primitives only called after transforms
-
-   Center is actually center at base of 8 sided cylinder
-
-   \param col color value
-   \param caps
+/**
+ * @brief Primitives only called after transforms
+ *
+ * Center is actually center at base of 8 sided cylinder
+ *
+ * @param colr Integer representing the color to use for drawing the cylinder.
+ * @param caps If non zero, draw caps at the bottom and top of the cylinder.
  */
-void primitive_cylinder(unsigned long col, int caps)
+void primitive_cylinder(unsigned long colr, int caps)
 {
     static int first = 1;
 
@@ -1329,53 +1389,53 @@ void primitive_cylinder(unsigned long col, int caps)
     }
 
     gsd_bgnqstrip();
-    gsd_litvert_func2(ogverts[0], col, ogvertsplus[0]);
-    gsd_litvert_func2(ogverts[0], col, ogverts[0]);
-    gsd_litvert_func2(ogverts[1], col, ogvertsplus[1]);
-    gsd_litvert_func2(ogverts[1], col, ogverts[1]);
-    gsd_litvert_func2(ogverts[2], col, ogvertsplus[2]);
-    gsd_litvert_func2(ogverts[2], col, ogverts[2]);
-    gsd_litvert_func2(ogverts[3], col, ogvertsplus[3]);
-    gsd_litvert_func2(ogverts[3], col, ogverts[3]);
-    gsd_litvert_func2(ogverts[4], col, ogvertsplus[4]);
-    gsd_litvert_func2(ogverts[4], col, ogverts[4]);
-    gsd_litvert_func2(ogverts[5], col, ogvertsplus[5]);
-    gsd_litvert_func2(ogverts[5], col, ogverts[5]);
-    gsd_litvert_func2(ogverts[6], col, ogvertsplus[6]);
-    gsd_litvert_func2(ogverts[6], col, ogverts[6]);
-    gsd_litvert_func2(ogverts[7], col, ogvertsplus[7]);
-    gsd_litvert_func2(ogverts[7], col, ogverts[7]);
-    gsd_litvert_func2(ogverts[0], col, ogvertsplus[0]);
-    gsd_litvert_func2(ogverts[0], col, ogverts[0]);
+    gsd_litvert_func2(ogverts[0], colr, ogvertsplus[0]);
+    gsd_litvert_func2(ogverts[0], colr, ogverts[0]);
+    gsd_litvert_func2(ogverts[1], colr, ogvertsplus[1]);
+    gsd_litvert_func2(ogverts[1], colr, ogverts[1]);
+    gsd_litvert_func2(ogverts[2], colr, ogvertsplus[2]);
+    gsd_litvert_func2(ogverts[2], colr, ogverts[2]);
+    gsd_litvert_func2(ogverts[3], colr, ogvertsplus[3]);
+    gsd_litvert_func2(ogverts[3], colr, ogverts[3]);
+    gsd_litvert_func2(ogverts[4], colr, ogvertsplus[4]);
+    gsd_litvert_func2(ogverts[4], colr, ogverts[4]);
+    gsd_litvert_func2(ogverts[5], colr, ogvertsplus[5]);
+    gsd_litvert_func2(ogverts[5], colr, ogverts[5]);
+    gsd_litvert_func2(ogverts[6], colr, ogvertsplus[6]);
+    gsd_litvert_func2(ogverts[6], colr, ogverts[6]);
+    gsd_litvert_func2(ogverts[7], colr, ogvertsplus[7]);
+    gsd_litvert_func2(ogverts[7], colr, ogverts[7]);
+    gsd_litvert_func2(ogverts[0], colr, ogvertsplus[0]);
+    gsd_litvert_func2(ogverts[0], colr, ogverts[0]);
     gsd_endqstrip();
 
     if (caps) {
         /* draw top */
         gsd_bgntfan();
-        gsd_litvert_func2(UP_NORM, col, UP_NORM);
-        gsd_litvert_func2(UP_NORM, col, ogvertsplus[0]);
-        gsd_litvert_func2(UP_NORM, col, ogvertsplus[1]);
-        gsd_litvert_func2(UP_NORM, col, ogvertsplus[2]);
-        gsd_litvert_func2(UP_NORM, col, ogvertsplus[3]);
-        gsd_litvert_func2(UP_NORM, col, ogvertsplus[4]);
-        gsd_litvert_func2(UP_NORM, col, ogvertsplus[5]);
-        gsd_litvert_func2(UP_NORM, col, ogvertsplus[6]);
-        gsd_litvert_func2(UP_NORM, col, ogvertsplus[7]);
-        gsd_litvert_func2(UP_NORM, col, ogvertsplus[0]);
+        gsd_litvert_func2(UP_NORM, colr, UP_NORM);
+        gsd_litvert_func2(UP_NORM, colr, ogvertsplus[0]);
+        gsd_litvert_func2(UP_NORM, colr, ogvertsplus[1]);
+        gsd_litvert_func2(UP_NORM, colr, ogvertsplus[2]);
+        gsd_litvert_func2(UP_NORM, colr, ogvertsplus[3]);
+        gsd_litvert_func2(UP_NORM, colr, ogvertsplus[4]);
+        gsd_litvert_func2(UP_NORM, colr, ogvertsplus[5]);
+        gsd_litvert_func2(UP_NORM, colr, ogvertsplus[6]);
+        gsd_litvert_func2(UP_NORM, colr, ogvertsplus[7]);
+        gsd_litvert_func2(UP_NORM, colr, ogvertsplus[0]);
         gsd_endtfan();
 
         /* draw bottom */
         gsd_bgntfan();
-        gsd_litvert_func2(DOWN_NORM, col, ORIGIN);
-        gsd_litvert_func2(DOWN_NORM, col, ogverts[0]);
-        gsd_litvert_func2(DOWN_NORM, col, ogverts[1]);
-        gsd_litvert_func2(DOWN_NORM, col, ogverts[2]);
-        gsd_litvert_func2(DOWN_NORM, col, ogverts[3]);
-        gsd_litvert_func2(DOWN_NORM, col, ogverts[4]);
-        gsd_litvert_func2(DOWN_NORM, col, ogverts[5]);
-        gsd_litvert_func2(DOWN_NORM, col, ogverts[6]);
-        gsd_litvert_func2(DOWN_NORM, col, ogverts[7]);
-        gsd_litvert_func2(DOWN_NORM, col, ogverts[0]);
+        gsd_litvert_func2(DOWN_NORM, colr, ORIGIN);
+        gsd_litvert_func2(DOWN_NORM, colr, ogverts[0]);
+        gsd_litvert_func2(DOWN_NORM, colr, ogverts[1]);
+        gsd_litvert_func2(DOWN_NORM, colr, ogverts[2]);
+        gsd_litvert_func2(DOWN_NORM, colr, ogverts[3]);
+        gsd_litvert_func2(DOWN_NORM, colr, ogverts[4]);
+        gsd_litvert_func2(DOWN_NORM, colr, ogverts[5]);
+        gsd_litvert_func2(DOWN_NORM, colr, ogverts[6]);
+        gsd_litvert_func2(DOWN_NORM, colr, ogverts[7]);
+        gsd_litvert_func2(DOWN_NORM, colr, ogverts[0]);
         gsd_endtfan();
     }
 
@@ -1385,12 +1445,12 @@ void primitive_cylinder(unsigned long col, int caps)
 /*** ACS_MODIFY_BEGIN - sites_attribute management
  * ********************************/
 /*
-   Draws boxes that are used for histograms by gpd_obj function in gpd.c
+   Draws boxes that are used for histograms by \ref gpd_obj function in gpd.c
    for site_attribute management
  */
 
-/*!
-   \brief Vertices for box
+/**
+ * @brief Vertices for box
  */
 float Box[8][3] = {{1.0, 1.0, -1.0},  {-1.0, 1.0, -1.0}, {-1.0, 1.0, 1.0},
                    {1.0, 1.0, 1.0},   {1.0, -1.0, -1.0}, {-1.0, -1.0, -1.0},
@@ -1399,14 +1459,18 @@ float Box[8][3] = {{1.0, 1.0, -1.0},  {-1.0, 1.0, -1.0}, {-1.0, 1.0, 1.0},
 float BoxN[6][3] = {{0, 0, -ONORM}, {0, 0, ONORM}, {0, ONORM, 0},
                     {0, -ONORM, 0}, {ONORM, 0, 0}, {-ONORM, 0, 0}};
 
-/*!
-   \brief Draw box
-
-   Warning siz is an array (we need it for scale only Z in histograms)
-
-   \param center center point
-   \param colr color value
-   \param siz size value
+/**
+ * @brief Draws a box at the specified center location.
+ *
+ * This function renders a box at the given center
+ * coordinates with the specified color and size.
+ *
+ * @warning siz is an array (we need it for scale only Z in histograms)
+ *
+ * @param center Pointer to a float array representing the (x, y, z) coordinates
+ *               of the center point.
+ * @param colr   Integer representing the color to use for drawing the symbol.
+ * @param siz    Size of the symbol.
  */
 void gsd_box(float *center, int colr, float *siz)
 {
