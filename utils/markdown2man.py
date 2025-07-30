@@ -1,26 +1,49 @@
 import argparse
-import re
+import os
 from pathlib import Path
+import re
+import textwrap
 
 
-def strip_yaml_from_markdown(content):
+def strip_yaml_from_markdown_and_reformat(content):
     # Remove YAML front matter
-    return re.sub(r"^---\n.*?\n---\n", "", content, flags=re.DOTALL).strip()
+    match = re.match(r"^---\n(.*?)\n---\n", content, re.DOTALL)
+    if not match:
+        return {}, content.strip()
 
+    yaml_block = match.group(1)
+    markdown = content[match.end() :].strip()
 
-def simplify_synopsis(content):
-    before, after = re.split(
-        r"(?=^## DESCRIPTION\b)", content, maxsplit=1, flags=re.MULTILINE
-    )
+    yaml = {}
+    for line in yaml_block.splitlines():
+        key, value = line.strip().split(":")
+        key = key.strip()
+        value = value.strip()
+        if value.startswith("[") and value.endswith("]"):
+            yaml[key] = [v.strip() for v in value[1:-1].split(",")]
+        else:
+            yaml[key] = value
 
-    # Remove Python sections (both command and parameters)
-    text = re.sub(
-        r'^=== "Python .*?"\n(?:\n| {4}.*\n)*', "", before, flags=re.MULTILINE
-    )
-    text = re.sub(r'^=== "Command line"\n', "", text, flags=re.MULTILINE)
-    # Unindent remaining lines by 4 spaces (if they start with at least 4 spaces)
-    text = re.sub(r"^ {4}", "", text, flags=re.MULTILINE)
-    return text + after
+    split_string = '=== "Command line"'
+    before, after = markdown.split(split_string, 1)
+
+    before = f"""
+
+    # NAME
+
+    {yaml["name"]} - {yaml["description"]}
+
+    # KEYWORDS
+
+    {", ".join(yaml["keywords"])}
+
+    # SYNOPSIS
+
+    """
+
+    markdown = before + after
+    markdown = markdown.replace("## Parameters", "### Parameters")
+    return yaml, markdown
 
 
 def parse_markdown(content):
@@ -187,17 +210,30 @@ def process_links(line):
     return re.sub(r"\[(.*?)\]\((.*?)\)", r"\1", line)
 
 
-def process_parameters(line):
-    return re.sub(
+def process_parameters(markdown):
+    parts = markdown.split("## DESCRIPTION", 1)
+    if len(parts) == 1:
+        return markdown
+    before, after = parts
+    before_processed = re.sub(
         r"^\*\*([a-z0-9_]*)\*\*=\*([a-z,]*)\*( \*\*\[required\]\*\*)?",
         r'.IP "**\1**=*\2*\3" 4m',
-        line,
+        before,
         flags=re.MULTILINE,
     )
+    return before_processed + "## DESCRIPTION" + after
 
 
-def process_flags(line):
-    return re.sub(r"^\*\*-(.*?)\*\*", r'.IP "**-\1**" 4m', line, flags=re.MULTILINE)
+def process_flags(markdown):
+    parts = markdown.split("## DESCRIPTION", 1)
+    if len(parts) == 1:
+        return markdown
+
+    before, after = parts
+    before_processed = re.sub(
+        r"^\*\*-(.*?)\*\*", r'.IP "**-\1**" 4m', before, flags=re.MULTILINE
+    )
+    return before_processed + "## DESCRIPTION" + after
 
 
 def process_formatting(line):
@@ -223,11 +259,56 @@ def process_headings(markdown):
     return re.sub(r"^#{3,} (.*)", convert_ss, markdown, flags=re.MULTILINE)
 
 
+def remove_python_content_blocks(markdown):
+    pattern = re.compile(
+        r"""
+        ^===\s*"Python[^\n]*"\n   # Match the Python block title
+        (?:
+            (?![!-~])             # As long as the line does NOT start with ascii
+            .*\n                  # Match that whole line
+        )*
+        """,
+        re.MULTILINE | re.VERBOSE,
+    )
+    return pattern.sub("", markdown)
+
+
+def unindent_command_content_blocks(markdown):
+    pattern = re.compile(
+        r"""
+        ^===\s*"Command[^\n]*\n   # Match the Python block title
+        (                         # Capture group for the content block
+        (?:\n?(?![!-~]).*)*       # Match all lines NOT starting with visible ASCII (indented)
+        )
+        """,
+        re.MULTILINE | re.VERBOSE,
+    )
+
+    def unindent_block(match):
+        return textwrap.dedent(match.group(1))
+
+    markdown = pattern.sub(unindent_block, markdown)
+    return re.sub(r'^=== "Command line"\n', "", markdown, flags=re.MULTILINE)
+
+
 def process_code(markdown):
-    return re.sub(r"\\", r"\(rs", markdown)
+    markdown = re.sub(r"\\", r"\(rs", markdown)
+
+    pattern = re.compile(r"(?m)^( *)```(?:\w+)?\n(.*?)(?<=\n)\1```", re.DOTALL)
+
+    def repl(match):
+        code = match.group(2)
+        dedented = textwrap.dedent(code).rstrip()
+        return f".PP\n.nf\n\\fC\n{dedented}\n\\fR\n.fi"
+
+    return pattern.sub(repl, markdown)
 
 
-def process_lists(markdown):
+def remove_comments(markdown):
+    return re.sub(r"<!--.*?-->", "", markdown, flags=re.DOTALL)
+
+
+def process_list(markdown):
     # Match list items and their continuation lines
     pattern = re.compile(
         r"""
@@ -254,27 +335,52 @@ def process_lists(markdown):
     return "\n".join(lines)
 
 
-def process_olists(markdown):
-    return re.sub(
-        r"^(\d+)\.\s+(.*)", r".IP \\fB\1\\fR\n\2\n", markdown, flags=re.MULTILINE
+def process_olist(markdown):
+    # Match list items and their continuation lines
+    pattern = re.compile(
+        r"""
+        ^[ \t]*                   # Optional leading whitespace
+        (\d+)[.)]                 # Ordered list number (capture this)
+        [ \t]+                    # At least one space
+        .+                      # First line of list item (non-greedy)
+          (?:\n                     # Followed by continuation lines
+            (?![ \t]*\d+[.)][ \t])  # Not starting with another list number
+            [^\n]+                  # Continuation line content
+          )*              # More content lines
+        """,
+        re.MULTILINE | re.VERBOSE,
     )
+
+    matches = list(pattern.finditer(markdown))
+    if not matches:
+        return markdown  # nothing to convert
+
+    lines = [".RS 4n"]
+    for match in matches:
+        number = match.group(1)
+        full_item = match.group(0)
+        # Remove the number and punctuation from the beginning
+        item_text = re.sub(r"^[ \t]*\d+[.)][ \t]+", "", full_item, count=1)
+        lines.append(f'.IP "{number}." 4n\n{item_text.strip()}')
+    lines.append(".RE")
+    return "\n".join(lines)
 
 
 def process_non_code(markdown):
-    markdown_text = process_parameters(markdown)
-    markdown_text = process_flags(markdown_text)
-    markdown_text = markdown_text.replace("&nbsp;&nbsp;&nbsp;&nbsp;", "")
-    # print(markdown_text)
-    markdown_text = process_table(markdown_text)
-    markdown_text = re.sub(r"\\#", "#", markdown_text)
-    markdown_text = re.sub(r"\\>", ">", markdown_text)
-    markdown_text = re.sub(r"\\<", "<", markdown_text)
-    markdown_text = re.sub(r"\\", r"\(rs", markdown_text)
-    markdown_text = re.sub(r"(?<=\S) {2,}(?=\S)", " ", markdown_text)
-    markdown_text = re.sub(r"(?<=\S) {2,}(?=\S)", " ", markdown_text)
-    markdown_text = process_formatting(markdown_text)
-    markdown_text = process_links(markdown_text)
-    return process_headings(markdown_text)
+    markdown = process_table(markdown)
+    markdown = markdown.replace(r"`", "")
+    markdown = re.sub(r"\\#", "#", markdown)
+    markdown = re.sub(r"\\\[", "[", markdown)
+    markdown = re.sub(r"\\\]", "]", markdown)
+    markdown = re.sub(r"\\>", ">", markdown)
+    markdown = re.sub(r"\\<", "<", markdown)
+    markdown = re.sub(r"\\", r"\(rs", markdown)
+    markdown = re.sub(r"(?<=\S) {2,}(?=\S)", " ", markdown)
+    markdown = re.sub(r"(?<=\S) {2,}(?=\S)", " ", markdown)
+    markdown = process_formatting(markdown)
+    markdown = process_links(markdown)
+    markdown = process_headings(markdown)
+    return re.sub(r"([^\n\s])  $", r"\1\n.br", markdown, flags=re.MULTILINE)
 
 
 def process_table(markdown: str) -> str:
@@ -317,88 +423,48 @@ def process_table(markdown: str) -> str:
     )
 
 
-def convert_line(line, in_paragraph, in_code_block):
-    """Convert a single line of Markdown to man page format, handling paragraph continuity."""
-    if line.startswith("```"):
-        if in_code_block:
-            return "\\fR\n.fi\n", False, False  # End code block
-        return ".nf\n\\fC\n", False, True  # Start code block with proper indent
-
-    if in_code_block:
-        return f"{line}\n", False, True  # Keep all whitespace in code blocks
-
-    if not line.strip():
-        return "", False, False  # Empty line resets paragraph state
-
-    # line = process_headings(line)
-    line = process_br(line)
-
-    line = line.replace("`", "")
-
-    if re.match(r"^[-*] (.+)", line):
-        return f'.IP "{re.sub(r"^[-*] ", "", line)}" 4m\n.br\n', False, False
-    # if re.match(r"^\d+\. (.+)", line):
-    # return re.sub(r"^(\d+)\.\s+(.*)", r'.IP \\fB\1\\fR\n\2\n', line, flags=re.MULTILINE), False, False
-    if in_paragraph:
-        return line + "\n", True, False
-    return f".PP\n{line}\n", True, False
+def add_paragraphs(markdown):
+    return re.sub(
+        r"(?m)(?:^|\n)([^\n\S]*[^\n]+(?:\n[^\n\S]*[^\n]+)*)",
+        lambda m: f"\n.PP\n{m.group(1)}",
+        markdown,
+    ).strip()
 
 
 def markdown_to_man(markdown_text):
     """Convert a Markdown text to a Unix man page format"""
-    markdown_text = strip_yaml_from_markdown(markdown_text)
-    markdown_text = simplify_synopsis(markdown_text)
+    yaml, markdown_text = strip_yaml_from_markdown_and_reformat(markdown_text)
+    markdown_text = remove_python_content_blocks(markdown_text)
+    markdown_text = unindent_command_content_blocks(markdown_text)
+    markdown_text = remove_comments(markdown_text)
+    # process synopsis
+    markdown_text = process_parameters(markdown_text)
+    markdown_text = process_flags(markdown_text)
+    markdown_text = markdown_text.replace("&nbsp;&nbsp;&nbsp;&nbsp;", "")
+
     blocks = parse_markdown(markdown_text)
     result = []
     for block in blocks:
         if block["type"] == "code":
             result.append(process_code(block["markdown"]))
         elif block["type"] == "list":
-            result.append(process_lists(block["markdown"]))
+            text = process_non_code(block["markdown"])
+            result.append(process_list(text))
         elif block["type"] == "olist":
-            result.append(process_olists(block["markdown"]))
+            text = process_non_code(block["markdown"])
+            result.append(process_olist(text))
         else:
             result.append(process_non_code(block["markdown"]))
     markdown_text = "\n".join(result)
-    # markdown_text = process_parameters(markdown_text)
-    # markdown_text = process_flags(markdown_text)
-    # markdown_text = markdown_text.replace("&nbsp;&nbsp;&nbsp;&nbsp;", "")
+    markdown_text = add_paragraphs(markdown_text)
 
-    # markdown_text = re.sub(r"\\#", "#", markdown_text)
-    # markdown_text = re.sub(r"\\>", ">", markdown_text)
-    # markdown_text = re.sub(r"\\<", "<", markdown_text)
-    # markdown_text = re.sub(r"\\", "\(rs", markdown_text)
-    # markdown_text = process_formatting(markdown_text)
-    # markdown_text = process_links(markdown_text)
+    version = os.environ.get("VERSION_NUMBER", "")
+    man_page = (
+        f'.TH {yaml.get("name", "MAN")} 1 "" "GRASS {version}" "GRASS User\'s Manual"\n'
+    )
+    man_page += markdown_text
 
-    lines = markdown_text.splitlines()
-    man_page = ['.TH MAN 1 "Manual"\n']
-    in_paragraph = False
-    in_code_block = False
-
-    # print(markdown_text)
-
-    for line in lines:
-        converted_line, in_paragraph, in_code_block = convert_line(
-            line, in_paragraph, in_code_block
-        )
-        man_page.append(converted_line)
-
-    if in_code_block:
-        man_page.append(".fi\n")  # Ensure proper closure of code block
-
-    return "".join(man_page)
-
-
-def convert_markdown_to_man(input_file, output_file):
-    """Read Markdown file and convert to man page."""
-    markdown_text = Path(input_file).read_text()
-
-    man_text = markdown_to_man(markdown_text)
-
-    Path(output_file).write_text(man_text)
-
-    print(f"Man page generated: {output_file}")
+    return man_page
 
 
 def main():
@@ -407,7 +473,9 @@ def main():
     parser.add_argument("output_file", help="Path to the output man page file.")
     args = parser.parse_args()
 
-    convert_markdown_to_man(args.input_file, args.output_file)
+    markdown_text = Path(args.input_file).read_text()
+    man_text = markdown_to_man(markdown_text)
+    Path(args.output_file).write_text(man_text)
 
 
 if __name__ == "__main__":
