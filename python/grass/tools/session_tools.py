@@ -66,6 +66,15 @@ class Tools:
     >>> with Tools(session=session) as tools:
     ...     tools.g_region(rows=100, cols=100)
     ToolResult(...)
+
+    A tool can be accessed via a function with the same name as the tool.
+    Alternatively, it can be called through one of the *run* or *call* functions.
+    The *run* function provides convenient functionality for handling tool parameters,
+    while the *call* function simply executes the tool. Both take tool parameters as
+    keyword arguments. Each function has a corresponding variant which accepts a list
+    of strings as parameters (*run_cmd* and *call_cmd*).
+    When a tool is run using the function corresponding to its name, the *run* function
+    is used in the background.
     """
 
     def __init__(
@@ -114,6 +123,9 @@ class Tools:
         notebook). When *capture_stderr* is set to True, the standard error output
         is captured and included in the exception message even if *capture_outputs*
         is set to False.
+
+        If *env* or other *Popen* arguments are provided to one of the tool running
+        functions, the constructor parameters except *errors* are ignored.
         """
         if env:
             self._original_env = env
