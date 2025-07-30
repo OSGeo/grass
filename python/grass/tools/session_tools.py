@@ -52,6 +52,20 @@ class Tools:
     the *ToolResult* object:
 
     >>> tools.g_region(flags="p").text  # doctest: +SKIP
+
+    Text inputs, when a tool supports standard input (stdin), can be passed as *io.StringIO* objects:
+
+    >>> from io import StringIO
+    >>> tools.v_in_ascii(
+    ...     input=StringIO("13.45,29.96,200"), output="point", separator=","
+    ... )
+    ToolResult(...)
+
+    The *Tools* object can be used as a context manager:
+
+    >>> with Tools(session=session) as tools:
+    ...     tools.g_region(rows=100, cols=100)
+    ToolResult(...)
     """
 
     def __init__(
@@ -82,8 +96,24 @@ class Tools:
         If verbose, quiet, superquiet is set to True, the corresponding verbosity level
         is set for all the tools. If one of them is set to False and the environment
         has the corresponding variable set, it is unset.
-        The values cannot be combined. If multiple are set to True, the most verbose
-        one wins.
+        The values cannot be combined. If multiple ones are set to True, the most
+        verbose one wins.
+
+        In case a tool run fails, indicating that by non-zero return code,
+        *grass.exceptions.CalledModuleError* exception is raised by default. This can
+        be changed by passing, e.g., `errors="ignore"`. The *errors* parameter
+        is passed to the *grass.script.handle_errors* function which determines
+        the specific behavior.
+
+        Text outputs from the tool are captured by default, both standard output
+        (stdout) and standard error output (stderr). Both will be part of the result
+        object returned by each tool run. Additionally, the standard error output will
+        be included in the exception message. When *capture_output* is set to False,
+        outputs are not captured in Python as values and go where the Python process
+        outputs go (this is usually clear in command line, but less clear in a Jupyter
+        notebook). When *capture_stderr* is set to True, the standard error output
+        is captured and included in the exception message even if *capture_outputs*
+        is set to False.
         """
         if env:
             self._original_env = env
