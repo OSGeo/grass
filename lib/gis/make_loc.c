@@ -169,13 +169,10 @@ int G_make_location_epsg(const char *location_name, struct Cell_head *wind,
  * \param proj_units    projection units suitable to write to the PROJ_UNITS
  *                      file, or NULL.
  *
- * \param proj_epsg     EPSG code suitable to write to the PROJ_EPSG
+ * \param proj_srid     Spatial reference ID suitable to write to the PROJ_SRID
  *                      file, or NULL.
  *
  * \param proj_wkt      WKT definition suitable to write to the PROJ_WKT
- *                      file, or NULL.
- *
- * \param proj_srid     Spatial reference ID suitable to write to the PROJ_SRID
  *                      file, or NULL.
  *
  * \return 0 on success

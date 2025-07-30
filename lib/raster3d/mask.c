@@ -187,6 +187,7 @@ int Rast3d_is_masked(RASTER3D_Map *map, int x, int y, int z)
  * <em>Rast3d_is_masked (x, y, z)</em> returns 1. Does nothing otherwise.
  * <em>value</em> is assumed to be of<em>type</em>.
  *
+ *  \param map
  *  \param x
  *  \param y
  *  \param z
@@ -230,6 +231,7 @@ void Rast3d_mask_float(RASTER3D_Map *map, int x, int y, int z, float *value)
  *
  * Same as <em>Rast3d_mask_num (x, y, z, value, DCELL_TYPE)</em>.
  *
+ *  \param map
  *  \param x
  *  \param y
  *  \param z

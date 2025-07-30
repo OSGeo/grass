@@ -147,7 +147,7 @@ class Tools:
 
         return env or self._original_env
 
-    def run(self, name: str, /, **kwargs):
+    def run(self, tool_name_: str, /, **kwargs):
         """Run a tool by specifying its name as a string and parameters.
 
         The parameters tool are tool name as a string and parameters as keyword
@@ -156,7 +156,7 @@ class Tools:
 
         The function may perform additional processing on the parameters.
 
-        :param name: name of a GRASS tool
+        :param tool_name_: name of a GRASS tool
         :param kwargs: tool parameters
         """
         # Object parameters are handled first before the conversion of the call to a
@@ -166,7 +166,7 @@ class Tools:
 
         # Get a fixed env parameter at at the beginning of each execution,
         # but repeat it every time in case the referenced environment is modified.
-        args, popen_options = gs.popen_args_command(name, **kwargs)
+        args, popen_options = gs.popen_args_command(tool_name_, **kwargs)
         # We approximate original kwargs with the possibly-modified kwargs.
         return self.run_cmd(
             args,
@@ -199,7 +199,7 @@ class Tools:
             **popen_options,
         )
 
-    def call(self, name: str, /, **kwargs):
+    def call(self, tool_name_: str, /, **kwargs):
         """Run a tool by specifying its name as a string and parameters.
 
         The parameters tool are tool name as a string and parameters as keyword
@@ -210,10 +210,10 @@ class Tools:
         the parameters, but numbers, lists, and tuples will still be translated to
         strings for execution.
 
-        :param name: name of a GRASS tool
+        :param tool_name_: name of a GRASS tool
         :param **kwargs: tool parameters
         """
-        args, popen_options = gs.popen_args_command(name, **kwargs)
+        args, popen_options = gs.popen_args_command(tool_name_, **kwargs)
         return self.call_cmd(args, **popen_options)
 
     def call_cmd(self, command, tool_kwargs=None, input=None, **popen_options):

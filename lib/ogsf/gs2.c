@@ -522,23 +522,23 @@ void GS_get_modelposition1(float pos[])
    know position to calculate size, have two dependent variables
    (nearclip * 2) from eye.
 
-   \param[out] siz size
+   \param[out] size size
    \param[out] pos coordinates (X, Y, Z)
  */
-void GS_get_modelposition(float *siz, float *pos)
+void GS_get_modelposition(float *size, float *pos)
 {
     float dist, near_h, dir[3];
 
     dist = 2. * Gd.nearclip;
 
     near_h = 2.0 * tan(4.0 * atan(1.) * Gv.fov / 3600.) * dist;
-    *siz = near_h / 8.0;
+    *size = near_h / 8.0;
 
     /* prevent clipping - would only happen if fov > ~127 degrees, at
        fov = 2.0 * atan(2.0) */
 
-    if (*siz > Gd.nearclip) {
-        *siz = Gd.nearclip;
+    if (*size > Gd.nearclip) {
+        *size = Gd.nearclip;
     }
 
     GS_v3dir(Gv.from_to[FROM], Gv.from_to[TO], dir);

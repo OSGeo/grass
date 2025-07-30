@@ -33,14 +33,14 @@
 #include "pg_local_proto.h"
 #endif
 
-/*
-   \brief Number of levels
-
-   - 1 without topology
-   - 2 with 2D topology
-
-   \todo Implement
-   - 3 with 3D topology
+/**
+ * @brief Number of levels
+ *
+ * - 1 without topology
+ * - 2 with 2D topology
+ *
+ * @todo Implement
+ *   - 3 with 3D topology
  */
 #define MAX_OPEN_LEVEL 2
 
@@ -753,7 +753,6 @@ int Vect_open_old_head(struct Map_info *Map, const char *name,
    \param mapset mapset name ("" for search path)
    \param layer layer name (OGR format)
 
-   \param[out] Map pointer to Map_info structure
    \param name name of vector map to open (datasource for direct OGR access)
    \param mapset mapset name ("" for search path, "OGR" for direct OGR access)
    \param layer layer name (OGR layer for direct OGR access)
