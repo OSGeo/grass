@@ -487,7 +487,7 @@ def get_interface_description(cmd):
                 "Unable to fetch interface description for command '<{cmd}>'."
                 "\n\nDetails: <{det}>"
             ).format(cmd=cmd, det=e)
-        )
+        ) from e
 
     desc = convert_xml_to_utf8(cmdout)
     return desc.replace(
@@ -518,7 +518,7 @@ def parse_interface(name, parser=processTask, blackList=None):
             _("Cannot parse interface description of <{name}> module: {error}").format(
                 name=name, error=error
             )
-        )
+        ) from error
     task = parser(tree, blackList=blackList).get_task()
     # if name from interface is different than the originally
     # provided name, then the provided name is likely a full path needed
