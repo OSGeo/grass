@@ -8,7 +8,7 @@ import grass.exceptions
 from grass.tools import Tools
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture
 def simple_vector_map(tmp_path_factory):
     """
     Fixture to create a basic GRASS GIS environment with a simple vector map containing attributes.
