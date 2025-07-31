@@ -1,3 +1,18 @@
+#!/usr/bin/env python3
+
+###############################################################################
+# Convert manual pages from markdown to MAN format
+#
+# Author(s): Anna Petrasova
+#
+# COPYRIGHT: (C) 2025 by the GRASS Development Team
+#
+#            This program is free software under the GNU General Public
+#            License (>=v2). Read the file COPYING that comes with GRASS
+#            for details.
+#
+###############################################################################
+
 import argparse
 import os
 from pathlib import Path
@@ -29,19 +44,19 @@ def strip_yaml_from_markdown_and_reformat(content):
 
     before = f"""
 
-    # NAME
+# NAME
 
-    {yaml["name"]} - {yaml["description"]}
+{yaml["name"]} - {yaml["description"]}
 
-    # KEYWORDS
+# KEYWORDS
 
-    {", ".join(yaml["keywords"])}
+{", ".join(yaml["keywords"])}
 
-    # SYNOPSIS
+# SYNOPSIS
 
     """
 
-    markdown = before + after
+    markdown = before + after.strip()
     markdown = markdown.replace("## Parameters", "### Parameters")
     return yaml, markdown
 
@@ -53,7 +68,6 @@ def parse_markdown(content):
 
     buffer = ""
     state = "default"
-    code_indent = 0
 
     for line in lines:
         if line.strip().startswith("```"):
@@ -67,29 +81,23 @@ def parse_markdown(content):
                 state = "default"
             # start of code block
             else:
-                code_indent = len(re.match(r" *", line).group())
-                if buffer:
-                    processing_block.append(buffer)
-                    buffer = ""
                 processed_content.append(
                     {"markdown": "\n".join(processing_block), "type": state}
                 )
-                processing_block = [line]
+                processing_block = []
+                processing_block.append(line)
                 state = "code"
             continue
 
         if state == "code":
-            processing_block.append(
-                line[code_indent:] if line.startswith(" " * code_indent) else line
-            )
+            processing_block.append(line)
             continue
 
-        if line.strip().startswith("- ") or line.startswith("* "):
+        if re.match(r"^(\s*)([-*]|\d+\.)\s+(.*)", line.strip()):
             if buffer:
                 processing_block.append(buffer)
                 buffer = ""
-
-            # start of list
+            # start of ordered list
             if state != "list":
                 processed_content.append(
                     {"markdown": "\n".join(processing_block), "type": state}
@@ -97,35 +105,11 @@ def parse_markdown(content):
                 processing_block = []
                 state = "list"
 
-            processing_block.append(line)
-            continue
-
-        if re.match(r"^\d+\.", line.strip()):
-            if buffer:
-                processing_block.append(buffer)
-                buffer = ""
-            # start of ordered list
-            if state != "olist":
-                processed_content.append(
-                    {"markdown": "\n".join(processing_block), "type": state}
-                )
-                processing_block = []
-                state = "olist"
-
-            processing_block.append(line)
-            continue
-
         if line.strip().startswith("|") and line.strip().endswith("|"):
             if buffer:
                 processing_block.append(buffer)
                 buffer = ""
             processing_block.append(line)
-            continue
-
-        if line.endswith("  "):
-            buffer += line  # Keep trailing spaces for markdown line breaks
-            processing_block.append(buffer)
-            buffer = ""
             continue
 
         # empty line at the start and end of code, list blocks
@@ -142,7 +126,16 @@ def parse_markdown(content):
             processing_block.append(line)
             continue
 
-        buffer += line.lstrip() + " "
+        if buffer:
+            buffer += " " + line
+        elif state == "list":
+            buffer += line
+        else:
+            buffer += line.lstrip()
+
+        if line.endswith("  "):
+            processing_block.append(buffer)
+            buffer = ""
 
     if buffer:
         processing_block.append(buffer)
@@ -150,64 +143,14 @@ def parse_markdown(content):
         processed_content.append(
             {"markdown": "\n".join(processing_block), "type": state}
         )
-    for each in processed_content:
-        print(each["type"], "\n")
-        print(each["markdown"])
+
     return processed_content
 
 
-def process_multiline_links(markdown):
-    # Regular expression to match links that may span multiple lines
-    link_pattern = re.compile(r"\[([^\]]*)\]\(([^)]+)\)", re.DOTALL)
-    image_link_pattern = re.compile(r"!\[([^\]]*)\]\(([^)]+)\)", re.DOTALL)
-
-    def replace_link(match):
-        # Strip leading and trailing whitespace or newlines from the link URL and text
-        alt_text = match.group(1).replace("\n", " ").strip()
-        url = match.group(2).replace("\n", "").strip()
-        return f"[{alt_text}]({url})"
-
-    def replace_image_link(match):
-        # Strip leading and trailing whitespace or newlines from the link URL and text
-        alt_text = match.group(1).replace("\n", " ").strip()
-        url = match.group(2).replace("\n", "").strip()
-        return f"![{alt_text}]({url})"
-
-    # Replace all matched links with the single-line version
-    markdown = re.sub(link_pattern, replace_link, markdown)
-    return re.sub(image_link_pattern, replace_image_link, markdown)
-
-
-def process_markdown_formatting(md_text):
-    # Regular expression to find multi-line formatting for bold, emphasis, and combined bold and emphasis
-    pattern = r"(\*\*\*([^\*]+)\*\*\*|\*\*([^\*]+)\*\*|\*([^\*]+)\*)"
-
-    def replace_match(match):
-        # Match for combined bold and emphasis (***text***)
-        if match.group(1).startswith("***"):
-            content = match.group(2).replace("\n", " ").strip()
-            return f"***{content}***"
-
-        # Match for bold (**text**)
-        if match.group(1).startswith("**"):
-            content = match.group(3).replace("\n", " ").strip()
-            return f"**{content}**"
-
-        # Match for emphasis (*text*)
-        if match.group(1).startswith("*"):
-            content = match.group(4).replace("\n", " ").strip()
-            return f"*{content}*"
-
-        return match.group(0)  # Return the original text if no match
-
-    # Apply the regex pattern to replace formatting spans
-    return re.sub(pattern, replace_match, md_text)
-
-
-def process_links(line):
+def process_links(markdown):
     """Replace Markdown links with only their display text."""
-    line = re.sub(r"!\[.*?\]\(.*?\)", "", line)
-    return re.sub(r"\[(.*?)\]\((.*?)\)", r"\1", line)
+    markdown = re.sub(r"!\[.*?\]\(.*?\)", "", markdown)
+    return re.sub(r"\[(.*?)\]\((.*?)\)", r"\1", markdown)
 
 
 def process_parameters(markdown):
@@ -216,7 +159,7 @@ def process_parameters(markdown):
         return markdown
     before, after = parts
     before_processed = re.sub(
-        r"^\*\*([a-z0-9_]*)\*\*=\*([a-z,]*)\*( \*\*\[required\]\*\*)?",
+        r"^\*\*([a-z0-9_]*)\*\*=\*([a-zA-Z,_ ]*)\*( \*\*\[required\]\*\*)?",
         r'.IP "**\1**=*\2*\3" 4m',
         before,
         flags=re.MULTILINE,
@@ -236,16 +179,12 @@ def process_flags(markdown):
     return before_processed + "## DESCRIPTION" + after
 
 
-def process_formatting(line):
+def process_formatting(markdown):
     """Apply inline formatting for bold, italic, and bold+italic."""
-    line = re.sub(r"\*\*\*(.+?)\*\*\*", r"\\fB\\fI\1\\fR", line)  # Bold+Italic
-    line = re.sub(r"\*\*(.+?)\*\*", r"\\fB\1\\fR", line)  # Bold
-    line = re.sub(r"\*(.+?)\*", r"\\fI\1\\fR", line)  # Italic
-    return line.replace("\u00a0", "    ")  # Replace non-breaking spaces with indent
-
-
-def process_br(line):
-    return re.sub(r"([^\n\s])  $", r"\1\n.br", line)
+    markdown = re.sub(r"\*\*\*(.+?)\*\*\*", r"\\fB\\fI\1\\fR", markdown)
+    markdown = re.sub(r"\*\*(.+?)\*\*", r"\\fB\1\\fR", markdown)
+    # avoid detecting \*
+    return re.sub(r"(?<!\\)\*(.+?)(?<!\\)\*", r"\\fI\1\\fR", markdown)
 
 
 def process_headings(markdown):
@@ -309,78 +248,67 @@ def remove_comments(markdown):
 
 
 def process_list(markdown):
-    # Match list items and their continuation lines
-    pattern = re.compile(
-        r"""
-        ^[ \t]*[-*+]                # Bullet list marker at start of line
-        [ \t]+                      # Space after bullet
-        .+                          # First line of text
-        (?:\n(?![ \t]*[-*+] )       # Continuation lines NOT starting with another bullet
-            [^\n]+)*                # Non-blank continuation lines
-    """,
-        re.MULTILINE | re.VERBOSE,
-    )
-
-    matches = pattern.findall(markdown)
-    if not matches:
-        return markdown  # nothing to convert
-
-    # Build roff output
-    lines = [".RS 4n"]
-    for item in matches:
-        # Clean bullet
-        item_text = re.sub(r"^[ \t]*[-*][ \t]+", "", item, count=1)
-        lines.extend((".IP \\(bu 4n", item_text.strip()))
-    lines.append(".RE")
-    return "\n".join(lines)
-
-
-def process_olist(markdown):
-    # Match list items and their continuation lines
-    pattern = re.compile(
-        r"""
-        ^[ \t]*                   # Optional leading whitespace
-        (\d+)[.)]                 # Ordered list number (capture this)
-        [ \t]+                    # At least one space
-        .+                      # First line of list item (non-greedy)
-          (?:\n                     # Followed by continuation lines
-            (?![ \t]*\d+[.)][ \t])  # Not starting with another list number
-            [^\n]+                  # Continuation line content
-          )*              # More content lines
-        """,
-        re.MULTILINE | re.VERBOSE,
-    )
-
-    matches = list(pattern.finditer(markdown))
-    if not matches:
-        return markdown  # nothing to convert
-
-    lines = [".RS 4n"]
-    for match in matches:
-        number = match.group(1)
-        full_item = match.group(0)
-        # Remove the number and punctuation from the beginning
-        item_text = re.sub(r"^[ \t]*\d+[.)][ \t]+", "", full_item, count=1)
-        lines.append(f'.IP "{number}." 4n\n{item_text.strip()}')
-    lines.append(".RE")
-    return "\n".join(lines)
-
-
-def process_non_code(markdown):
-    markdown = process_table(markdown)
-    markdown = markdown.replace(r"`", "")
-    markdown = re.sub(r"\\#", "#", markdown)
-    markdown = re.sub(r"\\\[", "[", markdown)
-    markdown = re.sub(r"\\\]", "]", markdown)
-    markdown = re.sub(r"\\>", ">", markdown)
-    markdown = re.sub(r"\\<", "<", markdown)
-    markdown = re.sub(r"\\", r"\(rs", markdown)
-    markdown = re.sub(r"(?<=\S) {2,}(?=\S)", " ", markdown)
-    markdown = re.sub(r"(?<=\S) {2,}(?=\S)", " ", markdown)
     markdown = process_formatting(markdown)
+    markdown = process_special_characters(markdown)
+    markdown = process_links(markdown)
+    markdown = process_br(markdown)
+
+    output = []
+    indent_levels = []
+
+    for line in markdown.splitlines():
+        match = re.match(r"^(\s*)([-*]|\d+\.)\s+(.*)", line)  # Match bullets or numbers
+        if not match:
+            output.append(line)
+            continue  # Skip non-list lines (shouldn't happen if input is all lists)
+
+        spaces, bullet, item_text = match.groups()
+        level = len(spaces)  # Determine indentation level
+
+        while indent_levels and indent_levels[-1] > level:
+            output.append(".RE")  # Close previous indentation level
+            indent_levels.pop()
+
+        if not indent_levels or indent_levels[-1] < level:
+            output.append(".RS 4n")  # Open new indentation level
+            indent_levels.append(level)
+
+        if re.match(r"^\d+\.$", bullet):  # Numbered list
+            output.append(f'.IP "{bullet}" 4n\n{item_text}')
+        else:  # Bullet list
+            output.append(".IP \\(bu 4n\n" + item_text)
+
+    # Close any remaining indentation levels
+    while indent_levels:
+        output.append(".RE")
+        indent_levels.pop()
+
+    return "\n".join(output)
+
+
+def process_special_characters(markdown):
+    markdown = markdown.replace(r"\[", "[")
+    markdown = markdown.replace(r"\]", "]")
+    markdown = markdown.replace(r"\#", "#")
+    markdown = markdown.replace(r"\>", ">")
+    markdown = markdown.replace(r"\<", "<")
+    markdown = markdown.replace(r"\*", "*")
+    markdown = markdown.replace("`", "")
+    # eliminate extra spaces between words
+    return re.sub(r"(?<=\S) {2,}(?=\S)", " ", markdown)
+
+
+def process_br(markdown):
+    return re.sub(r"([^\n\s])  $", r"\1\n.br", markdown, flags=re.MULTILINE)
+
+
+def process_default(markdown):
+    markdown = process_table(markdown)
+    markdown = process_formatting(markdown)
+    markdown = process_special_characters(markdown)
     markdown = process_links(markdown)
     markdown = process_headings(markdown)
-    return re.sub(r"([^\n\s])  $", r"\1\n.br", markdown, flags=re.MULTILINE)
+    return process_br(markdown)
 
 
 def process_table(markdown: str) -> str:
@@ -448,13 +376,9 @@ def markdown_to_man(markdown_text):
         if block["type"] == "code":
             result.append(process_code(block["markdown"]))
         elif block["type"] == "list":
-            text = process_non_code(block["markdown"])
-            result.append(process_list(text))
-        elif block["type"] == "olist":
-            text = process_non_code(block["markdown"])
-            result.append(process_olist(text))
+            result.append(process_list(block["markdown"]))
         else:
-            result.append(process_non_code(block["markdown"]))
+            result.append(process_default(block["markdown"]))
     markdown_text = "\n".join(result)
     markdown_text = add_paragraphs(markdown_text)
 
