@@ -53,6 +53,12 @@ int Rast_is_reclass(const char *name, const char *mapset, char *rname,
 
     type = reclass_type(fd, &rname, &rmapset, NULL);
     fclose(fd);
+    if (rname) {
+        G_free(rname);
+    }
+    if (rmapset) {
+        G_free(rmapset);
+    }
     if (type < 0)
         return -1;
     else
