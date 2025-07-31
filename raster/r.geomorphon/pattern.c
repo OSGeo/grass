@@ -92,7 +92,6 @@ int calc_pattern(PATTERN *pattern, int row, int cur_row, int col,
     zenith_distance = 0.0;
     nadir_distance = 0.0;
 
-
     if (oneoff)
         prof_sso("search_rel_elevation_m");
     for (i = 0; i < NUM_DIRS; ++i) {
