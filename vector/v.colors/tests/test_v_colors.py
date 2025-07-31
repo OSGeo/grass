@@ -1,6 +1,5 @@
 import re
 import pytest
-import json
 import io
 
 import grass.script as gs
@@ -53,8 +52,7 @@ def test_color_by_category(simple_vector_map):
     tools = Tools(session=session)
 
     tools.v_colors(map=mapname, use="cat", color="blues")
-    result = tools.v_colors_out(map=mapname, format="json")
-    rules = json.loads(result.stdout)
+    rules = tools.v_colors_out(map=mapname, format="json")
 
     values = [str(rule["value"]) for rule in rules]
     assert any(v.isdigit() for v in values), (
@@ -85,8 +83,7 @@ def test_color_by_attr_column(simple_vector_map):
     tools = Tools(session=session)
 
     tools.v_colors(map=mapname, use="attr", column="val", color="ryg")
-    result = tools.v_colors_out(map=mapname, format="json")
-    rules = json.loads(result.stdout)
+    rules = tools.v_colors_out(map=mapname, format="json")
     filtered = [r for r in rules if str(r["value"]) not in ("nv", "default")]
 
     assert len(filtered) >= 3, (
@@ -112,8 +109,7 @@ def test_rgb_column_assignment(simple_vector_map):
     tools.v_colors(
         map=mapname, use="attr", column="val", color="reds", rgb_column="GRASSRGB"
     )
-    result = tools.v_db_select(map=mapname, columns="GRASSRGB", format="json")
-    data = json.loads(result.stdout)
+    data = tools.v_db_select(map=mapname, columns="GRASSRGB", format="json")
     rgbs = [r["GRASSRGB"] for r in data["records"]]
 
     assert rgbs, "No RGB values found in the GRASSRGB column after applying colors."
@@ -153,8 +149,7 @@ def test_constant_attribute_value(simple_vector_map):
     tools.v_colors(
         map=mapname, use="attr", column="val", color="greens", rgb_column="GRASSRGB"
     )
-    result = tools.v_db_select(map=mapname, columns="GRASSRGB", format="json")
-    data = json.loads(result.stdout)
+    data = tools.v_db_select(map=mapname, columns="GRASSRGB", format="json")
 
     rgbs = [r["GRASSRGB"] for r in data["records"]]
     unique_rgbs = set(rgbs)
@@ -195,8 +190,7 @@ def test_custom_rules_file(tmp_path, simple_vector_map):
     rule = "1 red\n2 green\n3 blue\n"
 
     tools.v_colors(map=mapname, rules=io.StringIO(rule), rgb_column="GRASSRGB")
-    result = tools.v_db_select(map=mapname, columns="GRASSRGB", format="json")
-    data = json.loads(result.stdout)
+    data = tools.v_db_select(map=mapname, columns="GRASSRGB", format="json")
 
     actual_colors = [r["GRASSRGB"] for r in data["records"]]
     expected = ["255:0:0", "0:255:0", "0:0:255"]
@@ -219,13 +213,13 @@ def test_overwrite_rgb_column(simple_vector_map):
         map=mapname, use="attr", column="val", color="reds", rgb_column="GRASSRGB"
     )
     result1 = tools.v_db_select(map=mapname, columns="GRASSRGB", format="json")
-    rgbs1 = [r["GRASSRGB"] for r in json.loads(result1.stdout)["records"]]
+    rgbs1 = [r["GRASSRGB"] for r in result1["records"]]
 
     tools.v_colors(
         map=mapname, use="attr", column="val", color="blues", rgb_column="GRASSRGB"
     )
     result2 = tools.v_db_select(map=mapname, columns="GRASSRGB", format="json")
-    rgbs2 = [r["GRASSRGB"] for r in json.loads(result2.stdout)["records"]]
+    rgbs2 = [r["GRASSRGB"] for r in result2["records"]]
 
     assert rgbs1 != rgbs2, (
         "RGB column values did not change after applying a new color scheme."
@@ -244,8 +238,7 @@ def test_use_cat_column(simple_vector_map):
     tools = Tools(session=session)
 
     tools.v_colors(map=mapname, use="cat", color="reds", rgb_column="GRASSRGB")
-    result = tools.v_db_select(map=mapname, columns="GRASSRGB", format="json")
-    data = json.loads(result.stdout)
+    data = tools.v_db_select(map=mapname, columns="GRASSRGB", format="json")
 
     pattern = re.compile(r"^\d{1,3}:\d{1,3}:\d{1,3}$")
     valid = [r["GRASSRGB"] for r in data["records"] if pattern.match(r["GRASSRGB"])]
@@ -291,12 +284,11 @@ def test_logarithmic_color_scale(simple_vector_map):
         rgb_column="GRASSRGB",
         flags="g",
     )
-    result = tools.v_db_select(map=mapname, columns="GRASSRGB", format="json")
-    data = json.loads(result.stdout)
+    data = tools.v_db_select(map=mapname, columns="GRASSRGB", format="json")
 
     rgb_pattern = re.compile(r"^\d{1,3}:\d{1,3}:\d{1,3}$")
-    for rec in data.get("records", []):
-        rgb = rec.get("GRASSRGB", "").strip()
+    for rec in data["records"]:
+        rgb = rec["GRASSRGB"].strip()
         assert rgb_pattern.match(rgb), f"Invalid RGB format: {rgb}"
         values = list(map(int, rgb.split(":")))
         assert all(0 <= v <= 255 for v in values), (
@@ -318,8 +310,7 @@ def test_v_colors_named_table(simple_vector_map, color_table):
 
     tools.v_colors(map=mapname, column="val", color=color_table, rgb_column="GRASSRGB")
 
-    result = tools.v_db_select(map=mapname, columns="GRASSRGB", format="json")
-    data = json.loads(result.stdout)
+    data = tools.v_db_select(map=mapname, columns="GRASSRGB", format="json")
 
     assert len(data["records"]) == 3, f"Expected 3 records, got {len(data['records'])}."
     for rec in data["records"]:
@@ -379,8 +370,7 @@ def test_v_colors_reversed_order_rules(simple_vector_map, tmp_path):
         column="cat",
         rgb_column="GRASSRGB",
     )
-    result = tools.v_db_select(map=mapname, columns="cat,GRASSRGB", format="json")
-    data = json.loads(result.stdout)
+    data = tools.v_db_select(map=mapname, columns="cat,GRASSRGB", format="json")
 
     expected = {
         1: "255:0:0",
