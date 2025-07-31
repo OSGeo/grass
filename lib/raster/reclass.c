@@ -53,12 +53,6 @@ int Rast_is_reclass(const char *name, const char *mapset, char *rname,
 
     type = reclass_type(fd, &rname, &rmapset, NULL);
     fclose(fd);
-    if (rname) {
-        G_free(rname);
-    }
-    if (rmapset) {
-        G_free(rmapset);
-    }
     if (type < 0)
         return -1;
     else
@@ -247,11 +241,9 @@ static int reclass_type(FILE *fd, char **rname, char **rmapset,
     /* later may add other types of reclass */
     type = RECLASS_TABLE;
 
-    /* Read the mapset and file name of the REAL cell file */
-    if (*rname)
-        **rname = '\0';
-    if (*rmapset)
-        **rmapset = '\0';
+    /* Clear the output buffers before parsing */
+    rname[0]   = '\0';
+    rmapset[0] = '\0';
     for (i = 0; i < 2; i++) {
         if (fgets(buf, sizeof buf, fd) == NULL) {
             if (error_message != NULL) {
@@ -274,16 +266,12 @@ static int reclass_type(FILE *fd, char **rname, char **rmapset,
             return -1;
         }
         if (strncmp(label, "maps", 4) == 0) {
-            if (*rmapset)
-                strcpy(*rmapset, arg);
-            else
-                *rmapset = G_store(arg);
+            strncpy(rmapset, arg, GMAPSET_MAX-1);
+            rmapset[GMAPSET_MAX-1] = '\0';
         }
         else if (strncmp(label, "name", 4) == 0) {
-            if (*rname)
-                strcpy(*rname, arg);
-            else
-                *rname = G_store(arg);
+            strncpy(rname, arg, GNAME_MAX-1);
+            rname[GNAME_MAX-1] = '\0';
         }
         else {
             if (error_message != NULL) {
