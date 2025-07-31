@@ -147,14 +147,14 @@ int Rast_get_reclass(const char *name, const char *mapset,
     if (fd == NULL)
         return -1;
     char namebuf[GNAME_MAX], mapsetbuf[GMAPSET_MAX];
-    namebuf[0]   = '\0';
+    namebuf[0] = '\0';
     mapsetbuf[0] = '\0';
     reclass->type = reclass_type(fd, namebuf, mapsetbuf);
     if (reclass->type <= 0) {
         fclose(fd);
         return reclass->type;
     }
-    reclass->name   = G_store(namebuf);
+    reclass->name = G_store(namebuf);
     reclass->mapset = G_store(mapsetbuf);
 
     switch (reclass->type) {
@@ -218,7 +218,7 @@ static int reclass_type(FILE *fd, char *rname, char *rmapset)
     type = RECLASS_TABLE;
 
     /* Clear the output buffers before parsing */
-    rname[0]   = '\0';
+    rname[0] = '\0';
     rmapset[0] = '\0';
     for (i = 0; i < 2; i++) {
         if (fgets(buf, sizeof buf, fd) == NULL)
@@ -226,12 +226,12 @@ static int reclass_type(FILE *fd, char *rname, char *rmapset)
         if (sscanf(buf, "%[^:]:%s", label, arg) != 2)
             return -1;
         if (strncmp(label, "maps", 4) == 0) {
-            strncpy(rmapset, arg, GMAPSET_MAX-1);
-            rmapset[GMAPSET_MAX-1] = '\0';
+            strncpy(rmapset, arg, GMAPSET_MAX - 1);
+            rmapset[GMAPSET_MAX - 1] = '\0';
         }
         else if (strncmp(label, "name", 4) == 0) {
-            strncpy(rname, arg, GNAME_MAX-1);
-            rname[GNAME_MAX-1] = '\0';
+            strncpy(rname, arg, GNAME_MAX - 1);
+            rname[GNAME_MAX - 1] = '\0';
         }
         else
             return -1;
