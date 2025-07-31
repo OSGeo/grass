@@ -54,8 +54,8 @@ def test_color_by_category(simple_vector_map):
     tools.v_colors(map=mapname, use="cat", color="blues")
     rules = tools.v_colors_out(map=mapname, format="json")
 
-    values = [str(rule["value"]) for rule in rules]
-    assert any(v.isdigit() for v in values), (
+    values = [rule["value"] for rule in rules]
+    assert any(isinstance(v, int) for v in values), (
         "Expected at least one numeric category in color rules, found none."
     )
     assert "default" in values, (
