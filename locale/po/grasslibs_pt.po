@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_pt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-19 15:42+0000\n"
+"POT-Creation-Date: 2025-07-26 16:02+0000\n"
 "PO-Revision-Date: 2025-03-12 12:05+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese <https://weblate.osgeo.org/projects/grass-gis/grasslibs/pt/>\n"
@@ -1605,25 +1605,25 @@ msgid "Flags:"
 msgstr ""
 
 #: ../lib/gis/parser_help.c:222 ../lib/gis/parser_html.c:185
-#: ../lib/gis/parser_interface.c:329 ../lib/gis/parser_md_cli.c:313
-#: ../lib/gis/parser_md_python.c:473 ../lib/gis/parser_rest.c:158
+#: ../lib/gis/parser_interface.c:329 ../lib/gis/parser_md_cli.c:345
+#: ../lib/gis/parser_md_python.c:497 ../lib/gis/parser_rest.c:158
 msgid "Allow output files to overwrite existing files"
 msgstr "Permitir que os ficheiros de saída reescrevam os ficheiros existentes"
 
 #: ../lib/gis/parser_help.c:224 ../lib/gis/parser_html.c:189
-#: ../lib/gis/parser_interface.c:337 ../lib/gis/parser_md_cli.c:320
+#: ../lib/gis/parser_interface.c:337 ../lib/gis/parser_md_cli.c:352
 msgid "Print usage summary"
 msgstr ""
 
 #: ../lib/gis/parser_help.c:225 ../lib/gis/parser_html.c:192
-#: ../lib/gis/parser_interface.c:344 ../lib/gis/parser_md_cli.c:323
-#: ../lib/gis/parser_md_python.c:478 ../lib/gis/parser_rest.c:162
+#: ../lib/gis/parser_interface.c:344 ../lib/gis/parser_md_cli.c:355
+#: ../lib/gis/parser_md_python.c:502 ../lib/gis/parser_rest.c:162
 msgid "Verbose module output"
 msgstr "Saída do módulo verbosa"
 
 #: ../lib/gis/parser_help.c:226 ../lib/gis/parser_html.c:195
-#: ../lib/gis/parser_interface.c:351 ../lib/gis/parser_md_cli.c:326
-#: ../lib/gis/parser_md_python.c:482 ../lib/gis/parser_rest.c:165
+#: ../lib/gis/parser_interface.c:351 ../lib/gis/parser_md_cli.c:358
+#: ../lib/gis/parser_md_python.c:506 ../lib/gis/parser_rest.c:165
 msgid "Quiet module output"
 msgstr "Saída do módulo quiet"
 
@@ -1632,7 +1632,7 @@ msgid "Super quiet module output"
 msgstr ""
 
 #: ../lib/gis/parser_help.c:228 ../lib/gis/parser_html.c:198
-#: ../lib/gis/parser_md_cli.c:332
+#: ../lib/gis/parser_md_cli.c:364
 msgid "Force launching GUI dialog"
 msgstr ""
 
@@ -1692,7 +1692,7 @@ msgstr ""
 msgid "Allowed values"
 msgstr "Valor de linha ilegal"
 
-#: ../lib/gis/parser_md_cli.c:329 ../lib/gis/parser_md_python.c:487
+#: ../lib/gis/parser_md_cli.c:361 ../lib/gis/parser_md_python.c:511
 #, fuzzy
 #| msgid "Quiet module output"
 msgid "Very quiet module output"
@@ -2930,11 +2930,11 @@ msgstr "Tipo de vector desconhecido."
 msgid "Input matrix and vector have differing dimensions1"
 msgstr ""
 
-#: ../lib/gmath/la.c:927 ../lib/gmath/la.c:1042 ../lib/gmath/la.c:1321
+#: ../lib/gmath/la.c:927 ../lib/gmath/la.c:1042 ../lib/gmath/la.c:1322
 msgid "Output vector is uninitialized"
 msgstr "Vector de saída não iniciado"
 
-#: ../lib/gmath/la.c:1047 ../lib/gmath/la.c:1326
+#: ../lib/gmath/la.c:1047 ../lib/gmath/la.c:1327
 msgid "Vectors are not of the same type"
 msgstr "Vectores não são do mesmo tipo"
 
@@ -2942,15 +2942,15 @@ msgstr "Vectores não são do mesmo tipo"
 msgid "Output vector is of incorrect type"
 msgstr "Vector de saída é de tipo incorreto"
 
-#: ../lib/gmath/la.c:1057 ../lib/gmath/la.c:1336
+#: ../lib/gmath/la.c:1057 ../lib/gmath/la.c:1337
 msgid "Matrices not allowed"
 msgstr "Matrizes não são permitidas"
 
-#: ../lib/gmath/la.c:1063 ../lib/gmath/la.c:1342
+#: ../lib/gmath/la.c:1063 ../lib/gmath/la.c:1343
 msgid "Vectors have differing dimensions"
 msgstr "Vectores tem dimensões diferentes"
 
-#: ../lib/gmath/la.c:1069 ../lib/gmath/la.c:1348
+#: ../lib/gmath/la.c:1069 ../lib/gmath/la.c:1349
 msgid "Output vector has incorrect dimension"
 msgstr "Vector de saída tem dimensões incorreta"
 
@@ -2962,15 +2962,15 @@ msgstr "Dimensões do vector além dos limites"
 msgid "Row/column out of range"
 msgstr "Linha/coluna fora do limite"
 
-#: ../lib/gmath/la.c:1331
+#: ../lib/gmath/la.c:1332
 msgid "Output vector is not the same type as others"
 msgstr ""
 
-#: ../lib/gmath/la.c:1391
+#: ../lib/gmath/la.c:1392
 msgid "Vector structure is not initialised"
 msgstr "Estrutura de vectores não inicializada"
 
-#: ../lib/gmath/la.c:1511 ../lib/gmath/la.c:1519 ../lib/gmath/la.c:1524
+#: ../lib/gmath/la.c:1512 ../lib/gmath/la.c:1520 ../lib/gmath/la.c:1525
 msgid "Input format error"
 msgstr "Erro no formato de entrada"
 
@@ -4376,32 +4376,32 @@ msgstr ""
 msgid "%d points without category. Unable to determine color rules for features without category."
 msgstr ""
 
-#: ../lib/ogsf/gs2.c:1202
+#: ../lib/ogsf/gs2.c:1204
 #, c-format
 msgid "no category info"
 msgstr "sem informação sobre categoria"
 
-#: ../lib/ogsf/gs2.c:1220
+#: ../lib/ogsf/gs2.c:1222
 #, c-format
 msgid "no data"
 msgstr "sem data"
 
-#: ../lib/ogsf/gs2.c:1644
+#: ../lib/ogsf/gs2.c:1646
 #, c-format
 msgid "Raster map <%s> is outside of current region. Load failed."
 msgstr "O mapa raster <%s> está fora da região atual. O carregamento falhou."
 
-#: ../lib/ogsf/gs2.c:1724 ../lib/ogsf/gs2.c:1731 ../lib/ogsf/gs2.c:1740
-#: ../lib/ogsf/gs2.c:1750 ../lib/ogsf/gs2.c:1759 ../lib/ogsf/gs2.c:1770
-#: ../lib/ogsf/gs2.c:1818
+#: ../lib/ogsf/gs2.c:1726 ../lib/ogsf/gs2.c:1733 ../lib/ogsf/gs2.c:1742
+#: ../lib/ogsf/gs2.c:1752 ../lib/ogsf/gs2.c:1761 ../lib/ogsf/gs2.c:1772
+#: ../lib/ogsf/gs2.c:1820
 msgid "GS_load_att_map(): Out of memory. Unable to load map"
 msgstr "GS_load_att_map(): Memória esgotada. Não é possível carregar o mapa"
 
-#: ../lib/ogsf/gs2.c:1847
+#: ../lib/ogsf/gs2.c:1849
 msgid "Loading failed"
 msgstr "O carregamento falhou"
 
-#: ../lib/ogsf/gs2.c:1851
+#: ../lib/ogsf/gs2.c:1853
 msgid "Error finding range"
 msgstr ""
 
@@ -4549,20 +4549,20 @@ msgstr ""
 msgid "Tried to pop an empty stack"
 msgstr ""
 
-#: ../lib/pngdriver/graph_set.c:100
+#: ../lib/pngdriver/graph_set.c:106
 msgid "png: truecolor status enabled"
 msgstr ""
 
-#: ../lib/pngdriver/graph_set.c:101
+#: ../lib/pngdriver/graph_set.c:107
 msgid "png: truecolor status disabled"
 msgstr ""
 
-#: ../lib/pngdriver/graph_set.c:149
+#: ../lib/pngdriver/graph_set.c:155
 #, c-format
 msgid "png: collecting to file '%s'"
 msgstr ""
 
-#: ../lib/pngdriver/graph_set.c:150
+#: ../lib/pngdriver/graph_set.c:156
 #, c-format
 msgid "png: image size %dx%d"
 msgstr ""
@@ -4634,7 +4634,7 @@ msgstr ""
 #: ../lib/vector/Vlib/open_ogr.c:164 ../lib/vector/Vlib/open_ogr.c:242
 #: ../lib/vector/Vlib/read_ogr.c:55 ../lib/vector/Vlib/read_ogr.c:157
 #: ../lib/vector/Vlib/read_ogr.c:239 ../lib/vector/Vlib/rewind_ogr.c:47
-#: ../lib/vector/Vlib/rewind_ogr.c:71 ../lib/vector/Vlib/simple_features.c:317
+#: ../lib/vector/Vlib/rewind_ogr.c:71 ../lib/vector/Vlib/simple_features.c:318
 #: ../lib/vector/Vlib/write_ogr.c:70 ../lib/vector/Vlib/write_ogr.c:105
 #: ../lib/vector/Vlib/write_ogr.c:146 ../lib/vector/Vlib/write_sfa.c:300
 msgid "GRASS is not compiled with OGR support"
@@ -4658,16 +4658,16 @@ msgstr "OGR não consegue processar o texto do parâmetro de estilo PROJ.4: %s (
 msgid "OGR can't get WKT-style parameter string (OGR Error code was %d)"
 msgstr "OGR não consegue obter o texto do parâmetro de estilo WKT (O código de erro OGR foi %d)"
 
-#: ../lib/proj/convert.c:470
+#: ../lib/proj/convert.c:474
 #, c-format
 msgid "Updating spatial reference with embedded proj4 definition failed. Proj4 definition: <%s>"
 msgstr ""
 
-#: ../lib/proj/convert.c:481
+#: ../lib/proj/convert.c:485
 msgid "Updating spatial reference with embedded proj4 definition"
 msgstr ""
 
-#: ../lib/proj/convert.c:619
+#: ../lib/proj/convert.c:623
 msgid "No projection name! Projection parameters likely to be meaningless."
 msgstr "Sem nome de projeção! É provável que os parâmetros de projeção não tenham conteúdo."
 
@@ -6150,7 +6150,7 @@ msgstr ""
 #: ../lib/vector/Vlib/read_pg.c:98 ../lib/vector/Vlib/read_pg.c:221
 #: ../lib/vector/Vlib/read_pg.c:307 ../lib/vector/Vlib/read_pg.c:427
 #: ../lib/vector/Vlib/rewind_pg.c:56 ../lib/vector/Vlib/rewind_pg.c:81
-#: ../lib/vector/Vlib/simple_features.c:344 ../lib/vector/Vlib/write_pg.c:134
+#: ../lib/vector/Vlib/simple_features.c:345 ../lib/vector/Vlib/write_pg.c:134
 #: ../lib/vector/Vlib/write_pg.c:168 ../lib/vector/Vlib/write_pg.c:206
 #: ../lib/vector/Vlib/write_pg.c:308 ../lib/vector/Vlib/write_pg.c:369
 #: ../lib/vector/Vlib/write_pg.c:496 ../lib/vector/Vlib/write_sfa.c:308
@@ -6325,7 +6325,7 @@ msgid "%d features without category skipped. To export also features without cat
 msgstr ""
 
 #: ../lib/vector/Vlib/box.c:244 ../lib/vector/Vlib/read.c:184
-#: ../lib/vector/Vlib/read_nat.c:144 ../lib/vector/Vlib/read_pg.c:341
+#: ../lib/vector/Vlib/read_nat.c:145 ../lib/vector/Vlib/read_pg.c:341
 #: ../lib/vector/Vlib/read_sfa.c:50 ../lib/vector/Vlib/write_nat.c:188
 #: ../lib/vector/Vlib/write_nat.c:304 ../lib/vector/Vlib/write_nat.c:672
 #: ../lib/vector/Vlib/write_pg.c:247 ../lib/vector/Vlib/write_pg.c:396
@@ -7276,13 +7276,13 @@ msgstr "Vect_segment_intersection() ERROR (segmentos verticais colineares)"
 msgid "Vect_segment_intersection() ERROR (collinear non vertical segments)"
 msgstr "Vect_segment_intersection() ERROR (segmentos não verticais colineares)"
 
-#: ../lib/vector/Vlib/intersect.c:1256 ../lib/vector/Vlib/intersect.c:1262
-#: ../lib/vector/Vlib/intersect.c:1264 ../lib/vector/Vlib/intersect.c:1309
-#: ../lib/vector/Vlib/intersect.c:1318 ../lib/vector/Vlib/intersect.c:1340
-#: ../lib/vector/Vlib/intersect.c:1357 ../lib/vector/Vlib/intersect2.c:1245
-#: ../lib/vector/Vlib/intersect2.c:1251 ../lib/vector/Vlib/intersect2.c:1253
-#: ../lib/vector/Vlib/intersect2.c:1292 ../lib/vector/Vlib/intersect2.c:1300
-#: ../lib/vector/Vlib/intersect2.c:1321 ../lib/vector/Vlib/intersect2.c:1337
+#: ../lib/vector/Vlib/intersect.c:1258 ../lib/vector/Vlib/intersect.c:1264
+#: ../lib/vector/Vlib/intersect.c:1266 ../lib/vector/Vlib/intersect.c:1311
+#: ../lib/vector/Vlib/intersect.c:1320 ../lib/vector/Vlib/intersect.c:1342
+#: ../lib/vector/Vlib/intersect.c:1359 ../lib/vector/Vlib/intersect2.c:1247
+#: ../lib/vector/Vlib/intersect2.c:1253 ../lib/vector/Vlib/intersect2.c:1255
+#: ../lib/vector/Vlib/intersect2.c:1294 ../lib/vector/Vlib/intersect2.c:1302
+#: ../lib/vector/Vlib/intersect2.c:1323 ../lib/vector/Vlib/intersect2.c:1339
 msgid "Error while adding point to array. Out of memory"
 msgstr "Erro aquando da adição de pontos ao conjunto. Sem memória"
 
@@ -7339,22 +7339,22 @@ msgstr ""
 msgid "Invalid node id: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/level_two.c:312
+#: ../lib/vector/Vlib/level_two.c:313
 #, c-format
 msgid "Nodes not available for line %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/level_two.c:353
+#: ../lib/vector/Vlib/level_two.c:354
 #, c-format
 msgid "Areas not available for line %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/level_two.c:358
+#: ../lib/vector/Vlib/level_two.c:359
 #, c-format
 msgid "Line %d is not a boundary"
 msgstr ""
 
-#: ../lib/vector/Vlib/level_two.c:440
+#: ../lib/vector/Vlib/level_two.c:441
 #, c-format
 msgid "Topology info not available for feature %d"
 msgstr ""
@@ -7995,7 +7995,7 @@ msgstr ""
 msgid "Isle index is out of range"
 msgstr ""
 
-#: ../lib/vector/Vlib/read_nat.c:150 ../lib/vector/Vlib/read_pg.c:347
+#: ../lib/vector/Vlib/read_nat.c:151 ../lib/vector/Vlib/read_pg.c:347
 #: ../lib/vector/Vlib/read_sfa.c:56 ../lib/vector/Vlib/write_nat.c:311
 #: ../lib/vector/Vlib/write_nat.c:678 ../lib/vector/Vlib/write_pg.c:254
 #: ../lib/vector/Vlib/write_pg.c:419 ../lib/vector/Vlib/write_pg.c:2711
@@ -8188,17 +8188,17 @@ msgstr "Não foi possível apagar o item %d do índice espacial"
 msgid "Unknown Simple Features type (%d)"
 msgstr ""
 
-#: ../lib/vector/Vlib/simple_features.c:332 ../lib/vector/Vlib/write_pg.c:336
+#: ../lib/vector/Vlib/simple_features.c:333 ../lib/vector/Vlib/write_pg.c:336
 #: ../lib/vector/Vlib/write_pg.c:829 ../lib/vector/Vlib/write_pg.c:1250
 #: ../lib/vector/Vlib/write_pg.c:1407
 msgid "No connection defined"
 msgstr ""
 
-#: ../lib/vector/Vlib/simple_features.c:340
+#: ../lib/vector/Vlib/simple_features.c:341
 msgid "Unable to get number of simple features"
 msgstr ""
 
-#: ../lib/vector/Vlib/simple_features.c:350
+#: ../lib/vector/Vlib/simple_features.c:351
 #, c-format
 msgid "Unable to report simple features for vector map <%s>"
 msgstr ""
