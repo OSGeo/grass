@@ -202,3 +202,6 @@ python/grass/docs/src/pydispatch.rst
 python/grass/docs/src/pygrass.*rst
 python/grass/docs/src/script.rst
 python/grass/docs/src/temporal.rst
+
+# Test result files
+*junit.xml
