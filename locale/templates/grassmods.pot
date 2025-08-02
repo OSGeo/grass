@@ -23079,7 +23079,7 @@ msgstr ""
 
 #: ../raster/r.mapcalc/evaluate.c:451
 #, c-format
-msgid "The number of rows is less than the number of threads.             Set the number of threads to be the same as the rows = %d."
+msgid "The number of rows is less than the number of threads. Set the number of threads to be the same as the rows = %d."
 msgstr ""
 
 #: ../raster/r.mapcalc/expression.c:205
