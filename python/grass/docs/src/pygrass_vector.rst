@@ -1,7 +1,7 @@
 Introduction to Vector classes
 ==============================
 
-Details about the GRASS GIS vector architecture can be found in the
+Details about the GRASS vector architecture can be found in the
 `GRASS GIS 8 Programmer's Manual: GRASS Vector Library
 <https://grass.osgeo.org/programming8/vectorlib.html>`_.
 

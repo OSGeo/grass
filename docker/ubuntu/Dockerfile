@@ -269,7 +269,7 @@ COPY . /src/grass_build/
 
 WORKDIR /src/grass_build
 
-# Set environmental variables for GRASS GIS compilation, without debug symbols
+# Set environmental variables for GRASS compilation, without debug symbols
 # Set gcc/g++ environmental variables for GRASS GIS compilation, without debug symbols
 ENV MYCFLAGS="-O2 -std=gnu99"
 ENV MYLDFLAGS="-s"

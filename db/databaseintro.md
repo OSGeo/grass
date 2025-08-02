@@ -1,9 +1,9 @@
 ---
-description: Database management in GRASS GIS
+description: Database management in GRASS
 index: database
 ---
 
-# Database management in GRASS GIS
+# Database management in GRASS
 
 ## Attribute management in general
 

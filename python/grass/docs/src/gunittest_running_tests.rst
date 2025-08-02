@@ -148,7 +148,7 @@ Example Bash script to run be used as a cron job
 
     GRASSDATA="/grassdata/tests-grassdata"
 
-    echo "Nightly GRASS GIS test started: $NOW" >> $LOGFILE
+    echo "Nightly GRASS test started: $NOW" >> $LOGFILE
 
     # compile current source code from scratch
     cd $GRASSSRC
@@ -178,7 +178,7 @@ Example Bash script to run be used as a cron job
     # so publish or archive results
     rsync -rtvu --delete $REPORTS/ "/var/www/html/grassgistestreports"
 
-    echo "Nightly ($NOW) GRASS GIS test finished: $(date $DATE_FLAGS)" >> $LOGFILE
+    echo "Nightly ($NOW) GRASS test finished: $(date $DATE_FLAGS)" >> $LOGFILE
 
 A script similar to this one can be used as a cron job, on most Linux systems
 using ``crontab -e`` and adding a line similar to the following one::
