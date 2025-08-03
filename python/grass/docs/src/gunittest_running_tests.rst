@@ -108,9 +108,9 @@ Running tests and creating report
 
 Currently there is full support only for running all the tests in
 the small (basic) version of GRASS sample Location for North Carolina
-(see `GRASS GIS sample data`).
+(see `GRASS sample data`).
 
-.. _GRASS GIS sample data: https://grass.osgeo.org/download/sample-data
+.. _GRASS sample data: https://grass.osgeo.org/download/sample-data
 
 
 Example Bash script to run be used as a cron job
