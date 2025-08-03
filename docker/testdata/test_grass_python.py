@@ -4,10 +4,10 @@ import grass.script as gs
 
 # hint: do not use ~ as an alias for HOME
 with gs.setup.init(
-    # run in PERMANENT mapset of demolocation in GRASS GIS source
+    # run in PERMANENT mapset of demolocation in GRASSrce
     os.environ["DEMOLOCATION"]  # "/grassdata/demolocation/PERMANENT",
 ):
-    print("grass-setup: tests for PROJ, GDAL, PDAL, GRASS GIS")
+    print("grass-setup: tests for PROJ, GDAL, PDAL, GRASS")
     print(gs.parse_command("g.gisenv", flags="s"))
 
     # simple test: just scan the LAZ file
