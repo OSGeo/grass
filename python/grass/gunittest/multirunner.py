@@ -3,7 +3,7 @@ Testing framework module for running tests in Python unittest fashion
 
 Copyright (C) 2014-2021 by the GRASS Development Team
 This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS GIS
+License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :authors: Vaclav Petras
@@ -73,11 +73,9 @@ def main():
     )
     # TODO: rename since every src can be used?
     parser.add_argument(
-        "--grasssrc", required=True, help="GRASS GIS source code (to take tests from)"
+        "--grasssrc", required=True, help="GRASS source code (to take tests from)"
     )
-    parser.add_argument(
-        "--grassdata", required=True, help="GRASS GIS data base (GISDBASE)"
-    )
+    parser.add_argument("--grassdata", required=True, help="GRASS data base (GISDBASE)")
     parser.add_argument(
         "--create-main-report",
         help="Create also main report for all tests",
@@ -107,7 +105,7 @@ def main():
     grass_executable = args.grassbin
 
     # Software
-    # query GRASS GIS itself for its GISBASE
+    # query GRASS itself for its GISBASE
     # we assume that the start script is available and in the PATH
     # the shell=True is here because of MS Windows? (code taken from wiki)
     startcmd = grass_executable + " --config path"
@@ -117,7 +115,7 @@ def main():
         out, err = p.communicate()
         if p.returncode != 0:
             print(
-                "ERROR: Cannot find GRASS GIS start script (%s):\n%s" % (startcmd, err),
+                "ERROR: Cannot find GRASS start script (%s):\n%s" % (startcmd, err),
                 file=sys.stderr,
             )
             return 1
