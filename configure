@@ -5010,8 +5010,8 @@ then :
 
 fi
 
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for GRASS GIS headers commit date" >&5
-printf %s "checking for GRASS GIS headers commit date... " >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for GRASS headers commit date" >&5
+printf %s "checking for GRASS headers commit date... " >&6; }
 if test "$GIT" != "no" ; then
    GRASS_VERSION_GIT=`$GIT rev-parse --short HEAD 2>/dev/null`
    if test -z "$GRASS_VERSION_GIT"; then
