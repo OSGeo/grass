@@ -124,10 +124,10 @@ int V1_read_next_line_nat(struct Map_info *Map, struct line_pnts *line_p,
    Note: Topology must be built at level >= GV_BUILD_BASE
 
    \param Map pointer to Map_info struct
-   \param[out] Points container used to store line points within (pointer to
+   \param[out] line_p container used to store line points within (pointer to
                       line_pnts struct)
-   \param[out] Cats container used to store line categories
-                    within (pointer to line_cats struct)
+   \param[out] line_c container used to store line categories
+                      within (pointer to line_cats struct)
    \param line feature id to read (starts at 1)
 
    \return feature type (GV_POINT, GV_LINE, ...)

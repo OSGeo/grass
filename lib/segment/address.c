@@ -104,7 +104,6 @@ int seg_address_slow(const SEGMENT *SEG, off_t row, off_t col, int *n,
  * \param[in,out] index
  * \return always returns 0
  */
-
 int seg_address(const SEGMENT *SEG, off_t row, off_t col, int *n, int *index)
 {
     /* old code

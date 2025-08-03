@@ -105,7 +105,7 @@ jobs:
             --enable-largefile \
             --prefix="$INSTALL_PREFIX/" \
             --with-blas \
-            --with-bzlib=no \
+            --with-bzlib \
             --with-cxx \
             --with-fftw \
             --with-freetype \
@@ -116,12 +116,12 @@ jobs:
             --with-netcdf \
             --with-nls \
             --with-odbc \
-            --with-openmp=no \
+            --with-openmp \
             --with-pdal \
             --with-postgres --with-postgres-includes=/usr/include/postgresql \
             --with-proj-share=/usr/share/proj \
-            --with-pthread=no \
-            --with-readline=no \
+            --with-pthread \
+            --with-readline \
             --with-sqlite \
             --with-tiff \
             --with-zstd

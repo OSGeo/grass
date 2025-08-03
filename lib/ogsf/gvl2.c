@@ -846,7 +846,7 @@ int GVL_isosurf_get_att(int id, int isosurf_id, int att, int *set,
    \brief Unset isosurface attributes
 
    \param id volume set id
-   \param isosurface_id isosurface id
+   \param isosurf_id isosurface id
    \param att attribute id
 
    \return ?

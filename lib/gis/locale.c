@@ -62,7 +62,6 @@ void G_init_locale(void)
  * \param[in] msgid
  * \retval char * Pointer to string
  */
-
 char *G_gettext(const char *package NO_NLS_UNUSED, const char *msgid)
 {
 #if defined(HAVE_LIBINTL_H) && defined(USE_NLS)
@@ -83,7 +82,6 @@ char *G_gettext(const char *package NO_NLS_UNUSED, const char *msgid)
  * \param[in] n The number
  * \retval char * Pointer to string
  */
-
 char *G_ngettext(const char *package NO_NLS_UNUSED, const char *msgids,
                  const char *msgidp, unsigned long int n)
 {

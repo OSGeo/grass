@@ -5,7 +5,6 @@
 /*
  * transpose: returns arg2 as the transpose of arg1
  */
-
 int transpose(MATRIX *a, MATRIX *b)
 {
     register int i, j, nr, nc;

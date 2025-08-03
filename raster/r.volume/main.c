@@ -50,6 +50,7 @@ int main(int argc, char *argv[])
     unsigned long *n, *e;
     long int *count;
     int fd_data, fd_clump;
+    int skip_header = 0;
 
     const char *datamap, *clumpmap, *centroidsmap;
 
@@ -192,6 +193,9 @@ int main(int argc, char *argv[])
             G_fatal_error(_("The -f flag cannot be used with format=json. "
                             "Please select only one output format."));
         }
+        else if (format == PLAIN)
+            skip_header = 1; /* For backward compatibility */
+
         format = CSV;
     }
     // print = flag.print->answer;
@@ -355,7 +359,14 @@ int main(int argc, char *argv[])
     total_vol = 0.0;
 
     /* print output, write centroids */
-    if (fd_centroids || print)
+    if (fd_centroids || print) {
+        if (print && !skip_header && format == CSV) {
+            /* CSV Header */
+            fprintf(stdout, "%s%s%s%s%s%s%s%s%s%s%s%s%s\n", "cat", fs,
+                    "average", fs, "sum", fs, "cells", fs, "easting", fs,
+                    "northing", fs, "volume");
+        }
+
         for (i = 1; i <= max; i++) {
             if (count[i]) {
                 avg = sum[i] / (double)count[i];
@@ -414,6 +425,7 @@ int main(int argc, char *argv[])
                 }
             }
         }
+    }
 
     /* write centroid attributes and close the map */
     if (fd_centroids) {

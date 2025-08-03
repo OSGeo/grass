@@ -391,7 +391,6 @@ int dig_spidx_add_area(struct Plus_head *Plus, int area,
 
    \return 0
  */
-
 int dig_spidx_add_isle(struct Plus_head *Plus, int isle,
                        const struct bound_box *box)
 {
