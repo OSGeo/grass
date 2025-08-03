@@ -24,7 +24,7 @@ import wx.lib.scrolledpanel as scrolled
 from core.gcmd import RunCommand, GError
 from core.debug import Debug
 from dbmgr.vinfo import VectorDBInfo, GetUnicodeValue, GetDbEncoding
-from gui_core.widgets import IntegerValidator, FloatValidator
+from gui_core.widgets import IntegerValidator, FloatValidator, TimeISOValidator
 from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox, TextCtrl
 
 
@@ -675,6 +675,11 @@ class ModifyTableRecord(wx.Dialog):
                     valueWin.SetValidator(IntegerValidator())
                 elif ctype == float:
                     valueWin.SetValidator(FloatValidator())
+                elif ctype == str and ctypeStr == "date":
+                    valueWin.SetValidator(TimeISOValidator())
+                    # Date ISO8601 format hint
+                    valueWin.SetHint(_("YYYY-MM-DD"))
+
                 if not winFocus:
                     wx.CallAfter(valueWin.SetFocus)
                     winFocus = True
