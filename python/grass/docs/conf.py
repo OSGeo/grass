@@ -404,7 +404,7 @@ texinfo_documents = [
         project,
         "GRASS Development Team",
         "PythonLib",
-        "Documentation for Python API of GRASS GIS",
+        "Documentation for Python API of GRASS",
         "Miscellaneous",
     ),
 ]
