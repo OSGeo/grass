@@ -231,7 +231,8 @@ int main(int argc, char *argv[])
     if (param.q->answer != NULL) {
         N_read_rast3d_to_array_3d(param.q->answer, data->q, param.mask->answer);
         N_convert_array_3d_null_to_zero(data->q);
-    } else {
+    }
+    else {
         G_message(_("No sink map provided. Initializing zero sink..."));
         for (z = 0; z < geom->depths; z++) {
             for (y = 0; y < geom->rows; y++) {
