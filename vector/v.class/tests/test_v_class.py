@@ -8,7 +8,7 @@ from grass.exceptions import CalledModuleError
 @pytest.fixture(scope="module")
 def setup_vector_with_values(tmp_path_factory):
     """
-    Pytest fixture to create a temporary GRASS GIS project with a vector map
+    Pytest fixture to create a temporary GRASS project with a vector map
     containing sample points and associated attribute data.
 
     This setup initializes the GRASS environment, sets the computational region,
@@ -16,7 +16,7 @@ def setup_vector_with_values(tmp_path_factory):
     and populates it with numeric values for testing classification.
 
     Yields:
-        session: active GRASS GIS session with the prepared project and vector map.
+        session: active GRASS session with the prepared project and vector map.
     """
     # Create a single temporary project directory once per module
     project = tmp_path_factory.mktemp("v_class_project")

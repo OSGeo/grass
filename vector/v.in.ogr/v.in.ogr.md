@@ -416,7 +416,7 @@ desired, you can then reproject it to another project with
 [v.import](v.import.md), [v.in.db](v.in.db.md), [v.in.e00](v.in.e00.md),
 [v.out.ogr](v.out.ogr.md)*
 
-GRASS GIS Wiki page: Import of [Global
+GRASS Wiki page: Import of [Global
 datasets](https://grasswiki.osgeo.org/wiki/Global_datasets)
 
 ## AUTHORS
