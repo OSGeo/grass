@@ -204,7 +204,7 @@ int main(int argc, char *argv[])
     N_set_les_callback_3d_func(call, (*N_callback_gwflow_3d)); /*gwflow 3d */
 
     /*Allocate the groundwater flow data structure */
-    data = N_alloc_gwflow_data3d(geom->cols, geom->rows, geom->depths, 0, 0);
+    data = N_alloc_gwflow_data3d(geom->cols, geom->rows, geom->depths, 1, 0);
 
     /*Set the calculation time */
     sscanf(param.dt->answer, "%lf", &(data->dt));
@@ -228,8 +228,19 @@ int main(int argc, char *argv[])
     N_read_rast3d_to_array_3d(param.hc_z->answer, data->hc_z,
                               param.mask->answer);
     N_convert_array_3d_null_to_zero(data->hc_z);
-    N_read_rast3d_to_array_3d(param.q->answer, data->q, param.mask->answer);
-    N_convert_array_3d_null_to_zero(data->q);
+    if (param.q->answer != NULL) {
+        N_read_rast3d_to_array_3d(param.q->answer, data->q, param.mask->answer);
+        N_convert_array_3d_null_to_zero(data->q);
+    } else {
+        G_message(_("No sink map provided. Initializing zero sink..."));
+        for (z = 0; z < geom->depths; z++) {
+            for (y = 0; y < geom->rows; y++) {
+                for (x = 0; x < geom->cols; x++) {
+                    N_put_array_3d_d_value(data->q, x, y, z, 0.0);
+                }
+            }
+        }
+    }
     N_read_rast3d_to_array_3d(param.s->answer, data->s, param.mask->answer);
     N_convert_array_3d_null_to_zero(data->s);
 
