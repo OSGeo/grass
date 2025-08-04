@@ -528,8 +528,8 @@ int main(int argc, char *argv[])
                         ? "DCELL"
                         : (maptype == FCELL_TYPE ? "FCELL" : "??"))));
 
-    /* if GDAL datatype set by user, do checks */
-    if (type->answer) {
+    /* if GDAL datatype set by user and export not forced, do checks */
+    if (type->answer && !flag_f->answer) {
 
         /* Check if raster data range is outside of the range of
          * given GDAL datatype, not even overlapping */
@@ -619,33 +619,34 @@ int main(int argc, char *argv[])
     }
 
     /* exact range and nodata checks for each band */
-    G_message(_("Checking GDAL data type and nodata value..."));
-    for (band = 0; band < ref.nfiles; band++) {
-        if (ref.nfiles > 1) {
-            G_verbose_message(
-                _("Checking options for raster map <%s> (band %d)..."),
-                G_fully_qualified_name(ref.file[band].name,
-                                       ref.file[band].mapset),
-                band + 1);
-        }
+    if (!flag_f->answer || !nodataopt->answer) {
+		G_message(_("Checking GDAL data type and nodata value..."));
+		for (band = 0; band < ref.nfiles; band++) {
+			if (ref.nfiles > 1) {
+				G_verbose_message(
+					_("Checking options for raster map <%s> (band %d)..."),
+					G_fully_qualified_name(ref.file[band].name,
+										   ref.file[band].mapset),
+					band + 1);
+			}
 
-        retval = exact_checks(datatype, ref.file[band].name,
-                              ref.file[band].mapset, &cellhead, maptype,
-                              nodataval, nodataopt->key, default_nodataval);
+			retval = exact_checks(datatype, ref.file[band].name,
+								  ref.file[band].mapset, &cellhead, maptype,
+								  nodataval, nodataopt->key, default_nodataval);
 
-        /* nodata value is present in the data to be exported */
-        if (retval == -1) {
-            if (flag_f->answer)
-                G_warning(_("Forcing raster export."));
-            else
-                G_fatal_error(_("Raster export aborted."));
-        }
-        /* data don't fit into range of GDAL datatype */
-        else if (retval == -2) {
-            G_fatal_error(_("Raster export aborted."));
-        }
+			/* nodata value is present in the data to be exported */
+			if (retval == -1) {
+				if (flag_f->answer)
+					G_warning(_("Forcing raster export."));
+				else
+					G_fatal_error(_("Raster export aborted."));
+			}
+			/* data don't fit into range of GDAL datatype */
+			else if (retval == -2) {
+				G_fatal_error(_("Raster export aborted."));
+			}
+		}
     }
-
     /* Create dataset for output with target driver or, if needed, with
      * in-memory driver */
     char **papszOptions = NULL;
