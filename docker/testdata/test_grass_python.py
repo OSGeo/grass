@@ -4,7 +4,7 @@ import grass.script as gs
 
 # hint: do not use ~ as an alias for HOME
 with gs.setup.init(
-    # run in PERMANENT mapset of demolocation in GRASSrce
+    # run in PERMANENT mapset of demolocation in GRASS source
     os.environ["DEMOLOCATION"]  # "/grassdata/demolocation/PERMANENT",
 ):
     print("grass-setup: tests for PROJ, GDAL, PDAL, GRASS")
