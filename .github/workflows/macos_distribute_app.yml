@@ -119,7 +119,7 @@ jobs:
           echo cs_keychain_profile=\"${KEYCHAIN_PROFILE}\" >> ${{ env.Config }}
           echo cs_provisionprofile=\"${RUNNER_TEMP}/embedded.provisionprofile\" >> ${{ env.Config }}
 
-      - name: Build GRASS GIS app
+      - name: Build GRASS app
         run: |
           ./macos/build_grass_app.bash --with-liblas --notarize -o "${{ runner.temp }}"
 
