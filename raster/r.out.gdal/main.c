@@ -528,6 +528,9 @@ int main(int argc, char *argv[])
                         ? "DCELL"
                         : (maptype == FCELL_TYPE ? "FCELL" : "??"))));
 
+	if (flag_f->answer)
+		G_warning(_("Forcing raster export"));
+
     /* if GDAL datatype set by user and export not forced, do checks */
     if (type->answer && !flag_f->answer) {
 
@@ -575,13 +578,10 @@ int main(int argc, char *argv[])
             }
         }
         if (retval == -1) {
-            if (flag_f->answer)
-                G_warning(_("Forcing raster export"));
-            else
-                G_fatal_error(
-                    _("Raster export aborted. "
-                      "To override data loss check, use the -%c flag"),
-                    flag_f->key);
+			G_fatal_error(
+				_("Raster export aborted. "
+				  "To override data loss check, use the -%c flag"),
+				flag_f->key);
         }
     }
 
