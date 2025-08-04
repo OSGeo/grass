@@ -1,4 +1,4 @@
-<!-- meta page description: SQL support in GRASS GIS -->
+<!-- meta page description: SQL support in GRASS -->
 
 <!-- this file is lib/db/sqlp/sql.html -->
 
@@ -8,7 +8,7 @@ category number (attribute ID, usually the "cat" integer column). The
 category numbers are stored both in the vector geometry and the
 attribute table.
 <p>
-GRASS GIS supports various RDBMS
+GRASS supports various RDBMS
 (<a href="https://en.wikipedia.org/wiki/Relational_database_management_system">Relational
 database management system</a>) and embedded databases. SQL
 (<a href="https://en.wikipedia.org/wiki/Sql">Structured Query
@@ -18,14 +18,14 @@ database driver selected.
 
 <h2>Database drivers</h2>
 
-The default database driver used by GRASS GIS 8 is SQLite. GRASS GIS
+The default database driver used by GRASS 8 is SQLite. GRASGRASS
 handles multiattribute vector data by default. The <em>db.*</em> set of
 commands  provides basic SQL support for attribute management, while the
 <em>v.db.*</em> set of commands operates on vector maps.
 
 <p>
 Note: The list of available database drivers can vary in various binary
-distributions of GRASS GIS:
+distributions of GRASS:
 <p>
 <table class="border">
 <tr><td><a href="grass-sqlite.html">sqlite</a></td><td>Data storage in SQLite database files (default DB backend)</td>
@@ -232,7 +232,7 @@ v.db.update vectormap column=species qcolumn="CASE WHEN col1 &gt;= 1 THEN cat WH
 </em>
 
 <p>
-<a href="databaseintro.html">Database management in GRASS GIS</a>,
+<a href="databaseintro.html">Database management in GRASS</a>,
 <a href="database.html">Help pages for database modules</a>
 
 <h2>AUTHOR</h2>
