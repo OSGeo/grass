@@ -89,8 +89,8 @@ from grass.grassdb.history import Status
 
 
 class GMFrame(wx.Frame):
-    """Layer Manager frame with notebook widget for controlling GRASS
-    GIS. Includes command console page for typing GRASS (and other)
+    """Layer Manager frame with notebook widget for controlling GRASS.
+    Includes command console page for typing GRASS (and other)
     commands, tree widget page for managing map layers.
     """
 
