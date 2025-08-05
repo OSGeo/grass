@@ -101,7 +101,7 @@ jobs:
           echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
         shell: msys2 {0}
 
-      - name: Compile GRASS GIS
+      - name: Compile GRASS
         shell: msys2 {0}
         run: |
           .github/workflows/build_osgeo4w.sh
