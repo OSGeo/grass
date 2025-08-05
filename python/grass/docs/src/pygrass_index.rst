@@ -47,9 +47,9 @@ References
   System (GIS)*. ISPRS International Journal of
   Geo-Information. 2(1):201-219. `doi:10.3390/ijgi2010201
   <https://doi.org/10.3390/ijgi2010201>`_
-* `Python related articles in the GRASS GIS Wiki
+* `Python related articles in the GRASS Wiki
   <https://grasswiki.osgeo.org/wiki/Category:Python>`_
-* `GRASS GIS 8 Programmer's Manual
+* `GRASS 8 Programmer's Manual
   <https://grass.osgeo.org/programming8/>`_
 
 This project has been funded with support from the `Google Summer of

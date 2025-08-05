@@ -1,7 +1,7 @@
-<!-- meta page description: GRASS GIS Database -->
+<!-- meta page description: GRASS Database -->
 
-A GRASS GIS Database is simply a set of directories and files
-with certain structure which GRASS GIS works efficiently with.
+A GRASS Database is simply a set of directories and files
+with certain structure which GRASS works efficiently with.
 Project is a directory with data related to
 one geographic location or a project.
 All data within one project has the same coordinate reference system.
@@ -12,14 +12,14 @@ which can contain commonly used data within one GRASS project
 such as base maps.
 The PERMANENT mapset also contains metadata related to the project
 such as the coordinate reference system.
-When GRASS GIS is started it connects to a database, project and mapset
+When GRASS is started it connects to a database, project and mapset
 specified by the user.
 
 <p>
 <!-- original drawing: doc/grass_database.svg -->
 <center>
   <img src="grass_database.png" alt="example: nc_spm - highway - elevation"><br>
-  <i>Fig. 1: GRASS GIS Database structure as visible to the user</i>
+  <i>Fig. 1: GRASS Database structure as visible to the user</i>
 </center>
 
 <!--
@@ -32,9 +32,9 @@ In geospatial analysis often involves combining data from various sources
 multiple users
 -->
 
-<h3>GRASS GIS Database</h3>
+<h3>GRASS Database</h3>
 
-All data for GRASS GIS must be in GRASS GIS Database which is a directory
+All data for GRASS must be in GRASS Database which is a directory
 (visible on the disk) containing subdirectories which are GRASS projects.
 User can have one or more of Databases on the disk. Typically users have
 one directory called <code>grassdata</code> in their home directory.
@@ -45,13 +45,13 @@ in a shared network file system (e.g. NFS).
 <!-- TODO: above needs some fixes -->
 
 <p>
-GRASS GIS Databases can be safely copied or moved as any other directories.
-Don't be confused with (relational) databases which are used in GRASS GIS
-to hold attribute data and might be part of the GRASS GIS Database.
-From user point of view, GRASS GIS Database with all its data in it
+GRASS Databases can be safely copied or moved as any other directories.
+Don't be confused with (relational) databases which are used in GRASS
+to hold attribute data and might be part of the GRASS Database.
+From user point of view, GRASS Database with all its data in it
 is similar to, e.g. PostGIS, database, as it stores all information
 inside in a specific format and is accessible by specific tools.
-GRASS GIS Databases is in GRASS GIS often called GISDBASE or DATABASE.
+GRASS Databases is in GRASS often called GISDBASE or DATABASE.
 
 <h3>GRASS Projects</h3>
 
@@ -76,7 +76,7 @@ this name has not been completely removed from code and documentation yet.
 
 <p>
 Users and programmers familiar with relational databases such as PostgreSQL
-can view projects as individual databases inside a storage area (the GRASS GIS Database).
+can view projects as individual databases inside a storage area (the GRASS Database).
 Mapsets in a project are like namespaces or schemas inside a database.
 
 <!-- TODO: naming limitations and best practices -->
@@ -84,13 +84,13 @@ Mapsets in a project are like namespaces or schemas inside a database.
 <h3>GRASS Mapsets</h3>
 
 Mapsets contains the actual data, mostly geospatial data,
-referred to as maps in GRASS GIS.
+referred to as maps in GRASS.
 Mapsets are a tool for organizing maps in a transparent way
 as well as a tool for isolating different tasks to prevent data loss.
 
 <p>
-GRASS GIS is always connected to one particular mapset.
-GRASS GIS modules can create, modify, change, or delete a data only in
+GRASS is always connected to one particular mapset.
+GRASS modules can create, modify, change, or delete a data only in
 the current mapset.
 By default, only the data from the current mapset and PERMANENT mapset
 are visible. Using
@@ -131,11 +131,11 @@ match. In case of data coming with different coordinate reference systems,
 it is recommended to use <a href="r.proj.html"><em>r.proj</em></a>
 or <a href="v.proj.html"><em>v.proj</em></a> to reproject the data.
 The files and directories should not be moved or modified directly,
-but only using GRASS GIS tools.
+but only using GRASS tools.
 
 <h3>The role of the PERMANENT Mapset</h3>
 
-When creating a new project, GRASS GIS automatically creates a special
+When creating a new project, GRASS automatically creates a special
 mapset called PERMANENT where the core data for the project are stored.
 
 <p>
@@ -161,7 +161,7 @@ Users have the option of switching back to the default region at any time.
 
 <h3>Importing, exporting and linking data</h3>
 
-GRASS GIS works only with data which are imported into a GRASS Database,
+GRASS works only with data which are imported into a GRASS Database,
 so all data needs to be imported, e.g. by
 <a href="r.in.gdal.html"><em>r.in.gdal</em></a> or
 highly convenient <a href="r.import.html"><em>r.import</em></a>,
@@ -185,18 +185,18 @@ as standard raster maps. Similarly for newly created maps,
 setups a format and directory where the actual data will be stored,
 however in GRASS Database the data will be created as standard maps.
 
-<h3>Starting GRASS GIS</h3>
+<h3>Starting GRASS</h3>
 
-After launching GRASS GIS for the first time,
+After launching GRASS for the first time,
 the GUI opens in a default project <code>world_latlong_wgs84</code>.
 From there a new project can be created.
 
 <p>
 <center>
-  <img src="grass_start.png" alt="GRASS GIS GUI after first start"><br>
+  <img src="grass_start.png" alt="GRASS GUI after first start"><br>
 </center>
 
-GRASS GIS can be also started with a given database, project and mapset
+GRASS can be also started with a given database, project and mapset
 from the command line. For example, the following will start
 in a given mapset with only command line interface:
 
@@ -261,9 +261,9 @@ the <em>File</em> menu in <em>Layer Manager</em> or
 <h2>See also</h2>
 
 <em>
-<a href="index.html">GRASS GIS Reference Manual</a>
+<a href="index.html">GRASS Reference Manual</a>
 <br>
-<a href="grass.html">GRASS GIS startup program manual page</a>
+<a href="grass.html">GRASS startup program manual page</a>
 <br>
 <a href="https://grasswiki.osgeo.org/wiki/Importing_data">Importing data on GRASS Wiki</a>
 <br>

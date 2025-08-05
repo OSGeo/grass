@@ -125,7 +125,7 @@ class GMFrame(wx.Frame):
         if title:
             self.baseTitle = title
         else:
-            self.baseTitle = _("GRASS GIS")
+            self.baseTitle = _("GRASS")
 
         self.iconsize = (16, 16)
         self.size = size

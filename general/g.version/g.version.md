@@ -1,14 +1,14 @@
 ## DESCRIPTION
 
 *g.version* prints to standard output the GRASS version number, date,
-the GRASS GIS copyright (**-c** flag), and GRASS build information
+the GRASS copyright (**-c** flag), and GRASS build information
 (**-b** flag).
 
 ## NOTES
 
 This program requires no command line arguments; the user simply types
 *g.version* on the command line to see the version number and date of
-the GRASS GIS software currently being run by the user.
+the GRASS software currently being run by the user.
 
 Information about GRASS GIS core [GIS
 Library](https://grass.osgeo.org/programming8/gislib.html) can be
@@ -115,16 +115,16 @@ libgis date: 2024-04-27T09:38:49+00:00
 <!-- markdownlint-restore -->
 
 Note: if `revision=exported` is reported instead of the git hash then
-the `git` program was not available during compilation of GRASS GIS and
+the `git` program was not available during compilation of GRASS and
 the source code did not contain the `.git/` subdirectory (requires e.g.
-to `git clone` the GRASS GIS [software
+to `git clone` the GRASS [software
 repository](https://github.com/OSGeo/grass/).)
 
-## Citing GRASS GIS
+## Citing GRASS
 
 The GRASS Development Team has invested significant time and effort in
-creating GRASS GIS, please cite it when using it for data analysis. The
-GRASS GIS [Web site](https://grass.osgeo.org/about/license/) offers
+creating GRASS, please cite it when using it for data analysis. The
+GRASS [Web site](https://grass.osgeo.org/about/license/) offers
 citations in different styles.
 
 ## AUTHORS
