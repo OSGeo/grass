@@ -189,6 +189,11 @@ static void parallel_line(struct line_pnts *Points, double da, double db,
     double phi1, phi2, delta_phi;
     double nsegments, angular_tol, angular_step;
     int inner_corner, turns360;
+    vx = 0.0;
+    c1 = 0.0;
+    vy = 0.0;
+    b1 = 0.0;
+    a1 = 0.0;
 
     G_debug(3, "parallel_line()");
 
