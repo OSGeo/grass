@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-04 10:14+0000\n"
-"PO-Revision-Date: 2025-06-25 06:07+0000\n"
+"PO-Revision-Date: 2025-08-07 08:20+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/sv/>\n"
 "Language: sv\n"
@@ -695,10 +695,8 @@ msgid "%s=, %s=, %s= and %s= are mutually exclusive."
 msgstr "%s=, %s=, %s= och %s= är ömsesidigt uteslutande."
 
 #: ../gui/wxpython/animation/g.gui.animation.py:137
-#, fuzzy
-#| msgid "Animation Tool - GRASS GIS"
 msgid "Animation Tool - GRASS"
-msgstr "Animeringsverktyg - GRASS GIS"
+msgstr "Animeringsverktyg - GRASS"
 
 #: ../gui/wxpython/animation/nviztask.py:40
 #, python-format
@@ -1450,16 +1448,12 @@ msgid "Data Catalog"
 msgstr "Datakatalog"
 
 #: ../gui/wxpython/datacatalog/frame.py:42
-#, fuzzy
-#| msgid "Close GRASS GIS Data Catalog"
 msgid "Close GRASS Data Catalog"
-msgstr "Stäng GRASS GIS datakatalog"
+msgstr "Stäng GRASS-datakatalog"
 
 #: ../gui/wxpython/datacatalog/g.gui.datacatalog.py:50
-#, fuzzy
-#| msgid "Data Catalog - GRASS GIS"
 msgid "Data Catalog - GRASS"
-msgstr "Datakatalog - GRASS GIS"
+msgstr "Datakatalog - GRASS"
 
 #: ../gui/wxpython/datacatalog/infomanager.py:36
 msgid "Create new project"
@@ -1470,17 +1464,13 @@ msgid "Learn more"
 msgstr "Läs mer"
 
 #: ../gui/wxpython/datacatalog/infomanager.py:40
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "GRASS GIS helps you organize your data using projects (locations) which contain mapsets (subprojects). All data in one project is in the same coordinate reference system (CRS).\n"
-#| "\n"
-#| "You are currently in mapset PERMANENT in default project {loc} which uses WGS 84 (EPSG:4326). Consider creating a new project with a CRS specific to your area. You can do it now or anytime later from the toolbar above."
+#, python-brace-format
 msgid ""
 "GRASS helps you organize your data using projects (locations) which contain mapsets (subprojects). All data in one project is in the same coordinate reference system (CRS).\n"
 "\n"
 "You are currently in mapset PERMANENT in default project {loc} which uses WGS 84 (EPSG:4326). Consider creating a new project with a CRS specific to your area. You can do it now or anytime later from the toolbar above."
 msgstr ""
-"GRASS GIS hjälper dig att organisera dina data med hjälp av projekt (platser) som innehåller kartuppsättningar (underprojekt). Alla data i ett projekt är i samma koordinatreferenssystem (CRS).\n"
+"GRASS hjälper dig att organisera dina data med hjälp av projekt (platser) som innehåller kartuppsättningar (underprojekt). Alla data i ett projekt är i samma koordinatreferenssystem (CRS).\n"
 "\n"
 "Du befinner dig för närvarande i kartuppsättningen PERMANENT i standardprojektet {loc} som använder WGS 84 (EPSG:4326). Överväg att skapa ett nytt projekt med ett CRS som är specifikt för ditt område. Du kan göra det nu eller när som helst senare från verktygsfältet ovan."
 
@@ -1518,20 +1508,18 @@ msgid "No change, don't ask me again"
 msgstr "Ingen förändring, fråga mig inte igen"
 
 #: ../gui/wxpython/datacatalog/infomanager.py:84
-#, fuzzy, python-brace-format
-#| msgid "{string} GRASS GIS has started in a temporary project. To continue, use Data Catalog below to switch to a different project."
+#, python-brace-format
 msgid "{string} GRASS has started in a temporary project. To continue, use Data Catalog below to switch to a different project."
-msgstr "{string} GRASS GIS har startat i ett tillfälligt projekt. För att fortsätta, använd Datakatalogen nedan för att byta till ett annat projekt."
+msgstr "{string} GRASS har startat i ett tillfälligt projekt. För att fortsätta, använd Datakatalogen nedan för att byta till ett annat projekt."
 
 #: ../gui/wxpython/datacatalog/infomanager.py:94
 msgid "Switch to last used mapset"
 msgstr "Byt till senast använda mapset"
 
 #: ../gui/wxpython/datacatalog/infomanager.py:96
-#, fuzzy, python-brace-format
-#| msgid "Last used mapset in path '{mapsetpath}' is currently in use. GRASS GIS has started in a temporary project. To continue, use Data Catalog below to switch to a different project or remove lock file and switch to the last used mapset."
+#, python-brace-format
 msgid "Last used mapset in path '{mapsetpath}' is currently in use. GRASS has started in a temporary project. To continue, use Data Catalog below to switch to a different project or remove lock file and switch to the last used mapset."
-msgstr "Senast använda kartset i sökvägen '{mapsetpath}' används för närvarande. GRASS GIS har startat i ett tillfälligt projekt. För att fortsätta, använd datakatalogen nedan för att byta till ett annat projekt eller ta bort låsfilen och byt till den senast använda kartuppsättningen."
+msgstr "Senast använda kartset i sökvägen '{mapsetpath}' används för närvarande. GRASS har startat i ett tillfälligt projekt. För att fortsätta, använd datakatalogen nedan för att byta till ett annat projekt eller ta bort låsfilen och byt till den senast använda kartuppsättningen."
 
 #: ../gui/wxpython/datacatalog/infomanager.py:109
 #, python-brace-format
@@ -2503,7 +2491,7 @@ msgstr "Kategori"
 
 #: ../gui/wxpython/dbmgr/dialogs.py:670
 msgid "YYYY-MM-DD"
-msgstr ""
+msgstr "YYYY-MM-DD"
 
 #: ../gui/wxpython/dbmgr/g.gui.dbmgr.py:48
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:70
@@ -2518,10 +2506,8 @@ msgid "Loading attribute data for vector map <%s>..."
 msgstr "Läser in attributdata för vektorkarta <%s>..."
 
 #: ../gui/wxpython/dbmgr/g.gui.dbmgr.py:55
-#, fuzzy
-#| msgid "Attribute Table Manager - GRASS GIS"
 msgid "Attribute Table Manager - GRASS"
-msgstr "Hantering av attributtabeller - GRASS GIS"
+msgstr "Hantering av attributtabeller - GRASS"
 
 #: ../gui/wxpython/dbmgr/manager.py:92
 msgid "Attribute Table Manager"
@@ -3755,10 +3741,8 @@ msgid "Graphical Modeler"
 msgstr "Grafisk modellerare"
 
 #: ../gui/wxpython/gmodeler/g.gui.gmodeler.py:56
-#, fuzzy
-#| msgid "Graphical Modeler - GRASS GIS"
 msgid "Graphical Modeler - GRASS"
-msgstr "Grafisk modellerare - GRASS GIS"
+msgstr "Grafisk modellerare - GRASS"
 
 #: ../gui/wxpython/gmodeler/model.py:70
 msgid "model"
@@ -4680,22 +4664,16 @@ msgstr "Symbolnamn:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2334
 #: ../gui/wxpython/gui_core/dialogs.py:2363
-#, fuzzy
-#| msgid "Quit GRASS GIS"
 msgid "Quit GRASS"
-msgstr "Avsluta GRASS GIS"
+msgstr "Avsluta GRASS"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2355
-#, fuzzy
-#| msgid "Do you want to quit GRASS GIS including shell or just close the GUI?"
 msgid "Do you want to quit GRASS including shell or just close the GUI?"
-msgstr "Vill du avsluta GRASS GIS inklusive shell eller bara stänga GUI?"
+msgstr "Vill du avsluta GRASS inklusive skal eller bara stänga grafiskt gränssnitt?"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2357
-#, fuzzy
-#| msgid "Do you want to quit GRASS GIS?"
 msgid "Do you want to quit GRASS?"
-msgstr "Vill du sluta med GRASS GIS?"
+msgstr "Vill du avsluta GRASS?"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2361
 msgid "Close GUI"
@@ -4925,10 +4903,8 @@ msgid "Try to set up GRASS_ADDON_PATH or GRASS_ADDON_BASE variable."
 msgstr "Försök att ställa in variabeln GRASS_ADDON_PATH eller GRASS_ADDON_BASE."
 
 #: ../gui/wxpython/gui_core/ghelp.py:64
-#, fuzzy
-#| msgid "About GRASS GIS"
 msgid "About GRASS"
-msgstr "Om GRASS GIS"
+msgstr "Om GRASS"
 
 #: ../gui/wxpython/gui_core/ghelp.py:80
 msgid "Info"
@@ -5000,10 +4976,9 @@ msgid "%s file missing"
 msgstr "%s fil saknas"
 
 #: ../gui/wxpython/gui_core/ghelp.py:336
-#, fuzzy, python-brace-format
-#| msgid "Unable to provide citation suggestion, see GRASS GIS website instead. The error was: {0}"
+#, python-brace-format
 msgid "Unable to provide citation suggestion, see GRASS website instead. The error was: {0}"
-msgstr "Kan inte ge förslag på referens, se GRASS GIS webbplats istället. Felet var: {0}"
+msgstr "Kan inte ge förslag på referens, se GRASS webbplats istället. Felet var: {0}"
 
 #: ../gui/wxpython/gui_core/ghelp.py:416 ../gui/wxpython/gui_core/ghelp.py:488
 #, python-format
@@ -6782,10 +6757,8 @@ msgid "Raster map <%s> not found"
 msgstr "Rasterkarta <%s> hittades inte"
 
 #: ../gui/wxpython/iclass/g.gui.iclass.py:111
-#, fuzzy
-#| msgid "Supervised Classification Tool - GRASS GIS"
 msgid "Supervised Classification Tool - GRASS"
-msgstr "Verktyg för övervakad klassificering - GRASS GIS"
+msgstr "Verktyg för övervakad klassificering - GRASS"
 
 #: ../gui/wxpython/iclass/g.gui.iclass.py:122
 #, python-format
@@ -6883,10 +6856,8 @@ msgid "Unable to load icon theme. Reason: %s. Quitting wxGUI..."
 msgstr "Det går inte att läsa in ikontema. Orsak: %s. Avslutar wxGUI..."
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:122
-#, fuzzy
-#| msgid "1. Select GRASS GIS database directory"
 msgid "1. Select GRASS database directory"
-msgstr "1. Välj katalog för GRASS GIS-databas"
+msgstr "1. Välj katalog för GRASS-databas"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:127
 msgid "2. Select GRASS Location"
@@ -6897,10 +6868,8 @@ msgid "3. Select GRASS Mapset"
 msgstr "3. Välj GRASS Mapset"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:151
-#, fuzzy
-#| msgid "GRASS GIS database directory contains Locations."
 msgid "GRASS database directory contains Locations."
-msgstr "GRASS GIS-databasens katalog innehåller platser."
+msgstr "GRASS-databasens katalog innehåller platser."
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:158
 msgid "All data in one Location is in the same  coordinate reference system (projection). One Location can be one project. Location contains Mapsets."
@@ -6968,10 +6937,9 @@ msgid "Delete selected mapset"
 msgstr "Ta bort vald mapset"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:299
-#, fuzzy, python-format
-#| msgid "GRASS GIS %s startup%s"
+#, python-format
 msgid "GRASS %s startup%s"
-msgstr "GRASS GIS %s uppstart%s"
+msgstr "GRASS %s uppstart%s"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:304
 msgid "Enter GRASS session"
@@ -7293,10 +7261,8 @@ msgid "target Z:"
 msgstr "mål Z:"
 
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:50
-#, fuzzy
-#| msgid "GRASS GIS Manage Ground Control Points"
 msgid "GRASS Manage Ground Control Points"
-msgstr "GRASS GIS Hantera markkontrollpunkter"
+msgstr "GRASS Hantera markkontrollpunkter"
 
 #: ../gui/wxpython/iscatt/controllers.py:209
 msgid "No data set."
@@ -7663,10 +7629,8 @@ msgid "Remove selected class"
 msgstr "Ta bort vald klass"
 
 #: ../gui/wxpython/lmgr/frame.py:111 ../gui/wxpython/main_window/frame.py:128
-#, fuzzy
-#| msgid "PyGRASS"
 msgid "GRASS"
-msgstr "PyGRASS"
+msgstr "GRASS"
 
 #: ../gui/wxpython/lmgr/frame.py:143
 msgid "There were some issues when loading menu or Tools tab:"
@@ -8160,7 +8124,7 @@ msgstr "Vänta, uppdaterar data..."
 #: ../gui/wxpython/lmgr/pyshell.py:48
 #, python-format
 msgid "Welcome to wxGUI Interactive Python Shell %s"
-msgstr "Välkommen till wxGUI Interactive Python Shell %s"
+msgstr "Välkommen till wxGUI interaktivt Python-skal %s"
 
 #: ../gui/wxpython/lmgr/pyshell.py:50
 #, python-format
@@ -9287,10 +9251,8 @@ msgid "Map <%s> not found. "
 msgstr "Karta <%s> hittades inte. "
 
 #: ../gui/wxpython/mapswipe/g.gui.mapswipe.py:87
-#, fuzzy
-#| msgid "Map Swipe Tool - GRASS GIS"
 msgid "Map Swipe Tool - GRASS"
-msgstr "Verktyg för svepning av karta - GRASS GIS"
+msgstr "Verktyg för svepning av karta - GRASS"
 
 #: ../gui/wxpython/mapswipe/toolbars.py:140
 msgid "Swipe mode"
@@ -11160,10 +11122,8 @@ msgid "target Y:"
 msgstr "mål Y:"
 
 #: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:45
-#, fuzzy
-#| msgid "GRASS GIS Manage Location of Tick Points on a Scanned Photo"
 msgid "GRASS Manage Location of Tick Points on a Scanned Photo"
-msgstr "GRASS GIS Hantera placering av fästingpunkter på ett skannat foto"
+msgstr "GRASS Hantera placering av fästingpunkter på ett skannat foto"
 
 #: ../gui/wxpython/psmap/dialogs.py:303
 msgid "Units:"
@@ -12096,10 +12056,8 @@ msgid "labels: "
 msgstr "etiketter: "
 
 #: ../gui/wxpython/psmap/g.gui.psmap.py:52
-#, fuzzy
-#| msgid "Cartographic Composer - GRASS GIS"
 msgid "Cartographic Composer - GRASS"
-msgstr "Kartografisk kompositör - GRASS GIS"
+msgstr "Kartografisk kompositör - GRASS"
 
 #: ../gui/wxpython/psmap/instructions.py:157
 #, python-format
@@ -12385,10 +12343,8 @@ msgid "Base raster map <{}> not found in current mapset."
 msgstr "Basrasterkarta <{}> finns inte i aktuell kartuppsättning."
 
 #: ../gui/wxpython/rdigit/g.gui.rdigit.py:233
-#, fuzzy
-#| msgid "Raster Digitizer - GRASS GIS"
 msgid "Raster Digitizer - GRASS"
-msgstr "Rasterdigitalisering - GRASS GIS"
+msgstr "Rasterdigitalisering - GRASS"
 
 #: ../gui/wxpython/rdigit/toolbars.py:28
 msgid "Digitize area"
@@ -12518,10 +12474,8 @@ msgid "The raster map <%s> already exists. Please remove or rename the maps with
 msgstr "Rasterkartan <%s> finns redan. Ta bort eller byt namn på kartorna med prefixet '%s' eller välj alternativet att skriva över befintliga kartor"
 
 #: ../gui/wxpython/rlisetup/g.gui.rlisetup.py:48
-#, fuzzy
-#| msgid "Setup for r.li modules - GRASS GIS"
 msgid "Setup for r.li modules - GRASS"
-msgstr "Inställning för r.li-moduler - GRASS GIS"
+msgstr "Inställning för r.li-moduler - GRASS"
 
 #: ../gui/wxpython/rlisetup/sampling_frame.py:234
 #: ../gui/wxpython/rlisetup/sampling_frame.py:350
@@ -13478,10 +13432,8 @@ msgstr ""
 "Tryck på Del för att avvisa."
 
 #: ../gui/wxpython/timeline/g.gui.timeline.py:64
-#, fuzzy
-#| msgid "Timeline Tool - GRASS GIS"
 msgid "Timeline Tool - GRASS"
-msgstr "Verktyg för tidslinje - GRASS GIS"
+msgstr "Verktyg för tidslinje - GRASS"
 
 #: ../gui/wxpython/tplot/frame.py:48
 #, python-brace-format
@@ -13669,10 +13621,8 @@ msgid "With stvds you have to use 'coordinates' or 'cats' option"
 msgstr "Med stvds måste du använda alternativet 'coordinates' eller 'cats'"
 
 #: ../gui/wxpython/tplot/g.gui.tplot.py:173
-#, fuzzy
-#| msgid "Temporal Plot Tool - GRASS GIS"
 msgid "Temporal Plot Tool - GRASS"
-msgstr "Verktyg för temporär plottning - GRASS GIS"
+msgstr "Verktyg för temporär plottning - GRASS"
 
 #: ../gui/wxpython/vdigit/dialogs.py:91
 msgid "List of categories - right-click to delete"
@@ -13756,10 +13706,8 @@ msgid "Unable to create new vector map <%s>"
 msgstr "Det går inte att skapa en ny vektorkarta <%s>"
 
 #: ../gui/wxpython/vdigit/g.gui.vdigit.py:149
-#, fuzzy
-#| msgid "Vector Digitizer - GRASS GIS"
 msgid "Vector Digitizer - GRASS"
-msgstr "Vektordigitalisering - GRASS GIS"
+msgstr "Vektordigitalisering - GRASS"
 
 #: ../gui/wxpython/vdigit/mapwindow.py:549
 msgid "Update categories"
