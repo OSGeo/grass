@@ -194,7 +194,12 @@ def test_v_decimate_grid_based(setup_point_map):
     tools.g_region(vector=input_map, res=10)  # coarser grid
 
     tools.v_decimate(
-        input=input_map, output=output_map, flags="g", cell_limit=1, overwrite=True
+        input=input_map,
+        output=output_map,
+        flags="g",
+        cell_limit=1,
+        overwrite=True,
+        quiet=True,
     )
 
     result = tools.g_list(type="vector", pattern=output_map, format="json")
