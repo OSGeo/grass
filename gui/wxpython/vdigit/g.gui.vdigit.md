@@ -220,7 +220,7 @@ If the digitizer crashes for some reason, the changes are automatically
 saved. Broken topology can be repaired by running
 *[v.build](v.build.md)*.
 
-GRASS GIS uses a topological vector format, meaning that a common
+GRASS uses a topological vector format, meaning that a common
 boundary of two polygons is only stored once. When digitizing polygons
 it is thus important to be able to only draw each boundary once. When
 drawing a polygon adjacent to an existing polygon, one has to first

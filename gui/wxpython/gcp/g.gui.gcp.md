@@ -237,7 +237,7 @@ imagery group.
 #### GCP Map Display Statusbar
 
 The GCP map display statusbar is similar to the statusbar in the regular
-GRASS GIS map display with two differences, *Go to* has been replaced
+GRASS map display with two differences, *Go to* has been replaced
 with *Go to GCP No.* and *Projection* has been replaced with *RMS
 error*.
 

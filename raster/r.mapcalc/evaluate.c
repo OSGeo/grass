@@ -448,8 +448,8 @@ void execute(expr_list *ee)
         threads = rows;
         omp_set_num_threads(threads);
         G_verbose_message(
-            _("The number of rows is less than the number of threads. \
-            Set the number of threads to be the same as the rows = %d."),
+            _("The number of rows is less than the number of threads. "
+              "Set the number of threads to be the same as the rows = %d."),
             threads);
     }
 #endif
