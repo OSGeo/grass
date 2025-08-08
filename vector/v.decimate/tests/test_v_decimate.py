@@ -46,12 +46,6 @@ def setup_point_map(tmp_path):
         yield mapname, session
 
 
-def _get_point_count(mapname, tools):
-    """Helper to get number of points in a vector map."""
-    info = tools.v_info(map=mapname, flags="t", format="json")
-    return info["points"]
-
-
 @pytest.mark.parametrize("preserve_value", [2, 4])
 def test_v_decimate_preserve(setup_point_map, preserve_value):
     """Test count-based decimation using preserve parameter."""
@@ -106,7 +100,8 @@ def test_decimate_offset_and_limit(setup_point_map):
         input=input_map, output=output_map, offset=2, limit=3, overwrite=True
     )
 
-    count = _get_point_count(output_map, tools)
+    info = tools.v_info(map=output_map, flags="t", format="json")
+    count = info["points"]
     assert count == 3, f"Expected 3 points after offset and limit, got {count}"
 
 
@@ -120,7 +115,8 @@ def test_decimate_zrange(setup_point_map):
         input=input_map, output=output_map, zrange=(3.0, 5.0), overwrite=True
     )
 
-    count = _get_point_count(output_map, tools)
+    info = tools.v_info(map=output_map, flags="t", format="json")
+    count = info["points"]
     assert count == 3, f"Expected 3 points in zrange 3.0-5.0, got {count}"
 
 
