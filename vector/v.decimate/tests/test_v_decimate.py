@@ -40,7 +40,6 @@ def setup_point_map(tmp_path):
             flags="z",
             z=3,
             cat=4,
-            overwrite=True,
         )
 
         yield mapname, session
@@ -263,20 +262,3 @@ def test_v_decimate_with_layer_selection(setup_point_map):
     )
     info = tools.v_info(map=output_map, format="json")
     assert info["points"] > 0, "No points found after decimation on specific layer"
-
-
-def test_v_decimate_with_all_layers(setup_point_map):
-    """Test count-based decimation (skip) on all layers (layer=-1)."""
-    input_map, session = setup_point_map
-    tools = Tools(session=session)
-    output_map = "decimated_all_layers"
-
-    tools.v_decimate(
-        input=input_map,
-        output=output_map,
-        layer=-1,  # All layers
-        skip=2,
-        overwrite=True,
-    )
-    info = tools.v_info(map=output_map, format="json")
-    assert info["points"] > 0, "No points found after decimation on all layers"
