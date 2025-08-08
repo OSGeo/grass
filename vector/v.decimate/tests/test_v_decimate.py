@@ -225,16 +225,13 @@ def test_v_decimate_missing_required_flags_raises(setup_point_map):
     input_map, session = setup_point_map
     tools = Tools(session=session)
 
-    with pytest.raises(CalledModuleError) as excinfo:
+    with pytest.raises(CalledModuleError, match="requires at least one of"):
         tools.v_decimate(
             input=input_map,
             output="fail_test",
             flags="g",  # -g requires at least one of -f, -c, cell_limit, -z, zdiff
             overwrite=True,
         )
-    assert "requires at least one of" in str(excinfo.value), (
-        "Expected error about missing required flags or parameters"
-    )
 
 
 def test_v_decimate_flags_cg(setup_point_map):
