@@ -13,33 +13,33 @@ def setup_point_map(tmp_path):
     """
     mapname = "test_points"
     points = [
-        (100, 100, 1.0),
-        (100.05, 100.05, 1.1),
-        (100.1, 100.1, 1.2),
-        (101, 100, 2.0),
-        (102, 100, 3.0),
-        (103, 100, 4.0),
-        (104, 100, 5.0),
-        (105, 100, 6.0),
-        (106, 100, 7.0),
+        (100, 100, 1.0, 1),
+        (100.05, 100.05, 1.1, 1),
+        (100.1, 100.1, 1.2, 1),
+        (101, 100, 2.0, 2),
+        (102, 100, 3.0, 2),
+        (103, 100, 4.0, 2),
+        (104, 100, 5.0, 3),
+        (105, 100, 6.0, 3),
+        (106, 100, 7.0, 3),
     ]
-    coords = "\n".join(f"{x}|{y}|{z}" for x, y, z in points)
+    coords = "\n".join(f"{x}|{y}|{z}|{cat}" for x, y, z, cat in points)
 
     project = tmp_path / "grassdata"
     gs.create_project(project)
 
     with gs.setup.init(project) as session:
         tools = Tools(session=session)
-        # Set computational region covering points with 1m resolution
         tools.g_region(n=110, s=90, e=110, w=90, res=1)
 
-        # Import points as 3D vector map (z flag and z=3 column)
+        # Import points
         tools.v_in_ascii(
             input=io.StringIO(coords),
             output=mapname,
             separator="|",
             flags="z",
             z=3,
+            cat=4,
             overwrite=True,
         )
 
@@ -60,13 +60,20 @@ def test_v_decimate_preserve(setup_point_map, preserve_value):
 
     output_map = f"decimated_preserve_{preserve_value}"
 
+    # Run decimation
     tools.v_decimate(
         input=input_map, output=output_map, preserve=preserve_value, overwrite=True
     )
 
-    result = tools.g_list(type="vector", pattern=output_map, format="json")
-    names = [entry["name"] for entry in result]
-    assert output_map in names, f"Decimated map {output_map} not found in vector list"
+    # Get original and decimated info
+    orig_info = tools.v_info(map=input_map, flags="t", format="json")
+    dec_info = tools.v_info(map=output_map, flags="t", format="json")
+
+    # Assertions
+    assert dec_info["points"] > 0, f"Decimated map {output_map} has no points"
+    assert dec_info["points"] < orig_info["points"], (
+        f"Decimation did not reduce points: {orig_info['points']} -> {dec_info['points']}"
+    )
 
 
 def test_v_decimate_skip(setup_point_map):
@@ -77,10 +84,16 @@ def test_v_decimate_skip(setup_point_map):
     output_map = "decimated_skip_3"
     tools.v_decimate(input=input_map, output=output_map, skip=3, overwrite=True)
 
-    result = tools.g_list(type="vector", pattern=output_map, format="json")
-    assert any(v["name"] == output_map for v in result), (
-        f"Decimated map {output_map} not found"
+    orig_info = tools.v_info(map="test_points", flags="t", format="json")
+    dec_info = tools.v_info(map=output_map, flags="t", format="json")
+
+    orig_count = int(orig_info["points"])
+    dec_count = int(dec_info["points"])
+
+    assert dec_count < orig_count, (
+        f"Decimated map has {dec_count} points, expected less than {orig_count}"
     )
+    assert dec_count > 0, f"Decimated map {output_map} has no points"
 
 
 def test_decimate_offset_and_limit(setup_point_map):
@@ -158,9 +171,11 @@ def test_v_decimate_with_cats(setup_point_map):
         input=input_map, output=output_map, cats="2", layer=1, overwrite=True
     )
 
-    result = tools.g_list(type="vector", pattern=output_map, format="json")
-    assert any(v["name"] == output_map for v in result), (
-        f"Decimated map {output_map} not found"
+    orig_info = tools.v_info(map=input_map, flags="t", format="json")
+    dec_info = tools.v_info(map=output_map, flags="t", format="json")
+
+    assert dec_info["points"] <= orig_info["points"], (
+        f"Decimated points ({dec_info['points']}) should be <= original points ({orig_info['points']})"
     )
 
 
@@ -174,10 +189,10 @@ def test_v_decimate_limit_and_offset(setup_point_map):
         input=input_map, output=output_map, limit=5, offset=2, overwrite=True
     )
 
-    result = tools.g_list(type="vector", pattern=output_map, format="json")
-    assert any(v["name"] == output_map for v in result), (
-        f"Decimated map {output_map} not found"
-    )
+    # Use v_info to get info about the decimated map
+    dec_info = tools.v_info(map=output_map, flags="t", format="json")
+
+    assert dec_info["points"] > 0, f"Decimated map {output_map} has no points"
 
 
 def test_v_decimate_flag_x(setup_point_map):
