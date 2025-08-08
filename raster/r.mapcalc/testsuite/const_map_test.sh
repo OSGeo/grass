@@ -13,7 +13,7 @@
 #   - how big EPSILON?
 
 if [ -z "$GISBASE" ] ; then
-    echo "You must be in GRASS GIS to run this program."
+    echo "You must be in GRASS to run this program."
     exit 1
 fi
 

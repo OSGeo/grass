@@ -14,7 +14,7 @@ map (see [Vector introduction](vectorintro.md)).
 
 ## Available drivers
 
-Available drivers are listed in [SQL support in GRASS GIS](sql.md).
+Available drivers are listed in [SQL support in GRASS](sql.md).
 
 **Notes**:  
 The DBF driver provides only very limited SQL support (as DBF is not an

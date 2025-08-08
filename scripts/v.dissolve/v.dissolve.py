@@ -188,7 +188,7 @@ def sql_escape(text):
 
     Simple support for direct creation of SQL statements. This function,
     column_value_to_where, and updates_to_sql need a rewrite with a more systematic
-    solution for generating statements in Python for GRASS GIS attribute engine.
+    solution for generating statements in Python for GRASS attribute engine.
     """
     if isinstance(text, str):
         return text.replace("'", "''")

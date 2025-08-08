@@ -266,7 +266,7 @@ void Rast3d_rle_decode(char *src, char *dst, int nofElts, int eltLength,
 /*---------------------------------------------------------------------------*/
 
 /* TODO: Find out if this function used at all.
- * Seems to be some leftover from the early pre-SVN days of GRASS GIS.
+ * Seems to be some leftover from the early pre-SVN days of GRASS.
  * Maris, 2018.
  */
 void test_rle(void)
