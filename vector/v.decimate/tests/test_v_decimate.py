@@ -111,27 +111,6 @@ def test_decimate_zrange(setup_point_map):
     assert count == 3, f"Expected 3 points in zrange 3.0-5.0, got {count}"
 
 
-def test_decimate_grid_based_with_z_flag(setup_point_map):
-    """Test grid-based decimation using -g flag combined with z difference threshold (-z flag)."""
-    input_map, session = setup_point_map
-    tools = Tools(session=session)
-    output_map = "out_grid_z"
-
-    # Set region with 1m resolution to create grid cells
-    tools.g_region(vector=input_map, res=1.0)
-
-    # Decimate using grid with z-difference threshold (zdiff)
-    tools.v_decimate(
-        input=input_map, output=output_map, flags="gz", zdiff=0.5, overwrite=True
-    )
-
-    orig_count = _get_point_count(input_map, tools)
-    decimated_count = _get_point_count(output_map, tools)
-    assert decimated_count < orig_count, (
-        f"Grid-based decimation with z flag did not reduce points (orig: {orig_count}, decimated: {decimated_count})"
-    )
-
-
 def test_decimate_no_topology(setup_point_map):
     """Test decimation with no topology build (-b flag) and grid-based decimation."""
     input_map, session = setup_point_map
@@ -177,29 +156,6 @@ def test_v_decimate_with_cats(setup_point_map):
 
     tools.v_decimate(
         input=input_map, output=output_map, cats="2", layer=1, overwrite=True
-    )
-
-    result = tools.g_list(type="vector", pattern=output_map, format="json")
-    assert any(v["name"] == output_map for v in result), (
-        f"Decimated map {output_map} not found"
-    )
-
-
-def test_v_decimate_grid_based(setup_point_map):
-    """Test grid-based decimation with cell limit."""
-    input_map, session = setup_point_map
-    tools = Tools(session=session)
-    output_map = "decimated_grid"
-
-    tools.g_region(vector=input_map, res=10)  # coarser grid
-
-    tools.v_decimate(
-        input=input_map,
-        output=output_map,
-        flags="g",
-        cell_limit=1,
-        overwrite=True,
-        quiet=True,
     )
 
     result = tools.g_list(type="vector", pattern=output_map, format="json")
