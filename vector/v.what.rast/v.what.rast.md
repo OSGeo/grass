@@ -92,6 +92,108 @@ v.db.select pnts
 v.univar map=pnts column=height type=point
 ```
 
+### Print categories and values using Pandas
+
+```python
+import grass.script as gs
+import pandas as pd
+
+data = gs.parse_command(
+    "v.what.rast", map="bridges", raster="elevation", flags="p", format="json"
+)
+
+df = pd.DataFrame(data)
+print(df)
+```
+
+Possible output:
+
+```text
+    category       value
+0       4635   86.851212
+1       4648   87.883255
+2       4688  103.382004
+3       4709   67.387856
+4       4986   90.972832
+5       4991   86.550629
+6       5027   84.256355
+7       5060   79.500443
+8       5071   78.732864
+9       5089   85.703636
+10      5096  115.967323
+11      5130   81.055870
+12      5150   92.812927
+13      5166   88.149483
+14      5184   76.426331
+```
+
+The JSON output looks like:
+
+```json
+[
+    {
+        "category": 4635,
+        "value": 86.851211547851562
+    },
+    {
+        "category": 4648,
+        "value": 87.883255004882812
+    },
+    {
+        "category": 4688,
+        "value": 103.38200378417969
+    },
+    {
+        "category": 4709,
+        "value": 67.387855529785156
+    },
+    {
+        "category": 4986,
+        "value": 90.972831726074219
+    },
+    {
+        "category": 4991,
+        "value": 86.550628662109375
+    },
+    {
+        "category": 5027,
+        "value": 84.256355285644531
+    },
+    {
+        "category": 5060,
+        "value": 79.500442504882812
+    },
+    {
+        "category": 5071,
+        "value": 78.732864379882812
+    },
+    {
+        "category": 5089,
+        "value": 85.703636169433594
+    },
+    {
+        "category": 5096,
+        "value": 115.96732330322266
+    },
+    {
+        "category": 5130,
+        "value": 81.055870056152344
+    },
+    {
+        "category": 5150,
+        "value": 92.81292724609375
+    },
+    {
+        "category": 5166,
+        "value": 88.149482727050781
+    },
+    {
+        "category": 5184,
+        "value": 76.42633056640625
+    }
+]
+```
+
 ## SEE ALSO
 
 *[v.category](v.category.md), [v.db.addtable](v.db.addtable.md),
