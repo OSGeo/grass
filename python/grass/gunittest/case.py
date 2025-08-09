@@ -3,7 +3,7 @@ GRASS Python testing framework test case
 
 Copyright (C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS GIS
+License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :authors: Vaclav Petras
@@ -48,6 +48,7 @@ class TestCase(unittest.TestCase):
     Be especially careful and always use keyword argument syntax for *msg*
     parameter.
     """
+
     longMessage = True  # to get both standard and custom message
     maxDiff = None  # we can afford long diffs
     _temp_region = None  # to control the temporary region
@@ -103,6 +104,7 @@ class TestCase(unittest.TestCase):
             @classmethod
             def setUpClass(self):
                 self.use_temp_region()
+
 
             @classmethod
             def tearDownClass(self):
@@ -217,16 +219,21 @@ class TestCase(unittest.TestCase):
 
         ::
 
-            self.assertModuleKeyValue('r.info', map='elevation', flags='gr',
-                                      reference=dict(min=55.58, max=156.33),
-                                      precision=0.01, sep='=')
+            self.assertModuleKeyValue(
+                "r.info",
+                map="elevation",
+                flags="gr",
+                reference=dict(min=55.58, max=156.33),
+                precision=0.01,
+                sep="=",
+            )
 
         ::
 
-            module = SimpleModule('r.info', map='elevation', flags='gr')
-            self.assertModuleKeyValue(module,
-                                      reference=dict(min=55.58, max=156.33),
-                                      precision=0.01, sep='=')
+            module = SimpleModule("r.info", map="elevation", flags="gr")
+            self.assertModuleKeyValue(
+                module, reference=dict(min=55.58, max=156.33), precision=0.01, sep="="
+            )
 
         The output of the module should be key-value pairs (shell script style)
         which is typically obtained using ``-g`` flag.
@@ -258,12 +265,7 @@ class TestCase(unittest.TestCase):
                     " provided in reference"
                     ": %s\n" % (module, ", ".join(missing))
                 )
-            if mismatch:
-                stdMsg = "%s difference:\n" % module
-                stdMsg += "mismatch values"
-                stdMsg += " (key, reference, actual): %s\n" % mismatch
-                stdMsg += "command: %s %s" % (module, parameters)
-            else:
+            if not mismatch:
                 # we can probably remove this once we have more tests
                 # of keyvalue_equals and diff_keyvalue against each other
                 msg = (
@@ -273,6 +275,11 @@ class TestCase(unittest.TestCase):
                     " (assertModuleKeyValue())"
                 )
                 raise RuntimeError(msg)
+            stdMsg = "%s difference:\n" % module
+            stdMsg += "mismatch values"
+            stdMsg += " (key, reference, actual): %s\n" % mismatch
+            stdMsg += "command: %s %s" % (module, parameters)
+
             self.fail(self._formatMessage(msg, stdMsg))
 
     def assertRasterFitsUnivar(self, raster, reference, precision=None, msg=None):
@@ -283,8 +290,8 @@ class TestCase(unittest.TestCase):
         Typical example is checking minimum, maximum and number of NULL cells
         in the map::
 
-            values = 'null_cells=0\nmin=55.5787925720215\nmax=156.329864501953'
-            self.assertRasterFitsUnivar(raster='elevation', reference=values)
+            values = "null_cells=0\nmin=55.5787925720215\nmax=156.329864501953"
+            self.assertRasterFitsUnivar(raster="elevation", reference=values)
 
         Use keyword arguments syntax for all function parameters.
 
@@ -300,6 +307,7 @@ class TestCase(unittest.TestCase):
             msg=msg,
             sep="=",
             precision=precision,
+            nprocs=1,
         )
 
     def assertRasterFitsInfo(self, raster, reference, precision=None, msg=None):
@@ -309,8 +317,8 @@ class TestCase(unittest.TestCase):
         Only the provided values are tested.
         Typical example is checking minimum, maximum and type of the map::
 
-            minmax = 'min=0\nmax=1451\ndatatype=FCELL'
-            self.assertRasterFitsInfo(raster='elevation', reference=minmax)
+            minmax = "min=0\nmax=1451\ndatatype=FCELL"
+            self.assertRasterFitsInfo(raster="elevation", reference=minmax)
 
         Use keyword arguments syntax for all function parameters.
 
@@ -380,7 +388,7 @@ class TestCase(unittest.TestCase):
         A example of checking number of points::
 
             topology = dict(points=10938, primitives=10938)
-            self.assertVectorFitsTopoInfo(vector='bridges', reference=topology)
+            self.assertVectorFitsTopoInfo(vector="bridges", reference=topology)
 
         Note that here we are checking also the number of primitives to prove
         that there are no other features besides points.
@@ -480,9 +488,8 @@ class TestCase(unittest.TestCase):
         Only the provided values are tested.
         Typical example is checking minimum and maximum of a column::
 
-            minmax = 'min=0\nmax=1451'
-            self.assertVectorFitsUnivar(map='bridges', column='WIDTH',
-                                        reference=minmax)
+            minmax = "min=0\nmax=1451"
+            self.assertVectorFitsUnivar(map="bridges", column="WIDTH", reference=minmax)
 
         Use keyword arguments syntax for all function parameters.
 
@@ -637,7 +644,7 @@ class TestCase(unittest.TestCase):
     ):
         """Test the existence of a file.
 
-        .. note:
+        .. note::
             By default this also checks if the file size is greater than 0
             since we rarely want a file to be empty. It also checks
             if the file is accessible for reading since we expect that user
@@ -669,11 +676,11 @@ class TestCase(unittest.TestCase):
         trust (that you obtain the right file). Then you compute MD5
         sum of the file. And provide the sum in a test as a string::
 
-            self.assertFileMd5('result.png', md5='807bba4ffa...')
+            self.assertFileMd5("result.png", md5="807bba4ffa...")
 
         Use `file_md5()` function from this package::
 
-            file_md5('original_result.png')
+            file_md5("original_result.png")
 
         Or in command line, use ``md5sum`` command if available:
 
@@ -684,12 +691,13 @@ class TestCase(unittest.TestCase):
         Finally, you can use Python ``hashlib`` to obtain MD5::
 
             import hashlib
+
             hasher = hashlib.md5()
             # expecting the file to fit into memory
-            hasher.update(open('original_result.png', 'rb').read())
+            hasher.update(open("original_result.png", "rb").read())
             hasher.hexdigest()
 
-        .. note:
+        .. note::
             For text files, always create MD5 sum using ``\n`` (LF)
             as newline characters for consistency. Also use newline
             at the end of file (as for example, Git or PEP8 requires).
@@ -1119,7 +1127,7 @@ class TestCase(unittest.TestCase):
 
         This method should not be used to test v.overlay or v.select.
         """
-        diff = self._compute_xor_vectors(
+        diff = self._compute_vector_xor(
             ainput=reference,
             binput=actual,
             alayer=layer,
@@ -1151,11 +1159,11 @@ class TestCase(unittest.TestCase):
     def assertVectorEqualsVector(self, actual, reference, digits, precision, msg=None):
         """Test that two vectors are equal.
 
-        .. note:
+        .. note::
             This test should not be used to test ``v.in.ascii`` and
             ``v.out.ascii`` modules.
 
-        .. warning:
+        .. warning::
             ASCII files for vectors are loaded into memory, so this
             function works well only for "not too big" vector maps.
         """
@@ -1180,11 +1188,11 @@ class TestCase(unittest.TestCase):
     def assertVectorEqualsAscii(self, actual, reference, digits, precision, msg=None):
         """Test that vector is equal to the vector stored in GRASS ASCII file.
 
-        .. note:
+        .. note::
             This test should not be used to test ``v.in.ascii`` and
             ``v.out.ascii`` modules.
 
-        .. warning:
+        .. warning::
             ASCII files for vectors are loaded into memory, so this
             function works well only for "not too big" vector maps.
         """
@@ -1218,11 +1226,11 @@ class TestCase(unittest.TestCase):
     ):
         """Test that two GRASS ASCII vector files are equal.
 
-        .. note:
+        .. note::
             This test should not be used to test ``v.in.ascii`` and
             ``v.out.ascii`` modules.
 
-        .. warning:
+        .. warning::
             ASCII files for vectors are loaded into memory, so this
             function works well only for "not too big" vector maps.
         """
@@ -1309,7 +1317,7 @@ class TestCase(unittest.TestCase):
         In terms of testing framework, this function causes a common error,
         not a test failure.
 
-        :raises CalledModuleError: if the module failed
+        :raises ~grass.exceptions.CalledModuleError: If the module failed
         """
         module = _module_from_parameters(module, **kwargs)
         _check_module_run_parameters(module)
@@ -1335,7 +1343,7 @@ class TestCase(unittest.TestCase):
                 module.name, module.get_python(), module.returncode, errors=errors
             )
         # TODO: use this also in assert and apply when appropriate
-        if expecting_stdout and not module.outputs.stdout.strip():
+        if expecting_stdout and (not module.outputs.stdout.strip()):
             if module.outputs.stderr:
                 errors = " The errors are:\n" + module.outputs.stderr
             else:

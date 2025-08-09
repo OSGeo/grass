@@ -6,7 +6,7 @@
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
+ * \author GRASS Development Team
  *
  * \date 2005-2009
  */
@@ -104,7 +104,6 @@ int seg_address_slow(const SEGMENT *SEG, off_t row, off_t col, int *n,
  * \param[in,out] index
  * \return always returns 0
  */
-
 int seg_address(const SEGMENT *SEG, off_t row, off_t col, int *n, int *index)
 {
     /* old code

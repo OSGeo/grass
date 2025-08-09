@@ -125,20 +125,20 @@ def print_by_category(changes, categories, file=None):
 def binder_badge(tag):
     """Get mybinder Binder badge from a given tag, hash, or branch"""
     binder_image_url = "https://mybinder.org/badge_logo.svg"
-    binder_url = f"https://mybinder.org/v2/gh/OSGeo/grass/{tag}?urlpath=lab%2Ftree%2Fdoc%2Fnotebooks%2Fjupyter_example.ipynb"  # noqa
+    binder_url = f"https://mybinder.org/v2/gh/OSGeo/grass/{tag}?urlpath=lab%2Ftree%2Fdoc%2Fexamples%2Fnotebooks%2Fjupyter_example.ipynb"
     return f"[![Binder]({binder_image_url})]({binder_url})"
 
 
 def print_support(file=None):
     url = "https://opencollective.com/grass/tiers/supporter/all.json"
-    response = requests.get(url=url)
+    response = requests.get(url=url, timeout=7)
     data = response.json()
     if data:
         print_section_heading_3("Monthly Financial Supporters", file=file)
         random.shuffle(data)
         supporters = []
         for member in data:
-            supporters.append(f"""[{member['name']}]({member['profile']})""")
+            supporters.append(f"""[{member["name"]}]({member["profile"]})""")
         print(", ".join(supporters))
         print()
 
@@ -177,7 +177,7 @@ def print_notes(
     """
     num_changes = round_down_to_five(len(changes))
     print(
-        f"The GRASS GIS {end_tag} release provides more than "
+        f"The GRASS {end_tag} release provides more than "
         f"{num_changes} improvements and fixes "
         f"with respect to the release {start_tag}.\n"
     )

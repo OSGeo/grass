@@ -39,22 +39,23 @@ def remove_mapfile(mapfile):
 # read environment variables from file
 def read_env_file(env_file):
     width = height = legfile = None
-    fd = open(env_file)
-    if fd is None:
-        grass.fatal("Unable to open file '{0}'".format(env_file))
-    lines = fd.readlines()
-    for line in lines:
-        if line.startswith("#"):
-            continue
-        k, v = line.rstrip("\n").split("#", 1)[0].strip().split("=", 1)
-        os.environ[k] = v
-        if width is None and k == "GRASS_RENDER_WIDTH":
-            width = int(v)
-        if height is None and k == "GRASS_RENDER_HEIGHT":
-            height = int(v)
-        if legfile is None and k == "GRASS_LEGEND_FILE":
-            legfile = v
-    fd.close()
+    try:
+        with open(env_file) as fd:
+            for line in fd:
+                line = line.strip()
+                if line.startswith("#") or not line:
+                    continue
+                # Split on comment and parse key=value
+                k, v = line.split("#", 1)[0].strip().split("=", 1)
+                os.environ[k] = v
+                if width is None and k == "GRASS_RENDER_WIDTH":
+                    width = int(v)
+                if height is None and k == "GRASS_RENDER_HEIGHT":
+                    height = int(v)
+                if legfile is None and k == "GRASS_LEGEND_FILE":
+                    legfile = v
+    except OSError:
+        grass.fatal(f"Unable to open file '{env_file}'")
 
     if width is None or height is None:
         grass.fatal("Unknown monitor size")
@@ -86,20 +87,20 @@ def update_cmd_file(cmd_file, cmd, mapfile):
 
     mode = "w" if cmd[0] == "d.erase" else "a"
     # update cmd file
-    fd = open(cmd_file, mode)
-    if fd is None:
-        grass.fatal("Unable to open file '{0}'".format(cmd_file))
-    if mode == "a":
-        frame = os.getenv("GRASS_RENDER_FRAME", None)
-        if frame:
-            fd.write("# GRASS_RENDER_FRAME={0}\n".format(frame))
-        if mapfile:
-            fd.write("# GRASS_RENDER_FILE={0}\n".format(mapfile))
-        fd.write(" ".join(gtask.cmdtuple_to_list(cmd)))
-        fd.write("\n")
-    else:
-        fd.write("")
-    fd.close()
+    try:
+        with open(cmd_file, mode) as fd:
+            if mode == "a":
+                frame = os.getenv("GRASS_RENDER_FRAME", None)
+                if frame:
+                    fd.write("# GRASS_RENDER_FRAME={0}\n".format(frame))
+                if mapfile:
+                    fd.write("# GRASS_RENDER_FILE={0}\n".format(mapfile))
+                fd.write(" ".join(gtask.cmdtuple_to_list(cmd)))
+                fd.write("\n")
+            else:
+                fd.write("")
+    except OSError:
+        grass.fatal(f"Unable to open file '{cmd_file}'")
 
 
 # adjust region
@@ -152,14 +153,15 @@ def read_stdin(cmd):
         opt = "input"
 
     if opt:
-        tmpfile = tempfile.NamedTemporaryFile(dir=path).name + ".txt"
-        fd = open(tmpfile, "w")
-        while 1:
-            line = sys.stdin.readline()
-            if not line:
-                break
-            fd.write(line)
-        fd.close()
+        with tempfile.NamedTemporaryFile(
+            dir=path, suffix=".txt", mode="w", delete=False
+        ) as fd:
+            while True:
+                line = sys.stdin.readline()
+                if not line:
+                    break
+                fd.write(line)
+            tmpfile = fd.name
         cmd[1][opt] = tmpfile
 
 
@@ -172,11 +174,13 @@ if __name__ == "__main__":
 
     width, height, legfile = read_env_file(os.path.join(path, "env"))
     if mon.startswith("wx"):
-        mapfile = tempfile.NamedTemporaryFile(dir=path).name
         if cmd[0] in {"d.barscale", "d.legend", "d.northarrow", "d.legend.vect"}:
-            mapfile += ".png"
+            suffix = ".png"
         else:
-            mapfile += ".ppm"
+            suffix = ".ppm"
+
+        with tempfile.NamedTemporaryFile(dir=path, suffix=suffix) as tmpfile:
+            mapfile = tmpfile.name
         # to force rendering by wx monitors, but don't create a map file for
         # non-rendering modules
         if cmd[0] not in non_rendering_modules:

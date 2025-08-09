@@ -296,10 +296,8 @@ class NvizToolWindow(GNotebook):
 
         :param obj foldPanelBar: FolPanelBar widget obj instance
         :param obj scrolledPanel: ScrolledPanel widget obj instance
-        :param int collapsed: number of collapsed panels of FoldPanelBar
-                              widget
-        :param int expanded: number of expanded panels of FoldPanelBar
-                             widget
+        :param int collapsed: number of collapsed panels of FoldPanelBar widget
+        :param int expanded: number of expanded panels of FoldPanelBar widget
         """
         if expanded > 0:
             foldPanelBar.Expand(foldPanelBar.GetFoldPanel(0))
@@ -1612,12 +1610,12 @@ class NvizToolWindow(GNotebook):
         checkThematicWidth = wx.CheckBox(
             parent=panel, id=wx.ID_ANY, label=_("use width for thematic mapping")
         )
-        self.win["vector"]["lines"]["thematic"][
-            "checkcolor"
-        ] = checkThematicColor.GetId()
-        self.win["vector"]["lines"]["thematic"][
-            "checkwidth"
-        ] = checkThematicWidth.GetId()
+        self.win["vector"]["lines"]["thematic"]["checkcolor"] = (
+            checkThematicColor.GetId()
+        )
+        self.win["vector"]["lines"]["thematic"]["checkwidth"] = (
+            checkThematicWidth.GetId()
+        )
         checkThematicColor.Bind(wx.EVT_CHECKBOX, self.OnCheckThematic)
         checkThematicWidth.Bind(wx.EVT_CHECKBOX, self.OnCheckThematic)
         checkThematicColor.SetValue(False)
@@ -1827,12 +1825,12 @@ class NvizToolWindow(GNotebook):
         checkThematicSize = wx.CheckBox(
             parent=panel, id=wx.ID_ANY, label=_("use size for thematic mapping")
         )
-        self.win["vector"]["points"]["thematic"][
-            "checkcolor"
-        ] = checkThematicColor.GetId()
-        self.win["vector"]["points"]["thematic"][
-            "checksize"
-        ] = checkThematicSize.GetId()
+        self.win["vector"]["points"]["thematic"]["checkcolor"] = (
+            checkThematicColor.GetId()
+        )
+        self.win["vector"]["points"]["thematic"]["checksize"] = (
+            checkThematicSize.GetId()
+        )
         checkThematicColor.Bind(wx.EVT_CHECKBOX, self.OnCheckThematic)
         checkThematicSize.Bind(wx.EVT_CHECKBOX, self.OnCheckThematic)
         checkThematicColor.SetValue(False)
@@ -1938,9 +1936,10 @@ class NvizToolWindow(GNotebook):
 
     def GselectOnPopup(self, ltype, exclude=False):
         """Update gselect.Select() items"""
-        maps = []
-        for layer in self.mapWindow.Map.GetListOfLayers(ltype=ltype, active=True):
-            maps.append(layer.GetName())
+        maps = [
+            layer.GetName()
+            for layer in self.mapWindow.Map.GetListOfLayers(ltype=ltype, active=True)
+        ]
         return maps, exclude
 
     def _createVolumePage(self, parent):
@@ -3835,10 +3834,7 @@ class NvizToolWindow(GNotebook):
         """Gelper func for getting range of 3d map"""
         ret = RunCommand("r3.info", read=True, flags="r", map=name)
         if ret:
-            range = []
-            for value in ret.strip("\n").split("\n"):
-                range.append(float(value.split("=")[1]))
-            return range
+            return [float(value.split("=")[1]) for value in ret.strip("\n").split("\n")]
 
         return -1e6, 1e6
 
@@ -5185,11 +5181,9 @@ class NvizToolWindow(GNotebook):
                 self.EnablePage("constant", True)
         elif pageId == "cplane":
             count = self._display.GetCPlanesCount()
-            choices = [
-                _("None"),
+            choices = [_("None")] + [
+                "%s %i" % (_("Plane"), plane + 1) for plane in range(count)
             ]
-            for plane in range(count):
-                choices.append("%s %i" % (_("Plane"), plane + 1))
             self.FindWindowById(self.win["cplane"]["planes"]).SetItems(choices)
             current = 0
             for i, cplane in enumerate(self.mapWindow.cplanes):
@@ -5463,18 +5457,19 @@ class NvizToolWindow(GNotebook):
                     display.SetSelection(1)
                 else:
                     display.SetSelection(0)
-            if data[vtype]["mode"]["type"] == "surface":
-                rasters = self.mapWindow.GetLayerNames("raster")
-                constants = self.mapWindow.GetLayerNames("constant")
-                surfaces = rasters + constants
-                surfaceWin = self.FindWindowById(self.win["vector"][vtype]["surface"])
-                surfaceWin.SetItems(surfaces)
-                for idx, surface in enumerate(surfaces):
-                    try:  # TODO fix this mess
-                        selected = data[vtype]["mode"]["surface"]["show"][idx]
-                    except (TypeError, IndexError, KeyError):
-                        selected = False
-                    surfaceWin.Check(idx, selected)
+            if data[vtype]["mode"]["type"] != "surface":
+                continue
+            rasters = self.mapWindow.GetLayerNames("raster")
+            constants = self.mapWindow.GetLayerNames("constant")
+            surfaces = rasters + constants
+            surfaceWin = self.FindWindowById(self.win["vector"][vtype]["surface"])
+            surfaceWin.SetItems(surfaces)
+            for idx, surface in enumerate(surfaces):
+                try:  # TODO fix this mess
+                    selected = data[vtype]["mode"]["surface"]["show"][idx]
+                except (TypeError, IndexError, KeyError):
+                    selected = False
+                surfaceWin.Check(idx, selected)
 
         for type in ("slider", "text"):
             win = self.FindWindowById(self.win["vector"]["lines"]["height"][type])

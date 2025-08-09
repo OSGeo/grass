@@ -13,13 +13,9 @@ for details.
 
 from __future__ import annotations
 
-try:
-    from ply import yacc
-except ImportError:
-    pass
-
 import grass.pygrass.modules as pymod
 
+from .ply import yacc
 from .space_time_datasets import Raster3DDataset
 from .temporal_raster_base_algebra import (
     TemporalRasterAlgebraLexer,
@@ -70,7 +66,7 @@ class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
 
         self.lexer = TemporalRasterAlgebraLexer()
         self.lexer.build()
-        self.parser = yacc.yacc(module=self, debug=self.debug, write_tables=False)
+        self.parser = yacc.yacc(module=self, debug=self.debug)
 
         self.overwrite = overwrite
         self.count = 0
@@ -124,7 +120,7 @@ class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
                 # Get map index and temporal extent.
                 map_index = maplist.index(map_i)
                 new_index = map_index + t_neighbor
-                if new_index < max_index and new_index >= 0:
+                if 0 <= new_index < max_index:
                     map_i_t_extent = map_i.get_temporal_extent()
                     # Get neighboring map and set temporal extent.
                     map_n = maplist[new_index]

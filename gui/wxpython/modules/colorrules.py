@@ -203,8 +203,7 @@ class RulesPanel:
             self.mainPanel.FindWindowById(id + 1000).Enable()
             self.mainPanel.FindWindowById(id + 2000).Enable()
             if self.mapType == "vector" and not self.parent.GetParent().colorTable:
-                vals = []
-                vals.append(self.mainPanel.FindWindowById(id + 1000).GetValue())
+                vals = [self.mainPanel.FindWindowById(id + 1000).GetValue()]
                 try:
                     vals.append(self.mainPanel.FindWindowById(id + 1 + 1000).GetValue())
                 except AttributeError:
@@ -273,8 +272,7 @@ class RulesPanel:
 
     def SetVectorRule(self, num, val):
         """Set vector rule"""
-        vals = []
-        vals.append(val)
+        vals = [val]
         try:
             vals.append(self.mainPanel.FindWindowById(num + 1).GetValue())
         except AttributeError:
@@ -576,7 +574,7 @@ class ColorTable(wx.Frame):
         )
 
         row += 1
-        # add ckeck all and clear all
+        # add check all and clear all
         bodySizer.Add(
             self.rulesPanel.checkAll, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0)
         )
@@ -689,9 +687,7 @@ class ColorTable(wx.Frame):
             GMessage(message=_("Nothing to save."), parent=self)
             return
 
-        fd = open(path, "w")
-        fd.write(rulestxt)
-        fd.close()
+        Path(path).write_text(rulestxt)
 
     def OnLoadRulesFile(self, event):
         """Load color table from file"""
@@ -700,10 +696,7 @@ class ColorTable(wx.Frame):
             return
 
         self.rulesPanel.Clear()
-
-        fd = open(path)
-        self.ReadColorTable(ctable=fd.read())
-        fd.close()
+        self.ReadColorTable(ctable=Path(path).read_text())
 
     def ReadColorTable(self, ctable):
         """Read color table
@@ -725,9 +718,7 @@ class ColorTable(wx.Frame):
             self.rulesPanel.ruleslines[count]["value"] = value
             self.rulesPanel.ruleslines[count]["color"] = color
             self.rulesPanel.mainPanel.FindWindowById(count + 1000).SetValue(value)
-            rgb = []
-            for c in color.split(":"):
-                rgb.append(int(c))
+            rgb = [int(c) for c in color.split(":")]
             self.rulesPanel.mainPanel.FindWindowById(count + 2000).SetColour(rgb)
             # range
             try:
@@ -805,11 +796,7 @@ class ColorTable(wx.Frame):
             return False
 
         gtemp = utils.GetTempfile()
-        output = open(gtemp, "w")
-        try:
-            output.write(rulestxt)
-        finally:
-            output.close()
+        Path(gtemp).write_text(rulestxt)
 
         cmd = [
             "%s.colors" % self.mapType[0],  # r.colors/v.colors
@@ -1561,8 +1548,13 @@ class VectorColorTable(ColorTable):
             columns += "," + self.properties["loadColumn"]
 
         sep = ";"
-        if self.inmap:
-            outFile = tempfile.NamedTemporaryFile(mode="w+")
+        if not self.inmap:
+            self.preview.EraseMap()
+            del busy
+            return
+
+        # Use a context manager for the file
+        with tempfile.NamedTemporaryFile(mode="w+") as outFile:
             ret = RunCommand(
                 "v.db.select",
                 quiet=True,
@@ -1573,65 +1565,61 @@ class VectorColorTable(ColorTable):
                 sep=sep,
                 stdout=outFile,
             )
-        else:
-            self.preview.EraseMap()
-            del busy
-            return
 
-        outFile.seek(0)
-        i = 0
-        minim = maxim = 0.0
-        limit = 1000
+            outFile.seek(0)
+            i = 0
+            minim = maxim = 0.0
+            limit = 1000
 
-        colvallist = []
-        readvals = False
+            colvallist = []
+            readvals = False
 
-        while True:
-            # os.linesep doesn't work here (MSYS)
-            record = outFile.readline().replace("\n", "")
-            if not record:
-                break
-            self.rulesPanel.ruleslines[i] = {}
+            while True:
+                # os.linesep doesn't work here (MSYS)
+                record = outFile.readline().replace("\n", "")
+                if not record:
+                    break
+                self.rulesPanel.ruleslines[i] = {}
 
-            if not self.properties["loadColumn"]:
-                col1 = record
-                col2 = None
-            else:
-                col1, col2 = record.split(sep)
-
-            minim = min(float(col1), minim)
-            maxim = max(float(col1), maxim)
-
-            # color rules list should only have unique values of col1, not all
-            # records
-            if col1 not in colvallist:
-                self.rulesPanel.ruleslines[i]["value"] = col1
-                self.rulesPanel.ruleslines[i][self.attributeType] = col2
-
-                colvallist.append(col1)
-                i += 1
-
-            if i > limit and readvals is False:
-                dlg = wx.MessageDialog(
-                    parent=self,
-                    message=_(
-                        "Number of loaded records reached %d, "
-                        "displaying all the records will be time-consuming "
-                        "and may lead to computer freezing, "
-                        "do you still want to continue?"
-                    )
-                    % i,
-                    caption=_("Too many records"),
-                    style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
-                )
-                if dlg.ShowModal() == wx.ID_YES:
-                    readvals = True
-                    dlg.Destroy()
+                if not self.properties["loadColumn"]:
+                    col1 = record
+                    col2 = None
                 else:
-                    del busy
-                    dlg.Destroy()
-                    self.updateColumn = False
-                    return
+                    col1, col2 = record.split(sep)
+
+                minim = min(float(col1), minim)
+                maxim = max(float(col1), maxim)
+
+                # color rules list should only have unique values of col1, not all
+                # records
+                if col1 not in colvallist:
+                    self.rulesPanel.ruleslines[i]["value"] = col1
+                    self.rulesPanel.ruleslines[i][self.attributeType] = col2
+
+                    colvallist.append(col1)
+                    i += 1
+
+                if i > limit and readvals is False:
+                    dlg = wx.MessageDialog(
+                        parent=self,
+                        message=_(
+                            "Number of loaded records reached %d, "
+                            "displaying all the records will be time-consuming "
+                            "and may lead to computer freezing, "
+                            "do you still want to continue?"
+                        )
+                        % i,
+                        caption=_("Too many records"),
+                        style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
+                    )
+                    if dlg.ShowModal() == wx.ID_YES:
+                        readvals = True
+                        dlg.Destroy()
+                    else:
+                        del busy
+                        dlg.Destroy()
+                        self.updateColumn = False
+                        return
 
         self.rulesPanel.AddRules(i, start=True)
         ret = self.rulesPanel.LoadRules()
@@ -1830,11 +1818,7 @@ class VectorColorTable(ColorTable):
             return False
 
         gtemp = utils.GetTempfile()
-        output = open(gtemp, "w")
-        try:
-            output.write(rulestxt)
-        finally:
-            output.close()
+        Path(gtemp).write_text(rulestxt)
 
         RunCommand("db.execute", parent=self, input=gtemp)
         return True
@@ -1855,7 +1839,7 @@ class VectorColorTable(ColorTable):
         else:
             if not self.properties["storeColumn"]:
                 GError(_("No color column defined. Operation canceled."), parent=self)
-                return
+                return None
 
             self.UseAttrColumn(True)
 

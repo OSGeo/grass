@@ -1,0 +1,26 @@
+set(r_spread_SRCS
+    collect_ori.c
+    deleteHa.c
+    fixHa.c
+    get_minHa.c
+    insert2Ha.c
+    insertHa.c
+    main.c
+    pick_dist.c
+    pick_ignite.c
+    ram2out.c
+    replaceHa.c
+    select_linksB.c
+    spot.c
+    spread.c)
+
+build_program(
+  NAME
+  r.spread
+  SOURCES
+  "${r_spread_SRCS}"
+  DEPENDS
+  grass_gis
+  grass_raster
+  grass_display
+  ${LIBM})

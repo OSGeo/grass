@@ -74,7 +74,7 @@ void write_vtk_normal_header(FILE *fp, struct Cell_head region,
     /*Simple vtk ASCII header */
     fprintf(fp, "# vtk DataFile Version 3.0\n");
     /* The header line describes the data. */
-    fprintf(fp, "GRASS GIS %i Export\n", GRASS_VERSION_MAJOR);
+    fprintf(fp, "GRASS %i Export\n", GRASS_VERSION_MAJOR);
     fprintf(fp, "ASCII\n");
     fprintf(fp, "DATASET STRUCTURED_POINTS\n"); /*We are using the structured
                                                    point dataset. */
@@ -105,7 +105,7 @@ void write_vtk_structured_elevation_header(FILE *fp, struct Cell_head region)
 
     /*Simple vtk ASCII header */
     fprintf(fp, "# vtk DataFile Version 3.0\n");
-    fprintf(fp, "GRASS GIS %i Export\n", GRASS_VERSION_MAJOR);
+    fprintf(fp, "GRASS %i Export\n", GRASS_VERSION_MAJOR);
     fprintf(fp, "ASCII\n");
     fprintf(fp, "DATASET STRUCTURED_GRID\n"); /*We are using the structured grid
                                                  dataset. */
@@ -123,7 +123,7 @@ void write_vtk_polygonal_elevation_header(FILE *fp, struct Cell_head region)
 
     /*Simple vtk ASCII header */
     fprintf(fp, "# vtk DataFile Version 3.0\n");
-    fprintf(fp, "GRASS GIS %i Export\n", GRASS_VERSION_MAJOR);
+    fprintf(fp, "GRASS %i Export\n", GRASS_VERSION_MAJOR);
     fprintf(fp, "ASCII\n");
     fprintf(fp, "DATASET POLYDATA\n"); /*We are using polydataset. */
     fprintf(fp, "POINTS %i float\n", region.cols * region.rows);
@@ -195,6 +195,7 @@ void write_vtk_structured_coordinates(int fd, FILE *fp, char *varname UNUSED,
         }
         rowcount++;
     }
+    G_free(raster);
     return;
 }
 
@@ -310,7 +311,7 @@ void write_vtk_polygonal_coordinates(int fd, FILE *fp, char *varname UNUSED,
             fprintf(fp, "\n");
         }
     }
-
+    G_free(raster);
     return;
 }
 
@@ -352,6 +353,7 @@ void write_vtk_data(int fd, FILE *fp, char *varname, struct Cell_head region,
         }
         fprintf(fp, "\n");
     }
+    G_free(raster);
     return;
 }
 
@@ -408,6 +410,9 @@ void write_vtk_rgb_image_data(int redfd, int greenfd, int bluefd, FILE *fp,
             }
         }
     }
+    G_free(redraster);
+    G_free(greenraster);
+    G_free(blueraster);
     return;
 }
 
@@ -454,5 +459,8 @@ void write_vtk_vector_data(int xfd, int yfd, int zfd, FILE *fp,
             fprintf(fp, "%.*f %.*f %.*f \n", dp, x, dp, y, dp, z);
         }
     }
+    G_free(xraster);
+    G_free(yraster);
+    G_free(zraster);
     return;
 }

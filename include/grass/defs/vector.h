@@ -1,6 +1,8 @@
 #ifndef GRASS_VECTORDEFS_H
 #define GRASS_VECTORDEFS_H
 
+#include <stdbool.h>
+
 /*
  * "Public" functions, for use in modules
  */

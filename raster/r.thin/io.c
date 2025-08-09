@@ -59,7 +59,7 @@ CELL *get_a_row(int row)
 
 int put_a_row(int row, CELL *buf)
 {
-    /* rowio.h defines this withe 2nd argument as char * */
+    /* rowio.h defines this with the 2nd argument as char * */
     Rowio_put(&row_io, (char *)buf, row);
 
     return 0;

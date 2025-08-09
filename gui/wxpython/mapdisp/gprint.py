@@ -26,21 +26,6 @@ class MapPrint(wx.Printout):
         wx.Printout.__init__(self)
         self.canvas = canvas
 
-    def OnBeginDocument(self, start, end):
-        return super().OnBeginDocument(start, end)
-
-    def OnEndDocument(self):
-        super().OnEndDocument()
-
-    def OnBeginPrinting(self):
-        super().OnBeginPrinting()
-
-    def OnEndPrinting(self):
-        super().OnEndPrinting()
-
-    def OnPreparePrinting(self):
-        super().OnPreparePrinting()
-
     def HasPage(self, page) -> bool:
         return page <= 2
 

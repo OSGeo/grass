@@ -27,7 +27,7 @@ database:
           - db/**
           - lib/db/**
           - scripts/db.*/**
-          - '**.sql'
+          - "**.sql"
 display:
   - changed-files:
       - any-glob-to-any-file:
@@ -83,20 +83,37 @@ vector:
 CI:
   - changed-files:
       - any-glob-to-any-file:
+          - "**/.editorconfig"
+          - .clang-format
+          - .codecov.yml
+          - .coveragerc
+          - .cppcheck-suppressions
+          - .flake8
           - .github/**
-          - .travis/**
-          - binder/**
-          - .travis.yml
-          - renovate.json
           - .pre-commit-config.yaml
+          - .yamllint
+          - binder/**
+          - renovate.json
+CMake:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/**.cmake*"
+          - "**/CMakeLists.txt"
+          - cmake/**
 Windows:
   - changed-files:
       - any-glob-to-any-file:
+          - "**/**.bat"
+          - "**/**.bat.*"
+          - "**/*OSGeo4W**"
+          - "**/*osgeo4w**"
+          - msvc/**
           - mswindows/**
 macOS:
   - changed-files:
       - any-glob-to-any-file:
-          - macosx/**
+          - "**/*macos**"
+          - macos/**
 Linux:
   - changed-files:
       - any-glob-to-any-file:
@@ -106,9 +123,16 @@ docker:
   - changed-files:
       - any-glob-to-any-file:
           - docker/**
-          - '**/*Dockerfile*'
-          - '**/*dockerfile*'
+          - "**/*Dockerfile*"
+          - "**/*dockerfile*"
           - .dockerignore
+nix:
+  - changed-files:
+      - any-glob-to-any-file:
+          - .github/workflows/test-nix.yml
+          - flake.lock
+          - flake.nix
+          - package.nix
 
 docs:
   - all:
@@ -116,17 +140,17 @@ docs:
           - any-glob-to-any-file:
               - doc/**
               - man/**
-              - '**/*.md'
-              - '**/*.rst'
-              - '**/*.html'
-              - '**/*.dox'
-              - '**/*.png'
-              - '**.cff'
+              - "**/*.md"
+              - "**/*.rst"
+              - "**/*.html"
+              - "**/*.dox"
+              - "**/*.png"
+              - "**.cff"
               - CITING
               - AUTHORS
               - TODO
           - all-globs-to-all-files:
-              - '!doc/development/rfc/**'
+              - "!doc/development/rfc/**"
 RFC:
   - changed-files:
       - any-glob-to-any-file:
@@ -139,32 +163,43 @@ translation:
 Python:
   - changed-files:
       - any-glob-to-any-file:
-          - '**/*.py'
-          - '**/pyproject.toml'
+          - "**/*.py"
+          - "**/pyproject.toml"
 notebook:
   - changed-files:
       - any-glob-to-any-file:
-          - '**/*.ipynb'
-          - doc/notebooks/**
+          - "**/*.ipynb"
+          - doc/examples/notebooks/**
           - python/grass/jupyter/**
 C:
   - changed-files:
-      - any-glob-to-any-file: '**/*.c'
+      - any-glob-to-any-file: "**/*.c"
 C++:
   - changed-files:
-      - any-glob-to-any-file: '**/*.cpp'
+      - any-glob-to-any-file: "**/*.cpp"
 CSS:
   - changed-files:
-      - any-glob-to-any-file: '**/*.css'
+      - any-glob-to-any-file: "**/*.css"
 HTML:
   - changed-files:
-      - any-glob-to-any-file: '**/*.html'
+      - any-glob-to-any-file: "**/*.html"
 JavaScript:
   - changed-files:
-      - any-glob-to-any-file: '**/*.js'
-
+      - any-glob-to-any-file: "**/*.js"
+markdown:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.md"
+          - .markdownlint.yml
 # test suite
 tests:
   - changed-files:
       - any-glob-to-any-file:
-          - '**/testsuite/**'
+          - "**/*_gunittest.cfg"
+          - "**/.gunittest*.cfg"
+          - "**/test/**"
+          - "**/tests/**"
+          - "**/testsuite/**"
+          - "**test**"
+          - .codecov.yml
+          - .coveragerc
