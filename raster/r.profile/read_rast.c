@@ -145,7 +145,10 @@ int read_rast(double east, double north, double dist, int fd, int coords,
             break;
         case CSV:
             G_color_to_str(red, green, blue, clr_frmt, color_str);
-            fprintf(fp, "%s%s", fs, color_str);
+            if (clr_frmt != HEX)
+                fprintf(fp, "%s\"%s\"", fs, color_str);
+            else
+                fprintf(fp, "%s%s", fs, color_str);
             break;
         }
     }
