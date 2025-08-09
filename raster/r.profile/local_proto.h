@@ -6,7 +6,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-enum OutputFormat { PLAIN, JSON };
+enum OutputFormat { PLAIN, CSV, JSON };
 
 /* main.c */
 int do_profile(double, double, double, double, int, double, int, int, FILE *,
@@ -22,3 +22,4 @@ int input(char *, char *, char *, char *, char *, FILE *);
 
 extern int clr;
 extern struct Colors colors;
+extern char *fs;
