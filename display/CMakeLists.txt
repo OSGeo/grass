@@ -52,12 +52,16 @@ add_custom_command(
   TARGET d.barscale
   POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E make_directory
-          ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/barscales
+          ${OUTDIR}/${GRASS_INSTALL_GRAPHICSDIR}/barscales
   COMMAND ${CMAKE_COMMAND} -E copy ${d_barscale_png}
-          ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/barscales
-  BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/barscales)
-install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/barscales
-        DESTINATION ${GRASS_INSTALL_DOCDIR})
+          ${OUTDIR}/${GRASS_INSTALL_GRAPHICSDIR}/barscales
+  BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_GRAPHICSDIR}/barscales)
+install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_GRAPHICSDIR}/barscales
+        DESTINATION ${GRASS_INSTALL_GRAPHICSDIR})
+if(WITH_FHS AND WITH_DOCS)
+  install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_GRAPHICSDIR}/barscales
+          DESTINATION ${GRASS_INSTALL_DOCDIR})
+endif()
 
 build_program_in_subdir(d.colorlist DEPENDS grass_gis grass_display
                         grass_raster)
@@ -108,13 +112,17 @@ build_program_in_subdir(d.linegraph DEPENDS grass_gis grass_display grass_symb
 build_program_in_subdir(d.northarrow DEPENDS grass_gis grass_display grass_symb
                         ${LIBM})
 if(WITH_DOCS)
-  file(MAKE_DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/northarrows)
+  file(MAKE_DIRECTORY ${OUTDIR}/${GRASS_INSTALL_GRAPHICSDIR}/northarrows)
   file(GLOB d_northarrow_png
        ${CMAKE_CURRENT_SOURCE_DIR}/d.northarrow/thumbnails/*.png)
   file(COPY ${d_northarrow_png}
-       DESTINATION ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/northarrows)
-  install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/northarrows
-          DESTINATION ${GRASS_INSTALL_DOCDIR})
+       DESTINATION ${OUTDIR}/${GRASS_INSTALL_GRAPHICSDIR}/northarrows)
+  install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_GRAPHICSDIR}/northarrows
+          DESTINATION ${GRASS_INSTALL_GRAPHICSDIR})
+  if(WITH_FHS)
+    install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_GRAPHICSDIR}/northarrows
+            DESTINATION ${GRASS_INSTALL_DOCDIR})
+  endif()
 endif()
 build_program_in_subdir(d.path DEPENDS grass_gis grass_display grass_vector)
 build_program_in_subdir(d.profile DEPENDS grass_gis grass_display grass_raster
