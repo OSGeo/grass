@@ -395,8 +395,12 @@ def aggregate_by_topology(
                 filename = gs.tempfile(True)
                 with open(filename, "w") as out_file:
                     if weighting:
-                        for name, weight in zip(aggregation_list, aggregation_weights):
-                            out_file.write(f"{name}|{weight}\n")
+                        out_file.writelines(
+                            f"{name}|{weight}\n"
+                            for name, weight in zip(
+                                aggregation_list, aggregation_weights
+                            )
+                        )
                     else:
                         for name in aggregation_list:
                             string = "%s\n" % (name)
