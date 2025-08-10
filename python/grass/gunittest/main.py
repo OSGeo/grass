@@ -45,6 +45,9 @@ class GrassTestProgram(TestProgram):
         verbosity=1,
         failfast=None,
         catchbreak=None,
+        *,
+        tb_locals=False,
+        **kwargs,
     ):
         """Prepares the tests in GRASS way and then runs the tests.
 
@@ -74,13 +77,15 @@ class GrassTestProgram(TestProgram):
             super().__init__(
                 module=module,
                 argv=unittest_argv,
-                testLoader=grass_loader,
                 testRunner=grass_runner,
+                testLoader=grass_loader,
                 exit=exit_at_end,
                 verbosity=verbosity,
                 failfast=failfast,
                 catchbreak=catchbreak,
                 buffer=buffer_stdout_stderr,
+                tb_locals=tb_locals,
+                **kwargs,
             )
 
 
