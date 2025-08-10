@@ -452,6 +452,8 @@ class GrassTestRunner:
         failfast=False,
         buffer=False,
         result=None,
+        *,
+        **kwargs,
     ):
         if stream is None:
             stream = sys.stderr
