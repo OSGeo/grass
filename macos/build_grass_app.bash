@@ -18,12 +18,18 @@
 #############################################################################
 
 this_script=$(basename "$0")
-this_script_dir=$(cd "$(dirname "$0")" || exit; pwd)
+this_script_dir=$(
+    cd "$(dirname "$0")" || exit
+    pwd
+)
 arch=$(uname -m)
 cache_dir="${this_script_dir}/cache"
 config_home="${HOME}/.config"
 sdk=
-grassdir=$(cd "${this_script_dir}/.." || exit; pwd)
+grassdir=$(
+    cd "${this_script_dir}/.." || exit
+    pwd
+)
 deployment_target=
 grass_version=""
 grass_version_major=""
@@ -73,7 +79,6 @@ IFS='' read -r -d '' inst_dir_patch <<'EOF'
  RUN_GISBASE         = @GISBASE@
 EOF
 
-
 # read in configurations
 if [ -n "$XDG_CONFIG_HOME" ]; then
     config_home="$XDG_CONFIG_HOME"
@@ -86,7 +91,8 @@ fi
 # Functions
 #############################################################################
 
-function display_usage () { cat <<- _EOF_
+function display_usage() {
+    cat <<- _EOF_
 
 GRASS build script for Anaconda.
 
@@ -139,7 +145,7 @@ function endgroup() {
     printtag "endgroup"
 }
 
-function exit_nice () {
+function exit_nice() {
     error_code=$1
     if [[ "$#" -eq 2 && $2 = "cleanup" ]]; then
         rm -rf "$conda_temp_dir"
@@ -147,7 +153,7 @@ function exit_nice () {
     exit "$error_code"
 }
 
-function read_grass_version () {
+function read_grass_version() {
     begingroup "Read GRASS version"
     local versionfile="${grassdir}/include/VERSION"
     local arr=()
@@ -170,7 +176,7 @@ function read_grass_version () {
 
 # This set the build version for CFBundleVersion, in case of dev version the
 # git short commit hash number is added.
-function set_bundle_version () {
+function set_bundle_version() {
     begingroup "Set bundle version"
     pushd "$grassdir" > /dev/null || exit
     bundle_version=$grass_version
@@ -192,7 +198,7 @@ function set_bundle_version () {
     endgroup
 }
 
-function make_app_bundle_dir () {
+function make_app_bundle_dir() {
     begingroup "Make app bundle dir"
     local contents_dir="${grass_app_bundle}/Contents"
     local resources_dir="${contents_dir}/Resources"
@@ -204,12 +210,12 @@ function make_app_bundle_dir () {
 
     local info_plist_in="${grassdir}/macos/files/Info.plist.in"
 
-    sed "s|@GRASS_VERSION_DATE@|${grass_version_date}|g" "$info_plist_in" | \
-        sed "s|@GRASS_VERSION_MAJOR@|${grass_version_major}|g" | \
-        sed "s|@GRASS_VERSION_MINOR@|${grass_version_minor}|g" | \
-        sed "s|@GRASS_VERSION_RELEASE@|${grass_version_release}|g" | \
-        sed "s|@BUNDLE_VERSION@|${bundle_version}|g" | \
-        sed "s|@DEPLOYMENT_TARGET@|${deployment_target}|g" \
+    sed "s|@GRASS_VERSION_DATE@|${grass_version_date}|g" "$info_plist_in" \
+        | sed "s|@GRASS_VERSION_MAJOR@|${grass_version_major}|g" \
+        | sed "s|@GRASS_VERSION_MINOR@|${grass_version_minor}|g" \
+        | sed "s|@GRASS_VERSION_RELEASE@|${grass_version_release}|g" \
+        | sed "s|@BUNDLE_VERSION@|${bundle_version}|g" \
+        | sed "s|@DEPLOYMENT_TARGET@|${deployment_target}|g" \
             > "$contents_dir/Info.plist"
 
     local grassbin="grass"
@@ -231,20 +237,20 @@ function make_app_bundle_dir () {
     #     -o "${macos_dir}/GRASS"
     clang -x objective-c "-mmacosx-version-min=${deployment_target}" \
         -target "${arch}-apple-macos${deployment_target}" \
-        -mmacosx-version-min="$deployment_target"  \
+        -mmacosx-version-min="$deployment_target" \
         -isysroot "$sdk" -fobjc-arc -Os \
         -o "${macos_dir}/GRASS" "${this_script_dir}/files/main.m" || exit_nice 1
     echo "GRASS_APP_BUNDLE created: $grass_app_bundle"
     endgroup
 }
 
-function patch_grass () {
+function patch_grass() {
     begingroup "Apply patches"
     echo "$inst_dir_patch" | patch -d "$grassdir" -p0
     endgroup
 }
 
-function reset_grass_patches () {
+function reset_grass_patches() {
     begingroup "Reverting patches"
     echo "Reverting patches..."
     echo "$inst_dir_patch" | patch -d "$grassdir" -p0 -R
@@ -252,7 +258,7 @@ function reset_grass_patches () {
     endgroup
 }
 
-function set_up_conda () {
+function set_up_conda() {
     begingroup "Set up Conda"
     mkdir -p "$cache_dir"
     # move existing miniconda script to new external directory
@@ -282,7 +288,7 @@ function set_up_conda () {
     endgroup
 }
 
-function install_grass_session () {
+function install_grass_session() {
     begingroup "Install grass-session"
     local python_bin="${grass_app_bundle}/Contents/Resources/bin/python"
     $python_bin -m pip install --upgrade pip
@@ -290,12 +296,12 @@ function install_grass_session () {
     endgroup
 }
 
-function create_dmg () {
+function create_dmg() {
     begingroup "Create dmg"
     echo
     echo "Create dmg file of $grass_app_bundle ..."
 
-    if [ ! -d  "$grass_app_bundle" ]; then
+    if [ ! -d "$grass_app_bundle" ]; then
         echo "Error, attempt to create dmg file, but no app could be found"
         exit_nice 1
     fi
@@ -314,8 +320,7 @@ function create_dmg () {
     exact_app_size=$(du -ks "$grass_app_bundle" | cut -f 1)
     dmg_size=$((exact_app_size*120/100))
 
-    if [[ "$CI" == "true" ]]
-    then
+    if [[ "$CI" == "true" ]]; then
         # workaround for sometimes failed attempts on macos-13 (x86_64) runner
         local max_attempts=10
         local i=0
@@ -398,7 +403,7 @@ EOF
     endgroup
 }
 
-function remove_dmg () {
+function remove_dmg() {
     local disk
     if [ -d "/Volumes/${dmg_title}" ]; then
         disk=$(diskutil list | grep "$dmg_title" | awk -F\  '{print $NF}')
@@ -407,7 +412,7 @@ function remove_dmg () {
     rm -rf "${dmg_out_dir:?}/${dmg_name:?}"
 }
 
-function codesign_app () {
+function codesign_app() {
     local bins
     local grass_libs
     local libs
@@ -416,7 +421,7 @@ function codesign_app () {
 
     # remove build stage rpaths from grass libraries
 
-    grass_libs=$(find ./Resources -type f \(  -name "*libgrass_*.dylib" \))
+    grass_libs=$(find ./Resources -type f \( -name "*libgrass_*.dylib" \))
 
     while IFS= read -r file || [[ -n $file ]]; do
         rpath=$(otool -l "$file" | grep "dist.*/lib" | awk '{$1=$1};1' | cut -d " " -f 2)
@@ -437,15 +442,15 @@ function codesign_app () {
     # codesign embedded binaries
 
     bins=$(find ./Resources -type f -perm +111 ! \( -name "*.so" -or -name "*.dylib" -or -name "*.a" \
-        -or -name "*.py" -or -name "*.sh" \) -exec file '{}' \; | \
-        grep "x86_64\|arm64" | \
-        cut -d ":" -f 1 | \
-        grep -v "for architecture")
+        -or -name "*.py" -or -name "*.sh" \) -exec file '{}' \; \
+        | grep "x86_64\|arm64" \
+        | cut -d ":" -f 1 \
+        | grep -v "for architecture")
     wait
 
     while IFS= read -r file || [[ -n $file ]]; do
         "$codesign" --sign "${cs_ident}" --force --verbose --timestamp --options runtime \
-          --entitlements "$cs_entitlements" "${file}" &
+            --entitlements "$cs_entitlements" "${file}" &
     done < <(printf '%s\n' "$bins")
     wait
 
@@ -468,14 +473,14 @@ function codesign_app () {
     endgroup
 }
 
-function codesign_dmg () {
+function codesign_dmg() {
     begingroup "Code sign dmg"
     "$codesign" --force --verbose --timestamp --sign "$cs_ident" --options runtime \
         --entitlements "$cs_entitlements" "${dmg_out_dir}/${dmg_name}"
     endgroup
 }
 
-function notarize_app () {
+function notarize_app() {
     local tmpdir
     local zip_tmpfile
 
@@ -503,7 +508,7 @@ function notarize_app () {
     endgroup
 }
 
-function notarize_dmg () {
+function notarize_dmg() {
     begingroup "Notarize dmg"
     "$xcrun" notarytool submit "${dmg_out_dir}/${dmg_name}" \
         --keychain-profile "$cs_keychain_profile" --wait
@@ -684,16 +689,15 @@ begingroup "Build and install GRASS"
 
 pushd "$grassdir" > /dev/null || exit
 
-echo "Starting \"make distclean\"..."
-make distclean &>/dev/null
-echo "Finished \"make distclean\""
+echo 'Starting "make distclean"...'
+make distclean &> /dev/null
+echo 'Finished "make distclean"'
 
 source "${this_script_dir}/files/configure-grass.sh"
 
-if ! make -j"$(sysctl -n hw.ncpu)"
-then
+if ! make -j"$(sysctl -n hw.ncpu)"; then
     echo "Compilation failed, you may need to reset the GRASS git repository."
-    echo "This can be made with: \"cd [grass-source-dir] && git reset --hard\"."
+    echo 'This can be made with: "cd [grass-source-dir] && git reset --hard".'
     echo
     popd > /dev/null || exit
     exit_nice 1
@@ -701,10 +705,9 @@ fi
 
 echo
 echo "Start installation..."
-if ! make install
-then
+if ! make install; then
     echo "Installation failed, you may need to reset the GRASS git repository."
-    echo "This can be made with: \"cd [grass-source-dir] && git reset --hard\"."
+    echo 'This can be made with: "cd [grass-source-dir] && git reset --hard".'
     echo
     popd > /dev/null || exit
     exit_nice 1
