@@ -168,22 +168,17 @@ def reclass(inf, outf, lim, clump, diag, les, nodata=False):
     expression = "$outfile = $recfile"
     mapcalc_kwargs = {"outfile": outfile, "recfile": recfile}
     if p2.returncode != 0:
-        op_str = "less" if lesser else "greater"
+        msg = (
+            _("No areas of size less than or equal to {limit} hectares found.")
+            if lesser
+            else _("No areas of size greater than or equal to {limit} hectares found.")
+        )
         if nodata is True:
-            gs.warning(
-                _(
-                    "No areas of size %s than or equal to %f "
-                    "hectares found. Creating NULL raster..."
-                )
-                % (op_str, limit)
-            )
+            gs.warning(msg.format(limit) + " " + _("Creating NULL raster..."))
             expression = "$outfile = null()"
             del mapcalc_kwargs["recfile"]
         else:
-            gs.fatal(
-                _("No areas of size %s than or equal to %f hectares found.")
-                % (op_str, limit)
-            )
+            gs.fatal(msg.format(limit))
     gs.mapcalc(expression, **mapcalc_kwargs)
 
 
