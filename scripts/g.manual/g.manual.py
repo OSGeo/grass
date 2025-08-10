@@ -59,7 +59,7 @@ from grass.script import core as grass
 def start_browser(entry):
     if (
         browser
-        and browser not in ("xdg-open", "start")
+        and browser not in {"xdg-open", "start"}
         and not grass.find_program(browser)
     ):
         grass.fatal(_("Browser '%s' not found") % browser)
@@ -78,31 +78,39 @@ def start_browser(entry):
                 entry,
             )
     else:
-        path = os.path.join(gisbase, "docs", "html", entry + ".html")
-        if not os.path.exists(path) and os.getenv("GRASS_ADDON_BASE"):
-            path = os.path.join(
-                os.getenv("GRASS_ADDON_BASE"), "docs", "html", entry + ".html"
-            )
+        directory = os.path.join(gisbase, "docs", "mkdocs", "site")
+        if os.path.exists(directory):
+            path = os.path.join(directory, entry + ".html")
+            if not os.path.exists(path) and os.getenv("GRASS_ADDON_BASE"):
+                path = os.path.join(
+                    os.getenv("GRASS_ADDON_BASE"), "docs", "html", entry + ".html"
+                )
+        else:
+            path = os.path.join(gisbase, "docs", "html", entry + ".html")
+            if not os.path.exists(path) and os.getenv("GRASS_ADDON_BASE"):
+                path = os.path.join(
+                    os.getenv("GRASS_ADDON_BASE"), "docs", "html", entry + ".html"
+                )
 
         if not os.path.exists(path):
             grass.fatal(_("No HTML manual page entry for '%s'") % entry)
 
         url_path = "file://" + path
 
-    if browser and browser not in ("xdg-open", "start"):
+    if browser and browser not in {"xdg-open", "start"}:
         webbrowser.register(browser_name, None)
 
     grass.verbose(
-        _("Starting browser '%(browser)s' for manual" " entry '%(entry)s'...")
-        % dict(browser=browser_name, entry=entry)
+        _("Starting browser '%(browser)s' for manual entry '%(entry)s'...")
+        % {"browser": browser_name, "entry": entry}
     )
 
     try:
         webbrowser.open(url_path)
     except Exception:
         grass.fatal(
-            _("Error starting browser '%(browser)s' for HTML file" " '%(path)s'")
-            % dict(browser=browser, path=path)
+            _("Error starting browser '%(browser)s' for HTML file '%(path)s'")
+            % {"browser": browser, "path": path}
         )
 
 
@@ -132,10 +140,7 @@ def main():
     elif flags["t"]:
         special = "topics"
 
-    if flags["m"]:
-        start = start_man
-    else:
-        start = start_browser
+    start = start_man if flags["m"] else start_browser
 
     entry = options["entry"]
     gisbase = os.environ["GISBASE"]

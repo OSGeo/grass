@@ -19,8 +19,8 @@ import sys
 
 import wx
 
-import grass.script as grass
-import wx.lib.plot as plot
+import grass.script as gs
+from wx.lib import plot
 from gui_core.wrap import StockCursor
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from wxplot.base import BasePlotFrame, PlotIcons
@@ -97,10 +97,7 @@ class HistogramPlotFrame(BasePlotFrame):
         create a list of cell value and count/percent/area pairs. This is passed to
         plot to create a line graph of the histogram.
         """
-        try:
-            self.SetCursor(StockCursor(wx.CURSOR_ARROW))
-        except:
-            pass
+        self.SetCursor(StockCursor(wx.CURSOR_ARROW))
 
         self.SetGraphStyle()
         wx.BeginBusyCursor()
@@ -145,17 +142,16 @@ class HistogramPlotFrame(BasePlotFrame):
         #
         if self.maptype == "group":
             self.ptitle = _("Histogram of image group <%s>") % self.group
+        elif len(self.rasterList) == 1:
+            self.ptitle = _("Histogram of raster map <%s>") % self.rasterList[0]
         else:
-            if len(self.rasterList) == 1:
-                self.ptitle = _("Histogram of raster map <%s>") % self.rasterList[0]
-            else:
-                self.ptitle = _("Histogram of selected raster maps")
+            self.ptitle = _("Histogram of selected raster maps")
 
         #
         # set xlabel based on first raster map in list to be histogrammed
         #
         units = self.raster[self.rasterList[0]]["units"]
-        if units != "" and units != "(none)" and units is not None:
+        if units not in ("", "(none)") and units is not None:
             self.xlabel = _("Raster cell values %s") % units
         else:
             self.xlabel = _("Raster cell values")
@@ -244,8 +240,7 @@ class HistogramPlotFrame(BasePlotFrame):
 
         if len(self.plotlist) > 0:
             return self.plotlist
-        else:
-            return None
+        return None
 
     def Update(self):
         """Update histogram after changing options"""
@@ -259,7 +254,7 @@ class HistogramPlotFrame(BasePlotFrame):
         title = _("Statistics for Map(s) Histogrammed")
 
         for rast in self.rasterList:
-            ret = grass.read_command("r.univar", map=rast, flags="e", quiet=True)
+            ret = gs.read_command("r.univar", map=rast, flags="e", quiet=True)
             stats = _("Statistics for raster map <%s>") % rast + ":\n%s\n" % ret
             message.append(stats)
 

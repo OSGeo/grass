@@ -9,7 +9,7 @@ applications (see also <b>NOTES</b> on GeoTIFF below).
 (<em>createopt="TFW=YES,COMPRESS=DEFLATE"</em>).
 <p>For possible <em>createopt</em> and <em>metaopt</em> parameters please
 consult the individual
-<a href="http://www.gdal.org/formats_list.html">supported formats</a>
+<a href="https://gdal.org/en/stable/drivers/raster/">supported formats</a>
 pages on the GDAL website.
 The <em>createopt</em> parameter may be used to create TFW or World files
 ("TFW=YES","WORLDFILE=ON").
@@ -18,14 +18,14 @@ a group, when the imagery group's name is entered as input.
 (created imagery groups with the <em><a href="i.group.html">i.group</a></em>
 module)
 <p>As with most GRASS raster modules, the current region extents and region
-resolution are used, and a MASK is respected if present.
+resolution are used, and a raster mask is respected if present.
 Use <em><a href="g.region.html">g.region</a></em>'s "align=", or "raster="
 options if you need to realign the region settings to match the original
 map's before export.
 
 <h2>SUPPORTED RASTER FORMATS</h2>
 
-The set of <a href="http://www.gdal.org/formats_list.html">supported
+The set of <a href="https://gdal.org/en/stable/drivers/raster/">supported
 raster formats</a> written by <em>r.out.gdal</em> depends on the local
 GDAL installation, printed with the <em>-l</em> flag. Available may be
 (incomplete list):<p>
@@ -66,9 +66,9 @@ Please keep in mind that not all CELL rasters will require Int32 - e.g.,
 Moreover, some GDAL-supported formats do not support all the data types
 possible in GDAL and GRASS. Use <em><a href="r.info.html">r.info</a></em> to
 check the data type and range for your GRASS raster, refer to specific
-format documentation (on the <a href="http://www.gdal.org/">GDAL website</a>),
+format documentation (on the <a href="https://gdal.org/">GDAL website</a>),
 format vendor's documentation, and e.g. the Wikipedia article
-<em><a href="http://en.wikipedia.org/wiki/C_syntax#Typical_boundaries_of_primitive_integral_types">
+<em><a href="https://en.wikipedia.org/wiki/C_syntax#Typical_boundaries_of_primitive_integral_types">
 Typical boundaries of primitive integral types</a></em>
 for details.
 
@@ -110,7 +110,7 @@ symbology).
 
 <h3>Adding overviews to speed up map display in other software</h3>
 
-Adding overviews with <tt><a href="https://www.gdal.org/gdaladdo.html">gdaladdo</a></tt>
+Adding overviews with <code><a href="https://www.gdal.org/gdaladdo.html">gdaladdo</a></code>
 after exporting can speed up display. The overviews are created internally
 within the exported file. The amount of levels (power-of-two factors) are
 controlled with the <b>overviews</b> parameter. The higher the overview level
@@ -151,23 +151,23 @@ self-documenting (and useful) the dataset will be.
 Here are some things to try:
 
 <ul>
-<li>Create a World file with <tt>createopt="TFW=YES"</tt>.
+<li>Create a World file with <code>createopt="TFW=YES"</code>.</li>
 
 <li>Do not use GeoTIFF internal compression. Other GIS software often
 supports only a subset of the available compression methods with the
 supported methods differing between GIS software packages. Unfortunately
 this means the output image can be rather huge, but the file can be
-compressed with software like <tt>zip</tt>, <tt>gnuzip</tt>, or <tt>bzip2</tt>.
+compressed with software like <code>zip</code>, <code>gnuzip</code>, or <code>bzip2</code>.</li>
 
 <li>Skip exporting the color table. Color tables are not always properly
 rendered, particularly for type UInt16, and the GeoTIFF file can appear
 completely black. If you are lucky the problematic software package has
 a method to reset the color table and assign a new color table
-(sometimes called symbology).
+(sometimes called symbology).</li>
 
-<li>Keep metadata simple with <tt>createopt="PROFILE=GeoTIFF"</tt> or
-<tt>createopt="PROFILE=BASELINE"</tt>. With BASELINE no GDAL or GeoTIFF
-tags will be written and a World file is required (<em>createopt="TFW=YES"</em>).
+<li>Keep metadata simple with <code>createopt="PROFILE=GeoTIFF"</code> or
+<code>createopt="PROFILE=BASELINE"</code>. With BASELINE no GDAL or GeoTIFF
+tags will be written and a World file is required (<em>createopt="TFW=YES"</em>).</li>
 </ul>
 
 <!-- outdated?
@@ -185,7 +185,7 @@ Offset is only relevant if not zero. Scale is only relevant if not 1.
 
 <h3>Export the integer raster basin_50K map to GeoTIFF format</h3>
 
-See also <a href="https://gdal.org/drivers/raster/gtiff.html">GeoTIFF format description</a> (GDAL):
+See also <a href="https://gdal.org/en/stable/drivers/raster/gtiff.html">GeoTIFF format description</a> (GDAL):
 
 <div class="code"><pre>
 g.region raster=basin_50K -p
@@ -194,7 +194,7 @@ r.out.gdal input=basin_50K output=basin_50K.tif
 
 <h3>Export the integer raster landclass96 map to Cloud Optimized GeoTIFF format</h3>
 
-See also <a href="https://gdal.org/drivers/raster/cog.html">Cloud Optimized GeoTIFF (COG) format description</a> (GDAL):
+See also <a href="https://gdal.org/en/stable/drivers/raster/cog.html">Cloud Optimized GeoTIFF (COG) format description</a> (GDAL):
 
 <div class="code"><pre>
 g.region -p raster=landclass96
@@ -267,7 +267,8 @@ value (specific parameter of the module) means that any band values
 equal to this nodata value will be interpreted as nodata. Using an additional
 alpha channel means that all pixels with an alpha value of 0 are
 transparent. The alpha channel thus represents per-pixel encoding of
-nodata, just like the GRASS MASK (null file). That means when using an alpha
+nodata, just like the GRASS raster mask or per-raster null file.
+That means when using an alpha
 channel, you do not need to "free up" any particular value, but you can
 use any value you like to replace NULL cells, as long as the value can be
 represented by the Byte data type. It does not matter if that value is
@@ -298,7 +299,7 @@ r.mapcalc "out_b = if(isnull($BMAP), 0, #$BMAP)"
 # create group for export
 i.group group=out_rgba input=out_r,out_g,out_b,out_a
 
-# remove any MASK because this works only if there are
+# remove any mask because this works only if there are
 # no NULL cells in the bands to be exported
 r.mask -r
 
@@ -313,7 +314,7 @@ The resulting GeoTIFF file can be used e.g. for Web server applications.
 
 <h3>Export the floating point raster elevation map to ERDAS/IMG format</h3>
 
-See also <a href="https://gdal.org/drivers/raster/hfa.html">Erdas Imagine .img format description</a> (GDAL):
+See also <a href="https://gdal.org/en/stable/drivers/raster/hfa.html">Erdas Imagine .img format description</a> (GDAL):
 
 <div class="code"><pre>
 g.region raster=elevation -p
@@ -368,12 +369,12 @@ Band 1 Block=100x40 Type=UInt16, ColorInterp=Palette
 
 <h2>REFERENCES</h2>
 
-GDAL Pages: <a href="http://gdal.org">https://gdal.org</a>
+GDAL Pages: <a href="https://gdal.org">https://gdal.org</a>
 
 <h2>SEE ALSO</h2>
 
-<a href="https://gdal.org/drivers/raster/index.html">GDAL supported raster formats</a> and
-<a href="https://gdal.org/drivers/vector/index.html">GDAL supported vector formats</a>
+<a href="https://gdal.org/en/stable/drivers/raster/index.html">GDAL supported raster formats</a> and
+<a href="https://gdal.org/en/stable/drivers/vector/index.html">GDAL supported vector formats</a>
 
 <p>
 <em>

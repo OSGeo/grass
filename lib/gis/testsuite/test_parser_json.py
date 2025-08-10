@@ -10,11 +10,13 @@ for details.
 
 import subprocess
 from grass.gunittest.case import TestCase
+from grass.gunittest.utils import xfail_windows
 from grass.script import decode
 import json
 
 
 class TestParserJson(TestCase):
+    @xfail_windows
     def test_r_slope_aspect_json(self):
         args = [
             "r.slope.aspect",
@@ -33,7 +35,7 @@ class TestParserJson(TestCase):
             {"param": "precision", "value": "FCELL"},
             {"param": "zscale", "value": "1.0"},
             {"param": "min_slope", "value": "0.0"},
-            {"param": "nprocs", "value": "1"},
+            {"param": "nprocs", "value": "0"},
             {"param": "memory", "value": "300"},
         ]
 
@@ -58,6 +60,7 @@ class TestParserJson(TestCase):
         self.assertEqual(json_code["inputs"], inputs)
         self.assertEqual(json_code["outputs"], outputs)
 
+    @xfail_windows
     def test_v_out_ascii(self):
         args = [
             "v.out.ascii",
@@ -87,17 +90,16 @@ class TestParserJson(TestCase):
         print(stdout)
         json_code = json.loads(decode(stdout))
         self.assertEqual(json_code["module"], "v.out.ascii")
-        self.assertEqual(len(json_code["inputs"]), 6)
         self.assertEqual(json_code["inputs"], inputs)
         self.assertEqual(json_code["outputs"], outputs)
 
+    @xfail_windows
     def test_v_info(self):
         args = ["v.info", "map=hospitals@PERMANENT", "-c", "--json"]
 
         inputs = [
             {"param": "map", "value": "hospitals@PERMANENT"},
             {"param": "layer", "value": "1"},
-            {"param": "format", "value": "plain"},
         ]
 
         stdout, stderr = subprocess.Popen(args, stdout=subprocess.PIPE).communicate()
@@ -105,7 +107,6 @@ class TestParserJson(TestCase):
         json_code = json.loads(decode(stdout))
         print(json_code)
         self.assertEqual(json_code["module"], "v.info")
-        self.assertEqual(len(json_code["inputs"]), 3)
         self.assertEqual(json_code["inputs"], inputs)
 
 

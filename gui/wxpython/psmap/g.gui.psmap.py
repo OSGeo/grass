@@ -32,11 +32,11 @@
 # % required: no
 # %end
 
-import grass.script as gscript
+import grass.script as gs
 
 
 def main():
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
 
     import wx
 
@@ -49,7 +49,7 @@ def main():
     app = wx.App()
     frame = PsMapFrame(
         parent=None,
-        title=_("Cartographic Composer - GRASS GIS"),
+        title=_("Cartographic Composer - GRASS"),
     )
     frame.Show()
 

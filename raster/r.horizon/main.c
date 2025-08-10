@@ -31,7 +31,11 @@ Program was refactored by Anna Petrasova to remove most global variables.
  *   Free Software Foundation, Inc.,
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -163,7 +167,7 @@ int main(int argc, char *argv[])
     struct {
         struct Option *elevin, *dist, *coord, *direction, *horizon, *step,
             *start, *end, *bufferzone, *e_buff, *w_buff, *n_buff, *s_buff,
-            *maxdistance, *format, *output;
+            *maxdistance, *format, *output, *nprocs;
     } parm;
 
     struct {
@@ -175,6 +179,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("solar"));
     G_add_keyword(_("sun position"));
+    G_add_keyword(_("parallel"));
     module->label =
         _("Computes horizon angle height from a digital elevation model.");
     module->description =
@@ -309,6 +314,8 @@ int main(int argc, char *argv[])
         _("Name of file for output (use output=- for stdout)");
     parm.output->guisection = _("Point mode");
 
+    parm.nprocs = G_define_standard_option(G_OPT_M_NPROCS);
+
     flag.horizonDistance = G_define_flag();
     flag.horizonDistance->key = 'l';
     flag.horizonDistance->description =
@@ -327,6 +334,9 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
+
+    int nprocs = G_set_omp_num_threads(parm.nprocs);
+    nprocs = Rast_disable_omp_on_mask(nprocs);
 
     struct Cell_head cellhd;
     struct Cell_head new_cellhd;
@@ -515,7 +525,7 @@ int main(int argc, char *argv[])
             settings.fixedMaxLength); /* predefined as BIG */
 
     /* TODO: fixing BIG, there is a bug with distant mountains not being seen:
-       attempt to contrain to current region
+       attempt to constrain to current region
 
        fixedMaxLength = (fixedMaxLength < AMAX1(deltx, delty)) ? fixedMaxLength
        : AMAX1(deltx, delty); G_debug(1,"Using maxdistance %f", fixedMaxLength);
@@ -838,9 +848,10 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
     double printangle = settings->single_direction;
 
     origin_point.maxlength = settings->fixedMaxLength;
-    /* JSON variables and formating */
-    JSON_Value *azimuths_value, *horizons_value, *distances_value;
-    JSON_Array *azimuths, *horizons, *distances;
+    /* JSON variables and formatting */
+
+    JSON_Value *horizons_value;
+    JSON_Array *horizons;
 
     switch (format) {
     case PLAIN:
@@ -850,18 +861,16 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
         fprintf(fp, "\n");
         break;
     case JSON:
-
         json_object_set_number(json_origin, "x", xcoord);
         json_object_set_number(json_origin, "y", ycoord);
-        azimuths_value = json_value_init_array();
-        azimuths = json_value_get_array(azimuths_value);
         horizons_value = json_value_init_array();
         horizons = json_value_get_array(horizons_value);
-        distances_value = json_value_init_array();
-        distances = json_value_get_array(distances_value);
         break;
     }
+
     for (int i = 0; i < printCount; i++) {
+        JSON_Value *value;
+        JSON_Object *object;
         OriginAngle origin_angle;
         com_par(geometry, &origin_angle, angle, xp, yp);
 
@@ -872,7 +881,10 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
         if (settings->degreeOutput) {
             shadow_angle *= rad2deg;
         }
-
+        if (format == JSON) {
+            value = json_value_init_object();
+            object = json_object(value);
+        }
         if (settings->compassOutput) {
             double tmpangle;
 
@@ -887,9 +899,10 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
                 fprintf(fp, "\n");
                 break;
             case JSON:
-                json_array_append_number(azimuths, tmpangle);
-                json_array_append_number(horizons, shadow_angle);
-                json_array_append_number(distances, horizon.length);
+                json_object_set_number(object, "azimuth", tmpangle);
+                json_object_set_number(object, "angle", shadow_angle);
+                json_object_set_number(object, "distance", horizon.length);
+                json_array_append_value(horizons, value);
                 break;
             }
         }
@@ -902,9 +915,10 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
                 fprintf(fp, "\n");
                 break;
             case JSON:
-                json_array_append_number(azimuths, printangle);
-                json_array_append_number(horizons, shadow_angle);
-                json_array_append_number(distances, horizon.length);
+                json_object_set_number(object, "azimuth", printangle);
+                json_object_set_number(object, "angle", shadow_angle);
+                json_object_set_number(object, "distance", horizon.length);
+                json_array_append_value(horizons, value);
                 break;
             }
         }
@@ -924,9 +938,7 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
     } /* end of for loop over angles */
 
     if (format == JSON) {
-        json_object_set_value(json_origin, "azimuth", azimuths_value);
-        json_object_set_value(json_origin, "horizon_height", horizons_value);
-        json_object_set_value(json_origin, "horizon_distance", distances_value);
+        json_object_set_value(json_origin, "horizons", horizons_value);
     }
 }
 
@@ -1178,7 +1190,10 @@ void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
             _("Calculating map %01d of %01d (angle %.2f, raster map <%s>)"),
             (k + 1), arrayNumInt, angle_deg, shad_filename);
 
-        for (int j = hor_row_start; j < hor_row_end; j++) {
+        int j;
+
+#pragma omp parallel for schedule(static, 1) default(shared)
+        for (j = hor_row_start; j < hor_row_end; j++) {
             G_percent(j - hor_row_start, hor_numrows - 1, 2);
             for (int i = hor_col_start; i < hor_col_end; i++) {
                 OriginPoint origin_point;
@@ -1218,12 +1233,11 @@ void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
                     if (settings->degreeOutput) {
                         shadow_angle *= rad2deg;
                     }
-
                     horizon_raster[j - buffer_s][i - buffer_w] = shadow_angle;
 
                 } /* undefs */
-            }
-        }
+            } /* end of loop over columns */
+        } /* end of parallel section */
 
         G_debug(1, "OUTGR() starts...");
         OUTGR(settings, shad_filename, cellhd);
@@ -1264,4 +1278,9 @@ void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
         Rast_write_history(shad_filename, &history);
         G_free(shad_filename);
     }
+
+    /* free memory */
+    for (int l = 0; l < hor_numrows; l++)
+        G_free(horizon_raster[l]);
+    G_free(horizon_raster);
 }

@@ -3,7 +3,7 @@
 # AUTHOR(S): Aaron Saw Min Sern <aaronsms u nus edu>
 #            Vaclav Petras <wenzeslaus gmail com>
 #
-# PURPOSE:   Benchmarking for GRASS GIS modules
+# PURPOSE:   Benchmarking for GRASS modules
 #
 # COPYRIGHT: (C) 2021 Vaclav Petras, and by the GRASS Development Team
 #
@@ -55,8 +55,7 @@ def benchmark_single(module, label, repeat=5):
         measured_times.append(module.time)
 
     avg = time_sum / repeat
-    if avg < min_avg:
-        min_avg = avg
+    min_avg = min(avg, min_avg)
     print(f"\nResult - {avg}s")
 
     print("\u2500" * term_size.columns)

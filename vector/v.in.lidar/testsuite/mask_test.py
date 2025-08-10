@@ -9,6 +9,11 @@ Licence:   This program is free software under the GNU General Public
            for details.
 """
 
+import os
+
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
+
 POINTS = """\
 17.46938776,18.67346939,1
 20.93877551,17.44897959,2
@@ -77,11 +82,6 @@ C  1 1
 """
 
 
-import os
-from grass.gunittest.case import TestCase
-from grass.gunittest.main import test
-
-
 class VectorMaskTest(TestCase):
     """Test case for watershed module
 
@@ -136,7 +136,7 @@ class VectorMaskTest(TestCase):
         )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
-            vector=self.imported_points, reference=dict(points=19)
+            vector=self.imported_points, reference={"points": 19}
         )
 
     def test_mask(self):
@@ -150,7 +150,7 @@ class VectorMaskTest(TestCase):
         )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
-            vector=self.imported_points, reference=dict(points=11)
+            vector=self.imported_points, reference={"points": 11}
         )
 
     def test_inverted_mask(self):
@@ -164,7 +164,7 @@ class VectorMaskTest(TestCase):
         )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
-            vector=self.imported_points, reference=dict(points=8)
+            vector=self.imported_points, reference={"points": 8}
         )
 
 

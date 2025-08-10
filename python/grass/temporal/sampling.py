@@ -18,9 +18,9 @@ for details.
 """
 
 from .core import (
+    SQLDatabaseInterfaceConnection,
     get_current_mapset,
     get_tgis_message_interface,
-    SQLDatabaseInterfaceConnection,
 )
 from .datetime_math import time_delta_to_relative_time
 from .factory import dataset_factory
@@ -34,8 +34,8 @@ def sample_stds_by_stds_topology(
     header,
     separator,
     method,
-    spatial=False,
-    print_only=True,
+    spatial: bool = False,
+    print_only: bool = True,
 ):
     """Sample the input space time datasets with a sample
     space time dataset, return the created map matrix and optionally
@@ -49,10 +49,8 @@ def sample_stds_by_stds_topology(
 
      Attention: Do not use the comma as separator for printing
 
-     :param intype: Type of the input space time dataset (strds, stvds or
-                    str3ds)
-     :param sampletype: Type of the sample space time datasets (strds,
-                        stvds or str3ds)
+     :param intype: Type of the input space time dataset (strds, stvds or str3ds)
+     :param sampletype: Type of the sample space time datasets (strds, stvds or str3ds)
      :param inputs: Name or comma separated names of space time datasets or
                     a list of map names
      :param sampler: Name of a space time dataset used for temporal sampling
@@ -82,19 +80,11 @@ def sample_stds_by_stds_topology(
     sts = []
 
     for input in inputs:
-        if input.find("@") >= 0:
-            id = input
-        else:
-            id = input + "@" + mapset
-
+        id = input if input.find("@") >= 0 else input + "@" + mapset
         st = dataset_factory(intype, id)
         sts.append(st)
 
-    if sampler.find("@") >= 0:
-        sid = sampler
-    else:
-        sid = sampler + "@" + mapset
-
+    sid = sampler if sampler.find("@") >= 0 else sampler + "@" + mapset
     sst = dataset_factory(sampletype, sid)
 
     dbif = SQLDatabaseInterfaceConnection()
@@ -156,10 +146,7 @@ def sample_stds_by_stds_topology(
             map = entry["granule"]
 
             start, end = map.get_temporal_extent_as_tuple()
-            if end:
-                delta = end - start
-            else:
-                delta = None
+            delta = end - start if end else None
             delta_first = start - first_time
 
             if map.is_time_absolute():

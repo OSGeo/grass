@@ -17,6 +17,8 @@
  *****************************************************************************/
 
 #if defined(_OPENMP)
+#include <stdbool.h>
+
 #include <omp.h>
 #endif
 #include <stdlib.h>
@@ -164,7 +166,7 @@ int main(int argc, char *argv[])
     parm.file->key = "file";
     parm.file->description =
         _("Input file with one raster map name and optional one weight per "
-          "line, field separator between name and weight is |");
+          "line, field separator between name and weight is | (pipe)");
     parm.file->required = NO;
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
@@ -211,40 +213,26 @@ int main(int argc, char *argv[])
     flag.lazy->key = 'z';
     flag.lazy->description = _("Do not keep files open");
 
+    G_option_required(parm.input, parm.file, NULL);
+    G_option_exclusive(parm.input, parm.file, NULL);
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    sscanf(parm.nprocs->answer, "%d", &nprocs);
-    if (nprocs < 1) {
+    nprocs = G_set_omp_num_threads(parm.nprocs);
+    nprocs = Rast_disable_omp_on_mask(nprocs);
+    if (nprocs < 1)
         G_fatal_error(_("<%d> is not valid number of nprocs."), nprocs);
-    }
 #if defined(_OPENMP)
-    omp_set_num_threads(nprocs);
     threaded = nprocs > 1;
-#else
-    if (nprocs != 1)
-        G_warning(_("GRASS is compiled without OpenMP support. Ignoring "
-                    "threads setting."));
-    nprocs = 1;
 #endif
-    if (nprocs > 1 && G_find_raster("MASK", G_mapset()) != NULL) {
-        G_warning(_("Parallel processing disabled due to active MASK."));
-        nprocs = 1;
-    }
+
     lo = -INFINITY;
     hi = INFINITY;
     if (parm.range->answer) {
         lo = atof(parm.range->answers[0]);
         hi = atof(parm.range->answers[1]);
     }
-
-    if (parm.input->answer && parm.file->answer)
-        G_fatal_error(_("%s= and %s= are mutually exclusive"), parm.input->key,
-                      parm.file->key);
-
-    if (!parm.input->answer && !parm.file->answer)
-        G_fatal_error(_("Please specify %s= or %s="), parm.input->key,
-                      parm.file->key);
 
     have_weights = 0;
 
@@ -617,7 +605,7 @@ int main(int argc, char *argv[])
 
                 computed++;
             } /* end for loop */
-        }     /* end parallel region */
+        } /* end parallel region */
 
         /* write output buffer to disk */
         for (i = 0; i < num_outputs; i++) {

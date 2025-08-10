@@ -1,6 +1,5 @@
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-from grass.gunittest.gmodules import call_module
 
 
 class TestViewshed(TestCase):
@@ -15,10 +14,10 @@ class TestViewshed(TestCase):
     def tearDownClass(cls):
         cls.del_temp_region()
 
-    def tearDown(cls):
+    def tearDown(self):
         """Remove viewshed map after each test method"""
         # TODO: eventually, removing maps should be handled through testing framework functions
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.viewshed)
+        self.runModule("g.remove", flags="f", type="raster", name=self.viewshed)
 
     def test_limits(self):
         """Test if results is in expected limits"""

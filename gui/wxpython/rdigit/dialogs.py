@@ -91,7 +91,7 @@ class NewRasterDialog(wx.Dialog):
             ret = grast.raster_info(value)
             self._typeChoice.SetStringSelection(ret["datatype"])
         except CalledModuleError:
-            return
+            pass
 
     def OnOK(self, event):
         mapName = self.GetMapName()
@@ -114,12 +114,11 @@ class NewRasterDialog(wx.Dialog):
                     caption=_("Overwrite?"),
                     style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
                 )
-                if not dlgOverwrite.ShowModal() == wx.ID_YES:
+                if dlgOverwrite.ShowModal() != wx.ID_YES:
                     dlgOverwrite.Destroy()
                     return
-                else:
-                    dlgOverwrite.Destroy()
-                    self.EndModal(wx.ID_OK)
+                dlgOverwrite.Destroy()
+                self.EndModal(wx.ID_OK)
             else:
                 self.EndModal(wx.ID_OK)
 

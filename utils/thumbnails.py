@@ -15,7 +15,10 @@
 
 import os
 import atexit
-import grass.script as grass
+import sys
+from pathlib import Path
+
+import grass.script as gs
 
 
 tmp_grad_abs = None
@@ -23,23 +26,21 @@ tmp_grad_rel = None
 
 
 def cleanup():
+    names = []
     if tmp_grad_rel:
-        grass.run_command(
-            "g.remove", flags="f", type="raster", name=tmp_grad_rel, quiet=True
-        )
+        names.append(tmp_grad_rel)
     if tmp_grad_abs:
-        grass.run_command(
-            "g.remove", flags="f", type="raster", name=tmp_grad_abs, quiet=True
+        names.append(tmp_grad_abs)
+    if len(names) > 0:
+        gs.run_command(
+            "g.remove", flags="f", type="raster", name=",".join(names), quiet=True
         )
 
 
 def make_gradient(path):
-    fh = open(path)
-    text = fh.read()
-    fh.close()
-
+    text = Path(path).read_text()
     lines = text.splitlines()
-    records = list()
+    records = []
     for line in lines:
         if line.startswith("#"):
             # skip comments
@@ -76,7 +77,7 @@ def make_gradient(path):
                 minval += abs(minval / 100)
             maxval = float(records[-1][0])
             maxval = min(maxval, 2500000)
-        if os.path.basename(path) in ("ndvi", "ndwi", "ndwi2"):
+        if os.path.basename(path) in {"ndvi", "ndwi", "ndwi2"}:
             minval = -1.0
             maxval = 1.0
         if os.path.basename(path) == "ndvi_MODIS":
@@ -86,11 +87,11 @@ def make_gradient(path):
             maxval = 1000.0
         if os.path.basename(path) == "precipitation":
             maxval = 2000.0
-        if os.path.basename(path) in ("terrain", "srtm", "srtm_plus"):
+        if os.path.basename(path) in {"terrain", "srtm", "srtm_plus"}:
             minval = -500.0
             maxval = 3000.0
         grad = tmp_grad_abs
-        grass.mapcalc(
+        gs.mapcalc(
             "$grad = "
             " float($min) + (col() - 1) * "
             "  (float($max) - float($min)) / ncols()",
@@ -106,15 +107,15 @@ def make_gradient(path):
 
 
 def make_image(output_dir, table, grad, height, width):
-    outfile = os.path.join(output_dir, "colortables", "%s.png" % table)
+    outfile = os.path.join(output_dir, "%s.png" % table)
     os.environ["GRASS_RENDER_FILE"] = outfile
 
-    grass.run_command("r.colors", map=grad, color=table, quiet=True)
+    gs.run_command("r.colors", map=grad, color=table, quiet=True)
     os.environ["GRASS_RENDER_FRAME"] = "%f,%f,%f,%f" % (0, height, 2, width - 2)
-    grass.run_command("d.rast", map=grad, quiet=True)
+    gs.run_command("d.rast", map=grad, quiet=True)
     if 1:
         os.environ["GRASS_RENDER_FRAME"] = "%f,%f,%f,%f" % (0, height, 0, width)
-        grass.write_command(
+        gs.write_command(
             "d.graph",
             quiet=True,
             flags="m",
@@ -158,7 +159,7 @@ def main():
     os.environ["GRASS_OVERWRITE"] = "1"
 
     color_dir = os.path.join(os.environ["GISBASE"], "etc", "colors")
-    output_dir = os.path.join(os.environ["GISBASE"], "docs", "html")
+    output_dir = sys.argv[1]
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -185,8 +186,8 @@ def main():
 
     os.environ["GRASS_ANTIALIAS"] = "none"
 
-    grass.use_temp_region()
-    grass.run_command(
+    gs.use_temp_region()
+    gs.run_command(
         "g.region",
         s=0,
         w=0,
@@ -198,14 +199,15 @@ def main():
         flags="a",
     )
 
-    grass.mapcalc("$grad = float(col())", grad=tmp_grad_rel, quiet=True)
+    gs.mapcalc("$grad = float(col())", grad=tmp_grad_rel, quiet=True)
 
-    for table in os.listdir(color_dir):
-        path = os.path.join(color_dir, table)
-        grad = make_gradient(path)
+    color_dir_path = Path(color_dir)
+    for table_path in color_dir_path.iterdir():
+        table = table_path.name
+        grad = make_gradient(table_path)
         make_image(output_dir, table, grad, height=height, width=width)
 
-    grass.mapcalc("$grad = col()", grad=tmp_grad_abs, quiet=True)
+    gs.mapcalc("$grad = col()", grad=tmp_grad_abs, quiet=True)
     for table in ["grey.eq", "grey.log", "random"]:
         make_image(output_dir, table, tmp_grad_abs, height=height, width=width)
 

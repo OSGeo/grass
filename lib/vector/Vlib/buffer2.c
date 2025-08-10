@@ -118,7 +118,7 @@ static void elliptic_tangent(double x, double y, double da, double db,
 
 /*
  * !!! This is not line in GRASS' sense. See
- * http://en.wikipedia.org/wiki/Line_%28mathematics%29
+ * https://en.wikipedia.org/wiki/Line_%28mathematics%29
  */
 static void line_coefficients(double x1, double y1, double x2, double y2,
                               double *a, double *b, double *c)
@@ -948,7 +948,7 @@ static void buffer_lines(struct line_pnts *area_outer,
                 }
 
                 /* we need to check if the area is in the buffer.
-                   I've simplfied convolution_line(), so that it runs faster,
+                   I've simplified convolution_line(), so that it runs faster,
                    however that leads to occasional problems */
                 if (check_poly &&
                     Vect_point_in_poly(cPoints->x[0], cPoints->y[0],
@@ -1135,6 +1135,8 @@ void Vect_area_buffer2(struct Map_info *Map, int area, double da, double db,
    \param round make corners round
    \param tol maximum distance between theoretical arc and output segments
    \param[out] oPoints output polygon outer border (ccw order)
+
+   \note Currently only handles buffers with rounded corners (round = 1)
  */
 void Vect_point_buffer2(double px, double py, double da, double db,
                         double dalpha, int round, double tol,
@@ -1144,13 +1146,13 @@ void Vect_point_buffer2(double px, double py, double da, double db,
     double angular_tol, angular_step, phi1;
     int j, nsegments;
 
-    G_debug(2, "Vect_point_buffer()");
+    G_debug(2, "%s()", __func__);
 
     *oPoints = Vect_new_line_struct();
 
     dalpha *= PI / 180; /* convert dalpha from degrees to radians */
 
-    if (round || (!round)) {
+    if (round) {
         angular_tol = angular_tolerance(tol, da, db);
 
         nsegments = (int)(2 * PI / angular_tol) + 1;

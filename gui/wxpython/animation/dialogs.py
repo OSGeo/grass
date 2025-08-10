@@ -24,6 +24,9 @@ import os
 import wx
 import copy
 import datetime
+
+from pathlib import Path
+
 import wx.lib.filebrowsebutton as filebrowse
 import wx.lib.scrolledpanel as SP
 import wx.lib.colourselect as csel
@@ -34,6 +37,7 @@ except ImportError:
     from wx import HyperlinkCtrl
 
 from core.gcmd import GMessage, GError, GException
+from grass.exceptions import ScriptError
 from core import globalvar
 from gui_core.dialogs import MapLayersDialog, GetImageHandlers
 from gui_core.preferences import PreferencesBaseDialog
@@ -486,9 +490,9 @@ class InputDialog(wx.Dialog):
             id=wx.ID_ANY,
             size=globalvar.DIALOG_GSELECT_SIZE,
             labelText=_("Workspace file:"),
-            dialogTitle=_("Choose workspace file to " "import 3D view parameters"),
+            dialogTitle=_("Choose workspace file to import 3D view parameters"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             fileMode=0,
             fileMask="GRASS Workspace File (*.gxw)|*.gxw",
         )
@@ -550,7 +554,7 @@ class InputDialog(wx.Dialog):
         )
         self.zoomRadio = RadioButton(panel, label=_("Zoom value:"))
         self.zoomRadio.SetToolTip(
-            _("N-S/E-W distances in map units used to " "gradually reduce region.")
+            _("N-S/E-W distances in map units used to gradually reduce region.")
         )
         gridSizer.Add(self.zoomRadio, pos=(3, 0), border=10, flag=wx.EXPAND | wx.LEFT)
 
@@ -671,14 +675,13 @@ class InputDialog(wx.Dialog):
 
             if not self.legend.IsChecked():
                 self.legend.SetValue(True)
-        else:
-            if not self._tmpLegendCmd and not self.animationData.legendCmd:
-                self.legend.SetValue(False)
+        elif not self._tmpLegendCmd and not self.animationData.legendCmd:
+            self.legend.SetValue(False)
 
     def _update(self):
         if self.nDChoice.GetSelection() == 1 and len(self._layerList) > 1:
             raise GException(
-                _("Only one series or space-time " "dataset is accepted for 3D mode.")
+                _("Only one series or space-time dataset is accepted for 3D mode.")
             )
         hasSeries = False
         for layer in self._layerList:
@@ -725,10 +728,9 @@ class InputDialog(wx.Dialog):
             if isStart:
                 self.animationData.startRegion = isStart
         else:
-            if isStart:
-                self.animationData.startRegion = isStart
-            else:
+            if not isStart:
                 raise GException(_("Region information is not complete"))
+            self.animationData.startRegion = isStart
             if isEnd:
                 self.animationData.endRegion = self.endRegion.GetValue()
                 self.animationData.zoomRegionValue = None
@@ -901,7 +903,7 @@ class EditDialog(wx.Dialog):
         return self.result
 
     def OnOk(self, event):
-        indices = set([anim.windowIndex for anim in self.animationData])
+        indices = {anim.windowIndex for anim in self.animationData}
         if len(indices) != len(self.animationData):
             GError(
                 parent=self,
@@ -1090,7 +1092,7 @@ class ExportDialog(wx.Dialog):
             labelText=_("Image file:"),
             dialogTitle=_("Choose image file"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             fileMode=wx.FD_OPEN,
             changeCallback=self.OnSetImage,
         )
@@ -1192,7 +1194,7 @@ class ExportDialog(wx.Dialog):
             labelText=_("Directory:"),
             dialogTitle=_("Choose directory for export"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
         )
 
         dirGridSizer = wx.GridBagSizer(hgap=5, vgap=5)
@@ -1220,7 +1222,7 @@ class ExportDialog(wx.Dialog):
             labelText=_("GIF file:"),
             dialogTitle=_("Choose file to save animation"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             fileMode=wx.FD_SAVE,
         )
         gifGridSizer = wx.GridBagSizer(hgap=5, vgap=5)
@@ -1243,7 +1245,7 @@ class ExportDialog(wx.Dialog):
             labelText=_("SWF file:"),
             dialogTitle=_("Choose file to save animation"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             fileMode=wx.FD_SAVE,
         )
         swfGridSizer = wx.GridBagSizer(hgap=5, vgap=5)
@@ -1274,7 +1276,7 @@ class ExportDialog(wx.Dialog):
             labelText=_("AVI file:"),
             dialogTitle=_("Choose file to save animation"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             fileMode=wx.FD_SAVE,
         )
         encodingLabel = StaticText(
@@ -1399,7 +1401,7 @@ class ExportDialog(wx.Dialog):
             self._hideAll()
             return
         cdata = self.listbox.GetClientData(index)
-        self.hidevbox.Show(self.fontBox, (cdata["name"] in ("time", "text")))
+        self.hidevbox.Show(self.fontBox, (cdata["name"] in {"time", "text"}))
         self.hidevbox.Show(self.imageBox, (cdata["name"] == "image"))
         self.hidevbox.Show(self.textBox, (cdata["name"] == "text"))
         self.hidevbox.Show(self.posBox, True)
@@ -1409,7 +1411,7 @@ class ExportDialog(wx.Dialog):
         self.spinY.SetValue(cdata["pos"][1])
         if cdata["name"] == "image":
             self.browse.SetValue(cdata["file"])
-        elif cdata["name"] in ("time", "text"):
+        elif cdata["name"] in {"time", "text"}:
             self.sampleLabel.SetFont(cdata["font"])
             if cdata["name"] == "text":
                 self.textCtrl.SetValue(cdata["text"])
@@ -1541,42 +1543,41 @@ class ExportDialog(wx.Dialog):
         """
 
         file_path_does_not_exist_err_message = _(
-            "Exported file directory '{base_dir}' " "does not exist."
+            "Exported file directory '{base_dir}' does not exist."
         )
         if not file_path:
             GError(parent=self, message=_("Export file is missing."))
             return False
-        else:
-            if not file_path.endswith(file_postfix):
-                filebrowsebtn.SetValue(file_path + file_postfix)
-                file_path += file_postfix
+        if not file_path.endswith(file_postfix):
+            filebrowsebtn.SetValue(file_path + file_postfix)
+            file_path += file_postfix
 
-            base_dir = os.path.dirname(file_path)
-            if not os.path.exists(base_dir):
-                GError(
-                    parent=self,
-                    message=file_path_does_not_exist_err_message.format(
-                        base_dir=base_dir,
-                    ),
-                )
-                return False
+        base_dir = os.path.dirname(file_path)
+        if not os.path.exists(base_dir):
+            GError(
+                parent=self,
+                message=file_path_does_not_exist_err_message.format(
+                    base_dir=base_dir,
+                ),
+            )
+            return False
 
-            if os.path.exists(file_path):
-                overwrite_dlg = wx.MessageDialog(
-                    self.GetParent(),
-                    message=_(
-                        "Exported animation file <{file}> exists. "
-                        "Do you want to overwrite it?".format(
-                            file=file_path,
-                        ),
-                    ),
-                    caption=_("Overwrite?"),
-                    style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
-                )
-                if not overwrite_dlg.ShowModal() == wx.ID_YES:
-                    overwrite_dlg.Destroy()
-                    return False
+        if os.path.exists(file_path):
+            overwrite_dlg = wx.MessageDialog(
+                self.GetParent(),
+                message=_(
+                    "Exported animation file <{file}> exists. "
+                    "Do you want to overwrite it?"
+                ).format(
+                    file=file_path,
+                ),
+                caption=_("Overwrite?"),
+                style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
+            )
+            if overwrite_dlg.ShowModal() != wx.ID_YES:
                 overwrite_dlg.Destroy()
+                return False
+            overwrite_dlg.Destroy()
 
         return True
 
@@ -1618,14 +1619,10 @@ class AnimSimpleLayerManager(SimpleLayerManager):
         dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_OK:
             layer = dlg.GetLayer()
-            if hidden:
-                signal = self.layerAdded
-            else:
-                signal = self.cmdChanged
+            signal = self.layerAdded if hidden else self.cmdChanged
             signal.emit(index=self._layerList.GetLayerIndex(layer), layer=layer)
-        else:
-            if hidden:
-                self._layerList.RemoveLayer(layer)
+        elif hidden:
+            self._layerList.RemoveLayer(layer)
         dlg.Destroy()
         self._update()
         self.anyChange.emit()
@@ -1750,7 +1747,7 @@ class AddTemporalLayerDialog(wx.Dialog):
         if typeName:
             self.tchoice.SetStringSelection(self._types[typeName])
             self.tselect.SetType(typeName)
-            if typeName in ("strds", "stvds", "str3ds"):
+            if typeName in {"strds", "stvds", "str3ds"}:
                 self.tselect.SetType(typeName, multiple=False)
                 self.addManyMapsButton.Disable()
             else:
@@ -1760,7 +1757,7 @@ class AddTemporalLayerDialog(wx.Dialog):
             self.tselect.SetValue("")
         else:
             typeName = self.tchoice.GetClientData(self.tchoice.GetSelection())
-            if typeName in ("strds", "stvds", "str3ds"):
+            if typeName in {"strds", "stvds", "str3ds"}:
                 self.tselect.SetType(typeName, multiple=False)
                 self.addManyMapsButton.Disable()
             else:
@@ -1773,14 +1770,14 @@ class AddTemporalLayerDialog(wx.Dialog):
 
     def _createDefaultCommand(self):
         cmd = []
-        if self._mapType in ("raster", "strds"):
+        if self._mapType in {"raster", "strds"}:
             cmd.append("d.rast")
-        elif self._mapType in ("vector", "stvds"):
+        elif self._mapType in {"vector", "stvds"}:
             cmd.append("d.vect")
-        elif self._mapType in ("raster_3d", "str3ds"):
+        elif self._mapType in {"raster_3d", "str3ds"}:
             cmd.append("d.rast3d")
         if self._name:
-            if self._mapType in ("raster", "vector", "raster_3d"):
+            if self._mapType in {"raster", "vector", "raster_3d"}:
                 cmd.append("map={name}".format(name=self._name.split(",")[0]))
             else:
                 try:
@@ -1788,7 +1785,7 @@ class AddTemporalLayerDialog(wx.Dialog):
                     if maps:
                         mapName, mapLayer = getNameAndLayer(maps[0])
                         cmd.append("map={name}".format(name=mapName))
-                except gcore.ScriptError as e:
+                except ScriptError as e:
                     GError(parent=self, message=str(e), showTraceback=False)
                     return None
         return cmd
@@ -1841,7 +1838,7 @@ class AddTemporalLayerDialog(wx.Dialog):
                 self.layer.name = self._name
                 self.layer.cmd = self._cmd
                 event.Skip()
-            except (GException, gcore.ScriptError) as e:
+            except (GException, ScriptError) as e:
                 GError(parent=self, message=str(e))
 
     def GetLayer(self):
@@ -2023,7 +2020,7 @@ class PreferencesDialog(PreferencesBaseDialog):
             panel,
             id=wx.ID_ANY,
             label=_("Learn more about formatting options"),
-            url="http://docs.python.org/2/library/datetime.html#"
+            url="https://docs.python.org/2/library/datetime.html#"
             "strftime-and-strptime-behavior",
         )
         link.SetNormalColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT))

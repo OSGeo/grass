@@ -8,7 +8,7 @@ See manual pages for details.
               and GeoModel, s.r.o., Bratislava, Slovakia
 email: hofierka@geomodel.sk,marcel.suri@jrc.it,
        suri@geomodel.sk Thomas.Huld@jrc.it
-(c) 2003-2013 by The GRASS Development Team
+(c) 2003-2013 by the GRASS Development Team
 ******************************************************************************/
 /*
  * This program is free software; you can redistribute it and/or
@@ -37,6 +37,7 @@ email: hofierka@geomodel.sk,marcel.suri@jrc.it,
 #include <omp.h>
 #endif
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -117,8 +118,6 @@ struct History hist;
 
 int INPUT_part(int offset, double *zmax);
 int OUTGR(void);
-int min(int, int);
-int max(int, int);
 
 /*void cube(int, int);
    void (*func) (int, int); */
@@ -200,7 +199,7 @@ int ll_correction = FALSE;
 double coslatsq;
 
 /* why not use G_distance() here which switches to geodesic/great
-   circle distace as needed? */
+   circle distance as needed? */
 double distance(double x1, double x2, double y1, double y2)
 {
     if (ll_correction) {
@@ -214,10 +213,10 @@ double distance(double x1, double x2, double y1, double y2)
 
 int main(int argc, char *argv[])
 {
-    double singleSlope;
-    double singleAspect;
-    double singleAlbedo;
-    double singleLinke;
+    double singleSlope = 0.0;
+    double singleAspect = 0.0;
+    double singleAlbedo = 0.0;
+    double singleLinke = 0.0;
 
     int threads;
 
@@ -234,7 +233,7 @@ int main(int argc, char *argv[])
         struct Flag *noshade, *saveMemory;
     } flag;
 
-    struct GridGeometry gridGeom;
+    struct GridGeometry gridGeom = {0};
 
     G_gisinit(argv[0]);
 
@@ -591,8 +590,8 @@ int main(int argc, char *argv[])
 #else
     threads = 1;
 #endif
-    if (threads > 1 && G_find_raster("MASK", G_mapset()) != NULL) {
-        G_warning(_("Parallel processing disabled due to active MASK."));
+    if (threads > 1 && Rast_mask_is_present()) {
+        G_warning(_("Parallel processing disabled due to active mask."));
         threads = 1;
     }
     G_message(_("Number of threads <%d>"), threads);
@@ -1441,7 +1440,7 @@ void joules2(struct SunGeometryConstDay *sunGeom,
                 ss = 0; /* we've got the sunset */
             }
         } /* end of while */
-    }     /* all-day radiation */
+    } /* all-day radiation */
 }
 
 /*////////////////////////////////////////////////////////////////////// */

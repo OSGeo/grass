@@ -18,9 +18,10 @@ This program is free software under the GNU General Public License
 
 import os
 import re
+from pathlib import Path
 
 import wx
-import grass.script as grass
+import grass.script as gs
 
 from core import globalvar
 from core.gcmd import GError, RunCommand
@@ -176,7 +177,7 @@ class MapCalcFrame(wx.Frame):
         self.btn_copy = Button(parent=self.panel, id=wx.ID_ANY, label=_("Copy"))
         self.btn_copy.SetToolTip(_("Copy the current command string to the clipboard"))
 
-        self.btn = dict()
+        self.btn = {}
         self.btn["pow"] = Button(parent=self.panel, id=wx.ID_ANY, label="^")
         self.btn["pow"].SetToolTip(_("exponent"))
         self.btn["div"] = Button(parent=self.panel, id=wx.ID_ANY, label="/")
@@ -608,7 +609,7 @@ class MapCalcFrame(wx.Frame):
             if newmcalcstr[-1] != " ":
                 newmcalcstr += " "
                 position_offset += 1
-        except:
+        except IndexError:
             pass
 
         newmcalcstr += what
@@ -617,7 +618,7 @@ class MapCalcFrame(wx.Frame):
         try:
             if newmcalcstr[-1] != " " and mcalcstr[position] != " ":
                 newmcalcstr += " "
-        except:
+        except IndexError:
             newmcalcstr += " "
 
         newmcalcstr += mcalcstr[position:]
@@ -632,7 +633,7 @@ class MapCalcFrame(wx.Frame):
                 try:
                     if newmcalcstr[position + position_offset] == " ":
                         position_offset += 1
-                except:
+                except IndexError:
                     pass
 
         self.text_mcalc.SetInsertionPoint(position + position_offset)
@@ -645,7 +646,7 @@ class MapCalcFrame(wx.Frame):
         if not name:
             GError(
                 parent=self,
-                message=_("You must enter the name of " "a new raster map to create."),
+                message=_("You must enter the name of a new raster map to create."),
             )
             return
 
@@ -658,9 +659,7 @@ class MapCalcFrame(wx.Frame):
         if not expr:
             GError(
                 parent=self,
-                message=_(
-                    "You must enter an expression " "to create a new raster map."
-                ),
+                message=_("You must enter an expression to create a new raster map."),
             )
             return
 
@@ -683,11 +682,8 @@ class MapCalcFrame(wx.Frame):
             self.log.RunCmd(cmd, onDone=self.OnDone)
             self.parent.Raise()
         else:
-            if self.overwrite.IsChecked():
-                overwrite = True
-            else:
-                overwrite = False
-            params = dict(expression="%s=%s" % (name, expr), overwrite=overwrite)
+            overwrite = bool(self.overwrite.IsChecked())
+            params = {"expression": "%s=%s" % (name, expr), "overwrite": overwrite}
             if seed_flag:
                 params["flags"] = "s"
             if seed:
@@ -702,14 +698,14 @@ class MapCalcFrame(wx.Frame):
         """
         if event.returncode != 0:
             return
-        name = self.newmaptxt.GetValue().strip(' "') + "@" + grass.gisenv()["MAPSET"]
+        name = self.newmaptxt.GetValue().strip(' "') + "@" + gs.gisenv()["MAPSET"]
         ltype = "raster"
         if self.rast3d:
             ltype = "raster_3d"
         self._giface.mapCreated.emit(
             name=name, ltype=ltype, add=self.addbox.IsChecked()
         )
-        gisenv = grass.gisenv()
+        gisenv = gs.gisenv()
         self._giface.grassdbChanged.emit(
             grassdb=gisenv["GISDBASE"],
             location=gisenv["LOCATION_NAME"],
@@ -738,11 +734,7 @@ class MapCalcFrame(wx.Frame):
                 dlg.Destroy()
                 return
 
-            try:
-                fobj = open(path, "w")
-                fobj.write(mctxt)
-            finally:
-                fobj.close()
+            Path(path).write_text(mctxt)
 
         dlg.Destroy()
 
@@ -760,11 +752,7 @@ class MapCalcFrame(wx.Frame):
                 dlg.Destroy()
                 return
 
-            try:
-                fobj = open(path, "r")
-                mctxt = fobj.read()
-            finally:
-                fobj.close()
+            mctxt = Path(path).read_text()
 
             try:
                 result, exp = mctxt.split("=", 1)

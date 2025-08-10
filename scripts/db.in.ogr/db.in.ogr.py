@@ -73,7 +73,7 @@
 # %end
 
 import os
-import grass.script as grass
+import grass.script as gs
 from grass.script.utils import decode
 from grass.exceptions import CalledModuleError
 
@@ -86,47 +86,45 @@ def main():
     output = options["output"]
     key = options["key"]
 
-    mapset = grass.gisenv()["MAPSET"]
+    mapset = gs.gisenv()["MAPSET"]
 
     if db_table:
         input = db_table
 
     if not output:
         tmpname = input.replace(".", "_")
-        output = grass.basename(tmpname)
+        output = gs.basename(tmpname)
 
     # check if table exists
     try:
-        nuldev = open(os.devnull, "w+")
-        s = grass.read_command("db.tables", flags="p", quiet=True, stderr=nuldev)
-        nuldev.close()
+        with open(os.devnull, "w+") as nuldev:
+            s = gs.read_command("db.tables", flags="p", quiet=True, stderr=nuldev)
     except CalledModuleError:
         # check connection parameters, set if uninitialized
-        grass.read_command("db.connect", flags="c")
-        s = grass.read_command("db.tables", flags="p", quiet=True)
+        gs.read_command("db.connect", flags="c")
+        s = gs.read_command("db.tables", flags="p", quiet=True)
 
     for line in decode(s).splitlines():
         if line == output:
-            if grass.overwrite():
-                grass.warning(
-                    _("Table <%s> already exists and will be " "overwritten") % output
+            if gs.overwrite():
+                gs.warning(
+                    _("Table <%s> already exists and will be overwritten") % output
                 )
-                grass.write_command(
+                gs.write_command(
                     "db.execute", input="-", stdin="DROP TABLE %s" % output
                 )
                 break
-            else:
-                grass.fatal(_("Table <%s> already exists") % output)
+            gs.fatal(_("Table <%s> already exists") % output)
 
     # treat DB as real vector map...
-    layer = db_table if db_table else None
+    layer = db_table or None
 
     vopts = {}
     if options["encoding"]:
         vopts["encoding"] = options["encoding"]
 
     try:
-        grass.run_command(
+        gs.run_command(
             "v.in.ogr",
             flags="o",
             input=input,
@@ -139,12 +137,12 @@ def main():
         )
     except CalledModuleError:
         if db_table:
-            grass.fatal(_("Input table <%s> not found or not readable") % input)
+            gs.fatal(_("Input table <%s> not found or not readable") % input)
         else:
-            grass.fatal(_("Input DSN <%s> not found or not readable") % input)
+            gs.fatal(_("Input DSN <%s> not found or not readable") % input)
 
     # save db connection settings of the output
-    f = grass.vector_layer_db(output, "1")
+    f = gs.vector_layer_db(output, "1")
 
     table = f["table"]
     database = f["database"]
@@ -152,13 +150,13 @@ def main():
 
     # rename ID col if requested from cat to new name
     if key:
-        grass.write_command(
+        gs.write_command(
             "db.execute",
             quiet=True,
             input="-",
             stdin="ALTER TABLE %s ADD COLUMN %s integer" % (output, key),
         )
-        grass.write_command(
+        gs.write_command(
             "db.execute",
             quiet=True,
             input="-",
@@ -166,33 +164,32 @@ def main():
         )
 
     # ... and immediately drop the empty geometry
-    vectfile = grass.find_file(output, element="vector", mapset=mapset)["file"]
+    vectfile = gs.find_file(output, element="vector", mapset=mapset)["file"]
     if not vectfile:
-        grass.fatal(_("Something went wrong. Should not happen"))
+        gs.fatal(_("Something went wrong. Should not happen"))
     else:
         # remove the vector part
-        grass.run_command("v.db.connect", quiet=True, map=output, layer="1", flags="d")
-        grass.run_command("g.remove", flags="f", quiet=True, type="vector", name=output)
+        gs.run_command("v.db.connect", quiet=True, map=output, layer="1", flags="d")
+        gs.run_command("g.remove", flags="f", quiet=True, type="vector", name=output)
 
     # get rid of superfluous auto-added cat column (and cat_ if present)
-    nuldev = open(os.devnull, "w+")
-    grass.run_command(
-        "db.dropcolumn",
-        quiet=True,
-        flags="f",
-        table=table,
-        database=database,
-        driver=driver,
-        column="cat",
-        stdout=nuldev,
-        stderr=nuldev,
-    )
-    nuldev.close()
+    with open(os.devnull, "w+") as nuldev:
+        gs.run_command(
+            "db.dropcolumn",
+            quiet=True,
+            flags="f",
+            table=table,
+            database=database,
+            driver=driver,
+            column="cat",
+            stdout=nuldev,
+            stderr=nuldev,
+        )
 
-    records = grass.db_describe(table, database=database, driver=driver)["nrows"]
-    grass.message(_("Imported table <%s> with %d rows") % (output, records))
+    records = gs.db_describe(table, database=database, driver=driver)["nrows"]
+    gs.message(_("Imported table <%s> with %d rows") % (output, records))
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

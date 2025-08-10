@@ -7,15 +7,14 @@ class Flag:
 
     It is possible to set flags of command using this object.
 
-    >>> flag = Flag(diz=dict(name='a', description='Flag description',
-    ...                      default=True))
+    >>> flag = Flag(diz=dict(name="a", description="Flag description", default=True))
     >>> flag.name
     'a'
     >>> flag.special
     False
     >>> flag.description
     'Flag description'
-    >>> flag = Flag(diz=dict(name='overwrite'))
+    >>> flag = Flag(diz=dict(name="overwrite"))
     >>> flag.name
     'overwrite'
     >>> flag.special
@@ -26,50 +25,48 @@ class Flag:
         self.value = False
         diz = read.element2dict(xflag) if xflag is not None else diz
         self.name = diz["name"]
-        self.special = (
-            True if self.name in ("verbose", "overwrite", "quiet", "run") else False
-        )
+        self.special = self.name in {"verbose", "overwrite", "quiet", "run"}
         self.description = diz.get("description", None)
         self.default = diz.get("default", None)
         self.guisection = diz.get("guisection", None)
-        self.suppress_required = True if "suppress_required" in diz else False
+        self.suppress_required = "suppress_required" in diz
 
     def get_bash(self):
         """Return the BASH representation of a flag.
 
-        >>> flag = Flag(diz=dict(name='a', description='Flag description',
-        ...                      default=True))
+        >>> flag = Flag(
+        ...     diz=dict(name="a", description="Flag description", default=True)
+        ... )
         >>> flag.get_bash()
         ''
         >>> flag.value = True
         >>> flag.get_bash()
         '-a'
-        >>> flag = Flag(diz=dict(name='overwrite'))
+        >>> flag = Flag(diz=dict(name="overwrite"))
         >>> flag.get_bash()
         ''
         >>> flag.value = True
         >>> flag.get_bash()
         '--o'
         """
-        if self.value:
-            if self.special:
-                return "--%s" % self.name[0]
-            else:
-                return "-%s" % self.name
-        else:
+        if not self.value:
             return ""
+        if self.special:
+            return "--%s" % self.name[0]
+        return "-%s" % self.name
 
     def get_python(self):
         """Return the python representation of a flag.
 
-        >>> flag = Flag(diz=dict(name='a', description='Flag description',
-        ...                      default=True))
+        >>> flag = Flag(
+        ...     diz=dict(name="a", description="Flag description", default=True)
+        ... )
         >>> flag.get_python()
         ''
         >>> flag.value = True
         >>> flag.get_python()
         'a'
-        >>> flag = Flag(diz=dict(name='overwrite'))
+        >>> flag = Flag(diz=dict(name="overwrite"))
         >>> flag.get_python()
         ''
         >>> flag.value = True
@@ -99,7 +96,7 @@ class Flag:
     def __doc__(self):
         """Return a documentation string, something like:
 
-        {name}: {default}, suppress required {supress}
+        {name}: {default}, suppress required {suppress}
             {description}
 
         >>>  flag = Flag(diz=dict(name='a', description='Flag description',
@@ -108,7 +105,7 @@ class Flag:
         a: True
             Flag description
 
-        >>> flag = Flag(diz=dict(name='overwrite'))
+        >>> flag = Flag(diz=dict(name="overwrite"))
         >>> print(flag.__doc__)
         overwrite: None
             None
@@ -118,5 +115,5 @@ class Flag:
             name=self.name,
             default=repr(self.default),
             description=self.description,
-            supress=("suppress required" if self.suppress_required else ""),
+            suppress=("suppress required" if self.suppress_required else ""),
         )

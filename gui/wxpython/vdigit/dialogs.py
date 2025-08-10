@@ -75,9 +75,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
                 for layer in cats[line].keys():
                     self.cats[line][layer] = list(cats[line][layer])
 
-            layers = []
-            for layer in self.digit.GetLayers():
-                layers.append(str(layer))
+            layers = [str(layer) for layer in self.digit.GetLayers()]
 
         # make copy of cats (used for 'reload')
         self.cats_orig = copy.deepcopy(self.cats)
@@ -114,9 +112,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
             self.fidText.SetLabel(str(self.fid))
         else:
             self.fidText.Show(False)
-            choices = []
-            for fid in self.cats.keys():
-                choices.append(str(fid))
+            choices = [str(fid) for fid in self.cats.keys()]
             self.fidMulti.SetItems(choices)
             self.fidMulti.SetSelection(0)
 
@@ -256,7 +252,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
                 self.cats[self.fid][layerNew] = []
             self.cats[self.fid][layerNew].append(catNew)
             self.cats[self.fid][layerOld].remove(catOld)
-        except:
+        except (KeyError, ValueError, AttributeError):
             event.Veto()
             self.list.SetItem(itemIndex, 0, str(layerNew))
             self.list.SetItem(itemIndex, 1, str(catNew))
@@ -387,7 +383,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         # restore original list
         self.cats = copy.deepcopy(self.cats_orig)
 
-        # polulate list
+        # populate list
         self.itemDataMap = self.list.Populate(self.cats[self.fid], update=True)
 
         event.Skip()
@@ -430,32 +426,31 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
                 for cat in catsCurr[0][layer]:
                     if layer not in catsCurr[1].keys() or cat not in catsCurr[1][layer]:
                         catList.append(cat)
-                if catList != []:
-                    if action == "catadd":
-                        add = True
-                    else:
-                        add = False
 
-                    newfid = self.digit.SetLineCats(fid, layer, catList, add)
-                    if len(self.cats.keys()) == 1:
-                        self.fidText.SetLabel("%d" % newfid)
-                    else:
-                        choices = self.fidMulti.GetItems()
-                        choices[choices.index(str(fid))] = str(newfid)
-                        self.fidMulti.SetItems(choices)
-                        self.fidMulti.SetStringSelection(str(newfid))
+                if catList == []:
+                    continue
 
-                    self.cats[newfid] = self.cats[fid]
-                    del self.cats[fid]
+                add = action == "catadd"
+                newfid = self.digit.SetLineCats(fid, layer, catList, add)
+                if len(self.cats.keys()) == 1:
+                    self.fidText.SetLabel("%d" % newfid)
+                else:
+                    choices = self.fidMulti.GetItems()
+                    choices[choices.index(str(fid))] = str(newfid)
+                    self.fidMulti.SetItems(choices)
+                    self.fidMulti.SetStringSelection(str(newfid))
 
-                    fid = newfid
-                    if self.fid < 0:
-                        wx.MessageBox(
-                            parent=self,
-                            message=_("Unable to update vector map."),
-                            caption=_("Error"),
-                            style=wx.OK | wx.ICON_ERROR,
-                        )
+                self.cats[newfid] = self.cats[fid]
+                del self.cats[fid]
+
+                fid = newfid
+                if self.fid < 0:
+                    wx.MessageBox(
+                        parent=self,
+                        message=_("Unable to update vector map."),
+                        caption=_("Error"),
+                        style=wx.OK | wx.ICON_ERROR,
+                    )
 
         self.cats_orig[fid] = copy.deepcopy(cats)
 
@@ -532,7 +527,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         # make copy of cats (used for 'reload')
         self.cats_orig = copy.deepcopy(self.cats)
 
-        # polulate list
+        # populate list
         self.fid = list(self.cats.keys())[0]
         self.itemDataMap = self.list.Populate(self.cats[self.fid], update=True)
 
@@ -549,9 +544,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         else:
             self.fidText.Show(False)
             self.fidMulti.Show(True)
-            choices = []
-            for fid in self.cats.keys():
-                choices.append(str(fid))
+            choices = [str(fid) for fid in self.cats.keys()]
             self.fidMulti.SetItems(choices)
             self.fidMulti.SetSelection(0)
 
@@ -591,7 +584,7 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdi
                 self.SetItem(index, 1, str(cat))
                 self.SetItemData(index, i)
                 itemData[i] = (str(layer), str(cat))
-                i = i + 1
+                i += 1
 
         if not update:
             self.SetColumnWidth(0, 100)
@@ -774,4 +767,3 @@ class CheckListFeature(ListCtrl, listmix.ListCtrlAutoWidthMixin, CheckListCtrlMi
 
     def OnCheckItem(self, index, flag):
         """Mapset checked/unchecked"""
-        pass

@@ -25,6 +25,8 @@ import tempfile
 import random
 import math
 
+from pathlib import Path
+
 import wx
 
 from wx.lib import ogl
@@ -64,19 +66,20 @@ from gui_core.wrap import (
 )
 from main_window.page import MainPageBase
 from gmodeler.giface import GraphicalModelerGrassInterface
-from gmodeler.model import (
-    Model,
+from gmodeler.model import Model, WriteModelFile
+from gmodeler.model_items import (
     ModelAction,
     ModelRelation,
     ModelLoop,
     ModelCondition,
     ModelComment,
-    WriteModelFile,
     ModelDataSeries,
     ModelDataSingle,
-    WriteActiniaFile,
-    WritePythonFile,
-    WritePyWPSFile,
+)
+from gmodeler.model_convert import (
+    ModelToActinia,
+    ModelToPython,
+    ModelToPyWPS,
 )
 from gmodeler.dialogs import (
     ModelDataDialog,
@@ -268,19 +271,15 @@ class ModelerPanel(wx.Panel, MainPageBase):
 
             if self.pythonPanel.IsModified():
                 self.SetStatusText(
-                    _(
-                        "{} script contains local modifications".format(
-                            self.pythonPanel.body.script_type
-                        )
+                    _("{} script contains local modifications").format(
+                        self.pythonPanel.body.script_type
                     ),
                     0,
                 )
             else:
                 self.SetStatusText(
-                    _(
-                        "{} script is up-to-date".format(
-                            self.pythonPanel.body.script_type
-                        )
+                    _("{} script is up-to-date").format(
+                        self.pythonPanel.body.script_type
                     ),
                     0,
                 )
@@ -403,11 +402,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
                 if not data:
                     continue
 
-                fd = open(finput, "w")
-                try:
-                    fd.write(data)
-                finally:
-                    fd.close()
+                Path(finput).write_text(data)
             del self.model.fileInput
 
         # delete intermediate data
@@ -455,7 +450,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
             y = layer.GetY()
 
             for p in params["params"]:
-                if p.get("prompt", "") not in (
+                if p.get("prompt", "") not in {
                     "raster",
                     "vector",
                     "raster_3d",
@@ -464,7 +459,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
                     "strds",
                     "stvds",
                     "str3ds",
-                ):
+                }:
                     continue
 
                 # add new data item if defined or required
@@ -536,16 +531,18 @@ class ModelerPanel(wx.Panel, MainPageBase):
                     data.Update()
 
                 # remove dead data items
-                if not p.get("value", ""):
-                    data = layer.FindData(p.get("name", ""))
-                    if data:
-                        remList, upList = self.model.RemoveItem(data, layer)
-                        for item in remList:
-                            self.canvas.diagram.RemoveShape(item)
-                            item.__del__()
+                if p.get("value", ""):
+                    continue
+                data = layer.FindData(p.get("name", ""))
+                if not data:
+                    continue
+                remList, upList = self.model.RemoveItem(data, layer)
+                for item in remList:
+                    self.canvas.diagram.RemoveShape(item)
+                    item.__del__()  # noqa: PLC2801, C2801
 
-                        for item in upList:
-                            item.Update()
+                for item in upList:
+                    item.Update()
 
             # valid / parameterized ?
             layer.SetValid(params)
@@ -624,10 +621,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
             item.Show(True)
             # relations/data
             for rel in item.GetRelations():
-                if rel.GetFrom() == item:
-                    dataItem = rel.GetTo()
-                else:
-                    dataItem = rel.GetFrom()
+                dataItem = rel.GetTo() if rel.GetFrom() == item else rel.GetFrom()
                 self._addEvent(dataItem)
                 self.canvas.diagram.AddShape(dataItem)
                 self.AddLine(rel)
@@ -676,31 +670,27 @@ class ModelerPanel(wx.Panel, MainPageBase):
         :return: False on failure
         """
         self.ModelChanged(False)
-        tmpfile = tempfile.TemporaryFile(mode="w+")
-        try:
-            WriteModelFile(fd=tmpfile, model=self.model)
-        except Exception:
-            GError(
-                parent=self, message=_("Writing current settings to model file failed.")
-            )
-            return False
-
-        try:
-            mfile = open(filename, "w")
-            tmpfile.seek(0)
-            for line in tmpfile.readlines():
-                mfile.write(line)
-        except OSError:
-            wx.MessageBox(
-                parent=self,
-                message=_("Unable to open file <%s> for writing.") % filename,
-                caption=_("Error"),
-                style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
-            )
-            return False
-
-        mfile.close()
-
+        with tempfile.TemporaryFile(mode="w+") as tmpfile:
+            try:
+                WriteModelFile(fd=tmpfile, model=self.model)
+            except Exception:
+                GError(
+                    parent=self,
+                    message=_("Writing current settings to model file failed."),
+                )
+                return False
+            try:
+                with open(filename, "w") as mfile:
+                    tmpfile.seek(0)
+                    mfile.writelines(tmpfile.readlines())
+            except OSError:
+                wx.MessageBox(
+                    parent=self,
+                    message=_("Unable to open file <%s> for writing.") % filename,
+                    caption=_("Error"),
+                    style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
+                )
+                return False
         return True
 
     def DefineLoop(self, loop):
@@ -838,7 +828,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
         dlg = wx.FileDialog(
             parent=self,
             message=_("Choose model file"),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             wildcard=_("GRASS Model File (*.gxm)|*.gxm"),
         )
         if dlg.ShowModal() == wx.ID_OK:
@@ -896,7 +886,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
         dlg = wx.FileDialog(
             parent=self,
             message=_("Choose file to save current model"),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             wildcard=_("GRASS Model File (*.gxm)|*.gxm"),
             style=wx.FD_SAVE,
         )
@@ -989,14 +979,10 @@ class ModelerPanel(wx.Panel, MainPageBase):
             xmax = x + w / 2
             ymin = y - h / 2
             ymax = y + h / 2
-            if xmin < xminImg:
-                xminImg = xmin
-            if xmax > xmaxImg:
-                xmaxImg = xmax
-            if ymin < yminImg:
-                yminImg = ymin
-            if ymax > ymaxImg:
-                ymaxImg = ymax
+            xminImg = min(xmin, xminImg)
+            xmaxImg = max(xmax, xmaxImg)
+            yminImg = min(ymin, yminImg)
+            ymaxImg = max(ymax, ymaxImg)
         size = wx.Size(int(xmaxImg - xminImg) + 50, int(ymaxImg - yminImg) + 50)
         bitmap = EmptyBitmap(width=size.width, height=size.height)
 
@@ -1265,7 +1251,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
 
         dlg = wx.MessageDialog(
             parent=self,
-            message=_("Do you want to permanently delete data?%s" % msg),
+            message=_("Do you want to permanently delete data?%s") % msg,
             caption=_("Delete intermediate data?"),
             style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
         )
@@ -1479,7 +1465,7 @@ class VariablePanel(wx.Panel):
 
     def UpdateModelVariables(self):
         """Update model variables"""
-        variables = dict()
+        variables = {}
         for values in self.list.GetData().values():
             name = values[0]
             variables[name] = {"type": str(values[1])}
@@ -1600,7 +1586,7 @@ class PythonPanel(wx.Panel):
         self.filename = None
         # default values of variables that will be changed if the desired
         # script type is changed
-        self.write_object = WritePythonFile
+        self.write_object = ModelToPython
 
         self.bodyBox = StaticBox(
             parent=self, id=wx.ID_ANY, label=" %s " % _("Python script")
@@ -1649,9 +1635,7 @@ class PythonPanel(wx.Panel):
         bodySizer.Add(self.body, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)
 
         btnSizer.Add(
-            StaticText(
-                parent=self, id=wx.ID_ANY, label="%s:" % _("Python script type")
-            ),
+            StaticText(parent=self, id=wx.ID_ANY, label=_("Python script type:")),
             flag=wx.ALIGN_CENTER_VERTICAL,
         )
         btnSizer.Add(self.script_type_box, proportion=0, flag=wx.RIGHT, border=5)
@@ -1671,25 +1655,20 @@ class PythonPanel(wx.Panel):
         """Get extension for script exporting.
         :return: script extension
         """
-        if self.write_object == WriteActiniaFile:
-            ext = "json"
-        else:
-            # Python, PyWPS
-            ext = "py"
-
-        return ext
+        # return "py" for Python, PyWPS
+        return "json" if self.write_object == ModelToActinia else "py"
 
     def SetWriteObject(self, script_type):
-        """Set correct self.write_object dependng on the script type.
+        """Set correct self.write_object depending on the script type.
         :param script_type: script type name as a string
         """
         if script_type == "PyWPS":
-            self.write_object = WritePyWPSFile
+            self.write_object = ModelToPyWPS
         elif script_type == "actinia":
-            self.write_object = WriteActiniaFile
+            self.write_object = ModelToActinia
         else:
             # script_type == "Python", fallback
-            self.write_object = WritePythonFile
+            self.write_object = ModelToPython
 
     def RefreshScript(self):
         """Refresh the script.
@@ -1708,8 +1687,8 @@ class PythonPanel(wx.Panel):
                 message=_(
                     "{} script is locally modified. "
                     "Refresh will discard all changes. "
-                    "Do you really want to continue?".format(self.body.script_type)
-                ),
+                    "Do you really want to continue?"
+                ).format(self.body.script_type),
                 caption=_("Update"),
                 style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
             )
@@ -1718,17 +1697,15 @@ class PythonPanel(wx.Panel):
             if ret == wx.ID_NO:
                 return False
 
-        fd = tempfile.TemporaryFile(mode="r+")
         grassAPI = UserSettings.Get(group="modeler", key="grassAPI", subkey="selection")
-        self.write_object(
-            fd,
-            self.parent.GetModel(),
-            grassAPI="script" if grassAPI == 0 else "pygrass",
-        )
-
-        fd.seek(0)
-        self.body.SetText(fd.read())
-        fd.close()
+        with tempfile.TemporaryFile(mode="r+") as fd:
+            self.write_object(
+                fd,
+                self.parent.GetModel(),
+                grassAPI="script" if grassAPI == 0 else "pygrass",
+            )
+            fd.seek(0)
+            self.body.SetText(fd.read())
 
         self.body.modified = False
 
@@ -1750,7 +1727,7 @@ class PythonPanel(wx.Panel):
             parent=self,
             message=_("Choose file to save"),
             defaultFile=os.path.basename(self.parent.GetModelFile(ext=False)),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             wildcard=fn_wildcard,
             style=wx.FD_SAVE,
         )
@@ -1769,7 +1746,7 @@ class PythonPanel(wx.Panel):
             dlg = wx.MessageDialog(
                 self,
                 message=_(
-                    "File <%s> already exists. " "Do you want to overwrite this file?"
+                    "File <%s> already exists. Do you want to overwrite this file?"
                 )
                 % filename,
                 caption=_("Save file"),
@@ -1781,33 +1758,26 @@ class PythonPanel(wx.Panel):
 
             dlg.Destroy()
 
-        fd = open(filename, "w")
-        try:
+        with open(filename, "w") as fd:
             if force:
                 self.write_object(fd, self.parent.GetModel())
             else:
                 fd.write(self.body.GetText())
-        finally:
-            fd.close()
-
         # executable file
         os.chmod(filename, stat.S_IRWXU | stat.S_IWUSR)
-
         return filename
 
     def OnRun(self, event):
         """Run Python script"""
         self.filename = grass.tempfile()
         try:
-            fd = open(self.filename, "w")
-            fd.write(self.body.GetText())
+            Path(self.filename).write_text(self.body.GetText())
         except OSError as e:
             GError(_("Unable to launch Python script. %s") % e, parent=self)
             return
-        finally:
-            fd.close()
-            mode = stat.S_IMODE(os.lstat(self.filename)[stat.ST_MODE])
-            os.chmod(self.filename, mode | stat.S_IXUSR)
+
+        mode = stat.S_IMODE(os.lstat(self.filename)[stat.ST_MODE])
+        os.chmod(self.filename, mode | stat.S_IXUSR)
 
         for item in self.parent.GetModel().GetItems():
             if (
@@ -1816,12 +1786,12 @@ class PythonPanel(wx.Panel):
                 > 0
             ):
                 self.parent._gconsole.RunCmd(
-                    [fd.name, "--ui"], skipInterface=False, onDone=self.OnDone
+                    [self.filename, "--ui"], skipInterface=False, onDone=self.OnDone
                 )
                 break
         else:
             self.parent._gconsole.RunCmd(
-                [fd.name], skipInterface=True, onDone=self.OnDone
+                [self.filename], skipInterface=True, onDone=self.OnDone
             )
 
         event.Skip()
@@ -1839,7 +1809,7 @@ class PythonPanel(wx.Panel):
         if self.RefreshScript():
             self.body.script_type = new_script_type
             self.parent.SetStatusText(
-                _("{} script is up-to-date".format(self.body.script_type)),
+                _("{} script is up-to-date").format(self.body.script_type),
                 0,
             )
 
@@ -1848,7 +1818,7 @@ class PythonPanel(wx.Panel):
         if self.body.script_type == "Python":
             self.btnRun.Enable()
             self.btnRun.SetToolTip(_("Run script"))
-        elif self.body.script_type in ("PyWPS", "actinia"):
+        elif self.body.script_type in {"PyWPS", "actinia"}:
             self.btnRun.Disable()
             self.btnRun.SetToolTip(
                 _("Run script - enabled only for basic Python scripts")
@@ -1858,7 +1828,7 @@ class PythonPanel(wx.Panel):
         """Refresh the script."""
         if self.RefreshScript():
             self.parent.SetStatusText(
-                _("{} script is up-to-date".format(self.body.script_type)),
+                _("{} script is up-to-date").format(self.body.script_type),
                 0,
             )
         event.Skip()

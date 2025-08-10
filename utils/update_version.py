@@ -5,14 +5,14 @@
 import sys
 import datetime
 from types import SimpleNamespace
+from pathlib import Path
 
 import argparse
 
 
 def read_version_file():
     """Return version file content as object instance with attributes"""
-    with open("include/VERSION", encoding="utf-8") as file:
-        lines = file.read().splitlines()
+    lines = Path("include/VERSION").read_text(encoding="utf-8").splitlines()
     return SimpleNamespace(
         major=lines[0], minor=lines[1], micro=lines[2], year=lines[3]
     )
@@ -63,7 +63,7 @@ def suggest_commit(action, version, tag):
     print("use:")
     print(f"  commit_message: 'version: {action} {version}'")
     if tag:
-        print(f"  tag_message: 'GRASS GIS {version}'")
+        print(f"  tag_message: 'GRASS {version}'")
 
 
 def release_candidate(args):
@@ -86,7 +86,7 @@ def release_candidate(args):
         micro=micro,
         year=this_year(),
     )
-    suggest_commit_from_version_file("GRASS GIS", tag=True)
+    suggest_commit_from_version_file("GRASS", tag=True)
 
 
 def release(_unused):
@@ -106,7 +106,7 @@ def release(_unused):
         micro=micro,
         year=this_year(),
     )
-    suggest_commit_from_version_file("GRASS GIS", tag=True)
+    suggest_commit_from_version_file("GRASS", tag=True)
 
 
 def update_micro(_unused):
@@ -226,10 +226,7 @@ def status(args):
     version_info = read_version_file()
     today = datetime.date.today().isoformat()
     version = construct_version(version_info)
-    if not version_info.micro.endswith("dev"):
-        tag = version
-    else:
-        tag = None
+    tag = version if not version_info.micro.endswith("dev") else None
     if args.bash:
         status_as_bash(version_info=version_info, today=today, version=version, tag=tag)
     else:
@@ -251,7 +248,7 @@ def suggest_message(args):
     version_info = read_version_file()
     if not version_info.micro.endswith("dev"):
         tag = construct_version(version_info)
-        action = "GRASS GIS"
+        action = "GRASS"
     else:
         tag = None
         action = "Start"

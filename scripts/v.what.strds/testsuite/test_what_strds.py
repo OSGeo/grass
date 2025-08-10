@@ -12,7 +12,7 @@ for details.
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
-import grass.script as gscript
+import grass.script as gs
 from grass.script.utils import decode
 
 
@@ -64,8 +64,8 @@ class TestWhatStrds(TestCase):
             overwrite=True,
         )
 
-        maps = gscript.list_strings("vector")
-        self.assertIn("what_strds@{ma}".format(ma=gscript.gisenv()["MAPSET"]), maps)
+        maps = gs.list_strings("vector")
+        self.assertIn("what_strds@{ma}".format(ma=gs.gisenv()["MAPSET"]), maps)
 
     def test_values(self):
         self.assertModule(

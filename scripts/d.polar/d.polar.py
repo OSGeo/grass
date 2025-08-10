@@ -112,7 +112,7 @@ def plot_dgraph():
             50 * (1 + ring * math.sin(math.radians(i))),
             50 * (1 + ring * math.cos(math.radians(i))),
         )
-        for i in range(0, 361)
+        for i in range(361)
     ]
 
     # trend vector
@@ -202,7 +202,6 @@ def plot_eps(psout):
     epsscale = 0.1
     frameallowance = 1.1
     halfframe = 3000
-    center = (halfframe, halfframe)
     scale = halfframe / (outerradius * frameallowance)
 
     diagramlinewidth = halfframe / 400
@@ -210,11 +209,6 @@ def plot_eps(psout):
     axesfontsize = halfframe / 16
     diagramfontsize = halfframe / 20
     halfframe_2 = halfframe * 2
-
-    averagedirectioncolor = 1  # (blue)
-    diagramcolor = 4  # (red)
-    circlecolor = 2  # (green)
-    axescolor = 0  # (black)
 
     northjustification = 2
     eastjustification = 6
@@ -287,13 +281,12 @@ newpath
     )
     outf.write(s)
 
-    sublength = len(outercircle) - 2
     (x, y) = outercircle[1]
     outf.write("%.2f %.2f moveto\n" % (x * scale + halfframe, y * scale + halfframe))
-    for x, y in outercircle[2:]:
-        outf.write(
-            "%.2f %.2f lineto\n" % (x * scale + halfframe, y * scale + halfframe)
-        )
+    outf.writelines(
+        "%.2f %.2f lineto\n" % (x * scale + halfframe, y * scale + halfframe)
+        for x, y in outercircle[2:]
+    )
 
     t = string.Template(
         """
@@ -343,13 +336,12 @@ newpath
     )
     outf.write(s)
 
-    sublength = len(sine_cosine_replic) - 2
     (x, y) = sine_cosine_replic[1]
     outf.write("%.2f %.2f moveto\n" % (x * scale + halfframe, y * scale + halfframe))
-    for x, y in sine_cosine_replic[2:]:
-        outf.write(
-            "%.2f %.2f lineto\n" % (x * scale + halfframe, y * scale + halfframe)
-        )
+    outf.writelines(
+        "%.2f %.2f lineto\n" % (x * scale + halfframe, y * scale + halfframe)
+        for x, y in sine_cosine_replic[2:]
+    )
 
     t = string.Template(
         """
@@ -369,13 +361,12 @@ newpath
     s = t.substitute(DIAGRAMLINEWIDTH=diagramlinewidth)
     outf.write(s)
 
-    sublength = len(vector) - 2
     (x, y) = vector[1]
     outf.write("%.2f %.2f moveto\n" % (x * scale + halfframe, y * scale + halfframe))
-    for x, y in vector[2:]:
-        outf.write(
-            "%.2f %.2f lineto\n" % (x * scale + halfframe, y * scale + halfframe)
-        )
+    outf.writelines(
+        "%.2f %.2f lineto\n" % (x * scale + halfframe, y * scale + halfframe)
+        for x, y in vector[2:]
+    )
 
     t = string.Template(
         """
@@ -434,8 +425,8 @@ def main():
             gcore.fatal(
                 _(
                     "EPS output file path <{}>, doesn't exists. "
-                    "Set new output file path.".format(eps)
-                )
+                    "Set new output file path."
+                ).format(eps)
             )
         else:
             eps = basename(eps, "eps") + ".eps"
@@ -445,8 +436,8 @@ def main():
             gcore.fatal(
                 _(
                     "option <output>: <{}> exists. To overwrite, "
-                    "use the --overwrite flag.".format(eps)
-                )
+                    "use the --overwrite flag."
+                ).format(eps)
             )
 
     # check if we have xgraph (if no EPS output requested)
@@ -480,7 +471,7 @@ def main():
     freq = {}
     for line in rawf:
         line = line.rstrip("\r\n")
-        if line in ["*", undef]:
+        if line in {"*", undef}:
             continue
         nvals += 1
         x = float(line)
@@ -510,7 +501,7 @@ def main():
     occurrences = sorted([(math.radians(x), freq[x]) for x in freq])
 
     # find the maximum value
-    maxradius = max([f for a, f in occurrences])
+    maxradius = max(f for a, f in occurrences)
 
     # now do cos() sin()
     sine_cosine = [(math.cos(a) * f, math.sin(a) * f) for a, f in occurrences]
@@ -521,7 +512,7 @@ def main():
         outercircle = []
         outercircle.append('"All Data incl. NULLs')
         scale = 1.0 * totalnumber / totalvalidnumber * maxradius
-        for i in range(0, 361):
+        for i in range(361):
             a = math.radians(i)
             x = math.cos(a) * scale
             y = math.sin(a) * scale

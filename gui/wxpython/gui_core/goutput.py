@@ -20,11 +20,13 @@ This program is free software under the GNU General Public License
 """
 
 import textwrap
+from string import digits
 
 import wx
 from wx import stc
 
 from grass.pydispatch.signal import Signal
+from pathlib import Path
 
 # needed just for testing
 if __name__ == "__main__":
@@ -351,15 +353,12 @@ class GConsoleWindow(wx.SplitterWindow):
             path = dlg.GetPath()
 
             try:
-                output = open(path, "w")
-                output.write(text)
+                Path(path).write_text(text)
             except OSError as e:
                 GError(
                     _("Unable to write file '%(path)s'.\n\nDetails: %(error)s")
                     % {"path": path, "error": e}
                 )
-            finally:
-                output.close()
             message = _("Command output saved into '%s'") % path
             self.showNotification.emit(message=message)
 
@@ -392,7 +391,7 @@ class GConsoleWindow(wx.SplitterWindow):
 
         self.cmdOutput.AddStyledMessage(message, type)
 
-        if event.type in ("warning", "error"):
+        if event.type in {"warning", "error"}:
             self.contentChanged.emit(notification=Notification.MAKE_VISIBLE)
         else:
             self.contentChanged.emit(notification=Notification.HIGHLIGHT)
@@ -573,9 +572,8 @@ class GStc(stc.StyledTextCtrl):
 
         if wrap:
             txt = textwrap.fill(txt, wrap) + "\n"
-        else:
-            if txt[-1] != "\n":
-                txt += "\n"
+        elif txt[-1] != "\n":
+            txt += "\n"
 
         if "\r" in txt:
             self.linePos = -1
@@ -619,17 +617,14 @@ class GStc(stc.StyledTextCtrl):
             for c in message:
                 if c == "\b":
                     self.linePos -= 1
-                else:
-                    if c == "\r":
-                        pos = self.GetCurLine()[1]
-                        # self.SetCurrentPos(pos)
-                    else:
-                        self.SetCurrentPos(self.linePos)
-                    self.ReplaceSelection(c)
-                    self.linePos = self.GetCurrentPos()
-                    if c != " ":
-                        last_c = c
-            if last_c not in ("0123456789"):
+                    continue
+
+                self.SetCurrentPos(self.linePos)
+                self.ReplaceSelection(c)
+                self.linePos = self.GetCurrentPos()
+                if c != " ":
+                    last_c = c
+            if last_c not in (digits):
                 self.AddTextWrapped("\n", wrap=None)
                 self.linePos = -1
         else:

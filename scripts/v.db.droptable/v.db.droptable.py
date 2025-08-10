@@ -36,7 +36,7 @@
 
 import sys
 import os
-import grass.script as gscript
+import grass.script as gs
 from grass.exceptions import CalledModuleError
 
 
@@ -48,34 +48,31 @@ def main():
 
     # We check for existence of the map in the current mapset before
     # doing any other operation.
-    info = gscript.find_file(map, element="vector", mapset=".")
+    info = gs.find_file(map, element="vector", mapset=".")
     if not info["file"]:
-        mapset = gscript.gisenv()["MAPSET"]
+        mapset = gs.gisenv()["MAPSET"]
         # Message is formulated in the way that it does not mislead
         # in case where a map of the same name is in another mapset.
-        gscript.fatal(
-            _(
-                "Vector map <{name}> not found" " in the current mapset ({mapset})"
-            ).format(name=map, mapset=mapset)
+        gs.fatal(
+            _("Vector map <{name}> not found in the current mapset ({mapset})").format(
+                name=map, mapset=mapset
+            )
         )
 
     # do some paranoia tests as well:
-    f = gscript.vector_layer_db(map, layer)
+    f = gs.vector_layer_db(map, layer)
 
     if not table:
         # Removing table name connected to selected layer
         table = f["table"]
         if not table:
-            gscript.fatal(_("No table assigned to layer <%s>") % layer)
+            gs.fatal(_("No table assigned to layer <%s>") % layer)
     else:
         # Removing user specified table
         existingtable = f["table"]
         if existingtable != table:
-            gscript.fatal(
-                _(
-                    "User selected table <%s> but the table <%s> "
-                    "is linked to layer <%s>"
-                )
+            gs.fatal(
+                _("User selected table <%s> but the table <%s> is linked to layer <%s>")
                 % (table, existingtable, layer)
             )
 
@@ -83,25 +80,22 @@ def main():
     database = f["database"]
     driver = f["driver"]
 
-    gscript.message(
-        _("Removing table <%s> linked to layer <%s> of vector" " map <%s>")
+    gs.message(
+        _("Removing table <%s> linked to layer <%s> of vector map <%s>")
         % (table, layer, map)
     )
 
     if not force:
-        gscript.message(
-            _(
-                "You must use the -f (force) flag to actually "
-                "remove the table. Exiting."
-            )
+        gs.message(
+            _("You must use the -f (force) flag to actually remove the table. Exiting.")
         )
-        gscript.message(_("Leaving map/table unchanged."))
+        gs.message(_("Leaving map/table unchanged."))
         sys.exit(0)
 
-    gscript.message(_("Dropping table <%s>...") % table)
+    gs.message(_("Dropping table <%s>...") % table)
 
     try:
-        gscript.write_command(
+        gs.write_command(
             "db.execute",
             stdin="DROP TABLE %s" % table,
             input="-",
@@ -109,26 +103,26 @@ def main():
             driver=driver,
         )
     except CalledModuleError:
-        gscript.fatal(_("An error occurred while running db.execute"))
+        gs.fatal(_("An error occurred while running db.execute"))
 
-    gscript.run_command("v.db.connect", flags="d", map=map, layer=layer)
+    gs.run_command("v.db.connect", flags="d", map=map, layer=layer)
 
-    gscript.message(_("Current attribute table link(s):"))
+    gs.message(_("Current attribute table link(s):"))
     # silently test first to avoid confusing error messages
     nuldev = open(os.devnull, "w")
     try:
-        gscript.run_command(
+        gs.run_command(
             "v.db.connect", flags="p", map=map, quiet=True, stdout=nuldev, stderr=nuldev
         )
     except CalledModuleError:
-        gscript.message(_("(No database links remaining)"))
+        gs.message(_("(No database links remaining)"))
     else:
-        gscript.run_command("v.db.connect", flags="p", map=map)
+        gs.run_command("v.db.connect", flags="p", map=map)
 
     # write cmd history:
-    gscript.vector_history(map)
+    gs.vector_history(map)
 
 
 if __name__ == "__main__":
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
     main()

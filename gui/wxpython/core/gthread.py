@@ -38,12 +38,12 @@ class gThread(threading.Thread, wx.EvtHandler):
 
     requestId = 0
 
-    def __init__(self, requestQ=None, resultQ=None, **kwds):
+    def __init__(self, requestQ=None, resultQ=None, **kwargs):
         wx.EvtHandler.__init__(self)
         self.terminate = False
         self._terminate_evt = None
 
-        threading.Thread.__init__(self, **kwds)
+        threading.Thread.__init__(self, **kwargs)
 
         if requestQ is None:
             self.requestQ = Queue.Queue()
@@ -61,19 +61,19 @@ class gThread(threading.Thread, wx.EvtHandler):
         self.Bind(EVT_THD_TERMINATE, self.OnTerminate)
         self.start()
 
-    def Run(self, *args, **kwds):
+    def Run(self, *args, **kwargs):
         """Run command in queue
 
         :param args: unnamed command arguments
-        :param kwds: named command arguments, keyword 'callable'
-                     represents function to be run, keyword 'ondone'
-                     represents function to be called after the
-                     callable is done
+        :param kwargs: named command arguments, keyword 'callable'
+                       represents function to be run, keyword 'ondone'
+                       represents function to be called after the
+                       callable is done
 
         :return: request id in queue
         """
         gThread.requestId += 1
-        self.requestQ.put((gThread.requestId, args, kwds))
+        self.requestQ.put((gThread.requestId, args, kwargs))
 
         return gThread.requestId
 
@@ -86,24 +86,26 @@ class gThread(threading.Thread, wx.EvtHandler):
         gThread.requestId = id
 
     def run(self):
+        variables = {
+            "callable": None,
+            "ondone": None,
+            "userdata": None,
+            "onterminate": None,
+        }
         while True:
-            requestId, args, kwds = self.requestQ.get()
+            requestId, args, kwargs = self.requestQ.get()
             for key in ("callable", "ondone", "userdata", "onterminate"):
-                if key in kwds:
-                    vars()[key] = kwds[key]
-                    del kwds[key]
-                else:
-                    vars()[key] = None
-
-            requestTime = time.time()
+                if key in kwargs:
+                    variables[key] = kwargs[key]
+                    del kwargs[key]
 
             ret = None
             exception = None
             time.sleep(0.01)
 
             self._terminate_evt = wxThdTerminate(
-                onterminate=vars()["onterminate"],
-                kwds=kwds,
+                onterminate=variables["onterminate"],
+                kwds=kwargs,
                 args=args,
                 pid=requestId,
             )
@@ -111,7 +113,7 @@ class gThread(threading.Thread, wx.EvtHandler):
             if self.terminate:
                 return
 
-            ret = vars()["callable"](*args, **kwds)
+            ret = variables["callable"](*args, **kwargs)
 
             if self.terminate:
                 return
@@ -121,12 +123,12 @@ class gThread(threading.Thread, wx.EvtHandler):
             self.resultQ.put((requestId, ret))
 
             event = wxCmdDone(
-                ondone=vars()["ondone"],
-                kwds=kwds,
-                args=args,  # TODO expand args to kwds
+                ondone=variables["ondone"],
+                kwds=kwargs,
+                args=args,  # TODO expand args to kwargs
                 ret=ret,
                 exception=exception,
-                userdata=vars()["userdata"],
+                userdata=variables["userdata"],
                 pid=requestId,
             )
 
@@ -154,15 +156,14 @@ class gThread(threading.Thread, wx.EvtHandler):
     def globaltrace(self, frame, event, arg):
         if event == "call":
             return self.localtrace
-        else:
-            return None
+        return None
 
     def localtrace(self, frame, event, arg):
         if self.terminate:
             if event == "line":
                 # Send event
                 wx.PostEvent(self, self._terminate_evt)
-                raise SystemExit()
+                raise SystemExit
         return self.localtrace
 
     def OnTerminate(self, event):

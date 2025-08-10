@@ -197,12 +197,16 @@ void write_params(char *mpfilename, char *yfiles[], char *outfile, int frames,
     FILE *fp;
     char dir[1000], *enddir;
     int i, dirlen = 0;
+    size_t len;
 
     if (NULL == (fp = fopen(mpfilename, "w")))
         G_fatal_error(_("Unable to create temporary files."));
 
     if (!fly) {
-        strcpy(dir, yfiles[0]);
+        len = G_strlcpy(dir, yfiles[0], sizeof(dir));
+        if (len >= sizeof(dir)) {
+            G_fatal_error(_("Directory <%s> too long"), yfiles[0]);
+        }
         enddir = strrchr(dir, '/');
 
         if (enddir) {

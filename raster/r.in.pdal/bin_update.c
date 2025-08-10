@@ -1,7 +1,7 @@
 /*
  * r.in.pdal Functions performing value updates on each incoming point
  *            during point binning process
- *   Copyright 2006 by M. Hamish Bowman, and The GRASS Development Team
+ *   Copyright 2006 by M. Hamish Bowman, and the GRASS Development Team
  *   Author: M. Hamish Bowman, University of Otago, Dunedin, New Zealand
  *     Maris Nartiss code refactoring for r.in.pdal
  *

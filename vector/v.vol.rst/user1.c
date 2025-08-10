@@ -59,11 +59,10 @@
    INPUT now reads site files using the new, multi-attribute format
    (mca 2/12/96)
  */
-
 int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
 {
     struct quadruple *point;
-    double x, y, z, w, nz = 0., sm;
+    double x, y, z, w, nz = 0., sm = 0.;
     double c1, c2, c3, c4, c5, c6, nsg;
     int i, j, k = 0, a, irev, cfmask;
     int ddisk = 0;
@@ -220,6 +219,9 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
             if (a < 0) {
                 G_warning(_("Can't insert %lf,%lf,%lf,%lf,%lf a=%d"), x, y, z,
                           w, sm, a);
+                Vect_destroy_field_info(Fi);
+                db_close_database_shutdown_driver(Driver);
+                db_CatValArray_free(&cvarr);
                 return -1;
             }
 
@@ -322,6 +324,8 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
         }
         else {
             fprintf(stderr, "ERROR: zero points in the given region!\n");
+            Vect_destroy_field_info(Fi);
+            db_close_database_shutdown_driver(Driver);
             return -1;
         }
     }
@@ -332,6 +336,8 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
                 KMIN, KMAX);
         fprintf(stderr, "for smooth connection of segments, npmin > segmax "
                         "(see manual) \n");
+        Vect_destroy_field_info(Fi);
+        db_close_database_shutdown_driver(Driver);
         return -1;
     }
 
@@ -382,6 +388,8 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
         }
         G_message(_("Bitmap mask created"));
     }
+    Vect_destroy_field_info(Fi);
+    db_close_database_shutdown_driver(Driver);
 
     return 1;
 }
@@ -389,7 +397,6 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
 /*
  * OUTGR now writes 3d raster maps (mca 2/15/96)
  */
-
 int OUTGR(void)
 {
     void *cf1, *cf2, *cf3, *cf4, *cf5, *cf6, *cf7;

@@ -1,4 +1,4 @@
-"""Fixtures for grass.script"""
+"""Fixtures for grass.experimental"""
 
 import uuid
 import os
@@ -6,15 +6,15 @@ import os
 import pytest
 
 import grass.script as gs
-import grass.experimental as experimental
+from grass import experimental
 
 
 @pytest.fixture
 def xy_session(tmp_path):
     """Active session in an XY location (scope: function)"""
-    location = "xy_test"
-    gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with gs.setup.init(tmp_path / location, env=os.environ.copy()) as session:
+    project = tmp_path / "xy_test"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy()) as session:
         yield session
 
 
@@ -27,9 +27,9 @@ def xy_session_for_module(tmp_path_factory):
     directories.
     """
     tmp_path = tmp_path_factory.mktemp("xy_session_for_module")
-    location = "xy_test"
-    gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with gs.setup.init(tmp_path / location, env=os.environ.copy()) as session:
+    project = tmp_path / "xy_test"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy()) as session:
         yield session
 
 
@@ -40,9 +40,7 @@ def unique_id():
 
 
 @pytest.fixture
-def xy_mapset_session(
-    xy_session_for_module, unique_id
-):  # pylint: disable=redefined-outer-name
+def xy_mapset_session(xy_session_for_module, unique_id):  # pylint: disable=redefined-outer-name
     """Active session in a mapset of an XY location
 
     Mapset scope is function, while the location scope is module.

@@ -50,20 +50,20 @@
 # %end
 
 import sys
-import grass.script as gscript
+import grass.script as gs
 
 
 def main():
     if options["option"] == "add":
-        num_bound = gscript.vector_info_topo(map=options["input"])["boundaries"]
+        num_bound = gs.vector_info_topo(map=options["input"])["boundaries"]
         if num_bound == 0:
-            gscript.fatal(_("Input vector map contains no boundaries."))
+            gs.fatal(_("Input vector map contains no boundaries."))
 
-        gscript.run_command("v.category", type="area", **options)
+        gs.run_command("v.category", type="area", **options)
 
     sys.exit(0)
 
 
 if __name__ == "__main__":
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
     main()

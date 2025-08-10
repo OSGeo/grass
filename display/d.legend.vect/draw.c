@@ -43,7 +43,7 @@ void draw(char *file_name, double LL, double LT, char *title, int cols,
     double symb_h, symb_w, def_symb_h, def_symb_w;
     int item_count, item;
     double it_per_col;
-    double margin, bg_h, bg_w;
+    double margin, bg_h;
     char **tokens;
 
     D_get_src(&dt, &db, &dl, &dr);
@@ -264,7 +264,7 @@ void draw(char *file_name, double LL, double LT, char *title, int cols,
     /* Draw background */
     if (do_bg) {
         double x0bg, y0bg, x1bg, y1bg;
-
+        double bg_w;
         if (title_w > offs_x + maxlblw)
             bg_w = title_w;
         else

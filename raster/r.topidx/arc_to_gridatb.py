@@ -9,25 +9,24 @@ def match(pattern, string):
     if m:
         match.value = m.group(1)
         return True
-    else:
-        match.value = None
-        return False
+    match.value = None
+    return False
 
 
-if len(sys.argv) != 3 or re.match("^-*help", sys.argv[1]):
+if len(sys.argv) != 3 or re.match(r"^-*help", sys.argv[1]):
     print("Usage: arc.to.gridatb.py arc_file gridatb_file")
-    exit()
+    sys.exit()
 
 infname = sys.argv[1]
 outfname = sys.argv[2]
 
 if not os.path.isfile(infname):
     print(f"{infname}: File not found")
-    exit()
+    sys.exit()
 
 if os.path.isfile(outfname):
     print(f"{outfname}: File already exists")
-    exit()
+    sys.exit()
 
 inf = open(infname)
 
@@ -54,14 +53,14 @@ for inline in inf:
     else:
         print(f"{infname}: Invalid input file format")
         inf.close()
-        exit()
+        sys.exit()
     if head == 0x3F:
         break
 
 if head != 0x3F:
     print(f"{infname}: Invalid input file format")
     inf.close()
-    exit()
+    sys.exit()
 
 outf = open(outfname, "w")
 outf.write(

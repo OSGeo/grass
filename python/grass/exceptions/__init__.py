@@ -1,5 +1,4 @@
-"""GRASS GIS interface to Python exceptions
-"""
+"""GRASS interface to Python exceptions"""
 
 import subprocess
 
@@ -33,13 +32,15 @@ class ParameterError(Exception):
 
 
 class ScriptError(Exception):
-    """Raised during script execution. ::
+    """Raised during script execution.
 
-    >>> error = ScriptError('My error message!')
-    >>> error.value
-    'My error message!'
-    >>> print(error)
-    My error message!
+    .. code-block:: pycon
+
+        >>> error = ScriptError("My error message!")
+        >>> error.value
+        'My error message!'
+        >>> print(error)
+        My error message!
     """
 
     def __init__(self, value):
@@ -71,13 +72,9 @@ class CalledModuleError(subprocess.CalledProcessError):
         """
         # CalledProcessError has undocumented constructor
         super().__init__(returncode, module)
-        if not module or module in code:
-            # No need to include module name if it is directly in code
-            # of if it is not set.
-            executed = code
-        else:
-            # Make sure module name is there if provided and not in code.
-            executed = f"{module} {code}"
+        # No need to include module name if it is directly in code of if it is not set.
+        # Otherwise, make sure module name is there if provided and not in code.
+        executed = code if not module or module in code else f"{module} {code}"
         if errors:
             # We assume actual errors, e.g., captured stderr.
             err = _("See the following errors:\n{errors}").format(errors=errors)

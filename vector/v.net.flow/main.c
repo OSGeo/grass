@@ -168,8 +168,8 @@ int main(int argc, char *argv[])
                       Fi->database, Fi->driver);
     db_set_error_handler_driver(driver);
 
-    sprintf(buf, "create table %s (cat integer, flow double precision)",
-            Fi->table);
+    snprintf(buf, sizeof(buf),
+             "create table %s (cat integer, flow double precision)", Fi->table);
 
     db_set_string(&sql, buf);
     G_debug(2, "%s", db_get_string(&sql));
@@ -249,8 +249,8 @@ int main(int argc, char *argv[])
             Vect_cat_get(Cats, afield, &cat);
             if (cat == -1)
                 continue; /*TODO: warning? */
-            sprintf(buf, "insert into %s values (%d, %f)", Fi->table, cat,
-                    flow[i] / (double)In.dgraph.cost_multip);
+            snprintf(buf, sizeof(buf), "insert into %s values (%d, %f)",
+                     Fi->table, cat, flow[i] / (double)In.dgraph.cost_multip);
             db_set_string(&sql, buf);
             G_debug(3, "%s", db_get_string(&sql));
 

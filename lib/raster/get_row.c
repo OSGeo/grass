@@ -11,6 +11,7 @@
    \author Original author CERL
  */
 
+#include <stdint.h>
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -368,6 +369,12 @@ static void gdal_values_int(int fd, const unsigned char *data,
         case GDT_Byte:
             c[i] = *(GByte *)d;
             break;
+/* GDT_Int8 was introduced in GDAL 3.7 */
+#if GDAL_VERSION_NUM >= GDAL_COMPUTE_VERSION(3, 7, 0)
+        case GDT_Int8:
+            c[i] = *(int8_t *)d;
+            break;
+#endif
         case GDT_Int16:
             c[i] = *(GInt16 *)d;
             break;
@@ -757,7 +764,7 @@ void Rast_get_d_row_nomask(int fd, DCELL *buf, int row)
  *            two particular types check the functions).
  *    - Step 4:  read or simmulate null value row and zero out cells
  * corresponding to null value cells. The masked out cells are set to null when
- * the mask exists. (the MASK is taken care of by null values (if the null file
+ * the mask exists. (the mask is taken care of by null values (if the null file
  * doesn't exist for this map, then the null row is simulated by assuming that
  * all zero are nulls *** in case of Rast_get_row() and assuming that all data
  * is valid in case of G_get_f/d_raster_row(). In case of deprecated function
@@ -1082,7 +1089,7 @@ static void embed_nulls(int fd, void *buf, int row, RASTER_MAP_TYPE map_type,
 
    Read or simulate null value row and set the cells corresponding
    to null value to 1. The masked out cells are set to null when the
-   mask exists. (the MASK is taken care of by null values
+   mask exists. (the mask is taken care of by null values
    (if the null file doesn't exist for this map, then the null row
    is simulated by assuming that all zeros in raster map are nulls.
    Also all masked out cells become nulls.

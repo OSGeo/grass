@@ -1,6 +1,6 @@
-"""Provides functions for the main GRASS GIS executable
+"""Provides functions for the main GRASS executable
 
-(C) 2024 by Vaclav Petras and the GRASS Development Team
+(C) 2024-2025 by Vaclav Petras and the GRASS Development Team
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -17,27 +17,110 @@ import shutil
 import subprocess
 import sys
 
+from . import resource_paths as res_paths
+
 # Get the system name
 WINDOWS = sys.platform.startswith("win")
 CYGWIN = sys.platform.startswith("cygwin")
 MACOS = sys.platform.startswith("darwin")
 
 
+class RuntimePaths:
+    """Get runtime paths to resources and basic GRASS build properties
+
+    The resource paths are also set as environmental variables.
+    """
+
+    def __init__(self, env=None):
+        if env is None:
+            env = os.environ
+        self.env = env
+
+    @property
+    def version(self):
+        return res_paths.GRASS_VERSION
+
+    @property
+    def version_major(self):
+        return res_paths.GRASS_VERSION_MAJOR
+
+    @property
+    def version_minor(self):
+        return res_paths.GRASS_VERSION_MINOR
+
+    @property
+    def ld_library_path_var(self):
+        return res_paths.LD_LIBRARY_PATH_VAR
+
+    @property
+    def grass_exe_name(self):
+        return res_paths.GRASS_EXE_NAME
+
+    @property
+    def grass_version_git(self):
+        return res_paths.GRASS_VERSION_GIT
+
+    @property
+    def gisbase(self):
+        return self.__get_dir("GISBASE")
+
+    @property
+    def prefix(self):
+        return self.__get_dir("GRASS_PREFIX")
+
+    @property
+    def config_projshare(self):
+        return self.env.get("GRASS_PROJSHARE", res_paths.CONFIG_PROJSHARE)
+
+    def __get_dir(self, env_var):
+        """Get the directory stored in the environmental variable 'env_var'
+
+        If the environmental variable not yet set, it is retrived and
+        set from resource_paths."""
+        if env_var in self.env and len(self.env[env_var]) > 0:
+            res = os.path.normpath(self.env[env_var])
+        else:
+            path = getattr(res_paths, env_var)
+            res = os.path.normpath(os.path.join(res_paths.GRASS_PREFIX, path))
+            self.env[env_var] = res
+        return res
+
+
 def get_grass_config_dir(major_version, minor_version, env):
     """Get configuration directory
 
-    Determines path of GRASS GIS user configuration directory.
+    Determines path of GRASS user configuration directory.
     """
-    # The code is in sync with grass.app.runtime (but not the same).
+    if env.get("GRASS_CONFIG_DIR"):
+        # use GRASS_CONFIG_DIR environmental variable is defined
+        env_dirname = "GRASS_CONFIG_DIR"
+    else:
+        env_dirname = "APPDATA" if WINDOWS else "HOME"
+
+    config_dir = env.get(env_dirname)
+    if config_dir is None:
+        msg = (
+            f"The {env_dirname} variable is not set, ask your operating system support"
+        )
+        raise RuntimeError(msg)
+
+    if not os.path.isdir(config_dir):
+        msg = (
+            f"The {env_dirname} variable points to directory which does"
+            " not exist, ask your operating system support"
+        )
+        raise NotADirectoryError(msg)
+
     if WINDOWS:
         config_dirname = f"GRASS{major_version}"
-        return os.path.join(env.get("APPDATA"), config_dirname)
     elif MACOS:
-        version = f"{major_version}.{minor_version}"
-        return os.path.join(env.get("HOME"), "Library", "GRASS", version)
+        config_dirname = os.path.join(
+            "Library", "GRASS", f"{major_version}.{minor_version}"
+        )
     else:
         config_dirname = f".grass{major_version}"
-        return os.path.join(env.get("HOME"), config_dirname)
+
+    return os.path.join(config_dir, config_dirname)
 
 
 def append_left_main_executable_paths(paths, install_path):
@@ -60,10 +143,7 @@ def append_left_addon_paths(paths, config_dir, env):
     # addons (base)
     addon_base = env.get("GRASS_ADDON_BASE")
     if not addon_base:
-        if MACOS:
-            name = "Addons"
-        else:
-            name = "addons"
+        name = "addons" if not MACOS else "Addons"
         addon_base = os.path.join(config_dir, name)
         env["GRASS_ADDON_BASE"] = addon_base
 
@@ -110,6 +190,7 @@ def set_paths(install_path, grass_config_dir, ld_library_path_variable_name):
     # retrieving second time, but now it is always set
     addon_base = os.getenv("GRASS_ADDON_BASE")
     set_man_path(install_path=install_path, addon_base=addon_base, env=os.environ)
+    set_isis()
 
 
 def set_man_path(install_path, addon_base, env):
@@ -154,20 +235,14 @@ def set_python_path_variable(install_path, env):
     """Set PYTHONPATH to find GRASS Python package in subprocesses"""
     path = env.get("PYTHONPATH")
     etcpy = os.path.join(install_path, "etc", "python")
-    if path:
-        path = etcpy + os.pathsep + path
-    else:
-        path = etcpy
+    path = etcpy + os.pathsep + path if path else etcpy
     env["PYTHONPATH"] = path
 
 
 def set_path_to_python_executable(env):
     """Set GRASS_PYTHON environment variable"""
     if not env.get("GRASS_PYTHON"):
-        if WINDOWS:
-            env["GRASS_PYTHON"] = "python3.exe"
-        else:
-            env["GRASS_PYTHON"] = "python3"
+        env["GRASS_PYTHON"] = sys.executable
 
 
 def set_defaults(config_projshare_path):
@@ -253,6 +328,25 @@ def set_browser(install_path):
         browser = "xdg-open"
 
     os.environ["GRASS_HTML_BROWSER"] = browser
+
+
+def set_isis():
+    """Enable a mixed ISIS-GRASS environment
+
+    ISIS is Integrated Software for Imagers and Spectrometers by USGS.
+    """
+    if os.getenv("ISISROOT"):
+        isis = os.getenv("ISISROOT")
+        os.environ["ISIS_LIB"] = isis + os.sep + "lib"
+        os.environ["ISIS_3RDPARTY"] = isis + os.sep + "3rdParty" + os.sep + "lib"
+        os.environ["QT_PLUGIN_PATH"] = isis + os.sep + "3rdParty" + os.sep + "plugins"
+        # os.environ['ISIS3DATA'] = isis + "$ISIS3DATA"
+        libpath = os.getenv("LD_LIBRARY_PATH", "")
+        isislibpath = os.getenv("ISIS_LIB")
+        isis3rdparty = os.getenv("ISIS_3RDPARTY")
+        os.environ["LD_LIBRARY_PATH"] = (
+            libpath + os.pathsep + isislibpath + os.pathsep + isis3rdparty
+        )
 
 
 def ensure_home():

@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 
 , withOpenGL ? true
 
@@ -21,10 +21,11 @@
 , libsvm
 , libtiff
 , libxml2
+, llvmPackages
 , netcdf
 , pdal
 , pkg-config
-, postgresql
+, libpq
 , proj
 , python3Packages
 , readline
@@ -32,7 +33,6 @@
 , wxGTK32
 , zlib
 , zstd
-
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,13 +41,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = lib.cleanSourceWith {
     src = ./.;
-    filter = path: type:
-      ! (lib.hasSuffix ".nix" path);
+    filter = (
+      path: type: (builtins.all (x: x != baseNameOf path) [
+        ".git"
+        ".github"
+        "flake.nix"
+        "package.nix"
+      ])
+    );
   };
 
   nativeBuildInputs = [
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
 
     bison
     flex
@@ -55,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     geos # for `geos-config`
     netcdf # for `nc-config`
     pkg-config
-  ] ++ (with python3Packages; [ python-dateutil numpy wxPython_4_2 ]);
+  ] ++ (with python3Packages; [ python-dateutil numpy wxpython ]);
 
   buildInputs = [
     blas
@@ -72,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     netcdf
     pdal
-    postgresql
+    libpq
     proj
     readline
     sqlite
@@ -80,7 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     zstd
   ] ++ lib.optionals withOpenGL [ libGLU ]
-  ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   strictDeps = true;
 
@@ -90,15 +97,15 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-cxx"
     "--with-fftw"
     "--with-freetype"
-    "--with-geos"
     "--with-gdal"
+    "--with-geos"
     "--with-lapack"
     "--with-libsvm"
     "--with-nls"
     "--with-openmp"
     "--with-pdal"
     "--with-postgres"
-    "--with-postgres-libs=${postgresql.lib}/lib/"
+    "--with-postgres-libs=${libpq}/lib/"
     "--with-proj-includes=${proj.dev}/include"
     "--with-proj-libs=${proj}/lib"
     "--with-proj-share=${proj}/share/proj"
@@ -109,17 +116,19 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-odbc"
   ] ++ lib.optionals (! withOpenGL) [
     "--without-opengl"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--without-cairo"
     "--without-freetype"
     "--without-x"
   ];
 
   # Otherwise a very confusing "Can't load GDAL library" error
-  makeFlags = lib.optional stdenv.isDarwin "GDAL_DYNAMIC=";
+  makeFlags = lib.optional stdenv.hostPlatform.isDarwin "GDAL_DYNAMIC=";
 
-  # Ensures that the python scripts running at build time are actually
-  # executable; otherwise, patchShebangs ignores them.
+  /*
+    Ensures that the python script run at build time are actually executable;
+    otherwise, patchShebangs ignores them.
+  */
   postConfigure = ''
     for f in $(find . -name '*.py'); do
       chmod +x $f
@@ -143,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "GIS software suite used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization";
     homepage = "https://grass.osgeo.org/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; teams.geospatial.members;
+    teams = [ teams.geospatial ];
     platforms = platforms.all;
     mainProgram = "grass";
   };

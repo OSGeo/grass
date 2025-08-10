@@ -34,11 +34,11 @@
 # % guisection: Model
 # %end
 
-import grass.script as gscript
+import grass.script as gs
 
 
 def main():
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
 
     import wx
 
@@ -53,7 +53,7 @@ def main():
     frame = ModelerFrame(
         parent=None,
         giface=StandaloneGrassInterface(),
-        title=_("Graphical Modeler - GRASS GIS"),
+        title=_("Graphical Modeler - GRASS"),
     )
     if options["file"]:
         frame.panel.LoadModelFile(options["file"])

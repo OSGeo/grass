@@ -20,11 +20,11 @@
 /* Define to 1 if you have the <cairo.h> header file. */
 #undef HAVE_CAIRO_H
 
+/* Define to 1 if you have the <cblas-atlas.h> header file. */
+#undef HAVE_CBLAS_ATLAS_H
+
 /* Define to 1 if you have the <cblas.h> header file. */
 #undef HAVE_CBLAS_H
-
-/* Define to 1 if you have the <clapack.h> header file. */
-#undef HAVE_CLAPACK_H
 
 /* Define to 1 if you have the <CL/cl.h> header file. */
 #undef HAVE_CL_CL_H
@@ -34,9 +34,6 @@
 
 /* Define to 1 if you have the `drand48' function. */
 #undef HAVE_DRAND48
-
-/* Define to 1 if you have the <f2c.h> header file. */
-#undef HAVE_F2C_H
 
 /* Define to 1 if you have the <fftw3.h> header file. */
 #undef HAVE_FFTW3_H
@@ -52,9 +49,6 @@
 
 /* Define to 1 if you have the `ftime' function. */
 #undef HAVE_FTIME
-
-/* Define to 1 if you have the <g2c.h> header file. */
-#undef HAVE_G2C_H
 
 /* Define to 1 if GDAL is to be used. */
 #undef HAVE_GDAL
@@ -89,8 +83,8 @@
 /* Define to 1 if you have the <langinfo.h> header file. */
 #undef HAVE_LANGINFO_H
 
-/* Define to 1 if ATLAS exists. */
-#undef HAVE_LIBATLAS
+/* Define to 1 if you have the <lapacke.h> header file. */
+#undef HAVE_LAPACKE_H
 
 /* Define to 1 if BLAS exists. */
 #undef HAVE_LIBBLAS
@@ -155,11 +149,11 @@
 /* Define to 1 if glXCreatePbuffer exists. */
 #undef HAVE_PBUFFERS
 
+/* Define to 1 if you have the <pcre.h> header file. */
+#undef HAVE_PCRE_H
+
 /* Define to 1 if PDAL exists. */
 #undef HAVE_PDAL
-
-/* Define to 1 if PDAL NoFilenameWriter is present. */
-#undef HAVE_PDAL_NOFILENAMEWRITER
 
 /* Define to 1 if glXCreateGLXPixmap exists. */
 #undef HAVE_PIXMAPS
@@ -193,6 +187,9 @@
 
 /* Define to 1 if you have the <regex.h> header file. */
 #undef HAVE_REGEX_H
+
+/* Define to 1 if you have the <pcre.h> header file. */
+#undef HAVE_PCRE_H
 
 /* Define to 1 if you have the `setenv' function. */
 #undef HAVE_SETENV
@@ -235,6 +232,12 @@
 
 /* Define to 1 if you have the <string.h> header file. */
 #undef HAVE_STRING_H
+
+/* Define to 1 if you have the `strlcat' function. */
+#undef HAVE_STRLCAT
+
+/* Define to 1 if you have the `strlcpy' function. */
+#undef HAVE_STRLCPY
 
 /* Define to 1 if you have the <svm.h> header file. */
 #undef HAVE_SVM_H

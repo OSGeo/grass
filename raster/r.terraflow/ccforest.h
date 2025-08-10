@@ -32,8 +32,8 @@ private:
     T key, value;
 
 public:
-    keyvalue() : key(-1), value(-1){};
-    keyvalue(T vk, T vv) : key(vk), value(vv){};
+    keyvalue() : key(-1), value(-1) {};
+    keyvalue(T vk, T vv) : key(vk), value(vv) {};
 
     T getPriority() const { return key; };
     T getValue() const { return value; };

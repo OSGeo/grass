@@ -234,10 +234,10 @@ int main(int argc, char *argv[])
     /* Set auxiliary table's name */
     if (vector) {
         if (G_name_is_fully_qualified(out_opt->answer, xname, xmapset)) {
-            sprintf(table_name, "%s_aux", xname);
+            snprintf(table_name, sizeof(table_name), "%s_aux", xname);
         }
         else
-            sprintf(table_name, "%s_aux", out_opt->answer);
+            snprintf(table_name, sizeof(table_name), "%s_aux", out_opt->answer);
     }
 
     /* Something went wrong in a previous v.surf.bspline execution */
@@ -879,7 +879,7 @@ int main(int argc, char *argv[])
                         G_free_matrix(obsVect_ext);
                         G_free_ivector(lineVect_ext);
                     } /* END FLAG_EXT == TRUE */
-                }     /* END GRID == FALSE */
+                } /* END GRID == FALSE */
                 G_free_vector(parVect);
                 G_free_matrix(obsVect);
                 G_free_ivector(lineVect);
@@ -894,7 +894,7 @@ int main(int argc, char *argv[])
                                 "Consider increasing spline step values."));
             }
         } /*! END WHILE; last_column = TRUE */
-    }     /*! END WHILE; last_row = TRUE */
+    } /*! END WHILE; last_row = TRUE */
 
     G_verbose_message(_("Writing output..."));
     /* Writing the output raster map */
@@ -920,8 +920,9 @@ int main(int argc, char *argv[])
 
         Segment_close(&out_seg); /* close segment structure  */
         /* set map title */
-        sprintf(title, "%s interpolation with Tykhonov regularization",
-                type_opt->answer);
+        snprintf(title, sizeof(title),
+                 "%s interpolation with Tykhonov regularization",
+                 type_opt->answer);
         Rast_put_cell_title(out_map_opt->answer, title);
         /* write map history */
         Rast_short_history(out_map_opt->answer, "raster", &history);

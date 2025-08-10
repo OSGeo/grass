@@ -19,7 +19,7 @@
 /* TODO
  * - add flag to weigh by line/boundary length and area size
  *   Roger Bivand on GRASS devel ml on July 2 2004
- *   http://lists.osgeo.org/pipermail/grass-dev/2004-July/014976.html
+ *   https://lists.osgeo.org/pipermail/grass-dev/2004-July/014976.html
  *   "[...] calculating weighted means, weighting by line length
  *   or area surface size [does not make sense]. I think it would be
  *   better to treat each line or area as a discrete, unweighted, unit
@@ -43,10 +43,13 @@
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
+#include <grass/parson.h>
 
 static void select_from_geometry(void);
 static void select_from_database(void);
 static void summary(void);
+
+enum OutputFormat { PLAIN, SHELL, JSON };
 
 struct Option *field_opt, *where_opt, *col_opt;
 struct Flag *shell_flag, *ext_flag, *weight_flag, *geometry;
@@ -80,10 +83,12 @@ double total_size = 0.0; /* total size: length/area */
 /* Extended statistics */
 int perc;
 
+enum OutputFormat format;
+
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct Option *map_opt, *type_opt, *percentile;
+    struct Option *map_opt, *type_opt, *percentile, *format_opt;
 
     module = G_define_module();
     G_add_keyword(_("vector"));
@@ -121,7 +126,10 @@ int main(int argc, char *argv[])
 
     shell_flag = G_define_flag();
     shell_flag->key = 'g';
-    shell_flag->description = _("Print the stats in shell script style");
+    shell_flag->label = _("Print the stats in shell script style [deprecated]");
+    shell_flag->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=shell instead.");
 
     ext_flag = G_define_flag();
     ext_flag->key = 'e';
@@ -136,6 +144,13 @@ int main(int argc, char *argv[])
     geometry->description =
         _("Calculate geometric distances instead of attribute statistics");
 
+    format_opt = G_define_standard_option(G_OPT_F_FORMAT);
+    format_opt->options = "plain,shell,json";
+    format_opt->descriptions = _("plain;Human readable text output;"
+                                 "shell;shell script style text output;"
+                                 "json;JSON (JavaScript Object Notation);");
+    format_opt->guisection = _("Print");
+
     G_gisinit(argv[0]);
 
     if (G_parser(argc, argv))
@@ -147,6 +162,26 @@ int main(int argc, char *argv[])
                       col_opt->key, col_opt->description);
     }
 
+    if (strcmp(format_opt->answer, "json") == 0) {
+        format = JSON;
+    }
+    else if (strcmp(format_opt->answer, "shell") == 0) {
+        format = SHELL;
+    }
+    else {
+        format = PLAIN;
+    }
+
+    if (shell_flag->answer) {
+        G_verbose_message(
+            _("Flag 'g' is deprecated and will be removed in a future "
+              "release. Please use format=shell instead."));
+        if (format == JSON) {
+            G_fatal_error(_("The -g flag cannot be used with format=json. "
+                            "Please select only one output format."));
+        }
+        format = SHELL;
+    }
     otype = Vect_option_to_types(type_opt);
     perc = atoi(percentile->answer);
 
@@ -343,6 +378,8 @@ void select_from_geometry(void)
             G_debug(3, "i=%d j=%d sum = %f val=%f", i, j, sum, val);
         }
     }
+    Vect_destroy_line_struct(jPoints);
+    Vect_destroy_line_struct(iPoints);
 }
 
 void select_from_database(void)
@@ -546,6 +583,9 @@ void select_from_database(void)
 
 void summary(void)
 {
+    JSON_Value *root_value;
+    JSON_Object *root_object;
+
     if (compatible) {
         if (!geometry->answer && weight_flag->answer) {
             mean = sum / total_size;
@@ -582,7 +622,49 @@ void summary(void)
 
     G_debug(3, "otype %d:", otype);
 
-    if (shell_flag->answer) {
+    if (format == JSON) {
+        root_value = json_value_init_object();
+        if (root_value == NULL) {
+            G_fatal_error(
+                _("Failed to initialize JSON object. Out of memory?"));
+        }
+        root_object = json_object(root_value);
+
+        json_object_set_number(root_object, "n", count);
+        if (geometry->answer) {
+            json_object_set_number(root_object, "nzero", nzero);
+        }
+        else {
+            json_object_set_number(root_object, "missing", nmissing);
+            json_object_set_number(root_object, "nnull", nnull);
+        }
+        if (count > 0) {
+            json_object_set_number(root_object, "min", min);
+            json_object_set_number(root_object, "max", max);
+            json_object_set_number(root_object, "range", max - min);
+            json_object_set_number(root_object, "sum", sum);
+            if (compatible) {
+                json_object_set_number(root_object, "mean", mean);
+                json_object_set_number(root_object, "mean_abs", mean_abs);
+                if (geometry->answer || !weight_flag->answer) {
+                    json_object_set_number(root_object, "population_stddev",
+                                           pop_stdev);
+                    json_object_set_number(root_object, "population_variance",
+                                           pop_variance);
+                    json_object_set_number(root_object,
+                                           "population_coeff_variation",
+                                           pop_coeff_variation);
+                    json_object_set_number(root_object, "sample_stddev",
+                                           sample_stdev);
+                    json_object_set_number(root_object, "sample_variance",
+                                           sample_variance);
+                    json_object_set_number(root_object, "kurtosis", kurtosis);
+                    json_object_set_number(root_object, "skewness", skewness);
+                }
+            }
+        }
+    }
+    else if (format == SHELL) {
         fprintf(stdout, "n=%d\n", count);
         if (geometry->answer) {
             fprintf(stdout, "nzero=%d\n", nzero);
@@ -688,7 +770,23 @@ void summary(void)
             quartile_perc = (Cvarr.value[qpos_perc]).val.d;
         }
 
-        if (shell_flag->answer) {
+        if (format == JSON) {
+            json_object_set_number(root_object, "first_quartile", quartile_25);
+            json_object_set_number(root_object, "median", median);
+            json_object_set_number(root_object, "third_quartile", quartile_75);
+
+            JSON_Value *percentiles_array_value = json_value_init_array();
+            JSON_Array *percentiles_array = json_array(percentiles_array_value);
+            JSON_Value *percentile_value = json_value_init_object();
+            JSON_Object *percentile_object = json_object(percentile_value);
+
+            json_object_set_number(percentile_object, "percentile", perc);
+            json_object_set_number(percentile_object, "value", quartile_perc);
+            json_array_append_value(percentiles_array, percentile_value);
+            json_object_set_value(root_object, "percentiles",
+                                  percentiles_array_value);
+        }
+        else if (format == SHELL) {
             fprintf(stdout, "first_quartile=%g\n", quartile_25);
             fprintf(stdout, "median=%g\n", median);
             fprintf(stdout, "third_quartile=%g\n", quartile_75);
@@ -711,5 +809,15 @@ void summary(void)
             else
                 fprintf(stdout, "%dth percentile: %g\n", perc, quartile_perc);
         }
+    }
+
+    if (format == JSON) {
+        char *serialized_string = json_serialize_to_string_pretty(root_value);
+        if (serialized_string == NULL) {
+            G_fatal_error(_("Failed to initialize pretty JSON string."));
+        }
+        puts(serialized_string);
+        json_free_serialized_string(serialized_string);
+        json_value_free(root_value);
     }
 }

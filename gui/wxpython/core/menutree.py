@@ -36,7 +36,7 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import copy
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
 
 import wx
 
@@ -62,7 +62,7 @@ class MenuTreeModelBuilder:
             group="appearance", key="menustyle", subkey="selection"
         )
 
-        xmlTree = etree.parse(filename)
+        xmlTree = ET.parse(filename)
         if expandAddons:
             expAddons(xmlTree)
             for message in getToolboxMessages():
@@ -88,16 +88,16 @@ class MenuTreeModelBuilder:
 
     def _createItem(self, item, node):
         if item.tag == "separator":
-            data = dict(
-                label="",
-                description="",
-                handler="",
-                command="",
-                keywords="",
-                shortcut="",
-                wxId="",
-                icon="",
-            )
+            data = {
+                "label": "",
+                "description": "",
+                "handler": "",
+                "command": "",
+                "keywords": "",
+                "shortcut": "",
+                "wxId": "",
+                "icon": "",
+            }
             self.model.AppendNode(parent=node, label="", data=data)
         elif item.tag == "menuitem":
             origLabel = _(item.find("label").text)
@@ -108,51 +108,35 @@ class MenuTreeModelBuilder:
             shortcut = item.find("shortcut")  # optional
             wxId = item.find("id")  # optional
             icon = item.find("icon")  # optional
-            if gcmd is not None:
-                gcmd = gcmd.text
-            else:
-                gcmd = ""
-            if desc.text:
-                desc = _(desc.text)
-            else:
-                desc = ""
-            if keywords is None or keywords.text is None:
-                keywords = ""
-            else:
-                keywords = keywords.text
-            if shortcut is not None:
-                shortcut = shortcut.text
-            else:
-                shortcut = ""
-            if wxId is not None:
-                wxId = eval("wx." + wxId.text)
-            else:
-                wxId = wx.ID_ANY
-            if icon is not None:
-                icon = icon.text
-            else:
-                icon = ""
+            gcmd = gcmd.text if gcmd is not None else ""
+            desc = _(desc.text) if desc.text else ""
+            keywords = (
+                "" if keywords is None or keywords.text is None else keywords.text
+            )
+            shortcut = shortcut.text if shortcut is not None else ""
+            wxId = eval("wx." + wxId.text) if wxId is not None else wx.ID_ANY
+            icon = icon.text if icon is not None else ""
             label = origLabel
             if gcmd:
                 if self.menustyle == 1:
                     label += "   [" + gcmd + "]"
                 elif self.menustyle == 2:
                     label = "      [" + gcmd + "]"
-            data = dict(
-                label=origLabel,
-                description=desc,
-                handler=handler,
-                command=gcmd,
-                keywords=keywords,
-                shortcut=shortcut,
-                wxId=wxId,
-                icon=icon,
-            )
+            data = {
+                "label": origLabel,
+                "description": desc,
+                "handler": handler,
+                "command": gcmd,
+                "keywords": keywords,
+                "shortcut": shortcut,
+                "wxId": wxId,
+                "icon": icon,
+            }
             self.model.AppendNode(parent=node, label=label, data=data)
         elif item.tag == "menu":
             self._createMenu(item, node)
         else:
-            raise ValueError(_("Unknow tag %s") % item.tag)
+            raise ValueError(_("Unknown tag %s") % item.tag)
 
     def GetModel(self, separators=False):
         """Returns copy of model with or without separators
@@ -160,10 +144,9 @@ class MenuTreeModelBuilder:
         """
         if separators:
             return copy.deepcopy(self.model)
-        else:
-            model = copy.deepcopy(self.model)
-            removeSeparators(model)
-            return model
+        model = copy.deepcopy(self.model)
+        removeSeparators(model)
+        return model
 
     def PrintTree(self, fh):
         for child in self.model.root.children:
@@ -242,9 +225,9 @@ if __name__ == "__main__":
     menu = "manager"
 
     for arg in sys.argv:
-        if arg in ("strings", "tree", "commands", "dump"):
+        if arg in {"strings", "tree", "commands", "dump"}:
             action = arg
-        elif arg in ("manager", "module_tree", "modeler", "psmap"):
+        elif arg in {"manager", "module_tree", "modeler", "psmap"}:
             menu = arg
 
     # FIXME: cross-dependencies
@@ -273,7 +256,7 @@ if __name__ == "__main__":
     else:
         import grass.script.core as gscore
 
-        gscore.fatal("Unknown value for parameter menu: " % menu)
+        gscore.fatal("Unknown value for parameter menu: %s" % menu)
 
     if action == "strings":
         menudata.PrintStrings(sys.stdout)
@@ -286,6 +269,6 @@ if __name__ == "__main__":
     else:
         import grass.script.core as gscore
 
-        gscore.fatal("Unknown value for parameter action: " % action)
+        gscore.fatal("Unknown value for parameter action: %s" % action)
 
     sys.exit(0)

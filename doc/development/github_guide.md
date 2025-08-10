@@ -1,6 +1,6 @@
 # Guide to contributing on GitHub
 
-This guide covers contributing to the GRASS GIS source,
+This guide covers contributing to the GRASS source,
 specifically to the _main_ branch.
 It assumes that you have some very basic knowledge of Git and GitHub.
 
@@ -23,14 +23,14 @@ git clone https://github.com/your_GH_account/grass.git
 cd grass/
 ```
 
-1. Add the main GRASS GIS repository as "upstream" (use HTTPS URL):
+1. Add the main GRASS repository as "upstream" (use HTTPS URL):
 
 ```bash
 git remote add upstream https://github.com/OSGeo/grass
 ```
 
 1. Your remotes now should be "origin" which is your fork and "upstream" which
-  is this main GRASS GIS repository. You can confirm that using:
+  is this main GRASS repository. You can confirm that using:
 
 ```bash
 git remote -v
@@ -122,9 +122,28 @@ a PR.
 Alternatively, you can explore GitHub CLI tool (_gh_) which allows you
 to do `git push` and create a PR in one step with `gh pr create -fw`.
 
+## Guidelines for writing a meaningful pull request
+
+A well-written pull request clearly conveys the purpose and impact of the
+proposed changes.
+
+### PR Title
+
+The title should be descriptive and clearly summarize the main purpose or change
+in the pull request. Start the title with the tool name or a
+[keyword](https://github.com/OSGeo/grass/blob/main/utils/release.yml) (e.g.:
+`tool name: Add functionality Y for Z`. Keep it short, i.e. aim for concise titles,
+typically under 50-60 characters.
+
+### PR Content
+
+A pull request requires an abstract, change details, and more. When you create
+the new PR, you are presented with a [template](https://github.com/OSGeo/grass/blob/main/.github/PULL_REQUEST_TEMPLATE/pull_request_template.md)
+to help standardize the content.
+
 ## After creating a PR
 
-GRASS GIS maintainers will now review your PR.
+GRASS maintainers will now review your PR.
 If needed, the maintainers will work with you to improve your changes.
 
 Once the changes in the PR are ready to be accepted,
@@ -173,7 +192,7 @@ git fetch upstream
 git merge upstream/main
 ```
 
-Git will ask you to edit the merge commit messsage, you can leave the default
+Git will ask you to edit the merge commit message, you can leave the default
 and close the editor. You may run into a conflict,
 in that case you need to resolve it.
 

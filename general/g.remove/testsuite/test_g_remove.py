@@ -52,7 +52,7 @@ class GMRemoveTest(TestCase):
 
     def test_remove_procedure(self):
         """Test that maps are removed only with -f"""
-        for i in range(0, 10):
+        for i in range(10):
             rmapcalc("test_map_%i = 100" % i)
         rmapcalc("test_two = 2")
 

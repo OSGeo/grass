@@ -25,7 +25,7 @@ import shutil
 
 from copy import deepcopy
 
-import grass.script as grass
+import grass.script as gs
 from grass.script.task import cmdlist_to_tuple, cmdtuple_to_list
 
 from core import globalvar
@@ -178,7 +178,7 @@ class WSDialogBase(wx.Dialog):
             border=5,
         )
 
-        # connectin settings
+        # connection settings
         settingsSizer = wx.StaticBoxSizer(self.settingsBox, wx.VERTICAL)
 
         serverSizer = wx.FlexGridSizer(cols=3, vgap=5, hgap=5)
@@ -331,17 +331,15 @@ class WSDialogBase(wx.Dialog):
 
     def OnClose(self, event):
         """Close the dialog"""
-        """Close dialog"""
         if not self.IsModal():
             self.Destroy()
         event.Skip()
 
     def _getCapFiles(self):
-        ws_cap_files = {}
-        for v in self.ws_panels.values():
-            ws_cap_files[v["panel"].GetWebService()] = v["panel"].GetCapFile()
-
-        return ws_cap_files
+        return {
+            v["panel"].GetWebService(): v["panel"].GetCapFile()
+            for v in self.ws_panels.values()
+        }
 
     def OnServer(self, event):
         """Server settings edited"""
@@ -378,7 +376,7 @@ class WSDialogBase(wx.Dialog):
             self.Fit()
 
         self.statusbar.SetStatusText(
-            _("Connecting to <%s>..." % self.server.GetValue().strip())
+            _("Connecting to <%s>...") % self.server.GetValue().strip()
         )
 
         # number of panels already connected
@@ -417,12 +415,9 @@ class WSDialogBase(wx.Dialog):
         :return: list of found web services on server (identified as keys in
                  self.ws_panels)
         """
-        conn_ws = []
-        for ws, data in self.ws_panels.items():
-            if data["panel"].IsConnected():
-                conn_ws.append(ws)
-
-        return conn_ws
+        return [
+            ws for ws, data in self.ws_panels.items() if data["panel"].IsConnected()
+        ]
 
     def UpdateDialogAfterConnection(self):
         """Update dialog after all web service panels downloaded and parsed
@@ -464,14 +459,14 @@ class WSDialogBase(wx.Dialog):
             )
             self._showWsPanel(self.web_service_sel[self.choose_ws_rb.GetSelection()])
             self.statusbar.SetStatusText(
-                _("Connected to <%s>" % self.server.GetValue().strip())
+                _("Connected to <%s>") % self.server.GetValue().strip()
             )
             for btn in self.run_btns:
                 btn.Enable(True)
         # no web service found on server
         else:
             self.statusbar.SetStatusText(
-                _("Unable to connect to <%s>" % self.server.GetValue().strip())
+                _("Unable to connect to <%s>") % self.server.GetValue().strip()
             )
             for btn in self.run_btns:
                 btn.Enable(False)
@@ -570,7 +565,7 @@ class AddWSDialog(WSDialogBase):
 
         lcmd = self.active_ws_panel.CreateCmd()
         if not lcmd:
-            return None
+            return
 
         # TODO: It is not clear how to do GetOptData in giface
         # knowing what GetOptData is doing might help
@@ -587,7 +582,7 @@ class AddWSDialog(WSDialogBase):
         active_ws = self.active_ws_panel.GetWebService()
         if "WMS" not in active_ws:
             cap_file = self.active_ws_panel.GetCapFile()
-            cmd_cap_file = grass.tempfile()
+            cmd_cap_file = gs.tempfile()
             shutil.copyfile(cap_file, cmd_cap_file)
             lcmd.append("capfile=" + cmd_cap_file)
 
@@ -668,7 +663,7 @@ class WSPropertiesDialog(WSDialogBase):
                 self.revert_ws_cap_files[ws] = cmd[1]["capfile"]
                 del ws_cap_files[ws]
             else:
-                self.revert_ws_cap_files[ws] = grass.tempfile()
+                self.revert_ws_cap_files[ws] = gs.tempfile()
 
         self._setRevertCapFiles(ws_cap_files)
 
@@ -677,16 +672,16 @@ class WSPropertiesDialog(WSDialogBase):
 
     def __del__(self):
         for f in self.revert_ws_cap_files.values():
-            grass.try_remove(f)
+            gs.try_remove(f)
 
     def _setRevertCapFiles(self, ws_cap_files):
         for ws, f in ws_cap_files.items():
-            if os.path.isfile(ws_cap_files[ws]):
+            if os.path.isfile(f):
                 shutil.copyfile(f, self.revert_ws_cap_files[ws])
             else:
                 # delete file content
-                f_o = open(f, "w")
-                f_o.close()
+                with open(f, "w"):
+                    pass
 
     def _createWidgets(self):
         WSDialogBase._createWidgets(self)
@@ -749,12 +744,9 @@ class WSPropertiesDialog(WSDialogBase):
             )
 
     def _getServerConnFromCmd(self, cmd):
-        """Get url/server/passwod from cmd tuple"""
+        """Get url/server/password from cmd tuple"""
         conn = {"url": "", "username": "", "password": ""}
-
-        for k in conn.keys():
-            if k in cmd[1]:
-                conn[k] = cmd[1][k]
+        conn |= {k: cmd[1][k] for k in conn.keys() if k in cmd[1]}
         return conn
 
     def _apply(self):
@@ -865,7 +857,7 @@ class SaveWMSLayerDialog(wx.Dialog):
         self.params["output"] = Select(
             parent=self,
             type="raster",
-            mapsets=[grass.gisenv()["MAPSET"]],
+            mapsets=[gs.gisenv()["MAPSET"]],
             size=globalvar.DIALOG_GSELECT_SIZE,
         )
 
@@ -883,13 +875,13 @@ class SaveWMSLayerDialog(wx.Dialog):
         )
         self.region_types["named"] = RadioButton(parent=self, label=_("Named region"))
         self.region_types["display"].SetToolTip(
-            _("Extent and resolution" " are based on Map Display geometry.")
+            _("Extent and resolution are based on Map Display geometry.")
         )
         self.region_types["comp"].SetToolTip(
-            _("Extent and resolution" " are based on computational region.")
+            _("Extent and resolution are based on computational region.")
         )
         self.region_types["named"].SetToolTip(
-            _("Extent and resolution" " are based on named region.")
+            _("Extent and resolution are based on named region.")
         )
         self.region_types["display"].SetValue(True)  # set default as map display
 
@@ -1012,7 +1004,7 @@ class SaveWMSLayerDialog(wx.Dialog):
     def OnSave(self, event):
         """Import WMS raster data into GRASS as raster layer."""
         self.thread.abort(abortall=True)
-        currmapset = grass.gisenv()["MAPSET"]
+        currmapset = gs.gisenv()["MAPSET"]
 
         self.output = self.params["output"].GetValue().strip()
         l_spl = self.output.strip().split("@")
@@ -1027,9 +1019,9 @@ class SaveWMSLayerDialog(wx.Dialog):
 
         elif (
             not self.overwrite.IsChecked()
-            and grass.find_file(self.output, "cell", ".")["fullname"]
+            and gs.find_file(self.output, "cell", ".")["fullname"]
         ):
-            msg = _("Output map <%s> already exists" % self.output)
+            msg = _("Output map <%s> already exists") % self.output
 
         if msg:
             GMessage(parent=self, message=msg)
@@ -1046,9 +1038,9 @@ class SaveWMSLayerDialog(wx.Dialog):
             reg_mapset = reg_spl[1]
 
         if self.region_types["named"].GetValue():
-            if not grass.find_file(reg_spl[0], "windows", reg_mapset)["fullname"]:
-                msg = _(
-                    "Region <%s> does not exist." % self.params["region"].GetValue()
+            if not gs.find_file(reg_spl[0], "windows", reg_mapset)["fullname"]:
+                msg = (
+                    _("Region <%s> does not exist.") % self.params["region"].GetValue()
                 )
                 GWarning(parent=self, message=msg)
                 return

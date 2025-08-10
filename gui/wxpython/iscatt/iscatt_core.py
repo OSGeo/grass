@@ -30,7 +30,7 @@ from math import sqrt, ceil, floor
 
 from core.gcmd import GException, RunCommand
 
-import grass.script as grass
+import grass.script as gs
 
 from iscatt.core_c import CreateCatRast, ComputeScatts, UpdateCatRast, Rasterize
 
@@ -155,12 +155,12 @@ class Core:
             b1, b2 = idScattToidBands(scatt_id, len(self.an_data.GetBands()))
             b = self.scatts_dt.GetBandsInfo(scatt_id)
 
-            region = {}
-            region["s"] = b["b2"]["min"] - 0.5
-            region["n"] = b["b2"]["max"] + 0.5
-
-            region["w"] = b["b1"]["min"] - 0.5
-            region["e"] = b["b1"]["max"] + 0.5
+            region = {
+                "s": b["b2"]["min"] - 0.5,
+                "n": b["b2"]["max"] + 0.5,
+                "w": b["b1"]["min"] - 0.5,
+                "e": b["b1"]["max"] + 0.5,
+            }
 
             arr = self.scatt_conds_dt.GetValuesArr(cat_id, scatt_id)
             arr = Rasterize(polygon=coords, rast=arr, region=region, value=value)
@@ -214,15 +214,16 @@ class CatRastUpdater:
 
     def SyncWithMap(self):
         # TODO possible optimization - bbox only of vertex and its two
-        # neighbours
+        # neighbors
 
         region = self.an_data.GetRegion()
 
-        bbox = {}
-        bbox["maxx"] = region["e"]
-        bbox["minx"] = region["w"]
-        bbox["maxy"] = region["n"]
-        bbox["miny"] = region["s"]
+        bbox = {
+            "maxx": region["e"],
+            "minx": region["w"],
+            "maxy": region["n"],
+            "miny": region["s"],
+        }
 
         updated_cats = []
 
@@ -237,7 +238,7 @@ class CatRastUpdater:
 
     def EditedFeature(self, new_bboxs, new_areas_cats, old_bboxs, old_areas_cats):
         # TODO possible optimization - bbox only of vertex and its two
-        # neighbours
+        # neighbors
 
         bboxs = old_bboxs + new_bboxs
         areas_cats = old_areas_cats + new_areas_cats
@@ -295,7 +296,7 @@ class CatRastUpdater:
         )
 
         if ret != 0:
-            GException(_("v.build failed:\n%s" % msg))
+            GException(_("v.build failed:\n%s") % msg)
 
         environs = os.environ.copy()
         environs["GRASS_REGION"] = grass_region["GRASS_REGION"]
@@ -315,7 +316,7 @@ class CatRastUpdater:
         )
 
         if ret != 0:
-            GException(_("v.to.rast failed:\n%s" % msg))
+            GException(_("v.to.rast failed:\n{messages}").format(messages=msg))
 
     def _create_grass_region_env(self, bbox):
         r = self.an_data.GetRegion()
@@ -323,7 +324,7 @@ class CatRastUpdater:
 
         if bbox["maxy"] <= r["s"]:
             return 0
-        elif bbox["maxy"] >= r["n"]:
+        if bbox["maxy"] >= r["n"]:
             new_r["n"] = bbox["maxy"]
         else:
             new_r["n"] = (
@@ -332,7 +333,7 @@ class CatRastUpdater:
 
         if bbox["miny"] >= r["n"]:
             return 0
-        elif bbox["miny"] <= r["s"]:
+        if bbox["miny"] <= r["s"]:
             new_r["s"] = bbox["miny"]
         else:
             new_r["s"] = (
@@ -341,7 +342,7 @@ class CatRastUpdater:
 
         if bbox["maxx"] <= r["w"]:
             return 0
-        elif bbox["maxx"] >= r["e"]:
+        if bbox["maxx"] >= r["e"]:
             new_r["e"] = bbox["maxx"]
         else:
             new_r["e"] = (
@@ -350,7 +351,7 @@ class CatRastUpdater:
 
         if bbox["minx"] >= r["e"]:
             return 0
-        elif bbox["minx"] <= r["w"]:
+        if bbox["minx"] <= r["w"]:
             new_r["w"] = bbox["minx"]
         else:
             new_r["w"] = (
@@ -361,7 +362,7 @@ class CatRastUpdater:
         new_r["nsres"] = r["nsres"]
         new_r["ewres"] = r["ewres"]
 
-        return {"GRASS_REGION": grass.region_env(**new_r)}
+        return {"GRASS_REGION": gs.region_env(**new_r)}
 
 
 class AnalyzedData:
@@ -446,7 +447,7 @@ class ScattPlotsCondsData:
             return False
 
         for scatt in self.cats[cat_id].values():
-            grass.try_remove(scatt["np_vals"])
+            gs.try_remove(scatt["np_vals"])
             del scatt["np_vals"]
 
         del self.cats[cat_id]
@@ -476,7 +477,7 @@ class ScattPlotsCondsData:
             b_i["b1"]["max"] - b_i["b1"]["min"] + 1,
         )
 
-        np_vals = np.memmap(grass.tempfile(), dtype=self.dtype, mode="w+", shape=shape)
+        np_vals = np.memmap(gs.tempfile(), dtype=self.dtype, mode="w+", shape=shape)
 
         self.cats[cat_id][scatt_id] = {"np_vals": np_vals}
 
@@ -488,9 +489,7 @@ class ScattPlotsCondsData:
         b1_info = self.an_data.GetBandInfo(b1)
         b2_info = self.an_data.GetBandInfo(b2)
 
-        bands_info = {"b1": b1_info, "b2": b2_info}
-
-        return bands_info
+        return {"b1": b1_info, "b2": b2_info}
 
     def DeleScattPlot(self, cat_id, scatt_id):
         if cat_id not in self.cats:
@@ -533,7 +532,7 @@ class ScattPlotsCondsData:
                 # if key is missing condition is always True (full scatter plor
                 # is computed)
                 if scatt_id in self.cats[cat_id]:
-                    self.cats[cat_id][scatt_id]["np_vals"] = cats[cat_id][scatt_id][
+                    self.cats[cat_id][scatt_id]["np_vals"] = scatt_ids[scatt_id][
                         "np_vals"
                     ]
 
@@ -553,8 +552,7 @@ class ScattPlotsCondsData:
 
 
 class ScattPlotsData(ScattPlotsCondsData):
-    """Data structure for computed points (classes) in scatter plots.\
-    """
+    """Data structure for computed points (classes) in scatter plots."""
 
     def __init__(self, an_data):
         self.cats_rasts = {}
@@ -580,7 +578,7 @@ class ScattPlotsData(ScattPlotsCondsData):
             self.cats_rasts_conds[cat_id] = None
             self.cats_rasts[cat_id] = None
         else:
-            self.cats_rasts_conds[cat_id] = grass.tempfile()
+            self.cats_rasts_conds[cat_id] = gs.tempfile()
             self.cats_rasts[cat_id] = "temp_cat_rast_%d_%d" % (cat_id, os.getpid())
             region = self.an_data.GetRegion()
             CreateCatRast(region, self.cats_rasts_conds[cat_id])
@@ -590,7 +588,7 @@ class ScattPlotsData(ScattPlotsCondsData):
     def DeleteCategory(self, cat_id):
         ScattPlotsCondsData.DeleteCategory(self, cat_id)
 
-        grass.try_remove(self.cats_rasts_conds[cat_id])
+        gs.try_remove(self.cats_rasts_conds[cat_id])
         del self.cats_rasts_conds[cat_id]
 
         RunCommand("g.remove", flags="f", type="raster", name=self.cats_rasts[cat_id])
@@ -635,7 +633,7 @@ class ScattPlotsData(ScattPlotsCondsData):
 
     def _getEllipse(self, cat_id, scatt_id, nstd):
         # Joe Kington
-        # http://stackoverflow.com/questions/12301071/multidimensional-confidence-intervals
+        # https://stackoverflow.com/questions/12301071/multidimensional-confidence-intervals
 
         data = np.copy(self.cats[cat_id][scatt_id]["np_vals"])
 
@@ -695,7 +693,7 @@ class ScattPlotsData(ScattPlotsCondsData):
     def CleanUp(self):
         ScattPlotsCondsData.CleanUp(self)
         for tmp in self.cats_rasts_conds.values():
-            grass.try_remove(tmp)
+            gs.try_remove(tmp)
         for tmp in self.cats_rasts.values():
             RunCommand("g.remove", flags="f", type="raster", name=tmp, getErrorMsg=True)
 
@@ -729,35 +727,36 @@ class ScattPlotsData(ScattPlotsCondsData):
         return cats_rasts
 
 
-# not used,  using iclass_perimeter algorithm instead of scipy convolve2d
-"""
-def RasterizePolygon(pol, height, min_h, width, min_w):
+# not used, using iclass_perimeter algorithm instead of scipy convolve2d
 
-    # Joe Kington
-    # http://stackoverflow.com/questions/3654289/scipy-create-2d-polygon-mask
-
-    #poly_verts = [(1,1), (1,4), (4,4),(4,1), (1,1)]
-
-    nx = width
-    ny = height
-
-    x, y =  np.meshgrid(np.arange(-0.5 + min_w, nx + 0.5 + min_w, dtype=float),
-                        np.arange(-0.5 + min_h, ny + 0.5 + min_h, dtype=float))
-    x, y = x.flatten(), y.flatten()
-
-    points = np.vstack((x,y)).T
-
-    p = Path(pol)
-    grid = p.contains_points(points)
-    grid = grid.reshape((ny + 1, nx + 1))
-    raster = np.zeros((height, width), dtype=np.uint8)#TODO bool
-
-    #TODO shift by 0.5
-    B = np.ones((2,2))/4
-    raster = convolve2d(grid, B, 'valid')
-
-    return raster
-"""
+# def RasterizePolygon(pol, height, min_h, width, min_w):
+#
+#     # Joe Kington
+#     # https://stackoverflow.com/questions/3654289/scipy-create-2d-polygon-mask
+#
+#     # poly_verts = [(1,1), (1,4), (4,4),(4,1), (1,1)]
+#
+#     nx = width
+#     ny = height
+#
+#     x, y = np.meshgrid(
+#         np.arange(-0.5 + min_w, nx + 0.5 + min_w, dtype=float),
+#         np.arange(-0.5 + min_h, ny + 0.5 + min_h, dtype=float),
+#     )
+#     x, y = x.flatten(), y.flatten()
+#
+#     points = np.vstack((x, y)).T
+#
+#     p = Path(pol)
+#     grid = p.contains_points(points)
+#     grid = grid.reshape((ny + 1, nx + 1))
+#     raster = np.zeros((height, width), dtype=np.uint8)  # TODO bool
+#
+#     # TODO shift by 0.5
+#     B = np.ones((2, 2)) / 4
+#     raster = convolve2d(grid, B, "valid")
+#
+#     return raster
 
 
 def idScattToidBands(scatt_id, n_bands):
@@ -784,14 +783,12 @@ def idBandsToidScatt(band_1_id, band_2_id, n_bands):
 
     n_b1 = n_bands - 1
 
-    scatt_id = int(
+    return int(
         (band_1_id * (2 * n_b1 + 1) - band_1_id * band_1_id) / 2
         + band_2_id
         - band_1_id
         - 1
     )
-
-    return scatt_id
 
 
 def GetRegion():
@@ -809,11 +806,7 @@ def _parseRegion(region_str):
 
     for param in region_str:
         k, v = param.split("=")
-        if k in ["rows", "cols", "cells"]:
-            v = int(v)
-        else:
-            v = float(v)
-        region[k] = v
+        region[k] = int(v) if k in {"rows", "cols", "cells"} else float(v)
 
     return region
 
@@ -836,8 +829,7 @@ def GetRasterInfo(rast):
         if k == "datatype":
             if v != "CELL":
                 return None
-            pass
-        elif k in ["rows", "cols", "cells", "min", "max"]:
+        elif k in {"rows", "cols", "cells", "min", "max"}:
             v = int(v)
         else:
             v = float(v)

@@ -18,7 +18,6 @@ The region setting should work for UTM and LL test locations
 
 import grass.script as gs
 import grass.temporal as tgis
-
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 

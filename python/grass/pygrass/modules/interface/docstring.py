@@ -4,8 +4,10 @@ def docstring_property(class_doc):
 
     >>> class A(object):
     ...     '''Main docstring'''
+    ...
     ...     def __init__(self, x):
     ...         self.x = x
+    ...
     ...     @docstring_property(__doc__)
     ...     def __doc__(self):
     ...         return "My value of x is %s." % self.x
@@ -44,11 +46,12 @@ class DocstringProperty:
     def __get__(self, obj, type=None):
         if obj is None:
             return self.class_doc
-        else:
-            return self.fget(obj)
+        return self.fget(obj)
 
     def __set__(self, obj, value):
-        raise AttributeError("can't set attribute")
+        msg = "Can't set attribute"
+        raise AttributeError(msg)
 
     def __delete__(self, obj):
-        raise AttributeError("can't delete attribute")
+        msg = "Can't delete attribute"
+        raise AttributeError(msg)

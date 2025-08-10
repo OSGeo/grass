@@ -106,6 +106,7 @@
 
 
 import os
+from pathlib import Path
 import sys
 from grass.script.utils import try_remove
 from grass.script import core as grass
@@ -126,7 +127,7 @@ def main():
     wfs_url += request_base
 
     if options["name"]:
-        if tuple([int(x) for x in version_num.split(".")]) >= (2, 0, 0):
+        if tuple(int(x) for x in version_num.split(".")) >= (2, 0, 0):
             wfs_url += "&TYPENAMES=" + options["name"]
         else:
             wfs_url += "&TYPENAME=" + options["name"]
@@ -153,28 +154,24 @@ def main():
     if flags["l"]:
         wfs_url = options["url"] + "REQUEST=GetCapabilities&SERVICE=WFS"
 
-    print(wfs_url)
-
     tmp = grass.tempfile()
     tmpxml = tmp + ".xml"
 
-    grass.debug(wfs_url)
+    grass.debug(f"The request URL: {wfs_url}")
 
     # Set user and password if given
     if options["username"] and options["password"]:
         grass.message(_("Setting username and password..."))
         if os.path.isfile(options["username"]):
-            with open(options["username"]) as f:
-                filecontent = f.read()
-                user = filecontent.strip()
+            filecontent = Path(options["username"]).read_text()
+            user = filecontent.strip()
         elif options["username"] in os.environ:
             user = os.environ[options["username"]]
         else:
             user = options["username"]
         if os.path.isfile(options["password"]):
-            with open(options["password"]) as f:
-                filecontent = f.read()
-                pw = filecontent.strip()
+            filecontent = Path(options["password"]).read_text()
+            pw = filecontent.strip()
         elif options["password"] in os.environ:
             pw = os.environ[options["password"]]
         else:
@@ -230,7 +227,14 @@ def main():
             grass.run_command("v.in.ogr", flags="o", input=tmpxml, output=out)
         grass.message(_("Vector map <%s> imported from WFS.") % out)
     except Exception:
+        import xml.etree.ElementTree as ET
+
         grass.message(_("WFS import failed"))
+
+        root = ET.parse(tmpxml).getroot()
+        if "ServiceExceptionReport" in root.tag:
+            se = root.find(root.tag[:-6])  # strip "Report" from the tag
+            grass.message(se.text.strip())
     finally:
         try_remove(tmpxml)
 

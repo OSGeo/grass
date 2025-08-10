@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # This is an example script how groundwater flow and solute transport are
-# computed within GRASS GIS
+# computed within GRASS
 import grass.script as gs
 
 # Overwrite existing maps
@@ -24,7 +24,6 @@ gs.run_command("r.mapcalc", expression="bottom=0")
 gs.run_command("r.mapcalc", expression="poros=0.17")
 gs.run_command("r.mapcalc", expression="syield=0.0001")
 gs.run_command("r.mapcalc", expression="null=0.0")
-#
 gs.message(_("Compute a steady state groundwater flow"))
 
 gs.run_command(

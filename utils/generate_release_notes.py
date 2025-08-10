@@ -26,6 +26,7 @@ PRETTY_TEMPLATE = (
     "    date: %ad%n"
     "    message: |-%n      %s"
 )
+CONFIG_DIRECTORY = Path("utils")
 
 
 def remove_excluded_changes(changes, exclude):
@@ -96,9 +97,7 @@ def print_category(category, changes, file=None):
         # Relies on author being specified as username.
         if " " in author:
             author = author.split(" ", maxsplit=1)[0]
-        if author.startswith("@"):
-            # We expect that to be always the case, but we test anyway.
-            author = author[1:]
+        author = author.removeprefix("@")
         if author in known_bot_names or author.endswith("[bot]"):
             hidden.append(item)
         elif len(visible) > max_section_length:
@@ -113,7 +112,7 @@ def print_category(category, changes, file=None):
         for item in itertools.chain(overflow, hidden):
             print(f"  * {item}", file=file)
         print("\n</details>")
-    print("")
+    print()
 
 
 def print_by_category(changes, categories, file=None):
@@ -126,22 +125,22 @@ def print_by_category(changes, categories, file=None):
 def binder_badge(tag):
     """Get mybinder Binder badge from a given tag, hash, or branch"""
     binder_image_url = "https://mybinder.org/badge_logo.svg"
-    binder_url = f"https://mybinder.org/v2/gh/OSGeo/grass/{tag}?urlpath=lab%2Ftree%2Fdoc%2Fnotebooks%2Fjupyter_example.ipynb"  # noqa
+    binder_url = f"https://mybinder.org/v2/gh/OSGeo/grass/{tag}?urlpath=lab%2Ftree%2Fdoc%2Fexamples%2Fnotebooks%2Fjupyter_example.ipynb"
     return f"[![Binder]({binder_image_url})]({binder_url})"
 
 
 def print_support(file=None):
     url = "https://opencollective.com/grass/tiers/supporter/all.json"
-    response = requests.get(url=url)
+    response = requests.get(url=url, timeout=7)
     data = response.json()
     if data:
         print_section_heading_3("Monthly Financial Supporters", file=file)
         random.shuffle(data)
         supporters = []
         for member in data:
-            supporters.append(f"""[{member['name']}]({member['profile']})""")
+            supporters.append(f"""[{member["name"]}]({member["profile"]})""")
         print(", ".join(supporters))
-        print("")
+        print()
 
 
 def adjust_after(lines):
@@ -178,7 +177,7 @@ def print_notes(
     """
     num_changes = round_down_to_five(len(changes))
     print(
-        f"The GRASS GIS {end_tag} release provides more than "
+        f"The GRASS {end_tag} release provides more than "
         f"{num_changes} improvements and fixes "
         f"with respect to the release {start_tag}.\n"
     )
@@ -198,7 +197,7 @@ def print_notes(
     print_by_category(changes_by_category, categories=categories, file=file)
     if after:
         print(after)
-        print("")
+        print()
     print(binder_badge(end_tag))
 
 
@@ -228,7 +227,7 @@ def notes_from_gh_api(start_tag, end_tag, branch, categories, exclude):
     raw_changes = lines[start_whats_changed + 1 : end_whats_changed]
     changes = []
     for change in raw_changes:
-        if change.startswith("* ") or change.startswith("- "):
+        if change.startswith(("* ", "- ")):
             changes.append(change[2:])
         else:
             changes.append(change)
@@ -264,20 +263,20 @@ def notes_from_git_log(start_tag, end_tag, categories, exclude):
     ).stdout
     commits = yaml.safe_load(text)
     if not commits:
-        raise RuntimeError("No commits retrieved from git log (try different tags)")
+        msg = "No commits retrieved from git log (try different tags)"
+        raise RuntimeError(msg)
 
-    config_directory = Path("utils")
     svn_name_by_git_author = csv_to_dict(
-        config_directory / "svn_name_git_author.csv",
+        CONFIG_DIRECTORY / "svn_name_git_author.csv",
         key="git_author",
         value="svn_name",
     )
     github_name_by_svn_name = csv_to_dict(
-        config_directory / "svn_name_github_name.csv",
+        CONFIG_DIRECTORY / "svn_name_github_name.csv",
         key="svn_name",
         value="github_name",
     )
-    github_name_by_git_author_file = config_directory / "git_author_github_name.csv"
+    github_name_by_git_author_file = CONFIG_DIRECTORY / "git_author_github_name.csv"
     github_name_by_git_author = csv_to_dict(
         github_name_by_git_author_file,
         key="git_author",
@@ -343,9 +342,8 @@ def create_release_notes(args):
             check=True,
         ).stdout.strip()
 
-    config_directory = Path("utils")
-    with open(config_directory / "release.yml", encoding="utf-8") as file:
-        config = yaml.safe_load(file.read())["notes"]
+    config_file = CONFIG_DIRECTORY / "release.yml"
+    config = yaml.safe_load(config_file.read_text(encoding="utf-8"))["notes"]
 
     if args.backend == "api":
         notes_from_gh_api(
@@ -391,8 +389,7 @@ def main():
     args = parser.parse_args()
     if args.backend == "check":
         config_file = Path("utils") / "release.yml"
-        with open(config_file, encoding="utf-8") as file:
-            config = yaml.safe_load(file.read())
+        config = yaml.safe_load(Path(config_file).read_text(encoding="utf-8"))
         has_match = False
         for category in config["notes"]["categories"]:
             if re.match(category["regexp"], args.branch):

@@ -10,14 +10,13 @@ for details.
 :authors: Soeren Gebbert
 """
 
+from __future__ import annotations
+
 from abc import ABCMeta, abstractmethod
-from .core import (
-    get_tgis_message_interface,
-    init_dbif,
-    get_current_mapset,
-)
-from .temporal_topology_dataset_connector import TemporalTopologyDatasetConnector
+
+from .core import get_current_mapset, get_tgis_message_interface, init_dbif
 from .spatial_topology_dataset_connector import SpatialTopologyDatasetConnector
+from .temporal_topology_dataset_connector import TemporalTopologyDatasetConnector
 
 ###############################################################################
 
@@ -30,12 +29,12 @@ class AbstractDataset(
 
     __metaclass__ = ABCMeta
 
-    def __init__(self):
+    def __init__(self) -> None:
         SpatialTopologyDatasetConnector.__init__(self)
         TemporalTopologyDatasetConnector.__init__(self)
         self.msgr = get_tgis_message_interface()
 
-    def reset_topology(self):
+    def reset_topology(self) -> None:
         """Reset any information about temporal topology"""
 
         self.reset_spatial_topology()
@@ -75,11 +74,11 @@ class AbstractDataset(
         topologies must be build first using the SpatioTemporalTopologyBuilder.
 
         :return: The dictionary with relations as keys and number as values or
-                 None in case the topology  wasn't build
+                 None in case the topology wasn't built
         """
         if self.is_temporal_topology_build() and not self.is_spatial_topology_build():
             return self.get_number_of_temporal_relations()
-        elif self.is_spatial_topology_build() and not self.is_temporal_topology_build():
+        if self.is_spatial_topology_build() and not self.is_temporal_topology_build():
             self.get_number_of_spatial_relations()
         else:
             return (
@@ -89,12 +88,12 @@ class AbstractDataset(
 
         return None
 
-    def set_topology_build_true(self):
+    def set_topology_build_true(self) -> None:
         """Use this method when the spatio-temporal topology was build"""
         self.set_spatial_topology_build_true()
         self.set_temporal_topology_build_true()
 
-    def set_topology_build_false(self):
+    def set_topology_build_false(self) -> None:
         """Use this method when the spatio-temporal topology was not build"""
         self.set_spatial_topology_build_false()
         self.set_temporal_topology_build_false()
@@ -105,19 +104,18 @@ class AbstractDataset(
         :return: A dictionary with "spatial" and "temporal" as keys that
                  have boolean values
         """
-        d = {}
-        d["spatial"] = self.is_spatial_topology_build()
-        d["temporal"] = self.is_temporal_topology_build()
+        return {
+            "spatial": self.is_spatial_topology_build(),
+            "temporal": self.is_temporal_topology_build(),
+        }
 
-        return d
-
-    def print_topology_info(self):
+    def print_topology_info(self) -> None:
         if self.is_temporal_topology_build():
             self.print_temporal_topology_info()
         if self.is_spatial_topology_build():
             self.print_spatial_topology_info()
 
-    def print_topology_shell_info(self):
+    def print_topology_shell_info(self) -> None:
         if self.is_temporal_topology_build():
             self.print_temporal_topology_shell_info()
         if self.is_spatial_topology_build():
@@ -127,19 +125,19 @@ class AbstractDataset(
     def reset(self, ident):
         """Reset the internal structure and set the identifier
 
-         This method creates the dataset specific internal objects
-         that store the base information, the spatial and temporal extent
-         and the metadata. It must be implemented in the dataset
-         specific subclasses. This is the code for the
-         vector dataset:
+        This method creates the dataset specific internal objects
+        that store the base information, the spatial and temporal extent
+        and the metadata. It must be implemented in the dataset
+        specific subclasses. This is the code for the
+        vector dataset:
 
-         .. code-block:: python
+        .. code-block:: python
 
-             self.base = VectorBase(ident=ident)
-             self.absolute_time = VectorAbsoluteTime(ident=ident)
-             self.relative_time = VectorRelativeTime(ident=ident)
-             self.spatial_extent = VectorSpatialExtent(ident=ident)
-             self.metadata = VectorMetadata(ident=ident)
+            self.base = VectorBase(ident=ident)
+            self.absolute_time = VectorAbsoluteTime(ident=ident)
+            self.relative_time = VectorRelativeTime(ident=ident)
+            self.spatial_extent = VectorSpatialExtent(ident=ident)
+            self.metadata = VectorMetadata(ident=ident)
 
         :param ident: The identifier of the dataset that  "name@mapset" or
                       in case of vector maps "name:layer@mapset"
@@ -224,7 +222,7 @@ class AbstractDataset(
     def print_self(self):
         """Print the content of the internal structure to stdout"""
 
-    def set_id(self, ident):
+    def set_id(self, ident) -> None:
         """Set the identifier of the dataset"""
         self.base.set_id(ident)
         self.temporal_extent.set_id(ident)
@@ -235,18 +233,21 @@ class AbstractDataset(
 
     def get_id(self):
         """Return the unique identifier of the dataset
+
         :return: The id of the dataset "name(:layer)@mapset" as string
         """
         return self.base.get_id()
 
     def get_name(self):
         """Return the name
+
         :return: The name of the dataset as string
         """
         return self.base.get_name()
 
     def get_mapset(self):
         """Return the mapset
+
         :return: The mapset in which the dataset was created as string
         """
         return self.base.get_mapset()
@@ -300,11 +301,12 @@ class AbstractDataset(
 
     def get_relative_time_unit(self):
         """Returns the relative time unit
+
         :return: The relative time unit as string, None if not present
         """
         return self.relative_time.get_unit()
 
-    def check_relative_time_unit(self, unit):
+    def check_relative_time_unit(self, unit) -> bool:
         """Check if unit is of type  year(s), month(s), day(s), hour(s),
         minute(s) or second(s)
 
@@ -326,9 +328,7 @@ class AbstractDataset(
             "second",
             "seconds",
         ]
-        if unit not in units:
-            return False
-        return True
+        return not unit not in units
 
     def get_temporal_type(self):
         """Return the temporal type of this dataset
@@ -345,8 +345,7 @@ class AbstractDataset(
         Top and bottom are set to 0 in case of a two dimensional spatial
         extent.
 
-        :return: A the spatial extent as tuple (north, south, east, west,
-                 top, bottom)
+        :return: A the spatial extent as tuple (north, south, east, west, top, bottom)
         """
         return self.spatial_extent.get_spatial_extent_as_tuple()
 
@@ -354,7 +353,7 @@ class AbstractDataset(
         """Return the spatial extent"""
         return self.spatial_extent
 
-    def select(self, dbif=None, mapset=None):
+    def select(self, dbif=None, mapset=None) -> None:
         """Select temporal dataset entry from database and fill
         the internal structure
 
@@ -395,7 +394,7 @@ class AbstractDataset(
     def delete(self):
         """Delete dataset from database if it exists"""
 
-    def insert(self, dbif=None, execute=True):
+    def insert(self, dbif=None, execute: bool = True):
         """Insert dataset into database
 
         :param dbif: The database interface to be used
@@ -437,7 +436,7 @@ class AbstractDataset(
             dbif.close()
         return statement
 
-    def update(self, dbif=None, execute=True, ident=None):
+    def update(self, dbif=None, execute: bool = True, ident=None):
         """Update the dataset entry in the database from the internal structure
         excluding None variables
 
@@ -471,7 +470,7 @@ class AbstractDataset(
             dbif.close()
         return statement
 
-    def update_all(self, dbif=None, execute=True, ident=None):
+    def update_all(self, dbif=None, execute: bool = True, ident=None):
         """Update the dataset entry in the database from the internal structure
         and include None variables.
 
@@ -509,25 +508,23 @@ class AbstractDataset(
             dbif.close()
         return statement
 
-    def is_time_absolute(self):
+    def is_time_absolute(self) -> bool | None:
         """Return True in case the temporal type is absolute
 
         :return: True if temporal type is absolute, False otherwise
         """
         if "temporal_type" in self.base.D:
             return self.base.get_ttype() == "absolute"
-        else:
-            return None
+        return None
 
-    def is_time_relative(self):
+    def is_time_relative(self) -> bool | None:
         """Return True in case the temporal type is relative
 
         :return: True if temporal type is relative, False otherwise
         """
         if "temporal_type" in self.base.D:
             return self.base.get_ttype() == "relative"
-        else:
-            return None
+        return None
 
     def get_temporal_extent(self):
         """Return the temporal extent of the correct internal type"""
@@ -583,18 +580,17 @@ class AbstractDatasetComparisonKeyStartTime:
     """This comparison key can be used to sort lists of abstract datasets
     by start time
 
-     Example:
+    :Example:
+      .. code-block:: python
 
-     .. code-block:: python
+        # Return all maps in a space time raster dataset as map objects
+        map_list = strds.get_registered_maps_as_objects()
 
-         # Return all maps in a space time raster dataset as map objects
-         map_list = strds.get_registered_maps_as_objects()
-
-         # Sort the maps in the list by start time
-         sorted_map_list = sorted(map_list, key=AbstractDatasetComparisonKeyStartTime)
+        # Sort the maps in the list by start time
+        sorted_map_list = sorted(map_list, key=AbstractDatasetComparisonKeyStartTime)
     """
 
-    def __init__(self, obj, *args):
+    def __init__(self, obj, *args) -> None:
         self.obj = obj
 
     def __lt__(self, other):
@@ -635,18 +631,17 @@ class AbstractDatasetComparisonKeyEndTime:
     """This comparison key can be used to sort lists of abstract datasets
     by end time
 
-     Example:
+    :Example:
+      .. code-block:: python
 
-     .. code-block:: python
+        # Return all maps in a space time raster dataset as map objects
+        map_list = strds.get_registered_maps_as_objects()
 
-         # Return all maps in a space time raster dataset as map objects
-         map_list = strds.get_registered_maps_as_objects()
-
-         # Sort the maps in the list by end time
-         sorted_map_list = sorted(map_list, key=AbstractDatasetComparisonKeyEndTime)
+        # Sort the maps in the list by end time
+        sorted_map_list = sorted(map_list, key=AbstractDatasetComparisonKeyEndTime)
     """
 
-    def __init__(self, obj, *args):
+    def __init__(self, obj, *args) -> None:
         self.obj = obj
 
     def __lt__(self, other):

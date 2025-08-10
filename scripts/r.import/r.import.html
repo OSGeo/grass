@@ -84,7 +84,7 @@ the to <a href="r.proj.html">r.proj</a> manual.
 <h3>Import of SRTM V3 global data at 1 arc-seconds resolution</h3>
 
 The SRTM V3 1 arc-second global data (~30 meters resolution) are available
-from EarthExplorer (<a href="http://earthexplorer.usgs.gov/">http://earthexplorer.usgs.gov/</a>).
+from EarthExplorer (<a href="https://earthexplorer.usgs.gov/">https://earthexplorer.usgs.gov/</a>).
 The SRTM collections are located under the "Digital Elevation" category.
 <p>
 Example for North Carolina sample dataset (the tile name is "n35_w079_1arc_v3.tif"):
@@ -106,7 +106,7 @@ r.colors srtmv3_resamp10m color=elevation
 </pre></div>
 
 <h3>Import of WorldClim data</h3>
-Import of a subset from WorldClim <a href="http://worldclim.org/bioclim">Bioclim data set</a>,
+Import of a subset from WorldClim <a href="https://www.worldclim.org/data/bioclim.html">Bioclim data set</a>,
 to be reprojected to current project CRS (North Carolina sample dataset).
 Different resolutions are available, in this example we use the 2.5 arc-minutes
 resolution data. During import, we spatially subset the world data to the
@@ -115,7 +115,7 @@ North Carolina region using the <em>extent</em> parameter:
 <div class="code"><pre>
 # download selected Bioclim data (2.5 arc-minutes resolution)
 # optionally tiles are available for the 30 arc-sec resolution
-wget http://biogeo.ucdavis.edu/data/climate/worldclim/1_4/grid/cur/bio_2-5m_bil.zip
+wget https://geodata.ucdavis.edu/climate/worldclim/1_4/grid/cur/bio_2-5m_bil.zip
 
 # extract BIO1 from package (BIO1 = Annual Mean Temperature):
 unzip bio_2-5m_bil.zip bio1.bil bio1.hdr

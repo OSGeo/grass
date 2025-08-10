@@ -14,11 +14,11 @@ class TestRaster(TestCase):
     """Test raster functions"""
 
     raster = "testrasterscript"
-    region = gs.region()
-    coords = (region["e"] - 1, region["n"] - 1)
 
     @classmethod
     def setUpClass(cls):
+        cls.region = gs.region()
+        cls.coords = (cls.region["e"] - 1, cls.region["n"] - 1)
         cls.runModule("r.mapcalc", expression="testrasterscript = 100", overwrite=True)
 
     @classmethod

@@ -13,12 +13,12 @@ The <em>filter</em> option specifies if all outliers will be removed
 (default), or only positive or only negative outliers. Filtering out
 only positive outliers can be useful to filter out vegetation returns
 (e.g. from forest canopies) from LIDAR point clouds, in order to
-extract Digital Terrain Models. Filtering out only negative outliers
+extract digital terrain models (DTMs). Filtering out only negative outliers
 can be useful to estimate vegetation height.
 
 <p>
-There is a flag to create a vector that can be visualizated by
-qgis. That means that topology is build and the z coordinate is
+There is a flag to create a vector that can be visualized in
+QGIS. That means that topology is built and the z coordinate is
 considered as a category.
 
 <h2>EXAMPLES</h2>
@@ -38,7 +38,7 @@ v.outlier input=vector_map output=vector_output outlier=vector_outlier qgis=vect
 </pre></div>
 
 Now, the outlier removal uses the default threshold and there is also
-an output vector available for visualizaton in QGIS
+an output vector available for visualization in QGIS
  (<a href="http://www.qgis.org">http://www.qgis.org</a>).
 
 <h3>North Carolina dataset example</h3>

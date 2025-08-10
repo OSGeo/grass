@@ -29,7 +29,7 @@ static char *help[] = {
     "read       unix-file             eps        Encapsulated PostScript file",
     "border     [y|n]                 mapinfo    map information",
     "window     region definition     region     region definition",
-    "maskcolor  MASK color",
+    "maskcolor  mask color",
     "rectangle  east north east north",
     "scale      1:#|# inches|# panels|1 inch = # miles",
     "outline    map composition outline",

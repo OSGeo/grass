@@ -8,6 +8,7 @@
  */
 
 #include <stdlib.h>
+#include <grass/parson.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
@@ -39,10 +40,14 @@ int main(int argc, char *argv[])
     struct Cell_head window;
     struct {
         struct Option *opt1, *profile, *res, *output, *null_str, *coord_file,
-            *units;
+            *units, *format, *color_format;
         struct Flag *g, *c, *m;
     } parm;
     struct GModule *module;
+    enum OutputFormat format;
+    ColorFormat clr_frmt;
+    JSON_Value *array_value;
+    JSON_Array *array;
 
     G_gisinit(argv[0]);
 
@@ -93,7 +98,9 @@ int main(int argc, char *argv[])
     parm.c = G_define_flag();
     parm.c->key = 'c';
     parm.c->description =
-        _("Output RRR:GGG:BBB color values for each profile point");
+        _("Output color values for each profile point (format controlled by "
+          "color_format option; default is 'triplet' for plain output, 'hex' "
+          "for JSON)");
 
     parm.units = G_define_standard_option(G_OPT_M_UNITS);
     parm.units->options = "meters,kilometers,feet,miles";
@@ -101,6 +108,14 @@ int main(int argc, char *argv[])
     parm.units->description =
         _("If units are not specified, current project units are used. "
           "Meters are used by default in geographic (latlon) projects.");
+
+    parm.format = G_define_standard_option(G_OPT_F_FORMAT);
+    parm.format->guisection = _("Print");
+
+    parm.color_format = G_define_standard_option(G_OPT_C_FORMAT);
+    parm.color_format->required = NO;
+    parm.color_format->answer = NULL;
+    parm.color_format->guisection = _("Color");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -147,7 +162,28 @@ int main(int argc, char *argv[])
         res = (window.ew_res + window.ns_res) / 2;
     }
 
-    G_message(_("Using resolution: %g [%s]"), res / factor, unit);
+    if (strcmp(parm.format->answer, "json") == 0) {
+        format = JSON;
+        array_value = json_value_init_array();
+        array = json_array(array_value);
+    }
+    else {
+        format = PLAIN;
+
+        G_message(_("Using resolution: %g [%s]"), res / factor, unit);
+    }
+
+    if (clr) {
+        if (parm.color_format->answer == NULL ||
+            parm.color_format->answer[0] == '\0') {
+            if (format == JSON)
+                parm.color_format->answer = "hex";
+            else
+                parm.color_format->answer = "triplet";
+        }
+
+        clr_frmt = G_option_to_color_format(parm.color_format);
+    }
 
     G_begin_distance_calculations();
 
@@ -177,17 +213,20 @@ int main(int argc, char *argv[])
     data_type = Rast_get_map_type(fd);
     /* Done with file */
 
-    /* Show message giving output format */
-    G_message(_("Output columns:"));
-    if (coords == 1)
-        sprintf(formatbuff,
-                _("Easting, Northing, Along track dist. [%s], Elevation"),
-                unit);
-    else
-        sprintf(formatbuff, _("Along track dist. [%s], Elevation"), unit);
-    if (clr)
-        strcat(formatbuff, _(" RGB color"));
-    G_message("%s", formatbuff);
+    if (format == PLAIN) {
+        /* Show message giving output format */
+        G_message(_("Output columns:"));
+        if (coords == 1)
+            snprintf(formatbuff, sizeof(formatbuff),
+                     _("Easting, Northing, Along track dist. [%s], Elevation"),
+                     unit);
+        else
+            snprintf(formatbuff, sizeof(formatbuff),
+                     _("Along track dist. [%s], Elevation"), unit);
+        if (clr)
+            strcat(formatbuff, _(" RGB color"));
+        G_message("%s", formatbuff);
+    }
 
     /* Get Profile Start Coords */
     if (parm.coord_file->answer) {
@@ -207,7 +246,7 @@ int main(int argc, char *argv[])
 
             if (havefirst)
                 do_profile(e1, e2, n1, n2, coords, res, fd, data_type, fp,
-                           null_string, unit, factor);
+                           null_string, unit, factor, format, array, clr_frmt);
             e1 = e2;
             n1 = n2;
             havefirst = TRUE;
@@ -232,7 +271,7 @@ int main(int argc, char *argv[])
 
             /* Get profile info */
             do_profile(e1, e2, n1, n2, coords, res, fd, data_type, fp,
-                       null_string, unit, factor);
+                       null_string, unit, factor, format, array, clr_frmt);
         }
         else {
             for (i = 0; i <= k - 2; i += 2) {
@@ -246,9 +285,19 @@ int main(int argc, char *argv[])
 
                 /* Get profile info */
                 do_profile(e1, e2, n1, n2, coords, res, fd, data_type, fp,
-                           null_string, unit, factor);
+                           null_string, unit, factor, format, array, clr_frmt);
             }
         }
+    }
+
+    if (format == JSON) {
+        char *serialized_string = json_serialize_to_string_pretty(array_value);
+        if (serialized_string == NULL) {
+            G_fatal_error(_("Failed to initialize pretty JSON string."));
+        }
+        puts(serialized_string);
+        json_free_serialized_string(serialized_string);
+        json_value_free(array_value);
     }
 
     Rast_close(fd);
@@ -264,7 +313,8 @@ int main(int argc, char *argv[])
 /* Establish parameters */
 int do_profile(double e1, double e2, double n1, double n2, int coords,
                double res, int fd, int data_type, FILE *fp, char *null_string,
-               const char *unit, double factor)
+               const char *unit, double factor, enum OutputFormat format,
+               JSON_Array *array, ColorFormat clr_frmt)
 {
     double rows, cols, LEN;
     double Y, X, k;
@@ -273,7 +323,8 @@ int do_profile(double e1, double e2, double n1, double n2, int coords,
     rows = n1 - n2;
 
     LEN = G_distance(e1, n1, e2, n2);
-    G_message(_("Approx. transect length: %f [%s]"), LEN / factor, unit);
+    if (format == PLAIN)
+        G_message(_("Approx. transect length: %f [%s]"), LEN / factor, unit);
 
     if (!G_point_in_region(e2, n2))
         G_warning(
@@ -284,7 +335,8 @@ int do_profile(double e1, double e2, double n1, double n2, int coords,
         /* Special case for no movement */
         e = e1;
         n = n1;
-        read_rast(e, n, dist / factor, fd, coords, data_type, fp, null_string);
+        read_rast(e, n, dist / factor, fd, coords, data_type, fp, null_string,
+                  format, array, clr_frmt);
     }
 
     k = res / hypot(rows, cols);
@@ -303,7 +355,7 @@ int do_profile(double e1, double e2, double n1, double n2, int coords,
         /* SE Quad or due east */
         for (e = e1, n = n1; e < e2 || n > n2; e += X, n -= Y) {
             read_rast(e, n, dist / factor, fd, coords, data_type, fp,
-                      null_string);
+                      null_string, format, array, clr_frmt);
             /* d+=res; */
             dist += G_distance(e - X, n + Y, e, n);
         }
@@ -313,7 +365,7 @@ int do_profile(double e1, double e2, double n1, double n2, int coords,
         /* NE Quad  or due north */
         for (e = e1, n = n1; e < e2 || n < n2; e += X, n += Y) {
             read_rast(e, n, dist / factor, fd, coords, data_type, fp,
-                      null_string);
+                      null_string, format, array, clr_frmt);
             /* d+=res; */
             dist += G_distance(e - X, n - Y, e, n);
         }
@@ -323,7 +375,7 @@ int do_profile(double e1, double e2, double n1, double n2, int coords,
         /* SW Quad or due south */
         for (e = e1, n = n1; e > e2 || n > n2; e -= X, n -= Y) {
             read_rast(e, n, dist / factor, fd, coords, data_type, fp,
-                      null_string);
+                      null_string, format, array, clr_frmt);
             /* d+=res; */
             dist += G_distance(e + X, n + Y, e, n);
         }
@@ -333,7 +385,7 @@ int do_profile(double e1, double e2, double n1, double n2, int coords,
         /* NW Quad  or due west */
         for (e = e1, n = n1; e > e2 || n < n2; e -= X, n += Y) {
             read_rast(e, n, dist / factor, fd, coords, data_type, fp,
-                      null_string);
+                      null_string, format, array, clr_frmt);
             /* d+=res; */
             dist += G_distance(e + X, n - Y, e, n);
         }

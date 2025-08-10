@@ -13,6 +13,7 @@ import os
 import stat
 import ctypes
 import shutil
+from pathlib import Path
 
 from grass.pygrass import utils
 from grass.pygrass.gis import Mapset
@@ -91,9 +92,13 @@ class SuccessTest(TestCase):
         """Remove the temporary region and generated data"""
         cls.del_temp_region()
         shutil.rmtree(cls.sig_dir1, ignore_errors=True)
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.b1, quiet=True)
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.b2, quiet=True)
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.train, quiet=True)
+        cls.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name=(cls.b1, cls.b2, cls.train),
+            quiet=True,
+        )
 
     def test_creation(self):
         """Test creating a signature"""
@@ -107,7 +112,7 @@ class SuccessTest(TestCase):
         )
 
         # File must be present
-        sig_stat = os.stat(f"{self.sig_dir1}/sig")
+        sig_stat = Path(self.sig_dir1, "sig").stat()
         self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
 
         # Compare values within sig file

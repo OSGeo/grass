@@ -4,7 +4,7 @@
 #            Vaclav Petras <wenzeslaus gmail com>
 #            Anna Petrasova <kratochanna gmail com>
 #
-# PURPOSE:   Display classes and setup functions for running GRASS GIS
+# PURPOSE:   Display classes and setup functions for running GRASS
 #            in Jupyter Notebooks
 #
 # COPYRIGHT: (C) 2021-2022 Caitlin Haedrich, and by the GRASS Development Team
@@ -13,7 +13,7 @@
 #            License (>=v2). Read the file COPYING that comes with GRASS
 #            for details.
 
-"""The *grass.jupyter* is a convenient GRASS GIS interface for Jupyter notebooks.
+"""A convenient GRASS interface for Jupyter notebooks.
 
 Python is a great tool for data science and scientific computing. Jupyter_ is an
 environment with computational notebooks which makes it even better tool for
@@ -22,10 +22,10 @@ code, text, and results such as figures and tables. JupyterLab is an environment
 you interact with all these parts. You can install it locally on your machine or
 use it online from some service provider.
 
-The *grass.jupyter* subpackage improves the integration of GRASS GIS and Jupyter
+The *grass.jupyter* subpackage improves the integration of GRASS and Jupyter
 notebooks compared to the standard Python API. The original version was written
 as part of Google Summer of Code in 2021 and experimental version was included in
-GRASS GIS 8.0. Since then, much more development happened adding better session
+GRASS 8.0. Since then, much more development happened adding better session
 handling and rendering of additional data types.
 
 Usage
@@ -37,12 +37,12 @@ such as *gj*, like this::
 >>> import grass.jupyter as gj
 
 .. note::
-    To import the package, you need to tell Python where the GRASS GIS Python package
+    To import the package, you need to tell Python where the GRASS Python package
     is unless you manually set this on your system or in the command line. Please, refer
     to the example notebooks linked below for an example of the full workflow.
 
 .. note::
-    On Windows, there is no system Python and GRASS GIS needs to use its own Python.
+    On Windows, there is no system Python and GRASS needs to use its own Python.
     Jupyter needs to be installed into that Python. Please, refer to the wiki_
     for Windows-specific instructions.
 
@@ -72,7 +72,7 @@ and interactive ones with live code are available on Binder:
 
 .. image:: https://mybinder.org/badge_logo.svg
     :target:
-        https://mybinder.org/v2/gh/OSGeo/grass/main?urlpath=lab%2Ftree%2Fdoc%2Fnotebooks%2Fjupyter_example.ipynb
+        https://mybinder.org/v2/gh/OSGeo/grass/main?urlpath=lab%2Ftree%2Fdoc%2Fexamples%2Fnotebooks%2Fjupyter_example.ipynb
 
 There are also internal classes and functions which are not guaranteed to have
 as stable API, although they are available through their specific submodules.
@@ -103,12 +103,23 @@ mentored by Vaclav Petras, Stephan Blumentrath, and Helena Mitasova.
 
 .. _Jupyter: https://jupyter.org/
 .. _wiki: https://grasswiki.osgeo.org/wiki/GRASS_GIS_Jupyter_notebooks
-.. _GitHub: https://github.com/OSGeo/grass/blob/main/doc/notebooks/jupyter_example.ipynb
+.. _GitHub: https://github.com/OSGeo/grass/blob/main/doc/examples/notebooks/jupyter_example.ipynb
 """
 
 from .interactivemap import InteractiveMap, Raster, Vector
 from .map import Map
 from .map3d import Map3D
+from .seriesmap import SeriesMap
 from .setup import init
 from .timeseriesmap import TimeSeriesMap
-from .seriesmap import SeriesMap
+
+__all__ = [
+    "InteractiveMap",
+    "Map",
+    "Map3D",
+    "Raster",
+    "SeriesMap",
+    "TimeSeriesMap",
+    "Vector",
+    "init",
+]

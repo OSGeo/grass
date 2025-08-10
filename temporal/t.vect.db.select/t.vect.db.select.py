@@ -50,8 +50,7 @@
 # % key: t_where
 # %end
 
-import grass.script as grass
-
+import grass.script as gs
 
 ############################################################################
 
@@ -66,12 +65,12 @@ def main():
     columns = options["columns"]
     tempwhere = options["t_where"]
     layer = options["layer"]
-    separator = grass.separator(options["separator"])
+    separator = gs.separator(options["separator"])
 
-    if where == "" or where == " " or where == "\n":
+    if where in {"", " ", "\n"}:
         where = None
 
-    if columns == "" or columns == " " or columns == "\n":
+    if columns in {"", " ", "\n"}:
         columns = None
 
     # Make sure the temporal database exists
@@ -92,7 +91,7 @@ def main():
             if row["layer"]:
                 layer = row["layer"]
 
-            select = grass.read_command(
+            select = gs.read_command(
                 "v.db.select",
                 map=vector_name,
                 layer=layer,
@@ -102,8 +101,8 @@ def main():
             )
 
             if not select:
-                grass.fatal(
-                    _("Unable to run v.db.select for vector map <%s> " "with layer %s")
+                gs.fatal(
+                    _("Unable to run v.db.select for vector map <%s> with layer %s")
                     % (vector_name, layer)
                 )
             # The first line are the column names
@@ -121,26 +120,25 @@ def main():
                         if col_names != col_names_new:
                             col_names = col_names_new
                             print(col_names)
+                    elif row["end_time"]:
+                        print(
+                            "%s%s%s%s%s"
+                            % (
+                                row["start_time"],
+                                separator,
+                                row["end_time"],
+                                separator,
+                                entry,
+                            )
+                        )
                     else:
-                        if row["end_time"]:
-                            print(
-                                "%s%s%s%s%s"
-                                % (
-                                    row["start_time"],
-                                    separator,
-                                    row["end_time"],
-                                    separator,
-                                    entry,
-                                )
-                            )
-                        else:
-                            print(
-                                "%s%s%s%s"
-                                % (row["start_time"], separator, separator, entry)
-                            )
+                        print(
+                            "%s%s%s%s"
+                            % (row["start_time"], separator, separator, entry)
+                        )
                     count += 1
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

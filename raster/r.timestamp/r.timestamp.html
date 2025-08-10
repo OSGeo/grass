@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-This command has 2 modes of operation. If no <b>date</b> argument is
+<em>r.timestamp</em> has two modes of operation. If no <b>date</b> argument is
 supplied, then the current timestamp for the raster map is printed. If
 a date argument is specified, then the timestamp for the raster map is
 set to the specified date(s). See examples below.
@@ -21,8 +21,8 @@ here:
 <p>There are two types of datetime values:
 
 <ul>
-  <li><em>absolute</em> and
-  <li><em>relative</em>.
+  <li><em>absolute</em> and</li>
+  <li><em>relative</em>.</li>
 </ul>
 
 Absolute values specify exact dates and/or times. Relative values
@@ -35,25 +35,25 @@ The general format for absolute values is:
 <div class="code"><pre>
   day month year [bc] hour:minute:seconds timezone
 
-	     day is 1-31
-	     month is jan,feb,...,dec
-	     year is 4 digit year
-	     [bc] if present, indicates dates is BC
-	     hour is 0-23 (24 hour clock)
-	     minute is 0-59
-	     second is 0-59.9999 (fractions of second allowed)
-	     timezone is +hhmm or -hhmm (eg, -0600)
+         day is 1-31
+         month is jan,feb,...,dec
+         year is 4 digit year
+         [bc] if present, indicates dates is BC
+         hour is 0-23 (24 hour clock)
+         minute is 0-59
+         second is 0-59.9999 (fractions of second allowed)
+         timezone is +hhmm or -hhmm (eg, -0600)
 </pre></div>
 
 Some parts can be missing, for example
 
 <div class="code"><pre>
-	     1994 [bc]
-	     Jan 1994 [bc]
-	     15 jan 1000 [bc]
-	     15 jan 1994 [bc] 10 [+0000]
-	     15 jan 1994 [bc] 10:00 [+0100]
-	     15 jan 1994 [bc] 10:00:23.34 [-0500]
+         1994 [bc]
+         Jan 1994 [bc]
+         15 jan 1000 [bc]
+         15 jan 1994 [bc] 10 [+0000]
+         15 jan 1994 [bc] 10:00 [+0100]
+         15 jan 1994 [bc] 10:00:23.34 [-0500]
 </pre></div>
 
 <h3>Relative</h3>
@@ -62,29 +62,29 @@ There are two types of relative datetime values, year-month and
 day-second. The formats are:
 
 <div class="code"><pre>
-	     [-] # years # months
-	     [-] # days # hours # minutes # seconds
+         [-] # years # months
+         [-] # days # hours # minutes # seconds
 </pre></div>
 
 The words years, months, days, hours, minutes, seconds are literal
 words, and the # are the numeric values. Examples:
 
 <div class="code"><pre>
-	     2 years
-	     5 months
-	     2 years 5 months
-	     100 days
-	     15 hours 25 minutes 35.34 seconds
-	     100 days 25 minutes
-	     1000 hours 35.34 seconds
+         2 years
+         5 months
+         2 years 5 months
+         100 days
+         15 hours 25 minutes 35.34 seconds
+         100 days 25 minutes
+         1000 hours 35.34 seconds
 </pre></div>
 
 The following are <i>illegal</i> because it mixes year-month and
 day-second (because the number of days in a month or in a year vary):
 
 <div class="code"><pre>
-	     3 months 15 days
-	     3 years 10 days
+         3 months 15 days
+         3 years 10 days
 </pre></div>
 
 <h2>EXAMPLES</h2>

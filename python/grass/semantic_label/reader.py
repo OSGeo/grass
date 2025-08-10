@@ -1,5 +1,4 @@
 import os
-import sys
 import json
 import glob
 import re
@@ -26,21 +25,21 @@ class SemanticLabelReader:
             os.path.join(os.environ["GISBASE"], "etc", "i.band.library", "*.json")
         )
         if not self._json_files:
-            raise SemanticLabelReaderError("No semantic label definitions found")
+            msg = "No semantic label definitions found"
+            raise SemanticLabelReaderError(msg)
 
         self._read_config()
 
     def _read_config(self):
         """Read configuration"""
-        self.config = dict()
+        self.config = {}
         for json_file in self._json_files:
             try:
                 with open(json_file) as fd:
                     config = json.load(fd, object_pairs_hook=OrderedDict)
             except json.decoder.JSONDecodeError as e:
-                raise SemanticLabelReaderError(
-                    "Unable to parse '{}': {}".format(json_file, e)
-                )
+                msg = "Unable to parse '{}': {}".format(json_file, e)
+                raise SemanticLabelReaderError(msg)
 
             # check if configuration is valid
             self._check_config(config)
@@ -58,13 +57,11 @@ class SemanticLabelReader:
         for items in config.values():
             for item in ("shortcut", "bands"):
                 if item not in items.keys():
-                    raise SemanticLabelReaderError(
-                        "Invalid band definition: <{}> is missing".format(item)
-                    )
+                    msg = "Invalid band definition: <{}> is missing".format(item)
+                    raise SemanticLabelReaderError(msg)
             if len(items["bands"]) < 1:
-                raise SemanticLabelReaderError(
-                    "Invalid band definition: no bands defined"
-                )
+                msg = "Invalid band definition: no bands defined"
+                raise SemanticLabelReaderError(msg)
 
     @staticmethod
     def _print_label_extended(label, item):
@@ -88,10 +85,8 @@ class SemanticLabelReader:
             print_kv(k, v, indent)
 
     def _print_label(self, semantic_label=None, tag=None):
-        sys.stdout.write(semantic_label)
-        if tag:
-            sys.stdout.write(" {}".format(tag))
-        sys.stdout.write(os.linesep)
+        tag_text = f" {tag}" if tag else ""
+        print(f"{semantic_label}{tag_text}")
 
     def print_info(self, shortcut=None, band=None, semantic_label=None, extended=False):
         """Prints semantic label information to stdout.
@@ -116,13 +111,13 @@ class SemanticLabelReader:
                     if shortcut and re.match(shortcut, item["shortcut"]) is None:
                         continue
                 except re.error as e:
-                    raise SemanticLabelReaderError("Invalid pattern: {}".format(e))
+                    msg = "Invalid pattern: {}".format(e)
+                    raise SemanticLabelReaderError(msg)
 
                 found = True
                 if band and band not in item["bands"]:
-                    raise SemanticLabelReaderError(
-                        "Band <{}> not found in <{}>".format(band, shortcut)
-                    )
+                    msg = "Band <{}> not found in <{}>".format(band, shortcut)
+                    raise SemanticLabelReaderError(msg)
 
                 # print generic information
                 if extended:
@@ -138,7 +133,7 @@ class SemanticLabelReader:
                     else:
                         for iband in item["bands"]:
                             self._print_label_extended(iband, item["bands"])
-                else:
+                else:  # noqa: PLR5501
                     # basic information only
                     if band:
                         self._print_label(
@@ -181,7 +176,7 @@ class SemanticLabelReader:
                     shortcut
                     and config[root]["shortcut"].upper() == shortcut.upper()
                     and band.upper()
-                    in map(lambda x: x.upper(), config[root]["bands"].keys())
+                    in (x.upper() for x in config[root]["bands"].keys())
                 ):
                     return filename
 
@@ -192,9 +187,9 @@ class SemanticLabelReader:
 
         :return list: list of valid band identifiers
         """
-        bands = []
-        for root in self.config.values():
-            for item in root.values():
-                for band in item["bands"]:
-                    bands.append("{}_{}".format(item["shortcut"], band))
-        return bands
+        return [
+            "{}_{}".format(item["shortcut"], band)
+            for root in self.config.values()
+            for item in root.values()
+            for band in item["bands"]
+        ]
