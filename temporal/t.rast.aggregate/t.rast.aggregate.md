@@ -188,6 +188,41 @@ yearly_avg_temp_2003|climate|2003-01-01 00:00:00|2004-01-01 00:00:00
 yearly_avg_temp_2004|climate|2004-01-01 00:00:00|2005-01-01 00:00:00
 ```
 
+#### Weighted aggregation
+
+In this example, we create a STRDS of fictional temperature values for
+a weekly interval:
+
+```sh
+MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7 map_8 map_9 map_10"
+for map in ${MAPS} ; do
+    r.surf.random output=${map} min=278 max=298
+    echo ${map} >> map_list.txt
+done
+
+t.create type=strds temporaltype=absolute \
+         output=temperature_weekly \
+         title="Weekly Temperature" \
+         description="Test dataset with weekly temperature"
+
+t.register -i type=raster input=temperature_weekly \
+          file=map_list.txt start="2021-05-01" increment="1 weeks"
+```
+
+We can now use the **-w** flag and the **sampling=related** option
+to calculate the 10-daily average temperature. The values of each 10-days
+granule are calculated weighted by relative temporal coverage of the input
+granules.
+
+```sh
+t.rast.aggregate input=temperature_weekly output=temperature_10daily_weighted \
+  basename=tendaily_temp_weighted method=average granularity="10 days" \
+  sampling=related -w
+```
+
+This is especially useful when harmonizing STRDS with granules that are not
+integer multiplications of each other.
+
 ## SEE ALSO
 
 *[t.rast.aggregate.ds](t.rast.aggregate.ds.md),
