@@ -16,6 +16,7 @@ import subprocess
 import hashlib
 import uuid
 import unittest
+from itertools import starmap
 from unittest.util import safe_repr
 
 from grass.pygrass.modules import Module
@@ -1502,16 +1503,15 @@ class _SubTest(TestCase):
         self.failureException = test_case.failureException
 
     def runTest(self):
-        raise NotImplementedError("subtests cannot be run directly")
+        msg = "subtests cannot be run directly"
+        raise NotImplementedError(msg)
 
     def _subDescription(self):
         parts = []
         if self._message is not _subtest_msg_sentinel:
             parts.append("[{}]".format(self._message))
         if self.params:
-            params_desc = ", ".join(
-                "{}={!r}".format(k, v) for (k, v) in self.params.items()
-            )
+            params_desc = ", ".join(starmap("{}={!r}".format, self.params.items()))
             parts.append("({})".format(params_desc))
         return " ".join(parts) or "(<subtest>)"
 
