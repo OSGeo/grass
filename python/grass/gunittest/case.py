@@ -147,7 +147,7 @@ class TestCase(unittest.TestCase):
         call_module("g.remove", quiet=True, flags="f", type="region", name=name)
         # TODO: we don't know if user calls this
         # so perhaps some decorator which would use with statement
-        # but we have zero chance of infuencing another test class
+        # but we have zero chance of influencing another test class
         # since we use class-specific name for temporary region
 
     def assertMultiLineEqual(self, first, second, msg=None):
