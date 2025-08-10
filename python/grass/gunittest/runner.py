@@ -452,7 +452,10 @@ class GrassTestRunner:
         failfast=False,
         buffer=False,
         result=None,
+        resultclass=None,
+        warnings=None,
         *,
+        tb_locals=False,
         **kwargs,
     ):
         if stream is None:
@@ -462,6 +465,11 @@ class GrassTestRunner:
         self.verbosity = verbosity
         self.failfast = failfast
         self.buffer = buffer
+        self.tb_locals = tb_locals
+        self.warnings = warnings
+        if resultclass is not None:
+            self.resultclass = resultclass
+
         self._result = result
 
     def run(self, test):
