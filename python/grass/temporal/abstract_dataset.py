@@ -74,7 +74,7 @@ class AbstractDataset(
         topologies must be build first using the SpatioTemporalTopologyBuilder.
 
         :return: The dictionary with relations as keys and number as values or
-                 None in case the topology  wasn't build
+                 None in case the topology wasn't built
         """
         if self.is_temporal_topology_build() and not self.is_spatial_topology_build():
             return self.get_number_of_temporal_relations()
@@ -104,11 +104,10 @@ class AbstractDataset(
         :return: A dictionary with "spatial" and "temporal" as keys that
                  have boolean values
         """
-        d = {}
-        d["spatial"] = self.is_spatial_topology_build()
-        d["temporal"] = self.is_temporal_topology_build()
-
-        return d
+        return {
+            "spatial": self.is_spatial_topology_build(),
+            "temporal": self.is_temporal_topology_build(),
+        }
 
     def print_topology_info(self) -> None:
         if self.is_temporal_topology_build():
@@ -126,19 +125,19 @@ class AbstractDataset(
     def reset(self, ident):
         """Reset the internal structure and set the identifier
 
-         This method creates the dataset specific internal objects
-         that store the base information, the spatial and temporal extent
-         and the metadata. It must be implemented in the dataset
-         specific subclasses. This is the code for the
-         vector dataset:
+        This method creates the dataset specific internal objects
+        that store the base information, the spatial and temporal extent
+        and the metadata. It must be implemented in the dataset
+        specific subclasses. This is the code for the
+        vector dataset:
 
-         .. code-block:: python
+        .. code-block:: python
 
-             self.base = VectorBase(ident=ident)
-             self.absolute_time = VectorAbsoluteTime(ident=ident)
-             self.relative_time = VectorRelativeTime(ident=ident)
-             self.spatial_extent = VectorSpatialExtent(ident=ident)
-             self.metadata = VectorMetadata(ident=ident)
+            self.base = VectorBase(ident=ident)
+            self.absolute_time = VectorAbsoluteTime(ident=ident)
+            self.relative_time = VectorRelativeTime(ident=ident)
+            self.spatial_extent = VectorSpatialExtent(ident=ident)
+            self.metadata = VectorMetadata(ident=ident)
 
         :param ident: The identifier of the dataset that  "name@mapset" or
                       in case of vector maps "name:layer@mapset"
@@ -234,18 +233,21 @@ class AbstractDataset(
 
     def get_id(self):
         """Return the unique identifier of the dataset
+
         :return: The id of the dataset "name(:layer)@mapset" as string
         """
         return self.base.get_id()
 
     def get_name(self):
         """Return the name
+
         :return: The name of the dataset as string
         """
         return self.base.get_name()
 
     def get_mapset(self):
         """Return the mapset
+
         :return: The mapset in which the dataset was created as string
         """
         return self.base.get_mapset()
@@ -299,6 +301,7 @@ class AbstractDataset(
 
     def get_relative_time_unit(self):
         """Returns the relative time unit
+
         :return: The relative time unit as string, None if not present
         """
         return self.relative_time.get_unit()
@@ -342,8 +345,7 @@ class AbstractDataset(
         Top and bottom are set to 0 in case of a two dimensional spatial
         extent.
 
-        :return: A the spatial extent as tuple (north, south, east, west,
-                 top, bottom)
+        :return: A the spatial extent as tuple (north, south, east, west, top, bottom)
         """
         return self.spatial_extent.get_spatial_extent_as_tuple()
 
@@ -578,15 +580,14 @@ class AbstractDatasetComparisonKeyStartTime:
     """This comparison key can be used to sort lists of abstract datasets
     by start time
 
-     Example:
+    :Example:
+      .. code-block:: python
 
-     .. code-block:: python
+        # Return all maps in a space time raster dataset as map objects
+        map_list = strds.get_registered_maps_as_objects()
 
-         # Return all maps in a space time raster dataset as map objects
-         map_list = strds.get_registered_maps_as_objects()
-
-         # Sort the maps in the list by start time
-         sorted_map_list = sorted(map_list, key=AbstractDatasetComparisonKeyStartTime)
+        # Sort the maps in the list by start time
+        sorted_map_list = sorted(map_list, key=AbstractDatasetComparisonKeyStartTime)
     """
 
     def __init__(self, obj, *args) -> None:
@@ -630,15 +631,14 @@ class AbstractDatasetComparisonKeyEndTime:
     """This comparison key can be used to sort lists of abstract datasets
     by end time
 
-     Example:
+    :Example:
+      .. code-block:: python
 
-     .. code-block:: python
+        # Return all maps in a space time raster dataset as map objects
+        map_list = strds.get_registered_maps_as_objects()
 
-         # Return all maps in a space time raster dataset as map objects
-         map_list = strds.get_registered_maps_as_objects()
-
-         # Sort the maps in the list by end time
-         sorted_map_list = sorted(map_list, key=AbstractDatasetComparisonKeyEndTime)
+        # Sort the maps in the list by end time
+        sorted_map_list = sorted(map_list, key=AbstractDatasetComparisonKeyEndTime)
     """
 
     def __init__(self, obj, *args) -> None:

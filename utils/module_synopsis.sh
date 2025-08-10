@@ -19,7 +19,7 @@
 #
 
 if [ -z "$GISBASE" ]; then
-    echo "You must be in GRASS GIS to run this program." 1>&2
+    echo "You must be in GRASS to run this program." 1>&2
     exit 1
 fi
 
@@ -341,7 +341,7 @@ g.message "Generating LaTeX source (writing to \$GISBASE/etc/) ..."
 #### write header
 # shellcheck disable=SC2154 # $n$ is latex syntax
 cat << EOF > "${TMP}.tex"
-%% Adapted from LyX 1.3 LaTeX export. (c) 2009 The GRASS Development Team
+%% Adapted from LyX 1.3 LaTeX export. (c) 2009 by the GRASS Development Team
 \documentclass[a4paper]{article}
 \usepackage{palatino}
 \usepackage[T1]{fontenc}

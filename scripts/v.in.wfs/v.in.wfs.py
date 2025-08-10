@@ -157,7 +157,7 @@ def main():
     tmp = grass.tempfile()
     tmpxml = tmp + ".xml"
 
-    grass.debug("The request URL: {wfs_url}")
+    grass.debug(f"The request URL: {wfs_url}")
 
     # Set user and password if given
     if options["username"] and options["password"]:

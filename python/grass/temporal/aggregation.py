@@ -157,7 +157,7 @@ def aggregate_raster_maps(
                 )
                 % ({"name": new_map.get_name()})
             )
-            return
+            return None
 
     msgr.verbose(
         _("Computing aggregation of maps between %(st)s - %(end)s")
@@ -166,13 +166,11 @@ def aggregate_raster_maps(
 
     # Create the r.series input file
     filename = gs.tempfile(True)
-    file = open(filename, "w")
+    with open(filename, "w") as out_file:
+        for name in inputs:
+            string = "%s\n" % (name)
+            out_file.write(string)
 
-    for name in inputs:
-        string = "%s\n" % (name)
-        file.write(string)
-
-    file.close()
     # Run r.series
     try:
         if len(inputs) > 1000:
@@ -364,11 +362,10 @@ def aggregate_by_topology(
             if len(aggregation_list) > 1:
                 # Create the r.series input file
                 filename = gs.tempfile(True)
-                file = open(filename, "w")
-                for name in aggregation_list:
-                    string = "%s\n" % (name)
-                    file.write(string)
-                file.close()
+                with open(filename, "w") as out_file:
+                    for name in aggregation_list:
+                        string = "%s\n" % (name)
+                        out_file.write(string)
 
                 mod = copy.deepcopy(r_series)
                 mod(file=filename, output=output_name)

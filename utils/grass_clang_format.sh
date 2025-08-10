@@ -2,7 +2,7 @@
 set -eu
 
 ###############################################################################
-# Format source code according to GRASS GIS submitting rules
+# Format source code according to GRASS submitting rules
 #
 # Dependencies:
 #    clang-format

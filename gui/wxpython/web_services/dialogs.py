@@ -336,11 +336,10 @@ class WSDialogBase(wx.Dialog):
         event.Skip()
 
     def _getCapFiles(self):
-        ws_cap_files = {}
-        for v in self.ws_panels.values():
-            ws_cap_files[v["panel"].GetWebService()] = v["panel"].GetCapFile()
-
-        return ws_cap_files
+        return {
+            v["panel"].GetWebService(): v["panel"].GetCapFile()
+            for v in self.ws_panels.values()
+        }
 
     def OnServer(self, event):
         """Server settings edited"""
@@ -377,7 +376,7 @@ class WSDialogBase(wx.Dialog):
             self.Fit()
 
         self.statusbar.SetStatusText(
-            _("Connecting to <$s>...") % self.server.GetValue().strip()
+            _("Connecting to <%s>...") % self.server.GetValue().strip()
         )
 
         # number of panels already connected
@@ -416,12 +415,9 @@ class WSDialogBase(wx.Dialog):
         :return: list of found web services on server (identified as keys in
                  self.ws_panels)
         """
-        conn_ws = []
-        for ws, data in self.ws_panels.items():
-            if data["panel"].IsConnected():
-                conn_ws.append(ws)
-
-        return conn_ws
+        return [
+            ws for ws, data in self.ws_panels.items() if data["panel"].IsConnected()
+        ]
 
     def UpdateDialogAfterConnection(self):
         """Update dialog after all web service panels downloaded and parsed
@@ -569,7 +565,7 @@ class AddWSDialog(WSDialogBase):
 
         lcmd = self.active_ws_panel.CreateCmd()
         if not lcmd:
-            return None
+            return
 
         # TODO: It is not clear how to do GetOptData in giface
         # knowing what GetOptData is doing might help
@@ -684,8 +680,8 @@ class WSPropertiesDialog(WSDialogBase):
                 shutil.copyfile(f, self.revert_ws_cap_files[ws])
             else:
                 # delete file content
-                f_o = open(f, "w")
-                f_o.close()
+                with open(f, "w"):
+                    pass
 
     def _createWidgets(self):
         WSDialogBase._createWidgets(self)
@@ -750,10 +746,7 @@ class WSPropertiesDialog(WSDialogBase):
     def _getServerConnFromCmd(self, cmd):
         """Get url/server/password from cmd tuple"""
         conn = {"url": "", "username": "", "password": ""}
-
-        for k in conn.keys():
-            if k in cmd[1]:
-                conn[k] = cmd[1][k]
+        conn |= {k: cmd[1][k] for k in conn.keys() if k in cmd[1]}
         return conn
 
     def _apply(self):

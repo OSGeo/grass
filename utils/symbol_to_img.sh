@@ -4,7 +4,7 @@
 #
 # MODULE:       symbol_to_img.sh
 # AUTHOR(S):    Anna Petrasova, Hamish Bowman, Vaclav Petras
-# PURPOSE:      Renders the GRASS GIS symbols from dir to a dir of PNGs
+# PURPOSE:      Renders the GRASS symbols from dir to a dir of PNGs
 # COPYRIGHT:    (C) 2012-2016 by Anna Petrasova
 #               and the GRASS Development Team
 #

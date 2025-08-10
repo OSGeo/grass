@@ -164,7 +164,7 @@ void writeHeaderString3(FILE *fp, char *valueString, const char *value)
 
 /*---------------------------------------------------------------------------*/
 
-/* Opens the output acsii file and writes the header.
+/* Opens the output ascii file and writes the header.
  * Returns the file handle for the output file.
  */
 FILE *openAscii(char *asciiFile, RASTER3D_Region region)

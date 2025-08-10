@@ -29,7 +29,7 @@
 #endif
 
 #include <unistd.h>
-#ifndef __MINGW32__
+#ifndef _WIN32
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -389,18 +389,22 @@ static int ends_with(const char *string, const char *suffix)
 
 static void map_file(void)
 {
-#ifndef __MINGW32__
+#ifndef _WIN32
     size_t size = HEADER_SIZE + ca.width * ca.height * sizeof(unsigned int);
     void *ptr;
     int fd;
 
     fd = open(ca.file_name, O_RDWR);
-    if (fd < 0)
+    if (fd < 0) {
+        G_warning(_("Unable to open file: %s"), ca.file_name);
         return;
+    }
 
     ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, (off_t)0);
-    if (ptr == MAP_FAILED)
+    if (ptr == MAP_FAILED) {
+        close(fd);
         return;
+    }
 
     if (ca.grid) {
         cairo_destroy(cairo);

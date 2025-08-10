@@ -190,7 +190,7 @@ void AerosolModel::mie(double (&ex)[4][10], double (&sc)[4][10],
             sc[0][j] += (double)(mie_in.cij[i] * sca2[j][i]);
         }
 
-    /* computation of the phase function and the asymetry coefficient
+    /* computation of the phase function and the asymmetry coefficient
        of the mixture of particles */
 
     for (j = 0; j < 10; j++) {
@@ -492,7 +492,7 @@ void AerosolModel::save()
   oceanic component (O.C., SUBROUTINE OCEA)
   water-soluble component (W.S., SUBROUTINE WATE)
   soot component (S.O., SUBROUTINE SOOT)
-  (2) pre-computed caracteristics, now available are the desertic aerosol model
+  (2) pre-computed characteristics, now available are the desertic aerosol model
   corresponding to background conditions, as described in Shettle(1984), a
   stratospheric aerosol model as measured Mona Loa (Hawaii) during El Chichon
   eruption and as described by King et al. (1984), and a biomass burning aerosol

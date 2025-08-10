@@ -58,91 +58,96 @@ int db_convert_value_datetime_into_string(dbValue *value, int sqltype,
     case DB_YEAR:
         switch (to) {
         case DB_YEAR:
-            sprintf(buf, "%d", year);
+            snprintf(buf, sizeof(buf), "%d", year);
             break;
         case DB_MONTH:
-            sprintf(buf, "%d%c%02d", year, ds, month);
+            snprintf(buf, sizeof(buf), "%d%c%02d", year, ds, month);
             break;
         case DB_DAY:
-            sprintf(buf, "%d%c%02d%c%02d", year, ds, month, ds, day);
+            snprintf(buf, sizeof(buf), "%d%c%02d%c%02d", year, ds, month, ds,
+                     day);
             break;
         case DB_HOUR:
-            sprintf(buf, "%d%c%02d%c%02d %02d", year, ds, month, ds, day, hour);
+            snprintf(buf, sizeof(buf), "%d%c%02d%c%02d %02d", year, ds, month,
+                     ds, day, hour);
             break;
         case DB_MINUTE:
-            sprintf(buf, "%d%c%02d%c%02d %02d%c%02d", year, ds, month, ds, day,
-                    hour, ts, minute);
+            snprintf(buf, sizeof(buf), "%d%c%02d%c%02d %02d%c%02d", year, ds,
+                     month, ds, day, hour, ts, minute);
             break;
         case DB_SECOND:
         case DB_FRACTION:
-            sprintf(buf, "%d%c%02d%c%02d %02d%c%02d%c%s%.10g", year, ds, month,
-                    ds, day, hour, ts, minute, ts, xs, seconds);
+            snprintf(buf, sizeof(buf), "%d%c%02d%c%02d %02d%c%02d%c%s%.10g",
+                     year, ds, month, ds, day, hour, ts, minute, ts, xs,
+                     seconds);
             break;
         }
         break;
     case DB_MONTH:
         switch (to) {
         case DB_MONTH:
-            sprintf(buf, "%d", month);
+            snprintf(buf, sizeof(buf), "%d", month);
             break;
         case DB_DAY:
-            sprintf(buf, "%02d%c%02d", month, ds, day);
+            snprintf(buf, sizeof(buf), "%02d%c%02d", month, ds, day);
             break;
         case DB_HOUR:
-            sprintf(buf, "%02d%c%02d %02d", month, ds, day, hour);
+            snprintf(buf, sizeof(buf), "%02d%c%02d %02d", month, ds, day, hour);
             break;
         case DB_MINUTE:
-            sprintf(buf, "%02d%c%02d %02d%c%02d", month, ds, day, hour, ts,
-                    minute);
+            snprintf(buf, sizeof(buf), "%02d%c%02d %02d%c%02d", month, ds, day,
+                     hour, ts, minute);
             break;
         case DB_SECOND:
         case DB_FRACTION:
-            sprintf(buf, "%02d%c%02d %02d%c%02d%c%s%.10g", month, ds, day, hour,
-                    ts, minute, ts, xs, seconds);
+            snprintf(buf, sizeof(buf), "%02d%c%02d %02d%c%02d%c%s%.10g", month,
+                     ds, day, hour, ts, minute, ts, xs, seconds);
             break;
         }
         break;
     case DB_DAY:
         switch (to) {
         case DB_DAY:
-            sprintf(buf, "%02d", day);
+            snprintf(buf, sizeof(buf), "%02d", day);
             break;
         case DB_HOUR:
-            sprintf(buf, "%02d %02d", day, hour);
+            snprintf(buf, sizeof(buf), "%02d %02d", day, hour);
             break;
         case DB_MINUTE:
-            sprintf(buf, "%02d %02d%c%02d", day, hour, ts, minute);
+            snprintf(buf, sizeof(buf), "%02d %02d%c%02d", day, hour, ts,
+                     minute);
             break;
         case DB_SECOND:
         case DB_FRACTION:
-            sprintf(buf, "%02d %02d%c%02d%c%s%.10g", day, hour, ts, minute, ts,
-                    xs, seconds);
+            snprintf(buf, sizeof(buf), "%02d %02d%c%02d%c%s%.10g", day, hour,
+                     ts, minute, ts, xs, seconds);
             break;
         }
         break;
     case DB_HOUR:
         switch (to) {
         case DB_HOUR:
-            sprintf(buf, "%02d", hour);
+            snprintf(buf, sizeof(buf), "%02d", hour);
             break;
         case DB_MINUTE:
-            sprintf(buf, "%02d%c%02d", hour, ts, minute);
+            snprintf(buf, sizeof(buf), "%02d%c%02d", hour, ts, minute);
             break;
         case DB_SECOND:
         case DB_FRACTION:
-            sprintf(buf, "%02d%c%02d%c%s%.10g", hour, ts, minute, ts, xs,
-                    seconds);
+            snprintf(buf, sizeof(buf), "%02d%c%02d%c%s%.10g", hour, ts, minute,
+                     ts, xs, seconds);
             break;
         }
         break;
     case DB_MINUTE:
         switch (to) {
         case DB_MINUTE:
-            sprintf(buf, "%02d", minute);
+            snprintf(buf, sizeof(buf), "%02d", minute);
             break;
         case DB_SECOND:
         case DB_FRACTION:
-            sprintf(buf, "%02d%c%s%.10g", minute, ts, xs, seconds);
+            snprintf(buf, sizeof(buf), "%02d%c%s%.10g", minute, ts, xs,
+                     seconds);
             break;
         }
         break;
@@ -151,22 +156,24 @@ int db_convert_value_datetime_into_string(dbValue *value, int sqltype,
         switch (to) {
         case DB_SECOND:
         case DB_FRACTION:
-            sprintf(buf, "%g", seconds);
+            snprintf(buf, sizeof(buf), "%g", seconds);
             break;
         }
         break;
     default:
         switch (sqltype) {
         case DB_SQL_TYPE_DATE:
-            sprintf(buf, "%d%c%02d%c%02d", year, ds, month, ds, day);
+            snprintf(buf, sizeof(buf), "%d%c%02d%c%02d", year, ds, month, ds,
+                     day);
             break;
         case DB_SQL_TYPE_TIME:
-            sprintf(buf, "%02d%c%02d%c%s%.10g", hour, ts, minute, ts, xs,
-                    seconds);
+            snprintf(buf, sizeof(buf), "%02d%c%02d%c%s%.10g", hour, ts, minute,
+                     ts, xs, seconds);
             break;
         case DB_SQL_TYPE_TIMESTAMP:
-            sprintf(buf, "%d%c%02d%c%02d %02d%c%02d%c%s%.10g", year, ds, month,
-                    ds, day, hour, ts, minute, ts, xs, seconds);
+            snprintf(buf, sizeof(buf), "%d%c%02d%c%02d %02d%c%02d%c%s%.10g",
+                     year, ds, month, ds, day, hour, ts, minute, ts, xs,
+                     seconds);
             break;
         }
     }

@@ -104,9 +104,8 @@ class GRASSStartup(wx.Frame):
         # labels
         # crashes when LOCATION doesn't exist
         # get version & revision
-        versionFile = open(os.path.join(globalvar.ETCDIR, "VERSIONNUMBER"))
-        versionLine = versionFile.readline().rstrip("\n")
-        versionFile.close()
+        with open(os.path.join(globalvar.ETCDIR, "VERSIONNUMBER")) as versionFile:
+            versionLine = versionFile.readline().rstrip("\n")
         try:
             grassVersion, grassRevision = versionLine.split(" ", 1)
             if grassVersion.endswith("dev"):
@@ -120,7 +119,7 @@ class GRASSStartup(wx.Frame):
         self.gisdbase_box = StaticBox(
             parent=self.panel,
             id=wx.ID_ANY,
-            label=" %s " % _("1. Select GRASS GIS database directory"),
+            label=" %s " % _("1. Select GRASS database directory"),
         )
         self.location_box = StaticBox(
             parent=self.panel,
@@ -149,7 +148,7 @@ class GRASSStartup(wx.Frame):
         self.ldbase = StaticText(
             parent=self.gisdbase_panel,
             id=wx.ID_ANY,
-            label=_("GRASS GIS database directory contains Locations."),
+            label=_("GRASS database directory contains Locations."),
         )
 
         self.llocation = StaticWrapText(
@@ -297,7 +296,7 @@ class GRASSStartup(wx.Frame):
 
     def _set_properties(self, version, revision):
         """Set frame properties"""
-        self.SetTitle(_("GRASS GIS %s startup%s") % (version, revision))
+        self.SetTitle(_("GRASS %s startup%s") % (version, revision))
         self.SetIcon(
             wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
@@ -346,12 +345,11 @@ class GRASSStartup(wx.Frame):
             sys.stderr.write(
                 _("ERROR: Location <%s> not found\n") % self.GetRCValue("LOCATION_NAME")
             )
-            if len(self.listOfLocations) > 0:
-                self.lblocations.SetSelection(0, force=True)
-                self.lblocations.EnsureVisible(0)
-                location = self.listOfLocations[0]
-            else:
+            if len(self.listOfLocations) <= 0:
                 return
+            self.lblocations.SetSelection(0, force=True)
+            self.lblocations.EnsureVisible(0)
+            location = self.listOfLocations[0]
 
         # list of mapsets
         self.UpdateMapsets(os.path.join(self.gisdbase, location))
@@ -542,8 +540,7 @@ class GRASSStartup(wx.Frame):
         gisrc = os.getenv("GISRC")
 
         if gisrc and os.path.isfile(gisrc):
-            try:
-                rc = open(gisrc)
+            with open(gisrc) as rc:
                 for line in rc:
                     try:
                         key, val = line.split(":", 1)
@@ -552,8 +549,6 @@ class GRASSStartup(wx.Frame):
                             _("Invalid line in GISRC file (%s):%s\n") % (e, line)
                         )
                     grassrc[key.strip()] = DecodeString(val.strip())
-            finally:
-                rc.close()
 
         return grassrc
 
@@ -868,8 +863,7 @@ class GRASSStartup(wx.Frame):
             GError(
                 parent=self,
                 message=_(
-                    "Unicode error detected. "
-                    "Check your locale settings. Details: {0}"
+                    "Unicode error detected. Check your locale settings. Details: {0}"
                 ).format(e),
                 showTraceback=False,
             )
@@ -1116,34 +1110,32 @@ class GRASSStartup(wx.Frame):
 
             ret = dlg.ShowModal()
             dlg.Destroy()
-            if ret == wx.ID_YES:
-                dlg1 = wx.MessageDialog(
-                    parent=self,
-                    message=_(
-                        "ARE YOU REALLY SURE?\n\n"
-                        "If you really are running another GRASS session doing this "
-                        "could corrupt your data. Have another look in the processor "
-                        "manager just to be sure..."
-                    ),
-                    caption=_("Lock file found"),
-                    style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
-                )
-
-                ret = dlg1.ShowModal()
-                dlg1.Destroy()
-
-                if ret == wx.ID_YES:
-                    try:
-                        os.remove(lockfile)
-                    except OSError as e:
-                        GError(
-                            _("Unable to remove '%(lock)s'.\n\nDetails: %(reason)s")
-                            % {"lock": lockfile, "reason": e}
-                        )
-                else:
-                    return
-            else:
+            if ret != wx.ID_YES:
                 return
+
+            dlg1 = wx.MessageDialog(
+                parent=self,
+                message=_(
+                    "ARE YOU REALLY SURE?\n\n"
+                    "If you really are running another GRASS session doing this "
+                    "could corrupt your data. Have another look in the processor "
+                    "manager just to be sure..."
+                ),
+                caption=_("Lock file found"),
+                style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
+            )
+            ret = dlg1.ShowModal()
+            dlg1.Destroy()
+
+            if ret != wx.ID_YES:
+                return
+            try:
+                os.remove(lockfile)
+            except OSError as e:
+                GError(
+                    _("Unable to remove '%(lock)s'.\n\nDetails: %(reason)s")
+                    % {"lock": lockfile, "reason": e}
+                )
         self.SetLocation(dbase, location, mapset)
         self.ExitSuccessfully()
 
@@ -1276,7 +1268,7 @@ class StartUp(wx.App):
 
 if __name__ == "__main__":
     if os.getenv("GISBASE") is None:
-        sys.exit("Failed to start GUI, GRASS GIS is not running.")
+        sys.exit("Failed to start GUI, GRASS is not running.")
 
     GRASSStartUp = StartUp(0)
     GRASSStartUp.MainLoop()

@@ -44,7 +44,7 @@ int display_zcoor(struct Map_info *Map, int type, LATTR *lattr)
         if ((ltype != GV_POINT) && (ltype & type))
             continue;
 
-        sprintf(text, "%.2f", Points->z[0]);
+        snprintf(text, sizeof(text), "%.2f", Points->z[0]);
         show_label(&Points->x[0], &Points->y[0], lattr, text);
     }
     Vect_destroy_line_struct(Points);
@@ -64,7 +64,7 @@ int display_zcoor(struct Map_info *Map, int type, LATTR *lattr)
         Vect_get_node_coor(Map, el, &xl, &yl, &zl);
         G_debug(3, "node = %d", el);
 
-        sprintf(text, "%.2f", zl);
+        snprintf(text, sizeof(text), "%.2f", zl);
         show_label(&xl, &yl, lattr, text);
     }
 

@@ -9,4 +9,4 @@ LIB = SIM
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 
-default: $(ARCH_INCDIR)/waterglobs.h $(ARCH_INCDIR)/simlib.h lib
+default: $(ARCH_INCDIR)/simlib.h lib

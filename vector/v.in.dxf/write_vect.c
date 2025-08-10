@@ -27,14 +27,14 @@ void write_vect(struct Map_info *Map, char *layer, char *entity, char *handle,
     Cats = Vect_new_cats_struct();
     if (!flag_table) {
         i = get_field_cat(Map, layer, &field, &cat);
-        sprintf(buf,
-                "insert into %s (%s"
-                ", layer"
-                ", entity"
-                ", handle"
-                ", label"
-                ") values (%d, '",
-                Fi[i]->table, Fi[i]->key, cat);
+        snprintf(buf, sizeof(buf),
+                 "insert into %s (%s"
+                 ", layer"
+                 ", entity"
+                 ", handle"
+                 ", label"
+                 ") values (%d, '",
+                 Fi[i]->table, Fi[i]->key, cat);
 
         if (layer) {
             db_set_string(&str, layer);
@@ -220,14 +220,14 @@ static int get_field_cat(struct Map_info *Map, char *layer, int *field,
 
     /* capital table names are a pain in SQL */
     G_str_to_lower(Fi[i]->table);
-    sprintf(buf,
-            "create table %s (cat integer"
-            ", layer varchar(%d)"
-            ", entity varchar(%d)"
-            ", handle varchar(16)"
-            ", label varchar(%d)"
-            ")",
-            Fi[i]->table, DXF_BUF_SIZE, DXF_BUF_SIZE, DXF_BUF_SIZE);
+    snprintf(buf, sizeof(buf),
+             "create table %s (cat integer"
+             ", layer varchar(%d)"
+             ", entity varchar(%d)"
+             ", handle varchar(16)"
+             ", label varchar(%d)"
+             ")",
+             Fi[i]->table, DXF_BUF_SIZE, DXF_BUF_SIZE, DXF_BUF_SIZE);
     db_set_string(&sql, buf);
 
     if (db_execute_immediate(driver, &sql) != DB_OK)
@@ -243,9 +243,12 @@ static int get_field_cat(struct Map_info *Map, char *layer, int *field,
                   Fi[i]->table, Fi[i]->key);
 
     if (Vect_map_add_dblink(Map, *field, field_name, Fi[i]->table,
-                            GV_KEY_COLUMN, Fi[i]->database, Fi[i]->driver))
+                            GV_KEY_COLUMN, Fi[i]->database, Fi[i]->driver)) {
+        const char *map_name = Vect_get_full_name(Map);
         G_warning(_("Unable to add database link for vector map <%s>"),
-                  Vect_get_full_name(Map));
+                  map_name);
+        G_free((void *)map_name);
+    }
 
     return i;
 }

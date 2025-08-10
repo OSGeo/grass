@@ -1,0 +1,158 @@
+## DESCRIPTION
+
+*v.net.timetable* finds the shortest path between two points using
+timetables. *v.net.timetable* reads input, one query per line, from the
+standard input and writes output to the standard output as well as to
+the **output** map and to tables linked to layers 1 and 2. Each line of
+input must follow one of the following formats:
+
+```sh
+PATH_ID FROM_X FROM_Y TO_X TO_Y START_TIME MIN_CHANGE MAX_CHANGES WALK_CHANGE
+PATH_ID FROM_STOP TO_STOP START_TIME MIN_CHANGE MAX_CHANGES WALK_CHANGE
+```
+
+where PATH_ID is the identifier of a query that is used in the output
+map to differentiate between queries. Search begins at START_TIME.
+MIN_CHANGE gives the minimum number of time (inclusively) for a change
+from one route to another. MAX_CHANGES denotes the maximum number of
+changes allowed or -1 if infinity. WALK_CHANGE is 1 or 0 depending
+whether walking from a stop to another stop is considered a change or
+not. Finally, the path is found from FROM_STOP to TO_STOP in latter case
+and from the stop closest to (FROM_X, FROM_Y) coordinates to the stop
+closest to (TO_X, TO_Y) coordinates in former case.  
+For each input query, module outputs a description of the shortest path
+to the standard output. For example, using the tables given below, for
+the following input:
+
+```sh
+47 130 300 0 1 5 0
+```
+
+the following output is produced:
+
+```sh
+Route 15, from 130 leaving at 15 arriving to 250 at 22
+Walk from 250 leaving at 22 arriving to 300 at 24
+```
+
+Moreover, the module writes the path to the **output** map and stores
+all the information necessary to reconstruct the path to the tables.
+Table corresponding to stops/points is linked to layer 1 and looks,
+after the query, as follows:
+
+```sh
+cat|path_id|stop_id|index|arr_time|dep_time
+1|47|130|1|0|15
+2|47|250|2|22|22
+3|47|300|3|24|24
+```
+
+where CAT is the category of a point in the map, PATH_ID is the path
+identifier, STOP_ID is the identifier of the stop as used in the input
+map, INDEX is the index of the stop on the path (i.e, index=1 is the
+first stop visited, ...) and ARR_TIME and DEP_TIME denote the arrival
+time and departure time respectively. Arrival time for the first stop on
+the path is always equal to START_TIME and departure time for the last
+stop is always equal to the arrival time.  
+The table linked to the second layer corresponds to subroutes taken
+between stops. The following table is obtained for the above query:
+
+```sh
+cat|path_id|from_id|to_id|route_id|index|from_time|to_time
+1|47|130|250|15|1|15|22
+2|47|250|300|-1|2|22|24
+```
+
+where CAT is the category of lines of subroute between stops FROM_ID to
+TO_ID, ROUTE_ID is the identifier of the route taken or -1 if walking,
+INDEX and PATH_ID are as above and FROM_TIME and TO_TIME denote the
+times between which the route is taken.  
+The **output** map contains the points on the positions of used stops.
+If a subroute is taken between two stops then a line segment is added
+between two corresponding points. Finally, instead of straight line
+segment, the actual paths of routes can be given in **paths** layer. If
+this parameter is used then each line in the input map must contain
+identifiers as category numbers of all routes passing through the line.
+The module then finds the path between two stops and writes this path
+instead. In case of walking from one stop to another, straight line
+between the stops is used.
+
+## NOTES
+
+Timetables are stored in a table linked to the given **layer** of the
+**input** map. Timetable consists of routes and each route is just a
+sequence of stops with specified arrival times. If two sequences of
+stops differ only in times then they still correspond to two routes. For
+example, if there is a bus line that leaves every 20 minutes and follow
+exactly the same path every time then there still needs to be a separate
+route for every time. For each stop (given by the category number of the
+point) the table storing information about the routes must contain the
+list of all routes stopping at the stop(given by route identifiers)
+together with arrival times. That is, the table must contain three
+columns: stop - which is the key of the table, **route_id** and
+**stop_time** where each triple corresponds to a route arriving to a
+stop and a certain time. For example, a valid table might look as
+follows:
+
+```sh
+cat|route_id|stop_time
+100|5|0
+130|5|10
+150|5|20
+250|5|30
+300|5|40
+260|15|5
+130|15|15
+250|15|22
+150|35|17
+250|35|27
+300|35|37
+100|35|50
+```
+
+Note that **stop_time** is an integer and so you can use any units and
+offset to specify arrival times.  
+Also, walking connections between stops can be given by a table linked
+to **walking** layer of the **input** map. If this parameter is -1 then
+walking between stops is not allowed. The table must contain three
+columns: stop - which is the key of the table, **to_stop** and
+**length**. A record in the table says that it takes **length** units of
+time to walk from stop to **to_stop**. The following is a valid table:
+
+```sh
+cat|length|to_stop
+250|2|300
+```
+
+Beware that this only means that it is possible to walk from stop 250 to
+stop 300 but not the other way round.
+
+## EXAMPLES
+
+To find a path from stop with identifier 130 to stop with category 300,
+starting at time 0, with one time unit for change, maximum of 5 changes
+and with walking not considered a change of route, we use the following
+command:
+
+```sh
+echo "47 130 300 0 1 5 0" | v.net.timetable \
+     input=buses output=path layer=5 walking=6 path=7
+```
+
+If, on the other hand, we know the coordinates of the places then the
+following command might be used:
+
+```sh
+echo "47 10.31 54.31 90.21 28.21 0 1 5 0" | v.net.timetable \
+     input=buses output=path layer=5 walking=6 path=7
+```
+
+## SEE ALSO
+
+*[v.net](v.net.md), [v.net.path](v.net.path.md),
+[v.net.distance](v.net.distance.md)*
+
+## AUTHORS
+
+Daniel Bundala, Google Summer of Code 2009, Student  
+Wolf Bergenheim, Mentor

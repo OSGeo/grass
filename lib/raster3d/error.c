@@ -16,7 +16,6 @@
  *  \param msg
  *  \return void
  */
-
 void Rast3d_skip_error(const char *msg UNUSED)
 {
 }
@@ -30,7 +29,6 @@ void Rast3d_skip_error(const char *msg UNUSED)
  *  \param msg
  *  \return void
  */
-
 void Rast3d_print_error(const char *msg)
 {
     fprintf(stderr, "ERROR: ");
@@ -47,7 +45,6 @@ void Rast3d_print_error(const char *msg)
  *  \param msg
  *  \return void
  */
-
 void Rast3d_fatal_error(const char *msg, ...)
 {
     char buffer[2000]; /* No novels to the error logs, OK? */

@@ -5,7 +5,6 @@ import grass.script as gs
 
 
 class TestRBuffer(TestCase):
-
     @classmethod
     def setUpClass(cls):
         """Set up a temporary region for testing."""

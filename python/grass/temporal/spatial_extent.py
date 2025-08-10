@@ -3,7 +3,7 @@ Spatial extents classes for map layer and space time datasets
 
 Usage:
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> import grass.temporal as tgis
     >>> tgis.init()
@@ -83,7 +83,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> extent = SpatialExtent(
@@ -158,12 +158,12 @@ class SpatialExtent(SQLDatabaseInterface):
         - covered
         - equivalent
 
-        .. code-block:: python
+        .. code-block:: pycon
 
-             >>> A = SpatialExtent(north=80, south=20, east=60, west=10)
-             >>> B = SpatialExtent(north=80, south=20, east=60, west=10)
-             >>> A.overlapping_2d(B)
-             True
+            >>> A = SpatialExtent(north=80, south=20, east=60, west=10)
+            >>> B = SpatialExtent(north=80, south=20, east=60, west=10)
+            >>> A.overlapping_2d(B)
+            True
 
         :param extent: The spatial extent to check overlapping with
         :return: True or False
@@ -214,16 +214,16 @@ class SpatialExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
-             >>> A = SpatialExtent(
-             ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
-             ... )
-             >>> B = SpatialExtent(
-             ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
-             ... )
-             >>> A.overlapping(B)
-             True
+            >>> A = SpatialExtent(
+            ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
+            ... )
+            >>> A.overlapping(B)
+            True
 
         :param extent: The spatial extent to check overlapping with
         :return: True or False
@@ -299,7 +299,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = SpatialExtent(
             ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
@@ -366,8 +366,8 @@ class SpatialExtent(SQLDatabaseInterface):
              | Bottom:..................... -30.0
 
 
-         :param extent: The spatial extent to intersect with
-         :return: The intersection spatial extent
+        :param extent: The spatial extent to intersect with
+        :return: The intersection spatial extent
         """  # noqa: E501
 
         if not self.overlapping(extent):
@@ -474,7 +474,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = SpatialExtent(
             ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
@@ -556,8 +556,8 @@ class SpatialExtent(SQLDatabaseInterface):
              | Bottom:..................... -50.0
 
 
-         :param extent: The spatial extent to create a disjoint union with
-         :return: The union spatial extent
+        :param extent: The spatial extent to create a disjoint union with
+        :return: The union spatial extent
         """  # noqa: E501
 
         new = self.disjoint_union_2d(extent)
@@ -633,7 +633,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = SpatialExtent(
             ...     north=79, south=21, east=59, west=11, bottom=-49, top=49
@@ -666,7 +666,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = SpatialExtent(north=80, south=20, east=60, west=10)
             >>> B = SpatialExtent(north=79, south=21, east=59, west=11)
@@ -686,7 +686,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = SpatialExtent(
             ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
@@ -710,7 +710,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = SpatialExtent(north=80, south=20, east=60, west=10)
             >>> B = SpatialExtent(north=80, south=20, east=60, west=10)
@@ -759,7 +759,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = SpatialExtent(
             ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
@@ -868,13 +868,13 @@ class SpatialExtent(SQLDatabaseInterface):
 
         # We check that at least one edge of extent is located in self
         edge_count = 0
-        if eW > W and eW < E:
+        if W < eW < E:
             edge_count += 1
-        if eE < E and eE > W:
+        if W < eE < E:
             edge_count += 1
-        if eN < N and eN > S:
+        if S < eN < N:
             edge_count += 1
-        if eS > S and eS < N:
+        if S < eS < N:
             edge_count += 1
 
         return edge_count != 0
@@ -941,21 +941,21 @@ class SpatialExtent(SQLDatabaseInterface):
 
         # We check that at least one edge of extent is located in self
         edge_count = 0
-        if eW > W and eW < E:
+        if W < eW < E:
             edge_count += 1
-        if eE < E and eE > W:
+        if W < eE < E:
             edge_count += 1
-        if eN < N and eN > S:
+        if S < eN < N:
             edge_count += 1
-        if eS > S and eS < N:
+        if S < eS < N:
             edge_count += 1
-        if eN < N and eN > S:
+        if S < eN < N:
             edge_count += 1
-        if eS > S and eS < N:
+        if S < eS < N:
             edge_count += 1
-        if eT < T and eT > B:
+        if B < eT < T:
             edge_count += 1
-        if eB > B and eB < T:
+        if B < eB < T:
             edge_count += 1
 
         return edge_count != 0
@@ -1182,7 +1182,7 @@ class SpatialExtent(SQLDatabaseInterface):
             edge = "S"
             edge_count += 1
 
-        # Meet a a single edge only
+        # Meet a single edge only
         if edge_count != 1:
             return False
 
@@ -1323,7 +1323,9 @@ class SpatialExtent(SQLDatabaseInterface):
             or self.meet(extent)
         )
 
-    def spatial_relation_2d(self, extent) -> Literal[
+    def spatial_relation_2d(
+        self, extent
+    ) -> Literal[
         "equivalent",
         "contain",
         "in",
@@ -1370,7 +1372,9 @@ class SpatialExtent(SQLDatabaseInterface):
 
         return "unknown"
 
-    def spatial_relation(self, extent) -> Literal[
+    def spatial_relation(
+        self, extent
+    ) -> Literal[
         "equivalent",
         "contain",
         "in",
@@ -1398,7 +1402,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = SpatialExtent(
             ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
@@ -1712,8 +1716,7 @@ class SpatialExtent(SQLDatabaseInterface):
     def set_spatial_extent(self, spatial_extent) -> None:
         """Set the three dimensional spatial extent
 
-        :param spatial_extent: An object of type SpatialExtent or its
-                               subclasses
+        :param spatial_extent: An object of type SpatialExtent or its subclasses
         """
 
         self.set_north(spatial_extent.get_north())
@@ -1749,8 +1752,7 @@ class SpatialExtent(SQLDatabaseInterface):
     def set_spatial_extent_2d(self, spatial_extent) -> None:
         """Set the three dimensional spatial extent
 
-        :param spatial_extent: An object of type SpatialExtent or its
-                               subclasses
+        :param spatial_extent: An object of type SpatialExtent or its subclasses
         """
 
         self.set_north(spatial_extent.north)
@@ -1807,6 +1809,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
     def get_id(self):
         """Convenient method to get the unique identifier (primary key)
+
         :return: None if not found
         """
         if "id" in self.D:
@@ -1860,42 +1863,54 @@ class SpatialExtent(SQLDatabaseInterface):
 
     def get_north(self):
         """Get the northern edge of the map
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "north" in self.D:
             return self.D["north"]
         return None
 
     def get_south(self):
         """Get the southern edge of the map
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "south" in self.D:
             return self.D["south"]
         return None
 
     def get_east(self):
         """Get the eastern edge of the map
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "east" in self.D:
             return self.D["east"]
         return None
 
     def get_west(self):
         """Get the western edge of the map
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "west" in self.D:
             return self.D["west"]
         return None
 
     def get_top(self):
         """Get the top edge of the map
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "top" in self.D:
             return self.D["top"]
         return None
 
     def get_bottom(self):
         """Get the bottom edge of the map
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "bottom" in self.D:
             return self.D["bottom"]
         return None

@@ -12,7 +12,7 @@ from core.gcmd import GError
 
 
 class SamplingType:
-    """ "
+    """
     KMVWINC = samplingtype=moving, regionbox=keyboard, shape=circle
     KMVWINR = samplingtype moving, regionbox=keyboard, shape=rectangle
     MMVWINC = samplingtype=moving, regionbox=mouse, shape=circle

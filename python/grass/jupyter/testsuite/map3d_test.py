@@ -133,7 +133,21 @@ class TestMap3D(TestCase):
         """Check that show() works"""
         renderer = gj.Map3D()
         renderer.render(elevation_map="elevation", color_map="elevation")
-        self.assertTrue(renderer.show(), "Failed to create IPython Image object")
+        self.assertIsNone(renderer.show(), "Failed to create IPython Image object")
+
+    def test_save_file(self):
+        """Test saving of file"""
+        grass_renderer = gj.Map3D()
+        # Add a vector and a raster to the map
+        grass_renderer.render(
+            elevation_map="elevation", color_map="elevation", perspective=20
+        )
+        custom_filename = "test_filename_save.png"
+        grass_renderer.save(custom_filename)
+        # Add files to self for cleanup later
+        self.files.append(custom_filename)
+        # Ensure the image was created
+        self.assertFileExists(custom_filename)
 
 
 if __name__ == "__main__":

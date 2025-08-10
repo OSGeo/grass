@@ -14,7 +14,6 @@
  *  \param string
  *  \return char
  */
-
 char *G_tolcase(char *string)
 {
     char *p;
@@ -42,7 +41,6 @@ char *G_tolcase(char *string)
  *  \param string
  *  \return char
  */
-
 char *G_toucase(char *string)
 {
     char *p;

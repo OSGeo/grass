@@ -103,7 +103,7 @@ def main(options, unused_flags):
     if destination.exists():
         gs.fatal(
             _(
-                "Project named <{}> already exists in <{directory}>, download canceled"
+                "Project named <{name}> already exists in <{directory}>, download canceled"
             ).format(name=name, directory=database)
         )
 
