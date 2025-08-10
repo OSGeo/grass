@@ -21,9 +21,9 @@
 
 static struct state {
     struct list {
-	char **names;
-	int count;
-	int size;
+        char **names;
+        int count;
+        int size;
     } path, path2;
 } state;
 
@@ -46,21 +46,21 @@ const char *G_get_mapset_name(int n)
     G__get_list_of_mapsets();
 
     if (n < 0 || n >= st->path.count)
-	return NULL;
+        return NULL;
 
     return st->path.names[n];
 }
 
 /*!
-  \brief Fill list of mapsets from search path (internal use only)
-*/
+   \brief Fill list of mapsets from search path (internal use only)
+ */
 void G__get_list_of_mapsets(void)
 {
     FILE *fp;
     const char *cur;
 
     if (st->path.count > 0)
-	return;
+        return;
 
     st->path.count = 0;
     st->path.size = 0;
@@ -71,27 +71,30 @@ void G__get_list_of_mapsets(void)
 
     fp = G_fopen_old("", "SEARCH_PATH", G_mapset());
     if (fp) {
-	char name[GNAME_MAX];
-	while (fscanf(fp, "%s", name) == 1) {
-	    if (strcmp(name, cur) == 0)
-		continue;
-	    if (G_mapset_permissions(name) >= 0)
-		new_mapset(name);
-	}
-	fclose(fp);
+        char name[GNAME_MAX];
+
+        while (fscanf(fp, "%s", name) == 1) {
+            if (strcmp(name, cur) == 0)
+                continue;
+            if (G_mapset_permissions(name) >= 0)
+                new_mapset(name);
+        }
+        fclose(fp);
     }
     else {
-	static const char perm[] = "PERMANENT";
-	if (strcmp(perm, cur) != 0 && G_mapset_permissions(perm) >= 0)
-	    new_mapset(perm);
+        static const char perm[] = "PERMANENT";
+
+        if (strcmp(perm, cur) != 0 && G_mapset_permissions(perm) >= 0)
+            new_mapset(perm);
     }
 }
 
 void new_mapset(const char *name)
 {
     if (st->path.count >= st->path.size) {
-	st->path.size += 10;
-	st->path.names = G_realloc(st->path.names, st->path.size * sizeof(char *));
+        st->path.size += 10;
+        st->path.names =
+            G_realloc(st->path.names, st->path.size * sizeof(char *));
     }
 
     st->path.names[st->path.count++] = G_store(name);
@@ -139,10 +142,11 @@ void G_reset_mapsets(void)
 
    List is updated by each call to this function.
 
-   \return pointer to zero terminated array of available mapsets
+   \return pointer to NULL terminated array of available mapsets
  */
 char **G_get_available_mapsets(void)
 {
+    char *location;
     char **mapsets = NULL;
     int alloc = 50;
     int n = 0;
@@ -153,33 +157,37 @@ char **G_get_available_mapsets(void)
 
     mapsets = G_calloc(alloc, sizeof(char *));
 
-    dir = opendir(G_location_path());
-    if (!dir)
-	return mapsets;
-
-    while ((ent = readdir(dir))) {
-	char buf[GPATH_MAX];
-	struct stat st;
-
-	sprintf(buf, "%s/%s/WIND", G_location_path(), ent->d_name);
-
-	if (G_stat(buf, &st) != 0) {
-	    G_debug(4, "%s is not mapset", ent->d_name);
-	    continue;
-	}
-
-	G_debug(4, "%s is mapset", ent->d_name);
-
-	if (n + 2 >= alloc) {
-	    alloc += 50;
-	    mapsets = G_realloc(mapsets, alloc * sizeof(char *));
-	}
-
-	mapsets[n++] = G_store(ent->d_name);
-	mapsets[n] = NULL;
+    location = G_location_path();
+    dir = opendir(location);
+    if (!dir) {
+        G_free(location);
+        return mapsets;
     }
 
+    while ((ent = readdir(dir))) {
+        char buf[GPATH_MAX];
+        struct stat st;
+
+        snprintf(buf, sizeof(buf), "%s/%s/WIND", location, ent->d_name);
+
+        if (G_stat(buf, &st) != 0) {
+            G_debug(4, "%s is not mapset", ent->d_name);
+            continue;
+        }
+
+        G_debug(4, "%s is mapset", ent->d_name);
+
+        if (n + 2 >= alloc) {
+            alloc += 50;
+            mapsets = G_realloc(mapsets, alloc * sizeof(char *));
+        }
+
+        mapsets[n++] = G_store(ent->d_name);
+    }
+    mapsets[n] = NULL;
+
     closedir(dir);
+    G_free(location);
 
     return mapsets;
 }
@@ -195,24 +203,24 @@ char **G_get_available_mapsets(void)
 void G_add_mapset_to_search_path(const char *mapset)
 {
     if (!G_is_mapset_in_search_path(mapset))
-	new_mapset(mapset);
+        new_mapset(mapset);
 }
 
 /*!
-  \brief Check if given mapset is in search path
+   \brief Check if given mapset is in search path
 
-  \param mapset mapset name
+   \param mapset mapset name
 
-  \return 1 mapset found in search path
-  \return 0 mapset not found
-*/
+   \return 1 mapset found in search path
+   \return 0 mapset not found
+ */
 int G_is_mapset_in_search_path(const char *mapset)
 {
     int i;
-    
+
     for (i = 0; i < st->path.count; i++) {
-	if (strcmp(st->path.names[i], mapset) == 0)
-	    return 1;
+        if (strcmp(st->path.names[i], mapset) == 0)
+            return 1;
     }
 
     return 0;

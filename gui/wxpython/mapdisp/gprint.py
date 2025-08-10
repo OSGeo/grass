@@ -22,31 +22,12 @@ from core.gcmd import GMessage
 
 
 class MapPrint(wx.Printout):
-
     def __init__(self, canvas):
         wx.Printout.__init__(self)
         self.canvas = canvas
 
-    def OnBeginDocument(self, start, end):
-        return super(MapPrint, self).OnBeginDocument(start, end)
-
-    def OnEndDocument(self):
-        super(MapPrint, self).OnEndDocument()
-
-    def OnBeginPrinting(self):
-        super(MapPrint, self).OnBeginPrinting()
-
-    def OnEndPrinting(self):
-        super(MapPrint, self).OnEndPrinting()
-
-    def OnPreparePrinting(self):
-        super(MapPrint, self).OnPreparePrinting()
-
-    def HasPage(self, page):
-        if page <= 2:
-            return True
-        else:
-            return False
+    def HasPage(self, page) -> bool:
+        return page <= 2
 
     def GetPageInfo(self):
         return (1, 2, 1, 2)
@@ -54,7 +35,7 @@ class MapPrint(wx.Printout):
     def OnPrintPage(self, page):
         dc = self.GetDC()
 
-        #-------------------------------------------
+        # -------------------------------------------
         # One possible method of setting scaling factors...
         maxX, maxY = self.canvas.GetSize()
 
@@ -63,8 +44,8 @@ class MapPrint(wx.Printout):
         marginY = 10
 
         # Add the margin to the graphic size
-        maxX = maxX + (2 * marginX)
-        maxY = maxY + (2 * marginY)
+        maxX += 2 * marginX
+        maxY += 2 * marginY
 
         # Get the size of the DC in pixels
         (w, h) = dc.GetSizeTuple()
@@ -84,7 +65,7 @@ class MapPrint(wx.Printout):
         dc.SetUserScale(actualScale, actualScale)
         dc.SetDeviceOrigin(int(posX), int(posY))
 
-        #-------------------------------------------
+        # -------------------------------------------
 
         self.canvas.pdc.DrawToDC(dc)
 
@@ -95,7 +76,6 @@ class MapPrint(wx.Printout):
 
 
 class PrintOptions(wx.Object):
-
     def __init__(self, parent, mapwin):
         self.mapframe = parent
         self.mapwin = mapwin
@@ -150,9 +130,12 @@ class PrintOptions(wx.Object):
         printout = MapPrint(self.mapwin)
 
         if not printer.Print(self.mapframe, printout, True):
-            GMessage(_("There was a problem printing.\n"
-                       "Perhaps your current printer is not set correctly?"))
+            GMessage(
+                _(
+                    "There was a problem printing.\n"
+                    "Perhaps your current printer is not set correctly?"
+                )
+            )
         else:
-            self.printData = wx.PrintData(
-                printer.GetPrintDialogData().GetPrintData())
+            self.printData = wx.PrintData(printer.GetPrintDialogData().GetPrintData())
         printout.Destroy()

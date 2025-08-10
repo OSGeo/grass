@@ -4,8 +4,8 @@
  */
 #include "ps_info.h"
 
-#define DY		10.0
-#define FONTSIZE	10.0
+#define DY       10.0
+#define FONTSIZE 10.0
 
 int show_scale(void)
 {

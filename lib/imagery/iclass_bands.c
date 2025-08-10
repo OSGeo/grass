@@ -36,7 +36,7 @@
    \param[out] band_buffer buffer to read one row of each band
    \param[out] band_fd band files descriptors
  */
-void open_band_files(struct Ref *refer, CELL *** band_buffer, int **band_fd)
+void open_band_files(struct Ref *refer, CELL ***band_buffer, int **band_fd)
 {
     int n, nbands;
 
@@ -46,14 +46,14 @@ void open_band_files(struct Ref *refer, CELL *** band_buffer, int **band_fd)
 
     /* allocate row buffers and open raster maps */
     nbands = refer->nfiles;
-    *band_buffer = (CELL **) G_malloc(nbands * sizeof(CELL *));
+    *band_buffer = (CELL **)G_malloc(nbands * sizeof(CELL *));
     *band_fd = (int *)G_malloc(nbands * sizeof(int));
 
     for (n = 0; n < nbands; n++) {
-	(*band_buffer)[n] = Rast_allocate_c_buf();
-	name = refer->file[n].name;
-	mapset = refer->file[n].mapset;
-	(*band_fd)[n] = Rast_open_old(name, mapset);
+        (*band_buffer)[n] = Rast_allocate_c_buf();
+        name = refer->file[n].name;
+        mapset = refer->file[n].mapset;
+        (*band_fd)[n] = Rast_open_old(name, mapset);
     }
 }
 
@@ -64,7 +64,7 @@ void open_band_files(struct Ref *refer, CELL *** band_buffer, int **band_fd)
    \param band_buffer buffer to read one row of each band
    \param band_fd band files descriptors
  */
-void close_band_files(struct Ref *refer, CELL ** band_buffer, int *band_fd)
+void close_band_files(struct Ref *refer, CELL **band_buffer, int *band_fd)
 {
     int n, nbands;
 
@@ -72,8 +72,8 @@ void close_band_files(struct Ref *refer, CELL ** band_buffer, int *band_fd)
 
     nbands = refer->nfiles;
     for (n = 0; n < nbands; n++) {
-	G_free(band_buffer[n]);
-	Rast_close(band_fd[n]);
+        G_free(band_buffer[n]);
+        Rast_close(band_fd[n]);
     }
 
     G_free(band_buffer);
@@ -88,12 +88,12 @@ void close_band_files(struct Ref *refer, CELL ** band_buffer, int *band_fd)
    \param nbands number of band files
    \param row data row
  */
-void read_band_row(CELL ** band_buffer, int *band_fd, int nbands, int row)
+void read_band_row(CELL **band_buffer, int *band_fd, int nbands, int row)
 {
     int i;
 
     G_debug(5, "read_band_row(): row = %d", row);
 
     for (i = 0; i < nbands; i++)
-	Rast_get_c_row_nomask(band_fd[i], band_buffer[i], row);
+        Rast_get_c_row_nomask(band_fd[i], band_buffer[i], row);
 }

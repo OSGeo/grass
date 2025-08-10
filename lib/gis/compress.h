@@ -12,7 +12,7 @@
 
 /* adding a new compressor:
  * add the corresponding functions G_*compress() and G_*_expand()
- * if needed, add checks to configure.in and include/config.in
+ * if needed, add checks to configure.ac and include/grass/config.h.in
  * modify compress.h (this file)
  * nothing to change in compress.c
  */
@@ -26,13 +26,12 @@ int G_bz2_compress_bound(int);
 int G_zstd_compress_bound(int);
 
 typedef int compress_fn(unsigned char *src, int src_sz, unsigned char *dst,
-		int dst_sz);
+                        int dst_sz);
 typedef int expand_fn(unsigned char *src, int src_sz, unsigned char *dst,
-	      int dst_sz);
+                      int dst_sz);
 typedef int bound_fn(int src_sz);
 
-struct compressor_list
-{
+struct compressor_list {
     int available;
     compress_fn *compress;
     expand_fn *expand;
@@ -48,8 +47,8 @@ struct compressor_list
  * 4: BZIP2
  * 5: ZSTD
  */
- 
-static int n_compressors = 6; 
+
+static int n_compressors = 6;
 
 struct compressor_list compressor[] = {
     {1, G_no_compress, G_no_expand, G_no_compress_bound, "NONE"},
@@ -66,6 +65,4 @@ struct compressor_list compressor[] = {
 #else
     {0, G_zstd_compress, G_zstd_expand, G_zstd_compress_bound, "ZSTD"},
 #endif
-    {0, NULL, NULL, NULL, NULL}
-};
-
+    {0, NULL, NULL, NULL, NULL}};

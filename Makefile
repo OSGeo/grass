@@ -8,8 +8,8 @@
 #   	    	Radim Blazek - Italy - blazek AT itc.it
 # PURPOSE:  	It provides the commands necessary to compile, install,
 #   	    	clean, and uninstall GRASS
-#   	    	See INSTALL file for explanations.
-# COPYRIGHT:    (C) 2002-2012 by the GRASS Development Team
+#   	    	See INSTALL.md file for usage.
+# COPYRIGHT:    (C) 2002-2025 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #   	    	License (>=v2). Read the file COPYING that comes with GRASS
@@ -26,9 +26,10 @@ DATE := $(shell date '+%d_%m_%Y')
 
 DIRS = \
 	demolocation \
-	tools \
+	utils \
 	include \
 	lib \
+	python \
 	db \
 	display \
 	general \
@@ -45,16 +46,15 @@ DIRS = \
 	visualization \
 	locale \
 	man \
-	macosx \
 	mswindows
 
 SUBDIRS = $(DIRS)
 
-FILES = AUTHORS CHANGES CITING COPYING GPL.TXT INSTALL REQUIREMENTS.html contributors.csv contributors_extra.csv translators.csv
+FILES = AUTHORS CITING COPYING GPL.TXT INSTALL.md REQUIREMENTS.md contributors.csv contributors_extra.csv translators.csv
 FILES_DST = $(patsubst %,$(ARCH_DISTDIR)/%,$(FILES))
 
 default:
-	@echo "GRASS GIS $(GRASS_VERSION_MAJOR).$(GRASS_VERSION_MINOR).$(GRASS_VERSION_RELEASE) $(GRASS_VERSION_GIT) compilation log" \
+	@echo "GRASS $(GRASS_VERSION_MAJOR).$(GRASS_VERSION_MINOR).$(GRASS_VERSION_RELEASE) $(GRASS_VERSION_GIT) compilation log" \
 		> $(ERRORLOG)
 	@echo "--------------------------------------------------" >> $(ERRORLOG)
 	@echo "Started compilation: `date`"                        >> $(ERRORLOG)
@@ -90,6 +90,7 @@ $(ARCH_DISTDIR)/%: %
 	$(INSTALL_DATA) $< $@
 
 LIBDIRS = \
+	lib/external/parson \
 	lib/external/shapelib \
 	lib/datetime \
 	lib/gis \
@@ -97,7 +98,7 @@ LIBDIRS = \
 	lib/db \
 	lib/vector \
 	db/drivers \
-	lib/python
+	python
 
 # Compile libraries only
 libs:
@@ -105,7 +106,7 @@ libs:
 	$(MAKE) subdirs SUBDIRS=$(LIBDIRS)
 	$(MAKE) $(FILES_DST)
 
-cleandistdirs: 
+cleandistdirs:
 	-rm -rf $(ARCH_DISTDIR)
 	-rm -rf $(ARCH_BINDIR)
 
@@ -113,15 +114,19 @@ cleandistdirs:
 cleanscriptstrings:
 	rm -f locale/scriptstrings/*.c 2>/dev/null
 
-clean: cleandistdirs cleanscriptstrings cleandocs
+clean: cleandistdirs cleanscriptstrings cleandocs code-coverage-clean
 
 libsclean: cleandistdirs
 	$(MAKE) clean-recursive SUBDIRS=$(LIBDIRS)
 
+code-coverage-clean:
+	-find . -type f \( -name "*.gcda" -o -name "*.gcno" -o -name "*.gcov" \) -delete
+	-rm -f .coverage
+
 distclean: clean
 	-rm -f config.cache config.log config.status config.status.$(ARCH) 2>/dev/null
 	-rm -f ChangeLog ChangeLog.bak $(ERRORLOG) grass.pc
-	-rm -f include/config.h include/version.h
+	-rm -f include/grass/config.h include/grass/version.h
 	-rm -f include/Make/Platform.make include/Make/Doxyfile_arch_html include/Make/Doxyfile_arch_latex 2>/dev/null
 
 include $(MODULE_TOPDIR)/include/Make/Install.make

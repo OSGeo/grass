@@ -1,13 +1,12 @@
-
 /****************************************************************************
  *
  * MODULE:       r.regression.multi
- * 
+ *
  * AUTHOR(S):    Markus Metz
- * 
+ *
  * PURPOSE:      Calculates multiple linear regression from raster maps:
  *               y = b0 + b1*x1 + b2*x2 + ... +  bn*xn + e
- * 
+ *
  * COPYRIGHT:    (C) 2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -21,79 +20,81 @@
 #include <math.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/gjson.h>
 #include <grass/glocale.h>
 #include <grass/raster.h>
 
-struct MATRIX
-{
-    int n;			/* SIZE OF THIS MATRIX (N x N) */
+enum OutputFormat { SHELL, JSON };
+
+struct MATRIX {
+    int n; /* SIZE OF THIS MATRIX (N x N) */
     double *v;
 };
 
-#define M(m,row,col) (m)->v[((row) * ((m)->n)) + (col)]
+#define M(m, row, col) (m)->v[((row) * ((m)->n)) + (col)]
 
 static int solvemat(struct MATRIX *m, double a[], double B[])
 {
     int i, j, i2, j2, imark;
     double factor, temp;
-    double pivot;		/* ACTUAL VALUE OF THE LARGEST PIVOT CANDIDATE */
+    double pivot; /* ACTUAL VALUE OF THE LARGEST PIVOT CANDIDATE */
 
     for (i = 0; i < m->n; i++) {
-	j = i;
+        j = i;
 
-	/* find row with largest magnitude value for pivot value */
+        /* find row with largest magnitude value for pivot value */
 
-	pivot = M(m, i, j);
-	imark = i;
-	for (i2 = i + 1; i2 < m->n; i2++) {
-	    temp = fabs(M(m, i2, j));
-	    if (temp > fabs(pivot)) {
-		pivot = M(m, i2, j);
-		imark = i2;
-	    }
-	}
+        pivot = M(m, i, j);
+        imark = i;
+        for (i2 = i + 1; i2 < m->n; i2++) {
+            temp = fabs(M(m, i2, j));
+            if (temp > fabs(pivot)) {
+                pivot = M(m, i2, j);
+                imark = i2;
+            }
+        }
 
-	/* if the pivot is very small then the points are nearly co-linear */
-	/* co-linear points result in an undefined matrix, and nearly */
-	/* co-linear points results in a solution with rounding error */
+        /* if the pivot is very small then the points are nearly co-linear */
+        /* co-linear points result in an undefined matrix, and nearly */
+        /* co-linear points results in a solution with rounding error */
 
-	if (pivot == 0.0) {
-	    G_warning(_("Matrix is unsolvable"));
-	    return 0;
-	}
+        if (pivot == 0.0) {
+            G_warning(_("Matrix is unsolvable"));
+            return 0;
+        }
 
-	/* if row with highest pivot is not the current row, switch them */
+        /* if row with highest pivot is not the current row, switch them */
 
-	if (imark != i) {
-	    for (j2 = 0; j2 < m->n; j2++) {
-		temp = M(m, imark, j2);
-		M(m, imark, j2) = M(m, i, j2);
-		M(m, i, j2) = temp;
-	    }
+        if (imark != i) {
+            for (j2 = 0; j2 < m->n; j2++) {
+                temp = M(m, imark, j2);
+                M(m, imark, j2) = M(m, i, j2);
+                M(m, i, j2) = temp;
+            }
 
-	    temp = a[imark];
-	    a[imark] = a[i];
-	    a[i] = temp;
-	}
+            temp = a[imark];
+            a[imark] = a[i];
+            a[i] = temp;
+        }
 
-	/* compute zeros above and below the pivot, and compute
-	   values for the rest of the row as well */
+        /* compute zeros above and below the pivot, and compute
+           values for the rest of the row as well */
 
-	for (i2 = 0; i2 < m->n; i2++) {
-	    if (i2 != i) {
-		factor = M(m, i2, j) / pivot;
-		for (j2 = j; j2 < m->n; j2++)
-		    M(m, i2, j2) -= factor * M(m, i, j2);
-		a[i2] -= factor * a[i];
-	    }
-	}
+        for (i2 = 0; i2 < m->n; i2++) {
+            if (i2 != i) {
+                factor = M(m, i2, j) / pivot;
+                for (j2 = j; j2 < m->n; j2++)
+                    M(m, i2, j2) -= factor * M(m, i, j2);
+                a[i2] -= factor * a[i];
+            }
+        }
     }
 
     /* SINCE ALL OTHER VALUES IN THE MATRIX ARE ZERO NOW, CALCULATE THE
        COEFFICIENTS BY DIVIDING THE COLUMN VECTORS BY THE DIAGONAL VALUES. */
 
     for (i = 0; i < m->n; i++) {
-	B[i] = a[i] / M(m, i, i);
+        B[i] = a[i] / M(m, i, i);
     }
 
     return 1;
@@ -101,27 +102,34 @@ static int solvemat(struct MATRIX *m, double a[], double B[])
 
 int main(int argc, char *argv[])
 {
-    unsigned int r, c, rows, cols, n_valid;	/*  totals  */
+    unsigned int r, c, rows, cols; /*  totals  */
     int *mapx_fd, mapy_fd, mapres_fd, mapest_fd;
     int i, j, k, n_predictors;
     double *sumX, sumY, *sumsqX, sumsqY, *sumXY;
     double *meanX, meanY, *varX, varY, *sdX, sdY;
-    double yest, yres;       /* estimated y, residual */
-    double sumYest, *SSerr_without;
-    double SE;
-    double meanYest, meanYres, varYest, varYres, sdYest, sdYres;
+    double yest, yres; /* estimated y, residual */
+    double /* sumYest, */ *SSerr_without;
+
+    /* double SE; */
+    /* double meanYest, meanYres, varYest, varYres, sdYest, sdYres; */
     double SStot, SSerr, SSreg;
     double SAE;
     double **a;
     struct MATRIX *m, *m_all;
-    double **B, Rsq, Rsqadj, F, t, AIC, AICc, BIC;
+    double **B, Rsq, Rsqadj, F, /* t, */ AIC, AICc, BIC;
     unsigned int count = 0;
     DCELL **mapx_buf, *mapy_buf, *mapx_val, mapy_val, *mapres_buf, *mapest_buf;
     char *name;
-    struct Option *input_mapx, *input_mapy, *output_res, *output_est, *output_opt;
+    struct Option *input_mapx, *input_mapy, *output_res, *output_est,
+        *output_opt, *format_opt;
     struct Flag *shell_style;
     struct Cell_head region;
     struct GModule *module;
+    enum OutputFormat format;
+    JSON_Value *root_value = NULL, *predictors_value = NULL,
+               *predictor_value = NULL;
+    JSON_Object *root_object = NULL, *predictor_object = NULL;
+    JSON_Array *predictors_array = NULL;
 
     G_gisinit(argv[0]);
 
@@ -130,7 +138,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("statistics"));
     G_add_keyword(_("regression"));
     module->description =
-	_("Calculates multiple linear regression from raster maps.");
+        _("Calculates multiple linear regression from raster maps.");
 
     /* Define the different options */
     input_mapx = G_define_standard_option(G_OPT_R_INPUTS);
@@ -155,20 +163,60 @@ int main(int argc, char *argv[])
     output_opt->key = "output";
     output_opt->required = NO;
     output_opt->description =
-	(_("ASCII file for storing regression coefficients (output to screen if file not specified)."));
+        (_("ASCII file for storing regression coefficients (output to screen "
+           "if file not specified)."));
+
+    format_opt = G_define_standard_option(G_OPT_F_FORMAT);
+    format_opt->options = "shell,json";
+    format_opt->answer = "shell";
+    format_opt->descriptions = ("shell;shell script style text output;"
+                                "json;JSON (JavaScript Object Notation);");
 
     shell_style = G_define_flag();
     shell_style->key = 'g';
-    shell_style->description = _("Print in shell script style");
+    shell_style->label = _("Print in shell script style [deprecated]");
+    shell_style->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=shell instead.");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     name = output_opt->answer;
     if (name != NULL && strcmp(name, "-") != 0) {
-	if (NULL == freopen(name, "w", stdout)) {
-	    G_fatal_error(_("Unable to open file <%s> for writing"), name);
-	}
+        if (NULL == freopen(name, "w", stdout)) {
+            G_fatal_error(_("Unable to open file <%s> for writing"), name);
+        }
+    }
+
+    if (strcmp(format_opt->answer, "json") == 0) {
+        format = JSON;
+        root_value = G_json_value_init_object();
+        if (root_value == NULL) {
+            G_fatal_error(
+                _("Failed to initialize JSON object. Out of memory?"));
+        }
+        root_object = G_json_object(root_value);
+
+        predictors_value = G_json_value_init_array();
+        if (predictors_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
+        predictors_array = G_json_array(predictors_value);
+    }
+    else {
+        format = SHELL;
+    }
+
+    if (shell_style->answer) {
+        G_verbose_message(
+            _("Flag 'g' is deprecated and will be removed in a future "
+              "release. Please use format=shell instead."));
+        if (format == JSON) {
+            G_fatal_error(_("The -g flag cannot be used with format=json. "
+                            "Please select only one output format."));
+        }
+        format = SHELL;
     }
 
     G_get_window(&region);
@@ -176,9 +224,10 @@ int main(int argc, char *argv[])
     cols = region.cols;
 
     /* count x maps */
-    for (i = 0; input_mapx->answers[i]; i++);
+    for (i = 0; input_mapx->answers[i]; i++)
+        ;
     n_predictors = i;
-    
+
     /* allocate memory for x maps */
     mapx_fd = (int *)G_malloc(n_predictors * sizeof(int));
     sumX = (double *)G_malloc(n_predictors * sizeof(double));
@@ -190,10 +239,11 @@ int main(int argc, char *argv[])
     sdX = (double *)G_malloc(n_predictors * sizeof(double));
     mapx_buf = (DCELL **)G_malloc(n_predictors * sizeof(DCELL *));
     mapx_val = (DCELL *)G_malloc((n_predictors + 1) * sizeof(DCELL));
-    
+
     /* ordinary least squares */
     m = NULL;
-    m_all = (struct MATRIX *)G_malloc((n_predictors + 1) * sizeof(struct MATRIX));
+    m_all =
+        (struct MATRIX *)G_malloc((n_predictors + 1) * sizeof(struct MATRIX));
     a = (double **)G_malloc((n_predictors + 1) * sizeof(double *));
     B = (double **)G_malloc((n_predictors + 1) * sizeof(double *));
 
@@ -205,375 +255,451 @@ int main(int argc, char *argv[])
     B[0] = (double *)G_malloc(m->n * sizeof(double));
 
     for (i = 0; i < m->n; i++) {
-	for (j = i; j < m->n; j++)
-	    M(m, i, j) = 0.0;
-	a[0][i] = 0.0;
-	B[0][i] = 0.0;
+        for (j = i; j < m->n; j++)
+            M(m, i, j) = 0.0;
+        a[0][i] = 0.0;
+        B[0][i] = 0.0;
     }
-    
-    for (k = 1; k <= n_predictors; k++) {
-	m = &(m_all[k]);
-	m->n = n_predictors;
-	m->v = (double *)G_malloc(m->n * m->n * sizeof(double));
-	a[k] = (double *)G_malloc(m->n * sizeof(double));
-	B[k] = (double *)G_malloc(m->n * sizeof(double));
 
-	for (i = 0; i < m->n; i++) {
-	    for (j = i; j < m->n; j++)
-		M(m, i, j) = 0.0;
-	    a[k][i] = 0.0;
-	    B[k][i] = 0.0;
-	}
+    for (k = 1; k <= n_predictors; k++) {
+        m = &(m_all[k]);
+        m->n = n_predictors;
+        m->v = (double *)G_malloc(m->n * m->n * sizeof(double));
+        a[k] = (double *)G_malloc(m->n * sizeof(double));
+        B[k] = (double *)G_malloc(m->n * sizeof(double));
+
+        for (i = 0; i < m->n; i++) {
+            for (j = i; j < m->n; j++)
+                M(m, i, j) = 0.0;
+            a[k][i] = 0.0;
+            B[k][i] = 0.0;
+        }
     }
 
     /* open maps */
     G_debug(1, "open maps");
     for (i = 0; i < n_predictors; i++) {
-	mapx_fd[i] = Rast_open_old(input_mapx->answers[i], "");
+        mapx_fd[i] = Rast_open_old(input_mapx->answers[i], "");
     }
     mapy_fd = Rast_open_old(input_mapy->answer, "");
 
     for (i = 0; i < n_predictors; i++)
-	mapx_buf[i] = Rast_allocate_d_buf();
+        mapx_buf[i] = Rast_allocate_d_buf();
     mapy_buf = Rast_allocate_d_buf();
 
     for (i = 0; i < n_predictors; i++) {
-	sumX[i] = sumsqX[i] = sumXY[i] = 0.0;
-	meanX[i] = varX[i] = sdX[i] = 0.0;
-	SSerr_without[i] = 0.0;
+        sumX[i] = sumsqX[i] = sumXY[i] = 0.0;
+        meanX[i] = varX[i] = sdX[i] = 0.0;
+        SSerr_without[i] = 0.0;
     }
     sumY = sumsqY = meanY = varY = sdY = 0.0;
-    sumYest = meanYest = varYest = sdYest = 0.0;
-    meanYres = varYres = sdYres = 0.0;
+    /* sumYest = meanYest = varYest = sdYest = 0.0; */
+    /* meanYres = varYres = sdYres = 0.0; */
 
     /* read input maps */
     G_message(_("First pass..."));
-    n_valid = 0;
     mapx_val[0] = 1.0;
     for (r = 0; r < rows; r++) {
-	G_percent(r, rows, 2);
+        G_percent(r, rows, 2);
 
-	for (i = 0; i < n_predictors; i++)
-	    Rast_get_d_row(mapx_fd[i], mapx_buf[i], r);
+        for (i = 0; i < n_predictors; i++)
+            Rast_get_d_row(mapx_fd[i], mapx_buf[i], r);
 
-	Rast_get_d_row(mapy_fd, mapy_buf, r);
+        Rast_get_d_row(mapy_fd, mapy_buf, r);
 
-	for (c = 0; c < cols; c++) {
-	    int isnull = 0;
+        for (c = 0; c < cols; c++) {
+            int isnull = 0;
 
-	    for (i = 0; i < n_predictors; i++) {
-		mapx_val[i + 1] = mapx_buf[i][c];
-		if (Rast_is_d_null_value(&(mapx_val[i + 1]))) {
-		    isnull = 1;
-		    break;
-		}
-	    }
-	    if (isnull)
-		continue;
+            for (i = 0; i < n_predictors; i++) {
+                mapx_val[i + 1] = mapx_buf[i][c];
+                if (Rast_is_d_null_value(&(mapx_val[i + 1]))) {
+                    isnull = 1;
+                    break;
+                }
+            }
+            if (isnull)
+                continue;
 
-	    mapy_val = mapy_buf[c];
-	    if (Rast_is_d_null_value(&mapy_val))
-		continue;
+            mapy_val = mapy_buf[c];
+            if (Rast_is_d_null_value(&mapy_val))
+                continue;
 
-	    for (i = 0; i <= n_predictors; i++) {
-		double val1 = mapx_val[i];
+            for (i = 0; i <= n_predictors; i++) {
+                double val1 = mapx_val[i];
 
-		for (j = i; j <= n_predictors; j++) {
-		    double val2 = mapx_val[j];
+                for (j = i; j <= n_predictors; j++) {
+                    double val2 = mapx_val[j];
 
-		    m = &(m_all[0]);
-		    M(m, i, j) += val1 * val2;
+                    m = &(m_all[0]);
+                    M(m, i, j) += val1 * val2;
 
-		    /* linear model without predictor k */
-		    for (k = 1; k <= n_predictors; k++) {
-			if (k != i && k != j) {
-			    int i2 = k > i ? i : i - 1;
-			    int j2 = k > j ? j : j - 1;
+                    /* linear model without predictor k */
+                    for (k = 1; k <= n_predictors; k++) {
+                        if (k != i && k != j) {
+                            int i2 = k > i ? i : i - 1;
+                            int j2 = k > j ? j : j - 1;
 
-			    m = &(m_all[k]);
-			    M(m, i2, j2) += val1 * val2;
-			}
-		    }
-		}
+                            m = &(m_all[k]);
+                            M(m, i2, j2) += val1 * val2;
+                        }
+                    }
+                }
 
-		a[0][i] += mapy_val * val1;
-		for (k = 1; k <= n_predictors; k++) {
-		    if (k != i) {
-			int i2 = k > i ? i : i - 1;
+                a[0][i] += mapy_val * val1;
+                for (k = 1; k <= n_predictors; k++) {
+                    if (k != i) {
+                        int i2 = k > i ? i : i - 1;
 
-			a[k][i2] += mapy_val * val1;
-		    }
-		}
+                        a[k][i2] += mapy_val * val1;
+                    }
+                }
 
-		if (i > 0) {
-		    sumX[i - 1] += val1;
-		    sumsqX[i - 1] += val1 * val1;
-		    sumXY[i - 1] += val1 * mapy_val;
-		}
-	    }
+                if (i > 0) {
+                    sumX[i - 1] += val1;
+                    sumsqX[i - 1] += val1 * val1;
+                    sumXY[i - 1] += val1 * mapy_val;
+                }
+            }
 
-	    sumY += mapy_val;
-	    sumsqY += mapy_val * mapy_val;
-	    count++;
-	}
+            sumY += mapy_val;
+            sumsqY += mapy_val * mapy_val;
+            count++;
+        }
     }
     G_percent(rows, rows, 2);
-    
-    if (count < n_predictors + 1)
-	G_fatal_error(_("Not enough valid cells available"));
+
+    if (count < (unsigned int)n_predictors + 1)
+        G_fatal_error(_("Not enough valid cells available"));
 
     for (k = 0; k <= n_predictors; k++) {
-	m = &(m_all[k]);
+        m = &(m_all[k]);
 
-	/* TRANSPOSE VALUES IN UPPER HALF OF M TO OTHER HALF */
-	for (i = 1; i < m->n; i++)
-	    for (j = 0; j < i; j++)
-		M(m, i, j) = M(m, j, i);
+        /* TRANSPOSE VALUES IN UPPER HALF OF M TO OTHER HALF */
+        for (i = 1; i < m->n; i++)
+            for (j = 0; j < i; j++)
+                M(m, i, j) = M(m, j, i);
 
-	if (!solvemat(m, a[k], B[k])) {
-	    for (i = 0; i <= n_predictors; i++) {
-		fprintf(stdout, "b%d=0.0\n", i);
-	    }
-	    G_fatal_error(_("Multiple regression failed"));
-	}
+        if (!solvemat(m, a[k], B[k])) {
+            if (format == SHELL)
+                for (i = 0; i <= n_predictors; i++) {
+                    fprintf(stdout, "b%d=0.0\n", i);
+                }
+            G_fatal_error(_("Multiple regression failed"));
+        }
     }
-    
+
     /* second pass */
     G_message(_("Second pass..."));
 
     /* residuals output */
     if (output_res->answer) {
-	mapres_fd = Rast_open_new(output_res->answer, DCELL_TYPE);
-	mapres_buf = Rast_allocate_d_buf();
+        mapres_fd = Rast_open_new(output_res->answer, DCELL_TYPE);
+        mapres_buf = Rast_allocate_d_buf();
     }
     else {
-	mapres_fd = -1;
-	mapres_buf = NULL;
+        mapres_fd = -1;
+        mapres_buf = NULL;
     }
 
     /* estimates output */
     if (output_est->answer) {
-	mapest_fd = Rast_open_new(output_est->answer, DCELL_TYPE);
-	mapest_buf = Rast_allocate_d_buf();
+        mapest_fd = Rast_open_new(output_est->answer, DCELL_TYPE);
+        mapest_buf = Rast_allocate_d_buf();
     }
     else {
-	mapest_fd = -1;
-	mapest_buf = NULL;
+        mapest_fd = -1;
+        mapest_buf = NULL;
     }
 
     for (i = 0; i < n_predictors; i++)
-	meanX[i] = sumX[i] / count;
+        meanX[i] = sumX[i] / count;
 
     meanY = sumY / count;
     SStot = SSerr = SSreg = 0.0;
     SAE = 0.0;
     for (r = 0; r < rows; r++) {
-	G_percent(r, rows, 2);
+        G_percent(r, rows, 2);
 
-	for (i = 0; i < n_predictors; i++)
-	    Rast_get_d_row(mapx_fd[i], mapx_buf[i], r);
+        for (i = 0; i < n_predictors; i++)
+            Rast_get_d_row(mapx_fd[i], mapx_buf[i], r);
 
-	Rast_get_d_row(mapy_fd, mapy_buf, r);
-	
-	if (mapres_buf)
-	    Rast_set_d_null_value(mapres_buf, cols);
-	if (mapest_buf)
-	    Rast_set_d_null_value(mapest_buf, cols);
+        Rast_get_d_row(mapy_fd, mapy_buf, r);
 
-	for (c = 0; c < cols; c++) {
-	    int isnull = 0;
+        if (mapres_buf)
+            Rast_set_d_null_value(mapres_buf, cols);
+        if (mapest_buf)
+            Rast_set_d_null_value(mapest_buf, cols);
 
-	    for (i = 0; i < n_predictors; i++) {
-		mapx_val[i + 1] = mapx_buf[i][c];
-		if (Rast_is_d_null_value(&(mapx_val[i + 1]))) {
-		    isnull = 1;
-		    break;
-		}
-	    }
-	    if (isnull)
-		continue;
+        for (c = 0; c < cols; c++) {
+            int isnull = 0;
 
-	    yest = 0.0;
-	    for (i = 0; i <= n_predictors; i++) {
-		yest += B[0][i] * mapx_val[i];
-	    }
-	    if (mapest_buf)
-		mapest_buf[c] = yest;
+            for (i = 0; i < n_predictors; i++) {
+                mapx_val[i + 1] = mapx_buf[i][c];
+                if (Rast_is_d_null_value(&(mapx_val[i + 1]))) {
+                    isnull = 1;
+                    break;
+                }
+            }
+            if (isnull)
+                continue;
 
-	    mapy_val = mapy_buf[c];
-	    if (Rast_is_d_null_value(&mapy_val))
-		continue;
+            yest = 0.0;
+            for (i = 0; i <= n_predictors; i++) {
+                yest += B[0][i] * mapx_val[i];
+            }
+            if (mapest_buf)
+                mapest_buf[c] = yest;
 
-	    yres = mapy_val - yest;
-	    if (mapres_buf)
-		mapres_buf[c] = yres;
+            mapy_val = mapy_buf[c];
+            if (Rast_is_d_null_value(&mapy_val))
+                continue;
 
-	    SStot += (mapy_val - meanY) * (mapy_val - meanY);
-	    SSreg += (yest - meanY) * (yest - meanY);
-	    SSerr += yres * yres;
-	    SAE += fabs(yres);
+            yres = mapy_val - yest;
+            if (mapres_buf)
+                mapres_buf[c] = yres;
 
-	    for (k = 1; k <= n_predictors; k++) {
-		double yesti = 0.0;
-		double yresi;
+            SStot += (mapy_val - meanY) * (mapy_val - meanY);
+            SSreg += (yest - meanY) * (yest - meanY);
+            SSerr += yres * yres;
+            SAE += fabs(yres);
 
-		/* linear model without predictor k */
-		for (i = 0; i <= n_predictors; i++) {
-		    if (i != k) {
-			j = k > i ? i : i - 1;
-			yesti += B[k][j] * mapx_val[i];
-		    }
-		}
-		yresi = mapy_val - yesti;
+            for (k = 1; k <= n_predictors; k++) {
+                double yesti = 0.0;
+                double yresi;
 
-		/* linear model without predictor k */
-		SSerr_without[k - 1] += yresi * yresi;
+                /* linear model without predictor k */
+                for (i = 0; i <= n_predictors; i++) {
+                    if (i != k) {
+                        j = k > i ? i : i - 1;
+                        yesti += B[k][j] * mapx_val[i];
+                    }
+                }
+                yresi = mapy_val - yesti;
 
-		varX[k - 1] = (mapx_val[k] - meanX[k - 1]) * (mapx_val[k] - meanX[k - 1]);
-	    }
-	}
+                /* linear model without predictor k */
+                SSerr_without[k - 1] += yresi * yresi;
 
-	if (mapres_buf)
-	    Rast_put_d_row(mapres_fd, mapres_buf);
-	if (mapest_buf)
-	    Rast_put_d_row(mapest_fd, mapest_buf);
+                varX[k - 1] =
+                    (mapx_val[k] - meanX[k - 1]) * (mapx_val[k] - meanX[k - 1]);
+            }
+        }
+
+        if (mapres_buf)
+            Rast_put_d_row(mapres_fd, mapres_buf);
+        if (mapest_buf)
+            Rast_put_d_row(mapest_fd, mapest_buf);
     }
     G_percent(rows, rows, 2);
 
-    fprintf(stdout, "n=%d\n", count);
     /* coefficient of determination aka R squared */
     Rsq = 1 - (SSerr / SStot);
-    fprintf(stdout, "Rsq=%f\n", Rsq);
     /* adjusted coefficient of determination */
     Rsqadj = 1 - ((SSerr * (count - 1)) / (SStot * (count - n_predictors - 1)));
-    fprintf(stdout, "Rsqadj=%f\n", Rsqadj);
-    /* RMSE */
-    fprintf(stdout, "RMSE=%f\n", sqrt(SSerr / count));
-    /* MAE */
-    fprintf(stdout, "MAE=%f\n", SAE / count);
     /* F statistic */
-    /* F = ((SStot - SSerr) / (n_predictors)) / (SSerr / (count - n_predictors));
-     * , or: */
-    F = ((SStot - SSerr) * (count - n_predictors - 1)) / (SSerr * (n_predictors));
-    fprintf(stdout, "F=%f\n", F);
-
+    /* F = ((SStot - SSerr) / (n_predictors)) / (SSerr / (count -
+     * n_predictors)); , or: */
+    F = ((SStot - SSerr) * (count - n_predictors - 1)) /
+        (SSerr * (n_predictors));
     i = 0;
-    /* constant aka estimate for intercept in R */
-    fprintf(stdout, "b%d=%f\n", i, B[0][i]);
     /* t score for R squared of the full model, unused */
-    t = sqrt(Rsq) * sqrt((count - 2) / (1 - Rsq));
+    /* t = sqrt(Rsq) * sqrt((count - 2) / (1 - Rsq)); */
     /*
-    fprintf(stdout, "t%d=%f\n", i, t);
-    */
+       fprintf(stdout, "t%d=%f\n", i, t);
+     */
 
-    /* AIC, corrected AIC, and BIC information criteria for the full model */
+    /* AIC, corrected AIC, and BIC information criteria for the full model
+     */
     AIC = count * log(SSerr / count) + 2 * (n_predictors + 1);
-    fprintf(stdout, "AIC=%f\n", AIC);
-    AICc = AIC + (2 * n_predictors * (n_predictors + 1)) / (count - n_predictors - 1);
-    fprintf(stdout, "AICc=%f\n", AICc);
+    AICc = AIC +
+           (2 * n_predictors * (n_predictors + 1)) / (count - n_predictors - 1);
     BIC = count * log(SSerr / count) + log(count) * (n_predictors + 1);
-    fprintf(stdout, "BIC=%f\n", BIC);
-
     /* error variance of the model, identical to R */
-    SE = SSerr / (count - n_predictors - 1);
+    /* SE = SSerr / (count - n_predictors - 1); */
     /*
-    fprintf(stdout, "SE=%f\n", SE);
-    fprintf(stdout, "SSerr=%f\n", SSerr);
-    */
+       fprintf(stdout, "SE=%f\n", SE);
+       fprintf(stdout, "SSerr=%f\n", SSerr);
+     */
 
-    for (i = 0; i < n_predictors; i++) {
+    switch (format) {
+    case SHELL:
+        fprintf(stdout, "n=%d\n", count);
+        fprintf(stdout, "Rsq=%f\n", Rsq);
+        fprintf(stdout, "Rsqadj=%f\n", Rsqadj);
+        /* RMSE */
+        fprintf(stdout, "RMSE=%f\n", sqrt(SSerr / count));
+        /* MAE */
+        fprintf(stdout, "MAE=%f\n", SAE / count);
+        fprintf(stdout, "F=%f\n", F);
+        /* constant aka estimate for intercept in R */
+        fprintf(stdout, "b%d=%f\n", i, B[0][i]);
+        fprintf(stdout, "AIC=%f\n", AIC);
+        fprintf(stdout, "AICc=%f\n", AICc);
+        fprintf(stdout, "BIC=%f\n", BIC);
+        break;
 
-	fprintf(stdout, "\npredictor%d=%s\n", i + 1, input_mapx->answers[i]);
-	fprintf(stdout, "b%d=%f\n", i + 1, B[0][i + 1]);
-	if (n_predictors > 1) {
-	    double Rsqi, SEi, sumsqX_corr;
-
-	    /* corrected sum of squares for predictor [i] */
-	    sumsqX_corr = sumsqX[i] - sumX[i] * sumX[i] / (count - n_predictors - 1);
-
-	    /* standard error SE for predictor [i] */
-
-	    /* SE[i] with only one predictor: sqrt(SE / sumsqX_corr)
-	     * this does not work with more than one predictor */
-	    /* in R, SEi is sqrt(diag(R) * resvar) with
-	     * R = ???
-	     * resvar = rss / rdf = SE global
-	     * rss = sum of squares of the residuals
-	     * rdf = residual degrees of freedom = count - n_predictors - 1 */
-	    SEi = sqrt(SE / (Rsq * sumsqX_corr));
-	    /*
-	    fprintf(stdout, "SE%d=%f\n", i + 1, SEi);
-	    */
-
-	    /* Sum of squares for predictor [i] */
-	    /*
-	    fprintf(stdout, "SSerr%d=%f\n", i + 1, SSerr_without[i] - SSerr);
-	    */
-
-	    /* R squared of the model without predictor [i] */
-	    /* Rsqi = 1 - SSerr_without[i] / SStot; */
-	    /* the additional amount of variance explained
-	     * when including predictor [i] :
-	     * Rsq - Rsqi */
-	    Rsqi = (SSerr_without[i] - SSerr) / SStot;
-	    fprintf(stdout, "Rsq%d=%f\n", i + 1, Rsqi);
-
-	    /* t score for Student's t distribution, unused */
-	    t = (B[0][i + 1]) / SEi;
-	    /*
-	    fprintf(stdout, "t%d=%f\n", i + 1, t);
-	    */
-
-	    /* F score for Fisher's F distribution
-	     * here: F score to test if including predictor [i]
-	     * yields a significant improvement
-	     * after Lothar Sachs, Angewandte Statistik:
-	     * F = (Rsq - Rsqi) * (count - n_predictors - 1) / (1 - Rsq) */
-	    /* same like Sumsq / SE */
-	    /* same like (SSerr_without[i] / SSerr - 1) * (count - n_predictors - 1) */
-	    /* same like R-stats when entered in R-stats as last predictor */
-	    F = (SSerr_without[i] / SSerr - 1) * (count - n_predictors - 1);
-	    fprintf(stdout, "F%d=%f\n", i + 1, F);
-
-	    /* AIC, corrected AIC, and BIC information criteria for
-	     * the model without predictor [i] */
-	    AIC = count * log(SSerr_without[i] / count) + 2 * (n_predictors);
-	    fprintf(stdout, "AIC%d=%f\n", i + 1, AIC);
-	    AICc = AIC + (2 * (n_predictors - 1) * n_predictors) / (count - n_predictors - 2);
-	    fprintf(stdout, "AICc%d=%f\n", i + 1, AICc);
-	    BIC = count * log(SSerr_without[i] / count) + (n_predictors - 1) * log(count);
-	    fprintf(stdout, "BIC%d=%f\n", i + 1, BIC);
-	}
+    case JSON:
+        G_json_object_set_number(root_object, "n", count);
+        G_json_object_set_number(root_object, "Rsq", Rsq);
+        G_json_object_set_number(root_object, "Rsqadj", Rsqadj);
+        G_json_object_set_number(root_object, "RMSE", sqrt(SSerr / count));
+        G_json_object_set_number(root_object, "MAE", SAE / count);
+        G_json_object_set_number(root_object, "F", F);
+        G_json_object_set_number(root_object, "b0", B[0][i]);
+        G_json_object_set_number(root_object, "AIC", AIC);
+        G_json_object_set_number(root_object, "AICc", AICc);
+        G_json_object_set_number(root_object, "BIC", BIC);
+        break;
     }
-    
 
     for (i = 0; i < n_predictors; i++) {
-	Rast_close(mapx_fd[i]);
-	G_free(mapx_buf[i]);
+        switch (format) {
+        case SHELL:
+            fprintf(stdout, "\npredictor%d=%s\n", i + 1,
+                    input_mapx->answers[i]);
+            fprintf(stdout, "b%d=%f\n", i + 1, B[0][i + 1]);
+            break;
+
+        case JSON:
+            predictor_value = G_json_value_init_object();
+            if (predictor_value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON object. Out of memory?"));
+            }
+            predictor_object = G_json_object(predictor_value);
+
+            G_json_object_set_string(predictor_object, "name",
+                                     input_mapx->answers[i]);
+            G_json_object_set_number(predictor_object, "b", B[0][i + 1]);
+            break;
+        }
+
+        if (n_predictors > 1) {
+            /* double Rsqi, SEi, sumsqX_corr; */
+
+            /* corrected sum of squares for predictor [i] */
+            /* sumsqX_corr =
+               sumsqX[i] - sumX[i] * sumX[i] / (count - n_predictors - 1); */
+
+            /* standard error SE for predictor [i] */
+
+            /* SE[i] with only one predictor: sqrt(SE / sumsqX_corr)
+             * this does not work with more than one predictor */
+            /* in R, SEi is sqrt(diag(R) * resvar) with
+             * R = ???
+             * resvar = rss / rdf = SE global
+             * rss = sum of squares of the residuals
+             * rdf = residual degrees of freedom = count - n_predictors - 1 */
+            /* SEi = sqrt(SE / (Rsq * sumsqX_corr)); */
+            /*
+               fprintf(stdout, "SE%d=%f\n", i + 1, SEi);
+             */
+
+            /* Sum of squares for predictor [i] */
+            /*
+               fprintf(stdout, "SSerr%d=%f\n", i + 1, SSerr_without[i] - SSerr);
+             */
+
+            /* R squared of the model without predictor [i] */
+            /* Rsqi = 1 - SSerr_without[i] / SStot; */
+            /* the additional amount of variance explained
+             * when including predictor [i] :
+             * Rsq - Rsqi */
+            /* Rsqi = (SSerr_without[i] - SSerr) / SStot;
+               fprintf(stdout, "Rsq%d=%f\n", i + 1, Rsqi); */
+
+            /* t score for Student's t distribution, unused */
+            /* t = (B[0][i + 1]) / SEi; */
+            /*
+               fprintf(stdout, "t%d=%f\n", i + 1, t);
+             */
+
+            /* F score for Fisher's F distribution
+             * here: F score to test if including predictor [i]
+             * yields a significant improvement
+             * after Lothar Sachs, Angewandte Statistik:
+             * F = (Rsq - Rsqi) * (count - n_predictors - 1) / (1 - Rsq) */
+            /* same like Sumsq / SE */
+            /* same like (SSerr_without[i] / SSerr - 1) * (count - n_predictors
+             * - 1) */
+            /* same like R-stats when entered in R-stats as last predictor */
+            F = (SSerr_without[i] / SSerr - 1) * (count - n_predictors - 1);
+            /* AIC, corrected AIC, and BIC information criteria for
+             * the model without predictor [i] */
+            AIC = count * log(SSerr_without[i] / count) + 2 * (n_predictors);
+            AICc = AIC + (2 * (n_predictors - 1) * n_predictors) /
+                             (count - n_predictors - 2);
+            BIC = count * log(SSerr_without[i] / count) +
+                  (n_predictors - 1) * log(count);
+
+            switch (format) {
+            case SHELL:
+                fprintf(stdout, "F%d=%f\n", i + 1, F);
+                fprintf(stdout, "AIC%d=%f\n", i + 1, AIC);
+                fprintf(stdout, "AICc%d=%f\n", i + 1, AICc);
+                fprintf(stdout, "BIC%d=%f\n", i + 1, BIC);
+                break;
+
+            case JSON:
+                G_json_object_set_number(predictor_object, "F", F);
+                G_json_object_set_number(predictor_object, "AIC", AIC);
+                G_json_object_set_number(predictor_object, "AICc", AICc);
+                G_json_object_set_number(predictor_object, "BIC", BIC);
+                break;
+            }
+        }
+        else if (format == JSON) {
+            G_json_object_set_null(predictor_object, "F");
+            G_json_object_set_null(predictor_object, "AIC");
+            G_json_object_set_null(predictor_object, "AICc");
+            G_json_object_set_null(predictor_object, "BIC");
+        }
+
+        if (format == JSON)
+            G_json_array_append_value(predictors_array, predictor_value);
+    }
+
+    for (i = 0; i < n_predictors; i++) {
+        Rast_close(mapx_fd[i]);
+        G_free(mapx_buf[i]);
     }
     Rast_close(mapy_fd);
     G_free(mapy_buf);
-    
+
     if (mapres_fd > -1) {
-	struct History history;
+        struct History history;
 
-	Rast_close(mapres_fd);
-	G_free(mapres_buf);
+        Rast_close(mapres_fd);
+        G_free(mapres_buf);
 
-	Rast_short_history(output_res->answer, "raster", &history);
-	Rast_command_history(&history);
-	Rast_write_history(output_res->answer, &history);
+        Rast_short_history(output_res->answer, "raster", &history);
+        Rast_command_history(&history);
+        Rast_write_history(output_res->answer, &history);
     }
 
     if (mapest_fd > -1) {
-	struct History history;
+        struct History history;
 
-	Rast_close(mapest_fd);
-	G_free(mapest_buf);
+        Rast_close(mapest_fd);
+        G_free(mapest_buf);
 
-	Rast_short_history(output_est->answer, "raster", &history);
-	Rast_command_history(&history);
-	Rast_write_history(output_est->answer, &history);
+        Rast_short_history(output_est->answer, "raster", &history);
+        Rast_command_history(&history);
+        Rast_write_history(output_est->answer, &history);
+    }
+
+    if (format == JSON) {
+        G_json_object_set_value(root_object, "predictors", predictors_value);
+
+        char *json_string = G_json_serialize_to_string_pretty(root_value);
+        if (!json_string) {
+            G_json_value_free(root_value);
+            G_fatal_error(_("Failed to serialize JSON to pretty format."));
+        }
+
+        puts(json_string);
+
+        G_json_free_serialized_string(json_string);
+        G_json_value_free(root_value);
     }
 
     exit(EXIT_SUCCESS);

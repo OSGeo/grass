@@ -1,22 +1,22 @@
 /*!
-  \file lib/pngdriver/graph_close.c
+   \file lib/pngdriver/graph_close.c
 
-  \brief GRASS png display driver - close graphics processing
+   \brief GRASS png display driver - close graphics processing
 
-  (C) 2003-2014 by Glynn Clements and the GRASS Development Team
-  
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
-  
-  \author Per Henrik Johansen (original contributor)
-  \author Glynn Clements
-*/
+   (C) 2003-2014 by Glynn Clements and the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
+
+   \author Per Henrik Johansen (original contributor)
+   \author Glynn Clements
+ */
 
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#ifdef __MINGW32__
+#ifdef _WIN32
 #include <windows.h>
 #else
 #include <sys/mman.h>
@@ -31,9 +31,9 @@ static void unmap_file(void)
     void *ptr = (char *)png.grid - HEADER_SIZE;
 
     if (!png.mapped)
-	return;
+        return;
 
-#ifdef __MINGW32__
+#ifdef _WIN32
     UnmapViewOfFile(ptr);
     CloseHandle(png.handle);
 #else
@@ -44,15 +44,15 @@ static void unmap_file(void)
 }
 
 /*!
-  \brief Close down the graphics processing. This gets called only at driver
-         termination time.
-*/
+   \brief Close down the graphics processing. This gets called only at driver
+   termination time.
+ */
 void PNG_Graph_close(void)
 {
     write_image();
 
     if (png.mapped)
-	unmap_file();
+        unmap_file();
     else
-	G_free(png.grid);
+        G_free(png.grid);
 }

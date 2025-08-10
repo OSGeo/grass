@@ -1,31 +1,31 @@
 /*!
-  \file db/dbmi_client/c_drop_tab.c
- 
- \brief DBMI Library (client) - drop table
- 
- (C) 1999-2008, 2011 by the GRASS Development Team
- 
- This program is free software under the GNU General Public
- License (>=v2). Read the file COPYING that comes with GRASS
- for details.
+   \file db/dbmi_client/c_drop_tab.c
 
- \author Joel Jones (CERL/UIUC)
- \author Radim Blazek
-*/
+   \brief DBMI Library (client) - drop table
+
+   (C) 1999-2008, 2011 by the GRASS Development Team
+
+   This program is free software under the GNU General Public
+   License (>=v2). Read the file COPYING that comes with GRASS
+   for details.
+
+   \author Joel Jones (CERL/UIUC)
+   \author Radim Blazek
+ */
 
 #include <grass/dbmi.h>
 #include "macros.h"
 
 /*!
-  \brief Drop table
+   \brief Drop table
 
-  \param driver db driver
-  \param name table name to be dropped
+   \param driver db driver
+   \param name table name to be dropped
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
-int db_drop_table(dbDriver * driver, dbString * name)
+int db_drop_table(dbDriver *driver, dbString *name)
 {
     int ret_code;
 
@@ -40,7 +40,7 @@ int db_drop_table(dbDriver * driver, dbString * name)
     DB_RECV_RETURN_CODE(&ret_code);
 
     if (ret_code != DB_OK)
-	return ret_code;	/* ret_code SHOULD == DB_FAILED */
+        return ret_code; /* ret_code SHOULD == DB_FAILED */
 
     /* no results */
     return DB_OK;

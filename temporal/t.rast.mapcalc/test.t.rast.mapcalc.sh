@@ -1,5 +1,5 @@
 #!/bin/sh
-# Test for t.rast.mapcalc 
+# Test for t.rast.mapcalc
 
 export GRASS_OVERWRITE=1
 

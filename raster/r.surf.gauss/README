@@ -1,6 +1,6 @@
 r.surf.gauss - 	Program to produce a raster map layer of gaussian deviates whose
-		mean and standard deviation can be expressed by the user. It 
-		uses a gaussian random number generator from Press, Flannery, 
+		mean and standard deviation can be expressed by the user. It
+		uses a gaussian random number generator from Press, Flannery,
 		Teukolsky and Vetterling (1988) - Numerical Recipes in C.
 
 See also -	r.surf.random
@@ -18,4 +18,3 @@ Parameters:
           default: 0.0
   sigma   Standard deviation
           default: 1.0
-

@@ -1,0 +1,30 @@
+---
+BasedOnStyle: LLVM
+IndentWidth: 4
+---
+Language: Cpp
+AccessModifierOffset: -4
+AlignConsecutiveMacros:
+  Enabled: true
+  AcrossEmptyLines: true
+  AcrossComments: true
+  PadOperators: true
+AlignEscapedNewlines: Left
+AllowShortFunctionsOnASingleLine: InlineOnly
+AlwaysBreakTemplateDeclarations: Yes
+BreakBeforeBraces: Stroustrup
+ForEachMacros:
+  - DGL_FOREACH_NODE
+  - DGL_FOREACH_EDGE
+  - BOOST_FOREACH
+IfMacros:
+  - SORT_DEBUG
+MacroBlockBegin: GNO_BEGIN
+MacroBlockEnd: GNO_END
+SortIncludes: Never
+---
+Language: ObjC
+---
+Language: JavaScript
+---
+Language: Json

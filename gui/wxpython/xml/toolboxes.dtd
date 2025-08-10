@@ -31,4 +31,3 @@ elements which are not typical candidates for xlink use.
 <!ELEMENT keywords (#PCDATA)>
 <!ELEMENT shortcut (#PCDATA)>
 <!ELEMENT wx-id (#PCDATA)>
-

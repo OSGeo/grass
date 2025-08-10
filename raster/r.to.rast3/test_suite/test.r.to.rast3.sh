@@ -17,9 +17,9 @@ r.mapcalc --o expr="elev_4 = 35"
 r.mapcalc --o expr="elev_5 = 45"
 
 # We @test several methods to generate @raster3d maps from raster maps
-# For validation a @precision=0 should be used. We start with 5 raster maps, 
-# then 3 raster maps then using single float and double raster maps 
-# with differen tile sizes and null data
+# For validation a @precision=0 should be used. We start with 5 raster maps,
+# then 3 raster maps then using single float and double raster maps
+# with different tile sizes and null data
 r.to.rast3 --o input=elev_1,elev_2,elev_3,elev_4,elev_5 output=test_volume_6_raster tilesize=1
 r.to.rast3 --o input=elev_1,elev_2,elev_3               output=test_volume_3_raster tilesize=1
 r.to.rast3 --o input=elev_float                         output=test_volume_float_raster tilesize=2

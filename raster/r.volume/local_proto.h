@@ -1,3 +1,7 @@
-#define SEP "-----------------------------------------------------------------------------"
+#define SEP                                                                    \
+    "------------------------------------------------------------------------" \
+    "-----"
 
-int centroids(int, unsigned long*, unsigned long*, int, int);
+enum OutputFormat { PLAIN, CSV, JSON };
+
+int centroids(int, unsigned long *, unsigned long *, int, int);

@@ -19,33 +19,33 @@ void atou1(double *a, int m, int n)
     i = n - 1;
     mm = m - n;
     if (mm == 0) {
-	*p0 = 1.;
-	p0 -= n + 1;
-	--i;
-	++mm;
+        *p0 = 1.;
+        p0 -= n + 1;
+        --i;
+        ++mm;
     }
     for (; i >= 0; --i, ++mm, p0 -= n + 1) {
-	if (*p0 != 0.) {
-	    for (j = 0, p = p0 + n; j < mm; p += n)
-		w[j++] = *p;
-	    h = *p0;
-	    *p0 = 1. - h;
-	    for (j = 0, p = p0 + n; j < mm; p += n)
-		*p = -h * w[j++];
-	    for (k = i + 1, q = p0 + 1; k < n; ++k) {
-		for (j = 0, p = q + n, s = 0.; j < mm; p += n)
-		    s += w[j++] * *p;
-		s *= h;
-		for (j = 0, p = q + n; j < mm; p += n)
-		    *p -= s * w[j++];
-		*q++ = -s;
-	    }
-	}
-	else {
-	    *p0 = 1.;
-	    for (j = 0, p = p0 + n, q = p0 + 1; j < mm; ++j, p += n)
-		*p = *q++ = 0.;
-	}
+        if (*p0 != 0.) {
+            for (j = 0, p = p0 + n; j < mm; p += n)
+                w[j++] = *p;
+            h = *p0;
+            *p0 = 1. - h;
+            for (j = 0, p = p0 + n; j < mm; p += n)
+                *p = -h * w[j++];
+            for (k = i + 1, q = p0 + 1; k < n; ++k) {
+                for (j = 0, p = q + n, s = 0.; j < mm; p += n)
+                    s += w[j++] * *p;
+                s *= h;
+                for (j = 0, p = q + n; j < mm; p += n)
+                    *p -= s * w[j++];
+                *q++ = -s;
+            }
+        }
+        else {
+            *p0 = 1.;
+            for (j = 0, p = p0 + n, q = p0 + 1; j < mm; ++j, p += n)
+                *p = *q++ = 0.;
+        }
     }
     free(w);
 }

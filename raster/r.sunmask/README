@@ -19,7 +19,7 @@ Calculating sun position... (using solpos (V. 11 April 2001) from NREL)
    sun angle above horz.(refraction corrected) 31.662413
  Sunrise time (without refraction): 07:16
  Sunset time  (without refraction): 19:07
-Calculating shadows from DEM...   
+Calculating shadows from DEM...
 
 --------------------------
 
@@ -39,7 +39,7 @@ parameter seasonally in r.sunmask (timezone parameter).
 
 solpos questions can be directed to
 > Steve Wilcox (Stephen_Wilcox@nrel.gov)
-> National Renewable Energy Laboratory  
+> National Renewable Energy Laboratory
 > 1617 Cole Boulevard, Golden, CO 80401-3393
 > voice: 1-303-275-4061; fax: 1-303-275-4675
   http://rredc.nrel.gov/solar/codes_algs/solpos/

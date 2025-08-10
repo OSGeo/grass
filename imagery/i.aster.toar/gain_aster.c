@@ -1,6 +1,5 @@
-#include<stdio.h>
-#include<stdlib.h>
-
+#include <stdio.h>
+#include <stdlib.h>
 
 /* Gain values LUT for ASTER */
 double gain_aster(int band_number, int gain_code)
@@ -10,7 +9,7 @@ double gain_aster(int band_number, int gain_code)
     /*1 - Normal */
     /*2 - Low 1(Not Applicable for band 10-14: TIR) */
     /*3 - Low 2(Not Applicable for Band 1-3N/B & 10-14) */
-    double result;
+    double result = 0.0;
 
     /* HIGH GAIN */
     if (gain_code == 0) {

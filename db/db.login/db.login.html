@@ -15,8 +15,8 @@ Note that the passwords are stored in a hidden, <i>unencrypted</i>
 file in the user account, specifically
 
 <ul>
-<li> in the 'home' directory, i.e. <tt>$HOME/.grass7/dblogin</tt> (Unix-like systems)</li>
-<li> <tt>%APPDATA%/GRASS7/dblogin</tt> (MS-Windows)</li>
+<li> in the 'home' directory, i.e. <code>$HOME/.grass8/dblogin</code> (Unix-like systems)</li>
+<li> <code>%APPDATA%\Roaming\GRASS8\dblogin</code> (MS-Windows)</li>
 </ul>
 
 Only the file owner can access this file.
@@ -45,7 +45,6 @@ Username and empty password specified:
 db.login driver=pg database=mydb user=bacava password=""
 </pre></div>
 
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -55,14 +54,9 @@ db.login driver=pg database=mydb user=bacava password=""
 </em>
 
 <p>
-<a href="sql.html">SQL support in GRASS GIS</a>
+<a href="sql.html">SQL support in GRASS</a>
 
 <h2>AUTHOR</h2>
 
 Radim Blazek<br>
 Support for hostname and port by Martin Landa, OSGeoREL, Czech Technical University in Prague, Czech Republic (GRASS 7.1)
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

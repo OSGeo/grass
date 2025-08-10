@@ -1,14 +1,14 @@
 #########################################################################
 #                         Variable names
 # xxxINCDIR  directory(ies) including header files (example: /usr/include)
-# xxxINC  cc option(s) for include directory (example: -I/usr/inlude)
+# xxxINC  cc option(s) for include directory (example: -I/usr/include)
 # xxxLIBDIR  directory(ies) containing library (example: /usr/lib)
 # xxxLIBPATH cc option for library directory (example: -L/usr/lib)
 # xxx_LIBNAME library name (example: gis)
-# xxxLIB full static library path 
+# xxxLIB full static library path
 #        (example: /home/abc/grass63/dist.i686-pc-linux-gnu/lib/libgis.a)
 # xxxDEP dependency
-# 
+#
 # GRASS_xxx GRASS specific (without ARCH_xxx)
 #
 # ARCH_xxx platform specific dirs (without GRASS_xxx)
@@ -59,17 +59,18 @@ DOCSDIR         = $(ARCH_DISTDIR)/docs
 ETC             = $(ARCH_DISTDIR)/etc
 GUIDIR          = $(ARCH_DISTDIR)/gui
 HTMLDIR         = $(ARCH_DISTDIR)/docs/html
+MDDIR           = $(ARCH_DISTDIR)/docs/mkdocs
 SCRIPTDIR       = $(ARCH_DISTDIR)/scripts
 MSG_DIR         = $(ARCH_DISTDIR)/etc/msgs
 MO_DIR          = $(ARCH_DISTDIR)/locale
-TOOLSDIR	= $(ARCH_DISTDIR)/tools
+UTILSDIR        = $(ARCH_DISTDIR)/utils
 
 FONTDIR         = $(ARCH_DISTDIR)/fonts
 
 GRASS_VERSION_NUMBER  = $(GRASS_VERSION_MAJOR).$(GRASS_VERSION_MINOR).$(GRASS_VERSION_RELEASE)
 GRASS_LIB_VERSION_NUMBER  = $(GRASS_VERSION_MAJOR).$(GRASS_VERSION_MINOR)
 
-GRASS_NAME	= grass$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
+GRASS_NAME	= grass
 
 ##################### other #############################################
 
@@ -89,7 +90,7 @@ MANIFEST = internal
 endif
 
 # lexical analyzer and default options
-LFLAGS      = 
+LFLAGS      =
 
 # parser generator and default options
 YFLAGS      = -d -v
@@ -97,10 +98,9 @@ YFLAGS      = -d -v
 MANSECT = 1
 MANBASEDIR = $(ARCH_DISTDIR)/docs/man
 MANDIR = $(MANBASEDIR)/man$(MANSECT)
-HTML2MAN = VERSION_NUMBER=$(GRASS_VERSION_NUMBER) $(GISBASE)/tools/g.html2man.py
+HTML2MAN = VERSION_NUMBER=$(GRASS_VERSION_NUMBER) $(GISBASE)/utils/g.html2man.py
 
 GDAL_LINK = $(USE_GDAL)
-GDAL_DYNAMIC = 1
 
 DEPFILE = depend.mk
 
@@ -153,6 +153,7 @@ libs = \
 	NVIZ:nviz \
 	OGSF:ogsf \
 	OPTRI:optri \
+	PARSON:parson \
 	PNGDRIVER:pngdriver \
 	PSDRIVER:psdriver \
 	QTREE:qtree \
@@ -197,8 +198,8 @@ DSPFDEPS         = $(GISLIB)
 FORMDEPS         = $(DBMILIB) $(GISLIB)
 RASTER3DDEPS     = $(RASTERLIB) $(GISLIB)
 GISDEPS          = $(DATETIMELIB) $(ZLIBLIBPATH) $(ZLIB) $(BZIP2LIBPATH) $(BZIP2LIB) $(ZSTDLIBPATH) $(ZSTDLIB) $(INTLLIB) $(REGEXLIBPATH) $(REGEXLIB) $(ICONVLIB) $(PTHREADLIBPATH) $(PTHREADLIB) $(MATHLIB)
-GMATHDEPS        = $(GISLIB) $(FFTWLIB) $(LAPACKLIB) $(BLASLIB) $(CCMATHLIB) $(OMPLIBPATH) $(OMPLIB)
-GPDEDEPS         = $(RASTER3DLIB) $(RASTERLIB) $(GISLIB) $(GMATHLIB) $(OMPLIBPATH) $(OMPLIB) $(MATHLIB)
+GMATHDEPS        = $(GISLIB) $(FFTWLIB) $(LAPACKLIB) $(BLASLIB) $(CCMATHLIB) $(OPENMP_CFLAGS) $(OPENMP_LIBPATH) $(OPENMP_LIB)
+GPDEDEPS         = $(RASTER3DLIB) $(RASTERLIB) $(GISLIB) $(GMATHLIB) $(OPENMP_LIBPATH) $(OPENMP_LIB) $(MATHLIB)
 GPROJDEPS        = $(GISLIB) $(GDALLIBS) $(PROJLIB) $(MATHLIB)
 HTMLDRIVERDEPS   = $(DRIVERLIB) $(GISLIB) $(MATHLIB)
 IMAGERYDEPS      = $(GISLIB) $(MATHLIB) $(RASTERLIB) $(VECTORLIB)
@@ -212,7 +213,7 @@ NVIZDEPS         = $(OGSFLIB) $(GISLIB) $(OPENGLLIB)
 OGSFDEPS         = $(BITMAPLIB) $(RASTER3DLIB) $(VECTORLIB) $(DBMILIB) $(RASTERLIB) $(GISLIB) $(TIFFLIBPATH) $(TIFFLIB) $(OPENGLLIB) $(OPENGLULIB) $(MATHLIB)
 PNGDRIVERDEPS    = $(DRIVERLIB) $(GISLIB) $(PNGLIB) $(MATHLIB)
 PSDRIVERDEPS     = $(DRIVERLIB) $(GISLIB) $(MATHLIB)
-RASTERDEPS       = $(GISLIB) $(GPROJLIB) $(MATHLIB)
+RASTERDEPS       = $(GISLIB) $(GPROJLIB) $(MATHLIB) $(PARSONLIB)
 RLIDEPS          = $(RASTERLIB) $(GISLIB) $(MATHLIB)
 ROWIODEPS        = $(GISLIB)
 RTREEDEPS        = $(GISLIB) $(MATHLIB)
@@ -231,19 +232,11 @@ CAIRODRIVERDEPS += $(XLIBPATH) $(XLIB) $(XEXTRALIBS)
 endif
 
 ifneq ($(USE_CAIRO),)
-DISPLAYDEPS += $(CAIRODRIVERLIB) 
+DISPLAYDEPS += $(CAIRODRIVERLIB)
 endif
 
 ifneq ($(GDAL_LINK),)
-ifneq ($(GDAL_DYNAMIC),)
-ifneq ($(MINGW),)
-RASTERDEPS += -lkernel32
-else
-RASTERDEPS += $(DLLIB)
-endif
-else
 RASTERDEPS += $(GDALLIBS)
-endif
 endif
 
 ifeq ($(OPENGL_WINDOWS),1)
@@ -270,11 +263,7 @@ $(1)LIB = -l$$($(1)_LIBNAME) $$($(1)DEPS)
 else
 $(1)LIB = -l$$($(1)_LIBNAME)
 endif
-ifneq ($(1),IOSTREAM)
 $(1)DEP = $$(BASE_LIBDIR)/$$(LIB_PREFIX)$$($(1)_LIBNAME)$$(LIB_SUFFIX)
-else
-$(1)DEP = $$(BASE_LIBDIR)/$$(STLIB_PREFIX)$$($(1)_LIBNAME)$$(STLIB_SUFFIX)
-endif
 endef
 
 $(foreach lib,$(libs),$(eval $(call lib_rules,$(firstword $(subst :, ,$(lib))),$(lastword $(subst :, ,$(lib))))))

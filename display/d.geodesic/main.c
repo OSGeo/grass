@@ -1,15 +1,14 @@
-
 /****************************************************************************
  *
  * MODULE:       d.geodesic
  * AUTHOR(S):    Michael Shapiro (CERL) (original contributor)
  *               Markus Neteler <neteler itc.it>,
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Eric G. Miller <egm2 jps.net>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_b yahoo.com>, 
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Eric G. Miller <egm2 jps.net>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
- * PURPOSE:      displays a geodesic line in the active frame on the user's 
+ * PURPOSE:      displays a geodesic line in the active frame on the user's
  *               graphics monitor
  * COPYRIGHT:    (C) 1999-2014 by the GRASS Development Team
  *
@@ -18,6 +17,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
@@ -35,9 +35,8 @@ int main(int argc, char *argv[])
     int unit_id;
     double factor;
     struct GModule *module;
-    struct
-    {
-	struct Option *lcolor, *tcolor, *coor, *units;
+    struct {
+        struct Option *lcolor, *tcolor, *coor, *units;
     } parm;
 
     G_gisinit(argv[0]);
@@ -48,9 +47,9 @@ int main(int argc, char *argv[])
     G_add_keyword(_("great circle"));
     G_add_keyword(_("shortest path"));
     module->description =
-	_("Displays a geodesic line, tracing the shortest distance "
-	"between two geographic points along a great circle, in "
-	"a longitude/latitude data set.");
+        _("Displays a geodesic line, tracing the shortest distance "
+          "between two geographic points along a great circle, in "
+          "a longitude/latitude data set.");
 
     parm.coor = G_define_standard_option(G_OPT_M_COORDS);
     parm.coor->key_desc = "lon1,lat1,lon2,lat2";
@@ -72,11 +71,11 @@ int main(int argc, char *argv[])
     parm.units->answer = "meters";
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     if (G_projection() != PROJECTION_LL)
-	G_fatal_error(_("Location is not %s"),
-		      G_projection_name(PROJECTION_LL));
+        G_fatal_error(_("Location is not %s"),
+                      G_projection_name(PROJECTION_LL));
 
     /* get conversion factor and unit name */
     unit_id = G_units(parm.units->answer);
@@ -84,39 +83,37 @@ int main(int argc, char *argv[])
     unit = G_get_units_name(unit_id, 1, 0);
 
     if (parm.coor->answers[0] == NULL)
-	G_fatal_error(_("No coordinates given"));
+        G_fatal_error(_("No coordinates given"));
 
     if (!G_scan_easting(parm.coor->answers[0], &lon1, G_projection()))
-	G_fatal_error(_("%s - illegal longitude"), parm.coor->answers[0]);
+        G_fatal_error(_("%s - illegal longitude"), parm.coor->answers[0]);
 
     if (!G_scan_northing(parm.coor->answers[1], &lat1, G_projection()))
-	G_fatal_error(_("%s - illegal longitude"), parm.coor->answers[1]);
+        G_fatal_error(_("%s - illegal longitude"), parm.coor->answers[1]);
 
     if (!G_scan_easting(parm.coor->answers[2], &lon2, G_projection()))
-	G_fatal_error(_("%s - illegal longitude"), parm.coor->answers[2]);
+        G_fatal_error(_("%s - illegal longitude"), parm.coor->answers[2]);
 
     if (!G_scan_northing(parm.coor->answers[3], &lat2, G_projection()))
-	G_fatal_error(_("%s - illegal longitude"), parm.coor->answers[3]);
-
+        G_fatal_error(_("%s - illegal longitude"), parm.coor->answers[3]);
 
     D_open_driver();
-    
+
     line_color = D_translate_color(parm.lcolor->answer);
     if (!line_color)
-	line_color = D_translate_color(parm.lcolor->answer =
-				       DEFAULT_FG_COLOR);
+        line_color = D_translate_color(parm.lcolor->answer = DEFAULT_FG_COLOR);
 
     if (strcmp(parm.lcolor->answer, DEFAULT_FG_COLOR) == 0)
-	deftcolor = "red";
+        deftcolor = "red";
     else
-	deftcolor = DEFAULT_FG_COLOR;
+        deftcolor = DEFAULT_FG_COLOR;
 
     if (parm.tcolor->answer == NULL)
-	text_color = D_translate_color(deftcolor);
+        text_color = D_translate_color(deftcolor);
     else if (strcmp(parm.tcolor->answer, "none") == 0)
-	text_color = -1;
+        text_color = -1;
     else
-	text_color = D_translate_color(parm.tcolor->answer);
+        text_color = D_translate_color(parm.tcolor->answer);
 
     plot(lon1, lat1, lon2, lat2, line_color, text_color, factor, unit);
 

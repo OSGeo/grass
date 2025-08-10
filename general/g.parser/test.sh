@@ -2,31 +2,31 @@
 
 # g.parser demo script for shell programming
 
-#%module
-#% description: g.parser test script (shell)
-#% keyword: keyword1
-#% keyword: keyword2
-#%end
-#%flag
-#% key: f
-#% description: A flag
-#%end
-#%option G_OPT_R_MAP
-#% key: raster
-#% required: yes
-#%end
-#%option G_OPT_V_MAP
-#% key: vector
-#%end
-#%option
-#% key: option1
-#% type: string
-#% description: An option
-#% required: no
-#%end
+# %module
+# % description: g.parser test script (shell)
+# % keyword: keyword1
+# % keyword: keyword2
+# %end
+# %flag
+# % key: f
+# % description: A flag
+# %end
+# %option G_OPT_R_MAP
+# % key: raster
+# % required: yes
+# %end
+# %option G_OPT_V_MAP
+# % key: vector
+# %end
+# %option
+# % key: option1
+# % type: string
+# % description: An option
+# % required: no
+# %end
 
 if [ -z "$GISBASE" ] ; then
-    echo "You must be in GRASS GIS to run this program." 1>&2
+    echo "You must be in GRASS to run this program." 1>&2
     exit 1
 fi
 
@@ -54,4 +54,3 @@ g.message message="Value of GIS_OPT_raster: '$GIS_OPT_raster'"
 g.message message="Value of GIS_OPT_vect: '$GIS_OPT_vector'"
 
 #### end of your code ####
-

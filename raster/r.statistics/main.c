@@ -1,8 +1,7 @@
-
 /****************************************************************************
  *
  * MODULE:       r.statistics
- *               
+ *
  * AUTHOR(S):    Martin Schroeder, Geographisches Institut Heidelberg, Germany
  *
  * PURPOSE:      Category or object oriented statistics
@@ -25,20 +24,19 @@
 
 /* modify this table to add new methods */
 struct menu menu[] = {
-    {"diversity", o_divr,    "Diversity of values in specified objects in %%"},
-    {"average",   o_average, "Average of values in specified objects"},
-    {"mode",      o_mode,    "Mode of values in specified objects"},
-    {"median",    o_median,  "Median of values in specified objects"},
-    {"avedev",    o_adev,    "Average deviation of values in specified objects"},
-    {"stddev",    o_sdev,    "Standard deviation of values in specified objects"},
-    {"variance",  o_var,     "Variance of values in specified objects"},
-    {"skewness",  o_skew,    "Skewnes of values in specified objects"},
-    {"kurtosis",  o_kurt,    "Kurtosis of values in specified objects"},
-    {"min",       o_min,     "Minimum of values in specified objects"},
-    {"max",       o_max,     "Maximum of values in specified objects"},
-    {"sum",       o_sum,     "Sum of values in specified objects"},
-    {NULL,        NULL,      NULL}
-};
+    {"diversity", o_divr, "Diversity of values in specified objects in %%"},
+    {"average", o_average, "Average of values in specified objects"},
+    {"mode", o_mode, "Mode of values in specified objects"},
+    {"median", o_median, "Median of values in specified objects"},
+    {"avedev", o_adev, "Average deviation of values in specified objects"},
+    {"stddev", o_sdev, "Standard deviation of values in specified objects"},
+    {"variance", o_var, "Variance of values in specified objects"},
+    {"skewness", o_skew, "Skewnes of values in specified objects"},
+    {"kurtosis", o_kurt, "Kurtosis of values in specified objects"},
+    {"min", o_min, "Minimum of values in specified objects"},
+    {"max", o_max, "Maximum of values in specified objects"},
+    {"sum", o_sum, "Sum of values in specified objects"},
+    {NULL, NULL, NULL}};
 
 int main(int argc, char **argv)
 {
@@ -56,7 +54,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("statistics"));
     G_add_keyword(_("zonal statistics"));
     module->description =
-	_("Calculates category or object oriented statistics.");
+        _("Calculates category or object oriented statistics.");
 
     basemap = G_define_standard_option(G_OPT_R_BASE);
 
@@ -69,22 +67,22 @@ int main(int argc, char **argv)
     method->description = _("Method of object-based statistic");
 
     for (o_method = 0; menu[o_method].name; o_method++) {
-	if (o_method)
-	    strcat(methods, ",");
-	else
-	    *(methods) = 0;
-	strcat(methods, menu[o_method].name);
+        if (o_method)
+            strcat(methods, ",");
+        else
+            *(methods) = 0;
+        strcat(methods, menu[o_method].name);
     }
     method->options = G_store(methods);
 
     for (o_method = 0; menu[o_method].name; o_method++) {
-	if (o_method)
-	    strcat(methods, ";");
-	else
-	    *(methods) = 0;
-	strcat(methods, menu[o_method].name);
-	strcat(methods, ";");
-	strcat(methods, menu[o_method].text);
+        if (o_method)
+            strcat(methods, ";");
+        else
+            *(methods) = 0;
+        strcat(methods, menu[o_method].name);
+        strcat(methods, ";");
+        strcat(methods, menu[o_method].text);
     }
     method->descriptions = G_store(methods);
 
@@ -95,37 +93,37 @@ int main(int argc, char **argv)
     flag_c = G_define_flag();
     flag_c->key = 'c';
     flag_c->description =
-	_("Cover values extracted from the category labels of the cover map");
+        _("Cover values extracted from the category labels of the cover map");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     if (Rast_map_is_fp(basemap->answer, "") != 0)
-	G_fatal_error(_("This module currently only works for integer (CELL) maps"));
+        G_fatal_error(
+            _("This module currently only works for integer (CELL) maps"));
 
     if (Rast_map_is_fp(covermap->answer, "") != 0)
-	G_fatal_error(_("This module currently only works for integer (CELL) maps"));
+        G_fatal_error(
+            _("This module currently only works for integer (CELL) maps"));
 
     if (Rast_read_cats(covermap->answer, "", &cats) < 0)
-	G_fatal_error(_("Unable to read category file of raster map <%s>"),
-		      covermap->answer);
+        G_fatal_error(_("Unable to read category file of raster map <%s>"),
+                      covermap->answer);
 
     for (o_method = 0; menu[o_method].name; o_method++)
-	if (strcmp(menu[o_method].name, method->answer) == 0)
-	    break;
+        if (strcmp(menu[o_method].name, method->answer) == 0)
+            break;
 
     if (!menu[o_method].name) {
-	G_warning(_("<%s=%s> unknown %s"), method->key, method->answer,
-		  method->key);
-	G_usage();
+        G_warning(_("<%s=%s> unknown %s"), method->key, method->answer,
+                  method->key);
+        G_usage();
 
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     }
 
-    (*menu[o_method].func)(basemap->answer, covermap->answer,
-			   outputmap->answer,
-			   flag_c->answer, &cats);
+    (*menu[o_method].func)(basemap->answer, covermap->answer, outputmap->answer,
+                           flag_c->answer, &cats);
 
     return 0;
 }
-

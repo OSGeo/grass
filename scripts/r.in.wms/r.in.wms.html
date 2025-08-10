@@ -1,8 +1,8 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.in.wms</em> handles all of downloading and importing raster data
-from <a href="http://www.opengeospatial.org/standards/wms">OGC
-WMS</a> and <a href="http://www.opengeospatial.org/standards/wmts">OGC
+from <a href="https://www.ogc.org/publications/standard/wms/">OGC
+WMS</a> and <a href="https://www.ogc.org/publications/standard/wmts/">OGC
 WMTS</a> web mapping servers. It only needs be told the
 desired data to collect (bounds and resolution) via a region, the
 server to get the data from, and the layer or layers to get. It
@@ -16,13 +16,13 @@ capabilities of the WMS server. This should be available via a capabilities
 request (see examples)
 
 <p>
-If possible, the EPSG code of the current location should be used with the 
+If possible, the EPSG code of the current project should be used with the
 <b>srs</b> option to avoid unnecessary reprojection.
 
 <p>
 When using GDAL WMS driver (<b>driver=WMS_GDAL</b>), the GDAL library
 needs to be built with WMS support,
-see <a href="http://gdal.org/frmt_wms.html">GDAL WMS</a> manual page
+see <a href="https://gdal.org/en/stable/drivers/raster/wms.html">GDAL WMS</a> manual page
 for details.
 
 <h3>Tiled WMS</h3>
@@ -30,7 +30,7 @@ for details.
 Into the parameter <b>layers</b> the name of the <i>TiledGroup</i> need to
 be inserted from Tile Service file. Time variable can be specified
 in <b>urlparams</b> parameter,
-e.g: <tt>urlparams='time=2012-1-1'</tt>.
+e.g: <code>urlparams='time=2012-1-1'</code>.
 
 <h2>EXAMPLES</h2>
 
@@ -38,11 +38,11 @@ e.g: <tt>urlparams='time=2012-1-1'</tt>.
 
 <div class="code"><pre>
 # Topographic WMS with OpenStreetMap by mundialis
-r.in.wms -c url="http://ows.mundialis.de/services/service?"
-r.in.wms -c url="http://ows.mundialis.de/services/service?" | grep Name
+r.in.wms -c url="https://ows.mundialis.de/services/service?"
+r.in.wms -c url="https://ows.mundialis.de/services/service?" | grep Name
 
 # Czech WMS
-r.in.wms -c url="http://wms.cuzk.cz/wms.asp"
+r.in.wms -c url="https://wms.cuzk.cz/wms.asp"
 </pre></div>
 
 <h3>Download raster data from WMS server (GetMap request)</h3>
@@ -50,7 +50,7 @@ r.in.wms -c url="http://wms.cuzk.cz/wms.asp"
 <h4>Open Street Map</h4>
 
 <div class="code"><pre>
-# OSM
+# OSM, using WMS_GRASS driver
 g.region n=90 s=-90 w=-180 e=180 res=0:10:00 -p
 r.in.wms url="http://watzmann-geog.urz.uni-heidelberg.de/cached/osm" layers=osm_auto:all output=osm format=png
 r.info osm
@@ -70,13 +70,14 @@ r.info topo
 </pre></div>
 <p>
 More OSM WMS servers can be found online, e.g. on the OSM wiki in a
-<a href="http://wiki.openstreetmap.org/wiki/WMS#Public_WMS_Servers">OSM WMS Servers list</a>
-and on the <a href="http://wiki.openstreetmap.org/wiki/OSM-WMS-EUROPE">OSM-WMS-EUROPE</a> page.
+<a href="https://wiki.openstreetmap.org/wiki/WMS#Public_WMS_Servers">OSM WMS Servers list</a>
+and on the <a href="https://wiki.openstreetmap.org/wiki/WORLD_OSM_WMS">WORLD_OSM_WMS</a> page.
 
 <h4>Countries and coastlines</h4>
 
 <div class="code"><pre>
-r.in.wms url="http://www2.demis.nl/WMS/wms.asp" layers=Countries,Borders,Coastline output=countries srs=4326 format=png 
+# using WMS_GRASS driver
+r.in.wms url="http://www2.demis.nl/WMS/wms.asp" layers=Countries,Borders,Coastline output=countries srs=4326 format=png
 r.info countries
 </pre></div>
 
@@ -85,6 +86,7 @@ r.info countries
 <div class="code"><pre>
 # North Carolina sample data
 g.region raster=elevation -p
+# using WMS_GRASS driver
 r.in.wms url="https://tiles.maps.eox.at/wms?" layers=s2cloudless output=sentinel2 format=png
 r.info sentinel2
 </pre></div>
@@ -97,6 +99,7 @@ r.info sentinel2
 <h4>OGC WMTS Example</h4>
 
 <div class="code"><pre>
+# using WMTS_GRASS driver
 r.in.wms url="http://gpp3-wxs.ign.fr/yourAPIkey/geoportail/wmts" layers=ORTHOIMAGERY.ORTHOPHOTOS \
          output=orthophoto srs=3857 format=jpeg driver=WMTS_GRASS style=normal password="*" username="*"
 r.info orthophoto
@@ -107,10 +110,12 @@ Note: username, password and API key can be obtained from <a href="http://api.ig
 <h4>Data covering the Czech Republic</h4>
 
 <div class="code"><pre>
+# using WMS_GRASS driver
 r.in.wms url="http://wms.cuzk.cz/wms.asp" layers=prehledka_kraju-linie srs=4326 output=kn format=png
 </pre></div>
 
 <div class="code"><pre>
+# using WMTS_GRASS driver
 r.in.wms url="http://geoportal.cuzk.cz/WMTS_ORTOFOTO/WMTService.aspx" layers=orto output=orthophoto \
          srs=3857 format=jpeg driver=WMTS_GRASS style=default
 r.info orthophoto
@@ -133,23 +138,30 @@ r.in.wms -c url="http://cidportal.jrc.ec.europa.eu/copernicus/services/ows/wms/p
 # spatial subset of Europe
 # enlarging maxcols and maxrows in order to minimize impact of copyright notice in map
 g.region n=56 s=47 w=5 e=16 res=0:00:10 -pa
+# using WMS_GRASS driver
 r.in.wms url="http://cidportal.jrc.ec.europa.eu/copernicus/services/ows/wms/public/core003?" \
          layer="OI.Mosaic.NaturalColor.Feathering" output="jrc_copernicus_core003_mosaik" \
          maxcols=3400 maxrows=3400
 r.info jrc_copernicus_core003_mosaik
-</pre></div>
 
+# Alternatively, using WMS_GDAL driver with BIGTIFF and compression enabled
+r.in.wms url="http://cidportal.jrc.ec.europa.eu/copernicus/services/ows/wms/public/core003?" \
+         layer="OI.Mosaic.NaturalColor.Feathering" output="jrc_copernicus_core003_mosaik2" \
+         maxcols=3400 maxrows=3400 driver=WMS_GDAL gdal_createopt="BIGTIFF=YES,COMPRESS=DEFLATE"
+r.info jrc_copernicus_core003_mosaik2
+
+</pre></div>
 
 <h2>REQUIREMENTS</h2>
 
-<em>r.in.wms</em> requires the <a href="https://www.gdal.org/gdalwarp.html">gdalwarp</a>
+<em>r.in.wms</em> requires the <a href="https://gdal.org/en/stable/programs/gdalwarp.html">gdalwarp</a>
 utility from the GDAL/OGR library.
 
 <h2>REFERENCES</h2>
 
 <ul>
-  <li><a href="http://www.opengeospatial.org/standards/wms">OGC WMS</a></li>
-  <li><a href="http://www.opengeospatial.org/standards/wmts">OGC WMTS</a></li>
+  <li><a href="https://www.ogc.org/publications/standard/wms/">OGC WMS</a></li>
+  <li><a href="https://www.ogc.org/publications/standard/wmts/">OGC WMTS</a></li>
 </ul>
 
 <h2>SEE ALSO</h2>
@@ -170,8 +182,3 @@ See also
 
 Stepan Turek, Czech Technical University in Prague, Czech Republic<br>
 (bachelor's final project 2012, mentor: Martin Landa)
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

@@ -1,6 +1,6 @@
 /*! \page vlibTopology Topology
 
-by GRASS Development Team (http://grass.osgeo.org)
+by GRASS Development Team (https://grass.osgeo.org)
 
 \tableofcontents
 
@@ -20,7 +20,7 @@ pseudo-topology (boundaries constructed from polygons) is written.
 The following rules apply to the vector data:
 
 - Boundaries should not cross each other (i.e., boundaries which would
-  cross must be split at their intersection to form distict boundaries).
+  cross must be split at their intersection to form distinct boundaries).
   On the contrary, lines can cross each other, e.g. bridges over rivers.
 - Lines and boundaries share nodes only if their endpoints are identical.
   Lines or boundaries can be forced to share a common node by snapping
@@ -37,7 +37,7 @@ The following rules apply to the vector data:
   in separate layers. However if area features and linear features
   must appear in one layer, common boundaries should be digitized only
   once. For example, a boundary that is also a line (e.g., a road which
-  is also a field boundary), should be digitized as a boundary to 
+  is also a field boundary), should be digitized as a boundary to
   complete the area(s), and a boundary which is functionally also a line
   should be labeled as a line by a distinct category number.
 

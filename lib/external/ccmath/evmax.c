@@ -20,28 +20,28 @@ double evmax(double *a, double *u, int n)
     *(qm - 1) = 1.;
     ev = 0.;
     for (kc = 0; kc < 200; ++kc) {
-	h = c = 0.;
-	evm = ev;
-	for (p = u, r = a, s = q; s < qm;) {
-	    *p = 0.;
-	    for (t = q; t < qm;)
-		*p += *r++ * *t++;
-	    c += *p * *p;
-	    h += *p++ * *s++;
-	}
-	ev = c / h;
-	c = sqrt(c);
-	for (p = u, s = q; s < qm;) {
-	    *p /= c;
-	    *s++ = *p++;
-	}
-	if (((c = ev - evm) < 0. ? -c : c) < 1.e-16 * (ev < 0. ? -ev : ev)) {
-	    free(q);
-	    return ev;
-	}
+        h = c = 0.;
+        evm = ev;
+        for (p = u, r = a, s = q; s < qm;) {
+            *p = 0.;
+            for (t = q; t < qm;)
+                *p += *r++ * *t++;
+            c += *p * *p;
+            h += *p++ * *s++;
+        }
+        ev = c / h;
+        c = sqrt(c);
+        for (p = u, s = q; s < qm;) {
+            *p /= c;
+            *s++ = *p++;
+        }
+        if (((c = ev - evm) < 0. ? -c : c) < 1.e-16 * (ev < 0. ? -ev : ev)) {
+            free(q);
+            return ev;
+        }
     }
     free(q);
     for (kc = 0; kc < n;)
-	u[kc++] = 0.;
+        u[kc++] = 0.;
     return 0.;
 }

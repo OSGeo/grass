@@ -28,16 +28,15 @@ int db__driver_drop_table(dbString *name)
     PGresult *res;
     char cmd[DB_SQL_MAX];
 
-    sprintf(cmd, "DROP TABLE %s", db_get_string(name));
-        
+    snprintf(cmd, sizeof(cmd), "DROP TABLE %s", db_get_string(name));
+
     res = PQexec(pg_conn, cmd);
 
     if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-	db_d_append_error("%s\n%s",
-			  _("Unable to execute():"),
-			  PQerrorMessage(pg_conn));
-	db_d_report_error();
-	return DB_FAILED;
+        db_d_append_error("%s\n%s", _("Unable to execute():"),
+                          PQerrorMessage(pg_conn));
+        db_d_report_error();
+        return DB_FAILED;
     }
 
     return DB_OK;

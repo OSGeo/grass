@@ -1,6 +1,6 @@
 /*! \page veditlib GRASS Vedit Library
 
-by GRASS Development Team (http://grass.osgeo.org)
+by GRASS Development Team (https://grass.osgeo.org)
 
 \tableofcontents
 
@@ -77,7 +77,7 @@ The library is used by <tt>v.edit</tt> module and wxGUI %vector digitizer.
 \section seealso See Also
 
  - \ref vectorlib
-  
+
  - \ref dbmilib
 
 \section authors Authors

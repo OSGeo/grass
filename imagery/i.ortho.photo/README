@@ -1,5 +1,5 @@
 STATUS:
-	The i.ortho.photo suite of modules has been temporarily disabled 
+	The i.ortho.photo suite of modules has been temporarily disabled
 	from GRASS 7 as they are heavily dependent on the text-based
 	Vask library and interactive XDRIVER monitors, both of which
 	have been removed. As the modules are rewritten to run in non-
@@ -37,7 +37,7 @@ internal:
  libes/         -> lib/
  menu/          -> TODO (wxGUI, use g.gui.gcp classes)
  photo.elev/    -> i.ortho.elev/
- photo.2target/ -> ? i.ortho.transform/ 
+ photo.2target/ -> ? i.ortho.transform/
  photo.camera/  -> i.ortho.camera/
  photo.2image/  -> ? (wxGUI, use g.gui.gcp classes: fiducial marks)
  photo.init/    -> i.ortho.init/
@@ -47,15 +47,15 @@ internal:
 Workflow description:
 
 Open Source GIS: A GRASS GIS Approach, Second Edition, 2004
-by Markus Neteler and Helena Mitasova, 
+by Markus Neteler and Helena Mitasova,
 Chapter 10 – PROCESSING OF AERIAL PHOTOS
-http://grassbook.org/extra/sample-chapter/
+https://grassbook.org/extra/sample-chapter/
 --> PDF
 
 ######################################################################
 GRASS GIS 4 to 6
 
-The main program is i.ortho.photo which is just a menu driver for the 
+The main program is i.ortho.photo which is just a menu driver for the
 following programs:
 
 1 i.group
@@ -74,7 +74,7 @@ The following GRASS 6 directories contain the source code:
 	./photo.target:		select target location and mapset
 
 	./photo.elev:		select elevation model
- 
+
 	./photo.camera:		select a camera to use for parameters
 
 	./photo.2image:		code for image to photo coordinate
@@ -87,5 +87,5 @@ The following GRASS 6 directories contain the source code:
 				transformation parameters
 
 	./photo.rectify:	does the actual image rectification
-	
+
 	./libes:		libraries for ortho programs

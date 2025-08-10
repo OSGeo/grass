@@ -1,6 +1,6 @@
 #include "proto.h"
 
-static char* STD_OPT_STRINGS[] = {"G_OPT_UNDEFINED",
+static char *STD_OPT_STRINGS[] = {"G_OPT_UNDEFINED",
                                   "G_OPT_DB_SQL",
                                   "G_OPT_DB_WHERE",
                                   "G_OPT_DB_TABLE",
@@ -12,6 +12,7 @@ static char* STD_OPT_STRINGS[] = {"G_OPT_UNDEFINED",
                                   "G_OPT_DB_KEYCOLUMN",
                                   "G_OPT_I_GROUP",
                                   "G_OPT_I_SUBGROUP",
+                                  "G_OPT_MEMORYMB",
                                   "G_OPT_R_INPUT",
                                   "G_OPT_R_INPUTS",
                                   "G_OPT_R_OUTPUT",
@@ -49,11 +50,12 @@ static char* STD_OPT_STRINGS[] = {"G_OPT_UNDEFINED",
                                   "G_OPT_V_ID",
                                   "G_OPT_V_IDS",
                                   "G_OPT_F_INPUT",
-                                  "G_OPT_F_BIN_INPUT",                                  
+                                  "G_OPT_F_BIN_INPUT",
                                   "G_OPT_F_OUTPUT",
                                   "G_OPT_F_SEP",
                                   "G_OPT_C",
                                   "G_OPT_CN",
+                                  "G_OPT_C_FORMAT",
                                   "G_OPT_M_UNITS",
                                   "G_OPT_M_DATATYPE",
                                   "G_OPT_M_MAPSET",
@@ -64,6 +66,8 @@ static char* STD_OPT_STRINGS[] = {"G_OPT_UNDEFINED",
                                   "G_OPT_M_DIR",
                                   "G_OPT_M_REGION",
                                   "G_OPT_M_NULL_VALUE",
+                                  "G_OPT_M_NPROCS",
+                                  "G_OPT_M_SEED",
                                   "G_OPT_STDS_INPUT",
                                   "G_OPT_STDS_INPUTS",
                                   "G_OPT_STDS_OUTPUT",
@@ -92,15 +96,17 @@ struct Option *define_standard_option(const char *name)
     struct Option *opt;
 
     key = G_OPT_UNDEFINED;
-    for (i = 1; key == G_OPT_UNDEFINED && i < (sizeof(STD_OPT_STRINGS) / sizeof(char *)); i++) {
+    for (i = 1; key == G_OPT_UNDEFINED &&
+                i < (sizeof(STD_OPT_STRINGS) / sizeof(char *));
+         i++) {
         if (G_strcasecmp(name, STD_OPT_STRINGS[i]) == 0)
             key = i;
     }
 
     if (key == G_OPT_UNDEFINED)
-	opt = G_define_option();
+        opt = G_define_option();
     else
-	opt = G_define_standard_option(key);
-    
+        opt = G_define_standard_option(key);
+
     return opt;
 }

@@ -18,33 +18,37 @@
 #
 # /
 
-#%module
-#% description: Views BMP images from the PNG driver.
-#% keyword: display
-#% keyword: raster
-#%end
-#%option G_OPT_F_INPUT
-#% key: image
-#% description: Name of input image file
-#%end
-#%option
-#% key: percent
-#% type: integer
-#% required: no
-#% multiple: no
-#% description: Percentage of CPU time to use
-#% answer: 10
-#%end
+# %module
+# % description: Views BMP images from the PNG driver.
+# % keyword: display
+# % keyword: raster
+# %end
+# %option G_OPT_F_INPUT
+# % key: image
+# % description: Name of input image file
+# %end
+# %option
+# % key: percent
+# % type: integer
+# % required: no
+# % multiple: no
+# % description: Percentage of CPU time to use
+# % answer: 10
+# %end
 
-import sys
-import struct
-import numpy
-import time
 import signal
+import struct
+import sys
+import time
+import numpy as np
 
-import wxversion
-wxversion.select('2.8')
 import wx
+
+import grass.script as gs
+from grass.script.setup import set_gui_path
+
+set_gui_path()
+from gui_core.wrap import BitmapFromImage  # noqa: E402
 
 
 class Frame(wx.Frame):
@@ -74,14 +78,14 @@ class Frame(wx.Frame):
     def draw(self):
         app = self.app
         size = self.GetSize()
-        x0 = (size.GetWidth() - app.i_width) / 2
-        y0 = (size.GetHeight() - app.i_height) / 2
+        x0 = (size.GetWidth() - app.i_width) // 2
+        y0 = (size.GetHeight() - app.i_height) // 2
         dc = wx.PaintDC(self)
         data = app.imgbuf.reshape((app.i_height, app.i_width, 4))
         data = data[::, ::, 2::-1]
-        fn = getattr(data, "tobytes", getattr(data, "tostring"))
-        image = wx.ImageFromData(app.i_width, app.i_height, fn())
-        dc.DrawBitmap(wx.BitmapFromImage(image), x0, y0, False)
+        fn = getattr(data, "tobytes", data.tostring)
+        image = wx.Image(app.i_width, app.i_height, fn())
+        dc.DrawBitmap(BitmapFromImage(image), x0, y0, False)
 
     def redraw(self, ev):
         if self.app.fraction > 0.001:
@@ -103,7 +107,6 @@ class Frame(wx.Frame):
 
 
 class Application(wx.App):
-
     def __init__(self):
         self.image = sys.argv[1]
         self.fraction = int(sys.argv[2]) / 100.0
@@ -113,47 +116,67 @@ class Application(wx.App):
     def read_bmp_header(self, header):
         magic, bmfh, bmih = struct.unpack("2s12s40s10x", header)
 
-        if magic != 'BM':
-            raise SyntaxError("Invalid magic number")
+        if gs.decode(magic) != "BM":
+            msg = "Invalid magic number"
+            raise SyntaxError(msg)
 
         size, res1, res2, hsize = struct.unpack("<IHHI", bmfh)
 
         if hsize != self.HEADER_SIZE:
-            raise SyntaxError("Invalid file header size")
+            msg = "Invalid file header size"
+            raise SyntaxError(msg)
 
-        hsize, width, height, planes, bpp, compression, imsize, xppm, yppm, cused, cimp = \
-            struct.unpack("<IiiHHIIiiII", bmih)
+        (
+            hsize,
+            width,
+            height,
+            planes,
+            bpp,
+            compression,
+            imsize,
+            xppm,
+            yppm,
+            cused,
+            cimp,
+        ) = struct.unpack("<IiiHHIIiiII", bmih)
 
         if hsize != 40:
-            raise SyntaxError("Invalid info header size")
+            msg = "Invalid info header size"
+            raise SyntaxError(msg)
 
         self.i_width = width
         self.i_height = -height
 
         if planes != 1:
-            raise SyntaxError("Planar data not supported")
+            msg = "Planar data not supported"
+            raise SyntaxError(msg)
         if bpp != 32:
-            raise SyntaxError("Only 32-BPP images supported")
+            msg = "Only 32-BPP images supported"
+            raise SyntaxError(msg)
         if compression != 0:
-            raise SyntaxError("Compression not supported")
+            msg = "Compression not supported"
+            raise SyntaxError(msg)
         if imsize != self.i_width * self.i_height * 4:
-            raise SyntaxError("Invalid image data size")
+            msg = "Invalid image data size"
+            raise SyntaxError(msg)
         if size != self.HEADER_SIZE + self.i_width * self.i_height * 4:
-            raise SyntaxError("Invalid image size")
+            msg = "Invalid image size"
+            raise SyntaxError(msg)
 
     def map_file(self):
-        f = open(self.image, 'r')
-
-        header = f.read(self.HEADER_SIZE)
+        with open(self.image, "rb") as f:
+            header = f.read(self.HEADER_SIZE)
         self.read_bmp_header(header)
 
-        self.imgbuf = numpy.memmap(f, mode='r', offset=self.HEADER_SIZE)
+        self.imgbuf = np.memmap(
+            self.image, mode="r", offset=self.HEADER_SIZE, dtype=np.uint8
+        )
 
     def signal_handler(self, sig, frame):
         wx.CallAfter(self.mainwin.Refresh)
 
     def set_handler(self):
-        if 'SIGUSR1' in dir(signal):
+        if "SIGUSR1" in dir(signal):
             signal.signal(signal.SIGUSR1, self.signal_handler)
 
     def OnInit(self):
@@ -167,6 +190,7 @@ class Application(wx.App):
         self.set_handler()
 
         return True
+
 
 if __name__ == "__main__":
     app = Application()

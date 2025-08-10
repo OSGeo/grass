@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:       t.topology
@@ -20,37 +20,34 @@
 #
 #############################################################################
 
-#%module
-#% description: Lists temporal topology of a space time dataset.
-#% keyword: temporal
-#% keyword: topology
-#% keyword: time
-#%end
+# %module
+# % description: Lists temporal topology of a space time dataset.
+# % keyword: temporal
+# % keyword: topology
+# % keyword: time
+# %end
 
-#%option G_OPT_STDS_INPUT
-#%end
+# %option G_OPT_STDS_INPUT
+# %end
 
-#%option G_OPT_STDS_TYPE
-#% guidependency: input
-#% guisection: Required
-#%end
+# %option G_OPT_STDS_TYPE
+# % guidependency: input
+# % guisection: Required
+# %end
 
-#%option G_OPT_T_WHERE
-#%end
+# %option G_OPT_T_WHERE
+# %end
 
-#%flag
-#% key: m
-#% description: Print temporal topological relationships and exit
-#%end
+# %flag
+# % key: m
+# % description: Print temporal topological relationships and exit
+# %end
 
-#%flag
-#% key: s
-#% description: Print spatio-temporal topological relationships and exit
-#%end
-from __future__ import print_function
-
-import grass.script as grass
-
+# %flag
+# % key: s
+# % description: Print spatio-temporal topological relationships and exit
+# %end
+import grass.script as gs
 
 ############################################################################
 
@@ -63,8 +60,8 @@ def main():
     name = options["input"]
     type = options["type"]
     where = options["where"]
-    temporal_relations = flags['m']
-    spatio_temporal_relations = flags['s']
+    temporal_relations = flags["m"]
+    spatio_temporal_relations = flags["s"]
 
     # Make sure the temporal database exists
     tgis.init()
@@ -72,16 +69,12 @@ def main():
     sp = tgis.open_old_stds(name, type)
 
     # Get ordered map list
-    maps = sp.get_registered_maps_as_objects(
-        where=where, order="start_time", dbif=None)
+    maps = sp.get_registered_maps_as_objects(where=where, order="start_time", dbif=None)
 
     spatial = None
 
     if spatio_temporal_relations:
-        if sp.get_type() == "strds":
-            spatial = "2D"
-        else:
-            spatial = "3D"
+        spatial = "2D" if sp.get_type() == "strds" else "3D"
 
     if temporal_relations or spatio_temporal_relations:
         sp.print_spatio_temporal_relationships(maps=maps, spatial=spatial)
@@ -90,7 +83,9 @@ def main():
     sp.base.print_info()
 
     #      0123456789012345678901234567890
-    print(" +-------------------- Temporal topology -------------------------------------+")
+    print(
+        " +-------------------- Temporal topology -------------------------------------+"  # noqa: E501
+    )
     if where:
         print(" | Is subset of dataset: ...... True")
     else:
@@ -124,7 +119,9 @@ def main():
         gran = tgis.compute_relative_time_granularity(maps)
     print(" | Granularity: ............... %s" % str(gran))
 
-    print(" +-------------------- Topological relations ---------------------------------+")
+    print(
+        " +-------------------- Topological relations ---------------------------------+"  # noqa: E501
+    )
     dict_ = sp.count_temporal_relations(maps)
 
     if dict_:
@@ -156,8 +153,11 @@ def main():
                 print(" | Follows: ................... %s" % (dict_[key]))
             if key == "precedes":
                 print(" | Precedes: .................. %s" % (dict_[key]))
-    print(" +----------------------------------------------------------------------------+")
+    print(
+        "+----------------------------------------------------------------------------+"  # noqa: E501
+    )
+
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

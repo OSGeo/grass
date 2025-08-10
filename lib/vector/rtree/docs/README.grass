@@ -12,13 +12,13 @@ Changes done in GRASS:
 - added Makefile and Makefile.alone
 - added mail from Daniel Green is in 'MAILS'
 - few modifications to get rid of compiler warnings, but warnings like:
-    index.c:277: warning: `tmp_nptr' might be used uninitialized in this function 
-    were left because need deeper revision if may cause problems, insetad of blindly init to 0/NULL
+    index.c:277: warning: `tmp_nptr' might be used uninitialized in this function
+    were left because need deeper revision if may cause problems, instead of blindly init to 0/NULL
 - '//' comments -> '/* */'
 - printf() - > fprintf(stdout,)
 - NUMDIMS set to 3
 - test.c 2D -> 3D
-- type RectReal: float -> double 
+- type RectReal: float -> double
 - log_pi set to constant
 - added GRASS headers to all *.[hc] files
 - changed to R*-tree, near complete rewrite

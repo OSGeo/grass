@@ -1,93 +1,100 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.cluster</em> partitions a point cloud into clusters or clumps. 
+<em>v.cluster</em> partitions a point cloud into clusters or clumps.
 
 <p>
-If the minimum number of points is not specified with the <b>min</b> 
-option, the minimum number of points to constitute a cluster is 
-<i>number of dimensions + 1</i>, i.e. 3 for 2D points and 4 for 3D 
+If the minimum number of points is not specified with the <b>min</b>
+option, the minimum number of points to constitute a cluster is
+<i>number of dimensions + 1</i>, i.e. 3 for 2D points and 4 for 3D
 points.
 
 <p>
-If the maximum distance is not specified with the <b>distance</b> 
-option, the maximum distance is estimated from the observed distances 
+If the maximum distance is not specified with the <b>distance</b>
+option, the maximum distance is estimated from the observed distances
 to the neighbors using the upper 99% confidence interval.
 
 <p>
-<em>v.cluster</em> supports different methods for clustering. The 
-recommended methods are <b>method=dbscan</b> if all clusters should 
-have a density (maximum distance between points) not larger than 
-<b>distance</b> or <b>method=density</b> if clusters should be created 
+<em>v.cluster</em> supports different methods for clustering. The
+recommended methods are <b>method=dbscan</b> if all clusters should
+have a density (maximum distance between points) not larger than
+<b>distance</b> or <b>method=density</b> if clusters should be created
 separately for each observed density (distance to the farthest neighbor).
 
-<h4>dbscan</h4>
-The <a href="http://en.wikipedia.org/wiki/DBSCAN">Density-Based Spatial 
-Clustering of Applications with Noise</a> is a commonly used clustering 
-algorithm. A new cluster is started for a point with at least 
-<i>min</i> - 1 neighbors within the maximum distance. These neighbors 
-are added to the cluster. The cluster is then expanded as long as at 
-least <i>min</i> - 1 neighbors are within the maximum distance for each 
+<h3>Clustering methods</h3>
+
+<h4>dbscan method</h4>
+The <a href="https://en.wikipedia.org/wiki/DBSCAN">Density-Based Spatial
+Clustering of Applications with Noise</a> is a commonly used clustering
+algorithm. A new cluster is started for a point with at least
+<i>min</i> - 1 neighbors within the maximum distance. These neighbors
+are added to the cluster. The cluster is then expanded as long as at
+least <i>min</i> - 1 neighbors are within the maximum distance for each
 point already in the cluster.
 
-<h4>dbscan2</h4>
-Similar to <i>dbscan</i>, but here it is sufficient if the resultant 
-cluster consists of at least <b>min</b> points, even if no point in the 
+<h4>dbscan2 method</h4>
+Similar to <i>dbscan</i>, but here it is sufficient if the resultant
+cluster consists of at least <b>min</b> points, even if no point in the
 cluster has at least <i>min - 1</i> neighbors within <b>distance</b>.
 
-<h4>density</h4>
-This method creates clusters according to their point density. The 
-maximum distance is not used. Instead, the points are sorted ascending 
-by the distance to their farthest neighbor (core distance), inspecting 
-<i>min - 1</i> neighbors. The densest cluster is created first, using 
-as threshold the core distance of the seed point. The cluster is 
-expanded as for DBSCAN, with the difference that each cluster has its 
-own maximum distance. This method can identify clusters with different 
+<h4>density method</h4>
+This method creates clusters according to their point density. The
+maximum distance is not used. Instead, the points are sorted ascending
+by the distance to their farthest neighbor (core distance), inspecting
+<i>min - 1</i> neighbors. The densest cluster is created first, using
+as threshold the core distance of the seed point. The cluster is
+expanded as for DBSCAN, with the difference that each cluster has its
+own maximum distance. This method can identify clusters with different
 densities and can create nested clusters.
 
-<h4>optics</h4>
-This method is <a 
-href="http://en.wikipedia.org/wiki/OPTICS_algorithm">Ordering Points to 
-Identify the Clustering Structure</a>. It is controlled by the number 
-of neighbor points (option <i>min</i> - 1). The core distance of a 
-point is the distance to the farthest neighbor. The reachability of a 
-point <i>q</i> is its distance from a point <i>p</i> (original optics: 
-max(core-distance(p), distance(p, q))). The aim of the <i>optics</i> 
-method is to reduce the reachability of each point. Each unprocessed 
-point is the seed for a new cluster. Its neighbors are added to a queue 
-sorted by smallest reachability if their reachability can be reduced. 
-The points in the queue are processed and their unprocessed neighbors 
-are added to a queue sorted by smallest reachability if their 
+<h4>optics method</h4>
+This method is
+<a href="https://en.wikipedia.org/wiki/OPTICS_algorithm">Ordering Points to
+Identify the Clustering Structure</a>. It is controlled by the number
+of neighbor points (option <i>min</i> - 1). The core distance of a
+point is the distance to the farthest neighbor. The reachability of a
+point <i>q</i> is its distance from a point <i>p</i> (original optics:
+max(core-distance(p), distance(p, q))). The aim of the <i>optics</i>
+method is to reduce the reachability of each point. Each unprocessed
+point is the seed for a new cluster. Its neighbors are added to a queue
+sorted by smallest reachability if their reachability can be reduced.
+The points in the queue are processed and their unprocessed neighbors
+are added to a queue sorted by smallest reachability if their
 reachability can be reduced.
 
 <p>
-The <i>optics</i> method does not create clusters itself, but produces 
-an ordered list of the points together with their reachability. The 
-output list is ordered according to the order of processing: the first 
-point processed is the first in the list, the last point processed is 
-the last in the list. Clusters can be extracted from this list by 
-identifying valleys in the points' reachability, e.g. by using a 
-threshold value. If a maximum distance is specified, this is used to 
-identify clusters, otherwise each separated network will constitute a 
+The <i>optics</i> method does not create clusters itself, but produces
+an ordered list of the points together with their reachability. The
+output list is ordered according to the order of processing: the first
+point processed is the first in the list, the last point processed is
+the last in the list. Clusters can be extracted from this list by
+identifying valleys in the points' reachability, e.g. by using a
+threshold value. If a maximum distance is specified, this is used to
+identify clusters, otherwise each separated network will constitute a
 cluster.
 
 <p>
-The OPTICS algorithm uses each yet unprocessed point to start a new 
-cluster. The order of the input points is arbitrary and can thus 
+The OPTICS algorithm uses each yet unprocessed point to start a new
+cluster. The order of the input points is arbitrary and can thus
 influence the resultant clusters.
 
-<h4>optics2</h4>
-<b>EXPERIMENTAL</b> This method is similar to OPTICS, minimizing the 
-reachability of each point. Points are reconnected if their 
-reachability can be reduced. Contrary to OPTICS, a cluster's seed is 
-not fixed but changed if possible. Each point is connected to another 
-point until the core of the cluster (seed point) is reached. 
-Effectively, the initial seed is updated in the process. Thus separated 
-networks of points are created, with each network representing a 
+<h4>optics2 method</h4>
+<b>EXPERIMENTAL</b> This method is similar to OPTICS, minimizing the
+reachability of each point. Points are reconnected if their
+reachability can be reduced. Contrary to OPTICS, a cluster's seed is
+not fixed but changed if possible. Each point is connected to another
+point until the core of the cluster (seed point) is reached.
+Effectively, the initial seed is updated in the process. Thus separated
+networks of points are created, with each network representing a
 cluster. The maximum distance is not used.
+
+<h2>NOTES</h2>
+
+By default, cluster IDs are stored as category values of the points
+in layer 2.
 
 <h2>EXAMPLE</h2>
 
-Analysis of random points for areas in areas of the vector 
+Analysis of random points for areas in areas of the vector
 <i>urbanarea</i> (North Carolina sample dataset).
 
 <p>
@@ -171,6 +178,7 @@ d.mon stop=cairo
 
 Generate random points for analysis (100 points per area), use different
 method for clustering and visualize using color stored the attribute table.
+
 <div class="code"><pre>
 # pick a subregion of the vector urbanarea
 g.region -p n=272950 s=188330 w=574720 e=703090 res=10
@@ -191,7 +199,6 @@ v.colors map=rand_clusters layer=2 use=cat color=random rgb_column=grassrgb
 d.vect map=rand_clusters layer=2 color=none rgb_column=grassrgb icon=basic/circle
 </pre></div>
 
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -203,8 +210,3 @@ d.vect map=rand_clusters layer=2 color=none rgb_column=grassrgb icon=basic/circl
 <h2>AUTHOR</h2>
 
 Markus Metz
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

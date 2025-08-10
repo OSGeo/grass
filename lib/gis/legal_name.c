@@ -34,26 +34,29 @@
 int G_legal_filename(const char *s)
 {
     const char *name = s;
-    
+
     if (*s == '.' || *s == 0) {
-	G_warning(_("Illegal filename <%s>. Cannot start with '.' or be 'NULL'."), name);
-	return -1;
+        G_warning(
+            _("Illegal filename <%s>. Cannot start with '.' or be 'NULL'."),
+            name);
+        return -1;
     }
 
     for (; *s; s++)
-	if (*s == '/' || *s == '"' || *s == '\'' || *s <= ' ' ||
-	    *s == '@' || *s == ',' || *s == '=' || *s == '*' || *s > 0176) {
-	    G_warning(_("Illegal filename <%s>. Character <%c> not allowed.\n"), name, *s);
-	    return -1;
-	}
-    
+        if (*s == '/' || *s == '"' || *s == '\'' || *s <= ' ' || *s == '@' ||
+            *s == ',' || *s == '=' || *s == '*' || *s > 0176) {
+            G_warning(_("Illegal filename <%s>. Character <%c> not allowed.\n"),
+                      name, *s);
+            return -1;
+        }
+
     return 1;
 }
 
 /*!
  * \brief Check input and output file names.
  *
- * Check: 
+ * Check:
  *  1) output is legal map name,
  *  2) if can find input map, and
  *  3) if input was found in current mapset, check if input != output.
@@ -65,68 +68,66 @@ int G_legal_filename(const char *s)
  * \return 0 OK
  * \return 1 error
  */
-int G_check_input_output_name(const char *input, const char *output,
-			      int error)
+int G_check_input_output_name(const char *input, const char *output, int error)
 {
     const char *mapset;
 
     if (output == NULL)
-	return 0;		/* don't die on undefined parameters */
+        return 0; /* don't die on undefined parameters */
     if (G_legal_filename(output) == -1) {
-	if (error == G_FATAL_EXIT) {
-	    G_fatal_error(_("Output raster map name <%s> is not valid map name"),
-			  output);
-	}
-	else if (error == G_FATAL_PRINT) {
-	    G_warning(_("Output raster map name <%s> is not valid map name"),
-		      output);
-	    return 1;
-	}
-	else {			/* G_FATAL_RETURN */
-	    return 1;
-	}
+        if (error == G_FATAL_EXIT) {
+            G_fatal_error(
+                _("Output raster map name <%s> is not valid map name"), output);
+        }
+        else if (error == G_FATAL_PRINT) {
+            G_warning(_("Output raster map name <%s> is not valid map name"),
+                      output);
+            return 1;
+        }
+        else { /* G_FATAL_RETURN */
+            return 1;
+        }
     }
 
     mapset = G_find_raster2(input, "");
 
     if (mapset == NULL) {
-	if (error == G_FATAL_EXIT) {
-	    G_fatal_error(_("Raster map <%s> not found"), input);
-	}
-	else if (error == G_FATAL_PRINT) {
-	    G_warning(_("Raster map <%s> not found"), input);
-	    return 1;
-	}
-	else {			/* G_FATAL_RETURN */
-	    return 1;
-	}
+        if (error == G_FATAL_EXIT) {
+            G_fatal_error(_("Raster map <%s> not found"), input);
+        }
+        else if (error == G_FATAL_PRINT) {
+            G_warning(_("Raster map <%s> not found"), input);
+            return 1;
+        }
+        else { /* G_FATAL_RETURN */
+            return 1;
+        }
     }
 
     if (strcmp(mapset, G_mapset()) == 0) {
-	char nm[1000], ms[1000];
-	const char *in;
+        char nm[1000], ms[1000];
+        const char *in;
 
-	if (G_name_is_fully_qualified(input, nm, ms)) {
-	    in = nm;
-	}
-	else {
-	    in = input;
-	}
+        if (G_name_is_fully_qualified(input, nm, ms)) {
+            in = nm;
+        }
+        else {
+            in = input;
+        }
 
-	if (strcmp(in, output) == 0) {
-	    if (error == G_FATAL_EXIT) {
-		G_fatal_error(_("Output raster map <%s> is used as input"),
-			      output);
-	    }
-	    else if (error == G_FATAL_PRINT) {
-		G_warning(_("Output raster map <%s> is used as input"),
-			  output);
-		return 1;
-	    }
-	    else {		/* G_FATAL_RETURN */
-		return 1;
-	    }
-	}
+        if (strcmp(in, output) == 0) {
+            if (error == G_FATAL_EXIT) {
+                G_fatal_error(_("Output raster map <%s> is used as input"),
+                              output);
+            }
+            else if (error == G_FATAL_PRINT) {
+                G_warning(_("Output raster map <%s> is used as input"), output);
+                return 1;
+            }
+            else { /* G_FATAL_RETURN */
+                return 1;
+            }
+        }
     }
 
     return 0;

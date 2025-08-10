@@ -22,6 +22,7 @@ SUBDIRS = \
 	v.edit \
 	v.extract \
 	v.extrude \
+	v.fill.holes \
 	v.generalize \
 	v.hull \
 	v.info \
@@ -101,7 +102,6 @@ SUBDIRS = \
 	v.out.ogr \
 	v.in.ogr \
 	v.external \
-	v.in.dwg \
 	v.in.lidar \
 	v.external.out
 
@@ -110,4 +110,3 @@ include $(MODULE_TOPDIR)/include/Make/Dir.make
 default: htmldir
 
 htmldir: parsubdirs
-

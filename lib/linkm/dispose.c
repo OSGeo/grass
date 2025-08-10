@@ -4,14 +4,14 @@
  **  Copyright 1992 USA-CERL   All rights reserved.
  **
  */
+
 #include <grass/linkm.h>
 
-
-void link_dispose(struct link_head *Head, VOID_T * ptr)
+void link_dispose(struct link_head *Head, VOID_T *ptr)
 {
     if (NULL == ptr)
-	return;
+        return;
 
-    link__set_next(ptr, Head->Unused);	/* ptr->next = Unused */
-    Head->Unused = ptr;		/* Unused = ptr */
+    link__set_next(ptr, Head->Unused); /* ptr->next = Unused */
+    Head->Unused = ptr;                /* Unused = ptr */
 }

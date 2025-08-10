@@ -1,7 +1,7 @@
 /*
  * r.in.lidar filtering functions
  *
- * Copyright 2011-2015 by Markus Metz, and The GRASS Development Team
+ * Copyright 2011-2015 by Markus Metz, and the GRASS Development Team
  * Authors:
  *  Markus Metz (r.in.lidar)
  *  Vaclav Petras (move code to a separate files)
@@ -14,13 +14,11 @@
 #ifndef __FILTERS_H__
 #define __FILTERS_H__
 
-struct ReturnFilter
-{
+struct ReturnFilter {
     int filter;
 };
 
-struct ClassFilter
-{
+struct ClassFilter {
 
     /** NULL terminated list of class numbers represented as string */
     char **str_classes;

@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_client/c_create_tab.c
- * 
+ *
  * \brief DBMI Library (client) - create table
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -16,15 +16,15 @@
 #include "macros.h"
 
 /*!
-  \brief Create table
+   \brief Create table
 
-  \param driver db driver
-  \param table table description (pointer to dbTable structure)
+   \param driver db driver
+   \param table table description (pointer to dbTable structure)
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
-int db_create_table(dbDriver * driver, dbTable * table)
+int db_create_table(dbDriver *driver, dbTable *table)
 {
     int ret_code;
 
@@ -39,7 +39,7 @@ int db_create_table(dbDriver * driver, dbTable * table)
     DB_RECV_RETURN_CODE(&ret_code);
 
     if (ret_code != DB_OK)
-	return ret_code;	/* ret_code SHOULD == DB_FAILED */
+        return ret_code; /* ret_code SHOULD == DB_FAILED */
 
     /* no results */
     return DB_OK;

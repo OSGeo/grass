@@ -21,16 +21,15 @@
    \param Map pointer to vector map
    \param tx,ty point coordinates
    \param[out] tz z-coordinate of point
-   \param[out] angle angle
-   \param[out] slope slope
+   \param[out] angle angle (unsupported)
+   \param[out] slope slope (unsupported)
 
    \return 1 on success,
    \return 0 point is not in area,
    \return -1 area has not 4 points or has island
  */
-int
-Vect_tin_get_z(struct Map_info *Map,
-	       double tx, double ty, double *tz, double *angle, double *slope)
+int Vect_tin_get_z(struct Map_info *Map, double tx, double ty, double *tz,
+                   double *angle UNUSED, double *slope UNUSED)
 {
     int i, area, n_points;
     struct Plus_head *Plus;
@@ -45,29 +44,29 @@ Vect_tin_get_z(struct Map_info *Map,
 
     Plus = &(Map->plus);
     if (first_time == 1) {
-	Points = Vect_new_line_struct();
-	first_time = 0;
+        Points = Vect_new_line_struct();
+        first_time = 0;
     }
 
     area = Vect_find_area(Map, tx, ty);
     G_debug(3, "TIN: area = %d", area);
     if (area == 0)
-	return 0;
+        return 0;
 
     Area = Plus->Area[area];
     if (Area->n_isles > 0)
-	return -1;
+        return -1;
 
     Vect_get_area_points(Map, area, Points);
     n_points = Points->n_points;
     if (n_points != 4)
-	return -1;
+        return -1;
 
     x = Points->x;
     y = Points->y;
     z = Points->z;
     for (i = 0; i < 3; i++) {
-	G_debug(3, "TIN: %d %f %f %f", i, x[i], y[i], z[i]);
+        G_debug(3, "TIN: %d %f %f %f", i, x[i], y[i], z[i]);
     }
 
     vx1 = x[1] - x[0];

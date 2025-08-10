@@ -2,15 +2,13 @@ MODULE_TOPDIR = ..
 
 include $(MODULE_TOPDIR)/include/Make/Other.make
 
-SRCFILES = WIND DEFAULT_WIND VAR PROJ_INFO PROJ_UNITS MYNAME
-DBFMAPS = mysites point
+SRCFILES = WIND DEFAULT_WIND VAR PROJ_INFO PROJ_UNITS PROJ_SRID PROJ_EPSG MYNAME
 SQLITEMAPS = country_boundaries
 MAPFILES = dbln coor topo head cidx sidx hist
-DBFFILES := $(foreach map,$(DBFMAPS),dbf/$(map).dbf)
 SQLITEFILES = sqlite/sqlite.db
-VECTFILES := $(foreach map,$(DBFMAPS),$(foreach file,$(MAPFILES),vector/$(map)/$(file))) $(foreach map,$(SQLITEMAPS),$(foreach file,$(MAPFILES),vector/$(map)/$(file)))
-SRC := $(SRCFILES) $(DBFFILES) $(SQLITEFILES) $(VECTFILES)
-SRCDIRS := PERMANENT PERMANENT/vector PERMANENT/dbf PERMANENT/sqlite $(patsubst %,PERMANENT/vector/%,$(DBFMAPS)) $(patsubst %,PERMANENT/vector/%,$(SQLITEMAPS))
+VECTFILES := $(foreach map,$(SQLITEMAPS),$(foreach file,$(MAPFILES),vector/$(map)/$(file)))
+SRC := $(SRCFILES) $(SQLITEFILES) $(VECTFILES)
+SRCDIRS := PERMANENT PERMANENT/vector PERMANENT/sqlite $(patsubst %,PERMANENT/vector/%,$(SQLITEMAPS))
 
 DSTDIR = $(ARCH_DISTDIR)/demolocation
 DST := $(patsubst %,$(DSTDIR)/PERMANENT/%,$(SRC))

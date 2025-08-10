@@ -1,9 +1,9 @@
-
 /****************************************************************************
  *
  * MODULE:       HTMLMAP
- * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original contributor)
- *               
+ * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original
+ *                  contributor)
+ *
  * PURPOSE:      driver to allow HTML image maps
  * COPYRIGHT:    (C) 2007-2007 by the GRASS Development Team
  *
@@ -23,7 +23,7 @@ const struct driver *HTML_Driver(void)
     static int initialized;
 
     if (initialized)
-	return &drv;
+        return &drv;
 
     drv.name = "html";
     drv.Box = HTML_Box;

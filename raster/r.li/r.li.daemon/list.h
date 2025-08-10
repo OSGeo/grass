@@ -1,4 +1,3 @@
-
 /**
  * \file list.h
  *
@@ -13,7 +12,7 @@
  * \version 1.0
  *
  * \include
- * 
+ *
  */
 #include <stdio.h>
 #include <unistd.h>
@@ -27,14 +26,11 @@
  * \member next the next item in list
  * \member m the content of list node
  */
-struct node
-{
+struct node {
     struct node *prev;
     struct node *next;
     msg *m;
 };
-
-
 
 /**
  * \brief FIFO list
@@ -42,13 +38,11 @@ struct node
  * \member tail last item in list
  * \member size number of items in list
  */
-struct list
-{
+struct list {
     struct node *head;
     struct node *tail;
     int size;
 };
-
 
 /**
  * \brief insert a item in list
@@ -63,24 +57,23 @@ void insertNode(struct list *l, msg m);
  */
 void removeNode(struct list *l);
 
- /**
-  * \brief struct for runtime area generation
-  * \param dist inter-area distance
-  * \param add_row cell to add in rows
-  * \param add_col cell to add in columns
-  * \param rows area length in rows
-  * \param cols area length in columns
-  * \param x column offset of next area
-  * \param y row offset of next area
-  * \param rl sample area length in rows
-  * \param cl sample area length in columns
-  * \param count identifier of next area
-  * \param sf_x column offset of sample frame
-  * \param sf_y row offset of sample frame
-  * \param maskname name of mask for the area
-  */
-struct g_area
-{
+/**
+ * \brief struct for runtime area generation
+ * \param dist inter-area distance
+ * \param add_row cell to add in rows
+ * \param add_col cell to add in columns
+ * \param rows area length in rows
+ * \param cols area length in columns
+ * \param x column offset of next area
+ * \param y row offset of next area
+ * \param rl sample area length in rows
+ * \param cl sample area length in columns
+ * \param count identifier of next area
+ * \param sf_x column offset of sample frame
+ * \param sf_y row offset of sample frame
+ * \param maskname name of mask for the area
+ */
+struct g_area {
     int dist;
     int add_row;
     int add_col;

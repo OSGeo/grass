@@ -1,5 +1,5 @@
 #!/bin/sh
-# Test for t.rast3d.mapcalc 
+# Test for t.rast3d.mapcalc
 
 # We need to set a specific region in the
 # @preprocess step of this test.

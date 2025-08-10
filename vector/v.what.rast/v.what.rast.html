@@ -34,10 +34,10 @@ If the raster value is NULL, then attribute value is set to NULL.
 geometry instead, use <em><a href="v.drape.html">v.drape</a></em>.
 <p>
 Categories and values are output unsorted with the print flag. To sort them
-pipe the output of this module into the UNIX <tt>sort</tt> tool
-(<tt>sort&nbsp;-n</tt>). If you need coordinates, after sorting use
-<em><a href="v.out.ascii.html">v.out.ascii</a></em> and the UNIX <tt>paste</tt> tool
-(<tt>paste&nbsp;-d'|'</tt>). In the case of a NULL result, a "<tt>*</tt>"
+pipe the output of this module into the UNIX <code>sort</code> tool
+(<code>sort&nbsp;-n</code>). If you need coordinates, after sorting use
+<em><a href="v.out.ascii.html">v.out.ascii</a></em> and the UNIX <code>paste</code> tool
+(<code>paste&nbsp;-d'|'</code>). In the case of a NULL result, a "<code>*</code>"
 will be printed in lieu of the value.
 <p>
 The interpolation flag is only useful for continuous value raster maps,
@@ -47,7 +47,6 @@ be raster cell-edge artifacts visible in the results, this compromise
 has been made for processing speed. If one or more of the nearest four
 raster cells is NULL, then only the raster cells containing values will
 be used in the weighted average.
-
 
 <h2>EXAMPLES</h2>
 
@@ -98,7 +97,6 @@ v.db.select pnts
 v.univar map=pnts column=height type=point
 </pre></div>
 
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -111,12 +109,7 @@ v.univar map=pnts column=height type=point
 <a href="v.what.vect.html">v.what.vect</a>
 </em>
 
-
 <h2>AUTHORS</h2>
+
 Radim Blazek<br>
 Hamish Bowman (interpolation)
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

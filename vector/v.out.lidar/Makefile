@@ -13,4 +13,3 @@ include $(MODULE_TOPDIR)/include/Make/Module.make
 ifneq ($(USE_LIBLAS),)
 default: cmd
 endif
-

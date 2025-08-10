@@ -1,70 +1,85 @@
-<!-- meta page description: Image processing in GRASS GIS -->
+<!-- meta page description: Image processing in GRASS -->
 <!-- meta page index: imagery -->
 <h3>Image processing in general</h3>
 
+GRASS provides a powerful suite of tools for the processing and
+analysis of geospatial raster data, including satellite imagery and
+aerial photography. Its image processing capabilities encompass a broad
+range of preprocessing operations, such as data import, georeferencing,
+radiometric calibration, and atmospheric correction. It is particularly
+suited for handling Earth observation data, enabling the analysis of
+multispectral and temporal datasets. GRASS supports advanced
+functionalities such as image classification, sensor fusion, and point
+cloud statistics. The calculation of vegetation indices further enables
+analyses of environmental, agricultural, and land cover dynamics. An
+extensive collection of
+<a href="https://grass.osgeo.org/grass8/manuals/addons/#i">addons</a>
+further enhances its image processing capabilities, particularly in the
+context of Earth observation and remote sensing applications.
+
 <b>Digital numbers and physical values (reflection/radiance-at-sensor):</b>
 <p>
-Satellite imagery is commonly stored in Digital Numbers (DN) for 
-minimizing the storage volume, i.e. the originally sampled analog 
-physical value (color, temperature, etc) is stored a discrete 
-representation in 8-16 bits. For example, Landsat data are stored in 
-8bit values (i.e., ranging from 0 to 255); other satellite data may 
-be stored in 10 or 16 bits. Having data stored in DN, it implies 
-that these data are not yet the observed ground reality. Such data 
-are called "at-satellite", for example the amount of energy sensed 
-by the sensor of the satellite platform is encoded in 8 or more 
-bits. This energy is called radiance-at-sensor. To obtain physical 
-values from DNs, satellite image providers use a linear transform 
-equation <tt>(y = a * x + b)</tt> to encode the radiance-at-sensor 
-in 8 to 16 bits. DNs can be turned back into physical values by 
-applying the reverse formula <tt>(x = (y - b) / a)</tt>.
+Satellite imagery is commonly stored in Digital Numbers (DN) for
+minimizing the storage volume, i.e. the originally sampled analog
+physical value (color, temperature, etc) is stored a discrete
+representation in 8-16 bits. For example, Landsat data are stored in
+8bit values (i.e., ranging from 0 to 255); other satellite data may
+be stored in 10 or 16 bits. Having data stored in DN, it implies
+that these data are not yet the observed ground reality. Such data
+are called "at-satellite", for example the amount of energy sensed
+by the sensor of the satellite platform is encoded in 8 or more
+bits. This energy is called radiance-at-sensor. To obtain physical
+values from DNs, satellite image providers use a linear transform
+equation <code>(y = a * x + b)</code> to encode the radiance-at-sensor
+in 8 to 16 bits. DNs can be turned back into physical values by
+applying the reverse formula <code>(x = (y - b) / a)</code>.
 <p>
-The GRASS GIS module <a href="i.landsat.toar.html">i.landsat.toar</a>
+The GRASS module <a href="i.landsat.toar.html">i.landsat.toar</a>
 easily transforms Landsat DN to radiance-at-sensor (top of atmosphere,
 TOA). The equivalent module for ASTER data is
 <a href="i.aster.toar.html">i.aster.toar</a>.
-For other satellites, <a href="r.mapcalc.html">r.mapcalc</a> can 
+For other satellites, <a href="r.mapcalc.html">r.mapcalc</a> can
 be employed.
 <p>
 <b>Reflection/radiance-at-sensor and surface reflectance</b>
 <p>
-When radiance-at-sensor has been obtained, still the atmosphere 
-influences the signal as recorded at the sensor. This atmospheric 
-interaction with the sun energy reflected back into space by 
+When radiance-at-sensor has been obtained, still the atmosphere
+influences the signal as recorded at the sensor. This atmospheric
+interaction with the sun energy reflected back into space by
 ground/vegetation/soil needs to be corrected. The need of
 removing atmospheric artifacts stems from the fact that the
-atmosphericic conditions are changing over time. Hence, to gain
+atmospheric conditions are changing over time. Hence, to gain
 comparability between Earth surface images taken at different
 times, atmospheric need to be removed converting at-sensor values
 which are top of atmosphere to surface reflectance values.
 <p>
-In GRASS GIS, there are two ways to apply atmospheric correction for
+In GRASS, there are two ways to apply atmospheric correction for
 satellite imagery. A simple, less accurate way for Landsat is with
 <a href="i.landsat.toar.html">i.landsat.toar</a>,
-using the DOS correction method. The more accurate way is using 
-<a href="i.atcorr.html">i.atcorr</a> (which supports many satellite 
-sensors). The atmospherically corrected sensor data represent 
-surface <a href="http://en.wikipedia.org/wiki/reflectance">reflectance</a>,
-which ranges theoretically from 0% to 100%. Note that this level of 
-data correction is the proper level of correction to calculate 
+using the DOS correction method. The more accurate way is using
+<a href="i.atcorr.html">i.atcorr</a> (which supports many satellite
+sensors). The atmospherically corrected sensor data represent
+surface <a href="https://en.wikipedia.org/wiki/reflectance">reflectance</a>,
+which ranges theoretically from 0% to 100%. Note that this level of
+data correction is the proper level of correction to calculate
 vegetation indices.
 <p>
-In GRASS GIS, image data are identical to <a href="rasterintro.html">raster data</a>.
-However, a couple of commands are explicitly dedicated to image 
-processing. The geographic boundaries of the raster/imagery file are 
-described by the north, south, east, and west fields. These values 
-describe the lines which bound the map at its edges. These lines do 
-NOT pass through the center of the grid cells at the edge of the 
+In GRASS, image data are identical to <a href="rasterintro.html">raster data</a>.
+However, a couple of commands are explicitly dedicated to image
+processing. The geographic boundaries of the raster/imagery file are
+described by the north, south, east, and west fields. These values
+describe the lines which bound the map at its edges. These lines do
+NOT pass through the center of the grid cells at the edge of the
 map, but along the edge of the map itself.
 
 <p>
 As a general rule in GRASS:
 <ol>
 <li> Raster/imagery output maps have their bounds and resolution equal
- to those of the current region.
+ to those of the current region.</li>
 <li> Raster/imagery input maps are automatically cropped/padded and
  rescaled (using nearest-neighbor resampling) to match the current
- region.
+ region.</li>
 </ol>
 
 
@@ -73,18 +88,42 @@ As a general rule in GRASS:
 The module <a href="r.in.gdal.html">r.in.gdal</a> offers a common
 interface for many different raster and satellite image
 formats. Additionally, it also offers options such as on-the-fly
-location creation or extension of the default region to match the
+project creation or extension of the default region to match the
 extent of the imported raster map.  For special cases, other import
 modules are available. Always the full map is imported. Imagery data
 can be group (e.g. channel-wise) with <a href="i.group.html">i.group</a>.
 
 <p>
 For importing scanned maps, the user will need to create a
-x,y-location, scan the map in the desired resolution and save it into
+x,y-project, scan the map in the desired resolution and save it into
 an appropriate raster format (e.g. tiff, jpeg, png, pbm) and then use
 <a href="r.in.gdal.html">r.in.gdal</a> to import it. Based on
 reference points the scanned map can be rectified to obtain geocoded
 data.
+
+<h3>Semantic label information</h3>
+
+Semantic labels are a description which can be stored as metadata.
+To print available semantic labels relevant for multispectral satellite
+data, use <a href="i.band.library.html">i.band.library</a>.
+<a href="r.semantic.label.html">r.semantic.label</a> allows assigning of
+these satellite imagery band references as defined in
+<a href="i.band.library.html">i.band.library</a>. Semantic labels are
+also used in signature files of imagery classification tools. Therefore,
+signature files of one imagery or raster group can be used to classify
+a different group with identical semantic labels.
+
+<div align="center" style="margin: 10px">
+<img src="band_references_scheme.png" alt="GRASS band references scheme" width="600" height="435" border="0"><br>
+<i>
+    New enhanced classification workflow involving semantic labels.
+</i>
+</div>
+
+With <a href="r.support.html">r.support</a> any sort of semantic label
+the user wishes may be added (i.e., not only those registered in
+<em>i.band.library</em>). Semantic labels are supported also by the
+<a href="temporalintro.html">temporal</a> GRASS modules.
 
 <h3>Image processing operations</h3>
 
@@ -105,7 +144,7 @@ GRASS is able to geocode raster and image data of various types:
  (<a href="i.group.html">i.group</a>, <a href="i.target.html">i.target</a>,
  <a href="g.gui.gcp.html">g.gui.gcp</a>, <a href="i.rectify.html">i.rectify</a>)</li>
 <li>unreferenced satellite data from optical and Radar sensors by
- defining a certain number of ground control points 
+ defining a certain number of ground control points
  (<a href="i.group.html">i.group</a>, <a href="i.target.html">i.target</a>,
  <a href="g.gui.gcp.html">g.gui.gcp</a>, <a href="i.rectify.html">i.rectify</a>)</li>
 <li>interactive graphical <a href="wxGUI.gcp.html">Ground Control Point (GCP) manager</a></li>
@@ -132,7 +171,7 @@ An example for indices derived from multispectral data is the NDVI
 status with NDVI, the Red and the Near Infrared channels (NIR) are
 taken as used as input for simple map algebra in the GRASS command
 <a href="r.mapcalc.html">r.mapcalc</a>
-(<tt>ndvi = 1.0 * (nir - red)/(nir + red)</tt>). With
+(<code>ndvi = 1.0 * (nir - red)/(nir + red)</code>). With
 <a href="r.colors.html">r.colors</a> an optimized "ndvi" color table
 can be assigned afterward. Also other vegetation indices can be
 generated likewise.
@@ -165,21 +204,30 @@ GRASS supports the following methods:
     or <a href="g.gui.iclass.html">g.gui.iclass</a>, <a href="i.maxlik.html">i.maxlik</a>)
    using the Maximum Likelihood classification method</li>
   </ul>
+  </li>
 <li> Combined radiometric/geometric (segmentation based) classification:
   <ul>
   <li> Supervised classification (<a href="i.gensigset.html">i.gensigset</a>,
-   <a href="i.smap.html">i.smap</a>)
+   <a href="i.smap.html">i.smap</a>)</li>
   </ul>
+  </li>
 <li> Object-oriented classification:
   <ul>
-  <li> Unsupervised classification (segmentation based: 
-       <a href="i.segment.html">i.segment</a>)
+  <li> Unsupervised classification (segmentation based:
+       <a href="i.segment.html">i.segment</a>)</li>
   </ul>
+  </li>
 </ul>
-  
+
 Kappa statistic can be calculated to validate the results
 (<a href="r.kappa.html">r.kappa</a>). Covariance/correlation matrices can be
 calculated with <a href="r.covar.html">r.covar</a>.
+
+<p>
+Note - signatures generated for one scene are suitable for classification
+of other scenes as long as they consist of same raster bands
+(semantic labels match). This comes handy when classifying multiple scenes
+from a single sensor taken in different areas or different times.
 
 <h3>Image fusion</h3>
 
@@ -201,8 +249,8 @@ top-of-atmosphere radiance or reflectance and temperature (<a href="i.aster.toar
 
 <h3>Time series processing</h3>
 
-GRASS also offers support for time series processing (<a
-href="r.series.html">r.series</a>). Statistics can be derived from a
+GRASS also offers support for time series processing
+(<a href="r.series.html">r.series</a>). Statistics can be derived from a
 set of coregistered input maps such as multitemporal satellite
 data. The common univariate statistics and also linear regression can
 be calculated.
@@ -238,9 +286,9 @@ Several modules support the calculation of the energy balance:
 <h3>See also</h3>
 
 <ul>
-<li> GRASS GIS Wiki page: <a href="http://grasswiki.osgeo.org/wiki/Image_processing">Image processing</a></li>
-<li>The GRASS 4 
-    <em><a href="http://grass.osgeo.org/gdp/imagery/grass4_image_processing.pdf">Image
+<li> GRASS Wiki page: <a href="https://grasswiki.osgeo.org/wiki/Image_processing">Image processing</a></li>
+<li>The GRASS 4
+    <em><a href="https://grass.osgeo.org/gdp/imagery/grass4_image_processing.pdf">Image
      Processing manual</a></em></li>
   <li><a href="rasterintro.html">Introduction into raster data processing</a></li>
   <li><a href="raster3dintro.html">Introduction into 3D raster data (voxel) processing</a></li>

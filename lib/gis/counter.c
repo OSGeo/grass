@@ -17,13 +17,13 @@ static void make_mutex(void)
     pthread_mutexattr_t attr;
 
     if (initialized)
-	return;
+        return;
 
     pthread_mutex_lock(&t_mutex);
 
     if (initialized) {
-	pthread_mutex_unlock(&t_mutex);
-	return;
+        pthread_mutex_unlock(&t_mutex);
+        return;
     }
 
     pthread_mutexattr_init(&attr);
@@ -46,6 +46,7 @@ void G_init_counter(struct Counter *c, int v)
 int G_counter_next(struct Counter *c)
 {
     int v;
+
 #ifdef HAVE_PTHREAD_H
     pthread_mutex_lock(&mutex);
 #endif
@@ -59,15 +60,15 @@ int G_counter_next(struct Counter *c)
 int G_is_initialized(int *p)
 {
     if (*p)
-	return 1;
+        return 1;
 
 #ifdef HAVE_PTHREAD_H
     make_mutex();
     pthread_mutex_lock(&mutex);
 
     if (*p) {
-	pthread_mutex_unlock(&mutex);
-	return 1;
+        pthread_mutex_unlock(&mutex);
+        return 1;
     }
 #endif
     return 0;
@@ -81,4 +82,3 @@ void G_initialize_done(int *p)
     pthread_mutex_unlock(&mutex);
 #endif
 }
-

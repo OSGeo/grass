@@ -18,7 +18,7 @@
         <menuitem>
           <label>Quit editor</label>
           <help>Close editor window</help>
-          <handler>OnClose</handler>
+          <handler>OnCloseWindow</handler>
           <shortcut>Ctrl+W</shortcut>
         </menuitem>
       </items>
@@ -48,8 +48,8 @@
           <handler>OnSimpleScriptTemplate</handler>
         </menuitem>
         <menuitem>
-          <label>Load GRASS &amp;module template</label>
-          <help>Load full GRASS module template</help>
+          <label>Load GRASS &amp;tool template</label>
+          <help>Load full GRASS tool template</help>
           <handler>OnGrassModuleTemplate</handler>
         </menuitem>
       </items>
@@ -63,13 +63,13 @@
           <handler>OnSimpleScriptExample</handler>
         </menuitem>
         <menuitem>
-          <label>Load GRASS &amp;module example</label>
-          <help>Load full GRASS module example</help>
+          <label>Load GRASS &amp;tool example</label>
+          <help>Load full GRASS tool example</help>
           <handler>OnGrassModuleExample</handler>
         </menuitem>
         <menuitem>
-          <label>Load GRASS module error &amp;handling example</label>
-          <help>Load full GRASS module with error handling example</help>
+          <label>Load GRASS tool error &amp;handling example</label>
+          <help>Load full GRASS tool with error handling example</help>
           <handler>OnGrassModuleErrorHandlingExample</handler>
         </menuitem>
       </items>
@@ -79,7 +79,7 @@
       <items>
         <menuitem>
           <label>GRASS Python Help</label>
-          <help>Display documentation for writing Python code in GRASS GIS</help>
+          <help>Display documentation for writing Python code in GRASS</help>
           <handler>OnHelp</handler>
         </menuitem>
         <menuitem>
@@ -88,23 +88,23 @@
           <handler>OnPythonHelp</handler>
         </menuitem>
         <menuitem>
-          <label>GRASS Modules help</label>
-          <help>Display the HTML man page index for all GRASS modules</help>
+          <label>GRASS Tools help</label>
+          <help>Display the HTML man page index for all GRASS tools</help>
           <handler>OnModulesHelp</handler>
         </menuitem>
         <menuitem>
           <label>GRASS Python code guidelines</label>
-          <help>Display guidelines for submitting Python code to GRASS GIS</help>
+          <help>Display guidelines for submitting Python code to GRASS</help>
           <handler>OnSubmittingHelp</handler>
         </menuitem>
         <menuitem>
           <label>Getting your code to GRASS Addons</label>
-          <help>Display instructions for submitting you code to GRASS GIS Addons repository</help>
+          <help>Display instructions for submitting you code to GRASS Addons repository</help>
           <handler>OnAddonsHelp</handler>
         </menuitem>
         <menuitem>
           <label>Get support</label>
-          <help>Display information about getting support for writing Python code in GRASS GIS</help>
+          <help>Display information about getting support for writing Python code in GRASS</help>
           <handler>OnSupport</handler>
         </menuitem>
       </items>

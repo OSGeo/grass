@@ -4,11 +4,11 @@ include $(MODULE_TOPDIR)/include/Make/Vars.make
 
 #order is relevant:
 SUBDIRS = \
+	external \
 	datetime \
 	gis \
 	proj \
 	raster \
-	external \
 	gmath \
 	linkm \
 	driver \
@@ -31,6 +31,7 @@ SUBDIRS = \
 	lidar \
 	raster3d \
 	raster3d/test \
+	external/parson/test \
 	gpde \
 	dspf \
 	symbol \
@@ -41,7 +42,6 @@ SUBDIRS = \
 	ogsf \
 	nviz \
 	temporal \
-	python \
 	iostream \
 	manage \
 	calc
@@ -50,4 +50,3 @@ include $(MODULE_TOPDIR)/include/Make/Dir.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
 default: subdirs
-

@@ -8,7 +8,7 @@
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
+ * \author GRASS Development Team
  */
 
 #include <stdio.h>
@@ -29,14 +29,14 @@ void G_init_debug(void)
     const char *lstr;
 
     if (G_is_initialized(&initialized))
-	return;
+        return;
 
     lstr = G_getenv_nofatal("DEBUG");
 
     if (lstr != NULL)
-	grass_debug_level = atoi(lstr);
+        grass_debug_level = atoi(lstr);
     else
-	grass_debug_level = 0;
+        grass_debug_level = 0;
 
     G_initialize_done(&initialized);
 }
@@ -45,13 +45,14 @@ void G_init_debug(void)
  * \brief Print debugging message.
  *
  * Print debugging message if environment variable GRASS_DEBUG_LEVEL
- * is set to level equal or greater  
+ * is set to level equal or greater
  *
  * Levels: (recommended levels)<br>
  *  - 1 - message is printed once or twice per module<br>
  *  - 2 - less interesting once-per-module messages,<br>
  *  - 2 - library functions likely to be used once in a module<br>
- *  - 3 - library functions likely to be called a few times in a module (<=10),<br>
+ *  - 3 - library functions likely to be called a few times in a module
+ * (<=10),<br>
  *  - 3 - database opening and closing logistics<br>
  *  - 4 - each row (raster) or line (vector) or database/column (DB),<br>
  *  - 4 - each column/cat (DB)<br>
@@ -71,31 +72,28 @@ int G_debug(int level, const char *msg, ...)
     G_init_debug();
 
     if (grass_debug_level >= level) {
-	va_start(ap, msg);
+        filen = getenv("GRASS_DEBUG_FILE");
+        if (filen != NULL) {
+            fd = fopen(filen, "a");
+            if (!fd) {
+                G_warning(_("Cannot open debug file '%s'"), filen);
+                return 0;
+            }
+        }
+        else {
+            fd = stderr;
+        }
 
-	filen = getenv("GRASS_DEBUG_FILE");
-	if (filen != NULL) {
-	    fd = fopen(filen, "a");
-	    if (!fd) {
-		G_warning(_("Cannot open debug file '%s'"), filen);
-		return 0;
-	    }
-	}
-	else {
-	    fd = stderr;
-	}
+        fprintf(fd, "D%d/%d: ", level, grass_debug_level);
+        va_start(ap, msg);
+        vfprintf(fd, msg, ap);
+        va_end(ap);
+        fprintf(fd, "\n");
+        fflush(fd);
 
-	fprintf(fd, "D%d/%d: ", level, grass_debug_level);
-	vfprintf(fd, msg, ap);
-	fprintf(fd, "\n");
-	fflush(fd);
-
-	if (filen != NULL)
-	    fclose(fd);
-
-	va_end(ap);
+        if (filen != NULL)
+            fclose(fd);
     }
 
     return 1;
 }
-

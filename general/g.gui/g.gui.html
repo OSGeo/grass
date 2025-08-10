@@ -1,38 +1,33 @@
 <h2>DESCRIPTION</h2>
 
-The <em>g.gui</em> module allows user to start the Graphical User 
-Interface (GUI) from the command line prompt or to change the 
+The <em>g.gui</em> module allows user to start the Graphical User
+Interface (GUI) from the command line prompt or to change the
 default User Interface (UI) settings.
 
 <p>
-GRASS GIS 7 comes with both a wxPython-based GUI
+GRASS comes with both a wxPython-based GUI
 aka <em><a href="wxGUI.html">wxGUI</a></em> (<b>ui=wxpython</b>) and
 command line text-based UI (<b>ui=text</b>).
 
 <h2>NOTES</h2>
 
-If the <b>-d</b> update flag is given or the <tt>GRASS_GUI</tt> 
-environmental <a href="variables.html">variable</a> is unset, then 
-the GRASS internal variable <tt>GUI</tt> is permanently changed and 
+If the <b>-d</b> update flag is given or the <code>GRASS_GUI</code>
+environmental <a href="variables.html">variable</a> is unset, then
+the GRASS internal variable <code>GUI</code> is permanently changed and
 the selected <b>ui</b> will be used as the default UI from then on.
 
 <p>
 All GRASS internal variables (see <em><a href="g.gisenv.html">g.gisenv</a></em>)
 are stored in the user's home directory in a hidden file called
-<tt>$HOME/.grass7/rc</tt> on Unix-based operating systems
-and <tt>%APPDATA%\GRASS7\rc</tt> on MS Windows. Note that these GRASS
+<code>$HOME/.grass8/rc</code> on Unix-based operating systems
+and <code>%APPDATA%\GRASS8\rc</code> on MS Windows. Note that these GRASS
 internal variables are not the shell environment variables and the
-<tt>rc</tt> file is not a classic UNIX run command file, it just
+<code>rc</code> file is not a classic UNIX run command file, it just
 contains persistent GRASS variables.
 
-<p>
-The
-old <em><a href="http://grass.osgeo.org/grass64/manuals/gis.m.html">gis.m</a></em>
-and <em><a href="http://grass.osgeo.org/grass64/manuals/d.m.html">d.m</a></em>
-Tcl/Tk-based GUIs known from GRASS GIS 6 have been dropped in GRASS
-GIS 7.
-
 <h2>EXAMPLES</h2>
+
+<h3>Set default user interface settings</h3>
 
 Set default user interface setting to command line, text-based UI:
 <div class="code"><pre>
@@ -53,6 +48,13 @@ Set default user interface setting to the graphical user interface
 g.gui -dn ui=wxpython
 </pre></div>
 
+<h3>Load workspace from command line</h3>
+
+Start the GUI from command line with an existing workspace:
+<div class="code"><pre>
+g.gui workspace=myproject.gxw
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>
@@ -62,14 +64,9 @@ g.gui -dn ui=wxpython
 </em>
 
 <p>
-<a href="http://grasswiki.osgeo.org/wiki/WxPython-based_GUI_for_GRASS">wxGUI wiki page</a>
+<a href="https://grasswiki.osgeo.org/wiki/WxPython-based_GUI_for_GRASS">wxGUI wiki page</a>
 
 <h2>AUTHORS</h2>
 
 Martin Landa, FBK-irst, Trento, Italy<br>
 Hamish Bowman, Otago University, Dunedin, New Zealand (fine tuning)
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

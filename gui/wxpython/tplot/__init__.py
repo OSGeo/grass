@@ -1,4 +1,4 @@
 all = [
-    'g.gui.tplot',
-    'frame',
+    "g.gui.tplot",
+    "frame",
 ]

@@ -1,0 +1,13 @@
+# Percentage of forest cover, derived from
+# https://catalog.data.gov/dataset/modis-terra-vegetation-continuous-fields-yearly-l3-global-250m-sin-grid-v006
+0 255:250:250
+10 242:238:191
+20 242:233:126
+30 214:214:54
+40 175:214:0
+50 137:186:0
+60 99:156:0
+70 68:128:0
+80 43:99:0
+90 21:71:0
+100 10:56:0

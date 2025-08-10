@@ -3,7 +3,7 @@
 <em>d.mon</em> allows the user to start, select, list, release, and
 stop available graphics monitors.
 
-<h3>Starting a monitor</h3> 
+<h3>Starting a monitor</h3>
 
 In order to display on-screen GRASS graphics, the user must
 <b>start</b> and <b>select</b> a graphics monitor. By default,
@@ -23,7 +23,7 @@ explicitly <b>select</b> a monitor that has been started.
 unless it is stopped for some reason. A monitor may continue to run
 for any length of time, even when no GRASS session is being run.
 
-<h3>Stopping a monitor</h3> 
+<h3>Stopping a monitor</h3>
 
 A graphics monitor has two different types of status: monitor
 program <em>not running</em>, and monitor <em>running</em>. A monitor
@@ -31,7 +31,7 @@ that has been started and/or selected will be listed as running; a
 monitor that has been stopped (or not started) will be listed as not
 running.  The <b>-l</b> flag will list all currently running monitors.
 
-<h3>Selecting a monitor</h3> 
+<h3>Selecting a monitor</h3>
 
 When the user <em>starts</em> a monitor, it is also
 (automatically) <em>selected</em> for graphics output unless the user
@@ -52,8 +52,8 @@ flag.
 <h2>NOTES</h2>
 
 <em>d.mon</em> is designed for interactive use. If non-interactive use
-is needed (e.g., in a script) set <tt>GRASS_RENDER_IMMEDIATE=png</tt>
-(or <tt>=cairo</tt>) and use the related environment
+is needed (e.g., in a script) set <code>GRASS_RENDER_IMMEDIATE=png</code>
+(or <code>=cairo</code>) and use the related environment
 <a href="variables.html">variables</a> to control output size etc.
 
 <h2>EXAMPLES</h2>
@@ -73,7 +73,7 @@ d.mon start=wx0
 <i>Figure: The initialization of display monitor wx0</i>
 </div>
 
-All subsequently displayed data will be rendered on monitor <tt>wx0</tt>.
+All subsequently displayed data will be rendered on monitor <code>wx0</code>.
 
 <div class="code"><pre>
 g.region raster=elevation -p
@@ -95,7 +95,7 @@ d.mon start=cairo output=out.pdf
 </pre></div>
 
 From this moment on all displayed data will be rendered into
-file <tt>output.pdf</tt>. 
+file <code>output.pdf</code>.
 
 <h3>List running monitors</h3>
 
@@ -128,7 +128,7 @@ still running wxGUI monitor, use
 d.mon select=wx0
 </pre></div>
 
-<h3>Stopping a monitor</h3> 
+<h3>Stopping a monitor</h3>
 
 To close the wxGUI monitor, run
 
@@ -154,8 +154,3 @@ of variables for rendering</a>,
 <h2>AUTHOR</h2>
 
 Martin Landa, OSGeoREL, Czech Technical University in Prague, Czech Republic
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

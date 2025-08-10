@@ -3,7 +3,7 @@
 <em>v.external</em> creates new vector map as a link to external OGR
 layer or PostGIS feature table. OGR (Simple Features Library) is part
 of the
-<a href="http://www.gdal.org">GDAL</a> library, so you need to install
+<a href="https://gdal.org">GDAL</a> library, so you need to install
 GDAL to use <em>v.external</em> for external OGR layers. Note that a
 PostGIS feature table can be linked also using built-in <em>GRASS-PostGIS
 data driver</em> (requires GRASS to be built with PostgreSQL support).
@@ -47,7 +47,7 @@ v.external -f
 </pre></div>
 
 For details see
-<a href="http://www.gdal.org/ogr_formats.html">GDAL web site</a>.
+<a href="https://gdal.org/en/stable/drivers/vector/">GDAL web site</a>.
 
 <h2>EXAMPLES</h2>
 
@@ -57,14 +57,14 @@ Assuming that 'test_shape.shp' is located in directory
 '/home/user/shape_data'.
 
 <div class="code"><pre>
-v.external input=/home/user/shape_data layer=test_shape output=grass_map 
+v.external input=/home/user/shape_data layer=test_shape output=grass_map
 </pre></div>
 
 <h3>PostGIS layers</h3>
 
 By default, PostGIS links are created by built-in PostGIS support,
 ie. using <em>GRASS-PostGIS data driver</em>. If the environment
-variable <tt>GRASS_VECTOR_OGR</tt> exists, or GRASS is compiled
+variable <code>GRASS_VECTOR_OGR</code> exists, or GRASS is compiled
 without PostgreSQL support then GRASS will use OGR-PostgreSQL driver
 for creating a link.
 
@@ -116,7 +116,7 @@ example below only one feature (in this case a vector tile) will be
 linked as a new GRASS vector map.
 
 <div class="code"><pre>
-v.external in="PG:dbname=tiles" layer=wrs2_descending where="pr=191026" 
+v.external in="PG:dbname=tiles" layer=wrs2_descending where="pr=191026"
 ...
 Number of areas: 1
 ...
@@ -124,7 +124,7 @@ Number of areas: 1
 
 <h2>REFERENCES</h2>
 
-<a href="http://www.gdal.org/ogr__api_8h.html">OGR vector library C
+<a href="https://gdal.org/en/stable/api/">OGR vector library C
 API</a> documentation
 
 <h2>SEE ALSO</h2>
@@ -140,13 +140,13 @@ API</a> documentation
 </em>
 
 <p>
-<a href="http://www.gdal.org/">GDAL Library</a>
+<a href="https://gdal.org/">GDAL Library</a>
 <br>
-<a href="http://postgis.org/">PostGIS</a>
+<a href="https://postgis.net/">PostGIS</a>
 
 <p>
 See
-also GRASS <a href="http://grasswiki.osgeo.org/wiki/Working_with_external_data_in_GRASS_7">user wiki page</a> for more examples.
+also GRASS <a href="https://grasswiki.osgeo.org/wiki/Working_with_external_data_in_GRASS_7">user wiki page</a> for more examples.
 
 <h2>AUTHORS</h2>
 
@@ -154,8 +154,3 @@ Radim Blazek, ITC-Irst, Trento, Italy
 <br>
 PostGIS support by Martin Landa, GeoForAll (OSGeoREL) Lab, Czech
 Technical University in Prague, Czech Republic
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

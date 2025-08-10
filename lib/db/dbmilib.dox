@@ -2,7 +2,7 @@
 
 by GRASS Development Team
 
-http://grass.osgeo.org
+https://grass.osgeo.org
 
 \section dbmiIntro Introduction
 
@@ -15,10 +15,10 @@ Interface) with its integrated drivers. At time of this writing
 following DBMI drivers for attribute storage are available:
 
  - DBF: xBase files (default)
- - ODBC: to interface from http://www.unixodbc.org
- - PostgreSQL driver (note that PostgreSQL can also be accessed through ODBC): http://www.postgresql.org
+ - ODBC: to interface from https://www.unixodbc.org
+ - PostgreSQL driver (note that PostgreSQL can also be accessed through ODBC): https://www.postgresql.org
  - mySQL: http://mysql.com/
- - SQLite: http://www.sqlite.org
+ - SQLite: https://www.sqlite.org
 
 These drivers are compiled depending on present DB related libraries
 and 'configure' settings. Only the DBF driver is always compiled. The
@@ -62,7 +62,7 @@ programming. There are three groups:
 Allocation:
 
  - db_store()
- 
+
  - db_malloc()
 
  - db_calloc()
@@ -160,7 +160,7 @@ Column properties:
  - db_copy_column()
 
  - db_convert_Cstring_to_column_value()
- 
+
  - db_convert_Cstring_to_column_default_value()
 
  - db_convert_column_value_to_string()
@@ -188,7 +188,7 @@ Cursor management:
  - db_get_cursor_token()
 
  - db_set_cursor_token()
- 
+
  - db_set_cursor_type_readonly()
 
  - db_set_cursor_type_update()
@@ -344,7 +344,7 @@ Index management:
  - db_free_index_array()
 
  - db_set_index_name()
- 
+
  - db_get_index_name()
 
  - db_set_index_table_name()
@@ -394,7 +394,7 @@ String manipulation:
  - db_init_string()
 
  - db_set_string()
- 
+
  - db_set_string_no_copy()
 
  - db_sizeof_string()
@@ -572,11 +572,11 @@ Misc:
  - db_CatValArray_sort_by_value()
 
  - db_close_cursor()
- 
+
  - db_close_database()
 
  - db_close_database_shutdown_driver()
- 
+
  - db_column_Ctype()
 
  - db_column_sqltype()
@@ -586,11 +586,11 @@ Misc:
  - db_copy_table()
 
  - db_copy_table_where()
- 
+
  - db_copy_table_select()
 
  - db_copy_table_by_ints()
- 
+
  - db_create_database()
 
  - db_create_index()
@@ -602,7 +602,7 @@ Misc:
  - db_delete_database()
 
  - db_delete_table()
- 
+
  - db_describe_table()
 
  - db_drop_column()
@@ -618,15 +618,15 @@ Misc:
  - db_find_database()
 
  - db_get_column()
- 
+
  - db_get_num_rows()
 
  - db_get_table_number_of_rows()
- 
+
  - db_grant_on_table()
 
  - db_gversion()
- 
+
  - db_insert()
 
  - db_list_databases()
@@ -642,11 +642,11 @@ Misc:
  - db_open_insert_cursor()
 
  - db_open_select_cursor()
- 
+
  - db_open_update_cursor()
 
  - db_print_column_definition()
- 
+
  - db_print_table_definition()
 
  - db_start_driver_open_database()
@@ -660,7 +660,7 @@ Misc:
  - db_shutdown_driver()
 
  - db_start_driver()
- 
+
  - db_table_exists()
 
  - db_update()
@@ -675,7 +675,7 @@ Misc:
  - db_d_add_column()
 
  - db_d_append_error()
- 
+
  - db_d_begin_transaction()
 
  - db_d_bind_update()
@@ -717,7 +717,7 @@ Misc:
  - db_d_grant_on_table()
 
  - db_d_init_error()
- 
+
  - db_d_insert()
 
  - db_d_list_databases()
@@ -737,7 +737,7 @@ Misc:
  - db_d_report_error()
 
  - db_d_update()
- 
+
 \section dbmiReferences References
 
 Text based on: R. Blazek, M. Neteler, and R. Micarelli. The new GRASS 5.1
@@ -746,7 +746,7 @@ Text based on: R. Blazek, M. Neteler, and R. Micarelli. The new GRASS 5.1
  http://www.ing.unitn.it/~grass/proceedings/proceedings/pdfs/Blazek_Radim.pdf
 
 \section dbmiSeeAlso See Also
- 
+
 GRASS Vector Architecture: \ref vectorlib
 
 \section dbmiAuthors Authors

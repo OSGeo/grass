@@ -227,8 +227,6 @@
       <wxgui-item name="Save"/>
       <wxgui-item name="SaveAs"/>
       <wxgui-item name="Close"/>
-      <separator/>
-      <wxgui-item name="LoadGRCFileTclTkGUI"/>
     </items>
   </toolbox>
   <toolbox name="MapDisplay">
@@ -304,13 +302,20 @@
       <module-item name="r.in.lidar">
         <label>LAS LiDAR points import</label>
       </module-item>
+      <module-item name="r.in.pdal">
+        <label>Point cloud (LAS LiDAR) import</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.in.wms">
+        <label>WMS/WMTS import</label>
+      </module-item>
       <separator/>
       <module-item name="r.unpack">
         <label>Unpack raster map</label>
       </module-item>
       <separator/>
       <module-item name="r.proj">
-        <label>Reproject raster map from different GRASS location</label>
+        <label>Reproject raster map from different GRASS project</label>
       </module-item>
     </items>
   </toolbox>
@@ -347,13 +352,16 @@
       <module-item name="v.in.lidar">
         <label>LAS LiDAR points import</label>
       </module-item>
+      <module-item name="v.in.pdal">
+        <label>Point cloud (LAS LiDAR) import</label>
+      </module-item>
       <separator/>
       <module-item name="v.unpack">
         <label>Unpack vector map</label>
       </module-item>
       <separator/>
       <module-item name="v.proj">
-        <label>Reproject vector map from different GRASS location</label>
+        <label>Reproject vector map from different GRASS project</label>
       </module-item>
     </items>
   </toolbox>
@@ -609,8 +617,6 @@
       <separator/>
       <wxgui-item name="CreateNewLocation"/>
       <wxgui-item name="CreateNewMapset"/>
-      <separator/>
-      <wxgui-item name="VersionAndCopyright"/>
     </items>
   </toolbox>
   <toolbox name="MapProjections">
@@ -680,10 +686,13 @@
       </module-item>
       <separator/>
       <module-item name="r.proj">
-        <label>Reproject raster map from different GRASS location</label>
+        <label>Reproject raster map from different GRASS project</label>
       </module-item>
       <module-item name="r.tileset">
         <label>Tiling</label>
+      </module-item>
+      <module-item name="r.buildvrt">
+        <label>Build a VRT (Virtual Raster)</label>
       </module-item>
     </items>
   </toolbox>
@@ -761,8 +770,8 @@
         <label>Raster series aggregation</label>
       </module-item>
       <module-item name="r.series.accumulate">
-        <label>Raster series accumulation</label> 
-      </module-item> 
+        <label>Raster series accumulation</label>
+      </module-item>
       <separator/>
       <module-item name="r.stats.zonal">
         <label>Statistical overlay</label>
@@ -797,6 +806,9 @@
       </module-item>
       <module-item name="r.cost">
         <label>Cost surface</label>
+      </module-item>
+      <module-item name="r.path">
+        <label>Trace a path</label>
       </module-item>
       <module-item name="r.walk">
         <label>Cumulative movement costs</label>
@@ -1067,12 +1079,16 @@
         <label>Regularized spline tension</label>
       </module-item>
       <separator/>
-      <module-item name="r.series.interp"> 
-        <label>Raster series interpolation</label> 
-      </module-item> 
+      <module-item name="r.series.interp">
+        <label>Raster series interpolation</label>
+      </module-item>
       <separator/>
       <module-item name="r.fillnulls">
         <label>Fill NULL cells</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.fill.stats">
+        <label>Fill NULL cells using IDW</label>
       </module-item>
     </items>
   </toolbox>
@@ -1167,7 +1183,7 @@
         <label>Rectify vector map</label>
       </module-item>
       <module-item name="v.proj">
-        <label>Reproject vector map from different GRASS location</label>
+        <label>Reproject vector map from different GRASS project</label>
       </module-item>
       <separator/>
       <module-item name="v.support">
@@ -1195,7 +1211,12 @@
         <label>Split polylines</label>
       </module-item>
       <separator/>
-      <wxgui-item name="CleanVectorMap"/>
+      <module-item name="v.clean">
+        <label>Clean vector map</label>
+      </module-item>
+      <module-item name="v.fill.holes">
+        <label>Fill holes in areas</label>
+      </module-item>
       <module-item name="v.generalize">
         <label>Smooth or simplify</label>
       </module-item>
@@ -1538,6 +1559,17 @@
         <label>Sequential maximum a posteriori classification (SMAP)</label>
       </module-item>
       <separator/>
+      <module-item name="i.svm.train">
+        <label>Input for supervised SVM</label>
+      </module-item>
+      <module-item name="i.svm.predict">
+        <label>Support Vector Machines classification (SVM)</label>
+      </module-item>
+      <separator/>
+      <module-item name="i.signatures">
+        <label>Manage signature files</label>
+      </module-item>
+      <separator/>
       <module-item name="i.segment">
         <label>Object segmentation</label>
       </module-item>
@@ -1551,6 +1583,9 @@
       </module-item>
       <module-item name="r.mfilter">
         <label>Matrix/convolving filter</label>
+      </module-item>
+      <module-item name="r.smooth.edgepreserve">
+        <label>Edge preserving smoothing</label>
       </module-item>
     </items>
   </toolbox>
@@ -2006,13 +2041,18 @@
         <label>Attribute table manager</label>
       </module-item>
       <wxgui-item name="CartographicComposer"/>
+      <wxgui-item name="CorrectsScanningDistortions"/>
+      <wxgui-item name="DataCatalog"/>
       <wxgui-item name="Georectify"/>
       <wxgui-item name="GraphicalModeler"/>
       <wxgui-item name="InteractiveInputForSupervisedClassification"/>
+      <wxgui-item name="ManagingGCPsfor3DCorrection"/>
       <wxgui-item name="MapSwipe"/>
+      <wxgui-item name="SetUpSamplingAndAnalysisFramework"/>
       <wxgui-item name="TplotTool"/>
       <wxgui-item name="TimelineTool"/>
+      <wxgui-item name="VDigit"/>
+      <wxgui-item name="RDigit"/>
     </items>
   </toolbox>
 </toolboxes>
-

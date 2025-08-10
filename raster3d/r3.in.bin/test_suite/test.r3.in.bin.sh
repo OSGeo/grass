@@ -4,8 +4,8 @@ g.region w=0 e=180 s=0 n=90 b=0 t=100 res3=10
 
 r3.mapcalc --o expr="test_out_bin_float = float(if(row() == 2, null(), row()))"
 r3.mapcalc --o expr="test_out_bin_double = double(if(row() == 2, null(), row()))"
-r3.out.ascii --o precision=0 input=test_out_bin_float output=test_out_bin_float.ref; 
-r3.out.ascii --o precision=0 input=test_out_bin_double output=test_out_bin_double.ref; 
+r3.out.ascii --o precision=0 input=test_out_bin_float output=test_out_bin_float.ref;
+r3.out.ascii --o precision=0 input=test_out_bin_double output=test_out_bin_double.ref;
 
 # @test
 
@@ -35,7 +35,7 @@ r3.out.bin --o input=test_out_bin_float byte=4 null=-9999 \
 r3.out.bin --o input=test_out_bin_float byte=4 null=-9999 \
     output=test_out_bin_float_swap_b4.bin order=swap
 
-    
+
 # Write float map as integer array
 
 r3.out.bin --o -i input=test_out_bin_float byte=1 null=0 \
@@ -106,7 +106,7 @@ r3.in.bin --o output=test_in_bin_float_10 byte=8 null=0 \
     input=test_out_bin_float_native_b8_as_integer.bin order=native \
     bottom=0 top=100 west=0 east=180 south=0 north=90 \
     cols=18 rows=9 depths=10 -i
-    
+
 # Test little and big endian
 
 r3.in.bin --o output=test_in_bin_float_11 byte=4 null=-9999 \
@@ -128,7 +128,7 @@ for map in `g.list type=raster_3d pattern=test_in_bin_float*` ; do
   r3.out.ascii input=${map} output=${map}.txt precision=0
 done
 
-for i in `ls test_in_bin_float_*.txt` ; do 
+for i in `ls test_in_bin_float_*.txt` ; do
     diff $i test_out_bin_float.ref
 done
 

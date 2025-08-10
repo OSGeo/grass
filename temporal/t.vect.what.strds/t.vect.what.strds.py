@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:       t.vect.what.strds
@@ -20,54 +20,55 @@
 #
 #############################################################################
 
-#%module
-#% description: Stores raster map values at spatial and temporal positions of vector points as vector attributes.
-#% keyword: temporal
-#% keyword: sampling
-#% keyword: vector
-#% keyword: time
-#%end
+# %module
+# % description: Stores raster map values at spatial and temporal positions of vector points as vector attributes.
+# % keyword: temporal
+# % keyword: sampling
+# % keyword: vector
+# % keyword: time
+# %end
 
-#%option G_OPT_STVDS_INPUT
-#%end
+# %option G_OPT_STVDS_INPUT
+# %end
 
-#%option G_OPT_STRDS_INPUT
-#% key: strds
-#%end
+# %option G_OPT_STRDS_INPUT
+# % key: strds
+# %end
 
-#%option
-#% key: column
-#% type: string
-#% label: Name of the vector column to be created and to store sampled raster values
-#% description: The use of a column name forces t.vect.what.rast to sample only values from the first map found in an interval. Otherwise the raster map names are used as column names
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: column
+# % type: string
+# % label: Name of the vector column to be created and to store sampled raster values
+# % description: The use of a column name forces t.vect.what.rast to sample only values from the first map found in an interval. Otherwise the raster map names are used as column names
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: method
-#% type: string
-#% description: Aggregate operation to be performed on the raster maps
-#% required: yes
-#% multiple: no
-#% options: disabled,average,count,median,mode,minimum,min_raster,maximum,max_raster,stddev,range,sum,variance,diversity,slope,offset,detcoeff,quart1,quart3,perc90,quantile,skewness,kurtosis
-#% answer: disabled
-#%end
+# %option
+# % key: method
+# % type: string
+# % description: Aggregate operation to be performed on the raster maps
+# % required: yes
+# % multiple: no
+# % options: disabled,average,count,median,mode,minimum,min_raster,maximum,max_raster,stddev,range,sum,variance,diversity,slope,offset,detcoeff,quart1,quart3,perc90,quantile,skewness,kurtosis
+# % answer: disabled
+# %end
 
-#%option G_OPT_DB_WHERE
-#%end
+# %option G_OPT_DB_WHERE
+# %end
 
-#%option G_OPT_T_WHERE
-#% key: t_where
-#%end
+# %option G_OPT_T_WHERE
+# % key: t_where
+# %end
 
-#%option G_OPT_T_SAMPLE
-#%end
+# %option G_OPT_T_SAMPLE
+# %end
 
 import os
-import grass.script as grass
-import grass.script.raster as raster
+
+import grass.script as gs
 from grass.exceptions import CalledModuleError
+from grass.script import raster
 
 ############################################################################
 
@@ -85,7 +86,7 @@ def main():
     tempwhere = options["t_where"]
     sampling = options["sampling"]
 
-    if where == "" or where == " " or where == "\n":
+    if where in {"", " ", "\n"}:
         where = None
 
     # Make sure the temporal database exists
@@ -99,8 +100,7 @@ def main():
 
     if strds_sp.get_temporal_type() != sp.get_temporal_type():
         dbif.close()
-        grass.fatal(_("Input and aggregation dataset must "
-                      "have the same temporal type"))
+        gs.fatal(_("Input and aggregation dataset must have the same temporal type"))
 
     # Check if intervals are present in the sample dataset
     if sp.get_temporal_type() == "absolute":
@@ -110,15 +110,20 @@ def main():
 
     if map_time != "interval":
         dbif.close()
-        grass.fatal(_("All registered maps of the space time vector "
-                      "dataset must have time intervals"))
+        gs.fatal(
+            _(
+                "All registered maps of the space time vector "
+                "dataset must have time intervals"
+            )
+        )
 
-    rows = sp.get_registered_maps("name,layer,mapset,start_time,end_time",
-                                  tempwhere, "start_time", dbif)
+    rows = sp.get_registered_maps(
+        "name,layer,mapset,start_time,end_time", tempwhere, "start_time", dbif
+    )
 
     if not rows:
         dbif.close()
-        grass.fatal(_("Space time vector dataset <%s> is empty") % sp.get_id())
+        gs.fatal(_("Space time vector dataset <%s> is empty") % sp.get_id())
 
     # Sample the raster dataset with the vector dataset and run v.what.rast
     for row in rows:
@@ -127,8 +132,7 @@ def main():
         vectmap = row["name"] + "@" + row["mapset"]
         layer = row["layer"]
 
-        raster_maps = tgis.collect_map_names(
-            strds_sp, dbif, start, end, sampling)
+        raster_maps = tgis.collect_map_names(strds_sp, dbif, start, end, sampling)
 
         aggreagated_map_name = None
 
@@ -136,26 +140,27 @@ def main():
             # Aggregation
             if method != "disabled" and len(raster_maps) > 1:
                 # Generate the temporary map name
-                aggreagated_map_name = "aggreagated_map_name_" + \
-                    str(os.getpid())
-                new_map = tgis.aggregate_raster_maps(raster_maps,
-                                                     aggreagated_map_name,
-                                                     start, end, 0, method,
-                                                     False, dbif)
-                aggreagated_map_name = aggreagated_map_name + "_0"
+                aggreagated_map_name = "aggreagated_map_name_" + str(os.getpid())
+                new_map = tgis.aggregate_raster_maps(
+                    raster_maps,
+                    aggreagated_map_name,
+                    start,
+                    end,
+                    0,
+                    method,
+                    False,
+                    dbif,
+                )
+                aggreagated_map_name += "_0"
                 if new_map is None:
                     continue
                 # We overwrite the raster_maps list
-                raster_maps = (new_map.get_id(), )
+                raster_maps = (new_map.get_id(),)
 
             for rastermap in raster_maps:
-
-                if column:
-                    col_name = column
-                else:
-                    # Create a new column with the SQL compliant
-                    # name of the sampled raster map
-                    col_name = rastermap.split("@")[0].replace(".", "_")
+                # Create a new column with the SQL compliant
+                # name of the sampled raster map if not column
+                col_name = column or rastermap.split("@")[0].replace(".", "_")
 
                 coltype = "DOUBLE PRECISION"
                 # Get raster type
@@ -165,43 +170,70 @@ def main():
 
                 try:
                     if layer:
-                        grass.run_command("v.db.addcolumn",
-                                          map=vectmap, layer=layer,
-                                          column="%s %s" % (col_name, coltype),
-                                          overwrite=grass.overwrite())
+                        gs.run_command(
+                            "v.db.addcolumn",
+                            map=vectmap,
+                            layer=layer,
+                            column="%s %s" % (col_name, coltype),
+                            overwrite=gs.overwrite(),
+                        )
                     else:
-                        grass.run_command("v.db.addcolumn", map=vectmap,
-                                          column="%s %s" % (col_name, coltype),
-                                          overwrite=grass.overwrite())
+                        gs.run_command(
+                            "v.db.addcolumn",
+                            map=vectmap,
+                            column="%s %s" % (col_name, coltype),
+                            overwrite=gs.overwrite(),
+                        )
                 except CalledModuleError:
                     dbif.close()
-                    grass.fatal(_("Unable to add column %s to vector map <%s>")
-                                % (col_name, vectmap))
+                    gs.fatal(
+                        _("Unable to add column %s to vector map <%s>")
+                        % (col_name, vectmap)
+                    )
 
                 # Call v.what.rast
                 try:
                     if layer:
-                        grass.run_command("v.what.rast", map=vectmap,
-                                          layer=layer, raster=rastermap,
-                                          column=col_name, where=where)
+                        gs.run_command(
+                            "v.what.rast",
+                            map=vectmap,
+                            layer=layer,
+                            raster=rastermap,
+                            column=col_name,
+                            where=where,
+                        )
                     else:
-                        grass.run_command("v.what.rast", map=vectmap,
-                                          raster=rastermap, column=col_name,
-                                          where=where)
+                        gs.run_command(
+                            "v.what.rast",
+                            map=vectmap,
+                            raster=rastermap,
+                            column=col_name,
+                            where=where,
+                        )
                 except CalledModuleError:
                     dbif.close()
-                    grass.fatal(_("Unable to run v.what.rast for vector map "
-                                  "<%s> and raster map <%s>") % (vectmap,
-                                                                 rastermap))
+                    gs.fatal(
+                        _(
+                            "Unable to run v.what.rast for vector map "
+                            "<%s> and raster map <%s>"
+                        )
+                        % (vectmap, rastermap)
+                    )
 
                 if aggreagated_map_name:
                     try:
-                        grass.run_command("g.remove", flags='f', type='raster',
-                                          name=aggreagated_map_name)
+                        gs.run_command(
+                            "g.remove",
+                            flags="f",
+                            type="raster",
+                            name=aggreagated_map_name,
+                        )
                     except CalledModuleError:
                         dbif.close()
-                        grass.fatal(_("Unable to remove raster map <%s>")
-                                    % (aggreagated_map_name))
+                        gs.fatal(
+                            _("Unable to remove raster map <%s>")
+                            % (aggreagated_map_name)
+                        )
 
                 # Use the first map in case a column names was provided
                 if column:
@@ -209,6 +241,7 @@ def main():
 
     dbif.close()
 
+
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

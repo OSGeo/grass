@@ -1,5 +1,4 @@
-/*
- **********************************************************************
+/***********************************************************************
  *
  * MODULE:       r3.support (GRASS core)
  *
@@ -12,7 +11,7 @@
  *
  * COPYRIGHT:    (C) 2000-2007 by the GRASS Development Team
  *
- *               This program is free software under the GNU General 
+ *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that comes
  *               with GRASS for details.
  *
@@ -50,7 +49,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("metadata"));
     G_add_keyword(_("voxel"));
     module->description = _("Allows creation and/or modification of "
-			    "3D raster map layer support files.");
+                            "3D raster map layer support files.");
 
     raster = G_define_standard_option(G_OPT_R3_MAP);
 
@@ -67,7 +66,7 @@ int main(int argc, char *argv[])
     history_opt->type = TYPE_STRING;
     history_opt->required = NO;
     history_opt->description =
-	_("Text to append to the next line of the map's metadata file");
+        _("Text to append to the next line of the map's metadata file");
 
     units_opt = G_define_option();
     units_opt->key = "unit";
@@ -80,7 +79,7 @@ int main(int argc, char *argv[])
     vunits_opt->type = TYPE_STRING;
     vunits_opt->required = NO;
     vunits_opt->description = _("The vertical unit of the map");
-    
+
     datasrc1_opt = G_define_option();
     datasrc1_opt->key = "source1";
     datasrc1_opt->key_desc = "phrase";
@@ -101,7 +100,7 @@ int main(int argc, char *argv[])
     datadesc_opt->type = TYPE_STRING;
     datadesc_opt->required = NO;
     datadesc_opt->description =
-	_("Text to use for data description or keyword(s)");
+        _("Text to use for data description or keyword(s)");
 
     map_opt = G_define_option();
     map_opt->key = "raster";
@@ -126,138 +125,141 @@ int main(int argc, char *argv[])
 
     /* Parse command-line options */
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     /* Make sure raster exists and set mapset */
     infile = raster->answer;
-    mapset = G_find_raster3d(infile, G_mapset());	/* current mapset only for editing */
+    mapset = G_find_raster3d(infile,
+                             G_mapset()); /* current mapset only for editing */
     if (!mapset || strcmp(mapset, G_mapset()) != 0)
-	G_fatal_error(_("3D raster map <%s> not found"), infile);
+        G_fatal_error(_("3D raster map <%s> not found"), infile);
 
     if (title_opt->answer) {
-	strncpy(title, title_opt->answer, MAX_TITLE_LEN);
-	title[MAX_TITLE_LEN - 1] = '\0';	/* strncpy doesn't null terminate over-sized input */
-	G_strip(title);
-	G_debug(3, "map title= [%s]  (%d chars)", title, (int)strlen(title));
-        
+        strncpy(title, title_opt->answer, MAX_TITLE_LEN);
+        title[MAX_TITLE_LEN - 1] =
+            '\0'; /* strncpy doesn't null terminate over-sized input */
+        G_strip(title);
+        G_debug(3, "map title= [%s]  (%d chars)", title, (int)strlen(title));
+
         Rast3d_read_history(raster->answer, "", &hist);
         Rast_set_history(&hist, HIST_TITLE, title);
-	Rast3d_write_history(raster->answer, &hist);
+        Rast3d_write_history(raster->answer, &hist);
     }
 
     if (save_opt->answer) {
-	FILE *fp = fopen(save_opt->answer, "w");
-	int i;
+        FILE *fp = fopen(save_opt->answer, "w");
+        int i;
 
-	if (!fp)
-	    G_fatal_error(_("Unable to open output file <%s>"), save_opt->answer);
+        if (!fp)
+            G_fatal_error(_("Unable to open output file <%s>"),
+                          save_opt->answer);
 
-	Rast3d_read_history(raster->answer, "", &hist);
+        Rast3d_read_history(raster->answer, "", &hist);
 
-	for (i = 0; i < Rast_history_length(&hist); i++)
-	    fprintf(fp, "%s\n", Rast_history_line(&hist, i));
+        for (i = 0; i < Rast_history_length(&hist); i++)
+            fprintf(fp, "%s\n", Rast_history_line(&hist, i));
 
-	fclose(fp);
+        fclose(fp);
     }
 
     if (load_opt->answer) {
-	FILE *fp = fopen(load_opt->answer, "r");
+        FILE *fp = fopen(load_opt->answer, "r");
 
-	if (!fp)
-	    G_fatal_error(_("Unable to open input file <%s>"), load_opt->answer);
+        if (!fp)
+            G_fatal_error(_("Unable to open input file <%s>"),
+                          load_opt->answer);
 
-	Rast3d_read_history(raster->answer, "", &hist);
+        Rast3d_read_history(raster->answer, "", &hist);
 
-	Rast_clear_history(&hist);
+        Rast_clear_history(&hist);
 
-	for (;;) {
-	    char buf[80];
-	    if (!G_getl2(buf, sizeof(buf), fp))
-		break;
-	    Rast_append_history(&hist, buf);
-	}
+        for (;;) {
+            char buf[80];
 
-	fclose(fp);
+            if (!G_getl2(buf, sizeof(buf), fp))
+                break;
+            Rast_append_history(&hist, buf);
+        }
 
-	Rast3d_write_history(raster->answer, &hist);
+        fclose(fp);
+
+        Rast3d_write_history(raster->answer, &hist);
     }
 
     if (history_opt->answer) {
-	Rast3d_read_history(raster->answer, "", &hist);
+        Rast3d_read_history(raster->answer, "", &hist);
 
-	/* two less than defined as if only one less a newline gets appended in the hist file. bug? */
-	/* Should be RECORD_LEN, but r.info truncates at > 71 chars */
-	if (strlen(history_opt->answer) > 71) {
-	    int i;
+        /* two less than defined as if only one less a newline gets appended in
+         * the hist file. bug? */
+        /* Should be RECORD_LEN, but r.info truncates at > 71 chars */
+        if (strlen(history_opt->answer) > 71) {
+            for (unsigned int i = 0; i < strlen(history_opt->answer); i += 71) {
+                char buf[72];
 
-	    for (i = 0; i < strlen(history_opt->answer); i += 71) {
-		char buf[72];
+                strncpy(buf, &history_opt->answer[i], sizeof(buf) - 1);
+                buf[sizeof(buf) - 1] = '\0';
 
-		strncpy(buf, &history_opt->answer[i], sizeof(buf)-1);
-		buf[sizeof(buf)-1] = '\0';
+                Rast_append_history(&hist, buf);
+            }
+        }
+        else
+            Rast_append_history(&hist, history_opt->answer);
 
-		Rast_append_history(&hist, buf);
-	    }
-	}
-	else
-	    Rast_append_history(&hist, history_opt->answer);
-
-	Rast3d_write_history(raster->answer, &hist);
+        Rast3d_write_history(raster->answer, &hist);
     }
-    
-    if(units_opt->answer || vunits_opt->answer) {
+
+    if (units_opt->answer || vunits_opt->answer) {
         RASTER3D_Map *map;
-        
-        map = Rast3d_open_cell_old(raster->answer, G_mapset(), \
-                RASTER3D_DEFAULT_WINDOW, RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
-        
+
+        map = Rast3d_open_cell_old(
+            raster->answer, G_mapset(), RASTER3D_DEFAULT_WINDOW,
+            RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
+
         /* Modify the units */
         if (units_opt->answer)
             Rast3d_set_unit(map, units_opt->answer);
 
         if (vunits_opt->answer)
             Rast3d_set_vertical_unit(map, vunits_opt->answer);
-        
+
         Rast3d_rewrite_header(map);
         Rast3d_close(map);
-    
     }
 
     if (datasrc1_opt->answer || datasrc2_opt->answer || datadesc_opt->answer) {
-	Rast3d_read_history(raster->answer, "", &hist);
+        Rast3d_read_history(raster->answer, "", &hist);
 
-	if (datasrc1_opt->answer)
-	    Rast_set_history(&hist, HIST_DATSRC_1, datasrc1_opt->answer);
+        if (datasrc1_opt->answer)
+            Rast_set_history(&hist, HIST_DATSRC_1, datasrc1_opt->answer);
 
-	if (datasrc2_opt->answer)
-	    Rast_set_history(&hist, HIST_DATSRC_2, datasrc2_opt->answer);
+        if (datasrc2_opt->answer)
+            Rast_set_history(&hist, HIST_DATSRC_2, datasrc2_opt->answer);
 
-	if (datadesc_opt->answer)
-	    Rast_set_history(&hist, HIST_KEYWRD, datadesc_opt->answer);
+        if (datadesc_opt->answer)
+            Rast_set_history(&hist, HIST_KEYWRD, datadesc_opt->answer);
 
-	Rast3d_write_history(raster->answer, &hist);
+        Rast3d_write_history(raster->answer, &hist);
     }
 
-    if (map_opt->answer) {	/* use cats from another map */
-	int fd;
-	struct Categories cats;
+    if (map_opt->answer) { /* use cats from another map */
+        int fd;
+        struct Categories cats;
 
-	fd = Rast_open_old(infile, "");
-	Rast_init_cats("", &cats);
-	if (Rast3d_read_cats(map_opt->answer, "", &cats) < 0)
-	    G_fatal_error(_("Unable to read category file of raster map <%s>"),
-			  map_opt->answer);
+        fd = Rast_open_old(infile, "");
+        Rast_init_cats("", &cats);
+        if (Rast3d_read_cats(map_opt->answer, "", &cats) < 0)
+            G_fatal_error(_("Unable to read category file of raster map <%s>"),
+                          map_opt->answer);
 
-	Rast3d_write_cats(infile, &cats);
-	G_message(_("cats table for [%s] set to %s"),
-		  infile, map_opt->answer);
-	Rast_close(fd);
-	Rast_free_cats(&cats);
+        Rast3d_write_cats(infile, &cats);
+        G_message(_("cats table for [%s] set to %s"), infile, map_opt->answer);
+        Rast_close(fd);
+        Rast_free_cats(&cats);
     }
 
     /* Check the histogram and range */
     if (stats_flag->answer)
-	check_stats(raster->answer);
+        check_stats(raster->answer);
 
     return EXIT_SUCCESS;
 }

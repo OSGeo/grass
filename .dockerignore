@@ -1,9 +1,17 @@
 docker
 !docker/testdata
-!docker/alpine/alpine-py38-ctypes.patch
-!docker/alpine/alpine-py38-gisinit.patch
-.git
+!docker/alpine/grass_tests.sh
 .gitignore
 .github
-.travis
-.travis.yml
+# Do not copy files from previous compilations
+dist.*
+
+# The following git files are needed by GRASS to extract the revision
+# during compilation. If you are not using one of the Dockerimages from this
+# repository, delete the .git folder in your Dockerfile after compilation.
+.git
+!.git/HEAD
+!.git/refs/heads
+!.git/objects
+.git/objects/*
+!.git/objects/pack

@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.cost
@@ -23,7 +22,7 @@
  *
  ***************************************************************************/
 
-/* These routines manage the list of grid-cell candidates for 
+/* These routines manage the list of grid-cell candidates for
  * visiting to calculate distances to surrounding cells.
  * A min-heap approach is used.  Components are
  * sorted first by distance then by the order in which they were added.
@@ -38,14 +37,13 @@
  *   retrieves the entry with the smallest distance value
  */
 
-
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include "cost.h"
 
 #define GET_PARENT(c) (((c) - 2) / 3 + 1)
-#define GET_CHILD(p) (((p) * 3) - 1)
+#define GET_CHILD(p)  (((p) * 3) - 1)
 
 static long next_point = 0;
 static long heap_size = 0;
@@ -57,20 +55,20 @@ int init_heap(void)
     next_point = 0;
     heap_size = 0;
     heap_alloced = 1000;
-    heap_index = (struct cost **) G_malloc(heap_alloced * sizeof(struct cost *));
+    heap_index = (struct cost **)G_malloc(heap_alloced * sizeof(struct cost *));
 
     free_point = NULL;
-    
+
     return 0;
 }
 
 int free_heap(void)
 {
     if (heap_alloced)
-	G_free(heap_index);
+        G_free(heap_index);
 
     if (free_point)
-	G_free(free_point);
+        G_free(free_point);
 
     return 0;
 }
@@ -80,38 +78,38 @@ int free_heap(void)
 int cmp_costs(struct cost *a, struct cost *b)
 {
     if (a->min_cost < b->min_cost)
-	return 1;
+        return 1;
     else if (a->min_cost == b->min_cost) {
-	if (a->age < b->age)
-	    return 1;
+        if (a->age < b->age)
+            return 1;
     }
 
     return 0;
 }
 
-long sift_up(long start, struct cost * child_pnt)
+long sift_up(long start, struct cost *child_pnt)
 {
     register long parent, child;
 
     child = start;
 
     while (child > 1) {
-	parent = GET_PARENT(child);
+        parent = GET_PARENT(child);
 
-	/* child is smaller */
-	if (cmp_costs(child_pnt, heap_index[parent])) {
-	    /* push parent point down */
-	    heap_index[child] = heap_index[parent];
-	    child = parent;
-	}
-	else
-	    /* no more sifting up, found new slot for child */
-	    break;
+        /* child is smaller */
+        if (cmp_costs(child_pnt, heap_index[parent])) {
+            /* push parent point down */
+            heap_index[child] = heap_index[parent];
+            child = parent;
+        }
+        else
+            /* no more sifting up, found new slot for child */
+            break;
     }
 
     /* put point in new slot */
     if (child < start) {
-	heap_index[child] = child_pnt;
+        heap_index[child] = child_pnt;
     }
 
     return child;
@@ -122,11 +120,11 @@ struct cost *insert(double min_cost, int row, int col)
     struct cost *new_cell;
 
     if (free_point) {
-	new_cell = free_point;
-	free_point = NULL;
+        new_cell = free_point;
+        free_point = NULL;
     }
     else
-	new_cell = (struct cost *)(G_malloc(sizeof(struct cost)));
+        new_cell = (struct cost *)(G_malloc(sizeof(struct cost)));
 
     new_cell->min_cost = min_cost;
     new_cell->age = next_point;
@@ -136,8 +134,9 @@ struct cost *insert(double min_cost, int row, int col)
     next_point++;
     heap_size++;
     if (heap_size >= heap_alloced) {
-	heap_alloced += 1000;
-	heap_index = (struct cost **) G_realloc((void *)heap_index, heap_alloced * sizeof(struct cost *));
+        heap_alloced += 1000;
+        heap_index = (struct cost **)G_realloc(
+            (void *)heap_index, heap_alloced * sizeof(struct cost *));
     }
 
     heap_index[heap_size] = new_cell;
@@ -152,17 +151,17 @@ struct cost *get_lowest(void)
     register long parent, child, childr, i;
 
     if (heap_size == 0)
-	return NULL;
-	
+        return NULL;
+
     next_cell = heap_index[1];
     heap_index[0] = next_cell;
 
     if (heap_size == 1) {
-	heap_size--;
+        heap_size--;
 
-	heap_index[1] = NULL;
+        heap_index[1] = NULL;
 
-	return next_cell;
+        return next_cell;
     }
 
     /* start with root */
@@ -171,30 +170,31 @@ struct cost *get_lowest(void)
     /* sift down: move hole back towards bottom of heap */
 
     while ((child = GET_CHILD(parent)) <= heap_size) {
-	/* select smallest child */
-	if (child < heap_size) {
-	    childr = child + 1;
-	    i = child + 3;
-	    while (childr < i && childr <= heap_size) {
-		/* get smallest child */
-		if (cmp_costs(heap_index[childr], heap_index[child])) {
-		    child = childr;
-		}
-		childr++;
-	    }
-	}
+        /* select smallest child */
+        if (child < heap_size) {
+            childr = child + 1;
+            i = child + 3;
+            while (childr < i && childr <= heap_size) {
+                /* get smallest child */
+                if (cmp_costs(heap_index[childr], heap_index[child])) {
+                    child = childr;
+                }
+                childr++;
+            }
+        }
 
-	/* move hole down */
-	heap_index[parent] = heap_index[child];
-	parent = child;
+        /* move hole down */
+        heap_index[parent] = heap_index[child];
+        parent = child;
     }
 
     /* hole is in lowest layer, move to heap end */
     if (parent < heap_size) {
-	heap_index[parent] = heap_index[heap_size];
+        heap_index[parent] = heap_index[heap_size];
 
-	/* sift up last swapped point, only necessary if hole moved to heap end */
-	sift_up(parent, heap_index[parent]);
+        /* sift up last swapped point, only necessary if hole moved to heap end
+         */
+        sift_up(parent, heap_index[parent]);
     }
 
     /* the actual drop */
@@ -206,9 +206,9 @@ struct cost *get_lowest(void)
 int delete(struct cost *delete_cell)
 {
     if (free_point)
-	G_free(delete_cell);
+        G_free(delete_cell);
     else
-	free_point = delete_cell;
+        free_point = delete_cell;
 
     return 0;
 }

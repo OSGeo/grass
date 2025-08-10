@@ -5,15 +5,14 @@ overlays cell category values onto a raster map layer displayed
 on the user's graphics monitor.
 
 Category values will be displayed in the text color given and scaled
-to fit within a single cell. A grid outlining each map cell will also 
+to fit within a single cell. A grid outlining each map cell will also
 be overlain in a user-specified color, unless it has been set to "none".
 
 <p>If no grid color is given the default will be used. If no map layer
 is specified, the program will use whatever raster map layer is
 currently displayed in the active frame on the graphics monitor.
-<p>If the <b>-f</b> flag is given the displayed number will take on the color 
+<p>If the <b>-f</b> flag is given the displayed number will take on the color
 of the base map in that cell.
-
 
 <h2>NOTES</h2>
 
@@ -25,7 +24,8 @@ No data cells are indicated with "Null".
 
 <h2>EXAMPLE</h2>
 
-A) Distance from the streams network (North Carolina sample dataset):
+Distance from the streams network (North Carolina sample dataset):
+
 <div class="code"><pre>
 g.region raster=streams_derived -p
 r.grow.distance input=streams_derived distance=dist_from_streams
@@ -33,7 +33,7 @@ d.rast.num dist_from_streams -a
 </pre></div>
 
 <div align="center" style="margin: 10px">
-<img src="d_rast_num_zoom.png" border=0><br>
+<img src="d_rast_num_zoom.png" border="0" alt="Euclidean distance from the streams network in meters"><br>
 <i>Euclidean distance from the streams network in meters (detail, numbers shown
    with d.rast.num)</i>
 </div>
@@ -50,14 +50,8 @@ d.rast.num dist_from_streams -a
 <a href="r.slope.aspect.html">r.slope.aspect</a>
 </em>
 
-
 <h2>AUTHORS</h2>
 
 Raghavan Srinivasan,
 and Chris Rewerts,<br>
 Agricultural Engineering, Purdue University
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

@@ -22,31 +22,30 @@ the rasterized contour lines, thus ensuring that an uphill and downhill
 contour value will be the two values chosen.  <em>r.surf.contour</em>
 interpolates from the uphill and downhill values by the true distance.
 
-
 <h3>Parameters:</h3>
 
 <dl>
 
-<dt><b>input=</b><em>name</em> 
+<dt><b>input=</b><em>name</em>
 
-<dd>Name of an existing raster map that contains a set of 
+<dd>Name of an existing raster map that contains a set of
 initial category values (i.e., some cells contain known elevation
 values (denoting contours) while the rest contain NULL values).
 
-<dt><b>output=</b><em>name</em> 
+<dt><b>output=</b><em>name</em>
 
 <dd>Name to be assigned to new output raster map that represents
 a smooth (e.g., elevation) surface generated from
 the known category values in the input raster map layer.
 </dl>
 
-<p>An existing MASK raster map is respected for both reading <em>input</em>
+<p>An existing mask raster map is respected for both reading <em>input</em>
 and writing <em>output</em>.
 
 <h2>NOTES</h2>
 
 <em>r.surf.contour</em> works well under the following circumstances:
-1) the contour lines extend to the the edge of the current region,
+1) the contour lines extend to the edge of the current region,
 2) the program is run at the same resolution as that of the input map,
 3) there are no disjointed contour lines,
 and 4) no spot elevation data BETWEEN contour lines exist.  Spot elevations at
@@ -76,7 +75,7 @@ g.region raster=elevation -p
 # get minimum elevation value
 r.univar elevation
 
-# generate vector contour lines 
+# generate vector contour lines
 r.contour input=elevation output=contours_5m step=5 minlevel=50
 
 # rasterize contour lines
@@ -94,7 +93,6 @@ r.colors diff color=differences
 r.univar diff
 </pre></div>
 
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -108,13 +106,8 @@ r.univar diff
 </em>
 
 <p>
-Overview: <a href="https://grasswiki.osgeo.org/wiki/Interpolation">Interpolation and Resampling</a> in GRASS GIS
+Overview: <a href="https://grasswiki.osgeo.org/wiki/Interpolation">Interpolation and Resampling</a> in GRASS
 
 <h2>AUTHOR</h2>
 
 Chuck Ehlschlaeger, U.S. Army Construction Engineering Research Laboratory
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

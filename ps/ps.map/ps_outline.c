@@ -34,14 +34,13 @@ double e1, e2, e3, n1, n2, n3;
  ** plotted.
  */
 
-extern RASTER_MAP_TYPE o_open_file();
 static RASTER_MAP_TYPE map_type;
 
 int ps_outline(void)
 {
-    /* let user know what's happenning */
-    G_message(_("Outlining areas in raster map <%s in %s> ..."),
-	      PS.cell_name, PS.cell_mapset);
+    /* let user know what's happening */
+    G_message(_("Outlining areas in raster map <%s in %s> ..."), PS.cell_name,
+              PS.cell_mapset);
 
     /* set the outline color and width */
     set_ps_color(&PS.outline_color);
@@ -56,14 +55,9 @@ int ps_outline(void)
     return 0;
 }
 
-
 /* The outlinefile function is just slightly modified p.map code. */
-#define KEY(x) (strcmp(key,x)==0)
-static char *help[] = {
-    "color  color",
-    "width  #",
-    ""
-};
+#define KEY(x) (strcmp(key, x) == 0)
+static char *help[] = {"color  color", "width  #", ""};
 int read_outline(void)
 {
     char buf[1024];
@@ -75,36 +69,36 @@ int read_outline(void)
     set_color(&color, 0, 0, 0);
 
     while (input(2, buf, help)) {
-	if (!key_data(buf, &key, &data))
-	    continue;
+        if (!key_data(buf, &key, &data))
+            continue;
 
-	if (KEY("color")) {
-	    ret = G_str_to_color(data, &r, &g, &b);
-	    if (ret == 1)
-		set_color(&color, r, g, b);
-	    else if (ret == 2)  /* i.e. "none" */
-		/* unset_color(&color); */
-		error(key, data, _("Unsupported color request"));
-	    else
-		error(key, data, _("illegal color request"));
+        if (KEY("color")) {
+            ret = G_str_to_color(data, &r, &g, &b);
+            if (ret == 1)
+                set_color(&color, r, g, b);
+            else if (ret == 2) /* i.e. "none" */
+                /* unset_color(&color); */
+                error(key, data, _("Unsupported color request"));
+            else
+                error(key, data, _("illegal color request"));
 
-	    continue;
-	}
+            continue;
+        }
 
-	if (KEY("width")) {
-	    PS.outline_width = -1.;
-	    ch = ' ';
-	    if (sscanf(data, "%lf%c", &(PS.outline_width), &ch) < 1
-		|| PS.outline_width < 0.) {
-		PS.outline_width = 1.;
-		error(key, data, _("illegal width request"));
-	    }
-	    if (ch == 'i')
-		PS.outline_width = PS.outline_width * 72.;
-	    continue;
-	}
+        if (KEY("width")) {
+            PS.outline_width = -1.;
+            ch = ' ';
+            if (sscanf(data, "%lf%c", &(PS.outline_width), &ch) < 1 ||
+                PS.outline_width < 0.) {
+                PS.outline_width = 1.;
+                error(key, data, _("illegal width request"));
+            }
+            if (ch == 'i')
+                PS.outline_width = PS.outline_width * 72.;
+            continue;
+        }
 
-	error(key, data, _("illegal outline sub-request"));
+        error(key, data, _("illegal outline sub-request"));
     }
 
     PS.outline_color = color;
@@ -113,55 +107,53 @@ int read_outline(void)
     return 0;
 }
 
-
 /* draw_outline - draw boundaries of polygons in file */
 
 int draw_outline(void)
 {
     int raster_size;
 
-    row = col = top = 0;	/* get started for read of first */
-    bottom = 1;			/*   line from raster map */
+    row = col = top = 0; /* get started for read of first */
+    bottom = 1;          /*   line from raster map */
     scan_length = read_next();
     k = 0;
     raster_size = Rast_cell_size(map_type);
-    while (read_next()) {	/* read rest of file, one row at *//*   a time */
-	n1 = Rast_row_to_northing((double)row - 1., &(PS.w));
-	n2 = Rast_row_to_northing((double)row, &(PS.w));
-	n3 = Rast_row_to_northing((double)row + 1., &(PS.w));
+    while (read_next()) { /* read rest of file, one row at */ /*   a time */
+        n1 = Rast_row_to_northing((double)row - 1., &(PS.w));
+        n2 = Rast_row_to_northing((double)row, &(PS.w));
+        n3 = Rast_row_to_northing((double)row + 1., &(PS.w));
 
-	for (col = 0; col < scan_length - 1; col++) {
-	    e1 = Rast_col_to_easting((double)col - 1., &(PS.w));
-	    e2 = Rast_col_to_easting((double)col, &(PS.w));
-	    e3 = Rast_col_to_easting((double)col + 1., &(PS.w));
-	    tl = G_incr_void_ptr(buffer[top], col * raster_size);
-	    /* top left in window */
-	    tr = G_incr_void_ptr(buffer[top], (col + 1) * raster_size);
-	    /* top right in window */
-	    bl = G_incr_void_ptr(buffer[bottom], col * raster_size);
-	    /* bottom left in window */
-	    br = G_incr_void_ptr(buffer[bottom], (col + 1) * raster_size);
-	    /* bottom right in window */
-	    draw_boundaries();
-	    if (k == 3)
-		k = 0;
-	}
-	row++;
+        for (col = 0; col < scan_length - 1; col++) {
+            e1 = Rast_col_to_easting((double)col - 1., &(PS.w));
+            e2 = Rast_col_to_easting((double)col, &(PS.w));
+            e3 = Rast_col_to_easting((double)col + 1., &(PS.w));
+            tl = G_incr_void_ptr(buffer[top], col * raster_size);
+            /* top left in window */
+            tr = G_incr_void_ptr(buffer[top], (col + 1) * raster_size);
+            /* top right in window */
+            bl = G_incr_void_ptr(buffer[bottom], col * raster_size);
+            /* bottom left in window */
+            br = G_incr_void_ptr(buffer[bottom], (col + 1) * raster_size);
+            /* bottom right in window */
+            draw_boundaries();
+            if (k == 3)
+                k = 0;
+        }
+        row++;
     }
 
     return 0;
-}				/* draw_outlines */
-
+} /* draw_outlines */
 
 static int draw_boundaries(void)
 {
     if (Rast_raster_cmp(bl, br, map_type) != 0)
-	draw_bot();
+        draw_bot();
     if (Rast_raster_cmp(tr, br, map_type) != 0)
-	draw_rite();
+        draw_rite();
 
     return 0;
-}				/* draw_boundaries */
+} /* draw_boundaries */
 
 /* read_next - read another line from input file */
 
@@ -169,8 +161,8 @@ static int read_next(void)
 {
     int n;
 
-    top = bottom++;		/* switch top and bottom, */
-    bottom = 1 & bottom;	/*   which are always 0 or 1 */
+    top = bottom++;      /* switch top and bottom, */
+    bottom = 1 & bottom; /*   which are always 0 or 1 */
     n = o_read_row(buffer[bottom]);
     return (n);
 }
@@ -197,9 +189,9 @@ int draw_top(void)
     sec_draw = 0;
     G_plot_line(e2, n2, e2, n1);
     if (++k == 3)
-	fprintf(PS.fp, " D\n");
+        fprintf(PS.fp, " D\n");
     else
-	fprintf(PS.fp, " D ");
+        fprintf(PS.fp, " D ");
 
     return 0;
 }
@@ -215,9 +207,9 @@ int draw_rite(void)
     sec_draw = 0;
     G_plot_line(e2, n2, e3, n2);
     if (++k == 3)
-	fprintf(PS.fp, " D\n");
+        fprintf(PS.fp, " D\n");
     else
-	fprintf(PS.fp, " D ");
+        fprintf(PS.fp, " D ");
 
     return 0;
 }
@@ -233,9 +225,9 @@ int draw_left(void)
     sec_draw = 0;
     G_plot_line(e2, n2, e1, n2);
     if (++k == 3)
-	fprintf(PS.fp, " D\n");
+        fprintf(PS.fp, " D\n");
     else
-	fprintf(PS.fp, " D ");
+        fprintf(PS.fp, " D ");
 
     return 0;
 }
@@ -251,9 +243,9 @@ int draw_bot(void)
     sec_draw = 0;
     G_plot_line(e2, n2, e2, n3);
     if (++k == 3)
-	fprintf(PS.fp, " D\n");
+        fprintf(PS.fp, " D\n");
     else
-	fprintf(PS.fp, " D ");
+        fprintf(PS.fp, " D ");
 
     return 0;
 }

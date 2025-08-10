@@ -11,7 +11,7 @@ ifneq ($(MINGW),)
 default: GRASS-Packager.bat GRASS-Installer.nsi parsubdirs
 else
 default:
-endif	
+endif
 
 GRASS-Packager.bat: GRASS-Packager.bat.tmpl
 	sed \
@@ -21,7 +21,7 @@ GRASS-Packager.bat: GRASS-Packager.bat.tmpl
 
 GRASS-Installer.nsi: GRASS-Installer.nsi.tmpl
 	sed \
-	-e 's#@GRASS_VERSION_SVN@#$(GRASS_VERSION_SVN)#' \
+	-e 's#@GRASS_VERSION_GIT@#$(GRASS_VERSION_GIT)#' \
 	-e 's#@GRASS_VERSION_MAJOR@#$(GRASS_VERSION_MAJOR)#' \
 	-e 's#@GRASS_VERSION_MINOR@#$(GRASS_VERSION_MINOR)#' \
 	-e 's#@GRASS_VERSION_RELEASE@#$(GRASS_VERSION_RELEASE)#' \

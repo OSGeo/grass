@@ -1,11 +1,12 @@
 #include <grass/raster.h>
 
-struct ncb			/* neighborhood control block */
+struct ncb /* neighborhood control block */
 {
-    DCELL **buf;		/* for reading raster map */
-    int *value;			/* neighborhood values */
-    int nsize;			/* size of the neighborhood */
-    int dist;			/* nsize/2 */
+    DCELL ***buf; /* for reading raster map */
+    int *value;   /* neighborhood values */
+    int nsize;    /* size of the neighborhood */
+    int dist;     /* nsize/2 */
+    int threads;
     struct Categories cats;
     char **mask;
     DCELL **weights;

@@ -18,21 +18,20 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
-import os
-
 import wx
 
 from grass.pydispatch.signal import Signal
+
 try:
-    from PIL import Image
+    from PIL import Image  # noqa: F401
+
     hasPIL = True
 except ImportError:
     hasPIL = False
 from gui_core.wrap import NewId
 
 
-class OverlayController(object):
-
+class OverlayController:
     """Base class for decorations (barscale, legend) controller."""
 
     def __init__(self, renderer, giface):
@@ -40,17 +39,18 @@ class OverlayController(object):
         self._renderer = renderer
         self._overlay = None
         self._coords = None
-        self._pdcType = 'image'
+        self._pdcType = "image"
         self._propwin = None
-        self._defaultAt = ''
-        self._cmd = None   # to be set by user
+        self._defaultAt = ""
+        self._cmd = None  # to be set by user
         self._name = None  # to be defined by subclass
         self._removeLabel = None  # to be defined by subclass
+        self._activateLabel = None  # to be defined by subclass
         self._id = NewId()
         self._dialog = None
 
         # signals that overlay or its visibility changed
-        self.overlayChanged = Signal('OverlayController::overlayChanged')
+        self.overlayChanged = Signal("OverlayController::overlayChanged")
 
     def SetCmd(self, cmd):
         hasAt = False
@@ -74,8 +74,7 @@ class OverlayController(object):
 
     def GetCoords(self):
         if self._coords is None:  # initial position
-            x, y = self.GetPlacement(
-                (self._renderer.width, self._renderer.height))
+            x, y = self.GetPlacement((self._renderer.width, self._renderer.height))
             self._coords = [x, y]
         return self._coords
 
@@ -95,6 +94,11 @@ class OverlayController(object):
         return self._removeLabel
 
     removeLabel = property(fget=GetRemoveLabel)
+
+    def GetActivateLabel(self):
+        return self._activateLabel
+
+    activateLabel = property(fget=GetActivateLabel)
 
     def GetId(self):
         return self._id
@@ -122,10 +126,10 @@ class OverlayController(object):
 
     dialog = property(fget=GetDialog, fset=SetDialog)
 
-    def IsShown(self):
-        if self._overlay and self._overlay.IsActive() and self._overlay.IsRendered():
-            return True
-        return False
+    def IsShown(self) -> bool:
+        return bool(
+            self._overlay and self._overlay.IsActive() and self._overlay.IsRendered()
+        )
 
     def Show(self, show=True):
         """Activate or deactivate overlay."""
@@ -157,13 +161,14 @@ class OverlayController(object):
             command=self.cmd,
             active=False,
             render=True,
-            hidden=True)
+            hidden=True,
+        )
         # check if successful
 
     def _update(self):
         self._renderer.ChangeOverlay(id=self._id, command=self._cmd)
 
-    def CmdIsValid(self):
+    def CmdIsValid(self) -> bool:
         """If command is valid"""
         return True
 
@@ -176,169 +181,183 @@ class OverlayController(object):
             self._giface.WriteWarning(
                 _(
                     "Please install Python Imaging Library (PIL)\n"
-                    "for better control of legend and other decorations."))
+                    "for better control of legend and other decorations."
+                )
+            )
             return 0, 0
 
         for param in self._cmd:
-            if not param.startswith('at'):
+            if not param.startswith("at"):
                 continue
-            x, y = [float(number) for number in param.split('=')[1].split(',')]
-            x = int((x / 100.) * screensize[0])
-            y = int((1 - y / 100.) * screensize[1])
+            x, y = (float(number) for number in param.split("=")[1].split(","))
+            x = int((x / 100.0) * screensize[0])
+            y = int((1 - y / 100.0) * screensize[1])
 
             return x, y
 
 
 class DtextController(OverlayController):
-
     def __init__(self, renderer, giface):
         OverlayController.__init__(self, renderer, giface)
-        self._name = 'text'
+        self._name = "text"
         self._removeLabel = _("Remove text")
-        self._defaultAt = 'at=50,50'
-        self._cmd = ['d.text', self._defaultAt]
+        self._activateLabel = _("Text properties")
+        self._defaultAt = "at=50,50"
+        self._cmd = ["d.text", self._defaultAt]
 
-    def CmdIsValid(self):
+    def CmdIsValid(self) -> bool:
         inputs = 0
         for param in self._cmd[1:]:
-            param = param.split('=')
-            if len(param) == 1:
+            param = param.split("=")
+            if len(param) == 1 or (param[0] == "text" and len(param) == 2):
                 inputs += 1
-            else:
-                if param[0] == 'text' and len(param) == 2:
-                    inputs += 1
-        if inputs >= 1:
-            return True
-        return False
+        return inputs >= 1
 
 
 class BarscaleController(OverlayController):
-
     def __init__(self, renderer, giface):
         OverlayController.__init__(self, renderer, giface)
-        self._name = 'barscale'
+        self._name = "barscale"
         self._removeLabel = _("Remove scale bar")
+        self._activateLabel = _("Scale bar properties")
         # different from default because the reference point is not in the
         # middle
-        self._defaultAt = 'at=0,98'
-        self._cmd = ['d.barscale', self._defaultAt]
+        self._defaultAt = "at=0,98"
+        self._cmd = ["d.barscale", self._defaultAt]
 
 
 class ArrowController(OverlayController):
-
     def __init__(self, renderer, giface):
         OverlayController.__init__(self, renderer, giface)
-        self._name = 'arrow'
+        self._name = "arrow"
         self._removeLabel = _("Remove north arrow")
+        self._activateLabel = _("North arrow properties")
         # different from default because the reference point is not in the
         # middle
-        self._defaultAt = 'at=85.0,25.0'
-        self._cmd = ['d.northarrow', self._defaultAt]
+        self._defaultAt = "at=85.0,25.0"
+        self._cmd = ["d.northarrow", self._defaultAt]
 
 
 class LegendVectController(OverlayController):
-
     def __init__(self, renderer, giface):
         OverlayController.__init__(self, renderer, giface)
-        self._name = 'vectleg'
-        self._removeLabel = _("Remove vector legend")
+        self._name = "vectleg"
+        self._removeLabel = _("Remove legend")
+        self._activateLabel = _("Vector legend properties")
         # different from default because the reference point is not in the
         # middle
-        self._defaultAt = 'at=20.0,80.0'
-        self._cmd = ['d.legend.vect', self._defaultAt]
+        self._defaultAt = "at=20.0,80.0"
+        self._cmd = ["d.legend.vect", self._defaultAt]
 
 
 class LegendController(OverlayController):
-
     def __init__(self, renderer, giface):
         OverlayController.__init__(self, renderer, giface)
-        self._name = 'legend'
+        self._name = "legend"
         self._removeLabel = _("Remove legend")
+        self._activateLabel = _("Raster legend properties")
         # default is in the center to avoid trimmed legend on the edge
-        self._defaultAt = 'at=5,50,47,50'
-        self._cmd = ['d.legend', self._defaultAt]
+        self._defaultAt = "at=5,50,47,50"
+        self._actualAt = self._defaultAt
+        self._cmd = ["d.legend", self._defaultAt]
+
+    def SetCmd(self, cmd):
+        """Overridden method
+
+        Required for setting default or actual raster legend position.
+        """
+        hasAt = False
+        for i in cmd:
+            if i.startswith("at="):
+                hasAt = True
+                # reset coordinates, 'at' values will be used, see GetCoords
+                self._coords = None
+                break
+        if not hasAt:
+            if self._actualAt != self._defaultAt:
+                cmd.append(self._actualAt)
+            else:
+                cmd.append(self._defaultAt)
+        self._cmd = cmd
+
+    cmd = property(fset=SetCmd, fget=OverlayController.GetCmd)
 
     def GetPlacement(self, screensize):
         if not hasPIL:
             self._giface.WriteWarning(
                 _(
                     "Please install Python Imaging Library (PIL)\n"
-                    "for better control of legend and other decorations."))
+                    "for better control of legend and other decorations."
+                )
+            )
             return 0, 0
         for param in self._cmd:
-            if not param.startswith('at'):
+            if not param.startswith("at"):
                 continue
-            # if the at= is the default, we will move the legend from the center to bottom left
+            # if the at= is the default, we will move the legend from the center to
+            # bottom left
             if param == self._defaultAt:
                 b, t, l, r = 5, 50, 7, 10
             else:
-                b, t, l, r = [float(number) for number in param.split(
-                    '=')[1].split(',')]  # pylint: disable-msg=W0612
-            x = int((l / 100.) * screensize[0])
-            y = int((1 - t / 100.) * screensize[1])
+                b, t, l, r = (
+                    float(number) for number in param.split("=")[1].split(",")
+                )  # pylint: disable=W0612
+            x = int((l / 100.0) * screensize[0])
+            y = int((1 - t / 100.0) * screensize[1])
 
             return x, y
 
-    def CmdIsValid(self):
+    def CmdIsValid(self) -> bool:
         inputs = 0
         for param in self._cmd[1:]:
-            param = param.split('=')
-            if len(param) == 1:
+            param = param.split("=")
+            if (
+                len(param) == 1
+                or (param[0] == "raster" and len(param) == 2)
+                or (param[0] == "raster_3d" and len(param) == 2)
+            ):
                 inputs += 1
-            else:
-                if param[0] == 'raster' and len(param) == 2:
-                    inputs += 1
-                elif param[0] == 'raster_3d' and len(param) == 2:
-                    inputs += 1
-        if inputs == 1:
-            return True
-        return False
+        return inputs == 1
 
     def ResizeLegend(self, begin, end, screenSize):
         """Resize legend according to given bbox coordinates."""
         w = abs(begin[0] - end[0])
         h = abs(begin[1] - end[1])
-        if begin[0] < end[0]:
-            x = begin[0]
-        else:
-            x = end[0]
-        if begin[1] < end[1]:
-            y = begin[1]
-        else:
-            y = end[1]
+        x = min(end[0], begin[0])
+        y = min(end[1], begin[1])
 
-        at = [(screenSize[1] - (y + h)) / float(screenSize[1]) * 100,
-              (screenSize[1] - y) / float(screenSize[1]) * 100,
-              x / float(screenSize[0]) * 100,
-              (x + w) / float(screenSize[0]) * 100]
+        at = [
+            (screenSize[1] - (y + h)) / float(screenSize[1]) * 100,
+            (screenSize[1] - y) / float(screenSize[1]) * 100,
+            x / float(screenSize[0]) * 100,
+            (x + w) / float(screenSize[0]) * 100,
+        ]
         atStr = "at=%d,%d,%d,%d" % (at[0], at[1], at[2], at[3])
 
         for i, subcmd in enumerate(self._cmd):
-            if subcmd.startswith('at='):
+            if subcmd.startswith("at="):
                 self._cmd[i] = atStr
                 break
 
         self._coords = None
+        self._actualAt = atStr
         self.Show()
 
     def StartResizing(self):
         """Tool in toolbar or button itself were pressed"""
         # prepare for resizing
         window = self._giface.GetMapWindow()
-        window.SetNamedCursor('cross')
-        window.mouse['use'] = None
-        window.mouse['box'] = 'box'
-        window.pen = wx.Pen(colour='Black', width=2, style=wx.SHORT_DASH)
+        window.SetNamedCursor("cross")
+        window.mouse["use"] = None
+        window.mouse["box"] = "box"
+        window.pen = wx.Pen(colour="Black", width=2, style=wx.SHORT_DASH)
         window.mouseLeftUp.connect(self._finishResizing)
 
     def _finishResizing(self):
         window = self._giface.GetMapWindow()
         window.mouseLeftUp.disconnect(self._finishResizing)
         screenSize = window.GetClientSize()
-        self.ResizeLegend(
-            window.mouse["begin"],
-            window.mouse["end"],
-            screenSize)
+        self.ResizeLegend(window.mouse["begin"], window.mouse["end"], screenSize)
         self._giface.GetMapDisplay().GetMapToolbar().SelectDefault()
         # redraw
         self.overlayChanged.emit()

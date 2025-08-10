@@ -8,7 +8,7 @@
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team, Martin Landa <landa.martin gmail.com>
+ * \author GRASS Development Team, Martin Landa <landa.martin gmail.com>
  */
 
 #include <stdlib.h>
@@ -30,7 +30,6 @@
  * \return 1 if overwrite
  * \return 0 if not overwrite
  */
-
 int G_check_overwrite(int argc, char **argv)
 {
     const char *overstr;
@@ -38,25 +37,25 @@ int G_check_overwrite(int argc, char **argv)
 
     overwrite = 0;
     if ((overstr = G_getenv_nofatal("OVERWRITE"))) {
-	overwrite = atoi(overstr);
+        overwrite = atoi(overstr);
     }
 
     /* check if inherited GRASS_OVERWRITE is 1 */
     if (!overwrite && (overstr = getenv("GRASS_OVERWRITE"))) {
-	overwrite = atoi(overstr);
+        overwrite = atoi(overstr);
     }
 
     /* check for --o or --overwrite option */
     if (!overwrite) {
-	int i;
+        int i;
 
-	for (i = 0; i < argc; i++) {
-	    if (strcmp(argv[i], "--o") == 0 ||
-		strcmp(argv[i], "--overwrite") == 0) {
-		overwrite = 1;
-		break;
-	    }
-	}
+        for (i = 0; i < argc; i++) {
+            if (strcmp(argv[i], "--o") == 0 ||
+                strcmp(argv[i], "--overwrite") == 0) {
+                overwrite = 1;
+                break;
+            }
+        }
     }
 
     G_setenv_nogisrc("OVERWRITE", "1");

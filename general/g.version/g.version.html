@@ -1,28 +1,28 @@
 <h2>DESCRIPTION</h2>
 
 <em>g.version</em> prints to standard output the GRASS version number,
-date, the GRASS GIS copyright (<b>-c</b> flag), and GRASS build information
+date, the GRASS copyright (<b>-c</b> flag), and GRASS build information
 (<b>-b</b> flag).
 
 <h2>NOTES</h2>
 
 This program requires no command line arguments; the user simply types
 <em>g.version</em> on the command line to see the version number and
-date of the GRASS GIS software currently being run by the user.
+date of the GRASS software currently being run by the user.
 
 <p>
-Information about GRASS GIS
-core <a href="https://grass.osgeo.org/programming7/gislib.html">GIS
+Information about GRASS
+core <a href="https://grass.osgeo.org/programming8/gislib.html">GIS
 Library</a> can be printed by <b>-r</b> flag.
 
 <p>
 Version numbers of additional libraries
-like <a href="https://proj.org/">PROJ</a>, <a href="http://gdal.org/">GDAL/OGR</a>
-or <a href="http://trac.osgeo.org/geos">GEOS</a> are printed
+like <a href="https://proj.org/">PROJ</a>, <a href="https://gdal.org/">GDAL/OGR</a>
+or <a href="https://trac.osgeo.org/geos">GEOS</a> are printed
 by <b>-e</b> flag.
 
 <p>
-See also function <tt>version()</tt>
+See also function <code>version()</code>
 from <a href="https://grasswiki.osgeo.org/wiki/GRASS_Python_Scripting_Library">Python
 Scripting Library</a>.
 
@@ -36,9 +36,9 @@ print gcore.version()
 
 <h3>Basic info</h3>
 <div class="code"><pre>
-g.version 
+g.version
 
-GRASS 7.9.dev (2019)
+GRASS 8.4.0 (2024)
 </pre></div>
 
 <h3>GIS Library info</h3>
@@ -46,46 +46,46 @@ GRASS 7.9.dev (2019)
 <div class="code"><pre>
 g.version -r
 
-GRASS 7.9.dev (2019)
-libgis Revision
-libgis Date
+GRASS 8.4.0 (2024)
+libgis revision: c9e8576cf
+libgis date: 2024-04-27T09:38:49+00:00
 </pre></div>
 
 <h3>Full info in shell script style</h3>
 <div class="code"><pre>
 g.version -rge
 
-version=7.9.dev
-date=2019
-revision=2cb165dc8
-build_date=2019-08-05
+version=8.4.0
+date=2024
+revision=d57f40906
+build_date=2024-05-23
 build_platform=x86_64-pc-linux-gnu
 build_off_t_size=8
-libgis_revision=060163d17
-libgis_date="2017-04-04 09:43:02 +0200 (Tue, 04 Apr 2017) "
-proj4=5.2.0
-gdal=2.3.2
-geos=3.7.1
-sqlite=3.26.0
+libgis_revision=c9e8576cf
+libgis_date=2024-04-27T09:38:49+00:00
+proj=8.2.1
+gdal=3.4.3
+geos=3.9.2
+sqlite=3.36.0
 </pre></div>
 
-<h2>Citing GRASS GIS</h2>
+Note: if <code>revision=exported</code> is reported instead of the git hash then the
+<code>git</code> program was not available during compilation of GRASS and the
+source code did not contain the <code>.git/</code> subdirectory (requires e.g. to
+<code>git clone</code> the GRASS <a href="https://github.com/OSGeo/grass/">software repository</a>.)
+
+<h2>Citing GRASS</h2>
 
 The GRASS Development Team has invested significant time and effort
-in creating GRASS GIS, please cite it when using it for data analysis.
+in creating GRASS, please cite it when using it for data analysis.
 
-The GRASS GIS <a href="https://grass.osgeo.org/download/software/">Web site</a>
+The GRASS <a href="https://grass.osgeo.org/about/license/">Web site</a>
 offers citations in different styles.
 <!-- TODO: g.version should offer this right away -->
 
 <h2>AUTHORS</h2>
 
-Michael Shapiro, 
-U.S. Army Construction Engineering 
+Michael Shapiro,
+U.S. Army Construction Engineering
 Research Laboratory<br>
 Extended info by Martin Landa, Czech Technical University in Prague, Czech Republic
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

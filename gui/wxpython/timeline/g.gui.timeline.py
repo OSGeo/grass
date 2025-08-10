@@ -19,50 +19,55 @@
 #
 ############################################################################
 
-#%module
-#% description: Allows comparing temporal datasets by displaying their temporal extents in a plot.
-#% keyword: general
-#% keyword: GUI
-#% keyword: temporal
-#%end
-#%option G_OPT_STDS_INPUTS
-#% required: no
-#%end
-#%flag
-#% key: 3
-#% description: Show also 3D plot of spatio-temporal extents
-#%end
+# %module
+# % description: Allows comparing temporal datasets by displaying their temporal extents in a plot.
+# % keyword: general
+# % keyword: GUI
+# % keyword: temporal
+# % keyword: plot
+# %end
+# %option G_OPT_STDS_INPUTS
+# % required: no
+# %end
+# %flag
+# % key: 3
+# % description: Show also 3D plot of spatio-temporal extents
+# %end
 
-import grass.script as gscript
+import grass.script as gs
 
 
 def main():
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
 
     import wx
 
     from grass.script.setup import set_gui_path
+
     set_gui_path()
 
     try:
         from timeline.frame import TimelineFrame
     except ImportError as e:
         # TODO: why do we need this special check here, the reason of error
-        # is wrong intallation or something, no need to report this to the
+        # is wrong installation or something, no need to report this to the
         # user in a nice way
-        gscript.fatal(str(e))
+        gs.fatal(str(e))
 
-    datasets = options['inputs'].strip().split(',')
+    datasets = options["inputs"].strip().split(",")
     datasets = [data for data in datasets if data]
-    view3d = flags['3']
+    view3d = flags["3"]
 
     app = wx.App()
-    frame = TimelineFrame(None)
+    frame = TimelineFrame(
+        parent=None,
+        title=_("Timeline Tool - GRASS"),
+    )
     frame.SetDatasets(datasets)
     frame.Show3D(view3d)
     frame.Show()
     app.MainLoop()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

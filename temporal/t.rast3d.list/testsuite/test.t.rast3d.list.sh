@@ -2,7 +2,7 @@
 # This is a test to list 3draster maps of a space time raster3d dataset
 
 # We need to set a specific region in the
-# @preprocess step of this test. 
+# @preprocess step of this test.
 # The region setting should work for UTM and LL test locations
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
@@ -16,7 +16,7 @@ r3.mapcalc expr="vol_4 = rand(0, 510)" -s
 r3.mapcalc expr="vol_5 = rand(0, 300)" -s
 r3.mapcalc expr="vol_6 = rand(0, 650)" -s
 
-n1=`g.tempfile pid=1 -d` 
+n1=`g.tempfile pid=1 -d`
 n2=`g.tempfile pid=2 -d`
 n3=`g.tempfile pid=3 -d`
 n4=`g.tempfile pid=4 -d`

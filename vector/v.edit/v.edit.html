@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 The module <em>v.edit</em> allows the user to edit a vector map
-via command line interface. 
+via command line interface.
 
 <p><em>v.edit</em> supports only "simple" vector features: points,
 centroids, lines and boundaries. Currently, only 2D vector features
@@ -27,11 +27,11 @@ v.edit map=roads tool=select \
 selects all features (and prints their id's to standard output)
 covered by two bounding boxes (center at 599505,4921010 and
 603389.0625,4918292.1875, size 2*10000) with attribute
-<tt>label='interstate'</tt>.
+<code>label='interstate'</code>.
 
 <h2>NOTES</h2>
 
-If no vector features are selected or the flag <b>-t</b> is
+If no vector features are selected or the flag <b>-b</b> is
 used, topology is not build at the end.
 
 <h2>USAGE</h2>
@@ -46,8 +46,8 @@ Vector features can be selected in several ways:
     box, size defined by <b>threshold</b>)</li>
     <li><b>bbox</b> - using bounding box</li>
     <li><b>polygon</b> - using polygon (at least 3 coordinate pairs have to be set)</li>
-    <li><b>where</b> - using where statement (attribute data)
-    <li><b>query</b> - special query (e.g. minimal vector line length)
+    <li><b>where</b> - using where statement (attribute data)</li>
+    <li><b>query</b> - special query (e.g. minimal vector line length)</li>
 </ul>
 
 Additional parameters for vector feature specification are:
@@ -77,7 +77,7 @@ Additional parameters for vector feature specification are:
 
     <li><b>delete</b> - Delete selected vector features from existing
     vector map.</li>
-   
+
     <li><b>copy</b> - Make identical copy of selected vector
     features. If background map <b>bgmap</b> is given copy features
     from background map, not from currently modified vector map.</li>
@@ -108,8 +108,8 @@ Additional parameters for vector feature specification are:
     <li><b>break</b> - Split given vector line or boundary into two
     lines on location given by <b>coords</b>. If <b>coords</b> not
     given, breaks all selected lines at each intersection (based
-    on <em><a href="v.clean.html">v.clean</a></em>, <tt>tool=break</tt>).</li>
-    
+    on <em><a href="v.clean.html">v.clean</a></em>, <code>tool=break</code>).</li>
+
     <li><b>snap</b> - Snap vector features in given threshold. See
     also module <em><a href="v.clean.html">v.clean</a></em>. Note that this
     tool supports only snapping to nodes. Parameters <b>snap</b> and
@@ -139,7 +139,7 @@ Additional parameters for vector feature specification are:
 
     <li><b>chtype</b> - Change feature type of selected geometry
     objects. Points are converted to centroids, centroids to points,
-    lines to boundaries and boundaries to lines.
+    lines to boundaries and boundaries to lines.</li>
 
     <li><b>vertexadd</b> - Add vertex(ces) to the given vector lines
     or boundaries. Location of the new vertex is given by <b>coord</b>
@@ -156,7 +156,7 @@ Additional parameters for vector feature specification are:
     line or boundary in bounding box is modified. Moved vertex can be
     snapped (defined <b>snap</b>) to nodes or vertices based on
     threshold distance <b>threshold</b>.</li>
-    
+
     <li><b>zbulk</b> - Assign z coordinate to 3D vector lines in given
     bounding box. The first found line will get z coordinate based on
     value given by <b>zbulk</b> parameter. Z coordinate of other
@@ -165,7 +165,7 @@ Additional parameters for vector feature specification are:
     and <b>zbulk</b> parameter. Also input vector map must be 3D.</li>
 
     <li><b>select</b> - Print comma separated list of selected line
-      id's. No editing is done.
+      id's. No editing is done.</li>
 </ul>
 
 <h2>EXAMPLES</h2>
@@ -181,7 +181,7 @@ v.edit tool=create map=vectmap
 Create new vector map and read data from file 'roads.txt':
 
 <div class="code"><pre>
-v.out.ascii in=roads format=standard > roads.txt;
+v.out.ascii in=roads format=standard &gt; roads.txt;
 v.edit tool=create map=vectmap input=roads.txt
 </pre></div>
 
@@ -238,7 +238,7 @@ v.edit tool=delete map=roads cats=1,2 coords=600952.625,4926107
 </pre></div>
 
 Remove all features with category 1 and 2 covered by two bounding boxes
-(center coordinates 592542.892,4924766.996 and 603389.062,4918292.187, 
+(center coordinates 592542.892,4924766.996 and 603389.062,4918292.187,
 size 1000 map units):
 
 <div class="code"><pre>
@@ -430,7 +430,6 @@ v.edit a2 tool=zbulk bbox=586121.25049368,4911970.21547109,603092.60466035,49270
    zbulk=1000,10
 </pre></div>
 
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -449,9 +448,5 @@ v.edit a2 tool=zbulk bbox=586121.25049368,4911970.21547109,603092.60466035,49270
 
 Original author: Wolf Bergenheim - independent developer<br>
 Initial updates: Jachym Cepicky, Mendel University of Agriculture and Forestry in Brno, Czech Republic<br>
-Major update by Martin Landa, FBK-irst (formerly ITC-irst), Trento, Italy
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+Major update by Martin Landa, FBK-irst (formerly ITC-irst), Trento, Italy<br>
+Extend tools by Huidae Cho

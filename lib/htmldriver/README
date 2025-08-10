@@ -12,19 +12,19 @@ server-side image maps used by web server software.
   Note that commands that require the MOUSE will NOT work correctly (or
 at all!)
 
-  Polygons can at most have 100 vertices (this limit imposed by HTML image map 
-formats.)  The driver will attempt to trim polygons that have more that 100 
-vertices (also see GRASS_RENDER_HTMLMAXPOINTS, below.)  Also, any polygon that is 
+  Polygons can at most have 100 vertices (this limit imposed by HTML image map
+formats.)  The driver will attempt to trim polygons that have more that 100
+vertices (also see GRASS_RENDER_HTMLMAXPOINTS, below.)  Also, any polygon that is
 entirely bounded by another polygon will be discarded.
 
   Text written to the driver before polygons are used as the HREF tag for
-all subsequent polygons written.  It is intended that all polygons 
+all subsequent polygons written.  It is intended that all polygons
 that exists in a vector file will have the same HREF tag.
 
   The only GRASS display commands that should be used with this driver are:
 	d.text	 - pass href information for resulting image maps.
 	d.vect.area	 - draw polygons from a vector file.
-    
+
 
     0. Set environment variables:
 
@@ -36,7 +36,7 @@ that exists in a vector file will have the same HREF tag.
        Additionally, HTMLMAP driver recognizes:
 
        export GRASS_RENDER_HTMLTYPE
-       GRASS_RENDER_HTMLTYPE=xxx  
+       GRASS_RENDER_HTMLTYPE=xxx
             specifies the type of Html map to create:
 	    CLIENT  - Netscape client-side image map (default).  (NAME="map")
 	    APACHE  - Apache/NCSA server-side image map
@@ -59,7 +59,7 @@ that exists in a vector file will have the same HREF tag.
 	    change from the previous one to keep in the list of vertices
             for a polygon.  The default is '2', which means that a point's
 	    x or y difference from the previous point must change by a number
-	    of pixels greate than this value.  This parameters helps
+	    of pixels greater than this value.  This parameters helps
 	    to eliminate points closely spaced points.
 
 
@@ -68,14 +68,14 @@ that exists in a vector file will have the same HREF tag.
 	    specifies the minimum bounding box dimensions (both width and
 	    height) in order to store a polygon.  The default is '2', which
 	    means any polygon having bounding box width or height extent
-	    of less than 2 pixels will not be output as a clickable area.  
-            This parameter helps to eliminate clickable areas that are one 
+	    of less than 2 pixels will not be output as a clickable area.
+            This parameter helps to eliminate clickable areas that are one
 	    pixel in height or width, typically a single point or line.
-	
+
 
 	export GRASS_RENDER_HTMLMAXPOINTS
 	GRASS_RENDER_HTMLMAXPOINTS=xx
-	    specifies the maxiumum number of vertices that a polygon can 
+	    specifies the maximum number of vertices that a polygon can
 	    have.  The default is 99.  Some browser can only handle
 	    image map polygons of less that 100 vertices.
 
@@ -98,11 +98,11 @@ that exists in a vector file will have the same HREF tag.
 
          d.mon stop=HTMLMAP
 
-       This will write the image map file file. A new file called 'htmlmap' 
-       (or whatever you specified with GRASS_RENDER_FILE) will be created  
-       in your current directory.  
+       This will write the image map file file. A new file called 'htmlmap'
+       (or whatever you specified with GRASS_RENDER_FILE) will be created
+       in your current directory.
 
-    4. In practice, you'll want to create gif/jpg/png images that correspond 
+    4. In practice, you'll want to create gif/jpg/png images that correspond
        with your newly created image map:
 
          # using previous GRASS_RENDER_WIDTH & GRASS_RENDER_HEIGHT
@@ -119,7 +119,7 @@ that exists in a vector file will have the same HREF tag.
          g.region raster=D_cell
          r.out.ppm -q input=D_cell output=alien.ppm
          # use the netpbm utilities to create a gif (quantize if needed)
-         ppmquant 128 <alien.ppm |  ppmtogif >alien.gif	
+         ppmquant 128 <alien.ppm |  ppmtogif >alien.gif
          # assemble some html with the image and the image map
          echo '<html><body><img src="alien.gif" usemap="#map">' >alien.html
          cat htmlmap                                           >>alien.html
@@ -137,13 +137,13 @@ that exists in a vector file will have the same HREF tag.
 
 	cd src/display/devices/HTMLMAP
 	gmake5
-    
+
     If all goes well, the HTMLMAP driver will be compiled and moved into
     your device driver directory ($GISBASE/driver) and "etc/monitorcap"
     will be modified.
 
 
-  Other:  
+  Other:
 
     Don't forget to add the HTMLMAP driver in your monitorcap file!
     Your monitorcap file exists as $GISBASE/etc/monitorcap.
@@ -152,16 +152,16 @@ that exists in a vector file will have the same HREF tag.
              /usr/local/grass43/dev/fifo.9a /usr/local/grass43/dev/fifo.9b \
              ::any terminal
 
-    Note: This job will be done by the Gmakefile.    
+    Note: This job will be done by the Gmakefile.
 
     HTMLMAP was adapted from the CELL driver in GRASS 4.3.  Point-in-
-    polygon-test code was lifted from Randolph Franklin's web page, see 
+    polygon-test code was lifted from Randolph Franklin's web page, see
 
 	http://www.ecse.rpi.edu/Homepages/wrf/
 	http://www.ecse.rpi.edu/Homepages/wrf/research/geom/pnpoly.html
 
 
-    If you create an HTML file with two or more images & image maps, you 
+    If you create an HTML file with two or more images & image maps, you
     will need to edit the map names.  The HTMLMAP driver creates its map
     with the name 'map'.  A small sed script can easily change the map name:
 

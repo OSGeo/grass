@@ -5,17 +5,22 @@ external servers.
 
 <h2>EXAMPLES</h2>
 
-Import of world cities with population &gt; 1 million:
-<p>
-<div class="code"><pre>
-# run in Latitude-Longitude location (EPGS code 4326):
-# download geonam_gt1M layer:
-v.in.wfs \
-  url="http://mapserver.flightgear.org/ms?Service=WFS&amp;request=GetFeature&amp;version=1.0.0" \
-  name=geonam_gt1M output=geonam_gt1M
-</pre></div>
+<h3>WFS import without credentials</h3>
+Import of Copernicus Sentinel-2 satellite scene footprints:
 
 <p>
+<div class="code"><pre>
+# run in Latitude-Longitude project (EPGS code 4326):
+# download "sentinel:mgrs" layer:
+v.in.wfs url="https://geoserver.mundialis.de/geoserver/sentinel/wfs?" name="sentinel:mgrs" output=sentinel2_mgrs
+# download NRW ALKIS "ave:Flurstueck" attribute:
+# set the AOI beforehand with g.region and limit import to current region with -r flag
+v.in.wfs url="https://www.wfs.nrw.de/geobasis/wfs_nw_alkis_vereinfacht?" -r output=wfs_alkis_vereinfacht srs=25832
+name="ave:Flurstueck" version="2.0.0" layer="Flurstueck"
+</pre></div>
+
+<h3>WFS import with API key</h3>
+
 Download 25 ship wrecks from LINZ data service:
 <br>
 (first create yourself a free API key at
@@ -23,14 +28,14 @@ Download 25 ship wrecks from LINZ data service:
 
 <p>
 <div class="code"><pre>
-# run in LatLong location:
+# run in LatLong project:
 URL='http://wfs.data.linz.govt.nz/&lt;PUT YOUR API KEY HERE&gt;/wfs?'
 
-# download available layers to wms_capabilities.xml
-v.in.wfs -l url="$URL" 
+# download list of available layers to wms_capabilities.xml
+v.in.wfs -l url="$URL"
 </pre></div>
 
-From that file we learn that the shipwreck layer is called "<tt>v:x633</tt>"
+From that file we learn that the shipwreck layer is called "<code>v:x633</code>"
 and that EPSG code 4326 (LatLong WGS84) is a supported SRS for this data layer.
 
 <div class="code"><pre>
@@ -47,14 +52,10 @@ Parser support (for GML).
 <em>
 <a href="g.region.html">g.region</a>,
 <a href="r.in.wms.html">r.in.wms</a>,
+<a href="v.import.html">v.import</a>,
 <a href="v.in.ogr.html">v.in.ogr</a>
 </em>
 
 <h2>AUTHORS</h2>
 
 Markus Neteler, Hamish Bowman
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

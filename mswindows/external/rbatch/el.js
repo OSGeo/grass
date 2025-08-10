@@ -1,3 +1,5 @@
+/* global ActiveXObject, WScript */
+/* global Application:writeable, Arguments:writeable, Index:writeable */
 // elevate.js -- runs target command line elevated
 // Arguments should not have embedded spaces.
 // http://blogs.msdn.com/b/aaron_margosis/archive/2007/07/01/scripting-elevation-on-vista.aspx
@@ -10,9 +12,9 @@ if (WScript.Arguments.Length >= 1) {
         }
         Arguments += WScript.Arguments(Index);
     }
-    new ActiveXObject("Shell.Application").ShellExecute(Application, Arguments, "", "runas");
+    new ActiveXObject("Shell.Application")
+        .ShellExecute(Application, Arguments, "", "runas");
 } else {
     WScript.Echo("Usage:");
     WScript.Echo("elevate Application Arguments");
 }
-

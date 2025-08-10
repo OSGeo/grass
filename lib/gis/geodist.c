@@ -46,7 +46,6 @@ static struct state *st = &state;
  * \param a semi-major axis in meters
  * \param e2 ellipsoid eccentricity
  */
-
 void G_begin_geodesic_distance(double a, double e2)
 {
     st->al = a;
@@ -62,10 +61,9 @@ void G_begin_geodesic_distance(double a, double e2)
  *
  * <b>Note:</b> Must be called first.
  *
- * \param lat1 first latitude
+ * \param[in] lat1 first latitude
  * \return
  */
-
 void G_set_geodesic_distance_lat1(double lat1)
 {
     st->t1r = atan(st->boa * tan(Radians(lat1)));
@@ -78,7 +76,7 @@ void G_set_geodesic_distance_lat1(double lat1)
  *
  * <b>Note:</b> Must be called second.
  *
- * \param lat2 second latitidue
+ * \param[in] lat2 second latitude
  */
 void G_set_geodesic_distance_lat2(double lat2)
 {
@@ -113,28 +111,27 @@ void G_set_geodesic_distance_lat2(double lat2)
  * passed to G_set_geodesic_distance_latl() and <i>lat2</i> was the
  * latitude passed to G_set_geodesic_distance_lat2().
  *
- * \param lon1 first longitude
- * \param lon2 second longitude
+ * \param[in] lon1 first longitude
+ * \param[in] lon2 second longitude
  *
  * \return double distance in meters
  */
 double G_geodesic_distance_lon_to_lon(double lon1, double lon2)
 {
-    double a, cd, d, e,		/*dl, */
-      q, sd, sdlmr, t, u, v, x, y;
-
+    double a, cd, d, e, /*dl, */
+        q, sd, sdlmr, t, u, v, x, y;
 
     sdlmr = sin(Radians(lon2 - lon1) / 2);
 
     /* special case - shapiro */
     if (sdlmr == 0.0 && st->t1r == st->t2r)
-	return 0.0;
+        return 0.0;
 
     q = st->t3 + sdlmr * sdlmr * st->t4;
 
     /* special case - shapiro */
     if (q == 1.0)
-	return M_PI * st->al;
+        return M_PI * st->al;
 
     /* Mod: shapiro
      * cd=1-2q is ill-conditioned if q is small O(10**-23)
@@ -154,15 +151,15 @@ double G_geodesic_distance_lon_to_lon(double lon1, double lon2)
        t=dl/sd;
      */
 
-    cd = 1 - 2 * q;		/* ill-conditioned subtraction for small q */
+    cd = 1 - 2 * q; /* ill-conditioned subtraction for small q */
     /* mod starts here */
-    sd = 2 * sqrt(q - q * q);	/* sd^2 = 1 - cd^2 */
-    if (q != 0.0 && cd == 1.0)	/* test for small q */
-	t = 1.0;
+    sd = 2 * sqrt(q - q * q);  /* sd^2 = 1 - cd^2 */
+    if (q != 0.0 && cd == 1.0) /* test for small q */
+        t = 1.0;
     else if (sd == 0.0)
-	t = 1.0;
+        t = 1.0;
     else
-	t = acos(cd) / sd;	/* don't know how to fix acos(1-2*q) yet */
+        t = acos(cd) / sd; /* don't know how to fix acos(1-2*q) yet */
     /* mod ends here */
 
     u = st->t1 / (1 - q);
@@ -173,23 +170,23 @@ double G_geodesic_distance_lon_to_lon(double lon1, double lon2)
     y = u - v;
     a = -d * e;
 
-    return st->al * sd * (t
-			  - st->f / 4 * (t * x - y)
-			  + st->ff64 * (x * (a + (t - (a + e) / 2) * x)
-					+ y * (-2 * d + e * y) + d * x * y));
+    return st->al * sd *
+           (t - st->f / 4 * (t * x - y) +
+            st->ff64 * (x * (a + (t - (a + e) / 2) * x) + y * (-2 * d + e * y) +
+                        d * x * y));
 }
 
 /*!
  * \brief Calculates geodesic distance.
  *
- * Calculates the geodesic distance from <i>lon1,lat1</i> to 
+ * Calculates the geodesic distance from <i>lon1,lat1</i> to
  * <i>lon2,lat2</i> in meters.
- * 
+ *
  * <b>Note:</b> The calculation of the geodesic distance is fairly
  * costly.
  *
- * \param lon1,lat1 longitude,latitude of first point
- * \param lon2,lat2 longitude,latitude of second point
+ * \param[in] lon1,lat1 longitude,latitude of first point
+ * \param[in] lon2,lat2 longitude,latitude of second point
  *
  * \return distance in meters
  */

@@ -1,10 +1,9 @@
-
 /****************************************************************************
  *
  * MODULE:       r.report
  * AUTHOR(S):    Michael Shapiro, CERL (original contributor)
  *               Roberto Flor <flor itc.it>
- *               Jachym Cepicky <jachym les-ejk.cz>, 
+ *               Jachym Cepicky <jachym les-ejk.cz>,
  *               Jan-Oliver Wagner <jan intevation.de>
  *               Sort option by Martin Landa <landa.martin gmail.com>
  * PURPOSE:      Reports statistics for raster map(s).
@@ -52,7 +51,8 @@ DCELL *DMAX, *DMIN;
 int maskfd;
 CELL *mask;
 CELL NULL_CELL;
-int (*get_row)();
+
+enum OutputFormat format;
 
 char fs[2];
 struct Categories *labels;

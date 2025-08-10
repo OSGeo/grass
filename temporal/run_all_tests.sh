@@ -1,9 +1,9 @@
 #!/bin/sh
 # This scripts runs all tests available in the temporal module directory
-# Logs a written to "run.log" 
+# Logs a written to "run.log"
 
 if [ -z "$GISBASE" ] ; then
-    echo "You must be in GRASS GIS to run this program." 1>&2
+    echo "You must be in GRASS to run this program." 1>&2
     exit 1
 fi
 

@@ -30,7 +30,7 @@ export WORKERS=1
 time (
  r.mapcalc "$OUTPUT.r = r#$FIRST * $PERCENT/100.0 + (1.0 - $PERCENT/100.0) * r#$SECOND"
  r.mapcalc "$OUTPUT.g = g#$FIRST * $PERCENT/100.0 + (1.0 - $PERCENT/100.0) * g#$SECOND"
- r.mapcalc "$OUTPUT.b = b#$FIRST * $PERCENT/100.0 + (1.0 - $PERCENT/100.0) * b#$SECOND" 
+ r.mapcalc "$OUTPUT.b = b#$FIRST * $PERCENT/100.0 + (1.0 - $PERCENT/100.0) * b#$SECOND"
 )
 
 
@@ -42,5 +42,3 @@ time (
  r.mapcalc "$OUTPUT.b = b#$FIRST * $PERCENT/100.0 + (1.0 - $PERCENT/100.0) * b#$SECOND" &
  wait
 )
-
-

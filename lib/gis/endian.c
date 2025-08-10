@@ -23,16 +23,15 @@
  */
 int G_is_little_endian(void)
 {
-    union
-    {
-	int testWord;
-	char testByte[sizeof(int)];
+    union {
+        int testWord;
+        char testByte[sizeof(int)];
     } endianTest;
 
     endianTest.testWord = 1;
 
     if (endianTest.testByte[0] == 1)
-	return 1;		/* true: little endian */
+        return 1; /* true: little endian */
 
-    return 0;			/* false: big endian */
+    return 0; /* false: big endian */
 }

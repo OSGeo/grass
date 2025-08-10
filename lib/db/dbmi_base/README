@@ -15,7 +15,7 @@ For example
 	db_ls()        /* client routine */
 	db_driver_ls() /* driver routine */
 
-----------------------------------------------------------	
+----------------------------------------------------------
 The following variables need to be supplied by gmake
 
 XDRLIB:
@@ -27,11 +27,6 @@ XDRLIB:
 	mips:       XDRLIB = -lrpcsvc
 	sgi:        XDRLIB = -lsun
 
-USE_DIRECT:
-    #define that says to use #include <sys/dir.h> and struct direct
-    instead of #include <dirent.h> and struct dirent
-
-	mips: USE_DIRECT = -DUSE_DIRECT
 
 USE_BUFFERED_IO:
     #define that says to not to call setbuf(fd, NULL) to force unbuffered io
@@ -47,7 +42,7 @@ CC:
 
 ---------------
 The $DBMSCAP file should have the remote-shell full path in the
-command and not let $PATH handle it. 
+command and not let $PATH handle it.
 
 	sun: /usr/ucb/rsh
 	mips: /bin/net/rsh

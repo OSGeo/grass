@@ -1,4 +1,3 @@
-
 /* Vis5D version 5.0 */
 
 /*
@@ -21,8 +20,6 @@
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-
-
 #ifndef V5D_H
 #define V5D_H
 
@@ -42,28 +39,22 @@
 
 #define V5D_VERSION 42
 
-
 /*
  * Define our own 1 and 2-byte data types.  We use these names to avoid
  * collisions with types defined by the OS include files.
  */
-typedef unsigned char V5Dubyte;	/* Must be 1 byte, except for cray */
-typedef unsigned short V5Dushort;	/* Must be 2 byte, except for cray */
+typedef unsigned char V5Dubyte;   /* Must be 1 byte */
+typedef unsigned short V5Dushort; /* Must be 2 byte */
 
-
-
-#define MISSING 1.0e35
-#define IS_MISSING(X)  ( (X) >= 1.0e30 )
-
+#define MISSING       1.0e35
+#define IS_MISSING(X) ((X) >= 1.0e30)
 
 /* Limits on 5-D grid size:  (must match those in v5df.h!!!) */
-#define MAXVARS      30
-#define MAXTIMES    400
-#define MAXROWS     400
-#define MAXCOLUMNS  400
-#define MAXLEVELS   100
-
-
+#define MAXVARS       30
+#define MAXTIMES      400
+#define MAXROWS       400
+#define MAXCOLUMNS    400
+#define MAXLEVELS     100
 
 /************************************************************************/
 
@@ -79,40 +70,25 @@ typedef unsigned short V5Dushort;	/* Must be 2 byte, except for cray */
 
 /************************************************************************/
 
-extern int v5dCreateSimple(const char *name,
-			   int numtimes, int numvars,
-			   int nr, int nc, int nl,
-			   const char varname[MAXVARS][10],
-			   const int timestamp[],
-			   const int datestamp[],
-			   float northlat, float latinc,
-			   float westlon, float loninc,
-			   float bottomhgt, float hgtinc);
+extern int v5dCreateSimple(const char *name, int numtimes, int numvars, int nr,
+                           int nc, int nl, const char varname[MAXVARS][10],
+                           const int timestamp[], const int datestamp[],
+                           float northlat, float latinc, float westlon,
+                           float loninc, float bottomhgt, float hgtinc);
 
-
-extern int v5dCreate(const char *name,
-		     int numtimes, int numvars,
-		     int nr, int nc, const int nl[],
-		     const char varname[MAXVARS][10],
-		     const int timestamp[],
-		     const int datestamp[],
-		     int compressmode,
-		     int projection,
-		     const float proj_args[],
-		     int vertical, const float vert_args[]);
-
+extern int v5dCreate(const char *name, int numtimes, int numvars, int nr,
+                     int nc, const int nl[], const char varname[MAXVARS][10],
+                     const int timestamp[], const int datestamp[],
+                     int compressmode, int projection, const float proj_args[],
+                     int vertical, const float vert_args[]);
 
 extern int v5dWrite(int time, int var, const float data[]);
 
-
 extern int v5dClose(void);
-
 
 extern int v5dSetLowLev(int lowlev[]);
 
 extern int v5dSetUnits(int var, const char *units);
-
-
 
 /************************************************************************/
 
@@ -127,33 +103,32 @@ extern int v5dSetUnits(int var, const char *units);
 /************************************************************************/
 
 #define MAXPROJARGS 100
-#define MAXVERTARGS (MAXLEVELS+1)
+#define MAXVERTARGS (MAXLEVELS + 1)
 
 /*
  * This struct describes the structure of a .v5d file.
  */
-typedef struct
-{
+typedef struct {
     /* PUBLIC (user can freely read, sometimes write, these fields) */
-    int NumTimes;		/* Number of time steps */
-    int NumVars;		/* Number of variables */
-    int Nr;			/* Number of rows */
-    int Nc;			/* Number of columns */
-    int Nl[MAXVARS];		/* Number of levels per variable */
-    int LowLev[MAXVARS];	/* Lowest level per variable */
-    char VarName[MAXVARS][10];	/* 9-character variable names */
-    char Units[MAXVARS][20];	/* 19-character units for variables */
-    int TimeStamp[MAXTIMES];	/* Time in HHMMSS format */
-    int DateStamp[MAXTIMES];	/* Date in YYDDD format */
-    float MinVal[MAXVARS];	/* Minimum variable data values */
-    float MaxVal[MAXVARS];	/* Maximum variable data values */
+    int NumTimes;              /* Number of time steps */
+    int NumVars;               /* Number of variables */
+    int Nr;                    /* Number of rows */
+    int Nc;                    /* Number of columns */
+    int Nl[MAXVARS];           /* Number of levels per variable */
+    int LowLev[MAXVARS];       /* Lowest level per variable */
+    char VarName[MAXVARS][10]; /* 9-character variable names */
+    char Units[MAXVARS][20];   /* 19-character units for variables */
+    int TimeStamp[MAXTIMES];   /* Time in HHMMSS format */
+    int DateStamp[MAXTIMES];   /* Date in YYDDD format */
+    float MinVal[MAXVARS];     /* Minimum variable data values */
+    float MaxVal[MAXVARS];     /* Maximum variable data values */
 
     /* This info is used for external function computation */
-    short McFile[MAXTIMES][MAXVARS];	/* McIDAS file number in 1..9999 */
-    short McGrid[MAXTIMES][MAXVARS];	/* McIDAS grid number in 1..? */
+    short McFile[MAXTIMES][MAXVARS]; /* McIDAS file number in 1..9999 */
+    short McGrid[MAXTIMES][MAXVARS]; /* McIDAS grid number in 1..? */
 
-    int VerticalSystem;		/* Which vertical coordinate system */
-    float VertArgs[MAXVERTARGS];	/* Vert. Coord. Sys. arguments... */
+    int VerticalSystem;          /* Which vertical coordinate system */
+    float VertArgs[MAXVERTARGS]; /* Vert. Coord. Sys. arguments... */
 
     /*
        IF VerticalSystem==0 THEN
@@ -177,14 +152,14 @@ typedef struct
        ENDIF
      */
 
-    int Projection;		/* Which map projection */
-    float ProjArgs[MAXPROJARGS];	/* Map projection arguments... */
+    int Projection;              /* Which map projection */
+    float ProjArgs[MAXPROJARGS]; /* Map projection arguments... */
 
     /*
        IF Projection==0 THEN
        -- Rectilinear grid, generic units
        ProjArgs[0] = North bound, Y coordinate of grid row 0
-       ProjArgs[1] = West bound, X coordiante of grid column 0
+       ProjArgs[1] = West bound, X coordinate of grid column 0
        ProjArgs[2] = Increment between rows
        ProjArgs[3] = Increment between columns
        NOTES: X coordinates increase to the right, Y increase upward.
@@ -226,27 +201,22 @@ typedef struct
        ENDIF
      */
 
-    int CompressMode;		/* 1, 2 or 4 = # bytes per grid point */
-    char FileVersion[10];	/* 9-character version number */
+    int CompressMode;     /* 1, 2 or 4 = # bytes per grid point */
+    char FileVersion[10]; /* 9-character version number */
 
     /* PRIVATE (not to be touched by user code) */
-    unsigned int FileFormat;	/* COMP5D file version or 0 if .v5d */
-    int FileDesc;		/* Unix file descriptor */
-    char Mode;			/* 'r' = read, 'w' = write */
-    off_t CurPos;			/* current position of file pointer */
-    off_t FirstGridPos;		/* position of first grid in file */
-    off_t GridSize[MAXVARS];	/* size of each grid */
-    off_t SumGridSizes;		/* sum of GridSize[0..NumVars-1] */
+    unsigned int FileFormat; /* COMP5D file version or 0 if .v5d */
+    int FileDesc;            /* Unix file descriptor */
+    char Mode;               /* 'r' = read, 'w' = write */
+    off_t CurPos;            /* current position of file pointer */
+    off_t FirstGridPos;      /* position of first grid in file */
+    off_t GridSize[MAXVARS]; /* size of each grid */
+    off_t SumGridSizes;      /* sum of GridSize[0..NumVars-1] */
 } v5dstruct;
-
-
 
 extern float pressure_to_height(float pressure);
 
 extern float height_to_pressure(float height);
-
-
-
 
 extern int v5dYYDDDtoDays(int yyddd);
 
@@ -256,61 +226,43 @@ extern int v5dDaysToYYDDD(int days);
 
 extern int v5dSecondsToHHMMSS(int seconds);
 
-
-extern void v5dPrintStruct(const v5dstruct * v);
-
+extern void v5dPrintStruct(const v5dstruct *v);
 
 extern v5dstruct *v5dNewStruct(void);
 
-extern void v5dFreeStruct(v5dstruct * v);
+extern void v5dFreeStruct(v5dstruct *v);
 
-extern void v5dInitStruct(v5dstruct * v);
+extern void v5dInitStruct(v5dstruct *v);
 
-extern int v5dVerifyStruct(const v5dstruct * v);
-
+extern int v5dVerifyStruct(const v5dstruct *v);
 
 extern void v5dCompressGrid(int nr, int nc, int nl, int compressmode,
-			    const float data[], void *compdata,
-			    float ga[], float gb[],
-			    float *minval, float *maxval);
-
+                            const float data[], void *compdata, float ga[],
+                            float gb[], float *minval, float *maxval);
 
 extern void v5dDecompressGrid(int nr, int nc, int nl, int compressmode,
-			      void *compdata,
-			      float ga[], float gb[], float data[]);
+                              void *compdata, float ga[], float gb[],
+                              float data[]);
 
+extern int v5dSizeofGrid(const v5dstruct *v, int time, int var);
 
-extern int v5dSizeofGrid(const v5dstruct * v, int time, int var);
+extern v5dstruct *v5dOpenFile(const char *filename, v5dstruct *v);
 
+extern int v5dCreateFile(const char *filename, v5dstruct *v);
 
-extern v5dstruct *v5dOpenFile(const char *filename, v5dstruct * v);
+extern v5dstruct *v5dUpdateFile(const char *filename, v5dstruct *v);
 
+extern int v5dCloseFile(v5dstruct *v);
 
-extern int v5dCreateFile(const char *filename, v5dstruct * v);
+extern int v5dReadCompressedGrid(v5dstruct *v, int time, int var, float *ga,
+                                 float *gb, void *compdata);
 
+extern int v5dReadGrid(v5dstruct *v, int time, int var, float data[]);
 
-extern v5dstruct *v5dUpdateFile(const char *filename, v5dstruct * v);
+extern int v5dWriteCompressedGrid(const v5dstruct *v, int time, int var,
+                                  const float *ga, const float *gb,
+                                  const void *compdata);
 
-
-extern int v5dCloseFile(v5dstruct * v);
-
-
-extern int v5dReadCompressedGrid(v5dstruct * v,
-				 int time, int var,
-				 float *ga, float *gb, void *compdata);
-
-
-extern int v5dReadGrid(v5dstruct * v, int time, int var, float data[]);
-
-
-extern int v5dWriteCompressedGrid(const v5dstruct * v,
-				  int time, int var,
-				  const float *ga, const float *gb,
-				  const void *compdata);
-
-
-extern int v5dWriteGrid(v5dstruct * v, int time, int var, const float data[]);
-
-
+extern int v5dWriteGrid(v5dstruct *v, int time, int var, const float data[]);
 
 #endif

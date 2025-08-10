@@ -7,8 +7,7 @@ DEPENDENCIES = $(VECTORDEP) $(BITMAPDEP) $(DIG2DEP) $(RASTERDEP) $(GISDEP)
 
 EXTRA_INC = $(VECT_INC)
 EXTRA_CFLAGS = $(VECT_CFLAGS)
- 
+
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
-default: cmd	
-
+default: cmd

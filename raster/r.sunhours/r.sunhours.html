@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.sunhours</em> calculates sun elevation and sun azimuth angles for
-the given time of day and each grid cell in the current region. 
+the given time of day and each grid cell in the current region.
 Additionally, the photoperiod (sunshine hours on flat terrain) can be
 calculated.
 
@@ -15,11 +15,11 @@ of the sun from due north in a clockwise direction.
 <p>
 The time used here is defined such that 12:00 (high noon) is the time
 when the sun has reached its highest point in the sky at the current site,
-unless the <em>-t</em> flag is used in which case time is interpreted as 
+unless the <em>-t</em> flag is used in which case time is interpreted as
 Greenwich standard time.
 <p>
-If a <em>sunhour</em> output map is specified, the module calculates 
-sunshine hours for the given day. This option requires both Greenwhich 
+If a <em>sunhour</em> output map is specified, the module calculates
+sunshine hours for the given day. This option requires both Greenwhich
 standard time and the use of the SOLPOS algorithm by NREL.
 
 <h2>NOTES</h2>
@@ -40,9 +40,9 @@ r.sunhours elevation=sun_elev year=2010 month=10 day=11 hour=14 minute=00
 
 # visualize
 d.mon wx0
-d.rast sun_elev 
+d.rast sun_elev
 d.vect nc_state type=boundary
-d.legend sun_elev -s 
+d.legend sun_elev -s
 </pre></div>
 <p>
 <center>
@@ -62,11 +62,13 @@ r.sunhours sunhour=photoperiod_doy_001 year=2012 day=1
 </pre></div>
 
 <h2>Acknowledgements</h2>
+
 Acknowledgements: National Renewable Energy Laboratory for their
 <a href="http://rredc.nrel.gov/solar/codesandalgorithms/solpos/">SOLPOS 2.0</a> sun position
 algorithm.
 
 <h2>SEE ALSO</h2>
+
 <em>
 <a href="g.region.html">g.region</a>,
 <a href="r.sun.html">r.sun</a>,
@@ -76,8 +78,3 @@ algorithm.
 <h2>AUTHOR</h2>
 
 Markus Metz
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

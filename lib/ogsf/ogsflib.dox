@@ -1,10 +1,10 @@
-/*! \page ogsflib GRASS GIS OGSF Library
-<!-- doxygenized from "GRASS 5 Programmer's Manual" 
+/*! \page ogsflib GRASS OGSF Library
+<!-- doxygenized from "GRASS 5 Programmer's Manual"
      by M. Neteler 2/2004
      Updated by Martin Landa <landa.martin gmail.com> in 6/2011
   -->
 
-by GRASS Development Team (http://grass.osgeo.org)
+by GRASS Development Team (https://grass.osgeo.org)
 
 \section ogsfintro OGSF Library for OpenGL programming
 

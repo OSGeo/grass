@@ -1,4 +1,3 @@
-
 /**
  * \file error.c
  *

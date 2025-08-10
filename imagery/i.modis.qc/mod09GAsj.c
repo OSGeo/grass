@@ -1,11 +1,11 @@
 /* Salt pan unsigned int bits[14]
  * 0 -> class 0: No
  * 1 -> class 1: Yes
- */  
+ */
 
 #include <grass/raster.h>
 
-CELL mod09GAsj(CELL pixel) 
+CELL mod09GAsj(CELL pixel)
 {
     CELL qctemp;
 
@@ -14,5 +14,3 @@ CELL mod09GAsj(CELL pixel)
 
     return qctemp;
 }
-
-

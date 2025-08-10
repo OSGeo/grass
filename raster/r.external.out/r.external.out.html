@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.external.out</em> instructs GRASS GIS to write subsequently generated
+<em>r.external.out</em> instructs GRASS to write subsequently generated
 raster maps as data files (e.g. GeoTIFF) using GDAL instead of storing them
 in GRASS raster format in the current mapset.
 <p>
@@ -12,9 +12,8 @@ A relative directory path (parameter <em>directory</em>) is interpreted
 relative to the current mapset directory, not the current directory where
 the command was launched. An unspecified or empty directory (which will
 occur if the user passes a simple filename for <em>output</em>) results
-in the output file being placed in the "gdal/" subdirectory of the 
+in the output file being placed in the "gdal/" subdirectory of the
 current mapset directory.
-
 
 <h2>EXAMPLES</h2>
 
@@ -32,7 +31,7 @@ r.external.out directory=$HOME/gisoutput/ format="GTiff" option="BIGTIFF=YES,COM
 # prepare sample analysis
 g.region raster=elevation -p
 
-# perform GRASS calculation (here: filter by height, write > 120m, NULL otherwise)
+# perform GRASS calculation (here: filter by height, write &gt; 120m, NULL otherwise)
 # this will store the output map directly as GeoTIFF, so we use .tif extension:
 r.mapcalc "elev_filt.tif = if(elevation &gt; 120.0, elevation, null() )"
 
@@ -45,7 +44,7 @@ r.external.out -r
 gdalinfo $HOME/gisoutput/elev_filt.tif
 </pre></div>
 
-<h3>Complete workflow using only external geodata while processing in GRASS GIS</h3>
+<h3>Complete workflow using only external geodata while processing in GRASS</h3>
 
 The module <em>r.external.out</em> can be used along with
 <em>r.external</em> to process external geodata in GRASS
@@ -71,7 +70,7 @@ gdalinfo $HOME/gisoutput/warm.tif
 
 <h2>REFERENCES</h2>
 
-GDAL Pages: <a href="http://www.gdal.org">http://www.gdal.org/</a><br>
+GDAL Pages: <a href="https://gdal.org">https://gdal.org/</a><br>
 
 <h2>SEE ALSO</h2>
 
@@ -84,8 +83,3 @@ GDAL Pages: <a href="http://www.gdal.org">http://www.gdal.org/</a><br>
 <h2>AUTHOR</h2>
 
 Glynn Clements
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

@@ -23,26 +23,26 @@
 #                    http://www.ngdc.noaa.gov/mgg/shorelines/shorelines.html
 #
 
-#%module
-#% description: Imports Mapgen or Matlab-ASCII vector maps into GRASS.
-#% keyword: vector
-#% keyword: import
-#%end
-#%flag
-#% key: f
-#% description: Input map is in Matlab format
-#%end
-#%flag
-#% key: z
-#% description: Create a 3D vector points map from 3 column Matlab data
-#%end
-#%option G_OPT_F_INPUT
-#% description: Name of input file in Mapgen/Matlab format
-#%end
-#%option G_OPT_V_OUTPUT
-#% description: Name for output vector map (omit for display to stdout)
-#% required: no
-#%end
+# %module
+# % description: Imports Mapgen or Matlab-ASCII vector maps into GRASS.
+# % keyword: vector
+# % keyword: import
+# %end
+# %flag
+# % key: f
+# % description: Input map is in Matlab format
+# %end
+# %flag
+# % key: z
+# % description: Create a 3D vector points map from 3 column Matlab data
+# %end
+# %option G_OPT_F_INPUT
+# % description: Name of input file in Mapgen/Matlab format
+# %end
+# %option G_OPT_V_OUTPUT
+# % description: Name for output vector map (omit for display to stdout)
+# % required: no
+# %end
 
 import sys
 import os
@@ -57,42 +57,34 @@ from grass.exceptions import CalledModuleError
 
 def cleanup():
     try_remove(tmp)
-    try_remove(tmp + '.dig')
+    try_remove(tmp + ".dig")
 
 
 def main():
     global tmp
 
-    infile = options['input']
-    output = options['output']
-    matlab = flags['f']
-    threeD = flags['z']
+    infile = options["input"]
+    output = options["output"]
+    matlab = flags["f"]
+    threeD = flags["z"]
 
-    prog = 'v.in.mapgen'
-
-    opts = ""
+    prog = "v.in.mapgen"
 
     if not os.path.isfile(infile):
         grass.fatal(_("Input file <%s> not found") % infile)
 
-    if output:
-        name = output
-    else:
-        name = ''
+    name = output or ""
 
     if threeD:
         matlab = True
 
-    if threeD:
-        do3D = 'z'
-    else:
-        do3D = ''
+    do3D = "z" if threeD else ""
 
     tmp = grass.tempfile()
 
     # create ascii vector file
     inf = open(infile)
-    outf = open(tmp, 'w')
+    outf = open(tmp, "w")
 
     grass.message(_("Importing data..."))
     cat = 1
@@ -111,17 +103,19 @@ def main():
 
         for line in inf:
             f = line.split()
-            if f[0].lower() == 'nan':
+            if f[0].lower() == "nan":
                 if points != []:
                     outf.write("L %d 1\n" % len(points))
-                    for point in points:
-                        outf.write(" %.15g %.15g %.15g\n" % tuple(map(float, point)))
+                    outf.writelines(
+                        " %.15g %.15g %.15g\n" % tuple(map(float, point))
+                        for point in points
+                    )
                     outf.write(" 1 %d\n" % cat)
                     cat += 1
                 points = []
             else:
                 if len(f) == 2:
-                    f.append('0')
+                    f.append("0")
                 points.append(f)
 
         if points != []:
@@ -130,36 +124,40 @@ def main():
                 try:
                     outf.write(" %.15g %.15g %.15g\n" % tuple(map(float, point)))
                 except ValueError:
-                    grass.fatal(_("An error occurred on line '%s', exiting.") % line.strip())
+                    grass.fatal(
+                        _("An error occurred on line '%s', exiting.") % line.strip()
+                    )
             outf.write(" 1 %d\n" % cat)
             cat += 1
     else:
         # mapgen format.
         points = []
         for line in inf:
-            if line[0] == '#':
+            if line[0] == "#":
                 if points != []:
                     outf.write("L %d 1\n" % len(points))
-                    for point in points:
-                        outf.write(" %.15g %.15g\n" % tuple(map(float, point)))
+                    outf.writelines(
+                        " %.15g %.15g\n" % tuple(map(float, point)) for point in points
+                    )
                     outf.write(" 1 %d\n" % cat)
                     cat += 1
                 points = []
             else:
-                points.append(line.rstrip('\r\n').split('\t'))
+                points.append(line.rstrip("\r\n").split("\t"))
 
         if points != []:
             outf.write("L %d 1\n" % len(points))
-            for point in points:
-                outf.write(" %.15g %.15g\n" % tuple(map(float, point)))
+            outf.writelines(
+                " %.15g %.15g\n" % tuple(map(float, point)) for point in points
+            )
             outf.write(" 1 %d\n" % cat)
             cat += 1
     outf.close()
     inf.close()
 
     # create digit header
-    digfile = tmp + '.dig'
-    outf = open(digfile, 'w')
+    digfile = tmp + ".dig"
+    outf = open(digfile, "w")
     t = string.Template(
         """ORGANIZATION: GRASSroots organization
 DIGIT DATE:   $date
@@ -171,14 +169,14 @@ OTHER INFO:   Imported with $prog
 ZONE:         0
 MAP THRESH:   0
 VERTI:
-""")
+"""
+    )
     date = time.strftime("%m/%d/%y")
     year = time.strftime("%Y")
-    user = os.getenv('USERNAME') or os.getenv('LOGNAME')
-    host = os.getenv('COMPUTERNAME') or os.uname()[1]
+    user = os.getenv("USERNAME") or os.getenv("LOGNAME")
+    host = os.getenv("COMPUTERNAME") or os.uname()[1]
 
-    s = t.substitute(prog=prog, name=name, date=date, year=year,
-                     user=user, host=host)
+    s = t.substitute(prog=prog, name=name, date=date, year=year, user=user, host=host)
     outf.write(s)
 
     # process points list to ascii vector file (merge in vertices)
@@ -197,10 +195,12 @@ VERTI:
         # import to binary vector file
         grass.message(_("Importing with v.in.ascii..."))
         try:
-            grass.run_command('v.in.ascii', flags=do3D, input=digfile,
-                              output=name, format='standard')
+            grass.run_command(
+                "v.in.ascii", flags=do3D, input=digfile, output=name, format="standard"
+            )
         except CalledModuleError:
             grass.fatal(_('An error occurred on creating "%s", please check') % name)
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

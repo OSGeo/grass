@@ -1,20 +1,19 @@
-
 /*****************************************************************************
-*
-* MODULE:       Grass PDE Numerical Library
-* AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
-* 		soerengebbert <at> gmx <dot> de
-*               
-* PURPOSE:     	gradient management functions 
-* 		part of the gpde library
-*
-* COPYRIGHT:    (C) 2000 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       Grass PDE Numerical Library
+ * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
+ *                 soerengebbert <at> gmx <dot> de
+ *
+ * PURPOSE:      gradient management functions
+ *               part of the gpde library
+ *
+ * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #include <grass/N_pde.h>
 
@@ -28,7 +27,7 @@ N_gradient_2d *N_alloc_gradient_2d(void)
 {
     N_gradient_2d *grad;
 
-    grad = (N_gradient_2d *) G_calloc(1, sizeof(N_gradient_2d));
+    grad = (N_gradient_2d *)G_calloc(1, sizeof(N_gradient_2d));
 
     return grad;
 }
@@ -39,7 +38,7 @@ N_gradient_2d *N_alloc_gradient_2d(void)
  * \return void
  *
  * */
-void N_free_gradient_2d(N_gradient_2d * grad)
+void N_free_gradient_2d(N_gradient_2d *grad)
 {
     G_free(grad);
     grad = NULL;
@@ -57,8 +56,7 @@ void N_free_gradient_2d(N_gradient_2d * grad)
  * \return N_gradient_2d *
  *
  * */
-N_gradient_2d *N_create_gradient_2d(double NC, double SC, double WC,
-				    double EC)
+N_gradient_2d *N_create_gradient_2d(double NC, double SC, double WC, double EC)
 {
     N_gradient_2d *grad;
 
@@ -82,12 +80,12 @@ N_gradient_2d *N_create_gradient_2d(double NC, double SC, double WC,
  * \return int - 1 success, 0 failure while copying
  *
  * */
-int N_copy_gradient_2d(N_gradient_2d * source, N_gradient_2d * target)
+int N_copy_gradient_2d(N_gradient_2d *source, N_gradient_2d *target)
 {
     G_debug(5, "N_copy_gradient_2d: copy N_gradient_2d");
 
     if (!source || !target)
-	return 0;
+        return 0;
 
     target->NC = source->NC;
     target->SC = source->SC;
@@ -98,45 +96,45 @@ int N_copy_gradient_2d(N_gradient_2d * source, N_gradient_2d * target)
 }
 
 /*!
- * \brief Return a N_gradient_2d structure calculated from the input gradient field
- * at position [row][col]
+ * \brief Return a N_gradient_2d structure calculated from the input gradient
+ * field at position [row][col]
  *
- *  This function returns the gradient of a cell at position [row][col] from the input gradient field.
- *  Returend is a new structure of type N_gradient_2d.
+ *  This function returns the gradient of a cell at position [row][col] from the
+ * input gradient field. Returned is a new structure of type N_gradient_2d.
  *
  *  \param field N_gradient_field_2d * - A two dimensional gradient field
- *  \param gradient N_gradient_2d * - the gradient structure which should be filled with data, if a NULL pointer is given, a new structure will be created
+ *  \param gradient N_gradient_2d * - the gradient structure which should be
+ * filled with data, if a NULL pointer is given, a new structure will be created
  *  \param col int
  *  \param row int
  *  \return N_gradient_2d * - the new or filled gradient structure
- *  
+ *
  *
  * */
-N_gradient_2d *N_get_gradient_2d(N_gradient_field_2d * field,
-				 N_gradient_2d * gradient, int col, int row)
+N_gradient_2d *N_get_gradient_2d(N_gradient_field_2d *field,
+                                 N_gradient_2d *gradient, int col, int row)
 {
     double NC = 0, SC = 0, WC = 0, EC = 0;
     N_gradient_2d *grad = gradient;
-
 
     NC = N_get_array_2d_d_value(field->y_array, col, row);
     SC = N_get_array_2d_d_value(field->y_array, col, row + 1);
     WC = N_get_array_2d_d_value(field->x_array, col, row);
     EC = N_get_array_2d_d_value(field->x_array, col + 1, row);
 
-    G_debug(5,
-	    "N_get_gradient_2d: calculate N_gradient_2d NC %g SC %g WC %g EC %g",
-	    NC, SC, WC, EC);
+    G_debug(
+        5, "N_get_gradient_2d: calculate N_gradient_2d NC %g SC %g WC %g EC %g",
+        NC, SC, WC, EC);
 
     /*if gradient is a NULL pointer, create a new one */
     if (!grad) {
-	grad = N_create_gradient_2d(NC, SC, WC, EC);
+        grad = N_create_gradient_2d(NC, SC, WC, EC);
     }
     else {
-	grad->NC = NC;
-	grad->SC = SC;
-	grad->WC = WC;
-	grad->EC = EC;
+        grad->NC = NC;
+        grad->SC = SC;
+        grad->WC = WC;
+        grad->EC = EC;
     }
 
     return grad;
@@ -152,7 +150,7 @@ N_gradient_3d *N_alloc_gradient_3d(void)
 {
     N_gradient_3d *grad;
 
-    grad = (N_gradient_3d *) G_calloc(1, sizeof(N_gradient_3d));
+    grad = (N_gradient_3d *)G_calloc(1, sizeof(N_gradient_3d));
 
     return grad;
 }
@@ -163,14 +161,13 @@ N_gradient_3d *N_alloc_gradient_3d(void)
  * \return void
  *
  * */
-void N_free_gradient_3d(N_gradient_3d * grad)
+void N_free_gradient_3d(N_gradient_3d *grad)
 {
     G_free(grad);
     grad = NULL;
 
     return;
 }
-
 
 /*!
  * \brief allocate and initialize a N_gradient_3d structure
@@ -184,8 +181,8 @@ void N_free_gradient_3d(N_gradient_3d * grad)
  * \return N_gradient_3d *
  *
  * */
-N_gradient_3d *N_create_gradient_3d(double NC, double SC, double WC,
-				    double EC, double TC, double BC)
+N_gradient_3d *N_create_gradient_3d(double NC, double SC, double WC, double EC,
+                                    double TC, double BC)
 {
     N_gradient_3d *grad;
 
@@ -211,12 +208,12 @@ N_gradient_3d *N_create_gradient_3d(double NC, double SC, double WC,
  * \return int - 1 success, 0 failure while copying
  *
  * */
-int N_copy_gradient_3d(N_gradient_3d * source, N_gradient_3d * target)
+int N_copy_gradient_3d(N_gradient_3d *source, N_gradient_3d *target)
 {
     G_debug(5, "N_copy_gradient_3d: copy N_gradient_3d");
 
     if (!source || !target)
-	return 0;
+        return 0;
 
     target->NC = source->NC;
     target->SC = source->SC;
@@ -228,26 +225,27 @@ int N_copy_gradient_3d(N_gradient_3d * source, N_gradient_3d * target)
     return 1;
 }
 
-
 /*!
- * \brief Return a N_gradient_3d structure calculated from the input gradient field
- * at position [depth][row][col]
+ * \brief Return a N_gradient_3d structure calculated from the input gradient
+ * field at position [depth][row][col]
  *
- *  This function returns the gradient of a 3d cell at position [depth][row][col] from the input gradient field.
- *  Returned is a new structure of type N_gradient_3d.
+ *  This function returns the gradient of a 3d cell at position
+ * [depth][row][col] from the input gradient field. Returned is a new structure
+ * of type N_gradient_3d.
  *
  *  \param field N_gradient_field_3d * - A three dimensional gradient field
- *  \param gradient N_gradient_3d * - an existing gradient structure or a NULL pointer, if a NULL pointer is providet a new structure will be returned
+ *  \param gradient N_gradient_3d * - an existing gradient structure or a NULL
+ * pointer, if a NULL pointer is providet a new structure will be returned
  *  \param col int
  *  \param row int
  *  \param depth int
  *  \return N_gradient_3d *
- *  
+ *
  *
  * */
-N_gradient_3d *N_get_gradient_3d(N_gradient_field_3d * field,
-				 N_gradient_3d * gradient, int col, int row,
-				 int depth)
+N_gradient_3d *N_get_gradient_3d(N_gradient_field_3d *field,
+                                 N_gradient_3d *gradient, int col, int row,
+                                 int depth)
 {
     double NC, SC, WC, EC, TC, BC;
     N_gradient_3d *grad = gradient;
@@ -260,20 +258,21 @@ N_gradient_3d *N_get_gradient_3d(N_gradient_field_3d * field,
     TC = N_get_array_3d_d_value(field->z_array, col, row, depth + 1);
 
     G_debug(6,
-	    "N_get_gradient_3d: calculate N_gradient_3d NC %g SC %g WC %g EC %g TC %g BC %g",
-	    NC, SC, WC, EC, TC, BC);
+            "N_get_gradient_3d: calculate N_gradient_3d NC %g SC %g WC %g EC "
+            "%g TC %g BC %g",
+            NC, SC, WC, EC, TC, BC);
 
     /*if gradient is a NULL pointer, create a new one */
     if (!grad) {
-	grad = N_create_gradient_3d(NC, SC, WC, EC, TC, BC);
+        grad = N_create_gradient_3d(NC, SC, WC, EC, TC, BC);
     }
     else {
-	grad->NC = NC;
-	grad->SC = SC;
-	grad->WC = WC;
-	grad->EC = EC;
-	grad->BC = BC;
-	grad->TC = TC;
+        grad->NC = NC;
+        grad->SC = SC;
+        grad->WC = WC;
+        grad->EC = EC;
+        grad->BC = BC;
+        grad->TC = TC;
     }
 
     return grad;
@@ -282,7 +281,7 @@ N_gradient_3d *N_get_gradient_3d(N_gradient_field_3d * field,
 /*!
  * \brief Allocate a N_gradient_neighbours_x structure
  *
- * This structure contains all neighbour gradients in x direction of one cell  
+ * This structure contains all neighbour gradients in x direction of one cell
  *
  * \return N_gradient_neighbours_x  *
  *
@@ -292,8 +291,7 @@ N_gradient_neighbours_x *N_alloc_gradient_neighbours_x(void)
     N_gradient_neighbours_x *grad;
 
     grad =
-	(N_gradient_neighbours_x *) G_calloc(1,
-					     sizeof(N_gradient_neighbours_x));
+        (N_gradient_neighbours_x *)G_calloc(1, sizeof(N_gradient_neighbours_x));
 
     return grad;
 }
@@ -304,14 +302,13 @@ N_gradient_neighbours_x *N_alloc_gradient_neighbours_x(void)
  * \return void
  *
  * */
-void N_free_gradient_neighbours_x(N_gradient_neighbours_x * grad)
+void N_free_gradient_neighbours_x(N_gradient_neighbours_x *grad)
 {
     G_free(grad);
     grad = NULL;
 
     return;
 }
-
 
 /*!
  * \brief Allocate and initialize a N_gradient_neighbours_x structure
@@ -326,15 +323,14 @@ void N_free_gradient_neighbours_x(N_gradient_neighbours_x * grad)
 
  *
  * */
-N_gradient_neighbours_x *N_create_gradient_neighbours_x(double NWN,
-							double NEN, double WC,
-							double EC, double SWS,
-							double SES)
+N_gradient_neighbours_x *N_create_gradient_neighbours_x(double NWN, double NEN,
+                                                        double WC, double EC,
+                                                        double SWS, double SES)
 {
     N_gradient_neighbours_x *grad;
 
     G_debug(6,
-	    "N_create_gradient_neighbours_x: create N_gradient_neighbours_x");
+            "N_create_gradient_neighbours_x: create N_gradient_neighbours_x");
 
     grad = N_alloc_gradient_neighbours_x();
 
@@ -356,14 +352,13 @@ N_gradient_neighbours_x *N_create_gradient_neighbours_x(double NWN,
  * \return int - 1 success, 0 failure while copying
  *
  * */
-int
-N_copy_gradient_neighbours_x(N_gradient_neighbours_x * source,
-			     N_gradient_neighbours_x * target)
+int N_copy_gradient_neighbours_x(N_gradient_neighbours_x *source,
+                                 N_gradient_neighbours_x *target)
 {
     G_debug(6, "N_copy_gradient_neighbours_x: copy N_gradient_neighbours_x");
 
     if (!source || !target)
-	return 0;
+        return 0;
 
     target->NWN = source->NWN;
     target->NEN = source->NEN;
@@ -378,7 +373,7 @@ N_copy_gradient_neighbours_x(N_gradient_neighbours_x * source,
 /*!
  * \brief Allocate a N_gradient_neighbours_y structure
  *
- * This structure contains all neighbour gradients in y direction of one cell  
+ * This structure contains all neighbour gradients in y direction of one cell
  *
  * \return N_gradient_neighbours_y  *
  *
@@ -388,8 +383,7 @@ N_gradient_neighbours_y *N_alloc_gradient_neighbours_y(void)
     N_gradient_neighbours_y *grad;
 
     grad =
-	(N_gradient_neighbours_y *) G_calloc(1,
-					     sizeof(N_gradient_neighbours_y));
+        (N_gradient_neighbours_y *)G_calloc(1, sizeof(N_gradient_neighbours_y));
 
     return grad;
 }
@@ -400,7 +394,7 @@ N_gradient_neighbours_y *N_alloc_gradient_neighbours_y(void)
  * \return void
  *
  * */
-void N_free_gradient_neighbours_y(N_gradient_neighbours_y * grad)
+void N_free_gradient_neighbours_y(N_gradient_neighbours_y *grad)
 {
     G_free(grad);
     grad = NULL;
@@ -421,15 +415,14 @@ void N_free_gradient_neighbours_y(N_gradient_neighbours_y * grad)
 
  *
  * */
-N_gradient_neighbours_y *N_create_gradient_neighbours_y(double NWW,
-							double NEE, double NC,
-							double SC, double SWW,
-							double SEE)
+N_gradient_neighbours_y *N_create_gradient_neighbours_y(double NWW, double NEE,
+                                                        double NC, double SC,
+                                                        double SWW, double SEE)
 {
     N_gradient_neighbours_y *grad;
 
     G_debug(6,
-	    "N_create_gradient_neighbours_y: create N_gradient_neighbours_y");
+            "N_create_gradient_neighbours_y: create N_gradient_neighbours_y");
 
     grad = N_alloc_gradient_neighbours_y();
 
@@ -451,14 +444,13 @@ N_gradient_neighbours_y *N_create_gradient_neighbours_y(double NWW,
  * \return int - 1 success, 0 failure while copying
  *
  * */
-int
-N_copy_gradient_neighbours_y(N_gradient_neighbours_y * source,
-			     N_gradient_neighbours_y * target)
+int N_copy_gradient_neighbours_y(N_gradient_neighbours_y *source,
+                                 N_gradient_neighbours_y *target)
 {
     G_debug(6, "N_copy_gradient_neighbours_y: copy N_gradient_neighbours_y");
 
     if (!source || !target)
-	return 0;
+        return 0;
 
     target->NWW = source->NWW;
     target->NEE = source->NEE;
@@ -473,7 +465,7 @@ N_copy_gradient_neighbours_y(N_gradient_neighbours_y * source,
 /*!
  * \brief Allocate a N_gradient_neighbours_z structure
  *
- * This structure contains all neighbour gradients in z direction of one cell  
+ * This structure contains all neighbour gradients in z direction of one cell
  *
  * \return N_gradient_neighbours_z  *
  *
@@ -483,8 +475,7 @@ N_gradient_neighbours_z *N_alloc_gradient_neighbours_z(void)
     N_gradient_neighbours_z *grad;
 
     grad =
-	(N_gradient_neighbours_z *) G_calloc(1,
-					     sizeof(N_gradient_neighbours_z));
+        (N_gradient_neighbours_z *)G_calloc(1, sizeof(N_gradient_neighbours_z));
 
     return grad;
 }
@@ -495,7 +486,7 @@ N_gradient_neighbours_z *N_alloc_gradient_neighbours_z(void)
  * \return void
  *
  * */
-void N_free_gradient_neighbours_z(N_gradient_neighbours_z * grad)
+void N_free_gradient_neighbours_z(N_gradient_neighbours_z *grad)
 {
     G_free(grad);
     grad = NULL;
@@ -520,15 +511,15 @@ void N_free_gradient_neighbours_z(N_gradient_neighbours_z * grad)
  *
  * */
 N_gradient_neighbours_z *N_create_gradient_neighbours_z(double NWZ, double NZ,
-							double NEZ, double WZ,
-							double CZ, double EZ,
-							double SWZ, double SZ,
-							double SEZ)
+                                                        double NEZ, double WZ,
+                                                        double CZ, double EZ,
+                                                        double SWZ, double SZ,
+                                                        double SEZ)
 {
     N_gradient_neighbours_z *grad;
 
     G_debug(6,
-	    "N_create_gradient_neighbours_z: create N_gradient_neighbours_z");
+            "N_create_gradient_neighbours_z: create N_gradient_neighbours_z");
 
     grad = N_alloc_gradient_neighbours_z();
 
@@ -553,14 +544,13 @@ N_gradient_neighbours_z *N_create_gradient_neighbours_z(double NWZ, double NZ,
  * \return int - 1 success, 0 failure while copying
  *
  * */
-int
-N_copy_gradient_neighbours_z(N_gradient_neighbours_z * source,
-			     N_gradient_neighbours_z * target)
+int N_copy_gradient_neighbours_z(N_gradient_neighbours_z *source,
+                                 N_gradient_neighbours_z *target)
 {
     G_debug(6, "N_copy_gradient_neighbours_z: copy N_gradient_neighbours_z");
 
     if (!source || !target)
-	return 0;
+        return 0;
 
     target->NWZ = source->NWZ;
     target->NZ = source->NZ;
@@ -578,7 +568,7 @@ N_copy_gradient_neighbours_z(N_gradient_neighbours_z * source,
 /*!
  * \brief Allocate a N_gradient_neighbours_2d structure
  *
- * This structure contains all neighbour gradients in all directions of one cell 
+ * This structure contains all neighbour gradients in all directions of one cell
  * in a 2d raster layer
  *
  * \return N_gradient_neighbours_2d *
@@ -588,10 +578,8 @@ N_gradient_neighbours_2d *N_alloc_gradient_neighbours_2d(void)
 {
     N_gradient_neighbours_2d *grad;
 
-    grad =
-	(N_gradient_neighbours_2d *) G_calloc(1,
-					      sizeof
-					      (N_gradient_neighbours_2d));
+    grad = (N_gradient_neighbours_2d *)G_calloc(
+        1, sizeof(N_gradient_neighbours_2d));
 
     grad->x = N_alloc_gradient_neighbours_x();
     grad->y = N_alloc_gradient_neighbours_y();
@@ -605,7 +593,7 @@ N_gradient_neighbours_2d *N_alloc_gradient_neighbours_2d(void)
  * \return void
  *
  * */
-void N_free_gradient_neighbours_2d(N_gradient_neighbours_2d * grad)
+void N_free_gradient_neighbours_2d(N_gradient_neighbours_2d *grad)
 {
 
     N_free_gradient_neighbours_x(grad->x);
@@ -620,32 +608,32 @@ void N_free_gradient_neighbours_2d(N_gradient_neighbours_2d * grad)
 /*!
  * \brief Allocate and initialize a N_gradient_neighbours_2d structure
  *
- * The parameter N_gradient_neighbours x and y are copied into the new allocated structure 
- * and can be deleted after the initializing
+ * The parameter N_gradient_neighbours x and y are copied into the new allocated
+ * structure and can be deleted after the initializing
  *
  * \return N_gradient_neighbours_2d * -- if failure NULL is returned
  *
  * */
-N_gradient_neighbours_2d
-    * N_create_gradient_neighbours_2d(N_gradient_neighbours_x * x,
-				      N_gradient_neighbours_y * y)
+N_gradient_neighbours_2d *
+N_create_gradient_neighbours_2d(N_gradient_neighbours_x *x,
+                                N_gradient_neighbours_y *y)
 {
     N_gradient_neighbours_2d *grad;
     int fail = 0;
 
     G_debug(5,
-	    "N_create_gradient_neighbours_2d: create N_gradient_neighbours_2d");
+            "N_create_gradient_neighbours_2d: create N_gradient_neighbours_2d");
 
     grad = N_alloc_gradient_neighbours_2d();
 
     if (!N_copy_gradient_neighbours_x(x, grad->x))
-	fail++;
+        fail++;
     if (!N_copy_gradient_neighbours_y(y, grad->y))
-	fail++;
+        fail++;
 
     if (fail > 0) {
-	N_free_gradient_neighbours_2d(grad);
-	grad = NULL;
+        N_free_gradient_neighbours_2d(grad);
+        grad = NULL;
     }
 
     return grad;
@@ -659,58 +647,54 @@ N_gradient_neighbours_2d
  * \return int - 1 success, 0 failure while copying
  *
  * */
-int
-N_copy_gradient_neighbours_2d(N_gradient_neighbours_2d * source,
-			      N_gradient_neighbours_2d * target)
+int N_copy_gradient_neighbours_2d(N_gradient_neighbours_2d *source,
+                                  N_gradient_neighbours_2d *target)
 {
     int fail = 0;
 
-    G_debug(5,
-	    "N_copy_gradient_neighbours_2d: copy N_gradient_neighbours_2d");
+    G_debug(5, "N_copy_gradient_neighbours_2d: copy N_gradient_neighbours_2d");
 
     if (!source || !target)
-	return 0;
+        return 0;
 
     if (!(N_copy_gradient_neighbours_x(source->x, target->x)))
-	fail++;
+        fail++;
     if (!(N_copy_gradient_neighbours_y(source->y, target->y)))
-	fail++;
+        fail++;
 
     if (fail > 0) {
-	return 0;
+        return 0;
     }
 
     return 1;
 }
 
 /*!
- * \brief Return a N_gradient_neighbours_2d structure calculated from the input gradient field
- * at position [row][col]
+ * \brief Return a N_gradient_neighbours_2d structure calculated from the input
+ * gradient field at position [row][col]
  *
- *  This function returns the gradient neighbours in x and y dierection 
+ *  This function returns the gradient neighbours in x and y dierection
  *  of a cell at position [row][col] from the input gradient field.
- *  Returend is a pointer to a structure of type N_gradient_neighbours_2d.
+ *  Returned is a pointer to a structure of type N_gradient_neighbours_2d.
  *
  *  \param field N_gradient_field_2d * - A two dimensional gradient field
- *  \param gradient N_gradient_neighbours_2d * - the gradient structure which should be filled with data, if a NULL pointer is given, a new structure will be created
- *  \param col int
- *  \param row int
- *  \return N_gradient_neighbours_2d * - the new or filled gradient structure
- *  
+ *  \param gradient N_gradient_neighbours_2d * - the gradient structure which
+ * should be filled with data, if a NULL pointer is given, a new structure will
+ * be created \param col int \param row int \return N_gradient_neighbours_2d * -
+ * the new or filled gradient structure
+ *
  *
  * */
-N_gradient_neighbours_2d *N_get_gradient_neighbours_2d(N_gradient_field_2d *
-						       field,
-						       N_gradient_neighbours_2d
-						       * gradient, int col,
-						       int row)
+N_gradient_neighbours_2d *
+N_get_gradient_neighbours_2d(N_gradient_field_2d *field,
+                             N_gradient_neighbours_2d *gradient, int col,
+                             int row)
 {
     double NWN, NEN, WC, EC, SWS, SES;
     double NWW, NEE, NC, SC, SWW, SEE;
     N_gradient_neighbours_2d *grad = NULL;
     N_gradient_neighbours_x *grad_x = NULL;
     N_gradient_neighbours_y *grad_y = NULL;
-
 
     NWN = N_get_array_2d_d_value(field->x_array, col, row - 1);
     NEN = N_get_array_2d_d_value(field->x_array, col + 1, row - 1);
@@ -726,28 +710,28 @@ N_gradient_neighbours_2d *N_get_gradient_neighbours_2d(N_gradient_field_2d *
     SWW = N_get_array_2d_d_value(field->y_array, col - 1, row + 1);
     SEE = N_get_array_2d_d_value(field->y_array, col + 1, row + 1);
 
-
     grad_x = N_create_gradient_neighbours_x(NWN, NEN, WC, EC, SWS, SES);
     grad_y = N_create_gradient_neighbours_y(NWW, NEE, NC, SC, SWW, SEE);
 
     G_debug(5,
-	    "N_get_gradient_neighbours_2d: calculate N_gradient_neighbours_x NWN %g NEN %g WC %g EC %g SWS %g SES %g",
-	    NWN, NEN, WC, EC, SWS, SES);
+            "N_get_gradient_neighbours_2d: calculate N_gradient_neighbours_x "
+            "NWN %g NEN %g WC %g EC %g SWS %g SES %g",
+            NWN, NEN, WC, EC, SWS, SES);
 
     G_debug(5,
-	    "N_get_gradient_neighbours_2d: calculate N_gradient_neighbours_y NWW %g NEE %g NC %g SC %g SWW %g SEE %g",
-	    NWW, NEE, NC, SC, SWW, SEE);
-
+            "N_get_gradient_neighbours_2d: calculate N_gradient_neighbours_y "
+            "NWW %g NEE %g NC %g SC %g SWW %g SEE %g",
+            NWW, NEE, NC, SC, SWW, SEE);
 
     /*if gradient is a NULL pointer, create a new one */
     if (!gradient) {
-	grad = N_create_gradient_neighbours_2d(grad_x, grad_y);
-	gradient = grad;
+        grad = N_create_gradient_neighbours_2d(grad_x, grad_y);
+        gradient = grad;
     }
     else {
-	grad = N_create_gradient_neighbours_2d(grad_x, grad_y);
-	N_copy_gradient_neighbours_2d(grad, gradient);
-	N_free_gradient_neighbours_2d(grad);
+        grad = N_create_gradient_neighbours_2d(grad_x, grad_y);
+        N_copy_gradient_neighbours_2d(grad, gradient);
+        N_free_gradient_neighbours_2d(grad);
     }
 
     N_free_gradient_neighbours_x(grad_x);
@@ -756,11 +740,10 @@ N_gradient_neighbours_2d *N_get_gradient_neighbours_2d(N_gradient_field_2d *
     return gradient;
 }
 
-
 /*!
  * \brief Allocate a N_gradient_neighbours_3d structure
  *
- * This structure contains all neighbour gradients in all directions of one cell 
+ * This structure contains all neighbour gradients in all directions of one cell
  * in a 3d raster layer
  *
  * \return N_gradient_neighbours_3d *
@@ -770,10 +753,8 @@ N_gradient_neighbours_3d *N_alloc_gradient_neighbours_3d(void)
 {
     N_gradient_neighbours_3d *grad;
 
-    grad =
-	(N_gradient_neighbours_3d *) G_calloc(1,
-					      sizeof
-					      (N_gradient_neighbours_3d));
+    grad = (N_gradient_neighbours_3d *)G_calloc(
+        1, sizeof(N_gradient_neighbours_3d));
 
     grad->xt = N_alloc_gradient_neighbours_x();
     grad->xc = N_alloc_gradient_neighbours_x();
@@ -793,7 +774,7 @@ N_gradient_neighbours_3d *N_alloc_gradient_neighbours_3d(void)
  * \return void
  *
  * */
-void N_free_gradient_neighbours_3d(N_gradient_neighbours_3d * grad)
+void N_free_gradient_neighbours_3d(N_gradient_neighbours_3d *grad)
 {
 
     N_free_gradient_neighbours_x(grad->xt);
@@ -814,50 +795,47 @@ void N_free_gradient_neighbours_3d(N_gradient_neighbours_3d * grad)
 /*!
  * \brief Allocate and initialize a N_gradient_neighbours_3d structure
  *
- * The parameter N_gradient_neighbours x(tcb) and y(tcb) and z(tb) are copied into the new allocated structure 
+ * The parameter N_gradient_neighbours x(tcb) and y(tcb) and z(tb) are copied
+ into the new allocated structure
  * and can be deleted after the initializing
  *
  * \return N_gradient_neighbours_3d * -- if failure NULL is returned
 
  *
  * */
-N_gradient_neighbours_3d
-    * N_create_gradient_neighbours_3d(N_gradient_neighbours_x * xt,
-				      N_gradient_neighbours_x * xc,
-				      N_gradient_neighbours_x * xb,
-				      N_gradient_neighbours_y * yt,
-				      N_gradient_neighbours_y * yc,
-				      N_gradient_neighbours_y * yb,
-				      N_gradient_neighbours_z * zt,
-				      N_gradient_neighbours_z * zb)
+N_gradient_neighbours_3d *N_create_gradient_neighbours_3d(
+    N_gradient_neighbours_x *xt, N_gradient_neighbours_x *xc,
+    N_gradient_neighbours_x *xb, N_gradient_neighbours_y *yt,
+    N_gradient_neighbours_y *yc, N_gradient_neighbours_y *yb,
+    N_gradient_neighbours_z *zt, N_gradient_neighbours_z *zb)
 {
     N_gradient_neighbours_3d *grad;
     int fail = 0;
 
     G_debug(5,
-	    "N_create_gradient_neighbours_3d: create N_gradient_neighbours_3d");
+            "N_create_gradient_neighbours_3d: create N_gradient_neighbours_3d");
 
     grad = N_alloc_gradient_neighbours_3d();
 
     if (!(N_copy_gradient_neighbours_x(xt, grad->xt)))
-	fail++;
+        fail++;
     if (!(N_copy_gradient_neighbours_x(xc, grad->xc)))
-	fail++;
+        fail++;
     if (!(N_copy_gradient_neighbours_x(xb, grad->xb)))
-	fail++;
+        fail++;
     if (!(N_copy_gradient_neighbours_y(yt, grad->yt)))
-	fail++;
+        fail++;
     if (!(N_copy_gradient_neighbours_y(yc, grad->yc)))
-	fail++;
+        fail++;
     if (!(N_copy_gradient_neighbours_y(yb, grad->yb)))
-	fail++;
+        fail++;
     if (!(N_copy_gradient_neighbours_z(zt, grad->zt)))
-	fail++;
+        fail++;
     if (!(N_copy_gradient_neighbours_z(zb, grad->zb)))
-	fail++;
+        fail++;
 
     if (fail > 0) {
-	return NULL;
+        return NULL;
     }
 
     return grad;
@@ -871,37 +849,35 @@ N_gradient_neighbours_3d
  * \return int - 1 success, 0 failure while copying
  *
  * */
-int
-N_copy_gradient_neighbours_3d(N_gradient_neighbours_3d * source,
-			      N_gradient_neighbours_3d * target)
+int N_copy_gradient_neighbours_3d(N_gradient_neighbours_3d *source,
+                                  N_gradient_neighbours_3d *target)
 {
     int fail = 0;
 
-    G_debug(5,
-	    "N_copy_gradient_neighbours_3d: copy N_gradient_neighbours_3d");
+    G_debug(5, "N_copy_gradient_neighbours_3d: copy N_gradient_neighbours_3d");
 
     if (!source || !target)
-	return 0;
+        return 0;
 
     if (!(N_copy_gradient_neighbours_x(source->xt, target->xt)))
-	fail++;
+        fail++;
     if (!(N_copy_gradient_neighbours_x(source->xc, target->xc)))
-	fail++;
+        fail++;
     if (!(N_copy_gradient_neighbours_x(source->xb, target->xb)))
-	fail++;
+        fail++;
     if (!(N_copy_gradient_neighbours_y(source->yt, target->yt)))
-	fail++;
+        fail++;
     if (!(N_copy_gradient_neighbours_y(source->yc, target->yc)))
-	fail++;
+        fail++;
     if (!(N_copy_gradient_neighbours_y(source->yb, target->yb)))
-	fail++;
+        fail++;
     if (!(N_copy_gradient_neighbours_z(source->zt, target->zt)))
-	fail++;
+        fail++;
     if (!(N_copy_gradient_neighbours_z(source->zb, target->zb)))
-	fail++;
+        fail++;
 
     if (fail > 0) {
-	return 0;
+        return 0;
     }
 
     return 1;
@@ -910,11 +886,11 @@ N_copy_gradient_neighbours_3d(N_gradient_neighbours_3d * source,
 /*!
  * \brief Allocate a N_gradient_field_2d
  *
- * The field arrays are of type DCELL. 
+ * The field arrays are of type DCELL.
  *
- * \param rows - number of rows of the 2d array from which the gradient should be calculated
- * \param cols - number of cols of the 2d array from which the gradient should be calculated
- * \return N_gradient_field_2d *
+ * \param rows - number of rows of the 2d array from which the gradient should
+ * be calculated \param cols - number of cols of the 2d array from which the
+ * gradient should be calculated \return N_gradient_field_2d *
  *
  * */
 N_gradient_field_2d *N_alloc_gradient_field_2d(int cols, int rows)
@@ -922,9 +898,9 @@ N_gradient_field_2d *N_alloc_gradient_field_2d(int cols, int rows)
     N_gradient_field_2d *field;
 
     G_debug(5,
-	    "N_alloc_gradient_field_2d: allocate a N_gradient_field_2d struct");
+            "N_alloc_gradient_field_2d: allocate a N_gradient_field_2d struct");
 
-    field = (N_gradient_field_2d *) G_calloc(1, sizeof(N_gradient_field_2d));
+    field = (N_gradient_field_2d *)G_calloc(1, sizeof(N_gradient_field_2d));
 
     field->x_array = N_alloc_array_2d(cols, rows, 1, DCELL_TYPE);
     field->y_array = N_alloc_array_2d(cols, rows, 1, DCELL_TYPE);
@@ -941,7 +917,7 @@ N_gradient_field_2d *N_alloc_gradient_field_2d(int cols, int rows)
  * \return void
  *
  * */
-void N_free_gradient_field_2d(N_gradient_field_2d * field)
+void N_free_gradient_field_2d(N_gradient_field_2d *field)
 {
 
     N_free_array_2d(field->x_array);
@@ -962,14 +938,13 @@ void N_free_gradient_field_2d(N_gradient_field_2d * field)
  * \return int - 1 success, 0 failure while copying
  *
  * */
-int
-N_copy_gradient_field_2d(N_gradient_field_2d * source,
-			 N_gradient_field_2d * target)
+int N_copy_gradient_field_2d(N_gradient_field_2d *source,
+                             N_gradient_field_2d *target)
 {
     G_debug(3, "N_copy_gradient_field_2d: copy N_gradient_field_2d");
 
     if (!source || !target)
-	return 0;
+        return 0;
 
     N_copy_array_2d(source->x_array, target->x_array);
     N_copy_array_2d(source->y_array, target->y_array);
@@ -983,13 +958,13 @@ N_copy_gradient_field_2d(N_gradient_field_2d * source,
  * \return void
  *
  * */
-void N_print_gradient_field_2d_info(N_gradient_field_2d * field)
+void N_print_gradient_field_2d_info(N_gradient_field_2d *field)
 {
     fprintf(stdout, "N_gradient_field_2d \n");
     fprintf(stdout, "Cols %i\n", field->cols);
     fprintf(stdout, "Rows: %i\n", field->rows);
-    fprintf(stdout, "X array pointer: %p\n", field->x_array);
-    fprintf(stdout, "Y array pointer: %p\n", field->y_array);
+    fprintf(stdout, "X array pointer: %p\n", (void *)field->x_array);
+    fprintf(stdout, "Y array pointer: %p\n", (void *)field->y_array);
     fprintf(stdout, "Min %g\n", field->min);
     fprintf(stdout, "Max %g\n", field->max);
     fprintf(stdout, "Sum %g\n", field->sum);
@@ -1003,16 +978,16 @@ void N_print_gradient_field_2d_info(N_gradient_field_2d * field)
     return;
 }
 
-
 /*!
  * \brief Allocate a N_gradient_field_3d
  *
- * The field arrays are always of type DCELL_TYPE. 
+ * The field arrays are always of type DCELL_TYPE.
  *
- * \param cols - number of cols of the 3d array from which the gradient should be calculated
- * \param rows - number of rows of the 3d array from which the gradient should be calculated
- * \param depths - number of depths of the 3d array from which the gradient should be calculated
- * \return N_gradient_field_3d *
+ * \param cols - number of cols of the 3d array from which the gradient should
+ * be calculated \param rows - number of rows of the 3d array from which the
+ * gradient should be calculated \param depths - number of depths of the 3d
+ * array from which the gradient should be calculated \return
+ * N_gradient_field_3d *
  *
  * */
 N_gradient_field_3d *N_alloc_gradient_field_3d(int cols, int rows, int depths)
@@ -1020,9 +995,9 @@ N_gradient_field_3d *N_alloc_gradient_field_3d(int cols, int rows, int depths)
     N_gradient_field_3d *field;
 
     G_debug(5,
-	    "N_alloc_gradient_field_3d: allocate a N_gradient_field_3d struct");
+            "N_alloc_gradient_field_3d: allocate a N_gradient_field_3d struct");
 
-    field = (N_gradient_field_3d *) G_calloc(1, sizeof(N_gradient_field_3d));
+    field = (N_gradient_field_3d *)G_calloc(1, sizeof(N_gradient_field_3d));
 
     field->x_array = N_alloc_array_3d(cols, rows, depths, 1, DCELL_TYPE);
     field->y_array = N_alloc_array_3d(cols, rows, depths, 1, DCELL_TYPE);
@@ -1035,14 +1010,13 @@ N_gradient_field_3d *N_alloc_gradient_field_3d(int cols, int rows, int depths)
     return field;
 }
 
-
 /*!
  * \brief Free's a N_gradient_neighbours_3d structure
  *
  * \return void
  *
  * */
-void N_free_gradient_field_3d(N_gradient_field_3d * field)
+void N_free_gradient_field_3d(N_gradient_field_3d *field)
 {
 
     N_free_array_3d(field->x_array);
@@ -1056,7 +1030,6 @@ void N_free_gradient_field_3d(N_gradient_field_3d * field)
     return;
 }
 
-
 /*!
  * \brief Copy N_gradient_field_3d structure from source to target
  *
@@ -1065,14 +1038,13 @@ void N_free_gradient_field_3d(N_gradient_field_3d * field)
  * \return int - 1 success, 0 failure while copying
  *
  * */
-int
-N_copy_gradient_field_3d(N_gradient_field_3d * source,
-			 N_gradient_field_3d * target)
+int N_copy_gradient_field_3d(N_gradient_field_3d *source,
+                             N_gradient_field_3d *target)
 {
     G_debug(3, "N_copy_gradient_field_3d: copy N_gradient_field_3d");
 
     if (!source || !target)
-	return 0;
+        return 0;
 
     N_copy_array_3d(source->x_array, target->x_array);
     N_copy_array_3d(source->y_array, target->y_array);
@@ -1087,16 +1059,16 @@ N_copy_gradient_field_3d(N_gradient_field_3d * source,
  * \return void
  *
  * */
-void N_print_gradient_field_3d_info(N_gradient_field_3d * field)
+void N_print_gradient_field_3d_info(N_gradient_field_3d *field)
 {
 
     fprintf(stdout, "N_gradient_field_3d \n");
     fprintf(stdout, "Cols %i\n", field->cols);
     fprintf(stdout, "Rows: %i\n", field->rows);
     fprintf(stdout, "Depths %i\n", field->depths);
-    fprintf(stdout, "X array pointer: %p\n", field->x_array);
-    fprintf(stdout, "Y array pointer: %p\n", field->y_array);
-    fprintf(stdout, "Z array pointer: %p\n", field->z_array);
+    fprintf(stdout, "X array pointer: %p\n", (void *)field->x_array);
+    fprintf(stdout, "Y array pointer: %p\n", (void *)field->y_array);
+    fprintf(stdout, "Z array pointer: %p\n", (void *)field->z_array);
     fprintf(stdout, "Min %g\n", field->min);
     fprintf(stdout, "Max %g\n", field->max);
     fprintf(stdout, "Sum %g\n", field->sum);

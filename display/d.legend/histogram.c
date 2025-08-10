@@ -2,7 +2,7 @@
  *    Draws a histogram along the left side of a smooth gradient legend
  *    (stats fetching code adapted from d.histogram)
  *
- *    Copyright (C) 2014 by Hamish Bowman, and the GRASS Development Team* 
+ *    Copyright (C) 2014 by Hamish Bowman, and the GRASS Development Team*
  *    This program is free software under the GPL (>=v2)
  *    Read the COPYING file that comes with GRASS for details.
  */
@@ -13,14 +13,14 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-double histogram(const char *map_name, int x0, int y0, int width,
-                 int height, int color, int flip, int horiz, int map_type,
-                 int is_fp, struct FPRange render_range, int drawh)
+double histogram(const char *map_name, int x0, int y0, int width, int height,
+                 int color, int flip, int horiz, int map_type, int is_fp,
+                 struct FPRange render_range, int drawh)
 {
     int i, nsteps, ystep;
     long cell_count = 0;
     double max_width, width_mult, dx, max;
-    double dy, y0_adjust;       /* only needed for CELL maps */
+    double dy, y0_adjust; /* only needed for CELL maps */
     struct stat_list dist_stats;
     struct stat_node *ptr;
     struct Range range;
@@ -41,7 +41,6 @@ double histogram(const char *map_name, int x0, int y0, int width,
 
     /* reset return value max */
     max = 0;
-
 
     if (render_range.first_time) {
         /* user specified range, can be either larger
@@ -68,33 +67,30 @@ double histogram(const char *map_name, int x0, int y0, int width,
         else
             nsteps = (int)(0.5 + (map_range * (height - 3) / user_range));
 
-        G_debug(1,
-                "number of steps for r.stats = %d, height-3=%d  width-3=%d",
+        G_debug(1, "number of steps for r.stats = %d, height-3=%d  width-3=%d",
                 nsteps, height - 3, width - 3);
 
-        /* need to know the % of the MAP range where user range starts and stops.
-         *   note that MAP range can be fully inside user range, in which case
-         *   keep 0-100% aka 0,nsteps, i.e. the step number in the nsteps range */
+        /* need to know the % of the MAP range where user range starts and
+         * stops. note that MAP range can be fully inside user range, in which
+         * case keep 0-100% aka 0,nsteps, i.e. the step number in the nsteps
+         * range */
 
         if (render_range.min > map_min) {
             crop_min_perc = (render_range.min - map_min) / map_range;
             G_debug(3, "min: %.02f vs. %.02f (%.02f) ... %.02f%%",
-                    render_range.min, map_min, map_range,
-                    100 * crop_min_perc);
+                    render_range.min, map_min, map_range, 100 * crop_min_perc);
         }
 
         if (render_range.max > map_max) {
             crop_max_perc = 1.0 - ((render_range.max - map_max) / user_range);
-            G_debug(3, "max: %.02f vs. %.02f (%.02f) ... %.02f%%",
-                    map_max, render_range.max, map_range,
-                    100 * crop_max_perc);
+            G_debug(3, "max: %.02f vs. %.02f (%.02f) ... %.02f%%", map_max,
+                    render_range.max, map_range, 100 * crop_max_perc);
         }
 
         if (render_range.min < map_min) {
             pad_min_perc = (map_min - render_range.min) / user_range;
-            G_debug(3, "Min: %.02f vs. %.02f (%.02f) ... %.02f%%",
-                    map_min, render_range.min, user_range,
-                    100 * pad_min_perc);
+            G_debug(3, "Min: %.02f vs. %.02f (%.02f) ... %.02f%%", map_min,
+                    render_range.min, user_range, 100 * pad_min_perc);
         }
 
 #ifdef amplify_gain
@@ -109,14 +105,12 @@ double histogram(const char *map_name, int x0, int y0, int width,
 #endif
     }
 
-
     /* TODO */
     if (!is_fp && render_range.first_time) {
         G_warning(_("Histogram constrained by range not yet implemented for "
                     "categorical rasters"));
         return max;
     }
-
 
     /* get the distribution statistics */
     get_stats(map_name, &dist_stats, nsteps, map_type);
@@ -139,27 +133,25 @@ double histogram(const char *map_name, int x0, int y0, int width,
             else
                 y0_adjust = 0;
 
-            if (!flip)          /* mmph */
+            if (!flip) /* mmph */
                 y0_adjust += 0.5;
         }
     }
 
-
-    G_debug(3, "mincat=%ld  maxcat=%ld", dist_stats.mincat,
-            dist_stats.maxcat);
+    G_debug(3, "mincat=%ld  maxcat=%ld", dist_stats.mincat, dist_stats.maxcat);
 
     for (i = dist_stats.mincat, ystep = 0; i <= dist_stats.maxcat; i++) {
         cell_count = 0;
         if (!ptr)
             break;
 
-        /* jump out if user range cuts things shorter than the map's native range */
+        /* jump out if user range cuts things shorter than the map's native
+         * range */
         if ((horiz && ystep > width - 4) || (!horiz && ystep > height - 4))
             break;
 
         /* jump out if user range goes beyond max of map data */
-        if (((double)ystep / ((horiz ? width : height) - 3.0)) >
-            crop_max_perc)
+        if (((double)ystep / ((horiz ? width : height) - 3.0)) > crop_max_perc)
             break;
         /* TODO if (!is_fp && i > render_range.max)
            break;
@@ -172,7 +164,8 @@ double histogram(const char *map_name, int x0, int y0, int width,
         /* now it's ok advance the plotter position */
         ystep++;
 
-        /* if user range is below the minimum real map value, we need to pad out the space */
+        /* if user range is below the minimum real map value, we need to pad out
+         * the space */
         if (render_range.first_time && render_range.min < map_min) {
             if (((double)ystep / ((horiz ? width : height) - 3.0)) <
                 pad_min_perc) {
@@ -181,24 +174,24 @@ double histogram(const char *map_name, int x0, int y0, int width,
             }
         }
 
-        if (ptr->cat == i) {    /* AH-HA!! found the stat */
+        if (ptr->cat == i) { /* AH-HA!! found the stat */
             cell_count = ptr->stat;
 
             if (ptr->next != NULL)
                 ptr = ptr->next;
         }
-        else {                  /* we have to look for the stat */
+        else { /* we have to look for the stat */
 
             /* loop until we find it, or pass where it should be */
             while (ptr->cat < i && ptr->next != NULL)
                 ptr = ptr->next;
-            if (ptr->cat == i) {        /* AH-HA!! found the stat */
+            if (ptr->cat == i) { /* AH-HA!! found the stat */
                 cell_count = ptr->stat;
 
                 if (ptr->next != NULL)
                     ptr = ptr->next;
             }
-            else                /* stat cannot be found */
+            else /* stat cannot be found */
                 G_debug(5, "No matching stat found, i=%d", i);
         }
 
@@ -220,7 +213,7 @@ double histogram(const char *map_name, int x0, int y0, int width,
 
                     D_cont_rel(0, -dx);
                 }
-                else {          /* vertical */
+                else { /* vertical */
                     if (flip)
                         D_move_abs(x0 - 1, y0 - 1 + height - ystep);
                     else
@@ -229,7 +222,7 @@ double histogram(const char *map_name, int x0, int y0, int width,
                     D_cont_rel(-dx, 0);
                 }
             }
-            else {              /* categorical */
+            else { /* categorical */
 
                 if (horiz) {
                     if (flip)
@@ -238,22 +231,23 @@ double histogram(const char *map_name, int x0, int y0, int width,
                                   x0 + width + y0_adjust + 1 + ((i - 1) * dy),
                                   y0 - 1 - dx);
                     else
-                        D_box_abs(x0 + y0_adjust + ((i - 2) * dy),
-                                  y0 - 1,
-                                  x0 - 1 + y0_adjust + ((i - 1) * dy), y0 - 1 - dx);
+                        D_box_abs(x0 + y0_adjust + ((i - 2) * dy), y0 - 1,
+                                  x0 - 1 + y0_adjust + ((i - 1) * dy),
+                                  y0 - 1 - dx);
                 }
-                else {          /* vertical */
+                else { /* vertical */
 
                     if (flip)
-                        /* GRASS_EPSILON fudge around D_box_abs() weirdness + PNG driver */
+                        /* GRASS_EPSILON fudge around D_box_abs() weirdness +
+                         * PNG driver */
                         D_box_abs(x0 - 1 - GRASS_EPSILON * 10,
                                   y0 + height + y0_adjust + ((i - 2) * dy),
                                   x0 - 1 - dx,
                                   y0 + height + y0_adjust + 1 + ((i - 1) * dy));
                     else
                         D_box_abs(x0 - 1 - GRASS_EPSILON * 10,
-                                  y0 + y0_adjust + ((i - 2) * dy),
-                                  x0 - 1 - dx, y0 + y0_adjust - 1 + ((i - 1) * dy));
+                                  y0 + y0_adjust + ((i - 2) * dy), x0 - 1 - dx,
+                                  y0 + y0_adjust - 1 + ((i - 1) * dy));
                 }
             }
         }

@@ -18,9 +18,9 @@ raster will have that resolution (see more below for more information
 about extent and resolution management).
 
 <p>
-<em>r.in.lidar</em> is designed for processing massive point cloud 
-datasets, for example raw LiDAR or sidescan sonar swath data. It has 
-been tested with large datasets (see below for memory management 
+<em>r.in.lidar</em> is designed for processing massive point cloud
+datasets, for example raw LiDAR or sidescan sonar swath data. It has
+been tested with large datasets (see below for memory management
 notes).
 
 <h3>Binning</h3>
@@ -28,7 +28,7 @@ notes).
 The main difference between <em>r.in.lidar</em> and
 <em><a href="v.in.lidar.html">v.in.lidar</a></em> is that
 <em>r.in.lidar</em> creates a raster instead of just importing the
-points into GRASS GIS. However, <em>r.in.lidar</em> does not merely
+points into GRASS. However, <em>r.in.lidar</em> does not merely
 rasterizes the points from the point cloud. <em>r.in.lidar</em>
 uses binning to derive values for individual raster cells,
 so the value of a cell is typically an aggregation of values
@@ -42,7 +42,7 @@ In the basic case, binning is a method which counts the number of
 points which fall into one raster cell, i.e. bin. The number of points
 per cell (bin) indicates the density of points in the point cloud.
 The cell (bin) is always square or rectangular in case of
-<em>r.in.lidar</em> because the result is GRASS GIS 2D raster.
+<em>r.in.lidar</em> because the result is GRASS 2D raster.
 The result of binning where the number of point per cell is counted
 is sometimes called 2D (two dimensional) histogram because
 a histogram is used in univariate statistics (in one dimension)
@@ -125,7 +125,7 @@ Variance and derivatives use the biased estimator (n)
 <dt>coeff_var</dt>
 <dd>This computes the coefficient of variance of point values for each
 cell. Coefficient of variance is given in percentage and defined as
-<tt>(stddev/mean)*100</tt>.</dd>
+<code>(stddev/mean)*100</code>.</dd>
 <dt>median</dt>
 <dd>This computes the median of point values for each cell</dd>
 <dt>percentile</dt>
@@ -155,7 +155,7 @@ g.region s=s-0.000001
 </pre></div>
 
 See <em><a href="g.region.html">g.region</a></em> for details about
-computation region handling in GRASS GIS.
+computation region handling in GRASS.
 
 <p>
 The <b>zrange</b> parameter may be used for filtering the input data by
@@ -184,10 +184,10 @@ is applied to Z values after the <b>base_raster</b> reduction.
 </center>
 
 <p>
-A LiDAR pulse can have multiple returns. The first return values can be 
-used to obtain a digital surface model (DSM) where e.g. canopy cover is 
-represented. The last return values can be used to obtain a digital 
-terrain model (DTM) where e.g. the forest floor instead of canopy 
+A LiDAR pulse can have multiple returns. The first return values can be
+used to obtain a digital surface model (DSM) where e.g. canopy cover is
+represented. The last return values can be used to obtain a digital
+terrain model (DTM) where e.g. the forest floor instead of canopy
 cover is represented. The <b>return_filter</b> option allows selecting
 one of first, mid, or last returns. Return number and number of returns
 in the pulse associated with each point are compared to determine
@@ -208,9 +208,9 @@ environment if the cells are oversampled.
 
 <p>
 The user can use a combination of <em>r.in.lidar</em> <b>output</b> maps
-to create custom raster-based filters, for examplee, use
+to create custom raster-based filters, for example, use
 <em><a href="r.mapcalc.html">r.mapcalc</a></em> to create
-a <tt>mean-(2*stddev)</tt> map. (In this example the user may want to
+a <code>mean-(2*stddev)</code> map. (In this example the user may want to
 include a lower bound filter in <em>r.mapcalc</em> to remove highly
 variable points (small <em>n</em>) or run <em>r.neighbors</em> to
 smooth the stddev map before further use.)
@@ -252,10 +252,10 @@ top of the canopy.
 <h3>Setting extent and resolution</h3>
 
 <p>
-Since the creation of raster maps depends on the computational 
-region settings (extent and resolution), as default the current 
-region extents and resolution are used for the import. When using 
-the <em>-e</em> flag along with the <em>resolution=value</em> 
+Since the creation of raster maps depends on the computational
+region settings (extent and resolution), as default the current
+region extents and resolution are used for the import. When using
+the <em>-e</em> flag along with the <em>resolution=value</em>
 parameter, the region used for the new raster will be based
 the point cloud extent and the provided resolution. It is therefore
 recommended to first use the <em>-s</em> flag to get the extents of the
@@ -267,10 +267,10 @@ resolution. The best option is to know the point cloud extent ahead,
 e.g. from tiling scheme, and use it. See below for details.
 
 <p>
-Since the <em>r.in.lidar</em> generates a raster map through binning 
-from the original LiDAR points, the target computational region 
-extent and resolution have to be determined. A typical workflow 
-would involve the examination of the LAS data's associated 
+Since the <em>r.in.lidar</em> generates a raster map through binning
+from the original LiDAR points, the target computational region
+extent and resolution have to be determined. A typical workflow
+would involve the examination of the LAS data's associated
 documentation or the scan of the LAS data file with
 <em>r.in.lidar</em>'s <b>-s</b> (or <b>-g</b>) flag to find the input
 data's bounds.
@@ -293,16 +293,15 @@ the <em>resolution</em> parameter. Also here it is recommended to verify
 and optimize the resulting region settings with <em>g.region</em> prior
 to importing the dataset.
 
-
 <h2>NOTES</h2>
 
-<h3>Format and projection support</h3>
+<h3>Format and coordinate reference system support</h3>
 
 The typical file extensions for the LAS format are .las and .laz
 (compressed). The compressed LAS (.laz) format can be imported only if
 libLAS has been compiled with LASzip support. It is also recommended to
-compile libLAS with GDAL which is used to test if the LAS projection
-matches that of the GRASS location.
+compile libLAS with GDAL which is used to test if the LAS coordinate
+reference system (CRS) matches that of the GRASS project (previously called location).
 
 <h3>LAS file import preparations</h3>
 
@@ -333,10 +332,10 @@ will use a large amount of system memory (RAM) for large raster regions
 (&gt; 10000x10000 pixels).
 If the module refuses to start complaining that there isn't enough memory,
 use the <b>percent</b> parameter to run the module in several passes.
-In addition using a less precise map format (<tt>CELL</tt> [integer] or
-<tt>FCELL</tt> [floating point]) will use less memory than a <tt>DCELL</tt>
+In addition using a less precise map format (<code>CELL</code> [integer] or
+<code>FCELL</code> [floating point]) will use less memory than a <code>DCELL</code>
 [double precision floating point] <b>output</b> map.
-For <b>method</b>=<em>n</em>, the <tt>CELL</tt> format is used
+For <b>method</b>=<em>n</em>, the <code>CELL</code> format is used
 automatically.
 
 <p>
@@ -357,7 +356,7 @@ the other statistics memory use for these also depends on
 the number of data points.
 
 <p>
-The default map <b>type</b>=<tt>FCELL</tt> is intended as compromise between
+The default map <b>type</b>=<code>FCELL</code> is intended as compromise between
 preserving data precision and limiting system resource consumption.
 
 <h3>Trim option</h3>
@@ -368,7 +367,7 @@ Attempt to use it with other statistical methods will result in an error.
 <h2>EXAMPLES</h2>
 
 Simple example of binning of point from a LAS file into a newly created
-raster map in an existing location/mapset (using metric units):
+raster map in an existing project/mapset (using metric units):
 
 <div class="code"><pre>
 # set the computational region automatically, resol. for binning is 5m
@@ -444,39 +443,39 @@ r.in.lidar input=points.las output=lidar_dem_percentile_95 \
 Further hints: how to calculate number of LiDAR points/square meter:
 <div class="code"><pre>
 g.region -e
-  # Metric location:
+  # Metric project:
   # points_per_sq_m = n_points / (ns_extent * ew_extent)
 
-  # Lat/Lon location:
+  # Lat/Lon project:
   # points_per_sq_m = n_points / (ns_extent * ew_extent*cos(lat) * (1852*60)^2)
 </pre></div>
 
 <h3>Serpent Mound dataset</h3>
 
 This example is analogous to the example used in the GRASS wiki page for
-<a href="http://grasswiki.osgeo.org/wiki/LIDAR#Import_LAS_as_raster_DEM">importing LAS as raster DEM</a>.
-<p>The sample LAS data are in the file "Serpent Mound Model LAS Data.las", 
-available at 
-<a href="http://www.appliedimagery.com/downloads/sampledata/Serpent%20Mound%20Model%20LAS%20Data.las">appliedimagery.com</a>:
+<a href="https://grasswiki.osgeo.org/wiki/LIDAR#Import_LAS_as_raster_DEM">importing LAS as raster DEM</a>.
+<p>The sample LAS data are in the file "Serpent Mound Model LAS Data.laz",
+available at
+<a href="https://github.com/PDAL/data/raw/4ee9ee43b195268a59113555908c1c0cdf955bd4/liblas/Serpent%20Mound%20Model%20LAS%20Data.laz">Serpent Mound Model LAS Data.laz</a>:
 
 <div class="code"><pre>
 # print LAS file info
-r.in.lidar -p input="Serpent Mound Model LAS Data.las"
+r.in.lidar -p input="Serpent Mound Model LAS Data.laz"
 
-# using v.in.lidar to create a new location
-# create location with projection information of the LAS data
-v.in.lidar -i input="Serpent Mound Model LAS Data.las" location=Serpent_Mound
+# using v.in.lidar to create a new project
+# create project with CRS information of the LAS data
+v.in.lidar -i input="Serpent Mound Model LAS Data.laz" project=Serpent_Mound
 
-# quit and restart GRASS in the newly created location "Serpent_Mound"
+# quit and restart GRASS in the newly created project "Serpent_Mound"
 
 # scan the extents of the LAS data
-r.in.lidar -sg input="Serpent Mound Model LAS Data.las"
+r.in.lidar -sg input="Serpent Mound Model LAS Data.laz"
 
 # set the region to the extents of the LAS data, align to resolution
 g.region n=4323641.57 s=4320942.61 w=289020.90 e=290106.02 res=1 -ap
 
 # import as raster DEM
-r.in.lidar input="Serpent Mound Model LAS Data.las" \
+r.in.lidar input="Serpent Mound Model LAS Data.laz" \
            output=Serpent_Mound_Model_LAS_Data method=mean
 </pre></div>
 
@@ -489,7 +488,7 @@ r.in.lidar input="Serpent Mound Model LAS Data.las" \
 
 The mean height above ground of the points can be computed for each
 raster cell (the ground elevation is given by the raster map
-<tt>elevation</tt>):
+<code>elevation</code>):
 
 <div class="code"><pre>
 g.region raster=elevation -p
@@ -502,7 +501,7 @@ to match the precision of the points rather than deriving it from the base raste
 
 <h3>Multiple file input</h3>
 
-The file option requres a file that contains a list of file names with the full 
+The file option requires a file that contains a list of file names with the full
 path. For example, a list of files in the directory /home/user/data:
 <div class="code"><pre>
 points1.laz
@@ -518,11 +517,11 @@ would be lised in the file as:
 </pre></div>
 On Linux and OSX, this file can be automatically generated with the command:
 <div class="code"><pre>
-ls /home/user/data/*.laz > /home/user/data/filelist.txt
+ls /home/user/data/*.laz &gt; /home/user/data/filelist.txt
 </pre></div>
 On Windows:
 <div class="code"><pre>
-dir /b c:\users\user\data\*.laz > c:\users\user\data\filelist.txt
+dir /b c:\users\user\data\*.laz &gt; c:\users\user\data\filelist.txt
 </pre></div>
 
 The mean height above ground example above would then be:
@@ -537,30 +536,29 @@ Python module:
 
 <div class="code"><pre>
 import glob
-import gscript
-    
+import grass.script as gs
+
 file_list_name = '/home/user/data/filelist.txt'
 with open(, mode='w') as file_list:
     for path in glob.iglob('/home/user/data/lidar/*.las'):
         file_list.write(path + "\n")
 
-gscript.run_command('r.in.lidar', file=file_list_name,
-                    output='mean_height_above_ground',
-                    base_raster='elevation' method='mean')
+gs.run_command('r.in.lidar', file=file_list_name,
+               output='mean_height_above_ground',
+               base_raster='elevation' method='mean')
 </pre></div>
-
 
 <h2>KNOWN ISSUES</h2>
 
 <ul>
-<li>The "<tt>nan</tt>" value (as defined in C language) can leak into
+<li>The "<code>nan</code>" value (as defined in C language) can leak into
     <em>coeff_var</em> raster maps. Cause is unknown. Possible
-    work-around is: <tt>r.null setnull=nan</tt> or
-    <tt>r.mapcalc 'no_nan = if(map == map, map, null())'</tt>.
+    work-around is: <code>r.null setnull=nan</code> or
+    <code>r.mapcalc 'no_nan = if(map == map, map, null())'</code>.</li>
 <li>Only one method can be applied for a single run and multiple map
     output from a single run
-    (e.g. <tt>method=string[,string,...] output=name[,name,...]</tt>
-    or <tt>n=string mean=string</tt>) is no supported.
+    (e.g. <code>method=string[,string,...] output=name[,name,...]</code>
+    or <code>n=string mean=string</code>) is no supported.</li>
 <!-- not really:
 <li> Merge with r.in.xyz.
 -->
@@ -569,7 +567,6 @@ gscript.run_command('r.in.lidar', file=file_list_name,
 
 If you encounter any problems (or solutions!) please contact the GRASS
 Development Team.
-
 
 <h2>SEE ALSO</h2>
 
@@ -594,21 +591,20 @@ Development Team.
 <a href="http://opentopography.org/">OpenTopography</a>
 (LiDAR point cloud repository)
 
-
 <h2>REFERENCES</h2>
 
 <ul>
 <li>
 V. Petras, A. Petrasova, J. Jeziorska, H. Mitasova (2016):
 <em>Processing UAV and lidar point clouds in GRASS GIS</em>.
-XXIII ISPRS Congress 2016 [<a href="http://www.int-arch-photogramm-remote-sens-spatial-inf-sci.net/XLI-B7/945/2016/">ISPRS Archives</a>, <a href="https://www.researchgate.net/publication/304340172_Processing_UAV_and_lidar_point_clouds_in_GRASS_GIS">ResearchGate</a>]
+XXIII ISPRS Congress 2016 [<a href="https://doi.org/10.5194/isprs-archives-XLI-B7-945-2016">ISPRS Archives</a>, <a href="https://www.researchgate.net/publication/304340172_Processing_UAV_and_lidar_point_clouds_in_GRASS_GIS">ResearchGate</a>]</li>
 <li>
 <a href="https://www.asprs.org/committee-general/laser-las-file-format-exchange-activities.html">
-ASPRS LAS format</a>
+ASPRS LAS format</a></li>
 <li>
-<a href="http://www.liblas.org/">LAS library</a>
+<a href="https://liblas.org/">LAS library</a></li>
 <li>
-<a href="http://test.liblas.org/doxygen/liblas_8h.htm">LAS library C API</a> documentation
+<a href="https://liblas.org/doxygen/liblas_8h.html">LAS library C API</a> documentation</li>
 </ul>
 
 <h2>AUTHORS</h2>
@@ -619,8 +615,3 @@ Vaclav Petras,
 (base_raster option, documentation)
 <br>
 based on <em>r.in.xyz</em> by Hamish Bowman and Volker Wichmann<br>
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

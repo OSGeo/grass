@@ -1,0 +1,8 @@
+---
+name: CodeQL config
+paths-ignore:
+  - "**/testsuite/**"
+  - bin.*
+  - dist.*
+  - node_modules
+  - python/grass/pygrass/tests

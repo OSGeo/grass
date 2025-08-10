@@ -1,5 +1,5 @@
 /*! \page segmentlib GRASS Segment Library
-<!-- doxygenized from "GRASS 5 Programmer's Manual" 
+<!-- doxygenized from "GRASS 5 Programmer's Manual"
      by M. Neteler 8/2005
   -->
 
@@ -8,69 +8,69 @@
 \section segmentintro Introduction
 
 <P>
-Large data files which contain data in a matrix format often need to be 
-accessed in a nonsequential or random manner. This requirement complicates 
+Large data files which contain data in a matrix format often need to be
+accessed in a nonsequential or random manner. This requirement complicates
 the programming.
 
 <P>
 Methods for accessing the data are to:
 
 <P>
-(1) read the entire data file into memory and process the data as a 
+(1) read the entire data file into memory and process the data as a
 two-dimensional matrix,
 
 <P>
-(2) perform direct access i/o to the data file for every data value to be 
+(2) perform direct access i/o to the data file for every data value to be
 accessed, or
 
 <P>
 (3) read only portions of the data file into memory as needed.
 
 <P>
-Method (1) greatly simplifies the programming effort since i/o is done once 
-and data access is simple array referencing. However, it has the 
-disadvantage that large amounts of memory may be required to hold the data. 
-The memory may not be available, or if it is, system paging of the module 
-may severely degrade performance. Method (2) is not much more complicated to 
-code and requires no significant amount of memory to hold the data. But the 
-i/o involved will certainly degrade performance. Method (3) is a mixture of 
-(1) and (2) . Memory requirements are fixed and data is read from the data 
-file only when not already in memory. However the programming is more 
+Method (1) greatly simplifies the programming effort since i/o is done once
+and data access is simple array referencing. However, it has the
+disadvantage that large amounts of memory may be required to hold the data.
+The memory may not be available, or if it is, system paging of the module
+may severely degrade performance. Method (2) is not much more complicated to
+code and requires no significant amount of memory to hold the data. But the
+i/o involved will certainly degrade performance. Method (3) is a mixture of
+(1) and (2) . Memory requirements are fixed and data is read from the data
+file only when not already in memory. However the programming is more
 complex.
 
 <P>
-The routines provided in this library are an implementation of method (3) . 
-They are based on the idea that if the original matrix were segmented or 
-partitioned into smaller matrices these segments could be managed to reduce 
-both the memory required and the i/o. Data access along connected paths 
-through the matrix, (i.e., moving up or down one row and left or right one 
+The routines provided in this library are an implementation of method (3) .
+They are based on the idea that if the original matrix were segmented or
+partitioned into smaller matrices these segments could be managed to reduce
+both the memory required and the i/o. Data access along connected paths
+through the matrix, (i.e., moving up or down one row and left or right one
 column) should benefit.
 
 <P>
-In most applications, the original data is not in the segmented format. The 
-data must be transformed from the nonsegmented format to the segmented 
-format. This means reading the original data matrix row by row and writing 
-each row to a new file with the segmentation organization. This step 
+In most applications, the original data is not in the segmented format. The
+data must be transformed from the nonsegmented format to the segmented
+format. This means reading the original data matrix row by row and writing
+each row to a new file with the segmentation organization. This step
 corresponds to the i/o step of method (1) .
 
 <P>
-Then data can be retrieved from the segment file through routines by 
-specifying the row and column of the original matrix. Behind the scenes, the 
-data is paged into memory as needed and the requested data is returned to 
+Then data can be retrieved from the segment file through routines by
+specifying the row and column of the original matrix. Behind the scenes, the
+data is paged into memory as needed and the requested data is returned to
 the caller.
 
 \note All routines and global variables in this library, documented
 or undocumented, start with the prefix \c Segment_. To avoid name
-conflicts, programmers should not create variables or routines in their own 
+conflicts, programmers should not create variables or routines in their own
 modules which use this prefix.
 
 
 \section Segment_Routines Segment Routines
 
 <P>
-The routines in the <I>Segment Library</I> are described below, more or 
-less in the order they would logically be used in a module. They use a data 
-structure called SEGMENT which is defined in the header file 
+The routines in the <I>Segment Library</I> are described below, more or
+less in the order they would logically be used in a module. They use a data
+structure called SEGMENT which is defined in the header file
 \c grass/segment.h that must be included in any code using these
 routines:
 
@@ -81,20 +81,20 @@ routines:
 \see \ref Loading_the_Segment_Library.
 
 <P>
-A temporary file needs to be prepared and a SEGMENT structure needs to 
-be initialized before any data can be transferred to the segment file. 
+A temporary file needs to be prepared and a SEGMENT structure needs to
+be initialized before any data can be transferred to the segment file.
 This can be done with the <I>Segment Library</I> routine:
 
 <P>
 <I>int Segment_open(SEGMENT *SEG, char *fname, off_t nrows, off_t ncols,
   int srows, int scols, int len, int nseg)</I>, open a new segment structure.
 <P>
-  A new file with full path name <B>fname</B> will be created and 
-  formatted. The original nonsegmented data matrix consists of 
+  A new file with full path name <B>fname</B> will be created and
+  formatted. The original nonsegmented data matrix consists of
   <B>nrows</B> and <B>ncols</B>. The segments consist of <B>srows</B> by
-  <B>scols</B>. The data items have length <B>len</B> bytes. The number 
-  of segments to be retained in memory is given by <B>nseg</B>. This 
-  routine calls Segment_format() and Segment_init(), see below. If 
+  <B>scols</B>. The data items have length <B>len</B> bytes. The number
+  of segments to be retained in memory is given by <B>nseg</B>. This
+  routine calls Segment_format() and Segment_init(), see below. If
   Segment_open() is used, the routines Segment_format() and Segment_init()
   must not be used.
 <P>
@@ -102,7 +102,7 @@ Return codes are: 1 ok; else a negative number between -1 and -6 encoding
   the error type.
 
 <P>
-Alternatively, the first step is to create a file which is properly 
+Alternatively, the first step is to create a file which is properly
 formatted for use by the <I>Segment Library</I> routines:
 
 <P>
@@ -198,7 +198,7 @@ The data is not written to disk immediately. It is stored in a memory segment
 Return codes are: 1 if ok; else -1 could not seek or write segment file.
 
 <P>
-After random reading and writing is finished, the pending updates must be 
+After random reading and writing is finished, the pending updates must be
 flushed to disk:
 
 <P>
@@ -238,14 +238,14 @@ Finally, memory allocated in the SEGMENT structure is freed:
 
 <P>
 
-The following routine both deletes the segment file and releases allocated 
+The following routine both deletes the segment file and releases allocated
 memory:
 
 <P>
 <I>int Segment_close (SEGMENT *seg)</I>, close segment structure
 <P>
-  Deletes the segment file and uses Segment_release() to release the 
-  allocated memory. No further cleaing up is required.
+  Deletes the segment file and uses Segment_release() to release the
+  allocated memory. No further cleaning up is required.
 
 <P>
 
@@ -254,7 +254,7 @@ memory:
 
 The following should provide the programmer with a good idea of how to use the
 <I>Segment Library</I> routines. The examples assume that the data is integer.
-Creation of a segment file and initialization of the segment structure 
+Creation of a segment file and initialization of the segment structure
 at once:
 
 \code
@@ -263,7 +263,7 @@ SEGMENT seg;
 Segment_open (&seg, G_tempfile(), nrows, ncols, srows, scols, sizeof(int), nseg);
 \endcode
 
-Alternatively, the first step is the creation and formatting of a segment 
+Alternatively, the first step is the creation and formatting of a segment
 file. A file is created, formatted and then closed:
 
 
@@ -291,7 +291,7 @@ Segment_init (&seg, fd, nseg);
 
 <P>
 Both the segment file and the segment structure are now ready to use, and
-data can be read row by row from the original data file and put into the 
+data can be read row by row from the original data file and put into the
 segment file:
 
 \code
@@ -347,15 +347,15 @@ Segment_put (&seg, 10, row, col); // this will not work
 \endcode
 
 <P>
-Once the random access processing is complete, the data would be extracted 
-from the segment file and written to a nonsegmented matrix data file as 
+Once the random access processing is complete, the data would be extracted
+from the segment file and written to a nonsegmented matrix data file as
 follows:
 
 
 \code
 Segment_flush (&seg);
 
-for (row = 0; row < nrows; row++) 
+for (row = 0; row < nrows; row++)
 {
     Segment_get_row (&seg, buf, row);
 
@@ -364,7 +364,7 @@ for (row = 0; row < nrows; row++)
 \endcode
 
 <P>
-Finally, the memory allocated for use by the segment routines would be 
+Finally, the memory allocated for use by the segment routines would be
 released and the file closed:
 
 
@@ -376,7 +376,7 @@ close (fd);
 
 
 \note The <I>Segment Library</I> does not know the name of the
-segment file. It does not attempt to remove the file. If the file is only 
+segment file. It does not attempt to remove the file. If the file is only
 temporary, the programmer should remove the file after closing it.
 
 <P>
@@ -387,10 +387,10 @@ Performance of the <I>Segment Library</I> routines can be improved by
 about 10% if <B>srows, scols</B> are each powers of 2; in this case a
 faster alternative is used to access the segment file. An additional
 improvement can be achieved if <B>len</B> is also a power of 2. For
-scattered access to a large dataset, smaller segments, i.e. values 
+scattered access to a large dataset, smaller segments, i.e. values
 for <B>srows, scols</B> of 32, 64, or 128 seem to provide
-the best performance. Calculating segment size as a fraction of the 
-data matrix size, e.g. srows = nrows / 4 + 1, will result in very poor 
+the best performance. Calculating segment size as a fraction of the
+data matrix size, e.g. srows = nrows / 4 + 1, will result in very poor
 performance, particularly for larger datasets.
 
 \section Loading_the_Segment_Library Loading the Segment Library
@@ -403,7 +403,7 @@ $(SEGMENTLIB)
 in the Makefile.
 
 <P>
-See \ref Compiling_and_Installing_GRASS_Modules for a complete 
+See \ref Compiling_and_Installing_GRASS_Modules for a complete
 discussion of Makefiles.
 
 */

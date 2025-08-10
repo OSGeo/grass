@@ -8,7 +8,7 @@ double GasDev(void);
 void Indep(void);
 
 /* init.c */
-void Init();
+void Init(void);
 
 /* random.c */
 double ran1(void);

@@ -9,8 +9,9 @@ interpolate NULL cells will considerably speed up the module.
 <p>
 The input raster map is read at its native resolution, the output raster
 map will be produced for the current computational region set with
-<em><a href="g.region.html">g.region</a></em>. Any MASK will be respected, masked
-values will be treated as NULL cells in both the input and the output map.
+<em><a href="g.region.html">g.region</a></em>. A raster mask, if present,
+will be respected. Masked values will be treated like other NULL cells
+in both the input and output maps.
 <p>Spline step values <b>ew_step</b> for the east-west direction and
 <b>ns_step</b> for the north-south direction should not be smaller than
 the east-west and north-south resolutions of the input map. For a raster
@@ -24,7 +25,8 @@ smooth the interpolation. With a small <b>lambda</b>, the
 interpolated surface closely follows observation points; a larger value
 will produce a smoother interpolation. Reasonable values are 0.0001,
 0.001, 0.005, 0.01, 0.02, 0.05, 0.1 (needs more testing). For seamless
-NULL cell interpolation, a small value is required and default is set to 0.005.
+NULL cell interpolation, a small value is required. The default <b>lambda</b>
+value is set to 0.01.
 <p>
 From a theoretical perspective, the interpolating procedure takes place in two
 parts: the first is an estimate of the linear coefficients of a spline function;
@@ -37,9 +39,9 @@ is defined by <b>ew_step</b> for the east-west direction and
 spline step values should be no less than the east-west and north-south
 resolutions of the input map. Each non-NULL cell observation is modeled as a
 linear function of the non-zero splines in the area around the observation.
-The least squares regression predicts the the coefficients of these linear functions.
+The least squares regression predicts the coefficients of these linear functions.
 Regularization avoids the need to have one one observation and one coefficient
-for each spline (in order to avoid instability). 
+for each spline (in order to avoid instability).
 
 <p>A cross validation "leave-one-out" analysis is available to help to determine
 the optimal <b>lambda</b> value that produces an interpolation that
@@ -50,7 +52,7 @@ validation can run very slowly if more than 100 observations are used. The
 cross-validation output reports <i>mean</i> and <i>rms</i> of the residuals from
 the true point value and the estimated from the interpolation for a fixed series
 of <b>lambda</b> values. No vector nor raster output will be created
-when cross-validation is selected. 
+when cross-validation is selected.
 
 <h2>EXAMPLES</h2>
 
@@ -61,7 +63,7 @@ r.resamp.bspline input=raster_surface output=interpolated_surface method=bicubic
 </pre></div>
 
 A bicubic spline interpolation will be done and a raster map with estimated
-(i.e., interpolated) values will be created. 
+(i.e., interpolated) values will be created.
 
 <h3>Interpolation of NULL cells and patching</h3>
 
@@ -80,7 +82,7 @@ r.patch input=input_raster,interpolated_nulls output=input_raster_gapfilled
 <h3>Interpolation of NULL cells and patching (NC data)</h3>
 
 In this example, the SRTM elevation map in the
-North Carolina sample dataset location is filtered for outlier
+North Carolina sample dataset is filtered for outlier
 elevation values; missing pixels are then re-interpolated to obtain
 a complete elevation map:
 
@@ -111,10 +113,10 @@ d.rast elev_srtm_30m_complete
 
 A random sample of points should be generated first with
 <em><a href="r.random.html">r.random</a></em>, and the current region should not
-include more than 100 non-NULL random cells. 
+include more than 100 non-NULL random cells.
 
 <div class="code"><pre>
-r.resamp.bspline -c input=input_raster 
+r.resamp.bspline -c input=input_raster
 </pre></div>
 
 <h2>REFERENCES</h2>
@@ -144,16 +146,12 @@ Girona, Espa&ntilde;a. CD ISBN: 978-84-690-3886-9</li>
 </em>
 
 <p>
-Overview: <a href="https://grasswiki.osgeo.org/wiki/Interpolation">Interpolation and Resampling</a> in GRASS GIS
+Overview: <a href="https://grasswiki.osgeo.org/wiki/Interpolation">Interpolation and Resampling</a> in GRASS
 
 <h2>AUTHORS</h2>
+
 Markus Metz<br>
 <br>
 based on <em><a href="v.surf.bspline.html">v.surf.bspline</a></em> by
 <br>
 Maria Antonia Brovelli, Massimiliano Cannata, Ulisse Longoni, Mirko Reguzzoni, Roberto Antolin
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

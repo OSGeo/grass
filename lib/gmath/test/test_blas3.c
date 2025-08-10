@@ -1,19 +1,18 @@
-
 /*****************************************************************************
-*
-* MODULE:       Grass PDE Numerical Library
-* AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2007
-* 		soerengebbert <at> gmx <dot> de
-*               
-* PURPOSE:      Unit tests for les creation
-*
-* COPYRIGHT:    (C) 2007 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       Grass PDE Numerical Library
+ * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2007
+ *                 soerengebbert <at> gmx <dot> de
+ *
+ * PURPOSE:      Unit tests for les creation
+ *
+ * COPYRIGHT:    (C) 2007 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -26,7 +25,6 @@
 /* prototypes */
 static int test_blas_level_3_double(void);
 static int test_blas_level_3_float(void);
-
 
 /* *************************************************************** */
 /* Perfrome the blas level 3 unit tests ************************** */
@@ -41,9 +39,9 @@ int unit_test_blas_level_3(void)
     sum += test_blas_level_3_float();
 
     if (sum > 0)
-	G_warning(_("\n-- blas level 3 unit tests failure --"));
+        G_warning(_("\n-- blas level 3 unit tests failure --"));
     else
-	G_message(_("\n-- blas level 3 unit tests finished successfully --"));
+        G_message(_("\n-- blas level 3 unit tests finished successfully --"));
 
     return sum;
 }
@@ -69,44 +67,43 @@ int test_blas_level_3_double(void)
     fill_d_vector_scalar(x, 1, cols);
     fill_d_vector_scalar(y, 0, rows);
 
-    fill_d_vector_scalar(A[0], 1, rows*cols);
-    fill_d_vector_scalar(B[0], 2, rows*cols);
+    fill_d_vector_scalar(A[0], 1, rows * cols);
+    fill_d_vector_scalar(B[0], 2, rows * cols);
 
 #pragma omp parallel default(shared)
-{
-    G_math_d_aA_B(A, B, 1.0 , C, rows , cols );
-    G_math_d_Ax(C, x, y, rows, cols);
-}
+    {
+        G_math_d_aA_B(A, B, 1.0, C, rows, cols);
+        G_math_d_Ax(C, x, y, rows, cols);
+    }
     G_math_d_asum_norm(y, &a, rows);
 
-
-    if(a != 3*rows*cols) {
-    	G_message("Error in G_math_d_aA_B: %f != %f", a, (double)3*rows*cols);
-	sum++;
+    if (a != 3 * rows * cols) {
+        G_message("Error in G_math_d_aA_B: %f != %f", a,
+                  (double)3 * rows * cols);
+        sum++;
     }
 #pragma omp parallel default(shared)
-{
-    G_math_d_aA_B(A, B, -1.0 , C, rows , cols );
-    G_math_d_Ax(C, x, y, rows, cols);
-}
+    {
+        G_math_d_aA_B(A, B, -1.0, C, rows, cols);
+        G_math_d_Ax(C, x, y, rows, cols);
+    }
     G_math_d_asum_norm(y, &b, rows);
 
-
-    if(b != rows*cols) {
-    	G_message("Error in G_math_d_aA_B: %f != %f", b, (double)rows*cols);
-	sum++;
+    if (b != rows * cols) {
+        G_message("Error in G_math_d_aA_B: %f != %f", b, (double)rows * cols);
+        sum++;
     }
 #pragma omp parallel default(shared)
-{
-    G_math_d_aA_B(A, B, 2.0 , C, rows , cols );
-    G_math_d_Ax(C, x, y, rows, cols);
-}
+    {
+        G_math_d_aA_B(A, B, 2.0, C, rows, cols);
+        G_math_d_Ax(C, x, y, rows, cols);
+    }
     G_math_d_asum_norm(y, &c, rows);
 
-
-    if(c != 4*rows*cols) {
-    	G_message("Error in G_math_d_aA_B: %f != %f", c, (double)4*rows*cols);
-	sum++;
+    if (c != 4 * rows * cols) {
+        G_message("Error in G_math_d_aA_B: %f != %f", c,
+                  (double)4 * rows * cols);
+        sum++;
     }
 
     G_free_matrix(A);
@@ -123,37 +120,36 @@ int test_blas_level_3_double(void)
 
     fill_d_vector_scalar(x, 1, rows);
     fill_d_vector_scalar(y, 0, rows);
-    fill_d_vector_scalar(A[0], 1, rows*cols);
-    fill_d_vector_scalar(B[0], 2, rows*cols);
+    fill_d_vector_scalar(A[0], 1, rows * cols);
+    fill_d_vector_scalar(B[0], 2, rows * cols);
 
 #pragma omp parallel default(shared)
-{
-    G_math_d_AB(A, B, C, rows , cols , cols );
-    G_math_d_Ax(C, x, y, rows, cols);
-}
+    {
+        G_math_d_AB(A, B, C, rows, cols, cols);
+        G_math_d_Ax(C, x, y, rows, cols);
+    }
     G_math_d_asum_norm(y, &d, rows);
 
-
-    if(d != 2*rows*cols*cols) {
-    	G_message("Error in G_math_d_AB: %f != %f", d, (double)2*rows*cols*cols);
-	sum++;
+    if (d != 2 * rows * cols * cols) {
+        G_message("Error in G_math_d_AB: %f != %f", d,
+                  (double)2 * rows * cols * cols);
+        sum++;
     }
 
-    if(x)
-      G_free_vector(x);
-    if(y)
-      G_free_vector(y);
+    if (x)
+        G_free_vector(x);
+    if (y)
+        G_free_vector(y);
 
-    if(A)
-      G_free_matrix(A);
-    if(B)
-      G_free_matrix(B);
-    if(C)
-      G_free_matrix(C);
+    if (A)
+        G_free_matrix(A);
+    if (B)
+        G_free_matrix(B);
+    if (C)
+        G_free_matrix(C);
 
     return sum;
 }
-
 
 /* *************************************************************** */
 /* ************** F L O A T ************************************** */
@@ -176,41 +172,43 @@ int test_blas_level_3_float(void)
     fill_f_vector_scalar(x, 1, cols);
     fill_f_vector_scalar(y, 0, rows);
 
-    fill_f_vector_scalar(A[0], 1, rows*cols);
-    fill_f_vector_scalar(B[0], 2, rows*cols);
+    fill_f_vector_scalar(A[0], 1, rows * cols);
+    fill_f_vector_scalar(B[0], 2, rows * cols);
 
 #pragma omp parallel default(shared)
-{
-    G_math_f_aA_B(A, B, 1.0 , C, rows , cols );
-    G_math_f_Ax(C, x, y, rows, cols);
-}
+    {
+        G_math_f_aA_B(A, B, 1.0, C, rows, cols);
+        G_math_f_Ax(C, x, y, rows, cols);
+    }
     G_math_f_asum_norm(y, &a, rows);
 
-    if(a != 3*rows*cols) {
-    	G_message("Error in G_math_f_aA_B: %f != %f", a, (double)3*rows*cols);
-	sum++;
+    if (a != 3 * rows * cols) {
+        G_message("Error in G_math_f_aA_B: %f != %f", a,
+                  (double)3 * rows * cols);
+        sum++;
     }
 #pragma omp parallel default(shared)
-{
-    G_math_f_aA_B(A, B, -1.0 , C, rows , cols );
-    G_math_f_Ax(C, x, y, rows, cols);
-}
+    {
+        G_math_f_aA_B(A, B, -1.0, C, rows, cols);
+        G_math_f_Ax(C, x, y, rows, cols);
+    }
     G_math_f_asum_norm(y, &b, rows);
 
-    if(b != rows*cols) {
-    	G_message("Error in G_math_f_aA_B: %f != %f", b, (double)rows*cols);
-	sum++;
+    if (b != rows * cols) {
+        G_message("Error in G_math_f_aA_B: %f != %f", b, (double)rows * cols);
+        sum++;
     }
 #pragma omp parallel default(shared)
-{
-    G_math_f_aA_B(A, B, 2.0 , C, rows , cols );
-    G_math_f_Ax(C, x, y, rows, cols);
-}
+    {
+        G_math_f_aA_B(A, B, 2.0, C, rows, cols);
+        G_math_f_Ax(C, x, y, rows, cols);
+    }
     G_math_f_asum_norm(y, &c, rows);
 
-    if(c != 4*rows*cols) {
-    	G_message("Error in G_math_f_aA_B: %f != %f", c, (double)4*rows*cols);
-	sum++;
+    if (c != 4 * rows * cols) {
+        G_message("Error in G_math_f_aA_B: %f != %f", c,
+                  (double)4 * rows * cols);
+        sum++;
     }
 
     G_free_fmatrix(A);
@@ -227,33 +225,33 @@ int test_blas_level_3_float(void)
 
     fill_f_vector_scalar(x, 1, rows);
     fill_f_vector_scalar(y, 0, rows);
-    fill_f_vector_scalar(A[0], 1, rows*cols);
-    fill_f_vector_scalar(B[0], 2, rows*cols);
+    fill_f_vector_scalar(A[0], 1, rows * cols);
+    fill_f_vector_scalar(B[0], 2, rows * cols);
 
 #pragma omp parallel default(shared)
-{
-    G_math_f_AB(A, B, C, rows , cols , cols );
-    G_math_f_Ax(C, x, y, rows, cols);
-}
+    {
+        G_math_f_AB(A, B, C, rows, cols, cols);
+        G_math_f_Ax(C, x, y, rows, cols);
+    }
     G_math_f_asum_norm(y, &d, rows);
 
-
-    if(d != 2*rows*cols*cols) {
-    	G_message("Error in G_math_f_AB: %f != %f", d, (double)2*rows*cols*cols);
-	sum++;
+    if (d != 2 * rows * cols * cols) {
+        G_message("Error in G_math_f_AB: %f != %f", d,
+                  (double)2 * rows * cols * cols);
+        sum++;
     }
 
-    if(x)
-      G_free_fvector(x);
-    if(y)
-      G_free_fvector(y);
+    if (x)
+        G_free_fvector(x);
+    if (y)
+        G_free_fvector(y);
 
-    if(A)
-      G_free_fmatrix(A);
-    if(B)
-      G_free_fmatrix(B);
-    if(C)
-      G_free_fmatrix(C);
+    if (A)
+        G_free_fmatrix(A);
+    if (B)
+        G_free_fmatrix(B);
+    if (C)
+        G_free_fmatrix(C);
 
     return sum;
 }

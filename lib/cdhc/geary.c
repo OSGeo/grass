@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <math.h>
 
-
 double *Cdhc_geary_test(double *x, int n)
 {
     int i;
@@ -10,14 +9,14 @@ double *Cdhc_geary_test(double *x, int n)
 
     y[0] = 0.0;
     for (i = 0; i < n; ++i)
-	mean += x[i];
+        mean += x[i];
 
     mean /= n;
 
     for (i = 0; i < n; ++i) {
-	diff = x[i] - mean;
-	y[0] += fabs(diff);
-	s += diff * diff;
+        diff = x[i] - mean;
+        y[0] += fabs(diff);
+        s += diff * diff;
     }
 
     s *= n;

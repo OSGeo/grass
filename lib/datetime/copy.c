@@ -8,7 +8,7 @@
 #include <grass/datetime.h>
 
 /*!
- * \brief 
+ * \brief
  *
  * Copies the DateTime [into/from ???]  src
  *
@@ -16,8 +16,7 @@
  *  \param src
  *  \return void
  */
-
-void datetime_copy(DateTime * dst, const DateTime * src)
+void datetime_copy(DateTime *dst, const DateTime *src)
 {
     memcpy(dst, src, sizeof(DateTime));
 }

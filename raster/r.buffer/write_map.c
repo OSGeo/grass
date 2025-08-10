@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.buffer
@@ -17,15 +16,14 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
-****************************************************************************/
+ ****************************************************************************/
 
 #include <stdlib.h>
 #include "distance.h"
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-
-    /* write out result */
+/* write out result */
 
 int write_output_map(char *output, int offset)
 {
@@ -39,7 +37,7 @@ int write_output_map(char *output, int offset)
     fd_out = Rast_open_c_new(output);
 
     if (offset)
-	fd_in = Rast_open_old(output, G_mapset());
+        fd_in = Rast_open_old(output, G_mapset());
 
     cell = Rast_allocate_c_buf();
     G_message(_("Writing output raster map <%s>..."), output);
@@ -47,36 +45,36 @@ int write_output_map(char *output, int offset)
     ptr = map;
 
     for (row = 0; row < window.rows; row++) {
-	G_percent(row, window.rows, 2);
-	col = window.cols;
-	if (!offset) {
-	    while (col-- > 0)
-		*cell++ = (CELL) * ptr++;
-	}
-	else {
-	    Rast_get_c_row_nomask(fd_in, cell, row);
+        G_percent(row, window.rows, 2);
+        col = window.cols;
+        if (!offset) {
+            while (col-- > 0)
+                *cell++ = (CELL)*ptr++;
+        }
+        else {
+            Rast_get_c_row_nomask(fd_in, cell, row);
 
-	    while (col-- > 0) {
-		if (*cell == 0 && *ptr != 0)
-		    *cell = (CELL) * ptr + offset;
-		cell++;
-		ptr++;
-	    }
-	}
-	cell -= window.cols;
-	/* set 0 to NULL */
-	for (k = 0; k < window.cols; k++)
-	    if (cell[k] == 0)
-		Rast_set_null_value(&cell[k], 1, CELL_TYPE);
+            while (col-- > 0) {
+                if (*cell == 0 && *ptr != 0)
+                    *cell = (CELL)*ptr + offset;
+                cell++;
+                ptr++;
+            }
+        }
+        cell -= window.cols;
+        /* set 0 to NULL */
+        for (k = 0; k < window.cols; k++)
+            if (cell[k] == 0)
+                Rast_set_null_value(&cell[k], 1, CELL_TYPE);
 
-	Rast_put_row(fd_out, cell, CELL_TYPE);
+        Rast_put_row(fd_out, cell, CELL_TYPE);
     }
 
     G_percent(row, window.rows, 2);
     G_free(cell);
 
     if (offset)
-	Rast_close(fd_in);
+        Rast_close(fd_in);
 
     Rast_close(fd_out);
 

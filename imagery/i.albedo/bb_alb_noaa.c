@@ -1,5 +1,5 @@
-/* 
- * Broadband albedo NOAA AVHRR 14 
+/*
+ * Broadband albedo NOAA AVHRR 14
  * (maybe others too but not sure)
  */
 double bb_alb_noaa(double redchan, double nirchan)

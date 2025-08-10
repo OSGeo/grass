@@ -14,11 +14,11 @@ void mmul(double *c, double *a, double *b, int n)
 
     trnm(b, n);
     for (i = 0; i < n; ++i, a += n) {
-	for (j = 0, q = b; j < n; ++j) {
-	    for (k = 0, p = a, s = 0.; k < n; ++k)
-		s += *p++ * *q++;
-	    *c++ = s;
-	}
+        for (j = 0, q = b; j < n; ++j) {
+            for (k = 0, p = a, s = 0.; k < n; ++k)
+                s += *p++ * *q++;
+            *c++ = s;
+        }
     }
     trnm(b, n);
 }

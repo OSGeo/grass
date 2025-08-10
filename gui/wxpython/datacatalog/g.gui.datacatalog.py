@@ -18,24 +18,25 @@
 #
 ############################################################################
 
-#%module
-#% description: Tool for browsing, modifying and managing GRASS maps.
-#% keyword: general
-#% keyword: GUI
-#% keyword: map management
-#%end
+# %module
+# % description: Tool for browsing, modifying and managing GRASS maps.
+# % keyword: general
+# % keyword: GUI
+# % keyword: map management
+# %end
 
-import grass.script as gscript
+import grass.script as gs
 
 
 def main():
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
 
     # import wx only after running parser
     # to avoid issues when only interface is needed
     import wx
 
     from grass.script.setup import set_gui_path
+
     set_gui_path()
 
     from core.giface import StandaloneGrassInterface
@@ -43,10 +44,15 @@ def main():
 
     app = wx.App()
 
-    frame = DataCatalogFrame(parent=None, giface=StandaloneGrassInterface())
+    frame = DataCatalogFrame(
+        parent=None,
+        giface=StandaloneGrassInterface(),
+        title=_("Data Catalog - GRASS"),
+    )
     frame.CentreOnScreen()
     frame.Show()
     app.MainLoop()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

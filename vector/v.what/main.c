@@ -1,5 +1,4 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       v.what
  *
@@ -30,14 +29,13 @@
 #include <grass/glocale.h>
 #include "what.h"
 
-
 int main(int argc, char **argv)
 {
     struct {
-	struct Flag *print, *topo, *shell, *json, *multiple;
+        struct Flag *print, *topo, *shell, *json, *multiple;
     } flag;
     struct {
-	struct Option *map, *field, *coords, *maxdist, *type;
+        struct Option *map, *field, *coords, *maxdist, *type, *cols;
     } opt;
     struct Cell_head window;
     struct GModule *module;
@@ -49,6 +47,7 @@ int main(int argc, char **argv)
     char buf[2000];
     int i, level, ret, type;
     int *field;
+    char *columns;
     double xval, yval, xres, yres, maxd, x;
     double EW_DIST1, EW_DIST2, NS_DIST1, NS_DIST2;
     char nsres[30], ewres[30];
@@ -85,6 +84,10 @@ int main(int argc, char **argv)
     opt.maxdist->description = _("Query threshold distance");
     opt.maxdist->guisection = _("Threshold");
 
+    opt.cols = G_define_standard_option(G_OPT_DB_COLUMNS);
+    opt.cols->label = _("Name of attribute column(s)");
+    opt.cols->description = _("Default: all columns");
+
     flag.topo = G_define_flag();
     flag.topo->key = 'd';
     flag.topo->description = _("Print topological information (debugging)");
@@ -107,13 +110,14 @@ int main(int argc, char **argv)
 
     flag.multiple = G_define_flag();
     flag.multiple->key = 'm';
-    flag.multiple->description = _("Print multiple features if overlapping features are found");
+    flag.multiple->description =
+        _("Print multiple features if overlapping features are found");
     flag.multiple->guisection = _("Print");
 
     G_option_exclusive(flag.shell, flag.json, NULL);
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     /* initialize variables */
     vect = NULL;
@@ -122,100 +126,124 @@ int main(int argc, char **argv)
     field = NULL;
 
     if (opt.map->answers && opt.map->answers[0])
-	vect = opt.map->answers;
+        vect = opt.map->answers;
     else
-	G_fatal_error(_("No input vector maps!"));
+        G_fatal_error(_("No input vector maps!"));
+
+    /* get specified column names */
+    if (opt.cols->answers && opt.cols->answers[0]) {
+        int col_alloc;
+        int new_len;
+
+        col_alloc = 1024;
+        columns = (char *)G_calloc(col_alloc, sizeof(char));
+        for (i = 0; opt.cols->answers[i]; i++) {
+            new_len = strlen(columns) + strlen(opt.cols->answers[i]) + 1;
+            if (new_len >= col_alloc) {
+                col_alloc = new_len + 1024;
+                columns = G_realloc(columns, col_alloc);
+            }
+            if (i > 0)
+                strcat(columns, ",");
+            strcat(columns, opt.cols->answers[i]);
+        }
+    }
+    else
+        columns = "*";
 
     maxd = atof(opt.maxdist->answer);
     type = Vect_option_to_types(opt.type);
-    output = flag.shell->answer ? OUTPUT_SCRIPT :
-	    (flag.json->answer ? OUTPUT_JSON : OUTPUT_TEXT);
+    output = flag.shell->answer
+                 ? OUTPUT_SCRIPT
+                 : (flag.json->answer ? OUTPUT_JSON : OUTPUT_TEXT);
 
     if (maxd == 0.0) {
-	/* this code is a translation from d.what.vect which uses display
-	 * resolution to figure out a querying distance
-	 * display resolution is not available here
-	 * using raster resolution instead to determine vector querying
-	 * distance does not really make sense
-	 * maxd = 0 can make sense */
-	G_get_window(&window);
-	x = window.proj;
-	G_format_resolution(window.ew_res, ewres, x);
-	G_format_resolution(window.ns_res, nsres, x);
-	G_begin_distance_calculations();
-	EW_DIST1 =
-	    G_distance(window.east, window.north, window.west, window.north);
-	/* EW Dist at South Edge */
-	EW_DIST2 =
-	    G_distance(window.east, window.south, window.west, window.south);
-	/* NS Dist at East edge */
-	NS_DIST1 =
-	    G_distance(window.east, window.north, window.east, window.south);
-	/* NS Dist at West edge */
-	NS_DIST2 =
-	    G_distance(window.west, window.north, window.west, window.south);
-	xres = ((EW_DIST1 + EW_DIST2) / 2) / window.cols;
-	yres = ((NS_DIST1 + NS_DIST2) / 2) / window.rows;
-	if (xres > yres)
-	    maxd = xres;
-	else
-	    maxd = yres;
+        /* this code is a translation from d.what.vect which uses display
+         * resolution to figure out a querying distance
+         * display resolution is not available here
+         * using raster resolution instead to determine vector querying
+         * distance does not really make sense
+         * maxd = 0 can make sense */
+        G_get_window(&window);
+        x = window.proj;
+        G_format_resolution(window.ew_res, ewres, x);
+        G_format_resolution(window.ns_res, nsres, x);
+        G_begin_distance_calculations();
+        EW_DIST1 =
+            G_distance(window.east, window.north, window.west, window.north);
+        /* EW Dist at South Edge */
+        EW_DIST2 =
+            G_distance(window.east, window.south, window.west, window.south);
+        /* NS Dist at East edge */
+        NS_DIST1 =
+            G_distance(window.east, window.north, window.east, window.south);
+        /* NS Dist at West edge */
+        NS_DIST2 =
+            G_distance(window.west, window.north, window.west, window.south);
+        xres = ((EW_DIST1 + EW_DIST2) / 2) / window.cols;
+        yres = ((NS_DIST1 + NS_DIST2) / 2) / window.rows;
+        if (xres > yres)
+            maxd = xres;
+        else
+            maxd = yres;
     }
 
     /* Look at maps given on command line */
     if (vect) {
-	for (i = 0; vect[i]; i++)
-	    ;
-	nvects = i;
+        for (i = 0; vect[i]; i++)
+            ;
+        nvects = i;
 
-	for (i = 0; opt.field->answers[i]; i++)
-	    ;
+        for (i = 0; opt.field->answers[i]; i++)
+            ;
 
-	if (nvects != i)
-	    G_fatal_error(_("Number of given vector maps (%d) differs from number of layers (%d)"),
-			  nvects, i);
+        if (nvects != i)
+            G_fatal_error(_("Number of given vector maps (%d) differs from "
+                            "number of layers (%d)"),
+                          nvects, i);
 
-	Map = (struct Map_info *) G_malloc(nvects * sizeof(struct Map_info));
-	field = (int *) G_malloc(nvects * sizeof(int));
+        Map = (struct Map_info *)G_malloc(nvects * sizeof(struct Map_info));
+        field = (int *)G_malloc(nvects * sizeof(int));
 
-	for (i = 0; i < nvects; i++) {
-	    level = Vect_open_old2(&Map[i], vect[i], "", opt.field->answers[i]);
-	    if (level < 2)
-		G_fatal_error(_("You must build topology on vector map <%s>"),
-			      vect[i]);
-	    field[i] = Vect_get_field_number(&Map[i], opt.field->answers[i]);
-	}
+        for (i = 0; i < nvects; i++) {
+            level = Vect_open_old2(&Map[i], vect[i], "", opt.field->answers[i]);
+            if (level < 2)
+                G_fatal_error(_("You must build topology on vector map <%s>"),
+                              vect[i]);
+            field[i] = Vect_get_field_number(&Map[i], opt.field->answers[i]);
+        }
     }
 
     if (strcmp(opt.coords->answer, "-") == 0) {
-	/* read them from stdin */
-	setvbuf(stdin, NULL, _IOLBF, 0);
-	setvbuf(stdout, NULL, _IOLBF, 0);
-	while (fgets(buf, sizeof(buf), stdin) != NULL) {
-	    ret = sscanf(buf, "%lf%c%lf", &xval, &ch, &yval);
-	    if (ret == 3 && (ch == ',' || ch == ' ' || ch == '\t')) {
-		what(Map, nvects, vect, xval, yval, maxd, type,
-		     flag.topo->answer, flag.print->answer, output,
-		     flag.multiple->answer, field);
-	    }
-	    else {
-		G_warning(_("Unknown input format, skipping: '%s'"), buf);
-		continue;
-	    }
-	}
+        /* read them from stdin */
+        setvbuf(stdin, NULL, _IOLBF, 0);
+        setvbuf(stdout, NULL, _IOLBF, 0);
+        while (fgets(buf, sizeof(buf), stdin) != NULL) {
+            ret = sscanf(buf, "%lf%c%lf", &xval, &ch, &yval);
+            if (ret == 3 && (ch == ',' || ch == ' ' || ch == '\t')) {
+                what(Map, nvects, vect, xval, yval, maxd, type,
+                     flag.topo->answer, flag.print->answer, output,
+                     flag.multiple->answer, field, columns);
+            }
+            else {
+                G_warning(_("Unknown input format, skipping: '%s'"), buf);
+                continue;
+            }
+        }
     }
     else {
-	/* use coords given on command line */
-	for (i = 0; opt.coords->answers[i] != NULL; i += 2) {
-	    xval = atof(opt.coords->answers[i]);
-	    yval = atof(opt.coords->answers[i + 1]);
-	    what(Map, nvects, vect, xval, yval, maxd, type, flag.topo->answer,
-		 flag.print->answer, output, flag.multiple->answer, field);
-	}
+        /* use coords given on command line */
+        for (i = 0; opt.coords->answers[i] != NULL; i += 2) {
+            xval = atof(opt.coords->answers[i]);
+            yval = atof(opt.coords->answers[i + 1]);
+            what(Map, nvects, vect, xval, yval, maxd, type, flag.topo->answer,
+                 flag.print->answer, output, flag.multiple->answer, field,
+                 columns);
+        }
     }
 
     for (i = 0; i < nvects; i++)
-	Vect_close(&Map[i]);
+        Vect_close(&Map[i]);
 
     exit(EXIT_SUCCESS);
 }

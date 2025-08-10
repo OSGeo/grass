@@ -26,7 +26,7 @@ int normalsv(double *svbox)
     /* Parameter adjustments */
 
     if (klotz1_1.first == 0)
-	G_warning(_("normalsv: save of uninitialized block"));
+        G_warning(_("normalsv: save of uninitialized block"));
 
     /* save zufall block klotz0 */
     zufallsv(svbox);
@@ -35,7 +35,7 @@ int normalsv(double *svbox)
     svbox[609] = (double)klotz1_1.xptr;
     k = 609;
     for (i = 0; i < 1024; ++i)
-	svbox[i + k] = klotz1_1.xbuff[i];
+        svbox[i + k] = klotz1_1.xbuff[i];
 
     return 0;
-}				/* normalsv */
+} /* normalsv */

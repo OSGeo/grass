@@ -3,7 +3,7 @@ MODULE_TOPDIR = ../..
 
 PGM = v.category
 
-LIBES = $(VECTORLIB) $(GISLIB)
+LIBES = $(VECTORLIB) $(GISLIB) $(PARSONLIB)
 DEPENDENCIES = $(VECTORDEP) $(GISDEP)
 EXTRA_INC = $(VECT_INC)
 EXTRA_CFLAGS = $(VECT_CFLAGS)
@@ -11,4 +11,3 @@ EXTRA_CFLAGS = $(VECT_CFLAGS)
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
 default: cmd
-

@@ -22,17 +22,17 @@
    \return 0 success
    \return -1 error writing
  */
-int G_fwrite_key_value(FILE * fd, const struct Key_Value *kv)
+int G_fwrite_key_value(FILE *fd, const struct Key_Value *kv)
 {
     int n;
     int err;
 
     err = 0;
     for (n = 0; n < kv->nitems; n++)
-	if (kv->value[n][0]) {
-	    if (EOF == fprintf(fd, "%s: %s\n", kv->key[n], kv->value[n]))
-		err = -1;
-	}
+        if (kv->value[n][0]) {
+            if (EOF == fprintf(fd, "%s: %s\n", kv->key[n], kv->value[n]))
+                err = -1;
+        }
     return err;
 }
 
@@ -46,7 +46,7 @@ int G_fwrite_key_value(FILE * fd, const struct Key_Value *kv)
    \return pointer to allocated Key_Value structure
    \return NULL on error
  */
-struct Key_Value *G_fread_key_value(FILE * fd)
+struct Key_Value *G_fread_key_value(FILE *fd)
 {
     struct Key_Value *kv;
     char *key, *value;
@@ -54,17 +54,17 @@ struct Key_Value *G_fread_key_value(FILE * fd)
 
     kv = G_create_key_value();
     if (kv == NULL)
-	return NULL;
+        return NULL;
     while (G_getl2(buf, sizeof(buf) - 1, fd) != 0) {
-	key = value = buf;
-	while (*value && *value != ':')
-	    value++;
-	if (*value != ':')
-	    continue;
-	*value++ = 0;
-	G_strip(key);
-	G_strip(value);
-	G_set_key_value(key, value, kv);
+        key = value = buf;
+        while (*value && *value != ':')
+            value++;
+        if (*value != ':')
+            continue;
+        *value++ = 0;
+        G_strip(key);
+        G_strip(value);
+        G_set_key_value(key, value, kv);
     }
     return kv;
 }

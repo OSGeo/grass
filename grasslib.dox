@@ -1,10 +1,10 @@
-/*! \mainpage GRASS GIS 7 Programmer's Manual
+/*! \mainpage GRASS 8 Programmer's Manual
 <!-- * doxygenized from "GRASS 5 Programmer's Manual"
        by M. Neteler 2/2004
-     * updated 8/2005, 2006-2008, 2010-2011, 2017, 2018, 2019
+     * updated 8/2005, 2006-2025
   -->
 
-<a href="https://grass.osgeo.org">GRASS GIS</a> (<b>Geographic
+<a href="https://grass.osgeo.org">GRASS</a> (<b>Geographic
 Resources Analysis Support System</b>) is an open source, free
 software <em>Geographical Information System</em> (GIS) with raster,
 topological %vector, image processing, and graphics production
@@ -18,18 +18,18 @@ Analysis Support System</i> from the programming perspective. Design
 theory, system support libraries, system maintenance, and system
 enhancement are all presented. This work is part of ongoing research
 being performed by the <a
-href="http://grasswiki.osgeo.org/wiki/Team">GRASS Development
+href="https://grasswiki.osgeo.org/wiki/Team">GRASS Development
 Team</a>, an international team of programmers, GRASS module authors
 are cited within their module's source code and the contributed manual
 pages.
 
-&copy; 2000-2020 by the GRASS Development Team
+&copy; 2000-2025 by the GRASS Development Team
 
 This manual is published under <a
 href="http://www.fsf.org/copyleft/fdl.html">GNU Free Documentation
 License</a> (GFDL), and comes with ABSOLUTELY NO WARRANTY. The
 development of GRASS software and this manual is kindly supported by
-the <a href="http://www.osgeo.org">Open Source Geospatial
+the <a href="https://www.osgeo.org">Open Source Geospatial
 Foundation</a>, who provides the GRASS main infrastructure.
 
 Main web site: <a
@@ -37,10 +37,11 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
 
 <i>Note: Missing entries below still need to be documented in Doxygen format.</i>
 
-<!-- original:
-  https://github.com/OSGeo/grass/blob/master/doc/grass7_arch.odg
+<!--
+  original:
+  doc/grass_arch.odg
 -->
-\image html "grass7_arch.png" "GRASS 7 Architecture"
+\image html "grass_arch.png" "GRASS Architecture"
 
 \section libsOverview Libraries
 
@@ -51,7 +52,7 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
  - gis: \ref gislib
  - raster: \ref rasterlib
  - vector: \ref vectorlib
- - Temporal GIS API: See https://grass.osgeo.org/grass79/manuals/libpython/temporal_framework.html
+ - Temporal GIS API: See https://grass.osgeo.org/grass-devel/manuals/libpython/temporal_framework.html
 
 \section libs Further libraries
 
@@ -112,7 +113,7 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
 
 \subsection pythonlibs Python API
 
- - python:	See GRASS GIS Python library (https://grass.osgeo.org/grass79/manuals/libpython/)
+ - python:	See GRASS Python library (https://grass.osgeo.org/grass-devel/manuals/libpython/)
 
 \subsection projlibs Projection Libraries
 
@@ -120,8 +121,8 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
 
 \subsection misclibs Miscellaneous Libraries
 
- - datetime:	\ref datetime (DateTime library) 
- - external:	\ref external (External libraries from other projects such as shapelib and \ref ccmathlib)
+ - datetime:	\ref datetime (DateTime library)
+ - external:	\ref external (External libraries from other projects such as shapelib, parson and \ref ccmathlib)
  - fonts:	\ref fonts (GRASS fonts library)
  - init:	\ref init (GRASS initialization code + scripts)
  - iostream:	\ref iostream (fast I/O library)
@@ -130,6 +131,22 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
  - manage:      \ref managelib
  - symbol:	\ref symbol (Drawing symbols for %point %vector data library)
 
+\subsection external Adding External Libraries
+
+ The following files must be added or updated when including a new external library.
+
+ - <b>add:</b> lib/external/<b>newlib</b>
+ - <b>add:</b> lib/external/<b>newlib</b>/\*.c
+ - <b>add:</b> lib/external/<b>newlib</b>/\*.h
+ - <b>add:</b> lib/external/<b>newlib</b>/LICENSE
+ - <b>add:</b> lib/external/<b>newlib</b>/Makefile
+ - <b>update:</b> lib/external/Makefile
+ - <b>update:</b> lib/external/README.license
+ - <b>update:</b> lib/README.md
+ - <b>update:</b> include/Make/Install.make
+ - <b>update:</b> include/Make/Grass.make
+ - <b>update:</b> Makefile
+
 \section location File structure of GRASS Location
 
 A GRASS <b>raster map</b> consists of several files in several subdirectories in a mapset,
@@ -137,7 +154,7 @@ organized as follows:
 <dl>
  <dt><b>cellhd/</b></dt>
  <dd>map header including projection code, coordinates representing
-  the spatial extent of the raster map, number of rows and columns, resolution, 
+  the spatial extent of the raster map, number of rows and columns, resolution,
   and information about map compression;</dd>
  <dt><b>cell/, fcell/ or grid3/</b></dt>
  <dd>generic matrix of values in a compressed, portable
@@ -149,7 +166,7 @@ organized as follows:
  <dt><b>cats/</b></dt>
  <dd>optional category file which contains text or numeric labels assigned
   to the raster map categories;</dd>
- <dt><b>colr/</b></dt> 
+ <dt><b>colr/</b></dt>
  <dd>optional color table;</dd>
  <dt><b>cell_misc/</b></dt>
  <dd>optional timestamp, range of values, quantization rules (for floating %point maps)
@@ -184,10 +201,11 @@ as follows:
   storage in database (DBMS).</dd>
 </dl>
 
-<!-- original: 
-  https://raw.githubusercontent.com/OSGeo/grass/master/doc/help_loc_structure.odg
+<!--
+  original:
+  doc/help_project_structure.odg
 -->
-\image html "loc_struct.png" "Diagram of GRASS file structure"
+\image html "help_project_structure.png" "Diagram of GRASS file structure"
 
 \section Compiling_and_Installing_GRASS_Modules Compiling and Installing GRASS Modules
 
@@ -234,7 +252,7 @@ compilation process and requirements are discussed in more detail now.
 
 \todo Update the list.
 
-<b>GRASS Libraries</b>. The following variables name the various GRASS 
+<b>GRASS Libraries</b>. The following variables name the various GRASS
 libraries:
 
  - <i>GISLIB</i> - This names the <b>GIS Library</b>, which is the
@@ -263,7 +281,7 @@ details about this library, and \ref
 Loading_the_Display_Library for a sample <i>Makefile</i>
 which loads this library.
 
-<b>UNIX Libraries:</b> The following variables name some useful UNIX 
+<b>UNIX Libraries:</b> The following variables name some useful UNIX
 system libraries:
 
  - <i>MATHLIB</i> - This names the math library. It should be used

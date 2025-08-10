@@ -9,4 +9,3 @@ include $(MODULE_TOPDIR)/include/Make/Etc.make
 include $(MODULE_TOPDIR)/include/Make/NoHtml.make
 
 default: etc
-

@@ -1,0 +1,157 @@
+---
+name: Verify Success reusable workflow
+
+# Use this reusable workflow as a job of workflow to check that
+# all jobs, including ones ran through a matrix, were successful.
+# This job can then be used as a required status check in the
+# repo's rulesets, that allows to change the required jobs or
+# the matrix values of a required job without needing to change
+# the rulesets settings. In the future, GitHub might have a
+# solution to this natively.
+
+# This reusable workflow has inputs to change what is required
+# to have this workflow pass. It handles the cases were there were
+# skipped jobs, and no successful jobs.
+
+# The jobs to check must set as the `needs` for the job calling this
+# reusable workflow. This also means that the job ids should be in the
+# same workflow file. The calling job must be set to always run to be
+# triggered when jobs are skipped or cancelled.
+# Then, set the `needs_context` input like:
+# `needs_context: ${{ toJson(needs) }}`
+
+# Example usage, as a job inside a workflow:
+# ```
+# jobs:
+#   a-job-id:
+#     ...
+#   another-job-id:
+#     ...
+#   some-job-success:
+#     name: Some Job Result
+#     needs:
+#       - a-job-id
+#       - another-job-id
+#     if: ${{ always() }}
+#     uses: ./.github/workflows/verify-success.yml
+#     with:
+#       needs_context: ${{ toJson(needs) }}
+# ```
+
+on:
+  workflow_call:
+    inputs:
+      needs_context:
+        type: string
+        required: true
+        # Can't escape the handlebars in the description
+        description: >-
+          In the calling job that defines all the needed jobs,
+          send `toJson(needs)` inside `$` followed by `{{ }}`
+      fail_if_failure:
+        type: boolean
+        default: true
+        description: >-
+          If true, this workflow will fail if any job from 'needs_context was
+          failed
+      fail_if_cancelled:
+        type: boolean
+        default: true
+        description: >-
+          If true, this workflow will fail if any job from 'needs_context' was
+          cancelled
+      fail_if_skipped:
+        type: boolean
+        default: false
+        description: >-
+          If true, this workflow will fail if any job from 'needs_context' was
+          skipped
+      require_success:
+        type: boolean
+        default: true
+        description: >-
+          If true, this workflow will fail if no job from 'needs_context' was
+          successful
+
+permissions: {}
+
+jobs:
+  verify-success:
+    name: Success
+    runs-on: macos-latest
+    continue-on-error: true
+    steps:
+      - name: Set outputs for each job result type
+        id: has-result
+        run: |
+          echo "failure=${{
+            contains(env.NEEDS_RESULT, 'failure') }}" >> "$GITHUB_OUTPUT"
+          echo "cancelled=${{
+            contains(env.NEEDS_RESULT, 'cancelled') }}" >> "$GITHUB_OUTPUT"
+          echo "skipped=${{
+            contains(env.NEEDS_RESULT, 'skipped') }}" >> "$GITHUB_OUTPUT"
+          echo "success=${{
+            contains(env.NEEDS_RESULT, 'success') }}" >> "$GITHUB_OUTPUT"
+        env:
+          NEEDS_RESULT: ${{ toJson(fromJson(inputs.needs_context).*.result) }}
+      - name: Set exit codes for each job result type
+        id: exit-code
+        run: |
+          echo "failure=${{ inputs.fail_if_failure &&
+                  fromJson(steps.has-result.outputs.failure) && 1 || 0
+                  }}" >> "$GITHUB_OUTPUT"
+          echo "cancelled=${{ inputs.fail_if_cancelled &&
+                  fromJson(steps.has-result.outputs.cancelled) && 1 || 0
+                  }}" >> "$GITHUB_OUTPUT"
+          echo "skipped=${{ inputs.fail_if_skipped &&
+                  fromJson(steps.has-result.outputs.skipped) && 1 || 0
+                  }}" >> "$GITHUB_OUTPUT"
+          echo "success=${{ inputs.require_success &&
+                  !fromJson(steps.has-result.outputs.success) && 1 || 0
+                  }}" >> "$GITHUB_OUTPUT"
+      - name: Set messages for each job result type
+        id: message
+        run: |
+          echo "failure=${{ format('{0}{1} were failed',
+            (steps.exit-code.outputs.failure == 1) && env.P1 || env.P2,
+            (steps.has-result.outputs.failure == 'true') && env.M1 || env.M2)
+            }}" >> "$GITHUB_OUTPUT"
+          echo "cancelled=${{ format('{0}{1} were cancelled',
+            (steps.exit-code.outputs.cancelled == 1) && env.P1 || env.P2,
+            (steps.has-result.outputs.cancelled == 'true') && env.M1 || env.M2)
+            }}" >> "$GITHUB_OUTPUT"
+          echo "skipped=${{ format('{0}{1} were skipped',
+            (steps.exit-code.outputs.skipped == 1) && env.P1 || env.P2,
+            (steps.has-result.outputs.skipped == 'true') && env.M1 || env.M2)
+            }}" >> "$GITHUB_OUTPUT"
+          echo "success=${{ format('{0}{1} were successful',
+            (steps.exit-code.outputs.success == 1) && env.P1 || env.P2,
+            (steps.has-result.outputs.success == 'true') && env.M1 || env.M2)
+            }}" >> "$GITHUB_OUTPUT"
+        env:
+          P1: "::error ::" # Common message prefix if step will fail
+          P2: "" # Common message prefix if step will not fail
+          M1: "Some jobs" # Common message if result is true
+          M2: "No jobs" # Common message if result is false
+
+      - name: Check for failed jobs
+        run: |
+          echo "${{ steps.message.outputs.failure }}"
+          exit ${{ steps.exit-code.outputs.failure }}
+      - name: Check for cancelled jobs
+        run: |
+          echo "${{ steps.message.outputs.cancelled }}"
+          exit ${{ steps.exit-code.outputs.cancelled }}
+      - name: Check for skipped jobs
+        run: |
+          echo "${{ steps.message.outputs.skipped }}"
+          exit ${{ steps.exit-code.outputs.skipped }}
+      - name: Check for successful jobs
+        run: |
+          echo "${{ steps.message.outputs.success }}"
+          exit ${{ steps.exit-code.outputs.success }}
+
+      - run: echo "Checks passed successfully"
+        if: ${{ success() }}
+      - run: echo "Checks failed"
+        if: ${{ !success() }}

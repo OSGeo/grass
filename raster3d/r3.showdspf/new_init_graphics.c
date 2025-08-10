@@ -1,4 +1,3 @@
-
 /*--------------------------------------------------------------------
  new_init_graphics.c
 
@@ -7,10 +6,11 @@
  Date         : 3-6-00
 
  Note: The following code is not meant necessarily to be commercial grade
-       code.  It is just meant to be better than the original grad-student version.
-       K.S.
+       code.  It is just meant to be better than the original grad-student
+       version. K.S.
   --------------------------------------------------------------------
  */
+
 #include <stdio.h>
 #include "vizual.h"
 
@@ -18,7 +18,7 @@
 
 #include <Xm/Xm.h>
 #include <Xm/Form.h>
-      /* include file for GL drawing widget */
+/* include file for GL drawing widget */
 #ifdef HAVE_GL_GLWMDRAWA_H
 #include <GL/GLwMDrawA.h>
 #else
@@ -49,12 +49,15 @@ static Widget PlotSelected;
 static int MultipleThresholdFlag;
 static int ProceedStatus;
 static GLuint FontBase;
-static int Attributes[] = { GLX_RGBA, GLX_DEPTH_SIZE, 16, GLX_RED_SIZE, 1,
-    GLX_GREEN_SIZE, 1, GLX_BLUE_SIZE, 1, GLX_DOUBLEBUFFER, None
-};
-static int SingleAttributes[] = { GLX_RGBA, GLX_RED_SIZE, 1,
-    GLX_GREEN_SIZE, 1, GLX_BLUE_SIZE, 1, GLX_DOUBLEBUFFER, None
-};
+
+static int Attributes[] = {GLX_RGBA, GLX_DEPTH_SIZE,   16,  GLX_RED_SIZE,
+                           1,        GLX_GREEN_SIZE,   1,   GLX_BLUE_SIZE,
+                           1,        GLX_DOUBLEBUFFER, None};
+
+static int SingleAttributes[] = {GLX_RGBA, GLX_RED_SIZE,  1, GLX_GREEN_SIZE,
+                                 1,        GLX_BLUE_SIZE, 1, GLX_DOUBLEBUFFER,
+                                 None};
+
 static int RotationEnabled;
 
 void glinitCB(Widget widget, XtPointer client_data, XtPointer cdata);
@@ -85,8 +88,8 @@ void get_trackball_rotation_matrix(float mat[4][4])
 
     Ball_Value(&Trackball, mNow);
     for (i = 0; i < QuatLen; i++)
-	for (j = 0; j < QuatLen; j++)
-	    mat[i][j] = mNow[i][j];
+        for (j = 0; j < QuatLen; j++)
+            mat[i][j] = mNow[i][j];
 }
 
 /*-------------------------------------------------------------------
@@ -103,7 +106,7 @@ void set_trackball_rotations(struct dspec *D_spec)
     glRotatef(.1 * (D_spec->yrot * 10), 0., 1., 0.);
     glRotatef(.1 * (D_spec->zrot * 10), 0., 0., 1.);
     glRotatef(.1 * (D_spec->xrot * 10), 1., 0., 0.);
-    glGetFloatv(GL_MODELVIEW_MATRIX, (GLfloat *) tranmat);
+    glGetFloatv(GL_MODELVIEW_MATRIX, (GLfloat *)tranmat);
     Ball_SetMatrix(&Trackball, tranmat);
     glPopMatrix();
 }
@@ -147,13 +150,12 @@ void new_getsize(long *x, long *y)
     *y = MainOGLWindow.height;
 }
 
-
 /*-------------------------------------------------------------------
   initializeFonts()
-  This function initializes the OpenGL display lists required for drawing 
+  This function initializes the OpenGL display lists required for drawing
   2D text in a 3D window.  FontBase will end up pointing to a sequence
   of display lists in which each individual display character in a font.
-  The font chosen in a Courier Bold font chosen to match the font used 
+  The font chosen in a Courier Bold font chosen to match the font used
   by the IRISGL charstr() function.
   -------------------------------------------------------------------
 */
@@ -164,12 +166,13 @@ void initializeFonts()
     GLuint base;
     unsigned int first, last;
 
-    fontInfo = XLoadQueryFont(XtDisplay(MainOGLWindow.widget),
-			      "-adobe-courier-bold-r-normal--14-100-100-100-m-90-iso8859-1");
+    fontInfo = XLoadQueryFont(
+        XtDisplay(MainOGLWindow.widget),
+        "-adobe-courier-bold-r-normal--14-100-100-100-m-90-iso8859-1");
     id = fontInfo->fid;
     first = fontInfo->min_char_or_byte2;
     last = fontInfo->max_char_or_byte2;
-    base = glGenLists((GLuint) last + 1);
+    base = glGenLists((GLuint)last + 1);
     glXUseXFont(id, first, last - first + 1, base + first);
     XFreeFont(XtDisplay(MainOGLWindow.widget), fontInfo);
     FontBase = base;
@@ -177,28 +180,28 @@ void initializeFonts()
 
 /*-------------------------------------------------------------------
   new_charstr()
-  This is an OpenGL version of the IRISGL charstr() function. The initializeFonts
-  function must have been called prior to calling this function.
+  This is an OpenGL version of the IRISGL charstr() function. The
+  initializeFonts function must have been called prior to calling this function.
   -------------------------------------------------------------------
 */
 void new_charstr(char *str)
 {
     glPushAttrib(GL_LIST_BIT);
     glListBase(FontBase);
-    glCallLists(strlen(str), GL_UNSIGNED_BYTE, (GLubyte *) str);
+    glCallLists(strlen(str), GL_UNSIGNED_BYTE, (GLubyte *)str);
     glPopAttrib();
 }
 
 /*-------------------------------------------------------------------
   winset_main()
-  This function is the equivalent of the IRISGL winset command for 
+  This function is the equivalent of the IRISGL winset command for
   the main 3D drawing window.
   -------------------------------------------------------------------
 */
 void winset_main()
 {
     glXMakeCurrent(XtDisplay(MainOGLWindow.widget), MainOGLWindow.window,
-		   MainOGLWindow.glx_context);
+                   MainOGLWindow.glx_context);
 }
 
 /*-------------------------------------------------------------------
@@ -222,20 +225,21 @@ int loadrect(char *name)
     winset_main();
     fp = fopen(name, "r");
     if (!fp) {
-	fprintf(stderr, "Unable to open file <%s>\n", name);
-	G_free(buffer);
-	return 0;
+        fprintf(stderr, "Unable to open file <%s>\n", name);
+        G_free(buffer);
+        return 0;
     }
     fread(&xsiz, sizeof(int), 1, fp);
     fread(&ysiz, sizeof(int), 1, fp);
     if (NULL ==
-	(buffer = (unsigned long *)G_malloc(xsiz * ysiz * sizeof(long)))) {
-	fprintf(stderr, "Out of memory\n");
-	return -1;
+        (buffer = (unsigned long *)G_malloc(xsiz * ysiz * sizeof(long)))) {
+        fprintf(stderr, "Out of memory\n");
+        fclose(fp);
+        return -1;
     }
 
     if (ysiz != fread(buffer, xsiz * sizeof(long), ysiz, fp))
-	fprintf(stderr, "Unable to write file <%s>\n", name);
+        fprintf(stderr, "Unable to write file <%s>\n", name);
 
     clear_screen();
     glMatrixMode(GL_PROJECTION);
@@ -253,7 +257,6 @@ int loadrect(char *name)
     fclose(fp);
     G_free(buffer);
 
-
     aspect = (float)MainOGLWindow.width / (float)MainOGLWindow.height;
 
     glMatrixMode(GL_PROJECTION);
@@ -268,16 +271,13 @@ int loadrect(char *name)
 
     /* pick greatest dimension to use for translation of viewer from origin */
     if (xd < yd)
-	trd = yd;
+        trd = yd;
     else
-	trd = xd;
+        trd = xd;
     if (trd < zd)
-	trd = zd;
+        trd = zd;
 
     glTranslatef(0.0, 0.0, -trd * 1.6);
-
-
-
 
     return (0);
 }
@@ -296,18 +296,17 @@ int dumprect(char *name)
 
     new_getsize(&xsiz, &ysiz);
     if (NULL ==
-	(buffer = (unsigned long *)G_malloc(xsiz * ysiz * sizeof(long)))) {
-	fprintf(stderr, "Out of memory\n");
-	return -1;
+        (buffer = (unsigned long *)G_malloc(xsiz * ysiz * sizeof(long)))) {
+        fprintf(stderr, "Out of memory\n");
+        return -1;
     }
     winset_main();
 
-
     fp = fopen(name, "w");
     if (!fp) {
-	fprintf(stderr, "Unable to open file <%s>\n", name);
-	G_free(buffer);
-	return 0;
+        fprintf(stderr, "Unable to open file <%s>\n", name);
+        G_free(buffer);
+        return 0;
     }
 
     /* write dims */
@@ -318,11 +317,10 @@ int dumprect(char *name)
 
     glReadPixels(0, 0, xsiz, ysiz, GL_RGBA, GL_BYTE, buffer);
     if (ysiz != fwrite(buffer, xsiz * sizeof(long), ysiz, fp))
-	fprintf(stderr, "Unable to write file <%s>\n", name);
+        fprintf(stderr, "Unable to write file <%s>\n", name);
 
     fclose(fp);
     G_free(buffer);
-
 
     return (0);
 }
@@ -333,11 +331,11 @@ int dumprect(char *name)
   into a GIF file.
   -------------------------------------------------------------------
 */
-#define CPACKTORGBA(l,r,g,b,a)			\
-   (r) = ((l)>>0) & 0xff;			\
-   (g) = ((l)>>8) & 0xff;			\
-   (b) = ((l)>>16) & 0xff;			\
-(a) = ((l)>>24) & 0xff;
+#define CPACKTORGBA(l, r, g, b, a) \
+    (r) = ((l) >> 0) & 0xff;       \
+    (g) = ((l) >> 8) & 0xff;       \
+    (b) = ((l) >> 16) & 0xff;      \
+    (a) = ((l) >> 24) & 0xff;
 
 #include "togif.h"
 int dumpgif(char *name)
@@ -352,65 +350,57 @@ int dumpgif(char *name)
 
     new_getsize(&xwid, &ywid);
     if (xwid % 2)
-	xwid--;
+        xwid--;
     if (ywid % 2)
-	ywid--;
-
-
+        ywid--;
 
     if (NULL ==
-	(pixels = (unsigned long *)G_malloc(xwid * ywid * sizeof(long)))) {
-	fprintf(stderr, "Out of memory\n");
-	return -1;
+        (pixels = (unsigned long *)G_malloc(xwid * ywid * sizeof(long)))) {
+        fprintf(stderr, "Out of memory\n");
+        return -1;
     }
 
     winset_main();
 
-
     fp = fopen(name, "wb");
     if (!fp) {
-	fprintf(stderr, "Unable to open file <%s>\n", name);
-	G_free(pixels);
-	return 0;
+        fprintf(stderr, "Unable to open file <%s>\n", name);
+        G_free(pixels);
+        return 0;
     }
-
 
     glReadBuffer(GL_FRONT);
     glReadPixels(0, 0, xwid, ywid, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 
     numpixels = xwid * ywid;
     for (i = 0; i < numpixels; i++) {
-	CPACKTORGBA(pixels[i], red, green, blue, alpha);
+        CPACKTORGBA(pixels[i], red, green, blue, alpha);
 #ifdef WIN32
-	pixels[i] = red | (green << 8) | (blue << 16) | (alpha << 24);
+        pixels[i] = red | (green << 8) | (blue << 16) | (alpha << 24);
 #else
-	pixels[i] = alpha | (blue << 8) | (green << 16) | (red << 24);
+        pixels[i] = alpha | (blue << 8) | (green << 16) | (red << 24);
 #endif
     }
-
 
     writer = vgl_GIFWriterBegin();
     vgl_GIFWriterWriteGIFFile(writer, pixels, xwid, ywid, 0, fp);
 
-
     fclose(fp);
     G_free(pixels);
-
 
     return (0);
 }
 
-
 /*-------------------------------------------------------------------
   winset_colortable()
-  This function is the equivalent of the IRISGL winset command for 
+  This function is the equivalent of the IRISGL winset command for
   the colormap window.
   -------------------------------------------------------------------
 */
 void winset_colortable()
 {
     glXMakeCurrent(XtDisplay(ColormapWindow.widget), ColormapWindow.window,
-		   ColormapWindow.glx_context);
+                   ColormapWindow.glx_context);
 }
 
 /*-------------------------------------------------------------------
@@ -428,13 +418,14 @@ void winset_colortable()
 #include <grass/gis.h>
 static String Fallback_resources[] = {
     "*.fontList:-adobe-helvetica-bold-r-normal--12-120-75-75-p-70-iso8859-1",
-    "*Thresholds.fontList:-adobe-helvetica-bold-r-normal--17-120-100-100-p-92-iso8859-1",
+    "*Thresholds.fontList:-adobe-helvetica-bold-r-normal--17-120-100-100-p-92-"
+    "iso8859-1",
 };
 
 void init_graphics(char *name, int argc, char **argv, struct dspec *dspecptr)
 {
     int n;
-    Arg args[20];		/* array used to set widget resources */
+    Arg args[20]; /* array used to set widget resources */
     XVisualInfo *vi;
     XEvent event;
     Widget toplevel, form;
@@ -456,9 +447,9 @@ void init_graphics(char *name, int argc, char **argv, struct dspec *dspecptr)
     n++;
     XtSetArg(args[n], XmNy, 100);
     n++;
-    toplevel = XtAppInitialize(&App_context, "Showdspf", NULL,
-			       0, &argc, argv, Fallback_resources, args, n);
-    /* 
+    toplevel = XtAppInitialize(&App_context, "Showdspf", NULL, 0, &argc, argv,
+                               Fallback_resources, args, n);
+    /*
      *     Create the 3D drawing window
      */
     n = 0;
@@ -473,11 +464,11 @@ void init_graphics(char *name, int argc, char **argv, struct dspec *dspecptr)
     form = XmCreateForm(toplevel, "form", args, n);
     XtManageChild(form);
     vi = glXChooseVisual(XtDisplay(form), DefaultScreen(XtDisplay(form)),
-			 Attributes);
+                         Attributes);
     if (!vi) {
-	fprintf(stderr, "Fatal error: Couldn't get a visual\n");
-	fprintf(stderr, "See program developer.\n");
-	exit(1);
+        fprintf(stderr, "Fatal error: Couldn't get a visual\n");
+        fprintf(stderr, "See program developer.\n");
+        exit(1);
     }
 
     n = 0;
@@ -522,16 +513,13 @@ void init_graphics(char *name, int argc, char **argv, struct dspec *dspecptr)
     radio = XmCreateRadioBox(buttonrowcol, "radio", args, n);
     XtManageChild(radio);
     n = 0;
-    SingleToggle =
-	XtVaCreateManagedWidget("Single", xmToggleButtonWidgetClass, radio,
-				NULL);
-    XtAddCallback(SingleToggle, XmNarmCallback, SingleMultipleCB,
-		  (XtPointer) 1);
-    MultipleToggle =
-	XtVaCreateManagedWidget("Multiple", xmToggleButtonWidgetClass, radio,
-				NULL);
+    SingleToggle = XtVaCreateManagedWidget("Single", xmToggleButtonWidgetClass,
+                                           radio, NULL);
+    XtAddCallback(SingleToggle, XmNarmCallback, SingleMultipleCB, (XtPointer)1);
+    MultipleToggle = XtVaCreateManagedWidget(
+        "Multiple", xmToggleButtonWidgetClass, radio, NULL);
     XtAddCallback(MultipleToggle, XmNarmCallback, SingleMultipleCB,
-		  (XtPointer) 0);
+                  (XtPointer)0);
     XmToggleButtonSetState(SingleToggle, True, False);
 
     n = 0;
@@ -540,42 +528,34 @@ void init_graphics(char *name, int argc, char **argv, struct dspec *dspecptr)
     separator = XmCreateSeparatorGadget(buttonrowcol, "separator1", args, n);
     XtManageChild(separator);
 
-
     n = 0;
-    Button_plus =
-	XtCreateManagedWidget("Increase", xmPushButtonWidgetClass,
-			      buttonrowcol, args, n);
-    XtAddCallback(Button_plus, XmNactivateCallback, PlusMinusCB,
-		  (XtPointer) 1);
-    Button_minus =
-	XtCreateManagedWidget("Decrease", xmPushButtonWidgetClass,
-			      buttonrowcol, args, n);
-    XtAddCallback(Button_minus, XmNactivateCallback, PlusMinusCB,
-		  (XtPointer) 0);
+    Button_plus = XtCreateManagedWidget("Increase", xmPushButtonWidgetClass,
+                                        buttonrowcol, args, n);
+    XtAddCallback(Button_plus, XmNactivateCallback, PlusMinusCB, (XtPointer)1);
+    Button_minus = XtCreateManagedWidget("Decrease", xmPushButtonWidgetClass,
+                                         buttonrowcol, args, n);
+    XtAddCallback(Button_minus, XmNactivateCallback, PlusMinusCB, (XtPointer)0);
 
     n = 0;
     PlotSelected = XmCreatePushButton(buttonrowcol, "Plot Selected", args, n);
     XtAddCallback(PlotSelected, XmNactivateCallback, PlotSelectedCB, NULL);
 
-
     n = 0;
     ThresholdRadio = XmCreateRadioBox(buttonrowcol, "radio", args, n);
     XtManageChild(ThresholdRadio);
     if (Headfax.linefax.nthres) {
-	for (i = 1; i <= Headfax.linefax.nthres; i++) {
-	    n = 0;
-	    if (i <= MAXTHRESHOLDS) {
-		sprintf(buffer, "Threshold %d", i);
-		Threshbutton[i - 1] =
-		    XtVaCreateManagedWidget(buffer, xmToggleButtonWidgetClass,
-					    ThresholdRadio, NULL);
-		XtAddCallback(Threshbutton[i - 1], XmNarmCallback,
-			      ThresholdCB, (XtPointer) (i - 1));
-	    }
-	}
-	XmToggleButtonSetState(Threshbutton[0], True, False);
+        for (i = 1; i <= Headfax.linefax.nthres; i++) {
+            n = 0;
+            if (i <= MAXTHRESHOLDS) {
+                sprintf(buffer, "Threshold %d", i);
+                Threshbutton[i - 1] = XtVaCreateManagedWidget(
+                    buffer, xmToggleButtonWidgetClass, ThresholdRadio, NULL);
+                XtAddCallback(Threshbutton[i - 1], XmNarmCallback, ThresholdCB,
+                              (XtPointer)(i - 1));
+            }
+        }
+        XmToggleButtonSetState(Threshbutton[0], True, False);
     }
-
 
     n = 0;
     XtSetArg(args[n], XmNrightAttachment, XmATTACH_WIDGET);
@@ -600,8 +580,7 @@ void init_graphics(char *name, int argc, char **argv, struct dspec *dspecptr)
     XtAddCallback(MainOGLWindow.widget, GLwNinputCallback, glinputCB, 0);
     XtAddCallback(MainOGLWindow.widget, GLwNresizeCallback, glresizeCB, 0);
 
-
-    /* 
+    /*
      *     Create the colormap window
      */
     n = 0;
@@ -613,9 +592,9 @@ void init_graphics(char *name, int argc, char **argv, struct dspec *dspecptr)
     n++;
     XtSetArg(args[n], XmNy, 5);
     n++;
-    gl_shell = XtAppCreateShell("Colormap", "GL_window",
-				topLevelShellWidgetClass, XtDisplay(toplevel),
-				args, n);
+    gl_shell =
+        XtAppCreateShell("Colormap", "GL_window", topLevelShellWidgetClass,
+                         XtDisplay(toplevel), args, n);
 
     n = 0;
     XtSetArg(args[n], XmNwidth, 100);
@@ -629,14 +608,12 @@ void init_graphics(char *name, int argc, char **argv, struct dspec *dspecptr)
     form = XmCreateForm(gl_shell, "form", args, n);
     XtManageChild(form);
     vi = glXChooseVisual(XtDisplay(form), DefaultScreen(XtDisplay(form)),
-			 SingleAttributes);
+                         SingleAttributes);
     if (!vi) {
-	fprintf(stderr, "Fatal error: Couldn't get a visual\n");
-	fprintf(stderr, "See program developer.\n");
-	exit(1);
+        fprintf(stderr, "Fatal error: Couldn't get a visual\n");
+        fprintf(stderr, "See program developer.\n");
+        exit(1);
     }
-
-
 
     n = 0;
     XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM);
@@ -654,12 +631,11 @@ void init_graphics(char *name, int argc, char **argv, struct dspec *dspecptr)
     XtManageChild(ColormapWindow.widget);
 
     XtAddCallback(ColormapWindow.widget, GLwNginitCallback, glinitCB,
-		  (void *)1);
+                  (void *)1);
 
     XtAddCallback(ColormapWindow.widget, GLwNexposeCallback, glexpose2CB, 0);
 
     XtAddCallback(ColormapWindow.widget, GLwNresizeCallback, glresize2CB, 0);
-
 
     XtRealizeWidget(toplevel);
     XStoreName(XtDisplay(toplevel), XtWindow(toplevel), name);
@@ -668,12 +644,10 @@ void init_graphics(char *name, int argc, char **argv, struct dspec *dspecptr)
 
     XMapRaised(XtDisplay(gl_shell), XtWindow(gl_shell));
 
-
     while (ProceedStatus < 4) {
-	XtAppNextEvent(App_context, &event);
-	XtDispatchEvent(&event);
+        XtAppNextEvent(App_context, &event);
+        XtDispatchEvent(&event);
     }
-
 }
 
 /*-------------------------------------------------------------------
@@ -687,7 +661,7 @@ void ThresholdCB(Widget widget, XtPointer client_data, XtPointer call_data)
     int num = (int)client_data;
 
     if (MultipleThresholdFlag)
-	return;
+        return;
     MainOGLWindow.ptr_D_spec->Thresh = num;
     do_draw_immediate_mode();
 }
@@ -703,19 +677,18 @@ void PlusMinusCB(Widget widget, XtPointer client_data, XtPointer call_data)
     int flag = (int)client_data;
 
     if (flag) {
-	MainOGLWindow.ptr_D_spec->Thresh++;
-	if (MainOGLWindow.ptr_D_spec->Thresh > Headfax.linefax.nthres - 1)
-	    MainOGLWindow.ptr_D_spec->Thresh = 0;
-	set_threshold_button(MainOGLWindow.ptr_D_spec->Thresh + 1);
-	do_draw_immediate_mode();
-
+        MainOGLWindow.ptr_D_spec->Thresh++;
+        if (MainOGLWindow.ptr_D_spec->Thresh > Headfax.linefax.nthres - 1)
+            MainOGLWindow.ptr_D_spec->Thresh = 0;
+        set_threshold_button(MainOGLWindow.ptr_D_spec->Thresh + 1);
+        do_draw_immediate_mode();
     }
     else {
-	MainOGLWindow.ptr_D_spec->Thresh--;
-	if (MainOGLWindow.ptr_D_spec->Thresh < 0)
-	    MainOGLWindow.ptr_D_spec->Thresh = Headfax.linefax.nthres - 1;
-	set_threshold_button(MainOGLWindow.ptr_D_spec->Thresh + 1);
-	do_draw_immediate_mode();
+        MainOGLWindow.ptr_D_spec->Thresh--;
+        if (MainOGLWindow.ptr_D_spec->Thresh < 0)
+            MainOGLWindow.ptr_D_spec->Thresh = Headfax.linefax.nthres - 1;
+        set_threshold_button(MainOGLWindow.ptr_D_spec->Thresh + 1);
+        do_draw_immediate_mode();
     }
 }
 
@@ -729,14 +702,14 @@ void set_threshold_button(int iset)
     int i;
 
     for (i = 1; i <= Headfax.linefax.nthres; i++) {
-	if (i == iset) {
-	    if (i <= MAXTHRESHOLDS)
-		XmToggleButtonSetState(Threshbutton[i - 1], True, False);
-	}
-	else {
-	    if ((i <= MAXTHRESHOLDS) && !MultipleThresholdFlag)
-		XmToggleButtonSetState(Threshbutton[i - 1], False, False);
-	}
+        if (i == iset) {
+            if (i <= MAXTHRESHOLDS)
+                XmToggleButtonSetState(Threshbutton[i - 1], True, False);
+        }
+        else {
+            if ((i <= MAXTHRESHOLDS) && !MultipleThresholdFlag)
+                XmToggleButtonSetState(Threshbutton[i - 1], False, False);
+        }
     }
 }
 
@@ -748,7 +721,7 @@ void set_threshold_button(int iset)
 void unset_threshold_button(int iset)
 {
     if (iset <= MAXTHRESHOLDS)
-	XmToggleButtonSetState(Threshbutton[iset - 1], False, False);
+        XmToggleButtonSetState(Threshbutton[iset - 1], False, False);
 }
 
 /*-------------------------------------------------------------------
@@ -766,145 +739,132 @@ void rotateLoop()
     int thresh = 1;
 
     for (;;) {
-	XtAppNextEvent(App_context, &event);
+        XtAppNextEvent(App_context, &event);
 
-	if (event.type == KeyPress) {
-	    K = (XKeyPressedEvent *) & event;
-	    sym =
-		XKeycodeToKeysym(XtDisplay(MainOGLWindow.widget), K->keycode,
-				 0);
-	    if (sym == XK_Escape) {
-		fprintf(stderr, "Escape\n");
-		return;
-	    }
-	    else if (sym == XK_equal) {
-		if (K->state & ShiftMask) {
-		    MainOGLWindow.ptr_D_spec->Thresh++;
-		    if (MainOGLWindow.ptr_D_spec->Thresh >
-			Headfax.linefax.nthres - 1)
-			MainOGLWindow.ptr_D_spec->Thresh = 0;
-		    do_draw_immediate_mode();
-		    set_threshold_button(MainOGLWindow.ptr_D_spec->Thresh +
-					 1);
-		}
-	    }
-	    else if (sym == XK_minus) {
-		if (!(K->state & ShiftMask)) {
-		    MainOGLWindow.ptr_D_spec->Thresh--;
-		    if (MainOGLWindow.ptr_D_spec->Thresh < 0)
-			MainOGLWindow.ptr_D_spec->Thresh =
-			    Headfax.linefax.nthres - 1;
-		    do_draw_immediate_mode();
-		    set_threshold_button(MainOGLWindow.ptr_D_spec->Thresh +
-					 1);
-		}
-	    }
-	    else if (sym == XK_C) {
-		clear_screen();
-	    }
-	    else if (sym == XK_1) {
-		thresh = 0;
-		if (thresh < Headfax.linefax.nthres) {
+        if (event.type == KeyPress) {
+            K = (XKeyPressedEvent *)&event;
+            sym = XKeycodeToKeysym(XtDisplay(MainOGLWindow.widget), K->keycode,
+                                   0);
+            if (sym == XK_Escape) {
+                fprintf(stderr, "Escape\n");
+                return;
+            }
+            else if (sym == XK_equal) {
+                if (K->state & ShiftMask) {
+                    MainOGLWindow.ptr_D_spec->Thresh++;
+                    if (MainOGLWindow.ptr_D_spec->Thresh >
+                        Headfax.linefax.nthres - 1)
+                        MainOGLWindow.ptr_D_spec->Thresh = 0;
+                    do_draw_immediate_mode();
+                    set_threshold_button(MainOGLWindow.ptr_D_spec->Thresh + 1);
+                }
+            }
+            else if (sym == XK_minus) {
+                if (!(K->state & ShiftMask)) {
+                    MainOGLWindow.ptr_D_spec->Thresh--;
+                    if (MainOGLWindow.ptr_D_spec->Thresh < 0)
+                        MainOGLWindow.ptr_D_spec->Thresh =
+                            Headfax.linefax.nthres - 1;
+                    do_draw_immediate_mode();
+                    set_threshold_button(MainOGLWindow.ptr_D_spec->Thresh + 1);
+                }
+            }
+            else if (sym == XK_C) {
+                clear_screen();
+            }
+            else if (sym == XK_1) {
+                thresh = 0;
+                if (thresh < Headfax.linefax.nthres) {
 
-		    MainOGLWindow.ptr_D_spec->Thresh = thresh;
-		    do_draw_immediate_mode();
-		    set_threshold_button(MainOGLWindow.ptr_D_spec->Thresh +
-					 1);
-		}
-	    }
-	    else if (sym == XK_2) {
-		thresh = 1;
-		if (thresh < Headfax.linefax.nthres) {
+                    MainOGLWindow.ptr_D_spec->Thresh = thresh;
+                    do_draw_immediate_mode();
+                    set_threshold_button(MainOGLWindow.ptr_D_spec->Thresh + 1);
+                }
+            }
+            else if (sym == XK_2) {
+                thresh = 1;
+                if (thresh < Headfax.linefax.nthres) {
 
-		    MainOGLWindow.ptr_D_spec->Thresh = thresh;
-		    do_draw_immediate_mode();
-		    set_threshold_button(MainOGLWindow.ptr_D_spec->Thresh +
-					 1);
-		}
-	    }
-	    else if (sym == XK_3) {
-		thresh = 2;
-		if (thresh < Headfax.linefax.nthres) {
+                    MainOGLWindow.ptr_D_spec->Thresh = thresh;
+                    do_draw_immediate_mode();
+                    set_threshold_button(MainOGLWindow.ptr_D_spec->Thresh + 1);
+                }
+            }
+            else if (sym == XK_3) {
+                thresh = 2;
+                if (thresh < Headfax.linefax.nthres) {
 
-		    MainOGLWindow.ptr_D_spec->Thresh = thresh;
-		    do_draw_immediate_mode();
-		    set_threshold_button(MainOGLWindow.ptr_D_spec->Thresh +
-					 1);
-		}
-	    }
-	    else if (sym == XK_4) {
-		thresh = 3;
-		if (thresh < Headfax.linefax.nthres) {
+                    MainOGLWindow.ptr_D_spec->Thresh = thresh;
+                    do_draw_immediate_mode();
+                    set_threshold_button(MainOGLWindow.ptr_D_spec->Thresh + 1);
+                }
+            }
+            else if (sym == XK_4) {
+                thresh = 3;
+                if (thresh < Headfax.linefax.nthres) {
 
-		    MainOGLWindow.ptr_D_spec->Thresh = thresh;
-		    do_draw_immediate_mode();
-		    set_threshold_button(MainOGLWindow.ptr_D_spec->Thresh +
-					 1);
-		}
-	    }
-	    else if (sym == XK_5) {
-		thresh = 4;
-		if (thresh < Headfax.linefax.nthres) {
+                    MainOGLWindow.ptr_D_spec->Thresh = thresh;
+                    do_draw_immediate_mode();
+                    set_threshold_button(MainOGLWindow.ptr_D_spec->Thresh + 1);
+                }
+            }
+            else if (sym == XK_5) {
+                thresh = 4;
+                if (thresh < Headfax.linefax.nthres) {
 
-		    MainOGLWindow.ptr_D_spec->Thresh = thresh;
-		    do_draw_immediate_mode();
-		    set_threshold_button(MainOGLWindow.ptr_D_spec->Thresh +
-					 1);
-		}
-	    }
-	    else if (sym == XK_6) {
-		thresh = 5;
-		if (thresh < Headfax.linefax.nthres) {
+                    MainOGLWindow.ptr_D_spec->Thresh = thresh;
+                    do_draw_immediate_mode();
+                    set_threshold_button(MainOGLWindow.ptr_D_spec->Thresh + 1);
+                }
+            }
+            else if (sym == XK_6) {
+                thresh = 5;
+                if (thresh < Headfax.linefax.nthres) {
 
-		    MainOGLWindow.ptr_D_spec->Thresh = thresh;
-		    do_draw_immediate_mode();
-		    set_threshold_button(MainOGLWindow.ptr_D_spec->Thresh +
-					 1);
-		}
-	    }
-	    else if (sym == XK_7) {
-		thresh = 6;
-		if (thresh < Headfax.linefax.nthres) {
+                    MainOGLWindow.ptr_D_spec->Thresh = thresh;
+                    do_draw_immediate_mode();
+                    set_threshold_button(MainOGLWindow.ptr_D_spec->Thresh + 1);
+                }
+            }
+            else if (sym == XK_7) {
+                thresh = 6;
+                if (thresh < Headfax.linefax.nthres) {
 
-		    MainOGLWindow.ptr_D_spec->Thresh = thresh;
-		    do_draw_immediate_mode();
-		    set_threshold_button(MainOGLWindow.ptr_D_spec->Thresh +
-					 1);
-		}
-	    }
-	    else if (sym == XK_8) {
-		thresh = 7;
-		if (thresh < Headfax.linefax.nthres) {
+                    MainOGLWindow.ptr_D_spec->Thresh = thresh;
+                    do_draw_immediate_mode();
+                    set_threshold_button(MainOGLWindow.ptr_D_spec->Thresh + 1);
+                }
+            }
+            else if (sym == XK_8) {
+                thresh = 7;
+                if (thresh < Headfax.linefax.nthres) {
 
-		    MainOGLWindow.ptr_D_spec->Thresh = thresh;
-		    do_draw_immediate_mode();
-		    set_threshold_button(MainOGLWindow.ptr_D_spec->Thresh +
-					 1);
-		}
-	    }
-	    else if (sym == XK_9) {
-		thresh = 8;
-		if (thresh < Headfax.linefax.nthres) {
+                    MainOGLWindow.ptr_D_spec->Thresh = thresh;
+                    do_draw_immediate_mode();
+                    set_threshold_button(MainOGLWindow.ptr_D_spec->Thresh + 1);
+                }
+            }
+            else if (sym == XK_9) {
+                thresh = 8;
+                if (thresh < Headfax.linefax.nthres) {
 
-		    MainOGLWindow.ptr_D_spec->Thresh = thresh;
-		    do_draw_immediate_mode();
-		    set_threshold_button(MainOGLWindow.ptr_D_spec->Thresh +
-					 1);
-		}
-	    }
-	    else if (sym == XK_Escape) {
-		fprintf(stderr, "Escape\n");
-		return;
-	    }
-
-	}
-	else if (MainOGLWindow.right_button_hit) {
-	    MainOGLWindow.right_button_hit = 0;
-	    return;
-	}
-	else {
-	    XtDispatchEvent(&event);
-	}
+                    MainOGLWindow.ptr_D_spec->Thresh = thresh;
+                    do_draw_immediate_mode();
+                    set_threshold_button(MainOGLWindow.ptr_D_spec->Thresh + 1);
+                }
+            }
+            else if (sym == XK_Escape) {
+                fprintf(stderr, "Escape\n");
+                return;
+            }
+        }
+        else if (MainOGLWindow.right_button_hit) {
+            MainOGLWindow.right_button_hit = 0;
+            return;
+        }
+        else {
+            XtDispatchEvent(&event);
+        }
     }
 }
 
@@ -925,101 +885,97 @@ void glinputCB(Widget widget, XtPointer client_data, XtPointer cdata)
     static int rot_oxmouse, rot_oymouse;
     int dymouse;
 
-
     GLwDrawingAreaCallbackStruct *call_data =
-	(GLwDrawingAreaCallbackStruct *) cdata;
+        (GLwDrawingAreaCallbackStruct *)cdata;
 
     if (!RotationEnabled)
-	return;
-
+        return;
 
     switch (call_data->event->type) {
     case ButtonPress:
-	if (call_data->event->xbutton.button == Button1) {
-	    if (MainOGLWindow.middle_button_status == 0) {
-		MainOGLWindow.left_button_status = 1;
-		rot_first = 1;
-		xpos = call_data->event->xbutton.x;
-		ypos = MainOGLWindow.height - call_data->event->xbutton.y;
-		vNow.x = (2 * (float)xpos / MainOGLWindow.width) - 1.;
-		vNow.y = (2 * (float)ypos / MainOGLWindow.height) - 1.;
-		Ball_Mouse(&Trackball, vNow);
-		Ball_Update(&Trackball);
+        if (call_data->event->xbutton.button == Button1) {
+            if (MainOGLWindow.middle_button_status == 0) {
+                MainOGLWindow.left_button_status = 1;
+                rot_first = 1;
+                xpos = call_data->event->xbutton.x;
+                ypos = MainOGLWindow.height - call_data->event->xbutton.y;
+                vNow.x = (2 * (float)xpos / MainOGLWindow.width) - 1.;
+                vNow.y = (2 * (float)ypos / MainOGLWindow.height) - 1.;
+                Ball_Mouse(&Trackball, vNow);
+                Ball_Update(&Trackball);
 
-
-
-		Ball_BeginDrag(&Trackball);
-	    }
-	}
-	else if (call_data->event->xbutton.button == Button2) {
-	    if (MainOGLWindow.left_button_status == 0) {
-		tr_first = 1;
-		MainOGLWindow.middle_button_status = 1;
-	    }
-	}
-	else if (call_data->event->xbutton.button == Button3) {
-	    MainOGLWindow.right_button_hit = 1;
-	}
-	break;
+                Ball_BeginDrag(&Trackball);
+            }
+        }
+        else if (call_data->event->xbutton.button == Button2) {
+            if (MainOGLWindow.left_button_status == 0) {
+                tr_first = 1;
+                MainOGLWindow.middle_button_status = 1;
+            }
+        }
+        else if (call_data->event->xbutton.button == Button3) {
+            MainOGLWindow.right_button_hit = 1;
+        }
+        break;
     case ButtonRelease:
-	if (call_data->event->xbutton.button == Button1) {
-	    MainOGLWindow.left_button_status = 0;
-	    Ball_EndDrag(&Trackball);
-	    Ball_Mouse(&Trackball, vNow);
-	    Ball_Update(&Trackball);
-	    do_draw_with_display_list(MainOGLWindow.ptr_D_spec);
-	}
-	else if (call_data->event->xbutton.button == Button2) {
-	    MainOGLWindow.middle_button_status = 0;
-	}
-	break;
+        if (call_data->event->xbutton.button == Button1) {
+            MainOGLWindow.left_button_status = 0;
+            Ball_EndDrag(&Trackball);
+            Ball_Mouse(&Trackball, vNow);
+            Ball_Update(&Trackball);
+            do_draw_with_display_list(MainOGLWindow.ptr_D_spec);
+        }
+        else if (call_data->event->xbutton.button == Button2) {
+            MainOGLWindow.middle_button_status = 0;
+        }
+        break;
     case MotionNotify:
 
-	if (MainOGLWindow.left_button_status) {
-	    /* Rotate 3D scene */
-	    xpos = call_data->event->xmotion.x;
-	    ypos = MainOGLWindow.height - call_data->event->xmotion.y;
-	    if (rot_first) {
-		rot_oxmouse = xpos;
-		rot_oymouse = ypos;
-		rot_first = 0;
-	    }
-	    vNow.x = (2 * (float)xpos / MainOGLWindow.width) - 1.;
-	    vNow.y = (2 * (float)ypos / MainOGLWindow.height) - 1.;
+        if (MainOGLWindow.left_button_status) {
+            /* Rotate 3D scene */
+            xpos = call_data->event->xmotion.x;
+            ypos = MainOGLWindow.height - call_data->event->xmotion.y;
+            if (rot_first) {
+                rot_oxmouse = xpos;
+                rot_oymouse = ypos;
+                rot_first = 0;
+            }
+            vNow.x = (2 * (float)xpos / MainOGLWindow.width) - 1.;
+            vNow.y = (2 * (float)ypos / MainOGLWindow.height) - 1.;
 
-	    Ball_Mouse(&Trackball, vNow);
-	    Ball_Update(&Trackball);
-	    if (((vNowLast.x - vNow.x) * (vNowLast.x - vNow.x) +
-		 (vNowLast.y - vNow.y) * (vNowLast.y - vNow.y)) > .01) {
-		vNowLast = vNow;
-		do_draw_with_display_list(MainOGLWindow.ptr_D_spec);
-	    }
-	}
-	else if (MainOGLWindow.middle_button_status) {
-	    /* Translate 3D scene */
-	    xpos = call_data->event->xmotion.x;
-	    ypos = MainOGLWindow.height - call_data->event->xmotion.y;
-	    if (tr_first) {
-		tr_oymouse = ypos;
-		tr_first = 0;
-	    }
-	    dymouse = ypos - tr_oymouse;
-	    if (dymouse > 10 || dymouse < -10) {
-		tr_oymouse = ypos;
+            Ball_Mouse(&Trackball, vNow);
+            Ball_Update(&Trackball);
+            if (((vNowLast.x - vNow.x) * (vNowLast.x - vNow.x) +
+                 (vNowLast.y - vNow.y) * (vNowLast.y - vNow.y)) > .01) {
+                vNowLast = vNow;
+                do_draw_with_display_list(MainOGLWindow.ptr_D_spec);
+            }
+        }
+        else if (MainOGLWindow.middle_button_status) {
+            /* Translate 3D scene */
+            xpos = call_data->event->xmotion.x;
+            ypos = MainOGLWindow.height - call_data->event->xmotion.y;
+            if (tr_first) {
+                tr_oymouse = ypos;
+                tr_first = 0;
+            }
+            dymouse = ypos - tr_oymouse;
+            if (dymouse > 10 || dymouse < -10) {
+                tr_oymouse = ypos;
 
-		if (MainOGLWindow.ptr_D_spec) {
-		    MainOGLWindow.ptr_D_spec->ztrans -= (float)dymouse;
-		    do_draw_with_display_list(MainOGLWindow.ptr_D_spec);
-		}
-	    }
-	}
-	break;
+                if (MainOGLWindow.ptr_D_spec) {
+                    MainOGLWindow.ptr_D_spec->ztrans -= (float)dymouse;
+                    do_draw_with_display_list(MainOGLWindow.ptr_D_spec);
+                }
+            }
+        }
+        break;
     }
 }
 
 /*-------------------------------------------------------------------
   glinitCB()
-  This function is called during initialization of both the main 3D 
+  This function is called during initialization of both the main 3D
   drawing window and colormap window
   -------------------------------------------------------------------
 */
@@ -1031,78 +987,76 @@ void glinitCB(Widget widget, XtPointer client_data, XtPointer cdata)
     int height, width;
     float aspect;
     GLwDrawingAreaCallbackStruct *call_data =
-	(GLwDrawingAreaCallbackStruct *) cdata;
+        (GLwDrawingAreaCallbackStruct *)cdata;
     int id = (int)client_data;
 
     XtSetArg(args[0], GLwNvisualInfo, &vi);
     XtGetValues(widget, args, 1);
 
-
     if (id == 0) {
-	/* Main 3D window */
-	MainOGLWindow.window = XtWindow(widget);
-	MainOGLWindow.glx_context =
-	    glXCreateContext(XtDisplay(widget), vi, 0, GL_TRUE);
-	glXMakeCurrent(XtDisplay(widget), MainOGLWindow.window,
-		       MainOGLWindow.glx_context);
-	glDepthRange(0x0000, 0x7fffff);
+        /* Main 3D window */
+        MainOGLWindow.window = XtWindow(widget);
+        MainOGLWindow.glx_context =
+            glXCreateContext(XtDisplay(widget), vi, 0, GL_TRUE);
+        glXMakeCurrent(XtDisplay(widget), MainOGLWindow.window,
+                       MainOGLWindow.glx_context);
+        glDepthRange(0x0000, 0x7fffff);
 
+        height = (GLuint)call_data->height - 1;
+        width = (GLuint)call_data->width - 1;
+        aspect = (float)width / (float)height;
 
-	height = (GLuint) call_data->height - 1;
-	width = (GLuint) call_data->width - 1;
-	aspect = (float)width / (float)height;
+        do_lights();
+        clear_screen();
 
-	do_lights();
-	clear_screen();
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluPerspective(45., aspect, .10, 1000.0);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(45., aspect, .10, 1000.0);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+        xd = Headfax.xdim * MainOGLWindow.ptr_D_spec->xscale;
+        yd = Headfax.ydim * MainOGLWindow.ptr_D_spec->yscale;
+        zd = Headfax.zdim * MainOGLWindow.ptr_D_spec->zscale;
 
-	xd = Headfax.xdim * MainOGLWindow.ptr_D_spec->xscale;
-	yd = Headfax.ydim * MainOGLWindow.ptr_D_spec->yscale;
-	zd = Headfax.zdim * MainOGLWindow.ptr_D_spec->zscale;
+        /* pick greatest dimension to use for translation of viewer from origin
+         */
+        if (xd < yd)
+            trd = yd;
+        else
+            trd = xd;
+        if (trd < zd)
+            trd = zd;
 
-	/* pick greatest dimension to use for translation of viewer from origin */
-	if (xd < yd)
-	    trd = yd;
-	else
-	    trd = xd;
-	if (trd < zd)
-	    trd = zd;
+        glTranslatef(0.0, 0.0, -trd * 1.6);
+        glXSwapBuffers(XtDisplay(widget), MainOGLWindow.window);
+        initializeFonts();
 
-	glTranslatef(0.0, 0.0, -trd * 1.6);
-	glXSwapBuffers(XtDisplay(widget), MainOGLWindow.window);
-	initializeFonts();
+        MainDlist = glGenLists(1);
+        glNewList(MainDlist, GL_COMPILE_AND_EXECUTE);
+        glEndList();
 
-	MainDlist = glGenLists(1);
-	glNewList(MainDlist, GL_COMPILE_AND_EXECUTE);
-	glEndList();
+        Ball_Init(&Trackball);
+        Ball_Place(&Trackball, qOne, .90);
 
-	Ball_Init(&Trackball);
-	Ball_Place(&Trackball, qOne, .90);
-
-
-	ProceedStatus++;
+        ProceedStatus++;
     }
     else {
-	ColormapWindow.window = XtWindow(widget);
-	ColormapWindow.glx_context =
-	    glXCreateContext(XtDisplay(widget), vi, 0, GL_TRUE);
+        ColormapWindow.window = XtWindow(widget);
+        ColormapWindow.glx_context =
+            glXCreateContext(XtDisplay(widget), vi, 0, GL_TRUE);
 
-	glXMakeCurrent(XtDisplay(widget), ColormapWindow.window,
-		       ColormapWindow.glx_context);
-	clear_screen();
+        glXMakeCurrent(XtDisplay(widget), ColormapWindow.window,
+                       ColormapWindow.glx_context);
+        clear_screen();
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluOrtho2D(0, 100, 0, 1000);
-	glMatrixMode(GL_MODELVIEW);
-	draw_ctable();
-	winset_main();
-	ProceedStatus++;
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(0, 100, 0, 1000);
+        glMatrixMode(GL_MODELVIEW);
+        draw_ctable();
+        winset_main();
+        ProceedStatus++;
     }
 }
 
@@ -1116,24 +1070,22 @@ void glexposeCB(Widget widget, XtPointer client_data, XtPointer cdata)
     Window wind;
     static int First = 1;
     GLwDrawingAreaCallbackStruct *call_data =
-	(GLwDrawingAreaCallbackStruct *) cdata;
+        (GLwDrawingAreaCallbackStruct *)cdata;
     wind = XtWindow(widget);
     glXMakeCurrent(XtDisplay(widget), wind, MainOGLWindow.glx_context);
-    MainOGLWindow.height = (GLuint) (call_data->height);
-    MainOGLWindow.width = (GLuint) (call_data->width);
-    glViewport(0, 0, (GLuint) (call_data->width),
-	       (GLuint) (call_data->height));
-    glScissor(0, 0, (GLuint) (call_data->width),
-	      (GLuint) (call_data->height));
+    MainOGLWindow.height = (GLuint)(call_data->height);
+    MainOGLWindow.width = (GLuint)(call_data->width);
+    glViewport(0, 0, (GLuint)(call_data->width), (GLuint)(call_data->height));
+    glScissor(0, 0, (GLuint)(call_data->width), (GLuint)(call_data->height));
     glEnable(GL_DEPTH_TEST);
 
     clear_screen();
     if (First) {
-	do_draw_immediate_mode();
-	First = 0;
+        do_draw_immediate_mode();
+        First = 0;
     }
     else {
-	do_draw_with_display_list(MainOGLWindow.ptr_D_spec);
+        do_draw_with_display_list(MainOGLWindow.ptr_D_spec);
     }
 
     ProceedStatus++;
@@ -1149,18 +1101,16 @@ void glresizeCB(Widget widget, XtPointer client_data, XtPointer cdata)
     Window wind;
     GLdouble aspect;
     GLwDrawingAreaCallbackStruct *call_data =
-	(GLwDrawingAreaCallbackStruct *) cdata;
+        (GLwDrawingAreaCallbackStruct *)cdata;
 
     wind = XtWindow(widget);
     glXMakeCurrent(XtDisplay(widget), wind, MainOGLWindow.glx_context);
 
-    glViewport(0, 0, (GLuint) (call_data->width),
-	       (GLuint) (call_data->height));
-    glScissor(0, 0, (GLuint) (call_data->width),
-	      (GLuint) (call_data->height));
+    glViewport(0, 0, (GLuint)(call_data->width), (GLuint)(call_data->height));
+    glScissor(0, 0, (GLuint)(call_data->width), (GLuint)(call_data->height));
 
-    MainOGLWindow.height = (GLuint) (call_data->height);
-    MainOGLWindow.width = (GLuint) (call_data->width);
+    MainOGLWindow.height = (GLuint)(call_data->height);
+    MainOGLWindow.width = (GLuint)(call_data->width);
 
     aspect = (float)MainOGLWindow.width / (float)MainOGLWindow.height;
 
@@ -1169,7 +1119,6 @@ void glresizeCB(Widget widget, XtPointer client_data, XtPointer cdata)
     gluPerspective(45., aspect, .10, 1000.0);
     glMatrixMode(GL_MODELVIEW);
     do_draw_with_display_list(MainOGLWindow.ptr_D_spec);
-
 }
 
 /*-------------------------------------------------------------------
@@ -1196,7 +1145,7 @@ void glexpose2CB(Widget widget, XtPointer client_data, XtPointer cdata)
 {
     Window wind;
     GLwDrawingAreaCallbackStruct *call_data =
-	(GLwDrawingAreaCallbackStruct *) cdata;
+        (GLwDrawingAreaCallbackStruct *)cdata;
 
     wind = XtWindow(widget);
     winset_colortable();
@@ -1204,13 +1153,11 @@ void glexpose2CB(Widget widget, XtPointer client_data, XtPointer cdata)
     glXMakeCurrent(XtDisplay(widget), wind, ColormapWindow.glx_context);
 
     glDisable(GL_DEPTH_TEST);
-    ColormapWindow.height = (GLuint) (call_data->height);
-    ColormapWindow.width = (GLuint) (call_data->width);
+    ColormapWindow.height = (GLuint)(call_data->height);
+    ColormapWindow.width = (GLuint)(call_data->width);
 
-    glViewport(0, 0, (GLuint) (call_data->width),
-	       (GLuint) (call_data->height));
-    glScissor(0, 0, (GLuint) (call_data->width),
-	      (GLuint) (call_data->height));
+    glViewport(0, 0, (GLuint)(call_data->width), (GLuint)(call_data->height));
+    glScissor(0, 0, (GLuint)(call_data->width), (GLuint)(call_data->height));
 
     clear_screen2();
     glMatrixMode(GL_PROJECTION);
@@ -1229,23 +1176,21 @@ void glexpose2CB(Widget widget, XtPointer client_data, XtPointer cdata)
 
 /*-------------------------------------------------------------------
   glresize2CB()
-  This function is called when the colormap window is resized 
+  This function is called when the colormap window is resized
   -------------------------------------------------------------------
 */
 void glresize2CB(Widget widget, XtPointer client_data, XtPointer cdata)
 {
     Window wind;
     GLwDrawingAreaCallbackStruct *call_data =
-	(GLwDrawingAreaCallbackStruct *) cdata;
+        (GLwDrawingAreaCallbackStruct *)cdata;
 
     wind = XtWindow(widget);
     glXMakeCurrent(XtDisplay(widget), wind, ColormapWindow.glx_context);
-    glViewport(0, 0, (GLuint) (call_data->width),
-	       (GLuint) (call_data->height));
-    glScissor(0, 0, (GLuint) (call_data->width),
-	      (GLuint) (call_data->height));
-    ColormapWindow.height = (GLuint) (call_data->height);
-    ColormapWindow.width = (GLuint) (call_data->width);
+    glViewport(0, 0, (GLuint)(call_data->width), (GLuint)(call_data->height));
+    glScissor(0, 0, (GLuint)(call_data->width), (GLuint)(call_data->height));
+    ColormapWindow.height = (GLuint)(call_data->height);
+    ColormapWindow.width = (GLuint)(call_data->width);
 
     clear_screen2();
     glMatrixMode(GL_PROJECTION);
@@ -1283,39 +1228,39 @@ void SingleMultipleCB(Widget widget, XtPointer client_data, XtPointer cdata)
     int i;
 
     if (flag == 1) {
-	MultipleThresholdFlag = 0;
-	n = 0;
-	XtSetArg(args[n], XmNradioBehavior, True);
-	n++;
-	XtSetValues(ThresholdRadio, args, n);
-	XtManageChild(Button_plus);
-	XtManageChild(Button_minus);
-	XtUnmanageChild(PlotSelected);
-	for (i = 1; i <= Headfax.linefax.nthres; i++) {
-	    if (i <= MAXTHRESHOLDS)
-		XmToggleButtonSetState(Threshbutton[i - 1], False, False);
-	}
+        MultipleThresholdFlag = 0;
+        n = 0;
+        XtSetArg(args[n], XmNradioBehavior, True);
+        n++;
+        XtSetValues(ThresholdRadio, args, n);
+        XtManageChild(Button_plus);
+        XtManageChild(Button_minus);
+        XtUnmanageChild(PlotSelected);
+        for (i = 1; i <= Headfax.linefax.nthres; i++) {
+            if (i <= MAXTHRESHOLDS)
+                XmToggleButtonSetState(Threshbutton[i - 1], False, False);
+        }
     }
     else {
-	MultipleThresholdFlag = 1;
-	for (i = 1; i <= Headfax.linefax.nthres; i++) {
-	    if (i <= MAXTHRESHOLDS)
-		XmToggleButtonSetState(Threshbutton[i - 1], False, False);
-	}
-	n = 0;
-	XtSetArg(args[n], XmNradioBehavior, False);
-	n++;
-	XtSetValues(ThresholdRadio, args, n);
-	XtUnmanageChild(Button_plus);
-	XtUnmanageChild(Button_minus);
-	XtManageChild(PlotSelected);
+        MultipleThresholdFlag = 1;
+        for (i = 1; i <= Headfax.linefax.nthres; i++) {
+            if (i <= MAXTHRESHOLDS)
+                XmToggleButtonSetState(Threshbutton[i - 1], False, False);
+        }
+        n = 0;
+        XtSetArg(args[n], XmNradioBehavior, False);
+        n++;
+        XtSetValues(ThresholdRadio, args, n);
+        XtUnmanageChild(Button_plus);
+        XtUnmanageChild(Button_minus);
+        XtManageChild(PlotSelected);
     }
 }
 
 /*-------------------------------------------------------------------
   PlotSelectedCB()
   This function is the callback function for the "Plot Selected" button.
-  A plot containing thresholds corresponding to all selected Threshold 
+  A plot containing thresholds corresponding to all selected Threshold
   toggle buttons will be drawn.
   -------------------------------------------------------------------
 */
@@ -1326,19 +1271,18 @@ void PlotSelectedCB(Widget widget, XtPointer client_data, XtPointer cdata)
     int numSelected = 0;
 
     for (i = 1; i <= Headfax.linefax.nthres; i++) {
-	if (i <= MAXTHRESHOLDS) {
-	    if (XmToggleButtonGetState(Threshbutton[i - 1]) == True) {
-		selectedList[numSelected] = i;
-		numSelected++;
-	    }
-	}
+        if (i <= MAXTHRESHOLDS) {
+            if (XmToggleButtonGetState(Threshbutton[i - 1]) == True) {
+                selectedList[numSelected] = i;
+                numSelected++;
+            }
+        }
     }
     for (i = 0; i < numSelected; i++) {
-	MainOGLWindow.ptr_D_spec->t[i] = selectedList[i] - 1;
+        MainOGLWindow.ptr_D_spec->t[i] = selectedList[i] - 1;
     }
     MainOGLWindow.ptr_D_spec->nt = numSelected;
     draw_multiple();
-
 }
 
 /*-------------------------------------------------------------------
@@ -1363,8 +1307,8 @@ void setSingleSelectionMode()
     XtManageChild(Button_minus);
     XtUnmanageChild(PlotSelected);
     for (i = 1; i <= Headfax.linefax.nthres; i++) {
-	if (i <= MAXTHRESHOLDS)
-	    XmToggleButtonSetState(Threshbutton[i - 1], False, False);
+        if (i <= MAXTHRESHOLDS)
+            XmToggleButtonSetState(Threshbutton[i - 1], False, False);
     }
 }
 
@@ -1383,8 +1327,8 @@ void setMultipleSelectionMode()
     MultipleThresholdFlag = 1;
     XmToggleButtonSetState(MultipleToggle, True, True);
     for (i = 1; i <= Headfax.linefax.nthres; i++) {
-	if (i <= MAXTHRESHOLDS)
-	    XmToggleButtonSetState(Threshbutton[i - 1], False, False);
+        if (i <= MAXTHRESHOLDS)
+            XmToggleButtonSetState(Threshbutton[i - 1], False, False);
     }
     n = 0;
     XtSetArg(args[n], XmNradioBehavior, False);

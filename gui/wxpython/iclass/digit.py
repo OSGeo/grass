@@ -17,19 +17,33 @@ for details.
 """
 
 import wx
-
+from core.gcmd import GWarning
 from vdigit.mapwindow import VDigitWindow
 from vdigit.wxdigit import IVDigit
-from vdigit.wxdisplay import DisplayDriver, TYPE_AREA
-from core.gcmd import GWarning
+from vdigit.wxdisplay import TYPE_AREA, DisplayDriver
+
 try:
-    from grass.lib.gis import G_verbose, G_set_verbose
-    from grass.lib.vector import *
-    from grass.lib.vedit import *
+    from ctypes import pointer
+
+    from grass.lib.gis import G_set_verbose, G_verbose
+    from grass.lib.vector import (
+        Map_info,
+        Vect_build,
+        Vect_close,
+        Vect_copy_map_lines,
+        Vect_get_area_cat,
+        Vect_get_num_lines,
+        Vect_is_3d,
+        Vect_open_new,
+        Vect_open_tmp_new,
+        Vect_open_tmp_update,
+        Vect_open_update,
+    )
+    from grass.lib.vedit import TYPE_CENTROIDIN, Vedit_delete_areas_cat
 except ImportError:
     pass
 
-import grass.script as grass
+import grass.script as gs
 
 
 class IClassVDigitWindow(VDigitWindow):
@@ -43,23 +57,28 @@ class IClassVDigitWindow(VDigitWindow):
         :param parent: gui parent
         :param map: map renderer instance
         """
-        VDigitWindow.__init__(self, parent=parent, giface=giface,
-                              Map=map, properties=properties)
+        VDigitWindow.__init__(
+            self, parent=parent, giface=giface, Map=map, properties=properties
+        )
 
     def _onLeftDown(self, event):
         action = self.toolbar.GetAction()
         if not action:
             return
 
-        region = grass.region()
+        region = gs.region()
         e, n = self.Pixel2Cell(event.GetPosition())
-        if not((region['s'] <= n <= region['n'])
-               and(region['w'] <= e <= region['e'])):
+        if not (
+            (region["s"] <= n <= region["n"]) and (region["w"] <= e <= region["e"])
+        ):
             GWarning(
-                parent=self.parent, message=_(
+                parent=self.parent,
+                message=_(
                     "You are trying to create a training area "
                     "outside the computational region. "
-                    "Please, use g.region to set the appropriate region first."))
+                    "Please, use g.region to set the appropriate region first."
+                ),
+            )
             return
 
         cat = self.GetCurrentCategory()
@@ -71,9 +90,11 @@ class IClassVDigitWindow(VDigitWindow):
                     "In order to create a training area, "
                     "you have to select class first.\n\n"
                     "There is no class yet, "
-                    "do you want to create one?"),
+                    "do you want to create one?"
+                ),
                 caption=_("No class selected"),
-                style=wx.YES_NO)
+                style=wx.YES_NO,
+            )
             if dlg.ShowModal() == wx.ID_YES:
                 self.parent.OnCategoryManager(None)
 
@@ -81,7 +102,7 @@ class IClassVDigitWindow(VDigitWindow):
             event.Skip()
             return
 
-        super(IClassVDigitWindow, self)._onLeftDown(event)
+        super()._onLeftDown(event)
 
     def _addRecord(self):
         return False
@@ -90,7 +111,7 @@ class IClassVDigitWindow(VDigitWindow):
         pass
 
     def _onRightUp(self, event):
-        super(IClassVDigitWindow, self)._onRightUp(event)
+        super()._onRightUp(event)
         self.parent.UpdateChangeState(changes=True)
 
     def GetCurrentCategory(self):
@@ -103,23 +124,22 @@ class IClassVDigitWindow(VDigitWindow):
 
     def GetCategoryColor(self, cat):
         """Get color associated with given category"""
-        r, g, b = [int(x) for x in self.parent.GetClassColor(cat).split(':')][:3]
+        r, g, b = [int(x) for x in self.parent.GetClassColor(cat).split(":")][:3]
         return wx.Colour(r, g, b)
 
 
 class IClassVDigit(IVDigit):
     """Class similar to IVDigit but specialized for wxIClass."""
 
-    def __init__(self, mapwindow):
-        IVDigit.__init__(self, mapwindow, driver=IClassDisplayDriver)
-        self._settings['closeBoundary'] = True  # snap to the first node
+    def __init__(self, giface, mapwindow):
+        IVDigit.__init__(self, giface, mapwindow, driver=IClassDisplayDriver)
+        self._settings["closeBoundary"] = True  # snap to the first node
 
     def _getNewFeaturesLayer(self):
         return 1
 
     def _getNewFeaturesCat(self):
-        cat = self.mapWindow.GetCurrentCategory()
-        return cat
+        return self.mapWindow.GetCurrentCategory()
 
     def DeleteAreasByCat(self, cats):
         """Delete areas (centroid+boundaries) by categories
@@ -129,13 +149,15 @@ class IClassVDigit(IVDigit):
         for cat in cats:
             Vedit_delete_areas_cat(self.poMapInfo, 1, cat)
 
-    def CopyMap(self, name, tmp=False):
+    def CopyMap(self, name, tmp=False, update=False):
         """Make a copy of open vector map
 
         Note: Attributes are not copied
 
         :param name: name for a copy
         :param tmp: True for temporary map
+        :param bool update: True if copy target vector map (poMapInfoNew)
+        exist
 
         :return: number of copied features
         :return: -1 on error
@@ -147,16 +169,20 @@ class IClassVDigit(IVDigit):
         poMapInfoNew = pointer(Map_info())
 
         if not tmp:
-            open_fn = Vect_open_new
+            open_fn = Vect_open_update if update else Vect_open_new
         else:
-            open_fn = Vect_open_tmp_new
+            open_fn = Vect_open_tmp_update if update else Vect_open_tmp_new
 
-        is3D = bool(Vect_is_3d(self.poMapInfo))
-        if open_fn(poMapInfoNew, name, is3D) == -1:
-            return -1
+        if update:
+            if open_fn(poMapInfoNew, name, "") == -1:
+                return -1
+        else:
+            is3D = bool(Vect_is_3d(self.poMapInfo))
+            if open_fn(poMapInfoNew, name, is3D) == -1:
+                return -1
 
         verbose = G_verbose()
-        G_set_verbose(-1)      # be silent
+        G_set_verbose(-1)  # be silent
 
         if Vect_copy_map_lines(self.poMapInfo, poMapInfoNew) == 1:
             G_set_verbose(verbose)
@@ -183,14 +209,7 @@ class IClassDisplayDriver(DisplayDriver):
     """
 
     def __init__(self, device, deviceTmp, mapObj, window, glog, gprogress):
-        DisplayDriver.__init__(
-            self,
-            device,
-            deviceTmp,
-            mapObj,
-            window,
-            glog,
-            gprogress)
+        DisplayDriver.__init__(self, device, deviceTmp, mapObj, window, glog, gprogress)
         self._cat = -1
 
     def _drawObject(self, robj):

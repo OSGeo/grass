@@ -7,7 +7,7 @@ locations within the current geographic region in the
 active display frame on the graphics monitor.
 
 <p>Each mouse click will output the easting and northing of the point
-currently located beneath the mouse pointer. 
+currently located beneath the mouse pointer.
 A mouse-button menu is presented so the user knows which
 mouse buttons to use. The output is always printed to the
 terminal screen; if the output is redirected into a file,
@@ -25,17 +25,16 @@ The left mouse button prints the coordinates at the selected point,
 the middle mouse button allows you to query two points (they are connected
 by a line for convenience). Use the right mouse button to exit the module.
 
-
 <h2>NOTES</h2>
 
-This program uses the current geographic region setting and active frame. 
-It is not necessary, although useful, to have displayed a map in the current 
+This program uses the current geographic region setting and active frame.
+It is not necessary, although useful, to have displayed a map in the current
 frame before running <em>d.where</em>. The <b>-d</b> flag allows the user to
 optionally output latitude/longitude coordinates pair(s) in decimal degree
 rather than DD:MM:SS format. The <b>-w</b> flag is only valid
-if a datum is defined for the current location.
+if a datum is defined for the current project's coordinate reference system.
 
-If the <b>-f</b> flag is given the x,y frame coordinates of the active display 
+If the <b>-f</b> flag is given the x,y frame coordinates of the active display
 monitor will be returned (as a percentage, 0,0 is bottom left).
 
 <h2>EXAMPLE</h2>
@@ -56,15 +55,9 @@ d.where
 <a href="v.what.vect.html">v.what.vect</a>
 </em>
 
-
 <h2>AUTHORS</h2>
 
 James Westervelt, <br>
 Michael Shapiro, <br>
-U.S. Army Construction Engineering 
+U.S. Army Construction Engineering
 Research Laboratory
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

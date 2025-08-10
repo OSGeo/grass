@@ -4,14 +4,15 @@
 #include "ncb.h"
 #include "local_proto.h"
 
-int readcell(int fd, int row, int nrows, int ncols)
+int readcell(int fd, int row, int nrows, int ncols, int thread_id)
 {
-    rotate_bufs();
+    rotate_bufs(thread_id);
 
-    if (row < nrows)
-	Rast_get_d_row(fd, ncb.buf[ncb.nsize - 1] + ncb.dist, row);
+    if (row >= 0 && row < nrows)
+        Rast_get_d_row(fd, ncb.buf[thread_id][ncb.nsize - 1] + ncb.dist, row);
     else
-	Rast_set_d_null_value(ncb.buf[ncb.nsize - 1] + ncb.dist, ncols);
+        Rast_set_d_null_value(ncb.buf[thread_id][ncb.nsize - 1] + ncb.dist,
+                              ncols);
 
     return 0;
 }

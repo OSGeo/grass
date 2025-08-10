@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_client/c_listdb.c
- * 
+ *
  * \brief DBMI Library (client) - list databases
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -16,19 +16,19 @@
 #include "macros.h"
 
 /*!
-  \brief List databases
-  
-  \param driver db driver
-  \param path db path
-  \param npaths number of given paths
-  \param[out] handles handle infos
-  \param[out] count number of handle infos
+   \brief List databases
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
-*/
-int db_list_databases(dbDriver * driver, dbString * path, int npaths,
-		      dbHandle ** handles, int *count)
+   \param driver db driver
+   \param path db path
+   \param npaths number of given paths
+   \param[out] handles handle infos
+   \param[out] count number of handle infos
+
+   \return DB_OK on success
+   \return DB_FAILED on failure
+ */
+int db_list_databases(dbDriver *driver, dbString *path, int npaths,
+                      dbHandle **handles, int *count)
 {
     int ret_code;
     int i;
@@ -45,13 +45,13 @@ int db_list_databases(dbDriver * driver, dbString * path, int npaths,
     DB_RECV_RETURN_CODE(&ret_code);
 
     if (ret_code != DB_OK)
-	return ret_code;	/* ret_code SHOULD == DB_FAILED */
+        return ret_code; /* ret_code SHOULD == DB_FAILED */
 
     /* results */
     DB_RECV_INT(count);
     h = db_alloc_handle_array(*count);
     for (i = 0; i < *count; i++) {
-	DB_RECV_HANDLE(&h[i]);
+        DB_RECV_HANDLE(&h[i]);
     }
     *handles = h;
 

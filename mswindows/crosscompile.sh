@@ -4,8 +4,8 @@
 #
 # MODULE:	crosscompile.sh
 # AUTHOR(S):	Huidae Cho <grass4u gmail.com>
-# PURPOSE:	Builds a cross-compiled portable package of GRASS GIS
-# COPYRIGHT:	(C) 2019, 2020 by Huidae Cho and the GRASS Development Team
+# PURPOSE:	Builds a cross-compiled portable package of GRASS
+# COPYRIGHT:	(C) 2019-2021 by Huidae Cho and the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (>=v2). Read the file COPYING that comes with GRASS
@@ -15,7 +15,9 @@
 #
 # This script requires MXE <https://mxe.cc/> for cross-compilation and was
 # tested on Slackware 14.2 x86_64 with up-to-date packages from slackpkg and
-# sbopkg.
+# sbopkg. It was also tested on WSLackware
+# <https://github.com/Mohsens22/WSLackware> in WSL
+# <https://docs.microsoft.com/en-us/windows/wsl/>.
 #
 # Basic steps:
 #
@@ -29,6 +31,7 @@
 #
 # cd ~/usr/src
 # git clone https://github.com/OSGeo/grass.git
+# git clone https://github.com/OSGeo/grass-addons.git
 # cd grass
 # mswindows/crosscompile.sh --mxe-path=$HOME/usr/src/mxe --update --package \
 #      > crosscompile.log 2>&1
@@ -37,8 +40,9 @@
 # stop on errors
 set -e
 
-# default paths, but can be overriden from the command line
+# default paths, but can be overridden from the command line
 mxe_path=${MXE_PATH-$HOME/usr/local/src/mxe}
+addons_path=${ADDONS_PATH-../grass-addons}
 freetype_include=${FREETYPE_INCLUDE-/usr/include/freetype2}
 
 # process options
@@ -52,16 +56,20 @@ Usage: crosscompile.sh [OPTIONS]
 
 -h, --help                   display this help message
     --mxe-path=PATH          MXE path (default: $HOME/usr/local/src/mxe)
+    --addons-path=PATH       grass-addons path (default: ../grass-addons)
     --freetype-include=PATH  FreeType include path
                              (default: /usr/include/freetype2)
     --update                 update the current branch
     --package                package the cross-compiled build as
-                             grass79-x86_64-w64-mingw32-YYYYMMDD.zip
+                             grassVV-x86_64-w64-mingw32-YYYYMMDD.zip
 EOT
 		exit
 		;;
 	--mxe-path=*)
 		mxe_path=`echo $opt | sed 's/^[^=]*=//'`
+		;;
+	--addons-path=*)
+		addons_path=`echo $opt | sed 's/^[^=]*=//'`
 		;;
 	--freetype-include=*)
 		freetype_include=`echo $opt | sed 's/^[^=]*=//'`
@@ -121,29 +129,40 @@ CFLAGS="-g -O2 -Wall" \
 CXXFLAGS="-g -O2 -Wall" \
 LDFLAGS="-lcurses" \
 ./configure \
---with-nls \
---with-readline \
---with-wxwidgets \
---with-freetype-includes=$freetype_include \
+--with-blas \
 --with-bzlib \
+--with-freetype-includes=$freetype_include \
+--with-geos \
+--with-lapack \
+--with-netcdf \
+--with-nls \
+--with-openmp \
 --with-postgres \
 --with-pthread \
---with-openmp \
---with-blas \
---with-lapack \
---with-geos \
---with-netcdf \
+--with-readline \
 >> /dev/stdout
 
 make clean default
 
+if [ -d $addons_path ]; then
+	MODULE_TOPDIR=`pwd`
+	(
+	cd $addons_path
+	if [ $update -eq 1 -a -d .git ]; then
+		git pull
+	fi
+	cd src
+	make MODULE_TOPDIR=$MODULE_TOPDIR clean default
+	)
+fi
+
 build_arch=`sed -n '/^ARCH[ \t]*=/{s/^.*=[ \t]*//; p}' include/Make/Platform.make`
 for i in \
 	config.log \
-	include/Make/Platform.make \
+	error.log \
 	include/Make/Doxyfile_arch_html \
 	include/Make/Doxyfile_arch_latex \
-	error.log \
+	include/Make/Platform.make \
 ; do
 	cp -a $i $i.$build_arch
 done
@@ -165,32 +184,43 @@ RANLIB=$mxe_bin-ranlib \
 WINDRES=$mxe_bin-windres \
 PKG_CONFIG=$mxe_bin-pkg-config \
 ./configure \
+--build=$build_arch \
 --host=$arch \
---with-nls \
---with-readline \
---with-wxwidgets \
---with-freetype-includes=$mxe_shared/include/freetype2 \
+--with-blas \
 --with-bzlib \
+--with-freetype-includes=$mxe_shared/include/freetype2 \
+--with-gdal=$mxe_shared/bin/gdal-config \
+--with-geos=$mxe_shared/bin/geos-config \
+--with-lapack \
+--with-netcdf=$mxe_shared/bin/nc-config \
+--with-nls \
+--with-opengl=windows \
+--with-openmp \
 --with-postgres \
 --with-pthread \
---with-openmp \
---with-blas \
---with-lapack \
---with-geos=$mxe_shared/bin/geos-config \
---with-netcdf=$mxe_shared/bin/nc-config \
---with-gdal=$mxe_shared/bin/gdal-config \
---with-opengl=windows \
+--with-readline \
 >> /dev/stdout
 
 make clean default
 
+if [ -d $addons_path ]; then
+	(
+	cd $addons_path
+	if [ $update -eq 1 -a -d .git ]; then
+		git pull
+	fi
+	cd src
+	make MODULE_TOPDIR=$MODULE_TOPDIR clean default
+	)
+fi
+
 arch=`sed -n '/^ARCH[ \t]*=/{s/^.*=[ \t]*//; p}' include/Make/Platform.make`
 for i in \
 	config.log \
-	include/Make/Platform.make \
+	error.log \
 	include/Make/Doxyfile_arch_html \
 	include/Make/Doxyfile_arch_latex \
-	error.log \
+	include/Make/Platform.make \
 ; do
 	cp -a $i $i.$arch
 done
@@ -216,7 +246,7 @@ for i in \
 	libblas.dll \
 	libbz2.dll \
 	libcairo-2.dll \
-	libcrypto-1_1-x64.dll \
+	libcrypto-3-x64.dll \
 	libcurl-4.dll \
 	libdf-0.dll \
 	libexpat-1.dll \
@@ -262,7 +292,7 @@ for i in \
 	libspatialite-7.dll \
 	libsqlite3-0.dll \
 	libssh2-1.dll \
-	libssl-1_1-x64.dll \
+	libssl-3-x64.dll \
 	libstdc++-6.dll \
 	libtermcap.dll \
 	libtiff-5.dll \
@@ -277,8 +307,8 @@ for i in \
 done
 
 for i in \
-	proj \
 	gdal \
+	proj \
 ; do
 	rm -rf $dist/share/$i
 	cp -a $mxe_shared/share/$i $dist/share/$i
@@ -289,19 +319,16 @@ done
 
 version=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
 
-rm -f $dist/grass$version.tmp
-cp -a bin.$arch/grass$version.py $dist/etc
+rm -f $dist/grass.tmp
+cp -a bin.$arch/grass.py $dist/etc/grass$version.py
 
-cat<<'EOT' > $dist/grass$version.bat
+cat<<'EOT' | sed "s/\$version/$version/g" > $dist/grass.bat
 @echo off
-
-rem Change this variable to override auto-detection of python.exe in PATH
-set GRASS_PYTHON=C:\Python38\python.exe
-
-rem For portable installation, use %~d0 for the changing drive letter
-rem set GRASS_PYTHON=%~d0\Python38\python.exe
+setlocal EnableDelayedExpansion
 
 set GISBASE=%~dp0
+set GISBASE=%GISBASE:~0,-1%
+
 set GRASS_PROJSHARE=%GISBASE%\share\proj
 
 set PROJ_LIB=%GISBASE%\share\proj
@@ -311,33 +338,79 @@ rem XXX: Do we need these variables?
 rem set GEOTIFF_CSV=%GISBASE%\share\epsg_csv
 rem set FONTCONFIG_FILE=%GISBASE%\etc\fonts.conf
 
-if not exist %GISBASE%\etc\fontcap (
-	pushd .
-	set GISRC=dummy
-	cd %GISBASE%\lib
-	%GISBASE%\bin\g.mkfontcap.exe
-	popd
-)
+if defined GRASS_PYTHON (
+	if not exist "%GRASS_PYTHON%" (
+		echo.
+		echo %GRASS_PYTHON% not found
+		echo Please fix GRASS_PYTHON
+		echo.
+		pause
+		goto :eof
+	)
+) else (
+	rem Change this variable to override auto-detection of python.exe in
+	rem PATH
+	set GRASS_PYTHON=C:\Python312\python.exe
 
-if not exist "%GRASS_PYTHON%" (
-	set GRASS_PYTHON=
-	for /f usebackq %%i in (`where python.exe`) do set GRASS_PYTHON=%%i
-)
-if "%GRASS_PYTHON%"=="" (
-	echo.
-	echo python.exe not found in PATH
-	echo Please set GRASS_PYTHON in %~f0
-	echo.
-	pause
-	goto:eof
+	rem For portable installation, use %~d0 for the changing drive letter
+	rem set GRASS_PYTHON=%~d0\Python312\python.exe
+
+	if not exist "%GRASS_PYTHON%" (
+		set GRASS_PYTHON=
+		for /f usebackq %%i in (`where python.exe`) do if "!GRASS_PYTHON!" == "" set GRASS_PYTHON=%%i
+	)
+	if not defined GRASS_PYTHON (
+		echo.
+		echo python.exe not found in PATH
+		echo Please set GRASS_PYTHON
+		echo.
+		pause
+		goto :eof
+	)
 )
 rem XXX: Do we need PYTHONHOME?
 rem for %%i in (%GRASS_PYTHON%) do set PYTHONHOME=%%~dpi
 
-"%GRASS_PYTHON%" "%GISBASE%\etc\grass79.py" %*
-if %ERRORLEVEL% geq 1 pause
+rem If GRASS_SH is externally defined, that shell will be used; Otherwise,
+rem GISBASE\etc\sh.bat will be used if it exists; If not, cmd.exe will be used;
+rem This check is mainly for supporting BusyBox for Windows (busybox64.exe)
+rem (https://frippery.org/busybox/)
+if not defined GRASS_SH (
+	set GRASS_SH=%GISBASE%\etc\sh.bat
+	if not exist "!GRASS_SH!" set GRASS_SH=
+)
+
+rem With busybox64.exe and Firefox as the default browser, g.manual fails with
+rem "Your Firefox profile cannot be loaded. It may be missing or inaccessible";
+rem I tried to set GRASS_HTML_BROWSER to the full path of chrome.exe, but it
+rem didn't work; Setting BROWSER to its full path according to the webbrowser
+rem manual worked
+if "%GRASS_SH%" == "%GISBASE%\etc\sh.bat" if not defined BROWSER (
+	for %%i in ("%ProgramFiles%" "%ProgramFiles(x86)%") do (
+		if not defined BROWSER (
+			set BROWSER=%%i
+			set BROWSER=!BROWSER:"=!
+			if exist "!BROWSER!\Google\Chrome\Application\chrome.exe" (
+				set BROWSER=!BROWSER!\Google\Chrome\Application\chrome.exe
+			) else (
+				set BROWSER=
+			)
+		)
+	)
+)
+
+if not exist "%GISBASE%\etc\fontcap" (
+	pushd .
+	%~d0
+	cd %GISBASE%\lib
+	set GISRC=dummy
+	"%GISBASE%\bin\g.mkfontcap.exe"
+	popd
+)
+
+"%GRASS_PYTHON%" "%GISBASE%\etc\grass$version.py" %*
 EOT
-unix2dos $dist/grass$version.bat
+unix2dos $dist/grass.bat
 
 # package if requested
 if [ $package -eq 1 ]; then

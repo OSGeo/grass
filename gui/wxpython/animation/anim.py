@@ -93,19 +93,17 @@ class Animation(wx.EvtHandler):
 
     def Start(self):
         if not self.IsActive():
-            return
+            pass
 
     def Pause(self, paused):
         if not self.IsActive():
-            return
+            pass
 
     def Stop(self):
         if not self.IsActive():
             return
         self.currentIndex = 0
-        self.callbackEndAnimation(
-            self.currentIndex, self.GetFrame(
-                self.currentIndex))
+        self.callbackEndAnimation(self.currentIndex, self.GetFrame(self.currentIndex))
 
     def _arrivedToEnd(self):
         """Decides which action to do after animation end (stop, repeat)."""
@@ -121,7 +119,7 @@ class Animation(wx.EvtHandler):
                 self.orientation = Orientation.BACKWARD
                 self.currentIndex = self.count - 2  # -1
                 self.callbackOrientationChanged(Orientation.BACKWARD)
-        else:
+        else:  # noqa: PLR5501
             if self.replayMode == ReplayMode.REPEAT:
                 self.currentIndex = self.count - 1
             elif self.replayMode == ReplayMode.REVERSE:
@@ -134,9 +132,7 @@ class Animation(wx.EvtHandler):
         if not self.IsActive():
             return
 
-        self.callbackUpdateFrame(
-            self.currentIndex, self.GetFrame(
-                self.currentIndex))
+        self.callbackUpdateFrame(self.currentIndex, self.GetFrame(self.currentIndex))
         if self.orientation == Orientation.FORWARD:
             self.currentIndex += 1
             if self.currentIndex == self.count:
@@ -151,9 +147,7 @@ class Animation(wx.EvtHandler):
         if not self.IsActive():
             return
         self.currentIndex = index
-        self.callbackUpdateFrame(
-            self.currentIndex, self.GetFrame(
-                self.currentIndex))
+        self.callbackUpdateFrame(self.currentIndex, self.GetFrame(self.currentIndex))
 
     def PreviousFrameIndex(self):
         if not self.IsActive():
@@ -178,6 +172,7 @@ class Animation(wx.EvtHandler):
             self.currentIndex -= 1
             if self.currentIndex == -1:
                 self.currentIndex = 0
+
 
 # def test():
 #    import wx

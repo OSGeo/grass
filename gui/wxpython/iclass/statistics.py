@@ -18,22 +18,35 @@ for details.
 """
 
 import os
-import six
-from ctypes import *
+import sys
+from ctypes import byref, c_char_p, c_float, c_int
 
-import grass.script as grass
+import grass.script as gs
 
 try:
-    from grass.lib.imagery import *
-except ImportError as e:
+    from grass.lib.imagery import (
+        I_iclass_statistics_get_cat,
+        I_iclass_statistics_get_color,
+        I_iclass_statistics_get_histo,
+        I_iclass_statistics_get_max,
+        I_iclass_statistics_get_mean,
+        I_iclass_statistics_get_min,
+        I_iclass_statistics_get_name,
+        I_iclass_statistics_get_nbands,
+        I_iclass_statistics_get_ncells,
+        I_iclass_statistics_get_nstd,
+        I_iclass_statistics_get_range_max,
+        I_iclass_statistics_get_range_min,
+        I_iclass_statistics_get_stddev,
+    )
+except ImportError:
     sys.stderr.write(_("Loading imagery lib failed"))
 
 from grass.pydispatch.signal import Signal
 
 
 class StatisticsData:
-    """Stores all statistics.
-    """
+    """Stores all statistics."""
 
     def __init__(self):
         self.statisticsDict = {}
@@ -41,8 +54,7 @@ class StatisticsData:
 
         self.statisticsAdded = Signal("StatisticsData.statisticsAdded")
         self.statisticsDeleted = Signal("StatisticsData.statisticsDeleted")
-        self.allStatisticsDeleted = Signal(
-            "StatisticsData.allStatisticsDeleted")
+        self.allStatisticsDeleted = Signal("StatisticsData.allStatisticsDeleted")
 
         self.statisticsSet = Signal("StatisticsData.statisticsSet")
 
@@ -53,8 +65,8 @@ class StatisticsData:
         st = Statistics()
         st.SetBaseStatistics(cat=cat, name=name, color=color)
         st.statisticsSet.connect(
-            lambda stats: self.statisticsSet.emit(
-                cat=cat, stats=stats))
+            lambda stats: self.statisticsSet.emit(cat=cat, stats=stats)
+        )
 
         self.statisticsDict[cat] = st
         self.statisticsList.append(cat)
@@ -78,7 +90,7 @@ class StatisticsData:
 
 
 class Statistics:
-    """Statistis conected to one class (category).
+    """Statistis connected to one class (category).
 
     It is Python counterpart of similar C structure.
     But it adds some attributes or features used in wxIClass.
@@ -117,9 +129,9 @@ class Statistics:
         self.name = name
         self.color = color
 
-        rasterPath = grass.tempfile(create=False)
-        name = name.replace(' ', '_')
-        self.rasterName = name + '_' + os.path.basename(rasterPath)
+        rasterPath = gs.tempfile(create=False)
+        name = name.replace(" ", "_")
+        self.rasterName = name + "_" + os.path.basename(rasterPath)
 
     def SetFromcStatistics(self, cStatistics):
         """Sets all statistical values.
@@ -138,12 +150,12 @@ class Statistics:
         name = c_char_p()
         I_iclass_statistics_get_name(cStatistics, byref(name))
         if self.name != name.value:
-            set_stats["name"] = grass.decode(name.value)
+            set_stats["name"] = gs.decode(name.value)
 
         color = c_char_p()
         I_iclass_statistics_get_color(cStatistics, byref(color))
         if self.color != color.value:
-            set_stats["color"] = grass.decode(color.value)
+            set_stats["color"] = gs.decode(color.value)
 
         nbands = c_int()
         I_iclass_statistics_get_nbands(cStatistics, byref(nbands))
@@ -175,15 +187,14 @@ class Statistics:
             self.bands.append(band)
 
     def SetStatistics(self, stats):
-
-        for st, val in six.iteritems(stats):
+        for st, val in stats.items():
             setattr(self, st, val)
 
         self.statisticsSet.emit(stats=stats)
 
 
 class BandStatistics:
-    """Statistis conected to one band within class (category).
+    """Statistis connected to one band within class (category).
 
     :class:`Statistics`
     """

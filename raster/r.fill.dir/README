@@ -1,4 +1,4 @@
-Date: Wed, 09 May 2001 22:49:03 -0600 
+Date: Wed, 09 May 2001 22:49:03 -0600
 From: "Roger S. Miller" <rgrmill@rt66.com>
 To: Markus Neteler <neteler@geog.uni-hannover.de>
 Subject: r.fill.dir
@@ -32,7 +32,7 @@ map with unresolved problems and a map of the undrained areas that were
 found but not filled.
 
 I included these options because I found while running test cases that
-filling DEMs was often not the best way to solve a drainage problem. 
+filling DEMs was often not the best way to solve a drainage problem.
 The new options let the user get a partially-fixed elevation map,
 identify the remaining problems and fix the problems appropriately.
 
@@ -43,7 +43,7 @@ cases:
 1) The original code didn't consider the two outer rows and columns
 around the edge of the map.  The new code only neglects the outer-most
 row and column.  As a result, the two codes gave results that sometimes
-differed at the edge of the map. 
+differed at the edge of the map.
 
 2) The new code was able to solve problems that the old code would not
 solve.
@@ -113,7 +113,7 @@ The disadvantage is that most of the parameters passed to the
 type-independent functions and most of the values returned by them must
 be void pointers, and that leads to some cumbersome expressions.  Also,
 it generally isn't possible to use "=" in any expression.  Instead you
-have to use "memcpy" or something similar to move values around. 
+have to use "memcpy" or something similar to move values around.
 
 The tinf.c and tinf.h files contain functions to handle basic raster
 i/o, simple math operations, variable initializations, testing for

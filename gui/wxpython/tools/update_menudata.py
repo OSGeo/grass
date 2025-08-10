@@ -19,15 +19,11 @@ Usage: python support/update_menudata.py [-d]
 @author Martin Landa <landa.martin gmail.com>
 """
 
-from __future__ import print_function
-
 import os
 import sys
 import tempfile
-try:
-    import xml.etree.ElementTree as etree
-except ImportError:
-    import elementtree.ElementTree as etree  # Python <= 2.4
+import xml.etree.ElementTree as ET
+from subprocess import DEVNULL
 
 from grass.script import core as grass
 from grass.script import task as gtask
@@ -38,30 +34,29 @@ from core.globalvar import grassCmd
 
 def parseModules():
     """Parse modules' interface"""
-    modules = dict()
+    modules = {}
 
     # list of modules to be ignored
-    ignore = ['g.mapsets_picker.py',
-              'v.type_wrapper.py',
-              'g.parser',
-              'vcolors']
+    ignore = ["g.mapsets_picker.py", "v.type_wrapper.py", "g.parser", "vcolors"]
 
     count = len(grassCmd)
     i = 0
     for module in grassCmd:
         i += 1
         if i % 10 == 0:
-            grass.info('* %d/%d' % (i, count))
+            grass.info("* %d/%d" % (i, count))
         if module in ignore:
             continue
         try:
             interface = gtask.parse_interface(module)
         except Exception as e:
-            grass.error(module + ': ' + str(e))
+            grass.error(module + ": " + str(e))
             continue
-        modules[interface.name] = {'label': interface.label,
-                                   'desc': interface.description,
-                                   'keywords': interface.keywords}
+        modules[interface.name] = {
+            "label": interface.label,
+            "desc": interface.description,
+            "keywords": interface.keywords,
+        }
 
     return modules
 
@@ -69,45 +64,42 @@ def parseModules():
 def updateData(data, modules):
     """Update menu data tree"""
     # list of modules to be ignored
-    ignore = ['v.type_wrapper.py',
-              'vcolors']
+    ignore = ["v.type_wrapper.py", "vcolors"]
 
-    menu_modules = list()
-    for node in data.tree.getiterator():
-        if node.tag != 'menuitem':
+    menu_modules = []
+    for node in data.tree.iter():
+        if node.tag != "menuitem":
             continue
 
-        item = dict()
-        for child in node.getchildren():
-            item[child.tag] = child.text
+        item = {child.tag: child.text for child in node}
 
-        if 'command' not in item:
+        if "command" not in item:
             continue
 
-        if item['command'] in ignore:
+        if item["command"] in ignore:
             continue
 
-        module = item['command'].split(' ')[0]
+        module = item["command"].split(" ")[0]
         if module not in modules:
-            grass.warning("'%s' not found in modules" % item['command'])
+            grass.warning("'%s' not found in modules" % item["command"])
             continue
 
-        if modules[module]['label']:
-            desc = modules[module]['label']
+        if modules[module]["label"]:
+            desc = modules[module]["label"]
         else:
-            desc = modules[module]['desc']
-        if node.find('handler').text == 'OnMenuCmd':
-            node.find('help').text = desc
+            desc = modules[module]["desc"]
+        if node.find("handler").text == "OnMenuCmd":
+            node.find("help").text = desc
 
-        if 'keywords' not in modules[module]:
-            grass.warning('%s: keywords missing' % module)
+        if "keywords" not in modules[module]:
+            grass.warning("%s: keywords missing" % module)
         else:
-            if node.find('keywords') is None:
-                node.insert(2, etree.Element('keywords'))
+            if node.find("keywords") is None:
+                node.insert(2, ET.Element("keywords"))
                 grass.warning("Adding tag 'keywords' to '%s'" % module)
-            node.find('keywords').text = ','.join(modules[module]['keywords'])
+            node.find("keywords").text = ",".join(modules[module]["keywords"])
 
-        menu_modules.append(item['command'])
+        menu_modules.append(item["command"])
 
     for module in modules.keys():
         if module not in menu_modules:
@@ -117,45 +109,38 @@ def updateData(data, modules):
 def writeData(data, file=None):
     """Write updated menudata.xml"""
     if file is None:
-        file = os.path.join('xml', 'menudata.xml')
+        file = os.path.join("xml", "menudata.xml")
 
     try:
         data.tree.write(file)
-    except IOError:
-        print("'%s' not found."
-              " Please run the script from 'gui/wxpython'." % file,
-              file=sys.stderr)
+    except OSError:
+        print(
+            "'%s' not found. Please run the script from 'gui/wxpython'." % file,
+            file=sys.stderr,
+        )
         return
 
     try:
-        f = open(file, 'a')
-        try:
-            f.write('\n')
-        finally:
-            f.close()
-    except IOError:
-        print("ERROR: Unable to write to menudata file.",
-              file=sys.stderr)
+        with open(file, "a") as f:
+            f.write("\n")
+    except OSError:
+        print("ERROR: Unable to write to menudata file.", file=sys.stderr)
 
 
 def main(argv=None):
     if argv is None:
         argv = sys.argv
 
-    if len(argv) > 1 and argv[1] == '-d':
-        printDiff = True
-    else:
-        printDiff = False
+    printDiff = bool(len(argv) > 1 and argv[1] == "-d")
 
-    if len(argv) > 1 and argv[1] == '-h':
+    if len(argv) > 1 and argv[1] == "-h":
         print(sys.stderr, __doc__, file=sys.stderr)
         return 1
 
-    nuldev = open(os.devnull, 'w+')
     grass.info("Step 1: running make...")
-    grass.call(['make'], stderr=nuldev)
+    grass.call(["make"], stderr=DEVNULL)
     grass.info("Step 2: parsing modules...")
-    modules = dict()
+    modules = {}
     modules = parseModules()
     grass.info("Step 3: reading menu data...")
     data = LayerManagerMenuData()
@@ -163,21 +148,22 @@ def main(argv=None):
     updateData(data, modules)
 
     if printDiff:
-        tempFile = tempfile.NamedTemporaryFile()
-        grass.info("Step 5: diff menu data...")
-        writeData(data, tempFile.name)
-
-        grass.call(['diff', '-u',
-                    os.path.join('xml', 'menudata.xml'),
-                    tempFile.name], stderr=nuldev)
+        with tempfile.NamedTemporaryFile() as tempFile:
+            grass.info("Step 5: diff menu data...")
+            writeData(data, tempFile.name)
+            grass.call(
+                ["diff", "-u", os.path.join("xml", "menudata.xml"), tempFile.name],
+                stderr=DEVNULL,
+            )
     else:
         grass.info("Step 5: writing menu data (menudata.xml)...")
         writeData(data)
 
     return 0
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     if os.getenv("GISBASE") is None:
-        sys.exit("You must be in GRASS GIS to run this program.")
+        sys.exit("You must be in GRASS to run this program.")
 
     sys.exit(main())

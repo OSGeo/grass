@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE toolbox SYSTEM "main_menu.dtd">
 <toolbox name="DefaultModuleTree">
-  <label>Default GRASS GIS module tree</label>
+  <label>Default GRASS module tree</label>
   <items>
     <subtoolbox name="ImportExportLink"/>
     <subtoolbox name="ManageMaps"/>
@@ -17,4 +17,3 @@
     <addons/>
   </items>
 </toolbox>
-

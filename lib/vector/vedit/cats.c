@@ -1,34 +1,34 @@
 /*!
-  \file lib/vector/vedit/cats.c
+   \file lib/vector/vedit/cats.c
 
-  \brief Vedit library - category manipulation
-  
-  (C) 2006-2008 by the GRASS Development Team
+   \brief Vedit library - category manipulation
 
-  This program is free software under the GNU General Public License
-  (>=v2).  Read the file COPYING that comes with GRASS for details.
-  
-  \author Jachym Cepicky <jachym.cepicky gmail.com>
-  \author Martin Landa <landa.martin gmail.com>
-*/
+   (C) 2006-2008 by the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
+
+   \author Jachym Cepicky <jachym.cepicky gmail.com>
+   \author Martin Landa <landa.martin gmail.com>
+ */
 
 #include <grass/glocale.h>
 #include <grass/vedit.h>
 
 /*!
-  \brief Add / remove categories
-  
-  \param Map pointer to Map_info
-  \param List list of selected primitives
-  \param layer layer number
-  \param del action (non-zero for delete otherwise add)
-  \param Clist list of category numbers
-  
-  \return number of modified primitives
-  \return -1 on error
-*/
-int Vedit_modify_cats(struct Map_info *Map, struct ilist *List,
-		      int layer, int del, struct cat_list *Clist)
+   \brief Add / remove categories
+
+   \param Map pointer to Map_info
+   \param List list of selected primitives
+   \param layer layer number
+   \param del action (non-zero for delete otherwise add)
+   \param Clist list of category numbers
+
+   \return number of modified primitives
+   \return -1 on error
+ */
+int Vedit_modify_cats(struct Map_info *Map, struct ilist *List, int layer,
+                      int del, struct cat_list *Clist)
 {
     int i, j;
     struct line_cats *Cats;
@@ -38,7 +38,7 @@ int Vedit_modify_cats(struct Map_info *Map, struct ilist *List,
 
     /* features defined by cats */
     if (Clist->n_ranges <= 0) {
-	return 0;
+        return 0;
     }
 
     nlines_modified = 0;
@@ -48,42 +48,42 @@ int Vedit_modify_cats(struct Map_info *Map, struct ilist *List,
 
     /* for each line, set new category */
     for (i = 0; i < List->n_values; i++) {
-	line = List->value[i];
-	type = Vect_read_line(Map, Points, Cats, line);
+        line = List->value[i];
+        type = Vect_read_line(Map, Points, Cats, line);
 
-	if (!Vect_line_alive(Map, line))
-	    continue;
+        if (!Vect_line_alive(Map, line))
+            continue;
 
-	rewrite = 0;
-	for (j = 0; j < Clist->n_ranges; j++) {
-	    for (cat = Clist->min[j]; cat <= Clist->max[j]; cat++) {
-		/* add new category */
-		if (!del) {
-		    if (Vect_cat_set(Cats, layer, cat) < 1) {
-			G_warning(_("Unable to set category %d for (feature id %d)"),
-				  cat, line);
-		    }
-		    else {
-			rewrite = 1;
-		    }
-		}
-		else {		/* delete old category */
-		    if (Vect_field_cat_del(Cats, layer, cat) > 0) {
-			rewrite = 1;
-		    }
-		}
-	    }
-	}
+        rewrite = 0;
+        for (j = 0; j < Clist->n_ranges; j++) {
+            for (cat = Clist->min[j]; cat <= Clist->max[j]; cat++) {
+                /* add new category */
+                if (!del) {
+                    if (Vect_cat_set(Cats, layer, cat) < 1) {
+                        G_warning(
+                            _("Unable to set category %d for (feature id %d)"),
+                            cat, line);
+                    }
+                    else {
+                        rewrite = 1;
+                    }
+                }
+                else { /* delete old category */
+                    if (Vect_field_cat_del(Cats, layer, cat) > 0) {
+                        rewrite = 1;
+                    }
+                }
+            }
+        }
 
-	if (rewrite == 0)
-	    continue;
+        if (rewrite == 0)
+            continue;
 
-	if (Vect_rewrite_line(Map, line, type, Points, Cats) < 0) {
-	    return -1;
-	}
+        if (Vect_rewrite_line(Map, line, type, Points, Cats) < 0) {
+            return -1;
+        }
 
-	nlines_modified++;
-
+        nlines_modified++;
     }
 
     /* destroy structures */

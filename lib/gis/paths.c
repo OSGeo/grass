@@ -3,7 +3,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#ifndef __MINGW32__
+#ifndef _WIN32
 #include <pwd.h>
 #else
 #include <windows.h>
@@ -26,7 +26,7 @@
 
 int G_mkdir(const char *path)
 {
-#ifdef __MINGW32__
+#ifdef _WIN32
     return mkdir(path);
 #else
     return mkdir(path, 0777);
@@ -45,9 +45,9 @@ int G_mkdir(const char *path)
 int G_is_dirsep(char c)
 {
     if (c == GRASS_DIRSEP || c == HOST_DIRSEP)
-	return 1;
+        return 1;
     else
-	return 0;
+        return 0;
 }
 
 /**
@@ -62,13 +62,13 @@ int G_is_dirsep(char c)
 int G_is_absolute_path(const char *path)
 {
     if (G_is_dirsep(path[0])
-#ifdef __MINGW32__
-	|| (isalpha(path[0]) && (path[1] == ':') && G_is_dirsep(path[2]))
+#ifdef _WIN32
+        || (isalpha(path[0]) && (path[1] == ':') && G_is_dirsep(path[2]))
 #endif
-	)
-	return 1;
+    )
+        return 1;
     else
-	return 0;
+        return 0;
 }
 
 /**
@@ -85,8 +85,8 @@ char *G_convert_dirseps_to_host(char *path)
     char *i;
 
     for (i = path; *i; i++) {
-	if (*i == GRASS_DIRSEP)
-	    *i = HOST_DIRSEP;
+        if (*i == GRASS_DIRSEP)
+            *i = HOST_DIRSEP;
     }
 
     return path;
@@ -107,8 +107,8 @@ char *G_convert_dirseps_from_host(char *path)
     char *i;
 
     for (i = path; *i; i++) {
-	if (*i == HOST_DIRSEP)
-	    *i = GRASS_DIRSEP;
+        if (*i == HOST_DIRSEP)
+            *i = GRASS_DIRSEP;
     }
 
     return path;
@@ -120,7 +120,7 @@ char *G_convert_dirseps_from_host(char *path)
  * Returns information about the specified file.
  *
  * \param file_name file name
- * \param stat pointer to structure filled with file information
+ * \param buf pointer to structure filled with file information
  *
  * \return Return value from system lstat function
  **/
@@ -135,16 +135,16 @@ int G_stat(const char *file_name, struct stat *buf)
  *
  * Returns information about the specified file.
  *
- * \param file_name file name, in the case of a symbolic link, the 
+ * \param file_name file name, in the case of a symbolic link, the
  *                  link itself is stat-ed, not the file that it refers to
- * \param stat pointer to structure filled with file information
+ * \param buf pointer to structure filled with file information
  *
  * \return Return value from system lstat function
  **/
 
 int G_lstat(const char *file_name, struct stat *buf)
 {
-#ifdef __MINGW32__
+#ifdef _WIN32
     return stat(file_name, buf);
 #else
     return lstat(file_name, buf);
@@ -164,7 +164,7 @@ int G_lstat(const char *file_name, struct stat *buf)
 int G_owner(const char *path)
 {
 
-#ifndef __MINGW32__
+#ifndef _WIN32
     struct stat info;
 
     G_stat(path, &info);
@@ -172,9 +172,10 @@ int G_owner(const char *path)
     return (int)info.st_uid;
 #else
 
-    /* this code is taken from the official example to 
+    /* this code is taken from the official example to
      * find the owner of a file object from
-     * http://msdn.microsoft.com/en-us/library/windows/desktop/aa446629%28v=vs.85%29.aspx */
+     * http://msdn.microsoft.com/en-us/library/windows/desktop/aa446629%28v=vs.85%29.aspx
+     */
 
     DWORD dwRtnCode = 0;
     PSID pSidOwner = NULL;
@@ -187,37 +188,35 @@ int G_owner(const char *path)
     PSECURITY_DESCRIPTOR pSD = NULL;
 
     /* Get the handle of the file object. */
-    hFile = CreateFile(
-                      TEXT(path),		/* lpFileName */
-		      GENERIC_READ,		/* dwDesiredAccess */
-		      FILE_SHARE_READ,		/* dwShareMode */
-		      NULL,			/* lpSecurityAttributes */
-		      OPEN_EXISTING,		/* dwCreationDisposition */
-		      FILE_ATTRIBUTE_NORMAL,	/* dwFlagsAndAttributes */
-		      NULL			/* hTemplateFile */
-		      );
-    
+    hFile = CreateFile(TEXT(path),            /* lpFileName */
+                       GENERIC_READ,          /* dwDesiredAccess */
+                       FILE_SHARE_READ,       /* dwShareMode */
+                       NULL,                  /* lpSecurityAttributes */
+                       OPEN_EXISTING,         /* dwCreationDisposition */
+                       FILE_ATTRIBUTE_NORMAL, /* dwFlagsAndAttributes */
+                       NULL                   /* hTemplateFile */
+    );
+
     if (hFile == INVALID_HANDLE_VALUE) {
-	G_fatal_error(_("Unable to open file <%s> for reading"), path);
+        G_fatal_error(_("Unable to open file <%s> for reading"), path);
     }
-    
+
     /* Get the owner SID of the file. */
-    dwRtnCode = GetSecurityInfo(
-		      hFile,				/* handle */
-		      SE_FILE_OBJECT,			/* ObjectType */
-		      OWNER_SECURITY_INFORMATION,	/* SecurityInfo */
-		      &pSidOwner,			/* ppsidOwner */
-		      NULL,				/* ppsidGroup */
-		      NULL,				/* ppDacl */
-		      NULL,				/* ppSacl */
-		      &pSD				/* ppSecurityDescriptor */
-		      );
-    
+    dwRtnCode = GetSecurityInfo(hFile,                      /* handle */
+                                SE_FILE_OBJECT,             /* ObjectType */
+                                OWNER_SECURITY_INFORMATION, /* SecurityInfo */
+                                &pSidOwner,                 /* ppsidOwner */
+                                NULL,                       /* ppsidGroup */
+                                NULL,                       /* ppDacl */
+                                NULL,                       /* ppSacl */
+                                &pSD /* ppSecurityDescriptor */
+    );
+
     if (dwRtnCode != ERROR_SUCCESS) {
-	G_fatal_error(_("Unable to fetch security info for <%s>"), path);
+        G_fatal_error(_("Unable to fetch security info for <%s>"), path);
     }
     CloseHandle(hFile);
-    
+
     return (int)pSidOwner;
 #endif
 }

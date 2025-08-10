@@ -24,7 +24,7 @@ Parameter skip does not influence the flow accumulation computation, parameter d
 Flow line integration can be influenced by several parameters.
 Option <b>step</b> controls the integration step and influences the precision and computational time.
 The unit of step can be defined either in terms of the size of the voxel (3D raster cell),
-length in map units, or as elapsed time. 
+length in map units, or as elapsed time.
 Option <b>limit</b> specifies the maximum number of steps of each flow line.
 
 <h3>Attributes</h3>
@@ -39,10 +39,12 @@ Note that using <b>a</b> flag results in longer computation time, so consider in
 <b>step</b> and <b>max_error</b> parameter.
 
 <h2>NOTES</h2>
+
 r3.flow uses Runge-Kutta with adaptive step size
-(<a href="http://en.wikipedia.org/wiki/Cash-Karp_method">Cash-Karp method</a>).
+(<a href="https://en.wikipedia.org/wiki/Cash-Karp_method">Cash-Karp method</a>).
 
 <h2>EXAMPLES</h2>
+
 First we create input data using
 <a href="r3.gwflow.html#example-1">example 1</a> from
 <a href="r3.gwflow.html">r3.gwflow manual page</a>:
@@ -52,9 +54,9 @@ First we create input data using
 g.region res=25 res3=25 t=100 b=0 n=1000 s=0 w=0 e=1000 -p3
 
 # now create the input raster maps for a confined aquifer
-r3.mapcalc expression="phead = if(row() == 1 && depth() == 4, 50, 40)"
-r3.mapcalc expression="status = if(row() == 1 && depth() == 4, 2, 1)"
-r3.mapcalc expression="well = if(row() == 20 && col() == 20 && depth() == 2, -0.25, 0)"
+r3.mapcalc expression="phead = if(row() == 1 &amp;&amp; depth() == 4, 50, 40)"
+r3.mapcalc expression="status = if(row() == 1 &amp;&amp; depth() == 4, 2, 1)"
+r3.mapcalc expression="well = if(row() == 20 &amp;&amp; col() == 20 &amp;&amp; depth() == 2, -0.25, 0)"
 r3.mapcalc expression="hydcond = 0.00025"
 r3.mapcalc expression="syield = 0.0001"
 r.mapcalc  expression="recharge = 0.0"
@@ -87,16 +89,13 @@ Again, we visualize the result in 3D view and we check 'use color for thematic r
 <img src="r3flow_flowlines_color.png">
 
 <h2>SEE ALSO</h2>
+
 <em>
 <a href="r.flow.html">r.flow</a>,
 <a href="r3.gradient.html">r3.gradient</a>,
 <a href="r3.gwflow.html">r3.gwflow</a>
 </em>
 
-<h2>AUTHORS</h2>
-Anna Petrasova, <a href="http://geospatial.ncsu.edu/osgeorel/">NCSU OSGeoREL</a>, developed during GSoC 2014.
+<h2>AUTHOR</h2>
 
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+Anna Petrasova, <a href="https://geospatial.ncsu.edu/geoforall/">NCSU GeoForAll Lab</a>, developed during GSoC 2014.

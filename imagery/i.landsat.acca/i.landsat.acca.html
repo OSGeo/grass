@@ -22,9 +22,9 @@ useful for Landsat-4/5 TM.
 
 Run the standard ACCA algorithm with filling of small cloud holes
 (the <b>-f</b> flag): With per-band reflectance raster maps
-named <tt>226_62.toar.1, 226_62.toar.2, </tt> [...] and LANDSAT-7
-thermal band <tt>226_62.toar.61</tt>, outputting to a new raster map
-named <tt>226_62.acca</tt>:
+named <code>226_62.toar.1, 226_62.toar.2, ...</code> and LANDSAT-7
+thermal band <code>226_62.toar.61</code>, outputting to a new raster map
+named <code>226_62.acca</code>:
 
 <div class="code"><pre>
 i.landsat.toar sensor=7 gain=HHHLHLHHL date=2003-04-07 \
@@ -33,20 +33,19 @@ i.landsat.toar sensor=7 gain=HHHLHLHHL date=2003-04-07 \
 i.landsat.acca -f band_prefix=226_62.toar output=226_62.acca
 </pre></div>
 
-
 <h2>REFERENCES</h2>
 
-<ol>
+<ul>
   <li>Irish R.R., Barker J.L., Goward S.N., and Arvidson T., 2006.
     Characterization of the Landsat-7 ETM+ Automated Cloud-Cover
     Assessment (ACCA) Algorithm. Photogrammetric Engineering and Remote
     Sensing vol. 72(10): 1179-1188.</li>
-  
+
   <li>Irish, R.R., 2000. Landsat 7 Automatic Cloud Cover Assessment. In
     S.S. Shen and M.R. Descour (Eds.): Algorithms for Multispectral,
     Hyperspectral, and Ultraspectral Imagery VI. Proceedings of SPIE,
     4049: 348-355.</li>
-</ol>
+</ul>
 
 <h2>SEE ALSO</h2>
 
@@ -58,8 +57,3 @@ i.landsat.acca -f band_prefix=226_62.toar output=226_62.acca
 <h2>AUTHOR</h2>
 
 E. Jorge Tizado  (ej.tizado unileon es), Dept. Biodiversity and Environmental Management, University of Le&oacute;n, Spain
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

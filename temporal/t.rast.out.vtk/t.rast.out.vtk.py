@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:       t.rast.out.vtk
@@ -20,60 +20,61 @@
 #
 #############################################################################
 
-#%module
-#% description: Exports space time raster dataset as VTK time series.
-#% keyword: temporal
-#% keyword: export
-#% keyword: output
-#% keyword: raster
-#% keyword: VTK
-#% keyword: time
-#%end
+# %module
+# % description: Exports space time raster dataset as VTK time series.
+# % keyword: temporal
+# % keyword: export
+# % keyword: output
+# % keyword: raster
+# % keyword: VTK
+# % keyword: time
+# %end
 
-#%option G_OPT_STRDS_INPUT
-#%end
+# %option G_OPT_STRDS_INPUT
+# %end
 
-#%option
-#% key: directory
-#% type: string
-#% description: Path to the export directory
-#% required: yes
-#% multiple: no
-#%end
+# %option
+# % key: directory
+# % type: string
+# % description: Path to the export directory
+# % required: yes
+# % multiple: no
+# %end
 
-#%option G_OPT_R_ELEV
-#% required: no
-#%end
+# %option G_OPT_R_ELEV
+# % required: no
+# %end
 
-#%option G_OPT_T_WHERE
-#%end
+# %option G_OPT_T_WHERE
+# %end
 
-#%option
-#% key: null
-#% type: double
-#% description: Value to represent no data cell
-#% required: no
-#% multiple: no
-#% answer: -99999.99
-#%end
+# %option
+# % key: null
+# % type: double
+# % description: Value to represent no data cell
+# % required: no
+# % multiple: no
+# % answer: -99999.99
+# %end
 
-#%flag
-#% key: p
-#% description: Create VTK point data instead of VTK cell data (if no elevation map is given)
-#%end
+# %flag
+# % key: p
+# % description: Create VTK point data instead of VTK cell data (if no elevation map is given)
+# %end
 
-#%flag
-#% key: c
-#% description: Correct the coordinates to fit the VTK-OpenGL precision
-#%end
+# %flag
+# % key: c
+# % description: Correct the coordinates to fit the VTK-OpenGL precision
+# %end
 
-#%flag
-#% key: g
-#% description: Export files using the space time dataset granularity for equidistant time between maps, where statement will be ignored
-#%end
+# %flag
+# % key: g
+# % description: Export files using the space time dataset granularity for equidistant time between maps, where statement will be ignored
+# %end
 
 import os
-import grass.script as grass
+
+import grass.script as gs
 from grass.exceptions import CalledModuleError
 
 ############################################################################
@@ -97,7 +98,7 @@ def main():
     tgis.init()
 
     if not os.path.exists(expdir):
-        grass.fatal(_("Export directory <%s> not found.") % expdir)
+        gs.fatal(_("Export directory <%s> not found.") % expdir)
 
     os.chdir(expdir)
 
@@ -108,7 +109,7 @@ def main():
         maps = sp.get_registered_maps_as_objects_by_granularity()
         # Create a NULL map in case of granularity support
         null_map = "temporary_null_map_%i" % os.getpid()
-        grass.mapcalc("%s = null()" % (null_map))
+        gs.mapcalc("%s = null()" % (null_map))
     else:
         maps = sp.get_registered_maps_as_objects(where, "start_time", None)
 
@@ -128,8 +129,7 @@ def main():
             if id is None:
                 id = null_map
 
-            grass.run_command("g.copy", raster="%s,%s" % (id, map_name),
-                              overwrite=True)
+            gs.run_command("g.copy", raster="%s,%s" % (id, map_name), overwrite=True)
             out_name = "%6.6i_%s.vtk" % (count, sp.base.get_name())
 
             mflags = ""
@@ -141,23 +141,34 @@ def main():
             # Export the raster map with r.out.vtk
             try:
                 if elevation:
-                    grass.run_command("r.out.vtk", flags=mflags, null=null,
-                                      input=map_name, elevation=elevation,
-                                      output=out_name,
-                                      overwrite=grass.overwrite())
+                    gs.run_command(
+                        "r.out.vtk",
+                        flags=mflags,
+                        null=null,
+                        input=map_name,
+                        elevation=elevation,
+                        output=out_name,
+                        overwrite=gs.overwrite(),
+                    )
                 else:
-                    grass.run_command("r.out.vtk", flags=mflags, null=null,
-                                      input=map_name, output=out_name,
-                                      overwrite=grass.overwrite())
+                    gs.run_command(
+                        "r.out.vtk",
+                        flags=mflags,
+                        null=null,
+                        input=map_name,
+                        output=out_name,
+                        overwrite=gs.overwrite(),
+                    )
             except CalledModuleError:
-                grass.fatal(_("Unable to export raster map <%s>" % map_name))
+                gs.fatal(_("Unable to export raster map <%s>") % map_name)
 
             count += 1
 
     if use_granularity:
-        grass.run_command("g.remove", flags='f', type='raster', name=null_map)
-    grass.run_command("g.remove", flags='f', type='raster', name=map_name)
+        gs.run_command("g.remove", flags="f", type="raster", name=null_map)
+    gs.run_command("g.remove", flags="f", type="raster", name=map_name)
+
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

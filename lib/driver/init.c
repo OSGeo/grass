@@ -26,18 +26,18 @@ const struct driver *driver;
 
 struct GFONT_CAP *ftcap;
 
-int screen_width;
-int screen_height;
+GRASS_DRIVER_EXPORT int screen_width;
+GRASS_DRIVER_EXPORT int screen_height;
 
-double cur_x;
-double cur_y;
+GRASS_DRIVER_EXPORT double cur_x;
+GRASS_DRIVER_EXPORT double cur_y;
 
-double text_size_x;
-double text_size_y;
-double text_rotation;
+GRASS_DRIVER_EXPORT double text_size_x;
+GRASS_DRIVER_EXPORT double text_size_y;
+GRASS_DRIVER_EXPORT double text_rotation;
 double text_sinrot;
 double text_cosrot;
-int matrix_valid;
+GRASS_DRIVER_EXPORT int matrix_valid;
 
 /*!
   \brief Initialize display driver
@@ -59,7 +59,7 @@ void LIB_init(const struct driver *drv)
     screen_height = (p && atoi(p)) ? atoi(p) : DEF_HEIGHT;
 
     if (COM_Graph_set() < 0)
-	exit(1);
+        exit(1);
 
     COM_Set_window(0, screen_height, 0, screen_width);
 }

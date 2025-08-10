@@ -5,7 +5,7 @@
 
 static char *me = "dseg_read_cell";
 
-int dseg_read_cell(DSEG * dseg, char *map_name, char *mapset)
+int dseg_read_cell(DSEG *dseg, char *map_name, char *mapset)
 {
     GW_LARGE_INT row, rows;
     int map_fd;
@@ -18,14 +18,14 @@ int dseg_read_cell(DSEG * dseg, char *map_name, char *mapset)
     rows = Rast_window_rows();
     dbuffer = Rast_allocate_d_buf();
     for (row = 0; row < rows; row++) {
-	Rast_get_d_row(map_fd, dbuffer, row);
-	if (Segment_put_row(&(dseg->seg), (DCELL *) dbuffer, row) < 0) {
-	    G_free(dbuffer);
-	    Rast_close(map_fd);
-	    G_warning("%s(): unable to segment put row for [%s] in [%s]",
-		      me, map_name, mapset);
-	    return (-1);
-	}
+        Rast_get_d_row(map_fd, dbuffer, row);
+        if (Segment_put_row(&(dseg->seg), (DCELL *)dbuffer, row) < 0) {
+            G_free(dbuffer);
+            Rast_close(map_fd);
+            G_warning("%s(): unable to segment put row for [%s] in [%s]", me,
+                      map_name, mapset);
+            return (-1);
+        }
     }
 
     Rast_close(map_fd);

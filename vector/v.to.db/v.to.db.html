@@ -8,23 +8,24 @@ found or multiple categories were found. For line azimuths '-1' is used
 for closed lines (start equals end).
 
 <h2>NOTES</h2>
+
 Measures of lengths and areas are always reported in meters, unless the
 <em>unit</em> parameter is set.
 The units <em>miles</em>, <em>feet</em>, <em>meters</em> and
 <em>kilometers</em> are square for <em>option=area</em>.
 <p>Feet and acre units are always reported in their common versions
 (i.e. the International Foot, exactly 5280 feet in a mile), even
-when the location's standard map unit is the US Survey foot.
-<p>When calculating perimeters in Latitude-Longitude locations, the geodesic
+when the coordinate reference system's standard map unit is the US Survey foot.
+<p>When calculating perimeters in Latitude-Longitude CRS, the geodesic
 distance between the vertices is used.
-<p>When using <em>option=coor</em> on a vector area map, 
+<p>When using <em>option=coor</em> on a vector area map,
 only coordinates of centroids with unique category will be reported.
 <p>When using <em>option=bbox</em> on a vector area map with more than one
-feature per category value, the results corresponds to the bounding box of 
+feature per category value, the results corresponds to the bounding box of
 all features of same category taken together.
 <p>Line azimuth is calculated as angle from the North direction to the line endnode
 direction at the line statnode. By default it's reported in decimal degrees (0-360, CW) but
-it also may be repored in radians with <em>unit=radians</em>. Azimuth value
+it also may be reported in radians with <em>unit=radians</em>. Azimuth value
 <b>-1</b> is used to report closed line with it's startnode and endnode being in
 same place. Azimuth values make sense only if every vector line has only one
 entry in database (unique CAT value).
@@ -36,11 +37,10 @@ a given input vector <em>layer</em>. The <b>print only</b> (<b>-p</b>) mode
 doesn't require a table. Use <em><a href="db.execute.html">db.execute</a></em>
 or <em><a href="v.db.addtable.html">v.db.addtable</a></em> to create a table if
 needed.
-<p>Updating the table has to be done column-wise. The <em>column</em> must be
-present in the table, except when using the <b>print only</b> (<b>-p</b>)
-mode. Use <em><a href="db.execute.html">db.execute</a></em> or
-<em><a href="v.db.addcolumn.html">v.db.addcolumn</a></em> to add new columns if
-needed.
+<p>Updating the table has to be done column-wise. The <em>column</em> will be
+created in the table if it doesn't already exist, except when using the
+<b>print only</b> (<b>-p</b>) mode. If the <em>column</em> exists, the
+<b>--overwrite</b> flag is required to overwrite it.
 
 <h2>EXAMPLES</h2>
 
@@ -95,9 +95,9 @@ v.db.select mysoils layer=2
 
 <p>Compute D<sub>L</sub>, the Fractal Dimension (Mandelbrot, 1982), of the
 boundary defining a polygon based on the formula:
-<br><tt>
+<br><code>
 D = 2 * (log perimeter) / (log area):<br>
-</tt>
+</code>
 <div class="code"><pre>
 g.copy vect=soils,mysoils
 v.db.addcolumn mysoils col="d double precision"
@@ -140,6 +140,34 @@ v.to.db -p roads option=length type=line units=k
 v.to.db -p roads option=count type=line
 </pre></div>
 
+Report all line lengths of the input vector map in JSON format:<br>
+<div class="code"><pre>
+v.to.db busroute6 -p option=length type=line format=json
+</pre></div>
+<div class="code"><pre>
+{
+    "totals": {
+        "length": 10426.657857419743
+    },
+    "records": [
+        {
+            "category": 1,
+            "length": 4554.943058982206
+        },
+        {
+            "category": 2,
+            "length": 5871.714798437537
+        }
+    ]
+}
+</pre></div>
+
+<h2>REFERENCES</h2>
+
+<ul>
+  <li>Mandelbrot, B. B. (1982). The fractal geometry of nature. New York: W. H. Freeman.</li>
+  <li>Xu, Y. F. &amp; Sun, D. A. (2005). Geotechnique 55, No. 9, 691-695</li>
+</ul>
 
 <h2>SEE ALSO</h2>
 
@@ -156,21 +184,7 @@ v.to.db -p roads option=count type=line
 <a href="v.what.html">v.what</a>
 </em>
 
-
-<h2>REFERENCES</h2>
-
-<ul>
-  <li>Mandelbrot, B. B. (1982). The fractal geometry of nature. New York: W. H. Freeman.</li>
-  <li>Xu, Y. F. &amp; Sun, D. A. (2005). Geotechnique 55, No. 9, 691-695</li>
-</ul>
-
-
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
 Radim Blazek, ITC-irst, Trento, Italy<br>
-Line sinuousity implemented by Wolf Bergenheim
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+Line sinuosity implemented by Wolf Bergenheim

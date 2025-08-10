@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_openinsert.c
- * 
+ *
  * \brief DBMI Library (driver) - open insert cursor
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -17,10 +17,10 @@
 #include "dbstubs.h"
 
 /*!
-  \brief Open insert cursor
+   \brief Open insert cursor
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
 int db_d_open_insert_cursor(void)
 {
@@ -33,12 +33,12 @@ int db_d_open_insert_cursor(void)
     DB_RECV_TABLE_DEFINITION(&table);
 
     /* create a cursor */
-    cursor = (dbCursor *) db_malloc(sizeof(dbCursor));
+    cursor = (dbCursor *)db_malloc(sizeof(dbCursor));
     if (cursor == NULL)
-	return db_get_error_code();
-    token = db_new_token((dbAddress) cursor);
+        return db_get_error_code();
+    token = db_new_token((dbAddress)cursor);
     if (token < 0)
-	return db_get_error_code();
+        return db_get_error_code();
     db_init_cursor(cursor);
     db_set_cursor_table(cursor, table);
 
@@ -47,8 +47,8 @@ int db_d_open_insert_cursor(void)
 
     /* send the return code */
     if (stat != DB_OK) {
-	DB_SEND_FAILURE();
-	return DB_OK;
+        DB_SEND_FAILURE();
+        return DB_OK;
     }
     DB_SEND_SUCCESS();
 

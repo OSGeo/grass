@@ -1,9 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       db.tables
  * AUTHOR(S):    Radim Blazek <radim.blazek gmail.com> (original contributor)
- *               Glynn Clements <glynn gclements.plus.com>, Markus Neteler <neteler itc.it>, Stephan Holl
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Markus Neteler <neteler itc.it>,
+ *               Stephan Holl
  * PURPOSE:      lists all tables for a given database
  * COPYRIGHT:    (C) 2002-2006 by the GRASS Development Team
  *
@@ -18,8 +19,7 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
-struct
-{
+struct {
     char *driver, *database;
     int s;
 } parms;
@@ -39,22 +39,23 @@ int main(int argc, char **argv)
 
     if (!parms.driver)
         G_fatal_error(_("Database connection not defined. Run db.connect."));
-      
+
     driver = db_start_driver(parms.driver);
     if (driver == NULL)
-	G_fatal_error(_("Unable to start driver <%s>"), parms.driver);
+        G_fatal_error(_("Unable to start driver <%s>"), parms.driver);
 
     db_init_handle(&handle);
     db_set_handle(&handle, parms.database, NULL);
     if (db_open_database(driver, &handle) != DB_OK)
-	G_fatal_error(_("Unable to open database <%s>"), parms.database);
+        G_fatal_error(_("Unable to open database <%s>"), parms.database);
 
     system_tables = parms.s;
     if (db_list_tables(driver, &names, &count, system_tables) != DB_OK)
-        G_fatal_error(_("Unable to list tables from database <%s>"), parms.database);
-    
+        G_fatal_error(_("Unable to list tables from database <%s>"),
+                      parms.database);
+
     for (i = 0; i < count; i++)
-	fprintf(stdout, "%s\n", db_get_string(&names[i]));
+        fprintf(stdout, "%s\n", db_get_string(&names[i]));
 
     if (count < 1)
         G_important_message(_("No tables found"));
@@ -78,11 +79,11 @@ static void parse_command_line(int argc, char **argv)
     driver = G_define_standard_option(G_OPT_DB_DRIVER);
     driver->options = db_list_drivers();
     if ((drv = db_get_default_driver_name()))
-	driver->answer = (char *) drv;
+        driver->answer = (char *)drv;
 
     database = G_define_standard_option(G_OPT_DB_DATABASE);
     if ((db = db_get_default_database_name()))
-	database->answer = (char *) db;
+        database->answer = (char *)db;
 
     p = G_define_flag();
     p->key = 'p';
@@ -99,7 +100,7 @@ static void parse_command_line(int argc, char **argv)
     module->description = _("Lists all tables for a given database.");
 
     if (G_parser(argc, argv))
-	exit(EXIT_SUCCESS);
+        exit(EXIT_SUCCESS);
 
     parms.driver = driver->answer;
     parms.database = database->answer;

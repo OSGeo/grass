@@ -7,7 +7,7 @@
 void init_error(void);
 
 /* cursor.c */
-cursor *alloc_cursor();
+cursor *alloc_cursor(void);
 void free_cursor(cursor *);
 
 /* describe.c */

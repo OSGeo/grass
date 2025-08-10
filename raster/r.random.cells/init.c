@@ -12,12 +12,13 @@
 /* function prototypes */
 static int comp_array(const void *p1, const void *p2);
 
-void Init()
+void Init(void)
 {
     struct Cell_head Region;
     int Count;
     int FD, row, col;
-    double MinRes;
+
+    /* double MinRes; */
 
     G_debug(2, "Init()");
 
@@ -26,43 +27,46 @@ void Init()
     G_get_set_window(&Region);
     EW = Region.ew_res;
     NS = Region.ns_res;
-    if (EW < NS)
-	MinRes = EW;
-    else
-	MinRes = NS;
+    /* if (EW < NS)
+       MinRes = EW;
+       else
+       MinRes = NS; */
     CellBuffer = Rast_allocate_c_buf();
 
     /* Out = FlagCreate( Rs, Cs); */
-    Out = (CELL **) G_malloc(sizeof(CELL *) * Rs);
+    Out = (CELL **)G_malloc(sizeof(CELL *) * Rs);
     for (row = 0; row < Rs; row++) {
-	Out[row] = Rast_allocate_c_buf();
-	Rast_zero_buf(Out[row], CELL_TYPE);
+        Out[row] = Rast_allocate_c_buf();
+        Rast_zero_buf(Out[row], CELL_TYPE);
     }
 
     Cells = FlagCreate(Rs, Cs);
     CellCount = 0;
-    if (G_find_raster2("MASK", G_mapset())) {
-	FD = Rast_open_old("MASK", G_mapset());
-	{
-	    for (row = 0; row < Rs; row++) {
-		Rast_get_c_row_nomask(FD, CellBuffer, row);
-		for (col = 0; col < Cs; col++) {
-		    if (CellBuffer[col] && !Rast_is_c_null_value(&CellBuffer[col])) {
-			FLAG_SET(Cells, row, col);
-			CellCount++;
-		    }
-		}
-	    }
-	    Rast_close(FD);
-	}
+    char mask_name[GNAME_MAX];
+    char mask_mapset[GMAPSET_MAX];
+    if (Rast_mask_status(mask_name, mask_mapset, NULL, NULL, NULL)) {
+        FD = Rast_open_old(mask_name, mask_mapset);
+        {
+            for (row = 0; row < Rs; row++) {
+                Rast_get_c_row_nomask(FD, CellBuffer, row);
+                for (col = 0; col < Cs; col++) {
+                    if (CellBuffer[col] &&
+                        !Rast_is_c_null_value(&CellBuffer[col])) {
+                        FLAG_SET(Cells, row, col);
+                        CellCount++;
+                    }
+                }
+            }
+            Rast_close(FD);
+        }
     }
     else {
-	for (row = 0; row < Rs; row++) {
-	    for (col = 0; col < Cs; col++) {
-		FLAG_SET(Cells, row, col);
-	    }
-	}
-	CellCount = Rs * Cs;
+        for (row = 0; row < Rs; row++) {
+            for (col = 0; col < Cs; col++) {
+                FLAG_SET(Cells, row, col);
+            }
+        }
+        CellCount = Rs * Cs;
     }
 
     /* cut down num of cells if requested */
@@ -73,47 +77,45 @@ void Init()
     G_debug(1, "(CellCount):%d", CellCount);
 
     sscanf(Distance->answer, "%lf", &MaxDist);
-    if (MaxDist < 0.0)
-	G_fatal_error(_("Distance must be >= 0.0"));
-    
+    if (MaxDist <= 0.0)
+        G_fatal_error(_("Distance must be > 0.0"));
+
     G_debug(3, "(MaxDist):%.12lf", MaxDist);
     MaxDistSq = MaxDist * MaxDist;
     if (!SeedStuff->answer) {
-	Seed = -1;
+        Seed = -1;
     }
     else {
-	sscanf(SeedStuff->answer, "%d", &(Seed));
+        sscanf(SeedStuff->answer, "%d", &(Seed));
     }
 
     if (Seed < 0)
-	G_srand48_auto();
+        G_srand48_auto();
     else
-	G_srand48(Seed);
+        G_srand48(Seed);
 
-    G_message(_("Generating raster map <%s>..."),
-	      Output->answer);
+    G_message(_("Generating raster map <%s>..."), Output->answer);
 
-    DoNext = (CELLSORTER *) G_malloc(CellCount * sizeof(CELLSORTER));
+    DoNext = (CELLSORTER *)G_malloc(CellCount * sizeof(CELLSORTER));
     Count = 0;
     for (row = 0; row < Rs; row++) {
-	G_percent(row, Rs, 2);
-	for (col = 0; col < Cs; col++) {
-	    if (0 != FlagGet(Cells, row, col)) {
-		DoNext[Count].R = row;
-		DoNext[Count].C = col;
-		DoNext[Count].Value = GasDev();
-		if (++Count == CellCount) {
-		    row = Rs;
-		    col = Cs;
-		}
-	    }
-	}
+        G_percent(row, Rs, 2);
+        for (col = 0; col < Cs; col++) {
+            if (0 != FlagGet(Cells, row, col)) {
+                DoNext[Count].R = row;
+                DoNext[Count].C = col;
+                DoNext[Count].Value = GasDev();
+                if (++Count == CellCount) {
+                    row = Rs;
+                    col = Cs;
+                }
+            }
+        }
     }
     G_percent(1, 1, 1);
-    
+
     qsort(DoNext, CellCount, sizeof(CELLSORTER), comp_array);
 }
-
 
 static int comp_array(const void *q1, const void *q2)
 {
@@ -121,9 +123,8 @@ static int comp_array(const void *q1, const void *q2)
     const CELLSORTER *p2 = q2;
 
     if (p1->Value < p2->Value)
-	return (-1);
+        return (-1);
     if (p2->Value < p1->Value)
-	return (1);
+        return (1);
     return (0);
 }
-

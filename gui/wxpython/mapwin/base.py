@@ -20,7 +20,6 @@ This program is free software under the GNU General Public License
 """
 
 import wx
-import six
 
 from core.settings import UserSettings
 from core.gcmd import GError
@@ -30,34 +29,35 @@ from grass.script import core as grass
 from grass.pydispatch.signal import Signal
 
 
-class MapWindowProperties(object):
-
+class MapWindowProperties:
     def __init__(self):
         self._resolution = None
-        self.resolutionChanged = Signal(
-            'MapWindowProperties.resolutionChanged')
+        self.resolutionChanged = Signal("MapWindowProperties.resolutionChanged")
         self._autoRender = None
-        self.autoRenderChanged = Signal(
-            'MapWindowProperties.autoRenderChanged')
+        self.autoRenderChanged = Signal("MapWindowProperties.autoRenderChanged")
         self._showRegion = None
-        self.showRegionChanged = Signal(
-            'MapWindowProperties.showRegionChanged')
+        self.showRegionChanged = Signal("MapWindowProperties.showRegionChanged")
         self._alignExtent = None
-        self.alignExtentChanged = Signal(
-            'MapWindowProperties.alignExtentChanged')
+        self.alignExtentChanged = Signal("MapWindowProperties.alignExtentChanged")
+        self._useDefinedProjection = False
+        self.useDefinedProjectionChanged = Signal(
+            "MapWindowProperties.useDefinedProjectionChanged"
+        )
+        self._sbItem = None
+        self.sbItemChanged = Signal("MapWindowProperties.sbItemChanged")
 
     def setValuesFromUserSettings(self):
         """Convenient function to get values from user settings into this object."""
-        self._resolution = UserSettings.Get(group='display',
-                                            key='compResolution',
-                                            subkey='enabled')
-        self._autoRender = UserSettings.Get(group='display',
-                                            key='autoRendering',
-                                            subkey='enabled')
+        self._resolution = UserSettings.Get(
+            group="display", key="compResolution", subkey="enabled"
+        )
+        self._autoRender = UserSettings.Get(
+            group="display", key="autoRendering", subkey="enabled"
+        )
         self._showRegion = False  # in statusbar.py was not from settings
-        self._alignExtent = UserSettings.Get(group='display',
-                                             key='alignExtent',
-                                             subkey='enabled')
+        self._alignExtent = UserSettings.Get(
+            group="display", key="alignExtent", subkey="enabled"
+        )
 
     @property
     def resolution(self):
@@ -99,8 +99,32 @@ class MapWindowProperties(object):
             self._alignExtent = value
             self.alignExtentChanged.emit(value=value)
 
+    @property
+    def useDefinedProjection(self):
+        return self._useDefinedProjection
 
-class MapWindowBase(object):
+    @useDefinedProjection.setter
+    def useDefinedProjection(self, value):
+        if value != self._useDefinedProjection:
+            self._useDefinedProjection = value
+            self.useDefinedProjectionChanged.emit(value=value)
+
+    @property
+    def epsg(self):
+        return UserSettings.Get(group="projection", key="statusbar", subkey="epsg")
+
+    @property
+    def sbItem(self):
+        return self._sbItem
+
+    @sbItem.setter
+    def sbItem(self, mode):
+        if mode != self._sbItem:
+            self._sbItem = mode
+            self.sbItemChanged.emit(mode=mode)
+
+
+class MapWindowBase:
     """Abstract map display window class
 
     Superclass for BufferedWindow class (2D display mode), and GLWindow
@@ -118,23 +142,21 @@ class MapWindowBase(object):
         self._giface = giface
 
         # Emitted when someone registers as mouse event handler
-        self.mouseHandlerRegistered = Signal(
-            'MapWindow.mouseHandlerRegistered')
+        self.mouseHandlerRegistered = Signal("MapWindow.mouseHandlerRegistered")
         # Emitted when mouse event handler is unregistered
-        self.mouseHandlerUnregistered = Signal(
-            'MapWindow.mouseHandlerUnregistered')
+        self.mouseHandlerUnregistered = Signal("MapWindow.mouseHandlerUnregistered")
         # emitted after double click in pointer mode on legend, text, scalebar
-        self.overlayActivated = Signal('MapWindow.overlayActivated')
+        self.overlayActivated = Signal("MapWindow.overlayActivated")
         # emitted when overlay should be hidden
-        self.overlayRemoved = Signal('MapWindow.overlayRemoved')
+        self.overlayRemoved = Signal("MapWindow.overlayRemoved")
 
         # mouse attributes -- position on the screen, begin and end of
         # dragging, and type of drawing
         self.mouse = {
-            'begin': [0, 0],  # screen coordinates
-            'end': [0, 0],
-            'use': "pointer",
-            'box': "point"
+            "begin": [0, 0],  # screen coordinates
+            "end": [0, 0],
+            "use": "pointer",
+            "box": "point",
         }
         # last east, north coordinates, changes on mouse motion
         self.lastEN = None
@@ -158,7 +180,7 @@ class MapWindowBase(object):
             wx.EVT_ENTER_WINDOW: [],
             wx.EVT_LEAVE_WINDOW: [],
             wx.EVT_MOUSEWHEEL: [],
-            wx.EVT_MOUSE_EVENTS: []
+            wx.EVT_MOUSE_EVENTS: [],
         }
 
         # available cursors
@@ -167,14 +189,14 @@ class MapWindowBase(object):
             "cross": StockCursor(cursorId=wx.CURSOR_CROSS),
             "hand": StockCursor(cursorId=wx.CURSOR_HAND),
             "pencil": StockCursor(cursorId=wx.CURSOR_PENCIL),
-            "sizenwse": StockCursor(cursorId=wx.CURSOR_SIZENWSE)
+            "sizenwse": StockCursor(cursorId=wx.CURSOR_SIZENWSE),
         }
 
         # default cursor for window is arrow (at least we rely on it here)
         # but we need to define attribute here
         # cannot call SetNamedCursor since it expects the instance
         # to be a wx window, so setting only the attribute
-        self._cursor = 'default'
+        self._cursor = "default"
 
         wx.CallAfter(self.InitBinding)
 
@@ -183,38 +205,41 @@ class MapWindowBase(object):
 
     def InitBinding(self):
         """Binds helper functions, which calls all handlers
-           registered to events with the events
+        registered to events with the events
         """
-        for ev, handlers in six.iteritems(self.handlersContainer):
+        for ev, handlers in self.handlersContainer.items():
             self.Bind(ev, self.EventTypeHandler(handlers))
 
     def EventTypeHandler(self, evHandlers):
         return lambda event: self.HandlersCaller(event, evHandlers)
 
     def HandlersCaller(self, event, handlers):
-        """Hepler function which calls all handlers registered for
+        """Helper function which calls all handlers registered for
         event
         """
         for handler in handlers:
             try:
                 handler(event)
-            except:
+            except Exception:
                 handlers.remove(handler)
                 GError(
-                    parent=self, message=_(
+                    parent=self,
+                    message=_(
                         "Error occurred during calling of handler: %s \n"
-                        "Handler was unregistered.") %
-                    handler.__name__)
+                        "Handler was unregistered."
+                    )
+                    % handler.__name__,
+                )
 
         event.Skip()
 
     def RegisterMouseEventHandler(self, event, handler, cursor=None):
         """Binds event handler
 
-        @depreciated This method is depreciated. Use Signals or drawing API
+        @deprecated This method is deprecated. Use Signals or drawing API
         instead. Signals do not cover all events but new Signals can be added
         when needed consider also adding generic signal. However, more
-        interesing and useful is higher level API to create objects, graphics etc.
+        interesting and useful is higher level API to create objects, graphics etc.
 
         Call event.Skip() in handler to allow default processing in MapWindow.
 
@@ -230,8 +255,9 @@ class MapWindowBase(object):
                 # current map display's map window
                 # expects LayerManager to be the parent
                 self.mapwin = self.parent.GetLayerTree().GetMapDisplay().GetWindow()
-                if self.mapwin.RegisterEventHandler(wx.EVT_LEFT_DOWN, self.OnMouseAction,
-                                                    'cross'):
+                if self.mapwin.RegisterEventHandler(
+                    wx.EVT_LEFT_DOWN, self.OnMouseAction, "cross"
+                ):
                     self.parent.GetLayerTree().GetMapDisplay().Raise()
                 else:
                     # handle that you cannot get coordinates
@@ -239,10 +265,11 @@ class MapWindowBase(object):
             def OnMouseAction(self, event):
                 # get real world coordinates of mouse click
                 coor = self.mapwin.Pixel2Cell(event.GetPositionTuple()[:])
-                self.text.SetLabel('Coor: ' + str(coor))
-                self.mapwin.UnregisterMouseEventHandler(wx.EVT_LEFT_DOWN, self.OnMouseAction)
+                self.text.SetLabel("Coor: " + str(coor))
+                self.mapwin.UnregisterMouseEventHandler(
+                    wx.EVT_LEFT_DOWN, self.OnMouseAction
+                )
                 event.Skip()
-
 
         Emits mouseHandlerRegistered signal before handler is registered.
 
@@ -255,12 +282,12 @@ class MapWindowBase(object):
         """
         self.mouseHandlerRegistered.emit()
         # inserts handler into list
-        for containerEv, handlers in six.iteritems(self.handlersContainer):
+        for containerEv, handlers in self.handlersContainer.items():
             if event == containerEv:
                 handlers.append(handler)
 
-        self.mouse['useBeforeGenericEvent'] = self.mouse['use']
-        self.mouse['use'] = 'genericEvent'
+        self.mouse["useBeforeGenericEvent"] = self.mouse["use"]
+        self.mouse["use"] = "genericEvent"
 
         if cursor:
             self._overriddenCursor = self.GetNamedCursor()
@@ -271,26 +298,31 @@ class MapWindowBase(object):
     def UnregisterAllHandlers(self):
         """Unregisters all registered handlers
 
-        @depreciated This method is depreciated. Use Signals or drawing API instead.
+        @deprecated This method is deprecated. Use Signals or drawing API instead.
 
         Before each handler is unregistered it is called with string
         value "unregistered" of event parameter.
         """
-        for containerEv, handlers in six.iteritems(self.handlersContainer):
+        for handlers in self.handlersContainer.values():
             for handler in handlers:
                 try:
                     handler("unregistered")
                     handlers.remove(handler)
-                except:
-                    GError(parent=self,
-                           message=_("Error occurred during unregistration of handler: %s \n \
-                                       Handler was unregistered.") % handler.__name__)
+                except Exception:
+                    GError(
+                        parent=self,
+                        message=_(
+                            "Error occurred during unregistration of handler: %s \n \
+                                       Handler was unregistered."
+                        )
+                        % handler.__name__,
+                    )
                     handlers.remove(handler)
 
     def UnregisterMouseEventHandler(self, event, handler):
         """Unbinds event handler for event
 
-        @depreciated This method is depreciated. Use Signals or drawing API instead.
+        @deprecated This method is deprecated. Use Signals or drawing API instead.
 
         Before handler is unregistered it is called with string value
         "unregistered" of event parameter.
@@ -304,7 +336,7 @@ class MapWindowBase(object):
         :return: False if event cannot be unbind
         """
         # removes handler from list
-        for containerEv, handlers in six.iteritems(self.handlersContainer):
+        for containerEv, handlers in self.handlersContainer.items():
             if event != containerEv:
                 continue
             try:
@@ -312,16 +344,22 @@ class MapWindowBase(object):
                 if handler in handlers:
                     handlers.remove(handler)
                 else:
-                    grass.warning(_("Handler: %s was not registered")
-                                  % handler.__name__)
-            except:
-                GError(parent=self,
-                       message=_("Error occurred during unregistration of handler: %s \n \
-                                       Handler was unregistered") % handler.__name__)
+                    grass.warning(
+                        _("Handler: %s was not registered") % handler.__name__
+                    )
+            except Exception:
+                GError(
+                    parent=self,
+                    message=_(
+                        "Error occurred during unregistration of handler: %s \n \
+                                       Handler was unregistered"
+                    )
+                    % handler.__name__,
+                )
                 handlers.remove(handler)
 
         # restore mouse use (previous state)
-        self.mouse['use'] = self.mouse['useBeforeGenericEvent']
+        self.mouse["use"] = self.mouse["useBeforeGenericEvent"]
 
         # restore overridden cursor
         if self._overriddenCursor:
@@ -331,10 +369,10 @@ class MapWindowBase(object):
         return True
 
     def Pixel2Cell(self, xyCoords):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def Cell2Pixel(self, enCoords):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def OnMotion(self, event):
         """Tracks mouse motion and update statusbar
@@ -346,7 +384,7 @@ class MapWindowBase(object):
         """
         try:
             self.lastEN = self.Pixel2Cell(event.GetPosition())
-        except (ValueError):
+        except ValueError:
             self.lastEN = None
 
         event.Skip()
@@ -354,7 +392,8 @@ class MapWindowBase(object):
     def GetLastEN(self):
         """Returns last coordinates of mouse cursor.
 
-        @depreciated This method is depreciated. Use Signal with coordinates as parameters.
+        @deprecated This method is deprecated. Use Signal with coordinates as
+        parameters.
 
         :func:`OnMotion`
         """
@@ -374,16 +413,16 @@ class MapWindowBase(object):
 
     def SetModePointer(self):
         """Sets mouse mode to pointer."""
-        self.mouse['use'] = 'pointer'
-        self.mouse['box'] = 'point'
-        self.SetNamedCursor('default')
+        self.mouse["use"] = "pointer"
+        self.mouse["box"] = "point"
+        self.SetNamedCursor("default")
 
     def SetModePan(self):
         """Sets mouse mode to pan."""
-        self.mouse['use'] = "pan"
-        self.mouse['box'] = "box"
+        self.mouse["use"] = "pan"
+        self.mouse["box"] = "box"
         self.zoomtype = 0
-        self.SetNamedCursor('hand')
+        self.SetNamedCursor("hand")
 
     def SetModeZoomIn(self):
         self._setModeZoom(zoomType=1)
@@ -393,28 +432,28 @@ class MapWindowBase(object):
 
     def _setModeZoom(self, zoomType):
         self.zoomtype = zoomType
-        self.mouse['use'] = "zoom"
-        self.mouse['box'] = "box"
-        self.pen = wx.Pen(colour='Red', width=2, style=wx.SHORT_DASH)
-        self.SetNamedCursor('cross')
+        self.mouse["use"] = "zoom"
+        self.mouse["box"] = "box"
+        self.pen = wx.Pen(colour="Red", width=2, style=wx.SHORT_DASH)
+        self.SetNamedCursor("cross")
 
     def SetModeDrawRegion(self):
-        self.mouse['use'] = 'drawRegion'
-        self.mouse['box'] = "box"
-        self.pen = wx.Pen(colour='Red', width=2, style=wx.SHORT_DASH)
-        self.SetNamedCursor('cross')
+        self.mouse["use"] = "drawRegion"
+        self.mouse["box"] = "box"
+        self.pen = wx.Pen(colour="Red", width=2, style=wx.SHORT_DASH)
+        self.SetNamedCursor("cross")
 
     def SetModeQuery(self):
         """Query mode on"""
-        self.mouse['use'] = "query"
-        self.mouse['box'] = "point"
+        self.mouse["use"] = "query"
+        self.mouse["box"] = "point"
         self.zoomtype = 0
-        self.SetNamedCursor('cross')
+        self.SetNamedCursor("cross")
 
     def DisactivateWin(self):
         """Use when the class instance is hidden in MapFrame."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def ActivateWin(self):
         """Used when the class instance is activated in MapFrame."""
-        raise NotImplementedError()
+        raise NotImplementedError

@@ -13,23 +13,23 @@
  * array is returned.
  *
  */
-
 const char *G__machine_name(void)
 {
     static int initialized;
     static char name[128];
 
     if (G_is_initialized(&initialized))
-	return name;
+        return name;
 
 #if defined(HAVE_GETHOSTNAME)
     gethostname(name, sizeof(name));
-    name[sizeof(name) - 1] = 0;	/* make sure NUL terminated */
+    name[sizeof(name) - 1] = 0; /* make sure NUL terminated */
 #elif defined(HAVE_SYS_UTSNAME_H)
     {
-	struct utsname attname;
-	uname(&attname);
-	strcpy(name, attname.nodename);
+        struct utsname attname;
+
+        uname(&attname);
+        strcpy(name, attname.nodename);
     }
 #else
     strcpy(name, "unknown");

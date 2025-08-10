@@ -2,9 +2,8 @@
 <h2>DESCRIPTION</h2>
 
 <b>wxGUI</b> is a native <em>Graphical User Interface</em> (GUI) for
-GRASS GIS. Its main features include displaying geographical data
-in 2D and 3D, calling GRASS GIS modules, and interacting with data.
-
+GRASS. Its main features include displaying geographical data
+in 2D and 3D, calling GRASS modules, and interacting with data.
 
 <h3>Overview</h3>
 The GUI is composed of <em>three</em> main components:
@@ -14,27 +13,29 @@ The GUI is composed of <em>three</em> main components:
   command-line prompt, and command output window tab.</li>
   <li>The <b>Map Display Window</b> integrates basic tools for
   zooming, panning, data querying, and map elements (north arrows,
-  barscale, etc.). Each display window is associated with its own 
-  set of map layers in the layer manager. The user may start multiple map 
+  barscale, etc.). Each display window is associated with its own
+  set of map layers in the layer manager. The user may start multiple map
   displays during a session. The map layers for each display are grouped
   under different tabs in the Layer Manager.</li>
-  <li><a href="wxGUI.modules.html">Module dialogs</a> enable running GRASS modules.</li>
+  <li><a href="wxGUI.modules.html">Module dialogs</a> enable running GRASS modules
+  that can be searched and launched via Tools tab.
+  </li>
 </ul>
 
 <h3>Layer Manager</h3>
 
 The <em>Layer Manager</em> provides an interactive graphical interface for
-creating and managing GRASS displays. There is a toolbar to manage displayed 
-map layers, a layer tree frame in which map layers for display are organized, 
-a command output window tab, and interactive command line prompt. On Linux 
-and Windows platforms, the layer manager also has a menu bar with a set of 
-pull-down menus for all GRASS GIS functions (analysis, file I/O, GIS 
-configuration and management); on a Mac, the GRASS functions menu is at the 
+creating and managing GRASS displays. There is a toolbar to manage displayed
+map layers, a layer tree frame in which map layers for display are organized,
+a command output window tab, and interactive command line prompt. On Linux
+and Windows platforms, the layer manager also has a menu bar with a set of
+pull-down menus for all GRASS functions (analysis, file I/O, GIS
+configuration and management); on a Mac, the GRASS functions menu is at the
 top of the screen.
 
 <center>
 <br>
-<img src="wxGUI_layer_manager.jpg" border="1" alt="screenshot"><br><br>
+<img src="wxGUI_layer_manager.png" border="1" alt="screenshot"><br><br>
 Figure: Layer Manager screenshot on Ubuntu
 </center>
 
@@ -47,9 +48,9 @@ additional buttons for saving or opening workspace file, and others.
 
 <p>
 Map layers are listed in the window frame below the toolbar. Layers can
-include raster and vector maps, vector labels, and commands (where any 
-GRASS command can be written). Layers are displayed as arranged in the layer 
-tree: the bottom layer is displayed first and the top layer is displayed 
+include raster and vector maps, vector labels, and commands (where any
+GRASS command can be written). Layers are displayed as arranged in the layer
+tree: the bottom layer is displayed first and the top layer is displayed
 last, as if the layers were a series of stacked overlays.
 
 <p>
@@ -61,14 +62,14 @@ composition can be saved to a workspace file and opened in subsequent
 sessions, restoring all layers and their display options.
 
 <p>
-A right mouse click on a layer or left clicking the button to the right of 
-the layer opens a dropdown menu with options to remove or rename the layer 
-(not the actual map), change its display properties (d.rast and d.vect 
-options such as color, symbol, etc.), show its metadata (r.info, v.info) or 
+A right mouse click on a layer or left clicking the button to the right of
+the layer opens a dropdown menu with options to remove or rename the layer
+(not the actual map), change its display properties (d.rast and d.vect
+options such as color, symbol, etc.), show its metadata (r.info, v.info) or
 attributes, if applicable.
 <p>
-A left mouse double click on a layer opens GUI for its display options 
-These options are those for the d.* command for each layer type (d.rast, 
+A left mouse double click on a layer opens GUI for its display options
+These options are those for the d.* command for each layer type (d.rast,
 d.vect, or d.grid, for example).
 
 <h4>Layer Manager Toolbar</h4>
@@ -78,22 +79,22 @@ d.vect, or d.grid, for example).
   <dt><img src="icons/monitor-create.png" alt="icon">&nbsp;
     <em>Start new map display</em></dt>
   <dd>Opens a new map display and creates empty layer tree tab in Layer Manager.</dd>
-  
+
   <dt><img src="icons/create.png" alt="icon">&nbsp;
     <em>Create new workspace</em></dt>
   <dd>Removes all layers from the layer tree and creates a new, empty tree
     where new layers can be added.</dd>
-  
+
   <dt><img src="icons/open.png" alt="icon">&nbsp;
     <em>Open existing workspace file</em></dt>
   <dd>Opens an previously saved workspace file, containing a set of display
     layers and their option settings.</dd>
-  
+
   <dt><img src="icons/save.png" alt="icon">&nbsp;
     <em>Save current workspace to file</em></dt>
   <dd>Saves current set of layers and their options to a workspace
     file.</dd>
-  
+
   <dt><img src="icons/layer-open.png" alt="icon">&nbsp;
     <em>Load map layers into workspace</em></dt>
   <dd>Loads selected raster or vector maps into current layer tree.</dd>
@@ -102,116 +103,116 @@ d.vect, or d.grid, for example).
     <em>Add raster map layer</em></dt>
   <dd>Adds raster map to layer tree, see <em><a href="d.rast.html">d.rast</a></em>.
   </dd>
-  
+
   <dt><img src="icons/layer-raster-more.png" alt="icon">&nbsp;
     <em>Add various raster map layers (RGB, HIS, shaded relief...)</em></dt>
   <dd>Opens a dropdown menu that allows user to select to:
-    
+
     <dl>
       <dt><img src="icons/layer-raster3d-add.png" alt="icon">&nbsp;
-	<em>Add 3D raster map layer</em></dt>
+    <em>Add 3D raster map layer</em></dt>
       <dd>Adds 3D raster map to layer tree.</dd>
-  
+
       <dt><img src="icons/layer-rgb-add.png" alt="icon">&nbsp;
-	<em>Add RGB raster layer</em></dt>
-      <dd>Combines and displays three raster maps defined as red, green, 
-	and blue channels to create an RGB color map, 
-	see <em><a href="d.rgb.html">d.rgb</a></em>.</dd>
-      
+      <em>Add RGB raster layer</em></dt>
+      <dd>Combines and displays three raster maps defined as red, green,
+    and blue channels to create an RGB color map,
+    see <em><a href="d.rgb.html">d.rgb</a></em>.</dd>
+
       <dt><img src="icons/layer-his-add.png" alt="icon">&nbsp;
-	<em>Add HIS raster layer</em></dt>
+      <em>Add HIS raster layer</em></dt>
       <dd>Combines and displays two or three raster maps defined as hue,
-	intensity, and (optionally) saturation channels to create a color map,
-	see <em><a href="d.his.html">d.his</a></em>.</dd>
-      
+    intensity, and (optionally) saturation channels to create a color map,
+    see <em><a href="d.his.html">d.his</a></em>.</dd>
+
       <dt><img src="icons/layer-shaded-relief-add.png" alt="icon">&nbsp;
-	<em>Add shaded relief raster map layer </em></dt>
+      <em>Add shaded relief raster map layer </em></dt>
       <dd>Adds shaded relief raster map layer,
       see <em><a href="r.relief.html">r.relief</a></em> and
       <em><a href="d.shade.html">d.shade</a></em>.</dd>
 
       <dt><img src="icons/layer-aspect-arrow-add.png" alt="icon">&nbsp;
-	<em>Add raster arrows layer</em></dt>
+      <em>Add raster arrows layer</em></dt>
       <dd>Adds map of raster cells with directional arrows drawn. Arrow
-	direction and length are determined by separate aspect/directional map
-	and (optional) slope/intensity map,
-	see <em><a href="d.rast.arrow.html">d.rast.arrow</a></em>.</dd>
-      
+    direction and length are determined by separate aspect/directional map
+    and (optional) slope/intensity map,
+    see <em><a href="d.rast.arrow.html">d.rast.arrow</a></em>.</dd>
+
       <dt><img src="icons/layer-cell-cats-add.png" alt="icon">&nbsp;
-	<em>Add raster numbers layer</em></dt>
-      <dd>Adds map of raster cells with numbers representing the cell values, 
-	see <em><a href="d.rast.num.html">d.rast.num</a></em>.</dd>
+      <em>Add raster numbers layer</em></dt>
+      <dd>Adds map of raster cells with numbers representing the cell values,
+    see <em><a href="d.rast.num.html">d.rast.num</a></em>.</dd>
     </dl>
   </dd>
   <dt><img src="icons/layer-vector-add.png" alt="icon">&nbsp;
     <em>Add vector map layer</em></dt>
   <dd>Adds a vector map layer,
   see <em><a href="d.vect.html">d.vect</a></em>.</dd>
-  
+
   <dt><img src="icons/layer-vector-more.png" alt="icon">&nbsp;
     <em>Add various vector map layers (thematic, chart...)</em></dt>
   <dd>Opens a dropdown menu that allows user to select to:
-    
+
     <dl>
       <dt><img src="icons/layer-vector-thematic-add.png" alt="icon">&nbsp;
-	<em>Add thematic area (choropleth) map layer
-	  (for all vector types)</em></dt>
+      <em>Add thematic area (choropleth) map layer
+      (for all vector types)</em></dt>
       <dd>Adds layer for thematic display values from a numeric attribute
-	column associated with a vector map. Options include: thematic display
-	type (graduated colors or point sizes), methods for creating display
-	intervals, SQL query of attribute column to limit vector objects to
-	display, control of point icon types and sizes, control of thematic
-	color schemes, creation of legend for thematic map, and saving the
-	results of thematic mapping to a ps.map instructions file for later
-	printing,
-	see <em><a href="d.vect.thematic.html">d.vect.thematic</a></em>.</dd>
-      
+    column associated with a vector map. Options include: thematic display
+    type (graduated colors or point sizes), methods for creating display
+    intervals, SQL query of attribute column to limit vector objects to
+    display, control of point icon types and sizes, control of thematic
+    color schemes, creation of legend for thematic map, and saving the
+    results of thematic mapping to a ps.map instructions file for later
+    printing,
+    see <em><a href="d.vect.thematic.html">d.vect.thematic</a></em>.</dd>
+
       <dt><img src="icons/layer-vector-chart-add.png" alt="icon">&nbsp;
-	<em>Add thematic chart layer (for vector points)</em></dt>
+    <em>Add thematic chart layer (for vector points)</em></dt>
       <dd>Adds layer in which pie or bar charts can be automatically created
-	at vector point locations. Charts display values from selected columns
-	in the associated attribute table. Options include: chart type, layer
-	and attributes to chart, chart colors, and chart size (fixed or based
-	on attribute column),
-	see <em><a href="d.vect.chart.html">d.vect.chart</a></em>.</dd>
+    at vector point locations. Charts display values from selected columns
+    in the associated attribute table. Options include: chart type, layer
+    and attributes to chart, chart colors, and chart size (fixed or based
+    on attribute column),
+    see <em><a href="d.vect.chart.html">d.vect.chart</a></em>.</dd>
     </dl>
   </dd>
   <dt><img src="icons/layer-group-add.png" alt="icon">&nbsp;
     <em>Add group</em></dt>
   <dd>Adds an empty group. Layers can then be added to the group.</dd>
-  
+
   <dt><img src="icons/layer-more.png" alt="icon">&nbsp;
     <em>Add grid or vector labels overlay</em></dt>
   <dd>Opens a dropdown menu that allows user to select to:
     <dl>
       <dt><img src="icons/layer-grid-add.png" alt="icon">&nbsp;
-	<em>Add overlay grids and lines</em></dt>
-      <dd>Adds layer to display regular grid (for all locations)
-	see <em><a href="d.grid.html">d.grid</a></em></dd>
-      
+      <em>Add overlay grids and lines</em></dt>
+      <dd>Adds layer to display regular grid
+    see <em><a href="d.grid.html">d.grid</a></em></dd>
+
       <dt><img src="icons/layer-label-add.png" alt="icon">&nbsp;
-	<em>Add labels layer for vector objects (from existing labels file)</em></dt>
+    <em>Add labels layer for vector objects (from existing labels file)</em></dt>
       <dd>Add a layer of text from a labels file for vector objects
-	created with the <em><a href="v.label.html">v.label</a></em> module. 
-	A labels file can also be created with a text editor, 
-	see <em><a href="d.labels.html">d.labels</a></em>.</dd>
-      
+    created with the <em><a href="v.label.html">v.label</a></em> module.
+    A labels file can also be created with a text editor,
+    see <em><a href="d.labels.html">d.labels</a></em>.</dd>
+
       <dt><img src="icons/shortest-distance.png" alt="icon">&nbsp;
-	<em>Add geodesic line layer</em></dt>
-      <dd>Add layer to display geodesic line for latitude/longitude locations only,
-	see <em><a href="d.geodesic.html">d.geodesic</a></em></dd>
-      
+      <em>Add geodesic line layer</em></dt>
+      <dd>Add layer to display geodesic line for latitude/longitude projects only,
+    see <em><a href="d.geodesic.html">d.geodesic</a></em></dd>
+
       <dt><img src="icons/shortest-distance.png" alt="icon">&nbsp;
-	<em>Add rhumbline layer</em>
-	<dd>Add layer to display rhumblines (for latitude/longitude locations only),
+      <em>Add rhumbline layer</em>
+    <dd>Add layer to display rhumblines (for latitude/longitude projects only),
           see <em><a href="d.rhumbline.html">d.rhumbline</a></em>.</dd>
 
       <dt><img src="icons/layer-command-add.png" alt="icon">&nbsp;
-	<em>Add command layer</em></dt>
-      <dd>Adds a layer in which a GRASS GIS command or command list can be entered.
-	For a command list use the semi-colon (";") symbol as a separator.
-	For example:
-	
+      <em>Add command layer</em></dt>
+      <dd>Adds a layer in which a GRASS command or command list can be entered.
+    For a command list use the semi-colon (";") symbol as a separator.
+    For example:
+
 <div class="code"><pre>
 d.rast soils;d.rast -o roads;d.vect streams col=blue
 </pre></div>
@@ -226,51 +227,51 @@ d.text text=Population\ density
   <dt><img src="icons/layer-remove.png" alt="icon">&nbsp;
     <em>Delete selected layer</em></dt>
   <dd>Removes selected map layer or map layer group from layer tree.</dd>
-  
+
   <dt><img src="icons/edit.png" alt="icon">&nbsp;
     <em>Edit vector maps</em></dt>
   <dd>Opens <em><a href="wxGUI.vdigit.html">vector digitizer</a></em> to allow editing selected vector map.</dd>
-  
+
   <dt><img src="icons/table.png" alt="icon">&nbsp;
     <em>Show attribute table</em></dt>
   <dd>Opens <em><a href="wxGUI.dbmgr.html">attribute table manager</a></em> for selected vector map.</dd>
-  
+
   <dt><img src="icons/layer-open.png" alt="icon">&nbsp;
     <em>Import raster or vector data</em></dt>
   <dd>
     <dl>
       <dt><img src="icons/layer-import.png" alt="icon">&nbsp;
-	<em>Import raster data</em></dt>
+      <em>Import raster data</em></dt>
       <dd>Import selected raster data into GRASS
       using <em><a href="r.in.gdal.html">r.in.gdal</a></em> and load
       them into current layer tree.</dd>
-      
+
       <dt><img src="icons/layer-import.png" alt="icon">&nbsp;
-	<em>Link external raster data</em></dt>
+      <em>Link external raster data</em></dt>
       <dd>Link selected external raster data as GRASS raster maps
       (using <em><a href="r.external.html">r.external</a></em>) and
       load them into current layer tree.</dd>
 
       <dt><img src="icons/layer-export.png" alt="icon">&nbsp;
-	<em>Set raster output format</em></dt>
+      <em>Set raster output format</em></dt>
       <dd>Define external format for newly created raster maps
       (see <em><a href="r.external.out.html">r.external.out</a></em>
       for details)</dd>
-      
+
       <dt><img src="icons/layer-import.png" alt="icon">&nbsp;
-	<em>Import vector data</em></dt>
+      <em>Import vector data</em></dt>
       <dd>Import selected vector data into GRASS
       using <em><a href="v.in.ogr.html">v.in.ogr</a></em> and load
       them into current layer tree.</dd>
 
       <dt><img src="icons/layer-import.png" alt="icon">&nbsp;
-	<em>Link external vector data</em></dt>
+      <em>Link external vector data</em></dt>
       <dd>Link selected external vector data as GRASS vector maps
       (using <em><a href="v.external.html">v.external</a></em>) and
       load them into current layer tree.</dd>
 
       <dt><img src="icons/layer-export.png" alt="icon">&nbsp;
-	<em>Set vector output format</em></dt>
+      <em>Set vector output format</em></dt>
       <dd>Define external format for newly created vector maps
       (see <em><a href="v.external.out.html">v.external.out</a></em>
       for details)</dd>
@@ -298,7 +299,7 @@ d.text text=Population\ density
   <dd>Launches <em><a href="wxGUI.psmap.html">Cartographic
     Composer</a></em> to create interactively hardcopy map
     outputs.</dd>
-  
+
   <dt><img src="icons/settings.png" alt="icon">&nbsp;
     <em>Show GUI settings</em></dt>
   <dd>Opens dialog to change GUI settings.</dd>
@@ -311,8 +312,8 @@ d.text text=Population\ density
 
 <h3>Map Display Window</h3>
 
-The map display window includes toolbar that can be docked and undocked from 
-the window, a map canvas where a map composition of one or more layers is 
+The map display window includes toolbar that can be docked and undocked from
+the window, a map canvas where a map composition of one or more layers is
 displayed, and a statusbar with information about the geographic region of
 the maps displayed.
 
@@ -322,18 +323,18 @@ Figure: Map Display screenshot on Ubuntu
 </center>
 
 <p>
-Each Map Display Window has a unique layer tree (in the layer manager) 
-and geographic <em>region</em> setting. At the top of the window is a 
-toolbar with buttons to manage the map in the display (render, erase, zoom 
-and pan), for query and and analysis (distance measurement, profile, 
+Each Map Display Window has a unique layer tree (in the layer manager)
+and geographic <em>region</em> setting. At the top of the window is a
+toolbar with buttons to manage the map in the display (render, erase, zoom
+and pan), for query and and analysis (distance measurement, profile,
 and histogram creation), to overlay map elements onto the display (scale,
 north arrow, legend, and custom text), and to export or print the display.
 
 <p>
-In the statusbar, the user can choose to display the geographic coordinates 
+In the statusbar, the user can choose to display the geographic coordinates
 under the cursor, current geographical region extent, computational region
-(including graphical visualization in map display), map display geometry 
-(number of rows, columns, resolution) and map scale. Checking the 
+(including graphical visualization in map display), map display geometry
+(number of rows, columns, resolution) and map scale. Checking the
 <em>render</em> button in the statusbar will cause the map display to update
 automatically any time a map is added to, removed from, or changed in its
 layer tree.
@@ -354,12 +355,12 @@ the computational region extents.
     <em>Re-render display</em></dt>
   <dd>Re-renders all active map layers regardless of whether they have changed
     or not, see <em><a href="d.redraw.html">d.redraw</a></em>.</dd>
-  
+
   <dt><img src="icons/erase.png" alt="icon">&nbsp;
     <em>Erase display</em></dt>
   <dd>Erases the currently selected map display to a white background,
     see <em><a href="d.erase.html">d.erase</a></em>.</dd>
-  
+
   <dt><img src="icons/pointer.png" alt="icon">&nbsp;
     <em>Pointer</em></dt>
   <dd>Select arrow cursor for map display.</dd>
@@ -374,12 +375,12 @@ the computational region extents.
   <dt><img src="icons/info.png" alt="icon">&nbsp;
     <em>Query raster/vector maps</em></dt>
     <dd>Query selected raster, RGB raster (all three map channels will be
-	queried), or vector map(s) using the mouse. Map(s) must be selected
-	before query.  Vector charts and thematic vector maps cannot be
-	queried. The results of the query will be displayed in a dialog.
-	See <em><a href="r.what.html">r.what</a>, <a href="v.what.html">v.what</a></em>.
+    queried), or vector map(s) using the mouse. Map(s) must be selected
+    before query.  Vector charts and thematic vector maps cannot be
+    queried. The results of the query will be displayed in a dialog.
+    See <em><a href="r.what.html">r.what</a>, <a href="v.what.html">v.what</a></em>.
   </dd>
-  
+
   <dt><img src="icons/pan.png" alt="icon">&nbsp;
     <em>Pan</em></dt>
   <dd>Interactive selection of a new center of view in the active
@@ -388,7 +389,7 @@ the computational region extents.
     but not the size of the area displayed or the resolution. Panning
     does <em>not</em> affect the computational region for other GIS
     processes, see <em><a href="g.region.html">g.region</a></em>.</dd>
-  
+
   <dt><img src="icons/zoom-in.png" alt="icon">&nbsp;
     <em>Zoom in</em></dt>
   <dd>Interactive zooming with the mouse in the active display monitor.
@@ -400,7 +401,7 @@ the computational region extents.
     region extents (both size and location of area displayed). It
     does <em>not</em> affect the computational region for other GIS
     processes, see <em><a href="g.region.html">g.region</a></em>.</dd>
-  
+
   <dt><img src="icons/zoom-out.png" alt="icon">&nbsp;
     <em>Zoom out</em></dt>
   <dd>Interactive zooming with the mouse in the active display monitor.
@@ -413,7 +414,7 @@ the computational region extents.
     displayed). It does <em>not</em> affect the computational region for
     other GIS processes,
     see <em><a href="g.region.html">g.region</a></em>.</dd>
-  
+
   <dt><img src="icons/zoom-extent.png" alt="icon">&nbsp;
     <em>Zoom to selected map(s)</em></dt>
   <dd>Set zoom extent based on selected raster or vector maps. Zooming
@@ -431,7 +432,7 @@ the computational region extents.
     <em>Return to previous zoom</em></dt>
   <dd>Returns to the previous zoom extent. Up to 10 levels of zoom back are
     maintained, see <em><a href="g.region.html">g.region</a></em>.</dd>
-  
+
   <dt><img src="icons/zoom-more.png" alt="icon">&nbsp;
     <em>Various zoom options</em></dt>
   <dd>Opens a dropdown menu that allows user to:
@@ -440,7 +441,7 @@ the computational region extents.
       <li><em>Zoom to saved region</em>. Zooms to previously
       saved named region.</li>
       <li><em>Set computational region extent from display.</em>
-      The computational region (the mapset's <tt>WIND</tt> file)
+      The computational region (the mapset's <code>WIND</code> file)
       is set to match the current display extent (does not change
       the resolution), see <em><a href="g.region.html">g.region</a></em>.</li>
       <li><em>Set computational region extent interactively.</em>
@@ -452,7 +453,7 @@ the computational region extents.
       <li><em>Save computational region to named region</em></li>
     </ul>
   </dd>
-  
+
   <dt><img src="icons/layer-raster-analyze.png" alt="icon">&nbsp;
     <em>Analyze menu</em></dt>
   <dd>Opens a dropdown menu with:
@@ -463,7 +464,7 @@ the computational region extents.
         length of each segment and the cumulative length of all segments
         measuered is displayed in the command output window frame. Lengths are
         measured in the current measurement unit. Double-click to switch off measuring.</dd>
-      
+
       <dt><img src="icons/area-measure.png" alt="icon">&nbsp;
         <em>Measure area</em></dt>
       <dd>Interactive measurement of area defined with the mouse. Area is
@@ -472,9 +473,9 @@ the computational region extents.
       <dt><img src="icons/layer-raster-profile.png" alt="icon">&nbsp;
         <em>Profile surface map</em></dt>
       <dd>Interactively create profile of a raster map. Profile transect is
-	drawn with the mouse in map display. The profile may be of the
-	displayed map or a different map. Up to three maps can be profiled 
-	simultaneously.</dd>
+    drawn with the mouse in map display. The profile may be of the
+    displayed map or a different map. Up to three maps can be profiled
+    simultaneously.</dd>
 
       <dt><img src="icons/layer-raster-profile.png" alt="icon">&nbsp;
         <em>Create bivariate scatterplot of raster maps</em></dt>
@@ -497,11 +498,11 @@ the computational region extents.
       <dd>See tool's <a href="wxGUI.vnet.html">manual page</a>.</dd>
     </dl>
   </dd>
-  
+
   <dt><img src="icons/overlay-add.png" alt="icon">&nbsp;
     <em>Add overlay</em></dt>
   <dd>opens a dropdown menu that allows user to
-    
+
     <dl>
     <dt><img src="icons/legend-add.png" alt="icon">&nbsp;
       <em>Add raster map legend</em></dt>
@@ -521,7 +522,7 @@ the computational region extents.
       include north arrow placement (using screen coordinates or a mouse),
       north arrow style and color,
       see <em><a href="d.northarrow.html">d.northarrow</a></em>.</dd>
-    
+
     <dt><img src="icons/text-add.png" alt="icon">&nbsp;
       <em>Add text layer</em></dt>
     <dd>Adds layer to display a line of text using default GRASS font
@@ -534,7 +535,7 @@ the computational region extents.
   <dt><img src="icons/map-export.png" alt="icon">&nbsp;
     <em>Save display to graphic file</em></dt>
   <dd>Save the visible image in map display to different raster graphic formats.</dd>
-  
+
   <dt><img src="icons/print.png" alt="icon">&nbsp;
     <em>Print map</em></dt>
   <dd>Prints map on system native printer or PostScript device;
@@ -545,25 +546,25 @@ the computational region extents.
     <dl>
       <dt><em>2D view</em></dt>
       <dd>Normal GIS display. All active layers are composited and displayed
-	in 2D mode.</dd>
-      
+    in 2D mode.</dd>
+
       <dt><em>3D view</em></dt>
-      <dd>Experimental replacement for NVIZ. Displays all active layers in 
-	3D perspective using OpenGL. A new control panel opens to manage the 
-	3D view. 3D view can be zoomed, panned, rotated, and tilted. The 
-	vertical exaggeration of rasters and 3D vectors can be set. Various 
-	color and lighten settings are possible. Not yet functional for 
-	Windows platforms</dd>
-      
+      <dd>Experimental replacement for NVIZ. Displays all active layers in
+    3D perspective using OpenGL. A new control panel opens to manage the
+    3D view. 3D view can be zoomed, panned, rotated, and tilted. The
+    vertical exaggeration of rasters and 3D vectors can be set. Various
+    color and lighten settings are possible. Not yet functional for
+    Windows platforms</dd>
+
       <dt><em>Vector digitizer</em></dt>
-      <dd>Puts display into vector digitizing mode and opens a new digitizing 
-	toolbar. The user can digitize a new vector map or edit an existing
-	map.</dd>
-      
+      <dd>Puts display into vector digitizing mode and opens a new digitizing
+    toolbar. The user can digitize a new vector map or edit an existing
+    map.</dd>
+
       <dt><em>Raster digitizer</em></dt>
-      <dd>Puts display into raster digitizing mode and opens a new digitizing 
-	toolbar. The user can digitize a new raster map or edit an existing
-	map.</dd>
+      <dd>Puts display into raster digitizing mode and opens a new digitizing
+    toolbar. The user can digitize a new raster map or edit an existing
+    map.</dd>
     </dl>
   </dd>
 
@@ -635,74 +636,64 @@ the computational region extents.
   <dd>Render map (re-renders map)</dd>
   <dt>F5</dt>
   <dd>Render map (re-renders map)</dd>
+  <dt>F6</dt>
+  <dd>Enable/disable auto-rendering map (re-renders map)</dd>
 </dl>
 
+<h3>Starting the GUI from command line</h3>
 
-<h3>Starting the graphical user interface</h3>
-
-If the wxGUI is not the default user interface, it can defined as default by
-typing at the GRASS GIS command line prompt:
-
-<div class="code"><pre>
-g.gui -u wxpython
-</pre></div>
-
-Alternatively it may be defined in GISRC file
-(<tt>$HOME/.grass7/rc</tt> on GNU/Linux, <tt>$APPDATA\GRASS7\rc</tt>
-on MS Windows) by <tt>GUI</tt> variable
-
-<div class="code"><pre>
-GUI: wxpython
-</pre></div>
-
-or by the environmental variable <tt>GRASS_GUI</tt>.
-<p>
-The GUI can be quit by selecting the 'File -&gt; Exit GUI' menu item.
-<!-- is &rarr; allowed? -->
-On MS Windows when GRASS is launched without an interactive command line
-this will end the entire GRASS session. In other cases the terminal
-window will remain running; type <tt>exit</tt> at the command prompt
-to end the GRASS session.
-<p>
-The GUI can be restarted from the GRASS command line prompt by typing
+By default, the GUI is always started, but if only the command line (shell) is
+running, the GUI can be also started manually using:
 
 <div class="code"><pre>
 g.gui
 </pre></div>
 
-or
+If the wxGUI is not the default user interface, it can defined as default by
+typing at the GRASS command line:
 
 <div class="code"><pre>
-g.gui wxpython
+g.gui -d wxpython
 </pre></div>
 
-To restart with previously saved workspace file:
+Alternatively, it may be defined in the main configuration file
+(<code>$HOME/.grass8/rc</code> on GNU/Linux and macOS, <code>%APPDATA%\Roaming\GRASS8\rc</code>
+on MS Windows) using the <code>GUI</code> variable set to <code>wxpython</code>
+(<code>GUI: wxpython</code>) or by the environmental variable <code>GRASS_GUI</code>.
+
+
+To start with a previously saved workspace file:
 
 <div class="code"><pre>
-g.gui wxpython workspace=file.gxw
+g.gui workspace=file.gxw
 </pre></div>
 
 <p>
 The user can also start GRASS from the shell command line with the wxGUI
-specifying the <tt>--gui</tt> switch:
+specifying the <code>--gui</code> switch:
 
 <div class="code"><pre>
-grass79 --gui
+grass --gui
 </pre></div>
 
+<p>
+The GUI can be quit by selecting the 'File &gt; Quit GRASS' menu item
+which gives options to close only GUI or to quit GRASS entirely
+if GRASS is running with a command line (a shell in a terminal application).
+Exiting the shell (typically by the <code>exit</code> command) ends the GRASS session
+including any running GUIs.
 
 <h3>Background information</h3>
 
 <b>wxGUI</b> is a native <em>Graphical User Interface</em> (GUI) for
-GRASS GIS written in <a href="http://www.python.org">Python</a>
-using <a href="http://www.wxpython.org">wxPython</a> library.
-
+GRASS written in <a href="https://www.python.org">Python</a>
+using <a href="https://www.wxpython.org">wxPython</a> library.
 
 <h2>SEE ALSO</h2>
 
 <em>
-  <a href="wxGUI.components.html">wxGUI components</a><br>
-  <a href="wxGUI.modules.html">wxGUI module dialogs</a>
+  <a href="wxGUI.components.html">wxGUI components</a>,
+  <a href="wxGUI.modules.html">wxGUI module dialogs</a>,
   <a href="wxGUI.toolboxes.html">wxGUI toolboxes (menu customization)</a>
 </em>
 
@@ -728,8 +719,3 @@ Tereza Fiedlerova, OSGeoREL, Czech Technical University in Prague, Czech Republi
 Matej Krejci, OSGeoREL, Czech Technical University in Prague, Czech Republic<br><br>
 
 Icons created by <a href="http://robert.szczepanek.pl">Robert Szczepanek</a>, Poland (<a href="https://github.com/Cracert/GIS-icons">Git repository</a>)
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

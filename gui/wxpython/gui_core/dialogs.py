@@ -29,34 +29,53 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import sys
 import re
-import six
+from pathlib import Path
 
 import wx
 
 from grass.script import core as grass
-from grass.script.utils import natural_sort, try_remove
+from grass.script.utils import naturally_sorted, try_remove
 
 from grass.pydispatch.signal import Signal
-
 from core import globalvar
 from core.gcmd import GError, RunCommand, GMessage
-from gui_core.gselect import LocationSelect, MapsetSelect, Select, \
-    OgrTypeSelect, SubGroupSelect
-from gui_core.widgets import SingleSymbolPanel, GListCtrl, SimpleValidator, \
-    MapValidator
+from gui_core.gselect import (
+    LocationSelect,
+    MapsetSelect,
+    Select,
+    OgrTypeSelect,
+    SubGroupSelect,
+)
+from gui_core.widgets import SingleSymbolPanel, SimpleValidator, MapValidator
 from core.settings import UserSettings
 from core.debug import Debug
-from gui_core.wrap import Button, CheckListBox, EmptyBitmap, HyperlinkCtrl, \
-    Menu, NewId, SpinCtrl, StaticBox, StaticText, TextCtrl 
+from core.utils import is_shell_running
+from gui_core.wrap import (
+    Button,
+    CheckListBox,
+    EmptyBitmap,
+    HyperlinkCtrl,
+    Menu,
+    NewId,
+    Slider,
+    SpinCtrl,
+    StaticBox,
+    StaticText,
+    TextCtrl,
+    ListBox,
+)
 
 
 class SimpleDialog(wx.Dialog):
-
-    def __init__(self, parent, title, id=wx.ID_ANY,
-                 style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
-                 **kwargs):
+    def __init__(
+        self,
+        parent,
+        title,
+        id=wx.ID_ANY,
+        style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
+        **kwargs,
+    ):
         """General dialog to choose given element (location, mapset, vector map, etc.)
 
         :param parent: window
@@ -86,12 +105,11 @@ class SimpleDialog(wx.Dialog):
         btnSizer.AddButton(self.btnOK)
         btnSizer.Realize()
 
-        self.sizer.Add(self.dataSizer, proportion=1,
-                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+        self.sizer.Add(self.dataSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
 
-        # self.sizer.Add(item = self.informLabel, proportion = 0, flag = wx.ALL, border = 5)
-        self.sizer.Add(btnSizer, proportion=0,
-                       flag=wx.EXPAND | wx.ALL, border=5)
+        # self.sizer.Add(item = self.informLabel, proportion = 0,
+        # flag = wx.ALL, border = 5)
+        self.sizer.Add(btnSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 
     def ValidatorCallback(self, win):
         GMessage(parent=self, message=self.warning)
@@ -102,15 +120,15 @@ class SimpleDialog(wx.Dialog):
 class LocationDialog(SimpleDialog):
     """Dialog used to select location"""
 
-    def __init__(self, parent, title=_("Select GRASS location and mapset")):
+    def __init__(self, parent, title=_("Select GRASS project and mapset")):
         SimpleDialog.__init__(self, parent, title)
 
         self.element1 = LocationSelect(
             parent=self.panel,
             id=wx.ID_ANY,
             size=globalvar.DIALOG_GSELECT_SIZE,
-            validator=SimpleValidator(
-                callback=self.ValidatorCallback))
+            validator=SimpleValidator(callback=self.ValidatorCallback),
+        )
         self.element1.Bind(wx.EVT_TEXT, self.OnLocation)
         self.element1.Bind(wx.EVT_COMBOBOX, self.OnLocation)
         self.element2 = MapsetSelect(
@@ -119,10 +137,10 @@ class LocationDialog(SimpleDialog):
             size=globalvar.DIALOG_GSELECT_SIZE,
             setItems=False,
             skipCurrent=True,
-            validator=SimpleValidator(
-                callback=self.ValidatorCallback))
+            validator=SimpleValidator(callback=self.ValidatorCallback),
+        )
         self.element1.SetFocus()
-        self.warning = _("Location or mapset is not defined.")
+        self.warning = _("Project or mapset is not defined.")
         self._layout()
         self.SetMinSize(self.GetSize())
 
@@ -130,26 +148,26 @@ class LocationDialog(SimpleDialog):
         """Do layout"""
         self.dataSizer.Add(
             StaticText(
-                parent=self.panel,
-                id=wx.ID_ANY,
-                label=_("Name of GRASS location:")),
+                parent=self.panel, id=wx.ID_ANY, label=_("Name of GRASS project:")
+            ),
             proportion=0,
             flag=wx.ALL,
-            border=1)
-        self.dataSizer.Add(self.element1, proportion=0,
-                           flag=wx.EXPAND | wx.ALL, border=1)
+            border=1,
+        )
+        self.dataSizer.Add(
+            self.element1, proportion=0, flag=wx.EXPAND | wx.ALL, border=1
+        )
 
         self.dataSizer.Add(
-            StaticText(
-                parent=self.panel,
-                id=wx.ID_ANY,
-                label=_("Name of mapset:")),
+            StaticText(parent=self.panel, id=wx.ID_ANY, label=_("Name of mapset:")),
             proportion=0,
             flag=wx.EXPAND | wx.ALL,
-            border=1)
+            border=1,
+        )
 
-        self.dataSizer.Add(self.element2, proportion=0,
-                           flag=wx.EXPAND | wx.ALL, border=1)
+        self.dataSizer.Add(
+            self.element2, proportion=0, flag=wx.EXPAND | wx.ALL, border=1
+        )
 
         self.panel.SetSizer(self.sizer)
         self.sizer.Fit(self)
@@ -159,10 +177,9 @@ class LocationDialog(SimpleDialog):
         location = event.GetString()
 
         if location:
-            dbase = grass.gisenv()['GISDBASE']
+            dbase = grass.gisenv()["GISDBASE"]
             self.element2.UpdateItems(dbase=dbase, location=location)
             self.element2.SetSelection(0)
-            mapset = self.element2.GetStringSelection()
 
     def GetValues(self):
         """Get location, mapset"""
@@ -172,24 +189,23 @@ class LocationDialog(SimpleDialog):
 class MapsetDialog(SimpleDialog):
     """Dialog used to select mapset"""
 
-    def __init__(self, parent, title=_("Select mapset in GRASS location"),
-                 location=None):
+    def __init__(
+        self, parent, title=_("Select mapset in GRASS project"), location=None
+    ):
         SimpleDialog.__init__(self, parent, title)
 
         if location:
-            self.SetTitle(self.GetTitle() + ' <%s>' % location)
+            self.SetTitle(self.GetTitle() + " <%s>" % location)
         else:
-            self.SetTitle(
-                self.GetTitle() + ' <%s>' %
-                grass.gisenv()['LOCATION_NAME'])
+            self.SetTitle(self.GetTitle() + " <%s>" % grass.gisenv()["LOCATION_NAME"])
 
         self.element = MapsetSelect(
             parent=self.panel,
             id=wx.ID_ANY,
             skipCurrent=True,
             size=globalvar.DIALOG_GSELECT_SIZE,
-            validator=SimpleValidator(
-                callback=self.ValidatorCallback))
+            validator=SimpleValidator(callback=self.ValidatorCallback),
+        )
 
         self.element.SetFocus()
         self.warning = _("Name of mapset is missing.")
@@ -199,11 +215,15 @@ class MapsetDialog(SimpleDialog):
 
     def _layout(self):
         """Do layout"""
-        self.dataSizer.Add(StaticText(parent=self.panel, id=wx.ID_ANY,
-                                      label=_("Name of mapset:")),
-                           proportion=0, flag=wx.ALL, border=1)
-        self.dataSizer.Add(self.element, proportion=0,
-                           flag=wx.EXPAND | wx.ALL, border=1)
+        self.dataSizer.Add(
+            StaticText(parent=self.panel, id=wx.ID_ANY, label=_("Name of mapset:")),
+            proportion=0,
+            flag=wx.ALL,
+            border=1,
+        )
+        self.dataSizer.Add(
+            self.element, proportion=0, flag=wx.EXPAND | wx.ALL, border=1
+        )
         self.panel.SetSizer(self.sizer)
         self.sizer.Fit(self)
 
@@ -212,7 +232,6 @@ class MapsetDialog(SimpleDialog):
 
 
 class VectorDialog(SimpleDialog):
-
     def __init__(self, parent, title=_("Select vector map"), layerTree=None):
         """Dialog for selecting existing vector map
 
@@ -224,25 +243,33 @@ class VectorDialog(SimpleDialog):
         """
         SimpleDialog.__init__(self, parent, title)
 
-        self.element = Select(
-            parent=self.panel,
-            id=wx.ID_ANY,
-            size=globalvar.DIALOG_GSELECT_SIZE,
-            type='vector',
-            layerTree=layerTree,
-            validator=MapValidator())
+        self.element = self._selection_widget(layerTree)
         self.element.SetFocus()
 
         self.warning = _("Name of vector map is missing.")
         wx.CallAfter(self._layout)
 
+    def _selection_widget(self, layerTree):
+        return Select(
+            parent=self.panel,
+            id=wx.ID_ANY,
+            size=globalvar.DIALOG_GSELECT_SIZE,
+            type="vector",
+            layerTree=layerTree,
+            fullyQualified=True,
+        )
+
     def _layout(self):
         """Do layout"""
-        self.dataSizer.Add(StaticText(parent=self.panel, id=wx.ID_ANY,
-                                      label=_("Name of vector map:")),
-                           proportion=0, flag=wx.ALL, border=1)
-        self.dataSizer.Add(self.element, proportion=0,
-                           flag=wx.EXPAND | wx.ALL, border=1)
+        self.dataSizer.Add(
+            StaticText(parent=self.panel, id=wx.ID_ANY, label=_("Name of vector map:")),
+            proportion=0,
+            flag=wx.ALL,
+            border=1,
+        )
+        self.dataSizer.Add(
+            self.element, proportion=0, flag=wx.EXPAND | wx.ALL, border=1
+        )
 
         self.panel.SetSizer(self.sizer)
         self.sizer.Fit(self)
@@ -253,26 +280,30 @@ class VectorDialog(SimpleDialog):
         :param full: True to get fully qualified name
         """
         name = self.element.GetValue()
-        if full:
-            if '@' in name:
-                return name
-            else:
-                return name + '@' + grass.gisenv()['MAPSET']
-
-        return name.split('@', 1)[0]
+        if not full:
+            return name.split("@", 1)[0]
+        if "@" in name:
+            return name
+        return name + "@" + grass.gisenv()["MAPSET"]
 
 
 class NewVectorDialog(VectorDialog):
-
-    def __init__(self, parent, title=_("Create new vector map"),
-                 disableAdd=False, disableTable=False, showType=False):
+    def __init__(
+        self,
+        parent,
+        title=_("Create new vector map"),
+        disableAdd=False,
+        disableTable=False,
+        showType=False,
+    ):
         """Dialog for creating new vector map
 
         :param parent: parent window
         :param title: window title
         :param disableAdd: disable 'add layer' checkbox
         :param disableTable: disable 'create table' checkbox
-        :param showType: True to show feature type selector (used for creating new empty OGR layers)
+        :param showType: True to show feature type selector (used for creating new
+                         empty OGR layers)
 
         :return: dialog instance
         """
@@ -285,8 +316,9 @@ class NewVectorDialog(VectorDialog):
             self.ftype = None
 
         # create attribute table
-        self.table = wx.CheckBox(parent=self.panel, id=wx.ID_ANY,
-                                 label=_("Create attribute table"))
+        self.table = wx.CheckBox(
+            parent=self.panel, id=wx.ID_ANY, label=_("Create attribute table")
+        )
         self.table.SetValue(True)
         if disableTable:
             self.table.Enable(False)
@@ -294,33 +326,42 @@ class NewVectorDialog(VectorDialog):
         if showType:
             self.keycol = None
         else:
-            self.keycol = TextCtrl(parent=self.panel, id=wx.ID_ANY,
-                                   size=globalvar.DIALOG_SPIN_SIZE)
+            self.keycol = TextCtrl(
+                parent=self.panel, id=wx.ID_ANY, size=globalvar.DIALOG_SPIN_SIZE
+            )
             self.keycol.SetValue(
-                UserSettings.Get(
-                    group='atm',
-                    key='keycolumn',
-                    subkey='value'))
+                UserSettings.Get(group="atm", key="keycolumn", subkey="value")
+            )
             if disableTable:
                 self.keycol.Enable(False)
 
         self.addbox = wx.CheckBox(
             parent=self.panel,
-            label=_('Add created map into layer tree'),
-            style=wx.NO_BORDER)
+            label=_("Add created map into layer tree"),
+            style=wx.NO_BORDER,
+        )
         if disableAdd:
             self.addbox.SetValue(True)
             self.addbox.Enable(False)
         else:
             self.addbox.SetValue(
-                UserSettings.Get(
-                    group='cmd',
-                    key='addNewLayer',
-                    subkey='enabled'))
+                UserSettings.Get(group="cmd", key="addNewLayer", subkey="enabled")
+            )
 
         self.table.Bind(wx.EVT_CHECKBOX, self.OnTable)
 
         self.warning = _("Name of new vector map is missing.")
+
+    def _selection_widget(self, layerTree):
+        return Select(
+            parent=self.panel,
+            id=wx.ID_ANY,
+            size=globalvar.DIALOG_GSELECT_SIZE,
+            type="vector",
+            layerTree=layerTree,
+            fullyQualified=False,
+            validator=MapValidator(),
+        )
 
     def OnTable(self, event):
         if self.keycol:
@@ -330,40 +371,39 @@ class NewVectorDialog(VectorDialog):
         """Do layout"""
         self.dataSizer.Add(
             StaticText(
-                parent=self.panel,
-                id=wx.ID_ANY,
-                label=_("Name for new vector map:")),
+                parent=self.panel, id=wx.ID_ANY, label=_("Name for new vector map:")
+            ),
             proportion=0,
             flag=wx.ALL,
-            border=1)
-        self.dataSizer.Add(self.element, proportion=0,
-                           flag=wx.EXPAND | wx.ALL, border=1)
+            border=1,
+        )
+        self.dataSizer.Add(
+            self.element, proportion=0, flag=wx.EXPAND | wx.ALL, border=1
+        )
         if self.ftype:
             self.dataSizer.AddSpacer(1)
-            self.dataSizer.Add(self.ftype, proportion=0,
-                               flag=wx.EXPAND | wx.ALL, border=1)
+            self.dataSizer.Add(
+                self.ftype, proportion=0, flag=wx.EXPAND | wx.ALL, border=1
+            )
 
-        self.dataSizer.Add(self.table, proportion=0,
-                           flag=wx.EXPAND | wx.ALL, border=1)
+        self.dataSizer.Add(self.table, proportion=0, flag=wx.EXPAND | wx.ALL, border=1)
 
         if self.keycol:
             keySizer = wx.BoxSizer(wx.HORIZONTAL)
             keySizer.Add(
-                StaticText(
-                    parent=self.panel,
-                    label=_("Key column:")),
+                StaticText(parent=self.panel, label=_("Key column:")),
                 proportion=0,
-                flag=wx.ALIGN_CENTER_VERTICAL)
+                flag=wx.ALIGN_CENTER_VERTICAL,
+            )
             keySizer.AddSpacer(10)
-            keySizer.Add(self.keycol, proportion=0,
-                         flag=wx.ALIGN_RIGHT)
-            self.dataSizer.Add(keySizer, proportion=1,
-                               flag=wx.EXPAND | wx.ALL, border=1)
+            keySizer.Add(self.keycol, proportion=0)
+            self.dataSizer.Add(
+                keySizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=1
+            )
 
         self.dataSizer.AddSpacer(5)
 
-        self.dataSizer.Add(self.addbox, proportion=0,
-                           flag=wx.EXPAND | wx.ALL, border=1)
+        self.dataSizer.Add(self.addbox, proportion=0, flag=wx.EXPAND | wx.ALL, border=1)
 
         self.panel.SetSizer(self.sizer)
         self.sizer.Fit(self)
@@ -373,7 +413,7 @@ class NewVectorDialog(VectorDialog):
         """Get key column name"""
         if self.keycol:
             return self.keycol.GetValue()
-        return UserSettings.Get(group='atm', key='keycolumn', subkey='value')
+        return UserSettings.Get(group="atm", key="keycolumn", subkey="value")
 
     def IsChecked(self, key):
         """Get dialog properties
@@ -383,9 +423,9 @@ class NewVectorDialog(VectorDialog):
         :return: True/False
         :return: None on error
         """
-        if key == 'add':
+        if key == "add":
             return self.addbox.IsChecked()
-        elif key == 'table':
+        if key == "table":
             return self.table.IsChecked()
 
         return None
@@ -402,10 +442,16 @@ class NewVectorDialog(VectorDialog):
         return None
 
 
-def CreateNewVector(parent, cmd, title=_('Create new vector map'),
-                    exceptMap=None, giface=None,
-                    disableAdd=False, disableTable=False):
-    """Create new vector map layer
+def CreateNewVector(
+    parent,
+    cmd,
+    title=_("Create new vector map"),
+    exceptMap=None,
+    giface=None,
+    disableAdd=False,
+    disableTable=False,
+):
+    r"""Create new vector map layer
 
     :param cmd: (prog, \*\*kwargs)
     :param title: window title
@@ -417,15 +463,16 @@ def CreateNewVector(parent, cmd, title=_('Create new vector map'),
     :return: dialog instance
     :return: None on error
     """
-    vExternalOut = grass.parse_command('v.external.out', flags='g')
-    isNative = vExternalOut['format'] == 'native'
-    if cmd[0] == 'v.edit' and not isNative:
-        showType = True
-    else:
-        showType = False
-    dlg = NewVectorDialog(parent, title=title,
-                          disableAdd=disableAdd, disableTable=disableTable,
-                          showType=showType)
+    vExternalOut = grass.parse_command("v.external.out", flags="g")
+    isNative = vExternalOut["format"] == "native"
+    showType = bool(cmd[0] == "v.edit" and not isNative)
+    dlg = NewVectorDialog(
+        parent,
+        title=title,
+        disableAdd=disableAdd,
+        disableTable=disableTable,
+        showType=showType,
+    )
 
     if dlg.ShowModal() != wx.ID_OK:
         dlg.Destroy()
@@ -434,103 +481,107 @@ def CreateNewVector(parent, cmd, title=_('Create new vector map'),
     outmap = dlg.GetName()
     key = dlg.GetKey()
     if outmap == exceptMap:
-        GError(parent=parent,
-               message=_("Unable to create vector map <%s>.") % outmap)
+        GError(parent=parent, message=_("Unable to create vector map <%s>.") % outmap)
         dlg.Destroy()
         return None
     if dlg.table.IsEnabled() and not key:
-        GError(parent=parent,
-               message=_("Invalid or empty key column.\n"
-                         "Unable to create vector map <%s>.") % outmap)
+        GError(
+            parent=parent,
+            message=_("Invalid or empty key column.\nUnable to create vector map <%s>.")
+            % outmap,
+        )
         dlg.Destroy()
-        return
+        return None
 
-    if outmap == '':  # should not happen
+    if outmap == "":  # should not happen
         dlg.Destroy()
         return None
 
     # update cmd -> output name defined
     cmd[1][cmd[2]] = outmap
     if showType:
-        cmd[1]['type'] = dlg.GetFeatureType()
+        cmd[1]["type"] = dlg.GetFeatureType()
 
-    curMapset = grass.gisenv()['MAPSET']
+    curMapset = grass.gisenv()["MAPSET"]
     if isNative:
-        listOfVectors = grass.list_grouped('vector')[curMapset]
+        listOfVectors = grass.list_grouped("vector")[curMapset]
     else:
-        listOfVectors = RunCommand('v.external',
-                                   quiet=True,
-                                   parent=parent,
-                                   read=True,
-                                   flags='l',
-                                   input=vExternalOut['dsn']).splitlines()
+        listOfVectors = RunCommand(
+            "v.external",
+            quiet=True,
+            parent=parent,
+            read=True,
+            flags="l",
+            input=vExternalOut["dsn"],
+        ).splitlines()
 
     overwrite = False
-    if not UserSettings.Get(group='cmd', key='overwrite',
-                            subkey='enabled') and outmap in listOfVectors:
+    if (
+        not UserSettings.Get(group="cmd", key="overwrite", subkey="enabled")
+        and outmap in listOfVectors
+    ):
         dlgOw = wx.MessageDialog(
             parent,
             message=_(
                 "Vector map <%s> already exists "
                 "in the current mapset. "
-                "Do you want to overwrite it?") %
-            outmap,
+                "Do you want to overwrite it?"
+            )
+            % outmap,
             caption=_("Overwrite?"),
-            style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
-        if dlgOw.ShowModal() == wx.ID_YES:
-            overwrite = True
-        else:
+            style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
+        )
+        if dlgOw.ShowModal() != wx.ID_YES:
             dlgOw.Destroy()
             dlg.Destroy()
             return None
-
-    if UserSettings.Get(group='cmd', key='overwrite', subkey='enabled'):
         overwrite = True
 
-    ret = RunCommand(prog=cmd[0],
-                     parent=parent,
-                     overwrite=overwrite,
-                     **cmd[1])
+    if UserSettings.Get(group="cmd", key="overwrite", subkey="enabled"):
+        overwrite = True
+
+    ret = RunCommand(prog=cmd[0], parent=parent, overwrite=overwrite, **cmd[1])
     if ret != 0:
         dlg.Destroy()
         return None
 
-    if not isNative and not grass.find_file(
-            outmap, element='vector', mapset=curMapset)['fullname']:
+    if (
+        not isNative
+        and not grass.find_file(outmap, element="vector", mapset=curMapset)["fullname"]
+    ):
         # create link for OGR layers
-        RunCommand('v.external',
-                   overwrite=overwrite,
-                   parent=parent,
-                   input=vExternalOut['dsn'],
-                   layer=outmap)
+        RunCommand(
+            "v.external",
+            overwrite=overwrite,
+            parent=parent,
+            input=vExternalOut["dsn"],
+            layer=outmap,
+        )
 
     # create attribute table
     if dlg.table.IsEnabled() and dlg.table.IsChecked():
         if isNative:
-            sql = 'CREATE TABLE %s (%s INTEGER)' % (outmap, key)
+            sql = "CREATE TABLE %s (%s INTEGER)" % (outmap, key)
 
-            RunCommand('db.connect',
-                       flags='c')
+            RunCommand("db.connect", flags="c")
 
             Debug.msg(1, "SQL: %s" % sql)
-            RunCommand('db.execute',
-                       quiet=True,
-                       parent=parent,
-                       input='-',
-                       stdin=sql)
+            RunCommand("db.execute", quiet=True, parent=parent, input="-", stdin=sql)
 
-            RunCommand('v.db.connect',
-                       quiet=True,
-                       parent=parent,
-                       map=outmap,
-                       table=outmap,
-                       key=key,
-                       layer='1')
+            RunCommand(
+                "v.db.connect",
+                quiet=True,
+                parent=parent,
+                map=outmap,
+                table=outmap,
+                key=key,
+                layer="1",
+            )
         # TODO: how to deal with attribute tables for OGR layers?
 
     # return fully qualified map name
-    if '@' not in outmap:
-        outmap += '@' + grass.gisenv()['MAPSET']
+    if "@" not in outmap:
+        outmap += "@" + grass.gisenv()["MAPSET"]
 
     # if giface:
     #     giface.WriteLog(_("New vector map <%s> created") % outmap)
@@ -539,9 +590,7 @@ def CreateNewVector(parent, cmd, title=_('Create new vector map'),
 
 
 class SavedRegion(wx.Dialog):
-
-    def __init__(self, parent, title, id=wx.ID_ANY, loadsave='load',
-                 **kwargs):
+    def __init__(self, parent, title, id=wx.ID_ANY, loadsave="load", **kwargs):
         """Loading or saving of display extents to saved region file
 
         :param loadsave: load or save region?
@@ -549,49 +598,48 @@ class SavedRegion(wx.Dialog):
         wx.Dialog.__init__(self, parent, id, title, **kwargs)
 
         self.loadsave = loadsave
-        self.wind = ''
+        self.wind = ""
 
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         box = wx.BoxSizer(wx.HORIZONTAL)
         label = StaticText(parent=self, id=wx.ID_ANY)
-        box.Add(
-            label,
-            proportion=0,
-            flag=wx.ALIGN_CENTRE | wx.ALL,
-            border=5)
-        if loadsave == 'load':
+        box.Add(label, proportion=0, flag=wx.ALIGN_CENTRE | wx.ALL, border=5)
+        if loadsave == "load":
             label.SetLabel(_("Load region:"))
             self._selection = Select(
-                parent=self,
-                size=globalvar.DIALOG_GSELECT_SIZE,
-                type='windows')
-        elif loadsave == 'save':
+                parent=self, size=globalvar.DIALOG_GSELECT_SIZE, type="windows"
+            )
+        elif loadsave == "save":
             label.SetLabel(_("Save region:"))
             self._selection = Select(
                 parent=self,
                 size=globalvar.DIALOG_GSELECT_SIZE,
-                type='windows',
-                mapsets=[
-                    grass.gisenv()['MAPSET']],
-                fullyQualified=False)
+                type="windows",
+                mapsets=[grass.gisenv()["MAPSET"]],
+                fullyQualified=False,
+            )
 
-        box.Add(
-            self._selection,
-            proportion=0,
-            flag=wx.ALIGN_CENTRE | wx.ALL,
-            border=5)
+        box.Add(self._selection, proportion=0, flag=wx.ALIGN_CENTRE | wx.ALL, border=5)
         self._selection.SetFocus()
         self._selection.Bind(wx.EVT_TEXT, self.OnRegion)
 
-        sizer.Add(box, proportion=0, flag=wx.GROW |
-                  wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
+        sizer.Add(
+            box,
+            proportion=0,
+            flag=wx.GROW | wx.ALL,
+            border=5,
+        )
 
         line = wx.StaticLine(
-            parent=self, id=wx.ID_ANY, size=(
-                20, -1), style=wx.LI_HORIZONTAL)
-        sizer.Add(line, proportion=0, flag=wx.GROW |
-                  wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT, border=5)
+            parent=self, id=wx.ID_ANY, size=(20, -1), style=wx.LI_HORIZONTAL
+        )
+        sizer.Add(
+            line,
+            proportion=0,
+            flag=wx.GROW | wx.LEFT | wx.RIGHT,
+            border=5,
+        )
 
         btnsizer = wx.StdDialogButtonSizer()
 
@@ -603,11 +651,7 @@ class SavedRegion(wx.Dialog):
         btnsizer.AddButton(btn)
         btnsizer.Realize()
 
-        sizer.Add(
-            btnsizer,
-            proportion=0,
-            flag=wx.ALIGN_RIGHT | wx.ALL,
-            border=5)
+        sizer.Add(btnsizer, proportion=0, flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
 
         self.SetSizer(sizer)
         sizer.Fit(self)
@@ -615,14 +659,18 @@ class SavedRegion(wx.Dialog):
 
     def OnRegion(self, event):
         value = self._selection.GetValue()
-        if '@' in value:
-            value = value.rsplit('@', 1)[0]
+        if "@" in value:
+            value = value.rsplit("@", 1)[0]
         if not grass.legal_name(value):
-            GMessage(parent=self,
-                     message=_("Name cannot begin with '.' "
-                               "and must not contain space, quotes, "
-                               "'/', '\'', '@', ',', '=', '*', "
-                               "and all other non-alphanumeric characters."))
+            GMessage(
+                parent=self,
+                message=_(
+                    "Name cannot begin with '.' "
+                    "and must not contain space, quotes, "
+                    "'/', ''', '@', ',', '=', '*', "
+                    "and all other non-alphanumeric characters."
+                ),
+            )
         else:
             self.wind = value
 
@@ -634,12 +682,18 @@ class SavedRegion(wx.Dialog):
 class GroupDialog(wx.Dialog):
     """Dialog for creating/editing groups"""
 
-    def __init__(self, parent=None, defaultGroup=None, defaultSubgroup=None,
-                 title=_("Create or edit imagery groups"),
-                 style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
-
-        wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY, title=title,
-                           style=style, **kwargs)
+    def __init__(
+        self,
+        parent=None,
+        defaultGroup=None,
+        defaultSubgroup=None,
+        title=_("Create or edit imagery groups"),
+        style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
+        **kwargs,
+    ):
+        wx.Dialog.__init__(
+            self, parent=parent, id=wx.ID_ANY, title=title, style=style, **kwargs
+        )
 
         self.parent = parent
         self.defaultGroup = defaultGroup
@@ -659,7 +713,7 @@ class GroupDialog(wx.Dialog):
         self.gmaps = []
 
         # pattern chosen for filtering
-        self.flt_pattern = ''
+        self.flt_pattern = ""
 
         self.bodySizer = self._createDialogBody()
 
@@ -668,8 +722,7 @@ class GroupDialog(wx.Dialog):
         btnApply = Button(parent=self, id=wx.ID_APPLY)
         btnClose = Button(parent=self, id=wx.ID_CANCEL)
 
-        btnOk.SetToolTip(
-            _("Apply changes to selected group and close dialog"))
+        btnOk.SetToolTip(_("Apply changes to selected group and close dialog"))
         btnApply.SetToolTip(_("Apply changes to selected group"))
         btnClose.SetToolTip(_("Close dialog, changes are not applied"))
 
@@ -688,14 +741,22 @@ class GroupDialog(wx.Dialog):
         btnSizer.Realize()
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
-        mainSizer.Add(self.bodySizer, proportion=1,
-                      flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=10)
-        mainSizer.Add(wx.StaticLine(parent=self, id=wx.ID_ANY,
-                                    style=wx.LI_HORIZONTAL), proportion=0,
-                      flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=10)
+        mainSizer.Add(
+            self.bodySizer, proportion=1, flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=10
+        )
+        mainSizer.Add(
+            wx.StaticLine(parent=self, id=wx.ID_ANY, style=wx.LI_HORIZONTAL),
+            proportion=0,
+            flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
+            border=10,
+        )
 
-        mainSizer.Add(btnSizer, proportion=0, flag=wx.LEFT |
-                      wx.RIGHT | wx.BOTTOM | wx.ALIGN_RIGHT, border=10)
+        mainSizer.Add(
+            btnSizer,
+            proportion=0,
+            flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.ALIGN_RIGHT,
+            border=10,
+        )
 
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
@@ -712,28 +773,38 @@ class GroupDialog(wx.Dialog):
         bodySizer = wx.BoxSizer(wx.VERTICAL)
         # TODO same text in MapLayersDialogBase
 
-        filter_tooltip = _("Put here a regular expression."
-                           " Characters '.*' stand for anything,"
-                           " character '^' stands for the beginning"
-                           " and '$' for the end.")
+        filter_tooltip = _(
+            "Put here a regular expression."
+            " Characters '.*' stand for anything,"
+            " character '^' stands for the beginning"
+            " and '$' for the end."
+        )
 
         # group selection
-        bodySizer.Add(StaticText(parent=self, id=wx.ID_ANY,
-                                 label=_("Select existing group or "
-                                            "enter name of new group:")),
-                      flag=wx.ALIGN_CENTER_VERTICAL | wx.TOP, border=10)
-        self.groupSelect = Select(parent=self, type='group',
-                                  mapsets=[grass.gisenv()['MAPSET']],
-                                  size=globalvar.DIALOG_GSELECT_SIZE,
-                                  fullyQualified=False)  # searchpath?
+        bodySizer.Add(
+            StaticText(
+                parent=self,
+                id=wx.ID_ANY,
+                label=_("Select existing group or enter name of new group:"),
+            ),
+            flag=wx.TOP,
+            border=10,
+        )
+        self.groupSelect = Select(
+            parent=self,
+            type="group",
+            mapsets=[grass.gisenv()["MAPSET"]],
+            size=globalvar.DIALOG_GSELECT_SIZE,
+            fullyQualified=False,
+        )  # searchpath?
 
         bodySizer.Add(self.groupSelect, flag=wx.TOP | wx.EXPAND, border=5)
 
-        self.subg_chbox = wx.CheckBox(parent=self, id=wx.ID_ANY,
-                                      label=_("Edit/create subgroup"))
+        self.subg_chbox = wx.CheckBox(
+            parent=self, id=wx.ID_ANY, label=_("Edit/create subgroup")
+        )
 
-        bodySizer.Add(self.subg_chbox,
-                      flag=wx.ALIGN_CENTER_VERTICAL | wx.TOP, border=10)
+        bodySizer.Add(self.subg_chbox, flag=wx.TOP, border=10)
 
         self.subg_panel = wx.Panel(self)
         subg_sizer = wx.BoxSizer(wx.VERTICAL)
@@ -742,17 +813,13 @@ class GroupDialog(wx.Dialog):
             StaticText(
                 parent=self.subg_panel,
                 id=wx.ID_ANY,
-                label=_(
-                    "Select existing subgroup or "
-                    "enter name of new subgroup:")),
-            flag=wx.ALIGN_CENTER_VERTICAL)
+                label=_("Select existing subgroup or enter name of new subgroup:"),
+            )
+        )
 
         self.subGroupSelect = SubGroupSelect(parent=self.subg_panel)
 
-        subg_sizer.Add(
-            self.subGroupSelect,
-            flag=wx.EXPAND | wx.TOP,
-            border=5)
+        subg_sizer.Add(self.subGroupSelect, flag=wx.EXPAND | wx.TOP, border=5)
 
         self.subg_panel.SetSizer(subg_sizer)
 
@@ -767,56 +834,48 @@ class GroupDialog(wx.Dialog):
 
         gListSizer = wx.GridBagSizer(vgap=3, hgap=2)
 
-        self.g_sel_all = wx.CheckBox(parent=self.gListPanel, id=wx.ID_ANY,
-                                     label=_("Select all"))
+        self.g_sel_all = wx.CheckBox(
+            parent=self.gListPanel, id=wx.ID_ANY, label=_("Select all")
+        )
 
-        gListSizer.Add(self.g_sel_all,
-                       flag=wx.ALIGN_CENTER_VERTICAL,
-                       pos=(0, 1))
+        gListSizer.Add(self.g_sel_all, flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 1))
 
         gListSizer.Add(
-            StaticText(
-                parent=self.gListPanel,
-                label=_("Pattern:")),
+            StaticText(parent=self.gListPanel, label=_("Pattern:")),
             flag=wx.ALIGN_CENTER_VERTICAL,
-            pos=(
-                1,
-                0))
+            pos=(1, 0),
+        )
 
-        self.gfilter = TextCtrl(parent=self.gListPanel, id=wx.ID_ANY,
-                                   value="",
-                                   size=(250, -1))
+        self.gfilter = TextCtrl(
+            parent=self.gListPanel, id=wx.ID_ANY, value="", size=(250, -1)
+        )
         self.gfilter.SetToolTip(filter_tooltip)
 
-        gListSizer.Add(self.gfilter,
-                       flag=wx.EXPAND,
-                       pos=(1, 1))
+        gListSizer.Add(self.gfilter, flag=wx.EXPAND, pos=(1, 1))
 
         gListSizer.Add(
-            StaticText(
-                parent=self.gListPanel,
-                label=_("List of maps:")),
+            StaticText(parent=self.gListPanel, label=_("List of maps:")),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM,
             border=5,
-            pos=(
-                2,
-                0))
+            pos=(2, 0),
+        )
 
         sizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.gLayerBox = wx.ListBox(
-            parent=self.gListPanel, id=wx.ID_ANY, size=(-1, 150),
-            style=wx.LB_MULTIPLE | wx.LB_NEEDED_SB)
+        self.gLayerBox = ListBox(
+            parent=self.gListPanel,
+            id=wx.ID_ANY,
+            size=(-1, 150),
+            style=wx.LB_MULTIPLE | wx.LB_NEEDED_SB,
+        )
         sizer.Add(self.gLayerBox, proportion=1, flag=wx.EXPAND)
 
         self.addLayer = Button(self.gListPanel, id=wx.ID_ADD)
-        self.addLayer.SetToolTip(
-            _("Select map layers and add them to the list."))
+        self.addLayer.SetToolTip(_("Select map layers and add them to the list."))
         buttonSizer.Add(self.addLayer, flag=wx.BOTTOM, border=10)
 
         self.removeLayer = Button(self.gListPanel, id=wx.ID_REMOVE)
-        self.removeLayer.SetToolTip(
-            _("Remove selected layer(s) from list."))
+        self.removeLayer.SetToolTip(_("Remove selected layer(s) from list."))
         buttonSizer.Add(self.removeLayer)
         sizer.Add(buttonSizer, flag=wx.LEFT, border=5)
 
@@ -834,46 +893,37 @@ class GroupDialog(wx.Dialog):
 
         # select toggle
         self.subg_sel_all = wx.CheckBox(
-            parent=self.subgListPanel,
-            id=wx.ID_ANY,
-            label=_("Select all"))
+            parent=self.subgListPanel, id=wx.ID_ANY, label=_("Select all")
+        )
 
-        subgListSizer.Add(self.subg_sel_all,
-                          flag=wx.ALIGN_CENTER_VERTICAL,
-                          pos=(0, 1))
+        subgListSizer.Add(self.subg_sel_all, flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 1))
 
         subgListSizer.Add(
-            StaticText(
-                parent=self.subgListPanel,
-                label=_("Pattern:")),
+            StaticText(parent=self.subgListPanel, label=_("Pattern:")),
             flag=wx.ALIGN_CENTER_VERTICAL,
-            pos=(
-                1,
-                0))
+            pos=(1, 0),
+        )
 
-        self.subgfilter = TextCtrl(parent=self.subgListPanel, id=wx.ID_ANY,
-                                      value="",
-                                      size=(250, -1))
+        self.subgfilter = TextCtrl(
+            parent=self.subgListPanel, id=wx.ID_ANY, value="", size=(250, -1)
+        )
         self.subgfilter.SetToolTip(filter_tooltip)
 
-        subgListSizer.Add(self.subgfilter,
-                          flag=wx.EXPAND,
-                          pos=(1, 1))
+        subgListSizer.Add(self.subgfilter, flag=wx.EXPAND, pos=(1, 1))
 
         subgListSizer.Add(
-            StaticText(
-                parent=self.subgListPanel,
-                label=_("List of maps:")),
+            StaticText(parent=self.subgListPanel, label=_("List of maps:")),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM,
             border=5,
-            pos=(
-                2,
-                0))
+            pos=(2, 0),
+        )
 
         self.subgListBox = CheckListBox(
-            parent=self.subgListPanel, id=wx.ID_ANY, size=(250, 100))
+            parent=self.subgListPanel, id=wx.ID_ANY, size=(250, 100)
+        )
         self.subgListBox.SetToolTip(
-            _("Check maps from group to be included into subgroup."))
+            _("Check maps from group to be included into subgroup.")
+        )
 
         subgListSizer.Add(self.subgListBox, flag=wx.EXPAND, pos=(2, 1))
         subgListSizer.AddGrowableCol(1)
@@ -883,10 +933,7 @@ class GroupDialog(wx.Dialog):
         bodySizer.Add(self.subgListPanel, proportion=1, flag=wx.EXPAND)
 
         self.infoLabel = StaticText(parent=self, id=wx.ID_ANY)
-        bodySizer.Add(
-            self.infoLabel,
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.TOP | wx.BOTTOM,
-            border=5)
+        bodySizer.Add(self.infoLabel, flag=wx.TOP | wx.BOTTOM, border=5)
 
         # bindings
         self.gfilter.Bind(wx.EVT_TEXT, self.OnGroupFilter)
@@ -897,8 +944,7 @@ class GroupDialog(wx.Dialog):
         self.addLayer.Bind(wx.EVT_BUTTON, self.OnAddLayer)
         self.removeLayer.Bind(wx.EVT_BUTTON, self.OnRemoveLayer)
         self.subg_chbox.Bind(wx.EVT_CHECKBOX, self.OnSubgChbox)
-        self.subGroupSelect.Bind(
-            wx.EVT_TEXT, lambda event: self.SubGroupSelected())
+        self.subGroupSelect.Bind(wx.EVT_TEXT, lambda event: self.SubGroupSelected())
         self.subg_sel_all.Bind(wx.EVT_CHECKBOX, self.OnSubgSelAll)
         self.g_sel_all.Bind(wx.EVT_CHECKBOX, self.OnGSelAll)
 
@@ -931,8 +977,7 @@ class GroupDialog(wx.Dialog):
         if not check:
             self.gLayerBox.DeselectAll()
         else:
-            for item in range(self.subgListBox.GetCount()):
-                self.gLayerBox.Select(item)
+            self.gLayerBox.SelectAll()
 
         event.Skip()
 
@@ -940,8 +985,7 @@ class GroupDialog(wx.Dialog):
         check = False
 
         nsel = len(self.gLayerBox.GetSelections())
-        if self.gLayerBox.GetCount() == nsel and \
-           self.gLayerBox.GetCount() != 0:
+        if self.gLayerBox.GetCount() == nsel and self.gLayerBox.GetCount() != 0:
             check = True
 
         self.g_sel_all.SetValue(check)
@@ -1037,7 +1081,8 @@ class GroupDialog(wx.Dialog):
     def OnAddLayer(self, event):
         """Add new layer to listbox"""
         dlg = MapLayersDialogForGroups(
-            parent=self, title=_("Add selected map layers into group"))
+            parent=self, title=_("Add selected map layers into group")
+        )
 
         if dlg.ShowModal() != wx.ID_OK:
             dlg.Destroy()
@@ -1052,8 +1097,13 @@ class GroupDialog(wx.Dialog):
 
     def OnRemoveLayer(self, event):
         """Remove layer from listbox"""
-        while self.gLayerBox.GetSelections():
-            sel = self.gLayerBox.GetSelections()[0]
+        # After removal of last selected item by .Delete,
+        # ListBox selects the last of remaining items in the list
+        # and thus adds a new item to GetSelections
+        # Items are removed in reverse order to maintain positional number
+        # of other selected items (ListBox is dynamic!)
+        selections = sorted(self.gLayerBox.GetSelections(), reverse=True)
+        for sel in selections:
             m = self.gLayerBox.GetString(sel)
             self.gLayerBox.Delete(sel)
             self.gmaps.remove(m)
@@ -1062,10 +1112,7 @@ class GroupDialog(wx.Dialog):
     def GetLayers(self):
         """Get layers"""
         if self.edit_subg:
-            layers = []
-            for maps, sel in six.iteritems(self.subgmaps):
-                if sel:
-                    layers.append(maps)
+            layers = [maps for maps, sel in self.subgmaps.items() if sel]
         else:
             layers = self.gmaps[:]
 
@@ -1077,10 +1124,10 @@ class GroupDialog(wx.Dialog):
         wx.CallAfter(self.GroupSelected)
 
     def GroupSelected(self):
-        """Group was selected, check if changes were apllied"""
+        """Group was selected, check if changes were applied"""
         self._checkChange()
         group, s = self.GetSelectedGroup()
-        maps = list()
+        maps = []
         groups = self.GetExistGroups()
         if group in groups:
             maps = self.GetGroupLayers(group)
@@ -1108,19 +1155,19 @@ class GroupDialog(wx.Dialog):
         self.subgListBox.Set(maps)
 
         for i, m in enumerate(maps):
-            if m in six.iterkeys(self.subgmaps) and self.subgmaps[m]:
+            if m in self.subgmaps.keys() and self.subgmaps[m]:
                 self.subgListBox.Check(i)
 
         self._checkSubGSellAll()
 
     def SubGroupSelected(self):
-        """Subgroup was selected, check if changes were apllied"""
+        """Subgroup was selected, check if changes were applied"""
         self._checkChange()
 
         subgroup = self.subGroupSelect.GetValue().strip()
         group = self.currentGroup
 
-        gmaps = list()
+        gmaps = []
         groups = self.GetExistGroups()
 
         self.subgmaps = {}
@@ -1151,14 +1198,13 @@ class GroupDialog(wx.Dialog):
         """Apply filter for strings in data list"""
         flt_data = []
         if len(self.flt_pattern) == 0:
-            flt_data = data[:]
-            return flt_data
+            return data[:]
 
         for dt in data:
             try:
                 if re.compile(self.flt_pattern).search(dt):
                     flt_data.append(dt)
-            except:
+            except re.error:
                 pass
 
         return flt_data
@@ -1173,12 +1219,11 @@ class GroupDialog(wx.Dialog):
         if self.currentGroup and self.dataChanged:
             dlg = wx.MessageDialog(
                 self,
-                message=_(
-                    "Group <%s> was changed, "
-                    "do you want to apply changes?") %
-                self.currentGroup,
+                message=_("Group <%s> was changed, do you want to apply changes?")
+                % self.currentGroup,
                 caption=_("Unapplied changes"),
-                style=wx.YES_NO | wx.ICON_QUESTION | wx.YES_DEFAULT)
+                style=wx.YES_NO | wx.ICON_QUESTION | wx.YES_DEFAULT,
+            )
             if dlg.ShowModal() == wx.ID_YES:
                 self.ApplyChanges()
 
@@ -1189,12 +1234,11 @@ class GroupDialog(wx.Dialog):
         if self.currentSubgroup and self.dataChanged:
             dlg = wx.MessageDialog(
                 self,
-                message=_(
-                    "Subgroup <%s> was changed, "
-                    "do you want to apply changes?") %
-                self.currentSubgroup,
+                message=_("Subgroup <%s> was changed, do you want to apply changes?")
+                % self.currentSubgroup,
                 caption=_("Unapplied changes"),
-                style=wx.YES_NO | wx.ICON_QUESTION | wx.YES_DEFAULT)
+                style=wx.YES_NO | wx.ICON_QUESTION | wx.YES_DEFAULT,
+            )
             if dlg.ShowModal() == wx.ID_YES:
                 self.ApplyChanges()
 
@@ -1226,19 +1270,19 @@ class GroupDialog(wx.Dialog):
 
         ret = None
         if remove:
-            ret = RunCommand('i.group',
-                             parent=self,
-                             group=group,
-                             flags='r',
-                             input=','.join(remove),
-                             **kwargs)
+            ret = RunCommand(
+                "i.group",
+                parent=self,
+                group=group,
+                flags="r",
+                input=",".join(remove),
+                **kwargs,
+            )
 
         if add:
-            ret = RunCommand('i.group',
-                             parent=self,
-                             group=group,
-                             input=','.join(add),
-                             **kwargs)
+            ret = RunCommand(
+                "i.group", parent=self, group=group, input=",".join(add), **kwargs
+            )
 
         return ret
 
@@ -1246,35 +1290,29 @@ class GroupDialog(wx.Dialog):
         """Create new group"""
         layers = self.GetLayers()
         if not layers:
-            GMessage(parent=self,
-                     message=_("No raster maps selected."))
+            GMessage(parent=self, message=_("No raster maps selected."))
             return 1
 
         kwargs = {}
         if subgroup:
             kwargs["subgroup"] = subgroup
 
-        ret = RunCommand('i.group',
-                         parent=self,
-                         group=group,
-                         input=layers,
-                         **kwargs)
+        ret = RunCommand("i.group", parent=self, group=group, input=layers, **kwargs)
         # update subgroup select
         self.SubGroupSelected()
         return ret
 
     def GetExistGroups(self):
         """Returns existing groups in current mapset"""
-        return grass.list_grouped('group')[grass.gisenv()['MAPSET']]
+        return grass.list_grouped("group")[grass.gisenv()["MAPSET"]]
 
     def GetExistSubgroups(self, group):
         """Returns existing subgroups in a group"""
-        return RunCommand('i.group', group=group,
-                          read=True, flags='sg').splitlines()
+        return RunCommand("i.group", group=group, read=True, flags="sg").splitlines()
 
     def ShowResult(self, group, returnCode, create):
-        """Show if operation was successfull."""
-        group += '@' + grass.gisenv()['MAPSET']
+        """Show if operation was successful."""
+        group += "@" + grass.gisenv()["MAPSET"]
         if returnCode is None:
             label = _("No changes to apply in group <%s>.") % group
         elif returnCode == 0:
@@ -1282,7 +1320,7 @@ class GroupDialog(wx.Dialog):
                 label = _("Group <%s> was successfully created.") % group
             else:
                 label = _("Group <%s> was successfully changed.") % group
-        else:
+        else:  # noqa: PLR5501
             if create:
                 label = _("Creating of new group <%s> failed.") % group
             else:
@@ -1293,49 +1331,38 @@ class GroupDialog(wx.Dialog):
 
     def GetSelectedGroup(self):
         """Return currently selected group (without mapset)"""
-        g = self.groupSelect.GetValue().split('@')[0]
-        if self.edit_subg:
-            s = self.subGroupSelect.GetValue()
-        else:
-            s = None
+        g = self.groupSelect.GetValue().split("@")[0]
+        s = self.subGroupSelect.GetValue() if self.edit_subg else None
         return g, s
 
     def GetGroupLayers(self, group, subgroup=None):
         """Get layers in group"""
-        kwargs = dict()
-        kwargs['group'] = group
+        kwargs = {"group": group}
         if subgroup:
-            kwargs['subgroup'] = subgroup
+            kwargs["subgroup"] = subgroup
 
-        res = RunCommand('i.group',
-                         parent=self,
-                         flags='g',
-                         read=True, **kwargs)
+        res = RunCommand("i.group", parent=self, flags="g", read=True, **kwargs)
         if not res:
             return []
         return res.splitlines()
 
     def ClearNotification(self):
         """Clear notification string"""
-        self.infoLabel.SetLabel("")
+        if self.infoLabel:
+            self.infoLabel.SetLabel("")
 
     def ApplyChanges(self):
         """Create or edit group"""
         group = self.currentGroup
         if not group:
-            GMessage(parent=self,
-                     message=_("No group selected."))
+            GMessage(parent=self, message=_("No group selected."))
             return False
 
         if self.edit_subg and not self.currentSubgroup:
-            GMessage(parent=self,
-                     message=_("No subgroup selected."))
+            GMessage(parent=self, message=_("No subgroup selected."))
             return 0
 
-        if self.edit_subg:
-            subgroup = self.currentSubgroup
-        else:
-            subgroup = None
+        subgroup = self.currentSubgroup if self.edit_subg else None
 
         groups = self.GetExistGroups()
         if group in groups:
@@ -1373,27 +1400,30 @@ class MapLayersDialogBase(wx.Dialog):
     MapLayersDialog. Base class contains core functionality.
     """
 
-    def __init__(self, parent, title,
-                 style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
-        wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY, title=title,
-                           style=style, **kwargs)
+    def __init__(
+        self, parent, title, style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs
+    ):
+        wx.Dialog.__init__(
+            self, parent=parent, id=wx.ID_ANY, title=title, style=style, **kwargs
+        )
 
         self.parent = parent  # GMFrame or ?
 
-        self.applyAddingMapLayers = Signal(
-            'MapLayersDialogBase.applyAddingMapLayers')
+        self.applyAddingMapLayers = Signal("MapLayersDialogBase.applyAddingMapLayers")
 
         self.mainSizer = wx.BoxSizer(wx.VERTICAL)
 
         # dialog body
         self.bodySizer = self._createDialogBody()
-        self.mainSizer.Add(self.bodySizer, proportion=1,
-                           flag=wx.EXPAND | wx.ALL, border=5)
+        self.mainSizer.Add(
+            self.bodySizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5
+        )
 
         # update list of layer to be loaded
         self.map_layers = []  # list of map layers (full list type/mapset)
-        self.LoadMapLayers(self.GetLayerType(cmd=True),
-                           self.mapset.GetStringSelection())
+        self.LoadMapLayers(
+            self.GetLayerType(cmd=True), self.mapset.GetStringSelection()
+        )
 
         self._fullyQualifiedNames()
         self._modelerDSeries()
@@ -1410,8 +1440,9 @@ class MapLayersDialogBase(wx.Dialog):
         self._addApplyButton()
         self.btnSizer.Realize()
 
-        self.mainSizer.Add(self.btnSizer, proportion=0,
-                           flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+        self.mainSizer.Add(
+            self.btnSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5
+        )
 
         self.SetSizer(self.mainSizer)
         self.mainSizer.Fit(self)
@@ -1423,23 +1454,24 @@ class MapLayersDialogBase(wx.Dialog):
         """Method used only by MapLayersDialogForModeler,
         for other subclasses does nothing.
         """
-        pass
 
     def _addApplyButton(self):
         """Method used only by MapLayersDialog,
         for other subclasses does nothing.
         """
-        pass
 
     def _fullyQualifiedNames(self):
-        """Adds CheckBox which determines is fully qualified names are retuned.
-        """
+        """Adds CheckBox which determines if fully qualified names are returned."""
         self.fullyQualified = wx.CheckBox(
-            parent=self, id=wx.ID_ANY,
-            label=_("Use fully-qualified map names"))
+            parent=self, id=wx.ID_ANY, label=_("Use fully-qualified map names")
+        )
         self.fullyQualified.SetValue(True)
-        self.mainSizer.Add(self.fullyQualified, proportion=0,
-                           flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5)
+        self.mainSizer.Add(
+            self.fullyQualified,
+            proportion=0,
+            flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
+            border=5,
+        )
 
     def _useFullyQualifiedNames(self):
         return self.fullyQualified.IsChecked()
@@ -1447,12 +1479,12 @@ class MapLayersDialogBase(wx.Dialog):
     def _layerTypes(self):
         """Determines which layer types can be chosen.
 
-         Valid values:
-         - raster
-         - raster3d
-         - vector
-         """
-        return [_('raster'), _('3D raster'), _('vector')]
+        Valid values:
+        - raster
+        - raster3d
+        - vector
+        """
+        return [_("raster"), _("3D raster"), _("vector")]
 
     def _selectAll(self):
         """Check all layers by default"""
@@ -1462,48 +1494,46 @@ class MapLayersDialogBase(wx.Dialog):
         bodySizer = wx.GridBagSizer(vgap=3, hgap=3)
 
         # layer type
-        bodySizer.Add(StaticText(parent=self, label=_("Map type:")),
-                      flag=wx.ALIGN_CENTER_VERTICAL,
-                      pos=(0, 0))
+        bodySizer.Add(
+            StaticText(parent=self, label=_("Map type:")),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            pos=(0, 0),
+        )
 
-        self.layerType = wx.Choice(parent=self, id=wx.ID_ANY,
-                                   choices=self._layerTypes(), size=(100, -1))
+        self.layerType = wx.Choice(
+            parent=self, id=wx.ID_ANY, choices=self._layerTypes(), size=(100, -1)
+        )
 
         self.layerType.SetSelection(0)
 
-        bodySizer.Add(self.layerType,
-                      pos=(0, 1))
+        bodySizer.Add(self.layerType, pos=(0, 1))
         self.layerType.Bind(wx.EVT_CHOICE, self.OnChangeParams)
 
         # select toggle
-        self.toggle = wx.CheckBox(parent=self, id=wx.ID_ANY,
-                                  label=_("Select toggle"))
+        self.toggle = wx.CheckBox(parent=self, id=wx.ID_ANY, label=_("Select toggle"))
         self.toggle.SetValue(self._selectAll())
-        bodySizer.Add(self.toggle,
-                      flag=wx.ALIGN_CENTER_VERTICAL,
-                      pos=(0, 2))
+        bodySizer.Add(self.toggle, flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 2))
 
         # mapset filter
-        bodySizer.Add(StaticText(parent=self, label=_("Mapset:")),
-                      flag=wx.ALIGN_CENTER_VERTICAL,
-                      pos=(1, 0))
+        bodySizer.Add(
+            StaticText(parent=self, label=_("Mapset:")),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            pos=(1, 0),
+        )
 
         self.mapset = MapsetSelect(parent=self, searchPath=True)
-        self.mapset.SetStringSelection(grass.gisenv()['MAPSET'])
-        bodySizer.Add(self.mapset,
-                      pos=(1, 1), span=(1, 2))
+        self.mapset.SetStringSelection(grass.gisenv()["MAPSET"])
+        bodySizer.Add(self.mapset, pos=(1, 1), span=(1, 2))
 
         # map name filter
-        bodySizer.Add(StaticText(parent=self, label=_("Pattern:")),
-                      flag=wx.ALIGN_CENTER_VERTICAL,
-                      pos=(2, 0))
+        bodySizer.Add(
+            StaticText(parent=self, label=_("Pattern:")),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            pos=(2, 0),
+        )
 
-        self.filter = TextCtrl(parent=self, id=wx.ID_ANY,
-                               value="",
-                               size=(250, -1))
-        bodySizer.Add(self.filter,
-                      flag=wx.EXPAND,
-                      pos=(2, 1), span=(1, 2))
+        self.filter = TextCtrl(parent=self, id=wx.ID_ANY, value="", size=(250, -1))
+        bodySizer.Add(self.filter, flag=wx.EXPAND, pos=(2, 1), span=(1, 2))
 
         self.filter.SetFocus()
         # TODO same text in GroupDialog
@@ -1512,23 +1542,20 @@ class MapLayersDialogBase(wx.Dialog):
                 "Put here a regular expression."
                 " Characters '.*' stand for anything,"
                 " character '^' stands for the beginning"
-                " and '$' for the end."))
+                " and '$' for the end."
+            )
+        )
 
         # layer list
         bodySizer.Add(
-            StaticText(
-                parent=self,
-                label=_("List of maps:")),
+            StaticText(parent=self, label=_("List of maps:")),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_TOP,
-            pos=(
-                3,
-                0))
-        self.layers = CheckListBox(parent=self, id=wx.ID_ANY,
-                                   size=(250, 100),
-                                   choices=[])
-        bodySizer.Add(self.layers,
-                      flag=wx.EXPAND,
-                      pos=(3, 1), span=(1, 2))
+            pos=(3, 0),
+        )
+        self.layers = CheckListBox(
+            parent=self, id=wx.ID_ANY, size=(250, 100), choices=[]
+        )
+        bodySizer.Add(self.layers, flag=wx.EXPAND, pos=(3, 1), span=(1, 2))
 
         bodySizer.AddGrowableCol(1)
         bodySizer.AddGrowableRow(3)
@@ -1549,18 +1576,18 @@ class MapLayersDialogBase(wx.Dialog):
         :param str mapset: mapset name
         """
         self.map_layers = grass.list_grouped(type=type)[mapset]
-        self.layers.Set(natural_sort(self.map_layers))
+        self.layers.Set(naturally_sorted(self.map_layers))
 
         # check all items by default
         for item in range(self.layers.GetCount()):
-
             self.layers.Check(item, check=self._selectAll())
 
     def OnChangeParams(self, event):
         """Filter parameters changed by user"""
         # update list of layer to be loaded
-        self.LoadMapLayers(self.GetLayerType(cmd=True),
-                           self.mapset.GetStringSelection())
+        self.LoadMapLayers(
+            self.GetLayerType(cmd=True), self.mapset.GetStringSelection()
+        )
 
         event.Skip()
 
@@ -1613,9 +1640,9 @@ class MapLayersDialogBase(wx.Dialog):
             try:
                 if re.compile(event.GetString()).search(layer):
                     list.append(layer)
-            except:
+            except re.error:
                 pass
-        list = natural_sort(list)
+        list = naturally_sorted(list)
 
         self.layers.Set(list)
         self.OnSelectAll(None)
@@ -1642,7 +1669,7 @@ class MapLayersDialogBase(wx.Dialog):
             if not self.layers.IsChecked(item):
                 continue
             if self._useFullyQualifiedNames():
-                layerNames.append(self.layers.GetString(item) + '@' + mapset)
+                layerNames.append(self.layers.GetString(item) + "@" + mapset)
             else:
                 layerNames.append(self.layers.GetString(item))
 
@@ -1658,11 +1685,11 @@ class MapLayersDialogBase(wx.Dialog):
 
         sel = self.layerType.GetSelection()
         if sel == 0:
-            ltype = 'raster'
+            ltype = "raster"
         elif sel == 1:
-            ltype = 'raster_3d'
+            ltype = "raster_3d"
         else:
-            ltype = 'vector'
+            ltype = "vector"
 
         return ltype
 
@@ -1674,8 +1701,7 @@ class MapLayersDialog(MapLayersDialogBase):
     """
 
     def __init__(self, parent, title, **kwargs):
-        MapLayersDialogBase.__init__(
-            self, parent=parent, title=title, **kwargs)
+        MapLayersDialogBase.__init__(self, parent=parent, title=title, **kwargs)
 
     def _addApplyButton(self):
         btnApply = Button(parent=self, id=wx.ID_APPLY)
@@ -1683,25 +1709,27 @@ class MapLayersDialog(MapLayersDialogBase):
         btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
 
     def OnApply(self, event):
-        self.applyAddingMapLayers.emit(mapLayers=self.GetMapLayers(),
-                                       ltype=self.GetLayerType(cmd=True))
+        self.applyAddingMapLayers.emit(
+            mapLayers=self.GetMapLayers(), ltype=self.GetLayerType(cmd=True)
+        )
 
 
 class MapLayersDialogForGroups(MapLayersDialogBase):
-    """Subclass of MapLayersDialogBase used for specyfying maps in an imagery group.
+    """Subclass of MapLayersDialogBase used for specifying maps in an imagery group.
 
     Shows only raster maps.
     """
 
     def __init__(self, parent, title, **kwargs):
-        MapLayersDialogBase.__init__(
-            self, parent=parent, title=title, **kwargs)
+        MapLayersDialogBase.__init__(self, parent=parent, title=title, **kwargs)
 
     def _layerTypes(self):
-        return [_('raster'), ]
+        return [
+            _("raster"),
+        ]
 
     def _selectAll(self):
-        """Could be overriden"""
+        """Could be overridden"""
         return False
 
     def _fullyQualifiedNames(self):
@@ -1712,19 +1740,19 @@ class MapLayersDialogForGroups(MapLayersDialogBase):
 
 
 class MapLayersDialogForModeler(MapLayersDialogBase):
-    """Subclass of MapLayersDialogBase used in Modeler.
-    """
+    """Subclass of MapLayersDialogBase used in Modeler."""
 
     def __init__(self, parent, title, **kwargs):
-        MapLayersDialogBase.__init__(
-            self, parent=parent, title=title, **kwargs)
+        MapLayersDialogBase.__init__(self, parent=parent, title=title, **kwargs)
 
     def _modelerDSeries(self):
-        self.dseries = wx.CheckBox(parent=self, id=wx.ID_ANY,
-                                   label=_("Dynamic series (%s)") % 'g.list')
+        self.dseries = wx.CheckBox(
+            parent=self, id=wx.ID_ANY, label=_("Dynamic series (%s)") % "g.list"
+        )
         self.dseries.SetValue(False)
-        self.mainSizer.Add(self.dseries, proportion=0,
-                           flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5)
+        self.mainSizer.Add(
+            self.dseries, proportion=0, flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5
+        )
 
     def GetDSeries(self):
         """Used by modeler only
@@ -1732,13 +1760,13 @@ class MapLayersDialogForModeler(MapLayersDialogBase):
         :return: g.list command
         """
         if not self.dseries or not self.dseries.IsChecked():
-            return ''
+            return ""
 
-        cond = 'map in `g.list type=%s ' % self.GetLayerType(cmd=True)
+        cond = "map in `g.list type=%s " % self.GetLayerType(cmd=True)
         patt = self.filter.GetValue()
         if patt:
-            cond += 'pattern=%s ' % patt
-        cond += 'mapset=%s`' % self.mapset.GetStringSelection()
+            cond += "pattern=%s " % patt
+        cond += "mapset=%s`" % self.mapset.GetStringSelection()
 
         return cond
 
@@ -1748,51 +1776,51 @@ class SetOpacityDialog(wx.Dialog):
     Dialog expects opacity between 0 and 1 and returns this range, too.
     """
 
-    def __init__(self, parent, id=wx.ID_ANY, title=_("Set Map Layer Opacity"),
-                 size=wx.DefaultSize, pos=wx.DefaultPosition,
-                 style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, opacity=1):
-
-        self.parent = parent    # GMFrame
+    def __init__(
+        self,
+        parent,
+        id=wx.ID_ANY,
+        title=_("Set Map Layer Opacity"),
+        size=wx.DefaultSize,
+        pos=wx.DefaultPosition,
+        style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
+        opacity=1,
+    ):
+        self.parent = parent  # GMFrame
         self.opacity = opacity  # current opacity
 
-        super(
-            SetOpacityDialog,
-            self).__init__(
-            parent,
-            id=id,
-            pos=pos,
-            size=size,
-            style=style,
-            title=title)
+        super().__init__(parent, id=id, pos=pos, size=size, style=style, title=title)
 
-        self.applyOpacity = Signal('SetOpacityDialog.applyOpacity')
+        self.applyOpacity = Signal("SetOpacityDialog.applyOpacity")
         panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         box = wx.GridBagSizer(vgap=5, hgap=5)
-        self.value = wx.Slider(
-            panel, id=wx.ID_ANY, value=int(self.opacity * 100),
+        box.AddGrowableCol(0)
+        self.value = Slider(
+            panel,
+            id=wx.ID_ANY,
+            value=int(self.opacity * 100),
             style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS | wx.SL_TOP | wx.SL_LABELS,
-            minValue=0, maxValue=100, size=(350, -1))
+            minValue=0,
+            maxValue=100,
+        )
 
-        box.Add(self.value,
-                flag=wx.ALIGN_CENTRE, pos=(0, 0), span=(1, 2))
-        box.Add(StaticText(parent=panel, id=wx.ID_ANY,
-                           label=_("transparent")),
-                pos=(1, 0))
-        box.Add(StaticText(parent=panel, id=wx.ID_ANY,
-                           label=_("opaque")),
-                flag=wx.ALIGN_RIGHT,
-                pos=(1, 1))
+        box.Add(self.value, flag=wx.EXPAND, pos=(0, 0), span=(1, 2))
+        box.Add(
+            StaticText(parent=panel, id=wx.ID_ANY, label=_("transparent")), pos=(1, 0)
+        )
+        box.Add(
+            StaticText(parent=panel, id=wx.ID_ANY, label=_("opaque")),
+            flag=wx.ALIGN_RIGHT,
+            pos=(1, 1),
+        )
 
-        sizer.Add(box, proportion=0,
-                  flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
+        sizer.Add(box, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 
-        line = wx.StaticLine(parent=panel, id=wx.ID_ANY,
-                             style=wx.LI_HORIZONTAL)
-        sizer.Add(line, proportion=0,
-                  flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
+        line = wx.StaticLine(parent=panel, id=wx.ID_ANY, style=wx.LI_HORIZONTAL)
+        sizer.Add(line, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 
         # buttons
         btnsizer = wx.StdDialogButtonSizer()
@@ -1809,21 +1837,22 @@ class SetOpacityDialog(wx.Dialog):
         btnsizer.AddButton(btnApply)
         btnsizer.Realize()
 
-        sizer.Add(btnsizer, proportion=0,
-                  flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
+        sizer.Add(btnsizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 
         panel.SetSizer(sizer)
         sizer.Fit(panel)
 
-        self.SetSize(self.GetBestSize())
+        w, h = self.GetBestSize()
+        self.SetSize(wx.Size(w, h))
+        self.SetMaxSize(wx.Size(-1, h))
+        self.SetMinSize(wx.Size(w, h))
 
         self.Layout()
 
     def GetOpacity(self):
         """Button 'OK' pressed"""
         # return opacity value
-        opacity = float(self.value.GetValue()) / 100
-        return opacity
+        return float(self.value.GetValue()) / 100
 
     def OnApply(self, event):
         self.applyOpacity.emit(value=self.GetOpacity())
@@ -1831,51 +1860,43 @@ class SetOpacityDialog(wx.Dialog):
 
 def GetImageHandlers(image):
     """Get list of supported image handlers"""
-    lext = list()
-    ltype = list()
+    lext = []
+    ltype = []
     try:
         for h in image.GetHandlers():
             lext.append(h.GetExtension())
     except AttributeError:
-        lext = {'png', 'gif', 'jpg', 'pcx', 'pnm', 'tif', 'xpm'}
+        lext = {"png", "gif", "jpg", "pcx", "pnm", "tif", "xpm"}
 
-    filetype = ''
-    if 'png' in lext:
+    filetype = ""
+    if "png" in lext:
         filetype += "PNG file (*.png)|*.png|"
-        ltype.append({'type': wx.BITMAP_TYPE_PNG,
-                      'ext': 'png'})
+        ltype.append({"type": wx.BITMAP_TYPE_PNG, "ext": "png"})
     filetype += "BMP file (*.bmp)|*.bmp|"
-    ltype.append({'type': wx.BITMAP_TYPE_BMP,
-                  'ext': 'bmp'})
-    if 'gif' in lext:
+    ltype.append({"type": wx.BITMAP_TYPE_BMP, "ext": "bmp"})
+    if "gif" in lext:
         filetype += "GIF file (*.gif)|*.gif|"
-        ltype.append({'type': wx.BITMAP_TYPE_GIF,
-                      'ext': 'gif'})
+        ltype.append({"type": wx.BITMAP_TYPE_GIF, "ext": "gif"})
 
-    if 'jpg' in lext:
+    if "jpg" in lext:
         filetype += "JPG file (*.jpg)|*.jpg|"
-        ltype.append({'type': wx.BITMAP_TYPE_JPEG,
-                      'ext': 'jpg'})
+        ltype.append({"type": wx.BITMAP_TYPE_JPEG, "ext": "jpg"})
 
-    if 'pcx' in lext:
+    if "pcx" in lext:
         filetype += "PCX file (*.pcx)|*.pcx|"
-        ltype.append({'type': wx.BITMAP_TYPE_PCX,
-                      'ext': 'pcx'})
+        ltype.append({"type": wx.BITMAP_TYPE_PCX, "ext": "pcx"})
 
-    if 'pnm' in lext:
+    if "pnm" in lext:
         filetype += "PNM file (*.pnm)|*.pnm|"
-        ltype.append({'type': wx.BITMAP_TYPE_PNM,
-                      'ext': 'pnm'})
+        ltype.append({"type": wx.BITMAP_TYPE_PNM, "ext": "pnm"})
 
-    if 'tif' in lext:
+    if "tif" in lext:
         filetype += "TIF file (*.tif)|*.tif|"
-        ltype.append({'type': wx.BITMAP_TYPE_TIF,
-                      'ext': 'tif'})
+        ltype.append({"type": wx.BITMAP_TYPE_TIF, "ext": "tif"})
 
-    if 'xpm' in lext:
+    if "xpm" in lext:
         filetype += "XPM file (*.xpm)|*.xpm"
-        ltype.append({'type': wx.BITMAP_TYPE_XPM,
-                      'ext': 'xpm'})
+        ltype.append({"type": wx.BITMAP_TYPE_XPM, "ext": "xpm"})
 
     return filetype, ltype
 
@@ -1883,42 +1904,47 @@ def GetImageHandlers(image):
 class ImageSizeDialog(wx.Dialog):
     """Set size for saved graphic file"""
 
-    def __init__(self, parent, id=wx.ID_ANY, title=_("Set image size"),
-                 style=wx.DEFAULT_DIALOG_STYLE, **kwargs):
+    def __init__(
+        self,
+        parent,
+        id=wx.ID_ANY,
+        title=_("Set image size"),
+        style=wx.DEFAULT_DIALOG_STYLE,
+        **kwargs,
+    ):
+        img_size = kwargs.pop("img_size", None)
         self.parent = parent
 
-        wx.Dialog.__init__(
-            self,
-            parent,
-            id=id,
-            style=style,
-            title=title,
-            **kwargs)
+        wx.Dialog.__init__(self, parent, id=id, style=style, title=title, **kwargs)
 
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
-        self.box = StaticBox(parent=self.panel, id=wx.ID_ANY,
-                             label=' % s' % _("Image size"))
+        self.box = StaticBox(
+            parent=self.panel, id=wx.ID_ANY, label=" % s" % _("Image size")
+        )
 
         size = self.parent.GetWindow().GetClientSize()
-        self.width = SpinCtrl(parent=self.panel, id=wx.ID_ANY,
-                              style=wx.SP_ARROW_KEYS)
+        self.width = SpinCtrl(parent=self.panel, id=wx.ID_ANY, style=wx.SP_ARROW_KEYS)
         self.width.SetRange(20, 1e6)
-        self.width.SetValue(size.width)
+        self.width.SetValue(img_size[0] if img_size else size.width)
         wx.CallAfter(self.width.SetFocus)
-        self.height = SpinCtrl(parent=self.panel, id=wx.ID_ANY,
-                               style=wx.SP_ARROW_KEYS)
+        self.height = SpinCtrl(parent=self.panel, id=wx.ID_ANY, style=wx.SP_ARROW_KEYS)
         self.height.SetRange(20, 1e6)
-        self.height.SetValue(size.height)
-        self.template = wx.Choice(parent=self.panel, id=wx.ID_ANY,
-                                  size=(125, -1),
-                                  choices=["",
-                                           "640x480",
-                                           "800x600",
-                                           "1024x768",
-                                           "1280x960",
-                                           "1600x1200",
-                                           "1920x1440"])
+        self.height.SetValue(img_size[1] if img_size else size.height)
+        self.template = wx.Choice(
+            parent=self.panel,
+            id=wx.ID_ANY,
+            size=(125, -1),
+            choices=[
+                "",
+                "640x480",
+                "800x600",
+                "1024x768",
+                "1280x960",
+                "1600x1200",
+                "1920x1440",
+            ],
+        )
 
         self.btnOK = Button(parent=self.panel, id=wx.ID_OK)
         self.btnOK.SetDefault()
@@ -1936,23 +1962,24 @@ class ImageSizeDialog(wx.Dialog):
         # body
         box = wx.StaticBoxSizer(self.box, wx.HORIZONTAL)
         fbox = wx.FlexGridSizer(cols=2, vgap=5, hgap=5)
-        fbox.Add(StaticText(parent=self.panel, id=wx.ID_ANY,
-                            label=_("Width:")),
-                 flag=wx.ALIGN_CENTER_VERTICAL)
+        fbox.Add(
+            StaticText(parent=self.panel, id=wx.ID_ANY, label=_("Width:")),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+        )
         fbox.Add(self.width)
-        fbox.Add(StaticText(parent=self.panel, id=wx.ID_ANY,
-                            label=_("Height:")),
-                 flag=wx.ALIGN_CENTER_VERTICAL)
+        fbox.Add(
+            StaticText(parent=self.panel, id=wx.ID_ANY, label=_("Height:")),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+        )
         fbox.Add(self.height)
-        fbox.Add(StaticText(parent=self.panel, id=wx.ID_ANY,
-                            label=_("Template:")),
-                 flag=wx.ALIGN_CENTER_VERTICAL)
+        fbox.Add(
+            StaticText(parent=self.panel, id=wx.ID_ANY, label=_("Template:")),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+        )
         fbox.Add(self.template)
 
-        box.Add(fbox, proportion=1,
-                flag=wx.EXPAND | wx.ALL, border=5)
-        sizer.Add(box, proportion=1,
-                  flag=wx.EXPAND | wx.ALL, border=3)
+        box.Add(fbox, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
+        sizer.Add(box, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)
 
         # buttons
         btnsizer = wx.StdDialogButtonSizer()
@@ -1960,11 +1987,10 @@ class ImageSizeDialog(wx.Dialog):
         btnsizer.AddButton(self.btnCancel)
         btnsizer.Realize()
 
-        sizer.Add(btnsizer, proportion=0,
-                  flag=wx.EXPAND | wx.ALIGN_RIGHT | wx.ALL, border=5)
+        sizer.Add(btnsizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 
         self.panel.SetSizer(sizer)
-        sizer.Fit(self.panel)
+        sizer.Fit(self)
         self.Layout()
 
     def GetValues(self):
@@ -1977,33 +2003,26 @@ class ImageSizeDialog(wx.Dialog):
         if not sel:
             width, height = self.parent.GetWindow().GetClientSize()
         else:
-            width, height = map(int, sel.split('x'))
+            width, height = map(int, sel.split("x"))
         self.width.SetValue(width)
         self.height.SetValue(height)
 
 
 class SqlQueryFrame(wx.Frame):
-
-    def __init__(self, parent, id=wx.ID_ANY,
-                 title=_("GRASS GIS SQL Query Utility"),
-                 *kwargs):
-        """SQL Query Utility window
-        """
+    def __init__(self, parent, id=wx.ID_ANY, title=_("SQL Query Utility"), *kwargs):
+        """SQL Query Utility window"""
         self.parent = parent
 
         wx.Frame.__init__(self, parent=parent, id=id, title=title, *kwargs)
         self.SetIcon(
-            wx.Icon(
-                os.path.join(
-                    globalvar.ICONDIR,
-                    'grass_sql.ico'),
-                wx.BITMAP_TYPE_ICO))
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
+        )
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
-        self.sqlBox = StaticBox(parent=self.panel, id=wx.ID_ANY,
-                                label=_(" SQL statement "))
-        self.sql = TextCtrl(parent=self.panel, id=wx.ID_ANY,
-                            style=wx.TE_MULTILINE)
+        self.sqlBox = StaticBox(
+            parent=self.panel, id=wx.ID_ANY, label=_(" SQL statement ")
+        )
+        self.sql = TextCtrl(parent=self.panel, id=wx.ID_ANY, style=wx.TE_MULTILINE)
 
         self.btnApply = Button(parent=self.panel, id=wx.ID_APPLY)
         self.btnCancel = Button(parent=self.panel, id=wx.ID_CANCEL)
@@ -2019,26 +2038,27 @@ class SqlQueryFrame(wx.Frame):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         sqlSizer = wx.StaticBoxSizer(self.sqlBox, wx.HORIZONTAL)
-        sqlSizer.Add(self.sql, proportion=1,
-                     flag=wx.EXPAND)
+        sqlSizer.Add(self.sql, proportion=1, flag=wx.EXPAND)
 
         btnSizer = wx.StdDialogButtonSizer()
         btnSizer.AddButton(self.btnApply)
         btnSizer.AddButton(self.btnCancel)
         btnSizer.Realize()
 
-        sizer.Add(sqlSizer, proportion=1,
-                  flag=wx.EXPAND | wx.ALL, border=5)
-        sizer.Add(btnSizer, proportion=0,
-                  flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
+        sizer.Add(sqlSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
+        sizer.Add(
+            btnSizer,
+            proportion=0,
+            flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
+            border=5,
+        )
 
         self.panel.SetSizer(sizer)
 
         self.Layout()
 
     def OnCloseWindow(self, event):
-        """Close window
-        """
+        """Close window"""
         self.Close()
 
 
@@ -2048,8 +2068,7 @@ class SymbolDialog(wx.Dialog):
     Dialog is called in gui_core::forms module.
     """
 
-    def __init__(self, parent, symbolPath,
-                 currentSymbol=None, title=_("Symbols")):
+    def __init__(self, parent, symbolPath, currentSymbol=None, title=_("Symbols")):
         """Dialog constructor.
 
         It is assumed that symbolPath contains folders with symbols.
@@ -2061,7 +2080,7 @@ class SymbolDialog(wx.Dialog):
         """
         wx.Dialog.__init__(self, parent=parent, title=title, id=wx.ID_ANY)
 
-        self.symbolPath = symbolPath
+        self.symbolPath = Path(symbolPath)
         self.currentSymbol = currentSymbol  # default basic/x
         self.selected = None
         self.selectedDir = None
@@ -2074,32 +2093,24 @@ class SymbolDialog(wx.Dialog):
         vSizer = wx.BoxSizer(wx.VERTICAL)
         fgSizer = wx.FlexGridSizer(rows=2, cols=2, vgap=5, hgap=5)
         self.folderChoice = wx.Choice(
-            mainPanel,
-            id=wx.ID_ANY,
-            choices=os.listdir(
-                self.symbolPath))
+            mainPanel, id=wx.ID_ANY, choices=[p.name for p in self.symbolPath.iterdir()]
+        )
         self.folderChoice.Bind(wx.EVT_CHOICE, self.OnFolderSelect)
 
         fgSizer.Add(
-            StaticText(
-                mainPanel,
-                id=wx.ID_ANY,
-                label=_("Symbol directory:")),
+            StaticText(mainPanel, id=wx.ID_ANY, label=_("Symbol directory:")),
             proportion=0,
-            flag=wx.ALIGN_CENTER_VERTICAL)
+            flag=wx.ALIGN_CENTER_VERTICAL,
+        )
 
-        fgSizer.Add(self.folderChoice, proportion=0,
-                    flag=wx.ALIGN_CENTER, border=0)
+        fgSizer.Add(self.folderChoice, proportion=0, flag=wx.ALIGN_CENTER, border=0)
 
         self.infoLabel = StaticText(mainPanel, id=wx.ID_ANY)
         fgSizer.Add(
-            StaticText(
-                mainPanel,
-                id=wx.ID_ANY,
-                label=_("Symbol name:")),
-            flag=wx.ALIGN_CENTRE_VERTICAL)
-        fgSizer.Add(self.infoLabel, proportion=0,
-                    flag=wx.ALIGN_CENTRE_VERTICAL)
+            StaticText(mainPanel, id=wx.ID_ANY, label=_("Symbol name:")),
+            flag=wx.ALIGN_CENTRE_VERTICAL,
+        )
+        fgSizer.Add(self.infoLabel, proportion=0, flag=wx.ALIGN_CENTRE_VERTICAL)
         vSizer.Add(fgSizer, proportion=0, flag=wx.ALL, border=5)
 
         self.panels = self._createSymbolPanels(mainPanel)
@@ -2117,14 +2128,13 @@ class SymbolDialog(wx.Dialog):
         btnSizer.AddButton(self.btnCancel)
         btnSizer.AddButton(self.btnOK)
         btnSizer.Realize()
-        mainSizer.Add(btnSizer, proportion=0,
-                      flag=wx.EXPAND | wx.ALL, border=5)
+        mainSizer.Add(btnSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 
         # show panel with the largest number of images and fit size
-        count = []
-        for folder in os.listdir(self.symbolPath):
-            count.append(
-                len(os.listdir(os.path.join(self.symbolPath, folder))))
+        count = [
+            len(list((self.symbolPath / folder).iterdir()))
+            for folder in [p.name for p in self.symbolPath.iterdir()]
+        ]
 
         index = count.index(max(count))
         self.folderChoice.SetSelection(index)
@@ -2153,7 +2163,7 @@ class SymbolDialog(wx.Dialog):
         """Creates multiple panels with symbols.
 
         Panels are shown/hidden according to selected folder."""
-        folders = os.listdir(self.symbolPath)
+        folders = [p.name for p in self.symbolPath.iterdir()]
 
         panels = []
         self.symbolPanels = []
@@ -2161,9 +2171,7 @@ class SymbolDialog(wx.Dialog):
         for folder in folders:
             panel = wx.Panel(parent, style=wx.BORDER_RAISED)
             sizer = wx.GridSizer(cols=6, vgap=3, hgap=3)
-            images = self._getSymbols(
-                path=os.path.join(
-                    self.symbolPath, folder))
+            images = self._getSymbols(path=self.symbolPath / folder)
 
             symbolPanels = []
             for img in images:
@@ -2181,9 +2189,7 @@ class SymbolDialog(wx.Dialog):
 
     def _getSymbols(self, path):
         # we assume that images are in subfolders (1 level only)
-        imageList = []
-        for image in os.listdir(path):
-            imageList.append(os.path.join(path, image))
+        imageList = [str(p) for p in path.iterdir()]
 
         return sorted(imageList)
 
@@ -2200,7 +2206,7 @@ class SymbolDialog(wx.Dialog):
             self.infoLabel.SetLabel(self.selected)
         else:
             self.btnOK.Disable()
-            self.infoLabel.SetLabel('')
+            self.infoLabel.SetLabel("")
 
     def SelectionChanged(self, name, doubleClick):
         """Selected symbol changed."""
@@ -2220,14 +2226,12 @@ class SymbolDialog(wx.Dialog):
         self.infoLabel.SetLabel(name)
 
     def GetSelectedSymbolName(self):
-        """Returns currently selected symbol name (e.g. 'basic/x').
-        """
+        """Returns currently selected symbol name (e.g. 'basic/x')."""
         # separator must be '/' and not dependent on OS
-        return self.selectedDir + '/' + self.selected
+        return self.selectedDir + "/" + self.selected
 
     def GetSelectedSymbolPath(self):
-        """Returns currently selected symbol full path.
-        """
+        """Returns currently selected symbol full path."""
         return os.path.join(self.symbolPath, self.selectedDir, self.selected)
 
 
@@ -2238,16 +2242,18 @@ class TextEntryDialog(wx.Dialog):
     """
 
     def __init__(
-            self, parent, message, caption='', defaultValue='',
-            validator=wx.DefaultValidator, style=wx.OK | wx.CANCEL | wx.CENTRE,
-            textStyle=0, textSize=(300, -1),
-            **kwargs):
-        wx.Dialog.__init__(
-            self,
-            parent=parent,
-            id=wx.ID_ANY,
-            title=caption,
-            **kwargs)
+        self,
+        parent,
+        message,
+        caption="",
+        defaultValue="",
+        validator=wx.DefaultValidator,
+        style=wx.OK | wx.CANCEL | wx.CENTRE,
+        textStyle=0,
+        textSize=(300, -1),
+        **kwargs,
+    ):
+        wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY, title=caption, **kwargs)
 
         vbox = wx.BoxSizer(wx.VERTICAL)
 
@@ -2255,19 +2261,14 @@ class TextEntryDialog(wx.Dialog):
         vbox.Add(stline, proportion=0, flag=wx.EXPAND | wx.ALL, border=10)
 
         self._textCtrl = TextCtrl(
-            self,
-            id=wx.ID_ANY,
-            value=defaultValue,
-            validator=validator,
-            style=textStyle)
+            self, id=wx.ID_ANY, value=defaultValue, validator=validator, style=textStyle
+        )
         self._textCtrl.SetInitialSize(textSize)
         wx.CallAfter(self._textCtrl.SetFocus)
 
         vbox.Add(
-            self._textCtrl,
-            proportion=0,
-            flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
-            border=10)
+            self._textCtrl, proportion=0, flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=10
+        )
         self._textCtrl.SetFocus()
 
         sizer = self.CreateSeparatedButtonSizer(style)
@@ -2285,8 +2286,9 @@ class TextEntryDialog(wx.Dialog):
 class HyperlinkDialog(wx.Dialog):
     """Dialog for displaying message with hyperlink."""
 
-    def __init__(self, parent, title, message, hyperlink,
-                 hyperlinkLabel=None, style=wx.OK):
+    def __init__(
+        self, parent, title, message, hyperlink, hyperlinkLabel=None, style=wx.OK
+    ):
         """Constructor
 
         :param parent: gui parent
@@ -2296,42 +2298,44 @@ class HyperlinkDialog(wx.Dialog):
         :param hyperlinkLabel: label shown instead of url
         :param style: button style
         """
-        wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY, title=title,
-                           style=wx.DEFAULT_DIALOG_STYLE)
+        wx.Dialog.__init__(
+            self,
+            parent=parent,
+            id=wx.ID_ANY,
+            title=title,
+            style=wx.DEFAULT_DIALOG_STYLE,
+        )
 
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         label = StaticText(self, label=message)
-        sizer.Add(
-            label,
-            proportion=0,
-            flag=wx.ALIGN_CENTRE | wx.ALL,
-            border=10)
-        hyperlinkLabel = hyperlinkLabel if hyperlinkLabel else hyperlink
+        sizer.Add(label, proportion=0, flag=wx.ALIGN_CENTRE | wx.ALL, border=10)
+        hyperlinkLabel = hyperlinkLabel or hyperlink
         hyperlinkCtrl = HyperlinkCtrl(
-            self, id=wx.ID_ANY, label=hyperlinkLabel, url=hyperlink,
-            style=HyperlinkCtrl.HL_ALIGN_LEFT | HyperlinkCtrl.HL_CONTEXTMENU)
-        sizer.Add(
-            hyperlinkCtrl,
-            proportion=0,
-            flag=wx.EXPAND | wx.ALL,
-            border=10)
+            self,
+            id=wx.ID_ANY,
+            label=hyperlinkLabel,
+            url=hyperlink,
+            style=HyperlinkCtrl.HL_ALIGN_LEFT | HyperlinkCtrl.HL_CONTEXTMENU,
+        )
+        sizer.Add(hyperlinkCtrl, proportion=0, flag=wx.EXPAND | wx.ALL, border=10)
 
         btnsizer = self.CreateSeparatedButtonSizer(style)
-        sizer.Add(
-            btnsizer,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=10)
+        sizer.Add(btnsizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=10)
 
         self.SetSizer(sizer)
         sizer.Fit(self)
 
 
 class QuitDialog(wx.Dialog):
-
-    def __init__(self, parent, title=_("Quit GRASS GIS"), id=wx.ID_ANY,
-                 style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
+    def __init__(
+        self,
+        parent,
+        title=_("Quit GRASS"),
+        id=wx.ID_ANY,
+        style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
+        **kwargs,
+    ):
         """Dialog to quit GRASS
 
         :param parent: window
@@ -2340,24 +2344,24 @@ class QuitDialog(wx.Dialog):
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
         self._icon = wx.StaticBitmap(
-            self.panel, wx.ID_ANY,
-            wx.ArtProvider().GetBitmap(
-                wx.ART_QUESTION,
-                client=wx.ART_MESSAGE_BOX))
+            self.panel,
+            wx.ID_ANY,
+            wx.ArtProvider().GetBitmap(wx.ART_QUESTION, client=wx.ART_MESSAGE_BOX),
+        )
 
-        self.informLabel = StaticText(
-            parent=self.panel, id=wx.ID_ANY, label=_(
-                "Do you want to quit GRASS including shell "
-                "prompt or just close the GUI?"))
+        self._shell_running = is_shell_running()
+
+        if self._shell_running:
+            text = _("Do you want to quit GRASS including shell or just close the GUI?")
+        else:
+            text = _("Do you want to quit GRASS?")
+        self.informLabel = StaticText(parent=self.panel, id=wx.ID_ANY, label=text)
         self.btnCancel = Button(parent=self.panel, id=wx.ID_CANCEL)
-        self.btnClose = Button(parent=self.panel, id=wx.ID_NO,
-                                  label=_("Close GUI"))
-        self.btnClose.SetFocus()
-        self.btnQuit = Button(parent=self.panel, id=wx.ID_YES,
-                                 label=_("Quit GRASS GIS"))
-        self.btnQuit.SetForegroundColour(wx.Colour(35, 142, 35))
-
-        self.btnClose.Bind(wx.EVT_BUTTON, self.OnClose)
+        if self._shell_running:
+            self.btnClose = Button(parent=self.panel, id=wx.ID_NO, label=_("Close GUI"))
+            self.btnClose.Bind(wx.EVT_BUTTON, self.OnClose)
+        self.btnQuit = Button(parent=self.panel, id=wx.ID_YES, label=_("Quit GRASS"))
+        self.btnQuit.SetFocus()
         self.btnQuit.Bind(wx.EVT_BUTTON, self.OnQuit)
 
         self.__layout()
@@ -2368,17 +2372,16 @@ class QuitDialog(wx.Dialog):
 
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         btnSizer.Add(self.btnCancel, flag=wx.RIGHT, border=5)
-        btnSizer.Add(self.btnClose, flag=wx.RIGHT, border=5)
+        if self._shell_running:
+            btnSizer.Add(self.btnClose, flag=wx.RIGHT, border=5)
         btnSizer.Add(self.btnQuit, flag=wx.RIGHT, border=5)
 
         bodySizer = wx.BoxSizer(wx.HORIZONTAL)
         bodySizer.Add(self._icon, flag=wx.RIGHT, border=10)
         bodySizer.Add(self.informLabel, proportion=1, flag=wx.EXPAND)
 
-        sizer.Add(bodySizer, proportion=1,
-                  flag=wx.EXPAND | wx.ALL, border=15)
-        sizer.Add(btnSizer, proportion=0,
-                  flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
+        sizer.Add(bodySizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=15)
+        sizer.Add(btnSizer, proportion=0, flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
 
         self.panel.SetSizer(sizer)
         sizer.Fit(self)
@@ -2397,95 +2400,88 @@ class DefaultFontDialog(wx.Dialog):
     to use in all GRASS displays
     """
 
-    def __init__(self, parent, title, id=wx.ID_ANY,
-                 style=wx.DEFAULT_DIALOG_STYLE |
-                 wx.RESIZE_BORDER,
-                 settings=UserSettings,
-                 type='font'):
-
+    def __init__(
+        self,
+        parent,
+        title,
+        id=wx.ID_ANY,
+        style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
+        settings=UserSettings,
+        type="font",
+    ):
         self.settings = settings
         self.type = type
 
         wx.Dialog.__init__(self, parent, id, title, style=style)
 
         panel = wx.Panel(parent=self, id=wx.ID_ANY)
-        self.tmp_file = grass.tempfile(False) + '.png'
+        self.tmp_file = grass.tempfile(False) + ".png"
 
         self.fontdict, fontdict_reverse, self.fontlist = self.GetFonts()
 
         border = wx.BoxSizer(wx.VERTICAL)
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Font settings"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Font settings"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        label = StaticText(parent=panel, id=wx.ID_ANY,
-                           label=_("Select font:"))
-        gridSizer.Add(label,
-                      flag=wx.ALIGN_TOP,
-                      pos=(0, 0))
+        label = StaticText(parent=panel, id=wx.ID_ANY, label=_("Select font:"))
+        gridSizer.Add(label, flag=wx.ALIGN_TOP, pos=(0, 0))
 
         self.fontlb = wx.ListBox(
             parent=panel,
             id=wx.ID_ANY,
             pos=wx.DefaultPosition,
             choices=self.fontlist,
-            style=wx.LB_SINGLE)
+            style=wx.LB_SINGLE,
+        )
         self.Bind(wx.EVT_LISTBOX, self.EvtListBox, self.fontlb)
         self.Bind(wx.EVT_LISTBOX_DCLICK, self.EvtListBoxDClick, self.fontlb)
 
-        gridSizer.Add(self.fontlb,
-                      flag=wx.EXPAND, pos=(1, 0))
+        gridSizer.Add(self.fontlb, flag=wx.EXPAND, pos=(1, 0))
 
-        self.renderfont = wx.StaticBitmap(panel, -1, wx.Bitmap.FromRGBA(100, 50, 255, 255, 255))
-        gridSizer.Add(self.renderfont,
-                      flag=wx.EXPAND, pos=(2, 0))
+        self.renderfont = wx.StaticBitmap(
+            panel, -1, wx.Bitmap.FromRGBA(100, 50, 255, 255, 255)
+        )
+        gridSizer.Add(self.renderfont, flag=wx.EXPAND, pos=(2, 0))
 
-        if self.type == 'font':
+        if self.type == "font":
             if "GRASS_FONT" in os.environ:
                 self.font = os.environ["GRASS_FONT"]
             else:
-                self.font = self.settings.Get(group='display',
-                                              key='font', subkey='type')
-            self.encoding = self.settings.Get(group='display',
-                                              key='font', subkey='encoding')
+                self.font = self.settings.Get(
+                    group="display", key="font", subkey="type"
+                )
+            self.encoding = self.settings.Get(
+                group="display", key="font", subkey="encoding"
+            )
 
-            label = StaticText(parent=panel, id=wx.ID_ANY,
-                               label=_("Character encoding:"))
-            gridSizer.Add(label,
-                          flag=wx.ALIGN_CENTER_VERTICAL,
-                          pos=(3, 0))
+            label = StaticText(
+                parent=panel, id=wx.ID_ANY, label=_("Character encoding:")
+            )
+            gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(3, 0))
 
-            self.textentry = TextCtrl(parent=panel, id=wx.ID_ANY,
-                                      value=self.encoding)
-            gridSizer.Add(self.textentry,
-                          flag=wx.EXPAND, pos=(4, 0))
+            self.textentry = TextCtrl(parent=panel, id=wx.ID_ANY, value=self.encoding)
+            gridSizer.Add(self.textentry, flag=wx.EXPAND, pos=(4, 0))
 
             self.textentry.Bind(wx.EVT_TEXT, self.OnEncoding)
 
-        elif self.type == 'outputfont':
-            self.font = self.settings.Get(group='appearance',
-                                          key='outputfont', subkey='type')
-            self.fontsize = self.settings.Get(group='appearance',
-                                              key='outputfont', subkey='size')
-            label = StaticText(parent=panel, id=wx.ID_ANY,
-                               label=_("Font size:"))
-            gridSizer.Add(label,
-                          flag=wx.ALIGN_CENTER_VERTICAL,
-                          pos=(3, 0))
+        elif self.type == "outputfont":
+            self.font = self.settings.Get(
+                group="appearance", key="outputfont", subkey="type"
+            )
+            self.fontsize = self.settings.Get(
+                group="appearance", key="outputfont", subkey="size"
+            )
+            label = StaticText(parent=panel, id=wx.ID_ANY, label=_("Font size:"))
+            gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(3, 0))
 
             self.spin = SpinCtrl(parent=panel, id=wx.ID_ANY)
             if self.fontsize:
                 self.spin.SetValue(int(self.fontsize))
             self.spin.Bind(wx.EVT_SPINCTRL, self.OnSizeSpin)
             self.spin.Bind(wx.EVT_TEXT, self.OnSizeSpin)
-            gridSizer.Add(self.spin,
-                          flag=wx.ALIGN_CENTER_VERTICAL,
-                          pos=(4, 0))
+            gridSizer.Add(self.spin, flag=wx.ALIGN_CENTER_VERTICAL, pos=(4, 0))
 
         else:
             return
@@ -2499,12 +2495,9 @@ class DefaultFontDialog(wx.Dialog):
                 self.font = None
 
         gridSizer.AddGrowableCol(0)
-        sizer.Add(gridSizer, proportion=1,
-                  flag=wx.EXPAND | wx.ALL,
-                  border=5)
+        sizer.Add(gridSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
 
-        border.Add(sizer, proportion=1,
-                   flag=wx.ALL | wx.EXPAND, border=3)
+        border.Add(sizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=3)
 
         btnsizer = wx.StdDialogButtonSizer()
 
@@ -2516,8 +2509,7 @@ class DefaultFontDialog(wx.Dialog):
         btnsizer.AddButton(btn)
         btnsizer.Realize()
 
-        border.Add(btnsizer, proportion=0,
-                   flag=wx.EXPAND | wx.ALIGN_RIGHT | wx.ALL, border=5)
+        border.Add(btnsizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 
         panel.SetAutoLayout(True)
         panel.SetSizer(border)
@@ -2554,45 +2546,52 @@ class DefaultFontDialog(wx.Dialog):
         fontdict = {}
         fontdict_reverse = {}
         env = os.environ.copy()
-        driver = UserSettings.Get(group='display', key='driver', subkey='type')
-        if driver == 'png':
-            env['GRASS_RENDER_IMMEDIATE'] = 'png'
+        driver = UserSettings.Get(group="display", key="driver", subkey="type")
+        if driver == "png":
+            env["GRASS_RENDER_IMMEDIATE"] = "png"
         else:
-            env['GRASS_RENDER_IMMEDIATE'] = 'cairo'
-        ret = RunCommand('d.fontlist', flags='v',
-                         read=True,
-                         env=env)
+            env["GRASS_RENDER_IMMEDIATE"] = "cairo"
+        ret = RunCommand("d.fontlist", flags="v", read=True, env=env)
         if not ret:
             return fontlist
 
         dfonts = ret.splitlines()
         for line in dfonts:
-            shortname = line.split('|')[0]
-            longname = line.split('|')[1]
+            shortname = line.split("|")[0]
+            longname = line.split("|")[1]
             # not sure when this happens?
-            if shortname.startswith('#'):
+            if shortname.startswith("#"):
                 continue
             fontlist.append(longname)
             fontdict[longname] = shortname
             fontdict_reverse[shortname] = longname
-        fontlist = natural_sort(list(set(fontlist)))
+        fontlist = naturally_sorted(list(set(fontlist)))
 
         return fontdict, fontdict_reverse, fontlist
 
     def RenderText(self, font, text, size):
-        """Renders an example text with the selected font and resets the bitmap widget"""
+        """Renders an example text with the selected font and resets the bitmap
+        widget"""
         env = os.environ.copy()
-        driver = UserSettings.Get(group='display', key='driver', subkey='type')
-        if driver == 'png':
-            env['GRASS_RENDER_IMMEDIATE'] = 'png'
+        driver = UserSettings.Get(group="display", key="driver", subkey="type")
+        if driver == "png":
+            env["GRASS_RENDER_IMMEDIATE"] = "png"
         else:
-            env['GRASS_RENDER_IMMEDIATE'] = 'cairo'
-        env['GRASS_RENDER_WIDTH'] = str(size[0])
-        env['GRASS_RENDER_HEIGHT'] = str(size[1])
-        env['GRASS_RENDER_FILE'] = self.tmp_file
-        env['GRASS_REGION'] = grass.region_env(s=0, n=size[1], w=0, e=size[0])
-        ret = RunCommand('d.text', text=text, font=font, align='cc', at='50,60',
-                         size=80, color='black', env=env)
+            env["GRASS_RENDER_IMMEDIATE"] = "cairo"
+        env["GRASS_RENDER_WIDTH"] = str(size[0])
+        env["GRASS_RENDER_HEIGHT"] = str(size[1])
+        env["GRASS_RENDER_FILE"] = self.tmp_file
+        env["GRASS_REGION"] = grass.region_env(s=0, n=size[1], w=0, e=size[0])
+        ret = RunCommand(
+            "d.text",
+            text=text,
+            font=font,
+            align="cc",
+            at="50,60",
+            size=80,
+            color="black",
+            env=env,
+        )
         if ret == 0:
             self.renderfont.SetBitmap(wx.Bitmap(self.tmp_file))
         else:

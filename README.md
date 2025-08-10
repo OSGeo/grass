@@ -1,110 +1,97 @@
-[![Build Status](https://travis-ci.com/OSGeo/grass.svg?branch=master)](https://travis-ci.com/OSGeo/grass)
+# GRASS Repository
 
-# GRASS GIS Repository
+[![GCC C/C++ standards check](https://github.com/OSGeo/grass/workflows/GCC%20C/C++%20standards%20check/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3A%22GCC+C%2FC%2B%2B+standards+check%22)
+[![Python code quality check](https://github.com/OSGeo/grass/workflows/Python%20code%20quality%20check/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3A%22Python+code+quality+check%22)
+[![General linting](https://github.com/OSGeo/grass/workflows/General%20linting/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3A%22General+linting%22)
+[![Ubuntu](https://github.com/OSGeo/grass/workflows/Ubuntu/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3AUbuntu)
+[![OSGeo4W](https://github.com/OSGeo/grass/workflows/OSGeo4W/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3AOSGeo4W)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/OSGeo/grass/badge)](https://securityscorecards.dev/viewer/?uri=github.com/OSGeo/grass)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/2470/badge)](https://www.bestpractices.dev/projects/2470)
+[![Coverity](https://scan.coverity.com/projects/1038/badge.svg)](https://scan.coverity.com/projects/grass)  
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5176030.svg)](https://doi.org/10.5281/zenodo.5176030)
+[![Discourse](https://img.shields.io/badge/discourse-forum-blue?logo=discourse)](https://discourse.osgeo.org/c/grass/62)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/OSGeo/grass/main?labpath=doc%2Fexamples%2Fnotebooks%2Fjupyter_example.ipynb)  
+[![Powered by NumFOCUS](https://img.shields.io/badge/powered%20by-NumFOCUS-orange.svg?style=flat&colorA=E1523D&colorB=007D8A)](http://numfocus.org)
+[![Hosted by OSGeo](https://img.shields.io/badge/hosted%20by-OSGeo-4cb05b.svg?style=flat&labelColor=00393f)](https://www.osgeo.org/)
 
 ## Description
 
-GRASS GIS ([https://grass.osgeo.org/](https://grass.osgeo.org/)) is
-a Geographic Information System used for geospatial data management and
-analysis, image processing, graphics/map production, spatial modeling, and
-visualization.
+[GRASS](https://grass.osgeo.org/), Geographic Resources Analysis Support System,
+is a powerful computational engine for raster, vector, and geospatial processing.
+It supports terrain and ecosystem modeling, hydrology, data management,
+and imagery processing. With a built-in temporal framework and Python API,
+it enables advanced time series analysis and rapid geospatial programming,
+optimized for large-scale analysis on various hardware configurations.
 
-## How to get write access here
+You can use GRASS as your desktop Geographic Information System (GIS)
+or as a geoprocessing engine through command-line, Python or R interface.
 
-In general: you don't really need write access as you can simply open
-a [pull request](https://github.com/OSGeo/grass/pulls) to contribute to
-GRASS GIS. See [CONTRIBUTING file](CONTRIBUTING.md) for more details.
+GRASS is open-source and free software, available under the [GNU General Public License](https://www.gnu.org/licenses/#GPL),
+and hosted by the Open Source Geospatial Foundation ([OSGeo](https://www.osgeo.org/)).
 
-Want to become a core developer? See
-[Procedure for gaining Git write access](https://trac.osgeo.org/grass/wiki/HowToContribute#WriteaccesstotheGRASScorerepository)
+[//]: # (numfocus-fiscal-sponsor-attribution)
 
-## How to compile GRASS
+GRASS uses a [custom governance model](./GOVERNANCE.md)
+and is fiscally sponsored by [NumFOCUS](https://numfocus.org/). Consider making
+a [tax-deductible donation](https://numfocus.org/donate-to-grass) to help the project
+pay for developer time, professional services, travel, workshops,
+and a variety of other needs.
 
-> See INSTALL file.
+<!-- markdownlint-disable MD033 -->
+<div align="center">
+  <a href="https://numfocus.org/donate-to-grass">
+    <img height="60px"
+         alt="NumFOCUS logo",
+         src="https://raw.githubusercontent.com/numfocus/templates/master/images/numfocus-logo.png"
+         align="center">
+  </a>
+</div>
+<br>
 
-Yes, you should really read [INSTALL](INSTALL).
+NumFOCUS is a 501(c)(3) non-profit charity in the United States;
+as such, donations to NumFOCUS are tax-deductible as allowed by law.
+As with any donation, you should consult with your personal tax adviser or
+the IRS about your particular tax situation.
 
-## How to generate the 'Programmer's Manual'
+## Downloads
 
-This needs doxygen (<http://www.doxygen.org>) and optionally
-Graphviz dot (<http://www.research.att.com/sw/tools/graphviz/>).
+See [download instructions](https://grass.osgeo.org/download/)
+to get GRASS for your platform.
 
-To build the GRASS programmer's documentation, run
+## Documentation
 
-```
-make htmldocs
-```
+See [documentation](https://grass.osgeo.org/grass-devel/manuals/index.html) and
+[tutorials](https://grass.osgeo.org/grass-devel/manuals/tutorials/index.html)
+to start learning GRASS.
 
-or to generate documentation as single html file
-(recommended for simple reading)
+## Getting help
 
-```
-make htmldocs-single
-```
+Join the GRASS community on [Discourse](https://discourse.osgeo.org/c/grass/grass-user/70)
+or explore [GRASS commercial support](https://grass.osgeo.org/support/commercial/).
 
-here. This takes quite some time. The result is in `lib/html/index.html`
-which refers to further document repositories in
+## Contributing
 
-```
-lib/vector/html/index.html
-lib/db/html/index.html
-lib/gis/html/index.html
-```
+All contributions are welcome! Join GRASS developer community on [Discourse](https://discourse.osgeo.org/c/grass/developer/61)
+to discuss your plans or simply open
+a [pull request](https://github.com/OSGeo/grass/pulls).
+See [CONTRIBUTING file](CONTRIBUTING.md) for more details.
 
-The master file is: `./grasslib.dox` where all sub-documents have to
-be linked into.
+## Compiling GRASS
 
-To generate the documents in PDF format, run
-
-```
-make pdfdocs
-```
-
-An online version is available [here](https://grass.osgeo.org/programming7/)
+See the [INSTALL.md file](INSTALL.md). In addition, there are
+detailed [compile instructions](https://grasswiki.osgeo.org/wiki/Compile_and_Install)
+in the Wiki.
 
 ## Docker
 
-Build using the downloaded source code (in the directory with the
-source code):
+For using and building a GRASS docker image, see [docker/README.md](docker/README.md).
 
-```
-docker build -t grassgis79 .
-```
+## Further documents
 
-A test run (assuming you have existing GRASS GIS location; it can be
-downloaded from
-[here](https://grass.osgeo.org/sampledata/north_carolina/nc_basic_spm_grass7.zip))
+- [NumFOCUS Code of Conduct](CODE_OF_CONDUCT.md)
+- [Roadmap](https://grass.osgeo.org/about/roadmap/)
+- [Governance](https://grass.osgeo.org/about/governance/)
 
-```
-# case 1: launching in the grassdata directory in which the location is stored:
-docker run -it --rm --user=$(id -u):$(id -g) --volume $(pwd):/data \
-    --env HOME=/data/ grassgis79 grass --text nc_basic_spm_grass7/user1 \
-        --exec g.region -p
+## Thanks to all contributors ❤
 
-# case 2: launching anywhere
-docker run -it --rm --user=$(id -u):$(id -g) \
-    --volume /your/test/grassdata/:/data --env HOME=/data/ grassgis79 \
-        grass /data/nc_basic_spm_grass7/PERMANENT --exec g.region -p
-```
-
-Note that the first `grassgis79` is the name of the image while the second
-`grass` is the name of the executable.
-
-To run the tests (again assuming local location):
-
-```
-docker run -it --rm --user=$(id -u):$(id -g) \
-    --volume /your/test/grassdata/:/data --env HOME=/data/ -w /code/grass \
-        grassgis79 grass /data/nc_basic_spm_grass7/PERMANENT --exec \
-            python -m grass.gunittest.main \
-                --location nc_basic_spm_grass7 --location-type nc
-```
-
-Note: If you compiled locally before building the Docker image, you may
-encounter problems as the local configuration and locally compiled file
-are copied to and used in the Docker image. To make sure you don't have
-this issue, clean all the compiled files from the source code:
-
-```
-make distclean
-```
+[![GRASS contributors](https://contrib.rocks/image?repo=OSGeo/grass "GRASS contributors")](https://github.com/OSGeo/grass/graphs/contributors)

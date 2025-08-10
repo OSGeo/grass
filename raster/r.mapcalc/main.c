@@ -1,10 +1,9 @@
-
 /****************************************************************************
  *
  * MODULE:       r.mapcalc
  * AUTHOR(S):    Michael Shapiro, CERL (original contributor)
  *               rewritten 2002: Glynn Clements <glynn gclements.plus.com>
- * PURPOSE:      
+ * PURPOSE:
  * COPYRIGHT:    (C) 1999-2007 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -12,6 +11,9 @@
  *               for details.
  *
  *****************************************************************************/
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 
 #include <unistd.h>
 #include <stdio.h>
@@ -60,9 +62,11 @@ static expr_list *parse_file(const char *filename)
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct Option *expr, *file, *seed, *region;
+    struct Option *expr, *file, *seed, *region, *nprocs;
     struct Flag *random, *describe;
     int all_ok;
+    char *desc;
+    int threads = 1;
 
     G_gisinit(argv[0]);
 
@@ -78,19 +82,25 @@ int main(int argc, char **argv)
     expr->required = NO;
     expr->description = _("Expression to evaluate");
     expr->guisection = _("Expression");
-    
+
     region = G_define_option();
     region->key = "region";
     region->type = TYPE_STRING;
     region->required = NO;
     region->answer = "current";
     region->options = "current,intersect,union";
-    region->description = _("The computational region that should be used.\n"
-                            "               - current uses the current region of the mapset.\n"
-                            "               - intersect computes the intersection region between\n"
-                            "                 all input maps and uses the smallest resolution\n"
-                            "               - union computes the union extent of all map regions\n"
-                            "                 and uses the smallest resolution");
+    region->description = _("The computational region that should be used.");
+    desc = NULL;
+    G_asprintf(&desc,
+               "current;%s;"
+               "intersect;%s;"
+               "union;%s;",
+               _("current uses the current region of the mapset"),
+               _("intersect computes the intersection region between "
+                 "all input maps and uses the smallest resolution"),
+               _("union computes the union extent of all map regions "
+                 "and uses the smallest resolution"));
+    region->descriptions = desc;
 
     file = G_define_standard_option(G_OPT_F_INPUT);
     file->key = "file";
@@ -98,23 +108,21 @@ int main(int argc, char **argv)
     file->description = _("File containing expression(s) to evaluate");
     file->guisection = _("Expression");
 
-    seed = G_define_option();
-    seed->key = "seed";
-    seed->type = TYPE_INTEGER;
-    seed->required = NO;
-    seed->description = _("Seed for rand() function");
+    seed = G_define_standard_option(G_OPT_M_SEED);
 
     random = G_define_flag();
     random->key = 's';
-    random->description = _("Generate random seed (result is non-deterministic)");
+    random->description =
+        _("Generate random seed (result is non-deterministic)");
 
     describe = G_define_flag();
     describe->key = 'l';
     describe->description = _("List input and output maps");
 
-    if (argc == 1)
-    {
-        char **p = G_malloc(3 * sizeof(char *));
+    nprocs = G_define_standard_option(G_OPT_M_NPROCS);
+
+    char **p = G_malloc(3 * sizeof(char *));
+    if (argc == 1) {
         p[0] = argv[0];
         p[1] = G_store("file=-");
         p[2] = NULL;
@@ -128,12 +136,12 @@ int main(int argc, char **argv)
     overwrite_flag = module->overwrite;
 
     if (expr->answer && file->answer)
-        G_fatal_error(_("%s= and %s= are mutually exclusive"),
-                        expr->key, file->key);
+        G_fatal_error(_("%s= and %s= are mutually exclusive"), expr->key,
+                      file->key);
 
     if (seed->answer && random->answer)
-        G_fatal_error(_("%s= and -%c are mutually exclusive"),
-                        seed->key, random->key);
+        G_fatal_error(_("%s= and -%c are mutually exclusive"), seed->key,
+                      random->key);
 
     if (expr->answer)
         result = parse_string(expr->answer);
@@ -158,7 +166,7 @@ int main(int argc, char **argv)
         G_debug(3, "Generated random seed (-s): %ld", seed_value);
     }
 
-    /* Set the global variable of the region setup approach */ 
+    /* Set the global variable of the region setup approach */
     region_approach = 1;
 
     if (G_strncasecmp(region->answer, "union", 5) == 0)
@@ -168,18 +176,52 @@ int main(int argc, char **argv)
         region_approach = 3;
 
     G_debug(1, "Region answer %s region approach %i", region->answer,
-                                                      region_approach);
-    
+            region_approach);
+
     if (describe->answer) {
         describe_maps(stdout, result);
         return EXIT_SUCCESS;
     }
 
     pre_exec();
+
+    /* Determine the number of threads */
+    threads = atoi(nprocs->answer);
+
+    /* Check if the program name is r3.mapcalc */
+    /* Handle both Unix and Windows path separators */
+    const char *progname = strrchr(argv[0], '/');
+    if (!progname)
+        progname = strrchr(argv[0], '\\');
+    progname = progname ? progname + 1 : argv[0];
+
+    if ((strncmp(progname, "r3.mapcalc", 10) == 0) && (threads != 1)) {
+        threads = 1;
+        nprocs->answer = "1";
+        G_verbose_message(_("r3.mapcalc does not support parallel execution."));
+    }
+    else if ((seeded) && (threads != 1)) {
+        threads = 1;
+        nprocs->answer = "1";
+        G_verbose_message(
+            _("Parallel execution is not supported for random seed."));
+    }
+
+    /* Ensure the proper number of threads is assigned */
+    threads = G_set_omp_num_threads(nprocs);
+    if (threads > 1)
+        threads = Rast_disable_omp_on_mask(threads);
+    if (threads < 1)
+        G_fatal_error(_("<%d> is not valid number of nprocs."), threads);
+
+    /* Execute calculations */
     execute(result);
     post_exec();
 
     all_ok = 1;
+
+    G_free(p);
+    p = NULL;
 
     if (floating_point_exception_occurred) {
         G_warning(_("Floating point error(s) occurred in the calculation"));

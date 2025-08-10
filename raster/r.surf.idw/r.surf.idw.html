@@ -9,15 +9,15 @@ to determined the interpolated value of a cell can be
 specified by the user (default: 12 nearest data points).
 
 <p>
-If there is a current working mask, it applies to the output 
-raster map. Only those cells falling within the mask will be 
-assigned interpolated values. The search procedure for the 
-selection of nearest neighboring points will consider all 
-input data, without regard to the mask. 
+If there is a current working mask, it applies to the output
+raster map. Only those cells falling within the mask will be
+assigned interpolated values. The search procedure for the
+selection of nearest neighboring points will consider all
+input data, without regard to the mask.
 
 The <b>-e</b> flag is the error analysis option that interpolates values
 only for those cells of the input raster map which have non-zero values and
-outputs the difference (see <a href="#minuse.html">NOTES</a> below).
+outputs the difference (see <a href="#minuse">NOTES</a> below).
 <p>The <b>npoints</b> parameter defines the number of nearest data points used
 to determine the interpolated value of an output raster cell.
 
@@ -35,17 +35,17 @@ distances are calculated from point to point along a
 geodesic.
 
 <p>
-Unlike <em><a href="https://grass.osgeo.org/grass7/manuals/addons/r.surf.idw2.html">r.surf.idw2</a></em> (addon),
+Unlike <em><a href="https://grass.osgeo.org/grass8/manuals/addons/r.surf.idw2.html">r.surf.idw2</a></em> (addon),
 which processes all input data points in each interpolation cycle, <em>r.surf.idw</em>
 attempts to minimize the number of input data for which distances must be
 calculated. Execution speed is therefore a function of the search effort,
 and does not increase appreciably with the number of input data points.
 
 <p>
-<em>r.surf.idw</em> will generally outperform 
+<em>r.surf.idw</em> will generally outperform
 <em>r.surf.idw2</em> except when the input data
 layer contains few non-zero data, i.e. when the cost of the search exceeds
-the cost of the additional distance calculations performed by 
+the cost of the additional distance calculations performed by
 <em>r.surf.idw2</em>. The relative performance
 of these utilities will depend on the comparative speed of boolean, integer
 and floating point operations on a particular platform.
@@ -66,8 +66,8 @@ irregularly spaced input data.  However, the output result
 for the former may include unacceptable nonconformities in
 the surface pattern.
 
-<a name="minuse.html"></a>
-<p>
+<h3 id="minuse">Surface-generation error analysis</h3>
+
 The <b>-e</b> flag option provides a standard
 surface-generation error analysis facility. It produces an output raster map
 of the difference of interpolated values minus input values for those cells
@@ -100,6 +100,7 @@ r.colors map=elev_diff color=differences
 -->
 
 <h2>KNOWN ISSUES</h2>
+
 Module <em>r.surf.idw</em> works only for integer (CELL) raster maps.
 
 <h2>SEE ALSO</h2>
@@ -114,7 +115,7 @@ Module <em>r.surf.idw</em> works only for integer (CELL) raster maps.
 </em>
 
 <p>
-Overview: <a href="https://grasswiki.osgeo.org/wiki/Interpolation">Interpolation and Resampling</a> in GRASS GIS
+Overview: <a href="https://grasswiki.osgeo.org/wiki/Interpolation">Interpolation and Resampling</a> in GRASS
 
 <h2>AUTHOR</h2>
 
@@ -122,9 +123,4 @@ Greg Koerper <br>
 Global Climate Research Project <br>
 U.S. EPA Environmental Research Laboratory <br>
 200 S.W. 35th Street, JSB <br>
-Corvallis, OR 97333 
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+Corvallis, OR 97333

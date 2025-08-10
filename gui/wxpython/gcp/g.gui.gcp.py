@@ -5,7 +5,7 @@
 # MODULE:    GCP Manager
 # AUTHOR(S): Markus Metz
 # PURPOSE:   Georectification and Ground Control Points management.
-# COPYRIGHT: (C) 2012 by Markus Metz, and the GRASS Development Team
+# COPYRIGHT: (C) 2012-2020 by Markus Metz, and the GRASS Development Team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -19,23 +19,24 @@
 #
 ############################################################################
 
-#%module
-#% description: Georectifies a map and allows managing Ground Control Points.
-#% keyword: general
-#% keyword: GUI
-#% keyword: georectification
-#% keyword: GCP
-#%end
+# %module
+# % description: Georectifies a map and allows managing Ground Control Points.
+# % keyword: general
+# % keyword: GUI
+# % keyword: georectification
+# % keyword: geometry
+# % keyword: GCP
+# %end
 
 """
-Module to run GCP management tool as stadalone application.
+Module to run GCP management tool as standalone application.
 
 @author Vaclav Petras  <wenzeslaus gmail.com> (standalone module)
 """
 
 import os
 
-import grass.script as gscript
+import grass.script as gs
 
 
 def main():
@@ -44,28 +45,30 @@ def main():
     .. todo::
         use command line options as an alternative to wizard
     """
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
 
     import wx
 
     from grass.script.setup import set_gui_path
+
     set_gui_path()
 
     from core.settings import UserSettings
     from core.giface import StandaloneGrassInterface
     from gcp.manager import GCPWizard
 
-    driver = UserSettings.Get(group='display', key='driver', subkey='type')
-    if driver == 'png':
-        os.environ['GRASS_RENDER_IMMEDIATE'] = 'png'
+    driver = UserSettings.Get(group="display", key="driver", subkey="type")
+    if driver == "png":
+        os.environ["GRASS_RENDER_IMMEDIATE"] = "png"
     else:
-        os.environ['GRASS_RENDER_IMMEDIATE'] = 'cairo'
+        os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
 
     app = wx.App()
 
-    wizard = GCPWizard(parent=None, giface=StandaloneGrassInterface())
+    GCPWizard(parent=None, giface=StandaloneGrassInterface())
 
     app.MainLoop()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

@@ -13,4 +13,3 @@ DEPENDENCIES =  $(ARCH_INCDIR)/Vect.h $(ARCH_INCDIR)/V_.h \
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 
 default: lib
-

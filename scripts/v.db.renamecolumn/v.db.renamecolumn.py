@@ -20,69 +20,80 @@
 #############################################################################
 
 
-#%module
-#% description: Renames a column in the attribute table connected to a given vector map.
-#% keyword: vector
-#% keyword: attribute table
-#% keyword: database
-#% keyword: rename
-#%end
-#%option G_OPT_V_MAP
-#%end
-#%option G_OPT_V_FIELD
-#%end
-#%option
-#% key: column
-#% type: string
-#% description: Old and new name of the column (old,new)
-#% required: yes
-#% multiple: no
-#% key_desc: oldcol,newcol
-#%end
+# %module
+# % description: Renames a column in the attribute table connected to a given vector map.
+# % keyword: vector
+# % keyword: attribute table
+# % keyword: database
+# % keyword: rename
+# %end
+# %option G_OPT_V_MAP
+# %end
+# %option G_OPT_V_FIELD
+# %end
+# %option
+# % key: column
+# % type: string
+# % description: Old and new name of the column (old,new)
+# % required: yes
+# % multiple: no
+# % key_desc: oldcol,newcol
+# %end
 
-import sys
-import os
-import grass.script as grass
+import grass.script as gs
 
 
 def main():
-    map = options['map']
-    layer = options['layer']
-    column = options['column']
+    map = options["map"]
+    layer = options["layer"]
+    column = options["column"]
 
-    mapset = grass.gisenv()['MAPSET']
+    mapset = gs.gisenv()["MAPSET"]
 
-    if not grass.find_file(map, element='vector', mapset=mapset):
-        grass.fatal(_("Vector map <%s> not found in current mapset") % map)
+    if not gs.find_file(map, element="vector", mapset=mapset):
+        gs.fatal(_("Vector map <%s> not found in current mapset") % map)
 
-    f = grass.vector_layer_db(map, layer)
+    f = gs.vector_layer_db(map, layer)
 
-    table = f['table']
-    keycol = f['key']
-    database = f['database']
-    driver = f['driver']
+    table = f["table"]
+    keycol = f["key"]
+    database = f["database"]
+    driver = f["driver"]
 
     if not table:
-        grass.fatal(_("There is no table connected to the input vector map. Cannot rename any column"))
+        gs.fatal(
+            _(
+                "There is no table connected to the input vector map. Cannot rename "
+                "any column"
+            )
+        )
 
-    cols = column.split(',')
+    cols = column.split(",")
     oldcol = cols[0]
     newcol = cols[1]
 
     if driver == "dbf":
         if len(newcol) > 10:
-            grass.fatal(
-                _("Column name <%s> too long. The DBF driver supports column names not longer than 10 characters") %
-                newcol)
+            gs.fatal(
+                _(
+                    "Column name <%s> too long. The DBF driver supports column names "
+                    "not longer than 10 characters"
+                )
+                % newcol
+            )
 
     if oldcol == keycol:
-        grass.fatal(
-            _("Cannot rename column <%s> as it is needed to keep table <%s> connected to the input vector map") %
-            (oldcol, table))
+        gs.fatal(
+            _(
+                "Cannot rename column <%s> as it is needed to keep table <%s> "
+                "connected to the input vector map"
+            )
+            % (oldcol, table)
+        )
 
     # describe old col
     oldcoltype = None
-    for f in grass.db_describe(table)['cols']:
+    for f in gs.db_describe(table, database=database, driver=driver)["cols"]:
         if f[0] != oldcol:
             continue
         oldcoltype = f[1]
@@ -90,34 +101,45 @@ def main():
 
     # old col there?
     if not oldcoltype:
-        grass.fatal(_("Column <%s> not found in table <%s>") % (oldcol, table))
+        gs.fatal(
+            _("Column <{column_name}> not found in table <{table_name}>").format(
+                column_name=oldcol, table_name=table
+            )
+        )
 
     # some tricks
-    if driver in ['sqlite', 'dbf']:
+    if driver in {"sqlite", "dbf"}:
         if oldcoltype.upper() == "CHARACTER":
-            colspec = "%s varchar(%s)" % (newcol, oldcollength)
+            colspec = f"{newcol} varchar({oldcollength})"
         else:
-            colspec = "%s %s" % (newcol, oldcoltype)
+            colspec = f"{newcol} {oldcoltype}"
 
-        grass.run_command('v.db.addcolumn', map=map, layer=layer, column=colspec)
-        sql = "UPDATE %s SET %s=%s" % (table, newcol, oldcol)
-        grass.write_command('db.execute', input='-', database=database, driver=driver, stdin=sql)
-        grass.run_command('v.db.dropcolumn', map=map, layer=layer, column=oldcol)
-    elif driver == 'mysql':
+        gs.run_command("v.db.addcolumn", map=map, layer=layer, column=colspec)
+        sql = f'UPDATE {table} SET "{newcol}"="{oldcol}"'
+        gs.write_command(
+            "db.execute", input="-", database=database, driver=driver, stdin=sql
+        )
+        gs.run_command("v.db.dropcolumn", map=map, layer=layer, column=oldcol)
+    elif driver == "mysql":
         if oldcoltype.upper() == "CHARACTER":
             newcoltype = "varchar(%s)" % (oldcollength)
         else:
             newcoltype = oldcoltype
 
-        sql = "ALTER TABLE %s CHANGE %s %s %s" % (table, oldcol, newcol, newcoltype)
-        grass.write_command('db.execute', input='-', database=database, driver=driver, stdin=sql)
+        sql = f'ALTER TABLE {table} CHANGE "{oldcol}" "{newcol}" {newcoltype}'
+        gs.write_command(
+            "db.execute", input="-", database=database, driver=driver, stdin=sql
+        )
     else:
-        sql = "ALTER TABLE %s RENAME %s TO %s" % (table, oldcol, newcol)
-        grass.write_command('db.execute', input='-', database=database, driver=driver, stdin=sql)
+        sql = f'ALTER TABLE {table} RENAME "{oldcol}" TO "{newcol}"'
+        gs.write_command(
+            "db.execute", input="-", database=database, driver=driver, stdin=sql
+        )
 
     # write cmd history:
-    grass.vector_history(map)
+    gs.vector_history(map)
+
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

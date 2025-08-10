@@ -1,15 +1,15 @@
 /*!
-  \file lib/pngdriver/read_png.c
+   \file lib/pngdriver/read_png.c
 
-  \brief GRASS png display driver - read png
+   \brief GRASS png display driver - read png
 
-  (C) 2007-2014 by Glynn Clements and the GRASS Development Team
-  
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
-  
-  \author Glynn Clements
-*/
+   (C) 2007-2014 by Glynn Clements and the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
+
+   \author Glynn Clements
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,24 +22,24 @@
 
 static void read_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-  png_size_t check;
-  FILE *fp;
+    png_size_t check;
+    FILE *fp;
 
-  if (png_ptr == NULL )
-    return;
+    if (png_ptr == NULL)
+        return;
 
-  fp = (FILE *) png_get_io_ptr(png_ptr);
+    fp = (FILE *)png_get_io_ptr(png_ptr);
 
-  if ( fp == NULL )
-    return;
+    if (fp == NULL)
+        return;
 
-  /* fread() returns 0 on error, so it is OK to store this in a png_size_t
-   * instead of an int, which is what fread() actually returns.
-   */
-  check = fread(data, 1, length, fp);
+    /* fread() returns 0 on error, so it is OK to store this in a png_size_t
+     * instead of an int, which is what fread() actually returns.
+     */
+    check = fread(data, 1, length, fp);
 
-  if (check != length)
-    G_fatal_error(_("Unable to read PNG"));
+    if (check != length)
+        G_fatal_error(_("Unable to read PNG"));
 }
 
 void read_png(void)
@@ -54,95 +54,96 @@ void read_png(void)
     png_uint_32 i_width, i_height;
     int depth, color_type;
 
-    png_ptr =
-	png_create_read_struct(PNG_LIBPNG_VER_STRING, &jbuf, NULL, NULL);
+    png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, &jbuf, NULL, NULL);
     if (!png_ptr)
         G_fatal_error(_("Unable to allocate PNG structure"));
 
     info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr)
-	G_fatal_error(_("Unable to allocate PNG structure"));
+        G_fatal_error(_("Unable to allocate PNG structure"));
 
     if (setjmp(png_jmpbuf(png_ptr)))
-	G_fatal_error(_("Unable to read PNG file"));
+        G_fatal_error(_("Unable to read PNG file"));
 
     input = fopen(png.file_name, "rb");
     if (!input)
-	G_fatal_error(_("Unable to open output file <%s>"), png.file_name);
+        G_fatal_error(_("Unable to open output file <%s>"), png.file_name);
 
     png_set_read_fn(png_ptr, input, read_data);
 
     png_read_info(png_ptr, info_ptr);
 
-    png_get_IHDR(png_ptr, info_ptr, &i_width, &i_height,
-		 &depth, &color_type, NULL, NULL, NULL);
+    png_get_IHDR(png_ptr, info_ptr, &i_width, &i_height, &depth, &color_type,
+                 NULL, NULL, NULL);
 
     if (depth != 8)
-	G_fatal_error(_("Input PNG file is not 8-bit"));
+        G_fatal_error(_("Input PNG file is not 8-bit"));
 
-    if (i_width != (unsigned long)png.width || i_height != (unsigned long)png.height)
-	G_fatal_error
-	    (_("Input PNG file has incorrect dimensions: expected: %dx%d got: %lux%lu"),
-	     png.width, png.height, (unsigned long) i_width, (unsigned long) i_height);
+    if (i_width != (unsigned long)png.width ||
+        i_height != (unsigned long)png.height)
+        G_fatal_error(_("Input PNG file has incorrect dimensions: expected: "
+                        "%dx%d got: %lux%lu"),
+                      png.width, png.height, (unsigned long)i_width,
+                      (unsigned long)i_height);
 
     if (png.true_color) {
-	if (color_type != PNG_COLOR_TYPE_RGB_ALPHA)
-	    G_fatal_error(_("Input PNG file is not RGBA"));
+        if (color_type != PNG_COLOR_TYPE_RGB_ALPHA)
+            G_fatal_error(_("Input PNG file is not RGBA"));
     }
     else {
-	if (color_type != PNG_COLOR_TYPE_PALETTE)
-	    G_fatal_error(_("Input PNG file is not indexed color"));
+        if (color_type != PNG_COLOR_TYPE_PALETTE)
+            G_fatal_error(_("Input PNG file is not indexed color"));
     }
 
     if (!png.true_color && png.has_alpha) {
-	png_bytep trans;
-	int num_trans;
+        png_bytep trans;
+        int num_trans;
 
-	png_get_tRNS(png_ptr, info_ptr, &trans, &num_trans, NULL);
+        png_get_tRNS(png_ptr, info_ptr, &trans, &num_trans, NULL);
 
-	if (num_trans != 1 || trans[0] != 0)
-	    G_fatal_error(_("Input PNG file has invalid palette"));
+        if (num_trans != 1 || trans[0] != 0)
+            G_fatal_error(_("Input PNG file has invalid palette"));
     }
 
     if (png.true_color)
-	png_set_invert_alpha(png_ptr);
+        png_set_invert_alpha(png_ptr);
     else {
-	png_colorp png_pal;
-	int num_palette;
-	int i;
+        png_colorp png_pal;
+        int num_palette;
+        int i;
 
-	png_get_PLTE(png_ptr, info_ptr, &png_pal, &num_palette);
+        png_get_PLTE(png_ptr, info_ptr, &png_pal, &num_palette);
 
-	if (num_palette > 256)
-	    num_palette = 256;
+        if (num_palette > 256)
+            num_palette = 256;
 
-	for (i = 0; i < num_palette; i++) {
-	    png.palette[i][0] = png_pal[i].red;
-	    png.palette[i][1] = png_pal[i].green;
-	    png.palette[i][2] = png_pal[i].blue;
-	}
+        for (i = 0; i < num_palette; i++) {
+            png.palette[i][0] = png_pal[i].red;
+            png.palette[i][1] = png_pal[i].green;
+            png.palette[i][2] = png_pal[i].blue;
+        }
     }
 
     line = G_malloc(png.width * 4);
 
     for (y = 0, p = png.grid; y < png.height; y++) {
-	png_bytep q = line;
+        png_bytep q = line;
 
-	png_read_row(png_ptr, q, NULL);
+        png_read_row(png_ptr, q, NULL);
 
-	if (png.true_color)
-	    for (x = 0; x < png.width; x++, p++) {
-		int r = *q++;
-		int g = *q++;
-		int b = *q++;
-		int a = *q++;
-		unsigned int c = png_get_color(r, g, b, a);
+        if (png.true_color)
+            for (x = 0; x < png.width; x++, p++) {
+                int r = *q++;
+                int g = *q++;
+                int b = *q++;
+                int a = *q++;
+                unsigned int c = png_get_color(r, g, b, a);
 
-		*p = c;
-	    }
-	else
-	    for (x = 0; x < png.width; x++, p++, q++)
-		*p = (png_byte) * q;
+                *p = c;
+            }
+        else
+            for (x = 0; x < png.width; x++, p++, q++)
+                *p = (png_byte)*q;
     }
 
     G_free(line);

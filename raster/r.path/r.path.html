@@ -1,9 +1,9 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.path</em> traces a path from starting points following input 
-directions. Such a movement direction map can be generated with 
-<em><a href="r.walk.html">r.walk</a></em>, 
-<em><a href="r.cost.html">r.cost</a></em>, 
+<em>r.path</em> traces a path from starting points following input
+directions. Such a movement direction map can be generated with
+<em><a href="r.walk.html">r.walk</a></em>,
+<em><a href="r.cost.html">r.cost</a></em>,
 <em><a href="r.slope.aspect.html">r.slope.aspect</a></em>,
 <em><a href="r.watershed.html">r.watershed</a></em>, or
 <em><a href="r.fill.dir.html">r.fill.dir</a></em>,
@@ -11,29 +11,29 @@ provided that the direction is in degrees, measured counterclockwise
 from east.
 
 <p>
-Alternatively, bitmask-encoded directions can be provided where each 
-bit position corresponds to a specific neighbour. A path will continue 
-to all neighbours with their bit set. This means a path can split and 
-merge. Such bitmasked directions can be created with the <b>-b</b> 
-flag of <em><a href="r.cost.html">r.cost</a></em> and 
+Alternatively, bitmask-encoded directions can be provided where each
+bit position corresponds to a specific neighbour. A path will continue
+to all neighbours with their bit set. This means a path can split and
+merge. Such bitmasked directions can be created with the <b>-b</b>
+flag of <em><a href="r.cost.html">r.cost</a></em> and
 <em><a href="r.walk.html">r.walk</a></em>.
 
 <div class="code"><pre>
 Direction encoding for neighbors of x
-    
+
   135  90  45          7 8 1
   180  x  360          6 x 2
   225 270 315          5 4 3
-  
+
   degrees           bit positions
   CCW from East
 </pre></div>
 
-A path stops when the direction is zero or negative, indicating a stop 
+A path stops when the direction is zero or negative, indicating a stop
 point or outlet.
 <p>
 The <b>output</b> raster map will show one or more least-cost paths
-between each user-provided location(s) and the target points (direction 
+between each user-provided location(s) and the target points (direction
 &le; 0). By default, the <b>output</b> will be an integer CELL map with
 the id of the start points along the least cost path, and null cells elsewhere.
 
@@ -51,27 +51,27 @@ incompatible.
 
 
 <p>
-The <b>start_coordinates</b> parameter consists of map E and N grid 
-coordinates of a starting point. Each x,y pair is the easting and 
-northing (respectively) of a starting point from which a path will be 
-traced following <b>input</b> directions. The <b>start_points</b> 
-parameter can take multiple vector maps containing additional starting 
+The <b>start_coordinates</b> parameter consists of map E and N grid
+coordinates of a starting point. Each x,y pair is the easting and
+northing (respectively) of a starting point from which a path will be
+traced following <b>input</b> directions. The <b>start_points</b>
+parameter can take multiple vector maps containing additional starting
 points.
 
 <h2>NOTES</h2>
-The directions are recorded as degrees CCW from East, the Knight's move 
+
+The directions are recorded as degrees CCW from East, the Knight's move
 of r.cost and r.walk is considered:
 <div class="code"><pre>
-       112.5     67.5          
-157.5  135   90  45   22.5     
-       180   x   0            
+       112.5     67.5
+157.5  135   90  45   22.5
+       180   x   0
 202.5  225  270  315  337.5
        247.5     292.5
 </pre></div>
-i.e. a cell with the value 135 means the next cell is to the North-West, 
-and a cell with the value 157.5 means that the next cell is to the 
+i.e. a cell with the value 135 means the next cell is to the North-West,
+and a cell with the value 157.5 means that the next cell is to the
 West-North-West.
-
 
 <h2>EXAMPLES</h2>
 
@@ -90,7 +90,7 @@ v.in.ascii input=- output=start format=point separator=comma &lt;&lt;EOF
 EOF
 </pre></div>
 
-We need to supply a direction raster map to the <em>r.path</em> module. 
+We need to supply a direction raster map to the <em>r.path</em> module.
 To get these directions, we use the
 <em><a href="r.watershed.html">r.watershed</a></em> module:
 
@@ -177,8 +177,8 @@ d.vect map=walkpath color=254:192:6 width=4 legend_label=Bitmask
 d.vect map=walkpath_k color=62:80:180 width=2 legend_label="Bitmask + knight's"
 -->
 
-The extracted least-cost path splits and merges on the way from 
-the start point to the stop point (start point for r.walk). Note the 
+The extracted least-cost path splits and merges on the way from
+the start point to the stop point (start point for r.walk). Note the
 gaps in the raster path when using the Knight's move.
 <div class="code"><pre>
 </pre></div>
@@ -188,7 +188,7 @@ gaps in the raster path when using the Knight's move.
     <img src="r_path_with_bitmask.png" alt="least cost path using bitmask" width="600" height="274">
 </a>
 <br>
-<i>Figure: Comparison of shortest paths using single directions and 
+<i>Figure: Comparison of shortest paths using single directions and
 multiple bitmask encoded directions without and with Knight's move</i>
 </div>
 
@@ -206,12 +206,7 @@ multiple bitmask encoded directions without and with Knight's move</i>
 <a href="r.watershed.html">r.watershed</a>
 </em>
 
-<h2>AUTHORS</h2>
+<h2>AUTHOR</h2>
 
 Markus Metz<br>
 Multiple path directions sponsored by <a href="https://www.mundialis.de">mundialis</a>
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

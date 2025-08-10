@@ -1,75 +1,141 @@
 <h2>DESCRIPTION</h2>
 
-<em><b>r.mask</b></em> - Facilitates creation of a raster "MASK" map to
+<em>r.mask</em> facilitates the creation and management of a raster mask to
 control raster operations.
+While the computational region specifies the extent (rectangular bounding box)
+and resolution, the mask specifies the area that should be considered for
+the operations and area which should be ignored.
+The mask is represented as a raster map called <code>MASK</code> by default.
 
 <p>
-The MASK is only applied when <em>reading</em> an existing GRASS raster map,
-for example when used in a module as an input map.
-
-The MASK will block out certain areas of a raster map from analysis and/or
-display, by "hiding" them from sight of other GRASS modules. Data falling
-within the bounaries of the MASK can be modified and operated upon by other
-GRASS raster modules; data falling outside the MASK is treated as if it were NULL.
+The mask is applied when <em>reading</em> an existing GRASS raster map,
+for example when used as an input map in a module. The mask will block out
+certain areas of a raster map from analysis and/or display, by "hiding" them
+from sight of other GRASS modules. Data falling within the boundaries of the
+mask can be modified and operated upon by other GRASS raster modules; data
+falling outside the mask is treated as if it were NULL.
 <p>
-Because the MASK is actually only a reclass map named "MASK", it can be
-copied, renamed, removed, and used in analyses, just like other GRASS
-raster map layers.  The user should be aware that a MASK remains in
-place until a user renames it to something other than "MASK", or removes
-it using "<tt>r.mask -r</tt>" or <em>g.remove</em>.
+By default, <em>r.mask</em> converts any non-NULL value in the input map,
+including zero, to 1. All these areas will be part of the mask (see the notes
+for more details). To only convert specific values (or range of values) to 1
+and the rest to NULL, use the <em>maskcats</em> parameter.
 <p>
-Grid cells in the MASK map containing <tt>0</tt> or <tt>NULL</tt>
-will replace data with NULL, while cells containing other values will allow
-data to pass through unaltered.
+Because the mask raster map created with <em>r.mask</em> is actually only
+a reclass map named <code>MASK</code> by default, it can be copied, renamed,
+removed, and used in analyses, just like other GRASS raster maps.
 <p>
-To restore raster operations to normal (i.e., all cells of the current region),
-remove the MASK file by setting the <b>-r</b> remove MASK flag. In this case, a
-dummy value must also be given for the input parameter.
-A MASK also can be removed by using <em>g.remove</em>
-or by renaming it to any other name with <em>g.rename</em>.
-
+The user should be aware that a mask remains in place until it is removed
+or renamed. To remove a mask and restore
+raster operations to normal (i.e., all cells of the current region), remove the
+mask by setting the <b>-r</b> flag (<code>r.mask -r</code>).
+Alternatively, a mask can be removed using <em>g.remove</em> or by renaming it
+to any other name with <em>g.rename</em>.
+<p>
+The <code>GRASS_MASK</code> environment variable can be used to specify
+the raster map which will be used as a mask. If the environment variable is
+not defined, the name <code>MASK</code> is used instead.
 
 <h2>NOTES</h2>
 
-The above method for specifying a "mask" may seem
-counterintuitive.  Areas inside the MASK are not hidden;
-areas outside the MASK will be ignored until the MASK file
-is removed.
-<p>
-The MASK is read as an integer map. If MASK is actually a
-floating-point map, the values will be converted to integers using the
-map's quantisation rules (this defaults to round-to-nearest, but can
-be changed with r.quant).
+The above method for specifying a "mask" may seem counterintuitive. Areas
+inside the mask are not hidden; areas outside the mask will be ignored until
+the mask is removed.
 <p>
 <em>r.mask</em> uses <em>r.reclass</em> to create a reclassification of an
-existing raster map and name it <tt>MASK</tt>. A reclass map takes up less space, but
-is affected by any changes to the underlying map from which it was created.
-The user can select category values from the input raster to use in the MASK
-with the <em>maskcats</em> parameter; if <em>r.mask</em> is run from the
+existing raster map and names it <code>MASK</code> by default.
+A reclass map takes up less
+space, but is affected by any changes to the underlying map from which it was
+created. The user can select category values from the input raster to use in the
+mask with the <em>maskcats</em> parameter; if <em>r.mask</em> is run from the
 command line, the category values listed in <em>maskcats</em> must be quoted
-(see example below).
-<p>
-Somewhat similar program functions to those performed by
-<em>r.mask</em> can be done using <em>r.mapcalc</em>, 
-<em>g.region</em>, and other commands.
+(see example below). Note that the <em>maskcats</em> can only be used if the
+input map is an integer map.
 
+<h3>Different ways to create a mask</h3>
+
+Mask can be created using <em>r.mask</em> or by creating a mask raster map
+directly.
+
+<p>
+The <em>r.mask</em> tool creates a mask with values 1 and NULL.
+By default, <em>r.mask</em> converts all non-NULL cells to 1.
+If a raster with ones (1) and NULLs values is used with <em>r.mask</em>, all
+raster cells with value 1 will be included in the computation,
+while those with NULL will be masked out.
+
+<div class="code"><pre>
+r.mapcalc -s "map1 = if(row() &lt; col(), 1, null())"
+r.mask raster=map1
+</pre></div>
+
+If a binary map with zeros and ones as values is used with <em>r.mask</em>,
+and both NULLs and zeros should be masked out, the <b>maskcats</b> parameter
+can be used to specify the values that should be masked out:
+
+<div class="code"><pre>
+r.mapcalc -s "map2 = if(row() &lt; col(), 1, 0)"
+r.mask raster=map2 maskcats="0"
+</pre></div>
+
+<p>
+Mask can also be created directly using any tools that have a raster as
+output, by naming the output raster <code>MASK</code> (or whatever the
+<code>GRASS_MASK</code> environment variable is set to).
+Both NULLs and zeros will be masked out in the raster mask.
+This allows for creation of a simple binary raster with only ones and zeros
+where cells with zeros in the mask raster are excluded from the computation
+(behaving as if they were NULL).
+A raster with zeros and ones can be created and used directly as a mask
+by naming the output raster <code>MASK</code>, e.g., using raster algebra:
+
+<div class="code"><pre>
+r.mapcalc -s "MASK = if(row() &lt; col(), 1, 0)"
+</pre></div>
+
+<h3>Handling of floating-point maps</h3>
+
+<em>r.mask</em> treats floating-point maps the same as integer maps (except that
+floating maps are not allowed in combination with the <em>maskcats</em>
+parameter); all non-NULL values of the input raster map are converted to 1 and
+are thus part of the mask. In the example below, all raster cells are part of
+the mask, i.e., nothing is blocked out from analysis and/or display.
+
+<div class="code"><pre>
+r.mapcalc -s "map3 = rand(0.0,1.0)"
+r.mask raster=map3
+</pre></div>
+
+However, when using another method than <em>r.mask</em> to create a mask,
+the user should be aware that the mask is read as an integer map. If mask is
+a floating-point map, the values will be converted to integers using
+the map's quantisation rules (this defaults to round-to-nearest, but can be
+changed with r.quant).
+
+<div class="code"><pre>
+r.mapcalc -s "map4 = rand(0.0,1.0)"
+g.copy raster=map4,MASK
+</pre></div>
+
+In the example above, raster cells with a rounded value of 1 are part of
+the mask, while raster cells with a rounded value of 0 are converted to NULL
+and consequently blocked out from analysis and/or display.
 
 <h2>EXAMPLES</h2>
 
 The examples are based on the North Carolina sample dataset.
 <p>
-Create a raster mask, for contraining the calculation of
+Create a raster mask, for constraining the calculation of
 univariate statistics of the elevation values for "lakes":
 <div class="code"><pre>
 # set computation region to lakes raster map
 g.region raster=lakes -p
-# use lakes as MASK
+# use lakes as mask
 r.mask raster=lakes
 # get statistics for elevation pixels of lakes:
 r.univar elevation
 </pre></div>
 
-Remove the raster mask ("MASK" map) with the -r flag:
+Remove the raster mask with the -r flag:
 <div class="code"><pre>
 r.mask -r
 </pre></div>
@@ -86,22 +152,17 @@ d.mon wx0
 d.rast geology_30m
 </pre></div>
 
-
 <h2>SEE ALSO</h2>
+
 <em>
 <a href="g.region.html">g.region</a>,
 <a href="r.mapcalc.html">r.mapcalc</a>,
 <a href="r.reclass.html">r.reclass</a>,
 <a href="g.remove.html">g.remove</a>,
-<a href="g.rename.html">g.rename</a>
+<a href="g.rename.html">g.rename</a>,
+<a href="r.quant.html">r.quant</a>
 </em>
-
 
 <h2>AUTHOR</h2>
 
 Michael Barton, Arizona State University
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

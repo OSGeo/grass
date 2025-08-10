@@ -1,22 +1,22 @@
 <h2>DESCRIPTION</h2>
 
-This module exports all maps registered in a space time raster datasets 
-as VTK legacy files using a numerical numbering scheme. The VTK files 
-can be visualized with any VTK based visualize. Our preferred tool is 
+<em>t.rast.out.vtk</em> exports all maps registered in a space time raster datasets
+as VTK legacy files using a numerical numbering scheme. The VTK files
+can be visualized with any VTK based visualize. Our preferred tool is
 ParaView. The VTK legacy files are created using <b>r.out.vtk</b>.
 
 <h2>EXAMPLE</h2>
 
-In this simple example we create several raster maps with random values 
-and one elevation map. The random value raster maps are registered in a 
-space time raster dataset. All maps of this space time raster dataset 
-are exported using <b>t.rast.out.vtk</b> into the directory 
-<b>/tmp/test1</b>.
+In this simple example we create several raster maps with random values
+and one elevation map. The random value raster maps are registered in a
+space time raster dataset. All maps of this space time raster dataset
+are exported using <b>t.rast.out.vtk</b> into the directory
+<b>/tmp/export</b>.
 
 
 <div class="code"><pre>
 mkdir /tmp/export
-t.rast.out.vtk input=precip_abs expdir=/tmp/export elevation=elevation
+t.rast.out.vtk input=precip_abs directory=/tmp/export/ elevation=elevation
 
 ls -1 /tmp/export
 000000_tempmean_monthly.vtk
@@ -37,15 +37,9 @@ ls -1 /tmp/export
 
 <em>
 <a href="r.out.vtk.html">r.out.vtk</a>,
-<a href="http://www.paraview.org">ParaView</a>
+<a href="https://www.paraview.org">ParaView</a>
 </em>
 
 <h2>AUTHOR</h2>
 
 S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
-

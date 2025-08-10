@@ -21,13 +21,11 @@
  * Read the file COPYING that comes with GRASS for details.
  */
 
-
 #ifndef TREE_H
 
 #define TREE_H
 
 #define VOID_T char
-
 
 /*!
  * Function table for a tree
@@ -35,48 +33,43 @@
  * From object oriented point of view, this structure represents
  * a class or a virtual table of functions/methods for a class.
  */
-struct multfunc
-{
-    int (*compare) ();
-    struct quaddata **(*divide_data) ();
-    int (*add_data) ();
-    int (*intersect) ();
-    int (*division_check) ();
-    int (*get_points) ();
+struct multfunc {
+    int (*compare)(struct triple *, struct quaddata *);
+    struct quaddata **(*divide_data)(struct quaddata *, int, double);
+    int (*add_data)(struct triple *, struct quaddata *, double);
+    int (*intersect)(struct quaddata *, struct quaddata *);
+    int (*division_check)(struct quaddata *, int);
+    int (*get_points)(struct quaddata *, struct quaddata *, int);
 };
 
-struct tree_info
-{
+struct tree_info {
     struct multfunc *functions;
     double dmin;
     int kmax;
     struct multtree *root;
 };
 
-struct multtree
-{
+struct multtree {
     struct quaddata *data;
     struct multtree **leafs;
     struct multtree *parent;
     int multant;
 };
 
-struct multfunc *MT_functions_new(int (*)(struct triple *, struct quaddata *),
-				  struct quaddata **(*)(struct quaddata *,
-							int, double),
-				  int (*)(struct triple *, struct quaddata *,
-					  double), int (*)(struct quaddata *,
-							   struct quaddata *),
-				  int (*)(struct quaddata *, int),
-				  int (*)(struct quaddata *,
-					  struct quaddata *, int));
-struct tree_info *MT_tree_info_new(struct multtree *, struct multfunc *,
-				   double, int);
+struct multfunc *
+MT_functions_new(int (*)(struct triple *, struct quaddata *),
+                 struct quaddata **(*)(struct quaddata *, int, double),
+                 int (*)(struct triple *, struct quaddata *, double),
+                 int (*)(struct quaddata *, struct quaddata *),
+                 int (*)(struct quaddata *, int),
+                 int (*)(struct quaddata *, struct quaddata *, int));
+struct tree_info *MT_tree_info_new(struct multtree *, struct multfunc *, double,
+                                   int);
 struct multtree *MT_tree_new(struct quaddata *, struct multtree **,
-			     struct multtree *, int);
+                             struct multtree *, int);
 int MT_insert(struct triple *, struct tree_info *, struct multtree *, int);
 int MT_divide(struct tree_info *, struct multtree *, int);
 int MT_region_data(struct tree_info *, struct multtree *, struct quaddata *,
-		   int, int);
+                   int, int);
 
 #endif

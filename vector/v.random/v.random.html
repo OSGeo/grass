@@ -16,29 +16,30 @@ calculated by rounding random floating point number.
 option <b>seed</b>.
 
 <h3>Restriction to vector areas</h3>
-<p>
+
 If an <b>restrict</b> vector map with areas is specified, the location
 of random points is restricted to the selected areas. By default, the
 requested number of points are distributed across all areas.
 
 <p>
-If the <b>-a</b> flag is given, the requested number of points is 
-generated for each individual area. For example, if 20 points should be 
-generated and the input map has 100 individual areas, 2000 points will 
+If the <b>-a</b> flag is given, the requested number of points is
+generated for each individual area. For example, if 20 points should be
+generated and the input map has 100 individual areas, 2000 points will
 be generated in total.
 
 <p>
 Attributes attached to <b>restrict</b> vector map are also transferred
-if the <b>layer</b> parameter is defined > 0,
+if the <b>layer</b> parameter is defined &gt; 0,
 see <em><a href="#stratified-random-sampling:-random-sampling-from-vector-map-by-attribute">example</a></em>
 below.
 
 <h2>NOTES</h2>
 
-Importantly, attributes will only be transferred if <b>layer</b> > 0
-(e.g., <tt>layer=1</tt>).
-  
+Importantly, attributes will only be transferred if <b>layer</b> &gt; 0
+(e.g., <code>layer=1</code>).
+
 <h2>EXAMPLES</h2>
+
 All examples are based on the North Carolina sample dataset.
 
 <h3>Generating random points in 2D</h3>
@@ -109,7 +110,7 @@ mv map.png vrandom_z.png
 
 <p>
 <center>
-<img src="vrandom_z.png" border=1><br>
+<img src="vrandom_z.png" border="1"><br>
 Random points with different X, Y, and Z coordinates
 </center>
 
@@ -118,7 +119,7 @@ Random points with different X, Y, and Z coordinates
 Generate 3 random points only in selected areas ("RALEIGH" related ZIP
 code areas):
 <div class="code"><pre>
-v.random restrict=zipcodes_wake output=zipcodes_local_random_n3 npoints=3 where="ZIPNAME = 'RALEIGH'" -a 
+v.random restrict=zipcodes_wake output=zipcodes_local_random_n3 npoints=3 where="ZIPNAME = 'RALEIGH'" -a
 
 # visualization
 d.mon wx0
@@ -152,7 +153,7 @@ d.vect randareas6k -c
 </pre></div>
 <p>
 <center>
-<img src="vrandom_polygons.png" border=1><br>
+<img src="vrandom_polygons.png" border="1"><br>
 Random adjacent areas from random points (here: used as centroids)
 </center>
 
@@ -170,7 +171,6 @@ v.to.rast randareas6k out=randareas6k use=cat
 r.colors randareas6k color=random
 d.rast randareas6k
 </pre></div>
-
 
 <h3>Random sampling from raster map</h3>
 
@@ -195,7 +195,7 @@ Generate 20 random points and sample attribute data from geology (vector) map:
 g.region -p vector=geology
 v.random output=random_samples npoints=20
 v.db.addtable map=random_samples columns='cat integer, geology varchar(100)'
-v.what.vect map=random_samples column=geology query_map=geology query_layer=1 query_column=GEO_NAME 
+v.what.vect map=random_samples column=geology query_map=geology query_layer=1 query_column=GEO_NAME
 v.db.select random_samples
 cat|geology
 1|PzZm
@@ -227,10 +227,9 @@ d.vect random_samples color=white
 -->
 <p>
 <center>
-<img src="vrandom_restricted_attr.png" border=1><br>
+<img src="vrandom_restricted_attr.png" border="1"><br>
 Random points only sampled in forested areas (stratified random sampling)
 </center>
-
 
 <h3>Stratified random sampling: Random sampling from vector map with spatial constraints</h3>
 
@@ -251,11 +250,10 @@ d.vect random_samples color=white
 -->
 <p>
 <center>
-<img src="vrandom_restricted_area.png" border=1><br>
+<img src="vrandom_restricted_area.png" border="1"><br>
 Two random points sampled in each individual water body (stratified
 random sampling)
 </center>
-
 
 <h2>SEE ALSO</h2>
 
@@ -270,18 +268,12 @@ random sampling)
 <a href="v.what.vect.html">v.what.vect</a>
 </em>
 <p>
-<a href="sql.html">SQL support in GRASS GIS</a>
+<a href="sql.html">SQL support in GRASS</a>
 
 <h2>AUTHOR</h2>
 
 <a href="http://mccauley-usa.com/">James Darrell McCauley</a>
 <a href="mailto:darrell@mccauley-usa.com">&lt;darrell@mccauley-usa.com&gt;</a>,
-<br>when he was at: 
-<a href="http://ABE.www.ecn.purdue.edu/ABE/">Agricultural
-Engineering</a>
+<br>when he was at:
+<a href="http://ABE.www.ecn.purdue.edu/ABE/">Agricultural Engineering</a>
 <a href="http://www.purdue.edu/">Purdue University</a>
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

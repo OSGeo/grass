@@ -1,25 +1,27 @@
-
 /***************************************************************************
  *
- * MODULE: 	g.region (commandline)
- * AUTHOR(S):	Michael Shapiro, CERL
- *              datum added by Andreas Lange <andreas.lange@rhein-main.de>
- * PURPOSE: 	Program to manage and print the boundary definitions for the
- *              geographic region.
- * 
- * COPYRIGHT:  	(C) 2000 by the GRASS Development Team
+ * MODULE:       g.region (commandline)
+ * AUTHOR(S):    Michael Shapiro, CERL
+ *               datum added by Andreas Lange <andreas.lange@rhein-main.de>
+ * PURPOSE:      Program to manage and print the boundary definitions for the
+ *               geographic region.
  *
- *   	    	This program is free software under the GPL (>=v2)
- *   	    	Read the file COPYING that comes with GRASS for details.
+ * COPYRIGHT:    (C) 2000-2021 by the GRASS Development Team
+ *
+ *               This program is free software under the GPL (>=v2)
+ *               Read the file COPYING that comes with GRASS for
+ *               details.
  ****************************************************************************/
 
 #include <string.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/raster3d.h>
 #include <grass/vector.h>
+#include <grass/parson.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
@@ -30,8 +32,7 @@ int main(int argc, char *argv[])
 {
     int i;
     int print_flag = 0;
-    int flat_flag; 
-    int set_flag;
+    int flat_flag = 0;
     double x, xs, ys, zs;
     int ival;
     int row_flag = 0, col_flag = 0;
@@ -41,22 +42,21 @@ int main(int argc, char *argv[])
     const char *mapset;
     char **rast_ptr, **vect_ptr;
     int pix;
+    bool update_file = false;
+    enum OutputFormat format;
+    JSON_Value *root_value;
+    JSON_Object *root_object;
 
     struct GModule *module;
-    struct
-    {
-	struct Flag
-	    *update, *print, *gprint, *flprint, *lprint, *eprint, *nangle,
-	    *center, *res_set, *dist_res, *dflt, *z, *savedefault,
-	    *bbox, *gmt_style, *wms_style;
+    struct {
+        struct Flag *noupdate, *force, *print, *gprint, *flprint, *lprint,
+            *eprint, *nangle, *center, *res_set, *dist_res, *dflt, *z,
+            *savedefault, *bbox, *gmt_style, *wms_style;
     } flag;
-    struct
-    {
-	struct Option
-	    *north, *south, *east, *west, *top, *bottom,
-	    *res, *nsres, *ewres, *res3, *tbres, *rows, *cols,
-	    *save, *region, *raster, *raster3d, *align,
-	    *zoom, *vect, *grow;
+    struct {
+        struct Option *north, *south, *east, *west, *top, *bottom, *res, *nsres,
+            *ewres, *res3, *nsres3, *ewres3, *tbres, *rows, *cols, *save,
+            *region, *raster, *raster3d, *align, *zoom, *vect, *grow, *format;
     } parm;
 
     G_gisinit(argv[0]);
@@ -68,8 +68,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("extent"));
     G_add_keyword(_("resolution"));
     G_add_keyword(_("level1"));
-    module->description =
-	_("Manages the boundary definitions for the " "geographic region.");
+    module->description = _("Manages the boundary definitions for the "
+                            "geographic region.");
 
     /* flags */
 
@@ -81,7 +81,8 @@ int main(int argc, char *argv[])
     flag.savedefault = G_define_flag();
     flag.savedefault->key = 's';
     flag.savedefault->label = _("Save as default region");
-    flag.savedefault->description = _("Only possible from the PERMANENT mapset");
+    flag.savedefault->description =
+        _("Only possible from the PERMANENT mapset");
     flag.savedefault->guisection = _("Existing");
 
     flag.print = G_define_flag();
@@ -92,7 +93,7 @@ int main(int argc, char *argv[])
     flag.lprint = G_define_flag();
     flag.lprint->key = 'l';
     flag.lprint->description = _("Print the current region in lat/long "
-				 "using the current ellipsoid/datum");
+                                 "using the current ellipsoid/datum");
     flag.lprint->guisection = _("Print");
 
     flag.eprint = G_define_flag();
@@ -103,33 +104,31 @@ int main(int argc, char *argv[])
     flag.center = G_define_flag();
     flag.center->key = 'c';
     flag.center->description =
-	_("Print the current region map center coordinates");
+        _("Print the current region map center coordinates");
     flag.center->guisection = _("Print");
 
     flag.gmt_style = G_define_flag();
     flag.gmt_style->key = 't';
-    flag.gmt_style->description =
-	_("Print the current region in GMT style");
+    flag.gmt_style->description = _("Print the current region in GMT style");
     flag.gmt_style->guisection = _("Print");
 
     flag.wms_style = G_define_flag();
     flag.wms_style->key = 'w';
-    flag.wms_style->description =
-	_("Print the current region in WMS style");
+    flag.wms_style->description = _("Print the current region in WMS style");
     flag.wms_style->guisection = _("Print");
 
     flag.dist_res = G_define_flag();
     flag.dist_res->key = 'm';
     flag.dist_res->description =
-	_("Print region resolution in meters (geodesic)");
+        _("Print region resolution in meters (geodesic)");
     flag.dist_res->guisection = _("Print");
 
     flag.nangle = G_define_flag();
     flag.nangle->key = 'n';
     flag.nangle->label = _("Print the convergence angle (degrees CCW)");
     flag.nangle->description =
-	_("The difference between the projection's grid north and true north, "
-	  "measured at the center coordinates of the current region.");
+        _("The difference between the projection's grid north and true north, "
+          "measured at the center coordinates of the current region.");
     flag.nangle->guisection = _("Print");
 
     flag.z = G_define_flag();
@@ -140,30 +139,39 @@ int main(int argc, char *argv[])
     flag.bbox = G_define_flag();
     flag.bbox->key = 'b';
     flag.bbox->description =
-	_("Print the maximum bounding box in lat/long on WGS84");
+        _("Print the maximum bounding box in lat/long on WGS84");
     flag.bbox->guisection = _("Print");
 
     flag.gprint = G_define_flag();
     flag.gprint->key = 'g';
-    flag.gprint->description = _("Print in shell script style");
+    flag.gprint->label = _("Print in shell script style [deprecated]");
+    flag.gprint->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=shell instead.");
     flag.gprint->guisection = _("Print");
 
     flag.flprint = G_define_flag();
     flag.flprint->key = 'f';
-    flag.flprint->description = _("Print in shell script style, but in one line (flat)");
+    flag.flprint->description = _("Print in one line (flat) in shell script "
+                                  "style (ignores format parameter)");
     flag.flprint->guisection = _("Print");
 
     flag.res_set = G_define_flag();
     flag.res_set->key = 'a';
     flag.res_set->description =
-	_("Align region to resolution (default = align to bounds, "
-	  "works only for 2D resolution)");
+        _("Align region to resolution (default = align to bounds, "
+          "works only for 2D resolution)");
     flag.res_set->guisection = _("Bounds");
 
-    flag.update = G_define_flag();
-    flag.update->key = 'u';
-    flag.update->description = _("Do not update the current region");
-    flag.update->guisection = _("Effects");
+    flag.noupdate = G_define_flag();
+    flag.noupdate->key = 'u';
+    flag.noupdate->description = _("Do not update the current region");
+    flag.noupdate->guisection = _("Effects");
+
+    flag.force = G_define_flag();
+    flag.force->key = 'o';
+    flag.force->description = _("Force update of the current region");
+    flag.force->guisection = _("Effects");
 
     /* parameters */
 
@@ -183,8 +191,8 @@ int main(int argc, char *argv[])
     parm.raster3d->required = NO;
     parm.raster3d->multiple = NO;
     parm.raster3d->description =
-	_("Set region to match 3D raster map(s) (both 2D and 3D "
-	  "values)");
+        _("Set region to match 3D raster map(s) (both 2D and 3D "
+          "values)");
     parm.raster3d->guisection = _("Existing");
 
     parm.vect = G_define_standard_option(G_OPT_V_MAP);
@@ -273,8 +281,7 @@ int main(int argc, char *argv[])
     parm.res->required = NO;
     parm.res->multiple = NO;
     parm.res->type = TYPE_STRING;
-    parm.res->description =
-	_("2D grid resolution (north-south and east-west)");
+    parm.res->description = _("2D grid resolution (north-south and east-west)");
     parm.res->guisection = _("Resolution");
 
     parm.res3 = G_define_option();
@@ -284,7 +291,7 @@ int main(int argc, char *argv[])
     parm.res3->multiple = NO;
     parm.res3->type = TYPE_STRING;
     parm.res3->description =
-	_("3D grid resolution (north-south, east-west and top-bottom)");
+        _("3D grid resolution (north-south, east-west and top-bottom)");
     parm.res3->guisection = _("Resolution");
 
     parm.nsres = G_define_option();
@@ -305,6 +312,24 @@ int main(int argc, char *argv[])
     parm.ewres->description = _("East-west 2D grid resolution");
     parm.ewres->guisection = _("Resolution");
 
+    parm.nsres3 = G_define_option();
+    parm.nsres3->key = "nsres3";
+    parm.nsres3->key_desc = "value";
+    parm.nsres3->required = NO;
+    parm.nsres3->multiple = NO;
+    parm.nsres3->type = TYPE_STRING;
+    parm.nsres3->description = _("North-south 3D grid resolution");
+    parm.nsres3->guisection = _("Resolution");
+
+    parm.ewres3 = G_define_option();
+    parm.ewres3->key = "ewres3";
+    parm.ewres3->key_desc = "value";
+    parm.ewres3->required = NO;
+    parm.ewres3->multiple = NO;
+    parm.ewres3->type = TYPE_STRING;
+    parm.ewres3->description = _("East-west 3D grid resolution");
+    parm.ewres3->guisection = _("Resolution");
+
     parm.tbres = G_define_option();
     parm.tbres->key = "tbres";
     parm.tbres->key_desc = "value";
@@ -321,7 +346,7 @@ int main(int argc, char *argv[])
     parm.zoom->multiple = NO;
     parm.zoom->type = TYPE_STRING;
     parm.zoom->description =
-	_("Shrink region until it meets non-NULL data from this raster map");
+        _("Shrink region until it meets non-NULL data from this raster map");
     parm.zoom->gisprompt = "old,cell,raster";
     parm.zoom->guisection = _("Bounds");
 
@@ -332,7 +357,7 @@ int main(int argc, char *argv[])
     parm.align->multiple = NO;
     parm.align->type = TYPE_STRING;
     parm.align->description =
-	_("Adjust region cells to cleanly align with this raster map");
+        _("Adjust region cells to cleanly align with this raster map");
     parm.align->gisprompt = "old,cell,raster";
     parm.align->guisection = _("Bounds");
 
@@ -343,9 +368,9 @@ int main(int argc, char *argv[])
     parm.grow->multiple = NO;
     parm.grow->type = TYPE_INTEGER;
     parm.grow->label =
-	_("Number of cells to add to each side of the current region extent");
+        _("Number of cells to add to each side of the current region extent");
     parm.grow->description =
-	_("A negative number shrinks the current region extent");
+        _("A negative number shrinks the current region extent");
     parm.grow->guisection = _("Bounds");
 
     parm.save = G_define_option();
@@ -355,143 +380,191 @@ int main(int argc, char *argv[])
     parm.save->multiple = NO;
     parm.save->type = TYPE_STRING;
     parm.save->description =
-	_("Save current region settings in named region file");
+        _("Save current region settings in named region file");
     parm.save->gisprompt = "new,windows,region";
     parm.save->guisection = _("Effects");
 
-    G_option_required(flag.dflt, flag.savedefault, flag.print, flag.lprint,
+    parm.format = G_define_standard_option(G_OPT_F_FORMAT);
+    parm.format->options = "plain,shell,json";
+    parm.format->descriptions = _("plain;Plain text output;"
+                                  "shell;shell script style output;"
+                                  "json;JSON (JavaScript Object Notation);");
+    parm.format->guisection = _("Print");
+
+    G_option_required(
+        flag.dflt, flag.savedefault, flag.print, flag.lprint, flag.eprint,
+        flag.center, flag.gmt_style, flag.wms_style, flag.dist_res, flag.nangle,
+        flag.z, flag.bbox, flag.gprint, flag.res_set, flag.noupdate,
+        flag.flprint, parm.region, parm.raster, parm.raster3d, parm.vect,
+        parm.north, parm.south, parm.east, parm.west, parm.top, parm.bottom,
+        parm.rows, parm.cols, parm.res, parm.res3, parm.nsres, parm.ewres,
+        parm.nsres3, parm.ewres3, parm.tbres, parm.zoom, parm.align, parm.save,
+        parm.grow, NULL);
+    G_option_exclusive(flag.noupdate, flag.force, NULL);
+    G_option_requires(flag.noupdate, flag.savedefault, flag.print, flag.lprint,
                       flag.eprint, flag.center, flag.gmt_style, flag.wms_style,
-                      flag.dist_res, flag.nangle, flag. z, flag.bbox, flag.gprint,
-                      flag.res_set, flag.update, parm.region, parm.raster,
-                      parm.raster3d, parm.vect, parm.north, parm.south, parm.east,
-                      parm.west, parm.top, parm.bottom, parm.rows, parm.cols,
-                      parm.res, parm.res3, parm.nsres, parm.ewres, parm.tbres,
-                      parm.zoom, parm.align, parm.save, parm.grow, NULL);
+                      flag.dist_res, flag.nangle, flag.z, flag.bbox,
+                      flag.gprint, flag.flprint, parm.save, NULL);
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     G_get_default_window(&window);
 
-    set_flag = !flag.update->answer;
-    flat_flag = flag.flprint->answer;
-
-    if (flag.print->answer)
-	print_flag |= PRINT_REG;
-
-    if (flag.gprint->answer)
-	print_flag |= PRINT_SH;
-
-    if (flag.lprint->answer)
-	print_flag |= PRINT_LL;
-
-    if (flag.eprint->answer)
-	print_flag |= PRINT_EXTENT;
-
-    if (flag.center->answer)
-	print_flag |= PRINT_CENTER;
-
-    if (flag.gmt_style->answer)
-	print_flag |= PRINT_GMT;
-
-    if (flag.wms_style->answer)
-	print_flag |= PRINT_WMS;
-
-    if (flag.nangle->answer)
-	print_flag |= PRINT_NANGLE;
-
-    if (flag.dist_res->answer)
-	print_flag |= PRINT_METERS;
-
-    if (flag.z->answer)
-	print_flag |= PRINT_3D;
-
-    if (flag.bbox->answer)
-	print_flag |= PRINT_MBBOX;
-
-    if (print_flag == PRINT_METERS)
-	print_flag |= PRINT_SH;
-
-    if (print_flag == PRINT_SH ||
-	print_flag & PRINT_3D || print_flag == PRINT_METERS + PRINT_SH) {
-	print_flag |= PRINT_REG;
+    if (flag.flprint->answer) {
+        print_flag |= PRINT_SH;
+        flat_flag = 1;
+        parm.format->answer = "shell";
     }
 
-    if (!flag.dflt->answer)
-	G_get_window(&window);
+    if (flag.print->answer)
+        print_flag |= PRINT_REG;
+
+    if (flag.gprint->answer) {
+        print_flag |= PRINT_SH;
+
+        G_verbose_message(
+            _("Flag 'g' is deprecated and will be removed in a future "
+              "release. Please use format=shell instead."));
+    }
+
+    if (flag.lprint->answer)
+        print_flag |= PRINT_LL;
+
+    if (flag.eprint->answer)
+        print_flag |= PRINT_EXTENT;
+
+    if (flag.center->answer)
+        print_flag |= PRINT_CENTER;
+
+    if (flag.gmt_style->answer)
+        print_flag |= PRINT_GMT;
+
+    if (flag.wms_style->answer)
+        print_flag |= PRINT_WMS;
+
+    if (flag.nangle->answer)
+        print_flag |= PRINT_NANGLE;
+
+    if (flag.dist_res->answer)
+        print_flag |= PRINT_METERS;
+
+    if (flag.z->answer)
+        print_flag |= PRINT_3D;
+
+    if (flag.bbox->answer)
+        print_flag |= PRINT_MBBOX;
+
+    if (print_flag == PRINT_METERS)
+        print_flag |= PRINT_SH;
+
+    if (print_flag == PRINT_SH || print_flag & PRINT_3D ||
+        print_flag == PRINT_METERS + PRINT_SH) {
+        print_flag |= PRINT_REG;
+    }
+
+    if (strcmp(parm.format->answer, "json") == 0) {
+        format = JSON;
+        root_value = json_value_init_object();
+        if (root_value == NULL) {
+            G_fatal_error(
+                _("Failed to initialize JSON object. Out of memory?"));
+        }
+        root_object = json_object(root_value);
+    }
+    else if (strcmp(parm.format->answer, "shell") == 0 ||
+             (print_flag & PRINT_SH)) {
+        format = SHELL;
+        print_flag |= PRINT_SH;
+    }
+    else {
+        format = PLAIN;
+    }
+
+    if (flag.dflt->answer)
+        update_file = true;
+    else
+        G_get_window(&window);
 
     /* region= */
     if ((name = parm.region->answer)) {
-	mapset = G_find_file2("windows", name, "");
-	if (!mapset)
-	    G_fatal_error(_("Region <%s> not found"), name);
-	G_get_element_window(&window, "windows", name, mapset);
+        update_file = true;
+        mapset = G_find_file2("windows", name, "");
+        if (!mapset)
+            G_fatal_error(_("Region <%s> not found"), name);
+        G_get_element_window(&window, "windows", name, mapset);
     }
 
     /* raster= */
     if (parm.raster->answer) {
-	int first = 0;
+        int first = 0;
 
-	rast_ptr = parm.raster->answers;
-	for (; *rast_ptr != NULL; rast_ptr++) {
-	    char rast_name[GNAME_MAX];
+        update_file = true;
+        rast_ptr = parm.raster->answers;
+        for (; *rast_ptr != NULL; rast_ptr++) {
+            char rast_name[GNAME_MAX];
 
-	    strcpy(rast_name, *rast_ptr);
-	    mapset = G_find_raster2(rast_name, "");
-	    if (!mapset)
-		G_fatal_error(_("Raster map <%s> not found"), rast_name);
-	    Rast_get_cellhd(rast_name, mapset, &temp_window);
-	    if (!first) {
-		window = temp_window;
-		first = 1;
-	    }
-	    else {
-		window.north = (window.north > temp_window.north) ?
-		    window.north : temp_window.north;
-		window.south = (window.south < temp_window.south) ?
-		    window.south : temp_window.south;
-		window.east = (window.east > temp_window.east) ?
-		    window.east : temp_window.east;
-		window.west = (window.west < temp_window.west) ?
-		    window.west : temp_window.west;
-	    }
-	}
-	G_adjust_Cell_head3(&window, 0, 0, 0);
+            strcpy(rast_name, *rast_ptr);
+            mapset = G_find_raster2(rast_name, "");
+            if (!mapset)
+                G_fatal_error(_("Raster map <%s> not found"), rast_name);
+            Rast_get_cellhd(rast_name, mapset, &temp_window);
+            if (!first) {
+                window = temp_window;
+                first = 1;
+            }
+            else {
+                window.north = (window.north > temp_window.north)
+                                   ? window.north
+                                   : temp_window.north;
+                window.south = (window.south < temp_window.south)
+                                   ? window.south
+                                   : temp_window.south;
+                window.east = (window.east > temp_window.east)
+                                  ? window.east
+                                  : temp_window.east;
+                window.west = (window.west < temp_window.west)
+                                  ? window.west
+                                  : temp_window.west;
+            }
+        }
+        G_adjust_Cell_head3(&window, 0, 0, 0);
     }
-
 
     /* raster3d= */
     if ((name = parm.raster3d->answer)) {
-	RASTER3D_Region win;
+        RASTER3D_Region win;
 
-	if ((mapset = G_find_raster3d(name, "")) == NULL)
-	    G_fatal_error(_("3D raster map <%s> not found"), name);
+        update_file = true;
+        if ((mapset = G_find_raster3d(name, "")) == NULL)
+            G_fatal_error(_("3D raster map <%s> not found"), name);
 
-	if (Rast3d_read_region_map(name, mapset, &win) < 0)
-	    G_fatal_error(_("Unable to read header of 3D raster map <%s@%s>"),
-			  name, mapset);
+        if (Rast3d_read_region_map(name, mapset, &win) < 0)
+            G_fatal_error(_("Unable to read header of 3D raster map <%s@%s>"),
+                          name, mapset);
 
-	Rast3d_region_to_cell_head(&win, &window);
+        Rast3d_region_to_cell_head(&win, &window);
     }
 
     /* vector= */
     if (parm.vect->answer) {
-	int first = 0;
+        int first = 0;
 
-	vect_ptr = parm.vect->answers;
-	for (; *vect_ptr != NULL; vect_ptr++) {
+        update_file = true;
+        vect_ptr = parm.vect->answers;
+        for (; *vect_ptr != NULL; vect_ptr++) {
             int ret;
-	    struct Map_info Map;
-	    struct bound_box box;
-	    char vect_name[GNAME_MAX];
-	    struct Cell_head map_window;
+            struct Map_info Map;
+            struct bound_box box;
+            char vect_name[GNAME_MAX];
+            struct Cell_head map_window;
 
-	    strcpy(vect_name, *vect_ptr);
-	    mapset = G_find_vector2(vect_name, "");
-	    if (!mapset)
-		G_fatal_error(_("Vector map <%s> not found"), vect_name);
+            strcpy(vect_name, *vect_ptr);
+            mapset = G_find_vector2(vect_name, "");
+            if (!mapset)
+                G_fatal_error(_("Vector map <%s> not found"), vect_name);
 
-	    temp_window = window;
+            temp_window = window;
 
             /* try to open head-only on level 2 */
             if (Vect_open_old_head(&Map, vect_name, mapset) < 2) {
@@ -504,13 +577,13 @@ int main(int argc, char *argv[])
             }
 
             ret = 0;
-            if (Vect_level(&Map) > 1)            /* level 2 - topology available */
+            if (Vect_level(&Map) > 1) /* level 2 - topology available */
                 ret = Vect_get_map_box(&Map, &box);
-            else                                 /* level 1 */
+            else /* level 1 */
                 ret = Vect_get_map_box1(&Map, &box);
             if (ret != 1)
                 G_fatal_error(_("Unable to get map bounding box"));
-            
+
             map_window = window;
             map_window.north = box.N;
             map_window.south = box.S;
@@ -519,340 +592,403 @@ int main(int argc, char *argv[])
             map_window.top = box.T;
             map_window.bottom = box.B;
 
-	    if (!first) {
-		window = map_window;
-		first = 1;
-	    }
-	    else {
-		window.north = (window.north > map_window.north) ?
-		    window.north : map_window.north;
-		window.south = (window.south < map_window.south) ?
-		    window.south : map_window.south;
-		window.east = (window.east > map_window.east) ?
-		    window.east : map_window.east;
-		window.west = (window.west < map_window.west) ?
-		    window.west : map_window.west;
-		if (map_window.top > window.top)
-		    window.top = map_window.top;
-		if (map_window.bottom < window.bottom)
-		    window.bottom = map_window.bottom;
-	    }
+            if (!first) {
+                window = map_window;
+                first = 1;
+            }
+            else {
+                window.north = (window.north > map_window.north)
+                                   ? window.north
+                                   : map_window.north;
+                window.south = (window.south < map_window.south)
+                                   ? window.south
+                                   : map_window.south;
+                window.east = (window.east > map_window.east) ? window.east
+                                                              : map_window.east;
+                window.west = (window.west < map_window.west) ? window.west
+                                                              : map_window.west;
+                if (map_window.top > window.top)
+                    window.top = map_window.top;
+                if (map_window.bottom < window.bottom)
+                    window.bottom = map_window.bottom;
+            }
 
-	    if (window.north == window.south) {
-		window.north = window.north + 0.5 * temp_window.ns_res;
-		window.south = window.south - 0.5 * temp_window.ns_res;
-	    }
-	    if (window.east == window.west) {
-		window.west = window.west - 0.5 * temp_window.ew_res;
-		window.east = window.east + 0.5 * temp_window.ew_res;
-	    }
-	    if (window.top == window.bottom) {
-		window.bottom = (window.bottom - 0.5 * temp_window.tb_res);
-		window.top = (window.top + 0.5 * temp_window.tb_res);
-	    }
+            if (window.north == window.south) {
+                window.north = window.north + 0.5 * temp_window.ns_res;
+                window.south = window.south - 0.5 * temp_window.ns_res;
+            }
+            if (window.east == window.west) {
+                window.west = window.west - 0.5 * temp_window.ew_res;
+                window.east = window.east + 0.5 * temp_window.ew_res;
+            }
+            if (window.top == window.bottom) {
+                window.bottom = (window.bottom - 0.5 * temp_window.tb_res);
+                window.top = (window.top + 0.5 * temp_window.tb_res);
+            }
 
-	    if (flag.res_set->answer)
-		Rast_align_window(&window, &temp_window);
+            if (flag.res_set->answer)
+                Rast_align_window(&window, &temp_window);
 
-	    Vect_close(&Map);
-	}
+            Vect_close(&Map);
+        }
     }
 
     /* n= */
     if ((value = parm.north->answer)) {
-	if ((i = nsew(value, "n+", "n-", "s+"))) {
-	    if (!G_scan_resolution(value + 2, &x, window.proj))
-		die(parm.north);
-	    switch (i) {
-	    case 1:
-		window.north += x;
-		break;
-	    case 2:
-		window.north -= x;
-		break;
-	    case 3:
-		window.north = window.south + x;
-		break;
-	    }
-	}
-	else if (G_scan_northing(value, &x, window.proj))
-	    window.north = x;
-	else
-	    die(parm.north);
+        update_file = true;
+        if ((i = nsew(value, "n+", "n-", "s+"))) {
+            if (!G_scan_resolution(value + 2, &x, window.proj))
+                die(parm.north);
+            switch (i) {
+            case 1:
+                window.north += x;
+                break;
+            case 2:
+                window.north -= x;
+                break;
+            case 3:
+                window.north = window.south + x;
+                break;
+            }
+        }
+        else if (G_scan_northing(value, &x, window.proj))
+            window.north = x;
+        else
+            die(parm.north);
+
+        if (flag.res_set->answer)
+            window.north = ceil(window.north / window.ns_res) * window.ns_res;
     }
 
     /* s= */
     if ((value = parm.south->answer)) {
-	if ((i = nsew(value, "s+", "s-", "n-"))) {
-	    if (!G_scan_resolution(value + 2, &x, window.proj))
-		die(parm.south);
-	    switch (i) {
-	    case 1:
-		window.south += x;
-		break;
-	    case 2:
-		window.south -= x;
-		break;
-	    case 3:
-		window.south = window.north - x;
-		break;
-	    }
-	}
-	else if (G_scan_northing(value, &x, window.proj))
-	    window.south = x;
-	else
-	    die(parm.south);
+        update_file = true;
+        if ((i = nsew(value, "s+", "s-", "n-"))) {
+            if (!G_scan_resolution(value + 2, &x, window.proj))
+                die(parm.south);
+            switch (i) {
+            case 1:
+                window.south += x;
+                break;
+            case 2:
+                window.south -= x;
+                break;
+            case 3:
+                window.south = window.north - x;
+                break;
+            }
+        }
+        else if (G_scan_northing(value, &x, window.proj))
+            window.south = x;
+        else
+            die(parm.south);
+
+        if (flag.res_set->answer)
+            window.south = floor(window.south / window.ns_res) * window.ns_res;
     }
 
     /* e= */
     if ((value = parm.east->answer)) {
-	if ((i = nsew(value, "e+", "e-", "w+"))) {
-	    if (!G_scan_resolution(value + 2, &x, window.proj))
-		die(parm.east);
-	    switch (i) {
-	    case 1:
-		window.east += x;
-		break;
-	    case 2:
-		window.east -= x;
-		break;
-	    case 3:
-		window.east = window.west + x;
-		break;
-	    }
-	}
-	else if (G_scan_easting(value, &x, window.proj))
-	    window.east = x;
-	else
-	    die(parm.east);
+        update_file = true;
+        if ((i = nsew(value, "e+", "e-", "w+"))) {
+            if (!G_scan_resolution(value + 2, &x, window.proj))
+                die(parm.east);
+            switch (i) {
+            case 1:
+                window.east += x;
+                break;
+            case 2:
+                window.east -= x;
+                break;
+            case 3:
+                window.east = window.west + x;
+                break;
+            }
+        }
+        else if (G_scan_easting(value, &x, window.proj))
+            window.east = x;
+        else
+            die(parm.east);
+
+        if (flag.res_set->answer)
+            window.east = ceil(window.east / window.ew_res) * window.ew_res;
     }
 
     /* w= */
     if ((value = parm.west->answer)) {
-	if ((i = nsew(value, "w+", "w-", "e-"))) {
-	    if (!G_scan_resolution(value + 2, &x, window.proj))
-		die(parm.west);
-	    switch (i) {
-	    case 1:
-		window.west += x;
-		break;
-	    case 2:
-		window.west -= x;
-		break;
-	    case 3:
-		window.west = window.east - x;
-		break;
-	    }
-	}
-	else if (G_scan_easting(value, &x, window.proj))
-	    window.west = x;
-	else
-	    die(parm.west);
+        update_file = true;
+        if ((i = nsew(value, "w+", "w-", "e-"))) {
+            if (!G_scan_resolution(value + 2, &x, window.proj))
+                die(parm.west);
+            switch (i) {
+            case 1:
+                window.west += x;
+                break;
+            case 2:
+                window.west -= x;
+                break;
+            case 3:
+                window.west = window.east - x;
+                break;
+            }
+        }
+        else if (G_scan_easting(value, &x, window.proj))
+            window.west = x;
+        else
+            die(parm.west);
+
+        if (flag.res_set->answer)
+            window.west = floor(window.west / window.ew_res) * window.ew_res;
     }
 
     /* t= */
     if ((value = parm.top->answer)) {
-	if ((i = nsew(value, "t+", "t-", "b+"))) {
-	    if (sscanf(value + 2, "%lf", &x) != 1)
-		die(parm.top);
-	    switch (i) {
-	    case 1:
-		window.top += x;
-		break;
-	    case 2:
-		window.top -= x;
-		break;
-	    case 3:
-		window.top = window.bottom + x;
-		break;
-	    }
-	}
-	else if (sscanf(value, "%lf", &x) == 1)
-	    window.top = x;
-	else
-	    die(parm.top);
+        update_file = true;
+        if ((i = nsew(value, "t+", "t-", "b+"))) {
+            if (sscanf(value + 2, "%lf", &x) != 1)
+                die(parm.top);
+            switch (i) {
+            case 1:
+                window.top += x;
+                break;
+            case 2:
+                window.top -= x;
+                break;
+            case 3:
+                window.top = window.bottom + x;
+                break;
+            }
+        }
+        else if (sscanf(value, "%lf", &x) == 1)
+            window.top = x;
+        else
+            die(parm.top);
     }
 
     /* b= */
     if ((value = parm.bottom->answer)) {
-	if ((i = nsew(value, "b+", "b-", "t-"))) {
-	    if (sscanf(value + 2, "%lf", &x) != 1)
-		die(parm.bottom);
-	    switch (i) {
-	    case 1:
-		window.bottom += x;
-		break;
-	    case 2:
-		window.bottom -= x;
-		break;
-	    case 3:
-		window.bottom = window.top - x;
-		break;
-	    }
-	}
-	else if (sscanf(value, "%lf", &x) == 1)
-	    window.bottom = x;
-	else
-	    die(parm.bottom);
+        update_file = true;
+        if ((i = nsew(value, "b+", "b-", "t-"))) {
+            if (sscanf(value + 2, "%lf", &x) != 1)
+                die(parm.bottom);
+            switch (i) {
+            case 1:
+                window.bottom += x;
+                break;
+            case 2:
+                window.bottom -= x;
+                break;
+            case 3:
+                window.bottom = window.top - x;
+                break;
+            }
+        }
+        else if (sscanf(value, "%lf", &x) == 1)
+            window.bottom = x;
+        else
+            die(parm.bottom);
     }
 
     /* res= */
     if ((value = parm.res->answer)) {
-	if (!G_scan_resolution(value, &x, window.proj))
-	    die(parm.res);
-	window.ns_res = x;
-	window.ew_res = x;
+        update_file = true;
+        if (!G_scan_resolution(value, &x, window.proj))
+            die(parm.res);
+        window.ns_res = x;
+        window.ew_res = x;
 
-	if (flag.res_set->answer) {
-	    window.north = ceil(window.north / x) * x;
-	    window.south = floor(window.south / x) * x;
-	    window.east = ceil(window.east / x) * x;
-	    window.west = floor(window.west / x) * x;
-	}
+        if (flag.res_set->answer) {
+            window.north = ceil(window.north / x) * x;
+            window.south = floor(window.south / x) * x;
+            window.east = ceil(window.east / x) * x;
+            window.west = floor(window.west / x) * x;
+        }
     }
 
     /* res3= */
     if ((value = parm.res3->answer)) {
-	if (!G_scan_resolution(value, &x, window.proj))
-	    die(parm.res);
-	window.ns_res3 = x;
-	window.ew_res3 = x;
-	window.tb_res = x;
+        update_file = true;
+        if (!G_scan_resolution(value, &x, window.proj))
+            die(parm.res3);
+        window.ns_res3 = x;
+        window.ew_res3 = x;
+        window.tb_res = x;
     }
 
     /* nsres= */
     if ((value = parm.nsres->answer)) {
-	if (!G_scan_resolution(value, &x, window.proj))
-	    die(parm.nsres);
-	window.ns_res = x;
+        update_file = true;
+        if (!G_scan_resolution(value, &x, window.proj))
+            die(parm.nsres);
+        window.ns_res = x;
 
-	if (flag.res_set->answer) {
-	    window.north = ceil(window.north / x) * x;
-	    window.south = floor(window.south / x) * x;
-	}
+        if (flag.res_set->answer) {
+            window.north = ceil(window.north / x) * x;
+            window.south = floor(window.south / x) * x;
+        }
     }
 
     /* ewres= */
     if ((value = parm.ewres->answer)) {
-	if (!G_scan_resolution(value, &x, window.proj))
-	    die(parm.ewres);
-	window.ew_res = x;
+        update_file = true;
+        if (!G_scan_resolution(value, &x, window.proj))
+            die(parm.ewres);
+        window.ew_res = x;
 
-	if (flag.res_set->answer) {
-	    window.east = ceil(window.east / x) * x;
-	    window.west = floor(window.west / x) * x;
-	}
+        if (flag.res_set->answer) {
+            window.east = ceil(window.east / x) * x;
+            window.west = floor(window.west / x) * x;
+        }
+    }
+
+    /* nsres3= */
+    if ((value = parm.nsres3->answer)) {
+        update_file = true;
+        if (sscanf(value, "%lf", &x) != 1)
+            die(parm.nsres3);
+        window.ns_res3 = x;
+    }
+
+    /* ewres3= */
+    if ((value = parm.ewres3->answer)) {
+        update_file = true;
+        if (sscanf(value, "%lf", &x) != 1)
+            die(parm.ewres3);
+        window.ew_res3 = x;
     }
 
     /* tbres= */
     if ((value = parm.tbres->answer)) {
-	if (sscanf(value, "%lf", &x) != 1)
-	    die(parm.tbres);
-	window.tb_res = x;
+        update_file = true;
+        if (sscanf(value, "%lf", &x) != 1)
+            die(parm.tbres);
+        window.tb_res = x;
 
-	if (flag.res_set->answer) {
-	    window.top = ceil(window.top / x) * x;
-	    window.bottom = floor(window.bottom / x) * x;
-	}
+        if (flag.res_set->answer) {
+            window.top = ceil(window.top / x) * x;
+            window.bottom = floor(window.bottom / x) * x;
+        }
     }
 
     /* rows= */
     if ((value = parm.rows->answer)) {
-	if (sscanf(value, "%i", &ival) != 1)
-	    die(parm.rows);
-	window.rows = ival;
-	row_flag = 1;
+        update_file = true;
+        if (sscanf(value, "%i", &ival) != 1)
+            die(parm.rows);
+        window.rows = ival;
+        row_flag = 1;
     }
 
     /* cols= */
     if ((value = parm.cols->answer)) {
-	if (sscanf(value, "%i", &ival) != 1)
-	    die(parm.cols);
-	window.cols = ival;
-	col_flag = 1;
+        update_file = true;
+        if (sscanf(value, "%i", &ival) != 1)
+            die(parm.cols);
+        window.cols = ival;
+        col_flag = 1;
     }
 
     /* zoom= */
     if ((name = parm.zoom->answer)) {
-	mapset = G_find_raster2(name, "");
-	if (!mapset)
-	    G_fatal_error(_("Raster map <%s> not found"), name);
-	zoom(&window, name, mapset);
+        update_file = true;
+        mapset = G_find_raster2(name, "");
+        if (!mapset)
+            G_fatal_error(_("Raster map <%s> not found"), name);
+        zoom(&window, name, mapset);
     }
 
     /* align= */
     if ((name = parm.align->answer)) {
-	mapset = G_find_raster2(name, "");
-	if (!mapset)
-	    G_fatal_error(_("Raster map <%s> not found"), name);
-	Rast_get_cellhd(name, mapset, &temp_window);
-	Rast_align_window(&window, &temp_window);
+        update_file = true;
+        mapset = G_find_raster2(name, "");
+        if (!mapset)
+            G_fatal_error(_("Raster map <%s> not found"), name);
+        Rast_get_cellhd(name, mapset, &temp_window);
+        Rast_align_window(&window, &temp_window);
     }
-    
+
     /* grow by number of cells */
-    if ((value = parm.grow->answer)){
-        if (sscanf(value, "%i", &pix)){
+    if ((value = parm.grow->answer)) {
+        update_file = true;
+        if (sscanf(value, "%i", &pix)) {
             xs = window.ns_res * pix;
-            if (window.north + xs > window.south - xs){
-                if (G_projection() == PROJECTION_LL && (
-                    window.north + xs <= 90.0 + 0.5 * window.ns_res ||
-                    window.south - xs >= -90.0 - 0.5 * window.ns_res)) {
-                    G_warning(_("'%s' option not used with <%s> because a coordinate would become invalid"), 
-		              parm.grow->key, "latitude");
-                } else {
+            if (window.north + xs > window.south - xs) {
+                if (G_projection() == PROJECTION_LL &&
+                    (window.north + xs <= 90.0 + 0.5 * window.ns_res ||
+                     window.south - xs >= -90.0 - 0.5 * window.ns_res)) {
+                    G_warning(_("'%s' option not used with <%s> because a "
+                                "coordinate would become invalid"),
+                              parm.grow->key, "latitude");
+                }
+                else {
                     window.north += xs;
                     window.south -= xs;
                 }
-            } else {
-                G_warning(_("'%s' option not used with <%s> because <%s> would become minor than <%s>"),
-		          parm.grow->key, "latitude", "north", "south");
+            }
+            else {
+                G_warning(_("'%s' option not used with <%s> because <%s> would "
+                            "become minor than <%s>"),
+                          parm.grow->key, "latitude", "north", "south");
             }
             ys = window.ew_res * pix;
-            if (window.east + ys > window.west - ys){
+            if (window.east + ys > window.west - ys) {
                 window.west -= ys;
                 window.east += ys;
-            } else {
-                G_warning(_("'%s' option not used with <%s> because <%s> would become minor than <%s>"),
-		          parm.grow->key, "longitude", "east", "west");
+            }
+            else {
+                G_warning(_("'%s' option not used with <%s> because <%s> would "
+                            "become minor than <%s>"),
+                          parm.grow->key, "longitude", "east", "west");
             }
             zs = window.tb_res * pix;
-            if (window.top + zs > window.bottom - zs){
+            if (window.top + zs > window.bottom - zs) {
                 window.top += zs;
                 window.bottom -= zs;
-            } else {
-                G_warning(_("'%s' option not used with <%s> because <%s> would become minor than <%s>"),
-		          parm.grow->key, "3D", "top", "bottom");
+            }
+            else {
+                G_warning(_("'%s' option not used with <%s> because <%s> would "
+                            "become minor than <%s>"),
+                          parm.grow->key, "3D", "top", "bottom");
             }
         }
     }
-	
+    G_adjust_Cell_head3(&window, row_flag, col_flag, 0);
+
     /* save= */
     if ((name = parm.save->answer)) {
-	temp_window = window;
-	G_adjust_Cell_head3(&temp_window, 0, 0, 0);
-	if (G_put_element_window(&temp_window, "windows", name) < 0)
-	    G_fatal_error(_("Unable to set region <%s>"), name);
+        update_file = false;
+        if (G_put_element_window(&window, "windows", name) < 0)
+            G_fatal_error(_("Unable to set region <%s>"), name);
     }
 
-    G_adjust_Cell_head3(&window, row_flag, col_flag, 0);
-    if (set_flag) {
-	if (G_put_window(&window) < 0)
-	    G_fatal_error(_("Unable to update current region"));
+    if (flag.force->answer || (update_file && !flag.noupdate->answer)) {
+        if (G_put_window(&window) < 0)
+            G_fatal_error(_("Unable to update current region"));
     }
 
     if (flag.savedefault->answer) {
-	if (strcmp(G_mapset(), "PERMANENT") == 0) {
-	    G_put_element_window(&window, "", "DEFAULT_WIND");
-	}
-	else {
-	    G_fatal_error(_("Unable to change default region. "
-			    "The current mapset is not <PERMANENT>."));
-	}
-    }				/* / flag.savedefault->answer */
-
+        if (strcmp(G_mapset(), "PERMANENT") == 0) {
+            G_put_element_window(&window, "", "DEFAULT_WIND");
+        }
+        else {
+            G_fatal_error(_("Unable to change default region. "
+                            "The current mapset is not <PERMANENT>."));
+        }
+    } /* / flag.savedefault->answer */
 
     if (print_flag)
-	print_window(&window, print_flag, flat_flag);
+        print_window(&window, print_flag, flat_flag, format, root_object);
+
+    if (format == JSON) {
+        char *serialized_string = NULL;
+        serialized_string = json_serialize_to_string_pretty(root_value);
+        if (serialized_string == NULL) {
+            G_fatal_error(_("Failed to initialize pretty JSON string."));
+        }
+        puts(serialized_string);
+        json_free_serialized_string(serialized_string);
+        json_value_free(root_value);
+    }
 
     exit(EXIT_SUCCESS);
 }
@@ -868,11 +1004,10 @@ static void die(struct Option *parm)
 static int nsew(const char *value, const char *a, const char *b, const char *c)
 {
     if (strncmp(value, a, strlen(a)) == 0)
-	return 1;
+        return 1;
     if (strncmp(value, b, strlen(b)) == 0)
-	return 2;
+        return 2;
     if (strncmp(value, c, strlen(c)) == 0)
-	return 3;
+        return 3;
     return 0;
 }
-

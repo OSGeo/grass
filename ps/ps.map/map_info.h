@@ -5,8 +5,7 @@
 
 #include "clr.h"
 
-struct map_info
-{
+struct map_info {
     double x, y;
     char *font;
     int fontsize;

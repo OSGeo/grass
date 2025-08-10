@@ -1,0 +1,35 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.example</em> is an example vector module that does something like
+labeling all vectors with value 1. A new map is written instead of updating
+the input map.
+See the source code for details.
+
+<h2>NOTES</h2>
+
+Some more detailed notes go here.
+
+<h2>EXAMPLE</h2>
+
+Label all vectors with value 1 (North Carolina sample dataset):
+
+<div class="code"><pre>
+v.example input=zipcodes_wake output=newmap
+v.category newmap option=report
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.example.html">r.example</a>,
+<a href="v.category.html">r.category</a>,
+<a href="v.example.html">v.example</a>
+</em>
+
+<em>
+<a href="https://grass.osgeo.org/programming8/">GRASS Programmer's Manual</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+Radim Blazek, ITC-irst, Trento, Italy

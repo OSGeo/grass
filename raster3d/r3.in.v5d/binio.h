@@ -1,4 +1,3 @@
-
 /* Vis5D version 5.0 */
 
 /*
@@ -21,41 +20,28 @@
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-
 /*
  * Functions to do binary I/O of floats, ints, etc. with byte swapping
  * as needed.
  */
 
-
 #ifndef BINIO_H
 #define BINIO_H
-
 
 /* Include files which define SEEK_SET, O_RD_ONLY, etc. */
 /* and prototype open(), close(), lseek(), etc. */
 #include <unistd.h>
 #include <fcntl.h>
 
-
-
 extern void flip4(const unsigned int *src, unsigned int *dest, int n);
 
 extern void flip2(const unsigned short *src, unsigned short *dest, int n);
-
-
-#ifdef _CRAY
-extern void cray_to_ieee_array(long *dest, const float *source, int n);
-extern void ieee_to_cray_array(float *dest, const long *source, int n);
-#endif
-
 
 /**********************************************************************/
 
 /*****                     Read Functions                         *****/
 
 /**********************************************************************/
-
 
 extern int read_bytes(int f, void *b, int n);
 
@@ -73,14 +59,11 @@ extern int read_float4_array(int f, float *x, int n);
 
 extern int read_block(int f, void *data, int elements, int elsize);
 
-
-
 /**********************************************************************/
 
 /*****                         Write Functions                    *****/
 
 /**********************************************************************/
-
 
 extern int write_bytes(int f, const void *b, int n);
 

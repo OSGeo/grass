@@ -1,15 +1,15 @@
-#include<stdio.h>
-#include<math.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
 
-    /* EVI2: Enhanced Vegetation Index
-     * Zhangyan Jiang ; Alfredo R. Huete ; Youngwook Kim and Kamel Didan
-     * 2-band enhanced vegetation index without a blue band and its application to AVHRR data
-     * Proc. SPIE 6679, Remote Sensing and Modeling of Ecosystems for Sustainability IV, 667905 (October 09, 2007)
-     * doi:10.1117/12.734933
-     * http://dx.doi.org/10.1117/12.734933
-     */ 
-double e_vi2(double redchan, double nirchan) 
+/* EVI2: Enhanced Vegetation Index
+ * Zhangyan Jiang ; Alfredo R. Huete ; Youngwook Kim and Kamel Didan
+ * 2-band enhanced vegetation index without a blue band and its application to
+ * AVHRR data Proc. SPIE 6679, Remote Sensing and Modeling of Ecosystems for
+ * Sustainability IV, 667905 (October 09, 2007) doi:10.1117/12.734933
+ * https://doi.org/10.1117/12.734933
+ */
+double e_vi2(double redchan, double nirchan)
 {
     double tmp, result;
 
@@ -22,4 +22,3 @@ double e_vi2(double redchan, double nirchan)
     }
     return result;
 }
-

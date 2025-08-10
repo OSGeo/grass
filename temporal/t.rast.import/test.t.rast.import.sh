@@ -19,7 +19,7 @@ r.mapcalc expr="prec_4 = rand(0, 510)" -s
 r.mapcalc expr="prec_5 = rand(0, 300)" -s
 r.mapcalc expr="prec_6 = rand(0, 650)" -s
 
-n1=`g.tempfile pid=1 -d` 
+n1=`g.tempfile pid=1 -d`
 
 cat > "${n1}" << EOF
 prec_1|2001-01-01|2001-07-01
@@ -79,6 +79,6 @@ rm -rf test
 rm strds_export.tar.bz2
 rm strds_export.tar.gz
 rm strds_export.tar
-rm strds_export_pack.tar  
+rm strds_export_pack.tar
 rm strds_export_pack.tar.gz
 rm strds_export_pack.tar.bz2

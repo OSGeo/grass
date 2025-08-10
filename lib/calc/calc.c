@@ -1,4 +1,3 @@
-
 #include <unistd.h>
 #include <signal.h>
 
@@ -13,7 +12,7 @@ int columns;
 
 /****************************************************************************/
 
-static RETSIGTYPE handle_fpe(int n)
+static void handle_fpe(int n UNUSED)
 {
     floating_point_exception = 1;
     floating_point_exception_occurred = 1;
@@ -21,7 +20,7 @@ static RETSIGTYPE handle_fpe(int n)
 
 void pre_exec(void)
 {
-#ifndef __MINGW32__
+#ifndef _WIN32
 #ifdef SIGFPE
     struct sigaction act;
 
@@ -38,7 +37,7 @@ void pre_exec(void)
 
 void post_exec(void)
 {
-#ifndef __MINGW32__
+#ifndef _WIN32
 #ifdef SIGFPE
     struct sigaction act;
 
@@ -59,4 +58,3 @@ void calc_init(int cols)
 }
 
 /****************************************************************************/
-

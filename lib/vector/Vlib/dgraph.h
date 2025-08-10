@@ -15,10 +15,10 @@ struct pg_edge {
 struct pg_vertex {
     double x; /* coordinates */
     double y;
-    int ecount; /* number of neighbours */
-    int eallocated; /* size of the array below */
+    int ecount;             /* number of neighbours */
+    int eallocated;         /* size of the array below */
     struct pg_edge **edges; /* array of pointers */
-    double *angles; /* precalculated angles with Ox */
+    double *angles;         /* precalculated angles with Ox */
 };
 
 struct planar_graph {
@@ -29,10 +29,10 @@ struct planar_graph {
     struct pg_edge *e;
 };
 
-struct planar_graph* pg_create_struct(int n, int e);
+struct planar_graph *pg_create_struct(int n, int e);
 void pg_destroy_struct(struct planar_graph *pg);
 int pg_existsedge(struct planar_graph *pg, int v1, int v2);
 void pg_addedge(struct planar_graph *pg, int v1, int v2);
-struct planar_graph* pg_create(const struct line_pnts *Points);
+struct planar_graph *pg_create(const struct line_pnts *Points);
 
 #endif

@@ -17,29 +17,29 @@ int read_data(struct files *files, struct SigSet *S)
 
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
-    class = (CELL *) G_calloc(ncols, sizeof(CELL));
+    class = (CELL *)G_calloc(ncols, sizeof(CELL));
 
     G_message(_("Reading raster maps..."));
 
     for (row = 0; row < nrows; row++) {
-	G_percent(row, nrows, 2);
-	read_training_map(class, row, ncols, files);
-	for (b = 0; b < files->nbands; b++)
-	    Rast_get_d_row(files->band_fd[b], files->band_cell[b], row);
+        G_percent(row, nrows, 2);
+        read_training_map(class, row, ncols, files);
+        for (b = 0; b < files->nbands; b++)
+            Rast_get_d_row(files->band_fd[b], files->band_cell[b], row);
 
-	for (col = 0; col < ncols; col++) {
-	    n = class[col];
-	    if (n < 0)
-		continue;
-	    Data = &S->ClassSig[n].ClassData;
-	    for (b = 0; b < files->nbands; b++) {
-		if (Rast_is_d_null_value(&files->band_cell[b][col]))
-		    Rast_set_d_null_value(&Data->x[Data->count][b], 1);
-		else
-		    Data->x[Data->count][b] = files->band_cell[b][col];
-	    }
-	    Data->count++;
-	}
+        for (col = 0; col < ncols; col++) {
+            n = class[col];
+            if (n < 0)
+                continue;
+            Data = &S->ClassSig[n].ClassData;
+            for (b = 0; b < files->nbands; b++) {
+                if (Rast_is_d_null_value(&files->band_cell[b][col]))
+                    Rast_set_d_null_value(&Data->x[Data->count][b], 1);
+                else
+                    Data->x[Data->count][b] = files->band_cell[b][col];
+            }
+            Data->count++;
+        }
     }
     G_percent(nrows, nrows, 2);
     G_free(class);
