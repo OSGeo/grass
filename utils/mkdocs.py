@@ -109,8 +109,7 @@ def get_addons_url(base_url, major_version):
         major_version,
         urlparse.urljoin(base_url, "grass-addons"),
     )
-    addons_url = f"{addons_repo_url}/tree/{version_branch}/"
-    return addons_url
+    return f"{addons_repo_url}/tree/{version_branch}/"
 
 
 def has_src_code_git(src_dir):
