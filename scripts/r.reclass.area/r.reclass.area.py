@@ -168,10 +168,7 @@ def reclass(inf, outf, lim, clump, diag, les, nodata=False):
     expression = "$outfile = $recfile"
     mapcalc_kwargs = {"outfile": outfile, "recfile": recfile}
     if p2.returncode != 0:
-        if lesser:
-            op_str = "less"
-        else:
-            op_str = "greater"
+        op_str = "less" if lesser else "greater"
         if nodata is True:
             gs.warning(
                 _(
@@ -258,11 +255,8 @@ def cleanup():
                 gs.run_command(
                     "g.remove", flags="f", type="vector", name=mapp, quiet=True
                 )
-        else:
-            if gs.find_file(name=mapp, element="raster")["file"]:
-                gs.run_command(
-                    "g.remove", flags="f", type="raster", name=mapp, quiet=True
-                )
+        elif gs.find_file(name=mapp, element="raster")["file"]:
+            gs.run_command("g.remove", flags="f", type="raster", name=mapp, quiet=True)
 
 
 if __name__ == "__main__":
