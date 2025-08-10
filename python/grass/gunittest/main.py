@@ -20,7 +20,13 @@ from unittest.main import TestProgram
 import grass.script.core as gs
 
 from .loader import GrassTestLoader
-from .runner import GrassTestRunner, MultiTestResult, TextTestResult, KeyValueTestResult
+from .runner import (
+    GrassTestRunner,
+    KeyValueTestResult,
+    MultiTestResult,
+    TextTestResult,
+    _WritelnDecorator,
+)
 from .invoker import GrassTestFilesInvoker
 from .utils import silent_rmtree
 from .reporters import FileAnonymizer
@@ -53,7 +59,7 @@ class GrassTestProgram(TestProgram):
         grass_loader = GrassTestLoader(grass_location=self.grass_location)
 
         text_result = TextTestResult(
-            stream=sys.stderr, descriptions=True, verbosity=verbosity
+            stream=_WritelnDecorator(sys.stderr), descriptions=True, verbosity=verbosity
         )
         with open("test_keyvalue_result.txt", "w") as keyval_file:
             keyval_result = KeyValueTestResult(stream=keyval_file)
