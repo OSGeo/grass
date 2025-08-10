@@ -238,18 +238,19 @@ def main():
             gs.fatal(_("An error occurred. Stop."))
 
         # some of the possible values:
-        rules = """8 50 50 50
-        11 70 70 70
-        12 90 90 90
-        60 grey
-        155 blue
-        232 violet
-        235 red
-        236 brown
-        248 orange
-        251 yellow
-        252 green
-        """
+        rules = (
+            "8 50 50 50\n"
+            "11 70 70 70\n"
+            "12 90 90 90\n"
+            "60 grey\n"
+            "155 blue\n"
+            "232 violet\n"
+            "235 red\n"
+            "236 brown\n"
+            "248 orange\n"
+            "251 yellow\n"
+            "252 green\n"
+        )
         gs.write_command("r.colors", map=smfile, rules="-", stdin=rules)
 
         gs.message(_("Imported SPOT VEGETATION SM quality map <%s>.") % smfile)
