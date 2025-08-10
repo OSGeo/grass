@@ -39,7 +39,7 @@ class _WritelnDecorator:
         self.write("\n")  # text-mode streams translate to \r\n if needed
 
 
-class TextTestResult(grass.gunittest.result.TestResult):
+class TextTestResult(grass.gunittest.result.TestResult, unittest.TextTestResult):
     """A test result class that can print formatted text results to a stream.
 
     Used by TextTestRunner.
