@@ -35,7 +35,7 @@ def open_old_stds(name, type, dbif=None):
 
     :param name: The name of the space time dataset, if the name does not
                  contain the mapset (name@mapset) then the current mapset
-                 will be used to identifiy the space time dataset
+                 will be used to identify the space time dataset
     :param type: The type of the space time dataset (strd, str3ds, stvds,
                  raster, vector, raster3d)
     :param dbif: The optional database interface to be used
@@ -88,7 +88,7 @@ def open_old_stds(name, type, dbif=None):
 ###############################################################################
 
 
-def check_new_stds(name, type, dbif=None, overwrite=False):
+def check_new_stds(name, type, dbif=None, overwrite: bool = False):
     """Check if a new space time dataset of a specific type can be created
 
     :param name: The name of the new space time dataset
@@ -153,7 +153,7 @@ def check_new_stds(name, type, dbif=None, overwrite=False):
 
 
 def open_new_stds(
-    name, type, temporaltype, title, descr, semantic, dbif=None, overwrite=False
+    name, type, temporaltype, title, descr, semantic, dbif=None, overwrite: bool = False
 ):
     """Create a new space time dataset of a specific type
 
@@ -210,7 +210,9 @@ def open_new_stds(
 ############################################################################
 
 
-def check_new_map_dataset(name, layer=None, type="raster", overwrite=False, dbif=None):
+def check_new_map_dataset(
+    name, layer=None, type="raster", overwrite: bool = False, dbif=None
+):
     """Check if a new map dataset of a specific type can be created in
      the temporal database
 
@@ -254,7 +256,12 @@ def check_new_map_dataset(name, layer=None, type="raster", overwrite=False, dbif
 
 
 def open_new_map_dataset(
-    name, layer=None, type="raster", temporal_extent=None, overwrite=False, dbif=None
+    name,
+    layer=None,
+    type="raster",
+    temporal_extent=None,
+    overwrite: bool = False,
+    dbif=None,
 ):
     """Create a new map dataset object of a specific type that can be
      registered in the temporal database

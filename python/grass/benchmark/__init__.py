@@ -2,7 +2,7 @@
 #
 # AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
 #
-# PURPOSE:   Benchmarking for GRASS GIS modules
+# PURPOSE:   Benchmarking for GRASS modules
 #
 # COPYRIGHT: (C) 2021 Vaclav Petras, and by the GRASS Development Team
 #
@@ -10,7 +10,7 @@
 #            License (>=v2). Read the file COPYING that comes with GRASS
 #            for details.
 
-"""Benchmarking for GRASS GIS modules
+"""Benchmarking for GRASS modules
 
 This subpackage of the grass package is experimental and the API can change anytime.
 The API of the package is defined by what is imported in the top-level ``__init__.py``
@@ -34,3 +34,17 @@ from .results import (
     save_results_to_file,
 )
 from .runners import benchmark_nprocs, benchmark_resolutions, benchmark_single
+
+__all__ = [
+    "benchmark_nprocs",
+    "benchmark_resolutions",
+    "benchmark_single",
+    "join_results",
+    "join_results_from_files",
+    "load_results",
+    "load_results_from_file",
+    "nprocs_plot",
+    "num_cells_plot",
+    "save_results",
+    "save_results_to_file",
+]

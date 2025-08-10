@@ -128,7 +128,7 @@ static void load_glyphs(void)
     for (i = 1; i <= 4; i++) {
         char buf[GPATH_MAX];
 
-        sprintf(buf, "%s/fonts/hersh.oc%d", G_gisbase(), i);
+        snprintf(buf, sizeof(buf), "%s/fonts/hersh.oc%d", G_gisbase(), i);
         read_hersh(buf);
     }
 }
@@ -141,7 +141,7 @@ static void read_fontmap(const char *name)
     num_chars = 0;
     memset(fontmap, 0, sizeof(fontmap));
 
-    sprintf(buf, "%s/fonts/%s.hmp", G_gisbase(), name);
+    snprintf(buf, sizeof(buf), "%s/fonts/%s.hmp", G_gisbase(), name);
 
     fp = fopen(buf, "r");
     if (!fp) {

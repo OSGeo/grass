@@ -3,7 +3,7 @@ Testing framework module for multi report
 
 Copyright (C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS GIS
+License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :authors: Vaclav Petras
@@ -119,10 +119,7 @@ def plot_percent_successful(x, xticks, xlabels, successes, filename, style):
 
     smedian = median(successes)
     smax = max(successes)
-    if successes[-1] < smedian:
-        color = "r"
-    else:
-        color = "g"
+    color = "r" if successes[-1] < smedian else "g"
     # another possibility is to color according to the gradient, ideally
     # on the whole curve but that's much more complicated
 
@@ -365,7 +362,7 @@ def info_plot(x, xticks, xlabels, results, filename, style):
     fig.savefig(filename)
 
 
-# TODO: solve the directory inconsitencies, implement None
+# TODO: solve the directory inconsistencies, implement None
 def main_page(
     results, filename, images, captions, title="Test reports", directory=None
 ):
@@ -416,13 +413,13 @@ def main_page(
                 )
             )
         page.write("</tbody></table>")
-        for image, caption in itertools.izip(images, captions):
-            page.write(
-                "<h3>{caption}<h3>"
-                '<img src="{image}" alt="{caption}" title="{caption}">'.format(
-                    image=image, caption=caption
-                )
+        page.writelines(
+            "<h3>{caption}<h3>"
+            '<img src="{image}" alt="{caption}" title="{caption}">'.format(
+                image=image, caption=caption
             )
+            for image, caption in itertools.izip(images, captions)
+        )
         page.write("</body></html>")
 
 

@@ -84,16 +84,13 @@ def main():
 
     if serial:
         for band in bands:
-            grass.verbose("band %d" % band)
+            grass.verbose("band %s" % band)
             s = grass.read_command("r.univar", flags="g", map=band)
             kv = parse_key_val(s)
             stddev[band] = float(kv["stddev"])
     else:
         # run all bands in parallel
-        if "WORKERS" in os.environ:
-            workers = int(os.environ["WORKERS"])
-        else:
-            workers = len(bands)
+        workers = int(os.environ["WORKERS"]) if "WORKERS" in os.environ else len(bands)
         proc = {}
         pout = {}
 
@@ -142,18 +139,14 @@ def main():
         _("The Optimum Index Factor analysis result (best combination shown first):")
     )
 
-    if shell:
-        fmt = "%s,%s,%s:%.4f\n"
-    else:
-        fmt = "%s, %s, %s:  %.4f\n"
+    fmt = "%s,%s,%s:%.4f\n" if shell else "%s, %s, %s:  %.4f\n"
 
     if not output or output == "-":
         for v, p in oif:
             sys.stdout.write(fmt % (p + (v,)))
     else:
         outf = open(output, "w")
-        for v, p in oif:
-            outf.write(fmt % (p + (v,)))
+        outf.writelines(fmt % (p + (v,)) for v, p in oif)
         outf.close()
 
 

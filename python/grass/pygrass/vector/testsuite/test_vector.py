@@ -6,8 +6,6 @@ Created on Wed Jun 18 17:21:42 2014
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-from grass.script.core import run_command
 from grass.pygrass.vector import VectorTopo
 
 
@@ -30,7 +28,7 @@ class VectorTopoTestCase(TestCase):
         if cls.vect.is_open():
             cls.vect.close()
 
-        """Remove the generated vector map, if exist"""
+        # Remove the generated vector map, if exists
         cls.runModule("g.remove", flags="f", type="vector", name=cls.tmpname)
 
     def test_getitem_slice(self):

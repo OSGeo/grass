@@ -122,7 +122,7 @@ def main():
     tempfile = gs.read_command("g.tempfile", pid=os.getpid()).strip() + ".tif"
 
     # get projection information for current GRASS location
-    proj = gs.read_command("g.proj", flags="jf").strip()
+    proj = gs.read_command("g.proj", flags="fp", format="proj4").strip()
 
     # currently only runs in projected location
     if "XY location" in proj:
@@ -152,10 +152,7 @@ def main():
     # Band 3b is not included ASTER L1T
     if proctype == "L1T":
         allbands.remove("3b")
-    if band == "all":
-        bandlist = allbands
-    else:
-        bandlist = band.split(",")
+    bandlist = allbands if band == "all" else band.split(",")
 
     # initialize datasets for L1A, L1B, L1T
     if proctype in {"L1A", "L1B", "L1T"}:

@@ -107,6 +107,7 @@ int gvld_isosurf(geovol *gvl)
     float *kem, *ksh, pkem, pksh;
     unsigned int *ktrans, *curcolor;
     int pktransp = 0;
+    int ret = 0;
 
     int *pos, *nz, *e_dl, tmp_pos, edge_pos[13];
 
@@ -188,7 +189,7 @@ int gvld_isosurf(geovol *gvl)
 
         /* transparency */
         check_transp[i] = 0;
-        ktrans[i] = (255 << 24);
+        ktrans[i] = (255U << 24);
         if (CONST_ATT == isosurf->att[ATT_TRANSP].att_src &&
             isosurf->att[ATT_TRANSP].constant != 0.0) {
             ktrans[i] = (255 - (int)isosurf->att[ATT_TRANSP].constant) << 24;
@@ -255,8 +256,8 @@ int gvld_isosurf(geovol *gvl)
             gsd_popmatrix();
             gsd_blend(0);
             gsd_zwritemask(0xffffffff);
-
-            return (-1);
+            ret = -1;
+            goto cleanup_exit;
         }
 
         for (y = 0; y < rows - 1; y++) {
@@ -319,7 +320,7 @@ int gvld_isosurf(geovol *gvl)
                             /* set position in data to current edge data */
                             pos[i] = edge_pos[crnt_ev];
 
-                            /* triagle vertex */
+                            /* triangle vertex */
                             if (crnt_ev == 12) {
                                 pt[X] = xc + (READ() / 255. * xres);
                                 pt[Y] = yc + (-(READ() / 255. * yres));
@@ -396,8 +397,20 @@ int gvld_isosurf(geovol *gvl)
     gsd_popmatrix();
     gsd_blend(0);
     gsd_zwritemask(0xffffffff);
-
-    return (0);
+cleanup_exit:
+    G_free(e_dl);
+    G_free(nz);
+    G_free(pos);
+    G_free(curcolor);
+    G_free(ktrans);
+    G_free(ksh);
+    G_free(kem);
+    G_free(check_shin);
+    G_free(check_emis);
+    G_free(check_material);
+    G_free(check_transp);
+    G_free(check_color);
+    return ret;
 }
 
 /*!
@@ -600,7 +613,7 @@ int gvld_slice(geovol *gvl, int ndx)
                     ((slice->data[offset + 1] & 0xff) << 8) |
                     ((slice->data[offset + 2] & 0xff) << 16);
 
-            /* triagle vertices */
+            /* triangle vertices */
             pt[ptX] = nextx * resx;
             pt[ptY] = nexty * resy;
             pt[ptZ] = z * resz;

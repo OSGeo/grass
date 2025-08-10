@@ -42,12 +42,12 @@ static int profile(int coords, const char *map, const char *nulls, char **line)
     if (coords)
         argv[argc++] = "-g";
 
-    sprintf(buf, "input=%s", map);
+    snprintf(buf, sizeof(buf), "input=%s", map);
     argv[argc++] = G_store(buf);
 
     argv[argc++] = "output=-";
 
-    sprintf(buf, "null_value=%s", nulls);
+    snprintf(buf, sizeof(buf), "null_value=%s", nulls);
     argv[argc++] = G_store(buf);
 
     strcpy(profile, "coordinates=");

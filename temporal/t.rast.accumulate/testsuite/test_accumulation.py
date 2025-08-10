@@ -12,7 +12,6 @@ import datetime
 
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
-from grass.gunittest.gmodules import SimpleModule
 
 
 class TestAccumulate(TestCase):

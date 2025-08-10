@@ -16,10 +16,10 @@ Update
   https://grasswiki.osgeo.org/wiki/R.sun
 
 ####
-Fix http://trac.osgeo.org/grass/ticket/498
+Fix https://trac.osgeo.org/grass/ticket/498
 
 pseudo-data test-case
-http://trac.osgeo.org/grass/ticket/498#comment:22
+https://trac.osgeo.org/grass/ticket/498#comment:22
 #spearfish (further north than NC so more defined shadows)
 g.region -d
 r.mapcalc "undulates = (2 + sin( row() * 2 ) + cos( col() * 2 )) * 500"

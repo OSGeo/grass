@@ -1,14 +1,17 @@
 ---
 ci:
   skip: [flake8]
+default_language_version:
+  node: lts
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
         exclude: |
           (?x)^(
                 configure$|
+                .*\.md$|
                 .*\.ascii$|
                 .*\.asc$|
                 .*\.ref$|
@@ -17,6 +20,7 @@ repos:
                 .*\.po$|
                 .*\.ps$|
                 .*\.svg$|
+                python/grass/temporal/ply/|
                 python/libgrass_interface_generator/ctypesgen/|
                 lib/fonts/fonts/.*
           )
@@ -32,35 +36,30 @@ repos:
                 .*\.po$|
                 .*\.ps$|
                 .*\.svg$|
+                python/grass/temporal/ply/|
                 python/libgrass_interface_generator/ctypesgen/|
                 lib/fonts/fonts/.*
           )
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
-    rev: v0.7.0
+    rev: v0.12.8
     hooks:
       # Run the linter.
-      - id: ruff
+      - id: ruff-check
         args: [--fix, --preview]
+      # Run the formatter.
+      - id: ruff-format
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.42.0
+    rev: v0.45.0
     hooks:
       - id: markdownlint-fix
-  # Using this mirror lets us use mypyc-compiled black, which is about 2x faster
-  - repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 24.10.0
-    hooks:
-      - id: black-jupyter
-        exclude: |
-          (?x)^(
-                python/libgrass_interface_generator/
-          )
   - repo: https://github.com/pycqa/flake8
-    rev: 7.1.1
+    rev: 7.3.0
     hooks:
       - id: flake8
         exclude: |
           (?x)^(
+                python/grass/temporal/ply/|
                 python/libgrass_interface_generator/|
                 .*/testsuite/.*
           )
@@ -75,6 +74,10 @@ repos:
                 .*\.ipynb$
           )
   - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.35.1
+    rev: v1.37.1
     hooks:
       - id: yamllint
+  - repo: https://github.com/editorconfig-checker/editorconfig-checker
+    rev: v3.3.0
+    hooks:
+      - id: editorconfig-checker

@@ -234,7 +234,7 @@ class ExportCategoryRaster(wx.Dialog):
         """Dialog for export of category raster.
 
         :param parent: window
-        :param str rasterName name of vector layer for export
+        :param str rasterName: name of vector layer for export
         :param title: window title
         """
         wx.Dialog.__init__(self, parent, id, title, style=style, **kwargs)
@@ -425,9 +425,7 @@ class SettingsDialog(wx.Dialog):
         gridSizer = wx.GridBagSizer(vgap=1, hgap=1)
 
         row = 0
-        setts = {}
-        setts.update(self.colorsSetts)
-        setts.update(self.sizeSetts)
+        setts = {**self.colorsSetts, **self.sizeSetts}
 
         settsOrder = [
             "sel_pol",

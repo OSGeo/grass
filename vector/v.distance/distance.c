@@ -131,7 +131,7 @@ int line2line(struct line_pnts *FPoints, int ftype, struct line_pnts *TPoints,
                 *falong = Vect_line_length(FPoints);
                 FPoints->n_points = np;
             }
-            np = fseg;
+            // np = fseg;
             if (fseg == 0)
                 fseg = 1;
             *fangle = sangle(FPoints, fseg);
@@ -176,7 +176,7 @@ int line2line(struct line_pnts *FPoints, int ftype, struct line_pnts *TPoints,
                 *talong = Vect_line_length(TPoints);
                 TPoints->n_points = np;
             }
-            np = tseg;
+            // np = tseg;
             if (tseg == 0)
                 tseg = 1;
             *tangle = sangle(TPoints, tseg);
@@ -231,7 +231,8 @@ int line2area(struct Map_info *To, struct line_pnts *Points, int type, int area,
     int i, j;
     double tmp_dist;
     int isle, nisles;
-    int all_inside_outer, all_outside_outer, all_outside_inner;
+    int all_inside_outer, all_outside_inner;
+    // int all_outside_outer;
     static struct line_pnts *aPoints = NULL;
     static struct line_pnts **iPoints = NULL;
     static struct bound_box *ibox = NULL;
@@ -272,7 +273,8 @@ int line2area(struct Map_info *To, struct line_pnts *Points, int type, int area,
     }
 
     /* inside area ? */
-    all_inside_outer = all_outside_outer = 1;
+    all_inside_outer = 1;
+    // all_outside_outer = 1;
     all_outside_inner = 1;
 
     int in_box;
@@ -291,7 +293,7 @@ int line2area(struct Map_info *To, struct line_pnts *Points, int type, int area,
 
             if (poly > 0) {
                 /* inside outer ring */
-                all_outside_outer = 0;
+                // all_outside_outer = 0;
             }
             else {
                 /* outside outer ring */

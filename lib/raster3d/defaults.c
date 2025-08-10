@@ -90,7 +90,6 @@ int g3d_vertical_unit_default = U_UNDEFINED;
  * \param doCompress specifies if a compression should be performed
  * \param precision a precision of compression
  */
-
 void Rast3d_set_compression_mode(int doCompress, int precision)
 {
     if ((doCompress != RASTER3D_NO_COMPRESSION) &&
@@ -123,7 +122,6 @@ void Rast3d_set_compression_mode(int doCompress, int precision)
  * \see Rast3d_set_compression_mode, RASTER3D_COMPRESSION_ENV_VAR_YES,
  RASTER3D_COMPRESSION_ENV_VAR_YES
  */
-
 void Rast3d_get_compression_mode(int *doCompress, int *precision)
 {
     if (doCompress != NULL)
@@ -140,7 +138,6 @@ void Rast3d_get_compression_mode(int *doCompress, int *precision)
  *  \param nTiles
  *  \return void
  */
-
 void Rast3d_set_cache_size(int nTiles)
 {
     if (nTiles < 0)
@@ -156,7 +153,6 @@ void Rast3d_set_cache_size(int nTiles)
  *
  *  \return int
  */
-
 int Rast3d_get_cache_size(void)
 {
     return g3d_cache_default;
@@ -170,7 +166,6 @@ int Rast3d_get_cache_size(void)
  *  \param nBytes
  *  \return void
  */
-
 void Rast3d_set_cache_limit(int nBytes)
 {
     if (nBytes <= 0)
@@ -186,7 +181,6 @@ void Rast3d_set_cache_limit(int nBytes)
  *
  *  \return int
  */
-
 int Rast3d_get_cache_limit(void)
 {
     return g3d_cache_max;
@@ -200,7 +194,6 @@ int Rast3d_get_cache_limit(void)
  *  \param type
  *  \return void
  */
-
 void Rast3d_set_file_type(int type)
 {
     if ((type != FCELL_TYPE) && (type != DCELL_TYPE))
@@ -216,7 +209,6 @@ void Rast3d_set_file_type(int type)
  *
  *  \return int
  */
-
 int Rast3d_get_file_type(void)
 {
     return g3d_file_type;
@@ -232,7 +224,6 @@ int Rast3d_get_file_type(void)
  *  \param tileZ
  *  \return void
  */
-
 void Rast3d_set_tile_dimension(int tileX, int tileY, int tileZ)
 {
     if ((g3d_tile_dimension[0] = tileX) <= 0)
@@ -258,7 +249,6 @@ void Rast3d_set_tile_dimension(int tileX, int tileY, int tileZ)
  *  \param tileZ
  *  \return void
  */
-
 void Rast3d_get_tile_dimension(int *tileX, int *tileY, int *tileZ)
 {
     *tileX = g3d_tile_dimension[0];
@@ -274,7 +264,6 @@ void Rast3d_get_tile_dimension(int *tileX, int *tileY, int *tileZ)
  *  \param fun
  *  \return void
  */
-
 void Rast3d_set_error_fun(void (*fun)(const char *))
 {
     g3d_error_fun = fun;
@@ -290,7 +279,6 @@ void Rast3d_set_error_fun(void (*fun)(const char *))
  *
  *  \return void
  */
-
 void Rast3d_init_defaults(void)
 {
     static int firstTime = 1;

@@ -101,7 +101,7 @@ int G_math_solver_pcg(double **A, double *x, double *b, int rows, int maxit,
 int G_math_solver_pcg_sband(double **A, double *x, double *b, int rows,
                             int bandwidth, int maxit, double err, int prec)
 {
-    G_fatal_error("Preconditioning of band matrics is not implemented yet");
+    G_fatal_error("Preconditioning of band matrices is not implemented yet");
     return solver_pcg(A, NULL, x, b, rows, maxit, err, prec, 1, bandwidth);
 }
 

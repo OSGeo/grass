@@ -86,10 +86,7 @@ def main():
         )
         merging = True
 
-    if vect:
-        name = vect
-    else:
-        name = e00name
+    name = vect or e00name
 
     # do import
 

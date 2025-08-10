@@ -1892,6 +1892,7 @@ class DataCatalogTree(TreeView):
             gs.try_remove(event.userData)
 
         for i in range(len(self.selected_layer)):
+            cmd: list[str] = []
             if self.selected_layer[i].data["type"] == "raster":
                 cmd = ["r.info"]
             elif self.selected_layer[i].data["type"] == "vector":
@@ -2016,10 +2017,7 @@ class DataCatalogTree(TreeView):
             mapset=mapset,
         )
         dlg.SetValue(value)
-        if dlg.ShowModal() == wx.ID_OK:
-            name = dlg.GetValue()
-        else:
-            name = None
+        name = dlg.GetValue() if dlg.ShowModal() == wx.ID_OK else None
         dlg.Destroy()
 
         return name

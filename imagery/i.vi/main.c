@@ -593,6 +593,16 @@ int main(int argc, char *argv[])
         else
             G_fatal_error(_("Unknown color request '%s'"), style);
     }
+    else if (!strcasecmp(viflag, "ndwi")) {
+        /* apply predefined NDWI color table */
+        const char *style = "ndwi";
+
+        if (G_find_color_rule("ndwi")) {
+            Rast_make_fp_colors(&colors, style, -1.0, 1.0);
+        }
+        else
+            G_fatal_error(_("Unknown color request '%s'"), style);
+    }
     else {
         /* Color from -1.0 to +1.0 in grey */
         Rast_init_colors(&colors);

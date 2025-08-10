@@ -8,13 +8,9 @@ import numpy as np
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-from grass.script.core import run_command
-
+from grass.pygrass.gis.region import Region
 from grass.pygrass.vector import VectorTopo
 from grass.pygrass.vector.geometry import Point
-from grass.pygrass.gis.region import Region
-from grass.pygrass.utils import get_mapset_vector
 
 
 def generate_coordinates(number, bbox=None, with_z=False):
@@ -59,7 +55,7 @@ class VectorTopo3DTestCase(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """Remove the generated vector map, if exist"""
+        """Remove the generated vector map, if exists"""
         cls.runModule("g.remove", flags="f", type="vector", name=cls.tmpname)
 
 

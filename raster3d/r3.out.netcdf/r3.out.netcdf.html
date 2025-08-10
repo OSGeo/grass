@@ -22,9 +22,9 @@ cube, then export the raster time series as netCDF file.
 Spatial coordinates are exported as cell centered coordinates. The projection can be optionally stored
 in the metadata as <em>crs</em> attributes .
 The netCDF projection metadata storage follows the spatial_ref GDAL/netCDF suggestion
-<a href="http://www.gdal.org/frmt_netcdf.html">here</a>
+<a href="https://gdal.org/en/stable/drivers/raster/netcdf.html">here</a>
 and the netCDF CF 1.6 convention
-<a href="http://cf-pcmdi.llnl.gov/documents/cf-conventions/1.6/cf-conventions.html#coordinate-system">here</a>
+<a href="https://cfconventions.org/cf-conventions/v1.6.0/cf-conventions.html#coordinate-system">here</a>
 using WKT projection information. Additional a PROJ string is
 stored in the <em>crs</em> attribute section.
 The export of projection parameters is suppressed when the XY-projection is set.

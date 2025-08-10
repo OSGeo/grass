@@ -60,7 +60,8 @@
 # %end
 # %flag
 # % key: g
-# % description: Print stats in shell script style
+# % label: Print stats in shell script style [deprecated]
+# % description: This flag is deprecated and will be removed in a future release. Use format=shell instead.
 # %end
 
 import sys
@@ -77,23 +78,17 @@ def cleanup():
 
 
 def sortfile(infile, outfile):
-    inf = open(infile)
-    outf = open(outfile, "w")
-
-    if gs.find_program("sort", "--help"):
-        gs.run_command("sort", flags="n", stdin=inf, stdout=outf)
-    else:
-        # FIXME: we need a large-file sorting function
-        gs.warning(_("'sort' not found: sorting in memory"))
-        lines = inf.readlines()
-        for i in range(len(lines)):
-            lines[i] = float(lines[i].rstrip("\r\n"))
-        lines.sort()
-        for line in lines:
-            outf.write(str(line) + "\n")
-
-    inf.close()
-    outf.close()
+    with open(infile) as inf, open(outfile, "w") as outf:
+        if (not gs.setup.WINDOWS) and gs.find_program("sort", "--help"):
+            gs.run_command("sort", flags="n", stdin=inf, stdout=outf)
+        else:
+            # FIXME: we need a large-file sorting function
+            gs.warning(_("'sort' not found: sorting in memory"))
+            lines = inf.readlines()
+            for i in range(len(lines)):
+                lines[i] = float(lines[i].rstrip("\r\n"))
+            lines.sort()
+            outf.writelines(str(line) + "\n" for line in lines)
 
 
 def main():
@@ -118,14 +113,16 @@ def main():
     perc = [float(p) for p in perc.split(",")]
 
     if not output_format:
-        if shellstyle:
-            output_format = "shell"
-        else:
-            output_format = "plain"
-    elif shellstyle:
+        output_format = "shell" if shellstyle else "plain"
+    if shellstyle:
         # This can be a message or warning in future versions.
         # In version 9, -g may be removed.
-        gs.verbose(_("The format option is used and -g flag ignored"))
+        gs.verbose(
+            _(
+                "Flag 'g' is deprecated and will be removed in a future "
+                "release. Please use format=shell instead."
+            )
+        )
 
     desc_table = gs.db_describe(table, database=database, driver=driver)
     if not desc_table:
@@ -153,24 +150,22 @@ def main():
     if not driver:
         driver = None
 
-    tmpf = open(tmp, "w")
-    gs.run_command(
-        "db.select",
-        flags="c",
-        table=table,
-        database=database,
-        driver=driver,
-        sql=sql,
-        stdout=tmpf,
-    )
-    tmpf.close()
+    with open(tmp, "w") as tmpf:
+        gs.run_command(
+            "db.select",
+            flags="c",
+            table=table,
+            database=database,
+            driver=driver,
+            sql=sql,
+            stdout=tmpf,
+        )
 
     # check if result is empty
-    tmpf = open(tmp)
-    if tmpf.read(1) == "":
-        if output_format in {"plain", "shell"}:
-            gs.fatal(_("Table <%s> contains no data.") % table)
-        tmpf.close()
+    with open(tmp) as tmpf:
+        if tmpf.read(1) == "":
+            if output_format in {"plain", "shell"}:
+                gs.fatal(_("Table <%s> contains no data.") % table)
 
     # calculate statistics
     if output_format == "plain":
@@ -183,19 +178,18 @@ def main():
     minv = 1e300
     maxv = -1e300
 
-    tmpf = open(tmp)
-    for line in tmpf:
-        line = line.rstrip("\r\n")
-        if len(line) == 0:
-            continue
-        x = float(line)
-        N += 1
-        sum += x
-        sum2 += x * x
-        sum3 += abs(x)
-        maxv = max(maxv, x)
-        minv = min(minv, x)
-    tmpf.close()
+    with open(tmp) as tmpf:
+        for line in tmpf:
+            line = line.rstrip("\r\n")
+            if len(line) == 0:
+                continue
+            x = float(line)
+            N += 1
+            sum += x
+            sum2 += x * x
+            sum3 += abs(x)
+            maxv = max(maxv, x)
+            minv = min(minv, x)
 
     if N <= 0:
         if output_format in {"plain", "shell"}:
@@ -259,7 +253,10 @@ def main():
             result["coeff_var"] = 0
         result["sum"] = sum
         if not extend:
-            json.dump({"statistics": result}, sys.stdout)
+            # for backward compatibility we include the statistics key
+            result["statistics"] = result.copy()
+            json.dump(result, sys.stdout, indent=4)
+            sys.stdout.write("\n")
     elif output_format == "shell":
         sys.stdout.write("n=%d\n" % N)
         sys.stdout.write("min=%.15g\n" % minv)
@@ -280,7 +277,8 @@ def main():
             sys.stdout.write("coeff_var=0\n")
         sys.stdout.write("sum=%.15g\n" % sum)
     else:
-        raise ValueError(f"Unknown output format {output_format}")
+        msg = f"Unknown output format {output_format}"
+        raise ValueError(msg)
 
     if not extend:
         return
@@ -310,24 +308,24 @@ def main():
             ppos[i] = 1
         pval[i] = 0
 
-    inf = open(tmp + ".sort")
-    line_number = 1
-    for line in inf:
-        line = line.rstrip("\r\n")
-        if len(line) == 0:
-            continue
-        if line_number == q25pos:
-            q25 = float(line)
-        if line_number == q50apos:
-            q50a = float(line)
-        if line_number == q50bpos:
-            q50b = float(line)
-        if line_number == q75pos:
-            q75 = float(line)
-        for i in range(len(ppos)):
-            if line_number == ppos[i]:
-                pval[i] = float(line)
-        line_number += 1
+    with open(tmp + ".sort") as inf:
+        line_number = 1
+        for line in inf:
+            line = line.rstrip("\r\n")
+            if len(line) == 0:
+                continue
+            if line_number == q25pos:
+                q25 = float(line)
+            if line_number == q50apos:
+                q50a = float(line)
+            if line_number == q50bpos:
+                q50b = float(line)
+            if line_number == q75pos:
+                q75 = float(line)
+            for i in range(len(ppos)):
+                if line_number == ppos[i]:
+                    pval[i] = float(line)
+            line_number += 1
 
     q50 = (q50a + q50b) / 2
 
@@ -359,13 +357,18 @@ def main():
         result["first_quartile"] = q25
         result["median"] = q50
         result["third_quartile"] = q75
+        # for backward compatibility we include the statistics key
+        statistics = result.copy()
         if options["percentile"]:
-            percentile_values = []
+            statistics["percentiles"] = perc
+            statistics["percentile_values"] = [pval[i] for i in range(len(perc))]
+            result["statistics"] = statistics
+
+            result["percentiles"] = []
             for i in range(len(perc)):
-                percentile_values.append(pval[i])
-        result["percentiles"] = perc
-        result["percentile_values"] = percentile_values
-        json.dump({"statistics": result}, sys.stdout)
+                result["percentiles"].append({"percentile": perc[i], "value": pval[i]})
+        json.dump(result, sys.stdout, indent=4)
+        sys.stdout.write("\n")
     else:
         sys.stdout.write("first_quartile=%.15g\n" % q25)
         sys.stdout.write("median=%.15g\n" % q50)

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 #include <process.h>
 #else
 #include <sys/wait.h>
@@ -127,13 +127,13 @@ void insert_value(int cat, int val, double dval)
 {
     char buf[1000];
 
-    sprintf(buf, "insert into %s values (%d", Fi->table, cat);
+    snprintf(buf, sizeof(buf), "insert into %s values (%d", Fi->table, cat);
     db_set_string(&sql, buf);
 
     if (data_type == CELL_TYPE)
-        sprintf(buf, ", %d", val);
+        snprintf(buf, sizeof(buf), ", %d", val);
     else
-        sprintf(buf, ", %f", dval);
+        snprintf(buf, sizeof(buf), ", %f", dval);
 
     db_append_string(&sql, buf);
 
@@ -145,7 +145,7 @@ void insert_value(int cat, int val, double dval)
 
         db_set_string(&label, lab);
         db_double_quote_string(&label);
-        sprintf(buf, ", '%s'", db_get_string(&label));
+        snprintf(buf, sizeof(buf), ", '%s'", db_get_string(&label));
         db_append_string(&sql, buf);
     }
 

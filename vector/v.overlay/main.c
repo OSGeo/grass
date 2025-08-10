@@ -441,7 +441,7 @@ int main(int argc, char *argv[])
                 }
             }
 
-            sprintf(buf, "select * from %s", inFi->table);
+            snprintf(buf, sizeof(buf), "select * from %s", inFi->table);
             db_set_string(&sql, buf);
 
             if (db_open_select_cursor(in_driver, &sql, &cursor,
@@ -470,7 +470,8 @@ int main(int argc, char *argv[])
                 db_append_string(&col_defs, " ");
                 switch (sqltype) {
                 case DB_SQL_TYPE_CHARACTER:
-                    sprintf(buf, "varchar(%d)", db_get_column_length(Column));
+                    snprintf(buf, sizeof(buf), "varchar(%d)",
+                             db_get_column_length(Column));
                     db_append_string(&col_defs, buf);
                     break;
                 case DB_SQL_TYPE_TEXT:
@@ -500,7 +501,7 @@ int main(int argc, char *argv[])
                     G_warning(_("Unknown column type '%s' of column '%s'"),
                               db_sqltype_name(sqltype),
                               db_get_column_name(Column));
-                    sprintf(buf, "varchar(250)");
+                    snprintf(buf, sizeof(buf), "varchar(250)");
                 }
             }
             attr[input].null_values = G_store(db_get_string(&sql));
@@ -546,7 +547,8 @@ int main(int argc, char *argv[])
                         }
                         else {
                             db_double_quote_string(&value_string);
-                            sprintf(buf, "'%s'", db_get_string(&value_string));
+                            snprintf(buf, sizeof(buf), "'%s'",
+                                     db_get_string(&value_string));
                             db_append_string(&sql, buf);
                         }
                         break;
@@ -587,20 +589,20 @@ int main(int argc, char *argv[])
     }
 
     if (driver) {
-        sprintf(buf, "create table %s (cat integer ", Fi->table);
+        snprintf(buf, sizeof(buf), "create table %s (cat integer ", Fi->table);
         db_set_string(&stmt, buf);
 
         if (attr[0].columns)
             db_append_string(&stmt, attr[0].columns);
         else {
-            sprintf(buf, ", a_cat integer");
+            snprintf(buf, sizeof(buf), ", a_cat integer");
             db_append_string(&stmt, buf);
         }
 
         if (attr[1].columns)
             db_append_string(&stmt, attr[1].columns);
         else {
-            sprintf(buf, ", b_cat integer");
+            snprintf(buf, sizeof(buf), ", b_cat integer");
             db_append_string(&stmt, buf);
         }
 
