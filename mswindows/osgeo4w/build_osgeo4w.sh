@@ -21,7 +21,6 @@ export PYTHONHOME=${OSGEO4W_ROOT_MSYS}/apps/Python312
 export ARCH=x86_64-w64-mingw32
 export MSYS2_LOCATION="${MSYS2_LOCATION:-C:/msys64}"
 
-
 mkdir -p mswindows/osgeo4w/lib
 rm -f $OSGEO4W_ROOT_MSYS/lib/libpq.a
 cp -uv $OSGEO4W_ROOT_MSYS/lib/libpq.lib mswindows/osgeo4w/lib/libpq.lib
