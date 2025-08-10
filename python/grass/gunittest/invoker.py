@@ -169,8 +169,7 @@ class GrassTestFilesInvoker:
         if module.file_type == "py":
             # ignoring shebang line to use current Python
             # and also pass parameters to it
-            # add also '-Qwarn'?
-            args = [sys.executable, "-tt", module.abs_file_path]
+            args = [sys.executable, module.abs_file_path]
         elif module.file_type == "sh":
             # ignoring shebang line to pass parameters to shell
             # expecting system to have sh or something compatible
