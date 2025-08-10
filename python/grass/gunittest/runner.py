@@ -446,13 +446,15 @@ class MultiTestResult(grass.gunittest.result.TestResult):
 class GrassTestRunner:
     def __init__(
         self,
-        stream=sys.stderr,
+        stream=None,
         descriptions=True,
         verbosity=1,
         failfast=False,
         buffer=False,
         result=None,
     ):
+        if stream is None:
+            stream = sys.stderr
         self.stream = _WritelnDecorator(stream)
         self.descriptions = descriptions
         self.verbosity = verbosity
