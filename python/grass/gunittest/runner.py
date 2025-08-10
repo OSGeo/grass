@@ -47,9 +47,13 @@ class TextTestResult(grass.gunittest.result.TestResult):
     separator1 = "=" * 70
     separator2 = "-" * 70
 
-    def __init__(self, stream, descriptions, verbosity):
-        super().__init__(stream=stream, descriptions=descriptions, verbosity=verbosity)
-        self.stream = _WritelnDecorator(stream)
+    def __init__(self, stream, descriptions, verbosity, **kwargs):
+        """Construct a TextTestResult. Subclasses should accept **kwargs
+        to ensure compatibility as the interface changes."""
+        super().__init__(
+            stream=stream, descriptions=descriptions, verbosity=verbosity, **kwargs
+        )
+        self.stream = stream
         self.showAll = verbosity > 1
         self.dots = verbosity == 1
         self.descriptions = descriptions
@@ -75,6 +79,7 @@ class TextTestResult(grass.gunittest.result.TestResult):
         super().addSuccess(test)
         if self.showAll:
             self.stream.writeln("ok")
+            self.stream.flush()
         elif self.dots:
             self.stream.write(".")
             self.stream.flush()
@@ -83,6 +88,7 @@ class TextTestResult(grass.gunittest.result.TestResult):
         super().addError(test, err)
         if self.showAll:
             self.stream.writeln("ERROR")
+            self.stream.flush()
         elif self.dots:
             self.stream.write("E")
             self.stream.flush()
@@ -91,6 +97,7 @@ class TextTestResult(grass.gunittest.result.TestResult):
         super().addFailure(test, err)
         if self.showAll:
             self.stream.writeln("FAIL")
+            self.stream.flush()
         elif self.dots:
             self.stream.write("F")
             self.stream.flush()
@@ -99,6 +106,7 @@ class TextTestResult(grass.gunittest.result.TestResult):
         super().addSkip(test, reason)
         if self.showAll:
             self.stream.writeln("skipped {0!r}".format(reason))
+            self.stream.flush()
         elif self.dots:
             self.stream.write("s")
             self.stream.flush()
@@ -107,6 +115,7 @@ class TextTestResult(grass.gunittest.result.TestResult):
         super().addExpectedFailure(test, err)
         if self.showAll:
             self.stream.writeln("expected failure")
+            self.stream.flush()
         elif self.dots:
             self.stream.write("x")
             self.stream.flush()
@@ -115,6 +124,7 @@ class TextTestResult(grass.gunittest.result.TestResult):
         super().addUnexpectedSuccess(test)
         if self.showAll:
             self.stream.writeln("unexpected success")
+            self.stream.flush()
         elif self.dots:
             self.stream.write("u")
             self.stream.flush()
@@ -122,6 +132,7 @@ class TextTestResult(grass.gunittest.result.TestResult):
     def printErrors(self):
         if self.dots or self.showAll:
             self.stream.writeln()
+            self.stream.flush()
         self.printErrorList("ERROR", self.errors)
         self.printErrorList("FAIL", self.failures)
 
@@ -131,6 +142,7 @@ class TextTestResult(grass.gunittest.result.TestResult):
             self.stream.writeln("%s: %s" % (flavour, self.getDescription(test)))
             self.stream.writeln(self.separator2)
             self.stream.writeln("%s" % err)
+            self.stream.flush()
 
     def setTimes(self, start_time, end_time, time_taken):
         self.start_time = start_time
