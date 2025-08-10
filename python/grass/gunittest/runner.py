@@ -16,7 +16,7 @@ import sys
 import time
 
 import unittest
-from grass.gunittest.result import TestResult
+import grass.gunittest.result
 
 __unittest = True
 
@@ -38,7 +38,7 @@ class _WritelnDecorator:
         self.write("\n")  # text-mode streams translate to \r\n if needed
 
 
-class TextTestResult(TestResult):
+class TextTestResult(grass.gunittest.result.TestResult):
     """A test result class that can print formatted text results to a stream.
 
     Used by TextTestRunner.
@@ -175,7 +175,7 @@ class TextTestResult(TestResult):
             self.stream.write("\n")
 
 
-class KeyValueTestResult(TestResult):
+class KeyValueTestResult(grass.gunittest.result.TestResult):
     """A test result class that can print formatted text results to a stream.
 
     Used by TextTestRunner.
@@ -275,7 +275,7 @@ class KeyValueTestResult(TestResult):
         self._stream.flush()
 
 
-class MultiTestResult(TestResult):
+class MultiTestResult(grass.gunittest.result.TestResult):
     # descriptions and verbosity unused
     # included for compatibility with unittest's TestResult
     # where are also unused, so perhaps we can remove them
