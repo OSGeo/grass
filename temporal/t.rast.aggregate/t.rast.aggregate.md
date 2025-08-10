@@ -194,10 +194,9 @@ In this example, we create a STRDS of fictional temperature values for
 a weekly interval:
 
 ```sh
-MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7 map_8 map_9 map_10"
-for map in ${MAPS} ; do
-    r.surf.random output=${map} min=278 max=298
-    echo ${map} >> map_list.txt
+for i in `seq 0 11` ; do
+    r.mapcalc expression="map_${i} = ${i}"
+    echo map_${i} >> map_list.txt
 done
 
 t.create type=strds temporaltype=absolute \
@@ -218,6 +217,22 @@ granules.
 t.rast.aggregate input=temperature_weekly output=temperature_10daily_weighted \
   basename=tendaily_temp_weighted method=average granularity="10 days" \
   sampling=related -w
+```
+
+Let's see the result:
+
+```sh
+t.rast.list input=temperature_10daily_weighted columns=name,start_time,end_time,min,max
+name|start_time|end_time|min|max
+tendaily_temp_weighted_2021_05_01|2021-05-01 00:00:00|2021-05-11 00:00:00|0.3|0.3
+tendaily_temp_weighted_2021_05_11|2021-05-11 00:00:00|2021-05-21 00:00:00|1.6|1.6
+tendaily_temp_weighted_2021_05_21|2021-05-21 00:00:00|2021-05-31 00:00:00|3.1|3.1
+tendaily_temp_weighted_2021_05_31|2021-05-31 00:00:00|2021-06-10 00:00:00|4.5|4.5
+tendaily_temp_weighted_2021_06_10|2021-06-10 00:00:00|2021-06-20 00:00:00|5.9|5.9
+tendaily_temp_weighted_2021_06_20|2021-06-20 00:00:00|2021-06-30 00:00:00|7.4|7.4
+tendaily_temp_weighted_2021_06_30|2021-06-30 00:00:00|2021-07-10 00:00:00|8.7|8.7
+tendaily_temp_weighted_2021_07_10|2021-07-10 00:00:00|2021-07-20 00:00:00|10.3|10.3
+tendaily_temp_weighted_2021_07_20|2021-07-20 00:00:00|2021-07-30 00:00:00|11.0|11.0
 ```
 
 This is especially useful when harmonizing STRDS with granules that are not
