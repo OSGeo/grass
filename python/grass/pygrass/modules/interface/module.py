@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from multiprocessing import cpu_count, Process, Queue
 import time
 from xml.etree.ElementTree import fromstring
@@ -626,7 +628,7 @@ class Module:
         self.outputs["stdout"] = Parameter(diz=diz)
         diz["name"] = "stderr"
         self.outputs["stderr"] = Parameter(diz=diz)
-        self._popen = None
+        self._popen: Popen | None = None
         self.time = None
         self.start_time = None  # This variable will be set in the run() function
         # This variable is set True if wait() was successfully called
@@ -833,16 +835,17 @@ class Module:
 
         cmd = self.make_cmd()
         self.start_time = time.time()
-        self._popen = Popen(
+        with Popen(
             cmd,
             stdin=self.stdin_,
             stdout=self.stdout_,
             stderr=self.stderr_,
             env=self.env_,
-        )
+        ) as __popen:
+            self._popen = __popen
 
-        if self.finish_ is True:
-            self.wait()
+            if self.finish_ is True:
+                self.wait()
 
         return self
 
@@ -852,7 +855,7 @@ class Module:
 
         :return: A reference to this object
         """
-        if self._finished is False:
+        if self._finished is False and self._popen is not None:
             stdout, stderr = self._popen.communicate(input=self.stdin)
             self.outputs["stdout"].value = decode(stdout) if stdout else ""
             self.outputs["stderr"].value = decode(stderr) if stderr else ""
