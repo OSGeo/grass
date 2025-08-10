@@ -25,17 +25,15 @@ set -eu
 ###############################################################################
 
 # cleanup at user break
-cleanup()
-{
-   rm -f "${f%%.html}_tmp.html"
+cleanup() {
+    rm -f "${f%%.html}_tmp.html"
 }
 
 # what to do in case of user break:
-exitprocedure()
-{
-   echo "User break!"
-   cleanup
-   exit 1
+exitprocedure() {
+    echo "User break!"
+    cleanup
+    exit 1
 }
 # shell check for user break (signal list: trap -l)
 trap "exitprocedure" 2 3 15
@@ -45,15 +43,15 @@ UTILSPATH="utils"
 
 process_file() {
     local file="$1" # temporary file
-    local f="$2" # original file
+    local f="$2"    # original file
 
-    cat "$file" | \
-        sed 's#<div class="code"><pre>#<pre><code>#g' | \
-        sed 's#</pre></div>#</code></pre>#g' | \
-        pandoc -f html-native_divs \
+    cat "$file" \
+        | sed 's#<div class="code"><pre>#<pre><code>#g' \
+        | sed 's#</pre></div>#</code></pre>#g' \
+        | pandoc -f html-native_divs \
             -t gfm+pipe_tables+gfm_auto_identifiers --wrap=auto \
-            --lua-filter "${UTILSPATH}/pandoc_codeblock.lua" | \
-        sed 's+ \\\$+ \$+g' | sed 's+%20+-+g' > "${f%%.html}.md"
+            --lua-filter "${UTILSPATH}/pandoc_codeblock.lua" \
+        | sed 's+ \\\$+ \$+g' | sed 's+%20+-+g' > "${f%%.html}.md"
 
     rm -f "$file"
 
