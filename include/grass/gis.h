@@ -22,7 +22,6 @@
 /* System include files */
 #include <stdio.h>
 #include <stdarg.h>
-#include <stdbool.h>
 
 /* Grass and local include files */
 #include <grass/config.h>
@@ -76,11 +75,11 @@ static const char *GRASS_copyright UNUSED = "GRASS GNU GPL licensed Software";
  */
 /* and 'false' For historical reasons 'TRUE' and 'FALSE' are still valid. */
 #ifndef TRUE
-#define TRUE true
+#define TRUE 1
 #endif
 
 #ifndef FALSE
-#define FALSE false
+#define FALSE 0
 #endif
 
 /*! \brief Cross-platform Newline Character */
@@ -161,7 +160,13 @@ static const char *GRASS_copyright UNUSED = "GRASS GNU GPL licensed Software";
 #define M_PI_2 1.57079632679489661923 /* pi/2 */
 
 #undef M_PI_4
+#ifdef _MSC_VER
+/* use the same value from ucrt\corecrt_math_defines.h to avoid redefinition
+ * warnings */
+#define M_PI_4 0.785398163397448309616 /* pi/4 */
+#else
 #define M_PI_4 0.78539816339744830962 /* pi/4 */
+#endif
 
 #undef M_R2D
 #define M_R2D 57.295779513082320877 /* 180/pi */
@@ -331,6 +336,7 @@ typedef enum {
     G_OPT_M_REGION,     /*!< saved region */
     G_OPT_M_NULL_VALUE, /*!< null value string */
     G_OPT_M_NPROCS,     /*!< number of threads for parallel computing */
+    G_OPT_M_SEED,       /*!< seed for random number generator */
 
     G_OPT_STDS_INPUT, /*!< old input space time dataset of type strds, str3ds or
                          stvds */
@@ -504,7 +510,7 @@ struct G_3dview {
     float from_to[2][3]; /* eye position & lookat position */
     float fov;           /* field of view */
     float twist;         /* right_hand rotation about from_to */
-    float exag;          /* terrain elevation exageration */
+    float exag;          /* terrain elevation exaggeration */
     int mesh_freq;       /* cells per grid line */
     int poly_freq;       /* cells per polygon */
     int display_type;    /* 1 for mesh, 2 for poly, 3 for both */

@@ -67,8 +67,8 @@ int main(int argc, char **argv)
     for (i = 0; i < 3; i++) {
         char buff[80];
 
-        sprintf(buff, _("Name of raster map to be used for <%s>"),
-                color_names[i]);
+        snprintf(buff, sizeof(buff),
+                 _("Name of raster map to be used for <%s>"), color_names[i]);
 
         B[i].opt = G_define_standard_option(G_OPT_R_MAP);
         B[i].opt->key = G_store(color_names[i]);

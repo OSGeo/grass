@@ -1,5 +1,3 @@
-# add_subdirectory(data) add_subdirectory(qtree) add_subdirectory(interp_float)
-
 build_library_in_subdir(
   data
   NAME
@@ -33,9 +31,13 @@ build_library_in_subdir(
   grass_vector
   grass_qtree
   grass_interpdata
-  GDAL
   ${LIBM}
   OPTIONAL_DEPENDS
   OPENMP
   HEADERS
   "interpf.h")
+
+target_include_directories(grass_interpfl PUBLIC ${GDAL_INCLUDE_DIR})
+if(TARGET PostgreSQL::PostgreSQL)
+  target_include_directories(grass_interpfl PUBLIC ${PostgreSQL_INCLUDE_DIR})
+endif()

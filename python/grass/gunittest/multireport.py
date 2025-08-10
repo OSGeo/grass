@@ -3,7 +3,7 @@ Testing framework module for multi report
 
 Copyright (C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS GIS
+License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :authors: Vaclav Petras
@@ -362,7 +362,7 @@ def info_plot(x, xticks, xlabels, results, filename, style):
     fig.savefig(filename)
 
 
-# TODO: solve the directory inconsitencies, implement None
+# TODO: solve the directory inconsistencies, implement None
 def main_page(
     results, filename, images, captions, title="Test reports", directory=None
 ):

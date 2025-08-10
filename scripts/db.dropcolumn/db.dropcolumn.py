@@ -87,7 +87,6 @@ def main():
 
     if not force:
         gs.message(_("Column <%s> would be deleted.") % column)
-        gs.message("")
         gs.message(
             _("You must use the force flag (-f) to actually remove it. Exiting.")
         )

@@ -43,7 +43,7 @@ This returns a dictionary with keys `present`, `full_name`, and
 The POSIX *test* utility uses return code 0 to indicate presence and 1
 to indicate absence of a file, so testing existence of a file with
 `test -f` gives return code 0 when the file exists. *r.mask.status* can
-be used in the same with the the **-t** flag:
+be used in the same with the **-t** flag:
 
 ```sh
 r.mask.status -t

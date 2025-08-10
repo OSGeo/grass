@@ -100,7 +100,7 @@ The JSON also contains information about columns stored under key
 `info`. Column names and types are under key `columns`. Each column has
 SQL data type under `sql_type` in all caps. A boolean `is_number`
 specifies whether the value is a number, i.e., integer or floating point
-number. The `is_number` value is aded for convenience and it is
+number. The `is_number` value is added for convenience and it is
 recommended to rely on the types derived from the JSON representation or
 the SQL types. The definition of `is_number` may change in the future.
 

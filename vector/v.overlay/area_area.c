@@ -351,8 +351,8 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                     if (driver) {
                         ATTR *at;
 
-                        sprintf(buf, "insert into %s values ( %d", Fi->table,
-                                out_cat);
+                        snprintf(buf, sizeof(buf), "insert into %s values ( %d",
+                                 Fi->table, out_cat);
                         db_set_string(&stmt, buf);
 
                         /* cata */
@@ -370,8 +370,8 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                                                      attr[0].null_values);
                             }
                             else {
-                                sprintf(buf, ", %d",
-                                        Centr[area].cat[0]->cat[i]);
+                                snprintf(buf, sizeof(buf), ", %d",
+                                         Centr[area].cat[0]->cat[i]);
                                 db_append_string(&stmt, buf);
                             }
                         }
@@ -380,7 +380,7 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                                 db_append_string(&stmt, attr[0].null_values);
                             }
                             else {
-                                sprintf(buf, ", null");
+                                snprintf(buf, sizeof(buf), ", null");
                                 db_append_string(&stmt, buf);
                             }
                         }
@@ -400,8 +400,8 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                                                      attr[1].null_values);
                             }
                             else {
-                                sprintf(buf, ", %d",
-                                        Centr[area].cat[1]->cat[j]);
+                                snprintf(buf, sizeof(buf), ", %d",
+                                         Centr[area].cat[1]->cat[j]);
                                 db_append_string(&stmt, buf);
                             }
                         }
@@ -410,7 +410,7 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                                 db_append_string(&stmt, attr[1].null_values);
                             }
                             else {
-                                sprintf(buf, ", null");
+                                snprintf(buf, sizeof(buf), ", null");
                                 db_append_string(&stmt, buf);
                             }
                         }

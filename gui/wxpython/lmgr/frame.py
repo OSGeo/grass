@@ -89,8 +89,8 @@ from grass.grassdb.history import Status
 
 
 class GMFrame(wx.Frame):
-    """Layer Manager frame with notebook widget for controlling GRASS
-    GIS. Includes command console page for typing GRASS (and other)
+    """Layer Manager frame with notebook widget for controlling GRASS.
+    Includes command console page for typing GRASS (and other)
     commands, tree widget page for managing map layers.
     """
 
@@ -108,7 +108,7 @@ class GMFrame(wx.Frame):
         if title:
             self.baseTitle = title
         else:
-            self.baseTitle = _("GRASS GIS")
+            self.baseTitle = _("GRASS")
 
         self.iconsize = (16, 16)
 
@@ -1883,7 +1883,7 @@ class GMFrame(wx.Frame):
         """Changes bookcontrol page to page associated with display."""
         # moved from mapdisp/frame.py
         # TODO: why it is called 3 times when getting focus?
-        # and one times when loosing focus?
+        # and one times when losing focus?
         if self.workspace_manager.loadingWorkspace:
             return
         pgnum = self.notebookLayers.GetPageIndex(notebookLayerPage)

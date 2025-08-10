@@ -361,6 +361,7 @@ int main(int argc, char *argv[])
     ObservationPoints points = {0};
     Inputs inputs = {0};
     Outputs outputs = {0};
+    Grids grids = {0};
 
     geometry.conv = G_database_units_to_meters_factor();
 
@@ -549,14 +550,16 @@ int main(int argc, char *argv[])
     if ((outputs.depth == NULL) && (outputs.disch == NULL) &&
         (outputs.err == NULL))
         G_warning(_("You are not outputting any raster maps"));
-    ret_val = input_data(geometry.my, geometry.mx, &sim, &inputs, &outputs);
+    ret_val =
+        input_data(geometry.my, geometry.mx, &sim, &inputs, &outputs, &grids);
     if (ret_val != 1)
         G_fatal_error(_("Input failed"));
 
-    alloc_grids_water(&geometry, &outputs);
+    alloc_grids_water(&geometry, &outputs, &grids);
 
-    grad_check(&setup, &geometry, &settings, &inputs, &outputs);
-    main_loop(&setup, &geometry, &settings, &sim, &points, &inputs, &outputs);
+    grad_check(&setup, &geometry, &settings, &inputs, &outputs, &grids);
+    main_loop(&setup, &geometry, &settings, &sim, &points, &inputs, &outputs,
+              &grids);
     free_walkers(&sim, outputs.outwalk);
 
     /* Exit with Success */

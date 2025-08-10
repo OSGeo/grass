@@ -23,19 +23,26 @@
  *****************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <grass/gis.h>
+#include <grass/gjson.h>
 #include <grass/glocale.h>
+
+enum OutputFormat { PLAIN, SHELL, JSON };
 
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct Option *coords, *units;
+    struct Option *coords, *units, *frmt;
     struct Flag *shell;
 
     double *x, *y;
     double length, area, f, sq_f;
     int i, npoints;
     const char *units_name, *sq_units_name;
+    enum OutputFormat format;
+    JSON_Value *root_value = NULL;
+    JSON_Object *root_object = NULL;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -55,12 +62,49 @@ int main(int argc, char **argv)
     units->label = _("Units");
     units->description = _("Default: project map units");
 
+    frmt = G_define_standard_option(G_OPT_F_FORMAT);
+    frmt->options = "plain,shell,json";
+    frmt->descriptions = _("plain;Plain text output;"
+                           "shell;shell script style output;"
+                           "json;JSON (JavaScript Object Notation);");
+    frmt->guisection = _("Print");
+
     shell = G_define_flag();
     shell->key = 'g';
-    shell->description = _("Shell script style");
+    shell->label = _("Shell script style [deprecated]");
+    shell->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=shell instead.");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
+
+    if (strcmp(frmt->answer, "json") == 0) {
+        format = JSON;
+        root_value = G_json_value_init_object();
+        if (root_value == NULL) {
+            G_fatal_error(
+                _("Failed to initialize JSON object. Out of memory?"));
+        }
+        root_object = G_json_object(root_value);
+    }
+    else if (strcmp(frmt->answer, "shell") == 0) {
+        format = SHELL;
+    }
+    else {
+        format = PLAIN;
+    }
+
+    if (shell->answer) {
+        G_verbose_message(
+            _("Flag 'g' is deprecated and will be removed in a future "
+              "release. Please use format=shell instead."));
+        if (format == JSON) {
+            G_fatal_error(_("The -g flag cannot be used with format=json. "
+                            "Please select only one output format."));
+        }
+        format = SHELL;
+    }
 
     npoints = 0;
     for (i = 0; coords->answers[i]; i += 2)
@@ -92,24 +136,56 @@ int main(int argc, char **argv)
     for (i = 1; i < npoints; i++)
         length += G_distance(x[i - 1], y[i - 1], x[i], y[i]);
 
-    if (shell->answer) {
+    switch (format) {
+    case SHELL:
         printf("units=%s,%s\n", units_name, sq_units_name);
         /* length */
         printf("length=%.6f\n", f * length);
-    }
-    else {
+        break;
+
+    case PLAIN:
         printf("%-8s %10.6f %s\n", _("Length:"), f * length, units_name);
+        break;
+
+    case JSON:
+        G_json_object_dotset_string(root_object, "units.length", units_name);
+        G_json_object_dotset_string(root_object, "units.area", sq_units_name);
+        G_json_object_set_number(root_object, "length", f * length);
+        break;
     }
 
     if (npoints > 3) {
         G_begin_polygon_area_calculations();
         area = G_area_of_polygon(x, y, npoints);
-        if (shell->answer) {
+        switch (format) {
+        case SHELL:
             printf("area=%.6f\n", sq_f * area);
-        }
-        else {
+            break;
+
+        case PLAIN:
             printf("%-8s %10.6f %s\n", _("Area:"), sq_f * area, sq_units_name);
+            break;
+
+        case JSON:
+            G_json_object_set_number(root_object, "area", sq_f * area);
+            break;
         }
+    }
+
+    if (format == JSON) {
+        if (npoints <= 3)
+            G_json_object_set_number(root_object, "area", 0);
+
+        char *json_string = G_json_serialize_to_string_pretty(root_value);
+        if (!json_string) {
+            G_json_value_free(root_value);
+            G_fatal_error(_("Failed to serialize JSON to pretty format."));
+        }
+
+        puts(json_string);
+
+        G_json_free_serialized_string(json_string);
+        G_json_value_free(root_value);
     }
 
     exit(EXIT_SUCCESS);

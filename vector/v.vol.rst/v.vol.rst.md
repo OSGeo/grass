@@ -13,7 +13,7 @@ the crossection of the interpolated volume with a surface defined by
 interpolation, geometric parameters of the interpolated phenomenon can
 be computed (magnitude of gradient, direction of gradient defined by
 horizontal and vertical angles), change of gradient, Gauss-Kronecker
-curvature, or mean curvature). These geometric parameteres are saved as
+curvature, or mean curvature). These geometric parameters are saved as
 3D raster maps **gradient, aspect_horizontal, aspect_vertical,
 ncurvature, gcurvature, mcurvature**, respectively. Maps
 **aspect_horizontal** and **aspect_vertical** are in degrees.
@@ -204,7 +204,7 @@ paraview --data=elevrand_3d.vtk
 # interpolate volume to "soilrange" voxel map
 v.vol.rst input=elevrand_3d wcol=soilrange elevation=soilrange zscale=100
 
-# visualize I: in GRASS GIS wxGUI
+# visualize I: in GRASS wxGUI
 g.gui
 # load: 2D raster map: elevation.10m
 #       3D raster map: soilrange

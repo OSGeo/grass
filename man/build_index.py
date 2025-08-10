@@ -35,9 +35,7 @@ def build_index(ext):
     filename = f"index.{ext}"
     os.chdir(man_dir)
     with open(filename + ".tmp", "w") as f:
-        write_header(
-            f, f"GRASS GIS {grass_version} Reference Manual", True, template=ext
-        )
+        write_header(f, f"GRASS {grass_version} Reference Manual", True, template=ext)
         write_cmd_overview(f)
         write_footer(f, f"index.{ext}", year, template=ext)
     replace_file(filename)
@@ -45,5 +43,3 @@ def build_index(ext):
 
 if __name__ == "__main__":
     build_index("html")
-
-    build_index("md")

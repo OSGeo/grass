@@ -20,11 +20,11 @@
 /* Define to 1 if you have the <cairo.h> header file. */
 #cmakedefine HAVE_CAIRO_H ${HAVE_CAIRO_H}
 
+/* Define to 1 if you have the <cblas-atlas.h> header file. */
+#cmakedefine HAVE_CBLAS_ATLAS_H ${HAVE_CBLAS_ATLAS_H}
+
 /* Define to 1 if you have the <cblas.h> header file. */
 #cmakedefine HAVE_CBLAS_H ${HAVE_CBLAS_H}
-
-/* Define to 1 if you have the <clapack.h> header file. */
-#cmakedefine HAVE_CLAPACK_H ${HAVE_CLAPACK_H}
 
 /* Define to 1 if you have the <CL/cl.h> header file. */
 #cmakedefine HAVE_CL_CL_H ${HAVE_CL_CL_H}
@@ -138,7 +138,7 @@
 #cmakedefine HAVE_NICE ${HAVE_NICE}
 
 /* Define to 1 if OGR is to be used. */
-#cmakedefine HAVE_OGR {HAVE_OGR}
+#cmakedefine HAVE_OGR ${HAVE_OGR}
 
 /* Define to 1 if you have the <omp.h> header file. */
 #cmakedefine HAVE_OMP_H ${HAVE_OMP_H}
@@ -213,7 +213,7 @@
 #cmakedefine HAVE_SQLITE3_H ${HAVE_SQLITE3_H}
 
 /* Define to 1 if you have the <sql.h> header file. */
-#cmakedefine HAVE_SQL_H ${HAVE_SQLITE3_H}
+#cmakedefine HAVE_SQL_H ${HAVE_SQL_H}
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #cmakedefine HAVE_STDINT_H ${HAVE_STDINT_H}

@@ -30,7 +30,7 @@ import urllib.parse as urlparse
 try:
     import grass.script as gs
 except ImportError:
-    # During compilation GRASS GIS
+    # During compilation GRASS
     gs = None
 
 from mkdocs import (
@@ -82,7 +82,7 @@ header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
- <title>${PGM} - GRASS GIS Manual</title>
+ <title>${PGM} - GRASS Manual</title>
  <meta name="Author" content="GRASS Development Team">
  <meta name="description" content="${PGM}: ${PGM_DESC}">
  <link rel="stylesheet" href="grassdocs.css" type="text/css">
@@ -133,7 +133,7 @@ footer_index = string.Template(
 <p>
 &copy; 2003-${YEAR}
 <a href="https://grass.osgeo.org">GRASS Development Team</a>,
-GRASS GIS ${GRASS_VERSION} Reference Manual
+GRASS ${GRASS_VERSION} Reference Manual
 </p>
 
 </div>
@@ -154,7 +154,7 @@ footer_noindex = string.Template(
 <p>
 &copy; 2003-${YEAR}
 <a href="https://grass.osgeo.org">GRASS Development Team</a>,
-GRASS GIS ${GRASS_VERSION} Reference Manual
+GRASS ${GRASS_VERSION} Reference Manual
 </p>
 
 </div>
@@ -328,7 +328,7 @@ def update_toc(data):
 # process header
 src_data = read_file(src_file)
 name = re.search(r"(<!-- meta page name:)(.*)(-->)", src_data, re.IGNORECASE)
-pgm_desc = "GRASS GIS Reference Manual"
+pgm_desc = "GRASS Reference Manual"
 if name:
     pgm = name.group(2).strip().split("-", 1)[0].strip()
     name_desc = re.search(

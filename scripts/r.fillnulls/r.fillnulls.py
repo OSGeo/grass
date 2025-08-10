@@ -267,10 +267,9 @@ def main():
             quiet=quiet,
         )
         cat_list = []
-        cats_file = open(cats_file_name)
-        for line in cats_file:
-            cat_list.append(line.rstrip("\n"))
-        cats_file.close()
+        with open(cats_file_name) as cats_file:
+            for line in cats_file:
+                cat_list.append(line.rstrip("\n"))
         os.remove(cats_file_name)
 
         if len(cat_list) < 1:

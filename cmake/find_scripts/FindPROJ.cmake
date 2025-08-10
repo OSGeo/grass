@@ -23,13 +23,22 @@ On success, the macro sets the following variables:
 Copyright (c) 2009 Mateusz Loskot <mateusz@loskot.net>
 Copyright (c) 2015 NextGIS <info@nextgis.com>
 Copyright (c) 2018 Hiroshi Miura
+Copyright (c) 2025 Nicklas Larsson (find_package Config Mode addition)
 
 #]=======================================================================]
 
-find_path(
-  PROJ_INCLUDE_DIR proj.h
-  PATHS ${PROJ_ROOT}/include
-  DOC "Path to PROJ library include directory")
+find_package(PROJ QUIET CONFIG)
+if(PROJ_FOUND AND TARGET PROJ::proj)
+  message("-- Found PROJ: ${PROJ_DIR} (found version \"${PROJ_VERSION}\")")
+  return()
+endif()
+
+if(NOT PROJ_INCLUDE_DIR)
+  find_path(
+    PROJ_INCLUDE_DIR proj.h
+    PATHS ${PROJ_ROOT}/include
+    DOC "Path to PROJ library include directory")
+endif()
 
 set(PROJ_NAMES ${PROJ_NAMES} proj proj_i)
 set(PROJ_NAMES_DEBUG ${PROJ_NAMES_DEBUG} projd proj_d)
@@ -99,20 +108,3 @@ if(PROJ_FOUND)
     endif()
   endif()
 endif()
-
-# ~~~
-# find_path(PROJ_INCLUDE_DIR proj.h PATH_SUFFIXES proj)
-#
-# find_library(PROJ_LIBRARY_RELEASE NAMES proj_i proj)
-# find_library(PROJ_LIBRARY_DEBUG NAMES projd) set(PROJ_FOUND FALSE)
-#
-# set(PROJ_LIBRARY) if(PROJ_LIBRARY_DEBUG) set( PROJ_LIBRARY
-# ${PROJ_LIBRARY_DEBUG} CACHE FILEPATH "doc" ) elseif(PROJ_LIBRARY_RELEASE) set(
-# PROJ_LIBRARY ${PROJ_LIBRARY_RELEASE} CACHE FILEPATH "doc" ) endif()
-#
-# mark_as_advanced(PROJ_LIBRARY_RELEASE) mark_as_advanced(PROJ_LIBRARY_DEBUG)
-# mark_as_advanced(PROJ_LIBRARY) mark_as_advanced(PROJ_INCLUDE_DIR)
-#
-# include(FindPackageHandleStandardArgs) find_package_handle_standard_args( PROJ
-# DEFAULT_MSG PROJ_LIBRARY PROJ_INCLUDE_DIR )
-# ~~~

@@ -13,7 +13,6 @@ set(gui_lib_DIRS
     modules
     nviz
     startup
-    tools
     vnet
     web_services
     wxplot)
@@ -22,6 +21,8 @@ set(gui_lib_targets)
 foreach(gui_lib_DIR ${gui_lib_DIRS})
   copy_python_files_in_subdir(${gui_lib_DIR} ${WXPYTHON_DIR})
   list(APPEND gui_lib_targets python_${gui_lib_DIR})
+  install(DIRECTORY "${OUTDIR}/${WXPYTHON_DIR}/${gui_lib_DIR}"
+          DESTINATION "${WXPYTHON_DIR}")
 endforeach()
 add_custom_target(
   GUI_WXPYTHON
@@ -55,19 +56,13 @@ if(WITH_DOCS)
   add_subdirectory(docs)
 endif()
 
-install(FILES README.md DESTINATION ${GRASS_INSTALL_GUIDIR}/wxpython)
-
-# copy all python files gui/ lib/python compile all python files so below target
-# depends on MODULD_LIST
+install(FILES README.md ${OUTDIR}/${WXPYTHON_DIR}/wxgui.py
+        DESTINATION ${WXPYTHON_DIR})
 
 add_custom_target(
   copy_wxpython_xml
   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/xml
-          ${OUTDIR}/${WXPYTHON_DIR}/xml
-  COMMAND
-    ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_SOURCE_DIR}/../xml/grass-interface.dtd
-    ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/xml)
+          ${OUTDIR}/${WXPYTHON_DIR}/xml)
 
 add_dependencies(copy_wxpython_xml GUI_WXPYTHON)
 
@@ -81,17 +76,18 @@ add_dependencies(compile_python_files ALL_MODULES)
 
 add_custom_command(
   OUTPUT "${OUTDIR}/${WXPYTHON_DIR}/xml/module_items.xml"
-  COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE}
-          ${CMAKE_CURRENT_SOURCE_DIR}/tools/build_modules_xml.py >
+  COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/tools"
+  COMMAND ${CMAKE_COMMAND} -E copy
+          ${CMAKE_CURRENT_SOURCE_DIR}/tools/build_modules_xml.py tools
+  COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} tools/build_modules_xml.py >
           "${OUTDIR}/${WXPYTHON_DIR}/xml/module_items.xml"
-  COMMENT "Generating interface description for all modules..."
-)
+  COMMENT "Generating interface description for all modules...")
 
-add_custom_target(
-  build_modules_items_xml
-  DEPENDS "${OUTDIR}/${WXPYTHON_DIR}/xml/module_items.xml")
+add_custom_target(build_modules_items_xml
+                  DEPENDS "${OUTDIR}/${WXPYTHON_DIR}/xml/module_items.xml")
 
-add_dependencies(build_modules_items_xml copy_wxpython_xml compile_python_files ${g_gui_targets})
+add_dependencies(build_modules_items_xml copy_wxpython_xml grass_interface_dtd
+                 compile_python_files ${g_gui_targets})
 
 add_custom_target(
   build_xml_menudata
@@ -139,3 +135,5 @@ add_custom_target(
     ${CMAKE_CURRENT_SOURCE_DIR}/core/menutree.py "psmap" >>
     ${CMAKE_CURRENT_SOURCE_DIR}/menustrings.py
   DEPENDS build_module_tree_menudata gui_images)
+
+install(DIRECTORY "${OUTDIR}/${WXPYTHON_DIR}/xml" DESTINATION "${WXPYTHON_DIR}")

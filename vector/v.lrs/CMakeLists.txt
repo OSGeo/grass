@@ -19,7 +19,7 @@ build_program_in_subdir(
   grass_dbmibase
   grass_dbmiclient
   grass_dbmidriver
-  GDAL
+  GDAL::GDAL
   ${LIBM})
 
 build_program_in_subdir(
@@ -31,7 +31,7 @@ build_program_in_subdir(
   grass_dbmibase
   grass_dbmiclient
   grass_dbmidriver
-  GDAL
+  GDAL::GDAL
   ${LIBM})
 
 build_program_in_subdir(
@@ -43,7 +43,7 @@ build_program_in_subdir(
   grass_dbmibase
   grass_dbmiclient
   grass_dbmidriver
-  GDAL
+  GDAL::GDAL
   ${LIBM})
 
 build_program_in_subdir(
@@ -55,4 +55,4 @@ build_program_in_subdir(
   grass_dbmibase
   grass_dbmiclient
   grass_dbmidriver
-  GDAL)
+  GDAL::GDAL)

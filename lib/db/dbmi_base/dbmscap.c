@@ -105,7 +105,7 @@ dbDbmscap *db_read_dbmscap(void)
        char comment[1024];
        int  line;
      */
-    char *dirpath;
+    char *dirpath = NULL;
     DIR *dir;
     struct dirent *ent;
 
@@ -157,8 +157,9 @@ dbDbmscap *db_read_dbmscap(void)
 
     /* opend db drivers directory */
 #ifdef _WIN32
-    dirpath = G_malloc(strlen("\\driver\\db\\") + strlen(G_gisbase()) + 1);
-    sprintf(dirpath, "%s\\driver\\db\\", G_gisbase());
+    size_t len = (strlen("\\driver\\db\\") + strlen(G_gisbase()) + 1);
+    dirpath = G_malloc(len);
+    snprintf(dirpath, len, "%s\\driver\\db\\", G_gisbase());
     G_convert_dirseps_to_host(dirpath);
 #else
     G_asprintf(&dirpath, "%s/driver/db/", G_gisbase());
@@ -189,9 +190,10 @@ dbDbmscap *db_read_dbmscap(void)
         name = G_str_replace(ent->d_name, ".exe", "");
 
 #ifdef _WIN32
-        dirpath = G_malloc(strlen("\\driver\\db\\") + strlen(G_gisbase()) +
-                           strlen(ent->d_name) + 1);
-        sprintf(dirpath, "%s\\driver\\db\\%s", G_gisbase(), ent->d_name);
+        len = strlen("\\driver\\db\\") + strlen(G_gisbase()) +
+              strlen(ent->d_name) + 1;
+        dirpath = G_malloc(len);
+        snprintf(dirpath, len, "%s\\driver\\db\\%s", G_gisbase(), ent->d_name);
         G_convert_dirseps_to_host(dirpath);
 #else
         G_asprintf(&dirpath, "%s/driver/db/%s", G_gisbase(), ent->d_name);

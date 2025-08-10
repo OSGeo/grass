@@ -1,7 +1,10 @@
 #ifndef GRASS_RASTERDEFS_H
 #define GRASS_RASTERDEFS_H
 
+#include <stdbool.h>
+
 #include <grass/gis.h>
+#include <grass/colors.h>
 
 /* --- ANSI prototypes for the lib/raster functions --- */
 
@@ -400,6 +403,7 @@ char *Rast_mask_name(void);
 bool Rast_mask_status(char *, char *, bool *, char *, char *);
 int Rast__mask_info(char *, char *);
 bool Rast_mask_is_present(void);
+int Rast_disable_omp_on_mask(int);
 
 /* maskfd.c */
 int Rast_maskfd(void);

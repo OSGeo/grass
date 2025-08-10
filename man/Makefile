@@ -19,9 +19,15 @@ DSTFILES := \
 	$(MDDIR)/source/favicon.ico \
 	$(MDDIR)/source/grassdocs.css \
 	$(MDDIR)/scripts/hook_list_scripts.py \
+	$(MDDIR)/source/index.md \
+	$(MDDIR)/overrides/partials/copyright.html \
 	$(MDDIR)/overrides/partials/footer.html \
 	$(MDDIR)/overrides/partials/actions.html \
-	$(MDDIR)/source/tags.md
+	$(MDDIR)/overrides/partials/source.html \
+	$(MDDIR)/overrides/fragments/tags/default/listing.html \
+	$(MDDIR)/source/keywords.md \
+	$(MDDIR)/source/development_intro.md \
+	$(MDDIR)/source/command_line_intro.md
 
 categories = \
 	d:display \
@@ -43,7 +49,7 @@ IDXSRC = full_index index topics keywords graphical_index manual_gallery class_g
 
 INDICES := $(patsubst %,$(HTMLDIR)/%.html,$(IDXSRC))
 
-IDXSRC_MD = full_index index topics keywords graphical_index manual_gallery class_graphical parser_standard_options $(IDXCATS)
+IDXSRC_MD = full_index index topics graphical_index manual_gallery class_graphical parser_standard_options $(IDXCATS)
 INDICES_MD := $(patsubst %,$(MDDIR)/source/%.md,$(IDXSRC_MD))
 
 ALL_HTML := $(wildcard $(HTMLDIR)/*.*.html)
@@ -151,7 +157,7 @@ $(HTMLDIR)/full_index.html: $(ALL_HTML) build_full_index.py build_html.py
 	$(call build,full_index)
 	touch $@
 
-$(MDDIR)/source/full_index.md: $(ALL_MD) build_full_index.py build_html.py
+$(MDDIR)/source/full_index.md: $(ALL_MD) build_full_index.py build_md.py
 	$(call build,full_index)
 	touch $@
 
@@ -159,15 +165,7 @@ $(HTMLDIR)/index.html: build_index.py build_html.py
 	$(call build,index)
 	touch $@
 
-$(MDDIR)/source/index.md: build_index.py build_md.py
-	$(call build,index)
-	touch $@
-
 $(HTMLDIR)/keywords.html: $(ALL_HTML)
-	$(call build_keywords)
-	touch $@
-
-$(MDDIR)/source/keywords.md: $(ALL_MD)
 	$(call build_keywords)
 	touch $@
 
@@ -247,6 +245,9 @@ $(HTMLDIR)/parser_standard_options.css: parser_standard_options.css
 $(MDDIR)/mkdocs.yml: mkdocs/mkdocs.yml
 	$(INSTALL_DATA) $< $@
 
+$(MDDIR)/source/index.md: mkdocs/index.md
+	$(INSTALL_DATA) $< $@
+
 $(MDDIR)/source/grass_logo.svg: grass_logo.svg
 	$(INSTALL_DATA) $< $@
 
@@ -259,7 +260,13 @@ $(MDDIR)/source/favicon.ico: favicon.ico
 $(MDDIR)/source/grassdocs.css: mkdocs/grassdocs.css
 	$(INSTALL_DATA) $< $@
 
-$(MDDIR)/source/tags.md: mkdocs/tags.md
+$(MDDIR)/source/keywords.md: mkdocs/keywords.md
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/development_intro.md: mkdocs/docs/development_intro.md
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/command_line_intro.md: mkdocs/docs/command_line_intro.md
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/scripts/hook_list_scripts.py: mkdocs/scripts/hook_list_scripts.py | $(MDDIR)/scripts
@@ -268,21 +275,33 @@ $(MDDIR)/scripts/hook_list_scripts.py: mkdocs/scripts/hook_list_scripts.py | $(M
 $(MDDIR)/scripts:
 	$(MKDIR) $@
 
+$(MDDIR)/overrides/partials/copyright.html: mkdocs/overrides/partials/copyright.html | $(MDDIR)/overrides/partials
+	$(INSTALL_DATA) $< $@
+
 $(MDDIR)/overrides/partials/footer.html: mkdocs/overrides/partials/footer.html | $(MDDIR)/overrides/partials
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/overrides/partials/actions.html: mkdocs/overrides/partials/actions.html | $(MDDIR)/overrides/partials
 	$(INSTALL_DATA) $< $@
 
+$(MDDIR)/overrides/partials/source.html: mkdocs/overrides/partials/source.html | $(MDDIR)/overrides/partials
+	$(INSTALL_DATA) $< $@
+
 $(MDDIR)/overrides/partials:
 	$(MKDIR) $@
 
+$(MDDIR)/overrides/fragments/tags/default:
+	$(MKDIR) $@
+
+$(MDDIR)/overrides/fragments/tags/default/listing.html: mkdocs/overrides/fragments/tags/default/listing.html | $(MDDIR)/overrides/fragments/tags/default
+	$(INSTALL_DATA) $< $@
+
 build-mkdocs:
-	@cd $(MDDIR) ; SITE_NAME="GRASS GIS $(GRASS_VERSION_NUMBER) Reference Manual" \
-	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS GIS $(GRASS_VERSION_NUMBER) Reference Manual" \
+	@cd $(MDDIR) ; SITE_NAME="GRASS $(GRASS_VERSION_NUMBER) Documentation" \
+	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS $(GRASS_VERSION_NUMBER) Documentation" \
 	mkdocs build
 
 serve-mkdocs:
-	@cd $(MDDIR) ; SITE_NAME="GRASS GIS $(GRASS_VERSION_NUMBER) Reference Manual" \
-	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS GIS $(GRASS_VERSION_NUMBER) Reference Manual" \
+	@cd $(MDDIR) ; SITE_NAME="GRASS $(GRASS_VERSION_NUMBER) Documentation" \
+	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS $(GRASS_VERSION_NUMBER) Documentation" \
 	mkdocs serve

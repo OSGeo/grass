@@ -420,7 +420,7 @@ class VNETAnalyses:
             return False
         cats = self.data.GetAnalysisProperties()["cmdParams"]["cats"]
 
-        # Creates part of cmd fro analysis
+        # Creates part of cmd for analysis
         cmdParams = [
             analysis,
             *self._setInputParams(analysis, params, flags),
@@ -514,7 +514,7 @@ class VNETAnalyses:
         self.onAnDone(event.cmd, event.returncode, output)
 
     def _runTurnsAn(self, analysis, output, params, flags, catPts):
-        # Creates part of cmd fro analysis
+        # Creates part of cmd for analysis
         cmdParams = [
             analysis,
             *self._setInputParams(analysis, params, flags),
@@ -623,7 +623,7 @@ class VNETAnalyses:
     def _runAn(self, analysis, output, params, flags, catPts):
         """Called for all v.net.* analysis (except v.net.path)"""
 
-        # Creates part of cmd fro analysis
+        # Creates part of cmd for analysis
         cmdParams = [
             analysis,
             *self._setInputParams(analysis, params, flags),
@@ -637,8 +637,9 @@ class VNETAnalyses:
                 if len(catPts[cat[0]]) < 1:
                     GMessage(
                         parent=self,
-                        message=_("Please choose '%s' and '%s' point.")
-                        % (cats[0][1], cats[1][1]),
+                        message=_("Please choose '{0}' and '{1}' point.").format(
+                            cats[0][1], cats[1][1]
+                        ),
                     )
                     return False
         else:

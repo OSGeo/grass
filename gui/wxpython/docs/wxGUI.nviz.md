@@ -1,16 +1,11 @@
 ---
 description: wxGUI 3D View Mode
 index: wxGUI
+keywords: [display, GUI, visualization, graphics, raster, vector, raster3d]
+
 ---
 
 # wxGUI 3D View Mode
-
-## KEYWORDS
-
-[display](display.md), [GUI](topic_GUI.md),
-[visualization](keywords.md#visualization),
-[graphics](keywords.md#graphics), [raster](keywords.md#raster),
-[vector](keywords.md#vector), [raster3d](keywords.md#raster3d)
 
 ## DESCRIPTION
 

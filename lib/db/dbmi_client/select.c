@@ -261,6 +261,7 @@ int db_select_value(dbDriver *driver, const char *tab, const char *key, int id,
    \param tab table name
    \param key key column name
    \param col value column name
+   \param where where statement
    \param[out] cvarr dbCatValArray to store within
 
    \return number of selected values

@@ -13,7 +13,6 @@ build_program(
   grass_raster
   grass_raster3d
   grass_vector
-  GDAL
   ${LIBM})
 
 set(test_r3flow_SRCS test_main.c flowline.c integrate.c interpolate.c
@@ -32,5 +31,4 @@ build_program(
   grass_dbmiclient
   grass_dbmidriver
   grass_vector
-  GDAL
   ${LIBM})

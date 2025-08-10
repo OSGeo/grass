@@ -1,3 +1,8 @@
+#[[
+COPYRIGHT: (c) 2020-2025 by the GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
+]]
+
 set(MODULES
     date
     gis
@@ -49,9 +54,15 @@ set(stats_HDRS stats.h defs/stats.h)
 set(raster3d_HDRS raster3d.h defs/raster3d.h)
 set(cluster_HDRS cluster.h defs/cluster.h)
 
-set(proj_SYSHDRS ${PROJ_INCLUDE_DIR} ${GDAL_INCLUDE_DIR})
-set(vector_SYSHDRS ${PostgreSQL_INCLUDE_DIR} ${GDAL_INCLUDE_DIR})
-set(vedit_SYSHDRS ${PostgreSQL_INCLUDE_DIR} ${GDAL_INCLUDE_DIR})
+set(proj_INCHDRS ${PROJ_INCLUDE_DIRS} ${GDAL_INCLUDE_DIRS})
+set(vector_INCHDRS ${PostgreSQL_INCLUDE_DIRS} ${GDAL_INCLUDE_DIRS})
+set(vedit_INCHDRS ${PostgreSQL_INCLUDE_DIRS} ${GDAL_INCLUDE_DIRS})
+
+set(_c_flags ${CMAKE_C_FLAGS})
+if(APPLE AND CMAKE_OSX_SYSROOT)
+  string(APPEND _c_flags " --sysroot ${CMAKE_OSX_SYSROOT}")
+  message("_c_flags")
+endif()
 
 foreach(module ${MODULES})
   if(NOT ${module}_LIBS)
@@ -62,19 +73,18 @@ foreach(module ${MODULES})
     message(FATAL_ERROR "${module}_HDRS is not set")
   endif()
 
-  if(NOT ${module}_SYSHDRS)
-    set(${module}_SYSHDRS})
+  if(NOT ${module}_INCHDRS)
+    set(${module}_INCHDRS})
   endif()
-  list(INSERT ${module}_SYSHDRS 0 ${CMAKE_INSTALL_PREFIX})
-  list(REMOVE_DUPLICATES ${module}_SYSHDRS)
-
-  #[[
-  foreach(${module}_LIB ${${module}_LIBS})
-    if(NOT TARGET ${${module}_LIB})
-      message(FATAL_ERROR "${${module}_LIB} is not a target")
-    endif()
-  endforeach()
-]]
+  list(INSERT ${module}_INCHDRS 0 ${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR})
+  if(CMAKE_INSTALL_INCLUDEDIR)
+    list(INSERT ${module}_INCHDRS 0
+         ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR})
+  endif()
+  if(CMAKE_PREFIX_PATH)
+    list(INSERT ${module}_INCHDRS 0 ${CMAKE_PREFIX_PATH})
+  endif()
+  list(REMOVE_DUPLICATES ${module}_INCHDRS)
 
   if(NOT ${module}_TARGET_NAME)
     list(GET ${module}_LIBS 0 first_lib)
@@ -93,7 +103,7 @@ foreach(module ${MODULES})
       ${CMAKE_COMMAND} -DCTYPESGEN_PY=${CMAKE_CURRENT_SOURCE_DIR}/run.py
       -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DCOMPILER=${CMAKE_C_COMPILER}
       "-DHDRS=${${module}_HDRS}" "-DLIBS=${${module}_LIBS}" -DOUTDIR=${OUTDIR}
-      "-DSYSHDRS=${${module}_SYSHDRS}" -DC_FLAGS=${CMAKE_C_FLAGS}
+      "-DINCHDRS=${${module}_INCHDRS}" -DC_FLAGS=${_c_flags}
       -DGRASS_INSTALL_INCLUDEDIR=${GRASS_INSTALL_INCLUDEDIR}
       -DGRASS_INSTALL_SCRIPTDIR=${GRASS_INSTALL_SCRIPTDIR}
       -DGRASS_INSTALL_DEMODIR=${GRASS_INSTALL_DEMODIR}
@@ -111,3 +121,10 @@ foreach(module ${MODULES})
   install(FILES ${output_file} DESTINATION ${GRASS_INSTALL_PYDIR}/grass/lib)
 
 endforeach()
+
+file(COPY_FILE libgrass__init__.py
+     ${OUTDIR}/${GRASS_INSTALL_PYDIR}/grass/lib/__init__.py)
+install(FILES ${OUTDIR}/${GRASS_INSTALL_PYDIR}/grass/lib/__init__.py
+        DESTINATION ${GRASS_INSTALL_PYDIR}/grass/lib)
+
+unset(_c_flags)

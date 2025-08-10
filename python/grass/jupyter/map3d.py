@@ -26,19 +26,20 @@ from .region import RegionManagerFor3D
 
 
 class Map3D:
-    """Creates and displays 3D visualization using GRASS GIS 3D rendering engine NVIZ.
+    """Creates and displays 3D visualization using GRASS 3D rendering engine NVIZ.
 
     The 3D image is created using the *render* function which uses the *m.nviz.image*
     module in the background. Additional images can be
     placed on the image using the *overlay* attribute which is the 2D renderer, i.e.,
     has interface of the *Map* class.
 
-    Basic usage::
+    :Basic usage:
+      .. code-block:: pycon
 
-    >>> img = Map()
-    >>> img.render(elevation_map="elevation", color_map="elevation", perspective=20)
-    >>> img.overlay.d_legend(raster="elevation", at=(60, 97, 87, 92))
-    >>> img.show()
+        >>> img = Map3D()
+        >>> img.render(elevation_map="elevation", color_map="elevation", perspective=20)
+        >>> img.overlay.d_legend(raster="elevation", at=(60, 97, 87, 92))
+        >>> img.show()
 
     For the OpenGL rendering with *m.nviz.image* to work, a display (screen) is needed.
     This is not guaranteed on headless systems such as continuous integration (CI) or
@@ -77,7 +78,7 @@ class Map3D:
                             this region is then used for rendering
 
         When *resolution_fine* is 1, rasters are used in the resolution according
-        to the computational region as usual in GRASS GIS.
+        to the computational region as usual in GRASS.
         Setting *resolution_fine* to values higher than one, causes rasters to
         be resampled to a coarser resolution (2 for twice as coarse than computational
         region resolution). This allows for fast rendering of large rasters without
@@ -230,6 +231,13 @@ class Map3D:
     def show(self):
         """Displays a PNG image of map"""
         # Lazy import to avoid an import-time dependency on IPython.
-        from IPython.display import Image  # pylint: disable=import-outside-toplevel
+        from IPython.display import Image, display  # pylint: disable=import-outside-toplevel
 
-        return Image(self._filename)
+        display(Image(self._filename))
+
+    def save(self, filename):
+        """Saves an image to the specified *filename*"""
+        from PIL import Image
+
+        img = Image.open(self._filename)
+        img.save(filename)

@@ -114,11 +114,13 @@ void trans3d(struct Map_info *In, struct Map_info *Out, int type,
 
             /* store height to the attribute table */
             if (ctype == DB_C_TYPE_INT)
-                sprintf(buf, "update %s set %s = %d where cat = %d", Fi->table,
-                        zcolumn, (int)Points->z[0], cat);
+                snprintf(buf, sizeof(buf),
+                         "update %s set %s = %d where cat = %d", Fi->table,
+                         zcolumn, (int)Points->z[0], cat);
             else /* double */
-                sprintf(buf, "update %s set %s = %.8f where cat = %d",
-                        Fi->table, zcolumn, Points->z[0], cat);
+                snprintf(buf, sizeof(buf),
+                         "update %s set %s = %.8f where cat = %d", Fi->table,
+                         zcolumn, Points->z[0], cat);
 
             G_debug(3, "SQL: %s", buf);
             db_set_string(&stmt, buf);

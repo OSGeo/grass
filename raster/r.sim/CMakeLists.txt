@@ -8,12 +8,10 @@ build_library_in_subdir(
   grass_raster
   grass_vector
   grass_gmath
-  GDAL
   ${LIBM}
   OPTIONAL_DEPENDS
   OPENMP
   HEADERS
-  "waterglobs.h"
   "simlib.h")
 
 build_program_in_subdir(
@@ -21,9 +19,9 @@ build_program_in_subdir(
   DEPENDS
   grass_gis
   grass_gmath
-  grass_sim
   grass_raster
-  GDAL
+  grass_sim
+  grass_vector
   OPTIONAL_DEPENDS
   OPENMP
   INCLUDES
@@ -34,9 +32,9 @@ build_program_in_subdir(
   DEPENDS
   grass_gis
   grass_gmath
-  grass_sim
   grass_raster
-  GDAL
+  grass_sim
+  grass_vector
   OPTIONAL_DEPENDS
   OPENMP
   INCLUDES

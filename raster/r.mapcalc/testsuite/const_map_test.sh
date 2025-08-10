@@ -13,7 +13,7 @@
 #   - how big EPSILON?
 
 if [ -z "$GISBASE" ] ; then
-    echo "You must be in GRASS GIS to run this program."
+    echo "You must be in GRASS to run this program."
     exit 1
 fi
 
@@ -97,7 +97,7 @@ compare_result()
  fi
 }
 
-# Deactive the current mask, by using our own mask name,
+# Deactivate the current mask, by using our own mask name,
 # but not creating any mask.
 MASKTMP=mask.$TMPNAME
 export GRASS_MASK=$MASKTMP

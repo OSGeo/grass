@@ -35,6 +35,7 @@ Program was refactored by Anna Petrasova to remove most global variables.
 #include <omp.h>
 #endif
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -334,7 +335,8 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    G_set_omp_num_threads(parm.nprocs);
+    int nprocs = G_set_omp_num_threads(parm.nprocs);
+    nprocs = Rast_disable_omp_on_mask(nprocs);
 
     struct Cell_head cellhd;
     struct Cell_head new_cellhd;
@@ -523,7 +525,7 @@ int main(int argc, char *argv[])
             settings.fixedMaxLength); /* predefined as BIG */
 
     /* TODO: fixing BIG, there is a bug with distant mountains not being seen:
-       attempt to contrain to current region
+       attempt to constrain to current region
 
        fixedMaxLength = (fixedMaxLength < AMAX1(deltx, delty)) ? fixedMaxLength
        : AMAX1(deltx, delty); G_debug(1,"Using maxdistance %f", fixedMaxLength);
@@ -846,7 +848,7 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
     double printangle = settings->single_direction;
 
     origin_point.maxlength = settings->fixedMaxLength;
-    /* JSON variables and formating */
+    /* JSON variables and formatting */
 
     JSON_Value *horizons_value;
     JSON_Array *horizons;

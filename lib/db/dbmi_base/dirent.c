@@ -77,7 +77,8 @@ dbDirent *db_dirent(const char *dirname, int *n)
     }
     rewinddir(dp);
 
-    path = db_malloc(strlen(dirname) + max + 2); /* extra 2 for / and NULL */
+    size_t path_len = strlen(dirname) + max + 2; // extra 2 for / and NULL
+    path = db_malloc(path_len);
     if (path == NULL) {
         closedir(dp);
         return (dbDirent *)NULL;
@@ -95,7 +96,7 @@ dbDirent *db_dirent(const char *dirname, int *n)
 
         if (DB_OK != db_set_string(&db_dirent[i].name, entry->d_name))
             break;
-        sprintf(path, "%s/%s", dirname, entry->d_name);
+        snprintf(path, path_len, "%s/%s", dirname, entry->d_name);
         db_dirent[i].perm = get_perm(path);
         db_dirent[i].isdir = (db_isdir(path) == DB_OK);
     }

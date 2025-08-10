@@ -4,7 +4,7 @@
  *
  * AUTHOR(S):  Maris Nartiss <maris.gis@gmail.com>
  *             with hints from v.out.ascii, v.buffer, v.what
- *             and other GRASS GIS modules
+ *             and other GRASS modules
  *
  * PURPOSE:    Output vector point/line values along sampling line
  *
@@ -236,7 +236,7 @@ int main(int argc, char *argv[])
     coords_opt = G_define_standard_option(G_OPT_M_COORDS);
     coords_opt->multiple = YES;
     coords_opt->label = _("Coordinates for profiling line nodes");
-    coords_opt->description = _("Specify profiling line vertexes and nodes");
+    coords_opt->description = _("Specify profiling line vertices and nodes");
     coords_opt->guisection = _("Profiling line");
 
     /* - or profiling line can be taken form other vector map */
@@ -401,7 +401,7 @@ int main(int argc, char *argv[])
 
     /* Get profile line from an existing vector map */
     if (inline_map->answer != NULL) {
-        /* If we get here, pro_mapset is inicialized */
+        /* If we get here, pro_mapset is initialized */
         if (1 > Vect_open_old(&Pro, inline_map->answer, pro_mapset))
             G_fatal_error(_("Unable to open vector map <%s>"),
                           inline_map->answer);
@@ -698,8 +698,8 @@ int main(int argc, char *argv[])
         if (open3d == WITH_Z)
             fprintf(ascii, "%s%.*f", fs, dp, resultset[j].z);
         if (Fi != NULL) {
-            sprintf(sql, "select * from %s where %s=%d", Fi->table, Fi->key,
-                    resultset[j].cat);
+            snprintf(sql, sizeof(sql), "select * from %s where %s=%d",
+                     Fi->table, Fi->key, resultset[j].cat);
             G_debug(2, "SQL: \"%s\"", sql);
             db_set_string(&dbsql, sql);
             /* driver IS initialized here in case if Fi != NULL */

@@ -14,8 +14,3 @@ call "%OSGEO4W_ROOT%\apps\grass\grass@POSTFIX@\etc\env.bat"
 
 set PYTHONPATH=%OSGEO4W_ROOT%\apps\grass\grass@POSTFIX@\etc\python;%PYTHONPATH%
 "%GRASS_PYTHON%" %*
-
-rem
-rem Pause on error
-rem
-if %ERRORLEVEL% GEQ 1 pause

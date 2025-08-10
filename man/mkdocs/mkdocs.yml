@@ -1,10 +1,11 @@
 ---
 # Project information
+site_author: The GRASS Development Team # Default author to all pages
 site_name: !ENV SITE_NAME
 site_url: https://grass.osgeo.org/grass-stable/manuals/
 
 # Repository information
-repo_name: GitHub
+repo_name: OSGeo/grass
 repo_url: https://github.com/OSGeo # Set to OSGeo so we can added grass and grass-addons
 edit_uri_template: edit/main/{path!q}
 
@@ -23,27 +24,51 @@ theme:
   logo: grass_logo.svg
   favicon: favicon.ico
   features:
-    - search.suggest
-    - search.highlight
+    - content.action.edit # Edit on GitHub
+    - content.action.view
     - content.code.copy
+    - content.tabs.link
+    - content.tooltips
+    - search.share
+    - search.highlight
     - navigation.footer
-    - navigation.indexes
-    # - navigation.expand
+    - navigation.instant
+    - navigation.instant.progress
     - navigation.tabs
     - navigation.tabs.sticky
-    - content.action.view
-    - content.action.edit # Edit on GitHub
+    - navigation.top
+
   palette:
     primary: custom
-    # accent: custom
+
   icon:
     repo: fontawesome/brands/github
     edit: material/pencil
     view: material/eye
+    logo: material/library
 
 # Customization
 extra:
-  homepage: ./index.html
+  homepage: index.html
+  social:
+    - icon: simple/opencollective
+      link: https://opencollective.com/grass
+    - icon: fontawesome/brands/gitter
+      link: https://gitter.im/grassgis/community
+    - icon: fontawesome/brands/mastodon
+      link: https://fosstodon.org/@grassgis/
+    - icon: fontawesome/brands/discourse
+      link: https://discourse.osgeo.org/c/grass/62
+    - icon: fontawesome/brands/linkedin
+      link: https://linkedin.com/company/grass-gis
+    - icon: fontawesome/brands/x-twitter
+      link: https://x.com/GRASSGIS
+    - icon: fontawesome/brands/youtube
+      link: https://www.youtube.com/@grass-gis
+  github:
+    repos:
+      grass: grass
+      grass_addons: grass-addons
 
 # Hooks
 hooks:
@@ -57,93 +82,122 @@ extra_css:
 plugins:
   - search
   - glightbox
-  - tags
+  - tags:
+      tags_name_property: keywords
+      tags_slugify_format: "{slug}"
+  - tags:
+      tags: false
+      tags_name_property: keywords
+      tags_slugify_format: "{slug}"
+      listings_directive: topic_keyword
   - social:
       cards_layout_options:
+        background_color: rgb(76, 176, 91)
         background_image: null
-  # - git-revision-date-localized:
-  #     enable_creation_date: true
-  # - git-committers:
-  #     repository: OSGeo/grass
-  #     branch: main
 
 # Markdown extensions
 markdown_extensions:
   - admonition
   - pymdownx.details
   - pymdownx.superfences
+  - pymdownx.tasklist
+  - pymdownx.snippets
+  - pymdownx.magiclink
   - attr_list
   - md_in_html
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
 
 # Navigation
 nav:
+  - Getting started:
+      - Getting started: index.md
+      # These are linking to interfaces, but they would eventually be new pages
+      # which would provide more context, but less detail.
+      - Tutorials: https://grass-tutorials.osgeo.org/
   - Interfaces:
-      - Shell:
-          - Overview: grass.md
-          # - Getting Started: grassintro.md # Does not exist yet
-          - Environmental Variables: variables.md
-      - GUI:
-          - Overview: wxguiintro.md
+      - Overview: interfaces_overview.md
+      - Command line:
+          - Command line introduction: command_line_intro.md
+          - The grass command: grass.md
+          - Environmental variables: variables.md
+      - Python: python_intro.md
+      - Jupyter notebooks: jupyter_intro.md
+      - Graphical user interface:
+          - Introduction: helptext.md
           - Features: wxGUI.md
-          - Project Management: grass_database.md
-          - Tool Dialogs: wxGUI.modules.md
-          - Attribute Table Management: wxGUI.dbmgr.md
-          - Cartographic Composer: wxGUI.psmap.md
-          - Data Catalog: wxGUI.datacatalog.md
-          - Vector Digitizer: wxGUI.vdigit.md
-          - Raster Digitizer: wxGUI.rdigit.md
-          - Graphical Modeler: wxGUI.gmodeler.md
-          - Ground Control Points Manager: wxGUI.gcp.md
-          - Network Analysis: wxGUI.vnet.md
-          - Help: helptext.md
-          - List of Components: wxGUI.components.md
+          - Tool dialogs: wxGUI.modules.md
+          - Attribute table management: wxGUI.dbmgr.md
+          - Cartographic composer: wxGUI.psmap.md
+          - Data catalog: wxGUI.datacatalog.md
+          - Vector digitizer: wxGUI.vdigit.md
+          - Raster digitizer: wxGUI.rdigit.md
+          - Graphical modeler: wxGUI.gmodeler.md
+          - Ground control points manager: wxGUI.gcp.md
+          - Network analysis: wxGUI.vnet.md
+          - Visualization:
+              - Animation: wxGUI.animation.md
+              - 3D visualization: wxGUI.nviz.md
+              - Interactive scatter plot: wxGUI.iscatt.md
+              - Map swipe: wxGUI.mapswipe.md
+              - Timeline: wxGUI.timeline.md
+              - Temporal plot: wxGUI.tplot.md
+          - List of components: wxGUI.components.md
 
-      # - Scripting:
-      #     - Overview: scriptingintro.md
-      #     - Python: python.md
-      #     - Shell Scripting: shell.md
-      #     - Batch Processing: batch.md
-      #     - R: r.md
-      # - Jupyter Notebook: jupyter.md
+  - Key concepts:
+      - GRASS projects: grass_database.md
+      - Raster overview: rasterintro.md
+      - 3D raster overview: raster3dintro.md
+      - Vector overview: vectorintro.md
+      - Databases overview: databaseintro.md
+      - Database drivers: sql.md
+      - Imagery overview: imageryintro.md
+      - Temporal overview: temporalintro.md
+      - Display drivers: displaydrivers.md
+      - Projections and transformations: projectionintro.md
 
-  - Project Management:
-      - General Tools: general.md
-      - Projection and Transformations: projectionintro.md
+  - Tools:
+      - Tools: full_index.md
+      - General tools: general.md
+      - Raster tools: raster.md
+      - 3D raster tools: raster3d.md
+      - Vector tools: vector.md
+      - Database tools: database.md
+      - Imagery tools: imagery.md
+      - Temporal tools: temporal.md
+      - Display tools: display.md
+      - PostScript tools: postscript.md
+      - Miscellaneous tools: miscellaneous.md
 
-  - Processing Tools:
-      - Raster:
-          - Overview: rasterintro.md
-          - Raster Tools: raster.md
-      - Raster 3D:
-          - Overview: raster3dintro.md
-          - Raster 3D Tools: raster3d.md
-      - Vectors:
-          - Overview: vectorintro.md
-          - Vector Tools: vector.md
-          - Databases Overview: databaseintro.md
-          - Database Tools: database.md
-          - Supported Database Drivers: sql.md
-      # - GUI Tools:
-      - Imagery:
-          - Overview: imageryintro.md
-          - Imagery Tools: imagery.md
-          - GUI Tools:
-              - Image Classification: wxGUI.iclass.md
-      - Temporal:
-          - Overview: temporalintro.md
-          - Temporal: temporal.md
+  - Development: development_intro.md
 
-  - Visualization:
-      # - Overview: visualizationintro.md # Does not exist yet
-      - Display Tools: display.md
-      - GUI Tools:
-          - Animation: wxGUI.animation.md
-          - "3D Visualization": wxGUI.nviz.md
-          - Interactive Scatter Plot: wxGUI.iscatt.md
-          - Map Swipe: wxGUI.mapswipe.md
-          - Timeline: wxGUI.timeline.md
-          - Temporal Plot: wxGUI.tplot.md
-
-  # - Other:
-  #     - Misc: miscellaneous.md
-  #     - Postscript: postscript.md
+not_in_nav: |
+  r.*
+  v.*
+  r3.*
+  i.*
+  t.*
+  db.*
+  d.*
+  g.*
+  m.*
+  ps.*
+  wxGUI.*
+  test.*
+  topic_*
+  *_graphical.md
+  *driver.md
+  grass-dbf.md
+  grass-ogr.md
+  grass-pg.md
+  grass-sqlite.md
+  wxpyimgview.md
+  ximgview.md

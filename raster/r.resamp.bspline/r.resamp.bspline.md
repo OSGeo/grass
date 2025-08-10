@@ -41,7 +41,7 @@ north-south direction. For optimal performance, the spline step values
 should be no less than the east-west and north-south resolutions of the
 input map. Each non-NULL cell observation is modeled as a linear
 function of the non-zero splines in the area around the observation. The
-least squares regression predicts the the coefficients of these linear
+least squares regression predicts the coefficients of these linear
 functions. Regularization avoids the need to have one one observation
 and one coefficient for each spline (in order to avoid instability).
 
@@ -144,7 +144,7 @@ r.resamp.bspline -c input=input_raster
 [v.surf.bspline](v.surf.bspline.md)*
 
 Overview: [Interpolation and
-Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS GIS
+Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS
 
 ## AUTHORS
 

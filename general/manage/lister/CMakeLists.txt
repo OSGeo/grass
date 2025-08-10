@@ -22,7 +22,6 @@ build_program(
   grass_dbmibase
   grass_gis
   grass_raster
-  GDAL
   RUNTIME_OUTPUT_DIR
   "${GRASS_INSTALL_ETCDIR}/lister"
   NO_DOCS)

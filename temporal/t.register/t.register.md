@@ -6,7 +6,7 @@ timestamps to raster, 3D raster and vector maps in the temporal database
 registers them within input space time datasets (stds). The existing
 timestamp modules [r.timestamp](r.timestamp.md),
 [r3.timestamp](r3.timestamp.md) and [v.timestamp](v.timestamp.md) do not
-register the maps in the temporal database of GRASS GIS. However,
+register the maps in the temporal database of GRASS. However,
 timestamps that have been created with these modules can be read and
 used by *t.register*. This works only for maps that are not already
 registered in the temporal database.
@@ -269,8 +269,7 @@ prec_7|PERMANENT|2001-07-01 00:00:00|2001-08-01 00:00:00
 The European Climate Assessment & Dataset (ECA&D) project offers the
 E-OBS dataset which is a daily gridded observational dataset for
 precipitation, temperature and sea level pressure in Europe based on
-ECA&D information. Download and decompress mean temperature data from:
-[here](https://surfobs.climate.copernicus.eu/dataaccess/access_eobs.php#datafiles).
+ECA&D information. [Download and decompress mean temperature data here](https://surfobs.climate.copernicus.eu/dataaccess/access_eobs.php#datafiles).
 
 ```sh
 # import E-OBS V12 into a lat-long project (alternatively, use r.external)

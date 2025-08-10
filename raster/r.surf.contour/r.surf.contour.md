@@ -37,7 +37,7 @@ writing *output*.
 ## NOTES
 
 *r.surf.contour* works well under the following circumstances: 1) the
-contour lines extend to the the edge of the current region, 2) the
+contour lines extend to the edge of the current region, 2) the
 program is run at the same resolution as that of the input map, 3) there
 are no disjointed contour lines, and 4) no spot elevation data BETWEEN
 contour lines exist. Spot elevations at the tops of hills and the
@@ -92,7 +92,7 @@ r.univar diff
 [v.to.rast](v.to.rast.md)*
 
 Overview: [Interpolation and
-Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS GIS
+Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS
 
 ## AUTHOR
 

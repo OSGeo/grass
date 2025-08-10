@@ -16,11 +16,11 @@ JSON_Value *make_units(int ns, int nl)
         JSON_Object *unit_object = json_object(unit_value);
 
         if (unit[i].type == CELL_COUNTS) {
-            json_object_set_string(unit_object, "unit", "cell counts");
+            json_object_set_string(unit_object, "unit", "cells");
             json_object_set_number(unit_object, "value", count_sum(&_ns, nl));
         }
         else if (unit[i].type == PERCENT_COVER) {
-            json_object_set_string(unit_object, "unit", "% cover");
+            json_object_set_string(unit_object, "unit", "percent");
             int k = ns - 1;
             while (k >= 0 && same_cats(k, ns, nl - 1))
                 k--;
@@ -136,7 +136,7 @@ void print_json(void)
     JSON_Value *root_value = json_value_init_object();
     JSON_Object *root_object = json_object(root_value);
 
-    json_object_set_string(root_object, "location", G_location());
+    json_object_set_string(root_object, "project", G_location());
 
     char date[64];
     time_t now;
@@ -153,8 +153,8 @@ void print_json(void)
     json_object_set_number(region_object, "south", window.south);
     json_object_set_number(region_object, "east", window.east);
     json_object_set_number(region_object, "west", window.west);
-    json_object_set_number(region_object, "ew_res", window.ew_res);
-    json_object_set_number(region_object, "ns_res", window.ns_res);
+    json_object_set_number(region_object, "ewres", window.ew_res);
+    json_object_set_number(region_object, "nsres", window.ns_res);
     json_object_set_value(root_object, "region", region_value);
 
     char *mask = maskinfo();
@@ -176,11 +176,11 @@ void print_json(void)
         char *label;
         label = Rast_get_cats_title(&(layers[i].labels));
         if (label == NULL || *label == 0) {
-            json_object_set_null(map_object, "label");
+            json_object_set_null(map_object, "title");
         }
         else {
             G_strip(label);
-            json_object_set_string(map_object, "label", label);
+            json_object_set_string(map_object, "title", label);
         }
 
         json_object_set_string(map_object, "type", "raster");

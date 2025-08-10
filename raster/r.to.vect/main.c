@@ -202,7 +202,7 @@ int main(int argc, char *argv[])
 
         /* Create new table */
         db_zero_string(&sql);
-        sprintf(buf, "create table %s ( cat integer", Fi->table);
+        snprintf(buf, sizeof(buf), "create table %s ( cat integer", Fi->table);
         db_append_string(&sql, buf);
 
         if (!value_flag) { /* add value to the table */
@@ -230,7 +230,7 @@ int main(int argc, char *argv[])
             }
             clen += 10;
 
-            sprintf(buf, ", label varchar(%d)", clen);
+            snprintf(buf, sizeof(buf), ", label varchar(%d)", clen);
             db_append_string(&sql, buf);
         }
 
@@ -339,8 +339,8 @@ int main(int argc, char *argv[])
                 }
                 G_debug(3, "cat = %d label = %s", cat, db_get_string(&label));
 
-                sprintf(buf, "insert into %s values ( %d, '%s')", Fi->table,
-                        cat, db_get_string(&label));
+                snprintf(buf, sizeof(buf), "insert into %s values ( %d, '%s')",
+                         Fi->table, cat, db_get_string(&label));
                 db_set_string(&sql, buf);
                 G_debug(3, "%s", db_get_string(&sql));
 
