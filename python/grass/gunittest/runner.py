@@ -65,20 +65,6 @@ class TextTestResult(grass.gunittest.result.TestResult, unittest.TextTestResult)
         self.end_time = None
         self.time_taken = None
 
-    def getDescription(self, test):
-        doc_first_line = test.shortDescription()
-        if self.descriptions and doc_first_line:
-            return "\n".join((str(test), doc_first_line))
-        return str(test)
-
-    def startTest(self, test):
-        super().startTest(test)
-        if self.showAll:
-            self.stream.write(self.getDescription(test))
-            self.stream.write(" ... ")
-            self.stream.flush()
-            self._newline = False
-
     def _write_status(self, test, status):
         is_subtest = isinstance(test, _SubTest)
         if is_subtest or self._newline:
@@ -106,77 +92,6 @@ class TextTestResult(grass.gunittest.result.TestResult, unittest.TextTestResult)
                     self.stream.write("E")
                 self.stream.flush()
         super().addSubTest(test, subtest, err)
-
-    def addSuccess(self, test):
-        super().addSuccess(test)
-        if self.showAll:
-            self._write_status(test, "ok")
-        elif self.dots:
-            self.stream.write(".")
-            self.stream.flush()
-
-    def addError(self, test, err):
-        super().addError(test, err)
-        if self.showAll:
-            self._write_status(test, "ERROR")
-        elif self.dots:
-            self.stream.write("E")
-            self.stream.flush()
-
-    def addFailure(self, test, err):
-        super().addFailure(test, err)
-        if self.showAll:
-            self._write_status(test, "FAIL")
-        elif self.dots:
-            self.stream.write("F")
-            self.stream.flush()
-
-    def addSkip(self, test, reason):
-        super().addSkip(test, reason)
-        if self.showAll:
-            self._write_status(test, "skipped {0!r}".format(reason))
-        elif self.dots:
-            self.stream.write("s")
-            self.stream.flush()
-
-    def addExpectedFailure(self, test, err):
-        super().addExpectedFailure(test, err)
-        if self.showAll:
-            self.stream.writeln("expected failure")
-            self.stream.flush()
-        elif self.dots:
-            self.stream.write("x")
-            self.stream.flush()
-
-    def addUnexpectedSuccess(self, test):
-        super().addUnexpectedSuccess(test)
-        if self.showAll:
-            self.stream.writeln("unexpected success")
-            self.stream.flush()
-        elif self.dots:
-            self.stream.write("u")
-            self.stream.flush()
-
-    def printErrors(self):
-        if self.dots or self.showAll:
-            self.stream.writeln()
-            self.stream.flush()
-        self.printErrorList("ERROR", self.errors)
-        self.printErrorList("FAIL", self.failures)
-        unexpectedSuccesses = getattr(self, "unexpectedSuccesses", ())
-        if unexpectedSuccesses:
-            self.stream.writeln(self.separator1)
-            for test in unexpectedSuccesses:
-                self.stream.writeln(f"UNEXPECTED SUCCESS: {self.getDescription(test)}")
-            self.stream.flush()
-
-    def printErrorList(self, flavour, errors):
-        for test, err in errors:
-            self.stream.writeln(self.separator1)
-            self.stream.writeln("%s: %s" % (flavour, self.getDescription(test)))
-            self.stream.writeln(self.separator2)
-            self.stream.writeln("%s" % err)
-            self.stream.flush()
 
     def setTimes(self, start_time, end_time, time_taken):
         self.start_time = start_time
