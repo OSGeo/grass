@@ -1,6 +1,6 @@
 # Guide to contributing on GitHub
 
-This guide covers contributing to the GRASS GIS source,
+This guide covers contributing to the GRASS source,
 specifically to the _main_ branch.
 It assumes that you have some very basic knowledge of Git and GitHub.
 
@@ -23,14 +23,14 @@ git clone https://github.com/your_GH_account/grass.git
 cd grass/
 ```
 
-1. Add the main GRASS GIS repository as "upstream" (use HTTPS URL):
+1. Add the main GRASS repository as "upstream" (use HTTPS URL):
 
 ```bash
 git remote add upstream https://github.com/OSGeo/grass
 ```
 
 1. Your remotes now should be "origin" which is your fork and "upstream" which
-  is this main GRASS GIS repository. You can confirm that using:
+  is this main GRASS repository. You can confirm that using:
 
 ```bash
 git remote -v
@@ -143,7 +143,7 @@ to help standardize the content.
 
 ## After creating a PR
 
-GRASS GIS maintainers will now review your PR.
+GRASS maintainers will now review your PR.
 If needed, the maintainers will work with you to improve your changes.
 
 Once the changes in the PR are ready to be accepted,
@@ -192,7 +192,7 @@ git fetch upstream
 git merge upstream/main
 ```
 
-Git will ask you to edit the merge commit messsage, you can leave the default
+Git will ask you to edit the merge commit message, you can leave the default
 and close the editor. You may run into a conflict,
 in that case you need to resolve it.
 

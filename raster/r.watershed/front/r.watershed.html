@@ -316,17 +316,15 @@ drainage basins can be of any size because the length of an interior
 stream segment is determined by the distance between the tributaries
 flowing into it.
 
-<h3>MASK and no data</h3>
+<h3>Masking and no data</h3>
 
 
 The <em>r.watershed</em> program does not require the user to have the
 current geographic region filled with elevation values.  Areas without
-elevation data (masked or NULL cells) are ignored. It is NOT necessary
-to create a raster map (or raster reclassification)
-named <code>MASK</code> for NULL cells.  Areas without elevation data will
-be treated as if they are off the edge of the region. Such areas will
-reduce the memory necessary to run the program.  Masking out
-unimportant areas can significantly reduce processing time if the
+elevation data (masked or NULL cells, i.e., no data) are ignored and
+treated as if they were outside the region. Masking out
+unimportant areas can significantly reduce processing time and memory
+requirements if the
 watersheds of interest occupy a small percentage of the overall area.
 
 <p>
@@ -357,7 +355,7 @@ To isolate an individual river network using the output of this
 module, a number of approaches may be considered.
 
 <ol>
-<li>Use a resample of the basins catchment raster map as a MASK.<br>
+<li>Use a resample of the basins catchment raster map as a raster mask.<br>
   The equivalent vector map method is similar
   using <em><a href="v.select.html">v.select</a></em> or
   <em><a href="v.overlay.html">v.overlay</a></em>.</li>
@@ -386,7 +384,7 @@ The stream segments output can be easily vectorized after thinning
 with
 <em><a href="r.thin.html">r.thin</a></em>. Each stream segment in the
 vector map will have the value of the associated basin. To isolate
-subbasins and streams for a larger basin, a MASK for the larger basin
+subbasins and streams for a larger basin, a mask for the larger basin
 can be created with
 <em><a href="r.water.outlet.html">r.water.outlet</a></em>. The stream
 segments output serves as a guide where to place the outlet point used
@@ -469,13 +467,13 @@ cut-off value. This only works with SFD, not with MFD.
 <div class="code"><pre>
   r.watershed elev=elevation.dem accum=rwater.accum
 
-  r.mapcalc 'MASK = if(!isnull(elevation.dem))'
+  r.mask raster=elevation.dem
   r.mapcalc "rwater.course = \
    if( abs(rwater.accum) &gt; $mean_of_abs, \
        abs(rwater.accum), \
        null() )"
   r.colors -g rwater.course col=bcyr
-  g.remove -f type=raster name=MASK
+  r.mask -r
 
   # <i>Thinning is required before converting raster lines to vector</i>
   r.thin in=rwater.course out=rwater.course.Thin

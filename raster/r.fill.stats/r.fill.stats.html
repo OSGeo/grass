@@ -395,10 +395,10 @@ http://fatra.cnr.ncsu.edu/uav-lidar-analytics-course/midpines_2015_spm.las
 -->
 
 Inspect the point density and determine the extent of the point cloud
-using the <em><a href="r.in.lidar.html">r.in.lidar</a></em> module:
+using the <em><a href="r.in.pdal.html">r.in.pdal</a></em> module:
 
 <div class="code"><pre>
-r.in.lidar -e input=points.las output=density method=n resolution=5 class_filter=2
+r.in.pdal -e input=points.las output=density method=n resolution=5 class_filter=2
 </pre></div>
 
 Based on the result, set computational region extent and desired
@@ -411,7 +411,7 @@ g.region -pa raster=density res=1
 Import the point cloud as raster using binning:
 
 <div class="code"><pre>
-r.in.lidar input=points.las output=ground_raw method=mean class_filter=2
+r.in.pdal input=points.las output=ground_raw method=mean class_filter=2
 </pre></div>
 
 Check that there are more non-NULL cells than NULL ("no data") cells:

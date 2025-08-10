@@ -216,6 +216,10 @@ class HistoryBrowserTree(CTreeView):
         """Create popup menu for commands"""
         menu = Menu()
 
+        copyItem = wx.MenuItem(menu, wx.ID_ANY, _("&Copy"))
+        menu.AppendItem(copyItem)
+        self.Bind(wx.EVT_MENU, self.OnCopyCmd, copyItem)
+
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Remove"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRemoveCmd, item)
@@ -313,7 +317,6 @@ class HistoryBrowserTree(CTreeView):
         Populate the tree history model based on the current history log.
         """
         for entry in self.ReadFromHistory():
-
             # Get history day node
             day_node = self.GetHistoryNode(entry)
 
@@ -658,3 +661,25 @@ class HistoryBrowserTree(CTreeView):
             self.CollapseNode(node, recursive=False)
         else:
             self.ExpandNode(node, recursive=False)
+
+    def OnCopyCmd(self, event):
+        """Copy selected cmd to clipboard"""
+        self.DefineItems(self.GetSelected())
+        if not self.selected_command:
+            return
+
+        selected_command = self.selected_command[0]
+        command = selected_command.data["name"]
+
+        # Copy selected command to clipboard
+        try:
+            if wx.TheClipboard.Open():
+                try:
+                    wx.TheClipboard.SetData(wx.TextDataObject(command))
+                    self.showNotification.emit(
+                        message=_("Command <{}> copied to clipboard").format(command)
+                    )
+                finally:
+                    wx.TheClipboard.Close()
+        except wx.PyWidgetError:
+            self.showNotification.emit(message=_("Failed to copy command to clipboard"))

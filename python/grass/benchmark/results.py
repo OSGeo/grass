@@ -2,7 +2,7 @@
 #
 # AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
 #
-# PURPOSE:   Benchmarking for GRASS GIS modules
+# PURPOSE:   Benchmarking for GRASS modules
 #
 # COPYRIGHT: (C) 2021 Vaclav Petras, and by the GRASS Development Team
 #
@@ -103,9 +103,7 @@ def join_results_from_files(
     source_filenames, prefixes=None, select=None, prefixes_as_labels=False
 ):
     """Join multiple files into one results object."""
-    to_merge = []
-    for result_file in source_filenames:
-        to_merge.append(load_results_from_file(result_file))
+    to_merge = [load_results_from_file(result_file) for result_file in source_filenames]
     return join_results(
         to_merge,
         prefixes=prefixes,

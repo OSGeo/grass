@@ -31,12 +31,18 @@ typedef struct func_desc {
 #define SET_NULL_F(x) (Rast_set_f_null_value((x), 1))
 #define SET_NULL_D(x) (Rast_set_d_null_value((x), 1))
 
-extern volatile int floating_point_exception;
-extern volatile int floating_point_exception_occurred;
+#ifdef GRASS_CMAKE_BUILD
+#include <export/grass_calc_export.h>
+#else
+#define GRASS_CALC_EXPORT
+#endif
+
+extern GRASS_CALC_EXPORT volatile int floating_point_exception;
+extern GRASS_CALC_EXPORT volatile int floating_point_exception_occurred;
 
 extern int columns;
 
-extern func_desc calc_func_descs[];
+extern GRASS_CALC_EXPORT func_desc calc_func_descs[];
 
 #include <grass/defs/calc.h>
 

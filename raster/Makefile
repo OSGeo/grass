@@ -94,6 +94,7 @@ SUBDIRS = \
 	r.relief \
 	r.sim \
 	r.slope.aspect \
+	r.smooth.edgepreserve \
 	r.solute.transport \
 	r.spread \
 	r.spreadpath \
@@ -140,7 +141,6 @@ PGM = rasterintro
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
 default:
-	$(MAKE) -C r.mapcalc
 	$(MAKE) htmldir
 
 htmldir: parsubdirs
@@ -154,3 +154,5 @@ $(HTMLDIR)/r.out.png:
 	# no-op - override Html.make rule for .png image files
 $(MDDIR)/source/r.out.png:
 	# no-op - override Html.make rule for .png image files
+
+r.colors: r.mapcalc

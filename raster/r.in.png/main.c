@@ -81,7 +81,7 @@ static int get_png_val(png_bytep *pp, int bit_depth)
 
 static void init_channel(channel *c)
 {
-    sprintf(c->name, "%s%s", output, c->suffix);
+    snprintf(c->name, sizeof(c->name), "%s%s", output, c->suffix);
 
     if (Float) {
         c->fd = Rast_open_fp_new(c->name);
@@ -244,7 +244,8 @@ static void print_header(void)
         alpha_string = "+transparency";
 
     if (png_get_valid(png_ptr, info_ptr, PNG_INFO_gAMA))
-        sprintf(gamma_string, ", image gamma = %4.2f", f_gamma);
+        snprintf(gamma_string, sizeof(gamma_string), ", image gamma = %4.2f",
+                 f_gamma);
 
     fprintf(stderr, "%lu x %lu image, %d bit%s %s%s%s%s\n",
             (unsigned long)width, (unsigned long)height, bit_depth,

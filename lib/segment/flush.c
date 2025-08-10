@@ -6,7 +6,7 @@
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
+ * \author GRASS Development Team
  *
  * \date 2005-2009
  */
@@ -26,7 +26,6 @@
  * \param[in] SEG segment
  * \return always returns 0
  */
-
 int Segment_flush(SEGMENT *SEG)
 {
     int i;

@@ -30,8 +30,8 @@ column will be named <code>elev_sum</code>.
 DBF specification to 10 characters. Therefore it is advised to be economical
 in the use of the column prefix when using DBF as any additional characters
 will be chopped off.
-<p>If a MASK is present, it will be restored after the script finished.
-The script changes temporarily to the resolution of the given raster map.
+<p>The script internally aligns the raster grid cells to the grid of the first
+input raster map.
 <p>If an area has several categories in the selected layer (equivalent
 to overlapping polygons in Simple Features), only one category will be
 kept during the rasterization process. Statistics for the skipped

@@ -65,19 +65,6 @@ def main():
     basename = options["basename"]
     spatial = flags["s"]
 
-    # Check for PLY istallation
-    try:
-        # Intentionally unused imports
-        from ply import lex  # noqa: F401
-        from ply import yacc  # noqa: F401
-    except ImportError:
-        gs.fatal(
-            _(
-                "Please install PLY (Lex and Yacc Python implementation) to use the "
-                "temporal algebra modules."
-            )
-        )
-
     tgis.init(True)
     p = tgis.TemporalVectorAlgebraParser(run=True, debug=False, spatial=spatial)
     p.parse(expression, basename, gs.overwrite())

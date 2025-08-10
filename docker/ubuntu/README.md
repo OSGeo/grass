@@ -1,7 +1,7 @@
-# Docker GRASS GIS (Ubuntu Linux)
+# Docker GRASS (Ubuntu Linux)
 
 Dockerfile with an [Ubuntu Linux](https://ubuntu.com/) image with
-[GRASS GIS](https://grass.osgeo.org/), [PDAL](https://pdal.io) support.
+[GRASS](https://grass.osgeo.org/), [PDAL](https://pdal.io) support.
 
 Download size of this image is of approximately 2.6 GB.
 
@@ -100,7 +100,7 @@ $ DOCKER_BUILDKIT=1 docker build  \
 
 ## Test the docker image
 
-Note: Adjust the volume mount to the path of the GRASS GIS source code directory.
+Note: Adjust the volume mount to the path of the GRASS source code directory.
 
 ```bash
 # Test basic functionality

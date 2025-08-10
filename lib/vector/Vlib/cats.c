@@ -479,7 +479,7 @@ int Vect_array_to_cat_list(const int *vals, int nvals, struct cat_list *list)
 
    Allocated array should be freed by G_free().
 
-   \param cat_list pointer to cat_list struct
+   \param list pointer to cat_list struct
    \param[out] vals array of integers
    \param[out] nvals number of values
 
