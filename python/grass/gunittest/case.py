@@ -36,6 +36,8 @@ from .gutils import is_map_in_mapset
 
 from io import StringIO
 
+_subtest_msg_sentinel = object()
+
 
 class TestCase(unittest.TestCase):
     # we disable R0904 for all TestCase classes because their purpose is to
@@ -1484,3 +1486,43 @@ def _check_module_run_parameters(module):
         msg = "stderr_ can be only PIPE or None"
         raise ValueError(msg)
         # because we want to capture it
+
+
+class _SubTest(TestCase):
+    """
+    Private class _SubTest copied over from Python unittest to be available
+    when subclassing
+    """
+
+    def __init__(self, test_case, message, params):
+        super().__init__()
+        self._message = message
+        self.test_case = test_case
+        self.params = params
+        self.failureException = test_case.failureException
+
+    def runTest(self):
+        raise NotImplementedError("subtests cannot be run directly")
+
+    def _subDescription(self):
+        parts = []
+        if self._message is not _subtest_msg_sentinel:
+            parts.append("[{}]".format(self._message))
+        if self.params:
+            params_desc = ", ".join(
+                "{}={!r}".format(k, v) for (k, v) in self.params.items()
+            )
+            parts.append("({})".format(params_desc))
+        return " ".join(parts) or "(<subtest>)"
+
+    def id(self):
+        return "{} {}".format(self.test_case.id(), self._subDescription())
+
+    def shortDescription(self):
+        """Returns a one-line description of the subtest, or None if no
+        description has been provided.
+        """
+        return self.test_case.shortDescription()
+
+    def __str__(self):
+        return "{} {}".format(self.test_case, self._subDescription())
