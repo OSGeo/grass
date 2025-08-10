@@ -39,7 +39,6 @@ from .core import (
 )
 from grass.exceptions import CalledModuleError
 from .utils import (
-    encode,
     float_or_dms,
     parse_key_val,
     try_remove,
@@ -215,7 +214,7 @@ def mapcalc_start(
         verbose=verbose,
         overwrite=overwrite,
     )
-    p.stdin.write(encode(e))
+    p.stdin.write(e)
     p.stdin.close()
     return p
 

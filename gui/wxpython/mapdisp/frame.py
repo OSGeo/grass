@@ -1099,13 +1099,11 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 map=raster, coord=(east, north), localized=True, env=env
             )
         if vect:
-            encoding = UserSettings.Get(group="atm", key="encoding", subkey="value")
             try:
                 vectQuery = gs.vector_what(
                     map=vect,
                     coord=(east, north),
                     distance=qdist,
-                    encoding=encoding,
                     multiple=True,
                 )
             except ScriptError:
@@ -1716,9 +1714,7 @@ class MapDisplay(FrameMixin, MapPanel):
         )
         # set system icon
         parent.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
         # use default frame window layout
         client_disp = wx.ClientDisplayRect()

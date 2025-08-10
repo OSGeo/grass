@@ -68,7 +68,7 @@ from .temporal_granularity import compute_absolute_time_granularity
 
 
 class TemporalRasterAlgebraLexer(TemporalAlgebraLexer):
-    """Lexical analyzer for the GRASS GIS temporal algebra"""
+    """Lexical analyzer for the GRASS temporal algebra"""
 
     def __init__(self) -> None:
         TemporalAlgebraLexer.__init__(self)

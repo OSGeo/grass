@@ -371,7 +371,9 @@ def main():
         not gs.overwrite()
         and gs.find_file(output, element="vector", mapset=".")["mapset"]
     ):
-        gs.fatal(_("option <%s>: <%s> exists.") % ("output", output))
+        gs.fatal(
+            _("option <{key}>: <{value}> exists.").format(key="output", value=output)
+        )
 
     if options["extent"] == "region":
         gs.run_command("g.remove", type="vector", name=vreg, flags="f", quiet=True)

@@ -3,7 +3,7 @@ GRASS Python testing framework module for running from command line
 
 Copyright (C) 2014-2021 by the GRASS Development Team
 This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS GIS
+License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :authors: Vaclav Petras
@@ -138,8 +138,9 @@ def get_config(start_directory, config_file):
 
     If file is explicitly specified, it must exist.
 
-    Raises OSError if file is not accessible, e.g., if it exists,
-    but there is an issue with permissions.
+    :raises OSError: if file is not accessible, e.g., if it exists,
+        but there is an issue with permissions.
+    :raises ValueError: If neither start_directory nor config_file are set.
     """
     config_parser = configparser.ConfigParser()
     if config_file:

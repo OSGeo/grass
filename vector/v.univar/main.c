@@ -49,7 +49,7 @@ static void select_from_geometry(void);
 static void select_from_database(void);
 static void summary(void);
 
-enum OutputFormat { PLAIN, JSON };
+enum OutputFormat { PLAIN, SHELL, JSON };
 
 struct Option *field_opt, *where_opt, *col_opt;
 struct Flag *shell_flag, *ext_flag, *weight_flag, *geometry;
@@ -126,7 +126,10 @@ int main(int argc, char *argv[])
 
     shell_flag = G_define_flag();
     shell_flag->key = 'g';
-    shell_flag->description = _("Print the stats in shell script style");
+    shell_flag->label = _("Print the stats in shell script style [deprecated]");
+    shell_flag->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=shell instead.");
 
     ext_flag = G_define_flag();
     ext_flag->key = 'e';
@@ -142,6 +145,10 @@ int main(int argc, char *argv[])
         _("Calculate geometric distances instead of attribute statistics");
 
     format_opt = G_define_standard_option(G_OPT_F_FORMAT);
+    format_opt->options = "plain,shell,json";
+    format_opt->descriptions = _("plain;Human readable text output;"
+                                 "shell;shell script style text output;"
+                                 "json;JSON (JavaScript Object Notation);");
     format_opt->guisection = _("Print");
 
     G_gisinit(argv[0]);
@@ -158,10 +165,23 @@ int main(int argc, char *argv[])
     if (strcmp(format_opt->answer, "json") == 0) {
         format = JSON;
     }
+    else if (strcmp(format_opt->answer, "shell") == 0) {
+        format = SHELL;
+    }
     else {
         format = PLAIN;
     }
 
+    if (shell_flag->answer) {
+        G_verbose_message(
+            _("Flag 'g' is deprecated and will be removed in a future "
+              "release. Please use format=shell instead."));
+        if (format == JSON) {
+            G_fatal_error(_("The -g flag cannot be used with format=json. "
+                            "Please select only one output format."));
+        }
+        format = SHELL;
+    }
     otype = Vect_option_to_types(type_opt);
     perc = atoi(percentile->answer);
 
@@ -644,7 +664,7 @@ void summary(void)
             }
         }
     }
-    else if (shell_flag->answer) {
+    else if (format == SHELL) {
         fprintf(stdout, "n=%d\n", count);
         if (geometry->answer) {
             fprintf(stdout, "nzero=%d\n", nzero);
@@ -766,7 +786,7 @@ void summary(void)
             json_object_set_value(root_object, "percentiles",
                                   percentiles_array_value);
         }
-        else if (shell_flag->answer) {
+        else if (format == SHELL) {
             fprintf(stdout, "first_quartile=%g\n", quartile_25);
             fprintf(stdout, "median=%g\n", median);
             fprintf(stdout, "third_quartile=%g\n", quartile_75);

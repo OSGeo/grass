@@ -11,7 +11,6 @@
  * \param[in] n
  * \return long
  */
-
 long G_math_max_pow2(const long n)
 {
     long p2, n1;
@@ -38,7 +37,6 @@ long G_math_max_pow2(const long n)
  * \param[in] n
  * \return long
  */
-
 long G_math_min_pow2(const long n)
 {
     long p2, n1;

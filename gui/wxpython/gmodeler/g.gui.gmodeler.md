@@ -10,12 +10,12 @@ index: topic_GUI|GUI
 The **Graphical Modeler** is a *[wxGUI](wxGUI.md)* component which
 allows the user to create, edit, and manage simple and complex models
 using an easy-to-use interface. When performing analytical operations in
-GRASS GIS, the operations are not isolated, but part of a chain of
+GRASS, the operations are not isolated, but part of a chain of
 operations. Using the Graphical Modeler, a chain of processes (i.e.
-GRASS GIS modules) can be wrapped into one process (i.e. model).
+GRASS modules) can be wrapped into one process (i.e. model).
 Subsequently it is easier to execute the model later on even with
 slightly different inputs or parameters.  
-Models represent a programming technique used in GRASS GIS to
+Models represent a programming technique used in GRASS to
 concatenate single steps together to accomplish a task. It is
 advantageous when the user see boxes and ovals that are connected by
 lines and represent some tasks rather than seeing lines of coded text.
@@ -23,7 +23,7 @@ The Graphical Modeler can be used as a custom tool that automates a
 process. Created models can simplify or shorten a task which can be run
 many times and it can also be easily shared with others. Important to
 note is that models cannot perform specified tasks that one cannot also
-manually perform with GRASS GIS. It is recommended to first to develop
+manually perform with GRASS. It is recommended to first to develop
 the process manually, note down the steps (e.g. by using the *Copy*
 button in module dialogs) and later replicate them in model.
 
@@ -257,7 +257,7 @@ Then it should be set in the module dialog as input called `%{raster}`.
 
 ### Saving the model file
 
-Finally, the model settings can be stored as a GRASS GIS Model file with
+Finally, the model settings can be stored as a GRASS Model file with
 `*.gxm` extension. The advantage is that it can be shared as a reusable
 workflow that may be run also by other users with different data.
 
@@ -321,7 +321,7 @@ In the example below the [MODIS
 MOD13Q1](https://e4ftl01.cr.usgs.gov/MOLT/MOD13Q1.006/) (NDVI) satellite
 data products are used in a loop. The original data are stored as coded
 integer values that need to be multiplied by the value `0.0001` to
-represent real *ndvi values*. Moreover, GRASS GIS provides a predefined
+represent real *ndvi values*. Moreover, GRASS provides a predefined
 color table called `ndvi` to represent *ndvi data*. In this case it is
 not necessary to work with every image separately.  
 The Graphical Modeler is an appropriate tool to process data in an
@@ -330,9 +330,9 @@ image in mapset and `%{ndvi}` for original data name suffix). After the
 loop component is added to model, it is necessary to define series of
 maps with required settings of map type, mapset, etc.
 
-![MODIS data representation in GRASS GIS after Graphical Modeler
+![MODIS data representation in GRASS after Graphical Modeler
 usage](g_gui_gmodeler_loop_dlg.png)  
-*Figure: MODIS data representation in GRASS GIS after Graphical Modeler
+*Figure: MODIS data representation in GRASS after Graphical Modeler
 usage.*
 
 When the model is supplemented by all of modules, these modules should
@@ -342,13 +342,13 @@ are shown below.
 ![Model with loop](g_gui_gmodeler_loop_final.png)  
 *Figure: Model with loop.*
 
-![MODIS data representation in GRASS GIS](g_gui_gmodeler_modis_1o.png)
-![MODIS data representation in GRASS GIS](g_gui_gmodeler_modis_1.png)
-![MODIS data representation in GRASS GIS](g_gui_gmodeler_modis_2o.png)
-![MODIS data representation in GRASS GIS](g_gui_gmodeler_modis_2.png)
-![MODIS data representation in GRASS GIS](g_gui_gmodeler_modis_3o.png)
-![MODIS data representation in GRASS GIS](g_gui_gmodeler_modis_3.png)  
-*Figure: MODIS data representation in GRASS GIS after Graphical Modeler
+![MODIS data representation in GRASS](g_gui_gmodeler_modis_1o.png)
+![MODIS data representation in GRASS](g_gui_gmodeler_modis_1.png)
+![MODIS data representation in GRASS](g_gui_gmodeler_modis_2o.png)
+![MODIS data representation in GRASS](g_gui_gmodeler_modis_2.png)
+![MODIS data representation in GRASS](g_gui_gmodeler_modis_3o.png)
+![MODIS data representation in GRASS](g_gui_gmodeler_modis_3.png)  
+*Figure: MODIS data representation in GRASS after Graphical Modeler
 usage.*
 
 The steps to enter in the command console of the Graphical Modeler would

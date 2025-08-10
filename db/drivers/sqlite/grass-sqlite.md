@@ -53,7 +53,7 @@ sqlitebrowser "$GISDBASE/$LOCATION_NAME/$MAPSET"/sqlite/sqlite.db
 *[db.connect](db.connect.md), [db.execute](db.execute.md),
 [db.select](db.select.md)*  
   
-*[SQL support in GRASS GIS](sql.md)*  
+*[SQL support in GRASS](sql.md)*  
   
 *[SQLite web site](https://www.sqlite.org), [SQLite
 manual](https://www.sqlite.org/quickstart.html), [sqlite - Management

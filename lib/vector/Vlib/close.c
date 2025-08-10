@@ -310,7 +310,7 @@ void Vect__free_cache(struct Format_info_cache *cache)
 
 /*! Free memory of offset array
 
-   \param cache pointer to offset array to be freed
+   \param offset pointer to offset array to be freed
  */
 void Vect__free_offset(struct Format_info_offset *offset)
 {

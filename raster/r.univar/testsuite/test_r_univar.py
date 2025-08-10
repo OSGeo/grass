@@ -87,6 +87,15 @@ class TestRasterUnivar(TestCase):
             precision=1e-10,
             sep="=",
         )
+        self.assertModuleKeyValue(
+            module="r.univar",
+            map="map_a",
+            format="shell",
+            nprocs=4,
+            reference=univar_string,
+            precision=1e-10,
+            sep="=",
+        )
 
     def test_2(self):
         # Output of r.univar
@@ -108,6 +117,15 @@ class TestRasterUnivar(TestCase):
             module="r.univar",
             map="map_a",
             flags="g",
+            nprocs=4,
+            reference=univar_string,
+            precision=1e-10,
+            sep="=",
+        )
+        self.assertModuleKeyValue(
+            module="r.univar",
+            map="map_a",
+            format="shell",
             nprocs=4,
             reference=univar_string,
             precision=1e-10,
@@ -260,6 +278,14 @@ class TestRasterUnivar(TestCase):
         self.assertModuleKeyValue(
             module="r.univar",
             map=["map_a", "map_b"],
+            format="shell",
+            reference=univar_string,
+            precision=1e-10,
+            sep="=",
+        )
+        self.assertModuleKeyValue(
+            module="r.univar",
+            map=["map_a", "map_b"],
             flags="g",
             nprocs=4,
             reference=univar_string,
@@ -384,6 +410,16 @@ class TestRasterUnivar(TestCase):
             map=["map_a"],
             zones="zone_map",
             flags="g",
+            nprocs=4,
+            reference=univar_string,
+            precision=1e-10,
+            sep="=",
+        )
+        self.assertModuleKeyValue(
+            module="r.univar",
+            map=["map_a"],
+            zones="zone_map",
+            format="shell",
             nprocs=4,
             reference=univar_string,
             precision=1e-10,
@@ -567,6 +603,37 @@ class TestRasterUnivar(TestCase):
             precision=1e-10,
             sep="=",
         )
+
+    def test_t_flag(self):
+        reference = """
+        zone|label|non_null_cells|null_cells|min|max|range|mean|mean_of_abs|stddev|variance|coeff_var|sum|sum_abs
+1||1710|0|102|209|107|155.5|155.5|26.5502667908755|704.916666666667|17.0741265536177|265905|265905
+2||6390|0|121|280|159|200.5|200.5|33.0895250293302|1094.91666666667|16.5035037552769|1281195|1281195
+        """
+        module = SimpleModule(
+            "r.univar",
+            map=["map_a"],
+            zones="zone_map",
+            flags="t",
+        )
+        self.runModule(module)
+        self.assertEqual(module.outputs.stdout.strip(), reference.strip())
+
+        # CSV takes precedence over the t flag
+        reference = """
+        zone,label,non_null_cells,null_cells,min,max,range,mean,mean_of_abs,stddev,variance,coeff_var,sum,sum_abs
+1,,1710,0,102,209,107,155.5,155.5,26.5502667908755,704.916666666667,17.0741265536177,265905,265905
+2,,6390,0,121,280,159,200.5,200.5,33.0895250293302,1094.91666666667,16.5035037552769,1281195,1281195
+        """
+        module = SimpleModule(
+            "r.univar", map=["map_a"], zones="zone_map", flags="t", format="csv"
+        )
+        self.runModule(module)
+        self.assertEqual(module.outputs.stdout.strip(), reference.strip())
+
+        module = SimpleModule("r.univar", map=["map_a"], zones="zone_map", format="csv")
+        self.runModule(module)
+        self.assertEqual(module.outputs.stdout.strip(), reference.strip())
 
     def test_json(self):
         reference = {

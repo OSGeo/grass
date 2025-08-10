@@ -25,7 +25,7 @@ import urllib.parse as urlparse
 try:
     import grass.script as gs
 except ImportError:
-    # During compilation GRASS GIS
+    # During compilation GRASS
     gs = None
 
 from mkdocs import (

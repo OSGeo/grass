@@ -64,7 +64,6 @@ void write_cell_value_d(void *cell_output, void *cell_input)
 /*
  * Write a double value into a cell (truncates for CELL type output).
  */
-
 void write_double_value_c(void *cell, double val)
 {
     Rast_set_c_value(cell, (CELL)val, OUT_TYPE);

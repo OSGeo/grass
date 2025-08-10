@@ -1,7 +1,7 @@
 /*!
  * \file msvc/fcntl.h
  *
- * \brief Header file for msvc/open.c and msvc/creat.c
+ * \brief Header file for msvc/fcntl.c
  *
  * (C) 2025 by the GRASS Development Team
  *
