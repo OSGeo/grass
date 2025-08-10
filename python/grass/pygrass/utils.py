@@ -478,7 +478,9 @@ def txt2numpy(
 
         >>> import grass.script.core as grasscore
         >>> import numpy as np
-        >>> txt = grasscore.read_command("r.stats", flags="cn", input="basin_50K,geology_30m", separator="|")
+        >>> txt = grasscore.read_command(
+        ...     "r.stats", flags="cn", input="basin_50K,geology_30m", separator="|"
+        ... )
         >>> np_array = txt2numpy(txt, sep="|", names=None)
         >>> print(np_array)
 
@@ -501,17 +503,13 @@ def txt2numpy(
         "usecols": usecols,
         "names": names,
         "encoding": encoding,
-        "delimiter": sep
-        }
+        "delimiter": sep,
+    }
 
     if structured:
         kwargs["dtype"] = None
 
-    np_array = np.genfromtxt(
-        BytesIO(tablestring),
-        **kwargs
-    )
-    return np_array
+    return np.genfromtxt(BytesIO(tablestring), **kwargs)
 
 
 def numpy2table(
@@ -524,39 +522,53 @@ def numpy2table(
     update_formats=True,
     overwrite=True,
 ):
-    """ Write numpy array to database table. Most suitable SQL data type is
-        extracted from the numpy dtype, as well as column names (if possible),
-        if not given by the user
+    """Write numpy array to database table. Most suitable SQL data type is
+    extracted from the numpy dtype, as well as column names (if possible),
+    if not given by the user
 
-        :param np_array: structured or unstructured 2d numpy array
-        :type np_array: numpy.ndarray
+    :param np_array: structured or unstructured 2d numpy array
+    :type np_array: numpy.ndarray
 
-        :param connection: A database (PostgreSQL or SQLite) connection object
-        :type connection: connection
+    :param connection: A database (PostgreSQL or SQLite) connection object
+    :type connection: connection
 
-        :param formats: A list of strings that describe the dtype of the numpy array
-        :type formats: list
+    :param formats: A list of strings that describe the dtype of the numpy array
+    :type formats: list
 
-        :param names: List of strings with names for columns
-        :type names: list
+    :param names: List of strings with names for columns
+    :type names: list
 
         :param column_prefix: A sring with the prefix to be used for column names
         :type column_prefix: str
 
-        :param update_formats: Flag whether to overwrite existing format definitions in structured numpy arrays
-        :type update_formats: bool
+    :param update_formats: Flag whether to overwrite existing format definitions in structured numpy arrays
+    :type update_formats: bool
 
-        :param overwrite: Whether to overwrite existing tables with the same name
-        :type overwrite: bool
+    :param overwrite: Whether to overwrite existing tables with the same name
+    :type overwrite: bool
 
-            >>> import numpy as np
-            >>> from io import BytesIO
-            >>> import sqlite3
-            >>> conn = sqlite3.connect("file::memory:?cache=shared")
-            >>> np_array = np.array([["112","abc","2005-01-01","13.543", "True", "1"], ["9223372036854775806","test","2005-02-01","29.543", "False", "0"]])
-            >>> table = "test"
-            >>> numpy2table(np_array, table, conn, names=None, formats=None, update_formats=True)
-            >>> conn.close()
+        >>> import numpy as np
+        >>> from io import BytesIO
+        >>> import sqlite3
+        >>> conn = sqlite3.connect("file::memory:?cache=shared")
+        >>> np_array = np.array(
+        ...     [
+        ...         ["112", "abc", "2005-01-01", "13.543", "True", "1"],
+        ...         [
+        ...             "9223372036854775806",
+        ...             "test",
+        ...             "2005-02-01",
+        ...             "29.543",
+        ...             "False",
+        ...             "0",
+        ...         ],
+        ...     ]
+        ... )
+        >>> table = "test"
+        >>> numpy2table(
+        ...     np_array, table, conn, names=None, formats=None, update_formats=True
+        ... )
+        >>> conn.close()
     """
 
     import sys
@@ -565,7 +577,7 @@ def numpy2table(
     from numpy.lib import recfunctions as rfn
 
     connection_info = str(type(connection)).split("'")[1].lower()
-    if not "pg" and not "sqlite" in connection_info:
+    if not "pg" and "sqlite" not in connection_info:
         raise GrassError(_("DB backend not supported, please check connection!"))
 
     dbdriver = (
@@ -718,14 +730,13 @@ def numpy2table(
                             )
                         )
                     )
-                else:
-                    raise GrassError(
-                        _(
-                            "Cannot represent column {} as {}".format(
-                                np_array.dtype.names[idx], np_format
-                            )
+                raise GrassError(
+                    _(
+                        "Cannot represent column {} as {}".format(
+                            np_array.dtype.names[idx], np_format
                         )
                     )
+                )
 
     # Start with unstructured array
     if not np_array.dtype.names:
@@ -764,7 +775,7 @@ def numpy2table(
 
                     # print(np_array_view[:,col_idx].astype(np_dtype))
                     # Bool types represented as integer
-                    if np_dtype == np.uint8 or np_dtype == np.int8:
+                    if np_dtype in (np.uint8, np.int8):
                         dtype = (
                             np.dtype(np.bool)
                             if np.max(np_array_view[:, col_idx].astype(np_dtype)) == 1
@@ -779,7 +790,7 @@ def numpy2table(
                     continue
             if not dtype:
                 dtype = np_array_view[:, col_idx].dtype
-            formats.append((dtype))
+            formats.append(dtype)
 
     # Generate a list of tuples with column names and formats for the array
     if not names and formats:
@@ -796,10 +807,10 @@ def numpy2table(
         )
     elif names and formats:
         dtype = np.dtype(
-            [(names[idx], np_format,) for idx, np_format in enumerate(formats)]
+            [(names[idx], np_format) for idx, np_format in enumerate(formats)]
         )
     elif names and not formats:
-        dtype = np.dtype([(np_name, names[idx],) for idx, np_name in enumerate(names)])
+        dtype = np.dtype([(np_name, np_name) for idx, np_name in enumerate(names)])
     else:
         dtype = None
 
@@ -837,9 +848,9 @@ def numpy2table(
             cur.executemany(insert_sql, structured_array.tolist())
         elif dbdriver == "pg":
             # For arrays that do not contain objects or binary data, they could be loaded using the copy statement
-            if set(
-                [np.dtype(descr[1]).num for descr in structured_array.dtype.descr]
-            ).isdisjoint(set([13, 14, 15, 16, 17, 20])):
+            if {
+                np.dtype(descr[1]).num for descr in structured_array.dtype.descr
+            }.isdisjoint({13, 14, 15, 16, 17, 20}):
                 np_array_txt = BytesIO()
                 np.savetxt(np_array_txt, structured_array, delimiter="\t", fmt="%s")
                 np_array_txt.seek(0)
@@ -852,8 +863,6 @@ def numpy2table(
                 )
                 execute_values(cur, insert_sql, structured_array.tolist())
         connection.commit()
-
-    return None
 
 
 def create_test_vector_map(map_name="test_vector"):
