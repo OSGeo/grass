@@ -73,15 +73,14 @@ def SnapToNode(e, n, tresh, vectMap):
         vectlib.WITHOUT_Z,
     )
 
-    if nodeNum > 0:
-        e = c_double(0)
-        n = c_double(0)
-        vectlib.Vect_get_node_coor(openedMap, nodeNum, byref(e), byref(n), None)  # z
-        e = e.value
-        n = n.value
-    else:
+    if nodeNum <= 0:
         vectlib.Vect_close(openedMap)
         return False
+    e = c_double(0)
+    n = c_double(0)
+    vectlib.Vect_get_node_coor(openedMap, nodeNum, byref(e), byref(n), None)
+    e = e.value
+    n = n.value
 
     return e, n
 
@@ -110,15 +109,14 @@ def GetNearestNodeCat(e, n, layer, tresh, vectMap):
         vectlib.WITHOUT_Z,
     )
 
-    if nodeNum > 0:
-        e = c_double(0)
-        n = c_double(0)
-        vectlib.Vect_get_node_coor(openedMap, nodeNum, byref(e), byref(n), None)  # z
-        e = e.value
-        n = n.value
-    else:
+    if nodeNum <= 0:
         vectlib.Vect_close(openedMap)
         return -1
+    e = c_double(0)
+    n = c_double(0)
+    vectlib.Vect_get_node_coor(openedMap, nodeNum, byref(e), byref(n), None)
+    e = e.value
+    n = n.value
 
     box = vectlib.bound_box()
     List = POINTER(vectlib.boxlist)

@@ -14,6 +14,9 @@ env:
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
   cancel-in-progress: true
+
+permissions: {}
+
 jobs:
   macos_build:
     name: macOS build
@@ -49,11 +52,23 @@ jobs:
         id: date
         # Year and week of year so cache key changes weekly
         run: echo "date=$(date +%Y-%U)" >> "${GITHUB_OUTPUT}"
+      - name: Prepare Conda environment file
+        env:
+          test_dependencies: |
+            ipython
+            pytest
+            pytest-github-actions-annotate-failures
+            pytest-timeout
+            pytest-xdist
+            pyyaml
+        run: |
+          cp ./macos/files/conda-requirements-dev-arm64.txt "${RUNNER_TEMP}/macos_dependencies.txt"
+          echo "$test_dependencies" | sed "s/ /\n/g" >> "${RUNNER_TEMP}/macos_dependencies.txt"
       - name: Setup Mamba
-        uses: mamba-org/setup-micromamba@068f1ab4b37ed9b3d9f73da7db90a0cda0a48d29 # v2.0.3
+        uses: mamba-org/setup-micromamba@b09ef9b599704322748535812ca03efb2625677b # v2.0.5
         with:
           init-shell: bash
-          environment-file: .github/workflows/macos_dependencies.txt
+          environment-file: ${{ runner.temp }}/macos_dependencies.txt
           environment-name: grass-env
           # Persist on the same period (date).
           cache-environment-key: environment-${{ steps.date.outputs.date }}
@@ -80,34 +95,65 @@ jobs:
         run: |
           export PYTHONPATH=$(grass --config python_path):$PYTHONPATH
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
-          pytest --verbose --color=yes --durations=0 --durations-min=0.5 \
-            --numprocesses auto \
-            -ra . \
-            -m 'not needs_solo_run'
+          pytest \
+            @.github/workflows/pytest_args_ci.txt \
+            @.github/workflows/pytest_args_parallel.txt \
+            --junitxml=pytest.xdist.junit.xml \
+            -k 'not testsuite'
       - name: Run pytest with a single worker (for tests marked with needs_solo_run)
         shell: micromamba-shell {0}
         run: |
           export PYTHONPATH=$(grass --config python_path):$PYTHONPATH
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
-          pytest --verbose --color=yes --durations=0 --durations-min=0.5 \
-            -ra . \
-            -m 'needs_solo_run'
+          pytest \
+            @.github/workflows/pytest_args_ci.txt \
+            @.github/workflows/pytest_args_not_parallel.txt \
+            --junitxml=pytest.needs_solo_run.junit.xml \
+            -k 'not testsuite'
+      - name: Run pytest with a single worker (for gunittest-based tests)
+        shell: micromamba-shell {0}
+        run: |
+          export PYTHONPATH=$(grass --config python_path):$PYTHONPATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
+          pytest \
+            @.github/workflows/pytest_args_gunittest.txt \
+            --junitxml=pytest.gunittest.junit.xml
+
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@47f89e9acb64b76debcd5ea40642d25a4adced9f # v1.1.1
+        with:
+          exclude: gui
+          flags: macos-pytest-python
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Cache GRASS Sample Dataset
+        id: cached-data
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
+        with:
+          path: sample-data/nc_spm_full_v2alpha2.tar.gz
+          key: nc_spm_full_v2alpha2.tar.gz
+          enableCrossOsArchive: true
+
+      - name: Download GRASS Sample Dataset
+        if: steps.cached-data.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p sample-data
+          curl -L "$SAMPLE_DATA" -o sample-data/nc_spm_full_v2alpha2.tar.gz
+        env:
+          SAMPLE_DATA: "https://grass.osgeo.org/sampledata/north_carolina/\
+            nc_spm_full_v2alpha2.tar.gz"
 
       - name: Run gunittest tests
         shell: micromamba-shell {0}
-        run: |
-          grass --tmp-project XY --exec \
-              g.download.project url=${{ env.SampleData }} path=$HOME
-          grass --tmp-project XY --exec \
-              python3 -m grass.gunittest.main \
-              --grassdata $HOME --location nc_spm_full_v2alpha2 --location-type nc \
-              --min-success 100 --config .github/workflows/macos_gunittest.cfg
+        run: .github/workflows/test_thorough.sh --config .github/workflows/macos_gunittest.cfg
         env:
-          SampleData: "https://grass.osgeo.org/sampledata/north_carolina/\
+          SAMPLE_DATA_URL: "file://${{ github.workspace }}/sample-data/\
             nc_spm_full_v2alpha2.tar.gz"
+
       - name: Make HTML test report available
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: testreport-macOS
           path: testreport

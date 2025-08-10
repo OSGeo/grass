@@ -283,10 +283,10 @@ newpath
 
     (x, y) = outercircle[1]
     outf.write("%.2f %.2f moveto\n" % (x * scale + halfframe, y * scale + halfframe))
-    for x, y in outercircle[2:]:
-        outf.write(
-            "%.2f %.2f lineto\n" % (x * scale + halfframe, y * scale + halfframe)
-        )
+    outf.writelines(
+        "%.2f %.2f lineto\n" % (x * scale + halfframe, y * scale + halfframe)
+        for x, y in outercircle[2:]
+    )
 
     t = string.Template(
         """
@@ -338,10 +338,10 @@ newpath
 
     (x, y) = sine_cosine_replic[1]
     outf.write("%.2f %.2f moveto\n" % (x * scale + halfframe, y * scale + halfframe))
-    for x, y in sine_cosine_replic[2:]:
-        outf.write(
-            "%.2f %.2f lineto\n" % (x * scale + halfframe, y * scale + halfframe)
-        )
+    outf.writelines(
+        "%.2f %.2f lineto\n" % (x * scale + halfframe, y * scale + halfframe)
+        for x, y in sine_cosine_replic[2:]
+    )
 
     t = string.Template(
         """
@@ -363,10 +363,10 @@ newpath
 
     (x, y) = vector[1]
     outf.write("%.2f %.2f moveto\n" % (x * scale + halfframe, y * scale + halfframe))
-    for x, y in vector[2:]:
-        outf.write(
-            "%.2f %.2f lineto\n" % (x * scale + halfframe, y * scale + halfframe)
-        )
+    outf.writelines(
+        "%.2f %.2f lineto\n" % (x * scale + halfframe, y * scale + halfframe)
+        for x, y in vector[2:]
+    )
 
     t = string.Template(
         """

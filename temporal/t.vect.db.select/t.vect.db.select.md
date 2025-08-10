@@ -1,0 +1,49 @@
+## DESCRIPTION
+
+The module *t.vect.db.select* prints attributes of vector maps
+registered in a space time vector dataset.
+
+## EXAMPLE
+
+The example is querying the *shoreline* space time dataset:
+
+```sh
+t.vect.db.select input=shoreline
+start_time|end_time|cat|DESCR|SOURCE|DATE
+1849|1873|1|T-736|NOAA/USGS|01/01/1858
+1849|1873|2|T-657|NOAA/USGS|01/01/1857
+1849|1873|3|T-381(2)|NOAA/USGS|01/01/1852
+1849|1873|4|T-381(1)|NOAA/USGS|01/01/1852
+1849|1873|5|T-381(1)|NOAA/USGS|01/01/1852
+...
+2009||44|2009 USDA NAIP|2009-07-11|VA, SAND, Wet / Dry
+2009||45|2009 USDA NAIP|2009-07-11|Carolina Beach, SAND, Wet / Dry
+2009||46|2009 USDA NAIP|2009-07-11|Carolina Beach, REVETMENT-ROCK, Hard Structure
+2009||47|2009 USDA NAIP|2009-07-11|Fort Fisher, REVETMENT-ROCK, Hard Structure
+```
+
+In the following example it print only DATE and SOURCE columns for data
+before 1900-01-01.
+
+```sh
+t.vect.db.select input=shoreline column=DATE,SOURCE t_where="start_time < 1900"
+start_time|end_time|DATE|SOURCE
+1849|1873|01/01/1858|NOAA/USGS
+1849|1873|01/01/1857|NOAA/USGS
+1849|1873|01/01/1852|NOAA/USGS
+1849|1873|01/01/1852|NOAA/USGS
+...
+1849|1873|01/01/1860|NOAA/USGS
+1849|1873|01/01/1860|NOAA/USGS
+1849|1873|01/01/1873|Coastal Carolina University
+1849|1873|01/01/1873|Coastal Carolina University
+1849|1873|01/01/1873|Coastal Carolina University
+```
+
+## SEE ALSO
+
+*[t.create](t.create.md), [t.info](t.info.md)*
+
+## AUTHOR
+
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

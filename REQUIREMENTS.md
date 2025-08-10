@@ -1,4 +1,4 @@
-# Requirements to compile GRASS GIS 8
+# Requirements to compile GRASS 8
 
 A workstation running some flavor of UNIX including
 GNU/Linux, Solaris, IRIX, BSD, Mac OSX, Cygwin or MinGW (on Win32/Win64).
@@ -95,9 +95,6 @@ Note: also the respective development packages (commonly named `xxx-dev` or
 - **Python dateutil Library** (`python-dateutil`, needed for the tgrass modules `t.*`)
   [https://pypi.org/project/python-dateutil/](https://pypi.org/project/python-dateutil/)
   [https://github.com/dateutil/dateutil](https://github.com/dateutil/dateutil)
-- **Python PLY Library (Python Lex-Yacc)** (`python-ply`, needed for the
-  temporal algebra in tgis)
-  [https://www.dabeaz.com/ply](https://www.dabeaz.com/ply/)
 - **Pillow (Python Imaging Library)** (highly recommended for wxGUI and
   necessary for wxGUI Cartographic Composer)
   [https://python-pillow.org/](https://python-pillow.org/)
@@ -137,7 +134,7 @@ MacOSX users may go here to download precompiled libraries etc.:
 
 ---
 
-© _GRASS Development Team 1997-2024_
+© _GRASS Development Team 1997-2025_
 
 Please report bugs here:
 [https://grass.osgeo.org/contribute/](https://grass.osgeo.org/contribute/)

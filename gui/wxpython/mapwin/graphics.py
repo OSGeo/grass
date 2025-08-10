@@ -200,6 +200,7 @@ class GraphicsSet:
         Could be 'point' or 'line' according to graphicsType.
 
         :param coords: list of east, north coordinates (double) of item.
+
                        Example:
 
                            * point: [1023, 122]
@@ -211,8 +212,7 @@ class GraphicsSet:
                       relevant just for 'point' type.
         :type label: str
         :param hide: if it is True, the item is not drawn when self.Draw
-                     is called. Hidden items are also counted in drawing
-                     order.
+                     is called. Hidden items are also counted in drawing order.
         :type hide: bool
         :return: (GraphicsSetItem) - added item reference
         """
@@ -363,7 +363,7 @@ class GraphicsSet:
         :return: True if order was changed
         :return: False if drawNum is out of range or item was not found
         """
-        if drawNum < len(self.itemsList) and drawNum >= 0 and item in self.itemsList:
+        if 0 <= drawNum < len(self.itemsList) and item in self.itemsList:
             self.itemsList.insert(
                 drawNum, self.itemsList.pop(self.itemsList.index(item))
             )

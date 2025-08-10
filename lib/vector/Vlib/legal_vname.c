@@ -28,7 +28,6 @@
    \return -1 if name does not start with letter A..Za..z or if name does not
    continue with A..Za..z0..9_
  */
-
 int Vect_legal_filename(const char *s)
 {
     /* full list of SQL keywords available at
@@ -38,7 +37,7 @@ int Vect_legal_filename(const char *s)
     char buf[GNAME_MAX];
     int i;
 
-    sprintf(buf, "%s", s);
+    snprintf(buf, sizeof(buf), "%s", s);
 
     if (*s == '.' || *s == 0) {
         G_warning(
@@ -89,7 +88,6 @@ int Vect_legal_filename(const char *s)
    \return 0 OK
    \return 1 error
  */
-
 int Vect_check_input_output_name(const char *input, const char *output,
                                  int error)
 {

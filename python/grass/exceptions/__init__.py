@@ -1,5 +1,4 @@
-"""GRASS GIS interface to Python exceptions
-"""
+"""GRASS interface to Python exceptions"""
 
 import subprocess
 
@@ -33,13 +32,15 @@ class ParameterError(Exception):
 
 
 class ScriptError(Exception):
-    """Raised during script execution. ::
+    """Raised during script execution.
 
-    >>> error = ScriptError('My error message!')
-    >>> error.value
-    'My error message!'
-    >>> print(error)
-    My error message!
+    .. code-block:: pycon
+
+        >>> error = ScriptError("My error message!")
+        >>> error.value
+        'My error message!'
+        >>> print(error)
+        My error message!
     """
 
     def __init__(self, value):

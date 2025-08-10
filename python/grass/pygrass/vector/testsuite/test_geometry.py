@@ -83,7 +83,7 @@ class PointTestCase(TestCase):
         point1 = Point(1, 0)
         self.assertFalse(point0 == point1)
         self.assertFalse(point0 == (1, 0))
-        self.assertTrue(point0 == point0)  # noqa: PLR0124
+        self.assertTrue(point0 == point0)  # noqa: PLR0124 # pylint: disable=R0124
         self.assertTrue(point0 == (0, 0))
 
     def test_repr(self):
@@ -117,7 +117,7 @@ class LineTestCase(TestCase):
             cls.vect.close()
             cls.c_mapinfo = None
 
-        """Remove the generated vector map, if exist"""
+        # Remove the generated vector map, if exists
         cls.runModule("g.remove", flags="f", type="vector", name=cls.tmpname)
 
     def test_len(self):
@@ -207,7 +207,7 @@ class NodeTestCase(TestCase):
             cls.vect.close()
             cls.c_mapinfo = None
 
-        """Remove the generated vector map, if exist"""
+        # Remove the generated vector map, if exists
         cls.runModule("g.remove", flags="f", type="vector", name=cls.tmpname)
 
     def test_init(self):
@@ -264,7 +264,7 @@ class AreaTestCase(TestCase):
             cls.vect.close()
             cls.c_mapinfo = None
 
-        """Remove the generated vector map, if exist"""
+        # Remove the generated vector map, if exists
         cls.runModule("g.remove", flags="f", type="vector", name=cls.tmpname)
 
     def test_init(self):

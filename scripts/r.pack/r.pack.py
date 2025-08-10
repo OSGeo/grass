@@ -14,7 +14,7 @@
 #############################################################################
 
 # %module
-# % description: Exports a raster map as GRASS GIS specific archive file
+# % description: Exports a raster map as GRASS specific archive file
 # % keyword: raster
 # % keyword: export
 # % keyword: copying
@@ -101,9 +101,7 @@ def main():
                         map_basedir = os.path.sep.join(
                             os.path.normpath(
                                 map_file["file"],
-                            ).split(
-                                os.path.sep
-                            )[:-2],
+                            ).split(os.path.sep)[:-2],
                         )
                         vrt_files[map] = map_basedir
 

@@ -48,7 +48,6 @@
  *    store an int.  The mapdev code is not guaranteed to work if
  *    plus_t is changed to a type that is larger than an int.
  */
-
 int dig_Rd_P_node(struct Plus_head *Plus, int n, struct gvfile *fp)
 {
     int cnt, n_edges;

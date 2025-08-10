@@ -217,8 +217,9 @@ class BitmapProvider:
         """
         Debug.msg(
             2,
-            "BitmapProvider.Load: "
-            "force={f}, bgcolor={b}, nprocs={n}".format(f=force, b=bgcolor, n=nprocs),
+            "BitmapProvider.Load: force={f}, bgcolor={b}, nprocs={n}".format(
+                f=force, b=bgcolor, n=nprocs
+            ),
         )
         cmds = []
         regions = []
@@ -757,14 +758,15 @@ class MapFilesPool(DictRefCounter):
         Debug.msg(4, "MapFilesPool.Clear")
 
         for key in list(self.dictionary.keys()):
-            if self.referenceCount[key] <= 0:
-                name, ext = os.path.splitext(self.dictionary[key])
-                os.remove(self.dictionary[key])
-                if ext == ".ppm":
-                    os.remove(name + ".pgm")
-                del self.dictionary[key]
-                del self.referenceCount[key]
-                del self.size[key]
+            if self.referenceCount[key] > 0:
+                continue
+            name, ext = os.path.splitext(self.dictionary[key])
+            os.remove(self.dictionary[key])
+            if ext == ".ppm":
+                os.remove(name + ".pgm")
+            del self.dictionary[key]
+            del self.referenceCount[key]
+            del self.size[key]
 
 
 class BitmapPool(DictRefCounter):

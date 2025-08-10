@@ -45,13 +45,12 @@ def test_reading_respects_change_of_session(tmp_path):
         import grass.lib.gis as libgis
 
         names = []
-        for location_name in ["test1", "test2", "abc"]:
-            # pylint: disable=protected-access
-            gs.core._create_location_xy(tmp_path, location_name)
-            with gs.setup.init(tmp_path / location_name):
+        for project_name in ["test1", "test2", "abc"]:
+            gs.create_project(tmp_path / project_name)
+            with gs.setup.init(tmp_path / project_name):
                 libgis.G__read_gisrc_path()
                 libgis.G__read_gisrc_env()
-                names.append((pygrass_utils.getenv("LOCATION_NAME"), location_name))
+                names.append((pygrass_utils.getenv("LOCATION_NAME"), project_name))
         queue.put(names)
 
     names = run_in_subprocess(switch_through_locations)

@@ -105,7 +105,8 @@ int export_areas_single(struct Map_info *In, int field, int donocat,
 
     /* select attributes ordered by category value */
     db_init_string(&dbstring);
-    sprintf(buf, "SELECT * FROM %s ORDER BY %s ASC", Fi->table, Fi->key);
+    snprintf(buf, sizeof(buf), "SELECT * FROM %s ORDER BY %s ASC", Fi->table,
+             Fi->key);
     G_debug(2, "SQL: %s", buf);
     db_set_string(&dbstring, buf);
     if (db_open_select_cursor(driver, &dbstring, &cursor, DB_SEQUENTIAL) !=
@@ -291,7 +292,8 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
     if (doatt) {
         /* select attributes ordered by category value */
         db_init_string(&dbstring);
-        sprintf(buf, "SELECT * FROM %s ORDER BY %s ASC", Fi->table, Fi->key);
+        snprintf(buf, sizeof(buf), "SELECT * FROM %s ORDER BY %s ASC",
+                 Fi->table, Fi->key);
         G_debug(2, "SQL: %s", buf);
         db_set_string(&dbstring, buf);
         if (db_open_select_cursor(driver, &dbstring, &cursor, DB_SEQUENTIAL) !=

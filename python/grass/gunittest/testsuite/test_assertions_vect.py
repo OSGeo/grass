@@ -2,10 +2,10 @@
 Tests assertion methods for vectors.
 """
 
+import unittest
 from grass.exceptions import CalledModuleError
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-from grass.gunittest.utils import xfail_windows
 
 
 V_UNIVAR_SCHOOLS_WIDTH_SUBSET = """n=144
@@ -180,7 +180,7 @@ class TestVectorGeometryAssertions(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        # TODO: this should be decided globaly by cleanup variable
+        # TODO: this should be decided globally by cleanup variable
         # perhaps cls.gremove() wheoul be the right option
         # when invoking separately, no need to delete maps since mapset
         # is deleted
@@ -282,7 +282,7 @@ class TestVectorGeometryAssertions(TestCase):
         self.assertFileExists(self.simple_base_file)
         self.assertFileExists(self.simple_modified_file)
 
-    @xfail_windows
+    @unittest.expectedFailure
     def test_assertVectorEqualsAscii_by_import(self):
         amap = "simple_vector_map_imported_base"
         self.runModule(
