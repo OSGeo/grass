@@ -54,10 +54,6 @@ class TextTestResult(grass.gunittest.result.TestResult, unittest.TextTestResult)
         super().__init__(
             stream=stream, descriptions=descriptions, verbosity=verbosity, **kwargs
         )
-        self.stream = stream
-        self.showAll = verbosity > 1
-        self.dots = verbosity == 1
-        self.descriptions = descriptions
         self._newline = True
         self.durations = durations
 
