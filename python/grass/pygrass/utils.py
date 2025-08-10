@@ -571,7 +571,6 @@ def numpy2table(
         >>> conn.close()
     """
 
-    import sys
     from io import BytesIO
     import numpy as np
     from numpy.lib import recfunctions as rfn
@@ -586,9 +585,8 @@ def numpy2table(
 
     # Check DB connection
     if dbdriver == "sqlite":
-        import sqlite3
+        pass
     elif dbdriver == "pg":
-        import psycopg2
         from psycopg2.extras import execute_values
 
     """
@@ -713,7 +711,7 @@ def numpy2table(
                         if not np_array.dtype.names
                         else np_array[np_array.dtype.names[idx]].dtype.itemsize
                     )
-                    np_format = np.dtype((np_format, size,)).str
+                    np_format = np.dtype((np_format, size)).str
                     formats[idx] = np_format
                 if not np_array.dtype.names:
                     np_array[:, idx].astype(np_format).astype("str") == np_array[
@@ -859,7 +857,6 @@ def numpy2table(
                 insert_sql = "INSERT INTO {}({}) VALUES %s;".format(
                     table,
                     ", ".join(structured_array.dtype.names),
-                    ",".join(["?"] * len(structured_array.dtype.names)),
                 )
                 execute_values(cur, insert_sql, structured_array.tolist())
         connection.commit()
