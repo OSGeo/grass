@@ -128,7 +128,7 @@ cleanup_and_exit:
             G_free(cols[i].name);
             G_free(cols[i].value);
         }
-        G_free(cols);   /* was missing */
+        G_free(cols);
     }
     G_free(table);
     G_free(where);
