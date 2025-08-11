@@ -69,7 +69,7 @@ LOCATIONS = [
     },
     {
         "label": "GISMentors dataset, Czech Republic",
-        "url": "http://training.gismentors.eu/geodata/grass/gismentors.zip",
+        "url": "https://www.training.gismentors.cz/geodata/grass/gismentors.zip",
     },
     {
         "label": "Natural Earth Dataset in WGS84",
