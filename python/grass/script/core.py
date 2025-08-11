@@ -355,7 +355,7 @@ def make_command(
                         "To run the module <%s> add underscore at the end"
                         " of the option <%s> to avoid conflict with Python"
                         " keywords. Underscore at the beginning is"
-                        " deprecated in GRASS GIS 7.0 and has been removed"
+                        " deprecated in GRASS 7.0 and has been removed"
                         " in version 7.1."
                     )
                     % (prog, opt)
@@ -1075,7 +1075,7 @@ def parser() -> tuple[dict[str, str], dict[str, bool]]:
     https://grass.osgeo.org/grass-devel/manuals/parser_standard_options.html
     """
     if not os.getenv("GISBASE"):
-        print("You must be in GRASS GIS to run this program.", file=sys.stderr)
+        print("You must be in GRASS to run this program.", file=sys.stderr)
         sys.exit(1)
 
     cmdline = [basename(sys.argv[0])]

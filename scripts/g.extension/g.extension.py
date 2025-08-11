@@ -81,19 +81,19 @@
 
 # %flag
 # % key: l
-# % description: List available extensions in the official GRASS GIS Addons repository
+# % description: List available extensions in the official GRASS Addons repository
 # % guisection: Print
 # % suppress_required: yes
 # %end
 # %flag
 # % key: c
-# % description: List available extensions in the official GRASS GIS Addons repository including module description
+# % description: List available extensions in the official GRASS Addons repository including module description
 # % guisection: Print
 # % suppress_required: yes
 # %end
 # %flag
 # % key: g
-# % description: List available extensions in the official GRASS GIS Addons repository (shell script style)
+# % description: List available extensions in the official GRASS Addons repository (shell script style)
 # % guisection: Print
 # % suppress_required: yes
 # %end
@@ -201,7 +201,7 @@ else:
 
 class GitAdapter:
     """
-    Basic class for listing and downloading GRASS GIS AddOns using git
+    Basic class for listing and downloading GRASS AddOns using git
 
     """
 
@@ -313,7 +313,7 @@ class GitAdapter:
         """Return commit hash reference and names for remote branches of
         a git repository
 
-        :param url: URL to git repository, defaults to the official GRASS GIS
+        :param url: URL to git repository, defaults to the official GRASS
                     addon repository
         """
         branch_list = gs.Popen(
@@ -330,7 +330,7 @@ class GitAdapter:
         """Return commit hash reference and names for remote branches of
         a git repository
 
-        :param url: URL to git repository, defaults to the official GRASS GIS
+        :param url: URL to git repository, defaults to the official GRASS
                     addon repository
         """
         default_branch = gs.Popen(
@@ -2366,7 +2366,7 @@ def check_style_file(name):
         gs.warning(
             _(
                 "Unable to create '{filename}': {error}."
-                " Is the GRASS GIS documentation package installed?"
+                " Is the GRASS documentation package installed?"
                 " Installation continues,"
                 " but documentation may not look right."
             ).format(filename=addons_file, error=error)
@@ -2853,7 +2853,7 @@ def main():
         else:
             if original_url == "" or flags["o"]:
                 # Query GitHub API only if extension will be downloaded
-                # from official GRASS GIS addons repository
+                # from official GRASS addons repository
                 get_addons_paths(gg_addons_base_dir=options["prefix"])
             source, url = resolve_source_code(
                 name=options["extension"],

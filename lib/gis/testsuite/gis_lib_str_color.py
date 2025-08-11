@@ -30,26 +30,26 @@ class StringToColorTestCase(TestCase):
         self.assertEqual(b.value, blue, msg="Wrong number for blue (%s)" % colors)
 
     def test_grass_format(self):
-        """Test GRASS GIS color format (RRR:GGG:BBB)"""
+        """Test GRASS color format (RRR:GGG:BBB)"""
         self.convert_color("50:150:250", 50, 150, 250)
 
     def test_grass_format_black(self):
-        """Test GRASS GIS color black color"""
+        """Test GRASS color black color"""
         self.convert_color("0:0:0", 0, 0, 0)
 
     def test_grass_format_white(self):
-        """Test GRASS GIS color white color"""
+        """Test GRASS color white color"""
         self.convert_color("255:255:255", 255, 255, 255)
 
     def test_grass_format_separators(self):
-        """Test GRASS GIS color format with all allowed separators"""
+        """Test GRASS color format with all allowed separators"""
         self.convert_color("50,150,250", 50, 150, 250)
         self.convert_color("50:150:250", 50, 150, 250)
         self.convert_color("50;150;250", 50, 150, 250)
         self.convert_color("50 150 250", 50, 150, 250)
 
     def test_grass_format_multiple_separators(self):
-        """Test GRASS GIS color format with duplicated separators"""
+        """Test GRASS color format with duplicated separators"""
         self.convert_color("50, 150, 250", 50, 150, 250)
         self.convert_color("50::150:250", 50, 150, 250)
         self.convert_color("50  ; 150 ; 250", 50, 150, 250)
@@ -93,11 +93,11 @@ class StringToColorTestCase(TestCase):
         self.convert_color("#FFFFFF", 255, 255, 255)
 
     def test_grass_named_black(self):
-        """Test GRASS GIS color black color"""
+        """Test GRASS color black color"""
         self.convert_color("black", 0, 0, 0)
 
     def test_grass_named_white(self):
-        """Test GRASS GIS color white color"""
+        """Test GRASS color white color"""
         self.convert_color("white", 255, 255, 255)
 
 

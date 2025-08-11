@@ -10,7 +10,7 @@ This program requires no command line arguments; the user simply types
 *g.version* on the command line to see the version number and date of
 the GRASS software currently being run by the user.
 
-Information about GRASS GIS core [GIS
+Information about GRASS core [GIS
 Library](https://grass.osgeo.org/programming8/gislib.html) can be
 printed by **-r** flag.
 

@@ -17,8 +17,8 @@ for the new GUI. Due to this Python became more and more important
 and developers converted all shell scripts from GRASS GIS 6 to Python
 for GRASS GIS 7.
 
-To work with *PyGRASS* you need an up-to-date version of GRASS
-GIS. The only action before starting to work with *PyGRASS* is
+To work with *PyGRASS* you need an up-to-date version of GRASS.
+The only action before starting to work with *PyGRASS* is
 to launch GRASS 8 and from the console launch *python* or
 *ipython* (the second one is the recommended way).
 

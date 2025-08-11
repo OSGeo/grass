@@ -4,7 +4,7 @@
 These parameters are then taken as default values by modules so that the
 user does not need to enter the parameters each time.
 
-The default database backend in GRASS GIS is [SQLite](grass-sqlite.md)
+The default database backend in GRASS is [SQLite](grass-sqlite.md)
 (since version 7).
 
 ## NOTES

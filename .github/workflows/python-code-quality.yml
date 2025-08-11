@@ -32,11 +32,11 @@ jobs:
       # renovate: datasource=pypi depName=flake8
       FLAKE8_VERSION: "7.3.0"
       # renovate: datasource=pypi depName=pylint
-      PYLINT_VERSION: "3.3.7"
+      PYLINT_VERSION: "3.3.8"
       # renovate: datasource=pypi depName=bandit
       BANDIT_VERSION: "1.8.6"
       # renovate: datasource=pypi depName=ruff
-      RUFF_VERSION: "0.12.7"
+      RUFF_VERSION: "0.12.8"
 
     runs-on: ${{ matrix.os }}
     permissions:
@@ -127,7 +127,7 @@ jobs:
           path: bandit.sarif
 
       - name: Upload SARIF File into Security Tab
-        uses: github/codeql-action/upload-sarif@51f77329afa6477de8c49fc9c7046c15b9a4e79d # v3.29.5
+        uses: github/codeql-action/upload-sarif@76621b61decf072c1cee8dd1ce2d2a82d33c17ed # v3.29.8
         with:
           sarif_file: bandit.sarif
 
@@ -139,7 +139,7 @@ jobs:
         run: |
           echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
 
-      - uses: rui314/setup-mold@702b1908b5edf30d71a8d1666b724e0f0c6fa035 # v1
+      - uses: rui314/setup-mold@7344740a9418dcdcb481c7df83d9fbd1d5072d7d # v1
       - name: Build
         run: .github/workflows/build_${{ matrix.os }}.sh $HOME/install
 

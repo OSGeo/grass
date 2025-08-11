@@ -144,7 +144,7 @@ r.resamp.bspline -c input=input_raster
 [v.surf.bspline](v.surf.bspline.md)*
 
 Overview: [Interpolation and
-Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS GIS
+Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS
 
 ## AUTHORS
 
