@@ -1095,8 +1095,11 @@ def parser() -> tuple[dict[str, str], dict[str, bool]]:
         s = p.communicate()[0]
         lines = s.split(b"\0")
         if not lines or lines[0] != b"@ARGS_PARSED@":
-            stdout = os.fdopen(sys.stdout.fileno(), "wb")
-            stdout.write(s)
+            if hasattr(sys.stdout, "buffer"):
+                sys.stdout.buffer.write(s)
+            else:
+                text = s.decode(sys.stdout.encoding, "strict")
+                sys.stdout.write(text)
             sys.exit(p.returncode)
         return _parse_opts(lines[1:])
 
