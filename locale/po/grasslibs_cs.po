@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 10:14+0000\n"
+"POT-Creation-Date: 2025-08-09 15:41+0000\n"
 "PO-Revision-Date: 2025-03-12 12:05+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Czech <https://weblate.osgeo.org/projects/grass-gis/grasslibs/cs/>\n"
@@ -1117,27 +1117,27 @@ msgstr ""
 msgid "Region file %s/%s/%s is empty"
 msgstr ""
 
-#: ../lib/gis/gisinit.c:78 ../lib/gis/gisinit.c:129
+#: ../lib/gis/gisinit.c:78 ../lib/gis/gisinit.c:128
 #, c-format
-msgid "Module built against version %s but trying to use version %s. In case of errors you need to rebuild the module against GRASS GIS version %s."
+msgid "Module built against version %s but trying to use version %s. In case of errors you need to rebuild the module against GRASS version %s."
 msgstr ""
 
-#: ../lib/gis/gisinit.c:86 ../lib/gis/gisinit.c:137
+#: ../lib/gis/gisinit.c:85 ../lib/gis/gisinit.c:135
 #, c-format
-msgid "Module built against version %s but trying to use version %s. You need to rebuild GRASS GIS or untangle multiple installations."
+msgid "Module built against version %s but trying to use version %s. You need to rebuild GRASS or untangle multiple installations."
 msgstr ""
 
-#: ../lib/gis/gisinit.c:101
+#: ../lib/gis/gisinit.c:100
 #, c-format
 msgid "MAPSET %s - permission denied"
 msgstr "MAPSET %s - přístup odepřen"
 
-#: ../lib/gis/gisinit.c:104
+#: ../lib/gis/gisinit.c:103
 #, c-format
 msgid "MAPSET %s not found at %s"
 msgstr ""
 
-#: ../lib/gis/gisinit.c:155
+#: ../lib/gis/gisinit.c:153
 msgid "System not initialized. Programmer forgot to call G_gisinit()."
 msgstr "Systém není inicializován. Programátor zapomněl zavolat G_gisinit()."
 
@@ -2049,11 +2049,11 @@ msgid "Project name (not path to project)"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:730
-msgid "GRASS GIS database directory"
+msgid "GRASS database directory"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:731
-msgid "Default: path to the current GRASS GIS database"
+msgid "Default: path to the current GRASS database"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:743
@@ -6662,7 +6662,7 @@ msgstr[2] "%d primitiv zaregistrováno"
 #: ../lib/vector/Vlib/build_sfa.c:668
 #, c-format
 msgid "One vertex registered"
-msgid_plural "%<PRId64> vertices registered"
+msgid_plural "%d vertices registered"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""

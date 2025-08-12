@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 10:14+0000\n"
+"POT-Creation-Date: 2025-08-09 15:41+0000\n"
 "PO-Revision-Date: 2025-06-14 21:41+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Russian <https://weblate.osgeo.org/projects/grass-gis/grasslibs/ru/>\n"
@@ -1129,27 +1129,28 @@ msgstr "Не удалось открыть файл элемента <%s> для
 msgid "Region file %s/%s/%s is empty"
 msgstr "Файл фрагмента %s/%s/%s пуст"
 
-#: ../lib/gis/gisinit.c:78 ../lib/gis/gisinit.c:129
+#: ../lib/gis/gisinit.c:78 ../lib/gis/gisinit.c:128
 #, fuzzy, c-format
-msgid "Module built against version %s but trying to use version %s. In case of errors you need to rebuild the module against GRASS GIS version %s."
+msgid "Module built against version %s but trying to use version %s. In case of errors you need to rebuild the module against GRASS version %s."
 msgstr "Модуль собран для версии %s, но была выполнена попытка использовать его для версии %s. Необходимо заново собрать GRASS GIS или разобраться с множественными установками."
 
-#: ../lib/gis/gisinit.c:86 ../lib/gis/gisinit.c:137
-#, c-format
-msgid "Module built against version %s but trying to use version %s. You need to rebuild GRASS GIS or untangle multiple installations."
+#: ../lib/gis/gisinit.c:85 ../lib/gis/gisinit.c:135
+#, fuzzy, c-format
+#| msgid "Module built against version %s but trying to use version %s. You need to rebuild GRASS GIS or untangle multiple installations."
+msgid "Module built against version %s but trying to use version %s. You need to rebuild GRASS or untangle multiple installations."
 msgstr "Модуль собран для версии %s, но была выполнена попытка использовать его для версии %s. Необходимо заново собрать GRASS GIS или разобраться с множественными установками."
 
-#: ../lib/gis/gisinit.c:101
+#: ../lib/gis/gisinit.c:100
 #, c-format
 msgid "MAPSET %s - permission denied"
 msgstr "НАБОР %s — доступ запрещен"
 
-#: ../lib/gis/gisinit.c:104
+#: ../lib/gis/gisinit.c:103
 #, c-format
 msgid "MAPSET %s not found at %s"
 msgstr "НАБОР %s не найден в %s"
 
-#: ../lib/gis/gisinit.c:155
+#: ../lib/gis/gisinit.c:153
 msgid "System not initialized. Programmer forgot to call G_gisinit()."
 msgstr "Система не инициализирована. Разработчик забыл вызвать функцию G_gisinit()."
 
@@ -2077,11 +2078,15 @@ msgid "Project name (not path to project)"
 msgstr "Имя области (не путь расположения)"
 
 #: ../lib/gis/parser_standard_options.c:730
-msgid "GRASS GIS database directory"
+#, fuzzy
+#| msgid "GRASS GIS database directory"
+msgid "GRASS database directory"
 msgstr "Каталог базы данных GRASS GIS"
 
 #: ../lib/gis/parser_standard_options.c:731
-msgid "Default: path to the current GRASS GIS database"
+#, fuzzy
+#| msgid "Default: path to the current GRASS GIS database"
+msgid "Default: path to the current GRASS database"
 msgstr "По умолчанию: путь к текущей базе данных GRASS GIS"
 
 #: ../lib/gis/parser_standard_options.c:743
@@ -6813,7 +6818,7 @@ msgstr[3] "Один примитив зарегистрирован"
 #| msgid "One vertex registered"
 #| msgid_plural "%<PRId64> vertices registered"
 msgid "One vertex registered"
-msgid_plural "%<PRId64> vertices registered"
+msgid_plural "%d vertices registered"
 msgstr[0] "%<PRId64> вершина зарегистрирована"
 msgstr[1] "%<PRId64> вершины зарегистрировано"
 msgstr[2] "%<PRId64> вершин зарегистрировано"

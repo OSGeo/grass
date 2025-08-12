@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 10:14+0000\n"
+"POT-Creation-Date: 2025-08-09 15:41+0000\n"
 "PO-Revision-Date: 2025-06-14 20:56+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/es/>\n"
@@ -1139,27 +1139,28 @@ msgstr "No ha sido posible abrir archivo de elemento %s para <%s@%s>"
 msgid "Region file %s/%s/%s is empty"
 msgstr "El archivo de región %s/%s/%s está vacío"
 
-#: ../lib/gis/gisinit.c:78 ../lib/gis/gisinit.c:129
+#: ../lib/gis/gisinit.c:78 ../lib/gis/gisinit.c:128
 #, fuzzy, c-format
-msgid "Module built against version %s but trying to use version %s. In case of errors you need to rebuild the module against GRASS GIS version %s."
+msgid "Module built against version %s but trying to use version %s. In case of errors you need to rebuild the module against GRASS version %s."
 msgstr "El módulo fue construido con versión %s pero se está intetando usar versión %s. NEcesita reconstruir GRASS GIS o desenmarañar instalaciones múltiples."
 
-#: ../lib/gis/gisinit.c:86 ../lib/gis/gisinit.c:137
-#, c-format
-msgid "Module built against version %s but trying to use version %s. You need to rebuild GRASS GIS or untangle multiple installations."
+#: ../lib/gis/gisinit.c:85 ../lib/gis/gisinit.c:135
+#, fuzzy, c-format
+#| msgid "Module built against version %s but trying to use version %s. You need to rebuild GRASS GIS or untangle multiple installations."
+msgid "Module built against version %s but trying to use version %s. You need to rebuild GRASS or untangle multiple installations."
 msgstr "El módulo fue construido con versión %s pero se está intetando usar versión %s. NEcesita reconstruir GRASS GIS o desenmarañar instalaciones múltiples."
 
-#: ../lib/gis/gisinit.c:101
+#: ../lib/gis/gisinit.c:100
 #, c-format
 msgid "MAPSET %s - permission denied"
 msgstr "DIRECTORIO DE MAPAS %s - permiso denegado"
 
-#: ../lib/gis/gisinit.c:104
+#: ../lib/gis/gisinit.c:103
 #, c-format
 msgid "MAPSET %s not found at %s"
 msgstr "DIRECTORIO DE MAPAS %s no encontrado en %s"
 
-#: ../lib/gis/gisinit.c:155
+#: ../lib/gis/gisinit.c:153
 msgid "System not initialized. Programmer forgot to call G_gisinit()."
 msgstr "El sistema no ha sido inicializado. EL programador olvidó llamar G_gisinit()."
 
@@ -2085,11 +2086,15 @@ msgid "Project name (not path to project)"
 msgstr "Nombre de Localización (no es ruta de Localización)"
 
 #: ../lib/gis/parser_standard_options.c:730
-msgid "GRASS GIS database directory"
+#, fuzzy
+#| msgid "GRASS GIS database directory"
+msgid "GRASS database directory"
 msgstr "Directorio de bases de datos GRASS GIS"
 
 #: ../lib/gis/parser_standard_options.c:731
-msgid "Default: path to the current GRASS GIS database"
+#, fuzzy
+#| msgid "Default: path to the current GRASS GIS database"
+msgid "Default: path to the current GRASS database"
 msgstr "Predeterminado: ruta a la base de datos actual GRASS GIS"
 
 #: ../lib/gis/parser_standard_options.c:743
@@ -6736,7 +6741,7 @@ msgstr[1] "%d primitivas registradas"
 #: ../lib/vector/Vlib/build_sfa.c:668
 #, c-format
 msgid "One vertex registered"
-msgid_plural "%<PRId64> vertices registered"
+msgid_plural "%d vertices registered"
 msgstr[0] ""
 msgstr[1] ""
 
