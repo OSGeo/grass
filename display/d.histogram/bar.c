@@ -379,7 +379,8 @@ int bar(struct stat_list *dist_stats, /* list of distribution statistics */
         i++;
     tic_every = tics[i].every;
     tic_unit = tics[i].unit;
-    if (G_strlcpy(tic_name, tics[i].name, sizeof(tic_name)) >= sizeof(tic_name)) {
+    if (G_strlcpy(tic_name, tics[i].name, sizeof(tic_name)) >=
+        sizeof(tic_name)) {
         G_fatal_error(_("Tic name <%s> is too long"), tics[i].name);
     }
 
