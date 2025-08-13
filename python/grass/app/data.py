@@ -1,4 +1,4 @@
-"""Provides functions for the main GRASS GIS executable
+"""Provides functions for the main GRASS executable
 
 (C) 2020-2025 by Vaclav Petras and the GRASS Development Team
 
@@ -51,7 +51,7 @@ def get_possible_database_path():
 
 
 def create_database_directory():
-    """Creates the standard GRASS GIS directory.
+    """Creates the standard GRASS directory.
     Creates database directory named grassdata in the standard location
     according to the platform.
 

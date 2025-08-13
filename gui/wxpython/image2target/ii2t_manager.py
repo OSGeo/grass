@@ -1,7 +1,7 @@
 """
 @package gcp.manager
 
-@brief Georectification module for GRASS GIS. Includes ground control
+@brief Georectification module for GRASS. Includes ground control
 point management and interactive point and click GCP creation
 
 Classes:

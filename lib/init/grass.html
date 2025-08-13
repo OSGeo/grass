@@ -52,7 +52,7 @@
 <dd> Prints GRASS configuration parameters (options: arch, build, compiler, date, path, python_path, revision, svn_revision, version)
 
 <dt><b>--exec EXECUTABLE</b>
-<dd> Execute GRASS module or script. The provided executable will be executed in a GRASS GIS non-interactive session.
+<dd> Execute GRASS module or script. The provided executable will be executed in a GRASS non-interactive session.
 
 <dt><b>--tmp-project</b>
 <dd> Run using a temporary project which is created based on the given
@@ -93,7 +93,7 @@ following ways:
 
 <h2>DESCRIPTION</h2>
 
-<p>This command is used to launch GRASS GIS. It will parse the command
+<p>This command is used to launch GRASS. It will parse the command
 line arguments and then initialize GRASS for the user. Since GRASS
 modules require a specific environment, this program must be called
 before any other GRASS module can run. The command line arguments are
@@ -124,7 +124,7 @@ the subprocess itself can be interactive if that is what the user requires.
 
 <h3>Config flag</h3>
 
-The flag <b>--config option</b> prints GRASS GIS configuration and
+The flag <b>--config option</b> prints GRASS configuration and
 version parameters, with the options:
 
 <ul>
@@ -141,7 +141,7 @@ version parameters, with the options:
 
 <h2>SAMPLE DATA</h2>
 
-The GRASS GIS project provides several free sample geospatial datasets
+The GRASS project provides several free sample geospatial datasets
 as ready-to-use projects. They are available to download at
 <a href="https://grass.osgeo.org/download/sample-data/">https://grass.osgeo.org/download/sample-data/</a>.
 
@@ -363,7 +363,7 @@ A very simple Python script ("test.py") may look like this:
 # import GRASS Python bindings (see also pygrass)
 import grass.script as gs
 
-gs.message('Current GRASS GIS environment:')
+gs.message('Current GRASS environment:')
 print(gs.gisenv())
 
 gs.message('Available raster maps:')
@@ -480,10 +480,10 @@ GRASS_PYTHON environmental variable.
 List of <a href="variables.html">GRASS environment variables</a>
 
 <p>
-<a href="https://grass.osgeo.org">GRASS GIS Web site</a><br>
-<a href="https://grasswiki.osgeo.org/wiki/">GRASS GIS User Wiki</a><br>
-<a href="https://github.com/OSGeo/grass/issues">GRASS GIS Bug Tracker</a><br>
-<a href="https://grass.osgeo.org/programming8/">GRASS GIS 8 Programmer's Manual</a>
+<a href="https://grass.osgeo.org">GRASS Web site</a><br>
+<a href="https://grasswiki.osgeo.org/wiki/">GRASS User Wiki</a><br>
+<a href="https://github.com/OSGeo/grass/issues">GRASS Bug Tracker</a><br>
+<a href="https://grass.osgeo.org/programming8/">GRASS 8 Programmer's Manual</a>
 
 <h2>AUTHORS (of this page)</h2>
 

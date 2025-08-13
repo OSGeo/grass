@@ -26,7 +26,7 @@ from .region import RegionManagerFor3D
 
 
 class Map3D:
-    """Creates and displays 3D visualization using GRASS GIS 3D rendering engine NVIZ.
+    """Creates and displays 3D visualization using GRASS 3D rendering engine NVIZ.
 
     The 3D image is created using the *render* function which uses the *m.nviz.image*
     module in the background. Additional images can be
@@ -78,7 +78,7 @@ class Map3D:
                             this region is then used for rendering
 
         When *resolution_fine* is 1, rasters are used in the resolution according
-        to the computational region as usual in GRASS GIS.
+        to the computational region as usual in GRASS.
         Setting *resolution_fine* to values higher than one, causes rasters to
         be resampled to a coarser resolution (2 for twice as coarse than computational
         region resolution). This allows for fast rendering of large rasters without

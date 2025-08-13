@@ -75,7 +75,7 @@ is from the attribute table.
 
 If sampled feature (point, line) contains multiple attribute entries
 (has multiple CAT values), only the first one is reported. If this is a
-limitation in some practical use case, a feature request in GRASS GIS
+limitation in some practical use case, a feature request in GRASS
 issue tracker should be opened.
 
 ## SEE ALSO

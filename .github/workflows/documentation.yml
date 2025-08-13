@@ -83,7 +83,7 @@ jobs:
           pip install -r grass/.github/workflows/python_requirements.txt
           pip install -r grass-addons/.github/workflows/requirements.txt
 
-      - uses: rui314/setup-mold@702b1908b5edf30d71a8d1666b724e0f0c6fa035 # v1
+      - uses: rui314/setup-mold@7344740a9418dcdcb481c7df83d9fbd1d5072d7d # v1
 
       - name: Create installation directory
         run: |
@@ -105,7 +105,7 @@ jobs:
             --enable-largefile \
             --prefix="$INSTALL_PREFIX/" \
             --with-blas \
-            --with-bzlib=no \
+            --with-bzlib \
             --with-cxx \
             --with-fftw \
             --with-freetype \
@@ -116,12 +116,12 @@ jobs:
             --with-netcdf \
             --with-nls \
             --with-odbc \
-            --with-openmp=no \
+            --with-openmp \
             --with-pdal \
             --with-postgres --with-postgres-includes=/usr/include/postgresql \
             --with-proj-share=/usr/share/proj \
-            --with-pthread=no \
-            --with-readline=no \
+            --with-pthread \
+            --with-readline \
             --with-sqlite \
             --with-tiff \
             --with-zstd

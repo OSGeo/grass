@@ -8,7 +8,7 @@
 #
 # By default, the script will look for the source code in the current directory
 # and create bin.x86_64-w64-mingw32\grass$ver.bat (run this batch file to start
-# GRASS GIS) and dist.x86_64-w64-mingw32\etc\env.bat.
+# GRASS) and dist.x86_64-w64-mingw32\etc\env.bat.
 #
 
 # stop on errors

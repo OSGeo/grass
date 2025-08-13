@@ -716,7 +716,7 @@ def init(raise_fatal_error: bool = False, skip_db_version_check: bool = False):
     else:
         backup_howto = _(
             "You need to export it by "
-            "restoring the GRASS GIS version used for creating this DB."
+            "restoring the GRASS version used for creating this DB."
             "Notes: Use t.rast.export and t.vect.export "
             "to make a backup of your"
             " existing space time datasets. To save the timestamps of"
@@ -755,7 +755,7 @@ def init(raise_fatal_error: bool = False, skip_db_version_check: bool = False):
                     _(
                         "Unsupported temporal database: version mismatch."
                         "\n %(backup)s Supported temporal API version is:"
-                        " %(api)i.\nPlease update your GRASS GIS "
+                        " %(api)i.\nPlease update your GRASS "
                         "installation.\nCurrent temporal database info:"
                         "%(info)s"
                     )

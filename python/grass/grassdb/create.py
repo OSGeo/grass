@@ -1,5 +1,5 @@
 """
-Create objects in GRASS GIS Spatial Database
+Create objects in GRASS Spatial Database
 
 (C) 2020 by the GRASS Development Team
 This program is free software under the GNU General Public

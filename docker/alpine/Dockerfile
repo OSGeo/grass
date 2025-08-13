@@ -108,7 +108,7 @@ ENV GRASS_CONFIG="\
       --without-opengl \
       "
 
-# Set environmental variables for GRASS GIS compilation, without debug symbols
+# Set environmental variables for GRASS compilation, without debug symbols
 ENV MYCFLAGS="-O2 -std=gnu99 -m64" \
     MYLDFLAGS="-s -Wl,--no-undefined -lblas" \
     # CXX stuff:
@@ -118,7 +118,7 @@ ENV MYCFLAGS="-O2 -std=gnu99 -m64" \
     CXXFLAGS="$MYCXXFLAGS" \
     NUMTHREADS=2
 
-# These packages are required to compile GRASS GIS.
+# These packages are required to compile GRASS.
 ENV GRASS_BUILD_PACKAGES="\
       build-base \
       bzip2-dev \
@@ -156,11 +156,11 @@ RUN echo "Install main packages";\
     apk add --no-cache --virtual .build-deps $GRASS_BUILD_PACKAGES
     # echo LANG="en_US.UTF-8" > /etc/default/locale;
 
-# Copy and install GRASS GIS
+# Copy and install GRASS
 COPY . /src/grass_build/
 WORKDIR /src/grass_build/
 
-# Configure compile and install GRASS GIS
+# Configure compile and install GRASS
 RUN echo "  => Configure and compile grass" && \
     /src/grass_build/configure $GRASS_CONFIG && \
     make -j $NUMTHREADS && \
@@ -191,7 +191,7 @@ RUN cp /usr/local/grass/gui/wxpython/xml/module_items.xml module_items.xml; \
 
 FROM common AS grass
 
-# GRASS GIS specific
+# GRASS specific
 # allow work with MAPSETs that are not owned by current user
 ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     SHELL="/bin/bash" \
@@ -200,7 +200,7 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     LC_ALL="en_US.UTF-8" \
     PYTHONPATH="/usr/local/grass/etc/python:$PYTHONPATH"
 
-# Copy GRASS GIS and GDAL GRASS driver from build image
+# Copy GRASS and GDAL GRASS driver from build image
 COPY --from=build /usr/local/bin/grass /usr/local/bin/grass
 COPY --from=build /usr/local/grass* /usr/local/grass/
 COPY --from=build /usr/lib/gdalplugins/*_GRASS.so /usr/lib/gdalplugins/
@@ -212,7 +212,7 @@ ENV GRASS_GISBASE=/usr/local/grass
 COPY docker/testdata/simple.laz /tmp/
 COPY docker/testdata/test_grass_python.py docker/testdata/test_grass_session.py docker/alpine/grass_tests.sh /scripts/
 
-# run GRASS GIS python session and scan the test LAZ file; some cleanup
+# run GRASS python session and scan the test LAZ file; some cleanup
 # also show installed version
 RUN ln -sf /usr/local/grass /usr/local/grass85; \
     rm -rf /tmp/grasstest_epsg_25832; \

@@ -4,7 +4,7 @@
  *
  * AUTHOR(S):  Maris Nartiss <maris.gis@gmail.com>
  *             with hints from v.out.ascii, v.buffer, v.what
- *             and other GRASS GIS modules
+ *             and other GRASS modules
  *
  * PURPOSE:    Output vector point/line values along sampling line
  *

@@ -1,4 +1,4 @@
-"""Provides functions for the main GRASS GIS executable
+"""Provides functions for the main GRASS executable
 
 (C) 2024-2025 by Vaclav Petras and the GRASS Development Team
 
@@ -89,7 +89,7 @@ class RuntimePaths:
 def get_grass_config_dir(major_version, minor_version, env):
     """Get configuration directory
 
-    Determines path of GRASS GIS user configuration directory.
+    Determines path of GRASS user configuration directory.
     """
     if env.get("GRASS_CONFIG_DIR"):
         # use GRASS_CONFIG_DIR environmental variable is defined
