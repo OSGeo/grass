@@ -144,7 +144,8 @@ _capture_stderr = False  # capture stderr of subprocesses if possible
 
 
 def call(*args, **kwargs):
-    return Popen(*args, **kwargs).wait()
+    with Popen(*args, **kwargs) as p:
+        return p.wait()
 
 
 # GRASS-oriented interface to subprocess module
@@ -1095,8 +1096,11 @@ def parser() -> tuple[dict[str, str], dict[str, bool]]:
         s = p.communicate()[0]
         lines = s.split(b"\0")
         if not lines or lines[0] != b"@ARGS_PARSED@":
-            stdout = os.fdopen(sys.stdout.fileno(), "wb")
-            stdout.write(s)
+            if hasattr(sys.stdout, "buffer"):
+                sys.stdout.buffer.write(s)
+            else:
+                text = s.decode(sys.stdout.encoding, "strict")
+                sys.stdout.write(text)
             sys.exit(p.returncode)
         return _parse_opts(lines[1:])
 
