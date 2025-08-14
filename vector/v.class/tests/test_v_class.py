@@ -96,6 +96,41 @@ def test_v_class_break_values(setup_vector_with_values, algorithm, expected):
     assert breaks == pytest.approx(expected, rel=1e-2)
 
 
+def test_v_class_required(setup_vector_with_values):
+    """
+    Test that v.class produces the expected output when only the required inputs are provided.
+    """
+    session = setup_vector_with_values
+    output = gs.read_command(
+        "v.class",
+        map="test_points",
+        column="value",
+        algorithm="qua",
+        nbclasses=5,
+        env=session.env,
+    )
+
+    result = output.splitlines()
+    expected = [
+        "",
+        "Classification of value into 5 classes",
+        "Using algorithm: *** qua ***",
+        "Mean: 5.500000\tStandard deviation = 2.872281",
+        "",
+        "   From (excl.)     To (incl.)      Frequency",
+        "",
+        "        1.00000        3.00000              3",
+        "        3.00000        5.00000              2",
+        "        5.00000        7.00000              2",
+        "        7.00000        9.00000              2",
+        "        9.00000       10.00000              1",
+        "",
+        "Note: Minimum of first class is including",
+        "",
+    ]
+    assert result == expected
+
+
 def test_v_class_expression_breaks(setup_vector_with_values):
     """
     Test break values when passing a column expression (value/2).
@@ -156,7 +191,7 @@ def test_v_class_invalid_column(setup_vector_with_values):
 
 @pytest.mark.parametrize(
     ("nbclasses", "expected_breaks"),
-    [(1, [0.0]), (2, [6.0]), (10, [2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0])],
+    [(2, [6.0]), (10, [2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0])],
 )
 def test_v_class_varied_nbclasses(setup_vector_with_values, nbclasses, expected_breaks):
     """
