@@ -144,7 +144,8 @@ _capture_stderr = False  # capture stderr of subprocesses if possible
 
 
 def call(*args, **kwargs):
-    return Popen(*args, **kwargs).wait()
+    with Popen(*args, **kwargs) as p:
+        return p.wait()
 
 
 # GRASS-oriented interface to subprocess module
