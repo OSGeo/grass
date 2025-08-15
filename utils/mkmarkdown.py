@@ -30,7 +30,7 @@ except ImportError:
 
 from mkdocs import (
     read_file,
-    get_version_branch,
+    get_addons_url,
     get_last_git_commit,
     top_dir,
     get_addon_path,
@@ -48,7 +48,6 @@ def parse_source(pgm):
     """
     grass_version = os.getenv("VERSION_NUMBER", "unknown")
     main_url = ""
-    addons_url = ""
     grass_git_branch = "main"
     major, minor, patch = None, None, None
     if grass_version != "unknown":
@@ -57,22 +56,8 @@ def parse_source(pgm):
         main_repo_url = urlparse.urljoin(base_url, "grass")
         main_url = f"{main_repo_url}/tree/{grass_git_branch}/"
         addons_repo_url = urlparse.urljoin(base_url, "grass-addons")
-        version_branch = get_version_branch(
-            major,
-            urlparse.urljoin(base_url, "grass-addons"),
-        )
-        addons_url = f"{addons_repo_url}/tree/{version_branch}/"
 
     cur_dir = os.path.abspath(os.path.curdir)
-    if cur_dir.startswith(top_dir + os.path.sep):
-        repo_url = main_repo_url
-        source_url = main_url
-        pgmdir = cur_dir.replace(top_dir, "").lstrip(os.path.sep)
-    else:
-        # addons
-        repo_url = addons_repo_url
-        source_url = addons_url
-        pgmdir = os.path.sep.join(cur_dir.split(os.path.sep)[-3:])
 
     url_source = ""
     addon_path = None
@@ -82,7 +67,7 @@ def parse_source(pgm):
             # Addon is installed from the local dir
             if os.path.exists(os.getenv("SOURCE_URL")):
                 url_source = urlparse.urljoin(
-                    addons_url,
+                    get_addons_url(base_url=base_url, major_version=major),
                     addon_path,
                 )
             else:
@@ -96,6 +81,15 @@ def parse_source(pgm):
                 res = res._replace(path="/".join(res.path.split("/")[:3]))
                 repo_url = urlparse.urlunsplit(res)
     else:
+        if cur_dir.startswith(top_dir + os.path.sep):
+            repo_url = main_repo_url
+            source_url = main_url
+            pgmdir = cur_dir.replace(top_dir, "").lstrip(os.path.sep)
+        else:
+            # addons
+            repo_url = addons_repo_url
+            source_url = get_addons_url(base_url=base_url, major_version=major)
+            pgmdir = os.path.sep.join(cur_dir.split(os.path.sep)[-3:])
         url_source = urlparse.urljoin(source_url, pgmdir)
     if sys.platform == "win32":
         url_source = url_source.replace(os.path.sep, "/")
