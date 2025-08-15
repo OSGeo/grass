@@ -68,8 +68,7 @@ def _translate(text):
         try:
             import gettext  # pylint: disable=import-outside-toplevel
 
-            gisbase = os.environ["GISBASE"]
-            locale_dir = os.path.join(gisbase, "locale")
+            locale_dir = os.environ["GRASS_LOCALEDIR"]
             # With fallback set to True, not finding the translations files for
             # a language or domain results in a use of null translation, so this
             # does not raise an exception even if the locale settings is broken

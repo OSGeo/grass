@@ -434,8 +434,8 @@ def get_lib_path(modname, libname=None):
     from os import getenv
     from os.path import isdir, join, sep
 
-    if isdir(join(getenv("GISBASE"), "etc", modname)):
-        path = join(os.getenv("GISBASE"), "etc", modname)
+    if isdir(join(getenv("GRASS_ETCDIR"), modname)):
+        path = join(os.getenv("GRASS_ETCDIR"), modname)
     elif (
         getenv("GRASS_ADDON_BASE")
         and libname
