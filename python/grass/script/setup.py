@@ -88,9 +88,11 @@ import shutil
 import subprocess
 import sys
 import tempfile as tmpfile
+import gettext
 
 WINDOWS = sys.platform.startswith("win")
 MACOS = sys.platform.startswith("darwin")
+gettext.install("grasslibs", os.path.join(os.getenv("GISBASE"), "locale"))
 
 VERSION_MAJOR = "@GRASS_VERSION_MAJOR@"
 VERSION_MINOR = "@GRASS_VERSION_MINOR@"
