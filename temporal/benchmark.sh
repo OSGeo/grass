@@ -31,13 +31,13 @@ time t.create type=strds temporaltype=absolute output=bench3 title="Bench3" desc
 time t.create type=strds temporaltype=absolute output=bench4 title="Bench4" descr="Bench4"
 
 echo "### Register maps"
-time t.register -i input=bench1  file=${MAP_LIST} start="2001-01-01 00:00:00" increment="1 day"
+time t.register -i input=bench1 file=${MAP_LIST} start="2001-01-01 00:00:00" increment="1 day"
 echo "### Register maps again"
-time t.register input=bench2  file=${MAP_LIST}
+time t.register input=bench2 file=${MAP_LIST}
 echo "### Register maps again"
-time t.register input=bench3  file=${MAP_LIST}
+time t.register input=bench3 file=${MAP_LIST}
 echo "### Register maps again"
-time t.register input=bench4  file=${MAP_LIST}
+time t.register input=bench4 file=${MAP_LIST}
 
 echo "### List maps"
 time t.rast.list input=bench1 column=name,start_time > "/dev/null"

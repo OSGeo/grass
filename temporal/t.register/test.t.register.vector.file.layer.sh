@@ -11,9 +11,9 @@ g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
 v.random --o -z output=lidar_abs_1 n=5 zmin=0 zmax=100
 
-n1=`g.tempfile pid=4 -d` # Only map names and layer
-n2=`g.tempfile pid=5 -d` # Map names, layer and start time
-n3=`g.tempfile pid=6 -d` # Map names, layer, start time and increment
+n1=$(g.tempfile pid=4 -d) # Only map names and layer
+n2=$(g.tempfile pid=5 -d) # Map names, layer and start time
+n3=$(g.tempfile pid=6 -d) # Map names, layer, start time and increment
 # The vector map
 v.random --o -z seed=1 output=lidar_abs_orig n=100 zmin=0 zmax=100 column=sand
 # Adding new layer with categories

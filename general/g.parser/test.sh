@@ -25,12 +25,12 @@
 # % required: no
 # %end
 
-if [ -z "$GISBASE" ] ; then
+if [ -z "$GISBASE" ]; then
     echo "You must be in GRASS to run this program." 1>&2
     exit 1
 fi
 
-if [ "$1" != "@ARGS_PARSED@" ] ; then
+if [ "$1" != "@ARGS_PARSED@" ]; then
     exec g.parser "$0" "$@"
 fi
 
@@ -38,14 +38,14 @@ fi
 
 echo ""
 
-if [ $GIS_FLAG_F -eq 1 ] ; then
-  g.message message="Flag -f set"
+if [ "$GIS_FLAG_F" -eq 1 ]; then
+    g.message message="Flag -f set"
 else
-  g.message message="Flag -f not set"
+    g.message message="Flag -f not set"
 fi
 
 # test if parameter present:
-if [ -n "$GIS_OPT_OPTION1" ] ; then
+if [ -n "$GIS_OPT_OPTION1" ]; then
     echo "Value of GIS_OPT_OPTION1: '$GIS_OPT_OPTION1'"
 fi
 

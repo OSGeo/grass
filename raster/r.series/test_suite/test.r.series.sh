@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Test r.series basic aggregation functions with map and file inputs
 # We need to set a specific region in the
 # @preprocess step of this test. We generate
@@ -12,8 +13,8 @@ r.mapcalc --o expr="prec_4 = 400"
 r.mapcalc --o expr="prec_5 = 500"
 r.mapcalc --o expr="prec_6 = 600"
 
-TMP_FILE=`g.tempfile pid=1`
-TMP_FILE_WEIGHTS=`g.tempfile pid=2`
+TMP_FILE=$(g.tempfile pid=1)
+TMP_FILE_WEIGHTS=$(g.tempfile pid=2)
 # We create an input files containing empty lines. However, r.series should process the
 # valid raster maps listed in the files.
 cat > "${TMP_FILE}" << EOF
@@ -49,7 +50,6 @@ prec_6|0.5
 
 
 EOF
-
 
 # The first @test with map input and @precision=3
 r.series -z --o --v input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 output=test_1_prec_mean method=average
@@ -94,7 +94,6 @@ r.series    --o --v nprocs=8 input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 wei
 #r.out.ascii --o input=test_1_prec_count_weight output=test_1_prec_count_weight.ref dp=3
 #r.out.ascii --o input=test_1_prec_range_weight output=test_1_prec_range_weight.ref dp=3
 #r.out.ascii --o input=test_1_prec_sum_weight output=test_1_prec_sum_weight.ref dp=3
-
 
 # The second @test with file input and @precision=3
 r.series -z --o --v file="${TMP_FILE}" output=test_2_prec_mean method=average

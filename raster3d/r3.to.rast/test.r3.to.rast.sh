@@ -1,3 +1,4 @@
+#!/usr/bin/env sh
 # This script tests the conversion of voxel data
 # into raster data slices. Validation data for each test
 # is located in the module source directory
@@ -14,15 +15,14 @@ r3.mapcalc --o expr="volume_null = if(row() == 1 || row() == 5, null(), volume)"
 # Create floating point map
 r3.mapcalc --o expr="volume_null_float = float(volume_null)"
 
-
 # First we @test with identical region settings for raster and voxel data
 # Reference data for all generated @raster maps are located in the r3.to.rast source directory.
 r3.to.rast --o input=volume_null output=test_raster_slice_1
 r3.to.rast --o input=volume_null_float output=test_raster_slice_float
 
 # Export of the references
-for i in `g.list type=raster pattern=test_raster_slice_1*` ; do r.out.ascii input=$i output=${i}.txt; done
-for i in `g.list type=raster pattern=test_raster_slice_float*` ; do r.out.ascii input=$i output=${i}.txt; done
+for i in $(g.list type=raster pattern=test_raster_slice_1*); do r.out.ascii input="$i" output="${i}".txt; done
+for i in $(g.list type=raster pattern=test_raster_slice_float*); do r.out.ascii input="$i" output="${i}".txt; done
 
 # The next @preprocess step adjusts the raster region to increase the resolution by 2
 g.region res=7.5 -p3
@@ -32,7 +32,7 @@ g.region res=7.5 -p3
 r3.to.rast --o input=volume_null output=test_raster_slice_2
 
 # Export of the references
-for i in `g.list type=raster pattern=test_raster_slice_2*` ; do r.out.ascii input=$i output=${i}.txt; done
+for i in $(g.list type=raster pattern=test_raster_slice_2*); do r.out.ascii input="$i" output="${i}".txt; done
 
 # The next @preprocess step adjusts the raster region to increase the resolution by 2 again
 g.region res=5 -p3
@@ -42,10 +42,10 @@ g.region res=5 -p3
 r3.to.rast --o input=volume_null output=test_raster_slice_3
 
 # Export of the references
-for i in `g.list type=raster pattern=test_raster_slice_3*` ; do r.out.ascii input=$i output=${i}.txt; done
+for i in $(g.list type=raster pattern=test_raster_slice_3*); do r.out.ascii input="$i" output="${i}".txt; done
 
 # Comparison of references and text files
-for i in `ls *.ref` ; do
-    diff $i "`basename $i .ref`.txt" ;
+for i in $(ls -- *.ref); do
+    diff "$i" "$(basename "$i" .ref).txt"
 done
-rm *.txt
+rm -- ./*.txt

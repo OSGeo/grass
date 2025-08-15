@@ -8,29 +8,29 @@
 #   - calculate md5sum
 #   - compare with known results
 
-if [ -z "$GISBASE" ] ; then
+if [ -z "$GISBASE" ]; then
     echo "You must be in GRASS to run this program."
     exit 1
 fi
 
 #### check if we have sed
-if [ ! -x "$(which sed)" ] ; then
+if [ ! -x "$(which sed)" ]; then
     echo "$PROG: sed required, please install first" 1>&2
     exit 1
 fi
 
 #### check if we have md5sum or md5
-if [ -x "$(which md5sum)" ] ; then
-  MD5="md5sum | cut -d' ' -f1"
-elif [ -x "$(which md5)" ] ; then
-  MD5="md5 -q"
+if [ -x "$(which md5sum)" ]; then
+    MD5="md5sum | cut -d' ' -f1"
+elif [ -x "$(which md5)" ]; then
+    MD5="md5 -q"
 else
-  echo "$PROG: md5sum or md5 required, please install first" 1>&2
-  exit 1
+    echo "$PROG: md5sum or md5 required, please install first" 1>&2
+    exit 1
 fi
 
 #### check if we have cut
-if [ ! -x "$(which cut)" ] ; then
+if [ ! -x "$(which cut)" ]; then
     echo "$PROG: cut required, please install first" 1>&2
     exit 1
 fi
@@ -52,52 +52,51 @@ PID=$$
 TMPNAME=$(echo ${PID}_tmp_testmap | sed 's+\.+_+g')
 
 # some functions - keep order here
-cleanup()
-{
- echo "Removing temporary map"
- g.remove -f type=raster name="$TMPNAME" > /dev/null
+cleanup() {
+    echo "Removing temporary map"
+    g.remove -f type=raster name="$TMPNAME" > /dev/null
 }
 
 # Create our own mask.
 MASKTMP="mask.${TMPNAME}"
 export GRASS_MASK="$MASKTMP"
 
-finalcleanup()
-{
- echo "Restoring user region"
- g.region region="$TMPNAME"
- g.remove -f type=region name="$TMPNAME" > /dev/null
- # Remove our mask if present.
- g.remove -f type=raster name="$MASKTMP" > /dev/null
+finalcleanup() {
+    echo "Restoring user region"
+    g.region region="$TMPNAME"
+    g.remove -f type=region name="$TMPNAME" > /dev/null
+    # Remove our mask if present.
+    g.remove -f type=raster name="$MASKTMP" > /dev/null
 }
 
-check_exit_status()
-{
- if [ "$1" -ne 0 ] ; then
-  echo "An error occurred."
-  cleanup ; finalcleanup
-  exit 1
- fi
+check_exit_status() {
+    if [ "$1" -ne 0 ]; then
+        echo "An error occurred."
+        cleanup
+        finalcleanup
+        exit 1
+    fi
 }
 
 ########## test function goes here
-check_md5sum()
-{
- EXPECTED="$1"
- FOUND="$2"
+check_md5sum() {
+    EXPECTED="$1"
+    FOUND="$2"
 
- # test for NAN
- if [ "$FOUND" = "nan" ] ; then
-  echo "ERROR. $VALUENAME: Expected=$EXPECTED | FOUND=$FOUND"
-  cleanup ; finalcleanup
-  exit 1
- fi
+    # test for NAN
+    if [ "$FOUND" = "nan" ]; then
+        echo "ERROR. $VALUENAME: Expected=$EXPECTED | FOUND=$FOUND"
+        cleanup
+        finalcleanup
+        exit 1
+    fi
 
- if [ "$EXPECTED" != "$FOUND" ] ; then
-  echo "ERROR. The md5sum differs."
-  cleanup ; finalcleanup
-  exit 1
- fi
+    if [ "$EXPECTED" != "$FOUND" ]; then
+        echo "ERROR. The md5sum differs."
+        cleanup
+        finalcleanup
+        exit 1
+    fi
 }
 
 echo "Saving current & setting test region."

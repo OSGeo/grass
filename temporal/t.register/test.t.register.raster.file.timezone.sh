@@ -20,8 +20,8 @@ r.mapcalc --o expr="prec_4 = rand(0, 510)" -s
 r.mapcalc --o expr="prec_5 = rand(0, 300)" -s
 r.mapcalc --o expr="prec_6 = rand(0, 650)" -s
 
-n2=`g.tempfile pid=2 -d` # Map names and start time
-n3=`g.tempfile pid=3 -d` # Map names start time and increment
+n2=$(g.tempfile pid=2 -d) # Map names and start time
+n3=$(g.tempfile pid=3 -d) # Map names start time and increment
 
 cat > "${n2}" << EOF
 prec_1|2001-01-01 10:00:00 +02:00

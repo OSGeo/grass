@@ -4,7 +4,7 @@
 # We need to set a specific region in the
 # @preprocess step of this test.
 
-v.random --o -z output=soil_1 n=100 zmin=0 zmax=100 column=height  seed=1
+v.random --o -z output=soil_1 n=100 zmin=0 zmax=100 column=height seed=1
 v.random --o -z output=soil_2 n=100 zmin=0 zmax=100 column=height seed=2
 v.random --o -z output=soil_3 n=100 zmin=0 zmax=100 column=height seed=3
 v.random --o -z output=soil_4 n=100 zmin=0 zmax=100 column=height seed=4
@@ -13,7 +13,7 @@ v.random --o -z output=soil_6 n=100 zmin=0 zmax=100 column=height seed=6
 v.random --o -z output=soil_7 n=100 zmin=0 zmax=100 column=height seed=7
 v.random --o -z output=soil_8 n=100 zmin=0 zmax=100 column=height seed=8
 
-n1=`g.tempfile pid=1 -d`
+n1=$(g.tempfile pid=1 -d)
 
 cat > "${n1}" << EOF
 soil_1
@@ -37,7 +37,7 @@ t.info type=stvds input=soil_abs2
 t.vect.list input=soil_abs2
 
 t.vect.extract --v --o input=soil_abs1 output=soil_abs3 where="start_time >= '2001-01-01'" \
-               base=new_vect expr=" height > 50" nprocs=1
+    base=new_vect expr=" height > 50" nprocs=1
 t.info type=stvds input=soil_abs3
 t.vect.list input=soil_abs3 columns=name,start_time,end_time,primitives
 
