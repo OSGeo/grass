@@ -506,7 +506,7 @@ def start_command(
     verbose=False,
     superquiet=False,
     **kwargs,
-):
+) -> Popen:
     """Returns a :class:`~grass.script.core.Popen` object with the command created by
     :py:func:`~grass.script.core.make_command`.
     Accepts any of the arguments which :py:class:`Popen()` accepts apart from "args"
