@@ -1,6 +1,6 @@
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-from grass.script.core import read_command
+from grass.script.core import read_command, parse_command
 
 
 class TestVWhatRast(TestCase):
@@ -76,6 +76,132 @@ class TestVWhatRast(TestCase):
         ]
         self.assertEqual(result, expected)
 
+        # Verify with explicit plain format
+        result = read_command(
+            "v.what.rast",
+            map=self.test_vector,
+            raster=self.test_raster,
+            flags="p",
+            format="plain",
+        ).splitlines()
+        self.assertEqual(result, expected)
+
+    def test_csv_output_int(self):
+        """Verify CSV style output with integer map."""
+        result = read_command(
+            "v.what.rast",
+            map=self.test_vector,
+            raster=self.test_raster,
+            flags="p",
+            format="csv",
+        ).splitlines()
+        expected = [
+            "cat,value",
+            "21,1",
+            "22,2",
+            "23,3",
+            "24,4",
+            "25,*",
+            "16,1",
+            "17,2",
+            "18,3",
+            "19,4",
+            "20,*",
+            "11,1",
+            "12,2",
+            "13,3",
+            "14,4",
+            "15,*",
+            "6,1",
+            "7,2",
+            "8,3",
+            "9,4",
+            "10,*",
+            "1,1",
+            "2,2",
+            "3,3",
+            "4,4",
+            "5,*",
+        ]
+        self.assertEqual(result, expected)
+
+        # Verify with pipe separator
+        result = read_command(
+            "v.what.rast",
+            map=self.test_vector,
+            raster=self.test_raster,
+            flags="p",
+            format="csv",
+            separator="pipe",
+        ).splitlines()
+        expected = [
+            "cat|value",
+            "21|1",
+            "22|2",
+            "23|3",
+            "24|4",
+            "25|*",
+            "16|1",
+            "17|2",
+            "18|3",
+            "19|4",
+            "20|*",
+            "11|1",
+            "12|2",
+            "13|3",
+            "14|4",
+            "15|*",
+            "6|1",
+            "7|2",
+            "8|3",
+            "9|4",
+            "10|*",
+            "1|1",
+            "2|2",
+            "3|3",
+            "4|4",
+            "5|*",
+        ]
+        self.assertEqual(result, expected)
+
+    def test_json_output_int(self):
+        """Verify JSON style output with integer map."""
+        result = parse_command(
+            "v.what.rast",
+            map=self.test_vector,
+            raster=self.test_raster,
+            flags="p",
+            format="json",
+        )
+        expected = [
+            {"category": 21, "value": 1},
+            {"category": 22, "value": 2},
+            {"category": 23, "value": 3},
+            {"category": 24, "value": 4},
+            {"category": 25, "value": None},
+            {"category": 16, "value": 1},
+            {"category": 17, "value": 2},
+            {"category": 18, "value": 3},
+            {"category": 19, "value": 4},
+            {"category": 20, "value": None},
+            {"category": 11, "value": 1},
+            {"category": 12, "value": 2},
+            {"category": 13, "value": 3},
+            {"category": 14, "value": 4},
+            {"category": 15, "value": None},
+            {"category": 6, "value": 1},
+            {"category": 7, "value": 2},
+            {"category": 8, "value": 3},
+            {"category": 9, "value": 4},
+            {"category": 10, "value": None},
+            {"category": 1, "value": 1},
+            {"category": 2, "value": 2},
+            {"category": 3, "value": 3},
+            {"category": 4, "value": 4},
+            {"category": 5, "value": None},
+        ]
+        self.assertEqual(result, expected)
+
     def test_plain_output_float(self):
         """Verify plain text output with float map."""
         result = read_command(
@@ -107,6 +233,132 @@ class TestVWhatRast(TestCase):
             "3|1.5",
             "4|2",
             "5|4.5",
+        ]
+        self.assertEqual(result, expected)
+
+        # Verify with explicit plain format
+        result = read_command(
+            "v.what.rast",
+            map=self.test_vector,
+            raster=self.float_raster,
+            flags="p",
+            format="plain",
+        ).splitlines()
+        self.assertEqual(result, expected)
+
+    def test_csv_output_float(self):
+        """Verify CSV style output with float map."""
+        result = read_command(
+            "v.what.rast",
+            map=self.test_vector,
+            raster=self.float_raster,
+            flags="p",
+            format="csv",
+        ).splitlines()
+        expected = [
+            "cat,value",
+            "21,0.5",
+            "22,1",
+            "23,1.5",
+            "24,2",
+            "25,4.5",
+            "16,0.5",
+            "17,1",
+            "18,1.5",
+            "19,2",
+            "20,4.5",
+            "11,0.5",
+            "12,1",
+            "13,1.5",
+            "14,2",
+            "15,4.5",
+            "6,0.5",
+            "7,1",
+            "8,1.5",
+            "9,2",
+            "10,4.5",
+            "1,0.5",
+            "2,1",
+            "3,1.5",
+            "4,2",
+            "5,4.5",
+        ]
+        self.assertEqual(result, expected)
+
+        # Verify with pipe separator
+        result = read_command(
+            "v.what.rast",
+            map=self.test_vector,
+            raster=self.float_raster,
+            flags="p",
+            format="csv",
+            separator="pipe",
+        ).splitlines()
+        expected = [
+            "cat|value",
+            "21|0.5",
+            "22|1",
+            "23|1.5",
+            "24|2",
+            "25|4.5",
+            "16|0.5",
+            "17|1",
+            "18|1.5",
+            "19|2",
+            "20|4.5",
+            "11|0.5",
+            "12|1",
+            "13|1.5",
+            "14|2",
+            "15|4.5",
+            "6|0.5",
+            "7|1",
+            "8|1.5",
+            "9|2",
+            "10|4.5",
+            "1|0.5",
+            "2|1",
+            "3|1.5",
+            "4|2",
+            "5|4.5",
+        ]
+        self.assertEqual(result, expected)
+
+    def test_json_output_float(self):
+        """Verify JSON style output with float map."""
+        result = parse_command(
+            "v.what.rast",
+            map=self.test_vector,
+            raster=self.float_raster,
+            flags="p",
+            format="json",
+        )
+        expected = [
+            {"category": 21, "value": 0.5},
+            {"category": 22, "value": 1},
+            {"category": 23, "value": 1.5},
+            {"category": 24, "value": 2},
+            {"category": 25, "value": 4.5},
+            {"category": 16, "value": 0.5},
+            {"category": 17, "value": 1},
+            {"category": 18, "value": 1.5},
+            {"category": 19, "value": 2},
+            {"category": 20, "value": 4.5},
+            {"category": 11, "value": 0.5},
+            {"category": 12, "value": 1},
+            {"category": 13, "value": 1.5},
+            {"category": 14, "value": 2},
+            {"category": 15, "value": 4.5},
+            {"category": 6, "value": 0.5},
+            {"category": 7, "value": 1},
+            {"category": 8, "value": 1.5},
+            {"category": 9, "value": 2},
+            {"category": 10, "value": 4.5},
+            {"category": 1, "value": 0.5},
+            {"category": 2, "value": 1},
+            {"category": 3, "value": 1.5},
+            {"category": 4, "value": 2},
+            {"category": 5, "value": 4.5},
         ]
         self.assertEqual(result, expected)
 
