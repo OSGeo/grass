@@ -42,23 +42,19 @@ int G_vasprintf(char **out, const char *fmt, va_list ap)
 #ifdef HAVE_ASPRINTF
     return vasprintf(out, fmt, ap);
 #else
-    size_t size = strlen(fmt) + 50;
-    char *buf = G_malloc(size);
+    va_list aq;
+    char *buf;
+    size_t size;
     int count;
 
-    for (;;) {
-        /* BUG: according to man vsnprintf,
-         * va_start() should be called immediately before vsnprintf(),
-         * and va_end() immediately after vsnprintf()
-         * otherwise there will be memory corruption */
-        count = vsnprintf(buf, size, fmt, ap);
-        if (count >= 0 && count < size)
-            break;
-        size *= 2;
-        buf = G_realloc(buf, size);
-    }
-
-    buf = G_realloc(buf, count + 1);
+    va_copy(aq, ap);
+    /* determine a sufficient size */
+    count = vsnprintf(NULL, 0, fmt, ap);
+    /* count holds the number of printable characters; size must be +1 for '\0'
+     */
+    buf = G_malloc(size = ++count);
+    count = vsnprintf(buf, size, fmt, aq);
+    va_end(aq);
     *out = buf;
 
     return count;
@@ -98,29 +94,22 @@ int G_asprintf(char **out, const char *fmt, ...)
 int G_rasprintf(char **out, size_t *size, const char *fmt, ...)
 {
     va_list ap;
-    int count;
     char *buf = *out;
     size_t osize = *size;
+    int count;
 
-    if (osize < strlen(fmt) + 50) {
-        osize = strlen(fmt) + 50;
-        buf = G_realloc(buf, osize);
-    }
+    va_start(ap, fmt);
+    count = vsnprintf(buf, osize, fmt, ap);
+    va_end(ap);
 
-    for (;;) {
+    if (count >= osize) {
+        /* count holds the number of printable characters; osize must be +1 for
+         * '\0' */
+        buf = G_realloc(buf, osize = ++count);
         va_start(ap, fmt);
         count = vsnprintf(buf, osize, fmt, ap);
         va_end(ap);
-        if (count >= 0 && (size_t)count < osize)
-            break;
-        if (count > -1)
-            osize = count + 1;
-        else
-            osize *= 2;
-
-        buf = G_realloc(buf, osize);
     }
-
     *out = buf;
     *size = osize;
 
