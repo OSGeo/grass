@@ -180,7 +180,7 @@ def discover_modules(
                     raise ImportError(
                         "Cannot import module named %s in %s (%s)"
                         % (name, full, e.message)
-                    )
+                    ) from e
                     # alternative is to create TestClass which will raise
                     # see unittest.loader
             if add:
