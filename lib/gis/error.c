@@ -487,7 +487,7 @@ static int print_word(FILE *fd, char **word, int *len, const int lead)
 /* Print one message, prefix inserted before each new line */
 static void print_sentence(FILE *fd, const int type, const char *msg)
 {
-    char prefix[100];
+    char prefix[100] = "";
     const char *start;
     int id = G_counter_next(&message_id);
 
