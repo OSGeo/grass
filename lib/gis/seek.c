@@ -50,14 +50,22 @@ off_t G_ftell(FILE *fp)
 void G_fseek(FILE *fp, off_t offset, int whence)
 {
 #ifdef HAVE_FSEEKO
-    if (fseeko(fp, offset, whence) != 0)
-        G_fatal_error(_("Unable to seek: %s"), strerror(errno));
+    if (fseeko(fp, offset, whence) != 0) {
+        int err = errno;
+        /* GTC seek refers to reading/writing from a different position
+         * in a file */
+        G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+    }
 #else
     long loff = (long)offset;
 
     if ((off_t)loff != offset)
         G_fatal_error(_("Seek offset out of range"));
-    if (fseek(fp, loff, whence) != 0)
-        G_fatal_error(_("Unable to seek: %s"), strerror(errno));
+    if (fseek(fp, loff, whence) != 0) {
+        int err = errno;
+        /* GTC seek refers to reading/writing from a different position
+         * in a file */
+        G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+    }
 #endif
 }
