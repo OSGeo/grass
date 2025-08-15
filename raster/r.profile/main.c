@@ -19,6 +19,7 @@ int clr;
 struct Colors colors;
 
 static double dist, e, n;
+char *fs;
 
 int main(int argc, char *argv[])
 {
@@ -40,8 +41,8 @@ int main(int argc, char *argv[])
     struct Cell_head window;
     struct {
         struct Option *opt1, *profile, *res, *output, *null_str, *coord_file,
-            *units, *format, *color_format;
-        struct Flag *g, *c, *m;
+            *units, *format, *color_format, *fs;
+        struct Flag *g, *c;
     } parm;
     struct GModule *module;
     enum OutputFormat format;
@@ -110,12 +111,20 @@ int main(int argc, char *argv[])
           "Meters are used by default in geographic (latlon) projects.");
 
     parm.format = G_define_standard_option(G_OPT_F_FORMAT);
+    parm.format->options = "plain,csv,json";
+    parm.format->descriptions = ("plain;Human readable text output;"
+                                 "csv;CSV (Comma Separated Values);"
+                                 "json;JSON (JavaScript Object Notation);");
     parm.format->guisection = _("Print");
 
     parm.color_format = G_define_standard_option(G_OPT_C_FORMAT);
     parm.color_format->required = NO;
     parm.color_format->answer = NULL;
     parm.color_format->guisection = _("Color");
+
+    parm.fs = G_define_standard_option(G_OPT_F_SEP);
+    parm.fs->answer = "comma";
+    parm.fs->guisection = _("Formatting");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -167,19 +176,24 @@ int main(int argc, char *argv[])
         array_value = json_value_init_array();
         array = json_array(array_value);
     }
+    else if (strcmp(parm.format->answer, "csv") == 0) {
+        format = CSV;
+    }
     else {
         format = PLAIN;
 
         G_message(_("Using resolution: %g [%s]"), res / factor, unit);
     }
 
+    fs = G_option_to_separator(parm.fs);
+
     if (clr) {
         if (parm.color_format->answer == NULL ||
             parm.color_format->answer[0] == '\0') {
-            if (format == JSON)
-                parm.color_format->answer = "hex";
-            else
+            if (format == PLAIN)
                 parm.color_format->answer = "triplet";
+            else
+                parm.color_format->answer = "hex";
         }
 
         clr_frmt = G_option_to_color_format(parm.color_format);
@@ -226,6 +240,15 @@ int main(int argc, char *argv[])
         if (clr)
             strcat(formatbuff, _(" RGB color"));
         G_message("%s", formatbuff);
+    }
+    else if (format == CSV) {
+        /* CSV Header */
+        if (coords)
+            fprintf(fp, "%s%s%s%s", "easting", fs, "northing", fs);
+        fprintf(fp, "%s%s%s", "distance", fs, "value");
+        if (clr)
+            fprintf(fp, "%s%s", fs, "color");
+        fprintf(fp, "\n");
     }
 
     /* Get Profile Start Coords */
