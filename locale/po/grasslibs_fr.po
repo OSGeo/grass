@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 10:14+0000\n"
+"POT-Creation-Date: 2025-08-09 15:41+0000\n"
 "PO-Revision-Date: 2025-08-04 18:54+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs/fr/>\n"
@@ -585,7 +585,7 @@ msgstr ""
 "-- tests unitaires gjson terminés avec succès --"
 
 #: ../lib/gis/adj_cellhd.c:57 ../lib/gis/adj_cellhd.c:170
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Illegal n-s resolution value: %g"
 msgstr "Valeur de résolution n-s illégale : %g"
 
@@ -595,7 +595,7 @@ msgid "Illegal number of rows: %d (resolution is %g)"
 msgstr "Nombre de lignes illégal : %d (la résolution est %g)"
 
 #: ../lib/gis/adj_cellhd.c:68 ../lib/gis/adj_cellhd.c:188
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Illegal e-w resolution value: %g"
 msgstr "Valeur de résolution e-o illégale : %g"
 
@@ -652,12 +652,12 @@ msgid "Illegal number of rows for 3D: %d (resolution is %g)"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:191
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Illegal e-w resolution value for 3D: %g"
 msgstr "Valeur de résolution e-o illégale pour 3D : %g"
 
 #: ../lib/gis/adj_cellhd.c:200
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Illegal number of columns for 3D: %d (resolution is %g)"
 msgstr "Nombre de colonnes illégal pour 3D : %d (la résolution est %g)"
 
@@ -667,7 +667,7 @@ msgid "Illegal t-b resolution value: %g"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:211
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Illegal depths value: %d"
 msgstr "Valeur des profondeurs illégale : %d"
 
@@ -1121,27 +1121,29 @@ msgstr "Impossible d'ouvrir le fichier élément <%s> pour <%s@%s>"
 msgid "Region file %s/%s/%s is empty"
 msgstr "Le fichier de région %s/%s/%s est vide"
 
-#: ../lib/gis/gisinit.c:78 ../lib/gis/gisinit.c:129
-#, c-format
-msgid "Module built against version %s but trying to use version %s. In case of errors you need to rebuild the module against GRASS GIS version %s."
+#: ../lib/gis/gisinit.c:78 ../lib/gis/gisinit.c:128
+#, fuzzy, c-format
+#| msgid "Module built against version %s but trying to use version %s. In case of errors you need to rebuild the module against GRASS GIS version %s."
+msgid "Module built against version %s but trying to use version %s. In case of errors you need to rebuild the module against GRASS version %s."
 msgstr "Module compilé avec la version %s mais tente d'utiliser la version %s. Vous devez recompiler GRASS ou gérer les versions multiples."
 
-#: ../lib/gis/gisinit.c:86 ../lib/gis/gisinit.c:137
-#, c-format
-msgid "Module built against version %s but trying to use version %s. You need to rebuild GRASS GIS or untangle multiple installations."
+#: ../lib/gis/gisinit.c:85 ../lib/gis/gisinit.c:135
+#, fuzzy, c-format
+#| msgid "Module built against version %s but trying to use version %s. You need to rebuild GRASS GIS or untangle multiple installations."
+msgid "Module built against version %s but trying to use version %s. You need to rebuild GRASS or untangle multiple installations."
 msgstr "Module compilé avec la version %s mais tentative d'utiliser la version %s. Vous devez recompiler GRASS ou gérer les versions multiples."
 
-#: ../lib/gis/gisinit.c:101
+#: ../lib/gis/gisinit.c:100
 #, c-format
 msgid "MAPSET %s - permission denied"
 msgstr "Jeu de données (MAPSET) %s - permission refusée"
 
-#: ../lib/gis/gisinit.c:104
+#: ../lib/gis/gisinit.c:103
 #, c-format
 msgid "MAPSET %s not found at %s"
 msgstr "Jeu de cartes %s non trouvé dans %s"
 
-#: ../lib/gis/gisinit.c:155
+#: ../lib/gis/gisinit.c:153
 msgid "System not initialized. Programmer forgot to call G_gisinit()."
 msgstr "Système non initialisé. Le développeur a oublié d'appeler G_gisinit()."
 
@@ -2058,11 +2060,15 @@ msgid "Project name (not path to project)"
 msgstr "Nom du projet (pas le chemin vers le projet)"
 
 #: ../lib/gis/parser_standard_options.c:730
-msgid "GRASS GIS database directory"
+#, fuzzy
+#| msgid "GRASS GIS database directory"
+msgid "GRASS database directory"
 msgstr "Répertoire de la base du SIG GRASS"
 
 #: ../lib/gis/parser_standard_options.c:731
-msgid "Default: path to the current GRASS GIS database"
+#, fuzzy
+#| msgid "Default: path to the current GRASS GIS database"
+msgid "Default: path to the current GRASS database"
 msgstr "Défaut : chemin de la base SIG GRASS courante"
 
 #: ../lib/gis/parser_standard_options.c:743
@@ -6732,9 +6738,11 @@ msgstr[1] "%d primitives référencées"
 
 #: ../lib/vector/Vlib/build_nat.c:122 ../lib/vector/Vlib/build_sfa.c:381
 #: ../lib/vector/Vlib/build_sfa.c:668
-#, c-format
+#, fuzzy, c-format
+#| msgid "One vertex registered"
+#| msgid_plural "%<PRId64> vertices registered"
 msgid "One vertex registered"
-msgid_plural "%<PRId64> vertices registered"
+msgid_plural "%d vertices registered"
 msgstr[0] "%d sommet référencé"
 msgstr[1] "%<PRId64> sommets référencés"
 

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 10:14+0000\n"
-"PO-Revision-Date: 2025-07-12 20:05+0000\n"
+"POT-Creation-Date: 2025-08-09 15:41+0000\n"
+"PO-Revision-Date: 2025-08-11 09:39+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/sv/>\n"
 "Language: sv\n"
@@ -1111,27 +1111,27 @@ msgstr "Det går inte att öppna elementfilen <%s> för <%s@%s>"
 msgid "Region file %s/%s/%s is empty"
 msgstr "Regionfilen %s/%s/%s är tom"
 
-#: ../lib/gis/gisinit.c:78 ../lib/gis/gisinit.c:129
+#: ../lib/gis/gisinit.c:78 ../lib/gis/gisinit.c:128
 #, c-format
-msgid "Module built against version %s but trying to use version %s. In case of errors you need to rebuild the module against GRASS GIS version %s."
-msgstr "Modulen byggdes mot version %s men försöker använda version %s. I händelse av fel måste du bygga om modulen mot GRASS GIS version %s."
+msgid "Module built against version %s but trying to use version %s. In case of errors you need to rebuild the module against GRASS version %s."
+msgstr "Modulen byggdes mot version %s men försöker använda version %s. I händelse av fel måste du bygga om modulen mot GRASS version %s."
 
-#: ../lib/gis/gisinit.c:86 ../lib/gis/gisinit.c:137
+#: ../lib/gis/gisinit.c:85 ../lib/gis/gisinit.c:135
 #, c-format
-msgid "Module built against version %s but trying to use version %s. You need to rebuild GRASS GIS or untangle multiple installations."
-msgstr "Modulen byggdes mot version %s men försöker använda version %s. Du måste bygga om GRASS GIS eller lösa upp flera installationer."
+msgid "Module built against version %s but trying to use version %s. You need to rebuild GRASS or untangle multiple installations."
+msgstr "Modulen byggdes mot version %s men försöker använda version %s. Du måste bygga om GRASS eller lösa upp flera installationer."
 
-#: ../lib/gis/gisinit.c:101
+#: ../lib/gis/gisinit.c:100
 #, c-format
 msgid "MAPSET %s - permission denied"
 msgstr "MAPSET %s - behörighet nekad"
 
-#: ../lib/gis/gisinit.c:104
+#: ../lib/gis/gisinit.c:103
 #, c-format
 msgid "MAPSET %s not found at %s"
 msgstr "MAPSET %s hittades inte på %s"
 
-#: ../lib/gis/gisinit.c:155
+#: ../lib/gis/gisinit.c:153
 msgid "System not initialized. Programmer forgot to call G_gisinit()."
 msgstr "Systemet är inte initialiserat. Programmeraren glömde att anropa G_gisinit()."
 
@@ -2046,12 +2046,12 @@ msgid "Project name (not path to project)"
 msgstr "Projektnamn (inte sökväg till projektet)"
 
 #: ../lib/gis/parser_standard_options.c:730
-msgid "GRASS GIS database directory"
-msgstr "GRASS GIS-databas katalog"
+msgid "GRASS database directory"
+msgstr "GRASS-databaskatalog"
 
 #: ../lib/gis/parser_standard_options.c:731
-msgid "Default: path to the current GRASS GIS database"
-msgstr "Standard: sökväg till den aktuella GRASS GIS-databasen"
+msgid "Default: path to the current GRASS database"
+msgstr "Standard: sökväg till den aktuella GRASS-databasen"
 
 #: ../lib/gis/parser_standard_options.c:743
 msgid "Coordinates"
@@ -6713,9 +6713,9 @@ msgstr[1] "%d primitiver registrerade"
 #: ../lib/vector/Vlib/build_sfa.c:668
 #, c-format
 msgid "One vertex registered"
-msgid_plural "%<PRId64> vertices registered"
+msgid_plural "%d vertices registered"
 msgstr[0] "Ett hörn registrerat"
-msgstr[1] "%<PRId64> hörn registrerade"
+msgstr[1] "%d hörn registrerade"
 
 #: ../lib/vector/Vlib/build_nat.c:137
 msgid "Building areas..."

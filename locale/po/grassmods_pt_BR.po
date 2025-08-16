@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 10:14+0000\n"
+"POT-Creation-Date: 2025-08-09 15:41+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.osgeo.org/projects/grass-gis/grassmods/pt_BR/>\n"
@@ -460,7 +460,7 @@ msgid "Lists all databases for a given driver and location."
 msgstr ""
 
 #: ../db/db.describe/main.c:140 ../general/g.proj/output.c:382
-#: ../general/g.region/main.c:986 ../general/g.version/main.c:411
+#: ../general/g.region/main.c:986 ../general/g.version/main.c:409
 #: ../imagery/i.group/main.c:301 ../raster/r.category/main.c:412
 #: ../raster/r.describe/dumplist.c:69 ../raster/r.info/main.c:997
 #: ../raster/r.mask.status/main.c:111 ../raster/r.object.geometry/main.c:401
@@ -4018,6 +4018,7 @@ msgstr "Número de dígitos significativos (apenas ponto flutuante)"
 msgid "Get text color from cell color value"
 msgstr "Usar cor do texto a partir da cor da célula"
 
+#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #: ../display/d.rast.num/main.c:211 ../raster/r.thin/io.c:106
@@ -7536,7 +7537,9 @@ msgid "license"
 msgstr "licença"
 
 #: ../general/g.version/main.c:80
-msgid "Displays GRASS GIS version info."
+#, fuzzy
+#| msgid "Displays GRASS GIS version info."
+msgid "Displays GRASS version info."
 msgstr "Exibe informações da versão do GRASS GIS."
 
 #: ../general/g.version/main.c:82
@@ -7585,34 +7588,34 @@ msgstr "Shell"
 msgid "Cannot use the -g flag with format=json; please select only one option."
 msgstr ""
 
-#: ../general/g.version/main.c:268
+#: ../general/g.version/main.c:267
 #, c-format
 msgid "Cannot determine GRASS libgis version and date number. The GRASS build might be broken. Report this to developers or packagers.\n"
 msgstr ""
 
-#: ../general/g.version/main.c:281
-msgid "GRASS GIS libgis version and date number don't have the expected format. Trying to print the original strings..."
+#: ../general/g.version/main.c:279
+msgid "GRASS libgis version and date number don't have the expected format. Trying to print the original strings..."
 msgstr ""
 
-#: ../general/g.version/main.c:284
+#: ../general/g.version/main.c:282
 #, c-format
 msgid "GIS_H_VERSION=\"%s\""
 msgstr ""
 
-#: ../general/g.version/main.c:285
+#: ../general/g.version/main.c:283
 #, c-format
 msgid "GIS_H_DATE=\"%s\""
 msgstr ""
 
-#: ../general/g.version/main.c:347
+#: ../general/g.version/main.c:345
 msgid "GRASS not compiled with GDAL/OGR support"
 msgstr ""
 
-#: ../general/g.version/main.c:372
+#: ../general/g.version/main.c:370
 msgid "GRASS not compiled with GEOS support"
 msgstr ""
 
-#: ../general/g.version/main.c:398
+#: ../general/g.version/main.c:396
 msgid "GRASS not compiled with SQLite support"
 msgstr ""
 
@@ -12010,8 +12013,8 @@ msgstr ""
 msgid "Predict with a Support Vector Machine"
 msgstr ""
 
-#. GTC: SVM prediction input
 #. GTC: SVM training input
+#. GTC: SVM prediction input
 #: ../imagery/i.svm.predict/main.c:60 ../imagery/i.svm.train/main.c:62
 #, fuzzy
 msgid "Maps with feature values (attributes)"
@@ -13299,15 +13302,15 @@ msgid "Specific branch to fetch addon from (only used when fetching from git)"
 msgstr ""
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:16
-msgid "List available extensions in the official GRASS GIS Addons repository"
+msgid "List available extensions in the official GRASS Addons repository"
 msgstr ""
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:18
-msgid "List available extensions in the official GRASS GIS Addons repository including module description"
+msgid "List available extensions in the official GRASS Addons repository including module description"
 msgstr ""
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:20
-msgid "List available extensions in the official GRASS GIS Addons repository (shell script style)"
+msgid "List available extensions in the official GRASS Addons repository (shell script style)"
 msgstr ""
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:22
@@ -14459,7 +14462,7 @@ msgid "Include no data values"
 msgstr ""
 
 #: ../locale/scriptstrings/r.pack_to_translate.c:1
-msgid "Exports a raster map as GRASS GIS specific archive file"
+msgid "Exports a raster map as GRASS specific archive file"
 msgstr ""
 
 #: ../locale/scriptstrings/r.pack_to_translate.c:4
@@ -14651,7 +14654,7 @@ msgid "Output field separator"
 msgstr "Separador de campo"
 
 #: ../locale/scriptstrings/r.unpack_to_translate.c:1
-msgid "Imports a GRASS GIS specific raster archive file (packed with r.pack) as a raster map"
+msgid "Imports a GRASS specific raster archive file (packed with r.pack) as a raster map"
 msgstr ""
 
 #: ../locale/scriptstrings/r.unpack_to_translate.c:5
@@ -16230,8 +16233,10 @@ msgid "select"
 msgstr "selecionar"
 
 #: ../locale/scriptstrings/t.vect.export_to_translate.c:1
-msgid "Exports a space time vector dataset as GRASS GIS specific archive file."
-msgstr ""
+#, fuzzy
+#| msgid "Name of a space time raster dataset archive"
+msgid "Exports a space time vector dataset as GRASS specific archive file."
+msgstr "Nome de um arquivo de conjunto de dados raster de espaço-tempo"
 
 #: ../locale/scriptstrings/t.vect.export_to_translate.c:6
 msgid "Name of a space time vector dataset archive"
@@ -16262,7 +16267,7 @@ msgid "Register empty maps"
 msgstr ""
 
 #: ../locale/scriptstrings/t.vect.import_to_translate.c:1
-msgid "Imports a space time vector dataset from a GRASS GIS specific archive file."
+msgid "Imports a space time vector dataset from a GRASS specific archive file."
 msgstr ""
 
 #: ../locale/scriptstrings/t.vect.import_to_translate.c:12
@@ -16835,8 +16840,10 @@ msgid "Restrict fetch to features which touch the current region"
 msgstr ""
 
 #: ../locale/scriptstrings/v.pack_to_translate.c:1
-msgid "Exports a vector map as GRASS GIS specific archive file"
-msgstr ""
+#, fuzzy
+#| msgid "Exports a vector map to SVG file."
+msgid "Exports a vector map as GRASS specific archive file"
+msgstr "Exporta um mapa vetorial para um arquivo SVG."
 
 #: ../locale/scriptstrings/v.pack_to_translate.c:5
 msgid "Name of vector map to pack up"
@@ -16919,7 +16926,7 @@ msgid "Method used for point interpolation"
 msgstr ""
 
 #: ../locale/scriptstrings/v.unpack_to_translate.c:1
-msgid "Imports a GRASS GIS specific vector archive file (packed with v.pack) as a vector map"
+msgid "Imports a GRASS specific vector archive file (packed with v.pack) as a vector map"
 msgstr ""
 
 #: ../locale/scriptstrings/v.unpack_to_translate.c:6
@@ -30019,6 +30026,7 @@ msgstr "Categorias demais (encontrei: %i, máx: %i). Tente rescalonar ou reclass
 msgid "Input raster must be of type CELL."
 msgstr "O raster de entrada deve ser do tipo CELL."
 
+#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #: ../raster/r.thin/io.c:108 ../raster/r.thin/io.c:179
@@ -33528,8 +33536,9 @@ msgid "Download file from <{url}>, failed. Check internet connection."
 msgstr ""
 
 #: ../scripts/g.extension.all/g.extension.all.py:174
-msgid "Unable to get GRASS GIS version."
-msgstr ""
+#, fuzzy
+msgid "Unable to get GRASS version."
+msgstr "Falhou na criação da feição OGR"
 
 #: ../scripts/g.extension.all/g.extension.all.py:196
 msgid "The <{}> addon cannot be reinstalled. Addon wasn't found among the official addons."
@@ -33876,7 +33885,7 @@ msgstr ""
 
 #: ../scripts/g.extension/g.extension.py:2368
 #, python-brace-format
-msgid "Unable to create '{filename}': {error}. Is the GRASS GIS documentation package installed? Installation continues, but documentation may not look right."
+msgid "Unable to create '{filename}': {error}. Is the GRASS documentation package installed? Installation continues, but documentation may not look right."
 msgstr ""
 
 #: ../scripts/g.extension/g.extension.py:2387
@@ -35162,7 +35171,7 @@ msgid "File {name} not found."
 msgstr ""
 
 #: ../scripts/r.unpack/r.unpack.py:81 ../scripts/r.unpack/r.unpack.py:135
-#: ../scripts/v.unpack/v.unpack.py:81 ../scripts/v.unpack/v.unpack.py:144
+#: ../scripts/v.unpack/v.unpack.py:81 ../scripts/v.unpack/v.unpack.py:141
 msgid "Pack file unreadable"
 msgstr ""
 
@@ -35182,7 +35191,7 @@ msgstr ""
 
 #: ../scripts/r.unpack/r.unpack.py:129
 #, python-brace-format
-msgid "This GRASS GIS pack file contains vector data. Use v.unpack to unpack <{name}>"
+msgid "This GRASS pack file contains vector data. Use v.unpack to unpack <{name}>"
 msgstr ""
 
 #: ../scripts/r.unpack/r.unpack.py:140
@@ -35194,21 +35203,21 @@ msgstr "Substituir a verificação de projeção (usar a projeção do local atu
 msgid "PROJ_INFO file is missing, unpack raster map in XY (unprojected) project."
 msgstr ""
 
-#: ../scripts/r.unpack/r.unpack.py:177 ../scripts/v.unpack/v.unpack.py:186
+#: ../scripts/r.unpack/r.unpack.py:177 ../scripts/v.unpack/v.unpack.py:183
 #, python-brace-format
 msgid ""
 "Difference between PROJ_INFO file of packed map and of current project:\n"
 "{diff}"
 msgstr ""
 
-#: ../scripts/r.unpack/r.unpack.py:184 ../scripts/v.unpack/v.unpack.py:193
+#: ../scripts/r.unpack/r.unpack.py:184 ../scripts/v.unpack/v.unpack.py:190
 #, python-brace-format
 msgid ""
 "Difference between PROJ_UNITS file of packed map and of current project:\n"
 "{diff}"
 msgstr ""
 
-#: ../scripts/r.unpack/r.unpack.py:190 ../scripts/v.unpack/v.unpack.py:199
+#: ../scripts/r.unpack/r.unpack.py:190 ../scripts/v.unpack/v.unpack.py:196
 #, fuzzy
 msgid "Coordinate reference system of dataset does not appear to match current project. In case of no significant differences in the CRS definitions, use the -o flag to ignore them and use current project definition."
 msgstr ""
@@ -35969,40 +35978,40 @@ msgstr "Mapa vetorial <%s> já existe"
 msgid "Vector map <%s> already exists and will be overwritten"
 msgstr "O mapa vetorial <%s> já existe e será substituído"
 
-#: ../scripts/v.unpack/v.unpack.py:138
+#: ../scripts/v.unpack/v.unpack.py:137
 #, python-format
-msgid "This GRASS GIS pack file contains raster data. Use r.unpack to unpack <%s>"
+msgid "This GRASS pack file contains raster data. Use r.unpack to unpack <%s>"
 msgstr ""
 
-#: ../scripts/v.unpack/v.unpack.py:155
+#: ../scripts/v.unpack/v.unpack.py:152
 msgid "PROJ_INFO file is missing, unpack vector map in XY (unprojected) project."
 msgstr ""
 
-#: ../scripts/v.unpack/v.unpack.py:181
+#: ../scripts/v.unpack/v.unpack.py:178
 msgid "Projection information does not match. Proceeding..."
 msgstr ""
 
-#: ../scripts/v.unpack/v.unpack.py:243
+#: ../scripts/v.unpack/v.unpack.py:240
 #, python-format
 msgid "Coping table <%s> as table <%s>"
 msgstr ""
 
-#: ../scripts/v.unpack/v.unpack.py:258
+#: ../scripts/v.unpack/v.unpack.py:255
 #, python-format
 msgid "Unable to copy table <%s> as table <%s>"
 msgstr ""
 
-#: ../scripts/v.unpack/v.unpack.py:263
+#: ../scripts/v.unpack/v.unpack.py:260
 #, python-format
 msgid "Connect table <%s> to vector map <%s> at layer <%s>"
 msgstr ""
 
-#: ../scripts/v.unpack/v.unpack.py:282
+#: ../scripts/v.unpack/v.unpack.py:279
 #, python-format
 msgid "Unable to connect table <%s> to vector map <%s>"
 msgstr ""
 
-#: ../scripts/v.unpack/v.unpack.py:286
+#: ../scripts/v.unpack/v.unpack.py:283
 #, python-format
 msgid "Vector map <%s> successfully unpacked"
 msgstr ""
@@ -46044,7 +46053,9 @@ msgid "Conversion factor for values used for approximation"
 msgstr "Fator de conversão para valores usados ​​para aproximação"
 
 #: ../vector/v.surf.rst/main.c:423
-msgid "GRASS GIS is not compiled with OpenMP support, parallel computation is disabled."
+#, fuzzy
+#| msgid "GRASS GIS is not compiled with OpenMP support, parallel computation is disabled."
+msgid "GRASS is not compiled with OpenMP support, parallel computation is disabled."
 msgstr "GRASS GIS não é compilado com suporte a OpenMP, a computação paralela está desabilitada."
 
 #: ../vector/v.surf.rst/main.c:434 ../vector/v.surf.rst/main.c:439
