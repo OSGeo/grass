@@ -95,6 +95,20 @@ def test_v_class_break_values(setup_vector_with_values, algorithm, expected):
     breaks = [float(b) for b in output.strip().split(",")]
     assert breaks == pytest.approx(expected, rel=1e-2)
 
+    # Test with explicit 'plain' format
+    output = gs.read_command(
+        "v.class",
+        map="test_points",
+        column="value",
+        algorithm=algorithm,
+        nbclasses=5,
+        flags="g",
+        format="plain",
+        env=session.env,
+    )
+    breaks = [float(b) for b in output.strip().split(",")]
+    assert breaks == pytest.approx(expected, rel=1e-2)
+
 
 def test_v_class_required(setup_vector_with_values):
     """
@@ -128,6 +142,19 @@ def test_v_class_required(setup_vector_with_values):
         "Note: Minimum of first class is including",
         "",
     ]
+    assert result == expected
+
+    # Test with explicit 'plain' format
+    output = gs.read_command(
+        "v.class",
+        map="test_points",
+        column="value",
+        algorithm="qua",
+        nbclasses=5,
+        format="plain",
+        env=session.env,
+    )
+    result = output.splitlines()
     assert result == expected
 
 
@@ -381,3 +408,141 @@ def test_v_class_warning_discontinuities(setup_vector_with_values):
     assert all(
         breaks[i] <= breaks[i + 1] for i in range(len(breaks) - 1)
     )  # sorted ascending
+
+
+def assert_json_equal(expected, actual):
+    if isinstance(expected, dict):
+        assert isinstance(actual, dict)
+        assert len(expected.keys()) == len(actual.keys())
+        for key in expected:
+            assert_json_equal(expected[key], actual[key])
+    elif isinstance(expected, list):
+        assert isinstance(actual, list)
+        assert len(expected) == len(actual)
+        for exp_item, act_item in zip(expected, actual):
+            assert_json_equal(exp_item, act_item)
+    elif isinstance(expected, float):
+        assert actual == pytest.approx(expected, rel=1e-6)
+    else:
+        assert expected == actual
+
+
+def test_v_class_required_json(setup_vector_with_values):
+    """
+    Test that v.class produces the expected output when only the required inputs are provided with JSON format.
+    """
+    session = setup_vector_with_values
+    result = gs.parse_command(
+        "v.class",
+        map="test_points",
+        column="value",
+        algorithm="qua",
+        nbclasses=5,
+        format="json",
+        env=session.env,
+    )
+
+    expected = {
+        "classes": 5,
+        "mean": 5.5,
+        "standard_deviation": 2.8722813232690143,
+        "breaks": [3, 5, 7, 9],
+        "intervals": [
+            {"frequency": 3, "from": 1, "to": 3},
+            {"frequency": 2, "from": 3, "to": 5},
+            {"frequency": 2, "from": 5, "to": 7},
+            {"frequency": 2, "from": 7, "to": 9},
+            {"frequency": 1, "from": 9, "to": 10},
+        ],
+    }
+    assert_json_equal(expected, result)
+
+
+def test_v_class_breaks_json(setup_vector_with_values):
+    """
+    Test that v.class produces the correct break values with JSON format.
+    """
+    session = setup_vector_with_values
+    result = gs.parse_command(
+        "v.class",
+        map="test_points",
+        column="value",
+        algorithm="qua",
+        nbclasses=5,
+        format="json",
+        flags="b",
+        env=session.env,
+    )
+
+    expected = [3, 5, 7, 9]
+    assert_json_equal(expected, result)
+
+
+def test_v_class_required_csv(setup_vector_with_values):
+    """
+    Test that v.class produces the expected output when only the required inputs are provided with CSV format.
+    """
+    session = setup_vector_with_values
+    output = gs.read_command(
+        "v.class",
+        map="test_points",
+        column="value",
+        algorithm="qua",
+        nbclasses=5,
+        format="csv",
+        env=session.env,
+    )
+
+    expected = [
+        "from,to,frequency",
+        "1.00000,3.00000,3",
+        "3.00000,5.00000,2",
+        "5.00000,7.00000,2",
+        "7.00000,9.00000,2",
+        "9.00000,10.00000,1",
+    ]
+    result = output.splitlines()
+    assert result == expected
+
+
+def test_v_class_breaks_list(setup_vector_with_values):
+    """
+    Test that v.class produces the correct break values with LIST format.
+    """
+    session = setup_vector_with_values
+    output = gs.read_command(
+        "v.class",
+        map="test_points",
+        column="value",
+        algorithm="qua",
+        nbclasses=5,
+        format="list",
+        flags="b",
+        env=session.env,
+    )
+
+    expected = [3, 5, 7, 9]
+    breaks = [float(b) for b in output.strip().split(",")]
+    assert breaks == pytest.approx(expected, rel=1e-2)
+
+
+def test_v_class_breaks_separator_list(setup_vector_with_values):
+    """
+    Test that v.class produces the correct break values with LIST format and pipe separator.
+    """
+    session = setup_vector_with_values
+    output = gs.read_command(
+        "v.class",
+        map="test_points",
+        column="value",
+        algorithm="qua",
+        nbclasses=5,
+        format="list",
+        flags="b",
+        separator="pipe",
+        env=session.env,
+    )
+
+    expected = [3, 5, 7, 9]
+    breaks = [float(b) for b in output.strip().split("|")]
+    assert breaks == pytest.approx(expected, rel=1e-2)
