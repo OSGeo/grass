@@ -21,6 +21,10 @@ class TestResult(unittest.TestResult):
     formatted traceback of the error that occurred.
     """
 
+    start_time: float | None = None
+    end_time: float | None = None
+    time_taken: float | None = None
+
     # descriptions and verbosity unused
     # included for compatibility with unittest's TestResult
     # where are also unused, so perhaps we can remove them
@@ -35,6 +39,9 @@ class TestResult(unittest.TestResult):
         self.successes: list[
             grass.gunittest.case.TestCase | unittest.case.TestCase
         ] = []
+        self.start_time = None
+        self.end_time = None
+        self.time_taken = None
 
     def addSuccess(
         self, test: grass.gunittest.case.TestCase | unittest.case.TestCase
@@ -55,4 +62,6 @@ class TestResult(unittest.TestResult):
         :param end_time: The end time of the test, as returned by time.time()
         :param time_taken: The time taken for the test, usually end_time-start_time
         """
-        # TODO: implement this
+        self.start_time = start_time
+        self.end_time = end_time
+        self.time_taken = time_taken
