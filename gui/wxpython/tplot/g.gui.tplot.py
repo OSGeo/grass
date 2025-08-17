@@ -170,7 +170,7 @@ def main():
     frame = TplotFrame(
         parent=None,
         giface=StandaloneGrassInterface(),
-        title=_("Temporal Plot Tool - GRASS GIS"),
+        title=_("Temporal Plot Tool - GRASS"),
     )
     if flags["l"]:
         frame.linRegRaster.SetValue(state=True)

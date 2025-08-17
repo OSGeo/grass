@@ -26,7 +26,7 @@ performed separately by running the appropriate modules.
 - *Ortho-rectification*
   1. Ortho-rectify imagery group: [i.ortho.rectify](i.ortho.rectify.md)
 
-The ortho-rectification procedure in GRASS GIS places the image pixels
+The ortho-rectification procedure in GRASS places the image pixels
 on the surface of the earth by matching the coordinate system of the
 aerial image in pixels (*image coordinate system*) and the coordinate
 system of the camera sensor in millimetres (*photo coordinate system*)

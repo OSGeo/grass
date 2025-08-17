@@ -44,15 +44,21 @@ static void map_file(void)
 #ifdef _WIN32
     png.handle = CreateFileMapping((HANDLE)_get_osfhandle(fd), NULL,
                                    PAGE_READWRITE, 0, size, NULL);
-    if (!png.handle)
+    if (!png.handle) {
+        close(fd);
         return;
+    }
     ptr = MapViewOfFile(png.handle, FILE_MAP_WRITE, 0, 0, size);
-    if (!ptr)
+    if (!ptr) {
+        close(fd);
         return;
+    }
 #else
     ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, (off_t)0);
-    if (ptr == MAP_FAILED)
+    if (ptr == MAP_FAILED) {
+        close(fd);
         return;
+    }
 #endif
 
     if (png.grid)
@@ -77,7 +83,6 @@ static void map_file(void)
    screen_left < screen_right
    screen_top  < screen_bottom
  */
-
 int PNG_Graph_set(void)
 {
     unsigned int red, grn, blu;

@@ -206,6 +206,11 @@ html_theme_options = {
     "localtoc_label_text": "Table of contents",
     "nav_links": [
         {
+            "href": "grass.tools",
+            "title": "Tools API",
+            "internal": True,
+        },
+        {
             "href": "script_intro",
             "title": "Scripting API",
             "internal": True,
@@ -399,7 +404,7 @@ texinfo_documents = [
         project,
         "GRASS Development Team",
         "PythonLib",
-        "Documentation for Python API of GRASS GIS",
+        "Documentation for Python API of GRASS",
         "Miscellaneous",
     ),
 ]

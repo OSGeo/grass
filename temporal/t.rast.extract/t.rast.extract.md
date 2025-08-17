@@ -11,7 +11,7 @@ raster map. In case a *r.mapcalc* sub-expression is defined, the base
 name of the resulting raster maps must be specified. The *r.mapcalc*
 expression can be used to select maps as well, since by default
 resulting empty maps are not registered in the output space time raster
-dataset and removed after processing. The number of parallel GRASS GIS
+dataset and removed after processing. The number of parallel GRASS
 processes can be specified to speed up the processing.
 
 If no *r.mapcalc* expression is defined, the selected maps are simply

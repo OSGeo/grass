@@ -3,7 +3,7 @@ GRASS Python testing framework module for report generation
 
 Copyright (C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS GIS
+License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :authors: Vaclav Petras
@@ -186,13 +186,13 @@ def get_svn_info():
     """
     try:
         # TODO: introduce directory, not only current
-        p = subprocess.Popen(
+        with subprocess.Popen(
             ["svn", "info", ".", "--xml"],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-        )
-        stdout, stderr = p.communicate()
-        rc = p.poll()
+        ) as p:
+            stdout, stderr = p.communicate()
+            rc = p.poll()
         info = {}
         if not rc:
             root = ET.fromstring(stdout)
@@ -241,13 +241,13 @@ def get_svn_path_authors(path, from_date=None):
     revision_range = "BASE:1" if from_date is None else "BASE:{%s}" % from_date
     try:
         # TODO: allow also usage of --limit
-        p = subprocess.Popen(
+        with subprocess.Popen(
             ["svn", "log", "--xml", "--revision", revision_range, path],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-        )
-        stdout, stderr = p.communicate()
-        rc = p.poll()
+        ) as p:
+            stdout, stderr = p.communicate()
+            rc = p.poll()
         if not rc:
             root = ET.fromstring(stdout)
             # TODO: get also date if this make sense

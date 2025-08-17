@@ -6,7 +6,7 @@ import grass.script as gs
 @pytest.fixture
 def setup_polylines(tmp_path):
     """
-    Fixture to create a basic GRASS GIS project with a vector map 'lines' containing
+    Fixture to create a basic GRASS project with a vector map 'lines' containing
     connected and disconnected line features.
 
     The vector is created from ASCII standard format input defining three lines:

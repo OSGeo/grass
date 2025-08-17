@@ -5,7 +5,7 @@
 
 ARG GUI=without
 
-FROM ubuntu:22.04@sha256:1ec65b2719518e27d4d25f104d93f9fac60dc437f81452302406825c46fcc9cb AS common_start
+FROM ubuntu:22.04@sha256:1aa979d85661c488ce030ac292876cf6ed04535d3a237e49f61542d8e5de5ae0 AS common_start
 
 LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann,Stefan Blumentrath"
 LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
@@ -135,7 +135,6 @@ ARG GRASS_PYTHON_PACKAGES="\
     numpy \
     Pillow \
     pip \
-    ply \
     psycopg2 \
     python-dateutil \
     python-magic \
@@ -270,8 +269,8 @@ COPY . /src/grass_build/
 
 WORKDIR /src/grass_build
 
-# Set environmental variables for GRASS GIS compilation, without debug symbols
-# Set gcc/g++ environmental variables for GRASS GIS compilation, without debug symbols
+# Set environmental variables for GRASS compilation, without debug symbols
+# Set gcc/g++ environmental variables for GRASS compilation, without debug symbols
 ENV MYCFLAGS="-O2 -std=gnu99"
 ENV MYLDFLAGS="-s"
 # CXX stuff:
@@ -280,7 +279,7 @@ ENV LDFLAGS="$MYLDFLAGS"
 ENV CFLAGS="$MYCFLAGS"
 ENV CXXFLAGS="$MYCXXFLAGS"
 
-# Configure compile and install GRASS GIS
+# Configure compile and install GRASS
 ENV NUMTHREADS=4
 RUN make distclean || echo "nothing to clean"
 RUN ./configure $GRASS_CONFIG \
@@ -308,7 +307,7 @@ RUN git clone --branch $GDAL_GRASS_VERSION --depth 1 https://github.com/OSGeo/gd
 # Leave build stage
 FROM grass_gis AS grass_gis_final
 
-# GRASS GIS specific
+# GRASS specific
 # allow work with MAPSETs that are not owned by current user
 ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     SHELL="/bin/bash" \
@@ -319,27 +318,27 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     LD_LIBRARY_PATH="/usr/local/grass/lib:$LD_LIBRARY_PATH" \
     GDAL_DRIVER_PATH="/usr/lib/gdalplugins"
 
-# Copy GRASS GIS from build image
+# Copy GRASS from build image
 COPY --link --from=build /usr/local/bin/* /usr/local/bin/
 COPY --link --from=build /usr/local/grass85 /usr/local/grass85/
 COPY --link --from=build /src/site-packages /usr/lib/python3.10/
 COPY --link --from=build /usr/lib/gdalplugins /usr/lib/gdalplugins
 # COPY --link --from=datum_grids /tmp/cdn.proj.org/*.tif /usr/share/proj/
 
-# Create generic GRASS GIS lib name regardless of version number
+# Create generic GRASS lib name regardless of version number
 RUN ln -sf /usr/local/grass85 /usr/local/grass
 
-# show GRASS GIS, PROJ, GDAL etc versions
+# show GRASS, PROJ, GDAL etc versions
 RUN grass --tmp-project EPSG:4326 --exec g.version -rge && \
     pdal --version && \
     python --version
 
 WORKDIR /scripts
 
-# enable GRASS GIS Python session support
+# enable GRASS Python session support
 ## grass --config python-path
 ENV PYTHONPATH="/usr/local/grass/etc/python:${PYTHONPATH}"
-# enable GRASS GIS ctypes imports
+# enable GRASS ctypes imports
 ## grass --config path
 ENV LD_LIBRARY_PATH="/usr/local/grass/lib:$LD_LIBRARY_PATH"
 
@@ -347,7 +346,7 @@ WORKDIR /tmp
 COPY docker/testdata/simple.laz .
 WORKDIR /scripts
 COPY docker/testdata/test_grass_session.py .
-## run GRASS GIS python session and scan the test LAZ file
+## run GRASS python session and scan the test LAZ file
 RUN python /scripts/test_grass_session.py
 RUN rm -rf /tmp/grasstest_epsg_25832
 # test LAZ file

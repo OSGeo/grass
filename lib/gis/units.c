@@ -130,7 +130,6 @@ double G_meters_to_units_factor_sq(int units)
 
   \return 1 if True, 0 otherwise
  */
-
 int G_is_units_type_spatial(int units)
 {
     switch (units) {
@@ -162,7 +161,6 @@ int G_is_units_type_spatial(int units)
 
   \return 1 if True, 0 otherwise
  */
-
 int G_is_units_type_temporal(int units)
 {
     switch (units) {

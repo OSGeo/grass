@@ -35,13 +35,15 @@ r.slope.aspect elevation=elevation slope=slope aspect=aspect
 
 ## Python
 
-GRASS Python interface provides libraries to create GRASS scripts and access
-the internal data structures of GRASS. The Python interface consists of
-two main libraries:
-*[grass.script](https://grass.osgeo.org/grass-stable/manuals/libpython/script_intro.html)*
-provides a Python interface to GRASS tools
+GRASS Python interface provides libraries to use GRASS tools, create scripts,
+and access the GRASS data structures. The Python interface consists of
+three main libraries:
+*[grass.tools](https://grass.osgeo.org/grass-stable/manuals/libpython/tools_index.html)*
+provides a Python interface to GRASS tools,
+*[grass.script](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script_intro.html)*
+handles GRASS projects and sessions in Python,
 and *[grass.pygrass](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_index.html)*
-enables access to the internal data structures of GRASS.
+enables a fine-grained access to the GRASS data structures.
 
 To get started with scripting, create a new project with `gs.create_project` and
 start a GRASS session with the `gs.setup.init` function to initialize the
@@ -57,6 +59,7 @@ sys.path.append(
 )
 
 import grass.script as gs
+from grass.tools import Tools
 
 # Create a new project
 gs.create_project(path="path/to/my_project", epsg="3358")
@@ -65,9 +68,10 @@ gs.create_project(path="path/to/my_project", epsg="3358")
 with gs.setup.init("path/to/my_project") as session:
 
     # Run GRASS tools
-    gs.run_command("r.import", input="/path/to/elevation.tif", output="elevation")
-    gs.run_command("g.region", raster="elevation")
-    gs.run_command("r.slope.aspect", elevation="elevation", slope="slope")
+    tools = Tools(session=session)
+    tools.r_import_(input="/path/to/elevation.tif", output="elevation")
+    tools.g_region(raster="elevation")
+    tools.r_slope_aspect(elevation="elevation", slope="slope")
 ```
 
 [Learn more :material-arrow-right-bold:](python_intro.md){ .md-button }

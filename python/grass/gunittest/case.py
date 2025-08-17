@@ -3,7 +3,7 @@ GRASS Python testing framework test case
 
 Copyright (C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS GIS
+License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :authors: Vaclav Petras
@@ -1127,7 +1127,7 @@ class TestCase(unittest.TestCase):
 
         This method should not be used to test v.overlay or v.select.
         """
-        diff = self._compute_xor_vectors(
+        diff = self._compute_vector_xor(
             ainput=reference,
             binput=actual,
             alayer=layer,

@@ -33,9 +33,7 @@ modclass = sys.argv[2]
 
 filename = modclass + ".txt"
 with open(filename + ".tmp", "wb") as f:
-    write_rest_header(
-        f, "GRASS GIS %s Reference Manual: %s" % (grass_version, modclass)
-    )
+    write_rest_header(f, "GRASS %s Reference Manual: %s" % (grass_version, modclass))
     if modclass.lower() not in {"general", "miscellaneous", "postscript"}:
         f.write(
             modclass_intro_tmpl.substitute(

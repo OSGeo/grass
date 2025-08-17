@@ -81,6 +81,7 @@ int main(int argc, char *argv[])
     nbclass_opt->type = TYPE_INTEGER;
     nbclass_opt->required = YES;
     nbclass_opt->multiple = NO;
+    nbclass_opt->options = "2-";
     nbclass_opt->description = _("Number of classes to define");
 
     shell_flag = G_define_flag();

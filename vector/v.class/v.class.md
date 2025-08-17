@@ -68,7 +68,7 @@ and to determine the density classes:
 v.class map=communes column=pop/area algo=std nbclasses=5
 ```
 
-The following example uses the output of d.class and feeds it directly
+The following example uses the output of v.class and feeds it directly
 into *d.vect.thematic*:
 
 ```sh
