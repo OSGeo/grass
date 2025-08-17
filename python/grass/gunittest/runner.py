@@ -14,10 +14,10 @@ a template. It is not expected that something will left.
 
 from __future__ import annotations
 
-import sys
 import time
 import unittest
 from typing import TextIO
+import warnings
 
 import grass.gunittest.case
 import grass.gunittest.result
@@ -389,55 +389,97 @@ class MultiTestResult(grass.gunittest.result.TestResult):
                     raise
 
 
-class GrassTestRunner:
+class GrassTestRunner(unittest.TextTestRunner):
+    resultclass = TextTestResult
+
     def __init__(
         self,
-        stream=None,
-        descriptions=True,
-        verbosity=1,
-        failfast=False,
-        buffer=False,
-        result=None,
-        resultclass=None,
-        warnings=None,
         *,
-        tb_locals=False,
+        result=None,
         **kwargs,
     ) -> None:
-        if stream is None:
-            stream = sys.stderr
-        self.stream = _WritelnDecorator(stream)
-        self.descriptions = descriptions
-        self.verbosity = verbosity
-        self.failfast = failfast
-        self.buffer = buffer
-        self.tb_locals = tb_locals
-        self.warnings = warnings
-        if resultclass is not None:
-            self.resultclass = resultclass
+        super().__init__(**kwargs)
 
         self._result = result
 
     def run(self, test):
         """Run the given test case or test suite."""
-        result = self._result
+        result = self._makeResult()
         unittest.registerResult(result)
         result.failfast = self.failfast
         result.buffer = self.buffer
-        startTime = time.time()
-        startTestRun = getattr(result, "startTestRun", None)
-        if startTestRun is not None:
-            startTestRun()
-        try:
-            test(result)
-        finally:
-            stopTime = time.time()
-            timeTaken = stopTime - startTime
-            setTimes = getattr(result, "setTimes", None)
-            if setTimes is not None:
-                setTimes(startTime, stopTime, timeTaken)
-            stopTestRun = getattr(result, "stopTestRun", None)
-            if stopTestRun is not None:
-                stopTestRun()
+        result.tb_locals = self.tb_locals
+        with warnings.catch_warnings():
+            if self.warnings:
+                # if self.warnings is set, use it to filter all the warnings
+                warnings.simplefilter(self.warnings)
+                # if the filter is 'default' or 'always', special-case the
+                # warnings from the deprecated unittest methods to show them
+                # no more than once per module, because they can be fairly
+                # noisy.  The -Wd and -Wa flags can be used to bypass this
+                # only when self.warnings is None.
+                if self.warnings in ["default", "always"]:
+                    warnings.filterwarnings(
+                        "module",
+                        category=DeprecationWarning,
+                        message=r"Please use assert\w+ instead.",
+                    )
+            startTime = time.perf_counter()
+            startTestRun = getattr(result, "startTestRun", None)
+            if startTestRun is not None:
+                startTestRun()
+            try:
+                test(result)
+            finally:
+                stopTime = time.perf_counter()
+                timeTaken = stopTime - startTime
+                setTimes = getattr(result, "setTimes", None)
+                if setTimes is not None:
+                    setTimes(startTime, stopTime, timeTaken)
+                stopTestRun = getattr(result, "stopTestRun", None)
+                if stopTestRun is not None:
+                    stopTestRun()
+            stopTime = time.perf_counter()
+        timeTaken = stopTime - startTime
+        result.printErrors()
+        if hasattr(result, "separator2"):
+            self.stream.writeln(result.separator2)
+        run = result.testsRun
+        self.stream.writeln(
+            "Ran %d test%s in %.3fs" % (run, run != 1 and "s" or "", timeTaken)
+        )
+        self.stream.writeln()
 
+        expectedFails = unexpectedSuccesses = skipped = 0
+        try:
+            results = map(
+                len,
+                (result.expectedFailures, result.unexpectedSuccesses, result.skipped),
+            )
+        except AttributeError:
+            pass
+        else:
+            expectedFails, unexpectedSuccesses, skipped = results
+
+        infos = []
+        if not result.wasSuccessful():
+            self.stream.write("FAILED")
+            failed, errored = len(result.failures), len(result.errors)
+            if failed:
+                infos.append("failures=%d" % failed)
+            if errored:
+                infos.append("errors=%d" % errored)
+        else:
+            self.stream.write("OK")
+        if skipped:
+            infos.append("skipped=%d" % skipped)
+        if expectedFails:
+            infos.append("expected failures=%d" % expectedFails)
+        if unexpectedSuccesses:
+            infos.append("unexpected successes=%d" % unexpectedSuccesses)
+        if infos:
+            self.stream.writeln(" (%s)" % (", ".join(infos),))
+        else:
+            self.stream.write("\n")
+        self.stream.flush()
         return result
