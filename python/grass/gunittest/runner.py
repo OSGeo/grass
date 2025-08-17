@@ -208,7 +208,7 @@ class MultiTestResult(grass.gunittest.result.TestResult):
     # where are also unused, so perhaps we can remove them
     # stream set to None and not included in interface, it would not make sense
     def __init__(self, results, forgiving=False, descriptions=None, verbosity=None):
-        super().__init__(descriptions=descriptions, verbosity=verbosity, stream=None)
+        super().__init__(stream=None, descriptions=descriptions, verbosity=verbosity)
         self._results = results
         self._forgiving = forgiving
 
