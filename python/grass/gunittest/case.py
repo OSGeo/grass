@@ -16,7 +16,6 @@ import subprocess
 import hashlib
 import uuid
 import unittest
-from itertools import starmap
 from unittest.util import safe_repr
 
 from grass.pygrass.modules import Module
@@ -36,8 +35,6 @@ from .checkers import (
 from .gutils import is_map_in_mapset
 
 from io import StringIO
-
-_subtest_msg_sentinel = object()
 
 
 class TestCase(unittest.TestCase):
@@ -1487,42 +1484,3 @@ def _check_module_run_parameters(module):
         msg = "stderr_ can be only PIPE or None"
         raise ValueError(msg)
         # because we want to capture it
-
-
-class _SubTest(TestCase):
-    """
-    Private class _SubTest copied over from Python unittest to be available
-    when subclassing
-    """
-
-    def __init__(self, test_case, message, params):
-        super().__init__()
-        self._message = message
-        self.test_case = test_case
-        self.params = params
-        self.failureException = test_case.failureException
-
-    def runTest(self):
-        msg = "subtests cannot be run directly"
-        raise NotImplementedError(msg)
-
-    def _subDescription(self):
-        parts = []
-        if self._message is not _subtest_msg_sentinel:
-            parts.append("[{}]".format(self._message))
-        if self.params:
-            params_desc = ", ".join(starmap("{}={!r}".format, self.params.items()))
-            parts.append("({})".format(params_desc))
-        return " ".join(parts) or "(<subtest>)"
-
-    def id(self):
-        return "{} {}".format(self.test_case.id(), self._subDescription())
-
-    def shortDescription(self):
-        """Returns a one-line description of the subtest, or None if no
-        description has been provided.
-        """
-        return self.test_case.shortDescription()
-
-    def __str__(self):
-        return "{} {}".format(self.test_case, self._subDescription())

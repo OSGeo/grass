@@ -17,7 +17,6 @@ import time
 
 import unittest
 import grass.gunittest.result
-from grass.gunittest.case import _SubTest
 
 __unittest = True
 
@@ -60,34 +59,6 @@ class TextTestResult(grass.gunittest.result.TestResult, unittest.TextTestResult)
         self.start_time = None
         self.end_time = None
         self.time_taken = None
-
-    def _write_status(self, test, status):
-        is_subtest = isinstance(test, _SubTest)
-        if is_subtest or self._newline:
-            if not self._newline:
-                self.stream.writeln()
-            if is_subtest:
-                self.stream.write("  ")
-            self.stream.write(self.getDescription(test))
-            self.stream.write(" ... ")
-        self.stream.writeln(status)
-        self.stream.flush()
-        self._newline = True
-
-    def addSubTest(self, test, subtest, err):
-        if err is not None:
-            if self.showAll:
-                if issubclass(err[0], subtest.failureException):
-                    self._write_status(subtest, "FAIL")
-                else:
-                    self._write_status(subtest, "ERROR")
-            elif self.dots:
-                if issubclass(err[0], subtest.failureException):
-                    self.stream.write("F")
-                else:
-                    self.stream.write("E")
-                self.stream.flush()
-        super().addSubTest(test, subtest, err)
 
     def setTimes(self, start_time, end_time, time_taken):
         self.start_time = start_time
