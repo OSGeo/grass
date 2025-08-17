@@ -88,10 +88,14 @@ char *format_options(void)
     }
     else {
         ret = G_store("");
+        if (list) {
+        for (i = 0; i < count; i++)
+            G_free(list[i]);
+        G_free(list);
+        }
     }
 
     G_debug(2, "all drivers: %s", ret);
-
     return ret;
 }
 
