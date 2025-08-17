@@ -53,7 +53,7 @@ class TextTestResult(grass.gunittest.result.TestResult, unittest.TextTestResult)
 
     def __init__(
         self,
-        stream: TextIO | None,
+        stream: _WritelnDecorator | TextIO | None,
         descriptions: bool | None,
         verbosity: int | None,
         *,
