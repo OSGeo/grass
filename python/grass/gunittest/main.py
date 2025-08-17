@@ -64,7 +64,7 @@ class GrassTestProgram(TestProgram):
         text_result = TextTestResult(
             stream=_WritelnDecorator(sys.stderr), descriptions=True, verbosity=verbosity
         )
-        with open("test_keyvalue_result.txt", "w") as keyval_file:
+        with open("test_keyvalue_result.txt", "w", encoding="utf-8") as keyval_file:
             keyval_result = KeyValueTestResult(stream=keyval_file)
             result = MultiTestResult(results=[text_result, keyval_result])
 
