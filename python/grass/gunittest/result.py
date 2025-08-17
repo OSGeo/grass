@@ -55,5 +55,4 @@ class TestResult(unittest.TestResult):
         :param end_time: The end time of the test, as returned by time.time()
         :param time_taken: The time taken for the test, usually end_time-start_time
         """
-        pass
         # TODO: implement this
