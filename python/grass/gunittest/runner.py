@@ -12,10 +12,14 @@ File content taken from Python's  ``unittest.runner``, it will be used as
 a template. It is not expected that something will left.
 """
 
+from __future__ import annotations
+
 import sys
 import time
-
 import unittest
+from typing import TextIO
+
+import grass.gunittest.case
 import grass.gunittest.result
 
 __unittest = True
@@ -24,7 +28,7 @@ __unittest = True
 class _WritelnDecorator:
     """Used to decorate file-like objects with a handy 'writeln' method"""
 
-    def __init__(self, stream):
+    def __init__(self, stream) -> None:
         self.stream = stream
 
     def __getattr__(self, attr: str):
@@ -32,7 +36,7 @@ class _WritelnDecorator:
             raise AttributeError(attr)
         return getattr(self.stream, attr)
 
-    def writeln(self, arg=None):
+    def writeln(self, arg=None) -> None:
         if arg:
             self.write(arg)
         self.write("\n")  # text-mode streams translate to \r\n if needed
@@ -47,24 +51,32 @@ class TextTestResult(grass.gunittest.result.TestResult, unittest.TextTestResult)
     separator1 = "=" * 70
     separator2 = "-" * 70
 
-    def __init__(self, stream, descriptions, verbosity, *, durations=None, **kwargs):
+    def __init__(
+        self,
+        stream: TextIO | None,
+        descriptions: bool | None,
+        verbosity: int | None,
+        *,
+        durations: int | None = None,
+        **kwargs,
+    ) -> None:
         """Construct a TextTestResult. Subclasses should accept **kwargs
         to ensure compatibility as the interface changes."""
         super().__init__(
             stream=stream, descriptions=descriptions, verbosity=verbosity, **kwargs
         )
-        self.durations = durations
+        self.durations: int | None = durations
 
-        self.start_time = None
-        self.end_time = None
-        self.time_taken = None
+        self.start_time: float | None = None
+        self.end_time: float | None = None
+        self.time_taken: float | None = None
 
-    def setTimes(self, start_time, end_time, time_taken):
+    def setTimes(self, start_time: float, end_time: float, time_taken: float) -> None:
         self.start_time = start_time
         self.end_time = end_time
         self.time_taken = time_taken
 
-    def stopTestRun(self):
+    def stopTestRun(self) -> None:
         super().stopTestRun()
         self.printErrors()
         self.stream.writeln(self.separator2)
@@ -111,13 +123,13 @@ class KeyValueTestResult(grass.gunittest.result.TestResult):
     separator1 = "=" * 70
     separator2 = "-" * 70
 
-    def __init__(self, stream, test_type=None):
+    def __init__(self, stream, test_type=None) -> None:
         super().__init__(stream=stream, descriptions=None, verbosity=None)
         self._stream = _WritelnDecorator(stream)
 
-        self.start_time = None
-        self.end_time = None
-        self.time_taken = None
+        self.start_time: float | None = None
+        self.end_time: float | None = None
+        self.time_taken: float | None = None
 
         if test_type:
             self.test_type = test_type
@@ -127,19 +139,21 @@ class KeyValueTestResult(grass.gunittest.result.TestResult):
         self._grass_modules = []
         self._supplementary_files: list[str] = []
 
-    def setTimes(self, start_time, end_time, time_taken):
+    def setTimes(self, start_time: float, end_time: float, time_taken: float) -> None:
         self.start_time = start_time
         self.end_time = end_time
         self.time_taken = time_taken
 
-    def stopTest(self, test):
+    def stopTest(
+        self, test: grass.gunittest.case.TestCase | unittest.case.TestCase
+    ) -> None:
         super().stopTest(test)
         if hasattr(test, "grass_modules"):
             self._grass_modules.extend(test.grass_modules)
         if hasattr(test, "supplementary_files"):
             self._supplementary_files.extend(test.supplementary_files)
 
-    def stopTestRun(self):
+    def stopTestRun(self) -> None:
         super().stopTestRun()
         infos = []
 
@@ -207,12 +221,16 @@ class MultiTestResult(grass.gunittest.result.TestResult):
     # included for compatibility with unittest's TestResult
     # where are also unused, so perhaps we can remove them
     # stream set to None and not included in interface, it would not make sense
-    def __init__(self, results, forgiving=False, descriptions=None, verbosity=None):
+    def __init__(
+        self, results, forgiving=False, descriptions=None, verbosity=None
+    ) -> None:
         super().__init__(stream=None, descriptions=descriptions, verbosity=verbosity)
         self._results = results
         self._forgiving = forgiving
 
-    def startTest(self, test):
+    def startTest(
+        self, test: grass.gunittest.case.TestCase | unittest.case.TestCase
+    ) -> None:
         super().startTest(test)
         for result in self._results:
             try:
@@ -223,7 +241,9 @@ class MultiTestResult(grass.gunittest.result.TestResult):
                 else:
                     raise
 
-    def stopTest(self, test):
+    def stopTest(
+        self, test: grass.gunittest.case.TestCase | unittest.case.TestCase
+    ) -> None:
         """Called when the given test has been run"""
         super().stopTest(test)
         for result in self._results:
@@ -235,7 +255,9 @@ class MultiTestResult(grass.gunittest.result.TestResult):
                 else:
                     raise
 
-    def addSuccess(self, test):
+    def addSuccess(
+        self, test: grass.gunittest.case.TestCase | unittest.case.TestCase
+    ) -> None:
         super().addSuccess(test)
         for result in self._results:
             try:
@@ -246,7 +268,9 @@ class MultiTestResult(grass.gunittest.result.TestResult):
                 else:
                     raise
 
-    def addError(self, test, err):
+    def addError(
+        self, test: grass.gunittest.case.TestCase | unittest.case.TestCase, err
+    ) -> None:
         super().addError(test, err)
         for result in self._results:
             try:
@@ -257,7 +281,9 @@ class MultiTestResult(grass.gunittest.result.TestResult):
                 else:
                     raise
 
-    def addFailure(self, test, err):
+    def addFailure(
+        self, test: grass.gunittest.case.TestCase | unittest.case.TestCase, err
+    ) -> None:
         super().addFailure(test, err)
         for result in self._results:
             try:
@@ -268,7 +294,9 @@ class MultiTestResult(grass.gunittest.result.TestResult):
                 else:
                     raise
 
-    def addSkip(self, test, reason):
+    def addSkip(
+        self, test: grass.gunittest.case.TestCase | unittest.case.TestCase, reason: str
+    ) -> None:
         super().addSkip(test, reason)
         for result in self._results:
             try:
@@ -279,7 +307,9 @@ class MultiTestResult(grass.gunittest.result.TestResult):
                 else:
                     raise
 
-    def addExpectedFailure(self, test, err):
+    def addExpectedFailure(
+        self, test: grass.gunittest.case.TestCase | unittest.case.TestCase, err
+    ) -> None:
         super().addExpectedFailure(test, err)
         for result in self._results:
             try:
@@ -290,7 +320,9 @@ class MultiTestResult(grass.gunittest.result.TestResult):
                 else:
                     raise
 
-    def addUnexpectedSuccess(self, test):
+    def addUnexpectedSuccess(
+        self, test: grass.gunittest.case.TestCase | unittest.case.TestCase
+    ) -> None:
         super().addUnexpectedSuccess(test)
         for result in self._results:
             try:
@@ -301,7 +333,7 @@ class MultiTestResult(grass.gunittest.result.TestResult):
                 else:
                     raise
 
-    def printErrors(self):
+    def printErrors(self) -> None:
         """Called by TestRunner after test run"""
         super().printErrors()
         for result in self._results:
@@ -313,7 +345,7 @@ class MultiTestResult(grass.gunittest.result.TestResult):
                 else:
                     raise
 
-    def startTestRun(self):
+    def startTestRun(self) -> None:
         """Called once before any tests are executed.
 
         See startTest for a method called before each test.
@@ -328,7 +360,7 @@ class MultiTestResult(grass.gunittest.result.TestResult):
                 else:
                     raise
 
-    def stopTestRun(self):
+    def stopTestRun(self) -> None:
         """Called once after all tests are executed.
 
         See stopTest for a method called after each test.
@@ -345,9 +377,8 @@ class MultiTestResult(grass.gunittest.result.TestResult):
 
     # TODO: better would be to pass start at the beginning
     # alternative is to leave counting time on class
-    # TODO: document: we expect all grass classes to have setTimes
     # TODO: alternatively, be more forgiving for non-unittest methods
-    def setTimes(self, start_time, end_time, time_taken):
+    def setTimes(self, start_time: float, end_time: float, time_taken: float) -> None:
         for result in self._results:
             try:
                 result.setTimes(start_time, end_time, time_taken)
@@ -372,7 +403,7 @@ class GrassTestRunner:
         *,
         tb_locals=False,
         **kwargs,
-    ):
+    ) -> None:
         if stream is None:
             stream = sys.stderr
         self.stream = _WritelnDecorator(stream)
