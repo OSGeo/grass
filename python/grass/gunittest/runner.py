@@ -53,7 +53,6 @@ class TextTestResult(grass.gunittest.result.TestResult, unittest.TextTestResult)
         super().__init__(
             stream=stream, descriptions=descriptions, verbosity=verbosity, **kwargs
         )
-        self._newline = True
         self.durations = durations
 
         self.start_time = None
