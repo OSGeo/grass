@@ -66,7 +66,7 @@ def update_keyval_file(filename, module, returncode):
     keyval["returncode"] = returncode
     keyval["test_file_authors"] = test_file_authors
 
-    Path(filename).write_text(keyvalue_to_text(keyval))
+    Path(filename).write_text(keyvalue_to_text(keyval), encoding="utf-8")
     return keyval
 
 
@@ -351,7 +351,8 @@ class GrassTestFilesInvoker:
             " (testsuite directories)</li>"
             '<li><a href="testfiles.html">Results by test files</a></li>'
             "<ul>"
-            "</body></html>".format(location=location, type=location_type)
+            "</body></html>".format(location=location, type=location_type),
+            encoding="utf-8",
         )
 
         testsuite_dir_reporter = TestsuiteDirReporter(
