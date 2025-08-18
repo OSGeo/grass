@@ -73,8 +73,8 @@ int stats(void)
     fd = fopen(stats_file, "r");
     if (fd == NULL) {
         unlink(stats_file);
-        snprintf(buf, sizeof(buf), "Unable to open result file <%s>\n",
-                 stats_file);
+        G_warning(_("r.stats produced no output"));
+        return 0;
     }
 
     while (G_getl(buf, sizeof buf, fd)) {
