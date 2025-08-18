@@ -47,9 +47,13 @@ int stats(void)
 
     argv[argc++] = "separator=:";
 
-    snprintf(buf, sizeof(buf), "input=%s,%s",
-             G_fully_qualified_name(mname, mmapset),
-             G_fully_qualified_name(rname, rmapset));
+    char *f_mname = G_fully_qualified_name(mname, mmapset);
+    char *f_rname = G_fully_qualified_name(rname, rmapset);
+
+    snprintf(buf, sizeof(buf), "input=%s,%s", f_mname, f_rname);
+    G_free(f_mname);
+    G_free(f_rname);
+    
     argv[argc++] = buf;
 
     argv[argc++] = SF_REDIRECT_FILE;
