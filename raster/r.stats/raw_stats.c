@@ -40,6 +40,21 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
     if (with_coordinates)
         G_get_set_window(&window);
 
+    if (format == CSV) {
+        /* CSV Header */
+        if (with_coordinates)
+            fprintf(stdout, "%s%s%s%s", "east", fs, "north", fs);
+        if (with_xy)
+            fprintf(stdout, "%s%s%s%s", "col", fs, "row", fs);
+
+        for (i = 0; i < nfiles; i++) {
+            fprintf(stdout, "%s%s_%s", i ? fs : "", map_names[i], "cat");
+            if (with_labels)
+                fprintf(stdout, "%s%s_%s", fs, map_names[i], "label");
+        }
+        fprintf(stdout, "\n");
+    }
+
     /* here we go */
     Rast_set_c_null_value(&null_cell, 1);
     for (row = 0; row < nrows; row++) {
@@ -96,6 +111,7 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
                     json_object_set_number(object, "row", row + 1);
                 }
                 break;
+            case CSV:
             case PLAIN:
                 if (with_coordinates) {
                     G_format_easting(Rast_col_to_easting(col + .5, &window),
@@ -123,6 +139,7 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
                                 category, "label",
                                 Rast_get_c_cat(&null_cell, &labels[i]));
                         break;
+                    case CSV:
                     case PLAIN:
                         fprintf(stdout, "%s%s", i ? fs : "", no_data_str);
                         if (with_labels)
@@ -141,6 +158,15 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
                                 category, "label",
                                 Rast_get_c_cat((CELL *)rastp[i], &labels[i]));
                         }
+                        break;
+                    case CSV:
+                        fprintf(stdout, "%s%ld", i ? fs : "",
+                                (long)*((CELL *)rastp[i]));
+                        if (with_labels)
+                            fprintf(stdout, "%s%s", fs,
+                                    !is_fp[i] ? Rast_get_c_cat((CELL *)rastp[i],
+                                                               &labels[i])
+                                              : no_data_str);
                         break;
                     case PLAIN:
                         fprintf(stdout, "%s%ld", i ? fs : "",
@@ -162,6 +188,7 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
                                 category, "label",
                                 Rast_get_f_cat((FCELL *)rastp[i], &labels[i]));
                         break;
+                    case CSV:
                     case PLAIN:
                         snprintf(str1, sizeof(str1), "%.8g",
                                  *((FCELL *)rastp[i]));
@@ -185,6 +212,7 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
                                 category, "label",
                                 Rast_get_d_cat((DCELL *)rastp[i], &labels[i]));
                         break;
+                    case CSV:
                     case PLAIN:
                         snprintf(str1, sizeof(str1), "%.16g",
                                  *((DCELL *)rastp[i]));
@@ -214,6 +242,7 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
                 json_object_set_value(object, "categories", categories_value);
                 json_array_append_value(array, object_value);
                 break;
+            case CSV:
             case PLAIN:
                 fprintf(stdout, "\n");
                 break;
