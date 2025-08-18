@@ -53,7 +53,6 @@ int stats(void)
     snprintf(buf, sizeof(buf), "input=%s,%s", f_mname, f_rname);
     G_free(f_mname);
     G_free(f_rname);
-    
     argv[argc++] = buf;
 
     argv[argc++] = SF_REDIRECT_FILE;
