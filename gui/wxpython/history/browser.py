@@ -109,6 +109,8 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         self.icons = {
             "check": MetaIcon(img="success").GetBitmap(bmpsize),
             "cross": MetaIcon(img="cross").GetBitmap(bmpsize),
+            "heart_on": MetaIcon(img="star").GetBitmap(bmpsize),
+            "heart_off": MetaIcon(img="star-unfilled").GetBitmap(bmpsize),
         }
 
     def _createGeneralInfoBox(self):
@@ -118,6 +120,44 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         )
         self.general_info_box_sizer = wx.StaticBoxSizer(
             self.general_info_box, wx.VERTICAL
+        )
+
+        # Add favorite button at the top
+        self.favorite_sizer = wx.BoxSizer(wx.HORIZONTAL)
+
+        # Create favorite label
+        self.favorite_label = StaticText(
+            parent=self.general_info_box,
+            id=wx.ID_ANY,
+            label=_("Favorite:"),
+            style=wx.ALIGN_LEFT,
+        )
+        self.favorite_sizer.Add(
+            self.favorite_label,
+            proportion=0,
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.RIGHT,
+            border=10,
+        )
+
+        # Create favorite toggle button
+        self.favorite_button = wx.BitmapButton(
+            parent=self.general_info_box,
+            id=wx.ID_ANY,
+            bitmap=self.icons["heart_off"],
+            style=wx.NO_BORDER
+        )
+        self.favorite_button.SetToolTip(_("Mark as favorite"))
+        self.favorite_button.Bind(wx.EVT_BUTTON, self.OnToggleFavorite)
+        self.favorite_sizer.Add(
+            self.favorite_button,
+            proportion=0,
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
+
+        # Add favorite sizer to the general info box
+        self.general_info_box_sizer.Add(
+            self.favorite_sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5
         )
 
         self.sizer_general_info = wx.GridBagSizer(hgap=0, vgap=0)
@@ -301,15 +341,17 @@ class HistoryInfoPanel(SP.ScrolledPanel):
 
         self.region_settings_box.Show()
 
-    def showCommandInfo(self, command_info):
+    def showCommandInfo(self, command_info, is_favorite=False):
         """Show command info input.
 
         :param dict command_info: command info entry for update
+        :param bool is_favorite: whether the command is marked as favorite
         """
         if command_info:
             self._updateGeneralInfoBox(command_info)
             self._updateRegionSettingsGrid(command_info)
             self._updateRegionSettingsMatch()
+            self._updateFavoriteButton(is_favorite)
         else:
             self.hideCommandInfo()
         self.SetupScrolling(scroll_x=False, scroll_y=True)
@@ -339,6 +381,41 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         self.giface.updateMap.emit(render=False, renderVector=False)
         self._updateRegionSettingsMatch()
         self.Layout()
+
+    def OnToggleFavorite(self, event):
+        """Toggle favorite status of the current command."""
+        # Get the currently selected command from the tree
+        selected_nodes = self.parent.parent.tree.GetSelected()
+        if not selected_nodes:
+            return
+
+        node = selected_nodes[0]
+        if node.data["type"] != "command":
+            return
+
+        # Toggle favorite status
+        is_favorite = not node.data.get("favorite", False)
+        node.data["favorite"] = is_favorite
+
+        # Update button appearance
+        self._updateFavoriteButton(is_favorite)
+
+        # Save to JSON history
+        self.parent.parent.tree.mark_command_favorite(node.data["name"], is_favorite)
+
+        # Refresh the tree view
+        self.parent.parent.tree.RefreshNode(node)
+        if node.parent:
+            self.parent.parent.tree._reloadNode(node.parent)
+
+    def _updateFavoriteButton(self, is_favorite):
+        """Update the favorite button appearance based on favorite status."""
+        if is_favorite:
+            self.favorite_button.SetBitmap(self.icons["heart_on"])
+            self.favorite_button.SetToolTip(_("Remove from favorites"))
+        else:
+            self.favorite_button.SetBitmap(self.icons["heart_off"])
+            self.favorite_button.SetToolTip(_("Mark as favorite"))
 
 
 class HistoryBrowser(wx.SplitterWindow):
