@@ -219,7 +219,7 @@ class KeyValueTestResult(TestResult):
             self.test_type = "not-specified"
 
         self._grass_modules = []
-        self._supplementary_files = []
+        self._supplementary_files: list[str] = []
 
     def setTimes(self, start_time, end_time, time_taken):
         self.start_time = start_time

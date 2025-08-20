@@ -1289,7 +1289,7 @@ class TestCase(unittest.TestCase):
                 # TODO: all HTML files might be collected by the main reporter
                 # TODO: standardize the format of name of HTML file
                 # for one test id there is only one possible file of this name
-                htmldiff_file_name = self.id() + "_ascii_diff" + ".html"
+                htmldiff_file_name: str = self.id() + "_ascii_diff" + ".html"
                 self.supplementary_files.append(htmldiff_file_name)
                 htmldiff = difflib.HtmlDiff().make_file(
                     fromlines,
