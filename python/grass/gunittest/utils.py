@@ -72,18 +72,6 @@ def do_doctest_gettext_workaround():
 _MAX_LENGTH = 80
 
 
-# taken from unittest.util (Python 2.7) since it is not part of API
-# but we need it for the same reason as it is used un unittest's TestCase
-def safe_repr(obj, short=False):
-    try:
-        result = repr(obj)
-    except Exception:
-        result = object.__repr__(obj)  # noqa: PLC2801
-    if not short or len(result) < _MAX_LENGTH:
-        return result
-    return result[:_MAX_LENGTH] + " [truncated]..."
-
-
 def xfail_windows(test_item):
     """Marks a test as an expected failure or error only on Windows
     Equivalent to applying @unittest.expectedFailure only when running
