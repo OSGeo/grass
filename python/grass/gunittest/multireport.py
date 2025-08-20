@@ -9,13 +9,16 @@ for details.
 :authors: Vaclav Petras
 """
 
+from __future__ import annotations
+
 import sys
 import os
 import argparse
 import itertools
 import datetime
 import operator
-from collections import defaultdict, namedtuple
+from collections import defaultdict
+from typing import TYPE_CHECKING, NamedTuple
 from pathlib import Path
 
 from grass.gunittest.checkers import text_to_keyvalue
@@ -30,6 +33,18 @@ mpl.use("Agg")
 # Perhaps in the future, switch_backend() could be used.
 import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.dates import date2num  # noqa: E402
+
+
+if TYPE_CHECKING:
+    from _typeshed import StrPath
+
+
+class _PlotStyle(NamedTuple):
+    linestyle: str
+    linewidth: float
+    success_color: str
+    fail_color: str
+    total_color: str
 
 
 class TestResultSummary:
@@ -62,7 +77,9 @@ class TestResultSummary:
         self.report = None
 
 
-def plot_percents(x, xticks, xlabels, successes, failures, filename, style):
+def plot_percents(
+    x, xticks, xlabels, successes, failures, filename: StrPath, style: _PlotStyle
+) -> None:
     fig = plt.figure()
     graph = fig.add_subplot(111)
 
@@ -93,7 +110,9 @@ def plot_percents(x, xticks, xlabels, successes, failures, filename, style):
     fig.savefig(filename)
 
 
-def plot_percent_successful(x, xticks, xlabels, successes, filename, style):
+def plot_percent_successful(
+    x, xticks, xlabels, successes, filename: StrPath, style: _PlotStyle
+) -> None:
     fig = plt.figure()
     graph = fig.add_subplot(111)
 
@@ -142,7 +161,9 @@ def plot_percent_successful(x, xticks, xlabels, successes, filename, style):
     fig.savefig(filename)
 
 
-def tests_successful_plot(x, xticks, xlabels, results, filename, style):
+def tests_successful_plot(
+    x, xticks, xlabels, results, filename: StrPath, style: _PlotStyle
+) -> None:
     successes = []
     for result in results:
         if result.total:
@@ -162,7 +183,9 @@ def tests_successful_plot(x, xticks, xlabels, results, filename, style):
     )
 
 
-def tests_plot(x, xticks, xlabels, results, filename, style):
+def tests_plot(
+    x, xticks, xlabels, results, filename: StrPath, style: _PlotStyle
+) -> None:
     total = [result.total for result in results]
     successes = [result.successes for result in results]
     # TODO: document: counting errors and failures together
@@ -201,7 +224,9 @@ def tests_plot(x, xticks, xlabels, results, filename, style):
     fig.savefig(filename)
 
 
-def tests_percent_plot(x, xticks, xlabels, results, filename, style):
+def tests_percent_plot(
+    x, xticks, xlabels, results, filename: StrPath, style: _PlotStyle
+) -> None:
     successes = []
     failures = []
     for result in results:
@@ -226,7 +251,9 @@ def tests_percent_plot(x, xticks, xlabels, results, filename, style):
     )
 
 
-def files_successful_plot(x, xticks, xlabels, results, filename, style):
+def files_successful_plot(
+    x, xticks, xlabels, results, filename: StrPath, style: _PlotStyle
+) -> None:
     successes = []
     for result in results:
         if result.total:
@@ -246,7 +273,9 @@ def files_successful_plot(x, xticks, xlabels, results, filename, style):
     )
 
 
-def files_plot(x, xticks, xlabels, results, filename, style):
+def files_plot(
+    x, xticks, xlabels, results, filename: StrPath, style: _PlotStyle
+) -> None:
     total = [result.files_total for result in results]
     successes = [result.files_successes for result in results]
     failures = [result.files_failures for result in results]
@@ -284,7 +313,9 @@ def files_plot(x, xticks, xlabels, results, filename, style):
     fig.savefig(filename)
 
 
-def files_percent_plot(x, xticks, xlabels, results, filename, style):
+def files_percent_plot(
+    x, xticks, xlabels, results, filename: StrPath, style: _PlotStyle
+) -> None:
     successes = []
     failures = []
     for result in results:
@@ -308,7 +339,9 @@ def files_percent_plot(x, xticks, xlabels, results, filename, style):
     )
 
 
-def info_plot(x, xticks, xlabels, results, filename, style):
+def info_plot(
+    x, xticks, xlabels, results, filename: StrPath, style: _PlotStyle
+) -> None:
     modules = [len(result.tested_modules) for result in results]
     names = [len(result.names) for result in results]
     authors = [len(result.test_files_authors) for result in results]
@@ -364,8 +397,13 @@ def info_plot(x, xticks, xlabels, results, filename, style):
 
 # TODO: solve the directory inconsistencies, implement None
 def main_page(
-    results, filename, images, captions, title="Test reports", directory=None
-):
+    results,
+    filename: StrPath,
+    images,
+    captions,
+    title="Test reports",
+    directory: StrPath | None = None,
+) -> None:
     filename = os.path.join(directory, filename)
     with open(filename, "w") as page:
         page.write(
@@ -449,7 +487,7 @@ def main():
     )
 
     args = parser.parse_args()
-    output = args.output
+    output: StrPath = args.output
     reports = args.reports
     use_timestamps = args.timestamps
 
@@ -525,11 +563,7 @@ def main():
             "<tbody>"
         )
 
-        PlotStyle = namedtuple(
-            "PlotStyle",
-            ["linestyle", "linewidth", "success_color", "fail_color", "total_color"],
-        )
-        plot_style = PlotStyle(
+        plot_style = _PlotStyle(
             linestyle="-",
             linewidth=4.0,
             success_color="g",
