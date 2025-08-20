@@ -9,28 +9,34 @@ for details.
 :authors: Vaclav Petras
 """
 
+from __future__ import annotations
+
 import errno
 import os
-from pathlib import Path
 import shutil
 import sys
-from unittest import expectedFailure
 import warnings
+from pathlib import Path
+from typing import TYPE_CHECKING
+from unittest import expectedFailure
+
+if TYPE_CHECKING:
+    from _typeshed import StrOrBytesPath, StrPath
 
 
-def ensure_dir(directory):
+def ensure_dir(directory: StrOrBytesPath) -> None:
     """Create all directories in the given path if needed."""
     if not os.path.exists(directory):
         os.makedirs(directory)
 
 
-def add_gitignore_to_dir(directory):
+def add_gitignore_to_dir(directory: StrPath) -> None:
     gitignore_path = Path(directory) / ".gitignore"
     if not Path(gitignore_path).exists():
         Path(gitignore_path).write_text("*")
 
 
-def silent_rmtree(filename):
+def silent_rmtree(filename: StrOrBytesPath) -> None:
     """Remove the file but do nothing if file does not exist."""
     try:
         shutil.rmtree(filename)
@@ -41,7 +47,7 @@ def silent_rmtree(filename):
             raise
 
 
-def do_doctest_gettext_workaround():
+def do_doctest_gettext_workaround() -> None:
     """Setups environment for doing a doctest with gettext usage.
 
     When using gettext with dynamically defined underscore function
@@ -53,12 +59,12 @@ def do_doctest_gettext_workaround():
     environment to satisfy all. This is done by this function.
     """
 
-    def new_displayhook(string):
+    def new_displayhook(string: str | None) -> None:
         """A replacement for default `sys.displayhook`"""
         if string is not None:
             sys.stdout.write("%r\n" % (string,))
 
-    def new_translator(string):
+    def new_translator(string: str) -> str:
         """A fake gettext underscore function."""
         return string
 
