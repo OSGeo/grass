@@ -67,6 +67,12 @@ int read_rast(double east, double north, double dist, int fd, int coords,
 
         fprintf(fp, " %f", dist);
         break;
+    case CSV:
+        if (coords)
+            fprintf(fp, "%f%s%f%s", east, fs, north, fs);
+
+        fprintf(fp, "%f", dist);
+        break;
     }
 
     if (outofbounds || Rast_is_d_null_value(&dcell[col])) {
@@ -76,6 +82,9 @@ int read_rast(double east, double north, double dist, int fd, int coords,
             break;
         case PLAIN:
             fprintf(fp, " %s", null_string);
+            break;
+        case CSV:
+            fprintf(fp, "%s%s", fs, null_string);
             break;
         }
     }
@@ -89,6 +98,9 @@ int read_rast(double east, double north, double dist, int fd, int coords,
             case PLAIN:
                 fprintf(fp, " %d", dvalue);
                 break;
+            case CSV:
+                fprintf(fp, "%s%d", fs, dvalue);
+                break;
             }
         }
         else {
@@ -98,6 +110,9 @@ int read_rast(double east, double north, double dist, int fd, int coords,
                 break;
             case PLAIN:
                 fprintf(fp, " %f", dcell[col]);
+                break;
+            case CSV:
+                fprintf(fp, "%s%f", fs, dcell[col]);
                 break;
             }
         }
@@ -128,6 +143,13 @@ int read_rast(double east, double north, double dist, int fd, int coords,
                 fprintf(fp, " %03d:%03d:%03d", red, green, blue);
             }
             break;
+        case CSV:
+            G_color_to_str(red, green, blue, clr_frmt, color_str);
+            if (clr_frmt != HEX)
+                fprintf(fp, "%s\"%s\"", fs, color_str);
+            else
+                fprintf(fp, "%s%s", fs, color_str);
+            break;
         }
     }
 
@@ -136,6 +158,7 @@ int read_rast(double east, double north, double dist, int fd, int coords,
         json_array_append_value(array, value);
         break;
     case PLAIN:
+    case CSV:
         fprintf(fp, "\n");
         break;
     }
