@@ -53,7 +53,7 @@ def main():
     frame = ModelerFrame(
         parent=None,
         giface=StandaloneGrassInterface(),
-        title=_("Graphical Modeler - GRASS GIS"),
+        title=_("Graphical Modeler - GRASS"),
     )
     if options["file"]:
         frame.panel.LoadModelFile(options["file"])

@@ -15,7 +15,7 @@
 #############################################################################
 
 # %module
-# % description: Exports a vector map as GRASS GIS specific archive file
+# % description: Exports a vector map as GRASS specific archive file
 # % keyword: vector
 # % keyword: export
 # % keyword: copying

@@ -4,7 +4,7 @@ from grass.gunittest.main import test
 
 
 class TestColorsEnhance(TestCase):
-    """Regression test suite for i.colors.enhance module in GRASS GIS."""
+    """Regression test suite for i.colors.enhance module in GRASS."""
 
     @classmethod
     def setUpClass(cls):

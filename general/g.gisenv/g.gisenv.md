@@ -1,6 +1,6 @@
 ## DESCRIPTION
 
-*g.gisenv* outputs and modifies the user's current GRASS GIS variable
+*g.gisenv* outputs and modifies the user's current GRASS variable
 settings. When a user runs GRASS, certain variables are set specifying
 the GRASS data base, project, mapset, peripheral device drivers, etc.,
 being used in the current GRASS session. These variable name settings

@@ -162,7 +162,7 @@ GRASS_HEADERS_GIT_HASH="${GRASS_VERSION_NUMBER}"
 GRASS_HEADERS_GIT_DATE=`date -u +%FT%T%z | sed 's/\(..\)$/:\1/'`
 AC_PATH_PROG(GIT, git, no)
 AC_CHECK_FILE([$GRASS_VERSION_GIT_FILE])
-AC_MSG_CHECKING(for GRASS GIS headers commit date)
+AC_MSG_CHECKING(for GRASS headers commit date)
 if test "$GIT" != "no" ; then
    GRASS_VERSION_GIT=`$GIT rev-parse --short HEAD 2>/dev/null`
    if test -z "$GRASS_VERSION_GIT"; then

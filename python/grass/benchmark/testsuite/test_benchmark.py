@@ -2,7 +2,7 @@
 #
 # AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
 #
-# PURPOSE:   Benchmarking for GRASS GIS modules
+# PURPOSE:   Benchmarking for GRASS modules
 #
 # COPYRIGHT: (C) 2021 Vaclav Petras, and by the GRASS Development Team
 #

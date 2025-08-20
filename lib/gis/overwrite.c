@@ -8,7 +8,7 @@
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team, Martin Landa <landa.martin gmail.com>
+ * \author GRASS Development Team, Martin Landa <landa.martin gmail.com>
  */
 
 #include <stdlib.h>

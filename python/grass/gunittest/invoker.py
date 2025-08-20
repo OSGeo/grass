@@ -3,11 +3,13 @@ GRASS Python testing framework test files invoker (runner)
 
 Copyright (C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS GIS
+License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :authors: Vaclav Petras
 """
+
+from __future__ import annotations
 
 import collections
 import os
@@ -15,6 +17,8 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
+from typing import TYPE_CHECKING
+
 
 from .checkers import text_to_keyvalue
 
@@ -33,6 +37,9 @@ from .utils import silent_rmtree, ensure_dir
 
 import grass.script as gs
 from grass.script.utils import decode, _get_encoding
+
+if TYPE_CHECKING:
+    from _typeshed import StrPath
 
 maketrans = str.maketrans
 
@@ -73,12 +80,12 @@ class GrassTestFilesInvoker:
     def __init__(
         self,
         start_dir,
-        clean_mapsets=True,
-        clean_outputs=True,
-        clean_before=True,
-        testsuite_dir="testsuite",
+        clean_mapsets: bool = True,
+        clean_outputs: bool = True,
+        clean_before: bool = True,
+        testsuite_dir: str = "testsuite",
         file_anonymizer=None,
-        timeout=None,
+        timeout: float | None = None,
     ):
         """
 
@@ -91,9 +98,9 @@ class GrassTestFilesInvoker:
         :param float timeout: maximum duration of one test in seconds
         """
         self.start_dir = start_dir
-        self.clean_mapsets = clean_mapsets
-        self.clean_outputs = clean_outputs
-        self.clean_before = clean_before
+        self.clean_mapsets: bool = clean_mapsets
+        self.clean_outputs: bool = clean_outputs
+        self.clean_before: bool = clean_before
         self.testsuite_dir = testsuite_dir  # TODO: solve distribution of this constant
         # reporter is created for each call of run_in_location()
         self.reporter = None
@@ -104,9 +111,9 @@ class GrassTestFilesInvoker:
         else:
             self._file_anonymizer = file_anonymizer
 
-        self.timeout = timeout
+        self.timeout: float | None = timeout
 
-    def _create_mapset(self, gisdbase, location, module):
+    def _create_mapset(self, gisdbase, location, module) -> tuple[str, str]:
         """Create mapset according to information in module.
 
         :param loader.GrassTestPythonModule module:
@@ -131,11 +138,13 @@ class GrassTestFilesInvoker:
         )
         return mapset, mapset_dir
 
-    def _run_test_module(self, module, results_dir, gisdbase, location, timeout):
+    def _run_test_module(
+        self, module, results_dir: StrPath, gisdbase, location, timeout: float | None
+    ) -> None:
         """Run one test file."""
         self.testsuite_dirs[module.tested_dir].append(module.name)
-        cwd = os.path.join(results_dir, module.tested_dir, module.name)
-        data_dir = os.path.join(module.file_dir, "data")
+        cwd: str = os.path.join(results_dir, module.tested_dir, module.name)
+        data_dir: str = os.path.join(module.file_dir, "data")
         if os.path.exists(data_dir):
             # TODO: link dir instead of copy tree and remove link afterwads
             # (removing is good because of testsuite dir in samplecode)
@@ -169,8 +178,7 @@ class GrassTestFilesInvoker:
         if module.file_type == "py":
             # ignoring shebang line to use current Python
             # and also pass parameters to it
-            # add also '-Qwarn'?
-            args = [sys.executable, "-tt", module.abs_file_path]
+            args = [sys.executable, module.abs_file_path]
         elif module.file_type == "sh":
             # ignoring shebang line to pass parameters to shell
             # expecting system to have sh or something compatible
@@ -198,7 +206,7 @@ class GrassTestFilesInvoker:
             )
             stdout = p.stdout
             stderr = p.stderr
-            returncode = p.returncode
+            returncode: int = p.returncode
             # No timeout to report. Non-none time out values are used to indicate
             # the timeout case.
             timed_out = None
@@ -277,7 +285,9 @@ class GrassTestFilesInvoker:
                 # later on if the processes are still running.)
                 shutil.rmtree(mapset_dir, ignore_errors=True)
 
-    def run_in_location(self, gisdbase, location, location_type, results_dir, exclude):
+    def run_in_location(
+        self, gisdbase, location, location_type, results_dir: StrPath, exclude
+    ) -> GrassTestFilesMultiReporter:
         """Run tests in a given location
 
         Returns an object with counting attributes of GrassTestFilesCountingReporter,

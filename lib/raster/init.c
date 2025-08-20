@@ -8,7 +8,7 @@
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
+ * \author GRASS Development Team
  *
  * \date 2000-2008
  */
@@ -32,7 +32,7 @@ static int initialized = 0; /** Is set when engine is initialized */
 static int init(void);
 
 /**
- * \brief Initialize GRASS GIS engine.
+ * \brief Initialize GRASS engine.
  *
  * Initializes GIS engine and ensures a valid mapset is available.
  *
