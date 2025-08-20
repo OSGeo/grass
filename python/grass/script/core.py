@@ -597,9 +597,7 @@ def run_command(*args, **kwargs):
 
     :raises ~grass.exceptions.CalledModuleError: When module returns non-zero return code.
     """
-    encoding = "default"
-    if "encoding" in kwargs:
-        encoding = kwargs["encoding"]
+    encoding = kwargs.get("encoding", "default")
 
     if _capture_stderr and "stderr" not in kwargs.keys():
         kwargs["stderr"] = PIPE
@@ -669,9 +667,7 @@ def read_command(*args, **kwargs):
 
     :return: stdout
     """
-    encoding = "default"
-    if "encoding" in kwargs:
-        encoding = kwargs["encoding"]
+    encoding = kwargs.get("encoding", "default")
 
     if _capture_stderr and "stderr" not in kwargs.keys():
         kwargs["stderr"] = PIPE
@@ -775,9 +771,7 @@ def write_command(*args, **kwargs):
 
     :raises ~grass.exceptions.CalledModuleError: When module returns non-zero return code
     """
-    encoding = "default"
-    if "encoding" in kwargs:
-        encoding = kwargs["encoding"]
+    encoding = kwargs.get("encoding", "default")
     # TODO: should we delete it from kwargs?
     stdin = kwargs["stdin"]
     if _capture_stderr and "stderr" not in kwargs.keys():
