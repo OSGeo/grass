@@ -76,11 +76,8 @@ def test_v_decimate_skip(setup_point_map):
     output_map = "decimated_skip_3"
     tools.v_decimate(input=input_map, output=output_map, skip=3, overwrite=True)
 
-    orig_info = tools.v_info(map=input_map, flags="t", format="json")
-    dec_info = tools.v_info(map=output_map, flags="t", format="json")
-
-    orig_count = int(orig_info["points"])
-    dec_count = int(dec_info["points"])
+    orig_count = tools.v_info(map=input_map, flags="t", format="json")["points"]
+    dec_count = tools.v_info(map=output_map, flags="t", format="json")["points"]
 
     assert dec_count < orig_count, (
         f"Decimated map has {dec_count} points; expected less than original {orig_count}"
@@ -99,8 +96,7 @@ def test_decimate_offset_and_limit(setup_point_map):
         input=input_map, output=output_map, offset=2, limit=3, overwrite=True
     )
 
-    info = tools.v_info(map=output_map, flags="t", format="json")
-    count = info["points"]
+    count = tools.v_info(map=output_map, flags="t", format="json")["points"]
 
     assert count == 3, f"Expected 3 points after offset and limit, got {count}"
 
@@ -116,8 +112,7 @@ def test_decimate_zrange(setup_point_map):
         input=input_map, output=output_map, zrange=(3.0, 5.0), overwrite=True
     )
 
-    info = tools.v_info(map=output_map, flags="t", format="json")
-    count = info["points"]
+    count = tools.v_info(map=output_map, flags="t", format="json")["points"]
 
     assert count == 3, f"Expected 3 points in zrange 3.0-5.0, got {count}"
 
