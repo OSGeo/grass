@@ -179,7 +179,7 @@ def main():
 
     # clone current region
     # switch to a temporary region
-    # gs.use_temp_region()
+    gs.use_temp_region()
 
     gs.run_command("g.region", raster=name, quiet=True)
 
