@@ -2092,7 +2092,7 @@ def find_grass_python_package() -> None:
     if "GRASS_PYDIR" in os.environ and len(os.getenv("GRASS_PYDIR")) > 0:
         GRASS_PYDIR = os.path.normpath(os.environ["GRASS_PYDIR"])
     else:
-        GRASS_PYDIR = os.path.normpath("@GRASS_PYDIR@")
+        GRASS_PYDIR = os.path.normpath(r"@GRASS_PYDIR@")
 
     if os.path.exists(GRASS_PYDIR):
         sys.path.append(GRASS_PYDIR)
