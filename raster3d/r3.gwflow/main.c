@@ -204,7 +204,7 @@ int main(int argc, char *argv[])
     N_set_les_callback_3d_func(call, (*N_callback_gwflow_3d)); /*gwflow 3d */
 
     /*Allocate the groundwater flow data structure */
-    data = N_alloc_gwflow_data3d(geom->cols, geom->rows, geom->depths, 1, 0);
+    data = N_alloc_gwflow_data3d(geom->cols, geom->rows, geom->depths, 0, 0);
 
     /*Set the calculation time */
     sscanf(param.dt->answer, "%lf", &(data->dt));
