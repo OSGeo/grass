@@ -459,7 +459,7 @@ void execute(expr_list *ee)
 
     verbose = isatty(2);
     for (current_depth = 0; current_depth < depths; current_depth++) {
-      int row;
+        int row;
 #pragma omp parallel for default(shared) schedule(static, 1) private(i) ordered
         for (row = 0; row < rows; row++) {
             if (verbose)
