@@ -259,13 +259,6 @@ int main(int argc, char *argv[])
         JSON_Array *layers_array = NULL;
         JSON_Value *layers_value = NULL;
         if (format == JSON) {
-            root_value = json_value_init_object();
-            if (root_value == NULL) {
-                G_fatal_error(
-                    _("Failed to initialize JSON object. Out of memory?"));
-            }
-            root_object = json_object(root_value);
-
             layers_value = json_value_init_array();
             if (layers_value == NULL) {
                 G_fatal_error(
@@ -321,16 +314,15 @@ int main(int argc, char *argv[])
         }
 
         if (format == JSON) {
-            json_object_set_value(root_object, "layers", layers_value);
 
             char *serialized_string = NULL;
-            serialized_string = json_serialize_to_string_pretty(root_value);
+            serialized_string = json_serialize_to_string_pretty(layers_value);
             if (serialized_string == NULL) {
                 G_fatal_error(_("Failed to initialize pretty JSON string."));
             }
             puts(serialized_string);
             json_free_serialized_string(serialized_string);
-            json_value_free(root_value);
+            json_value_free(layers_value);
         }
         Vect_close(&In);
         exit(EXIT_SUCCESS);
