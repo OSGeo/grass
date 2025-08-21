@@ -105,7 +105,7 @@ class TestVCategory(TestCase):
 
         result = json.loads(module.outputs.stdout)
 
-        expected = {"layers": [1, 2]}
+        expected = [1, 2]
 
         self.assertDictEqual(expected, result)
 
