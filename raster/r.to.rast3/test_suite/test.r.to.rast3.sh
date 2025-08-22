@@ -1,3 +1,4 @@
+#!/usr/bin/env sh
 # This script tests the conversion of raster maps
 # into a single voxel map with r.to.rast3
 

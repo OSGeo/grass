@@ -49,9 +49,9 @@ freetype_include=${FREETYPE_INCLUDE-/usr/include/freetype2}
 update=0
 package=0
 for opt; do
-	case "$opt" in
-	-h|--help)
-		cat<<'EOT'
+    case "$opt" in
+        -h | --help)
+            cat << 'EOT'
 Usage: crosscompile.sh [OPTIONS]
 
 -h, --help                   display this help message
@@ -63,108 +63,107 @@ Usage: crosscompile.sh [OPTIONS]
     --package                package the cross-compiled build as
                              grassVV-x86_64-w64-mingw32-YYYYMMDD.zip
 EOT
-		exit
-		;;
-	--mxe-path=*)
-		mxe_path=`echo $opt | sed 's/^[^=]*=//'`
-		;;
-	--addons-path=*)
-		addons_path=`echo $opt | sed 's/^[^=]*=//'`
-		;;
-	--freetype-include=*)
-		freetype_include=`echo $opt | sed 's/^[^=]*=//'`
-		;;
-	--update)
-		update=1
-		;;
-	--package)
-		package=1
-		;;
-	*)
-		echo "$opt: unknown option"
-		exit 1
-		;;
-	esac
+            exit
+            ;;
+        --mxe-path=*)
+            mxe_path=$(echo "$opt" | sed 's/^[^=]*=//')
+            ;;
+        --addons-path=*)
+            addons_path=$(echo "$opt" | sed 's/^[^=]*=//')
+            ;;
+        --freetype-include=*)
+            freetype_include=$(echo "$opt" | sed 's/^[^=]*=//')
+            ;;
+        --update)
+            update=1
+            ;;
+        --package)
+            package=1
+            ;;
+        *)
+            echo "$opt: unknown option"
+            exit 1
+            ;;
+    esac
 done
 
 # see if we're inside the root of the GRASS source code
 if [ ! -f grass.pc.in ]; then
-	echo "Please run this script from the root of the GRASS source code"
-	exit 1
+    echo "Please run this script from the root of the GRASS source code"
+    exit 1
 fi
 
 # check paths
 errors=0
-if [ ! -d $mxe_path ]; then
-	echo "$mxe_path: not found"
-	errors=1
+if [ ! -d "$mxe_path" ]; then
+    echo "$mxe_path: not found"
+    errors=1
 fi
-if [ ! -d $freetype_include ]; then
-	echo "$freetype_include: not found"
-	errors=1
+if [ ! -d "$freetype_include" ]; then
+    echo "$freetype_include: not found"
+    errors=1
 fi
 if [ $update -eq 1 -a ! -d .git ]; then
-	echo "not a git repository"
-	errors=1
+    echo "not a git repository"
+    errors=1
 fi
 if [ $errors -eq 1 ]; then
-	exit 1
+    exit 1
 fi
 
 ################################################################################
 # Start
 
-echo "Started cross-compilation: `date`"
+echo "Started cross-compilation: $(date)"
 echo
 
 # update the current branch if requested
 if [ $update -eq 1 -a -d .git ]; then
-	git pull
+    git pull
 fi
 
 ################################################################################
 # Compile the native architecture for generating document files
 
 CFLAGS="-g -O2 -Wall" \
-CXXFLAGS="-g -O2 -Wall" \
-LDFLAGS="-lcurses" \
-./configure \
---with-blas \
---with-bzlib \
---with-freetype-includes=$freetype_include \
---with-geos \
---with-lapack \
---with-netcdf \
---with-nls \
---with-openmp \
---with-postgres \
---with-pthread \
---with-readline \
->> /dev/stdout
+    CXXFLAGS="-g -O2 -Wall" \
+    LDFLAGS="-lcurses" \
+    ./configure \
+    --with-blas \
+    --with-bzlib \
+    --with-freetype-includes="$freetype_include" \
+    --with-geos \
+    --with-lapack \
+    --with-netcdf \
+    --with-nls \
+    --with-openmp \
+    --with-postgres \
+    --with-pthread \
+    --with-readline \
+    >> /dev/stdout
 
 make clean default
 
-if [ -d $addons_path ]; then
-	MODULE_TOPDIR=`pwd`
-	(
-	cd $addons_path
-	if [ $update -eq 1 -a -d .git ]; then
-		git pull
-	fi
-	cd src
-	make MODULE_TOPDIR=$MODULE_TOPDIR clean default
-	)
+if [ -d "$addons_path" ]; then
+    MODULE_TOPDIR=$(pwd)
+    (
+        cd "$addons_path"
+        if [ $update -eq 1 -a -d .git ]; then
+            git pull
+        fi
+        cd src
+        make MODULE_TOPDIR="$MODULE_TOPDIR" clean default
+    )
 fi
 
-build_arch=`sed -n '/^ARCH[ \t]*=/{s/^.*=[ \t]*//; p}' include/Make/Platform.make`
+build_arch=$(sed -n '/^ARCH[ \t]*=/{s/^.*=[ \t]*//; p}' include/Make/Platform.make)
 for i in \
-	config.log \
-	error.log \
-	include/Make/Doxyfile_arch_html \
-	include/Make/Doxyfile_arch_latex \
-	include/Make/Platform.make \
-; do
-	cp -a $i $i.$build_arch
+    config.log \
+    error.log \
+    include/Make/Doxyfile_arch_html \
+    include/Make/Doxyfile_arch_latex \
+    include/Make/Platform.make; do
+    cp -a $i "$i.$build_arch"
 done
 
 ################################################################################
@@ -176,53 +175,52 @@ mxe_bin=$mxe_path/usr/bin/$shared
 mxe_shared=$mxe_path/usr/$shared
 
 CC=$mxe_bin-gcc \
-CXX=$mxe_bin-g++ \
-CFLAGS="-g -O2 -Wall" \
-CXXFLAGS="-g -O2 -Wall" \
-AR=$mxe_bin-ar \
-RANLIB=$mxe_bin-ranlib \
-WINDRES=$mxe_bin-windres \
-PKG_CONFIG=$mxe_bin-pkg-config \
-./configure \
---build=$build_arch \
---host=$arch \
---with-blas \
---with-bzlib \
---with-freetype-includes=$mxe_shared/include/freetype2 \
---with-gdal=$mxe_shared/bin/gdal-config \
---with-geos=$mxe_shared/bin/geos-config \
---with-lapack \
---with-netcdf=$mxe_shared/bin/nc-config \
---with-nls \
---with-opengl=windows \
---with-openmp \
---with-postgres \
---with-pthread \
---with-readline \
->> /dev/stdout
+    CXX=$mxe_bin-g++ \
+    CFLAGS="-g -O2 -Wall" \
+    CXXFLAGS="-g -O2 -Wall" \
+    AR=$mxe_bin-ar \
+    RANLIB=$mxe_bin-ranlib \
+    WINDRES=$mxe_bin-windres \
+    PKG_CONFIG=$mxe_bin-pkg-config \
+    ./configure \
+    --build="$build_arch" \
+    --host=$arch \
+    --with-blas \
+    --with-bzlib \
+    --with-freetype-includes="$mxe_shared/include/freetype2" \
+    --with-gdal="$mxe_shared/bin/gdal-config" \
+    --with-geos="$mxe_shared/bin/geos-config" \
+    --with-lapack \
+    --with-netcdf="$mxe_shared/bin/nc-config" \
+    --with-nls \
+    --with-opengl=windows \
+    --with-openmp \
+    --with-postgres \
+    --with-pthread \
+    --with-readline \
+    >> /dev/stdout
 
 make clean default
 
-if [ -d $addons_path ]; then
-	(
-	cd $addons_path
-	if [ $update -eq 1 -a -d .git ]; then
-		git pull
-	fi
-	cd src
-	make MODULE_TOPDIR=$MODULE_TOPDIR clean default
-	)
+if [ -d "$addons_path" ]; then
+    (
+        cd "$addons_path"
+        if [ $update -eq 1 -a -d .git ]; then
+            git pull
+        fi
+        cd src
+        make MODULE_TOPDIR="$MODULE_TOPDIR" clean default
+    )
 fi
 
-arch=`sed -n '/^ARCH[ \t]*=/{s/^.*=[ \t]*//; p}' include/Make/Platform.make`
+arch=$(sed -n '/^ARCH[ \t]*=/{s/^.*=[ \t]*//; p}' include/Make/Platform.make)
 for i in \
-	config.log \
-	error.log \
-	include/Make/Doxyfile_arch_html \
-	include/Make/Doxyfile_arch_latex \
-	include/Make/Platform.make \
-; do
-	cp -a $i $i.$arch
+    config.log \
+    error.log \
+    include/Make/Doxyfile_arch_html \
+    include/Make/Doxyfile_arch_latex \
+    include/Make/Platform.make; do
+    cp -a $i "$i.$arch"
 done
 
 ################################################################################
@@ -232,97 +230,94 @@ build_dist=dist.$build_arch
 dist=dist.$arch
 
 for i in \
-	docs \
-	gui/wxpython/xml \
-; do
-	rm -rf $dist/$i
-	cp -a $build_dist/$i $dist/$i
+    docs \
+    gui/wxpython/xml; do
+    rm -rf "$dist/$i"
+    cp -a "$build_dist/$i" "$dist/$i"
 done
 
 ################################################################################
 # Copy MXE files
 
 for i in \
-	libblas.dll \
-	libbz2.dll \
-	libcairo-2.dll \
-	libcrypto-3-x64.dll \
-	libcurl-4.dll \
-	libdf-0.dll \
-	libexpat-1.dll \
-	libfftw3-3.dll \
-	libfontconfig-1.dll \
-	libfreetype-6.dll \
-	libfreexl-1.dll \
-	libgcc_s_seh-1.dll \
-	libgcrypt-20.dll \
-	libgdal-20.dll \
-	libgeos-3-6-2.dll \
-	libgeos_c-1.dll \
-	libgeotiff-2.dll \
-	libgfortran-3.dll \
-	libgif-7.dll \
-	libglib-2.0-0.dll \
-	libgnurx-0.dll \
-	libgomp-1.dll \
-	libgpg-error-0.dll \
-	libgta-0.dll \
-	libharfbuzz-0.dll \
-	libhdf5-8.dll \
-	libhdf5_hl-8.dll \
-	libiconv-2.dll \
-	libidn2-0.dll \
-	libintl-8.dll \
-	libjpeg-9.dll \
-	libjson-c-4.dll \
-	liblapack.dll \
-	liblzma-5.dll \
-	libmfhdf-0.dll \
-	libmysqlclient.dll \
-	libnetcdf.dll \
-	libopenjp2.dll \
-	libpcre-1.dll \
-	libpixman-1-0.dll \
-	libpng16-16.dll \
-	libportablexdr-0.dll \
-	libpq.dll \
-	libproj-13.dll \
-	libquadmath-0.dll \
-	libreadline8.dll \
-	libspatialite-7.dll \
-	libsqlite3-0.dll \
-	libssh2-1.dll \
-	libssl-3-x64.dll \
-	libstdc++-6.dll \
-	libtermcap.dll \
-	libtiff-5.dll \
-	libunistring-2.dll \
-	libwebp-7.dll \
-	libwinpthread-1.dll \
-	libxml2-2.dll \
-	libzstd.dll \
-	zlib1.dll \
-; do
-	cp -a $mxe_shared/bin/$i $dist/lib
+    libblas.dll \
+    libbz2.dll \
+    libcairo-2.dll \
+    libcrypto-3-x64.dll \
+    libcurl-4.dll \
+    libdf-0.dll \
+    libexpat-1.dll \
+    libfftw3-3.dll \
+    libfontconfig-1.dll \
+    libfreetype-6.dll \
+    libfreexl-1.dll \
+    libgcc_s_seh-1.dll \
+    libgcrypt-20.dll \
+    libgdal-20.dll \
+    libgeos-3-6-2.dll \
+    libgeos_c-1.dll \
+    libgeotiff-2.dll \
+    libgfortran-3.dll \
+    libgif-7.dll \
+    libglib-2.0-0.dll \
+    libgnurx-0.dll \
+    libgomp-1.dll \
+    libgpg-error-0.dll \
+    libgta-0.dll \
+    libharfbuzz-0.dll \
+    libhdf5-8.dll \
+    libhdf5_hl-8.dll \
+    libiconv-2.dll \
+    libidn2-0.dll \
+    libintl-8.dll \
+    libjpeg-9.dll \
+    libjson-c-4.dll \
+    liblapack.dll \
+    liblzma-5.dll \
+    libmfhdf-0.dll \
+    libmysqlclient.dll \
+    libnetcdf.dll \
+    libopenjp2.dll \
+    libpcre-1.dll \
+    libpixman-1-0.dll \
+    libpng16-16.dll \
+    libportablexdr-0.dll \
+    libpq.dll \
+    libproj-13.dll \
+    libquadmath-0.dll \
+    libreadline8.dll \
+    libspatialite-7.dll \
+    libsqlite3-0.dll \
+    libssh2-1.dll \
+    libssl-3-x64.dll \
+    libstdc++-6.dll \
+    libtermcap.dll \
+    libtiff-5.dll \
+    libunistring-2.dll \
+    libwebp-7.dll \
+    libwinpthread-1.dll \
+    libxml2-2.dll \
+    libzstd.dll \
+    zlib1.dll; do
+    cp -a "$mxe_shared/bin/$i" "$dist/lib"
 done
 
 for i in \
-	gdal \
-	proj \
-; do
-	rm -rf $dist/share/$i
-	cp -a $mxe_shared/share/$i $dist/share/$i
+    gdal \
+    proj; do
+    rm -rf "$dist/share/$i"
+    cp -a "$mxe_shared/share/$i" "$dist/share/$i"
 done
 
 ################################################################################
 # Post-compile process
 
-version=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
+version=$(sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make)
 
-rm -f $dist/grass.tmp
-cp -a bin.$arch/grass.py $dist/etc/grass$version.py
+rm -f "$dist/grass.tmp"
+cp -a bin."$arch"/grass.py "$dist/etc/grass$version.py"
 
-cat<<'EOT' | sed "s/\$version/$version/g" > $dist/grass.bat
+cat << 'EOT' | sed "s/\$version/$version/g" > "$dist/grass.bat"
 @echo off
 setlocal EnableDelayedExpansion
 
@@ -410,17 +405,17 @@ if not exist "%GISBASE%\etc\fontcap" (
 
 "%GRASS_PYTHON%" "%GISBASE%\etc\grass$version.py" %*
 EOT
-unix2dos $dist/grass.bat
+unix2dos "$dist/grass.bat"
 
 # package if requested
 if [ $package -eq 1 ]; then
-	date=`date +%Y%m%d`
-	rm -f grass
-	ln -s $dist grass
-	rm -f grass*-$arch-*.zip
-	zip -r grass$version-$arch-$date.zip grass
-	rm -f grass
+    date=$(date +%Y%m%d)
+    rm -f grass
+    ln -s "$dist" grass
+    rm -f grass*-"$arch"-*.zip
+    zip -r "grass$version-$arch-$date.zip" grass
+    rm -f grass
 fi
 
 echo
-echo "Completed cross-compilation: `date`"
+echo "Completed cross-compilation: $(date)"

@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 rm -f X1 X2 X3 X1.txt X2.txt X3.txt
 
 cat > X1.txt << EOF
@@ -81,48 +80,54 @@ A	40		60		10		4060
 A	60		50		10		6050
 EOF
 
-function check_path () {
-	fromNode=$1
-	toNode=$2
-	totDistance=$3
-	nLinks=$4
-	nodeList=($5)
-	file=$6
+function check_path() {
+    fromNode=$1
+    toNode=$2
+    totDistance=$3
+    nLinks=$4
+    nodeList=($5)
+    file=$6
 
-	echo "check_path $fromNode -> $toNode - tot. distance $totDistance - n. links $nLinks"
+    echo "check_path $fromNode -> $toNode - tot. distance $totDistance - n. links $nLinks"
 
-	vlist=(`./shortest_path -g $file -f $fromNode -t $toNode`) || { echo "compute shortest path: command execution failed."; exit 1; }
+    vlist=($(./shortest_path -g "$file" -f "$fromNode" -t "$toNode")) || {
+        echo "compute shortest path: command execution failed."
+        exit 1
+    }
 
-	test "${vlist[10]}" = "unreachable" && {
-		echo "node $toNode is unreachable - test failed"; exit 1
-		}
-	test "${vlist[12]}" = "$nLinks" || {
-		echo "link count is ${vlist[12]} instead of $nLinks - test failed"; exit 1
-		}
-	test "${vlist[16]}" = "$totDistance" || {
-		echo "total distance is ${vlist[16]} instead of $totDistance - test failed"; exit 1
-		}
+    test "${vlist[10]}" = "unreachable" && {
+        echo "node $toNode is unreachable - test failed"
+        exit 1
+    }
+    test "${vlist[12]}" = "$nLinks" || {
+        echo "link count is ${vlist[12]} instead of $nLinks - test failed"
+        exit 1
+    }
+    test "${vlist[16]}" = "$totDistance" || {
+        echo "total distance is ${vlist[16]} instead of $totDistance - test failed"
+        exit 1
+    }
 
-	i=19
-	iNodeList=0
+    i=19
+    iNodeList=0
 
-	for (( iLink=0 ; iLink < $nLinks ; iLink++ ))
-	do
-		test ! "${vlist[$i]}" == "${nodeList[$iNodeList]}" && {
-			echo "wrong link $iLink head (${vlist[$i]}, ${nodeList[$iNodeList]}) - test failed"; exit 1
-			}
-		let i=i+2
-		let iNodeList=iNodeList+1
-		test ! "${vlist[$i]}" == "${nodeList[$iNodeList]}" && {
-			echo "wrong link $iLink tail (${vlist[$i]}, ${nodeList[$iNodeList]}) - test failed"; exit 1
-			}
-		let i=i+17
-		let iNodeList=iNodeList+1
-	done
+    for ((iLink = 0; iLink < nLinks; iLink++)); do
+        test ! "${vlist[$i]}" == "${nodeList[$iNodeList]}" && {
+            echo "wrong link $iLink head (${vlist[$i]}, ${nodeList[$iNodeList]}) - test failed"
+            exit 1
+        }
+        let i=i+2
+        let iNodeList=iNodeList+1
+        test ! "${vlist[$i]}" == "${nodeList[$iNodeList]}" && {
+            echo "wrong link $iLink tail (${vlist[$i]}, ${nodeList[$iNodeList]}) - test failed"
+            exit 1
+        }
+        let i=i+17
+        let iNodeList=iNodeList+1
+    done
 
-	echo "done"
+    echo "done"
 }
-
 
 #
 #
@@ -130,12 +135,18 @@ function check_path () {
 
 echo "script rtest03.sh: test shortest path computations..."
 
-./cr_from_a -f X1.txt -g X1 || { echo "create test graph: command execution failed."; exit 1; }
+./cr_from_a -f X1.txt -g X1 || {
+    echo "create test graph: command execution failed."
+    exit 1
+}
 
 check_path 1 80 30 2 "1 3 3 80" X1 || exit 1
 check_path 3 1 22 1 "3 1" X1 || exit 1
 
-./cr_from_a -f X2.txt -g X2 || { echo "create test graph: command execution failed."; exit 1; }
+./cr_from_a -f X2.txt -g X2 || {
+    echo "create test graph: command execution failed."
+    exit 1
+}
 
 check_path 1 80 30 2 "1 3 3 80" X2 || exit 1
 check_path 3 1 22 1 "3 1" X2 || exit 1

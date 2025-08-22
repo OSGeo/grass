@@ -19,7 +19,7 @@ r.mapcalc expr="prec_4 = rand(0, 510)" -s
 r.mapcalc expr="prec_5 = rand(0, 300)" -s
 r.mapcalc expr="prec_6 = rand(0, 650)" -s
 
-n1=`g.tempfile pid=1 -d`
+n1=$(g.tempfile pid=1 -d)
 
 cat > "${n1}" << EOF
 prec_1|2001-01-01|2001-07-01
@@ -30,7 +30,7 @@ prec_5|2001-05-01|2001-06-01
 prec_6|2001-06-01|2001-07-01
 EOF
 
-eval `g.gisenv`
+eval $(g.gisenv)
 
 t.create type=strds temporaltype=absolute output=precip_abs1 title="A test with input files" descr="A test with input files"
 
@@ -45,30 +45,30 @@ t.rast.export input=precip_abs1 output=strds_export_pack.tar.gz compression=gzip
 t.rast.export input=precip_abs1 output=strds_export_pack.tar.bz2 compression=bzip2 format=pack directory=test
 
 # Checking different flags
-t.rast.import --o input=strds_export.tar.bz2 output=precip_abs1 directory=test\
-          -oe title="A test" description="Description of a test"
-t.rast.import --o input=strds_export.tar.bz2 output=precip_abs1 directory=test\
-          -loe title="A test" description="Description of a test"
-t.rast.import --o input=strds_export.tar.bz2 output=precip_abs1 directory=test\
-              title="A test" description="Description of a test"
-t.rast.import --o input=strds_export.tar.bz2 output=precip_abs1 directory=test\
-          -l  title="A test" description="Description of a test"
+t.rast.import --o input=strds_export.tar.bz2 output=precip_abs1 directory=test \
+    -oe title="A test" description="Description of a test"
+t.rast.import --o input=strds_export.tar.bz2 output=precip_abs1 directory=test \
+    -loe title="A test" description="Description of a test"
+t.rast.import --o input=strds_export.tar.bz2 output=precip_abs1 directory=test \
+    title="A test" description="Description of a test"
+t.rast.import --o input=strds_export.tar.bz2 output=precip_abs1 directory=test \
+    -l title="A test" description="Description of a test"
 
 # Import using different compression and formats
-t.rast.import --o input=strds_export.tar.gz output=precip_abs1 directory=test\
-              title="A test" description="Description of a test"
+t.rast.import --o input=strds_export.tar.gz output=precip_abs1 directory=test \
+    title="A test" description="Description of a test"
 r.info prec_1
-t.rast.import --o input=strds_export.tar output=precip_abs1 directory=test\
-              title="A test" description="Description of a test"
+t.rast.import --o input=strds_export.tar output=precip_abs1 directory=test \
+    title="A test" description="Description of a test"
 r.info prec_1
-t.rast.import --o input=strds_export_pack.tar output=precip_abs1 directory=test\
-              title="A test" description="Description of a test"
+t.rast.import --o input=strds_export_pack.tar output=precip_abs1 directory=test \
+    title="A test" description="Description of a test"
 r.info prec_1
-t.rast.import --o input=strds_export_pack.tar.gz output=precip_abs1 directory=test\
-              title="A test" description="Description of a test"
+t.rast.import --o input=strds_export_pack.tar.gz output=precip_abs1 directory=test \
+    title="A test" description="Description of a test"
 r.info prec_1
-t.rast.import --o input=strds_export_pack.tar.bz2 output=precip_abs1 directory=test\
-              title="A test" description="Description of a test"
+t.rast.import --o input=strds_export_pack.tar.bz2 output=precip_abs1 directory=test \
+    title="A test" description="Description of a test"
 r.info prec_1
 
 # Cleaning up

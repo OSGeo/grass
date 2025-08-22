@@ -18,7 +18,7 @@ CONFIGURE_FLAGS="\
   --with-bzlib-libs=${CONDA_PREFIX}/lib \
   --with-cairo \
   --with-cairo-includes=${CONDA_PREFIX}/include/cairo \
-  --with-cairo-ldflags="-lcairo" \
+  --with-cairo-ldflags=-lcairo \
   --with-cairo-libs=${CONDA_PREFIX}/lib \
   --with-cxx \
   --with-fftw-includes=${CONDA_PREFIX}/include \
@@ -33,7 +33,6 @@ CONFIGURE_FLAGS="\
   --with-libpng=${CONDA_PREFIX}/bin/libpng-config \
   --with-libs=${CONDA_PREFIX}/lib \
   --with-netcdf=${CONDA_PREFIX}/bin/nc-config \
-  --with-netcdf=${CONDA_PREFIX}/bin/nc-config \
   --with-nls \
   --with-opengl=aqua \
   --with-openmp \
@@ -46,7 +45,7 @@ CONFIGURE_FLAGS="\
   --with-proj-share=${CONDA_PREFIX}/share/proj \
   --with-readline \
   --with-readline-includes=${CONDA_PREFIX}/include/readline \
-  --with-readline-libs=${CONDA_PREFIX}/lib
+  --with-readline-libs=${CONDA_PREFIX}/lib \
   --with-sqlite \
   --with-sqlite-includes=${CONDA_PREFIX}/include \
   --with-sqlite-libs=${CONDA_PREFIX}/lib \
@@ -56,7 +55,7 @@ CONFIGURE_FLAGS="\
   --with-zstd-includes=${CONDA_PREFIX}/include \
   --with-zstd-libs=${CONDA_PREFIX}/lib \
   --without-mysql \
-  --without-x \
+  --without-x
 "
 
 export CFLAGS="-O2 -pipe -ffp-contract=off -arch ${CONDA_ARCH} -DGL_SILENCE_DEPRECATION -Wall -Wextra -Wpedantic -Wvla"
@@ -66,7 +65,7 @@ export CPPFLAGS="-isystem${CONDA_PREFIX}/include"
 ./configure $CONFIGURE_FLAGS
 
 EXEMPT=""
-make -j$(sysctl -n hw.ncpu) CFLAGS="$CFLAGS -Werror $EXEMPT" \
-  CXXFLAGS="$CXXFLAGS -Werror $EXEMPT"
+make -j"$(sysctl -n hw.ncpu)" CFLAGS="$CFLAGS -Werror $EXEMPT" \
+    CXXFLAGS="$CXXFLAGS -Werror $EXEMPT"
 
 make install

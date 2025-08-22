@@ -115,15 +115,13 @@ echo "Configuring libLAS..."
 "$cmake" -G "Unix Makefiles" $LIBLAS_CONFIGURE_FLAGS "$liblas_source_dir"
 
 echo "Compiling and installing libLAS..."
-if ! make &> "${cache_dir}/libLAS_install.log"
-then
+if ! make &> "${cache_dir}/libLAS_install.log"; then
     echo "...libLAS compilation failed. See ${cache_dir}/libLAS_install.log."
     popd > /dev/null
     exit_nice 1
 fi
 
-if ! make install &> "${cache_dir}/libLAS_install.log"
-then
+if ! make install &> "${cache_dir}/libLAS_install.log"; then
     echo "...libLAS installations failed. See ${cache_dir}/libLAS_install.log."
     popd > /dev/null
     exit_nice 1

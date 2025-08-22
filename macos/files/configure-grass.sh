@@ -74,13 +74,13 @@ CONFIGURE_FLAGS="\
 "
 
 if [ "$grass_version_major$grass_version_minor" -ge 85 ]; then
-  CONFIGURE_FLAGS="\
+    CONFIGURE_FLAGS="\
       ${CONFIGURE_FLAGS} \
       --with-blas=openblas \
       --with-lapack=openblas
   "
 else
-  CONFIGURE_FLAGS="\
+    CONFIGURE_FLAGS="\
       ${CONFIGURE_FLAGS} \
         --with-blas \
         --with-blas-libs=${PREFIX}/lib \

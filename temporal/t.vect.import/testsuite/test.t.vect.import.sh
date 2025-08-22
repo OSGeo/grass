@@ -12,7 +12,7 @@ v.random --o -z output=soil_1 n=100 zmin=0 zmax=100 column=height seed=1
 v.random --o -z output=soil_2 n=100 zmin=0 zmax=100 column=height seed=2
 v.random --o -z output=soil_3 n=100 zmin=0 zmax=100 column=height seed=3
 
-n1=`g.tempfile pid=1 -d`
+n1=$(g.tempfile pid=1 -d)
 
 cat > "${n1}" << EOF
 soil_1
@@ -33,28 +33,28 @@ t.vect.export format=pack input=soil_abs1 output=stvds_export_pack.tar.gz compre
 t.vect.export format=pack input=soil_abs1 output=stvds_export_pack.tar compression=no directory=/tmp
 
 # Checking different flags
-t.vect.import --o input=stvds_export_gml.tar.bz2 output=precip_abs1 directory=test\
-          -oe title="A test" description="Description of a test"
-t.vect.import --o input=stvds_export_gml.tar.bz2 output=precip_abs1 directory=test\
-          -o title="A test" description="Description of a test"
-t.vect.import --o input=stvds_export_gml.tar.bz2 output=precip_abs1 directory=test\
-              title="A test" description="Description of a test"
+t.vect.import --o input=stvds_export_gml.tar.bz2 output=precip_abs1 directory=test \
+    -oe title="A test" description="Description of a test"
+t.vect.import --o input=stvds_export_gml.tar.bz2 output=precip_abs1 directory=test \
+    -o title="A test" description="Description of a test"
+t.vect.import --o input=stvds_export_gml.tar.bz2 output=precip_abs1 directory=test \
+    title="A test" description="Description of a test"
 
 # Import using different compression and formats
-t.vect.import --o input=stvds_export_gml.tar.gz output=soil_abs2 directory=test\
-              title="A test" description="Description of a test"
+t.vect.import --o input=stvds_export_gml.tar.gz output=soil_abs2 directory=test \
+    title="A test" description="Description of a test"
 v.info soil_1
-t.vect.import --o input=stvds_export_gml.tar output=soil_abs2 directory=test\
-              title="A test" description="Description of a test"
+t.vect.import --o input=stvds_export_gml.tar output=soil_abs2 directory=test \
+    title="A test" description="Description of a test"
 v.info soil_1
-t.vect.import --o input=stvds_export_pack.tar output=soil_abs2 directory=test\
-              title="A test" description="Description of a test"
+t.vect.import --o input=stvds_export_pack.tar output=soil_abs2 directory=test \
+    title="A test" description="Description of a test"
 v.info soil_1
-t.vect.import --o input=stvds_export_pack.tar.gz output=soil_abs2 directory=test\
-              title="A test" description="Description of a test"
+t.vect.import --o input=stvds_export_pack.tar.gz output=soil_abs2 directory=test \
+    title="A test" description="Description of a test"
 v.info soil_1
-t.vect.import --o input=stvds_export_pack.tar.bz2 output=soil_abs2 directory=test\
-              title="A test" description="Description of a test"
+t.vect.import --o input=stvds_export_pack.tar.bz2 output=soil_abs2 directory=test \
+    title="A test" description="Description of a test"
 v.info soil_1
 
 # Cleaning up

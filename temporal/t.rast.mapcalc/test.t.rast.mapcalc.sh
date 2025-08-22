@@ -27,30 +27,30 @@ t.info precip_abs2
 
 # The first @test
 t.rast.mapcalc -n inputs=precip_abs1,precip_abs2 output=precip_abs3 \
-           expression=" precip_abs1 + precip_abs2" base=new_prec \
-           method=equal nprocs=5
+    expression=" precip_abs1 + precip_abs2" base=new_prec \
+    method=equal nprocs=5
 t.info type=strds input=precip_abs3
 
 t.rast.mapcalc -s inputs=precip_abs1,precip_abs2,precip_abs3 output=precip_abs4 \
-           expression=" (precip_abs1 + precip_abs2) / precip_abs2" base=new_prec \
-           method=equal nprocs=5
+    expression=" (precip_abs1 + precip_abs2) / precip_abs2" base=new_prec \
+    method=equal nprocs=5
 t.info type=strds input=precip_abs4
 
 t.rast.mapcalc -s inputs=precip_abs1,precip_abs2 output=precip_abs4 \
-           expression=" (precip_abs1 + precip_abs2) * null()" base=new_prec \
-           method=equal nprocs=5
+    expression=" (precip_abs1 + precip_abs2) * null()" base=new_prec \
+    method=equal nprocs=5
 t.info type=strds input=precip_abs4
 
 t.rast.mapcalc -sn inputs=precip_abs1,precip_abs2 output=precip_abs4 \
-           expression=" (precip_abs1 + precip_abs2) * null()" base=new_prec \
-           method=equal nprocs=5
+    expression=" (precip_abs1 + precip_abs2) * null()" base=new_prec \
+    method=equal nprocs=5
 t.info type=strds input=precip_abs4
 
 # Let the test fail
 g.remove -f type=raster name=prec_1
 t.rast.mapcalc -sn inputs=precip_abs1,precip_abs2 output=precip_abs4 \
-           expression=" (precip_abs1 + precip_abs2) * null()" base=new_prec \
-           method=equal nprocs=5
+    expression=" (precip_abs1 + precip_abs2) * null()" base=new_prec \
+    method=equal nprocs=5
 
 # @postprocess
 t.remove -rf type=strds input=precip_abs1,precip_abs2,precip_abs3,precip_abs4

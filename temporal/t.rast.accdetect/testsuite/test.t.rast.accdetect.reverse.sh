@@ -28,18 +28,18 @@ t.rast.accdetect -r input=temp_accumulation occurrence=temp_occ base=temp_occ \
     range=20,80 start="2001-01-01" cycle="12 months" staend=1,2,3 indi=temp_indi suffix="num%03"
 
 t.rast.list temp_accumulation col=name,start_time,min,max > data/test_2_temp_accumulation.txt
-t.rast.list temp_occ col=name,start_time,min,max  > data/test_2_temp_occ.txt
+t.rast.list temp_occ col=name,start_time,min,max > data/test_2_temp_occ.txt
 t.rast.list temp_indi col=name,start_time,min,max > data/test_2_temp_indi.txt
 
 #t.remove -rf type=strds input=temp_abs1,temp_accumulation,temp_indi
 
 cd data
 
-for i in `ls test_2_*.txt` ; do
-    diff $i "`basename $i .txt`.ref" >> out.diff
+for i in $(ls -- test_2_*.txt); do
+    diff "$i" "$(basename "$i" .txt).ref" >> out.diff
 done
 
-CHAR_NUM=`cat out.diff | wc -c`
+CHAR_NUM=$(cat out.diff | wc -c)
 
 # Return as exit status 0 in case no diffs are found
-exit $CHAR_NUM
+exit "$CHAR_NUM"

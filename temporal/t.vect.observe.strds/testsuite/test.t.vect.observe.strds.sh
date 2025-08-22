@@ -7,17 +7,16 @@ g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
 export GRASS_OVERWRITE=1
 
-r.mapcalc  expr="prec_1 = 100.0"
-r.mapcalc  expr="prec_2 = 200.0"
-r.mapcalc  expr="prec_3 = 300"
-r.mapcalc  expr="prec_4 = 400"
-r.mapcalc  expr="prec_5 = 500.0"
-r.mapcalc  expr="prec_6 = 600.0"
+r.mapcalc expr="prec_1 = 100.0"
+r.mapcalc expr="prec_2 = 200.0"
+r.mapcalc expr="prec_3 = 300"
+r.mapcalc expr="prec_4 = 400"
+r.mapcalc expr="prec_5 = 500.0"
+r.mapcalc expr="prec_6 = 600.0"
 
-r.mapcalc  expr="prec_7 = 400"
-r.mapcalc  expr="prec_8 = 500.0"
-r.mapcalc  expr="prec_9 = 600.0"
-
+r.mapcalc expr="prec_7 = 400"
+r.mapcalc expr="prec_8 = 500.0"
+r.mapcalc expr="prec_9 = 600.0"
 
 v.random output=prec npoints=5 seed=1
 v.random -z output=test_1 column=test n=5 seed=1
@@ -36,7 +35,7 @@ t.vect.list input=prec_observer
 t.vect.db.select input=prec_observer
 
 t.vect.observe.strds columns=test1,test2,test3 input=test_1 \
-    strds=precip_abs1,precip_abs1,precip_abs2 output=test_1_observer  \
+    strds=precip_abs1,precip_abs1,precip_abs2 output=test_1_observer \
     vector=test_1_observer
 
 v.info test_1_observer

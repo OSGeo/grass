@@ -16,7 +16,7 @@ r.mapcalc --o expr="prec_5 = rand(0, 300)" -s
 r.mapcalc --o expr="prec_6 = rand(0, 650)" -s
 r.mapcalc --o expr="elevation = sin(row() + col()) * 10"
 
-n1=`g.tempfile pid=1 -d`
+n1=$(g.tempfile pid=1 -d)
 
 cat > "${n1}" << EOF
 prec_1|2001-01-01|2001-02-01

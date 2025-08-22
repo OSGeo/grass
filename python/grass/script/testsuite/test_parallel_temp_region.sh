@@ -12,8 +12,7 @@
 set -u
 # More set commands later on.
 
-if [ $# -eq 0 ]
-then
+if [ $# -eq 0 ]; then
     # No arguments supplied, use default which is small enough to run
     # well on small machines and does not overwhelm a normal system.
     MAP_PARALLEL=parallel_tmp_region_parallel
@@ -23,8 +22,7 @@ then
     SIMPLE_SIZE=150
     NEST_SIZES=100,200
     NUM_NEST=2
-elif [ $# -eq 7 ]
-then
+elif [ $# -eq 7 ]; then
     # Allow user to set a large number of processes.
     MAP_PARALLEL=$1
     MAP_NEST=$2
@@ -57,7 +55,7 @@ MAP_PARALLEL_PATTERN="${MAP_PARALLEL}_*_size_*_nesting_*"
 MAP_NEST_PATTERN="${MAP_NEST}_*_size_*_nesting_*"
 
 # Remove maps at exit.
-cleanup () {
+cleanup() {
     EXIT_CODE=$?
     g.remove type=raster pattern="${MAP_PARALLEL_PATTERN}" -f --quiet
     g.remove type=raster pattern="${MAP_NEST_PATTERN}" -f --quiet
@@ -72,8 +70,7 @@ SCRIPT="./data/script_using_temporary_region.py"
 # (This needs to be tested explicitly because command_not_found_handle
 # implementations may return 0 when command/file is not found.)
 command -v "${SCRIPT}"
-if [ $? -ne 0 ]
-then
+if [ $? -ne 0 ]; then
     >&2 echo "Script ${SCRIPT} not found"
     exit 1
 fi
@@ -84,8 +81,7 @@ set -x
 
 # Serial/Sequential
 
-for i in `seq 1 $NUM_SEQUNTIALS`
-do
+for i in $(seq 1 "$NUM_SEQUNTIALS"); do
     "${SCRIPT}" "${SIMPLE_SIZE}" 0
 done
 
@@ -93,8 +89,7 @@ done
 # Because it is much harder to check return codes of parallel processes,
 # we go a step further and generate data and check their presence.
 
-for i in `seq 1 $NUM_PARALLELS`
-do
+for i in $(seq 1 "$NUM_PARALLELS"); do
     "${SCRIPT}" "${SIMPLE_SIZE}" 0 "${MAP_PARALLEL}_$i" &
 done
 
@@ -103,31 +98,27 @@ wait
 EXPECTED=$NUM_PARALLELS
 NUM=$(g.list type=raster pattern="${MAP_PARALLEL_PATTERN}" mapset=. | wc -l)
 
-if [ ${NUM} -ne ${EXPECTED} ]
-then
+if [ "${NUM}" -ne "${EXPECTED}" ]; then
     echo "Pure parallel test: Got ${NUM} but expected ${EXPECTED} maps"
     exit 1
 fi
 
 # With nesting
 
-for i in `seq 1 $NUM_SEQUNTIALS`
-do
+for i in $(seq 1 "$NUM_SEQUNTIALS"); do
     "${SCRIPT}" "${NEST_SIZES}" 0
 done
 
-for i in `seq 1 $NUM_PARALLELS`
-do
+for i in $(seq 1 "$NUM_PARALLELS"); do
     "${SCRIPT}" "${NEST_SIZES}" 0 "${MAP_NEST}_$i" &
 done
 
 wait
 
-EXPECTED=$(( $NUM_PARALLELS * $NUM_NEST ))
+EXPECTED=$((NUM_PARALLELS * NUM_NEST))
 NUM=$(g.list type=raster pattern="${MAP_NEST_PATTERN}" mapset=. | wc -l)
 
-if [ ${NUM} -ne ${EXPECTED} ]
-then
+if [ "${NUM}" -ne ${EXPECTED} ]; then
     echo "Parallel with nesting: Got ${NUM} but expected ${EXPECTED} maps"
     exit 1
 fi

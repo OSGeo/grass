@@ -12,7 +12,7 @@ r.mapcalc --o expr="prec_4 = 400.0"
 r.mapcalc --o expr="prec_5 = 500.0"
 r.mapcalc --o expr="prec_6 = 600.0"
 
-n1=`g.tempfile pid=1 -d`
+n1=$(g.tempfile pid=1 -d)
 
 cat > "${n1}" << EOF
 prec_1|2001-01-01|2001-04-01
@@ -68,7 +68,7 @@ t.rast.to.rast3 --o input=precip_abs output=precipitation
 t.info type=raster_3d input=precipitation
 r3.info precipitation
 
-t.register --o --v -i type=raster input=precip_abs file=${n1}
+t.register --o --v -i type=raster input=precip_abs file="${n1}"
 t.info type=strds input=precip_abs
 
 t.rast.to.rast3 --o input=precip_abs output=precipitation

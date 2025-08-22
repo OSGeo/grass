@@ -19,7 +19,7 @@ v.random -z output=soil_1 n=20 zmin=0 zmax=100 column=height
 v.random -z output=soil_2 n=20 zmin=0 zmax=100 column=height
 v.random -z output=soil_3 n=20 zmin=0 zmax=100 column=height
 
-n1=`g.tempfile pid=1 -d`
+n1=$(g.tempfile pid=1 -d)
 
 cat > "${n1}" << EOF
 soil_1|2001-01-01|2001-04-01

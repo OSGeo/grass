@@ -13,8 +13,8 @@
 # Adopted for GRASS by Huidae Cho
 
 prefix="${OSGEO4W_ROOT_MSYS}"
-version="$(sed '/^#define PNG_LIBPNG_VER_STRING/!d; s/^[^"]*"\|"//g' ${prefix}/include/libpng*/png.h)"
-dll_version="$(sed '/^#define PNG_LIBPNG_VER_SHAREDLIB/!d; s/^[^0-9]*\|[^0-9]*$//g' ${prefix}/include/libpng*/png.h)"
+version="$(sed '/^#define PNG_LIBPNG_VER_STRING/!d; s/^[^"]*"\|"//g' "${prefix}"/include/libpng*/png.h)"
+dll_version="$(sed '/^#define PNG_LIBPNG_VER_SHAREDLIB/!d; s/^[^0-9]*\|[^0-9]*$//g' "${prefix}"/include/libpng*/png.h)"
 exec_prefix="${prefix}"
 libdir="${prefix}/lib"
 includedir="${prefix}/include/libpng${dll_version}"
@@ -27,9 +27,8 @@ cppflags=""
 ccopts=""
 ldopts=""
 
-usage()
-{
-    cat <<EOF
+usage() {
+    cat << EOF
 Usage: $0 [OPTION] ...
 
 Known values for OPTION are:
@@ -51,7 +50,7 @@ Known values for OPTION are:
   --version       print version information
 EOF
 
-    exit $1
+    exit "$1"
 }
 
 if test $# -eq 0; then
@@ -61,73 +60,73 @@ fi
 while test $# -gt 0; do
     case "$1" in
 
-    --prefix)
-        echo ${prefix}
-        ;;
+        --prefix)
+            echo "${prefix}"
+            ;;
 
-    --version)
-        echo ${version}
-        exit 0
-        ;;
+        --version)
+            echo "${version}"
+            exit 0
+            ;;
 
-    --dll-version)
-        echo ${dll_version}
-        exit 0
-        ;;
+        --dll-version)
+            echo "${dll_version}"
+            exit 0
+            ;;
 
-    --help)
-        usage 0
-        ;;
+        --help)
+            usage 0
+            ;;
 
-    --ccopts)
-        echo ${ccopts}
-        ;;
+        --ccopts)
+            echo "${ccopts}"
+            ;;
 
-    --cppflags)
-        echo ${cppflags}
-        ;;
+        --cppflags)
+            echo "${cppflags}"
+            ;;
 
-    --cflags)
-        echo ${I_opts} ${cppflags} ${ccopts}
-        ;;
+        --cflags)
+            echo "${I_opts}" "${cppflags}" "${ccopts}"
+            ;;
 
-    --libdir)
-        echo ${libdir}
-        ;;
+        --libdir)
+            echo "${libdir}"
+            ;;
 
-    --libs)
-        echo ${libs}
-        ;;
+        --libs)
+            echo "${libs}"
+            ;;
 
-    --I_opts)
-        echo ${I_opts}
-        ;;
+        --I_opts)
+            echo "${I_opts}"
+            ;;
 
-    --L_opts)
-        echo ${L_opts}
-        ;;
+        --L_opts)
+            echo "${L_opts}"
+            ;;
 
-    --R_opts)
-        echo ${R_opts}
-        ;;
+        --R_opts)
+            echo "${R_opts}"
+            ;;
 
-    --ldopts)
-        echo ${ldopts}
-        ;;
+        --ldopts)
+            echo "${ldopts}"
+            ;;
 
-    --ldflags)
-        echo ${ldopts} ${L_opts} ${R_opts} ${libs}
-        ;;
+        --ldflags)
+            echo "${ldopts}" "${L_opts}" "${R_opts}" "${libs}"
+            ;;
 
-    --static)
-        R_opts=""
-        libs=${all_libs}
-        ;;
+        --static)
+            R_opts=""
+            libs=${all_libs}
+            ;;
 
-    *)
-        usage
-        exit 1
-        ;;
+        *)
+            usage
+            exit 1
+            ;;
     esac
     shift
 done
