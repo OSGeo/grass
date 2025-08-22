@@ -92,7 +92,6 @@ int main(int argc, char *argv[])
     enum OutputFormat format;
     JSON_Array *root_array = NULL;
     JSON_Value *root_value = NULL;
-    JSON_Object *root_object = NULL;
     int skip_header = 0;
 
     module = G_define_module();
