@@ -87,6 +87,7 @@ int main(int argc, char **argv)
     field_opt->gisprompt = "new,layer,layer";
 
     sep_opt = G_define_standard_option(G_OPT_F_SEP);
+    sep_opt->answer = NULL;
     sep_opt->label = _("Field separator for printing output");
     sep_opt->guisection = _("Print");
 
@@ -129,6 +130,11 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
+    // ignore -c flag if both -p and -c flags are given
+    if (print->answer && columns->answer) {
+        columns->answer = 0;
+    }
+
     // If no format option is specified, preserve backward compatibility
     if (format_opt->answer == NULL || format_opt->answer[0] == '\0') {
         if (csv_print->answer || columns->answer) {
@@ -152,6 +158,14 @@ int main(int argc, char **argv)
     }
     else {
         format = PLAIN;
+    }
+
+    /* For backward compatibility */
+    if (!sep_opt->answer) {
+        if (!skip_header && format == CSV)
+            sep_opt->answer = "comma";
+        else
+            sep_opt->answer = "pipe";
     }
 
     if (format != PLAIN && !print->answer && !csv_print->answer &&
@@ -340,21 +354,43 @@ int main(int argc, char **argv)
                     G_fatal_error(_("Unable to describe table <%s>"),
                                   fi->table);
 
-                if (!skip_header && format != JSON) {
+                if (!skip_header) {
                     /* CSV Header */
-                    fprintf(stdout, "%s|%s\n", "sql_type", "name");
+                    if (format == PLAIN)
+                        fprintf(stdout, "%s|%s\n", "name", "sql_type");
+                    else if (format == CSV)
+                        fprintf(stdout, "%s%s%s\n", "name", sep, "sql_type");
                 }
 
                 ncols = db_get_table_number_of_columns(table);
                 for (col = 0; col < ncols; col++) {
                     switch (format) {
                     case PLAIN:
+                        fprintf(
+                            stdout, "%s|%s\n",
+                            db_get_column_name(db_get_table_column(table, col)),
+                            db_sqltype_name(db_get_column_sqltype(
+                                db_get_table_column(table, col))));
+
+                        break;
                     case CSV:
-                        fprintf(stdout, "%s|%s\n",
-                                db_sqltype_name(db_get_column_sqltype(
-                                    db_get_table_column(table, col))),
-                                db_get_column_name(
-                                    db_get_table_column(table, col)));
+                        if (skip_header) {
+                            /* For Backward Compatibility */
+                            fprintf(stdout, "%s%s%s\n",
+                                    db_sqltype_name(db_get_column_sqltype(
+                                        db_get_table_column(table, col))),
+                                    sep,
+                                    db_get_column_name(
+                                        db_get_table_column(table, col)));
+                        }
+                        else {
+                            fprintf(stdout, "%s%s%s\n",
+                                    db_get_column_name(
+                                        db_get_table_column(table, col)),
+                                    sep,
+                                    db_sqltype_name(db_get_column_sqltype(
+                                        db_get_table_column(table, col))));
+                        }
                         break;
 
                     case JSON:

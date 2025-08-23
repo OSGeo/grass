@@ -19,6 +19,12 @@ class TestVDbConnect(TestCase):
             r"layer <1\/bridges> table <bridges> in database <.+sqlite\.db> through driver <sqlite> with key <cat>",
         )
 
+        # Repeat check using -c and -p flags
+        actual_plain = read_command(
+            "v.db.connect", map="bridges", flags="cp"
+        ).splitlines()
+        self.assertEqual(actual_plain, actual)
+
         # Repeat check using explicit plain format
         actual_plain = read_command(
             "v.db.connect", map="bridges", flags="p", format="plain"
@@ -36,8 +42,8 @@ class TestVDbConnect(TestCase):
             "v.db.connect", map="bridges", flags="p", format="csv"
         ).splitlines()
         self.assertEqual(len(actual), 2)
-        self.assertEqual(actual[0], "layer|layer_name|table|key|database|driver")
-        self.assertRegex(actual[1], r"1\|bridges\|bridges\|cat\|.+sqlite\.db\|sqlite")
+        self.assertEqual(actual[0], "layer,layer_name,table,key,database,driver")
+        self.assertRegex(actual[1], r"1,bridges,bridges,cat,.+sqlite\.db,sqlite")
 
         # Repeat check using explicit CSV format and flag -g
         actual_csv = read_command(
@@ -80,14 +86,32 @@ class TestVDbConnect(TestCase):
         actual = read_command("v.db.connect", map="bridges", flags="c").splitlines()
         self.assertEqual(actual, expected)
 
-        # Prepend the CSV header
-        expected.insert(0, "sql_type|name")
+        expected = [
+            "name|sql_type",
+            "cat|INTEGER",
+            "OBJECTID|INTEGER",
+            "BRIDGES__1|DOUBLE PRECISION",
+            "SIPS_ID|CHARACTER",
+            "TYPE|CHARACTER",
+            "CLASSIFICA|CHARACTER",
+            "BRIDGE_NUM|DOUBLE PRECISION",
+            "FEATURE_IN|CHARACTER",
+            "FACILITY_C|CHARACTER",
+            "LOCATION|CHARACTER",
+            "YEAR_BUILT|DOUBLE PRECISION",
+            "WIDTH|DOUBLE PRECISION",
+            "CO_|DOUBLE PRECISION",
+            "CO_NAME|CHARACTER",
+        ]
 
         # Repeat check using explicit plain format
         actual = read_command(
             "v.db.connect", map="bridges", flags="c", format="plain"
         ).splitlines()
         self.assertEqual(actual, expected)
+
+        # Adjust expected for CSV format
+        expected = [line.replace("|", ",") for line in expected]
 
         # Repeat check using explicit CSV format
         actual = read_command(
