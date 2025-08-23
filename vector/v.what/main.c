@@ -52,7 +52,9 @@ int main(int argc, char **argv)
     double EW_DIST1, EW_DIST2, NS_DIST1, NS_DIST2;
     char nsres[30], ewres[30];
     char ch;
-    int output;
+    enum OutputFormat format;
+    JSON_Value *root_value = NULL;
+    JSON_Array *root_array = NULL;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -153,9 +155,15 @@ int main(int argc, char **argv)
 
     maxd = atof(opt.maxdist->answer);
     type = Vect_option_to_types(opt.type);
-    output = flag.shell->answer
-                 ? OUTPUT_SCRIPT
-                 : (flag.json->answer ? OUTPUT_JSON : OUTPUT_TEXT);
+    format = flag.shell->answer ? SHELL : (flag.json->answer ? JSON : PLAIN);
+
+    if (format == JSON) {
+        root_value = G_json_value_init_array();
+        if (root_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
+        root_array = G_json_array(root_value);
+    }
 
     if (maxd == 0.0) {
         /* this code is a translation from d.what.vect which uses display
@@ -222,8 +230,8 @@ int main(int argc, char **argv)
             ret = sscanf(buf, "%lf%c%lf", &xval, &ch, &yval);
             if (ret == 3 && (ch == ',' || ch == ' ' || ch == '\t')) {
                 what(Map, nvects, vect, xval, yval, maxd, type,
-                     flag.topo->answer, flag.print->answer, output,
-                     flag.multiple->answer, field, columns);
+                     flag.topo->answer, flag.print->answer, format,
+                     flag.multiple->answer, field, columns, root_array);
             }
             else {
                 G_warning(_("Unknown input format, skipping: '%s'"), buf);
@@ -237,9 +245,21 @@ int main(int argc, char **argv)
             xval = atof(opt.coords->answers[i]);
             yval = atof(opt.coords->answers[i + 1]);
             what(Map, nvects, vect, xval, yval, maxd, type, flag.topo->answer,
-                 flag.print->answer, output, flag.multiple->answer, field,
-                 columns);
+                 flag.print->answer, format, flag.multiple->answer, field,
+                 columns, root_array);
         }
+    }
+
+    if (format == JSON) {
+        char *json_string = G_json_serialize_to_string_pretty(root_value);
+        if (!json_string) {
+            G_json_value_free(root_value);
+            G_fatal_error(_("Failed to serialize JSON to pretty format."));
+        }
+        puts(json_string);
+
+        G_json_free_serialized_string(json_string);
+        G_json_value_free(root_value);
     }
 
     for (i = 0; i < nvects; i++)

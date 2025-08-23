@@ -23,6 +23,75 @@ radius):
 v.what hospitals coordinates=542690.4,204802.7 distance=2000000
 ```
 
+Extracting categories from JSON output using Python:
+
+```python
+import json
+import grass.script as gs
+
+result = gs.read_command(
+    "v.what",
+    map="hospitals",
+    coordinates=[542690.4, 204802.7],
+    distance=2000000,
+    flags="ja",
+)
+
+data = json.loads(result)
+print(data[0]["categories"])
+```
+
+Possible output:
+
+```text
+[{'layer': 1, 'category': 22, 'driver': 'sqlite', 'database': '/grassdata/nc_spm_08_grass7/PERMANENT/sqlite/sqlite.db', 'table': 'hospitals', 'key_column': 'cat', 'attributes': {'cat': '22', 'OBJECTID': '22', 'AREA': '0', 'PERIMETER': '0', 'HLS_': '22', 'HLS_ID': '22', 'NAME': 'Randolph Hospital', 'ADDRESS': '364 White Oak St', 'CITY': 'Asheboro', 'ZIP': '27203', 'COUNTY': 'Randolph', 'PHONE': '(336) 625-5151', 'CANCER': 'yes', 'POLYGONID': '0', 'SCALE': '1', 'ANGLE': '1'}}]
+```
+
+The whole JSON may look like this:
+
+```json
+[
+    {
+        "coordinate": {
+            "easting": 542690.40000000002,
+            "northing": 204802.70000000001
+        },
+        "map": "hospitals",
+        "mapset": "PERMANENT",
+        "type": "Point",
+        "id": 22,
+        "categories": [
+            {
+                "layer": 1,
+                "category": 22,
+                "driver": "sqlite",
+                "database": "/grassdata/nc_spm_08_grass7/PERMANENT/sqlite/sqlite.db",
+                "table": "hospitals",
+                "key_column": "cat",
+                "attributes": {
+                    "cat": "22",
+                    "OBJECTID": "22",
+                    "AREA": "0",
+                    "PERIMETER": "0",
+                    "HLS_": "22",
+                    "HLS_ID": "22",
+                    "NAME": "Randolph Hospital",
+                    "ADDRESS": "364 White Oak St",
+                    "CITY": "Asheboro",
+                    "ZIP": "27203",
+                    "COUNTY": "Randolph",
+                    "PHONE": "(336) 625-5151",
+                    "CANCER": "yes",
+                    "POLYGONID": "0",
+                    "SCALE": "1",
+                    "ANGLE": "1"
+                }
+            }
+        ]
+    }
+]
+```
+
 ## SEE ALSO
 
 *[d.what.rast](d.what.rast.md), [d.what.vect](d.what.vect.md),
