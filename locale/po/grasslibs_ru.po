@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-09 15:41+0000\n"
+"POT-Creation-Date: 2025-08-16 15:40+0000\n"
 "PO-Revision-Date: 2025-06-14 21:41+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Russian <https://weblate.osgeo.org/projects/grass-gis/grasslibs/ru/>\n"
@@ -3454,12 +3454,12 @@ msgstr "Не удалось открыть выходной файл сигна�
 msgid "prepare_signature: outline has odd number of points."
 msgstr "подготовка сигнатуры: контур имеет нечётное число точек."
 
-#: ../lib/imagery/iclass_statistics.c:225 ../lib/imagery/iscatt_core.c:956
+#: ../lib/imagery/iclass_statistics.c:225 ../lib/imagery/iscatt_core.c:965
 #, c-format
 msgid "prepare_signature: scan line %d has odd number of points."
 msgstr "подготовка сигнатуры: линия сканирования %d имеет нечётное число точек."
 
-#: ../lib/imagery/iclass_statistics.c:235 ../lib/imagery/iscatt_core.c:965
+#: ../lib/imagery/iclass_statistics.c:235 ../lib/imagery/iscatt_core.c:976
 msgid "signature: perimeter points out of order."
 msgstr "сигнатура: нарушен порядок расположения точек периметра."
 
@@ -3489,74 +3489,74 @@ msgstr "Значение категории ячейки вне диапазон
 msgid "Unable to write header into category raster condition file <%s>."
 msgstr "Не удалось записать заголовок в файл условий для категорий растра <%s>."
 
-#: ../lib/imagery/iscatt_core.c:98
+#: ../lib/imagery/iscatt_core.c:99
 #, c-format
 msgid "Unable to write into category raster condition file <%s>."
 msgstr "Не удалось выполнить запись в файл условий для категорий растра <%s>."
 
-#: ../lib/imagery/iscatt_core.c:250
+#: ../lib/imagery/iscatt_core.c:252
 #, c-format
 msgid "Unable to open category raster conditions file <%s>."
 msgstr "Не удалось открыть файл условий для категорий растра <%s>."
 
-#: ../lib/imagery/iscatt_core.c:258
+#: ../lib/imagery/iscatt_core.c:260
 #, c-format
 msgid "Unable to find patch raster <%s>."
 msgstr "Не удалось найти исправление растра <%s>."
 
-#: ../lib/imagery/iscatt_core.c:274
+#: ../lib/imagery/iscatt_core.c:276
 #, c-format
 msgid "Resolutions of patch <%s> and patched file <%s> are not same."
 msgstr "Разрешения исправления <%s> и исправленного файла <%s> не совпадают."
 
-#: ../lib/imagery/iscatt_core.c:300 ../lib/imagery/iscatt_core.c:341
+#: ../lib/imagery/iscatt_core.c:302 ../lib/imagery/iscatt_core.c:345
 #, c-format
 msgid "Corrupted  category raster conditions file <%s> (fseek failed)"
 msgstr "Повреждён файл условий для категорий растра <%s> (ошибка fseek)"
 
-#: ../lib/imagery/iscatt_core.c:331
+#: ../lib/imagery/iscatt_core.c:334
 #, c-format
 msgid "Unable to write into category raster conditions file <%s>"
 msgstr "Не удалось выполнить запись в файл условий для категорий растра <%s>"
 
-#: ../lib/imagery/iscatt_core.c:518
+#: ../lib/imagery/iscatt_core.c:524
 msgid "Unable to read from category raster condition file."
 msgstr "Не удалось прочитать файл условий для категорий растра."
 
-#: ../lib/imagery/iscatt_core.c:525
+#: ../lib/imagery/iscatt_core.c:531
 msgid "Invalid size of category raster conditions file."
 msgstr "Недопустимый размер файла условий для категорий растра."
 
-#: ../lib/imagery/iscatt_core.c:568
+#: ../lib/imagery/iscatt_core.c:574
 msgid "Data inconsistent. Value computed for scatter plot is out of initialized range."
 msgstr "Несовместимые данные. Значения, рассчитанные для точечной диаграммы, находятся вне инициализированного диапазона."
 
-#: ../lib/imagery/iscatt_core.c:738
+#: ../lib/imagery/iscatt_core.c:741
 #, c-format
 msgid "Unable to find raster <%s>"
 msgstr "Не удалось найти растр <%s>"
 
-#: ../lib/imagery/iscatt_core.c:747
+#: ../lib/imagery/iscatt_core.c:750
 #, c-format
 msgid "Unable to open raster <%s>"
 msgstr "Не удалось открыть растр <%s>"
 
-#: ../lib/imagery/iscatt_core.c:753
+#: ../lib/imagery/iscatt_core.c:759
 #, c-format
 msgid "Raster <%s> type is not <%s>"
 msgstr "Тип растра <%s> не <%s>"
 
-#: ../lib/imagery/iscatt_core.c:766
+#: ../lib/imagery/iscatt_core.c:772
 #, c-format
 msgid "Unable to read range of raster <%s>"
 msgstr "Не удалось прочитать диапазон растра <%s>"
 
-#: ../lib/imagery/iscatt_core.c:790
+#: ../lib/imagery/iscatt_core.c:796
 #, c-format
 msgid "Unable to open category raster condition file <%s>"
 msgstr "Не удалось открыть файл условий для категорий растра <%s>"
 
-#: ../lib/imagery/iscatt_core.c:803
+#: ../lib/imagery/iscatt_core.c:812
 msgid "Corrupted category raster conditions file (fseek failed)"
 msgstr "Повреждён файл условий для категорий растра (ошибка fseek)"
 
@@ -6574,36 +6574,36 @@ msgstr "Удалено линий: %d"
 msgid "Removed bridges: %d"
 msgstr "Удалено мостов: %d"
 
-#: ../lib/vector/Vlib/buffer2.c:356
+#: ../lib/vector/Vlib/buffer2.c:361
 msgid "Line is not looped"
 msgstr "Линия не замкнута"
 
-#: ../lib/vector/Vlib/buffer2.c:438
+#: ../lib/vector/Vlib/buffer2.c:443
 #, c-format
 msgid "Unexpected result of line_intersection() res = %d"
 msgstr "Неожиданные результаты выполнения line_intersection() res = %d"
 
-#: ../lib/vector/Vlib/buffer2.c:587
+#: ../lib/vector/Vlib/buffer2.c:592
 msgid "Next edge was visited (right) but it is not the first one !!! breaking loop"
 msgstr "Выполнен переход на следующее ребро (правое), но оно не является первым!!! Разрыв замкнутой последовательности"
 
-#: ../lib/vector/Vlib/buffer2.c:598
+#: ../lib/vector/Vlib/buffer2.c:603
 msgid "Next edge was visited (left) but it is not the first one !!! breaking loop"
 msgstr "Выполнен переход на следующее ребро (левое), но оно не является первым!!! Разрыв замкнутой последовательности"
 
-#: ../lib/vector/Vlib/buffer2.c:646
+#: ../lib/vector/Vlib/buffer2.c:651
 msgid "side != 0 feature not implemented"
 msgstr "сторона != 0 объект не реализован"
 
-#: ../lib/vector/Vlib/buffer2.c:892 ../lib/vector/Vlib/buffer2.c:940
+#: ../lib/vector/Vlib/buffer2.c:897 ../lib/vector/Vlib/buffer2.c:945
 msgid "zero area size"
 msgstr "нулевой размер полигона"
 
-#: ../lib/vector/Vlib/buffer2.c:898 ../lib/vector/Vlib/buffer2.c:946
+#: ../lib/vector/Vlib/buffer2.c:903 ../lib/vector/Vlib/buffer2.c:951
 msgid "Line was not closed"
 msgstr "Линия не была замкнута"
 
-#: ../lib/vector/Vlib/buffer2.c:912 ../lib/vector/Vlib/buffer2.c:965
+#: ../lib/vector/Vlib/buffer2.c:917 ../lib/vector/Vlib/buffer2.c:970
 msgid "Vect_get_point_in_poly() failed"
 msgstr "Ошибка выполнения Vect_get_point_in_poly()"
 
