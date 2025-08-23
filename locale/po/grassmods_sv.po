@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-09 15:41+0000\n"
+"POT-Creation-Date: 2025-08-16 15:40+0000\n"
 "PO-Revision-Date: 2025-08-11 09:39+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
@@ -2123,7 +2123,7 @@ msgstr "Ingen grafikenhet vald"
 #: ../raster/r.carve/main.c:153 ../raster/r.cost/main.c:357
 #: ../raster/r.walk/main.c:460 ../scripts/r.mask/r.mask.py:173
 #: ../scripts/v.db.univar/v.db.univar.py:80
-#: ../scripts/v.dissolve/v.dissolve.py:585 ../scripts/v.pack/v.pack.py:62
+#: ../scripts/v.dissolve/v.dissolve.py:576 ../scripts/v.pack/v.pack.py:62
 #: ../scripts/v.report/v.report.py:85 ../vector/v.clean/test/topocheck.c:62
 #: ../vector/v.colors/main.c:252 ../vector/v.edit/main.c:161
 #: ../vector/v.lidar.correction/main.c:158
@@ -2153,7 +2153,7 @@ msgstr "Vektorkarta <%s> hittades inte"
 #: ../raster/r.what/main.c:265 ../raster3d/r3.flow/main.c:398
 #: ../vector/v.buffer/main.c:332 ../vector/v.build.polylines/main.c:152
 #: ../vector/v.build/main.c:120 ../vector/v.build/main.c:130
-#: ../vector/v.class/main.c:98 ../vector/v.clean/main.c:291
+#: ../vector/v.class/main.c:99 ../vector/v.clean/main.c:291
 #: ../vector/v.clean/test/topocheck.c:66 ../vector/v.clean/test/topocheck.c:86
 #: ../vector/v.cluster/main.c:140 ../vector/v.colors.out/make_colors.c:23
 #: ../vector/v.colors.out/scan_cats.c:19 ../vector/v.colors/main.c:276
@@ -2394,8 +2394,8 @@ msgstr "Går inte att läsa färg"
 
 #: ../display/d.graph/do_graph.c:105 ../display/d.graph/do_graph.c:350
 #: ../display/d.graph/do_graph.c:365 ../display/d.graph/main.c:103
-#: ../display/d.labels/color.c:65 ../display/d.legend.vect/draw.c:201
-#: ../display/d.legend.vect/draw.c:212 ../display/d.rast/display.c:25
+#: ../display/d.labels/color.c:65 ../display/d.legend.vect/draw.c:202
+#: ../display/d.legend.vect/draw.c:213 ../display/d.rast/display.c:25
 #: ../raster/r.out.png/main.c:174
 #, c-format
 msgid "[%s]: No such color"
@@ -2830,7 +2830,7 @@ msgstr "Regionstorleken är större än maxreg, inget visas."
 msgid "Unable to open label file <%s>"
 msgstr "Det går inte att öppna etikettfilen <%s>"
 
-#: ../display/d.legend.vect/draw.c:77 ../display/d.legend.vect/main.c:266
+#: ../display/d.legend.vect/draw.c:78 ../display/d.legend.vect/main.c:266
 #: ../display/d.linegraph/main.c:409 ../display/d.linegraph/main.c:427
 #: ../display/d.linegraph/main.c:726 ../display/d.text/main.c:368
 #: ../display/d.where/main.c:168 ../general/g.cairocomp/main.c:46
@@ -2846,11 +2846,11 @@ msgstr "Det går inte att öppna etikettfilen <%s>"
 msgid "Unable to open input file <%s>"
 msgstr "Det gick inte att öppna indatafilen <%s>"
 
-#: ../display/d.legend.vect/draw.c:185
+#: ../display/d.legend.vect/draw.c:186
 msgid "Cannot read symbol"
 msgstr "Det går inte att läsa symbolen"
 
-#: ../display/d.legend.vect/draw.c:246
+#: ../display/d.legend.vect/draw.c:247
 msgid "Invalid value for color type in legend file. Use one of 'lf' or 'ps'."
 msgstr "Ogiltigt värde för färgtyp i legendfilen. Använd en av 'lf' eller 'ps'."
 
@@ -4413,7 +4413,7 @@ msgstr "Skapa 3D-diagram"
 #: ../vector/v.buffer/main.c:422 ../vector/v.colors/read_rgb.c:23
 #: ../vector/v.colors/scan_attr.c:24 ../vector/v.colors/write_rgb.c:20
 #: ../vector/v.distance/main.c:590 ../vector/v.edit/select.c:499
-#: ../vector/v.extrude/main.c:223 ../vector/v.generalize/misc.c:167
+#: ../vector/v.extrude/main.c:223 ../vector/v.generalize/misc.c:168
 #: ../vector/v.neighbors/main.c:219 ../vector/v.overlay/main.c:422
 #: ../vector/v.surf.bspline/crosscorr.c:123 ../vector/v.to.rast/support.c:101
 #: ../vector/v.to.rast/support.c:271 ../vector/v.to.rast/support.c:499
@@ -4432,7 +4432,7 @@ msgstr "Databasanslutning inte definierad för lagret %d"
 #: ../raster/r.contour/main.c:170 ../raster/r.random/random.c:67
 #: ../raster/r.to.vect/main.c:200 ../raster/r.volume/main.c:322
 #: ../raster3d/r3.flow/main.c:46 ../vector/v.buffer/main.c:427
-#: ../vector/v.class/main.c:113 ../vector/v.colors.out/make_colors.c:36
+#: ../vector/v.class/main.c:114 ../vector/v.colors.out/make_colors.c:36
 #: ../vector/v.colors/read_rgb.c:27 ../vector/v.colors/scan_attr.c:28
 #: ../vector/v.colors/write_rgb.c:24 ../vector/v.db.connect/main.c:224
 #: ../vector/v.db.connect/main.c:334 ../vector/v.db.select/main.c:282
@@ -4589,7 +4589,7 @@ msgstr "diskontinuiteter"
 msgid "equiprobable (normal distribution)"
 msgstr "utjämningsbar (normalfördelning)"
 
-#: ../display/d.vect.thematic/main.c:133 ../vector/v.class/main.c:84
+#: ../display/d.vect.thematic/main.c:133 ../vector/v.class/main.c:85
 msgid "Number of classes to define"
 msgstr "Antal klasser som ska definieras"
 
@@ -4743,12 +4743,12 @@ msgstr ""
 msgid "Classification of %s into %i classes\n"
 msgstr "Klassificering av %s till %i-klasser\n"
 
-#: ../display/d.vect.thematic/main.c:517 ../vector/v.class/main.c:195
+#: ../display/d.vect.thematic/main.c:517 ../vector/v.class/main.c:196
 #, c-format
 msgid "Using algorithm: *** %s ***\n"
 msgstr "Använda algoritm: *** %s ***\n"
 
-#: ../display/d.vect.thematic/main.c:518 ../vector/v.class/main.c:196
+#: ../display/d.vect.thematic/main.c:518 ../vector/v.class/main.c:197
 #, c-format
 msgid "Mean: %f\tStandard deviation = %f\n"
 msgstr "Medelvärde: %f Standardavvikelse = %f\n"
@@ -4758,7 +4758,7 @@ msgstr "Medelvärde: %f Standardavvikelse = %f\n"
 msgid "Last chi2 = %f\n"
 msgstr "Sista chi2 = %f\n"
 
-#: ../display/d.vect.thematic/main.c:524 ../vector/v.class/main.c:203
+#: ../display/d.vect.thematic/main.c:524 ../vector/v.class/main.c:204
 #, c-format
 msgid "Stdev multiplied by %.4f to define step\n"
 msgstr "Stdev multiplicerat med %.4f för att definiera steg\n"
@@ -4833,6 +4833,12 @@ msgstr "Inget attribut hittades för katt %d: %s"
 #: ../display/d.vect/label.c:32
 msgid "Topology level required for drawing centroids for OGR layers"
 msgstr "Topologinivå som krävs för att rita centroider för OGR-lager"
+
+#: ../display/d.vect/legend.c:18 ../display/d.vect/main.c:367
+#, fuzzy, c-format
+#| msgid "DEM name <%s> is too long"
+msgid "Map name <%s> is too long"
+msgstr "DEM-namnet <%s> är för långt"
 
 #: ../display/d.vect/lines.c:114
 msgid "Unable to display features by id, topology not available. Please try to rebuild topology using v.build or v.build.all."
@@ -5029,32 +5035,32 @@ msgstr "Regionstorleken är lägre än minreg, inget visas"
 msgid "Region size is greater than maxreg, nothing displayed"
 msgstr "Regionstorleken är större än maxreg, inget visas"
 
-#: ../display/d.vect/main.c:373
+#: ../display/d.vect/main.c:376
 #, c-format
 msgid "The -%c flag and <%s> option cannot be used together, the -%c flag will be ignored!"
 msgstr "Flaggan -%c och alternativet <%s> kan inte användas tillsammans, flaggan -%c ignoreras!"
 
-#: ../display/d.vect/main.c:398 ../display/d.vect/main.c:404
+#: ../display/d.vect/main.c:401 ../display/d.vect/main.c:407
 #, c-format
 msgid "Option <%s> must be > 0"
 msgstr "Alternativ <%s> måste vara > 0"
 
-#: ../display/d.vect/main.c:409
+#: ../display/d.vect/main.c:412
 #, c-format
 msgid "%d error in cat option"
 msgid_plural "%d errors in cat option"
 msgstr[0] "%d fel i kattalternativet"
 msgstr[1] "%d fel i kattalternativet"
 
-#: ../display/d.vect/main.c:426
+#: ../display/d.vect/main.c:429
 msgid "Plotting..."
 msgstr "Plottar..."
 
-#: ../display/d.vect/main.c:438
+#: ../display/d.vect/main.c:441
 msgid "The bounding box of the map is outside the current region, nothing drawn"
 msgstr "Kartans avgränsningsbox ligger utanför den aktuella regionen, inget ritas"
 
-#: ../display/d.vect/main.c:510
+#: ../display/d.vect/main.c:513
 msgid "Rendering failed"
 msgstr "Rendering misslyckades"
 
@@ -17628,7 +17634,7 @@ msgid "Target east,north coordinates to local x,y"
 msgstr "Rikta in öst-, nordkoordinater till lokala x,y"
 
 #: ../ps/ps.map/catval.c:47 ../ps/ps.map/catval.c:108 ../ps/ps.map/catval.c:174
-#: ../vector/v.class/main.c:107 ../vector/v.label.sa/labels.c:75
+#: ../vector/v.class/main.c:108 ../vector/v.label.sa/labels.c:75
 #: ../vector/v.label/main.c:273 ../vector/v.vol.rst/user1.c:91
 msgid "Unable to get layer info for vector map"
 msgstr "Det går inte att få lagerinformation för vektorkarta"
@@ -17638,7 +17644,7 @@ msgid "Column type not supported (must be string)"
 msgstr "Kolumntyp stöds inte (måste vara sträng)"
 
 #: ../ps/ps.map/catval.c:65 ../ps/ps.map/catval.c:130 ../ps/ps.map/catval.c:197
-#: ../vector/v.class/main.c:128 ../vector/v.normal/main.c:132
+#: ../vector/v.class/main.c:129 ../vector/v.normal/main.c:132
 #: ../vector/v.out.lidar/main.c:131 ../vector/v.out.lidar/main.c:165
 #: ../vector/v.sample/main.c:149 ../vector/v.surf.bspline/main.c:402
 #: ../vector/v.surf.idw/read_sites.c:70 ../vector/v.to.rast3/main.c:98
@@ -21188,7 +21194,7 @@ msgstr "Det går inte att skriva till filen"
 #: ../raster/r.in.bin/main.c:115 ../raster/r.in.bin/main.c:117
 #: ../raster/r.in.bin/main.c:119 ../raster/r.in.bin/main.c:121
 #: ../raster/r.in.bin/main.c:647 ../raster/r.in.gridatb/file_io.c:21
-#: ../raster/r.in.gridatb/file_io.c:27 ../raster/r.in.gridatb/file_io.c:61
+#: ../raster/r.in.gridatb/file_io.c:29 ../raster/r.in.gridatb/file_io.c:63
 #: ../raster/r.in.mat/main.c:133 ../raster/r.in.mat/main.c:155
 #: ../raster/r.in.mat/main.c:175 ../raster/r.in.mat/main.c:177
 #: ../raster/r.in.mat/main.c:183 ../raster/r.in.mat/main.c:189
@@ -21653,15 +21659,21 @@ msgstr ""
 msgid "Unable to open file: %s"
 msgstr "Kunde inte öppna filen: %s"
 
-#: ../raster/r.in.gridatb/file_io.c:40
+#: ../raster/r.in.gridatb/file_io.c:24
+#, fuzzy, c-format
+#| msgid "Error: Unexpected end of file, file may be corrupted."
+msgid "Unexpected end of file while reading %s"
+msgstr "Fel i filen: Oväntat slut på filen, filen kan vara skadad."
+
+#: ../raster/r.in.gridatb/file_io.c:42
 msgid "Setting window header failed"
 msgstr "Inställning av fönsterhuvud misslyckades"
 
-#: ../raster/r.in.gridatb/file_io.c:43
+#: ../raster/r.in.gridatb/file_io.c:45
 msgid "Rows changed"
 msgstr "Raderna ändrade"
 
-#: ../raster/r.in.gridatb/file_io.c:46
+#: ../raster/r.in.gridatb/file_io.c:48
 msgid "Cols changed"
 msgstr "Cols förändrades"
 
@@ -35302,7 +35314,7 @@ msgstr "Det gick inte att skapa databas <%s> med drivrutin <%s>"
 
 #: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:144
 #: ../vector/v.decimate/copy_tab.c:101 ../vector/v.extract/copy_tab.c:106
-#: ../vector/v.generalize/misc.c:180 ../vector/v.to.points/main.c:187
+#: ../vector/v.generalize/misc.c:181 ../vector/v.to.points/main.c:187
 #, c-format, python-format
 msgid "Unable to copy table <%s>"
 msgstr "Det går inte att kopiera tabell <%s>"
@@ -35393,7 +35405,7 @@ msgid "Use of libsqlitefunctions only with SQLite backend"
 msgstr "Användning av libsqlitefunctions endast med SQLite-backend"
 
 #: ../scripts/v.db.update/v.db.update.py:103
-#: ../scripts/v.dissolve/v.dissolve.py:615 ../vector/v.to.rast/support.c:297
+#: ../scripts/v.dissolve/v.dissolve.py:605 ../vector/v.to.rast/support.c:297
 #: ../vector/v.to.rast/support.c:528 ../vector/v.to.rast/vect2rast.c:67
 #: ../vector/v.what.rast3/main.c:143
 #, c-format, python-format
@@ -35408,71 +35420,71 @@ msgstr "<value> och <qcolumn> är ömsesidigt uteslutande"
 msgid "Either <value> or <qcolumn> must be given"
 msgstr "Antingen <value> eller <qcolumn> måste anges"
 
-#: ../scripts/v.dissolve/v.dissolve.py:248
+#: ../scripts/v.dissolve/v.dissolve.py:246
 #, python-brace-format
 msgid "At least one method must be provided when backend <{backend}> is used"
 msgstr "Minst en metod måste anges när backend <{backend}> används"
 
-#: ../scripts/v.dissolve/v.dissolve.py:256
+#: ../scripts/v.dissolve/v.dissolve.py:254
 #, python-brace-format
 msgid "Method <{method}> is not available for backend <{backend}>"
 msgstr "Metod <{method}> är inte tillgänglig för backend <{backend}>"
 
-#: ../scripts/v.dissolve/v.dissolve.py:271
+#: ../scripts/v.dissolve/v.dissolve.py:269
 #, python-brace-format
 msgid "Column <{column}> does not exist in vector <{vector}> (layer <{layer}>). Specify result columns with 'name type' syntax if you are using function calls instead of aggregate column names only."
 msgstr "Kolumn <{column}> finns inte i vektor <{vector}> (lager <{layer}>). Ange resultatkolumner med syntaxen \"name type\" om du använder funktionsanrop i stället för enbart aggregerade kolumnnamn."
 
-#: ../scripts/v.dissolve/v.dissolve.py:279
+#: ../scripts/v.dissolve/v.dissolve.py:277
 #, python-brace-format
 msgid "Column <{column}> selected for aggregation does not exist in vector <{vector}> (layer <{layer}>)"
 msgstr "Kolumn <{column}> som valts för aggregering finns inte i vektor <{vector}> (lager <{layer}>)"
 
-#: ../scripts/v.dissolve/v.dissolve.py:322
+#: ../scripts/v.dissolve/v.dissolve.py:320
 #, python-brace-format
 msgid "When result columns are specified, the number of aggregate columns ({columns_to_aggregate}) needs to be the same as the number of methods ({methods})"
 msgstr "När resultatkolumner anges måste antalet aggregatkolumner ({columns_to_aggregate}) vara detsamma som antalet metoder ({methods})"
 
-#: ../scripts/v.dissolve/v.dissolve.py:338
+#: ../scripts/v.dissolve/v.dissolve.py:336
 #, python-brace-format
 msgid "The number of result columns ({result_columns}) needs to be the same as the number of aggregate columns ({columns_to_aggregate})"
 msgstr "Antalet resultatkolumner ({result_columns}) måste vara detsamma som antalet aggregatkolumner ({columns_to_aggregate})"
 
-#: ../scripts/v.dissolve/v.dissolve.py:349
+#: ../scripts/v.dissolve/v.dissolve.py:347
 #, python-brace-format
 msgid "The number of result columns ({result_columns}) needs to be the same as the number of aggregation methods ({methods})"
 msgstr "Antalet resultatkolumner ({result_columns}) måste vara detsamma som antalet aggregeringsmetoder ({methods})"
 
-#: ../scripts/v.dissolve/v.dissolve.py:362
+#: ../scripts/v.dissolve/v.dissolve.py:360
 #, python-brace-format
 msgid "Result column '{column}' needs a type specified (using the syntax: 'name type') when no methods are provided with the {option_name} option and aggregation backend is '{backend}'"
 msgstr "Resultatkolumnen '{column}' behöver en specificerad typ (med syntaxen: 'name type') när inga metoder tillhandahålls med alternativet {option_name} och aggregeringsbackend är '{backend}'"
 
-#: ../scripts/v.dissolve/v.dissolve.py:376
+#: ../scripts/v.dissolve/v.dissolve.py:374
 #, python-brace-format
 msgid "Methods must be specified with {backend} backend and with result columns provided"
 msgstr "Metoder måste specificeras med {backend} backend och med resultatkolumner som tillhandahålls"
 
-#: ../scripts/v.dissolve/v.dissolve.py:590
+#: ../scripts/v.dissolve/v.dissolve.py:581
 #, python-format
 msgid "No '%s' option specified. Dissolving based on category values from layer <%s>."
 msgstr "Inget '%s'-alternativ angivet. Upplösning baserad på kategorivärden från lager <%s>."
 
-#: ../scripts/v.dissolve/v.dissolve.py:606
+#: ../scripts/v.dissolve/v.dissolve.py:596
 #, python-format
 msgid "Invalid layer number (%d). Parameter '%s' specified, assuming layer '1'."
 msgstr "Ogiltigt lagernummer (%d). Parameter '%s' angiven, antar lager '1'."
 
-#: ../scripts/v.dissolve/v.dissolve.py:618
+#: ../scripts/v.dissolve/v.dissolve.py:608
 msgid "Key column must be of type integer or string"
 msgstr "Nyckelkolumnen måste vara av typen heltal eller sträng"
 
-#: ../scripts/v.dissolve/v.dissolve.py:623
+#: ../scripts/v.dissolve/v.dissolve.py:613
 #, python-brace-format
 msgid "Key column type must be string (text) for aggregation method to work, not '{column_type}'"
 msgstr "Nyckelkolumnens typ måste vara sträng (text) för att aggregeringsmetoden ska fungera, inte '{column_type}'"
 
-#: ../scripts/v.dissolve/v.dissolve.py:676
+#: ../scripts/v.dissolve/v.dissolve.py:664
 #, python-brace-format
 msgid ""
 "A processing step failed. Check the above error messages and see the following details:\n"
@@ -36049,7 +36061,7 @@ msgstr "Alternativet '%s' är inte tillgängligt med GEOS-buffring"
 msgid "Unable to select data from table <%s>"
 msgstr "Det går inte att välja data från tabellen <%s>"
 
-#: ../vector/v.buffer/main.c:444 ../vector/v.class/main.c:125
+#: ../vector/v.buffer/main.c:444 ../vector/v.class/main.c:126
 #: ../vector/v.sample/main.c:238 ../vector/v.surf.bspline/crosscorr.c:141
 #: ../vector/v.surf.bspline/main.c:399 ../vector/v.surf.idw/read_sites.c:67
 #: ../vector/v.to.rast3/main.c:102 ../vector/v.what.rast/main.c:184
@@ -36460,19 +36472,19 @@ msgstr "Klassificerar attributdata, t.ex. för tematisk kartläggning"
 msgid "Column name or expression"
 msgstr "Kolumnnamn eller uttryck"
 
-#: ../vector/v.class/main.c:89
+#: ../vector/v.class/main.c:90
 msgid "Print only class breaks (without min and max)"
 msgstr "Skriv endast ut klassraster (utan min och max)"
 
-#: ../vector/v.class/main.c:134
+#: ../vector/v.class/main.c:135
 msgid "Unable to sort array of values"
 msgstr "Det går inte att sortera en matris med värden"
 
-#: ../vector/v.class/main.c:165
+#: ../vector/v.class/main.c:166
 msgid "The discontinuities algorithm indicates that some class breaks are not statistically significant at alpha=0.05. You are advised to reduce the number of classes."
 msgstr "Diskontinuitetsalgoritmen indikerar att vissa klassuppdelningar inte är statistiskt signifikanta vid alpha=0,05. Du rekommenderas att minska antalet klasser."
 
-#: ../vector/v.class/main.c:193
+#: ../vector/v.class/main.c:194
 #, c-format
 msgid ""
 "\n"
@@ -36481,12 +36493,12 @@ msgstr ""
 "\n"
 "Klassificering av %s till %i-klasser\n"
 
-#: ../vector/v.class/main.c:200
+#: ../vector/v.class/main.c:201
 #, c-format
 msgid "Lowest chi2 = %f\n"
 msgstr "Lägsta chi2 = %f\n"
 
-#: ../vector/v.class/main.c:206
+#: ../vector/v.class/main.c:207
 #, c-format
 msgid ""
 "%15s%15s%15s\n"
@@ -36495,7 +36507,7 @@ msgstr ""
 "%15s%15s%15s\n"
 "\n"
 
-#: ../vector/v.class/main.c:218
+#: ../vector/v.class/main.c:219
 #, c-format
 msgid ""
 "\n"
@@ -39047,7 +39059,7 @@ msgstr "Antal hörnpunkter för valda funktioner minskat från %d till %d (%d%% 
 msgid "Number of vertices for selected features changed from %d to %d (%d%% remaining)"
 msgstr "Antal hörnpunkter för valda funktioner ändrat från %d till %d (%d%% återstår)"
 
-#: ../vector/v.generalize/misc.c:163
+#: ../vector/v.generalize/misc.c:164
 #, c-format
 msgid "Layer %d"
 msgstr "Lager %d"

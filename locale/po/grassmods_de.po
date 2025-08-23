@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-09 15:41+0000\n"
+"POT-Creation-Date: 2025-08-16 15:40+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/grassmods/de/>\n"
@@ -2130,7 +2130,7 @@ msgstr "Keine Graphik-Ausgabe ausgewählt."
 #: ../raster/r.carve/main.c:153 ../raster/r.cost/main.c:357
 #: ../raster/r.walk/main.c:460 ../scripts/r.mask/r.mask.py:173
 #: ../scripts/v.db.univar/v.db.univar.py:80
-#: ../scripts/v.dissolve/v.dissolve.py:585 ../scripts/v.pack/v.pack.py:62
+#: ../scripts/v.dissolve/v.dissolve.py:576 ../scripts/v.pack/v.pack.py:62
 #: ../scripts/v.report/v.report.py:85 ../vector/v.clean/test/topocheck.c:62
 #: ../vector/v.colors/main.c:252 ../vector/v.edit/main.c:161
 #: ../vector/v.lidar.correction/main.c:158
@@ -2160,7 +2160,7 @@ msgstr "Vektorkarte <%s> nicht gefunden."
 #: ../raster/r.what/main.c:265 ../raster3d/r3.flow/main.c:398
 #: ../vector/v.buffer/main.c:332 ../vector/v.build.polylines/main.c:152
 #: ../vector/v.build/main.c:120 ../vector/v.build/main.c:130
-#: ../vector/v.class/main.c:98 ../vector/v.clean/main.c:291
+#: ../vector/v.class/main.c:99 ../vector/v.clean/main.c:291
 #: ../vector/v.clean/test/topocheck.c:66 ../vector/v.clean/test/topocheck.c:86
 #: ../vector/v.cluster/main.c:140 ../vector/v.colors.out/make_colors.c:23
 #: ../vector/v.colors.out/scan_cats.c:19 ../vector/v.colors/main.c:276
@@ -2401,8 +2401,8 @@ msgstr "Kann Farbe nicht lesen."
 
 #: ../display/d.graph/do_graph.c:105 ../display/d.graph/do_graph.c:350
 #: ../display/d.graph/do_graph.c:365 ../display/d.graph/main.c:103
-#: ../display/d.labels/color.c:65 ../display/d.legend.vect/draw.c:201
-#: ../display/d.legend.vect/draw.c:212 ../display/d.rast/display.c:25
+#: ../display/d.labels/color.c:65 ../display/d.legend.vect/draw.c:202
+#: ../display/d.legend.vect/draw.c:213 ../display/d.rast/display.c:25
 #: ../raster/r.out.png/main.c:174
 #, c-format
 msgid "[%s]: No such color"
@@ -2837,7 +2837,7 @@ msgstr "Region-Größe ist größer als die Maximal-Region; es wird nichts angez
 msgid "Unable to open label file <%s>"
 msgstr "Kann die Beshriftungsdatei <%s> nicht öffnen."
 
-#: ../display/d.legend.vect/draw.c:77 ../display/d.legend.vect/main.c:266
+#: ../display/d.legend.vect/draw.c:78 ../display/d.legend.vect/main.c:266
 #: ../display/d.linegraph/main.c:409 ../display/d.linegraph/main.c:427
 #: ../display/d.linegraph/main.c:726 ../display/d.text/main.c:368
 #: ../display/d.where/main.c:168 ../general/g.cairocomp/main.c:46
@@ -2853,11 +2853,11 @@ msgstr "Kann die Beshriftungsdatei <%s> nicht öffnen."
 msgid "Unable to open input file <%s>"
 msgstr "Kann die Eingabedatei <%s> nicht öffnen."
 
-#: ../display/d.legend.vect/draw.c:185
+#: ../display/d.legend.vect/draw.c:186
 msgid "Cannot read symbol"
 msgstr ""
 
-#: ../display/d.legend.vect/draw.c:246
+#: ../display/d.legend.vect/draw.c:247
 msgid "Invalid value for color type in legend file. Use one of 'lf' or 'ps'."
 msgstr ""
 
@@ -4419,7 +4419,7 @@ msgstr ""
 #: ../vector/v.buffer/main.c:422 ../vector/v.colors/read_rgb.c:23
 #: ../vector/v.colors/scan_attr.c:24 ../vector/v.colors/write_rgb.c:20
 #: ../vector/v.distance/main.c:590 ../vector/v.edit/select.c:499
-#: ../vector/v.extrude/main.c:223 ../vector/v.generalize/misc.c:167
+#: ../vector/v.extrude/main.c:223 ../vector/v.generalize/misc.c:168
 #: ../vector/v.neighbors/main.c:219 ../vector/v.overlay/main.c:422
 #: ../vector/v.surf.bspline/crosscorr.c:123 ../vector/v.to.rast/support.c:101
 #: ../vector/v.to.rast/support.c:271 ../vector/v.to.rast/support.c:499
@@ -4438,7 +4438,7 @@ msgstr "Die Datenbankverbindung für den Layer<%d> ist nicht definiert."
 #: ../raster/r.contour/main.c:170 ../raster/r.random/random.c:67
 #: ../raster/r.to.vect/main.c:200 ../raster/r.volume/main.c:322
 #: ../raster3d/r3.flow/main.c:46 ../vector/v.buffer/main.c:427
-#: ../vector/v.class/main.c:113 ../vector/v.colors.out/make_colors.c:36
+#: ../vector/v.class/main.c:114 ../vector/v.colors.out/make_colors.c:36
 #: ../vector/v.colors/read_rgb.c:27 ../vector/v.colors/scan_attr.c:28
 #: ../vector/v.colors/write_rgb.c:24 ../vector/v.db.connect/main.c:224
 #: ../vector/v.db.connect/main.c:334 ../vector/v.db.select/main.c:282
@@ -4595,7 +4595,7 @@ msgstr ""
 msgid "equiprobable (normal distribution)"
 msgstr ""
 
-#: ../display/d.vect.thematic/main.c:133 ../vector/v.class/main.c:84
+#: ../display/d.vect.thematic/main.c:133 ../vector/v.class/main.c:85
 msgid "Number of classes to define"
 msgstr "Anzahl der zu bestimmenden Klassen"
 
@@ -4747,12 +4747,12 @@ msgstr ""
 msgid "Classification of %s into %i classes\n"
 msgstr "Klassifikation von %s in %i Klassen\n"
 
-#: ../display/d.vect.thematic/main.c:517 ../vector/v.class/main.c:195
+#: ../display/d.vect.thematic/main.c:517 ../vector/v.class/main.c:196
 #, c-format
 msgid "Using algorithm: *** %s ***\n"
 msgstr "Verwende den Algorithmus: *** %s ***\n"
 
-#: ../display/d.vect.thematic/main.c:518 ../vector/v.class/main.c:196
+#: ../display/d.vect.thematic/main.c:518 ../vector/v.class/main.c:197
 #, c-format
 msgid "Mean: %f\tStandard deviation = %f\n"
 msgstr "Mittelwert: %f\tStandardabweichung = %f\n"
@@ -4762,7 +4762,7 @@ msgstr "Mittelwert: %f\tStandardabweichung = %f\n"
 msgid "Last chi2 = %f\n"
 msgstr "Letztes chi^2 = %f\n"
 
-#: ../display/d.vect.thematic/main.c:524 ../vector/v.class/main.c:203
+#: ../display/d.vect.thematic/main.c:524 ../vector/v.class/main.c:204
 #, c-format
 msgid "Stdev multiplied by %.4f to define step\n"
 msgstr "Standardabweichung multipliziert mit %.4f definiert die Schrittweite\n"
@@ -4837,6 +4837,12 @@ msgstr "Kein Attribut für cat %d: %s gefunden."
 #: ../display/d.vect/label.c:32
 msgid "Topology level required for drawing centroids for OGR layers"
 msgstr ""
+
+#: ../display/d.vect/legend.c:18 ../display/d.vect/main.c:367
+#, fuzzy, c-format
+#| msgid "Group <%s> not found"
+msgid "Map name <%s> is too long"
+msgstr "Gruppe <%s> nicht gefunden."
 
 #: ../display/d.vect/lines.c:114
 msgid "Unable to display features by id, topology not available. Please try to rebuild topology using v.build or v.build.all."
@@ -5033,32 +5039,32 @@ msgstr ""
 msgid "Region size is greater than maxreg, nothing displayed"
 msgstr ""
 
-#: ../display/d.vect/main.c:373
+#: ../display/d.vect/main.c:376
 #, c-format
 msgid "The -%c flag and <%s> option cannot be used together, the -%c flag will be ignored!"
 msgstr ""
 
-#: ../display/d.vect/main.c:398 ../display/d.vect/main.c:404
+#: ../display/d.vect/main.c:401 ../display/d.vect/main.c:407
 #, c-format
 msgid "Option <%s> must be > 0"
 msgstr ""
 
-#: ../display/d.vect/main.c:409
+#: ../display/d.vect/main.c:412
 #, c-format
 msgid "%d error in cat option"
 msgid_plural "%d errors in cat option"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../display/d.vect/main.c:426
+#: ../display/d.vect/main.c:429
 msgid "Plotting..."
 msgstr "Zeichne..."
 
-#: ../display/d.vect/main.c:438
+#: ../display/d.vect/main.c:441
 msgid "The bounding box of the map is outside the current region, nothing drawn"
 msgstr ""
 
-#: ../display/d.vect/main.c:510
+#: ../display/d.vect/main.c:513
 msgid "Rendering failed"
 msgstr ""
 
@@ -17768,7 +17774,7 @@ msgid "Target east,north coordinates to local x,y"
 msgstr "Ziel Ost-,Nord-Koordinaten zu lokalen x,y."
 
 #: ../ps/ps.map/catval.c:47 ../ps/ps.map/catval.c:108 ../ps/ps.map/catval.c:174
-#: ../vector/v.class/main.c:107 ../vector/v.label.sa/labels.c:75
+#: ../vector/v.class/main.c:108 ../vector/v.label.sa/labels.c:75
 #: ../vector/v.label/main.c:273 ../vector/v.vol.rst/user1.c:91
 msgid "Unable to get layer info for vector map"
 msgstr "Kann die Layer-Informationen der Vektorkarte nicht bekommen."
@@ -17778,7 +17784,7 @@ msgid "Column type not supported (must be string)"
 msgstr "Spaltentyp wird nicht unterstützt (muss 'string' sein)."
 
 #: ../ps/ps.map/catval.c:65 ../ps/ps.map/catval.c:130 ../ps/ps.map/catval.c:197
-#: ../vector/v.class/main.c:128 ../vector/v.normal/main.c:132
+#: ../vector/v.class/main.c:129 ../vector/v.normal/main.c:132
 #: ../vector/v.out.lidar/main.c:131 ../vector/v.out.lidar/main.c:165
 #: ../vector/v.sample/main.c:149 ../vector/v.surf.bspline/main.c:402
 #: ../vector/v.surf.idw/read_sites.c:70 ../vector/v.to.rast3/main.c:98
@@ -21341,7 +21347,7 @@ msgstr "Kann nicht in die Datei schreiben."
 #: ../raster/r.in.bin/main.c:115 ../raster/r.in.bin/main.c:117
 #: ../raster/r.in.bin/main.c:119 ../raster/r.in.bin/main.c:121
 #: ../raster/r.in.bin/main.c:647 ../raster/r.in.gridatb/file_io.c:21
-#: ../raster/r.in.gridatb/file_io.c:27 ../raster/r.in.gridatb/file_io.c:61
+#: ../raster/r.in.gridatb/file_io.c:29 ../raster/r.in.gridatb/file_io.c:63
 #: ../raster/r.in.mat/main.c:133 ../raster/r.in.mat/main.c:155
 #: ../raster/r.in.mat/main.c:175 ../raster/r.in.mat/main.c:177
 #: ../raster/r.in.mat/main.c:183 ../raster/r.in.mat/main.c:189
@@ -21817,15 +21823,20 @@ msgstr ""
 msgid "Unable to open file: %s"
 msgstr "Kann Datei '%s' nicht öffnen"
 
-#: ../raster/r.in.gridatb/file_io.c:40
+#: ../raster/r.in.gridatb/file_io.c:24
+#, c-format
+msgid "Unexpected end of file while reading %s"
+msgstr ""
+
+#: ../raster/r.in.gridatb/file_io.c:42
 msgid "Setting window header failed"
 msgstr "Schreiben des Fenster-Headers fehlgeschlagen."
 
-#: ../raster/r.in.gridatb/file_io.c:43
+#: ../raster/r.in.gridatb/file_io.c:45
 msgid "Rows changed"
 msgstr "Zeilen geändert"
 
-#: ../raster/r.in.gridatb/file_io.c:46
+#: ../raster/r.in.gridatb/file_io.c:48
 msgid "Cols changed"
 msgstr "Spalten geändert"
 
@@ -35551,7 +35562,7 @@ msgstr ""
 
 #: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:144
 #: ../vector/v.decimate/copy_tab.c:101 ../vector/v.extract/copy_tab.c:106
-#: ../vector/v.generalize/misc.c:180 ../vector/v.to.points/main.c:187
+#: ../vector/v.generalize/misc.c:181 ../vector/v.to.points/main.c:187
 #, c-format, python-format
 msgid "Unable to copy table <%s>"
 msgstr "Kann die Tabelle <%s> nicht kopieren."
@@ -35639,7 +35650,7 @@ msgid "Use of libsqlitefunctions only with SQLite backend"
 msgstr ""
 
 #: ../scripts/v.db.update/v.db.update.py:103
-#: ../scripts/v.dissolve/v.dissolve.py:615 ../vector/v.to.rast/support.c:297
+#: ../scripts/v.dissolve/v.dissolve.py:605 ../vector/v.to.rast/support.c:297
 #: ../vector/v.to.rast/support.c:528 ../vector/v.to.rast/vect2rast.c:67
 #: ../vector/v.what.rast3/main.c:143
 #, c-format, python-format
@@ -35654,71 +35665,71 @@ msgstr ""
 msgid "Either <value> or <qcolumn> must be given"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:248
+#: ../scripts/v.dissolve/v.dissolve.py:246
 #, python-brace-format
 msgid "At least one method must be provided when backend <{backend}> is used"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:256
+#: ../scripts/v.dissolve/v.dissolve.py:254
 #, python-brace-format
 msgid "Method <{method}> is not available for backend <{backend}>"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:271
+#: ../scripts/v.dissolve/v.dissolve.py:269
 #, python-brace-format
 msgid "Column <{column}> does not exist in vector <{vector}> (layer <{layer}>). Specify result columns with 'name type' syntax if you are using function calls instead of aggregate column names only."
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:279
+#: ../scripts/v.dissolve/v.dissolve.py:277
 #, python-brace-format
 msgid "Column <{column}> selected for aggregation does not exist in vector <{vector}> (layer <{layer}>)"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:322
+#: ../scripts/v.dissolve/v.dissolve.py:320
 #, python-brace-format
 msgid "When result columns are specified, the number of aggregate columns ({columns_to_aggregate}) needs to be the same as the number of methods ({methods})"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:338
+#: ../scripts/v.dissolve/v.dissolve.py:336
 #, python-brace-format
 msgid "The number of result columns ({result_columns}) needs to be the same as the number of aggregate columns ({columns_to_aggregate})"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:349
+#: ../scripts/v.dissolve/v.dissolve.py:347
 #, python-brace-format
 msgid "The number of result columns ({result_columns}) needs to be the same as the number of aggregation methods ({methods})"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:362
+#: ../scripts/v.dissolve/v.dissolve.py:360
 #, python-brace-format
 msgid "Result column '{column}' needs a type specified (using the syntax: 'name type') when no methods are provided with the {option_name} option and aggregation backend is '{backend}'"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:376
+#: ../scripts/v.dissolve/v.dissolve.py:374
 #, python-brace-format
 msgid "Methods must be specified with {backend} backend and with result columns provided"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:590
+#: ../scripts/v.dissolve/v.dissolve.py:581
 #, python-format
 msgid "No '%s' option specified. Dissolving based on category values from layer <%s>."
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:606
+#: ../scripts/v.dissolve/v.dissolve.py:596
 #, python-format
 msgid "Invalid layer number (%d). Parameter '%s' specified, assuming layer '1'."
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:618
+#: ../scripts/v.dissolve/v.dissolve.py:608
 msgid "Key column must be of type integer or string"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:623
+#: ../scripts/v.dissolve/v.dissolve.py:613
 #, python-brace-format
 msgid "Key column type must be string (text) for aggregation method to work, not '{column_type}'"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:676
+#: ../scripts/v.dissolve/v.dissolve.py:664
 #, python-brace-format
 msgid ""
 "A processing step failed. Check the above error messages and see the following details:\n"
@@ -36285,7 +36296,7 @@ msgstr ""
 msgid "Unable to select data from table <%s>"
 msgstr "Kann keine Daten der Tabelle <%s> selektieren"
 
-#: ../vector/v.buffer/main.c:444 ../vector/v.class/main.c:125
+#: ../vector/v.buffer/main.c:444 ../vector/v.class/main.c:126
 #: ../vector/v.sample/main.c:238 ../vector/v.surf.bspline/crosscorr.c:141
 #: ../vector/v.surf.bspline/main.c:399 ../vector/v.surf.idw/read_sites.c:67
 #: ../vector/v.to.rast3/main.c:102 ../vector/v.what.rast/main.c:184
@@ -36698,19 +36709,19 @@ msgstr "Klassifiziert Attributdaten, z.B. für thematische Karten"
 msgid "Column name or expression"
 msgstr "Spaltennamen oder Ausdruck"
 
-#: ../vector/v.class/main.c:89
+#: ../vector/v.class/main.c:90
 msgid "Print only class breaks (without min and max)"
 msgstr "Gebe nur die Klassengrenzen aus (ohne Min und Max)"
 
-#: ../vector/v.class/main.c:134
+#: ../vector/v.class/main.c:135
 msgid "Unable to sort array of values"
 msgstr ""
 
-#: ../vector/v.class/main.c:165
+#: ../vector/v.class/main.c:166
 msgid "The discontinuities algorithm indicates that some class breaks are not statistically significant at alpha=0.05. You are advised to reduce the number of classes."
 msgstr "Der Diskontinuitätsalgorithmus weist daraufhin, dass einige Klassengrenzen nicht statistisch signifikant (alpha = 0.05) sind. Es wird Ihnen geraten, die Anzahl der Klassen zu reduzieren."
 
-#: ../vector/v.class/main.c:193
+#: ../vector/v.class/main.c:194
 #, c-format
 msgid ""
 "\n"
@@ -36719,12 +36730,12 @@ msgstr ""
 "\n"
 "Klassifikation von %s in %i Klassen\n"
 
-#: ../vector/v.class/main.c:200
+#: ../vector/v.class/main.c:201
 #, c-format
 msgid "Lowest chi2 = %f\n"
 msgstr "Kleinstes chi^2 = %f\n"
 
-#: ../vector/v.class/main.c:206
+#: ../vector/v.class/main.c:207
 #, c-format
 msgid ""
 "%15s%15s%15s\n"
@@ -36733,7 +36744,7 @@ msgstr ""
 "%15s%15s%15s\n"
 "\n"
 
-#: ../vector/v.class/main.c:218
+#: ../vector/v.class/main.c:219
 #, c-format
 msgid ""
 "\n"
@@ -39273,7 +39284,7 @@ msgstr ""
 msgid "Number of vertices for selected features changed from %d to %d (%d%% remaining)"
 msgstr ""
 
-#: ../vector/v.generalize/misc.c:163
+#: ../vector/v.generalize/misc.c:164
 #, c-format
 msgid "Layer %d"
 msgstr "Layer %d"
