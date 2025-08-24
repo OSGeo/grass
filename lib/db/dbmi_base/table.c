@@ -107,7 +107,7 @@ const char *db_get_table_name(dbTable *table)
    \brief Set the description of the table
 
    \param table pointer to dbTable
-   \param name description of the table
+   \param description description of the table
 
    \return DB_OK
  */

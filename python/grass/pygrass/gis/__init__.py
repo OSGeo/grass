@@ -85,7 +85,7 @@ def set_current_mapset(mapset, location=None, gisdbase=None):
     """Set the current mapset as working area
 
     :param mapset: Name of the mapset
-    :type value: str
+    :type mapset: str
 
     :param location: Name of the location
     :type location: str
@@ -104,7 +104,7 @@ def make_mapset(mapset, location=None, gisdbase=None):
     """Create a new mapset
 
     :param mapset: Name of the mapset
-    :type value: str
+    :type mapset: str
 
     :param location: Name of the location
     :type location: str

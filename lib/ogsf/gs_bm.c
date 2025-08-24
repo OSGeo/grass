@@ -103,7 +103,7 @@ void gsbm_zero_mask(struct BM *map)
    Must be same size, ORs bitmaps & stores in bmvar
 
    \param bmvar bitmap (BM) to changed
-   \param bmcom bitmap (BM)
+   \param bmcon bitmap (BM)
    \param mask_type mask type (see mask types macros)
 
    \return -1 on failure (bitmap mispatch)
@@ -158,7 +158,7 @@ static int gsbm_masks(struct BM *bmvar, struct BM *bmcon, const int mask_type)
    Must be same size, ORs bitmaps & stores in bmvar
 
    \param bmvar bitmap (BM) to changed
-   \param bmcom bitmap (BM)
+   \param bmcon bitmap (BM)
    \param mask_type mask type (see mask types macros)
 
    \return -1 on failure (bitmap mispatch)
@@ -175,8 +175,7 @@ int gsbm_or_masks(struct BM *bmvar, struct BM *bmcon)
    Must be same size, ORNOTs bitmaps & stores in bmvar
 
    \param bmvar bitmap (BM) to changed
-   \param bmcom bitmap (BM)
-   \param mask_type mask type (see mask types macros)
+   \param bmcon bitmap (BM)
 
    \return -1 on failure (bitmap mispatch)
    \return 0 on success
@@ -192,8 +191,7 @@ int gsbm_ornot_masks(struct BM *bmvar, struct BM *bmcon)
    Must be same size, ADDs bitmaps & stores in bmvar
 
    \param bmvar bitmap (BM) to changed
-   \param bmcom bitmap (BM)
-   \param mask_type mask type (see mask types macros)
+   \param bmcon bitmap (BM)
 
    \return -1 on failure (bitmap mispatch)
    \return 0 on success
@@ -209,8 +207,7 @@ int gsbm_and_masks(struct BM *bmvar, struct BM *bmcon)
    Must be same size, XORs bitmaps & stores in bmvar
 
    \param bmvar bitmap (BM) to changed
-   \param bmcom bitmap (BM)
-   \param mask_type mask type (see mask types macros)
+   \param bmcon bitmap (BM)
 
    \return -1 on failure (bitmap mispatch)
    \return 0 on success

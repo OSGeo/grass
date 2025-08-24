@@ -1,7 +1,7 @@
 """
 @package photo2image.ip2i_manager
 
-@brief Scanning distortion correction of a photo for GRASS GIS.
+@brief Scanning distortion correction of a photo for GRASS.
 Includes ground control point management and interactive point
 and click GCP creation
 

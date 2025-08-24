@@ -17,17 +17,20 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/gjson.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 #include <grass/arraystats.h>
 
+enum OutputFormat { PLAIN, CSV, JSON, LIST };
+
 int main(int argc, char *argv[])
 {
     struct GModule *module;
     struct Option *map_opt, *field_opt, *col_opt, *where_opt;
-    struct Option *algo_opt, *nbclass_opt;
-    struct Flag *shell_flag;
+    struct Option *algo_opt, *nbclass_opt, *sep, *format_opt;
+    struct Flag *breaks_flag;
     struct Map_info Map;
     struct field_info *Fi;
     dbDriver *Driver;
@@ -38,7 +41,13 @@ int main(int argc, char *argv[])
     double finfo;
     double *classbreaks, min, max, *data;
     struct GASTATS stats;
-    char *desc;
+    char *desc, *fs;
+    enum OutputFormat format;
+    JSON_Value *root_value = NULL, *intervals_value = NULL,
+               *interval_value = NULL, *breaks_value = NULL;
+    JSON_Array *root_array = NULL, *intervals_array = NULL,
+               *breaks_array = NULL;
+    JSON_Object *root_object = NULL, *interval_object = NULL;
 
     module = G_define_module();
     G_add_keyword(_("vector"));
@@ -81,16 +90,54 @@ int main(int argc, char *argv[])
     nbclass_opt->type = TYPE_INTEGER;
     nbclass_opt->required = YES;
     nbclass_opt->multiple = NO;
+    nbclass_opt->options = "2-";
     nbclass_opt->description = _("Number of classes to define");
 
-    shell_flag = G_define_flag();
-    shell_flag->key = 'g';
-    shell_flag->description =
+    sep = G_define_standard_option(G_OPT_F_SEP);
+    sep->answer = "comma";
+    sep->label = _("Field separator for printing output");
+
+    format_opt = G_define_standard_option(G_OPT_F_FORMAT);
+    format_opt->options = "plain,csv,json,list";
+    format_opt->descriptions = ("plain;Human readable text output;"
+                                "csv;CSV (Comma Separated Values);"
+                                "json;JSON (JavaScript Object Notation);"
+                                "list;List of class breaks values;");
+    format_opt->guisection = _("Print");
+
+    breaks_flag = G_define_flag();
+    breaks_flag->key = 'b';
+    breaks_flag->description =
         _("Print only class breaks (without min and max)");
 
     G_gisinit(argv[0]);
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
+
+    if (strcmp(format_opt->answer, "json") == 0) {
+        format = JSON;
+    }
+    else if (strcmp(format_opt->answer, "list") == 0) {
+        format = LIST;
+    }
+    else if (strcmp(format_opt->answer, "csv") == 0) {
+        format = CSV;
+    }
+    else {
+        format = PLAIN;
+    }
+
+    fs = G_option_to_separator(sep);
+
+    if (format == CSV && breaks_flag->answer) {
+        G_fatal_error(_("CSV format cannot be used with the -b flag. Please "
+                        "use the -b flag with the 'list' format instead."));
+    }
+
+    if (format == LIST && !breaks_flag->answer) {
+        G_fatal_error(_("The 'list' format can only be used with the -b "
+                        "flag. Please use -b to enable list output."));
+    }
 
     /* open input vector */
     Vect_set_open_level(2);
@@ -167,14 +214,67 @@ int main(int argc, char *argv[])
               "alpha=0.05. You are advised to reduce the number of classes."));
 
     /*output to be piped to other modules ? */
-    if (shell_flag->answer) {
+    if (breaks_flag->answer) {
 
-        for (i = 0; i < nbreaks - 1; i++)
-            fprintf(stdout, "%f,", classbreaks[i]);
-        fprintf(stdout, "%f", classbreaks[nbreaks - 1]);
-        fprintf(stdout, "\n");
+        if (format == JSON) {
+            root_value = G_json_value_init_array();
+            if (root_value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON array. Out of memory?"));
+            }
+            root_array = G_json_array(root_value);
+        }
+
+        for (i = 0; i < nbreaks; i++) {
+            switch (format) {
+            case PLAIN:
+                fprintf(stdout, "%s%f", i ? "," : "", classbreaks[i]);
+                break;
+
+            case CSV:
+                /* This combination is not allowed and thus not possible */
+                break;
+
+            case JSON:
+                G_json_array_append_number(root_array, classbreaks[i]);
+                break;
+
+            case LIST:
+                fprintf(stdout, "%s%f", i ? fs : "", classbreaks[i]);
+                break;
+            }
+        }
+
+        if (format != JSON)
+            fprintf(stdout, "\n");
     }
     else {
+
+        if (format == JSON) {
+            root_value = G_json_value_init_object();
+            if (root_value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON object. Out of memory?"));
+            }
+            root_object = G_json_object(root_value);
+
+            intervals_value = G_json_value_init_array();
+            if (intervals_value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON array. Out of memory?"));
+            }
+            intervals_array = G_json_array(intervals_value);
+
+            breaks_value = G_json_value_init_array();
+            if (breaks_value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON array. Out of memory?"));
+            }
+            breaks_array = G_json_array(breaks_value);
+        }
+        else if (format == CSV) {
+            fprintf(stdout, "%s%s%s%s%s\n", "from", fs, "to", fs, "frequency");
+        }
 
         frequencies = (int *)G_malloc((nbreaks + 1) * sizeof(int));
         for (i = 0; i < nbreaks + 1; i++)
@@ -190,32 +290,99 @@ int main(int argc, char *argv[])
         /* as equ algorithm can modify number of breaks we recalculate number of
          * classes
          */
-        fprintf(stdout, _("\nClassification of %s into %i classes\n"),
-                col_opt->answer, nbreaks + 1);
-        fprintf(stdout, _("Using algorithm: *** %s ***\n"), algo_opt->answer);
-        fprintf(stdout, _("Mean: %f\tStandard deviation = %f\n"), stats.mean,
-                stats.stdev);
+        switch (format) {
+        case PLAIN:
+            fprintf(stdout, _("\nClassification of %s into %i classes\n"),
+                    col_opt->answer, nbreaks + 1);
+            fprintf(stdout, _("Using algorithm: *** %s ***\n"),
+                    algo_opt->answer);
+            fprintf(stdout, _("Mean: %f\tStandard deviation = %f\n"),
+                    stats.mean, stats.stdev);
 
-        if (G_strcasecmp(algo_opt->answer, "dis") == 0) {
-            fprintf(stdout, _("Lowest chi2 = %f\n"), finfo);
+            if (G_strcasecmp(algo_opt->answer, "dis") == 0) {
+                fprintf(stdout, _("Lowest chi2 = %f\n"), finfo);
+            }
+            if (G_strcasecmp(algo_opt->answer, "std") == 0)
+                fprintf(stdout, _("Stdev multiplied by %.4f to define step\n"),
+                        finfo);
+            fprintf(stdout, "\n");
+            fprintf(stdout, _("%15s%15s%15s\n\n"), "From (excl.)", "To (incl.)",
+                    "Frequency");
+            fprintf(stdout, "%15.5f%15.5f%15i\n", min, classbreaks[0],
+                    frequencies[0]);
+
+            for (i = 1; i < nbreaks; i++) {
+                fprintf(stdout, "%15.5f%15.5f%15i\n", classbreaks[i - 1],
+                        classbreaks[i], frequencies[i]);
+            }
+            fprintf(stdout, "%15.5f%15.5f%15i\n", classbreaks[nbreaks - 1], max,
+                    frequencies[nbreaks]);
+
+            fprintf(stdout,
+                    _("\nNote: Minimum of first class is including\n\n"));
+            break;
+
+        case CSV:
+            fprintf(stdout, "%.5f%s%.5f%s%i\n", min, fs, classbreaks[0], fs,
+                    frequencies[0]);
+
+            for (i = 1; i < nbreaks; i++) {
+                fprintf(stdout, "%.5f%s%.5f%s%i\n", classbreaks[i - 1], fs,
+                        classbreaks[i], fs, frequencies[i]);
+            }
+            fprintf(stdout, "%.5f%s%.5f%s%i\n", classbreaks[nbreaks - 1], fs,
+                    max, fs, frequencies[nbreaks]);
+            break;
+
+        case JSON:
+            G_json_object_set_number(root_object, "classes", nbreaks + 1);
+
+            G_json_object_set_number(root_object, "mean", stats.mean);
+            G_json_object_set_number(root_object, "standard_deviation",
+                                     stats.stdev);
+
+            for (i = 0; i <= nbreaks; i++) {
+                interval_value = G_json_value_init_object();
+                if (interval_value == NULL) {
+                    G_fatal_error(
+                        _("Failed to initialize JSON object. Out of memory?"));
+                }
+                interval_object = G_json_object(interval_value);
+
+                G_json_object_set_number(interval_object, "from",
+                                         i ? classbreaks[i - 1] : min);
+                G_json_object_set_number(interval_object, "to",
+                                         i < nbreaks ? classbreaks[i] : max);
+                G_json_object_set_number(interval_object, "frequency",
+                                         frequencies[i]);
+
+                G_json_array_append_value(intervals_array, interval_value);
+
+                if (i < nbreaks)
+                    G_json_array_append_number(breaks_array, classbreaks[i]);
+            }
+
+            G_json_object_set_value(root_object, "breaks", breaks_value);
+            G_json_object_set_value(root_object, "intervals", intervals_value);
+            break;
+
+        case LIST:
+            /* This combination is not allowed and thus not possible */
+            break;
         }
-        if (G_strcasecmp(algo_opt->answer, "std") == 0)
-            fprintf(stdout, _("Stdev multiplied by %.4f to define step\n"),
-                    finfo);
-        fprintf(stdout, "\n");
-        fprintf(stdout, _("%15s%15s%15s\n\n"), "From (excl.)", "To (incl.)",
-                "Frequency");
-        fprintf(stdout, "%15.5f%15.5f%15i\n", min, classbreaks[0],
-                frequencies[0]);
+    }
 
-        for (i = 1; i < nbreaks; i++) {
-            fprintf(stdout, "%15.5f%15.5f%15i\n", classbreaks[i - 1],
-                    classbreaks[i], frequencies[i]);
+    if (format == JSON) {
+        char *json_string = G_json_serialize_to_string_pretty(root_value);
+        if (!json_string) {
+            G_json_value_free(root_value);
+            G_fatal_error(_("Failed to serialize JSON to pretty format."));
         }
-        fprintf(stdout, "%15.5f%15.5f%15i\n", classbreaks[nbreaks - 1], max,
-                frequencies[nbreaks]);
 
-        fprintf(stdout, _("\nNote: Minimum of first class is including\n\n"));
+        puts(json_string);
+
+        G_json_free_serialized_string(json_string);
+        G_json_value_free(root_value);
     }
 
     fflush(stdout);

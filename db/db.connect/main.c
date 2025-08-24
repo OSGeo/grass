@@ -19,10 +19,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/gjson.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
 static char *substitute_variables(dbConnection *);
+
+enum OutputFormat { PLAIN, SHELL, JSON };
 
 int main(int argc, char *argv[])
 {
@@ -31,8 +34,11 @@ int main(int argc, char *argv[])
     struct Flag *print, *shell, *check_set_default, *def;
 
     /*    struct Option *driver, *database, *user, *password, *keycol; */
-    struct Option *driver, *database, *schema, *group;
+    struct Option *driver, *database, *schema, *group, *frmt;
     struct GModule *module;
+    enum OutputFormat format;
+    JSON_Value *root_value = NULL;
+    JSON_Object *root_object = NULL;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -48,13 +54,15 @@ int main(int argc, char *argv[])
     print = G_define_flag();
     print->key = 'p';
     print->label = _("Print current connection parameters and exit");
-    print->description = _("Substitute variables in database settings");
     print->guisection = _("Print");
 
     shell = G_define_flag();
     shell->key = 'g';
-    shell->description =
-        _("Print current connection parameters using shell style and exit");
+    shell->label = _("Print current connection parameters using shell style "
+                     "and exit [deprecated]");
+    shell->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=shell instead.");
     shell->guisection = _("Print");
 
     check_set_default = G_define_flag();
@@ -102,6 +110,13 @@ int main(int argc, char *argv[])
                            "select privilege is granted");
     group->guisection = _("Set");
 
+    frmt = G_define_standard_option(G_OPT_F_FORMAT);
+    frmt->options = "plain,shell,json";
+    frmt->descriptions = _("plain;Plain text output;"
+                           "shell;shell script style output;"
+                           "json;JSON (JavaScript Object Notation);");
+    frmt->guisection = _("Print");
+
     /* commented due to new mechanism - see db.login
        user = G_define_option() ;
        user->key        = "user" ;
@@ -121,10 +136,44 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    if (print->answer || shell->answer) {
-        /* get and print connection in shell style */
+    if (strcmp(frmt->answer, "json") == 0) {
+        format = JSON;
+        root_value = G_json_value_init_object();
+        if (root_value == NULL) {
+            G_fatal_error(
+                _("Failed to initialize JSON object. Out of memory?"));
+        }
+        root_object = G_json_object(root_value);
+    }
+    else if (strcmp(frmt->answer, "shell") == 0) {
+        format = SHELL;
+    }
+    else {
+        format = PLAIN;
+    }
+
+    if (shell->answer) {
+        G_verbose_message(
+            _("Flag 'g' is deprecated and will be removed in a future "
+              "release. Please use format=shell instead."));
+        if (format == JSON) {
+            G_fatal_error(_("The -g flag cannot be used with format=json. "
+                            "Please select only one output format."));
+        }
+        format = SHELL;
+        print->answer = 1;
+    }
+
+    if (format != PLAIN && !print->answer) {
+        G_fatal_error(
+            _("The -p flag is required when using the format option."));
+    }
+
+    if (print->answer) {
+        /* get and print connection */
         if (db_get_connection(&conn) == DB_OK) {
-            if (shell->answer) {
+            switch (format) {
+            case SHELL:
                 fprintf(stdout, "driver=%s\n",
                         conn.driverName ? conn.driverName : "");
                 fprintf(stdout, "database=%s\n",
@@ -132,8 +181,9 @@ int main(int argc, char *argv[])
                 fprintf(stdout, "schema=%s\n",
                         conn.schemaName ? conn.schemaName : "");
                 fprintf(stdout, "group=%s\n", conn.group ? conn.group : "");
-            }
-            else {
+                break;
+
+            case PLAIN:
                 databaseName = substitute_variables(&conn);
 
                 fprintf(stdout, "driver: %s\n",
@@ -145,11 +195,59 @@ int main(int argc, char *argv[])
                 fprintf(stdout, "schema: %s\n",
                         conn.schemaName ? conn.schemaName : "");
                 fprintf(stdout, "group: %s\n", conn.group ? conn.group : "");
+                break;
+
+            case JSON:
+                databaseName = substitute_variables(&conn);
+
+                if (conn.driverName)
+                    G_json_object_set_string(root_object, "driver",
+                                             conn.driverName);
+                else
+                    G_json_object_set_null(root_object, "driver");
+
+                if (conn.databaseName)
+                    G_json_object_set_string(root_object, "database_template",
+                                             conn.databaseName);
+                else
+                    G_json_object_set_null(root_object, "database_template");
+
+                /* substitute variables */
+                if (databaseName)
+                    G_json_object_set_string(root_object, "database",
+                                             databaseName);
+                else
+                    G_json_object_set_null(root_object, "database");
+
+                if (conn.schemaName)
+                    G_json_object_set_string(root_object, "schema",
+                                             conn.schemaName);
+                else
+                    G_json_object_set_null(root_object, "schema");
+
+                if (conn.group)
+                    G_json_object_set_string(root_object, "group", conn.group);
+                else
+                    G_json_object_set_null(root_object, "group");
+                break;
             }
         }
         else
             G_fatal_error(_("Database connection not defined. "
                             "Run db.connect."));
+
+        if (format == JSON) {
+            char *json_string = G_json_serialize_to_string_pretty(root_value);
+            if (!json_string) {
+                G_json_value_free(root_value);
+                G_fatal_error(_("Failed to serialize JSON to pretty format."));
+            }
+
+            puts(json_string);
+
+            G_json_free_serialized_string(json_string);
+            G_json_value_free(root_value);
+        }
 
         exit(EXIT_SUCCESS);
     }

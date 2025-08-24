@@ -39,17 +39,17 @@ desc_override = {
 header2_tmpl = string.Template(
     r"""
 ==================================================================
-GRASS GIS ${grass_version} Reference Manual
+GRASS ${grass_version} Reference Manual
 ==================================================================
 .. figure:: grass_logo.png
    :align: center
    :alt: GRASS logo
 
-GRASS GIS ${grass_version} Reference Manual
+GRASS ${grass_version} Reference Manual
 --------------------------------------------------------------------
 
 **Geographic Resources Analysis Support System**, commonly
-referred to as `GRASS GIS <https://grass.osgeo.org>`_, is a `Geographic
+referred to as `GRASS <https://grass.osgeo.org>`_, is a `Geographic
 Information System <https://en.wikipedia.org/wiki/Geographic_information_system>`_
 (GIS) used for geospatial data management and analysis, image processing,
 graphics/maps production, spatial modeling, and visualization. GRASS is
@@ -123,7 +123,7 @@ Database
 .. toctree::
     :maxdepth: 1
 
-        SQL support in GRASS GIS <sql>
+        SQL support in GRASS <sql>
         Database commands manual <database>
 
 General
@@ -170,7 +170,7 @@ footer_tmpl = string.Template(
 --------------
 
 :doc:`Manual main page <index>` \| :doc:`Full Index <full_index>`
- 2003-2025 `GRASS Development Team <https://grass.osgeo.org>`_, GRASS GIS ${grass_version} Reference Manual
+ 2003-2025 `GRASS Development Team <https://grass.osgeo.org>`_, GRASS ${grass_version} Reference Manual
 """  # noqa: E501
 )
 

@@ -223,7 +223,6 @@ void RTreeSetOverflow(struct RTree *t, char overflow)
 
    \return nothing
  */
-
 void RTreeDestroyTree(struct RTree *t)
 {
     int i;
