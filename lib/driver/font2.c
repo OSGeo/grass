@@ -7,6 +7,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
 
 struct glyph {
     unsigned int offset : 20;
@@ -182,7 +183,10 @@ int font_init(const char *name)
     if (strcmp(name, current_font) == 0)
         return 0;
 
-    strcpy(current_font, name);
+    if (G_strlcpy(current_font, name, sizeof(current_font)) >=
+        sizeof(current_font)) {
+        G_fatal_error(_("Font name <%s> is too long"), name);
+    }
     font_loaded = 0;
 
     return 0;
