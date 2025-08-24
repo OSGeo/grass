@@ -20,7 +20,13 @@ from unittest.main import TestProgram
 import grass.script.core as gs
 
 from .loader import GrassTestLoader
-from .runner import GrassTestRunner, MultiTestResult, TextTestResult, KeyValueTestResult
+from .runner import (
+    GrassTestRunner,
+    KeyValueTestResult,
+    MultiTestResult,
+    TextTestResult,
+    _WritelnDecorator,
+)
 from .invoker import GrassTestFilesInvoker
 from .utils import silent_rmtree
 from .reporters import FileAnonymizer
@@ -39,6 +45,9 @@ class GrassTestProgram(TestProgram):
         verbosity=1,
         failfast=None,
         catchbreak=None,
+        *,
+        tb_locals=False,
+        **kwargs,
     ):
         """Prepares the tests in GRASS way and then runs the tests.
 
@@ -53,7 +62,7 @@ class GrassTestProgram(TestProgram):
         grass_loader = GrassTestLoader(grass_location=self.grass_location)
 
         text_result = TextTestResult(
-            stream=sys.stderr, descriptions=True, verbosity=verbosity
+            stream=_WritelnDecorator(sys.stderr), descriptions=True, verbosity=verbosity
         )
         with open("test_keyvalue_result.txt", "w") as keyval_file:
             keyval_result = KeyValueTestResult(stream=keyval_file)
@@ -68,13 +77,15 @@ class GrassTestProgram(TestProgram):
             super().__init__(
                 module=module,
                 argv=unittest_argv,
-                testLoader=grass_loader,
                 testRunner=grass_runner,
+                testLoader=grass_loader,
                 exit=exit_at_end,
                 verbosity=verbosity,
                 failfast=failfast,
                 catchbreak=catchbreak,
                 buffer=buffer_stdout_stderr,
+                tb_locals=tb_locals,
+                **kwargs,
             )
 
 

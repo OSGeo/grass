@@ -40,6 +40,7 @@ CELL NULL_CELL;
 
 char *fs;
 struct Categories *labels;
+char **map_names; /* input map names */
 
 int main(int argc, char *argv[])
 {
@@ -121,7 +122,7 @@ int main(int argc, char *argv[])
         _("Name for output file (if omitted or \"-\" output to stdout)");
 
     option.fs = G_define_standard_option(G_OPT_F_SEP);
-    option.fs->answer = "space";
+    option.fs->answer = NULL;
     option.fs->guisection = _("Formatting");
 
     option.nv = G_define_standard_option(G_OPT_M_NULL_VALUE);
@@ -152,6 +153,10 @@ int main(int argc, char *argv[])
     option.sort->guisection = _("Formatting");
 
     option.format = G_define_standard_option(G_OPT_F_FORMAT);
+    option.format->options = "plain,csv,json";
+    option.format->descriptions = ("plain;Human readable text output;"
+                                   "csv;CSV (Comma Separated Values);"
+                                   "json;JSON (JavaScript Object Notation);");
     option.format->guisection = _("Print");
 
     /* Define the different flags */
@@ -243,10 +248,21 @@ int main(int argc, char *argv[])
         nsteps = 255;
     }
 
+    /* For backward compatibility */
+    if (!option.fs->answer) {
+        if (strcmp(option.format->answer, "csv") == 0)
+            option.fs->answer = "comma";
+        else
+            option.fs->answer = "space";
+    }
+
     if (strcmp(option.format->answer, "json") == 0) {
         format = JSON;
         root_value = json_value_init_array();
         root_array = json_array(root_value);
+    }
+    else if (strcmp(option.format->answer, "csv") == 0) {
+        format = CSV;
     }
     else {
         format = PLAIN;
@@ -310,8 +326,11 @@ int main(int argc, char *argv[])
         is_fp = (int *)G_realloc(is_fp, (nfiles + 1) * sizeof(int));
         DMAX = (DCELL *)G_realloc(DMAX, (nfiles + 1) * sizeof(DCELL));
         DMIN = (DCELL *)G_realloc(DMIN, (nfiles + 1) * sizeof(DCELL));
+        map_names =
+            (char **)G_realloc(map_names, (nfiles + 1) * sizeof(char *));
 
         fd[nfiles] = Rast_open_old(name, "");
+        map_names[nfiles] = G_store(name);
 
         if (!as_int)
             is_fp[nfiles] = Rast_map_is_fp(name, "");

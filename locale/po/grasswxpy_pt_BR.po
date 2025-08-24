@@ -3,19 +3,21 @@
 # This file is distributed under the same license as the GRASS GIS package.
 # transifex generated, 2017
 #
+# Daniel de Castro Victoria <daniel.victoria@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 10:14+0000\n"
-"PO-Revision-Date: 2017-05-23 21:08+0200\n"
-"Last-Translator: Daniel Victoria <daniel.victoria@gmail.com>, 2017\n"
-"Language-Team: Portuguese (Brazil) (https://www.transifex.com/grass-gis/teams/45198/pt_BR/)\n"
+"POT-Creation-Date: 2025-08-16 15:40+0000\n"
+"PO-Revision-Date: 2025-08-12 23:34+0000\n"
+"Last-Translator: Daniel de Castro Victoria <daniel.victoria@gmail.com>\n"
+"Language-Team: Portuguese (Brazil) <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: ../gui/wxpython/animation/controller.py:244
 #: ../gui/wxpython/animation/dialogs.py:858
@@ -1850,9 +1852,8 @@ msgid "&Create mapset"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:2165
-#, fuzzy
 msgid "&Delete project"
-msgstr "Excluir registros"
+msgstr "&Excluir projeto"
 
 #: ../gui/wxpython/datacatalog/tree.py:2171
 #, fuzzy
@@ -1860,9 +1861,8 @@ msgid "&Rename project"
 msgstr "Gerenciar projeções"
 
 #: ../gui/wxpython/datacatalog/tree.py:2190
-#, fuzzy
 msgid "&Create new project (location)"
-msgstr "Criar uma nova location"
+msgstr "&Criar um novo projeto (location)"
 
 #: ../gui/wxpython/datacatalog/tree.py:2194
 #, fuzzy
@@ -1878,18 +1878,16 @@ msgid "&Delete GRASS database from disk"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:2236
-#, fuzzy
 msgid "&Delete projects (locations)"
-msgstr "Apagar location seleccionada"
+msgstr "&Excluir projetos (locations)"
 
 #: ../gui/wxpython/datacatalog/tree.py:2248
 msgid "&Delete mapsets"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:2254
-#, fuzzy
 msgid "&Copy paths to mapsets"
-msgstr "Gerenciar o acesso aos mapsets"
+msgstr "&Copiar caminho aos mapsets"
 
 #: ../gui/wxpython/datacatalog/tree.py:2264 ../gui/wxpython/history/tree.py:233
 msgid "No available options"
@@ -2040,7 +2038,7 @@ msgstr "Tabela"
 
 #: ../gui/wxpython/dbmgr/base.py:1191 ../gui/wxpython/dbmgr/base.py:2336
 msgid " (read-only)"
-msgstr ""
+msgstr " (apenas-leitura)"
 
 #: ../gui/wxpython/dbmgr/base.py:1208
 msgid "SQL Query"
@@ -3464,7 +3462,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_toolbars.py:117
 #: ../gui/wxpython/photo2image/ip2i_toolbars.py:117
 msgid " / Zoom to map"
-msgstr ""
+msgstr " Zoom para o mapa"
 
 #: ../gui/wxpython/gcp/toolbars.py:134
 #: ../gui/wxpython/image2target/ii2t_toolbars.py:134
@@ -4195,9 +4193,8 @@ msgid "Python editor"
 msgstr "Editor Python"
 
 #: ../gui/wxpython/gmodeler/preferences.py:95
-#, fuzzy
 msgid "GRASS API:"
-msgstr "Ajuda GRASS"
+msgstr "API GRASS"
 
 #: ../gui/wxpython/gmodeler/preferences.py:140
 #: ../gui/wxpython/gmodeler/preferences.py:459
@@ -4923,10 +4920,8 @@ msgid "Try to set up GRASS_ADDON_PATH or GRASS_ADDON_BASE variable."
 msgstr "Tente configurar a variável GRASS_ADDON_PATH ou GRASS_ADDON_BASE."
 
 #: ../gui/wxpython/gui_core/ghelp.py:64
-#, fuzzy
-#| msgid "About GRASS GIS"
 msgid "About GRASS"
-msgstr "Sobre GRASS GIS"
+msgstr "Sobre GRASS"
 
 #: ../gui/wxpython/gui_core/ghelp.py:80
 msgid "Info"
@@ -5840,10 +5835,8 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:361
 #: ../gui/wxpython/gui_core/pyedit.py:371
-#, fuzzy
-#| msgid "Unable to launch Python script. %s"
 msgid " Unable to launch Python script."
-msgstr "Não foi possível iniciar o script Python. %s"
+msgstr " Não foi possível iniciar o script Python."
 
 #: ../gui/wxpython/gui_core/pyedit.py:469
 msgid "Open file"
@@ -6999,10 +6992,9 @@ msgid "Delete selected mapset"
 msgstr "Apagar mapset seleccionado"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:299
-#, fuzzy, python-format
-#| msgid "GRASS GIS %s startup%s"
+#, python-format
 msgid "GRASS %s startup%s"
-msgstr "Inicialização %s do GRASS GIS %s"
+msgstr "Inicialização %s do GRASS  %s"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:304
 msgid "Enter GRASS session"
@@ -7170,7 +7162,7 @@ msgid ""
 msgstr ""
 "Pretende continuar a apagar a location <%s>?\n"
 "\n"
-"TODOS os MAPAS incluidos neste lcoation serão APAGADOS!"
+"TODOS os MAPAS incluidos neste location serão APAGADOS!"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:854
 #, fuzzy, python-format
@@ -7697,9 +7689,8 @@ msgid "Remove selected class"
 msgstr "Remover classe selecionada"
 
 #: ../gui/wxpython/lmgr/frame.py:111 ../gui/wxpython/main_window/frame.py:128
-#, fuzzy
 msgid "GRASS"
-msgstr "Ajuda GRASS"
+msgstr "GRASS"
 
 #: ../gui/wxpython/lmgr/frame.py:143
 msgid "There were some issues when loading menu or Tools tab:"
@@ -8322,24 +8313,20 @@ msgid "Show attribute data for selected vector map"
 msgstr ""
 
 #: ../gui/wxpython/lmgr/toolbars.py:128
-#, fuzzy
 msgid "Add multiple map layers"
-msgstr "Adicionar camada RGB"
+msgstr "Adicionar multiplas camadas"
 
 #: ../gui/wxpython/lmgr/toolbars.py:138
-#, fuzzy
 msgid "Add various raster maps"
-msgstr "Adicionar mapa raster"
+msgstr "Adicionar vários mapas raster"
 
 #: ../gui/wxpython/lmgr/toolbars.py:143
-#, fuzzy
 msgid "Add vector map"
-msgstr "Adiciona vetor"
+msgstr "Adicionar mapa vetorial"
 
 #: ../gui/wxpython/lmgr/toolbars.py:148
-#, fuzzy
 msgid "Add various vector maps"
-msgstr "Adicionar ou editar mapa vetorial"
+msgstr "Adicionar vários mapas vetoriais"
 
 #: ../gui/wxpython/lmgr/toolbars.py:158
 #, fuzzy
@@ -10029,7 +10016,7 @@ msgstr "Camadas a serem reprojetadas"
 
 #: ../gui/wxpython/modules/import_export.py:1019
 msgid "&Import && reproject"
-msgstr "&Import && reproject"
+msgstr "&Importar && reprojetar"
 
 #: ../gui/wxpython/modules/import_export.py:1021
 msgid "Reproject selected layers"
@@ -14073,9 +14060,8 @@ msgid "Digitize new area (boundary without category) (Ctrl+A)"
 msgstr "Digitalize nova área (fronteira sem categoria)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:180
-#, fuzzy
 msgid "Add new vertex to line or boundary (Ctrl+V)"
-msgstr "Adicionar novo vértice à linha ou fronteira"
+msgstr "Adicionar novo vértice a linha ou fronteira (Ctrl+V)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:181
 #: ../gui/wxpython/vdigit/toolbars.py:189
@@ -14845,7 +14831,7 @@ msgstr ""
 
 #: ../gui/wxpython/web_services/dialogs.py:134
 msgid " Layer Manager Settings "
-msgstr ""
+msgstr " Configurações do gerenciador de camada "
 
 #: ../gui/wxpython/web_services/dialogs.py:138
 msgid "Output layer name:"

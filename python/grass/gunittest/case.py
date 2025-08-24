@@ -16,6 +16,7 @@ import subprocess
 import hashlib
 import uuid
 import unittest
+from unittest.util import safe_repr
 
 from grass.pygrass.modules import Module
 from grass.exceptions import CalledModuleError
@@ -31,7 +32,6 @@ from .checkers import (
     text_file_md5,
     files_equal_md5,
 )
-from .utils import safe_repr
 from .gutils import is_map_in_mapset
 
 from io import StringIO
@@ -40,7 +40,7 @@ from io import StringIO
 class TestCase(unittest.TestCase):
     # we disable R0904 for all TestCase classes because their purpose is to
     # provide a lot of assert methods
-    # pylint: disable=R0904
+    # pylint: disable=R0904,C0103
     """
 
     Always use keyword arguments for all parameters other than first two. For
@@ -65,19 +65,14 @@ class TestCase(unittest.TestCase):
         self.addTypeEqualityFunc(str, "assertMultiLineEqual")
 
     def _formatMessage(self, msg, standardMsg):
-        """Honor the longMessage attribute when generating failure messages.
-
+        """Honour the longMessage attribute when generating failure messages.
         If longMessage is False this means:
-
         * Use only an explicit message if it is provided
         * Otherwise use the standard message for the assert
 
         If longMessage is True:
-
         * Use the standard message
-        * If an explicit message is provided, return string with both messages
-
-        Based on Python unittest _formatMessage, formatting changed.
+        * If an explicit message is provided, plus ' : ' and the explicit message
         """
         if not self.longMessage:
             return msg or standardMsg
@@ -86,9 +81,9 @@ class TestCase(unittest.TestCase):
         try:
             # don't switch to '{}' formatting in Python 2.X
             # it changes the way unicode input is handled
-            return "%s \n%s" % (msg, standardMsg)
+            return "%s : %s" % (standardMsg, msg)
         except UnicodeDecodeError:
-            return "%s \n%s" % (safe_repr(msg), safe_repr(standardMsg))
+            return "%s : %s" % (safe_repr(standardMsg), safe_repr(msg))
 
     @classmethod
     def use_temp_region(cls):
@@ -152,7 +147,7 @@ class TestCase(unittest.TestCase):
         call_module("g.remove", quiet=True, flags="f", type="region", name=name)
         # TODO: we don't know if user calls this
         # so perhaps some decorator which would use with statement
-        # but we have zero chance of infuencing another test class
+        # but we have zero chance of influencing another test class
         # since we use class-specific name for temporary region
 
     def assertMultiLineEqual(self, first, second, msg=None):
@@ -1289,7 +1284,7 @@ class TestCase(unittest.TestCase):
                 # TODO: all HTML files might be collected by the main reporter
                 # TODO: standardize the format of name of HTML file
                 # for one test id there is only one possible file of this name
-                htmldiff_file_name = self.id() + "_ascii_diff" + ".html"
+                htmldiff_file_name: str = self.id() + "_ascii_diff" + ".html"
                 self.supplementary_files.append(htmldiff_file_name)
                 htmldiff = difflib.HtmlDiff().make_file(
                     fromlines,

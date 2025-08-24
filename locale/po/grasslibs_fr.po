@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 10:14+0000\n"
-"PO-Revision-Date: 2025-08-04 18:54+0000\n"
+"POT-Creation-Date: 2025-08-16 15:40+0000\n"
+"PO-Revision-Date: 2025-08-19 18:31+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs/fr/>\n"
 "Language: fr\n"
@@ -585,7 +585,7 @@ msgstr ""
 "-- tests unitaires gjson terminés avec succès --"
 
 #: ../lib/gis/adj_cellhd.c:57 ../lib/gis/adj_cellhd.c:170
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Illegal n-s resolution value: %g"
 msgstr "Valeur de résolution n-s illégale : %g"
 
@@ -595,7 +595,7 @@ msgid "Illegal number of rows: %d (resolution is %g)"
 msgstr "Nombre de lignes illégal : %d (la résolution est %g)"
 
 #: ../lib/gis/adj_cellhd.c:68 ../lib/gis/adj_cellhd.c:188
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Illegal e-w resolution value: %g"
 msgstr "Valeur de résolution e-o illégale : %g"
 
@@ -652,12 +652,12 @@ msgid "Illegal number of rows for 3D: %d (resolution is %g)"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:191
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Illegal e-w resolution value for 3D: %g"
 msgstr "Valeur de résolution e-o illégale pour 3D : %g"
 
 #: ../lib/gis/adj_cellhd.c:200
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Illegal number of columns for 3D: %d (resolution is %g)"
 msgstr "Nombre de colonnes illégal pour 3D : %d (la résolution est %g)"
 
@@ -667,7 +667,7 @@ msgid "Illegal t-b resolution value: %g"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:211
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Illegal depths value: %d"
 msgstr "Valeur des profondeurs illégale : %d"
 
@@ -1121,27 +1121,27 @@ msgstr "Impossible d'ouvrir le fichier élément <%s> pour <%s@%s>"
 msgid "Region file %s/%s/%s is empty"
 msgstr "Le fichier de région %s/%s/%s est vide"
 
-#: ../lib/gis/gisinit.c:78 ../lib/gis/gisinit.c:129
+#: ../lib/gis/gisinit.c:78 ../lib/gis/gisinit.c:128
 #, c-format
-msgid "Module built against version %s but trying to use version %s. In case of errors you need to rebuild the module against GRASS GIS version %s."
-msgstr "Module compilé avec la version %s mais tente d'utiliser la version %s. Vous devez recompiler GRASS ou gérer les versions multiples."
+msgid "Module built against version %s but trying to use version %s. In case of errors you need to rebuild the module against GRASS version %s."
+msgstr "Module compilé avec la version %s mais tent d'utiliser la version %s. En cas d’erreurs, vous devez recompiler le module avec la version %s de GRASS."
 
-#: ../lib/gis/gisinit.c:86 ../lib/gis/gisinit.c:137
+#: ../lib/gis/gisinit.c:85 ../lib/gis/gisinit.c:135
 #, c-format
-msgid "Module built against version %s but trying to use version %s. You need to rebuild GRASS GIS or untangle multiple installations."
+msgid "Module built against version %s but trying to use version %s. You need to rebuild GRASS or untangle multiple installations."
 msgstr "Module compilé avec la version %s mais tentative d'utiliser la version %s. Vous devez recompiler GRASS ou gérer les versions multiples."
 
-#: ../lib/gis/gisinit.c:101
+#: ../lib/gis/gisinit.c:100
 #, c-format
 msgid "MAPSET %s - permission denied"
 msgstr "Jeu de données (MAPSET) %s - permission refusée"
 
-#: ../lib/gis/gisinit.c:104
+#: ../lib/gis/gisinit.c:103
 #, c-format
 msgid "MAPSET %s not found at %s"
 msgstr "Jeu de cartes %s non trouvé dans %s"
 
-#: ../lib/gis/gisinit.c:155
+#: ../lib/gis/gisinit.c:153
 msgid "System not initialized. Programmer forgot to call G_gisinit()."
 msgstr "Système non initialisé. Le développeur a oublié d'appeler G_gisinit()."
 
@@ -2058,11 +2058,15 @@ msgid "Project name (not path to project)"
 msgstr "Nom du projet (pas le chemin vers le projet)"
 
 #: ../lib/gis/parser_standard_options.c:730
-msgid "GRASS GIS database directory"
+#, fuzzy
+#| msgid "GRASS GIS database directory"
+msgid "GRASS database directory"
 msgstr "Répertoire de la base du SIG GRASS"
 
 #: ../lib/gis/parser_standard_options.c:731
-msgid "Default: path to the current GRASS GIS database"
+#, fuzzy
+#| msgid "Default: path to the current GRASS GIS database"
+msgid "Default: path to the current GRASS database"
 msgstr "Défaut : chemin de la base SIG GRASS courante"
 
 #: ../lib/gis/parser_standard_options.c:743
@@ -2093,11 +2097,11 @@ msgstr "0 : utiliser la valeur par défaut d'OpenMP ; >0 : utiliser nprocs ;
 #, fuzzy
 #| msgid "Pseudo-random number generator not seeded"
 msgid "Seed value for the random number generator"
-msgstr "Générateur de nombres pseudo-aléatoires sans graine"
+msgstr "Valeur de départ pour le générateur de nombres aléatoires"
 
 #: ../lib/gis/parser_standard_options.c:798
 msgid "Using the same seed ensures identical results, while a randomly generated seed produces different outcomes in each run."
-msgstr ""
+msgstr "L’utilisation de la même graine garantit des résultats identiques, tandis qu'une graine générée de manière aléatoire produit des résultats différents à chaque exécution."
 
 #: ../lib/gis/parser_standard_options.c:810
 msgid "Name of the input space time dataset"
@@ -3428,12 +3432,12 @@ msgstr "Impossible d'ouvrir le fichier de signatures '%s'"
 msgid "prepare_signature: outline has odd number of points."
 msgstr "prepare_signature : la outline a un nombre de points impair."
 
-#: ../lib/imagery/iclass_statistics.c:225 ../lib/imagery/iscatt_core.c:956
+#: ../lib/imagery/iclass_statistics.c:225 ../lib/imagery/iscatt_core.c:965
 #, c-format
 msgid "prepare_signature: scan line %d has odd number of points."
 msgstr "prepare_signature : la ligne %d a un nombre de points impair."
 
-#: ../lib/imagery/iclass_statistics.c:235 ../lib/imagery/iscatt_core.c:965
+#: ../lib/imagery/iclass_statistics.c:235 ../lib/imagery/iscatt_core.c:976
 msgid "signature: perimeter points out of order."
 msgstr "signature : points du périmètre hors d'usage."
 
@@ -3463,74 +3467,74 @@ msgstr "Valeur de catégorie en dehors des limites"
 msgid "Unable to write header into category raster condition file <%s>."
 msgstr "Impossible d'écrire l'en-tête du fichier <%s> de catégorie  du raster."
 
-#: ../lib/imagery/iscatt_core.c:98
+#: ../lib/imagery/iscatt_core.c:99
 #, c-format
 msgid "Unable to write into category raster condition file <%s>."
 msgstr "Impossible d'écrire dans le fichier <%s> de catégories du raster."
 
-#: ../lib/imagery/iscatt_core.c:250
+#: ../lib/imagery/iscatt_core.c:252
 #, c-format
 msgid "Unable to open category raster conditions file <%s>."
 msgstr "Impossible d'ouvrir le fichier de conditions du raster <%s>."
 
-#: ../lib/imagery/iscatt_core.c:258
+#: ../lib/imagery/iscatt_core.c:260
 #, c-format
 msgid "Unable to find patch raster <%s>."
 msgstr "Impossible de trouver le raster de patch <%s>."
 
-#: ../lib/imagery/iscatt_core.c:274
+#: ../lib/imagery/iscatt_core.c:276
 #, c-format
 msgid "Resolutions of patch <%s> and patched file <%s> are not same."
 msgstr "Les résolutions du patch <%s> et du fichier patché <%s> ne sont pas les mêmes."
 
-#: ../lib/imagery/iscatt_core.c:300 ../lib/imagery/iscatt_core.c:341
+#: ../lib/imagery/iscatt_core.c:302 ../lib/imagery/iscatt_core.c:345
 #, c-format
 msgid "Corrupted  category raster conditions file <%s> (fseek failed)"
 msgstr "Fichier <%s> de catégories du raster corrompu (fseek a échoué)"
 
-#: ../lib/imagery/iscatt_core.c:331
+#: ../lib/imagery/iscatt_core.c:334
 #, c-format
 msgid "Unable to write into category raster conditions file <%s>"
 msgstr "Impossible d'écrire dans le fichier <%s> de catégories du raster"
 
-#: ../lib/imagery/iscatt_core.c:518
+#: ../lib/imagery/iscatt_core.c:524
 msgid "Unable to read from category raster condition file."
 msgstr "Impossible de lire le fichier de catégories du raster."
 
-#: ../lib/imagery/iscatt_core.c:525
+#: ../lib/imagery/iscatt_core.c:531
 msgid "Invalid size of category raster conditions file."
 msgstr "Taille du fichier de catégories du raster invalide."
 
-#: ../lib/imagery/iscatt_core.c:568
+#: ../lib/imagery/iscatt_core.c:574
 msgid "Data inconsistent. Value computed for scatter plot is out of initialized range."
 msgstr "Données non cohérentes. La valeur calculée pour le graphique est en dehors de la plage initiale."
 
-#: ../lib/imagery/iscatt_core.c:738
+#: ../lib/imagery/iscatt_core.c:741
 #, c-format
 msgid "Unable to find raster <%s>"
 msgstr "Impossible de trouver le raster <%s>"
 
-#: ../lib/imagery/iscatt_core.c:747
+#: ../lib/imagery/iscatt_core.c:750
 #, c-format
 msgid "Unable to open raster <%s>"
 msgstr "Impossible d'ouvrir le raster <%s>"
 
-#: ../lib/imagery/iscatt_core.c:753
+#: ../lib/imagery/iscatt_core.c:759
 #, c-format
 msgid "Raster <%s> type is not <%s>"
 msgstr "Le raster <%s> n'est pas de type <%s>"
 
-#: ../lib/imagery/iscatt_core.c:766
+#: ../lib/imagery/iscatt_core.c:772
 #, c-format
 msgid "Unable to read range of raster <%s>"
 msgstr "Impossible de lire la plage de valeurs du raster <%s>"
 
-#: ../lib/imagery/iscatt_core.c:790
+#: ../lib/imagery/iscatt_core.c:796
 #, c-format
 msgid "Unable to open category raster condition file <%s>"
 msgstr "Impossible d'ouvrir le fichier de catégories du raster <%s>"
 
-#: ../lib/imagery/iscatt_core.c:803
+#: ../lib/imagery/iscatt_core.c:812
 msgid "Corrupted category raster conditions file (fseek failed)"
 msgstr "Fichier de catégories du raster corrompu (fseek a échoué)"
 
@@ -3570,7 +3574,7 @@ msgstr "%s supprimé"
 #: ../lib/imagery/manage_signatures.c:94
 #, c-format
 msgid "Unable to remove %s signature"
-msgstr ""
+msgstr "Impossible de supprimer la signature de %s."
 
 #: ../lib/imagery/manage_signatures.c:97 ../lib/imagery/manage_signatures.c:139
 #: ../lib/imagery/manage_signatures.c:206 ../lib/manage/do_copy.c:62
@@ -3786,7 +3790,7 @@ msgstr "créer un jeu de cartes temporaire (utilisez avec l'option --exec)."
 
 #: ../lib/init/grass.py:358
 msgid "created in the specified project and deleted at exit"
-msgstr ""
+msgstr "créé dans le projet spécifié et supprimé à la sortie"
 
 #: ../lib/init/grass.py:359
 #, fuzzy
@@ -4195,7 +4199,7 @@ msgstr "%s copié"
 #: ../lib/manage/do_copy.c:85 ../lib/manage/do_remove.c:101
 #: ../lib/manage/do_rename.c:99
 msgid "String for secondary color table has been truncated"
-msgstr ""
+msgstr "La chaîne de caractères de la table de couleurs secondaire a été tronquée"
 
 #: ../lib/manage/do_list.c:30
 #, c-format
@@ -4793,7 +4797,7 @@ msgstr "Champ de nord invalide : %s"
 #: ../lib/proj/do_proj.c:214
 #, fuzzy, c-format
 msgid "South %g is larger than north %g"
-msgstr "Le Nord doit être plus grand que le Sud"
+msgstr "%g sud est plus grand que %g nord"
 
 #: ../lib/proj/do_proj.c:328
 #, c-format
@@ -4822,9 +4826,9 @@ msgid "A custom pipeline requires input and output projection info"
 msgstr "Un pipeline personnalisé nécessite des informations sur la projection de l'entrée et de la sortie"
 
 #: ../lib/proj/do_proj.c:492
-#, c-format
+#, c-format, fuzzy
 msgid "The transformation pipeline contains an '%s' step. Remove this step if easting and northing are swapped in the output."
-msgstr ""
+msgstr "Le pipeline de transformation contient une étape '%s'. Supprimez cette étape si l'Est et le Nord sont inversés dans la sortie."
 
 #: ../lib/proj/do_proj.c:557
 #, fuzzy, c-format
@@ -6007,7 +6011,7 @@ msgstr "Commencez par changer le nombre de colonnes vers nsizc %d %d"
 #: ../lib/rst/interp_float/resout2d.c:209
 #, c-format
 msgid "RST library temporary file reading error: %s"
-msgstr ""
+msgstr "Erreur de lecture de fichier temporaire de la bibliothèque RST : %s"
 
 #: ../lib/rst/interp_float/resout2d.c:81
 msgid "Temporarily changing the region to desired resolution..."
@@ -6494,36 +6498,36 @@ msgstr "Lignes supprimées : %d"
 msgid "Removed bridges: %d"
 msgstr "Ponts supprimés : %d"
 
-#: ../lib/vector/Vlib/buffer2.c:356
+#: ../lib/vector/Vlib/buffer2.c:361
 msgid "Line is not looped"
 msgstr "La ligne ne boucle pas"
 
-#: ../lib/vector/Vlib/buffer2.c:438
+#: ../lib/vector/Vlib/buffer2.c:443
 #, c-format
 msgid "Unexpected result of line_intersection() res = %d"
 msgstr "Résultat inatendu pour line_intersection() res = %d"
 
-#: ../lib/vector/Vlib/buffer2.c:587
+#: ../lib/vector/Vlib/buffer2.c:592
 msgid "Next edge was visited (right) but it is not the first one !!! breaking loop"
 msgstr "L'angle suivant a déjà été visité (droite) mais il n'est pas le premier !!! Sortie de la boucle"
 
-#: ../lib/vector/Vlib/buffer2.c:598
+#: ../lib/vector/Vlib/buffer2.c:603
 msgid "Next edge was visited (left) but it is not the first one !!! breaking loop"
 msgstr "L'angle suivant a déjà été visité (gauche) mais il n'est pas le premier !!! sortie de la boucle"
 
-#: ../lib/vector/Vlib/buffer2.c:646
+#: ../lib/vector/Vlib/buffer2.c:651
 msgid "side != 0 feature not implemented"
 msgstr "fonction side != 0 non implémentée"
 
-#: ../lib/vector/Vlib/buffer2.c:892 ../lib/vector/Vlib/buffer2.c:940
+#: ../lib/vector/Vlib/buffer2.c:897 ../lib/vector/Vlib/buffer2.c:945
 msgid "zero area size"
 msgstr "surface de taille nulle"
 
-#: ../lib/vector/Vlib/buffer2.c:898 ../lib/vector/Vlib/buffer2.c:946
+#: ../lib/vector/Vlib/buffer2.c:903 ../lib/vector/Vlib/buffer2.c:951
 msgid "Line was not closed"
 msgstr "La ligne n'était pas fermée"
 
-#: ../lib/vector/Vlib/buffer2.c:912 ../lib/vector/Vlib/buffer2.c:965
+#: ../lib/vector/Vlib/buffer2.c:917 ../lib/vector/Vlib/buffer2.c:970
 msgid "Vect_get_point_in_poly() failed"
 msgstr "Vect_get_point_in_poly() a échoué"
 
@@ -6734,9 +6738,9 @@ msgstr[1] "%d primitives référencées"
 #: ../lib/vector/Vlib/build_sfa.c:668
 #, c-format
 msgid "One vertex registered"
-msgid_plural "%<PRId64> vertices registered"
+msgid_plural "%d vertices registered"
 msgstr[0] "%d sommet référencé"
-msgstr[1] "%<PRId64> sommets référencés"
+msgstr[1] "%d sommets référencés"
 
 #: ../lib/vector/Vlib/build_nat.c:137
 msgid "Building areas..."
@@ -8332,14 +8336,14 @@ msgid "Unable to write feature in vector map <%s>"
 msgstr "Impossible d'écrire l'objet dans la carte vecteur <%s>"
 
 #: ../lib/vector/Vlib/write.c:255
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to rewrite feature/offset %<PRId64> in vector map <%s>"
-msgstr "Impossible de réécrire l'entité/décalage %lu dans la carte vecteur <%s>"
+msgstr "Impossible de réécrire l'entité/décalage %<PRId64> dans la carte vecteur <%s>"
 
 #: ../lib/vector/Vlib/write.c:288
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to delete feature/offset %<PRId64> from vector map <%s>"
-msgstr "Impossible de supprimer l'entité/décalage %lu dans la carte vecteur <%s>"
+msgstr "Impossible de supprimer l'entité/décalage %<PRId64> dans la carte vecteur <%s>"
 
 #: ../lib/vector/Vlib/write.c:325
 #, fuzzy, c-format

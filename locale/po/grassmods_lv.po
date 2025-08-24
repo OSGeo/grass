@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 10:14+0000\n"
+"POT-Creation-Date: 2025-08-16 15:40+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Latvian <https://weblate.osgeo.org/projects/grass-gis/grassmods/lv/>\n"
@@ -462,7 +462,7 @@ msgid "Lists all databases for a given driver and location."
 msgstr ""
 
 #: ../db/db.describe/main.c:140 ../general/g.proj/output.c:382
-#: ../general/g.region/main.c:986 ../general/g.version/main.c:411
+#: ../general/g.region/main.c:986 ../general/g.version/main.c:409
 #: ../imagery/i.group/main.c:301 ../raster/r.category/main.c:412
 #: ../raster/r.describe/dumplist.c:69 ../raster/r.info/main.c:997
 #: ../raster/r.mask.status/main.c:111 ../raster/r.object.geometry/main.c:401
@@ -2123,7 +2123,7 @@ msgstr "Nav izvēlēta grafiskā iekārta"
 #: ../raster/r.carve/main.c:153 ../raster/r.cost/main.c:357
 #: ../raster/r.walk/main.c:460 ../scripts/r.mask/r.mask.py:173
 #: ../scripts/v.db.univar/v.db.univar.py:80
-#: ../scripts/v.dissolve/v.dissolve.py:585 ../scripts/v.pack/v.pack.py:62
+#: ../scripts/v.dissolve/v.dissolve.py:576 ../scripts/v.pack/v.pack.py:62
 #: ../scripts/v.report/v.report.py:85 ../vector/v.clean/test/topocheck.c:62
 #: ../vector/v.colors/main.c:252 ../vector/v.edit/main.c:161
 #: ../vector/v.lidar.correction/main.c:158
@@ -2153,7 +2153,7 @@ msgstr ""
 #: ../raster/r.what/main.c:265 ../raster3d/r3.flow/main.c:398
 #: ../vector/v.buffer/main.c:332 ../vector/v.build.polylines/main.c:152
 #: ../vector/v.build/main.c:120 ../vector/v.build/main.c:130
-#: ../vector/v.class/main.c:98 ../vector/v.clean/main.c:291
+#: ../vector/v.class/main.c:99 ../vector/v.clean/main.c:291
 #: ../vector/v.clean/test/topocheck.c:66 ../vector/v.clean/test/topocheck.c:86
 #: ../vector/v.cluster/main.c:140 ../vector/v.colors.out/make_colors.c:23
 #: ../vector/v.colors.out/scan_cats.c:19 ../vector/v.colors/main.c:276
@@ -2394,8 +2394,8 @@ msgstr ""
 
 #: ../display/d.graph/do_graph.c:105 ../display/d.graph/do_graph.c:350
 #: ../display/d.graph/do_graph.c:365 ../display/d.graph/main.c:103
-#: ../display/d.labels/color.c:65 ../display/d.legend.vect/draw.c:201
-#: ../display/d.legend.vect/draw.c:212 ../display/d.rast/display.c:25
+#: ../display/d.labels/color.c:65 ../display/d.legend.vect/draw.c:202
+#: ../display/d.legend.vect/draw.c:213 ../display/d.rast/display.c:25
 #: ../raster/r.out.png/main.c:174
 #, c-format
 msgid "[%s]: No such color"
@@ -2829,7 +2829,7 @@ msgstr ""
 msgid "Unable to open label file <%s>"
 msgstr ""
 
-#: ../display/d.legend.vect/draw.c:77 ../display/d.legend.vect/main.c:266
+#: ../display/d.legend.vect/draw.c:78 ../display/d.legend.vect/main.c:266
 #: ../display/d.linegraph/main.c:409 ../display/d.linegraph/main.c:427
 #: ../display/d.linegraph/main.c:726 ../display/d.text/main.c:368
 #: ../display/d.where/main.c:168 ../general/g.cairocomp/main.c:46
@@ -2845,11 +2845,11 @@ msgstr ""
 msgid "Unable to open input file <%s>"
 msgstr ""
 
-#: ../display/d.legend.vect/draw.c:185
+#: ../display/d.legend.vect/draw.c:186
 msgid "Cannot read symbol"
 msgstr ""
 
-#: ../display/d.legend.vect/draw.c:246
+#: ../display/d.legend.vect/draw.c:247
 msgid "Invalid value for color type in legend file. Use one of 'lf' or 'ps'."
 msgstr ""
 
@@ -4026,6 +4026,7 @@ msgstr ""
 msgid "Get text color from cell color value"
 msgstr ""
 
+#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #: ../display/d.rast.num/main.c:211 ../raster/r.thin/io.c:106
@@ -4416,7 +4417,7 @@ msgstr ""
 #: ../vector/v.buffer/main.c:422 ../vector/v.colors/read_rgb.c:23
 #: ../vector/v.colors/scan_attr.c:24 ../vector/v.colors/write_rgb.c:20
 #: ../vector/v.distance/main.c:590 ../vector/v.edit/select.c:499
-#: ../vector/v.extrude/main.c:223 ../vector/v.generalize/misc.c:167
+#: ../vector/v.extrude/main.c:223 ../vector/v.generalize/misc.c:168
 #: ../vector/v.neighbors/main.c:219 ../vector/v.overlay/main.c:422
 #: ../vector/v.surf.bspline/crosscorr.c:123 ../vector/v.to.rast/support.c:101
 #: ../vector/v.to.rast/support.c:271 ../vector/v.to.rast/support.c:499
@@ -4435,7 +4436,7 @@ msgstr ""
 #: ../raster/r.contour/main.c:170 ../raster/r.random/random.c:67
 #: ../raster/r.to.vect/main.c:200 ../raster/r.volume/main.c:322
 #: ../raster3d/r3.flow/main.c:46 ../vector/v.buffer/main.c:427
-#: ../vector/v.class/main.c:113 ../vector/v.colors.out/make_colors.c:36
+#: ../vector/v.class/main.c:114 ../vector/v.colors.out/make_colors.c:36
 #: ../vector/v.colors/read_rgb.c:27 ../vector/v.colors/scan_attr.c:28
 #: ../vector/v.colors/write_rgb.c:24 ../vector/v.db.connect/main.c:224
 #: ../vector/v.db.connect/main.c:334 ../vector/v.db.select/main.c:282
@@ -4597,7 +4598,7 @@ msgstr ""
 msgid "equiprobable (normal distribution)"
 msgstr ""
 
-#: ../display/d.vect.thematic/main.c:133 ../vector/v.class/main.c:84
+#: ../display/d.vect.thematic/main.c:133 ../vector/v.class/main.c:85
 msgid "Number of classes to define"
 msgstr ""
 
@@ -4747,12 +4748,12 @@ msgstr ""
 msgid "Classification of %s into %i classes\n"
 msgstr ""
 
-#: ../display/d.vect.thematic/main.c:517 ../vector/v.class/main.c:195
+#: ../display/d.vect.thematic/main.c:517 ../vector/v.class/main.c:196
 #, c-format
 msgid "Using algorithm: *** %s ***\n"
 msgstr ""
 
-#: ../display/d.vect.thematic/main.c:518 ../vector/v.class/main.c:196
+#: ../display/d.vect.thematic/main.c:518 ../vector/v.class/main.c:197
 #, c-format
 msgid "Mean: %f\tStandard deviation = %f\n"
 msgstr ""
@@ -4762,7 +4763,7 @@ msgstr ""
 msgid "Last chi2 = %f\n"
 msgstr ""
 
-#: ../display/d.vect.thematic/main.c:524 ../vector/v.class/main.c:203
+#: ../display/d.vect.thematic/main.c:524 ../vector/v.class/main.c:204
 #, c-format
 msgid "Stdev multiplied by %.4f to define step\n"
 msgstr ""
@@ -4838,6 +4839,11 @@ msgstr ""
 #: ../display/d.vect/label.c:32
 msgid "Topology level required for drawing centroids for OGR layers"
 msgstr ""
+
+#: ../display/d.vect/legend.c:18 ../display/d.vect/main.c:367
+#, fuzzy, c-format
+msgid "Map name <%s> is too long"
+msgstr "rastrs <%s> nav atrasts"
 
 #: ../display/d.vect/lines.c:114
 msgid "Unable to display features by id, topology not available. Please try to rebuild topology using v.build or v.build.all."
@@ -5035,17 +5041,17 @@ msgstr ""
 msgid "Region size is greater than maxreg, nothing displayed"
 msgstr ""
 
-#: ../display/d.vect/main.c:373
+#: ../display/d.vect/main.c:376
 #, c-format
 msgid "The -%c flag and <%s> option cannot be used together, the -%c flag will be ignored!"
 msgstr ""
 
-#: ../display/d.vect/main.c:398 ../display/d.vect/main.c:404
+#: ../display/d.vect/main.c:401 ../display/d.vect/main.c:407
 #, c-format
 msgid "Option <%s> must be > 0"
 msgstr ""
 
-#: ../display/d.vect/main.c:409
+#: ../display/d.vect/main.c:412
 #, c-format
 msgid "%d error in cat option"
 msgid_plural "%d errors in cat option"
@@ -5053,15 +5059,15 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: ../display/d.vect/main.c:426
+#: ../display/d.vect/main.c:429
 msgid "Plotting..."
 msgstr "Zīmē..."
 
-#: ../display/d.vect/main.c:438
+#: ../display/d.vect/main.c:441
 msgid "The bounding box of the map is outside the current region, nothing drawn"
 msgstr ""
 
-#: ../display/d.vect/main.c:510
+#: ../display/d.vect/main.c:513
 msgid "Rendering failed"
 msgstr ""
 
@@ -7530,7 +7536,7 @@ msgid "license"
 msgstr ""
 
 #: ../general/g.version/main.c:80
-msgid "Displays GRASS GIS version info."
+msgid "Displays GRASS version info."
 msgstr ""
 
 #: ../general/g.version/main.c:82
@@ -7580,34 +7586,34 @@ msgstr ""
 msgid "Cannot use the -g flag with format=json; please select only one option."
 msgstr ""
 
-#: ../general/g.version/main.c:268
+#: ../general/g.version/main.c:267
 #, c-format
 msgid "Cannot determine GRASS libgis version and date number. The GRASS build might be broken. Report this to developers or packagers.\n"
 msgstr ""
 
-#: ../general/g.version/main.c:281
-msgid "GRASS GIS libgis version and date number don't have the expected format. Trying to print the original strings..."
+#: ../general/g.version/main.c:279
+msgid "GRASS libgis version and date number don't have the expected format. Trying to print the original strings..."
 msgstr ""
 
-#: ../general/g.version/main.c:284
+#: ../general/g.version/main.c:282
 #, c-format
 msgid "GIS_H_VERSION=\"%s\""
 msgstr ""
 
-#: ../general/g.version/main.c:285
+#: ../general/g.version/main.c:283
 #, c-format
 msgid "GIS_H_DATE=\"%s\""
 msgstr ""
 
-#: ../general/g.version/main.c:347
+#: ../general/g.version/main.c:345
 msgid "GRASS not compiled with GDAL/OGR support"
 msgstr ""
 
-#: ../general/g.version/main.c:372
+#: ../general/g.version/main.c:370
 msgid "GRASS not compiled with GEOS support"
 msgstr ""
 
-#: ../general/g.version/main.c:398
+#: ../general/g.version/main.c:396
 msgid "GRASS not compiled with SQLite support"
 msgstr ""
 
@@ -12018,8 +12024,8 @@ msgstr ""
 msgid "Predict with a Support Vector Machine"
 msgstr ""
 
-#. GTC: SVM prediction input
 #. GTC: SVM training input
+#. GTC: SVM prediction input
 #: ../imagery/i.svm.predict/main.c:60 ../imagery/i.svm.train/main.c:62
 #, fuzzy
 msgid "Maps with feature values (attributes)"
@@ -13297,15 +13303,16 @@ msgid "Specific branch to fetch addon from (only used when fetching from git)"
 msgstr ""
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:16
-msgid "List available extensions in the official GRASS GIS Addons repository"
-msgstr ""
+#, fuzzy
+msgid "List available extensions in the official GRASS Addons repository"
+msgstr "izveidot sarakstu ar visām pieejamajām karšu biblotēkām/mapsets"
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:18
-msgid "List available extensions in the official GRASS GIS Addons repository including module description"
+msgid "List available extensions in the official GRASS Addons repository including module description"
 msgstr ""
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:20
-msgid "List available extensions in the official GRASS GIS Addons repository (shell script style)"
+msgid "List available extensions in the official GRASS Addons repository (shell script style)"
 msgstr ""
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:22
@@ -14465,7 +14472,7 @@ msgid "Include no data values"
 msgstr ""
 
 #: ../locale/scriptstrings/r.pack_to_translate.c:1
-msgid "Exports a raster map as GRASS GIS specific archive file"
+msgid "Exports a raster map as GRASS specific archive file"
 msgstr ""
 
 #: ../locale/scriptstrings/r.pack_to_translate.c:4
@@ -14657,7 +14664,7 @@ msgid "Output field separator"
 msgstr "Izvades lauku atdalītājs"
 
 #: ../locale/scriptstrings/r.unpack_to_translate.c:1
-msgid "Imports a GRASS GIS specific raster archive file (packed with r.pack) as a raster map"
+msgid "Imports a GRASS specific raster archive file (packed with r.pack) as a raster map"
 msgstr ""
 
 #: ../locale/scriptstrings/r.unpack_to_translate.c:5
@@ -16235,8 +16242,9 @@ msgid "select"
 msgstr ""
 
 #: ../locale/scriptstrings/t.vect.export_to_translate.c:1
-msgid "Exports a space time vector dataset as GRASS GIS specific archive file."
-msgstr ""
+#, fuzzy
+msgid "Exports a space time vector dataset as GRASS specific archive file."
+msgstr "Eksistējošas rastra kartes nosaukums"
 
 #: ../locale/scriptstrings/t.vect.export_to_translate.c:6
 msgid "Name of a space time vector dataset archive"
@@ -16267,8 +16275,9 @@ msgid "Register empty maps"
 msgstr ""
 
 #: ../locale/scriptstrings/t.vect.import_to_translate.c:1
-msgid "Imports a space time vector dataset from a GRASS GIS specific archive file."
-msgstr ""
+#, fuzzy
+msgid "Imports a space time vector dataset from a GRASS specific archive file."
+msgstr "Eksistējošas rastra kartes nosaukums"
 
 #: ../locale/scriptstrings/t.vect.import_to_translate.c:12
 msgid "Create a new project (location) and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
@@ -16841,7 +16850,7 @@ msgid "Restrict fetch to features which touch the current region"
 msgstr ""
 
 #: ../locale/scriptstrings/v.pack_to_translate.c:1
-msgid "Exports a vector map as GRASS GIS specific archive file"
+msgid "Exports a vector map as GRASS specific archive file"
 msgstr ""
 
 #: ../locale/scriptstrings/v.pack_to_translate.c:5
@@ -16925,7 +16934,7 @@ msgid "Method used for point interpolation"
 msgstr ""
 
 #: ../locale/scriptstrings/v.unpack_to_translate.c:1
-msgid "Imports a GRASS GIS specific vector archive file (packed with v.pack) as a vector map"
+msgid "Imports a GRASS specific vector archive file (packed with v.pack) as a vector map"
 msgstr ""
 
 #: ../locale/scriptstrings/v.unpack_to_translate.c:6
@@ -17739,7 +17748,7 @@ msgid "Target east,north coordinates to local x,y"
 msgstr ""
 
 #: ../ps/ps.map/catval.c:47 ../ps/ps.map/catval.c:108 ../ps/ps.map/catval.c:174
-#: ../vector/v.class/main.c:107 ../vector/v.label.sa/labels.c:75
+#: ../vector/v.class/main.c:108 ../vector/v.label.sa/labels.c:75
 #: ../vector/v.label/main.c:273 ../vector/v.vol.rst/user1.c:91
 msgid "Unable to get layer info for vector map"
 msgstr ""
@@ -17749,7 +17758,7 @@ msgid "Column type not supported (must be string)"
 msgstr ""
 
 #: ../ps/ps.map/catval.c:65 ../ps/ps.map/catval.c:130 ../ps/ps.map/catval.c:197
-#: ../vector/v.class/main.c:128 ../vector/v.normal/main.c:132
+#: ../vector/v.class/main.c:129 ../vector/v.normal/main.c:132
 #: ../vector/v.out.lidar/main.c:131 ../vector/v.out.lidar/main.c:165
 #: ../vector/v.sample/main.c:149 ../vector/v.surf.bspline/main.c:402
 #: ../vector/v.surf.idw/read_sites.c:70 ../vector/v.to.rast3/main.c:98
@@ -21326,7 +21335,7 @@ msgstr ""
 #: ../raster/r.in.bin/main.c:115 ../raster/r.in.bin/main.c:117
 #: ../raster/r.in.bin/main.c:119 ../raster/r.in.bin/main.c:121
 #: ../raster/r.in.bin/main.c:647 ../raster/r.in.gridatb/file_io.c:21
-#: ../raster/r.in.gridatb/file_io.c:27 ../raster/r.in.gridatb/file_io.c:61
+#: ../raster/r.in.gridatb/file_io.c:29 ../raster/r.in.gridatb/file_io.c:63
 #: ../raster/r.in.mat/main.c:133 ../raster/r.in.mat/main.c:155
 #: ../raster/r.in.mat/main.c:175 ../raster/r.in.mat/main.c:177
 #: ../raster/r.in.mat/main.c:183 ../raster/r.in.mat/main.c:189
@@ -21796,15 +21805,20 @@ msgstr ""
 msgid "Unable to open file: %s"
 msgstr "Nebija iespējams atvērt failu <%s>"
 
-#: ../raster/r.in.gridatb/file_io.c:40
+#: ../raster/r.in.gridatb/file_io.c:24
+#, c-format
+msgid "Unexpected end of file while reading %s"
+msgstr ""
+
+#: ../raster/r.in.gridatb/file_io.c:42
 msgid "Setting window header failed"
 msgstr ""
 
-#: ../raster/r.in.gridatb/file_io.c:43
+#: ../raster/r.in.gridatb/file_io.c:45
 msgid "Rows changed"
 msgstr ""
 
-#: ../raster/r.in.gridatb/file_io.c:46
+#: ../raster/r.in.gridatb/file_io.c:48
 msgid "Cols changed"
 msgstr ""
 
@@ -30027,6 +30041,7 @@ msgstr ""
 msgid "Input raster must be of type CELL."
 msgstr ""
 
+#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #: ../raster/r.thin/io.c:108 ../raster/r.thin/io.c:179
@@ -33535,7 +33550,7 @@ msgstr ""
 
 #: ../scripts/g.extension.all/g.extension.all.py:174
 #, fuzzy
-msgid "Unable to get GRASS GIS version."
+msgid "Unable to get GRASS version."
 msgstr "neiespējami atjaunot robežas"
 
 #: ../scripts/g.extension.all/g.extension.all.py:196
@@ -33902,7 +33917,7 @@ msgstr "reģions <%s> nav atrasts"
 
 #: ../scripts/g.extension/g.extension.py:2368
 #, python-brace-format
-msgid "Unable to create '{filename}': {error}. Is the GRASS GIS documentation package installed? Installation continues, but documentation may not look right."
+msgid "Unable to create '{filename}': {error}. Is the GRASS documentation package installed? Installation continues, but documentation may not look right."
 msgstr ""
 
 #: ../scripts/g.extension/g.extension.py:2387
@@ -35228,7 +35243,7 @@ msgid "File {name} not found."
 msgstr "rastrs <%s> nav atrasts"
 
 #: ../scripts/r.unpack/r.unpack.py:81 ../scripts/r.unpack/r.unpack.py:135
-#: ../scripts/v.unpack/v.unpack.py:81 ../scripts/v.unpack/v.unpack.py:144
+#: ../scripts/v.unpack/v.unpack.py:81 ../scripts/v.unpack/v.unpack.py:141
 msgid "Pack file unreadable"
 msgstr ""
 
@@ -35249,7 +35264,7 @@ msgstr "Izejas karte kurā tiks ierakstīti punkti"
 
 #: ../scripts/r.unpack/r.unpack.py:129
 #, python-brace-format
-msgid "This GRASS GIS pack file contains vector data. Use v.unpack to unpack <{name}>"
+msgid "This GRASS pack file contains vector data. Use v.unpack to unpack <{name}>"
 msgstr ""
 
 #: ../scripts/r.unpack/r.unpack.py:140
@@ -35261,21 +35276,21 @@ msgstr "Neņemt vērā projekciju (izmantot pašreizējā novietojuma projekciju
 msgid "PROJ_INFO file is missing, unpack raster map in XY (unprojected) project."
 msgstr ""
 
-#: ../scripts/r.unpack/r.unpack.py:177 ../scripts/v.unpack/v.unpack.py:186
+#: ../scripts/r.unpack/r.unpack.py:177 ../scripts/v.unpack/v.unpack.py:183
 #, python-brace-format
 msgid ""
 "Difference between PROJ_INFO file of packed map and of current project:\n"
 "{diff}"
 msgstr ""
 
-#: ../scripts/r.unpack/r.unpack.py:184 ../scripts/v.unpack/v.unpack.py:193
+#: ../scripts/r.unpack/r.unpack.py:184 ../scripts/v.unpack/v.unpack.py:190
 #, python-brace-format
 msgid ""
 "Difference between PROJ_UNITS file of packed map and of current project:\n"
 "{diff}"
 msgstr ""
 
-#: ../scripts/r.unpack/r.unpack.py:190 ../scripts/v.unpack/v.unpack.py:199
+#: ../scripts/r.unpack/r.unpack.py:190 ../scripts/v.unpack/v.unpack.py:196
 msgid "Coordinate reference system of dataset does not appear to match current project. In case of no significant differences in the CRS definitions, use the -o flag to ignore them and use current project definition."
 msgstr ""
 
@@ -35549,7 +35564,7 @@ msgstr "Nevar atvērt datubāzi  %s pēc adreses %s"
 
 #: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:144
 #: ../vector/v.decimate/copy_tab.c:101 ../vector/v.extract/copy_tab.c:106
-#: ../vector/v.generalize/misc.c:180 ../vector/v.to.points/main.c:187
+#: ../vector/v.generalize/misc.c:181 ../vector/v.to.points/main.c:187
 #, c-format, python-format
 msgid "Unable to copy table <%s>"
 msgstr ""
@@ -35637,7 +35652,7 @@ msgid "Use of libsqlitefunctions only with SQLite backend"
 msgstr ""
 
 #: ../scripts/v.db.update/v.db.update.py:103
-#: ../scripts/v.dissolve/v.dissolve.py:615 ../vector/v.to.rast/support.c:297
+#: ../scripts/v.dissolve/v.dissolve.py:605 ../vector/v.to.rast/support.c:297
 #: ../vector/v.to.rast/support.c:528 ../vector/v.to.rast/vect2rast.c:67
 #: ../vector/v.what.rast3/main.c:143
 #, c-format, python-format
@@ -35654,72 +35669,72 @@ msgstr "2 līmeņiem jābūt norādītiem"
 msgid "Either <value> or <qcolumn> must be given"
 msgstr "2 līmeņiem jābūt norādītiem"
 
-#: ../scripts/v.dissolve/v.dissolve.py:248
+#: ../scripts/v.dissolve/v.dissolve.py:246
 #, python-brace-format
 msgid "At least one method must be provided when backend <{backend}> is used"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:256
+#: ../scripts/v.dissolve/v.dissolve.py:254
 #, python-brace-format
 msgid "Method <{method}> is not available for backend <{backend}>"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:271
+#: ../scripts/v.dissolve/v.dissolve.py:269
 #, python-brace-format
 msgid "Column <{column}> does not exist in vector <{vector}> (layer <{layer}>). Specify result columns with 'name type' syntax if you are using function calls instead of aggregate column names only."
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:279
+#: ../scripts/v.dissolve/v.dissolve.py:277
 #, python-brace-format
 msgid "Column <{column}> selected for aggregation does not exist in vector <{vector}> (layer <{layer}>)"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:322
+#: ../scripts/v.dissolve/v.dissolve.py:320
 #, python-brace-format
 msgid "When result columns are specified, the number of aggregate columns ({columns_to_aggregate}) needs to be the same as the number of methods ({methods})"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:338
+#: ../scripts/v.dissolve/v.dissolve.py:336
 #, python-brace-format
 msgid "The number of result columns ({result_columns}) needs to be the same as the number of aggregate columns ({columns_to_aggregate})"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:349
+#: ../scripts/v.dissolve/v.dissolve.py:347
 #, python-brace-format
 msgid "The number of result columns ({result_columns}) needs to be the same as the number of aggregation methods ({methods})"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:362
+#: ../scripts/v.dissolve/v.dissolve.py:360
 #, python-brace-format
 msgid "Result column '{column}' needs a type specified (using the syntax: 'name type') when no methods are provided with the {option_name} option and aggregation backend is '{backend}'"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:376
+#: ../scripts/v.dissolve/v.dissolve.py:374
 #, python-brace-format
 msgid "Methods must be specified with {backend} backend and with result columns provided"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:590
+#: ../scripts/v.dissolve/v.dissolve.py:581
 #, python-format
 msgid "No '%s' option specified. Dissolving based on category values from layer <%s>."
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:606
+#: ../scripts/v.dissolve/v.dissolve.py:596
 #, fuzzy, python-format
 msgid "Invalid layer number (%d). Parameter '%s' specified, assuming layer '1'."
 msgstr "Nederīgs soļu skaits: %s"
 
-#: ../scripts/v.dissolve/v.dissolve.py:618
+#: ../scripts/v.dissolve/v.dissolve.py:608
 #, fuzzy
 msgid "Key column must be of type integer or string"
 msgstr "vektora karte <%s> nav atrasta"
 
-#: ../scripts/v.dissolve/v.dissolve.py:623
+#: ../scripts/v.dissolve/v.dissolve.py:613
 #, python-brace-format
 msgid "Key column type must be string (text) for aggregation method to work, not '{column_type}'"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:676
+#: ../scripts/v.dissolve/v.dissolve.py:664
 #, python-brace-format
 msgid ""
 "A processing step failed. Check the above error messages and see the following details:\n"
@@ -36065,40 +36080,40 @@ msgstr ""
 msgid "Vector map <%s> already exists and will be overwritten"
 msgstr ""
 
-#: ../scripts/v.unpack/v.unpack.py:138
+#: ../scripts/v.unpack/v.unpack.py:137
 #, python-format
-msgid "This GRASS GIS pack file contains raster data. Use r.unpack to unpack <%s>"
+msgid "This GRASS pack file contains raster data. Use r.unpack to unpack <%s>"
 msgstr ""
 
-#: ../scripts/v.unpack/v.unpack.py:155
+#: ../scripts/v.unpack/v.unpack.py:152
 msgid "PROJ_INFO file is missing, unpack vector map in XY (unprojected) project."
 msgstr ""
 
-#: ../scripts/v.unpack/v.unpack.py:181
+#: ../scripts/v.unpack/v.unpack.py:178
 msgid "Projection information does not match. Proceeding..."
 msgstr ""
 
-#: ../scripts/v.unpack/v.unpack.py:243
+#: ../scripts/v.unpack/v.unpack.py:240
 #, fuzzy, python-format
 msgid "Coping table <%s> as table <%s>"
 msgstr "reģions <%s> nav atrasts"
 
-#: ../scripts/v.unpack/v.unpack.py:258
+#: ../scripts/v.unpack/v.unpack.py:255
 #, fuzzy, python-format
 msgid "Unable to copy table <%s> as table <%s>"
 msgstr "Rastra izejas fails"
 
-#: ../scripts/v.unpack/v.unpack.py:263
+#: ../scripts/v.unpack/v.unpack.py:260
 #, fuzzy, python-format
 msgid "Connect table <%s> to vector map <%s> at layer <%s>"
 msgstr "neiespējami atvērt <%s>"
 
-#: ../scripts/v.unpack/v.unpack.py:282
+#: ../scripts/v.unpack/v.unpack.py:279
 #, fuzzy, python-format
 msgid "Unable to connect table <%s> to vector map <%s>"
 msgstr "neiespējami atvērt <%s>"
 
-#: ../scripts/v.unpack/v.unpack.py:286
+#: ../scripts/v.unpack/v.unpack.py:283
 #, fuzzy, python-format
 msgid "Vector map <%s> successfully unpacked"
 msgstr "KĻŪDA: <%s> jau eksistē\n"
@@ -36310,7 +36325,7 @@ msgstr "rastra karte <%s> nav atrasta"
 msgid "Unable to select data from table <%s>"
 msgstr ""
 
-#: ../vector/v.buffer/main.c:444 ../vector/v.class/main.c:125
+#: ../vector/v.buffer/main.c:444 ../vector/v.class/main.c:126
 #: ../vector/v.sample/main.c:238 ../vector/v.surf.bspline/crosscorr.c:141
 #: ../vector/v.surf.bspline/main.c:399 ../vector/v.surf.idw/read_sites.c:67
 #: ../vector/v.to.rast3/main.c:102 ../vector/v.what.rast/main.c:184
@@ -36727,38 +36742,38 @@ msgstr ""
 msgid "Column name or expression"
 msgstr ""
 
-#: ../vector/v.class/main.c:89
+#: ../vector/v.class/main.c:90
 msgid "Print only class breaks (without min and max)"
 msgstr ""
 
-#: ../vector/v.class/main.c:134
+#: ../vector/v.class/main.c:135
 msgid "Unable to sort array of values"
 msgstr ""
 
-#: ../vector/v.class/main.c:165
+#: ../vector/v.class/main.c:166
 msgid "The discontinuities algorithm indicates that some class breaks are not statistically significant at alpha=0.05. You are advised to reduce the number of classes."
 msgstr ""
 
-#: ../vector/v.class/main.c:193
+#: ../vector/v.class/main.c:194
 #, c-format
 msgid ""
 "\n"
 "Classification of %s into %i classes\n"
 msgstr ""
 
-#: ../vector/v.class/main.c:200
+#: ../vector/v.class/main.c:201
 #, c-format
 msgid "Lowest chi2 = %f\n"
 msgstr ""
 
-#: ../vector/v.class/main.c:206
+#: ../vector/v.class/main.c:207
 #, c-format
 msgid ""
 "%15s%15s%15s\n"
 "\n"
 msgstr ""
 
-#: ../vector/v.class/main.c:218
+#: ../vector/v.class/main.c:219
 #, c-format
 msgid ""
 "\n"
@@ -39318,7 +39333,7 @@ msgstr ""
 msgid "Number of vertices for selected features changed from %d to %d (%d%% remaining)"
 msgstr ""
 
-#: ../vector/v.generalize/misc.c:163
+#: ../vector/v.generalize/misc.c:164
 #, c-format
 msgid "Layer %d"
 msgstr ""
@@ -46172,7 +46187,7 @@ msgid "Conversion factor for values used for approximation"
 msgstr ""
 
 #: ../vector/v.surf.rst/main.c:423
-msgid "GRASS GIS is not compiled with OpenMP support, parallel computation is disabled."
+msgid "GRASS is not compiled with OpenMP support, parallel computation is disabled."
 msgstr ""
 
 #: ../vector/v.surf.rst/main.c:434 ../vector/v.surf.rst/main.c:439
@@ -48589,10 +48604,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Export as waypoints"
 #~ msgstr "Rakstu jaunu failu... \n"
-
-#, fuzzy
-#~ msgid "Export space time raster dataset to a CSV file."
-#~ msgstr "Eksistējošas rastra kartes nosaukums"
 
 #, fuzzy
 #~ msgid "Export vector map as PNG"

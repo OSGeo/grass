@@ -145,7 +145,8 @@ build_program_in_subdir(
   grass_dbmiclient
   grass_dbmidriver
   grass_gis
-  grass_vector)
+  grass_vector
+  grass_parson)
 
 build_program_in_subdir(v.clean DEPENDS grass_gis grass_vector ${LIBM})
 
@@ -824,7 +825,8 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_raster
-  grass_vector)
+  grass_vector
+  grass_parson)
 
 build_program_in_subdir(
   v.what.rast3

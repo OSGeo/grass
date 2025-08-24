@@ -144,7 +144,8 @@ _capture_stderr = False  # capture stderr of subprocesses if possible
 
 
 def call(*args, **kwargs):
-    return Popen(*args, **kwargs).wait()
+    with Popen(*args, **kwargs) as p:
+        return p.wait()
 
 
 # GRASS-oriented interface to subprocess module
@@ -505,7 +506,7 @@ def start_command(
     verbose=False,
     superquiet=False,
     **kwargs,
-):
+) -> Popen:
     """Returns a :class:`~grass.script.core.Popen` object with the command created by
     :py:func:`~grass.script.core.make_command`.
     Accepts any of the arguments which :py:class:`Popen()` accepts apart from "args"
@@ -596,9 +597,7 @@ def run_command(*args, **kwargs):
 
     :raises ~grass.exceptions.CalledModuleError: When module returns non-zero return code.
     """
-    encoding = "default"
-    if "encoding" in kwargs:
-        encoding = kwargs["encoding"]
+    encoding = kwargs.get("encoding", "default")
 
     if _capture_stderr and "stderr" not in kwargs.keys():
         kwargs["stderr"] = PIPE
@@ -668,9 +667,7 @@ def read_command(*args, **kwargs):
 
     :return: stdout
     """
-    encoding = "default"
-    if "encoding" in kwargs:
-        encoding = kwargs["encoding"]
+    encoding = kwargs.get("encoding", "default")
 
     if _capture_stderr and "stderr" not in kwargs.keys():
         kwargs["stderr"] = PIPE
@@ -774,9 +771,7 @@ def write_command(*args, **kwargs):
 
     :raises ~grass.exceptions.CalledModuleError: When module returns non-zero return code
     """
-    encoding = "default"
-    if "encoding" in kwargs:
-        encoding = kwargs["encoding"]
+    encoding = kwargs.get("encoding", "default")
     # TODO: should we delete it from kwargs?
     stdin = kwargs["stdin"]
     if _capture_stderr and "stderr" not in kwargs.keys():
@@ -1095,8 +1090,11 @@ def parser() -> tuple[dict[str, str], dict[str, bool]]:
         s = p.communicate()[0]
         lines = s.split(b"\0")
         if not lines or lines[0] != b"@ARGS_PARSED@":
-            stdout = os.fdopen(sys.stdout.fileno(), "wb")
-            stdout.write(s)
+            if hasattr(sys.stdout, "buffer"):
+                sys.stdout.buffer.write(s)
+            else:
+                text = s.decode(sys.stdout.encoding, "strict")
+                sys.stdout.write(text)
             sys.exit(p.returncode)
         return _parse_opts(lines[1:])
 
