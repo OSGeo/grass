@@ -59,7 +59,7 @@ print(data)
 
 Possible output:
 
-```text
+```json
 [{'layer': 1, 'layer_name': 'roadsmajor', 'table': 'roadsmajor', 'key': 'cat', 'database': '/grassdata/nc_spm_08_grass7/PERMANENT/sqlite/sqlite.db', 'driver': 'sqlite'}]
 ```
 
@@ -74,7 +74,7 @@ print(data)
 
 Possible output:
 
-```text
+```json
 [{'name': 'cat', 'sql_type': 'INTEGER', 'is_number': True}, {'name': 'MAJORRDS_', 'sql_type': 'DOUBLE PRECISION', 'is_number': True}, {'name': 'ROAD_NAME', 'sql_type': 'CHARACTER', 'is_number': False}, {'name': 'MULTILANE', 'sql_type': 'CHARACTER', 'is_number': False}, {'name': 'PROPYEAR', 'sql_type': 'INTEGER', 'is_number': True}, {'name': 'OBJECTID', 'sql_type': 'INTEGER', 'is_number': True}, {'name': 'SHAPE_LEN', 'sql_type': 'DOUBLE PRECISION', 'is_number': True}]
 ```
 
