@@ -70,10 +70,6 @@ class TextTestResult(grass.gunittest.result.TestResult, unittest.TextTestResult)
         self.end_time: float | None = None
         self.time_taken: float | None = None
 
-    def setTimes(self, start_time: float, end_time: float, time_taken: float) -> None:
-        super().setTimes(
-            start_time=start_time, end_time=end_time, time_taken=time_taken
-        )
 
     def stopTestRun(self) -> None:
         super().stopTestRun()
@@ -138,10 +134,6 @@ class KeyValueTestResult(grass.gunittest.result.TestResult):
         self._grass_modules = []
         self._supplementary_files: list[str] = []
 
-    def setTimes(self, start_time: float, end_time: float, time_taken: float) -> None:
-        super().setTimes(
-            start_time=start_time, end_time=end_time, time_taken=time_taken
-        )
 
     def stopTest(
         self, test: grass.gunittest.case.TestCase | unittest.case.TestCase
