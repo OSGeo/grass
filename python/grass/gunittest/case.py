@@ -1243,10 +1243,10 @@ class TestCase(unittest.TestCase):
         # workaround for missing -h (do not print header) flag in v.out.ascii
         num_lines_of_header = 10
         diff = difflib.unified_diff(
-            fromlines[num_lines_of_header:],
-            tolines[num_lines_of_header:],
-            "reference",
+            [line.strip() for line in fromlines[num_lines_of_header:]],
+            [line.strip() for line in tolines[num_lines_of_header:]],
             "actual",
+            "reference",
             n=context_lines,
         )
         # TODO: this should be solved according to cleanup policy
@@ -1289,8 +1289,8 @@ class TestCase(unittest.TestCase):
                 htmldiff = difflib.HtmlDiff().make_file(
                     fromlines,
                     tolines,
-                    "reference",
                     "actual",
+                    "reference",
                     context=True,
                     numlines=context_lines,
                     charset="utf-8",
