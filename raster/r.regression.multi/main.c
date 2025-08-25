@@ -20,8 +20,11 @@
 #include <math.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/gjson.h>
 #include <grass/glocale.h>
 #include <grass/raster.h>
+
+enum OutputFormat { SHELL, JSON };
 
 struct MATRIX {
     int n; /* SIZE OF THIS MATRIX (N x N) */
@@ -118,10 +121,15 @@ int main(int argc, char *argv[])
     DCELL **mapx_buf, *mapy_buf, *mapx_val, mapy_val, *mapres_buf, *mapest_buf;
     char *name;
     struct Option *input_mapx, *input_mapy, *output_res, *output_est,
-        *output_opt;
+        *output_opt, *format_opt;
     struct Flag *shell_style;
     struct Cell_head region;
     struct GModule *module;
+    enum OutputFormat format;
+    JSON_Value *root_value = NULL, *predictors_value = NULL,
+               *predictor_value = NULL;
+    JSON_Object *root_object = NULL, *predictor_object = NULL;
+    JSON_Array *predictors_array = NULL;
 
     G_gisinit(argv[0]);
 
@@ -158,9 +166,18 @@ int main(int argc, char *argv[])
         (_("ASCII file for storing regression coefficients (output to screen "
            "if file not specified)."));
 
+    format_opt = G_define_standard_option(G_OPT_F_FORMAT);
+    format_opt->options = "shell,json";
+    format_opt->answer = "shell";
+    format_opt->descriptions = ("shell;shell script style text output;"
+                                "json;JSON (JavaScript Object Notation);");
+
     shell_style = G_define_flag();
     shell_style->key = 'g';
-    shell_style->description = _("Print in shell script style");
+    shell_style->label = _("Print in shell script style [deprecated]");
+    shell_style->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=shell instead.");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -170,6 +187,36 @@ int main(int argc, char *argv[])
         if (NULL == freopen(name, "w", stdout)) {
             G_fatal_error(_("Unable to open file <%s> for writing"), name);
         }
+    }
+
+    if (strcmp(format_opt->answer, "json") == 0) {
+        format = JSON;
+        root_value = G_json_value_init_object();
+        if (root_value == NULL) {
+            G_fatal_error(
+                _("Failed to initialize JSON object. Out of memory?"));
+        }
+        root_object = G_json_object(root_value);
+
+        predictors_value = G_json_value_init_array();
+        if (predictors_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
+        predictors_array = G_json_array(predictors_value);
+    }
+    else {
+        format = SHELL;
+    }
+
+    if (shell_style->answer) {
+        G_verbose_message(
+            _("Flag 'g' is deprecated and will be removed in a future "
+              "release. Please use format=shell instead."));
+        if (format == JSON) {
+            G_fatal_error(_("The -g flag cannot be used with format=json. "
+                            "Please select only one output format."));
+        }
+        format = SHELL;
     }
 
     G_get_window(&region);
@@ -333,9 +380,10 @@ int main(int argc, char *argv[])
                 M(m, i, j) = M(m, j, i);
 
         if (!solvemat(m, a[k], B[k])) {
-            for (i = 0; i <= n_predictors; i++) {
-                fprintf(stdout, "b%d=0.0\n", i);
-            }
+            if (format == SHELL)
+                for (i = 0; i <= n_predictors; i++) {
+                    fprintf(stdout, "b%d=0.0\n", i);
+                }
             G_fatal_error(_("Multiple regression failed"));
         }
     }
@@ -443,42 +491,28 @@ int main(int argc, char *argv[])
     }
     G_percent(rows, rows, 2);
 
-    fprintf(stdout, "n=%d\n", count);
     /* coefficient of determination aka R squared */
     Rsq = 1 - (SSerr / SStot);
-    fprintf(stdout, "Rsq=%f\n", Rsq);
     /* adjusted coefficient of determination */
     Rsqadj = 1 - ((SSerr * (count - 1)) / (SStot * (count - n_predictors - 1)));
-    fprintf(stdout, "Rsqadj=%f\n", Rsqadj);
-    /* RMSE */
-    fprintf(stdout, "RMSE=%f\n", sqrt(SSerr / count));
-    /* MAE */
-    fprintf(stdout, "MAE=%f\n", SAE / count);
     /* F statistic */
     /* F = ((SStot - SSerr) / (n_predictors)) / (SSerr / (count -
      * n_predictors)); , or: */
     F = ((SStot - SSerr) * (count - n_predictors - 1)) /
         (SSerr * (n_predictors));
-    fprintf(stdout, "F=%f\n", F);
-
     i = 0;
-    /* constant aka estimate for intercept in R */
-    fprintf(stdout, "b%d=%f\n", i, B[0][i]);
     /* t score for R squared of the full model, unused */
     /* t = sqrt(Rsq) * sqrt((count - 2) / (1 - Rsq)); */
     /*
        fprintf(stdout, "t%d=%f\n", i, t);
      */
 
-    /* AIC, corrected AIC, and BIC information criteria for the full model */
+    /* AIC, corrected AIC, and BIC information criteria for the full model
+     */
     AIC = count * log(SSerr / count) + 2 * (n_predictors + 1);
-    fprintf(stdout, "AIC=%f\n", AIC);
     AICc = AIC +
            (2 * n_predictors * (n_predictors + 1)) / (count - n_predictors - 1);
-    fprintf(stdout, "AICc=%f\n", AICc);
     BIC = count * log(SSerr / count) + log(count) * (n_predictors + 1);
-    fprintf(stdout, "BIC=%f\n", BIC);
-
     /* error variance of the model, identical to R */
     /* SE = SSerr / (count - n_predictors - 1); */
     /*
@@ -486,10 +520,59 @@ int main(int argc, char *argv[])
        fprintf(stdout, "SSerr=%f\n", SSerr);
      */
 
-    for (i = 0; i < n_predictors; i++) {
+    switch (format) {
+    case SHELL:
+        fprintf(stdout, "n=%d\n", count);
+        fprintf(stdout, "Rsq=%f\n", Rsq);
+        fprintf(stdout, "Rsqadj=%f\n", Rsqadj);
+        /* RMSE */
+        fprintf(stdout, "RMSE=%f\n", sqrt(SSerr / count));
+        /* MAE */
+        fprintf(stdout, "MAE=%f\n", SAE / count);
+        fprintf(stdout, "F=%f\n", F);
+        /* constant aka estimate for intercept in R */
+        fprintf(stdout, "b%d=%f\n", i, B[0][i]);
+        fprintf(stdout, "AIC=%f\n", AIC);
+        fprintf(stdout, "AICc=%f\n", AICc);
+        fprintf(stdout, "BIC=%f\n", BIC);
+        break;
 
-        fprintf(stdout, "\npredictor%d=%s\n", i + 1, input_mapx->answers[i]);
-        fprintf(stdout, "b%d=%f\n", i + 1, B[0][i + 1]);
+    case JSON:
+        G_json_object_set_number(root_object, "n", count);
+        G_json_object_set_number(root_object, "Rsq", Rsq);
+        G_json_object_set_number(root_object, "Rsqadj", Rsqadj);
+        G_json_object_set_number(root_object, "RMSE", sqrt(SSerr / count));
+        G_json_object_set_number(root_object, "MAE", SAE / count);
+        G_json_object_set_number(root_object, "F", F);
+        G_json_object_set_number(root_object, "b0", B[0][i]);
+        G_json_object_set_number(root_object, "AIC", AIC);
+        G_json_object_set_number(root_object, "AICc", AICc);
+        G_json_object_set_number(root_object, "BIC", BIC);
+        break;
+    }
+
+    for (i = 0; i < n_predictors; i++) {
+        switch (format) {
+        case SHELL:
+            fprintf(stdout, "\npredictor%d=%s\n", i + 1,
+                    input_mapx->answers[i]);
+            fprintf(stdout, "b%d=%f\n", i + 1, B[0][i + 1]);
+            break;
+
+        case JSON:
+            predictor_value = G_json_value_init_object();
+            if (predictor_value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON object. Out of memory?"));
+            }
+            predictor_object = G_json_object(predictor_value);
+
+            G_json_object_set_string(predictor_object, "name",
+                                     input_mapx->answers[i]);
+            G_json_object_set_number(predictor_object, "b", B[0][i + 1]);
+            break;
+        }
+
         if (n_predictors > 1) {
             /* double Rsqi, SEi, sumsqX_corr; */
 
@@ -540,19 +623,39 @@ int main(int argc, char *argv[])
              * - 1) */
             /* same like R-stats when entered in R-stats as last predictor */
             F = (SSerr_without[i] / SSerr - 1) * (count - n_predictors - 1);
-            fprintf(stdout, "F%d=%f\n", i + 1, F);
-
             /* AIC, corrected AIC, and BIC information criteria for
              * the model without predictor [i] */
             AIC = count * log(SSerr_without[i] / count) + 2 * (n_predictors);
-            fprintf(stdout, "AIC%d=%f\n", i + 1, AIC);
             AICc = AIC + (2 * (n_predictors - 1) * n_predictors) /
                              (count - n_predictors - 2);
-            fprintf(stdout, "AICc%d=%f\n", i + 1, AICc);
             BIC = count * log(SSerr_without[i] / count) +
                   (n_predictors - 1) * log(count);
-            fprintf(stdout, "BIC%d=%f\n", i + 1, BIC);
+
+            switch (format) {
+            case SHELL:
+                fprintf(stdout, "F%d=%f\n", i + 1, F);
+                fprintf(stdout, "AIC%d=%f\n", i + 1, AIC);
+                fprintf(stdout, "AICc%d=%f\n", i + 1, AICc);
+                fprintf(stdout, "BIC%d=%f\n", i + 1, BIC);
+                break;
+
+            case JSON:
+                G_json_object_set_number(predictor_object, "F", F);
+                G_json_object_set_number(predictor_object, "AIC", AIC);
+                G_json_object_set_number(predictor_object, "AICc", AICc);
+                G_json_object_set_number(predictor_object, "BIC", BIC);
+                break;
+            }
         }
+        else if (format == JSON) {
+            G_json_object_set_null(predictor_object, "F");
+            G_json_object_set_null(predictor_object, "AIC");
+            G_json_object_set_null(predictor_object, "AICc");
+            G_json_object_set_null(predictor_object, "BIC");
+        }
+
+        if (format == JSON)
+            G_json_array_append_value(predictors_array, predictor_value);
     }
 
     for (i = 0; i < n_predictors; i++) {
@@ -582,6 +685,21 @@ int main(int argc, char *argv[])
         Rast_short_history(output_est->answer, "raster", &history);
         Rast_command_history(&history);
         Rast_write_history(output_est->answer, &history);
+    }
+
+    if (format == JSON) {
+        G_json_object_set_value(root_object, "predictors", predictors_value);
+
+        char *json_string = G_json_serialize_to_string_pretty(root_value);
+        if (!json_string) {
+            G_json_value_free(root_value);
+            G_fatal_error(_("Failed to serialize JSON to pretty format."));
+        }
+
+        puts(json_string);
+
+        G_json_free_serialized_string(json_string);
+        G_json_value_free(root_value);
     }
 
     exit(EXIT_SUCCESS);

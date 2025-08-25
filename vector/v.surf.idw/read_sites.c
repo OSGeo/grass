@@ -12,7 +12,6 @@
  * Only uses floating point attributes.
  * mccauley
  */
-
 void read_sites(const char *name, const char *field_name, const char *col,
                 int noindex)
 {

@@ -1432,7 +1432,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      subset of the registered maps without "WHERE"
         :param dbif: The database interface to be used
         :param spatial_extent: Spatial extent dict and projection information
-            e.g. from g.region -ug3 with GRASS GIS region keys
+            e.g. from g.region -ug3 with GRASS region keys
             "n", "s", "e", "w", "b", "t", and "projection".
         :param spatial_relation: Spatial relation to the provided
             spatial extent as a string with one of the following values:
@@ -1508,7 +1508,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      objects in the list without "ORDER BY"
         :param dbif: The database interface to be used
         :param spatial_extent: Spatial extent dict and projection information
-            e.g. from g.region -ug3 with GRASS GIS region keys
+            e.g. from g.region -ug3 with GRASS region keys
             "n", "s", "e", "w", "b", "t", and  "projection".
         :param spatial_relation: Spatial relation to the provided
             spatial extent as a string with one of the following values:
@@ -1563,7 +1563,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                       objects in the list without "ORDER BY"
         :param dbif: The database interface to be used
         :param spatial_extent: Spatial extent dict and projection information
-            e.g. from g.region -ug3 with GRASS GIS region keys
+            e.g. from g.region -ug3 with GRASS region keys
             "n", "s", "e", "w", "b", "t", and "projection".
         :param spatial_relation: Spatial relation to the provided
             spatial extent as a string with one of the following values:
@@ -1850,7 +1850,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         :param group: The columns to be used in the SQL GROUP BY statement
                       as SQL compliant string without "GROUP BY"
         :param spatial_extent: Spatial extent dict and projection information
-            e.g. from g.region -ug3 with GRASS GIS region keys
+            e.g. from g.region -ug3 with GRASS region keys
             "n", "s", "e", "w", "b", "t", and  "projection".
         :param spatial_relation: Spatial relation to the provided
             spatial extent as a string with one of the following values:

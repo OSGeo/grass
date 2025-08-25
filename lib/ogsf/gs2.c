@@ -494,7 +494,7 @@ int GS_transp_is_set(void)
 /*!
    \brief Retrieves coordinates for lighting model position, at center of view
 
-   \param pos[out] coordinates
+   \param[out] pos coordinates
  */
 void GS_get_modelposition1(float pos[])
 {
@@ -522,23 +522,23 @@ void GS_get_modelposition1(float pos[])
    know position to calculate size, have two dependent variables
    (nearclip * 2) from eye.
 
-   \param siz[out] size
-   \param pos[out] coordinates (X, Y, Z)
+   \param[out] size size
+   \param[out] pos coordinates (X, Y, Z)
  */
-void GS_get_modelposition(float *siz, float *pos)
+void GS_get_modelposition(float *size, float *pos)
 {
     float dist, near_h, dir[3];
 
     dist = 2. * Gd.nearclip;
 
     near_h = 2.0 * tan(4.0 * atan(1.) * Gv.fov / 3600.) * dist;
-    *siz = near_h / 8.0;
+    *size = near_h / 8.0;
 
     /* prevent clipping - would only happen if fov > ~127 degrees, at
        fov = 2.0 * atan(2.0) */
 
-    if (*siz > Gd.nearclip) {
-        *siz = Gd.nearclip;
+    if (*size > Gd.nearclip) {
+        *size = Gd.nearclip;
     }
 
     GS_v3dir(Gv.from_to[FROM], Gv.from_to[TO], dir);
@@ -707,6 +707,8 @@ void GS_draw_line_onsurf(int id, float x1, float y1, float x2, float y2)
 
    \param id surface id
    \param x1,y1,x2,y2 line nodes
+   \param lasp
+   \param n
 
    \return number of points used
  */
@@ -1522,7 +1524,7 @@ int GS_num_surfs(void)
 
    Must be freed when not needed!
 
-   \param[out] numsurf number of available surfaces
+   \param[out] numsurfs number of available surfaces
 
    \return pointer to surface array
    \return NULL on error

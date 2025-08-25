@@ -25,7 +25,6 @@
  * \param[in] table
  * \return int DB_FAILED on error; DB_OK on success
  */
-
 int db__driver_create_table(dbTable *table)
 {
     int col, ncols;

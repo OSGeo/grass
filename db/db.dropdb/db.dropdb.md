@@ -8,7 +8,7 @@
 
 ### Drop (delete) an existing database connected through SQLite driver
 
-Note that the standard GRASS GIS SQLite database is by default found in
+Note that the standard GRASS SQLite database is by default found in
 the user's current mapset. This example shows an out-of-mapset database
 removal:
 

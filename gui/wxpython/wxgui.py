@@ -63,7 +63,7 @@ class GMApp(wx.App):
         :return: True
         """
         # Internal and display name of the app (if supported by/on platform)
-        self.SetAppName("GRASS GIS")
+        self.SetAppName("GRASS")
         self.SetVendorName("The GRASS Development Team")
 
         # create splash screen

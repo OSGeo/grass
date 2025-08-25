@@ -21,7 +21,6 @@
     \param opt A nprocs Option struct to specify the number of threads
     \return the number of threads set up for OpenMP parallel computing
 */
-
 int G_set_omp_num_threads(struct Option *opt)
 {
     /* make sure Option is not null */
