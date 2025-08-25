@@ -18,7 +18,7 @@
 #include <grass/glocale.h>
 
 static const char NULL_STRING[] = "null";
-static int reclass_type(FILE *, char **, char **);
+static int reclass_type(FILE *, char *, char *);
 static FILE *fopen_cellhd_old(const char *, const char *);
 static FILE *fopen_cellhd_new(const char *);
 static int get_reclass_table(FILE *, struct Reclass *);
@@ -50,7 +50,7 @@ int Rast_is_reclass(const char *name, const char *mapset, char *rname,
     if (fd == NULL)
         return -1;
 
-    type = reclass_type(fd, &rname, &rmapset);
+    type = reclass_type(fd, rname, rmapset);
     fclose(fd);
     if (type < 0)
         return -1;
@@ -146,13 +146,16 @@ int Rast_get_reclass(const char *name, const char *mapset,
     fd = fopen_cellhd_old(name, mapset);
     if (fd == NULL)
         return -1;
-    reclass->name = NULL;
-    reclass->mapset = NULL;
-    reclass->type = reclass_type(fd, &reclass->name, &reclass->mapset);
+    char namebuf[GNAME_MAX], mapsetbuf[GMAPSET_MAX];
+    namebuf[0] = '\0';
+    mapsetbuf[0] = '\0';
+    reclass->type = reclass_type(fd, namebuf, mapsetbuf);
     if (reclass->type <= 0) {
         fclose(fd);
         return reclass->type;
     }
+    reclass->name = G_store(namebuf);
+    reclass->mapset = G_store(mapsetbuf);
 
     switch (reclass->type) {
     case RECLASS_TABLE:
@@ -199,7 +202,7 @@ void Rast_free_reclass(struct Reclass *reclass)
     }
 }
 
-static int reclass_type(FILE *fd, char **rname, char **rmapset)
+static int reclass_type(FILE *fd, char *rname, char *rmapset)
 {
     char buf[128];
     char label[128], arg[128];
@@ -214,35 +217,26 @@ static int reclass_type(FILE *fd, char **rname, char **rmapset)
     /* later may add other types of reclass */
     type = RECLASS_TABLE;
 
-    /* Read the mapset and file name of the REAL cell file */
-    if (*rname)
-        **rname = '\0';
-    if (*rmapset)
-        **rmapset = '\0';
+    /* Clear the output buffers before parsing */
+    rname[0] = '\0';
+    rmapset[0] = '\0';
     for (i = 0; i < 2; i++) {
         if (fgets(buf, sizeof buf, fd) == NULL)
             return -1;
         if (sscanf(buf, "%[^:]:%s", label, arg) != 2)
             return -1;
         if (strncmp(label, "maps", 4) == 0) {
-            if (*rmapset)
-                strcpy(*rmapset, arg);
-            else
-                *rmapset = G_store(arg);
+            strncpy(rmapset, arg, GMAPSET_MAX - 1);
+            rmapset[GMAPSET_MAX - 1] = '\0';
         }
         else if (strncmp(label, "name", 4) == 0) {
-            if (*rname)
-                strcpy(*rname, arg);
-            else
-                *rname = G_store(arg);
+            strncpy(rname, arg, GNAME_MAX - 1);
+            rname[GNAME_MAX - 1] = '\0';
         }
         else
             return -1;
     }
-    if (**rmapset && **rname)
-        return type;
-    else
-        return -1;
+    return (rmapset[0] && rname[0]) ? type : -1;
 }
 
 static FILE *fopen_cellhd_old(const char *name, const char *mapset)
