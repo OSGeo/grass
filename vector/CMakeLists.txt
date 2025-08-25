@@ -181,7 +181,8 @@ build_program_in_subdir(
   grass_dbmiclient
   grass_dbmidriver
   grass_gis
-  grass_vector)
+  grass_vector
+  grass_parson)
 
 build_program_in_subdir(
   v.db.select
