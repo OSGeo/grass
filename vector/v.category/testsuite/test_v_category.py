@@ -105,9 +105,9 @@ class TestVCategory(TestCase):
 
         result = json.loads(module.outputs.stdout)
 
-        expected = {"layers": [1, 2]}
+        expected = [1, 2]
 
-        self.assertDictEqual(expected, result)
+        self.assertListEqual(expected, result)
 
     def test_report_option_plain(self):
         """Test v.category with the plain output format, and report option."""
