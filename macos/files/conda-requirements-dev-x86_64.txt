@@ -7,6 +7,7 @@ expat
 fftw
 flex
 freetype
+gdal
 geos
 gettext
 ghostscript
