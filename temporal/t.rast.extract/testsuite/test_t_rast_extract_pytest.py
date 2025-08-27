@@ -70,7 +70,7 @@ def session(tmp_path_factory):
             description="A test",
             overwrite=True,
         )
-        tmp_file = tools.g_tempfile().text
+        tmp_file = tools.g_tempfile(pid=os.environ["PID"]).text
         Path(tmp_file).write_text("".join(register_strings), encoding="UTF8")
         tools.t_register(
             type="raster",
