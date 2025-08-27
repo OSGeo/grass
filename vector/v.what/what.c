@@ -93,10 +93,28 @@ static void F_generate(const char *drvname, const char *dbname,
             G_debug(2, "%s: %s", colname, db_get_string(&str));
             switch (format) {
             case JSON:
-                formbuf = G_str_replace(db_get_string(&str), "\\", "\\\\");
-                formbuf = G_str_replace(formbuf, "\"", "\\\"");
-                G_json_object_set_string(attribute_object, colname, formbuf);
-                G_free(formbuf);
+                if (db_test_value_isnull(value)) {
+                    G_json_object_set_null(attribute_object, colname);
+                }
+                else {
+                    int c_type = db_sqltype_to_Ctype(sqltype);
+                    if (c_type == DB_C_TYPE_INT) {
+                        G_json_object_set_number(attribute_object, colname,
+                                                 db_get_value_int(value));
+                    }
+                    else if (c_type == DB_C_TYPE_DOUBLE) {
+                        G_json_object_set_number(attribute_object, colname,
+                                                 db_get_value_double(value));
+                    }
+                    else {
+                        formbuf =
+                            G_str_replace(db_get_string(&str), "\\", "\\\\");
+                        formbuf = G_str_replace(formbuf, "\"", "\\\"");
+                        G_json_object_set_string(attribute_object, colname,
+                                                 formbuf);
+                        G_free(formbuf);
+                    }
+                }
                 break;
             case SHELL:
                 snprintf(buf, sizeof(buf), "%s=%s\n", colname,
@@ -200,13 +218,7 @@ void write_cats(struct Map_info *Map, int field, struct line_cats *Cats,
                             Fi->driver, Fi->database, Fi->table, Fi->key);
                     break;
                 case JSON:
-                    /* escape backslash to create valid JSON */
-                    formbuf2 = G_str_replace(Fi->database, "\\", "\\\\");
-                    G_json_object_set_string(cat_object, "driver", Fi->driver);
-                    G_json_object_set_string(cat_object, "database", formbuf2);
-                    G_json_object_set_string(cat_object, "table", Fi->table);
                     G_json_object_set_string(cat_object, "key_column", Fi->key);
-                    G_free(formbuf2);
                     break;
                 default:
                     fprintf(stdout,
@@ -462,22 +474,26 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
 
             switch (type) {
             case GV_POINT:
-                snprintf(buf, sizeof(buf), "Point");
+                snprintf(buf, sizeof(buf),
+                         (format == JSON) ? "point" : "Point");
                 break;
             case GV_LINE:
-                snprintf(buf, sizeof(buf), "Line");
+                snprintf(buf, sizeof(buf), (format == JSON) ? "line" : "Line");
                 break;
             case GV_BOUNDARY:
-                snprintf(buf, sizeof(buf), "Boundary");
+                snprintf(buf, sizeof(buf),
+                         (format == JSON) ? "boundary" : "Boundary");
                 break;
             case GV_FACE:
-                snprintf(buf, sizeof(buf), "Face");
+                snprintf(buf, sizeof(buf), (format == JSON) ? "face" : "Face");
                 break;
             case GV_CENTROID:
-                snprintf(buf, sizeof(buf), "Centroid");
+                snprintf(buf, sizeof(buf),
+                         (format == JSON) ? "centroid" : "Centroid");
                 break;
             default:
-                snprintf(buf, sizeof(buf), "Unknown");
+                snprintf(buf, sizeof(buf),
+                         (format == JSON) ? "unknown" : "Unknown");
             }
             if (type & GV_LINES) {
                 if (G_projection() == 3)
@@ -655,15 +671,15 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                     break;
                 case JSON:
                     if (multiple) {
-                        G_json_object_set_string(feature_object, "type", buf);
                         G_json_object_set_number(feature_object, "id", line);
+                        G_json_object_set_string(feature_object, "type", buf);
                         if (type & GV_LINES)
                             G_json_object_set_number(feature_object, "length",
                                                      l);
                     }
                     else {
-                        G_json_object_set_string(map_object, "type", buf);
                         G_json_object_set_number(map_object, "id", line);
+                        G_json_object_set_string(map_object, "type", buf);
                         if (type & GV_LINES)
                             G_json_object_set_number(map_object, "length", l);
                     }
@@ -773,13 +789,11 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
 
             if (format == JSON) {
                 if (multiple) {
-                    G_json_object_set_value(feature_object, "categories",
-                                            cats_value);
+                    G_json_object_set_value(feature_object, "data", cats_value);
                     G_json_array_append_value(features_array, feature_value);
                 }
                 else
-                    G_json_object_set_value(map_object, "categories",
-                                            cats_value);
+                    G_json_object_set_value(map_object, "data", cats_value);
             }
         } /* for lineList */
 
@@ -817,11 +831,11 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                         G_json_object_set_number(feature_object, "area_height",
                                                  z);
                         G_json_object_set_string(feature_object, "type",
-                                                 "Area");
+                                                 "area");
                     }
                     else {
                         G_json_object_set_number(map_object, "area_height", z);
-                        G_json_object_set_string(map_object, "type", "Area");
+                        G_json_object_set_string(map_object, "type", "area");
                     }
                     break;
                 default:
@@ -837,10 +851,10 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                 case JSON:
                     if (multiple) {
                         G_json_object_set_string(feature_object, "type",
-                                                 "Area");
+                                                 "area");
                     }
                     else {
-                        G_json_object_set_string(map_object, "type", "Area");
+                        G_json_object_set_string(map_object, "type", "area");
                     }
                     break;
                 default:
@@ -1001,13 +1015,11 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
 
             if (format == JSON) {
                 if (multiple) {
-                    G_json_object_set_value(feature_object, "categories",
-                                            cats_value);
+                    G_json_object_set_value(feature_object, "data", cats_value);
                     G_json_array_append_value(features_array, feature_value);
                 }
                 else
-                    G_json_object_set_value(map_object, "categories",
-                                            cats_value);
+                    G_json_object_set_value(map_object, "data", cats_value);
             }
         } /* for areaList */
 
