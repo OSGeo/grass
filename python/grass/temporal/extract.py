@@ -25,6 +25,25 @@ from grass.exceptions import CalledModuleError
 ############################################################################
 
 
+def compile_new_map_name(sp, base: str, count: int, map_id:str, time_suffix: str | None, dbif):
+    """Compile new map name with suffix and semantic label."""
+    if sp.get_temporal_type() == "absolute" and time_suffix:
+        old_map = sp.get_new_map_instance(map_id)
+        old_map.select(dbif)
+        semantic_label = old_map.metadata.get_semantic_label()
+        if time_suffix == "gran":
+            suffix = create_suffix_from_datetime(
+                old_map.temporal_extent.get_start_time(), sp.get_granularity()
+            )
+        elif time_suffix == "time":
+            suffix = create_time_suffix(old_map)
+        if semantic_label:
+            return f"{base}_{semantic_label}_{suffix}"
+        else:
+            return f"{base}_{suffix}"
+    return create_numeric_suffix(base, count, time_suffix)
+
+
 def extract_dataset(
     input,
     output,
@@ -96,33 +115,21 @@ def extract_dataset(
             proc_count = 0
             proc_list = []
 
+            # Make sure STRDS is in the expression referenced with fully qualified name
+            if sp.base.get_map_id() not in expression:
+                expression = expression.replace(sp.base.get_name(), sp.base.get_map_id())
             for row in rows:
                 count += 1
 
                 if count % 10 == 0:
                     msgr.percent(count, num_rows, 1)
 
-                if sp.get_temporal_type() == "absolute" and time_suffix == "gran":
-                    old_map = sp.get_new_map_instance(row["id"])
-                    old_map.select(dbif)
-                    suffix = create_suffix_from_datetime(
-                        old_map.temporal_extent.get_start_time(), sp.get_granularity()
-                    )
-                    map_name = "{ba}_{su}".format(ba=base, su=suffix)
-                elif sp.get_temporal_type() == "absolute" and time_suffix == "time":
-                    old_map = sp.get_new_map_instance(row["id"])
-                    old_map.select(dbif)
-                    suffix = create_time_suffix(old_map)
-                    map_name = "{ba}_{su}".format(ba=base, su=suffix)
-                else:
-                    map_name = create_numeric_suffix(base, count, time_suffix)
+                map_name = compile_new_map_name(sp, base, count, row["id"], time_suffix, dbif)
 
                 # We need to modify the r(3).mapcalc expression
                 if type != "vector":
                     expr = expression
                     expr = expr.replace(sp.base.get_map_id(), row["id"])
-                    expr = expr.replace(sp.base.get_name(), row["id"])
-
                     expr = "%s = %s" % (map_name, expr)
 
                     # We need to build the id
