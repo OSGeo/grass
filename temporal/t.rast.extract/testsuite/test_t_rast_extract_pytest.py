@@ -9,10 +9,12 @@ for details.
 """
 
 import os
+import pytest
 import shutil
 
+from pathlib import Path
+
 import grass.script as gs
-import pytest
 from grass.tools import Tools
 
 
@@ -47,13 +49,18 @@ def session(tmp_path_factory):
         tools.g_mapset(mapset="perc", flags="c")
         tools.g_gisenv(set="TGIS_USE_CURRENT_MAPSET=1")
         tools.g_region(s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10)
-        for i in range(1, 7):
-            tools.r_mapcalc(expression=f"prec_{i} = {i}00", overwrite=True)
-            tools.r_semantic_label(
-                map=f"prec_{i}",
-                semantic_label=f"S2_{i}",
-                overwrite=True,
-            )
+        register_strings = []
+        for i in range(1, 4):
+            for label in ["A", "B"]:
+                mapname = f"prec_{label}_{i}"
+                semantic_label = f"S2{label}_{i}"
+                tools.r_mapcalc(expression=f"{mapname} = {i}00", overwrite=True)
+                tools.r_semantic_label(
+                    map=mapname,
+                    semantic_label=semantic_label,
+                    overwrite=True,
+                )
+                register_strings.append(f"{mapname}|2025-08-0{i}|{semantic_label}\n")
 
         tools.t_create(
             type="strds",
@@ -62,17 +69,14 @@ def session(tmp_path_factory):
             title="A test",
             description="A test",
             overwrite=True,
-            env=session.env,
         )
+        tmp_file = tools.g_tempfile().text
+        Path(tmp_file).write_text("".join(register_strings), encoding="UTF8")
         tools.t_register(
-            flags="i",
             type="raster",
             input="prec",
-            maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6",
-            start="2001-01-01",
-            increment="3 months",
+            file=tmp_file,
             overwrite=True,
-            env=session.env,
         )
         yield session
 
