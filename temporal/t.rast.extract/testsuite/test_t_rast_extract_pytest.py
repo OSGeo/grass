@@ -1,5 +1,11 @@
 """Test t.rast.extract.
 
+This test checks that t.rast.extract works also when
+a) a fully qualified name is used in the expression,
+b) it is run with a STRDS from another mapset as input and
+c) the STRDS contains maps with identical temporal extent but with
+   different semantic labels
+
 (C) 2025 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -9,26 +15,24 @@ for details.
 """
 
 import os
-import pytest
 import shutil
-
 from pathlib import Path
 
 import grass.script as gs
+import pytest
 from grass.tools import Tools
 
 
 @pytest.fixture(scope="module")
 def session(tmp_path_factory):
-    """Pytest fixture to create a temporary GRASS project with a vector map
-    containing sample points and associated attribute data.
+    """Pytest fixture to create a temporary GRASS project with a STRDS.
 
     This setup initializes the GRASS environment, sets the computational region,
-    imports point data from ASCII format, creates an attribute column 'value',
-    and populates it with numeric values for testing classification.
+    creates a series of raster maps with semantic labels, and rgisters
+    the maps in a new SpaceTimeRasterDataSet (STRDS).
 
     Yields:
-        session: active GRASS session with the prepared project and vector map.
+        session: active GRASS session with the prepared project and STRDS.
 
     """
     # Create a single temporary project directory once per module
@@ -70,7 +74,7 @@ def session(tmp_path_factory):
             description="A test",
             overwrite=True,
         )
-        tmp_file = tools.g_tempfile(pid=os.environ["PID"]).text
+        tmp_file = tools.g_tempfile(pid=os.getpid()).text
         Path(tmp_file).write_text("".join(register_strings), encoding="UTF8")
         tools.t_register(
             type="raster",
@@ -88,48 +92,80 @@ def test_selection(session):
     tools.t_rast_extract(
         input="prec",
         output="prec_1",
-        basename="prec_1",
-        where="start_time > '2001-06-01'",
+        where="start_time > '2025-08-01'",
         verbose=True,
         overwrite=True,
-        env=session.env,
     )
     assert gisenv["MAPSET"] == "perc"
 
 
 def test_selection_and_expression(session):
     """Perform a selection and a r.mapcalc expression with full name."""
+    result = "prec_2"
     tools = Tools(session=session)
     gisenv = gs.gisenv(env=session.env)
     tools.t_rast_extract(
         input="prec",
-        output="prec_2",
-        where="start_time > '2001-06-01'",
-        expression=" if(prec@perc>400,prec@perc,null())",
+        output=result,
+        where="start_time > '2025-08-01'",
+        expression=" if(prec@perc>=200,prec@perc,null())",
         basename="prec_2",
         nprocs=2,
         verbose=True,
         overwrite=True,
     )
-    strds = tools.t_list().text
-    assert "prec_2" in strds
+    strds_info = gs.parse_key_val(tools.t_info(input=result, flags="g").text)
+    expected_info = {
+        "start_time": "'2025-08-02 00:00:00'",
+        "end_time": "'2025-08-03 00:00:00'",
+        "name": result,
+        "min_min": "200.0",
+        "min_max": "300.0",
+        "max_min": "200.0",
+        "max_max": "300.0",
+        "aggregation_type": "None",
+        "number_of_semantic_labels": "4",
+        "semantic_labels": "S2A_2,S2A_3,S2B_2,S2B_3",
+        "number_of_maps": "4",
+    }
+    for k, v in expected_info.items():
+        assert (
+            strds_info[k] == v
+        ), f"Expected value for key '{k}' is {v}. Got: {strds_info[k]}"
     assert gisenv["MAPSET"] == "perc"
 
 
 def test_selection_and_expression_simple_name(session):
     """Perform a selection and a r.mapcalc expression with simple name."""
+    result = "prec_3"
     tools = Tools(session=session)
     gisenv = gs.gisenv(env=session.env)
     tools.t_rast_extract(
         input="prec",
-        output="prec_3",
-        where="start_time > '2001-06-01'",
-        expression=" if(prec> 400, prec, null())",
+        output=result,
+        where="start_time > '2025-08-01'",
+        expression=" if(prec>= 200, prec, null())",
         basename="prec_3",
         nprocs=2,
         verbose=True,
         overwrite=True,
     )
-    strds = tools.t_list().text
-    assert "prec_3" in strds
+    strds_info = gs.parse_key_val(tools.t_info(input=result, flags="g").text)
+    expected_info = {
+        "start_time": "'2025-08-02 00:00:00'",
+        "end_time": "'2025-08-03 00:00:00'",
+        "name": result,
+        "min_min": "200.0",
+        "min_max": "300.0",
+        "max_min": "200.0",
+        "max_max": "300.0",
+        "aggregation_type": "None",
+        "number_of_semantic_labels": "4",
+        "semantic_labels": "S2A_2,S2A_3,S2B_2,S2B_3",
+        "number_of_maps": "4",
+    }
+    for k, v in expected_info.items():
+        assert (
+            strds_info[k] == v
+        ), f"Expected value for key '{k}' is {v}. Got: {strds_info[k]}"
     assert gisenv["MAPSET"] == "perc"
