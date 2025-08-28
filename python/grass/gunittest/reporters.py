@@ -465,7 +465,7 @@ def wrap_stdstream_to_html(
 ) -> None:
     before = "<html><body><h1>%s</h1><pre>" % (module.name + " " + stream)
     after = "</pre></body></html>"
-    with open(outfile, "w") as html, open(infile) as text:
+    with open(outfile, "w", encoding="utf-8") as html, open(infile) as text:
         html.write(before)
         html.writelines(color_error_line(html_escape(line)) for line in text)
         html.write(after)
