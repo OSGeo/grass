@@ -121,8 +121,10 @@ int main(int argc, char *argv[])
         char name[GNAME_MAX], mapset[GMAPSET_MAX];
 
         if (!G_name_is_fully_qualified(outvect->answer, name, mapset)) {
-            if (G_strlcpy(name, outvect->answer, sizeof(name)) >= sizeof(name)) {
-                G_warning(_("Output vector name too long: <%s>"), outvect->answer);
+            if (G_strlcpy(name, outvect->answer, sizeof(name)) >=
+                sizeof(name)) {
+                G_warning(_("Output vector name too long: <%s>"),
+                          outvect->answer);
             }
             if (G_strlcpy(mapset, G_mapset(), sizeof(mapset)) >= sizeof(mapset)) {
                 G_warning(_("Mapset name too long: <%s>"), G_mapset());
