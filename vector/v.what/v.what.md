@@ -34,17 +34,18 @@ result = gs.read_command(
     map="hospitals",
     coordinates=[542690.4, 204802.7],
     distance=2000000,
-    flags="ja",
+    flags="a",
+    format="json",
 )
 
 data = json.loads(result)
-print(data[0]["categories"])
+print(data[0]["data"])
 ```
 
 Possible output:
 
 ```text
-[{'layer': 1, 'category': 22, 'driver': 'sqlite', 'database': '/grassdata/nc_spm_08_grass7/PERMANENT/sqlite/sqlite.db', 'table': 'hospitals', 'key_column': 'cat', 'attributes': {'cat': '22', 'OBJECTID': '22', 'AREA': '0', 'PERIMETER': '0', 'HLS_': '22', 'HLS_ID': '22', 'NAME': 'Randolph Hospital', 'ADDRESS': '364 White Oak St', 'CITY': 'Asheboro', 'ZIP': '27203', 'COUNTY': 'Randolph', 'PHONE': '(336) 625-5151', 'CANCER': 'yes', 'POLYGONID': '0', 'SCALE': '1', 'ANGLE': '1'}}]
+[{'layer': 1, 'category': 22, 'attributes': {'cat': 22, 'OBJECTID': 22, 'AREA': 0, 'PERIMETER': 0, 'HLS_': 22, 'HLS_ID': 22, 'NAME': 'Randolph Hospital', 'ADDRESS': '364 White Oak St', 'CITY': 'Asheboro', 'ZIP': '27203', 'COUNTY': 'Randolph', 'PHONE': '(336) 625-5151', 'CANCER': 'yes', 'POLYGONID': 0, 'SCALE': 1, 'ANGLE': 1}}]
 ```
 
 The whole JSON may look like this:
@@ -58,23 +59,19 @@ The whole JSON may look like this:
         },
         "map": "hospitals",
         "mapset": "PERMANENT",
-        "type": "Point",
         "id": 22,
-        "categories": [
+        "type": "point",
+        "data": [
             {
                 "layer": 1,
                 "category": 22,
-                "driver": "sqlite",
-                "database": "/grassdata/nc_spm_08_grass7/PERMANENT/sqlite/sqlite.db",
-                "table": "hospitals",
-                "key_column": "cat",
                 "attributes": {
-                    "cat": "22",
-                    "OBJECTID": "22",
-                    "AREA": "0",
-                    "PERIMETER": "0",
-                    "HLS_": "22",
-                    "HLS_ID": "22",
+                    "cat": 22,
+                    "OBJECTID": 22,
+                    "AREA": 0,
+                    "PERIMETER": 0,
+                    "HLS_": 22,
+                    "HLS_ID": 22,
                     "NAME": "Randolph Hospital",
                     "ADDRESS": "364 White Oak St",
                     "CITY": "Asheboro",
@@ -82,9 +79,9 @@ The whole JSON may look like this:
                     "COUNTY": "Randolph",
                     "PHONE": "(336) 625-5151",
                     "CANCER": "yes",
-                    "POLYGONID": "0",
-                    "SCALE": "1",
-                    "ANGLE": "1"
+                    "POLYGONID": 0,
+                    "SCALE": 1,
+                    "ANGLE": 1
                 }
             }
         ]

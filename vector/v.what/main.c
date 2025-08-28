@@ -32,10 +32,10 @@
 int main(int argc, char **argv)
 {
     struct {
-        struct Flag *print, *topo, *shell, *json, *multiple;
+        struct Flag *print, *topo, *shell, *json, *multiple, *connection;
     } flag;
     struct {
-        struct Option *map, *field, *coords, *maxdist, *type, *cols;
+        struct Option *map, *field, *coords, *maxdist, *type, *cols, *format;
     } opt;
     struct Cell_head window;
     struct GModule *module;
@@ -90,6 +90,15 @@ int main(int argc, char **argv)
     opt.cols->label = _("Name of attribute column(s)");
     opt.cols->description = _("Default: all columns");
 
+    opt.format = G_define_standard_option(G_OPT_F_FORMAT);
+    opt.format->options = "plain,shell,json";
+    opt.format->required = NO;
+    opt.format->answer = NULL;
+    opt.format->descriptions = _("plain;Plain text output;"
+                                 "shell;shell script style output;"
+                                 "json;JSON (JavaScript Object Notation);");
+    opt.format->guisection = _("Print");
+
     flag.topo = G_define_flag();
     flag.topo->key = 'd';
     flag.topo->description = _("Print topological information (debugging)");
@@ -116,7 +125,13 @@ int main(int argc, char **argv)
         _("Print multiple features if overlapping features are found");
     flag.multiple->guisection = _("Print");
 
-    G_option_exclusive(flag.shell, flag.json, NULL);
+    flag.connection = G_define_flag();
+    flag.connection->key = 'i';
+    flag.connection->description =
+        _("Print attribute database connection information");
+    flag.connection->guisection = _("Print");
+
+    G_option_exclusive(flag.shell, flag.json, opt.format, NULL);
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -155,7 +170,43 @@ int main(int argc, char **argv)
 
     maxd = atof(opt.maxdist->answer);
     type = Vect_option_to_types(opt.type);
-    format = flag.shell->answer ? SHELL : (flag.json->answer ? JSON : PLAIN);
+    if (opt.format->answer == NULL || opt.format->answer[0] == '\0') {
+        format = flag.shell->answer ? SHELL
+                                    : (flag.json->answer ? LEGACY_JSON : PLAIN);
+        if (format == LEGACY_JSON) {
+            G_verbose_message(
+                _("Flag 'j' is deprecated and will be removed in a future "
+                  "release. Please use format=json instead."));
+        }
+        else if (format == SHELL) {
+            G_verbose_message(
+                _("Flag 'g' is deprecated and will be removed in a future "
+                  "release. Please use format=shell instead."));
+        }
+    }
+    else {
+        if (strcmp(opt.format->answer, "json") == 0) {
+            format = JSON;
+        }
+        else if (strcmp(opt.format->answer, "shell") == 0) {
+            format = SHELL;
+        }
+        else {
+            format = PLAIN;
+        }
+    }
+
+    /* For backward compatibility */
+    if (format != JSON) {
+        if (!flag.connection->answer) {
+            G_verbose_message(_(
+                "Flag 'i' prints attribute database connection information. "
+                "It is currently always enabled for backward compatibility, "
+                "but this behavior will be removed in a future release. "
+                "Please use the 'i' flag together with the 'a' flag instead."));
+        }
+        flag.connection->answer = 1;
+    }
 
     if (format == JSON) {
         root_value = G_json_value_init_array();
@@ -231,7 +282,8 @@ int main(int argc, char **argv)
             if (ret == 3 && (ch == ',' || ch == ' ' || ch == '\t')) {
                 what(Map, nvects, vect, xval, yval, maxd, type,
                      flag.topo->answer, flag.print->answer, format,
-                     flag.multiple->answer, field, columns, root_array);
+                     flag.multiple->answer, field, columns, root_array,
+                     flag.connection->answer);
             }
             else {
                 G_warning(_("Unknown input format, skipping: '%s'"), buf);
@@ -246,7 +298,7 @@ int main(int argc, char **argv)
             yval = atof(opt.coords->answers[i + 1]);
             what(Map, nvects, vect, xval, yval, maxd, type, flag.topo->answer,
                  flag.print->answer, format, flag.multiple->answer, field,
-                 columns, root_array);
+                 columns, root_array, flag.connection->answer);
         }
     }
 
