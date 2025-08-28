@@ -24,8 +24,6 @@ from __future__ import annotations
 import json
 import shutil
 from io import StringIO
-
-# We create the namedtuple dynamically.
 from collections import namedtuple
 
 import numpy as np
@@ -96,6 +94,7 @@ class ParameterConverter:
             output_arrays.append(output_array)
             output_arrays_dict[key] = output_array
             self.temporary_rasters.append(name)
+        # We create the namedtuple dynamically, so we don't use the typed version.
         self.all_array_results = namedtuple("arrays", output_arrays_dict.keys())(  # noqa: PYI024
             *output_arrays_dict.values()
         )
