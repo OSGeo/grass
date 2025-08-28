@@ -47,7 +47,7 @@ maketrans = str.maketrans
 # TODO: this might be more extend then update
 def update_keyval_file(filename, module, returncode):
     if os.path.exists(filename):
-        keyval = text_to_keyvalue(Path(filename).read_text(), sep="=")
+        keyval = text_to_keyvalue(Path(filename).read_text(encoding="utf-8"), sep="=")
     else:
         keyval = {}
 
