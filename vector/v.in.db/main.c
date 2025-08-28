@@ -126,7 +126,8 @@ int main(int argc, char *argv[])
                 G_warning(_("Output vector name too long: <%s>"),
                           outvect->answer);
             }
-            if (G_strlcpy(mapset, G_mapset(), sizeof(mapset)) >= sizeof(mapset)) {
+            if (G_strlcpy(mapset, G_mapset(), sizeof(mapset)) >=
+                sizeof(mapset)) {
                 G_warning(_("Mapset name too long: <%s>"), G_mapset());
             }
         }
