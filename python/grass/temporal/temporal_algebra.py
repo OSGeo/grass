@@ -479,7 +479,7 @@ from .temporal_operator import TemporalOperatorParser
 
 
 class TemporalAlgebraLexer:
-    """Lexical analyzer for the GRASS GIS temporal algebra"""
+    """Lexical analyzer for the GRASS temporal algebra"""
 
     # Functions that defines an if condition, temporal buffering, snapping and
     # selection of maps with temporal extent.

@@ -4,7 +4,7 @@ from grass.gunittest.main import test
 
 
 class TestIAlbedo(TestCase):
-    """Regression tests for the i.albedo GRASS GIS module."""
+    """Regression tests for the i.albedo GRASS module."""
 
     output_raster = "albedo_output"
 

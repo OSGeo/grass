@@ -579,6 +579,7 @@ void select_from_database(void)
     }
 
     G_debug(2, "sum = %f total_size = %f", sum, total_size);
+    Vect_destroy_line_struct(Points);
 }
 
 void summary(void)
