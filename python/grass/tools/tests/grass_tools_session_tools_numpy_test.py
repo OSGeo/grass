@@ -83,3 +83,26 @@ def test_numpy_grass_array_input_output(xy_dataset_session):
     assert result.shape == (rows, cols)
     assert np.all(result == np.full((rows, cols), 10))
     assert isinstance(result, gs.array.array)
+
+
+def test_numpy_one_input_multiple_outputs_into_result(xy_dataset_session):
+    """"""
+    tools = Tools(session=xy_dataset_session, always_result=True)
+    tools.g_region(rows=2, cols=3)
+    result = tools.r_slope_aspect(
+        elevation=np.ones((2, 3)), slope=np.array, aspect=np.array
+    )
+    assert result.arrays.slope.shape == (2, 3)
+    assert np.all(result.arrays.slope == np.full((2, 3), 0))
+    assert result.arrays.aspect.shape == (2, 3)
+    assert np.all(result.arrays.aspect == np.full((2, 3), 0))
+
+    # Unpacking tuple works with the array attribute of the result object.
+    (slope, aspect) = result.arrays
+    assert slope.shape == (2, 3)
+    assert aspect.shape == (2, 3)
+
+    # Other attributes of result object still work.
+    assert result.stdout == ""
+    assert result.text == ""
+    assert len(result.stderr)

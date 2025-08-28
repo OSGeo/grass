@@ -25,6 +25,9 @@ import json
 import shutil
 from io import StringIO
 
+# We create the namedtuple dynamically.
+from collections import namedtuple
+
 import numpy as np
 
 import grass.script as gs
@@ -67,7 +70,7 @@ class ParameterConverter:
                 # We test for class or the function.
                 name = gs.append_uuid("tmp_serialized_output_array")
                 kwargs[key] = name
-                self._numpy_outputs.append((name, value))
+                self._numpy_outputs.append((name, key, value))
             elif isinstance(value, StringIO):
                 kwargs[key] = "-"
                 self.stdin = value.getvalue()
@@ -87,10 +90,15 @@ class ParameterConverter:
         The arrays are stored in the *result* attribute.
         """
         output_arrays = []
-        for name, value in self._numpy_outputs:
+        output_arrays_dict = {}
+        for name, key, unused in self._numpy_outputs:
             output_array = garray.array(name, env=env)
             output_arrays.append(output_array)
+            output_arrays_dict[key] = output_array
             self.temporary_rasters.append(name)
+        self.all_array_results = namedtuple("arrays", output_arrays_dict.keys())(  # noqa: PYI024
+            *output_arrays_dict.values()
+        )
         if len(output_arrays) == 1:
             self.result = output_arrays[0]
             return True
@@ -207,6 +215,7 @@ class ToolResult:
         self._stderr = stderr
         self._text = None
         self._cached_json = None
+        self._arrays = {}
 
     @property
     def text(self) -> str | None:
@@ -333,3 +342,10 @@ class ToolResult:
         if self._stderr is not None:
             parameters.append(f"stderr='{self._stderr}'")
         return f"{self.__class__.__name__}({', '.join(parameters)})"
+
+    @property
+    def arrays(self) -> dict:
+        return self._arrays
+
+    def set_arrays(self, arrays):
+        self._arrays = arrays

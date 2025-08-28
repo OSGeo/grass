@@ -38,10 +38,8 @@ class Tools:
 
     >>> from grass.tools import Tools
     >>> tools = Tools(session=session)
-    >>> tools.g_region(rows=100, cols=100)  # doctest: +ELLIPSIS
-    ToolResult(...)
+    >>> tools.g_region(rows=100, cols=100)
     >>> tools.r_random_surface(output="surface", seed=42)
-    ToolResult(...)
 
     For tools outputting JSON, the results can be accessed directly:
 
@@ -59,13 +57,11 @@ class Tools:
     >>> tools.v_in_ascii(
     ...     input=StringIO("13.45,29.96,200"), output="point", separator=","
     ... )
-    ToolResult(...)
 
     The *Tools* object can be used as a context manager:
 
     >>> with Tools(session=session) as tools:
     ...     tools.g_region(rows=100, cols=100)
-    ToolResult(...)
 
     A tool can be accessed via a function with the same name as the tool.
     Alternatively, it can be called through one of the *run* or *call* functions.
@@ -80,14 +76,42 @@ class Tools:
 
     >>> import numpy as np
     >>> tools.g_region(rows=2, cols=3)
-    ToolResult(...)
     >>> slope = tools.r_slope_aspect(elevation=np.ones((2, 3)), slope=np.ndarray)
+    >>> tools.r_grow(
+    ...     input=np.array([[1, np.nan, np.nan], [np.nan, np.nan, np.nan]]),
+    ...     radius=1.5,
+    ...     output=np.ndarray,
+    ... )
+    array([[1., 1., 0.],
+           [1., 1., 0.]])
 
     When multiple outputs are returned, they are returned as a tuple:
 
     >>> (slope, aspect) = tools.r_slope_aspect(
     ...     elevation=np.ones((2, 3)), slope=np.array, aspect=np.array
     ... )
+
+    To access the arrays by name, e.g., with a high number of output arrays,
+    the standard result object can be requested with *always_result*:
+
+    >>> tools = Tools(session=session, always_result=True)
+    >>> result = tools.r_slope_aspect(
+    ...     elevation=np.ones((2, 3)), slope=np.array, aspect=np.array
+    ... )
+
+    The result object than includes the arrays under the array attribute
+    where they can be accessed as attributes by names corresponding to the
+    output parameter names:
+
+    >>> slope = result.arrays.slope
+    >>> aspect = result.arrays.aspect
+
+    Using `always_result=True` is also advantageous to obtain both arrays
+    and text outputs from the tool as the result object has the same
+    attributes and functionality as without arrays:
+
+    >>> result.text
+    ''
     """
 
     def __init__(
@@ -102,6 +126,7 @@ class Tools:
         errors=None,
         capture_output=True,
         capture_stderr=None,
+        always_result=False,
     ):
         """
         If session is provided and has an env attribute, it is used to execute tools.
@@ -158,6 +183,7 @@ class Tools:
         else:
             self._capture_stderr = capture_stderr
         self._name_resolver = None
+        self._always_result = always_result
 
     def _modified_env_if_needed(self):
         """Get the environment for subprocesses
@@ -242,7 +268,11 @@ class Tools:
             kwargs, env=popen_options["env"]
         )
         if use_objects:
-            result = object_parameter_handler.result
+            if self._always_result:
+                result.set_arrays(object_parameter_handler.all_array_results)
+            else:
+                result = object_parameter_handler.result
+
         if object_parameter_handler.temporary_rasters:
             self.call(
                 "g.remove",
@@ -250,6 +280,8 @@ class Tools:
                 name=object_parameter_handler.temporary_rasters,
                 flags="f",
             )
+        if not self._always_result and not use_objects and not result.stdout:
+            return None
         return result
 
     def run_cmd(
