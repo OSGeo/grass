@@ -46,10 +46,8 @@ int stats(void)
     argv[argc++] = "-cin";
 
     argv[argc++] = "separator=:";
-    char *f_mname = NULL;
-    char *f_rname = NULL;
-    f_mname = G_fully_qualified_name(mname, mmapset);
-    f_rname = G_fully_qualified_name(rname, rmapset);
+    char *f_mname = G_fully_qualified_name(mname, mmapset);
+    char *f_rname = G_fully_qualified_name(rname, rmapset);
 
     snprintf(buf, sizeof(buf), "input=%s,%s", f_mname, f_rname);
     G_free(f_mname);
@@ -73,8 +71,8 @@ int stats(void)
     fd = fopen(stats_file, "r");
     if (fd == NULL) {
         unlink(stats_file);
-        G_warning(_("r.stats produced no output"));
-        return 0;
+        snprintf(buf, sizeof(buf), "Unable to open result file <%s>\n",
+                 stats_file);
     }
 
     while (G_getl(buf, sizeof buf, fd)) {
