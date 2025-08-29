@@ -75,7 +75,7 @@ char *format_options(void)
     ret = NULL;
     list = format_list(&count, &len);
 
-    if (len > 0) {
+    if (list && len > 0) {
         ret = G_malloc((len + 1) * sizeof(char)); /* \0 */
         *ret = '\0';
         for (i = 0; i < count; i++) {
@@ -91,7 +91,6 @@ char *format_options(void)
     }
 
     G_debug(2, "all drivers: %s", ret);
-
     return ret;
 }
 
