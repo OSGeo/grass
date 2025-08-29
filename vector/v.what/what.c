@@ -358,15 +358,6 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
         Vect_reset_list(lineList);
         Vect_reset_list(areaList);
 
-        if (format == JSON) {
-            map_value = G_json_value_init_object();
-            if (map_value == NULL) {
-                G_fatal_error(
-                    _("Failed to initialize JSON object. Out of memory?"));
-            }
-            map_object = G_json_object(map_value);
-        }
-
         if (multiple) {
             int type;
 
@@ -443,7 +434,13 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
             nlines++;
         }
 
-        if ((nfeats > 0 || G_verbose() >= G_verbose_std()) && format == JSON) {
+        if (nfeats > 0 && format == JSON) {
+            map_value = G_json_value_init_object();
+            if (map_value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON object. Out of memory?"));
+            }
+            map_object = G_json_object(map_value);
             G_json_object_dotset_number(map_object, "coordinate.easting", east);
             G_json_object_dotset_number(map_object, "coordinate.northing",
                                         north);
@@ -470,8 +467,10 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                     Map[i].name, Map[i].mapset);
             break;
         case JSON:
-            G_json_object_set_string(map_object, "map", Map[i].name);
-            G_json_object_set_string(map_object, "mapset", Map[i].mapset);
+            if (nfeats > 0) {
+                G_json_object_set_string(map_object, "map", Map[i].name);
+                G_json_object_set_string(map_object, "mapset", Map[i].mapset);
+            }
             break;
         default:
             fprintf(stdout, "%s\nMap: %s\nMapset: %s\n", SEP, Map[i].name,
@@ -489,7 +488,6 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                 fprintf(stdout, "}\n");
                 break;
             case JSON:
-                G_json_array_append_value(root_array, map_value);
                 break;
             case PLAIN:
                 fprintf(stdout, _("Nothing found.\n"));

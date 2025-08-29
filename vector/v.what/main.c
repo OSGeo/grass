@@ -109,14 +109,26 @@ int main(int argc, char **argv)
     flag.print->description = _("Print attribute information");
     flag.print->guisection = _("Print");
 
+    flag.connection = G_define_flag();
+    flag.connection->key = 'i';
+    flag.connection->description =
+        _("Print attribute database connection information");
+    flag.connection->guisection = _("Print");
+
     flag.shell = G_define_flag();
     flag.shell->key = 'g';
-    flag.shell->description = _("Print the stats in shell script style");
+    flag.shell->label = _("Print the stats in shell script style [deprecated]");
+    flag.shell->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=shell instead.");
     flag.shell->guisection = _("Print");
 
     flag.json = G_define_flag();
     flag.json->key = 'j';
-    flag.json->description = _("Print the stats in JSON");
+    flag.json->description = _("Print the stats in JSON [deprecated]");
+    flag.json->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=json instead.");
     flag.json->guisection = _("Print");
 
     flag.multiple = G_define_flag();
@@ -125,13 +137,8 @@ int main(int argc, char **argv)
         _("Print multiple features if overlapping features are found");
     flag.multiple->guisection = _("Print");
 
-    flag.connection = G_define_flag();
-    flag.connection->key = 'i';
-    flag.connection->description =
-        _("Print attribute database connection information");
-    flag.connection->guisection = _("Print");
-
     G_option_exclusive(flag.shell, flag.json, opt.format, NULL);
+    G_option_requires(flag.connection, flag.print, NULL);
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
