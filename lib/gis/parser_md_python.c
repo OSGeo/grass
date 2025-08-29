@@ -57,7 +57,7 @@ void print_python_short_flag(FILE *file, const char *key, const char *label,
 void print_python_long_flag(FILE *file, const char *key, const char *label,
                             const char *description, const char *indent)
 {
-    fprintf(file, "%s**%s**: bool, *optional*", indent, key);
+    fprintf(file, "%s**%s** : bool, *optional*", indent, key);
     fprintf(file, MD_NEWLINE);
     fprintf(file, "\n");
     if (label != NULL) {
