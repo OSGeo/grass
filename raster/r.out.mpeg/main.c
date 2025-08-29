@@ -37,6 +37,7 @@
  * PARTICULAR PURPOSE.
  */
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -455,7 +456,10 @@ static char **gee_wildfiles(const char *wildarg, const char *element, int *num)
     mlist(element, wildarg, tfile);
     files = parse(tfile, num);
 
-    remove(tfile);
+    if (remove(tfile) != 0) {
+        G_warning(_("Failed to remove temporary file <%s>: %s"),
+                  tfile, strerror(errno));
+    }
     G_free(tfile);
 
     return files;
