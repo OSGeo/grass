@@ -1341,7 +1341,8 @@ int N_les_integrate_dirichlet_3d(N_les *les, N_geom_data *geom,
             }
         }
     }
-
+    G_free(dvect2);
+    G_free(dvect1);
     return 0;
 }
 
