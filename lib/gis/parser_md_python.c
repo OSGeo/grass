@@ -559,4 +559,18 @@ void G__md_print_python_long_version(FILE *file, const char *indent,
                            _("Very quiet module output"), indent);
     fprintf(file, MD_NEWLINE);
     fprintf(file, "\n");
+
+    if (!tools_api)
+        return;
+
+    fprintf(file, "\n%sReturns:\n\n", indent);
+    fprintf(file, "%s**result** : ", indent);
+    fprintf(file, "grass.tools.support.ToolResult");
+    fprintf(file, " | None");
+    fprintf(file, MD_NEWLINE);
+    fprintf(file, "\n%s", indent);
+    fprintf(file, "If the tool produces text as standard output, a "
+                  "*ToolResult* object will be returned. "
+                  "Otherwise, `None` will be returned.");
+    fprintf(file, "\n");
 }
