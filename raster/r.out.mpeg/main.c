@@ -457,8 +457,8 @@ static char **gee_wildfiles(const char *wildarg, const char *element, int *num)
     files = parse(tfile, num);
 
     if (remove(tfile) != 0) {
-        G_warning(_("Failed to remove temporary file <%s>: %s"),
-                  tfile, strerror(errno));
+        G_warning(_("Failed to remove temporary file <%s>: %s"), tfile,
+                  strerror(errno));
     }
     G_free(tfile);
 
