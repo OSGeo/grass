@@ -2,7 +2,6 @@
 Tests assertion methods for vectors.
 """
 
-import unittest
 from grass.exceptions import CalledModuleError
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -282,7 +281,6 @@ class TestVectorGeometryAssertions(TestCase):
         self.assertFileExists(self.simple_base_file)
         self.assertFileExists(self.simple_modified_file)
 
-    @unittest.expectedFailure
     def test_assertVectorEqualsAscii_by_import(self):
         amap = "simple_vector_map_imported_base"
         self.runModule(
