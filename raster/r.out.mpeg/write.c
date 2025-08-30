@@ -327,8 +327,8 @@ void clean_files(char *file, char *files[], int num)
     for (i = 0; i < num; i++) {
         if (remove(files[i]) != 0) {
             int e = errno;
-            G_warning(_("Failed to remove file <%s>: %s"),
-                      files[i], strerror(e));
+            G_warning(_("Failed to remove file <%s>: %s"), files[i],
+                      strerror(e));
         }
     }
 }
