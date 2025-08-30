@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-16 15:40+0000\n"
-"PO-Revision-Date: 2025-08-23 01:35+0000\n"
+"POT-Creation-Date: 2025-08-23 15:39+0000\n"
+"PO-Revision-Date: 2025-08-25 16:34+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/fr/>\n"
 "Language: fr\n"
@@ -6386,9 +6386,8 @@ msgid "&Export history"
 msgstr "&Exporter l'historique"
 
 #: ../gui/wxpython/history/browser.py:396
-#, fuzzy
 msgid "Export history of executed commands to a file"
-msgstr "Exporter une carte vecteur vers un fichier SVG."
+msgstr "Exporter l'historique des commandes exécutées vers un fichier"
 
 #: ../gui/wxpython/history/browser.py:463
 #, fuzzy, python-brace-format
@@ -8602,7 +8601,7 @@ msgstr "Le projet '{}' existe déjà. Veuillez considérer l'utilisation d'un au
 
 #: ../gui/wxpython/location_wizard/wizard.py:311
 msgid "Existing project path"
-msgstr ""
+msgstr "Chemin du projet existant"
 
 #: ../gui/wxpython/location_wizard/wizard.py:346
 msgid "Title of the project is limited only to one line and 256 characters. The rest of the text will be ignored."
@@ -13050,7 +13049,7 @@ msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:409
 msgid "Error when deleting mapsets"
-msgstr ""
+msgstr "Erreur lors de la suppression de jeux de cartes"
 
 #: ../gui/wxpython/startup/guiutils.py:411
 #, python-brace-format
@@ -13093,9 +13092,8 @@ msgid "Delete selected projects"
 msgstr "Supprimer l'objet sélectionné"
 
 #: ../gui/wxpython/startup/guiutils.py:494
-#, fuzzy
 msgid "Error when deleting projects"
-msgstr "Erreur à la lecture du fichier '%s'."
+msgstr "Erreur lors de la suppression des projets"
 
 #: ../gui/wxpython/startup/guiutils.py:496
 #, python-brace-format

@@ -3,19 +3,21 @@
 # This file is distributed under the same license as the GRASS GIS package.
 # transifex generated, 2017
 #
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-16 15:40+0000\n"
-"PO-Revision-Date: 2018-03-10 17:22+0100\n"
-"Last-Translator: Zoltan Siki <siki@agt.bme.hu>, 2018\n"
-"Language-Team: Hungarian (https://www.transifex.com/grass-gis/teams/45198/hu/)\n"
+"POT-Creation-Date: 2025-08-23 15:39+0000\n"
+"PO-Revision-Date: 2025-08-26 14:19+0000\n"
+"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
+"Language-Team: Hungarian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: ../gui/wxpython/animation/controller.py:244
 #: ../gui/wxpython/animation/dialogs.py:858
@@ -4880,7 +4882,7 @@ msgstr "Próbálja meg beállítani a GRASS_ADDON_PATH vagy GRASS_ADDON_BASE vá
 #, fuzzy
 #| msgid "About GRASS GIS"
 msgid "About GRASS"
-msgstr "GRASS GIS névjegy"
+msgstr "GRASS névjegy"
 
 #: ../gui/wxpython/gui_core/ghelp.py:80
 msgid "Info"
@@ -6846,7 +6848,7 @@ msgstr "Nem tudom betölteni az ikon témát. Ok: %s. Kilépés a wxGUI-ból..."
 #, fuzzy
 #| msgid "1. Select GRASS GIS database directory"
 msgid "1. Select GRASS database directory"
-msgstr "1. Válasszon GRASS GIS adatbázis könyvtárat"
+msgstr "1. Válasszon GRASS adatbázis könyvtárat"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:127
 msgid "2. Select GRASS Location"
@@ -6860,7 +6862,7 @@ msgstr "3. Válasszon GRASS térképcsoportot"
 #, fuzzy
 #| msgid "GRASS GIS database directory contains Locations."
 msgid "GRASS database directory contains Locations."
-msgstr "A GRASS GIS adatbázis könyvtár tartalmaz helyeket."
+msgstr "A GRASS adatbázis könyvtár tartalmaz helyeket."
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:158
 msgid "All data in one Location is in the same  coordinate reference system (projection). One Location can be one project. Location contains Mapsets."
@@ -6931,7 +6933,7 @@ msgstr "Kiválasztott térképcsoport törlése"
 #, fuzzy, python-format
 #| msgid "GRASS GIS %s startup%s"
 msgid "GRASS %s startup%s"
-msgstr "GRASS GIS %sindítás%s"
+msgstr "GRASS %sindítás%s"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:304
 msgid "Enter GRASS session"
@@ -7244,7 +7246,7 @@ msgstr "Cél Z:"
 #, fuzzy
 #| msgid "GRASS GIS Manage Ground Control Points"
 msgid "GRASS Manage Ground Control Points"
-msgstr "GRASS GIS illesztőpont kezelés"
+msgstr "GRASS illesztőpont kezelés"
 
 #: ../gui/wxpython/iscatt/controllers.py:209
 msgid "No data set."
@@ -12434,7 +12436,7 @@ msgstr ""
 #, fuzzy
 #| msgid "GRASS GIS Setup for r.li modules"
 msgid "Setup for r.li modules - GRASS"
-msgstr "GRASS GIS beállítás az r.li modulhoz"
+msgstr "GRASS beállítás az r.li modulhoz"
 
 #: ../gui/wxpython/rlisetup/sampling_frame.py:234
 #: ../gui/wxpython/rlisetup/sampling_frame.py:350
@@ -13524,7 +13526,7 @@ msgstr ""
 #, fuzzy
 #| msgid "GRASS GIS Temporal Plot Tool"
 msgid "Temporal Plot Tool - GRASS"
-msgstr "GRASS GIS időbeli rajz eszköz"
+msgstr "GRASS időbeli rajz eszköz"
 
 #: ../gui/wxpython/vdigit/dialogs.py:91
 msgid "List of categories - right-click to delete"
