@@ -24,13 +24,19 @@
 /* For rowio */
 int rowio_get_row(int fd, void *buf, int row, int buf_len)
 {
-    lseek(fd, ((off_t)row) * buf_len, SEEK_SET);
-    errno = 0;
+    if (lseek(fd, ((off_t)row) * buf_len, SEEK_SET) == -1) {
+        int err = errno;
+        G_fatal_error(_("Seek error on temp file. %d: %s"), err, strerror(err));
+    }
+
     ssize_t reads = read(fd, buf, (size_t)buf_len);
-    if (reads == -1)
+    if (reads == -1) {
+        int err = errno;
         G_fatal_error(
             _("There was an error reading data from a temporary file. %d: %s"),
-            errno, strerror(errno));
+            err, strerror(err));
+    }
+
     return (reads == buf_len);
 }
 
@@ -38,13 +44,19 @@ int rowio_get_row(int fd, void *buf, int row, int buf_len)
 int rowio_put_row(int fd, const void *buf, int row, int buf_len)
 {
     // can't use G_fseek, as rowio operates on file descriptors
-    lseek(fd, ((off_t)row) * buf_len, SEEK_SET);
-    errno = 0;
+    if (lseek(fd, ((off_t)row) * buf_len, SEEK_SET) == -1) {
+        int err = errno;
+        G_fatal_error(_("Seek error on temp file. %d: %s"), err, strerror(err));
+    }
+
     ssize_t writes = write(fd, buf, (size_t)buf_len);
-    if (writes == -1)
+    if (writes == -1) {
+        int err = errno;
         G_fatal_error(
             _("There was an error writing data from a temporary file. %d: %s"),
-            errno, strerror(errno));
+            err, strerror(err));
+    }
+
     return (writes == buf_len);
 }
 
