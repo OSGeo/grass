@@ -9,11 +9,11 @@ authors:
 GRASS Python interface provides libraries to use GRASS tools, create scripts,
 and access the GRASS data structures. The Python interface consists of
 three main libraries:
-*[grass.tools](https://grass.osgeo.org/grass-stable/manuals/libpython/tools_index.html)*
+*[grass.tools](https://grass.osgeo.org/grass-devel/manuals/libpython/tools_index.html)*
 provides a Python interface to GRASS tools,
-*[grass.script](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script_intro.html)*
+*[grass.script](https://grass.osgeo.org/grass-devel/manuals/libpython/grass.script_intro.html)*
 handles GRASS projects and sessions in Python,
-and *[grass.pygrass](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_index.html)*
+and *[grass.pygrass](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_index.html)*
 enables a fine-grained access to the GRASS data structures.
 
 ## Scripting
@@ -65,7 +65,7 @@ tools.r_slope_aspect(elevation="elevation", slope="slope")
 
 ### Running tools
 
-Tools can be accessed through a *[grass.tool.Tools](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.tools.html#grass.tools.Tools)*
+Tools can be accessed through a *[grass.tool.Tools](https://grass.osgeo.org/grass-devel/manuals/libpython/grass.tools.html#grass.tools.Tools)*
 object from *grass.tools* which is created either within an active GRASS
 session or with a session passed as a parameter (see above).
 Here, we create the *Tools* object assuming an active session:
@@ -119,7 +119,7 @@ tools.r_colors(
 ```
 
 The methods will raise *CalledModuleError* if a tool fails.
-For customization of error handling, please refer to the [documentation](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html#grass.script.core.handle_errors).
+For customization of error handling, please refer to the [documentation](https://grass.osgeo.org/grass-devel/manuals/libpython/grass.script.html#grass.script.core.handle_errors).
 
 !!! grass-tip "Overwriting data"
     By default, GRASS prevents overwriting existing maps to protect your data,
@@ -183,7 +183,7 @@ we can use the *text* attribute:
 print(tools.g_region(flags="p").text)
 ```
 
-The documentation of *[grass.tool.support.ToolResult](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.tools.html#grass.tools.support.ToolResult)*
+The documentation of *[grass.tool.support.ToolResult](https://grass.osgeo.org/grass-devel/manuals/libpython/grass.tools.html#grass.tools.support.ToolResult)*
 provides an overview of all the attributes and text processing functions,
 such as *text_split* function and *comma_items* attribute.
 
@@ -193,8 +193,8 @@ The GRASS Python API includes a NumPy interface that allows you to read
 and write raster data as NumPy arrays.
 This makes it easy to integrate GRASS with the broader Python scientific
 stack for advanced analysis and custom modeling.
-Using *[grass.script.array](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html#script.array.array)*
-and *[grass.script.array3d](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html#script.array.array3d)*,
+Using *[grass.script.array](https://grass.osgeo.org/grass-devel/manuals/libpython/grass.script.html#script.array.array)*
+and *[grass.script.array3d](https://grass.osgeo.org/grass-devel/manuals/libpython/grass.script.html#script.array.array3d)*,
 you can switch between GRASS raster maps and NumPy arrays, run GRASS tools,
 and perform array-based operations as needed.
 It works for rasters as well as for 3D rasters.
@@ -255,26 +255,26 @@ core packages of `grass.pygrass` include:
 
 | Topic                         | Documentation Link                                                                                   |
 |-------------------------------|------------------------------------------------------------------------------------------------------|
-| Project and Region Management | [grass.pygrass.gis](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_gis.html)         |
-| Raster Data Access            | [grass.pygrass.raster](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html)   |
-| Vector Data Access            | [grass.pygrass.vector](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_vector.html)   |
+| Project and Region Management | [grass.pygrass.gis](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_gis.html)         |
+| Raster Data Access            | [grass.pygrass.raster](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_raster.html)   |
+| Vector Data Access            | [grass.pygrass.vector](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_vector.html)   |
 
 For a complete reference of the PyGRASS library, see the full documentation:
 
 <!-- markdownlint-disable-next-line line-length -->
-[Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_index.html){ .md-button }
+[Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_index.html){ .md-button }
 
 ### Project Management
 
-The [grass.pygrass.gis](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_gis.html)
+The [grass.pygrass.gis](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_gis.html)
 module provides access to the project and region management
-of GRASS. The [grass.pygrass.gis](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_gis.html)
+of GRASS. The [grass.pygrass.gis](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_gis.html)
 module provides functions to create, manage, and delete GRASS projects and
-mapsets. The core classes include [Gisdbase](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.gis.html#pygrass.gis.Gisdbase),
-[Location](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.gis.html#pygrass.gis.Location),
+mapsets. The core classes include [Gisdbase](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass.gis.html#pygrass.gis.Gisdbase),
+[Location](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass.gis.html#pygrass.gis.Location),
 and [Mapset](https://grass.osgeo.org/grass85/manuals/libpython/pygrass.gis.html#pygrass.gis.Mapset).
 
-The [Gisdbase](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.gis.html#pygrass.gis.Gisdbase)
+The [Gisdbase](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass.gis.html#pygrass.gis.Gisdbase)
 class provides access to the GRASS database
 and where you can manage GRASS projects and mapsets.
 
@@ -289,14 +289,14 @@ print(projects)
 ```
 
 This will return a list of all projects in the GRASS database directory as
-[Location](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.gis.html#pygrass.gis.Location)
+[Location](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass.gis.html#pygrass.gis.Location)
 objects.
 
 ```text
 ['nc_spm_08_grass7', 'my_project']
 ```
 
-The [Location](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.gis.html#pygrass.gis.Location)
+The [Location](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass.gis.html#pygrass.gis.Location)
 object provides access to the specific project
 and its mapsets.
 
@@ -326,11 +326,11 @@ rasters = mapset.glist(type='raster')
 ```
 
 For more details about the `gis` module, see the Full Documentation:
-[GIS Module](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_gis.html)
+[GIS Module](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_gis.html)
 
 ### Region
 
-The [grass.pygrass.gis.region](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.gis.html#pygrass.gis.region.Region)
+The [grass.pygrass.gis.region](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass.gis.html#pygrass.gis.region.Region)
 module gives access to read and modify computational regions. For example, to
 get the current extent and resolution of the active mapset:
 
@@ -394,7 +394,7 @@ Resolution: [10.0, 10.0]
 For more details about the `region` module, see the Full Documentation:
 
 <!-- markdownlint-disable-next-line line-length -->
-[Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.gis.html#module-pygrass.gis){ .md-button }
+[Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass.gis.html#module-pygrass.gis){ .md-button }
 
 ### Data Management
 
@@ -402,20 +402,20 @@ For more details about the `region` module, see the Full Documentation:
 
 Do you have an idea that requires more advanced raster processing? PyGRASS provides
 direct read and write access to raster data with the
-[grass.pygrass.raster](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html)
-module. The core classes include [RasterRow](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rasterrow),
-[RasterRowIO](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rasterrowio),
-and [RasterSegment](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rastersegment).
+[grass.pygrass.raster](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_raster.html)
+module. The core classes include [RasterRow](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_raster.html#rasterrow),
+[RasterRowIO](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_raster.html#rasterrowio),
+and [RasterSegment](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_raster.html#rastersegment).
 Each class provides a different level of access to the raster data with its own set
 of read and write capabilities, as shown in the table below.
 
 | Class          | Description                                             | Read | Write |
 |----------------|-------------------------------------------------------- |-------|------|
-| [RasterRow](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rasterrow)    | Read write access to raster row data.                       | :rabbit2: Random  | :rabbit2: Sequential |
-| [RasterRowIO](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rasterrowio)  | Fast read only access to raster row data.                   | :rabbit2: Cached | :x: No |
-| [RasterSegment](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rastersegment) | Simultaneous read write access to tiled raster segments stored on disk.       | :turtle: Cached | :turtle: Random |
+| [RasterRow](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_raster.html#rasterrow)    | Read write access to raster row data.                       | :rabbit2: Random  | :rabbit2: Sequential |
+| [RasterRowIO](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_raster.html#rasterrowio)  | Fast read only access to raster row data.                   | :rabbit2: Cached | :x: No |
+| [RasterSegment](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_raster.html#rastersegment) | Simultaneous read write access to tiled raster segments stored on disk.       | :turtle: Cached | :turtle: Random |
 
-The [RasterRow](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rasterrow)
+The [RasterRow](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_raster.html#rasterrow)
 class allows for either read or write access to raster row data
 and provides methods to access raster state and metadata. To read all rows of the
 `elevation` raster:
@@ -459,7 +459,7 @@ with raster.RasterRow('elevation') as elev:
 ```
 
 !!! grass-tip "RasterSegment"
-    The [RasterSegment](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rastersegment)
+    The [RasterSegment](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_raster.html#rastersegment)
     class provides simultaneous read and write access to tiled
     raster segments stored on disk. This class is useful for working with large
     raster datasets that do not fit into memory.
@@ -467,21 +467,21 @@ with raster.RasterRow('elevation') as elev:
 For more details about the `raster` module, see the Full Documentation:
 
 <!-- markdownlint-disable-next-line line-length -->
-[Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html){ .md-button }
+[Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_raster.html){ .md-button }
 
 #### Vector
 
-The [grass.pygrass.vector](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_vector.html#vector)
+The [grass.pygrass.vector](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_vector.html#vector)
 module provides direct read and write access to vector data in GRASS.
-The core classes include [Vector](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.Vector)
-and [VectorTopo](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_vector.html#vectortopo-label).
+The core classes include [Vector](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass.vector.html#pygrass.vector.Vector)
+and [VectorTopo](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_vector.html#vectortopo-label).
 
 | Class          | Description  |
 |----------------|--------------|
-| [Vector](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.Vector) | Provides basic information about vector data. |
-| [VectorTopo](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_vector.html#vectortopo-label) | Read and write access to vector data. |
+| [Vector](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass.vector.html#pygrass.vector.Vector) | Provides basic information about vector data. |
+| [VectorTopo](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_vector.html#vectortopo-label) | Read and write access to vector data. |
 
-Here is a simple example with [Vector](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.Vector)
+Here is a simple example with [Vector](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass.vector.html#pygrass.vector.Vector)
 to check if a vector map exists and print the mapset it is in.
 
 ```python
@@ -496,9 +496,9 @@ if roads.exists():
 
 ```
 
-With the [VectorTopo](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_vector.html#vectortopo-label)
+With the [VectorTopo](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_vector.html#vectortopo-label)
 class you can get the same basic information about the
-vector map returned by the [Vector](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.Vector)
+vector map returned by the [Vector](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass.vector.html#pygrass.vector.Vector)
 class in addition to read and write access.
 
 ```python
@@ -517,22 +517,22 @@ with VectorTopo('roadsmajor') as roads:
 
 #### Geometry and Attributes
 
-In GRASS vector [geometry](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_vector.html#geometry-classes)
+In GRASS vector [geometry](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_vector.html#geometry-classes)
 and attributes are treated separately. This means that the attributes of a
 vector are not automatically read when the geometry is read.
 
 To build a geometry object, you can use the geometry class in the
-[grass.pygrass.vector.geometry](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#module-pygrass.vector.geometry)
+[grass.pygrass.vector.geometry](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass.vector.html#module-pygrass.vector.geometry)
 module.
 
 | Geometry Class | Description |
 |----------------|-------------|
-| [Area](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Area) | Represents the topological composition of a closed ring of boundaries and a centroid. |
-| [Boundary](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Boundary) | Represents the border line to describe an area. |
-| [Centroid](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Centroid) | Represents a centroid feature in a vector map. |
-| [Isle](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Isle) | Represents an isle feature in a vector map. |
-| [Line](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Line) | Represents a line feature in a vector map. |
-| [Point](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Point) | Represents a point feature in a vector map. |
+| [Area](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Area) | Represents the topological composition of a closed ring of boundaries and a centroid. |
+| [Boundary](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Boundary) | Represents the border line to describe an area. |
+| [Centroid](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Centroid) | Represents a centroid feature in a vector map. |
+| [Isle](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Isle) | Represents an isle feature in a vector map. |
+| [Line](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Line) | Represents a line feature in a vector map. |
+| [Point](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Point) | Represents a point feature in a vector map. |
 
 Each geometry class has its own set of methods to help extract useful
 information. For example, let's built a `Boundary` object from a list of points
@@ -549,7 +549,7 @@ area = border.area
 ```
 
 To access the attributes of a vector map, you can use the `attrs` attribute
-of the [VectorTopo](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_vector.html#vectortopo-label)
+of the [VectorTopo](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_vector.html#vectortopo-label)
 object. The `attrs` attribute is a dictionary that contains
 the attributes of the current feature.
 
@@ -567,7 +567,7 @@ with VectorTopo('roadsmajor') as roads:
 ```
 
 To write a new feature to the `roads` vector map with attributes
-we need to access the database of the vector map with the [VectorTopo](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_vector.html#vectortopo-label).
+we need to access the database of the vector map with the [VectorTopo](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_vector.html#vectortopo-label).
 
 Here is an example of how to write a new feature to the `roads` vector map.
 
@@ -603,7 +603,7 @@ with VectorTopo('roadsmajor', mode='rw') as roads:
     roads.build()
 ```
 
-Featurs can also be updated by using the [rewrite](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.VectorTopo.rewrite)
+Featurs can also be updated by using the [rewrite](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass.vector.html#pygrass.vector.VectorTopo.rewrite)
 method instead of the `write`. If the geometry of the feature has not changed,
 you can save the attributes to the database table without rebuilding the
 topology using `table.conn.commit`.
@@ -631,10 +631,10 @@ You can also use many of `Geometry` and `Attribute` methods to filter
 features in a more concise way.
 
 For example, to test if a random point is within 5000 meters of a road segment
-you can use the [distance](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Line.distance)
-method of the [Line](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Line)
-geometry object. The [distance](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Line.distance)
-method returns a [LineDist](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.LineDist)
+you can use the [distance](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Line.distance)
+method of the [Line](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Line)
+geometry object. The [distance](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Line.distance)
+method returns a [LineDist](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.LineDist)
 object that contains the distance and the closest point on the line.
 
 ```python
@@ -662,8 +662,8 @@ with VectorTopo('roadsmajor') as roads:
 ```
 
 Or to simple filter a table using `SQL` you can use the `where` method with
-[table_to_dict](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.VectorTopo.table_to_dict)
-to get a dictionary of the features that match the query, the [table.Filter](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.table.Filters)
+[table_to_dict](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass.vector.html#pygrass.vector.VectorTopo.table_to_dict)
+to get a dictionary of the features that match the query, the [table.Filter](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass.vector.html#pygrass.vector.table.Filters)
 class for more advanced operations.
 
 ```python
@@ -700,13 +700,13 @@ SELECT * FROM roadsmajor WHERE ROAD_NAME = 'NC-50' ORDER BY cat LIMIT 5;
 
 !!! grass-tip "Used Different SQL Database"
     The default database for GRASS is SQLite, but you can use other SQL databases
-    like PostgreSQL with the `driver` option in the [VectorTopo](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_vector.html#vectortopo-label)
+    like PostgreSQL with the `driver` option in the [VectorTopo](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_vector.html#vectortopo-label)
     object.
 
 For more details about the `vector` module, see the Full Documentation:
 
 <!-- markdownlint-disable-next-line line-length -->
-[Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_vector.html){ .md-button }
+[Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_vector.html){ .md-button }
 
 ## Additional ways to access tools
 
@@ -719,12 +719,12 @@ The *grass.script* package provides a set of tool-calling functions
 which follow text input and output handling use cases from
 a command-line shell perspective.
 Four main functions are:
-*[gs.run_command](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html#script.core.run_command)*,
-*[gs.parse_command](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html#script.core.parse_command)*,
-*[gs.read_command](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html#script.core.read_command)*,
-and *[gs.write_command](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html#script.core.write_command)*.
+*[gs.run_command](https://grass.osgeo.org/grass-devel/manuals/libpython/grass.script.html#script.core.run_command)*,
+*[gs.parse_command](https://grass.osgeo.org/grass-devel/manuals/libpython/grass.script.html#script.core.parse_command)*,
+*[gs.read_command](https://grass.osgeo.org/grass-devel/manuals/libpython/grass.script.html#script.core.read_command)*,
+and *[gs.write_command](https://grass.osgeo.org/grass-devel/manuals/libpython/grass.script.html#script.core.write_command)*.
 
-The *[gs.run_command](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html#script.core.run_command)*
+The *[gs.run_command](https://grass.osgeo.org/grass-devel/manuals/libpython/grass.script.html#script.core.run_command)*
 function is used to run a GRASS tool when you require
 no return value. For example, when computing raster slope with
 [r.slope.aspect](r.slope.aspect.md):
@@ -733,7 +733,7 @@ no return value. For example, when computing raster slope with
 gs.run_command("r.slope.aspect", elevation="elevation", slope="slope")
 ```
 
-The *[gs.parse_command](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html#script.core.parse_command)*
+The *[gs.parse_command](https://grass.osgeo.org/grass-devel/manuals/libpython/grass.script.html#script.core.parse_command)*
 function is useful when the tool returns
 machine-readable text output on the standard output.
 For example, use it to parse the output of [v.db.select](v.db.select.md#json)
@@ -743,7 +743,7 @@ to represent attribute data in a Python dictionary:
 data = gs.parse_command("v.db.select", map="hospitals", format="json")
 ```
 
-The *[gs.read_command](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html#script.core.read_command)*
+The *[gs.read_command](https://grass.osgeo.org/grass-devel/manuals/libpython/grass.script.html#script.core.read_command)*
 function returns the text output of a GRASS tool.
 This can be useful when you want to print human-readable output of a tool.
 For example, when reading the output of [g.region](g.region.md):
@@ -752,7 +752,7 @@ For example, when reading the output of [g.region](g.region.md):
 print(gs.read_command("g.region", flags="p"))
 ```
 
-The *[gs.write_command](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html#script.core.write_command)*
+The *[gs.write_command](https://grass.osgeo.org/grass-devel/manuals/libpython/grass.script.html#script.core.write_command)*
 function is used to send data to a GRASS tool
 through the standard input. For example, when writing a custom color scheme to
 a raster map with [r.colors](r.colors.md):
@@ -774,7 +774,7 @@ gs.write_command("r.colors",
 
 ### Tools as objects
 
-The [grass.pygrass.modules](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_modules.html)
+The [grass.pygrass.modules](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_modules.html)
 module provides access to the GRASS tools (also called modules). The `Module` class
 provides a Pythonic interface to the GRASS modules and tools.
 
@@ -814,13 +814,13 @@ slope_aspect_tool.keywords
 slope_aspect_tool.inputs
 ```
 
-The [grass.pygrass.modules](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_modules.html)
+The [grass.pygrass.modules](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_modules.html)
 module provides an alterative approach to running GRASS tools.
 
 To learn more about the `Module` class, see the Full Documentation:
 
 <!-- markdownlint-disable-next-line line-length -->
-[Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_modules.html#module-class){ .md-button }
+[Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_modules.html#module-class){ .md-button }
 
 ## GRASS Python best practices
 
