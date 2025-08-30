@@ -151,7 +151,7 @@ class ToolResult:
 
     @property
     def text(self) -> str | None:
-        """Text output as decoded string"""
+        """Text output as decoded string without leading and trailing whitespace"""
         if self._text is not None:
             return self._text
         if self._stdout is None:
@@ -209,7 +209,7 @@ class ToolResult:
         Empty or no output results in an empty list.
         """
         if not self.text:
-            # This provides consitent behavior with explicit separator including
+            # This provides consistent behavior with explicit separator including
             # a single space and no separator which triggers general whitespace
             # splitting which results in an empty list for an empty string.
             return []
@@ -219,10 +219,12 @@ class ToolResult:
 
     @property
     def stdout(self) -> str | bytes | None:
+        """Standard output (text output) without modifications"""
         return self._stdout
 
     @property
     def stderr(self) -> str | bytes | None:
+        """Standard error output (messages and errors) without modifications"""
         return self._stderr
 
     def _json_or_error(self) -> dict:
