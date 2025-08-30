@@ -218,8 +218,8 @@ include(generate_html)
 
 set(MKHTML_PY ${CMAKE_BINARY_DIR}/utils/mkhtml.py)
 set(THUMBNAILS_PY ${CMAKE_BINARY_DIR}/utils/thumbnails.py)
-set(HTML2MAN VERSION_NUMBER=${GRASS_VERSION_NUMBER} ${PYTHON_EXECUTABLE}
-             ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/g.html2man.py)
+set(MD2MAN VERSION_NUMBER=${GRASS_VERSION_NUMBER} ${PYTHON_EXECUTABLE}
+             ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/markdown2man.py)
 
 set(env_path "$ENV{PATH}")
 
