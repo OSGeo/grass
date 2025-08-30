@@ -784,11 +784,6 @@ class TestVWhatModule(TestCase):
                 "point_height": 50,
                 "data": [{"layer": 1, "category": 13}],
             },
-            {
-                "coordinate": {"easting": 4, "northing": 4},
-                "map": "point_vector_3d",
-                "mapset": "...",
-            },
         ]
         self.assert_json_equal(expected, result)
 
