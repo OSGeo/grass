@@ -92,6 +92,15 @@ class CalledModuleError(subprocess.CalledProcessError):
             returncode=returncode,
             see_errors=err,
         )
+        self.module = module
+        self.code = code
+        self.errors = errors
+
+    def __reduce__(self):
+        return (
+            self.__class__,
+            (self.module, self.code, self.returncode, self.errors),
+        )
 
     def __str__(self):
         return self.msg
