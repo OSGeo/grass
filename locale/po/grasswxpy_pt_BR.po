@@ -4,13 +4,14 @@
 # transifex generated, 2017
 #
 # Daniel de Castro Victoria <daniel.victoria@gmail.com>, 2025.
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-16 15:40+0000\n"
-"PO-Revision-Date: 2025-08-12 23:34+0000\n"
-"Last-Translator: Daniel de Castro Victoria <daniel.victoria@gmail.com>\n"
+"POT-Creation-Date: 2025-08-23 15:39+0000\n"
+"PO-Revision-Date: 2025-08-26 14:19+0000\n"
+"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -1451,7 +1452,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Close GRASS GIS Data Catalog"
 msgid "Close GRASS Data Catalog"
-msgstr "Fechar catálogo de dados do GRASS GIS"
+msgstr "Fechar catálogo de dados do GRASS"
 
 #: ../gui/wxpython/datacatalog/g.gui.datacatalog.py:50
 #, fuzzy
@@ -4677,7 +4678,7 @@ msgstr "Nome do símbolo:"
 #, fuzzy
 #| msgid "Quit GRASS GIS"
 msgid "Quit GRASS"
-msgstr "Sair do GRASS GIS"
+msgstr "Sair do GRASS"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2355
 #, fuzzy
@@ -4996,7 +4997,7 @@ msgstr "arquivo %s faltando"
 #, fuzzy, python-brace-format
 #| msgid "Unable to provide citation suggestion, see GRASS GIS website instead. The error was: {0}"
 msgid "Unable to provide citation suggestion, see GRASS website instead. The error was: {0}"
-msgstr "Não foi possível fornecer sugestão de citação, consulte o site GRASS GIS. O erro foi: {0}"
+msgstr "Não foi possível fornecer sugestão de citação, consulte o site GRASS. O erro foi: {0}"
 
 #: ../gui/wxpython/gui_core/ghelp.py:416 ../gui/wxpython/gui_core/ghelp.py:488
 #, python-format
@@ -6910,7 +6911,7 @@ msgstr "Não foi possível carregar o tema de ícone. Razão: %s. Saindo do wxGU
 #, fuzzy
 #| msgid "1. Select GRASS GIS database directory"
 msgid "1. Select GRASS database directory"
-msgstr "1. Selecione o diretório de banco de dados GRASS GIS"
+msgstr "1. Selecione o diretório de banco de dados GRASS"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:127
 msgid "2. Select GRASS Location"
@@ -6924,7 +6925,7 @@ msgstr "3. Selecione Mapset GRASS"
 #, fuzzy
 #| msgid "GRASS GIS database directory contains Locations."
 msgid "GRASS database directory contains Locations."
-msgstr "O diretório do banco de dados do GRASS GIS contém Locations."
+msgstr "O diretório do banco de dados do GRASS contém Locations."
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:158
 msgid "All data in one Location is in the same  coordinate reference system (projection). One Location can be one project. Location contains Mapsets."
@@ -7320,7 +7321,7 @@ msgstr "destino Z:"
 #, fuzzy
 #| msgid "GRASS GIS Manage Ground Control Points"
 msgid "GRASS Manage Ground Control Points"
-msgstr " Gerenciar Pontos de Controle no Solo GRASS GIS"
+msgstr "Gerenciar Pontos de Controle no Solo GRASS"
 
 #: ../gui/wxpython/iscatt/controllers.py:209
 msgid "No data set."
@@ -11204,7 +11205,7 @@ msgstr "destino Y:"
 #, fuzzy
 #| msgid "GRASS GIS Manage Location of Tick Points on a Scanned Photo"
 msgid "GRASS Manage Location of Tick Points on a Scanned Photo"
-msgstr "GRASS GIS Gerenciar Localização de Pontos de Marcas de Intervalo em uma Foto Digitalizada"
+msgstr "GRASS Gerenciar Localização de Pontos de Marcas de Intervalo em uma Foto Digitalizada"
 
 #: ../gui/wxpython/psmap/dialogs.py:303
 msgid "Units:"
@@ -12566,7 +12567,7 @@ msgstr "O mapa raster <%s> já existe. Remova ou renomeie os mapas com o prefixo
 #, fuzzy
 #| msgid "GRASS GIS Setup for r.li modules"
 msgid "Setup for r.li modules - GRASS"
-msgstr "Configuração GRASS GIS para módulos r.li"
+msgstr "Configuração GRASS para módulos r.li"
 
 #: ../gui/wxpython/rlisetup/sampling_frame.py:234
 #: ../gui/wxpython/rlisetup/sampling_frame.py:350
