@@ -173,7 +173,7 @@ def benchmark_resolutions(module, resolutions, label, repeat=5, nprocs=None):
         region = gs.region()
         n_cells.append(region["cells"])
         print("\u2500" * term_size.columns)
-        print(f"Benchmark with {resolution} resolution...\n")
+        print(f"Benchmark with resolution {resolution}...\n")
         time_sum = 0
         measured_times = []
         for _ in range(repeat):

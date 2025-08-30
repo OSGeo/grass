@@ -38,10 +38,8 @@ class Tools:
 
     >>> from grass.tools import Tools
     >>> tools = Tools(session=session)
-    >>> tools.g_region(rows=100, cols=100)  # doctest: +ELLIPSIS
-    ToolResult(...)
+    >>> tools.g_region(rows=100, cols=100)
     >>> tools.r_random_surface(output="surface", seed=42)
-    ToolResult(...)
 
     For tools outputting JSON, the results can be accessed directly:
 
@@ -59,13 +57,11 @@ class Tools:
     >>> tools.v_in_ascii(
     ...     input=StringIO("13.45,29.96,200"), output="point", separator=","
     ... )
-    ToolResult(...)
 
     The *Tools* object can be used as a context manager:
 
     >>> with Tools(session=session) as tools:
     ...     tools.g_region(rows=100, cols=100)
-    ToolResult(...)
 
     A tool can be accessed via a function with the same name as the tool.
     Alternatively, it can be called through one of the *run* or *call* functions.
@@ -75,6 +71,47 @@ class Tools:
     of strings as parameters (*run_cmd* and *call_cmd*).
     When a tool is run using the function corresponding to its name, the *run* function
     is used in the background.
+
+    Raster input and outputs can be NumPy arrays:
+
+    >>> import numpy as np
+    >>> tools.g_region(rows=2, cols=3)
+    >>> slope = tools.r_slope_aspect(elevation=np.ones((2, 3)), slope=np.ndarray)
+    >>> tools.r_grow(
+    ...     input=np.array([[1, np.nan, np.nan], [np.nan, np.nan, np.nan]]),
+    ...     radius=1.5,
+    ...     output=np.ndarray,
+    ... )
+    array([[1., 1., 0.],
+           [1., 1., 0.]])
+
+    When multiple outputs are returned, they are returned as a tuple:
+
+    >>> (slope, aspect) = tools.r_slope_aspect(
+    ...     elevation=np.ones((2, 3)), slope=np.array, aspect=np.array
+    ... )
+
+    To access the arrays by name, e.g., with a high number of output arrays,
+    the standard result object can be requested with *always_result*:
+
+    >>> tools = Tools(session=session, always_result=True)
+    >>> result = tools.r_slope_aspect(
+    ...     elevation=np.ones((2, 3)), slope=np.array, aspect=np.array
+    ... )
+
+    The result object than includes the arrays under the array attribute
+    where they can be accessed as attributes by names corresponding to the
+    output parameter names:
+
+    >>> slope = result.arrays.slope
+    >>> aspect = result.arrays.aspect
+
+    Using `always_result=True` is also advantageous to obtain both arrays
+    and text outputs from the tool as the result object has the same
+    attributes and functionality as without arrays:
+
+    >>> result.text
+    ''
     """
 
     def __init__(
@@ -89,6 +126,7 @@ class Tools:
         errors=None,
         capture_output=True,
         capture_stderr=None,
+        always_result=False,
     ):
         """
         If session is provided and has an env attribute, it is used to execute tools.
@@ -145,6 +183,7 @@ class Tools:
         else:
             self._capture_stderr = capture_stderr
         self._name_resolver = None
+        self._always_result = always_result
 
     def _modified_env_if_needed(self):
         """Get the environment for subprocesses
@@ -209,13 +248,41 @@ class Tools:
         # Get a fixed env parameter at at the beginning of each execution,
         # but repeat it every time in case the referenced environment is modified.
         args, popen_options = gs.popen_args_command(tool_name_, **kwargs)
+
+        # Compute the environment for subprocesses and store it for later use.
+        if "env" not in popen_options:
+            popen_options["env"] = self._modified_env_if_needed()
+
+        object_parameter_handler.translate_objects_to_data(
+            kwargs, env=popen_options["env"]
+        )
+
         # We approximate original kwargs with the possibly-modified kwargs.
-        return self.run_cmd(
+        result = self.run_cmd(
             args,
             tool_kwargs=kwargs,
             input=object_parameter_handler.stdin,
             **popen_options,
         )
+        use_objects = object_parameter_handler.translate_data_to_objects(
+            kwargs, env=popen_options["env"]
+        )
+        if use_objects:
+            if self._always_result:
+                result.set_arrays(object_parameter_handler.all_array_results)
+            else:
+                result = object_parameter_handler.result
+
+        if object_parameter_handler.temporary_rasters:
+            self.call(
+                "g.remove",
+                type="raster",
+                name=object_parameter_handler.temporary_rasters,
+                flags="f",
+            )
+        if not self._always_result and not use_objects and not result.stdout:
+            return None
+        return result
 
     def run_cmd(
         self,
