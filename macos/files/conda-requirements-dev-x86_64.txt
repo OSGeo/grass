@@ -44,7 +44,6 @@ proj
 python.app
 python<3.13
 setuptools
-six
 sqlite
 wxpython=4.2.2
 zstd

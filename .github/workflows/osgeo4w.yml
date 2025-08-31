@@ -91,7 +91,6 @@ jobs:
             python3-numpy
             python3-pip
             python3-pywin32
-            python3-six
             python3-wxpython
             sqlite3-devel
             zstd-devel
