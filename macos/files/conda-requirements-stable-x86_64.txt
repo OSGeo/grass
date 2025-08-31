@@ -164,7 +164,6 @@ https://conda.anaconda.org/conda-forge/noarch/munkres-1.1.4-pyhd8ed1ab_1.conda
 https://conda.anaconda.org/conda-forge/osx-64/openjpeg-2.5.3-h036ada5_1.conda
 https://conda.anaconda.org/conda-forge/osx-64/orc-2.1.2-h82caab2_0.conda
 https://conda.anaconda.org/conda-forge/noarch/packaging-25.0-pyh29332c3_1.conda
-https://conda.anaconda.org/conda-forge/noarch/ply-3.11-pyhd8ed1ab_3.conda
 https://conda.anaconda.org/conda-forge/noarch/pyparsing-3.2.3-pyhe01879c_2.conda
 https://conda.anaconda.org/conda-forge/osx-64/python.app-1.4-py312h2f459f6_5.conda
 https://conda.anaconda.org/conda-forge/osx-64/re2-2025.06.26-ha5e900a_0.conda
