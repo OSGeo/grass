@@ -31,6 +31,7 @@ jobs:
         with:
           path: grass
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Get dependencies
         run: |
@@ -66,6 +67,7 @@ jobs:
           ref: grass${{ env.MAJOR }}
           path: grass-addons
           fetch-depth: 0
+          persist-credentials: false
 
       - name: ccache
         uses: hendrikmuhs/ccache-action@63069e3931dedbf3b63792097479563182fe70d1 # v1.2.18
