@@ -115,11 +115,13 @@ jobs:
           MACOS_CERTIFICATE_NAME: ${{ secrets.MACOS_CERTIFICATE_NAME }}
         run: |
           mkdir -p "${HOME}/.config/grass"
-          echo sdk=\"$(xcrun --show-sdk-path)\" >> "${CONFIG}"
-          echo deployment_target=\"${{ matrix.deployment_target }}\" >> "${CONFIG}"
-          echo cs_ident=\"${MACOS_CERTIFICATE_NAME}\" >> "${CONFIG}"
-          echo cs_keychain_profile=\"${KEYCHAIN_PROFILE}\" >> "${CONFIG}"
-          echo cs_provisionprofile=\"${RUNNER_TEMP}/embedded.provisionprofile\" >> "${CONFIG}"
+          {
+            echo sdk=\"$(xcrun --show-sdk-path)\"
+            echo deployment_target=\"${{ matrix.deployment_target }}\"
+            echo cs_ident=\"${MACOS_CERTIFICATE_NAME}\"
+            echo cs_keychain_profile=\"${KEYCHAIN_PROFILE}\"
+            echo cs_provisionprofile=\"${RUNNER_TEMP}/embedded.provisionprofile\"
+          } >> "${CONFIG}"
 
       - name: Build GRASS app
         run: |
