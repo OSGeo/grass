@@ -113,19 +113,20 @@ jobs:
         env:
           CONFIG: ${HOME}/.config/grass/configure-build-${{ matrix.name }}.sh
           MACOS_CERTIFICATE_NAME: ${{ secrets.MACOS_CERTIFICATE_NAME }}
+          MATRIX_DEPLOYMENT_TARGET: ${{ matrix.deployment_target }}
         run: |
           mkdir -p "${HOME}/.config/grass"
           {
-            echo sdk=\"$(xcrun --show-sdk-path)\"
-            echo deployment_target=\"${{ matrix.deployment_target }}\"
-            echo cs_ident=\"${MACOS_CERTIFICATE_NAME}\"
-            echo cs_keychain_profile=\"${KEYCHAIN_PROFILE}\"
-            echo cs_provisionprofile=\"${RUNNER_TEMP}/embedded.provisionprofile\"
+            echo sdk=\""$(xcrun --show-sdk-path)"\"
+            echo deployment_target=\""${MATRIX_DEPLOYMENT_TARGET}"\"
+            echo cs_ident=\""${MACOS_CERTIFICATE_NAME}"\"
+            echo cs_keychain_profile=\""${KEYCHAIN_PROFILE}"\"
+            echo cs_provisionprofile=\""${RUNNER_TEMP}/embedded.provisionprofile"\"
           } >> "${CONFIG}"
 
       - name: Build GRASS app
         run: |
-          ./macos/build_grass_app.bash --with-liblas --notarize -o "${{ runner.temp }}"
+          ./macos/build_grass_app.bash --with-liblas --notarize -o "${RUNNER_TEMP}"
 
       - name: Upload DMG file as artifact
         if: ${{ success() && !cancelled() }}
