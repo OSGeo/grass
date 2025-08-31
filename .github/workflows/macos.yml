@@ -65,7 +65,7 @@ jobs:
             pyyaml
         run: |
           cp ./macos/files/conda-requirements-dev-arm64.txt "${RUNNER_TEMP}/macos_dependencies.txt"
-          echo "$test_dependencies" | sed "s/ /\n/g" >> "${RUNNER_TEMP}/macos_dependencies.txt"
+          echo "${test_dependencies// /\n}" >> "${RUNNER_TEMP}/macos_dependencies.txt"
       - name: Setup Mamba
         uses: mamba-org/setup-micromamba@b09ef9b599704322748535812ca03efb2625677b # v2.0.5
         with:
@@ -81,12 +81,12 @@ jobs:
           printenv | sort
           $CC --version
       - name: Create installation directory
-        run: mkdir $HOME/install
+        run: mkdir "${HOME}/install"
       - name: Build and install
         shell: micromamba-shell {0}
-        run: source ./.github/workflows/macos_install.sh $HOME/install
+        run: source ./.github/workflows/macos_install.sh "${HOME}/install"
       - name: Add the bin directory to PATH
-        run: echo "$HOME/install/bin" >> $GITHUB_PATH
+        run: echo "${HOME}/install/bin" >> "${GITHUB_PATH}"
       - name: Check installed version
         if: ${{ !cancelled() }}
         shell: micromamba-shell {0}
