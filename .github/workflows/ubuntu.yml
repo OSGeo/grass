@@ -136,7 +136,9 @@ jobs:
           CFLAGS: -fPIC -Wvla -ffp-contract=off
           # TODO: -pedantic-errors here won't compile
           CXXFLAGS: -fPIC -ffp-contract=off
-        run: .github/workflows/build_${{ matrix.config }}.sh "${HOME}/install" -Werror
+          MATRIX_CONFIG: ${{ matrix.config }}
+        run: |
+          ".github/workflows/build_${MATRIX_CONFIG}.sh" "${HOME}/install" -Werror
 
       - name: Add the bin directory to PATH
         run: |
