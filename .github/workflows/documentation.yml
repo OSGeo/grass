@@ -75,7 +75,7 @@ jobs:
           create-symlink: true
           verbose: 2
           evict-old-files: 7d
-          key: ${{ github.workflow }}-${{ github.job }}-grass${{ env.MAJOR }}-${{ matrix.python-version }}
+          key: ${{ github.workflow }}-${{ github.job }}-grass${{ env.MAJOR }}-${{ env.PYTHON_VERSION }}
 
       - name: Install Python dependencies
         # We install both core and addon dependencies, but we don't install any
