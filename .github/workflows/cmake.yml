@@ -61,7 +61,7 @@ jobs:
           mkdir "${HOME}/install"
       - name: Configure
         run: |
-          cmake ${CMAKE_OPTIONS} -S "${GITHUB_WORKSPACE}" -B "${GITHUB_WORKSPACE}/build" -G Ninja \
+          cmake -S "${GITHUB_WORKSPACE}" -B "${GITHUB_WORKSPACE}/build" -G Ninja \
             -DCMAKE_INSTALL_PREFIX="${HOME}/install" -DWITH_NLS=ON -DWITH_GUI=OFF -DWITH_DOCS=OFF \
             -DWITH_READLINE=ON -DWITH_ODBC=ON -DWITH_NETCDF=ON -DWITH_BZLIB=ON
       - name: Print CMakeCache.txt
