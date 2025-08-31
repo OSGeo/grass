@@ -53,12 +53,14 @@ jobs:
 
       - name: Set version variables
         run: |
-          cd grass
-          eval $(./utils/update_version.py status --bash)
-          echo "MAJOR=$MAJOR" >> $GITHUB_ENV
-          echo "MINOR=$MINOR" >> $GITHUB_ENV
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "YEAR=$YEAR" >> $GITHUB_ENV
+          cd grass || exit
+          eval "$(./utils/update_version.py status --bash)"
+          {
+            echo "MAJOR=${MAJOR}"
+            echo "MINOR=${MINOR}"
+            echo "VERSION=${VERSION}"
+            echo "YEAR=${YEAR}"
+          } >> "${GITHUB_ENV}"
 
       - name: Checkout addons
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
@@ -170,11 +172,11 @@ jobs:
       - name: Compile addons
         run: |
           ./grass-addons/utils/cronjobs_osgeo_lxd/compile_addons_git.sh \
-            "$MAJOR" \
-            "$MINOR" \
-            $(pwd)/grass-addons/src \
-            $(grass --config path) \
-            $(pwd)/addons-build-dir \
+            "${MAJOR}" \
+            "${MINOR}" \
+            "$(pwd)/grass-addons/src" \
+            "$(grass --config path)" \
+            "$(pwd)/addons-build-dir" \
             grass
 
       - name: Get target path for Markdown files
@@ -183,24 +185,27 @@ jobs:
 
       - name: Move from build to target directory
         run: |
-          mkdir "$MKDOCS_DIR/source/addons"
-          mv -v addons-build-dir/docs/md/source/* "$MKDOCS_DIR/source/addons"
+          mkdir "${MKDOCS_DIR}/source/addons"
+          mv -v addons-build-dir/docs/md/source/* "${MKDOCS_DIR}/source/addons"
 
       - name: Build index
         run: |
-          export ARCH="$(grass --config arch)"
-          export ARCH_DISTDIR="$(grass --config path)"
-          export VERSION_NUMBER="$VERSION"
+          ARCH="$(grass --config arch)"
+          ARCH_DISTDIR="$(grass --config path)"
+          export ARCH
+          export ARCH_DISTDIR
+          export VERSION_NUMBER="${VERSION}"
           grass --tmp-project XY --exec \
-            python grass/man/build_full_index.py md index "$MKDOCS_DIR/source/addons" addons
+            python grass/man/build_full_index.py md index "${MKDOCS_DIR}/source/addons" addons
 
       - name: Copy shared files to addons
         run: |
-          cd "$MKDOCS_DIR/source"
+          cd "${MKDOCS_DIR}/source" || exit
           # This should match directories with color tables and other files
           # linked from the pages.
+          # shellcheck disable=SC2010,SC2035 # TODO: Address these two issues
           for name in $(ls -1d */ | grep -vE "^(addons|libpython)/$"); do
-            cp -rv $name addons
+            cp -rv "${name}" addons
           done
 
       - name: Get mkdocs
@@ -209,30 +214,30 @@ jobs:
 
       - name: Run mkdocs
         run: |
-          cd grass
-          eval $(./utils/update_version.py status --bash)
+          cd grass || exit
+          eval "$(./utils/update_version.py status --bash)"
           cd ..
           export SITE_NAME="GRASS $VERSION Documentation"
           export COPYRIGHT="&copy; 2003-$YEAR GRASS Development Team, GRASS $VERSION Documentation"
-          cd $MKDOCS_DIR
+          cd "${MKDOCS_DIR}" || exit
           mkdocs build
 
       - name: Build Sphinx documentation
         run: |
           pip install -r "grass/python/grass/docs/requirements.txt"
-          cd grass
+          cd grass || exit
           make sphinxdoclib
           ARCH="$(grass --config arch)"
-          mv -v dist.$ARCH/docs/html/libpython $MKDOCS_DIR/site
+          mv -v dist."${ARCH}/docs/html/libpython" "${MKDOCS_DIR}/site"
 
       - name: Merge Sphinx and MkDocs Sitemaps
         run: |
-          cd grass
+          cd grass || exit
           python utils/merge_sitemaps.py \
-            --mkdocs-sitemap "$MKDOCS_DIR/site/sitemap.xml" \
-            --sphinx-sitemap "$MKDOCS_DIR/site/libpython/sitemap.xml" \
-            --output "$MKDOCS_DIR/site/sitemap.xml" \
-            --version $VERSION -o
+            --mkdocs-sitemap "${MKDOCS_DIR}/site/sitemap.xml" \
+            --sphinx-sitemap "${MKDOCS_DIR}/site/libpython/sitemap.xml" \
+            --output "${MKDOCS_DIR}/site/sitemap.xml" \
+            --version "${VERSION}" -o
 
       - name: Make logs available
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
