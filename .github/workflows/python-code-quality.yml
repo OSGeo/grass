@@ -45,13 +45,15 @@ jobs:
     steps:
       - name: Versions
         run: |
-          echo OS: ${{ matrix.os }}
-          echo Python: ${{ env.PYTHON_VERSION }}
-          echo Minimal Python version: ${{ env.MIN_PYTHON_VERSION }}
-          echo Flake8: ${{ env.FLAKE8_VERSION }}
-          echo Pylint: ${{ env.PYLINT_VERSION }}
-          echo Bandit: ${{ env.BANDIT_VERSION }}
-          echo Ruff: ${{ env.RUFF_VERSION }}
+          echo "OS: ${MATRIX_OS}"
+          echo "Python: ${PYTHON_VERSION}"
+          echo "Minimal Python version: ${MIN_PYTHON_VERSION}"
+          echo "Flake8: ${FLAKE8_VERSION}"
+          echo "Pylint: ${PYLINT_VERSION}"
+          echo "Bandit: ${BANDIT_VERSION}"
+          echo "Ruff: ${RUFF_VERSION}"
+        env:
+          MATRIX_OS: ${{ matrix.os }}
 
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
@@ -66,7 +68,7 @@ jobs:
         run: python -m pip install --upgrade pip
 
       - name: Install Ruff
-        run: pip install ruff==${{ env.RUFF_VERSION }}
+        run: pip install "ruff==${RUFF_VERSION}"
       - name: Run Ruff (output annotations on fixable errors)
         run: ruff check --output-format=github . --preview --unsafe-fixes
         continue-on-error: true
@@ -104,11 +106,11 @@ jobs:
           pip install -r .github/workflows/optional_requirements.txt
           pip install --user pipx
           pipx ensurepath
-          pipx install flake8==${{ env.FLAKE8_VERSION }}
-          pipx install pylint==${{ env.PYLINT_VERSION }}
+          pipx install "flake8==${FLAKE8_VERSION}"
+          pipx install "pylint==${PYLINT_VERSION}"
           pipx inject pylint -r .github/workflows/python_requirements.txt -r .github/workflows/optional_requirements.txt
           # The extra toml is only needed before Python 3.11
-          pipx install bandit[sarif,toml]==${{ env.BANDIT_VERSION }}
+          pipx install "bandit[sarif,toml]==${BANDIT_VERSION}"
 
       - name: Run Flake8
         run: |
