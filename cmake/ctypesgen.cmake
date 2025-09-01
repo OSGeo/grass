@@ -31,7 +31,7 @@ if(NOT MSVC)
 endif()
 set(ENV{LC_ALL} C)
 
-set(CTYPESFLAGS "${COMPILER} -E ${C_FLAGS}")
+set(CTYPESFLAGS "\"${COMPILER}\" -E ${C_FLAGS}")
 
 set(LIBRARIES)
 foreach(LIB ${LIBS})
