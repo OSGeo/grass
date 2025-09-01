@@ -4,12 +4,13 @@
 # Maris Nartiss <maris.gis@gmail.com>, 2012, 2014, 2020.
 # Maris Nartiss <maris.kde@gmail.com>, 2014, 2015, 2016, 2017, 2018.
 # Māris Nartišs <mn@sungis.lv>, 2014, 2015.
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-16 15:40+0000\n"
-"PO-Revision-Date: 2025-06-14 22:43+0000\n"
+"POT-Creation-Date: 2025-08-23 15:39+0000\n"
+"PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Latvian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/lv/>\n"
 "Language: lv\n"
@@ -4642,12 +4643,12 @@ msgstr "Simbola nosaukums:"
 #, fuzzy
 #| msgid "Quit GRASS GIS"
 msgid "Quit GRASS"
-msgstr "Iziet no GRASS GIS"
+msgstr "Iziet no GRASS"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2355
 #, fuzzy
 msgid "Do you want to quit GRASS including shell or just close the GUI?"
-msgstr "Vai tiešām vēlaties iziet no GRASS GIS (ieskaitot komandrindu) vai arī tikai aizvērt grafisko vidi?"
+msgstr "Vai tiešām vēlaties iziet no GRASS (ieskaitot komandrindu) vai arī tikai aizvērt grafisko vidi?"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2357
 #, fuzzy
@@ -4883,7 +4884,7 @@ msgstr ""
 #, fuzzy
 #| msgid "About GRASS GIS"
 msgid "About GRASS"
-msgstr "Par GRASS GIS"
+msgstr "Par GRASS"
 
 #: ../gui/wxpython/gui_core/ghelp.py:80
 msgid "Info"
@@ -6858,7 +6859,7 @@ msgstr ""
 #, fuzzy
 #| msgid "1. Select GRASS GIS database directory"
 msgid "1. Select GRASS database directory"
-msgstr "1. Izvēlieties GRASS GIS datubāzes mapi"
+msgstr "1. Izvēlieties GRASS datubāzes mapi"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:127
 msgid "2. Select GRASS Location"
@@ -6872,7 +6873,7 @@ msgstr "3. Izvēlieties GRASS karšu kopu"
 #, fuzzy
 #| msgid "GRASS GIS database directory contains Locations."
 msgid "GRASS database directory contains Locations."
-msgstr "GRASS GIS datubāze satur novietojumus"
+msgstr "GRASS datubāze satur novietojumus"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:158
 msgid "All data in one Location is in the same  coordinate reference system (projection). One Location can be one project. Location contains Mapsets."
@@ -6943,7 +6944,7 @@ msgstr "Dzēst izvēlēto karšu kopu"
 #, fuzzy, python-format
 #| msgid "GRASS GIS %s startup%s"
 msgid "GRASS %s startup%s"
-msgstr "GRASS GIS %s palaišana %s"
+msgstr "GRASS %s palaišana %s"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:304
 msgid "Enter GRASS session"
