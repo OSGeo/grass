@@ -100,7 +100,7 @@ jobs:
 
       - name: Set number of cores for compilation
         run: |
-          echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
+          echo "MAKEFLAGS=-j$(nproc)" >> "${GITHUB_ENV}"
         shell: msys2 {0}
 
       - name: Compile GRASS
@@ -116,7 +116,7 @@ jobs:
         run: .github/workflows/print_versions.sh
 
       - name: Test executing of the grass command
-        run: .github/workflows/test_simple.bat '${{env.O4WROOT}}\opt\grass\grass85.bat'
+        run: .github/workflows/test_simple.bat '%O4WROOT%\opt\grass\grass85.bat'
         env:
           O4WROOT: ${{ steps.osgeo4w.outputs.root }}
 
@@ -161,7 +161,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Run tests
-        run: .github/workflows/test_thorough.bat '${{env.O4WROOT}}\opt\grass\grass85.bat' '${{env.O4WROOT}}\bin\python3'
+        run: .github/workflows/test_thorough.bat '%O4WROOT%\opt\grass\grass85.bat' '%O4WROOT%\bin\python3'
         env:
           O4WROOT: ${{ steps.osgeo4w.outputs.root }}
 
