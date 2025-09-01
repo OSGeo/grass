@@ -158,7 +158,6 @@ jobs:
           path: sample-data/nc_spm_full_v2alpha2.tar.gz
           key: nc_spm_full_v2alpha2.tar.gz
           enableCrossOsArchive: true
-          lookup-only: true
 
       - name: Download GRASS Sample Dataset
         if: steps.cached-data.outputs.cache-hit != 'true'
