@@ -37,7 +37,7 @@ This map must be prepared by the user in advance by using a combination
 of *[wxGUI vector digitizer](wxGUI.vdigit.md)* and
 *[v.to.rast](v.to.rast.md)*, or some other import/development process
 (e.g.,
-*[v.transects](https://grass.osgeo.org/grass-stable/manuals/addons/v.transects.html))*
+*[v.transects](https://grass.osgeo.org/grass-devel/manuals/addons/v.transects.html))*
 to define the areas representative of the classes in the image.
 
 At present, there is no fully-interactive tool specifically designed for
