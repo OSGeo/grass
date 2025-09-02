@@ -105,9 +105,11 @@ class PreprocessorParser(object):
         if re.search(r"(^|[/\\])cl(\.exe)?[ \t]", cmd, re.I):
             # MSVC cl.exe
             cmd += " -nologo -d1PP"
+            msvc = True
         else:
             # Assume gcc
             cmd += " -dD"
+            msvc = False
 
         for undefine in self.options.cpp_undefines:
             cmd += " -U%s" % undefine
@@ -125,9 +127,13 @@ class PreprocessorParser(object):
 
         self.cparser.handle_status(cmd)
 
+        if IS_WINDOWS and not msvc:
+            # only for non-MSVC on Windows
+            cmd = ["sh.exe", "-c", cmd]
+
         pp = subprocess.Popen(
             cmd,
-            shell=not IS_WINDOWS,
+            shell=not msvc,
             universal_newlines=False,  # binary
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
