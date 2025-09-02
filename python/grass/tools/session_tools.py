@@ -85,7 +85,7 @@ class Tools:
         errors=None,
         capture_output=True,
         capture_stderr=None,
-        always_result=False,
+        consistent_result=False,
     ):
         """
         If session is provided and has an env attribute, it is used to execute tools.
@@ -122,7 +122,7 @@ class Tools:
         is set to `False`.
 
         A tool call will return a result object if the tool produces standard output
-        (stdout) and `None` otherwise. If *always_result* is set to `True`, a call
+        (stdout) and `None` otherwise. If *consistent_result* is set to `True`, a call
         will return a result object even without standard output (stdout and text
         attributes of the result object will evaluate to `False`).
 
@@ -147,7 +147,7 @@ class Tools:
         else:
             self._capture_stderr = capture_stderr
         self._name_resolver = None
-        self._always_result = always_result
+        self._consistent_result = consistent_result
 
     def _modified_env_if_needed(self):
         """Get the environment for subprocesses
@@ -316,7 +316,7 @@ class Tools:
                 stderr=stderr,
                 handler=self._errors,
             )
-        if not self._always_result and not result.stdout:
+        if not self._consistent_result and not result.stdout:
             return None
         return result
 
