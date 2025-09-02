@@ -66,7 +66,6 @@
  *
  * \return 0 if successful, otherwise 1
  */
-
 int G_recursive_copy(const char *src, const char *dst)
 {
     DIR *dirp;

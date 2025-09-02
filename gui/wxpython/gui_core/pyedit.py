@@ -1,9 +1,9 @@
-"""GRASS GIS Simple Python Editor
+"""GRASS Simple Python Editor
 
 Copyright (C) 2016 by the GRASS Development Team
 
 This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS GIS
+License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :authors: Vaclav Petras

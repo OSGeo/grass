@@ -61,7 +61,7 @@ from core.debug import Debug
 class AboutWindow(wx.Frame):
     """Create custom About Window"""
 
-    def __init__(self, parent, size=(770, 460), title=_("About GRASS GIS"), **kwargs):
+    def __init__(self, parent, size=(770, 460), title=_("About GRASS"), **kwargs):
         wx.Frame.__init__(
             self, parent=parent, id=wx.ID_ANY, title=title, size=size, **kwargs
         )
@@ -131,7 +131,7 @@ class AboutWindow(wx.Frame):
             logoBitmap, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER, border=20
         )
 
-        infoLabel = "GRASS GIS %s" % vInfo.get("version", _("unknown version"))
+        infoLabel = "GRASS %s" % vInfo.get("version", _("unknown version"))
         if "x86_64" in vInfo.get("build_platform", ""):
             infoLabel += " (64bit)"
         info = StaticText(parent=infoTxt, id=wx.ID_ANY, label=infoLabel + os.linesep)
@@ -334,7 +334,7 @@ class AboutWindow(wx.Frame):
         except CalledModuleError as error:
             text = _(
                 "Unable to provide citation suggestion,"
-                " see GRASS GIS website instead."
+                " see GRASS website instead."
                 " The error was: {0}"
             ).format(error)
 

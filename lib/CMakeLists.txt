@@ -32,7 +32,9 @@ build_library_in_subdir(
   PROJ::proj
   grass_gis
   grass_gproj
-  grass_parson)
+  grass_parson
+  OPTIONAL_DEPENDS
+  OPENMP)
 
 if(TARGET LAPACKE)
   target_link_libraries(grass_raster PRIVATE LAPACKE)
@@ -172,8 +174,8 @@ build_library_in_subdir(
 build_library_in_subdir(
   raster3d
   NAME
-  grass_raster3d 
-  DEPENDS 
+  grass_raster3d
+  DEPENDS
   ${LIBM}
   grass_raster
   grass_gis)

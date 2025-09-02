@@ -79,7 +79,7 @@ geovol *gvl_get_prev_vol(int id)
 /*!
    \brief Get all volumes
 
-   \param[out] list of geovol structs
+   \param[out] gvols list of geovol structs
 
    \return number of available volume sets
  */

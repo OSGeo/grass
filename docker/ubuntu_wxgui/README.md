@@ -1,7 +1,7 @@
-# Docker GRASS GIS (Ubuntu Linux)
+# Docker GRASS (Ubuntu Linux)
 
 Dockerfile with an [Ubuntu Linux](https://ubuntu.com/) image with
-[GRASS GIS](https://grass.osgeo.org/), [PDAL](https://pdal.io) support.
+[GRASS](https://grass.osgeo.org/), [PDAL](https://pdal.io) support.
 
 Download size of this image is of approximately 2.6 GB.
 

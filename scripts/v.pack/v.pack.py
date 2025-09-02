@@ -15,7 +15,7 @@
 #############################################################################
 
 # %module
-# % description: Exports a vector map as GRASS GIS specific archive file
+# % description: Exports a vector map as GRASS specific archive file
 # % keyword: vector
 # % keyword: export
 # % keyword: copying
@@ -83,7 +83,11 @@ def main():
             )
             try_remove(outfile)
         else:
-            grass.fatal(_("option <%s>: <%s> exists.") % ("output", outfile))
+            grass.fatal(
+                _("option <{key}>: <{value}> exists.").format(
+                    key="output", value=outfile
+                )
+            )
 
     # prepare for packing
     grass.verbose(_("Packing <%s>...") % (gfile["fullname"]))
