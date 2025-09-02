@@ -102,14 +102,14 @@ class PreprocessorParser(object):
             # (currently the default)
             cmd += " -U __GNUC__"
 
-        if re.search(r"(^|[/\\])cl(\.exe)?[ \t]", cmd, re.I):
+        if IS_WINDOWS and re.search(r"(^|[/\\])cl(\.exe)?[ \t]", cmd, re.I):
             # MSVC cl.exe
             cmd += " -nologo -d1PP"
-            msvc = True
+            is_msvc = True
         else:
             # Assume gcc
             cmd += " -dD"
-            msvc = False
+            is_msvc = False
 
         for undefine in self.options.cpp_undefines:
             cmd += " -U%s" % undefine
@@ -127,13 +127,13 @@ class PreprocessorParser(object):
 
         self.cparser.handle_status(cmd)
 
-        if IS_WINDOWS and not msvc:
+        if IS_WINDOWS and not is_msvc:
             # only for non-MSVC on Windows
             cmd = ["sh.exe", "-c", cmd]
 
         pp = subprocess.Popen(
             cmd,
-            shell=not msvc,
+            shell=not is_msvc,
             universal_newlines=False,  # binary
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
