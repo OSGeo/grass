@@ -40,7 +40,7 @@ endforeach()
 
 set(INC_HEADERS)
 foreach(INCHDR ${INCHDRS})
-  list(APPEND INC_HEADERS "-I${INCHDR}")
+  list(APPEND INC_HEADERS "-I\"${INCHDR}\"")
 endforeach()
 
 set(DEFINES)
