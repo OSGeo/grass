@@ -46,7 +46,9 @@ def subcommand_run_tool(args, tool_args: list, print_help: bool):
         project_path = Path(tmp_dir_name) / project_name
         gs.create_project(project_path)
         with gs.setup.init(project_path) as session:
-            tools = Tools(session=session, capture_output=False, consistent_result=True)
+            tools = Tools(
+                session=session, capture_output=False, consistent_return_value=True
+            )
             try:
                 # From here, we return the subprocess return code regardless of its
                 # value. Error states are handled through exceptions.
