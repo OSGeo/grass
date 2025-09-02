@@ -2,20 +2,21 @@
 # This file is distributed under the same license as the GRASS package.
 # Copyright (C) 2008 GRASS Development Team
 # Vasilios Antoniou <antoniou_v@yahoo.gr>, 2008
-#
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-16 15:40+0000\n"
-"PO-Revision-Date: 2013-02-07 20:23+0200\n"
-"Last-Translator: Nikos Ves <vesnikos@gmail.com>\n"
-"Language-Team: Greek <grass-translations@lists.osgeo.org>\n"
+"POT-Creation-Date: 2025-08-23 15:39+0000\n"
+"PO-Revision-Date: 2025-08-26 14:19+0000\n"
+"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
+"Language-Team: Greek <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.4\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: ../gui/wxpython/animation/controller.py:244
 #: ../gui/wxpython/animation/dialogs.py:858
@@ -1429,7 +1430,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Choose GIS Data Directory"
 msgid "Close GRASS Data Catalog"
-msgstr "Επιλογή φακέλου δεδομένων GIS "
+msgstr "Επιλογή φακέλου δεδομένων GIS"
 
 #: ../gui/wxpython/datacatalog/g.gui.datacatalog.py:50
 msgid "Data Catalog - GRASS"
@@ -4837,7 +4838,7 @@ msgstr ""
 #, fuzzy
 #| msgid "About GRASS GIS"
 msgid "About GRASS"
-msgstr "Σχετικα με το GRASS GIS"
+msgstr "Σχετικα με το GRASS"
 
 #: ../gui/wxpython/gui_core/ghelp.py:80
 msgid "Info"

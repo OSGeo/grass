@@ -31,6 +31,7 @@ jobs:
         with:
           path: grass
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Get dependencies
         run: |
@@ -66,6 +67,7 @@ jobs:
           ref: grass${{ env.MAJOR }}
           path: grass-addons
           fetch-depth: 0
+          persist-credentials: false
 
       - name: ccache
         uses: hendrikmuhs/ccache-action@63069e3931dedbf3b63792097479563182fe70d1 # v1.2.18
@@ -83,7 +85,7 @@ jobs:
           pip install -r grass/.github/workflows/python_requirements.txt
           pip install -r grass-addons/.github/workflows/requirements.txt
 
-      - uses: rui314/setup-mold@7344740a9418dcdcb481c7df83d9fbd1d5072d7d # v1
+      - uses: rui314/setup-mold@725a8794d15fc7563f59595bd9556495c0564878 # v1
 
       - name: Create installation directory
         run: |
