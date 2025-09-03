@@ -92,21 +92,21 @@ class Tools:
     ... )
 
     To access the arrays by name, e.g., with a high number of output arrays,
-    the standard result object can be requested with *always_result*:
+    the standard result object can be requested with *consistent_return_value*:
 
-    >>> tools = Tools(session=session, always_result=True)
+    >>> tools = Tools(session=session, consistent_return_value=True)
     >>> result = tools.r_slope_aspect(
     ...     elevation=np.ones((2, 3)), slope=np.array, aspect=np.array
     ... )
 
-    The result object than includes the arrays under the array attribute
+    The result object than includes the arrays under the *arrays* attribute
     where they can be accessed as attributes by names corresponding to the
     output parameter names:
 
     >>> slope = result.arrays.slope
     >>> aspect = result.arrays.aspect
 
-    Using `always_result=True` is also advantageous to obtain both arrays
+    Using `consistent_return_value=True` is also advantageous to obtain both arrays
     and text outputs from the tool as the result object has the same
     attributes and functionality as without arrays:
 
@@ -168,6 +168,8 @@ class Tools:
         *text* attributes of the result object will evaluate to `False`). This is
         advantageous when examining the *stdout* or *text* attributes directly, or
         when using the *returncode* attribute in combination with `errors="ignore"`.
+        Additionally, this can be used to obtain both NumPy arrays and text outputs
+        from a tool call.
 
         If *env* or other *Popen* arguments are provided to one of the tool running
         functions, the constructor parameters except *errors* are ignored.
