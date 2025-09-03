@@ -57,7 +57,7 @@ void print_python_short_flag(FILE *file, const char *key, const char *label,
 void print_python_long_flag(FILE *file, const char *key, const char *label,
                             const char *description, const char *indent)
 {
-    fprintf(file, "%s**%s**: bool, *optional*", indent, key);
+    fprintf(file, "%s**%s** : bool, *optional*", indent, key);
     fprintf(file, MD_NEWLINE);
     fprintf(file, "\n");
     if (label != NULL) {
@@ -609,9 +609,9 @@ void G__md_print_python_long_version(FILE *file, const char *indent,
                   "Otherwise, `None` will be returned.");
     if (outputs_arrays) {
         fprintf(file, " If an array type (e.g., *np.ndarray*) is used for one "
-                      "of the raster outputs,"
-                      " the result will be an array and will have the shape "
-                      "corresponding to the computational region."
+                      "of the raster outputs, "
+                      "the result will be an array and will have the shape "
+                      "corresponding to the computational region. "
                       "If an array type is used for more than one raster "
                       "output, the result will be a tuple of arrays.");
     }

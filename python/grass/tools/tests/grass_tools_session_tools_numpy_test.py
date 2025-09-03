@@ -87,7 +87,7 @@ def test_numpy_grass_array_input_output(xy_dataset_session):
 
 def test_numpy_one_input_multiple_outputs_into_result(xy_dataset_session):
     """"""
-    tools = Tools(session=xy_dataset_session, always_result=True)
+    tools = Tools(session=xy_dataset_session, consistent_return_value=True)
     tools.g_region(rows=2, cols=3)
     result = tools.r_slope_aspect(
         elevation=np.ones((2, 3)), slope=np.array, aspect=np.array

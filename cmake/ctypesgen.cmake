@@ -31,7 +31,7 @@ if(NOT MSVC)
 endif()
 set(ENV{LC_ALL} C)
 
-set(CTYPESFLAGS "${COMPILER} -E ${C_FLAGS}")
+set(CTYPESFLAGS "\"${COMPILER}\" -E ${C_FLAGS}")
 
 set(LIBRARIES)
 foreach(LIB ${LIBS})
@@ -40,7 +40,7 @@ endforeach()
 
 set(INC_HEADERS)
 foreach(INCHDR ${INCHDRS})
-  list(APPEND INC_HEADERS "-I${INCHDR}")
+  list(APPEND INC_HEADERS "-I\"${INCHDR}\"")
 endforeach()
 
 set(DEFINES)

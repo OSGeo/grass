@@ -126,7 +126,7 @@ class Tools:
         errors=None,
         capture_output=True,
         capture_stderr=None,
-        always_result=False,
+        consistent_return_value=False,
     ):
         """
         If session is provided and has an env attribute, it is used to execute tools.
@@ -135,15 +135,15 @@ class Tools:
         However, session and env interaction may change in the future.
 
         If overwrite is provided, a an overwrite is set for all the tools.
-        When overwrite is set to False, individual tool calls can set overwrite
-        to True. If overwrite is set in the session or env, it is used.
-        Note that once overwrite is set to True globally, an individual tool call
-        cannot set it back to False.
+        When overwrite is set to `False`, individual tool calls can set overwrite
+        to `True`. If overwrite is set in the session or env, it is used.
+        Note that once overwrite is set to `True` globally, an individual tool call
+        cannot set it back to `False`.
 
-        If verbose, quiet, superquiet is set to True, the corresponding verbosity level
-        is set for all the tools. If one of them is set to False and the environment
+        If verbose, quiet, superquiet is set to `True`, the corresponding verbosity level
+        is set for all the tools. If one of them is set to `False` and the environment
         has the corresponding variable set, it is unset.
-        The values cannot be combined. If multiple ones are set to True, the most
+        The values cannot be combined. If multiple ones are set to `True`, the most
         verbose one wins.
 
         In case a tool run fails, indicating that by non-zero return code,
@@ -155,12 +155,19 @@ class Tools:
         Text outputs from the tool are captured by default, both standard output
         (stdout) and standard error output (stderr). Both will be part of the result
         object returned by each tool run. Additionally, the standard error output will
-        be included in the exception message. When *capture_output* is set to False,
+        be included in the exception message. When *capture_output* is set to `False`,
         outputs are not captured in Python as values and go where the Python process
         outputs go (this is usually clear in command line, but less clear in a Jupyter
-        notebook). When *capture_stderr* is set to True, the standard error output
+        notebook). When *capture_stderr* is set to `True`, the standard error output
         is captured and included in the exception message even if *capture_outputs*
-        is set to False.
+        is set to `False`.
+
+        A tool call will return a result object if the tool produces standard output
+        (stdout) and `None` otherwise. If *consistent_return_value* is set to `True`,
+        a call will return a result object even without standard output (*stdout* and
+        *text* attributes of the result object will evaluate to `False`). This is
+        advantageous when examining the *stdout* or *text* attributes directly, or
+        when using the *returncode* attribute in combination with `errors="ignore"`.
 
         If *env* or other *Popen* arguments are provided to one of the tool running
         functions, the constructor parameters except *errors* are ignored.
@@ -183,7 +190,7 @@ class Tools:
         else:
             self._capture_stderr = capture_stderr
         self._name_resolver = None
-        self._always_result = always_result
+        self._consistent_return_value = consistent_return_value
 
     def _modified_env_if_needed(self):
         """Get the environment for subprocesses
@@ -268,7 +275,7 @@ class Tools:
             kwargs, env=popen_options["env"]
         )
         if use_objects:
-            if self._always_result:
+            if self._consistent_return_value:
                 result.set_arrays(object_parameter_handler.all_array_results)
             else:
                 result = object_parameter_handler.result
@@ -280,8 +287,6 @@ class Tools:
                 name=object_parameter_handler.temporary_rasters,
                 flags="f",
             )
-        if not self._always_result and not use_objects and not result.stdout:
-            return None
         return result
 
     def run_cmd(
@@ -380,6 +385,8 @@ class Tools:
                 stderr=stderr,
                 handler=self._errors,
             )
+        if not self._consistent_return_value and not result.stdout:
+            return None
         return result
 
     def __getattr__(self, name):
