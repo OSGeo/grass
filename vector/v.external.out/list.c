@@ -91,6 +91,7 @@ char *format_options(void)
     }
 
     G_debug(2, "all drivers: %s", ret);
+
     return ret;
 }
 
