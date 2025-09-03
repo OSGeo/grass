@@ -57,7 +57,7 @@ void print_python_short_flag(FILE *file, const char *key, const char *label,
 void print_python_long_flag(FILE *file, const char *key, const char *label,
                             const char *description, const char *indent)
 {
-    fprintf(file, "%s**%s**: bool, *optional*", indent, key);
+    fprintf(file, "%s**%s** : bool, *optional*", indent, key);
     fprintf(file, MD_NEWLINE);
     fprintf(file, "\n");
     if (label != NULL) {
@@ -558,5 +558,19 @@ void G__md_print_python_long_version(FILE *file, const char *indent,
     print_python_long_flag(file, "superquiet", NULL,
                            _("Very quiet module output"), indent);
     fprintf(file, MD_NEWLINE);
+    fprintf(file, "\n");
+
+    if (!tools_api)
+        return;
+
+    fprintf(file, "\n%sReturns:\n\n", indent);
+    fprintf(file, "%s**result** : ", indent);
+    fprintf(file, "grass.tools.support.ToolResult");
+    fprintf(file, " | None");
+    fprintf(file, MD_NEWLINE);
+    fprintf(file, "\n%s", indent);
+    fprintf(file, "If the tool produces text as standard output, a "
+                  "*ToolResult* object will be returned. "
+                  "Otherwise, `None` will be returned.");
     fprintf(file, "\n");
 }
