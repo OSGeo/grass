@@ -99,11 +99,6 @@ int main(int argc, char **argv)
                                  "json;JSON (JavaScript Object Notation);");
     opt.format->guisection = _("Print");
 
-    flag.topo = G_define_flag();
-    flag.topo->key = 'd';
-    flag.topo->description = _("Print topological information (debugging)");
-    flag.topo->guisection = _("Print");
-
     flag.print = G_define_flag();
     flag.print->key = 'a';
     flag.print->description = _("Print attribute information");
@@ -114,6 +109,13 @@ int main(int argc, char **argv)
     flag.connection->description =
         _("Print attribute database connection information");
     flag.connection->guisection = _("Print");
+
+    flag.topo = G_define_flag();
+    flag.topo->key = 'd';
+    flag.topo->label = _("Print topological information (debugging)");
+    flag.topo->description =
+        _("Prints internal information for topology debugging");
+    flag.topo->guisection = _("Print");
 
     flag.shell = G_define_flag();
     flag.shell->key = 'g';
@@ -133,12 +135,15 @@ int main(int argc, char **argv)
 
     flag.multiple = G_define_flag();
     flag.multiple->key = 'm';
+    flag.multiple->label =
+        _("Print multiple features for each map if they meet the criteria");
     flag.multiple->description =
-        _("Print multiple features if overlapping features are found");
+        _("For JSON, this places features under a \"features\" key");
     flag.multiple->guisection = _("Print");
 
     G_option_exclusive(flag.shell, flag.json, opt.format, NULL);
     G_option_requires(flag.connection, flag.print, NULL);
+    G_option_requires(opt.cols, flag.print, NULL);
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
