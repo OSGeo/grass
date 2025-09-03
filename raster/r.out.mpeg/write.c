@@ -321,13 +321,14 @@ void clean_files(char *file, char *files[], int num)
     if (file) {
         if (remove(file) != 0) {
             int e = errno;
-            G_warning(_("Failed to remove file <%s>: %s"), file, strerror(e));
+            G_warning(_("Failed to remove temporary file <%s>: %s"), file,
+                      strerror(e));
         }
     }
     for (i = 0; i < num; i++) {
         if (remove(files[i]) != 0) {
             int e = errno;
-            G_warning(_("Failed to remove file <%s>: %s"), files[i],
+            G_warning(_("Failed to remove temporary file <%s>: %s"), files[i],
                       strerror(e));
         }
     }
