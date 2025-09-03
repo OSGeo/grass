@@ -80,7 +80,7 @@ void print_list(FILE *fp, struct elist *el, int count, const char *separator,
     JSON_Object *map_object = NULL;
     JSON_Value *map_value = NULL;
 
-    if (!count)
+    if (!count && format != JSON)
         return;
 
     if (format == JSON) {
@@ -91,7 +91,8 @@ void print_list(FILE *fp, struct elist *el, int count, const char *separator,
         root_array = G_json_array(root_value);
     }
 
-    qsort(el, count, sizeof(struct elist), compare_elist);
+    if (count > 1)
+        qsort(el, count, sizeof(struct elist), compare_elist);
 
     for (i = 0; i < count; i++) {
         int need_mapset = 0;

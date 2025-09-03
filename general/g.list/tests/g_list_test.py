@@ -1,6 +1,9 @@
-import grass.script as gs
-import pytest
 import sys
+
+import pytest
+
+import grass.script as gs
+from grass.tools import Tools
 
 
 def test_default_output(simple_dataset):
@@ -290,3 +293,15 @@ def test_json_output(simple_dataset):
         },
     ]
     assert actual == expected
+
+
+def test_no_json_output(simple_dataset):
+    """Test g.list returning an empty JSON list"""
+    tools = Tools(env=simple_dataset.env)
+    result = tools.g_list(
+        type="raster",
+        pattern="does_not_exist",
+        format="json",
+    )
+    assert not result
+    assert list(result) == []
