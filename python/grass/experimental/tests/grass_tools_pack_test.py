@@ -16,7 +16,7 @@ def test_pack_input_output_tool_name_function(xy_dataset_session, rows_raster_fi
     assert not tools.g_findfile(
         element="raster", file=rows_raster_file3x3.stem, format="json"
     )["name"]
-    assert not tools.g_list(type="raster", format="shell").text
+    assert not tools.g_list(type="raster", format="json")
 
 
 def test_pack_input_output_with_name_and_parameter_call(
@@ -34,7 +34,7 @@ def test_pack_input_output_with_name_and_parameter_call(
     assert not tools.g_findfile(
         element="raster", file=rows_raster_file3x3.stem, format="json"
     )["name"]
-    assert not tools.g_list(type="raster", format="shell").text
+    assert not tools.g_list(type="raster", format="json")
 
 
 def test_pack_input_output_with_subprocess_run_like_call(
@@ -55,7 +55,7 @@ def test_pack_input_output_with_subprocess_run_like_call(
     assert not tools.g_findfile(
         element="raster", file=rows_raster_file3x3.stem, format="json"
     )["name"]
-    assert not tools.g_list(type="raster", format="shell").text
+    assert not tools.g_list(type="raster", format="json")
 
 
 def test_io_cleanup_after_function(xy_dataset_session, rows_raster_file3x3):
@@ -68,7 +68,7 @@ def test_io_cleanup_after_function(xy_dataset_session, rows_raster_file3x3):
     assert not tools.g_findfile(
         element="raster", file=rows_raster_file3x3.stem, format="json"
     )["name"]
-    assert not tools.g_list(type="raster", format="shell").text
+    assert not tools.g_list(type="raster", format="json")
 
 
 def test_io_cleanup_after_context(xy_dataset_session, rows_raster_file3x3):
@@ -92,7 +92,7 @@ def test_io_cleanup_after_context(xy_dataset_session, rows_raster_file3x3):
     assert not tools.g_findfile(
         element="raster", file=rows_raster_file3x3.stem, format="json"
     )["name"]
-    assert not tools.g_list(type="raster", format="shell").text
+    assert not tools.g_list(type="raster", format="json")
 
 
 def test_io_no_cleanup(xy_dataset_session, rows_raster_file3x3):
@@ -113,7 +113,7 @@ def test_io_no_cleanup(xy_dataset_session, rows_raster_file3x3):
     assert not tools.g_findfile(
         element="raster", file=rows_raster_file3x3.stem, format="json"
     )["name"]
-    assert not tools.g_list(type="raster", format="shell").text
+    assert not tools.g_list(type="raster", format="json")
 
 
 def test_io_no_cleanup_with_context(xy_dataset_session, rows_raster_file3x3):
@@ -144,4 +144,4 @@ def test_io_no_cleanup_with_context(xy_dataset_session, rows_raster_file3x3):
     assert not tools.g_findfile(
         element="raster", file=rows_raster_file3x3.stem, format="json"
     )["name"]
-    assert not tools.g_list(type="raster", format="shell").text
+    assert not tools.g_list(type="raster", format="json")
