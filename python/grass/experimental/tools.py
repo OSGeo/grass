@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 ##############################################################################
 # AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
 #
@@ -12,7 +10,9 @@
 #            for details.
 ##############################################################################
 
-"""API to call GRASS tools (modules) as Python functions"""
+"""The module provides an API to use GRASS tools (modules) as Python functions"""
+
+from __future__ import annotations
 
 import json
 from pathlib import Path
@@ -34,6 +34,7 @@ class PackImporterExporter:
         return value.endswith((".grass_raster", ".pack", ".rpack", ".grr"))
 
     def modify_and_ingest_argument_list(self, args, parameters):
+        # TODO: Deal with r.pack and r.unpack calls.
         # Uses parameters, but modifies the command, generates list of rasters and vectors.
         if "inputs" in parameters:
             for item in parameters["inputs"]:
@@ -104,6 +105,12 @@ class PackImporterExporter:
 class Tools(grass.tools.Tools):
     """In addition to Tools, it processes arguments which are raster pack files"""
 
+    def __init__(self, keep_data=None, **kwargs):
+        super().__init__(**kwargs)
+        self._delete_on_context_exit = False
+        self._keep_data = keep_data
+        self._cleanups = []
+
     def _process_parameters(self, command, **popen_options):
         popen_options["stdin"] = None
         popen_options["stdout"] = gs.PIPE
@@ -112,55 +119,63 @@ class Tools(grass.tools.Tools):
         # the intended run, not our special run before the actual run).
         return self.call_cmd([*command, "--json"], **popen_options)
 
-    def run(self, name, /, **kwargs):
+    def run(self, tool_name_: str, /, **kwargs):
+        """Run a tool by specifying its name as a string and parameters.
+
+        The parameters tool are tool name as a string and parameters as keyword
+        arguments. The keyword arguments may include an argument *flags* which is a
+        string of one-character tool flags.
+
+        The function may perform additional processing on the parameters.
+
+        :param tool_name_: name of a GRASS tool
+        :param kwargs: tool parameters
+        """
+        # Object parameters are handled first before the conversion of the call to a
+        # list of strings happens.
         object_parameter_handler = ParameterConverter()
         object_parameter_handler.process_parameters(kwargs)
 
-        args, popen_options = gs.popen_args_command(name, **kwargs)
-
-        interface_result = self._process_parameters(args, **popen_options)
-        if interface_result.returncode != 0:
-            # This is only for the error states.
-            return gs.handle_errors(
-                interface_result.returncode,
-                result=None,
-                args=[name],
-                kwargs=kwargs,
-                stderr=interface_result.stderr,
-                handler="raise",
-            )
-        parameters = json.loads(interface_result.stdout)
-
-        # We approximate tool_kwargs as original kwargs.
+        # Get a fixed env parameter at at the beginning of each execution,
+        # but repeat it every time in case the referenced environment is modified.
+        args, popen_options = gs.popen_args_command(tool_name_, **kwargs)
+        # We approximate original kwargs with the possibly-modified kwargs.
         return self.run_cmd(
             args,
             tool_kwargs=kwargs,
-            processed_parameters=parameters,
-            stdin=object_parameter_handler.stdin,
+            input=object_parameter_handler.stdin,
             **popen_options,
         )
 
     def run_cmd(
         self,
-        command,
-        tool_kwargs=None,
-        stdin=None,
-        processed_parameters=None,
+        command: list[str],
+        *,
+        input: str | bytes | None = None,
+        tool_kwargs: dict | None = None,
         **popen_options,
     ):
-        if not processed_parameters:
-            interface_result = self._process_parameters(command, **popen_options)
-            if interface_result.returncode != 0:
-                # This is only for the error states.
-                return gs.handle_errors(
-                    interface_result.returncode,
-                    result=None,
-                    args=[command],
-                    kwargs=tool_kwargs,
-                    stderr=interface_result.stderr,
-                    handler="raise",
-                )
-            processed_parameters = json.loads(interface_result.stdout)
+        """Run a tool by passing its name and parameters a list of strings.
+
+        The function may perform additional processing on the parameters.
+
+        :param command: list of strings to execute as the command
+        :param input: text input for the standard input of the tool
+        :param tool_kwargs: named tool arguments used for error reporting (experimental)
+        :param **popen_options: additional options for :py:func:`subprocess.Popen`
+        """
+        interface_result = self._process_parameters(command, **popen_options)
+        if interface_result.returncode != 0:
+            # This is only for the error states.
+            return gs.handle_errors(
+                interface_result.returncode,
+                result=None,
+                args=[command],
+                kwargs=tool_kwargs,
+                stderr=interface_result.stderr,
+                handler="raise",
+            )
+        processed_parameters = json.loads(interface_result.stdout)
 
         pack_importer_exporter = PackImporterExporter(run_function=self.call)
         pack_importer_exporter.modify_and_ingest_argument_list(
@@ -172,9 +187,29 @@ class Tools(grass.tools.Tools):
         result = self.call_cmd(
             command,
             tool_kwargs=tool_kwargs,
-            stdin=stdin,
+            input=input,
             **popen_options,
         )
         pack_importer_exporter.export_data()
-        pack_importer_exporter.cleanup()
+        if self._delete_on_context_exit or self._keep_data:
+            self._cleanups.append(pack_importer_exporter.cleanup)
+        else:
+            pack_importer_exporter.cleanup()
         return result
+
+    def __enter__(self):
+        """Enter the context manager context.
+
+        :returns: reference to the object (self)
+        """
+        self._delete_on_context_exit = True
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        """Exit the context manager context."""
+        if not self._keep_data:
+            self.cleanup()
+
+    def cleanup(self):
+        for cleanup in self._cleanups:
+            cleanup()
