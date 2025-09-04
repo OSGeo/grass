@@ -23,6 +23,7 @@
 void check_create_import_opts(struct Option *, char *, FILE *);
 void check_create_export_opts(struct Option *, char *, FILE *);
 char *check_mapset_in_layer_name(char *, int);
+char *str_json_escape(const char *str);
 
 /*!
    \brief This function generates actinia JSON process chain building blocks
@@ -293,7 +294,9 @@ char *G__json(void)
             else if (opt->answer) {
                 /* Check for input options */
                 fprintf(fp, "     {\"param\": \"%s\", ", opt->key);
-                fprintf(fp, "\"value\": \"%s\"}", opt->answer);
+                char *escaped_value = str_json_escape(opt->answer);
+                fprintf(fp, "\"value\": \"%s\"}", escaped_value);
+                G_free(escaped_value);
                 i++;
                 if (i < num_inputs) {
                     fprintf(fp, ",\n");
@@ -422,12 +425,16 @@ void check_create_import_opts(struct Option *opt, char *element, FILE *fp)
     fprintf(fp, "\"param\": \"%s\", ", opt->key);
     /* In case of import the mapset must be removed always */
     if (urlfound == 1) {
-        fprintf(fp, "\"value\": \"%s\"",
-                check_mapset_in_layer_name(tokens[0], has_import));
+        char *escaped_value =
+            str_json_escape(check_mapset_in_layer_name(tokens[0], has_import));
+        fprintf(fp, "\"value\": \"%s\"", escaped_value);
+        G_free(escaped_value);
     }
     else {
-        fprintf(fp, "\"value\": \"%s\"",
-                check_mapset_in_layer_name(opt->answer, has_import));
+        char *escaped_value = str_json_escape(
+            check_mapset_in_layer_name(opt->answer, has_import));
+        fprintf(fp, "\"value\": \"%s\"", escaped_value);
+        G_free(escaped_value);
     };
     fprintf(fp, "}");
 
@@ -484,12 +491,16 @@ void check_create_export_opts(struct Option *opt, char *element, FILE *fp)
 
     fprintf(fp, "\"param\": \"%s\", ", opt->key);
     if (has_file_export == 1) {
-        fprintf(fp, "\"value\": \"$file::%s\"",
-                check_mapset_in_layer_name(tokens[0], 1));
+        char *escaped_value =
+            str_json_escape(check_mapset_in_layer_name(tokens[0], 1));
+        fprintf(fp, "\"value\": \"$file::%s\"", escaped_value);
+        G_free(escaped_value);
     }
     else {
-        fprintf(fp, "\"value\": \"%s\"",
-                check_mapset_in_layer_name(tokens[0], 1));
+        char *escaped_value =
+            str_json_escape(check_mapset_in_layer_name(tokens[0], 1));
+        fprintf(fp, "\"value\": \"%s\"", escaped_value);
+        G_free(escaped_value);
     }
     fprintf(fp, "}");
 
@@ -526,4 +537,58 @@ char *check_mapset_in_layer_name(char *layer_name, int always_remove)
         return tokens[0];
 
     return layer_name;
+}
+
+/** \brief Escape a string for JSON.
+ *
+ * Returns a newly allocated string that must be freed with G_free().
+ */
+char *str_json_escape(const char *str)
+{
+    char *out;
+    char *tmp;
+
+    // Always duplicate the input string for code simplicity.
+    out = G_store(str);
+
+    // We test character presence to avoid duplicating the input string
+    // for every potential replacement.
+    if (strchr(out, '\\')) {
+        tmp = G_str_replace(out, "\\", "\\\\");
+        G_free(out);
+        out = tmp;
+    }
+    if (strchr(out, '\r')) {
+        tmp = G_str_replace(out, "\r", "\\r");
+        G_free(out);
+        out = tmp;
+    }
+    if (strchr(out, '\n')) {
+        tmp = G_str_replace(out, "\n", "\\n");
+        G_free(out);
+        out = tmp;
+    }
+    if (strchr(out, '\t')) {
+        tmp = G_str_replace(out, "\t", "\\t");
+        G_free(out);
+        out = tmp;
+    }
+    if (strchr(out, '"')) {
+        tmp = G_str_replace(out, "\"", "\\\"");
+        G_free(out);
+        out = tmp;
+    }
+    // While formfeed and backspace are unlikely, we test for them to
+    // ensure valid JSON.
+    if (strchr(out, '\f')) {
+        tmp = G_str_replace(out, "\f", "\\f");
+        G_free(out);
+        out = tmp;
+    }
+    if (strchr(out, '\b')) {
+        tmp = G_str_replace(out, "\b", "\\b");
+        G_free(out);
+        out = tmp;
+    }
+    return out;
 }
