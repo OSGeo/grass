@@ -127,7 +127,7 @@ int main(int argc, char **argv)
 
     flag.json = G_define_flag();
     flag.json->key = 'j';
-    flag.json->description = _("Print the stats in JSON [deprecated]");
+    flag.json->label = _("Print the stats in JSON [deprecated]");
     flag.json->description = _(
         "This flag is deprecated and will be removed in a future release. Use "
         "format=json instead.");
