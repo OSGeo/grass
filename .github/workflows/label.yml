@@ -9,7 +9,12 @@ name: Pull Request Labeler
 # https://github.com/actions/labeler/blob/master/README.md
 
 on:
-  - pull_request_target
+  # zizmor: ignore[dangerous-triggers] Labeler should be used with pull_request_target
+  pull_request_target:
+    # Limit pull_request_target execution to maintained branches
+    branches:
+      - main
+      - releasebranch_*
 
 permissions: {}
 

@@ -105,9 +105,9 @@ jobs:
             || github.ref == format('refs/heads/{0}', steps.tag-branch.outputs.latest_rel_branch)
           }}"
           echo "latest=${latest}" >> "${GITHUB_OUTPUT}"
-          echo "latest is $latest"
+          echo "latest is ${latest}"
           echo "current=${current}" >> "${GITHUB_OUTPUT}"
-          echo "current is $current"
+          echo "current is ${current}"
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@c1e51972afc2121e065aed6d45c65596fe445f3f # v5.8.0
@@ -160,7 +160,9 @@ jobs:
                 && format('type=gha,scope={0}', matrix.os) || '' }}
           cache-to: type=gha,mode=max,scope=${{ matrix.os }}
       - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
+        run: echo "${STEPS_DOCKER_BUILD_OUTPUTS_DIGEST}"
+        env:
+          STEPS_DOCKER_BUILD_OUTPUTS_DIGEST: ${{ steps.docker_build.outputs.digest }}
       - name: Attest docker.io image
         uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a # v3.0.0
         # If there isn't a digest, an annotation cannot be added
