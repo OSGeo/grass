@@ -26,10 +26,19 @@ import shutil
 from io import StringIO
 from collections import namedtuple
 
-import numpy as np
+try:
+    import numpy as np
+except ImportError:
+    np = None
 
 import grass.script as gs
-import grass.script.array as garray
+
+try:
+    import grass.script.array as ga
+except ImportError:
+    # While np and ga are separate here, later, we will assume that if np is present,
+    # ga is present as well because that's the only import-time failure we expect.
+    ga = None
 
 
 class ParameterConverter:
@@ -60,11 +69,11 @@ class ParameterConverter:
         be done by lower level code.
         """
         for key, value in kwargs.items():
-            if isinstance(value, np.ndarray):
+            if np and isinstance(value, np.ndarray):
                 name = gs.append_uuid("tmp_serialized_input_array")
                 kwargs[key] = name
                 self._numpy_inputs[key] = (name, value)
-            elif value in (np.ndarray, np.array, garray.array):
+            elif np and value in (np.ndarray, np.array, ga.array):
                 # We test for class or the function.
                 name = gs.append_uuid("tmp_serialized_output_array")
                 kwargs[key] = name
@@ -76,7 +85,7 @@ class ParameterConverter:
     def translate_objects_to_data(self, kwargs, env):
         """Convert NumPy arrays to GRASS data"""
         for name, value in self._numpy_inputs.values():
-            map2d = garray.array(env=env)
+            map2d = ga.array(env=env)
             map2d[:] = value
             map2d.write(name)
             self.temporary_rasters.append(name)
@@ -90,7 +99,7 @@ class ParameterConverter:
         output_arrays = []
         output_arrays_dict = {}
         for name, key, unused in self._numpy_outputs:
-            output_array = garray.array(name, env=env)
+            output_array = ga.array(name, env=env)
             output_arrays.append(output_array)
             output_arrays_dict[key] = output_array
             self.temporary_rasters.append(name)

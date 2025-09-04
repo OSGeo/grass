@@ -1,6 +1,6 @@
 import numpy as np
 
-import grass.script as gs
+import grass.script.array as ga
 from grass.tools import Tools
 
 
@@ -76,13 +76,11 @@ def test_numpy_grass_array_input_output(xy_dataset_session):
     cols = 3
     tools.g_region(rows=rows, cols=cols)
     tools.r_mapcalc_simple(expression="5", output="const_5")
-    const_5 = gs.array.array("const_5", env=xy_dataset_session.env)
-    result = tools.r_mapcalc_simple(
-        expression="2 * A", a=const_5, output=gs.array.array
-    )
+    const_5 = ga.array("const_5", env=xy_dataset_session.env)
+    result = tools.r_mapcalc_simple(expression="2 * A", a=const_5, output=ga.array)
     assert result.shape == (rows, cols)
     assert np.all(result == np.full((rows, cols), 10))
-    assert isinstance(result, gs.array.array)
+    assert isinstance(result, ga.array)
 
 
 def test_numpy_one_input_multiple_outputs_into_result(xy_dataset_session):
