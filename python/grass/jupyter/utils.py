@@ -475,13 +475,14 @@ def update_region(region):
     current = gs.region()
     return gs.parse_command(
         "g.region",
-        flags="ga",
+        flags="p" if gs.locn_is_latlong() else "pa",
         n=region["north"],
         s=region["south"],
         e=region["east"],
         w=region["west"],
         nsres=current["nsres"],
         ewres=current["ewres"],
+        format="json",
     )
 
 
