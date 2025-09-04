@@ -248,7 +248,7 @@ void print_python_option(FILE *file, const struct Option *opt,
         }
     }
 
-    if (opt->def) {
+    if (opt->def && opt->def[0] != '\0') {
         fprintf(file, MD_NEWLINE);
         fprintf(file, "\n");
         fprintf(file, "%s", indent);
