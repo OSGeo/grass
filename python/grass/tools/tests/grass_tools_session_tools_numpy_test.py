@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 
 import grass.script.array as ga
 from grass.tools import Tools
@@ -104,3 +105,24 @@ def test_numpy_one_input_multiple_outputs_into_result(xy_dataset_session):
     assert result.stdout == ""
     assert result.text == ""
     assert len(result.stderr)
+
+
+def test_wrong_region_size(xy_dataset_session):
+    """Check that a NumPy array shape and computational region mismatch produce error"""
+    tools = Tools(session=xy_dataset_session)
+    tools.g_region(rows=5, cols=10)
+    with pytest.raises(ValueError, match="broadcast"):
+        tools.r_slope_aspect(elevation=np.ones((2, 3)), slope=np.ndarray)
+
+
+def test_wrong_region_size_with_broadcast(xy_dataset_session):
+    """Check an array which can be broadcasted.
+
+    While we currently don't promise any specific broadcasting behavior in the
+    documentation, as of now, we let NumPy do its standard broadcasting.
+    """
+    tools = Tools(session=xy_dataset_session)
+    tools.g_region(rows=5, cols=3)
+    slope = tools.r_slope_aspect(elevation=np.ones((1, 3)), slope=np.ndarray)
+    assert slope.shape == (5, 3)
+    assert np.all(slope == np.full((5, 3), 0))

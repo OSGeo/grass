@@ -85,6 +85,9 @@ class Tools:
     array([[1., 1., 0.],
            [1., 1., 0.]])
 
+    The input array's shape and the computational region rows and columns need to
+    match. The output array's shape is determined by the computational region.
+
     When multiple outputs are returned, they are returned as a tuple:
 
     >>> (slope, aspect) = tools.r_slope_aspect(
