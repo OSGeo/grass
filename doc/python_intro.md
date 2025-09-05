@@ -1,6 +1,7 @@
 ---
 authors:
     - Corey T. White
+    - Vaclav Petras
     - GRASS Development Team
 ---
 
@@ -201,19 +202,27 @@ and finishes again with a NumPy array:
 
 ```python
 import numpy as np
+import grass.script as gs
 from grass.tools import Tools
 
-# Create a 100x100 sinusoidal elevation surface
-xx, yy = np.meshgrid(np.linspace(0, 1, 100), np.linspace(0, 1, 100))
-elevation = np.sin(xx) + np.cos(yy)
+# Create a 100x100 elevation surface
+xx, yy = np.meshgrid(np.linspace(0, 1, 100), np.linspace(-1, 1, 100))
+elevation = xx * np.exp(-8 * np.abs(yy))
+
+gs.create_project("xy_project")
+session = gs.setup.init("xy_project")
 
 # Set the region to match the array dimensions and resolution
-tools = Tools()
-tools.g_region(n=elevation.shape[0], s=0, e=elevation.shape[1], w=0, res=1)
+tools = Tools(session=session)
+rows = elevation.shape[0]
+cols = elevation.shape[1]
+tools.g_region(s=0, n=rows, w=0, e=cols, res=1)
 
 # Use the NumPy array with a GRASS tool to compute, e.g., flow accumulation,
 # and get the result as a new NumPy array.
-accumulation = tools.r_watershed(elevation=elevation, accumulation=np.array)
+accumulation = tools.r_watershed(elevation=elevation, accumulation=np.array, flags="a")
+
+accumulation.max()
 ```
 
 An additional APIs, *[grass.script.array](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html#script.array.array)*
@@ -232,6 +241,8 @@ import grass.script.array as ga
 from grass.tools import Tools
 
 # Set computational region to match the whole raster
+# This is assuming we are already using a GRASS project and that the project
+# contains a raster called 'elevation'
 tools = Tools()
 tools.g_region(raster="elevation")
 
@@ -254,12 +265,14 @@ import numpy as np
 from grass.tools import Tools
 import grass.script.array as ga
 
-# Create a 100x100 sinusoidal elevation surface
+# Create an array filled with values
 x = np.full((2, 3), 10)
 
 # Set the region to match the array dimensions and resolution
 tools = Tools()
-tools.g_region(n=x.shape[0], s=0, e=x.shape[1], w=0, res=1)
+rows = elevation.shape[0]
+cols = elevation.shape[1]
+tools.g_region(s=0, n=rows, w=0, e=cols, res=1)
 
 # Write the NumPy array to a new GRASS raster map
 map2d = ga.array()
