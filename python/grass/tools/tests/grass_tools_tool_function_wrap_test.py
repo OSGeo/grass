@@ -1,5 +1,7 @@
 """Tests of grass.tools.support.ToolFunctionResolver"""
 
+import os
+
 import pytest
 
 from grass.tools.support import ToolFunctionResolver
@@ -69,3 +71,47 @@ def test_levenshtein_distance_empty_text():
     ToolFunctionResolver.levenshtein_distance(non_empty_text, empty_text) == len(
         non_empty_text
     )
+
+
+def test_allowed_prefix_no_separator():
+    """Check that dotted tool name is resolved"""
+    prefix = "r"
+    resolver = ToolFunctionResolver(
+        run_function=lambda x: x, env=os.environ.copy(), allowed_prefix=prefix
+    )
+    assert resolver.r_watershed() == "r.watershed"
+    assert "r_info" in resolver.names()
+    for name in resolver.names():
+        assert name.startswith(prefix)
+    with pytest.raises(AttributeError, match="does_not_exist"):
+        assert resolver.does_not_exist
+    with pytest.raises(AttributeError, match="r_does_not_exist"):
+        assert resolver.r_does_not_exist
+    with pytest.raises(AttributeError, match="v_does_not_exist"):
+        assert resolver.v_does_not_exist
+    with pytest.raises(AttributeError, match="v_info"):
+        assert resolver.v_info
+    with pytest.raises(TypeError, match="v_info"):
+        assert resolver.get_function("v_info", exception_type=TypeError)
+
+
+def test_allowed_prefix_d_with_underscore():
+    """Check that dotted tool name is resolved"""
+    prefix = "d_"
+    resolver = ToolFunctionResolver(
+        run_function=lambda x: x, env=os.environ.copy(), allowed_prefix=prefix
+    )
+    assert resolver.d_rast() == "d.rast"
+    assert "d_vect" in resolver.names()
+    for name in resolver.names():
+        assert name.startswith(prefix)
+    with pytest.raises(AttributeError, match="does_not_exist"):
+        assert resolver.does_not_exist
+    with pytest.raises(AttributeError, match="d_does_not_exist"):
+        assert resolver.d_does_not_exist
+    with pytest.raises(AttributeError, match="v_does_not_exist"):
+        assert resolver.v_does_not_exist
+    with pytest.raises(AttributeError, match="r_info"):
+        assert resolver.r_info
+    with pytest.raises(TypeError, match="r_info"):
+        assert resolver.get_function("r_info", exception_type=TypeError)

@@ -18,7 +18,8 @@ import shutil
 import tempfile
 import weakref
 
-import grass.script as gs
+from grass.tools import Tools
+from grass.tools.support import ToolFunctionResolver
 
 from .region import RegionManagerFor2D
 
@@ -56,6 +57,7 @@ class Map:
         height=None,
         filename=None,
         env=None,
+        session=None,
         font="sans",
         text_size=12,
         renderer="cairo",
@@ -68,7 +70,8 @@ class Map:
         :param int height: height of map in pixels
         :param int width: width of map in pixels
         :param str filename: filename or path to save a PNG of map
-        :param str env: environment
+        :param str env: runtime environment to use for execution (defaults to global)
+        :param str session: session with environment (used if it has an env attribute)
         :param str font: font to use in rendering; either the name of a font from
                         $GISBASE/etc/fontcap (or alternative fontcap file specified
                         by GRASS_FONT_CAP), or alternatively the full path to a FreeType
@@ -87,6 +90,8 @@ class Map:
         # Copy Environment
         if env:
             self._env = env.copy()
+        elif session and hasattr(session, "env"):
+            self._env = session.env.copy()
         else:
             self._env = os.environ.copy()
         # Environment Settings
@@ -134,6 +139,7 @@ class Map:
             height=height,
             env=self._env,
         )
+        self._name_resolver = None
 
     @property
     def filename(self):
@@ -150,42 +156,49 @@ class Map:
         """Region manager object"""
         return self._region_manager
 
-    def run(self, module, **kwargs):
-        """Run modules from the GRASS display family (modules starting with "d.").
+    def run(self, tool_name_: str, /, **kwargs):
+        """Run tools from the GRASS display family (tools starting with "d").
 
-         This function passes arguments directly to grass.script.run_command()
+         This function passes arguments directly to grass.tools.run(),
          so the syntax is the same.
 
-        :param str module: name of GRASS module
-        :param `**kwargs`: named arguments passed to run_command()"""
-
-        # Check module is from display library then run
-        if module[0] != "d":
-            msg = "Module must begin with letter 'd'."
-            raise ValueError(msg)
-        self._region_manager.set_region_from_command(module, **kwargs)
-        self._region_manager.adjust_rendering_size_from_region()
-        gs.run_command(module, env=self._env, **kwargs)
-
-    def __getattr__(self, name):
-        """Parse attribute to GRASS display module. Attribute should be in
-        the form 'd_module_name'. For example, 'd.rast' is called with 'd_rast'.
+        :param tool_name_: name of a GRASS tool
+        :param `**kwargs`: parameters passed to the tool
         """
 
-        # Check to make sure format is correct
-        if not name.startswith("d_"):
-            raise AttributeError(_("Module must begin with 'd_'"))
-        # Reformat string
-        grass_module = name.replace("_", ".")
-        # Assert module exists
-        if not shutil.which(grass_module):
-            raise AttributeError(_("Cannot find GRASS module {}").format(grass_module))
+        # Check module is from display library then run
+        if tool_name_[0] != "d":
+            msg = f"Tool must be a display tool starting with 'd', got: {tool_name_}"
+            raise ValueError(msg)
+        self._region_manager.set_region_from_command(tool_name_, **kwargs)
+        self._region_manager.adjust_rendering_size_from_region()
+        Tools(env=self._env).run(tool_name_, **kwargs)
 
-        def wrapper(**kwargs):
-            # Run module
-            self.run(grass_module, **kwargs)
+    def __getattr__(self, name):
+        """Get a function representing a GRASS display tool.
 
-        return wrapper
+        Attributes should be in the form 'd_tool_name'.
+        For example, 'd.rast' is called with 'd_rast'.
+        """
+        if not self._name_resolver:
+            self._name_resolver = ToolFunctionResolver(
+                run_function=self.run,
+                env=self._env,
+                allowed_prefix="d_",
+            )
+        return self._name_resolver.get_function(name, exception_type=AttributeError)
+
+    def __dir__(self):
+        """List available tools and standard attributes."""
+        if not self._name_resolver:
+            self._name_resolver = ToolFunctionResolver(
+                run_function=self.run,
+                env=self._env,
+                allowed_prefix="d_",
+            )
+        # Collect instance and class attributes
+        static_attrs = set(dir(type(self))) | set(self.__dict__.keys())
+        return list(static_attrs) + self._name_resolver.names()
 
     def show(self):
         """Displays a PNG image of map"""
