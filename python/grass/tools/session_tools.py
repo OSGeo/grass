@@ -75,8 +75,10 @@ class Tools:
     Raster input and outputs can be NumPy arrays:
 
     >>> import numpy as np
-    >>> tools.g_region(rows=2, cols=3)
-    >>> slope = tools.r_slope_aspect(elevation=np.ones((2, 3)), slope=np.ndarray)
+    >>> rows = 2
+    >>> cols = 3
+    >>> tools.g_region(s=0, n=rows, w=0, e=cols, res=1)
+    >>> slope = tools.r_slope_aspect(elevation=np.ones((rows, cols)), slope=np.ndarray)
     >>> tools.r_grow(
     ...     input=np.array([[1, np.nan, np.nan], [np.nan, np.nan, np.nan]]),
     ...     radius=1.5,
@@ -113,6 +115,7 @@ class Tools:
     and text outputs from the tool as the result object has the same
     attributes and functionality as without arrays:
 
+    >>> # In this case, the tool did not produce any text, so the text is empty.
     >>> result.text
     ''
     """
