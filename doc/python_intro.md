@@ -209,8 +209,7 @@ elevation = np.sin(xx) + np.cos(yy)
 
 # Set the region to match the array dimensions and resolution
 tools = Tools()
-tools.g_region(n=elevation.shape[0], s=0,
-               e=elevation.shape[1], w=0, res=1)
+tools.g_region(n=elevation.shape[0], s=0, e=elevation.shape[1], w=0, res=1)
 
 # Use the NumPy array with a GRASS tool to compute, e.g., flow accumulation,
 # and get the result as a new NumPy array.
@@ -222,21 +221,29 @@ and *[grass.script.array3d](https://grass.osgeo.org/grass-stable/manuals/libpyth
 provide you with full control over read and writing data
 between GRASS raster maps and NumPy arrays, including 3D raster maps.
 The following example demonstrates reading an existing GRASS raster into a NumPy
-array, modifying the array, and writing the modified array back to a GRASS raster:
+array, plotting the data, modifying the array, and writing the modified array
+back to a GRASS raster:
 
 ```python
 import numpy as np
 import seaborn as sns
+import matplotlib.pyplot as plt
 import grass.script.array as ga
+from grass.tools import Tools
+
+# Set computational region to match the whole raster
+tools = Tools()
+tools.g_region(raster="elevation")
 
 # Read elevation as a NumPy array
-elev = ga.array(mapname="elevation")
+elevation = ga.array(mapname="elevation")
 # Plot raster histogram
-sns.histplot(data=elev.ravel(), kde=True)
+sns.histplot(data=elevation.ravel(), kde=True)
+plt.show()
 # Modify values
-elev *= 2
+elevation *= 2
 # Write modified array into a GRASS raster
-elev.write(mapname="elevation_2")
+elevation.write(mapname="elevation_2")
 ```
 
 Finally, this example shows a workflow for creating a NumPy array
@@ -255,7 +262,7 @@ tools = Tools()
 tools.g_region(n=x.shape[0], s=0, e=x.shape[1], w=0, res=1)
 
 # Write the NumPy array to a new GRASS raster map
-map2d = gs.array()
+map2d = ga.array()
 map2d[:] = x
 map2d.write("x")  # add overwrite=True for repeated runs
 ```
