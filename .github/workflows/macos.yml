@@ -67,7 +67,7 @@ jobs:
           cp ./macos/files/conda-requirements-dev-arm64.txt "${RUNNER_TEMP}/macos_dependencies.txt"
           echo "$test_dependencies" | sed "s/ /\n/g" >> "${RUNNER_TEMP}/macos_dependencies.txt"
       - name: Setup Mamba
-        uses: mamba-org/setup-micromamba@b09ef9b599704322748535812ca03efb2625677b # v2.0.5
+        uses: mamba-org/setup-micromamba@7f29b8b80078b1b601dfa018b0f7425c587c63bb # v2.0.6
         with:
           init-shell: bash
           environment-file: ${{ runner.temp }}/macos_dependencies.txt
