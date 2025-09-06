@@ -27,9 +27,10 @@ static int parse_sql_update(const char *, char **, column_info **, int *,
 
 int db__driver_execute_immediate(dbString *sql)
 {
-    char *where, *table;
-    int res, ncols, i;
-    column_info *cols;
+    char *where = NULL, *table = NULL;
+    int res, ncols = 0, i;
+    column_info *cols = NULL;
+    int ret = DB_FAILED;
 
     OGRLayerH hLayer;
     OGRFeatureH hFeature;
@@ -42,22 +43,27 @@ int db__driver_execute_immediate(dbString *sql)
 
     /* try RDBMS SQL */
     OGR_DS_ExecuteSQL(hDs, db_get_string(sql), NULL, NULL);
-    if (CPLGetLastErrorType() == CE_None)
-        return DB_OK;
+    if (CPLGetLastErrorType() == CE_None) {
+        ret = DB_OK;
+        goto cleanup_and_exit;
+    }
 
     /* parse UPDATE statement */
     res = parse_sql_update(db_get_string(sql), &table, &cols, &ncols, &where);
     G_debug(3, "\tUPDATE: table=%s, where=%s, ncols=%d", table,
             where ? where : "", ncols);
-    if (res != 0)
-        return DB_FAILED;
+    if (res != 0) {
+        ret = DB_FAILED;
+        goto cleanup_and_exit;
+    }
 
     /* get OGR layer */
     hLayer = OGR_DS_GetLayerByName(hDs, table);
     if (!hLayer) {
         db_d_append_error(_("OGR layer <%s> not found"), table);
         db_d_report_error();
-        return DB_FAILED;
+        ret = DB_FAILED;
+        goto cleanup_and_exit;
     }
 
     if (where)
@@ -71,7 +77,8 @@ int db__driver_execute_immediate(dbString *sql)
             db_d_append_error(_("Column <%s> not found in table <%s>"),
                               cols[i].name, table);
             db_d_report_error();
-            return DB_FAILED;
+            ret = DB_FAILED;
+            goto cleanup_and_exit;
         }
         cols[i].qindex = OGR_FD_GetFieldIndex(hFeatureDefn, cols[i].value);
         hFieldDefn = OGR_FD_GetFieldDefn(hFeatureDefn, cols[i].index);
@@ -114,15 +121,18 @@ int db__driver_execute_immediate(dbString *sql)
                       OGR_F_GetFID(hFeature), OGR_L_GetName(hLayer));
         OGR_F_Destroy(hFeature);
     }
-
+    ret = DB_OK;
+cleanup_and_exit:
+    if (cols) {
+        for (i = 0; i < ncols; i++) {
+            G_free(cols[i].name);
+            G_free(cols[i].value);
+        }
+        G_free(cols);
+    }
     G_free(table);
     G_free(where);
-    for (i = 0; i < ncols; i++) {
-        G_free(cols[i].name);
-        G_free(cols[i].value);
-    }
-
-    return DB_OK;
+    return ret;
 }
 
 int parse_sql_update(const char *sql, char **table, column_info **cols,
