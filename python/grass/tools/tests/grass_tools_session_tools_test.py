@@ -11,6 +11,15 @@ from grass.experimental.mapset import TemporaryMapsetSession
 from grass.tools import Tools
 
 
+has_pandas = False
+try:
+    import pandas as pd
+
+    has_pandas = True
+except ImportError:
+    pass
+
+
 def test_no_stdout_returns_none(xy_dataset_session):
     """Check that no stdout results in returning None"""
     tools = Tools(session=xy_dataset_session)
@@ -132,6 +141,15 @@ def test_json_as_list(xy_dataset_session):
     for item in result:
         assert "name" in item
     assert len(result)
+
+
+@pytest.mark.skipif(has_pandas is False, reason="Requires Pandas")
+def test_json_for_pandas(xy_dataset_session):
+    """Check that JSON can be read into Pandas dataframe"""
+    tools = Tools(session=xy_dataset_session)
+    # This also tests JSON parsing with a format option.
+    result = tools.run("g.region", flags="p", format="json")
+    assert not pd.DataFrame(result).empty
 
 
 def test_help_call_no_parameters(xy_dataset_session):
