@@ -120,22 +120,12 @@ int main(int argc, char **argv)
     null_only = flag2->answer;
 
     sscanf(opt4->answer, "%d", &repeat);
-    sscanf(opt6->answer, "%d", &nprocs);
-    if (nprocs < 1) {
-        G_fatal_error(_("<%d> is not valid number of threads."), nprocs);
-    }
-#if defined(_OPENMP)
-    omp_set_num_threads(nprocs);
-#else
-    if (nprocs != 1)
-        G_warning(_("GRASS is compiled without OpenMP support. Ignoring "
-                    "threads setting."));
-    nprocs = 1;
-#endif
-    if (nprocs > 1 && Rast_mask_is_present()) {
-        G_warning(_("Parallel processing disabled due to active mask."));
-        nprocs = 1;
-    }
+
+    nprocs = G_set_omp_num_threads(opt6);
+    nprocs = Rast_disable_omp_on_mask(nprocs);
+    if (nprocs < 1)
+        G_fatal_error(_("<%d> is not valid number of nprocs."), nprocs);
+
     out_name = opt2->answer;
     filt_name = opt3->answer;
 

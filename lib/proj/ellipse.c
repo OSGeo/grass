@@ -156,7 +156,6 @@ int GPJ__get_ellipsoid_params(const struct Key_Value *proj_keys, double *a,
  * \return 1 on success
  * \return -1 if not found in table
  */
-
 int GPJ_get_ellipsoid_by_name(const char *name, struct gpj_ellps *estruct)
 {
     struct ellps_list *list, *listhead;

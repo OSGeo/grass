@@ -94,6 +94,24 @@ JSON_Status G_json_object_set_null(JSON_Object *object, const char *name)
 {
     return json_object_set_null(object, name);
 }
+JSON_Status G_json_object_dotset_string(JSON_Object *object, const char *name,
+                                        const char *string)
+{
+    return json_object_dotset_string(object, name, string);
+}
+const char *G_json_object_dotget_string(JSON_Object *object, const char *name)
+{
+    return json_object_dotget_string(object, name);
+}
+JSON_Status G_json_object_dotset_number(JSON_Object *object, const char *name,
+                                        double number)
+{
+    return json_object_dotset_number(object, name, number);
+}
+double G_json_object_dotget_number(JSON_Object *object, const char *name)
+{
+    return json_object_dotget_number(object, name);
+}
 JSON_Array *G_json_array(const JSON_Value *value)
 {
     return json_array(value);

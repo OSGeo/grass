@@ -1,4 +1,4 @@
-Testing GRASS GIS source code and modules
+Testing Framework
 =========================================
 
 If you are already familiar with the basic concepts
@@ -15,7 +15,7 @@ of GRASS testing framework, you might want to skip to one of:
 Introduction
 ------------
 
-For the testing in GRASS GIS, we are using a `gunittest` package and
+For the testing in GRASS, we are using a `gunittest` package and
 we usually refer to the system of writing and running tests
 as to a *GRASS testing framework*.
 
@@ -26,8 +26,8 @@ or running of test in the way that process terminations potentially
 caused by C library functions does not influence the main testing process.
 
 Some tests will run without any data but many tests require
-the small (basic) version of GRASS GIS sample Location for North Carolina
-(see `GRASS GIS sample data`).
+the small (basic) version of GRASS sample Location for North Carolina
+(see `GRASS sample data`).
 
 Basic example
 -------------
@@ -96,7 +96,7 @@ within an expect interval. There is a much larger selection of assert methods
 in :class:`~gunittest.case.TestCase` class documentation
 and also in Python `unittest`_ package documentation.
 
-To run the test, run GRASS GIS, use NC SPM sample location and create
+To run the test, run GRASS, use NC SPM sample location and create
 a separate mapset (name it ``test`` for example). Then go to the directory
 with the test file and run it:
 
@@ -149,7 +149,7 @@ test case
 test suite
     A *test suite*, or also *testsuite*, is a set of tests focused on one
     topic, functionality or unit (similarly to test case).
-    In GRASS GIS, it is a set of files in one ``testsuite`` directory.
+    In GRASS, it is a set of files in one ``testsuite`` directory.
     The test files in one ``testsuite``
     directory are expected to test what is in the parent directory
     of a given ``testsuite`` directory. This is used to organize
@@ -199,7 +199,7 @@ test fixture (test set up and tear down)
     methods are executed once for the whole class while the methods
     without ``Class`` are executed for each test method.
 
-    In GRASS GIS, the preparation may, but does not have to, contain imports
+    In GRASS, the preparation may, but does not have to, contain imports
     of maps, using temporary region, setting computational region,
     or generating random maps. The cleanup step should remove temporary
     region as well as remove all created maps and files.
@@ -231,7 +231,7 @@ of the directory with tested files (module, package, library). Each test file
 All test file names should have pattern ``test*.py`` or ``*.py``
 if another naming convention seems more appropriate.
 
-GRASS GIS `gunittest` package and testing framework is similar to the standard
+GRASS `gunittest` package and testing framework is similar to the standard
 Python ``unittest`` package, so the ways to build tests are very similar.
 Test methods are in a test test case class and each test method tests one
 think using one or more assert methods.
@@ -518,14 +518,14 @@ to reimplementing the functionality, relying on a person examining the data,
 or improper tests such as mere testing
 if the module executed without an error without looking at the actual results.
 Moreover, the testing framework does not have a control over what is
-executed and how which limits potential usage and features of testing
-framework. Doing this also prevents testing framework from creating a
+executed and how, which limits potential usage and features of the testing
+framework. Doing this also prevents the testing framework from creating a
 detailed report and thus better understanding of what is tested and what is
 failing. Shell scripts are also harder to execute on MS Windows where the
 interpreter might not be available or might not be on path.
 
 The testing framework uses Shell interpreter with ``-e`` flag when executing
-the tests, so the tests does not have to use ``set -e`` and can rely on it being
+the tests, so the tests do not have to use ``set -e`` and can rely on it being
 set from outside. The flag ensures that if some command fails, i.e. ends with
 non-zero return code (exit status), the execution of the script ends too.
 The testing framework also uses ``-x`` flag to print the executed commands
@@ -551,25 +551,25 @@ Data
     Both the section and the practice itself are under development.
 
 Most of the tests requires some input data. However, it is good to write
-a test in the way that it is independent on the available data.
+a test in the way that it is independent of the available data.
 In case of GRASS, we have we can have tests of functions where
 some numbers or strings are input and some numbers or string are output.
-These tests does not require any data to be provided since the numbers
+These tests do not require any data to be provided since the numbers
 can be part of the test. Then we have another category of tests, typically
 tests of GRASS modules, which require some maps to be on the input
 and thus the output (and test) depends on the specific data.
-Again, it it best to have tests which does not require any special data
-or generally environment settings (e.g. geographic projection)
+Again, it is best to have tests which do not require any special data
+or general environment settings (e.g. geographic projection)
 but it is much easier to write good tests with a given set of data.
-So, an compromises must be made and tests of different types should be written.
+So, compromises must be made and tests of different types should be written.
 
-In the GRASS testing framework, each test file should be marked according to
+In the GRASS testing framework, each test file should be marked according to the
 category it belongs to. Each category corresponds to GRASS location or locations
 where the test file can run successfully.
 
 Universal tests
-    First category is *universal*. The tests in this category use some some
-    hard coded constants, generated data, random data, or their own imported
+    First category is *universal*. The tests in this category use some
+    hardcoded constants, generated data, random data, or their own imported
     data as in input to function and GRASS modules. All the tests, input data
     and reference results should be projection independent. These tests will
     runs always regardless of available locations.
@@ -581,7 +581,7 @@ Standard names tests
     names, i.e. raster map named elevation will always contain some kind of
     digital elevation model of some area, so raster map elevation can be
     used to compute aspect. In other words, these tests should be able to
-    (successfully) run in any location with a maps named in the same way as
+    (successfully) run in any location with maps named in the same way as
     in the standard testing location(s).
 
 Standard data tests
@@ -590,14 +590,14 @@ Standard data tests
     as in the *standard names* but the tests rely also on the data being the
     same as in the standard testing location(s). However, the (geographic)
     projection or data storage can be different. This is expected to be the
-    most common case but it is much better if the tests is one of the previous
-    categories (*universal* or *standard names*). If it is possible the
-    functions or modules with tests in this category should have also tests
-    which will fit into one of the previous categories, even though these
-    additional tests will not be as precise as the other tests.
+    most common case but it is much better if the tests are one of the previous
+    categories (*universal* or *standard names*). If possible, the functions
+    or modules with tests in this category should also have tests which will
+    fit into one of the previous categories, even though these additional tests
+    will not be as precise as the other tests.
 
 Location specific tests
-    Finally, there are tests which requires certain concrete location. There
+    Finally, there are tests which require a certain concrete location. There
     is (or will be) a set of standard testing locations each will have the same
     data (maps) but the projections and data storage types will be different.
     The suggested locations are: NC sample location in SPM projection,
@@ -610,7 +610,7 @@ Location specific tests
     standard locations.
 
 Specialized location tests
-    Additionally, an specialized location with a collection of strange,
+    Additionally, a specialized location with a collection of strange,
     incorrect, or generally extreme data will be provided. In theory, more
     than one location like this can be created if the data cannot be
     together in one location or if the location itself is somehow special,
@@ -634,7 +634,7 @@ Data specific to one test
 
 If the data required by the test are not part of standard location
 and cannot be part of the test file itself, this data should be stored
-in files in ``data`` subdirectory of ``testsuite`` directory.
+in files in the ``data`` subdirectory of the ``testsuite`` directory.
 The test should access the data using a relative path from its location,
 i.e. all data will be accessed using ``data/...``. This ``data`` directory
 might be used directly when running test file directly in the directory
@@ -669,7 +669,7 @@ Besides testing, you can also use some tools to check the quality of your code
 according to various standards and occurrence of certain code patterns.
 
 For C/C++ code we additionally use the third party solution `Coverity Scan`_
-where GRASS GIS is registered as project number `1038`_. Also you can use
+where GRASS is registered as project number `1038`_. Also you can use
 `Cppcheck`_ which will show a lot of errors which compilers do not check.
 In any case, set your compiler to high error and warning levels,
 check them and fix them in your code. Furthermore, continuous integrations is
@@ -721,4 +721,4 @@ Further reading
 .. _1038: https://scan.coverity.com/projects/1038
 .. _Cppcheck: http://cppcheck.sourceforge.net/
 .. _sandbox: https://svn.osgeo.org/grass/sandbox/wenzeslaus/grass_py_static_check.py
-.. _GRASS GIS sample data: https://grass.osgeo.org/download/data/ and http://fatra.cnr.ncsu.edu/data/ (nc_spm_full_v2alpha)
+.. _GRASS sample data: https://grass.osgeo.org/download/data/ and http://fatra.cnr.ncsu.edu/data/ (nc_spm_full_v2alpha)

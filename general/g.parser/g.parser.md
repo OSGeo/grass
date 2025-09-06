@@ -445,7 +445,7 @@ if __name__ == "__main__":
 # %end
 
 if [ -z "$GISBASE" ] ; then
-    echo "You must be in GRASS GIS to run this program." 1>&2
+    echo "You must be in GRASS to run this program." 1>&2
     exit 1
 fi
 
@@ -507,7 +507,7 @@ use strict;
 # %end
 
 if ( !$ENV{'GISBASE'} ) {
-    printf(STDERR  "You must be in GRASS GIS to run this program.\n");
+    printf(STDERR  "You must be in GRASS to run this program.\n");
     exit 1;
 }
 
@@ -538,8 +538,8 @@ printf ("Value of GIS_OPT_vect: '%s'\n", $ENV{'GIS_OPT_VECTOR'});
 
 ### Easy creation of a script
 
-By using the **--script** flag with any GRASS GIS module (must be run in
-a GRASS GIS session) header, description, keywords, parameters, flags
+By using the **--script** flag with any GRASS module (must be run in
+a GRASS session) header, description, keywords, parameters, flags
 and a template main Python script section will be printed in the
 terminal which can be saved to a file and used for further script
 programming.
@@ -665,7 +665,7 @@ Overview table: [Parser standard options](parser_standard_options.md)
 [Style Guide: Developing Python
 scripts](https://github.com/OSGeo/grass/blob/main/doc/development/style_guide.md#developing-python-scripts)
 
-Related Wiki pages: [Using GRASS GIS with other programming
+Related Wiki pages: [Using GRASS with other programming
 languages](https://grasswiki.osgeo.org/wiki/Category:Linking_to_other_languages)
 
 ## AUTHOR

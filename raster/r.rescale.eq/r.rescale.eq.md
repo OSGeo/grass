@@ -8,7 +8,7 @@ reflect the original category values that produced each category. This
 command is useful for producing representations with a reduced number of
 categories from a raster map layer with a large range of category values
 (e.g., elevation). *Rescaled* map layers are appropriate for use in such
-GRASS GIS commands as *[r.stats](r.stats.md)*,
+GRASS commands as *[r.stats](r.stats.md)*,
 *[r.report](r.report.md)*, and *[r.coin](r.coin.md)*.
 
 ## EXAMPLE

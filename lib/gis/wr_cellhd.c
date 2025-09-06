@@ -8,7 +8,7 @@
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
+ * \author GRASS Development Team
  *
  * \date 1999-2014
  */
@@ -24,7 +24,6 @@
  * \param[in] is_cellhd 1 cell header; 0 window
  * \return
  */
-
 void G__write_Cell_head(FILE *fd, const struct Cell_head *cellhd, int is_cellhd)
 {
     char buf[1024];
@@ -70,7 +69,6 @@ void G__write_Cell_head(FILE *fd, const struct Cell_head *cellhd, int is_cellhd)
  * \param[in] is_cellhd 1 cell header; 0 window
  * \return
  */
-
 void G__write_Cell_head3(FILE *fd, const struct Cell_head *cellhd,
                          int is_cellhd)
 {

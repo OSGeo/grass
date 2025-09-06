@@ -39,7 +39,7 @@ class DataCatalogFrame(wx.Frame):
 
         # buttons
         self.btnClose = Button(parent=self.panel, id=wx.ID_CLOSE)
-        self.btnClose.SetToolTip(_("Close GRASS GIS Data Catalog"))
+        self.btnClose.SetToolTip(_("Close GRASS Data Catalog"))
         self.btnClose.SetDefault()
 
         # events

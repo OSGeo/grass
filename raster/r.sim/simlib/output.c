@@ -518,14 +518,26 @@ int output_data(int tt, double ft UNUSED, const Setup *setup,
         else
             Rast_short_history(depth0, type, &hist);
 
+        // init.walkers: Number of initial walkers in a single block
+        // maxwalk: Number of input walkers per block
+        // remaining walkers: Remaining walkers in an iteration
         Rast_append_format_history(
             &hist, "init.walk=%d, maxwalk=%d, remaining walkers=%d", sim->nwalk,
             sim->maxwa, sim->nwalka);
+
+        // duration (sec.): Total simulation time in seconds
+        // time-series iteration: Number of iterations (cells)
         Rast_append_format_history(
-            &hist, "duration (sec.)=%d, time-serie iteration=%d",
+            &hist, "duration (sec.)=%d, time-series iteration=%d",
             settings->timesec, tt);
+
+        // written deltap: Time step for water (s)
+        // mean vel.: Mean velocity of water flow (m^3/s)
         Rast_append_format_history(&hist, "written deltap=%f, mean vel.=%f",
                                    setup->deltap, setup->vmean);
+
+        // mean source (si): Mean source Rate (Rainfall Excess) (m/s)
+        // mean infiltration: Mean Infiltration Rate (m/s)
         Rast_append_format_history(&hist, "mean source (si)=%e, mean infil=%e",
                                    setup->si0, setup->infmean);
 
@@ -558,14 +570,34 @@ int output_data(int tt, double ft UNUSED, const Setup *setup,
         else
             Rast_short_history(disch0, type, &hist);
 
+        // init.walkers: Number of initial walkers in a single block
+        // maxwalk: Number of input walkers per block
+        // remaining walkers: Remaining walkers in an iteration
         Rast_append_format_history(
             &hist, "init.walkers=%d, maxwalk=%d, rem. walkers=%d", sim->nwalk,
             sim->maxwa, sim->nwalka);
+
+        // duration (sec.): Total simulation time in seconds
+        // time-series iteration: Number of iterations (cells)
         Rast_append_format_history(
-            &hist, "duration (sec.)=%d, time-serie iteration=%d",
+            &hist, "duration (sec.)=%d, time-series iteration=%d",
             settings->timesec, tt);
+
+        // written deltap: Time step for water (s)
+        // mean vel.: Mean velocity of water flow (m^3/s)
         Rast_append_format_history(&hist, "written deltap=%f, mean vel.=%f",
                                    setup->deltap, setup->vmean);
+
+        // Prevent potential division by zero error
+        if (setup->chmean != 0.0)
+            // mean manning: Mean Manning's n value
+            Rast_append_format_history(&hist, "mean mann=%f",
+                                       1.0 / setup->chmean);
+        else
+            Rast_append_format_history(&hist, "mean mann=undef");
+
+        // mean source (si): Mean rainfall excess (or sediment concentration?)
+        // mean infiltration: Mean Infiltration Rate (m/s)
         Rast_append_format_history(&hist, "mean source (si)=%e, mean infil=%e",
                                    setup->si0, setup->infmean);
 
@@ -606,6 +638,17 @@ int output_data(int tt, double ft UNUSED, const Setup *setup,
             settings->timesec, tt);
         Rast_append_format_history(&hist, "written deltap=%f, mean vel.=%f",
                                    setup->deltap, setup->vmean);
+
+        // Prevent potential division by zero error
+        if (setup->chmean != 0.0)
+            // mean manning: Mean Manning's n value
+            Rast_append_format_history(&hist, "mean mann=%f",
+                                       1.0 / setup->chmean);
+        else
+            Rast_append_format_history(&hist, "mean mann=undef");
+
+        // mean source (si): Mean rainfall excess (or sediment concentration?)
+        // mean infiltration: Mean Infiltration Rate (m/s)
         Rast_append_format_history(&hist, "mean source (si)=%f", setup->si0);
 
         Rast_format_history(&hist, HIST_DATSRC_1, "input files: %s %s %s",

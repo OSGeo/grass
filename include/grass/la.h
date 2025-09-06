@@ -7,17 +7,17 @@
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author David D. Gray, ddgray@armacde.demon co uk
- * \author GRASS GIS Development Team
+ * \author GRASS Development Team
  *
  * \date 2000-2007
  */
 
 #ifndef HAVE_LIBBLAS
-#error GRASS GIS is not configured with BLAS (la.h cannot be included)
+#error GRASS is not configured with BLAS (la.h cannot be included)
 #endif
 
 #ifndef HAVE_LIBLAPACK
-#error GRASS GIS is not configured with LAPACK (la.h cannot be included)
+#error GRASS is not configured with LAPACK (la.h cannot be included)
 #endif
 
 #ifndef GRASS_LA_H

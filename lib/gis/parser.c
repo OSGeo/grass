@@ -136,7 +136,6 @@ static const char *get_renamed_option(const char *);
  * prompting.
  *
  */
-
 void G_disable_interactive(void)
 {
     st->no_interactive = 1;
@@ -476,7 +475,7 @@ int G_parser(int argc, char **argv)
         }
 
         /* If first arg is "--interface-description" then print out
-         * a xml description of the task */
+         * an xml description of the task */
         if (strcmp(argv[1], "--interface-description") == 0) {
             G__usage_xml();
             exit(EXIT_SUCCESS);
@@ -1957,7 +1956,7 @@ FILE *G_open_option_file(const struct Option *option)
    \brief Close an input/output file returned by G_open_option_file(). If the
    file pointer is stdin, stdout, or stderr, nothing happens.
 
-   \param file pointer
+   \param fp file pointer
  */
 void G_close_option_file(FILE *fp)
 {

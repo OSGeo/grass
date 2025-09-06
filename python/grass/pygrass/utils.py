@@ -51,7 +51,7 @@ def findfiles(dirpath, match=None):
 
 
 def findmaps(type, pattern=None, mapset="", location="", gisdbase=""):
-    """Return a list of tuple contining the names of the:
+    """Return a list of tuples containing the names of the:
 
     * map
     * mapset,
@@ -391,13 +391,11 @@ def split_in_chunk(iterable, length=10):
 
     >>> for chunk in split_in_chunk(range(25)):
     ...     print(chunk)
-    ...
     (0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
     (10, 11, 12, 13, 14, 15, 16, 17, 18, 19)
     (20, 21, 22, 23, 24)
     >>> for chunk in split_in_chunk(range(25), 3):
     ...     print(chunk)
-    ...
     (0, 1, 2)
     (3, 4, 5)
     (6, 7, 8)
@@ -447,21 +445,21 @@ def create_test_vector_map(map_name="test_vector"):
     11 boundaries and 4 centroids. The attribute table contains cat, name
     and value columns.
 
-     param map_name: The vector map name that should be used
+    :param map_name: The vector map name that should be used
 
+    .. code-block:: none
 
-
-                               P1 P2 P3
-        6                       *  *  *
-        5
-        4    _______ ___ ___   L1 L2 L3
-     Y  3   |A1___ *|  *|  *|   |  |  |
-        2   | |A2*| |   |   |   |  |  |
-        1   | |___| |A3 |A4 |   |  |  |
-        0   |_______|___|___|   |  |  |
-       -1
-         -1 0 1 2 3 4 5 6 7 8 9 10 12 14
-                        X
+                                   P1 P2 P3
+            6                       *  *  *
+            5
+            4    _______ ___ ___   L1 L2 L3
+         Y  3   |A1___ *|  *|  *|   |  |  |
+            2   | |A2*| |   |   |   |  |  |
+            1   | |___| |A3 |A4 |   |  |  |
+            0   |_______|___|___|   |  |  |
+           -1
+             -1 0 1 2 3 4 5 6 7 8 9 10 12 14
+                            X
     """
 
     from grass.pygrass.vector import VectorTopo
@@ -519,37 +517,39 @@ def create_test_vector_map(map_name="test_vector"):
 def create_test_stream_network_map(map_name="streams"):
     R"""Create test data
 
-       This functions creates a vector map layer with lines that represent
-       a stream network with two different graphs. The first graph
-       contains a loop, the second can be used as directed graph.
+    This functions creates a vector map layer with lines that represent
+    a stream network with two different graphs. The first graph
+    contains a loop, the second can be used as directed graph.
 
-       This should be used in doc and unit tests to create location/mapset
-       independent vector map layer.
+    This should be used in doc and unit tests to create location/mapset
+    independent vector map layer.
 
-        param map_name: The vector map name that should be used
+    :param map_name: The vector map name that should be used
 
-       1(0,2)  3(2,2)
-        \     /
-       1 \   / 2
-          \ /
-           2(1,1)
-    6(0,1) ||  5(2,1)
-       5 \ || / 4
-          \||/
-           4(1,0)
-           |
-           | 6
-           |7(1,-1)
+    .. code-block:: none
 
-       7(0,-1) 8(2,-1)
-        \     /
-       8 \   / 9
-          \ /
-           9(1, -2)
-           |
-           | 10
-           |
-          10(1,-3)
+           1(0,2)  3(2,2)
+            \     /
+           1 \   / 2
+              \ /
+               2(1,1)
+        6(0,1) ||  5(2,1)
+           5 \ || / 4
+              \||/
+               4(1,0)
+               |
+               | 6
+               |7(1,-1)
+
+           7(0,-1) 8(2,-1)
+            \     /
+           8 \   / 9
+              \ /
+               9(1, -2)
+               |
+               | 10
+               |
+              10(1,-3)
     """
 
     from grass.pygrass.vector import VectorTopo

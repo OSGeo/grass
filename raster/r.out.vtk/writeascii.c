@@ -74,7 +74,7 @@ void write_vtk_normal_header(FILE *fp, struct Cell_head region,
     /*Simple vtk ASCII header */
     fprintf(fp, "# vtk DataFile Version 3.0\n");
     /* The header line describes the data. */
-    fprintf(fp, "GRASS GIS %i Export\n", GRASS_VERSION_MAJOR);
+    fprintf(fp, "GRASS %i Export\n", GRASS_VERSION_MAJOR);
     fprintf(fp, "ASCII\n");
     fprintf(fp, "DATASET STRUCTURED_POINTS\n"); /*We are using the structured
                                                    point dataset. */
@@ -105,7 +105,7 @@ void write_vtk_structured_elevation_header(FILE *fp, struct Cell_head region)
 
     /*Simple vtk ASCII header */
     fprintf(fp, "# vtk DataFile Version 3.0\n");
-    fprintf(fp, "GRASS GIS %i Export\n", GRASS_VERSION_MAJOR);
+    fprintf(fp, "GRASS %i Export\n", GRASS_VERSION_MAJOR);
     fprintf(fp, "ASCII\n");
     fprintf(fp, "DATASET STRUCTURED_GRID\n"); /*We are using the structured grid
                                                  dataset. */
@@ -123,7 +123,7 @@ void write_vtk_polygonal_elevation_header(FILE *fp, struct Cell_head region)
 
     /*Simple vtk ASCII header */
     fprintf(fp, "# vtk DataFile Version 3.0\n");
-    fprintf(fp, "GRASS GIS %i Export\n", GRASS_VERSION_MAJOR);
+    fprintf(fp, "GRASS %i Export\n", GRASS_VERSION_MAJOR);
     fprintf(fp, "ASCII\n");
     fprintf(fp, "DATASET POLYDATA\n"); /*We are using polydataset. */
     fprintf(fp, "POINTS %i float\n", region.cols * region.rows);

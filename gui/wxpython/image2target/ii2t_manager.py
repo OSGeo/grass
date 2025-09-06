@@ -1,7 +1,7 @@
 """
 @package gcp.manager
 
-@brief Georectification module for GRASS GIS. Includes ground control
+@brief Georectification module for GRASS. Includes ground control
 point management and interactive point and click GCP creation
 
 Classes:
@@ -2263,9 +2263,7 @@ class GCPDisplay(FrameMixin, GCPPanel):
         )
         # set system icon
         parent.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
 
         # bind to frame

@@ -285,7 +285,6 @@ static char *_make_sublevels(const char *elems)
  * \param[in] item
  * \return Pointer to string path
  */
-
 char *G_rc_path(const char *element, const char *item)
 {
     size_t len;

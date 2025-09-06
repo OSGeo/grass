@@ -31,7 +31,6 @@
  *
  * returns number of points or -1 on error
  */
-
 int dig_get_poly_points(int n_lines, struct line_pnts **LPoints,
                         int *direction, /* line direction: > 0 or < 0 */
                         struct line_pnts *BPoints)
