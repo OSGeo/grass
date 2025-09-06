@@ -233,6 +233,7 @@ int export_areas_single(struct Map_info *In, int field, int donocat,
         db_close_cursor(&cursor);
 
     Vect_destroy_line_struct(Points);
+    Vect_destroy_cats_struct(Cats);
 
     return n_exported;
 }
