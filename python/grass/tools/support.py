@@ -359,6 +359,9 @@ class ToolResult:
     def __len__(self):
         return len(self._json_or_error())
 
+    def __iter__(self):
+        return iter(self._json_or_error())
+
     def __repr__(self):
         parameters = []
         parameters.append(f"returncode={self.returncode}")
