@@ -73,11 +73,7 @@ class DataCollectingParser(ctypesparser.CtypesParser, CtypesTypeVisitor):
             for header in self.options.other_headers:
                 f.write("#include <%s>\n" % header)
             for header in self.headers:
-                # Use header as-is if it's already absolute, otherwise make it absolute
-                header_path = header if os.path.isabs(header) else os.path.abspath(header)
-                # Convert backslashes to forward slashes for C/C++ compatibility
-                header_normalized = header_path.replace('\\', '/')
-                f.write('#include "%s"\n' % header_normalized)
+                f.write('#include "%s"\n' % os.path.abspath(header))
             f.flush()
         try:
             super(DataCollectingParser, self).parse(fname, self.options.debug_level)

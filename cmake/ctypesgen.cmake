@@ -58,10 +58,6 @@ foreach(HDR ${HDRS})
   list(APPEND HEADERS "${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}/grass/${HDR}")
 endforeach()
 
-# set(RUNTIME_GISBASE_1
-#     "\"${RUNTIME_GISBASE}\""
-# )
-
 message(STATUS "Generating ${OUT_FILE}")
 execute_process(
   COMMAND
