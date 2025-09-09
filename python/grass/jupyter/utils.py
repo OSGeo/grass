@@ -384,7 +384,8 @@ def get_map_name_from_d_command(module, **kwargs):
     """
     special = {"d.his": "hue", "d.legend": "raster", "d.rgb": "red", "d.shade": "shade"}
     parameter = special.get(module, "map")
-    return kwargs.get(parameter, "")
+    value = kwargs.get(parameter, "")
+    return value if isinstance(value, str) else None
 
 
 def get_rendering_size(region, width, height, default_width=600, default_height=400):
