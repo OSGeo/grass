@@ -23,7 +23,9 @@
 void check_create_import_opts(struct Option *, char *, FILE *);
 void check_create_export_opts(struct Option *, char *, FILE *);
 char *check_mapset_in_layer_name(char *, int);
-char *str_json_escape(const char *str);
+static char *str_json_escape(const char *str);
+static char *str_replace_free_buffer(char *buffer, const char old_char,
+                                     const char *new_str);
 
 /*!
    \brief This function generates actinia JSON process chain building blocks
@@ -539,56 +541,57 @@ char *check_mapset_in_layer_name(char *layer_name, int always_remove)
     return layer_name;
 }
 
+/** \brief Replace *old_char* with *new_str* and free the *buffer* if needed
+ *
+ * Replaces *old_char* (one character) with *new_str* (a string) in *buffer*
+ * and returns the new string. If no replacements were made, returns pointer
+ * to the original *buffer* unchanged.
+ *
+ * In any case, returned string should be freed with G_free(), while
+ * the original *buffer* should not be freed. The *buffer* must be a heap
+ * allocated string.
+ *
+ * \param buffer the string to make replacements in
+ * \param old_char the character to replace
+ * \param new_str the replacement string
+ *
+ * \return a newly allocated string or *buffer* if no replacements were made
+ */
+static char *str_replace_free_buffer(char *buffer, const char old_char,
+                                     const char *new_str)
+{
+    // Check if the input string contains the character to replace to avoid
+    // allocation in G_str_replace.
+    if (strchr(buffer, old_char)) {
+        // The function takes strings, not chars.
+        char old_str[2] = {old_char, '\0'};
+        char *res = G_str_replace(buffer, old_str, new_str);
+        G_free(buffer);
+        return res;
+    }
+    return buffer;
+}
+
 /** \brief Escape a string for JSON.
  *
- * Returns a newly allocated string that must be freed with G_free().
+ * \param str the string to escape
+ *
+ * \return a newly allocated string that must be freed with G_free()
  */
-char *str_json_escape(const char *str)
+static char *str_json_escape(const char *str)
 {
-    char *out;
-    char *tmp;
-
     // Always duplicate the input string for code simplicity.
-    out = G_store(str);
-
+    char *out = G_store(str);
     // We test character presence to avoid duplicating the input string
     // for every potential replacement.
-    if (strchr(out, '\\')) {
-        tmp = G_str_replace(out, "\\", "\\\\");
-        G_free(out);
-        out = tmp;
-    }
-    if (strchr(out, '\r')) {
-        tmp = G_str_replace(out, "\r", "\\r");
-        G_free(out);
-        out = tmp;
-    }
-    if (strchr(out, '\n')) {
-        tmp = G_str_replace(out, "\n", "\\n");
-        G_free(out);
-        out = tmp;
-    }
-    if (strchr(out, '\t')) {
-        tmp = G_str_replace(out, "\t", "\\t");
-        G_free(out);
-        out = tmp;
-    }
-    if (strchr(out, '"')) {
-        tmp = G_str_replace(out, "\"", "\\\"");
-        G_free(out);
-        out = tmp;
-    }
-    // While formfeed and backspace are unlikely, we test for them to
+    // While formfeed and backspace are unlikely, we check for them to
     // ensure valid JSON.
-    if (strchr(out, '\f')) {
-        tmp = G_str_replace(out, "\f", "\\f");
-        G_free(out);
-        out = tmp;
-    }
-    if (strchr(out, '\b')) {
-        tmp = G_str_replace(out, "\b", "\\b");
-        G_free(out);
-        out = tmp;
-    }
+    out = str_replace_free_buffer(out, '\\', "\\\\");
+    out = str_replace_free_buffer(out, '\r', "\\r");
+    out = str_replace_free_buffer(out, '\n', "\\n");
+    out = str_replace_free_buffer(out, '\t', "\\t");
+    out = str_replace_free_buffer(out, '\"', "\\\"");
+    out = str_replace_free_buffer(out, '\f', "\\f");
+    out = str_replace_free_buffer(out, '\b', "\\b");
     return out;
 }
