@@ -254,7 +254,7 @@ import numpy as np
 from grass.tools import Tools
 import grass.script.array as ga
 
-# Create a 100x100 sinusoidal elevation surface
+# Create a 2x3 constant raster with value 10
 x = np.full((2, 3), 10)
 
 # Set the region to match the array dimensions and resolution
