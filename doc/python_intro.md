@@ -216,7 +216,7 @@ tools.g_region(n=elevation.shape[0], s=0, e=elevation.shape[1], w=0, res=1)
 accumulation = tools.r_watershed(elevation=elevation, accumulation=np.array)
 ```
 
-An additional APIs, *[grass.script.array](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html#script.array.array)*
+Additional APIs, *[grass.script.array](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html#script.array.array)*
 and *[grass.script.array3d](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html#script.array.array3d)*,
 provide you with full control over read and writing data
 between GRASS raster maps and NumPy arrays, including 3D raster maps.
