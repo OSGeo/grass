@@ -16,7 +16,7 @@ would result in N real eigen values and N eigen vectors (each composed
 of N real numbers).
 
 The module
-*[m.eigensystem](https://grass.osgeo.org/grass-stable/manuals/addons/m.eigensystem.html)*
+*[m.eigensystem](https://grass.osgeo.org/grass-devel/manuals/addons/m.eigensystem.html)*
 in [GRASS Addons](https://grass.osgeo.org/download/addons/) can be
 installed and used to generate the eigenvalues and vectors.
 
@@ -68,7 +68,7 @@ This can be done with *[r.rescale](r.rescale.md)*.
 ## SEE ALSO
 
 *[i.pca](i.pca.md),
-[m.eigensystem](https://grass.osgeo.org/grass-stable/manuals/addons/m.eigensystem.html)
+[m.eigensystem](https://grass.osgeo.org/grass-devel/manuals/addons/m.eigensystem.html)
 (Addon), [r.mapcalc](r.mapcalc.md), [r.rescale](r.rescale.md)*
 
 ## AUTHOR

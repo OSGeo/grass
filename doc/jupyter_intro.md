@@ -116,7 +116,7 @@ m.show()
 ```
 
 !!! grass-tip "Map Size and Extent"
-    See [detailed documentation](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.jupyter.html#module-grass.jupyter.map)
+    See [detailed documentation](https://grass.osgeo.org/grass-devel/manuals/libpython/grass.jupyter.html#module-grass.jupyter.map)
     for changing the map size and geographic extent.
 
 ## Interactive map
@@ -142,7 +142,7 @@ m.show()
 
 The map gives you the ability to query the map, zoom in and out, and pan around,
 set the computational region, and create simple vector data by digitizing.
-To change the default basemap, see [documentation](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.jupyter.html#module-grass.jupyter.interactivemap).
+To change the default basemap, see [documentation](https://grass.osgeo.org/grass-devel/manuals/libpython/grass.jupyter.html#module-grass.jupyter.interactivemap).
 
 ## 3D map
 
@@ -254,15 +254,15 @@ flow_map.show()
 ## Python library documentation
 
 For complete documentation on the `grass.jupyter` package, see the
-[grass.jupyter](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.jupyter.html)
+[grass.jupyter](https://grass.osgeo.org/grass-devel/manuals/libpython/grass.jupyter.html)
 library documentation page.
 
 For complete documentation on the `grass.tools` package, see the
-[grass.tools](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.tools.html)
+[grass.tools](https://grass.osgeo.org/grass-devel/manuals/libpython/grass.tools.html)
 library documentation page.
 
 For complete documentation on the `grass.script` package, see the
-[grass.script](https://grass.osgeo.org/grass-stable/manuals/libpython/script_intro.html)
+[grass.script](https://grass.osgeo.org/grass-devel/manuals/libpython/script_intro.html)
 library documentation page.
 
 ## Tutorials

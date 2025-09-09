@@ -84,7 +84,7 @@ of Texas, Austin, 1990.
 
 *[i.cca](i.cca.md), [g.gui.iclass](g.gui.iclass.md), [i.fft](i.fft.md),
 [i.ifft](i.ifft.md),
-[m.eigensystem](https://grass.osgeo.org/grass-stable/manuals/addons/m.eigensystem.html),
+[m.eigensystem](https://grass.osgeo.org/grass-devel/manuals/addons/m.eigensystem.html),
 [r.covar](r.covar.md), [r.mapcalc](r.mapcalc.md)*
 
 *[Principal Components Analysis

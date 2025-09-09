@@ -32,7 +32,7 @@ grass --tmp-project XY --exec g.download.project url=https://grass.osgeo.org/sam
 
 *[g.mapset](g.mapset.md), [g.mapsets](g.mapsets.md),
 [r.proj](r.proj.md), [v.proj](v.proj.md),
-[g.proj.all](https://grass.osgeo.org/grass-stable/manuals/addons/g.proj.all.html)*
+[g.proj.all](https://grass.osgeo.org/grass-devel/manuals/addons/g.proj.all.html)*
 
 ## AUTHOR
 

@@ -49,7 +49,7 @@ algorithms such as [i.maxlik](i.maxlik.md) or [i.smap](i.smap.md), or
 for the identification of objects in [i.segment](i.segment.md), and/or
 for the characterization of these objects and thus, for example, as one
 of the raster inputs of the
-[i.segment.stats](https://grass.osgeo.org/grass-stable/manuals/addons/i.segment.stats.html)
+[i.segment.stats](https://grass.osgeo.org/grass-devel/manuals/addons/i.segment.stats.html)
 addon.
 
 In general, several variables constitute texture: differences in grey

@@ -104,7 +104,7 @@ r.smooth.edgepreserve function=tukey input=ortho_2001_t792_1m \
 
 - Smooth with statistics: *[r.neighbours](r.neighbours)*
 - The Mumford-Shah variational model for image segmentation (an add-on):
-*[r.smooth.seg](https://grass.osgeo.org/grass-stable/manuals/addons/r.smooth.seg.html)*
+*[r.smooth.seg](https://grass.osgeo.org/grass-devel/manuals/addons/r.smooth.seg.html)*
 
 ## REFERENCES
 

@@ -941,7 +941,7 @@ Anil K. Jain (Prentice Hall, NJ, 1989; p 67).
 ## SEE ALSO
 
 *[g.region](g.region.md),
-[r.bitpattern](https://grass.osgeo.org/grass-stable/manuals/addons/r.bitpattern.html),
+[r.bitpattern](https://grass.osgeo.org/grass-devel/manuals/addons/r.bitpattern.html),
 [r.blend](r.blend.md), [r.colors](r.colors.md),
 [r.fillnulls](r.fillnulls.md), [r.mapcalc.simple](r.mapcalc.simple.md)*
 

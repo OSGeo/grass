@@ -57,13 +57,13 @@ maps, especially on slower file systems with latency like NFS.
 Performance degradation may also occur on local file systems, but is
 usually less severe. For such use cases consider using the GRASS
 addon
-[r.buildvrt.gdal](https://grass.osgeo.org/grass-stable/manuals/addons/r.buildvrt.gdal.html)
+[r.buildvrt.gdal](https://grass.osgeo.org/grass-devel/manuals/addons/r.buildvrt.gdal.html)
 or building GDAL VRTs, e.g. with *gdalbuildvrt*.
 
 ## SEE ALSO
 
 *[r.tile](r.tile.md), [r.patch](r.patch.md), [r.external](r.external.md)
-[r.buildvrt.gdal](https://grass.osgeo.org/grass-stable/manuals/addons/r.buildvrt.gdal.html)*
+[r.buildvrt.gdal](https://grass.osgeo.org/grass-devel/manuals/addons/r.buildvrt.gdal.html)*
 
 The equivalent GDAL utility
 *[gdalbuildvrt](https://gdal.org/en/stable/programs/gdalbuildvrt.html)*
