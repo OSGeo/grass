@@ -118,10 +118,11 @@ class ParameterConverter:
 
 
 class ToolFunctionResolver:
-    def __init__(self, *, run_function, env):
+    def __init__(self, *, run_function, env, allowed_prefix=None):
         self._run_function = run_function
         self._env = env
         self._names = None
+        self._allowed_prefix = allowed_prefix
 
     def get_tool_name(self, name, exception_type):
         """Parse attribute to GRASS display module. Attribute should be in
@@ -149,6 +150,12 @@ class ToolFunctionResolver:
             msg = (
                 f"Tool or attribute {name} ({tool_name}) not found"
                 " (check session setup and documentation for tool and attribute names)"
+            )
+            raise exception_type(msg)
+        if self._allowed_prefix and not name.startswith(self._allowed_prefix):
+            msg = (
+                f"Tool {name} ({tool_name}) is not suitable to run this way"
+                f" based on the allowed prefix ({self._allowed_prefix})"
             )
             raise exception_type(msg)
         return tool_name
@@ -207,7 +214,15 @@ class ToolFunctionResolver:
     def names(self):
         if self._names:
             return self._names
-        self._names = [name.replace(".", "_") for name in gs.get_commands()[0]]
+        if self._allowed_prefix:
+            dotted_allow_prefix = self._allowed_prefix.replace("_", ".")
+        else:
+            dotted_allow_prefix = None
+        self._names = [
+            name.replace(".", "_")
+            for name in gs.get_commands()[0]
+            if not dotted_allow_prefix or name.startswith(dotted_allow_prefix)
+        ]
         return self._names
 
 
