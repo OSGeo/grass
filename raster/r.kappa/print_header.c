@@ -21,8 +21,10 @@ void print_header(void)
     snprintf(buf, sizeof(buf), "LOCATION: %s\t\t\t\t%s", G_location(),
              G_date());
     fprintf(fd, "%s\n", buf);
-    if ((mask = maskinfo()))
+    if ((mask = maskinfo())) {
         snprintf(buf, sizeof(buf), "MASK: %s", mask);
+        G_free(mask);
+    }
 
     fprintf(fd, "%s\n", buf);
     fprintf(fd, "MAPS: ");
