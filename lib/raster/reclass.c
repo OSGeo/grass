@@ -12,6 +12,7 @@
  */
 
 #include <string.h>
+#include <stdbool.h>
 
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -154,10 +155,10 @@ int Rast_get_reclass(const char *name, const char *mapset,
         return reclass->type;
     }
 
-    char *error_line = NULL;
+    char *error_message = NULL;
     switch (reclass->type) {
     case RECLASS_TABLE:
-        stat = get_reclass_table(fd, reclass, &error_line);
+        stat = get_reclass_table(fd, reclass, &error_message);
         break;
     default:
         stat = -1;
@@ -171,11 +172,11 @@ int Rast_get_reclass(const char *name, const char *mapset,
         else
             G_warning(
                 _("Illegal reclass format in header file for <%s@%s>: %s"),
-                name, mapset, error_line);
+                name, mapset, error_message);
         stat = -1;
     }
-    if (error_line != NULL)
-        G_free(error_line);
+    if (error_message != NULL)
+        G_free(error_message);
     return stat;
 }
 
@@ -372,17 +373,18 @@ static FILE *fopen_cellhd_new(const char *name)
  * \brief Get reclass table from header file
  *
  * If there is reading error due to the format, -1 is returned and,
- * if error_line is not NULL, it will be set to a pointer to a newly
- * allocated string containing the line where error was encountered.
+ * if error_message is not NULL, it will be set to a pointer to a newly
+ * allocated string containing an error message with the line where error
+ * was encountered.
  *
  * \param fd header file
  * \param[out] reclass pointer to Reclass structure
- * \param[out] error_line pointer to error line
+ * \param[out] error_message pointer to error message
 
  * \return 1 on success, -1 on format error, -2 on too many categories
  */
 static int get_reclass_table(FILE *fd, struct Reclass *reclass,
-                             char **error_line)
+                             char **error_message)
 {
     char buf[128];
     int n;
@@ -400,11 +402,13 @@ static int get_reclass_table(FILE *fd, struct Reclass *reclass,
     null_str_size = strlen(NULL_STRING);
     n = 0;
     first = 1;
+    bool min_set = false;
     while (fgets(buf, sizeof buf, fd)) {
         if (first) {
             first = 0;
             if (sscanf(buf, "#%d", &cat) == 1) {
                 reclass->min = cat;
+                min_set = true;
                 continue;
             }
         }
@@ -414,8 +418,18 @@ static int get_reclass_table(FILE *fd, struct Reclass *reclass,
             if (sscanf(buf, "%d", &cat) != 1) {
                 if (reclass->table != NULL)
                     G_free(reclass->table);
-                if (error_line != NULL)
-                    *error_line = G_store(buf);
+                if (error_message != NULL) {
+                    if (min_set)
+                        G_asprintf(error_message,
+                                   _("Reading integer failed on line: %s "
+                                     "(after reading min: %d)"),
+                                   buf, reclass->min);
+                    else
+                        G_asprintf(error_message,
+                                   _("First entry (min) not read yet and "
+                                     "reading integer failed on line: %s"),
+                                   buf);
+                }
                 return -1;
             }
         }
