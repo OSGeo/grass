@@ -1,8 +1,8 @@
-"""Test grass.experimental.Tools class"""
+"""Test grass.tools.Tools class"""
 
 import os
 
-from grass.experimental.tools import Tools
+from grass.tools import Tools
 
 
 def test_pack_input_output_tool_name_function(xy_dataset_session, rows_raster_file3x3):

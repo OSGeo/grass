@@ -24,7 +24,6 @@ from __future__ import annotations
 import json
 import shutil
 from io import StringIO
-from pathlib import Path
 from collections import namedtuple
 
 try:
@@ -41,22 +40,7 @@ except ImportError:
     # ga is present as well because that's the only import-time failure we expect.
     ga = None
 
-
-# Partial copy to avoid import issues for now
-class PackImporterExporter:
-    raster_pack_suffixes = (".grass_raster", ".pack", ".rpack", ".grr")
-
-    @classmethod
-    def is_recognized_file(cls, value):
-        return cls.is_raster_pack_file(value)
-
-    @classmethod
-    def is_raster_pack_file(cls, value):
-        if isinstance(value, (str, bytes)):
-            return value.endswith(cls.raster_pack_suffixes)
-        if isinstance(value, Path):
-            return value.suffix in cls.raster_pack_suffixes
-        return False
+from .importexport import PackImporterExporter
 
 
 class ParameterConverter:

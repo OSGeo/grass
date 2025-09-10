@@ -18,6 +18,7 @@ import os
 
 import grass.script as gs
 
+from .importexport import PackImporterExporter
 from .support import ParameterConverter, ToolFunctionResolver, ToolResult
 
 
@@ -130,6 +131,7 @@ class Tools:
         capture_output=True,
         capture_stderr=None,
         consistent_return_value=False,
+        keep_data=None,
     ):
         """
         If session is provided and has an env attribute, it is used to execute tools.
@@ -196,6 +198,11 @@ class Tools:
             self._capture_stderr = capture_stderr
         self._name_resolver = None
         self._consistent_return_value = consistent_return_value
+        # Decides if we delete at each run or only at the end of context.
+        self._delete_on_context_exit = False
+        # User request to keep the data.
+        self._keep_data = keep_data
+        self._cleanups = []
 
     def _modified_env_if_needed(self):
         """Get the environment for subprocesses
@@ -274,6 +281,7 @@ class Tools:
             args,
             tool_kwargs=kwargs,
             input=object_parameter_handler.stdin,
+            import_export=object_parameter_handler.import_export,
             **popen_options,
         )
         use_objects = object_parameter_handler.translate_data_to_objects(
@@ -299,6 +307,7 @@ class Tools:
         command: list[str],
         *,
         input: str | bytes | None = None,
+        import_export: bool | None = None,
         tool_kwargs: dict | None = None,
         **popen_options,
     ):
@@ -311,12 +320,46 @@ class Tools:
         :param tool_kwargs: named tool arguments used for error reporting (experimental)
         :param **popen_options: additional options for :py:func:`subprocess.Popen`
         """
-        return self.call_cmd(
+        if import_export is None:
+            import_export = False
+            for item in command:
+                if PackImporterExporter.is_recognized_file(item):
+                    import_export = True
+                    break
+        if import_export:
+            interface_result = self._process_parameters(command, **popen_options)
+            if interface_result.returncode != 0:
+                # This is only for the error states.
+                return gs.handle_errors(
+                    interface_result.returncode,
+                    result=None,
+                    args=[command],
+                    kwargs=tool_kwargs,
+                    stderr=interface_result.stderr,
+                    handler="raise",
+                )
+            processed_parameters = interface_result.json
+
+            pack_importer_exporter = PackImporterExporter(run_function=self.call)
+            pack_importer_exporter.modify_and_ingest_argument_list(
+                command, processed_parameters
+            )
+            pack_importer_exporter.import_data()
+
+        # We approximate tool_kwargs as original kwargs.
+        result = self.call_cmd(
             command,
             tool_kwargs=tool_kwargs,
             input=input,
             **popen_options,
         )
+        if import_export:
+            pack_importer_exporter.export_data()
+            if self._delete_on_context_exit or self._keep_data:
+                self._cleanups.append(pack_importer_exporter.cleanup)
+            else:
+                pack_importer_exporter.cleanup()
+        return result
 
     def call(self, tool_name_: str, /, **kwargs):
         """Run a tool by specifying its name as a string and parameters.
@@ -423,7 +466,22 @@ class Tools:
 
         :returns: reference to the object (self)
         """
+        self._delete_on_context_exit = True
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
         """Exit the context manager context."""
+        if not self._keep_data:
+            self.cleanup()
+
+    def cleanup(self):
+        for cleanup in self._cleanups:
+            cleanup()
+
+    def _process_parameters(self, command, **popen_options):
+        popen_options["stdin"] = None
+        popen_options["stdout"] = gs.PIPE
+        # We respect whatever is in the stderr option because that's what the user
+        # asked for and will expect to get in case of error (we pretend that it was
+        # the intended run, not our special run before the actual run).
+        return self.call_cmd([*command, "--json"], **popen_options)
