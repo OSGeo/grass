@@ -11,7 +11,7 @@ class ImporterExporter:
 
     @classmethod
     def is_raster_pack_file(cls, value):
-        if isinstance(value, (str, bytes)):
+        if isinstance(value, str):
             return value.endswith(cls.raster_pack_suffixes)
         if isinstance(value, Path):
             return value.suffix in cls.raster_pack_suffixes
