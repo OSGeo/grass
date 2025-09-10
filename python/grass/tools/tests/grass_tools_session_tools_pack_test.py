@@ -62,7 +62,7 @@ def test_pack_input_output_with_subprocess_run_like_call(
 
 
 def test_no_modify_command(xy_dataset_session, rows_raster_file3x3):
-    """Check input and output pack files work with tool name call"""
+    """Check that input command is not modified by the function"""
     tools = Tools(session=xy_dataset_session)
     tools.g_region(rows=3, cols=3)
     command = [
@@ -165,7 +165,11 @@ def test_io_no_cleanup_with_context(xy_dataset_session, rows_raster_file3x3):
 
 
 def test_wrong_parameter(xy_dataset_session, rows_raster_file3x3):
-    """Check input and output pack files work with tool name call"""
+    """Check wrong parameter causes standard exception
+
+    Since the tool is called to process its parameters with pack IO,
+    the error handling takes a different path than without pack IO active.
+    """
     tools = Tools(session=xy_dataset_session)
     tools.g_region(rows=3, cols=3)
     with pytest.raises(CalledModuleError, match="does_not_exist"):
