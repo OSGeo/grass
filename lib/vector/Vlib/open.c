@@ -33,14 +33,14 @@
 #include "pg_local_proto.h"
 #endif
 
-/*
-   \brief Number of levels
-
-   - 1 without topology
-   - 2 with 2D topology
-
-   \todo Implement
-   - 3 with 3D topology
+/**
+ * @brief Number of levels
+ *
+ * - 1 without topology
+ * - 2 with 2D topology
+ *
+ * @todo Implement
+ *   - 3 with 3D topology
  */
 #define MAX_OPEN_LEVEL 2
 
@@ -603,7 +603,7 @@ int Vect_open_old(struct Map_info *Map, const char *name, const char *mapset)
    \brief Open existing temporary vector map for reading
 
    Temporary vector maps are stored in the current mapset (directory
-   <tt>.tmp/<hostname>/vector</tt>).
+   <tt>.tmp/\<hostname\>/vector</tt>).
 
    Calls G_fatal_error() on failure.
 
@@ -671,7 +671,7 @@ int Vect_open_update(struct Map_info *Map, const char *name, const char *mapset)
    \brief Open existing temporary vector map for reading/writing
 
    Temporary vector maps are stored in the current mapset (directory
-   <tt>.tmp/<hostname>/vector</tt>).
+   <tt>.tmp/\<hostname\>/vector</tt>).
 
    By default list of updated features is not maintained, see
    Vect_set_updated() for details.
@@ -753,7 +753,6 @@ int Vect_open_old_head(struct Map_info *Map, const char *name,
    \param mapset mapset name ("" for search path)
    \param layer layer name (OGR format)
 
-   \param[out] Map pointer to Map_info structure
    \param name name of vector map to open (datasource for direct OGR access)
    \param mapset mapset name ("" for search path, "OGR" for direct OGR access)
    \param layer layer name (OGR layer for direct OGR access)
@@ -967,7 +966,7 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
    \brief Create new temporary vector map
 
    Temporary vector maps are stored in the current mapset (directory
-   <tt>.tmp/<hostname>/vector</tt>). If the map already exists, it is
+   <tt>.tmp/\<hostname\>/vector</tt>). If the map already exists, it is
    overwritten.
 
    Temporary vector maps are automatically deleted when closing the map

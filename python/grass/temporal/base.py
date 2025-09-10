@@ -1172,7 +1172,7 @@ class AbstractSTDSRegister(SQLDatabaseInterface):
                       the dataset name, layer name and the mapset
                       "name@mapset" or "name:layer@mapset"
                       used as as primary key in the temporal database
-        :param stds: A comma separated list of space time dataset ids
+        :param registered_stds: A comma separated list of space time dataset ids
         """
 
         SQLDatabaseInterface.__init__(self, table, ident)

@@ -1,4 +1,4 @@
-"""GRASS GIS interface to Python exceptions"""
+"""GRASS interface to Python exceptions"""
 
 import subprocess
 
@@ -91,6 +91,15 @@ class CalledModuleError(subprocess.CalledProcessError):
             executed=executed,
             returncode=returncode,
             see_errors=err,
+        )
+        self.module = module
+        self.code = code
+        self.errors = errors
+
+    def __reduce__(self):
+        return (
+            self.__class__,
+            (self.module, self.code, self.returncode, self.errors),
         )
 
     def __str__(self):

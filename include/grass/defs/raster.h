@@ -403,6 +403,7 @@ char *Rast_mask_name(void);
 bool Rast_mask_status(char *, char *, bool *, char *, char *);
 int Rast__mask_info(char *, char *);
 bool Rast_mask_is_present(void);
+int Rast_disable_omp_on_mask(int);
 
 /* maskfd.c */
 int Rast_maskfd(void);

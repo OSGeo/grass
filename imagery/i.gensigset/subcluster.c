@@ -366,10 +366,18 @@ static double regroup(struct ClassSig *Sig, int nbands)
             subsum += tmp;
             Data->p[s][i] = tmp;
         }
-        likelihood += log(subsum) + maxlike;
 
-        for (i = 0; i < Sig->nsubclasses; i++)
-            Data->p[s][i] /= subsum;
+        if (subsum > 0)
+            likelihood += log(subsum) + maxlike;
+
+        for (i = 0; i < Sig->nsubclasses; i++) {
+            if (subsum) {
+                Data->p[s][i] /= subsum;
+            }
+            else {
+                Data->p[s][i] = 0.0;
+            }
+        }
     }
 
     return (likelihood);

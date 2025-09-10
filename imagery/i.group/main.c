@@ -23,6 +23,9 @@
 #include <grass/gis.h>
 #include <grass/imagery.h>
 #include <grass/glocale.h>
+#include <grass/gjson.h>
+
+enum OutputFormat { PLAIN, JSON, SHELL };
 
 /* function prototypes */
 static int add_or_update_group(char group[INAME_LEN], char **rasters, int k);
@@ -33,7 +36,9 @@ static int remove_group_files(char group[INAME_LEN], char **rasters, int k);
 static int remove_subgroup_files(char group[INAME_LEN],
                                  char subgroup[INAME_LEN], char **rasters,
                                  int k);
-static void print_subgroups(const char *group, const char *mapset, int simple);
+static void print_subgroups(const char *group, const char *mapset,
+                            enum OutputFormat format, JSON_Array *root_array);
+static void list_files_json(const struct Ref *ref, JSON_Array *root_array);
 
 int main(int argc, char *argv[])
 {
@@ -43,9 +48,14 @@ int main(int argc, char *argv[])
     int m, k = 0;
     int can_edit;
 
-    struct Option *grp, *rast, *rastf, *sgrp;
+    struct Option *grp, *rast, *rastf, *sgrp, *frmt;
     struct Flag *r, *l, *s, *simple_flag;
     struct GModule *module;
+
+    enum OutputFormat format;
+
+    JSON_Value *root_value = NULL;
+    JSON_Array *root_array = NULL;
 
     G_gisinit(argv[0]);
 
@@ -73,6 +83,13 @@ int main(int argc, char *argv[])
     rastf->description = _("Input file with one raster map name per line");
     rastf->required = NO;
 
+    frmt = G_define_standard_option(G_OPT_F_FORMAT);
+    frmt->options = "plain,shell,json";
+    frmt->descriptions = _("plain;Human readable text output;"
+                           "shell;shell script style text output;"
+                           "json;JSON (JavaScript Object Notation);");
+    frmt->guisection = _("Print");
+
     r = G_define_flag();
     r->key = 'r';
     r->description =
@@ -91,16 +108,46 @@ int main(int argc, char *argv[])
 
     simple_flag = G_define_flag();
     simple_flag->key = 'g';
-    simple_flag->description = _("Print in shell script style");
+    simple_flag->label = _("Print in shell script style [deprecated]");
+    simple_flag->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=shell instead.");
     simple_flag->guisection = _("Print");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
+    if (strcmp(frmt->answer, "json") == 0) {
+        format = JSON;
+        root_value = G_json_value_init_array();
+        if (root_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
+        root_array = G_json_array(root_value);
+    }
+    else if (strcmp(frmt->answer, "shell") == 0) {
+        format = SHELL;
+    }
+    else {
+        format = PLAIN;
+    }
+
+    if (simple_flag->answer) {
+        G_verbose_message(
+            _("Flag 'g' is deprecated and will be removed in a future "
+              "release. Please use format=shell instead."));
+        if (format == JSON) {
+            G_json_value_free(root_value);
+            G_fatal_error(_("Cannot use the -g flag with format=json; "
+                            "please select only one option."));
+        }
+        format = SHELL;
+    }
+
     /* backward compatibility -> simple list implied l flag list, if there was
-       only l flag (with s flag added it is not clear, simple_flag is linked to
-       both) */
-    if ((simple_flag->answer && !s->answer) && !l->answer)
+       only l flag (with s flag added it is not clear, shell/json format is
+       linked to both) */
+    if (format != PLAIN && !s->answer && !l->answer)
         l->answer = TRUE;
 
     /* Determine number of raster maps to include */
@@ -182,29 +229,41 @@ int main(int argc, char *argv[])
             if (sgrp->answer) {
                 /* list subgroup files */
                 I_get_subgroup_ref2(group, sgrp->answer, mapset, &ref);
-                if (simple_flag->answer) {
+                switch (format) {
+                case SHELL:
                     G_message(_("Subgroup <%s> of group <%s> references the "
                                 "following raster maps:"),
                               sgrp->answer, group);
                     I_list_subgroup_simple(&ref, stdout);
-                }
-                else
+                    break;
+                case PLAIN:
                     I_list_subgroup(group, sgrp->answer, &ref, stdout);
+                    break;
+                case JSON:
+                    list_files_json(&ref, root_array);
+                    break;
+                }
             }
             else if (s->answer) {
-                print_subgroups(group, mapset, simple_flag->answer);
+                print_subgroups(group, mapset, format, root_array);
             }
             else {
                 /* list group files */
                 I_get_group_ref2(group, mapset, &ref);
-                if (simple_flag->answer) {
+                switch (format) {
+                case SHELL:
                     G_message(
                         _("Group <%s> references the following raster maps:"),
                         group);
                     I_list_group_simple(&ref, stdout);
-                }
-                else
+                    break;
+                case PLAIN:
                     I_list_group(group, &ref, stdout);
+                    break;
+                case JSON:
+                    list_files_json(&ref, root_array);
+                    break;
+                }
             }
         }
         else {
@@ -233,6 +292,17 @@ int main(int argc, char *argv[])
                 add_or_update_group(group, rasters, k);
             }
         }
+    }
+
+    if (format == JSON) {
+        char *serialized_string = NULL;
+        serialized_string = G_json_serialize_to_string_pretty(root_value);
+        if (serialized_string == NULL) {
+            G_fatal_error(_("Failed to initialize pretty JSON string."));
+        }
+        puts(serialized_string);
+        G_json_free_serialized_string(serialized_string);
+        G_json_value_free(root_value);
     }
 
     return EXIT_SUCCESS;
@@ -435,7 +505,8 @@ static int remove_subgroup_files(char group[INAME_LEN],
     return 0;
 }
 
-static void print_subgroups(const char *group, const char *mapset, int simple)
+static void print_subgroups(const char *group, const char *mapset,
+                            enum OutputFormat format, JSON_Array *root_array)
 {
     int subgs_num, i;
     int len, tot_len;
@@ -443,10 +514,12 @@ static void print_subgroups(const char *group, const char *mapset, int simple)
     char **subgs;
 
     subgs = I_list_subgroups2(group, mapset, &subgs_num);
-    if (simple)
+    switch (format) {
+    case SHELL:
         for (i = 0; i < subgs_num; i++)
             fprintf(stdout, "%s\n", subgs[i]);
-    else {
+        break;
+    case PLAIN:
         if (subgs_num <= 0) {
             fprintf(stdout, _("Group <%s> does not contain any subgroup.\n"),
                     group);
@@ -474,7 +547,32 @@ static void print_subgroups(const char *group, const char *mapset, int simple)
         if (tot_len)
             fprintf(stdout, "\n");
         fprintf(stdout, "-------------\n");
+        break;
+    case JSON:
+        for (i = 0; i < subgs_num; i++)
+            G_json_array_append_string(root_array, subgs[i]);
+        break;
     }
     G_free(subgs);
     return;
+}
+
+/*!
+ * \brief List files in a (sub)group (JSON)
+ *
+ * List map in map\@mapset form.
+ *
+ * \param ref group reference (set with I_get_group_ref())
+ * \param root_array JSON array to which data will be appended.
+ */
+static void list_files_json(const struct Ref *ref, JSON_Array *root_array)
+{
+    int i;
+    char map_str[1024];
+
+    for (i = 0; i < ref->nfiles; i++) {
+        snprintf(map_str, sizeof(map_str), "%s@%s", ref->file[i].name,
+                 ref->file[i].mapset);
+        G_json_array_append_string(root_array, map_str);
+    }
 }

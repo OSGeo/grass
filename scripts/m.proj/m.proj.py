@@ -245,7 +245,7 @@ def main():
 
     cmd = ["cs2cs"] + copyinp + outfmt + in_proj.split() + ["+to"] + out_proj.split()
 
-    p = gcore.Popen(cmd, stdin=gcore.PIPE, stdout=gcore.PIPE)
+    p = gcore.Popen(cmd, stdin=gcore.PIPE, stdout=gcore.PIPE, text=False)
 
     tr = TrThread(ifs, inf, p.stdin)
     tr.start()

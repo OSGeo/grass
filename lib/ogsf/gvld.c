@@ -107,6 +107,7 @@ int gvld_isosurf(geovol *gvl)
     float *kem, *ksh, pkem, pksh;
     unsigned int *ktrans, *curcolor;
     int pktransp = 0;
+    int ret = 0;
 
     int *pos, *nz, *e_dl, tmp_pos, edge_pos[13];
 
@@ -255,8 +256,8 @@ int gvld_isosurf(geovol *gvl)
             gsd_popmatrix();
             gsd_blend(0);
             gsd_zwritemask(0xffffffff);
-
-            return (-1);
+            ret = -1;
+            goto cleanup_exit;
         }
 
         for (y = 0; y < rows - 1; y++) {
@@ -396,8 +397,20 @@ int gvld_isosurf(geovol *gvl)
     gsd_popmatrix();
     gsd_blend(0);
     gsd_zwritemask(0xffffffff);
-
-    return (0);
+cleanup_exit:
+    G_free(e_dl);
+    G_free(nz);
+    G_free(pos);
+    G_free(curcolor);
+    G_free(ktrans);
+    G_free(ksh);
+    G_free(kem);
+    G_free(check_shin);
+    G_free(check_emis);
+    G_free(check_material);
+    G_free(check_transp);
+    G_free(check_color);
+    return ret;
 }
 
 /*!

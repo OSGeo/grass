@@ -21,7 +21,7 @@ char *maskinfo(void)
 
     results = NULL;
     if (!Rast_mask_status(mask_name, mask_mapset, NULL, NULL, NULL))
-        return "none";
+        return G_store("none");
     if (Rast_get_reclass(mask_name, mask_mapset, &reclass) <= 0) {
         snprintf(text, sizeof(text), "%s in %s", mask_name, mask_mapset);
         return append(results, text);

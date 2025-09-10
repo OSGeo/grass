@@ -63,12 +63,12 @@ class Layer:  # pylint: disable=too-few-public-methods
     ):
         """Reproject GRASS raster, export to PNG, and compute bounding box.
 
-        param str name: layer name
-        param str title: title of layer to display in layer control legend
-        param bool use_region: use computational region of current mapset
-        param str saved_region: name of saved computation region
-        param renderer: instance of ReprojectionRenderer
-        **kwargs: keyword arguments passed to folium/ipyleaflet layer instance
+        :param str name: layer name
+        :param str title: title of layer to display in layer control legend
+        :param bool use_region: use computational region of current mapset
+        :param str saved_region: name of saved computation region
+        :param renderer: instance of ReprojectionRenderer
+        :param kwargs: keyword arguments passed to folium/ipyleaflet layer instance
         """
         self._name = name
         self._layer_kwargs = kwargs
@@ -355,10 +355,11 @@ class InteractiveMap:
         Color table for the raster can be modified with `r.colors` before calling
         this function.
 
-        .. note:: This will only work if the raster is located in the current mapset.
-        To change the color table of a raster located outside the current mapset,
-        switch to that mapset with `g.mapset`, modify the color table with `r.color`
-        then switch back to the initial mapset and run this function.
+        .. note::
+            This will only work if the raster is located in the current mapset.
+            To change the color table of a raster located outside the current mapset,
+            switch to that mapset with ``g.mapset``, modify the color table with ``r.color``
+            then switch back to the initial mapset and run this function.
 
         :param str name: name of raster to add to display; positional-only parameter
         :param str title: raster name for layer control
@@ -372,7 +373,8 @@ class InteractiveMap:
 
         A Layer Control is added by default. Call this function to customize
         layer control object. Accepts keyword arguments to be passed to leaflet
-        layer control object"""
+        layer control object
+        """
 
         if self._folium:
             self.layer_control_object = self._folium.LayerControl(**kwargs)
@@ -552,7 +554,7 @@ class InteractiveRegionController:
             self.bottom_output_widget.clear_output()
             print(
                 _(
-                    "Region changed to: n={n}, s={s}, e={e}, w={w} "
+                    "Region changed to: n={north}, s={south}, e={east}, w={west} "
                     "nsres={nsres} ewres={ewres}"
                 ).format(**region)
             )

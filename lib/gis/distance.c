@@ -67,8 +67,8 @@ int G_begin_distance_calculations(void)
    latitude-longitude, this distance is measured along the
    geodesic. Two routines perform geodesic distance calculations.
 
-   \param e1,n1 east-north coordinates of first point
-   \param e2,n2 east-north coordinates of second point
+   \param[in] e1,n1 east-north coordinates of first point
+   \param[in] e2,n2 east-north coordinates of second point
 
    \return distance
  */

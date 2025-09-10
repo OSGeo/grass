@@ -443,11 +443,6 @@ from __future__ import annotations
 
 from typing import Literal
 
-try:
-    from ply import lex, yacc
-except ImportError:
-    pass
-
 import copy
 import os
 from datetime import datetime
@@ -472,6 +467,7 @@ from .datetime_math import (
 )
 from .factory import dataset_factory
 from .open_stds import open_new_stds, open_old_stds
+from .ply import lex, yacc
 from .space_time_datasets import RasterDataset
 from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
 from .temporal_granularity import (
@@ -483,7 +479,7 @@ from .temporal_operator import TemporalOperatorParser
 
 
 class TemporalAlgebraLexer:
-    """Lexical analyzer for the GRASS GIS temporal algebra"""
+    """Lexical analyzer for the GRASS temporal algebra"""
 
     # Functions that defines an if condition, temporal buffering, snapping and
     # selection of maps with temporal extent.
@@ -692,9 +688,7 @@ class TemporalAlgebraLexer:
 
     # Build the lexer
     def build(self, **kwargs) -> None:
-        self.lexer = lex.lex(
-            module=self, optimize=False, nowarn=True, debug=0, **kwargs
-        )
+        self.lexer = lex.lex(module=self, debug=0, **kwargs)
 
     # Just for testing
     def test(self, data) -> None:
@@ -980,7 +974,7 @@ class TemporalAlgebraParser:
         """
         self.lexer = TemporalAlgebraLexer()
         self.lexer.build()
-        self.parser = yacc.yacc(module=self, debug=self.debug, write_tables=False)
+        self.parser = yacc.yacc(module=self, debug=self.debug)
 
         self.overwrite = overwrite
         self.count = 0
@@ -1378,8 +1372,8 @@ class TemporalAlgebraParser:
         :return: A tuple of spatial and temporal topology lists
                 (temporal_topo_list, spatial_topo_list)
 
-        :raises: This method will raise a syntax error in case the topology name is
-                 unknown
+        :raises SyntaxError:
+            This method will raise a syntax error in case the topology name is unknown
         """
         temporal_topo_list = []
         spatial_topo_list = []
@@ -1904,6 +1898,7 @@ class TemporalAlgebraParser:
             a9@B - start: 8 end: 10
             a8@B - start: 8 end: 10
 
+        :raises SyntaxError: If an unpermitted temporal relation name is used in ``topolist``
         """
         topologylist = [
             "EQUAL",
@@ -2275,11 +2270,9 @@ class TemporalAlgebraParser:
              - [True,  '&&', False]              -> False
              - [False, '||', True]               -> True
 
-        :param tvarexpr: List of GlobalTemporalVar objects and map lists.
-                     The list is constructed by the TemporalAlgebraParser
-                     in order of expression evaluation in the parser.
-
-        :return: Map list with conditional values for all temporal expressions.
+        :param maplist: A list of maps
+        :param inverse:
+        :return: Map list with conditional values evaluated
         """
 
         def recurse_compare(conditionlist):

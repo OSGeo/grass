@@ -137,7 +137,6 @@ typedef int rli_func(int fd, char **par, struct area_entry *ad, double *result);
  * idiom for success/failure. The interface was designed to accommodate
  * common usage of this function in r.li modules.
  */
-
 int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
                    char *output);
 

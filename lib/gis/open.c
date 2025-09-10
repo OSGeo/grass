@@ -145,7 +145,6 @@ static int G__open(const char *element, const char *name, const char *mapset,
    \return open file descriptor (int)
    \return -1 could not open
  */
-
 int G_open_new(const char *element, const char *name)
 {
     return G__open(element, name, G_mapset(), 1);
@@ -187,7 +186,6 @@ int G_open_old(const char *element, const char *name, const char *mapset)
    \return open file descriptor (int)
    \return -1 could not open
  */
-
 int G_open_update(const char *element, const char *name)
 {
     int fd;
@@ -215,7 +213,6 @@ int G_open_update(const char *element, const char *name)
    \return open file descriptor (FILE *)
    \return NULL on error
  */
-
 FILE *G_fopen_new(const char *element, const char *name)
 {
     int fd;

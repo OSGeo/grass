@@ -12,6 +12,7 @@
  */
 
 #include <string.h>
+#include <stdbool.h>
 
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -21,7 +22,7 @@ static const char NULL_STRING[] = "null";
 static int reclass_type(FILE *, char **, char **);
 static FILE *fopen_cellhd_old(const char *, const char *);
 static FILE *fopen_cellhd_new(const char *);
-static int get_reclass_table(FILE *, struct Reclass *);
+static int get_reclass_table(FILE *, struct Reclass *, char **);
 
 /*!
  * \brief Check if raster map is reclassified
@@ -154,9 +155,10 @@ int Rast_get_reclass(const char *name, const char *mapset,
         return reclass->type;
     }
 
+    char *error_message = NULL;
     switch (reclass->type) {
     case RECLASS_TABLE:
-        stat = get_reclass_table(fd, reclass);
+        stat = get_reclass_table(fd, reclass, &error_message);
         break;
     default:
         stat = -1;
@@ -168,10 +170,13 @@ int Rast_get_reclass(const char *name, const char *mapset,
             G_warning(_("Too many reclass categories for <%s@%s>"), name,
                       mapset);
         else
-            G_warning(_("Illegal reclass format in header file for <%s@%s>"),
-                      name, mapset);
+            G_warning(
+                _("Illegal reclass format in header file for <%s@%s>: %s"),
+                name, mapset, error_message);
         stat = -1;
     }
+    if (error_message != NULL)
+        G_free(error_message);
     return stat;
 }
 
@@ -364,7 +369,22 @@ static FILE *fopen_cellhd_new(const char *name)
     return G_fopen_new("cellhd", name);
 }
 
-static int get_reclass_table(FILE *fd, struct Reclass *reclass)
+/**
+ * \brief Get reclass table from header file
+ *
+ * If there is reading error due to the format, -1 is returned and,
+ * if error_message is not NULL, it will be set to a pointer to a newly
+ * allocated string containing an error message with the line where error
+ * was encountered.
+ *
+ * \param fd header file
+ * \param[out] reclass pointer to Reclass structure
+ * \param[out] error_message pointer to error message
+
+ * \return 1 on success, -1 on format error, -2 on too many categories
+ */
+static int get_reclass_table(FILE *fd, struct Reclass *reclass,
+                             char **error_message)
 {
     char buf[128];
     int n;
@@ -382,19 +402,36 @@ static int get_reclass_table(FILE *fd, struct Reclass *reclass)
     null_str_size = strlen(NULL_STRING);
     n = 0;
     first = 1;
+    bool min_set = false;
     while (fgets(buf, sizeof buf, fd)) {
         if (first) {
             first = 0;
             if (sscanf(buf, "#%d", &cat) == 1) {
                 reclass->min = cat;
+                min_set = true;
                 continue;
             }
         }
         if (strncmp(buf, NULL_STRING, null_str_size) == 0)
             Rast_set_c_null_value(&cat, 1);
         else {
-            if (sscanf(buf, "%d", &cat) != 1)
+            if (sscanf(buf, "%d", &cat) != 1) {
+                if (reclass->table != NULL)
+                    G_free(reclass->table);
+                if (error_message != NULL) {
+                    if (min_set)
+                        G_asprintf(error_message,
+                                   _("Reading integer failed on line: %s "
+                                     "(after reading min: %d)"),
+                                   buf, reclass->min);
+                    else
+                        G_asprintf(error_message,
+                                   _("First entry (min) not read yet and "
+                                     "reading integer failed on line: %s"),
+                                   buf);
+                }
                 return -1;
+            }
         }
         n++;
         len = (long)n * sizeof(CELL);

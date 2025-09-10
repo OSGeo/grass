@@ -68,7 +68,7 @@ from .temporal_granularity import compute_absolute_time_granularity
 
 
 class TemporalRasterAlgebraLexer(TemporalAlgebraLexer):
-    """Lexical analyzer for the GRASS GIS temporal algebra"""
+    """Lexical analyzer for the GRASS temporal algebra"""
 
     def __init__(self) -> None:
         TemporalAlgebraLexer.__init__(self)
@@ -435,10 +435,10 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         list builder for temporal raster algebra.
 
         :param map_i: Map object with temporal extent.
-        :param temporal_relations: List of temporal relation to map_i.
-        :param temporal_topo_list: List of strings for given temporal relations.
         :param compop: Comparison operator, && or ||.
         :param aggregate: Aggregation operator for relation map list, & or \\|.
+        :param temporal_topo_list: List of strings for given temporal relations.
+        :param spatial_topo_list: List of strings for given spatial relations.
         :param convert: Boolean if conditional values should be converted to
                         r.mapcalc command strings.
 

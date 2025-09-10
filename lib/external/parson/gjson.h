@@ -29,6 +29,13 @@ extern JSON_Status G_json_object_set_number(JSON_Object *, const char *,
 extern JSON_Status G_json_object_set_boolean(JSON_Object *, const char *, int);
 extern JSON_Status G_json_object_set_null(JSON_Object *, const char *);
 
+extern JSON_Status G_json_object_dotset_string(JSON_Object *, const char *,
+                                               const char *);
+extern const char *G_json_object_dotget_string(JSON_Object *, const char *);
+extern JSON_Status G_json_object_dotset_number(JSON_Object *, const char *,
+                                               double);
+extern double G_json_object_dotget_number(JSON_Object *, const char *);
+
 extern JSON_Array *G_json_array(const JSON_Value *);
 extern JSON_Value *G_json_array_get_value(const JSON_Array *, size_t);
 extern const char *G_json_array_get_string(const JSON_Array *, size_t);

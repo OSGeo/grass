@@ -26,25 +26,44 @@ from pathlib import Path
 
 import grass.script as gs
 from grass.app.data import lock_mapset, unlock_mapset, MapsetLockingException
-from grass.experimental.standalone import StandaloneTools
+from grass.tools import Tools
+
+# Special flags supported besides help and --json which does not need special handling:
+SPECIAL_FLAGS = [
+    "--interface-description",
+    "--md-description",
+    "--wps-process-description",
+    "--script",
+]
+# To make this list shorter, we don't support outdated special flags:
+# --help-text --html-description --rst-description
 
 
-def subcommand_run_tool(args, tool_args: list, help: bool):
-    command = [args.tool_name, *tool_args]
-    if help:
-        with tempfile.TemporaryDirectory() as tmp_dir_name:
-            project_name = "project"
-            project_path = Path(tmp_dir_name) / project_name
-            gs.create_project(project_path)
-            with gs.setup.init(project_path) as session:
-                result = subprocess.run(command, env=session.env)
-        return result.returncode
-
-    with StandaloneTools(capture_output=False) as tools:
-        try:
-            tools.run_from_list(command)
-        except subprocess.CalledProcessError as error:
-            return error.returncode
+def subcommand_run_tool(args, tool_args: list, print_help: bool):
+    command = [args.tool, *tool_args]
+    with tempfile.TemporaryDirectory() as tmp_dir_name:
+        project_name = "project"
+        project_path = Path(tmp_dir_name) / project_name
+        gs.create_project(project_path)
+        with gs.setup.init(project_path) as session:
+            tools = Tools(
+                session=session, capture_output=False, consistent_return_value=True
+            )
+            try:
+                # From here, we return the subprocess return code regardless of its
+                # value. Error states are handled through exceptions.
+                if print_help:
+                    # We consumed the help flag, so we need to add it explicitly.
+                    return tools.call_cmd([*command, "--help"]).returncode
+                if any(item in command for item in SPECIAL_FLAGS):
+                    # This is here basically because of how --json behaves,
+                    # two JSON flags are accepted, but --json currently overridden by
+                    # other special flags, so later use of --json in tools will fail
+                    # with the other flags active.
+                    return tools.call_cmd(command).returncode
+                return tools.run_cmd(command).returncode
+            except subprocess.CalledProcessError as error:
+                return error.returncode
 
 
 def subcommand_lock_mapset(args):
@@ -100,9 +119,15 @@ def main(args=None, program=None):
 
     # Subcommand parsers
 
-    subparser = subparsers.add_parser("run", help="run a tool")
-    subparser.add_argument("tool_name", type=str)
-    subparser.set_defaults(func=subcommand_run_tool)
+    run_subparser = subparsers.add_parser(
+        "run",
+        help="run a tool",
+        add_help=False,
+        epilog="Tool name is followed by its parameters.",
+    )
+    run_subparser.add_argument("tool", type=str, nargs="?", help="name of a tool")
+    run_subparser.add_argument("--help", action="store_true")
+    run_subparser.set_defaults(func=subcommand_run_tool)
 
     subparser = subparsers.add_parser("lock", help="lock a mapset")
     subparser.add_argument("mapset_path", type=str)
@@ -148,26 +173,15 @@ def main(args=None, program=None):
     subparser.set_defaults(func=subcommand_show_man)
 
     # Parsing
-
-    if not args:
-        args = sys.argv[1:]
-    raw_args = args.copy()
-    add_back = None
-    if len(raw_args) > 2 and raw_args[0] == "run":
-        # Getting the --help of tools needs to work around the standard help mechanism
-        # of argparse.
-        # Maybe a better workaround is to use custom --help, action="help", print_help,
-        # and dedicated tool help function complimentary with g.manual subcommand
-        # interface.
-        if "--help" in raw_args[2:]:
-            raw_args.remove("--help")
-            add_back = "--help"
-        elif "--h" in raw_args[2:]:
-            raw_args.remove("--h")
-            add_back = "--h"
-    parsed_args, other_args = parser.parse_known_args(raw_args)
+    parsed_args, other_args = parser.parse_known_args(args)
+    # Standard help already exited, but we need to handle tools separately.
     if parsed_args.subcommand == "run":
-        if add_back:
-            other_args.append(add_back)
-        return parsed_args.func(parsed_args, other_args, help=bool(add_back))
+        if parsed_args.tool is None and parsed_args.help:
+            run_subparser.print_help()
+            return 0
+        if parsed_args.tool is None:
+            run_subparser.print_usage()
+            # argparse gives 2 without parameters, so we behave the same.
+            return 2
+        return parsed_args.func(parsed_args, other_args, print_help=parsed_args.help)
     return parsed_args.func(parsed_args)
