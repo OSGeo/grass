@@ -7,9 +7,7 @@ DSTDIR = $(ETC)/python/grass/experimental
 
 MODULES = \
 	create \
-	mapset \
-	standalone \
-	tools
+	mapset
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)

@@ -5,7 +5,7 @@ import os
 import numpy as np
 import pytest
 
-from grass.experimental.standalone import StandaloneTools
+from grass.tools import StandaloneTools
 
 
 def test_json():
@@ -201,11 +201,11 @@ def test_regions_independent():
     assert region["cols"] == 5
 
 
-def test_region_changed_for_session(xy_session):
+def test_region_changed_for_session(xy_dataset_session):
     """Check that global overwrite is not used when separate env is used"""
-    tools1 = StandaloneTools(session=xy_session)
+    tools1 = StandaloneTools(session=xy_dataset_session)
     tools1.g_region(rows=4, cols=5)
-    tools2 = StandaloneTools(session=xy_session)
+    tools2 = StandaloneTools(session=xy_dataset_session)
     region = tools2.g_region(flags="p", format="json")
     assert region["rows"] == 4
     assert region["cols"] == 5
@@ -281,14 +281,14 @@ def test_numpy_inputs_region_mismatch():
 def test_existing_session_accepted(xy_mapset_non_permament):
     """Check that numbers are parsed as numbers"""
     tools = StandaloneTools(session=xy_mapset_non_permament)
-    assert tools.g_mapset(flags="p").text == "test1"
+    assert tools.g_mapset(flags="p").text == xy_mapset_non_permament.name
 
 
-def test_another_session_is_ignored(xy_session):
+def test_another_session_is_ignored(xy_dataset_session):
     """Check that numbers are parsed as numbers"""
     from grass.experimental import MapsetSession
 
-    with MapsetSession("test1", create=True, env=xy_session.env) as session:
+    with MapsetSession("test1", create=True, env=xy_dataset_session.env) as session:
         tools = StandaloneTools()
         assert tools.g_mapset(flags="p").text == "PERMANENT"
         from grass.experimental.tools import Tools

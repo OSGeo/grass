@@ -24,12 +24,9 @@ import weakref
 from pathlib import Path
 
 import grass.script as gs
-from .tools import (
-    Tools,
-    PackImporterExporter,
-    ObjectParameterHandler,
-    ToolFunctionNameHelper,
-)
+from .session_tools import Tools
+from .support import ParameterConverter, ToolFunctionResolver
+from grass.experimental.tools import PackImporterExporter
 
 
 # Using inheritance to get the getattr behavior and other functionality,
@@ -69,7 +66,7 @@ class StandaloneTools:
         )
 
     def run(self, name, /, **kwargs):
-        object_parameter_handler = ObjectParameterHandler()
+        object_parameter_handler = ParameterConverter()
         object_parameter_handler.process_parameters(kwargs)
 
         args, popen_options = gs.popen_args_command(name, **kwargs)
@@ -292,9 +289,7 @@ class StandaloneTools:
             # We create session and an empty XY project in one step.
             self._create_session()
         if not self._name_helper:
-            self._name_helper = ToolFunctionNameHelper(
-                run_function=self.run,
-                env=self._session.env,
-                prefix=None,
+            self._name_helper = ToolFunctionResolver(
+                run_function=self.run, env=self._session.env
             )
         return self._name_helper.get_function(name, exception_type=AttributeError)
