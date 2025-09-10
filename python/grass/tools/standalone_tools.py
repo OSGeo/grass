@@ -26,7 +26,7 @@ from pathlib import Path
 import grass.script as gs
 from .session_tools import Tools
 from .support import ParameterConverter, ToolFunctionResolver
-from grass.experimental.tools import PackImporterExporter
+from grass.tools.importexport import ImporterExporter
 
 
 # Using inheritance to get the getattr behavior and other functionality,
@@ -141,14 +141,11 @@ class StandaloneTools:
             # We create session and an empty XY project in one step.
             self._create_session()
 
-        parameters = json.loads(
-            subprocess.check_output(
-                [*command, "--json"], text=True, env=self._session.env
-            )
+        pack_importer_exporter = ImporterExporter(
+            run_function=self.no_nonsense_run,
+            run_cmd_function=self.no_nonsense_run_from_list,
         )
-
-        pack_importer_exporter = PackImporterExporter(run_function=self.no_nonsense_run)
-        pack_importer_exporter.modify_and_ingest_argument_list(command, parameters)
+        command = pack_importer_exporter.process_parameter_list(command)
 
         if not self._crs_initialized:
             self._initialize_crs(pack_importer_exporter.input_rasters)
@@ -163,7 +160,7 @@ class StandaloneTools:
             # while not touching the underlying session.
             self.no_nonsense_run(
                 "g.region",
-                raster=pack_importer_exporter.input_rasters[0].stem,
+                raster=pack_importer_exporter.input_rasters[0][0].stem,
                 env=self._session.env,
             )
             self._region_is_set = True
@@ -189,12 +186,11 @@ class StandaloneTools:
                 quiet=False,
                 verbose=False,
                 superquiet=False,
-                stdin=None,
                 errors=self._errors,
                 capture_output=self._capture_output,
                 session=self._session,
             )
-        return self._tools.no_nonsense_run_from_list(command)
+        return self._tools.call_cmd(command)
 
     def _create_session(self):
         # Temporary folder for all our files
@@ -227,7 +223,7 @@ class StandaloneTools:
         mapset_path = Path(mapset_path)
 
         if rasters:
-            with tarfile.TarFile(rasters[0]) as tar:
+            with tarfile.TarFile(rasters[0][0]) as tar:
                 for name in [
                     "PROJ_UNITS",
                     "PROJ_INFO",
