@@ -114,10 +114,20 @@ void print_python_option(FILE *file, const struct Option *opt,
     char prompt_description[KEYLENGTH];
     if (opt->gisprompt) {
         G__split_gisprompt(opt->gisprompt, age, element, prompt_description);
-        if (tools_api && !opt->multiple && opt->type == TYPE_STRING &&
-            G_strncasecmp("old", age, 3) == 0 &&
-            G_strncasecmp("file", element, 4) == 0) {
-            type = "str | io.StringIO";
+        if (tools_api && !opt->multiple && opt->type == TYPE_STRING) {
+            if (G_strncasecmp("old", age, 3) == 0 &&
+                G_strncasecmp("file", element, 4) == 0) {
+                type = "str | io.StringIO";
+            }
+            if (G_strncasecmp("old", age, 3) == 0 &&
+                G_strncasecmp("cell", element, 4) == 0) {
+                type = "str | np.ndarray";
+            }
+            if (G_strncasecmp("new", age, 3) == 0 &&
+                G_strncasecmp("cell", element, 4) == 0) {
+                type = "str | type(np.ndarray) | type(np.array) | "
+                       "type(gs.array.array)";
+            }
         }
     }
 
@@ -248,7 +258,7 @@ void print_python_option(FILE *file, const struct Option *opt,
         }
     }
 
-    if (opt->def) {
+    if (opt->def && opt->def[0] != '\0') {
         fprintf(file, MD_NEWLINE);
         fprintf(file, "\n");
         fprintf(file, "%s", indent);
@@ -564,13 +574,46 @@ void G__md_print_python_long_version(FILE *file, const char *indent,
         return;
 
     fprintf(file, "\n%sReturns:\n\n", indent);
+
+    bool outputs_arrays = false;
+    char age[KEYLENGTH];
+    char element[KEYLENGTH];
+    char prompt_description[KEYLENGTH];
+    if (st->n_opts) {
+        opt = &st->first_option;
+        while (opt != NULL) {
+            if (opt->gisprompt) {
+                G__split_gisprompt(opt->gisprompt, age, element,
+                                   prompt_description);
+                if (tools_api && !opt->multiple && opt->type == TYPE_STRING) {
+                    if (G_strncasecmp("new", age, 3) == 0 &&
+                        G_strncasecmp("cell", element, 4) == 0) {
+                        outputs_arrays = true;
+                    }
+                }
+            }
+            opt = opt->next_opt;
+        }
+    }
+
     fprintf(file, "%s**result** : ", indent);
     fprintf(file, "grass.tools.support.ToolResult");
+    if (outputs_arrays) {
+        fprintf(file, " | np.ndarray | tuple[np.ndarray]");
+    }
     fprintf(file, " | None");
     fprintf(file, MD_NEWLINE);
     fprintf(file, "\n%s", indent);
     fprintf(file, "If the tool produces text as standard output, a "
                   "*ToolResult* object will be returned. "
                   "Otherwise, `None` will be returned.");
+    if (outputs_arrays) {
+        fprintf(file, " If an array type (e.g., *np.ndarray*) is used for one "
+                      "of the raster outputs, "
+                      "the result will be an array and will have the shape "
+                      "corresponding to the computational region. "
+                      "If an array type is used for more than one raster "
+                      "output, the result will be a tuple of arrays.");
+    }
     fprintf(file, "\n");
 }
