@@ -82,7 +82,7 @@ int G_recursive_copy(const char *src, const char *dst)
 
         if (G_lstat(dst, &sb) == 0 && S_ISDIR(sb.st_mode)) {
             char path[GPATH_MAX];
-            const char *p = strrchr(src, '/');
+            const char *p = strrchr(src, HOST_DIRSEP);
 
             /* src => dst/src */
             snprintf(path, sizeof(path), "%s/%s", dst, (p ? p + 1 : src));

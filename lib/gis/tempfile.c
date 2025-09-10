@@ -160,11 +160,12 @@ void G_temp_element(char *element)
 void G__temp_element(char *element, int tmp)
 {
     const char *machine;
+    char sep[2] = {HOST_DIRSEP, '\0'};
 
     strcpy(element, ".tmp");
     machine = G__machine_name();
     if (machine != NULL && *machine != 0) {
-        strcat(element, "/");
+        strcat(element, sep);
         strcat(element, machine);
     }
 
@@ -185,11 +186,12 @@ void G__temp_element(char *element, int tmp)
 void G__temp_element_basedir(char *element, const char *basedir)
 {
     const char *machine;
+    char sep[2] = {HOST_DIRSEP, '\0'};
 
     strcpy(element, ".tmp");
     machine = G__machine_name();
     if (machine != NULL && *machine != 0) {
-        strcat(element, "/");
+        strcat(element, sep);
         strcat(element, machine);
     }
 
