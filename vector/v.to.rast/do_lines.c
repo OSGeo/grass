@@ -7,7 +7,7 @@
 
 /* function prototypes */
 static int plot_line(double *, double *, int, int, int);
-static int plot_points(double *, double *, int);
+static int plot_points(double *, double *, int, int);
 static double v2angle(double[2], double[2], double, double);
 static double deg_angle(double, double, double, double);
 
@@ -131,7 +131,7 @@ int do_lines(struct Map_info *Map, struct line_pnts *Points,
             count++;
         }
         else if (type & GV_POINTS) {
-            plot_points(Points->x, Points->y, Points->n_points);
+            plot_points(Points->x, Points->y, Points->n_points, dense);
             count++;
         }
     }
@@ -199,11 +199,15 @@ static double deg_angle(double x0, double y0, double x1, double y1)
     return (v_ang * 360.0 / M_2PI);
 }
 
-static int plot_points(double *x, double *y, int n)
+static int plot_points(double *x, double *y, int n, int dense)
 {
     /* only plot the first point */
-    if (n > 0)
-        G_plot_point(*x, *y);
+    if (n > 0) {
+        if (dense)
+            plot_point(*x, *y);
+        else
+            G_plot_point(*x, *y);
+    }
 
     return 0;
 }
