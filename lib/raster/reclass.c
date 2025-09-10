@@ -21,7 +21,7 @@ static const char NULL_STRING[] = "null";
 static int reclass_type(FILE *, char **, char **);
 static FILE *fopen_cellhd_old(const char *, const char *);
 static FILE *fopen_cellhd_new(const char *);
-static int get_reclass_table(FILE *, struct Reclass *);
+static int get_reclass_table(FILE *, struct Reclass *, char **);
 
 /*!
  * \brief Check if raster map is reclassified
@@ -154,9 +154,10 @@ int Rast_get_reclass(const char *name, const char *mapset,
         return reclass->type;
     }
 
+    char *error_line = NULL;
     switch (reclass->type) {
     case RECLASS_TABLE:
-        stat = get_reclass_table(fd, reclass);
+        stat = get_reclass_table(fd, reclass, &error_line);
         break;
     default:
         stat = -1;
@@ -168,10 +169,13 @@ int Rast_get_reclass(const char *name, const char *mapset,
             G_warning(_("Too many reclass categories for <%s@%s>"), name,
                       mapset);
         else
-            G_warning(_("Illegal reclass format in header file for <%s@%s>"),
-                      name, mapset);
+            G_warning(
+                _("Illegal reclass format in header file for <%s@%s>: %s"),
+                name, mapset, error_line);
         stat = -1;
     }
+    if (error_line != NULL)
+        G_free(error_line);
     return stat;
 }
 
@@ -364,7 +368,21 @@ static FILE *fopen_cellhd_new(const char *name)
     return G_fopen_new("cellhd", name);
 }
 
-static int get_reclass_table(FILE *fd, struct Reclass *reclass)
+/**
+ * \brief Get reclass table from header file
+ *
+ * If there is reading error due to the format, -1 is returned and,
+ * if error_line is not NULL, it will be set to a pointer to a newly
+ * allocated string containing the line where error was encountered.
+ *
+ * \param fd header file
+ * \param[out] reclass pointer to Reclass structure
+ * \param[out] error_line pointer to error line
+
+ * \return 1 on success, -1 on format error, -2 on too many categories
+ */
+static int get_reclass_table(FILE *fd, struct Reclass *reclass,
+                             char **error_line)
 {
     char buf[128];
     int n;
@@ -393,8 +411,13 @@ static int get_reclass_table(FILE *fd, struct Reclass *reclass)
         if (strncmp(buf, NULL_STRING, null_str_size) == 0)
             Rast_set_c_null_value(&cat, 1);
         else {
-            if (sscanf(buf, "%d", &cat) != 1)
+            if (sscanf(buf, "%d", &cat) != 1) {
+                if (reclass->table != NULL)
+                    G_free(reclass->table);
+                if (error_line != NULL)
+                    *error_line = G_store(buf);
                 return -1;
+            }
         }
         n++;
         len = (long)n * sizeof(CELL);
