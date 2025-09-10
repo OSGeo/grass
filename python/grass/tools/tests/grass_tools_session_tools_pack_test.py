@@ -1,7 +1,10 @@
-"""Test grass.tools.Tools class"""
+"""Test pack import-export functionality of grass.tools.Tools class"""
 
 import os
 
+import pytest
+
+from grass.exceptions import CalledModuleError
 from grass.tools import Tools
 
 
@@ -56,6 +59,20 @@ def test_pack_input_output_with_subprocess_run_like_call(
         element="raster", file=rows_raster_file3x3.stem, format="json"
     )["name"]
     assert not tools.g_list(type="raster", format="json")
+
+
+def test_no_modify_command(xy_dataset_session, rows_raster_file3x3):
+    """Check input and output pack files work with tool name call"""
+    tools = Tools(session=xy_dataset_session)
+    tools.g_region(rows=3, cols=3)
+    command = [
+        "r.slope.aspect",
+        f"elevation={rows_raster_file3x3}",
+        "slope=file.grass_raster",
+    ]
+    original = command.copy()
+    tools.run_cmd(command)
+    assert original == command
 
 
 def test_io_cleanup_after_function(xy_dataset_session, rows_raster_file3x3):
@@ -145,3 +162,90 @@ def test_io_no_cleanup_with_context(xy_dataset_session, rows_raster_file3x3):
         element="raster", file=rows_raster_file3x3.stem, format="json"
     )["name"]
     assert not tools.g_list(type="raster", format="json")
+
+
+def test_wrong_parameter(xy_dataset_session, rows_raster_file3x3):
+    """Check input and output pack files work with tool name call"""
+    tools = Tools(session=xy_dataset_session)
+    tools.g_region(rows=3, cols=3)
+    with pytest.raises(CalledModuleError, match="does_not_exist"):
+        tools.r_slope_aspect(
+            elevation=rows_raster_file3x3,
+            slope="file.grass_raster",
+            does_not_exist="test",
+        )
+
+
+def test_direct_r_unpack_to_data(xy_dataset_session, rows_raster_file3x3):
+    """Check that we can r.unpack data as usual"""
+    tools = Tools(session=xy_dataset_session, keep_data=True)
+    tools.g_region(rows=3, cols=3)
+    name = "data_1"
+    tools.r_unpack(input=rows_raster_file3x3, output=name)
+    assert tools.g_findfile(element="raster", file=name, format="json")["name"]
+    assert not tools.g_findfile(
+        element="raster", file=rows_raster_file3x3.stem, format="json"
+    )["name"]
+
+
+def test_direct_r_unpack_to_pack(xy_dataset_session, rows_raster_file3x3, tmp_path):
+    """Check that roundtrip from existing packed raster to new packed raster works"""
+    tools = Tools(session=xy_dataset_session, keep_data=True)
+    tools.g_region(rows=3, cols=3)
+    name = "auto_packed_data_1.grass_raster"
+    packed_file = tmp_path / name
+    tools.r_unpack(input=rows_raster_file3x3, output=packed_file)
+    assert packed_file.exists()
+    assert tools.g_findfile(element="raster", file=packed_file.stem, format="json")[
+        "name"
+    ]
+    assert not tools.g_findfile(
+        element="raster", file=rows_raster_file3x3.stem, format="json"
+    )["name"]
+
+
+def test_direct_r_pack_from_data(xy_dataset_session, tmp_path):
+    """Check that we can r.pack data as usual"""
+    tools = Tools(session=xy_dataset_session, keep_data=True)
+    tools.g_region(rows=3, cols=3)
+    tools.r_mapcalc(expression="data_1 = 1")
+    name = "manually_packed_data_1.grass_raster"
+    packed_file = tmp_path / name
+    tools.r_pack(input="data_1", output=packed_file)
+    # New file was created.
+    assert packed_file.exists()
+    # Input still exists.
+    assert tools.g_findfile(element="raster", file="data_1", format="json")["name"]
+    # There should be no raster created automatically.
+    assert not tools.g_findfile(element="raster", file=packed_file.stem, format="json")[
+        "name"
+    ]
+    tools.cleanup()
+    # Input still exists even after cleaning.
+    assert tools.g_findfile(element="raster", file="data_1", format="json")["name"]
+
+
+def test_direct_r_pack_from_pack(xy_dataset_session, rows_raster_file3x3, tmp_path):
+    """Check that roundtrip from existing packed raster to raster works"""
+    tools = Tools(session=xy_dataset_session, keep_data=True)
+    tools.g_region(rows=3, cols=3)
+    name = "manually_packed_data_1.grass_raster"
+    packed_file = tmp_path / name
+    tools.r_pack(input=rows_raster_file3x3, output=packed_file)
+    # New file was created.
+    assert packed_file.exists()
+    # Input still exists.
+    assert rows_raster_file3x3.exists()
+    # Auto-imported raster should exist.
+    assert tools.g_findfile(
+        element="raster", file=rows_raster_file3x3.stem, format="json"
+    )["name"]
+    # There should be no raster created automatically.
+    assert not tools.g_findfile(element="raster", file=packed_file.stem, format="json")[
+        "name"
+    ]
+    tools.cleanup()
+    # Auto-imported raster should be deleted.
+    assert not tools.g_findfile(
+        element="raster", file=rows_raster_file3x3.stem, format="json"
+    )["name"]

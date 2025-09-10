@@ -18,7 +18,7 @@ import os
 
 import grass.script as gs
 
-from .importexport import PackImporterExporter
+from .importexport import ImporterExporter
 from .support import ParameterConverter, ToolFunctionResolver, ToolResult
 
 
@@ -281,7 +281,7 @@ class Tools:
             args,
             tool_kwargs=kwargs,
             input=object_parameter_handler.stdin,
-            import_export=object_parameter_handler.import_export,
+            parameter_converter=object_parameter_handler,
             **popen_options,
         )
         use_objects = object_parameter_handler.translate_data_to_objects(
@@ -307,7 +307,7 @@ class Tools:
         command: list[str],
         *,
         input: str | bytes | None = None,
-        import_export: bool | None = None,
+        parameter_converter: ParameterConverter | None = None,
         tool_kwargs: dict | None = None,
         **popen_options,
     ):
@@ -320,30 +320,14 @@ class Tools:
         :param tool_kwargs: named tool arguments used for error reporting (experimental)
         :param **popen_options: additional options for :py:func:`subprocess.Popen`
         """
-        if import_export is None:
-            import_export = False
-            for item in command:
-                if PackImporterExporter.is_recognized_file(item):
-                    import_export = True
-                    break
-        if import_export:
-            interface_result = self._process_parameters(command, **popen_options)
-            if interface_result.returncode != 0:
-                # This is only for the error states.
-                return gs.handle_errors(
-                    interface_result.returncode,
-                    result=None,
-                    args=[command],
-                    kwargs=tool_kwargs,
-                    stderr=interface_result.stderr,
-                    handler="raise",
-                )
-            processed_parameters = interface_result.json
-
-            pack_importer_exporter = PackImporterExporter(run_function=self.call)
-            pack_importer_exporter.modify_and_ingest_argument_list(
-                command, processed_parameters
+        if parameter_converter is None:
+            parameter_converter = ParameterConverter()
+            parameter_converter.process_parameter_list(command[1:])
+        if parameter_converter.import_export:
+            pack_importer_exporter = ImporterExporter(
+                run_function=self.call, run_cmd_function=self.call_cmd
             )
+            command = pack_importer_exporter.process_parameter_list(command)
             pack_importer_exporter.import_data()
 
         # We approximate tool_kwargs as original kwargs.
@@ -353,7 +337,7 @@ class Tools:
             input=input,
             **popen_options,
         )
-        if import_export:
+        if parameter_converter.import_export:
             pack_importer_exporter.export_data()
             if self._delete_on_context_exit or self._keep_data:
                 self._cleanups.append(pack_importer_exporter.cleanup)
@@ -477,11 +461,3 @@ class Tools:
     def cleanup(self):
         for cleanup in self._cleanups:
             cleanup()
-
-    def _process_parameters(self, command, **popen_options):
-        popen_options["stdin"] = None
-        popen_options["stdout"] = gs.PIPE
-        # We respect whatever is in the stderr option because that's what the user
-        # asked for and will expect to get in case of error (we pretend that it was
-        # the intended run, not our special run before the actual run).
-        return self.call_cmd([*command, "--json"], **popen_options)
