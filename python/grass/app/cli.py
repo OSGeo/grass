@@ -26,7 +26,7 @@ from pathlib import Path
 
 import grass.script as gs
 from grass.app.data import lock_mapset, unlock_mapset, MapsetLockingException
-from grass.experimental.tools import Tools
+from grass.tools import Tools
 
 # Special flags supported besides help and --json which does not need special handling:
 SPECIAL_FLAGS = [
