@@ -24,6 +24,7 @@ from __future__ import annotations
 import json
 import shutil
 from io import StringIO
+from pathlib import Path
 from collections import namedtuple
 
 try:
@@ -41,6 +42,23 @@ except ImportError:
     ga = None
 
 
+# Partial copy to avoid import issues for now
+class PackImporterExporter:
+    raster_pack_suffixes = (".grass_raster", ".pack", ".rpack", ".grr")
+
+    @classmethod
+    def is_recognized_file(cls, value):
+        return cls.is_raster_pack_file(value)
+
+    @classmethod
+    def is_raster_pack_file(cls, value):
+        if isinstance(value, (str, bytes)):
+            return value.endswith(cls.raster_pack_suffixes)
+        if isinstance(value, Path):
+            return value.suffix in cls.raster_pack_suffixes
+        return False
+
+
 class ParameterConverter:
     """Converts parameter values to strings and facilitates flow of the data."""
 
@@ -51,6 +69,7 @@ class ParameterConverter:
         self.stdin = None
         self.result = None
         self.temporary_rasters = []
+        self.import_export = None
 
     def process_parameters(self, kwargs):
         """Converts high level parameter values to strings.
@@ -81,6 +100,12 @@ class ParameterConverter:
             elif isinstance(value, StringIO):
                 kwargs[key] = "-"
                 self.stdin = value.getvalue()
+            elif self.import_export is None and PackImporterExporter.is_recognized_file(
+                value
+            ):
+                self.import_export = True
+        if self.import_export is None:
+            self.import_export = False
 
     def translate_objects_to_data(self, kwargs, env):
         """Convert NumPy arrays to GRASS data"""

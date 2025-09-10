@@ -23,15 +23,24 @@ from grass.tools.support import ParameterConverter
 
 
 class PackImporterExporter:
-    def __init__(self, *, run_function, env=None):
-        self._run_function = run_function
-        self._env = env
-        self.input_rasters: list[tuple] = []
-        self.output_rasters: list[tuple] = []
+    raster_pack_suffixes = (".grass_raster", ".pack", ".rpack", ".grr")
+
+    @classmethod
+    def is_recognized_file(cls, value):
+        return cls.is_raster_pack_file(value)
 
     @classmethod
     def is_raster_pack_file(cls, value):
-        return value.endswith((".grass_raster", ".pack", ".rpack", ".grr"))
+        if isinstance(value, (str, bytes)):
+            return value.endswith(cls.raster_pack_suffixes)
+        if isinstance(value, Path):
+            return value.suffix in cls.raster_pack_suffixes
+        return False
+
+    def __init__(self, *, run_function, env=None):
+        self._run_function = run_function
+        self.input_rasters: list[tuple] = []
+        self.output_rasters: list[tuple] = []
 
     def modify_and_ingest_argument_list(self, args, parameters):
         # TODO: Deal with r.pack and r.unpack calls.
@@ -61,15 +70,12 @@ class PackImporterExporter:
 
     def import_rasters(self):
         for raster_file, inproject_name in self.input_rasters:
-            # Currently we override the projection check.
             self._run_function(
                 "r.unpack",
                 input=raster_file,
                 output=inproject_name,
                 overwrite=True,
                 superquiet=True,
-                # flags="o",
-                env=self._env,
             )
 
     def export_rasters(self):
@@ -144,6 +150,7 @@ class Tools(grass.tools.Tools):
             args,
             tool_kwargs=kwargs,
             input=object_parameter_handler.stdin,
+            import_export=object_parameter_handler.import_export,
             **popen_options,
         )
 
@@ -152,6 +159,7 @@ class Tools(grass.tools.Tools):
         command: list[str],
         *,
         input: str | bytes | None = None,
+        import_export: bool | None = None,
         tool_kwargs: dict | None = None,
         **popen_options,
     ):
@@ -164,24 +172,31 @@ class Tools(grass.tools.Tools):
         :param tool_kwargs: named tool arguments used for error reporting (experimental)
         :param **popen_options: additional options for :py:func:`subprocess.Popen`
         """
-        interface_result = self._process_parameters(command, **popen_options)
-        if interface_result.returncode != 0:
-            # This is only for the error states.
-            return gs.handle_errors(
-                interface_result.returncode,
-                result=None,
-                args=[command],
-                kwargs=tool_kwargs,
-                stderr=interface_result.stderr,
-                handler="raise",
-            )
-        processed_parameters = json.loads(interface_result.stdout)
+        if import_export is None:
+            import_export = False
+            for item in command:
+                if PackImporterExporter.is_recognized_file(item):
+                    import_export = True
+                    break
+        if import_export:
+            interface_result = self._process_parameters(command, **popen_options)
+            if interface_result.returncode != 0:
+                # This is only for the error states.
+                return gs.handle_errors(
+                    interface_result.returncode,
+                    result=None,
+                    args=[command],
+                    kwargs=tool_kwargs,
+                    stderr=interface_result.stderr,
+                    handler="raise",
+                )
+            processed_parameters = json.loads(interface_result.stdout)
 
-        pack_importer_exporter = PackImporterExporter(run_function=self.call)
-        pack_importer_exporter.modify_and_ingest_argument_list(
-            command, processed_parameters
-        )
-        pack_importer_exporter.import_data()
+            pack_importer_exporter = PackImporterExporter(run_function=self.call)
+            pack_importer_exporter.modify_and_ingest_argument_list(
+                command, processed_parameters
+            )
+            pack_importer_exporter.import_data()
 
         # We approximate tool_kwargs as original kwargs.
         result = self.call_cmd(
@@ -190,11 +205,12 @@ class Tools(grass.tools.Tools):
             input=input,
             **popen_options,
         )
-        pack_importer_exporter.export_data()
-        if self._delete_on_context_exit or self._keep_data:
-            self._cleanups.append(pack_importer_exporter.cleanup)
-        else:
-            pack_importer_exporter.cleanup()
+        if import_export:
+            pack_importer_exporter.export_data()
+            if self._delete_on_context_exit or self._keep_data:
+                self._cleanups.append(pack_importer_exporter.cleanup)
+            else:
+                pack_importer_exporter.cleanup()
         return result
 
     def __enter__(self):

@@ -8,7 +8,7 @@ import pytest
 import grass.script as gs
 from grass.exceptions import CalledModuleError
 from grass.experimental.mapset import TemporaryMapsetSession
-from grass.tools import Tools
+from grass.experimental.tools import Tools
 
 
 has_pandas = False
