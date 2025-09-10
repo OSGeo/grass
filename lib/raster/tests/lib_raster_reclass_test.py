@@ -19,7 +19,7 @@ def test_reclass_as_mask_correct_state(tmp_path):
         tools.r_mapcalc(expression="raster_mask = if(row() < 10, 1, null())")
         with MaskManager(env=session.env):
             tools.r_mask(raster="raster_mask")
-            tools.r_univar(input="data")
+            tools.r_univar(map="data")
             tools.r_mask(flags="r")
 
 
