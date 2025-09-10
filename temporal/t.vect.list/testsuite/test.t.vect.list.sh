@@ -15,11 +15,11 @@ v.random -z output=lidar_4 n=20 zmin=0 zmax=100 column=height
 v.random -z output=lidar_5 n=20 zmin=0 zmax=100 column=height
 v.random -z output=lidar_6 n=20 zmin=0 zmax=100 column=height
 
-n1=`g.tempfile pid=1 -d`
-n2=`g.tempfile pid=2 -d`
-n3=`g.tempfile pid=3 -d`
-n4=`g.tempfile pid=4 -d`
-n5=`g.tempfile pid=5 -d`
+n1=$(g.tempfile pid=1 -d)
+n2=$(g.tempfile pid=2 -d)
+n3=$(g.tempfile pid=3 -d)
+n4=$(g.tempfile pid=4 -d)
+n5=$(g.tempfile pid=5 -d)
 
 cat > "${n1}" << EOF
 lidar_1
@@ -74,31 +74,31 @@ t.create type=stvds temporaltype=absolute output=lidar_abs5 title="A test with i
 
 # The first @test
 t.register type=vector input=lidar_abs1 file="${n1}" start="2001-01-01" increment="1 months"
-t.vect.list    separator=" | " method=comma     input=lidar_abs1
+t.vect.list separator=" | " method=comma     input=lidar_abs1
 t.vect.list input=lidar_abs1
 t.vect.list separator=" | " method=cols      input=lidar_abs1
 t.vect.list separator=" | " method=delta     input=lidar_abs1
 t.vect.list separator=" | " method=deltagaps input=lidar_abs1
 
 t.register type=vector input=lidar_abs2 file="${n2}"
-t.vect.list    separator=" | " method=comma     input=lidar_abs2
+t.vect.list separator=" | " method=comma     input=lidar_abs2
 t.vect.list input=lidar_abs2
 t.vect.list separator=" | " method=cols      input=lidar_abs2
 t.vect.list separator=" | " method=delta     input=lidar_abs2
 t.vect.list separator=" | " method=deltagaps input=lidar_abs2
 
 t.register type=vector input=lidar_abs3 file="${n3}"
-t.vect.list    separator=" | " method=comma     input=lidar_abs3
+t.vect.list separator=" | " method=comma     input=lidar_abs3
 t.vect.list separator=" | " method=delta     input=lidar_abs3
 t.vect.list separator=" | " method=deltagaps input=lidar_abs3
 
 t.register type=vector input=lidar_abs4 file="${n4}"
-t.vect.list    separator=" | " method=comma     input=lidar_abs4
+t.vect.list separator=" | " method=comma     input=lidar_abs4
 t.vect.list separator=" | " method=delta     input=lidar_abs4
 t.vect.list separator=" | " method=deltagaps input=lidar_abs4
 
 t.register type=vector input=lidar_abs5 file="${n5}"
-t.vect.list    separator=" | " method=comma     input=lidar_abs5
+t.vect.list separator=" | " method=comma     input=lidar_abs5
 t.vect.list input=lidar_abs5
 t.vect.list separator=" | " method=cols      input=lidar_abs5
 t.vect.list separator=" | " method=delta     input=lidar_abs5

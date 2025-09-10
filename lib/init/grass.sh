@@ -23,7 +23,7 @@
 
 trap "echo 'User break!' ; exit" 2 3 9 15
 
-if [ -z "$GRASS_PYTHON" ] ; then
+if [ -z "$GRASS_PYTHON" ]; then
     GRASS_PYTHON=python3
 fi
 export GRASS_PYTHON

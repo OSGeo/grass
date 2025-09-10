@@ -55,11 +55,11 @@ t.rast.list temp_indi col=name,start_time,min,max         > data/test_1_temp_ind
 
 cd data
 
-for i in `ls test_1_*.txt` ; do
-    diff $i "`basename $i .txt`.ref" >> out.diff
+for i in $(ls -- test_1_*.txt); do
+    diff "$i" "$(basename "$i" .txt).ref" >> out.diff
 done
 
-CHAR_NUM=`cat out.diff | wc -c`
+CHAR_NUM=$(cat out.diff | wc -c)
 
 # Return as exit status 0 in case no diffs are found
-exit $CHAR_NUM
+exit "$CHAR_NUM"

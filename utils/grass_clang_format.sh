@@ -32,8 +32,7 @@ set -eu
 
 # Check if variable is integer (POSIX compliant)
 # based on https://unix.stackexchange.com/a/598047
-is_integer ()
-{
+is_integer() {
     case "${1#[+-]}" in
         (*[!0123456789]*) echo 1 ;;
         ('')              echo 1 ;;
@@ -47,7 +46,7 @@ req_cf_v="18"
 # No need to continue if the .clang-format file isn't found
 if [ ! -f .clang-format ]; then
     echo "Error: could not find the .clang-format file. Is the GRASS source"
-    echo  "  top directory your working directory?"
+    echo "  top directory your working directory?"
     exit 1
 fi
 
@@ -58,7 +57,7 @@ else
     fmt="${GRASS_CLANG_FORMAT}"
 fi
 
-if ! (${fmt} --version >/dev/null); then
+if ! (${fmt} --version > /dev/null); then
     echo "clang-format not available."
     exit 1
 fi
@@ -75,8 +74,8 @@ else
 fi
 
 clang_version_full=$(${fmt} --version)
-clang_version=$(echo "${clang_version_full}" | \
-    sed -En 's/.*version ([0-9]+)\.[0-9]+\.[0-9]+.*/\1/p')
+clang_version=$(echo "${clang_version_full}" \
+    | sed -En 's/.*version ([0-9]+)\.[0-9]+\.[0-9]+.*/\1/p')
 if [ "${clang_version}" -ne "${req_cf_v}" ]; then
     echo "Error: ${clang_version_full}"
     echo "  is used, but version ${req_cf_v} is required."
@@ -94,4 +93,4 @@ fi
 
 find "${dir}" -type f \
     '(' -iname '*.c' -o -iname '*.cpp' -o -iname '*.h' -o -iname '*.hpp' ')' \
-        -exec "${fmt}" -i '{}' +
+    -exec "${fmt}" -i '{}' +

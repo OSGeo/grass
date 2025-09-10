@@ -18,33 +18,31 @@
 #   (TeX needs to be able to find grasslogo_vector.pdf)
 #
 
-if  [ -z "$GISBASE" ] ; then
+if [ -z "$GISBASE" ]; then
     echo "You must be in GRASS to run this program." 1>&2
     exit 1
 fi
 
-for FILE in txt tex ; do
-    if [ -e "$GISBASE/etc/module_synopsis.$FILE" ] ; then
-    #  echo "ERROR: module_synopsis.$FILE already exists" 1>&2
-    #  exit 1
-       #blank it
-       g.message -w "Overwriting \"\$GISBASE/etc/module_synopsis.$FILE\""
-       \rm "$GISBASE/etc/module_synopsis.$FILE"
+for FILE in txt tex; do
+    if [ -e "$GISBASE/etc/module_synopsis.$FILE" ]; then
+        #  echo "ERROR: module_synopsis.$FILE already exists" 1>&2
+        #  exit 1
+        #blank it
+        g.message -w "Overwriting \"\$GISBASE/etc/module_synopsis.$FILE\""
+        \rm "$GISBASE/etc/module_synopsis.$FILE"
     fi
 done
-for FILE in html pdf ; do
-    if [ -e "$GISBASE/docs/$FILE/module_synopsis.$FILE" ] ; then
-    #  echo "ERROR: module_synopsis.$FILE already exists" 1>&2
-    #  exit 1
-       #blank it
-       g.message -w "Overwriting \"\$GISBASE/docs/$FILE/module_synopsis.$FILE\""
-       \rm "$GISBASE/docs/$FILE/module_synopsis.$FILE"
+for FILE in html pdf; do
+    if [ -e "$GISBASE/docs/$FILE/module_synopsis.$FILE" ]; then
+        #  echo "ERROR: module_synopsis.$FILE already exists" 1>&2
+        #  exit 1
+        #blank it
+        g.message -w "Overwriting \"\$GISBASE/docs/$FILE/module_synopsis.$FILE\""
+        \rm "$GISBASE/docs/$FILE/module_synopsis.$FILE"
     fi
 done
 
-
-TMP="`g.tempfile pid=$$`"
-if [ $? -ne 0 ] || [ -z "$TMP" ] ; then
+if ! TMP="$(g.tempfile pid=$$)" || [ -z "$TMP" ]; then
     g.message -e "Unable to create temporary files"
     exit 1
 fi
@@ -54,7 +52,7 @@ g.message "Generating module synopsis (writing to \$GISBASE/etc/) ..."
 SYNOP="$GISBASE/etc/module_synopsis.txt"
 
 OLDDIR="$(pwd)"
-cd "$GISBASE"
+cd "$GISBASE" || exit 1
 
 ### generate menu hierarchy
 
@@ -65,104 +63,104 @@ MDPY="$GISBASE/etc/wxpython/gui_modules/menudata.py"
 # python menudata.py tree
 # python menudata.py strings
 python "$MDPY" commands | sed -e 's/ | /|/' -e 's/[ -].*|/|/' \
-  | sort -u > "$TMP.menu_hierarchy"
+    | sort -u > "$TMP.menu_hierarchy"
 
 # for running with GRASS 6.4 after generating with GRASS 6.5.
 #\cp "$TMP.menu_hierarchy" "$GISBASE/etc/gui/menu_hierarchy.txt"
 #\cp "$GISBASE/etc/gui/menu_hierarchy.txt" "$TMP.menu_hierarchy"
 
 ### given a module name return where it is in the menu tree
-find_menu_hierarchy()
-{
-  MODL=$1
+find_menu_hierarchy() {
+    MODL=$1
 
-  # unwrap wrapper scripts
-  if [ "$MODL" = "g.gui" ] ; then
-    MODL="g.change.gui.py"
-  elif  [ "$MODL" = "v.type" ] ; then
-    MODL="v.type_wrapper.py"
-  fi
+    # unwrap wrapper scripts
+    if [ "$MODL" = "g.gui" ]; then
+        MODL="g.change.gui.py"
+    elif [ "$MODL" = "v.type" ]; then
+        MODL="v.type_wrapper.py"
+    fi
 
-  PLACEMENT=`grep "^$MODL|" "$TMP.menu_hierarchy" | cut -f2 -d'|' | head -n 1`
+    PLACEMENT=$(grep "^$MODL|" "$TMP.menu_hierarchy" | cut -f2 -d'|' | head -n 1)
 
-  # combine some modules which are listed twice
-  if [ "$MODL" = "g.region" ] ; then
-      PLACEMENT=`echo "$PLACEMENT" | sed -e 's/Display/Set or Display/'`
-  elif  [ "$MODL" = "r.reclass" ] || [ "$MODL" = "v.reclass" ] ; then
-      PLACEMENT=`echo "$PLACEMENT" | sed -e 's/Reclassify.*$/Reclassify/'`
-  fi
+    # combine some modules which are listed twice
+    if [ "$MODL" = "g.region" ]; then
+        PLACEMENT=$(echo "$PLACEMENT" | sed -e 's/Display/Set or Display/')
+    elif [ "$MODL" = "r.reclass" ] || [ "$MODL" = "v.reclass" ]; then
+        PLACEMENT=$(echo "$PLACEMENT" | sed -e 's/Reclassify.*$/Reclassify/')
+    fi
 
-  echo "$PLACEMENT"
+    echo "$PLACEMENT"
 }
 
 ### execute the loop for all modules
-for DIR in bin scripts ; do
-  cd $DIR
+for DIR in bin scripts; do
+    cd $DIR || exit 1
 
-  for MODULE in ?\.* db.* r3.* ; do
-    unset label
-    unset desc
-#    echo "[$MODULE]"
+    for MODULE in ?\.* db.* r3.*; do
+        unset label
+        unset desc
+        #    echo "[$MODULE]"
 
-    case "$MODULE" in
-      g.parser | "r3.*" | g.module_to_skip)
-	continue
-	;;
-    esac
+        case "$MODULE" in
+            g.parser | "r3.*" | g.module_to_skip)
+                continue
+                ;;
+        esac
 
-    eval `$MODULE --interface-description | head -n 5 | tail -n 1 | \
-        tr '"' "'" | sed -e 's/^[ \t]./desc="/' -e 's/$/"/' -e 's/[^\."]"$/&./'`
+        eval "$($MODULE --interface-description | head -n 5 | tail -n 1 \
+            | tr '"' "'" | sed -e 's/^[ \t]./desc="/' -e 's/$/"/' -e 's/[^\."]"$/&./')"
 
-    if [ -z "$label" ] && [ -z "$desc" ] ; then
-	continue
-    fi
+        if [ -z "$label" ] && [ -z "$desc" ]; then
+            continue
+        fi
 
-    MODULE_MENU_LOC=`find_menu_hierarchy "$MODULE"`
+        MODULE_MENU_LOC=$(find_menu_hierarchy "$MODULE")
 
-    BUFF=""
-    if [ -z "$label" ] ; then
-	BUFF="$MODULE: $desc"
-    else
-	BUFF="$MODULE: $label"
-    fi
-    if [ -n "$MODULE_MENU_LOC" ] ; then
-        BUFF="$BUFF {$MODULE_MENU_LOC}"
-    fi
-    if [ -n "$BUFF" ] ; then
-       #echo "$BUFF"
-       echo "$BUFF" >> "$TMP"
-    fi
-  done
+        BUFF=""
+        if [ -z "$label" ]; then
+            BUFF="$MODULE: $desc"
+        else
+            BUFF="$MODULE: $label"
+        fi
+        if [ -n "$MODULE_MENU_LOC" ]; then
+            BUFF="$BUFF {$MODULE_MENU_LOC}"
+        fi
+        if [ -n "$BUFF" ]; then
+            #echo "$BUFF"
+            echo "$BUFF" >> "$TMP"
+        fi
+    done
 
-  cd ..
+    cd ..
 done
 
 # ps.map doesn't jive with the above loop.
-for MODULE in ps.map ; do
+# shellcheck disable=SC2043
+for MODULE in ps.map; do
     unset label
     unset desc
 
-    eval `$MODULE --interface-description | head -n 5 | tail -n 1 | \
-        tr '"' "'" | sed -e 's/^[ \t]./desc="/' -e 's/$/"/' -e 's/[^\."]"$/&./'`
+    eval "$($MODULE --interface-description | head -n 5 | tail -n 1 \
+        | tr '"' "'" | sed -e 's/^[ \t]./desc="/' -e 's/$/"/' -e 's/[^\."]"$/&./')"
 
-    if [ -z "$label" ] && [ -z "$desc" ] ; then
-	continue
+    if [ -z "$label" ] && [ -z "$desc" ]; then
+        continue
     fi
 
-    MODULE_MENU_LOC=`find_menu_hierarchy "$MODULE"`
+    MODULE_MENU_LOC=$(find_menu_hierarchy "$MODULE")
 
     BUFF=""
-    if [ -z "$label" ] ; then
-	BUFF="$MODULE: $desc"
+    if [ -z "$label" ]; then
+        BUFF="$MODULE: $desc"
     else
-	BUFF="$MODULE: $label"
+        BUFF="$MODULE: $label"
     fi
-    if [ -n "$MODULE_MENU_LOC" ] ; then
+    if [ -n "$MODULE_MENU_LOC" ]; then
         BUFF="$BUFF {$MODULE_MENU_LOC}"
     fi
-    if [ -n "$BUFF" ] ; then
-       #echo "$BUFF"
-       echo "$BUFF" >> "$TMP"
+    if [ -n "$BUFF" ]; then
+        #echo "$BUFF"
+        echo "$BUFF" >> "$TMP"
     fi
 done
 
@@ -191,7 +189,7 @@ cp "$SYNOP" "${TMP}.txt"
 g.message "Generating HTML (writing to \$GISBASE/docs/html/) ..."
 
 #### write header
-cat <<EOF >"${TMP}.html"
+cat << EOF > "${TMP}.html"
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
@@ -247,33 +245,40 @@ sed -i -e 's+\(a href="\)\([^#\.h]\)+\1../../grass64/manuals/html64_user/\2+'
   <li> <a href="nviz.html">NVIZ</a> - <i>n</i>-dimensional visualization suite
 EOF
 
-
 #### fill in module entries
 
-for SECTION in d db g i m ps r r3 v ; do
+for SECTION in d db g i m ps r r3 v; do
     SEC_TYPE="commands"
     case $SECTION in
-      d)
-	SEC_NAME="Display" ;;
-      db)
-	SEC_NAME="Database management" ;;
-      g)
-	SEC_NAME="General GIS management" ;;
-      i)
-	SEC_NAME="Imagery" ;;
-      m)
-	SEC_NAME="Miscellaneous"
-	SEC_TYPE="tools" ;;
-      ps)
-	SEC_NAME="PostScript" ;;
-      r)
-	SEC_NAME="Raster" ;;
-      r3)
-	SEC_NAME="Raster 3D" ;;
-      v)
-	SEC_NAME="Vector" ;;
+        d)
+            SEC_NAME="Display"
+            ;;
+        db)
+            SEC_NAME="Database management"
+            ;;
+        g)
+            SEC_NAME="General GIS management"
+            ;;
+        i)
+            SEC_NAME="Imagery"
+            ;;
+        m)
+            SEC_NAME="Miscellaneous"
+            SEC_TYPE="tools"
+            ;;
+        ps)
+            SEC_NAME="PostScript"
+            ;;
+        r)
+            SEC_NAME="Raster"
+            ;;
+        r3)
+            SEC_NAME="Raster 3D"
+            ;;
+        v)
+            SEC_NAME="Vector"
+            ;;
     esac
-
 
     cat << EOF >> "${TMP}.html"
 </ul>
@@ -285,17 +290,17 @@ for SECTION in d db g i m ps r r3 v ; do
 <ul>
 EOF
 
-    grep "^${SECTION}\." "${TMP}.txt" | \
-      sed -e 's/: /| /' -e 's/^.*|/<li> <a href="&.html">&<\/a>:/' \
-	  -e 's/|.html">/.html">/' -e 's+|</a>:+</a>:+' \
-	  -e 's/&/\&amp;/g' \
-	  -e 's+ {+\n     <BR><font size="-2" color="#778877"><i>+' \
-	  -e 's+}+</i></font>+' \
-	  -e 's+ > + \&rarr; +g'  >> "${TMP}.html"
+    grep "^${SECTION}\." "${TMP}.txt" \
+        | sed -e 's/: /| /' -e 's/^.*|/<li> <a href="&.html">&<\/a>:/' \
+            -e 's/|.html">/.html">/' -e 's+|</a>:+</a>:+' \
+            -e 's/&/\&amp;/g' \
+            -e 's+ {+\n     <BR><font size="-2" color="#778877"><i>+' \
+            -e 's+}+</i></font>+' \
+            -e 's+ > + \&rarr; +g' >> "${TMP}.html"
 
-    if [ "$SECTION" = "i" ] ; then
-	# include imagery photo subsection
-	cat << EOF >> "${TMP}.html"
+    if [ "$SECTION" = "i" ]; then
+        # include imagery photo subsection
+        cat << EOF >> "${TMP}.html"
 </ul>
 
 <h4>Imagery photo.* commands:</h4>
@@ -303,17 +308,16 @@ EOF
 <ul>
 EOF
 
-	grep "^photo\." "${TMP}.txt" | \
-	  sed -e 's/: /| /' -e 's/^.*|/<li> <a href="&.html">&<\/a>:/' \
-	      -e 's/|.html">/.html">/' -e 's+|</a>:+</a>:+' \
-	      -e 's/&/\&amp;/g' \
-	      -e 's+ {+\n     <BR><font size="-2" color="#778877"><i>+' \
-	      -e 's+}+</i></font>+' \
-	      -e 's+ > + \&rarr; +g'  >> "${TMP}.html"
+        grep "^photo\." "${TMP}.txt" \
+            | sed -e 's/: /| /' -e 's/^.*|/<li> <a href="&.html">&<\/a>:/' \
+                -e 's/|.html">/.html">/' -e 's+|</a>:+</a>:+' \
+                -e 's/&/\&amp;/g' \
+                -e 's+ {+\n     <BR><font size="-2" color="#778877"><i>+' \
+                -e 's+}+</i></font>+' \
+                -e 's+ > + \&rarr; +g' >> "${TMP}.html"
     fi
 
 done
-
 
 #### save footer
 cat << EOF >> "${TMP}.html"
@@ -331,12 +335,11 @@ EOF
 
 \mv "${TMP}.html" "$GISBASE/docs/html/module_synopsis.html"
 
-
-
 ####### create LaTeX source #######
 g.message "Generating LaTeX source (writing to \$GISBASE/etc/) ..."
 
 #### write header
+# shellcheck disable=SC2154 # $n$ is latex syntax
 cat << EOF > "${TMP}.tex"
 %% Adapted from LyX 1.3 LaTeX export. (c) 2009 by the GRASS Development Team
 \documentclass[a4paper]{article}
@@ -387,33 +390,40 @@ cat << EOF > "${TMP}.tex"
 \item [NVIZ]$n$-dimensional visualization suite
 EOF
 
-
 #### fill in module entries
 
-for SECTION in d db g i m ps r r3 v ; do
+for SECTION in d db g i m ps r r3 v; do
     SEC_TYPE="commands"
     case $SECTION in
-      d)
-	SEC_NAME="Display" ;;
-      db)
-	SEC_NAME="Database management" ;;
-      g)
-	SEC_NAME="General GIS management" ;;
-      i)
-	SEC_NAME="Imagery" ;;
-      m)
-	SEC_NAME="Miscellaneous"
-	SEC_TYPE="tools" ;;
-      ps)
-	SEC_NAME="PostScript" ;;
-      r)
-	SEC_NAME="Raster" ;;
-      r3)
-	SEC_NAME="Raster 3D" ;;
-      v)
-	SEC_NAME="Vector" ;;
+        d)
+            SEC_NAME="Display"
+            ;;
+        db)
+            SEC_NAME="Database management"
+            ;;
+        g)
+            SEC_NAME="General GIS management"
+            ;;
+        i)
+            SEC_NAME="Imagery"
+            ;;
+        m)
+            SEC_NAME="Miscellaneous"
+            SEC_TYPE="tools"
+            ;;
+        ps)
+            SEC_NAME="PostScript"
+            ;;
+        r)
+            SEC_NAME="Raster"
+            ;;
+        r3)
+            SEC_NAME="Raster 3D"
+            ;;
+        v)
+            SEC_NAME="Vector"
+            ;;
     esac
-
 
     cat << EOF >> "${TMP}.tex"
 \end{lyxlist}
@@ -424,12 +434,12 @@ for SECTION in d db g i m ps r r3 v ; do
 \begin{lyxlist}{00.00.0000}
 EOF
 
-    grep "^${SECTION}\." "${TMP}.txt" | \
-      sed -e 's/^/\\item [/' -e 's/: /]/' \
-          -e 's+ {+ \\\\\n$+' -e 's/}$/$/' \
-	  -e 's+ > +\\,\\triangleright\\,|+g' \
-          -e 's/\*/{*}/g' -e 's/_/\\_/g' -e 's/&/\\\&/g' \
-	| awk '/^\$/ { STR=$0; \
+    grep "^${SECTION}\." "${TMP}.txt" \
+        | sed -e 's/^/\\item [/' -e 's/: /]/' \
+            -e 's+ {+ \\\\\n$+' -e 's/}$/$/' \
+            -e 's+ > +\\,\\triangleright\\,|+g' \
+            -e 's/\*/{*}/g' -e 's/_/\\_/g' -e 's/&/\\\&/g' \
+        | awk '/^\$/ { STR=$0; \
 		       gsub(" ", "\\: ", STR); \
 		       gsub(/\|/, " ", STR); \
 		       sub(/^/, "  \\textcolor{DarkSeaGreen3}{\\footnotesize ", STR); \
@@ -438,9 +448,9 @@ EOF
 		     } ;
 	       /^\\/ {print}' >> "${TMP}.tex"
 
-    if [ "$SECTION" = "i" ] ; then
-	# include imagery photo subsection
-	cat << EOF >> "${TMP}.tex"
+    if [ "$SECTION" = "i" ]; then
+        # include imagery photo subsection
+        cat << EOF >> "${TMP}.tex"
 \end{lyxlist}
 
 \subsubsection*{Imagery photo.{*} commands:}
@@ -448,8 +458,8 @@ EOF
 \begin{lyxlist}{00.00.0000}
 EOF
 
-	grep "^photo\." "${TMP}.txt" | \
-	  sed -e 's/^/\\item [/' -e 's/: /]/' >> "${TMP}.tex"
+        grep "^photo\." "${TMP}.txt" \
+            | sed -e 's/^/\\item [/' -e 's/: /]/' >> "${TMP}.tex"
     fi
 
 done
@@ -472,26 +482,27 @@ EOF
 
 g.message "Converting LaTeX to PDF (writing to \$GISBASE/docs/pdf/) ..."
 
-for PGM in pdflatex ; do
-   if [ ! -x `which $PGM` ] ; then
-	g.message -e "pdflatex needed for this PDF conversion."
-	g.message "Done."
-	exit 1
-   fi
+# shellcheck disable=SC2043
+for PGM in pdflatex; do
+    if [ ! -x "$(which $PGM)" ]; then
+        g.message -e "pdflatex needed for this PDF conversion."
+        g.message "Done."
+        exit 1
+    fi
 done
 
-TMPDIR="`dirname "$TMP"`"
+TMPDIR="$(dirname "$TMP")"
 cp "$OLDDIR/../man/grasslogo_vector.pdf" "$TMPDIR"
-cd "$TMPDIR"
+cd "$TMPDIR" || exit 1
 
 #once working nicely make it quieter
 #pdflatex --interaction batchmode "$GISBASE/etc/module_synopsis.tex"
 pdflatex "$GISBASE/etc/module_synopsis.tex"
 
 \rm -f module_synopsis.dvi module_synopsis.ps \
-       module_synopsis_2.ps grasslogo_vector.pdf
+    module_synopsis_2.ps grasslogo_vector.pdf
 
-if [ ! -d "$GISBASE/docs/pdf" ] ; then
+if [ ! -d "$GISBASE/docs/pdf" ]; then
     mkdir "$GISBASE/docs/pdf"
 fi
 \mv module_synopsis.pdf "$GISBASE/docs/pdf/"

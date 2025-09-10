@@ -1,3 +1,4 @@
+#!/usr/bin/env sh
 # This script tests r.pack and r.unpack
 
 # We specify a small region in the @preprocess step
@@ -43,4 +44,4 @@ r.unpack -o --v -o input=test_double_uncompressed.pack output=test_double_uncomp
 #r.out.ascii --o input=test_double_uncompressed output=test_double_uncompressed.ref dp=1
 
 g.remove -f type=raster name=test_int,test_float,test_double,test_int_uncompressed,test_float_uncompressed,test_double_uncompressed
-rm *.pack
+rm -- *.pack

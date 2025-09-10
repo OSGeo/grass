@@ -6,7 +6,7 @@ set -o xtrace
 
 cd /vagrant
 
-if [ -f "include/Make/Platform.make" ] ; then
+if [ -f "include/Make/Platform.make" ]; then
     make cleandistdirs
     make distclean
 fi

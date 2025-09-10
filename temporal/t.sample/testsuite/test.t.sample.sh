@@ -1,4 +1,4 @@
-#1/bin/sh
+#!/bin/sh
 # This is a test to sample a space time raster dataset with a space time vector dataset
 
 # We need to set a specific region in the
@@ -26,9 +26,9 @@ v.random -z output=pnts6 npoints=20 zmin=0 zmax=100 column=height
 v.random -z output=pnts7 npoints=20 zmin=0 zmax=100 column=height
 v.random -z output=pnts8 npoints=20 zmin=0 zmax=100 column=height
 
-n1=`g.tempfile pid=1 -d`
-n2=`g.tempfile pid=2 -d`
-n3=`g.tempfile pid=3 -d`
+n1=$(g.tempfile pid=1 -d)
+n2=$(g.tempfile pid=2 -d)
+n3=$(g.tempfile pid=3 -d)
 
 cat > "${n1}" << EOF
 prec_1
@@ -53,19 +53,18 @@ pnts7|2001-01-20|2001-01-25
 pnts8|2001-01-25|2001-01-30
 EOF
 
-
 t.create type=strds temporaltype=absolute output=precip_abs0 \
-	title="A test with raster input files" descr="A test with raster input files"
+    title="A test with raster input files" descr="A test with raster input files"
 t.create type=stvds temporaltype=absolute output=pnts_abs0 \
-	title="A test with vector input files" descr="A test with vector input files"
+    title="A test with vector input files" descr="A test with vector input files"
 t.create type=stvds temporaltype=absolute output=pnts_abs1 \
-	title="A test with vector input files" descr="A test with vector input files"
+    title="A test with vector input files" descr="A test with vector input files"
 
 t.register type=raster -i input=precip_abs0 file="${n1}" start="2001-01-01" increment="1 months"
 t.rast.list precip_abs0
-t.register type=vector    input=pnts_abs0 file="${n2}"
+t.register type=vector input=pnts_abs0 file="${n2}"
 t.vect.list pnts_abs0
-t.register type=vector    input=pnts_abs1 file="${n3}"
+t.register type=vector input=pnts_abs1 file="${n3}"
 t.vect.list pnts_abs1
 
 # The @test
@@ -78,7 +77,6 @@ t.sample method=precedes input=precip_abs0 samtype=stvds sample=pnts_abs0 -c
 t.sample method=follows  input=precip_abs0 samtype=stvds sample=pnts_abs0 -c
 t.sample method=precedes,follows input=precip_abs0 samtype=stvds sample=pnts_abs0 -c
 t.sample input=precip_abs0 samtype=strds sample=precip_abs0 -cs
-
 
 # Test with temporal point data
 t.register type=raster input=precip_abs0 file="${n1}" start="2001-01-01" increment="1 months"

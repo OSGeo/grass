@@ -13,7 +13,7 @@ r.mapcalc --o expr="prec_4 = rand(0, 510)" -s
 r.mapcalc --o expr="prec_5 = rand(0, 300)" -s
 r.mapcalc --o expr="prec_6 = rand(0, 650)" -s
 
-n1=`g.tempfile pid=1 -d`
+n1=$(g.tempfile pid=1 -d)
 
 cat > "${n1}" << EOF
 prec_1|2001-01-01|2001-07-01
@@ -39,7 +39,7 @@ t.rast.list input=precip_abs
 
 # The second @test
 # Creating a valid topology
-t.register --o type=raster input=precip_abs file=${n1}
+t.register --o type=raster input=precip_abs file="${n1}"
 
 t.rast.list input=precip_abs
 t.topology input=precip_abs

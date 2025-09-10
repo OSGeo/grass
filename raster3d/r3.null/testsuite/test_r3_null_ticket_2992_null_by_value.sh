@@ -20,10 +20,10 @@ r3.mapcalc expr="test_1 = float(col() + row() + depth())"
 # so there should be none afterwards
 
 r3.null map=test_1 null=10
-eval `r3.univar map=test_1 -g | grep null_cells`
+eval $(r3.univar map=test_1 -g | grep null_cells)
 reference=0
 
-if (( $null_cells != $reference )) ; then
+if ((null_cells != reference)); then
     >&2 echo "Wrong number of NULL cells ($null_cells != $reference)"
     exit 1
 fi

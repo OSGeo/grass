@@ -7,7 +7,7 @@
 set -e
 set -x
 
-v.in.ascii input=- output=vedit_test separator=comma <<EOF
+v.in.ascii input=- output=vedit_test separator=comma << EOF
 913240.0,250614.0
 913250.0,250628.0
 EOF

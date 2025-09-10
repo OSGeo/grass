@@ -1,3 +1,4 @@
+#!/usr/bin/env sh
 # This script tests the r3.cross.rast to compute
 # cross section raster maps based on a raster3d and elevation map
 
@@ -34,12 +35,12 @@ r3.cross.rast --o input=volume_null elevation=elev_NAN output=test_cross_section
 r3.cross.rast --o input=volume_null elevation=elev_cross output=test_cross_section_result
 
 # Export of the text files
-for i in `g.list type=raster pattern=test_cross_section_*` ; do
-    r.out.ascii input=$i output=${i}.txt;
+for i in $(g.list type=raster pattern=test_cross_section_*); do
+    r.out.ascii input="$i" output="${i}".txt
 done
 
 # Comparison of references and text files
-for i in `ls *.ref` ; do
-    diff $i "`basename $i .ref`.txt" ;
+for i in $(ls *.ref); do
+    diff "$i" "$(basename "$i" .ref).txt"
 done
 rm *.txt

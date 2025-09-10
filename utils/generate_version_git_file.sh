@@ -11,7 +11,7 @@ if [ ! -f "$version_file" ]; then
     exit 1
 fi
 
-if ! (git log -1 >/dev/null); then
+if ! (git log -1 > /dev/null); then
     echo "Error: git not available."
     exit 1
 fi

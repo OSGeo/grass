@@ -17,13 +17,13 @@
 # generates images for gui/images/symbols
 # requires ps.map, Inkscape, and ImageMagic
 
-DIR="$(basename $PWD)"
+DIR="$(basename "$PWD")"
 PSMAP_FILE=tmp.psmap
 PS_FILE=tmp.ps
 PNG_OUT=png_out
 POINT_VECTOR=tmp_one_point
 
-v.in.ascii input=- format=standard -n output=$POINT_VECTOR <<EOF
+v.in.ascii input=- format=standard -n output=$POINT_VECTOR << EOF
 P 1 1
  100 100
  1 1
@@ -32,10 +32,8 @@ EOF
 rm -r "$PNG_OUT"
 mkdir "$PNG_OUT"
 
-for SYMBOL in *
-do
-    if [ -f "$SYMBOL" ]
-    then
+for SYMBOL in *; do
+    if [ -f "$SYMBOL" ]; then
         echo -e "border none\npoint 50% 50%\n  symbol $DIR/$SYMBOL\n  end\nend" > "$PSMAP_FILE"
         ps.map input="$PSMAP_FILE" output="$PS_FILE"
         inkscape -f "$PS_FILE" --export-png="$PNG_OUT/$SYMBOL.png" -D -h=30

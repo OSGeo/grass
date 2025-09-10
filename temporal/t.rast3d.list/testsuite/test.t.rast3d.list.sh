@@ -16,11 +16,11 @@ r3.mapcalc expr="vol_4 = rand(0, 510)" -s
 r3.mapcalc expr="vol_5 = rand(0, 300)" -s
 r3.mapcalc expr="vol_6 = rand(0, 650)" -s
 
-n1=`g.tempfile pid=1 -d`
-n2=`g.tempfile pid=2 -d`
-n3=`g.tempfile pid=3 -d`
-n4=`g.tempfile pid=4 -d`
-n5=`g.tempfile pid=5 -d`
+n1=$(g.tempfile pid=1 -d)
+n2=$(g.tempfile pid=2 -d)
+n3=$(g.tempfile pid=3 -d)
+n4=$(g.tempfile pid=4 -d)
+n5=$(g.tempfile pid=5 -d)
 
 cat > "${n1}" << EOF
 vol_1
@@ -74,32 +74,32 @@ t.create type=str3ds temporaltype=absolute output=volume_abs4 title="A test with
 t.create type=str3ds temporaltype=absolute output=volume_abs5 title="A test with input files" descr="A test with input files"
 
 # The first @test
-t.register type=raster_3d   input=volume_abs1 file="${n1}" start="2001-01-01" increment="1 months"
-t.rast3d.list    separator=" | " method=comma     input=volume_abs1
+t.register type=raster_3d input=volume_abs1 file="${n1}" start="2001-01-01" increment="1 months"
+t.rast3d.list separator=" | " method=comma     input=volume_abs1
 t.rast3d.list input=volume_abs1
 t.rast3d.list separator=" | " method=cols      input=volume_abs1
 t.rast3d.list separator=" | " method=delta     input=volume_abs1
 t.rast3d.list separator=" | " method=deltagaps input=volume_abs1
 
 t.register type=raster_3d input=volume_abs2 file="${n2}"
-t.rast3d.list    separator=" | " method=comma     input=volume_abs2
+t.rast3d.list separator=" | " method=comma     input=volume_abs2
 t.rast3d.list input=volume_abs2
 t.rast3d.list separator=" | " method=cols      input=volume_abs2
 t.rast3d.list separator=" | " method=delta     input=volume_abs2
 t.rast3d.list separator=" | " method=deltagaps input=volume_abs2
 
 t.register type=raster_3d input=volume_abs3 file="${n3}"
-t.rast3d.list    separator=" | " method=comma     input=volume_abs3
+t.rast3d.list separator=" | " method=comma     input=volume_abs3
 t.rast3d.list separator=" | " method=delta     input=volume_abs3
 t.rast3d.list separator=" | " method=deltagaps input=volume_abs3
 
 t.register type=raster_3d input=volume_abs4 file="${n4}"
-t.rast3d.list    separator=" | " method=comma     input=volume_abs4
+t.rast3d.list separator=" | " method=comma     input=volume_abs4
 t.rast3d.list separator=" | " method=delta     input=volume_abs4
 t.rast3d.list separator=" | " method=deltagaps input=volume_abs4
 
 t.register type=raster_3d input=volume_abs5 file="${n5}"
-t.rast3d.list    separator=" | " method=comma     input=volume_abs5
+t.rast3d.list separator=" | " method=comma     input=volume_abs5
 t.rast3d.list input=volume_abs5
 t.rast3d.list separator=" | " method=cols      input=volume_abs5
 t.rast3d.list separator=" | " method=delta     input=volume_abs5
