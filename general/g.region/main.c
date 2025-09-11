@@ -504,7 +504,8 @@ int main(int argc, char *argv[])
         for (; *rast_ptr != NULL; rast_ptr++) {
             char rast_name[GNAME_MAX];
 
-            if (G_strlcpy(rast_name, *rast_ptr, sizeof(rast_name)) >= sizeof(rast_name))
+            if (G_strlcpy(rast_name, *rast_ptr, sizeof(rast_name)) >=
+                sizeof(rast_name))
                 G_fatal_error(_("Raster map name too long: <%s>"), *rast_ptr);
             mapset = G_find_raster2(rast_name, "");
             if (!mapset)
