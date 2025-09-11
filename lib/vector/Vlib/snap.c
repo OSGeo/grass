@@ -572,8 +572,8 @@ static void Vect_snap_lines_list_rtree(struct Map_info *Map,
                           filename, strerror(errno));
         }
         if (remove(filename) != 0) {
-            G_warning(_("Unable to remove temporary file <%s>: %s"),
-                      filename, strerror(errno));
+            G_warning(_("Unable to remove temporary file <%s>: %s"), filename,
+                      strerror(errno));
         }
         G_free(filename);
     }
