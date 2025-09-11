@@ -504,7 +504,8 @@ int main(int argc, char *argv[])
         for (; *rast_ptr != NULL; rast_ptr++) {
             char rast_name[GNAME_MAX];
 
-            strcpy(rast_name, *rast_ptr);
+            if (G_strlcpy(rast_name, *rast_ptr, sizeof(rast_name)) >= sizeof(rast_name))
+                G_fatal_error(_("Raster map name too long: <%s>"), *rast_ptr);
             mapset = G_find_raster2(rast_name, "");
             if (!mapset)
                 G_fatal_error(_("Raster map <%s> not found"), rast_name);
@@ -559,7 +560,8 @@ int main(int argc, char *argv[])
             char vect_name[GNAME_MAX];
             struct Cell_head map_window;
 
-            strcpy(vect_name, *vect_ptr);
+            if (G_strlcpy(vect_name, *vect_ptr, sizeof(vect_name)) >= sizeof(vect_name))
+                G_fatal_error(_("Vector map name too long: <%s>"), *vect_ptr);
             mapset = G_find_vector2(vect_name, "");
             if (!mapset)
                 G_fatal_error(_("Vector map <%s> not found"), vect_name);
