@@ -561,7 +561,8 @@ int main(int argc, char *argv[])
             char vect_name[GNAME_MAX];
             struct Cell_head map_window;
 
-            if (G_strlcpy(vect_name, *vect_ptr, sizeof(vect_name)) >= sizeof(vect_name))
+            if (G_strlcpy(vect_name, *vect_ptr, sizeof(vect_name)) >=
+                sizeof(vect_name))
                 G_fatal_error(_("Vector map name too long: <%s>"), *vect_ptr);
             mapset = G_find_vector2(vect_name, "");
             if (!mapset)
