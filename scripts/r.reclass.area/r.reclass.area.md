@@ -6,6 +6,10 @@ specified area size (in hectares).
 If the **-c** flag is used, *r.reclass.area* will skip the creation of a
 clumped raster and assume that the input raster is already clumped.
 
+If the **-n** flag is used, *r.reclass.area* will output a raster
+with only NULL values if no areas are left after applying the reclass
+**method** (instead of throwing an error).
+
 ## EXAMPLES
 
 In this example, the ZIP code map in the North Carolina sample dataset

@@ -6,6 +6,10 @@ less than a user specified area size (in hectares).
 If the <b>-c</b> flag is used, <em>r.reclass.area</em> will skip the
 creation of a clumped raster and assume that the input raster is
 already clumped.
+<p>
+If the <b>-n</b> flag is used, <em>r.reclass.area</em> will output a raster
+with only NULL values if no areas are left after applying the reclass
+<b>method</b> (instead of throwing an error).
 
 <h2>EXAMPLES</h2>
 
