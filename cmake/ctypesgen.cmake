@@ -31,7 +31,7 @@ if(NOT MSVC)
 endif()
 set(ENV{LC_ALL} C)
 
-set(CTYPESFLAGS "\"${COMPILER}\" -E ${C_FLAGS}")
+set(CTYPESFLAGS "${COMPILER} -E ${C_FLAGS}")
 
 set(LIBRARIES)
 foreach(LIB ${LIBS})
@@ -40,7 +40,7 @@ endforeach()
 
 set(INC_HEADERS)
 foreach(INCHDR ${INCHDRS})
-  list(APPEND INC_HEADERS "-I\"${INCHDR}\"")
+  list(APPEND INC_HEADERS "-I${INCHDR}")
 endforeach()
 
 set(DEFINES)
@@ -61,7 +61,7 @@ endforeach()
 message(STATUS "Generating ${OUT_FILE}")
 execute_process(
   COMMAND
-    ${PYTHON_EXECUTABLE} ${CTYPESGEN_PY} --cpp "${CTYPESFLAGS}"
+    ${PYTHON_EXECUTABLE} ${CTYPESGEN_PY} --cpp ${CTYPESFLAGS}
     --no-embed-preamble --strip-build-path ${RUNTIME_GISBASE} ${INC_HEADERS}
     ${LIBRARIES} ${DEFINES} -o ${OUT_FILE} ${HEADERS}
   OUTPUT_VARIABLE ctypesgen_OV
