@@ -34,14 +34,6 @@ def xy_session_for_module(tmp_path_factory):
 
 
 @pytest.fixture
-def xy_dataset_session(tmp_path):
-    """Creates a session with a mapset which has vector with a float column"""
-    gs.core._create_location_xy(tmp_path, "test")  # pylint: disable=protected-access
-    with gs.setup.init(tmp_path / "test") as session:
-        yield session
-
-
-@pytest.fixture
 def unique_id():
     """A unique alphanumeric identifier"""
     return uuid.uuid4().hex
@@ -77,41 +69,3 @@ def xy_mapset_non_permament(xy_session):  # pylint: disable=redefined-outer-name
         "test1", create=True, env=xy_session.env
     ) as session:
         yield session
-
-
-@pytest.fixture
-def rows_raster_file3x3(tmp_path):
-    project = tmp_path / "xy_test3x3"
-    gs.create_project(project)
-    with gs.setup.init(project, env=os.environ.copy()) as session:
-        gs.run_command("g.region", rows=3, cols=3, env=session.env)
-        gs.mapcalc("rows = row()", env=session.env)
-        output_file = tmp_path / "rows3x3.grass_raster"
-        gs.run_command(
-            "r.pack",
-            input="rows",
-            output=output_file,
-            flags="c",
-            superquiet=True,
-            env=session.env,
-        )
-    return output_file
-
-
-@pytest.fixture
-def rows_raster_file4x5(tmp_path):
-    project = tmp_path / "xy_test4x5"
-    gs.create_project(project)
-    with gs.setup.init(project, env=os.environ.copy()) as session:
-        gs.run_command("g.region", rows=4, cols=5, env=session.env)
-        gs.mapcalc("rows = row()", env=session.env)
-        output_file = tmp_path / "rows4x5.grass_raster"
-        gs.run_command(
-            "r.pack",
-            input="rows",
-            output=output_file,
-            flags="c",
-            superquiet=True,
-            env=session.env,
-        )
-    return output_file
