@@ -80,8 +80,8 @@ def get_filename_length_limit(path):
         # On Windows, there is no os.pathconf
         # and the other exceptions are from function doc.
         # Getting actual value for Windows would be complicated,
-        # so we go with a commonly used limit.
-        return 255
+        # so we go with a low value rather than skipping the test.
+        return 50
 
 
 def test_long_names(session, tmp_path):
