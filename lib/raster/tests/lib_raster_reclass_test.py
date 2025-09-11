@@ -1,10 +1,13 @@
+import os
 from pathlib import Path
+from io import StringIO
 
 import pytest
 
 from grass.script import MaskManager
 from grass.tools import Tools
 from grass.exceptions import CalledModuleError
+from grass.experimental import MapsetSession
 
 
 def test_reclass_as_mask_correct_state(session):
@@ -66,3 +69,45 @@ def test_reclass_as_mask_intermixed_hash_value_line(session):
         cellhd_file.write_text(content, encoding="utf-8")
         with pytest.raises(CalledModuleError, match=r"(?s)not read yet.*#1"):
             tools.r_univar(map="data")
+
+
+def get_filename_length_limit(path):
+    """Get maximum filename length for the given path"""
+    try:
+        # Expected to work on unix
+        return os.pathconf(path, "PC_NAME_MAX")
+    except (AttributeError, ValueError, OSError):
+        # On Windows, there is no os.pathconf
+        # and the other exceptions are from function doc.
+        # Getting actual value for Windows would be complicated,
+        # so we go with a low value rather than skipping the test.
+        return 50
+
+
+def test_long_names(session, tmp_path):
+    """Check that long names are handled correctly"""
+    # Using 255 because that's GNAME_MAX is 256 minus the terminator.
+    name_size = min(get_filename_length_limit(tmp_path), 255)
+    mapset_name = "m" * name_size
+    long_name = "l" * name_size
+    name = "r" * name_size
+    with (
+        MapsetSession(name=mapset_name, create=True, env=session.env) as mapset_session,
+        Tools(session=mapset_session) as tools,
+    ):
+        # This one is the one to actually break when the names are too long for the
+        # internal buffer - the raster being used in r.reclass has a long name.
+        tools.r_mapcalc(expression=f"{long_name} = raster_mask")
+        tools.r_reclass(input=long_name, output=name, rules=StringIO("1 = 5\n"))
+        tools.r_univar(map=name)
+
+        tools.r_reclass(input=name, output="short_name", rules=StringIO("1 = 5\n"))
+        tools.r_univar(map="short_name")
+
+        with MaskManager(env=mapset_session.env) as mask:
+            tools.r_mask(raster=long_name, env=mask.env)
+            tools.r_univar(map=name, env=mask.env)
+
+        with MaskManager(env=mapset_session.env, mask_name="n" * name_size) as mask:
+            tools.r_mask(raster=long_name, env=mask.env)
+            tools.r_univar(map=name, env=mask.env)
