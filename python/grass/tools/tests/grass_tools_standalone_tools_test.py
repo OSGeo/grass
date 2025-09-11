@@ -11,22 +11,20 @@ from grass.tools import StandaloneTools
 def test_json():
     """Check that numbers are parsed as numbers"""
     tools = StandaloneTools()
-    assert (
-        tools.run_from_list(["g.region", "-p", "format=json"])["region"]["ns-res"] == 1
-    )
+    assert tools.run_from_list(["g.region", "-p", "format=json"])["nsres"] == 1
 
 
 def test_run_name_and_parameters():
     """Check that name-and-parameters style works"""
     tools = StandaloneTools()
-    assert tools.run("g.region", flags="p", format="json")["region"]["ns-res"] == 1
+    assert tools.run("g.region", flags="p", format="json")["nsres"] == 1
 
 
 # TODO: This may fail because shutils.which does not setup a session.
 def test_function_call_with_json():
     """Check that numbers are parsed as numbers"""
     tools = StandaloneTools()
-    assert tools.g_region(flags="p", format="json")["region"]["ns-res"] == 1
+    assert tools.g_region(flags="p", format="json")["nsres"] == 1
 
 
 def test_key_value_parser_number():
@@ -190,11 +188,11 @@ def test_pack_workflow(rows_raster_file4x5):
 def test_regions_independent():
     """Check that global overwrite is not used when separate env is used"""
     tools1 = StandaloneTools()
-    tools1.g_region(rows=3, cols=3)
+    tools1.g_region(rows=2, cols=3)
     tools2 = StandaloneTools()
     tools2.g_region(rows=4, cols=5)
     region = tools1.g_region(flags="p", format="json")
-    assert region["rows"] == 3
+    assert region["rows"] == 2
     assert region["cols"] == 3
     region = tools2.g_region(flags="p", format="json")
     assert region["rows"] == 4

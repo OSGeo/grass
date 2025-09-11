@@ -140,7 +140,8 @@ class ParameterConverter:
     def input_rows_columns(self):
         if not len(self._numpy_inputs):
             return None
-        shape = self._numpy_inputs.values()[0].shape
+        # We use first item in the dictionary (which is in insertion order).
+        shape = next(iter(self._numpy_inputs.values()))[1].shape
         return shape[0], shape[1]
 
 

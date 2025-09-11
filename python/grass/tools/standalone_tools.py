@@ -16,6 +16,7 @@ An API to call GRASS tools as Python functions without a session
 This is not a stable part of the API. Use at your own risk.
 """
 
+import os
 import tempfile
 import json
 import subprocess
@@ -32,7 +33,9 @@ from grass.tools.importexport import ImporterExporter
 # Using inheritance to get the getattr behavior and other functionality,
 # but the session and env really make it more seem like a case for composition.
 class StandaloneTools:
-    def __init__(self, session=None, work_dir=None, errors=None, capture_output=True):
+    def __init__(
+        self, session=None, env=None, work_dir=None, errors=None, capture_output=True
+    ):
         self._tools = None
         self._errors = errors
         self._capture_output = capture_output
@@ -40,10 +43,19 @@ class StandaloneTools:
         self._work_dir = work_dir
         self._tmp_dir = None
         self._tmp_dir_finalizer = None
-        self._session = session
+        if session and env:
+            msg = "Provide either session or env, not both"
+            raise ValueError(msg)
+        self._session = None
         if session:
             # If session is provided, we will use it as is.
+            self._session = session
             self._crs_initialized = True
+            self._original_env = None  # env should not be used
+        elif env:
+            self._original_env = env
+        else:
+            self._original_env = os.environ
         # Because we don't setup a session here, we don't have runtime available for
         # tools to be called through method calls. Should we just start session here
         # to have the runtime?
@@ -105,7 +117,7 @@ class StandaloneTools:
             self._region_is_set = True
 
         object_parameter_handler.translate_objects_to_data(
-            kwargs, parameters, env=self._session.env
+            kwargs, env=self._session.env
         )
 
         # We approximate tool_kwargs as original kwargs.
@@ -117,7 +129,7 @@ class StandaloneTools:
             **popen_options,
         )
         use_objects = object_parameter_handler.translate_data_to_objects(
-            kwargs, parameters, env=self._session.env
+            kwargs, env=self._session.env
         )
         if use_objects:
             result = object_parameter_handler.result
@@ -213,7 +225,7 @@ class StandaloneTools:
         gs.create_project(project_path)
         self._region_file = project_path / "PERMANENT" / "WIND"
         self._region_modified_time = self._region_file.stat().st_mtime
-        self._session = gs.setup.init(project_path)
+        self._session = gs.setup.init(project_path, env=self._original_env.copy())
 
     def _initialize_crs(self, rasters):
         # Get the mapset path

@@ -185,7 +185,6 @@ class Tools:
             self._original_env = session.env
         else:
             self._original_env = os.environ
-        self._modified_env = None
         self._overwrite = overwrite
         self._verbose = verbose
         self._quiet = quiet
