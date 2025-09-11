@@ -64,7 +64,7 @@ repos:
                 .*/testsuite/.*
           )
   - repo: https://github.com/pre-commit/mirrors-clang-format
-    rev: v18.1.8
+    rev: v21.1.0
     hooks:
       - id: clang-format
         types_or: [c, c++, javascript, json, objective-c]
