@@ -135,8 +135,7 @@ int Rast_is_reclassed_to(const char *name, const char *mapset, int *nrmaps,
    \param mapset mapset name
    \param[out] reclass pointer to Reclass structure
 
-   \return -1 on error
-   \return type code
+   \return type code (>=1), 0 if no reclass, -1 on error
  */
 int Rast_get_reclass(const char *name, const char *mapset,
                      struct Reclass *reclass)
@@ -152,10 +151,18 @@ int Rast_get_reclass(const char *name, const char *mapset,
     char *error_message = NULL;
     reclass->type =
         reclass_type(fd, &reclass->name, &reclass->mapset, &error_message);
-    if (reclass->type <= 0) {
+    if (reclass->type == 0) {
+        // no reclass
+        fclose(fd);
+        return reclass->type;
+    }
+    if (reclass->type < 0) {
+        // error
         fclose(fd);
         G_warning(_("Error reading beginning of header file for <%s@%s>: %s"),
                   name, mapset, error_message);
+        if (error_message != NULL)
+            G_free(error_message);
         return reclass->type;
     }
 
