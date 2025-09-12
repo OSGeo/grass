@@ -129,6 +129,77 @@ v.vect.stats points=rand5000 area=myzipcodes_wake \
   method=average points_column=value separator=comma -p
 ```
 
+Calculation of average point elevation per ZIP code polygon, printed to
+terminal using Pandas:
+
+```python
+import grass.script as gs
+import pandas as pd
+
+data = gs.parse_command(
+    "v.vect.stats",
+    points="rand5000",
+    area="myzipcodes_wake",
+    method="average",
+    points_column="value",
+    flags="p",
+    format="json",
+)
+
+df = pd.DataFrame(data)
+print(df)
+```
+
+Possible output
+
+```text
+    category  count     average
+0          1     27   88.048804
+1          2      3  123.612151
+2          3     58  117.817925
+3          4      8   98.016271
+4          5      1  118.571144
+5          6     60   80.062659
+6          7     47  103.492038
+7          8    139   91.205997
+8          9     40   96.236051
+9         10     70   78.189556
+10        11     83   83.004861
+11        12      3  102.464809
+12        13    146   75.453039
+13        14      5  105.863010
+14        15      8   92.556496
+15        16     74  107.865658
+16        17    116   91.719968
+17        18     88   80.068764
+18        19      7   89.533522
+19        20      3  102.381422
+20        21      0         NaN
+21        22      0         NaN
+22        23      0         NaN
+23        24     69  124.676068
+24        25     12  122.343233
+25        26     87   95.262591
+26        27     25  119.104137
+27        28    152   93.403018
+28        29     21  125.223070
+29        30     40  104.292826
+30        31      3   93.742845
+31        32     63   94.003920
+32        33     89  114.055029
+33        34    103  107.205170
+34        35     28  129.672171
+35        36     49  105.070617
+36        37    315   99.595964
+37        38     60  121.639108
+38        39     61  116.906759
+39        40    156   99.058741
+40        41     75  103.888415
+41        42     91  112.695404
+42        43    127  112.014728
+43        44      0         NaN
+```
+
 ### Average values of points in polygon with column update
 
 *See above for the creation of the input maps.*

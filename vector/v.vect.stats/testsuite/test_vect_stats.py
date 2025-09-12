@@ -2,12 +2,14 @@
 Name:       v.vect.stats test
 Purpose:    Tests v.vect.stats and its flags/options.
 
-Author:     Sunveer Singh, Google Code-in 2017
-Copyright:  (C) 2017 by Sunveer Singh and the GRASS Development Team
+Author:     Nishant Bansal
+Copyright:  (C) 2025 by Nishant Bansal and the GRASS Development Team
 Licence:    This program is free software under the GNU General Public
             License (>=v2). Read the file COPYING that comes with GRASS
             for details.
 """
+
+import json
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -324,6 +326,21 @@ class Testrr(TestCase):
         self.assertModule(v_vect_stats)
         self.assertLooksLike(reference=output1, actual=v_vect_stats.outputs.stdout)
 
+        # Repeat with explicit plain format
+        v_vect_stats = SimpleModule(
+            "v.vect.stats",
+            points=self.input,
+            areas=self.areas,
+            method="sum",
+            count_column="num_points",
+            stats_column="avg_elev",
+            points_column="cat",
+            flags="p",
+            format="plain",
+        )
+        self.assertModule(v_vect_stats)
+        self.assertLooksLike(reference=output1, actual=v_vect_stats.outputs.stdout)
+
     def test_average(self):
         """Testing method average"""
         v_vect_stats = SimpleModule(
@@ -335,6 +352,21 @@ class Testrr(TestCase):
             stats_column="avg_elev",
             points_column="cat",
             flags="p",
+        )
+        self.assertModule(v_vect_stats)
+        self.assertLooksLike(reference=output2, actual=v_vect_stats.outputs.stdout)
+
+        # Repeat with explicit plain format
+        v_vect_stats = SimpleModule(
+            "v.vect.stats",
+            points=self.input,
+            areas=self.areas,
+            method="average",
+            count_column="num_points",
+            stats_column="avg_elev",
+            points_column="cat",
+            flags="p",
+            format="plain",
         )
         self.assertModule(v_vect_stats)
         self.assertLooksLike(reference=output2, actual=v_vect_stats.outputs.stdout)
@@ -354,6 +386,21 @@ class Testrr(TestCase):
         self.assertModule(v_vect_stats)
         self.assertLooksLike(reference=output3, actual=v_vect_stats.outputs.stdout)
 
+        # Repeat with explicit plain format
+        v_vect_stats = SimpleModule(
+            "v.vect.stats",
+            points=self.input,
+            areas=self.areas,
+            method="variance",
+            count_column="num_points",
+            stats_column="avg_elev",
+            points_column="cat",
+            flags="p",
+            format="plain",
+        )
+        self.assertModule(v_vect_stats)
+        self.assertLooksLike(reference=output3, actual=v_vect_stats.outputs.stdout)
+
     def test_mincat(self):
         """Testing method min_cat"""
         v_vect_stats = SimpleModule(
@@ -365,6 +412,21 @@ class Testrr(TestCase):
             stats_column="avg_elev",
             points_column="cat",
             flags="p",
+        )
+        self.assertModule(v_vect_stats)
+        self.assertLooksLike(reference=output4, actual=v_vect_stats.outputs.stdout)
+
+        # Repeat with explicit plain format
+        v_vect_stats = SimpleModule(
+            "v.vect.stats",
+            points=self.input,
+            areas=self.areas,
+            method="range",
+            count_column="num_points",
+            stats_column="avg_elev",
+            points_column="cat",
+            flags="p",
+            format="plain",
         )
         self.assertModule(v_vect_stats)
         self.assertLooksLike(reference=output4, actual=v_vect_stats.outputs.stdout)
@@ -384,6 +446,21 @@ class Testrr(TestCase):
         self.assertModule(v_vect_stats)
         self.assertLooksLike(reference=output5, actual=v_vect_stats.outputs.stdout)
 
+        # Repeat with explicit plain format
+        v_vect_stats = SimpleModule(
+            "v.vect.stats",
+            points=self.input,
+            areas=self.areas,
+            method="max_cat",
+            count_column="num_points",
+            stats_column="avg_elev",
+            points_column="cat",
+            flags="p",
+            format="plain",
+        )
+        self.assertModule(v_vect_stats)
+        self.assertLooksLike(reference=output5, actual=v_vect_stats.outputs.stdout)
+
     def test_mode(self):
         """Testing method mode"""
         v_vect_stats = SimpleModule(
@@ -398,6 +475,535 @@ class Testrr(TestCase):
         )
         self.assertModule(v_vect_stats)
         self.assertLooksLike(reference=output6, actual=v_vect_stats.outputs.stdout)
+
+        # Repeat with explicit plain format
+        v_vect_stats = SimpleModule(
+            "v.vect.stats",
+            points=self.input,
+            areas=self.areas,
+            method="mode",
+            count_column="num_points",
+            stats_column="avg_elev",
+            points_column="cat",
+            flags="p",
+            format="plain",
+        )
+        self.assertModule(v_vect_stats)
+        self.assertLooksLike(reference=output6, actual=v_vect_stats.outputs.stdout)
+
+    def test_sum_csv(self):
+        """Testing method sum with CSV output format"""
+        v_vect_stats = SimpleModule(
+            "v.vect.stats",
+            points=self.input,
+            areas=self.areas,
+            method="sum",
+            count_column="num_points",
+            stats_column="avg_elev",
+            points_column="cat",
+            flags="p",
+            format="csv",
+        )
+        self.assertModule(v_vect_stats)
+        self.assertLooksLike(
+            reference=output1.replace("|", ","), actual=v_vect_stats.outputs.stdout
+        )
+
+    def test_average_csv(self):
+        """Testing method average with CSV output format"""
+        v_vect_stats = SimpleModule(
+            "v.vect.stats",
+            points=self.input,
+            areas=self.areas,
+            method="average",
+            count_column="num_points",
+            stats_column="avg_elev",
+            points_column="cat",
+            flags="p",
+            format="csv",
+        )
+        self.assertModule(v_vect_stats)
+        self.assertLooksLike(
+            reference=output2.replace("|", ","), actual=v_vect_stats.outputs.stdout
+        )
+
+    def test_median_csv(self):
+        """Testing method variance with CSV output format"""
+        v_vect_stats = SimpleModule(
+            "v.vect.stats",
+            points=self.input,
+            areas=self.areas,
+            method="variance",
+            count_column="num_points",
+            stats_column="avg_elev",
+            points_column="cat",
+            flags="p",
+            format="csv",
+        )
+        self.assertModule(v_vect_stats)
+        self.assertLooksLike(
+            reference=output3.replace("|", ","), actual=v_vect_stats.outputs.stdout
+        )
+
+    def test_mincat_csv(self):
+        """Testing method min_cat with CSV output format"""
+        v_vect_stats = SimpleModule(
+            "v.vect.stats",
+            points=self.input,
+            areas=self.areas,
+            method="range",
+            count_column="num_points",
+            stats_column="avg_elev",
+            points_column="cat",
+            flags="p",
+            format="csv",
+        )
+        self.assertModule(v_vect_stats)
+        self.assertLooksLike(
+            reference=output4.replace("|", ","), actual=v_vect_stats.outputs.stdout
+        )
+
+    def test_maxcat_csv(self):
+        """Testing method max_cat with CSV output format"""
+        v_vect_stats = SimpleModule(
+            "v.vect.stats",
+            points=self.input,
+            areas=self.areas,
+            method="max_cat",
+            count_column="num_points",
+            stats_column="avg_elev",
+            points_column="cat",
+            flags="p",
+            format="csv",
+        )
+        self.assertModule(v_vect_stats)
+        self.assertLooksLike(
+            reference=output5.replace("|", ","), actual=v_vect_stats.outputs.stdout
+        )
+
+    def test_mode_csv(self):
+        """Testing method mode with CSV output format"""
+        v_vect_stats = SimpleModule(
+            "v.vect.stats",
+            points=self.input,
+            areas=self.areas,
+            method="mode",
+            count_column="num_points",
+            stats_column="avg_elev",
+            points_column="cat",
+            flags="p",
+            format="csv",
+        )
+        self.assertModule(v_vect_stats)
+        self.assertLooksLike(
+            reference=output6.replace("|", ","), actual=v_vect_stats.outputs.stdout
+        )
+
+    def assert_json_equal(self, expected, actual):
+        if isinstance(expected, dict):
+            self.assertIsInstance(actual, dict)
+            self.assertCountEqual(expected.keys(), actual.keys())
+            for key in expected:
+                self.assert_json_equal(expected[key], actual[key])
+        elif isinstance(expected, list):
+            self.assertIsInstance(actual, list)
+            self.assertEqual(len(expected), len(actual))
+            for exp_item, act_item in zip(expected, actual):
+                self.assert_json_equal(exp_item, act_item)
+        elif isinstance(expected, float):
+            self.assertAlmostEqual(expected, actual, places=6)
+        else:
+            self.assertEqual(expected, actual)
+
+    def test_sum_json(self):
+        """Testing method sum with JSON output format"""
+        v_vect_stats = SimpleModule(
+            "v.vect.stats",
+            points=self.input,
+            areas=self.areas,
+            method="sum",
+            count_column="num_points",
+            stats_column="avg_elev",
+            points_column="cat",
+            flags="p",
+            format="json",
+        )
+        self.assertModule(v_vect_stats)
+
+        expected_results = [
+            {"category": 1, "count": 0, "sum": None},
+            {"category": 2, "count": 0, "sum": None},
+            {"category": 3, "count": 0, "sum": None},
+            {"category": 4, "count": 0, "sum": None},
+            {"category": 5, "count": 0, "sum": None},
+            {"category": 6, "count": 0, "sum": None},
+            {"category": 7, "count": 0, "sum": None},
+            {"category": 8, "count": 0, "sum": None},
+            {"category": 9, "count": 1, "sum": 7},
+            {"category": 10, "count": 0, "sum": None},
+            {"category": 11, "count": 0, "sum": None},
+            {"category": 12, "count": 0, "sum": None},
+            {"category": 13, "count": 1, "sum": 10},
+            {"category": 14, "count": 0, "sum": None},
+            {"category": 15, "count": 0, "sum": None},
+            {"category": 16, "count": 0, "sum": None},
+            {"category": 17, "count": 0, "sum": None},
+            {"category": 18, "count": 0, "sum": None},
+            {"category": 19, "count": 0, "sum": None},
+            {"category": 20, "count": 0, "sum": None},
+            {"category": 21, "count": 0, "sum": None},
+            {"category": 22, "count": 0, "sum": None},
+            {"category": 23, "count": 0, "sum": None},
+            {"category": 24, "count": 0, "sum": None},
+            {"category": 25, "count": 0, "sum": None},
+            {"category": 26, "count": 0, "sum": None},
+            {"category": 27, "count": 0, "sum": None},
+            {"category": 28, "count": 1, "sum": 6},
+            {"category": 29, "count": 1, "sum": 146},
+            {"category": 30, "count": 0, "sum": None},
+            {"category": 31, "count": 0, "sum": None},
+            {"category": 32, "count": 0, "sum": None},
+            {"category": 33, "count": 0, "sum": None},
+            {"category": 34, "count": 0, "sum": None},
+            {"category": 35, "count": 0, "sum": None},
+            {"category": 36, "count": 0, "sum": None},
+            {"category": 37, "count": 0, "sum": None},
+            {"category": 38, "count": 0, "sum": None},
+            {"category": 39, "count": 1, "sum": 8},
+            {"category": 40, "count": 2, "sum": 9},
+            {"category": 41, "count": 0, "sum": None},
+            {"category": 42, "count": 0, "sum": None},
+            {"category": 43, "count": 1, "sum": 9},
+            {"category": 44, "count": 0, "sum": None},
+        ]
+
+        result = json.loads(v_vect_stats.outputs.stdout)
+        self.assert_json_equal(expected_results, result)
+
+    def test_average_json(self):
+        """Testing method average with JSON output format"""
+        v_vect_stats = SimpleModule(
+            "v.vect.stats",
+            points=self.input,
+            areas=self.areas,
+            method="average",
+            count_column="num_points",
+            stats_column="avg_elev",
+            points_column="cat",
+            flags="p",
+            format="json",
+        )
+        self.assertModule(v_vect_stats)
+
+        expected_results = [
+            {"category": 1, "count": 0, "average": None},
+            {"category": 2, "count": 0, "average": None},
+            {"category": 3, "count": 0, "average": None},
+            {"category": 4, "count": 0, "average": None},
+            {"category": 5, "count": 0, "average": None},
+            {"category": 6, "count": 0, "average": None},
+            {"category": 7, "count": 0, "average": None},
+            {"category": 8, "count": 0, "average": None},
+            {"category": 9, "count": 1, "average": 7},
+            {"category": 10, "count": 0, "average": None},
+            {"category": 11, "count": 0, "average": None},
+            {"category": 12, "count": 0, "average": None},
+            {"category": 13, "count": 1, "average": 10},
+            {"category": 14, "count": 0, "average": None},
+            {"category": 15, "count": 0, "average": None},
+            {"category": 16, "count": 0, "average": None},
+            {"category": 17, "count": 0, "average": None},
+            {"category": 18, "count": 0, "average": None},
+            {"category": 19, "count": 0, "average": None},
+            {"category": 20, "count": 0, "average": None},
+            {"category": 21, "count": 0, "average": None},
+            {"category": 22, "count": 0, "average": None},
+            {"category": 23, "count": 0, "average": None},
+            {"category": 24, "count": 0, "average": None},
+            {"category": 25, "count": 0, "average": None},
+            {"category": 26, "count": 0, "average": None},
+            {"category": 27, "count": 0, "average": None},
+            {"category": 28, "count": 1, "average": 6},
+            {"category": 29, "count": 1, "average": 146},
+            {"category": 30, "count": 0, "average": None},
+            {"category": 31, "count": 0, "average": None},
+            {"category": 32, "count": 0, "average": None},
+            {"category": 33, "count": 0, "average": None},
+            {"category": 34, "count": 0, "average": None},
+            {"category": 35, "count": 0, "average": None},
+            {"category": 36, "count": 0, "average": None},
+            {"category": 37, "count": 0, "average": None},
+            {"category": 38, "count": 0, "average": None},
+            {"category": 39, "count": 1, "average": 8},
+            {"category": 40, "count": 2, "average": 4.5},
+            {"category": 41, "count": 0, "average": None},
+            {"category": 42, "count": 0, "average": None},
+            {"category": 43, "count": 1, "average": 9},
+            {"category": 44, "count": 0, "average": None},
+        ]
+
+        result = json.loads(v_vect_stats.outputs.stdout)
+        self.assert_json_equal(expected_results, result)
+
+    def test_median_json(self):
+        """Testing method variance with JSON output format"""
+        v_vect_stats = SimpleModule(
+            "v.vect.stats",
+            points=self.input,
+            areas=self.areas,
+            method="variance",
+            count_column="num_points",
+            stats_column="avg_elev",
+            points_column="cat",
+            flags="p",
+            format="json",
+        )
+        self.assertModule(v_vect_stats)
+
+        expected_results = [
+            {"category": 1, "count": 0, "variance": None},
+            {"category": 2, "count": 0, "variance": None},
+            {"category": 3, "count": 0, "variance": None},
+            {"category": 4, "count": 0, "variance": None},
+            {"category": 5, "count": 0, "variance": None},
+            {"category": 6, "count": 0, "variance": None},
+            {"category": 7, "count": 0, "variance": None},
+            {"category": 8, "count": 0, "variance": None},
+            {"category": 9, "count": 1, "variance": 0},
+            {"category": 10, "count": 0, "variance": None},
+            {"category": 11, "count": 0, "variance": None},
+            {"category": 12, "count": 0, "variance": None},
+            {"category": 13, "count": 1, "variance": 0},
+            {"category": 14, "count": 0, "variance": None},
+            {"category": 15, "count": 0, "variance": None},
+            {"category": 16, "count": 0, "variance": None},
+            {"category": 17, "count": 0, "variance": None},
+            {"category": 18, "count": 0, "variance": None},
+            {"category": 19, "count": 0, "variance": None},
+            {"category": 20, "count": 0, "variance": None},
+            {"category": 21, "count": 0, "variance": None},
+            {"category": 22, "count": 0, "variance": None},
+            {"category": 23, "count": 0, "variance": None},
+            {"category": 24, "count": 0, "variance": None},
+            {"category": 25, "count": 0, "variance": None},
+            {"category": 26, "count": 0, "variance": None},
+            {"category": 27, "count": 0, "variance": None},
+            {"category": 28, "count": 1, "variance": 0},
+            {"category": 29, "count": 1, "variance": 0},
+            {"category": 30, "count": 0, "variance": None},
+            {"category": 31, "count": 0, "variance": None},
+            {"category": 32, "count": 0, "variance": None},
+            {"category": 33, "count": 0, "variance": None},
+            {"category": 34, "count": 0, "variance": None},
+            {"category": 35, "count": 0, "variance": None},
+            {"category": 36, "count": 0, "variance": None},
+            {"category": 37, "count": 0, "variance": None},
+            {"category": 38, "count": 0, "variance": None},
+            {"category": 39, "count": 1, "variance": 0},
+            {"category": 40, "count": 2, "variance": 0.25},
+            {"category": 41, "count": 0, "variance": None},
+            {"category": 42, "count": 0, "variance": None},
+            {"category": 43, "count": 1, "variance": 0},
+            {"category": 44, "count": 0, "variance": None},
+        ]
+
+        result = json.loads(v_vect_stats.outputs.stdout)
+        self.assert_json_equal(expected_results, result)
+
+    def test_mincat_json(self):
+        """Testing method min_cat with JSON output format"""
+        v_vect_stats = SimpleModule(
+            "v.vect.stats",
+            points=self.input,
+            areas=self.areas,
+            method="range",
+            count_column="num_points",
+            stats_column="avg_elev",
+            points_column="cat",
+            flags="p",
+            format="json",
+        )
+        self.assertModule(v_vect_stats)
+
+        expected_results = [
+            {"category": 1, "count": 0, "range": None},
+            {"category": 2, "count": 0, "range": None},
+            {"category": 3, "count": 0, "range": None},
+            {"category": 4, "count": 0, "range": None},
+            {"category": 5, "count": 0, "range": None},
+            {"category": 6, "count": 0, "range": None},
+            {"category": 7, "count": 0, "range": None},
+            {"category": 8, "count": 0, "range": None},
+            {"category": 9, "count": 1, "range": 0},
+            {"category": 10, "count": 0, "range": None},
+            {"category": 11, "count": 0, "range": None},
+            {"category": 12, "count": 0, "range": None},
+            {"category": 13, "count": 1, "range": 0},
+            {"category": 14, "count": 0, "range": None},
+            {"category": 15, "count": 0, "range": None},
+            {"category": 16, "count": 0, "range": None},
+            {"category": 17, "count": 0, "range": None},
+            {"category": 18, "count": 0, "range": None},
+            {"category": 19, "count": 0, "range": None},
+            {"category": 20, "count": 0, "range": None},
+            {"category": 21, "count": 0, "range": None},
+            {"category": 22, "count": 0, "range": None},
+            {"category": 23, "count": 0, "range": None},
+            {"category": 24, "count": 0, "range": None},
+            {"category": 25, "count": 0, "range": None},
+            {"category": 26, "count": 0, "range": None},
+            {"category": 27, "count": 0, "range": None},
+            {"category": 28, "count": 1, "range": 0},
+            {"category": 29, "count": 1, "range": 0},
+            {"category": 30, "count": 0, "range": None},
+            {"category": 31, "count": 0, "range": None},
+            {"category": 32, "count": 0, "range": None},
+            {"category": 33, "count": 0, "range": None},
+            {"category": 34, "count": 0, "range": None},
+            {"category": 35, "count": 0, "range": None},
+            {"category": 36, "count": 0, "range": None},
+            {"category": 37, "count": 0, "range": None},
+            {"category": 38, "count": 0, "range": None},
+            {"category": 39, "count": 1, "range": 0},
+            {"category": 40, "count": 2, "range": 1},
+            {"category": 41, "count": 0, "range": None},
+            {"category": 42, "count": 0, "range": None},
+            {"category": 43, "count": 1, "range": 0},
+            {"category": 44, "count": 0, "range": None},
+        ]
+
+        result = json.loads(v_vect_stats.outputs.stdout)
+        self.assert_json_equal(expected_results, result)
+
+    def test_maxcat_json(self):
+        """Testing method max_cat with JSON output format"""
+        v_vect_stats = SimpleModule(
+            "v.vect.stats",
+            points=self.input,
+            areas=self.areas,
+            method="max_cat",
+            count_column="num_points",
+            stats_column="avg_elev",
+            points_column="cat",
+            flags="p",
+            format="json",
+        )
+        self.assertModule(v_vect_stats)
+
+        expected_results = [
+            {"category": 1, "count": 0, "max_cat": None},
+            {"category": 2, "count": 0, "max_cat": None},
+            {"category": 3, "count": 0, "max_cat": None},
+            {"category": 4, "count": 0, "max_cat": None},
+            {"category": 5, "count": 0, "max_cat": None},
+            {"category": 6, "count": 0, "max_cat": None},
+            {"category": 7, "count": 0, "max_cat": None},
+            {"category": 8, "count": 0, "max_cat": None},
+            {"category": 9, "count": 1, "max_cat": 7},
+            {"category": 10, "count": 0, "max_cat": None},
+            {"category": 11, "count": 0, "max_cat": None},
+            {"category": 12, "count": 0, "max_cat": None},
+            {"category": 13, "count": 1, "max_cat": 10},
+            {"category": 14, "count": 0, "max_cat": None},
+            {"category": 15, "count": 0, "max_cat": None},
+            {"category": 16, "count": 0, "max_cat": None},
+            {"category": 17, "count": 0, "max_cat": None},
+            {"category": 18, "count": 0, "max_cat": None},
+            {"category": 19, "count": 0, "max_cat": None},
+            {"category": 20, "count": 0, "max_cat": None},
+            {"category": 21, "count": 0, "max_cat": None},
+            {"category": 22, "count": 0, "max_cat": None},
+            {"category": 23, "count": 0, "max_cat": None},
+            {"category": 24, "count": 0, "max_cat": None},
+            {"category": 25, "count": 0, "max_cat": None},
+            {"category": 26, "count": 0, "max_cat": None},
+            {"category": 27, "count": 0, "max_cat": None},
+            {"category": 28, "count": 1, "max_cat": 6},
+            {"category": 29, "count": 1, "max_cat": 146},
+            {"category": 30, "count": 0, "max_cat": None},
+            {"category": 31, "count": 0, "max_cat": None},
+            {"category": 32, "count": 0, "max_cat": None},
+            {"category": 33, "count": 0, "max_cat": None},
+            {"category": 34, "count": 0, "max_cat": None},
+            {"category": 35, "count": 0, "max_cat": None},
+            {"category": 36, "count": 0, "max_cat": None},
+            {"category": 37, "count": 0, "max_cat": None},
+            {"category": 38, "count": 0, "max_cat": None},
+            {"category": 39, "count": 1, "max_cat": 8},
+            {"category": 40, "count": 2, "max_cat": 5},
+            {"category": 41, "count": 0, "max_cat": None},
+            {"category": 42, "count": 0, "max_cat": None},
+            {"category": 43, "count": 1, "max_cat": 9},
+            {"category": 44, "count": 0, "max_cat": None},
+        ]
+
+        result = json.loads(v_vect_stats.outputs.stdout)
+        self.assert_json_equal(expected_results, result)
+
+    def test_mode_json(self):
+        """Testing method mode with JSON output format"""
+        v_vect_stats = SimpleModule(
+            "v.vect.stats",
+            points=self.input,
+            areas=self.areas,
+            method="mode",
+            count_column="num_points",
+            stats_column="avg_elev",
+            points_column="cat",
+            flags="p",
+            format="json",
+        )
+        self.assertModule(v_vect_stats)
+
+        expected_results = [
+            {"category": 1, "count": 0, "mode": None},
+            {"category": 2, "count": 0, "mode": None},
+            {"category": 3, "count": 0, "mode": None},
+            {"category": 4, "count": 0, "mode": None},
+            {"category": 5, "count": 0, "mode": None},
+            {"category": 6, "count": 0, "mode": None},
+            {"category": 7, "count": 0, "mode": None},
+            {"category": 8, "count": 0, "mode": None},
+            {"category": 9, "count": 1, "mode": 7},
+            {"category": 10, "count": 0, "mode": None},
+            {"category": 11, "count": 0, "mode": None},
+            {"category": 12, "count": 0, "mode": None},
+            {"category": 13, "count": 1, "mode": 10},
+            {"category": 14, "count": 0, "mode": None},
+            {"category": 15, "count": 0, "mode": None},
+            {"category": 16, "count": 0, "mode": None},
+            {"category": 17, "count": 0, "mode": None},
+            {"category": 18, "count": 0, "mode": None},
+            {"category": 19, "count": 0, "mode": None},
+            {"category": 20, "count": 0, "mode": None},
+            {"category": 21, "count": 0, "mode": None},
+            {"category": 22, "count": 0, "mode": None},
+            {"category": 23, "count": 0, "mode": None},
+            {"category": 24, "count": 0, "mode": None},
+            {"category": 25, "count": 0, "mode": None},
+            {"category": 26, "count": 0, "mode": None},
+            {"category": 27, "count": 0, "mode": None},
+            {"category": 28, "count": 1, "mode": 6},
+            {"category": 29, "count": 1, "mode": 146},
+            {"category": 30, "count": 0, "mode": None},
+            {"category": 31, "count": 0, "mode": None},
+            {"category": 32, "count": 0, "mode": None},
+            {"category": 33, "count": 0, "mode": None},
+            {"category": 34, "count": 0, "mode": None},
+            {"category": 35, "count": 0, "mode": None},
+            {"category": 36, "count": 0, "mode": None},
+            {"category": 37, "count": 0, "mode": None},
+            {"category": 38, "count": 0, "mode": None},
+            {"category": 39, "count": 1, "mode": 8},
+            {"category": 40, "count": 2, "mode": 4},
+            {"category": 41, "count": 0, "mode": None},
+            {"category": 42, "count": 0, "mode": None},
+            {"category": 43, "count": 1, "mode": 9},
+            {"category": 44, "count": 0, "mode": None},
+        ]
+
+        result = json.loads(v_vect_stats.outputs.stdout)
+        self.assert_json_equal(expected_results, result)
 
 
 if __name__ == "__main__":
