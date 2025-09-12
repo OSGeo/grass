@@ -198,11 +198,11 @@ class Tools:
             self._capture_stderr = capture_stderr
         self._name_resolver = None
         self._consistent_return_value = consistent_return_value
+        self._importer_exporter = None
         # Decides if we delete at each run or only at the end of context.
         self._delete_on_context_exit = False
         # User request to keep the data.
         self._keep_data = keep_data
-        self._cleanups = []
 
     def _modified_env_if_needed(self):
         """Get the environment for subprocesses
@@ -320,15 +320,22 @@ class Tools:
         :param tool_kwargs: named tool arguments used for error reporting (experimental)
         :param **popen_options: additional options for :py:func:`subprocess.Popen`
         """
+        # Compute the environment for subprocesses and store it for later use.
+        if "env" not in popen_options:
+            popen_options["env"] = self._modified_env_if_needed()
+
         if parameter_converter is None:
             parameter_converter = ParameterConverter()
             parameter_converter.process_parameter_list(command[1:])
         if parameter_converter.import_export:
-            pack_importer_exporter = ImporterExporter(
-                run_function=self.call, run_cmd_function=self.call_cmd
+            if self._importer_exporter is None:
+                self._importer_exporter = ImporterExporter(
+                    run_function=self.call, run_cmd_function=self.call_cmd
+                )
+            command = self._importer_exporter.process_parameter_list(
+                command, **popen_options
             )
-            command = pack_importer_exporter.process_parameter_list(command)
-            pack_importer_exporter.import_data()
+            self._importer_exporter.import_data(env=popen_options["env"])
 
         # We approximate tool_kwargs as original kwargs.
         result = self.call_cmd(
@@ -338,11 +345,14 @@ class Tools:
             **popen_options,
         )
         if parameter_converter.import_export:
-            pack_importer_exporter.export_data()
-            if self._delete_on_context_exit or self._keep_data:
-                self._cleanups.append(pack_importer_exporter.cleanup)
-            else:
-                pack_importer_exporter.cleanup()
+            overwrite = None
+            if "--o" in command or "--overwrite" in command:
+                overwrite = True
+            self._importer_exporter.export_data(
+                env=popen_options["env"], overwrite=overwrite
+            )
+            if not self._delete_on_context_exit and not self._keep_data:
+                self._importer_exporter.cleanup(env=popen_options["env"])
         return result
 
     def call(self, tool_name_: str, /, **kwargs):
@@ -459,5 +469,5 @@ class Tools:
             self.cleanup()
 
     def cleanup(self):
-        for cleanup in self._cleanups:
-            cleanup()
+        if self._importer_exporter is not None:
+            self._importer_exporter.cleanup(env=self._modified_env_if_needed())
