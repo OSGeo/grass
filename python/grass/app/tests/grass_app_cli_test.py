@@ -53,3 +53,21 @@ def test_subcommand_run_tool_regular_run():
 def test_subcommand_run_tool_failure_run():
     """Check that a tool produces non-zero return code"""
     assert main(["run", "g.region", "raster=does_not_exist"]) == 1
+
+
+def test_subcommand_run_tool_pack(rows_raster_file3x2, tmp_path):
+    """Check that a tool accepts and produces a raster pack file"""
+    output = tmp_path / "output.grass_raster"
+    assert (
+        main(
+            [
+                "run",
+                "r.mapcalc.simple",
+                "expression=2 * A",
+                f"a={rows_raster_file3x2}",
+                f"output={output}",
+            ]
+        )
+        == 0
+    )
+    assert output.exists()
