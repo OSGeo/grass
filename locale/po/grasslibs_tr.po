@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_tr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-06 15:42+0000\n"
+"POT-Creation-Date: 2025-09-13 15:39+0000\n"
 "PO-Revision-Date: 2025-08-23 20:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Turkish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/tr/>\n"
@@ -1661,7 +1661,7 @@ msgstr "Seçenekler"
 msgid "Default"
 msgstr "Varsayılan"
 
-#: ../lib/gis/parser_json.c:378
+#: ../lib/gis/parser_json.c:383
 #, c-format
 msgid "Input string not understood: <%s>. Multiple '@' chars?"
 msgstr ""
@@ -5597,32 +5597,86 @@ msgstr ""
 msgid "Unable to create <%s> metadata file for raster map <%s@%s>"
 msgstr ""
 
-#: ../lib/raster/reclass.c:168
+#: ../lib/raster/reclass.c:162
+#, fuzzy, c-format
+#| msgid "Error reading range file for [%s in %s]"
+msgid "Error reading beginning of header file for <%s@%s>: %s"
+msgstr "[%s deki %s] in aralık dosyası okunamıyor"
+
+#: ../lib/raster/reclass.c:180
 #, c-format
 msgid "Too many reclass categories for <%s@%s>"
 msgstr ""
 
-#: ../lib/raster/reclass.c:171
+#: ../lib/raster/reclass.c:184
 #, c-format
-msgid "Illegal reclass format in header file for <%s@%s>"
+msgid "Illegal reclass format in header file for <%s@%s>: %s"
 msgstr ""
 
-#: ../lib/raster/reclass.c:273
+#: ../lib/raster/reclass.c:252
+#, fuzzy, c-format
+#| msgid "Unable to open %s for reading"
+msgid "File too short, reading line %d"
+msgstr "%s okuma için açılamıyor"
+
+#: ../lib/raster/reclass.c:259
+#, c-format
+msgid "Line too long: %s..."
+msgstr ""
+
+#: ../lib/raster/reclass.c:265
+#, c-format
+msgid "Format is not key:value: %s"
+msgstr ""
+
+#: ../lib/raster/reclass.c:284
+#, fuzzy, c-format
+#| msgid "Unknown file extension: %s"
+msgid "Unknown key at line: %s"
+msgstr "Bilinmeyen dosya uzantısı: %s"
+
+#: ../lib/raster/reclass.c:295
+#, c-format
+msgid "Mapset not read, only raster name: %s"
+msgstr ""
+
+#: ../lib/raster/reclass.c:299
+#, c-format
+msgid "Raster name not read, only mapset: %s"
+msgstr ""
+
+#: ../lib/raster/reclass.c:302
+#, fuzzy
+#| msgid "Raster map <%s> not found"
+msgid "Raster name and mapset not read"
+msgstr "<%s> raster haritası bulunamadı"
+
+#: ../lib/raster/reclass.c:333
 msgid "Illegal reclass request"
 msgstr "Uygun olmayan yeniden sınıflandırmaisteği"
 
-#: ../lib/raster/reclass.c:278
+#: ../lib/raster/reclass.c:338
 msgid "Illegal reclass type"
 msgstr "Uygun olmayan yeniden sınıflandırma tipi"
 
-#: ../lib/raster/reclass.c:284
+#: ../lib/raster/reclass.c:344
 #, c-format
 msgid "Unable to create header file for <%s@%s>"
 msgstr ""
 
-#: ../lib/raster/reclass.c:332
+#: ../lib/raster/reclass.c:392
 #, c-format
 msgid "Unable to create dependency file in <%s@%s>"
+msgstr ""
+
+#: ../lib/raster/reclass.c:479
+#, c-format
+msgid "Reading integer failed on line: %s (after reading min: %d)"
+msgstr ""
+
+#: ../lib/raster/reclass.c:484
+#, c-format
+msgid "First entry (min) not read yet and reading integer failed on line: %s"
 msgstr ""
 
 #: ../lib/raster/sample.c:68
