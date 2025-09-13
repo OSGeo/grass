@@ -2640,6 +2640,8 @@ class GdalSelect(wx.Panel):
         """
         try:
             from osgeo import gdal
+
+            gdal.DontUseExceptions()
         except ImportError:
             GError(
                 parent=self,
