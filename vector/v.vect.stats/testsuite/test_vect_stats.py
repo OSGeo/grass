@@ -299,7 +299,7 @@ output6 = """area_cat|count|mode
 """
 
 
-class Testrr(TestCase):
+class TestVectStats(TestCase):
     input = "hospitals"
     areas = "zipcodes_wake"
 
@@ -318,8 +318,6 @@ class Testrr(TestCase):
             points=self.input,
             areas=self.areas,
             method="sum",
-            count_column="num_points",
-            stats_column="avg_elev",
             points_column="cat",
             flags="p",
         )
@@ -332,8 +330,6 @@ class Testrr(TestCase):
             points=self.input,
             areas=self.areas,
             method="sum",
-            count_column="num_points",
-            stats_column="avg_elev",
             points_column="cat",
             flags="p",
             format="plain",
@@ -348,8 +344,6 @@ class Testrr(TestCase):
             points=self.input,
             areas=self.areas,
             method="average",
-            count_column="num_points",
-            stats_column="avg_elev",
             points_column="cat",
             flags="p",
         )
@@ -362,8 +356,6 @@ class Testrr(TestCase):
             points=self.input,
             areas=self.areas,
             method="average",
-            count_column="num_points",
-            stats_column="avg_elev",
             points_column="cat",
             flags="p",
             format="plain",
@@ -371,15 +363,13 @@ class Testrr(TestCase):
         self.assertModule(v_vect_stats)
         self.assertLooksLike(reference=output2, actual=v_vect_stats.outputs.stdout)
 
-    def test_median(self):
+    def test_variance(self):
         """Testing method variance"""
         v_vect_stats = SimpleModule(
             "v.vect.stats",
             points=self.input,
             areas=self.areas,
             method="variance",
-            count_column="num_points",
-            stats_column="avg_elev",
             points_column="cat",
             flags="p",
         )
@@ -392,8 +382,6 @@ class Testrr(TestCase):
             points=self.input,
             areas=self.areas,
             method="variance",
-            count_column="num_points",
-            stats_column="avg_elev",
             points_column="cat",
             flags="p",
             format="plain",
@@ -401,15 +389,13 @@ class Testrr(TestCase):
         self.assertModule(v_vect_stats)
         self.assertLooksLike(reference=output3, actual=v_vect_stats.outputs.stdout)
 
-    def test_mincat(self):
-        """Testing method min_cat"""
+    def test_range(self):
+        """Testing method range"""
         v_vect_stats = SimpleModule(
             "v.vect.stats",
             points=self.input,
             areas=self.areas,
             method="range",
-            count_column="num_points",
-            stats_column="avg_elev",
             points_column="cat",
             flags="p",
         )
@@ -422,8 +408,6 @@ class Testrr(TestCase):
             points=self.input,
             areas=self.areas,
             method="range",
-            count_column="num_points",
-            stats_column="avg_elev",
             points_column="cat",
             flags="p",
             format="plain",
@@ -438,8 +422,6 @@ class Testrr(TestCase):
             points=self.input,
             areas=self.areas,
             method="max_cat",
-            count_column="num_points",
-            stats_column="avg_elev",
             points_column="cat",
             flags="p",
         )
@@ -452,8 +434,6 @@ class Testrr(TestCase):
             points=self.input,
             areas=self.areas,
             method="max_cat",
-            count_column="num_points",
-            stats_column="avg_elev",
             points_column="cat",
             flags="p",
             format="plain",
@@ -468,8 +448,6 @@ class Testrr(TestCase):
             points=self.input,
             areas=self.areas,
             method="mode",
-            count_column="num_points",
-            stats_column="avg_elev",
             points_column="cat",
             flags="p",
         )
@@ -482,8 +460,6 @@ class Testrr(TestCase):
             points=self.input,
             areas=self.areas,
             method="mode",
-            count_column="num_points",
-            stats_column="avg_elev",
             points_column="cat",
             flags="p",
             format="plain",
@@ -498,8 +474,6 @@ class Testrr(TestCase):
             points=self.input,
             areas=self.areas,
             method="sum",
-            count_column="num_points",
-            stats_column="avg_elev",
             points_column="cat",
             flags="p",
             format="csv",
@@ -516,8 +490,6 @@ class Testrr(TestCase):
             points=self.input,
             areas=self.areas,
             method="average",
-            count_column="num_points",
-            stats_column="avg_elev",
             points_column="cat",
             flags="p",
             format="csv",
@@ -527,15 +499,13 @@ class Testrr(TestCase):
             reference=output2.replace("|", ","), actual=v_vect_stats.outputs.stdout
         )
 
-    def test_median_csv(self):
+    def test_variance_csv(self):
         """Testing method variance with CSV output format"""
         v_vect_stats = SimpleModule(
             "v.vect.stats",
             points=self.input,
             areas=self.areas,
             method="variance",
-            count_column="num_points",
-            stats_column="avg_elev",
             points_column="cat",
             flags="p",
             format="csv",
@@ -545,15 +515,13 @@ class Testrr(TestCase):
             reference=output3.replace("|", ","), actual=v_vect_stats.outputs.stdout
         )
 
-    def test_mincat_csv(self):
-        """Testing method min_cat with CSV output format"""
+    def test_range_csv(self):
+        """Testing method range with CSV output format"""
         v_vect_stats = SimpleModule(
             "v.vect.stats",
             points=self.input,
             areas=self.areas,
             method="range",
-            count_column="num_points",
-            stats_column="avg_elev",
             points_column="cat",
             flags="p",
             format="csv",
@@ -570,8 +538,6 @@ class Testrr(TestCase):
             points=self.input,
             areas=self.areas,
             method="max_cat",
-            count_column="num_points",
-            stats_column="avg_elev",
             points_column="cat",
             flags="p",
             format="csv",
@@ -588,8 +554,6 @@ class Testrr(TestCase):
             points=self.input,
             areas=self.areas,
             method="mode",
-            count_column="num_points",
-            stats_column="avg_elev",
             points_column="cat",
             flags="p",
             format="csv",
@@ -622,8 +586,6 @@ class Testrr(TestCase):
             points=self.input,
             areas=self.areas,
             method="sum",
-            count_column="num_points",
-            stats_column="avg_elev",
             points_column="cat",
             flags="p",
             format="json",
@@ -687,8 +649,6 @@ class Testrr(TestCase):
             points=self.input,
             areas=self.areas,
             method="average",
-            count_column="num_points",
-            stats_column="avg_elev",
             points_column="cat",
             flags="p",
             format="json",
@@ -745,15 +705,13 @@ class Testrr(TestCase):
         result = json.loads(v_vect_stats.outputs.stdout)
         self.assert_json_equal(expected_results, result)
 
-    def test_median_json(self):
+    def test_variance_json(self):
         """Testing method variance with JSON output format"""
         v_vect_stats = SimpleModule(
             "v.vect.stats",
             points=self.input,
             areas=self.areas,
             method="variance",
-            count_column="num_points",
-            stats_column="avg_elev",
             points_column="cat",
             flags="p",
             format="json",
@@ -810,15 +768,13 @@ class Testrr(TestCase):
         result = json.loads(v_vect_stats.outputs.stdout)
         self.assert_json_equal(expected_results, result)
 
-    def test_mincat_json(self):
-        """Testing method min_cat with JSON output format"""
+    def test_range_json(self):
+        """Testing method range with JSON output format"""
         v_vect_stats = SimpleModule(
             "v.vect.stats",
             points=self.input,
             areas=self.areas,
             method="range",
-            count_column="num_points",
-            stats_column="avg_elev",
             points_column="cat",
             flags="p",
             format="json",
@@ -882,8 +838,6 @@ class Testrr(TestCase):
             points=self.input,
             areas=self.areas,
             method="max_cat",
-            count_column="num_points",
-            stats_column="avg_elev",
             points_column="cat",
             flags="p",
             format="json",
@@ -947,8 +901,6 @@ class Testrr(TestCase):
             points=self.input,
             areas=self.areas,
             method="mode",
-            count_column="num_points",
-            stats_column="avg_elev",
             points_column="cat",
             flags="p",
             format="json",
