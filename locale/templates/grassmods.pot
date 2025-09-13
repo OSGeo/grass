@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-30 15:44+0000\n"
+"POT-Creation-Date: 2025-09-13 15:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,11 +75,15 @@ msgstr ""
 #: ../vector/v.class/main.c:264 ../vector/v.class/main.c:271
 #: ../vector/v.db.connect/main.c:152 ../vector/v.distance/main.c:310
 #: ../vector/v.info/print.c:866 ../vector/v.what.rast/main.c:144
+#: ../vector/v.what/main.c:226 ../vector/v.what/what.c:508
+#: ../vector/v.what/what.c:652 ../vector/v.what/what.c:705
+#: ../vector/v.what/what.c:898 ../vector/v.what/what.c:1037
+#: ../vector/v.what/what.c:1158
 msgid "Failed to initialize JSON array. Out of memory?"
 msgstr ""
 
 #: ../db/db.columns/main.c:98 ../db/db.connect/main.c:243
-#: ../general/g.findfile/main.c:36 ../general/g.list/list.c:139
+#: ../general/g.findfile/main.c:36 ../general/g.list/list.c:140
 #: ../general/g.mapset/main.c:37 ../general/g.mapsets/list.c:34
 #: ../misc/m.measure/main.c:182 ../raster/r.distance/report.c:138
 #: ../raster/r.regression.line/main.c:269
@@ -87,6 +91,7 @@ msgstr ""
 #: ../raster/r.stats.quantile/main.c:472 ../raster/r.volume/main.c:448
 #: ../raster3d/r3.info/main.c:993 ../vector/v.class/main.c:379
 #: ../vector/v.db.connect/main.c:434 ../vector/v.what.rast/main.c:694
+#: ../vector/v.what/main.c:321
 msgid "Failed to serialize JSON to pretty format."
 msgstr ""
 
@@ -224,9 +229,10 @@ msgstr ""
 #: ../vector/v.to.db/parse.c:136 ../vector/v.to.db/parse.c:141
 #: ../vector/v.to.db/parse.c:147 ../vector/v.univar/main.c:152
 #: ../vector/v.vect.stats/main.c:229 ../vector/v.vect.stats/main.c:236
-#: ../vector/v.what.rast/main.c:112 ../vector/v.what/main.c:94
-#: ../vector/v.what/main.c:99 ../vector/v.what/main.c:104
-#: ../vector/v.what/main.c:109 ../vector/v.what/main.c:115
+#: ../vector/v.what.rast/main.c:112 ../vector/v.what/main.c:100
+#: ../vector/v.what/main.c:105 ../vector/v.what/main.c:111
+#: ../vector/v.what/main.c:118 ../vector/v.what/main.c:126
+#: ../vector/v.what/main.c:134 ../vector/v.what/main.c:142
 msgid "Print"
 msgstr ""
 
@@ -257,6 +263,7 @@ msgstr ""
 #: ../raster/r.regression.multi/main.c:179
 #: ../raster/r.univar/r.univar_main.c:103
 #: ../raster/r.univar/r3.univar_main.c:65 ../vector/v.univar/main.c:131
+#: ../vector/v.what/main.c:124
 msgid "This flag is deprecated and will be removed in a future release. Use format=shell instead."
 msgstr ""
 
@@ -288,11 +295,12 @@ msgstr ""
 
 #: ../db/db.connect/main.c:115 ../general/g.region/main.c:389
 #: ../misc/m.measure/main.c:67 ../raster3d/r3.info/main.c:98
+#: ../vector/v.what/main.c:97
 msgid "plain;Plain text output;shell;shell script style output;json;JSON (JavaScript Object Notation);"
 msgstr ""
 
 #: ../db/db.connect/main.c:144 ../general/g.findfile/main.c:187
-#: ../general/g.list/list.c:121 ../general/g.mapset/main.c:118
+#: ../general/g.list/list.c:122 ../general/g.mapset/main.c:118
 #: ../general/g.mapsets/list.c:13 ../general/g.proj/output.c:54
 #: ../general/g.proj/output.c:360 ../general/g.region/main.c:471
 #: ../general/g.version/main.c:140 ../misc/m.measure/main.c:87
@@ -311,6 +319,10 @@ msgstr ""
 #: ../vector/v.db.connect/main.c:399 ../vector/v.distance/main.c:1578
 #: ../vector/v.info/print.c:824 ../vector/v.info/print.c:860
 #: ../vector/v.univar/main.c:630 ../vector/v.what.rast/main.c:628
+#: ../vector/v.what/what.c:202 ../vector/v.what/what.c:273
+#: ../vector/v.what/what.c:441 ../vector/v.what/what.c:539
+#: ../vector/v.what/what.c:680 ../vector/v.what/what.c:728
+#: ../vector/v.what/what.c:933
 msgid "Failed to initialize JSON object. Out of memory?"
 msgstr ""
 
@@ -323,6 +335,7 @@ msgstr ""
 #: ../raster/r.univar/r3.univar_main.c:176
 #: ../scripts/db.univar/db.univar.py:122
 #: ../scripts/v.db.univar/v.db.univar.py:99 ../vector/v.univar/main.c:177
+#: ../vector/v.what/main.c:195
 msgid "Flag 'g' is deprecated and will be removed in a future release. Please use format=shell instead."
 msgstr ""
 
@@ -551,7 +564,7 @@ msgstr ""
 #: ../raster/r.in.ascii/main.c:78 ../raster/r.reclass/main.c:67
 #: ../raster/r.recode/main.c:60 ../raster3d/r3.in.ascii/main.c:87
 #: ../vector/v.edit/args.c:94 ../vector/v.segment/main.c:81
-#: ../vector/v.what/main.c:77
+#: ../vector/v.what/main.c:79
 msgid "'-' for standard input"
 msgstr ""
 
@@ -599,7 +612,7 @@ msgstr ""
 #: ../raster/r.in.bin/main.c:307 ../raster/r.in.bin/main.c:334
 #: ../raster/r.in.bin/main.c:342 ../raster/r.in.bin/main.c:351
 #: ../raster/r.in.bin/main.c:412 ../raster/r.in.bin/main.c:424
-#: ../raster/r.out.mpeg/main.c:135 ../raster/r.resamp.bspline/main.c:111
+#: ../raster/r.out.mpeg/main.c:136 ../raster/r.resamp.bspline/main.c:111
 #: ../raster/r.resamp.bspline/main.c:119 ../raster/r.resamp.bspline/main.c:125
 #: ../raster/r.resamp.bspline/main.c:136 ../raster/r.resamp.bspline/main.c:141
 #: ../raster/r.resamp.rst/main.c:211 ../raster/r.resamp.rst/main.c:218
@@ -1161,7 +1174,7 @@ msgstr ""
 #: ../db/drivers/ogr/execute.c:71 ../scripts/db.univar/db.univar.py:137
 #: ../vector/v.colors.out/make_colors.c:42 ../vector/v.colors/scan_attr.c:34
 #: ../vector/v.db.connect/main.c:491 ../vector/v.distance/main.c:574
-#: ../vector/v.distance/main.c:616 ../vector/v.in.db/main.c:188
+#: ../vector/v.distance/main.c:616 ../vector/v.in.db/main.c:195
 #: ../vector/v.neighbors/main.c:234 ../vector/v.out.lidar/main.c:114
 #: ../vector/v.out.lidar/main.c:154 ../vector/v.reclass/main.c:145
 #: ../vector/v.to.3d/trans2.c:63 ../vector/v.to.3d/trans3.c:66
@@ -1289,14 +1302,15 @@ msgstr ""
 
 #: ../db/drivers/postgres/listdb.c:85 ../db/drivers/postgres/listtab.c:90
 #: ../db/drivers/sqlite/listdb.c:135 ../imagery/i.smap/multialloc.c:112
-#: ../raster/r.li/r.li.daemon/list.c:47 ../raster/r.stream.extract/bseg.c:41
-#: ../raster/r.stream.extract/cseg.c:41 ../raster/r.stream.extract/dseg.c:41
-#: ../raster/r.stream.extract/seg.c:41 ../raster/r.sun/main.c:874
-#: ../raster/r.sun/main.c:884 ../raster/r.sun/main.c:895
-#: ../raster/r.sun/main.c:905 ../raster/r.sun/main.c:915
-#: ../raster/r.sun/main.c:925 ../raster/r.sun/main.c:935
-#: ../raster/r.sun/main.c:946 ../raster/r.sun/main.c:956
-#: ../raster/r.to.rast3/main.c:243 ../raster/r.watershed/seg/bseg_open.c:43
+#: ../raster/r.li/r.li.daemon/list.c:32 ../raster/r.li/r.li.daemon/list.c:35
+#: ../raster/r.stream.extract/bseg.c:41 ../raster/r.stream.extract/cseg.c:41
+#: ../raster/r.stream.extract/dseg.c:41 ../raster/r.stream.extract/seg.c:41
+#: ../raster/r.sun/main.c:874 ../raster/r.sun/main.c:884
+#: ../raster/r.sun/main.c:895 ../raster/r.sun/main.c:905
+#: ../raster/r.sun/main.c:915 ../raster/r.sun/main.c:925
+#: ../raster/r.sun/main.c:935 ../raster/r.sun/main.c:946
+#: ../raster/r.sun/main.c:956 ../raster/r.to.rast3/main.c:243
+#: ../raster/r.watershed/seg/bseg_open.c:43
 #: ../raster/r.watershed/seg/cseg_open.c:43
 #: ../raster/r.watershed/seg/dseg_open.c:43
 #: ../raster/r.watershed/seg/sseg_open.c:42 ../raster3d/r3.to.rast/main.c:357
@@ -1835,7 +1849,7 @@ msgstr ""
 #: ../raster/r.null/main.c:58 ../raster/r.object.geometry/main.c:76
 #: ../raster/r.out.ascii/main.c:53 ../raster/r.out.bin/main.c:298
 #: ../raster/r.out.gdal/main.c:135 ../raster/r.out.gridatb/main.c:66
-#: ../raster/r.out.mat/main.c:62 ../raster/r.out.mpeg/main.c:103
+#: ../raster/r.out.mat/main.c:62 ../raster/r.out.mpeg/main.c:104
 #: ../raster/r.out.png/main.c:110 ../raster/r.out.pov/main.c:111
 #: ../raster/r.out.ppm/main.c:52 ../raster/r.out.ppm3/main.c:57
 #: ../raster/r.out.vrml/main.c:44 ../raster/r.out.vtk/main.c:59
@@ -2101,7 +2115,7 @@ msgstr ""
 #: ../vector/v.type/main.c:38 ../vector/v.univar/main.c:94
 #: ../vector/v.vect.stats/main.c:128 ../vector/v.vol.rst/main.c:218
 #: ../vector/v.voronoi/main.c:118 ../vector/v.what.rast/main.c:77
-#: ../vector/v.what.rast3/main.c:65 ../vector/v.what/main.c:61
+#: ../vector/v.what.rast3/main.c:65 ../vector/v.what/main.c:63
 #: ../visualization/ximgview/main.c:290
 msgid "vector"
 msgstr ""
@@ -2236,7 +2250,7 @@ msgstr ""
 #: ../vector/v.external/main.c:178 ../vector/v.extract/main.c:409
 #: ../vector/v.extrude/main.c:194 ../vector/v.fill.holes/main.c:88
 #: ../vector/v.generalize/main.c:335 ../vector/v.hull/main.c:122
-#: ../vector/v.in.ascii/main.c:252 ../vector/v.in.db/main.c:150
+#: ../vector/v.in.ascii/main.c:252 ../vector/v.in.db/main.c:157
 #: ../vector/v.in.dxf/main.c:143 ../vector/v.in.lidar/main.c:566
 #: ../vector/v.in.ogr/main.c:870 ../vector/v.in.pdal/main.cpp:441
 #: ../vector/v.in.region/main.c:75 ../vector/v.kernel/main.c:345
@@ -2656,6 +2670,12 @@ msgstr ""
 msgid "Respect NULL values while drawing"
 msgstr ""
 
+#: ../display/d.histogram/bar.c:129 ../display/d.histogram/bar.c:385
+#: ../display/d.histogram/pie.c:131
+#, c-format
+msgid "Tic name <%s> is too long"
+msgstr ""
+
 #: ../display/d.histogram/main.c:81
 msgid "histogram"
 msgstr ""
@@ -2745,11 +2765,6 @@ msgstr ""
 #: ../display/d.legend/draw.c:304
 #, c-format
 msgid "Range information for <%s> not available"
-msgstr ""
-
-#: ../display/d.histogram/pie.c:131
-#, c-format
-msgid "Tic name <%s> is too long"
 msgstr ""
 
 #: ../display/d.info/main.c:36
@@ -4437,8 +4452,8 @@ msgstr ""
 #: ../vector/v.distance/main.c:1415 ../vector/v.edit/select.c:512
 #: ../vector/v.extract/extract.c:276 ../vector/v.extract/main.c:226
 #: ../vector/v.extract/main.c:324 ../vector/v.extrude/main.c:228
-#: ../vector/v.in.ascii/main.c:359 ../vector/v.in.db/main.c:162
-#: ../vector/v.in.db/main.c:308 ../vector/v.in.dxf/write_vect.c:211
+#: ../vector/v.in.ascii/main.c:359 ../vector/v.in.db/main.c:169
+#: ../vector/v.in.db/main.c:315 ../vector/v.in.dxf/write_vect.c:211
 #: ../vector/v.in.ogr/main.c:1167 ../vector/v.in.ogr/main.c:1216
 #: ../vector/v.info/print.c:221 ../vector/v.kcv/main.c:126
 #: ../vector/v.label.sa/labels.c:78 ../vector/v.label/main.c:277
@@ -4473,7 +4488,7 @@ msgid "Unable to open database <%s> by driver <%s>"
 msgstr ""
 
 #: ../display/d.vect.chart/plot.c:84 ../display/d.vect/attr.c:111
-#: ../vector/v.in.db/main.c:229
+#: ../vector/v.in.db/main.c:236
 #, c-format
 msgid "Unable to open select cursor: '%s'"
 msgstr ""
@@ -5142,7 +5157,7 @@ msgstr ""
 #: ../locale/scriptstrings/v.what.strds_to_translate.c:5
 #: ../locale/scriptstrings/v.what.vect_to_translate.c:5
 #: ../raster/r.what/main.c:113 ../vector/v.what.rast/main.c:80
-#: ../vector/v.what.rast3/main.c:68 ../vector/v.what/main.c:63
+#: ../vector/v.what.rast3/main.c:68 ../vector/v.what/main.c:65
 msgid "position"
 msgstr ""
 
@@ -5153,7 +5168,7 @@ msgstr ""
 #: ../locale/scriptstrings/v.what.vect_to_translate.c:6
 #: ../raster/r.what.color/main.c:191 ../raster/r.what/main.c:112
 #: ../vector/v.what.rast/main.c:81 ../vector/v.what.rast3/main.c:69
-#: ../vector/v.what/main.c:62
+#: ../vector/v.what/main.c:64
 msgid "querying"
 msgstr ""
 
@@ -5655,7 +5670,7 @@ msgstr ""
 
 #: ../general/g.findfile/main.c:158
 #: ../imagery/i.ortho.photo/i.ortho.photo/menu.c:90
-#: ../raster/r.out.mpeg/main.c:150 ../raster/r.path/main.c:240
+#: ../raster/r.out.mpeg/main.c:151 ../raster/r.path/main.c:240
 #: ../raster/r.path/main.c:247 ../raster/r.path/main.c:253
 #, c-format
 msgid "Name <%s> is too long"
@@ -5818,12 +5833,12 @@ msgstr ""
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr ""
 
-#: ../general/g.list/list.c:167 ../general/g.region/main.c:543
+#: ../general/g.list/list.c:168 ../general/g.region/main.c:543
 #, c-format
 msgid "Unable to read header of 3D raster map <%s@%s>"
 msgstr ""
 
-#: ../general/g.list/list.c:176
+#: ../general/g.list/list.c:177
 #, c-format
 msgid "Unable to open vector map <%s@%s> on topological level"
 msgstr ""
@@ -12748,7 +12763,7 @@ msgstr ""
 #: ../raster/r.colors.out/raster_main.c:47 ../raster/r.external.out/main.c:235
 #: ../raster/r.out.ascii/main.c:54 ../raster/r.out.bin/main.c:299
 #: ../raster/r.out.gdal/main.c:136 ../raster/r.out.gridatb/main.c:67
-#: ../raster/r.out.mat/main.c:63 ../raster/r.out.mpeg/main.c:104
+#: ../raster/r.out.mat/main.c:63 ../raster/r.out.mpeg/main.c:105
 #: ../raster/r.out.png/main.c:111 ../raster/r.out.pov/main.c:112
 #: ../raster/r.out.ppm/main.c:53 ../raster/r.out.ppm3/main.c:58
 #: ../raster/r.out.vrml/main.c:45 ../raster/r.out.vtk/main.c:60
@@ -12770,7 +12785,7 @@ msgstr ""
 #: ../raster/r.external.out/main.c:236 ../raster/r.out.ascii/main.c:55
 #: ../raster/r.out.bin/main.c:300 ../raster/r.out.gdal/main.c:137
 #: ../raster/r.out.gridatb/main.c:68 ../raster/r.out.mat/main.c:64
-#: ../raster/r.out.mpeg/main.c:105 ../raster/r.out.png/main.c:112
+#: ../raster/r.out.mpeg/main.c:106 ../raster/r.out.png/main.c:112
 #: ../raster/r.out.pov/main.c:113 ../raster/r.out.ppm/main.c:54
 #: ../raster/r.out.ppm3/main.c:59 ../raster/r.out.vrml/main.c:46
 #: ../raster/r.out.vtk/main.c:61 ../raster3d/r3.out.ascii/main.c:304
@@ -17892,7 +17907,7 @@ msgid "Can't create temporary PostScript mask file."
 msgstr ""
 
 #: ../ps/ps.map/ps_raster.c:101 ../raster/r.grow.distance/main.c:325
-#: ../raster/r.out.mpeg/main.c:294 ../raster/r.series.accumulate/main.c:249
+#: ../raster/r.out.mpeg/main.c:295 ../raster/r.series.accumulate/main.c:249
 #: ../raster/r.series.accumulate/main.c:274
 #: ../raster/r.series.accumulate/main.c:285
 #: ../raster/r.series.accumulate/main.c:293
@@ -22699,11 +22714,11 @@ msgstr ""
 msgid "Problem reading r.stats output"
 msgstr ""
 
-#: ../raster/r.kappa/stats.c:64
+#: ../raster/r.kappa/stats.c:66
 msgid "Failed to remove file"
 msgstr ""
 
-#: ../raster/r.kappa/stats.c:66
+#: ../raster/r.kappa/stats.c:68
 msgid "error running r.stats"
 msgstr ""
 
@@ -24251,65 +24266,71 @@ msgstr ""
 msgid "%ld bytes written to '%s'"
 msgstr ""
 
-#: ../raster/r.out.mpeg/main.c:106
+#: ../raster/r.out.mpeg/main.c:107
 msgid "animation"
 msgstr ""
 
-#: ../raster/r.out.mpeg/main.c:108
+#: ../raster/r.out.mpeg/main.c:109
 msgid "Converts raster map series to MPEG movie."
 msgstr ""
 
-#: ../raster/r.out.mpeg/main.c:117
+#: ../raster/r.out.mpeg/main.c:118
 #, c-format
 msgid "Name of input raster map(s) for view no.%d"
 msgstr ""
 
-#: ../raster/r.out.mpeg/main.c:120
+#: ../raster/r.out.mpeg/main.c:121
 msgid "Views"
 msgstr ""
 
-#: ../raster/r.out.mpeg/main.c:134
+#: ../raster/r.out.mpeg/main.c:135
 msgid "Quality factor (1 = highest quality, lowest compression)"
 msgstr ""
 
-#: ../raster/r.out.mpeg/main.c:139
+#: ../raster/r.out.mpeg/main.c:140
 msgid "Convert on the fly, uses less disk space"
 msgstr ""
 
-#: ../raster/r.out.mpeg/main.c:140
+#: ../raster/r.out.mpeg/main.c:141
 msgid "Requires r.out.ppm with stdout option"
 msgstr ""
 
-#: ../raster/r.out.mpeg/main.c:169
+#: ../raster/r.out.mpeg/main.c:170
 msgid "Either mpeg_encode or ppmtompeg must be installed"
 msgstr ""
 
-#: ../raster/r.out.mpeg/main.c:299
+#: ../raster/r.out.mpeg/main.c:300
 #, c-format
 msgid "Unable to read color table for <%s>"
 msgstr ""
 
-#: ../raster/r.out.mpeg/main.c:348 ../raster/r.out.mpeg/main.c:380
+#: ../raster/r.out.mpeg/main.c:349 ../raster/r.out.mpeg/main.c:381
 msgid "mpeg_encode ERROR"
 msgstr ""
 
-#: ../raster/r.out.mpeg/main.c:421
+#: ../raster/r.out.mpeg/main.c:422
 msgid "Error reading wildcard"
 msgstr ""
 
-#: ../raster/r.out.mpeg/write.c:80 ../raster/r.out.mpeg/write.c:166
+#: ../raster/r.out.mpeg/main.c:460 ../raster/r.out.mpeg/write.c:324
+#: ../raster/r.out.mpeg/write.c:331
+#, c-format
+msgid "Failed to remove temporary file <%s>: %s"
+msgstr ""
+
+#: ../raster/r.out.mpeg/write.c:81 ../raster/r.out.mpeg/write.c:167
 msgid "Size mismatch error!"
 msgstr ""
 
-#: ../raster/r.out.mpeg/write.c:128 ../raster/r.out.mpeg/write.c:169
+#: ../raster/r.out.mpeg/write.c:129 ../raster/r.out.mpeg/write.c:170
 msgid "Unable to open output file"
 msgstr ""
 
-#: ../raster/r.out.mpeg/write.c:203
+#: ../raster/r.out.mpeg/write.c:204
 msgid "Unable to create temporary files."
 msgstr ""
 
-#: ../raster/r.out.mpeg/write.c:208
+#: ../raster/r.out.mpeg/write.c:209
 #, c-format
 msgid "Directory <%s> too long"
 msgstr ""
@@ -30299,6 +30320,7 @@ msgstr ""
 
 #: ../raster/r.univar/r.univar_main.c:101
 #: ../raster/r.univar/r3.univar_main.c:63 ../vector/v.univar/main.c:129
+#: ../vector/v.what/main.c:122
 msgid "Print the stats in shell script style [deprecated]"
 msgstr ""
 
@@ -31796,7 +31818,7 @@ msgstr ""
 msgid "Name of existing raster map(s) to query"
 msgstr ""
 
-#: ../raster/r.what/main.c:123 ../vector/v.what/main.c:76
+#: ../raster/r.what/main.c:123 ../vector/v.what/main.c:78
 msgid "Coordinates for query"
 msgstr ""
 
@@ -37065,7 +37087,7 @@ msgstr ""
 msgid "Table <%s> does not exist in database <%s>"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:497 ../vector/v.in.db/main.c:191
+#: ../vector/v.db.connect/main.c:497 ../vector/v.in.db/main.c:198
 msgid "Data type of key column must be integer"
 msgstr ""
 
@@ -39230,59 +39252,69 @@ msgstr ""
 msgid "Use imported table as attribute table for new map"
 msgstr ""
 
-#: ../vector/v.in.db/main.c:140
+#: ../vector/v.in.db/main.c:126
+#, c-format
+msgid "Output vector name too long: <%s>"
+msgstr ""
+
+#: ../vector/v.in.db/main.c:131
+#, c-format
+msgid "Mapset name too long: <%s>"
+msgstr ""
+
+#: ../vector/v.in.db/main.c:147
 #, c-format
 msgid "Vector map <%s> cannot be overwritten because input table <%s> is linked to this map."
 msgstr ""
 
-#: ../vector/v.in.db/main.c:176
+#: ../vector/v.in.db/main.c:183
 #, c-format
 msgid "Output vector map, table <%s> (driver: <%s>, database: <%s>) already exists"
 msgstr ""
 
-#: ../vector/v.in.db/main.c:196
+#: ../vector/v.in.db/main.c:203
 #, c-format
 msgid "Option <%s> must be specified when -%c flag is given"
 msgstr ""
 
-#: ../vector/v.in.db/main.c:201
+#: ../vector/v.in.db/main.c:208
 #, c-format
 msgid "Unable to define key column. This operation is not supported by <%s> driver. You need to define <%s> option."
 msgstr ""
 
-#: ../vector/v.in.db/main.c:239 ../vector/v.voronoi/main.c:429
+#: ../vector/v.in.db/main.c:246 ../vector/v.voronoi/main.c:429
 msgid "Writing features..."
 msgstr ""
 
-#: ../vector/v.in.db/main.c:247
+#: ../vector/v.in.db/main.c:254
 msgid "Key column must be integer"
 msgstr ""
 
-#: ../vector/v.in.db/main.c:260
+#: ../vector/v.in.db/main.c:267
 msgid "x/y/z column must be integer or double"
 msgstr ""
 
-#: ../vector/v.in.db/main.c:286 ../vector/v.net/main.c:155
+#: ../vector/v.in.db/main.c:293 ../vector/v.net/main.c:155
 #: ../vector/v.to.3d/main.c:95 ../vector/v.to.3d/main.c:116
 #: ../vector/v.transform/main.c:312
 msgid "Copying attributes..."
 msgstr ""
 
-#: ../vector/v.in.db/main.c:293
+#: ../vector/v.in.db/main.c:300
 msgid "Unable to copy table"
 msgstr ""
 
-#: ../vector/v.in.db/main.c:319
+#: ../vector/v.in.db/main.c:326
 #, c-format
 msgid "Unable to add key column <%s>: SERIAL type is not supported by <%s>"
 msgstr ""
 
-#: ../vector/v.in.db/main.c:330
+#: ../vector/v.in.db/main.c:337
 #, c-format
 msgid "Failed to update key column <%s>"
 msgstr ""
 
-#: ../vector/v.in.db/main.c:346
+#: ../vector/v.in.db/main.c:353
 #, c-format
 msgid "%d point written to vector map."
 msgid_plural "%d points written to vector map."
@@ -41421,10 +41453,10 @@ msgstr ""
 
 #: ../vector/v.lrs/v.lrs.label/main.c:332 ../vector/v.out.ogr/attrb.c:55
 #: ../vector/v.out.ogr/attrb_fast.c:62
-#: ../vector/v.out.ogr/export_areas_fast.c:118
-#: ../vector/v.out.ogr/export_areas_fast.c:185
-#: ../vector/v.out.ogr/export_areas_fast.c:305
-#: ../vector/v.out.ogr/export_areas_fast.c:410
+#: ../vector/v.out.ogr/export_areas_fast.c:119
+#: ../vector/v.out.ogr/export_areas_fast.c:187
+#: ../vector/v.out.ogr/export_areas_fast.c:308
+#: ../vector/v.out.ogr/export_areas_fast.c:413
 #: ../vector/v.out.ogr/export_lines_fast.c:103
 #: ../vector/v.out.ogr/export_lines_fast.c:170
 #: ../vector/v.out.ogr/export_lines_fast.c:301
@@ -43329,8 +43361,8 @@ msgstr ""
 msgid "List supported output formats and exit"
 msgstr ""
 
-#: ../vector/v.out.ogr/attrb.c:51 ../vector/v.out.ogr/export_areas_fast.c:182
-#: ../vector/v.out.ogr/export_areas_fast.c:407
+#: ../vector/v.out.ogr/attrb.c:51 ../vector/v.out.ogr/export_areas_fast.c:184
+#: ../vector/v.out.ogr/export_areas_fast.c:410
 #: ../vector/v.out.ogr/export_lines_fast.c:167
 #: ../vector/v.out.ogr/export_lines_fast.c:395
 #: ../vector/v.out.vtk/writeVTK.c:582
@@ -43361,10 +43393,10 @@ msgstr ""
 #: ../vector/v.out.ogr/export_areas.c:123
 #: ../vector/v.out.ogr/export_areas.c:227
 #: ../vector/v.out.ogr/export_areas.c:278
-#: ../vector/v.out.ogr/export_areas_fast.c:164
-#: ../vector/v.out.ogr/export_areas_fast.c:221
-#: ../vector/v.out.ogr/export_areas_fast.c:379
-#: ../vector/v.out.ogr/export_areas_fast.c:451
+#: ../vector/v.out.ogr/export_areas_fast.c:166
+#: ../vector/v.out.ogr/export_areas_fast.c:223
+#: ../vector/v.out.ogr/export_areas_fast.c:382
+#: ../vector/v.out.ogr/export_areas_fast.c:454
 #: ../vector/v.out.ogr/export_lines.c:131
 #: ../vector/v.out.ogr/export_lines.c:229
 #: ../vector/v.out.ogr/export_lines.c:278
@@ -43377,7 +43409,7 @@ msgstr ""
 
 #: ../vector/v.out.ogr/export_areas.c:168
 #: ../vector/v.out.ogr/export_areas_fast.c:95
-#: ../vector/v.out.ogr/export_areas_fast.c:275
+#: ../vector/v.out.ogr/export_areas_fast.c:278
 #: ../vector/v.out.ogr/export_lines.c:177
 #: ../vector/v.out.ogr/export_lines_fast.c:77
 #: ../vector/v.out.ogr/export_lines_fast.c:265
@@ -43387,14 +43419,14 @@ msgstr ""
 
 #: ../vector/v.out.ogr/export_areas.c:180
 #: ../vector/v.out.ogr/export_areas_fast.c:104
-#: ../vector/v.out.ogr/export_areas_fast.c:288
+#: ../vector/v.out.ogr/export_areas_fast.c:291
 #: ../vector/v.out.ogr/export_lines_fast.c:86
 #: ../vector/v.out.ogr/export_lines_fast.c:274
 msgid "Exporting features with category..."
 msgstr ""
 
 #: ../vector/v.out.ogr/export_areas.c:202
-#: ../vector/v.out.ogr/export_areas_fast.c:353
+#: ../vector/v.out.ogr/export_areas_fast.c:356
 #: ../vector/v.out.ogr/export_lines.c:212
 #: ../vector/v.out.ogr/export_lines_fast.c:349
 #, c-format
@@ -43402,23 +43434,23 @@ msgid "Unable to create multi-feature. Category %d not found in line %d, field %
 msgstr ""
 
 #: ../vector/v.out.ogr/export_areas.c:243
-#: ../vector/v.out.ogr/export_areas_fast.c:174
-#: ../vector/v.out.ogr/export_areas_fast.c:395
+#: ../vector/v.out.ogr/export_areas_fast.c:176
+#: ../vector/v.out.ogr/export_areas_fast.c:398
 #: ../vector/v.out.ogr/export_lines_fast.c:159
 #: ../vector/v.out.ogr/export_lines_fast.c:383
 msgid "Exporting features without category..."
 msgstr ""
 
-#: ../vector/v.out.ogr/export_areas_fast.c:114
-#: ../vector/v.out.ogr/export_areas_fast.c:301
+#: ../vector/v.out.ogr/export_areas_fast.c:115
+#: ../vector/v.out.ogr/export_areas_fast.c:304
 #: ../vector/v.out.ogr/export_lines_fast.c:99
 #: ../vector/v.out.ogr/export_lines_fast.c:297
 #, c-format
 msgid "Cannot select attributes sorted by %s"
 msgstr ""
 
-#: ../vector/v.out.ogr/export_areas_fast.c:142
-#: ../vector/v.out.ogr/export_areas_fast.c:328
+#: ../vector/v.out.ogr/export_areas_fast.c:144
+#: ../vector/v.out.ogr/export_areas_fast.c:331
 #: ../vector/v.out.ogr/export_lines_fast.c:126
 #: ../vector/v.out.ogr/export_lines_fast.c:323
 msgid "Category index is not sorted ascending by cat!"
@@ -43937,6 +43969,11 @@ msgstr ""
 #: ../vector/v.out.svg/main.c:399
 #, c-format
 msgid "Cannot select attributes for cat=%d"
+msgstr ""
+
+#: ../vector/v.out.svg/main.c:414
+#, c-format
+msgid "Column name <%s> is too long"
 msgstr ""
 
 #: ../vector/v.out.vtk/head.c:26
@@ -47280,93 +47317,113 @@ msgid_plural "%d records updated."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../vector/v.what/main.c:64
+#: ../vector/v.what/main.c:66
 msgid "Queries a vector map at given locations."
 msgstr ""
 
-#: ../vector/v.what/main.c:84
+#: ../vector/v.what/main.c:86
 msgid "Query threshold distance"
 msgstr ""
 
-#: ../vector/v.what/main.c:85
+#: ../vector/v.what/main.c:87
 msgid "Threshold"
 msgstr ""
 
-#: ../vector/v.what/main.c:88
+#: ../vector/v.what/main.c:90
 msgid "Name of attribute column(s)"
 msgstr ""
 
-#: ../vector/v.what/main.c:89
+#: ../vector/v.what/main.c:91
 msgid "Default: all columns"
 msgstr ""
 
-#: ../vector/v.what/main.c:93
-msgid "Print topological information (debugging)"
-msgstr ""
-
-#: ../vector/v.what/main.c:98
+#: ../vector/v.what/main.c:104
 msgid "Print attribute information"
 msgstr ""
 
-#: ../vector/v.what/main.c:103
-msgid "Print the stats in shell script style"
+#: ../vector/v.what/main.c:110
+msgid "Print attribute database connection information"
 msgstr ""
 
-#: ../vector/v.what/main.c:108
-msgid "Print the stats in JSON"
+#: ../vector/v.what/main.c:115
+msgid "Print topological information (debugging)"
 msgstr ""
 
-#: ../vector/v.what/main.c:114
-msgid "Print multiple features if overlapping features are found"
+#: ../vector/v.what/main.c:117
+msgid "Prints internal information for topology debugging"
 msgstr ""
 
-#: ../vector/v.what/main.c:131
+#: ../vector/v.what/main.c:130
+msgid "Print the stats in JSON [deprecated]"
+msgstr ""
+
+#: ../vector/v.what/main.c:132
+msgid "This flag is deprecated and will be removed in a future release. Use format=json instead."
+msgstr ""
+
+#: ../vector/v.what/main.c:139
+msgid "Print multiple features for each map if they meet the criteria"
+msgstr ""
+
+#: ../vector/v.what/main.c:141
+msgid "For JSON, this places features under a \"features\" key"
+msgstr ""
+
+#: ../vector/v.what/main.c:160
 msgid "No input vector maps!"
 msgstr ""
 
-#: ../vector/v.what/main.c:201
+#: ../vector/v.what/main.c:190
+msgid "Flag 'j' is deprecated and will be removed in a future release. Please use format=json instead."
+msgstr ""
+
+#: ../vector/v.what/main.c:215
+msgid "Flag 'i' prints attribute database connection information. It is currently always enabled for backward compatibility, but this behavior will be removed in a future release. Please use the 'i' flag together with the 'a' flag instead."
+msgstr ""
+
+#: ../vector/v.what/main.c:272
 #, c-format
 msgid "Number of given vector maps (%d) differs from number of layers (%d)"
 msgstr ""
 
-#: ../vector/v.what/main.c:211
+#: ../vector/v.what/main.c:282
 #, c-format
 msgid "You must build topology on vector map <%s>"
 msgstr ""
 
-#: ../vector/v.what/main.c:229
+#: ../vector/v.what/main.c:301
 #, c-format
 msgid "Unknown input format, skipping: '%s'"
 msgstr ""
 
-#: ../vector/v.what/what.c:46
+#: ../vector/v.what/what.c:47
 msgid "Cannot open driver"
 msgstr ""
 
-#: ../vector/v.what/what.c:54
+#: ../vector/v.what/what.c:55
 msgid "Cannot open database"
 msgstr ""
 
-#: ../vector/v.what/what.c:68
+#: ../vector/v.what/what.c:69
 msgid "Cannot open select cursor"
 msgstr ""
 
-#: ../vector/v.what/what.c:75
+#: ../vector/v.what/what.c:76
 msgid "Cannot fetch next record"
 msgstr ""
 
-#: ../vector/v.what/what.c:78
+#: ../vector/v.what/what.c:79
 msgid "No database record"
 msgstr ""
 
-#: ../vector/v.what/what.c:182
+#: ../vector/v.what/what.c:222
 #, c-format
 msgid ""
 "Layer: %d\n"
 "Category: %d\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:208
+#: ../vector/v.what/what.c:263
 #, c-format
 msgid ""
 "\n"
@@ -47376,12 +47433,12 @@ msgid ""
 "Key column: %s\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:388
+#: ../vector/v.what/what.c:493
 #, c-format
 msgid "Nothing found.\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:486
+#: ../vector/v.what/what.c:635
 #, c-format
 msgid ""
 "Id: %d\n"
@@ -47390,12 +47447,12 @@ msgid ""
 "Right: %d\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:489 ../vector/v.what/what.c:567
+#: ../vector/v.what/what.c:638 ../vector/v.what/what.c:794
 #, c-format
 msgid "Length: %f\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:509
+#: ../vector/v.what/what.c:667
 #, c-format
 msgid ""
 "Node[%d]=%d\n"
@@ -47403,7 +47460,7 @@ msgid ""
 "Coordinates=%.6f,%.6f,%.6f\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:515
+#: ../vector/v.what/what.c:673
 #, c-format
 msgid ""
 ",\n"
@@ -47412,7 +47469,7 @@ msgid ""
 "\"Coordinates\": %.6f,%.6f,%.6f"
 msgstr ""
 
-#: ../vector/v.what/what.c:521
+#: ../vector/v.what/what.c:696
 #, c-format
 msgid ""
 "Node[%d]: %d\n"
@@ -47420,77 +47477,77 @@ msgid ""
 "Coordinates: %.6f, %.6f, %.6f\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:541
+#: ../vector/v.what/what.c:739
 #, c-format
 msgid ""
 "Id: %d\n"
 "Angle: %.8f\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:564
+#: ../vector/v.what/what.c:791
 #, c-format
 msgid "Type: %s\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:565
+#: ../vector/v.what/what.c:792
 #, c-format
 msgid "Id: %d\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:586
+#: ../vector/v.what/what.c:821
 #, c-format
 msgid "Point height: %f\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:609
+#: ../vector/v.what/what.c:852
 #, c-format
 msgid "Line height: %f\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:629
+#: ../vector/v.what/what.c:886
 #, c-format
 msgid ""
 "Line height min: %f\n"
 "Line height max: %f\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:674
+#: ../vector/v.what/what.c:969
 #, c-format
 msgid ""
 "Type: Area\n"
 "Area height: %f\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:688
+#: ../vector/v.what/what.c:992
 #, c-format
 msgid "Type: Area\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:713
+#: ../vector/v.what/what.c:1029
 #, c-format
 msgid ""
 "Area: %d\n"
 "Number of isles: %d\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:728
+#: ../vector/v.what/what.c:1056
 #, c-format
 msgid "Isle[%d]: %d\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:748
+#: ../vector/v.what/what.c:1099
 #, c-format
 msgid "Island: %d In area: %d\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:770
+#: ../vector/v.what/what.c:1142
 #, c-format
 msgid ""
 "Sq Meters: %.3f\n"
 "Hectares: %.3f\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:772
+#: ../vector/v.what/what.c:1144
 #, c-format
 msgid ""
 "Acres: %.3f\n"

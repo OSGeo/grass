@@ -102,7 +102,14 @@ class PreprocessorParser(object):
             # (currently the default)
             cmd += " -U __GNUC__"
 
-        cmd += " -dD"
+        if IS_WINDOWS and re.search(r"(^|[/\\])cl(\.exe)?[ \t]", cmd, re.I):
+            # MSVC cl.exe
+            cmd += " -nologo -d1PP"
+            is_msvc = True
+        else:
+            # Assume gcc
+            cmd += " -dD"
+            is_msvc = False
 
         for undefine in self.options.cpp_undefines:
             cmd += " -U%s" % undefine
@@ -120,12 +127,13 @@ class PreprocessorParser(object):
 
         self.cparser.handle_status(cmd)
 
-        if IS_WINDOWS:
+        if IS_WINDOWS and not is_msvc:
+            # only for non-MSVC on Windows
             cmd = ["sh.exe", "-c", cmd]
 
         pp = subprocess.Popen(
             cmd,
-            shell=True,
+            shell=not is_msvc,
             universal_newlines=False,  # binary
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -159,7 +167,7 @@ class PreprocessorParser(object):
         source_lines = []
         define_lines = []
 
-        first_token_reg = re.compile(r"^#\s*([^ ]+)($|\s)")
+        first_token_reg = re.compile(r"^\s*#\s*([^ ]+)($|\s)")
 
         for line in ppout.split("\n"):
             line += "\n"
@@ -170,7 +178,7 @@ class PreprocessorParser(object):
                 source_lines.append(line)
                 define_lines.append("\n")
 
-            elif hash_token.isdigit():
+            elif hash_token.isdigit() or hash_token == "line":
                 # Line number information has to go with both groups
                 source_lines.append(line)
                 define_lines.append(line)

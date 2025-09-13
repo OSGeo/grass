@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-30 15:44+0000\n"
+"POT-Creation-Date: 2025-09-13 15:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -379,7 +379,7 @@ msgstr ""
 #: ../lib/vector/Vlib/net_build.c:158 ../lib/vector/Vlib/net_build.c:208
 #: ../lib/vector/Vlib/net_build.c:502 ../lib/vector/Vlib/net_build.c:799
 #: ../lib/vector/Vlib/net_build.c:975 ../lib/vector/Vlib/write_ogr.c:197
-#: ../lib/vector/Vlib/write_pg.c:3040 ../lib/vector/neta/timetables.c:140
+#: ../lib/vector/Vlib/write_pg.c:3040 ../lib/vector/neta/timetables.c:141
 #: ../lib/vector/neta/utils.c:123
 #, c-format
 msgid "Unable to open database <%s> by driver <%s>"
@@ -1580,25 +1580,25 @@ msgid "Flags:"
 msgstr ""
 
 #: ../lib/gis/parser_help.c:222 ../lib/gis/parser_html.c:185
-#: ../lib/gis/parser_interface.c:329 ../lib/gis/parser_md_cli.c:345
-#: ../lib/gis/parser_md_python.c:545 ../lib/gis/parser_rest.c:158
+#: ../lib/gis/parser_interface.c:329 ../lib/gis/parser_md_cli.c:343
+#: ../lib/gis/parser_md_python.c:555 ../lib/gis/parser_rest.c:158
 msgid "Allow output files to overwrite existing files"
 msgstr ""
 
 #: ../lib/gis/parser_help.c:224 ../lib/gis/parser_html.c:189
-#: ../lib/gis/parser_interface.c:337 ../lib/gis/parser_md_cli.c:352
+#: ../lib/gis/parser_interface.c:337 ../lib/gis/parser_md_cli.c:350
 msgid "Print usage summary"
 msgstr ""
 
 #: ../lib/gis/parser_help.c:225 ../lib/gis/parser_html.c:192
-#: ../lib/gis/parser_interface.c:344 ../lib/gis/parser_md_cli.c:355
-#: ../lib/gis/parser_md_python.c:550 ../lib/gis/parser_rest.c:162
+#: ../lib/gis/parser_interface.c:344 ../lib/gis/parser_md_cli.c:353
+#: ../lib/gis/parser_md_python.c:560 ../lib/gis/parser_rest.c:162
 msgid "Verbose module output"
 msgstr ""
 
 #: ../lib/gis/parser_help.c:226 ../lib/gis/parser_html.c:195
-#: ../lib/gis/parser_interface.c:351 ../lib/gis/parser_md_cli.c:358
-#: ../lib/gis/parser_md_python.c:554 ../lib/gis/parser_rest.c:165
+#: ../lib/gis/parser_interface.c:351 ../lib/gis/parser_md_cli.c:356
+#: ../lib/gis/parser_md_python.c:564 ../lib/gis/parser_rest.c:165
 msgid "Quiet module output"
 msgstr ""
 
@@ -1607,7 +1607,7 @@ msgid "Super quiet module output"
 msgstr ""
 
 #: ../lib/gis/parser_help.c:228 ../lib/gis/parser_html.c:198
-#: ../lib/gis/parser_md_cli.c:364
+#: ../lib/gis/parser_md_cli.c:362
 msgid "Force launching GUI dialog"
 msgstr ""
 
@@ -1652,24 +1652,24 @@ msgid "Options"
 msgstr ""
 
 #: ../lib/gis/parser_html.c:257 ../lib/gis/parser_md_cli.c:113
-#: ../lib/gis/parser_md_python.c:256 ../lib/gis/parser_rest.c:224
+#: ../lib/gis/parser_md_python.c:266 ../lib/gis/parser_rest.c:224
 msgid "Default"
 msgstr ""
 
-#: ../lib/gis/parser_json.c:378
+#: ../lib/gis/parser_json.c:383
 #, c-format
 msgid "Input string not understood: <%s>. Multiple '@' chars?"
 msgstr ""
 
-#: ../lib/gis/parser_md_cli.c:103 ../lib/gis/parser_md_python.c:207
+#: ../lib/gis/parser_md_cli.c:103 ../lib/gis/parser_md_python.c:217
 msgid "Allowed values"
 msgstr ""
 
-#: ../lib/gis/parser_md_cli.c:361 ../lib/gis/parser_md_python.c:559
+#: ../lib/gis/parser_md_cli.c:359 ../lib/gis/parser_md_python.c:569
 msgid "Very quiet module output"
 msgstr ""
 
-#: ../lib/gis/parser_md_python.c:182
+#: ../lib/gis/parser_md_python.c:192
 msgid "Used as"
 msgstr ""
 
@@ -4309,7 +4309,7 @@ msgstr ""
 #: ../lib/vector/Vlib/map.c:300 ../lib/vector/Vlib/map.c:433
 #: ../lib/vector/Vlib/net_build.c:152 ../lib/vector/Vlib/net_build.c:203
 #: ../lib/vector/Vlib/net_build.c:496 ../lib/vector/Vlib/net_build.c:793
-#: ../lib/vector/Vlib/net_build.c:970 ../lib/vector/neta/timetables.c:135
+#: ../lib/vector/Vlib/net_build.c:970 ../lib/vector/neta/timetables.c:136
 #: ../lib/vector/neta/utils.c:119
 #, c-format
 msgid "Database connection not defined for layer %d"
@@ -4350,17 +4350,17 @@ msgstr ""
 msgid "Raster map <%s> is outside of current region. Load failed."
 msgstr ""
 
-#: ../lib/ogsf/gs2.c:1726 ../lib/ogsf/gs2.c:1733 ../lib/ogsf/gs2.c:1742
-#: ../lib/ogsf/gs2.c:1752 ../lib/ogsf/gs2.c:1761 ../lib/ogsf/gs2.c:1772
-#: ../lib/ogsf/gs2.c:1820
+#: ../lib/ogsf/gs2.c:1727 ../lib/ogsf/gs2.c:1734 ../lib/ogsf/gs2.c:1743
+#: ../lib/ogsf/gs2.c:1753 ../lib/ogsf/gs2.c:1762 ../lib/ogsf/gs2.c:1773
+#: ../lib/ogsf/gs2.c:1821
 msgid "GS_load_att_map(): Out of memory. Unable to load map"
 msgstr ""
 
-#: ../lib/ogsf/gs2.c:1849
+#: ../lib/ogsf/gs2.c:1850
 msgid "Loading failed"
 msgstr ""
 
-#: ../lib/ogsf/gs2.c:1853
+#: ../lib/ogsf/gs2.c:1854
 msgid "Error finding range"
 msgstr ""
 
@@ -5583,32 +5583,81 @@ msgstr ""
 msgid "Unable to create <%s> metadata file for raster map <%s@%s>"
 msgstr ""
 
-#: ../lib/raster/reclass.c:168
+#: ../lib/raster/reclass.c:162
+#, c-format
+msgid "Error reading beginning of header file for <%s@%s>: %s"
+msgstr ""
+
+#: ../lib/raster/reclass.c:180
 #, c-format
 msgid "Too many reclass categories for <%s@%s>"
 msgstr ""
 
-#: ../lib/raster/reclass.c:171
+#: ../lib/raster/reclass.c:184
 #, c-format
-msgid "Illegal reclass format in header file for <%s@%s>"
+msgid "Illegal reclass format in header file for <%s@%s>: %s"
 msgstr ""
 
-#: ../lib/raster/reclass.c:273
-msgid "Illegal reclass request"
+#: ../lib/raster/reclass.c:252
+#, c-format
+msgid "File too short, reading line %d"
 msgstr ""
 
-#: ../lib/raster/reclass.c:278
-msgid "Illegal reclass type"
+#: ../lib/raster/reclass.c:259
+#, c-format
+msgid "Line too long: %s..."
+msgstr ""
+
+#: ../lib/raster/reclass.c:265
+#, c-format
+msgid "Format is not key:value: %s"
 msgstr ""
 
 #: ../lib/raster/reclass.c:284
 #, c-format
+msgid "Unknown key at line: %s"
+msgstr ""
+
+#: ../lib/raster/reclass.c:295
+#, c-format
+msgid "Mapset not read, only raster name: %s"
+msgstr ""
+
+#: ../lib/raster/reclass.c:299
+#, c-format
+msgid "Raster name not read, only mapset: %s"
+msgstr ""
+
+#: ../lib/raster/reclass.c:302
+msgid "Raster name and mapset not read"
+msgstr ""
+
+#: ../lib/raster/reclass.c:333
+msgid "Illegal reclass request"
+msgstr ""
+
+#: ../lib/raster/reclass.c:338
+msgid "Illegal reclass type"
+msgstr ""
+
+#: ../lib/raster/reclass.c:344
+#, c-format
 msgid "Unable to create header file for <%s@%s>"
 msgstr ""
 
-#: ../lib/raster/reclass.c:332
+#: ../lib/raster/reclass.c:392
 #, c-format
 msgid "Unable to create dependency file in <%s@%s>"
+msgstr ""
+
+#: ../lib/raster/reclass.c:479
+#, c-format
+msgid "Reading integer failed on line: %s (after reading min: %d)"
+msgstr ""
+
+#: ../lib/raster/reclass.c:484
+#, c-format
+msgid "First entry (min) not read yet and reading integer failed on line: %s"
 msgstr ""
 
 #: ../lib/raster/sample.c:68
@@ -5838,10 +5887,10 @@ msgstr ""
 #: ../lib/vector/neta/components.c:72 ../lib/vector/neta/components.c:182
 #: ../lib/vector/neta/flow.c:67 ../lib/vector/neta/flow.c:190
 #: ../lib/vector/neta/path.c:259 ../lib/vector/neta/spanningtree.c:103
-#: ../lib/vector/neta/timetables.c:69 ../lib/vector/neta/timetables.c:170
-#: ../lib/vector/neta/timetables.c:180 ../lib/vector/neta/timetables.c:193
-#: ../lib/vector/neta/timetables.c:276 ../lib/vector/neta/timetables.c:410
-#: ../lib/vector/neta/timetables.c:421
+#: ../lib/vector/neta/timetables.c:69 ../lib/vector/neta/timetables.c:171
+#: ../lib/vector/neta/timetables.c:181 ../lib/vector/neta/timetables.c:194
+#: ../lib/vector/neta/timetables.c:277 ../lib/vector/neta/timetables.c:411
+#: ../lib/vector/neta/timetables.c:422
 msgid "Out of memory"
 msgstr ""
 
@@ -8745,8 +8794,8 @@ msgid "Computing minimum spanning tree..."
 msgstr ""
 
 #: ../lib/vector/neta/timetables.c:46 ../lib/vector/neta/timetables.c:73
-#: ../lib/vector/neta/timetables.c:205 ../lib/vector/neta/timetables.c:244
-#: ../lib/vector/neta/timetables.c:284
+#: ../lib/vector/neta/timetables.c:206 ../lib/vector/neta/timetables.c:245
+#: ../lib/vector/neta/timetables.c:285
 #, c-format
 msgid "Unable to open select cursor: %s"
 msgstr ""
