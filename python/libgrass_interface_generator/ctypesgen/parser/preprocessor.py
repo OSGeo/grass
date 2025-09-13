@@ -169,10 +169,20 @@ class PreprocessorParser(object):
 
         first_token_reg = re.compile(r"^\s*#\s*([^ ]+)($|\s)")
 
-        for line in ppout.split("\n"):
-            line += "\n"
+        lines = ppout.split("\n")
+        n = len(lines)
+        i = 0
+        while i < n:
+            line = lines[i] + "\n"
+            i += 1
             search = first_token_reg.match(line)
             hash_token = search.group(1) if search else None
+
+            if hash_token:
+                # collect multiple lines
+                while i < n and line.endswith("\\\n"):
+                    line += lines[i] + "\n"
+                    i += 1
 
             if (not hash_token) or hash_token == "pragma":
                 source_lines.append(line)
