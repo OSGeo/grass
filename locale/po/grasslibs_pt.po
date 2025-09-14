@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_pt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-06 15:42+0000\n"
+"POT-Creation-Date: 2025-09-13 15:39+0000\n"
 "PO-Revision-Date: 2025-08-23 20:18+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese <https://weblate.osgeo.org/projects/grass-gis/grasslibs/pt/>\n"
@@ -1682,7 +1682,7 @@ msgstr "Opções"
 msgid "Default"
 msgstr "Padrão"
 
-#: ../lib/gis/parser_json.c:378
+#: ../lib/gis/parser_json.c:383
 #, c-format
 msgid "Input string not understood: <%s>. Multiple '@' chars?"
 msgstr ""
@@ -5630,32 +5630,88 @@ msgstr ""
 msgid "Unable to create <%s> metadata file for raster map <%s@%s>"
 msgstr ""
 
-#: ../lib/raster/reclass.c:168
+#: ../lib/raster/reclass.c:162
+#, c-format
+msgid "Error reading beginning of header file for <%s@%s>: %s"
+msgstr ""
+
+#: ../lib/raster/reclass.c:180
 #, c-format
 msgid "Too many reclass categories for <%s@%s>"
 msgstr ""
 
-#: ../lib/raster/reclass.c:171
+#: ../lib/raster/reclass.c:184
+#, fuzzy, c-format
+#| msgid "Unable to open header file for raster map <%s@%s>"
+msgid "Illegal reclass format in header file for <%s@%s>: %s"
+msgstr "Não foi possível abrir o ficheiro de cabeçalho do mapa raster <%s@%s>"
+
+#: ../lib/raster/reclass.c:252
+#, fuzzy, c-format
+#| msgid "Unable to open %s for reading"
+msgid "File too short, reading line %d"
+msgstr "Não foi possível abrir %s para leitura"
+
+#: ../lib/raster/reclass.c:259
 #, c-format
-msgid "Illegal reclass format in header file for <%s@%s>"
+msgid "Line too long: %s..."
 msgstr ""
 
-#: ../lib/raster/reclass.c:273
+#: ../lib/raster/reclass.c:265
+#, c-format
+msgid "Format is not key:value: %s"
+msgstr ""
+
+#: ../lib/raster/reclass.c:284
+#, fuzzy, c-format
+#| msgid "Unknown query tool"
+msgid "Unknown key at line: %s"
+msgstr "Ferramenta de pesquisa desconhecida"
+
+#: ../lib/raster/reclass.c:295
+#, fuzzy, c-format
+#| msgid "Unable to read range of raster map <%s>"
+msgid "Mapset not read, only raster name: %s"
+msgstr "Não foi possível ler o intervalo de valores do mapa raster <%s>"
+
+#: ../lib/raster/reclass.c:299
+#, fuzzy, c-format
+#| msgid "Raster map <%s> not found in mapset <%s>"
+msgid "Raster name not read, only mapset: %s"
+msgstr "Mapa raster <%s> não encontrado no mapset <%s>"
+
+#: ../lib/raster/reclass.c:302
+#, fuzzy
+#| msgid "Raster map <%s> not found"
+msgid "Raster name and mapset not read"
+msgstr "Mapa raster <%s> não encontrado"
+
+#: ../lib/raster/reclass.c:333
 msgid "Illegal reclass request"
 msgstr "Pedido de reclassificação ilegal"
 
-#: ../lib/raster/reclass.c:278
+#: ../lib/raster/reclass.c:338
 msgid "Illegal reclass type"
 msgstr "Tipo de reclassificação ilegal"
 
-#: ../lib/raster/reclass.c:284
+#: ../lib/raster/reclass.c:344
 #, c-format
 msgid "Unable to create header file for <%s@%s>"
 msgstr ""
 
-#: ../lib/raster/reclass.c:332
+#: ../lib/raster/reclass.c:392
 #, c-format
 msgid "Unable to create dependency file in <%s@%s>"
+msgstr ""
+
+#: ../lib/raster/reclass.c:479
+#, c-format
+msgid "Reading integer failed on line: %s (after reading min: %d)"
+msgstr ""
+
+#: ../lib/raster/reclass.c:484
+#, c-format
+msgid "First entry (min) not read yet and reading integer failed on line: %s"
 msgstr ""
 
 #: ../lib/raster/sample.c:68
@@ -9056,9 +9112,6 @@ msgstr "Ferramenta de pesquisa desconhecida"
 
 #~ msgid "Unable to open automatic MASK file"
 #~ msgstr "Não é possível abrir o ficheiro automático MASK"
-
-#~ msgid "Unable to open header file for raster map <%s@%s>"
-#~ msgstr "Não foi possível abrir o ficheiro de cabeçalho do mapa raster <%s@%s>"
 
 #, fuzzy
 #~ msgid "Unable to open null file <%s>"

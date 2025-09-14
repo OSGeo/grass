@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_bn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-06 15:42+0000\n"
+"POT-Creation-Date: 2025-09-13 15:39+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Bengali <https://weblate.osgeo.org/projects/grass-gis/grassmods/bn/>\n"
@@ -41456,8 +41456,8 @@ msgstr ""
 #: ../vector/v.out.ogr/attrb_fast.c:62
 #: ../vector/v.out.ogr/export_areas_fast.c:119
 #: ../vector/v.out.ogr/export_areas_fast.c:187
-#: ../vector/v.out.ogr/export_areas_fast.c:307
-#: ../vector/v.out.ogr/export_areas_fast.c:412
+#: ../vector/v.out.ogr/export_areas_fast.c:308
+#: ../vector/v.out.ogr/export_areas_fast.c:413
 #: ../vector/v.out.ogr/export_lines_fast.c:103
 #: ../vector/v.out.ogr/export_lines_fast.c:170
 #: ../vector/v.out.ogr/export_lines_fast.c:301
@@ -43363,7 +43363,7 @@ msgid "List supported output formats and exit"
 msgstr ""
 
 #: ../vector/v.out.ogr/attrb.c:51 ../vector/v.out.ogr/export_areas_fast.c:184
-#: ../vector/v.out.ogr/export_areas_fast.c:409
+#: ../vector/v.out.ogr/export_areas_fast.c:410
 #: ../vector/v.out.ogr/export_lines_fast.c:167
 #: ../vector/v.out.ogr/export_lines_fast.c:395
 #: ../vector/v.out.vtk/writeVTK.c:582
@@ -43396,8 +43396,8 @@ msgstr ""
 #: ../vector/v.out.ogr/export_areas.c:278
 #: ../vector/v.out.ogr/export_areas_fast.c:166
 #: ../vector/v.out.ogr/export_areas_fast.c:223
-#: ../vector/v.out.ogr/export_areas_fast.c:381
-#: ../vector/v.out.ogr/export_areas_fast.c:453
+#: ../vector/v.out.ogr/export_areas_fast.c:382
+#: ../vector/v.out.ogr/export_areas_fast.c:454
 #: ../vector/v.out.ogr/export_lines.c:131
 #: ../vector/v.out.ogr/export_lines.c:229
 #: ../vector/v.out.ogr/export_lines.c:278
@@ -43410,7 +43410,7 @@ msgstr ""
 
 #: ../vector/v.out.ogr/export_areas.c:168
 #: ../vector/v.out.ogr/export_areas_fast.c:95
-#: ../vector/v.out.ogr/export_areas_fast.c:277
+#: ../vector/v.out.ogr/export_areas_fast.c:278
 #: ../vector/v.out.ogr/export_lines.c:177
 #: ../vector/v.out.ogr/export_lines_fast.c:77
 #: ../vector/v.out.ogr/export_lines_fast.c:265
@@ -43420,14 +43420,14 @@ msgstr ""
 
 #: ../vector/v.out.ogr/export_areas.c:180
 #: ../vector/v.out.ogr/export_areas_fast.c:104
-#: ../vector/v.out.ogr/export_areas_fast.c:290
+#: ../vector/v.out.ogr/export_areas_fast.c:291
 #: ../vector/v.out.ogr/export_lines_fast.c:86
 #: ../vector/v.out.ogr/export_lines_fast.c:274
 msgid "Exporting features with category..."
 msgstr ""
 
 #: ../vector/v.out.ogr/export_areas.c:202
-#: ../vector/v.out.ogr/export_areas_fast.c:355
+#: ../vector/v.out.ogr/export_areas_fast.c:356
 #: ../vector/v.out.ogr/export_lines.c:212
 #: ../vector/v.out.ogr/export_lines_fast.c:349
 #, c-format
@@ -43436,14 +43436,14 @@ msgstr ""
 
 #: ../vector/v.out.ogr/export_areas.c:243
 #: ../vector/v.out.ogr/export_areas_fast.c:176
-#: ../vector/v.out.ogr/export_areas_fast.c:397
+#: ../vector/v.out.ogr/export_areas_fast.c:398
 #: ../vector/v.out.ogr/export_lines_fast.c:159
 #: ../vector/v.out.ogr/export_lines_fast.c:383
 msgid "Exporting features without category..."
 msgstr ""
 
 #: ../vector/v.out.ogr/export_areas_fast.c:115
-#: ../vector/v.out.ogr/export_areas_fast.c:303
+#: ../vector/v.out.ogr/export_areas_fast.c:304
 #: ../vector/v.out.ogr/export_lines_fast.c:99
 #: ../vector/v.out.ogr/export_lines_fast.c:297
 #, c-format
@@ -43451,7 +43451,7 @@ msgid "Cannot select attributes sorted by %s"
 msgstr ""
 
 #: ../vector/v.out.ogr/export_areas_fast.c:144
-#: ../vector/v.out.ogr/export_areas_fast.c:330
+#: ../vector/v.out.ogr/export_areas_fast.c:331
 #: ../vector/v.out.ogr/export_lines_fast.c:126
 #: ../vector/v.out.ogr/export_lines_fast.c:323
 msgid "Category index is not sorted ascending by cat!"
