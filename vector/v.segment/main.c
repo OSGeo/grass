@@ -396,7 +396,7 @@ int find_line(struct Map_info *Map, int lfield, int lcat)
     }
 
     Vect_destroy_list(cats);
-
+    Vect_destroy_cats_struct(Cats);
     return 0;
 }
 
