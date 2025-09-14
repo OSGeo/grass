@@ -60,6 +60,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
 
       - name: Invert inclusion list to an exclusion list
         id: get-exclude
@@ -69,12 +71,13 @@ jobs:
           temporal testsuite utils vector visualization)
           echo "Complete set of folders that can be included:"
           echo "${array[@]}"
-          delete=( ${{ env.DELETE_ARRAY }} )
+          # shellcheck disable=SC2206
+          delete=( ${DELETE_ARRAY} )
           echo "Included folders to remove from the complete set:"
           echo "${delete[@]}"
           for target in "${delete[@]}"; do
             for i in "${!array[@]}"; do
-              if [[ ${array[i]} = $target ]]; then
+              if [[ ${array[i]} = "${target}" ]]; then
                 unset 'array[i]'
               fi
             done
@@ -94,10 +97,10 @@ jobs:
 
       - name: Add extra exclusions to a gunittest config file
         run: |
-          sed 's:exclude =:exclude = ${{
-            steps.get-exclude.outputs.extra-exclude
-          }}:g' .gunittest.cfg > .gunittest.extra.cfg
+          sed "s:exclude =:exclude = ${STEPS_GET_EXCLUDE_OUTPUTS_EXTRA_EXCLUDE}:g" .gunittest.cfg > .gunittest.extra.cfg
           cat .gunittest.extra.cfg
+        env:
+          STEPS_GET_EXCLUDE_OUTPUTS_EXTRA_EXCLUDE: ${{ steps.get-exclude.outputs.extra-exclude }}
 
       - name: Get dependencies
         run: |
@@ -108,15 +111,15 @@ jobs:
 
       - name: Create installation directory
         run: |
-          mkdir $HOME/install
+          mkdir "${HOME}/install"
 
       - name: Set number of cores for compilation
         run: |
-          echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
+          echo "MAKEFLAGS=-j$(nproc)" >> "${GITHUB_ENV}"
 
       - name: Set LD_LIBRARY_PATH for compilation
         run: |
-          echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
+          echo "LD_LIBRARY_PATH=${HOME}/install/lib" >> "${GITHUB_ENV}"
 
       - name: Print build environment variables
         shell: bash -el {0}
@@ -131,11 +134,13 @@ jobs:
           CFLAGS: -fPIC -Wvla
           # TODO: -pedantic-errors here won't compile
           CXXFLAGS: -fPIC
-        run: .github/workflows/build_${{ matrix.config }}.sh $HOME/install -Werror
+          MATRIX_CONFIG: ${{ matrix.config }}
+        run: |
+          ".github/workflows/build_${MATRIX_CONFIG}.sh" "${HOME}/install" -Werror
 
       - name: Add the bin directory to PATH
         run: |
-          echo "$HOME/install/bin" >> $GITHUB_PATH
+          echo "${HOME}/install/bin" >> "${GITHUB_PATH}"
 
       - name: Print installed versions
         if: always()

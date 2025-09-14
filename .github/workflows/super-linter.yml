@@ -32,6 +32,7 @@ jobs:
           # super-linter needs the full git history to get the
           # list of files that changed across commits
           fetch-depth: 0
+          persist-credentials: false
       - name: Lint code base
         uses: super-linter/super-linter/slim@1fa6ba58a88783e9714725cf89ac26d53e80c148 # v6.9.0
         env:
@@ -48,6 +49,8 @@ jobs:
           # VALIDATE_CSS: true
           # VALIDATE_DOCKER: true
           VALIDATE_EDITORCONFIG: true
+          VALIDATE_GITHUB_ACTIONS: true
+          VALIDATE_GITHUB_ACTIONS_ZIZMOR: true
           VALIDATE_JAVASCRIPT_ES: true
           # VALIDATE_JAVASCRIPT_STANDARD: true
           VALIDATE_JSON: true

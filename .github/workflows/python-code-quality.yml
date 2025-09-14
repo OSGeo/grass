@@ -45,26 +45,30 @@ jobs:
     steps:
       - name: Versions
         run: |
-          echo OS: ${{ matrix.os }}
-          echo Python: ${{ env.PYTHON_VERSION }}
-          echo Minimal Python version: ${{ env.MIN_PYTHON_VERSION }}
-          echo Black: ${{ env.BLACK_VERSION }}
-          echo Flake8: ${{ env.FLAKE8_VERSION }}
-          echo Pylint: ${{ env.PYLINT_VERSION }}
-          echo Bandit: ${{ env.BANDIT_VERSION }}
+          echo "OS: ${MATRIX_OS}"
+          echo "Python: ${PYTHON_VERSION}"
+          echo "Minimal Python version: ${MIN_PYTHON_VERSION}"
+          echo "Black: ${BLACK_VERSION}"
+          echo "Flake8: ${FLAKE8_VERSION}"
+          echo "Pylint: ${PYLINT_VERSION}"
+          echo "Bandit: ${BANDIT_VERSION}"
+        env:
+          MATRIX_OS: ${{ matrix.os }}
 
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-          cache: pip
+          cache: pip # zizmor: ignore[cache-poisoning] Not creating release artifacts, less of a concern here
       - name: Upgrade pip
         run: python -m pip install --upgrade pip
 
       - name: Install Black only
-        run: pip install black[jupyter]==${{ env.BLACK_VERSION }}
+        run: pip install "black[jupyter]==${BLACK_VERSION}"
 
       - name: Run Black
         run: black .
@@ -89,17 +93,17 @@ jobs:
         run: |
           pip install -r .github/workflows/python_requirements.txt
           pip install -r .github/workflows/optional_requirements.txt
-          pip install flake8==${{ env.FLAKE8_VERSION }}
-          pip install pylint==${{ env.PYLINT_VERSION }} pytest-github-actions-annotate-failures
-          pip install bandit[sarif]==${{ env.BANDIT_VERSION }}
+          pip install "flake8==${FLAKE8_VERSION}"
+          pip install "pylint==${PYLINT_VERSION}" pytest-github-actions-annotate-failures
+          pip install "bandit[sarif]==${BANDIT_VERSION}"
 
       - name: Run Flake8
         run: |
-          flake8 --count --statistics --show-source --jobs=$(nproc) .
+          flake8 --count --statistics --show-source --jobs="$(nproc)" .
 
       - name: Run Flake8 on additional files
         run: |
-          flake8 --count --statistics --show-source --jobs=$(nproc) python/grass/{script,jupyter}/testsuite/
+          flake8 --count --statistics --show-source --jobs="$(nproc)" python/grass/{script,jupyter}/testsuite/
 
       - name: Bandit Vulnerability Scan
         run: |
@@ -118,33 +122,41 @@ jobs:
 
       - name: Create installation directory
         run: |
-          mkdir $HOME/install
+          mkdir "${HOME}/install"
 
       - name: Set number of cores for compilation
         run: |
-          echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
+          echo "MAKEFLAGS=-j$(nproc)" >> "${GITHUB_ENV}"
 
       - uses: rui314/setup-mold@725a8794d15fc7563f59595bd9556495c0564878 # v1
       - name: Build
-        run: .github/workflows/build_${{ matrix.os }}.sh $HOME/install
+        run: |
+          ".github/workflows/build_${MATRIX_OS}.sh" "${HOME}/install"
+        env:
+          MATRIX_OS: ${{ matrix.os }}
 
       - name: Add the bin directory to PATH
         run: |
-          echo "$HOME/install/bin" >> $GITHUB_PATH
+          echo "${HOME}/install/bin" >> "${GITHUB_PATH}"
 
       - name: Run Pylint on grass package
         run: |
-          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$HOME/install/grass84/lib:$LD_LIBRARY_PATH
+          PYTHONPATH="$(grass --config python_path):$PYTHONPATH"
+          LD_LIBRARY_PATH="$HOME/install/grass84/lib:$LD_LIBRARY_PATH"
+          export PYTHONPATH
+          export LD_LIBRARY_PATH
           cd python
-          pylint --persistent=no --py-version=${{ env.MIN_PYTHON_VERSION }} --jobs=$(nproc) grass
+          pylint --persistent=no --py-version="${MIN_PYTHON_VERSION}" --jobs="$(nproc)" grass
 
       - name: Run Pylint on wxGUI
         run: |
-          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$HOME/install/grass84/lib:$LD_LIBRARY_PATH
+          PYTHONPATH="$(grass --config python_path):$PYTHONPATH"
+          LD_LIBRARY_PATH="$HOME/install/grass84/lib:$LD_LIBRARY_PATH"
+          export PYTHONPATH
+          export LD_LIBRARY_PATH
           cd gui/wxpython
-          pylint --persistent=no --py-version=${{ env.MIN_PYTHON_VERSION }} --jobs=$(nproc) *
+          # shellcheck disable=SC2035
+          pylint --persistent=no --py-version="${MIN_PYTHON_VERSION}" --jobs="$(nproc)" *
 
       - name: Run Pylint on other files using pytest
         run: |
@@ -154,10 +166,12 @@ jobs:
             The errors reported with a newer version seem legitimite and should be fixed \
             (2023-10-18, see https://github.com/OSGeo/grass/pull/3205)\
             (2024-01-28, see https://github.com/OSGeo/grass/issues/3380)"
-          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$HOME/install/grass84/lib:$LD_LIBRARY_PATH
-          pytest --pylint -m pylint --pylint-rcfile=.pylintrc --pylint-jobs=$(nproc) \
-            --pylint-ignore-patterns="${{ env.PylintIgnore }}"
+          PYTHONPATH="$(grass --config python_path):$PYTHONPATH"
+          LD_LIBRARY_PATH="$HOME/install/grass84/lib:$LD_LIBRARY_PATH"
+          export PYTHONPATH
+          export LD_LIBRARY_PATH
+          pytest --pylint -m pylint --pylint-rcfile=.pylintrc --pylint-jobs="$(nproc)" \
+            --pylint-ignore-patterns="${PylintIgnore}"
         env:
           PylintIgnore: "python/.*,gui/wxpython/.*,doc/.*,man/.*,utils/.*,locale/.*,raster/.*,\
             imagery/.*,scripts/r.in.wms/wms_drv.py,scripts/g.extension/g.extension.py,\
@@ -173,8 +187,8 @@ jobs:
         run: |
           pip install sphinx
           make sphinxdoclib
-          ARCH=$(cat include/Make/Platform.make | grep ^ARCH | cut -d'=' -f2 | xargs)
-          cp -rp dist.$ARCH/docs/html/libpython sphinx-grass
+          ARCH="$(cat include/Make/Platform.make | grep ^ARCH | cut -d'=' -f2 | xargs)"
+          cp -rp "dist.${ARCH}/docs/html/libpython" sphinx-grass
 
       - name: Make Sphinx documentation available
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0

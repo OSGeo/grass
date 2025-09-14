@@ -23,12 +23,15 @@ jobs:
   additional-checks:
     name: Additional checks
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout repository contents
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           fetch-depth: 31
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
@@ -36,6 +39,10 @@ jobs:
           python-version: '3.10'
       - name: Install uv and restore its cache
         uses: astral-sh/setup-uv@681c641aba71e4a1c380be3ab5e12ad51f415867 # v7.1.6
+        with:
+          # To not have the last commit JSON and release notes files affected on
+          # releases, if copying the contents displayed in the CI logs.
+          enable-cache: false
 
       - name: Check that files with the same content are the same
         run: |
@@ -55,11 +62,12 @@ jobs:
           # Using the last 30 commits (for branches, tags, and PRs).
           # End is the current (latest) commit.
           python ./utils/generate_release_notes.py log \
-              ${{ github.ref_name }} \
-              $(git rev-parse HEAD~30) \
+              "${GITHUB_REF_NAME}" \
+              "$(git rev-parse HEAD~30)" \
               ""
       - name: "Cache pre-commit"
-        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+        # Not used for releases, only for running pre-commit
+        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1  # zizmor: ignore[cache-poisoning]
         with:
           path: ~/.cache/pre-commit
           key: pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}

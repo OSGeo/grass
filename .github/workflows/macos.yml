@@ -46,6 +46,8 @@ jobs:
           # Rehash to forget about the deleted files
           hash -r
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
       - name: Setup Mamba
         uses: mamba-org/setup-micromamba@add3a49764cedee8ee24e82dfde87f5bc2914462 # v2.0.7
         with:
@@ -58,12 +60,12 @@ jobs:
           printenv | sort
           $CC --version
       - name: Create installation directory
-        run: mkdir $HOME/install
+        run: mkdir "${HOME}/install"
       - name: Build and install
         shell: micromamba-shell {0}
-        run: source ./.github/workflows/macos_install.sh $HOME/install
+        run: source ./.github/workflows/macos_install.sh "${HOME}/install"
       - name: Add the bin directory to PATH
-        run: echo "$HOME/install/bin" >> $GITHUB_PATH
+        run: echo "${HOME}/install/bin" >> "${GITHUB_PATH}"
       - name: Check installed version
         if: always()
         shell: micromamba-shell {0}

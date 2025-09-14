@@ -34,12 +34,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
         with:
           python-version: ${{ matrix.python-version }}
-          cache: pip
+          cache: pip # zizmor: ignore[cache-poisoning] This pytest workflow not used for release artifacts
 
       - name: Install non-Python dependencies
         run: |
@@ -59,26 +61,31 @@ jobs:
 
       - name: Create installation directory
         run: |
-          mkdir $HOME/install
+          mkdir "${HOME}/install"
 
       - name: Set number of cores for compilation
         run: |
-          echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
+          echo "MAKEFLAGS=-j$(nproc)" >> "${GITHUB_ENV}"
 
       - name: Build
-        run: .github/workflows/build_${{ matrix.os }}.sh $HOME/install
+        run: |
+          ".github/workflows/build_${MATRIX_OS}.sh" "${HOME}/install"
+        env:
+          MATRIX_OS: ${{ matrix.os }}
 
       - name: Add the bin directory to PATH
         run: |
-          echo "$HOME/install/bin" >> $GITHUB_PATH
+          echo "${HOME}/install/bin" >> "${GITHUB_PATH}"
 
       - name: Test executing of the grass command
         run: .github/workflows/test_simple.sh
 
       - name: Run pytest
         run: |
-          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$HOME/install/grass84/lib:$LD_LIBRARY_PATH
+          PYTHONPATH="$(grass --config python_path):$PYTHONPATH"
+          LD_LIBRARY_PATH="$HOME/install/grass84/lib:$LD_LIBRARY_PATH"
+          export PYTHONPATH
+          export LD_LIBRARY_PATH
           pytest --verbose --color=yes --durations=0 --durations-min=0.5 --numprocesses auto -ra .
 
       - name: Print installed versions

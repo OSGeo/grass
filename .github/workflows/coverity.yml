@@ -18,6 +18,8 @@ jobs:
     if: github.repository == 'OSGeo/grass'
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
 
       - name: Get dependencies
         run: |
@@ -28,7 +30,7 @@ jobs:
 
       - name: Create installation directory
         run: |
-          mkdir $HOME/install
+          mkdir "${HOME}/install"
 
       - name: Download Coverity Build Tool
         run: |
@@ -41,11 +43,11 @@ jobs:
 
       - name: Set number of cores for compilation
         run: |
-          echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
+          echo "MAKEFLAGS=-j$(nproc)" >> "${GITHUB_ENV}"
 
       - name: Set LD_LIBRARY_PATH for compilation
         run: |
-          echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
+          echo "LD_LIBRARY_PATH=${HOME}/install/lib" >> "${GITHUB_ENV}"
 
       - name: Print build environment variables
         run: |
@@ -55,10 +57,10 @@ jobs:
 
       - name: Configure
         run: |
-          echo "CFLAGS=${{ env.CFLAGS }}" >> $GITHUB_ENV
-          echo "CXXFLAGS=${{ env.CXXFLAGS }}" >> $GITHUB_ENV
+          echo "CFLAGS=${CFLAGS}" >> "${GITHUB_ENV}"
+          echo "CXXFLAGS=${CXXFLAGS}" >> "${GITHUB_ENV}"
           ./configure \
-              --prefix="$HOME/install/" \
+              --prefix="${HOME}/install/" \
               --enable-largefile \
               --with-cxx \
               --with-zstd \
@@ -84,7 +86,8 @@ jobs:
       - name: Build with cov-build
         run: |
           pwd
-          export PATH="$(pwd)/cov-analysis-linux64/bin:${PATH}"
+          PATH="$(pwd)/cov-analysis-linux64/bin:${PATH}"
+          export PATH
           cov-build --dir cov-int make
 
       - name: Put results into Tarball
