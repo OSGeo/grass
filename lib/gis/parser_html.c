@@ -52,7 +52,7 @@ void G__usage_html(void)
             " <meta http-equiv=\"content-language\" content=\"en-us\">\n");
     fprintf(stdout, " <meta name=\"viewport\" content=\"width=device-width, "
                     "initial-scale=1\">\n");
-    fprintf(stdout, " <title>%s - GRASS GIS manual</title>\n", st->pgm_name);
+    fprintf(stdout, " <title>%s - GRASS manual</title>\n", st->pgm_name);
     fprintf(stdout, " <meta name=\"description\" content=\"%s", st->pgm_name);
     if (st->module_info.description)
         fprintf(stdout, ": %s\">", st->module_info.description);

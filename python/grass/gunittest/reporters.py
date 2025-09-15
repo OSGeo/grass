@@ -3,7 +3,7 @@ GRASS Python testing framework module for report generation
 
 Copyright (C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS GIS
+License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :authors: Vaclav Petras
@@ -20,12 +20,20 @@ import subprocess
 import collections
 import re
 from collections.abc import Iterable
+from typing import TYPE_CHECKING
+
 
 from .utils import add_gitignore_to_dir, ensure_dir
 from .checkers import text_to_keyvalue
 
 
 from io import StringIO
+
+if TYPE_CHECKING:
+    from typing import Literal, Union
+    from _typeshed import FileDescriptor, StrOrBytesPath, StrPath
+
+    FileDescriptorOrPath = Union[FileDescriptor, StrOrBytesPath]
 
 
 # TODO: change text_to_keyvalue to same sep as here
@@ -46,7 +54,7 @@ def keyvalue_to_text(keyvalue, sep="=", vsep="\n", isep=",", last_vertical=None)
     return text
 
 
-def replace_in_file(file_path, pattern, repl):
+def replace_in_file(file_path, pattern, repl) -> None:
     """
 
     :param repl: a repl parameter of ``re.sub()`` function
@@ -65,13 +73,18 @@ def replace_in_file(file_path, pattern, repl):
 
 
 class NoopFileAnonymizer:
-    def anonymize(self, filenames):
+    def anonymize(self, filenames) -> None:
         pass
 
 
 # TODO: why not remove GISDBASE by default?
 class FileAnonymizer:
-    def __init__(self, paths_to_remove, remove_gisbase=True, remove_gisdbase=False):
+    def __init__(
+        self,
+        paths_to_remove: list | None,
+        remove_gisbase: bool = True,
+        remove_gisdbase: bool = False,
+    ):
         self._paths_to_remove = []
         if remove_gisbase:
             gisbase = os.environ["GISBASE"]
@@ -86,7 +99,7 @@ class FileAnonymizer:
         if paths_to_remove:
             self._paths_to_remove.extend(paths_to_remove)
 
-    def anonymize(self, filenames):
+    def anonymize(self, filenames) -> None:
         # besides GISBASE and test recursion start directory (which is
         # supposed to be source root directory or similar) we can also try
         # to remove user home directory and GISDBASE
@@ -103,7 +116,7 @@ class FileAnonymizer:
                 replace_in_file(filename, re.escape(path) + path_end, "")
 
 
-def get_source_url(path, revision, line=None):
+def get_source_url(path, revision, line=None) -> str:
     """
 
     :param path: directory or file path relative to remote repository root
@@ -116,12 +129,12 @@ def get_source_url(path, revision, line=None):
     return "{tracurl}{path}?rev={revision}".format(**locals())
 
 
-def html_escape(text):
+def html_escape(text: str) -> str:
     """Escape ``'&'``, ``'<'``, and ``'>'`` in a string of data."""
     return saxutils.escape(text)
 
 
-def html_unescape(text):
+def html_unescape(text: str) -> str:
     """Unescape ``'&amp;'``, ``'&lt;'``, and ``'&gt;'`` in a string of data."""
     return saxutils.unescape(text)
 
@@ -144,7 +157,7 @@ def color_error_line(line):
     return line
 
 
-def to_web_path(path):
+def to_web_path(path: str) -> str:
     """Replace OS dependent path separator with slash.
 
     Path on MS Windows are not usable in links on web. For MS Windows,
@@ -186,13 +199,13 @@ def get_svn_info():
     """
     try:
         # TODO: introduce directory, not only current
-        p = subprocess.Popen(
+        with subprocess.Popen(
             ["svn", "info", ".", "--xml"],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-        )
-        stdout, stderr = p.communicate()
-        rc = p.poll()
+        ) as p:
+            stdout, stderr = p.communicate()
+            rc = p.poll()
         info = {}
         if not rc:
             root = ET.fromstring(stdout)
@@ -241,13 +254,13 @@ def get_svn_path_authors(path, from_date=None):
     revision_range = "BASE:1" if from_date is None else "BASE:{%s}" % from_date
     try:
         # TODO: allow also usage of --limit
-        p = subprocess.Popen(
+        with subprocess.Popen(
             ["svn", "log", "--xml", "--revision", revision_range, path],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-        )
-        stdout, stderr = p.communicate()
-        rc = p.poll()
+        ) as p:
+            stdout, stderr = p.communicate()
+            rc = p.poll()
         if not rc:
             root = ET.fromstring(stdout)
             # TODO: get also date if this make sense
@@ -264,7 +277,7 @@ def get_svn_path_authors(path, from_date=None):
     return None
 
 
-def get_html_test_authors_table(directory, tests_authors):
+def get_html_test_authors_table(directory, tests_authors) -> str:
     # SVN gives us authors of code together with authors of tests
     # so test code authors list also contains authors of tests only
     # TODO: don't do this for the top level directories?
@@ -305,7 +318,7 @@ def get_html_test_authors_table(directory, tests_authors):
 
 
 class GrassTestFilesMultiReporter:
-    """Interface to multiple repoter objects
+    """Interface to multiple reporter objects
 
     For start and finish of the tests and of a test of one file,
     it calls corresponding methods of all contained reporters.
@@ -314,11 +327,11 @@ class GrassTestFilesMultiReporter:
     provided.
     """
 
-    def __init__(self, reporters, forgiving=False):
+    def __init__(self, reporters: list, forgiving: bool = False) -> None:
         self.reporters = reporters
         self.forgiving = forgiving
 
-    def start(self, results_dir):
+    def start(self, results_dir: StrPath) -> None:
         # TODO: no directory cleaning (self.clean_before)? now cleaned by caller
         # TODO: perhaps only those who need it should do it (even multiple times)
         # and there is also the delete problem
@@ -333,7 +346,7 @@ class GrassTestFilesMultiReporter:
                 else:
                     raise
 
-    def finish(self):
+    def finish(self) -> None:
         for reporter in self.reporters:
             try:
                 reporter.finish()
@@ -343,7 +356,7 @@ class GrassTestFilesMultiReporter:
                 else:
                     raise
 
-    def start_file_test(self, module):
+    def start_file_test(self, module) -> None:
         for reporter in self.reporters:
             try:
                 reporter.start_file_test(module)
@@ -353,7 +366,7 @@ class GrassTestFilesMultiReporter:
                 else:
                     raise
 
-    def end_file_test(self, **kwargs):
+    def end_file_test(self, **kwargs) -> None:
         for reporter in self.reporters:
             try:
                 reporter.end_file_test(**kwargs)
@@ -373,24 +386,24 @@ class GrassTestFilesMultiReporter:
 
 
 class GrassTestFilesCountingReporter:
-    def __init__(self):
-        self.test_files = None
-        self.files_fail = None
-        self.files_pass = None
+    def __init__(self) -> None:
+        self.test_files: int | None = None
+        self.files_fail: int | None = None
+        self.files_pass: int | None = None
 
-        self.file_pass_per = None
-        self.file_fail_per = None
+        self.file_pass_per: float | None = None
+        self.file_fail_per: float | None = None
 
-        self.main_start_time = None
-        self.main_end_time = None
-        self.main_time = None
+        self.main_start_time: datetime.datetime | None = None
+        self.main_end_time: datetime.datetime | None = None
+        self.main_time: datetime.timedelta | None = None
 
-        self.file_start_time = None
-        self.file_end_time = None
-        self.file_time = None
+        self.file_start_time: datetime.datetime | None = None
+        self.file_end_time: datetime.datetime | None = None
+        self.file_time: datetime.timedelta | None = None
         self._start_file_test_called = False
 
-    def start(self, results_dir):
+    def start(self, results_dir) -> None:
         self.test_files = 0
         self.files_fail = 0
         self.files_pass = 0
@@ -398,7 +411,7 @@ class GrassTestFilesCountingReporter:
         # this might be moved to some report start method
         self.main_start_time = datetime.datetime.now()
 
-    def finish(self):
+    def finish(self) -> None:
         self.main_end_time = datetime.datetime.now()
         self.main_time = self.main_end_time - self.main_start_time
 
@@ -412,12 +425,12 @@ class GrassTestFilesCountingReporter:
             self.file_pass_per = None
             self.file_fail_per = None
 
-    def start_file_test(self, module):
+    def start_file_test(self, module) -> None:
         self.file_start_time = datetime.datetime.now()
         self._start_file_test_called = True
         self.test_files += 1
 
-    def end_file_test(self, returncode, **kwargs):
+    def end_file_test(self, returncode, **kwargs) -> None:
         assert self._start_file_test_called
         self.file_end_time = datetime.datetime.now()
         self.file_time = self.file_end_time - self.file_start_time
@@ -428,7 +441,7 @@ class GrassTestFilesCountingReporter:
         self._start_file_test_called = False
 
 
-def percent_to_html(percent):
+def percent_to_html(percent: float | None) -> str:
     if percent is None:
         return '<span style="color: {color}">unknown percentage</span>'
     if percent > 100 or percent < 0:
@@ -444,10 +457,15 @@ def percent_to_html(percent):
     )
 
 
-def wrap_stdstream_to_html(infile, outfile, module, stream):
+def wrap_stdstream_to_html(
+    infile: FileDescriptorOrPath,
+    outfile: StrOrBytesPath,
+    module,
+    stream: Literal["stdout", "stderr"],
+) -> None:
     before = "<html><body><h1>%s</h1><pre>" % (module.name + " " + stream)
     after = "</pre></body></html>"
-    with open(outfile, "w") as html, open(infile) as text:
+    with open(outfile, "w", encoding="utf-8") as html, open(infile) as text:
         html.write(before)
         html.writelines(color_error_line(html_escape(line)) for line in text)
         html.write(after)
@@ -465,7 +483,7 @@ def html_file_preview(filename):
     html = StringIO()
     html.write(before)
     if size < max_size:
-        with open(filename) as text:
+        with open(filename, encoding="utf-8") as text:
             for line in text:
                 html.write(color_error_line(html_escape(line)))
     elif size < 10 * max_size:
@@ -482,7 +500,7 @@ def html_file_preview(filename):
     return html.getvalue()
 
 
-def returncode_to_html_text(returncode, timed_out=None):
+def returncode_to_html_text(returncode, timed_out=None) -> str:
     if returncode:
         extra = f" (timeout >{timed_out}s)" if timed_out is not None else ""
         return f'<span style="color: red">FAILED{extra}</span>'
@@ -523,7 +541,7 @@ def success_to_html_text(total, successes):
 UNKNOWN_NUMBER_HTML = '<span style="font-size: 60%">unknown</span>'
 
 
-def success_to_html_percent(total, successes):
+def success_to_html_percent(total, successes) -> str:
     if total:
         pass_per = 100 * (float(successes) / total)
         return percent_to_html(pass_per)
@@ -539,7 +557,7 @@ def format_percentage(percentage: float | None) -> str:
 class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
     unknown_number = UNKNOWN_NUMBER_HTML
 
-    def __init__(self, file_anonymizer, main_page_name="index.html"):
+    def __init__(self, file_anonymizer, main_page_name: str = "index.html"):
         super().__init__()
         self.main_index = None
         self._file_anonymizer = file_anonymizer
@@ -550,7 +568,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         # having all variables public although not really part of API
         main_page_name = os.path.join(results_dir, self._main_page_name)
         # TODO: Ensure file is closed in all situations
-        self.main_index = open(main_page_name, "w")  # noqa: SIM115
+        self.main_index = open(main_page_name, "w", encoding="utf-8")  # noqa: SIM115
 
         # TODO: this can be moved to the counter class
         self.failures = 0
@@ -776,7 +794,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             # using constructors as seems advantageous for counting
             self._file_anonymizer.anonymize(supplementary_files)
 
-        with open(file_index_path, "w") as file_index:
+        with open(file_index_path, "w", encoding="utf-8") as file_index:
             file_index.write(header)
             file_index.write(summary_section)
             if modules:
@@ -818,7 +836,7 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
         self.result_dir = None
         self._info = info
 
-    def start(self, results_dir):
+    def start(self, results_dir) -> None:
         super().start(results_dir)
         # having all variables public although not really part of API
         self.result_dir = results_dir
@@ -844,7 +862,7 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
     def finish(self):
         super().finish()
 
-        # this shoul be moved to some additional meta passed in constructor
+        # this should be moved to some additional meta passed in constructor
         svn_info = get_svn_info()
         svn_revision = "" if not svn_info else svn_info["revision"]
 
@@ -879,7 +897,7 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
 
         summary_filename = os.path.join(self.result_dir, "test_keyvalue_result.txt")
         text = keyvalue_to_text(summary, sep="=", vsep="\n", isep=",")
-        Path(summary_filename).write_text(text)
+        Path(summary_filename).write_text(text, encoding="utf-8")
 
     def end_file_test(
         self, module, cwd, returncode, stdout, stderr, test_summary, timed_out=None
@@ -1011,7 +1029,7 @@ class TestsuiteDirReporter:
     def __init__(
         self,
         main_page_name,
-        testsuite_page_name="index.html",
+        testsuite_page_name: str = "index.html",
         top_level_testsuite_page_name=None,
     ):
         self.main_page_name = main_page_name
@@ -1032,7 +1050,7 @@ class TestsuiteDirReporter:
         self.files = 0
         self.files_successes = 0
 
-    def report_for_dir(self, root, directory, test_files):
+    def report_for_dir(self, root: StrPath, directory: StrPath, test_files) -> str:
         # TODO: create object from this, so that it can be passed from
         # one function to another
         # TODO: put the inside of for loop to another function
@@ -1066,7 +1084,7 @@ class TestsuiteDirReporter:
             "<th>Failed</th><th>Percent successful</th>"
             "</tr></thead><tbody>"
         )
-        with open(page_name, "w") as page:
+        with open(page_name, "w", encoding="utf-8") as page:
             page.write(head)
             page.write(tests_table_head)
             for test_file_name in test_files:
@@ -1075,7 +1093,9 @@ class TestsuiteDirReporter:
                     root, directory, test_file_name, "test_keyvalue_result.txt"
                 )
                 # if os.path.exists(summary_filename):
-                summary = text_to_keyvalue(Path(summary_filename).read_text(), sep="=")
+                summary = text_to_keyvalue(
+                    Path(summary_filename).read_text(encoding="utf-8"), sep="="
+                )
                 # else:
                 # TODO: write else here
                 #    summary = None
@@ -1190,7 +1210,7 @@ class TestsuiteDirReporter:
             )
         )
 
-    def report_for_dirs(self, root, directories):
+    def report_for_dirs(self, root: StrPath, directories) -> None:
         # TODO: this will need changes according to potential changes in
         # absolute/relative paths
 
@@ -1235,7 +1255,7 @@ class TestsuiteDirReporter:
             )
         )
 
-        with open(page_name, "w") as page:
+        with open(page_name, "w", encoding="utf-8") as page:
             page.write(head)
             page.write(tests_table_head)
 

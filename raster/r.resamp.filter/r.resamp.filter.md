@@ -100,7 +100,7 @@ By specifying the number of parallel processes with **nprocs** option,
 See benchmark script in the source code.*
 
 To reduce the memory requirements to minimum, set option **memory** to
-zero. To take advantage of the parallelization, GRASS GIS needs to
+zero. To take advantage of the parallelization, GRASS needs to
 compiled with OpenMP enabled.
 
 ## SEE ALSO
@@ -110,7 +110,7 @@ compiled with OpenMP enabled.
 [r.resamp.rst](r.resamp.rst.md), [r.resamp.stats](r.resamp.stats.md)*
 
 Overview: [Interpolation and
-Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS GIS
+Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS
 
 ## AUTHOR
 

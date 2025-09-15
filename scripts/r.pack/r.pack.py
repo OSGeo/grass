@@ -14,7 +14,7 @@
 #############################################################################
 
 # %module
-# % description: Exports a raster map as GRASS GIS specific archive file
+# % description: Exports a raster map as GRASS specific archive file
 # % keyword: raster
 # % keyword: export
 # % keyword: copying

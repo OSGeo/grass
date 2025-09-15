@@ -253,7 +253,7 @@ int Vect_save_frmt(struct Map_info *Map)
     }
 
     /* create frmt file */
-    sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
+    snprintf(buf, sizeof(buf), "%s/%s", GV_DIRECTORY, Map->name);
     fd = G_fopen_new(buf, GV_FRMT_ELEMENT);
     if (fd == NULL) {
         G_fatal_error("Unable to create file '%s'", buf);
@@ -310,7 +310,7 @@ void Vect__free_cache(struct Format_info_cache *cache)
 
 /*! Free memory of offset array
 
-   \param cache pointer to offset array to be freed
+   \param offset pointer to offset array to be freed
  */
 void Vect__free_offset(struct Format_info_offset *offset)
 {

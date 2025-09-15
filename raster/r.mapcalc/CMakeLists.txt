@@ -30,7 +30,8 @@ build_program(
   OPTIONAL_DEPENDS
   Readline::Readline
   Readline::History
-  Threads::Threads)
+  Threads::Threads
+  OPENMP)
 
 build_program(
   NAME

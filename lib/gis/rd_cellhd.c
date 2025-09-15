@@ -50,7 +50,7 @@ static double scan_double(const char *, double *);
 /*!
    \brief Read cell header (for internal use only)
 
-   \param fp file descriptor
+   \param fd file descriptor
    \param[out] cellhd pointer to Cell_head structure
  */
 void G__read_Cell_head(FILE *fd, struct Cell_head *cellhd)

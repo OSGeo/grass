@@ -136,7 +136,6 @@ static const char *get_renamed_option(const char *);
  * prompting.
  *
  */
-
 void G_disable_interactive(void)
 {
     st->no_interactive = 1;
@@ -476,7 +475,7 @@ int G_parser(int argc, char **argv)
         }
 
         /* If first arg is "--interface-description" then print out
-         * a xml description of the task */
+         * an xml description of the task */
         if (strcmp(argv[1], "--interface-description") == 0) {
             G__usage_xml();
             exit(EXIT_SUCCESS);
@@ -545,7 +544,8 @@ int G_parser(int argc, char **argv)
 
                 /* print everything: max verbosity level */
                 st->module_info.verbose = G_verbose_max();
-                sprintf(buff, "GRASS_VERBOSE=%d", G_verbose_max());
+                snprintf(buff, sizeof(buff), "GRASS_VERBOSE=%d",
+                         G_verbose_max());
                 putenv(G_store(buff));
                 if (st->quiet == 1) {
                     G_warning(_("Use either --quiet or --verbose flag, not "
@@ -560,7 +560,8 @@ int G_parser(int argc, char **argv)
 
                 /* print nothing, but errors and warnings */
                 st->module_info.verbose = G_verbose_min();
-                sprintf(buff, "GRASS_VERBOSE=%d", G_verbose_min());
+                snprintf(buff, sizeof(buff), "GRASS_VERBOSE=%d",
+                         G_verbose_min());
                 putenv(G_store(buff));
                 if (st->quiet == -1) {
                     G_warning(_("Use either --quiet or --verbose flag, not "
@@ -575,7 +576,8 @@ int G_parser(int argc, char **argv)
 
                 /* print nothing, but errors  */
                 st->module_info.verbose = G_verbose_min();
-                sprintf(buff, "GRASS_VERBOSE=%d", G_verbose_min());
+                snprintf(buff, sizeof(buff), "GRASS_VERBOSE=%d",
+                         G_verbose_min());
                 putenv(G_store(buff));
                 G_suppress_warnings(TRUE);
                 if (st->quiet == -1) {
@@ -1954,7 +1956,7 @@ FILE *G_open_option_file(const struct Option *option)
    \brief Close an input/output file returned by G_open_option_file(). If the
    file pointer is stdin, stdout, or stderr, nothing happens.
 
-   \param file pointer
+   \param fp file pointer
  */
 void G_close_option_file(FILE *fp)
 {

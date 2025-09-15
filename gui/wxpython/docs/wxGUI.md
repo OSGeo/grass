@@ -6,9 +6,9 @@ description: wxGUI
 
 ## DESCRIPTION
 
-**wxGUI** is a native *Graphical User Interface* (GUI) for GRASS GIS.
+**wxGUI** is a native *Graphical User Interface* (GUI) for GRASS.
 Its main features include displaying geographical data in 2D and 3D,
-calling GRASS GIS modules, and interacting with data.
+calling GRASS modules, and interacting with data.
 
 ### Overview
 
@@ -32,7 +32,7 @@ creating and managing GRASS displays. There is a toolbar to manage
 displayed map layers, a layer tree frame in which map layers for display
 are organized, a command output window tab, and interactive command line
 prompt. On Linux and Windows platforms, the layer manager also has a
-menu bar with a set of pull-down menus for all GRASS GIS functions
+menu bar with a set of pull-down menus for all GRASS functions
 (analysis, file I/O, GIS configuration and management); on a Mac, the
 GRASS functions menu is at the top of the screen.
 
@@ -170,7 +170,7 @@ Add layer to display rhumblines (for latitude/longitude projects only),
 see *[d.rhumbline](d.rhumbline.md)*.
 
 - ![icon](icons/layer-command-add.png)  *Add command layer*:
-Adds a layer in which a GRASS GIS command or command list can be
+Adds a layer in which a GRASS command or command list can be
 entered. For a command list use the semi-colon (";") symbol as a
 separator. For example:
 
@@ -540,7 +540,7 @@ g.gui
 ```
 
 If the wxGUI is not the default user interface, it can defined as
-default by typing at the GRASS GIS command line:
+default by typing at the GRASS command line:
 
 ```sh
 g.gui -d wxpython
@@ -563,15 +563,15 @@ specifying the `--gui` switch:
 grass --gui
 ```
 
-The GUI can be quit by selecting the 'File \> Quit GRASS GIS' menu item
-which gives options to close only GUI or to quit GRASS GIS entirely if
-GRASS GIS is running with a command line (a shell in a terminal
+The GUI can be quit by selecting the 'File \> Quit GRASS' menu item
+which gives options to close only GUI or to quit GRASS entirely if
+GRASS is running with a command line (a shell in a terminal
 application). Exiting the shell (typically by the `exit` command) ends
 the GRASS session including any running GUIs.
 
 ### Background information
 
-**wxGUI** is a native *Graphical User Interface* (GUI) for GRASS GIS
+**wxGUI** is a native *Graphical User Interface* (GUI) for GRASS
 written in [Python](https://www.python.org) using
 [wxPython](https://www.wxpython.org) library.
 

@@ -17,7 +17,8 @@ static int nlines = 50;
 
 static void F_generate(const char *drvname, const char *dbname,
                        const char *tblname, const char *key, int keyval,
-                       int output, char **form, char *columns)
+                       enum OutputFormat format, char **form, char *columns,
+                       JSON_Object *attribute_object)
 {
     int col, ncols, sqltype, more;
     char buf[5000];
@@ -60,8 +61,8 @@ static void F_generate(const char *drvname, const char *dbname,
      * application before F_generate() is called, because it may be correct
      * (connection defined in DB but table does not exist) */
 
-    sprintf(buf, "select %s from %s where %s = %d", columns, tblname, key,
-            keyval);
+    snprintf(buf, sizeof(buf), "select %s from %s where %s = %d", columns,
+             tblname, key, keyval);
     G_debug(2, "%s", buf);
     db_set_string(&sql, buf);
     if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) != DB_OK)
@@ -90,19 +91,45 @@ static void F_generate(const char *drvname, const char *dbname,
             colname = db_get_column_name(column);
 
             G_debug(2, "%s: %s", colname, db_get_string(&str));
-            switch (output) {
-            case OUTPUT_JSON:
+            switch (format) {
+            case LEGACY_JSON:
                 formbuf = G_str_replace(db_get_string(&str), "\\", "\\\\");
                 formbuf = G_str_replace(formbuf, "\"", "\\\"");
-                sprintf(buf, "%s\"%s\": \"%s\"", col == 0 ? "" : ",\n", colname,
-                        formbuf);
+                snprintf(buf, sizeof(buf), "%s\"%s\": \"%s\"",
+                         col == 0 ? "" : ",\n", colname, formbuf);
                 G_free(formbuf);
                 break;
-            case OUTPUT_SCRIPT:
-                sprintf(buf, "%s=%s\n", colname, db_get_string(&str));
+            case JSON:
+                if (db_test_value_isnull(value)) {
+                    G_json_object_set_null(attribute_object, colname);
+                }
+                else {
+                    int c_type = db_sqltype_to_Ctype(sqltype);
+                    if (c_type == DB_C_TYPE_INT) {
+                        G_json_object_set_number(attribute_object, colname,
+                                                 db_get_value_int(value));
+                    }
+                    else if (c_type == DB_C_TYPE_DOUBLE) {
+                        G_json_object_set_number(attribute_object, colname,
+                                                 db_get_value_double(value));
+                    }
+                    else {
+                        formbuf =
+                            G_str_replace(db_get_string(&str), "\\", "\\\\");
+                        formbuf = G_str_replace(formbuf, "\"", "\\\"");
+                        G_json_object_set_string(attribute_object, colname,
+                                                 formbuf);
+                        G_free(formbuf);
+                    }
+                }
+                break;
+            case SHELL:
+                snprintf(buf, sizeof(buf), "%s=%s\n", colname,
+                         db_get_string(&str));
                 break;
             default:
-                sprintf(buf, "%s : %s\n", colname, db_get_string(&str));
+                snprintf(buf, sizeof(buf), "%s : %s\n", colname,
+                         db_get_string(&str));
             }
             db_append_string(&html, buf);
         }
@@ -147,16 +174,19 @@ void coord2bbox(double east, double north, double maxdist,
 }
 
 void write_cats(struct Map_info *Map, int field, struct line_cats *Cats,
-                int showextra, int output, char *columns)
+                int showextra, enum OutputFormat format, char *columns,
+                JSON_Array *cats_array, int show_connection)
 {
     int i, j;
     char *formbuf1;
     char *formbuf2;
+    JSON_Value *cat_value = NULL, *attribute_value = NULL;
+    JSON_Object *cat_object = NULL, *attribute_object = NULL;
 
     if (Cats->n_cats == 0)
         return;
 
-    if (output == OUTPUT_JSON)
+    if (format == LEGACY_JSON)
         fprintf(stdout, ",\n\"Categories\": [");
 
     j = 0;
@@ -165,16 +195,28 @@ void write_cats(struct Map_info *Map, int field, struct line_cats *Cats,
 
         if (field == -1 || Cats->field[i] == field) {
             j++;
+            if (format == JSON) {
+                cat_value = G_json_value_init_object();
+                if (cat_value == NULL) {
+                    G_fatal_error(
+                        _("Failed to initialize JSON object. Out of memory?"));
+                }
+                cat_object = G_json_object(cat_value);
+            }
             G_debug(2, "field = %d  category = %d\n", Cats->field[i],
                     Cats->cat[i]);
-            switch (output) {
-            case OUTPUT_SCRIPT:
+            switch (format) {
+            case SHELL:
                 fprintf(stdout, "Layer=%d\nCategory=%d\n", Cats->field[i],
                         Cats->cat[i]);
                 break;
-            case OUTPUT_JSON:
+            case LEGACY_JSON:
                 fprintf(stdout, "%s\n{\"Layer\": %d, \"Category\": %d",
                         j == 1 ? "" : ",", Cats->field[i], Cats->cat[i]);
+                break;
+            case JSON:
+                G_json_object_set_number(cat_object, "layer", Cats->field[i]);
+                G_json_object_set_number(cat_object, "category", Cats->cat[i]);
                 break;
             default:
                 fprintf(stdout, _("Layer: %d\nCategory: %d\n"), Cats->field[i],
@@ -185,40 +227,71 @@ void write_cats(struct Map_info *Map, int field, struct line_cats *Cats,
             if (Fi != NULL && showextra) {
                 char *form;
 
-                switch (output) {
-                case OUTPUT_SCRIPT:
-                    fprintf(stdout,
+                if (show_connection) {
+                    switch (format) {
+                    case SHELL:
+                        fprintf(
+                            stdout,
                             "Driver=%s\nDatabase=%s\nTable=%s\nKey_column=%s\n",
                             Fi->driver, Fi->database, Fi->table, Fi->key);
-                    break;
-                case OUTPUT_JSON:
-                    /* escape backslash to create valid JSON */
-                    formbuf2 = G_str_replace(Fi->database, "\\", "\\\\");
-                    fprintf(
-                        stdout,
-                        ",\n\"Driver\": \"%s\",\n\"Database\": "
-                        "\"%s\",\n\"Table\": \"%s\",\n\"Key_column\": \"%s\"",
-                        Fi->driver, formbuf2, Fi->table, Fi->key);
-                    G_free(formbuf2);
-                    break;
-                default:
-                    fprintf(stdout,
-                            _("\nDriver: %s\nDatabase: %s\nTable: %s\nKey "
-                              "column: %s\n"),
-                            Fi->driver, Fi->database, Fi->table, Fi->key);
-                    break;
+                        break;
+                    case LEGACY_JSON:
+                        /* escape backslash to create valid JSON */
+                        formbuf2 = G_str_replace(Fi->database, "\\", "\\\\");
+                        fprintf(stdout,
+                                ",\n\"Driver\": \"%s\",\n\"Database\": "
+                                "\"%s\",\n\"Table\": \"%s\",\n\"Key_column\": "
+                                "\"%s\"",
+                                Fi->driver, formbuf2, Fi->table, Fi->key);
+                        G_free(formbuf2);
+                        break;
+                    case JSON:
+                        /* escape backslash to create valid JSON */
+                        formbuf2 = G_str_replace(Fi->database, "\\", "\\\\");
+                        G_json_object_set_string(cat_object, "driver",
+                                                 Fi->driver);
+                        G_json_object_set_string(cat_object, "database",
+                                                 formbuf2);
+                        G_json_object_set_string(cat_object, "table",
+                                                 Fi->table);
+                        G_json_object_set_string(cat_object, "key_column",
+                                                 Fi->key);
+                        G_free(formbuf2);
+                        break;
+                    default:
+                        fprintf(stdout,
+                                _("\nDriver: %s\nDatabase: %s\nTable: %s\nKey "
+                                  "column: %s\n"),
+                                Fi->driver, Fi->database, Fi->table, Fi->key);
+                        break;
+                    }
                 }
-                F_generate(Fi->driver, Fi->database, Fi->table, Fi->key,
-                           Cats->cat[i], output, &form, columns);
 
-                switch (output) {
-                case OUTPUT_SCRIPT:
+                if (format == JSON) {
+                    attribute_value = G_json_value_init_object();
+                    if (attribute_value == NULL) {
+                        G_fatal_error(_("Failed to initialize JSON object. Out "
+                                        "of memory?"));
+                    }
+                    attribute_object = G_json_object(attribute_value);
+                }
+
+                F_generate(Fi->driver, Fi->database, Fi->table, Fi->key,
+                           Cats->cat[i], format, &form, columns,
+                           attribute_object);
+
+                switch (format) {
+                case SHELL:
                     formbuf1 = G_str_replace(form, " ", "_");
                     fprintf(stdout, "%s", formbuf1);
                     G_free(formbuf1);
                     break;
-                case OUTPUT_JSON:
+                case LEGACY_JSON:
                     fprintf(stdout, ",\n\"Attributes\": {%s}", form);
+                    break;
+                case JSON:
+                    G_json_object_set_value(cat_object, "attributes",
+                                            attribute_value);
                     break;
                 default:
                     fprintf(stdout, "%s", form);
@@ -227,17 +300,20 @@ void write_cats(struct Map_info *Map, int field, struct line_cats *Cats,
                 G_free(form);
                 G_free(Fi);
             }
-            if (output == OUTPUT_JSON)
+            if (format == LEGACY_JSON)
                 fprintf(stdout, "}"); /* for cat */
+            if (format == JSON)
+                G_json_array_append_value(cats_array, cat_value);
         }
     }
-    if (output == OUTPUT_JSON)
+    if (format == LEGACY_JSON)
         fprintf(stdout, "]"); /* for list of cats */
 }
 
 void what(struct Map_info *Map, int nvects, char **vect, double east,
           double north, double maxdist, int qtype, int topo, int showextra,
-          int output, int multiple, int *field, char *columns)
+          enum OutputFormat format, int multiple, int *field, char *columns,
+          JSON_Array *root_array, int show_connection)
 {
     struct line_pnts *Points;
     struct line_cats *Cats;
@@ -247,6 +323,13 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
     double sqm_to_sqft;
     char buf[1000], *str;
     int i, j;
+    JSON_Value *map_value = NULL, *nodes_value = NULL, *node_value = NULL,
+               *features_value = NULL, *feature_value = NULL,
+               *cats_value = NULL, *line_value = NULL, *lines_value = NULL;
+    JSON_Object *map_object = NULL, *node_object = NULL, *feature_object = NULL,
+                *line_object = NULL;
+    JSON_Array *nodes_array = NULL, *features_array = NULL, *cats_array = NULL,
+               *lines_array = NULL;
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
@@ -330,15 +413,17 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
             G_format_northing(north, north_buf, G_projection());
 
             if (nfeats > 0 || G_verbose() >= G_verbose_std()) {
-                switch (output) {
-                case OUTPUT_SCRIPT:
+                switch (format) {
+                case SHELL:
                     fprintf(stdout, "East=%s\nNorth=%s\n", east_buf, north_buf);
                     break;
-                case OUTPUT_JSON:
+                case LEGACY_JSON:
                     fprintf(stdout,
                             "{\"Coordinates\": {\"East\": \"%s\", \"North\": "
                             "\"%s\"}",
                             east_buf, north_buf);
+                    break;
+                case JSON:
                     break;
                 default:
                     fprintf(stdout, "East: %s\nNorth: %s\n", east_buf,
@@ -349,16 +434,28 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
             nlines++;
         }
 
+        if (nfeats > 0 && format == JSON) {
+            map_value = G_json_value_init_object();
+            if (map_value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON object. Out of memory?"));
+            }
+            map_object = G_json_object(map_value);
+            G_json_object_dotset_number(map_object, "coordinate.easting", east);
+            G_json_object_dotset_number(map_object, "coordinate.northing",
+                                        north);
+        }
+
         strcpy(buf, vect[i]);
         if ((str = strchr(buf, '@')))
             *str = 0;
 
-        switch (output) {
-        case OUTPUT_SCRIPT:
+        switch (format) {
+        case SHELL:
             fprintf(stdout, "\nMap=%s\nMapset=%s\n", Map[i].name,
                     Map[i].mapset);
             break;
-        case OUTPUT_JSON:
+        case LEGACY_JSON:
             if (!i) {
                 fprintf(stdout, "%s\"Maps\": [",
                         nfeats > 0 || G_verbose() >= G_verbose_std() ? ",\n"
@@ -369,6 +466,12 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
             fprintf(stdout, "\n{\"Map\": \"%s\",\n\"Mapset\": \"%s\"",
                     Map[i].name, Map[i].mapset);
             break;
+        case JSON:
+            if (nfeats > 0) {
+                G_json_object_set_string(map_object, "map", Map[i].name);
+                G_json_object_set_string(map_object, "mapset", Map[i].mapset);
+            }
+            break;
         default:
             fprintf(stdout, "%s\nMap: %s\nMapset: %s\n", SEP, Map[i].name,
                     Map[i].mapset);
@@ -378,11 +481,15 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
         nlines++;
 
         if (nfeats == 0) {
-            switch (output) {
-            case OUTPUT_JSON:
+            switch (format) {
+            case SHELL:
+                break;
+            case LEGACY_JSON:
                 fprintf(stdout, "}\n");
                 break;
-            case OUTPUT_TEXT:
+            case JSON:
+                break;
+            case PLAIN:
                 fprintf(stdout, _("Nothing found.\n"));
                 break;
             }
@@ -390,10 +497,18 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
             continue;
         }
 
-        if (multiple && output == OUTPUT_JSON)
+        if (multiple && format == LEGACY_JSON)
             fprintf(stdout, ",\n\"Features\": [");
 
         first = 1;
+        if (multiple && format == JSON) {
+            features_value = G_json_value_init_array();
+            if (features_value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON array. Out of memory?"));
+            }
+            features_array = G_json_array(features_value);
+        }
 
         for (j = 0; j < lineList->n_values; j++) {
             int line, type;
@@ -404,19 +519,27 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
             l = 0;
 
             if (field[i] != -1 && !Vect_cat_get(Cats, field[i], NULL)) {
-                if (output == OUTPUT_JSON && !multiple) {
+                if (format == LEGACY_JSON && multiple) {
                     fprintf(stdout, "}\n");
                 }
                 continue;
             }
 
             if (multiple) {
-                switch (output) {
-                case OUTPUT_SCRIPT:
+                switch (format) {
+                case SHELL:
                     fprintf(stdout, "\n");
                     break;
-                case OUTPUT_JSON:
+                case LEGACY_JSON:
                     fprintf(stdout, "%s\n{", first ? "" : ",");
+                    break;
+                case JSON:
+                    feature_value = G_json_value_init_object();
+                    if (feature_value == NULL) {
+                        G_fatal_error(_("Failed to initialize JSON object. Out "
+                                        "of memory?"));
+                    }
+                    feature_object = G_json_object(feature_value);
                     break;
                 default:
                     fprintf(stdout, "%s\n", SEP);
@@ -427,22 +550,26 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
 
             switch (type) {
             case GV_POINT:
-                sprintf(buf, "Point");
+                snprintf(buf, sizeof(buf),
+                         (format == JSON) ? "point" : "Point");
                 break;
             case GV_LINE:
-                sprintf(buf, "Line");
+                snprintf(buf, sizeof(buf), (format == JSON) ? "line" : "Line");
                 break;
             case GV_BOUNDARY:
-                sprintf(buf, "Boundary");
+                snprintf(buf, sizeof(buf),
+                         (format == JSON) ? "boundary" : "Boundary");
                 break;
             case GV_FACE:
-                sprintf(buf, "Face");
+                snprintf(buf, sizeof(buf), (format == JSON) ? "face" : "Face");
                 break;
             case GV_CENTROID:
-                sprintf(buf, "Centroid");
+                snprintf(buf, sizeof(buf),
+                         (format == JSON) ? "centroid" : "Centroid");
                 break;
             default:
-                sprintf(buf, "Unknown");
+                snprintf(buf, sizeof(buf),
+                         (format == JSON) ? "unknown" : "Unknown");
             }
             if (type & GV_LINES) {
                 if (G_projection() == 3)
@@ -459,15 +586,15 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                     Vect_get_line_areas(&(Map[i]), line, &left, &right);
                 else
                     left = right = 0;
-                switch (output) {
-                case OUTPUT_SCRIPT:
+                switch (format) {
+                case SHELL:
                     fprintf(stdout, "Feature_max_distance=%f\n", maxdist);
                     fprintf(stdout, "Id=%d\nType=%s\nLeft=%d\nRight=%d\n", line,
                             buf, left, right);
                     if (type & GV_LINES)
                         fprintf(stdout, "Length=%f\n", l);
                     break;
-                case OUTPUT_JSON:
+                case LEGACY_JSON:
                     fprintf(stdout, "%s\"Feature_max_distance\": %f",
                             multiple ? "" : ",\n", maxdist);
                     fprintf(stdout,
@@ -476,6 +603,30 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                             line, buf, left, right);
                     if (type & GV_LINES)
                         fprintf(stdout, ",\n\"Length\": %f", l);
+                    break;
+                case JSON:
+                    if (multiple) {
+                        G_json_object_set_number(feature_object, "id", line);
+                        G_json_object_set_string(feature_object, "type", buf);
+                        G_json_object_set_number(
+                            feature_object, "feature_max_distance", maxdist);
+                        G_json_object_set_number(feature_object, "left", left);
+                        G_json_object_set_number(feature_object, "right",
+                                                 right);
+                        if (type & GV_LINES)
+                            G_json_object_set_number(feature_object, "length",
+                                                     l);
+                    }
+                    else {
+                        G_json_object_set_number(map_object, "id", line);
+                        G_json_object_set_string(map_object, "type", buf);
+                        G_json_object_set_number(
+                            map_object, "feature_max_distance", maxdist);
+                        G_json_object_set_number(map_object, "left", left);
+                        G_json_object_set_number(map_object, "right", right);
+                        if (type & GV_LINES)
+                            G_json_object_set_number(map_object, "length", l);
+                    }
                     break;
                 default:
                     fprintf(stdout, "Looking for features within: %f\n",
@@ -495,24 +646,50 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                 if (nnodes > 0)
                     Vect_get_line_nodes(&(Map[i]), line, &node[0], &node[1]);
 
+                if (format == JSON) {
+                    nodes_value = G_json_value_init_array();
+                    if (nodes_value == NULL) {
+                        G_fatal_error(_("Failed to initialize JSON array. "
+                                        "Out of memory?"));
+                    }
+                    nodes_array = G_json_array(nodes_value);
+                }
+
                 for (n = 0; n < nnodes; n++) {
                     double nx, ny, nz;
 
                     nnlines = Vect_get_node_n_lines(&(Map[i]), node[n]);
 
                     Vect_get_node_coor(&(Map[i]), node[n], &nx, &ny, &nz);
-                    switch (output) {
-                    case OUTPUT_SCRIPT:
+                    switch (format) {
+                    case SHELL:
                         fprintf(stdout,
                                 _("Node[%d]=%d\nNumber_lines=%d\nCoordinates=%."
                                   "6f,%.6f,%.6f\n"),
                                 n, node[n], nnlines, nx, ny, nz);
                         break;
-                    case OUTPUT_JSON:
+                    case LEGACY_JSON:
                         fprintf(stdout,
                                 _(",\n\"Node[%d]\": %d,\n\"Number_lines\": "
                                   "%d,\n\"Coordinates\": %.6f,%.6f,%.6f"),
                                 n, node[n], nnlines, nx, ny, nz);
+                        break;
+                    case JSON:
+                        node_value = G_json_value_init_object();
+                        if (node_value == NULL) {
+                            G_fatal_error(_("Failed to initialize JSON object. "
+                                            "Out of memory?"));
+                        }
+                        node_object = G_json_object(node_value);
+                        G_json_object_set_number(node_object, "id", node[n]);
+                        G_json_object_set_number(node_object, "number_lines",
+                                                 nnlines);
+                        G_json_object_set_number(node_object, "coordinate_x",
+                                                 nx);
+                        G_json_object_set_number(node_object, "coordinate_y",
+                                                 ny);
+                        G_json_object_set_number(node_object, "coordinate_z",
+                                                 nz);
                         break;
                     default:
                         fprintf(stdout,
@@ -522,18 +699,41 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                         break;
                     }
 
+                    if (format == JSON) {
+                        lines_value = G_json_value_init_array();
+                        if (lines_value == NULL) {
+                            G_fatal_error(_("Failed to initialize JSON array. "
+                                            "Out of memory?"));
+                        }
+                        lines_array = G_json_array(lines_value);
+                    }
+
                     for (nli = 0; nli < nnlines; nli++) {
                         nodeline = Vect_get_node_line(&(Map[i]), node[n], nli);
                         angle =
                             Vect_get_node_line_angle(&(Map[i]), node[n], nli);
-                        switch (output) {
-                        case OUTPUT_SCRIPT:
+                        switch (format) {
+                        case SHELL:
                             fprintf(stdout, "Id=%d\nAngle=%.8f\n", nodeline,
                                     angle);
                             break;
-                        case OUTPUT_JSON:
+                        case LEGACY_JSON:
                             fprintf(stdout, ",\n\"Id\": %d,\n\"Angle\": %.8f",
                                     nodeline, angle);
+                            break;
+                        case JSON:
+                            line_value = G_json_value_init_object();
+                            if (line_value == NULL) {
+                                G_fatal_error(
+                                    _("Failed to initialize JSON object. "
+                                      "Out of memory?"));
+                            }
+                            line_object = G_json_object(line_value);
+                            G_json_object_set_number(line_object, "id",
+                                                     nodeline);
+                            G_json_object_set_number(line_object, "angle",
+                                                     angle);
+                            G_json_array_append_value(lines_array, line_value);
                             break;
                         default:
                             fprintf(stdout, _("Id: %d\nAngle: %.8f\n"),
@@ -541,22 +741,51 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                             break;
                         }
                     }
+
+                    if (format == JSON) {
+                        G_json_object_set_value(node_object, "lines",
+                                                lines_value);
+                        G_json_array_append_value(nodes_array, node_value);
+                    }
+                }
+                if (format == JSON) {
+                    if (multiple)
+                        G_json_object_set_value(feature_object, "nodes",
+                                                nodes_value);
+                    else
+                        G_json_object_set_value(map_object, "nodes",
+                                                nodes_value);
                 }
             }
             else {
-                switch (output) {
-                case OUTPUT_SCRIPT:
+                switch (format) {
+                case SHELL:
                     fprintf(stdout, "Type=%s\n", buf);
                     fprintf(stdout, "Id=%d\n", line);
                     if (type & GV_LINES)
                         fprintf(stdout, "Length=%f\n", l);
                     break;
-                case OUTPUT_JSON:
+                case LEGACY_JSON:
                     fprintf(stdout, "%s\"Type\": \"%s\"", multiple ? "" : ",\n",
                             buf);
                     fprintf(stdout, ",\n\"Id\": %d", line);
                     if (type & GV_LINES)
                         fprintf(stdout, ",\n\"Length\": %f", l);
+                    break;
+                case JSON:
+                    if (multiple) {
+                        G_json_object_set_number(feature_object, "id", line);
+                        G_json_object_set_string(feature_object, "type", buf);
+                        if (type & GV_LINES)
+                            G_json_object_set_number(feature_object, "length",
+                                                     l);
+                    }
+                    else {
+                        G_json_object_set_number(map_object, "id", line);
+                        G_json_object_set_string(map_object, "type", buf);
+                        if (type & GV_LINES)
+                            G_json_object_set_number(map_object, "length", l);
+                    }
                     break;
                 default:
                     fprintf(stdout, _("Type: %s\n"), buf);
@@ -572,13 +801,21 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                 double min, max;
 
                 if (type & GV_POINTS) {
-                    switch (output) {
-                    case OUTPUT_SCRIPT:
+                    switch (format) {
+                    case SHELL:
                         fprintf(stdout, "Point_height=%f\n", Points->z[0]);
                         break;
-                    case OUTPUT_JSON:
+                    case LEGACY_JSON:
                         fprintf(stdout, ",\n\"Point_height\": %f",
                                 Points->z[0]);
+                        break;
+                    case JSON:
+                        if (multiple)
+                            G_json_object_set_number(
+                                feature_object, "point_height", Points->z[0]);
+                        else
+                            G_json_object_set_number(map_object, "point_height",
+                                                     Points->z[0]);
                         break;
                     default:
                         fprintf(stdout, _("Point height: %f\n"), Points->z[0]);
@@ -596,12 +833,20 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                             max = Points->z[k];
                     }
                     if (min == max) {
-                        switch (output) {
-                        case OUTPUT_SCRIPT:
+                        switch (format) {
+                        case SHELL:
                             fprintf(stdout, "Line_height=%f\n", min);
                             break;
-                        case OUTPUT_JSON:
+                        case LEGACY_JSON:
                             fprintf(stdout, ",\n\"Line_height\": %f", min);
+                            break;
+                        case JSON:
+                            if (multiple)
+                                G_json_object_set_number(feature_object,
+                                                         "line_height", min);
+                            else
+                                G_json_object_set_number(map_object,
+                                                         "line_height", min);
                             break;
                         default:
                             fprintf(stdout, _("Line height: %f\n"), min);
@@ -609,17 +854,31 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                         }
                     }
                     else {
-                        switch (output) {
-                        case OUTPUT_SCRIPT:
+                        switch (format) {
+                        case SHELL:
                             fprintf(stdout,
                                     "Line_height_min=%f\nLine_height_max=%f\n",
                                     min, max);
                             break;
-                        case OUTPUT_JSON:
+                        case LEGACY_JSON:
                             fprintf(stdout,
                                     ",\n\"Line_height_min\": "
                                     "%f,\n\"Line_height_max\": %f",
                                     min, max);
+                            break;
+                        case JSON:
+                            if (multiple) {
+                                G_json_object_set_number(
+                                    feature_object, "line_height_min", min);
+                                G_json_object_set_number(
+                                    feature_object, "line_height_max", max);
+                            }
+                            else {
+                                G_json_object_set_number(
+                                    map_object, "line_height_min", min);
+                                G_json_object_set_number(
+                                    map_object, "line_height_max", max);
+                            }
                             break;
                         default:
                             fprintf(
@@ -632,10 +891,28 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                 }
             } /* if height */
 
-            write_cats(&Map[i], field[i], Cats, showextra, output, columns);
+            if (format == JSON) {
+                cats_value = G_json_value_init_array();
+                if (cats_value == NULL) {
+                    G_fatal_error(
+                        _("Failed to initialize JSON array. Out of memory?"));
+                }
+                cats_array = G_json_array(cats_value);
+            }
 
-            if (output == OUTPUT_JSON && multiple)
+            write_cats(&Map[i], field[i], Cats, showextra, format, columns,
+                       cats_array, show_connection);
+            if (format == LEGACY_JSON && multiple)
                 fprintf(stdout, "}");
+
+            if (format == JSON) {
+                if (multiple) {
+                    G_json_object_set_value(feature_object, "data", cats_value);
+                    G_json_array_append_value(features_array, feature_value);
+                }
+                else
+                    G_json_object_set_value(map_object, "data", cats_value);
+            }
         } /* for lineList */
 
         for (j = 0; j < areaList->n_values; j++) {
@@ -643,12 +920,20 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
             double sq_meters, acres, hectares, sq_miles;
 
             if (multiple) {
-                switch (output) {
-                case OUTPUT_SCRIPT:
+                switch (format) {
+                case SHELL:
                     fprintf(stdout, "\n");
                     break;
-                case OUTPUT_JSON:
+                case LEGACY_JSON:
                     fprintf(stdout, "%s\n{", first ? "" : ",");
+                    break;
+                case JSON:
+                    feature_value = G_json_value_init_object();
+                    if (feature_value == NULL) {
+                        G_fatal_error(_("Failed to initialize JSON object. Out "
+                                        "of memory?"));
+                    }
+                    feature_object = G_json_object(feature_value);
                     break;
                 default:
                     fprintf(stdout, "%s\n", SEP);
@@ -659,14 +944,26 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
 
             area = areaList->value[j];
             if (Map[i].head.with_z && getz) {
-                switch (output) {
-                case OUTPUT_SCRIPT:
+                switch (format) {
+                case SHELL:
                     fprintf(stdout, "Type=Area\nArea_height=%f\n", z);
                     break;
-                case OUTPUT_JSON:
+                case LEGACY_JSON:
                     fprintf(stdout,
                             "%s\n\"Type\": \"Area\",\n\"Area_height\": %f",
                             multiple ? "" : ",", z);
+                    break;
+                case JSON:
+                    if (multiple) {
+                        G_json_object_set_number(feature_object, "area_height",
+                                                 z);
+                        G_json_object_set_string(feature_object, "type",
+                                                 "area");
+                    }
+                    else {
+                        G_json_object_set_number(map_object, "area_height", z);
+                        G_json_object_set_string(map_object, "type", "area");
+                    }
                     break;
                 default:
                     fprintf(stdout, _("Type: Area\nArea height: %f\n"), z);
@@ -674,13 +971,22 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                 }
             }
             else {
-                switch (output) {
-                case OUTPUT_SCRIPT:
+                switch (format) {
+                case SHELL:
                     fprintf(stdout, "Type=Area\n");
                     break;
-                case OUTPUT_JSON:
+                case LEGACY_JSON:
                     fprintf(stdout, "%s\n\"Type\": \"Area\"",
                             multiple ? "" : ",");
+                    break;
+                case JSON:
+                    if (multiple) {
+                        G_json_object_set_string(feature_object, "type",
+                                                 "area");
+                    }
+                    else {
+                        G_json_object_set_string(map_object, "type", "area");
+                    }
                     break;
                 default:
                     fprintf(stdout, _("Type: Area\n"));
@@ -699,13 +1005,25 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                 int nisles, isleidx, isle, isle_area;
 
                 nisles = Vect_get_area_num_isles(&Map[i], area);
-                switch (output) {
-                case OUTPUT_SCRIPT:
+                switch (format) {
+                case SHELL:
                     fprintf(stdout, "Area=%d\nNumber_isles=%d\n", area, nisles);
                     break;
-                case OUTPUT_JSON:
+                case LEGACY_JSON:
                     fprintf(stdout, ",\n\"Area\": %d,\n\"Number_isles\": %d",
                             area, nisles);
+                    break;
+                case JSON:
+                    if (multiple) {
+                        G_json_object_set_number(feature_object, "area", area);
+                        G_json_object_set_number(feature_object, "number_isles",
+                                                 nisles);
+                    }
+                    else {
+                        G_json_object_set_number(map_object, "area", area);
+                        G_json_object_set_number(map_object, "number_isles",
+                                                 nisles);
+                    }
                     break;
                 default:
                     fprintf(stdout, _("Area: %d\nNumber of isles: %d\n"), area,
@@ -713,14 +1031,26 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                     break;
                 }
 
+                if (format == JSON) {
+                    nodes_value = G_json_value_init_array();
+                    if (nodes_value == NULL) {
+                        G_fatal_error(_("Failed to initialize JSON array. "
+                                        "Out of memory?"));
+                    }
+                    nodes_array = G_json_array(nodes_value);
+                }
+
                 for (isleidx = 0; isleidx < nisles; isleidx++) {
                     isle = Vect_get_area_isle(&Map[i], area, isleidx);
-                    switch (output) {
-                    case OUTPUT_SCRIPT:
+                    switch (format) {
+                    case SHELL:
                         fprintf(stdout, "Isle[%d]=%d\n", isleidx, isle);
                         break;
-                    case OUTPUT_JSON:
+                    case LEGACY_JSON:
                         fprintf(stdout, ",\n\"Isle[%d]\": %d", isleidx, isle);
+                        break;
+                    case JSON:
+                        G_json_array_append_number(nodes_array, isle);
                         break;
                     default:
                         fprintf(stdout, _("Isle[%d]: %d\n"), isleidx, isle);
@@ -728,19 +1058,42 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                     }
                 }
 
+                if (format == JSON) {
+                    if (multiple)
+                        G_json_object_set_value(feature_object, "isles",
+                                                nodes_value);
+                    else
+                        G_json_object_set_value(map_object, "isles",
+                                                nodes_value);
+                }
+
                 isle = Vect_find_island(&Map[i], east, north);
 
                 if (isle) {
                     isle_area = Vect_get_isle_area(&Map[i], isle);
-                    switch (output) {
-                    case OUTPUT_SCRIPT:
+                    switch (format) {
+                    case SHELL:
                         fprintf(stdout, "Island=%d\nIsland_area=%d\n", isle,
                                 isle_area);
                         break;
-                    case OUTPUT_JSON:
+                    case LEGACY_JSON:
                         fprintf(stdout,
                                 ",\n\"Island\": %d,\n\"Island_area\": %d", isle,
                                 isle_area);
+                        break;
+                    case JSON:
+                        if (multiple) {
+                            G_json_object_set_number(feature_object, "island",
+                                                     isle);
+                            G_json_object_set_number(feature_object,
+                                                     "island_area", isle_area);
+                        }
+                        else {
+                            G_json_object_set_number(map_object, "island",
+                                                     isle);
+                            G_json_object_set_number(map_object, "island_area",
+                                                     isle_area);
+                        }
                         break;
                     default:
                         fprintf(stdout, _("Island: %d In area: %d\n"), isle,
@@ -750,19 +1103,40 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                 }
             }
             else {
-                switch (output) {
-                case OUTPUT_SCRIPT:
+                switch (format) {
+                case SHELL:
                     fprintf(stdout, "Sq_Meters=%.3f\nHectares=%.3f\n",
                             sq_meters, hectares);
                     fprintf(stdout, "Acres=%.3f\nSq_Miles=%.4f\n", acres,
                             sq_miles);
                     break;
-                case OUTPUT_JSON:
+                case LEGACY_JSON:
                     fprintf(stdout,
                             ",\n\"Sq_Meters\": %.3f,\n\"Hectares\": %.3f",
                             sq_meters, hectares);
                     fprintf(stdout, ",\n\"Acres\": %.3f,\n\"Sq_Miles\": %.4f",
                             acres, sq_miles);
+                    break;
+                case JSON:
+                    if (multiple) {
+                        G_json_object_set_number(feature_object, "sq_meters",
+                                                 sq_meters);
+                        G_json_object_set_number(feature_object, "hectares",
+                                                 hectares);
+                        G_json_object_set_number(feature_object, "acres",
+                                                 acres);
+                        G_json_object_set_number(feature_object, "sq_miles",
+                                                 sq_miles);
+                    }
+                    else {
+                        G_json_object_set_number(map_object, "sq_meters",
+                                                 sq_meters);
+                        G_json_object_set_number(map_object, "hectares",
+                                                 hectares);
+                        G_json_object_set_number(map_object, "acres", acres);
+                        G_json_object_set_number(map_object, "sq_miles",
+                                                 sq_miles);
+                    }
                     break;
                 default:
                     fprintf(stdout, _("Sq Meters: %.3f\nHectares: %.3f\n"),
@@ -777,19 +1151,42 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
             if (centroid > 0)
                 Vect_read_line(&Map[i], Points, Cats, centroid);
 
-            write_cats(&Map[i], field[i], Cats, showextra, output, columns);
+            if (format == JSON) {
+                cats_value = G_json_value_init_array();
+                if (cats_value == NULL) {
+                    G_fatal_error(
+                        _("Failed to initialize JSON array. Out of memory?"));
+                }
+                cats_array = G_json_array(cats_value);
+            }
 
-            if (output == OUTPUT_JSON && multiple)
+            write_cats(&Map[i], field[i], Cats, showextra, format, columns,
+                       cats_array, show_connection);
+            if (format == LEGACY_JSON && multiple)
                 fprintf(stdout, "}");
+
+            if (format == JSON) {
+                if (multiple) {
+                    G_json_object_set_value(feature_object, "data", cats_value);
+                    G_json_array_append_value(features_array, feature_value);
+                }
+                else
+                    G_json_object_set_value(map_object, "data", cats_value);
+            }
         } /* for areaList */
 
-        if (output == OUTPUT_JSON) {
+        if (format == LEGACY_JSON) {
             if (multiple)
                 fprintf(stdout, "]"); /* for features */
             fprintf(stdout, "}");     /* for map */
         }
+        if (format == JSON) {
+            if (multiple)
+                G_json_object_set_value(map_object, "features", features_value);
+            G_json_array_append_value(root_array, map_value);
+        }
     }
-    if (output == OUTPUT_JSON)
+    if (format == LEGACY_JSON)
         fprintf(stdout, "]}\n"); /* for nvects */
 
     fflush(stdout);

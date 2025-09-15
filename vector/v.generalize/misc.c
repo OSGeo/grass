@@ -144,6 +144,7 @@ int copy_tables_by_cats(struct Map_info *In, struct Map_info *Out)
         }
         if (f >= 0 && nocats[f] > 0)
             ntabs++;
+        Vect_destroy_field_info(IFi);
     }
 
     if (ntabs > 1)
@@ -183,6 +184,8 @@ int copy_tables_by_cats(struct Map_info *In, struct Map_info *Out)
             Vect_map_add_dblink(Out, OFi->number, OFi->name, OFi->table,
                                 IFi->key, OFi->database, OFi->driver);
         }
+        Vect_destroy_field_info(OFi);
+        Vect_destroy_field_info(IFi);
     }
 
     for (i = 0; i < nfields; i++)
@@ -190,6 +193,7 @@ int copy_tables_by_cats(struct Map_info *In, struct Map_info *Out)
     G_free(ocats);
     G_free(nocats);
     G_free(fields);
+    Vect_destroy_cats_struct(Cats);
     return 1;
 }
 

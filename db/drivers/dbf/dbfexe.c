@@ -58,7 +58,7 @@ int execute(char *sql, cursor *c)
     /* I don't know why, but if the statement ends by string in quotes 'xxx' and
      * is not followed by space or '\n' it is not parsed properly -> */
     tmpsql = (char *)G_malloc(strlen(sql) + 2);
-    sprintf(tmpsql, "%s ", sql);
+    snprintf(tmpsql, (strlen(sql) + 2), "%s ", sql);
     st = sqpInitStmt();
     st->stmt = tmpsql;
     sqpInitParser(st);
@@ -185,7 +185,7 @@ int execute(char *sql, cursor *c)
 
             return DB_FAILED;
         }
-        sprintf(name, "%s.dbf", st->table);
+        snprintf(name, sizeof(name), "%s.dbf", st->table);
         add_table(st->table, name);
 
         tab = find_table(st->table);
@@ -371,12 +371,12 @@ void eval_val(int tab, int row, int col UNUSED, SQLPVALUE *inval,
             if (val->type == SQLP_I) {
                 val->d = (double)val->i;
                 val->s = (char *)G_malloc(32 * sizeof(char));
-                sprintf(val->s, "%d", val->i);
+                snprintf(val->s, 32, "%d", val->i);
             }
             else if (val->type == SQLP_D) {
                 val->i = (int)val->d;
                 val->s = (char *)G_malloc(32 * sizeof(char));
-                sprintf(val->s, "%g", val->d);
+                snprintf(val->s, 32, "%g", val->d);
             }
             else if (val->type == SQLP_S) {
                 val->i = atoi(val->s);
@@ -661,12 +661,12 @@ int sel(SQLPSTMT *st, int tab, int **selset)
  */
 double eval_node(SQLPNODE *nptr, int tab, int row, SQLPVALUE *value)
 {
-    int left, right;
+    int left = NODE_FALSE, right = NODE_FALSE;
     SQLPVALUE left_value, right_value;
     int ccol;
     COLUMN *col;
     VALUE *val;
-    double left_dval, right_dval, dval;
+    double left_dval = 0.0, right_dval = 0.0, dval;
     char *rightbuf;
 
     /* Note: node types were previously checked by eval_node_type */
@@ -1010,7 +1010,7 @@ double eval_node(SQLPNODE *nptr, int tab, int row, SQLPVALUE *value)
  */
 int eval_node_type(SQLPNODE *nptr, int tab)
 {
-    int left, right;
+    int left = 0, right = 0;
     int ccol;
     COLUMN *col = NULL;
 

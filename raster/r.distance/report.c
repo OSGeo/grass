@@ -33,7 +33,7 @@ struct ReportLine {
     double distance;
 };
 
-static void print(struct ReportLine *, struct Parms *);
+static void print(struct ReportLine *, struct Parms *, JSON_Array *);
 static int compare(const void *, const void *);
 static int revcompare(const void *, const void *);
 
@@ -46,6 +46,8 @@ void report(struct Parms *parms)
     struct CatEdgeList *list1, *list2;
     struct ReportLine *lines;
     int nlines;
+    JSON_Value *root_value = NULL;
+    JSON_Array *root_array = NULL;
 
     G_get_set_window(&region);
     G_begin_distance_calculations();
@@ -54,6 +56,27 @@ void report(struct Parms *parms)
     map2 = &parms->map2;
 
     G_message(_("Processing..."));
+
+    if (parms->format == JSON) {
+        root_value = G_json_value_init_array();
+        if (root_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
+        root_array = G_json_array(root_value);
+    }
+    else if (parms->format == CSV) {
+        fprintf(stdout, "%s%s%s%s%s%s%s%s%s%s%s%s%s", "from_category",
+                parms->fs, "to_category", parms->fs, "distance", parms->fs,
+                "from_easting", parms->fs, "from_northing", parms->fs,
+                "to_easting", parms->fs, "to_northing");
+
+        if (parms->labels) {
+            fprintf(stdout, "%s%s%s%s", parms->fs, "from_label", parms->fs,
+                    "to_label");
+        }
+
+        fprintf(stdout, "\n");
+    }
 
     if (parms->sort > 0)
         lines = (struct ReportLine *)G_malloc(
@@ -92,7 +115,7 @@ void report(struct Parms *parms)
             if (parms->sort > 0)
                 lines[nlines++] = line;
             else
-                print(&line, parms);
+                print(&line, parms, root_array);
         }
     }
 
@@ -105,57 +128,144 @@ void report(struct Parms *parms)
             qsort(lines, nlines, sizeof(struct ReportLine), revcompare);
 
         for (i = 0; i < nlines; i++)
-            print(&lines[i], parms);
+            print(&lines[i], parms, root_array);
+    }
+
+    if (parms->format == JSON) {
+        char *json_string = G_json_serialize_to_string_pretty(root_value);
+        if (!json_string) {
+            G_json_value_free(root_value);
+            G_fatal_error(_("Failed to serialize JSON to pretty format."));
+        }
+
+        puts(json_string);
+
+        G_json_free_serialized_string(json_string);
+        G_json_value_free(root_value);
     }
 }
 
-static void print(struct ReportLine *line, struct Parms *parms)
+static void print(struct ReportLine *line, struct Parms *parms,
+                  JSON_Array *root_array)
 {
     char *fs;
     char temp[100];
+    JSON_Value *cell_value = NULL, *from_cell_value = NULL,
+               *to_cell_value = NULL;
+    JSON_Object *cell_object = NULL, *from_cell_object = NULL,
+                *to_cell_object = NULL;
 
     fs = parms->fs;
 
-    /* print cat numbers */
-    if (line->isnull1 && line->isnull2)
-        fprintf(stdout, "*%s*", fs);
-    else if (line->isnull1)
-        fprintf(stdout, "*%s%ld", fs, (long)line->cat2);
-    else if (line->isnull2)
-        fprintf(stdout, "%ld%s*", (long)line->cat1, fs);
-    else
-        fprintf(stdout, "%ld%s%ld", (long)line->cat1, fs, (long)line->cat2);
+    switch (parms->format) {
+    case CSV:
+    case PLAIN:
+        /* print cat numbers */
+        if (line->isnull1 && line->isnull2)
+            fprintf(stdout, "*%s*", fs);
+        else if (line->isnull1)
+            fprintf(stdout, "*%s%ld", fs, (long)line->cat2);
+        else if (line->isnull2)
+            fprintf(stdout, "%ld%s*", (long)line->cat1, fs);
+        else
+            fprintf(stdout, "%ld%s%ld", (long)line->cat1, fs, (long)line->cat2);
 
-    /* print distance */
-    sprintf(temp, "%.10f", line->distance);
-    G_trim_decimal(temp);
-    fprintf(stdout, "%s%s", fs, temp);
+        /* print distance */
+        snprintf(temp, sizeof(temp), "%.10f", line->distance);
+        G_trim_decimal(temp);
+        fprintf(stdout, "%s%s", fs, temp);
 
-    /* print coordinates of the closest pair */
-    G_format_easting(line->east1, temp,
-                     G_projection() == PROJECTION_LL ? -1 : 0);
-    fprintf(stdout, "%s%s", fs, temp);
-    G_format_northing(line->north1, temp,
-                      G_projection() == PROJECTION_LL ? -1 : 0);
-    fprintf(stdout, "%s%s", fs, temp);
-    G_format_easting(line->east2, temp,
-                     G_projection() == PROJECTION_LL ? -1 : 0);
-    fprintf(stdout, "%s%s", fs, temp);
-    G_format_northing(line->north2, temp,
-                      G_projection() == PROJECTION_LL ? -1 : 0);
-    fprintf(stdout, "%s%s", fs, temp);
+        /* print coordinates of the closest pair */
+        G_format_easting(line->east1, temp,
+                         G_projection() == PROJECTION_LL ? -1 : 0);
+        fprintf(stdout, "%s%s", fs, temp);
+        G_format_northing(line->north1, temp,
+                          G_projection() == PROJECTION_LL ? -1 : 0);
+        fprintf(stdout, "%s%s", fs, temp);
+        G_format_easting(line->east2, temp,
+                         G_projection() == PROJECTION_LL ? -1 : 0);
+        fprintf(stdout, "%s%s", fs, temp);
+        G_format_northing(line->north2, temp,
+                          G_projection() == PROJECTION_LL ? -1 : 0);
+        fprintf(stdout, "%s%s", fs, temp);
 
-    /* print category labels */
-    if (parms->labels) {
-        struct Map *map1, *map2;
+        /* print category labels */
+        if (parms->labels) {
+            struct Map *map1, *map2;
 
-        map1 = &parms->map1;
-        map2 = &parms->map2;
+            map1 = &parms->map1;
+            map2 = &parms->map2;
 
-        fprintf(stdout, "%s%s", fs, get_label(map1, line->cat1));
-        fprintf(stdout, "%s%s", fs, get_label(map2, line->cat2));
+            fprintf(stdout, "%s%s", fs, get_label(map1, line->cat1));
+            fprintf(stdout, "%s%s", fs, get_label(map2, line->cat2));
+        }
+        fprintf(stdout, "\n");
+        break;
+
+    case JSON:
+        /* initialize JSON objects */
+        cell_value = G_json_value_init_object();
+        if (cell_value == NULL) {
+            G_fatal_error(
+                _("Failed to initialize JSON object. Out of memory?"));
+        }
+        cell_object = G_json_object(cell_value);
+
+        from_cell_value = G_json_value_init_object();
+        if (from_cell_value == NULL) {
+            G_fatal_error(
+                _("Failed to initialize JSON object. Out of memory?"));
+        }
+        from_cell_object = G_json_object(from_cell_value);
+
+        to_cell_value = G_json_value_init_object();
+        if (to_cell_value == NULL) {
+            G_fatal_error(
+                _("Failed to initialize JSON object. Out of memory?"));
+        }
+        to_cell_object = G_json_object(to_cell_value);
+
+        /* print cat numbers */
+        if (line->isnull1)
+            G_json_object_set_null(from_cell_object, "category");
+        else
+            G_json_object_set_number(from_cell_object, "category",
+                                     (long)line->cat1);
+
+        if (line->isnull2)
+            G_json_object_set_null(to_cell_object, "category");
+        else
+            G_json_object_set_number(to_cell_object, "category",
+                                     (long)line->cat2);
+
+        /* print coordinates of the closest pair */
+        G_json_object_set_number(from_cell_object, "easting", line->east1);
+        G_json_object_set_number(from_cell_object, "northing", line->north1);
+        G_json_object_set_number(to_cell_object, "easting", line->east2);
+        G_json_object_set_number(to_cell_object, "northing", line->north2);
+
+        /* print category labels */
+        if (parms->labels) {
+            struct Map *map1, *map2;
+
+            map1 = &parms->map1;
+            map2 = &parms->map2;
+
+            G_json_object_set_string(from_cell_object, "label",
+                                     get_label(map1, line->cat1));
+            G_json_object_set_string(to_cell_object, "label",
+                                     get_label(map2, line->cat2));
+        }
+
+        /* print distance */
+        G_json_object_set_value(cell_object, "from_cell", from_cell_value);
+        G_json_object_set_value(cell_object, "to_cell", to_cell_value);
+        G_json_object_set_number(cell_object, "distance", line->distance);
+
+        /* add the cell object to the root array */
+        G_json_array_append_value(root_array, cell_value);
+        break;
     }
-    fprintf(stdout, "\n");
 }
 
 static int compare(const void *p1, const void *p2)

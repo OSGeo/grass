@@ -148,7 +148,7 @@ void G_read_datum_table(void)
     if (G_is_initialized(&table.initialized))
         return;
 
-    sprintf(file, "%s%s", G_gisbase(), DATUMTABLE);
+    snprintf(file, sizeof(file), "%s%s", G_gisbase(), DATUMTABLE);
 
     fd = fopen(file, "r");
     if (!fd) {

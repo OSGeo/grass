@@ -1141,7 +1141,14 @@ class ColumnSelect(ComboCtrl):
         self.SetValue("")
 
     def InsertColumns(
-        self, vector, layer, excludeKey=False, excludeCols=None, type=None, dbInfo=None
+        self,
+        vector,
+        layer,
+        excludeKey=False,
+        excludeCols=None,
+        type=None,
+        dbInfo=None,
+        setDefaultValue=True,
     ):
         """Insert columns for a vector attribute table into the columns combobox
 
@@ -1150,6 +1157,8 @@ class ColumnSelect(ComboCtrl):
         :param excludeKey: exclude key column from the list?
         :param excludeCols: list of columns to be removed from the list
         :param type: only columns of given type (given as list)
+        :param dbInfo: dbInfo object
+        :param setDefaultValue: True to set default value
         """
         if not dbInfo:
             dbInfo = VectorDBInfo(vector)
@@ -1187,7 +1196,8 @@ class ColumnSelect(ComboCtrl):
         for col in self.columns:
             self.tcp.AddItem(col)
 
-        self.SetValue(self.defaultValue)
+        if setDefaultValue:
+            self.SetValue(self.defaultValue)
 
         if self.param:
             value = self.param.get("value", "")
@@ -2258,7 +2268,9 @@ class GdalSelect(wx.Panel):
                     )
                 if ret:
                     raster_srid = gs.utils.decode(ret).replace(os.linesep, "")
-                    location_srid = gs.parse_command("g.proj", flags="g")
+                    location_srid = gs.parse_command(
+                        "g.proj", flags="p", format="shell"
+                    )
                     if raster_srid == location_srid["srid"].split(":")[-1]:
                         projectionMatch = "1"
             else:

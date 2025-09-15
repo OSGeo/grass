@@ -264,7 +264,7 @@ texinfo_documents = [
         project,
         "GRASS Development Team",
         "wxGUI",
-        "Documentation for GRASS GIS wxGUI Python code.",
+        "Documentation for GRASS wxGUI Python code.",
         "Miscellaneous",
     ),
 ]

@@ -83,16 +83,16 @@ int main(int argc, char *argv[])
     printinfo = G_define_flag();
     printinfo->key = 'p';
     printinfo->guisection = _("Print");
-    printinfo->description =
-        _("Print projection information in conventional GRASS format");
+    printinfo->description = _("Print projection information");
 
     shellinfo = G_define_flag();
     shellinfo->key = 'g';
     shellinfo->guisection = _("Print");
-    shellinfo->description =
-        _("[DEPRECATED] Print projection information in shell script style. "
-          "This flag is obsolete and will be removed in a future release. Use "
-          "format=shell instead.");
+    shellinfo->label =
+        _("Print projection information in shell script style [deprecated]");
+    shellinfo->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=shell instead.");
 
     datuminfo = G_define_flag();
     datuminfo->key = 'd';
@@ -103,10 +103,11 @@ int main(int argc, char *argv[])
     printproj4 = G_define_flag();
     printproj4->key = 'j';
     printproj4->guisection = _("Print");
-    printproj4->description =
-        _("[DEPRECATED] Print projection information in PROJ.4 format. "
-          "This flag is obsolete and will be removed in a future release. Use "
-          "format=proj4 instead.");
+    printproj4->label =
+        _("Print projection information in PROJ.4 format [deprecated]");
+    printproj4->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=proj4 instead.");
 
     dontprettify = G_define_flag();
     dontprettify->key = 'f';
@@ -123,10 +124,11 @@ int main(int argc, char *argv[])
     printwkt = G_define_flag();
     printwkt->key = 'w';
     printwkt->guisection = _("Print");
-    printwkt->description =
-        _("[DEPRECATED] Print projection information in WKT format. "
-          "This flag is obsolete and will be removed in a future release. Use "
-          "format=wkt instead.");
+    printwkt->label =
+        _("Print projection information in WKT format [deprecated]");
+    printwkt->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=wkt instead.");
 
     esristyle = G_define_flag();
     esristyle->key = 'e';
@@ -241,6 +243,8 @@ int main(int argc, char *argv[])
                              "proj4;PROJ.4 style text output;");
     format->guisection = _("Print");
 
+    G_option_exclusive(printinfo, datuminfo, create, NULL);
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
@@ -269,19 +273,25 @@ int main(int argc, char *argv[])
     }
 
     if (shellinfo->answer) {
-        G_warning(_("Flag 'g' is deprecated and will be removed in a future "
-                    "release. Please use format=shell instead."));
+        G_verbose_message(
+            _("Flag 'g' is deprecated and will be removed in a future "
+              "release. Please use format=shell instead."));
         outputFormat = SHELL;
     }
     else if (printproj4->answer) {
-        G_warning(_("Flag 'j' is deprecated and will be removed in a future "
-                    "release. Please use format=proj4 instead."));
+        G_verbose_message(
+            _("Flag 'j' is deprecated and will be removed in a future "
+              "release. Please use format=proj4 instead."));
         outputFormat = PROJ4;
     }
-    else if (printwkt->answer) {
-        G_warning(_("Flag 'w' is deprecated and will be removed in a future "
-                    "release. Please use format=wkt instead."));
+    else if (printwkt->answer || esristyle->answer) {
         outputFormat = WKT;
+
+        if (printwkt->answer) {
+            G_verbose_message(
+                _("Flag 'w' is deprecated and will be removed in a future "
+                  "release. Please use format=wkt instead."));
+        }
     }
 
     /* list codes for given authority */
@@ -361,26 +371,6 @@ int main(int argc, char *argv[])
     set_datumtrans(atoi(dtrans->answer), forcedatumtrans->answer);
 
     /* Output */
-    /* Only allow one output format at a time, to reduce confusion */
-    formats = ((printinfo->answer ? 1 : 0) + (shellinfo->answer ? 1 : 0) +
-               (datuminfo->answer ? 1 : 0) + (printproj4->answer ? 1 : 0) +
-#ifdef HAVE_OGR
-               (printwkt->answer ? 1 : 0) +
-#endif
-               (create->answer ? 1 : 0));
-    if (formats > 1) {
-#ifdef HAVE_OGR
-        G_fatal_error(_("Only one of -%c, -%c, -%c, -%c, -%c"
-                        " or -%c flags may be specified"),
-                      printinfo->key, shellinfo->key, datuminfo->key,
-                      printproj4->key, printwkt->key, create->key);
-#else
-        G_fatal_error(_("Only one of -%c, -%c, -%c, -%c"
-                        " or -%c flags may be specified"),
-                      printinfo->key, shellinfo->key, datuminfo->key,
-                      printproj4->key, create->key);
-#endif
-    }
     if ((printinfo->answer && outputFormat == PLAIN) || outputFormat == SHELL ||
         outputFormat == JSON)
         print_projinfo(outputFormat);

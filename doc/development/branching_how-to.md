@@ -57,10 +57,10 @@ Update the version in the source code (use `minor` or `major`):
 ./utils/update_version.py minor
 ```
 
-If you are using a clone you use for building GRASS GIS,
-clean up (`make distclean`) your GRASS GIS build to remove
+If you are using a clone you use for building GRASS,
+clean up (`make distclean`) your GRASS build to remove
 the now outdated generated version numbers.
-(You don't need to build GRASS GIS if you have a fresh clone.)
+(You don't need to build GRASS if you have a fresh clone.)
 
 Search for all other mentions of the last few versions to see
 if they need to be updated, for example:

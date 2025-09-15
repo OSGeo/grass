@@ -35,7 +35,6 @@ static Rast3d_paramType *param;
  *
  *  \return void
  */
-
 void Rast3d_set_standard3d_input_params(void)
 {
     param = Rast3d_malloc(sizeof(Rast3d_paramType));

@@ -7,7 +7,7 @@ to [GRASS Quickstart](helptext.md).
 A *mapset* holds a distinct set of data layers, each relevant to the
 same (or a subset of the same) geographic region, and each drawn in the
 same map coordinate system. At the outset of every GRASS session, the
-user identifies a GRASS data base, project (previosuly called location),
+user identifies a GRASS data base, project (previously called location),
 and mapset that are to be the user's *current data base*, *current
 project*, and *current mapset* for the duration of the session; any maps
 created by the user during the session will be stored under the *current
@@ -78,6 +78,10 @@ Users can restrict others' access to their mapset files through use of
 *[g.access](g.access.md)*. Mapsets to which access is restricted can
 still be listed in another's mapset search path; however, access to
 these mapsets will remain restricted.
+
+For parsing the outputs, always use the JSON output. The current *plain* format
+may change in a future major release. Please, open an issue if you need a
+stable parsable format which is not JSON.
 
 ## EXAMPLES
 

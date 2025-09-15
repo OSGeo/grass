@@ -87,7 +87,7 @@ right) and corresponding vector points (lower right)*
 
 ## REFERENCES
 
-Random Field Software for GRASS GIS by Chuck Ehlschlaeger
+Random Field Software for GRASS by Chuck Ehlschlaeger
 
 As part of my dissertation, I put together several programs that help
 GRASS (4.1 and beyond) develop uncertainty models of spatial data. I

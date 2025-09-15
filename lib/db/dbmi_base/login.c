@@ -43,7 +43,7 @@ static const char *login_filename(void)
 
     if (!file) {
         file = (char *)db_malloc(GPATH_MAX);
-        sprintf(file, "%s%cdblogin", G_config_path(), HOST_DIRSEP);
+        snprintf(file, GPATH_MAX, "%s%cdblogin", G_config_path(), HOST_DIRSEP);
     }
     return file;
 }

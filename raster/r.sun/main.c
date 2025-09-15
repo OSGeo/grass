@@ -37,6 +37,7 @@ email: hofierka@geomodel.sk,marcel.suri@jrc.it,
 #include <omp.h>
 #endif
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -212,10 +213,10 @@ double distance(double x1, double x2, double y1, double y2)
 
 int main(int argc, char *argv[])
 {
-    double singleSlope;
-    double singleAspect;
-    double singleAlbedo;
-    double singleLinke;
+    double singleSlope = 0.0;
+    double singleAspect = 0.0;
+    double singleAlbedo = 0.0;
+    double singleLinke = 0.0;
 
     int threads;
 
@@ -232,7 +233,7 @@ int main(int argc, char *argv[])
         struct Flag *noshade, *saveMemory;
     } flag;
 
-    struct GridGeometry gridGeom;
+    struct GridGeometry gridGeom = {0};
 
     G_gisinit(argv[0]);
 

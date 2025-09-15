@@ -115,9 +115,9 @@ int main(int argc, char *argv[])
     dbColumn *column;
     char *sep;
     enum OutputFormat format;
-    JSON_Value *root_value, *object_value;
-    JSON_Array *root_array;
-    JSON_Object *root_object;
+    JSON_Value *root_value = NULL, *object_value = NULL;
+    JSON_Array *root_array = NULL;
+    JSON_Object *root_object = NULL;
 
     G_gisinit(argv[0]);
 
@@ -269,7 +269,8 @@ int main(int argc, char *argv[])
 
     /* GUI dependency */
     opt.from->guidependency = G_store(opt.from_field->key);
-    sprintf(buf1, "%s,%s", opt.to_field->key, opt.to_column->key);
+    snprintf(buf1, sizeof(buf1), "%s,%s", opt.to_field->key,
+             opt.to_column->key);
     opt.to->guidependency = G_store(buf1);
     opt.to_field->guidependency = G_store(opt.to_column->key);
 
@@ -305,10 +306,18 @@ int main(int argc, char *argv[])
     if (strcmp(opt.format->answer, "json") == 0) {
         format = JSON;
         root_value = json_value_init_array();
+        if (root_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
         root_array = json_array(root_value);
     }
     else {
         format = PLAIN;
+    }
+
+    if (format == JSON && !print) {
+        G_fatal_error(_("The format option requires the -p flag; please re-run "
+                        "with -p to enable output."));
     }
 
     if (do_all && update_table)
@@ -592,11 +601,12 @@ int main(int argc, char *argv[])
             sqltype = db_get_column_sqltype(column);
             switch (sqltype) {
             case DB_SQL_TYPE_CHARACTER:
-                sprintf(to_attr_sqltype, "VARCHAR(%d)",
-                        db_get_column_length(column));
+                snprintf(to_attr_sqltype, sizeof(to_attr_sqltype),
+                         "VARCHAR(%d)", db_get_column_length(column));
                 break;
             default:
-                sprintf(to_attr_sqltype, "%s", db_sqltype_name(sqltype));
+                snprintf(to_attr_sqltype, sizeof(to_attr_sqltype), "%s",
+                         db_sqltype_name(sqltype));
             }
 
             db_free_column(column);
@@ -1440,7 +1450,7 @@ int main(int argc, char *argv[])
 
             switch (Upload[j].upload) {
             case CAT:
-                sprintf(buf2, "%s integer", Upload[j].column);
+                snprintf(buf2, sizeof(buf2), "%s integer", Upload[j].column);
                 break;
             case DIST:
             case FROM_X:
@@ -1450,10 +1460,12 @@ int main(int argc, char *argv[])
             case FROM_ALONG:
             case TO_ALONG:
             case TO_ANGLE:
-                sprintf(buf2, "%s double precision", Upload[j].column);
+                snprintf(buf2, sizeof(buf2), "%s double precision",
+                         Upload[j].column);
                 break;
             case TO_ATTR:
-                sprintf(buf2, "%s %s", Upload[j].column, to_attr_sqltype);
+                snprintf(buf2, sizeof(buf2), "%s %s", Upload[j].column,
+                         to_attr_sqltype);
             default:
                 break;
             }
@@ -1561,7 +1573,12 @@ int main(int argc, char *argv[])
                 break;
             case JSON:
                 object_value = json_value_init_object();
+                if (object_value == NULL) {
+                    G_fatal_error(
+                        _("Failed to initialize JSON object. Out of memory?"));
+                }
                 root_object = json_object(object_value);
+
                 json_object_set_number(root_object, "from_cat",
                                        Near[i].from_cat);
                 json_object_set_number(root_object, "to_cat", Near[i].to_cat);
@@ -1576,11 +1593,11 @@ int main(int argc, char *argv[])
                 continue;
 
             if (!Outp)
-                sprintf(buf1, "insert into %s values ( %d ", opt.table->answer,
-                        Near[i].from_cat);
+                snprintf(buf1, sizeof(buf1), "insert into %s values ( %d ",
+                         opt.table->answer, Near[i].from_cat);
             else
-                sprintf(buf1, "insert into %s values ( %d, %d ",
-                        opt.table->answer, i, Near[i].from_cat);
+                snprintf(buf1, sizeof(buf1), "insert into %s values ( %d, %d ",
+                         opt.table->answer, i, Near[i].from_cat);
 
             db_set_string(&stmt, buf1);
 
@@ -1590,57 +1607,59 @@ int main(int argc, char *argv[])
 
                 switch (Upload[j].upload) {
                 case CAT:
-                    sprintf(buf2, " %d", Near[i].to_cat);
+                    snprintf(buf2, sizeof(buf2), " %d", Near[i].to_cat);
                     break;
                 case DIST:
-                    sprintf(buf2, " %.17g", Near[i].dist);
+                    snprintf(buf2, sizeof(buf2), " %.17g", Near[i].dist);
                     break;
                 case FROM_X:
-                    sprintf(buf2, " %.17g", Near[i].from_x);
+                    snprintf(buf2, sizeof(buf2), " %.17g", Near[i].from_x);
                     break;
                 case FROM_Y:
-                    sprintf(buf2, " %.17g", Near[i].from_y);
+                    snprintf(buf2, sizeof(buf2), " %.17g", Near[i].from_y);
                     break;
                 case TO_X:
-                    sprintf(buf2, " %.17g", Near[i].to_x);
+                    snprintf(buf2, sizeof(buf2), " %.17g", Near[i].to_x);
                     break;
                 case TO_Y:
-                    sprintf(buf2, " %.17g", Near[i].to_y);
+                    snprintf(buf2, sizeof(buf2), " %.17g", Near[i].to_y);
                     break;
                 case FROM_ALONG:
-                    sprintf(buf2, " %.17g", Near[i].from_along);
+                    snprintf(buf2, sizeof(buf2), " %.17g", Near[i].from_along);
                     break;
                 case TO_ALONG:
-                    sprintf(buf2, " %.17g", Near[i].to_along);
+                    snprintf(buf2, sizeof(buf2), " %.17g", Near[i].to_along);
                     break;
                 case TO_ANGLE:
-                    sprintf(buf2, " %.17g", Near[i].to_angle);
+                    snprintf(buf2, sizeof(buf2), " %.17g", Near[i].to_angle);
                     break;
                 case TO_ATTR:
                     if (catval) {
                         switch (cvarr.ctype) {
                         case DB_C_TYPE_INT:
-                            sprintf(buf2, " %d", catval->val.i);
+                            snprintf(buf2, sizeof(buf2), " %d", catval->val.i);
                             break;
 
                         case DB_C_TYPE_DOUBLE:
-                            sprintf(buf2, " %.17g", catval->val.d);
+                            snprintf(buf2, sizeof(buf2), " %.17g",
+                                     catval->val.d);
                             break;
 
                         case DB_C_TYPE_STRING:
                             db_set_string(&dbstr, db_get_string(catval->val.s));
                             db_double_quote_string(&dbstr);
-                            sprintf(buf2, " '%s'", db_get_string(&dbstr));
+                            snprintf(buf2, sizeof(buf2), " '%s'",
+                                     db_get_string(&dbstr));
                             break;
 
                         case DB_C_TYPE_DATETIME:
                             /* TODO: formatting datetime */
-                            sprintf(buf2, " null");
+                            snprintf(buf2, sizeof(buf2), " null");
                             break;
                         }
                     }
                     else {
-                        sprintf(buf2, " null");
+                        snprintf(buf2, sizeof(buf2), " null");
                     }
                     break;
                 default:
@@ -1670,7 +1689,7 @@ int main(int argc, char *argv[])
             }
             update_exist++;
 
-            sprintf(buf1, "update %s set", Fi->table);
+            snprintf(buf1, sizeof(buf1), "update %s set", Fi->table);
             db_set_string(&stmt, buf1);
 
             j = 0;
@@ -1678,7 +1697,7 @@ int main(int argc, char *argv[])
                 if (j > 0)
                     db_append_string(&stmt, ",");
 
-                sprintf(buf2, " %s =", Upload[j].column);
+                snprintf(buf2, sizeof(buf2), " %s =", Upload[j].column);
                 db_append_string(&stmt, buf2);
 
                 if (Near[i].count == 0) { /* no nearest found */
@@ -1690,60 +1709,66 @@ int main(int argc, char *argv[])
                     switch (Upload[j].upload) {
                     case CAT:
                         if (Near[i].to_cat > 0)
-                            sprintf(buf2, " %d", Near[i].to_cat);
+                            snprintf(buf2, sizeof(buf2), " %d", Near[i].to_cat);
                         else
-                            sprintf(buf2, " null");
+                            snprintf(buf2, sizeof(buf2), " null");
                         break;
                     case DIST:
-                        sprintf(buf2, " %.17g", Near[i].dist);
+                        snprintf(buf2, sizeof(buf2), " %.17g", Near[i].dist);
                         break;
                     case FROM_X:
-                        sprintf(buf2, " %.17g", Near[i].from_x);
+                        snprintf(buf2, sizeof(buf2), " %.17g", Near[i].from_x);
                         break;
                     case FROM_Y:
-                        sprintf(buf2, " %.17g", Near[i].from_y);
+                        snprintf(buf2, sizeof(buf2), " %.17g", Near[i].from_y);
                         break;
                     case TO_X:
-                        sprintf(buf2, " %.17g", Near[i].to_x);
+                        snprintf(buf2, sizeof(buf2), " %.17g", Near[i].to_x);
                         break;
                     case TO_Y:
-                        sprintf(buf2, " %.17g", Near[i].to_y);
+                        snprintf(buf2, sizeof(buf2), " %.17g", Near[i].to_y);
                         break;
                     case FROM_ALONG:
-                        sprintf(buf2, " %.17g", Near[i].from_along);
+                        snprintf(buf2, sizeof(buf2), " %.17g",
+                                 Near[i].from_along);
                         break;
                     case TO_ALONG:
-                        sprintf(buf2, " %.17g", Near[i].to_along);
+                        snprintf(buf2, sizeof(buf2), " %.17g",
+                                 Near[i].to_along);
                         break;
                     case TO_ANGLE:
-                        sprintf(buf2, " %.17g", Near[i].to_angle);
+                        snprintf(buf2, sizeof(buf2), " %.17g",
+                                 Near[i].to_angle);
                         break;
                     case TO_ATTR:
                         if (catval) {
                             switch (cvarr.ctype) {
                             case DB_C_TYPE_INT:
-                                sprintf(buf2, " %d", catval->val.i);
+                                snprintf(buf2, sizeof(buf2), " %d",
+                                         catval->val.i);
                                 break;
 
                             case DB_C_TYPE_DOUBLE:
-                                sprintf(buf2, " %.17g", catval->val.d);
+                                snprintf(buf2, sizeof(buf2), " %.17g",
+                                         catval->val.d);
                                 break;
 
                             case DB_C_TYPE_STRING:
                                 db_set_string(&dbstr,
                                               db_get_string(catval->val.s));
                                 db_double_quote_string(&dbstr);
-                                sprintf(buf2, " '%s'", db_get_string(&dbstr));
+                                snprintf(buf2, sizeof(buf2), " '%s'",
+                                         db_get_string(&dbstr));
                                 break;
 
                             case DB_C_TYPE_DATETIME:
                                 /* TODO: formatting datetime */
-                                sprintf(buf2, " null");
+                                snprintf(buf2, sizeof(buf2), " null");
                                 break;
                             }
                         }
                         else {
-                            sprintf(buf2, " null");
+                            snprintf(buf2, sizeof(buf2), " null");
                         }
                         break;
                     default:
@@ -1754,7 +1779,8 @@ int main(int argc, char *argv[])
                 j++;
             }
             if (do_update) {
-                sprintf(buf2, " where %s = %d", Fi->key, Near[i].from_cat);
+                snprintf(buf2, sizeof(buf2), " where %s = %d", Fi->key,
+                         Near[i].from_cat);
                 db_append_string(&stmt, buf2);
                 G_debug(2, "SQL: %s", db_get_string(&stmt));
                 if (db_execute_immediate(driver, &stmt) == DB_OK) {

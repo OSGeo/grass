@@ -15,7 +15,7 @@
 #############################################################################
 
 # %module
-# % description: Imports a GRASS GIS specific vector archive file (packed with v.pack) as a vector map
+# % description: Imports a GRASS specific vector archive file (packed with v.pack) as a vector map
 # % keyword: vector
 # % keyword: import
 # % keyword: copying
@@ -134,10 +134,7 @@ def main():
         pass
     elif os.path.exists(os.path.join(data_name, "cell")):
         grass.fatal(
-            _(
-                "This GRASS GIS pack file contains raster data. Use "
-                "r.unpack to unpack <%s>"
-            )
+            _("This GRASS pack file contains raster data. Use r.unpack to unpack <%s>")
             % map_name
         )
     else:

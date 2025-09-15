@@ -153,7 +153,7 @@ int iso_r_cndx(data_buffer *dbuff)
    \param isosurf
    \param desc
    \param x,y,z
-   \param[out] value
+   \param[out] v value
 
    \return 0
    \return ?

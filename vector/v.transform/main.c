@@ -280,14 +280,14 @@ int main(int argc, char *argv[])
     Vect_hist_copy(&Old, &New);
     Vect_hist_command(&New);
 
-    sprintf(date, "%s", G_date());
+    snprintf(date, sizeof(date), "%s", G_date());
     sscanf(date, "%*s%s%d%*s%d", mon, &day, &yr);
-    sprintf(date, "%s %d %d", mon, day, yr);
+    snprintf(date, sizeof(date), "%s %d %d", mon, day, yr);
     Vect_set_date(&New, date);
 
     Vect_set_person(&New, G_whoami());
 
-    sprintf(buf, "transformed from %s", vold->answer);
+    snprintf(buf, sizeof(buf), "transformed from %s", vold->answer);
     Vect_set_map_name(&New, buf);
 
     Vect_set_scale(&New, 1);
