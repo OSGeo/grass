@@ -326,6 +326,18 @@ def t_PRAGMA_pack(t):
     return t
 
 
+@TOKEN(r"region")
+def t_PRAGMA_region(t):
+    t.type = "PRAGMA_REGION"
+    return t
+
+
+@TOKEN(r"endregion")
+def t_PRAGMA_endregion(t):
+    t.type = "PRAGMA_ENDREGION"
+    return t
+
+
 @TOKEN(r"\n")
 def t_PRAGMA_newline(t):
     t.type = "PRAGMA_END"

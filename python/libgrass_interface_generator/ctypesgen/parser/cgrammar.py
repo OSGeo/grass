@@ -106,7 +106,7 @@ tokens = reserved_keyword_tokens + reserved_keyword_tokens_new + (
     # "PP_NUMBER",
 
     # Pragma
-    "PRAGMA", "PRAGMA_END", "PRAGMA_PACK",
+    "PRAGMA", "PRAGMA_END", "PRAGMA_PACK", "PRAGMA_REGION", "PRAGMA_ENDREGION",
 
     # Delimiters
     "PERIOD", "ELLIPSIS", "LPAREN", "RPAREN", "LBRACKET",
@@ -1376,6 +1376,7 @@ def p_error(t):
 
 def p_pragma(p):
     """ pragma : pragma_pack
+               | pragma_region
                | PRAGMA pragma_directive_list PRAGMA_END
     """
 
@@ -1430,6 +1431,18 @@ def p_pragma_pack_stack_args(p):
     p[0] = (op, id, n)
 
 
+def p_pragma_region(p):
+    """ pragma_region : PRAGMA PRAGMA_REGION PRAGMA_END
+                      | PRAGMA PRAGMA_REGION pragma_directive_list PRAGMA_END
+                      | PRAGMA PRAGMA_ENDREGION PRAGMA_END
+                      | PRAGMA PRAGMA_ENDREGION pragma_directive_list PRAGMA_END
+    """
+    # For now, we simply ignore region pragmas but parse them correctly
+    # This allows the parser to continue without errors when encountering
+    # #pragma region and #pragma endregion directives with optional text
+    pass
+
+
 def p_pragma_directive_list(p):
     """ pragma_directive_list : pragma_directive
                               | pragma_directive_list pragma_directive
@@ -1443,6 +1456,7 @@ def p_pragma_directive_list(p):
 def p_pragma_directive(p):
     """ pragma_directive : IDENTIFIER
                          | string_literal
+                         | constant
     """
     p[0] = p[1]
 
