@@ -358,6 +358,44 @@ Please see
 - [GRASS Programming Style Guide](./doc/development/style_guide.md)
 - [Guide to contributing on GitHub](./doc/development/github_guide.md)
 
+
+## (N) Debian Bookworm (Debain 12) 
+
+To install all required build dependencies on Debian 12 (Bookworm):
+
+```bash 
+sudo apt update
+sudo apt install -y build-essential cmake gcc g++ make \
+    bison flex pkg-config gettext git \
+    libproj-dev libgdal-dev libgeos-dev \
+    libcairo2-dev libfreetype-dev libfontconfig1-dev \
+    libpng-dev libtiff-dev zlib1g-dev \
+    libbz2-dev libzstd-dev \
+    libfftw3-dev liblapacke-dev liblapack-dev libblas-dev libopenblas-dev \
+    libsqlite3-dev libpq-dev default-libmysqlclient-dev unixodbc-dev \
+    libwxgtk3.2-dev python3-numpy python3-matplotlib python3-pil python3-dateutil \
+    ffmpeg
+```
+```
+```
+```
+```
+
+These are the mandatory dependencies you need to build and compile GRASS. Copy and paste this on your terminal and hit enter.
+
+A few optional dependencies are shown below.
+
+```bash
+sudo apt install -y \
+    libnetcdf-dev \
+    libsvm-dev \
+    libpdal-dev \
+    r-base-dev \
+    python3-termcolor \
+    libglu1-mesa-dev libgl1-mesa-dev \
+    subversion```
+
 ## Authors
 
 Markus Neteler and the GRASS Development Team
+

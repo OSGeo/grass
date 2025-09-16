@@ -94,6 +94,7 @@ endif()
 
 unset(_default_pkgs)
 
+#[[
 include(CheckSymbolExists)
 set(CMAKE_REQUIRED_LIBRARIES ${LAPACKE_LIBRARIES})
 set(CMAKE_REQUIRED_INCLUDES ${LAPACKE_INCLUDEDIR})
@@ -102,6 +103,23 @@ check_symbol_exists(LAPACKE_dgesv "lapacke.h" HAVE_LAPACKE_DGESV)
 unset(CMAKE_REQUIRED_LIBRARIES)
 unset(CMAKE_REQUIRED_INCLUDES)
 unset(CMAKE_REQUIRED_QUIET)
+]]
+
+
+include(CheckLibraryExists)
+# Look for include and library
+find_path(LAPACKE_INCLUDE_DIR lapacke.h)
+find_library(LAPACKE_LIBRARIES lapacke)
+
+if(LAPACKE_INCLUDE_DIR AND LAPACKE_LIBRARIES)
+    set(CMAKE_REQUIRED_INCLUDES ${LAPACKE_INCLUDE_DIR})
+    set(CMAKE_REQUIRED_LIBRARIES ${LAPACKE_LIBRARIES})
+    check_library_exists(lapacke LAPACKE_dgesv "" HAVE_LAPACKE_DGESV)
+endif()
+
+unset(CMAKE_REQUIRED_LIBRARIES)
+unset(CMAKE_REQUIRED_INCLUDES)
+
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(
