@@ -359,7 +359,7 @@ Please see
 - [Guide to contributing on GitHub](./doc/development/github_guide.md)
 
 
-## (N) Debian Bookworm (Debain 12) 
+## (N) Debian Bookworm (Debian 12) 
 
 To install all required build dependencies on Debian 12 (Bookworm):
 
