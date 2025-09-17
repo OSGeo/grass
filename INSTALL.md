@@ -376,10 +376,6 @@ sudo apt install -y build-essential cmake gcc g++ make \
     libwxgtk3.2-dev python3-numpy python3-matplotlib python3-pil python3-dateutil \
     ffmpeg
 ```
-```
-```
-```
-```
 
 These are the mandatory dependencies you need to build and compile GRASS. Copy and paste this on your terminal and hit enter.
 
@@ -393,9 +389,9 @@ sudo apt install -y \
     r-base-dev \
     python3-termcolor \
     libglu1-mesa-dev libgl1-mesa-dev \
-    subversion```
+    subversion
+```
 
 ## Authors
 
 Markus Neteler and the GRASS Development Team
-
