@@ -347,6 +347,13 @@ def t_PRAGMA_error(t):
     return t
 
 
+@TOKEN(r"\\\n")
+def t_DEFINE_backslash_newline(t):
+    # Handle backslash continuation in #define - ignore this sequence
+    t.lexer.lineno += 1
+    return None  # Skip this token, don't return it to parser
+
+
 @TOKEN(r"\n")
 def t_DEFINE_newline(t):
     t.type = "PP_END_DEFINE"
