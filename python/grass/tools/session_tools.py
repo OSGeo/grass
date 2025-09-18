@@ -18,6 +18,7 @@ import os
 
 import grass.script as gs
 
+from .importexport import ImporterExporter
 from .support import ParameterConverter, ToolFunctionResolver, ToolResult
 
 
@@ -130,6 +131,7 @@ class Tools:
         capture_output=True,
         capture_stderr=None,
         consistent_return_value=False,
+        keep_data=None,
     ):
         """
         If session is provided and has an env attribute, it is used to execute tools.
@@ -183,7 +185,6 @@ class Tools:
             self._original_env = session.env
         else:
             self._original_env = os.environ
-        self._modified_env = None
         self._overwrite = overwrite
         self._verbose = verbose
         self._quiet = quiet
@@ -196,6 +197,11 @@ class Tools:
             self._capture_stderr = capture_stderr
         self._name_resolver = None
         self._consistent_return_value = consistent_return_value
+        # Decides if we delete at each run or only at the end of context.
+        self._delete_on_context_exit = False
+        # User request to keep the data.
+        self._keep_data = keep_data
+        self._cleanups = []
 
     def _modified_env_if_needed(self):
         """Get the environment for subprocesses
@@ -274,6 +280,7 @@ class Tools:
             args,
             tool_kwargs=kwargs,
             input=object_parameter_handler.stdin,
+            parameter_converter=object_parameter_handler,
             **popen_options,
         )
         use_objects = object_parameter_handler.translate_data_to_objects(
@@ -299,6 +306,7 @@ class Tools:
         command: list[str],
         *,
         input: str | bytes | None = None,
+        parameter_converter: ParameterConverter | None = None,
         tool_kwargs: dict | None = None,
         **popen_options,
     ):
@@ -311,12 +319,30 @@ class Tools:
         :param tool_kwargs: named tool arguments used for error reporting (experimental)
         :param **popen_options: additional options for :py:func:`subprocess.Popen`
         """
-        return self.call_cmd(
+        if parameter_converter is None:
+            parameter_converter = ParameterConverter()
+            parameter_converter.process_parameter_list(command[1:])
+        if parameter_converter.import_export:
+            pack_importer_exporter = ImporterExporter(
+                run_function=self.call, run_cmd_function=self.call_cmd
+            )
+            command = pack_importer_exporter.process_parameter_list(command)
+            pack_importer_exporter.import_data()
+
+        # We approximate tool_kwargs as original kwargs.
+        result = self.call_cmd(
             command,
             tool_kwargs=tool_kwargs,
             input=input,
             **popen_options,
         )
+        if parameter_converter.import_export:
+            pack_importer_exporter.export_data()
+            if self._delete_on_context_exit or self._keep_data:
+                self._cleanups.append(pack_importer_exporter.cleanup)
+            else:
+                pack_importer_exporter.cleanup()
+        return result
 
     def call(self, tool_name_: str, /, **kwargs):
         """Run a tool by specifying its name as a string and parameters.
@@ -423,7 +449,14 @@ class Tools:
 
         :returns: reference to the object (self)
         """
+        self._delete_on_context_exit = True
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
         """Exit the context manager context."""
+        if not self._keep_data:
+            self.cleanup()
+
+    def cleanup(self):
+        for cleanup in self._cleanups:
+            cleanup()
