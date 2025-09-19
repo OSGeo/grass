@@ -39,6 +39,7 @@ import tarfile
 
 from pathlib import Path
 
+import grass.script as gs
 from grass.script.utils import try_rmdir, try_remove
 from grass.script import core as grass
 
@@ -71,6 +72,7 @@ def main():
     if not gfile["name"]:
         grass.fatal(_("Raster map <%s> not found") % infile)
 
+    parent_dir = Path(outfile).parent
     if os.path.exists(outfile):
         if os.getenv("GRASS_OVERWRITE"):
             grass.warning(
@@ -79,6 +81,12 @@ def main():
             try_remove(outfile)
         else:
             grass.fatal(_("option <output>: <%s> exists.") % outfile)
+    elif not parent_dir.exists():
+        gs.fatal(_("Directory '{path}' does not exist").format(path=parent_dir))
+    elif not parent_dir.is_dir():
+        gs.fatal(_("Path '{path}' is not a directory").format(path=parent_dir))
+    elif not os.access(parent_dir, os.W_OK):
+        gs.fatal(_("Directory '{path}' is not writable").format(path=parent_dir))
 
     grass.message(_("Packing <%s> to <%s>...") % (gfile["fullname"], outfile))
     basedir = os.path.sep.join(os.path.normpath(gfile["file"]).split(os.path.sep)[:-2])
