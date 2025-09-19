@@ -3,9 +3,9 @@ build_program_in_subdir(g.copy DEPENDS grass_gis grass_manage)
 build_program_in_subdir(g.dirseps DEPENDS grass_gis)
 build_program_in_subdir(g.filename DEPENDS grass_gis)
 build_program_in_subdir(g.findetc DEPENDS grass_gis)
-build_program_in_subdir(g.findfile DEPENDS grass_gis grass_manage)
+build_program_in_subdir(g.findfile DEPENDS grass_gis grass_manage grass_parson)
 build_program_in_subdir(g.gisenv DEPENDS grass_gis)
-build_program_in_subdir(g.mapset DEPENDS grass_gis)
+build_program_in_subdir(g.mapset DEPENDS grass_gis grass_parson)
 build_program_in_subdir(g.mapsets DEPENDS grass_gis grass_parson)
 build_program_in_subdir(g.message DEPENDS grass_gis)
 build_program_in_subdir(g.mkfontcap DEPENDS grass_gis PRIMARY_DEPENDS
@@ -51,6 +51,7 @@ build_program_in_subdir(
   g.version
   DEPENDS
   grass_gis
+  grass_parson
   OPTIONAL_DEPENDS
   GDAL::GDAL
   GEOS::geos_c
@@ -86,7 +87,8 @@ build_program_in_subdir(
   grass_manage
   grass_raster
   grass_raster3d
-  grass_vector)
+  grass_vector
+  grass_parson)
 add_dependencies(g.list cell vector)
 
 build_program_in_subdir(g.remove DEPENDS grass_gis grass_manage grass_raster)

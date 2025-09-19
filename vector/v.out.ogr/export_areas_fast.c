@@ -104,25 +104,27 @@ int export_areas_single(struct Map_info *In, int field, int donocat,
         G_message(_("Exporting features with category..."));
 
     /* select attributes ordered by category value */
-    db_init_string(&dbstring);
-    snprintf(buf, sizeof(buf), "SELECT * FROM %s ORDER BY %s ASC", Fi->table,
-             Fi->key);
-    G_debug(2, "SQL: %s", buf);
-    db_set_string(&dbstring, buf);
-    if (db_open_select_cursor(driver, &dbstring, &cursor, DB_SEQUENTIAL) !=
-        DB_OK) {
-        G_fatal_error(_("Cannot select attributes sorted by %s"), Fi->key);
-    }
+    if (doatt) {
+        db_init_string(&dbstring);
+        snprintf(buf, sizeof(buf), "SELECT * FROM %s ORDER BY %s ASC",
+                 Fi->table, Fi->key);
+        G_debug(2, "SQL: %s", buf);
+        db_set_string(&dbstring, buf);
+        if (db_open_select_cursor(driver, &dbstring, &cursor, DB_SEQUENTIAL) !=
+            DB_OK) {
+            G_fatal_error(_("Cannot select attributes sorted by %s"), Fi->key);
+        }
 
-    if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
-        G_fatal_error(_("Unable to fetch data from table"));
+        if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
+            G_fatal_error(_("Unable to fetch data from table"));
 
-    /* get index of key column */
-    key_col_index = -1;
-    for (i = 0; i < ncol; i++) {
-        if (strcmp(Fi->key, colname[i]) == 0) {
-            key_col_index = i;
-            break;
+        /* get index of key column */
+        key_col_index = -1;
+        for (i = 0; i < ncol; i++) {
+            if (strcmp(Fi->key, colname[i]) == 0) {
+                key_col_index = i;
+                break;
+            }
         }
     }
 
@@ -231,6 +233,7 @@ int export_areas_single(struct Map_info *In, int field, int donocat,
         db_close_cursor(&cursor);
 
     Vect_destroy_line_struct(Points);
+    Vect_destroy_cats_struct(Cats);
 
     return n_exported;
 }

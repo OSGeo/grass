@@ -77,8 +77,9 @@ def writeAvi(
     between 0 and 1 for float types.
 
     Requires the "ffmpeg" application:
-      * Most linux users can install using their package manager
-      * There is a windows installer on the visvis website
+
+    * Most linux users can install using their package manager
+    * There is a windows installer on the visvis website
 
     :param str filename: output filename
     :param images:

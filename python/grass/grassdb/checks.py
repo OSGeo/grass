@@ -1,5 +1,5 @@
 """
-Checking objects in a GRASS GIS Spatial Database
+Checking objects in a GRASS Spatial Database
 
 (C) 2020 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -27,7 +27,7 @@ def mapset_exists(path: str | os.PathLike[str], location=None, mapset=None) -> b
 
     Either only *path* is provided or all three parameters need to be provided.
 
-    :param path: Path to a Mapset or to a GRASS GIS database directory
+    :param path: Path to a Mapset or to a GRASS database directory
     :param location: name of a Location if not part of *path*
     :param mapset: name of a Mapset if not part of *path*
     """
@@ -41,7 +41,7 @@ def mapset_exists(path: str | os.PathLike[str], location=None, mapset=None) -> b
 def location_exists(path: str | os.PathLike[str], location=None) -> bool:
     """Returns True whether location path exists.
 
-    :param path: Path to a Location or to a GRASS GIS database directory
+    :param path: Path to a Location or to a GRASS database directory
     :param location: name of a Location if not part of *path*
     """
     if location:
@@ -57,7 +57,7 @@ def is_mapset_valid(path: str | os.PathLike[str], location=None, mapset=None) ->
 
     Either only *path* is provided or all three parameters need to be provided.
 
-    :param path: Path to a Mapset or to a GRASS GIS database directory
+    :param path: Path to a Mapset or to a GRASS database directory
     :param location: name of a Location if not part of *path*
     :param mapset: name of a Mapset if not part of *path*
     """
@@ -75,7 +75,7 @@ def is_mapset_valid(path: str | os.PathLike[str], location=None, mapset=None) ->
 def is_location_valid(path: str | os.PathLike[str], location=None) -> bool:
     """Return True if GRASS Location is valid
 
-    :param path: Path to a Location or to a GRASS GIS database directory
+    :param path: Path to a Location or to a GRASS database directory
     :param location: name of a Location if not part of *path*
     """
     # DEFAULT_WIND file should not be required until you do something
@@ -255,7 +255,7 @@ def get_mapset_invalid_reason(database, location, mapset, none_for_no_reason=Fal
     The goal is to provide the most suitable error message
     (rather than to do a quick check).
 
-    :param database: Path to GRASS GIS database directory
+    :param database: Path to GRASS database directory
     :param location: name of a Location
     :param mapset: name of a Mapset
     :returns: translated message
@@ -315,7 +315,7 @@ def get_location_invalid_reason(
     diagnostic. When this function fails to find reason for invalidity, other
     the caller can continue the investigation in their context.
 
-    :param database: Path to GRASS GIS database directory
+    :param database: Path to GRASS database directory
     :param location: name of a Location
     :param none_for_no_reason: When True, return None when reason is unknown
     :returns: translated message or None

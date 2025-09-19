@@ -109,4 +109,4 @@ Credits: Development of the driver was sponsored by
 
 ## SEE ALSO
 
-*[db.connect](db.connect.md), [SQL support in GRASS GIS](sql.md)*
+*[db.connect](db.connect.md), [SQL support in GRASS](sql.md)*

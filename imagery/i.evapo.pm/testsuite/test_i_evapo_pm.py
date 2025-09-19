@@ -157,12 +157,8 @@ class TestEvapoPMDetailed(TestCase):
             overwrite=True,
         )
         stats_diff = gs.parse_command("r.univar", map="diff_night_day", format="json")
-        stats_day = gs.parse_command(
-            "r.univar", map="evapo_day", flags="g", format="json"
-        )
-        stats_night = gs.parse_command(
-            "r.univar", map="evapo_night", flags="g", format="json"
-        )
+        stats_day = gs.parse_command("r.univar", map="evapo_day", format="json")
+        stats_night = gs.parse_command("r.univar", map="evapo_night", format="json")
         self.assertGreater(
             stats_day["mean"],
             stats_night["mean"],
@@ -202,11 +198,9 @@ class TestEvapoPMDetailed(TestCase):
             output="evapo_netrad_high",
             overwrite=True,
         )
-        stats_low = gs.parse_command(
-            "r.univar", map="evapo_netrad_low", flags="g", format="json"
-        )
+        stats_low = gs.parse_command("r.univar", map="evapo_netrad_low", format="json")
         stats_high = gs.parse_command(
-            "r.univar", map="evapo_netrad_high", flags="g", format="json"
+            "r.univar", map="evapo_netrad_high", format="json"
         )
         self.assertGreater(
             stats_high["mean"],
@@ -243,12 +237,8 @@ class TestEvapoPMDetailed(TestCase):
             output="evapo_rh_high",
             overwrite=True,
         )
-        stats_low = gs.parse_command(
-            "r.univar", map="evapo_rh_low", flags="g", format="json"
-        )
-        stats_high = gs.parse_command(
-            "r.univar", map="evapo_rh_high", flags="g", format="json"
-        )
+        stats_low = gs.parse_command("r.univar", map="evapo_rh_low", format="json")
+        stats_high = gs.parse_command("r.univar", map="evapo_rh_high", format="json")
         self.assertGreater(
             stats_low["mean"],
             stats_high["mean"],
@@ -282,15 +272,15 @@ class TestEvapoPMDetailed(TestCase):
                 output=output,
                 overwrite=True,
             )
-        mean_10 = gs.parse_command(
-            "r.univar", map="evapo_netrad_10", flags="g", format="json"
-        )["mean"]
-        mean_15 = gs.parse_command(
-            "r.univar", map="evapo_netrad_15", flags="g", format="json"
-        )["mean"]
-        mean_20 = gs.parse_command(
-            "r.univar", map="evapo_netrad_20", flags="g", format="json"
-        )["mean"]
+        mean_10 = gs.parse_command("r.univar", map="evapo_netrad_10", format="json")[
+            "mean"
+        ]
+        mean_15 = gs.parse_command("r.univar", map="evapo_netrad_15", format="json")[
+            "mean"
+        ]
+        mean_20 = gs.parse_command("r.univar", map="evapo_netrad_20", format="json")[
+            "mean"
+        ]
         self.assertAlmostEqual(
             2 * mean_15,
             mean_10 + mean_20,

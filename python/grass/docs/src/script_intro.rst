@@ -2,7 +2,7 @@ Scripting API
 ======================
 
 Parts of the grass.script API
-----------------
+-----------------------------
 
 .. toctree::
    :maxdepth: 2
@@ -134,7 +134,7 @@ Providing GRASS module interface to a script
 
 The options which has something like ``G_OPT_R_INPUT`` after the word
 ``option`` are called standard options. Their list is accessible
-in GRASS GIS `C API documentation`_ of ``STD_OPT`` enum from ``gis.h`` file.
+in GRASS `C API documentation`_ of ``STD_OPT`` enum from ``gis.h`` file.
 Always use standard options if possible. They are not only easier to use
 but also ensure consistency across the modules and easier maintanenace
 in case of updates to the parameters parsing system.

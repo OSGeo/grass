@@ -420,7 +420,7 @@ int main(int argc, char *argv[])
     omp_set_num_threads(threads);
 #else
     if (threads > 1)
-        G_warning(_("GRASS GIS is not compiled with OpenMP support, parallel "
+        G_warning(_("GRASS is not compiled with OpenMP support, parallel "
                     "computation is disabled."));
 #endif
     if (threads > 1 && Rast_mask_is_present()) {

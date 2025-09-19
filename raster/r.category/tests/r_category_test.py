@@ -247,12 +247,12 @@ def test_r_category_json_output(simple_dataset):
         env=session.env,
     )
     result = json.loads(
-        gs.read_command("r.category", map="test", output_format="json", env=session.env)
+        gs.read_command("r.category", map="test", format="json", env=session.env)
     )
 
     expected = [
-        {"category": 1, "description": "trees, very green"},
-        {"category": 2, "description": "water, very deep"},
+        {"category": 1, "label": "trees, very green"},
+        {"category": 2, "label": "water, very deep"},
     ]
     assert result == expected, f"Expected {expected}, but got {result}"
 
@@ -276,48 +276,48 @@ def test_r_category_with_json_output_color(simple_dataset):
         [
             {
                 "category": 1,
-                "description": "trees, very green",
+                "label": "trees, very green",
                 "color": "rgb(68, 1, 84)",
             },
             {
                 "category": 2,
-                "description": "water, very deep",
+                "label": "water, very deep",
                 "color": "rgb(253, 231, 37)",
             },
         ],
         [
-            {"category": 1, "description": "trees, very green", "color": "#440154"},
+            {"category": 1, "label": "trees, very green", "color": "#440154"},
             {
                 "category": 2,
-                "description": "water, very deep",
+                "label": "water, very deep",
                 "color": "#FDE725",
             },
         ],
         [
-            {"category": 1, "description": "trees, very green", "color": "68:1:84"},
+            {"category": 1, "label": "trees, very green", "color": "68:1:84"},
             {
                 "category": 2,
-                "description": "water, very deep",
+                "label": "water, very deep",
                 "color": "253:231:37",
             },
         ],
         [
             {
                 "category": 1,
-                "description": "trees, very green",
+                "label": "trees, very green",
                 "color": "hsv(288, 98, 32)",
             },
             {
                 "category": 2,
-                "description": "water, very deep",
+                "label": "water, very deep",
                 "color": "hsv(53, 85, 99)",
             },
         ],
         [
-            {"category": 1, "description": "trees, very green"},
+            {"category": 1, "label": "trees, very green"},
             {
                 "category": 2,
-                "description": "water, very deep",
+                "label": "water, very deep",
             },
         ],
     ]
@@ -327,7 +327,7 @@ def test_r_category_with_json_output_color(simple_dataset):
             gs.read_command(
                 "r.category",
                 map="test",
-                output_format="json",
+                format="json",
                 color_format=color,
                 env=session.env,
             )

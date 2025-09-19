@@ -4,7 +4,7 @@ from grass.gunittest.main import test
 
 
 class TestISmap(TestCase):
-    """Regression tests for i.smap GRASS GIS module."""
+    """Regression tests for i.smap GRASS module."""
 
     group_name = "test_smap_group"
     subgroup_name = "test_smap_subgroup"

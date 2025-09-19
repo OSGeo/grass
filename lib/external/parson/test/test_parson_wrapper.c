@@ -95,6 +95,46 @@ int test_parson_wrapper(void)
     }
     G_json_value_free(value);
 
+    G_message("\t * testing JSON object dotset and dotget string\n");
+    value = G_json_value_init_object();
+    object = G_json_value_get_object(value);
+    if (object == NULL) {
+        G_warning("Error in G_json_value_get_object");
+        sum++;
+    }
+    if (G_json_object_dotset_string(object, TEST_OBJECT_DOT_KEY,
+                                    TEST_OBJECT_VALUE) != JSONSuccess) {
+        G_warning("Error in G_json_object_dotset_string");
+        sum++;
+    }
+    retrieved = G_json_object_dotget_string(object, TEST_OBJECT_DOT_KEY);
+    if (strcmp(retrieved, TEST_OBJECT_VALUE) != 0) {
+        G_warning("Error in G_json_object_dotget_string %s != %s",
+                  TEST_OBJECT_VALUE, retrieved);
+        sum++;
+    }
+    G_json_value_free(value);
+
+    G_message("\t * testing JSON object dotset and dotget number\n");
+    value = G_json_value_init_object();
+    object = G_json_value_get_object(value);
+    if (object == NULL) {
+        G_warning("Error in G_json_value_get_object");
+        sum++;
+    }
+    if (G_json_object_dotset_number(object, TEST_OBJECT_DOT_KEY, TEST_NUMBER) !=
+        JSONSuccess) {
+        G_warning("Error in G_json_object_dotset_number");
+        sum++;
+    }
+    double number = G_json_object_dotget_number(object, TEST_OBJECT_DOT_KEY);
+    if (number != TEST_NUMBER) {
+        G_warning("Error in G_json_object_dotget_number %f != %f", TEST_NUMBER,
+                  number);
+        sum++;
+    }
+    G_json_value_free(value);
+
     G_message("\t * testing JSON object get wrapping value");
     value = G_json_value_init_object();
     object = G_json_value_get_object(value);
@@ -224,7 +264,7 @@ int test_parson_wrapper(void)
         G_warning("Error in G_json_object_set_number");
         sum++;
     }
-    double number = G_json_object_get_number(object, TEST_OBJECT_KEY);
+    number = G_json_object_get_number(object, TEST_OBJECT_KEY);
     if (number != TEST_NUMBER) {
         G_warning("Error in G_json_object_get_number %f != %f", TEST_NUMBER,
                   number);

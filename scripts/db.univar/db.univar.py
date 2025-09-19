@@ -60,7 +60,8 @@
 # %end
 # %flag
 # % key: g
-# % description: Print stats in shell script style
+# % label: Print stats in shell script style [deprecated]
+# % description: This flag is deprecated and will be removed in a future release. Use format=shell instead.
 # %end
 
 import sys
@@ -113,10 +114,15 @@ def main():
 
     if not output_format:
         output_format = "shell" if shellstyle else "plain"
-    elif shellstyle:
+    if shellstyle:
         # This can be a message or warning in future versions.
         # In version 9, -g may be removed.
-        gs.verbose(_("The format option is used and -g flag ignored"))
+        gs.verbose(
+            _(
+                "Flag 'g' is deprecated and will be removed in a future "
+                "release. Please use format=shell instead."
+            )
+        )
 
     desc_table = gs.db_describe(table, database=database, driver=driver)
     if not desc_table:
@@ -247,7 +253,10 @@ def main():
             result["coeff_var"] = 0
         result["sum"] = sum
         if not extend:
-            json.dump({"statistics": result}, sys.stdout)
+            # for backward compatibility we include the statistics key
+            result["statistics"] = result.copy()
+            json.dump(result, sys.stdout, indent=4)
+            sys.stdout.write("\n")
     elif output_format == "shell":
         sys.stdout.write("n=%d\n" % N)
         sys.stdout.write("min=%.15g\n" % minv)
@@ -348,13 +357,18 @@ def main():
         result["first_quartile"] = q25
         result["median"] = q50
         result["third_quartile"] = q75
+        # for backward compatibility we include the statistics key
+        statistics = result.copy()
         if options["percentile"]:
-            percentile_values = []
+            statistics["percentiles"] = perc
+            statistics["percentile_values"] = [pval[i] for i in range(len(perc))]
+            result["statistics"] = statistics
+
+            result["percentiles"] = []
             for i in range(len(perc)):
-                percentile_values.append(pval[i])
-        result["percentiles"] = perc
-        result["percentile_values"] = percentile_values
-        json.dump({"statistics": result}, sys.stdout)
+                result["percentiles"].append({"percentile": perc[i], "value": pval[i]})
+        json.dump(result, sys.stdout, indent=4)
+        sys.stdout.write("\n")
     else:
         sys.stdout.write("first_quartile=%.15g\n" % q25)
         sys.stdout.write("median=%.15g\n" % q50)

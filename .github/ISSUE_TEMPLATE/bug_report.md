@@ -28,10 +28,10 @@ assignees: ''
 ## System description
 <!--
 - Operating System: [e.g. Windows, Linux, ..., incl. version]
-- GRASS GIS version: [e.g. 4.0]
+- GRASS version: [e.g. 4.0]
 
 - details about further software components
-    - run `g.version -rge` in a GRASS GIS terminal session or check in
+    - run `g.version -rge` in a GRASS terminal session or check in
       the GUI menu "Help > About"
     - run `python3 -c "import sys, wx; print(sys.version); print(wx.version())"`
       to print the Python and wxPython version numbers
