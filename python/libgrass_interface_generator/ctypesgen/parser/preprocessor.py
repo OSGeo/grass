@@ -104,7 +104,7 @@ class PreprocessorParser(object):
 
         if IS_WINDOWS and re.search(r"(^|[/\\])cl(\.exe)?[ \t]", cmd, re.I):
             # MSVC cl.exe
-            cmd += " -nologo -d1PP"
+            cmd += " -nologo /Zc:preprocessor -d1PP"
             is_msvc = True
         else:
             # Assume gcc
