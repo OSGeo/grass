@@ -8,7 +8,9 @@
 #endif
 
 #ifdef HAVE_SYS_TYPES_H
+#ifndef _WIN32
 #include <sys/types.h>
+#endif
 #endif
 
 struct aq {                     /* age queue */
