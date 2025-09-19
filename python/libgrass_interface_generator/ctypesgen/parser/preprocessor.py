@@ -104,7 +104,9 @@ class PreprocessorParser(object):
 
         if IS_WINDOWS and re.search(r"(^|[/\\])cl(\.exe)?[ \t]", cmd, re.I):
             # MSVC cl.exe
-            cmd += " -nologo -d1PP"
+            # -d1PP to extract #defines and -Zc:preprocessor to remove comments
+            # and flatten multiline #defines, which is equivalent to gcc's -dD
+            cmd += " -nologo -d1PP -Zc:preprocessor"
             is_msvc = True
         else:
             # Assume gcc
