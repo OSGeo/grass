@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-13 15:39+0000\n"
-"PO-Revision-Date: 2025-08-25 16:34+0000\n"
+"PO-Revision-Date: 2025-09-19 22:48+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/fr/>\n"
 "Language: fr\n"
@@ -1014,7 +1014,7 @@ msgstr "Essai de récupération depuis la région par défaut ..."
 #: ../gui/wxpython/core/render.py:851
 #, python-format
 msgid "GRASS tool '%s' not found. Unable to start map display window."
-msgstr ""
+msgstr "Outil GRASS '%s' non trouvé. Impossible de démarrer la fenêtre d'affichage des cartes."
 
 #: ../gui/wxpython/core/render.py:890
 #, python-format
@@ -1502,7 +1502,7 @@ msgstr ""
 
 #: ../gui/wxpython/datacatalog/infomanager.py:76
 msgid "No change, don't ask me again"
-msgstr ""
+msgstr "Pas de changement, ne plus me demander"
 
 #: ../gui/wxpython/datacatalog/infomanager.py:84
 #, python-brace-format
@@ -1582,21 +1582,21 @@ msgstr ""
 #: ../gui/wxpython/gui_core/menu.py:186 ../gui/wxpython/history/browser.py:387
 #: ../gui/wxpython/modules/extensions.py:76
 msgid "Search"
-msgstr ""
+msgstr "Rechercher"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:80
 msgid "Type to search database by map type or name. Use Python regular expressions to refine your search."
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:96
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Failed to read mapsets from project <{l}>."
-msgstr "Impossible de lire les jeux de cartes du secteur {l}."
+msgstr "Impossible de lire les jeux de cartes du projet {l}."
 
 #: ../gui/wxpython/datacatalog/tree.py:122
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Failed to read maps from project <{l}>."
-msgstr "Impossible de lire les cartes du secteur {l}."
+msgstr "Impossible de lire les cartes du projet <{l}>."
 
 #: ../gui/wxpython/datacatalog/tree.py:157
 #, python-brace-format
@@ -1605,32 +1605,32 @@ msgstr "La carte <{name}> de type <{elem}> existe déjà dans le jeu de cartes <
 
 #: ../gui/wxpython/datacatalog/tree.py:184
 msgid "name unknown"
-msgstr ""
+msgstr "nom inconnu"
 
 #: ../gui/wxpython/datacatalog/tree.py:186
 #, python-brace-format
 msgid "{name}  (current)"
-msgstr ""
+msgstr "{name}  (actuel)"
 
 #: ../gui/wxpython/datacatalog/tree.py:188
 #, python-brace-format
 msgid "{name}  (in use, owner: {owner})"
-msgstr ""
+msgstr "{name}  (en cours d'utilisation, propriétaire : {owner})"
 
 #: ../gui/wxpython/datacatalog/tree.py:192
 #, python-brace-format
 msgid "{name}  (in use)"
-msgstr ""
+msgstr "{name}  (en cours d'utilisation)"
 
 #: ../gui/wxpython/datacatalog/tree.py:194
 #, python-brace-format
 msgid "{name}  (owner: {owner})"
-msgstr ""
+msgstr "{name}  (propriétaire : {owner})"
 
 #: ../gui/wxpython/datacatalog/tree.py:198
 #, python-brace-format
 msgid "{name}"
-msgstr ""
+msgstr "{name}"
 
 #: ../gui/wxpython/datacatalog/tree.py:874
 #, python-brace-format
@@ -1647,7 +1647,7 @@ msgstr "Carte dans un autre projet"
 #: ../gui/wxpython/datacatalog/tree.py:1003
 #, python-brace-format
 msgid "{c} maps marked for moving."
-msgstr ""
+msgstr "{c} cartes marquées pour le déplacement."
 
 #: ../gui/wxpython/datacatalog/tree.py:1005
 #, python-brace-format
@@ -1657,7 +1657,7 @@ msgstr "Carte <{layer}> marquée pour suppression."
 #: ../gui/wxpython/datacatalog/tree.py:1018
 #, python-brace-format
 msgid "{c} maps marked for copying."
-msgstr ""
+msgstr "{c} cartes marquées pour la copie."
 
 #: ../gui/wxpython/datacatalog/tree.py:1020
 #, python-brace-format
@@ -1684,7 +1684,7 @@ msgstr "Renommage du jeu de cartes <{oldmapset}> en <{newmapset}> terminé"
 
 #: ../gui/wxpython/datacatalog/tree.py:1210
 msgid "Cannot rename location"
-msgstr ""
+msgstr "Impossible de renommer le projet"
 
 #: ../gui/wxpython/datacatalog/tree.py:1222
 #, fuzzy, python-brace-format
@@ -1751,12 +1751,12 @@ msgstr "g.remove terminé"
 #: ../gui/wxpython/datacatalog/tree.py:1523
 #, python-brace-format
 msgid "Do you really want to delete map(s) <{m}>?"
-msgstr ""
+msgstr "Voulez-vous vraiment supprimer la ou les cartes <{m}> ?"
 
 #: ../gui/wxpython/datacatalog/tree.py:1527
 #, python-brace-format
 msgid "Do you really want to delete {n} maps?"
-msgstr ""
+msgstr "Voulez-vous vraiment supprimer {n} cartes ?"
 
 #: ../gui/wxpython/datacatalog/tree.py:1528
 msgid "Delete map"
@@ -1772,9 +1772,8 @@ msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr "Pour déplacer ou copier des cartes depuis d'autres jeux de cartes, débloquez l'édition d'autres jeux de cartes"
 
 #: ../gui/wxpython/datacatalog/tree.py:1734
-#, fuzzy
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
-msgstr "Pour déplacer ou copier des cartes depuis d'autres jeux de cartes, débloquez l'édition d'autres jeux de cartes"
+msgstr "Pour déplacer ou copier des cartes vers un autre projet, veuillez les glisser vers un jeu de cartes dans le projet de destination"
 
 #: ../gui/wxpython/datacatalog/tree.py:2061
 msgid "&Cut"
@@ -1828,7 +1827,7 @@ msgstr "&Supprimer le jeu de cartes"
 
 #: ../gui/wxpython/datacatalog/tree.py:2140
 msgid "&Rename mapset"
-msgstr ""
+msgstr "&Renommer le jeu de cartes"
 
 #: ../gui/wxpython/datacatalog/tree.py:2146
 #: ../gui/wxpython/datacatalog/tree.py:2177
@@ -1839,7 +1838,7 @@ msgstr "Recharger les cartes"
 
 #: ../gui/wxpython/datacatalog/tree.py:2150
 msgid "&Copy path to mapset"
-msgstr ""
+msgstr "&Copier le chemin vers le jeu de cartes"
 
 #: ../gui/wxpython/datacatalog/tree.py:2161
 msgid "&Create mapset"
@@ -1863,20 +1862,19 @@ msgstr "Télécharger le projet (secteur) d'exemple"
 
 #: ../gui/wxpython/datacatalog/tree.py:2199
 msgid "&Remove GRASS database from data catalog"
-msgstr ""
+msgstr "Supprimer la base de données GRASS du catalogue de données"
 
 #: ../gui/wxpython/datacatalog/tree.py:2206
 msgid "&Delete GRASS database from disk"
 msgstr "&Supprimer la base de données GRASS du disque"
 
 #: ../gui/wxpython/datacatalog/tree.py:2236
-#, fuzzy
 msgid "&Delete projects (locations)"
-msgstr "Effacer le secteur sélectionné"
+msgstr "Supprimer les projets (Secteurs)"
 
 #: ../gui/wxpython/datacatalog/tree.py:2248
 msgid "&Delete mapsets"
-msgstr ""
+msgstr "Supprimer les jeux de cartes"
 
 #: ../gui/wxpython/datacatalog/tree.py:2254
 msgid "&Copy paths to mapsets"
@@ -1907,7 +1905,7 @@ msgstr "Ne peut afficher que 256 colonnes."
 #: ../gui/wxpython/dbmgr/base.py:316
 #, python-brace-format
 msgid "Incorrect encoding {enc} used. Set encoding in GUI Settings or set GRASS_DB_ENCODING variable."
-msgstr ""
+msgstr "Encodage incorrect {enc} utilisé. Définissez l'encodage dans les paramètres de l'interface graphique ou définissez la variable GRASS_DB_ENCODING."
 
 #: ../gui/wxpython/dbmgr/base.py:336
 #, python-brace-format
@@ -2136,10 +2134,9 @@ msgid "Category number (column %s) is missing."
 msgstr "Le numéro de catégorie (colonne %s) est manquant."
 
 #: ../gui/wxpython/dbmgr/base.py:1692
-#, fuzzy, python-format
-#| msgid "Vector map '%s' does not exist."
+#, python-format
 msgid "Column '%(column)s' does not exist."
-msgstr "La carte vectorielle '%s' n'existe pas."
+msgstr "La colonne '%(column)s' n'existe pas."
 
 #: ../gui/wxpython/dbmgr/base.py:1707
 #, python-format
@@ -2510,12 +2507,12 @@ msgstr "Gestionnaire de table attributaire - GRASS"
 
 #: ../gui/wxpython/dbmgr/manager.py:92
 msgid "Attribute Table Manager"
-msgstr ""
+msgstr "Gestionnaire de table attributaire"
 
 #: ../gui/wxpython/dbmgr/manager.py:95
 #, python-brace-format
 msgid "{document} (read-only)"
-msgstr ""
+msgstr "{document} (lecture seule)"
 
 #: ../gui/wxpython/dbmgr/manager.py:112
 #, python-format
@@ -3586,6 +3583,9 @@ msgid ""
 "\n"
 "Unable to add new action to the model."
 msgstr ""
+"'%s' n'est pas un outil GRASS.\n"
+"\n"
+"Impossible d’ajouter une nouvelle action au modèle."
 
 #: ../gui/wxpython/gmodeler/dialogs.py:365
 msgid "Relation properties"
@@ -3808,9 +3808,9 @@ msgid "Details: unsupported tag name '{0}'."
 msgstr "Détail : nom d'option non supportée '{0}'"
 
 #: ../gui/wxpython/gmodeler/model_convert.py:233
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Module {task_name} in your model contains parameterized flags. Actinia does not support parameterized flags. The following flags are therefore not being written in the generated JSON: {flags}"
-msgstr ""
+msgstr "Le module {task_name} de votre modèle contient des drapeaux paramétrés. Actinia ne supporte pas les drapeaux paramétrés. Les options suivantes ne sont donc pas écrites dans le JSON généré : {flags}"
 
 #: ../gui/wxpython/gmodeler/model_items.py:673
 msgid "<not defined>"
@@ -4120,7 +4120,6 @@ msgid "Python"
 msgstr "Console Python"
 
 #: ../gui/wxpython/gmodeler/panels.py:1616
-#, fuzzy
 msgid "PyWPS"
 msgstr "PyWPS"
 
@@ -4331,9 +4330,8 @@ msgid "Load model from file"
 msgstr "Charger le modèle depuis un fichier"
 
 #: ../gui/wxpython/gmodeler/toolbars.py:55
-#, fuzzy
 msgid "Save current model to file"
-msgstr "Enregistrer le modèle dans un fichier"
+msgstr "Enregistrer le modèle actuel dans un fichier"
 
 #: ../gui/wxpython/gmodeler/toolbars.py:57
 msgid "Export model to image"
@@ -4345,7 +4343,7 @@ msgstr "Exporter le modèle dans un script Python"
 
 #: ../gui/wxpython/gmodeler/toolbars.py:64
 msgid "Add GRASS tool (module) to model"
-msgstr ""
+msgstr "Ajouter un outil (module) GRASS au modèle"
 
 #: ../gui/wxpython/gmodeler/toolbars.py:67
 msgid "Add data to model"
@@ -4372,9 +4370,8 @@ msgid "Validate model"
 msgstr "Valider le modèle"
 
 #: ../gui/wxpython/gmodeler/toolbars.py:82
-#, fuzzy
 msgid "Set model properties"
-msgstr "Propriétés du modèle"
+msgstr "Définir les propriétés du modèle"
 
 #: ../gui/wxpython/gmodeler/toolbars.py:84
 msgid "Manage model variables"
@@ -4406,9 +4403,8 @@ msgid "Name of mapset:"
 msgstr "Nom du jeu de cartes :"
 
 #: ../gui/wxpython/gui_core/dialogs.py:193
-#, fuzzy
 msgid "Select mapset in GRASS project"
-msgstr "Choisir le jeu de cartes dans le secteur GRASS"
+msgstr "Choisir le jeu de cartes dans le projet GRASS"
 
 #: ../gui/wxpython/gui_core/dialogs.py:211
 msgid "Name of mapset is missing."
@@ -4796,9 +4792,8 @@ msgid "Map Display"
 msgstr "Fenêtre de carte"
 
 #: ../gui/wxpython/gui_core/forms.py:1656
-#, fuzzy
 msgid "Show graphical representation of temporal extent of dataset(s)."
-msgstr "Afficher une représentation graphique de l'emprise temporelle du jeu de données."
+msgstr "Afficher une représentation graphique de l'emprise temporelle des jeux de données."
 
 #: ../gui/wxpython/gui_core/forms.py:1965
 #: ../gui/wxpython/gui_core/preferences.py:1466
@@ -5054,14 +5049,12 @@ msgid "&Previous"
 msgstr "&Précédent"
 
 #: ../gui/wxpython/gui_core/goutput.py:143
-#, fuzzy
 msgid "Clear prompt and output window"
-msgstr "Effacer les messages de sortie"
+msgstr "Effacer l'invite et la fenêtre de sortie"
 
 #: ../gui/wxpython/gui_core/goutput.py:145
-#, fuzzy
 msgid "Save output to a file"
-msgstr "Enregistrer le modèle dans un fichier"
+msgstr "Enregistrer la sortie dans un fichier"
 
 #: ../gui/wxpython/gui_core/goutput.py:147
 msgid "Abort running command"
@@ -5123,11 +5116,13 @@ msgid "GSelect: invalid item: %s"
 msgstr "GSelect : objet %s invalide"
 
 #: ../gui/wxpython/gui_core/gselect.py:791
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Temporal GIS error:\n"
 "%s"
 msgstr ""
+"Erreur SIG temporel :\n"
+"%s"
 
 #: ../gui/wxpython/gui_core/gselect.py:797
 #, python-format
@@ -5283,7 +5278,7 @@ msgstr "Le programme de BD PostgreSQL <{psql}> n'a pas été trouvé. Veuillez l
 #: ../gui/wxpython/gui_core/gselect.py:2646
 #: ../gui/wxpython/modules/import_export.py:504
 msgid "The Python GDAL package is missing. Please install it."
-msgstr ""
+msgstr "Le package Python GDAL est manquant. Veuillez l'installer."
 
 #: ../gui/wxpython/gui_core/gselect.py:2767
 msgid "LineString"
@@ -5315,7 +5310,7 @@ msgstr "La carte vecteur <%s> en entrée et la carte <%s> sélectionnée dans le
 #: ../gui/wxpython/gui_core/gselect.py:3119
 #, python-format
 msgid "Unable to import C imagery library functions: %s\n"
-msgstr ""
+msgstr "Impossible d'importer les fonctions de la bibliothèque C d’imagerie : %s\n"
 
 #: ../gui/wxpython/gui_core/gselect.py:3197
 msgid "No vector map selected"
@@ -5334,15 +5329,16 @@ msgstr "Recherche ava&ncée ..."
 #: ../gui/wxpython/gui_core/menu.py:192
 #, python-format
 msgid "Do advanced search using %s tool"
-msgstr ""
+msgstr "Effectuez une recherche avancée à l'aide de l'outil %s"
 
 #: ../gui/wxpython/gui_core/menu.py:196 ../gui/wxpython/history/browser.py:381
+#, fuzzy
 msgid "Double-click to run selected tool"
-msgstr ""
+msgstr "Double-cliquez pour exécuter l'outil sélectionné"
 
 #: ../gui/wxpython/gui_core/menu.py:199
 msgid "&Run..."
-msgstr ""
+msgstr "Exécute&r…"
 
 #: ../gui/wxpython/gui_core/menu.py:200
 #, fuzzy
@@ -5363,7 +5359,6 @@ msgid "Documentation for %s is now open in the web browser"
 msgstr "La documentation pour %s est maintenant disponible dans le navigateur web"
 
 #: ../gui/wxpython/gui_core/menu.py:388
-#, fuzzy
 msgid "&Recent Files"
 msgstr "Fichiers &récents"
 
@@ -5457,11 +5452,11 @@ msgstr "Historique"
 
 #: ../gui/wxpython/gui_core/preferences.py:459
 msgid "Data Catalog settings"
-msgstr ""
+msgstr "Paramètres du catalogue de données"
 
 #: ../gui/wxpython/gui_core/preferences.py:464
 msgid "At startup load maps from current mapset only (in the Data tab)"
-msgstr ""
+msgstr "Au démarrage, ne charger que les cartes du jeu de cartes courant (dans l'onglet Données)"
 
 #: ../gui/wxpython/gui_core/preferences.py:479
 msgid "Workspace settings"
@@ -5505,9 +5500,8 @@ msgid "Font for command output:"
 msgstr "Police pour la sortie commandes :"
 
 #: ../gui/wxpython/gui_core/preferences.py:609
-#, fuzzy
 msgid "Font for manual pages:"
-msgstr "Afficher le manuel"
+msgstr "Police pour les pages du manuel :"
 
 #: ../gui/wxpython/gui_core/preferences.py:625
 msgid "Language settings"
@@ -5597,12 +5591,13 @@ msgid "3D view depth buffer (possible values are 16, 24, 32):"
 msgstr "Taille du tampon d'affichage 3D (valeurs possibles 16, 24, 32) :"
 
 #: ../gui/wxpython/gui_core/preferences.py:1202
+#, fuzzy
 msgid "Tool dialog settings"
-msgstr ""
+msgstr "Paramètres de la boîte de dialogue Outil"
 
 #: ../gui/wxpython/gui_core/preferences.py:1230
 msgid "Close dialog when completed successfully"
-msgstr ""
+msgstr "Fermer la boîte de dialogue une fois complété avec succès"
 
 #: ../gui/wxpython/gui_core/preferences.py:1257
 msgid "Allow interactive input"
@@ -5801,8 +5796,9 @@ msgid "Owner"
 msgstr "Propriétaire"
 
 #: ../gui/wxpython/gui_core/prompt.py:284
+#, fuzzy
 msgid "Type command here and press Enter"
-msgstr ""
+msgstr "Saisir la commande ici et appuyez sur la touche Entrée"
 
 #: ../gui/wxpython/gui_core/pyedit.py:300
 msgid "Permission denied <{}>. Please change file permission for reading."
@@ -5810,7 +5806,7 @@ msgstr "Permission refusée <{}>. Veuillez modifier les permissions du ficher po
 
 #: ../gui/wxpython/gui_core/pyedit.py:307
 msgid "Couldn't read file <{}>."
-msgstr ""
+msgstr "Impossible de lire le fichier <{}>."
 
 #: ../gui/wxpython/gui_core/pyedit.py:326
 msgid "Permission denied <{}>. Please change file permission for writing.{}"
@@ -5818,7 +5814,7 @@ msgstr "Permission refusée <{}>. Veuillez modifier les permissions du ficher po
 
 #: ../gui/wxpython/gui_core/pyedit.py:337
 msgid "Couldn't write file <{}>.{}"
-msgstr ""
+msgstr "Impossible d'écrire le fichier <{}>.{}"
 
 #: ../gui/wxpython/gui_core/pyedit.py:361
 #: ../gui/wxpython/gui_core/pyedit.py:371
@@ -5832,7 +5828,7 @@ msgstr "Ouvrir le fichier"
 #: ../gui/wxpython/gui_core/pyedit.py:511
 #, python-brace-format
 msgid "File <{path}> doesn't exist. It was probably moved or deleted."
-msgstr ""
+msgstr "Le fichier <{path}> n'existe pas. Il a probablement été déplacé ou supprimé."
 
 #: ../gui/wxpython/gui_core/pyedit.py:579
 msgid "Replace the content by the template?"
@@ -6198,17 +6194,17 @@ msgid "Fulltext search"
 msgstr "Recherche plein texte"
 
 #: ../gui/wxpython/gui_core/widgets.py:1239
+#, fuzzy
 msgid "Type to search in all tools. Press Enter for next match."
-msgstr ""
+msgstr "Tapez pour effectuer une recherche dans tous les outils. Appuyez sur la touche Entrée pour obtenir la correspondance suivante."
 
 #: ../gui/wxpython/gui_core/widgets.py:1301
 msgid "Searching, please type more characters."
 msgstr "Recherche, merci de taper plus de caractères."
 
 #: ../gui/wxpython/gui_core/widgets.py:1312
-#, fuzzy
 msgid "{} tools matched"
-msgstr "%d modules correspondent"
+msgstr "{} modules correspondent"
 
 #: ../gui/wxpython/gui_core/widgets.py:1379
 msgid "Profiles"
@@ -6255,12 +6251,11 @@ msgstr "Impossible d'enregistrer les paramètres"
 
 #: ../gui/wxpython/gui_core/wrap.py:255
 msgid "Clear"
-msgstr ""
+msgstr "Effacer"
 
 #: ../gui/wxpython/gui_core/wrap.py:257
-#, fuzzy
 msgid "&Clear"
-msgstr "Effacer"
+msgstr "Effa&cer"
 
 #: ../gui/wxpython/gui_core/wrap.py:268 ../gui/wxpython/mapswipe/dialogs.py:200
 msgid "Cancel"
@@ -6275,9 +6270,8 @@ msgid "Close"
 msgstr "Fermer"
 
 #: ../gui/wxpython/gui_core/wrap.py:283
-#, fuzzy
 msgid "&Close"
-msgstr "&Fermer"
+msgstr "Fermer"
 
 #: ../gui/wxpython/gui_core/wrap.py:294
 msgid "Apply"
@@ -6299,9 +6293,8 @@ msgid "Runtime duration:"
 msgstr "Durée d'une frame :"
 
 #: ../gui/wxpython/history/browser.py:42
-#, fuzzy
 msgid "Status:"
-msgstr "Afficher la barre de status"
+msgstr "Statut :"
 
 #: ../gui/wxpython/history/browser.py:43
 msgid "Mask 2D:"
@@ -6329,12 +6322,11 @@ msgstr "Est :"
 
 #: ../gui/wxpython/history/browser.py:49
 msgid "North-south resolution:"
-msgstr "Résolution Nord-Sud:"
+msgstr "Résolution Nord-Sud :"
 
 #: ../gui/wxpython/history/browser.py:50
-#, fuzzy
 msgid "East-west resolution:"
-msgstr "Résolution estimée :"
+msgstr "Résolution Est-Ouest :"
 
 #: ../gui/wxpython/history/browser.py:51
 msgid "Number of rows:"
@@ -6390,7 +6382,7 @@ msgid "Export history of executed commands to a file"
 msgstr "Exporter l'historique des commandes exécutées vers un fichier"
 
 #: ../gui/wxpython/history/browser.py:463
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{json} (*.json)|*.txt|{files} (*)|*"
 msgstr "{json} (*.json)|*.txt|{files} (*)|*"
 
@@ -6399,14 +6391,13 @@ msgid "JSON files"
 msgstr "Fichiers JSON"
 
 #: ../gui/wxpython/history/browser.py:468
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{txt} (*.txt)|*.txt|{files} (*)|*"
-msgstr "%(txt)s (*.txt)|*.txt|%(files)s (*)|*"
+msgstr "{txt} (*.txt)|*.txt|{files} (*)|*"
 
 #: ../gui/wxpython/history/browser.py:483
-#, fuzzy
 msgid "Command history saved to '{}'"
-msgstr "Log de la commande enregistrée dans '{}'"
+msgstr "Historique des commandes enregistré dans '{}'"
 
 #: ../gui/wxpython/history/tree.py:84
 #, fuzzy
@@ -6416,7 +6407,7 @@ msgstr "Aucune information sur le temps"
 #: ../gui/wxpython/history/tree.py:87
 #, python-brace-format
 msgid "{month_name} {day_number}"
-msgstr ""
+msgstr "{day_number} {month_name}"
 
 #: ../gui/wxpython/history/tree.py:92
 #, python-brace-format
@@ -6444,22 +6435,21 @@ msgid "{base_date}, {year}"
 msgstr ""
 
 #: ../gui/wxpython/history/tree.py:183
-#, fuzzy
 msgid "Double-click to open the tool"
-msgstr "Double-clic pour exécuter le module sélectionné"
+msgstr "Double-cliquez pour ouvrir l'outil"
 
 #: ../gui/wxpython/history/tree.py:223
 msgid "&Remove"
 msgstr "Supp&rimer"
 
 #: ../gui/wxpython/history/tree.py:575
+#, fuzzy
 msgid "Cannot be parsed into command"
-msgstr ""
+msgstr "Ne peut pas être analysé en commande"
 
 #: ../gui/wxpython/history/tree.py:601
-#, fuzzy
 msgid "Do you really want to remove <{}> command?"
-msgstr "Voulez-vous enregistrer les modifications ?"
+msgstr "Voulez-vous vraiment supprimer la commande <{}> ?"
 
 #: ../gui/wxpython/history/tree.py:602
 msgid "Remove command"
@@ -6478,10 +6468,8 @@ msgid "Command <{}> copied to clipboard"
 msgstr "Commande <{}> copiée dans le presse-papier"
 
 #: ../gui/wxpython/history/tree.py:685
-#, fuzzy
-#| msgid "Vector cleaning command copied to clipboard"
 msgid "Failed to copy command to clipboard"
-msgstr "Commande de nettoyage du vecteur copiée dans le presse-papier"
+msgstr "Impossible de copier la commande dans le presse-papiers"
 
 #: ../gui/wxpython/iclass/dialogs.py:57 ../gui/wxpython/iclass/toolbars.py:34
 #: ../gui/wxpython/iscatt/toolbars.py:55
@@ -6713,8 +6701,9 @@ msgid "Failed to create temporary vector map."
 msgstr "Échec de création de la carte vecteurtemporaire."
 
 #: ../gui/wxpython/iclass/frame.py:1154
+#, fuzzy
 msgid "There was an error initializing signatures. Check GUI console for any error messages."
-msgstr ""
+msgstr "Une erreur s'est produite lors de l'initialisation des signatures. Vérifier la console GUI pour tout message d'Erreur."
 
 #: ../gui/wxpython/iclass/frame.py:1205
 #, python-format
@@ -6743,7 +6732,7 @@ msgstr "Signatures obsolètes"
 
 #: ../gui/wxpython/iclass/frame.py:1247
 msgid "Signatures are not valid. Recalculate them and then try again."
-msgstr ""
+msgstr "Les signatures ne sont pas valides. Recalculez-les et essayez à nouveau."
 
 #: ../gui/wxpython/iclass/frame.py:1259
 #, python-format
@@ -7141,9 +7130,9 @@ msgstr ""
 "TOUTES LES CARTES incluses dans ce secteur seront DÉFINITIVEMENT SUPPRIMÉES !"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:854
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to delete location: %s"
-msgstr "Impossible d'effacer le secteur"
+msgstr "Impossible d'effacer le projet : %s"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:866
 #, python-brace-format
@@ -7482,7 +7471,7 @@ msgstr "Paramètres des ellipses :"
 
 #: ../gui/wxpython/iscatt/frame.py:160
 msgid "Interactive Scatter Plot Tool"
-msgstr ""
+msgstr "Outil de création de nuages de points interactif"
 
 #: ../gui/wxpython/iscatt/frame.py:386
 msgid "scatter plot"
@@ -7681,13 +7670,14 @@ msgid "3D view Toolbar"
 msgstr "Barre d'outils de vue 3D"
 
 #: ../gui/wxpython/lmgr/frame.py:362 ../gui/wxpython/main_window/frame.py:307
+#, fuzzy
 msgid "Rename current Map Display"
-msgstr ""
+msgstr "Renommer l'affichage actuel de la carte"
 
 #: ../gui/wxpython/lmgr/frame.py:485 ../gui/wxpython/main_window/frame.py:433
 #, python-brace-format
 msgid "Map Display {number}"
-msgstr ""
+msgstr "Affichage de carte {number}"
 
 #: ../gui/wxpython/lmgr/frame.py:583 ../gui/wxpython/lmgr/frame.py:903
 #: ../gui/wxpython/main_window/frame.py:531
@@ -8301,9 +8291,8 @@ msgid "Add various vector maps"
 msgstr "Ajouter des surcouches"
 
 #: ../gui/wxpython/lmgr/toolbars.py:158
-#, fuzzy
 msgid "Add web service map"
-msgstr "Ajouter une couche web service"
+msgstr "Ajouter une carte de service web"
 
 #: ../gui/wxpython/lmgr/toolbars.py:169
 #, fuzzy
@@ -8458,7 +8447,7 @@ msgstr "Espace de travail"
 
 #: ../gui/wxpython/lmgr/workspace.py:562
 msgid "File <{}> doesn't exist. It was probably moved or deleted."
-msgstr ""
+msgstr "Le fichier <{}> n'existe pas. Il a probablement été déplacé ou supprimé."
 
 #: ../gui/wxpython/location_wizard/dialogs.py:40
 msgid "Set default region extent and resolution"
@@ -8743,7 +8732,7 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:1598
 msgid "Find more information at:"
-msgstr ""
+msgstr "Pour de plus amples renseignements :"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1607
 #: ../gui/wxpython/location_wizard/wizard.py:1808
@@ -9035,7 +9024,7 @@ msgstr "Re-projeter les coordonnées affichées dans la barre d'état. La projec
 #: ../gui/wxpython/mapdisp/properties.py:273
 #, python-brace-format
 msgid "{label} (EPSG: {epsg})"
-msgstr ""
+msgstr "{label} (EPSG : {epsg})"
 
 #: ../gui/wxpython/mapdisp/properties.py:432
 #, fuzzy
@@ -9055,9 +9044,8 @@ msgid "As everyone's monitors and resolutions are set differently these values a
 msgstr "Étant donné que tous les moniteurs et les résolutions sont réglés différemment, ces valeurs ne sont pas des échelles réelles mais restent proches de la réalité."
 
 #: ../gui/wxpython/mapdisp/statusbar.py:518
-#, fuzzy
 msgid "Go to XY coordinates"
-msgstr "Définir les coordonnées des points de contrôle"
+msgstr "Aller aux coordonnées XY"
 
 #: ../gui/wxpython/mapdisp/statusbar.py:546
 #: ../gui/wxpython/mapdisp/statusbar.py:623
@@ -9151,7 +9139,7 @@ msgstr "Ajouter la légende des vecteurs"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:40
 msgid "Add north arrow"
-msgstr "Ajouter une flèche nord"
+msgstr "Ajouter une flèche d’orientation vers le nord"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:43
 msgid "Analyze map"
@@ -9466,11 +9454,11 @@ msgstr ""
 
 #: ../gui/wxpython/mapwin/decorations.py:233
 msgid "Remove north arrow"
-msgstr "Supprimer la flèche nord"
+msgstr "Supprimer la flèche d’orientation vers le nord"
 
 #: ../gui/wxpython/mapwin/decorations.py:234
 msgid "North arrow properties"
-msgstr ""
+msgstr "Propriétés de la flèche d’orientation vers le nord"
 
 #: ../gui/wxpython/mapwin/decorations.py:245
 #: ../gui/wxpython/mapwin/decorations.py:257
@@ -9479,7 +9467,7 @@ msgstr "Supprimer la légende"
 
 #: ../gui/wxpython/mapwin/decorations.py:246
 msgid "Vector legend properties"
-msgstr ""
+msgstr "Propriétés de la légende vectorielle"
 
 #: ../gui/wxpython/mapwin/decorations.py:258
 msgid "Raster legend properties"
@@ -9759,7 +9747,7 @@ msgstr "Extension non définie"
 
 #: ../gui/wxpython/modules/extensions.py:211
 msgid "Fetching list of tools from GRASS-Addons (be patient)..."
-msgstr ""
+msgstr "Récupération de la liste des outils depuis GRASS-Addons (veuillez patienter)..."
 
 #: ../gui/wxpython/modules/extensions.py:226
 #, python-format
@@ -9988,7 +9976,7 @@ msgstr "Reprojeter les couches sélectionnées"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:72
 msgid "3D Raster Map Calculator"
-msgstr ""
+msgstr "Calculatrice de carte raster 3D"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:85
 msgid "mapcalc statement"
@@ -10029,7 +10017,7 @@ msgstr "diviser"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:186
 msgid "add"
-msgstr "additionner "
+msgstr "additionner"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:188
 msgid "subtract"
@@ -10875,7 +10863,7 @@ msgstr "Altitude de la frange depuis le fond :"
 #: ../gui/wxpython/nviz/tools.py:2444 ../gui/wxpython/psmap/dialogs.py:6185
 #: ../gui/wxpython/psmap/toolbars.py:102
 msgid "North Arrow"
-msgstr "Flèche du Nord"
+msgstr "flèche d’orientation vers le nord"
 
 #: ../gui/wxpython/nviz/tools.py:2450
 msgid "Arrow length (in map units):"
@@ -11870,7 +11858,7 @@ msgstr "Pas d'image sélectionnée."
 
 #: ../gui/wxpython/psmap/dialogs.py:6190
 msgid "North Arrow settings"
-msgstr "Paramètres de la flèche nord"
+msgstr "Paramètres de la flèche d’orientation vers le nord"
 
 #: ../gui/wxpython/psmap/dialogs.py:6200
 msgid "Compute convergence"
@@ -12084,7 +12072,7 @@ msgstr "IMAGE"
 
 #: ../gui/wxpython/psmap/frame.py:1400
 msgid "NORTH ARROW"
-msgstr "FLÈCHE NORD"
+msgstr "FLÈCHE D’ORIENTATION VERS LE NORD"
 
 #: ../gui/wxpython/psmap/frame.py:1686
 msgid "Click and drag to resize object"
@@ -12378,8 +12366,9 @@ msgid "Raster map <{}> not found in current mapset."
 msgstr "Carte raster <{}> non trouvée dans le jeu de cartes actuel."
 
 #: ../gui/wxpython/rdigit/g.gui.rdigit.py:210
+#, fuzzy
 msgid "Base raster map <{}> not found in current mapset."
-msgstr ""
+msgstr "Carte raster de base <{}> introuvable dans le jeu de cartes actuel."
 
 #: ../gui/wxpython/rdigit/g.gui.rdigit.py:233
 msgid "Raster Digitizer - GRASS"
@@ -13028,6 +13017,11 @@ msgid ""
 "\n"
 "No mapsets will be deleted."
 msgstr ""
+"Impossible de supprimer un ou plusieurs jeux de cartes pour les raisons suivantes :\n"
+"\n"
+"{reasons}\n"
+"\n"
+"Aucun jeu de cartes ne sera supprimé."
 
 #: ../gui/wxpython/startup/guiutils.py:375
 msgid "Unable to delete selected mapsets"
@@ -13070,6 +13064,11 @@ msgid ""
 "\n"
 "No projects will be deleted."
 msgstr ""
+"Impossible de supprimer un ou plusieurs projets pour les raisons suivantes :\n"
+"\n"
+"{reasons}\n"
+"\n"
+"Aucun projet ne sera supprimé."
 
 #: ../gui/wxpython/startup/guiutils.py:460
 #, fuzzy
@@ -13280,9 +13279,8 @@ msgid "Download selected dataset"
 msgstr "Télécharger le Secteur sélectionné"
 
 #: ../gui/wxpython/startup/locdownload.py:489
-#, fuzzy
 msgid "Do you want to cancel dataset download?"
-msgstr "Voulez-vous annuler le téléchargement de ce secteur ?"
+msgstr "Voulez-vous annuler le téléchargement du jeu de données ?"
 
 #: ../gui/wxpython/timeline/frame.py:43
 msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {}"
@@ -13735,7 +13733,7 @@ msgstr "pixels écran"
 
 #: ../gui/wxpython/vdigit/preferences.py:215
 msgid "Snap also to vertex"
-msgstr "Magnétiser aussi les vertex"
+msgstr "Magnétiser aussi aux sommets"
 
 #: ../gui/wxpython/vdigit/preferences.py:225
 #: ../gui/wxpython/vdigit/preferences.py:819
@@ -13930,7 +13928,7 @@ msgstr "Nœud (deux lignes)"
 
 #: ../gui/wxpython/vdigit/preferences.py:739
 msgid "Vertex"
-msgstr "Vertex"
+msgstr "Sommet"
 
 #: ../gui/wxpython/vdigit/preferences.py:740
 msgid "Area (closed boundary + centroid)"
@@ -14032,19 +14030,16 @@ msgid "Edit selected line/boundary (Ctrl+E)"
 msgstr "Modifier les lignes/contours sélectionné(e)s"
 
 #: ../gui/wxpython/vdigit/toolbars.py:216
-#, fuzzy
 msgid "Move selected point(s), line(s), boundary(ies) or centroid(s) (Ctrl+M)"
-msgstr "Déplacer le(s) point(s), ligne(s), contour(s) ou centroïde(s) sélectionné(s)"
+msgstr "Déplacer le(s) point(s), ligne(s), contour(s) ou centroïde(s) sélectionné(s) (Ctrl+M)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:223
-#, fuzzy
 msgid "Move selected vertex (Ctrl+G)"
-msgstr "Déplacer le sommet sélectionné"
+msgstr "Déplacer le sommet sélectionné (Ctrl+G)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:228
-#, fuzzy
 msgid "Remove selected vertex (Ctrl+X)"
-msgstr "Supprimer le sommet sélectionné"
+msgstr "Supprimer le sommet sélectionné (Ctrl+X)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:232
 msgid "Settings (Ctrl+T)"
@@ -14090,7 +14085,7 @@ msgstr "Refaire les changements précédents"
 
 #: ../gui/wxpython/vdigit/toolbars.py:441
 msgid "No vector map is open for editing. Please select firsta vector map from the combo box."
-msgstr ""
+msgstr "Aucune carte vectorielle n'est sélectionnée pour édition. Veuillez sélectionner la première carte vectorielle dans la boîte combinée."
 
 #: ../gui/wxpython/vdigit/toolbars.py:712
 msgid "Break selected lines/boundaries at intersection"
@@ -14464,13 +14459,12 @@ msgid "Previous analysis result"
 msgstr "Aller au résultat d'analyse précédent"
 
 #: ../gui/wxpython/vnet/toolbars.py:149
-#, fuzzy
 msgid "Next analysis result"
 msgstr "Résultat de l'analyse suivante"
 
 #: ../gui/wxpython/vnet/toolbars.py:223
 msgid "Available analyses"
-msgstr ""
+msgstr "Analyses disponibles"
 
 #: ../gui/wxpython/vnet/vnet_core.py:110
 msgid "Unable to perform analysis."
