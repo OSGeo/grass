@@ -368,7 +368,14 @@ def make_command(
 
 
 def handle_errors(
-    returncode, result, args, kwargs, handler=None, stderr=None, env=None
+    returncode,
+    result,
+    args,
+    kwargs,
+    handler=None,
+    stderr=None,
+    exception=None,
+    env=None,
 ):
     """Error handler for :func:`run_command()` and similar functions
 
@@ -459,9 +466,9 @@ def handle_errors(
         sys.exit(returncode)
     else:
         module, code = get_module_and_code(args, kwargs)
-        raise CalledModuleError(
-            module=module, code=code, returncode=returncode, errors=stderr
-        )
+        if not exception:
+            exception = CalledModuleError
+        raise exception(module, code, returncode=returncode, errors=stderr)
 
 
 def popen_args_command(
