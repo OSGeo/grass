@@ -39,13 +39,11 @@ void check(CELL newdir, CELL *dir, void *center, void *edge, double cnst,
 int fill_row(int nl UNUSED, int ns, struct band3 *bnd)
 {
     int j, offset, inc, rc;
-    void *min;
+    char *min;
     char *center;
     char *edge;
 
     inc = bpe();
-
-    min = G_malloc(bpe());
 
     rc = 0;
     for (j = 1; j < ns - 1; j += 1) {

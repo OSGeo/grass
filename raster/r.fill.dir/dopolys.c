@@ -71,9 +71,11 @@ int dopolys(int fd, int fm, int nl, int ns)
             }
         }
     }
-    if (found == 0)
+    if (found == 0) {
+        G_free(cells);
+        G_free(dir);
         return 0;
-
+    }
     /* Loop through the list, assigning polygon numbers to unassigned entries
        and carrying the same assignment over to adjacent cells.  Repeat
        recursively */
