@@ -70,7 +70,6 @@ RUN apt-get update && apt-get upgrade -y && \
     python3-pip \
     python3-setuptools \
     python3-venv \
-    software-properties-common \
     sqlite3 \
     subversion \
     unzip \
