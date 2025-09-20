@@ -1,4 +1,4 @@
-FROM debian:12.12-slim@sha256:df52e55e3361a81ac1bead266f3373ee55d29aa50cf0975d440c2be3483d8ed3
+FROM debian:13.1-slim@sha256:c2880112cc5c61e1200c26f106e4123627b49726375eb5846313da9cca117337
 
 # apt-get update && apt-get install lsb-release -y && lsb_release -a
 
@@ -70,7 +70,6 @@ RUN apt-get update && apt-get upgrade -y && \
     python3-pip \
     python3-setuptools \
     python3-venv \
-    software-properties-common \
     sqlite3 \
     subversion \
     unzip \
