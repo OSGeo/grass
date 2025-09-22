@@ -153,7 +153,7 @@ nav:
           - List of components: wxGUI.components.md
 
   - Key concepts:
-      - GRASS projects: grass_database.md
+      - GRASS projects: grass_projects.md
       - Raster overview: rasterintro.md
       - 3D raster overview: raster3dintro.md
       - Vector overview: vectorintro.md
