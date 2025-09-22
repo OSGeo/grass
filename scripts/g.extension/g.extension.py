@@ -2475,10 +2475,11 @@ def resolve_install_prefix(path, to_system):
         path = os.environ["GISBASE"]
     if path == "$GRASS_ADDON_BASE":
         if not os.getenv("GRASS_ADDON_BASE"):
-            from grass.app.runtime import get_grass_config_dir
+            from grass.app.runtime import get_grass_config_dir_for_version
 
             path = os.path.join(
-                get_grass_config_dir(VERSION[0], VERSION[1], os.environ), "addons"
+                get_grass_config_dir_for_version(VERSION[0], VERSION[1], os.environ),
+                "addons",
             )
             gs.warning(
                 _("GRASS_ADDON_BASE is not defined, installing to {}").format(path)
