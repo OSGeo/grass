@@ -212,6 +212,9 @@ void contour(double levels[], int nlevels, struct Map_info Map, DCELL **z,
                   ncrossing);
     }
 
+    for (i = 0; i < nrow - 1; i++)
+        G_free(hit[i]);
+    G_free(hit);
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);
 }
