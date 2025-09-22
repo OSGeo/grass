@@ -2478,7 +2478,9 @@ def resolve_install_prefix(path, to_system):
             from grass.app.runtime import get_grass_config_dir_for_version
 
             path = os.path.join(
-                get_grass_config_dir_for_version(VERSION[0], VERSION[1], os.environ),
+                get_grass_config_dir_for_version(
+                    VERSION[0], VERSION[1], env=os.environ
+                ),
                 "addons",
             )
             gs.warning(
