@@ -7,21 +7,21 @@ description: GRASS Projects
 GRASS organizes geospatial work into GRASS projects and mapsets.
 Each project uses a single coordinate reference system (CRS),
 and all data within that project must match it. Inside a project are *mapsets*,
-which act as subprojects where data and analyses are kept together.
+which act as subprojects where data and analyses are organized.
 Mapsets can represent different research tasks, study areas,
 or the work of individual collaborators.
 
 ## Projects
 
 A GRASS project is the main organizational unit for geospatial data.
-Each project has a single coordinate reference system, and all data within it
-must use that CRS. This ensures that spatial analyses are consistent and
+Each project has a single coordinate reference system (CRS), and all data
+within it must use that CRS. This ensures that spatial analyses are consistent and
 prevents errors that arise when data from different projections are combined.
 
-A GRASS project is stored as a directory on disk.
-Inside this directory are the mapsets that make up the working environments
-for analyses. All geospatial analyses in GRASS take place within a mapset.
-At minimum, every project includes the PERMANENT mapset, which stores core
+A GRASS project organizes geospatial data into one or more mapsets,
+which serve as the working environments for analysis.
+All geospatial operations in GRASS take place within a mapset.
+At minimum, every project includes the PERMANENT mapset, which may store core
 baseline data. Additional mapsets can be created for individual tasks,
 study areas, or collaborators.
 
@@ -29,10 +29,11 @@ study areas, or collaborators.
 *Figure: Project raleigh_northcarolina_usa_epsg32119 uses CRS with EPSG code 32119
 and contains three mapsets: PERMANENT, viewsheds, and hydrology*
 
-Users can choose where to store projects.
-Many prefer to keep them in a single directory, commonly called grassdata,
-while others store them in separate folders organized according to their
-research projects. GRASS projects can be safely copied, moved, or compressed
+A GRASS project is stored as a directory on disk.
+Many prefer to keep multiple projects organized in a single directory,
+commonly called grassdata, while others store them in separate folders
+organized according to their research projects.
+GRASS projects can be safely copied, moved, or compressed
 (zipped) for sharing or backup, making it easy to transfer an entire project
 to another location or collaborator.
 
@@ -97,7 +98,8 @@ Projects can be created in various ways depending on the environment:
 
     ![Project Wizard](create_new_project_gui.png)
 
-- GRASS Python API: Allows creating a project programmatically with function [`create_project`](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.create_project).
+- GRASS Python API: Allows creating a project programmatically with the function
+  [`create_project`](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.create_project).
     This example creates a project named *my_project* with a specific EPSG code:
 
     ```python
@@ -232,8 +234,8 @@ The search path settings are saved in your current mapset for future sessions.
 ### Examples of using projects and mapsets
 
 **Site suitability analysis for solar plants:**
-    A researcher selects an appropriate CRS for his area and creates a GRASS project
-    to store base datasets. The PERMANENT mapset contains a statewide elevation
+    A researcher selects an appropriate CRS for the study area and creates a GRASS
+    project to store base datasets. The PERMANENT mapset contains a statewide elevation
     model and land cover map.
     For each candidate site, the researcher creates a new mapset,
     sets the appropriate computational region, and runs solar radiation computations.
