@@ -25,9 +25,9 @@ NEIGHBOR
 #define EW struct ew
 EW
 {
-    MELEMENT *east, /* next eastward search in this row */
-        *west,      /* next westward search in this row */
-        *start;     /* starting point of east and west search in this row */
+    MELEMENT *east,     /* next eastward search in this row */
+        *west,          /* next westward search in this row */
+        *start;         /* starting point of east and west search in this row */
     int ealive, walive; /* used only for latitude-longitude,
                              TRUE if search is active in this direction */
     EW *next;

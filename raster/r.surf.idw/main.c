@@ -331,7 +331,7 @@ int make_neighbors_list(
 {
     extern CELL *cell;
 
-    int neighbors = 0,          /* number of neighbors in current list */
+    int neighbors = 0,            /* number of neighbors in current list */
         nsearch = 1, ssearch = 1; /* expand search north and south */
     EW *north, *south;
 
@@ -483,7 +483,7 @@ int completed_row(EW *ewptr)
 }
 
 EW *next_row(EW *ewptr,
-             EW *boundary, /* row boundary of map in search direction */
+             EW *boundary,       /* row boundary of map in search direction */
              int *new, int south /* search proceeds southward if == 1 */
 )
 {
@@ -525,8 +525,8 @@ int first_west(EW *ewptr, int col)
 /*      This function evaluates nearest neighbor status for a given     */
 /*      datum and resets the row search pointer based on the result     */
 
-int find_neighbors(EW *ewptr, NEIGHBOR *nbr_head, int row, int col,
-                   int npoints, int *neighbors)
+int find_neighbors(EW *ewptr, NEIGHBOR *nbr_head, int row, int col, int npoints,
+                   int *neighbors)
 {
     MELEMENT **Mptr;  /* double indirection !! */
     int westward = 1; /* 1 if west of interpolation point */
@@ -675,10 +675,10 @@ MELEMENT *row_lists(
     /* Search and make array-indexed doubly-linked lists of original data points
      */
     int rows, int cols, /* total rows and columns in window */
-    int *datarows,        /* number of rows with non-zero input data */
-    int *npts,              /* number of data points available */
-    int fd,                 /* file descriptor, input */
-    CELL *cell              /* array of data for a single row */
+    int *datarows,      /* number of rows with non-zero input data */
+    int *npts,          /* number of data points available */
+    int fd,             /* file descriptor, input */
+    CELL *cell          /* array of data for a single row */
 )
 {
     int row, col;        /* row and column indices */
