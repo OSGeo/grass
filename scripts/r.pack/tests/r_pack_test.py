@@ -1,5 +1,6 @@
 import os
 import stat
+import re
 
 import pytest
 
@@ -44,7 +45,7 @@ def test_output_exists_without_overwrite(
     assert not output.exists()
     tools.r_pack(input="rows_raster", output=output)
     assert output.exists()
-    with pytest.raises(CalledModuleError, match=rf"(?s){output}.*[Oo]verwrite"):
+    with pytest.raises(CalledModuleError, match=rf"(?s){re.escape(str(output))}.*[Oo]verwrite"):
         # Same call repeated again.
         tools.r_pack(input="rows_raster", output=output)
     assert output.exists()
@@ -69,7 +70,7 @@ def test_output_dir_does_not_exist(xy_raster_dataset_session_for_module, tmp_pat
     assert not output.exists()
     assert not output.parent.exists()
     with pytest.raises(
-        CalledModuleError, match=rf"(?s)'{output.parent}'.*does not exist"
+        CalledModuleError, match=rf"(?s)'{re.escape(str(output.parent))}'.*does not exist"
     ):
         tools.r_pack(input="rows_raster", output=output)
 
@@ -84,7 +85,7 @@ def test_output_dir_is_file(xy_raster_dataset_session_for_module, tmp_path):
     assert output.parent.exists()
     assert output.parent.is_file()
     with pytest.raises(
-        CalledModuleError, match=rf"(?s)'{output.parent}'.*is not.*directory"
+        CalledModuleError, match=rf"(?s)'{re.escape(str(output.parent))}'.*is not.*directory"
     ):
         tools.r_pack(input="rows_raster", output=output)
 
@@ -100,7 +101,7 @@ def test_output_dir_is_not_writable(xy_raster_dataset_session_for_module, tmp_pa
     assert output.parent.exists()
     assert output.parent.is_dir()
     with pytest.raises(
-        CalledModuleError, match=rf"(?s)'{output.parent}'.*is not.*writable"
+        CalledModuleError, match=rf"(?s)'{re.escape(str(output.parent))}'.*is not.*writable"
     ):
         tools.r_pack(input="rows_raster", output=output)
 
