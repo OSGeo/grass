@@ -664,8 +664,6 @@ def create_location(gisdbase, location, geostring) -> None:
     :param location: name of new Location
     :param geostring: path to a georeferenced file or EPSG code
     """
-    if gpath("etc", "python") not in sys.path:
-        sys.path.append(gpath("etc", "python"))
     from grass.script import core as gcore  # pylint: disable=E0611
 
     try:
@@ -1438,8 +1436,6 @@ def start_gui(grass_gui: Literal["wxpython"]):
 
 def close_gui() -> None:
     """Close GUI if running"""
-    if gpath("etc", "python") not in sys.path:
-        sys.path.append(gpath("etc", "python"))
     from grass.script import core as gcore  # pylint: disable=E0611
 
     env = gcore.gisenv()
@@ -2100,7 +2096,7 @@ def find_grass_python_package() -> None:
     # Try to find the package.
     path, exists = find_path_to_grass_python_package()
     if exists:
-        sys.path.append(path)
+        sys.path.insert(0, path)
         try:
             # We don't make assumptions about what should be in the directory
             # and we simply try the actual import.
