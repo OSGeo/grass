@@ -87,6 +87,11 @@ class RuntimePaths:
 
 
 def get_grass_config_dir(*, env):
+    """Get configuration directory path
+
+    Determines path of GRASS user configuration directory for the current platform
+    using the build-time version information.
+    """
     paths = RuntimePaths(env=env)
     return get_grass_config_dir_for_version(
         paths.version_major, paths.version_minor, env=env
@@ -94,9 +99,10 @@ def get_grass_config_dir(*, env):
 
 
 def get_grass_config_dir_for_version(major_version, minor_version, *, env):
-    """Get configuration directory
+    """Get configuration directory path for specific version
 
-    Determines path of GRASS user configuration directory.
+    Determines path of GRASS user configuration directory for the current platform
+    and for the provided version.
     """
     if env.get("GRASS_CONFIG_DIR"):
         # use GRASS_CONFIG_DIR environmental variable is defined
