@@ -135,6 +135,42 @@ def test_selection_and_expression(session):
     assert gisenv["MAPSET"] == "perc"
 
 
+def test_inconsistent_selection_and_expression(session):
+    """Perform a selection and a r.mapcalc expression with simple and full name."""
+    result = "prec_2"
+    tools = Tools(session=session)
+    gisenv = gs.gisenv(env=session.env)
+    tools.t_rast_extract(
+        input="prec",
+        output=result,
+        where="start_time > '2025-08-01'",
+        expression=" if(prec>=200,prec@perc,null())",
+        basename="prec_2",
+        nprocs=2,
+        verbose=True,
+        overwrite=True,
+    )
+    strds_info = gs.parse_key_val(tools.t_info(input=result, flags="g").text)
+    expected_info = {
+        "start_time": "'2025-08-02 00:00:00'",
+        "end_time": "'2025-08-03 00:00:00'",
+        "name": result,
+        "min_min": "200.0",
+        "min_max": "300.0",
+        "max_min": "200.0",
+        "max_max": "300.0",
+        "aggregation_type": "None",
+        "number_of_semantic_labels": "4",
+        "semantic_labels": "S2A_2,S2A_3,S2B_2,S2B_3",
+        "number_of_maps": "4",
+    }
+    for k, v in expected_info.items():
+        assert (
+            strds_info[k] == v
+        ), f"Expected value for key '{k}' is {v}. Got: {strds_info[k]}"
+    assert gisenv["MAPSET"] == "perc"
+
+
 def test_selection_and_expression_simple_name(session):
     """Perform a selection and a r.mapcalc expression with simple name."""
     result = "prec_3"
