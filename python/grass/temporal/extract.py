@@ -8,6 +8,9 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
+import re
+
 from .core import (
     get_tgis_message_interface,
     get_current_mapset,
@@ -25,8 +28,17 @@ from grass.exceptions import CalledModuleError
 ############################################################################
 
 
-def compile_new_map_name(sp, base: str, count: int, map_id:str, time_suffix: str | None, dbif):
-    """Compile new map name with suffix and semantic label."""
+def compile_new_map_name(
+    sp, base: str, count: int, map_id: str, time_suffix: str | None, dbif
+):
+    """Compile new map name with suffix and semantic label.
+
+    :param sp: An open SpaceTimeDataSet (STDS)
+    :param count: Running number of the map to be used as numeric suffix (if not time suffix)
+    :param map_id: Map ID to compile new map name for
+    :param time_suffix: Type of time suffix to use (or None)
+    :param dbif: initialized TGIS database interface
+    """
     if sp.get_temporal_type() == "absolute" and time_suffix:
         old_map = sp.get_new_map_instance(map_id)
         old_map.select(dbif)
@@ -42,6 +54,46 @@ def compile_new_map_name(sp, base: str, count: int, map_id:str, time_suffix: str
         else:
             return f"{base}_{suffix}"
     return create_numeric_suffix(base, count, time_suffix)
+
+
+def replace_stds_names(expression: str, simple_name: str, full_name: str) -> str:
+    """Safely replace simple with full STDS names.
+
+     When users provide inconsistent input for STDS in the expression
+     (with and without mapset componenet) or if the STDS name is part
+     of the name of other raster maps in the expression, the final
+     mapcalc expression may become invalid when the STDS name later is
+     replaced with the name of the individual maps in the time series.
+     The replacement with the fully qualified STDS names avoids that
+     confusion.
+
+    :param expression: The mapcalc expression to replace names in
+    :param simple_name: STDS name *without* mapset component
+    :param full_name: STDS name *with* mapset component
+    """
+    separators = r""" ,-+*/^:&|"'`()<>#^"""
+    name_matches = re.finditer(simple_name, expression)
+    new_expression = ""
+    old_idx = 0
+    for match in name_matches:
+        # Fill-in expression component between matches
+        new_expression += expression[old_idx : match.start()]
+        # Only replace STDS name if pre- and succeeded by a separator
+        # Match is either at the start or preceeeded by a separator
+        if match.start() == 0 or expression[match.start() - 1] in separators:
+            # Match is either at the end or succeeded by a separator
+            if (
+                match.end() + 1 > len(expression)
+                or expression[match.end()] in separators
+            ):
+                new_expression += full_name
+            else:
+                new_expression += simple_name
+        else:
+            new_expression += simple_name
+        old_idx = match.end()
+    new_expression += expression[match.end() :]
+    return new_expression
 
 
 def extract_dataset(
@@ -116,15 +168,18 @@ def extract_dataset(
             proc_list = []
 
             # Make sure STRDS is in the expression referenced with fully qualified name
-            if sp.base.get_map_id() not in expression:
-                expression = expression.replace(sp.base.get_name(), sp.base.get_map_id())
+            expression = replace_stds_names(
+                expression, sp.base.get_name(), sp.base.get_map_id()
+            )
             for row in rows:
                 count += 1
 
                 if count % 10 == 0:
                     msgr.percent(count, num_rows, 1)
 
-                map_name = compile_new_map_name(sp, base, count, row["id"], time_suffix, dbif)
+                map_name = compile_new_map_name(
+                    sp, base, count, row["id"], time_suffix, dbif
+                )
 
                 # We need to modify the r(3).mapcalc expression
                 if type != "vector":
