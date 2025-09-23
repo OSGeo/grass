@@ -2085,13 +2085,19 @@ def find_grass_python_package() -> None:
     # Wheather or not the pre-set path exists, the environment may be just
     # set up right already. Let's try a basic import first.
     try:
-        import grass as unused_test_import  # noqa: F401
+        import grass.script as unused_gs  # noqa: F401, ICN001
 
         # The import works without any setup, so there is nothing more to do.
         return
-    except ImportError:
+    except ModuleNotFoundError:
         # If the grass package is not on path, we need to add it to path.
         pass
+
+    # If we happened to import something else, like our startup script called grass.py,
+    # we need to first remove it from the import cache (this does not truly un-import,
+    # but it should be sufficient for our startup script).
+    if "grass" in sys.modules:
+        del sys.modules["grass"]
 
     # Try to find the package.
     path, exists = find_path_to_grass_python_package()
@@ -2100,11 +2106,11 @@ def find_grass_python_package() -> None:
         try:
             # We don't make assumptions about what should be in the directory
             # and we simply try the actual import.
-            import grass as second_unused_test_import  # noqa: F401
+            import grass.script as unused_gs_2nd_attempt  # noqa: F401, ICN001
 
-            # If import worked, we did our part.
+            # If the import worked, we did our part.
             return
-        except ImportError as error:
+        except ModuleNotFoundError as error:
             # Existing path provided, but there is some issue with the import.
             # It may be a wrong path or issue in the package itself.
             # These strings are not translatable because we can't load translations.
