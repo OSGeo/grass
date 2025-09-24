@@ -1,6 +1,7 @@
 """Test pack import-export functionality of grass.tools.Tools class"""
 
 import os
+import re
 from pathlib import Path
 
 import pytest
@@ -256,6 +257,52 @@ def test_multiple_input_usages_with_defaults(xy_dataset_session, rows_raster_fil
     assert tools.g_findfile(element="raster", file="output", format="json")["name"]
 
 
+def test_creation_and_use_with_context(
+    xy_dataset_session, rows_raster_file3x3, tmp_path
+):
+    """Check that we can create an external file and then use the file later"""
+    slope = tmp_path / "slope.grass_raster"
+    with Tools(session=xy_dataset_session) as tools:
+        tools.g_region(raster=rows_raster_file3x3)
+        tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=slope)
+        tools.r_univar(map=slope, format="json")["cells"] == 9
+        assert tools.g_findfile(element="raster", file=slope.stem, format="json")[
+            "name"
+        ]
+    assert not tools.g_findfile(element="raster", file=slope.stem, format="json")[
+        "name"
+    ]
+    assert slope.exists()
+
+
+def test_creation_and_use_with_keep_data(
+    xy_dataset_session, rows_raster_file3x3, tmp_path
+):
+    """Check that we can create an external file and then use the file later"""
+    slope = tmp_path / "slope.grass_raster"
+    tools = Tools(session=xy_dataset_session, keep_data=True)
+    tools.g_region(raster=rows_raster_file3x3)
+    tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=slope)
+    tools.r_univar(map=slope, format="json")["cells"] == 9
+    assert tools.g_findfile(element="raster", file=slope.stem, format="json")["name"]
+    assert slope.exists()
+
+
+def test_creation_and_use_with_defaults(
+    xy_dataset_session, rows_raster_file3x3, tmp_path
+):
+    """Check that we can create an external file and then use the file later"""
+    slope = tmp_path / "slope.grass_raster"
+    tools = Tools(session=xy_dataset_session)
+    tools.g_region(raster=rows_raster_file3x3)
+    tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=slope)
+    tools.r_univar(map=slope, format="json")["cells"] == 9
+    assert not tools.g_findfile(element="raster", file=slope.stem, format="json")[
+        "name"
+    ]
+    assert slope.exists()
+
+
 def test_repeated_input_usages_with_context(xy_dataset_session, rows_raster_file3x3):
     """Check multiple usages of the same input raster with context"""
     with Tools(session=xy_dataset_session) as tools:
@@ -364,7 +411,7 @@ def test_non_existent_output_pack_directory(
     assert rows_raster_file3x3.exists()
     with pytest.raises(
         CalledModuleError,
-        match=rf"(?s)[^/\/a-zA-Z_]{output_file.parent}[^/\/a-zA-Z_].*does not exist",
+        match=rf"(?s)[^/\/a-zA-Z_]{re.escape(str(output_file.parent))}[^/\/a-zA-Z_].*does not exist",
     ):
         tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=output_file)
 

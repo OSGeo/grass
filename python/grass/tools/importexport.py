@@ -60,7 +60,8 @@ class ImporterExporter:
                     in_project_name = self._to_name(item["value"])
                     record = (Path(item["value"]), in_project_name)
                     if (
-                        record not in self.input_rasters
+                        record not in self.output_rasters
+                        and record not in self.input_rasters
                         and record not in self.current_input_rasters
                     ):
                         self.current_input_rasters.append(record)
