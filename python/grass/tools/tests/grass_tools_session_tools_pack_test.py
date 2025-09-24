@@ -620,7 +620,7 @@ def test_clean_after_call_failure_with_context_and_try(
         assert rows_raster_file3x3.exists()
 
 
-def test_clean_after_call_with_context_and_raises(
+def test_clean_after_call_failure_with_context_and_raises(
     xy_dataset_session, rows_raster_file3x3, tmp_path
 ):
     """Check input and output pack files work with tool name call
@@ -643,7 +643,7 @@ def test_clean_after_call_with_context_and_raises(
     assert rows_raster_file3x3.exists()
 
 
-def test_clean_after_call_without_context(
+def test_clean_after_call_failure_without_context(
     xy_dataset_session, rows_raster_file3x3, tmp_path
 ):
     """Check we delete imported input when we fail after that import.
@@ -665,7 +665,7 @@ def test_clean_after_call_without_context(
     assert rows_raster_file3x3.exists()
 
 
-def test_clean_after_call_without_context_with_keep_data(
+def test_clean_after_call_failure_without_context_with_keep_data(
     xy_dataset_session, rows_raster_file3x3, tmp_path
 ):
     """Check we don't delete imported input even after failure when asked.
