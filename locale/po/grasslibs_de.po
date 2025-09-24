@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-06 15:42+0000\n"
+"POT-Creation-Date: 2025-09-13 15:39+0000\n"
 "PO-Revision-Date: 2025-08-23 20:17+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/grasslibs/de/>\n"
@@ -1707,7 +1707,7 @@ msgstr "Optionen"
 msgid "Default"
 msgstr "Standardwert"
 
-#: ../lib/gis/parser_json.c:378
+#: ../lib/gis/parser_json.c:383
 #, c-format
 msgid "Input string not understood: <%s>. Multiple '@' chars?"
 msgstr ""
@@ -5707,32 +5707,90 @@ msgstr ""
 msgid "Unable to create <%s> metadata file for raster map <%s@%s>"
 msgstr ""
 
-#: ../lib/raster/reclass.c:168
+#: ../lib/raster/reclass.c:162
+#, c-format
+msgid "Error reading beginning of header file for <%s@%s>: %s"
+msgstr ""
+
+#: ../lib/raster/reclass.c:180
 #, c-format
 msgid "Too many reclass categories for <%s@%s>"
 msgstr ""
 
-#: ../lib/raster/reclass.c:171
-#, c-format
-msgid "Illegal reclass format in header file for <%s@%s>"
-msgstr ""
+#: ../lib/raster/reclass.c:184
+#, fuzzy, c-format
+#| msgid "Unable to open header file for raster map <%s@%s>"
+msgid "Illegal reclass format in header file for <%s@%s>: %s"
+msgstr "Kann Header-Datei der Rasterkarte <%s@%s> nicht öffnen."
 
-#: ../lib/raster/reclass.c:273
+#: ../lib/raster/reclass.c:252
+#, fuzzy, c-format
+#| msgid "Unable to open %s for reading"
+msgid "File too short, reading line %d"
+msgstr "Kann %s nicht zum Lesen öffnen."
+
+#: ../lib/raster/reclass.c:259
+#, fuzzy, c-format
+#| msgid "Line is not looped"
+msgid "Line too long: %s..."
+msgstr "Linie ist nicht gelooped."
+
+#: ../lib/raster/reclass.c:265
+#, fuzzy, c-format
+#| msgid "Format definition is not correct: %s"
+msgid "Format is not key:value: %s"
+msgstr "Format-Definition ist nicht korrekt: %s"
+
+#: ../lib/raster/reclass.c:284
+#, fuzzy, c-format
+#| msgid "Unknown type: %s"
+msgid "Unknown key at line: %s"
+msgstr "Unbekannter Typ: %s"
+
+#: ../lib/raster/reclass.c:295
+#, fuzzy, c-format
+#| msgid "Unable to read range of raster map <%s>"
+msgid "Mapset not read, only raster name: %s"
+msgstr "Kann den Wertebereich der Rasterkarte <%s> nicht lesen."
+
+#: ../lib/raster/reclass.c:299
+#, fuzzy, c-format
+#| msgid "Raster map <%s> not found in mapset <%s>"
+msgid "Raster name not read, only mapset: %s"
+msgstr "Rasterkarte <%s> nicht im Mapset <%s> gefunden."
+
+#: ../lib/raster/reclass.c:302
+#, fuzzy
+#| msgid "Raster map <%s> not found"
+msgid "Raster name and mapset not read"
+msgstr "Rasterkarte <%s> wurde nicht gefunden."
+
+#: ../lib/raster/reclass.c:333
 msgid "Illegal reclass request"
 msgstr "Ungültige Reklassifizierungsanfrage."
 
-#: ../lib/raster/reclass.c:278
+#: ../lib/raster/reclass.c:338
 msgid "Illegal reclass type"
 msgstr "Ungültiger Reklassifizierungs-Typ."
 
-#: ../lib/raster/reclass.c:284
+#: ../lib/raster/reclass.c:344
 #, c-format
 msgid "Unable to create header file for <%s@%s>"
 msgstr ""
 
-#: ../lib/raster/reclass.c:332
+#: ../lib/raster/reclass.c:392
 #, c-format
 msgid "Unable to create dependency file in <%s@%s>"
+msgstr ""
+
+#: ../lib/raster/reclass.c:479
+#, c-format
+msgid "Reading integer failed on line: %s (after reading min: %d)"
+msgstr ""
+
+#: ../lib/raster/reclass.c:484
+#, c-format
+msgid "First entry (min) not read yet and reading integer failed on line: %s"
 msgstr ""
 
 #: ../lib/raster/sample.c:68
@@ -9307,9 +9365,6 @@ msgstr "Unbekanntes Abfragewerkzeug"
 #~ msgid "Unable to open automatic MASK file"
 #~ msgstr "Kann automatische MASK-Datei nicht öffnen."
 
-#~ msgid "Unable to open header file for raster map <%s@%s>"
-#~ msgstr "Kann Header-Datei der Rasterkarte <%s@%s> nicht öffnen."
-
 #~ msgid "Unable to open null file <%s>"
 #~ msgstr "Kann die NULL-Datei <%s> nicht öffnen."
 
@@ -9323,10 +9378,6 @@ msgstr "Unbekanntes Abfragewerkzeug"
 #, python-format
 #~ msgid "Unable to write band identifier for raster map <%s>"
 #~ msgstr "Bandbezeichner für Rasterkarte kann nicht geschrieben werden <%s>"
-
-#, python-format
-#~ msgid "Unknown type: %s"
-#~ msgstr "Unbekannter Typ: %s"
 
 #~ msgid "Using <%s@%s>"
 #~ msgstr "Verwende <%s@%s>"

@@ -77,13 +77,13 @@ class CalledModuleError(subprocess.CalledProcessError):
         executed = code if not module or module in code else f"{module} {code}"
         if errors:
             # We assume actual errors, e.g., captured stderr.
-            err = _("See the following errors:\n{errors}").format(errors=errors)
+            err = "See the following errors:\n{errors}".format(errors=errors)
         else:
             # In command line, the errors will be above, but in testing framework
             # or notebooks, the errors will be somewhere else than the traceback.
-            err = _("See errors above the traceback or in the error output.")
+            err = "See errors above the traceback or in the error output."
         # The full message
-        self.msg = _(
+        self.msg = (
             "Module run `{executed}` ended with an error.\n"
             "The subprocess ended with a non-zero return code: {returncode}."
             " {see_errors}"
