@@ -2417,7 +2417,13 @@ class GMFrame(wx.Frame):
             return
         Debug.msg(1, "Exiting shell with pid={0}".format(shellPid))
         import signal
+        import grass.temporal as tgis
 
+        # All these wxGUI Animation, Timeline, Temporal tool initialize tgis
+        # framework (messenger and C-interface subprocesses) which require to be
+        # properly stopped before quitting GRASS (sending SIGTERM signal), because
+        # it causes "freeze" wxGUI tool window and wxGUI processes are not terminated.
+        tgis.stop_subprocesses()
         os.kill(shellPid, signal.SIGTERM)
 
     def MsgNoLayerSelected(self):
