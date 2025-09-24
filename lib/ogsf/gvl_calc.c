@@ -720,7 +720,6 @@ int gvl_isosurf_calc(geovol *gvol)
         }
     }
 
-    /* TODO: G_free() dbuff and need_update ??? */
     G_free(dbuff);
     G_free(need_update);
 
