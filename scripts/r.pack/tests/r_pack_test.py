@@ -1,6 +1,7 @@
 import os
-import stat
 import re
+import stat
+import sys
 
 import pytest
 
@@ -94,14 +95,17 @@ def test_output_dir_is_file(xy_raster_dataset_session_for_module, tmp_path):
         tools.r_pack(input="rows_raster", output=output)
 
 
+@pytest.mark.skipif(sys.platform.startswith("win"), reason="Dir still writable")
 def test_output_dir_is_not_writable(xy_raster_dataset_session_for_module, tmp_path):
     """Check behavior when directory is not writable"""
     tools = Tools(session=xy_raster_dataset_session_for_module)
     parent = tmp_path / "parent_dir"
     parent.mkdir()
+    # This should work for Windows according to the doc, but it does not.
     parent.chmod(stat.S_IREAD)
     output = parent / "output_1.rpack"
-    assert not os.path.exists(output)  # output.exists() gives permission denied
+    # Calling output.exists() gives permission denied on Linux, but os.path does not.
+    assert not os.path.exists(output)
     assert output.parent.exists()
     assert output.parent.is_dir()
     with pytest.raises(
