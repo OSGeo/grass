@@ -10,53 +10,31 @@ ARG GUI=without
 # ARG CXXFLAGS=""
 # ARG PYTHONPATH="$PYTHONPATH"
 # ARG LD_LIBRARY_PATH="/usr/local/lib"
-ARG BUILD_DATE="$(date +'%Y-%m-%dT%H:%M:%S%:z')"
-ARG REVISION="$(git log -n 1 --pretty=format:'%h')"
-ARG BRANCH="$(git branch --show-current)"
-ARG VERSION="$(head include/VERSION -n 3 | sed ':a;N;$!ba;s/\n/ /g')"
+ARG NUMTHREADS=4
+
+ARG BRANCH=$(git branch --show-current)
 ARG AUTHORS="Carmen Tawalika,Markus Neteler,Anika Weinmann,Stefan Blumentrath"
 ARG MAINTAINERS="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
-ARG SOURCE="https://github.com/OSGeo/grass/tree/${BRANCH}/docker/ubuntu"
-ARG VENDOR="GRASS GIS Development Team"
-ARG LICENSE="GPL-2.0-or-later"
-ARG TITLE="GRASS GIS ${VERSION}"
-ARG DESCRIPTION="GRASS GIS (https://grass.osgeo.org/) is a Geographic Information System used for geospatial data management and analysis, image processing, graphics/map production, spatial modeling, and visualization."
-ARG URL="https://github.com/OSGeo/grass/tree/${BRANCH}/docker"
+ARG VENDOR="GRASS Development Team"
 ARG BASE_NAME="ubuntu:22.04"
 ARG DOCUMENTATION="https://github.com/OSGeo/grass/tree/${BRANCH}/docker/README.md"
-ARG REF_NAME="grass-gis"
-ARG DIGEST="sha256:340d9b015b194dc6e2a13938944e0d016e57b9679963fdeb9ce021daac430221"
+ARG REF_NAME="grass"
+ARG DIGEST="sha256:4e0171b9275e12d375863f2b3ae9ce00a4c53ddda176bd55868df97ac6f21a6e"
 
 FROM ubuntu:22.04@sha256:4e0171b9275e12d375863f2b3ae9ce00a4c53ddda176bd55868df97ac6f21a6e AS common_start
 
-ARG BUILD_DATE
-ARG REVISION
-ARG BRANCH
 ARG AUTHORS
 ARG MAINTAINERS
-ARG VERSION
-ARG TITLE
-ARG DESCRIPTION
-ARG LICENSE
-ARG SOURCE
 ARG VENDOR
-ARG URL
 ARG GUI
 ARG BASE_NAME
 ARG DOCUMENTATION
 ARG REF_NAME
 ARG DIGEST
+ARG NUMTHREADS
 
 LABEL org.opencontainers.image.authors="$AUTHORS" \
       org.opencontainers.image.vendor="$VENDOR" \
-      org.opencontainers.image.license="$LICENSE" \
-      org.opencontainers.image.created="$BUILD_DATE" \
-      org.opencontainers.image.revision="$REVISION" \
-      org.opencontainers.image.url="$URL" \
-      org.opencontainers.image.source="$SOURCE" \
-      org.opencontainers.image.version="$VERSION" \
-      org.opencontainers.image.title="$TITLE" \
-      org.opencontainers.image.description="$DESCRIPTION" \
       org.opencontainers.image.base.name="$BASE_NAME" \
       org.opencontainers.image.base.digest="$DIGEST" \
       org.opencontainers.image.ref.name="$REF_NAME" \
@@ -183,20 +161,16 @@ ARG GRASS_CONFIG="\
 ARG GRASS_PYTHON_PACKAGES="\
     matplotlib \
     numpy \
-    Pillow \
+    Pillow==10.3.0 \
     pip \
     psycopg2 \
     python-dateutil \
     python-magic \
     setuptools \
   "
-ENV GRASS_PYTHON_PACKAGES=${GRASS_PYTHON_PACKAGES}
-
 FROM common_start AS grass_without_gui
 
-
-ARG GRASS_CONFIG="${GRASS_CONFIG} --without-opengl --without-x"
-
+ARG GRASS_ADDITIONAL_CONFIG="--without-opengl --without-x"
 
 FROM common_start AS grass_with_gui
 
@@ -216,6 +190,7 @@ ARG GRASS_RUN_PACKAGES="${GRASS_RUN_PACKAGES} \
   libtiff5 \
   libwebkit2gtk-4.0 \
   libxtst6 \
+  python3-wxgtk4.0 \
 "
 
 # librsvg2-common \
@@ -224,7 +199,6 @@ ARG GRASS_RUN_PACKAGES="${GRASS_RUN_PACKAGES} \
 # This may indicate that pixbuf loaders or the mime database could not be found.)
 
 ARG GRASS_BUILD_PACKAGES="${GRASS_BUILD_PACKAGES} \
-  adwaita-icon-theme-full \
   freeglut3-dev \
   libgl1-mesa-dev \
   libglu1-mesa-dev \
@@ -246,28 +220,21 @@ ARG GRASS_ADDITIONAL_CONFIG="\
   --with-readline \
   --with-x \
 "
-ARG GRASS_PYTHON_PACKAGES="${GRASS_PYTHON_PACKAGES} wxPython"
+# ARG GRASS_PYTHON_PACKAGES="${GRASS_PYTHON_PACKAGES} wxPython"
 # If you do not use any Gnome Accessibility features, to suppress warning
 # WARNING **: Couldn't connect to accessibility bus:
 # execute programs with
 ENV NO_AT_BRIDGE=1
 
 # hadolint ignore=DL3006
-FROM grass_${GUI}_gui AS grass_gis
+FROM grass_${GUI}_gui AS grass
 
 LABEL org.opencontainers.image.authors="$AUTHORS" \
       org.opencontainers.image.vendor="$VENDOR" \
-      org.opencontainers.image.license="$LICENSE" \
-      org.opencontainers.image.created="$BUILD_DATE" \
-      org.opencontainers.image.revision="$REVISION" \
-      org.opencontainers.image.url="$URL" \
-      org.opencontainers.image.source="$SOURCE" \
-      org.opencontainers.image.version="$VERSION" \
-      org.opencontainers.image.title="$TITLE" \
-      org.opencontainers.image.description="$DESCRIPTION" \
       maintainers="$MAINTAINERS"
 
 # Add ubuntugis unstable and fetch packages
+# hadolint ignore=SC2086
 RUN apt-get update \
     && apt-get install -y --no-install-recommends --no-install-suggests \
     software-properties-common \
@@ -277,7 +244,6 @@ RUN apt-get update \
     && apt-get update -y && apt-get upgrade -y \
     && apt-get install -y --no-install-recommends --no-install-suggests \
     $GRASS_RUN_PACKAGES \
-    # $GRASS_ADDITIONAL_RUN_PACKAGES \
     && apt-get remove -y gpg gpg-agent \
     && apt-get autoremove -y \
     && apt-get clean all \
@@ -304,7 +270,7 @@ RUN apt-get update \
 # RUN wget -q --no-check-certificate -r -l inf -A tif https://cdn.proj.org/
 
 # Start build stage
-FROM grass_gis AS build
+FROM grass AS build
 
 # Add build and Python packages
 # hadolint ignore=SC2086
@@ -334,34 +300,40 @@ WORKDIR /src/grass_build
 
 # Set environmental variables for GRASS compilation, without debug symbols
 # Set gcc/g++ environmental variables for GRASS compilation, without debug symbols
-ENV MYCFLAGS="-O2 -std=gnu99"
-ENV MYLDFLAGS="-s"
-# CXX stuff:
-
 ENV LD_LIBRARY_PATH="/usr/local/lib" \
     LDFLAGS="-s -Wl,--no-undefined -lblas" \
     CFLAGS="-O2 -std=gnu99" \
     CXXFLAGS="" \
     # PYTHONPATH="$PYTHONPATH" \
-    NUMTHREADS=4
+    NUMTHREADS=$NUMTHREADS
 
 # Configure compile and install GRASS
-ENV NUMTHREADS=4
-RUN make distclean || echo "nothing to clean"
-RUN ./configure $GRASS_CONFIG \
-    && make -j $NUMTHREADS \
-    && make install && ldconfig \
-    &&  cp /usr/local/grass85/gui/wxpython/xml/module_items.xml module_items.xml; \
-    rm -rf /usr/local/grass85/demolocation; \
-    rm -rf /usr/local/grass85/fonts; \
-    rm -rf /usr/local/grass85/gui; \
-    rm -rf /usr/local/grass85/share; \
-    mkdir -p /usr/local/grass85/gui/wxpython/xml/; \
-    mv module_items.xml /usr/local/grass85/gui/wxpython/xml/module_items.xml;
+# hadolint ignore=SC2086
+RUN make -j $NUMTHREADS distclean || echo "nothing to clean" \
+    && ./configure $GRASS_CONFIG \
+    $GRASS_ADDITIONAL_CONFIG \
+    && make -j $NUMTHREADS
+RUN make install && ldconfig \
+    && rm -rf /usr/local/grass85/demolocation \
+    && if [ "$GUI" = "with" ] ; then \
+        echo "GUI selected, skipping GUI related cleanup"; \
+    else \
+        echo "No GUI selected, removing GUI related files"; \
+        cp /usr/local/grass85/gui/wxpython/xml/module_items.xml module_items.xml \
+        && rm -rf /usr/local/grass85/fonts \
+        && rm -rf /usr/local/grass85/gui \
+        && rm -rf /usr/local/grass85/docs/html \
+        && rm -rf /usr/local/grass85/docs/mkdocs \
+        && rm -rf /usr/local/grass85/share \
+        && mkdir -p /usr/local/grass85/gui/wxpython/xml/ \
+        && mv module_items.xml /usr/local/grass85/gui/wxpython/xml/module_items.xml; \
+    fi
 
 # Build the GDAL-GRASS plugin
+ENV CMAKE_BUILD_PARALLEL_LEVEL=$NUMTHREADS
 # renovate: datasource=github-tags depName=OSGeo/gdal-grass
 ARG GDAL_GRASS_VERSION=1.0.4
+# hadolint ignore=DL3003
 RUN git clone --branch $GDAL_GRASS_VERSION --depth 1 https://github.com/OSGeo/gdal-grass.git \
     && cd "gdal-grass" \
     && cmake -B build -DAUTOLOAD_DIR=/usr/lib/gdalplugins -DBUILD_TESTING=OFF \
@@ -371,17 +343,9 @@ RUN git clone --branch $GDAL_GRASS_VERSION --depth 1 https://github.com/OSGeo/gd
     && rm -rf "gdal-grass"
 
 # Leave build stage
-FROM grass_gis AS grass_gis_final
+FROM grass AS grass_final
 LABEL org.opencontainers.image.authors="$AUTHORS" \
       org.opencontainers.image.vendor="$VENDOR" \
-      org.opencontainers.image.license="$LICENSE" \
-      org.opencontainers.image.created="$BUILD_DATE" \
-      org.opencontainers.image.revision="$REVISION" \
-      org.opencontainers.image.url="$URL" \
-      org.opencontainers.image.source="$SOURCE" \
-      org.opencontainers.image.version="$VERSION" \
-      org.opencontainers.image.title="$TITLE" \
-      org.opencontainers.image.description="$DESCRIPTION" \
       maintainers="$MAINTAINERS"
 
 # GRASS specific
@@ -391,7 +355,7 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     # https://proj.org/usage/environmentvars.html#envvar-PROJ_NETWORK
     PROJ_NETWORK=ON \
     LC_ALL="en_US.UTF-8" \
-    PYTHONPATH="/usr/local/grass/etc/python/" \
+    PYTHONPATH="/usr/local/grass/etc/python" \
     LD_LIBRARY_PATH="/usr/local/grass/lib:/usr/local/lib" \
     GDAL_DRIVER_PATH="/usr/lib/gdalplugins"
 
@@ -410,15 +374,6 @@ RUN grass --tmp-project EPSG:4326 --exec g.version -rge && \
     pdal --version && \
     python --version
 
-WORKDIR /scripts
-
-# enable GRASS Python session support
-## grass --config python-path
-ENV PYTHONPATH="/usr/local/grass/etc/python:${PYTHONPATH}"
-# enable GRASS ctypes imports
-## grass --config path
-# ENV LD_LIBRARY_PATH="/usr/local/grass/lib:$LD_LIBRARY_PATH"
-
 WORKDIR /tmp
 COPY docker/testdata/simple.laz .
 WORKDIR /scripts
@@ -426,7 +381,9 @@ COPY docker/testdata/test_grass_session.py .
 ## Run GRASS python session and scan the test LAZ file
 RUN python /scripts/test_grass_session.py \
     && rm -rf /tmp/grasstest_epsg_25832 \
-    && grass --tmp-project EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g
+    && grass --tmp-project EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g \
+    && rm /tmp/simple.laz \
+    && rm /scripts/test_grass_session.py
 
 WORKDIR /grassdb
 VOLUME /grassdb
