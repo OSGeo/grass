@@ -31,7 +31,8 @@ and contains three mapsets: PERMANENT, viewsheds, and hydrology*
 
 A GRASS project is stored as a directory on disk.
 Many prefer to keep multiple projects organized in a single directory,
-commonly called grassdata, while others store them in separate folders
+commonly referred to as *GRASS database* and named *grassdata*.
+Others store them in separate directories
 organized according to their research projects.
 GRASS projects can be safely copied, moved, or compressed
 (zipped) for sharing or backup, making it easy to transfer an entire project
