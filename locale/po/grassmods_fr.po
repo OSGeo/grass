@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-06 15:42+0000\n"
-"PO-Revision-Date: 2025-09-04 15:48+0000\n"
+"POT-Creation-Date: 2025-09-13 15:39+0000\n"
+"PO-Revision-Date: 2025-09-19 22:48+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grassmods/fr/>\n"
 "Language: fr\n"
@@ -4681,7 +4681,7 @@ msgstr ""
 
 #: ../display/d.vect.thematic/main.c:241 ../display/d.vect/main.c:331
 msgid "Do not show this layer in vector legend"
-msgstr ""
+msgstr "Ne pas afficher cette couche dans la légende vectorielle"
 
 #: ../display/d.vect.thematic/main.c:253
 msgid "Flag -e is deprecated, set verbose mode with --v to get the extended statistical info."
@@ -4891,27 +4891,27 @@ msgstr "Affichage"
 
 #: ../display/d.vect/main.c:95
 msgid "Display geometry of features"
-msgstr ""
+msgstr "Afficher la géométrie des entités"
 
 #: ../display/d.vect/main.c:96
 msgid "Display category numbers of features"
-msgstr ""
+msgstr "Afficher les numéros de catégorie des entités"
 
 #: ../display/d.vect/main.c:97
 msgid "Display topology information (nodes, edges)"
-msgstr ""
+msgstr "Afficher les informations topologiques (nœuds, arêtes)"
 
 #: ../display/d.vect/main.c:98
 msgid "Display vertices of features"
-msgstr ""
+msgstr "Afficher les sommets des entités"
 
 #: ../display/d.vect/main.c:99
 msgid "Display direction of linear features"
-msgstr ""
+msgstr "Afficher la direction des entités linéaires"
 
 #: ../display/d.vect/main.c:100
 msgid "Display z-coordinate of features (only for 3D vector maps)"
-msgstr ""
+msgstr "Afficher la coordonnée z des entités (uniquement pour les cartes vectorielles 3D)."
 
 #: ../display/d.vect/main.c:117
 msgid "Feature color"
@@ -10937,9 +10937,9 @@ msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/target.c:21
 #: ../imagery/i.ortho.photo/i.ortho.transform/main.c:103
-#, fuzzy, c-format
+#, c-format
 msgid "Target project (location) <%s> not found"
-msgstr "Région <%s> non trouvée"
+msgstr "Projet (Secteur) cible <%s> introuvable"
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/target.c:34
 #: ../imagery/i.ortho.photo/i.ortho.transform/main.c:115
@@ -10972,13 +10972,12 @@ msgid "Select or modify the imagery group target."
 msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.target/main.c:60
-#, fuzzy
 msgid "Name of target project (location) for ortho-rectification"
-msgstr "Impossible d'obtenir les informations de projection pour le Secteur courant"
+msgstr "Nom du projet (Secteur) cible pour l'ortho-rectification"
 
 #: ../imagery/i.ortho.photo/i.ortho.target/main.c:66
 msgid "Name of target mapset for ortho-rectification"
-msgstr ""
+msgstr "Nom du jeu de cartes cible pour l'ortho-rectification"
 
 #: ../imagery/i.ortho.photo/i.ortho.target/main.c:80
 #, fuzzy, c-format
@@ -24443,7 +24442,7 @@ msgstr "Facteur de qualité (1 = qualité maximale, compression minimale)"
 
 #: ../raster/r.out.mpeg/main.c:140
 msgid "Convert on the fly, uses less disk space"
-msgstr ""
+msgstr "Convertir à la volée, utilise moins d'espace disque"
 
 #: ../raster/r.out.mpeg/main.c:141
 msgid "Requires r.out.ppm with stdout option"
@@ -24468,10 +24467,9 @@ msgstr ""
 
 #: ../raster/r.out.mpeg/main.c:460 ../raster/r.out.mpeg/write.c:324
 #: ../raster/r.out.mpeg/write.c:331
-#, fuzzy, c-format
-#| msgid "Unable to create temporary file <%s>"
+#, c-format
 msgid "Failed to remove temporary file <%s>: %s"
-msgstr "Impossible de créer le fichier temporaire <%s>"
+msgstr "Impossible de supprimer le fichier temporaire <%s> : %s"
 
 #: ../raster/r.out.mpeg/write.c:81 ../raster/r.out.mpeg/write.c:167
 msgid "Size mismatch error!"
@@ -24486,10 +24484,9 @@ msgid "Unable to create temporary files."
 msgstr "Impossible d'écrire les fichiers temporaires"
 
 #: ../raster/r.out.mpeg/write.c:209
-#, fuzzy, c-format
-#| msgid "3D vector map <%s> not found"
+#, c-format
 msgid "Directory <%s> too long"
-msgstr "Carte vecteur 3D <%s> non trouvée"
+msgstr "Répertoire <%s> trop long"
 
 #: ../raster/r.out.png/main.c:115
 msgid "Export a GRASS raster map as a non-georeferenced PNG image."
@@ -24501,15 +24498,15 @@ msgstr ""
 
 #: ../raster/r.out.png/main.c:129
 msgid "Compression level of PNG file"
-msgstr ""
+msgstr "Niveau de compression du fichier PNG"
 
 #: ../raster/r.out.png/main.c:130
 msgid "(0 = none, 1 = fastest, 9 = best)"
-msgstr ""
+msgstr "(0 = aucun, 1 = le plus rapide, 9 = le meilleur)"
 
 #: ../raster/r.out.png/main.c:137
 msgid "Make NULL cells transparent"
-msgstr ""
+msgstr "Rendre les cellules NULL transparentes"
 
 #: ../raster/r.out.png/main.c:141
 msgid "Output world file"
@@ -24518,7 +24515,7 @@ msgstr ""
 #: ../raster/r.out.png/main.c:265
 #, c-format
 msgid "Converting <%s>..."
-msgstr ""
+msgstr "Conversion de <%s>..."
 
 #: ../raster/r.out.png/main.c:280 ../raster/r.univar/r.univar_main.c:320
 #, c-format
@@ -34459,7 +34456,7 @@ msgstr ""
 
 #: ../scripts/r.import/r.import.py:389
 msgid "Please check the 'extent' parameter"
-msgstr ""
+msgstr "Veuillez vérifier le paramètre « extent »."
 
 #: ../scripts/r.import/r.import.py:391 ../scripts/v.import/v.import.py:335
 #, fuzzy
@@ -34520,7 +34517,7 @@ msgstr ""
 
 #: ../scripts/r.in.aster/r.in.aster.py:191
 msgid "Importing into GRASS ..."
-msgstr ""
+msgstr "Importation dans GRASS ..."
 
 #: ../scripts/r.in.srtm/r.in.srtm.py:162
 msgid "This module only operates in LatLong locations"
@@ -34613,11 +34610,11 @@ msgstr ""
 
 #: ../scripts/r.in.wms/wms_base.py:160
 msgid "Maxcols must be greater than 100"
-msgstr ""
+msgstr "Maxcols doit être supérieur à 100"
 
 #: ../scripts/r.in.wms/wms_base.py:164
 msgid "Maxrows must be greater than 100"
-msgstr ""
+msgstr "Maxrows doit être supérieur à 100"
 
 #: ../scripts/r.in.wms/wms_base.py:206
 #, python-format
@@ -34641,7 +34638,7 @@ msgstr ""
 #: ../scripts/r.in.wms/wms_base.py:275
 #, python-brace-format
 msgid "Unable to fetch capabilities from <{0}>. Reason: "
-msgstr ""
+msgstr "Impossible de récupérer les capacités de <{0}>. Raison : "
 
 #: ../scripts/r.in.wms/wms_base.py:314
 #, python-format
@@ -34649,37 +34646,39 @@ msgid ""
 "Unable to open file '%s'.\n"
 "%s\n"
 msgstr ""
+"Impossible d'ouvrir le fichier '%s'.\n"
+"%s\n"
 
 #: ../scripts/r.in.wms/wms_base.py:356
 msgid "Unable to write data into tempfile"
-msgstr ""
+msgstr "Impossible d'écrire des données dans le fichier temporaire"
 
 #: ../scripts/r.in.wms/wms_base.py:374
 #, python-format
 msgid "Unable to determine region, %s failed"
-msgstr ""
+msgstr "Impossible de déterminer la région, %s a échoué"
 
 #: ../scripts/r.in.wms/wms_base.py:378
 msgid "Region definition: 4 points required"
-msgstr ""
+msgstr "Définition de la région : 4 points requis"
 
 #: ../scripts/r.in.wms/wms_base.py:384
 msgid "Reprojection of region using m.proj failed."
-msgstr ""
+msgstr "Échec de la reprojection de la région à l'aide de m.proj."
 
 #: ../scripts/r.in.wms/wms_base.py:424
 msgid "Reprojecting raster..."
-msgstr ""
+msgstr "Reprojection de la carte raster…"
 
 #: ../scripts/r.in.wms/wms_base.py:483 ../scripts/r.in.wms/wms_base.py:585
 #: ../scripts/r.in.wms/wms_base.py:616 ../scripts/r.in.wms/wms_base.py:657
 #, python-format
 msgid "%s failed"
-msgstr ""
+msgstr "%s a échoué"
 
 #: ../scripts/r.in.wms/wms_base.py:500
 msgid "Unable to create temporary files"
-msgstr ""
+msgstr "Impossible de créer des fichiers temporaires."
 
 #: ../scripts/r.in.wms/wms_base.py:525
 #, python-format
@@ -36322,7 +36321,7 @@ msgstr "noeud"
 #: ../vector/v.segment/main.c:66 ../vector/v.split/main.c:58
 #: ../vector/v.to.points/main.c:57
 msgid "vertex"
-msgstr ""
+msgstr "sommet"
 
 #: ../vector/v.build.polylines/main.c:119
 msgid "Builds polylines from lines or boundaries."
@@ -36480,16 +36479,12 @@ msgid "plain;Human readable text output;csv;CSV (Comma Separated Values);json;JS
 msgstr ""
 
 #: ../vector/v.category/main.c:177
-#, fuzzy
-#| msgid "Shell script style, currently only for report [deprecated]"
 msgid "CSV style output, currently only for report [deprecated]"
-msgstr "Style script shell, actuellement uniquement pour l’option « report » [obsolète]"
+msgstr "Sortie style CSV, actuellement uniquement pour l’option « report » [obsolète]"
 
 #: ../vector/v.category/main.c:179
-#, fuzzy
-#| msgid "Format: layer type count min max. This flag is deprecated and will be removed in a future release. Use format=shell instead."
 msgid "Format: layer type count min max. This flag is deprecated and will be removed in a future release. Use format=csv instead."
-msgstr "Format : couche type nombre min max. Cette option est obsolète et sera retirée dans une prochaine version. Utiliser plutôt format=shell."
+msgstr "Format : couche type nombre min max. Cette option est obsolète et sera retirée dans une prochaine version. Utiliser plutôt format=csv."
 
 #: ../vector/v.category/main.c:183
 msgid "Do not copy attribute table(s)"
@@ -36500,10 +36495,8 @@ msgid "Database connection and attribute tables for concerned layers are not cha
 msgstr ""
 
 #: ../vector/v.category/main.c:243 ../vector/v.db.connect/main.c:179
-#, fuzzy
-#| msgid "Flag 't' is deprecated and will be removed in a future release. Please use format=csv instead."
 msgid "Flag 'g' is deprecated and will be removed in a future release. Please use format=csv instead."
-msgstr "L'option 't' est obsolète et sera retirée dans une prochaine version. Utiliser plutôt format=csv."
+msgstr "L'option 'g' est obsolète et sera retirée dans une prochaine version. Utiliser plutôt format=json."
 
 #: ../vector/v.category/main.c:247
 msgid "JSON output and CSV output cannot be used simultaneously."
@@ -36786,8 +36779,9 @@ msgid "Change type of boundary bridges"
 msgstr ""
 
 #: ../vector/v.clean/main.c:257
+#, fuzzy
 msgid "Snap vertices"
-msgstr ""
+msgstr "Accrocher les sommets"
 
 #: ../vector/v.clean/main.c:260
 msgid "Remove duplicate area centroids"
@@ -36815,7 +36809,7 @@ msgstr ""
 
 #: ../vector/v.clean/main.c:323
 msgid "Topological cleaning works best with native GRASS vector format"
-msgstr ""
+msgstr "Le nettoyage topologique fonctionne mieux avec le format vectoriel natif de GRASS"
 
 #: ../vector/v.clean/main.c:335
 msgid "Failed to copy attribute table to output vector map"
@@ -36839,12 +36833,12 @@ msgstr ""
 #: ../vector/v.clean/main.c:408 ../vector/v.clean/main.c:423
 #: ../vector/v.clean/main.c:458
 msgid "Tool: Remove duplicates"
-msgstr ""
+msgstr "Outil : Suppression de doublons"
 
 #: ../vector/v.clean/main.c:366 ../vector/v.clean/main.c:414
 #: ../vector/v.clean/main.c:463
 msgid "Tool: Merge lines"
-msgstr ""
+msgstr "Outil : Fusionner les lignes"
 
 #: ../vector/v.clean/main.c:376
 msgid "Tool: Remove dangles"
@@ -36988,17 +36982,17 @@ msgstr ""
 
 #: ../vector/v.cluster/main.c:209
 msgid "Creating search index ..."
-msgstr ""
+msgstr "Création de l'index de recherche…"
 
 #: ../vector/v.cluster/main.c:244 ../vector/v.cluster/main.c:450
 #: ../vector/v.cluster/main.c:699
 #, c-format
 msgid "Option %s must be a positive number"
-msgstr ""
+msgstr "L'option %s doit être un nombre positif"
 
 #: ../vector/v.cluster/main.c:254 ../vector/v.cluster/main.c:460
 msgid "Estimating maximum distance ..."
-msgstr ""
+msgstr "Estimation de la distance maximale..."
 
 #: ../vector/v.cluster/main.c:285 ../vector/v.cluster/main.c:491
 msgid "No neighbors found"
@@ -37017,17 +37011,17 @@ msgstr ""
 #: ../vector/v.cluster/main.c:296 ../vector/v.cluster/main.c:502
 #, c-format
 msgid "Mean: %g"
-msgstr ""
+msgstr "Moyenne : %g"
 
 #: ../vector/v.cluster/main.c:297 ../vector/v.cluster/main.c:503
 #, c-format
 msgid "Standard deviation: %g"
-msgstr ""
+msgstr "Écart-type : %g"
 
 #: ../vector/v.cluster/main.c:299 ../vector/v.cluster/main.c:505
 #, c-format
 msgid "Estimated maximum distance: %g"
-msgstr ""
+msgstr "Distance maximale estimée : %g"
 
 #: ../vector/v.cluster/main.c:303 ../vector/v.cluster/main.c:509
 #: ../vector/v.cluster/main.c:925 ../vector/v.cluster/main.c:1083
@@ -37037,7 +37031,7 @@ msgstr ""
 #: ../vector/v.cluster/main.c:345 ../vector/v.cluster/main.c:554
 #, c-format
 msgid "nlines: %d, nclusters: %d"
-msgstr ""
+msgstr "nlines: %d, nclusters: %d"
 
 #: ../vector/v.cluster/main.c:390 ../vector/v.cluster/main.c:600
 #, c-format
@@ -37113,7 +37107,7 @@ msgstr ""
 #: ../vector/v.out.ascii/main.c:109 ../vector/v.surf.rst/main.c:585
 #, c-format
 msgid "Layer <%s> not found"
-msgstr ""
+msgstr "Couche <%s> non trouvée"
 
 #: ../vector/v.colors.out/make_colors.c:31 ../vector/v.db.connect/main.c:337
 #: ../vector/v.db.select/main.c:276 ../vector/v.distance/main.c:557
@@ -37158,7 +37152,7 @@ msgstr ""
 
 #: ../vector/v.colors/main.c:80
 msgid "Name of column containing numeric data"
-msgstr ""
+msgstr "Nom de la colonne contenant des données numériques"
 
 #: ../vector/v.colors/main.c:81
 msgid "Required for use=attr"
@@ -37174,7 +37168,7 @@ msgstr ""
 
 #: ../vector/v.colors/main.c:115
 msgid "Name of color column to populate RGB values"
-msgstr ""
+msgstr "Nom de la colonne de couleur pour remplir les valeurs RVB"
 
 #: ../vector/v.colors/main.c:116
 msgid "If not given writes color table"
@@ -37200,22 +37194,22 @@ msgstr ""
 #: ../vector/v.colors/main.c:232
 #, c-format
 msgid "One of -%c, -%c or %s=, %s= or %s= must be specified"
-msgstr ""
+msgstr "L'une des options -%c, -%c ou %s=, %s= ou %s= doit être spécifiée"
 
 #: ../vector/v.colors/main.c:238
 #, c-format
 msgid "%s=, %s= and %s= are mutually exclusive"
-msgstr ""
+msgstr "%s=, %s= et %s= sont mutuellement exclusifs"
 
 #: ../vector/v.colors/main.c:246
 #, c-format
 msgid "%s= required for -%c"
-msgstr ""
+msgstr "%s= requis pour -%c"
 
 #: ../vector/v.colors/main.c:258
 #, c-format
 msgid "Unable to remove color table of vector map <%s>"
-msgstr ""
+msgstr "Impossible de supprimer la table des couleurs de la carte vectorielle <%s>"
 
 #: ../vector/v.colors/main.c:261
 #, c-format
@@ -37229,16 +37223,16 @@ msgstr ""
 #: ../vector/v.colors/main.c:290
 #, c-format
 msgid "Option <%s>: min must be greater or equal to max"
-msgstr ""
+msgstr "Option <%s> : min doit être supérieur ou égal à max"
 
 #: ../vector/v.colors/main.c:297
 #, c-format
 msgid "Color table <%s> not found"
-msgstr ""
+msgstr "Table de couleur <%s> introuvable"
 
 #: ../vector/v.colors/main.c:363
 msgid "Writing color rules..."
-msgstr ""
+msgstr "Écriture des règles de couleur..."
 
 #: ../vector/v.colors/main.c:379
 #, c-format
@@ -37248,7 +37242,7 @@ msgstr ""
 #: ../vector/v.colors/make_colors.c:16
 #, c-format
 msgid "Color table '%s' is not supported for floating point attributes"
-msgstr ""
+msgstr "La table de couleurs '%s' n'est pas prise en charge pour les attributs à virgule flottante"
 
 #: ../vector/v.colors/make_colors.c:22 ../vector/v.colors/make_colors.c:30
 #, c-format
@@ -37354,10 +37348,8 @@ msgid "Delete connection for certain layer (not the table)"
 msgstr "Efface la connexion pour une couche donnée (mais n'efface pas la table"
 
 #: ../vector/v.db.connect/main.c:174
-#, fuzzy
-#| msgid "The -p flag is required when using the format option."
 msgid "The -p or -c flag is required when using the format option."
-msgstr "L'option -p est requise lors de l'utilisation de l'option format."
+msgstr "L'option -p ou -c est requise lors de l'utilisation de l'option format."
 
 #: ../vector/v.db.connect/main.c:216
 msgid "Please choose only one print style"
@@ -37558,15 +37550,15 @@ msgstr ""
 
 #: ../vector/v.decimate/main.c:176 ../vector/v.in.lidar/main.c:258
 msgid "Skip first n points"
-msgstr ""
+msgstr "Sauter les n premiers points"
 
 #: ../vector/v.decimate/main.c:178 ../vector/v.in.lidar/main.c:260
 msgid "Skips the given number of points at the beginning."
-msgstr ""
+msgstr "Sautes le nombre de points donné au début."
 
 #: ../vector/v.decimate/main.c:186
 msgid "Copy only n points"
-msgstr ""
+msgstr "Copier seulement n points"
 
 #: ../vector/v.decimate/main.c:187
 msgid "Copies only the given number of points"
@@ -37767,7 +37759,7 @@ msgstr ""
 
 #: ../vector/v.distance/main.c:185
 msgid "Minimum distance or -1 for no limit"
-msgstr ""
+msgstr "Distance minimale ou -1 pour aucune limite"
 
 #: ../vector/v.distance/main.c:196
 msgid "Values describing the relation between two nearest features"
@@ -37779,7 +37771,7 @@ msgstr ""
 
 #: ../vector/v.distance/main.c:208
 msgid "minimum distance to nearest feature"
-msgstr ""
+msgstr "distance minimale à l’entité la plus proche"
 
 #: ../vector/v.distance/main.c:209
 msgid "x coordinate of the nearest point on the 'to' feature"
@@ -37826,8 +37818,9 @@ msgid "First column is always category of 'from' feature called from_cat"
 msgstr ""
 
 #: ../vector/v.distance/main.c:259
+#, fuzzy
 msgid "Calculate distances to all features within the threshold"
-msgstr ""
+msgstr "Calculer les distances par rapport à toutes les entités situées à l'intérieur du seuil"
 
 #: ../vector/v.distance/main.c:261
 msgid "Output may be written to stdout using the '-p' flag or uploaded to a new table created by the 'table' option; multiple 'upload' options may be used."
@@ -37843,7 +37836,7 @@ msgstr "L'option format requiert l'option -p; veuillez exécuter à nouveau avec
 
 #: ../vector/v.distance/main.c:324
 msgid "Updating the from= table is not supported with -a"
-msgstr ""
+msgstr "La mise à jour de la table from= n'est pas prise en charge avec -a"
 
 #: ../vector/v.distance/main.c:333
 msgid "Square matrix output only possible with one single upload variable"
@@ -37871,7 +37864,7 @@ msgid "Input vector map <%s> is 3D"
 msgstr "La carte vectorielle d'entrée <%s> est 3D"
 
 #: ../vector/v.distance/main.c:415 ../vector/v.distance/main.c:437
-#, fuzzy, c-format
+#, c-format
 msgid "No features of selected type found in <%s>"
 msgstr "Aucune entité du type sélectionné trouvé dans <%s>"
 
@@ -38715,7 +38708,7 @@ msgstr ""
 #: ../vector/v.external/proj.c:78 ../vector/v.in.ogr/proj.c:79
 #, c-format
 msgid "Projection for layer <%s> does not contain a valid CRS"
-msgstr ""
+msgstr "La projection pour la couche <%s> ne contient pas de SCR valide"
 
 #: ../vector/v.extract/extract.c:202
 #, c-format
@@ -39570,16 +39563,14 @@ msgid "Use imported table as attribute table for new map"
 msgstr ""
 
 #: ../vector/v.in.db/main.c:126
-#, fuzzy, c-format
-#| msgid "Output vector map extent"
+#, c-format
 msgid "Output vector name too long: <%s>"
-msgstr "Afficher l'emprise de la carte vecteur"
+msgstr "Nom du vecteur de sortie trop long : <%s>"
 
 #: ../vector/v.in.db/main.c:131
-#, fuzzy, c-format
-#| msgid "Map name <%s> is too long"
+#, c-format
 msgid "Mapset name too long: <%s>"
-msgstr "Le nom de la carte <%s> est trop long"
+msgstr "Le nom du jeu de cartes est trop long : <%s>"
 
 #: ../vector/v.in.db/main.c:147
 #, c-format
@@ -41776,8 +41767,8 @@ msgstr ""
 #: ../vector/v.out.ogr/attrb_fast.c:62
 #: ../vector/v.out.ogr/export_areas_fast.c:119
 #: ../vector/v.out.ogr/export_areas_fast.c:187
-#: ../vector/v.out.ogr/export_areas_fast.c:307
-#: ../vector/v.out.ogr/export_areas_fast.c:412
+#: ../vector/v.out.ogr/export_areas_fast.c:308
+#: ../vector/v.out.ogr/export_areas_fast.c:413
 #: ../vector/v.out.ogr/export_lines_fast.c:103
 #: ../vector/v.out.ogr/export_lines_fast.c:170
 #: ../vector/v.out.ogr/export_lines_fast.c:301
@@ -43684,7 +43675,7 @@ msgid "List supported output formats and exit"
 msgstr ""
 
 #: ../vector/v.out.ogr/attrb.c:51 ../vector/v.out.ogr/export_areas_fast.c:184
-#: ../vector/v.out.ogr/export_areas_fast.c:409
+#: ../vector/v.out.ogr/export_areas_fast.c:410
 #: ../vector/v.out.ogr/export_lines_fast.c:167
 #: ../vector/v.out.ogr/export_lines_fast.c:395
 #: ../vector/v.out.vtk/writeVTK.c:582
@@ -43717,8 +43708,8 @@ msgstr ""
 #: ../vector/v.out.ogr/export_areas.c:278
 #: ../vector/v.out.ogr/export_areas_fast.c:166
 #: ../vector/v.out.ogr/export_areas_fast.c:223
-#: ../vector/v.out.ogr/export_areas_fast.c:381
-#: ../vector/v.out.ogr/export_areas_fast.c:453
+#: ../vector/v.out.ogr/export_areas_fast.c:382
+#: ../vector/v.out.ogr/export_areas_fast.c:454
 #: ../vector/v.out.ogr/export_lines.c:131
 #: ../vector/v.out.ogr/export_lines.c:229
 #: ../vector/v.out.ogr/export_lines.c:278
@@ -43731,7 +43722,7 @@ msgstr ""
 
 #: ../vector/v.out.ogr/export_areas.c:168
 #: ../vector/v.out.ogr/export_areas_fast.c:95
-#: ../vector/v.out.ogr/export_areas_fast.c:277
+#: ../vector/v.out.ogr/export_areas_fast.c:278
 #: ../vector/v.out.ogr/export_lines.c:177
 #: ../vector/v.out.ogr/export_lines_fast.c:77
 #: ../vector/v.out.ogr/export_lines_fast.c:265
@@ -43741,14 +43732,14 @@ msgstr ""
 
 #: ../vector/v.out.ogr/export_areas.c:180
 #: ../vector/v.out.ogr/export_areas_fast.c:104
-#: ../vector/v.out.ogr/export_areas_fast.c:290
+#: ../vector/v.out.ogr/export_areas_fast.c:291
 #: ../vector/v.out.ogr/export_lines_fast.c:86
 #: ../vector/v.out.ogr/export_lines_fast.c:274
 msgid "Exporting features with category..."
 msgstr ""
 
 #: ../vector/v.out.ogr/export_areas.c:202
-#: ../vector/v.out.ogr/export_areas_fast.c:355
+#: ../vector/v.out.ogr/export_areas_fast.c:356
 #: ../vector/v.out.ogr/export_lines.c:212
 #: ../vector/v.out.ogr/export_lines_fast.c:349
 #, c-format
@@ -43757,14 +43748,14 @@ msgstr ""
 
 #: ../vector/v.out.ogr/export_areas.c:243
 #: ../vector/v.out.ogr/export_areas_fast.c:176
-#: ../vector/v.out.ogr/export_areas_fast.c:397
+#: ../vector/v.out.ogr/export_areas_fast.c:398
 #: ../vector/v.out.ogr/export_lines_fast.c:159
 #: ../vector/v.out.ogr/export_lines_fast.c:383
 msgid "Exporting features without category..."
 msgstr ""
 
 #: ../vector/v.out.ogr/export_areas_fast.c:115
-#: ../vector/v.out.ogr/export_areas_fast.c:303
+#: ../vector/v.out.ogr/export_areas_fast.c:304
 #: ../vector/v.out.ogr/export_lines_fast.c:99
 #: ../vector/v.out.ogr/export_lines_fast.c:297
 #, fuzzy, c-format
@@ -43773,7 +43764,7 @@ msgid "Cannot select attributes sorted by %s"
 msgstr "Impossible de sélectionner les attributs pour cat = %d"
 
 #: ../vector/v.out.ogr/export_areas_fast.c:144
-#: ../vector/v.out.ogr/export_areas_fast.c:330
+#: ../vector/v.out.ogr/export_areas_fast.c:331
 #: ../vector/v.out.ogr/export_lines_fast.c:126
 #: ../vector/v.out.ogr/export_lines_fast.c:323
 msgid "Category index is not sorted ascending by cat!"
@@ -44295,10 +44286,9 @@ msgid "Cannot select attributes for cat=%d"
 msgstr ""
 
 #: ../vector/v.out.svg/main.c:414
-#, fuzzy, c-format
-#| msgid "Group name <%s> is too long"
+#, c-format
 msgid "Column name <%s> is too long"
-msgstr "Nom de groupe <%s> est trop long"
+msgstr "Nom de colonne <%s> est trop long"
 
 #: ../vector/v.out.vtk/head.c:26
 msgid "writeVTKHeader: Writing VTK-Header"
@@ -47683,10 +47673,8 @@ msgid "Print attribute information"
 msgstr "Affiche l'information attributaire"
 
 #: ../vector/v.what/main.c:110
-#, fuzzy
-#| msgid "Print attribute information"
 msgid "Print attribute database connection information"
-msgstr "Affiche l'information attributaire"
+msgstr "Afficher les informations de connexion à la base de données d’attributs"
 
 #: ../vector/v.what/main.c:115
 msgid "Print topological information (debugging)"
@@ -47699,34 +47687,28 @@ msgid "Prints internal information for topology debugging"
 msgstr "Affiche l'information topologique (déboguage)"
 
 #: ../vector/v.what/main.c:130
-#, fuzzy
-#| msgid "Print the stats in shell script style [deprecated]"
 msgid "Print the stats in JSON [deprecated]"
-msgstr "Afficher les statistiques en style script shell [obsolète]"
+msgstr "Afficher les statistiques en JSON [obsolète]"
 
 #: ../vector/v.what/main.c:132
-#, fuzzy
-#| msgid "This flag is deprecated and will be removed in a future release. Use format=csv instead."
 msgid "This flag is deprecated and will be removed in a future release. Use format=json instead."
-msgstr "Cette option est obsolète et sera retirée dans une prochaine version. Utiliser plutôt format=csv."
+msgstr "Cette option est obsolète et sera retirée dans une prochaine version. Utiliser plutôt format=json."
 
 #: ../vector/v.what/main.c:139
 msgid "Print multiple features for each map if they meet the criteria"
-msgstr ""
+msgstr "Afficher plusieurs entités pour chaque carte si elles répondent aux critères"
 
 #: ../vector/v.what/main.c:141
 msgid "For JSON, this places features under a \"features\" key"
-msgstr ""
+msgstr "Pour JSON, les entités sont placées sous une clé \"features\""
 
 #: ../vector/v.what/main.c:160
 msgid "No input vector maps!"
 msgstr ""
 
 #: ../vector/v.what/main.c:190
-#, fuzzy
-#| msgid "Flag 't' is deprecated and will be removed in a future release. Please use format=csv instead."
 msgid "Flag 'j' is deprecated and will be removed in a future release. Please use format=json instead."
-msgstr "L'option 't' est obsolète et sera retirée dans une prochaine version. Utiliser plutôt format=csv."
+msgstr "L'option 'j' est obsolète et sera retirée dans une prochaine version. Utiliser plutôt format=json."
 
 #: ../vector/v.what/main.c:215
 msgid "Flag 'i' prints attribute database connection information. It is currently always enabled for backward compatibility, but this behavior will be removed in a future release. Please use the 'i' flag together with the 'a' flag instead."

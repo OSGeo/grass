@@ -31,7 +31,7 @@ jobs:
     steps:
       - name: Create URL to the run output
         id: vars
-        run: echo "run-url=https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" >> $GITHUB_OUTPUT
+        run: echo "run-url=https://github.com/$GITHUB_REPOSITORY/actions/runs/${GITHUB_RUN_ID}" >> "${GITHUB_OUTPUT}"
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           persist-credentials: false
@@ -60,8 +60,11 @@ jobs:
       - name: Check outputs
         if: ${{ steps.cpr.outputs.pull-request-number }}
         run: |
-          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
-          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
+          echo "Pull Request Number - ${STEPS_CPR_OUTPUTS_PULL_REQUEST_NUMBER}"
+          echo "Pull Request URL - ${STEPS_CPR_OUTPUTS_PULL_REQUEST_URL}"
+        env:
+          STEPS_CPR_OUTPUTS_PULL_REQUEST_NUMBER: ${{ steps.cpr.outputs.pull-request-number }}
+          STEPS_CPR_OUTPUTS_PULL_REQUEST_URL: ${{ steps.cpr.outputs.pull-request-url }}
   update-i18n:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -74,7 +77,7 @@ jobs:
     steps:
       - name: Create URL to the run output
         id: vars
-        run: echo "run-url=https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" >> $GITHUB_OUTPUT
+        run: echo "run-url=https://github.com/$GITHUB_REPOSITORY/actions/runs/${GITHUB_RUN_ID}" >> "${GITHUB_OUTPUT}"
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           persist-credentials: false
@@ -95,7 +98,7 @@ jobs:
             --without-opengl \
             --without-pdal
       - name: Build grass core
-        run: make -j$(nproc)
+        run: make -j"$(nproc)"
       - name: Create .pot files (containing original messages)
         run: cd locale && make pot
       - name: Merge new messages (Done by Weblate plugin)
@@ -133,12 +136,16 @@ jobs:
           branch: periodic/update-i18n
           title: "locale: Update translation files"
           body: |
-            This updates the .pot template files, as well as all language-specific .po files.
+            This updates the .pot template files, as well as all language-specific .po files
+            if the option was selected.
             [Workflow run summary](${{ steps.vars.outputs.run-url }})
 
             Automated changes by [create-pull-request](https://github.com/peter-evans/create-pull-request) GitHub action
       - name: Check outputs
         if: ${{ steps.changed-files.outcome == 'failure' && steps.cpr.outputs.pull-request-number }}
         run: |
-          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
-          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
+          echo "Pull Request Number - ${STEPS_CPR_OUTPUTS_PULL_REQUEST_NUMBER}"
+          echo "Pull Request URL - ${STEPS_CPR_OUTPUTS_PULL_REQUEST_URL}"
+        env:
+          STEPS_CPR_OUTPUTS_PULL_REQUEST_NUMBER: ${{ steps.cpr.outputs.pull-request-number }}
+          STEPS_CPR_OUTPUTS_PULL_REQUEST_URL: ${{ steps.cpr.outputs.pull-request-url }}

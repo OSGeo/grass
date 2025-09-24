@@ -284,14 +284,24 @@ int main(int argc, char *argv[])
 
     /*allocate the geometry structure  for geometry and area calculation */
     geom = N_init_geom_data_2d(&region, geom);
+    if (!geom) {
+        G_fatal_error(_("Failed to initialize geometry data"));
+    }
 
     /*Set the function callback to the groundwater flow function */
     call = N_alloc_les_callback_2d();
+
+    if (!call)
+        G_fatal_error(_("Failed to allocate LES callback"));
+
     N_set_les_callback_2d_func(call, (*N_callback_gwflow_2d)); /*gwflow 2d */
 
     /*Allocate the groundwater flow data structure */
     data =
         N_alloc_gwflow_data2d(geom->cols, geom->rows, with_river, with_drain);
+
+    if (!data)
+        G_fatal_error(_("Failed to allocate gwflow data structure"));
 
     /* set the groundwater type */
     if (param.type->answer) {
@@ -370,6 +380,9 @@ int main(int argc, char *argv[])
 
     /*assemble the linear equation system  and solve it */
     les = create_solve_les(geom, data, call, solver, maxit, error);
+    if (!les)
+        G_fatal_error(
+            _("Unable to create and solve the linear equation system"));
 
     /* copy the result into the phead array for output or unconfined calculation
      */
@@ -401,6 +414,9 @@ int main(int argc, char *argv[])
 
             /*assemble the linear equation system  and solve it */
             les = create_solve_les(geom, data, call, solver, maxit, error);
+            if (!les)
+                G_fatal_error(
+                    _("Unable to create and solve the linear equation system"));
 
             /*calculate the maximum norm of the groundwater height difference */
             tmp = 0;
@@ -451,6 +467,9 @@ int main(int argc, char *argv[])
     if (param.vector_x->answer && param.vector_y->answer) {
         field = N_compute_gradient_field_2d(data->phead, data->hc_x, data->hc_y,
                                             geom, NULL);
+
+        if (!field)
+            G_fatal_error(_("Failed to compute gradient field"));
 
         xcomp = N_alloc_array_2d(geom->cols, geom->rows, 1, DCELL_TYPE);
         ycomp = N_alloc_array_2d(geom->cols, geom->rows, 1, DCELL_TYPE);
@@ -533,6 +552,9 @@ N_les *create_solve_les(N_geom_data *geom, N_gwflow_data2d *data,
     else
         les = N_assemble_les_2d_dirichlet(N_NORMAL_LES, geom, data->status,
                                           data->phead, (void *)data, call);
+
+    if (!les)
+        G_fatal_error(_("Unable to create the linear equation system"));
 
     N_les_integrate_dirichlet_2d(les, geom, data->status, data->phead);
 
