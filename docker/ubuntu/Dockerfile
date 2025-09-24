@@ -161,7 +161,7 @@ ARG GRASS_CONFIG="\
 ARG GRASS_PYTHON_PACKAGES="\
     matplotlib \
     numpy \
-    Pillow \
+    Pillow==10.3.0 \
     pip \
     psycopg2 \
     python-dateutil \
@@ -312,8 +312,8 @@ ENV LD_LIBRARY_PATH="/usr/local/lib" \
 RUN make -j $NUMTHREADS distclean || echo "nothing to clean" \
     && ./configure $GRASS_CONFIG \
     $GRASS_ADDITIONAL_CONFIG \
-    && make -j $NUMTHREADS \
-    && make install && ldconfig \
+    && make -j $NUMTHREADS
+RUN make install && ldconfig \
     && rm -rf /usr/local/grass85/demolocation \
     && if [ "$GUI" = "with" ] ; then \
         echo "GUI selected, skipping GUI related cleanup"; \
@@ -369,8 +369,6 @@ COPY --link --from=build /usr/lib/gdalplugins /usr/lib/gdalplugins
 # Create generic GRASS lib name regardless of version number
 RUN ln -sf /usr/local/grass85 /usr/local/grass
 
-FROM grass_final AS print_and_test
-
 # show GRASS, PROJ, GDAL etc versions
 RUN grass --tmp-project EPSG:4326 --exec g.version -rge && \
     pdal --version && \
@@ -383,8 +381,9 @@ COPY docker/testdata/test_grass_session.py .
 ## Run GRASS python session and scan the test LAZ file
 RUN python /scripts/test_grass_session.py \
     && rm -rf /tmp/grasstest_epsg_25832 \
-    && grass --tmp-project EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g
+    && grass --tmp-project EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g \
+    && rm /tmp/simple.laz \
+    && rm /scripts/test_grass_session.py
 
-FROM grass_final
 WORKDIR /grassdb
 VOLUME /grassdb
