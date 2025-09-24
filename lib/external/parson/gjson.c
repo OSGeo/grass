@@ -16,6 +16,7 @@
  *****************************************************************************/
 
 #include "gjson.h"
+#include "parson.h"
 
 /* *************************************************************** */
 /* ***** WRAPPER FOR PARSON FUNCTIONS USED IN GRASS ************** */
@@ -38,7 +39,7 @@ JSON_Object *G_json_value_get_object(const JSON_Value *value)
 
 JSON_Object *G_json_object(const JSON_Value *value)
 {
-    return json_object(value);
+    return G_json_object(value);
 }
 JSON_Object *G_json_object_get_object(const JSON_Object *object,
                                       const char *name)
@@ -114,7 +115,7 @@ double G_json_object_dotget_number(JSON_Object *object, const char *name)
 }
 JSON_Array *G_json_array(const JSON_Value *value)
 {
-    return json_array(value);
+    return G_json_array(value);
 }
 JSON_Value *G_json_array_get_value(const JSON_Array *array, size_t index)
 {
@@ -156,6 +157,11 @@ JSON_Status G_json_array_append_boolean(JSON_Array *array, int boolean)
 JSON_Status G_json_array_append_null(JSON_Array *array)
 {
     return json_array_append_null(array);
+}
+
+void G_json_set_float_serialization_format(const char *format)
+{
+    json_set_float_serialization_format(format);
 }
 
 char *G_json_serialize_to_string_pretty(const JSON_Value *value)
