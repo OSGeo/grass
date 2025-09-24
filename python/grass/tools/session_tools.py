@@ -17,7 +17,6 @@ from __future__ import annotations
 import os
 
 import grass.script as gs
-from grass.exceptions import CalledModuleError
 
 from .importexport import ImporterExporter
 from .support import ParameterConverter, ToolFunctionResolver, ToolResult
@@ -328,22 +327,16 @@ class Tools:
         if parameter_converter is None:
             parameter_converter = ParameterConverter()
             parameter_converter.process_parameter_list(command[1:])
-        if parameter_converter.import_export:
-            if self._importer_exporter is None:
-                self._importer_exporter = ImporterExporter(
-                    run_function=self.call, run_cmd_function=self.call_cmd
-                )
-            command = self._importer_exporter.process_parameter_list(
-                command, **popen_options
-            )
-            try:
-                self._importer_exporter.import_data(env=popen_options["env"])
-            except CalledModuleError:
-                if parameter_converter.import_export:
-                    if not self._delete_on_context_exit and not self._keep_data:
-                        self._importer_exporter.cleanup(env=popen_options["env"])
-                raise
         try:
+            if parameter_converter.import_export:
+                if self._importer_exporter is None:
+                    self._importer_exporter = ImporterExporter(
+                        run_function=self.call, run_cmd_function=self.call_cmd
+                    )
+                command = self._importer_exporter.process_parameter_list(
+                    command, **popen_options
+                )
+                self._importer_exporter.import_data(env=popen_options["env"])
             # We approximate tool_kwargs as original kwargs.
             result = self.call_cmd(
                 command,
@@ -351,20 +344,15 @@ class Tools:
                 input=input,
                 **popen_options,
             )
-        except CalledModuleError:
             if parameter_converter.import_export:
-                if not self._delete_on_context_exit and not self._keep_data:
-                    self._importer_exporter.cleanup(env=popen_options["env"])
-            raise
-        if parameter_converter.import_export:
-            overwrite = None
-            if "--o" in command or "--overwrite" in command:
-                overwrite = True
-            try:
+                overwrite = None
+                if "--o" in command or "--overwrite" in command:
+                    overwrite = True
                 self._importer_exporter.export_data(
                     env=popen_options["env"], overwrite=overwrite
                 )
-            finally:
+        finally:
+            if parameter_converter.import_export:
                 if not self._delete_on_context_exit and not self._keep_data:
                     self._importer_exporter.cleanup(env=popen_options["env"])
         return result
