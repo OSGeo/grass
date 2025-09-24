@@ -37,12 +37,15 @@ class ToolError(CalledModuleError):
     ):
         """Create an exception with a full error message based on the parameters.
 
-        Best results are provided when errors is a single line string, aiming at a
-        short and clear message. In case it is `None`, additional text is providing
-        to help the user find the error message, assuming that there is one somewhere.
-        If it is an empty string, it assumes that none was produced and reports
-        that in the resulting message. For multiline error messages,
-        no assumptions are made and information about the tool run is printed first.
+        Best results are provided when *errors* is a single line string, aiming at a
+        short and clear message. In case *errors* is `None`, additional text is
+        provided to help the user find the error message, assuming that there is one
+        somewhere. If *errors* is an empty string, it assumes that stderr was produced
+        and reports that in the resulting message. A single line message may be
+        modified to provide the best possible error message assuming it is a standard
+        fatal error message produced by a GRASS tool describing best what went wrong.
+        For multiline error messages, no assumptions are made, so the information
+        about the tool run is printed first and then the error message.
 
         :param tool: tool name (for interface compatibility with *CalledModuleError*)
         :param cmd: string or list of strings forming the actual (underlying) command
