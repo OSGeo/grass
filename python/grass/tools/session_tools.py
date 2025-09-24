@@ -32,7 +32,9 @@ class ToolError(CalledModuleError):
     not rely on that.
     """
 
-    def __init__(self, tool, cmd, returncode, errors=None):
+    def __init__(
+        self, tool: str, cmd: list, returncode: int, errors: str | None = None
+    ):
         """Create an exception with a full error message based on the parameters.
 
         Best results are provided when errors is a single line string, aiming at a
