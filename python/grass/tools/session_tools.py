@@ -51,6 +51,8 @@ class ToolError(CalledModuleError):
         :param cmd: string or list of strings forming the actual (underlying) command
         :param returncode: process returncode (assuming non-zero)
         :param errors: errors provided by the tool (typically stderr)
+
+        Expect changes to the *tool* parameter and the corresponding attribute.
         """
         # CalledProcessError has undocumented constructor
         super().__init__(tool, cmd, returncode, errors)
@@ -227,7 +229,7 @@ class Tools:
         verbose one wins.
 
         In case a tool run fails, indicating that by non-zero return code,
-        *grass.exceptions.CalledModuleError* exception is raised by default. This can
+        *grass.tools.ToolError* exception is raised by default. This can
         be changed by passing, e.g., `errors="ignore"`. The *errors* parameter
         is passed to the *grass.script.handle_errors* function which determines
         the specific behavior.
