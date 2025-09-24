@@ -58,9 +58,10 @@ For example, a UTM zone is often suitable for a local scale analysis, but it
 may be inappropriate for areas that span multiple UTM zones, as distortions
 will increase at the edges.
 
-You can select a CRS using an EPSG code, derive it from an existing georeferenced
-file (e.g. a GeoTiff or a GeoPackage), define a custom CRS, or use a generic
-cartesian system for simulations or non-georeferenced data.
+When creating a project, you can select a CRS using an EPSG code,
+derive it from an existing georeferenced file (e.g. a GeoTiff or a GeoPackage),
+define a custom CRS, or use a generic cartesian system
+for simulations or non-georeferenced data.
 
 !!! grass-tip "Setting a default region"
     The [computational region](g.region.md) defines the spatial extent and
@@ -68,7 +69,7 @@ cartesian system for simulations or non-georeferenced data.
     When creating a new project, it is a good idea to set a default computational
     region in the PERMANENT mapset, especially when you expect to work with
     raster data and multiple mapsets.
-    The default region is stored in the PERMANENT mapset and then applied
+    The default region is managed in the PERMANENT mapset and applied
     automatically to any new mapsets created within the project.
 
 ### Creating a GRASS project from different sources
@@ -92,11 +93,6 @@ data file are often the most practical and convenient options.
 ### Creating a GRASS project in different environments
 
 Projects can be created in various ways depending on the environment:
-
-- GRASS GUI Project Wizard: Guides you step-by-step to set the CRS and
-  optionally import a georeferenced file.
-
-    ![Project Wizard](create_new_project_gui.png)
 
 - GRASS Python API: Allows creating a project programmatically with the function
   [`create_project`](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.create_project).
@@ -132,6 +128,11 @@ Projects can be created in various ways depending on the environment:
     grass --tmp-project XY
     ```
 
+- GRASS GUI Project Wizard: Guides you step-by-step to set the CRS and
+  optionally import a georeferenced file.
+
+    ![Project Wizard](create_new_project_gui.png)
+
 ## Importing and linking data
 
 Data can be brought into a GRASS project either by importing into GRASS-native
@@ -145,7 +146,8 @@ Key GRASS tools for importing raster and vector data include [r.import](r.import
 and [v.import](v.import.md). These tools automatically reproject data if needed
 and use GDAL library, enabling import of data from a wide range of sources.
 There are other import tools for specific file formats, such as
-[r.in.pdal](r.in.pdal.md) for lidar data.
+[r.in.pdal](r.in.pdal.md) for lidar data and [r.unpack](r.unpack.md)
+and [v.unpack](v.unpack.md) for GRASS native rasters and vectors.
 
 Linking ([r.external](r.external.md) and [v.external](v.external.md))
 makes external data accessible in GRASS without creating a copy.
@@ -158,19 +160,21 @@ and has other limitations.
 A mapset is a subdirectory within a GRASS project where geospatial analyses
 are performed. All mapsets use their project's CRS.
 Organizing data into mapsets allows isolation of tasks and supports workflows
-where multiple users work on the same project concurrently,
+where multiple processes or users work on the same project concurrently,
 such as in high-performance computing (HPC) or shared network environments.
 
-Each GRASS project automatically includes a PERMANENT mapset.
-The PERMANENT mapset defines the CRS and stores core data needed across mapsets.
+Each GRASS project automatically includes one mapset named PERMANENT.
+The PERMANENT mapset can be used to store baseline data needed across mapsets.
 Additional mapsets can be created for individual subprojects, subregions, or users.
 Each mapset contains the actual geospatial data (GRASS uses the term "maps"),
-as well as metadata such as color tables and the current computational region.
-Temporary mapsets can also be created for workflows using GRASS from other
-environments (e.g., R, Python), existing only for the duration of the session.
+as well as their metadata such as color tables. It also stores mapset-level information
+such as the current computational region and raster mask.
+Temporary mapsets can also be created for one-off workflows from command line,
+Python or R, existing only for the task execution.
 
 GRASS tools operate only in the current mapset, while data from other mapsets
-can be accessed explicitly (e.g., mapname@mapset).
+can be accessed by explicitly providing map's *fully qualified name*,
+i.e., map name followed by an '@' sign and the name of the mapset (mapname@mapset).
 
 !!! grass-tip "Note"
     Unlike GRASS projects, mapsets typically *should not be copied or moved
@@ -180,10 +184,6 @@ can be accessed explicitly (e.g., mapname@mapset).
 ### Creating a mapset
 
 Mapsets can be created in various ways depending on the environment:
-
-- GRASS GUI: In menu *Settings > GRASS working environment > Create new mapset*.
-  Or create a new mapset by right-clicking on a project in the [Data Catalog](wxGUI.datacatalog.md).
-The new mapset will be created and set as the current mapset.
 
 - GRASS [g.mapset](g.mapset.md) tool:
     Create a new mapset in the current project and set it as the current mapset:
@@ -206,18 +206,23 @@ The new mapset will be created and set as the current mapset.
     grass --tmp-mapset /path/to/my_project
     ```
 
+- GRASS GUI: In menu *Settings > GRASS working environment > Create new mapset*.
+  Or create a new mapset by right-clicking on a project in the [Data Catalog](wxGUI.datacatalog.md).
+  The new mapset will be created and set as the current mapset.
+
 !!! grass-tip "Setting computational region"
     The computational region defines the spatial extent and resolution for
     raster operations in GRASS. Each mapset has its own computational region,
     which persists until it is changed by the user with [g.region](g.region.md).
     When a new mapset is created, it initially uses a default region stored
     in the PERMANENT mapset. If no default region is defined in PERMANENT,
-    the computational region must be set before any raster computations can be performed.
+    the computational region must be set before any meaningful raster computations
+    can be performed.
 
 ### Referring to maps from other mapsets
 
 When you use a map in GRASS, you can either refer to it by its bare name
-(e.g., `elevation`) or by its qualified name with a mapset (e.g., `elevation@PERMANENT`).
+(e.g., `elevation`) or by its fully qualified name with a mapset (e.g., `elevation@PERMANENT`).
 
 If you write `elevation@PERMANENT`, GRASS looks in that specified mapset
 and nowhere else. If you write only `elevation`, GRASS looks for the map of
@@ -225,8 +230,8 @@ that name in the current mapset first.
 If it doesn’t find it there, GRASS continues searching in the other mapsets
 listed in the *mapset search path*.
 By default, the search path always includes the current mapset
-(first, highest priority) and the PERMANENT mapset so the core
-layers are always available.
+(first, highest priority) and the PERMANENT mapset so the baseline
+data are always available.
 
 You can change which mapsets are included in the search path with [g.mapsets](g.mapsets.md).
 The search path settings are saved in your current mapset for future sessions.
@@ -234,9 +239,9 @@ The search path settings are saved in your current mapset for future sessions.
 ### Examples of using projects and mapsets
 
 **Site suitability analysis for solar plants:**
-    A researcher selects an appropriate CRS for the study area and creates a GRASS
-    project to store base datasets. The PERMANENT mapset contains a statewide elevation
-    model and land cover map.
+    A data scientist selects an appropriate CRS for the study area and creates
+    a GRASS project to store base datasets. The PERMANENT mapset contains
+    a statewide elevation model and land cover map.
     For each candidate site, the researcher creates a new mapset,
     sets the appropriate computational region, and runs solar radiation computations.
     The results are kept separate in their mapsets while the base datasets
@@ -246,8 +251,9 @@ The search path settings are saved in your current mapset for future sessions.
     A planner is testing several scenarios for urban growth. After creating
     a GRASS project, importing data into the PERMANENT mapset and setting default
     region, the planner creates multiple mapsets within the same GRASS project,
-    one per scenario, all using the same computational region and core land use data
-    in PERMANENT. This makes it easy to compare outcomes without mixing results.
+    one per scenario, all using the same computational region and baseline land
+    use data in PERMANENT. This makes it easy to compare outcomes without
+    mixing results.
 
 **Educational setting:**
     Each student downloads a copy of a sample dataset containing a GRASS project
@@ -262,8 +268,8 @@ The search path settings are saved in your current mapset for future sessions.
     computational regions. This setup keeps the national dataset safe while allowing
     large-scale analyses in parallel.
 
-**Temporary data processing:**
-    A data engineer needs to bring in several raw datasets, run analyses,
+**Data pipeline:**
+    A data engineer needs to combine several raw datasets, run analyses,
     and generate summary statistics. They create a temporary GRASS project,
     set computational region, perform the workflow, and once it is closed
     the project is deleted automatically, leaving no clutter behind.
