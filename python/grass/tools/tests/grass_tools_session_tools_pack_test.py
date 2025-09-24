@@ -505,3 +505,188 @@ def test_direct_r_pack_from_pack(xy_dataset_session, rows_raster_file3x3, tmp_pa
     assert not tools.g_findfile(
         element="raster", file=rows_raster_file3x3.stem, format="json"
     )["name"]
+
+
+def test_clean_after_tool_failure_with_context_and_try(
+    xy_dataset_session, rows_raster_file3x3, tmp_path
+):
+    """Check we delete imported input when we fail after that import.
+
+    A realistic code example with try-finally blocks, but without an explicit check
+    that the exception was raised.
+
+    We don't test multiple raster, assuming that either all are removed or all kept.
+    """
+    try:
+        with Tools(session=xy_dataset_session) as tools:
+            tools.r_mapcalc_simple(
+                expression="A + does_not_exist", a=rows_raster_file3x3, output="output"
+            )
+    except CalledModuleError:
+        pass
+    finally:
+        assert not tools.g_findfile(
+            element="raster", file=rows_raster_file3x3.stem, format="json"
+        )["name"]
+
+
+def test_clean_after_tool_failure_with_context_and_raises(
+    xy_dataset_session, rows_raster_file3x3, tmp_path
+):
+    """Check input and output pack files work with tool name call
+
+    Checks that the exception was actually raised, but does not show the intention
+    as clearly as the test with try-finally.
+    """
+    with (
+        pytest.raises(CalledModuleError, match=r"r\.mapcalc\.simple"),
+        Tools(session=xy_dataset_session) as tools,
+    ):
+        tools.r_mapcalc_simple(
+            expression="A + does_not_exist", a=rows_raster_file3x3, output="output"
+        )
+    assert not tools.g_findfile(
+        element="raster", file=rows_raster_file3x3.stem, format="json"
+    )["name"]
+    assert rows_raster_file3x3.exists()
+
+
+def test_clean_after_tool_failure_without_context(
+    xy_dataset_session, rows_raster_file3x3, tmp_path
+):
+    """Check we delete imported input when we fail after that import.
+
+    A single call should clean after itself unless told otherwise.
+    """
+    tools = Tools(session=xy_dataset_session)
+    with pytest.raises(CalledModuleError, match=r"r\.mapcalc\.simple"):
+        tools.r_mapcalc_simple(
+            expression="A + does_not_exist", a=rows_raster_file3x3, output="output"
+        )
+    assert not tools.g_findfile(
+        element="raster", file=rows_raster_file3x3.stem, format="json"
+    )["name"]
+    assert rows_raster_file3x3.exists()
+
+
+def test_clean_after_tool_failure_without_context_with_keep_data(
+    xy_dataset_session, rows_raster_file3x3, tmp_path
+):
+    """Check we don't delete imported input even after failure when asked.
+
+    When explicitly requested, we wait for explicit request to delete the imported
+    data even after a failure.
+    """
+    tools = Tools(session=xy_dataset_session, keep_data=True)
+    with pytest.raises(CalledModuleError, match=r"r\.mapcalc\.simple"):
+        tools.r_mapcalc_simple(
+            expression="A + does_not_exist", a=rows_raster_file3x3, output="output"
+        )
+    assert tools.g_findfile(
+        element="raster", file=rows_raster_file3x3.stem, format="json"
+    )["name"]
+    tools.cleanup()
+    assert not tools.g_findfile(
+        element="raster", file=rows_raster_file3x3.stem, format="json"
+    )["name"]
+    assert rows_raster_file3x3.exists()
+
+
+def test_clean_after_call_failure_with_context_and_try(
+    xy_dataset_session, rows_raster_file3x3, tmp_path
+):
+    """Check we delete imported input when we fail after that import.
+
+    A realistic code example with try-finally blocks, but without an explicit check
+    that the exception was raised.
+
+    We don't test multiple raster, assuming that either all are removed or all kept.
+    """
+    try:
+        with Tools(session=xy_dataset_session) as tools:
+            tools.g_region(rows=3, cols=3)
+            output_file = tmp_path / "does_not_exist" / "file.grass_raster"
+            assert not output_file.parent.exists()
+            # Non-existence of a directory will be failure inside r.pack which is
+            # what we use to get an internal failure inside the call.
+            # This relies on inputs being resolved before outputs.
+            tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=output_file)
+    except CalledModuleError:
+        pass
+    finally:
+        assert not tools.g_findfile(
+            element="raster", file=rows_raster_file3x3.stem, format="json"
+        )["name"]
+        assert rows_raster_file3x3.exists()
+
+
+def test_clean_after_call_with_context_and_raises(
+    xy_dataset_session, rows_raster_file3x3, tmp_path
+):
+    """Check input and output pack files work with tool name call
+
+    Checks that the exception was actually raised, but does not show the intention
+    as clearly as the test with try-finally.
+    """
+    with Tools(session=xy_dataset_session) as tools:
+        tools.g_region(rows=3, cols=3)
+        output_file = tmp_path / "does_not_exist" / "file.grass_raster"
+        assert not output_file.parent.exists()
+        # Non-existence of a directory will be failure inside r.pack which is
+        # what we use to get an internal failure inside the call.
+        # This relies on inputs being resolved before outputs.
+        with pytest.raises(CalledModuleError, match=r"r\.pack"):
+            tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=output_file)
+    assert not tools.g_findfile(
+        element="raster", file=rows_raster_file3x3.stem, format="json"
+    )["name"]
+    assert rows_raster_file3x3.exists()
+
+
+def test_clean_after_call_without_context(
+    xy_dataset_session, rows_raster_file3x3, tmp_path
+):
+    """Check we delete imported input when we fail after that import.
+
+    A single call should clean after itself unless told otherwise.
+    """
+    tools = Tools(session=xy_dataset_session)
+    tools.g_region(rows=3, cols=3)
+    output_file = tmp_path / "does_not_exist" / "file.grass_raster"
+    assert not output_file.parent.exists()
+    with pytest.raises(CalledModuleError, match=r"r\.pack"):
+        # Non-existence of a directory will be failure inside r.pack which is
+        # what we use to get an internal failure inside the call.
+        # This relies on inputs being resolved before outputs.
+        tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=output_file)
+    assert not tools.g_findfile(
+        element="raster", file=rows_raster_file3x3.stem, format="json"
+    )["name"]
+    assert rows_raster_file3x3.exists()
+
+
+def test_clean_after_call_without_context_with_keep_data(
+    xy_dataset_session, rows_raster_file3x3, tmp_path
+):
+    """Check we don't delete imported input even after failure when asked.
+
+    When explicitly requested, we wait for explict request to delete the imported
+    data even after a failure.
+    """
+    tools = Tools(session=xy_dataset_session, keep_data=True)
+    tools.g_region(rows=3, cols=3)
+    output_file = tmp_path / "does_not_exist" / "file.grass_raster"
+    assert not output_file.parent.exists()
+    with pytest.raises(CalledModuleError, match=r"r\.pack"):
+        # Non-existence of a directory will be failure inside r.pack which is
+        # what we use to get an internal failure inside the call.
+        # This relies on inputs being resolved before outputs.
+        tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=output_file)
+    assert tools.g_findfile(
+        element="raster", file=rows_raster_file3x3.stem, format="json"
+    )["name"]
+    tools.cleanup()
+    assert not tools.g_findfile(
+        element="raster", file=rows_raster_file3x3.stem, format="json"
+    )["name"]
+    assert rows_raster_file3x3.exists()
