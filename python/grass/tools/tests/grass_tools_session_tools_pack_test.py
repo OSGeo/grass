@@ -6,8 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from grass.exceptions import CalledModuleError
-from grass.tools import Tools
+from grass.tools import Tools, ToolError
 
 
 def test_pack_input_output_tool_name_function(
@@ -347,7 +346,7 @@ def test_output_without_overwrite(xy_dataset_session, rows_raster_file3x3, tmp_p
     assert os.path.exists(rows_raster_file3x3)
     output_file = tmp_path / "file.grass_raster"
     tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=output_file)
-    with pytest.raises(CalledModuleError, match=r"[Oo]verwrite"):
+    with pytest.raises(ToolError, match=r"[Oo]verwrite"):
         tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=output_file)
     assert output_file.exists()
 
@@ -389,7 +388,7 @@ def test_non_existent_pack_input(xy_dataset_session, tmp_path):
     input_file = tmp_path / "does_not_exist.grass_raster"
     assert not input_file.exists()
     with pytest.raises(
-        CalledModuleError,
+        ToolError,
         match=rf"(?s)[^/\/a-zA-Z_]{input_file}[^/\/a-zA-Z_].*not found",
     ):
         tools.r_slope_aspect(elevation=input_file, slope="slope")
@@ -410,7 +409,7 @@ def test_non_existent_output_pack_directory(
     assert not output_file.parent.exists()
     assert rows_raster_file3x3.exists()
     with pytest.raises(
-        CalledModuleError,
+        ToolError,
         match=rf"(?s)[^/\/a-zA-Z_]{re.escape(str(output_file.parent))}[^/\/a-zA-Z_].*does not exist",
     ):
         tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=output_file)
@@ -424,7 +423,7 @@ def test_wrong_parameter(xy_dataset_session, rows_raster_file3x3, tmp_path):
     """
     tools = Tools(session=xy_dataset_session)
     tools.g_region(rows=3, cols=3)
-    with pytest.raises(CalledModuleError, match="does_not_exist"):
+    with pytest.raises(ToolError, match="does_not_exist"):
         tools.r_slope_aspect(
             elevation=rows_raster_file3x3,
             slope="file.grass_raster",
@@ -522,7 +521,7 @@ def test_clean_after_tool_failure_with_context_and_try(
             tools.r_mapcalc_simple(
                 expression="A + does_not_exist", a=rows_raster_file3x3, output="output"
             )
-    except CalledModuleError:
+    except ToolError:
         pass
     finally:
         assert not tools.g_findfile(
@@ -539,7 +538,7 @@ def test_clean_after_tool_failure_with_context_and_raises(
     as clearly as the test with try-finally.
     """
     with (
-        pytest.raises(CalledModuleError, match=r"r\.mapcalc\.simple"),
+        pytest.raises(ToolError, match=r"r\.mapcalc\.simple"),
         Tools(session=xy_dataset_session) as tools,
     ):
         tools.r_mapcalc_simple(
@@ -559,7 +558,7 @@ def test_clean_after_tool_failure_without_context(
     A single call should clean after itself unless told otherwise.
     """
     tools = Tools(session=xy_dataset_session)
-    with pytest.raises(CalledModuleError, match=r"r\.mapcalc\.simple"):
+    with pytest.raises(ToolError, match=r"r\.mapcalc\.simple"):
         tools.r_mapcalc_simple(
             expression="A + does_not_exist", a=rows_raster_file3x3, output="output"
         )
@@ -578,7 +577,7 @@ def test_clean_after_tool_failure_without_context_with_use_cache(
     data even after a failure.
     """
     tools = Tools(session=xy_dataset_session, use_cache=True)
-    with pytest.raises(CalledModuleError, match=r"r\.mapcalc\.simple"):
+    with pytest.raises(ToolError, match=r"r\.mapcalc\.simple"):
         tools.r_mapcalc_simple(
             expression="A + does_not_exist", a=rows_raster_file3x3, output="output"
         )
@@ -611,7 +610,7 @@ def test_clean_after_call_failure_with_context_and_try(
             # what we use to get an internal failure inside the call.
             # This relies on inputs being resolved before outputs.
             tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=output_file)
-    except CalledModuleError:
+    except ToolError:
         pass
     finally:
         assert not tools.g_findfile(
@@ -635,7 +634,7 @@ def test_clean_after_call_failure_with_context_and_raises(
         # Non-existence of a directory will be failure inside r.pack which is
         # what we use to get an internal failure inside the call.
         # This relies on inputs being resolved before outputs.
-        with pytest.raises(CalledModuleError, match=r"r\.pack"):
+        with pytest.raises(ToolError, match=r"r\.pack"):
             tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=output_file)
     assert not tools.g_findfile(
         element="raster", file=rows_raster_file3x3.stem, format="json"
@@ -654,7 +653,7 @@ def test_clean_after_call_failure_without_context(
     tools.g_region(rows=3, cols=3)
     output_file = tmp_path / "does_not_exist" / "file.grass_raster"
     assert not output_file.parent.exists()
-    with pytest.raises(CalledModuleError, match=r"r\.pack"):
+    with pytest.raises(ToolError, match=r"r\.pack"):
         # Non-existence of a directory will be failure inside r.pack which is
         # what we use to get an internal failure inside the call.
         # This relies on inputs being resolved before outputs.
@@ -677,7 +676,7 @@ def test_clean_after_call_failure_without_context_with_use_cache(
     tools.g_region(rows=3, cols=3)
     output_file = tmp_path / "does_not_exist" / "file.grass_raster"
     assert not output_file.parent.exists()
-    with pytest.raises(CalledModuleError, match=r"r\.pack"):
+    with pytest.raises(ToolError, match=r"r\.pack"):
         # Non-existence of a directory will be failure inside r.pack which is
         # what we use to get an internal failure inside the call.
         # This relies on inputs being resolved before outputs.
