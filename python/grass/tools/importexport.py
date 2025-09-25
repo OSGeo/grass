@@ -151,6 +151,8 @@ class ImporterExporter:
         self.current_output_rasters = []
 
     def cleanup(self, *, env):
+        # We don't track in what mapset the rasters are, and we assume
+        # the mapset was not changed in the meantime.
         remove = [name for (unused, name) in self.input_rasters]
         remove.extend([name for (unused, name) in self.output_rasters])
         if remove:

@@ -146,7 +146,7 @@ def test_io_cleanup_after_context(xy_dataset_session, rows_raster_file3x3, tmp_p
 def test_io_no_cleanup(xy_dataset_session, rows_raster_file3x3, tmp_path):
     """Check input and output rasters are deleted only with explicit cleanup call"""
     output_file = tmp_path / "file.grass_raster"
-    tools = Tools(session=xy_dataset_session, keep_data=True)
+    tools = Tools(session=xy_dataset_session, use_cache=True)
     tools.g_region(rows=3, cols=3)
     tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=output_file)
     assert output_file.exists()
@@ -168,7 +168,7 @@ def test_io_no_cleanup_with_context(xy_dataset_session, rows_raster_file3x3, tmp
     """Check input and output rasters are kept even with context"""
     file_1 = tmp_path / "file_1.grass_raster"
     file_2 = tmp_path / "file_2.grass_raster"
-    with Tools(session=xy_dataset_session, keep_data=True) as tools:
+    with Tools(session=xy_dataset_session, use_cache=True) as tools:
         tools.g_region(rows=3, cols=3)
         tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=file_1)
         assert file_1.exists()
@@ -224,9 +224,9 @@ def test_multiple_input_usages_with_context(xy_dataset_session, rows_raster_file
     )["name"]
 
 
-def test_multiple_input_usages_with_keep_data(xy_dataset_session, rows_raster_file3x3):
+def test_multiple_input_usages_with_use_cache(xy_dataset_session, rows_raster_file3x3):
     """Check input and output rasters are kept even with context"""
-    tools = Tools(session=xy_dataset_session, keep_data=True)
+    tools = Tools(session=xy_dataset_session, use_cache=True)
     tools.g_region(raster=rows_raster_file3x3)
     tools.r_slope_aspect(elevation=rows_raster_file3x3, slope="slope")
     tools.r_mapcalc_simple(expression="100 * A", a=rows_raster_file3x3, output="a100")
@@ -275,12 +275,12 @@ def test_creation_and_use_with_context(
     assert slope.exists()
 
 
-def test_creation_and_use_with_keep_data(
+def test_creation_and_use_with_use_cache(
     xy_dataset_session, rows_raster_file3x3, tmp_path
 ):
     """Check that we can create an external file and then use the file later"""
     slope = tmp_path / "slope.grass_raster"
-    tools = Tools(session=xy_dataset_session, keep_data=True)
+    tools = Tools(session=xy_dataset_session, use_cache=True)
     tools.g_region(raster=rows_raster_file3x3)
     tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=slope)
     tools.r_univar(map=slope, format="json")["cells"] == 9
@@ -434,7 +434,7 @@ def test_wrong_parameter(xy_dataset_session, rows_raster_file3x3, tmp_path):
 
 def test_direct_r_unpack_to_data(xy_dataset_session, rows_raster_file3x3):
     """Check that we can r.unpack data as usual"""
-    tools = Tools(session=xy_dataset_session, keep_data=True)
+    tools = Tools(session=xy_dataset_session, use_cache=True)
     tools.g_region(rows=3, cols=3)
     name = "data_1"
     tools.r_unpack(input=rows_raster_file3x3, output=name)
@@ -446,7 +446,7 @@ def test_direct_r_unpack_to_data(xy_dataset_session, rows_raster_file3x3):
 
 def test_direct_r_unpack_to_pack(xy_dataset_session, rows_raster_file3x3, tmp_path):
     """Check that roundtrip from existing packed raster to new packed raster works"""
-    tools = Tools(session=xy_dataset_session, keep_data=True)
+    tools = Tools(session=xy_dataset_session, use_cache=True)
     tools.g_region(rows=3, cols=3)
     name = "auto_packed_data_1.grass_raster"
     packed_file = tmp_path / name
@@ -462,7 +462,7 @@ def test_direct_r_unpack_to_pack(xy_dataset_session, rows_raster_file3x3, tmp_pa
 
 def test_direct_r_pack_from_data(xy_dataset_session, tmp_path):
     """Check that we can r.pack data as usual"""
-    tools = Tools(session=xy_dataset_session, keep_data=True)
+    tools = Tools(session=xy_dataset_session, use_cache=True)
     tools.g_region(rows=3, cols=3)
     tools.r_mapcalc(expression="data_1 = 1")
     name = "manually_packed_data_1.grass_raster"
@@ -483,7 +483,7 @@ def test_direct_r_pack_from_data(xy_dataset_session, tmp_path):
 
 def test_direct_r_pack_from_pack(xy_dataset_session, rows_raster_file3x3, tmp_path):
     """Check that roundtrip from existing packed raster to raster works"""
-    tools = Tools(session=xy_dataset_session, keep_data=True)
+    tools = Tools(session=xy_dataset_session, use_cache=True)
     tools.g_region(rows=3, cols=3)
     name = "manually_packed_data_1.grass_raster"
     packed_file = tmp_path / name
@@ -569,7 +569,7 @@ def test_clean_after_tool_failure_without_context(
     assert rows_raster_file3x3.exists()
 
 
-def test_clean_after_tool_failure_without_context_with_keep_data(
+def test_clean_after_tool_failure_without_context_with_use_cache(
     xy_dataset_session, rows_raster_file3x3, tmp_path
 ):
     """Check we don't delete imported input even after failure when asked.
@@ -577,7 +577,7 @@ def test_clean_after_tool_failure_without_context_with_keep_data(
     When explicitly requested, we wait for explicit request to delete the imported
     data even after a failure.
     """
-    tools = Tools(session=xy_dataset_session, keep_data=True)
+    tools = Tools(session=xy_dataset_session, use_cache=True)
     with pytest.raises(CalledModuleError, match=r"r\.mapcalc\.simple"):
         tools.r_mapcalc_simple(
             expression="A + does_not_exist", a=rows_raster_file3x3, output="output"
@@ -665,7 +665,7 @@ def test_clean_after_call_failure_without_context(
     assert rows_raster_file3x3.exists()
 
 
-def test_clean_after_call_failure_without_context_with_keep_data(
+def test_clean_after_call_failure_without_context_with_use_cache(
     xy_dataset_session, rows_raster_file3x3, tmp_path
 ):
     """Check we don't delete imported input even after failure when asked.
@@ -673,7 +673,7 @@ def test_clean_after_call_failure_without_context_with_keep_data(
     When explicitly requested, we wait for explict request to delete the imported
     data even after a failure.
     """
-    tools = Tools(session=xy_dataset_session, keep_data=True)
+    tools = Tools(session=xy_dataset_session, use_cache=True)
     tools.g_region(rows=3, cols=3)
     output_file = tmp_path / "does_not_exist" / "file.grass_raster"
     assert not output_file.parent.exists()
