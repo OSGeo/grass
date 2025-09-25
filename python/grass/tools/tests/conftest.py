@@ -51,8 +51,9 @@ def echoing_resolver():
     return ToolFunctionResolver(run_function=lambda x: x, env=os.environ.copy())
 
 
-@pytest.fixture
-def rows_raster_file3x3(tmp_path):
+@pytest.fixture(scope="module")
+def rows_raster_file3x3(tmp_path_factory):
+    tmp_path = tmp_path_factory.mktemp("rows_raster_file3x3")
     project = tmp_path / "xy_test3x3"
     gs.create_project(project)
     with gs.setup.init(project, env=os.environ.copy()) as session:
@@ -70,8 +71,9 @@ def rows_raster_file3x3(tmp_path):
     return output_file
 
 
-@pytest.fixture
-def rows_raster_file4x5(tmp_path):
+@pytest.fixture(scope="module")
+def rows_raster_file4x5(tmp_path_factory):
+    tmp_path = tmp_path_factory.mktemp("rows_raster_file4x5")
     project = tmp_path / "xy_test4x5"
     gs.create_project(project)
     with gs.setup.init(project, env=os.environ.copy()) as session:

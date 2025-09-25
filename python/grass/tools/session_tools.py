@@ -196,6 +196,10 @@ class Tools:
     >>> result.text
     ''
 
+    Although using arrays incurs an overhead cost compared to using only
+    in-project data, the array interface provides a convenient workflow
+    when NumPy arrays are in use.
+
     If a tool accepts a single raster input or output, a native GRASS raster pack
     format can be used in the same way as an in-project raster or NumPy array.
     GRASS native rasters are recognized by `.grass_raster`, `.grr`, and `.rpack`
@@ -228,7 +232,9 @@ class Tools:
     >>> tools.cleanup()
 
     Notably, the above code works also with `use_cache=False` (or the default),
-    but the file will be imported twice, once for each tool call.
+    but the file will be imported twice, once for each tool call, so using
+    context manager or managing the cache explicity is good for reducing the
+    overhead which the external rasters bring compared to using in-project data.
     """
 
     def __init__(
