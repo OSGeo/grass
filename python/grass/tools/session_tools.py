@@ -198,7 +198,7 @@ class Tools:
 
     Although using arrays incurs an overhead cost compared to using only
     in-project data, the array interface provides a convenient workflow
-    when NumPy arrays are in use.
+    when NumPy arrays are used with other array functions.
 
     If a tool accepts a single raster input or output, a native GRASS raster pack
     format can be used in the same way as an in-project raster or NumPy array.
