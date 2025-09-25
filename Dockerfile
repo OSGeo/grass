@@ -46,8 +46,6 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 SHELL ["/bin/bash", "-c"]
 
-# WORKDIR /tmp
-
 # Todo: re-consider required dev packages for addons (~400MB in dev packages)
 ARG GRASS_RUN_PACKAGES="\
   bison \
@@ -93,6 +91,7 @@ ARG GRASS_RUN_PACKAGES="\
   libpython3-all-dev \
   libreadline8 \
   libsqlite3-0 \
+  libsvm3 \
   libtiff-tools \
   libzstd1 \
   locales \
@@ -129,6 +128,7 @@ ARG GRASS_BUILD_PACKAGES="\
   libpnglite-dev \
   libreadline-dev \
   libsqlite3-dev \
+  libsvm-dev \
   libtiff-dev \
   libzstd-dev \
   mesa-common-dev \
@@ -146,6 +146,7 @@ ARG GRASS_CONFIG="\
   --with-gdal=/usr/bin/gdal-config \
   --with-geos \
   --with-lapack \
+  --with-libsvm \
   --with-netcdf \
   --with-odbc \
   --with-openmp \
@@ -281,12 +282,9 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && (echo "Install Python" \
     && wget --progress="dot:giga" -q https://bootstrap.pypa.io/pip/get-pip.py \
-    # && apt-get install -y python3-ensurepip \
     && python get-pip.py \
-    # && python3 -m ensurepip --upgrade \
     && rm -r get-pip.py \
     && mkdir -p /src/site-packages \
-    # && cd /src \
     && python -m pip install --no-cache-dir -t /src/site-packages --upgrade \
     ${GRASS_PYTHON_PACKAGES} \
     && rm -r /root/.cache \
@@ -304,7 +302,6 @@ ENV LD_LIBRARY_PATH="/usr/local/lib" \
     LDFLAGS="-s -Wl,--no-undefined -lblas" \
     CFLAGS="-O2 -std=gnu99" \
     CXXFLAGS="" \
-    # PYTHONPATH="$PYTHONPATH" \
     NUMTHREADS=$NUMTHREADS
 
 # Configure compile and install GRASS
