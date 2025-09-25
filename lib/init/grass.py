@@ -85,8 +85,6 @@ if ENCODING is None:
 CMD_NAME = None
 GRASS_VERSION = None
 GRASS_VERSION_MAJOR = None
-GRASS_VERSION_MINOR = None
-LD_LIBRARY_PATH_VAR = None
 CONFIG_PROJSHARE = None
 GRASS_VERSION_GIT = None
 
@@ -380,9 +378,7 @@ def create_grass_config_dir() -> str:
     from grass.app.runtime import get_grass_config_dir
 
     try:
-        directory = get_grass_config_dir(
-            GRASS_VERSION_MAJOR, GRASS_VERSION_MINOR, os.environ
-        )
+        directory = get_grass_config_dir(env=os.environ)
     except (RuntimeError, NotADirectoryError) as e:
         fatal(f"{e}")
 
@@ -2123,8 +2119,6 @@ def main() -> None:
         CMD_NAME, \
         GRASS_VERSION, \
         GRASS_VERSION_MAJOR, \
-        GRASS_VERSION_MINOR, \
-        LD_LIBRARY_PATH_VAR, \
         GRASS_VERSION_GIT, \
         GISBASE, \
         CONFIG_PROJSHARE
@@ -2133,8 +2127,6 @@ def main() -> None:
     CMD_NAME = runtime_paths.grass_exe_name
     GRASS_VERSION = runtime_paths.version
     GRASS_VERSION_MAJOR = runtime_paths.version_major
-    GRASS_VERSION_MINOR = runtime_paths.version_minor
-    LD_LIBRARY_PATH_VAR = runtime_paths.ld_library_path_var
     GRASS_VERSION_GIT = runtime_paths.grass_version_git
     GISBASE = runtime_paths.gisbase
     CONFIG_PROJSHARE = runtime_paths.config_projshare
@@ -2215,7 +2207,6 @@ def main() -> None:
     set_paths(
         install_path=GISBASE,
         grass_config_dir=grass_config_dir,
-        ld_library_path_variable_name=LD_LIBRARY_PATH_VAR,
     )
     # Set GRASS_PAGER, GRASS_PYTHON, GRASS_GNUPLOT, GRASS_PROJSHARE
     set_defaults(config_projshare_path=CONFIG_PROJSHARE)

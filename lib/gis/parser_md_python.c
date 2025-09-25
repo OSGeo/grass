@@ -616,4 +616,9 @@ void G__md_print_python_long_version(FILE *file, const char *indent,
                       "output, the result will be a tuple of arrays.");
     }
     fprintf(file, "\n");
+
+    fprintf(file, "\n%sRaises:\n\n", indent);
+    fprintf(file,
+            "%s*grass.tools.ToolError*: When the tool ended with an error.\n",
+            indent);
 }

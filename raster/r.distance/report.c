@@ -143,6 +143,7 @@ void report(struct Parms *parms)
         G_json_free_serialized_string(json_string);
         G_json_value_free(root_value);
     }
+    G_free(lines);
 }
 
 static void print(struct ReportLine *line, struct Parms *parms,
