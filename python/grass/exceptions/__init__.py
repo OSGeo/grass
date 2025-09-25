@@ -54,12 +54,14 @@ class Usage(Exception):
     pass
 
 
-# TODO: we inherit from subprocess to be aligned with check_call but it is needed?
-# perhaps it would be better to inherit from Exception or from ScriptError
 class CalledModuleError(subprocess.CalledProcessError):
     """Raised when a called module ends with error (non-zero return code)
 
     Used for failures of modules called as subprocesses from Python code.
+
+    The class inherits from *subprocess.CalledProcessError* to allow for GRASS
+    subprocess calls to be aligned with *subprocess.check_call*
+    and *subprocess.run* with `check=False`.
     """
 
     def __init__(self, module, code, returncode, errors=None):
@@ -71,7 +73,7 @@ class CalledModuleError(subprocess.CalledProcessError):
         :param errors: errors provided by the module (e.g., stderr)
         """
         # CalledProcessError has undocumented constructor
-        super().__init__(returncode, module)
+        super().__init__(returncode, code, None, errors)
         # No need to include module name if it is directly in code of if it is not set.
         # Otherwise, make sure module name is there if provided and not in code.
         executed = code if not module or module in code else f"{module} {code}"

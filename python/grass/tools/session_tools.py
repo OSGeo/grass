@@ -17,8 +17,87 @@ from __future__ import annotations
 import os
 
 import grass.script as gs
+from grass.exceptions import CalledModuleError
 
 from .support import ParameterConverter, ToolFunctionResolver, ToolResult
+
+
+class ToolError(CalledModuleError):
+    """Raised when a tool run ends with error (typically a non-zero return code)
+
+    Inherits from *subprocess.CalledProcessError* to make it easy to transition from
+    or combine with code which is using the *subprocess* package.
+    Inherits from CalledModuleError to make it easy to transition code with except
+    statements around *grass.script.run_command*-style tool calls, but new code should
+    not rely on that.
+    """
+
+    def __init__(
+        self, tool: str, cmd: list, returncode: int, errors: str | None = None
+    ):
+        """Create an exception with a full error message based on the parameters.
+
+        Best results are provided when *errors* is a single line string, aiming at a
+        short and clear message. In case *errors* is `None`, additional text is
+        provided to help the user find the error message, assuming that there is one
+        somewhere. If *errors* is an empty string, it assumes that stderr was produced
+        and reports that in the resulting message. A single line message may be
+        modified to provide the best possible error message assuming it is a standard
+        fatal error message produced by a GRASS tool describing best what went wrong.
+        For multiline error messages, no assumptions are made, so the information
+        about the tool run is printed first and then the error message.
+
+        :param tool: tool name (for interface compatibility with *CalledModuleError*)
+        :param cmd: string or list of strings forming the actual (underlying) command
+        :param returncode: process returncode (assuming non-zero)
+        :param errors: errors provided by the tool (typically stderr)
+
+        Expect changes to the *tool* parameter and the corresponding attribute.
+        """
+        # CalledProcessError has undocumented constructor
+        super().__init__(tool, cmd, returncode, errors)
+        errors_first = False
+        # If provided, we assume errors are the actual tool errors with details, i.e.,
+        # the captured stderr of the tool.
+        if errors is None:
+            # If the stderr was passed to the caller process instead of being capured
+            # by the subprocess caller function, the stderr will be above
+            # the traceback in the command line, but in notebooks or when testing,
+            # the stderr will be somewhere else than the traceback.
+            errors = "See errors above the traceback or in the error output (stderr)."
+        elif errors == "":
+            errors = "No error output was produced"
+        elif "\n" not in errors.strip():
+            errors_first = True
+            # Remove end of line if any (and all other extra whitespace) and remove
+            # error prefix in English.
+            errors = errors.strip().removeprefix("ERROR: ")
+        # Short, one line error message from stderr makes a good error message as the
+        # first line of the exception text (shown by itself e.g. by pytest).
+        # When not clear what is in, include the run details first and the potentially
+        # long stderr afterwards.
+        # While return code would be semantically better with a colon, there is already
+        # a lot of colons in the resulting message (one after the exception type,
+        # one likely from stderr, and another one depending on the order), so no colon
+        # might be slightly easier to read.
+        if errors_first:
+            self.msg = (
+                f"{errors}\nRun `{cmd}` ended with an error (return code {returncode})"
+            )
+        else:
+            self.msg = (
+                f"Run `{cmd}` ended with an error (return code {returncode}):\n{errors}"
+            )
+        self.tool = tool
+
+    def __reduce__(self):
+        return (
+            self.__class__,
+            (self.tool, self.cmd, self.returncode, self.errors),
+        )
+
+    def __str__(self):
+        return self.msg
 
 
 class Tools:
@@ -150,7 +229,7 @@ class Tools:
         verbose one wins.
 
         In case a tool run fails, indicating that by non-zero return code,
-        *grass.exceptions.CalledModuleError* exception is raised by default. This can
+        *grass.tools.ToolError* exception is raised by default. This can
         be changed by passing, e.g., `errors="ignore"`. The *errors* parameter
         is passed to the *grass.script.handle_errors* function which determines
         the specific behavior.
@@ -389,6 +468,8 @@ class Tools:
                 kwargs=tool_kwargs or {},
                 stderr=stderr,
                 handler=self._errors,
+                exception=ToolError,
+                env=popen_options["env"],
             )
         if not self._consistent_return_value and not result.stdout:
             return None
