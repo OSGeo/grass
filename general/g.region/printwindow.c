@@ -123,6 +123,8 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
             fprintf(stdout, "%-*s %d\n", width, "zone:", window->zone);
             break;
         case JSON:
+            json_object_set_number(root_object, "projection", window->proj);
+            json_object_set_number(root_object, "zone", window->zone);
             break;
         }
 
