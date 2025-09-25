@@ -2,6 +2,10 @@
 ignore =
     # whitespace before ':' (Black)
     E203,
+    # E501 line too long
+    E501,
+    # global unused (TODO: Solve and remove exclusion)
+    F824,
     # line break before binary operator (Black)
     W503,
 
@@ -196,6 +200,7 @@ per-file-ignores =
 
 
 max-line-length = 88
+# Remember to remove the exclusions from .pre-commit-config.yaml when removing here
 exclude =
     .git,
     __pycache__,
@@ -213,6 +218,7 @@ exclude =
     # Test output directory
     testreport,
     # Not yet compliant
+    python/grass/temporal/ply,
     python/libgrass_interface_generator,
     # No tests checked for now
     testsuite,

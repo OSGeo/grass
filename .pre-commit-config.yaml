@@ -49,12 +49,14 @@ repos:
                 python/libgrass_interface_generator/
           )
   - repo: https://github.com/pycqa/flake8
-    rev: 3.9.2
+    rev: 7.3.0
     hooks:
       - id: flake8
         exclude: |
           (?x)^(
-                python/libgrass_interface_generator/
+                python/grass/temporal/ply/|
+                python/libgrass_interface_generator/|
+                .*/testsuite/.*
           )
   - repo: https://github.com/pre-commit/mirrors-clang-format
     rev: v15.0.6
