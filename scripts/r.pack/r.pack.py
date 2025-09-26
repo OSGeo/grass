@@ -31,6 +31,7 @@
 # % description: Switch the compression off
 # %end
 
+import json
 import os
 import sys
 import shutil
@@ -162,12 +163,19 @@ def main():
     # copy projection info
     # (would prefer to use g.proj*, but this way is 5.3 and 5.7 compat)
     gisenv = grass.gisenv()
-    for support in ["INFO", "UNITS", "EPSG"]:
+    for support in ["INFO", "UNITS", "EPSG", "SRID", "WKT"]:
         path = os.path.join(
             gisenv["GISDBASE"], gisenv["LOCATION_NAME"], "PERMANENT", "PROJ_" + support
         )
         if os.path.exists(path):
             shutil.copyfile(path, os.path.join(tmp_dir, "PROJ_" + support))
+
+    # copy CRS info from computational region
+    data = gs.parse_command("g.region", flags="p", format="shell")
+    crs_data = {}
+    crs_data["projection"] = int(data["projection"])
+    crs_data["zone"] = int(data["zone"])
+    (tmp_dir / "computational_region_crs.json").write_text(json.dumps(crs_data))
 
     # pack it all up
     os.chdir(tmp)
