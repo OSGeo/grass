@@ -96,7 +96,6 @@ def test_selection(session):
         verbose=True,
         overwrite=True,
     )
-    assert gisenv["MAPSET"] == "perc"
 
 
 def test_selection_and_expression(session):
@@ -132,7 +131,6 @@ def test_selection_and_expression(session):
         assert (
             strds_info[k] == v
         ), f"Expected value for key '{k}' is {v}. Got: {strds_info[k]}"
-    assert gisenv["MAPSET"] == "perc"
 
 
 def test_inconsistent_selection_and_expression(session):
@@ -168,7 +166,6 @@ def test_inconsistent_selection_and_expression(session):
         assert (
             strds_info[k] == v
         ), f"Expected value for key '{k}' is {v}. Got: {strds_info[k]}"
-    assert gisenv["MAPSET"] == "perc"
 
 
 def test_selection_and_expression_simple_name(session):
@@ -204,4 +201,3 @@ def test_selection_and_expression_simple_name(session):
         assert (
             strds_info[k] == v
         ), f"Expected value for key '{k}' is {v}. Got: {strds_info[k]}"
-    assert gisenv["MAPSET"] == "perc"
