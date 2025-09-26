@@ -9,6 +9,8 @@ for details.
 :authors: Soeren Gebbert
 """
 
+from __future__ import annotations
+
 import re
 import sys
 from multiprocessing import Process
@@ -56,8 +58,7 @@ def compile_new_map_name(
             suffix = create_time_suffix(old_map)
         if semantic_label:
             return f"{base}_{semantic_label}_{suffix}"
-        else:
-            return f"{base}_{suffix}"
+        return f"{base}_{suffix}"
     return create_numeric_suffix(base, count, time_suffix)
 
 
