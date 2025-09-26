@@ -42,7 +42,7 @@ New to geospatial processing or familiar with different geospatial software?
 Discover how GRASS approaches geospatial modeling.
 
 <!-- markdownlint-disable-next-line line-length -->
-[Explore key concepts :material-arrow-right-bold:](grass_database.md){ .md-button }
+[Explore key concepts :material-arrow-right-bold:](grass_projects.md){ .md-button }
 
 ## Development
 

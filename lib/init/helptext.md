@@ -34,7 +34,7 @@ automatically creates a special mapset called PERMANENT where the core
 data for the project can be stored.
 
 For more info about data hierarchy, see [GRASS
-Database](grass_database.md) page.
+projects](grass_projects.md) page.
 
 ## GRASS started in the default project, now what?
 
@@ -80,6 +80,7 @@ line.
 
 ## See also
 
+- [GRASS projects](grass_projects.md)
 - [The grass command](grass.md)
 - [GRASS tutorials and books](https://grass.osgeo.org/learn/)
 - [Intro to projections and transformations](projectionintro.md)
