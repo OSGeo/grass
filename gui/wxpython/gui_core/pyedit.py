@@ -1,28 +1,26 @@
-"""GRASS GIS Simple Python Editor
+"""GRASS Simple Python Editor
 
 Copyright (C) 2016 by the GRASS Development Team
 
 This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS GIS
+License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :authors: Vaclav Petras
 :authors: Martin Landa
 """
 
+from pathlib import Path
 import sys
 import os
 import stat
 
-try:
-    from StringIO import StringIO
-except ImportError:
-    from io import StringIO
+from io import StringIO
 import time
 
 import wx
 
-import grass.script as gscript
+import grass.script as gs
 from grass.script.utils import try_remove
 
 # needed just for testing
@@ -35,11 +33,13 @@ from core.gcmd import GError
 from gui_core.pystc import PyStc, SetDarkMode
 from core import globalvar
 from core.menutree import MenuTreeModelBuilder
-from gui_core.menu import RecentFilesMenu, Menu
+from gui_core.menu import RecentFilesMenu, Menu as Menubar
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from gui_core.wrap import IsDark
 from icons.icon import MetaIcon
 from core.debug import Debug
+from main_window.page import MainPageBase
+
 
 # TODO: add validation: call/import pep8 (error message if not available)
 # TODO: run with parameters (alternatively, just use console or GUI)
@@ -271,7 +271,7 @@ def open_url(url):
     webbrowser.open(url)
 
 
-class PyEditController(object):
+class PyEditController:
     # using the naming GUI convention, change for controller?
     # pylint: disable=invalid-name
 
@@ -285,16 +285,6 @@ class PyEditController(object):
         self.overwrite = False
         self.parameters = None
 
-        # Get first (File) menu
-        menu = guiparent.menubar.GetMenu(0)
-        self.recent_files = RecentFilesMenu(
-            app_name="pyedit",
-            parent_menu=menu,
-            pos=1,
-        )  # pos=1 recent files menu position (index) in the parent (File) menu
-
-        self.recent_files.file_requested.connect(self.OpenRecentFile)
-
     def _openFile(self, file_path):
         """Try open file and read content
 
@@ -303,21 +293,18 @@ class PyEditController(object):
         :return str or None: file content or None
         """
         try:
-            with open(file_path, "r") as f:
-                content = f.read()
-                return content
+            return Path(file_path).read_text()
         except PermissionError:
             GError(
                 message=_(
-                    "Permission denied <{}>. Please change file "
-                    "permission for reading.".format(file_path)
-                ),
+                    "Permission denied <{}>. Please change file permission for reading."
+                ).format(file_path),
                 parent=self.guiparent,
                 showTraceback=False,
             )
-        except IOError:
+        except OSError:
             GError(
-                message=_("Couldn't read file <{}>.".format(file_path)),
+                message=_("Couldn't read file <{}>.").format(file_path),
                 parent=self.guiparent,
             )
 
@@ -331,40 +318,47 @@ class PyEditController(object):
         :return None or True: file written or None
         """
         try:
-            with open(file_path, "w") as f:
-                f.write(content)
-                return True
+            Path(file_path).write_text(content)
+            return True
         except PermissionError:
             GError(
                 message=_(
                     "Permission denied <{}>. Please change file "
-                    "permission for writing.{}".format(
-                        file_path,
-                        additional_err_message,
-                    ),
+                    "permission for writing.{}"
+                ).format(
+                    file_path,
+                    additional_err_message,
                 ),
                 parent=self.guiparent,
                 showTraceback=False,
             )
-        except IOError:
+        except OSError:
             GError(
-                message=_(
-                    "Couldn't write file <{}>.{}".format(
-                        file_path, additional_err_message
-                    ),
+                message=_("Couldn't write file <{}>.{}").format(
+                    file_path, additional_err_message
                 ),
                 parent=self.guiparent,
             )
 
+    def SetRecentFilesMenu(self, menu):
+        # Get first (File) menu
+        self.recent_files = RecentFilesMenu(
+            app_name="pyedit",
+            parent_menu=menu,
+            pos=1,
+        )  # pos=1 recent files menu position (index) in the parent (File) menu
+
+        self.recent_files.file_requested.connect(self.OpenRecentFile)
+
     def OnRun(self, event):
         """Run Python script"""
         if not self.filename:
-            self.filename = gscript.tempfile() + ".py"
+            self.filename = gs.tempfile() + ".py"
             self.tempfile = True
             file_is_written = self._writeFile(
                 file_path=self.filename,
                 content=self.body.GetText(),
-                additional_err_message=" Unable to launch Python script.",
+                additional_err_message=_(" Unable to launch Python script."),
             )
             if file_is_written:
                 mode = stat.S_IMODE(os.lstat(self.filename)[stat.ST_MODE])
@@ -374,7 +368,7 @@ class PyEditController(object):
             file_is_written = self._writeFile(
                 file_path=self.filename,
                 content=self.body.GetText(),
-                additional_err_message=" Unable to launch Python script.",
+                additional_err_message=_(" Unable to launch Python script."),
             )
             if file_is_written:
                 # set executable file
@@ -402,7 +396,7 @@ class PyEditController(object):
         dlg = wx.FileDialog(
             parent=self.guiparent,
             message=_("Choose file to save"),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             wildcard=_("Python script (*.py)|*.py"),
             style=wx.FD_SAVE,
         )
@@ -421,7 +415,7 @@ class PyEditController(object):
             dlg = wx.MessageDialog(
                 parent=self.guiparent,
                 message=_(
-                    "File <%s> already exists. " "Do you want to overwrite this file?"
+                    "File <%s> already exists. Do you want to overwrite this file?"
                 )
                 % filename,
                 caption=_("Save file"),
@@ -473,7 +467,7 @@ class PyEditController(object):
         dlg = wx.FileDialog(
             parent=self.guiparent,
             message=_("Open file"),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             wildcard=_("Python script (*.py)|*.py"),
             style=wx.FD_OPEN,
         )
@@ -514,19 +508,19 @@ class PyEditController(object):
         if not file_exists:
             GError(
                 _(
-                    "File <{}> doesn't exist."
-                    "It was probably moved or deleted.".format(path)
-                ),
+                    "File <{path}> doesn't exist. It was probably moved or deleted."
+                ).format(path=path),
                 parent=self.guiparent,
             )
-        else:
-            if self.CanReplaceContent(by_message="file"):
-                self.filename = path
-                content = self._openFile(file_path=path)
-                if content:
-                    self.body.SetText(content)
-                    file_history.AddFileToHistory(filename=path)  # move up the list
-                    self.tempfile = False
+            return
+
+        if self.CanReplaceContent(by_message="file"):
+            self.filename = path
+            content = self._openFile(file_path=path)
+            if content:
+                self.body.SetText(content)
+                file_history.AddFileToHistory(filename=path)  # move up the list
+                self.tempfile = False
 
     def IsEmpty(self):
         """Check if python script is empty"""
@@ -626,7 +620,7 @@ class PyEditController(object):
         # inspired by g.manual but simple not using GRASS_HTML_BROWSER
         # not using g.manual because it does not show
         entry = "libpython/script_intro.html"
-        major, minor, patch = gscript.version()["version"].split(".")
+        major, minor, patch = gs.version()["version"].split(".")
         url = "https://grass.osgeo.org/grass%s%s/manuals/%s" % (major, minor, entry)
         open_url(url)
 
@@ -638,10 +632,14 @@ class PyEditController(object):
         self.giface.Help("full_index")
 
     def OnSubmittingHelp(self, event):
-        open_url("https://trac.osgeo.org/grass/wiki/Submitting/Python")
+        open_url(
+            "https://github.com/OSGeo/grass/blob/main/doc/development/style_guide.md#python"  # noqa: E501
+        )
 
     def OnAddonsHelp(self, event):
-        open_url("https://grass.osgeo.org/development/code-submission/")
+        open_url(
+            "https://github.com/OSGeo/grass/blob/main/doc/development/style_guide.md#developing-grass-addons"  # noqa: E501
+        )
 
     def OnSupport(self, event):
         open_url("https://grass.osgeo.org/support/")
@@ -678,43 +676,54 @@ class PyEditToolbar(BaseToolbar):
 
     def _toolbarData(self):
         """Toolbar data"""
-        return self._getToolbarData(
+        data = (
             (
+                ("open", self.icons["open"].label.rsplit(" ", 1)[0]),
+                self.icons["open"],
+                self.parent.OnOpen,
+            ),
+            (
+                ("save", self.icons["save"].label.rsplit(" ", 1)[0]),
+                self.icons["save"],
+                self.parent.OnSave,
+            ),
+            (None,),
+            (
+                ("run", self.icons["run"].label.rsplit(" ", 1)[0]),
+                self.icons["run"],
+                self.parent.OnRun,
+            ),
+            (
+                ("overwrite", self.icons["overwriteTrue"].label),
+                self.icons["overwriteTrue"],
+                self.OnSetOverwrite,
+                wx.ITEM_CHECK,
+            ),
+            (None,),
+            (
+                ("help", self.icons["help"].label),
+                self.icons["help"],
+                self.parent.OnHelp,
+            ),
+        )
+        if self.parent.IsDockable():
+            data += (
                 (
-                    ("open", self.icons["open"].label.rsplit(" ", 1)[0]),
-                    self.icons["open"],
-                    self.parent.OnOpen,
-                ),
-                (
-                    ("save", self.icons["save"].label.rsplit(" ", 1)[0]),
-                    self.icons["save"],
-                    self.parent.OnSave,
-                ),
-                (None,),
-                (
-                    ("run", self.icons["run"].label.rsplit(" ", 1)[0]),
-                    self.icons["run"],
-                    self.parent.OnRun,
-                ),
-                (
-                    ("overwrite", self.icons["overwriteTrue"].label),
-                    self.icons["overwriteTrue"],
-                    self.OnSetOverwrite,
+                    ("docking", BaseIcons["docking"].label),
+                    BaseIcons["docking"],
+                    self.parent.OnDockUndock,
                     wx.ITEM_CHECK,
                 ),
-                (None,),
-                (
-                    ("help", self.icons["help"].label),
-                    self.icons["help"],
-                    self.parent.OnHelp,
-                ),
-                (
-                    ("quit", self.icons["quit"].label),
-                    self.icons["quit"],
-                    self.parent.OnClose,
-                ),
             )
+        data += (
+            (
+                ("quit", self.icons["quit"].label),
+                self.icons["quit"],
+                self.parent.OnCloseWindow,
+            ),
         )
+
+        return self._getToolbarData(data)
 
     # TODO: add overwrite also to the menu and sync with toolbar
     def OnSetOverwrite(self, event):
@@ -736,33 +745,34 @@ class PyEditToolbar(BaseToolbar):
             self.parent.overwrite = False
 
 
-class PyEditFrame(wx.Frame):
-    # GUI class and a lot of trampoline methods
+class PyEditPanel(wx.Panel, MainPageBase):
+    # GUI class
     # pylint: disable=missing-docstring
     # pylint: disable=too-many-public-methods
     # pylint: disable=invalid-name
+    """PyEdit panel"""
 
     def __init__(
-        self, parent, giface, id=wx.ID_ANY, title=_("Simple Python Editor"), **kwargs
+        self,
+        parent,
+        giface,
+        id=wx.ID_ANY,
+        statusbar=None,
+        dockable=False,
+        **kwargs,
     ):
-        wx.Frame.__init__(self, parent=parent, id=id, title=title, **kwargs)
-        self.parent = parent
+        wx.Panel.__init__(self, parent=parent, id=id, **kwargs)
+        MainPageBase.__init__(self, dockable)
 
-        filename = os.path.join(globalvar.WXGUIDIR, "xml", "menudata_pyedit.xml")
-        self.menubar = Menu(
-            parent=self, model=MenuTreeModelBuilder(filename).GetModel(separators=True)
-        )
-        self.SetMenuBar(self.menubar)
+        self.parent = parent
+        self._giface = giface
 
         self.toolbar = PyEditToolbar(parent=self)
-        # workaround for http://trac.wxwidgets.org/ticket/13888
-        # TODO: toolbar is set in toolbar and here
-        if sys.platform != "darwin":
-            self.SetToolBar(self.toolbar)
 
-        self.panel = PyStc(parent=self)
+        self.panel = PyStc(parent=self, statusbar=statusbar)
         if IsDark():
             SetDarkMode(self.panel)
+
         self.controller = PyEditController(
             panel=self.panel, guiparent=self, giface=giface
         )
@@ -770,15 +780,24 @@ class PyEditFrame(wx.Frame):
         # don't start with an empty page
         self.panel.SetText(script_template())
 
+        self._layout()
+
+    def _layout(self):
+        """Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
+
+        sizer.Add(self.toolbar, proportion=0, flag=wx.EXPAND)
         sizer.Add(self.panel, proportion=1, flag=wx.EXPAND)
-        sizer.Fit(self)
-        sizer.SetSizeHints(self)
-        self.SetSizer(sizer)
-        self.Fit()
+
         self.SetAutoLayout(True)
+        self.SetSizer(sizer)
+        sizer.Fit(self)
+
         self.Layout()
-        self.Bind(wx.EVT_CLOSE, self.OnClose)
+
+    def SetUpPage(self, *args, **kwargs):
+        MainPageBase.SetUpPage(self, *args, **kwargs)
+        self.controller.SetRecentFilesMenu(self.GetMenu()[0])
 
     # TODO: it would be nice if we can pass the controller to the menu
     # might not be possible on the side of menu
@@ -789,12 +808,12 @@ class PyEditFrame(wx.Frame):
     def OnSave(self, *args, **kwargs):
         self.controller.OnSave(*args, **kwargs)
 
-    def OnClose(self, *args, **kwargs):
+    def OnCloseWindow(self, *args, **kwargs):
         # this will be often true because PyStc is using EVT_KEY_DOWN
         # to say if it was modified, not actual user change in text
         if self.controller.IsContentValuable():
             self.controller.OnSave(*args, **kwargs)
-        self.Destroy()
+        self._onCloseWindow()
 
     def OnRun(self, *args, **kwargs):
         # save without asking
@@ -845,6 +864,39 @@ class PyEditFrame(wx.Frame):
 
     def OnSetParameters(self, *args, **kwargs):
         self.controller.OnSetParameters(*args, **kwargs)
+
+
+class PyEditFrame(wx.Frame):
+    # GUI class and a lot of trampoline methods
+    # pylint: disable=missing-docstring
+    # pylint: disable=too-many-public-methods
+    # pylint: disable=invalid-name
+
+    def __init__(
+        self, parent, giface, id=wx.ID_ANY, title=_("Simple Python Editor"), **kwargs
+    ):
+        wx.Frame.__init__(self, parent=parent, id=id, title=title, **kwargs)
+        self.parent = parent
+
+        self.panel = PyEditPanel(parent=self, giface=giface)
+
+        filename = os.path.join(globalvar.WXGUIDIR, "xml", "menudata_pyedit.xml")
+        self.menubar = Menubar(
+            parent=self,
+            model=MenuTreeModelBuilder(filename).GetModel(separators=True),
+            class_handler=self.panel,
+        )
+        self.SetMenuBar(self.menubar)
+
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(self.panel, proportion=1, flag=wx.EXPAND)
+        sizer.Fit(self)
+        sizer.SetSizeHints(self)
+        self.SetSizer(sizer)
+        self.Fit()
+        self.SetAutoLayout(True)
+        self.Layout()
+        self.Bind(wx.EVT_CLOSE, self.panel.OnCloseWindow)
 
 
 def main():

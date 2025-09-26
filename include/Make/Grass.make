@@ -59,6 +59,7 @@ DOCSDIR         = $(ARCH_DISTDIR)/docs
 ETC             = $(ARCH_DISTDIR)/etc
 GUIDIR          = $(ARCH_DISTDIR)/gui
 HTMLDIR         = $(ARCH_DISTDIR)/docs/html
+MDDIR           = $(ARCH_DISTDIR)/docs/mkdocs
 SCRIPTDIR       = $(ARCH_DISTDIR)/scripts
 MSG_DIR         = $(ARCH_DISTDIR)/etc/msgs
 MO_DIR          = $(ARCH_DISTDIR)/locale
@@ -152,6 +153,7 @@ libs = \
 	NVIZ:nviz \
 	OGSF:ogsf \
 	OPTRI:optri \
+	PARSON:parson \
 	PNGDRIVER:pngdriver \
 	PSDRIVER:psdriver \
 	QTREE:qtree \
@@ -211,7 +213,7 @@ NVIZDEPS         = $(OGSFLIB) $(GISLIB) $(OPENGLLIB)
 OGSFDEPS         = $(BITMAPLIB) $(RASTER3DLIB) $(VECTORLIB) $(DBMILIB) $(RASTERLIB) $(GISLIB) $(TIFFLIBPATH) $(TIFFLIB) $(OPENGLLIB) $(OPENGLULIB) $(MATHLIB)
 PNGDRIVERDEPS    = $(DRIVERLIB) $(GISLIB) $(PNGLIB) $(MATHLIB)
 PSDRIVERDEPS     = $(DRIVERLIB) $(GISLIB) $(MATHLIB)
-RASTERDEPS       = $(GISLIB) $(GPROJLIB) $(MATHLIB)
+RASTERDEPS       = $(GISLIB) $(GPROJLIB) $(MATHLIB) $(PARSONLIB)
 RLIDEPS          = $(RASTERLIB) $(GISLIB) $(MATHLIB)
 ROWIODEPS        = $(GISLIB)
 RTREEDEPS        = $(GISLIB) $(MATHLIB)

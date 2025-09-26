@@ -4,18 +4,20 @@
  *
  * AUTHOR(S): Vaclav Petras
  *            Based on r.in.xyz and r.in.lidar by Markus Metz,
- *            Hamish Bowman, Volker Wichmann
+ *            Hamish Bowman, Volker Wichmann, Maris Nartiss
  *
  * PURPOSE:   Imports LAS LiDAR point clouds to a raster map using
  *            aggregate statistics.
  *
- * COPYRIGHT: (C) 2019-2021 by Vaclav Petras and the GRASS Development Team
+ * COPYRIGHT: (C) 2019-2024 by Vaclav Petras and the GRASS Development Team
  *
  *            This program is free software under the GNU General Public
  *            License (>=v2). Read the file COPYING that comes with
  *            GRASS for details.
  *
  *****************************************************************************/
+
+#include <cstdio>
 
 #if defined(__clang__)
 #pragma clang diagnostic push
@@ -67,8 +69,8 @@ int main(int argc, char *argv[])
     SEGMENT base_segment;
     struct PointBinning point_binning;
     void *raster_row;
-    struct Cell_head region;
-    struct Cell_head input_region;
+    struct Cell_head region = {};
+    struct Cell_head input_region = {};
     int rows, cols; /* scan box size */
 
     char buff[BUFFSIZE];
@@ -79,7 +81,7 @@ int main(int argc, char *argv[])
     bin_index_nodes.max_nodes = 0;
     bin_index_nodes.nodes = NULL;
 
-    struct Cell_head loc_wind;
+    struct Cell_head loc_wind = {};
 
     G_gisinit(argv[0]);
 
@@ -248,10 +250,10 @@ int main(int argc, char *argv[])
 
     reproject_flag->key = 'w';
     reproject_flag->label =
-        _("Reproject to location's coordinate system if needed");
+        _("Reproject to project's coordinate system if needed");
     reproject_flag->description =
         _("Reprojects input dataset to the coordinate system of"
-          " the GRASS location (by default only datasets with the"
+          " the GRASS project (by default only datasets with"
           " matching coordinate system can be imported");
     reproject_flag->guisection = _("Projection");
 
@@ -393,9 +395,10 @@ int main(int argc, char *argv[])
 
     over_flag->key = 'o';
     over_flag->label =
-        _("Override projection check (use current location's projection)");
-    over_flag->description = _(
-        "Assume that the dataset has same projection as the current location");
+        _("Override projection check (use current project's CRS)");
+    over_flag->description =
+        _("Assume that the dataset has the same coordinate reference system as "
+          "the current project");
     over_flag->guisection = _("Projection");
 
     Flag *base_rast_res_flag = G_define_flag();
@@ -443,12 +446,20 @@ int main(int argc, char *argv[])
 
     /* If we print extent, there is no need to validate rest of the input */
     if (print_extent_flag->answer) {
+#ifdef PDAL_USE_NOSRS
+        print_extent(&infiles, over_flag->answer);
+#else
         print_extent(&infiles);
+#endif
         exit(EXIT_SUCCESS);
     }
 
     if (print_info_flag->answer) {
+#ifdef PDAL_USE_NOSRS
+        print_lasinfo(&infiles, over_flag->answer);
+#else
         print_lasinfo(&infiles);
+#endif
         exit(EXIT_SUCCESS);
     }
 
@@ -504,7 +515,12 @@ int main(int argc, char *argv[])
     if (extents_flag->answer) {
         double min_x, max_x, min_y, max_y, min_z, max_z;
 
+#ifdef PDAL_USE_NOSRS
+        get_extent(&infiles, &min_x, &max_x, &min_y, &max_y, &min_z, &max_z,
+                   over_flag->answer);
+#else
         get_extent(&infiles, &min_x, &max_x, &min_y, &max_y, &min_z, &max_z);
+#endif
 
         region.east = xmax = max_x;
         region.west = xmin = min_x;
@@ -708,16 +724,24 @@ int main(int argc, char *argv[])
 
         std::string pdal_read_driver = factory.inferReaderDriver(infile);
         if (pdal_read_driver.empty())
-            G_fatal_error("Cannot determine input file type of <%s>", infile);
+            G_fatal_error(_("Cannot determine input file type of <%s>"),
+                          infile);
 
         pdal::Options las_opts;
         pdal::Option las_opt("filename", infile);
         las_opts.add(las_opt);
+#ifdef PDAL_USE_NOSRS
+        if (over_flag->answer) {
+            pdal::Option nosrs_opt("nosrs", true);
+            las_opts.add(nosrs_opt);
+        }
+#endif
         // stages created by factory are destroyed with the factory
         pdal::Stage *reader = factory.createStage(pdal_read_driver);
         if (!reader)
-            G_fatal_error("PDAL reader creation failed, a wrong format of <%s>",
-                          infile);
+            G_fatal_error(
+                _("PDAL reader creation failed, a wrong format of <%s>"),
+                infile);
         reader->setOptions(las_opts);
         readers.push_back(reader);
         merge_filter.setInput(*reader);
@@ -731,7 +755,7 @@ int main(int argc, char *argv[])
 
     // we reproject when requested regardless of the input projection
     if (reproject_flag->answer) {
-        G_message(_("Reprojecting the input to the location projection"));
+        G_message(_("Reprojecting the input to the project's CRS"));
         char *proj_wkt = location_projection_as_wkt(false);
 
         pdal::Options o4;
@@ -776,13 +800,18 @@ int main(int argc, char *argv[])
     //  consumption, so using 10k in case it is faster for some cases
     pdal::point_count_t point_table_capacity = 10000;
     pdal::FixedPointTable point_table(point_table_capacity);
-    binning_writer.prepare(point_table);
+    try {
+        binning_writer.prepare(point_table);
+    }
+    catch (const std::exception &err) {
+        G_fatal_error(_("PDAL error: %s"), err.what());
+    }
 
     // getting projection is possible only after prepare
     if (over_flag->answer) {
         G_important_message(_("Overriding projection check and assuming"
-                              " that the projection of input matches"
-                              " the location projection"));
+                              " that the CRS of input matches"
+                              " the project's CRS"));
     }
     else if (!reproject_flag->answer) {
         pdal::SpatialReference spatial_reference =
@@ -891,9 +920,10 @@ int main(int argc, char *argv[])
     char file_list[4096];
 
     if (file_list_opt->answer)
-        G_snprintf(file_list, sizeof(file_list), "%s", file_list_opt->answer);
+        std::snprintf(file_list, sizeof(file_list), "%s",
+                      file_list_opt->answer);
     else
-        G_snprintf(file_list, sizeof(file_list), "%s", input_opt->answer);
+        std::snprintf(file_list, sizeof(file_list), "%s", input_opt->answer);
 
     Rast_set_history(&history, HIST_DATSRC_1, file_list);
     Rast_write_history(outmap, &history);

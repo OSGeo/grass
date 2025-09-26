@@ -3,7 +3,7 @@ Created on Fri Jul  4 16:32:54 2014
 
 @author: pietro
 """
-from __future__ import print_function
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
@@ -22,7 +22,12 @@ GETTYPE = {
 class TestCheckValueFunction(TestCase):
     def test_single_all(self):
         param = Parameter(
-            diz=dict(name="int_number", required="yes", multiple="no", type="all")
+            diz={
+                "name": "int_number",
+                "required": "yes",
+                "multiple": "no",
+                "type": "all",
+            }
         )
         value = 1
         self.assertTupleEqual((value, value), _check_value(param, value))
@@ -38,7 +43,12 @@ class TestCheckValueFunction(TestCase):
     def test_single_float_double(self):
         for ptype in ("float", "double"):
             param = Parameter(
-                diz=dict(name="int_number", required="yes", multiple="no", type=ptype)
+                diz={
+                    "name": "int_number",
+                    "required": "yes",
+                    "multiple": "no",
+                    "type": ptype,
+                }
             )
             value = 1
             self.assertTupleEqual((float(value), value), _check_value(param, value))
@@ -58,7 +68,12 @@ class TestCheckValueFunction(TestCase):
     def test_multiple_float_double(self):
         for ptype in ("float", "double"):
             param = Parameter(
-                diz=dict(name="number", required="yes", multiple="yes", type=ptype)
+                diz={
+                    "name": "number",
+                    "required": "yes",
+                    "multiple": "yes",
+                    "type": ptype,
+                }
             )
             value = (1.4, 2.3)
             self.assertTupleEqual((list(value), value), _check_value(param, value))
@@ -104,15 +119,15 @@ class TestCheckValueFunction(TestCase):
     def test_range_float_double(self):
         for ptype in ("float", "double"):
             param = Parameter(
-                diz=dict(
-                    name="int_number",
-                    required="yes",
-                    multiple="no",
-                    type=ptype,
-                    values=[
+                diz={
+                    "name": "int_number",
+                    "required": "yes",
+                    "multiple": "no",
+                    "type": ptype,
+                    "values": [
                         "0.0-2.5",
                     ],
-                )
+                }
             )
             value = 1
             self.assertTupleEqual((float(value), value), _check_value(param, value))
@@ -133,9 +148,92 @@ class TestCheckValueFunction(TestCase):
             with self.assertRaises(ValueError):
                 _check_value(param, 2.6)
 
+    def test_positive_min_float_double(self):
+        """Check range checking for a positive minimum.
+
+        Tests positive cases, type of exception, and content of the message.
+        """
+        name = "number"
+        for ptype in ("float", "double"):
+            param = Parameter(
+                diz={
+                    "name": name,
+                    "required": "yes",
+                    "multiple": "no",
+                    "type": ptype,
+                    "values": [
+                        "2-",
+                    ],
+                }
+            )
+            value = 2
+            self.assertTupleEqual((float(value), value), _check_value(param, value))
+            value = 2.2
+            self.assertTupleEqual((value, value), _check_value(param, value))
+            value = "2"
+            self.assertTupleEqual((float(value), value), _check_value(param, value))
+            value = "2.5"
+            self.assertTupleEqual((float(value), value), _check_value(param, value))
+
+            # test errors
+            with self.assertRaisesRegex(ValueError, f"{name}.+elev"):
+                _check_value(param, "elev")
+            with self.assertRaisesRegex(TypeError, name):
+                _check_value(param, (1.0, 2.0))
+            # Only the main parts of the message are checked,
+            # but the check is order-dependent.
+            with self.assertRaisesRegex(ValueError, f"{name}.+1.9"):
+                _check_value(param, 1.9)
+            with self.assertRaisesRegex(ValueError, f"{name}.+-1.0"):
+                _check_value(param, -1.0)
+
+    def test_positive_max_float_double(self):
+        """Check range checking for a positive maximum.
+
+        Tests positive cases, type of exception, and content of the message.
+        """
+        name = "number"
+        for ptype in ("float", "double"):
+            param = Parameter(
+                diz={
+                    "name": name,
+                    "required": "yes",
+                    "multiple": "no",
+                    "type": ptype,
+                    "values": [
+                        "-100",
+                    ],
+                }
+            )
+            value = 1
+            self.assertTupleEqual((float(value), value), _check_value(param, value))
+            value = 1.2
+            self.assertTupleEqual((value, value), _check_value(param, value))
+            value = "0"
+            self.assertTupleEqual((float(value), value), _check_value(param, value))
+            value = "2.5"
+            self.assertTupleEqual((float(value), value), _check_value(param, value))
+
+            # test errors
+            with self.assertRaisesRegex(ValueError, f"{name}.+elev"):
+                _check_value(param, "elev")
+            with self.assertRaisesRegex(TypeError, name):
+                _check_value(param, (1.0, 2.0))
+            # Only the main parts of the message are checked,
+            # but the check is order-dependent.
+            with self.assertRaisesRegex(ValueError, f"{name}.+100.1"):
+                _check_value(param, 100.1)
+            with self.assertRaisesRegex(ValueError, f"{name}.+200"):
+                _check_value(param, 200.0)
+
     def test_single_integer(self):
         param = Parameter(
-            diz=dict(name="int_number", required="yes", multiple="no", type="integer")
+            diz={
+                "name": "int_number",
+                "required": "yes",
+                "multiple": "no",
+                "type": "integer",
+            }
         )
         value = 1
         self.assertTupleEqual((value, value), _check_value(param, value))
@@ -154,7 +252,12 @@ class TestCheckValueFunction(TestCase):
 
     def test_multiple_integer(self):
         param = Parameter(
-            diz=dict(name="int_number", required="yes", multiple="yes", type="integer")
+            diz={
+                "name": "int_number",
+                "required": "yes",
+                "multiple": "yes",
+                "type": "integer",
+            }
         )
         value = (1, 2)
         # import ipdb; ipdb.set_trace()
@@ -207,13 +310,13 @@ class TestCheckValueFunction(TestCase):
     def test_keydescvalues(self):
         for ptype in ("integer", "float"):
             param = Parameter(
-                diz=dict(
-                    name="int_number",
-                    required="yes",
-                    multiple="yes",
-                    keydesc=("range", "(min, max)"),
-                    type="integer",
-                )
+                diz={
+                    "name": "int_number",
+                    "required": "yes",
+                    "multiple": "yes",
+                    "keydesc": ("range", "(min, max)"),
+                    "type": "integer",
+                }
             )
             value = (1, 2)
             self.assertTupleEqual(
@@ -233,15 +336,15 @@ class TestCheckValueFunction(TestCase):
 
     def test_range_integer(self):
         param = Parameter(
-            diz=dict(
-                name="int_number",
-                required="yes",
-                multiple="no",
-                type="integer",
-                values=[
+            diz={
+                "name": "int_number",
+                "required": "yes",
+                "multiple": "no",
+                "type": "integer",
+                "values": [
                     "0-10",
                 ],
-            )
+            }
         )
         value = 1
         self.assertTupleEqual((value, value), _check_value(param, value))
@@ -268,13 +371,13 @@ class TestCheckValueFunction(TestCase):
 
     def test_choice_integer(self):
         param = Parameter(
-            diz=dict(
-                name="int_number",
-                required="yes",
-                multiple="no",
-                type="integer",
-                values=[2, 4, 6, 8],
-            )
+            diz={
+                "name": "int_number",
+                "required": "yes",
+                "multiple": "no",
+                "type": "integer",
+                "values": [2, 4, 6, 8],
+            }
         )
         value = 4
         self.assertTupleEqual((value, value), _check_value(param, value))
@@ -296,7 +399,7 @@ class TestCheckValueFunction(TestCase):
     def test_single_string_file(self):
         for ptype in ("string", "file"):
             param = Parameter(
-                diz=dict(name="name", required="yes", multiple="no", type=ptype)
+                diz={"name": "name", "required": "yes", "multiple": "no", "type": ptype}
             )
             value = "elev"
             self.assertTupleEqual((value, value), _check_value(param, value))
@@ -311,7 +414,12 @@ class TestCheckValueFunction(TestCase):
 
     def test_multiple_strings(self):
         param = Parameter(
-            diz=dict(name="rastnames", required="yes", multiple="yes", type="string")
+            diz={
+                "name": "rastnames",
+                "required": "yes",
+                "multiple": "yes",
+                "type": "string",
+            }
         )
         value = ["elev", "slope", "aspect"]
         self.assertTupleEqual((value, value), _check_value(param, value))
@@ -345,13 +453,13 @@ class TestCheckValueFunction(TestCase):
     def test_choice_string(self):
         values = ["elev", "asp", "slp"]
         param = Parameter(
-            diz=dict(
-                name="rastname",
-                required="yes",
-                multiple="no",
-                type="string",
-                values=values,
-            )
+            diz={
+                "name": "rastname",
+                "required": "yes",
+                "multiple": "no",
+                "type": "string",
+                "values": values,
+            }
         )
         value = "asp"
         self.assertTupleEqual((value, value), _check_value(param, value))
@@ -371,7 +479,12 @@ class TestParameterGetBash(TestCase):
     def test_single_float_double(self):
         for ptype in ("float", "double"):
             param = Parameter(
-                diz=dict(name="number", required="yes", multiple="no", type=ptype)
+                diz={
+                    "name": "number",
+                    "required": "yes",
+                    "multiple": "no",
+                    "type": ptype,
+                }
             )
             # set private attributes to skip the check function
             param._value = 1.0
@@ -384,7 +497,12 @@ class TestParameterGetBash(TestCase):
     def test_multiple_float_double(self):
         for ptype in ("float", "double"):
             param = Parameter(
-                diz=dict(name="number", required="yes", multiple="yes", type=ptype)
+                diz={
+                    "name": "number",
+                    "required": "yes",
+                    "multiple": "yes",
+                    "type": ptype,
+                }
             )
             # set private attributes to skip the check function
             param._value = [
@@ -406,7 +524,7 @@ class TestParameterGetBash(TestCase):
 
     def test_single_string(self):
         param = Parameter(
-            diz=dict(name="rast", required="yes", multiple="no", type="string")
+            diz={"name": "rast", "required": "yes", "multiple": "no", "type": "string"}
         )
         # set private attributes to skip the check function
         param._value = "elev"
@@ -415,7 +533,7 @@ class TestParameterGetBash(TestCase):
 
     def test_multiple_strings(self):
         param = Parameter(
-            diz=dict(name="rast", required="yes", multiple="yes", type="string")
+            diz={"name": "rast", "required": "yes", "multiple": "yes", "type": "string"}
         )
         # set private attributes to skip the check function
         param._value = ["elev", "asp", "slp"]
@@ -429,13 +547,13 @@ class TestParameterGetBash(TestCase):
 
     def test_keydescvalues(self):
         param = Parameter(
-            diz=dict(
-                name="range",
-                required="yes",
-                multiple="yes",
-                keydesc=("range", "(min, max)"),
-                type="integer",
-            )
+            diz={
+                "name": "range",
+                "required": "yes",
+                "multiple": "yes",
+                "keydesc": ("range", "(min, max)"),
+                "type": "integer",
+            }
         )
         # set private attributes to skip the check function
         param._value = [

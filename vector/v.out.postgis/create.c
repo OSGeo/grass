@@ -26,7 +26,7 @@ char *create_pgfile(const char *dsn, const char *schema, const char *olink,
     fp = G_fopen_new("", filename);
     if (!fp)
         G_fatal_error(_("Unable to create <%s> file"), filename);
-    sprintf(buf, "GRASS_VECTOR_PGFILE=%s", filename);
+    snprintf(buf, sizeof(buf), "GRASS_VECTOR_PGFILE=%s", filename);
     putenv(G_store(buf));
     G_add_error_handler(file_handler, filename);
 
@@ -75,7 +75,7 @@ char *create_pgfile(const char *dsn, const char *schema, const char *olink,
 
             if (strcmp(tokens[0], "srid") == 0 &&
                 (epsg && strcmp(tokens[1], epsg) != 0))
-                G_warning(_("EPSG code defined for current location (%s) is "
+                G_warning(_("EPSG code defined for current project (%s) is "
                             "overridden by %s"),
                           epsg, tokens[1]);
 

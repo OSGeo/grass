@@ -410,7 +410,7 @@ AC_DEFUN([SC_ENABLE_SHARED], [
     else
 	AC_MSG_RESULT([static])
 	SHARED_BUILD=0
-	AC_DEFINE(STATIC_BUILD, 1, [define for Windows static build])
+	AC_DEFINE(STATIC_BUILD, 1, [Define to 1 for Windows static build.])
 	GRASS_LIBRARY_TYPE='stlib'
     fi
     AC_SUBST(GRASS_LIBRARY_TYPE)
@@ -520,8 +520,8 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	*-sun-solaris*)
 	    # Note: If _REENTRANT isn't defined, then Solaris
 	    # won't define thread-safe library routines.
-	    AC_DEFINE(_REENTRANT, 1, [define _REENTRANT flag (for SunOS)])
-	    AC_DEFINE(_POSIX_PTHREAD_SEMANTICS, 1, [enable threading extensions on Solaris])
+	    AC_DEFINE(_REENTRANT, 1, [Define to 1 for _REENTRANT flag (for SunOS).])
+	    AC_DEFINE(_POSIX_PTHREAD_SEMANTICS, 1, [Define to 1 to enable threading extensions on Solaris.])
 	    # Note: need the LIBS below, otherwise Tk won't find Tcl's
 	    # symbols when dynamically loaded into tclsh.
             if test "$GCC" = "yes" ; then
@@ -543,8 +543,8 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    #       derives from UNIX System V Release 4
 	    # Note: If _REENTRANT isn't defined, then Solaris
 	    # won't define thread-safe library routines.
-	    AC_DEFINE(_REENTRANT, 1, [define _REENTRANT flag (for SunOS)])
-	    AC_DEFINE(_POSIX_PTHREAD_SEMANTICS, 1, [enable threading extensions on Solaris])
+	    AC_DEFINE(_REENTRANT, 1, [Define to 1 for _REENTRANT flag (for SunOS).])
+	    AC_DEFINE(_POSIX_PTHREAD_SEMANTICS, 1, [Define to 1 to enable threading extensions on Solaris.])
 	    # Note: need the LIBS below, otherwise Tk won't find Tcl's
 	    # symbols when dynamically loaded into tclsh.
             if test "$GCC" = "yes" ; then
@@ -574,8 +574,8 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    # TODO: add optional pthread support with any combination of:
 	    # CFLAGS="$CFLAGS -pthread"
 	    # LDFLAGS="$LDFLAGS -lpthread"
-	    # AC_DEFINE(_REENTRANT, 1, [define _REENTRANT flag (for SunOS)])
-	    # AC_DEFINE(_POSIX_PTHREAD_SEMANTICS, 1, [enable threading extensions on Solaris])
+	    # AC_DEFINE(_REENTRANT, 1, [Define to 1 for _REENTRANT flag (for SunOS).])
+	    # AC_DEFINE(_POSIX_PTHREAD_SEMANTICS, 1, [Define to 1 to enable threading extensions on Solaris.])
 	    ;;
 	*-netbsd*)
 	    # NetBSD has ELF.
@@ -596,8 +596,8 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    # TODO: add optional pthread support with any combination of:
 	    # CFLAGS="$CFLAGS -pthread"
 	    # LDFLAGS="$LDFLAGS -lpthread"
-	    # AC_DEFINE(_REENTRANT, 1, [define _REENTRANT flag (for SunOS)])
-	    # AC_DEFINE(_POSIX_PTHREAD_SEMANTICS, 1, [enable threading extensions on Solaris])
+	    # AC_DEFINE(_REENTRANT, 1, [Define to 1 for _REENTRANT flag (for SunOS).])
+	    # AC_DEFINE(_POSIX_PTHREAD_SEMANTICS, 1, [Define to 1 to enable threading extensions on Solaris.])
 	    ;;
 	*aix*)
 		# NOTE: do we need to support aix < 6 ?
@@ -638,8 +638,9 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
     AC_SUBST(STLIB_SUFFIX)
 ])
 
+
 dnl -------------------- OpenMP -----------------------------------------------
-dnl OpenMP code borrowed and modified from Autoconf 2.69 (AC_OPENMP)
+dnl OpenMP code borrowed and modified from Autoconf 2.71 (AC_OPENMP)
 dnl to enable Clang detection
 
 # _LOC_LANG_OPENMP
@@ -654,10 +655,10 @@ AC_DEFUN([_LOC_LANG_OPENMP],
 m4_define([_LOC_LANG_OPENMP(C)],
 [
 #ifndef _OPENMP
- choke me
+#error "OpenMP not supported"
 #endif
 #include <omp.h>
-int main () { return omp_get_num_threads (); }
+int main (void) { return omp_get_num_threads (); }
 ])
 
 # _LOC_LANG_OPENMP(C++)
@@ -688,56 +689,90 @@ m4_copy([_LOC_LANG_OPENMP(Fortran 77)], [_LOC_LANG_OPENMP(Fortran)])
 # The options are necessary at compile time (so the #pragmas are understood)
 # and at link time (so the appropriate library is linked with).
 # This macro takes care to not produce redundant options if $CC $CFLAGS already
-# supports OpenMP. It also is careful to not pass options to compilers that
-# misinterpret them; for example, most compilers accept "-openmp" and create
-# an output file called 'penmp' rather than activating OpenMP support.
+# supports OpenMP.
+#
+# For each candidate option, we do a compile test first, then a link test;
+# if the compile test succeeds but the link test fails, that means we have
+# found the correct option but it doesn't work because the libraries are
+# broken.  (This can happen, for instance, with SunPRO C and a bad combination
+# of operating system patches.)
+#
+# Several of the options in our candidate list can be misinterpreted by
+# compilers that don't use them to activate OpenMP support; for example,
+# many compilers understand "-openmp" to mean "write output to a file
+# named 'penmp'" rather than "enable OpenMP".  We can't completely avoid
+# the possibility of clobbering files named 'penmp' or 'mp' in configure's
+# working directory; therefore, this macro will bomb out if any such file
+# already exists when it's invoked.
 AC_DEFUN([LOC_OPENMP],
+[AC_REQUIRE([_LOC_OPENMP_SAFE_WD])]dnl
+[AC_ARG_ENABLE([openmp],
+   [AS_HELP_STRING([--disable-openmp], [do not use OpenMP])])]dnl
 [
   OPENMP_[]_AC_LANG_PREFIX[]FLAGS=
-  AC_ARG_ENABLE([openmp],
-    [AS_HELP_STRING([--disable-openmp], [do not use OpenMP])])
   if test "$enable_openmp" != no; then
     AC_CACHE_CHECK([for $[]_AC_CC[] option to support OpenMP],
       [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp],
-      [AC_LINK_IFELSE([_LOC_LANG_OPENMP],
-	 [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp='none needed'],
-	 [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp='unsupported'
-	  dnl Try these flags:
-	  dnl   GCC >= 4.2           -fopenmp
-	  dnl   SunPRO C             -xopenmp
-	  dnl   Intel C              -openmp
-	  dnl   SGI C, PGI C         -mp
-	  dnl   Tru64 Compaq C       -omp
-	  dnl   IBM C (AIX, Linux)   -qsmp=omp
-          dnl   Cray CCE             -homp
-          dnl   NEC SX               -Popenmp
-          dnl   Lahey Fortran (Linux)  --openmp
-          dnl   Clang (Apple)        -Xclang -fopenmp
-	  dnl If in this loop a compiler is passed an option that it doesn't
-	  dnl understand or that it misinterprets, the AC_LINK_IFELSE test
-	  dnl will fail (since we know that it failed without the option),
-	  dnl therefore the loop will continue searching for an option, and
-	  dnl no output file called 'penmp' or 'mp' is created.
-	  for ac_option in -fopenmp -xopenmp -openmp -mp -omp -qsmp=omp -homp \
-                           -Popenmp --openmp '-Xclang -fopenmp'; do
-	    ac_save_[]_AC_LANG_PREFIX[]FLAGS=$[]_AC_LANG_PREFIX[]FLAGS
-	    _AC_LANG_PREFIX[]FLAGS="$[]_AC_LANG_PREFIX[]FLAGS $ac_option"
-	    AC_LINK_IFELSE([_LOC_LANG_OPENMP],
-	      [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp=$ac_option])
-	    _AC_LANG_PREFIX[]FLAGS=$ac_save_[]_AC_LANG_PREFIX[]FLAGS
-	    if test "$ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp" != unsupported; then
-	      break
-	    fi
-	  done])])
-    case $ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp in #(
-      "none needed" | unsupported)
-	;; #(
-      *)
-	OPENMP_[]_AC_LANG_PREFIX[]FLAGS=$ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp ;;
-    esac
+      [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp='not found'
+      dnl Try these flags:
+      dnl   (on by default)      ''
+      dnl   GCC >= 4.2           -fopenmp
+      dnl   SunPRO C             -xopenmp
+      dnl   Intel C              -openmp
+      dnl   SGI C, PGI C         -mp
+      dnl   Tru64 Compaq C       -omp
+      dnl   IBM XL C (AIX, Linux) -qsmp=omp
+      dnl   Cray CCE             -homp
+      dnl   NEC SX               -Popenmp
+      dnl   Lahey Fortran (Linux)  --openmp
+      dnl   Clang (Apple)        -Xclang -fopenmp
+      for ac_option in '' -fopenmp -xopenmp -openmp -mp -omp -qsmp=omp -homp \
+                       -Popenmp --openmp '-Xclang -fopenmp'; do
+
+        ac_save_[]_AC_LANG_PREFIX[]FLAGS=$[]_AC_LANG_PREFIX[]FLAGS
+        _AC_LANG_PREFIX[]FLAGS="$[]_AC_LANG_PREFIX[]FLAGS $ac_option"
+        AC_COMPILE_IFELSE([_LOC_LANG_OPENMP],
+          [AC_LINK_IFELSE([_LOC_LANG_OPENMP],
+            [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp=$ac_option],
+            [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp='unsupported'])])
+        _AC_LANG_PREFIX[]FLAGS=$ac_save_[]_AC_LANG_PREFIX[]FLAGS
+
+        if test "$ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp" != 'not found'; then
+          break
+        fi
+      done
+      if test "$ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp" = 'not found'; then
+        ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp='unsupported'
+      elif test "$ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp" = ''; then
+        ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp='none needed'
+      fi
+      dnl _AC_OPENMP_SAFE_WD checked that these files did not exist before we
+      dnl started probing for OpenMP support, so if they exist now, they were
+      dnl created by the probe loop and it's safe to delete them.
+      rm -f penmp mp])
+    if test "$ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp" != 'unsupported' && \
+       test "$ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp" != 'none needed'; then
+      OPENMP_[]_AC_LANG_PREFIX[]FLAGS="$ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp"
+    fi
   fi
   AC_SUBST([OPENMP_]_AC_LANG_PREFIX[FLAGS])
 ])
+
+# _AC_OPENMP_SAFE_WD
+# ------------------
+# AC_REQUIREd by AC_OPENMP.  Checks both at autoconf time and at
+# configure time for files that AC_OPENMP clobbers.
+AC_DEFUN([_LOC_OPENMP_SAFE_WD],
+[m4_syscmd([test ! -e penmp && test ! -e mp])]dnl
+[m4_if(sysval, [0], [], [m4_fatal(m4_normalize(
+  [LOC_OPENMP clobbers files named 'mp' and 'penmp'.
+   To use LOC_OPENMP you must not have either of these files
+   at the top level of your source tree.]))])]dnl
+[if test -e penmp || test -e mp; then
+  AC_MSG_ERROR(m4_normalize(
+    [AC@&t@_OPENMP clobbers files named 'mp' and 'penmp'.
+     Aborting configure because one of these files already exists.]))
+fi])
 
 dnl -------------------- / OpenMP ---------------------------------------------
 

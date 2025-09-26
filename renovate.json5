@@ -1,0 +1,56 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        "config:best-practices",
+        ":semanticCommits",
+        ":semanticCommitTypeAll(CI)",
+
+        // allows using comments starting with
+        // "# renovate: " to update _VERSION
+        // environment variables in GitHub Action files.
+        "customManagers:githubActionsVersions",
+        // allows using comments starting with
+        // "# renovate: " to update _VERSION
+        // ENV or ARG in a Dockerfile.
+        "customManagers:dockerfileVersions",
+
+        // when a dependency is really out of date, this will prevent to skip directly to the latest version.
+        ":separateMultipleMajorReleases",
+
+        // Renovate's pre-commit support is still opt-in
+        ":enablePreCommit",
+
+        // weekly update of lock files (flake.lock)
+        ":maintainLockFilesWeekly",
+        "group:githubArtifactActions",
+        "schedule:weekends",
+    ],
+
+    // enable Nix lock file update (flake.lock)
+    "nix": {
+        "enabled": true,
+    },
+
+    "packageRules": [
+        {
+            "groupName": "ruff",
+            "matchPackageNames": [
+                "astral-sh/ruff",
+                "astral-sh/ruff-pre-commit",
+                "ruff",
+            ],
+        },
+        {
+            "groupName": "flake8",
+            "matchPackageNames": ["pycqa/flake8", "flake8"],
+        },
+        {
+            "groupName": "black",
+            "matchPackageNames": [
+                "psf/black-pre-commit-mirror",
+                "psf/black",
+                "black",
+            ],
+        },
+    ],
+}

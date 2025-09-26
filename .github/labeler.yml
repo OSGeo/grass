@@ -1,0 +1,205 @@
+---
+libraries:
+  - changed-files:
+      - any-glob-to-any-file:
+          - lib/**
+          - include/grass/**
+          - python/**
+module:
+  - changed-files:
+      - any-glob-to-any-file:
+          - db/**
+          - display/**
+          - general/**
+          - imagery/**
+          - misc/**
+          - ps/**
+          - raster/**
+          - raster3d/**
+          - scripts/**
+          - temporal/**
+          - vector/**
+
+# Module categories
+database:
+  - changed-files:
+      - any-glob-to-any-file:
+          - db/**
+          - lib/db/**
+          - scripts/db.*/**
+          - "**.sql"
+display:
+  - changed-files:
+      - any-glob-to-any-file:
+          - display/**
+          - lib/display/**
+          - scripts/d.*/**
+general:
+  - changed-files:
+      - any-glob-to-any-file:
+          - general/**
+          - scripts/g.*/**
+GUI:
+  - changed-files:
+      - any-glob-to-any-file:
+          - gui/**
+imagery:
+  - changed-files:
+      - any-glob-to-any-file:
+          - imagery/**
+          - lib/imagery/**
+          - scripts/i.*/**
+misc:
+  - changed-files:
+      - any-glob-to-any-file:
+          - misc/**
+          - scripts/m.*/**
+raster:
+  - changed-files:
+      - any-glob-to-any-file:
+          - raster/**
+          - lib/raster/**
+          - scripts/r.*/**
+raster3d:
+  - changed-files:
+      - any-glob-to-any-file:
+          - raster3d/**
+          - lib/raster3d/**
+          - scripts/r3.*/**
+temporal:
+  - changed-files:
+      - any-glob-to-any-file:
+          - temporal/**
+          - lib/temporal/**
+          - scripts/t.*/**
+vector:
+  - changed-files:
+      - any-glob-to-any-file:
+          - vector/**
+          - lib/vector/**
+          - scripts/v.*/**
+
+# Build, packaging, or OS related
+CI:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/.editorconfig"
+          - .clang-format
+          - .codecov.yml
+          - .coveragerc
+          - .cppcheck-suppressions
+          - .flake8
+          - .github/**
+          - .pre-commit-config.yaml
+          - .yamllint
+          - binder/**
+          - renovate.json
+CMake:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/**.cmake*"
+          - "**/CMakeLists.txt"
+          - cmake/**
+Windows:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/**.bat"
+          - "**/**.bat.*"
+          - "**/*OSGeo4W**"
+          - "**/*osgeo4w**"
+          - msvc/**
+          - mswindows/**
+macOS:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*macos**"
+          - macos/**
+Linux:
+  - changed-files:
+      - any-glob-to-any-file:
+          - singularity/**
+          - rpm/**
+docker:
+  - changed-files:
+      - any-glob-to-any-file:
+          - docker/**
+          - "**/*Dockerfile*"
+          - "**/*dockerfile*"
+          - .dockerignore
+nix:
+  - changed-files:
+      - any-glob-to-any-file:
+          - .github/workflows/test-nix.yml
+          - flake.lock
+          - flake.nix
+          - package.nix
+
+docs:
+  - all:
+      - changed-files:
+          - any-glob-to-any-file:
+              - doc/**
+              - man/**
+              - "**/*.md"
+              - "**/*.rst"
+              - "**/*.html"
+              - "**/*.dox"
+              - "**/*.png"
+              - "**.cff"
+              - CITING
+              - AUTHORS
+              - TODO
+          - all-globs-to-all-files:
+              - "!doc/development/rfc/**"
+RFC:
+  - changed-files:
+      - any-glob-to-any-file:
+          - doc/development/rfc/**
+translation:
+  - changed-files:
+      - any-glob-to-any-file: locale/**
+
+# based on file types
+Python:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.py"
+          - "**/pyproject.toml"
+notebook:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.ipynb"
+          - doc/examples/notebooks/**
+          - python/grass/jupyter/**
+C:
+  - changed-files:
+      - any-glob-to-any-file: "**/*.c"
+C++:
+  - changed-files:
+      - any-glob-to-any-file: "**/*.cpp"
+CSS:
+  - changed-files:
+      - any-glob-to-any-file: "**/*.css"
+HTML:
+  - changed-files:
+      - any-glob-to-any-file: "**/*.html"
+JavaScript:
+  - changed-files:
+      - any-glob-to-any-file: "**/*.js"
+markdown:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.md"
+          - .markdownlint.yml
+# test suite
+tests:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*_gunittest.cfg"
+          - "**/.gunittest*.cfg"
+          - "**/test/**"
+          - "**/tests/**"
+          - "**/testsuite/**"
+          - "**test**"
+          - .codecov.yml
+          - .coveragerc

@@ -58,10 +58,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <math.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
+#include <grass/parson.h>
 #include "r.proj.h"
 
 /* modify this table to add new methods */
@@ -132,13 +134,16 @@ int main(int argc, char **argv)
         *indbase,           /* name of input database       */
         *interpol,          /* interpolation method         */
         *memory,            /* amount of memory for cache   */
-        *res;               /* resolution of target map     */
+        *res,               /* resolution of target map     */
+        *format;            /* output format                */
 
 #ifdef HAVE_PROJ_H
     struct Option *pipeline; /* name of custom PROJ pipeline */
 #endif
     struct Cell_head incellhd, /* cell header of input map     */
         outcellhd;             /* and output map               */
+
+    enum OutputFormat outputFormat;
 
     G_gisinit(argv[0]);
 
@@ -147,12 +152,12 @@ int main(int argc, char **argv)
     G_add_keyword(_("projection"));
     G_add_keyword(_("transformation"));
     G_add_keyword(_("import"));
-    module->description = _("Re-projects a raster map from given location to "
-                            "the current location.");
+    module->description = _("Re-projects a raster map from given project to "
+                            "the current project.");
 
     inlocation = G_define_standard_option(G_OPT_M_LOCATION);
     inlocation->required = YES;
-    inlocation->label = _("Location containing input raster map");
+    inlocation->label = _("Project (location) containing input raster map");
     inlocation->guisection = _("Source");
 
     imapset = G_define_standard_option(G_OPT_M_MAPSET);
@@ -166,7 +171,7 @@ int main(int argc, char **argv)
     inmap->guisection = _("Source");
 
     indbase = G_define_standard_option(G_OPT_M_DBASE);
-    indbase->label = _("Path to GRASS database of input location");
+    indbase->label = _("Path to GRASS database of input project");
 
     outmap = G_define_standard_option(G_OPT_R_OUTPUT);
     outmap->required = NO;
@@ -195,6 +200,13 @@ int main(int argc, char **argv)
     res->description = _("Resolution of output raster map");
     res->guisection = _("Target");
 
+    format = G_define_standard_option(G_OPT_F_FORMAT);
+    format->options = "plain,shell,json";
+    format->descriptions = _("plain;Human readable text output;"
+                             "shell;shell script style text output;"
+                             "json;JSON (JavaScript Object Notation);");
+    format->guisection = _("Print");
+
 #ifdef HAVE_PROJ_H
     pipeline = G_define_option();
     pipeline->key = "pipeline";
@@ -210,7 +222,9 @@ int main(int argc, char **argv)
 
     nocrop = G_define_flag();
     nocrop->key = 'n';
-    nocrop->description = _("Do not perform region cropping optimization");
+    nocrop->description =
+        _("Do not perform region cropping optimization. See Notes if working "
+          "with a global latitude-longitude projection");
 
     print_bounds = G_define_flag();
     print_bounds->key = 'p';
@@ -220,8 +234,11 @@ int main(int argc, char **argv)
 
     gprint_bounds = G_define_flag();
     gprint_bounds->key = 'g';
-    gprint_bounds->description = _("Print input map's bounds in the current "
-                                   "projection and exit (shell style)");
+    gprint_bounds->label = _("Print input map's bounds in the current "
+                             "projection in shell script style [deprecated]");
+    gprint_bounds->description =
+        _("This flag is deprecated and will "
+          "be removed in a future release. Use format=shell instead.");
     gprint_bounds->guisection = _("Print");
 
     /* The parser checks if the map already exists in current mapset,
@@ -231,6 +248,29 @@ int main(int argc, char **argv)
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
+
+    if (strcmp(format->answer, "json") == 0) {
+        outputFormat = JSON;
+    }
+    else if (strcmp(format->answer, "shell") == 0) {
+        outputFormat = SHELL;
+    }
+    else {
+        outputFormat = PLAIN;
+    }
+
+    if (outputFormat != PLAIN && !print_bounds->answer && !list->answer) {
+        G_fatal_error(
+            _("The format option can only be used with -%c or -%c flags"),
+            print_bounds->key, list->key);
+    }
+
+    if (gprint_bounds->answer) {
+        G_verbose_message(
+            _("Flag 'g' is deprecated and will be removed in a future "
+              "release. Please use format=shell instead."));
+        outputFormat = SHELL;
+    }
 
     /* get the method */
     for (method = 0; (ipolname = menu[method].name); method++)
@@ -244,7 +284,7 @@ int main(int argc, char **argv)
 
     mapname = outmap->answer ? outmap->answer : inmap->answer;
     if (mapname && !list->answer && !overwrite && !print_bounds->answer &&
-        !gprint_bounds->answer && G_find_raster(mapname, G_mapset()))
+        outputFormat != SHELL && G_find_raster(mapname, G_mapset()))
         G_fatal_error(_("option <%s>: <%s> exists. To overwrite, use the "
                         "--overwrite flag"),
                       "output", mapname);
@@ -255,12 +295,12 @@ int main(int argc, char **argv)
 #if 0
         G_fatal_error(_("Input and output locations can not be the same"));
 #else
-        G_warning(_("Input and output locations are the same"));
+        G_warning(_("Input and output projects are the same"));
 #endif
-        G_get_window(&outcellhd);
+    G_get_window(&outcellhd);
 
-    if (gprint_bounds->answer && !print_bounds->answer)
-        print_bounds->answer = gprint_bounds->answer;
+    if (outputFormat == SHELL && !print_bounds->answer)
+        print_bounds->answer = 1;
     curr_proj = G_projection();
 
     /* Get projection info for output mapset */
@@ -286,7 +326,7 @@ int main(int argc, char **argv)
 
     permissions = G_mapset_permissions(setname);
     if (permissions < 0) /* can't access mapset       */
-        G_fatal_error(_("Mapset <%s> in input location <%s> - %s"), setname,
+        G_fatal_error(_("Mapset <%s> in input project <%s> - %s"), setname,
                       inlocation->answer,
                       permissions == 0 ? _("permission denied")
                                        : _("not found"));
@@ -295,15 +335,47 @@ int main(int argc, char **argv)
     if (list->answer) {
         int i;
         char **srclist;
+        JSON_Array *maps_array = NULL;
+        JSON_Value *maps_value = NULL;
 
-        G_verbose_message(_("Checking location <%s> mapset <%s>"),
+        if (outputFormat == JSON) {
+            maps_value = json_value_init_array();
+            if (maps_value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON array. Out of memory?"));
+            }
+            maps_array = json_array(maps_value);
+        }
+
+        G_verbose_message(_("Checking project <%s> mapset <%s>"),
                           inlocation->answer, setname);
         srclist = G_list(G_ELEMENT_RASTER, G_getenv_nofatal("GISDBASE"),
                          G_getenv_nofatal("LOCATION_NAME"), setname);
         for (i = 0; srclist[i]; i++) {
-            fprintf(stdout, "%s\n", srclist[i]);
+            switch (outputFormat) {
+            case SHELL:
+            case PLAIN:
+                fprintf(stdout, "%s\n", srclist[i]);
+                break;
+
+            case JSON:
+                json_array_append_string(maps_array, srclist[i]);
+                break;
+            }
         }
-        fflush(stdout);
+        if (outputFormat == JSON) {
+            char *serialized_string = NULL;
+            serialized_string = json_serialize_to_string_pretty(maps_value);
+            if (serialized_string == NULL) {
+                G_fatal_error(_("Failed to initialize pretty JSON string."));
+            }
+            puts(serialized_string);
+            json_free_serialized_string(serialized_string);
+            json_value_free(maps_value);
+        }
+        else {
+            fflush(stdout);
+        }
         exit(EXIT_SUCCESS); /* leave r.proj after listing */
     }
 
@@ -312,7 +384,7 @@ int main(int argc, char **argv)
 
     if (!G_find_raster(inmap->answer, setname))
         G_fatal_error(
-            _("Raster map <%s> in location <%s> in mapset <%s> not found"),
+            _("Raster map <%s> in project <%s> in mapset <%s> not found"),
             inmap->answer, inlocation->answer, setname);
 
     /* Read input map colour table */
@@ -358,7 +430,7 @@ int main(int argc, char **argv)
     Rast_get_cellhd(inmap->answer, setname, &incellhd);
 
     if (G_projection() == PROJECTION_XY)
-        G_fatal_error(_("Unable to work with unprojected data (xy location)"));
+        G_fatal_error(_("Unable to work with unprojected data (xy project)"));
 
     /* Save default borders so we can show them later */
     inorth = incellhd.north;
@@ -376,7 +448,10 @@ int main(int argc, char **argv)
     ocols = outcellhd.cols;
 
     if (print_bounds->answer) {
-        G_message(_("Input map <%s@%s> in location <%s>:"), inmap->answer,
+        JSON_Value *root_value = NULL;
+        JSON_Object *root_object = NULL;
+
+        G_message(_("Input map <%s@%s> in project <%s>:"), inmap->answer,
                   setname, inlocation->answer);
 
         /* reproject input raster extents from input to output */
@@ -405,17 +480,73 @@ int main(int argc, char **argv)
         G_format_easting(ieast, east_str, curr_proj);
         G_format_easting(iwest, west_str, curr_proj);
 
-        if (gprint_bounds->answer) {
-            fprintf(stdout, "n=%s s=%s w=%s e=%s rows=%d cols=%d\n", north_str,
-                    south_str, west_str, east_str, irows, icols);
+        if (outputFormat == JSON) {
+            root_value = json_value_init_object();
+            if (root_value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON object. Out of memory?"));
+            }
+            root_object = json_object(root_value);
         }
-        else {
+
+        switch (outputFormat) {
+        case PLAIN:
             fprintf(stdout, "Source cols: %d\n", icols);
             fprintf(stdout, "Source rows: %d\n", irows);
             fprintf(stdout, "Local north: %s\n", north_str);
             fprintf(stdout, "Local south: %s\n", south_str);
             fprintf(stdout, "Local west: %s\n", west_str);
             fprintf(stdout, "Local east: %s\n", east_str);
+            break;
+
+        case SHELL:
+            fprintf(stdout, "n=%s s=%s w=%s e=%s rows=%d cols=%d\n", north_str,
+                    south_str, west_str, east_str, irows, icols);
+            break;
+
+        case JSON:
+            if (isfinite(inorth)) {
+                json_object_set_number(root_object, "north", inorth);
+            }
+            else {
+                json_object_set_null(root_object, "north");
+            }
+
+            if (isfinite(isouth)) {
+                json_object_set_number(root_object, "south", isouth);
+            }
+            else {
+                json_object_set_null(root_object, "south");
+            }
+
+            if (isfinite(iwest)) {
+                json_object_set_number(root_object, "west", iwest);
+            }
+            else {
+                json_object_set_null(root_object, "west");
+            }
+
+            if (isfinite(ieast)) {
+                json_object_set_number(root_object, "east", ieast);
+            }
+            else {
+                json_object_set_null(root_object, "east");
+            }
+
+            json_object_set_number(root_object, "rows", irows);
+            json_object_set_number(root_object, "cols", icols);
+            break;
+        }
+
+        if (outputFormat == JSON) {
+            char *serialized_string = NULL;
+            serialized_string = json_serialize_to_string_pretty(root_value);
+            if (serialized_string == NULL) {
+                G_fatal_error(_("Failed to initialize pretty JSON string."));
+            }
+            puts(serialized_string);
+            json_free_serialized_string(serialized_string);
+            json_value_free(root_value);
         }
 
         exit(EXIT_SUCCESS);

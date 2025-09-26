@@ -18,9 +18,9 @@ from grass.gunittest.main import test
 class TestVImport(TestCase):
     imported = "test_v_import_imported"
 
-    def tearDown(cls):
+    def tearDown(self):
         """Remove imported map after each test method"""
-        cls.runModule("g.remove", flags="f", type="vector", name=cls.imported)
+        self.runModule("g.remove", flags="f", type="vector", name=self.imported)
 
     def test_import_same_proj_gpkg(self):
         """Import GPKG in same proj, default params"""
@@ -28,39 +28,39 @@ class TestVImport(TestCase):
         self.assertVectorExists(self.imported)
         self.assertVectorFitsExtendedInfo(
             vector=self.imported,
-            reference=dict(
-                name=self.imported,
-                level=2,
-                num_dblinks=1,
-                attribute_table=self.imported,
-            ),
+            reference={
+                "name": self.imported,
+                "level": 2,
+                "num_dblinks": 1,
+                "attribute_table": self.imported,
+            },
         )
         self.assertVectorFitsRegionInfo(
             vector=self.imported,
             # Values rounded to one decimal point.
-            reference=dict(
-                north=227744.8,
-                south=215259.6,
-                east=644450.6,
-                west=631257.4,
-                top=0,
-                bottom=0,
-            ),
+            reference={
+                "north": 227744.8,
+                "south": 215259.6,
+                "east": 644450.6,
+                "west": 631257.4,
+                "top": 0,
+                "bottom": 0,
+            },
             precision=0.2,
         )
         self.assertVectorFitsTopoInfo(
             vector=self.imported,
-            reference=dict(
-                nodes=5,
-                points=2,
-                lines=1,
-                boundaries=3,
-                centroids=3,
-                areas=3,
-                islands=3,
-                primitives=9,
-                map3d=0,
-            ),
+            reference={
+                "nodes": 5,
+                "points": 2,
+                "lines": 1,
+                "boundaries": 3,
+                "centroids": 3,
+                "areas": 3,
+                "islands": 3,
+                "primitives": 9,
+                "map3d": 0,
+            },
         )
 
     def test_import_gpkg_wgs84(self):
@@ -71,39 +71,39 @@ class TestVImport(TestCase):
         self.assertVectorExists(self.imported)
         self.assertVectorFitsExtendedInfo(
             vector=self.imported,
-            reference=dict(
-                name=self.imported,
-                level=2,
-                num_dblinks=1,
-                attribute_table=self.imported,
-            ),
+            reference={
+                "name": self.imported,
+                "level": 2,
+                "num_dblinks": 1,
+                "attribute_table": self.imported,
+            },
         )
         self.assertVectorFitsRegionInfo(
             vector=self.imported,
             # Values rounded to one decimal point.
-            reference=dict(
-                north=227744.8,
-                south=215259.6,
-                east=644450.6,
-                west=631257.4,
-                top=0,
-                bottom=0,
-            ),
+            reference={
+                "north": 227744.8,
+                "south": 215259.6,
+                "east": 644450.6,
+                "west": 631257.4,
+                "top": 0,
+                "bottom": 0,
+            },
             precision=0.2,
         )
         self.assertVectorFitsTopoInfo(
             vector=self.imported,
-            reference=dict(
-                nodes=5,
-                points=2,
-                lines=1,
-                boundaries=3,
-                centroids=3,
-                areas=3,
-                islands=3,
-                primitives=9,
-                map3d=0,
-            ),
+            reference={
+                "nodes": 5,
+                "points": 2,
+                "lines": 1,
+                "boundaries": 3,
+                "centroids": 3,
+                "areas": 3,
+                "islands": 3,
+                "primitives": 9,
+                "map3d": 0,
+            },
         )
 
 

@@ -4797,6 +4797,1642 @@ void IWave::planetscope0f10(int iwa)
     }
 }
 
+/* Following filter function created using create_iwave.py */
+
+void IWave::aviris(int iwa)
+{
+
+    /* b1 of AVIRIS */
+    static const float sr1[1] = {.8375};
+
+    /* b2 of AVIRIS */
+    static const float sr2[3] = {.6798, .9385, .8029};
+
+    /* b3 of AVIRIS */
+    static const float sr3[3] = {.7143, .9728, .7687};
+
+    /* b4 of AVIRIS */
+    static const float sr4[3] = {.4898, .7482, .9933};
+
+    /* b5 of AVIRIS */
+    static const float sr5[3] = {.5233, .7817, .9600};
+
+    /* b6 of AVIRIS */
+    static const float sr6[3] = {.5564, .8146, .9272};
+
+    /* b7 of AVIRIS */
+    static const float sr7[3] = {.5890, .8471, .8948};
+
+    /* b8 of AVIRIS */
+    static const float sr8[3] = {.6211, .8791, .8629};
+
+    /* b9 of AVIRIS */
+    static const float sr9[3] = {.6528, .9107, .8316};
+
+    /* b10 of AVIRIS */
+    static const float sr10[3] = {.6839, .9417, .8006};
+
+    /* b11 of AVIRIS */
+    static const float sr11[3] = {.7146, .9723, .7702};
+
+    /* b12 of AVIRIS */
+    static const float sr12[3] = {.4873, .7448, .9977};
+
+    /* b13 of AVIRIS */
+    static const float sr13[3] = {.5171, .7745, .9681};
+
+    /* b14 of AVIRIS */
+    static const float sr14[3] = {.5465, .8038, .9390};
+
+    /* b15 of AVIRIS */
+    static const float sr15[3] = {.5754, .8325, .9103};
+
+    /* b16 of AVIRIS */
+    static const float sr16[3] = {.6038, .8608, .8822};
+
+    /* b17 of AVIRIS */
+    static const float sr17[3] = {.6317, .8886, .8545};
+
+    /* b18 of AVIRIS */
+    static const float sr18[3] = {.6591, .9160, .8273};
+
+    /* b19 of AVIRIS */
+    static const float sr19[3] = {.6861, .9428, .8006};
+
+    /* b20 of AVIRIS */
+    static const float sr20[3] = {.7126, .9692, .7743};
+
+    /* b21 of AVIRIS */
+    static const float sr21[3] = {.7386, .9951, .7485};
+
+    /* b22 of AVIRIS */
+    static const float sr22[3] = {.5078, .7642, .9795};
+
+    /* b23 of AVIRIS */
+    static const float sr23[3] = {.5330, .7893, .9545};
+
+    /* b24 of AVIRIS */
+    static const float sr24[3] = {.5577, .8139, .9300};
+
+    /* b25 of AVIRIS */
+    static const float sr25[3] = {.5820, .8380, .9060};
+
+    /* b26 of AVIRIS */
+    static const float sr26[3] = {.6058, .8617, .8825};
+
+    /* b27 of AVIRIS */
+    static const float sr27[3] = {.6291, .8849, .8594};
+
+    /* b28 of AVIRIS */
+    static const float sr28[3] = {.6519, .9076, .8368};
+
+    /* b29 of AVIRIS */
+    static const float sr29[3] = {.6743, .9298, .8147};
+
+    /* b30 of AVIRIS */
+    static const float sr30[3] = {.6962, .9516, .7408};
+
+    /* b31 of AVIRIS */
+    static const float sr31[3] = {.0000, .8656, .7147};
+
+    /* b32 of AVIRIS */
+    static const float sr32[3] = {.0000, .9689, .6889};
+
+    /* b33 of AVIRIS */
+    static const float sr33[3] = {.5789, .8987, .1344};
+
+    /* b34 of AVIRIS */
+    static const float sr34[3] = {.6044, .9235, .0311};
+
+    /* b35 of AVIRIS */
+    static const float sr35[3] = {.6300, .9488, .7858};
+
+    /* b36 of AVIRIS */
+    static const float sr36[3] = {.7246, .9798, .7649};
+
+    /* b37 of AVIRIS */
+    static const float sr37[3] = {.4904, .7458, .9989};
+
+    /* b38 of AVIRIS */
+    static const float sr38[3] = {.5120, .7675, .9771};
+
+    /* b39 of AVIRIS */
+    static const float sr39[3] = {.5341, .7897, .9546};
+
+    /* b40 of AVIRIS */
+    static const float sr40[3] = {.5568, .8125, .9317};
+
+    /* b41 of AVIRIS */
+    static const float sr41[3] = {.5801, .8359, .9082};
+
+    /* b42 of AVIRIS */
+    static const float sr42[3] = {.6039, .8599, .8841};
+
+    /* b43 of AVIRIS */
+    static const float sr43[3] = {.6282, .8844, .8594};
+
+    /* b44 of AVIRIS */
+    static const float sr44[3] = {.6531, .9094, .8342};
+
+    /* b45 of AVIRIS */
+    static const float sr45[3] = {.6786, .9350, .8085};
+
+    /* b46 of AVIRIS */
+    static const float sr46[3] = {.7047, .9612, .7821};
+
+    /* b47 of AVIRIS */
+    static const float sr47[3] = {.7313, .9879, .7552};
+
+    /* b48 of AVIRIS */
+    static const float sr48[3] = {.5016, .7584, .9847};
+
+    /* b49 of AVIRIS */
+    static const float sr49[3] = {.5292, .7862, .9569};
+
+    /* b50 of AVIRIS */
+    static const float sr50[3] = {.5573, .8144, .9284};
+
+    /* b51 of AVIRIS */
+    static const float sr51[3] = {.5861, .8433, .8994};
+
+    /* b52 of AVIRIS */
+    static const float sr52[3] = {.6154, .8727, .8698};
+
+    /* b53 of AVIRIS */
+    static const float sr53[3] = {.6452, .9027, .8397};
+
+    /* b54 of AVIRIS */
+    static const float sr54[3] = {.6757, .9333, .8089};
+
+    /* b55 of AVIRIS */
+    static const float sr55[3] = {.7067, .9644, .7776};
+
+    /* b56 of AVIRIS */
+    static const float sr56[3] = {.7382, .9962, .7458};
+
+    /* b57 of AVIRIS */
+    static const float sr57[3] = {.5123, .7704, .9715};
+
+    /* b58 of AVIRIS */
+    static const float sr58[3] = {.5449, .8031, .9387};
+
+    /* b59 of AVIRIS */
+    static const float sr59[3] = {.5780, .8364, .9052};
+
+    /* b60 of AVIRIS */
+    static const float sr60[3] = {.6117, .8702, .8712};
+
+    /* b61 of AVIRIS */
+    static const float sr61[3] = {.6460, .9047, .8366};
+
+    /* b62 of AVIRIS */
+    static const float sr62[3] = {.6809, .9397, .8014};
+
+    /* b63 of AVIRIS */
+    static const float sr63[3] = {.7164, .9753, .7657};
+
+    /* b64 of AVIRIS */
+    static const float sr64[3] = {.4934, .7524, .9885};
+
+    /* b65 of AVIRIS */
+    static const float sr65[3] = {.5298, .7890, .9518};
+
+    /* b66 of AVIRIS */
+    static const float sr66[3] = {.5669, .8262, .9144};
+
+    /* b67 of AVIRIS */
+    static const float sr67[3] = {.6045, .8640, .8765};
+
+    /* b68 of AVIRIS */
+    static const float sr68[3] = {.6427, .9023, .8380};
+
+    /* b69 of AVIRIS */
+    static const float sr69[3] = {.6815, .9413, .7989};
+
+    /* b70 of AVIRIS */
+    static const float sr70[3] = {.7209, .9808, .7592};
+
+    /* b71 of AVIRIS */
+    static const float sr71[3] = {.5008, .7609, .9791};
+
+    /* b72 of AVIRIS */
+    static const float sr72[3] = {.5412, .8014, .9384};
+
+    /* b73 of AVIRIS */
+    static const float sr73[3] = {.5822, .8425, .8971};
+
+    /* b74 of AVIRIS */
+    static const float sr74[3] = {.6238, .8843, .8552};
+
+    /* b75 of AVIRIS */
+    static const float sr75[3] = {.6660, .9266, .8127};
+
+    /* b76 of AVIRIS */
+    static const float sr76[3] = {.7087, .9695, .7697};
+
+    /* b77 of AVIRIS */
+    static const float sr77[3] = {.4912, .7521, .9870};
+
+    /* b78 of AVIRIS */
+    static const float sr78[3] = {.5350, .7960, .9429};
+
+    /* b79 of AVIRIS */
+    static const float sr79[3] = {.5794, .8406, .8982};
+
+    /* b80 of AVIRIS */
+    static const float sr80[3] = {.6244, .8857, .8529};
+
+    /* b81 of AVIRIS */
+    static const float sr81[3] = {.6700, .9314, .8071};
+
+    /* b82 of AVIRIS */
+    static const float sr82[3] = {.7161, .9777, .7606};
+
+    /* b83 of AVIRIS */
+    static const float sr83[3] = {.5012, .7629, .9754};
+
+    /* b84 of AVIRIS */
+    static const float sr84[3] = {.5484, .8103, .9278};
+
+    /* b85 of AVIRIS */
+    static const float sr85[3] = {.5962, .8582, .8797};
+
+    /* b86 of AVIRIS */
+    static const float sr86[3] = {.6446, .9068, .8310};
+
+    /* b87 of AVIRIS */
+    static const float sr87[3] = {.6936, .9559, .7816};
+
+    /* b88 of AVIRIS */
+    static const float sr88[3] = {.4808, .7432, .9943};
+
+    /* b89 of AVIRIS */
+    static const float sr89[3] = {.5309, .7935, .9439};
+
+    /* b90 of AVIRIS */
+    static const float sr90[3] = {.5816, .8443, .8929};
+
+    /* b91 of AVIRIS */
+    static const float sr91[3] = {.6328, .8957, .8413};
+
+    /* b92 of AVIRIS */
+    static const float sr92[3] = {.6847, .9477, .7891};
+
+    /* b93 of AVIRIS */
+    static const float sr93[3] = {.4740, .7372, .9996};
+
+    /* b94 of AVIRIS */
+    static const float sr94[3] = {.5270, .7903, .9427};
+
+    /* b95 of AVIRIS */
+    static const float sr95[3] = {.0000, .0000, .8911};
+
+    /* b96 of AVIRIS */
+    static const float sr96[3] = {.0000, .0000, .8442};
+
+    /* b97 of AVIRIS */
+    static const float sr97[3] = {.6203, .9017, .0000};
+
+    /* b98 of AVIRIS */
+    static const float sr98[3] = {.6428, .9097, .0000};
+
+    /* b99 of AVIRIS */
+    static const float sr99[3] = {.6633, .9170, .8314};
+
+    /* b100 of AVIRIS */
+    static const float sr100[3] = {.6700, .9207, .8286};
+
+    /* b101 of AVIRIS */
+    static const float sr101[3] = {.6728, .9235, .8258};
+
+    /* b102 of AVIRIS */
+    static const float sr102[3] = {.6757, .9264, .8229};
+
+    /* b103 of AVIRIS */
+    static const float sr103[3] = {.6785, .9292, .8201};
+
+    /* b104 of AVIRIS */
+    static const float sr104[3] = {.6814, .9321, .8172};
+
+    /* b105 of AVIRIS */
+    static const float sr105[3] = {.6843, .9350, .8143};
+
+    /* b106 of AVIRIS */
+    static const float sr106[3] = {.6872, .9379, .8113};
+
+    /* b107 of AVIRIS */
+    static const float sr107[3] = {.6901, .9409, .8084};
+
+    /* b108 of AVIRIS */
+    static const float sr108[3] = {.6931, .9439, .8054};
+
+    /* b109 of AVIRIS */
+    static const float sr109[3] = {.6961, .9469, .8024};
+
+    /* b110 of AVIRIS */
+    static const float sr110[3] = {.6991, .9499, .7994};
+
+    /* b111 of AVIRIS */
+    static const float sr111[3] = {.7022, .9529, .7963};
+
+    /* b112 of AVIRIS */
+    static const float sr112[3] = {.7052, .9560, .7932};
+
+    /* b113 of AVIRIS */
+    static const float sr113[3] = {.7083, .9591, .7901};
+
+    /* b114 of AVIRIS */
+    static const float sr114[3] = {.7114, .9622, .7870};
+
+    /* b115 of AVIRIS */
+    static const float sr115[3] = {.7146, .9654, .7839};
+
+    /* b116 of AVIRIS */
+    static const float sr116[3] = {.7177, .9685, .7807};
+
+    /* b117 of AVIRIS */
+    static const float sr117[3] = {.7209, .9717, .7775};
+
+    /* b118 of AVIRIS */
+    static const float sr118[3] = {.7241, .9749, .7743};
+
+    /* b119 of AVIRIS */
+    static const float sr119[3] = {.7274, .9782, .7710};
+
+    /* b120 of AVIRIS */
+    static const float sr120[3] = {.7306, .9814, .7677};
+
+    /* b121 of AVIRIS */
+    static const float sr121[3] = {.7339, .9847, .7644};
+
+    /* b122 of AVIRIS */
+    static const float sr122[3] = {.7372, .9881, .7611};
+
+    /* b123 of AVIRIS */
+    static const float sr123[3] = {.7406, .9914, .7578};
+
+    /* b124 of AVIRIS */
+    static const float sr124[3] = {.7439, .9948, .7544};
+
+    /* b125 of AVIRIS */
+    static const float sr125[3] = {.7473, .9982, .7510};
+
+    /* b126 of AVIRIS */
+    static const float sr126[3] = {.4999, .7507, .9984};
+
+    /* b127 of AVIRIS */
+    static const float sr127[3] = {.5033, .7541, .9950};
+
+    /* b128 of AVIRIS */
+    static const float sr128[3] = {.5067, .7576, .9915};
+
+    /* b129 of AVIRIS */
+    static const float sr129[3] = {.5102, .7611, .9881};
+
+    /* b130 of AVIRIS */
+    static const float sr130[3] = {.5137, .7646, .9845};
+
+    /* b131 of AVIRIS */
+    static const float sr131[3] = {.5172, .7681, .9810};
+
+    /* b132 of AVIRIS */
+    static const float sr132[3] = {.5208, .7717, .9774};
+
+    /* b133 of AVIRIS */
+    static const float sr133[3] = {.5243, .7752, .9739};
+
+    /* b134 of AVIRIS */
+    static const float sr134[3] = {.5279, .7788, .9703};
+
+    /* b135 of AVIRIS */
+    static const float sr135[3] = {.5316, .7825, .9666};
+
+    /* b136 of AVIRIS */
+    static const float sr136[3] = {.5352, .7861, .9630};
+
+    /* b137 of AVIRIS */
+    static const float sr137[3] = {.5389, .7898, .9593};
+
+    /* b138 of AVIRIS */
+    static const float sr138[3] = {.5426, .7935, .9556};
+
+    /* b139 of AVIRIS */
+    static const float sr139[3] = {.5463, .7972, .9518};
+
+    /* b140 of AVIRIS */
+    static const float sr140[3] = {.5500, .8010, .9481};
+
+    /* b141 of AVIRIS */
+    static const float sr141[3] = {.5538, .8047, .9443};
+
+    /* b142 of AVIRIS */
+    static const float sr142[3] = {.5576, .8085, .9405};
+
+    /* b143 of AVIRIS */
+    static const float sr143[3] = {.5614, .8124, .9367};
+
+    /* b144 of AVIRIS */
+    static const float sr144[3] = {.5652, .8162, .9328};
+
+    /* b145 of AVIRIS */
+    static const float sr145[3] = {.5691, .8201, .9290};
+
+    /* b146 of AVIRIS */
+    static const float sr146[3] = {.5730, .8240, .9250};
+
+    /* b147 of AVIRIS */
+    static const float sr147[3] = {.5769, .8279, .9211};
+
+    /* b148 of AVIRIS */
+    static const float sr148[3] = {.5808, .8318, .9172};
+
+    /* b149 of AVIRIS */
+    static const float sr149[3] = {.5848, .8358, .9132};
+
+    /* b150 of AVIRIS */
+    static const float sr150[3] = {.5888, .8398, .9092};
+
+    /* b151 of AVIRIS */
+    static const float sr151[3] = {.5928, .8438, .9052};
+
+    /* b152 of AVIRIS */
+    static const float sr152[3] = {.5968, .8478, .9011};
+
+    /* b153 of AVIRIS */
+    static const float sr153[3] = {.6009, .8519, .8971};
+
+    /* b154 of AVIRIS */
+    static const float sr154[3] = {.6050, .8560, .8930};
+
+    /* b155 of AVIRIS */
+    static const float sr155[3] = {.6091, .8601, .8888};
+
+    /* b156 of AVIRIS */
+    static const float sr156[3] = {.6132, .8643, .8847};
+
+    /* b157 of AVIRIS */
+    static const float sr157[3] = {.6174, .8684, .8805};
+
+    /* b158 of AVIRIS */
+    static const float sr158[3] = {.6216, .8726, .7799};
+
+    /* b159 of AVIRIS */
+    static const float sr159[3] = {.1458, .7189, .0000};
+
+    /* b160 of AVIRIS */
+    static const float sr160[3] = {.0000, .0000, .9745};
+
+    /* b161 of AVIRIS */
+    static const float sr161[3] = {.2201, .6669, .8542};
+
+    /* b162 of AVIRIS */
+    static const float sr162[3] = {.0255, .5760, .9429};
+
+    /* b163 of AVIRIS */
+    static const float sr163[3] = {.5542, .8027, .9488};
+
+    /* b164 of AVIRIS */
+    static const float sr164[3] = {.5484, .7970, .9544};
+
+    /* b165 of AVIRIS */
+    static const float sr165[3] = {.5429, .7915, .9598};
+
+    /* b166 of AVIRIS */
+    static const float sr166[3] = {.5376, .7863, .9650};
+
+    /* b167 of AVIRIS */
+    static const float sr167[3] = {.5325, .7812, .9700};
+
+    /* b168 of AVIRIS */
+    static const float sr168[3] = {.5276, .7765, .9747};
+
+    /* b169 of AVIRIS */
+    static const float sr169[3] = {.5230, .7719, .9792};
+
+    /* b170 of AVIRIS */
+    static const float sr170[3] = {.5186, .7675, .9835};
+
+    /* b171 of AVIRIS */
+    static const float sr171[3] = {.5144, .7634, .9876};
+
+    /* b172 of AVIRIS */
+    static const float sr172[3] = {.5105, .7595, .9914};
+
+    /* b173 of AVIRIS */
+    static const float sr173[3] = {.5068, .7559, .9950};
+
+    /* b174 of AVIRIS */
+    static const float sr174[3] = {.5033, .7524, .9984};
+
+    /* b175 of AVIRIS */
+    static const float sr175[3] = {.7493, .9985, .7523};
+
+    /* b176 of AVIRIS */
+    static const float sr176[3] = {.7463, .9955, .7551};
+
+    /* b177 of AVIRIS */
+    static const float sr177[3] = {.7435, .9929, .7578};
+
+    /* b178 of AVIRIS */
+    static const float sr178[3] = {.7410, .9904, .7602};
+
+    /* b179 of AVIRIS */
+    static const float sr179[3] = {.7387, .9882, .7623};
+
+    /* b180 of AVIRIS */
+    static const float sr180[3] = {.7367, .9862, .7643};
+
+    /* b181 of AVIRIS */
+    static const float sr181[3] = {.7348, .9844, .7660};
+
+    /* b182 of AVIRIS */
+    static const float sr182[3] = {.7332, .9829, .7675};
+
+    /* b183 of AVIRIS */
+    static const float sr183[3] = {.7319, .9815, .7687};
+
+    /* b184 of AVIRIS */
+    static const float sr184[3] = {.7307, .9805, .7698};
+
+    /* b185 of AVIRIS */
+    static const float sr185[3] = {.7298, .9796, .7706};
+
+    /* b186 of AVIRIS */
+    static const float sr186[3] = {.7291, .9790, .7711};
+
+    /* b187 of AVIRIS */
+    static const float sr187[3] = {.7287, .9786, .7714};
+
+    /* b188 of AVIRIS */
+    static const float sr188[3] = {.7285, .9784, .7715};
+
+    /* b189 of AVIRIS */
+    static const float sr189[3] = {.7285, .9785, .7714};
+
+    /* b190 of AVIRIS */
+    static const float sr190[3] = {.7287, .9788, .7711};
+
+    /* b191 of AVIRIS */
+    static const float sr191[3] = {.7292, .9793, .7705};
+
+    /* b192 of AVIRIS */
+    static const float sr192[3] = {.7299, .9801, .7697};
+
+    /* b193 of AVIRIS */
+    static const float sr193[3] = {.7308, .9811, .7686};
+
+    /* b194 of AVIRIS */
+    static const float sr194[3] = {.7320, .9823, .7673};
+
+    /* b195 of AVIRIS */
+    static const float sr195[3] = {.7334, .9838, .7658};
+
+    /* b196 of AVIRIS */
+    static const float sr196[3] = {.7350, .9854, .7641};
+
+    /* b197 of AVIRIS */
+    static const float sr197[3] = {.7369, .9874, .7621};
+
+    /* b198 of AVIRIS */
+    static const float sr198[3] = {.7390, .9895, .7599};
+
+    /* b199 of AVIRIS */
+    static const float sr199[3] = {.7413, .9919, .7574};
+
+    /* b200 of AVIRIS */
+    static const float sr200[3] = {.7439, .9945, .7547};
+
+    /* b201 of AVIRIS */
+    static const float sr201[3] = {.7467, .9974, .7518};
+
+    /* b202 of AVIRIS */
+    static const float sr202[3] = {.4989, .7497, .9995};
+
+    /* b203 of AVIRIS */
+    static const float sr203[3] = {.5021, .7529, .9962};
+
+    /* b204 of AVIRIS */
+    static const float sr204[3] = {.5055, .7564, .9927};
+
+    /* b205 of AVIRIS */
+    static const float sr205[3] = {.5092, .7602, .9889};
+
+    /* b206 of AVIRIS */
+    static const float sr206[3] = {.5131, .7641, .9849};
+
+    /* b207 of AVIRIS */
+    static const float sr207[3] = {.5172, .7683, .9806};
+
+    /* b208 of AVIRIS */
+    static const float sr208[3] = {.5216, .7727, .9761};
+
+    /* b209 of AVIRIS */
+    static const float sr209[3] = {.5262, .7774, .9714};
+
+    /* b210 of AVIRIS */
+    static const float sr210[3] = {.5310, .7823, .9665};
+
+    /* b211 of AVIRIS */
+    static const float sr211[3] = {.5361, .7874, .9613};
+
+    /* b212 of AVIRIS */
+    static const float sr212[3] = {.5414, .7928, .9559};
+
+    /* b213 of AVIRIS */
+    static const float sr213[3] = {.5470, .7984, .9502};
+
+    /* b214 of AVIRIS */
+    static const float sr214[3] = {.5527, .8042, .9443};
+
+    /* b215 of AVIRIS */
+    static const float sr215[3] = {.5587, .8103, .9382};
+
+    /* b216 of AVIRIS */
+    static const float sr216[3] = {.5650, .8165, .9319};
+
+    /* b217 of AVIRIS */
+    static const float sr217[3] = {.5714, .8231, .9253};
+
+    /* b218 of AVIRIS */
+    static const float sr218[3] = {.5782, .8299, .9184};
+
+    /* b219 of AVIRIS */
+    static const float sr219[3] = {.5851, .8369, .9113};
+
+    /* b220 of AVIRIS */
+    static const float sr220[3] = {.5923, .8441, .9040};
+
+    /* b221 of AVIRIS */
+    static const float sr221[3] = {.5997, .8516, .8965};
+
+    /* b222 of AVIRIS */
+    static const float sr222[3] = {.6074, .8593, .8887};
+
+    /* b223 of AVIRIS */
+    static const float sr223[3] = {.6152, .8672, .8807};
+
+    /* b224 of AVIRIS */
+    static const float sr224[1] = {.6234};
+
+    static const float wli[224] = {
+        0.3675, 0.3725, 0.3825, 0.3900, 0.4000, 0.4100, 0.4200, 0.4300, 0.4400,
+        0.4500, 0.4600, 0.4675, 0.4775, 0.4875, 0.4975, 0.5075, 0.5175, 0.5275,
+        0.5375, 0.5475, 0.5575, 0.5650, 0.5750, 0.5850, 0.5950, 0.6050, 0.6150,
+        0.6250, 0.6350, 0.6450, 0.6550, 0.6650, 0.6525, 0.6625, 0.6725, 0.6825,
+        0.6900, 0.7000, 0.7100, 0.7200, 0.7300, 0.7400, 0.7500, 0.7600, 0.7700,
+        0.7800, 0.7900, 0.7975, 0.8075, 0.8175, 0.8275, 0.8375, 0.8475, 0.8575,
+        0.8675, 0.8775, 0.8850, 0.8950, 0.9050, 0.9150, 0.9250, 0.9350, 0.9450,
+        0.9525, 0.9625, 0.9725, 0.9825, 0.9925, 1.0025, 1.0125, 1.0200, 1.0300,
+        1.0400, 1.0500, 1.0600, 1.0700, 1.0775, 1.0875, 1.0975, 1.1075, 1.1175,
+        1.1275, 1.1350, 1.1450, 1.1550, 1.1650, 1.1750, 1.1825, 1.1925, 1.2025,
+        1.2125, 1.2225, 1.2300, 1.2400, 1.2500, 1.2600, 1.2500, 1.2600, 1.2700,
+        1.2800, 1.2900, 1.3000, 1.3100, 1.3200, 1.3300, 1.3400, 1.3500, 1.3600,
+        1.3700, 1.3800, 1.3900, 1.4000, 1.4100, 1.4200, 1.4300, 1.4400, 1.4500,
+        1.4600, 1.4700, 1.4800, 1.4900, 1.5000, 1.5100, 1.5200, 1.5300, 1.5375,
+        1.5475, 1.5575, 1.5675, 1.5775, 1.5875, 1.5975, 1.6075, 1.6175, 1.6275,
+        1.6375, 1.6475, 1.6575, 1.6675, 1.6775, 1.6875, 1.6975, 1.7075, 1.7175,
+        1.7275, 1.7375, 1.7475, 1.7575, 1.7675, 1.7775, 1.7875, 1.7975, 1.8075,
+        1.8175, 1.8275, 1.8375, 1.8475, 1.8575, 1.8675, 1.8675, 1.8625, 1.8725,
+        1.8825, 1.8925, 1.9025, 1.9125, 1.9225, 1.9325, 1.9425, 1.9525, 1.9625,
+        1.9725, 1.9825, 1.9925, 2.0050, 2.0150, 2.0250, 2.0350, 2.0450, 2.0550,
+        2.0650, 2.0750, 2.0850, 2.0950, 2.1050, 2.1150, 2.1250, 2.1350, 2.1450,
+        2.1550, 2.1650, 2.1750, 2.1850, 2.1950, 2.2050, 2.2150, 2.2250, 2.2350,
+        2.2450, 2.2550, 2.2650, 2.2725, 2.2825, 2.2925, 2.3025, 2.3125, 2.3225,
+        2.3325, 2.3425, 2.3525, 2.3625, 2.3725, 2.3825, 2.3925, 2.4025, 2.4125,
+        2.4225, 2.4325, 2.4425, 2.4525, 2.4625, 2.4725, 2.4825, 2.4925};
+    static const float wls[224] = {
+        0.3700, 0.3800, 0.3900, 0.3975, 0.4075, 0.4175, 0.4275, 0.4375, 0.4475,
+        0.4575, 0.4675, 0.4750, 0.4850, 0.4950, 0.5050, 0.5150, 0.5250, 0.5350,
+        0.5450, 0.5550, 0.5650, 0.5725, 0.5825, 0.5925, 0.6025, 0.6125, 0.6225,
+        0.6325, 0.6425, 0.6525, 0.6625, 0.6725, 0.6600, 0.6700, 0.6800, 0.6900,
+        0.6975, 0.7075, 0.7175, 0.7275, 0.7375, 0.7475, 0.7575, 0.7675, 0.7775,
+        0.7875, 0.7975, 0.8050, 0.8150, 0.8250, 0.8350, 0.8450, 0.8550, 0.8650,
+        0.8750, 0.8850, 0.8925, 0.9025, 0.9125, 0.9225, 0.9325, 0.9425, 0.9525,
+        0.9600, 0.9700, 0.9800, 0.9900, 1.0000, 1.0100, 1.0200, 1.0275, 1.0375,
+        1.0475, 1.0575, 1.0675, 1.0775, 1.0850, 1.0950, 1.1050, 1.1150, 1.1250,
+        1.1350, 1.1425, 1.1525, 1.1625, 1.1725, 1.1825, 1.1900, 1.2000, 1.2100,
+        1.2200, 1.2300, 1.2375, 1.2475, 1.2575, 1.2675, 1.2575, 1.2675, 1.2775,
+        1.2875, 1.2975, 1.3075, 1.3175, 1.3275, 1.3375, 1.3475, 1.3575, 1.3675,
+        1.3775, 1.3875, 1.3975, 1.4075, 1.4175, 1.4275, 1.4375, 1.4475, 1.4575,
+        1.4675, 1.4775, 1.4875, 1.4975, 1.5075, 1.5175, 1.5275, 1.5375, 1.5450,
+        1.5550, 1.5650, 1.5750, 1.5850, 1.5950, 1.6050, 1.6150, 1.6250, 1.6350,
+        1.6450, 1.6550, 1.6650, 1.6750, 1.6850, 1.6950, 1.7050, 1.7150, 1.7250,
+        1.7350, 1.7450, 1.7550, 1.7650, 1.7750, 1.7850, 1.7950, 1.8050, 1.8150,
+        1.8250, 1.8350, 1.8450, 1.8550, 1.8650, 1.8750, 1.8750, 1.8700, 1.8800,
+        1.8900, 1.9000, 1.9100, 1.9200, 1.9300, 1.9400, 1.9500, 1.9600, 1.9700,
+        1.9800, 1.9900, 2.0000, 2.0125, 2.0225, 2.0325, 2.0425, 2.0525, 2.0625,
+        2.0725, 2.0825, 2.0925, 2.1025, 2.1125, 2.1225, 2.1325, 2.1425, 2.1525,
+        2.1625, 2.1725, 2.1825, 2.1925, 2.2025, 2.2125, 2.2225, 2.2325, 2.2425,
+        2.2525, 2.2625, 2.2725, 2.2800, 2.2900, 2.3000, 2.3100, 2.3200, 2.3300,
+        2.3400, 2.3500, 2.3600, 2.3700, 2.3800, 2.3900, 2.4000, 2.4100, 2.4200,
+        2.4300, 2.4400, 2.4500, 2.4600, 2.4700, 2.4800, 2.4900, 2.4950};
+
+    ffu.wlinf = (float)wli[iwa - 1];
+    ffu.wlsup = (float)wls[iwa - 1];
+
+    int i;
+    for (i = 0; i < 1501; i++)
+        ffu.s[i] = 0;
+
+    switch (iwa) {
+    case 1:
+        for (i = 0; i < 1; i++)
+            ffu.s[47 + i] = sr1[i];
+        break;
+    case 2:
+        for (i = 0; i < 3; i++)
+            ffu.s[49 + i] = sr2[i];
+        break;
+    case 3:
+        for (i = 0; i < 3; i++)
+            ffu.s[53 + i] = sr3[i];
+        break;
+    case 4:
+        for (i = 0; i < 3; i++)
+            ffu.s[56 + i] = sr4[i];
+        break;
+    case 5:
+        for (i = 0; i < 3; i++)
+            ffu.s[60 + i] = sr5[i];
+        break;
+    case 6:
+        for (i = 0; i < 3; i++)
+            ffu.s[64 + i] = sr6[i];
+        break;
+    case 7:
+        for (i = 0; i < 3; i++)
+            ffu.s[68 + i] = sr7[i];
+        break;
+    case 8:
+        for (i = 0; i < 3; i++)
+            ffu.s[72 + i] = sr8[i];
+        break;
+    case 9:
+        for (i = 0; i < 3; i++)
+            ffu.s[76 + i] = sr9[i];
+        break;
+    case 10:
+        for (i = 0; i < 3; i++)
+            ffu.s[80 + i] = sr10[i];
+        break;
+    case 11:
+        for (i = 0; i < 3; i++)
+            ffu.s[84 + i] = sr11[i];
+        break;
+    case 12:
+        for (i = 0; i < 3; i++)
+            ffu.s[87 + i] = sr12[i];
+        break;
+    case 13:
+        for (i = 0; i < 3; i++)
+            ffu.s[91 + i] = sr13[i];
+        break;
+    case 14:
+        for (i = 0; i < 3; i++)
+            ffu.s[95 + i] = sr14[i];
+        break;
+    case 15:
+        for (i = 0; i < 3; i++)
+            ffu.s[99 + i] = sr15[i];
+        break;
+    case 16:
+        for (i = 0; i < 3; i++)
+            ffu.s[102 + i] = sr16[i];
+        break;
+    case 17:
+        for (i = 0; i < 3; i++)
+            ffu.s[107 + i] = sr17[i];
+        break;
+    case 18:
+        for (i = 0; i < 3; i++)
+            ffu.s[111 + i] = sr18[i];
+        break;
+    case 19:
+        for (i = 0; i < 3; i++)
+            ffu.s[115 + i] = sr19[i];
+        break;
+    case 20:
+        for (i = 0; i < 3; i++)
+            ffu.s[119 + i] = sr20[i];
+        break;
+    case 21:
+        for (i = 0; i < 3; i++)
+            ffu.s[123 + i] = sr21[i];
+        break;
+    case 22:
+        for (i = 0; i < 3; i++)
+            ffu.s[126 + i] = sr22[i];
+        break;
+    case 23:
+        for (i = 0; i < 3; i++)
+            ffu.s[130 + i] = sr23[i];
+        break;
+    case 24:
+        for (i = 0; i < 3; i++)
+            ffu.s[134 + i] = sr24[i];
+        break;
+    case 25:
+        for (i = 0; i < 3; i++)
+            ffu.s[138 + i] = sr25[i];
+        break;
+    case 26:
+        for (i = 0; i < 3; i++)
+            ffu.s[142 + i] = sr26[i];
+        break;
+    case 27:
+        for (i = 0; i < 3; i++)
+            ffu.s[146 + i] = sr27[i];
+        break;
+    case 28:
+        for (i = 0; i < 3; i++)
+            ffu.s[150 + i] = sr28[i];
+        break;
+    case 29:
+        for (i = 0; i < 3; i++)
+            ffu.s[154 + i] = sr29[i];
+        break;
+    case 30:
+        for (i = 0; i < 3; i++)
+            ffu.s[158 + i] = sr30[i];
+        break;
+    case 31:
+        for (i = 0; i < 3; i++)
+            ffu.s[162 + i] = sr31[i];
+        break;
+    case 32:
+        for (i = 0; i < 3; i++)
+            ffu.s[166 + i] = sr32[i];
+        break;
+    case 33:
+        for (i = 0; i < 3; i++)
+            ffu.s[161 + i] = sr33[i];
+        break;
+    case 34:
+        for (i = 0; i < 3; i++)
+            ffu.s[165 + i] = sr34[i];
+        break;
+    case 35:
+        for (i = 0; i < 3; i++)
+            ffu.s[169 + i] = sr35[i];
+        break;
+    case 36:
+        for (i = 0; i < 3; i++)
+            ffu.s[173 + i] = sr36[i];
+        break;
+    case 37:
+        for (i = 0; i < 3; i++)
+            ffu.s[176 + i] = sr37[i];
+        break;
+    case 38:
+        for (i = 0; i < 3; i++)
+            ffu.s[180 + i] = sr38[i];
+        break;
+    case 39:
+        for (i = 0; i < 3; i++)
+            ffu.s[184 + i] = sr39[i];
+        break;
+    case 40:
+        for (i = 0; i < 3; i++)
+            ffu.s[188 + i] = sr40[i];
+        break;
+    case 41:
+        for (i = 0; i < 3; i++)
+            ffu.s[192 + i] = sr41[i];
+        break;
+    case 42:
+        for (i = 0; i < 3; i++)
+            ffu.s[196 + i] = sr42[i];
+        break;
+    case 43:
+        for (i = 0; i < 3; i++)
+            ffu.s[200 + i] = sr43[i];
+        break;
+    case 44:
+        for (i = 0; i < 3; i++)
+            ffu.s[204 + i] = sr44[i];
+        break;
+    case 45:
+        for (i = 0; i < 3; i++)
+            ffu.s[208 + i] = sr45[i];
+        break;
+    case 46:
+        for (i = 0; i < 3; i++)
+            ffu.s[212 + i] = sr46[i];
+        break;
+    case 47:
+        for (i = 0; i < 3; i++)
+            ffu.s[216 + i] = sr47[i];
+        break;
+    case 48:
+        for (i = 0; i < 3; i++)
+            ffu.s[219 + i] = sr48[i];
+        break;
+    case 49:
+        for (i = 0; i < 3; i++)
+            ffu.s[223 + i] = sr49[i];
+        break;
+    case 50:
+        for (i = 0; i < 3; i++)
+            ffu.s[227 + i] = sr50[i];
+        break;
+    case 51:
+        for (i = 0; i < 3; i++)
+            ffu.s[231 + i] = sr51[i];
+        break;
+    case 52:
+        for (i = 0; i < 3; i++)
+            ffu.s[235 + i] = sr52[i];
+        break;
+    case 53:
+        for (i = 0; i < 3; i++)
+            ffu.s[239 + i] = sr53[i];
+        break;
+    case 54:
+        for (i = 0; i < 3; i++)
+            ffu.s[243 + i] = sr54[i];
+        break;
+    case 55:
+        for (i = 0; i < 3; i++)
+            ffu.s[247 + i] = sr55[i];
+        break;
+    case 56:
+        for (i = 0; i < 3; i++)
+            ffu.s[251 + i] = sr56[i];
+        break;
+    case 57:
+        for (i = 0; i < 3; i++)
+            ffu.s[254 + i] = sr57[i];
+        break;
+    case 58:
+        for (i = 0; i < 3; i++)
+            ffu.s[258 + i] = sr58[i];
+        break;
+    case 59:
+        for (i = 0; i < 3; i++)
+            ffu.s[262 + i] = sr59[i];
+        break;
+    case 60:
+        for (i = 0; i < 3; i++)
+            ffu.s[266 + i] = sr60[i];
+        break;
+    case 61:
+        for (i = 0; i < 3; i++)
+            ffu.s[270 + i] = sr61[i];
+        break;
+    case 62:
+        for (i = 0; i < 3; i++)
+            ffu.s[274 + i] = sr62[i];
+        break;
+    case 63:
+        for (i = 0; i < 3; i++)
+            ffu.s[278 + i] = sr63[i];
+        break;
+    case 64:
+        for (i = 0; i < 3; i++)
+            ffu.s[281 + i] = sr64[i];
+        break;
+    case 65:
+        for (i = 0; i < 3; i++)
+            ffu.s[285 + i] = sr65[i];
+        break;
+    case 66:
+        for (i = 0; i < 3; i++)
+            ffu.s[289 + i] = sr66[i];
+        break;
+    case 67:
+        for (i = 0; i < 3; i++)
+            ffu.s[293 + i] = sr67[i];
+        break;
+    case 68:
+        for (i = 0; i < 3; i++)
+            ffu.s[297 + i] = sr68[i];
+        break;
+    case 69:
+        for (i = 0; i < 3; i++)
+            ffu.s[301 + i] = sr69[i];
+        break;
+    case 70:
+        for (i = 0; i < 3; i++)
+            ffu.s[305 + i] = sr70[i];
+        break;
+    case 71:
+        for (i = 0; i < 3; i++)
+            ffu.s[308 + i] = sr71[i];
+        break;
+    case 72:
+        for (i = 0; i < 3; i++)
+            ffu.s[312 + i] = sr72[i];
+        break;
+    case 73:
+        for (i = 0; i < 3; i++)
+            ffu.s[316 + i] = sr73[i];
+        break;
+    case 74:
+        for (i = 0; i < 3; i++)
+            ffu.s[320 + i] = sr74[i];
+        break;
+    case 75:
+        for (i = 0; i < 3; i++)
+            ffu.s[324 + i] = sr75[i];
+        break;
+    case 76:
+        for (i = 0; i < 3; i++)
+            ffu.s[328 + i] = sr76[i];
+        break;
+    case 77:
+        for (i = 0; i < 3; i++)
+            ffu.s[331 + i] = sr77[i];
+        break;
+    case 78:
+        for (i = 0; i < 3; i++)
+            ffu.s[335 + i] = sr78[i];
+        break;
+    case 79:
+        for (i = 0; i < 3; i++)
+            ffu.s[339 + i] = sr79[i];
+        break;
+    case 80:
+        for (i = 0; i < 3; i++)
+            ffu.s[343 + i] = sr80[i];
+        break;
+    case 81:
+        for (i = 0; i < 3; i++)
+            ffu.s[347 + i] = sr81[i];
+        break;
+    case 82:
+        for (i = 0; i < 3; i++)
+            ffu.s[351 + i] = sr82[i];
+        break;
+    case 83:
+        for (i = 0; i < 3; i++)
+            ffu.s[354 + i] = sr83[i];
+        break;
+    case 84:
+        for (i = 0; i < 3; i++)
+            ffu.s[358 + i] = sr84[i];
+        break;
+    case 85:
+        for (i = 0; i < 3; i++)
+            ffu.s[362 + i] = sr85[i];
+        break;
+    case 86:
+        for (i = 0; i < 3; i++)
+            ffu.s[366 + i] = sr86[i];
+        break;
+    case 87:
+        for (i = 0; i < 3; i++)
+            ffu.s[370 + i] = sr87[i];
+        break;
+    case 88:
+        for (i = 0; i < 3; i++)
+            ffu.s[373 + i] = sr88[i];
+        break;
+    case 89:
+        for (i = 0; i < 3; i++)
+            ffu.s[377 + i] = sr89[i];
+        break;
+    case 90:
+        for (i = 0; i < 3; i++)
+            ffu.s[381 + i] = sr90[i];
+        break;
+    case 91:
+        for (i = 0; i < 3; i++)
+            ffu.s[385 + i] = sr91[i];
+        break;
+    case 92:
+        for (i = 0; i < 3; i++)
+            ffu.s[389 + i] = sr92[i];
+        break;
+    case 93:
+        for (i = 0; i < 3; i++)
+            ffu.s[392 + i] = sr93[i];
+        break;
+    case 94:
+        for (i = 0; i < 3; i++)
+            ffu.s[396 + i] = sr94[i];
+        break;
+    case 95:
+        for (i = 0; i < 3; i++)
+            ffu.s[400 + i] = sr95[i];
+        break;
+    case 96:
+        for (i = 0; i < 3; i++)
+            ffu.s[404 + i] = sr96[i];
+        break;
+    case 97:
+        for (i = 0; i < 3; i++)
+            ffu.s[400 + i] = sr97[i];
+        break;
+    case 98:
+        for (i = 0; i < 3; i++)
+            ffu.s[404 + i] = sr98[i];
+        break;
+    case 99:
+        for (i = 0; i < 3; i++)
+            ffu.s[408 + i] = sr99[i];
+        break;
+    case 100:
+        for (i = 0; i < 3; i++)
+            ffu.s[412 + i] = sr100[i];
+        break;
+    case 101:
+        for (i = 0; i < 3; i++)
+            ffu.s[416 + i] = sr101[i];
+        break;
+    case 102:
+        for (i = 0; i < 3; i++)
+            ffu.s[420 + i] = sr102[i];
+        break;
+    case 103:
+        for (i = 0; i < 3; i++)
+            ffu.s[424 + i] = sr103[i];
+        break;
+    case 104:
+        for (i = 0; i < 3; i++)
+            ffu.s[428 + i] = sr104[i];
+        break;
+    case 105:
+        for (i = 0; i < 3; i++)
+            ffu.s[432 + i] = sr105[i];
+        break;
+    case 106:
+        for (i = 0; i < 3; i++)
+            ffu.s[436 + i] = sr106[i];
+        break;
+    case 107:
+        for (i = 0; i < 3; i++)
+            ffu.s[440 + i] = sr107[i];
+        break;
+    case 108:
+        for (i = 0; i < 3; i++)
+            ffu.s[444 + i] = sr108[i];
+        break;
+    case 109:
+        for (i = 0; i < 3; i++)
+            ffu.s[448 + i] = sr109[i];
+        break;
+    case 110:
+        for (i = 0; i < 3; i++)
+            ffu.s[452 + i] = sr110[i];
+        break;
+    case 111:
+        for (i = 0; i < 3; i++)
+            ffu.s[456 + i] = sr111[i];
+        break;
+    case 112:
+        for (i = 0; i < 3; i++)
+            ffu.s[460 + i] = sr112[i];
+        break;
+    case 113:
+        for (i = 0; i < 3; i++)
+            ffu.s[464 + i] = sr113[i];
+        break;
+    case 114:
+        for (i = 0; i < 3; i++)
+            ffu.s[468 + i] = sr114[i];
+        break;
+    case 115:
+        for (i = 0; i < 3; i++)
+            ffu.s[472 + i] = sr115[i];
+        break;
+    case 116:
+        for (i = 0; i < 3; i++)
+            ffu.s[476 + i] = sr116[i];
+        break;
+    case 117:
+        for (i = 0; i < 3; i++)
+            ffu.s[480 + i] = sr117[i];
+        break;
+    case 118:
+        for (i = 0; i < 3; i++)
+            ffu.s[484 + i] = sr118[i];
+        break;
+    case 119:
+        for (i = 0; i < 3; i++)
+            ffu.s[488 + i] = sr119[i];
+        break;
+    case 120:
+        for (i = 0; i < 3; i++)
+            ffu.s[492 + i] = sr120[i];
+        break;
+    case 121:
+        for (i = 0; i < 3; i++)
+            ffu.s[496 + i] = sr121[i];
+        break;
+    case 122:
+        for (i = 0; i < 3; i++)
+            ffu.s[500 + i] = sr122[i];
+        break;
+    case 123:
+        for (i = 0; i < 3; i++)
+            ffu.s[504 + i] = sr123[i];
+        break;
+    case 124:
+        for (i = 0; i < 3; i++)
+            ffu.s[508 + i] = sr124[i];
+        break;
+    case 125:
+        for (i = 0; i < 3; i++)
+            ffu.s[512 + i] = sr125[i];
+        break;
+    case 126:
+        for (i = 0; i < 3; i++)
+            ffu.s[515 + i] = sr126[i];
+        break;
+    case 127:
+        for (i = 0; i < 3; i++)
+            ffu.s[519 + i] = sr127[i];
+        break;
+    case 128:
+        for (i = 0; i < 3; i++)
+            ffu.s[523 + i] = sr128[i];
+        break;
+    case 129:
+        for (i = 0; i < 3; i++)
+            ffu.s[527 + i] = sr129[i];
+        break;
+    case 130:
+        for (i = 0; i < 3; i++)
+            ffu.s[531 + i] = sr130[i];
+        break;
+    case 131:
+        for (i = 0; i < 3; i++)
+            ffu.s[535 + i] = sr131[i];
+        break;
+    case 132:
+        for (i = 0; i < 3; i++)
+            ffu.s[539 + i] = sr132[i];
+        break;
+    case 133:
+        for (i = 0; i < 3; i++)
+            ffu.s[543 + i] = sr133[i];
+        break;
+    case 134:
+        for (i = 0; i < 3; i++)
+            ffu.s[547 + i] = sr134[i];
+        break;
+    case 135:
+        for (i = 0; i < 3; i++)
+            ffu.s[551 + i] = sr135[i];
+        break;
+    case 136:
+        for (i = 0; i < 3; i++)
+            ffu.s[555 + i] = sr136[i];
+        break;
+    case 137:
+        for (i = 0; i < 3; i++)
+            ffu.s[559 + i] = sr137[i];
+        break;
+    case 138:
+        for (i = 0; i < 3; i++)
+            ffu.s[563 + i] = sr138[i];
+        break;
+    case 139:
+        for (i = 0; i < 3; i++)
+            ffu.s[567 + i] = sr139[i];
+        break;
+    case 140:
+        for (i = 0; i < 3; i++)
+            ffu.s[571 + i] = sr140[i];
+        break;
+    case 141:
+        for (i = 0; i < 3; i++)
+            ffu.s[575 + i] = sr141[i];
+        break;
+    case 142:
+        for (i = 0; i < 3; i++)
+            ffu.s[579 + i] = sr142[i];
+        break;
+    case 143:
+        for (i = 0; i < 3; i++)
+            ffu.s[583 + i] = sr143[i];
+        break;
+    case 144:
+        for (i = 0; i < 3; i++)
+            ffu.s[587 + i] = sr144[i];
+        break;
+    case 145:
+        for (i = 0; i < 3; i++)
+            ffu.s[591 + i] = sr145[i];
+        break;
+    case 146:
+        for (i = 0; i < 3; i++)
+            ffu.s[595 + i] = sr146[i];
+        break;
+    case 147:
+        for (i = 0; i < 3; i++)
+            ffu.s[599 + i] = sr147[i];
+        break;
+    case 148:
+        for (i = 0; i < 3; i++)
+            ffu.s[603 + i] = sr148[i];
+        break;
+    case 149:
+        for (i = 0; i < 3; i++)
+            ffu.s[607 + i] = sr149[i];
+        break;
+    case 150:
+        for (i = 0; i < 3; i++)
+            ffu.s[611 + i] = sr150[i];
+        break;
+    case 151:
+        for (i = 0; i < 3; i++)
+            ffu.s[615 + i] = sr151[i];
+        break;
+    case 152:
+        for (i = 0; i < 3; i++)
+            ffu.s[619 + i] = sr152[i];
+        break;
+    case 153:
+        for (i = 0; i < 3; i++)
+            ffu.s[623 + i] = sr153[i];
+        break;
+    case 154:
+        for (i = 0; i < 3; i++)
+            ffu.s[627 + i] = sr154[i];
+        break;
+    case 155:
+        for (i = 0; i < 3; i++)
+            ffu.s[631 + i] = sr155[i];
+        break;
+    case 156:
+        for (i = 0; i < 3; i++)
+            ffu.s[635 + i] = sr156[i];
+        break;
+    case 157:
+        for (i = 0; i < 3; i++)
+            ffu.s[639 + i] = sr157[i];
+        break;
+    case 158:
+        for (i = 0; i < 3; i++)
+            ffu.s[643 + i] = sr158[i];
+        break;
+    case 159:
+        for (i = 0; i < 3; i++)
+            ffu.s[647 + i] = sr159[i];
+        break;
+    case 160:
+        for (i = 0; i < 3; i++)
+            ffu.s[647 + i] = sr160[i];
+        break;
+    case 161:
+        for (i = 0; i < 3; i++)
+            ffu.s[645 + i] = sr161[i];
+        break;
+    case 162:
+        for (i = 0; i < 3; i++)
+            ffu.s[649 + i] = sr162[i];
+        break;
+    case 163:
+        for (i = 0; i < 3; i++)
+            ffu.s[653 + i] = sr163[i];
+        break;
+    case 164:
+        for (i = 0; i < 3; i++)
+            ffu.s[657 + i] = sr164[i];
+        break;
+    case 165:
+        for (i = 0; i < 3; i++)
+            ffu.s[661 + i] = sr165[i];
+        break;
+    case 166:
+        for (i = 0; i < 3; i++)
+            ffu.s[665 + i] = sr166[i];
+        break;
+    case 167:
+        for (i = 0; i < 3; i++)
+            ffu.s[669 + i] = sr167[i];
+        break;
+    case 168:
+        for (i = 0; i < 3; i++)
+            ffu.s[673 + i] = sr168[i];
+        break;
+    case 169:
+        for (i = 0; i < 3; i++)
+            ffu.s[677 + i] = sr169[i];
+        break;
+    case 170:
+        for (i = 0; i < 3; i++)
+            ffu.s[681 + i] = sr170[i];
+        break;
+    case 171:
+        for (i = 0; i < 3; i++)
+            ffu.s[685 + i] = sr171[i];
+        break;
+    case 172:
+        for (i = 0; i < 3; i++)
+            ffu.s[689 + i] = sr172[i];
+        break;
+    case 173:
+        for (i = 0; i < 3; i++)
+            ffu.s[693 + i] = sr173[i];
+        break;
+    case 174:
+        for (i = 0; i < 3; i++)
+            ffu.s[697 + i] = sr174[i];
+        break;
+    case 175:
+        for (i = 0; i < 3; i++)
+            ffu.s[702 + i] = sr175[i];
+        break;
+    case 176:
+        for (i = 0; i < 3; i++)
+            ffu.s[706 + i] = sr176[i];
+        break;
+    case 177:
+        for (i = 0; i < 3; i++)
+            ffu.s[710 + i] = sr177[i];
+        break;
+    case 178:
+        for (i = 0; i < 3; i++)
+            ffu.s[714 + i] = sr178[i];
+        break;
+    case 179:
+        for (i = 0; i < 3; i++)
+            ffu.s[718 + i] = sr179[i];
+        break;
+    case 180:
+        for (i = 0; i < 3; i++)
+            ffu.s[722 + i] = sr180[i];
+        break;
+    case 181:
+        for (i = 0; i < 3; i++)
+            ffu.s[726 + i] = sr181[i];
+        break;
+    case 182:
+        for (i = 0; i < 3; i++)
+            ffu.s[730 + i] = sr182[i];
+        break;
+    case 183:
+        for (i = 0; i < 3; i++)
+            ffu.s[734 + i] = sr183[i];
+        break;
+    case 184:
+        for (i = 0; i < 3; i++)
+            ffu.s[738 + i] = sr184[i];
+        break;
+    case 185:
+        for (i = 0; i < 3; i++)
+            ffu.s[742 + i] = sr185[i];
+        break;
+    case 186:
+        for (i = 0; i < 3; i++)
+            ffu.s[746 + i] = sr186[i];
+        break;
+    case 187:
+        for (i = 0; i < 3; i++)
+            ffu.s[750 + i] = sr187[i];
+        break;
+    case 188:
+        for (i = 0; i < 3; i++)
+            ffu.s[754 + i] = sr188[i];
+        break;
+    case 189:
+        for (i = 0; i < 3; i++)
+            ffu.s[758 + i] = sr189[i];
+        break;
+    case 190:
+        for (i = 0; i < 3; i++)
+            ffu.s[762 + i] = sr190[i];
+        break;
+    case 191:
+        for (i = 0; i < 3; i++)
+            ffu.s[766 + i] = sr191[i];
+        break;
+    case 192:
+        for (i = 0; i < 3; i++)
+            ffu.s[770 + i] = sr192[i];
+        break;
+    case 193:
+        for (i = 0; i < 3; i++)
+            ffu.s[774 + i] = sr193[i];
+        break;
+    case 194:
+        for (i = 0; i < 3; i++)
+            ffu.s[778 + i] = sr194[i];
+        break;
+    case 195:
+        for (i = 0; i < 3; i++)
+            ffu.s[782 + i] = sr195[i];
+        break;
+    case 196:
+        for (i = 0; i < 3; i++)
+            ffu.s[786 + i] = sr196[i];
+        break;
+    case 197:
+        for (i = 0; i < 3; i++)
+            ffu.s[790 + i] = sr197[i];
+        break;
+    case 198:
+        for (i = 0; i < 3; i++)
+            ffu.s[794 + i] = sr198[i];
+        break;
+    case 199:
+        for (i = 0; i < 3; i++)
+            ffu.s[798 + i] = sr199[i];
+        break;
+    case 200:
+        for (i = 0; i < 3; i++)
+            ffu.s[802 + i] = sr200[i];
+        break;
+    case 201:
+        for (i = 0; i < 3; i++)
+            ffu.s[806 + i] = sr201[i];
+        break;
+    case 202:
+        for (i = 0; i < 3; i++)
+            ffu.s[809 + i] = sr202[i];
+        break;
+    case 203:
+        for (i = 0; i < 3; i++)
+            ffu.s[813 + i] = sr203[i];
+        break;
+    case 204:
+        for (i = 0; i < 3; i++)
+            ffu.s[817 + i] = sr204[i];
+        break;
+    case 205:
+        for (i = 0; i < 3; i++)
+            ffu.s[821 + i] = sr205[i];
+        break;
+    case 206:
+        for (i = 0; i < 3; i++)
+            ffu.s[825 + i] = sr206[i];
+        break;
+    case 207:
+        for (i = 0; i < 3; i++)
+            ffu.s[829 + i] = sr207[i];
+        break;
+    case 208:
+        for (i = 0; i < 3; i++)
+            ffu.s[833 + i] = sr208[i];
+        break;
+    case 209:
+        for (i = 0; i < 3; i++)
+            ffu.s[837 + i] = sr209[i];
+        break;
+    case 210:
+        for (i = 0; i < 3; i++)
+            ffu.s[841 + i] = sr210[i];
+        break;
+    case 211:
+        for (i = 0; i < 3; i++)
+            ffu.s[845 + i] = sr211[i];
+        break;
+    case 212:
+        for (i = 0; i < 3; i++)
+            ffu.s[849 + i] = sr212[i];
+        break;
+    case 213:
+        for (i = 0; i < 3; i++)
+            ffu.s[853 + i] = sr213[i];
+        break;
+    case 214:
+        for (i = 0; i < 3; i++)
+            ffu.s[857 + i] = sr214[i];
+        break;
+    case 215:
+        for (i = 0; i < 3; i++)
+            ffu.s[861 + i] = sr215[i];
+        break;
+    case 216:
+        for (i = 0; i < 3; i++)
+            ffu.s[865 + i] = sr216[i];
+        break;
+    case 217:
+        for (i = 0; i < 3; i++)
+            ffu.s[869 + i] = sr217[i];
+        break;
+    case 218:
+        for (i = 0; i < 3; i++)
+            ffu.s[873 + i] = sr218[i];
+        break;
+    case 219:
+        for (i = 0; i < 3; i++)
+            ffu.s[877 + i] = sr219[i];
+        break;
+    case 220:
+        for (i = 0; i < 3; i++)
+            ffu.s[881 + i] = sr220[i];
+        break;
+    case 221:
+        for (i = 0; i < 3; i++)
+            ffu.s[885 + i] = sr221[i];
+        break;
+    case 222:
+        for (i = 0; i < 3; i++)
+            ffu.s[889 + i] = sr222[i];
+        break;
+    case 223:
+        for (i = 0; i < 3; i++)
+            ffu.s[893 + i] = sr223[i];
+        break;
+    case 224:
+        for (i = 0; i < 1; i++)
+            ffu.s[897 + i] = sr224[i];
+        break;
+    }
+}
 /* filter functions must be defined above */
 
 double IWave::equivwl() const
@@ -4818,6 +6454,1478 @@ double IWave::equivwl() const
     return wlwave / seb;
 }
 
+/* Following filter function created using create_iwave.py */
+/* This is from band 8 to band 57 of Hyperion (VNIR part), */
+
+void IWave::hyperion_vnir(int iwa)
+{
+
+    /* b8 of Hyperion_VNIR */
+    static const float sr1[1] = {.9508};
+
+    /* b9 of Hyperion_VNIR */
+    static const float sr2[3] = {.5412, .7871, .9669};
+
+    /* b10 of Hyperion_VNIR */
+    static const float sr3[3] = {.5251, .7711, .9829};
+
+    /* b11 of Hyperion_VNIR */
+    static const float sr4[3] = {.5090, .7550, .9990};
+
+    /* b12 of Hyperion_VNIR */
+    static const float sr5[3] = {.7390, .9849, .7691};
+
+    /* b13 of Hyperion_VNIR */
+    static const float sr6[3] = {.7229, .9689, .7851};
+
+    /* b14 of Hyperion_VNIR */
+    static const float sr7[3] = {.7068, .9528, .8012};
+
+    /* b15 of Hyperion_VNIR */
+    static const float sr8[3] = {.6908, .9368, .8173};
+
+    /* b16 of Hyperion_VNIR */
+    static const float sr9[3] = {.6747, .9207, .8333};
+
+    /* b17 of Hyperion_VNIR */
+    static const float sr10[3] = {.6586, .9046, .8494};
+
+    /* b18 of Hyperion_VNIR */
+    static const float sr11[3] = {.6426, .8886, .8655};
+
+    /* b19 of Hyperion_VNIR */
+    static const float sr12[3] = {.6265, .8725, .8815};
+
+    /* b20 of Hyperion_VNIR */
+    static const float sr13[3] = {.6104, .8564, .8976};
+
+    /* b21 of Hyperion_VNIR */
+    static const float sr14[3] = {.5944, .8404, .9136};
+
+    /* b22 of Hyperion_VNIR */
+    static const float sr15[3] = {.5783, .8243, .9297};
+
+    /* b23 of Hyperion_VNIR */
+    static const float sr16[3] = {.5623, .8082, .9458};
+
+    /* b24 of Hyperion_VNIR */
+    static const float sr17[3] = {.5462, .7922, .9618};
+
+    /* b25 of Hyperion_VNIR */
+    static const float sr18[3] = {.5301, .7761, .9779};
+
+    /* b26 of Hyperion_VNIR */
+    static const float sr19[3] = {.5141, .7600, .9940};
+
+    /* b27 of Hyperion_VNIR */
+    static const float sr20[3] = {.7440, .9900, .7640};
+
+    /* b28 of Hyperion_VNIR */
+    static const float sr21[3] = {.7279, .9739, .7801};
+
+    /* b29 of Hyperion_VNIR */
+    static const float sr22[3] = {.7119, .9578, .7962};
+
+    /* b30 of Hyperion_VNIR */
+    static const float sr23[3] = {.6958, .9418, .8122};
+
+    /* b31 of Hyperion_VNIR */
+    static const float sr24[3] = {.6797, .9257, .8283};
+
+    /* b32 of Hyperion_VNIR */
+    static const float sr25[3] = {.6637, .9097, .8444};
+
+    /* b33 of Hyperion_VNIR */
+    static const float sr26[3] = {.6476, .8936, .8604};
+
+    /* b34 of Hyperion_VNIR */
+    static const float sr27[3] = {.6315, .8775, .8765};
+
+    /* b35 of Hyperion_VNIR */
+    static const float sr28[3] = {.6155, .8615, .8926};
+
+    /* b36 of Hyperion_VNIR */
+    static const float sr29[3] = {.5994, .8454, .9086};
+
+    /* b37 of Hyperion_VNIR */
+    static const float sr30[3] = {.5833, .8293, .9247};
+
+    /* b38 of Hyperion_VNIR */
+    static const float sr31[3] = {.5673, .8133, .9407};
+
+    /* b39 of Hyperion_VNIR */
+    static const float sr32[3] = {.5512, .7972, .9568};
+
+    /* b40 of Hyperion_VNIR */
+    static const float sr33[3] = {.5352, .7811, .9729};
+
+    /* b41 of Hyperion_VNIR */
+    static const float sr34[3] = {.5191, .7651, .9889};
+
+    /* b42 of Hyperion_VNIR */
+    static const float sr35[3] = {.7490, .9950, .7590};
+
+    /* b43 of Hyperion_VNIR */
+    static const float sr36[3] = {.7329, .9789, .7751};
+
+    /* b44 of Hyperion_VNIR */
+    static const float sr37[3] = {.7169, .9629, .7911};
+
+    /* b45 of Hyperion_VNIR */
+    static const float sr38[3] = {.7008, .9468, .8072};
+
+    /* b46 of Hyperion_VNIR */
+    static const float sr39[3] = {.6848, .9307, .8233};
+
+    /* b47 of Hyperion_VNIR */
+    static const float sr40[3] = {.6687, .9147, .8393};
+
+    /* b48 of Hyperion_VNIR */
+    static const float sr41[3] = {.6526, .8986, .8554};
+
+    /* b49 of Hyperion_VNIR */
+    static const float sr42[3] = {.6366, .8826, .8715};
+
+    /* b50 of Hyperion_VNIR */
+    static const float sr43[3] = {.6205, .8665, .8875};
+
+    /* b51 of Hyperion_VNIR */
+    static const float sr44[3] = {.6044, .8504, .9036};
+
+    /* b52 of Hyperion_VNIR */
+    static const float sr45[3] = {.5884, .8344, .9197};
+
+    /* b53 of Hyperion_VNIR */
+    static const float sr46[3] = {.5723, .8183, .9357};
+
+    /* b54 of Hyperion_VNIR */
+    static const float sr47[3] = {.5562, .8022, .9518};
+
+    /* b55 of Hyperion_VNIR */
+    static const float sr48[3] = {.5402, .7862, .9678};
+
+    /* b56 of Hyperion_VNIR */
+    static const float sr49[3] = {.5241, .7701, .9839};
+
+    /* b57 of Hyperion_VNIR */
+    static const float sr50[1] = {.5081};
+
+    static const float wli[50] = {
+        0.4275, 0.4325, 0.4425, 0.4525, 0.4650, 0.4750, 0.4850, 0.4950, 0.5050,
+        0.5150, 0.5250, 0.5350, 0.5450, 0.5550, 0.5650, 0.5750, 0.5850, 0.5950,
+        0.6050, 0.6175, 0.6275, 0.6375, 0.6475, 0.6575, 0.6675, 0.6775, 0.6875,
+        0.6975, 0.7075, 0.7175, 0.7275, 0.7375, 0.7475, 0.7575, 0.7700, 0.7800,
+        0.7900, 0.8000, 0.8100, 0.8200, 0.8300, 0.8400, 0.8500, 0.8600, 0.8700,
+        0.8800, 0.8900, 0.9000, 0.9100, 0.9200};
+    static const float wls[50] = {
+        0.4300, 0.4400, 0.4500, 0.4600, 0.4725, 0.4825, 0.4925, 0.5025, 0.5125,
+        0.5225, 0.5325, 0.5425, 0.5525, 0.5625, 0.5725, 0.5825, 0.5925, 0.6025,
+        0.6125, 0.6250, 0.6350, 0.6450, 0.6550, 0.6650, 0.6750, 0.6850, 0.6950,
+        0.7050, 0.7150, 0.7250, 0.7350, 0.7450, 0.7550, 0.7650, 0.7775, 0.7875,
+        0.7975, 0.8075, 0.8175, 0.8275, 0.8375, 0.8475, 0.8575, 0.8675, 0.8775,
+        0.8875, 0.8975, 0.9075, 0.9175, 0.9225};
+
+    ffu.wlinf = (float)wli[iwa - 1];
+    ffu.wlsup = (float)wls[iwa - 1];
+
+    int i;
+    for (i = 0; i < 1501; i++)
+        ffu.s[i] = 0;
+
+    switch (iwa) {
+    case 1:
+        for (i = 0; i < 1; i++)
+            ffu.s[71 + i] = sr1[i];
+        break;
+    case 2:
+        for (i = 0; i < 3; i++)
+            ffu.s[73 + i] = sr2[i];
+        break;
+    case 3:
+        for (i = 0; i < 3; i++)
+            ffu.s[77 + i] = sr3[i];
+        break;
+    case 4:
+        for (i = 0; i < 3; i++)
+            ffu.s[81 + i] = sr4[i];
+        break;
+    case 5:
+        for (i = 0; i < 3; i++)
+            ffu.s[86 + i] = sr5[i];
+        break;
+    case 6:
+        for (i = 0; i < 3; i++)
+            ffu.s[90 + i] = sr6[i];
+        break;
+    case 7:
+        for (i = 0; i < 3; i++)
+            ffu.s[94 + i] = sr7[i];
+        break;
+    case 8:
+        for (i = 0; i < 3; i++)
+            ffu.s[98 + i] = sr8[i];
+        break;
+    case 9:
+        for (i = 0; i < 3; i++)
+            ffu.s[102 + i] = sr9[i];
+        break;
+    case 10:
+        for (i = 0; i < 3; i++)
+            ffu.s[106 + i] = sr10[i];
+        break;
+    case 11:
+        for (i = 0; i < 3; i++)
+            ffu.s[110 + i] = sr11[i];
+        break;
+    case 12:
+        for (i = 0; i < 3; i++)
+            ffu.s[114 + i] = sr12[i];
+        break;
+    case 13:
+        for (i = 0; i < 3; i++)
+            ffu.s[118 + i] = sr13[i];
+        break;
+    case 14:
+        for (i = 0; i < 3; i++)
+            ffu.s[122 + i] = sr14[i];
+        break;
+    case 15:
+        for (i = 0; i < 3; i++)
+            ffu.s[126 + i] = sr15[i];
+        break;
+    case 16:
+        for (i = 0; i < 3; i++)
+            ffu.s[130 + i] = sr16[i];
+        break;
+    case 17:
+        for (i = 0; i < 3; i++)
+            ffu.s[134 + i] = sr17[i];
+        break;
+    case 18:
+        for (i = 0; i < 3; i++)
+            ffu.s[138 + i] = sr18[i];
+        break;
+    case 19:
+        for (i = 0; i < 3; i++)
+            ffu.s[142 + i] = sr19[i];
+        break;
+    case 20:
+        for (i = 0; i < 3; i++)
+            ffu.s[147 + i] = sr20[i];
+        break;
+    case 21:
+        for (i = 0; i < 3; i++)
+            ffu.s[151 + i] = sr21[i];
+        break;
+    case 22:
+        for (i = 0; i < 3; i++)
+            ffu.s[155 + i] = sr22[i];
+        break;
+    case 23:
+        for (i = 0; i < 3; i++)
+            ffu.s[159 + i] = sr23[i];
+        break;
+    case 24:
+        for (i = 0; i < 3; i++)
+            ffu.s[163 + i] = sr24[i];
+        break;
+    case 25:
+        for (i = 0; i < 3; i++)
+            ffu.s[167 + i] = sr25[i];
+        break;
+    case 26:
+        for (i = 0; i < 3; i++)
+            ffu.s[171 + i] = sr26[i];
+        break;
+    case 27:
+        for (i = 0; i < 3; i++)
+            ffu.s[175 + i] = sr27[i];
+        break;
+    case 28:
+        for (i = 0; i < 3; i++)
+            ffu.s[179 + i] = sr28[i];
+        break;
+    case 29:
+        for (i = 0; i < 3; i++)
+            ffu.s[183 + i] = sr29[i];
+        break;
+    case 30:
+        for (i = 0; i < 3; i++)
+            ffu.s[187 + i] = sr30[i];
+        break;
+    case 31:
+        for (i = 0; i < 3; i++)
+            ffu.s[191 + i] = sr31[i];
+        break;
+    case 32:
+        for (i = 0; i < 3; i++)
+            ffu.s[195 + i] = sr32[i];
+        break;
+    case 33:
+        for (i = 0; i < 3; i++)
+            ffu.s[199 + i] = sr33[i];
+        break;
+    case 34:
+        for (i = 0; i < 3; i++)
+            ffu.s[203 + i] = sr34[i];
+        break;
+    case 35:
+        for (i = 0; i < 3; i++)
+            ffu.s[208 + i] = sr35[i];
+        break;
+    case 36:
+        for (i = 0; i < 3; i++)
+            ffu.s[212 + i] = sr36[i];
+        break;
+    case 37:
+        for (i = 0; i < 3; i++)
+            ffu.s[216 + i] = sr37[i];
+        break;
+    case 38:
+        for (i = 0; i < 3; i++)
+            ffu.s[220 + i] = sr38[i];
+        break;
+    case 39:
+        for (i = 0; i < 3; i++)
+            ffu.s[224 + i] = sr39[i];
+        break;
+    case 40:
+        for (i = 0; i < 3; i++)
+            ffu.s[228 + i] = sr40[i];
+        break;
+    case 41:
+        for (i = 0; i < 3; i++)
+            ffu.s[232 + i] = sr41[i];
+        break;
+    case 42:
+        for (i = 0; i < 3; i++)
+            ffu.s[236 + i] = sr42[i];
+        break;
+    case 43:
+        for (i = 0; i < 3; i++)
+            ffu.s[240 + i] = sr43[i];
+        break;
+    case 44:
+        for (i = 0; i < 3; i++)
+            ffu.s[244 + i] = sr44[i];
+        break;
+    case 45:
+        for (i = 0; i < 3; i++)
+            ffu.s[248 + i] = sr45[i];
+        break;
+    case 46:
+        for (i = 0; i < 3; i++)
+            ffu.s[252 + i] = sr46[i];
+        break;
+    case 47:
+        for (i = 0; i < 3; i++)
+            ffu.s[256 + i] = sr47[i];
+        break;
+    case 48:
+        for (i = 0; i < 3; i++)
+            ffu.s[260 + i] = sr48[i];
+        break;
+    case 49:
+        for (i = 0; i < 3; i++)
+            ffu.s[264 + i] = sr49[i];
+        break;
+    case 50:
+        for (i = 0; i < 1; i++)
+            ffu.s[268 + i] = sr50[i];
+        break;
+    }
+}
+
+/* Following filter function created using create_iwave.py */
+/* This is from band 77 to band 224 of Hyperion (SWIR part), */
+
+void IWave::hyperion_swir(int iwa)
+{
+
+    /* b77 of Hyperion_SWIR */
+    static const float sr1[1] = {.9504};
+
+    /* b78 of Hyperion_SWIR */
+    static const float sr2[3] = {.5452, .7930, .9592};
+
+    /* b79 of Hyperion_SWIR */
+    static const float sr3[3] = {.5364, .7842, .9680};
+
+    /* b80 of Hyperion_SWIR */
+    static const float sr4[3] = {.5277, .7755, .9767};
+
+    /* b81 of Hyperion_SWIR */
+    static const float sr5[3] = {.5189, .7667, .9855};
+
+    /* b82 of Hyperion_SWIR */
+    static const float sr6[3] = {.5101, .7579, .9943};
+
+    /* b83 of Hyperion_SWIR */
+    static const float sr7[3] = {.7492, .9970, .7552};
+
+    /* b84 of Hyperion_SWIR */
+    static const float sr8[3] = {.7404, .9882, .7640};
+
+    /* b85 of Hyperion_SWIR */
+    static const float sr9[3] = {.7317, .9795, .7727};
+
+    /* b86 of Hyperion_SWIR */
+    static const float sr10[3] = {.7229, .9707, .7815};
+
+    /* b87 of Hyperion_SWIR */
+    static const float sr11[3] = {.7141, .9619, .7903};
+
+    /* b88 of Hyperion_SWIR */
+    static const float sr12[3] = {.7054, .9532, .7990};
+
+    /* b89 of Hyperion_SWIR */
+    static const float sr13[3] = {.6966, .9444, .8078};
+
+    /* b90 of Hyperion_SWIR */
+    static const float sr14[3] = {.6878, .9356, .8165};
+
+    /* b91 of Hyperion_SWIR */
+    static const float sr15[3] = {.6791, .9269, .8253};
+
+    /* b92 of Hyperion_SWIR */
+    static const float sr16[3] = {.6703, .9181, .8341};
+
+    /* b93 of Hyperion_SWIR */
+    static const float sr17[3] = {.6616, .9094, .8428};
+
+    /* b94 of Hyperion_SWIR */
+    static const float sr18[3] = {.6528, .9006, .8516};
+
+    /* b95 of Hyperion_SWIR */
+    static const float sr19[3] = {.6440, .8918, .8604};
+
+    /* b96 of Hyperion_SWIR */
+    static const float sr20[3] = {.6353, .8831, .8691};
+
+    /* b97 of Hyperion_SWIR */
+    static const float sr21[3] = {.6265, .8743, .8779};
+
+    /* b98 of Hyperion_SWIR */
+    static const float sr22[3] = {.6177, .8655, .8866};
+
+    /* b99 of Hyperion_SWIR */
+    static const float sr23[3] = {.6090, .8568, .8954};
+
+    /* b100 of Hyperion_SWIR */
+    static const float sr24[3] = {.6002, .8480, .9042};
+
+    /* b101 of Hyperion_SWIR */
+    static const float sr25[3] = {.5915, .8393, .9129};
+
+    /* b102 of Hyperion_SWIR */
+    static const float sr26[3] = {.5827, .8305, .9217};
+
+    /* b103 of Hyperion_SWIR */
+    static const float sr27[3] = {.5739, .8217, .9305};
+
+    /* b104 of Hyperion_SWIR */
+    static const float sr28[3] = {.5652, .8130, .9392};
+
+    /* b105 of Hyperion_SWIR */
+    static const float sr29[3] = {.5564, .8042, .9480};
+
+    /* b106 of Hyperion_SWIR */
+    static const float sr30[3] = {.5476, .7954, .9567};
+
+    /* b107 of Hyperion_SWIR */
+    static const float sr31[3] = {.5389, .7867, .9655};
+
+    /* b108 of Hyperion_SWIR */
+    static const float sr32[3] = {.5301, .7779, .9743};
+
+    /* b109 of Hyperion_SWIR */
+    static const float sr33[3] = {.5214, .7692, .9830};
+
+    /* b110 of Hyperion_SWIR */
+    static const float sr34[3] = {.5126, .7604, .9918};
+
+    /* b111 of Hyperion_SWIR */
+    static const float sr35[3] = {.7516, .9994, .7527};
+
+    /* b112 of Hyperion_SWIR */
+    static const float sr36[3] = {.7429, .9907, .7615};
+
+    /* b113 of Hyperion_SWIR */
+    static const float sr37[3] = {.7341, .9819, .7703};
+
+    /* b114 of Hyperion_SWIR */
+    static const float sr38[3] = {.7253, .9732, .7790};
+
+    /* b115 of Hyperion_SWIR */
+    static const float sr39[3] = {.7166, .9644, .7878};
+
+    /* b116 of Hyperion_SWIR */
+    static const float sr40[3] = {.7078, .9556, .7966};
+
+    /* b117 of Hyperion_SWIR */
+    static const float sr41[3] = {.6991, .9469, .8053};
+
+    /* b118 of Hyperion_SWIR */
+    static const float sr42[3] = {.6903, .9381, .8141};
+
+    /* b119 of Hyperion_SWIR */
+    static const float sr43[3] = {.6815, .9293, .8228};
+
+    /* b120 of Hyperion_SWIR */
+    static const float sr44[3] = {.6728, .9206, .8316};
+
+    /* b121 of Hyperion_SWIR */
+    static const float sr45[3] = {.6640, .9118, .8404};
+
+    /* b122 of Hyperion_SWIR */
+    static const float sr46[3] = {.6552, .9031, .8491};
+
+    /* b123 of Hyperion_SWIR */
+    static const float sr47[3] = {.6465, .8943, .8579};
+
+    /* b124 of Hyperion_SWIR */
+    static const float sr48[3] = {.6377, .8855, .8667};
+
+    /* b125 of Hyperion_SWIR */
+    static const float sr49[3] = {.6290, .8768, .8754};
+
+    /* b126 of Hyperion_SWIR */
+    static const float sr50[3] = {.6202, .8680, .8842};
+
+    /* b127 of Hyperion_SWIR */
+    static const float sr51[3] = {.6114, .8592, .8929};
+
+    /* b128 of Hyperion_SWIR */
+    static const float sr52[3] = {.6027, .8505, .9017};
+
+    /* b129 of Hyperion_SWIR */
+    static const float sr53[3] = {.5939, .8417, .9105};
+
+    /* b130 of Hyperion_SWIR */
+    static const float sr54[3] = {.5851, .8330, .9192};
+
+    /* b131 of Hyperion_SWIR */
+    static const float sr55[3] = {.5764, .8242, .9280};
+
+    /* b132 of Hyperion_SWIR */
+    static const float sr56[3] = {.5676, .8154, .9368};
+
+    /* b133 of Hyperion_SWIR */
+    static const float sr57[3] = {.5589, .8067, .9455};
+
+    /* b134 of Hyperion_SWIR */
+    static const float sr58[3] = {.5501, .7979, .9543};
+
+    /* b135 of Hyperion_SWIR */
+    static const float sr59[3] = {.5413, .7891, .9630};
+
+    /* b136 of Hyperion_SWIR */
+    static const float sr60[3] = {.5326, .7804, .9718};
+
+    /* b137 of Hyperion_SWIR */
+    static const float sr61[3] = {.5238, .7716, .9806};
+
+    /* b138 of Hyperion_SWIR */
+    static const float sr62[3] = {.5150, .7629, .9893};
+
+    /* b139 of Hyperion_SWIR */
+    static const float sr63[3] = {.5063, .7541, .9981};
+
+    /* b140 of Hyperion_SWIR */
+    static const float sr64[3] = {.7453, .9931, .7590};
+
+    /* b141 of Hyperion_SWIR */
+    static const float sr65[3] = {.7366, .9844, .7678};
+
+    /* b142 of Hyperion_SWIR */
+    static const float sr66[3] = {.7278, .9756, .7766};
+
+    /* b143 of Hyperion_SWIR */
+    static const float sr67[3] = {.7190, .9669, .7853};
+
+    /* b144 of Hyperion_SWIR */
+    static const float sr68[3] = {.7103, .9581, .7941};
+
+    /* b145 of Hyperion_SWIR */
+    static const float sr69[3] = {.7015, .9493, .8029};
+
+    /* b146 of Hyperion_SWIR */
+    static const float sr70[3] = {.6928, .9406, .8116};
+
+    /* b147 of Hyperion_SWIR */
+    static const float sr71[3] = {.6840, .9318, .8204};
+
+    /* b148 of Hyperion_SWIR */
+    static const float sr72[3] = {.6752, .9230, .8292};
+
+    /* b149 of Hyperion_SWIR */
+    static const float sr73[3] = {.6665, .9143, .8379};
+
+    /* b150 of Hyperion_SWIR */
+    static const float sr74[3] = {.6577, .9055, .8467};
+
+    /* b151 of Hyperion_SWIR */
+    static const float sr75[3] = {.6489, .8968, .8554};
+
+    /* b152 of Hyperion_SWIR */
+    static const float sr76[3] = {.6402, .8880, .8642};
+
+    /* b153 of Hyperion_SWIR */
+    static const float sr77[3] = {.6314, .8792, .8730};
+
+    /* b154 of Hyperion_SWIR */
+    static const float sr78[3] = {.6227, .8705, .8817};
+
+    /* b155 of Hyperion_SWIR */
+    static const float sr79[3] = {.6139, .8617, .8905};
+
+    /* b156 of Hyperion_SWIR */
+    static const float sr80[3] = {.6051, .8529, .8993};
+
+    /* b157 of Hyperion_SWIR */
+    static const float sr81[3] = {.5964, .8442, .9080};
+
+    /* b158 of Hyperion_SWIR */
+    static const float sr82[3] = {.5876, .8354, .9168};
+
+    /* b159 of Hyperion_SWIR */
+    static const float sr83[3] = {.5788, .8267, .9255};
+
+    /* b160 of Hyperion_SWIR */
+    static const float sr84[3] = {.5701, .8179, .9343};
+
+    /* b161 of Hyperion_SWIR */
+    static const float sr85[3] = {.5613, .8091, .9431};
+
+    /* b162 of Hyperion_SWIR */
+    static const float sr86[3] = {.5526, .8004, .9518};
+
+    /* b163 of Hyperion_SWIR */
+    static const float sr87[3] = {.5438, .7916, .9606};
+
+    /* b164 of Hyperion_SWIR */
+    static const float sr88[3] = {.5350, .7828, .9694};
+
+    /* b165 of Hyperion_SWIR */
+    static const float sr89[3] = {.5263, .7741, .9781};
+
+    /* b166 of Hyperion_SWIR */
+    static const float sr90[3] = {.5175, .7653, .9869};
+
+    /* b167 of Hyperion_SWIR */
+    static const float sr91[3] = {.5087, .7566, .9956};
+
+    /* b168 of Hyperion_SWIR */
+    static const float sr92[3] = {.7478, .9956, .7566};
+
+    /* b169 of Hyperion_SWIR */
+    static const float sr93[3] = {.7390, .9868, .7654};
+
+    /* b170 of Hyperion_SWIR */
+    static const float sr94[3] = {.7303, .9781, .7741};
+
+    /* b171 of Hyperion_SWIR */
+    static const float sr95[3] = {.7215, .9693, .7829};
+
+    /* b172 of Hyperion_SWIR */
+    static const float sr96[3] = {.7127, .9605, .7916};
+
+    /* b173 of Hyperion_SWIR */
+    static const float sr97[3] = {.7040, .9518, .8004};
+
+    /* b174 of Hyperion_SWIR */
+    static const float sr98[3] = {.6952, .9430, .8092};
+
+    /* b175 of Hyperion_SWIR */
+    static const float sr99[3] = {.6865, .9343, .8179};
+
+    /* b176 of Hyperion_SWIR */
+    static const float sr100[3] = {.6777, .9255, .8267};
+
+    /* b177 of Hyperion_SWIR */
+    static const float sr101[3] = {.6689, .9167, .8355};
+
+    /* b178 of Hyperion_SWIR */
+    static const float sr102[3] = {.6602, .9080, .8442};
+
+    /* b179 of Hyperion_SWIR */
+    static const float sr103[3] = {.6514, .8992, .8530};
+
+    /* b180 of Hyperion_SWIR */
+    static const float sr104[3] = {.6426, .8904, .8617};
+
+    /* b181 of Hyperion_SWIR */
+    static const float sr105[3] = {.6339, .8817, .8705};
+
+    /* b182 of Hyperion_SWIR */
+    static const float sr106[3] = {.6251, .8729, .8793};
+
+    /* b183 of Hyperion_SWIR */
+    static const float sr107[3] = {.6164, .8642, .8880};
+
+    /* b184 of Hyperion_SWIR */
+    static const float sr108[3] = {.6076, .8554, .8968};
+
+    /* b185 of Hyperion_SWIR */
+    static const float sr109[3] = {.5988, .8466, .9056};
+
+    /* b186 of Hyperion_SWIR */
+    static const float sr110[3] = {.5901, .8379, .9143};
+
+    /* b187 of Hyperion_SWIR */
+    static const float sr111[3] = {.5813, .8291, .9231};
+
+    /* b188 of Hyperion_SWIR */
+    static const float sr112[3] = {.5725, .8203, .9318};
+
+    /* b189 of Hyperion_SWIR */
+    static const float sr113[3] = {.5638, .8116, .9406};
+
+    /* b190 of Hyperion_SWIR */
+    static const float sr114[3] = {.5550, .8028, .9494};
+
+    /* b191 of Hyperion_SWIR */
+    static const float sr115[3] = {.5463, .7941, .9581};
+
+    /* b192 of Hyperion_SWIR */
+    static const float sr116[3] = {.5375, .7853, .9669};
+
+    /* b193 of Hyperion_SWIR */
+    static const float sr117[3] = {.5287, .7765, .9757};
+
+    /* b194 of Hyperion_SWIR */
+    static const float sr118[3] = {.5200, .7678, .9844};
+
+    /* b195 of Hyperion_SWIR */
+    static const float sr119[3] = {.5112, .7590, .9932};
+
+    /* b196 of Hyperion_SWIR */
+    static const float sr120[3] = {.7502, .9981, .7541};
+
+    /* b197 of Hyperion_SWIR */
+    static const float sr121[3] = {.7415, .9893, .7629};
+
+    /* b198 of Hyperion_SWIR */
+    static const float sr122[3] = {.7327, .9805, .7717};
+
+    /* b199 of Hyperion_SWIR */
+    static const float sr123[3] = {.7240, .9718, .7804};
+
+    /* b200 of Hyperion_SWIR */
+    static const float sr124[3] = {.7152, .9630, .7892};
+
+    /* b201 of Hyperion_SWIR */
+    static const float sr125[3] = {.7064, .9542, .7979};
+
+    /* b202 of Hyperion_SWIR */
+    static const float sr126[3] = {.6977, .9455, .8067};
+
+    /* b203 of Hyperion_SWIR */
+    static const float sr127[3] = {.6889, .9367, .8155};
+
+    /* b204 of Hyperion_SWIR */
+    static const float sr128[3] = {.6801, .9280, .8242};
+
+    /* b205 of Hyperion_SWIR */
+    static const float sr129[3] = {.6714, .9192, .8330};
+
+    /* b206 of Hyperion_SWIR */
+    static const float sr130[3] = {.6626, .9104, .8418};
+
+    /* b207 of Hyperion_SWIR */
+    static const float sr131[3] = {.6539, .9017, .8505};
+
+    /* b208 of Hyperion_SWIR */
+    static const float sr132[3] = {.6451, .8929, .8593};
+
+    /* b209 of Hyperion_SWIR */
+    static const float sr133[3] = {.6363, .8841, .8680};
+
+    /* b210 of Hyperion_SWIR */
+    static const float sr134[3] = {.6276, .8754, .8768};
+
+    /* b211 of Hyperion_SWIR */
+    static const float sr135[3] = {.6188, .8666, .8856};
+
+    /* b212 of Hyperion_SWIR */
+    static const float sr136[3] = {.6100, .8579, .8943};
+
+    /* b213 of Hyperion_SWIR */
+    static const float sr137[3] = {.6013, .8491, .9031};
+
+    /* b214 of Hyperion_SWIR */
+    static const float sr138[3] = {.5925, .8403, .9119};
+
+    /* b215 of Hyperion_SWIR */
+    static const float sr139[3] = {.5838, .8316, .9206};
+
+    /* b216 of Hyperion_SWIR */
+    static const float sr140[3] = {.5750, .8228, .9294};
+
+    /* b217 of Hyperion_SWIR */
+    static const float sr141[3] = {.5662, .8140, .9381};
+
+    /* b218 of Hyperion_SWIR */
+    static const float sr142[3] = {.5575, .8053, .9469};
+
+    /* b219 of Hyperion_SWIR */
+    static const float sr143[3] = {.5487, .7965, .9557};
+
+    /* b220 of Hyperion_SWIR */
+    static const float sr144[3] = {.5399, .7878, .9644};
+
+    /* b221 of Hyperion_SWIR */
+    static const float sr145[3] = {.5312, .7790, .9732};
+
+    /* b222 of Hyperion_SWIR */
+    static const float sr146[3] = {.5224, .7702, .9820};
+
+    /* b223 of Hyperion_SWIR */
+    static const float sr147[3] = {.5137, .7615, .9907};
+
+    /* b224 of Hyperion_SWIR */
+    static const float sr148[1] = {.5049};
+
+    static const float wli[148] = {
+        0.9125, 0.9175, 0.9275, 0.9375, 0.9475, 0.9575, 0.9700, 0.9800, 0.9900,
+        1.0000, 1.0100, 1.0200, 1.0300, 1.0400, 1.0500, 1.0600, 1.0700, 1.0800,
+        1.0900, 1.1000, 1.1100, 1.1200, 1.1300, 1.1400, 1.1500, 1.1600, 1.1700,
+        1.1800, 1.1900, 1.2000, 1.2100, 1.2200, 1.2300, 1.2400, 1.2525, 1.2625,
+        1.2725, 1.2825, 1.2925, 1.3025, 1.3125, 1.3225, 1.3325, 1.3425, 1.3525,
+        1.3625, 1.3725, 1.3825, 1.3925, 1.4025, 1.4125, 1.4225, 1.4325, 1.4425,
+        1.4525, 1.4625, 1.4725, 1.4825, 1.4925, 1.5025, 1.5125, 1.5225, 1.5325,
+        1.5450, 1.5550, 1.5650, 1.5750, 1.5850, 1.5950, 1.6050, 1.6150, 1.6250,
+        1.6350, 1.6450, 1.6550, 1.6650, 1.6750, 1.6850, 1.6950, 1.7050, 1.7150,
+        1.7250, 1.7350, 1.7450, 1.7550, 1.7650, 1.7750, 1.7850, 1.7950, 1.8050,
+        1.8150, 1.8275, 1.8375, 1.8475, 1.8575, 1.8675, 1.8775, 1.8875, 1.8975,
+        1.9075, 1.9175, 1.9275, 1.9375, 1.9475, 1.9575, 1.9675, 1.9775, 1.9875,
+        1.9975, 2.0075, 2.0175, 2.0275, 2.0375, 2.0475, 2.0575, 2.0675, 2.0775,
+        2.0875, 2.0975, 2.1100, 2.1200, 2.1300, 2.1400, 2.1500, 2.1600, 2.1700,
+        2.1800, 2.1900, 2.2000, 2.2100, 2.2200, 2.2300, 2.2400, 2.2500, 2.2600,
+        2.2700, 2.2800, 2.2900, 2.3000, 2.3100, 2.3200, 2.3300, 2.3400, 2.3500,
+        2.3600, 2.3700, 2.3800, 2.3900};
+    static const float wls[148] = {
+        0.9150, 0.9250, 0.9350, 0.9450, 0.9550, 0.9650, 0.9775, 0.9875, 0.9975,
+        1.0075, 1.0175, 1.0275, 1.0375, 1.0475, 1.0575, 1.0675, 1.0775, 1.0875,
+        1.0975, 1.1075, 1.1175, 1.1275, 1.1375, 1.1475, 1.1575, 1.1675, 1.1775,
+        1.1875, 1.1975, 1.2075, 1.2175, 1.2275, 1.2375, 1.2475, 1.2600, 1.2700,
+        1.2800, 1.2900, 1.3000, 1.3100, 1.3200, 1.3300, 1.3400, 1.3500, 1.3600,
+        1.3700, 1.3800, 1.3900, 1.4000, 1.4100, 1.4200, 1.4300, 1.4400, 1.4500,
+        1.4600, 1.4700, 1.4800, 1.4900, 1.5000, 1.5100, 1.5200, 1.5300, 1.5400,
+        1.5525, 1.5625, 1.5725, 1.5825, 1.5925, 1.6025, 1.6125, 1.6225, 1.6325,
+        1.6425, 1.6525, 1.6625, 1.6725, 1.6825, 1.6925, 1.7025, 1.7125, 1.7225,
+        1.7325, 1.7425, 1.7525, 1.7625, 1.7725, 1.7825, 1.7925, 1.8025, 1.8125,
+        1.8225, 1.8350, 1.8450, 1.8550, 1.8650, 1.8750, 1.8850, 1.8950, 1.9050,
+        1.9150, 1.9250, 1.9350, 1.9450, 1.9550, 1.9650, 1.9750, 1.9850, 1.9950,
+        2.0050, 2.0150, 2.0250, 2.0350, 2.0450, 2.0550, 2.0650, 2.0750, 2.0850,
+        2.0950, 2.1050, 2.1175, 2.1275, 2.1375, 2.1475, 2.1575, 2.1675, 2.1775,
+        2.1875, 2.1975, 2.2075, 2.2175, 2.2275, 2.2375, 2.2475, 2.2575, 2.2675,
+        2.2775, 2.2875, 2.2975, 2.3075, 2.3175, 2.3275, 2.3375, 2.3475, 2.3575,
+        2.3675, 2.3775, 2.3875, 2.3925};
+
+    ffu.wlinf = (float)wli[iwa - 1];
+    ffu.wlsup = (float)wls[iwa - 1];
+
+    int i;
+    for (i = 0; i < 1501; i++)
+        ffu.s[i] = 0;
+
+    switch (iwa) {
+    case 1:
+        for (i = 0; i < 1; i++)
+            ffu.s[265 + i] = sr1[i];
+        break;
+    case 2:
+        for (i = 0; i < 3; i++)
+            ffu.s[267 + i] = sr2[i];
+        break;
+    case 3:
+        for (i = 0; i < 3; i++)
+            ffu.s[271 + i] = sr3[i];
+        break;
+    case 4:
+        for (i = 0; i < 3; i++)
+            ffu.s[275 + i] = sr4[i];
+        break;
+    case 5:
+        for (i = 0; i < 3; i++)
+            ffu.s[279 + i] = sr5[i];
+        break;
+    case 6:
+        for (i = 0; i < 3; i++)
+            ffu.s[283 + i] = sr6[i];
+        break;
+    case 7:
+        for (i = 0; i < 3; i++)
+            ffu.s[288 + i] = sr7[i];
+        break;
+    case 8:
+        for (i = 0; i < 3; i++)
+            ffu.s[292 + i] = sr8[i];
+        break;
+    case 9:
+        for (i = 0; i < 3; i++)
+            ffu.s[296 + i] = sr9[i];
+        break;
+    case 10:
+        for (i = 0; i < 3; i++)
+            ffu.s[300 + i] = sr10[i];
+        break;
+    case 11:
+        for (i = 0; i < 3; i++)
+            ffu.s[304 + i] = sr11[i];
+        break;
+    case 12:
+        for (i = 0; i < 3; i++)
+            ffu.s[308 + i] = sr12[i];
+        break;
+    case 13:
+        for (i = 0; i < 3; i++)
+            ffu.s[312 + i] = sr13[i];
+        break;
+    case 14:
+        for (i = 0; i < 3; i++)
+            ffu.s[316 + i] = sr14[i];
+        break;
+    case 15:
+        for (i = 0; i < 3; i++)
+            ffu.s[320 + i] = sr15[i];
+        break;
+    case 16:
+        for (i = 0; i < 3; i++)
+            ffu.s[324 + i] = sr16[i];
+        break;
+    case 17:
+        for (i = 0; i < 3; i++)
+            ffu.s[328 + i] = sr17[i];
+        break;
+    case 18:
+        for (i = 0; i < 3; i++)
+            ffu.s[332 + i] = sr18[i];
+        break;
+    case 19:
+        for (i = 0; i < 3; i++)
+            ffu.s[336 + i] = sr19[i];
+        break;
+    case 20:
+        for (i = 0; i < 3; i++)
+            ffu.s[340 + i] = sr20[i];
+        break;
+    case 21:
+        for (i = 0; i < 3; i++)
+            ffu.s[344 + i] = sr21[i];
+        break;
+    case 22:
+        for (i = 0; i < 3; i++)
+            ffu.s[348 + i] = sr22[i];
+        break;
+    case 23:
+        for (i = 0; i < 3; i++)
+            ffu.s[352 + i] = sr23[i];
+        break;
+    case 24:
+        for (i = 0; i < 3; i++)
+            ffu.s[356 + i] = sr24[i];
+        break;
+    case 25:
+        for (i = 0; i < 3; i++)
+            ffu.s[360 + i] = sr25[i];
+        break;
+    case 26:
+        for (i = 0; i < 3; i++)
+            ffu.s[364 + i] = sr26[i];
+        break;
+    case 27:
+        for (i = 0; i < 3; i++)
+            ffu.s[368 + i] = sr27[i];
+        break;
+    case 28:
+        for (i = 0; i < 3; i++)
+            ffu.s[372 + i] = sr28[i];
+        break;
+    case 29:
+        for (i = 0; i < 3; i++)
+            ffu.s[376 + i] = sr29[i];
+        break;
+    case 30:
+        for (i = 0; i < 3; i++)
+            ffu.s[380 + i] = sr30[i];
+        break;
+    case 31:
+        for (i = 0; i < 3; i++)
+            ffu.s[384 + i] = sr31[i];
+        break;
+    case 32:
+        for (i = 0; i < 3; i++)
+            ffu.s[388 + i] = sr32[i];
+        break;
+    case 33:
+        for (i = 0; i < 3; i++)
+            ffu.s[392 + i] = sr33[i];
+        break;
+    case 34:
+        for (i = 0; i < 3; i++)
+            ffu.s[396 + i] = sr34[i];
+        break;
+    case 35:
+        for (i = 0; i < 3; i++)
+            ffu.s[401 + i] = sr35[i];
+        break;
+    case 36:
+        for (i = 0; i < 3; i++)
+            ffu.s[405 + i] = sr36[i];
+        break;
+    case 37:
+        for (i = 0; i < 3; i++)
+            ffu.s[409 + i] = sr37[i];
+        break;
+    case 38:
+        for (i = 0; i < 3; i++)
+            ffu.s[413 + i] = sr38[i];
+        break;
+    case 39:
+        for (i = 0; i < 3; i++)
+            ffu.s[417 + i] = sr39[i];
+        break;
+    case 40:
+        for (i = 0; i < 3; i++)
+            ffu.s[421 + i] = sr40[i];
+        break;
+    case 41:
+        for (i = 0; i < 3; i++)
+            ffu.s[425 + i] = sr41[i];
+        break;
+    case 42:
+        for (i = 0; i < 3; i++)
+            ffu.s[429 + i] = sr42[i];
+        break;
+    case 43:
+        for (i = 0; i < 3; i++)
+            ffu.s[433 + i] = sr43[i];
+        break;
+    case 44:
+        for (i = 0; i < 3; i++)
+            ffu.s[437 + i] = sr44[i];
+        break;
+    case 45:
+        for (i = 0; i < 3; i++)
+            ffu.s[441 + i] = sr45[i];
+        break;
+    case 46:
+        for (i = 0; i < 3; i++)
+            ffu.s[445 + i] = sr46[i];
+        break;
+    case 47:
+        for (i = 0; i < 3; i++)
+            ffu.s[449 + i] = sr47[i];
+        break;
+    case 48:
+        for (i = 0; i < 3; i++)
+            ffu.s[453 + i] = sr48[i];
+        break;
+    case 49:
+        for (i = 0; i < 3; i++)
+            ffu.s[457 + i] = sr49[i];
+        break;
+    case 50:
+        for (i = 0; i < 3; i++)
+            ffu.s[461 + i] = sr50[i];
+        break;
+    case 51:
+        for (i = 0; i < 3; i++)
+            ffu.s[465 + i] = sr51[i];
+        break;
+    case 52:
+        for (i = 0; i < 3; i++)
+            ffu.s[469 + i] = sr52[i];
+        break;
+    case 53:
+        for (i = 0; i < 3; i++)
+            ffu.s[473 + i] = sr53[i];
+        break;
+    case 54:
+        for (i = 0; i < 3; i++)
+            ffu.s[477 + i] = sr54[i];
+        break;
+    case 55:
+        for (i = 0; i < 3; i++)
+            ffu.s[481 + i] = sr55[i];
+        break;
+    case 56:
+        for (i = 0; i < 3; i++)
+            ffu.s[485 + i] = sr56[i];
+        break;
+    case 57:
+        for (i = 0; i < 3; i++)
+            ffu.s[489 + i] = sr57[i];
+        break;
+    case 58:
+        for (i = 0; i < 3; i++)
+            ffu.s[493 + i] = sr58[i];
+        break;
+    case 59:
+        for (i = 0; i < 3; i++)
+            ffu.s[497 + i] = sr59[i];
+        break;
+    case 60:
+        for (i = 0; i < 3; i++)
+            ffu.s[501 + i] = sr60[i];
+        break;
+    case 61:
+        for (i = 0; i < 3; i++)
+            ffu.s[505 + i] = sr61[i];
+        break;
+    case 62:
+        for (i = 0; i < 3; i++)
+            ffu.s[509 + i] = sr62[i];
+        break;
+    case 63:
+        for (i = 0; i < 3; i++)
+            ffu.s[513 + i] = sr63[i];
+        break;
+    case 64:
+        for (i = 0; i < 3; i++)
+            ffu.s[518 + i] = sr64[i];
+        break;
+    case 65:
+        for (i = 0; i < 3; i++)
+            ffu.s[522 + i] = sr65[i];
+        break;
+    case 66:
+        for (i = 0; i < 3; i++)
+            ffu.s[526 + i] = sr66[i];
+        break;
+    case 67:
+        for (i = 0; i < 3; i++)
+            ffu.s[530 + i] = sr67[i];
+        break;
+    case 68:
+        for (i = 0; i < 3; i++)
+            ffu.s[534 + i] = sr68[i];
+        break;
+    case 69:
+        for (i = 0; i < 3; i++)
+            ffu.s[538 + i] = sr69[i];
+        break;
+    case 70:
+        for (i = 0; i < 3; i++)
+            ffu.s[542 + i] = sr70[i];
+        break;
+    case 71:
+        for (i = 0; i < 3; i++)
+            ffu.s[546 + i] = sr71[i];
+        break;
+    case 72:
+        for (i = 0; i < 3; i++)
+            ffu.s[550 + i] = sr72[i];
+        break;
+    case 73:
+        for (i = 0; i < 3; i++)
+            ffu.s[554 + i] = sr73[i];
+        break;
+    case 74:
+        for (i = 0; i < 3; i++)
+            ffu.s[558 + i] = sr74[i];
+        break;
+    case 75:
+        for (i = 0; i < 3; i++)
+            ffu.s[562 + i] = sr75[i];
+        break;
+    case 76:
+        for (i = 0; i < 3; i++)
+            ffu.s[566 + i] = sr76[i];
+        break;
+    case 77:
+        for (i = 0; i < 3; i++)
+            ffu.s[570 + i] = sr77[i];
+        break;
+    case 78:
+        for (i = 0; i < 3; i++)
+            ffu.s[574 + i] = sr78[i];
+        break;
+    case 79:
+        for (i = 0; i < 3; i++)
+            ffu.s[578 + i] = sr79[i];
+        break;
+    case 80:
+        for (i = 0; i < 3; i++)
+            ffu.s[582 + i] = sr80[i];
+        break;
+    case 81:
+        for (i = 0; i < 3; i++)
+            ffu.s[586 + i] = sr81[i];
+        break;
+    case 82:
+        for (i = 0; i < 3; i++)
+            ffu.s[590 + i] = sr82[i];
+        break;
+    case 83:
+        for (i = 0; i < 3; i++)
+            ffu.s[594 + i] = sr83[i];
+        break;
+    case 84:
+        for (i = 0; i < 3; i++)
+            ffu.s[598 + i] = sr84[i];
+        break;
+    case 85:
+        for (i = 0; i < 3; i++)
+            ffu.s[602 + i] = sr85[i];
+        break;
+    case 86:
+        for (i = 0; i < 3; i++)
+            ffu.s[606 + i] = sr86[i];
+        break;
+    case 87:
+        for (i = 0; i < 3; i++)
+            ffu.s[610 + i] = sr87[i];
+        break;
+    case 88:
+        for (i = 0; i < 3; i++)
+            ffu.s[614 + i] = sr88[i];
+        break;
+    case 89:
+        for (i = 0; i < 3; i++)
+            ffu.s[618 + i] = sr89[i];
+        break;
+    case 90:
+        for (i = 0; i < 3; i++)
+            ffu.s[622 + i] = sr90[i];
+        break;
+    case 91:
+        for (i = 0; i < 3; i++)
+            ffu.s[626 + i] = sr91[i];
+        break;
+    case 92:
+        for (i = 0; i < 3; i++)
+            ffu.s[631 + i] = sr92[i];
+        break;
+    case 93:
+        for (i = 0; i < 3; i++)
+            ffu.s[635 + i] = sr93[i];
+        break;
+    case 94:
+        for (i = 0; i < 3; i++)
+            ffu.s[639 + i] = sr94[i];
+        break;
+    case 95:
+        for (i = 0; i < 3; i++)
+            ffu.s[643 + i] = sr95[i];
+        break;
+    case 96:
+        for (i = 0; i < 3; i++)
+            ffu.s[647 + i] = sr96[i];
+        break;
+    case 97:
+        for (i = 0; i < 3; i++)
+            ffu.s[651 + i] = sr97[i];
+        break;
+    case 98:
+        for (i = 0; i < 3; i++)
+            ffu.s[655 + i] = sr98[i];
+        break;
+    case 99:
+        for (i = 0; i < 3; i++)
+            ffu.s[659 + i] = sr99[i];
+        break;
+    case 100:
+        for (i = 0; i < 3; i++)
+            ffu.s[663 + i] = sr100[i];
+        break;
+    case 101:
+        for (i = 0; i < 3; i++)
+            ffu.s[667 + i] = sr101[i];
+        break;
+    case 102:
+        for (i = 0; i < 3; i++)
+            ffu.s[671 + i] = sr102[i];
+        break;
+    case 103:
+        for (i = 0; i < 3; i++)
+            ffu.s[675 + i] = sr103[i];
+        break;
+    case 104:
+        for (i = 0; i < 3; i++)
+            ffu.s[679 + i] = sr104[i];
+        break;
+    case 105:
+        for (i = 0; i < 3; i++)
+            ffu.s[683 + i] = sr105[i];
+        break;
+    case 106:
+        for (i = 0; i < 3; i++)
+            ffu.s[687 + i] = sr106[i];
+        break;
+    case 107:
+        for (i = 0; i < 3; i++)
+            ffu.s[691 + i] = sr107[i];
+        break;
+    case 108:
+        for (i = 0; i < 3; i++)
+            ffu.s[695 + i] = sr108[i];
+        break;
+    case 109:
+        for (i = 0; i < 3; i++)
+            ffu.s[699 + i] = sr109[i];
+        break;
+    case 110:
+        for (i = 0; i < 3; i++)
+            ffu.s[702 + i] = sr110[i];
+        break;
+    case 111:
+        for (i = 0; i < 3; i++)
+            ffu.s[707 + i] = sr111[i];
+        break;
+    case 112:
+        for (i = 0; i < 3; i++)
+            ffu.s[710 + i] = sr112[i];
+        break;
+    case 113:
+        for (i = 0; i < 3; i++)
+            ffu.s[715 + i] = sr113[i];
+        break;
+    case 114:
+        for (i = 0; i < 3; i++)
+            ffu.s[718 + i] = sr114[i];
+        break;
+    case 115:
+        for (i = 0; i < 3; i++)
+            ffu.s[723 + i] = sr115[i];
+        break;
+    case 116:
+        for (i = 0; i < 3; i++)
+            ffu.s[727 + i] = sr116[i];
+        break;
+    case 117:
+        for (i = 0; i < 3; i++)
+            ffu.s[731 + i] = sr117[i];
+        break;
+    case 118:
+        for (i = 0; i < 3; i++)
+            ffu.s[735 + i] = sr118[i];
+        break;
+    case 119:
+        for (i = 0; i < 3; i++)
+            ffu.s[739 + i] = sr119[i];
+        break;
+    case 120:
+        for (i = 0; i < 3; i++)
+            ffu.s[744 + i] = sr120[i];
+        break;
+    case 121:
+        for (i = 0; i < 3; i++)
+            ffu.s[748 + i] = sr121[i];
+        break;
+    case 122:
+        for (i = 0; i < 3; i++)
+            ffu.s[752 + i] = sr122[i];
+        break;
+    case 123:
+        for (i = 0; i < 3; i++)
+            ffu.s[756 + i] = sr123[i];
+        break;
+    case 124:
+        for (i = 0; i < 3; i++)
+            ffu.s[760 + i] = sr124[i];
+        break;
+    case 125:
+        for (i = 0; i < 3; i++)
+            ffu.s[764 + i] = sr125[i];
+        break;
+    case 126:
+        for (i = 0; i < 3; i++)
+            ffu.s[768 + i] = sr126[i];
+        break;
+    case 127:
+        for (i = 0; i < 3; i++)
+            ffu.s[772 + i] = sr127[i];
+        break;
+    case 128:
+        for (i = 0; i < 3; i++)
+            ffu.s[776 + i] = sr128[i];
+        break;
+    case 129:
+        for (i = 0; i < 3; i++)
+            ffu.s[780 + i] = sr129[i];
+        break;
+    case 130:
+        for (i = 0; i < 3; i++)
+            ffu.s[784 + i] = sr130[i];
+        break;
+    case 131:
+        for (i = 0; i < 3; i++)
+            ffu.s[788 + i] = sr131[i];
+        break;
+    case 132:
+        for (i = 0; i < 3; i++)
+            ffu.s[792 + i] = sr132[i];
+        break;
+    case 133:
+        for (i = 0; i < 3; i++)
+            ffu.s[796 + i] = sr133[i];
+        break;
+    case 134:
+        for (i = 0; i < 3; i++)
+            ffu.s[800 + i] = sr134[i];
+        break;
+    case 135:
+        for (i = 0; i < 3; i++)
+            ffu.s[804 + i] = sr135[i];
+        break;
+    case 136:
+        for (i = 0; i < 3; i++)
+            ffu.s[808 + i] = sr136[i];
+        break;
+    case 137:
+        for (i = 0; i < 3; i++)
+            ffu.s[812 + i] = sr137[i];
+        break;
+    case 138:
+        for (i = 0; i < 3; i++)
+            ffu.s[816 + i] = sr138[i];
+        break;
+    case 139:
+        for (i = 0; i < 3; i++)
+            ffu.s[820 + i] = sr139[i];
+        break;
+    case 140:
+        for (i = 0; i < 3; i++)
+            ffu.s[824 + i] = sr140[i];
+        break;
+    case 141:
+        for (i = 0; i < 3; i++)
+            ffu.s[828 + i] = sr141[i];
+        break;
+    case 142:
+        for (i = 0; i < 3; i++)
+            ffu.s[832 + i] = sr142[i];
+        break;
+    case 143:
+        for (i = 0; i < 3; i++)
+            ffu.s[836 + i] = sr143[i];
+        break;
+    case 144:
+        for (i = 0; i < 3; i++)
+            ffu.s[840 + i] = sr144[i];
+        break;
+    case 145:
+        for (i = 0; i < 3; i++)
+            ffu.s[844 + i] = sr145[i];
+        break;
+    case 146:
+        for (i = 0; i < 3; i++)
+            ffu.s[848 + i] = sr146[i];
+        break;
+    case 147:
+        for (i = 0; i < 3; i++)
+            ffu.s[852 + i] = sr147[i];
+        break;
+    case 148:
+        for (i = 0; i < 1; i++)
+            ffu.s[856 + i] = sr148[i];
+        break;
+    }
+}
+
 void IWave::parse()
 {
     iinf = 0;
@@ -4829,7 +7937,7 @@ void IWave::parse()
 
     cin >> iwave;
     cin.ignore(numeric_limits<int>::max(), '\n');
-
+    printf("iwave = %d\n", iwave);
     if (iwave == 0 || iwave == -2) {
         cin >> ffu.wlinf;
         cin >> ffu.wlsup;
@@ -4918,6 +8026,12 @@ void IWave::parse()
             planetscope0f10(iwave - 199);
         else if (iwave <= 208)
             worldview4(iwave - 203);
+        else if (iwave <= 432)
+            aviris(iwave - 208);
+        else if (iwave <= 481)
+            hyperion_vnir(iwave - 432);
+        else if (iwave <= 628)
+            hyperion_swir(iwave - 481);
         else
             G_warning(_("Unsupported iwave value: %d"), iwave);
 
@@ -5179,7 +8293,10 @@ void IWave::print()
                                   string(" worldview 4 blue "),
                                   string(" worldview 4 green"),
                                   string(" worldview 4 red"),
-                                  string(" worldview 4 nir")};
+                                  string(" worldview 4 nir"),
+                                  string(" aviris b1-224"),
+                                  string(" hyperion vnir b8-57"),
+                                  string(" hyperion swir b77-224")};
 
     Output::Begin();
     Output::Repeat(22, ' ');

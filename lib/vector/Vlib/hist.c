@@ -41,12 +41,12 @@ int Vect_hist_command(struct Map_info *Map)
     if (0 > Vect_hist_write(Map, "\n"))
         return -1;
 
-    sprintf(buf, "GISDBASE: %s\n", G_gisdbase()); /* Needed ? */
+    snprintf(buf, sizeof(buf), "GISDBASE: %s\n", G_gisdbase()); /* Needed ? */
     if (0 > Vect_hist_write(Map, buf))
         return -1;
 
-    sprintf(buf, "LOCATION: %s MAPSET: %s USER: %s DATE: %s\n", G_location(),
-            G_mapset(), G_whoami(), G_date()); /* Needed ? */
+    snprintf(buf, sizeof(buf), "LOCATION: %s MAPSET: %s USER: %s DATE: %s\n",
+             G_location(), G_mapset(), G_whoami(), G_date()); /* Needed ? */
     if (0 > Vect_hist_write(Map, buf))
         return -1;
 
@@ -87,7 +87,7 @@ int Vect_hist_write(struct Map_info *Map, const char *str)
    \return NULL on error
    \return EOF end of file
  */
-char *Vect_hist_read(char *s, int size, const struct Map_info *Map)
+char *Vect_hist_read(char *s, int size, struct Map_info *Map)
 {
     int ret;
 
@@ -128,7 +128,7 @@ void Vect_hist_rewind(struct Map_info *Map)
    \return 0 on success
    \return -1 on error
  */
-int Vect_hist_copy(const struct Map_info *In, struct Map_info *Out)
+int Vect_hist_copy(struct Map_info *In, struct Map_info *Out)
 {
     size_t red, ret;
     char buf[1000];

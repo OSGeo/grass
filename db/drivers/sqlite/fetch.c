@@ -32,7 +32,6 @@
  * \param[in,out] more 1 = more data; 0 = no more data
  * \return int
  */
-
 int db__driver_fetch(dbCursor *cn, int position, int *more)
 {
     cursor *c;
@@ -130,7 +129,7 @@ int db__driver_fetch(dbCursor *cn, int position, int *more)
         G_debug(3, "col %d, litetype %d, sqltype %d: val = '%s'", col, litetype,
                 sqltype, text);
 
-        /* http://www.sqlite.org/capi3ref.html#sqlite3_column_type
+        /* https://www.sqlite.org/capi3ref.html#sqlite3_column_type
            SQLITE_INTEGER  1
            SQLITE_FLOAT    2
            SQLITE_TEXT     3
@@ -238,7 +237,6 @@ int db__driver_fetch(dbCursor *cn, int position, int *more)
  * \param[in] cn open database cursor
  * \return int number of rows in table
  */
-
 int db__driver_get_num_rows(dbCursor *cn)
 {
     cursor *c;

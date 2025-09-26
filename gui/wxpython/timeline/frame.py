@@ -16,20 +16,21 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
-import six
 from math import ceil
 from itertools import cycle
 import numpy as np
 
 import wx
 from functools import reduce
+from operator import add
 
 try:
-    import matplotlib
+    import matplotlib as mpl
 
     # The recommended way to use wx with mpl is with the WXAgg
     # backend.
-    matplotlib.use("WXAgg")
+    mpl.use("WXAgg")
+    from matplotlib import gridspec
     from matplotlib.figure import Figure
     from matplotlib.backends.backend_wxagg import (
         FigureCanvasWxAgg as FigCanvas,
@@ -45,7 +46,7 @@ except ImportError as e:
         ).format(e)
     )
 
-import grass.script as grass
+import grass.script as gs
 
 import grass.temporal as tgis
 from core.gcmd import GError, GException, RunCommand
@@ -57,19 +58,16 @@ ALPHA = 1
 COLORS = ["b", "g", "r", "c", "m", "y", "k"]
 
 
-def check_version(*version):
+def check_version(*version) -> bool:
     """Checks if given version or newer is installed"""
     versionInstalled = []
-    for i in matplotlib.__version__.split("."):
+    for i in mpl.__version__.split("."):
         try:
             v = int(i)
             versionInstalled.append(v)
         except ValueError:
             versionInstalled.append(0)
-    if versionInstalled < list(version):
-        return False
-    else:
-        return True
+    return versionInstalled >= list(version)
 
 
 class TimelineFrame(wx.Frame):
@@ -148,7 +146,7 @@ class TimelineFrame(wx.Frame):
         self.view3dCheck.Bind(wx.EVT_CHECKBOX, self.OnRedraw)
         if not check_version(1, 0, 0):
             self.view3dCheck.SetLabel(
-                _("3D plot of spatio-temporal extents " "(matplotlib >= 1.0.0)")
+                _("3D plot of spatio-temporal extents (matplotlib >= 1.0.0)")
             )
             self.view3dCheck.Disable()
 
@@ -235,9 +233,7 @@ class TimelineFrame(wx.Frame):
             self.timeData[name]["west"] = []
             self.timeData[name]["east"] = []
 
-            columns = ",".join(
-                ["name", "start_time", "end_time", "north", "south", "west", "east"]
-            )
+            columns = "name,start_time,end_time,north,south,west,east"
 
             rows = sp.get_registered_maps(
                 columns=columns, where=None, order="start_time", dbif=self.dbif
@@ -266,7 +262,6 @@ class TimelineFrame(wx.Frame):
     def _draw3dFigure(self):
         """Draws 3d view (spatio-temporal extents).
 
-
         Only for matplotlib versions >= 1.0.0.
         Earlier versions cannot draw time ticks and alpha
         and it has a slightly different API.
@@ -274,10 +269,7 @@ class TimelineFrame(wx.Frame):
         self.axes3d.clear()
         self.axes3d.grid(False)
         # self.axes3d.grid(True)
-        if self.temporalType == "absolute":
-            convert = mdates.date2num
-        else:
-            convert = lambda x: x  # noqa: E731
+        convert = mdates.date2num if self.temporalType == "absolute" else lambda x: x  # noqa: E731
 
         colors = cycle(COLORS)
         plots = []
@@ -303,8 +295,8 @@ class TimelineFrame(wx.Frame):
                 )
             )
 
-        params = grass.read_command("g.proj", flags="g")
-        params = grass.parse_key_val(params)
+        params = gs.read_command("g.proj", flags="p", format="shell")
+        params = gs.parse_key_val(params)
         if "unit" in params:
             self.axes3d.set_xlabel(_("X [%s]") % params["unit"])
             self.axes3d.set_ylabel(_("Y [%s]") % params["unit"])
@@ -323,10 +315,7 @@ class TimelineFrame(wx.Frame):
         """Draws 2D plot (temporal extents)"""
         self.axes2d.clear()
         self.axes2d.grid(True)
-        if self.temporalType == "absolute":
-            convert = mdates.date2num
-        else:
-            convert = lambda x: x  # noqa: E731
+        convert = mdates.date2num if self.temporalType == "absolute" else lambda x: x  # noqa: E731
 
         colors = cycle(COLORS)
 
@@ -424,6 +413,30 @@ class TimelineFrame(wx.Frame):
         self.datasets = datasets
         self._redraw()
 
+    def _change_figure_geometry(self, nrows=1, ncols=1, num=1):
+        """Change figure geometry
+
+        https://github.com/kecnry/autofig/commit/93e6debb953f5b2afe05f463064d60b9566afa59
+
+        :param int rows: number of rows
+        :param int cols: number of cols
+        :param int num: subplot order
+        """
+        if not check_version(3, 4, 0):
+            self.axes2d.change_geometry(nrows, ncols, num)
+        else:
+            for i, ax in enumerate(self.fig.axes):
+                ax.set_subplotspec(
+                    gridspec.SubplotSpec(
+                        gridspec.GridSpec(
+                            nrows,
+                            ncols,
+                            figure=self.fig,
+                        ),
+                        i,
+                    )
+                )
+
     def _redraw(self):
         """Readraw data.
 
@@ -437,7 +450,7 @@ class TimelineFrame(wx.Frame):
         self._draw2dFigure()
         if check_version(1, 0, 0):
             if self.view3dCheck.IsChecked():
-                self.axes2d.change_geometry(2, 1, 1)
+                self._change_figure_geometry(nrows=2, ncols=1, num=1)
                 if not self.axes3d:
                     # do not remove this import - unused but it is required for
                     # 3D
@@ -451,7 +464,8 @@ class TimelineFrame(wx.Frame):
                 if self.axes3d:
                     self.fig.delaxes(self.axes3d)
                     self.axes3d = None
-                self.axes2d.change_geometry(1, 1, 1)
+                    self._change_figure_geometry()
+                    self._draw2dFigure()
                 self.canvas.draw()
 
     def _checkDatasets(self, datasets):
@@ -467,19 +481,17 @@ class TimelineFrame(wx.Frame):
         allDatasets = [
             [
                 [(map, mapset, etype) for map in maps]
-                for etype, maps in six.iteritems(etypesDict)
+                for etype, maps in etypesDict.items()
             ]
-            for mapset, etypesDict in six.iteritems(tDict)
+            for mapset, etypesDict in tDict.items()
         ]
         # flatten this list
         if allDatasets:
-            allDatasets = reduce(
-                lambda x, y: x + y, reduce(lambda x, y: x + y, allDatasets)
-            )
+            allDatasets = reduce(add, reduce(add, allDatasets))
             mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
-            allDatasets = [
-                i for i in sorted(allDatasets, key=lambda l: mapsets.index(l[1]))
-            ]
+            allDatasets = sorted(
+                allDatasets, key=lambda dataset_info: mapsets.index(dataset_info[1])
+            )
 
         for dataset in datasets:
             errorMsg = _("Space time dataset <%s> not found.") % dataset
@@ -499,10 +511,10 @@ class TimelineFrame(wx.Frame):
 
             if len(indices) == 0:
                 raise GException(errorMsg)
-            elif len(indices) >= 2:
+            if len(indices) >= 2:
                 dlg = wx.SingleChoiceDialog(
                     self,
-                    message=_("Please specify the space time dataset <%s>." % dataset),
+                    message=_("Please specify the space time dataset <%s>.") % dataset,
                     caption=_("Ambiguous dataset name"),
                     choices=[
                         (
@@ -544,9 +556,7 @@ class TimelineFrame(wx.Frame):
             GError(parent=self, message=str(error), showTraceback=False)
             return
         self.datasets = datasets
-        self.datasetSelect.SetValue(
-            ",".join(map(lambda x: x[0] + "@" + x[1], datasets))
-        )
+        self.datasetSelect.SetValue(",".join(f"{x[0]}@{x[1]}" for x in datasets))
         self._redraw()
 
     def Show3D(self, show):
@@ -566,11 +576,11 @@ class LookUp:
         if type_ == "bar":
             self.data[yrange] = {"name": datasetName}
             for i, (start, end) in enumerate(xranges):
-                self.data[yrange][(start, end)] = i
+                self.data[yrange][start, end] = i
         elif type_ == "point":
-            self.data[(yrange, yrange)] = {"name": datasetName}
+            self.data[yrange, yrange] = {"name": datasetName}
             for i, start in enumerate(xranges):
-                self.data[(yrange, yrange)][(start, start)] = i
+                self.data[yrange, yrange][start, start] = i
 
     def GetInformation(self, x, y):
         keys = None
@@ -602,10 +612,14 @@ def InfoFormat(timeData, datasetName, mapIndex):
     elif etype == "str3ds":
         text.append(_("Space time 3D raster dataset: %s") % name)
 
-    text.append(_("Mapset: %s") % mapset)
-    text.append(_("Map name: %s") % timeData[datasetName]["names"][mapIndex])
-    text.append(_("Start time: %s") % timeData[datasetName]["start_datetime"][mapIndex])
-    text.append(_("End time: %s") % timeData[datasetName]["end_datetime"][mapIndex])
+    text.extend(
+        (
+            _("Mapset: %s") % mapset,
+            _("Map name: %s") % timeData[datasetName]["names"][mapIndex],
+            _("Start time: %s") % timeData[datasetName]["start_datetime"][mapIndex],
+            _("End time: %s") % timeData[datasetName]["end_datetime"][mapIndex],
+        )
+    )
 
     if not timeData[datasetName]["validTopology"]:
         text.append(_("WARNING: invalid topology"))
@@ -615,12 +629,11 @@ def InfoFormat(timeData, datasetName, mapIndex):
     return "\n".join(text)
 
 
-class DataCursor(object):
+class DataCursor:
     """A simple data cursor widget that displays the x,y location of a
     matplotlib artist when it is selected.
 
-
-    Source: http://stackoverflow.com/questions/4652439/
+    Source: https://stackoverflow.com/questions/4652439/
             is-there-a-matplotlib-equivalent-of-matlabs-datacursormode/4674445
     """
 
@@ -652,8 +665,8 @@ class DataCursor(object):
             artists = [artists]
         self.artists = artists
 
-        self.axes = tuple(set(art.axes for art in self.artists))
-        self.figures = tuple(set(ax.figure for ax in self.axes))
+        self.axes = tuple({art.axes for art in self.artists})
+        self.figures = tuple({ax.figure for ax in self.axes})
 
         self.annotations = {}
         for ax in self.axes:
@@ -681,8 +694,8 @@ class DataCursor(object):
             xytext=self.offsets,
             textcoords="offset points",
             va="bottom",
-            bbox=dict(boxstyle="round,pad=0.5", fc="yellow", alpha=0.7),
-            arrowprops=dict(arrowstyle="->", connectionstyle="arc3,rad=0"),
+            bbox={"boxstyle": "round,pad=0.5", "fc": "yellow", "alpha": 0.7},
+            arrowprops={"arrowstyle": "->", "connectionstyle": "arc3,rad=0"},
             annotation_clip=False,
             multialignment="left",
         )

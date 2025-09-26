@@ -3,7 +3,7 @@
 
    \brief GIS Library - Argument parsing functions (HTML output)
 
-   (C) 2001-2023 by the GRASS Development Team
+   (C) 2001-2025 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -52,7 +52,7 @@ void G__usage_html(void)
             " <meta http-equiv=\"content-language\" content=\"en-us\">\n");
     fprintf(stdout, " <meta name=\"viewport\" content=\"width=device-width, "
                     "initial-scale=1\">\n");
-    fprintf(stdout, " <title>%s - GRASS GIS manual</title>\n", st->pgm_name);
+    fprintf(stdout, " <title>%s - GRASS manual</title>\n", st->pgm_name);
     fprintf(stdout, " <meta name=\"description\" content=\"%s", st->pgm_name);
     if (st->module_info.description)
         fprintf(stdout, ": %s\">", st->module_info.description);
@@ -61,7 +61,7 @@ void G__usage_html(void)
     fprintf(stdout, "\n");
     if (st->module_info.keywords) {
         fprintf(stdout, " <meta name=\"keywords\" content=\"");
-        G__print_keywords(stdout, NULL);
+        G__print_keywords(stdout, NULL, FALSE);
         fprintf(stdout, "\">");
         fprintf(stdout, "\n");
     }
@@ -87,7 +87,7 @@ void G__usage_html(void)
 
     fprintf(stdout, "<h2>%s</h2>\n", _("KEYWORDS"));
     if (st->module_info.keywords) {
-        G__print_keywords(stdout, print_escaped_for_html_keywords);
+        G__print_keywords(stdout, print_escaped_for_html_keywords, FALSE);
         fprintf(stdout, "\n");
     }
     fprintf(stdout, "<h2>%s</h2>\n", _("SYNOPSIS"));

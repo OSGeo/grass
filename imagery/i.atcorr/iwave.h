@@ -85,6 +85,9 @@ private:
     void planetscope0e(int iwa);
     void planetscope0f10(int iwa);
     void worldview4(int iwa);
+    void aviris(int iwa);
+    void hyperion_vnir(int iwa);
+    void hyperion_swir(int iwa);
 
 public:
     /* To compute the equivalent wavelength needed for the calculation of the

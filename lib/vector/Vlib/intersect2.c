@@ -343,8 +343,8 @@ static int cross_seg(int i, int j, int b)
 #define QEVT_OUT         2
 #define QEVT_CRS         3
 
-#define GET_PARENT(p, c) ((p) = (int)(((c)-2) / 3 + 1))
-#define GET_CHILD(c, p)  ((c) = (int)(((p)*3) - 1))
+#define GET_PARENT(p, c) ((p) = (int)(((c) - 2) / 3 + 1))
+#define GET_CHILD(c, p)  ((c) = (int)(((p) * 3) - 1))
 
 struct qitem {
     int l; /* line 0 - A line , 1 - B line */
@@ -665,6 +665,8 @@ static int boq_load(struct boq *q, struct line_pnts *Pnts,
  * \param BPoints second input line or NULL
  * \param[out] ALines array of new lines created from original A line
  * \param[out] BLines array of new lines created from original B line
+ * \param pABox
+ * \param pBBox
  * \param[out] nalines number of new lines (ALines)
  * \param[out] nblines number of new lines (BLines)
  * \param with_z 3D, not supported!
@@ -1122,7 +1124,7 @@ int Vect_line_intersection2(struct line_pnts *APoints,
                 /* add first points of segments between last and current seg */
                 for (j = last_seg + 1; j <= seg; j++) {
                     G_debug(2, "  segment j = %d", j);
-                    /* skipp vertex identical to last break */
+                    /* skip vertex identical to last break */
                     if ((j == last_seg + 1) && Points->x[j] == last_x &&
                         Points->y[j] == last_y) {
                         G_debug(2, "   -> skip (identical to last break)");

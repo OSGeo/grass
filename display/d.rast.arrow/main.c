@@ -3,7 +3,7 @@
  * MODULE:       d.rast.arrow
  * AUTHOR(S):    Chris Rewerts, Agricultural Engineering, Purdue University
  * PURPOSE:      Draw arrows on slope/aspect maps.
- * COPYRIGHT:    (C) 2000, 2010 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2000, 2010, 2023 by the GRASS Development Team
  *
  *              This program is free software under the GNU General Public
  *              License (>=v2). Read the file COPYING that comes with GRASS
@@ -13,9 +13,9 @@
 
 /* some minor cleanup done by Andreas Lange, andreas.lange@rhein-main.de
  * Update to handle NULLs and floating point aspect maps: Hamish Bowman, Aug
- * 2004 Update for 360 degree arrows and magnitude scaling:  Hamish Bowman, Oct
- * 2005 Align grids with raster cells: Huidae Cho, Apr 2009 Drainage aspect
- * type: Huidae Cho, Sep 2015
+ * 2004; Update for 360 degree arrows and magnitude scaling:  Hamish Bowman, Oct
+ * 2005; Align grids with raster cells: Huidae Cho, Apr 2009; Drainage aspect
+ * type: Huidae Cho, Sep 2015; Terraflow type: Huidae Cho, May 2023
  */
 
 /*
@@ -107,7 +107,7 @@ int main(int argc, char **argv)
     opt2->type = TYPE_STRING;
     opt2->required = NO;
     opt2->answer = "grass";
-    opt2->options = "grass,compass,drainage,agnps,answers";
+    opt2->options = "grass,compass,drainage,agnps,answers,terraflow";
     opt2->description = _("Type of existing raster aspect map");
 
     opt3 = G_define_standard_option(G_OPT_C);
@@ -198,6 +198,8 @@ int main(int argc, char **argv)
         map_type = 4;
     else if (strcmp("drainage", opt2->answer) == 0)
         map_type = 5;
+    else if (strcmp("terraflow", opt2->answer) == 0)
+        map_type = 6;
 
     scale = atof(opt8->answer);
     if (scale <= 0.0)
@@ -377,7 +379,8 @@ int main(int argc, char **argv)
 
             /* treat AGNPS and ANSWERS data like old zero-as-null CELL */
             /*   TODO: update models */
-            if (map_type == 2 || map_type == 3 || map_type == 5) {
+            if (map_type == 2 || map_type == 3 || map_type == 5 ||
+                map_type == 6) {
                 if (Rast_is_null_value(ptr, raster_type))
                     aspect_c = 0;
                 else if (map_type == 5 && aspect_f < 0)
@@ -545,6 +548,53 @@ int main(int argc, char **argv)
                     break;
                 case 8:
                     arrow_e();
+                    break;
+                default:
+                    /* only draw if unknown_color is not none */
+                    if (unknown_color > 0) {
+                        D_use_color(unknown_color);
+                        unknown_();
+                        D_use_color(arrow_color);
+                    }
+                    break;
+                }
+            }
+
+            /* case switch for r.terraflow direction type aspect map */
+            else if (map_type == 6) {
+                D_use_color(arrow_color);
+                switch (aspect_c) {
+                case 0:
+                    /* only draw if x_color is not none (transparent) */
+                    if (x_color > 0) {
+                        D_use_color(x_color);
+                        draw_x();
+                        D_use_color(arrow_color);
+                    }
+                    break;
+                case 1:
+                    arrow_e();
+                    break;
+                case 2:
+                    arrow_se();
+                    break;
+                case 4:
+                    arrow_s();
+                    break;
+                case 8:
+                    arrow_sw();
+                    break;
+                case 16:
+                    arrow_w();
+                    break;
+                case 32:
+                    arrow_nw();
+                    break;
+                case 64:
+                    arrow_n();
+                    break;
+                case 128:
+                    arrow_ne();
                     break;
                 default:
                     /* only draw if unknown_color is not none */

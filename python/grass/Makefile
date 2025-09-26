@@ -9,6 +9,7 @@ SUBDIRS = \
 	app \
 	benchmark \
 	exceptions \
+	experimental \
 	grassdb \
 	gunittest \
 	imaging \
@@ -18,6 +19,7 @@ SUBDIRS = \
 	script \
 	semantic_label \
 	temporal \
+	tools \
 	utils
 
 default: $(PYDIR)/__init__.py

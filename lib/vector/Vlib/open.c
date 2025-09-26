@@ -33,14 +33,14 @@
 #include "pg_local_proto.h"
 #endif
 
-/*
-   \brief Number of levels
-
-   - 1 without topology
-   - 2 with 2D topology
-
-   \todo Implement
-   - 3 with 3D topology
+/**
+ * @brief Number of levels
+ *
+ * - 1 without topology
+ * - 2 with 2D topology
+ *
+ * @todo Implement
+ *   - 3 with 3D topology
  */
 #define MAX_OPEN_LEVEL 2
 
@@ -572,6 +572,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
             if (access(file_path, F_OK) == 0) /* fidx file exists? */
                 unlink(file_path);
         }
+        Map->support_updated = TRUE;
     }
 
     return level;
@@ -602,7 +603,7 @@ int Vect_open_old(struct Map_info *Map, const char *name, const char *mapset)
    \brief Open existing temporary vector map for reading
 
    Temporary vector maps are stored in the current mapset (directory
-   <tt>.tmp/<hostname>/vector</tt>).
+   <tt>.tmp/\<hostname\>/vector</tt>).
 
    Calls G_fatal_error() on failure.
 
@@ -670,7 +671,7 @@ int Vect_open_update(struct Map_info *Map, const char *name, const char *mapset)
    \brief Open existing temporary vector map for reading/writing
 
    Temporary vector maps are stored in the current mapset (directory
-   <tt>.tmp/<hostname>/vector</tt>).
+   <tt>.tmp/\<hostname\>/vector</tt>).
 
    By default list of updated features is not maintained, see
    Vect_set_updated() for details.
@@ -752,7 +753,6 @@ int Vect_open_old_head(struct Map_info *Map, const char *name,
    \param mapset mapset name ("" for search path)
    \param layer layer name (OGR format)
 
-   \param[out] Map pointer to Map_info structure
    \param name name of vector map to open (datasource for direct OGR access)
    \param mapset mapset name ("" for search path, "OGR" for direct OGR access)
    \param layer layer name (OGR layer for direct OGR access)
@@ -966,7 +966,7 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
    \brief Create new temporary vector map
 
    Temporary vector maps are stored in the current mapset (directory
-   <tt>.tmp/<hostname>/vector</tt>). If the map already exists, it is
+   <tt>.tmp/\<hostname\>/vector</tt>). If the map already exists, it is
    overwritten.
 
    Temporary vector maps are automatically deleted when closing the map
@@ -987,10 +987,10 @@ int Vect_open_tmp_new(struct Map_info *Map, const char *name, int with_z)
     char tmp_name[GNAME_MAX];
 
     if (!name) {
-        sprintf(tmp_name, "tmp_%d", getpid());
+        snprintf(tmp_name, sizeof(tmp_name), "tmp_%d", getpid());
     }
     else {
-        sprintf(tmp_name, "%s", name);
+        snprintf(tmp_name, sizeof(tmp_name), "%s", name);
     }
     G_debug(1, "Vect_open_tmp_new(): name = '%s' with_z = %d", name, with_z);
 
@@ -1006,7 +1006,7 @@ int Vect_open_tmp_new(struct Map_info *Map, const char *name, int with_z)
    \return 1 on success
    \return 0 on error
  */
-int Vect_coor_info(const struct Map_info *Map, struct Coor_info *Info)
+int Vect_coor_info(struct Map_info *Map, struct Coor_info *Info)
 {
     char file_path[GPATH_MAX];
     struct stat stat_buf;
@@ -1064,24 +1064,24 @@ int Vect_coor_info(const struct Map_info *Map, struct Coor_info *Info)
    \return maptype string on success (allocated by G_store())
    \return error message on error
  */
-const char *Vect_maptype_info(const struct Map_info *Map)
+const char *Vect_maptype_info(struct Map_info *Map)
 {
     char maptype[1000];
 
     switch (Map->format) {
     case GV_FORMAT_NATIVE:
-        sprintf(maptype, "native");
+        snprintf(maptype, sizeof(maptype), "native");
         break;
     case GV_FORMAT_OGR:
     case GV_FORMAT_OGR_DIRECT:
-        sprintf(maptype, "OGR");
+        snprintf(maptype, sizeof(maptype), "OGR");
         break;
     case GV_FORMAT_POSTGIS:
-        sprintf(maptype, "PostGIS");
+        snprintf(maptype, sizeof(maptype), "PostGIS");
         break;
     default:
-        sprintf(maptype, _("unknown %d (update Vect_maptype_info)"),
-                Map->format);
+        snprintf(maptype, sizeof(maptype),
+                 _("unknown %d (update Vect_maptype_info)"), Map->format);
     }
 
     return G_store(maptype);
@@ -1100,7 +1100,7 @@ const char *Vect_maptype_info(const struct Map_info *Map)
 
    \return map format code
  */
-int Vect_maptype(const struct Map_info *Map)
+int Vect_maptype(struct Map_info *Map)
 {
     if (Map->temporary) {
         const struct Format_info *finfo;
@@ -1489,16 +1489,22 @@ int map_format(struct Map_info *Map)
 
    \return buffer containing path
  */
-char *Vect__get_path(char *path, const struct Map_info *Map)
+char *Vect__get_path(char *path, struct Map_info *Map)
 {
     if (Map->temporary) {
         char path_tmp[GPATH_MAX];
 
         G__temp_element(path_tmp, TRUE);
-        sprintf(path, "%s/%s/%s", path_tmp, GV_DIRECTORY, Map->name);
+        if (snprintf(path, GPATH_MAX, "%s/%s/%s", path_tmp, GV_DIRECTORY,
+                     Map->name) >= GPATH_MAX)
+            G_fatal_error(_("Filepath '%s/%s' exceeds max length"), path_tmp,
+                          Map->name);
     }
     else {
-        sprintf(path, "%s/%s", GV_DIRECTORY, Map->name);
+        if (snprintf(path, GPATH_MAX, "%s/%s", GV_DIRECTORY, Map->name) >=
+            GPATH_MAX)
+            G_fatal_error(_("Filepath '%s/%s' exceeds max length"),
+                          GV_DIRECTORY, Map->name);
     }
 
     return path;
@@ -1514,7 +1520,7 @@ char *Vect__get_path(char *path, const struct Map_info *Map)
 
    \return allocated buffer containing path
  */
-char *Vect__get_element_path(char *file_path, const struct Map_info *Map,
+char *Vect__get_element_path(char *file_path, struct Map_info *Map,
                              const char *element)
 {
     char path[GPATH_MAX];

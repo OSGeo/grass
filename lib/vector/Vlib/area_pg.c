@@ -34,7 +34,7 @@ static PGresult *build_stmt(const struct Plus_head *,
    \return number of points
    \return -1 on error
  */
-int Vect__get_area_points_pg(const struct Map_info *Map, const plus_t *lines,
+int Vect__get_area_points_pg(struct Map_info *Map, const plus_t *lines,
                              int n_lines, struct line_pnts *APoints)
 {
     int i, direction;
@@ -92,7 +92,7 @@ PGresult *build_stmt(const struct Plus_head *plus,
         BLine = plus->Line[line];
         if (i > 0)
             strcat(stmt_id, ",");
-        sprintf(buf_id, "%d", (int)BLine->offset);
+        snprintf(buf_id, sizeof(buf_id), "%d", (int)BLine->offset);
         strcat(stmt_id, buf_id);
     }
     /* Not really working - why?

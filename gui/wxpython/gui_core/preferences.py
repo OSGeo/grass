@@ -28,6 +28,8 @@ This program is free software under the GNU General Public License
 import os
 import sys
 
+from pathlib import Path
+
 try:
     import pwd
 
@@ -36,12 +38,13 @@ except ImportError:
     havePwd = False
 
 import wx
+from wx.lib.agw import aui
 import wx.lib.colourselect as csel
 import wx.lib.mixins.listctrl as listmix
 import wx.lib.scrolledpanel as SP
 
 from grass.pydispatch.signal import Signal
-import grass.script as grass
+import grass.script as gs
 from grass.exceptions import OpenError
 
 from core import globalvar
@@ -112,7 +115,8 @@ class PreferencesBaseDialog(wx.Dialog):
         self.btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
         self.btnSave.SetToolTip(
             _(
-                "Apply and save changes to user settings file (default for next sessions)"
+                "Apply and save changes to user settings file (default for next "
+                "sessions)"
             )
         )
         self.btnSave.SetDefault()
@@ -189,19 +193,11 @@ class PreferencesBaseDialog(wx.Dialog):
         """Button 'Cancel' pressed"""
         self.Close()
 
-    def OnSave(self, event):
+    def OnSave(self, event, force=False):
         """Button 'Save' pressed
         Emits signal settingsChanged.
         """
-        if self._updateSettings():
-            lang = self.settings.Get(group="language", key="locale", subkey="lc_all")
-            if lang == "system":
-                # Most fool proof way to use system locale is to not provide
-                # any locale info at all
-                self.settings.Set(
-                    group="language", key="locale", subkey="lc_all", value=None
-                )
-                lang = None
+        if force is True or self._updateSettings():
             self.settings.SaveToFile()
             Debug.msg(1, "Settings saved to file '%s'" % self.settings.filePath)
             self.settingsChanged.emit()
@@ -320,34 +316,6 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         gridSizer.Add(askOnQuit, pos=(row, 0), span=(1, 2))
 
-        row += 1
-        hideSearch = wx.CheckBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=_("Hide '%s' tab (requires GUI restart)") % _("Tools"),
-            name="IsChecked",
-        )
-        hideSearch.SetValue(
-            self.settings.Get(group="manager", key="hideTabs", subkey="search")
-        )
-        self.winId["manager:hideTabs:search"] = hideSearch.GetId()
-
-        gridSizer.Add(hideSearch, pos=(row, 0), span=(1, 2))
-
-        row += 1
-        hidePyShell = wx.CheckBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=_("Hide '%s' tab (requires GUI restart)") % _("Python"),
-            name="IsChecked",
-        )
-        hidePyShell.SetValue(
-            self.settings.Get(group="manager", key="hideTabs", subkey="pyshell")
-        )
-        self.winId["manager:hideTabs:pyshell"] = hidePyShell.GetId()
-
-        gridSizer.Add(hidePyShell, pos=(row, 0), span=(1, 2))
-
         #
         # Selected text is copied to clipboard
         #
@@ -365,15 +333,125 @@ class PreferencesDialog(PreferencesBaseDialog):
                 group="manager", key="copySelectedTextToClipboard", subkey="enabled"
             )
         )
-        self.winId[
-            "manager:copySelectedTextToClipboard:enabled"
-        ] = copySelectedTextToClipboard.GetId()
+        self.winId["manager:copySelectedTextToClipboard:enabled"] = (
+            copySelectedTextToClipboard.GetId()
+        )
 
         gridSizer.Add(copySelectedTextToClipboard, pos=(row, 0), span=(1, 2))
 
         gridSizer.AddGrowableCol(0)
         sizer.Add(gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
+
+        #
+        # Layout settings
+        #
+        box = StaticBox(
+            parent=panel, id=wx.ID_ANY, label=" {} ".format(_("Layout settings"))
+        )
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
+
+        row = 0
+        defaultPos = wx.CheckBox(
+            parent=panel,
+            id=wx.ID_ANY,
+            label=_("Save current window layout as default"),
+            name="IsChecked",
+        )
+        defaultPos.SetValue(
+            self.settings.Get(group="general", key="defWindowPos", subkey="enabled")
+        )
+        defaultPos.SetToolTip(
+            wx.ToolTip(
+                _(
+                    "Save current position and size of Layer Manager window and opened "
+                    "Map Display window(s) and use as default for next sessions."
+                )
+            )
+        )
+        self.winId["general:defWindowPos:enabled"] = defaultPos.GetId()
+
+        gridSizer.Add(defaultPos, pos=(row, 0), span=(1, 2))
+
+        row += 1
+        singleWinPanesLayoutPos = wx.CheckBox(
+            parent=panel,
+            id=wx.ID_ANY,
+            label=_("Save current single window panes layout as default"),
+            name="SingleWinPanesLayoutPos",
+        )
+        singleWinPanesLayoutPos.SetValue(
+            self.settings.Get(
+                group="general",
+                key="singleWinPanesLayoutPos",
+                subkey="enabled",
+            )
+        )
+        singleWinPanesLayoutPos.SetToolTip(
+            wx.ToolTip(
+                _(
+                    "Save current position and size of single-window mode panes"
+                    " and use as default for next sessions."
+                )
+            )
+        )
+        if not self.settings.Get(
+            group="appearance",
+            key="singleWindow",
+            subkey="enabled",
+        ):
+            singleWinPanesLayoutPos.Disable()
+        self.winId["general:singleWinPanesLayoutPos:enabled"] = (
+            singleWinPanesLayoutPos.GetId()
+        )
+
+        gridSizer.Add(singleWinPanesLayoutPos, pos=(row, 0), span=(1, 2))
+
+        row += 1
+        hideSearch = wx.CheckBox(
+            parent=panel,
+            id=wx.ID_ANY,
+            label=_("Hide '{}' tab (requires GUI restart)").format(_("Tools")),
+            name="IsChecked",
+        )
+        hideSearch.SetValue(
+            self.settings.Get(group="manager", key="hideTabs", subkey="search")
+        )
+        self.winId["manager:hideTabs:search"] = hideSearch.GetId()
+
+        gridSizer.Add(hideSearch, pos=(row, 0), span=(1, 2))
+
+        row += 1
+        hideHistory = wx.CheckBox(
+            parent=panel,
+            id=wx.ID_ANY,
+            label=_("Hide '{}' tab (requires GUI restart)").format(_("History")),
+            name="IsChecked",
+        )
+        hideHistory.SetValue(
+            self.settings.Get(group="manager", key="hideTabs", subkey="history")
+        )
+        self.winId["manager:hideTabs:history"] = hideHistory.GetId()
+
+        gridSizer.Add(hideHistory, pos=(row, 0), span=(1, 2))
+
+        row += 1
+        hidePyShell = wx.CheckBox(
+            parent=panel,
+            id=wx.ID_ANY,
+            label=_("Hide '{}' tab (requires GUI restart)").format(_("Python")),
+            name="IsChecked",
+        )
+        hidePyShell.SetValue(
+            self.settings.Get(group="manager", key="hideTabs", subkey="pyshell")
+        )
+        self.winId["manager:hideTabs:pyshell"] = hidePyShell.GetId()
+
+        gridSizer.Add(hidePyShell, pos=(row, 0), span=(1, 2))
+        sizer.Add(gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
+
         #
         # Data catalog settings
         #
@@ -421,7 +499,6 @@ class PreferencesDialog(PreferencesBaseDialog):
         gridSizer.Add(posDisplay, pos=(row, 0), span=(1, 2))
 
         row += 1
-
         posManager = wx.CheckBox(
             parent=panel,
             id=wx.ID_ANY,
@@ -436,28 +513,6 @@ class PreferencesDialog(PreferencesBaseDialog):
         self.winId["general:workspace:posManager:enabled"] = posManager.GetId()
 
         gridSizer.Add(posManager, pos=(row, 0), span=(1, 2))
-
-        row += 1
-        defaultPos = wx.CheckBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=_("Save current window layout as default"),
-            name="IsChecked",
-        )
-        defaultPos.SetValue(
-            self.settings.Get(group="general", key="defWindowPos", subkey="enabled")
-        )
-        defaultPos.SetToolTip(
-            wx.ToolTip(
-                _(
-                    "Save current position and size of Layer Manager window and opened "
-                    "Map Display window(s) and use as default for next sessions."
-                )
-            )
-        )
-        self.winId["general:defWindowPos:enabled"] = defaultPos.GetId()
-
-        gridSizer.Add(defaultPos, pos=(row, 0), span=(1, 2))
 
         gridSizer.AddGrowableCol(0)
         sizer.Add(gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
@@ -546,6 +601,20 @@ class PreferencesDialog(PreferencesBaseDialog):
         outfontButton = Button(parent=panel, id=wx.ID_ANY, label=_("Set font"))
         gridSizer.Add(
             outfontButton, flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, pos=(row, 1)
+        )
+
+        # module HTML manual page font settings
+        row = 1
+        gridSizer.Add(
+            StaticText(parent=panel, id=wx.ID_ANY, label=_("Font for manual pages:")),
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
+            pos=(row, 0),
+        )
+        manPageFontButton = Button(parent=panel, id=wx.ID_ANY, label=_("Set font"))
+        gridSizer.Add(
+            manPageFontButton,
+            flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL,
+            pos=(row, 1),
         )
         gridSizer.AddGrowableCol(0)
 
@@ -791,6 +860,8 @@ class PreferencesDialog(PreferencesBaseDialog):
             outfontButton.Bind(wx.EVT_BUTTON, self.OnSetOutputFontCustomDialog)
         else:
             outfontButton.Bind(wx.EVT_BUTTON, self.OnSetOutputFont)
+
+        manPageFontButton.Bind(wx.EVT_BUTTON, self.OnSetManualPageFontDialog)
 
         return panel
 
@@ -1068,10 +1139,10 @@ class PreferencesDialog(PreferencesBaseDialog):
         #
 
         # see initialization of nviz GLWindow
-        if globalvar.CheckWxVersion(version=[2, 8, 11]) and sys.platform not in (
+        if globalvar.CheckWxVersion(version=[2, 8, 11]) and sys.platform not in {
             "win32",
             "darwin",
-        ):
+        }:
             box = StaticBox(
                 parent=panel,
                 id=wx.ID_ANY,
@@ -1215,6 +1286,56 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         gridSizer.Add(verbosity, pos=(row, 1), flag=wx.ALIGN_RIGHT)
 
+        row += 1
+        # nprocs
+        gridSizer.Add(
+            StaticText(
+                parent=panel,
+                id=wx.ID_ANY,
+                label=_(
+                    "Number of threads for parallel computing (supported tools only):"
+                ),
+            ),
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
+            pos=(row, 0),
+        )
+        self.nprocs = TextCtrl(
+            parent=panel,
+            id=wx.ID_ANY,
+            value=gs.gisenv().get("NPROCS", ""),
+            validator=IntegerValidator(),
+            name="NumberOfProcs",
+        )
+        gridSizer.Add(
+            self.nprocs,
+            flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL,
+            pos=(row, 1),
+        )
+
+        row += 1
+        # memorymb
+        gridSizer.Add(
+            StaticText(
+                parent=panel,
+                id=wx.ID_ANY,
+                label=_("Maximum memory in MB to be used (supported tools only):"),
+            ),
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
+            pos=(row, 0),
+        )
+        self.memorymb = TextCtrl(
+            parent=panel,
+            id=wx.ID_ANY,
+            value=gs.gisenv().get("MEMORYMB", ""),
+            validator=IntegerValidator(),
+            name="MemorySizeMB",
+        )
+        gridSizer.Add(
+            self.memorymb,
+            flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL,
+            pos=(row, 1),
+        )
+
         gridSizer.AddGrowableCol(0)
         sizer.Add(gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
@@ -1351,9 +1472,9 @@ class PreferencesDialog(PreferencesBaseDialog):
                 subkey=["transparent", "enabled"],
             )
         )
-        self.winId[
-            "vectorLayer:featureColor:transparent:enabled"
-        ] = transpFeature.GetId()
+        self.winId["vectorLayer:featureColor:transparent:enabled"] = (
+            transpFeature.GetId()
+        )
         gridSizer.Add(transpFeature, pos=(row, col + 1), flag=wx.ALIGN_CENTER_VERTICAL)
 
         # area fill color
@@ -1685,7 +1806,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                 "displayed in the lower-left of the Map "
                 "Display\nwindow's status bar. It is purely "
                 "cosmetic and does not affect the working "
-                "location's\nprojection in any way. You will "
+                "project's\ncoordinate reference system in any way. You will "
                 "need to enable the Projection check box in "
                 "the drop-down\nmenu located at the bottom "
                 "of the Map Display window.\n"
@@ -1699,7 +1820,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         epsgCode = wx.ComboBox(
             parent=panel, id=wx.ID_ANY, name="GetValue", size=(150, -1)
         )
-        self.epsgCodeDict = dict()
+        self.epsgCodeDict = {}
         epsgCode.SetValue(
             str(self.settings.Get(group="projection", key="statusbar", subkey="epsg"))
         )
@@ -1830,32 +1951,65 @@ class PreferencesDialog(PreferencesBaseDialog):
         #
         # update default window dimension
         #
-        if (
-            self.settings.Get(group="general", key="defWindowPos", subkey="enabled")
-            is True
-        ):
-            dim = ""
-            # layer manager
+        windows_pos = self.settings.Get(
+            group="general",
+            key="defWindowPos",
+            subkey="enabled",
+        )
+        single_window = self.settings.Get(
+            group="appearance",
+            key="singleWindow",
+            subkey="enabled",
+        )
+        if windows_pos:
+            # get dimension of main window
             pos = self.parent.GetPosition()
             size = self.parent.GetSize()
-            dim = "%d,%d,%d,%d" % (pos[0], pos[1], size[0], size[1])
-            # opened displays
+            dim = f"{pos[0]},{pos[1]},{size[0]},{size[1]}"
+
+            # extend dimension by dimensions of opened displays
             for mapdisp in self._giface.GetAllMapDisplays():
                 pos = mapdisp.GetPosition()
                 size = mapdisp.GetSize()
 
                 # window size must be larger than zero, not minimized
-                # when mapdisp is inside single window (panel has no IsIconized), don't save dim
-                if (
-                    hasattr(mapdisp, "IsIconized")
-                    and not mapdisp.IsIconized()
-                    and (size[0] > 0 and size[1] > 0)
+                # do not save dim when mapdisp is docked within single window
+                if (not mapdisp.IsDockable() or not mapdisp.IsDocked()) and (
+                    size[0] > 0 and size[1] > 0
                 ):
-                    dim += ",%d,%d,%d,%d" % (pos[0], pos[1], size[0], size[1])
+                    dim += f",{pos[0]},{pos[1]},{size[0]},{size[1]}"
 
-            self.settings.Set(
-                group="general", key="defWindowPos", subkey="dim", value=dim
-            )
+            if single_window:
+                # single window mode
+                self.settings.Set(
+                    group="general",
+                    key="defWindowPos",
+                    subkey="dimSingleWindow",
+                    value=dim,
+                )
+            else:
+                # multi window mode
+                self.settings.Set(
+                    group="general", key="defWindowPos", subkey="dim", value=dim
+                )
+
+        #
+        # update single window panes layout
+        #
+        single_win_panes_layout_pos = self.settings.Get(
+            group="general",
+            key="singleWinPanesLayoutPos",
+            subkey="enabled",
+        )
+        if single_window and single_win_panes_layout_pos:
+            aui_manager = aui.GetManager(self.parent)
+            if aui_manager:
+                self.settings.Set(
+                    group="general",
+                    key="singleWinPanesLayoutPos",
+                    subkey="pos",
+                    value=aui_manager.SavePerspective(),
+                )
 
         return True
 
@@ -1869,8 +2023,6 @@ class PreferencesDialog(PreferencesBaseDialog):
 
     def OnLoadEpsgCodes(self, event):
         """Load EPSG codes from the file"""
-        win = self.FindWindowById(self.winId["projection:statusbar:projFile"])
-        path = win.GetValue()
         epsgCombo = self.FindWindowById(self.winId["projection:statusbar:epsg"])
         wx.BeginBusyCursor()
         try:
@@ -1885,14 +2037,14 @@ class PreferencesDialog(PreferencesBaseDialog):
             )
             return
 
-        if isinstance(self.epsgCodeDict, type("")):
+        if isinstance(self.epsgCodeDict, str):
             wx.MessageBox(
                 parent=self,
                 message=_("Unable to read EPSG codes: %s") % self.epsgCodeDict,
                 caption=_("Error"),
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
-            self.epsgCodeDict = dict()
+            self.epsgCodeDict = {}
             epsgCombo.SetItems([])
             epsgCombo.SetValue("")
             self.FindWindowById(self.winId["projection:statusbar:proj4"]).SetValue("")
@@ -1972,7 +2124,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                     GError(
                         parent=self,
                         message=_(
-                            "Failed to set default display font. " "Try different font."
+                            "Failed to set default display font. Try different font."
                         ),
                         showTraceback=True,
                     )
@@ -2020,7 +2172,6 @@ class PreferencesDialog(PreferencesBaseDialog):
         size = self.settings.Get(group="appearance", key="outputfont", subkey="size")
         if size is None or size == 0:
             size = 11
-        size = float(size)
         if type is None or type == "":
             type = "Courier"
 
@@ -2035,8 +2186,7 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         dlg = wx.FontDialog(self, fontdata)
 
-        "FIXME: native font dialog does not initialize with current font"
-
+        # FIXME: native font dialog does not initialize with current font
         if dlg.ShowModal() == wx.ID_OK:
             outdata = dlg.GetFontData()
             font = outdata.GetChosenFont()
@@ -2057,6 +2207,49 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         event.Skip()
 
+    def OnSetManualPageFontDialog(self, event):
+        """Set font for module HTML manual page dialog"""
+        data = {}
+        font_point_size = self.settings.Get(
+            group="appearance",
+            key="manualPageFont",
+            subkey="pointSize",
+        )
+        font_face_name = self.settings.Get(
+            group="appearance",
+            key="manualPageFont",
+            subkey="faceName",
+        )
+        if font_point_size:
+            font_data = wx.FontData()
+            font = wx.Font(
+                pointSize=font_point_size,
+                family=wx.FONTFAMILY_MODERN,
+                style=wx.NORMAL,
+                weight=wx.FONTWEIGHT_NORMAL,
+                faceName=font_face_name,
+            )
+            font_data.SetInitialFont(font)
+            data["data"] = font_data
+        dlg = wx.FontDialog(parent=self, **data)
+        if dlg.ShowModal() == wx.ID_OK:
+            font_data = dlg.GetFontData()
+            font = font_data.GetChosenFont()
+            self.settings.Set(
+                group="appearance",
+                value=font.GetFaceName(),
+                key="manualPageFont",
+                subkey="faceName",
+            )
+            self.settings.Set(
+                group="appearance",
+                value=font.GetPointSize(),
+                key="manualPageFont",
+                subkey="pointSize",
+            )
+        dlg.Destroy()
+        event.Skip()
+
     def OnSetSymbol(self, event):
         """Opens symbol dialog"""
         winId = self.winId["vectorLayer:point:symbol"]
@@ -2074,12 +2267,53 @@ class PreferencesDialog(PreferencesBaseDialog):
         """Enable/disable wheel zoom mode control"""
         choiceId = self.winId["display:mouseWheelZoom:selection"]
         choice = self.FindWindowById(choiceId)
-        if choice.GetSelection() == 2:
-            enable = False
-        else:
-            enable = True
+        enable = choice.GetSelection() != 2
         scrollId = self.winId["display:scrollDirection:selection"]
         self.FindWindowById(scrollId).Enable(enable)
+
+    def OnSave(self, event):
+        """Button 'Save' pressed
+        Emits signal settingsChanged.
+        """
+        if self._updateSettings():
+            lang = self.settings.Get(group="language", key="locale", subkey="lc_all")
+            if lang == "system":
+                # Most fool proof way to use system locale is to not provide
+                # any locale info at all
+                self.settings.Set(
+                    group="language", key="locale", subkey="lc_all", value=None
+                )
+                lang = None
+            env = gs.gisenv()
+
+            # Set gisenv MEMORYMB var value
+            memorydb_gisenv = "MEMORYMB"
+            memorymb = self.memorymb.GetValue()
+            if memorymb:
+                gs.run_command(
+                    "g.gisenv",
+                    set=f"{memorydb_gisenv}={memorymb}",
+                )
+            elif env.get(memorydb_gisenv):
+                gs.run_command(
+                    "g.gisenv",
+                    unset=memorydb_gisenv,
+                )
+            # Set gisenv NPROCS var value
+            nprocs_gisenv = "NPROCS"
+            nprocs = self.nprocs.GetValue()
+            if nprocs:
+                gs.run_command(
+                    "g.gisenv",
+                    set=f"{nprocs_gisenv}={nprocs}",
+                )
+            elif env.get(nprocs_gisenv):
+                gs.run_command(
+                    "g.gisenv",
+                    unset=nprocs_gisenv,
+                )
+
+        PreferencesBaseDialog.OnSave(self, event, force=True)
 
 
 class MapsetAccess(wx.Dialog):
@@ -2100,7 +2334,7 @@ class MapsetAccess(wx.Dialog):
 
         self.all_mapsets_ordered = ListOfMapsets(get="ordered")
         self.accessible_mapsets = ListOfMapsets(get="accessible")
-        self.curr_mapset = grass.gisenv()["MAPSET"]
+        self.curr_mapset = gs.gisenv()["MAPSET"]
 
         # make a checklistbox from available mapsets and check those that are
         # active
@@ -2183,28 +2417,27 @@ class CheckListMapset(ListCtrl, listmix.ListCtrlAutoWidthMixin, CheckListCtrlMix
         """Load data into list"""
         self.InsertColumn(0, _("Mapset"))
         self.InsertColumn(1, _("Owner"))
-        ### self.InsertColumn(2, _('Group'))
-        gisenv = grass.gisenv()
+        # self.InsertColumn(2, _('Group'))
+        gisenv = gs.gisenv()
         locationPath = os.path.join(gisenv["GISDBASE"], gisenv["LOCATION_NAME"])
 
         for mapset in self.parent.all_mapsets_ordered:
             index = self.InsertItem(self.GetItemCount(), mapset)
-            mapsetPath = os.path.join(locationPath, mapset)
-            stat_info = os.stat(mapsetPath)
+            stat_info = Path(locationPath, mapset).stat()
             if havePwd:
                 try:
                     self.SetItem(index, 1, "%s" % pwd.getpwuid(stat_info.st_uid)[0])
                 except KeyError:
                     self.SetItem(index, 1, "nobody")
                 # FIXME: get group name
-                ### self.SetStringItem(index, 2, "%-8s" % stat_info.st_gid)
+                # self.SetStringItem(index, 2, "%-8s" % stat_info.st_gid)
             else:
                 # FIXME: no pwd under MS Windows (owner: 0, group: 0)
                 self.SetItem(index, 1, "%-8s" % stat_info.st_uid)
-                ### self.SetStringItem(index, 2, "%-8s" % stat_info.st_gid)
+                # self.SetStringItem(index, 2, "%-8s" % stat_info.st_gid)
 
         self.SetColumnWidth(col=0, width=wx.LIST_AUTOSIZE)
-        ### self.SetColumnWidth(col = 1, width = wx.LIST_AUTOSIZE)
+        # self.SetColumnWidth(col = 1, width = wx.LIST_AUTOSIZE)
 
     def OnCheckItem(self, index, flag):
         """Mapset checked/unchecked"""

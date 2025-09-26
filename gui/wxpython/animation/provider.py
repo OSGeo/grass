@@ -19,6 +19,7 @@ This program is free software under the GNU General Public License
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
+
 import os
 import sys
 import wx
@@ -92,9 +93,9 @@ class BitmapProvider:
         Applies to 2D mode.
 
         :param cmdsForComposition: list of lists of command lists
-                                   [[['d.rast', 'map=elev_2001'], ['d.vect', 'map=points']], # g.pnmcomp
-                                   [['d.rast', 'map=elev_2002'], ['d.vect', 'map=points']],
-                                   ...]
+                   [[['d.rast', 'map=elev_2001'], ['d.vect', 'map=points']], # g.pnmcomp
+                   [['d.rast', 'map=elev_2002'], ['d.vect', 'map=points']],
+                   ...]
         :param opacities: list of opacity values
         :param regions: list of regions
         """
@@ -120,7 +121,7 @@ class BitmapProvider:
     def _getUniqueCmds(self):
         """Returns list of unique commands.
         Takes into account the region assigned."""
-        unique = list()
+        unique = []
         for cmdList, region in zip(self._cmdsForComposition, self._regions):
             for cmd in cmdList:
                 if region:
@@ -216,8 +217,9 @@ class BitmapProvider:
         """
         Debug.msg(
             2,
-            "BitmapProvider.Load: "
-            "force={f}, bgcolor={b}, nprocs={n}".format(f=force, b=bgcolor, n=nprocs),
+            "BitmapProvider.Load: force={f}, bgcolor={b}, nprocs={n}".format(
+                f=force, b=bgcolor, n=nprocs
+            ),
         )
         cmds = []
         regions = []
@@ -327,9 +329,8 @@ class BitmapProvider:
 
         if returncode == 0:
             return BitmapFromImage(autoCropImageFromFile(filename))
-        else:
-            os.remove(filename)
-            raise GException(messages)
+        os.remove(filename)
+        raise GException(messages)
 
 
 class BitmapRenderer:
@@ -427,9 +428,9 @@ class BitmapRenderer:
                 for i in range(len(cmd_list)):
                     proc_list[i].join()
                     filename = queue_list[i].get()
-                    self._mapFilesPool[
-                        HashCmd(cmd_list[i][0], cmd_list[i][1])
-                    ] = filename
+                    self._mapFilesPool[HashCmd(cmd_list[i][0], cmd_list[i][1])] = (
+                        filename
+                    )
                     self._mapFilesPool.SetSize(
                         HashCmd(cmd_list[i][0], cmd_list[i][1]),
                         (self.imageWidth, self.imageHeight),
@@ -540,15 +541,17 @@ class BitmapComposer:
                     proc_list[i].join()
                     filename = queue_list[i].get()
                     if filename is None:
-                        self._bitmapPool[
-                            HashCmds(cmd_lists[i][0], cmd_lists[i][1])
-                        ] = createNoDataBitmap(
-                            self.imageWidth, self.imageHeight, text="Failed to render"
+                        self._bitmapPool[HashCmds(cmd_lists[i][0], cmd_lists[i][1])] = (
+                            createNoDataBitmap(
+                                self.imageWidth,
+                                self.imageHeight,
+                                text="Failed to render",
+                            )
                         )
                     else:
-                        self._bitmapPool[
-                            HashCmds(cmd_lists[i][0], cmd_lists[i][1])
-                        ] = BitmapFromImage(wx.Image(filename))
+                        self._bitmapPool[HashCmds(cmd_lists[i][0], cmd_lists[i][1])] = (
+                            BitmapFromImage(wx.Image(filename))
+                        )
                         os.remove(filename)
                 proc_count = 0
                 proc_list = []
@@ -655,7 +658,7 @@ def CompositeProcess(
     :param tempDir: directory for rendering
     :param cmdList: list of d.rast/d.vect commands
     :param region: region as a dict or None
-    :param opacites: list of opacities
+    :param opacities: list of opacities
     :param bgcolor: background color as a tuple of 3 values 0 to 255
     :param fileQueue: the inter process communication queue
                       storing the file name of the image
@@ -755,14 +758,15 @@ class MapFilesPool(DictRefCounter):
         Debug.msg(4, "MapFilesPool.Clear")
 
         for key in list(self.dictionary.keys()):
-            if self.referenceCount[key] <= 0:
-                name, ext = os.path.splitext(self.dictionary[key])
-                os.remove(self.dictionary[key])
-                if ext == ".ppm":
-                    os.remove(name + ".pgm")
-                del self.dictionary[key]
-                del self.referenceCount[key]
-                del self.size[key]
+            if self.referenceCount[key] > 0:
+                continue
+            name, ext = os.path.splitext(self.dictionary[key])
+            os.remove(self.dictionary[key])
+            if ext == ".ppm":
+                os.remove(name + ".pgm")
+            del self.dictionary[key]
+            del self.referenceCount[key]
+            del self.size[key]
 
 
 class BitmapPool(DictRefCounter):
@@ -894,7 +898,7 @@ def test():
     if os.path.exists(tempDir):
         shutil.rmtree(tempDir)
     os.mkdir(tempDir)
-    # comment this line to keep the directory after prgm ends
+    # comment this line to keep the directory after program ends
     #    cleanUp = CleanUp(tempDir)
     #    import atexit
     #    atexit.register(cleanUp)
@@ -921,7 +925,7 @@ def test():
     prov.mapsLoaded.connect(lambda: sys.stdout.write("Maps loading finished\n"))
     cmdMatrix = layerListToCmdsMatrix(layerList)
     prov.SetCmds(cmdMatrix, [layer.opacity for layer in layerList])
-    app = wx.App()
+    wx.App()
 
     prov.Load(bgcolor=(13, 156, 230), nprocs=4)
 

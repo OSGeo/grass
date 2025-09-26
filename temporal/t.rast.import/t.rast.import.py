@@ -26,7 +26,7 @@
 # % keyword: import
 # % keyword: raster
 # % keyword: time
-# % keyword: create location
+# % keyword: create project
 # %end
 
 # %option G_OPT_F_INPUT
@@ -42,7 +42,6 @@
 # % description: A numerical suffix separated by an underscore will be attached to create a unique identifier
 # % required: no
 # % multiple: no
-# % gisprompt:
 # %end
 
 # %option G_OPT_M_DIR
@@ -68,9 +67,9 @@
 # %end
 
 # %option
-# % key: location
+# % key: project
 # % type: string
-# % description: Create a new location and import the data into it. Do not run this module in parallel or interrupt it when a new location should be created
+# % description: Create a new project and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created
 # % required: no
 # % multiple: no
 # %end
@@ -90,21 +89,21 @@
 
 # %flag
 # % key: e
-# % description: Extend location extents based on new dataset
+# % description: Extend project extents based on new dataset
 # %end
 
 # %flag
 # % key: o
-# % label: Override projection check (use current location's projection)
-# % description: Assume that the dataset has same projection as the current location
+# % label: Override projection check (use current projects's CRS)
+# % description: Assume that the dataset has same coordinate reference system as the current location
 # %end
 
 # %flag
 # % key: c
-# % description: Create the location specified by the "location" parameter and exit. Do not import the space time raster datasets.
+# % description: Create the project specified by the "project" parameter and exit. Do not import the space time raster datasets.
 # %end
 
-import grass.script as grass
+import grass.script as gs
 
 
 def main():
@@ -117,7 +116,7 @@ def main():
     directory = options["directory"]
     title = options["title"]
     descr = options["description"]
-    location = options["location"]
+    location = options["project"]
     base = options["basename"]
     memory = options["memory"]
     set_current_region = flags["r"]
@@ -147,5 +146,5 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

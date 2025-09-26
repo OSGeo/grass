@@ -55,7 +55,6 @@
 # % description: A numerical suffix separated by an underscore will be attached to create a unique identifier
 # % required: yes
 # % multiple: no
-# % gisprompt:
 # %end
 
 # %option
@@ -77,8 +76,7 @@
 # % description: Check the spatial topology of temporally related maps and process only spatially related maps
 # %end
 
-import grass.script as grass
-
+import grass.script as gs
 
 ############################################################################
 
@@ -119,5 +117,5 @@ def main():
 ###############################################################################
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

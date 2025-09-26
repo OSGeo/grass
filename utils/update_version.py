@@ -5,14 +5,14 @@
 import sys
 import datetime
 from types import SimpleNamespace
+from pathlib import Path
 
 import argparse
 
 
 def read_version_file():
     """Return version file content as object instance with attributes"""
-    with open("include/VERSION", encoding="utf-8") as file:
-        lines = file.read().splitlines()
+    lines = Path("include/VERSION").read_text(encoding="utf-8").splitlines()
     return SimpleNamespace(
         major=lines[0], minor=lines[1], micro=lines[2], year=lines[3]
     )
@@ -63,7 +63,7 @@ def suggest_commit(action, version, tag):
     print("use:")
     print(f"  commit_message: 'version: {action} {version}'")
     if tag:
-        print(f"  tag_message: 'GRASS GIS {version}'")
+        print(f"  tag_message: 'GRASS {version}'")
 
 
 def release_candidate(args):
@@ -86,7 +86,7 @@ def release_candidate(args):
         micro=micro,
         year=this_year(),
     )
-    suggest_commit_from_version_file("GRASS GIS", tag=True)
+    suggest_commit_from_version_file("GRASS", tag=True)
 
 
 def release(_unused):
@@ -106,7 +106,7 @@ def release(_unused):
         micro=micro,
         year=this_year(),
     )
-    suggest_commit_from_version_file("GRASS GIS", tag=True)
+    suggest_commit_from_version_file("GRASS", tag=True)
 
 
 def update_micro(_unused):
@@ -143,22 +143,9 @@ def update_minor(args):
     version_file = read_version_file()
     micro = version_file.micro
     minor = int(version_file.minor)
-    if args.dev:
-        if not minor % 2:
-            sys.exit(
-                "Updating to a development-only version "
-                f"from an even minor version '{minor}' is not possible"
-            )
-        minor += 2
-    else:
-        minor += 1
+    minor += 1
     if micro.endswith("dev"):
-        if minor % 2:
-            # Odd is development-only, never released and without micro version.
-            micro = "dev"
-        else:
-            # Even will be released, so adding micro version.
-            micro = "0dev"
+        micro = "0dev"
     else:
         sys.exit("Updating version from a non-dev VERSION file is not possible")
     write_version_file(
@@ -239,14 +226,33 @@ def status(args):
     version_info = read_version_file()
     today = datetime.date.today().isoformat()
     version = construct_version(version_info)
-    if not version_info.micro.endswith("dev"):
-        tag = version
-    else:
-        tag = None
+    tag = version if not version_info.micro.endswith("dev") else None
     if args.bash:
         status_as_bash(version_info=version_info, today=today, version=version, tag=tag)
     else:
         status_as_yaml(version_info=version_info, today=today, version=version, tag=tag)
+
+
+def suggest_message(args):
+    """Print suggestion for a commit message
+
+    Assumes that the version file was changed, but not commited yet,
+    but it does not check that assumption.
+
+    This shows a wrong commit message if going back from RCs,
+    but it is not likely this is needed because the suggestion
+    will be part of the message for the switch and there is
+    no other work to do afterwards except for the commit
+    (unlike updating the version number).
+    """
+    version_info = read_version_file()
+    if not version_info.micro.endswith("dev"):
+        tag = construct_version(version_info)
+        action = "GRASS"
+    else:
+        tag = None
+        action = "Start"
+    suggest_commit_from_version_file(action, tag=tag)
 
 
 def main():
@@ -283,9 +289,6 @@ def main():
     subparser = subparsers.add_parser(
         "minor", help="increase minor (x.Y.z) version (uses dev in micro)"
     )
-    subparser.add_argument(
-        "--dev", action="store_true", help="increase development-only version"
-    )
     subparser.set_defaults(func=update_minor)
 
     subparser = subparsers.add_parser(
@@ -300,6 +303,11 @@ def main():
         "--bash", action="store_true", help="format as Bash variables for eval"
     )
     subparser.set_defaults(func=status)
+
+    subparser = subparsers.add_parser(
+        "suggest", help="suggest a commit message for new version"
+    )
+    subparser.set_defaults(func=suggest_message)
 
     args = parser.parse_args()
     args.func(args)

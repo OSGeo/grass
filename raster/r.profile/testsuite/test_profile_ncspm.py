@@ -3,6 +3,9 @@ from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
 import grass.script.core as gcore
 
+import json
+from itertools import zip_longest
+
 # not used yet
 LOCATION = "nc_spm"
 
@@ -129,6 +132,494 @@ output5 = """
 635746.431136 222663.350636 508.676634 117.672462
 """
 
+output6 = """
+ 0.000000 88.370453 159:255:000
+ 10.000000 88.397057 160:255:000
+ 20.000000 89.526253 174:255:000
+ 30.000000 89.677551 176:255:000
+ 40.000000 91.297195 197:255:000
+ 50.000000 91.297195 197:255:000
+ 60.000000 92.330658 210:255:000
+ 70.000000 93.069199 219:255:000
+ 80.000000 94.768280 240:255:000
+ 90.000000 95.524551 250:255:000
+ 100.000000 96.770805 255:250:000
+ 110.000000 96.770805 255:250:000
+ 120.000000 97.418869 255:246:000
+"""
+
+output7 = """
+ 0.000000 88.370453 #9FFF00
+ 10.000000 88.397057 #A0FF00
+ 20.000000 89.526253 #AEFF00
+ 30.000000 89.677551 #B0FF00
+ 40.000000 91.297195 #C5FF00
+ 50.000000 91.297195 #C5FF00
+ 60.000000 92.330658 #D2FF00
+ 70.000000 93.069199 #DBFF00
+ 80.000000 94.768280 #F0FF00
+ 90.000000 95.524551 #FAFF00
+ 100.000000 96.770805 #FFFA00
+ 110.000000 96.770805 #FFFA00
+ 120.000000 97.418869 #FFF600
+"""
+
+output8 = """
+ 0.000000 88.370453 rgb(159, 255, 0)
+ 10.000000 88.397057 rgb(160, 255, 0)
+ 20.000000 89.526253 rgb(174, 255, 0)
+ 30.000000 89.677551 rgb(176, 255, 0)
+ 40.000000 91.297195 rgb(197, 255, 0)
+ 50.000000 91.297195 rgb(197, 255, 0)
+ 60.000000 92.330658 rgb(210, 255, 0)
+ 70.000000 93.069199 rgb(219, 255, 0)
+ 80.000000 94.768280 rgb(240, 255, 0)
+ 90.000000 95.524551 rgb(250, 255, 0)
+ 100.000000 96.770805 rgb(255, 250, 0)
+ 110.000000 96.770805 rgb(255, 250, 0)
+ 120.000000 97.418869 rgb(255, 246, 0)
+"""
+
+output9 = """
+ 0.000000 88.370453 hsv(82, 100, 100)
+ 10.000000 88.397057 hsv(82, 100, 100)
+ 20.000000 89.526253 hsv(79, 100, 100)
+ 30.000000 89.677551 hsv(78, 100, 100)
+ 40.000000 91.297195 hsv(73, 100, 100)
+ 50.000000 91.297195 hsv(73, 100, 100)
+ 60.000000 92.330658 hsv(70, 100, 100)
+ 70.000000 93.069199 hsv(68, 100, 100)
+ 80.000000 94.768280 hsv(63, 100, 100)
+ 90.000000 95.524551 hsv(61, 100, 100)
+ 100.000000 96.770805 hsv(58, 100, 100)
+ 110.000000 96.770805 hsv(58, 100, 100)
+ 120.000000 97.418869 hsv(57, 100, 100)
+"""
+
+output10 = """distance,value,color
+0.000000,88.370453,"159:255:0"
+10.000000,88.397057,"160:255:0"
+20.000000,89.526253,"174:255:0"
+30.000000,89.677551,"176:255:0"
+40.000000,91.297195,"197:255:0"
+50.000000,91.297195,"197:255:0"
+60.000000,92.330658,"210:255:0"
+70.000000,93.069199,"219:255:0"
+80.000000,94.768280,"240:255:0"
+90.000000,95.524551,"250:255:0"
+100.000000,96.770805,"255:250:0"
+110.000000,96.770805,"255:250:0"
+120.000000,97.418869,"255:246:0"
+"""
+
+output11 = """distance,value,color
+0.000000,88.370453,"rgb(159, 255, 0)"
+10.000000,88.397057,"rgb(160, 255, 0)"
+20.000000,89.526253,"rgb(174, 255, 0)"
+30.000000,89.677551,"rgb(176, 255, 0)"
+40.000000,91.297195,"rgb(197, 255, 0)"
+50.000000,91.297195,"rgb(197, 255, 0)"
+60.000000,92.330658,"rgb(210, 255, 0)"
+70.000000,93.069199,"rgb(219, 255, 0)"
+80.000000,94.768280,"rgb(240, 255, 0)"
+90.000000,95.524551,"rgb(250, 255, 0)"
+100.000000,96.770805,"rgb(255, 250, 0)"
+110.000000,96.770805,"rgb(255, 250, 0)"
+120.000000,97.418869,"rgb(255, 246, 0)"
+"""
+
+output12 = """easting,northing,distance,value,color
+637656.000000,224222.000000,0.000000,88.370453,"hsv(82, 100, 100)"
+637664.540486,224227.201932,10.000000,88.397057,"hsv(82, 100, 100)"
+637673.080972,224232.403865,20.000000,89.526253,"hsv(79, 100, 100)"
+637681.621458,224237.605797,30.000000,89.677551,"hsv(78, 100, 100)"
+637690.161944,224242.807729,40.000000,91.297195,"hsv(73, 100, 100)"
+637698.702430,224248.009662,50.000000,91.297195,"hsv(73, 100, 100)"
+637707.242916,224253.211594,60.000000,92.330658,"hsv(70, 100, 100)"
+637715.783402,224258.413526,70.000000,93.069199,"hsv(68, 100, 100)"
+637724.323887,224263.615459,80.000000,94.768280,"hsv(63, 100, 100)"
+637732.864373,224268.817391,90.000000,95.524551,"hsv(61, 100, 100)"
+637741.404859,224274.019323,100.000000,96.770805,"hsv(58, 100, 100)"
+637749.945345,224279.221256,110.000000,96.770805,"hsv(58, 100, 100)"
+637758.485831,224284.423188,120.000000,97.418869,"hsv(57, 100, 100)"
+"""
+
+output_json_with_color = [
+    {
+        "easting": 637656,
+        "northing": 224222,
+        "distance": 0,
+        "value": 88.37045288085938,
+        "color": "#9FFF00",
+    },
+    {
+        "easting": 637664.5404859307,
+        "northing": 224227.20193233964,
+        "distance": 9.99999999997167,
+        "value": 88.39705657958984,
+        "color": "#A0FF00",
+    },
+    {
+        "easting": 637673.0809718615,
+        "northing": 224232.40386467928,
+        "distance": 19.99999999994334,
+        "value": 89.52625274658203,
+        "color": "#AEFF00",
+    },
+    {
+        "easting": 637681.6214577922,
+        "northing": 224237.6057970189,
+        "distance": 29.999999999915012,
+        "value": 89.67755126953125,
+        "color": "#B0FF00",
+    },
+    {
+        "easting": 637690.161943723,
+        "northing": 224242.80772935855,
+        "distance": 39.99999999988668,
+        "value": 91.29719543457031,
+        "color": "#C5FF00",
+    },
+    {
+        "easting": 637698.7024296537,
+        "northing": 224248.0096616982,
+        "distance": 49.99999999985835,
+        "value": 91.29719543457031,
+        "color": "#C5FF00",
+    },
+    {
+        "easting": 637707.2429155845,
+        "northing": 224253.21159403783,
+        "distance": 59.999999999830024,
+        "value": 92.33065795898438,
+        "color": "#D2FF00",
+    },
+    {
+        "easting": 637715.7834015152,
+        "northing": 224258.41352637747,
+        "distance": 69.9999999998017,
+        "value": 93.06919860839844,
+        "color": "#DBFF00",
+    },
+    {
+        "easting": 637724.323887446,
+        "northing": 224263.6154587171,
+        "distance": 79.99999999977337,
+        "value": 94.76828002929688,
+        "color": "#F0FF00",
+    },
+    {
+        "easting": 637732.8643733767,
+        "northing": 224268.81739105674,
+        "distance": 89.99999999974503,
+        "value": 95.52455139160156,
+        "color": "#FAFF00",
+    },
+    {
+        "easting": 637741.4048593075,
+        "northing": 224274.01932339638,
+        "distance": 99.99999999971669,
+        "value": 96.77080535888672,
+        "color": "#FFFA00",
+    },
+    {
+        "easting": 637749.9453452382,
+        "northing": 224279.22125573602,
+        "distance": 109.99999999968836,
+        "value": 96.77080535888672,
+        "color": "#FFFA00",
+    },
+    {
+        "easting": 637758.485831169,
+        "northing": 224284.42318807566,
+        "distance": 119.99999999966002,
+        "value": 97.41886901855469,
+        "color": "#FFF600",
+    },
+]
+
+output_json_with_color_rgb = [
+    {
+        "easting": 637656,
+        "northing": 224222,
+        "distance": 0,
+        "value": 88.37045288085938,
+        "color": "rgb(159, 255, 0)",
+    },
+    {
+        "easting": 637664.5404859307,
+        "northing": 224227.20193233964,
+        "distance": 9.99999999997167,
+        "value": 88.39705657958984,
+        "color": "rgb(160, 255, 0)",
+    },
+    {
+        "easting": 637673.0809718615,
+        "northing": 224232.40386467928,
+        "distance": 19.99999999994334,
+        "value": 89.52625274658203,
+        "color": "rgb(174, 255, 0)",
+    },
+    {
+        "easting": 637681.6214577922,
+        "northing": 224237.6057970189,
+        "distance": 29.999999999915012,
+        "value": 89.67755126953125,
+        "color": "rgb(176, 255, 0)",
+    },
+    {
+        "easting": 637690.161943723,
+        "northing": 224242.80772935855,
+        "distance": 39.99999999988668,
+        "value": 91.29719543457031,
+        "color": "rgb(197, 255, 0)",
+    },
+    {
+        "easting": 637698.7024296537,
+        "northing": 224248.0096616982,
+        "distance": 49.99999999985835,
+        "value": 91.29719543457031,
+        "color": "rgb(197, 255, 0)",
+    },
+    {
+        "easting": 637707.2429155845,
+        "northing": 224253.21159403783,
+        "distance": 59.999999999830024,
+        "value": 92.33065795898438,
+        "color": "rgb(210, 255, 0)",
+    },
+    {
+        "easting": 637715.7834015152,
+        "northing": 224258.41352637747,
+        "distance": 69.9999999998017,
+        "value": 93.06919860839844,
+        "color": "rgb(219, 255, 0)",
+    },
+    {
+        "easting": 637724.323887446,
+        "northing": 224263.6154587171,
+        "distance": 79.99999999977337,
+        "value": 94.76828002929688,
+        "color": "rgb(240, 255, 0)",
+    },
+    {
+        "easting": 637732.8643733767,
+        "northing": 224268.81739105674,
+        "distance": 89.99999999974503,
+        "value": 95.52455139160156,
+        "color": "rgb(250, 255, 0)",
+    },
+    {
+        "easting": 637741.4048593075,
+        "northing": 224274.01932339638,
+        "distance": 99.99999999971669,
+        "value": 96.77080535888672,
+        "color": "rgb(255, 250, 0)",
+    },
+    {
+        "easting": 637749.9453452382,
+        "northing": 224279.22125573602,
+        "distance": 109.99999999968836,
+        "value": 96.77080535888672,
+        "color": "rgb(255, 250, 0)",
+    },
+    {
+        "easting": 637758.485831169,
+        "northing": 224284.42318807566,
+        "distance": 119.99999999966002,
+        "value": 97.41886901855469,
+        "color": "rgb(255, 246, 0)",
+    },
+]
+
+output_json_with_color_triplet = [
+    {
+        "easting": 637656,
+        "northing": 224222,
+        "distance": 0,
+        "value": 88.37045288085938,
+        "color": "159:255:0",
+    },
+    {
+        "easting": 637664.5404859307,
+        "northing": 224227.20193233964,
+        "distance": 9.99999999997167,
+        "value": 88.39705657958984,
+        "color": "160:255:0",
+    },
+    {
+        "easting": 637673.0809718615,
+        "northing": 224232.40386467928,
+        "distance": 19.99999999994334,
+        "value": 89.52625274658203,
+        "color": "174:255:0",
+    },
+    {
+        "easting": 637681.6214577922,
+        "northing": 224237.6057970189,
+        "distance": 29.999999999915012,
+        "value": 89.67755126953125,
+        "color": "176:255:0",
+    },
+    {
+        "easting": 637690.161943723,
+        "northing": 224242.80772935855,
+        "distance": 39.99999999988668,
+        "value": 91.29719543457031,
+        "color": "197:255:0",
+    },
+    {
+        "easting": 637698.7024296537,
+        "northing": 224248.0096616982,
+        "distance": 49.99999999985835,
+        "value": 91.29719543457031,
+        "color": "197:255:0",
+    },
+    {
+        "easting": 637707.2429155845,
+        "northing": 224253.21159403783,
+        "distance": 59.999999999830024,
+        "value": 92.33065795898438,
+        "color": "210:255:0",
+    },
+    {
+        "easting": 637715.7834015152,
+        "northing": 224258.41352637747,
+        "distance": 69.9999999998017,
+        "value": 93.06919860839844,
+        "color": "219:255:0",
+    },
+    {
+        "easting": 637724.323887446,
+        "northing": 224263.6154587171,
+        "distance": 79.99999999977337,
+        "value": 94.76828002929688,
+        "color": "240:255:0",
+    },
+    {
+        "easting": 637732.8643733767,
+        "northing": 224268.81739105674,
+        "distance": 89.99999999974503,
+        "value": 95.52455139160156,
+        "color": "250:255:0",
+    },
+    {
+        "easting": 637741.4048593075,
+        "northing": 224274.01932339638,
+        "distance": 99.99999999971669,
+        "value": 96.77080535888672,
+        "color": "255:250:0",
+    },
+    {
+        "easting": 637749.9453452382,
+        "northing": 224279.22125573602,
+        "distance": 109.99999999968836,
+        "value": 96.77080535888672,
+        "color": "255:250:0",
+    },
+    {
+        "easting": 637758.485831169,
+        "northing": 224284.42318807566,
+        "distance": 119.99999999966002,
+        "value": 97.41886901855469,
+        "color": "255:246:0",
+    },
+]
+
+output_json_with_color_hsv = [
+    {
+        "easting": 637656,
+        "northing": 224222,
+        "distance": 0,
+        "value": 88.37045288085938,
+        "color": "hsv(82, 100, 100)",
+    },
+    {
+        "easting": 637664.5404859307,
+        "northing": 224227.20193233964,
+        "distance": 9.99999999997167,
+        "value": 88.39705657958984,
+        "color": "hsv(82, 100, 100)",
+    },
+    {
+        "easting": 637673.0809718615,
+        "northing": 224232.40386467928,
+        "distance": 19.99999999994334,
+        "value": 89.52625274658203,
+        "color": "hsv(79, 100, 100)",
+    },
+    {
+        "easting": 637681.6214577922,
+        "northing": 224237.6057970189,
+        "distance": 29.999999999915012,
+        "value": 89.67755126953125,
+        "color": "hsv(78, 100, 100)",
+    },
+    {
+        "easting": 637690.161943723,
+        "northing": 224242.80772935855,
+        "distance": 39.99999999988668,
+        "value": 91.29719543457031,
+        "color": "hsv(73, 100, 100)",
+    },
+    {
+        "easting": 637698.7024296537,
+        "northing": 224248.0096616982,
+        "distance": 49.99999999985835,
+        "value": 91.29719543457031,
+        "color": "hsv(73, 100, 100)",
+    },
+    {
+        "easting": 637707.2429155845,
+        "northing": 224253.21159403783,
+        "distance": 59.999999999830024,
+        "value": 92.33065795898438,
+        "color": "hsv(70, 100, 100)",
+    },
+    {
+        "easting": 637715.7834015152,
+        "northing": 224258.41352637747,
+        "distance": 69.9999999998017,
+        "value": 93.06919860839844,
+        "color": "hsv(68, 100, 100)",
+    },
+    {
+        "easting": 637724.323887446,
+        "northing": 224263.6154587171,
+        "distance": 79.99999999977337,
+        "value": 94.76828002929688,
+        "color": "hsv(63, 100, 100)",
+    },
+    {
+        "easting": 637732.8643733767,
+        "northing": 224268.81739105674,
+        "distance": 89.99999999974503,
+        "value": 95.52455139160156,
+        "color": "hsv(61, 100, 100)",
+    },
+    {
+        "easting": 637741.4048593075,
+        "northing": 224274.01932339638,
+        "distance": 99.99999999971669,
+        "value": 96.77080535888672,
+        "color": "hsv(58, 100, 100)",
+    },
+    {
+        "easting": 637749.9453452382,
+        "northing": 224279.22125573602,
+        "distance": 109.99999999968836,
+        "value": 96.77080535888672,
+        "color": "hsv(58, 100, 100)",
+    },
+    {
+        "easting": 637758.485831169,
+        "northing": 224284.42318807566,
+        "distance": 119.99999999966002,
+        "value": 97.41886901855469,
+        "color": "hsv(57, 100, 100)",
+    },
+]
+
 
 class TestProfileNCSPM(TestCase):
     @classmethod
@@ -216,6 +707,269 @@ class TestProfileNCSPM(TestCase):
         )
         self.assertModule(rprofile)
         self.assertMultiLineEqual(rprofile.outputs.stdout.strip(), output5.strip())
+
+    def test_profile_color(self):
+        rprofile = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="c",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.assertModule(rprofile)
+        self.assertMultiLineEqual(rprofile.outputs.stdout.strip(), output6.strip())
+
+        rprofile = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="c",
+            color_format="triplet",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.assertModule(rprofile)
+        self.assertMultiLineEqual(rprofile.outputs.stdout.strip(), output6.strip())
+
+        rprofile = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="c",
+            color_format="hex",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.assertModule(rprofile)
+        self.assertMultiLineEqual(rprofile.outputs.stdout.strip(), output7.strip())
+
+        rprofile = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="c",
+            color_format="rgb",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.assertModule(rprofile)
+        self.assertMultiLineEqual(rprofile.outputs.stdout.strip(), output8.strip())
+
+        rprofile = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="c",
+            color_format="hsv",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.assertModule(rprofile)
+        self.assertMultiLineEqual(rprofile.outputs.stdout.strip(), output9.strip())
+
+    def _assert_json_equal(self, expected, result, has_color=True):
+        for entry1, entry2 in zip_longest(expected, result):
+            self.assertAlmostEqual(entry1["easting"], entry2["easting"], places=6)
+            self.assertAlmostEqual(entry1["northing"], entry2["northing"], places=6)
+            self.assertAlmostEqual(entry1["distance"], entry2["distance"], places=6)
+            self.assertAlmostEqual(entry1["value"], entry2["value"], places=6)
+            if has_color:
+                self.assertEqual(entry1["color"], entry2["color"])
+
+    def test_profile_json(self):
+        module = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="g",
+            format="json",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.runModule(module)
+        self.assertEqual("", module.outputs.stderr)
+
+        expected = []
+        lines = output2.strip().split("\n")
+        for line in lines:
+            parts = line.split(" ")
+            expected.append(
+                {
+                    "easting": float(parts[0]),
+                    "northing": float(parts[1]),
+                    "distance": float(parts[2]),
+                    "value": float(parts[3]),
+                }
+            )
+        result = json.loads(module.outputs.stdout)
+        self._assert_json_equal(expected, result, has_color=False)
+
+    def test_profile_json_color(self):
+        module = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="gc",
+            format="json",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.runModule(module)
+        self.assertEqual("", module.outputs.stderr)
+
+        expected = output_json_with_color
+        result = json.loads(module.outputs.stdout)
+        self._assert_json_equal(expected, result)
+
+        module = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="gc",
+            format="json",
+            color_format="hex",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.runModule(module)
+        self.assertEqual("", module.outputs.stderr)
+
+        expected = output_json_with_color
+        result = json.loads(module.outputs.stdout)
+        self._assert_json_equal(expected, result)
+
+        module = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="gc",
+            format="json",
+            color_format="rgb",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.runModule(module)
+        self.assertEqual("", module.outputs.stderr)
+
+        expected = output_json_with_color_rgb
+        result = json.loads(module.outputs.stdout)
+        self._assert_json_equal(expected, result)
+
+        module = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="gc",
+            format="json",
+            color_format="triplet",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.runModule(module)
+        self.assertEqual("", module.outputs.stderr)
+
+        expected = output_json_with_color_triplet
+        result = json.loads(module.outputs.stdout)
+        self._assert_json_equal(expected, result)
+
+        module = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="gc",
+            format="json",
+            color_format="hsv",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.runModule(module)
+        self.assertEqual("", module.outputs.stderr)
+
+        expected = output_json_with_color_hsv
+        result = json.loads(module.outputs.stdout)
+        self._assert_json_equal(expected, result)
+
+    def test_profile_csv(self):
+        module = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="g",
+            format="csv",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.runModule(module)
+        self.assertEqual("", module.outputs.stderr)
+
+        expected = "easting,northing,distance,value\n" + "\n".join(
+            line.strip().replace(" ", ",") for line in output2.strip().splitlines()
+        )
+        result = module.outputs.stdout.strip()
+        self.assertMultiLineEqual(result, expected)
+
+    def test_profile_csv_color(self):
+        rprofile = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="c",
+            format="csv",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.assertModule(rprofile)
+        expected = "distance,value,color\n" + "\n".join(
+            line.strip().replace(" ", ",") for line in output7.strip().splitlines()
+        )
+        result = rprofile.outputs.stdout.strip()
+        self.assertMultiLineEqual(result, expected)
+
+        rprofile = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="c",
+            format="csv",
+            color_format="triplet",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.assertModule(rprofile)
+        expected = output10
+        result = rprofile.outputs.stdout
+        self.assertMultiLineEqual(result, expected)
+
+        rprofile = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="c",
+            format="csv",
+            color_format="hex",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.assertModule(rprofile)
+        expected = "distance,value,color\n" + "\n".join(
+            line.strip().replace(" ", ",") for line in output7.strip().splitlines()
+        )
+        result = rprofile.outputs.stdout.strip()
+        self.assertMultiLineEqual(result, expected)
+
+        rprofile = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="c",
+            format="csv",
+            color_format="rgb",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.assertModule(rprofile)
+        expected = output11
+        result = rprofile.outputs.stdout
+        self.assertMultiLineEqual(result, expected)
+
+        rprofile = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="gc",
+            format="csv",
+            color_format="hsv",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
+        self.assertModule(rprofile)
+        expected = output12
+        result = rprofile.outputs.stdout
+        self.assertMultiLineEqual(result, expected)
+
+    def test_profile_separator_csv(self):
+        module = SimpleModule(
+            "r.profile",
+            input="elevation",
+            format="csv",
+            null_value="nodata",
+            coordinates=[644914, 224579, 644986, 224627, 645091, 224549],
+            separator="|",
+        )
+        self.assertModule(module)
+
+        expected = "distance|value\n" + "\n".join(
+            line.strip().replace(" ", "|") for line in output3.strip().splitlines()
+        )
+        result = module.outputs.stdout.strip()
+        self.assertMultiLineEqual(result, expected)
 
 
 if __name__ == "__main__":

@@ -192,7 +192,7 @@ The wrapper integrates the ccmath library functions into the gmath
 structure. Hence only gmath memory allocation function should be used to create
 vector and matrix structures used by ccmath.
 
-This is the documentation of the linear algebra part of the the ccmath library used by GRASS.
+This is the documentation of the linear algebra part of the ccmath library used by GRASS.
 It was written by Daniel A. Atkinson and provides a detailed description of the available
 linear algebra functions.
 \verbatim
@@ -458,14 +458,14 @@ Additions: Brad Douglas
 <BR>
 <P>
 This chapter provides an explanation of how numerical algebra routines from
-LAPACK/BLAS can be accessed through the GRASS GIS library "gmath". Most of
+LAPACK/BLAS can be accessed through the GRASS library "gmath". Most of
 the functions are wrapper modules for linear algebra problems, a few are locally
 implemented.
 <BR>
 <P>
 Getting BLAS/LAPACK (one package) if not already provided by the system:
-<BR><TT><A HREF="http://www.netlib.org/lapack/">http://www.netlib.org/lapack/</A></TT>
-<BR><TT><A HREF="http://netlib.bell-labs.com/netlib/master/readme.html">http://netlib.bell-labs.com/netlib/master/readme.html</A></TT>
+<BR><TT><a href="https://www.netlib.org/lapack/">https://www.netlib.org/lapack/</A></TT>
+<BR><TT><a href="https://netlib.bell-labs.com/netlib/master/readme.html">https://netlib.bell-labs.com/netlib/master/readme.html</A></TT>
 <BR>
 <P>
 Pre-compiled binaries of LAPACK/BLAS are provided on many Linux

@@ -3,15 +3,17 @@ Specialized interfaces for invoking modules for testing framework
 
 Copyright (C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS GIS
+License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :authors: Vaclav Petras, Soeren Gebbert
 """
 
+from __future__ import annotations
+
 import subprocess
 from grass.script.core import start_command
-from grass.script.utils import encode, decode
+from grass.script.utils import decode
 from grass.exceptions import CalledModuleError
 from grass.pygrass.modules import Module
 
@@ -19,18 +21,16 @@ from .utils import do_doctest_gettext_workaround
 
 
 class SimpleModule(Module):
-    """Simple wrapper around pygrass.modules.Module to make sure that
+    r"""Simple wrapper around pygrass.modules.Module to make sure that
     run\_, finish\_, stdout and stderr are set correctly.
 
-    >>> mapcalc = SimpleModule('r.mapcalc', expression='test_a = 1',
-    ...                        overwrite=True)
+    >>> mapcalc = SimpleModule("r.mapcalc", expression="test_a = 1", overwrite=True)
     >>> mapcalc.run()
     Module('r.mapcalc')
     >>> mapcalc.returncode
     0
 
-    >>> colors = SimpleModule('r.colors',
-    ...                       map='test_a', rules='-', stdin_='1 red')
+    >>> colors = SimpleModule("r.colors", map="test_a", rules="-", stdin_="1 red")
     >>> colors.run()
     Module('r.colors')
     >>> colors.returncode
@@ -47,7 +47,7 @@ class SimpleModule(Module):
         for banned in ["stdout_", "stderr_", "finish_", "run_"]:
             if banned in kargs:
                 raise ValueError(
-                    "Do not set %s parameter" ", it would be overridden" % banned
+                    "Do not set %s parameter, it would be overridden" % banned
                 )
         kargs["stdout_"] = subprocess.PIPE
         kargs["stderr_"] = subprocess.PIPE
@@ -60,22 +60,24 @@ class SimpleModule(Module):
 def call_module(
     module,
     stdin=None,
-    merge_stderr=False,
-    capture_stdout=True,
-    capture_stderr=True,
+    merge_stderr: bool = False,
+    capture_stdout: bool = True,
+    capture_stderr: bool = True,
     **kwargs,
-):
+) -> str | None:
     r"""Run module with parameters given in `kwargs` and return its output.
 
-    >>> print (call_module('g.region', flags='pg'))  # doctest: +ELLIPSIS
+    >>> print(call_module("g.region", flags="pg"))  # doctest: +ELLIPSIS
     projection=...
     zone=...
     n=...
     s=...
     w=...
-    >>> call_module('m.proj', flags='i', input='-', stdin="50.0 41.5")
+    >>> call_module("m.proj", flags="i", input="-", stdin="50.0 41.5")
     '8642890.65|6965155.61|0.00\n'
-    >>> call_module('g.region', aabbbccc='notexist')  # doctest: +IGNORE_EXCEPTION_DETAIL
+    >>> call_module(
+    ...     "g.region", aabbbccc="notexist"
+    ... )  # doctest: +IGNORE_EXCEPTION_DETAIL
     Traceback (most recent call last):
         ...
     CalledModuleError: Module run g.region ... ended with error
@@ -97,13 +99,13 @@ def call_module(
     :returns: module standard output (stdout) as string or None
               if capture_stdout is False
 
-    :raises CalledModuleError: if module return code is non-zero
+    :raises ~grass.exceptions.CalledModuleError: if module return code is non-zero
     :raises ValueError: if the parameters are not correct
 
     .. note::
         The data read is buffered in memory, so do not use this method
         if the data size is large or unlimited.
-    """
+    """  # noqa: E501
     # TODO: remove this:
     do_doctest_gettext_workaround()
     # implementation inspired by subprocess.check_output() function
@@ -129,13 +131,13 @@ def call_module(
             kwargs["stderr"] = subprocess.STDOUT
         else:
             kwargs["stderr"] = subprocess.PIPE
-    process = start_command(module, **kwargs)
-    # input=None means no stdin (our default)
-    # for no stdout, output is None which is out interface
-    # for stderr=STDOUT or no stderr, errors is None
-    # which is fine for CalledModuleError
-    output, errors = process.communicate(input=encode(decode(stdin)) if stdin else None)
-    returncode = process.poll()
+    with start_command(module, **kwargs) as process:
+        # input=None means no stdin (our default)
+        # for no stdout, output is None which is out interface
+        # for stderr=STDOUT or no stderr, errors is None
+        # which is fine for CalledModuleError
+        output, errors = process.communicate(input=decode(stdin) if stdin else None)
+        returncode = process.poll()
     if returncode:
         raise CalledModuleError(module, kwargs, returncode, errors)
     return decode(output) if output else None

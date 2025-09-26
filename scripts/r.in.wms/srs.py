@@ -1,5 +1,6 @@
 """!
-@brief WMS, WMTS and NASA OnEarth drivers implemented in GRASS using GDAL Python bindings.
+@brief WMS, WMTS and NASA OnEarth drivers implemented in GRASS using GDAL Python
+bindings.
 
 List of classes:
  - srs.py::Srs
@@ -9,8 +10,10 @@ List of classes:
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
-@author Stepan Turek <stepan.turek seznam.cz> (Based on code from OWSLib - Copyright below)
+@author Stepan Turek <stepan.turek seznam.cz> (Based on code from OWSLib - Copyright
+        below)
 """
+
 # -*- coding: ISO-8859-15 -*-
 # =============================================================================
 # Copyright (c) 2011 Tom Kralidis
@@ -76,7 +79,7 @@ class Srs:
             # code is always the last value
             try:
                 self.code = int(values[-1])
-            except:
+            except (IndexError, ValueError):
                 self.code = values[-1]
 
         elif len(values) == 2:  # it's an authority:code code
@@ -102,7 +105,7 @@ class Srs:
         """
 
         return "urn:%s:def:crs:%s:%s:%s" % (
-            (self.naming_authority and self.naming_authority or "ogc"),
+            ((self.naming_authority and self.naming_authority) or "ogc"),
             (self.authority or ""),
             (self.version or ""),
             (self.code or ""),

@@ -35,13 +35,13 @@ int main(int argc, char *argv[])
 {
     int **infd;
     struct Categories cats;
-    struct Cell_stats *statf;
+    struct Cell_stats **thread_statf;
     struct Colors colr;
     int cats_ok;
     int colr_ok;
     int outfd;
     RASTER_MAP_TYPE out_type, map_type;
-    size_t out_cell_size;
+    size_t out_cell_size, in_buf_size, out_buf_size;
     struct History history;
     void **presult, **patch;
     void *outbuf;
@@ -102,21 +102,10 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    sscanf(threads->answer, "%d", &nprocs);
+    nprocs = G_set_omp_num_threads(threads);
+    nprocs = Rast_disable_omp_on_mask(nprocs);
     if (nprocs < 1)
         G_fatal_error(_("<%d> is not valid number of nprocs."), nprocs);
-#if defined(_OPENMP)
-    omp_set_num_threads(nprocs);
-#else
-    if (nprocs != 1)
-        G_warning(_("GRASS is compiled without OpenMP support. Ignoring "
-                    "threads setting."));
-    nprocs = 1;
-#endif
-    if (nprocs > 1 && G_find_raster("MASK", G_mapset()) != NULL) {
-        G_warning(_("Parallel processing disabled due to active MASK."));
-        nprocs = 1;
-    }
 
     use_zero = (zeroflag->answer);
     no_support = (nosupportflag->answer);
@@ -134,7 +123,10 @@ int main(int argc, char *argv[])
     infd = G_malloc(nprocs * sizeof(int *));
     for (t = 0; t < nprocs; t++)
         infd[t] = G_malloc(nfiles * sizeof(int));
-    statf = G_malloc(nfiles * sizeof(struct Cell_stats));
+    thread_statf = G_malloc(nprocs * (nfiles * sizeof(struct Cell_stats)));
+    for (t = 0; t < nprocs; t++) {
+        thread_statf[t] = G_malloc(nfiles * sizeof(struct Cell_stats));
+    }
     cellhd = G_malloc(nfiles * sizeof(struct Cell_head));
 
     for (i = 0; i < nfiles; i++) {
@@ -153,16 +145,12 @@ int main(int argc, char *argv[])
         else if (map_type == DCELL_TYPE)
             out_type = DCELL_TYPE;
 
-        Rast_init_cell_stats(&statf[i]);
+        for (t = 0; t < nprocs; t++) {
+            Rast_init_cell_stats(&thread_statf[t][i]);
+        }
 
         Rast_get_cellhd(name, "", &cellhd[i]);
     }
-    if (!no_support && nprocs > 1 && out_type == CELL_TYPE) {
-        no_support = true;
-        G_warning(_("Creating support files (labels, color table) disabled for "
-                    "nprocs > 1"));
-    }
-
     out_cell_size = Rast_cell_size(out_type);
 
     rname = opt2->answer;
@@ -181,7 +169,17 @@ int main(int argc, char *argv[])
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
 
-    bufrows = atoi(memory->answer) * (((1 << 20) / out_cell_size) / ncols);
+    /* memory reserved for presult and patch */
+    in_buf_size = out_cell_size * ncols * nprocs * 2;
+    /* memory available for output buffer */
+    out_buf_size = (size_t)atoi(memory->answer) * (1 << 20);
+    /* size_t is unsigned, check if any memory is left for output buffer */
+    if (out_buf_size <= in_buf_size)
+        out_buf_size = 0;
+    else
+        out_buf_size -= in_buf_size;
+    /* number of buffered output rows */
+    bufrows = out_buf_size / (out_cell_size * ncols);
     /* set the output buffer rows to be at most covering the entire map */
     if (bufrows > nrows) {
         bufrows = nrows;
@@ -226,9 +224,10 @@ int main(int argc, char *argv[])
                 north_edge = Rast_row_to_northing(row, &window);
                 south_edge = north_edge - window.ns_res;
 
-                if (out_type == CELL_TYPE && !no_support)
+                if (out_type == CELL_TYPE && !no_support) {
                     Rast_update_cell_stats((CELL *)local_presult, ncols,
-                                           &statf[0]);
+                                           &thread_statf[t_id][0]);
+                }
                 for (i = 1; i < nfiles; i++) {
                     /* check if raster i overlaps with the current row */
                     if (south_edge >= cellhd[i].north ||
@@ -238,9 +237,9 @@ int main(int argc, char *argv[])
                         continue;
 
                     Rast_get_row(local_infd[i], local_patch, row, out_type);
-                    if (!do_patch(local_presult, local_patch, &statf[i], ncols,
-                                  out_type, out_cell_size, use_zero,
-                                  no_support))
+                    if (!do_patch(local_presult, local_patch,
+                                  &(thread_statf[t_id][i]), ncols, out_type,
+                                  out_cell_size, use_zero, no_support))
                         break;
                 }
                 void *p = G_incr_void_ptr(outbuf, out_cell_size *
@@ -282,9 +281,19 @@ int main(int argc, char *argv[])
          */
         G_verbose_message(_("Creating support files for raster map <%s>..."),
                           new_name);
-        support(names, statf, nfiles, &cats, &cats_ok, &colr, &colr_ok,
-                out_type);
+
+        if (out_type == CELL_TYPE) {
+            merge_threads(thread_statf, nprocs, nfiles);
+        }
+
+        support(names, thread_statf[0], nfiles, &cats, &cats_ok, &colr,
+                &colr_ok, out_type);
     }
+
+    for (t = 0; t < nprocs; t++) {
+        G_free(thread_statf[t]);
+    }
+    G_free(thread_statf);
 
     /* now close (and create) the result */
     Rast_close(outfd);

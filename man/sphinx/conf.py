@@ -1,6 +1,6 @@
 #
-# GRASS GIS 8.3 Documentation documentation build configuration file, created by
-# sphinx-quickstart on Thu Aug  9 17:16:28 2012.
+# GRASS Python documentation build configuration file
+# originally created by sphinx-quickstart.
 #
 # This file is execfile()d with the current directory set to its containing dir.
 #
@@ -22,7 +22,7 @@
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ["sphinx.ext.todo", "sphinx.ext.pngmath"]
+extensions = ["sphinx.ext.todo", "sphinx.ext.imgmath"]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -37,15 +37,15 @@ source_suffix = ".txt"
 master_doc = "index"
 
 # General information about the project.
-project = "GRASS GIS 8.3 Documentation"
-copyright = "2023, GRASS Development Team"
+project = "GRASS"
+copyright = "2025, GRASS Development Team"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
 # The short X.Y version.
-version = "8.3"
+version = "8.4"
 # The full version, including alpha/beta/rc tags.
 release = "dev"
 
@@ -64,7 +64,7 @@ release = "dev"
 exclude_patterns = ["_build"]
 
 # The reST default role (used for this markup: `text`) to use for all documents.
-# default_role = None
+default_role = "literal"
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
 # add_function_parentheses = True
@@ -161,7 +161,7 @@ html_use_index = False
 # html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = "grass83Documentationdoc"
+htmlhelp_basename = "grass_gis"
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -180,8 +180,8 @@ latex_elements = {
 latex_documents = [
     (
         "content",
-        "grass83Documentation.tex",
-        "GRASS GIS 8.3 Documentation",
+        "grass_gis.tex",
+        project,
         "GRASS Development Team",
         "manual",
     ),
@@ -215,8 +215,8 @@ latex_documents = [
 man_pages = [
     (
         "content",
-        "grass83documentation",
-        "GRASS GIS 8.3 Documentation",
+        "grass_gis",
+        project,
         ["GRASS Development Team"],
         1,
     )
@@ -234,11 +234,11 @@ man_pages = [
 texinfo_documents = [
     (
         "content",
-        "grass83Documentation",
-        "GRASS GIS 8.3 Documentation",
+        "grass_python",
+        project,
         "GRASS Development Team",
-        "grass83Documentation",
-        "One line description of project.",
+        "grass_python",
+        "Documentation for GRASS in Sphinx",
         "Miscellaneous",
     ),
 ]
@@ -256,10 +256,10 @@ texinfo_documents = [
 # -- Options for Epub output ---------------------------------------------------
 
 # Bibliographic Dublin Core info.
-epub_title = "GRASS GIS 8.3 Documentation"
+epub_title = project
 epub_author = "GRASS Development Team"
-epub_publisher = "GRASS Development Team"
-epub_copyright = "2023, GRASS Development Team"
+epub_publisher = epub_author
+epub_copyright = copyright
 
 # The language of the text. It defaults to the language option
 # or en if the language is not set.

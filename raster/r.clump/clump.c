@@ -25,6 +25,8 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
+#include <errno.h>
+#include <string.h>
 
 #define INCR 1024
 
@@ -92,7 +94,9 @@ static CELL do_renumber(int *in_fd, DCELL *rng, int nin, int diag, int minsize,
             G_percent(row, nrows, 2);
 
             coffset = (off_t)row * csize;
-            lseek(cfd, coffset, SEEK_SET);
+            if (lseek(cfd, coffset, SEEK_SET) == -1) {
+                G_fatal_error(_("Unable to seek: %s"), strerror(errno));
+            }
             if (read(cfd, cur_clump, csize) != csize)
                 G_fatal_error(_("Unable to read from temp file"));
 
@@ -108,7 +112,9 @@ static CELL do_renumber(int *in_fd, DCELL *rng, int nin, int diag, int minsize,
                 temp_clump++;
             }
             if (do_write) {
-                lseek(cfd, coffset, SEEK_SET);
+                if (lseek(cfd, coffset, SEEK_SET) == -1) {
+                    G_fatal_error(_("Unable to seek: %s"), strerror(errno));
+                }
                 if (write(cfd, cur_clump, csize) != csize)
                     G_fatal_error(_("Unable to write to temp file"));
             }

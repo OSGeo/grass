@@ -41,14 +41,12 @@ int Vedit_split_lines(struct Map_info *Map, struct ilist *List,
 
     struct line_pnts *Points, *Points2;
     struct line_cats *Cats;
-    struct ilist *List_in_box;
 
     nlines_modified = 0;
 
     Points = Vect_new_line_struct();
     Points2 = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
-    List_in_box = Vect_new_list();
 
     for (i = 0; i < List->n_values; i++) {
         line = List->value[i];
@@ -101,7 +99,8 @@ int Vedit_split_lines(struct Map_info *Map, struct ilist *List,
             else
                 newline = Vect_write_line(Map, type, Points2, Cats);
             if (newline < 0) {
-                return -1;
+                nlines_modified = -1;
+                goto free_exit;
             }
             if (List_updated)
                 Vect_list_append(List_updated, newline);
@@ -118,19 +117,20 @@ int Vedit_split_lines(struct Map_info *Map, struct ilist *List,
             /* rewrite the line */
             newline = Vect_write_line(Map, type, Points2, Cats);
             if (newline < 0) {
-                return -1;
+                nlines_modified = -1;
+                goto free_exit;
             }
             if (List_updated)
                 Vect_list_append(List_updated, newline);
 
             nlines_modified++;
         } /* for each bounding box */
-    }     /* for each selected line */
+    } /* for each selected line */
 
+free_exit:
     Vect_destroy_line_struct(Points);
     Vect_destroy_line_struct(Points2);
     Vect_destroy_cats_struct(Cats);
-    Vect_destroy_list(List_in_box);
 
     return nlines_modified;
 }

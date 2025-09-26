@@ -593,7 +593,7 @@ int init_vars(int argc, char *argv[])
                 }
 
             } /* end non-NULL cell */
-        }     /* end column */
+        } /* end column */
     }
     G_percent(r, nrows, 1); /* finish it */
 

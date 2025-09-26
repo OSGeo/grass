@@ -23,10 +23,10 @@ mean coordinates):
 <li>area</li>
 <li>perimeter</li>
 <li>compact_square (compactness compared to a square:
-  <tt>compact_square = 4 * sqrt(area) / perimeter</tt>)
+  <code>compact_square = 4 * sqrt(area) / perimeter</code>)</li>
 <li>compact_circle (compactness compared to a circle:
-  <tt>compact_circle = perimeter / ( 2 * sqrt(PI * area) )</tt>)</li>
-<li>fractal dimension ( <tt>fd = 2 * ( log(perimeter) / log(area + 0.001) )</tt> )</li>
+  <code>compact_circle = perimeter / ( 2 * sqrt(PI * area) )</code>)</li>
+<li>fractal dimension ( <code>fd = 2 * ( log(perimeter) / log(area + 0.001) )</code> )</li>
 <li>mean x coordinate of object (in map units)</li>
 <li>mean y coordinate of object (in map units)</li>
 </ul>
@@ -36,6 +36,77 @@ mean coordinates):
 <div class="code"><pre>
 g.region raster=soilsID
 r.object.geometry input=soilsID output=soils_geom.txt
+</pre></div>
+
+The <b>format=json</b> option can be used to change the output format to JSON:
+
+<div class="code"><pre>
+r.object.geometry input=zipcodes format=json
+</pre></div>
+
+<div class="code"><pre>
+[
+    {
+        "category": 1,
+        "area": 106,
+        "perimeter": 62,
+        "compact_circle": 1.6987670351864215,
+        "compact_square": 0.66423420264432265,
+        "fd": 1.7699924681225903,
+        "mean_x": 631382.07547169807,
+        "mean_y": 222764.15094339623
+    },
+    {
+        "category": 2,
+        "area": 57,
+        "perimeter": 36,
+        "compact_circle": 1.3451172460704992,
+        "compact_square": 0.83887049280786108,
+        "fd": 1.772672742164326,
+        "mean_x": 643460.52631578944,
+        "mean_y": 217232.45614035087
+    },
+    {
+        "category": 3,
+        "area": 10,
+        "perimeter": 16,
+        "compact_circle": 1.4272992929222168,
+        "compact_square": 0.79056941504209488,
+        "fd": 2.4081353865496951,
+        "mean_x": 631300,
+        "mean_y": 215450
+    },
+    {
+        "category": 4,
+        "area": 63,
+        "perimeter": 60,
+        "compact_circle": 2.1324361862292305,
+        "compact_square": 0.52915026221291817,
+        "fd": 1.9764401337147652,
+        "mean_x": 642345.23809523811,
+        "mean_y": 226599.20634920636
+    },
+    {
+        "category": 5,
+        "area": 491,
+        "perimeter": 156,
+        "compact_circle": 1.9859985189304281,
+        "compact_square": 0.56816717451693177,
+        "fd": 1.6299200778082998,
+        "mean_x": 637912.93279022397,
+        "mean_y": 220636.96537678209
+    },
+    {
+        "category": 6,
+        "area": 83,
+        "perimeter": 60,
+        "compact_circle": 1.8578355639603314,
+        "compact_square": 0.60736223860961991,
+        "fd": 1.8531256328449071,
+        "mean_x": 635846.38554216863,
+        "mean_y": 227219.8795180723
+    }
+]
 </pre></div>
 
 <h2>SEE ALSO</h2>

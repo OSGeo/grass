@@ -25,6 +25,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
+#include <grass/parson.h>
 #include "local_proto.h"
 
 #define printline(x) fprintf(out, " | %-74.74s |\n", x)
@@ -33,16 +34,20 @@
     for (i = 0; i < 76; i++) \
         fprintf(out, "-");   \
     fprintf(out, "%c\n", x)
+#define TMPBUF_SZ 100
+
+enum OutputFormat { PLAIN, JSON, SHELL };
 
 /* local prototypes */
-static void format_double(const double, char *);
+static void format_double(const double, char[100]);
 static void compose_line(FILE *, const char *, ...);
+static char *history_as_string(struct History *hist);
 
 int main(int argc, char **argv)
 {
     const char *name, *mapset;
     const char *title;
-    char tmp1[100], tmp2[100], tmp3[100];
+    char tmp1[TMPBUF_SZ], tmp2[TMPBUF_SZ], tmp3[TMPBUF_SZ], tmp4[TMPBUF_SZ];
     char timebuff[256];
     char *units, *vdatum, *semantic_label;
     int i;
@@ -61,8 +66,12 @@ int main(int argc, char **argv)
     RASTER_MAP_TYPE data_type;
     struct Reclass reclass;
     struct GModule *module;
-    struct Option *opt1;
+    struct Option *opt1, *fopt;
     struct Flag *gflag, *rflag, *eflag, *hflag, *sflag;
+    enum OutputFormat format;
+
+    JSON_Value *root_value = NULL;
+    JSON_Object *root_object = NULL;
 
     /* Initialize GIS Engine */
     G_gisinit(argv[0]);
@@ -78,37 +87,83 @@ int main(int argc, char **argv)
 
     gflag = G_define_flag();
     gflag->key = 'g';
-    gflag->description =
-        _("Print raster array information in shell script style");
+    gflag->description = _("Print raster array information");
 
     rflag = G_define_flag();
     rflag->key = 'r';
-    rflag->description = _("Print range in shell script style");
+    rflag->description = _("Print range");
 
     sflag = G_define_flag();
     sflag->key = 's';
-    sflag->description = _("Print stats in shell script style");
+    sflag->description = _("Print stats");
 
     eflag = G_define_flag();
     eflag->key = 'e';
-    eflag->description =
-        _("Print extended metadata information in shell script style");
+    eflag->description = _("Print extended metadata information");
 
     hflag = G_define_flag();
     hflag->key = 'h';
     hflag->description = _("Print raster history instead of info");
 
+    fopt = G_define_standard_option(G_OPT_F_FORMAT);
+    fopt->required = NO;
+    fopt->answer = NULL;
+    fopt->options = "plain,shell,json";
+    fopt->descriptions = _("plain;Human readable text output;"
+                           "shell;shell script style text output;"
+                           "json;JSON (JavaScript Object Notation);");
+    fopt->guisection = _("Print");
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    if (hflag->answer &&
-        (gflag->answer || rflag->answer || sflag->answer || eflag->answer))
-        G_fatal_error(_("Flags -%c and -%c/%c/%c are mutually exclusive"),
-                      hflag->key, gflag->key, rflag->key, eflag->key);
+    // If no format option is specified, preserve backward compatibility
+    if (fopt->answer == NULL || fopt->answer[0] == '\0') {
+        if (gflag->answer || rflag->answer || sflag->answer || eflag->answer) {
+            // In the new behavior, "plain" will be the default format.
+            // Warn when the user specifies -g, -r, -s, or -e without
+            // format=shell option.
+            G_verbose_message(
+                _("The output format for flags -g, -r, -s, and -e currently "
+                  "defaults to 'shell', but this will change to 'plain' in a "
+                  "future release. To avoid unexpected behaviour, specify the "
+                  "format explicitly."));
+            fopt->answer = "shell";
+        }
+        else {
+            fopt->answer = "plain";
+        }
+    }
 
     name = G_store(opt1->answer);
     if ((mapset = G_find_raster2(name, "")) == NULL)
         G_fatal_error(_("Raster map <%s> not found"), name);
+
+    if (strcmp(fopt->answer, "json") == 0) {
+        format = JSON;
+        root_value = json_value_init_object();
+        if (root_value == NULL) {
+            G_fatal_error(
+                _("Failed to initialize JSON object. Out of memory?"));
+        }
+        root_object = json_object(root_value);
+    }
+    else if (strcmp(fopt->answer, "shell") == 0) {
+        format = SHELL;
+    }
+    else {
+        format = PLAIN;
+    }
+
+    // If no metadata-selection flags are specified and the format is not plain,
+    // enable all flags so that all information is printed.
+    if (!gflag->answer && !rflag->answer && !sflag->answer && !eflag->answer &&
+        !hflag->answer && format != PLAIN) {
+        gflag->answer = 1;
+        rflag->answer = 1;
+        sflag->answer = 1;
+        eflag->answer = 1;
+    }
 
     Rast_get_cellhd(name, "", &cellhd);
     cats_ok = Rast_read_cats(name, "", &cats) >= 0;
@@ -152,14 +207,14 @@ int main(int argc, char **argv)
     }
 
     if (!gflag->answer && !rflag->answer && !sflag->answer && !eflag->answer &&
-        !hflag->answer) {
+        !hflag->answer && format == PLAIN) {
         divider('+');
 
         compose_line(out, "Map:      %-29.29s  Date: %s", name,
                      hist_ok ? Rast_get_history(&hist, HIST_MAPID) : "??");
         compose_line(out, "Mapset:   %-29.29s  Login of Creator: %s", mapset,
                      hist_ok ? Rast_get_history(&hist, HIST_CREATOR) : "??");
-        compose_line(out, "Location: %s", G_location());
+        compose_line(out, "Project:  %s", G_location());
         compose_line(out, "DataBase: %s", G_gisdbase());
         compose_line(out, "Title:    %s", title);
 
@@ -441,37 +496,95 @@ int main(int argc, char **argv)
         }
 
         if (gflag->answer) {
-            G_format_northing(cellhd.north, tmp1, -1);
-            G_format_northing(cellhd.south, tmp2, -1);
-            fprintf(out, "north=%s\n", tmp1);
-            fprintf(out, "south=%s\n", tmp2);
+            const char *data_type_f =
+                (data_type == CELL_TYPE
+                     ? "CELL"
+                     : (data_type == DCELL_TYPE
+                            ? "DCELL"
+                            : (data_type == FCELL_TYPE ? "FCELL" : "??")));
+            grass_int64 total_cells = (grass_int64)cellhd.rows * cellhd.cols;
 
-            G_format_easting(cellhd.east, tmp1, -1);
-            G_format_easting(cellhd.west, tmp2, -1);
-            fprintf(out, "east=%s\n", tmp1);
-            fprintf(out, "west=%s\n", tmp2);
+            switch (format) {
+            case PLAIN:
+                G_format_northing(cellhd.north, tmp1, -1);
+                G_format_northing(cellhd.south, tmp2, -1);
+                fprintf(out, "North: %s\n", tmp1);
+                fprintf(out, "South: %s\n", tmp2);
 
-            G_format_resolution(cellhd.ns_res, tmp3, -1);
-            fprintf(out, "nsres=%s\n", tmp3);
+                G_format_easting(cellhd.east, tmp1, -1);
+                G_format_easting(cellhd.west, tmp2, -1);
+                fprintf(out, "East: %s\n", tmp1);
+                fprintf(out, "West: %s\n", tmp2);
 
-            G_format_resolution(cellhd.ew_res, tmp3, -1);
-            fprintf(out, "ewres=%s\n", tmp3);
+                G_format_resolution(cellhd.ns_res, tmp3, -1);
+                fprintf(out, "North-south resolution: %s\n", tmp3);
 
-            fprintf(out, "rows=%d\n", cellhd.rows);
-            fprintf(out, "cols=%d\n", cellhd.cols);
+                G_format_resolution(cellhd.ew_res, tmp3, -1);
+                fprintf(out, "East-west resolution: %s\n", tmp3);
 
-            fprintf(out, "cells=%" PRId64 "\n",
-                    (grass_int64)cellhd.rows * cellhd.cols);
+                fprintf(out, "Rows: %d\n", cellhd.rows);
+                fprintf(out, "Columns: %d\n", cellhd.cols);
 
-            fprintf(out, "datatype=%s\n",
-                    (data_type == CELL_TYPE
-                         ? "CELL"
-                         : (data_type == DCELL_TYPE
-                                ? "DCELL"
-                                : (data_type == FCELL_TYPE ? "FCELL" : "??"))));
-            if (cats_ok)
-                format_double((double)cats.num, tmp1);
-            fprintf(out, "ncats=%s\n", cats_ok ? tmp1 : "??");
+                fprintf(out, "Total cells: %" PRId64 "\n", total_cells);
+
+                fprintf(out, "Data type: %s\n", data_type_f);
+
+                if (cats_ok)
+                    format_double((double)cats.num, tmp4);
+                fprintf(out, "Number of categories: %s\n",
+                        cats_ok ? tmp4 : "??");
+                break;
+
+            case SHELL:
+                G_format_northing(cellhd.north, tmp1, -1);
+                G_format_northing(cellhd.south, tmp2, -1);
+                fprintf(out, "north=%s\n", tmp1);
+                fprintf(out, "south=%s\n", tmp2);
+
+                G_format_easting(cellhd.east, tmp1, -1);
+                G_format_easting(cellhd.west, tmp2, -1);
+                fprintf(out, "east=%s\n", tmp1);
+                fprintf(out, "west=%s\n", tmp2);
+
+                G_format_resolution(cellhd.ns_res, tmp3, -1);
+                fprintf(out, "nsres=%s\n", tmp3);
+
+                G_format_resolution(cellhd.ew_res, tmp3, -1);
+                fprintf(out, "ewres=%s\n", tmp3);
+
+                fprintf(out, "rows=%d\n", cellhd.rows);
+                fprintf(out, "cols=%d\n", cellhd.cols);
+
+                fprintf(out, "cells=%" PRId64 "\n", total_cells);
+
+                fprintf(out, "datatype=%s\n", data_type_f);
+
+                if (cats_ok)
+                    format_double((double)cats.num, tmp4);
+                fprintf(out, "ncats=%s\n", cats_ok ? tmp4 : "??");
+                break;
+            case JSON:
+                json_object_set_number(root_object, "north", cellhd.north);
+                json_object_set_number(root_object, "south", cellhd.south);
+                json_object_set_number(root_object, "nsres", cellhd.ns_res);
+
+                json_object_set_number(root_object, "east", cellhd.east);
+                json_object_set_number(root_object, "west", cellhd.west);
+                json_object_set_number(root_object, "ewres", cellhd.ew_res);
+
+                json_object_set_number(root_object, "rows", cellhd.rows);
+                json_object_set_number(root_object, "cols", cellhd.cols);
+                json_object_set_number(root_object, "cells", total_cells);
+
+                json_object_set_string(root_object, "datatype", data_type_f);
+                if (cats_ok) {
+                    json_object_set_number(root_object, "ncats", cats.num);
+                }
+                else {
+                    json_object_set_null(root_object, "ncats");
+                }
+                break;
+            }
         }
 
         if (rflag->answer || sflag->answer) {
@@ -480,12 +593,36 @@ int main(int argc, char **argv)
 
                 Rast_get_range_min_max(&crange, &min, &max);
                 if (Rast_is_c_null_value(&min)) {
-                    fprintf(out, "min=NULL\n");
-                    fprintf(out, "max=NULL\n");
+                    switch (format) {
+                    case PLAIN:
+                        fprintf(out, "Minimum: NULL\n");
+                        fprintf(out, "Maximum: NULL\n");
+                        break;
+                    case SHELL:
+                        fprintf(out, "min=NULL\n");
+                        fprintf(out, "max=NULL\n");
+                        break;
+                    case JSON:
+                        json_object_set_null(root_object, "min");
+                        json_object_set_null(root_object, "max");
+                        break;
+                    }
                 }
                 else {
-                    fprintf(out, "min=%i\n", min);
-                    fprintf(out, "max=%i\n", max);
+                    switch (format) {
+                    case PLAIN:
+                        fprintf(out, "Minimum: %i\n", min);
+                        fprintf(out, "Maximum: %i\n", max);
+                        break;
+                    case SHELL:
+                        fprintf(out, "min=%i\n", min);
+                        fprintf(out, "max=%i\n", max);
+                        break;
+                    case JSON:
+                        json_object_set_number(root_object, "min", min);
+                        json_object_set_number(root_object, "max", max);
+                        break;
+                    }
                 }
             }
             else {
@@ -493,17 +630,47 @@ int main(int argc, char **argv)
 
                 Rast_get_fp_range_min_max(&range, &min, &max);
                 if (Rast_is_d_null_value(&min)) {
-                    fprintf(out, "min=NULL\n");
-                    fprintf(out, "max=NULL\n");
+                    switch (format) {
+                    case PLAIN:
+                        fprintf(out, "Minimum: NULL\n");
+                        fprintf(out, "Maximum: NULL\n");
+                        break;
+                    case SHELL:
+                        fprintf(out, "min=NULL\n");
+                        fprintf(out, "max=NULL\n");
+                        break;
+                    case JSON:
+                        json_object_set_null(root_object, "min");
+                        json_object_set_null(root_object, "max");
+                        break;
+                    }
                 }
                 else {
-                    if (data_type == FCELL_TYPE) {
-                        fprintf(out, "min=%.7g\n", min);
-                        fprintf(out, "max=%.7g\n", max);
-                    }
-                    else {
-                        fprintf(out, "min=%.15g\n", min);
-                        fprintf(out, "max=%.15g\n", max);
+                    switch (format) {
+                    case PLAIN:
+                        if (data_type == FCELL_TYPE) {
+                            fprintf(out, "Minimum: %.7g\n", min);
+                            fprintf(out, "Maximum: %.7g\n", max);
+                        }
+                        else {
+                            fprintf(out, "Minimum: %.15g\n", min);
+                            fprintf(out, "Maximum: %.15g\n", max);
+                        }
+                        break;
+                    case SHELL:
+                        if (data_type == FCELL_TYPE) {
+                            fprintf(out, "min=%.7g\n", min);
+                            fprintf(out, "max=%.7g\n", max);
+                        }
+                        else {
+                            fprintf(out, "min=%.15g\n", min);
+                            fprintf(out, "max=%.15g\n", max);
+                        }
+                        break;
+                    case JSON:
+                        json_object_set_number(root_object, "min", min);
+                        json_object_set_number(root_object, "max", max);
+                        break;
                     }
                 }
             }
@@ -512,9 +679,20 @@ int main(int argc, char **argv)
         if (sflag->answer) {
 
             if (!gflag->answer) {
+                grass_int64 total_cells =
+                    (grass_int64)cellhd.rows * cellhd.cols;
                 /* always report total number of cells */
-                fprintf(out, "cells=%" PRId64 "\n",
-                        (grass_int64)cellhd.rows * cellhd.cols);
+                switch (format) {
+                case PLAIN:
+                    fprintf(out, "Total cells: %" PRId64 "\n", total_cells);
+                    break;
+                case SHELL:
+                    fprintf(out, "cells=%" PRId64 "\n", total_cells);
+                    break;
+                case JSON:
+                    json_object_set_number(root_object, "cells", total_cells);
+                    break;
+                }
             }
 
             if (rstats.count > 0) {
@@ -542,88 +720,293 @@ int main(int argc, char **argv)
                     }
                 }
 
-                fprintf(out, "n=%" PRId64 "\n", rstats.count);
-                fprintf(out, "mean=%.15g\n", mean);
-                fprintf(out, "stddev=%.15g\n", sd);
-                fprintf(out, "sum=%.15g\n", rstats.sum);
+                switch (format) {
+                case PLAIN:
+                    fprintf(out, "N: %" PRId64 "\n", rstats.count);
+                    fprintf(out, "Mean: %.15g\n", mean);
+                    fprintf(out, "Standard deviation: %.15g\n", sd);
+                    fprintf(out, "Sum: %.15g\n", rstats.sum);
+                    break;
+                case SHELL:
+                    fprintf(out, "n=%" PRId64 "\n", rstats.count);
+                    fprintf(out, "mean=%.15g\n", mean);
+                    fprintf(out, "stddev=%.15g\n", sd);
+                    fprintf(out, "sum=%.15g\n", rstats.sum);
+                    break;
+                case JSON:
+                    json_object_set_number(root_object, "n", rstats.count);
+                    json_object_set_number(root_object, "mean", mean);
+                    json_object_set_number(root_object, "stddev", sd);
+                    json_object_set_number(root_object, "sum", rstats.sum);
+                    break;
+                }
             }
             else {
-                fprintf(out, "n=0\n");
-                fprintf(out, "mean=NULL\n");
-                fprintf(out, "stddev=NULL\n");
-                fprintf(out, "sum=NULL\n");
+                switch (format) {
+                case PLAIN:
+                    fprintf(out, "N: 0\n");
+                    fprintf(out, "Mean: NULL\n");
+                    fprintf(out, "Standard deviation: NULL\n");
+                    fprintf(out, "Sum: NULL\n");
+                    break;
+                case SHELL:
+                    fprintf(out, "n=0\n");
+                    fprintf(out, "mean=NULL\n");
+                    fprintf(out, "stddev=NULL\n");
+                    fprintf(out, "sum=NULL\n");
+                    break;
+                case JSON:
+                    json_object_set_number(root_object, "n", 0);
+                    json_object_set_null(root_object, "mean");
+                    json_object_set_null(root_object, "stddev");
+                    json_object_set_null(root_object, "sum");
+                    break;
+                }
             }
         }
 
         if (eflag->answer) {
             char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+            const char *maptype, *date, *creator;
 
             G_unqualified_name(name, mapset, xname, xmapset);
 
-            fprintf(out, "map=%s\n", xname);
-            fprintf(out, "maptype=%s\n",
-                    hist_ok ? Rast_get_history(&hist, HIST_MAPTYPE) : "??");
-            fprintf(out, "mapset=%s\n", mapset);
-            fprintf(out, "location=%s\n", G_location());
-            fprintf(out, "database=%s\n", G_gisdbase());
-            fprintf(out, "date=\"%s\"\n",
-                    hist_ok ? Rast_get_history(&hist, HIST_MAPID) : "??");
-            fprintf(out, "creator=\"%s\"\n",
-                    hist_ok ? Rast_get_history(&hist, HIST_CREATOR) : "??");
-            fprintf(out, "title=\"%s\"\n", title);
+            maptype = hist_ok ? Rast_get_history(&hist, HIST_MAPTYPE) : "??";
+            date = hist_ok ? Rast_get_history(&hist, HIST_MAPID) : "??";
+            creator = hist_ok ? Rast_get_history(&hist, HIST_CREATOR) : "??";
+
+            switch (format) {
+            case PLAIN:
+                fprintf(out, "Map: %s\n", xname);
+                fprintf(out, "Maptype: %s\n", maptype);
+                fprintf(out, "Mapset: %s\n", mapset);
+                fprintf(out, "Location: %s\n", G_location());
+                fprintf(out, "Project: %s\n", G_location());
+                fprintf(out, "Database: %s\n", G_gisdbase());
+                fprintf(out, "Date: %s\n", date);
+                fprintf(out, "Creator: %s\n", creator);
+                fprintf(out, "Title: %s\n", title);
+                break;
+            case SHELL:
+                fprintf(out, "map=%s\n", xname);
+                fprintf(out, "maptype=%s\n", maptype);
+                fprintf(out, "mapset=%s\n", mapset);
+                fprintf(out, "location=%s\n", G_location());
+                fprintf(out, "project=%s\n", G_location());
+                fprintf(out, "database=%s\n", G_gisdbase());
+                fprintf(out, "date=\"%s\"\n", date);
+                fprintf(out, "creator=\"%s\"\n", creator);
+                fprintf(out, "title=\"%s\"\n", title);
+                break;
+            case JSON:
+                json_object_set_string(root_object, "map", name);
+                json_object_set_string(root_object, "maptype", maptype);
+                json_object_set_string(root_object, "mapset", mapset);
+                json_object_set_string(root_object, "location", G_location());
+                json_object_set_string(root_object, "project", G_location());
+                json_object_set_string(root_object, "database", G_gisdbase());
+                json_object_set_string(root_object, "date", date);
+                json_object_set_string(root_object, "creator", creator);
+                json_object_set_string(root_object, "title", title);
+                break;
+            }
             if (time_ok && (first_time_ok || second_time_ok)) {
 
                 G_format_timestamp(&ts, timebuff);
-
-                /*Create the r.info timestamp string */
-                fprintf(out, "timestamp=\"%s\"\n", timebuff);
+                switch (format) {
+                case PLAIN:
+                    /*Create the r.info timestamp string */
+                    fprintf(out, "Timestamp: %s\n", timebuff);
+                    break;
+                case SHELL:
+                    /*Create the r.info timestamp string */
+                    fprintf(out, "timestamp=\"%s\"\n", timebuff);
+                    break;
+                case JSON:
+                    json_object_set_string(root_object, "timestamp", timebuff);
+                    break;
+                }
             }
             else {
-                fprintf(out, "timestamp=\"none\"\n");
+                switch (format) {
+                case PLAIN:
+                    fprintf(out, "Timestamp: none\n");
+                    break;
+                case SHELL:
+                    fprintf(out, "timestamp=\"none\"\n");
+                    break;
+                case JSON:
+                    json_object_set_null(root_object, "timestamp");
+                    break;
+                }
             }
-            fprintf(out, "units=%s\n", units ? units : "\"none\"");
-            fprintf(out, "vdatum=%s\n", vdatum ? vdatum : "\"none\"");
-            fprintf(out, "semantic_label=%s\n",
-                    semantic_label ? semantic_label : "\"none\"");
-            fprintf(out, "source1=\"%s\"\n",
-                    hist_ok ? Rast_get_history(&hist, HIST_DATSRC_1)
-                            : "\"none\"");
-            fprintf(out, "source2=\"%s\"\n",
-                    hist_ok ? Rast_get_history(&hist, HIST_DATSRC_2)
-                            : "\"none\"");
-            fprintf(out, "description=\"%s\"\n",
-                    hist_ok ? Rast_get_history(&hist, HIST_KEYWRD)
-                            : "\"none\"");
-            if (Rast_history_length(&hist)) {
-                fprintf(out, "comments=\"");
-                for (i = 0; i < Rast_history_length(&hist); i++)
-                    fprintf(out, "%s", Rast_history_line(&hist, i));
-                fprintf(out, "\"\n");
-            }
-        }
 
-        if (hflag->answer) {
-            if (hist_ok) {
-                fprintf(out, "Data Source:\n");
+            switch (format) {
+            case PLAIN:
+                fprintf(out, "Data units: %s\n", units ? units : "none");
+                fprintf(out, "Vertical datum: %s\n", vdatum ? vdatum : "none");
+                fprintf(out, "Semantic label: %s\n",
+                        semantic_label ? semantic_label : "none");
+                fprintf(out, "Data source:\n");
                 fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_DATSRC_1));
                 fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_DATSRC_2));
-                fprintf(out, "Data Description:\n");
+                fprintf(out, "Data description:\n");
                 fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_KEYWRD));
                 if (Rast_history_length(&hist)) {
                     fprintf(out, "Comments:\n");
                     for (i = 0; i < Rast_history_length(&hist); i++)
                         fprintf(out, "   %s\n", Rast_history_line(&hist, i));
                 }
+                break;
+            case SHELL:
+                fprintf(out, "units=%s\n", units ? units : "\"none\"");
+                fprintf(out, "vdatum=%s\n", vdatum ? vdatum : "\"none\"");
+                fprintf(out, "semantic_label=%s\n",
+                        semantic_label ? semantic_label : "\"none\"");
+                fprintf(out, "source1=\"%s\"\n",
+                        hist_ok ? Rast_get_history(&hist, HIST_DATSRC_1)
+                                : "\"none\"");
+                fprintf(out, "source2=\"%s\"\n",
+                        hist_ok ? Rast_get_history(&hist, HIST_DATSRC_2)
+                                : "\"none\"");
+                fprintf(out, "description=\"%s\"\n",
+                        hist_ok ? Rast_get_history(&hist, HIST_KEYWRD)
+                                : "\"none\"");
+                if (Rast_history_length(&hist)) {
+                    fprintf(out, "comments=\"");
+                    for (i = 0; i < Rast_history_length(&hist); i++)
+                        fprintf(out, "%s", Rast_history_line(&hist, i));
+                    fprintf(out, "\"\n");
+                }
+                break;
+            case JSON:
+                if (units) {
+                    json_object_set_string(root_object, "units", units);
+                }
+                else {
+                    json_object_set_null(root_object, "units");
+                }
+                if (vdatum) {
+                    json_object_set_string(root_object, "vdatum", vdatum);
+                }
+                else {
+                    json_object_set_null(root_object, "vdatum");
+                }
+                if (semantic_label) {
+                    json_object_set_string(root_object, "semantic_label",
+                                           semantic_label);
+                }
+                else {
+                    json_object_set_null(root_object, "semantic_label");
+                }
+
+                if (hist_ok) {
+                    json_object_set_string(
+                        root_object, "source1",
+                        Rast_get_history(&hist, HIST_DATSRC_1));
+                    json_object_set_string(
+                        root_object, "source2",
+                        Rast_get_history(&hist, HIST_DATSRC_2));
+                    json_object_set_string(
+                        root_object, "description",
+                        Rast_get_history(&hist, HIST_KEYWRD));
+                    char *buffer = history_as_string(&hist);
+                    if (buffer) {
+                        json_object_set_string(root_object, "comments", buffer);
+                        G_free(buffer);
+                    }
+                    else {
+                        json_object_set_null(root_object, "comments");
+                    }
+                }
+                else {
+                    json_object_set_null(root_object, "source1");
+                    json_object_set_null(root_object, "source2");
+                    json_object_set_null(root_object, "description");
+                    json_object_set_null(root_object, "comments");
+                }
+                break;
+            }
+        }
+
+        if (hflag->answer && !eflag->answer) {
+            if (hist_ok) {
+                switch (format) {
+                case PLAIN:
+                    fprintf(out, "Data Source:\n");
+                    fprintf(out, "   %s\n",
+                            Rast_get_history(&hist, HIST_DATSRC_1));
+                    fprintf(out, "   %s\n",
+                            Rast_get_history(&hist, HIST_DATSRC_2));
+                    fprintf(out, "Data Description:\n");
+                    fprintf(out, "   %s\n",
+                            Rast_get_history(&hist, HIST_KEYWRD));
+                    if (Rast_history_length(&hist)) {
+                        fprintf(out, "Comments:\n");
+                        for (i = 0; i < Rast_history_length(&hist); i++)
+                            fprintf(out, "   %s\n",
+                                    Rast_history_line(&hist, i));
+                    }
+                    break;
+                case SHELL:
+                    fprintf(out, "source1=\"%s\"\n",
+                            hist_ok ? Rast_get_history(&hist, HIST_DATSRC_1)
+                                    : "\"none\"");
+                    fprintf(out, "source2=\"%s\"\n",
+                            hist_ok ? Rast_get_history(&hist, HIST_DATSRC_2)
+                                    : "\"none\"");
+                    fprintf(out, "description=\"%s\"\n",
+                            hist_ok ? Rast_get_history(&hist, HIST_KEYWRD)
+                                    : "\"none\"");
+                    if (Rast_history_length(&hist)) {
+                        fprintf(out, "comments=\"");
+                        for (i = 0; i < Rast_history_length(&hist); i++)
+                            fprintf(out, "%s", Rast_history_line(&hist, i));
+                        fprintf(out, "\"\n");
+                    }
+                    break;
+                case JSON:
+                    json_object_set_string(
+                        root_object, "source1",
+                        Rast_get_history(&hist, HIST_DATSRC_1));
+                    json_object_set_string(
+                        root_object, "source2",
+                        Rast_get_history(&hist, HIST_DATSRC_2));
+                    json_object_set_string(
+                        root_object, "description",
+                        Rast_get_history(&hist, HIST_KEYWRD));
+                    char *buffer = history_as_string(&hist);
+                    if (buffer) {
+                        json_object_set_string(root_object, "comments", buffer);
+                        G_free(buffer);
+                    }
+                    else {
+                        json_object_set_null(root_object, "comments");
+                    }
+
+                    break;
+                }
             }
         }
     } /* else rflag or sflag or tflag or gflag or hflag or mflag */
 
+    if (format == JSON) {
+        char *serialized_string = NULL;
+        serialized_string = json_serialize_to_string_pretty(root_value);
+        if (serialized_string == NULL) {
+            G_fatal_error(_("Failed to initialize pretty JSON string."));
+        }
+        puts(serialized_string);
+        json_free_serialized_string(serialized_string);
+        json_value_free(root_value);
+    }
+
     return EXIT_SUCCESS;
 }
 
-static void format_double(const double value, char *buf)
+static void format_double(const double value, char buf[100])
 {
-    sprintf(buf, "%.8f", value);
+    snprintf(buf, TMPBUF_SZ, "%.8f", value);
     G_trim_decimal(buf);
 }
 
@@ -641,4 +1024,47 @@ static void compose_line(FILE *out, const char *fmt, ...)
 
     printline(line);
     G_free(line);
+}
+
+static char *history_as_string(struct History *hist)
+{
+    int history_length = Rast_history_length(hist);
+    char *buffer = NULL;
+    if (history_length) {
+        size_t buffer_size = 0;
+        size_t total_length = 0;
+        for (int i = 0; i < history_length; i++) {
+            const char *line = Rast_history_line(hist, i);
+            size_t line_length = strlen(line);
+
+            // +1 for the null character
+            size_t required_size = total_length + line_length + 1;
+            if (required_size > buffer_size) {
+                // This is heuristic for reallocation based on remaining
+                // iterations and current size which is a good estimate for the
+                // first iteration and possible overshoot later on reducing the
+                // number of reallocations.
+                buffer_size = required_size * (history_length - i);
+                buffer = (char *)G_realloc(buffer, buffer_size);
+                if (total_length == 0)
+                    buffer[0] = '\0';
+            }
+            if (line_length >= 1 && line[line_length - 1] == '\\') {
+                // Ending backslash is line continuation.
+                strncat(buffer, line, line_length - 1);
+                total_length += line_length - 1;
+            }
+            else {
+                strncat(buffer, line, line_length);
+                total_length += line_length;
+                if (i < history_length - 1) {
+                    // Add newline to separate lines, but don't and newline at
+                    // the end of last (or only) line.
+                    strcat(buffer, "\n");
+                    ++total_length;
+                }
+            }
+        }
+    }
+    return buffer;
 }

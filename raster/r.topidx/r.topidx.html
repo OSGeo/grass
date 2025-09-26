@@ -1,24 +1,35 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.topidx</em> creates topographic index (wetness index), ln(a/tan(beta)), map from
-elevation map
-<p>where
-<dl>
-<dd>a: the area of the hillslope per unit contour length that drains through any point,
-<p><dd>tan(beta): the local surface topographic slope (delta vertical) / (delta horizontal).
-</dl>
-<p>Input maps may have NULL values.  For example, if you have a MASK for
-a watershed (basin map from <em>r.water.outlet</em>), the
-following command will create a masked elevation map (belev):
+<em>r.topidx</em> creates topographic index (wetness index), ln(a/tan(beta)),
+map from elevation map where
+
+<ul>
+<li>a: the area of the hillslope per unit contour length that drains through any
+      point,</li>
+<li>tan(beta): the local surface topographic slope (delta vertical) / (delta
+      horizontal).</li>
+</ul>
+
+<p>Input maps may have NULL values. For example, if you have a raster mask set
+for a watershed (using basin map from <em>r.water.outlet</em>), the following
+command will create a masked elevation map (belev):
+
 <div class="code"><pre>
 r.mapcalc "belev = if(isnull(basin), basin, elev)"
 </pre></div>
+
 <p>
 <em>r.stats -Anc</em> prints out averaged statistics for topographic index.
 
+<p>Lat/long projects are not supported. If data is not projected,
+please create a new project with a projected coordinate reference
+system and reproject the data there. Please run
+<em>r.topidx</em> from that project.
+
 <h2>EXAMPLE</h2>
 
-Running the command below will generate the topographic index map shown in the figure:
+Running the command below will generate the topographic index map shown in the
+figure:
 
 <div class="code"><pre>
 g.region raster=elevation -p

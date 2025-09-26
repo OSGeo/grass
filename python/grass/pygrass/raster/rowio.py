@@ -3,6 +3,7 @@ Created on Mon Jun 18 13:22:38 2012
 
 @author: pietro
 """
+
 import ctypes
 
 import grass.lib.rowio as librowio
@@ -12,22 +13,20 @@ from grass.pygrass.errors import GrassError
 from grass.pygrass.raster.raster_type import TYPE as RTYPE
 
 
-CMPFUNC = ctypes.CFUNCTYPE(
-    ctypes.c_int, ctypes.c_int, ctypes.c_void_p, ctypes.c_int, ctypes.c_int
-)
+CMPFUNC = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_int, ctypes.c_void_p, ctypes.c_int)
 
 
-def getmaprow_CELL(fd, buf, row, l):
+def getmaprow_CELL(fd, buf, row):
     librast.Rast_get_c_row(fd, ctypes.cast(buf, ctypes.POINTER(librast.CELL)), row)
     return 1
 
 
-def getmaprow_FCELL(fd, buf, row, l):
+def getmaprow_FCELL(fd, buf, row):
     librast.Rast_get_f_row(fd, ctypes.cast(buf, ctypes.POINTER(librast.FCELL)), row)
     return 1
 
 
-def getmaprow_DCELL(fd, buf, row, l):
+def getmaprow_DCELL(fd, buf, row):
     librast.Rast_get_d_row(fd, ctypes.cast(buf, ctypes.POINTER(librast.DCELL)), row)
     return 1
 
@@ -39,7 +38,7 @@ get_row = {
 }
 
 
-class RowIO(object):
+class RowIO:
     def __init__(self):
         self.c_rowio = librowio.ROWIO()
         self.fd = None
@@ -65,7 +64,8 @@ class RowIO(object):
             )
             == -1
         ):
-            raise GrassError("Fatal error, Rowio not setup correctly.")
+            msg = f"Fatal error, {RowIO.__name__} not setup correctly."
+            raise GrassError(msg)
 
     def release(self):
         librowio.Rowio_release(ctypes.byref(self.c_rowio))

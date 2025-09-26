@@ -24,13 +24,15 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-""" Module images2ims
+"""Module images2ims
 
 Use PIL to create a series of images.
 
 """
 
 import os
+from operator import itemgetter
+from string import digits
 
 try:
     import numpy as np
@@ -63,7 +65,7 @@ def checkImages(images):
                 images2.append(im)  # Ok
             elif im.dtype in [np.float32, np.float64]:
                 theMax = im.max()
-                if theMax > 128 and theMax < 300:
+                if 128 < theMax < 300:
                     pass  # assume 0:255
                 else:
                     im = im.copy()
@@ -79,9 +81,11 @@ def checkImages(images):
                 pass  # ok
             elif im.ndim == 3:
                 if im.shape[2] not in [3, 4]:
-                    raise ValueError("This array can not represent an image.")
+                    msg = "This array can not represent an image."
+                    raise ValueError(msg)
             else:
-                raise ValueError("This array can not represent an image.")
+                msg = "This array can not represent an image."
+                raise ValueError(msg)
         else:
             raise ValueError("Invalid image type: " + str(type(im)))
 
@@ -92,8 +96,7 @@ def checkImages(images):
 def _getFilenameParts(filename):
     if "*" in filename:
         return tuple(filename.split("*", 1))
-    else:
-        return os.path.splitext(filename)
+    return os.path.splitext(filename)
 
 
 def _getFilenameWithFormatter(filename, N):
@@ -117,10 +120,9 @@ def _getSequenceNumber(filename, part1, part2):
     # Get all numeric chars
     seq2 = ""
     for c in seq:
-        if c in "0123456789":
-            seq2 += c
-        else:
+        if c not in digits:
             break
+        seq2 += c
     # Make int and return
     return int(seq2)
 
@@ -144,7 +146,8 @@ def writeIms(filename, images):
 
     # Check PIL
     if PIL is None:
-        raise RuntimeError("Need PIL to write series of image files.")
+        msg = "Need PIL to write series of image files."
+        raise RuntimeError(msg)
 
     # Check images
     images = checkImages(images)
@@ -173,9 +176,7 @@ def writeIms(filename, images):
 
 
 def readIms(filename, asNumpy=True):
-    """readIms(filename, asNumpy=True)
-
-    Read images from a series of images in a single directory. Returns a
+    """Read images from a series of images in a single directory. Returns a
     list of numpy arrays, or, if asNumpy is false, a list if PIL images.
 
     :param filename:
@@ -184,11 +185,13 @@ def readIms(filename, asNumpy=True):
 
     # Check PIL
     if PIL is None:
-        raise RuntimeError("Need PIL to read a series of image files.")
+        msg = "Need PIL to read a series of image files."
+        raise RuntimeError(msg)
 
-    # Check Numpy
+    # Check NumPy
     if asNumpy and np is None:
-        raise RuntimeError("Need Numpy to return numpy arrays.")
+        msg = "Need NumPy to return numpy arrays."
+        raise RuntimeError(msg)
 
     # Get dirname and filename
     filename = os.path.abspath(filename)
@@ -196,7 +199,7 @@ def readIms(filename, asNumpy=True):
 
     # Check dir exists
     if not os.path.isdir(dirname):
-        raise IOError("Directory not found: " + str(dirname))
+        raise OSError("Directory not found: " + str(dirname))
 
     # Get two parts of the filename
     part1, part2 = _getFilenameParts(filename)
@@ -214,7 +217,7 @@ def readIms(filename, asNumpy=True):
             images.append((im.copy(), nr))
 
     # Sort images
-    images.sort(key=lambda x: x[1])
+    images.sort(key=itemgetter(1))
     images = [im[0] for im in images]
 
     # Convert to numpy if needed
@@ -228,7 +231,8 @@ def readIms(filename, asNumpy=True):
             # Make numpy array
             a = np.asarray(im)
             if len(a.shape) == 0:
-                raise MemoryError("Too little memory to convert PIL image to array")
+                msg = "Too little memory to convert PIL image to array"
+                raise MemoryError(msg)
             # Add
             images.append(a)
 

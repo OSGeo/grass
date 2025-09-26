@@ -12,7 +12,7 @@
  *
  * NOTES:
  *
- * 1) see dhist.h for a decalaration of the structure stat_list.
+ * 1) see dhist.h for a declaration of the structure stat_list.
  * 2) see bar.h for normalized coordinates of the different parts
  *    of the bar-chart, like the origin of the chart, the label
  *    positions, etc.
@@ -27,8 +27,10 @@
 
 #include <string.h>
 
-#include <grass/raster.h>
 #include <grass/display.h>
+#include <grass/gis.h>
+#include <grass/glocale.h>
+#include <grass/raster.h>
 
 #include "bar.h"
 
@@ -39,7 +41,7 @@ int bar(struct stat_list *dist_stats, /* list of distribution statistics */
     int draw = YES;
     long int bar_height; /* height, in pixels, of a histogram bar */
     CELL bar_color;      /* color/category number of a histogram bar */
-    DCELL dmax, range_dmin, range_dmax, dmin, dval;
+    DCELL dmax, range_dmin = 0, range_dmax = 0, dmin, dval;
     long int max_tics; /* maximum tics allowed on an axis */
     long int xoffset;  /* offset for x-axis */
     long int yoffset;  /* offset for y-axis */
@@ -122,7 +124,10 @@ int bar(struct stat_list *dist_stats, /* list of distribution statistics */
         }
         tic_every = tics[i].every;
         tic_unit = tics[i].unit;
-        strcpy(tic_name, tics[i].name);
+        if (G_strlcpy(tic_name, tics[i].name, sizeof(tic_name)) >=
+            sizeof(tic_name)) {
+            G_fatal_error(_("Tic name <%s> is too long"), tics[i].name);
+        }
     }
     else {
         if (is_fp && !cat_ranges) {
@@ -147,7 +152,6 @@ int bar(struct stat_list *dist_stats, /* list of distribution statistics */
     for (i = dist_stats->mincat; i <= dist_stats->maxcat; i++) {
         if (!ptr)
             break;
-        draw = NO;
         /* figure bar color and height
          *
          * the cat number determines the color, the corresponding stat,
@@ -250,7 +254,7 @@ int bar(struct stat_list *dist_stats, /* list of distribution statistics */
                         y_box[1] = y_box[2] = bar_height;
                         D_polygon_abs(x_box, y_box, 4);
                     }
-                }      /* fp */
+                } /* fp */
                 else { /* 1-color bar for int data or null */
 
                     D_color((CELL)bar_color, colors);
@@ -307,16 +311,17 @@ int bar(struct stat_list *dist_stats, /* list of distribution statistics */
             D_stroke();
 
             if (nodata && i == dist_stats->mincat)
-                sprintf(txt, "null");
+                snprintf(txt, sizeof(txt), "null");
             else if (is_fp) {
                 dmin = range_dmin + i * (range_dmax - range_dmin) / nsteps;
                 if ((tic_every * (range_dmax - range_dmin) / nsteps) < 1.0)
-                    sprintf(txt, "%.2f", dmin / (double)tic_unit);
+                    snprintf(txt, sizeof(txt), "%.2f", dmin / (double)tic_unit);
                 else
-                    sprintf(txt, "%d", (int)(dmin / (double)tic_unit));
+                    snprintf(txt, sizeof(txt), "%d",
+                             (int)(dmin / (double)tic_unit));
             }
             else
-                sprintf(txt, "%d", (int)(i / tic_unit));
+                snprintf(txt, sizeof(txt), "%d", (int)(i / tic_unit));
             text_height = (b - t) * TEXT_HEIGHT;
             text_width = (r - l) * TEXT_WIDTH;
             D_text_size(text_width, text_height);
@@ -347,9 +352,9 @@ int bar(struct stat_list *dist_stats, /* list of distribution statistics */
 
     /* draw the x-axis label */
     if (tic_unit != 1)
-        sprintf(xlabel, "X-AXIS: Cell Values %s", tic_name);
+        snprintf(xlabel, sizeof(xlabel), "X-AXIS: Cell Values %s", tic_name);
     else
-        sprintf(xlabel, "X-AXIS: Cell Values");
+        snprintf(xlabel, sizeof(xlabel), "X-AXIS: Cell Values");
     text_height = (b - t) * TEXT_HEIGHT;
     text_width = (r - l) * TEXT_WIDTH;
     D_text_size(text_width, text_height);
@@ -375,7 +380,10 @@ int bar(struct stat_list *dist_stats, /* list of distribution statistics */
         i++;
     tic_every = tics[i].every;
     tic_unit = tics[i].unit;
-    strcpy(tic_name, tics[i].name);
+    if (G_strlcpy(tic_name, tics[i].name, sizeof(tic_name)) >=
+        sizeof(tic_name)) {
+        G_fatal_error(_("Tic name <%s> is too long"), tics[i].name);
+    }
 
     stat_start = tic_unit * ((long)(dist_stats->minstat / tic_unit));
     stat_finis = tic_unit * ((long)(dist_stats->maxstat / tic_unit));
@@ -393,7 +401,7 @@ int bar(struct stat_list *dist_stats, /* list of distribution statistics */
             D_stroke();
 
             /* draw a tic-mark number */
-            sprintf(txt, "%d", (int)(i / tic_unit));
+            snprintf(txt, sizeof(txt), "%d", (int)(i / tic_unit));
             text_height = (b - t) * TEXT_HEIGHT;
             text_width = (r - l) * TEXT_WIDTH;
             D_text_size(text_width, text_height);
@@ -421,15 +429,17 @@ int bar(struct stat_list *dist_stats, /* list of distribution statistics */
     /* draw the y-axis label */
     if (tic_unit != 1) {
         if (type == COUNT)
-            sprintf(ylabel, "Y-AXIS: Number of cells %s", tic_name);
+            snprintf(ylabel, sizeof(ylabel), "Y-AXIS: Number of cells %s",
+                     tic_name);
         else
-            sprintf(ylabel, "Y-AXIS: Area %s sq. meters", tic_name);
+            snprintf(ylabel, sizeof(ylabel), "Y-AXIS: Area %s sq. meters",
+                     tic_name);
     }
     else {
         if (type == COUNT)
-            sprintf(ylabel, "Y-AXIS: Number of cells");
+            snprintf(ylabel, sizeof(ylabel), "Y-AXIS: Number of cells");
         else
-            sprintf(ylabel, "Y-AXIS: Area");
+            snprintf(ylabel, sizeof(ylabel), "Y-AXIS: Area");
     }
 
     text_height = (b - t) * TEXT_HEIGHT;

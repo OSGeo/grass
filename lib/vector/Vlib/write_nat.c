@@ -646,7 +646,7 @@ void V2__add_area_cats_to_cidx_nat(struct Map_info *Map, int area)
 
    \param Map pointer to Map_info struct
    \param line feature id to be removed
-   \param Points feature geometry (pointer to line_pnts struct)
+   \param points feature geometry (pointer to \ref line_pnts struct)
    \param external_routine external subroutine to execute (used by PostGIS
    Topology)
 
@@ -907,8 +907,7 @@ int V2__delete_line_from_topo_nat(struct Map_info *Map, int line, int type,
 int V2__add_line_to_topo_nat(struct Map_info *Map, off_t offset, int type,
                              const struct line_pnts *points,
                              const struct line_cats *cats, int restore_line,
-                             int (*external_routine)(const struct Map_info *,
-                                                     int))
+                             int (*external_routine)(struct Map_info *, int))
 {
     int first, s, n, i, line;
     int node, next_line, area, side, sel_area, new_area[2];

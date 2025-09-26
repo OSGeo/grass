@@ -9,7 +9,7 @@
 import sys
 import os
 
-from build_rest import *
+from build_rest import rest_dir, message_tmpl, rest_files, read_file
 
 os.chdir(rest_dir)
 

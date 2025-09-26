@@ -1,7 +1,7 @@
 GENERAL RESOURCES ON WINDOWS BATCH FILE PROGRAMMMING
 ----------------------------------------------------
 
-The Windows command line commands will bring up help information 
+The Windows command line commands will bring up help information
 that is particularly useful:
 
 	help set
@@ -18,7 +18,7 @@ Here are some links on Windows batch file programmming.
 
 	http://groups-beta.google.com/group/alt.msdos.batch.nt/msg/5a9587e871c27a75 - cmd bugs
 
-	http://groups-beta.google.com/group/alt.msdos.batch/msg/7b1d22945c89af75 - cmd help resources 
+	http://groups-beta.google.com/group/alt.msdos.batch/msg/7b1d22945c89af75 - cmd help resources
 
 	http://msdn.microsoft.com/downloads/list/webdev.asp - Windows script downloads
 
@@ -28,9 +28,9 @@ Here are some links on Windows batch file programmming.
 
 	http://www.commandline.co.uk - Ritchie Lawrence cmd line utilities
 
-	http://www.cybermesa.com/~bstewart/ - Bill Stewart’s scripting tools
+	http://www.cybermesa.com/~bstewart/ - Bill Stewartï¿½s scripting tools
 
-	http://www.fpschultze.de - FP Shcultze’s batch tricks
+	http://www.fpschultze.de - FP Shcultzeï¿½s batch tricks
 
 	http://www.microsoft.com/technet/community/columns/scripts - MS TechNet scripting
 

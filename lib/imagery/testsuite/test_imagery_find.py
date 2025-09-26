@@ -8,6 +8,7 @@
 Read the file COPYING that comes with GRASS
 for details
 """
+
 import os
 import shutil
 
@@ -22,6 +23,7 @@ from grass.lib.gis import G_mapset_path
 from grass.lib.imagery import (
     I_SIGFILE_TYPE_SIG,
     I_SIGFILE_TYPE_SIGSET,
+    I_SIGFILE_TYPE_LIBSVM,
     I_find_signature,
     I_find_signature2,
 )
@@ -37,6 +39,7 @@ class FindSignatureTestCase(TestCase):
         # tools, we must ensure signature directories exist
         os.makedirs(f"{cls.mpath}/signatures/sig/", exist_ok=True)
         os.makedirs(f"{cls.mpath}/signatures/sigset/", exist_ok=True)
+        os.makedirs(f"{cls.mpath}/signatures/libsvm/", exist_ok=True)
         cls.sig_name1 = tempname(10)
         cls.sig_dir1 = f"{cls.mpath}/signatures/sigset/{cls.sig_name1}"
         os.makedirs(cls.sig_dir1)
@@ -47,6 +50,11 @@ class FindSignatureTestCase(TestCase):
         os.makedirs(cls.sig_dir2)
         cls.sigdirs.append(cls.sig_dir2)
         open(f"{cls.sig_dir2}/sig", "a").close()
+        cls.sig_name3 = tempname(10)
+        cls.sig_dir3 = f"{cls.mpath}/signatures/libsvm/{cls.sig_name3}"
+        os.makedirs(cls.sig_dir3)
+        cls.sigdirs.append(cls.sig_dir3)
+        open(f"{cls.sig_dir3}/sig", "a").close()
 
     @classmethod
     def tearDownClass(cls):
@@ -101,6 +109,30 @@ class FindSignatureTestCase(TestCase):
         ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, self.sig_name1, "PERMANENT")
         self.assertFalse(ret)
 
+    def test_find_libsvm(self):
+        # Non existing without a mapset
+        ret = I_find_signature(I_SIGFILE_TYPE_LIBSVM, tempname(10), None)
+        self.assertFalse(ret)
+        # Non existing with a mapset
+        ret = I_find_signature(I_SIGFILE_TYPE_LIBSVM, tempname(10), self.mapset_name)
+        self.assertFalse(ret)
+        # Libsvm with sig type should equal non existing
+        ret = I_find_signature(I_SIGFILE_TYPE_SIG, self.sig_name3, self.mapset_name)
+        self.assertFalse(ret)
+        # Existing without a mapset
+        ret = I_find_signature(I_SIGFILE_TYPE_LIBSVM, self.sig_name3, None)
+        self.assertTrue(ret)
+        ms = utils.decode(ret)
+        self.assertEqual(ms, self.mapset_name)
+        # Existing with a mapset
+        ret = I_find_signature(I_SIGFILE_TYPE_LIBSVM, self.sig_name3, self.mapset_name)
+        self.assertTrue(ret)
+        ms = utils.decode(ret)
+        self.assertEqual(ms, self.mapset_name)
+        # Existing in a different mapset should fail
+        ret = I_find_signature(I_SIGFILE_TYPE_LIBSVM, self.sig_name3, "PERMANENT")
+        self.assertFalse(ret)
+
     def test_find2_sig(self):
         # Non existing without a mapset
         ret = I_find_signature2(I_SIGFILE_TYPE_SIG, tempname(10), None)
@@ -147,6 +179,30 @@ class FindSignatureTestCase(TestCase):
         self.assertEqual(ms, self.mapset_name)
         # Existing in a different mapset should fail
         ret = I_find_signature2(I_SIGFILE_TYPE_SIGSET, self.sig_name1, "PERMANENT")
+        self.assertFalse(ret)
+
+    def test_find2_libsvm(self):
+        # Non existing without a mapset
+        ret = I_find_signature2(I_SIGFILE_TYPE_LIBSVM, tempname(10), None)
+        self.assertFalse(ret)
+        # Non existing with a mapset
+        ret = I_find_signature2(I_SIGFILE_TYPE_LIBSVM, tempname(10), self.mapset_name)
+        self.assertFalse(ret)
+        # Libsvm with sig type should equal non existing
+        ret = I_find_signature2(I_SIGFILE_TYPE_SIG, self.sig_name3, self.mapset_name)
+        self.assertFalse(ret)
+        # Existing without a mapset
+        ret = I_find_signature2(I_SIGFILE_TYPE_LIBSVM, self.sig_name3, None)
+        self.assertTrue(ret)
+        ms = utils.decode(ret)
+        self.assertEqual(ms, self.mapset_name)
+        # Existing with a mapset
+        ret = I_find_signature2(I_SIGFILE_TYPE_LIBSVM, self.sig_name3, self.mapset_name)
+        self.assertTrue(ret)
+        ms = utils.decode(ret)
+        self.assertEqual(ms, self.mapset_name)
+        # Existing in a different mapset should fail
+        ret = I_find_signature2(I_SIGFILE_TYPE_LIBSVM, self.sig_name3, "PERMANENT")
         self.assertFalse(ret)
 
 

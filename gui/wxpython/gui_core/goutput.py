@@ -20,11 +20,13 @@ This program is free software under the GNU General Public License
 """
 
 import textwrap
+from string import digits
 
 import wx
 from wx import stc
 
 from grass.pydispatch.signal import Signal
+from pathlib import Path
 
 # needed just for testing
 if __name__ == "__main__":
@@ -84,6 +86,7 @@ class GConsoleWindow(wx.SplitterWindow):
         self.panelPrompt = wx.Panel(parent=self, id=wx.ID_ANY)
         # initialize variables
         self.parent = parent  # GMFrame | CmdPanel | ?
+        self.giface = giface
         self._gconsole = gconsole
         self._menuModel = menuModel
 
@@ -142,19 +145,10 @@ class GConsoleWindow(wx.SplitterWindow):
         self.btnOutputSave.SetToolTip(_("Save output to a file"))
         self.btnCmdAbort = Button(parent=self.panelProgress, id=wx.ID_STOP)
         self.btnCmdAbort.SetToolTip(_("Abort running command"))
-        self.btnCmdExportHistory = Button(parent=self.panelPrompt, id=wx.ID_ANY)
-        self.btnCmdExportHistory.SetLabel(_("&Export history"))
-        self.btnCmdExportHistory.SetToolTip(
-            _("Export history of executed commands to a file")
-        )
-
-        if not self._gcstyle & GC_PROMPT:
-            self.btnCmdExportHistory.Hide()
 
         self.btnClear.Bind(wx.EVT_BUTTON, self.OnClear)
         self.btnOutputSave.Bind(wx.EVT_BUTTON, self.OnOutputSave)
         self.btnCmdAbort.Bind(wx.EVT_BUTTON, self._gconsole.OnCmdAbort)
-        self.btnCmdExportHistory.Bind(wx.EVT_BUTTON, self.OnCmdExportHistory)
 
         self._layout()
 
@@ -182,19 +176,13 @@ class GConsoleWindow(wx.SplitterWindow):
             promptSizer.Add(helpText, proportion=0, flag=wx.EXPAND | wx.LEFT, border=5)
 
             btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+            btnSizer.AddStretchSpacer()
             btnSizer.Add(
                 self.btnOutputSave,
                 proportion=0,
                 flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
                 border=5,
             )
-            btnSizer.Add(
-                self.btnCmdExportHistory,
-                proportion=0,
-                flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
-                border=5,
-            )
-            btnSizer.AddStretchSpacer()
             btnSizer.Add(self.btnClear, proportion=0, flag=wx.EXPAND, border=5)
             promptSizer.Add(btnSizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
@@ -365,15 +353,12 @@ class GConsoleWindow(wx.SplitterWindow):
             path = dlg.GetPath()
 
             try:
-                output = open(path, "w")
-                output.write(text)
-            except IOError as e:
+                Path(path).write_text(text)
+            except OSError as e:
                 GError(
                     _("Unable to write file '%(path)s'.\n\nDetails: %(error)s")
                     % {"path": path, "error": e}
                 )
-            finally:
-                output.close()
             message = _("Command output saved into '%s'") % path
             self.showNotification.emit(message=message)
 
@@ -406,7 +391,7 @@ class GConsoleWindow(wx.SplitterWindow):
 
         self.cmdOutput.AddStyledMessage(message, type)
 
-        if event.type in ("warning", "error"):
+        if event.type in {"warning", "error"}:
             self.contentChanged.emit(notification=Notification.MAKE_VISIBLE)
         else:
             self.contentChanged.emit(notification=Notification.HIGHLIGHT)
@@ -414,29 +399,6 @@ class GConsoleWindow(wx.SplitterWindow):
     def OnCmdProgress(self, event):
         """Update progress message info"""
         self.progressbar.SetValue(event.value)
-        event.Skip()
-
-    def OnCmdExportHistory(self, event):
-        """Export the history of executed commands stored
-        in a .wxgui_history file to a selected file."""
-        dlg = wx.FileDialog(
-            self,
-            message=_("Save file as..."),
-            defaultFile="grass_cmd_log.txt",
-            wildcard=_("{txt} (*.txt)|*.txt|{files} (*)|*").format(
-                txt=_("Text files"), files=_("Files")
-            ),
-            style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
-        )
-
-        if dlg.ShowModal() == wx.ID_OK:
-            path = dlg.GetPath()
-            if self.cmdPrompt.CopyHistory(path):
-                self.showNotification.emit(
-                    message=_("Command history saved to '{}'".format(path))
-                )
-
-        dlg.Destroy()
         event.Skip()
 
     def OnCmdRun(self, event):
@@ -610,9 +572,8 @@ class GStc(stc.StyledTextCtrl):
 
         if wrap:
             txt = textwrap.fill(txt, wrap) + "\n"
-        else:
-            if txt[-1] != "\n":
-                txt += "\n"
+        elif txt[-1] != "\n":
+            txt += "\n"
 
         if "\r" in txt:
             self.linePos = -1
@@ -656,17 +617,14 @@ class GStc(stc.StyledTextCtrl):
             for c in message:
                 if c == "\b":
                     self.linePos -= 1
-                else:
-                    if c == "\r":
-                        pos = self.GetCurLine()[1]
-                        # self.SetCurrentPos(pos)
-                    else:
-                        self.SetCurrentPos(self.linePos)
-                    self.ReplaceSelection(c)
-                    self.linePos = self.GetCurrentPos()
-                    if c != " ":
-                        last_c = c
-            if last_c not in ("0123456789"):
+                    continue
+
+                self.SetCurrentPos(self.linePos)
+                self.ReplaceSelection(c)
+                self.linePos = self.GetCurrentPos()
+                if c != " ":
+                    last_c = c
+            if last_c not in (digits):
                 self.AddTextWrapped("\n", wrap=None)
                 self.linePos = -1
         else:

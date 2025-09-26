@@ -22,47 +22,56 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (handlers support)
 """
 
-import os
+from __future__ import annotations
+
 import copy
+import os
+from typing import TYPE_CHECKING
 
 from core import globalvar
+
+# isort: split
 import wx
 import wx.aui
-
-from mapdisp.toolbars import MapToolbar, NvizIcons
-from mapdisp.gprint import PrintOptions
-from core.gcmd import GError, GMessage, RunCommand
-from core.utils import ListOfCatsToRange, GetLayerNameFromCmd
-from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
 from core.debug import Debug
-from core.settings import UserSettings
-from gui_core.mapdisp import SingleMapPanel, FrameMixin
-from gui_core.query import QueryDialog, PrepareQueryResults
-from mapwin.buffered import BufferedMapWindow
-from mapwin.decorations import (
-    LegendController,
-    BarscaleController,
-    ArrowController,
-    DtextController,
-    LegendVectController,
-)
-from mapwin.analysis import (
-    ProfileController,
-    MeasureDistanceController,
-    MeasureAreaController,
-)
-from gui_core.forms import GUI
+from core.gcmd import GError, GMessage, RunCommand
 from core.giface import Notification
+from core.settings import UserSettings
+from core.utils import GetLayerNameFromCmd, ListOfCatsToRange
+from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
+from gui_core.forms import GUI
+from gui_core.mapdisp import FrameMixin, SingleMapPanel
+from gui_core.query import PrepareQueryResults, QueryDialog
 from gui_core.vselect import VectorSelectBase, VectorSelectHighlighter
 from gui_core.wrap import Menu
+from main_window.page import MainPageBase
 from mapdisp import statusbar as sb
+from mapdisp.gprint import PrintOptions
+from mapdisp.toolbars import MapToolbar, NvizIcons
+from mapwin.analysis import (
+    MeasureAreaController,
+    MeasureDistanceController,
+    ProfileController,
+)
+from mapwin.buffered import BufferedMapWindow
+from mapwin.decorations import (
+    ArrowController,
+    BarscaleController,
+    DtextController,
+    LegendController,
+    LegendVectController,
+)
 
-import grass.script as grass
-
+import grass.script as gs
 from grass.pydispatch.signal import Signal
+from grass.exceptions import ScriptError
+
+if TYPE_CHECKING:
+    import lmgr.frame
+    import main_window.frame
 
 
-class MapPanel(SingleMapPanel):
+class MapPanel(SingleMapPanel, MainPageBase):
     """Main panel for map display window. Drawing takes place in
     child double buffered drawing window.
     """
@@ -75,9 +84,10 @@ class MapPanel(SingleMapPanel):
         toolbars=["map"],
         statusbar=True,
         tree=None,
-        lmgr=None,
+        lmgr: main_window.frame.GMFrame | lmgr.frame.GMFrame | None = None,
         Map=None,
         auimgr=None,
+        dockable=False,
         name="MapWindow",
         **kwargs,
     ):
@@ -102,6 +112,7 @@ class MapPanel(SingleMapPanel):
             name=name,
             **kwargs,
         )
+        MainPageBase.__init__(self, dockable)
 
         self._giface = giface
         # Layer Manager object
@@ -110,11 +121,9 @@ class MapPanel(SingleMapPanel):
         # Layer Manager layer tree object
         # used for VDigit toolbar and window and GLWindow
         self.tree = tree
-        # checks for saving workspace
-        self.canCloseDisplayCallback = None
 
-        # Emitted when switching map notebook tabs (Single-Window)
-        self.onFocus = Signal("MapPanel.onFocus")
+        # Saved Map Display output img size
+        self._saved_output_img_size = None
 
         # Emitted when starting (switching to) 3D mode.
         # Parameter firstTime specifies if 3D was already activated.
@@ -122,9 +131,6 @@ class MapPanel(SingleMapPanel):
 
         # Emitted when ending (switching from) 3D mode.
         self.ending3dMode = Signal("MapPanel.ending3dMode")
-
-        # Emitted when closing display by closing its window.
-        self.closingDisplay = Signal("MapPanel.closingDisplay")
 
         # Emitted when closing display by closing its window.
         self.closingVNETDialog = Signal("MapPanel.closingVNETDialog")
@@ -163,7 +169,7 @@ class MapPanel(SingleMapPanel):
         self.Map.GetRenderMgr().renderingFailed.connect(
             lambda cmd, error: self._giface.WriteError(
                 _("Failed to run command '%(command)s'. Details:\n%(error)s")
-                % dict(command=" ".join(cmd), error=error)
+                % {"command": " ".join(cmd), "error": error}
             )
         )
 
@@ -298,7 +304,7 @@ class MapPanel(SingleMapPanel):
 
     def _addToolbarVDigit(self):
         """Add vector digitizer toolbar"""
-        from vdigit.main import haveVDigit, VDigit
+        from vdigit.main import VDigit, haveVDigit
         from vdigit.toolbars import VDigitToolbar
 
         if not haveVDigit:
@@ -307,7 +313,7 @@ class MapPanel(SingleMapPanel):
             self.toolbars["map"].combo.SetValue(_("2D view"))
 
             GError(
-                _("Unable to start wxGUI vector digitizer.\n" "Details: %s") % errorMsg,
+                _("Unable to start wxGUI vector digitizer.\nDetails: %s") % errorMsg,
                 parent=self,
             )
             return
@@ -388,7 +394,7 @@ class MapPanel(SingleMapPanel):
             .TopDockable(True)
             .CloseButton(False)
             .Layer(2)
-            .BestSize((self.toolbars["vdigit"].GetBestSize())),
+            .BestSize(self.toolbars["vdigit"].GetBestSize()),
         )
         # change mouse to draw digitized line
         self.MapWindow.mouse["box"] = "point"
@@ -403,7 +409,7 @@ class MapPanel(SingleMapPanel):
 
     def AddNviz(self):
         """Add 3D view mode window"""
-        from nviz.main import haveNviz, GLWindow, errorMsg
+        from nviz.main import GLWindow, errorMsg, haveNviz
 
         # check for GLCanvas and OpenGL
         if not haveNviz:
@@ -413,8 +419,9 @@ class MapPanel(SingleMapPanel):
                 message=_(
                     "Unable to switch to 3D display mode.\nThe Nviz python extension "
                     "was not found or loaded properly.\n"
-                    "Switching back to 2D display mode.\n\nDetails: %s" % errorMsg
-                ),
+                    "Switching back to 2D display mode.\n\nDetails: %s"
+                )
+                % errorMsg,
             )
             return
 
@@ -618,7 +625,7 @@ class MapPanel(SingleMapPanel):
                 .TopDockable(True)
                 .CloseButton(False)
                 .Layer(2)
-                .BestSize((self.toolbars["map"].GetBestSize())),
+                .BestSize(self.toolbars["map"].GetBestSize()),
             )
 
         # nviz
@@ -672,9 +679,13 @@ class MapPanel(SingleMapPanel):
         if self.GetToolbar("vdigit"):
             if self.MapWindow.digit:
                 self.MapWindow.digit.GetDisplay().SetSelected([])
-            self.MapWindow.UpdateMap(render=True, renderVector=True)
+            self.MapWindow.UpdateMap(
+                render=True,
+                renderVector=True,
+                reRenderTool=True,
+            )
         else:
-            self.MapWindow.UpdateMap(render=True)
+            self.MapWindow.UpdateMap(render=True, reRenderTool=True)
 
         # reset dialog with selected features
         if self.dialogs["vselect"]:
@@ -731,19 +742,19 @@ class MapPanel(SingleMapPanel):
             return
 
         # get size
-        dlg = ImageSizeDialog(self)
+        dlg = ImageSizeDialog(self, img_size=self._saved_output_img_size)
         dlg.CentreOnParent()
         if dlg.ShowModal() != wx.ID_OK:
             dlg.Destroy()
             return
-        width, height = dlg.GetValues()
+        self._saved_output_img_size = dlg.GetValues()
         dlg.Destroy()
 
         # get filename
         dlg = wx.FileDialog(
             parent=self,
             message=_(
-                "Choose a file name to save the image " "(no need to add extension)"
+                "Choose a file name to save the image (no need to add extension)"
             ),
             wildcard=filetype,
             style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
@@ -761,7 +772,7 @@ class MapPanel(SingleMapPanel):
             if ext != extType:
                 path = base + "." + extType
 
-            self.MapWindow.SaveToFile(path, fileType, width, height)
+            self.MapWindow.SaveToFile(path, fileType, *self._saved_output_img_size)
 
         dlg.Destroy()
 
@@ -773,6 +784,10 @@ class MapPanel(SingleMapPanel):
         if not ltype:
             return
         width, height = self.MapWindow.GetClientSize()
+
+        name = ""
+        extType = "png"
+
         for param in command[1:]:
             try:
                 p, val = param.split("=")
@@ -780,10 +795,7 @@ class MapPanel(SingleMapPanel):
                 # --overwrite
                 continue
             if p == "format":  # must be there
-                if self.IsPaneShown("3d"):
-                    extType = "ppm"
-                else:
-                    extType = val
+                extType = "ppm" if self.IsPaneShown("3d") else val
             if p == "output":  # must be there
                 name = val
             elif p == "size":
@@ -795,10 +807,8 @@ class MapPanel(SingleMapPanel):
         elif ext[1:] != extType:
             extType = ext[1:]
 
-        if self.IsPaneShown("3d"):
-            bitmapType = "ppm"
-        else:
-            bitmapType = wx.BITMAP_TYPE_PNG  # default type
+        # default type is PNG
+        bitmapType = "ppm" if self.IsPaneShown("3d") else wx.BITMAP_TYPE_PNG
         for each in ltype:
             if each["ext"] == extType:
                 bitmapType = each["type"]
@@ -828,16 +838,16 @@ class MapPanel(SingleMapPanel):
                 overwrite=overwrite,
                 getErrorMsg=True,
             )
-            if not returncode == 0:
+            if returncode != 0:
                 self._giface.WriteError(_("Failed to run d.to.rast:\n") + messages)
                 return
             # set region for composite
-            grass.use_temp_region()
+            gs.use_temp_region()
             returncode, messages = RunCommand(
                 "g.region", raster=tmpName + ".red", quiet=True, getErrorMsg=True
             )
-            if not returncode == 0:
-                grass.del_temp_region()
+            if returncode != 0:
+                gs.del_temp_region()
                 self._giface.WriteError(_("Failed to run d.to.rast:\n") + messages)
                 return
             # composite
@@ -851,7 +861,7 @@ class MapPanel(SingleMapPanel):
                 overwrite=overwrite,
                 getErrorMsg=True,
             )
-            grass.del_temp_region()
+            gs.del_temp_region()
             RunCommand(
                 "g.remove",
                 type="raster",
@@ -859,9 +869,9 @@ class MapPanel(SingleMapPanel):
                 quiet=True,
                 name=[tmpName + ".red", tmpName + ".green", tmpName + ".blue"],
             )
-            if not returncode == 0:
+            if returncode != 0:
                 self._giface.WriteError(_("Failed to run d.to.rast:\n") + messages)
-                grass.try_remove(pngFile)
+                gs.try_remove(pngFile)
                 return
 
             # alignExtent changes only region variable
@@ -878,7 +888,7 @@ class MapPanel(SingleMapPanel):
                 w=region["w"],
                 quiet=True,
             )
-            grass.try_remove(pngFile)
+            gs.try_remove(pngFile)
 
         if self.IsPaneShown("3d"):
             self._giface.WriteError(_("d.to.rast can be used only in 2D mode."))
@@ -898,7 +908,7 @@ class MapPanel(SingleMapPanel):
             return
         # output file as PNG
         tmpName = "d_to_rast_tmp"
-        pngFile = grass.tempfile(create=False) + ".png"
+        pngFile = gs.tempfile(create=False) + ".png"
         dOutFileCmd = ["d.out.file", "output=" + pngFile, "format=png"]
         self.DOutFile(dOutFileCmd, callback=_DToRastDone)
 
@@ -972,14 +982,20 @@ class MapPanel(SingleMapPanel):
         Also close associated layer tree page
         """
         Debug.msg(2, "MapPanel.OnCloseWindow()")
-        if self.canCloseDisplayCallback:
-            pgnum_dict = self.canCloseDisplayCallback(
-                askIfSaveWorkspace=askIfSaveWorkspace
-            )
+        if self.canCloseCallback:
+            pgnum_dict = self.canCloseCallback(askIfSaveWorkspace=askIfSaveWorkspace)
             if pgnum_dict is not None:
                 self.CleanUp()
                 if pgnum_dict["layers"] > -1:
-                    self.closingDisplay.emit(pgnum_dict=pgnum_dict)
+                    if self.IsDockable():
+                        self.closingPage.emit(
+                            pgnum_dict=pgnum_dict, is_docked=self.IsDocked()
+                        )
+                        if not self.IsDocked():
+                            frame = self.GetParent()
+                            frame.Destroy()
+                    else:
+                        self.closingPage.emit(pgnum_dict=pgnum_dict)
                     # Destroy is called when notebook page is deleted
         else:
             self.CleanUp()
@@ -1006,10 +1022,10 @@ class MapPanel(SingleMapPanel):
                 ltype = layer.maplayer.GetType()
                 if ltype == "raster":
                     rast.append(name)
-                elif ltype in ("rgb", "his"):
+                elif ltype in {"rgb", "his"}:
                     for iname in name.split("\n"):
                         rast.append(iname)
-                elif ltype in ("vector", "thememap", "themechart"):
+                elif ltype in {"vector", "thememap", "themechart"}:
                     vect.append(name)
             if vect:
                 # check for vector maps open to be edited
@@ -1019,7 +1035,7 @@ class MapPanel(SingleMapPanel):
                     for name in vect:
                         if lmap == name:
                             self._giface.WriteWarning(
-                                _("Vector map <%s> " "opened for editing - skipped.")
+                                _("Vector map <%s> opened for editing - skipped.")
                                 % lmap
                             )
                             vect.remove(name)
@@ -1074,25 +1090,23 @@ class MapPanel(SingleMapPanel):
                 mapdisp=self._giface.GetMapDisplay(), giface=self._giface
             )
 
-        # use display region settings instead of computation region settings
-        self.tmpreg = os.getenv("GRASS_REGION")
-        os.environ["GRASS_REGION"] = self.Map.SetRegion(windres=False)
-
         rastQuery = []
         vectQuery = []
-        if rast:
-            rastQuery = grass.raster_what(map=rast, coord=(east, north), localized=True)
+        env = os.environ.copy()
+        for raster in rast:
+            env["GRASS_REGION"] = gs.region_env(raster=raster)
+            rastQuery += gs.raster_what(
+                map=raster, coord=(east, north), localized=True, env=env
+            )
         if vect:
-            encoding = UserSettings.Get(group="atm", key="encoding", subkey="value")
             try:
-                vectQuery = grass.vector_what(
+                vectQuery = gs.vector_what(
                     map=vect,
                     coord=(east, north),
                     distance=qdist,
-                    encoding=encoding,
                     multiple=True,
                 )
-            except grass.ScriptError:
+            except ScriptError:
                 GError(
                     parent=self,
                     message=_(
@@ -1100,7 +1114,6 @@ class MapPanel(SingleMapPanel):
                         "Check database settings and topology."
                     ).format(maps=",".join(vect)),
                 )
-        self._QueryMapDone()
 
         self._highlighter_layer.Clear()
         if vectQuery and "Category" in vectQuery[0]:
@@ -1139,25 +1152,10 @@ class MapPanel(SingleMapPanel):
             self._highlighter_layer.SetMap(
                 vectQuery[0]["Map"] + "@" + vectQuery[0]["Mapset"]
             )
-            tmp = list()
-            for i in vectQuery:
-                tmp.append(i["Category"])
+            tmp = [i["Category"] for i in vectQuery]
 
             self._highlighter_layer.SetCats(tmp)
             self._highlighter_layer.DrawSelected()
-
-    def _QueryMapDone(self):
-        """Restore settings after querying (restore GRASS_REGION)"""
-        if hasattr(self, "tmpreg"):
-            if self.tmpreg:
-                os.environ["GRASS_REGION"] = self.tmpreg
-            elif "GRASS_REGION" in os.environ:
-                del os.environ["GRASS_REGION"]
-        elif "GRASS_REGION" in os.environ:
-            del os.environ["GRASS_REGION"]
-
-        if hasattr(self, "tmpreg"):
-            del self.tmpreg
 
     def OnQuery(self, event):
         """Query tools menu"""
@@ -1168,7 +1166,9 @@ class MapPanel(SingleMapPanel):
         # change the cursor
         self.MapWindow.SetNamedCursor("cross")
 
-    def AddTmpVectorMapLayer(self, name, cats, useId=False, addLayer=True):
+    def AddTmpVectorMapLayer(
+        self, name, cats, useId: bool = False, addLayer: bool = True
+    ):
         """Add temporal vector map layer to map composition
 
         :param name: name of map layer
@@ -1219,24 +1219,23 @@ class MapPanel(SingleMapPanel):
                 cmd[-1].append("layer=%d" % layer)
                 cmd[-1].append("cats=%s" % ListOfCatsToRange(lcats))
 
-        if addLayer:
-            args = {}
-            if useId:
-                args["ltype"] = "vector"
-            else:
-                args["ltype"] = "command"
-
-            return self.Map.AddLayer(
-                name=globalvar.QUERYLAYER,
-                command=cmd,
-                active=True,
-                hidden=True,
-                opacity=1.0,
-                render=True,
-                **args,
-            )
-        else:
+        if not addLayer:
             return cmd
+
+        args = {}
+        if useId:
+            args["ltype"] = "vector"
+        else:
+            args["ltype"] = "command"
+        return self.Map.AddLayer(
+            name=globalvar.QUERYLAYER,
+            command=cmd,
+            active=True,
+            hidden=True,
+            opacity=1.0,
+            render=True,
+            **args,
+        )
 
     def OnMeasureDistance(self, event):
         self._onMeasure(MeasureDistanceController)
@@ -1247,7 +1246,8 @@ class MapPanel(SingleMapPanel):
     def _onMeasure(self, controller):
         """Starts measurement mode.
 
-        :param controller: measurement class (MeasureDistanceController, MeasureAreaController)
+        :param controller: measurement class (MeasureDistanceController,
+                           MeasureAreaController)
         """
         self.measureController = controller(self._giface, mapWindow=self.GetMapWindow())
         # assure that the mode is ended and lines are cleared whenever other
@@ -1287,11 +1287,11 @@ class MapPanel(SingleMapPanel):
 
     def OnHistogramPyPlot(self, event):
         """Init PyPlot histogram display canvas and tools"""
-        raster = []
-
-        for layer in self._giface.GetLayerList().GetSelectedLayers():
-            if layer.maplayer.GetType() == "raster":
-                raster.append(layer.maplayer.GetName())
+        raster = [
+            layer.maplayer.GetName()
+            for layer in self._giface.GetLayerList().GetSelectedLayers()
+            if layer.maplayer.GetType() == "raster"
+        ]
 
         from wxplot.histogram import HistogramPlotFrame
 
@@ -1301,11 +1301,11 @@ class MapPanel(SingleMapPanel):
 
     def OnScatterplot(self, event):
         """Init PyPlot scatterplot display canvas and tools"""
-        raster = []
-
-        for layer in self._giface.GetLayerList().GetSelectedLayers():
-            if layer.maplayer.GetType() == "raster":
-                raster.append(layer.maplayer.GetName())
+        raster = [
+            layer.maplayer.GetName()
+            for layer in self._giface.GetLayerList().GetSelectedLayers()
+            if layer.maplayer.GetType() == "raster"
+        ]
 
         from wxplot.scatter import ScatterFrame
 
@@ -1313,8 +1313,8 @@ class MapPanel(SingleMapPanel):
 
         win.CentreOnParent()
         win.Show()
-        # Open raster select dialog to make sure that at least 2 rasters (and the desired rasters)
-        # are selected to be plotted
+        # Open raster select dialog to make sure that at least 2 rasters (and the
+        # desired rasters) are selected to be plotted
         win.OnSelectRaster(None)
 
     def OnHistogram(self, event):
@@ -1510,7 +1510,7 @@ class MapPanel(SingleMapPanel):
         self.MapWindow.SetRegion(zoomOnly=False)
 
     def OnSetExtentToWind(self, event):
-        """Set compulational region extent interactively"""
+        """Set computational region extent interactively"""
         self.MapWindow.SetModeDrawRegion()
 
     def OnSaveDisplayRegion(self, event):
@@ -1574,7 +1574,7 @@ class MapPanel(SingleMapPanel):
 
     def GetMapToolbar(self):
         """Returns toolbar with zooming tools"""
-        return self.toolbars["map"] if "map" in self.toolbars else None
+        return self.toolbars.get("map", None)
 
     def GetDialog(self, name):
         """Get selected dialog if exist"""
@@ -1611,7 +1611,7 @@ class MapPanel(SingleMapPanel):
     def AddRDigit(self):
         """Adds raster digitizer: creates toolbar and digitizer controller,
         binds events and signals."""
-        from rdigit.controller import RDigitController, EVT_UPDATE_PROGRESS
+        from rdigit.controller import EVT_UPDATE_PROGRESS, RDigitController
         from rdigit.toolbars import RDigitToolbar
 
         self.rdigit = RDigitController(self._giface, mapWindow=self.GetMapWindow())
@@ -1639,7 +1639,7 @@ class MapPanel(SingleMapPanel):
             ),
         )
         rasters = self.GetMap().GetListOfLayers(
-            ltype="raster", mapset=grass.gisenv()["MAPSET"]
+            ltype="raster", mapset=gs.gisenv()["MAPSET"]
         )
         self.toolbars["rdigit"].UpdateRasterLayers(rasters)
         self.toolbars["rdigit"].SelectDefault()
@@ -1663,14 +1663,14 @@ class MapPanel(SingleMapPanel):
             .CloseButton(False)
             .Layer(2)
             .DestroyOnClose()
-            .BestSize((self.toolbars["rdigit"].GetBestSize())),
+            .BestSize(self.toolbars["rdigit"].GetBestSize()),
         )
         self._mgr.Update()
 
         self.rdigit.Start()
 
     def _updateRDigitLayers(self, layer):
-        mapset = grass.gisenv()["MAPSET"]
+        mapset = gs.gisenv()["MAPSET"]
         self.toolbars["rdigit"].UpdateRasterLayers(
             rasters=self.GetMap().GetListOfLayers(ltype="raster", mapset=mapset)
         )
@@ -1714,9 +1714,7 @@ class MapDisplay(FrameMixin, MapPanel):
         )
         # set system icon
         parent.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
         # use default frame window layout
         client_disp = wx.ClientDisplayRect()

@@ -12,16 +12,17 @@
 #        for details.
 #
 #############################################################################
+from __future__ import annotations
 
 import os
-import sys
+from pathlib import Path
 import fnmatch
 import re
+from typing import TYPE_CHECKING
+import operator
 
-from build_html import write_html_footer, grass_version, header1_tmpl
-
-
-output_name = "manual_gallery.html"
+if TYPE_CHECKING:
+    from collections.abc import Iterable
 
 img_extensions = ["png", "jpg", "gif"]
 img_patterns = ["*." + extension for extension in img_extensions]
@@ -89,25 +90,36 @@ header_graphical_index_tmpl = """\
 
 <a href="index.html"><img src="grass_logo.png" alt="GRASS logo"></a>
 <hr class="header">
-<h2>GRASS GIS manual gallery</h2>
+<h2>GRASS manual gallery</h2>
 """
 
+# The recommeded width from style guide.
+MIN_IMAGE_WIDTH = 600
 
-def img_in_html(filename, imagename):
+
+def image_width(filename):
+    """Get image size in pixels (width times height)"""
+    try:
+        from PIL import Image
+    except ImportError:
+        return None
+    with Image.open(filename) as img:
+        return img.size[0]  # First element is width.
+
+
+def img_in_file(filename: str | os.PathLike[str], imagename: str, ext: str) -> bool:
     # for some reason, calling search just once is much faster
     # than calling it on every line (time is spent in _compile)
-    pattern = re.compile("<img .*src=.{0}.*>".format(imagename))
-    with open(filename) as file:
-        if re.search(pattern, file.read()):
-            return True
-    return False
+    if ext == "html":
+        pattern = re.compile("<img .*src=.{0}.*>".format(imagename))
+    else:
+        # expecting markdown
+        pattern = re.compile(r"\]\({0}\)".format(imagename))
+    return bool(re.search(pattern, Path(filename).read_text()))
 
 
-def file_matches(filename, patterns):
-    for pattern in patterns:
-        if fnmatch.fnmatch(filename, pattern):
-            return True
-    return False
+def file_matches(filename: str, patterns: Iterable[str]):
+    return any(fnmatch.fnmatch(filename, pattern) for pattern in patterns)
 
 
 def get_files(directory, patterns, exclude_patterns):
@@ -123,8 +135,7 @@ def remove_module_name(string, module):
     string = string.replace(module.replace("wxGUI.", "g.gui."), "")
     string = string.replace(module.replace(".", "_"), "")  # using _
     string = string.replace(module.replace(".", ""), "")  # using nothing
-    string = string.replace(module, "")  # using original dots
-    return string
+    return string.replace(module, "")  # using original dots
 
 
 def title_from_names(module_name, img_name):
@@ -138,55 +149,92 @@ def title_from_names(module_name, img_name):
     img_name = img_name.strip()
     if img_name:
         return "{name} ({desc})".format(name=module_name, desc=img_name)
+    return "{name}".format(name=module_name)
+
+
+def get_module_name(filename, ext):
+    return filename.replace(f".{ext}", "")
+
+
+def main(ext):
+    if ext == "html":
+        from build_html import (
+            header1_tmpl,
+            man_dir,
+        )
     else:
-        return "{name}".format(name=module_name)
+        from build_md import (
+            header1_tmpl,
+            man_dir,
+        )
 
+    output_name = f"manual_gallery.{ext}"
 
-def get_module_name(filename):
-    return filename.replace(".html", "")
-
-
-def main():
-    html_dir = sys.argv[1]
-
-    html_files = get_files(
-        html_dir,
-        ["*.html"],
-        exclude_patterns=[output_name, "*_graphical.html", "graphical_index.html"],
+    man_files = get_files(
+        man_dir,
+        [f"*.{ext}"],
+        exclude_patterns=[output_name, f"*_graphical.{ext}", f"graphical_index.{ext}"],
     )
-    img_html_files = {}
+    img_files = {}
 
-    for filename in os.listdir(html_dir):
+    for filename in os.listdir(man_dir):
         if filename in img_blacklist:
             continue
         if file_matches(filename, img_patterns):
-            for html_file in html_files:
-                if img_in_html(os.path.join(html_dir, html_file), filename):
-                    img_html_files[filename] = html_file
-                    # for now suppose one image per html
+            width = image_width(Path(man_dir, filename))
+            if width is not None and width < MIN_IMAGE_WIDTH:
+                # Skip small images.
+                continue
+            for man_filename in man_files:
+                if img_in_file(Path(man_dir, man_filename), filename, ext):
+                    img_files[filename] = man_filename
+                    # for now suppose one image per manual filename
+                    continue
 
-    with open(os.path.join(html_dir, output_name), "w") as output:
-        output.write(
-            header1_tmpl.substitute(
-                title="GRASS GIS %s Reference " "Manual: Manual gallery" % grass_version
-            )
-        )
-        output.write(header_graphical_index_tmpl)
-        output.write('<ul class="img-list">\n')
-        for image, html_file in sorted(img_html_files.items()):
-            name = get_module_name(html_file)
+    with open(Path(man_dir, output_name), "w") as output:
+        if ext == "html":
+            title = "GRASS %s Reference Manual: Manual gallery" % grass_version
+        else:
+            title = "Manual gallery"
+        output.write(header1_tmpl.substitute(title=title))
+        if ext == "html":
+            output.write(header_graphical_index_tmpl)
+            output.write('<ul class="img-list">\n')
+        for image, filename in sorted(img_files.items(), key=operator.itemgetter(1)):
+            name = get_module_name(filename, ext)
             title = title_from_names(name, image)
-            output.write(
-                "<li>"
-                '<a href="{html}" title="{title}">'
-                '<img src="{img}">'
-                '<span class="name">{name}</span>'
-                "</a>"
-                "</li>\n".format(html=html_file, img=image, title=title, name=name)
-            )
-        output.write("</ul>")
-        write_html_footer(output, "index.html", year)
+            if ext == "html":
+                output.write(
+                    "<li>"
+                    '<a href="{fn}" title="{title}">'
+                    '<img src="{img}">'
+                    '<span class="name">{name}</span>'
+                    "</a>"
+                    "</li>\n".format(fn=filename, img=image, title=title, name=name)
+                )
+            else:
+                output.write(
+                    f'[![{name}]({image} "{title}")]({filename})  \n*{title}*\n\n'
+                )
+        if ext == "html":
+            output.write("</ul>")
+        write_footer(output, f"index.{ext}", year, template=ext)
+
+    return img_files
 
 
 if __name__ == "__main__":
-    main()
+    from build import (
+        write_footer,
+        grass_version,
+    )
+
+    img_files_html = main("html")
+
+    img_files_md = main("md")
+
+    # TODO: img_files_html and img_files_md should be the same
+    # remove lines when fixed
+    for k in img_files_html:
+        if k not in img_files_md:
+            print(k)

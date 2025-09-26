@@ -42,7 +42,7 @@
 #ifndef PI
 #define PI M_PI
 #endif
-#define DATA(map, r, c) (map)[(r)*ncols + (c)]
+#define DATA(map, r, c) (map)[(r) * ncols + (c)]
 
 /*#define DEBUG */
 
@@ -97,7 +97,7 @@ void spread(void)
             to_cell = to_cell->next;
         }
 #endif
-        /*Get a cell in the list each time, and compute culmulative costs
+        /*Get a cell in the list each time, and compute cumulative costs
          *via the current spread cell*/
         to_cell = front_cell;
         while (to_cell != NULL) {
@@ -206,7 +206,7 @@ int cumulative(struct costHa *pres_cell, struct cell_ptrHa *to_cell,
     cost = 0.0;
     count = 1;
     while (count <= xsteps) {
-        /*Can't go through a barrer in a path */
+        /*Can't go through a barrier in a path */
         if (DATA(map_base, xrow, xcol) <= 0)
             return -1;
 
@@ -236,7 +236,7 @@ int cumulative(struct costHa *pres_cell, struct cell_ptrHa *to_cell,
     return 0;
 }
 
-/****** function for updating the cumulative cost/time, possibaly     ********
+/****** function for updating the cumulative cost/time, possibly      ********
  ****** back path x,y coordinates, both in the output(s) and the heap ********/
 
 void update(struct costHa *pres_cell, int row, int col, double angle,

@@ -1,6 +1,6 @@
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-from grass.gunittest.gmodules import SimpleModule, call_module
+from grass.gunittest.gmodules import SimpleModule
 
 from grass.script.core import tempname
 from grass.pygrass.gis import Mapset
@@ -24,12 +24,10 @@ class TestSemanticLabelsSystemDefined(TestCase):
 
     def read_semantic_label(self):
         with RasterRow(self.map) as rast:
-            semantic_label = rast.info.semantic_label
-
-        return semantic_label
+            return rast.info.semantic_label
 
     def test_semantic_label_assign_not_current_mapset(self):
-        if not self.mapset == "PERMANENT":
+        if self.mapset != "PERMANENT":
             self.mapset.name = "PERMANENT"
             a_map = self.mapset.glist(type="raster")[0]
             module = SimpleModule(
@@ -45,6 +43,21 @@ class TestSemanticLabelsSystemDefined(TestCase):
 
         # check also using pygrass
         self.assertEqual(self.read_semantic_label(), self.semantic_label)
+
+    def test_semantic_label_print(self):
+        semantic_label = "S2_1"
+        semantic_label_desc = "S2 Visible (Coastal/Aerosol)"
+        module = SimpleModule(
+            "r.semantic.label",
+            map=self.map,
+            semantic_label=semantic_label,
+        )
+        self.assertModule(module)
+
+        module = SimpleModule("r.semantic.label", map=self.map, operation="print")
+        self.assertModule(module)
+
+        self.assertEqual(module.outputs.stdout.strip(), semantic_label_desc)
 
     def test_semantic_label_dissociate(self):
         module = SimpleModule("r.semantic.label", operation="remove", map=self.map)

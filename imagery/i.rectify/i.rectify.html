@@ -11,42 +11,42 @@ system than before it was rectified). Supported transformation methods
 are first, second, and third order polynomial and thin plate spline.
 Thin plate spline is recommended for ungeoreferenced satellite imagery
 where ground control points (GCPs) are included. Examples are
-<a href="http://www.gdal.org/frmt_l1b.html">NOAA/AVHRR</a>
-and <a href="http://www.gdal.org/frmt_various.html#Envisat">ENVISAT</a>
+<a href="https://gdal.org/en/stable/drivers/raster/l1b.html">NOAA/AVHRR</a>
+and <a href="https://gdal.org/en/stable/drivers/raster/esat.html#raster-esat">ENVISAT</a>
 imagery which include throusands of GCPs.
 
 <p>
 If no ground control points are available, the
 <a href="wxGUI.gcp.html">Ground Control Points Manager</a>
 must be run before <em>i.rectify</em>. An image must be
-georeferences before it can reside in a standard coordinate
-LOCATION, and therefore be analyzed with the other map
-layers in the standard coordinate LOCATION. Upon
+georeferenced before it can reside in a standard coordinate
+project, and therefore be analyzed with the other map
+layers there. Upon
 completion of <em>i.rectify</em>, the rectified image is
-deposited in the target standard coordinate LOCATION. This
-LOCATION is selected using
+deposited in the target standard coordinate project. This
+project is selected using
 
 <em><a href="i.target.html">i.target</a></em>.
 
 <p>More than one raster map may be rectified at a time. Each cell file
 should be given a unique output file name. The rectified image or
-rectified raster maps will be located in the target LOCATION when the
+rectified raster maps will be located in the target project when the
 program is completed. The original unrectified files are not modified
 or removed.
 
 <p>If the <b>-c</b> flag is used, <em>i.rectify</em> will only rectify that
 portion of the image or raster map that occurs within the chosen window
-region in the target location, and only that portion of the cell
+region in the target project, and only that portion of the cell
 file will be relocated in the target database. It is
 important therefore, to check the current mapset window in
-the target LOCATION if the <b>-c</b> flag is used.
+the target project if the <b>-c</b> flag is used.
 
 <p>
 If you are rectifying a file with plans to patch it to
 another file using the GRASS program <em>r.patch</em>,
 choose option number one, the current window in the target
-location. This window, however, must be the default window
-for the target LOCATION. When a file being rectified is
+project. This window, however, must be the default window
+for the target project. When a file being rectified is
 smaller than the default window in which it is being
 rectified, NULLs are added to the rectified file. Patching
 files of the same size that contain NULL data,
@@ -66,11 +66,11 @@ The program will calculate the RMSE and check the required number of points.
 <h4>Linear affine transformation (1st order transformation)</h4>
 
 <dl>
-	<dd> x' = ax + by + c
-	<dd> y' = Ax + By + C
+<dd> x' = ax + by + c
+<dd> y' = Ax + By + C
 </dl>
 
-The a,b,c,A,B,C are determined by least squares regression
+The a, b, c, A, B, C are determined by least squares regression
 based on the control points entered.  This transformation
 applies scaling, translation and rotation. It is NOT a
 general purpose rubber-sheeting like TPS, nor is it ortho-photo
@@ -144,9 +144,9 @@ with categorical data, since the cell values will be altered.
 <p>In the bilinear, cubic and lanczos methods, if any of the surrounding cells used to
 interpolate the new cell value are NULL, the resulting cell will be NULL, even if
 the nearest cell is not NULL. This will cause some thinning along NULL borders,
-such as the coasts of land areas in a DEM. The bilinear_f, cubic_f and lanczos_f
-interpolation methods can be used if thinning along NULL edges is not desired.
-These methods "fall back" to simpler interpolation methods along NULL borders.
+such as the coasts of land areas in a DEM. The <em>bilinear_f</em>, <em>cubic_f</em>
+and <em>lanczos_f</em> interpolation methods can be used if thinning along NULL edges is
+not desired. These methods "fall back" to simpler interpolation methods along NULL borders.
 That is, from lanczos to cubic to bilinear to nearest.
 <p>If nearest neighbor assignment is used, the output map has the same raster
 format as the input map. If any of the other interpolations is used, the
@@ -161,9 +161,9 @@ mode.
 <h2>NOTES</h2>
 
 If <em>i.rectify</em> starts normally but after some time the following text is seen:
-<br><tt>
+<br><code>
 ERROR: Error writing segment file
-</tt><br>
+</code><br>
 the user may try the <b>-c</b> flag or the module needs more free space
 on the hard drive.
 
@@ -179,7 +179,9 @@ Processing manual</a></em>
   <a href="v.proj.html">v.proj</a>,
   <a href="i.group.html">i.group</a>,
   <a href="i.target.html">i.target</a>
-  <br>
+</em>
+<br>
+<em>
   <a href="wxGUI.gcp.html">Ground Control Points Manager</a>
 </em>
 

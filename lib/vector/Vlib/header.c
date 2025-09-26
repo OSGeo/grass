@@ -30,7 +30,7 @@
 
    \return 0 on success
  */
-int Vect_print_header(const struct Map_info *Map)
+int Vect_print_header(struct Map_info *Map)
 {
     fprintf(stdout, "\nSelected information from dig header\n");
     fprintf(stdout, " Organization:  %s\n", Vect_get_organization(Map));
@@ -61,7 +61,7 @@ int Vect_read_header(struct Map_info *Map)
 
    \return 0
  */
-int Vect_write_header(const struct Map_info *Map)
+int Vect_write_header(struct Map_info *Map)
 {
     /* do some sanity checking here */
     Vect__write_head(Map);
@@ -76,7 +76,7 @@ int Vect_write_header(const struct Map_info *Map)
    \return 0 on success
    \return -1 on error
  */
-int Vect__write_head(const struct Map_info *Map)
+int Vect__write_head(struct Map_info *Map)
 {
     char path[GPATH_MAX];
     FILE *head_fp;
@@ -84,8 +84,10 @@ int Vect__write_head(const struct Map_info *Map)
     Vect__get_path(path, Map);
     head_fp = G_fopen_new(path, GV_HEAD_ELEMENT);
     if (head_fp == NULL) {
+        const char *map_name = Vect_get_full_name(Map);
         G_warning(_("Unable to create header file for vector map <%s>"),
-                  Vect_get_full_name(Map));
+                  map_name);
+        G_free((void *)map_name);
         return -1;
     }
 
@@ -128,8 +130,9 @@ int Vect__read_head(struct Map_info *Map)
     Vect__get_path(path, Map);
     head_fp = G_fopen_old(path, GV_HEAD_ELEMENT, Map->mapset);
     if (head_fp == NULL) {
-        G_warning(_("Unable to open header file of vector <%s>"),
-                  Vect_get_full_name(Map));
+        const char *map_name = Vect_get_full_name(Map);
+        G_warning(_("Unable to open header file of vector <%s>"), map_name);
+        G_free((void *)map_name);
         return -1;
     }
 
@@ -189,7 +192,7 @@ int Vect__read_head(struct Map_info *Map)
 
    \return string containing name
  */
-const char *Vect_get_name(const struct Map_info *Map)
+const char *Vect_get_name(struct Map_info *Map)
 {
     return Map->name;
 }
@@ -201,7 +204,7 @@ const char *Vect_get_name(const struct Map_info *Map)
 
    \return string containing mapset name
  */
-const char *Vect_get_mapset(const struct Map_info *Map)
+const char *Vect_get_mapset(struct Map_info *Map)
 {
     return Map->mapset;
 }
@@ -218,25 +221,29 @@ const char *Vect_get_mapset(const struct Map_info *Map)
 
    \return allocated string "name@mapset"
  */
-const char *Vect_get_full_name(const struct Map_info *Map)
+const char *Vect_get_full_name(struct Map_info *Map)
 {
     char *ptr;
+    size_t len;
 
     if (Map->format == GV_FORMAT_OGR_DIRECT && Map->fInfo.ogr.dsn &&
         Map->fInfo.ogr.layer_name) {
-        ptr = (char *)G_malloc(strlen(Map->fInfo.ogr.layer_name) +
-                               strlen(Map->fInfo.ogr.dsn) + 2);
-        sprintf(ptr, "%s@%s", Map->fInfo.ogr.layer_name, Map->fInfo.ogr.dsn);
+        len =
+            strlen(Map->fInfo.ogr.layer_name) + strlen(Map->fInfo.ogr.dsn) + 2;
+        ptr = (char *)G_malloc(len);
+        snprintf(ptr, len, "%s@%s", Map->fInfo.ogr.layer_name,
+                 Map->fInfo.ogr.dsn);
 
         return ptr;
     }
 
-    ptr = (char *)G_malloc(strlen(Map->name) + strlen(Map->mapset) + 2);
+    len = strlen(Map->name) + strlen(Map->mapset) + 2;
+    ptr = (char *)G_malloc(len);
     if (strlen(Map->mapset) > 0) {
-        sprintf(ptr, "%s@%s", Map->name, Map->mapset);
+        snprintf(ptr, len, "%s@%s", Map->name, Map->mapset);
     }
     else {
-        sprintf(ptr, "%s", Map->name);
+        snprintf(ptr, len, "%s", Map->name);
     }
 
     return ptr;
@@ -252,7 +259,7 @@ const char *Vect_get_full_name(const struct Map_info *Map)
    \return TRUE  vector map is 3D
    \return FALSE vector map is not 3D
  */
-int Vect_is_3d(const struct Map_info *Map)
+int Vect_is_3d(struct Map_info *Map)
 {
     return Map->head.with_z;
 }
@@ -280,7 +287,7 @@ int Vect_set_organization(struct Map_info *Map, const char *str)
 
    \return string containing organization name
  */
-const char *Vect_get_organization(const struct Map_info *Map)
+const char *Vect_get_organization(struct Map_info *Map)
 {
     return Map->head.organization;
 }
@@ -311,7 +318,7 @@ int Vect_set_date(struct Map_info *Map, const char *str)
 
    \return date of digitization string
  */
-const char *Vect_get_date(const struct Map_info *Map)
+const char *Vect_get_date(struct Map_info *Map)
 {
     return (Map->head.date);
 }
@@ -339,7 +346,7 @@ int Vect_set_person(struct Map_info *Map, const char *str)
 
    \return string containing user name
  */
-const char *Vect_get_person(const struct Map_info *Map)
+const char *Vect_get_person(struct Map_info *Map)
 {
     return (Map->head.user_name);
 }
@@ -367,7 +374,7 @@ int Vect_set_map_name(struct Map_info *Map, const char *str)
 
    \return string containing map name
  */
-const char *Vect_get_map_name(const struct Map_info *Map)
+const char *Vect_get_map_name(struct Map_info *Map)
 {
     return Map->head.map_name;
 }
@@ -395,7 +402,7 @@ int Vect_set_map_date(struct Map_info *Map, const char *str)
 
    \return string containing a date
  */
-const char *Vect_get_map_date(const struct Map_info *Map)
+const char *Vect_get_map_date(struct Map_info *Map)
 {
     return Map->head.source_date;
 }
@@ -422,7 +429,7 @@ int Vect_set_scale(struct Map_info *Map, int scale)
 
    \return map scale
  */
-int Vect_get_scale(const struct Map_info *Map)
+int Vect_get_scale(struct Map_info *Map)
 {
     return (int)Map->head.orig_scale;
 }
@@ -450,7 +457,7 @@ int Vect_set_comment(struct Map_info *Map, const char *str)
 
    \return comment or other info string
  */
-const char *Vect_get_comment(const struct Map_info *Map)
+const char *Vect_get_comment(struct Map_info *Map)
 {
     return (Map->head.comment);
 }
@@ -478,7 +485,7 @@ int Vect_set_zone(struct Map_info *Map, int zone)
 
    \return projection zone
  */
-int Vect_get_zone(const struct Map_info *Map UNUSED)
+int Vect_get_zone(struct Map_info *Map UNUSED)
 {
     /* return Map->head.plani_zone; */
 
@@ -516,7 +523,7 @@ int Vect_set_proj(struct Map_info *Map, int proj)
    \return PROJECTION_UTM 1 - UTM   Universal Transverse Mercator,
    \return PROJECTION_LL  3 - Latitude-Longitude
  */
-int Vect_get_proj(const struct Map_info *Map)
+int Vect_get_proj(struct Map_info *Map)
 {
     return (Map->head.proj);
 }
@@ -532,8 +539,7 @@ int Vect_get_proj(const struct Map_info *Map)
    \return allocated string containing projection name
    \return NULL if <em>proj</em> is not a valid projection
  */
-
-const char *Vect_get_proj_name(const struct Map_info *Map)
+const char *Vect_get_proj_name(struct Map_info *Map)
 {
     char name[256];
     int n;
@@ -582,7 +588,7 @@ int Vect_set_thresh(struct Map_info *Map, double thresh)
 
    \return threshold used for digitization
  */
-double Vect_get_thresh(const struct Map_info *Map)
+double Vect_get_thresh(struct Map_info *Map)
 {
     return Map->head.digit_thresh;
 }

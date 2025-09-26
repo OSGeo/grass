@@ -43,17 +43,17 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
 @author Enhancements by Michael Barton <michael.barton asu.edu>
 @author Anna Kratochvilova <kratochanna gmail.com> (Google SoC 2011)
-@author Stepan Turek <stepan.turek seznam.cz> (ManageSettingsWidget - created from GdalSelect)
-@author Matej Krejci <matejkrejci gmail.com> (Google GSoC 2014; EmailValidator, TimeISOValidator)
-@author Tomas Zigo <tomas.zigo slovanet.sk> (LayersListValidator,
-PlacementValidator)
+@author Stepan Turek <stepan.turek seznam.cz> (ManageSettingsWidget - created from
+        GdalSelect)
+@author Matej Krejci <matejkrejci gmail.com> (Google GSoC 2014; EmailValidator,
+        TimeISOValidator)
+@author Tomas Zigo <tomas.zigo slovanet.sk> (LayersListValidator, PlacementValidator)
 """
 
 import os
 import sys
 import string
 import re
-import six
 from bisect import bisect
 from datetime import datetime
 from core.globalvar import wxPythonPhoenix
@@ -80,7 +80,7 @@ except ImportError:  # not sure about TGBTButton version
     from wx.lib.buttons import GenBitmapTextButton as BitmapTextButton
 
 if wxPythonPhoenix:
-    from wx import Validator as Validator
+    from wx import Validator
 else:
     from wx import PyValidator as Validator
 
@@ -133,7 +133,17 @@ class NotebookController:
         self.widget.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnRemoveHighlight)
 
     def AddPage(self, *args, **kwargs):
-        """Add a new page"""
+        """Add a new page
+
+        :param str name: use this param if notebooks has ability to
+                         change position and then you must use page name
+                         param arg to correctly delete notebook page.
+                         If you do not use this parameter, make sure that
+                         the notebooks does not have the ability to change
+                         position, because in that case the deletion of
+                         the page based on the position index would not
+                         work correctly.
+        """
         if "name" in kwargs:
             self.notebookPages[kwargs["name"]] = kwargs["page"]
             del kwargs["name"]
@@ -141,7 +151,17 @@ class NotebookController:
         self.classObject.AddPage(self.widget, *args, **kwargs)
 
     def InsertPage(self, *args, **kwargs):
-        """Insert a new page"""
+        """Insert a new page
+
+        :param str name: use this param if notebooks has ability to
+                         change position and then you must use page name
+                         param arg to correctly delete notebook page.
+                         If you do not use this parameter, make sure that
+                         the notebooks does not have the ability to change
+                         position, because in that case the deletion of
+                         the page based on the position index would not
+                         work correctly.
+        """
         if "name" in kwargs:
             self.notebookPages[kwargs["name"]] = kwargs["page"]
             del kwargs["name"]
@@ -150,7 +170,7 @@ class NotebookController:
             self.classObject.InsertPage(self.widget, *args, **kwargs)
         except (
             TypeError
-        ) as e:  # documentation says 'index', but certain versions of wx require 'n'
+        ):  # documentation says 'index', but certain versions of wx require 'n'
             kwargs["n"] = kwargs["index"]
             del kwargs["index"]
             self.classObject.InsertPage(self.widget, *args, **kwargs)
@@ -158,17 +178,17 @@ class NotebookController:
     def DeletePage(self, page):
         """Delete page
 
-        :param page: name
-        :return: True if page was deleted, False if not exists
+        :param str|int page: page name or page index position
+
+        :return bool: True if page was deleted, False if not exists
         """
         delPageIndex = self.GetPageIndexByName(page)
-        if delPageIndex != -1:
-            ret = self.classObject.DeletePage(self.widget, delPageIndex)
-            if ret:
-                del self.notebookPages[page]
-            return ret
-        else:
+        if delPageIndex == -1:
             return False
+        ret = self.classObject.DeletePage(self.widget, delPageIndex)
+        if ret:
+            del self.notebookPages[page]
+        return ret
 
     def RemovePage(self, page):
         """Delete page without deleting the associated window.
@@ -177,13 +197,12 @@ class NotebookController:
         :return: True if page was deleted, False if not exists
         """
         delPageIndex = self.GetPageIndexByName(page)
-        if delPageIndex != -1:
-            ret = self.classObject.RemovePage(self.widget, delPageIndex)
-            if ret:
-                del self.notebookPages[page]
-            return ret
-        else:
+        if delPageIndex == -1:
             return False
+        ret = self.classObject.RemovePage(self.widget, delPageIndex)
+        if ret:
+            del self.notebookPages[page]
+        return ret
 
     def SetSelectionByName(self, page):
         """Set active notebook page.
@@ -216,8 +235,12 @@ class NotebookController:
     def GetPageIndexByName(self, page):
         """Get notebook page index
 
-        :param page: name
+        :param str|int page: page name or page index position
+
+        :return int: page index
         """
+        if not self.notebookPages:
+            return page
         if page not in self.notebookPages:
             return -1
         for pageIndex in range(self.classObject.GetPageCount(self.widget)):
@@ -260,8 +283,12 @@ class FlatNotebookController(NotebookController):
     def GetPageIndexByName(self, page):
         """Get notebook page index
 
-        :param page: name
+        :param str|int page: page name or page index position
+
+        :return int: page index
         """
+        if not self.notebookPages:
+            return page
         if page not in self.notebookPages:
             return -1
 
@@ -319,7 +346,6 @@ class GNotebook(FN.FlatNotebook):
 
     def SetPageImage(self, page, index):
         """Does nothing because we don't want images for this style"""
-        pass
 
     def __getattr__(self, name):
         return getattr(self.controller, name)
@@ -407,16 +433,15 @@ class NumTextCtrl(TextCtrl):
     """Class derived from wx.TextCtrl for numerical values only"""
 
     def __init__(self, parent, **kwargs):
-        ##        self.precision = kwargs.pop('prec')
         TextCtrl.__init__(
             self, parent=parent, validator=NTCValidator(flag="DIGIT_ONLY"), **kwargs
         )
 
     def SetValue(self, value):
-        super(NumTextCtrl, self).SetValue(str(value))
+        super().SetValue(str(value))
 
     def GetValue(self):
-        val = super(NumTextCtrl, self).GetValue()
+        val = super().GetValue()
         if val == "":
             val = "0"
         try:
@@ -446,10 +471,10 @@ class FloatSlider(Slider):
             while abs(value) < 1:
                 value *= 100
                 self.coef *= 100
-            super(FloatSlider, self).SetRange(
+            super().SetRange(
                 self.minValueOrig * self.coef, self.maxValueOrig * self.coef
             )
-        super(FloatSlider, self).SetValue(value)
+        super().SetValue(value)
 
         Debug.msg(4, "FloatSlider.SetValue(): value = %f" % value)
 
@@ -464,10 +489,8 @@ class FloatSlider(Slider):
                 minValue *= 100
                 maxValue *= 100
                 self.coef *= 100
-            super(FloatSlider, self).SetValue(
-                super(FloatSlider, self).GetValue() * self.coef
-            )
-        super(FloatSlider, self).SetRange(minValue, maxValue)
+            super().SetValue(super().GetValue() * self.coef)
+        super().SetRange(minValue, maxValue)
         Debug.msg(
             4,
             "FloatSlider.SetRange(): minValue = %f, maxValue = %f"
@@ -475,7 +498,7 @@ class FloatSlider(Slider):
         )
 
     def GetValue(self):
-        val = super(FloatSlider, self).GetValue()
+        val = super().GetValue()
         Debug.msg(4, "FloatSlider.GetValue(): value = %f" % (val / self.coef))
         return val / self.coef
 
@@ -511,7 +534,7 @@ class SymbolButton(BitmapTextButton):
         elif usage == "pause":
             self.DrawPause(dc, size)
 
-        if sys.platform not in ("win32", "darwin"):
+        if sys.platform not in {"win32", "darwin"}:
             buffer.SetMaskColour(maskColor)
         self.SetBitmapLabel(buffer)
         dc.SelectObject(wx.NullBitmap)
@@ -543,11 +566,11 @@ class StaticWrapText(GenStaticText):
     """A Static Text widget that wraps its text to fit parents width,
     enlarging its height if necessary."""
 
-    def __init__(self, parent, id=wx.ID_ANY, label="", margin=0, *args, **kwds):
+    def __init__(self, parent, id=wx.ID_ANY, label="", margin=0, *args, **kwargs):
         self._margin = margin
         self._initialLabel = label
         self.init = False
-        GenStaticText.__init__(self, parent, id, label, *args, **kwds)
+        GenStaticText.__init__(self, parent, id, label, *args, **kwargs)
         self.Bind(wx.EVT_SIZE, self.OnSize)
 
     def DoGetBestSize(self):
@@ -727,7 +750,7 @@ class TimeISOValidator(BaseValidator):
         if text:
             try:
                 datetime.strptime(text, "%Y-%m-%d")
-            except:
+            except ValueError:
                 self._notvalid()
                 return False
 
@@ -789,8 +812,7 @@ class SimpleValidator(Validator):
         if len(text) == 0:
             self.callback(ctrl)
             return False
-        else:
-            return True
+        return True
 
     def TransferToWindow(self):
         """Transfer data from validator to window.
@@ -840,8 +862,7 @@ class GenericValidator(Validator):
         if not self._condition(text):
             self._callback(ctrl)
             return False
-        else:
-            return True
+        return True
 
     def TransferToWindow(self):
         """Transfer data from validator to window."""
@@ -1031,7 +1052,7 @@ class PlacementValidator(BaseValidator):
         super().__init__()
 
     def _enableDisableBtn(self, enable):
-        """Enable/Disable buttomn
+        """Enable/Disable button
 
         :param bool enable: Enable/Disable btn
         """
@@ -1158,8 +1179,7 @@ class GListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin, CheckListCtrlMixin):
 
         if checked is not None:
             return tuple(data)
-        else:
-            return (tuple(data), tuple(checkedList))
+        return (tuple(data), tuple(checkedList))
 
     def LoadData(self, data=None, selectOne=True):
         """Load data into list"""
@@ -1224,7 +1244,7 @@ class SearchModuleWidget(wx.Panel):
 
         if self._showTip:
             self._searchTip = StaticWrapText(
-                parent=self, id=wx.ID_ANY, label="Choose a tool", size=(-1, 35)
+                parent=self, id=wx.ID_ANY, label="Choose a tool", size=(-1, 40)
             )
 
         if self._showChoice:
@@ -1289,9 +1309,9 @@ class SearchModuleWidget(wx.Panel):
                 self._searchChoice.SetSelection(0)
                 self.OnSelectModule()
 
-        label = _("%d tools match") % len(commands)
+        label = _("{} tools matched").format(len(commands))
         if self._showTip:
-            self._searchTip.SetLabel(label)
+            self._searchTip.SetLabel(self._searchTip.GetLabel() + " [{}]".format(label))
 
         self.showNotification.emit(message=label)
 
@@ -1301,7 +1321,7 @@ class SearchModuleWidget(wx.Panel):
         """Search modules by keys
 
         :param keys: list of keys
-        :param value: patter to match
+        :param value: pattern to match
         """
         nodes = set()
         for key in keys:
@@ -1311,11 +1331,7 @@ class SearchModuleWidget(wx.Panel):
         nodes.sort(key=lambda node: self._model.GetIndexOfNode(node))
         self._results = nodes
         self._resultIndex = -1
-        commands = sorted(
-            [node.data["command"] for node in nodes if node.data["command"]]
-        )
-
-        return commands
+        return sorted([node.data["command"] for node in nodes if node.data["command"]])
 
     def OnSelectModule(self, event=None):
         """Module selected from choice, update command prompt"""
@@ -1504,30 +1520,29 @@ class ManageSettingsWidget(wx.Panel):
         :return: -1 on failure
         """
         try:
-            fd = open(self.settingsFile, "w")
-            fd.write("format_version=2.0\n")
-            for key, values in six.iteritems(self._settings):
-                first = True
-                for v in values:
-                    # escaping characters
-                    for e_ch in self.esc_chars:
-                        v = v.replace(e_ch, self.esc_chars[self.e_char_i] + e_ch)
-                    if first:
+            with open(self.settingsFile, "w") as fd:
+                fd.write("format_version=2.0\n")
+                for key, values in self._settings.items():
+                    first = True
+                    for v in values:
                         # escaping characters
                         for e_ch in self.esc_chars:
-                            key = key.replace(
-                                e_ch, self.esc_chars[self.e_char_i] + e_ch
-                            )
-                        fd.write("%s;%s;" % (key, v))
-                        first = False
-                    else:
-                        fd.write("%s;" % (v))
-                fd.write("\n")
+                            v = v.replace(e_ch, self.esc_chars[self.e_char_i] + e_ch)
+                        if first:
+                            # escaping characters
+                            for e_ch in self.esc_chars:
+                                key = key.replace(
+                                    e_ch, self.esc_chars[self.e_char_i] + e_ch
+                                )
+                            fd.write("%s;%s;" % (key, v))
+                            first = False
+                        else:
+                            fd.write("%s;" % (v))
+                    fd.write("\n")
 
-        except IOError:
+        except OSError:
             GError(parent=self, message=_("Unable to save settings"))
             return -1
-        fd.close()
 
         return 0
 
@@ -1540,31 +1555,28 @@ class ManageSettingsWidget(wx.Panel):
         :return: empty dict on error
         """
 
-        data = dict()
+        data = {}
         if not os.path.exists(self.settingsFile):
             return data
 
         try:
-            fd = open(self.settingsFile, "r")
-        except IOError:
+            with open(self.settingsFile) as fd:
+                fd_lines = fd.readlines()
+
+                if not fd_lines:
+                    return data
+
+                if fd_lines[0].strip() == "format_version=2.0":
+                    data = self._loadSettings_v2(fd_lines)
+                else:
+                    data = self._loadSettings_v1(fd_lines)
+
+                self.settingsChoice.SetItems(sorted(data.keys()))
+
+        except OSError:
             return data
-
-        fd_lines = fd.readlines()
-
-        if not fd_lines:
-            fd.close()
-            return data
-
-        if fd_lines[0].strip() == "format_version=2.0":
-            data = self._loadSettings_v2(fd_lines)
-        else:
-            data = self._loadSettings_v1(fd_lines)
-
-        self.settingsChoice.SetItems(sorted(data.keys()))
-        fd.close()
 
         self.settingsLoaded.emit(settings=data)
-
         return data
 
     def _loadSettings_v2(self, fd_lines):
@@ -1575,7 +1587,7 @@ class ManageSettingsWidget(wx.Panel):
         :return: parsed dict
         :return: empty dict on error
         """
-        data = dict()
+        data = {}
 
         for line in fd_lines[1:]:
             try:
@@ -1587,7 +1599,7 @@ class ManageSettingsWidget(wx.Panel):
                     idx = line.find(";", i_last)
                     if idx < 0:
                         break
-                    elif idx != 0:
+                    if idx != 0:
                         # find out whether it is separator
                         # $$$$; - it is separator
                         # $$$$$; - it is not separator
@@ -1630,7 +1642,7 @@ class ManageSettingsWidget(wx.Panel):
         :return: parsed dict
         :return: empty dict on error
         """
-        data = dict()
+        data = {}
 
         for line in fd_lines:
             try:
@@ -1776,7 +1788,7 @@ class LayersList(GListCtrl, listmix.TextEditMixin):
         colLocs = [0]
         loc = 0
         for n in range(self.GetColumnCount()):
-            loc = loc + self.GetColumnWidth(n)
+            loc += self.GetColumnWidth(n)
             colLocs.append(loc)
 
         col = bisect(colLocs, x + self.GetScrollPos(wx.HORIZONTAL)) - 1

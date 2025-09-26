@@ -89,12 +89,11 @@ def cleanup():
 
 
 def write2textf(what, output):
-    outf = open(output, "w")
     i = 0
-    for row in enumerate(what):
-        i = i + 1
-        outf.write("%d, %s\n" % (i, row))
-    outf.close()
+    with open(output, "w") as outf:
+        for row in enumerate(what):
+            i += 1
+            outf.write("%d, %s\n" % (i, row))
 
 
 def draw_gnuplot(what, xlabels, output, img_format, coord_legend):
@@ -102,11 +101,9 @@ def draw_gnuplot(what, xlabels, output, img_format, coord_legend):
 
     for i, row in enumerate(what):
         outfile = os.path.join(tmp_dir, "data_%d" % i)
-        outf = open(outfile, "w")
         xrange = max(xrange, len(row) - 2)
-        for j, val in enumerate(row[3:]):
-            outf.write("%d %s\n" % (j + 1, val))
-        outf.close()
+        with open(outfile, "w") as outf:
+            outf.writelines("%d %s\n" % (j + 1, val) for j, val in enumerate(row[3:]))
 
     # build gnuplot script
     lines = []
@@ -136,23 +133,18 @@ def draw_gnuplot(what, xlabels, output, img_format, coord_legend):
 
     cmd = []
     for i, row in enumerate(what):
-        if not coord_legend:
-            title = "Pick " + str(i + 1)
-        else:
-            title = str(tuple(row[0:2]))
+        title = "Pick " + str(i + 1) if not coord_legend else str(tuple(row[0:2]))
 
         x_datafile = os.path.join(tmp_dir, "data_%d" % i)
         cmd.append(" '%s' title '%s'" % (x_datafile, title))
 
     cmd = ",".join(cmd)
-    cmd = " ".join(["plot", cmd, "with linespoints pt 779"])
+    cmd = f"plot {cmd} with linespoints pt 779"
     lines.append(cmd)
 
     plotfile = os.path.join(tmp_dir, "spectrum.gnuplot")
-    plotf = open(plotfile, "w")
-    for line in lines:
-        plotf.write(line + "\n")
-    plotf.close()
+    with open(plotfile, "w") as plotf:
+        plotf.writelines(line + "\n" for line in lines)
 
     if output:
         gcore.call(["gnuplot", plotfile])
@@ -165,17 +157,13 @@ def draw_linegraph(what):
 
     xfile = os.path.join(tmp_dir, "data_x")
 
-    xf = open(xfile, "w")
-    for j, val in enumerate(what[0][3:]):
-        xf.write("%d\n" % (j + 1))
-    xf.close()
+    with open(xfile, "w") as xf:
+        xf.writelines("%d\n" % (j + 1) for j, val in enumerate(what[0][3:]))
 
     for i, row in enumerate(what):
         yfile = os.path.join(tmp_dir, "data_y_%d" % i)
-        yf = open(yfile, "w")
-        for j, val in enumerate(row[3:]):
-            yf.write("%s\n" % val)
-        yf.close()
+        with open(yfile, "w") as yf:
+            yf.writelines("%s\n" % val for j, val in enumerate(row[3:]))
         yfiles.append(yfile)
 
     sienna = "#%02x%02x%02x" % (160, 82, 45)
@@ -196,9 +184,8 @@ def draw_linegraph(what):
     if not found:
         gcore.fatal(
             _(
-                "Supported monitor isn't running. Please launch one of the"
-                " monitors {}.".format(", ".join(supported_monitors))
-            )
+                "Supported monitor isn't running. Please launch one of the monitors {}."
+            ).format(", ".join(supported_monitors))
         )
     selected_monitor = gcore.read_command("d.mon", flags="p", quiet=True).replace(
         "\n", ""
@@ -207,17 +194,15 @@ def draw_linegraph(what):
         gcore.fatal(
             _(
                 "Supported monitor isn't selected. Please select one of the"
-                " monitors {}.".format(", ".join(supported_monitors))
-            )
+                " monitors {}."
+            ).format(", ".join(supported_monitors))
         )
     with open(gcore.parse_command("d.mon", flags="g", quiet=True)["env"]) as f:
-        for line in f.readlines():
+        for line in f:
             if "GRASS_RENDER_FILE=" in line:
                 gcore.info(
-                    _(
-                        "{} monitor is used, output file {}".format(
-                            selected_monitor.capitalize(), line.split("=")[-1]
-                        )
+                    _("{} monitor is used, output file {}").format(
+                        selected_monitor.capitalize(), line.split("=")[-1]
                     )
                 )
                 break
@@ -289,7 +274,7 @@ def main():
     for line in s.splitlines():
         f = line.split("|")
         for i, v in enumerate(f):
-            if v in ["", "*"]:
+            if v in {"", "*"}:
                 f[i] = 0
             else:
                 f[i] = float(v)

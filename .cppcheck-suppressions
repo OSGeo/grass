@@ -1,0 +1,173 @@
+# True positives
+# imagery
+invalidFunctionArg:imagery/i.gensigset/subcluster.c:369
+invalidFunctionArg:imagery/i.smap/model.c:158
+
+# lib
+memleakOnRealloc:lib/external/shapelib/dbfopen.c:448
+va_end_missing:lib/gis/debug.c:82
+nullPointer:lib/vector/Vlib/cats.c:513
+nullPointer:lib/vector/Vlib/cats.c:517
+
+# False positives
+# binder
+syntaxError:binder/postBuild:7
+
+# config.guess, config.log, config.status, config.sub, configure, configure.ac
+syntaxError:config*
+
+# db
+syntaxError:db/databaseintro.html
+
+# demolocation
+syntaxError:demolocation/Makefile
+syntaxError:demolocation/grassrc.tmpl
+
+# display
+syntaxError:display/displaydrivers.html
+
+# dist.x86_64-pc-linux-gnu
+syntaxError:dist.x86_64-pc-linux-gnu/*
+
+# doc
+syntaxError:doc/*
+
+# docker
+syntaxError:docker/README.md
+
+# general/g.version
+internalAstError:general/g.version/main.c:49
+syntaxError:general/g.version/Makefile:8
+syntaxError:general/g.version/g.version.html:72
+
+# imagery/
+syntaxError:imagery/imageryintro.html
+## We are erroring out early if index is negative, so we won't be hitting this case!
+negativeIndex:imagery/i.atcorr/computations.cpp:459
+negativeIndex:imagery/i.atcorr/computations.cpp:1025
+
+
+# include/
+syntaxError:include/Makefile
+syntaxError:include/VERSION:1
+
+# text files
+syntaxError:INSTALL.md
+syntaxError:install-sh
+syntaxError:GPL.TXT
+syntaxError:aclocal.m4
+syntaxError:AUTHORS
+syntaxError:CITATION.cff
+syntaxError:CITING
+syntaxError:codecov.yaml
+syntaxError:CODE_OF_CONDUCT.md
+syntaxError:config.log
+syntaxError:configure.ac
+syntaxError:CONTRIBUTING.md
+syntaxError:contributors.csv
+syntaxError:contributors_extra.csv
+syntaxError:COPYING
+syntaxError:Dockerfile
+syntaxError:error.log
+syntaxError:flake.lock
+syntaxError:flake.nix
+syntaxError:grasslib.dox
+syntaxError:grass.pc*
+syntaxError:Makefile
+syntaxError:package.nix
+syntaxError:pyproject.toml
+syntaxError:README.md
+syntaxError:renovate.json5
+syntaxError:REQUIREMENTS.md
+syntaxError:SECURITY.md
+syntaxError:test_keyvalue_result.txt
+syntaxError:TODO
+syntaxError:translators.csv
+syntaxError:Vagrantfile
+syntaxError:binaryInstall.src
+syntaxError:codecov.yml:19
+
+# lib/
+syntaxError:lib/README:3
+# Internally generated file while compiling
+nullPointer:lib/db/sqlp/sqlp.yy.c
+nullPointer:<stdout>
+syntaxError:lib/db/sqlp/README
+syntaxError:lib/db/sqlp/sql*
+## va_copy() was used and it doesn't require va_start.
+va_list_usedBeforeStarted:lib/gis/aprintf.c:293
+va_list_usedBeforeStarted:lib/gis/aprintf.c:301
+va_list_usedBeforeStarted:lib/gis/aprintf.c:348
+## Though it's not explicity initialized, the loop next will initialize it. So, it's alright to ignore this.
+uninitvar:lib/vector/dglib/tavl.c:380
+missingReturn:lib/vector/dglib/nodemgmt-template.c:437
+## Though it's not explicity initialized, the loop next will initialize it. So, it's alright to ignore this.
+uninitvar:lib/vector/dglib/avl.c:291
+unknownMacro:lib/bitmap/Makefile:13
+## I feel we can just avoid syntaxError issues, as code can't be compiled unless it's syntax is correct!
+## And these usually have a tendency to pop up in the non-C or non-C++ programs!!
+syntaxError:lib/*
+unknownMacro:lib/gmath/Makefile
+unknownMacro:lib/lidar/Makefile
+
+
+# locale
+syntaxError:locale/README.md
+syntaxError:locale/Makefile
+syntaxError:locale/grass_po_stats.py
+unknownMacro:locale/*
+
+# macosx
+syntaxError:macosx/*
+
+# man
+syntaxError:man/*
+
+# mswindows
+syntaxError:mswindows/*
+
+# raster
+## FP error, as while loop before ensures that log argument is never equal to 1.
+invalidFunctionArg:raster/r.sim/simlib/random.c:36
+invalidFunctionArg:raster/r.sim/simlib/random.c:57
+
+## Different rules under different ifdef.
+ctuOneDefinitionRuleViolation:raster/r.in.pdal/grassrasterwriter.h:39
+syntaxError:raster/rasterintro.html
+syntaxError:raster/Makefile:155
+
+# raster3d
+
+## 'missingReturn` error is mostly from blocks for local computations
+missingReturn:raster3d/r3.showdspf/draw_cap_ogl.c:68
+missingReturn:raster3d/r3.showdspf/make_header.c:32
+
+syntaxError:raster3d/raster3dintro.html:194
+
+# rpm
+syntaxError:rpm/grass.spec:244
+syntaxError:rpm/grass-pkgconfig.patch:9
+
+# scripts
+syntaxError:scripts/windows_sh_launch.bat:11
+syntaxError:scripts/windows_launch.bat:1
+
+# temporal
+syntaxError:temporal/benchmark.sh:19
+syntaxError:temporal/run_all_tests.sh
+syntaxError:temporal/temporalintro.html
+
+# testsuite
+syntaxError:testsuite/raster_md5test.sh:11
+syntaxError:testsuite/README.md:38
+
+# utils
+syntaxError:utils/*
+unknownMacro:utils/coverage_mapper.py:13
+unknownMacro:utils/Makefile:8
+
+# vector
+
+## We are expected to use the memory allocated some other place, so it's FP.
+memleak:vector/v.lidar.growing/ConvexHull.c:246
+syntaxError:vector/vectorintro.html:11

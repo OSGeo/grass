@@ -13,7 +13,7 @@ set with the <b>resolution</b> argument.
 The <b>coordinates</b> parameter can be set to comma separated geographic
 coordinates for profile line endpoints.
 Alternatively the coordinate pairs can be piped from the text file specified
-by <b>file</b> option, or if set to "-", from <tt>stdin</tt>.
+by <b>file</b> option, or if set to "-", from <code>stdin</code>.
 In these cases the coordinate pairs should be given one comma separated pair
 per line.
 
@@ -45,8 +45,10 @@ The optional RGB output provides the associated GRASS colour value for
 each profile point.
 
 <p>Option <b>units</b> enables to set units of the profile length output.
-If the units are not specified, current location units will be used.
-In case of geographic locations (latitude/longitude), meters are used as default unit.
+If the units are not specified, current coordinate reference system's units will be used.
+In case of geographic CRS (latitude/longitude), meters are used as default unit.
+
+Finally, the output from <em>r.info</em> can be output in JSON by passing the <b>format=json</b> option.
 
 <h2>NOTES</h2>
 
@@ -57,7 +59,7 @@ the end point coordinates entered for the segmanet.
 
 <p>To extract the numbers in scripts, following parameters can be used:
 <div class="code"><pre>
-r.profile input=dgm12.5 coordinates=3570631,5763556 2>/dev/null
+r.profile input=dgm12.5 coordinates=3570631,5763556 2&gt;/dev/null
 </pre></div>
 
 This filters out everything except the numbers.
@@ -66,7 +68,7 @@ This filters out everything except the numbers.
 
 <h3>Extraction of values along profile defined by coordinates (variant 1)</h3>
 
-Extract a profile with coordinates (wayoints) provided on the command line
+Extract a profile with coordinates (waypoints) provided on the command line
 (North Carolina data set):
 
 <div class="code"><pre>
@@ -86,7 +88,7 @@ Extract a profile with coordinates provided from standard input or an external f
 <p>First create a points file with <em><a href="d.where.html">d.where</a></em>
 
 <div class="code"><pre>
-d.where > saved.points
+d.where &gt; saved.points
 </pre></div>
 
 Then pipe the points file into r.profile
@@ -129,7 +131,7 @@ Coordinate pairs can also be "piped" into <em>r.profile</em> (variant 2b):
 echo "641712,226095
 641546,224138
 641546,222048
-641049,221186" > coors.txt
+641049,221186" &gt; coors.txt
 cat coors.txt | r.profile elevation resolution=1000 file=-
 </pre></div>
 
@@ -149,6 +151,107 @@ Approx. transect length: 2090.000000 [meters]
  3964.027749 78.497757
 Approx. transect length: 995.014070 [meters]
  4054.027749 73.988029
+</pre></div>
+
+<h3>JSON Output</h3>
+<div class="code"><pre>
+r.profile -g input=elevation coordinates=641712,226095,641546,224138,641546,222048,641049,221186 -c format=json resolution=1000
+</pre></div>
+
+The output looks as follows:
+
+<div class="code"><pre>
+[
+    {
+        "easting": 641712,
+        "northing": 226095,
+        "distance": 0,
+        "elevation": 84.661506652832031,
+        "red": 113,
+        "green": 255,
+        "blue": 0
+    },
+    {
+        "easting": 641627.47980925441,
+        "northing": 225098.57823319823,
+        "distance": 1000.0000000000125,
+        "elevation": 98.179061889648438,
+        "red": 255,
+        "green": 241,
+        "blue": 0
+    },
+    {
+        "easting": 641546,
+        "northing": 224138,
+        "distance": 1964.0277492948007,
+        "elevation": 83.638137817382812,
+        "red": 100,
+        "green": 255,
+        "blue": 0
+    },
+    {
+        "easting": 641546,
+        "northing": 223138,
+        "distance": 2964.0277492948007,
+        "elevation": 89.141029357910156,
+        "red": 169,
+        "green": 255,
+        "blue": 0
+    },
+    {
+        "easting": 641546,
+        "northing": 222138,
+        "distance": 3964.0277492948007,
+        "elevation": 78.497756958007812,
+        "red": 35,
+        "green": 255,
+        "blue": 0
+    },
+    {
+        "easting": 641546,
+        "northing": 222048,
+        "distance": 4054.0277492948007,
+        "elevation": 73.988029479980469,
+        "red": 0,
+        "green": 249,
+        "blue": 17
+    }
+]
+</pre></div>
+
+<h3>Using JSON output with Python for plotting data</h3>
+
+The JSON output makes for ease of integration with popular python data science libraries. For instance, here
+is an example of creating a scatterplot of distance vs elevation with color coding.
+
+<div class="code"><pre>
+import grass.script as gs
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Run r.profile command
+elevation = gs.read_command(
+    "r.profile",
+    input="elevation",
+    coordinates="641712,226095,641546,224138,641546,222048,641049,221186",
+    format="json",
+    flags="gc"
+)
+
+# Load the JSON data into a dataframe
+df = pd.read_json(elevation)
+
+# Convert the RGB color values to hex format for matplotlib
+df["color"] = df.apply(lambda x: "#{:02x}{:02x}{:02x}".format(int(x["red"]), int(x["green"]), int(x["blue"])), axis=1)
+
+# Create the scatter plot
+plt.figure(figsize=(10, 6))
+plt.scatter(df['distance'], df['elevation'], c=df['color'], marker='o')
+plt.title('Profile of Distance vs. Elevation with Color Coding')
+plt.xlabel('Distance (meters)')
+plt.ylabel('Elevation')
+plt.grid(True)
+plt.show()
 </pre></div>
 
 <h2>SEE ALSO</h2>

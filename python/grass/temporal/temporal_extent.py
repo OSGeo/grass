@@ -3,7 +3,7 @@ Temporal extent classes
 
 Usage:
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> import grass.temporal as tgis
     >>> from datetime import datetime
@@ -19,7 +19,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
+
 from .base import SQLDatabaseInterface
 
 ###############################################################################
@@ -38,12 +38,15 @@ class TemporalExtent(SQLDatabaseInterface):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
-        >>> A = TemporalExtent(table="raster_absolute_time",
-        ... ident="soil@PERMANENT", start_time=datetime(2001, 01, 01),
-        ... end_time=datetime(2005,01,01) )
+        >>> A = TemporalExtent(
+        ...     table="raster_absolute_time",
+        ...     ident="soil@PERMANENT",
+        ...     start_time=datetime(2001, 1, 1),
+        ...     end_time=datetime(2005, 1, 1),
+        ... )
         >>> A.id
         'soil@PERMANENT'
         >>> A.start_time
@@ -57,8 +60,12 @@ class TemporalExtent(SQLDatabaseInterface):
         start_time='2001-01-01 00:00:00'
         end_time='2005-01-01 00:00:00'
         >>> # relative time
-        >>> A = TemporalExtent(table="raster_absolute_time",
-        ... ident="soil@PERMANENT", start_time=0, end_time=1 )
+        >>> A = TemporalExtent(
+        ...     table="raster_absolute_time",
+        ...     ident="soil@PERMANENT",
+        ...     start_time=0,
+        ...     end_time=1,
+        ... )
         >>> A.id
         'soil@PERMANENT'
         >>> A.start_time
@@ -74,7 +81,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
     """
 
-    def __init__(self, table=None, ident=None, start_time=None, end_time=None):
+    def __init__(self, table=None, ident=None, start_time=None, end_time=None) -> None:
         SQLDatabaseInterface.__init__(self, table, ident)
 
         self.set_id(ident)
@@ -91,16 +98,16 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
-            >>> A = TemporalExtent(start_time=5, end_time=6 )
+            >>> A = TemporalExtent(start_time=5, end_time=6)
             >>> inter = A.intersect(A)
             >>> inter.print_info()
              | Start time:................. 5
              | End time:................... 6
 
-            >>> A = TemporalExtent(start_time=5, end_time=6 )
-            >>> B = TemporalExtent(start_time=5, end_time=7 )
+            >>> A = TemporalExtent(start_time=5, end_time=6)
+            >>> B = TemporalExtent(start_time=5, end_time=7)
             >>> inter = A.intersect(B)
             >>> inter.print_info()
              | Start time:................. 5
@@ -110,8 +117,8 @@ class TemporalExtent(SQLDatabaseInterface):
              | Start time:................. 5
              | End time:................... 6
 
-            >>> A = TemporalExtent(start_time=3, end_time=6 )
-            >>> B = TemporalExtent(start_time=5, end_time=7 )
+            >>> A = TemporalExtent(start_time=3, end_time=6)
+            >>> B = TemporalExtent(start_time=5, end_time=7)
             >>> inter = A.intersect(B)
             >>> inter.print_info()
              | Start time:................. 5
@@ -121,8 +128,8 @@ class TemporalExtent(SQLDatabaseInterface):
              | Start time:................. 5
              | End time:................... 6
 
-            >>> A = TemporalExtent(start_time=3, end_time=8 )
-            >>> B = TemporalExtent(start_time=5, end_time=6 )
+            >>> A = TemporalExtent(start_time=3, end_time=8)
+            >>> B = TemporalExtent(start_time=5, end_time=6)
             >>> inter = A.intersect(B)
             >>> inter.print_info()
              | Start time:................. 5
@@ -132,8 +139,8 @@ class TemporalExtent(SQLDatabaseInterface):
              | Start time:................. 5
              | End time:................... 6
 
-            >>> A = TemporalExtent(start_time=5, end_time=8 )
-            >>> B = TemporalExtent(start_time=3, end_time=6 )
+            >>> A = TemporalExtent(start_time=5, end_time=8)
+            >>> B = TemporalExtent(start_time=3, end_time=6)
             >>> inter = A.intersect(B)
             >>> inter.print_info()
              | Start time:................. 5
@@ -143,8 +150,8 @@ class TemporalExtent(SQLDatabaseInterface):
              | Start time:................. 5
              | End time:................... 6
 
-            >>> A = TemporalExtent(start_time=5, end_time=None )
-            >>> B = TemporalExtent(start_time=3, end_time=6 )
+            >>> A = TemporalExtent(start_time=5, end_time=None)
+            >>> B = TemporalExtent(start_time=3, end_time=6)
             >>> inter = A.intersect(B)
             >>> inter.print_info()
              | Start time:................. 5
@@ -154,14 +161,14 @@ class TemporalExtent(SQLDatabaseInterface):
              | Start time:................. 5
              | End time:................... None
 
-            >>> A = TemporalExtent(start_time=5, end_time=8 )
-            >>> B = TemporalExtent(start_time=3, end_time=4 )
+            >>> A = TemporalExtent(start_time=5, end_time=8)
+            >>> B = TemporalExtent(start_time=3, end_time=4)
             >>> inter = A.intersect(B)
             >>> print(inter)
             None
 
-            >>> A = TemporalExtent(start_time=5, end_time=8 )
-            >>> B = TemporalExtent(start_time=3, end_time=None )
+            >>> A = TemporalExtent(start_time=5, end_time=8)
+            >>> B = TemporalExtent(start_time=3, end_time=None)
             >>> inter = A.intersect(B)
             >>> print(inter)
             None
@@ -169,7 +176,7 @@ class TemporalExtent(SQLDatabaseInterface):
         """
         relation = self.temporal_relation(extent)
 
-        if relation == "after" or relation == "before":
+        if relation in {"after", "before"}:
             return None
 
         if self.D["end_time"] is None:
@@ -195,9 +202,9 @@ class TemporalExtent(SQLDatabaseInterface):
             return RelativeTemporalExtent(
                 start_time=start, end_time=end, unit=self.get_unit()
             )
-        elif issubclass(type(self), AbsoluteTemporalExtent):
+        if issubclass(type(self), AbsoluteTemporalExtent):
             return AbsoluteTemporalExtent(start_time=start, end_time=end)
-        elif issubclass(type(self), TemporalExtent):
+        if issubclass(type(self), TemporalExtent):
             return TemporalExtent(start_time=start, end_time=end)
 
     def disjoint_union(self, extent):
@@ -209,16 +216,16 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
-            >>> A = TemporalExtent(start_time=5, end_time=6 )
+            >>> A = TemporalExtent(start_time=5, end_time=6)
             >>> inter = A.intersect(A)
             >>> inter.print_info()
              | Start time:................. 5
              | End time:................... 6
 
-            >>> A = TemporalExtent(start_time=5, end_time=6 )
-            >>> B = TemporalExtent(start_time=5, end_time=7 )
+            >>> A = TemporalExtent(start_time=5, end_time=6)
+            >>> B = TemporalExtent(start_time=5, end_time=7)
             >>> inter = A.disjoint_union(B)
             >>> inter.print_info()
              | Start time:................. 5
@@ -228,8 +235,8 @@ class TemporalExtent(SQLDatabaseInterface):
              | Start time:................. 5
              | End time:................... 7
 
-            >>> A = TemporalExtent(start_time=3, end_time=6 )
-            >>> B = TemporalExtent(start_time=5, end_time=7 )
+            >>> A = TemporalExtent(start_time=3, end_time=6)
+            >>> B = TemporalExtent(start_time=5, end_time=7)
             >>> inter = A.disjoint_union(B)
             >>> inter.print_info()
              | Start time:................. 3
@@ -239,8 +246,8 @@ class TemporalExtent(SQLDatabaseInterface):
              | Start time:................. 3
              | End time:................... 7
 
-            >>> A = TemporalExtent(start_time=3, end_time=8 )
-            >>> B = TemporalExtent(start_time=5, end_time=6 )
+            >>> A = TemporalExtent(start_time=3, end_time=8)
+            >>> B = TemporalExtent(start_time=5, end_time=6)
             >>> inter = A.disjoint_union(B)
             >>> inter.print_info()
              | Start time:................. 3
@@ -250,8 +257,8 @@ class TemporalExtent(SQLDatabaseInterface):
              | Start time:................. 3
              | End time:................... 8
 
-            >>> A = TemporalExtent(start_time=5, end_time=8 )
-            >>> B = TemporalExtent(start_time=3, end_time=6 )
+            >>> A = TemporalExtent(start_time=5, end_time=8)
+            >>> B = TemporalExtent(start_time=3, end_time=6)
             >>> inter = A.disjoint_union(B)
             >>> inter.print_info()
              | Start time:................. 3
@@ -261,8 +268,8 @@ class TemporalExtent(SQLDatabaseInterface):
              | Start time:................. 3
              | End time:................... 8
 
-            >>> A = TemporalExtent(start_time=5, end_time=None )
-            >>> B = TemporalExtent(start_time=3, end_time=6 )
+            >>> A = TemporalExtent(start_time=5, end_time=None)
+            >>> B = TemporalExtent(start_time=3, end_time=6)
             >>> inter = A.disjoint_union(B)
             >>> inter.print_info()
              | Start time:................. 3
@@ -272,8 +279,8 @@ class TemporalExtent(SQLDatabaseInterface):
              | Start time:................. 3
              | End time:................... 6
 
-            >>> A = TemporalExtent(start_time=5, end_time=8 )
-            >>> B = TemporalExtent(start_time=3, end_time=4 )
+            >>> A = TemporalExtent(start_time=5, end_time=8)
+            >>> B = TemporalExtent(start_time=3, end_time=4)
             >>> inter = A.disjoint_union(B)
             >>> inter.print_info()
              | Start time:................. 3
@@ -282,8 +289,8 @@ class TemporalExtent(SQLDatabaseInterface):
             >>> inter.print_info()
              | Start time:................. 3
              | End time:................... 8
-            >>> A = TemporalExtent(start_time=5, end_time=8 )
-            >>> B = TemporalExtent(start_time=3, end_time=None )
+            >>> A = TemporalExtent(start_time=5, end_time=8)
+            >>> B = TemporalExtent(start_time=3, end_time=None)
             >>> inter = A.disjoint_union(B)
             >>> inter.print_info()
              | Start time:................. 3
@@ -292,8 +299,8 @@ class TemporalExtent(SQLDatabaseInterface):
             >>> inter.print_info()
              | Start time:................. 3
              | End time:................... 8
-            >>> A = TemporalExtent(start_time=5, end_time=None )
-            >>> B = TemporalExtent(start_time=3, end_time=8 )
+            >>> A = TemporalExtent(start_time=5, end_time=None)
+            >>> B = TemporalExtent(start_time=3, end_time=8)
             >>> inter = A.disjoint_union(B)
             >>> inter.print_info()
              | Start time:................. 3
@@ -302,8 +309,8 @@ class TemporalExtent(SQLDatabaseInterface):
             >>> inter.print_info()
              | Start time:................. 3
              | End time:................... 8
-            >>> A = TemporalExtent(start_time=5, end_time=None )
-            >>> B = TemporalExtent(start_time=3, end_time=None )
+            >>> A = TemporalExtent(start_time=5, end_time=None)
+            >>> B = TemporalExtent(start_time=3, end_time=None)
             >>> inter = A.disjoint_union(B)
             >>> inter.print_info()
              | Start time:................. 3
@@ -313,8 +320,8 @@ class TemporalExtent(SQLDatabaseInterface):
              | Start time:................. 3
              | End time:................... 5
 
-            >>> A = RelativeTemporalExtent(start_time=5, end_time=None, unit="years" )
-            >>> B = RelativeTemporalExtent(start_time=3, end_time=None, unit="years" )
+            >>> A = RelativeTemporalExtent(start_time=5, end_time=None, unit="years")
+            >>> B = RelativeTemporalExtent(start_time=3, end_time=None, unit="years")
             >>> inter = A.disjoint_union(B)
             >>> inter.print_info()
              +-------------------- Relative time -----------------------------------------+
@@ -331,8 +338,12 @@ class TemporalExtent(SQLDatabaseInterface):
 
 
             >>> from datetime import datetime as dt
-            >>> A = AbsoluteTemporalExtent(start_time=dt(2001,1,10), end_time=dt(2003,1,1))
-            >>> B = AbsoluteTemporalExtent(start_time=dt(2005,1,10), end_time=dt(2008,1,1))
+            >>> A = AbsoluteTemporalExtent(
+            ...     start_time=dt(2001, 1, 10), end_time=dt(2003, 1, 1)
+            ... )
+            >>> B = AbsoluteTemporalExtent(
+            ...     start_time=dt(2005, 1, 10), end_time=dt(2008, 1, 1)
+            ... )
             >>> inter = A.disjoint_union(B)
             >>> inter.print_info()
              +-------------------- Absolute time -----------------------------------------+
@@ -345,7 +356,7 @@ class TemporalExtent(SQLDatabaseInterface):
              | Start time:................. 2001-01-10 00:00:00
              | End time:................... 2008-01-01 00:00:00
 
-        """
+        """  # noqa: E501
 
         start = None
         end = None
@@ -380,9 +391,9 @@ class TemporalExtent(SQLDatabaseInterface):
             return RelativeTemporalExtent(
                 start_time=start, end_time=end, unit=self.get_unit()
             )
-        elif issubclass(type(self), AbsoluteTemporalExtent):
+        if issubclass(type(self), AbsoluteTemporalExtent):
             return AbsoluteTemporalExtent(start_time=start, end_time=end)
-        elif issubclass(type(self), TemporalExtent):
+        if issubclass(type(self), TemporalExtent):
             return TemporalExtent(start_time=start, end_time=end)
 
     def union(self, extent):
@@ -394,16 +405,16 @@ class TemporalExtent(SQLDatabaseInterface):
                  or None in case the temporal extents are unrelated
                  (before or after)
 
-        .. code-block:: python
+        .. code-block:: pycon
 
-            >>> A = TemporalExtent(start_time=5, end_time=8 )
-            >>> B = TemporalExtent(start_time=3, end_time=4 )
+            >>> A = TemporalExtent(start_time=5, end_time=8)
+            >>> B = TemporalExtent(start_time=3, end_time=4)
             >>> inter = A.intersect(B)
             >>> print(inter)
             None
 
-            >>> A = TemporalExtent(start_time=5, end_time=8 )
-            >>> B = TemporalExtent(start_time=3, end_time=None )
+            >>> A = TemporalExtent(start_time=5, end_time=8)
+            >>> B = TemporalExtent(start_time=3, end_time=None)
             >>> inter = A.intersect(B)
             >>> print(inter)
             None
@@ -412,12 +423,12 @@ class TemporalExtent(SQLDatabaseInterface):
 
         relation = self.temporal_relation(extent)
 
-        if relation == "after" or relation == "before":
+        if relation in {"after", "before"}:
             return None
 
         return self.disjoint_union(extent)
 
-    def starts(self, extent):
+    def starts(self, extent) -> bool:
         """Return True if this temporal extent (A) starts at the start of the
         provided temporal extent (B) and finishes within it
         ::
@@ -431,10 +442,10 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
-            >>> A = TemporalExtent(start_time=5, end_time=6 )
-            >>> B = TemporalExtent(start_time=5, end_time=7 )
+            >>> A = TemporalExtent(start_time=5, end_time=6)
+            >>> B = TemporalExtent(start_time=5, end_time=7)
             >>> A.starts(B)
             True
             >>> B.starts(A)
@@ -444,15 +455,12 @@ class TemporalExtent(SQLDatabaseInterface):
         if self.D["end_time"] is None or extent.D["end_time"] is None:
             return False
 
-        if (
+        return bool(
             self.D["start_time"] == extent.D["start_time"]
             and self.D["end_time"] < extent.D["end_time"]
-        ):
-            return True
-        else:
-            return False
+        )
 
-    def started(self, extent):
+    def started(self, extent) -> bool:
         """Return True if this temporal extent (A) started at the start of the
         provided temporal extent (B) and finishes after it
         ::
@@ -465,10 +473,10 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
-            >>> A = TemporalExtent(start_time=5, end_time=7 )
-            >>> B = TemporalExtent(start_time=5, end_time=6 )
+            >>> A = TemporalExtent(start_time=5, end_time=7)
+            >>> B = TemporalExtent(start_time=5, end_time=6)
             >>> A.started(B)
             True
             >>> B.started(A)
@@ -478,15 +486,12 @@ class TemporalExtent(SQLDatabaseInterface):
         if self.D["end_time"] is None or extent.D["end_time"] is None:
             return False
 
-        if (
+        return bool(
             self.D["start_time"] == extent.D["start_time"]
             and self.D["end_time"] > extent.D["end_time"]
-        ):
-            return True
-        else:
-            return False
+        )
 
-    def finishes(self, extent):
+    def finishes(self, extent) -> bool:
         """Return True if this temporal extent (A) starts after the start of
         the provided temporal extent (B) and finishes with it
         ::
@@ -499,10 +504,10 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
-            >>> A = TemporalExtent(start_time=6, end_time=7 )
-            >>> B = TemporalExtent(start_time=5, end_time=7 )
+            >>> A = TemporalExtent(start_time=6, end_time=7)
+            >>> B = TemporalExtent(start_time=5, end_time=7)
             >>> A.finishes(B)
             True
             >>> B.finishes(A)
@@ -512,15 +517,12 @@ class TemporalExtent(SQLDatabaseInterface):
         if self.D["end_time"] is None or extent.D["end_time"] is None:
             return False
 
-        if (
+        return bool(
             self.D["end_time"] == extent.D["end_time"]
             and self.D["start_time"] > extent.D["start_time"]
-        ):
-            return True
-        else:
-            return False
+        )
 
-    def finished(self, extent):
+    def finished(self, extent) -> bool:
         """Return True if this temporal extent (A) starts before the start of
         the provided temporal extent (B) and finishes with it
         ::
@@ -533,10 +535,10 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
-            >>> A = TemporalExtent(start_time=5, end_time=7 )
-            >>> B = TemporalExtent(start_time=6, end_time=7 )
+            >>> A = TemporalExtent(start_time=5, end_time=7)
+            >>> B = TemporalExtent(start_time=6, end_time=7)
             >>> A.finished(B)
             True
             >>> B.finished(A)
@@ -546,15 +548,12 @@ class TemporalExtent(SQLDatabaseInterface):
         if self.D["end_time"] is None or extent.D["end_time"] is None:
             return False
 
-        if (
+        return bool(
             self.D["end_time"] == extent.D["end_time"]
             and self.D["start_time"] < extent.D["start_time"]
-        ):
-            return True
-        else:
-            return False
+        )
 
-    def after(self, extent):
+    def after(self, extent) -> bool:
         """Return True if this temporal extent (A) is located after the
         provided temporal extent (B)
         ::
@@ -567,10 +566,10 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
-            >>> A = TemporalExtent(start_time=8, end_time=9 )
-            >>> B = TemporalExtent(start_time=6, end_time=7 )
+            >>> A = TemporalExtent(start_time=8, end_time=9)
+            >>> B = TemporalExtent(start_time=6, end_time=7)
             >>> A.after(B)
             True
             >>> B.after(A)
@@ -578,15 +577,9 @@ class TemporalExtent(SQLDatabaseInterface):
 
         """
         if extent.D["end_time"] is None:
-            if self.D["start_time"] > extent.D["start_time"]:
-                return True
-            else:
-                return False
+            return self.D["start_time"] > extent.D["start_time"]
 
-        if self.D["start_time"] > extent.D["end_time"]:
-            return True
-        else:
-            return False
+        return self.D["start_time"] > extent.D["end_time"]
 
     def before(self, extent):
         """Return True if this temporal extent (A) is located before the
@@ -601,10 +594,10 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
-            >>> A = TemporalExtent(start_time=6, end_time=7 )
-            >>> B = TemporalExtent(start_time=8, end_time=9 )
+            >>> A = TemporalExtent(start_time=6, end_time=7)
+            >>> B = TemporalExtent(start_time=8, end_time=9)
             >>> A.before(B)
             True
             >>> B.before(A)
@@ -612,17 +605,11 @@ class TemporalExtent(SQLDatabaseInterface):
 
         """
         if self.D["end_time"] is None:
-            if self.D["start_time"] < extent.D["start_time"]:
-                return True
-            else:
-                return False
+            return self.D["start_time"] < extent.D["start_time"]
 
-        if self.D["end_time"] < extent.D["start_time"]:
-            return True
-        else:
-            return False
+        return self.D["end_time"] < extent.D["start_time"]
 
-    def adjacent(self, extent):
+    def adjacent(self, extent) -> bool:
         """Return True if this temporal extent (A) is a meeting neighbor the
         provided temporal extent (B)
         ::
@@ -637,16 +624,16 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
-            >>> A = TemporalExtent(start_time=5, end_time=7 )
-            >>> B = TemporalExtent(start_time=7, end_time=9 )
+            >>> A = TemporalExtent(start_time=5, end_time=7)
+            >>> B = TemporalExtent(start_time=7, end_time=9)
             >>> A.adjacent(B)
             True
             >>> B.adjacent(A)
             True
-            >>> A = TemporalExtent(start_time=5, end_time=7 )
-            >>> B = TemporalExtent(start_time=3, end_time=5 )
+            >>> A = TemporalExtent(start_time=5, end_time=7)
+            >>> B = TemporalExtent(start_time=3, end_time=5)
             >>> A.adjacent(B)
             True
             >>> B.adjacent(A)
@@ -656,14 +643,16 @@ class TemporalExtent(SQLDatabaseInterface):
         if self.D["end_time"] is None and extent.D["end_time"] is None:
             return False
 
-        if (self.D["start_time"] == extent.D["end_time"]) or (
-            self.D["end_time"] == extent.D["start_time"]
-        ):
-            return True
-        else:
-            return False
+        return bool(
+            self.D["start_time"] is not None
+            and extent.D["end_time"] is not None
+            and (
+                self.D["start_time"] == extent.D["end_time"]
+                or self.D["end_time"] == extent.D["start_time"]
+            )
+        )
 
-    def follows(self, extent):
+    def follows(self, extent) -> bool:
         """Return True if this temporal extent (A) follows the
         provided temporal extent (B)
         ::
@@ -676,25 +665,22 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
-            >>> A = TemporalExtent(start_time=5, end_time=7 )
-            >>> B = TemporalExtent(start_time=3, end_time=5 )
+            >>> A = TemporalExtent(start_time=5, end_time=7)
+            >>> B = TemporalExtent(start_time=3, end_time=5)
             >>> A.follows(B)
             True
             >>> B.follows(A)
             False
 
         """
-        if extent.D["end_time"] is None:
-            return False
+        return (
+            extent.D["end_time"] is not None
+            and self.D["start_time"] == extent.D["end_time"]
+        )
 
-        if self.D["start_time"] == extent.D["end_time"]:
-            return True
-        else:
-            return False
-
-    def precedes(self, extent):
+    def precedes(self, extent) -> bool:
         """Return True if this temporal extent (A) precedes the provided
         temporal extent (B)
         ::
@@ -708,10 +694,10 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
-            >>> A = TemporalExtent(start_time=5, end_time=7 )
-            >>> B = TemporalExtent(start_time=7, end_time=9 )
+            >>> A = TemporalExtent(start_time=5, end_time=7)
+            >>> B = TemporalExtent(start_time=7, end_time=9)
             >>> A.precedes(B)
             True
             >>> B.precedes(A)
@@ -719,15 +705,12 @@ class TemporalExtent(SQLDatabaseInterface):
 
 
         """
-        if self.D["end_time"] is None:
-            return False
+        return (
+            self.D["end_time"] is not None
+            and self.D["end_time"] == extent.D["start_time"]
+        )
 
-        if self.D["end_time"] == extent.D["start_time"]:
-            return True
-        else:
-            return False
-
-    def during(self, extent):
+    def during(self, extent) -> bool:
         """Return True if this temporal extent (A) is located during the provided
         temporal extent (B)
         ::
@@ -739,10 +722,10 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
-            >>> A = TemporalExtent(start_time=5, end_time=7 )
-            >>> B = TemporalExtent(start_time=4, end_time=9 )
+            >>> A = TemporalExtent(start_time=5, end_time=7)
+            >>> B = TemporalExtent(start_time=4, end_time=9)
             >>> A.during(B)
             True
             >>> B.during(A)
@@ -755,23 +738,17 @@ class TemporalExtent(SQLDatabaseInterface):
 
         # Check single point of time in interval
         if self.D["end_time"] is None:
-            if (
+            return bool(
                 self.D["start_time"] >= extent.D["start_time"]
                 and self.D["start_time"] < extent.D["end_time"]
-            ):
-                return True
-            else:
-                return False
+            )
 
-        if (
+        return bool(
             self.D["start_time"] > extent.D["start_time"]
             and self.D["end_time"] < extent.D["end_time"]
-        ):
-            return True
-        else:
-            return False
+        )
 
-    def contains(self, extent):
+    def contains(self, extent) -> bool:
         """Return True if this temporal extent (A) contains the provided
         temporal extent (B)
         ::
@@ -784,10 +761,10 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
-            >>> A = TemporalExtent(start_time=4, end_time=9 )
-            >>> B = TemporalExtent(start_time=5, end_time=8 )
+            >>> A = TemporalExtent(start_time=4, end_time=9)
+            >>> B = TemporalExtent(start_time=5, end_time=8)
             >>> A.contains(B)
             True
             >>> B.contains(A)
@@ -800,23 +777,17 @@ class TemporalExtent(SQLDatabaseInterface):
 
         # Check single point of time in interval
         if extent.D["end_time"] is None:
-            if (
+            return bool(
                 self.D["start_time"] <= extent.D["start_time"]
                 and self.D["end_time"] > extent.D["start_time"]
-            ):
-                return True
-            else:
-                return False
+            )
 
-        if (
+        return bool(
             self.D["start_time"] < extent.D["start_time"]
             and self.D["end_time"] > extent.D["end_time"]
-        ):
-            return True
-        else:
-            return False
+        )
 
-    def equal(self, extent):
+    def equal(self, extent) -> bool:
         """Return True if this temporal extent (A) is equal to the provided
         temporal extent (B)
         ::
@@ -829,10 +800,10 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
-            >>> A = TemporalExtent(start_time=5, end_time=6 )
-            >>> B = TemporalExtent(start_time=5, end_time=6 )
+            >>> A = TemporalExtent(start_time=5, end_time=6)
+            >>> B = TemporalExtent(start_time=5, end_time=6)
             >>> A.equal(B)
             True
             >>> B.equal(A)
@@ -840,23 +811,17 @@ class TemporalExtent(SQLDatabaseInterface):
 
         """
         if self.D["end_time"] is None and extent.D["end_time"] is None:
-            if self.D["start_time"] == extent.D["start_time"]:
-                return True
-            else:
-                return False
+            return self.D["start_time"] == extent.D["start_time"]
 
         if self.D["end_time"] is None or extent.D["end_time"] is None:
             return False
 
-        if (
+        return bool(
             self.D["start_time"] == extent.D["start_time"]
             and self.D["end_time"] == extent.D["end_time"]
-        ):
-            return True
-        else:
-            return False
+        )
 
-    def overlaps(self, extent):
+    def overlaps(self, extent) -> bool:
         """Return True if this temporal extent (A) overlapped the provided
         temporal extent (B)
         ::
@@ -869,37 +834,34 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
-            >>> A = TemporalExtent(start_time=5, end_time=7 )
-            >>> B = TemporalExtent(start_time=6, end_time=8 )
+            >>> A = TemporalExtent(start_time=5, end_time=7)
+            >>> B = TemporalExtent(start_time=6, end_time=8)
             >>> A.overlaps(B)
             True
             >>> B.overlaps(A)
             False
 
-            >>> A = TemporalExtent(start_time=5, end_time=6 )
-            >>> B = TemporalExtent(start_time=6, end_time=8 )
+            >>> A = TemporalExtent(start_time=5, end_time=6)
+            >>> B = TemporalExtent(start_time=6, end_time=8)
             >>> A.overlaps(B)
             False
             >>> B.overlaps(A)
             False
 
         """
-        if self.D["end_time"] is None or extent.D["end_time"] is None:
-            return False
 
-        if (
-            self.D["start_time"] < extent.D["start_time"]
+        return bool(
+            self.D["end_time"] is not None
+            and extent.D["end_time"] is not None
+            and self.D["start_time"] < extent.D["start_time"]
             and self.D["end_time"] < extent.D["end_time"]
             and self.D["end_time"] > extent.D["start_time"]
-        ):
-            return True
-        else:
-            return False
+        )
 
-    def overlapped(self, extent):
-        """Return True if this temporal extent (A) overlapps the provided
+    def overlapped(self, extent) -> bool:
+        """Return True if this temporal extent (A) overlaps the provided
         temporal extent (B)
         ::
 
@@ -912,34 +874,31 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
-            >>> A = TemporalExtent(start_time=6, end_time=8 )
-            >>> B = TemporalExtent(start_time=5, end_time=7 )
+            >>> A = TemporalExtent(start_time=6, end_time=8)
+            >>> B = TemporalExtent(start_time=5, end_time=7)
             >>> A.overlapped(B)
             True
             >>> B.overlapped(A)
             False
 
-            >>> A = TemporalExtent(start_time=6, end_time=8 )
-            >>> B = TemporalExtent(start_time=5, end_time=6 )
+            >>> A = TemporalExtent(start_time=6, end_time=8)
+            >>> B = TemporalExtent(start_time=5, end_time=6)
             >>> A.overlapped(B)
             False
             >>> B.overlapped(A)
             False
 
         """
-        if self.D["end_time"] is None or extent.D["end_time"] is None:
-            return False
 
-        if (
-            self.D["start_time"] > extent.D["start_time"]
+        return bool(
+            self.D["end_time"] is not None
+            and extent.D["end_time"] is not None
+            and self.D["start_time"] > extent.D["start_time"]
             and self.D["end_time"] > extent.D["end_time"]
             and self.D["start_time"] < extent.D["end_time"]
-        ):
-            return True
-        else:
-            return False
+        )
 
     def temporal_relation(self, extent):
         """Returns the temporal relation between temporal objects
@@ -1008,56 +967,58 @@ class TemporalExtent(SQLDatabaseInterface):
             return "precedes"
         return None
 
-    def set_id(self, ident):
+    def set_id(self, ident) -> None:
         """Convenient method to set the unique identifier (primary key)"""
         self.ident = ident
         self.D["id"] = ident
 
-    def set_start_time(self, start_time):
+    def set_start_time(self, start_time) -> None:
         """Set the valid start time of the extent"""
         self.D["start_time"] = start_time
 
-    def set_end_time(self, end_time):
+    def set_end_time(self, end_time) -> None:
         """Set the valid end time of the extent"""
         self.D["end_time"] = end_time
 
     def get_id(self):
         """Convenient method to get the unique identifier (primary key)
+
         :return: None if not found
         """
         if "id" in self.D:
             return self.D["id"]
-        else:
-            return None
+        return None
 
     def get_start_time(self):
         """Get the valid start time of the extent
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "start_time" in self.D:
             return self.D["start_time"]
-        else:
-            return None
+        return None
 
     def get_end_time(self):
         """Get the valid end time of the extent
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "end_time" in self.D:
             return self.D["end_time"]
-        else:
-            return None
+        return None
 
     # Set the properties
     id = property(fget=get_id, fset=set_id)
     start_time = property(fget=get_start_time, fset=set_start_time)
     end_time = property(fget=get_end_time, fset=set_end_time)
 
-    def print_info(self):
+    def print_info(self) -> None:
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print(" | Start time:................. " + str(self.get_start_time()))
         print(" | End time:................... " + str(self.get_end_time()))
 
-    def print_shell_info(self):
+    def print_shell_info(self) -> None:
         """Print information about this class in shell style"""
         print("start_time='{}'".format(str(self.get_start_time())))
         print("end_time='{}'".format(str(self.get_end_time())))
@@ -1072,18 +1033,18 @@ class AbsoluteTemporalExtent(TemporalExtent):
     start_time and end_time must be of type datetime
     """
 
-    def __init__(self, table=None, ident=None, start_time=None, end_time=None):
+    def __init__(self, table=None, ident=None, start_time=None, end_time=None) -> None:
         TemporalExtent.__init__(self, table, ident, start_time, end_time)
 
-    def print_info(self):
+    def print_info(self) -> None:
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print(
-            " +-------------------- Absolute time -----------------------------------------+"
+            " +-------------------- Absolute time -----------------------------------------+"  # noqa: E501
         )
         TemporalExtent.print_info(self)
 
-    def print_shell_info(self):
+    def print_shell_info(self) -> None:
         """Print information about this class in shell style"""
         TemporalExtent.print_shell_info(self)
 
@@ -1092,21 +1053,21 @@ class AbsoluteTemporalExtent(TemporalExtent):
 
 
 class RasterAbsoluteTime(AbsoluteTemporalExtent):
-    def __init__(self, ident=None, start_time=None, end_time=None):
+    def __init__(self, ident=None, start_time=None, end_time=None) -> None:
         AbsoluteTemporalExtent.__init__(
             self, "raster_absolute_time", ident, start_time, end_time
         )
 
 
 class Raster3DAbsoluteTime(AbsoluteTemporalExtent):
-    def __init__(self, ident=None, start_time=None, end_time=None):
+    def __init__(self, ident=None, start_time=None, end_time=None) -> None:
         AbsoluteTemporalExtent.__init__(
             self, "raster3d_absolute_time", ident, start_time, end_time
         )
 
 
 class VectorAbsoluteTime(AbsoluteTemporalExtent):
-    def __init__(self, ident=None, start_time=None, end_time=None):
+    def __init__(self, ident=None, start_time=None, end_time=None) -> None:
         AbsoluteTemporalExtent.__init__(
             self, "vector_absolute_time", ident, start_time, end_time
         )
@@ -1123,13 +1084,17 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
-        >>> A = STDSAbsoluteTime(table="strds_absolute_time",
-        ... ident="strds@PERMANENT", start_time=datetime(2001, 01, 01),
-        ... end_time=datetime(2005,01,01), granularity="1 days",
-        ... map_time="interval")
+        >>> A = STDSAbsoluteTime(
+        ...     table="strds_absolute_time",
+        ...     ident="strds@PERMANENT",
+        ...     start_time=datetime(2001, 1, 1),
+        ...     end_time=datetime(2005, 1, 1),
+        ...     granularity="1 days",
+        ...     map_time="interval",
+        ... )
         >>> A.id
         'strds@PERMANENT'
         >>> A.start_time
@@ -1162,17 +1127,17 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
         end_time=None,
         granularity=None,
         map_time=None,
-    ):
+    ) -> None:
         AbsoluteTemporalExtent.__init__(self, table, ident, start_time, end_time)
 
         self.set_granularity(granularity)
         self.set_map_time(map_time)
 
-    def set_granularity(self, granularity):
+    def set_granularity(self, granularity) -> None:
         """Set the granularity of the space time dataset"""
         self.D["granularity"] = granularity
 
-    def set_map_time(self, map_time):
+    def set_map_time(self, map_time) -> None:
         """Set the type of the map time
 
         Registered maps may have different types of time:
@@ -1187,11 +1152,12 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
 
     def get_granularity(self):
         """Get the granularity of the space time dataset
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "granularity" in self.D:
             return self.D["granularity"]
-        else:
-            return None
+        return None
 
     def get_map_time(self):
         """Get the type of the map time
@@ -1206,21 +1172,20 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
         """
         if "map_time" in self.D:
             return self.D["map_time"]
-        else:
-            return None
+        return None
 
     # Properties
     granularity = property(fget=get_granularity, fset=set_granularity)
     map_time = property(fget=get_map_time, fset=set_map_time)
 
-    def print_info(self):
+    def print_info(self) -> None:
         """Print information about this class in human readable style"""
         AbsoluteTemporalExtent.print_info(self)
         #      0123456789012345678901234567890
         print(" | Granularity:................ " + str(self.get_granularity()))
         print(" | Temporal type of maps:...... " + str(self.get_map_time()))
 
-    def print_shell_info(self):
+    def print_shell_info(self) -> None:
         """Print information about this class in shell style"""
         AbsoluteTemporalExtent.print_shell_info(self)
         print("granularity='{}'".format(str(self.get_granularity())))
@@ -1231,21 +1196,27 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
 
 
 class STRDSAbsoluteTime(STDSAbsoluteTime):
-    def __init__(self, ident=None, start_time=None, end_time=None, granularity=None):
+    def __init__(
+        self, ident=None, start_time=None, end_time=None, granularity=None
+    ) -> None:
         STDSAbsoluteTime.__init__(
             self, "strds_absolute_time", ident, start_time, end_time, granularity
         )
 
 
 class STR3DSAbsoluteTime(STDSAbsoluteTime):
-    def __init__(self, ident=None, start_time=None, end_time=None, granularity=None):
+    def __init__(
+        self, ident=None, start_time=None, end_time=None, granularity=None
+    ) -> None:
         STDSAbsoluteTime.__init__(
             self, "str3ds_absolute_time", ident, start_time, end_time, granularity
         )
 
 
 class STVDSAbsoluteTime(STDSAbsoluteTime):
-    def __init__(self, ident=None, start_time=None, end_time=None, granularity=None):
+    def __init__(
+        self, ident=None, start_time=None, end_time=None, granularity=None
+    ) -> None:
         STDSAbsoluteTime.__init__(
             self, "stvds_absolute_time", ident, start_time, end_time, granularity
         )
@@ -1261,11 +1232,16 @@ class RelativeTemporalExtent(TemporalExtent):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
-        >>> A = RelativeTemporalExtent(table="raster_relative_time",
-        ... ident="soil@PERMANENT", start_time=0, end_time=1, unit="years")
+        >>> A = RelativeTemporalExtent(
+        ...     table="raster_relative_time",
+        ...     ident="soil@PERMANENT",
+        ...     start_time=0,
+        ...     end_time=1,
+        ...     unit="years",
+        ... )
         >>> A.id
         'soil@PERMANENT'
         >>> A.start_time
@@ -1288,11 +1264,11 @@ class RelativeTemporalExtent(TemporalExtent):
 
     def __init__(
         self, table=None, ident=None, start_time=None, end_time=None, unit=None
-    ):
+    ) -> None:
         TemporalExtent.__init__(self, table, ident, start_time, end_time)
         self.set_unit(unit)
 
-    def set_unit(self, unit):
+    def set_unit(self, unit) -> None:
         """Set the unit of the relative time. Valid units are:
 
         - years
@@ -1306,11 +1282,12 @@ class RelativeTemporalExtent(TemporalExtent):
 
     def get_unit(self):
         """Get the unit of the relative time
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "unit" in self.D:
             return self.D["unit"]
-        else:
-            return None
+        return None
 
     def temporal_relation(self, map):
         """Returns the temporal relation between temporal objects
@@ -1333,16 +1310,16 @@ class RelativeTemporalExtent(TemporalExtent):
     # Properties
     unit = property(fget=get_unit, fset=set_unit)
 
-    def print_info(self):
+    def print_info(self) -> None:
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print(
-            " +-------------------- Relative time -----------------------------------------+"
+            " +-------------------- Relative time -----------------------------------------+"  # noqa: E501
         )
         TemporalExtent.print_info(self)
         print(" | Relative time unit:......... " + str(self.get_unit()))
 
-    def print_shell_info(self):
+    def print_shell_info(self) -> None:
         """Print information about this class in shell style"""
         TemporalExtent.print_shell_info(self)
         print("unit=" + str(self.get_unit()))
@@ -1352,21 +1329,21 @@ class RelativeTemporalExtent(TemporalExtent):
 
 
 class RasterRelativeTime(RelativeTemporalExtent):
-    def __init__(self, ident=None, start_time=None, end_time=None, unit=None):
+    def __init__(self, ident=None, start_time=None, end_time=None, unit=None) -> None:
         RelativeTemporalExtent.__init__(
             self, "raster_relative_time", ident, start_time, end_time, unit
         )
 
 
 class Raster3DRelativeTime(RelativeTemporalExtent):
-    def __init__(self, ident=None, start_time=None, end_time=None, unit=None):
+    def __init__(self, ident=None, start_time=None, end_time=None, unit=None) -> None:
         RelativeTemporalExtent.__init__(
             self, "raster3d_relative_time", ident, start_time, end_time, unit
         )
 
 
 class VectorRelativeTime(RelativeTemporalExtent):
-    def __init__(self, ident=None, start_time=None, end_time=None, unit=None):
+    def __init__(self, ident=None, start_time=None, end_time=None, unit=None) -> None:
         RelativeTemporalExtent.__init__(
             self, "vector_relative_time", ident, start_time, end_time, unit
         )
@@ -1382,12 +1359,18 @@ class STDSRelativeTime(RelativeTemporalExtent):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
-        >>> A = STDSRelativeTime(table="strds_relative_time",
-        ... ident="strds@PERMANENT", start_time=0, end_time=1, unit="years",
-        ... granularity=5, map_time="interval")
+        >>> A = STDSRelativeTime(
+        ...     table="strds_relative_time",
+        ...     ident="strds@PERMANENT",
+        ...     start_time=0,
+        ...     end_time=1,
+        ...     unit="years",
+        ...     granularity=5,
+        ...     map_time="interval",
+        ... )
         >>> A.id
         'strds@PERMANENT'
         >>> A.start_time
@@ -1425,17 +1408,17 @@ class STDSRelativeTime(RelativeTemporalExtent):
         unit=None,
         granularity=None,
         map_time=None,
-    ):
+    ) -> None:
         RelativeTemporalExtent.__init__(self, table, ident, start_time, end_time, unit)
 
         self.set_granularity(granularity)
         self.set_map_time(map_time)
 
-    def set_granularity(self, granularity):
+    def set_granularity(self, granularity) -> None:
         """Set the granularity of the space time dataset"""
         self.D["granularity"] = granularity
 
-    def set_map_time(self, map_time):
+    def set_map_time(self, map_time) -> None:
         """Set the type of the map time
 
         Registered maps may have different types of time:
@@ -1450,11 +1433,12 @@ class STDSRelativeTime(RelativeTemporalExtent):
 
     def get_granularity(self):
         """Get the granularity of the space time dataset
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "granularity" in self.D:
             return self.D["granularity"]
-        else:
-            return None
+        return None
 
     def get_map_time(self):
         """Get the type of the map time
@@ -1469,21 +1453,20 @@ class STDSRelativeTime(RelativeTemporalExtent):
         """
         if "map_time" in self.D:
             return self.D["map_time"]
-        else:
-            return None
+        return None
 
     # Properties
     granularity = property(fget=get_granularity, fset=set_granularity)
     map_time = property(fget=get_map_time, fset=set_map_time)
 
-    def print_info(self):
+    def print_info(self) -> None:
         """Print information about this class in human readable style"""
         RelativeTemporalExtent.print_info(self)
         #      0123456789012345678901234567890
         print(" | Granularity:................ " + str(self.get_granularity()))
         print(" | Temporal type of maps:...... " + str(self.get_map_time()))
 
-    def print_shell_info(self):
+    def print_shell_info(self) -> None:
         """Print information about this class in shell style"""
         RelativeTemporalExtent.print_shell_info(self)
         print("granularity=" + str(self.get_granularity()))
@@ -1502,7 +1485,7 @@ class STRDSRelativeTime(STDSRelativeTime):
         unit=None,
         granularity=None,
         map_time=None,
-    ):
+    ) -> None:
         STDSRelativeTime.__init__(
             self,
             "strds_relative_time",
@@ -1524,7 +1507,7 @@ class STR3DSRelativeTime(STDSRelativeTime):
         unit=None,
         granularity=None,
         map_time=None,
-    ):
+    ) -> None:
         STDSRelativeTime.__init__(
             self,
             "str3ds_relative_time",
@@ -1546,7 +1529,7 @@ class STVDSRelativeTime(STDSRelativeTime):
         unit=None,
         granularity=None,
         map_time=None,
-    ):
+    ) -> None:
         STDSRelativeTime.__init__(
             self,
             "stvds_relative_time",

@@ -10,9 +10,9 @@ the <b>column</b> option.
 keyword&nbsp;value
 </pre></div>
 (separated by space) or comment beginning with '#' (hash).
-Definition of new category begins with keyword <I>cat</I> followed
+Definition of new category begins with keyword <em>cat</em> followed
 by the new category value.
-Keyword <I>where</I> specifies SQL where condition.
+Keyword <em>where</em> specifies SQL where condition.
 
 <h2>NOTES</h2>
 
@@ -27,6 +27,8 @@ order.
 <p>For dissolving common boundaries, see
 <em><a href="v.dissolve.html">v.dissolve</a></em>.
 
+<p>Either the <b>rules</b> or <b>column</b> option must be specified.
+
 <h2>EXAMPLES</h2>
 
 <h3>Example 1: Reclass by rules</h3>
@@ -35,7 +37,7 @@ order.
 v.reclass input=land output=land_u type=boundary rules=land.rcl
 </pre></div>
 
-the rules file contains :
+The rules file contains:
 
 <div class="code"><pre>
 # land reclass file
@@ -49,12 +51,12 @@ Produces a new vector area map <em>land_u</em> containing boundaries from
 <em>land</em> with area category values selected from database by SQL
 select statement:
 <br>
-<tt>select id from tland where use = 'E13' and owner = 'Jara Cimrman'</tt>
+<code>select id from tland where use = 'E13' and owner = 'Jara Cimrman'</code>
 changed to category 1;
 <br>
 values selected from database by SQL select statement:
 <br>
-<tt>select id from tland where use = 'E14'</tt> changed to category 2.
+<code>select id from tland where use = 'E14'</code> changed to category 2.
 
 <h3>Example 2: Reclass by attribute column</h3>
 
@@ -71,7 +73,7 @@ cat|I_vs_P
 
 <h2>KNOWN ISSUES</h2>
 
-No table is created for reclassed layer if <b>rules</b> option is used.
+No table is created for reclassed layer if the <b>rules</b> option is used.
 
 <h2>SEE ALSO</h2>
 

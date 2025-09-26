@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/lidar.h>
+#include <grass/vector.h>
 
 /*------------------------------------------------------------------------------------------------*/
 void P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
@@ -49,12 +50,14 @@ void P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
             else {
                 db_init_string(&sql);
 
-                sprintf(buf, "INSERT INTO %s (ID, X, Y, Interp)", tab_name);
+                snprintf(buf, sizeof(buf), "INSERT INTO %s (ID, X, Y, Interp)",
+                         tab_name);
                 db_append_string(&sql, buf);
 
-                sprintf(buf, " VALUES (");
+                snprintf(buf, sizeof(buf), " VALUES (");
                 db_append_string(&sql, buf);
-                sprintf(buf, "%d, %f, %f, ", line_num[i], obs[i][0], obs[i][1]);
+                snprintf(buf, sizeof(buf), "%d, %f, %f, ", line_num[i],
+                         obs[i][0], obs[i][1]);
                 db_append_string(&sql, buf);
 
                 if ((*point->x > Overlap.E) && (*point->x < General.E)) {
@@ -65,9 +68,9 @@ void P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
                         weight = csi * eta;
                         *point->z = weight * interpolation;
 
-                        sprintf(buf, "%lf", *point->z);
+                        snprintf(buf, sizeof(buf), "%lf", *point->z);
                         db_append_string(&sql, buf);
-                        sprintf(buf, ")");
+                        snprintf(buf, sizeof(buf), ")");
                         db_append_string(&sql, buf);
 
                         if (db_execute_immediate(driver, &sql) != DB_OK)
@@ -81,9 +84,9 @@ void P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
                         weight = csi * eta;
                         *point->z = weight * interpolation;
 
-                        sprintf(buf, "%lf", *point->z);
+                        snprintf(buf, sizeof(buf), "%lf", *point->z);
                         db_append_string(&sql, buf);
-                        sprintf(buf, ")");
+                        snprintf(buf, sizeof(buf), ")");
                         db_append_string(&sql, buf);
 
                         if (db_execute_immediate(driver, &sql) != DB_OK)
@@ -95,9 +98,9 @@ void P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
                         weight = (General.E - *point->x) / overlap;
                         *point->z = weight * interpolation;
 
-                        sprintf(buf, "%lf", *point->z);
+                        snprintf(buf, sizeof(buf), "%lf", *point->z);
                         db_append_string(&sql, buf);
-                        sprintf(buf, ")");
+                        snprintf(buf, sizeof(buf), ")");
                         db_append_string(&sql, buf);
 
                         if (db_execute_immediate(driver, &sql) != DB_OK)
@@ -113,9 +116,9 @@ void P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
                         weight = eta * csi;
                         *point->z = weight * interpolation;
 
-                        sprintf(buf, "%lf", *point->z);
+                        snprintf(buf, sizeof(buf), "%lf", *point->z);
                         db_append_string(&sql, buf);
-                        sprintf(buf, ")");
+                        snprintf(buf, sizeof(buf), ")");
                         db_append_string(&sql, buf);
 
                         if (db_execute_immediate(driver, &sql) != DB_OK)
@@ -129,9 +132,9 @@ void P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
                         weight = csi * eta;
                         *point->z = weight * interpolation;
 
-                        sprintf(buf, "%lf", *point->z);
+                        snprintf(buf, sizeof(buf), "%lf", *point->z);
                         db_append_string(&sql, buf);
-                        sprintf(buf, ")");
+                        snprintf(buf, sizeof(buf), ")");
                         db_append_string(&sql, buf);
 
                         if (db_execute_immediate(driver, &sql) != DB_OK)
@@ -143,9 +146,9 @@ void P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
                         weight = (*point->x - General.W) / overlap;
                         *point->z = weight * interpolation;
 
-                        sprintf(buf, "%lf", *point->z);
+                        snprintf(buf, sizeof(buf), "%lf", *point->z);
                         db_append_string(&sql, buf);
-                        sprintf(buf, ")");
+                        snprintf(buf, sizeof(buf), ")");
                         db_append_string(&sql, buf);
 
                         if (db_execute_immediate(driver, &sql) != DB_OK)
@@ -159,9 +162,9 @@ void P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
                         weight = (General.N - *point->y) / overlap;
                         *point->z = weight * interpolation;
 
-                        sprintf(buf, "%lf", *point->z);
+                        snprintf(buf, sizeof(buf), "%lf", *point->z);
                         db_append_string(&sql, buf);
-                        sprintf(buf, ")");
+                        snprintf(buf, sizeof(buf), ")");
                         db_append_string(&sql, buf);
 
                         if (db_execute_immediate(driver, &sql) != DB_OK)
@@ -173,9 +176,9 @@ void P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
                         weight = (*point->y - General.S) / overlap;
                         *point->z = (1 - weight) * interpolation;
 
-                        sprintf(buf, "%lf", *point->z);
+                        snprintf(buf, sizeof(buf), "%lf", *point->z);
                         db_append_string(&sql, buf);
-                        sprintf(buf, ")");
+                        snprintf(buf, sizeof(buf), ")");
                         db_append_string(&sql, buf);
 
                         if (db_execute_immediate(driver, &sql) != DB_OK)
@@ -187,6 +190,7 @@ void P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
         }
     /*IF*/}
     /*FOR*/ db_commit_transaction(driver);
+    Vect_destroy_line_struct(point);
 
     return;
 }
@@ -313,6 +317,6 @@ int P_Regular_Points(struct Cell_head *Elaboration, struct Cell_head *Original,
                 Segment_put(out_seg, &dval, row, col);
             }
         } /* END COL */
-    }     /* END ROW */
+    } /* END ROW */
     return 1;
 }

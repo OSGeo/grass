@@ -1,12 +1,11 @@
 import os
 import platform
 
+import grass.script as gs
+from grass.exceptions import CalledModuleError
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-import grass.script as gs
-from grass.script import legal_name
-from grass.script import utils
+from grass.script import legal_name, utils
 
 
 class TestUnique(TestCase):
@@ -109,9 +108,13 @@ class TestLegalizeVectorName(TestCase):
         try:
             gs.run_command("v.edit", map=name, tool="create")
             gs.run_command("v.db.addtable", map=name)
-            gs.run_command("v.db.addcolumn", map=name, columns=name)
+            gs.run_command(
+                "v.db.addcolumn",
+                map=name,
+                columns=f"{name} integer",
+            )
             works = True
-        except gs.CalledModuleError:
+        except CalledModuleError:
             works = False
         finally:
             gs.run_command("g.remove", name=name, type="vector", flags="f")

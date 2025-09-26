@@ -67,8 +67,12 @@ class SelectionTest(TestCase):
 
         This is executed after each test run.
         """
-        self.runModule("g.remove", flags="f", type="raster", name=self.imp_raster)
-        self.runModule("g.remove", flags="f", type="raster", name=self.ref_raster)
+        self.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name=(self.imp_raster, self.ref_raster),
+        )
         try:
             self.runModule("g.remove", flags="f", type="raster", name=self.base_raster)
         except AttributeError:

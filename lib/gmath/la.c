@@ -9,7 +9,7 @@
  * 2006-11-23
  * 2015-01-20
 
- * This file is part of GRASS GIS. It is free software. You can
+ * This file is part of GRASS. It is free software. You can
  * redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option)
@@ -22,14 +22,28 @@
 
  ******************************************************************************/
 
-#include <stdio.h> /* needed here for ifdef/else */
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-
 #include <grass/config.h>
 
-#if defined(HAVE_LIBLAPACK) && defined(HAVE_LIBBLAS)
+#if defined(HAVE_LIBBLAS) && defined(HAVE_LIBLAPACK)
+
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#if defined(_MSC_VER)
+#include <complex.h>
+#define LAPACK_COMPLEX_CUSTOM
+#define lapack_complex_float  _Fcomplex
+#define lapack_complex_double _Dcomplex
+#endif
+
+#include <lapacke.h>
+#if defined(HAVE_CBLAS_ATLAS_H)
+#include <cblas-atlas.h>
+#else
+#include <cblas.h>
+#endif // HAVE_CBLAS_ATLAS_H
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -49,7 +63,6 @@ static int egcmp(const void *pa, const void *pb);
  * \param ldim
  * \return mat_struct
  */
-
 mat_struct *G_matrix_init(int rows, int cols, int ldim)
 {
     mat_struct *tmp_arry;
@@ -66,7 +79,7 @@ mat_struct *G_matrix_init(int rows, int cols, int ldim)
     tmp_arry->type = MATRIX_;
     tmp_arry->v_indx = -1;
 
-    tmp_arry->vals = (doublereal *)G_calloc(ldim * cols, sizeof(doublereal));
+    tmp_arry->vals = (double *)G_calloc(ldim * cols, sizeof(double));
     tmp_arry->is_init = 1;
 
     return tmp_arry;
@@ -80,13 +93,12 @@ mat_struct *G_matrix_init(int rows, int cols, int ldim)
  * \param A
  * \return 0 on error; 1 on success
  */
-
 int G_matrix_zero(mat_struct *A)
 {
     if (!A->vals)
         return 0;
 
-    memset(A->vals, 0, (A->ldim * A->cols) * sizeof(doublereal));
+    memset(A->vals, 0, (A->ldim * A->cols) * sizeof(double));
 
     return 1;
 }
@@ -105,7 +117,6 @@ int G_matrix_zero(mat_struct *A)
  * \param ldim
  * \return int
  */
-
 int G_matrix_set(mat_struct *A, int rows, int cols, int ldim)
 {
     if (rows < 1 || cols < 1 || ldim < 0) {
@@ -119,7 +130,7 @@ int G_matrix_set(mat_struct *A, int rows, int cols, int ldim)
     A->type = MATRIX_;
     A->v_indx = -1;
 
-    A->vals = (doublereal *)G_calloc(ldim * cols, sizeof(doublereal));
+    A->vals = (double *)G_calloc(ldim * cols, sizeof(double));
     A->is_init = 1;
 
     return 0;
@@ -135,7 +146,6 @@ int G_matrix_set(mat_struct *A, int rows, int cols, int ldim)
  * \param A
  * \return mat_struct
  */
-
 mat_struct *G_matrix_copy(const mat_struct *A)
 {
     mat_struct *B;
@@ -150,7 +160,8 @@ mat_struct *G_matrix_copy(const mat_struct *A)
         return NULL;
     }
 
-    memcpy(&B->vals[0], &A->vals[0], A->cols * A->ldim * sizeof(doublereal));
+    memcpy(&B->vals[0], &A->vals[0],
+           (size_t)A->cols * A->ldim * sizeof(double));
 
     return B;
 }
@@ -158,16 +169,15 @@ mat_struct *G_matrix_copy(const mat_struct *A)
 /*!
  * \fn mat_struct *G_matrix_add (mat_struct *mt1, mat_struct *mt2)
  *
- * \brief Adds two matricies
+ * \brief Adds two matrices
  *
- *  Adds two matricies <b>mt1</b> and <b>mt2</b> and returns a
+ *  Adds two matrices <b>mt1</b> and <b>mt2</b> and returns a
  * resulting matrix. The return structure is automatically initialized.
  *
  * \param mt1
  * \param mt2
  * \return mat_struct
  */
-
 mat_struct *G_matrix_add(mat_struct *mt1, mat_struct *mt2)
 {
     return G__matrix_add(mt1, mt2, 1, 1);
@@ -176,16 +186,15 @@ mat_struct *G_matrix_add(mat_struct *mt1, mat_struct *mt2)
 /*!
  * \fn mat_struct *G_matrix_subtract (mat_struct *mt1, mat_struct *mt2)
  *
- * \brief Subtract two matricies
+ * \brief Subtract two matrices
  *
- * Subtracts two matricies <b>mt1</b> and <b>mt2</b> and returns
+ * Subtracts two matrices <b>mt1</b> and <b>mt2</b> and returns
  * a resulting matrix. The return matrix is automatically initialized.
  *
  * \param mt1
  * \param mt2
  * \return mat_struct
  */
-
 mat_struct *G_matrix_subtract(mat_struct *mt1, mat_struct *mt2)
 {
     return G__matrix_add(mt1, mt2, 1, -1);
@@ -200,10 +209,10 @@ mat_struct *G_matrix_subtract(mat_struct *mt1, mat_struct *mt2)
  * Calculates the scalar-matrix multiplication
  *
  * \param scalar
- * \param A
+ * \param matrix
+ * \param out
  * \return mat_struct
  */
-
 mat_struct *G_matrix_scalar_mul(double scalar, mat_struct *matrix,
                                 mat_struct *out)
 {
@@ -225,7 +234,7 @@ mat_struct *G_matrix_scalar_mul(double scalar, mat_struct *matrix,
 
     for (i = 0; i < m; i++) {
         for (j = 0; j < n; j++) {
-            doublereal value = scalar * G_matrix_get_element(matrix, i, j);
+            double value = scalar * G_matrix_get_element(matrix, i, j);
 
             G_matrix_set_element(out, i, j, value);
         }
@@ -246,7 +255,6 @@ mat_struct *G_matrix_scalar_mul(double scalar, mat_struct *matrix,
  * \param c
  * \return mat_struct
  */
-
 mat_struct *G_matrix_scale(mat_struct *mt1, const double c)
 {
     return G__matrix_add(mt1, NULL, c, 0);
@@ -267,7 +275,6 @@ mat_struct *G_matrix_scale(mat_struct *mt1, const double c)
  * \param c2
  * \return mat_struct
  */
-
 mat_struct *G__matrix_add(mat_struct *mt1, mat_struct *mt2, const double c1,
                           const double c2)
 {
@@ -328,12 +335,10 @@ mat_struct *G__matrix_add(mat_struct *mt1, mat_struct *mt2, const double c1,
     return mt3;
 }
 
-#if defined(HAVE_LIBBLAS)
-
 /*!
  * \fn mat_struct *G_matrix_product (mat_struct *mt1, mat_struct *mt2)
  *
- * \brief Returns product of two matricies
+ * \brief Returns product of two matrices
  *
  *  Returns a matrix with the product of matrix <b>mt1</b> and
  * <b>mt2</b>. The return matrix is automatically initialized.
@@ -342,13 +347,11 @@ mat_struct *G__matrix_add(mat_struct *mt1, mat_struct *mt2, const double c1,
  * \param mt2
  * \return mat_struct
  */
-
 mat_struct *G_matrix_product(mat_struct *mt1, mat_struct *mt2)
 {
     mat_struct *mt3;
-    doublereal unity = 1, zero = 0;
-    integer rows, cols, interdim, lda, ldb;
-    integer1 no_trans = 'n';
+    double unity = 1., zero = 0.;
+    int rows, cols, interdim, lda, ldb;
 
     if (!((mt1->is_init) || (mt2->is_init))) {
         G_warning(_("One or both input matrices uninitialised"));
@@ -367,22 +370,18 @@ mat_struct *G_matrix_product(mat_struct *mt1, mat_struct *mt2)
 
     /* Call the driver */
 
-    rows = (integer)mt1->rows;
-    interdim = (integer)mt1->cols;
-    cols = (integer)mt2->cols;
+    rows = (int)mt1->rows;
+    interdim = (int)mt1->cols;
+    cols = (int)mt2->cols;
 
-    lda = (integer)mt1->ldim;
-    ldb = (integer)mt2->ldim;
+    lda = (int)mt1->ldim;
+    ldb = (int)mt2->ldim;
 
-    f77_dgemm(&no_trans, &no_trans, &rows, &cols, &interdim, &unity, mt1->vals,
-              &lda, mt2->vals, &ldb, &zero, mt3->vals, &lda);
+    cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, rows, cols, interdim,
+                unity, mt1->vals, lda, mt2->vals, ldb, zero, mt3->vals, lda);
 
     return mt3;
 }
-
-#else /* defined(HAVE_LIBBLAS) */
-#warning G_matrix_product() not compiled; requires BLAS library
-#endif /* defined(HAVE_LIBBLAS) */
 
 /*!
  * \fn mat_struct *G_matrix_transpose (mat_struct *mt)
@@ -396,12 +395,11 @@ mat_struct *G_matrix_product(mat_struct *mt1, mat_struct *mt2)
  * \param mt
  * \return mat_struct
  */
-
 mat_struct *G_matrix_transpose(mat_struct *mt)
 {
     mat_struct *mt1;
     int ldim, ldo;
-    doublereal *dbo, *dbt, *dbx, *dby;
+    double *dbo, *dbt, *dbx, *dby;
     int cnt, cnt2;
 
     /* Word align the workspace blocks */
@@ -437,8 +435,6 @@ mat_struct *G_matrix_transpose(mat_struct *mt)
 
     return mt1;
 }
-
-#if defined(HAVE_LIBBLAS) && defined(HAVE_LIBLAPACK)
 
 /*!
  * \fn int G_matrix_LU_solve (const mat_struct *mt1, mat_struct **xmat0,
@@ -509,20 +505,20 @@ int G_matrix_LU_solve(const mat_struct *mt1, mat_struct **xmat0,
     switch (mtype) {
 
     case NONSYM: {
-        integer *perm, res_info;
-        integer num_eqns, nrhs, lda, ldb;
+        int *perm, res_info;
+        int num_eqns, nrhs, lda, ldb;
 
-        perm = (integer *)G_malloc(wmat->rows * sizeof(integer));
+        perm = (int *)G_malloc(wmat->rows * sizeof(int));
 
         /* Set fields to pass to fortran routine */
-        num_eqns = (integer)mt1->rows;
-        nrhs = (integer)wmat->cols;
-        lda = (integer)mt1->ldim;
-        ldb = (integer)wmat->ldim;
+        num_eqns = (int)mt1->rows;
+        nrhs = (int)wmat->cols;
+        lda = (int)mt1->ldim;
+        ldb = (int)wmat->ldim;
 
         /* Call LA driver */
-        f77_dgesv(&num_eqns, &nrhs, mtx->vals, &lda, perm, wmat->vals, &ldb,
-                  &res_info);
+        res_info = LAPACKE_dgesv(LAPACK_COL_MAJOR, num_eqns, nrhs, mtx->vals,
+                                 lda, perm, wmat->vals, ldb);
 
         /* Copy the results from the modified data matrix, taking account
            of pivot permutations ???
@@ -545,7 +541,7 @@ int G_matrix_LU_solve(const mat_struct *mt1, mat_struct **xmat0,
          */
 
         memcpy(xmat->vals, wmat->vals,
-               wmat->cols * wmat->ldim * sizeof(doublereal));
+               (size_t)wmat->cols * wmat->ldim * sizeof(double));
 
         /* Free temp arrays */
         G_free(perm);
@@ -574,12 +570,6 @@ int G_matrix_LU_solve(const mat_struct *mt1, mat_struct **xmat0,
     return 0;
 }
 
-#else /* defined(HAVE_LIBBLAS) && defined(HAVE_LIBLAPACK) */
-#warning G_matrix_LU_solve() not compiled; requires BLAS and LAPACK libraries
-#endif /* defined(HAVE_LIBBLAS) && defined(HAVE_LIBLAPACK) */
-
-#if defined(HAVE_LIBBLAS) && defined(HAVE_LIBLAPACK)
-
 /*!
  * \fn mat_struct *G_matrix_inverse (mat_struct *mt)
  *
@@ -591,7 +581,6 @@ int G_matrix_LU_solve(const mat_struct *mt1, mat_struct **xmat0,
  * \param mt
  * \return mat_struct
  */
-
 mat_struct *G_matrix_inverse(mat_struct *mt)
 {
     mat_struct *mt0, *res;
@@ -635,10 +624,6 @@ mat_struct *G_matrix_inverse(mat_struct *mt)
     }
 }
 
-#else /* defined(HAVE_LIBBLAS) && defined(HAVE_LIBLAPACK) */
-#warning G_matrix_inverse() not compiled; requires BLAS and LAPACK libraries
-#endif /* defined(HAVE_LIBBLAS) && defined(HAVE_LIBLAPACK) */
-
 /*!
  * \fn void G_matrix_free (mat_struct *mt)
  *
@@ -649,7 +634,6 @@ mat_struct *G_matrix_inverse(mat_struct *mt)
  * \param mt
  * \return void
  */
-
 void G_matrix_free(mat_struct *mt)
 {
     if (mt->is_init)
@@ -668,18 +652,17 @@ void G_matrix_free(mat_struct *mt)
  *  \param mt
  *  \return void
  */
-
 void G_matrix_print(mat_struct *mt)
 {
     int i, j;
-    char buf[64], numbuf[64];
+    char buf[2048], numbuf[64];
 
     for (i = 0; i < mt->rows; i++) {
-        strcpy(buf, "");
+        G_strlcpy(buf, "", sizeof(buf));
 
         for (j = 0; j < mt->cols; j++) {
-
-            sprintf(numbuf, "%14.6f", G_matrix_get_element(mt, i, j));
+            snprintf(numbuf, sizeof(numbuf), "%14.6f",
+                     G_matrix_get_element(mt, i, j));
             strcat(buf, numbuf);
             if (j < mt->cols - 1)
                 strcat(buf, ", ");
@@ -707,7 +690,6 @@ void G_matrix_print(mat_struct *mt)
  *  \param val
  *  \return int
  */
-
 int G_matrix_set_element(mat_struct *mt, int rowval, int colval, double val)
 {
     if (!mt->is_init) {
@@ -720,7 +702,7 @@ int G_matrix_set_element(mat_struct *mt, int rowval, int colval, double val)
         return -1;
     }
 
-    mt->vals[rowval + colval * mt->ldim] = (doublereal)val;
+    mt->vals[rowval + colval * mt->ldim] = (double)val;
 
     return 0;
 }
@@ -739,7 +721,6 @@ int G_matrix_set_element(mat_struct *mt, int rowval, int colval, double val)
  *  \param colval
  *  \return double
  */
-
 double G_matrix_get_element(mat_struct *mt, int rowval, int colval)
 {
     double val;
@@ -761,7 +742,6 @@ double G_matrix_get_element(mat_struct *mt, int rowval, int colval)
  * \param col
  * \return vec_struct
  */
-
 vec_struct *G_matvect_get_column(mat_struct *mt, int col)
 {
     int i; /* loop */
@@ -801,7 +781,6 @@ vec_struct *G_matvect_get_column(mat_struct *mt, int col)
  * \param row
  * \return vec_struct
  */
-
 vec_struct *G_matvect_get_row(mat_struct *mt, int row)
 {
     int i; /* loop */
@@ -843,7 +822,6 @@ vec_struct *G_matvect_get_row(mat_struct *mt, int row)
  * \param indx
  * \return int
  */
-
 int G_matvect_extract_vector(mat_struct *mt, vtype vt, int indx)
 {
     if (vt == RVEC && indx >= mt->rows) {
@@ -889,7 +867,6 @@ int G_matvect_extract_vector(mat_struct *mt, vtype vt, int indx)
  *  \param vc
  *  \return int
  */
-
 int G_matvect_retrieve_matrix(vec_struct *vc)
 {
     /* We have to take the integrity of the vector structure
@@ -914,11 +891,10 @@ int G_matvect_retrieve_matrix(vec_struct *vc)
  * \param b
  * \return vec_struct
  */
-
 vec_struct *G_matvect_product(mat_struct *A, vec_struct *b, vec_struct *out)
 {
     unsigned int i, m, n, j;
-    register doublereal sum;
+    register double sum;
 
     /* G_message("A=%d,%d,%d", A->cols, A->rows, A->ldim); */
     /* G_message("B=%d,%d,%d", b->cols, b->rows, b->ldim); */
@@ -968,7 +944,6 @@ vec_struct *G_matvect_product(mat_struct *A, vec_struct *b, vec_struct *out)
  * \param vt
  * \return vec_struct
  */
-
 vec_struct *G_vector_init(int cells, int ldim, vtype vt)
 {
     vec_struct *tmp_arry;
@@ -997,8 +972,7 @@ vec_struct *G_vector_init(int cells, int ldim, vtype vt)
 
     tmp_arry->v_indx = 0;
 
-    tmp_arry->vals =
-        (doublereal *)G_calloc(ldim * tmp_arry->cols, sizeof(doublereal));
+    tmp_arry->vals = (double *)G_calloc(ldim * tmp_arry->cols, sizeof(double));
     tmp_arry->is_init = 1;
 
     return tmp_arry;
@@ -1014,7 +988,6 @@ vec_struct *G_vector_init(int cells, int ldim, vtype vt)
  * \param v
  * \return void
  */
-
 void G_vector_free(vec_struct *v)
 {
     if (v->is_init)
@@ -1037,7 +1010,6 @@ void G_vector_free(vec_struct *v)
  * \param out
  * \return vec_struct
  */
-
 vec_struct *G_vector_sub(vec_struct *v1, vec_struct *v2, vec_struct *out)
 {
     int idx1, idx2, idx0;
@@ -1112,7 +1084,6 @@ vec_struct *G_vector_sub(vec_struct *v1, vec_struct *v2, vec_struct *out)
  * \param vindx
  * \return int
  */
-
 int G_vector_set(vec_struct *A, int cells, int ldim, vtype vt, int vindx)
 {
     if ((cells < 1) || (vt == RVEC && ldim < 1) ||
@@ -1144,13 +1115,11 @@ int G_vector_set(vec_struct *A, int cells, int ldim, vtype vt, int vindx)
     else
         A->v_indx = vindx;
 
-    A->vals = (doublereal *)G_calloc(ldim * A->cols, sizeof(doublereal));
+    A->vals = (double *)G_calloc(ldim * A->cols, sizeof(double));
     A->is_init = 1;
 
     return 0;
 }
-
-#if defined(HAVE_LIBBLAS)
 
 /*!
  * \fn double G_vector_norm_euclid (vec_struct *vc)
@@ -1163,25 +1132,24 @@ int G_vector_set(vec_struct *A, int cells, int ldim, vtype vt, int vindx)
  * \param vc
  * \return double
  */
-
 double G_vector_norm_euclid(vec_struct *vc)
 {
-    integer incr, Nval;
-    doublereal *startpt;
+    int incr, Nval;
+    double *startpt;
 
     if (!vc->is_init)
         G_fatal_error(_("Matrix is not initialised"));
 
     if (vc->type == ROWVEC_) {
-        Nval = (integer)vc->cols;
-        incr = (integer)vc->ldim;
+        Nval = (int)vc->cols;
+        incr = (int)vc->ldim;
         if (vc->v_indx < 0)
             startpt = vc->vals;
         else
             startpt = vc->vals + vc->v_indx;
     }
     else {
-        Nval = (integer)vc->rows;
+        Nval = (int)vc->rows;
         incr = 1;
         if (vc->v_indx < 0)
             startpt = vc->vals;
@@ -1190,12 +1158,8 @@ double G_vector_norm_euclid(vec_struct *vc)
     }
 
     /* Call the BLAS routine dnrm2_() */
-    return (double)f77_dnrm2(&Nval, startpt, &incr);
+    return cblas_dnrm2(Nval, startpt, incr);
 }
-
-#else /* defined(HAVE_LIBBLAS) */
-#warning G_vector_norm_euclid() not compiled; requires BLAS library
-#endif /* defined(HAVE_LIBBLAS) */
 
 /*!
  * \fn double G_vector_norm_maxval (vec_struct *vc, int vflag)
@@ -1213,10 +1177,9 @@ double G_vector_norm_euclid(vec_struct *vc)
  * \param vflag
  * \return double
  */
-
 double G_vector_norm_maxval(vec_struct *vc, int vflag)
 {
-    doublereal xval, *startpt, *curpt;
+    double xval, *startpt, *curpt;
     double cellval;
     int ncells, incr;
 
@@ -1224,15 +1187,15 @@ double G_vector_norm_maxval(vec_struct *vc, int vflag)
         G_fatal_error(_("Matrix is not initialised"));
 
     if (vc->type == ROWVEC_) {
-        ncells = (integer)vc->cols;
-        incr = (integer)vc->ldim;
+        ncells = (int)vc->cols;
+        incr = (int)vc->ldim;
         if (vc->v_indx < 0)
             startpt = vc->vals;
         else
             startpt = vc->vals + vc->v_indx;
     }
     else {
-        ncells = (integer)vc->rows;
+        ncells = (int)vc->rows;
         incr = 1;
         if (vc->v_indx < 0)
             startpt = vc->vals;
@@ -1265,7 +1228,7 @@ double G_vector_norm_maxval(vec_struct *vc, int vflag)
                     xval = *curpt;
             }
             } /* switch */
-        }     /* if(curpt != startpt) */
+        } /* if(curpt != startpt) */
 
         curpt += incr;
         ncells--;
@@ -1284,7 +1247,6 @@ double G_vector_norm_maxval(vec_struct *vc, int vflag)
  * \param vc
  * \return double
  */
-
 double G_vector_norm1(vec_struct *vc)
 {
     double result = 0.0;
@@ -1320,9 +1282,9 @@ double G_vector_norm1(vec_struct *vc)
  *
  * \param v1
  * \param v2
+ * \param out Output vector
  * \return vec_struct
  */
-
 vec_struct *G_vector_product(vec_struct *v1, vec_struct *v2, vec_struct *out)
 {
     int idx1, idx2, idx0;
@@ -1360,9 +1322,6 @@ vec_struct *G_vector_product(vec_struct *v1, vec_struct *v2, vec_struct *out)
         return NULL;
     }
 
-#if defined(HAVE_LAPACK) && defined(HAVE_LIBBLAS)
-    f77_dhad(v1->cols, 1.0, v1->vals, 1, v2->vals, 1, 0.0, out->vals, 1.0);
-#else
     idx1 = (v1->v_indx > 0) ? v1->v_indx : 0;
     idx2 = (v2->v_indx > 0) ? v2->v_indx : 0;
     idx0 = (out->v_indx > 0) ? out->v_indx : 0;
@@ -1379,7 +1338,6 @@ vec_struct *G_vector_product(vec_struct *v1, vec_struct *v2, vec_struct *out)
                                  G_matrix_get_element(v1, i, idx1) *
                                      G_matrix_get_element(v2, i, idx2));
     }
-#endif
 
     return out;
 }
@@ -1394,12 +1352,11 @@ vec_struct *G_vector_product(vec_struct *v1, vec_struct *v2, vec_struct *out)
  * \param comp_flag
  * \return vec_struct
  */
-
 vec_struct *G_vector_copy(const vec_struct *vc1, int comp_flag)
 {
     vec_struct *tmp_arry;
     int incr1, incr2;
-    doublereal *startpt1, *startpt2, *curpt1, *curpt2;
+    double *startpt1, *startpt2, *curpt1, *curpt2;
     int cnt;
 
     if (!vc1->is_init) {
@@ -1441,8 +1398,8 @@ vec_struct *G_vector_copy(const vec_struct *vc1, int comp_flag)
         return NULL;
     }
 
-    tmp_arry->vals = (doublereal *)G_calloc(tmp_arry->ldim * tmp_arry->cols,
-                                            sizeof(doublereal));
+    tmp_arry->vals =
+        (double *)G_calloc(tmp_arry->ldim * tmp_arry->cols, sizeof(double));
     if (comp_flag == DO_COMPACT) {
         if (tmp_arry->type == ROWVEC_) {
             startpt1 = tmp_arry->vals;
@@ -1482,7 +1439,7 @@ vec_struct *G_vector_copy(const vec_struct *vc1, int comp_flag)
     }
 
     while (cnt > 0) {
-        memcpy(curpt1, curpt2, sizeof(doublereal));
+        memcpy(curpt1, curpt2, sizeof(double));
         curpt1 += incr1;
         curpt2 += incr2;
         cnt--;
@@ -1506,7 +1463,6 @@ vec_struct *G_vector_copy(const vec_struct *vc1, int comp_flag)
  * \param out
  * \return int
  */
-
 int G_matrix_read(FILE *fp, mat_struct *out)
 {
     char buff[100];
@@ -1554,12 +1510,11 @@ int G_matrix_read(FILE *fp, mat_struct *out)
  *
  * Resizes a matrix
  *
- * \param A
+ * \param in
  * \param rows
  * \param cols
  * \return mat_struct
  */
-
 mat_struct *G_matrix_resize(mat_struct *in, int rows, int cols)
 {
     mat_struct *matrix;
@@ -1583,7 +1538,7 @@ mat_struct *G_matrix_resize(mat_struct *in, int rows, int cols)
 }
 
 /*!
- * \fn int G_matrix_read_stdin (mat_struct *out)
+ * \fn int G_matrix_stdin(mat_struct *out)
  *
  * \brief Read a matrix from standard input
  *
@@ -1594,7 +1549,6 @@ mat_struct *G_matrix_resize(mat_struct *in, int rows, int cols)
  * \param out
  * \return int
  */
-
 int G_matrix_stdin(mat_struct *out)
 {
     return G_matrix_read(stdin, out);
@@ -1611,7 +1565,6 @@ int G_matrix_stdin(mat_struct *out)
  * \param m
  * \return int
  */
-
 int G_matrix_eigen_sort(vec_struct *d, mat_struct *m)
 {
     mat_struct tmp;
@@ -1633,7 +1586,7 @@ int G_matrix_eigen_sort(vec_struct *d, mat_struct *m)
     }
 
     /* sort the combined matrix */
-    qsort(tmp.vals, tmp.cols, tmp.ldim * sizeof(doublereal), egcmp);
+    qsort(tmp.vals, tmp.cols, tmp.ldim * sizeof(double), egcmp);
 
     /* split tmp into m and d */
     for (i = 0; i < m->cols; i++) {
@@ -1652,8 +1605,8 @@ int G_matrix_eigen_sort(vec_struct *d, mat_struct *m)
 
 static int egcmp(const void *pa, const void *pb)
 {
-    double a = *(doublereal *const)pa;
-    double b = *(doublereal *const)pb;
+    double a = *(double *const)pa;
+    double b = *(double *const)pb;
 
     if (a > b)
         return 1;
@@ -1663,4 +1616,6 @@ static int egcmp(const void *pa, const void *pb)
     return 0;
 }
 
-#endif /* HAVE_BLAS && HAVE_LAPACK && HAVE_G2C */
+#endif // HAVE_LIBLAPACK HAVE_LIBBLAS
+
+typedef int suppress_empty_translation_unit_compiler_warning;

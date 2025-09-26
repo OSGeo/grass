@@ -1,22 +1,23 @@
 <h2>DESCRIPTION</h2>
 
 <em>v.import</em> imports vector data from files and database connections
-supported by the <a href="http://www.gdal.org/">OGR</a> library) into the
-current location and mapset. If the projection of the input
-does not match the projection of the location, the input is reprojected
-into the current location. In case that the projection of the input map
-does match the projection of the location, the input is imported directly.
+supported by the <a href="https://gdal.org/">OGR</a> library into the
+current project (previously called location) and mapset. If the coordinate
+reference system (CRS) of the input
+does not match the CRS of the project, the input is reprojected
+into the current project. In case that the CRS of the input map
+does match the CRS of the project, the input is imported directly.
 
 <h3>Supported Vector Formats</h3>
 
 <em>v.import</em> uses the OGR library which supports various vector data
-formats including <a href="http://www.gdal.org/drv_shapefile.html">ESRI
-Shapefile</a>, <a href="http://www.gdal.org/drv_mitab.html">Mapinfo
+formats including <a href="https://gdal.org/en/stable/drivers/vector/shapefile.html">ESRI
+Shapefile</a>, <a href="https://gdal.org/en/stable/drivers/vector/mitab.html">Mapinfo
 File</a>, UK .NTF, SDTS, TIGER, IHO S-57 (ENC), DGN, GML, GPX, AVCBin, REC,
 Memory, OGDI, and PostgreSQL, depending on the local OGR installation.
-For details see the <a href="https://gdal.org/drivers/vector/">OGR web
+For details see the <a href="https://gdal.org/en/stable/drivers/vector/">OGR web
 site</a>. The OGR (Simple Features Library) is part of the
-<a href="http://www.gdal.org">GDAL</a> library, hence GDAL needs to be
+<a href="https://gdal.org">GDAL</a> library, hence GDAL needs to be
 installed to use <em>v.import</em>.
 
 <p>
@@ -24,15 +25,15 @@ The list of actually supported formats can be printed by <b>-f</b> flag.
 
 <h2>NOTES</h2>
 
-<em>v.import</em> checks the projection metadata of the dataset to be
-imported against the current location's projection. If not identical a
+<em>v.import</em> checks the CRS metadata of the dataset to be
+imported against that of the current project. If not identical a
 related error message is shown.
 <br>
-To override this projection check (i.e. to use current location's projection)
-by assuming that the dataset has the same projection as the current location
+To override this CRS check (i.e. to use current project's CRS)
+by assuming that the dataset has the same CRS as the current project
 the <b>-o</b> flag can be used. This is also useful when geodata to be
-imported do not contain any projection metadata at all. The user must be
-sure that the projection is identical in order to avoid to introduce data
+imported do not contain any CRS metadata at all. The user must be
+sure that the CRS is identical in order to avoid introducing data
 errors.
 
 <h3>Topology cleaning</h3>
@@ -42,13 +43,13 @@ topological areas. If the input polygons contain errors (unexpected
 overlapping areas, small gaps between polygons, or warnings about being
 unable to calculate centroids), the import might need to be repeated
 using a <em>snap</em> value as suggested in the output messages. The
-default value of <tt>snap=-1</tt> means that no snapping will be done.
+default value of <code>snap=-1</code> means that no snapping will be done.
 
 <!-- TODO: add hints for latlong -->
 
 <p>
 The <em>snap</em> threshold defines the maximal distance from one to another
-vertex in map units (for latitude-longitude locations in degrees). If there
+vertex in map units (for latitude-longitude projects in degrees). If there
 is no other vertex within <em>snap</em> distance, no snapping will be done.
 Note that a too large value can severely damage area topology, beyond repair.
 <p>
@@ -59,49 +60,9 @@ refer to the <em>v.clean</em> manual page.
 <h2>EXAMPLE</h2>
 
 <div class="code"><pre>
-# import SHAPE file at full extent and reproject to current location projection
+# import SHAPE file at full extent and reproject to current project CRS
 v.import input=research_area.shp output=research_area extent=input
 </pre></div>
-
-<h2>ERROR MESSAGES</h2>
-
-<h3>SQL syntax errors</h3>
-
-Depending on the currently selected SQL driver, error messages such as follows may arise:
-
-<div class="code"><pre>
-DBMI-SQLite driver error:
-Error in sqlite3_prepare():
-near "ORDER": syntax error
-</pre></div>
-
-Or:
-
-<div class="code"><pre>
-DBMI-DBF driver error:
-SQL parser error:
-syntax error, unexpected DESC, expecting NAME processing 'DESC
-</pre></div>
-
-This indicates that a column name in the input dataset corresponds to a reserved
-SQL word (here: 'ORDER' and 'DESC' respectively). A different column name has to be
-used in this case. The <b>columns</b> parameter can be used to assign different
-column names on the fly in order to avoid using reserved SQL words.
-
-For a list of SQL reserved words for SQLite (the default driver),
-see <a href="https://www.sqlite.org/lang_keywords.html">here</a>.
-
-<h3>Projection errors</h3>
-
-<div class="code"><pre>
-Projection of dataset does not appear to match the current location.
-</pre></div>
-
-Here you need to create or use a location whose projection matches that
-of the vector data you wish to import. Try using <b>location</b> parameter to
-create a new location based upon the projection information in the file. If
-desired, you can then re-project it to another location
-with <em><a href="v.proj.html">v.proj</a></em>.
 
 <h2>SEE ALSO</h2>
 

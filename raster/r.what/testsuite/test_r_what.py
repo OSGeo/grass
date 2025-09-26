@@ -12,6 +12,7 @@ Licence:    This program is free software under the GNU General Public
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 import os
+import json
 
 
 class TestRasterWhat(TestCase):
@@ -437,6 +438,25 @@ class TestRasterWhat(TestCase):
 332533.5941495|242831.139883875||121
 """
 
+    @staticmethod
+    def convert_plain_to_json(plain):
+        data = []
+        lines = plain.split("\n")
+        for line in lines:
+            line = line.strip()
+            if line:
+                parts = line.split("|")
+                item = {
+                    "easting": float(parts[0]),
+                    "northing": float(parts[1]),
+                    "site_name": parts[2],
+                    "boundary_county_500m": {"value": int(parts[3])},
+                }
+                if len(parts) == 5:
+                    item["boundary_county_500m"]["color"] = parts[4]
+                data.append(item)
+        return data
+
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
@@ -490,7 +510,7 @@ class TestRasterWhat(TestCase):
         )
         self.assertFileExists(filename="result.csv", msg="CSV file was not created")
         if os.path.isfile("result.csv"):
-            file = open("result.csv", "r")
+            file = open("result.csv")
             fileData = file.read()
             self.assertLooksLike(
                 actual=fileData,
@@ -539,6 +559,32 @@ class TestRasterWhat(TestCase):
             actual=str(module.outputs.stdout),
             reference=self.refrence_cache,
             msg="test_raster_what_cats did't run successfully",
+        )
+
+    def test_raster_what_json(self):
+        """Testing r.what runs successfully with input coordinates given as a vector points map and JSON output"""
+        reference = self.convert_plain_to_json(self.refrence_points)
+        module = SimpleModule(
+            "r.what", map=self.map1, points=self.points, format="json"
+        )
+        module.run()
+        self.assertListEqual(
+            json.loads(str(module.outputs.stdout)),
+            reference,
+            "test_raster_what_points did't run successfully",
+        )
+
+    def test_raster_what_points_flag_r_json(self):
+        """Testing r.what runs successfully with flag r and json output"""
+        reference = self.convert_plain_to_json(self.refrence_flag_r)
+        module = SimpleModule(
+            "r.what", map=self.map1, points=self.points, flags="r", format="json"
+        )
+        module.run()
+        self.assertListEqual(
+            json.loads(str(module.outputs.stdout)),
+            reference,
+            "test_raster_what_cats did't run successfully",
         )
 
 

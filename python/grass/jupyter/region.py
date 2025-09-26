@@ -114,14 +114,10 @@ class RegionManagerForInteractiveMap:
         west = float(bbox["ll_w"])
         north = float(bbox["ll_n"])
         east = float(bbox["ll_e"])
-        if self._bbox[0][0] > south:
-            self._bbox[0][0] = south
-        if self._bbox[0][1] > west:
-            self._bbox[0][1] = west
-        if self._bbox[1][0] < north:
-            self._bbox[1][0] = north
-        if self._bbox[1][1] < east:
-            self._bbox[1][1] = east
+        self._bbox[0][0] = min(self._bbox[0][0], south)
+        self._bbox[0][1] = min(self._bbox[0][1], west)
+        self._bbox[1][0] = max(self._bbox[1][0], north)
+        self._bbox[1][1] = max(self._bbox[1][1], east)
 
 
 class RegionManagerFor2D:
@@ -201,18 +197,87 @@ class RegionManagerFor2D:
                         vector=name, env=self._env
                     )
                     self._extent_set = True
-            else:
-                if not self._resolution_set and not self._extent_set:
-                    self._env["GRASS_REGION"] = gs.region_env(
-                        raster=name, env=self._env
-                    )
-                    self._extent_set = True
-                    self._resolution_set = True
-                elif not self._resolution_set:
-                    self._env["GRASS_REGION"] = gs.region_env(align=name, env=self._env)
-                    self._resolution_set = True
+            elif not self._resolution_set and not self._extent_set:
+                self._env["GRASS_REGION"] = gs.region_env(raster=name, env=self._env)
+                self._extent_set = True
+                self._resolution_set = True
+            elif not self._resolution_set:
+                self._env["GRASS_REGION"] = gs.region_env(align=name, env=self._env)
+                self._resolution_set = True
         except CalledModuleError:
             return
+
+
+class RegionManagerForSeries:
+    """Region manager for SeriesMap"""
+
+    def __init__(self, use_region, saved_region, width, height, env):
+        """Manages region during rendering.
+
+        :param use_region: if True, use either current or provided saved region,
+                          else derive region from rendered layers
+        :param saved_region: if name of saved_region is provided,
+                            this region is then used for rendering
+        :param width: rendering width
+        :param height: rendering height
+        :param env: environment for rendering
+        """
+        self._env = env
+        self._width = width
+        self._height = height
+        self._use_region = use_region
+        self._saved_region = saved_region
+        self._extent_set = False
+        self._resolution_set = False
+
+    def set_region_from_rasters(self, rasters):
+        """Sets computational region for rendering from a series of rasters.
+
+        This function sets the region from a series of rasters. If the extent or
+        resolution has already been set by calling this function previously or by the
+        set_region_from vectors() function, this function will not modify it.
+
+        If user specified the name of saved region during object's initialization,
+        the provided region is used. If it's not specified
+        and use_region=True, current region is used.
+        """
+        if self._saved_region:
+            self._env["GRASS_REGION"] = gs.region_env(
+                region=self._saved_region, env=self._env
+            )
+            return
+        if self._use_region:
+            # use current
+            return
+        if self._resolution_set and self._extent_set:
+            return
+        if not self._resolution_set and not self._extent_set:
+            self._env["GRASS_REGION"] = gs.region_env(raster=rasters, env=self._env)
+            self._extent_set = True
+            self._resolution_set = True
+        elif not self._resolution_set:
+            self._env["GRASS_REGION"] = gs.region_env(align=rasters[0], env=self._env)
+            self._resolution_set = True
+
+    def set_region_from_vectors(self, vectors):
+        """Sets computational region extent for rendering from a series of vectors
+
+        If the extent and resolution has already been set by set_region_from_rasters,
+        or by using the saved_region or use_region arguments, the region is not modified
+        """
+        if self._saved_region:
+            self._env["GRASS_REGION"] = gs.region_env(
+                region=self._saved_region, env=self._env
+            )
+            return
+        if self._use_region:
+            # use current
+            return
+        if self._resolution_set and self._extent_set:
+            return
+        if not self._resolution_set and not self._extent_set:
+            self._env["GRASS_REGION"] = gs.region_env(vector=vectors, env=self._env)
+            self._extent_set = True
 
 
 class RegionManagerFor3D:
@@ -269,7 +334,7 @@ class RegionManagerForTimeSeries:
         self._use_region = use_region
         self._saved_region = saved_region
 
-    def set_region_from_timeseries(self, timeseries):
+    def set_region_from_timeseries(self, timeseries, element_type="strds"):
         """Sets computational region for rendering.
 
         This function sets the computation region from the extent of
@@ -288,13 +353,17 @@ class RegionManagerForTimeSeries:
             # use current
             return
         # Get extent, resolution from space time dataset
-        info = gs.parse_command("t.info", input=timeseries, flags="g", env=self._env)
-        # Set grass region from extent
-        self._env["GRASS_REGION"] = gs.region_env(
-            n=info["north"],
-            s=info["south"],
-            e=info["east"],
-            w=info["west"],
-            nsres=info["nsres_min"],
-            ewres=info["ewres_min"],
+        info = gs.parse_command(
+            "t.info", input=timeseries, type=element_type, flags="g", env=self._env
         )
+        # Set grass region from extent
+        params = {
+            "n": info["north"],
+            "s": info["south"],
+            "e": info["east"],
+            "w": info["west"],
+        }
+        if "nsres_min" in info:
+            params["nsres"] = info["nsres_min"]
+            params["ewres"] = info["ewres_min"]
+        self._env["GRASS_REGION"] = gs.region_env(**params, env=self._env)

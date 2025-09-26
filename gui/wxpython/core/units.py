@@ -21,7 +21,6 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
-import six
 import math
 
 if __name__ == "__main__":
@@ -30,7 +29,7 @@ if __name__ == "__main__":
 
 class BaseUnits:
     def __init__(self):
-        self._units = dict()
+        self._units = {}
         self._units["length"] = {
             0: {"key": "mu", "label": _("map units")},
             1: {"key": "me", "label": _("meters")},
@@ -54,7 +53,7 @@ class BaseUnits:
 
         :return: list of units labels
         """
-        result = list()
+        result = []
         try:
             keys = sorted(self._units[type].keys())
             for idx in keys:
@@ -80,7 +79,7 @@ class BaseUnits:
 
         :return: index
         """
-        for k, u in six.iteritems(self._units[type]):
+        for k, u in self._units[type].items():
             if u["key"] == key:
                 return k
         return 0
@@ -111,7 +110,7 @@ def ConvertValue(value, type, units):
             f = 6.21371192237334e-4
         elif units == "ft":
             f = 3.28083989501312
-    else:  # -> area
+    else:  # -> area  # noqa: PLR5501
         if units == "me":
             f = 1.0
         elif units == "km":
@@ -133,19 +132,19 @@ def formatDist(distance, mapunits):
 
     Formats length numbers and units as a function of length.
 
-    >>> formatDist(20.56915, 'metres')
+    >>> formatDist(20.56915, "metres")
     (20.57, 'm')
-    >>> formatDist(6983.4591, 'metres')
+    >>> formatDist(6983.4591, "metres")
     (6.983, 'km')
-    >>> formatDist(0.59, 'feet')
+    >>> formatDist(0.59, "feet")
     (0.59, 'ft')
-    >>> formatDist(8562, 'feet')
+    >>> formatDist(8562, "feet")
     (1.622, 'miles')
-    >>> formatDist(0.48963, 'degrees')
+    >>> formatDist(0.48963, "degrees")
     (29.38, 'min')
-    >>> formatDist(20.2546, 'degrees')
+    >>> formatDist(20.2546, "degrees")
     (20.25, 'deg')
-    >>> formatDist(82.146, 'unknown')
+    >>> formatDist(82.146, "unknown")
     (82.15, 'units')
 
     Accepted map units are 'meters', 'metres', 'feet', 'degree'.
@@ -196,7 +195,7 @@ def formatDist(distance, mapunits):
         outdistance = round(distance / divisor, 1)
     elif (distance / divisor) > 0.0:
         outdistance = round(
-            distance / divisor, int(math.ceil(3 - math.log10(distance / divisor)))
+            distance / divisor, math.ceil(3 - math.log10(distance / divisor))
         )
     else:
         outdistance = float(distance / divisor)

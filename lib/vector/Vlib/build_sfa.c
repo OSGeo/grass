@@ -747,7 +747,7 @@ int Vect__build_sfa(struct Map_info *Map, int build)
    \return 1 on success
    \return 0 on error
  */
-int Vect_fidx_dump(const struct Map_info *Map, FILE *out)
+int Vect_fidx_dump(struct Map_info *Map, FILE *out)
 {
     int i;
     const struct Format_info_offset *offset;

@@ -17,8 +17,6 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com> (menu customization)
 """
 
-from __future__ import print_function
-
 import os
 import sys
 import getopt
@@ -26,7 +24,7 @@ import getopt
 # i18n is taken care of in the grass library code.
 # So we need to import it before any of the GUI code.
 from grass.exceptions import Usage
-from grass.script.core import set_raise_on_error
+from grass.script.core import set_raise_on_error, warning, error
 
 from core import globalvar
 from core.utils import registerPid, unregisterPid
@@ -65,7 +63,7 @@ class GMApp(wx.App):
         :return: True
         """
         # Internal and display name of the app (if supported by/on platform)
-        self.SetAppName("GRASS GIS")
+        self.SetAppName("GRASS")
         self.SetVendorName("The GRASS Development Team")
 
         # create splash screen
@@ -91,10 +89,28 @@ class GMApp(wx.App):
                 from main_window.frame import GMFrame
             else:
                 from lmgr.frame import GMFrame
-
-            mainframe = GMFrame(parent=None, id=wx.ID_ANY, workspace=self.workspaceFile)
-            mainframe.Show()
-            self.SetTopWindow(mainframe)
+            try:
+                mainframe = GMFrame(
+                    parent=None, id=wx.ID_ANY, workspace=self.workspaceFile
+                )
+            except Exception as err:
+                min_required_wx_version = [4, 2, 0]
+                if not globalvar.CheckWxVersion(min_required_wx_version):
+                    error(err)
+                    warning(
+                        _(
+                            "Current version of wxPython {} is lower than "
+                            "minimum required version {}"
+                        ).format(
+                            wx.__version__,
+                            ".".join(map(str, min_required_wx_version)),
+                        )
+                    )
+                else:
+                    raise
+            else:
+                mainframe.Show()
+                self.SetTopWindow(mainframe)
 
         wx.CallAfter(show_main_gui)
 
@@ -119,14 +135,11 @@ def process_opt(opts, args):
     """Process command-line arguments"""
     workspaceFile = None
     for o, a in opts:
-        if o in ("-h", "--help"):
+        if o in {"-h", "--help"}:
             printHelp()
 
-        elif o in ("-w", "--workspace"):
-            if a != "":
-                workspaceFile = str(a)
-            else:
-                workspaceFile = args.pop(0)
+        elif o in {"-w", "--workspace"}:
+            workspaceFile = str(a) if a != "" else args.pop(0)
 
     return workspaceFile
 
@@ -148,7 +161,7 @@ def main(argv=None):
     app = GMApp(workspaceFile)
 
     # suppress wxPython logs
-    q = wx.LogNull()
+    q = wx.LogNull()  # noqa: F841
     set_raise_on_error(True)
 
     # register GUI PID

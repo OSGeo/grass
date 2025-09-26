@@ -12,7 +12,7 @@
  *               OGR support by Martin Landa <landa.martin gmail.com>
  *               Markus Metz (labelcol, cats, where options)
  * PURPOSE:      Converts vector map to raster map
- * COPYRIGHT:    (C) 2003-2018 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2024 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -71,10 +71,10 @@ int main(int argc, char *argv[])
     use_opt->type = TYPE_STRING;
     use_opt->required = YES;
     use_opt->multiple = NO;
-    use_opt->options = "attr,cat,val,z,dir";
+    use_opt->options = "attr,cat,value,z,dir";
     use_opt->description = _("Source of raster values");
     desc = NULL;
-    G_asprintf(&desc, "attr;%s;cat;%s;val;%s;z;%s;dir;%s",
+    G_asprintf(&desc, "attr;%s;cat;%s;value;%s;z;%s;dir;%s",
                _("read values from attribute table"), _("use category values"),
                _("use value specified by value option"),
                _("use z coordinate (points or contours only)"),
@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
     val_opt->required = NO;
     val_opt->multiple = NO;
     val_opt->answer = "1";
-    val_opt->description = _("Raster value (for use=val)");
+    val_opt->description = _("Raster value (for use=value)");
 
     memory = G_define_standard_option(G_OPT_MEMORYMB);
 

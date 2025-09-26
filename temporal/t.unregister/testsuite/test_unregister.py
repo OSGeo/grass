@@ -7,8 +7,9 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 import os
-import grass.pygrass.modules as pymod
+
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
@@ -113,7 +114,7 @@ class TestUnregister(TestCase):
             "t.list",
             type="raster",
             columns="name",
-            where='mapset = "%s" AND (name = "a1" OR name = "a2" OR name = "a3")'
+            where="mapset = '%s' AND (name = 'a1' OR name = 'a2' OR name = 'a3')"
             % (tgis.get_current_mapset()),
         )
         self.runModule(lister)
@@ -126,7 +127,7 @@ class TestUnregister(TestCase):
             "t.list",
             type="raster",
             columns="name",
-            where='mapset = "%s" AND (name = "a1" OR name = "a2" OR name = "a3")'
+            where="mapset = '%s' AND (name = 'a1' OR name = 'a2' OR name = 'a3')"
             % (tgis.get_current_mapset()),
         )
         self.runModule(lister)
@@ -144,7 +145,7 @@ class TestUnregister(TestCase):
             "t.list",
             type="raster",
             columns="name",
-            where='mapset = "%s" AND (name = "a4" OR name = "a5" OR name = "a6")'
+            where="mapset = '%s' AND (name = 'a4' OR name = 'a5' OR name = 'a6')"
             % (tgis.get_current_mapset()),
         )
         self.runModule(lister)
@@ -157,7 +158,7 @@ class TestUnregister(TestCase):
             "t.list",
             type="raster",
             columns="name",
-            where='mapset = "%s" AND (name = "a4" OR name = "a5" OR name = "a6")'
+            where="mapset = '%s' AND (name = 'a4' OR name = 'a5' OR name = 'a6')"
             % (tgis.get_current_mapset()),
         )
         self.runModule(lister)

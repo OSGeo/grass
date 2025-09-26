@@ -18,12 +18,9 @@ This program is free software under the GNU General Public License
 import os
 import sys
 
-import grass.script as grass
+import grass.script as gs
 
 from grass.pydispatch.signal import Signal
-
-# to disable Abstract class not referenced
-# pylint: disable=R0921
 
 
 class Notification:
@@ -40,7 +37,7 @@ class Notification:
     RAISE_WINDOW = 3
 
 
-class Layer(object):
+class Layer:
     """Layer is generally usable layer object.
 
     .. note::
@@ -49,10 +46,8 @@ class Layer(object):
         layer as used in lmgr.
     """
 
-    pass
 
-
-class LayerList(object):
+class LayerList:
     def GetSelectedLayers(self, checkedOnly=True):
         """Returns list of selected layers.
 
@@ -62,7 +57,7 @@ class LayerList(object):
             However, this may be the same for some implementations
             (e.g. it d.mon has all layers checked and selected).
         """
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def GetSelectedLayer(self, checkedOnly=False):
         """Returns selected layer or None when there is no selected layer.
@@ -71,7 +66,7 @@ class LayerList(object):
             Parameter checkedOnly is here False by default. This might
             change if we find the right way of handling unchecked layers.
         """
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def AddLayer(self, ltype, name=None, checked=None, opacity=1.0, cmd=None):
         """Adds a new layer to the layer list.
@@ -84,7 +79,7 @@ class LayerList(object):
         :param opacity: layer opacity level
         :param cmd: command (given as a list)
         """
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def GetLayersByName(self, name):
         """Returns list of layers with a given name.
@@ -93,9 +88,9 @@ class LayerList(object):
 
         .. todo::
             if common usage is just to check the presence of layer,
-            intoroduce a new method ContainsLayerByName(name)
+            introduce a new method ContainsLayerByName(name)
         """
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def GetLayerByData(self, key, value):
         """Returns layer with specified.
@@ -106,7 +101,7 @@ class LayerList(object):
         .. warning::
             Avoid using this method, it might be removed in the future.
         """
-        raise NotImplementedError()
+        raise NotImplementedError
 
 
 class GrassInterface:
@@ -120,31 +115,31 @@ class GrassInterface:
 
     def RunCmd(self, *args, **kwargs):
         """Executes a command."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def Help(self, entry):
         """Shows a manual page for a given entry."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def WriteLog(self, text, wrap=None, notification=Notification.HIGHLIGHT):
         """Writes log message."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def WriteCmdLog(self, text, pid=None, notification=Notification.MAKE_VISIBLE):
         """Writes message related to start or end of the command."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def WriteWarning(self, text):
         """Writes warning message for the user."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def WriteError(self, text):
         """Writes error message for the user."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def GetLog(self, err=False):
         """Returns file-like object for writing."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def GetLayerTree(self):
         """Returns LayerManager's tree GUI object.
@@ -152,11 +147,11 @@ class GrassInterface:
 
             Will be removed from the interface.
         """
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def GetLayerList(self):
         """Returns a layer management object."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def GetMapDisplay(self):
         """Returns current map display.
@@ -168,7 +163,7 @@ class GrassInterface:
         :return: MapFrame instance
         :return: None when no mapdisplay open
         """
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def GetAllMapDisplays(self):
         """Get list of all map displays.
@@ -179,7 +174,7 @@ class GrassInterface:
 
         :return: list of MapFrame instances
         """
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def GetMapWindow(self):
         """Returns current map window.
@@ -188,7 +183,7 @@ class GrassInterface:
 
             For layer related tasks use GetLayerList().
         """
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def GetProgress(self):
         """Returns object which shows the progress.
@@ -197,16 +192,7 @@ class GrassInterface:
 
             Some implementations may not implement this method.
         """
-        raise NotImplementedError()
-
-    def UpdateCmdHistory(self, cmd):
-        """Add the command to the current history list shown to the user
-
-        .. note::
-
-            Some implementations may not implement this method or do nothing.
-        """
-        raise NotImplementedError()
+        raise NotImplementedError
 
 
 class StandaloneGrassInterface(GrassInterface):
@@ -227,10 +213,12 @@ class StandaloneGrassInterface(GrassInterface):
         # Signal for communicating something in current grassdb has changed.
         # Parameters:
         # action: required, is one of 'new', 'rename', 'delete'
-        # element: required, can be one of 'grassdb', 'location', 'mapset', 'raster', 'vector' and 'raster_3d'
+        # element: required, can be one of 'grassdb', 'location', 'mapset', 'raster',
+        #          'vector' and 'raster_3d'
         # grassdb: path to grass db, required
         # location: location name, required
-        # mapset: mapset name, required when element is 'mapset', 'raster', 'vector' or 'raster_3d'
+        # mapset: mapset name, required when element is 'mapset', 'raster',
+        #         'vector' or 'raster_3d'
         # map: map name, required when element is 'raster', 'vector' or 'raster_3d'
         # newname: new name (of mapset, map), required with action='rename'
         self.grassdbChanged = Signal("StandaloneGrassInterface.grassdbChanged")
@@ -240,6 +228,21 @@ class StandaloneGrassInterface(GrassInterface):
 
         # Signal emitted when workspace is changed
         self.workspaceChanged = Signal("StandaloneGrassInterface.workspaceChanged")
+
+        # Signal emitted when entry to history is added
+        self.entryToHistoryAdded = Signal(
+            "StandaloneGrassInterface.entryToHistoryAdded"
+        )
+
+        # Signal emitted when entry from history is removed
+        self.entryFromHistoryRemoved = Signal(
+            "StandaloneGrassInterface.entryFromHistoryRemoved"
+        )
+
+        # Signal emitted when entry in history is updated
+        self.entryInHistoryUpdated = Signal(
+            "StandaloneGrassInterface.entryInHistoryUpdated"
+        )
 
         # workaround, standalone grass interface should be moved to sep. file
         from core.gconsole import GConsole, EVT_CMD_OUTPUT, EVT_CMD_PROGRESS
@@ -267,7 +270,7 @@ class StandaloneGrassInterface(GrassInterface):
 
     def _onCmdProgress(self, event):
         """Update progress message info"""
-        grass.percent(event.value, 100, 1)
+        gs.percent(event.value, 100, 1)
         event.Skip()
 
     def RunCmd(
@@ -298,18 +301,18 @@ class StandaloneGrassInterface(GrassInterface):
         self._gconsole.RunCmd(["g.manual", "entry=%s" % entry])
 
     def WriteLog(self, text, wrap=None, notification=Notification.HIGHLIGHT):
-        self._write(grass.message, text)
+        self._write(gs.message, text)
 
     def WriteCmdLog(self, text, pid=None, notification=Notification.MAKE_VISIBLE):
         if pid:
             text = "(" + str(pid) + ") " + text
-        self._write(grass.message, text)
+        self._write(gs.message, text)
 
     def WriteWarning(self, text):
-        self._write(grass.warning, text)
+        self._write(gs.warning, text)
 
     def WriteError(self, text):
-        self._write(grass.error, text)
+        self._write(gs.error, text)
 
     def _write(self, function, text):
         orig = os.getenv("GRASS_MESSAGE_FORMAT")
@@ -330,20 +333,16 @@ class StandaloneGrassInterface(GrassInterface):
 
     def GetMapDisplay(self):
         """Get current map display."""
-        return None
+        return
 
     def GetAllMapDisplays(self):
         """Get list of all map displays."""
         return []
 
     def GetMapWindow(self):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def GetProgress(self):
         # TODO: implement some progress with same inface as gui one
         # (probably using g.message or similarly to Write... functions)
-        raise NotImplementedError()
-
-    def UpdateCmdHistory(self, cmd):
-        """There is no history displayed to the user, doing nothing"""
-        pass
+        raise NotImplementedError

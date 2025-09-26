@@ -18,6 +18,7 @@
  *
  *****************************************************************************/
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -119,18 +120,13 @@ int main(int argc, char **argv)
         _("GROUP BY conditions of SQL statement without 'group by' keyword");
     options.group->guisection = _("Selection");
 
-    options.format = G_define_option();
-    options.format->key = "format";
-    options.format->type = TYPE_STRING;
-    options.format->required = YES;
-    options.format->label = _("Output format");
+    options.format = G_define_standard_option(G_OPT_F_FORMAT);
     options.format->options = "plain,csv,json,vertical";
     options.format->descriptions =
         "plain;Configurable plain text output;"
         "csv;CSV (Comma Separated Values);"
         "json;JSON (JavaScript Object Notation);"
         "vertical;Plain text vertical output (instead of horizontal)";
-    options.format->answer = "plain";
     options.format->guisection = _("Format");
 
     options.fsep = G_define_standard_option(G_OPT_F_SEP);
@@ -288,27 +284,25 @@ int main(int argc, char **argv)
     db_set_error_handler_driver(driver);
 
     if (options.cols->answer)
-        sprintf(query, "SELECT %s FROM ", options.cols->answer);
+        snprintf(query, sizeof(query), "SELECT %s FROM ", options.cols->answer);
     else
-        sprintf(query, "SELECT * FROM ");
+        snprintf(query, sizeof(query), "SELECT * FROM ");
 
     db_set_string(&sql, query);
     db_append_string(&sql, Fi->table);
 
     if (options.where->answer) {
-        char *buf = NULL;
-
-        buf = G_malloc((strlen(options.where->answer) + 8));
-        sprintf(buf, " WHERE %s", options.where->answer);
+        size_t len = strlen(options.where->answer) + 8;
+        char *buf = G_malloc(len);
+        snprintf(buf, len, " WHERE %s", options.where->answer);
         db_append_string(&sql, buf);
         G_free(buf);
     }
 
     if (options.group->answer) {
-        char *buf = NULL;
-
-        buf = G_malloc((strlen(options.group->answer) + 8));
-        sprintf(buf, " GROUP BY %s", options.group->answer);
+        size_t len = strlen(options.group->answer) + 11;
+        char *buf = G_malloc(len);
+        snprintf(buf, len, " GROUP BY %s", options.group->answer);
         db_append_string(&sql, buf);
         G_free(buf);
     }
@@ -337,8 +331,32 @@ int main(int argc, char **argv)
     if (format == JSON) {
         if (flags.region->answer)
             fprintf(stdout, "{\"extent\":\n");
-        else
-            fprintf(stdout, "{\"records\":[\n");
+        else {
+            fprintf(stdout, "{\"info\":\n{\"columns\":[\n");
+            for (col = 0; col < ncols; col++) {
+                column = db_get_table_column(table, col);
+                if (col)
+                    fprintf(stdout, "},\n");
+                fprintf(stdout, "{\"name\":\"%s\",",
+                        db_get_column_name(column));
+                int sql_type = db_get_column_sqltype(column);
+                fprintf(stdout, "\"sql_type\":\"%s\",",
+                        db_sqltype_name(sql_type));
+
+                int c_type = db_sqltype_to_Ctype(sql_type);
+                fprintf(stdout, "\"is_number\":");
+                /* Same rules as for quoting, i.e., number only as
+                 * JSON or Python would see it and not numeric which may
+                 * include, e.g., date. */
+                if (c_type == DB_C_TYPE_INT || c_type == DB_C_TYPE_DOUBLE)
+                    fprintf(stdout, "true");
+                else
+                    fprintf(stdout, "false");
+            }
+
+            fprintf(stdout, "}\n]},\n");
+            fprintf(stdout, "\"records\":[\n");
+        }
     }
 
     /* fetch the data */

@@ -1,6 +1,6 @@
 Metadata-Version: 1.0
 Name: PyDispatcher
-Version: 2.0.3
+Version: 2.0.8
 Summary: Multi-producer-multi-consumer signal dispatching mechanism
 Home-page: http://pydispatcher.sourceforge.net
 Author: Mike C. Fletcher

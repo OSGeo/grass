@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
+
 import wx
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from icons.icon import MetaIcon
@@ -73,7 +74,7 @@ class MainToolbar(BaseToolbar):
     def _toolbarData(self):
         """Returns toolbar data (name, icon, handler)"""
         # BaseIcons are a set of often used icons. It is possible
-        # to reuse icons in ./trunk/gui/icons/grass or add new ones there.
+        # to reuse icons in gui/icons/grass or add new ones there.
         icons = ganimIcons
         return self._getToolbarData(
             (
@@ -119,7 +120,7 @@ class AnimationToolbar(BaseToolbar):
     def _toolbarData(self):
         """Returns toolbar data (name, icon, handler)"""
         # BaseIcons are a set of often used icons. It is possible
-        # to reuse icons in ./trunk/gui/icons/grass or add new ones there.
+        # to reuse icons in gui/icons/grass or add new ones there.
         icons = ganimIcons
         return self._getToolbarData(
             (

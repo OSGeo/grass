@@ -136,7 +136,6 @@ static const char *get_renamed_option(const char *);
  * prompting.
  *
  */
-
 void G_disable_interactive(void)
 {
     st->no_interactive = 1;
@@ -476,7 +475,7 @@ int G_parser(int argc, char **argv)
         }
 
         /* If first arg is "--interface-description" then print out
-         * a xml description of the task */
+         * an xml description of the task */
         if (strcmp(argv[1], "--interface-description") == 0) {
             G__usage_xml();
             exit(EXIT_SUCCESS);
@@ -493,6 +492,13 @@ int G_parser(int argc, char **argv)
          * a reStructuredText description of the task */
         if (strcmp(argv[1], "--rst-description") == 0) {
             G__usage_rest();
+            exit(EXIT_SUCCESS);
+        }
+
+        /* If first arg is "--md-description" then print out
+         * a Markdown description of the task */
+        if (strcmp(argv[1], "--md-description") == 0) {
+            G__usage_markdown();
             exit(EXIT_SUCCESS);
         }
 
@@ -538,7 +544,8 @@ int G_parser(int argc, char **argv)
 
                 /* print everything: max verbosity level */
                 st->module_info.verbose = G_verbose_max();
-                sprintf(buff, "GRASS_VERBOSE=%d", G_verbose_max());
+                snprintf(buff, sizeof(buff), "GRASS_VERBOSE=%d",
+                         G_verbose_max());
                 putenv(G_store(buff));
                 if (st->quiet == 1) {
                     G_warning(_("Use either --quiet or --verbose flag, not "
@@ -553,7 +560,8 @@ int G_parser(int argc, char **argv)
 
                 /* print nothing, but errors and warnings */
                 st->module_info.verbose = G_verbose_min();
-                sprintf(buff, "GRASS_VERBOSE=%d", G_verbose_min());
+                snprintf(buff, sizeof(buff), "GRASS_VERBOSE=%d",
+                         G_verbose_min());
                 putenv(G_store(buff));
                 if (st->quiet == -1) {
                     G_warning(_("Use either --quiet or --verbose flag, not "
@@ -568,7 +576,8 @@ int G_parser(int argc, char **argv)
 
                 /* print nothing, but errors  */
                 st->module_info.verbose = G_verbose_min();
-                sprintf(buff, "GRASS_VERBOSE=%d", G_verbose_min());
+                snprintf(buff, sizeof(buff), "GRASS_VERBOSE=%d",
+                         G_verbose_min());
                 putenv(G_store(buff));
                 G_suppress_warnings(TRUE);
                 if (st->quiet == -1) {
@@ -915,8 +924,10 @@ int G__uses_new_gisprompt(void)
 
    \param[out] fd file where to print
    \param format pointer to print function
+   \param newline TRUE to include newline
  */
-void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *))
+void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *),
+                       int newline)
 {
     int i;
 
@@ -927,8 +938,13 @@ void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *))
         else {
             format(fd, st->module_info.keywords[i]);
         }
-        if (i < st->n_keys - 1)
-            fprintf(fd, ", ");
+        if (i < st->n_keys - 1) {
+            fprintf(fd, ",");
+            if (!newline)
+                fprintf(fd, " ");
+        }
+        if (newline)
+            fprintf(fd, "\n");
     }
 
     fflush(fd);
@@ -971,7 +987,8 @@ int module_gui_wx(void)
     if (!st->pgm_path)
         G_fatal_error(_("Unable to determine program name"));
 
-    sprintf(script, "%s/gui/wxpython/gui_core/forms.py", getenv("GISBASE"));
+    snprintf(script, GPATH_MAX, "%s/gui/wxpython/gui_core/forms.py",
+             getenv("GISBASE"));
     if (access(script, F_OK) != -1)
         G_spawn(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), script,
                 G_recreate_command_original_path(), NULL);
@@ -984,7 +1001,8 @@ int module_gui_wx(void)
 void set_flag(int f)
 {
     struct Flag *flag;
-    char *err;
+    char *key, *err;
+    const char *renamed_key;
 
     err = NULL;
 
@@ -1008,6 +1026,67 @@ void set_flag(int f)
             return;
         }
         flag = flag->next_flag;
+    }
+
+    /* First, check if key has been renamed */
+    G_asprintf(&key, "-%c", f);
+    renamed_key = get_renamed_option(key);
+    G_free(key);
+
+    if (renamed_key) {
+        /* if renamed to a new flag */
+        if (*renamed_key == '-') {
+            /* if renamed to a long flag */
+            if (renamed_key[1] == '-') {
+                if (strcmp(renamed_key, "--overwrite") == 0) {
+                    /* this is a special case for -? to --overwrite */
+                    G_warning(_("Please update the usage of <%s>: "
+                                "flag <%c> has been renamed to <%s>"),
+                              G_program_name(), f, renamed_key);
+                    st->overwrite = 1;
+                }
+                else {
+                    /* long flags other than --overwrite are usually specific to
+                     * GRASS internals, just print an error and let's not
+                     * support them */
+                    G_asprintf(&err,
+                               _("Please update the usage of <%s>: "
+                                 "flag <%c> has been renamed to <%s>"),
+                               G_program_name(), f, renamed_key);
+                    append_error(err);
+                }
+                return;
+            }
+            /* if renamed to a short flag */
+            for (flag = &st->first_flag; flag; flag = flag->next_flag) {
+                if (renamed_key[1] == flag->key) {
+                    G_warning(_("Please update the usage of <%s>: "
+                                "flag <%c> has been renamed to <%s>"),
+                              G_program_name(), f, renamed_key);
+                    flag->answer = 1;
+                    if (flag->suppress_required)
+                        st->suppress_required = 1;
+                    if (flag->suppress_overwrite)
+                        st->suppress_overwrite = 1;
+                    return;
+                }
+            }
+        }
+        else {
+            /* if renamed to a new option (no option value given but will be
+             * required), fatal error */
+            struct Option *opt = NULL;
+            for (opt = &st->first_option; opt; opt = opt->next_opt) {
+                if (strcmp(renamed_key, opt->key) == 0) {
+                    G_asprintf(&err,
+                               _("Please update the usage of <%s>: "
+                                 "flag <%c> has been renamed to option <%s>"),
+                               G_program_name(), f, renamed_key);
+                    append_error(err);
+                    return;
+                }
+            }
+        }
     }
 
     G_asprintf(&err, _("%s: Sorry, <%c> is not a valid flag"), G_program_name(),
@@ -1161,12 +1240,29 @@ void set_option(const char *string)
     if (found)
         opt = matches[0];
 
-    /* First, check if key has been renamed in GRASS 7 */
+    /* First, check if key has been renamed */
     if (found == 0) {
-        const char *renamed_key = NULL;
+        const char *renamed_key = get_renamed_option(the_key);
 
-        renamed_key = get_renamed_option(the_key);
         if (renamed_key) {
+            /* if renamed to a new flag (option value given but will be lost),
+             * fatal error */
+            if (*renamed_key == '-') {
+                if (renamed_key[1] == '-')
+                    G_asprintf(&err,
+                               _("Please update the usage of <%s>: "
+                                 "option <%s> has been renamed to flag <%s>"),
+                               G_program_name(), the_key, renamed_key);
+                else
+                    G_asprintf(&err,
+                               _("Please update the usage of <%s>: "
+                                 "option <%s> has been renamed to flag <%c>"),
+                               G_program_name(), the_key, renamed_key[1]);
+                append_error(err);
+                return;
+            }
+
+            /* if renamed to a new option */
             for (at_opt = &st->first_option; at_opt;
                  at_opt = at_opt->next_opt) {
                 if (strcmp(renamed_key, at_opt->key) == 0) {
@@ -1719,7 +1815,7 @@ const char *get_renamed_option(const char *key)
         /* read renamed options from file (renamed_options) */
         char path[GPATH_MAX];
 
-        G_snprintf(path, GPATH_MAX, "%s/etc/renamed_options", G_gisbase());
+        snprintf(path, GPATH_MAX, "%s/etc/renamed_options", G_gisbase());
         st->renamed_options = G_read_key_value_file(path);
     }
 
@@ -1860,7 +1956,7 @@ FILE *G_open_option_file(const struct Option *option)
    \brief Close an input/output file returned by G_open_option_file(). If the
    file pointer is stdin, stdout, or stderr, nothing happens.
 
-   \param file pointer
+   \param fp file pointer
  */
 void G_close_option_file(FILE *fp)
 {

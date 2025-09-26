@@ -15,14 +15,12 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com>
 """
 
-from __future__ import print_function
-
 from grass.pydispatch.signal import Signal
 from core.giface import Notification
 from core.utils import GetLayerNameFromCmd
 
 
-class Layer(object):
+class Layer:
     """@implements core::giface::Layer
 
     .. note::
@@ -49,14 +47,16 @@ class Layer(object):
         )
 
 
-class LayerList(object):
+class LayerList:
     """@implements core.giface.Layer"""
 
     def __init__(self, tree):
         self._tree = tree
 
     def __len__(self):
-        return len([layer for layer in self])
+        # The list constructor calls __len__ as an optimization if available,
+        # causing a RecursionError
+        return len([layer for layer in self])  # noqa: C416 # pylint: disable=R1721
 
     def __iter__(self):
         """Iterates over the contents of the list."""
@@ -68,11 +68,11 @@ class LayerList(object):
 
     def __getitem__(self, index):
         """Select a layer from the LayerList using the index."""
-        return [l for l in self][index]
+        return list(self)[index]
 
     def __repr__(self):
         """Return a representation of the object."""
-        return "LayerList(%r)" % [layer for layer in self]
+        return "LayerList(%r)" % list(self)
 
     def GetSelectedLayers(self, checkedOnly=True):
         items = self._tree.GetSelectedLayer(multi=True, checkedOnly=checkedOnly)
@@ -88,9 +88,8 @@ class LayerList(object):
         item = self._tree.GetSelectedLayer(multi=False, checkedOnly=checkedOnly)
         if item is None:
             return None
-        else:
-            data = self._tree.GetPyData(item)
-            return Layer(item, data)
+        data = self._tree.GetPyData(item)
+        return Layer(item, data)
 
     def GetLayerInfo(self, layer):
         """For compatibility only, will be removed."""
@@ -107,10 +106,10 @@ class LayerList(object):
         :param opacity: layer opacity level
         :param cmd: command (given as a list)
         """
-        l = self._tree.AddLayer(
+        new_layer_lst = self._tree.AddLayer(
             ltype=ltype, lname=name, lchecked=checked, lopacity=opacity, lcmd=cmd
         )
-        return Layer(l, self._tree.GetPyData(l))
+        return Layer(new_layer_lst, self._tree.GetPyData(new_layer_lst))
 
     def DeleteLayer(self, layer):
         """Remove layer from layer list"""
@@ -122,11 +121,11 @@ class LayerList(object):
         self._tree.CheckItem(layer._layer, checked=checked)
 
     def SelectLayer(self, layer, select=True):
-        "Select or unselect layer"
+        """Select or unselect layer"""
         self._tree.SelectItem(layer._layer, select)
 
     def ChangeLayer(self, layer, **kwargs):
-        "Change layer (cmd, ltype, opacity)"
+        """Change layer (cmd, ltype, opacity)"""
         if "cmd" in kwargs:
             layer._pydata[0]["cmd"] = kwargs["cmd"]
             layerName, found = GetLayerNameFromCmd(kwargs["cmd"], fullyQualified=True)
@@ -149,12 +148,11 @@ class LayerList(object):
         items = self._tree.FindItemByData(key="name", value=name)
         if items is None:
             return []
-        else:
-            layers = []
-            for item in items:
-                layer = Layer(item, self._tree.GetPyData(item))
-                layers.append(layer)
-            return layers
+        layers = []
+        for item in items:
+            layer = Layer(item, self._tree.GetPyData(item))
+            layers.append(layer)
+        return layers
 
     def GetLayerByData(self, key, value):
         """Returns layer with specified.
@@ -170,11 +168,10 @@ class LayerList(object):
         item = self._tree.FindItemByData(key=key, value=value)
         if item is None:
             return None
-        else:
-            return Layer(item, self._tree.GetPyData(item))
+        return Layer(item, self._tree.GetPyData(item))
 
 
-class LayerManagerGrassInterface(object):
+class LayerManagerGrassInterface:
     """@implements core::giface::GrassInterface"""
 
     def __init__(self, lmgr):
@@ -200,10 +197,12 @@ class LayerManagerGrassInterface(object):
         # Signal for communicating something in current grassdb has changed.
         # Parameters:
         # action: required, is one of 'new', 'rename', 'delete'
-        # element: required, can be one of 'grassdb', 'location', 'mapset', 'raster', 'vector' and 'raster_3d'
+        # element: required, can be one of 'grassdb', 'location', 'mapset', 'raster',
+        #          'vector' and 'raster_3d'
         # grassdb: path to grass db, required
         # location: location name, required
-        # mapset: mapset name, required when element is 'mapset', 'raster', 'vector' or 'raster_3d'
+        # mapset: mapset name, required when element is 'mapset', 'raster',
+        #         'vector' or 'raster_3d'
         # map: map name, required when element is 'raster', 'vector' or 'raster_3d'
         # newname: new name (of mapset, map), required with action='rename'
         self.grassdbChanged = Signal("LayerManagerGrassInterface.grassdbChanged")
@@ -213,6 +212,21 @@ class LayerManagerGrassInterface(object):
 
         # Signal emitted when workspace is changed
         self.workspaceChanged = Signal("LayerManagerGrassInterface.workspaceChanged")
+
+        # Signal emitted when entry to history is added
+        self.entryToHistoryAdded = Signal(
+            "LayerManagerGrassInterface.entryToHistoryAdded"
+        )
+
+        # Signal emitted when entry from history is removed
+        self.entryFromHistoryRemoved = Signal(
+            "LayerManagerGrassInterface.entryFromHistoryRemoved"
+        )
+
+        # Signal emitted when entry in history is updated
+        self.entryInHistoryUpdated = Signal(
+            "LayerManagerGrassInterface.entryInHistoryUpdated"
+        )
 
     def RunCmd(self, *args, **kwargs):
         self.lmgr._gconsole.RunCmd(*args, **kwargs)
@@ -253,17 +267,13 @@ class LayerManagerGrassInterface(object):
     def GetMapWindow(self):
         if self.lmgr.GetMapDisplay(onlyCurrent=True):
             return self.lmgr.GetMapDisplay(onlyCurrent=True).GetMapWindow()
-        else:
-            return None
+        return None
 
     def GetProgress(self):
         return self.lmgr.goutput.GetProgressBar()
 
-    def UpdateCmdHistory(self, cmd):
-        self.lmgr.goutput.GetPrompt().UpdateCmdHistory(cmd)
 
-
-class LayerManagerGrassInterfaceForMapDisplay(object):
+class LayerManagerGrassInterfaceForMapDisplay:
     """Provides reference only to the given layer list (according to tree),
     not to the current.
 

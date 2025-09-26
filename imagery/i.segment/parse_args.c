@@ -12,7 +12,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     struct Option *group, *seeds, *bounds, *output, *method, *similarity,
         *threshold, *min_segment_size, *hs, *hr, *bsuf,
 #ifdef _OR_SHAPE_
-        *shape_weight, *smooth_weight,
+        *smooth_weight,
 #endif
         *mem;
     struct Flag *diagonal, *weighted, *ms_a, *ms_p;
@@ -192,7 +192,11 @@ int parse_args(int argc, char *argv[], struct globals *globals)
 
         for (bands = 0; group->answers[bands] != NULL; bands++) {
             /* strip @mapset, do not modify opt_in->answers */
-            strcpy(name, group->answers[bands]);
+            if (G_strlcpy(name, group->answers[bands], sizeof(name)) >=
+                sizeof(name)) {
+                G_fatal_error(_("Raster map name <%s> is too long"),
+                              group->answers[bands]);
+            }
             mapset = G_find_raster(name, "");
             if (!mapset)
                 G_fatal_error(_("Raster map <%s> not found"),

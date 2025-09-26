@@ -1,5 +1,6 @@
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+from grass.gunittest.utils import xfail_windows
 
 
 class Rcv:
@@ -16,6 +17,7 @@ class Rcv:
 
 
 class Recv_SomeTest(TestCase):
+    @xfail_windows
     def test_decode(self):
         """
         Multibyte chars should not be split

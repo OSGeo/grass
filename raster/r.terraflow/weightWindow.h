@@ -58,7 +58,7 @@ protected:
 public:
     weightWindow(const float gdx, const float gdy);
 
-    ~weightWindow(){};
+    ~weightWindow() {};
 
     /***************************************************************/
     /* Compute the weights of the neighbors of a cell given an elevation

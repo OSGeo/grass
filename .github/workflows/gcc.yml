@@ -7,16 +7,16 @@ on:
       - main
       - releasebranch_*
   pull_request:
-    branches:
-      - main
-      - releasebranch_*
+
+permissions: {}
 
 jobs:
   build:
     name: ${{ matrix.c }} & ${{ matrix.cpp }}
 
     concurrency:
-      group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{
+      group: >-
+        ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{
         matrix.c }}-${{ matrix.cpp }}
       cancel-in-progress: true
 
@@ -24,18 +24,14 @@ jobs:
     strategy:
       matrix:
         include:
-          - c: gnu99
-            cpp: c++11
-          - c: gnu11
-            cpp: c++11
-          - c: gnu11
-            cpp: c++14
           - c: gnu17
             cpp: c++17
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
       - name: Get dependencies
         run: |
           sudo apt-get update -y
@@ -44,13 +40,13 @@ jobs:
               sudo apt-get install -y --no-install-recommends --no-install-suggests
       - name: Create installation directory
         run: |
-          mkdir $HOME/install
+          mkdir "${HOME}/install"
       - name: Ensure one core for compilation
         run: |
-          echo "MAKEFLAGS=-j1" >> $GITHUB_ENV
+          echo "MAKEFLAGS=-j1" >> "${GITHUB_ENV}"
       - name: Set LD_LIBRARY_PATH for compilation
         run: |
-          echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
+          echo "LD_LIBRARY_PATH=${HOME}/install/lib" >> "${GITHUB_ENV}"
       - name: Print build environment variables
         shell: bash -el {0}
         run: |
@@ -63,4 +59,6 @@ jobs:
           CFLAGS: -std=${{ matrix.c }} -fPIC -Wall -Wextra
           # TODO: -pedantic-errors here won't compile
           CXXFLAGS: -std=${{ matrix.cpp }} -fPIC -Wall -Wextra
-        run: .github/workflows/build_ubuntu-22.04.sh $HOME/install -Werror
+        run: |
+          .github/workflows/build_ubuntu-22.04.sh "${HOME}/install" \
+              -isystem/usr/include/gdal -Wpedantic -Werror

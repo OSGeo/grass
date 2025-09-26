@@ -2,6 +2,8 @@
 #include <grass/raster.h>
 #include "global.h"
 
+#define BUFSZ 1024
+
 static int page = 0;
 static const char *date = NULL;
 static int max(int, int);
@@ -17,7 +19,7 @@ static int pbuf(char *buf)
 int header(int unit1, int unit2)
 {
     int i, k;
-    char buf[1024];
+    char buf[BUFSZ];
     char tbuf1[256], tbuf2[256];
     char north[50], south[50];
     char east[50], west[50];
@@ -36,9 +38,9 @@ int header(int unit1, int unit2)
     if (page == 1 && with_headers) {
         lcr("", "RASTER MAP CATEGORY REPORT", "", buf, page_width - 2);
         pbuf(buf);
-        sprintf(tbuf1, "LOCATION: %s", G_location());
+        snprintf(tbuf1, sizeof(tbuf1), "PROJECT: %s", G_location());
         if (with_headers && (page_length > 0))
-            sprintf(tbuf2, "Page %d", page);
+            snprintf(tbuf2, sizeof(tbuf2), "Page %d", page);
         else
             *tbuf2 = 0;
         lcr(tbuf1, tbuf2, date, buf, page_width - 2);
@@ -57,16 +59,16 @@ int header(int unit1, int unit2)
         len2 = max(strlen(east), strlen(west));
         len2 = max(len2, strlen(ew_res));
 
-        sprintf(buf, "%-9s north: %*s    east: %*s", "", len1, north, len2,
-                east);
+        snprintf(buf, sizeof(buf), "%-9s north: %*s    east: %*s", "", len1,
+                 north, len2, east);
         pbuf(buf);
 
-        sprintf(buf, "%-9s south: %*s    west: %*s", "REGION", len1, south,
-                len2, west);
+        snprintf(buf, sizeof(buf), "%-9s south: %*s    west: %*s", "REGION",
+                 len1, south, len2, west);
         pbuf(buf);
 
-        sprintf(buf, "%-9s res:   %*s    res:  %*s", "", len1, ns_res, len2,
-                ew_res);
+        snprintf(buf, sizeof(buf), "%-9s res:   %*s    res:  %*s", "", len1,
+                 ns_res, len2, ew_res);
         pbuf(buf);
 
         divider("|");
@@ -97,8 +99,8 @@ int header(int unit1, int unit2)
                 G_strip(title);
             if (title == NULL || *title == 0)
                 title = "(untitled)";
-            sprintf(buf, "%-*s%*s%s (%s in %s)", len1, label, i * 2, "", title,
-                    layers[i].name, layers[i].mapset);
+            snprintf(buf, sizeof(buf), "%-*s%*s%s (%s in %s)", len1, label,
+                     i * 2, "", title, layers[i].name, layers[i].mapset);
 
             pbuf(buf);
             label = "";
@@ -111,7 +113,8 @@ int header(int unit1, int unit2)
         if (k == 0)
             lcr("", "Category Information", "", buf, len1);
         else {
-            sprintf(tbuf1, "%*s|description", layers[0].nlen, "#");
+            snprintf(tbuf1, sizeof(tbuf1), "%*s|description", layers[0].nlen,
+                     "#");
             lcr(tbuf1, "", "", buf, len1);
         }
         fprintf(stdout, "|%s ", buf);
@@ -163,7 +166,7 @@ int newline(void)
     return 0;
 }
 
-int lcr(const char *left, const char *center, const char *right, char *buf,
+int lcr(const char *left, const char *center, const char *right, char buf[1024],
         int n)
 {
     int ll, lc, lr;
@@ -176,8 +179,8 @@ int lcr(const char *left, const char *center, const char *right, char *buf,
     sc = (n - lc) / 2 - ll;
     sr = n - lr - lc - (n - lc) / 2;
 
-    sprintf(buf, "%s%*s%s%*s%s", left, sc > 0 ? sc : 0, "", center,
-            sc > 0 ? sr : sr + sc, "", right);
+    snprintf(buf, BUFSZ, "%s%*s%s%*s%s", left, sc > 0 ? sc : 0, "", center,
+             sc > 0 ? sr : sr + sc, "", right);
 
     return 0;
 }

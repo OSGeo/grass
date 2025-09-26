@@ -102,14 +102,14 @@ double trunca()
     for (i = 0; i < 83; i++) {
         if (rmu[i] > 0.8)
             break;
-        k = i - 1;
+        k = i;
     }
 
     int kk = 0;
     for (i = 0; i < 83; i++) {
         if (rmu[i] > 0.94)
             break;
-        kk = i - 1;
+        kk = i;
     }
 
     double aa =
@@ -118,7 +118,7 @@ double trunca()
     double x1 = (double)(log10(sixs_trunc.pha[kk]));
     double x2 = (double)acos(rmu[kk]);
 
-    for (i = kk + 1; i < 83; i++) {
+    for (i = kk; i < 83; i++) {
         double a;
         if (fabs(rmu[i] - 1) <= 1e-08)
             a = x1 - aa * x2;
@@ -168,8 +168,7 @@ double trunca()
   illustrate the way molecules and aerosols are mixed in a realistic atmosphere.
   For molecules, the scale height is 8km. For aerosols it is assumed to be 2km
   unless otherwise specified by the user (using aircraft measurements).
-*/
-
+ */
 double discre(const double ta, const double ha, const double tr,
               const double hr, const int it, const int ntd, const double yy,
               const double dd, const double ppp2, const double ppp1)
@@ -445,9 +444,14 @@ void os(const double tamoy, const double trmoy, const double pizmoy,
         /* compute position of the plane layer */
         double taup = tap + trp;
         iplane = -1;
-        for (int i = 0; i <= ntp; i++)
+        for (int i = 0; i <= ntp; i++) {
             if (taup >= h[i])
                 iplane = i;
+        }
+        if (iplane == -1) {
+            G_fatal_error(
+                _("Position of the plane layer could not be determined"));
+        }
 
         /* update the layer from the end to the position to update if necessary
          */
@@ -1006,9 +1010,14 @@ void iso(const double tamoy, const double trmoy, const double pizmoy,
         /* compute position of the plane layer */
         double taup = tap + trp;
         iplane = -1;
-        for (int i = 0; i <= ntp; i++)
+        for (int i = 0; i <= ntp; i++) {
             if (taup >= h[i])
                 iplane = i;
+        }
+        if (iplane == -1) {
+            G_fatal_error(
+                _("Position of the plane layer could not be determined"));
+        }
 
         /* update the layer from the end to the position to update if necessary
          */

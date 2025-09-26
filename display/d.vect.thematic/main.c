@@ -119,11 +119,10 @@ int main(int argc, char **argv)
     algo_opt->options = "int,std,qua,equ,dis";
     algo_opt->description = _("Algorithm to use for classification");
     desc = NULL;
-    G_asprintf(&desc, "int;%s;std;%s;qua;%s;equ;%s", _("simple intervals"),
-               _("standard deviations"), _("quantiles"),
-               _("equiprobable (normal distribution)"));
+    G_asprintf(&desc, "int;%s;std;%s;qua;%s;equ;%s;dis;%s",
+               _("simple intervals"), _("standard deviations"), _("quantiles"),
+               _("equiprobable (normal distribution)"), _("discontinuities"));
     algo_opt->descriptions = desc;
-    /*currently disabled because of bugs       "dis;discontinuities"); */
     algo_opt->guisection = _("Classes");
 
     nbclass_opt = G_define_option();
@@ -533,26 +532,26 @@ int main(int argc, char **argv)
         while (TRUE) {
             nfeatures = Vect_get_num_primitives(&Map, GV_POINT);
             if (nfeatures > 0) {
-                write_into_legend_file("stdout", icon_opt->answer, title,
-                                       stats.min, stats.max, breakpoints,
-                                       nbreaks, size, bcolor, colors,
-                                       default_width, frequencies, "point");
+                write_into_legend_file(
+                    "stdout", icon_opt->answer, title, stats.min, stats.max,
+                    breakpoints, nbreaks, size, bcolor, colors, default_width,
+                    frequencies, ctype, "point");
                 break;
             }
             nfeatures = Vect_get_num_primitives(&Map, GV_LINE);
             if (nfeatures > 0) {
-                write_into_legend_file("stdout", icon_line_opt->answer, title,
-                                       stats.min, stats.max, breakpoints,
-                                       nbreaks, size, bcolor, colors,
-                                       default_width, frequencies, "line");
+                write_into_legend_file(
+                    "stdout", icon_line_opt->answer, title, stats.min,
+                    stats.max, breakpoints, nbreaks, size, bcolor, colors,
+                    default_width, frequencies, ctype, "line");
                 break;
             }
             nfeatures = Vect_get_num_primitives(&Map, GV_BOUNDARY);
             if (nfeatures > 0) {
-                write_into_legend_file("stdout", icon_area_opt->answer, title,
-                                       stats.min, stats.max, breakpoints,
-                                       nbreaks, size, bcolor, colors,
-                                       default_width, frequencies, "area");
+                write_into_legend_file(
+                    "stdout", icon_area_opt->answer, title, stats.min,
+                    stats.max, breakpoints, nbreaks, size, bcolor, colors,
+                    default_width, frequencies, ctype, "area");
                 break;
             }
         }
@@ -564,26 +563,26 @@ int main(int argc, char **argv)
         while (TRUE) {
             nfeatures = Vect_get_num_primitives(&Map, GV_POINT);
             if (nfeatures > 0) {
-                write_into_legend_file(leg_file, icon_opt->answer, title,
-                                       stats.min, stats.max, breakpoints,
-                                       nbreaks, size, bcolor, colors,
-                                       default_width, frequencies, "point");
+                write_into_legend_file(
+                    leg_file, icon_opt->answer, title, stats.min, stats.max,
+                    breakpoints, nbreaks, size, bcolor, colors, default_width,
+                    frequencies, ctype, "point");
                 break;
             }
             nfeatures = Vect_get_num_primitives(&Map, GV_LINE);
             if (nfeatures > 0) {
-                write_into_legend_file(leg_file, icon_line_opt->answer, title,
-                                       stats.min, stats.max, breakpoints,
-                                       nbreaks, size, bcolor, colors,
-                                       default_width, frequencies, "line");
+                write_into_legend_file(
+                    leg_file, icon_line_opt->answer, title, stats.min,
+                    stats.max, breakpoints, nbreaks, size, bcolor, colors,
+                    default_width, frequencies, ctype, "line");
                 break;
             }
             nfeatures = Vect_get_num_primitives(&Map, GV_BOUNDARY);
             if (nfeatures > 0) {
-                write_into_legend_file(leg_file, icon_area_opt->answer, title,
-                                       stats.min, stats.max, breakpoints,
-                                       nbreaks, size, bcolor, colors,
-                                       default_width, frequencies, "area");
+                write_into_legend_file(
+                    leg_file, icon_area_opt->answer, title, stats.min,
+                    stats.max, breakpoints, nbreaks, size, bcolor, colors,
+                    default_width, frequencies, ctype, "area");
                 break;
             }
         }
@@ -598,7 +597,7 @@ int main(int argc, char **argv)
                 write_into_legend_file(
                     legend_file_opt->answer, icon_opt->answer, title, stats.min,
                     stats.max, breakpoints, nbreaks, size, bcolor, colors,
-                    default_width, frequencies, "point");
+                    default_width, frequencies, ctype, "point");
                 break;
             }
             nfeatures = Vect_get_num_primitives(&Map, GV_LINE);
@@ -606,7 +605,7 @@ int main(int argc, char **argv)
                 write_into_legend_file(
                     legend_file_opt->answer, icon_line_opt->answer, title,
                     stats.min, stats.max, breakpoints, nbreaks, size, bcolor,
-                    colors, default_width, frequencies, "line");
+                    colors, default_width, frequencies, ctype, "line");
                 break;
             }
             nfeatures = Vect_get_num_primitives(&Map, GV_BOUNDARY);
@@ -614,7 +613,7 @@ int main(int argc, char **argv)
                 write_into_legend_file(
                     legend_file_opt->answer, icon_area_opt->answer, title,
                     stats.min, stats.max, breakpoints, nbreaks, size, bcolor,
-                    colors, default_width, frequencies, "area");
+                    colors, default_width, frequencies, ctype, "area");
                 break;
             }
         }
@@ -646,7 +645,7 @@ static char *icon_files(void)
 
     list = NULL;
     len = 0;
-    sprintf(path, "%s/etc/symbol", G_gisbase());
+    snprintf(path, sizeof(path), "%s/etc/symbol", G_gisbase());
 
     dir = opendir(path);
     if (!dir)
@@ -659,7 +658,8 @@ static char *icon_files(void)
         if (d->d_name[0] == '.')
             continue;
 
-        sprintf(path_i, "%s/etc/symbol/%s", G_gisbase(), d->d_name);
+        snprintf(path_i, sizeof(path_i), "%s/etc/symbol/%s", G_gisbase(),
+                 d->d_name);
         dir_i = opendir(path_i);
 
         if (!dir_i)
@@ -672,7 +672,7 @@ static char *icon_files(void)
 
             list = G_realloc(list, (count + 1) * sizeof(char *));
 
-            sprintf(buf, "%s/%s", d->d_name, d_i->d_name);
+            snprintf(buf, sizeof(buf), "%s/%s", d->d_name, d_i->d_name);
             list[count++] = G_store(buf);
 
             len += strlen(d->d_name) + strlen(d_i->d_name) + 2; /* '/' + ',' */

@@ -232,8 +232,7 @@ int Vect_box_clip(double *x, double *y, double *c_x, double *c_y,
    \return 0 line is dead
    \return -1 on error
  */
-int Vect_get_line_box(const struct Map_info *Map, int line,
-                      struct bound_box *Box)
+int Vect_get_line_box(struct Map_info *Map, int line, struct bound_box *Box)
 {
     struct Plus_head *Plus;
     struct P_line *Line;
@@ -298,8 +297,7 @@ int Vect_get_line_box(const struct Map_info *Map, int line,
    \return 0 area is dead
    \return -1 on error
  */
-int Vect_get_area_box(const struct Map_info *Map, int area,
-                      struct bound_box *Box)
+int Vect_get_area_box(struct Map_info *Map, int area, struct bound_box *Box)
 {
     struct Plus_head *Plus;
     struct P_area *Area;
@@ -344,8 +342,7 @@ int Vect_get_area_box(const struct Map_info *Map, int area,
    \return 0 isle is dead / bounding box not found
    \return -1 on error
  */
-int Vect_get_isle_box(const struct Map_info *Map, int isle,
-                      struct bound_box *Box)
+int Vect_get_isle_box(struct Map_info *Map, int isle, struct bound_box *Box)
 {
     struct Plus_head *Plus;
     struct P_isle *Isle;
@@ -388,7 +385,7 @@ int Vect_get_isle_box(const struct Map_info *Map, int isle,
    \return 1 on success
    \return 0 on error
  */
-int Vect_get_map_box(const struct Map_info *Map, struct bound_box *Box)
+int Vect_get_map_box(struct Map_info *Map, struct bound_box *Box)
 {
     const struct Plus_head *Plus;
 
@@ -423,9 +420,11 @@ int Vect_get_map_box1(struct Map_info *Map, struct bound_box *Box)
 
     Points = Vect_new_line_struct();
     Vect_rewind(Map);
+    const char *map_name = Vect_get_full_name(Map);
     G_verbose_message(_("Topology not available for vector map <%s>. "
                         "Registering primitives..."),
-                      Vect_get_full_name(Map));
+                      map_name);
+    G_free((void *)map_name);
     while (TRUE) {
         /* register line */
         type = Vect_read_next_line(Map, Points, NULL);

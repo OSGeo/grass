@@ -316,10 +316,16 @@ void GVL_get_dims(int id, int *rows, int *cols, int *depths)
         *rows = gvl->rows;
         *cols = gvl->cols;
         *depths = gvl->depths;
-    }
 
-    G_debug(3, "GVL_get_dims() id=%d, rows=%d, cols=%d, depths=%d",
-            gvl->gvol_id, gvl->rows, gvl->cols, gvl->depths);
+        G_debug(3, "GVL_get_dims() id=%d, rows=%d, cols=%d, depths=%d",
+                gvl->gvol_id, gvl->rows, gvl->cols, gvl->depths);
+    }
+    else {
+        G_debug(2,
+                "GVL_get_dims(): Attempted to access a null volume structure "
+                "for id=%d",
+                id);
+    }
 
     return;
 }
@@ -840,7 +846,7 @@ int GVL_isosurf_get_att(int id, int isosurf_id, int att, int *set,
    \brief Unset isosurface attributes
 
    \param id volume set id
-   \param isosurface_id isosurface id
+   \param isosurf_id isosurface id
    \param att attribute id
 
    \return ?

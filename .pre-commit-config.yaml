@@ -1,12 +1,17 @@
 ---
+ci:
+  skip: [flake8]
+default_language_version:
+  node: lts
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
         exclude: |
           (?x)^(
                 configure$|
+                .*\.md$|
                 .*\.ascii$|
                 .*\.asc$|
                 .*\.ref$|
@@ -15,6 +20,7 @@ repos:
                 .*\.po$|
                 .*\.ps$|
                 .*\.svg$|
+                python/grass/temporal/ply/|
                 python/libgrass_interface_generator/ctypesgen/|
                 lib/fonts/fonts/.*
           )
@@ -30,41 +36,56 @@ repos:
                 .*\.po$|
                 .*\.ps$|
                 .*\.svg$|
+                python/grass/temporal/ply/|
                 python/libgrass_interface_generator/ctypesgen/|
                 lib/fonts/fonts/.*
           )
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Ruff version.
+    rev: v0.13.1
+    hooks:
+      # Run the linter.
+      - id: ruff-check
+        args: [--fix, --preview]
+      # Run the formatter.
+      - id: ruff-format
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.33.0
+    rev: v0.45.0
     hooks:
-      - id: markdownlint
-  - repo: https://github.com/psf/black
-    rev: 23.1.0
-    hooks:
-      - id: black
-        exclude: |
-          (?x)^(
-                python/libgrass_interface_generator/
-          )
+      - id: markdownlint-fix
   - repo: https://github.com/pycqa/flake8
-    rev: 3.9.2
+    rev: 7.3.0
     hooks:
       - id: flake8
         exclude: |
           (?x)^(
-                python/libgrass_interface_generator/
+                python/grass/temporal/ply/|
+                python/libgrass_interface_generator/|
+                .*/testsuite/.*
           )
   - repo: https://github.com/pre-commit/mirrors-clang-format
-    rev: v15.0.6
+    rev: v18.1.8
     hooks:
       - id: clang-format
         types_or: [c, c++, javascript, json, objective-c]
         exclude: |
           (?x)^(
-                man/jquery.fixedheadertable.min.js
+                man/jquery.fixedheadertable.min.js$|
+                .*\.ipynb$
           )
   - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.29.0
+    rev: v1.37.1
     hooks:
       - id: yamllint
-        args: [--format, parsable, --strict, -d,
-               '{extends: default, rules: {truthy: disable, line-length: {max: 120, allow-non-breakable-words: true}}}']
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.7
+    hooks:
+      - id: actionlint
+  - repo: https://github.com/zizmorcore/zizmor-pre-commit
+    rev: v1.12.1
+    hooks:
+      - id: zizmor
+  - repo: https://github.com/editorconfig-checker/editorconfig-checker
+    rev: v3.4.0
+    hooks:
+      - id: editorconfig-checker

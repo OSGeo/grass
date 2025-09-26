@@ -23,19 +23,19 @@ For an introduction to map projections (with PROJ),see the manual page of
 
 <h2>NOTES</h2>
 
-<em>cs2cs</em> expects input data to formatted as <tt>x y</tt>, so if
-working with latitude-longitude data be sure to send the <tt>x</tt>
-value first, i.e., <tt>longitude&nbsp;latitude</tt>. Output data will
+<em>cs2cs</em> expects input data to formatted as <code>x y</code>, so if
+working with latitude-longitude data be sure to send the <code>x</code>
+value first, i.e., <code>longitude&nbsp;latitude</code>. Output data will
 be exported using the same convention.
 <p>
-<em>cs2cs</em> will treat a third data column as a <tt>z</tt> value
+<em>cs2cs</em> will treat a third data column as a <code>z</code> value
 (elevation) and will modify the value accordingly. This usually
 translates into small but real differences in that data column.
 <p>
 <em>cs2cs</em> does not expect the input stream to contain column
 headings, only numbers. If your data file has lines you wish to have
 passed through without being processed, they must start with the
-'<tt>#</tt>' character.
+'<code>#</code>' character.
 <p>
 If sending <em>m.proj</em> data from standard input, be aware that the
 data is first stored to a temporary file before being processed
@@ -58,7 +58,7 @@ some other informative messages.
 <p>
 If output is to lat/long, it will be formatted using PROJ's
 Degree:Minute:Second (DMS) convention
-of <tt>DDDdMM'SSS.SS"H</tt>. This can be handy if you wish to quickly
+of <code>DDDdMM'SSS.SS"H</code>. This can be handy if you wish to quickly
 convert lat/long decimal degree data into its DMS equivalent.<br>
 Alternatively, to have <em>m.proj</em> output data in decimal degrees,
 use the <b>-d</b> flag. This flag can also be used with non-lat/long
@@ -66,7 +66,7 @@ data to force a higher number of decimal places (the <em>cs2cs</em>
 default is 2).
 <p>
 Note that Lat/long output can be converted to GRASS's DMS convention
-(<tt>DDD:MM:SSS.SSSH</tt>) by piping the results of <em>m.proj</em>
+(<code>DDD:MM:SSS.SSSH</code>) by piping the results of <em>m.proj</em>
 through the <em>sed</em> stream editor as follows.
 
 <div class="code"><pre>
@@ -96,16 +96,16 @@ v.out.ascii bridges | m.proj -o -d input=-
 
 <h3>Reproject Long/Lat WGS84 coordinate pair to current map projection</h3>
 
-To convert a Long/Lat WGS84 coordinate pair to the current map projection
+To convert a Long/Lat WGS84 coordinate pair to the current map CRS
 using the <b>-i</b> flag which sets the target projection parameters
-automatically from the current location definition:
+automatically from the current project definition:
 <div class="code"><pre>
 echo "-78.61168178 33.92225767" | m.proj -i input=-
 645513.47|19180.31|0.00
 </pre></div>
 
 <p>
-The same, but load points from a file named <tt>waypoints.txt</tt> and
+The same, but load points from a file named <code>waypoints.txt</code> and
 continue on to import the results into a GRASS vector points map in
 the current map projection:
 <div class="code"><pre>
@@ -141,25 +141,25 @@ m.proj proj_in="+proj=utm +name=utm +a=6378137.0 +es=0.006694380 \
 </pre></div>
 
 <p>
-Projection parameters provided in the above case: <tt>+proj</tt>
-(projection type), <tt>+name</tt> (projection name), <tt>+a</tt>
-(ellipsoid: equatorial radius), <tt>+es</tt> (ellipsoid:
-eccentricity squared), <tt>+zone</tt> (zone for the area),
-<tt>+unfact</tt> (conversion factor from meters to other units,
-e.g. feet), <tt>+lat_0</tt> (standard parallel), <tt>+lon_0</tt>
-(central meridian), <tt>+k</tt> (scale factor) and <tt>+x_0</tt>
+Projection parameters provided in the above case: <code>+proj</code>
+(projection type), <code>+name</code> (projection name), <code>+a</code>
+(ellipsoid: equatorial radius), <code>+es</code> (ellipsoid:
+eccentricity squared), <code>+zone</code> (zone for the area),
+<code>+unfact</code> (conversion factor from meters to other units,
+e.g. feet), <code>+lat_0</code> (standard parallel), <code>+lon_0</code>
+(central meridian), <code>+k</code> (scale factor) and <code>+x_0</code>
 (false easting). Sometimes false northing is needed which is coded as
-<tt>+y_0</tt>.  Internally, the underlying
+<code>+y_0</code>.  Internally, the underlying
 <a href="https://proj.org">PROJ</a> projection library
 performs an inverse projection to latitude-longitude and then projects
 the coordinate list to the target projection.
 <p>
 Datum conversions are automatically handled by the PROJ library if
-<tt>+datum</tt> settings are specified on <b>both</b> the input <b>and</b> output
-projections on the command line. The <tt>+towgs84</tt> parameter can be used to
+<code>+datum</code> settings are specified on <b>both</b> the input <b>and</b> output
+projections on the command line. The <code>+towgs84</code> parameter can be used to
 define either 3 or 7 term datum transform coefficients, satisfying this requirement.
-<p>If a datum is specified there is no need for the <tt>+ellps=</tt> or underlying
-parameters, <tt>+a=</tt>, <tt>+es=</tt>, etc.
+<p>If a datum is specified there is no need for the <code>+ellps=</code> or underlying
+parameters, <code>+a=</code>, <code>+es=</code>, etc.
 
 <p>
 Another custom parameter usage example:

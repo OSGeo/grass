@@ -8,7 +8,7 @@ See manual pages for details.
               and GeoModel, s.r.o., Bratislava, Slovakia
 email: hofierka@geomodel.sk,marcel.suri@jrc.it,
        suri@geomodel.sk Thomas.Huld@jrc.it
-(c) 2003-2013 by The GRASS Development Team
+(c) 2003-2013 by the GRASS Development Team
 ******************************************************************************/
 /*
  * This program is free software; you can redistribute it and/or
@@ -37,6 +37,7 @@ email: hofierka@geomodel.sk,marcel.suri@jrc.it,
 #include <omp.h>
 #endif
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -117,8 +118,6 @@ struct History hist;
 
 int INPUT_part(int offset, double *zmax);
 int OUTGR(void);
-int min(int, int);
-int max(int, int);
 
 /*void cube(int, int);
    void (*func) (int, int); */
@@ -200,7 +199,7 @@ int ll_correction = FALSE;
 double coslatsq;
 
 /* why not use G_distance() here which switches to geodesic/great
-   circle distace as needed? */
+   circle distance as needed? */
 double distance(double x1, double x2, double y1, double y2)
 {
     if (ll_correction) {
@@ -214,10 +213,10 @@ double distance(double x1, double x2, double y1, double y2)
 
 int main(int argc, char *argv[])
 {
-    double singleSlope;
-    double singleAspect;
-    double singleAlbedo;
-    double singleLinke;
+    double singleSlope = 0.0;
+    double singleAspect = 0.0;
+    double singleAlbedo = 0.0;
+    double singleLinke = 0.0;
 
     int threads;
 
@@ -234,7 +233,7 @@ int main(int argc, char *argv[])
         struct Flag *noshade, *saveMemory;
     } flag;
 
-    struct GridGeometry gridGeom;
+    struct GridGeometry gridGeom = {0};
 
     G_gisinit(argv[0]);
 
@@ -591,6 +590,10 @@ int main(int argc, char *argv[])
 #else
     threads = 1;
 #endif
+    if (threads > 1 && Rast_mask_is_present()) {
+        G_warning(_("Parallel processing disabled due to active mask."));
+        threads = 1;
+    }
     G_message(_("Number of threads <%d>"), threads);
 
     if (civiltime != NULL) {
@@ -797,14 +800,14 @@ int main(int argc, char *argv[])
         struct Key_Value *in_proj_info, *in_unit_info;
 
         if ((in_proj_info = G_get_projinfo()) == NULL)
-            G_fatal_error(_("Can't get projection info of current location"));
+            G_fatal_error(_("Can't get projection info of current project"));
 
         if ((in_unit_info = G_get_projunits()) == NULL)
-            G_fatal_error(_("Can't get projection units of current location"));
+            G_fatal_error(_("Can't get projection units of current project"));
 
         if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
             G_fatal_error(
-                _("Can't get projection key values of current location"));
+                _("Can't get projection key values of current project"));
 
         G_free_key_value(in_proj_info);
         G_free_key_value(in_unit_info);
@@ -818,7 +821,7 @@ int main(int argc, char *argv[])
 
     if ((latin != NULL || longin != NULL) && (G_projection() == PROJECTION_LL))
         G_warning(_("latin and longin raster maps have no effect when in a "
-                    "Lat/Lon location"));
+                    "Lat/Lon project"));
     /* true about longin= when civiltime is used? */
     /* civiltime needs longin= but not latin= for non-LL projections -
        better would be it just use pj_proj() if it needs those?? */
@@ -1437,7 +1440,7 @@ void joules2(struct SunGeometryConstDay *sunGeom,
                 ss = 0; /* we've got the sunset */
             }
         } /* end of while */
-    }     /* all-day radiation */
+    } /* all-day radiation */
 }
 
 /*////////////////////////////////////////////////////////////////////// */
@@ -1690,6 +1693,8 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
     double locTimeOffset;
     double latitude, longitude;
     double coslat = 0.0;
+    bool shouldBeBestAM = false;
+    bool isBestAM = false;
 
     struct SunGeometryConstDay sunGeom;
     struct SunGeometryVarDay sunVarGeom;
@@ -1812,20 +1817,19 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
         }
         sunVarGeom.zmax = zmax;
         shadowoffset_base = (j % (numRows)) * n * arrayNumInt;
-#pragma omp parallel firstprivate(                                             \
-    q1, tan_lam_l, z1, i, shadowoffset, longitTime, coslat, coslatsq,          \
-    latitude, longitude, sin_phi_l, latid_l, sin_u, cos_u, sin_v, cos_v, lum,  \
-    gridGeom, elevin, aspin, slopein, civiltime, linkein, albedo, latin,       \
-    coefbh, coefdh, incidout, longin, horizon, beam_rad, insol_time, diff_rad, \
-    refl_rad, glob_rad, mapset, per, decimals, str_step)
+#pragma omp parallel firstprivate(                                            \
+        q1, tan_lam_l, z1, i, shadowoffset, longitTime, coslat, coslatsq,     \
+            latitude, longitude, sin_phi_l, latid_l, sin_u, cos_u, sin_v,     \
+            cos_v, lum, gridGeom, elevin, aspin, slopein, civiltime, linkein, \
+            albedo, latin, coefbh, coefdh, incidout, longin, horizon,         \
+            beam_rad, insol_time, diff_rad, refl_rad, glob_rad, mapset, per,  \
+            decimals, str_step, shouldBeBestAM, isBestAM)
         {
-#pragma omp for schedule(dynamic) firstprivate(sunGeom, sunVarGeom,      \
-                                               sunSlopeGeom, sunRadVar)  \
-    lastprivate(sunGeom, sunVarGeom, sunSlopeGeom, sunRadVar) reduction( \
-        max                                                              \
-        : linke_max, albedo_max, lat_max, sunrise_max, sunset_max)       \
-        reduction(min                                                    \
-                  : linke_min, albedo_min, lat_min, sunrise_min, sunset_min)
+#pragma omp for schedule(dynamic)                                            \
+    firstprivate(sunGeom, sunVarGeom, sunSlopeGeom, sunRadVar)               \
+    lastprivate(sunGeom, sunVarGeom, sunSlopeGeom, sunRadVar)                \
+    reduction(max : linke_max, albedo_max, lat_max, sunrise_max, sunset_max) \
+    reduction(min : linke_min, albedo_min, lat_min, sunrise_min, sunset_min)
             for (i = 0; i < n; i++) {
                 shadowoffset = shadowoffset_base + (arrayNumInt * i);
                 if (useCivilTime()) {
@@ -1937,8 +1941,21 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 
                     q1 = gridGeom.sinlat * cos_u * sin_v +
                          gridGeom.coslat * sin_u;
-                    tan_lam_l = -cos_u * cos_v / q1;
-                    sunSlopeGeom.longit_l = atan(tan_lam_l);
+
+                    if (q1 != 0.0) {
+                        tan_lam_l = -cos_u * cos_v / q1;
+                        sunSlopeGeom.longit_l = atan(tan_lam_l);
+                        isBestAM = (tan_lam_l > 0);
+                    }
+                    else {
+                        sunSlopeGeom.longit_l = pihalf;
+                        isBestAM = true;
+                    }
+
+                    shouldBeBestAM = (0.0 < sunSlopeGeom.aspect &&
+                                      sunSlopeGeom.aspect <= M_PI);
+                    sunSlopeGeom.shift12hrs = (shouldBeBestAM != isBestAM);
+
                     sunSlopeGeom.lum_C31_l = cos(latid_l) * sunGeom.cosdecl;
                     sunSlopeGeom.lum_C33_l = sin_phi_l * sunGeom.sindecl;
 

@@ -12,7 +12,7 @@ If parameters for database connection are already set with
 <em><a href="db.connect.html">db.connect</a></em>, they are taken as default
 values and do not need to be specified each time.
 <p>
-If you have a large number of SQL commands to process, it is much much
+If you have a large number of SQL commands to process, it is much
 faster to place all the SQL statements into a text file and
 use <b>input</b> file parameter than it is to process each statement
 individually in a loop. If multiple instruction lines are given, each
@@ -76,7 +76,7 @@ db.execute sql="DROP TABLE fmacopy"
 </pre></div>
 
 Update attribute with multiple SQL instructions in file
-(e.g., <tt>file.sql</tt>, instruction line must end with a semicolon):
+(e.g., <code>file.sql</code>, instruction line must end with a semicolon):
 <div class="code"><pre>
 UPDATE roads SET travelcost=5 WHERE cat=1;
 UPDATE roads SET travelcost=2 WHERE cat=2;
@@ -104,7 +104,7 @@ db.execute sql="UPDATE extratab SET names=(SELECT label FROM myroads WHERE extra
 <p>
 <em>
 <a href="sql.html">GRASS SQL interface</a>
-<em>
+</em>
 
 <h2>AUTHOR</h2>
 

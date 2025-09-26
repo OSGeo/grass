@@ -18,10 +18,7 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
 
-from __future__ import print_function
-
 import os
-import six
 
 import wx
 import wx.lib.scrolledpanel as scrolled
@@ -42,7 +39,7 @@ from iclass.dialogs import ContrastColor
 try:
     from agw import aui
 except ImportError:
-    import wx.lib.agw.aui as aui
+    from wx.lib.agw import aui
 
 
 class IClassIScattPanel(wx.Panel, ManageBusyCursorMixin):
@@ -224,9 +221,6 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
 
         self.Bind(aui.EVT_AUI_PANE_CLOSE, self.OnPlotPaneClosed)
 
-        dlgSize = (-1, 400)
-        # self.SetBestSize(dlgSize)
-        # self.SetInitialSize(dlgSize)
         self.SetAutoLayout(1)
         # fix goutput's pane size (required for Mac OSX)
         # if self.gwindow:
@@ -244,15 +238,15 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
         self.scatt_mgr.cursorPlotMove.connect(self.CursorPlotMove)
 
     def SetBusy(self, busy):
-        for scatt in six.itervalues(self.scatts):
+        for scatt in self.scatts.values():
             scatt.UpdateCur(busy)
 
     def CursorPlotMove(self, x, y, scatt_id):
         try:
-            x = int(round(x))
-            y = int(round(y))
+            x = round(x)
+            y = round(y)
             coords = True
-        except:
+        except TypeError:
             coords = False
 
         pane = self._getPane(scatt_id)
@@ -278,6 +272,7 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
         del self.scatts[scatt_id]
 
         if pane.IsOk():
+            pane.DestroyOnClose()
             self._mgr.ClosePane(pane)
         self._mgr.Update()
 
@@ -332,8 +327,7 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
         return name
 
     def _getScatterPlotName(self, i):
-        name = "scatter plot %d" % i
-        return name
+        return "scatter plot %d" % i
 
     def NewScatterPlot(self, scatt_id, transpose):
         # TODO needs to be resolved (should be in this class)
@@ -507,9 +501,8 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
             index = self.GetNextItem(lastFound, wx.LIST_NEXT_ALL, state)
             if index == -1:
                 break
-            else:
-                lastFound = index
-                indices.append(index)
+            lastFound = index
+            indices.append(index)
         return indices
 
     def DeselectAll(self):
@@ -545,10 +538,10 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
             text_c = wx.SystemSettings.GetColour(wx.SYS_COLOUR_INACTIVECAPTIONTEXT)
 
         # if it is in scope of the method, gui falls, using self solved it
-        self.l = wx.ListItemAttr()
-        self.l.SetBackgroundColour(back_c)
-        self.l.SetTextColour(text_c)
-        return self.l
+        self.item_attr = wx.ItemAttr()
+        self.item_attr.SetBackgroundColour(back_c)
+        self.item_attr.SetTextColour(text_c)
+        return self.item_attr
 
     def OnCategoryRightUp(self, event):
         """Show context menu on right click"""
@@ -574,11 +567,7 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
         item = menu.Append(wx.ID_ANY, _("Change opacity level"))
         self.Bind(wx.EVT_MENU, self.OnPopupOpacityLevel, item)
 
-        if showed:
-            text = _("Hide")
-        else:
-            text = _("Show")
-
+        text = _("Hide") if showed else _("Show")
         item = menu.Append(wx.ID_ANY, text)
         self.Bind(
             wx.EVT_MENU,
@@ -684,7 +673,7 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
         name = cat_attrs["name"]
 
         dlg = SetOpacityDialog(
-            self, opacity=value, title=_("Change opacity of class <%s>" % name)
+            self, opacity=value, title=_("Change opacity of class <%s>") % name
         )
 
         dlg.applyOpacity.connect(
@@ -705,15 +694,14 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
         dlg.CentreOnParent()
 
         while True:
-            if dlg.ShowModal() == wx.ID_OK:
-                name = dlg.GetNewName().strip()
-                if not name:
-                    GMessage(parent=self, message=_("Empty name was inserted."))
-                else:
-                    self.cats_mgr.SetCategoryAttrs(cat_id, {"name": name})
-                    break
-            else:
+            if dlg.ShowModal() != wx.ID_OK:
                 break
+
+            name = dlg.GetNewName().strip()
+            if name:
+                self.cats_mgr.SetCategoryAttrs(cat_id, {"name": name})
+                break
+            GMessage(parent=self, message=_("Empty name was inserted."))
 
         dlg.Destroy()
 

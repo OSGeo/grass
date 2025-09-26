@@ -12,7 +12,7 @@
 #            for details.
 
 """Reprojects rasters to Pseudo-Mercator and vectors to WGS84. Exports reprojected
- rasters and vectors to PNGs and geoJSONs, respectively."""
+rasters and vectors to PNGs and geoJSONs, respectively."""
 
 import os
 import tempfile
@@ -104,7 +104,7 @@ class ReprojectionRenderer:
             input=full_name,
             output=tgt_name,
             mapset=mapset,
-            location=env_info["LOCATION_NAME"],
+            project=env_info["LOCATION_NAME"],
             dbase=env_info["GISDBASE"],
             resolution=self._region_manager.resolution,
             env=self._psmerc_env,
@@ -153,7 +153,7 @@ class ReprojectionRenderer:
             input=name,
             output=new_name,
             mapset=mapset,
-            location=env_info["LOCATION_NAME"],
+            project=env_info["LOCATION_NAME"],
             dbase=env_info["GISDBASE"],
             env=self._wgs84_env,
         )

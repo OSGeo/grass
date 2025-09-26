@@ -26,8 +26,12 @@ class TestReclassArea(TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
-        cls.runModule("g.remove", type="raster", flags="f", name=cls.output + "Greater")
-        cls.runModule("g.remove", type="raster", flags="f", name=cls.output + "Lesser")
+        cls.runModule(
+            "g.remove",
+            type="raster",
+            flags="f",
+            name=(cls.output + "Greater", cls.output + "Lesser"),
+        )
 
     def test_reclassaeaGreater(self):
         """Testing r.reclass.area with greater"""

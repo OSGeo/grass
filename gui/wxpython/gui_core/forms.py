@@ -13,7 +13,7 @@ Classes:
  - forms::GrassGUIApp
 
 This program is just a coarse approach to automatically build a GUI
-from a xml-based GRASS user interface description.
+from an xml-based GRASS user interface description.
 
 You need to have Python 2.4, wxPython 2.8 and python-xml.
 
@@ -46,25 +46,19 @@ COPYING coming with GRASS for details.
 @author Stepan Turek <stepan.turek seznam.cz> (CoordinatesSelect)
 """
 
-from __future__ import print_function
+from __future__ import annotations
 
 import sys
 import textwrap
 import os
 import copy
 import locale
-import six
-
-if sys.version_info.major == 2:
-    import Queue
-else:
-    import queue as Queue
-
-    unicode = str
+import queue as Queue
 
 import codecs
 
 from threading import Thread
+from pathlib import Path
 
 import wx
 
@@ -72,19 +66,13 @@ import wx.lib.colourselect as csel
 import wx.lib.filebrowsebutton as filebrowse
 from wx.lib.newevent import NewEvent
 
-try:
-    import xml.etree.ElementTree as etree
-except ImportError:
-    import elementtree.ElementTree as etree  # Python <= 2.4
+import xml.etree.ElementTree as ET
 
 # needed when started from command line and for testing
 if __name__ == "__main__":
     if os.getenv("GISBASE") is None:
         # intentionally not translatable
-        sys.exit(
-            "Failed to start. GRASS GIS is not running"
-            " or the installation is broken."
-        )
+        sys.exit("Failed to start. GRASS is not running or the installation is broken.")
     from grass.script.setup import set_gui_path
 
     set_gui_path()
@@ -93,6 +81,7 @@ from grass.pydispatch.signal import Signal
 
 from grass.script import core as grass
 from grass.script import task as gtask
+from grass.exceptions import ScriptError
 
 from core import globalvar
 from gui_core.widgets import (
@@ -149,8 +138,7 @@ def text_beautify(someString, width=70):
                 textwrap.wrap(utils.normalize_whitespace(someString), width)
             ).strip(".,;:")
         )
-    else:
-        return escape_ampersand(utils.normalize_whitespace(someString).strip(".,;:"))
+    return escape_ampersand(utils.normalize_whitespace(someString).strip(".,;:"))
 
 
 def escape_ampersand(text):
@@ -182,7 +170,7 @@ class UpdateThread(Thread):
                 prompt = p.get("element", "")
                 if prompt == "vector":
                     name = p.get("name", "")
-                    if name in ("map", "input"):
+                    if name in {"map", "input"}:
                         self.eventId = p["wxId"][0]
             if self.eventId is None:
                 return
@@ -203,17 +191,10 @@ class UpdateThread(Thread):
         if not pMap:
             pMap = self.task.get_param("input", raiseError=False)
 
-        if pMap:
-            map = pMap.get("value", "")
-        else:
-            map = None
+        map = pMap.get("value", "") if pMap else None
 
         # avoid running db.describe several times
-        cparams = dict()
-        cparams[map] = {
-            "dbInfo": None,
-            "layers": None,
-        }
+        cparams = {map: {"dbInfo": None, "layers": None}}
 
         # update reference widgets
         for uid in p["wxId-bind"]:
@@ -224,10 +205,6 @@ class UpdateThread(Thread):
             name = win.GetName()
 
             # @todo: replace name by isinstance() and signals
-
-            pBind = self.task.get_param(uid, element="wxId", raiseError=False)
-            if pBind:
-                pBind["value"] = ""
 
             # set appropriate types in t.* modules and g.list/remove element
             # selections
@@ -266,7 +243,7 @@ class UpdateThread(Thread):
 
             map = layer = None
             driver = db = None
-            if name in ("LayerSelect", "ColumnSelect", "SqlWhereSelect"):
+            if name in {"LayerSelect", "ColumnSelect", "SqlWhereSelect"}:
                 if p.get("element", "") == "vector":  # -> vector
                     # get map name
                     map = p.get("value", "")
@@ -277,7 +254,7 @@ class UpdateThread(Thread):
                         if not p:
                             continue
 
-                        if p.get("element", "") in ["layer", "layer_all"]:
+                        if p.get("element", "") in {"layer", "layer_all"}:
                             layer = p.get("value", "")
                             if layer != "":
                                 layer = p.get("value", "")
@@ -285,13 +262,10 @@ class UpdateThread(Thread):
                                 layer = p.get("default", "")
                             break
 
-                elif p.get("element", "") in ["layer", "layer_all"]:  # -> layer
+                elif p.get("element", "") in {"layer", "layer_all"}:  # -> layer
                     # get layer
                     layer = p.get("value", "")
-                    if layer != "":
-                        layer = p.get("value", "")
-                    else:
-                        layer = p.get("default", "")
+                    layer = p.get("value", "") if layer != "" else p.get("default", "")
 
                     # get map name
                     pMapL = self.task.get_param(
@@ -317,8 +291,6 @@ class UpdateThread(Thread):
                     pTable = self.task.get_param(
                         "dbtable", element="element", raiseError=False
                     )
-                    if pTable:
-                        table = pTable.get("value", "")
 
             if name == "LayerSelect":
                 # determine format
@@ -334,16 +306,12 @@ class UpdateThread(Thread):
                             native = False
                             break
                 # TODO: update only if needed
-                if native:
-                    if map:
-                        self.data[win.InsertLayers] = {"vector": map}
-                    else:
-                        self.data[win.InsertLayers] = {}
+                if map:
+                    self.data[win.InsertLayers] = (
+                        {"vector": map} if native else {"dsn": map.rstrip("@OGR")}
+                    )
                 else:
-                    if map:
-                        self.data[win.InsertLayers] = {"dsn": map.rstrip("@OGR")}
-                    else:
-                        self.data[win.InsertLayers] = {}
+                    self.data[win.InsertLayers] = {}
 
             elif name == "TableSelect":
                 self.data[win.InsertTables] = {"driver": driver, "database": db}
@@ -362,18 +330,21 @@ class UpdateThread(Thread):
                         "vector": map,
                         "layer": layer,
                         "dbInfo": cparams[map]["dbInfo"],
+                        "setDefaultValue": False,
                     }
-                else:  # table
-                    if driver and db:
-                        self.data[win.GetParent().InsertTableColumns] = {
-                            "table": pTable.get("value"),
-                            "driver": driver,
-                            "database": db,
-                        }
-                    elif pTable:
-                        self.data[win.GetParent().InsertTableColumns] = {
-                            "table": pTable.get("value")
-                        }
+                # table
+                elif driver and db:
+                    self.data[win.GetParent().InsertTableColumns] = {
+                        "table": pTable.get("value"),
+                        "driver": driver,
+                        "database": db,
+                        "setDefaultValue": False,
+                    }
+                elif pTable:
+                    self.data[win.GetParent().InsertTableColumns] = {
+                        "table": pTable.get("value"),
+                        "setDefaultValue": False,
+                    }
 
             elif name == "SubGroupSelect":
                 self.data[win.Insert] = {"group": p.get("value", "")}
@@ -419,6 +390,14 @@ class UpdateThread(Thread):
                 if map:
                     self.data[win.GetParent().SetData] = {"vector": map, "layer": layer}
                 # TODO: table?
+            elif name == "SignatureSelect":
+                sigtype = self.task.get_param(
+                    "sigtype", element="element", raiseError=False
+                )
+                value = sigtype.get("value", "")
+                if value:
+                    value = f"signatures/{value}"
+                self.data[win.UpdateItems] = {"element": value}
 
 
 def UpdateDialog(parent, event, eventId, task):
@@ -430,8 +409,8 @@ class UpdateQThread(Thread):
 
     requestId = 0
 
-    def __init__(self, parent, requestQ, resultQ, **kwds):
-        Thread.__init__(self, **kwds)
+    def __init__(self, parent, requestQ, resultQ, **kwargs):
+        Thread.__init__(self, **kwargs)
 
         self.parent = parent  # cmdPanel
         self.daemon = True
@@ -441,19 +420,19 @@ class UpdateQThread(Thread):
 
         self.start()
 
-    def Update(self, callable, *args, **kwds):
+    def Update(self, callable, *args, **kwargs):
         UpdateQThread.requestId += 1
 
         self.request = None
-        self.requestQ.put((UpdateQThread.requestId, callable, args, kwds))
+        self.requestQ.put((UpdateQThread.requestId, callable, args, kwargs))
 
         return UpdateQThread.requestId
 
     def run(self):
         while True:
-            requestId, callable, args, kwds = self.requestQ.get()
+            requestId, callable, args, kwargs = self.requestQ.get()
 
-            self.request = callable(*args, **kwds)
+            self.request = callable(*args, **kwargs)
 
             self.resultQ.put((requestId, self.request.run()))
 
@@ -520,9 +499,7 @@ class TaskFrame(wx.Frame):
 
         # icon
         self.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_dialog.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
 
         guisizer = wx.BoxSizer(wx.VERTICAL)
@@ -600,8 +577,10 @@ class TaskFrame(wx.Frame):
         self.btn_cancel.Bind(wx.EVT_BUTTON, self.OnCancel)
         # bind closing to ESC and CTRL+Q
         self.Bind(wx.EVT_MENU, self.OnCancel, id=wx.ID_CANCEL)
-        accelTableList = [(wx.ACCEL_NORMAL, wx.WXK_ESCAPE, wx.ID_CANCEL)]
-        accelTableList.append((wx.ACCEL_CTRL, ord("Q"), wx.ID_CANCEL))
+        accelTableList = [
+            (wx.ACCEL_NORMAL, wx.WXK_ESCAPE, wx.ID_CANCEL),
+            (wx.ACCEL_CTRL, ord("Q"), wx.ID_CANCEL),
+        ]
         # TODO: bind Ctrl-t for tile windows here (trac #2004)
 
         if self.get_dcmd is not None:  # A callback has been set up
@@ -669,11 +648,11 @@ class TaskFrame(wx.Frame):
         if self._giface and self._giface.GetLayerTree():
             addLayer = False
             for p in self.task.params:
-                if p.get("age", "old") == "new" and p.get("prompt", "") in (
+                if p.get("age", "old") == "new" and p.get("prompt", "") in {
                     "raster",
                     "vector",
                     "raster_3d",
-                ):
+                }:
                     addLayer = True
 
             if addLayer:
@@ -730,10 +709,7 @@ class TaskFrame(wx.Frame):
         sizeFrame = self.GetBestSize()
         self.SetMinSize(sizeFrame)
 
-        if hasattr(self, "closebox"):
-            scale = 0.33
-        else:
-            scale = 0.50
+        scale = 0.33 if hasattr(self, "closebox") else 0.5
         self.SetSize(
             wx.Size(
                 round(sizeFrame[0]),
@@ -773,7 +749,7 @@ class TaskFrame(wx.Frame):
             if not modal and hasattr(self, "_disabler"):
                 del self._disabler
         else:
-            super(TaskFrame, self).MakeModal(modal)
+            super().MakeModal(modal)
 
     def updateValuesHook(self, event=None):
         """Update status bar data"""
@@ -814,16 +790,14 @@ class TaskFrame(wx.Frame):
             # was closed also when aborted but better is leave it open
             wx.CallLater(2000, self.Close)
 
-    def OnMapCreated(self, name, ltype):
+    def OnMapCreated(self, name, ltype, add: bool | None = None):
         """Map created or changed
 
         :param name: map name
         :param ltype: layer type (prompt value)
+        :param add: whether to display layer or not
         """
-        if hasattr(self, "addbox") and self.addbox.IsChecked():
-            add = True
-        else:
-            add = False
+        add = bool(hasattr(self, "addbox") and self.addbox.IsChecked())
 
         if self._giface:
             self._giface.mapCreated.emit(name=name, ltype=ltype, add=add)
@@ -879,7 +853,7 @@ class TaskFrame(wx.Frame):
                 )
                 print("parent window is: %s" % (str(self.parent)), file=sys.stderr)
         else:
-            gcmd.Command(cmd)
+            gcmd.Command(cmd, rerr=sys.stderr, stderr=sys.stderr)
 
         if ret != 0:
             self.notebookpanel.notebook.SetSelection(0)
@@ -921,21 +895,21 @@ class TaskFrame(wx.Frame):
         if (
             self.get_dcmd
             and self.parent
-            and self.parent.GetName() in ("LayerTree", "MapWindow")
+            and self.parent.GetName() in {"LayerTree", "MapWindow"}
         ):
             Debug.msg(1, "TaskFrame.OnCancel(): known parent")
             # display decorations and
             # pressing OK or cancel after setting layer properties
             if (
                 self.task.name
-                in [
+                in {
                     "d.barscale",
                     "d.legend",
                     "d.northarrow",
                     "d.histogram",
                     "d.text",
                     "d.legend.vect",
-                ]
+                }
                 or len(self.parent.GetLayerInfo(self.layer, key="cmd")) >= 1
             ):
                 # TODO: do this through policy
@@ -1001,7 +975,7 @@ class CmdPanel(wx.Panel):
         not_hidden = [
             p
             for p in self.task.params + self.task.flags
-            if not p.get("hidden", False) is True
+            if p.get("hidden", False) is not True
         ]
 
         self.label_id = []  # wrap titles on resize
@@ -1063,7 +1037,7 @@ class CmdPanel(wx.Panel):
         # flags
         #
         visible_flags = [
-            f for f in self.task.flags if not f.get("hidden", False) is True
+            f for f in self.task.flags if f.get("hidden", False) is not True
         ]
         for f in visible_flags:
             # we don't want another help (checkbox appeared in r58783)
@@ -1113,7 +1087,7 @@ class CmdPanel(wx.Panel):
                 parChk.Bind(wx.EVT_CHECKBOX, self.OnSetValue)
                 which_sizer.Add(parChk, proportion=0, flag=wx.LEFT, border=20)
 
-            if f["name"] in ("verbose", "quiet"):
+            if f["name"] in {"verbose", "quiet"}:
                 chk.Bind(wx.EVT_CHECKBOX, self.OnVerbosity)
                 vq = UserSettings.Get(group="cmd", key="verbosity", subkey="selection")
                 if f["name"] == vq:
@@ -1130,7 +1104,7 @@ class CmdPanel(wx.Panel):
         # parameters
         #
         visible_params = [
-            p for p in self.task.params if not p.get("hidden", False) is True
+            p for p in self.task.params if p.get("hidden", False) is not True
         ]
 
         try:
@@ -1142,7 +1116,7 @@ class CmdPanel(wx.Panel):
             which_sizer = tabsizer[p["guisection"]]
             which_panel = tab[p["guisection"]]
             # if label is given -> label and description -> tooltip
-            # otherwise description -> lavel
+            # otherwise description -> label
             if p.get("label", "") != "":
                 title = text_beautify(p["label"])
                 tooltip = text_beautify(p["description"], width=-1)
@@ -1163,10 +1137,7 @@ class CmdPanel(wx.Panel):
             else:
                 title_sizer = wx.BoxSizer(wx.HORIZONTAL)
                 title_txt = StaticText(parent=which_panel)
-                if p["key_desc"]:
-                    ltype = ",".join(p["key_desc"])
-                else:
-                    ltype = p["type"]
+                ltype = ",".join(p["key_desc"]) if p["key_desc"] else p["type"]
                 # red star for required options
                 if p.get("required", False):
                     required_txt = StaticText(parent=which_panel, label="*")
@@ -1195,7 +1166,7 @@ class CmdPanel(wx.Panel):
 
             if len(p.get("values", [])) > 0:
                 valuelist = list(map(str, p.get("values", [])))
-                valuelist_desc = list(map(unicode, p.get("values_desc", [])))
+                valuelist_desc = list(map(str, p.get("values_desc", [])))
                 required_text = "*" if p.get("required", False) else ""
                 if (
                     p.get("multiple", False)
@@ -1220,7 +1191,7 @@ class CmdPanel(wx.Panel):
                         isEnabled[defval] = "yes"
                         # for multi checkboxes, this is an array of all wx IDs
                         # for each individual checkbox
-                        p["wxId"] = list()
+                        p["wxId"] = []
                     idx = 0
                     for val in valuelist:
                         try:
@@ -1305,7 +1276,7 @@ class CmdPanel(wx.Panel):
                         title_txt.SetLabel(title + ":")
                         value = self._getValue(p)
 
-                        if p["name"] in ("icon", "icon_area", "icon_line"):  # symbols
+                        if p["name"] in {"icon", "icon_area", "icon_line"}:  # symbols
                             bitmap = wx.Bitmap(
                                 os.path.join(globalvar.SYMBDIR, value) + ".png"
                             )
@@ -1367,7 +1338,7 @@ class CmdPanel(wx.Panel):
 
             # text entry
             if (
-                p.get("type", "string") in ("string", "integer", "float")
+                p.get("type", "string") in {"string", "integer", "float"}
                 and len(p.get("values", [])) == 0
                 and p.get("gisprompt", False) is False
                 and p.get("prompt", "") != "color"
@@ -1450,12 +1421,13 @@ class CmdPanel(wx.Panel):
             if p.get("gisprompt", False):
                 title_txt.SetLabel(title + ":")
                 # GIS element entry
-                if p.get("prompt", "") not in (
+                if p.get("prompt", "") not in {
                     "color",
                     "cat",
                     "cats",
                     "subgroup",
                     "sigfile",
+                    "sigtype",
                     "separator",
                     "dbdriver",
                     "dbname",
@@ -1474,7 +1446,7 @@ class CmdPanel(wx.Panel):
                     "datasource",
                     "datasource_layer",
                     "sql_query",
-                ):
+                }:
                     multiple = p.get("multiple", False)
                     if p.get("age", "") == "new":
                         mapsets = [
@@ -1483,7 +1455,7 @@ class CmdPanel(wx.Panel):
                     else:
                         mapsets = None
                     if (
-                        self.task.name in ("r.proj", "v.proj")
+                        self.task.name in {"r.proj", "v.proj"}
                         and p.get("name", "") == "input"
                     ):
                         selection = gselect.ProjSelect(
@@ -1497,7 +1469,7 @@ class CmdPanel(wx.Panel):
                     else:
                         elem = p.get("element", None)
                         # hack for t.* modules
-                        if elem in ("stds", "map"):
+                        if elem in {"stds", "map"}:
                             orig_elem = elem
                             type_param = self.task.get_param(
                                 "type", element="name", raiseError=False
@@ -1550,9 +1522,8 @@ class CmdPanel(wx.Panel):
                         if value:
                             selection.SetValue(value)
 
-                        formatSelector = True
-                        # A gselect.Select is a combobox with two children: a textctl and a popupwindow;
-                        # we target the textctl here
+                        # A gselect.Select is a combobox with two children: a textctl
+                        # and a popupwindow; we target the textctl here
                         textWin = selection.GetTextCtrl()
                         if globalvar.CheckWxVersion([3]):
                             p["wxId"] = [
@@ -1575,44 +1546,63 @@ class CmdPanel(wx.Panel):
                         win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
                         win.Bind(wx.EVT_TEXT, self.OnSetValue)
 
-                        # if formatSelector and p.get('age', 'old') == 'old':
+                        # if formatSelector and p.get("age", "old") == "old":
                         #     # OGR supported (read-only)
                         #     self.hsizer = wx.BoxSizer(wx.HORIZONTAL)
-
-                        #     self.hsizer.Add(item = selection,
-                        #                     flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_TOP,
-                        #                     border = 5)
-
+                        #
+                        #     self.hsizer.Add(
+                        #         item=selection,
+                        #         flag=wx.ADJUST_MINSIZE
+                        #         | wx.BOTTOM
+                        #         | wx.LEFT
+                        #         | wx.RIGHT
+                        #         | wx.TOP
+                        #         | wx.ALIGN_TOP,
+                        #         border=5,
+                        #     )
+                        #
                         #     # format (native / ogr)
-                        #     rbox = wx.RadioBox(parent = which_panel, id = wx.ID_ANY,
-                        #                        label = " %s " % _("Format"),
-                        #                        style = wx.RA_SPECIFY_ROWS,
-                        #                        choices = [_("Native / Linked OGR"), _("Direct OGR")])
-                        #     if p.get('value', '').lower().rfind('@ogr') > -1:
+                        #     rbox = wx.RadioBox(
+                        #         parent=which_panel,
+                        #         id=wx.ID_ANY,
+                        #         label=" %s " % _("Format"),
+                        #         style=wx.RA_SPECIFY_ROWS,
+                        #         choices=[_("Native / Linked OGR"), _("Direct OGR")],
+                        #     )
+                        #     if p.get("value", "").lower().rfind("@ogr") > -1:
                         #         rbox.SetSelection(1)
-                        #     rbox.SetName('VectorFormat')
+                        #     rbox.SetName("VectorFormat")
                         #     rbox.Bind(wx.EVT_RADIOBOX, self.OnVectorFormat)
-
-                        #     self.hsizer.Add(item = rbox,
-                        #                     flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT |
-                        #                     wx.RIGHT | wx.ALIGN_TOP,
-                        #                     border = 5)
-
-                        #     ogrSelection = gselect.GdalSelect(parent = self, panel = which_panel, ogr = True,
-                        #                                       default = 'dir',
-                        #                                       exclude = ['file'])
+                        #
+                        #     self.hsizer.Add(
+                        #         item=rbox,
+                        #         flag=wx.ADJUST_MINSIZE
+                        #         | wx.BOTTOM
+                        #         | wx.LEFT
+                        #         | wx.RIGHT
+                        #         | wx.ALIGN_TOP,
+                        #         border=5,
+                        #     )
+                        #
+                        #     ogrSelection = gselect.GdalSelect(
+                        #         parent=self,
+                        #         panel=which_panel,
+                        #         ogr=True,
+                        #         default="dir",
+                        #         exclude=["file"],
+                        #     )
                         #     self.Bind(gselect.EVT_GDALSELECT, self.OnUpdateSelection)
                         #     self.Bind(gselect.EVT_GDALSELECT, self.OnSetValue)
 
-                        #     ogrSelection.SetName('OgrSelect')
+                        #     ogrSelection.SetName("OgrSelect")
                         #     ogrSelection.Hide()
 
                         #     which_sizer.Add(item = self.hsizer, proportion = 0)
 
-                        #     p['wxId'].append(rbox.GetId())
-                        #     p['wxId'].append(ogrSelection.GetId())
+                        #     p["wxId"].append(rbox.GetId())
+                        #     p["wxId"].append(ogrSelection.GetId())
                         #     for win in ogrSelection.GetDsnWin():
-                        #         p['wxId'].append(win.GetId())
+                        #         p["wxId"].append(win.GetId())
                         # else:
                         which_sizer.Add(
                             selection,
@@ -1639,7 +1629,7 @@ class CmdPanel(wx.Panel):
                             border=5,
                         )
                     else:
-                        if prompt in ("stds", "strds", "stvds", "str3ds"):
+                        if prompt in {"stds", "strds", "stvds", "str3ds"}:
                             showButton = True
                             try:
                                 # if matplotlib is there
@@ -1663,7 +1653,8 @@ class CmdPanel(wx.Panel):
                             bb.Bind(wx.EVT_BUTTON, self.OnTimelineTool)
                             bb.SetToolTip(
                                 _(
-                                    "Show graphical representation of temporal extent of dataset(s) ."
+                                    "Show graphical representation of temporal extent "
+                                    "of dataset(s)."
                                 )
                             )
                             p["wxId"].append(bb.GetId())
@@ -1741,6 +1732,27 @@ class CmdPanel(wx.Panel):
                         | wx.TOP,
                         border=5,
                     )
+                # signature type
+                elif prompt == "sigtype":
+                    win = gselect.SignatureTypeSelect(parent=which_panel)
+                    value = self._getValue(p)
+                    win.SetValue(value)
+                    p["wxId"] = [win.GetId()]
+                    if p.get("guidependency", ""):
+                        win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
+                        win.Bind(wx.EVT_COMBOBOX, self.OnUpdateSelection)
+                    win.Bind(wx.EVT_TEXT, self.OnSetValue)
+                    win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
+                    which_sizer.Add(
+                        win,
+                        proportion=0,
+                        flag=wx.ADJUST_MINSIZE
+                        | wx.BOTTOM
+                        | wx.LEFT
+                        | wx.RIGHT
+                        | wx.TOP,
+                        border=5,
+                    )
 
                 # separator
                 elif prompt == "separator":
@@ -1762,7 +1774,7 @@ class CmdPanel(wx.Panel):
                     )
 
                 # layer, dbdriver, dbname, dbcolumn, dbtable entry
-                elif prompt in (
+                elif prompt in {
                     "dbdriver",
                     "dbname",
                     "dbtable",
@@ -1771,7 +1783,7 @@ class CmdPanel(wx.Panel):
                     "location",
                     "mapset",
                     "dbase",
-                ):
+                }:
                     if p.get("multiple", "no") == "yes":
                         win = TextCtrl(
                             parent=which_panel,
@@ -1783,10 +1795,7 @@ class CmdPanel(wx.Panel):
                         value = self._getValue(p)
 
                         if prompt == "layer":
-                            if p.get("element", "layer") == "layer_all":
-                                all = True
-                            else:
-                                all = False
+                            all = bool(p.get("element", "layer") == "layer_all")
                             if p.get("age", "old") == "old":
                                 win = gselect.LayerSelect(
                                     parent=which_panel, all=all, default=p["default"]
@@ -1866,10 +1875,7 @@ class CmdPanel(wx.Panel):
                             win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
 
                         elif prompt == "mapset":
-                            if p.get("age", "old") == "old":
-                                new = False
-                            else:
-                                new = True
+                            new = p.get("age", "old") != "old"
 
                             win = gselect.MapsetSelect(
                                 parent=which_panel,
@@ -1917,9 +1923,9 @@ class CmdPanel(wx.Panel):
                     else:
                         this_sizer = which_sizer
                     colorSize = 150
-                    # For color selectors, this is a three-member array, holding the IDs of
-                    # the color picker,  the text control for multiple colors (or None),
-                    # and either a "transparent" checkbox or None
+                    # For color selectors, this is a three-member array, holding the
+                    # IDs of the color picker,  the text control for multiple colors
+                    # (or None), and either a "transparent" checkbox or None
                     p["wxId"] = [None] * 3
                     if p.get("multiple", False):
                         txt = TextCtrl(parent=which_panel, id=wx.ID_ANY)
@@ -1974,14 +1980,11 @@ class CmdPanel(wx.Panel):
 
                 # file selector
                 elif p.get("prompt", "") != "color" and p.get("prompt", "") == "file":
-                    if p.get("age", "new") == "new":
-                        fmode = wx.FD_SAVE
-                    else:
-                        fmode = wx.FD_OPEN
+                    fmode = wx.FD_SAVE if p.get("age", "new") == "new" else wx.FD_OPEN
                     # check wildcard
                     try:
                         fExt = os.path.splitext(p.get("key_desc", ["*.*"])[0])[1]
-                    except:
+                    except IndexError:
                         fExt = None
                     if not fExt:
                         fMask = "*"
@@ -2000,7 +2003,7 @@ class CmdPanel(wx.Panel):
                         dialogTitle=_("Choose %s")
                         % p.get("description", _("file")).lower(),
                         buttonText=_("Browse"),
-                        startDirectory=os.getcwd(),
+                        startDirectory=str(Path.cwd()),
                         fileMode=fmode,
                         changeCallback=self.OnSetValue,
                     )
@@ -2045,7 +2048,8 @@ class CmdPanel(wx.Panel):
                                     try:
                                         ifbb.AppendText(line)
                                     except UnicodeDecodeError:
-                                        # remove non-ascii characters on encoding mismatch (file vs OS)
+                                        # remove non-ascii characters on encoding
+                                        # mismatch (file vs OS)
                                         ifbb.AppendText(line.translate(None, nonascii))
                                 ifbb.SetInsertionPoint(0)
 
@@ -2110,7 +2114,7 @@ class CmdPanel(wx.Panel):
                         dialogTitle=_("Choose %s")
                         % p.get("description", _("Directory")),
                         buttonText=_("Browse"),
-                        startDirectory=os.getcwd(),
+                        startDirectory=str(Path.cwd()),
                         newDirectory=True,
                         changeCallback=self.OnSetValue,
                     )
@@ -2156,7 +2160,7 @@ class CmdPanel(wx.Panel):
                         border=5,
                     )
 
-                elif prompt in ("cat", "cats"):
+                elif prompt in {"cat", "cats"}:
                     # interactive selection of vector categories if layer
                     # manager is accessible
                     if self._giface:
@@ -2185,7 +2189,7 @@ class CmdPanel(wx.Panel):
                         border=5,
                     )
 
-                elif prompt in ("colortable", "barscale", "northarrow"):
+                elif prompt in {"colortable", "barscale", "northarrow"}:
                     if prompt == "colortable":
                         cb = ColorTablesComboBox(
                             parent=which_panel,
@@ -2264,7 +2268,7 @@ class CmdPanel(wx.Panel):
                         p["wxId"] = [self.win1.GetId()]
 
                         def OnCheckItem(index=None, flag=None, event=None):
-                            layers = list()
+                            layers = []
                             geometry = None
                             for layer, match, listId in self.win1.GetLayers():
                                 if "|" in layer:
@@ -2288,6 +2292,9 @@ class CmdPanel(wx.Panel):
 
                 elif prompt == "sql_query":
                     win = gselect.SqlWhereSelect(parent=which_panel, param=p)
+                    value = self._getValue(p)
+                    if value:
+                        win.SetValue(value)  # parameter previously set
                     p["wxId"] = [win.GetTextWin().GetId()]
                     win.GetTextWin().Bind(wx.EVT_TEXT, self.OnSetValue)
                     which_sizer.Add(
@@ -2365,16 +2372,16 @@ class CmdPanel(wx.Panel):
                     pOpt = self.task.get_param(opt, element="name", raiseError=False)
                     if pOpt and id:
                         if "wxId-bind" not in p:
-                            p["wxId-bind"] = list()
+                            p["wxId-bind"] = []
                         p["wxId-bind"] += pOpt["wxId"]
                 continue
             if p.get("gisprompt", False) is False:
                 continue
 
             prompt = p.get("prompt", "")
-            if prompt in ("raster", "vector"):
+            if prompt in {"raster", "vector"}:
                 name = p.get("name", "")
-                if name in ("map", "input"):
+                if name in {"map", "input"}:
                     pMap = p
             elif prompt == "layer":
                 pLayer.append(p)
@@ -2453,7 +2460,7 @@ class CmdPanel(wx.Panel):
             tab[section].SetupScrolling(True, True, 10, 10)
             tab[section].Layout()
             minsecsizes = tabsizer[section].GetSize()
-            maxsizes = list(map(lambda x: max(maxsizes[x], minsecsizes[x]), (0, 1)))
+            maxsizes = [max(maxsizes[x], minsecsizes[x]) for x in (0, 1)]
 
         # TODO: be less arbitrary with these 600
         self.panelMinHeight = 100
@@ -2535,7 +2542,7 @@ class CmdPanel(wx.Panel):
     def OnFileLoad(self, event):
         """Load file to interactive input"""
         me = event.GetId()
-        win = dict()
+        win = {}
         for p in self.task.params:
             if "wxId" in p and me in p["wxId"]:
                 win["file"] = self.FindWindowById(p["wxId"][0])
@@ -2550,21 +2557,15 @@ class CmdPanel(wx.Panel):
             gcmd.GMessage(parent=self, message=_("Nothing to load."))
             return
 
-        data = ""
         try:
-            f = open(path, "r")
-        except IOError as e:
+            data = Path(path).read_text()
+        except OSError as e:
             gcmd.GError(
                 parent=self,
                 showTraceback=False,
                 message=_("Unable to load file.\n\nReason: %s") % e,
             )
             return
-
-        try:
-            data = f.read()
-        finally:
-            f.close()
 
         win["text"].SetValue(data)
 
@@ -2589,7 +2590,7 @@ class CmdPanel(wx.Panel):
         dlg = wx.FileDialog(
             parent=self,
             message=_("Save input as..."),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
         )
 
@@ -2600,11 +2601,9 @@ class CmdPanel(wx.Panel):
                 enc = locale.getencoding()
             except AttributeError:
                 enc = locale.getdefaultlocale()[1]
-            f = codecs.open(path, encoding=enc, mode="w", errors="replace")
-            try:
+
+            with codecs.open(path, encoding=enc, mode="w", errors="replace") as f:
                 f.write(text + os.linesep)
-            finally:
-                f.close()
 
             win["file"].SetValue(path)
 
@@ -2628,13 +2627,11 @@ class CmdPanel(wx.Panel):
                 enc = locale.getencoding()
             except AttributeError:
                 enc = locale.getdefaultlocale()[1]
-            f = codecs.open(filename, encoding=enc, mode="w", errors="replace")
-            try:
+
+            with codecs.open(filename, encoding=enc, mode="w", errors="replace") as f:
                 f.write(text)
                 if text[-1] != os.linesep:
                     f.write(os.linesep)
-            finally:
-                f.close()
         else:
             win.SetValue("")
 
@@ -2715,7 +2712,7 @@ class CmdPanel(wx.Panel):
         self.OnUpdateSelection(event)
 
     def OnUpdateDialog(self, event):
-        for fn, kwargs in six.iteritems(event.data):
+        for fn, kwargs in event.data.items():
             fn(**kwargs)
 
         self.parent.updateValuesHook()
@@ -2725,23 +2722,17 @@ class CmdPanel(wx.Panel):
         verbose = self.FindWindowById(self.task.get_flag("verbose")["wxId"][0])
         quiet = self.FindWindowById(self.task.get_flag("quiet")["wxId"][0])
         if event.IsChecked():
-            if event.GetId() == verbose.GetId():
-                if quiet.IsChecked():
-                    quiet.SetValue(False)
-                    self.task.get_flag("quiet")["value"] = False
-            else:
-                if verbose.IsChecked():
-                    verbose.SetValue(False)
-                    self.task.get_flag("verbose")["value"] = False
+            if event.GetId() == verbose.GetId() and quiet.IsChecked():
+                quiet.SetValue(False)
+                self.task.get_flag("quiet")["value"] = False
+            elif event.GetId() == quiet.GetId() and verbose.IsChecked():
+                verbose.SetValue(False)
+                self.task.get_flag("verbose")["value"] = False
 
         event.Skip()
 
     def OnPageChange(self, event):
-        if not event:
-            sel = self.notebook.GetSelection()
-        else:
-            sel = event.GetSelection()
-
+        sel = self.notebook.GetSelection() if not event else event.GetSelection()
         idx = self.notebook.GetPageIndexByName("manual")
         if idx > -1 and sel == idx:
             # calling LoadPage() is strangely time-consuming (only first call)
@@ -2777,38 +2768,43 @@ class CmdPanel(wx.Panel):
     def OnColorChange(self, event):
         myId = event.GetId()
         for p in self.task.params:
-            if "wxId" in p and myId in p["wxId"]:
-                multiple = p["wxId"][1] is not None  # multiple colors
-                hasTansp = p["wxId"][2] is not None
-                if multiple:
-                    # selected color is added at the end of textCtrl
-                    colorchooser = wx.FindWindowById(p["wxId"][0])
-                    new_color = colorchooser.GetValue()[:]
-                    new_label = utils.rgb2str.get(
-                        new_color, ":".join(list(map(str, new_color)))
-                    )
-                    textCtrl = wx.FindWindowById(p["wxId"][1])
-                    val = textCtrl.GetValue()
-                    sep = ","
-                    if val and val[-1] != sep:
-                        val += sep
-                    val += new_label
-                    textCtrl.SetValue(val)
-                    p["value"] = val
-                elif hasTansp and wx.FindWindowById(p["wxId"][2]).GetValue():
-                    p["value"] = "none"
-                else:
-                    colorchooser = wx.FindWindowById(p["wxId"][0])
-                    new_color = colorchooser.GetValue()[:]
-                    # This is weird: new_color is a 4-tuple and new_color[:] is a 3-tuple
-                    # under wx2.8.1
-                    new_label = utils.rgb2str.get(
-                        new_color, ":".join(list(map(str, new_color)))
-                    )
-                    colorchooser.SetLabel(new_label)
-                    colorchooser.SetColour(new_color)
-                    colorchooser.Refresh()
-                    p["value"] = colorchooser.GetLabel()
+            if "wxId" not in p or myId not in p["wxId"]:
+                continue
+
+            multiple = p["wxId"][1] is not None  # multiple colors
+            hasTansp = p["wxId"][2] is not None
+            if multiple:
+                # selected color is added at the end of textCtrl
+                colorchooser = wx.FindWindowById(p["wxId"][0])
+                new_color = colorchooser.GetValue()[:]
+                new_label = utils.rgb2str.get(
+                    new_color, ":".join(list(map(str, new_color)))
+                )
+                textCtrl = wx.FindWindowById(p["wxId"][1])
+                val = textCtrl.GetValue()
+                sep = ","
+                if val and val[-1] != sep:
+                    val += sep
+                val += new_label
+                textCtrl.SetValue(val)
+                p["value"] = val
+
+                continue
+            if hasTansp and wx.FindWindowById(p["wxId"][2]).GetValue():
+                p["value"] = "none"
+                continue
+
+            colorchooser = wx.FindWindowById(p["wxId"][0])
+            new_color = colorchooser.GetValue()[:]
+            # This is weird: new_color is a 4-tuple and new_color[:] is
+            # a 3-tuple under wx2.8.1
+            new_label = utils.rgb2str.get(
+                new_color, ":".join(list(map(str, new_color)))
+            )
+            colorchooser.SetLabel(new_label)
+            colorchooser.SetColour(new_color)
+            colorchooser.Refresh()
+            p["value"] = colorchooser.GetLabel()
         self.OnUpdateValues()
 
     def OnUpdateValues(self, event=None):
@@ -2819,7 +2815,6 @@ class CmdPanel(wx.Panel):
         needed. It's a hook, actually.  Beware of what is 'self' in
         the method def, though. It will be called with no arguments.
         """
-        pass
 
     def OnCheckBoxMulti(self, event):
         """Fill the values as a ','-separated string according to
@@ -2833,9 +2828,7 @@ class CmdPanel(wx.Panel):
                 myIndex = p["wxId"].index(me)
 
         # Unpack current value list
-        currentValues = {}
-        for isThere in theParam.get("value", "").split(","):
-            currentValues[isThere] = 1
+        currentValues = dict.fromkeys(theParam.get("value", "").split(","), 1)
         theValue = theParam["values"][myIndex]
 
         if event.IsChecked():
@@ -2844,10 +2837,7 @@ class CmdPanel(wx.Panel):
             del currentValues[theValue]
 
         # Keep the original order, so that some defaults may be recovered
-        currentValueList = []
-        for v in theParam["values"]:
-            if v in currentValues:
-                currentValueList.append(v)
+        currentValueList = [v for v in theParam["values"] if v in currentValues]
 
         # Pack it back
         theParam["value"] = ",".join(currentValueList)
@@ -2888,15 +2878,14 @@ class CmdPanel(wx.Panel):
             pLayer = self.task.get_param("layer", element="name", raiseError=False)
             if pLayer:
                 pLayer["value"] = ""
+        elif isinstance(me, SpinCtrl):
+            porf["value"] = str(me.GetValue())
+        elif isinstance(me, wx.ComboBox):
+            porf["value"] = me.GetValue()
+        elif isinstance(me, wx.Choice):
+            porf["value"] = me.GetStringSelection()
         else:
-            if isinstance(me, SpinCtrl):
-                porf["value"] = str(me.GetValue())
-            elif isinstance(me, wx.ComboBox):
-                porf["value"] = me.GetValue()
-            elif isinstance(me, wx.Choice):
-                porf["value"] = me.GetStringSelection()
-            else:
-                porf["value"] = me.GetValue()
+            porf["value"] = me.GetValue()
 
         self.OnUpdateValues(event)
 
@@ -2907,25 +2896,24 @@ class CmdPanel(wx.Panel):
         myId = event.GetId()
 
         for p in self.task.params:
-            if "wxId" in p and myId in p["wxId"]:
-                from gui_core.dialogs import SymbolDialog
+            if "wxId" not in p or myId not in p["wxId"]:
+                continue
+            from gui_core.dialogs import SymbolDialog
 
-                dlg = SymbolDialog(
-                    self, symbolPath=globalvar.SYMBDIR, currentSymbol=p["value"]
-                )
-                if dlg.ShowModal() == wx.ID_OK:
-                    img = dlg.GetSelectedSymbolPath()
-                    p["value"] = dlg.GetSelectedSymbolName()
+            dlg = SymbolDialog(
+                self, symbolPath=globalvar.SYMBDIR, currentSymbol=p["value"]
+            )
+            if dlg.ShowModal() == wx.ID_OK:
+                img = dlg.GetSelectedSymbolPath()
+                p["value"] = dlg.GetSelectedSymbolName()
+                bitmapButton = wx.FindWindowById(p["wxId"][0])
+                label = wx.FindWindowById(p["wxId"][1])
+                bitmapButton.SetBitmapLabel(wx.Bitmap(img + ".png"))
+                label.SetLabel(p["value"])
 
-                    bitmapButton = wx.FindWindowById(p["wxId"][0])
-                    label = wx.FindWindowById(p["wxId"][1])
+                self.OnUpdateValues(event)
 
-                    bitmapButton.SetBitmapLabel(wx.Bitmap(img + ".png"))
-                    label.SetLabel(p["value"])
-
-                    self.OnUpdateValues(event)
-
-                dlg.Destroy()
+            dlg.Destroy()
 
     def OnTimelineTool(self, event):
         """Show Timeline Tool with dataset(s) from gselect.
@@ -2936,35 +2924,37 @@ class CmdPanel(wx.Panel):
         myId = event.GetId()
 
         for p in self.task.params:
-            if "wxId" in p and myId in p["wxId"]:
-                select = self.FindWindowById(p["wxId"][0])
-                if not select.GetValue():
-                    gcmd.GMessage(parent=self, message=_("No dataset given."))
-                    return
-                datasets = select.GetValue().split(",")
-                from timeline import frame
+            if "wxId" not in p or myId not in p["wxId"]:
+                continue
+            select = self.FindWindowById(p["wxId"][0])
+            if not select.GetValue():
+                gcmd.GMessage(parent=self, message=_("No dataset given."))
+                return
+            datasets = select.GetValue().split(",")
+            from timeline import frame
 
-                frame.run(parent=self, datasets=datasets)
+            frame.run(parent=self, datasets=datasets)
 
     def OnSelectFont(self, event):
         """Select font using font dialog"""
         myId = event.GetId()
         for p in self.task.params:
-            if "wxId" in p and myId in p["wxId"]:
-                from gui_core.dialogs import DefaultFontDialog
+            if "wxId" not in p or myId not in p["wxId"]:
+                continue
+            from gui_core.dialogs import DefaultFontDialog
 
-                dlg = DefaultFontDialog(
-                    parent=self,
-                    title=_("Select font"),
-                    style=wx.DEFAULT_DIALOG_STYLE,
-                    type="font",
-                )
-                if dlg.ShowModal() == wx.ID_OK:
-                    if dlg.font:
-                        p["value"] = dlg.font
-                        self.FindWindowById(p["wxId"][1]).SetValue(dlg.font)
-                        self.OnUpdateValues(event)
-                dlg.Destroy()
+            dlg = DefaultFontDialog(
+                parent=self,
+                title=_("Select font"),
+                style=wx.DEFAULT_DIALOG_STYLE,
+                type="font",
+            )
+            if dlg.ShowModal() == wx.ID_OK:
+                if dlg.font:
+                    p["value"] = dlg.font
+                    self.FindWindowById(p["wxId"][1]).SetValue(dlg.font)
+                    self.OnUpdateValues(event)
+            dlg.Destroy()
 
     def OnUpdateSelection(self, event):
         """Update dialog (layers, tables, columns, etc.)"""
@@ -3025,8 +3015,7 @@ class CmdPanel(wx.Panel):
             image = wx.Image(iconSectionDict[section]).Scale(
                 16, 16, wx.IMAGE_QUALITY_HIGH
             )
-            idx = imageList.Add(BitmapFromImage(image))
-            return idx
+            return imageList.Add(BitmapFromImage(image))
 
         return -1
 
@@ -3052,7 +3041,7 @@ class GUI:
         self.checkError = checkError
 
         self.grass_task = None
-        self.cmd = list()
+        self.cmd = []
 
         global _blackList
         if self.parent:
@@ -3088,7 +3077,7 @@ class GUI:
         try:
             global _blackList
             self.grass_task = gtask.parse_interface(cmd[0], blackList=_blackList)
-        except (grass.ScriptError, ValueError) as e:
+        except (ScriptError, ValueError) as e:
             raise gcmd.GException(e.value)
 
         # if layer parameters previously set, re-insert them into dialog
@@ -3098,7 +3087,7 @@ class GUI:
             if "flags" in dcmd_params:
                 self.grass_task.flags = dcmd_params["flags"]
 
-        err = list()
+        err = []
         # update parameters if needed && validate command
         if len(cmd) > 1:
             i = 0
@@ -3114,32 +3103,34 @@ class GUI:
                     else:
                         self.grass_task.set_flag(option[1], True)
                     cmd_validated.append(option)
-                else:  # parameter
-                    try:
-                        key, value = option.split("=", 1)
-                    except ValueError:
-                        if self.grass_task.firstParam:
-                            if i == 0:  # add key name of first parameter if not given
-                                key = self.grass_task.firstParam
-                                value = option
-                            else:
-                                raise gcmd.GException(
-                                    _("Unable to parse command '%s'") % " ".join(cmd)
-                                )
-                        else:
-                            continue
+                    continue
 
-                    task = self.grass_task.get_param(key, raiseError=False)
-                    if not task:
-                        err.append(
-                            _("%(cmd)s: parameter '%(key)s' not available")
-                            % {"cmd": cmd[0], "key": key}
-                        )
+                # parameter
+                try:
+                    key, value = option.split("=", 1)
+                except ValueError:
+                    if self.grass_task.firstParam:
+                        if i == 0:  # add key name of first parameter if not given
+                            key = self.grass_task.firstParam
+                            value = option
+                        else:
+                            raise gcmd.GException(
+                                _("Unable to parse command '%s'") % " ".join(cmd)
+                            )
+                    else:
                         continue
 
-                    self.grass_task.set_param(key, value)
-                    cmd_validated.append(key + "=" + value)
-                    i += 1
+                task = self.grass_task.get_param(key, raiseError=False)
+                if not task:
+                    err.append(
+                        _("%(cmd)s: parameter '%(key)s' not available")
+                        % {"cmd": cmd[0], "key": key}
+                    )
+                    continue
+
+                self.grass_task.set_param(key, value)
+                cmd_validated.append(key + "=" + value)
+                i += 1
 
             # update original command list
             cmd = cmd_validated
@@ -3175,8 +3166,7 @@ class GUI:
 
         if self.checkError:
             return self.grass_task, err
-        else:
-            return self.grass_task
+        return self.grass_task
 
     def GetCommandInputMapParamKey(self, cmd):
         """Get parameter key for input raster/vector map
@@ -3188,20 +3178,21 @@ class GUI:
         """
         # parse the interface description
         if not self.grass_task:
-            tree = etree.fromstring(gtask.get_interface_description(cmd))
+            tree = ET.fromstring(gtask.get_interface_description(cmd))
             self.grass_task = gtask.processTask(tree).get_task()
 
             for p in self.grass_task.params:
-                if p.get("name", "") in ("input", "map"):
-                    age = p.get("age", "")
-                    prompt = p.get("prompt", "")
-                    element = p.get("element", "")
-                    if (
-                        age == "old"
-                        and element in ("cell", "grid3", "vector")
-                        and prompt in ("raster", "raster_3d", "vector")
-                    ):
-                        return p.get("name", None)
+                if p.get("name", "") not in {"input", "map"}:
+                    continue
+                age = p.get("age", "")
+                prompt = p.get("prompt", "")
+                element = p.get("element", "")
+                if (
+                    age == "old"
+                    and (element in {"cell", "grid3", "vector"})
+                    and (prompt in {"raster", "raster_3d", "vector"})
+                ):
+                    return p.get("name", None)
         return None
 
 
@@ -3260,8 +3251,6 @@ if __name__ == "__main__":
             "forms.py opening form for: %s"
             % task.get_cmd(ignoreErrors=True, ignoreRequired=True),
         )
-        app = GrassGUIApp(task)
-        app.MainLoop()
     else:  # Test
         # Test grassTask from within a GRASS session
         if os.getenv("GISBASE") is not None:
@@ -3288,7 +3277,8 @@ if __name__ == "__main__":
         task.params = [
             {
                 "name": "text",
-                "description": "Descriptions go into tooltips if labels are present, like this one",
+                "description": "Descriptions go into tooltips if labels are present, "
+                "like this one",
                 "label": "Enter some text",
                 "key_desc": ["value"],
                 "values_desc": [],
@@ -3316,7 +3306,8 @@ if __name__ == "__main__":
             },
             {
                 "name": "plain_color",
-                "description": "This is a plain color, and it is a compulsory parameter",
+                "description": "This is a plain color, and it is a compulsory "
+                "parameter",
                 "required": False,
                 "gisprompt": True,
                 "prompt": "color",
@@ -3382,7 +3373,8 @@ if __name__ == "__main__":
             },
             {
                 "name": "b",
-                "description": "pre-filled flag, will appear in options since it is not required",
+                "description": "pre-filled flag, will appear in options since it is "
+                "not required",
                 "value": True,
                 "suppress_required": False,
             },
@@ -3395,4 +3387,5 @@ if __name__ == "__main__":
             },
         ]
         q = wx.LogNull()
-        GrassGUIApp(task).MainLoop()
+
+    GrassGUIApp(task).MainLoop()

@@ -20,7 +20,7 @@ from gui_core.wrap import SearchCtrl
 from icons.icon import MetaIcon
 
 icons = {
-    "reloadTree": MetaIcon(img="redraw", label=_("Reload GRASS locations")),
+    "reloadTree": MetaIcon(img="redraw", label=_("Reload GRASS projects")),
     "reloadMapset": MetaIcon(img="reload", label=_("Reload current GRASS mapset only")),
     "unlocked": MetaIcon(
         img="edit", label=_("Restrict edits to the current mapset only")
@@ -32,14 +32,15 @@ icons = {
         img="grassdb-add", label=_("Add existing or create new database")
     ),
     "addMapset": MetaIcon(
-        img="mapset-add", label=_("Create new mapset in current location")
+        img="mapset-add", label=_("Create new mapset in current project")
     ),
     "addLocation": MetaIcon(
-        img="location-add", label=_("Create new location in current GRASS database")
+        img="location-add",
+        label=_("Create new project (location) in current GRASS database"),
     ),
     "downloadLocation": MetaIcon(
         img="location-download",
-        label=_("Download sample location to current GRASS database"),
+        label=_("Download sample project (location) to current GRASS database"),
     ),
     "importRaster": MetaIcon(
         img="raster-import", label=_("Import raster data  [r.import]")
@@ -111,7 +112,7 @@ class DataCatalogToolbar(BaseToolbar):
     def _toolbarData(self):
         """Returns toolbar data (name, icon, handler)"""
         # BaseIcons are a set of often used icons. It is possible
-        # to reuse icons in ./trunk/gui/icons/grass or add new ones there.
+        # to reuse icons in gui/icons/grass or add new ones there.
         return self._getToolbarData(
             (
                 (

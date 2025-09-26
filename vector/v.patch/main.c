@@ -8,7 +8,7 @@
  *               Markus Neteler <neteler itc.it>,
  *               Martin Landa <landa.martin gmail.com> (bbox)
  * PURPOSE:
- * COPYRIGHT:    (C) 2002-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2024 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -237,7 +237,8 @@ int main(int argc, char *argv[])
                     else {
                         char tmpbuf[4096];
 
-                        sprintf(tmpbuf, ",%s", db_get_column_name(column_out));
+                        snprintf(tmpbuf, sizeof(tmpbuf), ",%s",
+                                 db_get_column_name(column_out));
                         strcat(colnames, tmpbuf);
                     }
                 }
@@ -416,7 +417,7 @@ int main(int argc, char *argv[])
             Vect_copy_head_data(&InMap, &OutMap);
 
         if (do_table) {
-            add_cat = maxcat + 1;
+            add_cat = maxcat;
         }
         else {
             add_cat = 0;
@@ -617,9 +618,9 @@ int copy_records(dbDriver *driver_in, dbString *table_name_in,
     db_init_string(&sql);
 
     if (colnames && *colnames)
-        sprintf(tmpbuf, "select %s from ", colnames);
+        snprintf(tmpbuf, sizeof(tmpbuf), "select %s from ", colnames);
     else
-        sprintf(tmpbuf, "select * from ");
+        snprintf(tmpbuf, sizeof(tmpbuf), "select * from ");
     db_set_string(&sql, tmpbuf);
     db_append_string(&sql, db_get_string(table_name_in));
 
@@ -642,7 +643,8 @@ int copy_records(dbDriver *driver_in, dbString *table_name_in,
         if (!more)
             break;
 
-        sprintf(buf, "insert into %s values ( ", db_get_string(table_name_out));
+        snprintf(buf, sizeof(buf), "insert into %s values ( ",
+                 db_get_string(table_name_out));
         db_set_string(&sql, buf);
 
         for (col = 0; col < ncols; col++) {
@@ -672,7 +674,8 @@ int copy_records(dbDriver *driver_in, dbString *table_name_in,
                 }
                 else {
                     db_double_quote_string(&value_str);
-                    sprintf(buf, "'%s'", db_get_string(&value_str));
+                    snprintf(buf, sizeof(buf), "'%s'",
+                             db_get_string(&value_str));
                     db_append_string(&sql, buf);
                 }
                 break;

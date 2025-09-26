@@ -8,19 +8,26 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 import copy
+import sys
 from datetime import datetime
 from multiprocessing import Process
-import grass.script as gscript
+
+import grass.script as gs
 from grass.exceptions import CalledModuleError
+
 from .core import (
     SQLDatabaseInterfaceConnection,
     get_current_mapset,
     get_tgis_message_interface,
 )
-from .open_stds import open_new_stds, open_old_stds, check_new_stds
 from .datetime_math import time_delta_to_relative_time
+from .open_stds import check_new_stds, open_new_stds, open_old_stds
 
+_TEMPORAL_OPERATOR_SUPPORTS_ONLY_ABSOLUTE_TIME = (
+    "The temporal operators <%s> support only absolute time."
+)
 ############################################################################
 
 
@@ -31,9 +38,9 @@ def dataset_mapcalculator(
     expression,
     base,
     method,
-    nprocs=1,
-    register_null=False,
-    spatial=False,
+    nprocs: int = 1,
+    register_null: bool = False,
+    spatial: bool = False,
 ):
     """Perform map-calculations of maps from different space time
     raster/raster3d datasets, using a specific sampling method
@@ -83,7 +90,7 @@ def dataset_mapcalculator(
     :param type: The type of the dataset: "raster" or "raster3d"
     :param expression: The r(3).mapcalc expression
     :param base: The base name of the new created maps in case a
-           mapclac expression is provided
+           mapcalc expression is provided
     :param method: The method to be used for temporal sampling
     :param nprocs: The number of parallel processes to be used for
            mapcalc processing
@@ -123,7 +130,7 @@ def dataset_mapcalculator(
         sp = open_old_stds(input, type, dbif)
         input_list.append(copy.copy(sp))
 
-    new_sp = check_new_stds(output, type, dbif, gscript.overwrite())
+    new_sp = check_new_stds(output, type, dbif, gs.overwrite())
 
     # Sample all inputs by the first input and create a sample matrix
     if spatial:
@@ -237,7 +244,7 @@ def dataset_mapcalculator(
 
             # Create the r.mapcalc statement for the current time step
             map_name = "{base}_{suffix}".format(
-                base=base, suffix=gscript.get_num_suffix(count, num)
+                base=base, suffix=gs.get_num_suffix(count, num)
             )
             # Remove spaces and new lines
             expr = expression.replace(" ", "")
@@ -265,7 +272,7 @@ def dataset_mapcalculator(
 
             # Check if new map is in the temporal database
             if new_map.is_in_db(dbif):
-                if gscript.overwrite():
+                if gs.overwrite():
                     # Remove the existing temporal database entry
                     new_map.delete(dbif)
                     new_map = first_input.get_new_map_instance(map_id)
@@ -308,19 +315,20 @@ def dataset_mapcalculator(
             proc_list[proc_count].start()
             proc_count += 1
 
-            if proc_count == nprocs or proc_count == num or count == num:
-                proc_count = 0
-                exitcodes = 0
-                for proc in proc_list:
-                    proc.join()
-                    exitcodes += proc.exitcode
+            if proc_count not in {nprocs, num} and count != num:
+                continue
+            proc_count = 0
+            exitcodes = 0
+            for proc in proc_list:
+                proc.join()
+                exitcodes += proc.exitcode
 
-                if exitcodes != 0:
-                    dbif.close()
-                    msgr.fatal(_("Error while mapcalc computation"))
+            if exitcodes != 0:
+                dbif.close()
+                msgr.fatal(_("Error while mapcalc computation"))
 
-                # Empty process list
-                proc_list = []
+            # Empty process list
+            proc_list = []
 
         # Register the new maps in the output space time dataset
         msgr.message(_("Starting map registration in temporal database..."))
@@ -340,7 +348,7 @@ def dataset_mapcalculator(
             description,
             semantic_type,
             dbif,
-            gscript.overwrite(),
+            gs.overwrite(),
         )
         count = 0
 
@@ -390,11 +398,11 @@ def dataset_mapcalculator(
                     names += ",%s" % (map.get_name())
                 count += 1
             if type == "raster":
-                gscript.run_command(
+                gs.run_command(
                     "g.remove", flags="f", type="raster", name=names, quiet=True
                 )
             elif type == "raster3d":
-                gscript.run_command(
+                gs.run_command(
                     "g.remove", flags="f", type="raster_3d", name=names, quiet=True
                 )
 
@@ -404,27 +412,27 @@ def dataset_mapcalculator(
 ###############################################################################
 
 
-def _run_mapcalc2d(expr):
+def _run_mapcalc2d(expr) -> None:
     """Helper function to run r.mapcalc in parallel"""
     try:
-        gscript.run_command(
-            "r.mapcalc", expression=expr, overwrite=gscript.overwrite(), quiet=True
+        gs.run_command(
+            "r.mapcalc", expression=expr, overwrite=gs.overwrite(), quiet=True
         )
     except CalledModuleError:
-        exit(1)
+        sys.exit(1)
 
 
 ###############################################################################
 
 
-def _run_mapcalc3d(expr):
+def _run_mapcalc3d(expr) -> None:
     """Helper function to run r3.mapcalc in parallel"""
     try:
-        gscript.run_command(
-            "r3.mapcalc", expression=expr, overwrite=gscript.overwrite(), quiet=True
+        gs.run_command(
+            "r3.mapcalc", expression=expr, overwrite=gs.overwrite(), quiet=True
         )
     except CalledModuleError:
-        exit(1)
+        sys.exit(1)
 
 
 ###############################################################################
@@ -477,15 +485,13 @@ def _operator_parser(expr, first, current):
     expr = _parse_start_time_operator(expr, is_time_absolute, first, current)
     expr = _parse_end_time_operator(expr, is_time_absolute, first, current)
     expr = _parse_start_operators(expr, is_time_absolute, current)
-    expr = _parse_end_operators(expr, is_time_absolute, current)
-
-    return expr
+    return _parse_end_operators(expr, is_time_absolute, current)
 
 
 ###############################################################################
 
 
-def _parse_start_operators(expr, is_time_absolute, current):
+def _parse_start_operators(expr, is_time_absolute: bool, current):
     """
     Supported operators for absolute time:
     - start_doy() - Day of year (doy) from the start time [1 - 366]
@@ -505,92 +511,47 @@ def _parse_start_operators(expr, is_time_absolute, current):
 
     if expr.find("start_year()") >= 0:
         if not is_time_absolute:
-            msgr.fatal(
-                _(
-                    "The temporal operators <%s> support only absolute "
-                    "time." % ("start_*")
-                )
-            )
+            msgr.fatal(_(_TEMPORAL_OPERATOR_SUPPORTS_ONLY_ABSOLUTE_TIME) % ("start_*"))
         expr = expr.replace("start_year()", str(start.year))
 
     if expr.find("start_month()") >= 0:
         if not is_time_absolute:
-            msgr.fatal(
-                _(
-                    "The temporal operators <%s> support only absolute "
-                    "time." % ("start_*")
-                )
-            )
+            msgr.fatal(_(_TEMPORAL_OPERATOR_SUPPORTS_ONLY_ABSOLUTE_TIME) % ("start_*"))
         expr = expr.replace("start_month()", str(start.month))
 
     if expr.find("start_week()") >= 0:
         if not is_time_absolute:
-            msgr.fatal(
-                _(
-                    "The temporal operators <%s> support only absolute "
-                    "time." % ("start_*")
-                )
-            )
+            msgr.fatal(_(_TEMPORAL_OPERATOR_SUPPORTS_ONLY_ABSOLUTE_TIME) % ("start_*"))
         expr = expr.replace("start_week()", str(start.isocalendar()[1]))
 
     if expr.find("start_day()") >= 0:
         if not is_time_absolute:
-            msgr.fatal(
-                _(
-                    "The temporal operators <%s> support only absolute "
-                    "time." % ("start_*")
-                )
-            )
+            msgr.fatal(_(_TEMPORAL_OPERATOR_SUPPORTS_ONLY_ABSOLUTE_TIME) % ("start_*"))
         expr = expr.replace("start_day()", str(start.day))
 
     if expr.find("start_hour()") >= 0:
         if not is_time_absolute:
-            msgr.fatal(
-                _(
-                    "The temporal operators <%s> support only absolute "
-                    "time." % ("start_*")
-                )
-            )
+            msgr.fatal(_(_TEMPORAL_OPERATOR_SUPPORTS_ONLY_ABSOLUTE_TIME) % ("start_*"))
         expr = expr.replace("start_hour()", str(start.hour))
 
     if expr.find("start_minute()") >= 0:
         if not is_time_absolute:
-            msgr.fatal(
-                _(
-                    "The temporal operators <%s> support only absolute "
-                    "time." % ("start_*")
-                )
-            )
+            msgr.fatal(_(_TEMPORAL_OPERATOR_SUPPORTS_ONLY_ABSOLUTE_TIME) % ("start_*"))
         expr = expr.replace("start_minute()", str(start.minute))
 
     if expr.find("start_second()") >= 0:
         if not is_time_absolute:
-            msgr.fatal(
-                _(
-                    "The temporal operators <%s> support only absolute "
-                    "time." % ("start_*")
-                )
-            )
+            msgr.fatal(_(_TEMPORAL_OPERATOR_SUPPORTS_ONLY_ABSOLUTE_TIME) % ("start_*"))
         expr = expr.replace("start_second()", str(start.second))
 
     if expr.find("start_dow()") >= 0:
         if not is_time_absolute:
-            msgr.fatal(
-                _(
-                    "The temporal operators <%s> support only absolute "
-                    "time." % ("start_*")
-                )
-            )
+            msgr.fatal(_(_TEMPORAL_OPERATOR_SUPPORTS_ONLY_ABSOLUTE_TIME) % ("start_*"))
         expr = expr.replace("start_dow()", str(start.isoweekday()))
 
     if expr.find("start_doy()") >= 0:
         if not is_time_absolute:
-            msgr.fatal(
-                _(
-                    "The temporal operators <%s> support only absolute "
-                    "time." % ("start_*")
-                )
-            )
+            msgr.fatal(_(_TEMPORAL_OPERATOR_SUPPORTS_ONLY_ABSOLUTE_TIME) % ("start_*"))
         year = datetime(start.year, 1, 1)
         delta = start - year
 
@@ -602,7 +563,7 @@ def _parse_start_operators(expr, is_time_absolute, current):
 ###############################################################################
 
 
-def _parse_end_operators(expr, is_time_absolute, current):
+def _parse_end_operators(expr, is_time_absolute: bool, current):
     """
     Supported operators for absolute time:
     - end_doy() - Day of year (doy) from the end time [1 - 366]
@@ -625,12 +586,7 @@ def _parse_end_operators(expr, is_time_absolute, current):
 
     if expr.find("end_year()") >= 0:
         if not is_time_absolute:
-            msgr.fatal(
-                _(
-                    "The temporal operators <%s> support only absolute "
-                    "time." % ("end_*")
-                )
-            )
+            msgr.fatal(_(_TEMPORAL_OPERATOR_SUPPORTS_ONLY_ABSOLUTE_TIME) % ("end_*"))
         if not end:
             expr = expr.replace("end_year()", "null()")
         else:
@@ -638,12 +594,7 @@ def _parse_end_operators(expr, is_time_absolute, current):
 
     if expr.find("end_month()") >= 0:
         if not is_time_absolute:
-            msgr.fatal(
-                _(
-                    "The temporal operators <%s> support only absolute "
-                    "time." % ("end_*")
-                )
-            )
+            msgr.fatal(_(_TEMPORAL_OPERATOR_SUPPORTS_ONLY_ABSOLUTE_TIME) % ("end_*"))
         if not end:
             expr = expr.replace("end_month()", "null()")
         else:
@@ -651,12 +602,7 @@ def _parse_end_operators(expr, is_time_absolute, current):
 
     if expr.find("end_week()") >= 0:
         if not is_time_absolute:
-            msgr.fatal(
-                _(
-                    "The temporal operators <%s> support only absolute "
-                    "time." % ("end_*")
-                )
-            )
+            msgr.fatal(_(_TEMPORAL_OPERATOR_SUPPORTS_ONLY_ABSOLUTE_TIME) % ("end_*"))
         if not end:
             expr = expr.replace("end_week()", "null()")
         else:
@@ -664,12 +610,7 @@ def _parse_end_operators(expr, is_time_absolute, current):
 
     if expr.find("end_day()") >= 0:
         if not is_time_absolute:
-            msgr.fatal(
-                _(
-                    "The temporal operators <%s> support only absolute "
-                    "time." % ("end_*")
-                )
-            )
+            msgr.fatal(_(_TEMPORAL_OPERATOR_SUPPORTS_ONLY_ABSOLUTE_TIME) % ("end_*"))
         if not end:
             expr = expr.replace("end_day()", "null()")
         else:
@@ -677,12 +618,7 @@ def _parse_end_operators(expr, is_time_absolute, current):
 
     if expr.find("end_hour()") >= 0:
         if not is_time_absolute:
-            msgr.fatal(
-                _(
-                    "The temporal operators <%s> support only absolute "
-                    "time." % ("end_*")
-                )
-            )
+            msgr.fatal(_(_TEMPORAL_OPERATOR_SUPPORTS_ONLY_ABSOLUTE_TIME) % ("end_*"))
         if not end:
             expr = expr.replace("end_hour()", "null()")
         else:
@@ -690,12 +626,7 @@ def _parse_end_operators(expr, is_time_absolute, current):
 
     if expr.find("end_minute()") >= 0:
         if not is_time_absolute:
-            msgr.fatal(
-                _(
-                    "The temporal operators <%s> support only absolute "
-                    "time." % ("end_*")
-                )
-            )
+            msgr.fatal(_(_TEMPORAL_OPERATOR_SUPPORTS_ONLY_ABSOLUTE_TIME) % ("end_*"))
         if not end:
             expr = expr.replace("end_minute()", "null()")
         else:
@@ -703,12 +634,7 @@ def _parse_end_operators(expr, is_time_absolute, current):
 
     if expr.find("end_second()") >= 0:
         if not is_time_absolute:
-            msgr.fatal(
-                _(
-                    "The temporal operators <%s> support only absolute "
-                    "time." % ("end_*")
-                )
-            )
+            msgr.fatal(_(_TEMPORAL_OPERATOR_SUPPORTS_ONLY_ABSOLUTE_TIME) % ("end_*"))
         if not end:
             expr = expr.replace("end_second()", "null()")
         else:
@@ -716,12 +642,7 @@ def _parse_end_operators(expr, is_time_absolute, current):
 
     if expr.find("end_dow()") >= 0:
         if not is_time_absolute:
-            msgr.fatal(
-                _(
-                    "The temporal operators <%s> support only absolute "
-                    "time." % ("end_*")
-                )
-            )
+            msgr.fatal(_(_TEMPORAL_OPERATOR_SUPPORTS_ONLY_ABSOLUTE_TIME) % ("end_*"))
         if not end:
             expr = expr.replace("end_dow()", "null()")
         else:
@@ -729,12 +650,7 @@ def _parse_end_operators(expr, is_time_absolute, current):
 
     if expr.find("end_doy()") >= 0:
         if not is_time_absolute:
-            msgr.fatal(
-                _(
-                    "The temporal operators <%s> support only absolute "
-                    "time." % ("end_*")
-                )
-            )
+            msgr.fatal(_(_TEMPORAL_OPERATOR_SUPPORTS_ONLY_ABSOLUTE_TIME) % ("end_*"))
         if not end:
             expr = expr.replace("end_doy()", "null()")
         else:
@@ -749,7 +665,7 @@ def _parse_end_operators(expr, is_time_absolute, current):
 ###############################################################################
 
 
-def _parse_td_operator(expr, is_time_absolute, first, current):
+def _parse_td_operator(expr, is_time_absolute: bool, first, current):
     """Parse the time delta operator td(). This operator
     represents the size of the current sample time interval
     in days and fraction of days for absolute time,
@@ -775,7 +691,7 @@ def _parse_td_operator(expr, is_time_absolute, first, current):
 ###############################################################################
 
 
-def _parse_start_time_operator(expr, is_time_absolute, first, current):
+def _parse_start_time_operator(expr, is_time_absolute: bool, first, current):
     """Parse the start_time() operator. This operator represent
     the time difference between the start time of the sample space time
     raster dataset and the start time of the current sample interval or
@@ -798,7 +714,7 @@ def _parse_start_time_operator(expr, is_time_absolute, first, current):
 ###############################################################################
 
 
-def _parse_end_time_operator(expr, is_time_absolute, first, current):
+def _parse_end_time_operator(expr, is_time_absolute: bool, first, current):
     """Parse the end_time() operator. This operator represent
     the time difference between the start time of the sample space time
     raster dataset and the end time of the current sample interval. The time

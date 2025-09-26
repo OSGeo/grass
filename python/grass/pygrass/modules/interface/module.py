@@ -1,20 +1,10 @@
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
-import sys
 from multiprocessing import cpu_count, Process, Queue
 import time
 from xml.etree.ElementTree import fromstring
 
 from grass.exceptions import CalledModuleError, GrassError, ParameterError
 from grass.script.core import Popen, PIPE, use_temp_region, del_temp_region
-from grass.script.utils import encode, decode
+from grass.script.utils import decode
 from .docstring import docstring_property
 from .parameter import Parameter
 from .flag import Flag
@@ -22,204 +12,217 @@ from .typedict import TypeDict
 from .read import GETFROMTAG, DOC
 from .env import G_debug
 
-if sys.version_info[0] == 2:
-    from itertools import izip_longest as zip_longest
-else:
-    from itertools import zip_longest
-
-    unicode = str
+from itertools import zip_longest
 
 
 def _get_bash(self, *args, **kargs):
     return self.get_bash()
 
 
-class ParallelModuleQueue(object):
-    """This class is designed to run an arbitrary number of pygrass Module or MultiModule
-    processes in parallel.
+class ParallelModuleQueue:
+    """This class is designed to run an arbitrary number of pygrass Module or
+    MultiModule processes in parallel.
 
-    Objects of type grass.pygrass.modules.Module or
-    grass.pygrass.modules.MultiModule can be put into the
-    queue using put() method. When the queue is full with the maximum
+    Objects of type :py:class:`grass.pygrass.modules.Module` or
+    :py:class:`grass.pygrass.modules.MultiModule` can be put into the
+    queue using :py:meth:`put` method. When the queue is full with the maximum
     number of parallel processes it will wait for all processes to finish,
     sets the stdout and stderr of the Module object and removes it
     from the queue when its finished.
 
     To finish the queue before the maximum number of parallel
-    processes was reached call wait() .
+    processes was reached, call :py:meth:`wait`.
 
     This class will raise a GrassError in case a Module process exits
     with a return code other than 0.
 
-    Processes that were run asynchronously with the MultiModule class
+    Processes that were run asynchronously with the :py:class:`MultiModule` class
     will not raise a GrassError in case of failure. This must be manually checked
-    by accessing finished modules by calling get_finished_modules().
+    by accessing finished modules by calling :py:meth:`get_finished_modules`.
 
-    Usage:
+    :Usage:
 
-    Check with a queue size of 3 and 5 processes
+      Check with a queue size of 3 and 5 processes
 
-    >>> import copy
-    >>> from grass.pygrass.modules import Module, MultiModule, ParallelModuleQueue
-    >>> mapcalc_list = []
+      .. code-block:: pycon
 
-    Setting run_ to False is important, otherwise a parallel processing is not possible
+        >>> import copy
+        >>> from grass.pygrass.modules import Module, MultiModule, ParallelModuleQueue
+        >>> mapcalc_list = []
 
-    >>> mapcalc = Module("r.mapcalc", overwrite=True, run_=False)
-    >>> queue = ParallelModuleQueue(nprocs=3)
-    >>> for i in range(5):
-    ...     new_mapcalc = copy.deepcopy(mapcalc)
-    ...     mapcalc_list.append(new_mapcalc)
-    ...     m = new_mapcalc(expression="test_pygrass_%i = %i"%(i, i))
-    ...     queue.put(m)
-    >>> queue.wait()
-    >>> mapcalc_list = queue.get_finished_modules()
-    >>> queue.get_num_run_procs()
-    0
-    >>> queue.get_max_num_procs()
-    3
-    >>> for mapcalc in mapcalc_list:
-    ...     print(mapcalc.returncode)
-    0
-    0
-    0
-    0
-    0
+      Setting ``run_`` to False is important, otherwise a parallel processing is not possible
 
-    Check with a queue size of 8 and 5 processes
+      .. code-block:: pycon
 
-    >>> queue = ParallelModuleQueue(nprocs=8)
-    >>> mapcalc_list = []
-    >>> for i in range(5):
-    ...     new_mapcalc = copy.deepcopy(mapcalc)
-    ...     mapcalc_list.append(new_mapcalc)
-    ...     m = new_mapcalc(expression="test_pygrass_%i = %i"%(i, i))
-    ...     queue.put(m)
-    >>> queue.wait()
-    >>> mapcalc_list = queue.get_finished_modules()
-    >>> queue.get_num_run_procs()
-    0
-    >>> queue.get_max_num_procs()
-    8
-    >>> for mapcalc in mapcalc_list:
-    ...     print(mapcalc.returncode)
-    0
-    0
-    0
-    0
-    0
+        >>> mapcalc = Module("r.mapcalc", overwrite=True, run_=False)
+        >>> queue = ParallelModuleQueue(nprocs=3)
+        >>> for i in range(5):
+        ...     new_mapcalc = copy.deepcopy(mapcalc)
+        ...     mapcalc_list.append(new_mapcalc)
+        ...     m = new_mapcalc(expression="test_pygrass_%i = %i" % (i, i))
+        ...     queue.put(m)
+        >>> queue.wait()
+        >>> mapcalc_list = queue.get_finished_modules()
+        >>> queue.get_num_run_procs()
+        0
+        >>> queue.get_max_num_procs()
+        3
+        >>> for mapcalc in mapcalc_list:
+        ...     print(mapcalc.returncode)
+        0
+        0
+        0
+        0
+        0
 
-    Check MultiModule approach with three by two processes running in a background process
+      Check with a queue size of 8 and 5 processes
 
-    >>> gregion = Module("g.region", flags="p", run_=False)
-    >>> queue = ParallelModuleQueue(nprocs=3)
-    >>> proc_list = []
-    >>> for i in range(3):
-    ...     new_gregion = copy.deepcopy(gregion)
-    ...     proc_list.append(new_gregion)
-    ...     new_mapcalc = copy.deepcopy(mapcalc)
-    ...     m = new_mapcalc(expression="test_pygrass_%i = %i"%(i, i))
-    ...     proc_list.append(new_mapcalc)
-    ...     mm = MultiModule(module_list=[new_gregion, new_mapcalc], sync=False, set_temp_region=True)
-    ...     queue.put(mm)
-    >>> queue.wait()
-    >>> proc_list = queue.get_finished_modules()
-    >>> queue.get_num_run_procs()
-    0
-    >>> queue.get_max_num_procs()
-    3
-    >>> for proc in proc_list:
-    ...     print(proc.returncode)
-    0
-    0
-    0
-    0
-    0
-    0
+      .. code-block:: pycon
 
-    Check with a queue size of 8 and 4 processes
+        >>> queue = ParallelModuleQueue(nprocs=8)
+        >>> mapcalc_list = []
+        >>> for i in range(5):
+        ...     new_mapcalc = copy.deepcopy(mapcalc)
+        ...     mapcalc_list.append(new_mapcalc)
+        ...     m = new_mapcalc(expression="test_pygrass_%i = %i" % (i, i))
+        ...     queue.put(m)
+        >>> queue.wait()
+        >>> mapcalc_list = queue.get_finished_modules()
+        >>> queue.get_num_run_procs()
+        0
+        >>> queue.get_max_num_procs()
+        8
+        >>> for mapcalc in mapcalc_list:
+        ...     print(mapcalc.returncode)
+        0
+        0
+        0
+        0
+        0
 
-    >>> queue = ParallelModuleQueue(nprocs=8)
-    >>> mapcalc_list = []
-    >>> new_mapcalc = copy.deepcopy(mapcalc)
-    >>> mapcalc_list.append(new_mapcalc)
-    >>> m = new_mapcalc(expression="test_pygrass_1 =1")
-    >>> queue.put(m)
-    >>> queue.get_num_run_procs()
-    1
-    >>> new_mapcalc = copy.deepcopy(mapcalc)
-    >>> mapcalc_list.append(new_mapcalc)
-    >>> m = new_mapcalc(expression="test_pygrass_2 =2")
-    >>> queue.put(m)
-    >>> queue.get_num_run_procs()
-    2
-    >>> new_mapcalc = copy.deepcopy(mapcalc)
-    >>> mapcalc_list.append(new_mapcalc)
-    >>> m = new_mapcalc(expression="test_pygrass_3 =3")
-    >>> queue.put(m)
-    >>> queue.get_num_run_procs()
-    3
-    >>> new_mapcalc = copy.deepcopy(mapcalc)
-    >>> mapcalc_list.append(new_mapcalc)
-    >>> m = new_mapcalc(expression="test_pygrass_4 =4")
-    >>> queue.put(m)
-    >>> queue.get_num_run_procs()
-    4
-    >>> queue.wait()
-    >>> mapcalc_list = queue.get_finished_modules()
-    >>> queue.get_num_run_procs()
-    0
-    >>> queue.get_max_num_procs()
-    8
-    >>> for mapcalc in mapcalc_list:
-    ...     print(mapcalc.returncode)
-    0
-    0
-    0
-    0
+      Check MultiModule approach with three by two processes running in a background process
 
-    Check with a queue size of 3 and 4 processes
+      .. code-block:: pycon
 
-    >>> queue = ParallelModuleQueue(nprocs=3)
-    >>> mapcalc_list = []
-    >>> new_mapcalc = copy.deepcopy(mapcalc)
-    >>> mapcalc_list.append(new_mapcalc)
-    >>> m = new_mapcalc(expression="test_pygrass_1 =1")
-    >>> queue.put(m)
-    >>> queue.get_num_run_procs()
-    1
-    >>> new_mapcalc = copy.deepcopy(mapcalc)
-    >>> mapcalc_list.append(new_mapcalc)
-    >>> m = new_mapcalc(expression="test_pygrass_2 =2")
-    >>> queue.put(m)
-    >>> queue.get_num_run_procs()
-    2
-    >>> new_mapcalc = copy.deepcopy(mapcalc)
-    >>> mapcalc_list.append(new_mapcalc)
-    >>> m = new_mapcalc(expression="test_pygrass_3 =3")
-    >>> queue.put(m) # Now it will wait until all procs finish and set the counter back to 0
-    >>> queue.get_num_run_procs()
-    0
-    >>> new_mapcalc = copy.deepcopy(mapcalc)
-    >>> mapcalc_list.append(new_mapcalc)
-    >>> m = new_mapcalc(expression="test_pygrass_%i = %i"%(i, i))
-    >>> queue.put(m)
-    >>> queue.get_num_run_procs()
-    1
-    >>> queue.wait()
-    >>> mapcalc_list = queue.get_finished_modules()
-    >>> queue.get_num_run_procs()
-    0
-    >>> queue.get_max_num_procs()
-    3
-    >>> for mapcalc in mapcalc_list:
-    ...     print(mapcalc.returncode)
-    0
-    0
-    0
-    0
+        >>> gregion = Module("g.region", flags="p", run_=False)
+        >>> queue = ParallelModuleQueue(nprocs=3)
+        >>> proc_list = []
+        >>> for i in range(3):
+        ...     new_gregion = copy.deepcopy(gregion)
+        ...     proc_list.append(new_gregion)
+        ...     new_mapcalc = copy.deepcopy(mapcalc)
+        ...     m = new_mapcalc(expression="test_pygrass_%i = %i" % (i, i))
+        ...     proc_list.append(new_mapcalc)
+        ...     mm = MultiModule(
+        ...         module_list=[new_gregion, new_mapcalc],
+        ...         sync=False,
+        ...         set_temp_region=True,
+        ...     )
+        ...     queue.put(mm)
+        >>> queue.wait()
+        >>> proc_list = queue.get_finished_modules()
+        >>> queue.get_num_run_procs()
+        0
+        >>> queue.get_max_num_procs()
+        3
+        >>> for proc in proc_list:
+        ...     print(proc.returncode)
+        0
+        0
+        0
+        0
+        0
+        0
 
-    """
+      Check with a queue size of 8 and 4 processes
+
+      .. code-block:: pycon
+
+        >>> queue = ParallelModuleQueue(nprocs=8)
+        >>> mapcalc_list = []
+        >>> new_mapcalc = copy.deepcopy(mapcalc)
+        >>> mapcalc_list.append(new_mapcalc)
+        >>> m = new_mapcalc(expression="test_pygrass_1 =1")
+        >>> queue.put(m)
+        >>> queue.get_num_run_procs()
+        1
+        >>> new_mapcalc = copy.deepcopy(mapcalc)
+        >>> mapcalc_list.append(new_mapcalc)
+        >>> m = new_mapcalc(expression="test_pygrass_2 =2")
+        >>> queue.put(m)
+        >>> queue.get_num_run_procs()
+        2
+        >>> new_mapcalc = copy.deepcopy(mapcalc)
+        >>> mapcalc_list.append(new_mapcalc)
+        >>> m = new_mapcalc(expression="test_pygrass_3 =3")
+        >>> queue.put(m)
+        >>> queue.get_num_run_procs()
+        3
+        >>> new_mapcalc = copy.deepcopy(mapcalc)
+        >>> mapcalc_list.append(new_mapcalc)
+        >>> m = new_mapcalc(expression="test_pygrass_4 =4")
+        >>> queue.put(m)
+        >>> queue.get_num_run_procs()
+        4
+        >>> queue.wait()
+        >>> mapcalc_list = queue.get_finished_modules()
+        >>> queue.get_num_run_procs()
+        0
+        >>> queue.get_max_num_procs()
+        8
+        >>> for mapcalc in mapcalc_list:
+        ...     print(mapcalc.returncode)
+        0
+        0
+        0
+        0
+
+      Check with a queue size of 3 and 4 processes
+
+      .. code-block:: pycon
+
+        >>> queue = ParallelModuleQueue(nprocs=3)
+        >>> mapcalc_list = []
+        >>> new_mapcalc = copy.deepcopy(mapcalc)
+        >>> mapcalc_list.append(new_mapcalc)
+        >>> m = new_mapcalc(expression="test_pygrass_1 =1")
+        >>> queue.put(m)
+        >>> queue.get_num_run_procs()
+        1
+        >>> new_mapcalc = copy.deepcopy(mapcalc)
+        >>> mapcalc_list.append(new_mapcalc)
+        >>> m = new_mapcalc(expression="test_pygrass_2 =2")
+        >>> queue.put(m)
+        >>> queue.get_num_run_procs()
+        2
+        >>> new_mapcalc = copy.deepcopy(mapcalc)
+        >>> mapcalc_list.append(new_mapcalc)
+        >>> m = new_mapcalc(expression="test_pygrass_3 =3")
+        >>> queue.put(
+        ...     m
+        ... )  # Now it will wait until all procs finish and set the counter back to 0
+        >>> queue.get_num_run_procs()
+        0
+        >>> new_mapcalc = copy.deepcopy(mapcalc)
+        >>> mapcalc_list.append(new_mapcalc)
+        >>> m = new_mapcalc(expression="test_pygrass_%i = %i" % (i, i))
+        >>> queue.put(m)
+        >>> queue.get_num_run_procs()
+        1
+        >>> queue.wait()
+        >>> mapcalc_list = queue.get_finished_modules()
+        >>> queue.get_num_run_procs()
+        0
+        >>> queue.get_max_num_procs()
+        3
+        >>> for mapcalc in mapcalc_list:
+        ...     print(mapcalc.returncode)
+        0
+        0
+        0
+        0
+
+    """  # noqa: E501
 
     def __init__(self, nprocs=1):
         """Constructor
@@ -236,13 +239,13 @@ class ParallelModuleQueue(object):
         self._finished_modules = []  # Store all processed modules in a list
 
     def put(self, module):
-        """Put the next Module or MultiModule object in the queue
+        r"""Put the next Module or MultiModule object in the queue
 
-        To run the Module objects in parallel the run\_ and finish\_ options
+        To run the Module objects in parallel the ``run_`` and ``finish_`` options
         of the Module must be set to False.
 
         :param module: a preconfigured Module or MultiModule object that were configured
-                       with run\_ and finish\_ set to False,
+                       with ``run_`` and ``finish_`` set to False,
         :type module: Module or MultiModule object
         """
         self._list[self._proc_count] = module
@@ -260,7 +263,8 @@ class ParallelModuleQueue(object):
 
         :param num: the number of the object in queue
         :type num: int
-        :returns: the Module object or list of Module objects or None if num is not in the queue
+        :returns: the Module object or list of Module objects or None if num is not in
+            the queue
         """
         if num < self._num_procs:
             return self._list[num]
@@ -270,7 +274,7 @@ class ParallelModuleQueue(object):
         """Get the number of Module processes that are in the queue running
         or finished
 
-        :returns: the number fo Module processes running/finished in the queue
+        :returns: the number of Module processes running/finished in the queue
         """
         return self._proc_count
 
@@ -320,7 +324,7 @@ class ParallelModuleQueue(object):
         self._proc_count = 0
 
 
-class Module(object):
+class Module:
     """This class is design to wrap/run/interact with the GRASS modules.
 
     The class during the init phase read the XML description generate using
@@ -336,17 +340,18 @@ class Module(object):
     >>> region.flags.u = True
     >>> region.flags["3"].value = True  # set numeric flags
     >>> region.get_bash()
-    'g.region -p -3 -u'
+    'g.region format=plain -p -3 -u'
     >>> new_region = copy.deepcopy(region)
     >>> new_region.inputs.res = "10"
     >>> new_region.get_bash()
-    'g.region res=10 -p -3 -u'
+    'g.region res=10 format=plain -p -3 -u'
 
     >>> neighbors = Module("r.neighbors")
     >>> neighbors.inputs.input = "mapA"
     >>> neighbors.outputs.output = "mapB"
     >>> neighbors.inputs.size = 5
     >>> neighbors.inputs.quantile = 0.5
+    >>> neighbors.inputs.nprocs = 1
     >>> neighbors.get_bash()
     'r.neighbors input=mapA size=5 method=average weighting_function=none quantile=0.5 nprocs=1 memory=300 output=mapB'
 
@@ -354,6 +359,7 @@ class Module(object):
     >>> new_neighbors1.inputs.input = "mapD"
     >>> new_neighbors1.inputs.size = 3
     >>> new_neighbors1.inputs.quantile = 0.5
+    >>> new_neighbors1.inputs.nprocs = 1
     >>> new_neighbors1.get_bash()
     'r.neighbors input=mapD size=3 method=average weighting_function=none quantile=0.5 nprocs=1 memory=300 output=mapB'
 
@@ -365,23 +371,29 @@ class Module(object):
 
     >>> neighbors = Module("r.neighbors")
     >>> neighbors.get_bash()
-    'r.neighbors size=3 method=average weighting_function=none nprocs=1 memory=300'
+    'r.neighbors size=3 method=average weighting_function=none nprocs=0 memory=300'
 
     >>> new_neighbors3 = copy.deepcopy(neighbors)
     >>> new_neighbors3(input="mapA", size=3, output="mapB", run_=False)
     Module('r.neighbors')
     >>> new_neighbors3.get_bash()
-    'r.neighbors input=mapA size=3 method=average weighting_function=none nprocs=1 memory=300 output=mapB'
+    'r.neighbors input=mapA size=3 method=average weighting_function=none nprocs=0 memory=300 output=mapB'
 
-    >>> mapcalc = Module("r.mapcalc", expression="test_a = 1",
-    ...                  overwrite=True, run_=False)
+    >>> mapcalc = Module(
+    ...     "r.mapcalc", expression="test_a = 1", overwrite=True, run_=False
+    ... )
     >>> mapcalc.run()
     Module('r.mapcalc')
     >>> mapcalc.returncode
     0
 
-    >>> mapcalc = Module("r.mapcalc", expression="test_a = 1",
-    ...                  overwrite=True, run_=False, finish_=False)
+    >>> mapcalc = Module(
+    ...     "r.mapcalc",
+    ...     expression="test_a = 1",
+    ...     overwrite=True,
+    ...     run_=False,
+    ...     finish_=False,
+    ... )
     >>> mapcalc.run()
     Module('r.mapcalc')
     >>> p = mapcalc.wait()
@@ -393,9 +405,15 @@ class Module(object):
     >>> p.returncode
     0
 
-    >>> colors = Module("r.colors", map="test_a", rules="-",
-    ...                 run_=False, stdout_=PIPE,
-    ...                 stderr_=PIPE, stdin_="1 red")
+    >>> colors = Module(
+    ...     "r.colors",
+    ...     map="test_a",
+    ...     rules="-",
+    ...     run_=False,
+    ...     stdout_=PIPE,
+    ...     stderr_=PIPE,
+    ...     stdin_="1 red",
+    ... )
     >>> colors.run()
     Module('r.colors')
     >>> p = mapcalc.wait()
@@ -408,8 +426,9 @@ class Module(object):
     >>> colors.outputs["stderr"].value.strip()
     "Color table for raster map <test_a> set to 'rules'"
 
-    >>> colors = Module("r.colors", map="test_a", rules="-",
-    ...                 run_=False, finish_=False, stdin_=PIPE)
+    >>> colors = Module(
+    ...     "r.colors", map="test_a", rules="-", run_=False, finish_=False, stdin_=PIPE
+    ... )
     >>> colors.inputs["stdin"].value = "1 red"
     >>> colors.run()
     Module('r.colors')
@@ -418,9 +437,15 @@ class Module(object):
     >>> colors.returncode
     0
 
-    >>> colors = Module("r.colors", map="test_a", rules="-",
-    ...                 run_=False, finish_=False,
-    ...                 stdin_=PIPE, stderr_=PIPE)
+    >>> colors = Module(
+    ...     "r.colors",
+    ...     map="test_a",
+    ...     rules="-",
+    ...     run_=False,
+    ...     finish_=False,
+    ...     stdin_=PIPE,
+    ...     stderr_=PIPE,
+    ... )
     >>> colors.inputs["stdin"].value = "1 red"
     >>> colors.run()
     Module('r.colors')
@@ -471,41 +496,45 @@ class Module(object):
     'r.colors map=test_a color=byg offset=0.0 scale=1.0'
 
     Often in the Module class you can find ``*args`` and ``kwargs`` annotation
-    in methods, like in the __call__ method.
+    in methods, like in the ``__call__`` method.
     Python allow developers to not specify all the arguments and
-    keyword arguments of a method or function. ::
+    keyword arguments of a method or function.
+
+    .. code-block:: python
 
         def f(*args):
             for arg in args:
-                print arg
+                print(arg)
 
     therefore if we call the function like:
 
-    >>> f('grass', 'gis', 'modules')                     # doctest: +SKIP
+    >>> f("grass", "gis", "modules")  # doctest: +SKIP
     grass
     gis
     modules
 
     or we can define a new list:
 
-    >>> words = ['grass', 'gis', 'modules']              # doctest: +SKIP
-    >>> f(*words)                                        # doctest: +SKIP
+    >>> words = ["grass", "gis", "modules"]  # doctest: +SKIP
+    >>> f(*words)  # doctest: +SKIP
     grass
     gis
     modules
 
-    we can do the same with keyword arguments, rewrite the above function: ::
+    we can do the same with keyword arguments, rewrite the above function
+
+    .. code-block:: python
 
         def f(*args, **kargs):
             for arg in args:
-                print arg
+                print(arg)
             for key, value in kargs.items():
-                print "%s = %r" % (key, value)
+                print("%s = %r" % (key, value))
 
     now we can use the new function, with:
 
-    >>> f('grass', 'gis', 'modules', os = 'linux', language = 'python')
-    ...                                                  # doctest: +SKIP
+    >>> f("grass", "gis", "modules", os="linux", language="python")
+    ... # doctest: +SKIP
     grass
     gis
     modules
@@ -515,40 +544,38 @@ class Module(object):
     or, as before we can, define a dictionary and give the dictionary to
     the function, like:
 
-    >>> keywords = {'os' : 'linux', 'language' : 'python'}  # doctest: +SKIP
-    >>> f(*words, **keywords)                            # doctest: +SKIP
+    >>> keywords = {"os": "linux", "language": "python"}  # doctest: +SKIP
+    >>> f(*words, **keywords)  # doctest: +SKIP
     grass
     gis
     modules
     os = 'linux'
     language = 'python'
 
-    In the Module class we heavily use this language feature to pass arguments
+    In the :py:class:`Module` class we heavily use this language feature to pass arguments
     and keyword arguments to the grass module.
-    """
+    """  # noqa: E501
 
     def __init__(self, cmd, *args, **kargs):
-        if isinstance(cmd, unicode):
-            self.name = str(cmd)
-        elif isinstance(cmd, str):
-            self.name = cmd
-        else:
-            raise GrassError("Problem initializing the module {s}".format(s=cmd))
+        if not isinstance(cmd, str):
+            msg = "Problem initializing the module {s}".format(s=cmd)
+            raise GrassError(msg)
+        self.name = cmd
         try:
             # call the command with --interface-description
             get_cmd_xml = Popen([cmd, "--interface-description"], stdout=PIPE)
         except OSError as e:
             print("OSError error({0}): {1}".format(e.errno, e.strerror))
             str_err = "Error running: `%s --interface-description`."
-            raise GrassError(str_err % self.name)
+            raise GrassError(str_err % self.name) from e
         # get the xml of the module
         self.xml = get_cmd_xml.communicate()[0]
         # transform and parse the xml into an Element class:
-        # http://docs.python.org/library/xml.etree.elementtree.html
+        # https://docs.python.org/library/xml.etree.elementtree.html
         tree = fromstring(self.xml)
 
         for e in tree:
-            if e.tag not in ("parameter", "flag"):
+            if e.tag not in {"parameter", "flag"}:
                 self.__setattr__(e.tag, GETFROMTAG[e.tag](e))
 
         #
@@ -611,10 +638,10 @@ class Module(object):
         self.__call__.__func__.__doc__ = self.__doc__
 
     def __call__(self, *args, **kargs):
-        """Set module parameters to the class and, if run_ is True execute the
+        """Set module parameters to the class and, if ``run_`` is True execute the
         module, therefore valid parameters are all the module parameters
-        plus some extra parameters that are: run_, stdin_, stdout_, stderr_,
-        env_ and finish_.
+        plus some extra parameters that are: ``run_``, ``stdin_``, ``stdout_``, ``stderr_``,
+        ``env_`` and ``finish_``.
         """
         if not args and not kargs:
             self.run()
@@ -622,24 +649,20 @@ class Module(object):
 
         self.update(*args, **kargs)
 
-        #
         # check if execute
-        #
-        if self.run_:
-            #
-            # check reqire parameters
-            #
-            if self.check_:
-                self.check()
-            return self.run()
-        return self
+        if not self.run_:
+            return self
+        # check required parameters
+        if self.check_:
+            self.check()
+        return self.run()
 
     def update(self, *args, **kargs):
         """Update module parameters and selected object attributes.
 
         Valid parameters are all the module parameters
-        and additional parameters, namely: run_, stdin_, stdout_, stderr_,
-        env_, and finish_.
+        and additional parameters, namely: ``run_``, ``stdin_``, ``stdout_``, ``stderr_``,
+        ``env_``, and ``finish_``.
         """
         #
         # check for extra kargs, set attribute and remove from dictionary
@@ -705,12 +728,11 @@ class Module(object):
         #     pre name par flg special
         if flags and special:
             return "%s.%s(%s, flags=%r, %s)" % (prefix, name, params, flags, special)
-        elif flags:
+        if flags:
             return "%s.%s(%s, flags=%r)" % (prefix, name, params, flags)
-        elif special:
+        if special:
             return "%s.%s(%s, %s)" % (prefix, name, params, special)
-        else:
-            return "%s.%s(%s)" % (prefix, name, params)
+        return "%s.%s(%s)" % (prefix, name, params)
 
     def __str__(self):
         """Return the command string that can be executed in a shell"""
@@ -759,12 +781,12 @@ class Module(object):
         """Return a dictionary that includes the name, all valid
         inputs, outputs and flags
         """
-        dic = {}
-        dic["name"] = self.name
-        dic["inputs"] = [(k, v.value) for k, v in self.inputs.items() if v.value]
-        dic["outputs"] = [(k, v.value) for k, v in self.outputs.items() if v.value]
-        dic["flags"] = [flg for flg in self.flags if self.flags[flg].value]
-        return dic
+        return {
+            "name": self.name,
+            "inputs": [(k, v.value) for k, v in self.inputs.items() if v.value],
+            "outputs": [(k, v.value) for k, v in self.outputs.items() if v.value],
+            "flags": [flg for flg in self.flags if self.flags[flg].value],
+        }
 
     def make_cmd(self):
         """Create the command string that can be executed in a shell
@@ -826,13 +848,11 @@ class Module(object):
 
     def wait(self):
         """Wait for the module to finish. Call this method if
-        the run() call was performed with self.false_ = False.
+        the run() call was performed with :code:`self.false_ = False`.
 
         :return: A reference to this object
         """
         if self._finished is False:
-            if self.stdin:
-                self.stdin = encode(self.stdin)
             stdout, stderr = self._popen.communicate(input=self.stdin)
             self.outputs["stdout"].value = decode(stdout) if stdout else ""
             self.outputs["stderr"].value = decode(stderr) if stderr else ""
@@ -852,100 +872,115 @@ class Module(object):
         return self
 
 
-class MultiModule(object):
+class MultiModule:
     """This class is designed to run a list of modules in serial in the provided order
     within a temporary region environment.
 
     Module can be run in serial synchronously or asynchronously.
 
     - Synchronously:  When calling run() all modules will run in serial order
-                      until they are finished, The run() method will return until all modules finished.
-                      The modules objects can be accessed by calling get_modules() to check their return
-                      values.
-    - Asynchronously: When calling run() all modules will run in serial order in a background process.
-                      Method run() will return after starting the modules without waiting for them to finish.
-                      The user must call the wait() method to wait for the modules to finish.
-                      Asynchronously called module can be optionally run in a temporary region
-                      environment, hence invokeing g.region will not alter the current
-                      region or the region of other MultiModule runs.
+                      until they are finished, The run() method will return until all
+                      modules finished. The modules objects can be accessed by calling
+                      get_modules() to check their return values.
+    - Asynchronously: When calling run() all modules will run in serial order in a
+                      background process. Method run() will return after starting the
+                      modules without waiting for them to finish. The user must call
+                      the wait() method to wait for the modules to finish.
+                      Asynchronously called module can be optionally run in a temporary
+                      region environment, hence invoking g.region will not alter the
+                      current region or the region of other MultiModule runs.
 
-                      Note:
+                      .. note::
 
-                          Modules run in asynchronous mode can only be accessed via the wait() method.
-                          The wait() method will return all finished module objects as list.
+                          Modules run in asynchronous mode can only be accessed via the
+                          wait() method. The wait() method will return all finished
+                          module objects as list.
 
     Objects of this class can be passed to the ParallelModuleQueue to run serial stacks
     of modules in parallel. This is meaningful if region settings must be applied
     to each parallel module run.
 
-    >>> from grass.pygrass.modules import Module
-    >>> from grass.pygrass.modules import MultiModule
-    >>> from multiprocessing import Process
-    >>> import copy
+    .. code-block:: pycon
+
+        >>> from grass.pygrass.modules import Module
+        >>> from grass.pygrass.modules import MultiModule
+        >>> from multiprocessing import Process
+        >>> import copy
 
     Synchronous module run
 
-    >>> region_1 = Module("g.region", run_=False)
-    >>> region_1.flags.p = True
-    >>> region_2 = copy.deepcopy(region_1)
-    >>> region_2.flags.p = True
-    >>> mm = MultiModule(module_list=[region_1, region_2])
-    >>> mm.run()
-    >>> m_list = mm.get_modules()
-    >>> m_list[0].returncode
-    0
-    >>> m_list[1].returncode
-    0
+    .. code-block:: pycon
+
+        >>> region_1 = Module("g.region", run_=False)
+        >>> region_1.flags.p = True
+        >>> region_2 = copy.deepcopy(region_1)
+        >>> region_2.flags.p = True
+        >>> mm = MultiModule(module_list=[region_1, region_2])
+        >>> mm.run()
+        >>> m_list = mm.get_modules()
+        >>> m_list[0].returncode
+        0
+        >>> m_list[1].returncode
+        0
 
     Asynchronous module run, setting finish = False
 
-    >>> region_1 = Module("g.region", run_=False)
-    >>> region_1.flags.p = True
-    >>> region_2 = copy.deepcopy(region_1)
-    >>> region_2.flags.p = True
-    >>> region_3 = copy.deepcopy(region_1)
-    >>> region_3.flags.p = True
-    >>> region_4 = copy.deepcopy(region_1)
-    >>> region_4.flags.p = True
-    >>> region_5 = copy.deepcopy(region_1)
-    >>> region_5.flags.p = True
-    >>> mm = MultiModule(module_list=[region_1, region_2, region_3, region_4, region_5],
-    ...                  sync=False)
-    >>> t = mm.run()
-    >>> isinstance(t, Process)
-    True
-    >>> m_list = mm.wait()
-    >>> m_list[0].returncode
-    0
-    >>> m_list[1].returncode
-    0
-    >>> m_list[2].returncode
-    0
-    >>> m_list[3].returncode
-    0
-    >>> m_list[4].returncode
-    0
+    .. code-block::
+
+        >>> region_1 = Module("g.region", run_=False)
+        >>> region_1.flags.p = True
+        >>> region_2 = copy.deepcopy(region_1)
+        >>> region_2.flags.p = True
+        >>> region_3 = copy.deepcopy(region_1)
+        >>> region_3.flags.p = True
+        >>> region_4 = copy.deepcopy(region_1)
+        >>> region_4.flags.p = True
+        >>> region_5 = copy.deepcopy(region_1)
+        >>> region_5.flags.p = True
+        >>> mm = MultiModule(
+        ...     module_list=[region_1, region_2, region_3, region_4, region_5],
+        ...     sync=False,
+        ... )
+        >>> t = mm.run()
+        >>> isinstance(t, Process)
+        True
+        >>> m_list = mm.wait()
+        >>> m_list[0].returncode
+        0
+        >>> m_list[1].returncode
+        0
+        >>> m_list[2].returncode
+        0
+        >>> m_list[3].returncode
+        0
+        >>> m_list[4].returncode
+        0
 
     Asynchronous module run, setting finish = False and using temporary region
 
-    >>> mm = MultiModule(module_list=[region_1, region_2, region_3, region_4, region_5],
-    ...                  sync=False, set_temp_region=True)
-    >>> str(mm)
-    'g.region -p ; g.region -p ; g.region -p ; g.region -p ; g.region -p'
-    >>> t = mm.run()
-    >>> isinstance(t, Process)
-    True
-    >>> m_list = mm.wait()
-    >>> m_list[0].returncode
-    0
-    >>> m_list[1].returncode
-    0
-    >>> m_list[2].returncode
-    0
-    >>> m_list[3].returncode
-    0
-    >>> m_list[4].returncode
-    0
+    .. code-block:: pycon
+
+        >>> mm = MultiModule(
+        ...     module_list=[region_1, region_2, region_3, region_4, region_5],
+        ...     sync=False,
+        ...     set_temp_region=True,
+        ... )
+        >>> str(mm)
+        'g.region format=plain -p ; g.region format=plain -p ; g.region format=plain -p ; g.region format=plain -p ; g.region format=plain -p'
+        >>> t = mm.run()
+        >>> isinstance(t, Process)
+        True
+        >>> m_list = mm.wait()
+        >>> m_list[0].returncode
+        0
+        >>> m_list[1].returncode
+        0
+        >>> m_list[2].returncode
+        0
+        >>> m_list[3].returncode
+        0
+        >>> m_list[4].returncode
+        0
 
     """
 
@@ -953,15 +988,16 @@ class MultiModule(object):
         """Constructor of the multi module class
 
         :param module_list: A list of pre-configured Module objects that should be run
-        :param sync: If set True the run() method will wait for all processes to finish -> synchronously run.
-                     If set False, the run() method will return after starting the processes -> asynchronously run.
-                     The wait() method must be called to finish the modules.
-        :param set_temp_region: Set a temporary region in which the modules should be run, hence
-                                region settings in the process list will not affect the current
-                                computation region.
+        :param sync: If set True the run() method will wait for all processes to finish
+                     -> synchronously run.
+                     If set False, the run() method will return after starting the
+                     processes -> asynchronously run. The wait() method must be called
+                     to finish the modules.
+        :param set_temp_region: Set a temporary region in which the modules should be
+                                run, hence region settings in the process list will not
+                                affect the current computation region.
 
-                                Note:
-
+                                .. note::
                                     This flag is only available in asynchronous mode!
         :return:
         """
@@ -978,22 +1014,22 @@ class MultiModule(object):
     def get_modules(self):
         """Return the list of modules that have been run in synchronous mode
 
-        Note: Asynchronously run module can only be accessed via the wait() method.
+        .. note:: Asynchronously run module can only be accessed via the wait() method.
 
         :return: The list of modules
         """
         return self.module_list
 
     def run(self):
-        """Start the modules in the list. If self.finished_ is set True
+        """Start the modules in the list. If ``self.finished_`` is set True
         this method will return after all processes finished.
 
-        If self.finish_ is set False, this method will return
+        If ``self.finish_`` is set False, this method will return
         after the process list was started for execution.
         In a background process, the processes in the list will
         be run one after the another.
 
-        :return: None in case of self.finish_ is True,
+        :return: None in case of ``self.finish_`` is True,
                  otherwise a multiprocessing.Process object that invokes the modules
         """
 
@@ -1002,16 +1038,15 @@ class MultiModule(object):
                 module.finish_ = True
                 module.run()
             return None
+        if self.set_temp_region is True:
+            self.p = Process(
+                target=run_modules_in_temp_region, args=[self.module_list, self.q]
+            )
         else:
-            if self.set_temp_region is True:
-                self.p = Process(
-                    target=run_modules_in_temp_region, args=[self.module_list, self.q]
-                )
-            else:
-                self.p = Process(target=run_modules, args=[self.module_list, self.q])
-            self.p.start()
+            self.p = Process(target=run_modules, args=[self.module_list, self.q])
+        self.p.start()
 
-            return self.p
+        return self.p
 
     def wait(self):
         """Wait for all processes to finish. Call this method

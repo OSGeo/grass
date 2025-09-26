@@ -97,15 +97,7 @@ int main(int argc, char **argv)
     parms.titles->answer = "ACCURACY ASSESSMENT";
     parms.titles->guisection = _("Output settings");
 
-    parms.format = G_define_option();
-    parms.format->key = "format";
-    parms.format->type = TYPE_STRING;
-    parms.format->required = YES;
-    parms.format->label = _("Output format");
-    parms.format->options = "plain,json";
-    parms.format->descriptions = "plain;Plain text output;"
-                                 "json;JSON (JavaScript Object Notation);";
-    parms.format->answer = "plain";
+    parms.format = G_define_standard_option(G_OPT_F_FORMAT);
     parms.format->guisection = _("Output settings");
 
     flags.w = G_define_flag();
@@ -174,7 +166,9 @@ static void layer(const char *s)
     const char *mapset;
     int n;
 
-    strcpy(name, s);
+    if (G_strlcpy(name, s, sizeof(name)) >= sizeof(name)) {
+        G_fatal_error(_("Raster map name <%s> is too long"), s);
+    }
     if ((mapset = G_find_raster2(name, "")) == NULL)
         G_fatal_error(_("Raster map <%s> not found"), s);
 

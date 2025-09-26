@@ -450,7 +450,7 @@ int GPJ_init_transform(const struct pj_info *info_in,
     info_trans->pj = NULL;
     info_trans->meters = 1.;
     info_trans->zone = 0;
-    sprintf(info_trans->proj, "pipeline");
+    snprintf(info_trans->proj, sizeof(info_trans->proj), "pipeline");
 
     /* user-provided pipeline */
     if (info_trans->def) {
@@ -698,7 +698,23 @@ int GPJ_init_transform(const struct pj_info *info_in,
 
         /* following code copied from proj_create_crs_to_crs_from_pj()
          * in proj src/4D_api.cpp
-         * but using PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT */
+         * using PROJ_SPATIAL_CRITERION_PARTIAL_INTERSECTION
+         * this can cause problems and artefacts
+         * switch to PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT
+         * in case of problems
+         * but results can be different from gdalwarp:
+         * shifted geolocation in some areas
+         * in these cases there is no right or wrong,
+         * different pipelines are all regarded as valid by PROJ
+         * depending on the area of interest
+         *
+         * see also:
+         * OGRProjCT::ListCoordinateOperations() in GDAL ogr/ogrct.cpp
+         * create_operation_to_geog_crs() in PROJ src/4D_api.cpp
+         * proj_create_crs_to_crs_from_pj() in PROJ src/4D_api.cpp
+         * proj_operation_factory_context_set_spatial_criterion() in PROJ
+         * src/iso19111/c_api.cpp
+         *  */
 
         /* now use the current region as area of interest */
         operation_ctx =
@@ -707,10 +723,17 @@ int GPJ_init_transform(const struct pj_info *info_in,
             PJ_DEFAULT_CTX, operation_ctx, xmin, ymin, xmax, ymax);
         proj_operation_factory_context_set_spatial_criterion(
             PJ_DEFAULT_CTX, operation_ctx,
-            PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT);
+            PROJ_SPATIAL_CRITERION_PARTIAL_INTERSECTION);
+        /* from GDAL OGRProjCT::ListCoordinateOperations() */
         proj_operation_factory_context_set_grid_availability_use(
             PJ_DEFAULT_CTX, operation_ctx,
-            PROJ_GRID_AVAILABILITY_DISCARD_OPERATION_IF_MISSING_GRID);
+#if PROJ_VERSION_NUM >= 7000000
+            proj_context_is_network_enabled(PJ_DEFAULT_CTX)
+                ? PROJ_GRID_AVAILABILITY_KNOWN_AVAILABLE
+                :
+#endif
+                PROJ_GRID_AVAILABILITY_DISCARD_OPERATION_IF_MISSING_GRID);
+
         /* The operations are sorted with the most relevant ones first:
          * by descending area (intersection of the transformation area
          * with the area of interest, or intersection of the
@@ -837,7 +860,7 @@ int GPJ_init_transform(const struct pj_info *info_in,
     info_trans->pj = NULL;
     info_trans->meters = 1.;
     info_trans->zone = 0;
-    sprintf(info_trans->proj, "pipeline");
+    snprintf(info_trans->proj, sizeof(info_trans->proj), "pipeline");
 
     /* user-provided pipeline */
     if (info_trans->def) {

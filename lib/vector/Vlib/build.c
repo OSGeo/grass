@@ -655,8 +655,11 @@ int Vect_topo_check(struct Map_info *Map, struct Map_info *Err)
                   n_zero_boundaries);
 
     /* remaining checks are for areas only */
-    if (Vect_get_num_primitives(Map, GV_BOUNDARY) == 0)
+    if (Vect_get_num_primitives(Map, GV_BOUNDARY) == 0) {
+        Vect_destroy_line_struct(Points);
+        Vect_destroy_cats_struct(Cats);
         return 1;
+    }
 
     /* intersecting boundaries -> overlapping areas */
     nerrors = Vect_check_line_breaks(Map, GV_BOUNDARY, Err);
@@ -754,7 +757,7 @@ int Vect_topo_check(struct Map_info *Map, struct Map_info *Err)
 
    \return current highest built level
  */
-int Vect_get_built(const struct Map_info *Map)
+int Vect_get_built(struct Map_info *Map)
 {
     return Map->plus.built;
 }
@@ -837,8 +840,8 @@ void Vect__build_downgrade(struct Map_info *Map, int build)
    - GV_BUILD_CENTROIDS - assign centroids to areas, build category index;
    - GV_BUILD_ALL - top level, the same as GV_BUILD_CENTROIDS.
 
-   If functions is called with build lower than current value of the
-   Map, the level is downgraded to requested value.
+   If the function is called with build level lower than the current value of
+   the Map, the level is downgraded to the requested value.
 
    All calls to Vect_write_line(), Vect_rewrite_line(),
    Vect_delete_line() respect the last value of build used in this
@@ -885,8 +888,9 @@ int Vect_build_partial(struct Map_info *Map, int build)
     plus = &(Map->plus);
     if (build > GV_BUILD_NONE && !Map->temporary &&
         Map->format != GV_FORMAT_POSTGIS) {
-        G_message(_("Building topology for vector map <%s>..."),
-                  Vect_get_full_name(Map));
+        const char *map_name = Vect_get_full_name(Map);
+        G_message(_("Building topology for vector map <%s>..."), map_name);
+        G_free((void *)map_name);
     }
     plus->with_z = Map->head.with_z;
     plus->spidx_with_z = Map->head.with_z;
@@ -1034,6 +1038,7 @@ int Vect_save_topo(struct Map_info *Map)
 
     if (0 > dig_write_plus_file(&fp, plus)) {
         G_warning(_("Error writing out topo file"));
+        fclose(fp.file);
         return 0;
     }
 
@@ -1051,7 +1056,7 @@ int Vect_save_topo(struct Map_info *Map)
    \return 1 on success
    \return 0 on error
  */
-int Vect_topo_dump(const struct Map_info *Map, FILE *out)
+int Vect_topo_dump(struct Map_info *Map, FILE *out)
 {
     int i, j, line, isle;
     float angle_deg;
@@ -1065,7 +1070,9 @@ int Vect_topo_dump(const struct Map_info *Map, FILE *out)
     plus = &(Map->plus);
 
     fprintf(out, "---------- TOPOLOGY DUMP ----------\n");
-    fprintf(out, "Map:             %s\n", Vect_get_full_name(Map));
+    const char *map_name = Vect_get_full_name(Map);
+    fprintf(out, "Map:             %s\n", map_name);
+    G_free((void *)map_name);
     fprintf(out, "Topology format: ");
     if (Map->format == GV_FORMAT_NATIVE)
         fprintf(out, "native");
@@ -1241,9 +1248,11 @@ int Vect_build_sidx(struct Map_info *Map)
 
    \return 1
  */
-int Vect_build_sidx_from_topo(const struct Map_info *Map)
+int Vect_build_sidx_from_topo(struct Map_info *Map)
 {
-    G_debug(3, "Vect_build_sidx_from_topo(): name=%s", Vect_get_full_name(Map));
+    const char *map_name = Vect_get_full_name(Map);
+    G_debug(3, "Vect_build_sidx_from_topo(): name=%s", map_name);
+    G_free((void *)map_name);
 
     G_warning(_("%s is no longer supported"), "Vect_build_sidx_from_topo()");
 
@@ -1312,7 +1321,7 @@ int Vect_save_sidx(struct Map_info *Map)
    \return 1 on success
    \return 0 on error
  */
-int Vect_sidx_dump(const struct Map_info *Map, FILE *out)
+int Vect_sidx_dump(struct Map_info *Map, FILE *out)
 {
     if (!(Map->plus.Spidx_built)) {
         Vect_build_sidx_from_topo(Map);

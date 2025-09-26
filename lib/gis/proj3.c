@@ -219,7 +219,7 @@ const char *G_database_ellipse_name(void)
         double a, es;
 
         G_get_ellipsoid_parameters(&a, &es);
-        sprintf(buf, "a=%.16g es=%.16g", a, es);
+        snprintf(buf, sizeof(buf), "a=%.16g es=%.16g", a, es);
         name = G_store(buf);
     }
 

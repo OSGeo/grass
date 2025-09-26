@@ -107,16 +107,18 @@ void G__usage_xml(void)
     char *type;
     char *s, *top;
     int i;
-    const char *encoding;
+    const char *encoding = NULL;
     int new_prompt = 0;
 
     new_prompt = G__uses_new_gisprompt();
 
     /* gettext converts strings to encoding returned by nl_langinfo(CODESET) */
 
+/* check if local_charset() comes from iconv. If so check for iconv library
+ * before using it */
 #if defined(HAVE_LANGINFO_H)
     encoding = nl_langinfo(CODESET);
-#elif defined(__MINGW32__) && defined(USE_NLS)
+#elif defined(_WIN32) && defined(USE_NLS)
     encoding = locale_charset();
 #endif
 
@@ -152,7 +154,7 @@ void G__usage_xml(void)
 
     if (st->module_info.keywords) {
         fprintf(stdout, "\t<keywords>\n\t\t");
-        G__print_keywords(stdout, print_escaped_for_xml);
+        G__print_keywords(stdout, print_escaped_for_xml, FALSE);
         fprintf(stdout, "\n\t</keywords>\n");
     }
 

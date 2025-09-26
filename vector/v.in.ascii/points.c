@@ -51,7 +51,6 @@ static int is_double(char *str)
  * If the who whole column is empty, column_sample will contain NULL
  * for that given column.
  */
-
 int points_analyse(FILE *ascii_in, FILE *ascii, char *fs, char *td,
                    int *rowlength, int *ncolumns, int *minncolumns, int *nrows,
                    int **column_type, char ***column_sample,
@@ -73,13 +72,11 @@ int points_analyse(FILE *ascii_in, FILE *ascii, char *fs, char *td,
     struct Cell_head window;
     double northing = .0;
     double easting = .0;
-    char *xtoken, *ytoken, *sav_buf;
+    char xtoken[256] = {0}, ytoken[256] = {0}, *sav_buf;
     int skip = FALSE, skipped = 0;
 
     buflen = 4000;
     buf = (char *)G_malloc(buflen);
-    xtoken = (char *)G_malloc(256);
-    ytoken = (char *)G_malloc(256);
 
     G_message(_("Scanning input for column types..."));
     /* fetch projection for LatLong test */
@@ -187,7 +184,7 @@ int points_analyse(FILE *ascii_in, FILE *ascii, char *fs, char *td,
                     if (i == xcol) {
                         if (G_scan_easting(tokens[i], &easting, window.proj)) {
                             G_debug(4, "is_latlong east: %g", easting);
-                            sprintf(xtoken, "%.15g", easting);
+                            snprintf(xtoken, sizeof(xtoken), "%.15g", easting);
                             /* replace current DMS token by decimal degree */
                             tokens[i] = xtoken;
                             if (region_flag) {
@@ -209,7 +206,7 @@ int points_analyse(FILE *ascii_in, FILE *ascii, char *fs, char *td,
                         if (G_scan_northing(tokens[i], &northing,
                                             window.proj)) {
                             G_debug(4, "is_latlong north: %g", northing);
-                            sprintf(ytoken, "%.15g", northing);
+                            snprintf(ytoken, sizeof(ytoken), "%.15g", northing);
                             /* replace current DMS token by decimal degree */
                             tokens[i] = ytoken;
                             if (region_flag) {
@@ -227,7 +224,7 @@ int points_analyse(FILE *ascii_in, FILE *ascii, char *fs, char *td,
                         }
                     }
                 } /* if (x or y) */
-            }     /* PROJECTION_LL */
+            } /* PROJECTION_LL */
             else {
                 if (strlen(tokens[i]) == 0) {
                     if (i == xcol) {
@@ -328,8 +325,6 @@ int points_analyse(FILE *ascii_in, FILE *ascii, char *fs, char *td,
     *nrows = row - 1; /* including skipped lines */
 
     G_free(buf);
-    G_free(xtoken);
-    G_free(ytoken);
 
     if (region_flag)
         G_message(n_("Skipping %d of %d row falling outside of current region",
@@ -375,7 +370,7 @@ int points_to_bin(FILE *ascii, int rowlen, struct Map_info *Map,
     db_init_string(&val);
 
     if (skip_lines > 0) {
-        sprintf(buf2, "HEADER: (%d lines)\n", skip_lines);
+        snprintf(buf2, sizeof(buf2), "HEADER: (%d lines)\n", skip_lines);
         Vect_hist_write(Map, buf2);
     }
 
@@ -443,11 +438,11 @@ int points_to_bin(FILE *ascii, int rowlen, struct Map_info *Map,
 
         /* Attributes */
         if (driver) {
-            sprintf(buf2, "insert into %s values ( ", table);
+            snprintf(buf2, sizeof(buf2), "insert into %s values ( ", table);
             db_set_string(&sql, buf2);
 
             if (catcol < 0) {
-                sprintf(buf2, "%d, ", cat);
+                snprintf(buf2, sizeof(buf2), "%d, ", cat);
                 db_append_string(&sql, buf2);
             }
 
@@ -462,23 +457,24 @@ int points_to_bin(FILE *ascii, int rowlen, struct Map_info *Map,
                         if (G_projection() == PROJECTION_LL &&
                             (i == xcol || i == ycol)) {
                             if (i == xcol)
-                                sprintf(buf2, "%.15g", x);
+                                snprintf(buf2, sizeof(buf2), "%.15g", x);
                             else
-                                sprintf(buf2, "%.15g", y);
+                                snprintf(buf2, sizeof(buf2), "%.15g", y);
                         }
                         else
-                            sprintf(buf2, "%s", tokens[i]);
+                            snprintf(buf2, sizeof(buf2), "%s", tokens[i]);
                     }
                     else {
                         db_set_string(&val, tokens[i]);
                         /* TODO: strip leading and trailing "quotes" from input
                          * string */
                         db_double_quote_string(&val);
-                        sprintf(buf2, "'%s'", db_get_string(&val));
+                        snprintf(buf2, sizeof(buf2), "'%s'",
+                                 db_get_string(&val));
                     }
                 }
                 else {
-                    sprintf(buf2, "null");
+                    snprintf(buf2, sizeof(buf2), "null");
                 }
                 db_append_string(&sql, buf2);
             }
@@ -494,6 +490,9 @@ int points_to_bin(FILE *ascii, int rowlen, struct Map_info *Map,
         G_free_tokens(tokens);
     }
     G_percent(nrows, nrows, 2);
+    Vect_destroy_line_struct(Points);
+    Vect_destroy_cats_struct(Cats);
+    G_free(buf);
 
     return 0;
 }

@@ -3,19 +3,11 @@ Created on Fri May 25 12:57:10 2012
 
 @author: Pietro Zambelli
 """
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
+
 import ctypes
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
-import grass.script as grass
+import grass.script as gs
 
 from grass.pygrass.errors import GrassError
 from grass.pygrass.shell.conversion import dict2html
@@ -25,9 +17,11 @@ test_vector_name = "Region_test_vector"
 test_raster_name = "Region_test_raster"
 
 
-class Region(object):
+class Region:
     """This class is design to easily access and modify GRASS computational
-    region. ::
+    region.
+
+    .. code-block:: pycon
 
         >>> r = Region()
         >>> r.north
@@ -106,7 +100,6 @@ class Region(object):
         >>> r.nsres
         0.04
 
-    ..
     """
 
     def __init__(self, default=False):
@@ -121,7 +114,7 @@ class Region(object):
         return ctypes.pointer(self.c_region)
 
     def _set_param(self, key, value):
-        grass.run_command("g.region", **{key: value})
+        gs.run_command("g.region", **{key: value})
 
     # ----------LIMITS----------
     def _get_n(self):
@@ -310,18 +303,18 @@ class Region(object):
         return self.__unicode__()
 
     def __eq__(self, reg):
-        """Compare two region. ::
+        """Compare two regions.
 
-        >>> r0 = Region()
-        >>> r1 = Region()
-        >>> r2 = Region()
-        >>> r2.nsres = 5
-        >>> r0 == r1
-        True
-        >>> r1 == r2
-        False
+        .. code-block:: pycon
 
-        ..
+            >>> r0 = Region()
+            >>> r1 = Region()
+            >>> r2 = Region()
+            >>> r2.nsres = 5
+            >>> r0 == r1
+            True
+            >>> r1 == r2
+            False
         """
         attrs = [
             "north",
@@ -339,10 +332,7 @@ class Region(object):
             "zone",
             "proj",
         ]
-        for attr in attrs:
-            if getattr(self, attr) != getattr(reg, attr):
-                return False
-        return True
+        return all(getattr(self, attr) == getattr(reg, attr) for attr in attrs)
 
     def __ne__(self, other):
         return not self == other
@@ -351,13 +341,13 @@ class Region(object):
     __hash__ = object.__hash__
 
     def keys(self):
-        """Return a list of valid keys. ::
+        """Return a list of valid keys.
+
+        .. code-block:: pycon
 
             >>> reg = Region()
-            >>> reg.keys()                               # doctest: +ELLIPSIS
+            >>> reg.keys()  # doctest: +ELLIPSIS
             ['proj', 'zone', ..., 'cols', 'cells']
-
-        ..
         """
         return [
             "proj",
@@ -378,13 +368,13 @@ class Region(object):
 
     def items(self):
         """Return a list of tuple with key and value."""
-        return [(k, self.__getattribute__(k)) for k in self.keys()]
+        return [(k, getattr(self, k)) for k in self.keys()]
 
     # ----------METHODS----------
     def zoom(self, raster_name):
         """Shrink region until it meets non-NULL data from this raster map
 
-        Warning: This will change the user GRASS region settings
+        .. warning:: This will change the user GRASS region settings
 
         :param raster_name: the name of raster
         :type raster_name: str
@@ -395,7 +385,7 @@ class Region(object):
     def align(self, raster_name):
         """Adjust region cells to cleanly align with this raster map
 
-        Warning: This will change the user GRASS region settings
+        .. warning:: This will change the user GRASS region settings
 
         :param raster_name: the name of raster
         :type raster_name: str
@@ -416,17 +406,16 @@ class Region(object):
         :param vector_name: the name of vector
         :type vector_name: str
 
-        Example ::
+        :Example:
+          .. code-block:: pycon
 
-        >>> reg = Region()
-        >>> reg.from_vect(test_vector_name)
-        >>> reg.get_bbox()
-        Bbox(6.0, 0.0, 14.0, 0.0)
-        >>> reg.read()
-        >>> reg.get_bbox()
-        Bbox(40.0, 0.0, 40.0, 0.0)
-
-        ..
+            >>> reg = Region()
+            >>> reg.from_vect(test_vector_name)
+            >>> reg.get_bbox()
+            Bbox(6.0, 0.0, 14.0, 0.0)
+            >>> reg.read()
+            >>> reg.get_bbox()
+            Bbox(40.0, 0.0, 40.0, 0.0)
         """
         from grass.pygrass.vector import VectorTopo
 
@@ -444,22 +433,22 @@ class Region(object):
         :param mapset: the mapset of raster
         :type mapset: str
 
-        call C function `Rast_get_cellhd`
+        Call C function :c:func:`Rast_get_cellhd`
 
-        Example ::
+        :Example:
+          .. code-block:: pycon
 
-        >>> reg = Region()
-        >>> reg.from_rast(test_raster_name)
-        >>> reg.get_bbox()
-        Bbox(50.0, 0.0, 60.0, 0.0)
-        >>> reg.read()
-        >>> reg.get_bbox()
-        Bbox(40.0, 0.0, 40.0, 0.0)
-
-        ..
+            >>> reg = Region()
+            >>> reg.from_rast(test_raster_name)
+            >>> reg.get_bbox()
+            Bbox(50.0, 0.0, 60.0, 0.0)
+            >>> reg.read()
+            >>> reg.get_bbox()
+            Bbox(40.0, 0.0, 40.0, 0.0)
         """
         if not raster_name:
-            raise ValueError("Raster name or mapset are invalid")
+            msg = "Raster name or mapset are invalid"
+            raise ValueError(msg)
 
         mapset = get_mapset_raster(raster_name)
 
@@ -467,36 +456,38 @@ class Region(object):
             libraster.Rast_get_cellhd(raster_name, mapset, self.byref())
 
     def set_raster_region(self):
-        """Set the computational region (window) for all raster maps in the current process.
+        """Set the computational region (window) for all raster maps in the current
+        process.
 
-        Attention: All raster objects must be closed or the
+        .. Attention:: All raster objects must be closed or the
                    process will be terminated.
 
-        The Raster library C function Rast_set_window() is called.
+        The Raster library C function :c:func:`Rast_set_window()` is called.
 
         """
         libraster.Rast_set_window(self.byref())
 
     def get_current(self):
         """Get the current working region of this process
-        and store it into this Region object
+        and store it into this :py:class:`Region` object
 
-        Previous calls to set_current() affects values returned by this function.
-        Previous calls to read() affects values returned by this function
+        Previous calls to :py:meth:`.set_current()` affects values returned by this function.
+        Previous calls to :py:meth:`.read()` affects values returned by this function
         only if the current working region is not initialized.
 
-         Example:
+        :Example:
+          .. code-block:: pycon
 
-         >>> r = Region()
-         >>> r.north
-         40.0
+            >>> r = Region()
+            >>> r.north
+            40.0
 
-         >>> r.north = 30
-         >>> r.north
-         30.0
-         >>> r.get_current()
-         >>> r.north
-         40.0
+            >>> r.north = 30
+            >>> r.north
+            30.0
+            >>> r.get_current()
+            >>> r.north
+            40.0
 
         """
         libgis.G_get_set_window(self.byref())
@@ -505,43 +496,44 @@ class Region(object):
         """Set the current working region from this region object
 
         This function adjusts the values before setting the region
-        so you don't have to call G_adjust_Cell_head().
+        so you don't have to call :c:func:`G_adjust_Cell_head()`.
 
-        Attention: Only the current process is affected.
+        .. Attention:: Only the current process is affected.
                    The GRASS computational region is not affected.
 
-         Example::
+        :Example:
+          .. code-block:: pycon
 
-         >>> r = Region()
-         >>> r.north
-         40.0
-         >>> r.south
-         0.0
+            >>> r = Region()
+            >>> r.north
+            40.0
+            >>> r.south
+            0.0
 
-         >>> r.north = 30
-         >>> r.south = 20
-         >>> r.set_current()
-         >>> r.north
-         30.0
-         >>> r.south
-         20.0
-         >>> r.get_current()
-         >>> r.north
-         30.0
-         >>> r.south
-         20.0
+            >>> r.north = 30
+            >>> r.south = 20
+            >>> r.set_current()
+            >>> r.north
+            30.0
+            >>> r.south
+            20.0
+            >>> r.get_current()
+            >>> r.north
+            30.0
+            >>> r.south
+            20.0
 
-         >>> r.read(force_read=False)
-         >>> r.north
-         40.0
-         >>> r.south
-         0.0
+            >>> r.read(force_read=False)
+            >>> r.north
+            40.0
+            >>> r.south
+            0.0
 
-         >>> r.read(force_read=True)
-         >>> r.north
-         40.0
-         >>> r.south
-         0.0
+            >>> r.read(force_read=True)
+            >>> r.north
+            40.0
+            >>> r.south
+            0.0
 
         """
         libgis.G_set_window(self.byref())
@@ -554,14 +546,15 @@ class Region(object):
         mapset into region.
 
         3D values are set to defaults if not available in WIND file.  An
-        error message is printed and exit() is called if there is a problem
+        error message is printed and :py:func:`exit()` is called if there is a problem
         reading the region.
 
-        <b>Note:</b> GRASS applications that read or write raster maps
-        should not use this routine since its use implies that the active
-        module region will not be used. Programs that read or write raster
-        map data (or vector data) can query the active module region using
-        Rast_window_rows() and Rast_window_cols().
+        .. warning::
+            GRASS applications that read or write raster maps
+            should not use this routine since its use implies that the active
+            module region will not be used. Programs that read or write raster
+            map data (or vector data) can query the active module region using
+            :c:func:`Rast_window_rows()` and :c:func:`Rast_window_cols()`.
 
         :param force_read: If True the WIND file of the current mapset
                            is re-readed, otherwise the initial region
@@ -583,42 +576,43 @@ class Region(object):
         carefully used, since the user will ot notice if his region
         was changed and would expect that only g.region will do this.
 
-         Example ::
+        :Example:
+          .. code-block:: pycon
 
-         >>> from copy import deepcopy
-         >>> r = Region()
-         >>> rn = deepcopy(r)
-         >>> r.north = 20
-         >>> r.south = 10
+            >>> from copy import deepcopy
+            >>> r = Region()
+            >>> rn = deepcopy(r)
+            >>> r.north = 20
+            >>> r.south = 10
 
-         >>> r.write()
-         >>> r.read()
-         >>> r.north
-         20.0
-         >>> r.south
-         10.0
+            >>> r.write()
+            >>> r.read()
+            >>> r.north
+            20.0
+            >>> r.south
+            10.0
 
-         >>> rn.write()
-         >>> r.read()
-         >>> r.north
-         40.0
-         >>> r.south
-         0.0
+            >>> rn.write()
+            >>> r.read()
+            >>> r.north
+            40.0
+            >>> r.south
+            0.0
 
-         >>> r.read_default()
-         >>> r.write()
+            >>> r.read_default()
+            >>> r.write()
 
-         ..
         """
         self.adjust()
         if libgis.G_put_window(self.byref()) < 0:
-            raise GrassError("Cannot change region (WIND file).")
+            msg = "Cannot change region (WIND file)."
+            raise GrassError(msg)
 
     def read_default(self):
         """
         Get the default region
 
-        Reads the default region for the location in this Region object.
+        Reads the default region for the location in this :py:class:`Region` object.
         3D values are set to defaults if not available in WIND file.
 
         An error message is printed and exit() is called if there is a
@@ -627,13 +621,16 @@ class Region(object):
         libgis.G_get_default_window(self.byref())
 
     def get_bbox(self):
-        """Return a Bbox object with the extension of the region. ::
+        """Return a :py:class:`~grass.pygrass.vector.basic.Bbox` object with the extension of the region.
+
+        :returns: A :py:class:`~grass.pygrass.vector.basic.Bbox` object
+        :rtype: ~grass.pygrass.vector.basic.Bbox
+
+        .. code-block:: pycon
 
             >>> reg = Region()
             >>> reg.get_bbox()
             Bbox(40.0, 0.0, 40.0, 0.0)
-
-        ..
         """
         from grass.pygrass.vector.basic import Bbox
 
@@ -647,12 +644,12 @@ class Region(object):
         )
 
     def set_bbox(self, bbox):
-        """Set region extent from Bbox
+        """Set region extent from :py:class:`~grass.pygrass.vector.basic.Bbox`
 
-        :param bbox: a Bbox object to set the extent
-        :type bbox: Bbox object
+        :param bbox: a py:class:`~grass.pygrass.vector.basic.Bbox` object to set the extent
+        :type bbox: :py:class:`~grass.pygrass.vector.basic.Bbox` object
 
-        ::
+        .. code-block:: pycon
 
             >>> from grass.pygrass.vector.basic import Bbox
             >>> b = Bbox(230963.640878, 212125.562878, 645837.437393, 628769.374393)
@@ -661,8 +658,6 @@ class Region(object):
             >>> reg.get_bbox()
             Bbox(230963.640878, 212125.562878, 645837.437393, 628769.374393)
             >>> reg.get_current()
-
-        ..
         """
         self.north = bbox.north
         self.south = bbox.south
@@ -682,7 +677,7 @@ if __name__ == "__main__":
 
     doctest.testmod()
 
-    """Remove the generated vector map, if exist"""
+    # Remove the generated vector map, if exists
     mset = utils.get_mapset_vector(test_vector_name, mapset="")
     if mset:
         run_command("g.remove", flags="f", type="vector", name=test_vector_name)

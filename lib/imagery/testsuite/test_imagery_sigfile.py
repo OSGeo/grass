@@ -8,10 +8,12 @@
 Read the file COPYING that comes with GRASS
 for details
 """
-import os
+
 import stat
 import ctypes
+import os
 import shutil
+from pathlib import Path
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -42,7 +44,10 @@ from grass.lib.imagery import (
 class SignatureFileTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
+        if os.name == "nt":
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("msvcrt"))
+        else:
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
         cls.mpath = utils.decode(G_mapset_path())
         cls.mapset_name = Mapset().name
         cls.sig_name = tempname(10)
@@ -79,7 +84,7 @@ class SignatureFileTestCase(TestCase):
 
         # Write signatures to file
         p_new_sigfile = I_fopen_signature_file_new(self.sig_name)
-        sig_stat = os.stat(f"{self.sig_dir}/sig")
+        sig_stat = Path(self.sig_dir, "sig").stat()
         self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
         I_write_signatures(p_new_sigfile, ctypes.byref(So))
         self.libc.fclose(p_new_sigfile)
@@ -135,7 +140,7 @@ class SignatureFileTestCase(TestCase):
 
         # Write signatures to file
         p_new_sigfile = I_fopen_signature_file_new(self.sig_name)
-        sig_stat = os.stat(f"{self.sig_dir}/sig")
+        sig_stat = Path(self.sig_dir, "sig").stat()
         self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
         I_write_signatures(p_new_sigfile, ctypes.byref(So))
         self.libc.fclose(p_new_sigfile)
@@ -187,7 +192,7 @@ class SignatureFileTestCase(TestCase):
 
         # Write signatures to file
         p_new_sigfile = I_fopen_signature_file_new(self.sig_name)
-        sig_stat = os.stat(f"{self.sig_dir}/sig")
+        sig_stat = Path(self.sig_dir, "sig").stat()
         self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
         I_write_signatures(p_new_sigfile, ctypes.byref(So))
         self.libc.fclose(p_new_sigfile)
@@ -276,7 +281,7 @@ class SignatureFileTestCase(TestCase):
 
         # Write signatures to file
         p_new_sigfile = I_fopen_signature_file_new(self.sig_name)
-        sig_stat = os.stat(f"{self.sig_dir}/sig")
+        sig_stat = Path(self.sig_dir, "sig").stat()
         self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
         I_write_signatures(p_new_sigfile, ctypes.byref(So))
         self.libc.fclose(p_new_sigfile)
@@ -330,7 +335,10 @@ class SignatureFileTestCase(TestCase):
 class SortSignaturesBysemantic_labelTest(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
+        if os.name == "nt":
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("msvcrt"))
+        else:
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
         cls.mapset = Mapset().name
         cls.map1 = tempname(10)
         cls.semantic_label1 = "The_Doors"
@@ -348,9 +356,12 @@ class SortSignaturesBysemantic_labelTest(TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.map1)
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.map2)
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.map3)
+        cls.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name=(cls.map1, cls.map2, cls.map3),
+        )
 
     def test_symmetric_complete_difference(self):
         # Prepare imagery group reference struct
@@ -383,9 +394,9 @@ class SortSignaturesBysemantic_labelTest(TestCase):
         self.assertEqual(ref_err, "The_Doors")
 
         # Clean up memory to help track memory leaks when run by valgrind
-        S.semantic_labels[
-            0
-        ] = None  # C should not call free() on memory allocated by python
+        S.semantic_labels[0] = (
+            None  # C should not call free() on memory allocated by python
+        )
         I_free_signatures(ctypes.byref(S))
         I_free_group_ref(ctypes.byref(R))
         if ret:

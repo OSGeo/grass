@@ -89,7 +89,7 @@ struct render_window *Nviz_new_render_window(void)
 /*!
    \brief Initialize render window
 
-   \param win pointer to render_window struct
+   \param rwin pointer to render_window struct
  */
 void Nviz_init_render_window(struct render_window *rwin)
 {
@@ -158,21 +158,19 @@ int Nviz_create_render_window(struct render_window *rwin, void *display UNUSED,
                               int width, int height)
 {
 #if defined(OPENGL_X11)
-    int attributeList[] = {
-        GLX_RGBA,
-        GLX_RED_SIZE,
-        1,
-        GLX_GREEN_SIZE,
-        1,
-        GLX_BLUE_SIZE,
-        1,
-        GLX_DEPTH_SIZE,
-        1,
+    int attributeList[] = {GLX_RGBA,
+                           GLX_RED_SIZE,
+                           1,
+                           GLX_GREEN_SIZE,
+                           1,
+                           GLX_BLUE_SIZE,
+                           1,
+                           GLX_DEPTH_SIZE,
+                           1,
 #if !defined(OPENGL_FBO)
-        GLX_DOUBLEBUFFER,
+                           GLX_DOUBLEBUFFER,
 #endif
-        None
-    };
+                           None};
     XVisualInfo *v;
 
     rwin->displayId = XOpenDisplay((char *)display);
@@ -205,21 +203,19 @@ int Nviz_create_render_window(struct render_window *rwin, void *display UNUSED,
     XFree(v);
 #elif defined(OPENGL_AQUA)
 #if defined(OPENGL_AGL)
-    int attributeList[] = {
-        AGL_RGBA,
-        AGL_RED_SIZE,
-        1,
-        AGL_GREEN_SIZE,
-        1,
-        AGL_BLUE_SIZE,
-        1,
-        AGL_DEPTH_SIZE,
-        1,
+    int attributeList[] = {AGL_RGBA,
+                           AGL_RED_SIZE,
+                           1,
+                           AGL_GREEN_SIZE,
+                           1,
+                           AGL_BLUE_SIZE,
+                           1,
+                           AGL_DEPTH_SIZE,
+                           1,
 #if !defined(OPENGL_FBO)
-        AGL_DOUBLEBUFFER,
+                           AGL_DOUBLEBUFFER,
 #endif
-        AGL_NONE
-    };
+                           AGL_NONE};
 
     /* TODO: open mac display */
 
@@ -321,7 +317,7 @@ int Nviz_create_render_window(struct render_window *rwin, void *display UNUSED,
 /*!
    \brief Make window current for rendering
 
-   \param win pointer to render_window struct
+   \param rwin pointer to render_window struct
 
    \return 1 on success
    \return 0 on failure

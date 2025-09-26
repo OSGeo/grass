@@ -53,25 +53,28 @@ int main(int argc, char *argv[])
 #endif
         *listcodes, /* list codes of given authority */
         *datum,     /* datum to add (or replace existing datum) */
-        *dtrans;    /* index to datum transform option          */
+        *dtrans,    /* index to datum transform option          */
+        *format;    /* output format */
     struct GModule *module;
 
     int formats;
+    enum OutputFormat outputFormat;
     const char *epsg = NULL;
 
+    /* We don't call G_gisinit() here because it validates the
+     * mapset, whereas this module may legitimately be used
+     * (to create a new location) when none exists. */
     G_set_program_name(argv[0]);
-    G_no_gisinit(); /* We don't call G_gisinit() here because it validates the
-                     * mapset, whereas this module may legitmately be used
-                     * (to create a new location) when none exists */
+    G_no_gisinit();
 
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("projection"));
-    G_add_keyword(_("create location"));
+    G_add_keyword(_("create project"));
 #ifdef HAVE_OGR
     module->label = _("Prints or modifies GRASS projection information files "
                       "(in various co-ordinate system descriptions).");
-    module->description = _("Can also be used to create new GRASS locations.");
+    module->description = _("Can also be used to create new GRASS projects.");
 #else
     module->description =
         _("Prints and manipulates GRASS projection information files.");
@@ -80,14 +83,16 @@ int main(int argc, char *argv[])
     printinfo = G_define_flag();
     printinfo->key = 'p';
     printinfo->guisection = _("Print");
-    printinfo->description =
-        _("Print projection information in conventional GRASS format");
+    printinfo->description = _("Print projection information");
 
     shellinfo = G_define_flag();
     shellinfo->key = 'g';
     shellinfo->guisection = _("Print");
-    shellinfo->description =
-        _("Print projection information in shell script style");
+    shellinfo->label =
+        _("Print projection information in shell script style [deprecated]");
+    shellinfo->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=shell instead.");
 
     datuminfo = G_define_flag();
     datuminfo->key = 'd';
@@ -98,8 +103,11 @@ int main(int argc, char *argv[])
     printproj4 = G_define_flag();
     printproj4->key = 'j';
     printproj4->guisection = _("Print");
-    printproj4->description =
-        _("Print projection information in PROJ.4 format");
+    printproj4->label =
+        _("Print projection information in PROJ.4 format [deprecated]");
+    printproj4->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=proj4 instead.");
 
     dontprettify = G_define_flag();
     dontprettify->key = 'f';
@@ -116,7 +124,11 @@ int main(int argc, char *argv[])
     printwkt = G_define_flag();
     printwkt->key = 'w';
     printwkt->guisection = _("Print");
-    printwkt->description = _("Print projection information in WKT format");
+    printwkt->label =
+        _("Print projection information in WKT format [deprecated]");
+    printwkt->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=wkt instead.");
 
     esristyle = G_define_flag();
     esristyle->key = 'e';
@@ -212,20 +224,75 @@ int main(int argc, char *argv[])
     create = G_define_flag();
     create->key = 'c';
     create->guisection = _("Modify");
-    create->description = _("Modify current location projection files");
+    create->description = _("Modify current project's projection files");
 
     location = G_define_option();
-    location->key = "location";
+    location->key = "project";
     location->type = TYPE_STRING;
     location->key_desc = "name";
     location->required = NO;
     location->guisection = _("Create");
-    location->description = _("Name of new location to create");
+    location->description = _("Name of new project (location) to create");
+
+    format = G_define_standard_option(G_OPT_F_FORMAT);
+    format->options = "plain,shell,json,wkt,proj4";
+    format->descriptions = _("plain;Human readable text output;"
+                             "shell;shell script style text output;"
+                             "json;JSON (JavaScript Object Notation);"
+                             "wkt;Well-known text output;"
+                             "proj4;PROJ.4 style text output;");
+    format->guisection = _("Print");
+
+    G_option_exclusive(printinfo, datuminfo, create, NULL);
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
     /* Initialisation & Validation */
+
+    if (strcmp(format->answer, "json") == 0) {
+        outputFormat = JSON;
+    }
+    else if (strcmp(format->answer, "shell") == 0) {
+        outputFormat = SHELL;
+    }
+    else if (strcmp(format->answer, "wkt") == 0) {
+        outputFormat = WKT;
+    }
+    else if (strcmp(format->answer, "proj4") == 0) {
+        outputFormat = PROJ4;
+    }
+    else {
+        outputFormat = PLAIN;
+    }
+
+    if (outputFormat != PLAIN && (!printinfo->answer || shellinfo->answer ||
+                                  printproj4->answer || printwkt->answer)) {
+        G_fatal_error(_("The format option can only be used with -%c flag"),
+                      printinfo->key);
+    }
+
+    if (shellinfo->answer) {
+        G_verbose_message(
+            _("Flag 'g' is deprecated and will be removed in a future "
+              "release. Please use format=shell instead."));
+        outputFormat = SHELL;
+    }
+    else if (printproj4->answer) {
+        G_verbose_message(
+            _("Flag 'j' is deprecated and will be removed in a future "
+              "release. Please use format=proj4 instead."));
+        outputFormat = PROJ4;
+    }
+    else if (printwkt->answer || esristyle->answer) {
+        outputFormat = WKT;
+
+        if (printwkt->answer) {
+            G_verbose_message(
+                _("Flag 'w' is deprecated and will be removed in a future "
+                  "release. Please use format=wkt instead."));
+        }
+    }
 
     /* list codes for given authority */
     if (listcodes->answer) {
@@ -304,34 +371,15 @@ int main(int argc, char *argv[])
     set_datumtrans(atoi(dtrans->answer), forcedatumtrans->answer);
 
     /* Output */
-    /* Only allow one output format at a time, to reduce confusion */
-    formats = ((printinfo->answer ? 1 : 0) + (shellinfo->answer ? 1 : 0) +
-               (datuminfo->answer ? 1 : 0) + (printproj4->answer ? 1 : 0) +
-#ifdef HAVE_OGR
-               (printwkt->answer ? 1 : 0) +
-#endif
-               (create->answer ? 1 : 0));
-    if (formats > 1) {
-#ifdef HAVE_OGR
-        G_fatal_error(_("Only one of -%c, -%c, -%c, -%c, -%c"
-                        " or -%c flags may be specified"),
-                      printinfo->key, shellinfo->key, datuminfo->key,
-                      printproj4->key, printwkt->key, create->key);
-#else
-        G_fatal_error(_("Only one of -%c, -%c, -%c, -%c"
-                        " or -%c flags may be specified"),
-                      printinfo->key, shellinfo->key, datuminfo->key,
-                      printproj4->key, create->key);
-#endif
-    }
-    if (printinfo->answer || shellinfo->answer)
-        print_projinfo(shellinfo->answer);
+    if ((printinfo->answer && outputFormat == PLAIN) || outputFormat == SHELL ||
+        outputFormat == JSON)
+        print_projinfo(outputFormat);
     else if (datuminfo->answer)
         print_datuminfo();
-    else if (printproj4->answer)
+    else if (outputFormat == PROJ4)
         print_proj4(dontprettify->answer);
 #ifdef HAVE_OGR
-    else if (printwkt->answer)
+    else if (outputFormat == WKT)
         print_wkt(esristyle->answer, dontprettify->answer);
 #endif
     else if (location->answer)
@@ -340,14 +388,15 @@ int main(int argc, char *argv[])
         modify_projinfo();
     else
 #ifdef HAVE_OGR
-        G_fatal_error(_("No output format specified, define one "
-                        "of flags -%c, -%c, -%c, or -%c"),
-                      printinfo->key, shellinfo->key, printproj4->key,
-                      printwkt->key);
+        G_fatal_error(
+            _("No output format specified. Define one of the options: "
+              "plain, shell, json, wkt, or proj4 using the -%c flag."),
+            printinfo->key);
 #else
-        G_fatal_error(_("No output format specified, define one "
-                        "of flags -%c, -%c, or -%c"),
-                      printinfo->key, shellinfo->key, printproj4->key);
+        G_fatal_error(
+            _("No output format specified. Define one of the options: "
+              "plain, shell, json, or proj4 using the -%c flag."),
+            printinfo->key);
 #endif
 
     /* Tidy Up */

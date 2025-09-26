@@ -780,8 +780,8 @@ void BasicMinMaxHeap<T>::verify()
 template <class T>
 class MinMaxHeap : public BasicMinMaxHeap<T> {
 public:
-    MinMaxHeap(HeapIndex size) : BasicMinMaxHeap<T>(size){};
-    virtual ~MinMaxHeap(){};
+    MinMaxHeap(HeapIndex size) : BasicMinMaxHeap<T>(size) {};
+    virtual ~MinMaxHeap() {};
     bool full(void) const { return this->size() >= this->maxsize; };
     HeapIndex get_maxsize() const { return this->maxsize; };
     HeapIndex fill(T *arr, HeapIndex n);
@@ -822,9 +822,9 @@ HeapIndex MinMaxHeap<T>::fill(T *arr, HeapIndex n)
 template <class T>
 class UnboundedMinMaxHeap : public BasicMinMaxHeap<T> {
 public:
-    UnboundedMinMaxHeap() : BasicMinMaxHeap<T>(MMHEAP_INITIAL_SIZE){};
-    UnboundedMinMaxHeap(HeapIndex size) : BasicMinMaxHeap<T>(size){};
-    virtual ~UnboundedMinMaxHeap(){};
+    UnboundedMinMaxHeap() : BasicMinMaxHeap<T>(MMHEAP_INITIAL_SIZE) {};
+    UnboundedMinMaxHeap(HeapIndex size) : BasicMinMaxHeap<T>(size) {};
+    virtual ~UnboundedMinMaxHeap() {};
 
 protected:
     virtual void grow();

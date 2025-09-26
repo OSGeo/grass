@@ -13,12 +13,26 @@ This program is free software under the GNU General Public License
 
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
+
 import wx
 
 from icons.icon import MetaIcon
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from core.gcmd import RunCommand
 from iscatt.dialogs import SettingsDialog
+
+
+def get_tool_name(tool_name, tool_name_type=tuple):
+    """Get tool name
+
+    :param str|tuple tool_name: tool name
+    :param type tool_name_type: tool name type with default tuple type
+
+    :return str: tool name
+    """
+    if isinstance(tool_name, tool_name_type):
+        return tool_name[0]
+    return tool_name
 
 
 class MainToolbar(BaseToolbar):
@@ -54,7 +68,8 @@ class MainToolbar(BaseToolbar):
             "zoomExtent": MetaIcon(
                 img="zoom-extent",
                 label=_(
-                    "Zoom to scatter plot data extend mode (click on scatter plot for zooming to extend)"
+                    "Zoom to scatter plot data extend mode (click on scatter plot for "
+                    "zooming to extend)"
                 ),
             ),
             "cats_mgr": MetaIcon(
@@ -79,19 +94,19 @@ class MainToolbar(BaseToolbar):
             (
                 ("pan", icons["pan"].label),
                 icons["pan"],
-                lambda event: self.SetPloltsMode(event, "pan"),
+                lambda event: self.SetPlotsMode(event, "pan"),
                 wx.ITEM_CHECK,
             ),
             (
                 ("zoom", icons["zoomIn"].label),
                 icons["zoomIn"],
-                lambda event: self.SetPloltsMode(event, "zoom"),
+                lambda event: self.SetPlotsMode(event, "zoom"),
                 wx.ITEM_CHECK,
             ),
             (
                 ("zoom_extend", icons["zoomExtent"].label),
                 icons["zoomExtent"],
-                lambda event: self.SetPloltsMode(event, "zoom_extend"),
+                lambda event: self.SetPlotsMode(event, "zoom_extend"),
                 wx.ITEM_CHECK,
             ),
             (None,),
@@ -129,12 +144,12 @@ class MainToolbar(BaseToolbar):
     def GetToolId(self, toolName):  # TODO can be useful in base
         return vars(self)[toolName]
 
-    def SetPloltsMode(self, event, tool_name):
+    def SetPlotsMode(self, event, tool_name):
         self.scatt_mgr.modeSet.disconnect(self.ModeSet)
         if event.IsChecked():
             for i_tool_data in self.controller.data:
-                i_tool_name = i_tool_data[0]
-                if not i_tool_name or i_tool_name in ["cats_mgr", "sel_pol_mode"]:
+                i_tool_name = get_tool_name(i_tool_data[0])
+                if not i_tool_name or i_tool_name in {"cats_mgr", "sel_pol_mode"}:
                     continue
                 if i_tool_name == tool_name:
                     continue
@@ -158,8 +173,8 @@ class MainToolbar(BaseToolbar):
 
     def UnsetMode(self):
         for i_tool_data in self.controller.data:
-            i_tool_name = i_tool_data[0]
-            if not i_tool_name or i_tool_name in ["cats_mgr", "sel_pol_mode"]:
+            i_tool_name = get_tool_name(i_tool_data[0])
+            if not i_tool_name or i_tool_name in {"cats_mgr", "sel_pol_mode"}:
                 continue
             i_tool_id = vars(self)[i_tool_name]
             self.ToggleTool(i_tool_id, False)
@@ -280,7 +295,7 @@ class EditingToolbar(BaseToolbar):
         self.scatt_mgr.modeSet.disconnect(self.ModeSet)
         if event.IsChecked():
             for i_tool_data in self.controller.data:
-                i_tool_name = i_tool_data[0]
+                i_tool_name = get_tool_name(i_tool_data[0])
                 if not i_tool_name:
                     continue
                 if i_tool_name == tool_name:
@@ -293,12 +308,12 @@ class EditingToolbar(BaseToolbar):
         self.scatt_mgr.modeSet.connect(self.ModeSet)
 
     def ModeSet(self, mode):
-        if mode in ["zoom", "pan", "zoom_extend", None]:
+        if mode in {"zoom", "pan", "zoom_extend", None}:
             self.UnsetMode()
 
     def UnsetMode(self):
         for i_tool_data in self.controller.data:
-            i_tool_name = i_tool_data[0]
+            i_tool_name = get_tool_name(i_tool_data[0])
             if not i_tool_name:
                 continue
             i_tool_id = vars(self)[i_tool_name]

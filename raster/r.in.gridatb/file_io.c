@@ -12,12 +12,17 @@ void rdwr_gridatb(void)
     float idx;
 
     fp = fopen(file, "r");
+    if (!fp) {
+        G_fatal_error(_("Unable to open file: %s"), file);
+    }
 
     buf[0] = 0;
     if (fscanf(fp, "%[^\n]", buf) != 1)
         G_fatal_error(_("Error reading data"));
-    if (!buf[0])
-        getc(fp);
+    if (!buf[0]) {
+        if (getc(fp) == EOF)
+            G_fatal_error(_("Unexpected end of file while reading %s"), file);
+    }
 
     if (fscanf(fp, "%d %d %lf\n", &cellhd.cols, &cellhd.rows, &cellhd.ns_res) !=
         3)

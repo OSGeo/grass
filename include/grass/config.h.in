@@ -20,11 +20,11 @@
 /* Define to 1 if you have the <cairo.h> header file. */
 #undef HAVE_CAIRO_H
 
+/* Define to 1 if you have the <cblas-atlas.h> header file. */
+#undef HAVE_CBLAS_ATLAS_H
+
 /* Define to 1 if you have the <cblas.h> header file. */
 #undef HAVE_CBLAS_H
-
-/* Define to 1 if you have the <clapack.h> header file. */
-#undef HAVE_CLAPACK_H
 
 /* Define to 1 if you have the <CL/cl.h> header file. */
 #undef HAVE_CL_CL_H
@@ -34,9 +34,6 @@
 
 /* Define to 1 if you have the `drand48' function. */
 #undef HAVE_DRAND48
-
-/* Define to 1 if you have the <f2c.h> header file. */
-#undef HAVE_F2C_H
 
 /* Define to 1 if you have the <fftw3.h> header file. */
 #undef HAVE_FFTW3_H
@@ -53,13 +50,10 @@
 /* Define to 1 if you have the `ftime' function. */
 #undef HAVE_FTIME
 
-/* Define to 1 if you have the <g2c.h> header file. */
-#undef HAVE_G2C_H
-
-/* define if GDAL is to be used */
+/* Define to 1 if GDAL is to be used. */
 #undef HAVE_GDAL
 
-/* define if GEOS is to be used */
+/* Define to 1 if GEOS is to be used. */
 #undef HAVE_GEOS
 
 /* Define to 1 if you have the <geos_c.h> header file. */
@@ -80,7 +74,7 @@
 /* Define to 1 if you have the <iconv.h> header file. */
 #undef HAVE_ICONV_H
 
-/* define if "int64_t" is available */
+/* Define to 1 if "int64_t" is available. */
 #undef HAVE_INT64_T
 
 /* Define to 1 if you have the <inttypes.h> header file. */
@@ -89,19 +83,19 @@
 /* Define to 1 if you have the <langinfo.h> header file. */
 #undef HAVE_LANGINFO_H
 
-/* define if ATLAS exists */
-#undef HAVE_LIBATLAS
+/* Define to 1 if you have the <lapacke.h> header file. */
+#undef HAVE_LAPACKE_H
 
-/* define if BLAS exists */
+/* Define to 1 if BLAS exists. */
 #undef HAVE_LIBBLAS
 
 /* Define to 1 if you have the <libintl.h> header file. */
 #undef HAVE_LIBINTL_H
 
-/* define if LAPACK exists */
+/* Define to 1 if LAPACK exists. */
 #undef HAVE_LIBLAPACK
 
-/* define if liblas exists */
+/* Define to 1 if liblas exists. */
 #undef HAVE_LIBLAS
 
 /* Define to 1 if you have the <liblas/capi/liblas.h> header file. */
@@ -110,17 +104,20 @@
 /* Define to 1 if you have the <libpq-fe.h> header file. */
 #undef HAVE_LIBPQ_FE_H
 
+/* Define to 1 if using LIBSVM. */
+#undef HAVE_LIBSVM
+
+/* Define to 1 if you have the <libsvm/svm.h> header file. */
+#undef HAVE_LIBSVM_SVM_H
+
 /* Define to 1 if you have the <limits.h> header file. */
 #undef HAVE_LIMITS_H
 
-/* define if "long long int" is available */
+/* Define to 1 if "long long int" is available. */
 #undef HAVE_LONG_LONG_INT
 
 /* Define to 1 if you have the `lseek' function. */
 #undef HAVE_LSEEK
-
-/* Define to 1 if you have the <memory.h> header file. */
-#undef HAVE_MEMORY_H
 
 /* Define to 1 if you have the <mysql.h> header file. */
 #undef HAVE_MYSQL_H
@@ -128,13 +125,13 @@
 /* Define to 1 if you have the `nanosleep' function. */
 #undef HAVE_NANOSLEEP
 
-/* define if NetCDF exists */
+/* Define to 1 if NetCDF exists. */
 #undef HAVE_NETCDF
 
 /* Define to 1 if you have the `nice' function. */
 #undef HAVE_NICE
 
-/* define if OGR is to be used */
+/* Define to 1 if OGR is to be used. */
 #undef HAVE_OGR
 
 /* Define to 1 if you have the <omp.h> header file. */
@@ -149,22 +146,25 @@
 /* Define to 1 if you have the <OpenGL/gl.h> header file. */
 #undef HAVE_OPENGL_GL_H
 
-/* define if glXCreatePbuffer exists */
+/* Define to 1 if glXCreatePbuffer exists. */
 #undef HAVE_PBUFFERS
 
-/* Define to 1 if PDAL is to be used. */
+/* Define to 1 if you have the <pcre.h> header file. */
+#undef HAVE_PCRE_H
+
+/* Define to 1 if PDAL exists. */
 #undef HAVE_PDAL
 
-/* define if glXCreateGLXPixmap exists */
+/* Define to 1 if glXCreateGLXPixmap exists. */
 #undef HAVE_PIXMAPS
 
 /* Define to 1 if you have the <png.h> header file. */
 #undef HAVE_PNG_H
 
-/* define if PostgreSQL is to be used */
+/* Define to 1 if PostgreSQL is to be used. */
 #undef HAVE_POSTGRES
 
-/* define if PQcmdTuples in lpq */
+/* Define to 1 if PQcmdTuples in lpq. */
 #undef HAVE_PQCMDTUPLES
 
 /* Define to 1 if you have the <proj_api.h> header file. */
@@ -188,6 +188,9 @@
 /* Define to 1 if you have the <regex.h> header file. */
 #undef HAVE_REGEX_H
 
+/* Define to 1 if you have the <pcre.h> header file. */
+#undef HAVE_PCRE_H
+
 /* Define to 1 if you have the `setenv' function. */
 #undef HAVE_SETENV
 
@@ -206,7 +209,7 @@
 /* define if socket() exists */
 #undef HAVE_SOCKET
 
-/* define if SQLite is to be used */
+/* Define to 1 if SQLite is to be used. */
 #undef HAVE_SQLITE
 
 /* Define to 1 if you have the <sqlite3.h> header file. */
@@ -218,6 +221,9 @@
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
 
+/* Define to 1 if you have the <stdio.h> header file. */
+#undef HAVE_STDIO_H
+
 /* Define to 1 if you have the <stdlib.h> header file. */
 #undef HAVE_STDLIB_H
 
@@ -226,6 +232,15 @@
 
 /* Define to 1 if you have the <string.h> header file. */
 #undef HAVE_STRING_H
+
+/* Define to 1 if you have the `strlcat' function. */
+#undef HAVE_STRLCAT
+
+/* Define to 1 if you have the `strlcpy' function. */
+#undef HAVE_STRLCPY
+
+/* Define to 1 if you have the <svm.h> header file. */
+#undef HAVE_SVM_H
 
 /* Define to 1 if you have the <sys/ioctl.h> header file. */
 #undef HAVE_SYS_IOCTL_H
@@ -281,13 +296,13 @@
 /* Define to 1 if you have the <zstd.h> header file. */
 #undef HAVE_ZSTD_H
 
-/* define if OpenGL uses Aqua (MacOS X) */
+/* Define to 1 if OpenGL uses Aqua (MacOS X). */
 #undef OPENGL_AQUA
 
-/* define if OpenGL uses Windows */
+/* Define to 1 if OpenGL uses Windows. */
 #undef OPENGL_WINDOWS
 
-/* define if OpenGL uses X11 */
+/* Define to 1 if OpenGL uses X11. */
 #undef OPENGL_X11
 
 /* Define to the address where bug reports for this package should be sent. */
@@ -308,22 +323,21 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
-/* Define to 1 if the `setpgrp' function takes no argument. */
+/* Define to 1 if the `setpgrp' function requires zero arguments. */
 #undef SETPGRP_VOID
 
-/* define for Windows static build */
+/* Define to 1 for Windows static build. */
 #undef STATIC_BUILD
 
-/* Define to 1 if you have the ANSI C header files. */
+/* Define to 1 if all of the C90 standard headers exist (not just the ones
+   required in a freestanding environment). This macro is provided for
+   backward compatibility; new code need not use it. */
 #undef STDC_HEADERS
 
-/* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
-#undef TIME_WITH_SYS_TIME
-
-/* define if NLS requested */
+/* Define to 1 if NLS requested. */
 #undef USE_NLS
 
-/* define if using old PROJ version 4 API */
+/* Define to 1 if using old PROJ version 4 API. */
 #undef USE_PROJ4API
 
 /* Define to 1 if the X Window System is missing or not being used. */
@@ -342,10 +356,10 @@
 /* Define for large files, on AIX-style hosts. */
 #undef _LARGE_FILES
 
-/* enable threading extensions on Solaris */
+/* Define to 1 to enable threading extensions on Solaris. */
 #undef _POSIX_PTHREAD_SEMANTICS
 
-/* define _REENTRANT flag (for SunOS) */
+/* Define to 1 for _REENTRANT flag (for SunOS). */
 #undef _REENTRANT
 
 /* Define to `int' if <sys/types.h> doesn't define. */

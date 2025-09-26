@@ -1,12 +1,3 @@
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
 import ctypes
 import numpy as np
 
@@ -22,21 +13,20 @@ import grass.lib.rowio as librowio
 
 libgis.G_gisinit("")
 
-#
+# flake8: noqa: E402
 # import pygrass modules
-#
 from grass.pygrass.errors import must_be_open
 from grass.pygrass.gis.region import Region
 from grass.pygrass import utils
 
-#
 # import raster classes
-#
 from grass.pygrass.raster.abstract import RasterAbstractBase
 from grass.pygrass.raster.raster_type import TYPE as RTYPE, RTYPE_STR
 from grass.pygrass.raster.buffer import Buffer
 from grass.pygrass.raster.segment import Segment
 from grass.pygrass.raster.rowio import RowIO
+
+# flake8: qa
 
 WARN_OVERWRITE = "Raster map <{0}> already exists and will be overwritten"
 
@@ -105,13 +95,13 @@ class RasterRow(RasterAbstractBase):
         Each Raster map have an attribute call ``cats`` that allow user
         to interact with the raster categories.
 
-        >>> elev.cats          # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+        >>> elev.cats  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
         [('A', 11, None),
          ('B', 12, None),
         ...
          ('P', 44, None)]
 
-        >>> elev.cats.labels() # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+        >>> elev.cats.labels()  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
         ['A', 'B', 'C', 'D', 'E',
          'F', 'G', 'H', 'I', 'J',
          'K', 'L', 'M', 'n', 'O', 'P']
@@ -119,8 +109,8 @@ class RasterRow(RasterAbstractBase):
         ('A', 11, None)
         >>> elev.cats[2]
         ('C', 13, None)
-        >>> elev.cats[0] = ('AA', 11)
-        >>> elev.cats[1] = ('BB', 12)
+        >>> elev.cats[0] = ("AA", 11)
+        >>> elev.cats[1] = ("BB", 12)
         >>> elev.cats.write()
         >>> elev.cats.read()
         >>> elev.cats[0]
@@ -143,9 +133,6 @@ class RasterRow(RasterAbstractBase):
 
     """
 
-    def __init__(self, name, mapset="", *args, **kargs):
-        super(RasterRow, self).__init__(name, mapset, *args, **kargs)
-
     # mode = "r", method = "row",
     @must_be_open
     def get_row(self, row, row_buffer=None):
@@ -155,7 +142,7 @@ class RasterRow(RasterAbstractBase):
         :param row: the number of row to obtain
         :type row: int
         :param row_buffer: Buffer object instance with the right dim and type
-        :type row_buffer: Buffer
+        :type row_buffer: ~grass.pygrass.raster.buffer.Buffer
 
         >>> elev = RasterRow(test_raster_name)
         >>> elev.open()
@@ -200,34 +187,34 @@ class RasterRow(RasterAbstractBase):
             * self._rows and self._cols
 
         """
-        self.mode = mode if mode else self.mode
-        self.mtype = mtype if mtype else self.mtype
+        self.mode = mode or self.mode
+        self.mtype = mtype or self.mtype
         self.overwrite = overwrite if overwrite is not None else self.overwrite
 
         if self.mode == "r":
-            if self.exist():
-                self.info.read()
-                self.cats.mtype = self.mtype
-                self.cats.read()
-                self.hist.read()
-                self._fd = libraster.Rast_open_old(self.name, self.mapset)
-                self._gtype = libraster.Rast_get_map_type(self._fd)
-                self.mtype = RTYPE_STR[self._gtype]
-            else:
+            if not self.exist():
                 str_err = _("The map does not exist, I can't open in 'r' mode")
                 raise OpenError(str_err)
+            self.info.read()
+            self.cats.mtype = self.mtype
+            self.cats.read()
+            self.hist.read()
+            self._fd = libraster.Rast_open_old(self.name, self.mapset)
+            self._gtype = libraster.Rast_get_map_type(self._fd)
+            self.mtype = RTYPE_STR[self._gtype]
         elif self.mode == "w":
             if self.exist():
                 if not self.overwrite:
                     str_err = _(
-                        "Raster map <{0}> already exists" " and will be not overwritten"
+                        "Raster map <{0}> already exists and will be not overwritten"
                     )
                     raise OpenError(str_err.format(self))
             if self._gtype is None:
                 raise OpenError(_("Raster type not defined"))
             self._fd = libraster.Rast_open_new(self.name, self._gtype)
         else:
-            raise OpenError("Open mode: %r not supported," " valid mode are: r, w")
+            msg = "Open mode: %r not supported, valid mode are: r, w"
+            raise OpenError(msg)
         # read rows and cols from the active region
         self._rows = libraster.Rast_window_rows()
         self._cols = libraster.Rast_window_cols()
@@ -240,7 +227,7 @@ class RasterRowIO(RasterRow):
 
     def __init__(self, name, *args, **kargs):
         self.rowio = RowIO()
-        super(RasterRowIO, self).__init__(name, *args, **kargs)
+        super().__init__(name, *args, **kargs)
 
     def open(self, mode=None, mtype=None, overwrite=False):
         """Open the raster if exist or created a new one.
@@ -255,7 +242,7 @@ class RasterRowIO(RasterRow):
                           raster maps
         :type overwrite: bool
         """
-        super(RasterRowIO, self).open(mode, mtype, overwrite)
+        super().open(mode, mtype, overwrite)
         self.rowio.open(self._fd, self._rows, self._cols, self.mtype)
 
     @must_be_open
@@ -281,7 +268,7 @@ class RasterRowIO(RasterRow):
         :type row_buffer: Buffer object
 
             >>> elev = RasterRowIO(test_raster_name)
-            >>> elev.open('r')
+            >>> elev.open("r")
             >>> for row in elev:
             ...     row
             Buffer([11, 21, 31, 41], dtype=int32)
@@ -320,13 +307,13 @@ class RasterSegment(RasterAbstractBase):
 
     def __init__(self, name, srows=64, scols=64, maxmem=100, *args, **kargs):
         self.segment = Segment(srows, scols, maxmem)
-        super(RasterSegment, self).__init__(name, *args, **kargs)
+        super().__init__(name, *args, **kargs)
 
     def _get_mode(self):
         return self._mode
 
     def _set_mode(self, mode):
-        if mode and mode.lower() not in ("r", "w", "rw"):
+        if mode and mode.lower() not in {"r", "w", "rw"}:
             str_err = _("Mode type: {0} not supported ('r', 'w','rw')")
             raise ValueError(str_err.format(mode))
         self._mode = mode
@@ -340,17 +327,17 @@ class RasterSegment(RasterAbstractBase):
         if isinstance(key, slice):
             # Get the start, stop, and step from the slice
             return [self.put_row(ii, row) for ii in range(*key.indices(len(self)))]
-        elif isinstance(key, tuple):
+        if isinstance(key, tuple):
             x, y = key
             return self.put(x, y, row)
-        elif isinstance(key, int):
+        if isinstance(key, int):
             if key < 0:  # Handle negative indices
                 key += self._rows
             if key >= self._rows:
                 raise IndexError(_("Index out of range: %r.") % key)
             return self.put_row(key, row)
-        else:
-            raise TypeError("Invalid argument type.")
+        msg = "Invalid argument type."
+        raise TypeError(msg)
 
     @must_be_open
     def map2segment(self):
@@ -378,7 +365,7 @@ class RasterSegment(RasterAbstractBase):
         :type row_buffer: Buffer object
 
             >>> elev = RasterRowIO(test_raster_name)
-            >>> elev.open('r')
+            >>> elev.open("r")
             >>> for row in elev:
             ...     row
             Buffer([11, 21, 31, 41], dtype=int32)
@@ -413,8 +400,8 @@ class RasterSegment(RasterAbstractBase):
 
         >>> map_a = RasterSegment(test_raster_name)
         >>> map_b = RasterSegment(test_raster_name + "_segment")
-        >>> map_a.open('r')
-        >>> map_b.open('w', mtype="CELL", overwrite=True)
+        >>> map_a.open("r")
+        >>> map_b.open("w", mtype="CELL", overwrite=True)
         >>> for row in range(map_a.info.rows):
         ...     map_b[row] = map_a[row] + 1000
         >>> map_a.close()
@@ -423,7 +410,7 @@ class RasterSegment(RasterAbstractBase):
         >>> map_b = RasterSegment(test_raster_name + "_segment")
         >>> map_b.open("r")
         >>> for row in map_b:
-        ...         row
+        ...     row
         Buffer([1011, 1021, 1031, 1041], dtype=int32)
         Buffer([1012, 1022, 1032, 1042], dtype=int32)
         Buffer([1013, 1023, 1033, 1043], dtype=int32)
@@ -444,9 +431,9 @@ class RasterSegment(RasterAbstractBase):
 
 
             >>> elev = RasterSegment(test_raster_name)
-            >>> elev.open('r')
+            >>> elev.open("r")
             >>> for i in range(4):
-            ...     elev.get(i,i)
+            ...     elev.get(i, i)
             11
             22
             33
@@ -455,10 +442,10 @@ class RasterSegment(RasterAbstractBase):
 
 
             >>> with RasterSegment(test_raster_name) as elev:
-            ...     elev.get(0,0)
-            ...     elev.get(1,1)
-            ...     elev.get(2,2)
-            ...     elev.get(3,3)
+            ...     elev.get(0, 0)
+            ...     elev.get(1, 1)
+            ...     elev.get(2, 2)
+            ...     elev.get(3, 3)
             11
             22
             33
@@ -480,19 +467,19 @@ class RasterSegment(RasterAbstractBase):
 
             >>> map_a = RasterSegment(test_raster_name)
             >>> map_b = RasterSegment(test_raster_name + "_segment")
-            >>> map_a.open('r')
-            >>> map_b.open('w', mtype="FCELL", overwrite=True)
+            >>> map_a.open("r")
+            >>> map_b.open("w", mtype="FCELL", overwrite=True)
             >>> for row in range(map_a.info.rows):
             ...     for col in range(map_a.info.cols):
-            ...         value = map_a.get(row,col)
-            ...         map_b.put(row,col,value + 100)
+            ...         value = map_a.get(row, col)
+            ...         map_b.put(row, col, value + 100)
             >>> map_a.close()
             >>> map_b.close()
 
             >>> map_b = RasterSegment(test_raster_name + "_segment")
             >>> map_b.open("r")
             >>> for row in map_b:
-            ...         row
+            ...     row
             Buffer([111., 121., 131., 141.], dtype=float32)
             Buffer([112., 122., 132., 142.], dtype=float32)
             Buffer([113., 123., 133., 143.], dtype=float32)
@@ -522,8 +509,8 @@ class RasterSegment(RasterAbstractBase):
         self._rows = libraster.Rast_window_rows()
         self._cols = libraster.Rast_window_cols()
 
-        self.mode = mode if mode else self.mode
-        self.mtype = mtype if mtype else self.mtype
+        self.mode = mode or self.mode
+        self.mtype = mtype or self.mtype
         self.overwrite = overwrite if overwrite is not None else self.overwrite
 
         if self.exist():
@@ -531,12 +518,12 @@ class RasterSegment(RasterAbstractBase):
             self.cats.mtype = self.mtype
             self.cats.read()
             self.hist.read()
-            if (self.mode == "w" or self.mode == "rw") and self.overwrite is False:
+            if (self.mode in {"w", "rw"}) and self.overwrite is False:
                 str_err = _("Raster map <{0}> already exists. Use overwrite.")
                 fatal(str_err.format(self))
 
             # We copy the raster map content into the segments
-            if self.mode == "rw" or self.mode == "r":
+            if self.mode in {"rw", "r"}:
                 self._fd = libraster.Rast_open_old(self.name, self.mapset)
                 self._gtype = libraster.Rast_get_map_type(self._fd)
                 self.mtype = RTYPE_STR[self._gtype]
@@ -576,7 +563,7 @@ class RasterSegment(RasterAbstractBase):
         :param rm_temp_files: if True all the segments file will be removed
         :type rm_temp_files: bool
         """
-        if self.mode == "w" or self.mode == "rw":
+        if self.mode in {"w", "rw"}:
             self.segment.flush()
             self.segment2map()
         if rm_temp_files:
@@ -593,15 +580,11 @@ class RasterSegment(RasterAbstractBase):
 def random_map_only_columns(mapname, mtype, overwrite=True, factor=100):
     region = Region()
     random_map = RasterRow(mapname)
+    rng = np.random.default_rng()
     row_buf = Buffer(
         (region.cols,),
         mtype,
-        buffer=(
-            np.random.random(
-                region.cols,
-            )
-            * factor
-        ).data,
+        buffer=(rng.random(region.cols) * factor).data,
     )
     random_map.open("w", mtype, overwrite)
     for _ in range(region.rows):
@@ -614,16 +597,12 @@ def random_map(mapname, mtype, overwrite=True, factor=100):
     region = Region()
     random_map = RasterRow(mapname)
     random_map.open("w", mtype, overwrite)
+    rng = np.random.default_rng()
     for _ in range(region.rows):
         row_buf = Buffer(
             (region.cols,),
             mtype,
-            buffer=(
-                np.random.random(
-                    region.cols,
-                )
-                * factor
-            ).data,
+            buffer=(rng.random(region.cols) * factor).data,
         )
         random_map.put_row(row_buf)
     random_map.close()
@@ -714,7 +693,7 @@ def numpy2raster(array, mtype, rastname, overwrite=False):
 
     :param obj array: a numpy array
     :param obj mtype: the datatype of array
-    :param str rastername: the name of output map
+    :param str rastname: the name of output map
     :param bool overwrite: True to overwrite existing map
     """
     reg = Region()
@@ -765,10 +744,11 @@ if __name__ == "__main__":
 
     doctest.testmod()
 
-    """Remove the generated vector map, if exist"""
     mset = utils.get_mapset_raster(test_raster_name, mapset="")
     if mset:
+        # Remove the generated vector map, if exists
         Module("g.remove", flags="f", type="raster", name=test_raster_name)
     mset = utils.get_mapset_raster(test_raster_name + "_segment", mapset="")
     if mset:
+        # Remove the generated raster map, if exists
         Module("g.remove", flags="f", type="raster", name=test_raster_name + "_segment")

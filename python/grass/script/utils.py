@@ -17,8 +17,9 @@ for details.
 .. sectionauthor:: Anna Petrasova <kratochanna gmail.com>
 """
 
+from __future__ import annotations
+
 import os
-import sys
 import shutil
 import locale
 import shlex
@@ -29,41 +30,49 @@ import uuid
 import random
 import string
 
+from pathlib import Path
+from typing import TYPE_CHECKING, AnyStr, Callable, TypeVar, cast, overload
 
-if sys.version_info.major >= 3:
-    unicode = str
+
+if TYPE_CHECKING:
+    from _typeshed import FileDescriptorOrPath, StrOrBytesPath, StrPath
 
 
-def float_or_dms(s):
+# Type variables
+T = TypeVar("T")
+VT = TypeVar("VT")  # Value type
+
+
+def float_or_dms(s) -> float:
     """Convert DMS to float.
 
-    >>> round(float_or_dms('26:45:30'), 5)
+    >>> round(float_or_dms("26:45:30"), 5)
     26.75833
-    >>> round(float_or_dms('26:0:0.1'), 5)
+    >>> round(float_or_dms("26:0:0.1"), 5)
     26.00003
 
     :param s: DMS value
 
     :return: float value
     """
-    if s[-1] in ["E", "W", "N", "S"]:
+    if s[-1] in {"E", "W", "N", "S"}:
         s = s[:-1]
     return sum(float(x) / 60**n for (n, x) in enumerate(s.split(":")))
 
 
-def separator(sep):
+def separator(sep: str) -> str:
     """Returns separator from G_OPT_F_SEP appropriately converted
     to character.
 
-    >>> separator('pipe')
+    >>> separator("pipe")
     '|'
-    >>> separator('comma')
+    >>> separator("comma")
     ','
 
     If the string does not match any of the separator keywords,
     it is returned as is:
 
-    >>> separator(', ')
+    >>> separator(", ")
     ', '
 
     :param str separator: character or separator keyword
@@ -72,18 +81,20 @@ def separator(sep):
     """
     if sep == "pipe":
         return "|"
-    elif sep == "comma":
+    if sep == "comma":
         return ","
-    elif sep == "space":
+    if sep == "space":
         return " "
-    elif sep == "tab" or sep == "\\t":
+    if sep in {"tab", "\\t"}:
         return "\t"
-    elif sep == "newline" or sep == "\\n":
+    if sep in {"newline", "\\n"}:
         return "\n"
     return sep
 
 
-def diff_files(filename_a, filename_b):
+def diff_files(
+    filename_a: FileDescriptorOrPath, filename_b: FileDescriptorOrPath
+) -> list[str]:
     """Diffs two text files and returns difference.
 
     :param str filename_a: first file path
@@ -94,13 +105,11 @@ def diff_files(filename_a, filename_b):
     import difflib
 
     differ = difflib.Differ()
-    fh_a = open(filename_a, "r")
-    fh_b = open(filename_b, "r")
-    result = list(differ.compare(fh_a.readlines(), fh_b.readlines()))
-    return result
+    with open(filename_a) as fh_a, open(filename_b) as fh_b:
+        return list(differ.compare(fh_a.readlines(), fh_b.readlines()))
 
 
-def try_remove(path):
+def try_remove(path: StrOrBytesPath) -> None:
     """Attempt to remove a file; no exception is generated if the
     attempt fails.
 
@@ -112,7 +121,7 @@ def try_remove(path):
         pass
 
 
-def try_rmdir(path):
+def try_rmdir(path: StrOrBytesPath) -> None:
     """Attempt to remove a directory; no exception is generated if the
     attempt fails.
 
@@ -124,45 +133,54 @@ def try_rmdir(path):
         shutil.rmtree(path, ignore_errors=True)
 
 
-def basename(path, ext=None):
+def basename(path: StrPath, ext: str | None = None) -> str:
     """Remove leading directory components and an optional extension
     from the specified path
 
     :param str path: path
     :param str ext: extension
     """
-    name = os.path.basename(path)
+    name: str = os.path.basename(path)
     if not ext:
         return name
-    fs = name.rsplit(".", 1)
+    fs: list[str] = name.rsplit(".", 1)
     if len(fs) > 1 and fs[1].lower() == ext:
         name = fs[0]
     return name
 
 
-class KeyValue(dict):
+class KeyValue(dict[str, VT]):
     """A general-purpose key-value store.
 
     KeyValue is a subclass of dict, but also allows entries to be read and
-    written using attribute syntax. Example:
+    written using attribute syntax.
 
-    >>> reg = KeyValue()
-    >>> reg['north'] = 489
-    >>> reg.north
-    489
-    >>> reg.south = 205
-    >>> reg['south']
-    205
+    :Example:
+      .. code-block:: pycon
+
+        >>> reg = KeyValue()
+        >>> reg["north"] = 489
+        >>> reg.north
+        489
+        >>> reg.south = 205
+        >>> reg["south"]
+        205
+
+    The keys of KeyValue are strings. To use other key types, use other mapping types.
+    To use the attribute syntax, the keys must be valid Python attribute names.
     """
 
-    def __getattr__(self, key):
-        return self[key]
+    def __getattr__(self, key: str) -> VT:
+        try:
+            return self[key]
+        except KeyError:
+            raise AttributeError(key)
 
-    def __setattr__(self, key, value):
+    def __setattr__(self, key: str, value: VT) -> None:
         self[key] = value
 
 
-def _get_encoding():
+def _get_encoding() -> str:
     try:
         # Python >= 3.11
         encoding = locale.getencoding()
@@ -173,109 +191,134 @@ def _get_encoding():
     return encoding
 
 
-def decode(bytes_, encoding=None):
+def decode(bytes_: AnyStr, encoding: str | None = None) -> str:
     """Decode bytes with default locale and return (unicode) string
 
     No-op if parameter is not bytes (assumed unicode string).
 
-    :param bytes bytes_: the bytes to decode
+    :param bytes\\_: the bytes to decode
     :param encoding: encoding to be used, default value is None
 
     Example
     -------
 
-    >>> decode(b'S\xc3\xbcdtirol')
+    >>> decode(b"S\xc3\xbcdtirol")
     u'Südtirol'
-    >>> decode(u'Südtirol')
+    >>> decode("Südtirol")
     u'Südtirol'
     >>> decode(1234)
     u'1234'
     """
-    if isinstance(bytes_, unicode):
+    if isinstance(bytes_, str):
         return bytes_
     if isinstance(bytes_, bytes):
-        if encoding is None:
-            enc = _get_encoding()
-        else:
-            enc = encoding
+        enc = _get_encoding() if encoding is None else encoding
         return bytes_.decode(enc)
-    # if something else than text
-    if sys.version_info.major >= 3:
-        # only text should be used
-        raise TypeError("can only accept types str and bytes")
-    else:
-        # for backwards compatibility
-        return unicode(bytes_)
+    # only text should be used
+    msg = f"can only accept types str and bytes, not {type(bytes_).__name__}"
+    raise TypeError(msg)
 
 
-def encode(string, encoding=None):
+def encode(string: AnyStr, encoding: str | None = None) -> bytes:
     """Encode string with default locale and return bytes with that encoding
 
     No-op if parameter is bytes (assumed already encoded).
     This ensures garbage in, garbage out.
 
-    :param str string: the string to encode
+    :param string: the string to encode
     :param encoding: encoding to be used, default value is None
 
     Example
     -------
 
-    >>> encode(b'S\xc3\xbcdtirol')
+    >>> encode(b"S\xc3\xbcdtirol")
     b'S\xc3\xbcdtirol'
-    >>> decode(u'Südtirol')
+    >>> decode("Südtirol")
     b'S\xc3\xbcdtirol'
     >>> decode(1234)
     b'1234'
     """
     if isinstance(string, bytes):
         return string
-    # this also tests str in Py3:
-    if isinstance(string, unicode):
-        if encoding is None:
-            enc = _get_encoding()
-        else:
-            enc = encoding
+    if isinstance(string, str):
+        enc = _get_encoding() if encoding is None else encoding
         return string.encode(enc)
     # if something else than text
-    if sys.version_info.major >= 3:
-        # only text should be used
-        raise TypeError("can only accept types str and bytes")
-    else:
-        # for backwards compatibility
-        return bytes(string)
+    msg = "Can only accept types str and bytes"
+    raise TypeError(msg)
 
 
-def text_to_string(text, encoding=None):
+def text_to_string(text: AnyStr, encoding: str | None = None) -> str:
     """Convert text to str. Useful when passing text into environments,
     in Python 2 it needs to be bytes on Windows, in Python 3 in needs unicode.
+
+    :param text: The text to convert to string
+    :param encoding: The encoding to be used to decode the text that will be converted
+    :returns: A (unicode) string
     """
-    if sys.version[0] == "2":
-        # Python 2
-        return encode(text, encoding=encoding)
-    else:
-        # Python 3
-        return decode(text, encoding=encoding)
+    return decode(text, encoding=encoding)
 
 
-def parse_key_val(s, sep="=", dflt=None, val_type=None, vsep=None):
+@overload
+def parse_key_val(
+    s: AnyStr,
+    sep: str = "=",
+    dflt: T | None = None,
+    val_type: None = ...,
+    vsep: str | None = None,
+) -> KeyValue[str | T | None]:
+    pass
+
+
+@overload
+def parse_key_val(
+    s: AnyStr,
+    sep: str = "=",
+    dflt: T | None = None,
+    val_type: Callable[[str], T] = ...,
+    vsep: str | None = None,
+) -> KeyValue[T | None]:
+    pass
+
+
+@overload
+def parse_key_val(
+    s: AnyStr,
+    sep: str = "=",
+    dflt: T | None = None,
+    val_type: Callable[[str], T] | None = None,
+    vsep: str | None = None,
+) -> KeyValue[str | T] | KeyValue[T | None] | KeyValue[T] | KeyValue[str | T | None]:
+    pass
+
+
+def parse_key_val(
+    s: AnyStr,
+    sep: str = "=",
+    dflt: T | None = None,
+    val_type: Callable[[str], T] | None = None,
+    vsep: str | None = None,
+) -> KeyValue[str | T] | KeyValue[T | None] | KeyValue[T] | KeyValue[str | T | None]:
     """Parse a string into a dictionary, where entries are separated
     by newlines and the key and value are separated by `sep` (default: `=`)
 
-    >>> parse_key_val('min=20\\nmax=50') == {'min': '20', 'max': '50'}
+    >>> parse_key_val("min=20\\nmax=50") == {"min": "20", "max": "50"}
     True
-    >>> parse_key_val('min=20\\nmax=50',
-    ...     val_type=float) == {'min': 20, 'max': 50}
+    >>> parse_key_val("min=20\\nmax=50", val_type=float) == {"min": 20, "max": 50}
     True
 
-    :param str s: string to be parsed
-    :param str sep: key/value separator
+    :param s: string to be parsed
+    :param sep: key/value separator
     :param dflt: default value to be used
     :param val_type: value type (None for no cast)
     :param vsep: vertical separator (default is Python 'universal newlines' approach)
 
     :return: parsed input (dictionary of keys/values)
     """
-    result = KeyValue()
+
+    result: (
+        KeyValue[str | T] | KeyValue[T | None] | KeyValue[T] | KeyValue[str | T | None]
+    ) = KeyValue()
 
     if not s:
         return result
@@ -285,7 +328,7 @@ def parse_key_val(s, sep="=", dflt=None, val_type=None, vsep=None):
         vsep = encode(vsep) if vsep else vsep
 
     if vsep:
-        lines = s.split(vsep)
+        lines: list[bytes] | list[str] = s.split(vsep)
         try:
             lines.remove("\n")
         except ValueError:
@@ -293,18 +336,25 @@ def parse_key_val(s, sep="=", dflt=None, val_type=None, vsep=None):
     else:
         lines = s.splitlines()
 
+    if callable(val_type):
+        result = cast("KeyValue[T | None]", result)
+        for line in lines:
+            kv: list[bytes] | list[str] = line.split(sep, 1)
+            k: str = decode(kv[0].strip())
+            result[k] = val_type(decode(kv[1].strip())) if len(kv) > 1 else dflt
+
+        if dflt is not None:
+            result = cast("KeyValue[T]", result)
+        return result
+
+    result = cast("KeyValue[str | T | None]", result)
     for line in lines:
         kv = line.split(sep, 1)
         k = decode(kv[0].strip())
-        if len(kv) > 1:
-            v = decode(kv[1].strip())
-        else:
-            v = dflt
+        result[k] = decode(kv[1].strip()) if len(kv) > 1 else dflt
 
-        if val_type:
-            result[k] = val_type(v)
-        else:
-            result[k] = v
+    if dflt is not None:
+        result = cast("KeyValue[str | T]", result)
 
     return result
 
@@ -326,17 +376,31 @@ def get_num_suffix(number, max_number):
 
 
 def split(s):
-    """!Platform specific shlex.split"""
-    if sys.version_info >= (2, 6):
-        return shlex.split(s, posix=(sys.platform != "win32"))
-    elif sys.platform == "win32":
-        return shlex.split(s.replace("\\", r"\\"))
-    else:
-        return shlex.split(s)
+    """Same shlex.split() func on all OS platforms
+
+    We don't use parameter posix=True on the OS MS Windows due to incorrectly
+    splitting command line parameters:
+
+    e.g. d.vect where="cat < 10"
+
+    is split incorrectly as follows:
+
+    'where="cat', '<', '10"'
+
+    Should be:
+
+    'where=cat < 10'
+
+
+    :param str s: cmd string
+
+    return list: cmd list
+    """
+    return shlex.split(s)
 
 
 # source:
-#    http://stackoverflow.com/questions/4836710/
+#    https://stackoverflow.com/questions/4836710/
 #    does-python-have-a-built-in-function-for-string-natural-sort/4836734#4836734
 def natural_sort(items):
     """Returns sorted list using natural sort
@@ -359,19 +423,16 @@ def naturally_sort(items, key=None):
         return int(text) if text.isdigit() else text.lower()
 
     def alphanum_key(actual_key):
-        if key:
-            sort_key = key(actual_key)
-        else:
-            sort_key = actual_key
-        return [convert(c) for c in re.split("([0-9]+)", sort_key)]
+        sort_key = key(actual_key) if key else actual_key
+        return [convert(c) for c in re.split(r"([0-9]+)", sort_key)]
 
     items.sort(key=alphanum_key)
 
 
 def get_lib_path(modname, libname=None):
     """Return the path of the libname contained in the module."""
-    from os.path import isdir, join, sep
     from os import getenv
+    from os.path import isdir, join, sep
 
     if isdir(join(getenv("GISBASE"), "etc", modname)):
         path = join(os.getenv("GISBASE"), "etc", modname)
@@ -379,10 +440,9 @@ def get_lib_path(modname, libname=None):
         getenv("GRASS_ADDON_BASE")
         and libname
         and isdir(join(getenv("GRASS_ADDON_BASE"), "etc", modname, libname))
-    ):
-        path = join(getenv("GRASS_ADDON_BASE"), "etc", modname)
-    elif getenv("GRASS_ADDON_BASE") and isdir(
-        join(getenv("GRASS_ADDON_BASE"), "etc", modname)
+    ) or (
+        getenv("GRASS_ADDON_BASE")
+        and isdir(join(getenv("GRASS_ADDON_BASE"), "etc", modname))
     ):
         path = join(getenv("GRASS_ADDON_BASE"), "etc", modname)
     elif getenv("GRASS_ADDON_BASE") and isdir(
@@ -391,7 +451,7 @@ def get_lib_path(modname, libname=None):
         path = join(os.getenv("GRASS_ADDON_BASE"), modname, modname)
     else:
         # used by g.extension compilation process
-        cwd = os.getcwd()
+        cwd = str(Path.cwd())
         idx = cwd.find(modname)
         if idx < 0:
             return None
@@ -411,7 +471,7 @@ def get_lib_path(modname, libname=None):
 
 
 def set_path(modulename, dirname=None, path="."):
-    """Set sys.path looking in the the local directory GRASS directories.
+    """Set sys.path looking in the local directory GRASS directories.
 
     :param modulename: string with the name of the GRASS module
     :param dirname: string with the directory name containing the python
@@ -451,8 +511,8 @@ def set_path(modulename, dirname=None, path="."):
 
     in the source code the function is called with the following parameters: ::
 
-        set_path('r.green', 'libhydro', '..')
-        set_path('r.green', 'libgreen', os.path.join('..', '..'))
+        set_path("r.green", "libhydro", "..")
+        set_path("r.green", "libgreen", os.path.join("..", ".."))
 
     when we are executing the module: r.green.hydro.financial locally from
     the command line:  ::
@@ -465,27 +525,27 @@ def set_path(modulename, dirname=None, path="."):
     The function is checking if the dirname is provided and if the
     directory exists and it is available using the path
     provided as third parameter, if yes add the path to sys.path to be
-    importable, otherwise it will check on GRASS GIS standard paths.
+    importable, otherwise it will check on GRASS standard paths.
 
     """
     import sys
 
     # TODO: why dirname is checked first - the logic should be revised
-    pathlib = None
+    pathlib_ = None
     if dirname:
-        pathlib = os.path.join(path, dirname)
-    if pathlib and os.path.exists(pathlib):
+        pathlib_ = os.path.join(path, dirname)
+    if pathlib_ and os.path.exists(pathlib_):
         # we are running the script from the script directory, therefore
         # we add the path to sys.path to reach the directory (dirname)
         sys.path.append(os.path.abspath(path))
     else:
-        # running from GRASS GIS session
+        # running from GRASS session
         path = get_lib_path(modulename, dirname)
         if path is None:
             pathname = os.path.join(modulename, dirname) if dirname else modulename
             raise ImportError(
                 "Not able to find the path '%s' directory "
-                "(current dir '%s')." % (pathname, os.getcwd())
+                "(current dir '%s')." % (pathname, Path.cwd())
             )
 
         sys.path.insert(0, path)
@@ -494,15 +554,12 @@ def set_path(modulename, dirname=None, path="."):
 def clock():
     """
     Return time counter to measure performance for chunks of code.
-    Uses time.clock() for Py < 3.3, time.perf_counter() for Py >= 3.3.
     Should be used only as difference between the calls.
     """
-    if sys.version_info > (3, 2):
-        return time.perf_counter()
-    return time.clock()
+    return time.perf_counter()
 
 
-def legalize_vector_name(name, fallback_prefix="x"):
+def legalize_vector_name(name, fallback_prefix: str | None = "x") -> str:
     """Make *name* usable for vectors, tables, and columns
 
     The returned string is a name usable for vectors, tables, and columns,
@@ -522,16 +579,18 @@ def legalize_vector_name(name, fallback_prefix="x"):
     """
     # The implementation is based on Vect_legal_filename().
     if not name:
-        raise ValueError("name cannot be empty")
-    if fallback_prefix and re.match("[^A-Za-z]", fallback_prefix[0]):
-        raise ValueError("fallback_prefix must start with an ASCII letter")
-    if fallback_prefix and re.match("[^A-Za-z]", name[0], flags=re.ASCII):
+        msg = "name cannot be empty"
+        raise ValueError(msg)
+    if fallback_prefix and re.match(r"[^A-Za-z]", fallback_prefix[0]):
+        msg = "fallback_prefix must start with an ASCII letter"
+        raise ValueError(msg)
+    if fallback_prefix and re.match(r"[^A-Za-z]", name[0], flags=re.ASCII):
         # We prefix here rather than just replace, because in cases of unique
         # identifiers, e.g., columns or node names, replacing the first
         # character by the same replacement character increases chances of
         # conflict (e.g. column names 10, 20, 30).
         name = "{fallback_prefix}{name}".format(**locals())
-    name = re.sub("[^A-Za-z0-9_]", "_", name, flags=re.ASCII)
+    name = re.sub(r"[^A-Za-z0-9_]", "_", name, flags=re.ASCII)
     keywords = ["and", "or", "not"]
     if name in keywords:
         name = "{name}_".format(**locals())
@@ -550,11 +609,11 @@ def append_node_pid(name):
 
     >>> append_node_pid("tmp_raster_1")
 
-    ..note::
+    .. note::
 
         Before you use this function for creating temporary files (i.e., normal
         files on disk, not maps and other mapset elements), see functions
-        designed for it in the GRASS GIS or standard Python library. These
+        designed for it in the GRASS or standard Python library. These
         take care of collisions already on different levels.
     """
     # We are using this node as a suffix, so we don't need to make sure it
@@ -583,7 +642,7 @@ def append_uuid(name):
 
     >>> append_uuid("tmp")
 
-    ..note::
+    .. note::
 
         See the note about creating temporary files in the
         :func:`append_node_pid()` description.
@@ -598,32 +657,33 @@ def append_random(name, suffix_length=None, total_length=None):
     >>> append_random("tmp", 8)
     >>> append_random("tmp", total_length=16)
 
-    ..note::
+    .. note::
 
         Note that this will be influenced by the random seed set for the Python
         random package.
 
-    ..note::
+    .. note::
 
         See the note about creating temporary files in the
         :func:`append_node_pid()` description.
     """
     if suffix_length and total_length:
-        raise ValueError(
-            "Either suffix_length or total_length can be provided, not both"
-        )
+        msg = "Either suffix_length or total_length can be provided, not both"
+        raise ValueError(msg)
     if not suffix_length and not total_length:
-        raise ValueError("suffix_length or total_length has to be provided")
+        msg = "suffix_length or total_length has to be provided"
+        raise ValueError(msg)
     if total_length:
         # remove len of name and one underscore
         name_length = len(name)
         suffix_length = total_length - name_length - 1
         if suffix_length <= 0:
-            raise ValueError(
+            msg = (
                 "No characters left for the suffix:"
                 " total_length <{total_length}> is too small"
                 " or name <{name}> ({name_length}) is too long".format(**locals())
             )
+            raise ValueError(msg)
     # We don't do lower and upper case because that could cause conflicts in
     # contexts which are case-insensitive.
     # We use lowercase because that's what is in UUID4 hex string.

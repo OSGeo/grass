@@ -7,7 +7,7 @@ them within input space time datasets (stds). The existing timestamp modules
 <a href="r.timestamp.html">r.timestamp</a>,
 <a href="r3.timestamp.html">r3.timestamp</a> and
 <a href="v.timestamp.html">v.timestamp</a> do not register the maps in the
-temporal database of GRASS GIS. However, timestamps that have been created
+temporal database of GRASS. However, timestamps that have been created
 with these modules can be read and used by <em>t.register</em>. This
 works only for maps that are not already registered in the temporal
 database.
@@ -21,6 +21,13 @@ user wants to register maps that are already registered in the temporal
 database in a different stds, there is no need to pass information regarding
 start and end time, <em>t.register</em> will read timestamps from the temporal
 database (i.e., in this case only passing map names will be enough).
+<p>
+Maps can be specified both with their fully qualified map name, meaning e.g.
+<i>map@mapset</i> and without the mapset name included. If the mapset
+name is not provided in the input, <em>t.register</em> will look for
+the given map on the current search path and assign the matching mapset.
+If the map is not found on the current search path the module will fail.
+Thus, registering maps with fully qualified map name is slightly faster.
 <p>
 The module <em>t.register</em> supports absolute and relative time. The absolute temporal type
 refers to a fixed date while the relative temporal type refers to data
@@ -62,7 +69,7 @@ database.
 
 There are several options to register maps by means of a file. The input file
 consists of a list of map names, optionally along with timestamps. Each map
-name (and timestaps if provided) should be stored in a new line in this file.
+name (and timestamps if provided) should be stored in a new line in this file.
 <p>
 When only map names are provided, the <em>increment</em> option and the <b>-i</b>
 flag are supported. However, when along with map names any kind of timestamp is
@@ -111,6 +118,18 @@ prec_3|2001-07-01|2001-10-01
 prec_4|2001-10-01|2002-01-01
 prec_5|2002-01-01|2002-04-01
 prec_6|2002-04-01|2002-07-01
+</pre></div>
+
+<p>
+Same as above but with fully qualified map names
+(no support for <em>increment</em> option nor <b>-i</b> flag):
+<div class="code"><pre>
+prec_1@PERMANENT|2001-01-01|2001-04-01
+prec_2@PERMANENT|2001-04-01|2001-07-01
+prec_3@PERMANENT|2001-07-01|2001-10-01
+prec_4@PERMANENT|2001-10-01|2002-01-01
+prec_5@PERMANENT|2002-01-01|2002-04-01
+prec_6@PERMANENT|2002-04-01|2002-07-01
 </pre></div>
 
 <h3>Support for semantic labels</h3>
@@ -256,12 +275,10 @@ dataset for precipitation, temperature and sea level pressure in
 Europe based on ECA&amp;D information.
 
 Download and decompress mean temperature data from:
-<a href="http://eca.knmi.nl/download/ensembles/data/Grid_0.25deg_reg/">here</a>
-by accepting their
-<a href="http://eca.knmi.nl/download/ensembles/ensembles.php">Terms of use</a>.
+<a href="https://surfobs.climate.copernicus.eu/dataaccess/access_eobs.php#datafiles">here</a>.
 
 <div class="code"><pre>
-# import E-OBS V12 into a lat-long location (alternatively, use r.external)
+# import E-OBS V12 into a lat-long project (alternatively, use r.external)
 r.in.gdal -oe input=tg_0.25deg_reg_1950-1964_v12.0.nc \
   output=temperature_mean offset=0
 r.in.gdal -oe input=tg_0.25deg_reg_1965-1979_v12.0.nc \

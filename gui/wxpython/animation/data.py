@@ -15,11 +15,13 @@ This program is free software under the GNU General Public License
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
+
 import os
 import copy
 
 from grass.script.utils import parse_key_val
 from grass.script import core as gcore
+from grass.exceptions import ScriptError
 
 from core.gcmd import GException
 from animation.nviztask import NvizTask
@@ -33,7 +35,7 @@ from animation.utils import (
 from core.layerlist import LayerList, Layer
 
 
-class AnimationData(object):
+class AnimationData:
     def __init__(self):
         self._name = None
         self._windowIndex = 0
@@ -84,11 +86,11 @@ class AnimationData(object):
         timeseriesList = []
         for layer in layerList:
             if layer.active and hasattr(layer, "maps"):
-                if layer.mapType in ("strds", "stvds", "str3ds"):
+                if layer.mapType in {"strds", "stvds", "str3ds"}:
                     timeseriesList.append((layer.name, layer.mapType))
                     self._firstStdsNameType = layer.name, layer.mapType
                 else:
-                    mapSeriesList.append((layer.maps))
+                    mapSeriesList.append(layer.maps)
         if not timeseriesList:
             self._firstStdsNameType = None, None
         # this throws GException
@@ -133,7 +135,7 @@ class AnimationData(object):
             raise ValueError(_("No workspace file selected."))
 
         if not os.path.exists(fileName):
-            raise IOError(_("File %s not found") % fileName)
+            raise OSError(_("File %s not found") % fileName)
         self._workspaceFile = fileName
 
         self.nvizTask.Load(self.workspaceFile)
@@ -239,9 +241,7 @@ class AnimationData(object):
             del region["projection"]
         if "zone" in region:
             del region["zone"]
-        regions = []
-        for i in range(self._mapCount):
-            regions.append(copy.copy(region))
+        regions = [copy.copy(region) for i in range(self._mapCount)]
         self._regions = regions
         if not (endRegion or zoomValue):
             return
@@ -294,14 +294,13 @@ class AnimLayer(Layer):
     def SetName(self, name):
         if not self.hidden:
             if self._mapType is None:
-                raise ValueError(
-                    "To set layer name, the type of layer must be specified."
-                )
-            if self._mapType in ("strds", "stvds", "str3ds"):
+                msg = "To set layer name, the type of layer must be specified."
+                raise ValueError(msg)
+            if self._mapType in {"strds", "stvds", "str3ds"}:
                 try:
                     name = validateTimeseriesName(name, self._mapType)
                     self._maps = getRegisteredMaps(name, self._mapType)
-                except (GException, gcore.ScriptError) as e:
+                except (GException, ScriptError) as e:
                     raise ValueError(str(e))
             else:
                 self._maps = validateMapNames(name.split(","), self._mapType)

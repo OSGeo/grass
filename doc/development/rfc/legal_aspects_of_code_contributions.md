@@ -2,7 +2,7 @@
 
 Author: Markus Neteler (based on GDAL.org/RFC3)
 
-Contact: [grass-psc AT lists.osgeo.org](http://lists.osgeo.org/mailman/listinfo/grass-psc)
+Contact: [grass-psc AT lists.osgeo.org](https://lists.osgeo.org/mailman/listinfo/grass-psc)
 
 Status: Adopted (8 Dec 2006)
 
@@ -66,4 +66,4 @@ source repository:
 Questions regarding GRASS GIS should be directed to the
 GRASS Development Team at the following address:
 
-Internet: <http://grass.osgeo.org/home/contact-us/>
+Internet: <https://grass.osgeo.org/support/community/>

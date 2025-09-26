@@ -104,8 +104,7 @@
 # % guisection: Time & Date
 # %end
 
-import grass.script as grass
-
+import grass.script as gs
 
 ############################################################################
 
@@ -116,7 +115,7 @@ def main():
     maps = options["maps"]
     type = options["type"]
     file = options["file"]
-    separator = grass.separator(options["separator"])
+    separator = gs.separator(options["separator"])
     start = options["start"]
     end = options["end"]
     unit = options["unit"]
@@ -144,18 +143,12 @@ def main():
 ###############################################################################
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
 
     # lazy imports
     import grass.temporal as tgis
 
     try:
-        from builtins import StandardError
-    except ImportError:
-        # python 3
-        StandardError = Exception
-
-    try:
         tgis.profile_function(main)
-    except StandardError as e:
-        grass.fatal(e)
+    except Exception as e:
+        gs.fatal(e)

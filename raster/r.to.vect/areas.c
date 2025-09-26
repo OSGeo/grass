@@ -100,7 +100,7 @@ static int update_width(struct area_table *, int);
 static int nabors(void);
 
 #define get_raster_value(ptr, col) \
-    Rast_get_d_value(G_incr_void_ptr(ptr, (col)*data_size), data_type)
+    Rast_get_d_value(G_incr_void_ptr(ptr, (col) * data_size), data_type)
 
 /* extract_areas - trace boundaries of polygons in file */
 

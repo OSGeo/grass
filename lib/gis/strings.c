@@ -267,17 +267,16 @@ char *G_str_replace(const char *buffer, const char *old_str,
 char *G_str_concat(const char **src_strings, int num_strings, const char *sep,
                    int maxsize)
 {
-    char buffer[maxsize];
-    int i;
-    char *end = buffer + maxsize;
-    char *p = NULL;
-
     if (maxsize < 1 || num_strings < 1)
         return NULL;
 
-    memset(buffer, 0, sizeof(buffer));
+    char *concat_str = NULL;
+    char *p = NULL;
+    char *buffer = G_malloc(maxsize * sizeof(char));
+    char *end = buffer + maxsize;
 
-    for (i = 0; i < num_strings; i++) {
+    memset(buffer, 0, maxsize);
+    for (int i = 0; i < num_strings; i++) {
         if (i == 0)
             p = (char *)G__memccpy(buffer, src_strings[i], '\0', maxsize);
         else {
@@ -287,8 +286,10 @@ char *G_str_concat(const char **src_strings, int num_strings, const char *sep,
                 p = (char *)G__memccpy(p - 1, src_strings[i], '\0', end - p);
         }
     }
+    concat_str = G_store(buffer);
+    G_free(buffer);
 
-    return G_store(buffer);
+    return concat_str;
 }
 
 /*!

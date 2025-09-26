@@ -30,25 +30,25 @@ set -u
 export INSTALL_PREFIX=$1
 
 ./configure \
-    --prefix="$INSTALL_PREFIX/" \
     --enable-largefile \
-    --with-cxx \
-    --with-zstd \
+    --prefix="$INSTALL_PREFIX/" \
+    --without-blas \
+    --without-lapack \
     --with-bzlib \
-    --with-blas \
-    --with-lapack \
-    --with-readline \
-    --without-openmp \
-    --with-pdal \
-    --without-pthread \
-    --with-tiff \
+    --with-cxx \
+    --with-fftw \
     --with-freetype \
     --with-freetype-includes="/usr/include/freetype2/" \
-    --with-proj-share=/usr/share/proj \
     --with-geos \
+    --with-netcdf \
+    --with-pdal \
+    --with-proj-share=/usr/share/proj \
+    --with-readline \
     --with-sqlite \
-    --with-fftw \
-    --with-netcdf
+    --with-tiff \
+    --with-zstd \
+    --without-openmp \
+    --without-pthread
 
 eval $makecmd
 make install

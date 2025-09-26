@@ -22,7 +22,6 @@ static unsigned char Buffer[10000]; /* buffer for outputting data to file */
  **   BUT, this code will simply place a 0 in 1st byte, and send it on to
  *       lower routine that writes out compressed data.
  */
-
 int write_cube(Cube_data *Cube, /* array of poly info  by threshold */
                int cur_x, file_info *headfax)
 {
@@ -252,21 +251,6 @@ int read_cube(Cube_data *Cube, file_info *headfax)
     return Cube->n_thresh = t_cnt;
 }
 
-#ifdef NEWCODE
-int my_fread(char *buf, int size, int cnt, FILE *fp)
-{
-    static char in_buf[10240];
-    static char *start, *end;
-    char *outp;
-    int ret;
-
-    if (ret = fread(in_buf, 1, 10240, fp))
-        ;
-
-    return 0;
-}
-#else
-
 static int cptr = 0;
 
 int my_fread(char *buf, int size, int cnt, FILE *fp)
@@ -304,4 +288,3 @@ int new_dspf(file_info *hfax)
 
     return 0;
 }
-#endif

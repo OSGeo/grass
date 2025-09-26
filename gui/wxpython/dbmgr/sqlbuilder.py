@@ -21,14 +21,12 @@ This program is free software under the GNU General Public License
 @author Jachym Cepicky <jachym.cepicky gmail.com> (original author)
 @author Martin Landa <landa.martin gmail.com>
 @author Hamish Bowman <hamish_b yahoo.com>
-@author Refactoring, SQLBUilderUpdate by Stepan Turek <stepan.turek seznam.cz> (GSoC 2012, mentor: Martin Landa)
+@author Refactoring, SQLBUilderUpdate by Stepan Turek <stepan.turek seznam.cz>
+        (GSoC 2012, mentor: Martin Landa)
 """
-
-from __future__ import print_function
 
 import os
 import sys
-import six
 
 from core import globalvar
 import wx
@@ -47,11 +45,11 @@ from gui_core.wrap import (
     StaticBox,
 )
 
-import grass.script as grass
+import grass.script as gs
 
 
 class SQLBuilder(wx.Frame):
-    """SQLBuider class
+    """SQLBuilder class
     Base class for classes, which builds SQL statements.
     """
 
@@ -59,9 +57,7 @@ class SQLBuilder(wx.Frame):
         wx.Frame.__init__(self, parent, id, title)
 
         self.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_sql.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
 
         self.parent = parent
@@ -69,9 +65,9 @@ class SQLBuilder(wx.Frame):
         # variables
         self.vectmap = vectmap  # fullname
         if "@" not in self.vectmap:
-            self.vectmap = grass.find_file(self.vectmap, element="vector")["fullname"]
+            self.vectmap = gs.find_file(self.vectmap, element="vector")["fullname"]
             if not self.vectmap:
-                grass.fatal(_("Vector map <%s> not found") % vectmap)
+                gs.fatal(_("Vector map <%s> not found") % vectmap)
         self.mapname, self.mapset = self.vectmap.split("@", 1)
 
         # db info
@@ -186,7 +182,7 @@ class SQLBuilder(wx.Frame):
         }
 
         self.btn_logicpanel = wx.Panel(parent=self.panel, id=wx.ID_ANY)
-        for key, value in six.iteritems(self.btn_logic):
+        for key, value in self.btn_logic.items():
             btn = Button(parent=self.btn_logicpanel, id=wx.ID_ANY, label=value[0])
             self.btn_logic[key].append(btn.GetId())
 
@@ -316,8 +312,8 @@ class SQLBuilder(wx.Frame):
             flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
             border=5,
         )
-        # self.pagesizer.Add(self.btn_uniqe,0,wx.ALIGN_LEFT|wx.TOP,border=5)
-        # self.pagesizer.Add(self.btn_uniqesample,0,wx.ALIGN_LEFT|wx.TOP,border=5)
+        # self.pagesizer.Add(self.btn_unique,0,wx.ALIGN_LEFT|wx.TOP,border=5)
+        # self.pagesizer.Add(self.btn_uniquesample,0,wx.ALIGN_LEFT|wx.TOP,border=5)
         self.pagesizer.Add(
             self.btn_logicpanel, proportion=0, flag=wx.ALIGN_CENTER_HORIZONTAL
         )
@@ -344,7 +340,7 @@ class SQLBuilder(wx.Frame):
         self.btn_unique.Bind(wx.EVT_BUTTON, self.OnUniqueValues)
         self.btn_uniquesample.Bind(wx.EVT_BUTTON, self.OnSampleValues)
 
-        for key, value in six.iteritems(self.btn_logic):
+        for key, value in self.btn_logic.items():
             self.FindWindowById(value[1]).Bind(wx.EVT_BUTTON, self.OnAddMark)
 
         self.btn_close.Bind(wx.EVT_BUTTON, self.OnClose)
@@ -358,22 +354,21 @@ class SQLBuilder(wx.Frame):
 
     def OnUniqueValues(self, event, justsample=False):
         """Get unique values"""
-        vals = []
         try:
             idx = self.list_columns.GetSelections()[0]
             column = self.list_columns.GetString(idx)
-        except:
+        except IndexError:
             self.list_values.Clear()
             return
 
         self.list_values.Clear()
-
-        sql = "SELECT DISTINCT {column} FROM {table} ORDER BY {column}".format(
+        # Enclose column name with SQL standard double quotes
+        sql = 'SELECT DISTINCT "{column}" FROM {table} ORDER BY "{column}"'.format(
             column=column, table=self.tablename
         )
         if justsample:
             sql += " LIMIT {}".format(255)
-        data = grass.db_select(
+        data = gs.db_select(
             sql=sql, database=self.database, driver=self.driver, sep="{_sep_}"
         )
         if not data:
@@ -384,7 +379,7 @@ class SQLBuilder(wx.Frame):
         i = 0
         items = []
         for item in data:  # sorted(set(map(lambda x: desc['ctype'](x[0]), data))):
-            if desc["type"] not in ("character", "text"):
+            if desc["type"] not in {"character", "text"}:
                 items.append(str(item[0]))
             else:
                 items.append("'{}'".format(GetUnicodeValue(item[0])))
@@ -401,7 +396,8 @@ class SQLBuilder(wx.Frame):
         idx = self.list_columns.GetSelections()
         for i in idx:
             column = self.list_columns.GetString(i)
-            self._add(element="column", value=column)
+            # Enclose column name with SQL standard double quotes
+            self._add(element="column", value=f'"{column}"')
 
         if not self.btn_uniquesample.IsEnabled():
             self.btn_uniquesample.Enable(True)
@@ -416,12 +412,6 @@ class SQLBuilder(wx.Frame):
 
         idx = selection[0]
         value = self.list_values.GetString(idx)
-        idx = self.list_columns.GetSelections()[0]
-        column = self.list_columns.GetString(idx)
-
-        ctype = self.dbInfo.GetTableDesc(self.dbInfo.GetTable(self.layer))[column][
-            "type"
-        ]
 
         self._add(element="value", value=value)
 
@@ -455,7 +445,7 @@ class SQLBuilder(wx.Frame):
         elif self.btn_arithmeticpanel and self.btn_arithmeticpanel.IsShown():
             btns = self.btn_arithmetic
 
-        for key, value in six.iteritems(btns):
+        for value in btns.values():
             if event.GetId() == value[1]:
                 mark = value[0]
                 break
@@ -582,10 +572,7 @@ class SQLBuilderSelect(SQLBuilder):
                 idx1 = len("select")
                 idx2 = sqlstr.lower().find("from")
                 colstr = sqlstr[idx1:idx2].strip()
-                if colstr == "*":
-                    cols = []
-                else:
-                    cols = colstr.split(",")
+                cols = [] if colstr == "*" else colstr.split(",")
                 if value in cols:
                     cols.remove(value)
                 else:
@@ -606,7 +593,7 @@ class SQLBuilderSelect(SQLBuilder):
                 curspos = self.text_sql.GetLastPosition() + len(newsqlstr)
                 newsqlstr = sqlstr + newsqlstr
 
-        elif element in ["value", "mark"]:
+        elif element in {"value", "mark"}:
             addstr = " " + value + " "
             newsqlstr = sqlstr[:curspos] + addstr + sqlstr[curspos:]
             curspos += len(addstr)
@@ -695,7 +682,7 @@ class SQLBuilderUpdate(SQLBuilder):
 
         self.btn_arithmeticpanel = wx.Panel(parent=self.panel, id=wx.ID_ANY)
 
-        for key, value in six.iteritems(self.btn_arithmetic):
+        for key, value in self.btn_arithmetic.items():
             btn = Button(parent=self.btn_arithmeticpanel, id=wx.ID_ANY, label=value[0])
             self.btn_arithmetic[key].append(btn.GetId())
 
@@ -748,7 +735,7 @@ class SQLBuilderUpdate(SQLBuilder):
         self.hsizer.Insert(2, self.funcpanel, proportion=1, flag=wx.EXPAND)
 
         self.list_func.Bind(wx.EVT_LISTBOX, self.OnAddFunc)
-        for key, value in six.iteritems(self.btn_arithmetic):
+        for key, value in self.btn_arithmetic.items():
             self.FindWindowById(value[1]).Bind(wx.EVT_BUTTON, self.OnAddMark)
         self.mode.SetSelection(0)
         self.OnMode(None)
@@ -821,7 +808,7 @@ class SQLBuilderUpdate(SQLBuilder):
         curspos = self.text_sql.GetInsertionPoint()
         newsqlstr = ""
 
-        if element in ["value", "mark", "func"] or (
+        if element in {"value", "mark", "func"} or (
             element == "column" and self.mode.GetSelection() == 2
         ):
             addstr = " " + value + " "
@@ -890,9 +877,7 @@ class SQLBuilderWhere(SQLBuilder):
             "map": vectmap,
         }
 
-        super(SQLBuilderWhere, self).__init__(
-            parent, title, vectmap, id=wx.ID_ANY, layer=layer
-        )
+        super().__init__(parent, title, vectmap, id=wx.ID_ANY, layer=layer)
 
     def OnClear(self, event):
         self.text_sql.SetValue("")
@@ -928,14 +913,11 @@ class SQLBuilderWhere(SQLBuilder):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) not in [3, 4]:
+    if len(sys.argv) not in {3, 4}:
         print(__doc__, file=sys.stderr)
         sys.exit()
 
-    if len(sys.argv) == 3:
-        layer = 1
-    else:
-        layer = int(sys.argv[3])
+    layer = 1 if len(sys.argv) == 3 else int(sys.argv[3])
 
     if sys.argv[1] == "select":
         sqlBuilder = SQLBuilderSelect

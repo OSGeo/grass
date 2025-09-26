@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
     int *readrow;
     int nrows, ncols, brows;
     int i, n, t;
-    size_t size;
+    size_t size, in_buf_size, out_buf_size;
     struct Colors colr;
     struct Cell_head cellhd;
     struct Cell_head window;
@@ -298,18 +298,10 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Neighborhood size must be odd"));
     ncb.dist = ncb.nsize / 2;
 
-    sscanf(parm.nprocs->answer, "%d", &ncb.threads);
-    if (ncb.threads < 1) {
-        G_fatal_error(_("<%d> is not valid number of threads."), ncb.threads);
-    }
-#if defined(_OPENMP)
-    omp_set_num_threads(ncb.threads);
-#else
-    if (ncb.threads != 1)
-        G_warning(_("GRASS is compiled without OpenMP support. Ignoring "
-                    "threads setting."));
-    ncb.threads = 1;
-#endif
+    ncb.threads = G_set_omp_num_threads(parm.nprocs);
+    ncb.threads = Rast_disable_omp_on_mask(ncb.threads);
+    if (ncb.threads < 1)
+        G_fatal_error(_("<%d> is not valid number of nprocs."), ncb.threads);
 
     if (strcmp(parm.weighting_function->answer, "none") && flag.circle->answer)
         G_fatal_error(_("-%c and %s= are mutually exclusive"), flag.circle->key,
@@ -338,15 +330,6 @@ int main(int argc, char *argv[])
 
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
-    brows = atoi(parm.memory->answer) * ((1 << 20) / sizeof(DCELL)) / ncols;
-    /* set the output buffer rows to be at most covering the entire map */
-    if (brows > nrows) {
-        brows = nrows;
-    }
-    /* but at least the number of threads */
-    if (brows < ncb.threads) {
-        brows = ncb.threads;
-    }
 
     /* open raster maps */
     in_fd = G_malloc(sizeof(int) * ncb.threads);
@@ -367,6 +350,27 @@ int main(int argc, char *argv[])
                       parm.output->key, parm.method->key);
 
     outputs = G_calloc(num_outputs, sizeof(struct output));
+
+    /* memory reserved for input */
+    in_buf_size = (Rast_window_cols() + 2 * ncb.dist) * sizeof(DCELL) *
+                  ncb.nsize * ncb.threads;
+    /* memory available for output buffer */
+    out_buf_size = (size_t)atoi(parm.memory->answer) * (1 << 20);
+    /* size_t is unsigned, check if any memory is left for output buffer */
+    if (out_buf_size <= in_buf_size)
+        out_buf_size = 0;
+    else
+        out_buf_size -= in_buf_size;
+    /* number of buffered rows for all output maps */
+    brows = out_buf_size / (sizeof(DCELL) * ncols * num_outputs);
+    /* set the output buffer rows to be at most covering the entire map */
+    if (brows > nrows) {
+        brows = nrows;
+    }
+    /* but at least the number of threads */
+    if (brows < ncb.threads) {
+        brows = ncb.threads;
+    }
 
     /* read the weights */
     weights = 0;
@@ -434,8 +438,9 @@ int main(int argc, char *argv[])
         if (parm.title->answer)
             strcpy(out->title, parm.title->answer);
         else
-            sprintf(out->title, "%dx%d neighborhood: %s of %s", ncb.nsize,
-                    ncb.nsize, menu[method].name, ncb.oldcell);
+            snprintf(out->title, sizeof(out->title),
+                     "%dx%d neighborhood: %s of %s", ncb.nsize, ncb.nsize,
+                     menu[method].name, ncb.oldcell);
     }
 
     /* copy color table? */

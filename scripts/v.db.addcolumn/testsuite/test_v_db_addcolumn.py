@@ -34,7 +34,7 @@ class TestVDbAddColumn(TestCase):
 
         m = SimpleModule("v.info", map="myroads", flags="c")
         self.assertModule(m)
-        self.assertRegexpMatches(decode(m.outputs.stdout), "slope")
+        self.assertRegex(decode(m.outputs.stdout), "slope")
 
     def test_add_two_columns_check(self):
         """Add two column to the attribute table"""
@@ -48,8 +48,8 @@ class TestVDbAddColumn(TestCase):
 
         m = SimpleModule("v.info", map="myroads", flags="c")
         self.assertModule(m)
-        self.assertRegexpMatches(decode(m.outputs.stdout), "slope_2")
-        self.assertRegexpMatches(decode(m.outputs.stdout), "myname")
+        self.assertRegex(decode(m.outputs.stdout), "slope_2")
+        self.assertRegex(decode(m.outputs.stdout), "myname")
 
 
 if __name__ == "__main__":

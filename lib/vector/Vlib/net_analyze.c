@@ -256,7 +256,6 @@ static int find_shortest_path(struct Map_info *Map, int from, int to,
    return value, \return -1 : destination unreachable
 
  */
-
 int Vect_net_ttb_shortest_path(struct Map_info *Map, int from, int from_type,
                                int to, int to_type, int tucfield,
                                struct ilist *List, double *cost)
@@ -411,7 +410,7 @@ dglGraph_s *Vect_net_get_graph(struct Map_info *Map)
    \return 1 OK
    \return 0 does not exist (was not inserted)
  */
-int Vect_net_get_line_cost(const struct Map_info *Map, int line, int direction,
+int Vect_net_get_line_cost(struct Map_info *Map, int line, int direction,
                            double *cost)
 {
     /* dglInt32_t *pEdge; */
@@ -465,7 +464,7 @@ int Vect_net_get_line_cost(const struct Map_info *Map, int line, int direction,
 
    \return 1
  */
-int Vect_net_get_node_cost(const struct Map_info *Map, int node, double *cost)
+int Vect_net_get_node_cost(struct Map_info *Map, int node, double *cost)
 {
     G_debug(3, "Vect_net_get_node_cost(): node = %d", node);
 
@@ -480,19 +479,24 @@ int Vect_net_get_node_cost(const struct Map_info *Map, int node, double *cost)
    \brief Find nearest node(s) on network.
 
    \param Map vector map with build graph (see Vect_net_ttb_build_graph and
-   Vect_net_build_graph) \param x,y,z point coordinates (z coordinate NOT USED
-   !) \param direction (GV_FORWARD - from point to net, GV_BACKWARD - from net
-   to point) \param maxdist maximum distance to the network \param[out] node1
-   pointer where to store the node number (or NULL) \param[out] node2 pointer
-   where to store the node number (or NULL) \param[out] ln    pointer where to
-   store the nearest line number (or NULL) \param[out] costs1 pointer where to
-   store costs on nearest line to node1 (not costs from x,y,z to the line) (or
-   NULL) \param[out] costs2 pointer where to store costs on nearest line to
-   node2 (not costs from x,y,z to the line) (or NULL) \param[out] Points1
-   pointer to structure where to store vertices on nearest line to node1 (or
-   NULL) \param[out] Points2 pointer to structure where to store vertices on
-   nearest line to node2 (or NULL) \param[out] pointer where to distance to the
-   line (or NULL) \param[out] distance
+              Vect_net_build_graph)
+   \param x,y,z point coordinates (z coordinate NOT USED!)
+   \param direction (GV_FORWARD - from point to net, GV_BACKWARD - from net
+                    to point)
+   \param maxdist maximum distance to the network
+   \param[out] node1 pointer where to store the node number (or NULL)
+   \param[out] node2 pointer where to store the node number (or NULL)
+   \param[out] ln    pointer where to store the nearest line number (or NULL)
+   \param[out] costs1 pointer where to store costs on nearest line to node1 (not
+                      costs from x,y,z to the line) (or NULL)
+   \param[out] costs2 pointer where to store costs on nearest line to node2
+                      (not costs from x,y,z to the line) (or NULL)
+   \param[out] Points1 pointer to structure where to store vertices on nearest
+                       line to node1 (or NULL)
+   \param[out] Points2 pointer to structure where to store vertices on nearest
+                       line to node2 (or NULL)
+  \param[out] pointer where to distance to the line (or NULL)
+  \param[out] distance
 
    \return number of nodes found (0,1,2)
  */

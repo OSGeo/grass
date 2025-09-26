@@ -3,27 +3,17 @@ Testing framework module for running tests in Python unittest fashion
 
 Copyright (C) 2014-2021 by the GRASS Development Team
 This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS GIS
+License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :authors: Vaclav Petras
 """
-
-from __future__ import print_function
 
 import sys
 import os
 import argparse
 import subprocess
 import locale
-
-try:
-    from itertools import izip as zip
-except ImportError:  # will be 3.x series
-    pass
-
-if sys.version_info.major >= 3:
-    unicode = str
 
 
 def _get_encoding():
@@ -40,27 +30,20 @@ def _get_encoding():
 def decode(bytes_, encoding=None):
     if isinstance(bytes_, bytes):
         return bytes_.decode(_get_encoding())
-    else:
-        return bytes_
+    return bytes_
 
 
 def encode(string, encoding=None):
-    if isinstance(string, unicode):
+    if isinstance(string, str):
         return string.encode(_get_encoding())
-    else:
-        return string
+    return string
 
 
 def text_to_string(text):
     """Convert text to str. Useful when passing text into environments,
     in Python 2 it needs to be bytes on Windows, in Python 3 in needs unicode.
     """
-    if sys.version[0] == "2":
-        # Python 2
-        return encode(text)
-    else:
-        # Python 3
-        return decode(text)
+    return decode(text)
 
 
 def main():
@@ -90,11 +73,9 @@ def main():
     )
     # TODO: rename since every src can be used?
     parser.add_argument(
-        "--grasssrc", required=True, help="GRASS GIS source code (to take tests from)"
+        "--grasssrc", required=True, help="GRASS source code (to take tests from)"
     )
-    parser.add_argument(
-        "--grassdata", required=True, help="GRASS GIS data base (GISDBASE)"
-    )
+    parser.add_argument("--grassdata", required=True, help="GRASS data base (GISDBASE)")
     parser.add_argument(
         "--create-main-report",
         help="Create also main report for all tests",
@@ -124,20 +105,20 @@ def main():
     grass_executable = args.grassbin
 
     # Software
-    # query GRASS GIS itself for its GISBASE
+    # query GRASS itself for its GISBASE
     # we assume that the start script is available and in the PATH
     # the shell=True is here because of MS Windows? (code taken from wiki)
     startcmd = grass_executable + " --config path"
-    p = subprocess.Popen(
+    with subprocess.Popen(
         startcmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    )
-    out, err = p.communicate()
-    if p.returncode != 0:
-        print(
-            "ERROR: Cannot find GRASS GIS start script (%s):\n%s" % (startcmd, err),
-            file=sys.stderr,
-        )
-        return 1
+    ) as p:
+        out, err = p.communicate()
+        if p.returncode != 0:
+            print(
+                "ERROR: Cannot find GRASS start script (%s):\n%s" % (startcmd, err),
+                file=sys.stderr,
+            )
+            return 1
     gisbase = decode(out.strip())
 
     # set GISBASE environment variable
@@ -168,10 +149,9 @@ def main():
         # including also type to make it unique and preserve it for sure
         report = "report_for_" + location + "_" + location_type
         absreport = os.path.abspath(report)
-        p = subprocess.Popen(
+        with subprocess.Popen(
             [
                 sys.executable,
-                "-tt",
                 "-m",
                 "grass.gunittest.main",
                 "--grassdata",
@@ -184,23 +164,24 @@ def main():
                 absreport,
             ],
             cwd=grasssrc,
-        )
-        returncode = p.wait()
-        reports.append(report)
+        ) as p2:
+            returncode = p2.wait()
+            reports.append(report)
 
     if main_report:
         # TODO: solve the path to source code (work now only for grass source code)
         arguments = [
             sys.executable,
-            grasssrc + "/python/grass/gunittest/" + "multireport.py",
-            "--timestapms",
+            grasssrc + "/python/grass/gunittest/multireport.py",
+            "--timestamps",
+            *reports,
         ]
-        arguments.extend(reports)
-        p = subprocess.Popen(arguments)
-        returncode = p.wait()
-        if returncode != 0:
-            print("ERROR: Creation of main report failed.", file=sys.stderr)
-            return 1
+
+        with subprocess.Popen(arguments) as p3:
+            returncode = p3.wait()
+            if returncode != 0:
+                print("ERROR: Creation of main report failed.", file=sys.stderr)
+                return 1
 
     return 0
 

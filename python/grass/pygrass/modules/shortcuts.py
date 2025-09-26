@@ -1,47 +1,50 @@
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
 import fnmatch
 
-
-from grass.script.core import get_commands
 from grass.pygrass.modules.interface import Module
 
-_CMDS = list(get_commands()[0])
-_CMDS.sort()
+
+def _get_commands():
+    """Get a list of commands (tool names)"""
+    if _get_commands.list_of_commands is None:
+        # Retrieve and store the list during the the first call of the function.
+        # pylint: disable=import-outside-toplevel
+        from grass.script.core import get_commands
+
+        _get_commands.list_of_commands = list(get_commands()[0])
+        _get_commands.list_of_commands.sort()
+    return _get_commands.list_of_commands
 
 
-class MetaModule(object):
+# Initialize the attribute of the function to indicate
+# that the data is not initialized.
+_get_commands.list_of_commands = None
+
+
+class MetaModule:
     """Example how to use MetaModule
 
-    >>> g = MetaModule('g')
+    >>> g = MetaModule("g")
     >>> g_list = g.list
     >>> g_list.name
     'g.list'
     >>> g_list.required
     ['type']
-    >>> g_list.inputs.type = 'raster'
-    >>> g_list.inputs.mapset = 'PERMANENT'
+    >>> g_list.inputs.type = "raster"
+    >>> g_list.inputs.mapset = "PERMANENT"
     >>> g_list.stdout_ = -1
     >>> g_list.run()
     Module('g.list')
-    >>> g_list.outputs.stdout                         # doctest: +ELLIPSIS
+    >>> g_list.outputs.stdout  # doctest: +ELLIPSIS
     '...basin...elevation...'
 
-    >>> r = MetaModule('r')
+    >>> r = MetaModule("r")
     >>> what = r.what
     >>> what.description
     'Queries raster maps on their category values and category labels.'
-    >>> what.inputs.map = 'elevation'
-    >>> what.inputs.coordinates = [640000,220500]          # doctest: +SKIP
-    >>> what.run()                                         # doctest: +SKIP
-    >>> v = MetaModule('v')
+    >>> what.inputs.map = "elevation"
+    >>> what.inputs.coordinates = [640000, 220500]  # doctest: +SKIP
+    >>> what.run()  # doctest: +SKIP
+    >>> v = MetaModule("v")
     >>> v.import                                      # doctest: +ELLIPSIS
     Traceback (most recent call last):
       File ".../doctest.py", line 1315, in __run
@@ -56,12 +59,12 @@ class MetaModule(object):
 
     def __init__(self, prefix, cls=None):
         self.prefix = prefix
-        self.cls = cls if cls else Module
+        self.cls = cls or Module
 
     def __dir__(self):
         return [
             mod[(len(self.prefix) + 1) :].replace(".", "_")
-            for mod in fnmatch.filter(_CMDS, "%s.*" % self.prefix)
+            for mod in fnmatch.filter(_get_commands(), "%s.*" % self.prefix)
         ]
 
     def __getattr__(self, name):

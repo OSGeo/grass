@@ -103,7 +103,7 @@ int D_open_driver(void)
         }
 
         if (c)
-            sprintf(progname, "%s", c);
+            snprintf(progname, sizeof(progname), "%s", c);
         else { /* monitors managed by d.mon -> call default renderer */
             char element[GPATH_MAX];
 
@@ -138,10 +138,9 @@ int D_open_driver(void)
     drv = (p && G_strcasecmp(p, "png") == 0)    ? PNG_Driver()
           : (p && G_strcasecmp(p, "ps") == 0)   ? PS_Driver()
           : (p && G_strcasecmp(p, "html") == 0) ? HTML_Driver()
-          :
+                                                :
 #ifdef USE_CAIRO
-          (p && G_strcasecmp(p, "cairo") == 0) ? Cairo_Driver()
-                                               : Cairo_Driver();
+                                                Cairo_Driver();
 #else
                                                 PNG_Driver();
 #endif
@@ -249,7 +248,7 @@ void D_encoding(const char *name)
   \brief Get font list
 
   \param[out] list list of font names
-  \param[out] number of items in the list
+  \param[out] count of items in the list
 */
 void D_font_list(char ***list, int *count)
 {
@@ -260,7 +259,7 @@ void D_font_list(char ***list, int *count)
   \brief Get font info
 
   \param[out] list list of font info
-  \param[out] number of items in the list
+  \param[out] count of items in the list
 */
 void D_font_info(char ***list, int *count)
 {
@@ -278,7 +277,6 @@ void D_font_info(char ***list, int *count)
  *  \param[out] r right edge of clip window
  *  \return ~
  */
-
 void D_get_clip_window(double *t, double *b, double *l, double *r)
 {
     COM_Get_window(t, b, l, r);
@@ -296,7 +294,6 @@ void D_get_clip_window(double *t, double *b, double *l, double *r)
  *  \param r right edge of clip window
  *  \return ~
  */
-
 void D_set_clip_window(double t, double b, double l, double r)
 {
     if (t < frame.t)
@@ -322,7 +319,6 @@ void D_set_clip_window(double t, double b, double l, double r)
  *  \param[out] r right edge of frame
  *  \return ~
  */
-
 void D_get_frame(double *t, double *b, double *l, double *r)
 {
     *t = frame.t;
@@ -342,7 +338,6 @@ void D_get_frame(double *t, double *b, double *l, double *r)
  *  \param[out] r right edge of screen
  *  \return ~
  */
-
 void D_get_screen(double *t, double *b, double *l, double *r)
 {
     *t = screen.t;
@@ -360,7 +355,6 @@ void D_get_screen(double *t, double *b, double *l, double *r)
  *  \param ~
  *  \return ~
  */
-
 void D_set_clip_window_to_map_window(void)
 {
     D_set_clip_window(D_get_d_north(), D_get_d_south(), D_get_d_west(),
@@ -376,7 +370,6 @@ void D_set_clip_window_to_map_window(void)
  *  \param ~
  *  \return ~
  */
-
 void D_set_clip_window_to_screen_window(void)
 {
     COM_Set_window(frame.t, frame.b, frame.l, frame.r);

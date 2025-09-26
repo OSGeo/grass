@@ -5,17 +5,15 @@ set -e
 
 # compile
 ./configure \
-    --enable-largefile=yes \
-    --with-nls \
-    --with-cxx \
-    --with-readline \
     --with-bzlib \
-    --with-pthread \
-    --with-proj-share=/usr/share/proj \
-    --with-geos=/usr/bin/geos-config \
     --with-cairo \
-    --with-opengl-libs=/usr/include/GL \
+    --with-cxx \
     --with-freetype=yes --with-freetype-includes="/usr/include/freetype2/" \
+    --with-geos=/usr/bin/geos-config \
+    --with-nls \
+    --with-opengl-libs=/usr/include/GL \
+    --with-proj-share=/usr/share/proj \
+    --with-readline \
     --with-sqlite=yes
 make
 
@@ -26,8 +24,8 @@ mkdir -p $HOME/.local/bin/
 ln -s $HOME/bin.*/grass* $HOME/.local/bin/grass
 
 # download a sample dataset
-mkdir -p data/grassdata \
+mkdir -p data \
   && curl -SL https://grass.osgeo.org/sampledata/north_carolina/nc_basic_spm_grass7.zip > nc_basic_spm_grass7.zip \
   && unzip -qq nc_basic_spm_grass7.zip \
-  && mv nc_basic_spm_grass7 data/grassdata \
+  && mv nc_basic_spm_grass7 data \
   && rm nc_basic_spm_grass7.zip

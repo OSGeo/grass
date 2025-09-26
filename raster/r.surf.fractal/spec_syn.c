@@ -42,9 +42,6 @@ int specsyn(double *data[2], /* Array holding complex data to transform. */
     double phase, rad, /* polar coordinates of Fourier coeff.  */
         *temp[2];
 
-    /* You can set GRASS_RANDOM_SEED for repeatability */
-    G_math_srand_auto(); /* Reset random number generator.       */
-
     temp[0] = (double *)G_malloc(nn * nn * sizeof(double));
     temp[1] = (double *)G_malloc(nn * nn * sizeof(double));
 

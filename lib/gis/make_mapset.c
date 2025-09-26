@@ -62,12 +62,13 @@ int G_make_mapset(const char *gisdbase_name, const char *location_name,
         return -2;
 
     /* Check if location exists */
-    sprintf(path, "%s/%s", gisdbase_name, location_name);
+    snprintf(path, sizeof(path), "%s/%s", gisdbase_name, location_name);
     if (access(path, F_OK) == -1)
         G_fatal_error(_("Location <%s> doesn't exist"), location_name);
 
     /* Make the mapset */
-    sprintf(path, "%s/%s/%s", gisdbase_name, location_name, mapset_name);
+    snprintf(path, sizeof(path), "%s/%s/%s", gisdbase_name, location_name,
+             mapset_name);
     if (G_mkdir(path) != 0) {
         perror("G_make_mapset");
         return -1;

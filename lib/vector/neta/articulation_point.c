@@ -153,5 +153,6 @@ int NetA_articulation_points(dglGraph_s *graph, struct ilist *articulation_list)
     G_free(parent);
     G_free(stack);
     G_free(current_edge);
+    G_free(mark);
     return points;
 }

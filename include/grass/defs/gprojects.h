@@ -65,7 +65,7 @@ void GPJ_free_ellps(struct gpj_ellps *);
 #ifndef HAVE_PROJ_H
 /* PROJ.4's private datastructures copied from projects.h as removed
    from upstream; pending better solution. see:
-   http://trac.osgeo.org/proj/ticket/98 */
+   https://trac.osgeo.org/proj/ticket/98 */
 
 int pj_factors(LP, void *, double, struct FACTORS *);
 

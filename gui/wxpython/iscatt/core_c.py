@@ -11,18 +11,35 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
 
+import ctypes
 import sys
-import six
-import numpy as np
+from ctypes import POINTER, c_char_p, c_double, c_int, c_uint8, pointer
 from multiprocessing import Process, Queue
 
-from ctypes import *
+import numpy as np
 
 try:
-    from grass.lib.imagery import *
-    from grass.lib.gis import G_get_window
+    from grass.lib.gis import G_get_window, struct_Cell_head
+    from grass.lib.imagery import (
+        SC_SCATT_CONDITIONS,
+        SC_SCATT_DATA,
+        I_apply_colormap,
+        I_compute_scatts,
+        I_create_cat_rast,
+        I_insert_patch_to_cat_rast,
+        I_merge_arrays,
+        I_rasterize,
+        I_sc_add_cat,
+        I_sc_free_cats,
+        I_sc_init_cats,
+        I_sc_insert_scatt_data,
+        I_scd_init_scatt_data,
+        scdScattData,
+        struct_scCats,
+    )
+    from grass.lib.raster import struct_Range
 except ImportError as e:
-    sys.stderr.write(_("Loading ctypes libs failed"))
+    sys.stderr.write(_("Loading ctypes libs failed: %s") % e)
 
 from core.gcmd import GException
 from grass.script import encode
@@ -59,7 +76,7 @@ def ApplyColormap(vals, vals_mask, colmap, out_vals):
     colmap_p = colmap.ctypes.data_as(c_uint8_p)
     out_vals_p = out_vals.ctypes.data_as(c_uint8_p)
 
-    vals_size = vals.reshape((-1)).shape[0]
+    vals_size = vals.reshape(-1).shape[0]
     I_apply_colormap(vals_p, vals_mask_p, vals_size, colmap_p, out_vals_p)
 
 
@@ -107,13 +124,13 @@ def ComputeScatts(
 
 
 def _memmapToFileNames(data):
-    for k, v in six.iteritems(data):
+    for k, v in data.items():
         if "np_vals" in v:
             data[k]["np_vals"] = v["np_vals"].filename()
 
 
 def _fileNamesToMemmap(data):
-    for k, v in six.iteritems(data):
+    for k, v in data.items():
         if "np_vals" in v:
             data[k]["np_vals"] = np.memmap(filename=v["np_vals"])
 
@@ -195,12 +212,8 @@ def _regionToCellHead(region):
         "ewres": "ew_res",
     }
 
-    for k, v in six.iteritems(region):
-        if k in ["rows", "cols", "cells", "zone"]:  # zone added in r65224
-            v = int(v)
-        else:
-            v = float(v)
-
+    for k, v in region.items():
+        v = int(v) if k in {"rows", "cols", "cells", "zone"} else float(v)
         if k in convert_dict:
             k = convert_dict[k]
 
@@ -228,18 +241,18 @@ def _getComputationStruct(cats, cats_rasts, cats_type, n_bands):
     refs = []
     cats_rasts_core = []
 
-    for cat_id, scatt_ids in six.iteritems(cats):
+    for cat_id, scatt_ids in cats.items():
         cat_c_id = I_sc_add_cat(pointer(sccats))
         cats_rasts_core.append(cats_rasts[cat_id])
 
-        for scatt_id, dt in six.iteritems(scatt_ids):
+        for scatt_id, dt in scatt_ids.items():
             # if key is missing condition is always True (full scatter plor is
             # computed)
             vals = dt["np_vals"]
 
             scatt_vals = scdScattData()
 
-            c_void_p = ctypes.POINTER(ctypes.c_void_p)
+            c_void_p = POINTER(ctypes.c_void_p)
 
             if cats_type == SC_SCATT_DATA:
                 vals[:] = 0
@@ -270,7 +283,6 @@ def _updateCatRastProcess(patch_rast, region, cat_rast, output_queue):
 
 
 def _rasterize(polygon, rast, region, value, output_queue):
-    pol_size = len(polygon) * 2
     pol = np.array(polygon, dtype=float)
 
     c_uint8_p = POINTER(c_uint8)

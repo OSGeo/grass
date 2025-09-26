@@ -36,11 +36,11 @@ class TestVDbAddTable(TestCase):
 
         m = SimpleModule("v.info", map="myroads", flags="c")
         self.assertModule(m)
-        self.assertNotRegexpMatches(decode(m.outputs.stdout), "slope")
+        self.assertNotRegex(decode(m.outputs.stdout), "slope")
 
         m = SimpleModule("v.info", map="myroads", flags="c", layer=2)
         self.assertModule(m)
-        self.assertRegexpMatches(decode(m.outputs.stdout), "slope")
+        self.assertRegex(decode(m.outputs.stdout), "slope")
 
 
 if __name__ == "__main__":

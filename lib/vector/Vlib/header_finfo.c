@@ -34,7 +34,7 @@
    \return string containing OGR/PostGIS datasource name
    \return NULL on error (map format is native)
  */
-const char *Vect_get_finfo_dsn_name(const struct Map_info *Map)
+const char *Vect_get_finfo_dsn_name(struct Map_info *Map)
 {
     if (Map->format == GV_FORMAT_OGR || Map->format == GV_FORMAT_OGR_DIRECT) {
 #ifndef HAVE_OGR
@@ -49,8 +49,9 @@ const char *Vect_get_finfo_dsn_name(const struct Map_info *Map)
         return Map->fInfo.pg.db_name;
     }
 
-    G_debug(1, "Native vector format detected for <%s>",
-            Vect_get_full_name(Map));
+    const char *mname = Vect_get_full_name(Map);
+    G_debug(1, "Native vector format detected for <%s>", mname);
+    G_free((void *)mname);
 
     return NULL;
 }
@@ -70,7 +71,7 @@ const char *Vect_get_finfo_dsn_name(const struct Map_info *Map)
    \return string containing layer name
    \return NULL on error (map format is native)
  */
-char *Vect_get_finfo_layer_name(const struct Map_info *Map)
+char *Vect_get_finfo_layer_name(struct Map_info *Map)
 {
     char *name;
 
@@ -89,8 +90,9 @@ char *Vect_get_finfo_layer_name(const struct Map_info *Map)
                    Map->fInfo.pg.table_name);
     }
     else {
-        G_debug(1, "Native vector format detected for <%s>",
-                Vect_get_full_name(Map));
+        const char *mname = Vect_get_full_name(Map);
+        G_debug(1, "Native vector format detected for <%s>", mname);
+        G_free((void *)mname);
     }
 
     return name;
@@ -105,7 +107,7 @@ char *Vect_get_finfo_layer_name(const struct Map_info *Map)
    \return "PostgreSQL" for PostGIS format (GV_FORMAT_POSTGIS)
    \return NULL on error (or on missing OGR/PostgreSQL support)
  */
-const char *Vect_get_finfo_format_info(const struct Map_info *Map)
+const char *Vect_get_finfo_format_info(struct Map_info *Map)
 {
     if (Map->format == GV_FORMAT_OGR || Map->format == GV_FORMAT_OGR_DIRECT) {
 #ifndef HAVE_OGR
@@ -140,7 +142,7 @@ const char *Vect_get_finfo_format_info(const struct Map_info *Map)
    (point, linestring, polygon, ...)
    \return NULL on error (map format is native)
  */
-const char *Vect_get_finfo_geometry_type(const struct Map_info *Map)
+const char *Vect_get_finfo_geometry_type(struct Map_info *Map)
 {
     int dim;
     char *ftype, *ftype_tmp;
@@ -175,10 +177,10 @@ const char *Vect_get_finfo_geometry_type(const struct Map_info *Map)
         PGresult *res;
 
         pg_info = &(Map->fInfo.pg);
-        sprintf(stmt,
-                "SELECT type,coord_dimension FROM geometry_columns "
-                "WHERE f_table_schema = '%s' AND f_table_name = '%s'",
-                pg_info->schema_name, pg_info->table_name);
+        snprintf(stmt, sizeof(stmt),
+                 "SELECT type,coord_dimension FROM geometry_columns "
+                 "WHERE f_table_schema = '%s' AND f_table_name = '%s'",
+                 pg_info->schema_name, pg_info->table_name);
         G_debug(2, "SQL: %s", stmt);
 
         res = PQexec(pg_info->conn, stmt);
@@ -204,8 +206,9 @@ const char *Vect_get_finfo_geometry_type(const struct Map_info *Map)
     G_str_to_lower(ftype);
 
     if (dim == 3) {
-        ftype_tmp = (char *)G_malloc(3 + strlen(ftype) + 1);
-        sprintf(ftype_tmp, "3D %s", ftype);
+        size_t len = 3 + strlen(ftype) + 1;
+        ftype_tmp = (char *)G_malloc(len);
+        snprintf(ftype_tmp, len, "3D %s", ftype);
         G_free(ftype);
         ftype = ftype_tmp;
     }
@@ -221,7 +224,7 @@ const char *Vect_get_finfo_geometry_type(const struct Map_info *Map)
    \return pointer to Format_info structure
    \return NULL for native format
  */
-const struct Format_info *Vect_get_finfo(const struct Map_info *Map)
+const struct Format_info *Vect_get_finfo(struct Map_info *Map)
 {
     /* do not check Map-format which is native (see
      * GRASS_VECTOR_EXTERNAL_IMMEDIATE) */
@@ -244,7 +247,7 @@ const struct Format_info *Vect_get_finfo(const struct Map_info *Map)
    \return GV_TOPO_PSEUDO for pseudo-topology
    \return GV_TOPO_POSTGIS for PostGIS Topology
  */
-int Vect_get_finfo_topology_info(const struct Map_info *Map, char **toposchema,
+int Vect_get_finfo_topology_info(struct Map_info *Map, char **toposchema,
                                  char **topogeom, int *topo_geo_only)
 {
     if (Map->format == GV_FORMAT_OGR || Map->format == GV_FORMAT_OGR_DIRECT) {

@@ -36,6 +36,7 @@ extern "C" {
 #include <grass/vector.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
+#include <unistd.h>
 }
 
 extern "C" {
@@ -212,19 +213,20 @@ int main(int argc, char *argv[])
     Flag *reproject_flag = G_define_flag();
     reproject_flag->key = 'w';
     reproject_flag->label =
-        _("Reproject to location's coordinate system if needed");
+        _("Reproject to projects's coordinate system if needed");
     reproject_flag->description =
         _("Reprojects input dataset to the coordinate system of"
-          " the GRASS location (by default only datasets with the"
+          " the GRASS project (by default only datasets with the"
           " matching coordinate system can be imported");
     reproject_flag->guisection = _("Projection");
 
     Flag *over_flag = G_define_flag();
     over_flag->key = 'o';
     over_flag->label =
-        _("Override projection check (use current location's projection)");
-    over_flag->description = _(
-        "Assume that the dataset has same projection as the current location");
+        _("Override projection check (use current project's CRS)");
+    over_flag->description =
+        _("Assume that the dataset has the same coordinate reference system as "
+          "the current project");
     over_flag->guisection = _("Projection");
 
     // TODO: from the API it seems that also prj file path and proj string will
@@ -347,7 +349,7 @@ int main(int argc, char *argv[])
 
     // we reproject when requested regardless the input projection
     if (reproject_flag->answer) {
-        G_message(_("Reprojecting the input to the location projection"));
+        G_message(_("Reprojecting the input to the project's CRS"));
         char *proj_wkt = location_projection_as_wkt(false);
         pdal::Options o4;
         // TODO: try catch for user input error
@@ -370,8 +372,8 @@ int main(int argc, char *argv[])
     // getting projection is possible only after prepare
     if (over_flag->answer) {
         G_important_message(_("Overriding projection check and assuming"
-                              " that the projection of input matches"
-                              " the location projection"));
+                              " that the CRS of input matches"
+                              " the project's CRS"));
     }
     else if (!reproject_flag->answer) {
         pdal::SpatialReference spatial_reference =

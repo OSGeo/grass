@@ -3,7 +3,7 @@ Testing framework module for running tests in Python unittest fashion
 
 Copyright (C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS GIS
+License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :authors: Vaclav Petras
@@ -12,57 +12,36 @@ File content taken from Python's  ``unittest.runner``, it will be used as
 a template. It is not expected that something will left.
 """
 
+from __future__ import annotations
 
-import sys
 import time
-
 import unittest
+from typing import TextIO
+
+import grass.gunittest.case
+import grass.gunittest.result
 
 __unittest = True
 
 
-class _WritelnDecorator(object):
+class _WritelnDecorator:
     """Used to decorate file-like objects with a handy 'writeln' method"""
 
-    def __init__(self, stream):
+    def __init__(self, stream) -> None:
         self.stream = stream
 
-    def __getattr__(self, attr):
-        if attr in ("stream", "__getstate__"):
+    def __getattr__(self, attr: str):
+        if attr in {"stream", "__getstate__"}:
             raise AttributeError(attr)
         return getattr(self.stream, attr)
 
-    def writeln(self, arg=None):
+    def writeln(self, arg=None) -> None:
         if arg:
             self.write(arg)
         self.write("\n")  # text-mode streams translate to \r\n if needed
 
 
-class TestResult(unittest.TestResult):
-    # descriptions and verbosity unused
-    # included for compatibility with unittest's TestResult
-    # where are also unused, so perhaps we can remove them
-    # stream set to None and not included in interface, it would not make sense
-    def __init__(self, stream=None, descriptions=None, verbosity=None):
-        super(TestResult, self).__init__(
-            stream=stream, descriptions=descriptions, verbosity=verbosity
-        )
-        self.successes = []
-
-    def addSuccess(self, test):
-        super(TestResult, self).addSuccess(test)
-        self.successes.append(test)
-
-    # TODO: better would be to pass start at the beginning
-    # alternative is to leave counting time on class
-    # TODO: document: we expect all grass classes to have setTimes
-    # TODO: alternatively, be more forgiving for non-unittest methods
-    def setTimes(self, start_time, end_time, time_taken):
-        pass
-        # TODO: implement this
-
-
-class TextTestResult(TestResult):
+class TextTestResult(grass.gunittest.result.TestResult, unittest.TextTestResult):
     """A test result class that can print formatted text results to a stream.
 
     Used by TextTestRunner.
@@ -71,105 +50,32 @@ class TextTestResult(TestResult):
     separator1 = "=" * 70
     separator2 = "-" * 70
 
-    def __init__(self, stream, descriptions, verbosity):
-        super(TextTestResult, self).__init__(
-            stream=stream, descriptions=descriptions, verbosity=verbosity
+    def __init__(
+        self,
+        stream: _WritelnDecorator | TextIO | None,
+        descriptions: bool | None,
+        verbosity: int | None,
+        *,
+        durations: int | None = None,
+        **kwargs,
+    ) -> None:
+        """Construct a TextTestResult. Subclasses should accept **kwargs
+        to ensure compatibility as the interface changes."""
+        super().__init__(
+            stream=stream, descriptions=descriptions, verbosity=verbosity, **kwargs
         )
-        self.stream = _WritelnDecorator(stream)
-        self.showAll = verbosity > 1
-        self.dots = verbosity == 1
-        self.descriptions = descriptions
+        self.durations: int | None = durations
 
-        self.start_time = None
-        self.end_time = None
-        self.time_taken = None
+        self.start_time: float | None = None
+        self.end_time: float | None = None
+        self.time_taken: float | None = None
 
-    def getDescription(self, test):
-        doc_first_line = test.shortDescription()
-        if self.descriptions and doc_first_line:
-            return "\n".join((str(test), doc_first_line))
-        else:
-            return str(test)
-
-    def startTest(self, test):
-        super(TextTestResult, self).startTest(test)
-        if self.showAll:
-            self.stream.write(self.getDescription(test))
-            self.stream.write(" ... ")
-            self.stream.flush()
-
-    def addSuccess(self, test):
-        super(TextTestResult, self).addSuccess(test)
-        if self.showAll:
-            self.stream.writeln("ok")
-        elif self.dots:
-            self.stream.write(".")
-            self.stream.flush()
-
-    def addError(self, test, err):
-        super(TextTestResult, self).addError(test, err)
-        if self.showAll:
-            self.stream.writeln("ERROR")
-        elif self.dots:
-            self.stream.write("E")
-            self.stream.flush()
-
-    def addFailure(self, test, err):
-        super(TextTestResult, self).addFailure(test, err)
-        if self.showAll:
-            self.stream.writeln("FAIL")
-        elif self.dots:
-            self.stream.write("F")
-            self.stream.flush()
-
-    def addSkip(self, test, reason):
-        super(TextTestResult, self).addSkip(test, reason)
-        if self.showAll:
-            self.stream.writeln("skipped {0!r}".format(reason))
-        elif self.dots:
-            self.stream.write("s")
-            self.stream.flush()
-
-    def addExpectedFailure(self, test, err):
-        super(TextTestResult, self).addExpectedFailure(test, err)
-        if self.showAll:
-            self.stream.writeln("expected failure")
-        elif self.dots:
-            self.stream.write("x")
-            self.stream.flush()
-
-    def addUnexpectedSuccess(self, test):
-        super(TextTestResult, self).addUnexpectedSuccess(test)
-        if self.showAll:
-            self.stream.writeln("unexpected success")
-        elif self.dots:
-            self.stream.write("u")
-            self.stream.flush()
-
-    def printErrors(self):
-        if self.dots or self.showAll:
-            self.stream.writeln()
-        self.printErrorList("ERROR", self.errors)
-        self.printErrorList("FAIL", self.failures)
-
-    def printErrorList(self, flavour, errors):
-        for test, err in errors:
-            self.stream.writeln(self.separator1)
-            self.stream.writeln("%s: %s" % (flavour, self.getDescription(test)))
-            self.stream.writeln(self.separator2)
-            self.stream.writeln("%s" % err)
-
-    def setTimes(self, start_time, end_time, time_taken):
-        self.start_time = start_time
-        self.end_time = end_time
-        self.time_taken = time_taken
-
-    def stopTestRun(self):
-        super(TextTestResult, self).stopTestRun()
+    def stopTestRun(self) -> None:
+        super().stopTestRun()
         self.printErrors()
         self.stream.writeln(self.separator2)
         run = self.testsRun
-        self.stream.write("Ran %d test%s" % (run, run != 1 and "s" or ""))
+        self.stream.write("Ran %d test%s" % (run, (run != 1 and "s") or ""))
         if self.time_taken:
             self.stream.write(" in %.3fs" % (self.time_taken))
         self.stream.writeln()
@@ -202,7 +108,7 @@ class TextTestResult(TestResult):
             self.stream.write("\n")
 
 
-class KeyValueTestResult(TestResult):
+class KeyValueTestResult(grass.gunittest.result.TestResult):
     """A test result class that can print formatted text results to a stream.
 
     Used by TextTestRunner.
@@ -211,15 +117,13 @@ class KeyValueTestResult(TestResult):
     separator1 = "=" * 70
     separator2 = "-" * 70
 
-    def __init__(self, stream, test_type=None):
-        super(KeyValueTestResult, self).__init__(
-            stream=stream, descriptions=None, verbosity=None
-        )
+    def __init__(self, stream, test_type=None) -> None:
+        super().__init__(stream=stream, descriptions=None, verbosity=None)
         self._stream = _WritelnDecorator(stream)
 
-        self.start_time = None
-        self.end_time = None
-        self.time_taken = None
+        self.start_time: float | None = None
+        self.end_time: float | None = None
+        self.time_taken: float | None = None
 
         if test_type:
             self.test_type = test_type
@@ -227,22 +131,19 @@ class KeyValueTestResult(TestResult):
             self.test_type = "not-specified"
 
         self._grass_modules = []
-        self._supplementary_files = []
+        self._supplementary_files: list[str] = []
 
-    def setTimes(self, start_time, end_time, time_taken):
-        self.start_time = start_time
-        self.end_time = end_time
-        self.time_taken = time_taken
-
-    def stopTest(self, test):
-        super(KeyValueTestResult, self).stopTest(test)
+    def stopTest(
+        self, test: grass.gunittest.case.TestCase | unittest.case.TestCase
+    ) -> None:
+        super().stopTest(test)
         if hasattr(test, "grass_modules"):
             self._grass_modules.extend(test.grass_modules)
         if hasattr(test, "supplementary_files"):
             self._supplementary_files.extend(test.supplementary_files)
 
-    def stopTestRun(self):
-        super(KeyValueTestResult, self).stopTestRun()
+    def stopTestRun(self) -> None:
+        super().stopTestRun()
         infos = []
 
         run = self.testsRun
@@ -276,48 +177,50 @@ class KeyValueTestResult(TestResult):
         # write test details and just write status=failed
         if not run:
             run = errored + failed + succeeded
-        infos.append("total=%d" % (run))
-
-        infos.append("failures=%d" % failed)
-        infos.append("errors=%d" % errored)
-        infos.append("successes=%d" % succeeded)
-        infos.append("skipped=%d" % skipped)
-
-        # TODO: document this: if not supported by view,
-        # expected_failures should be counted as failures and vice versa
-        # or both add to skipped as unclear?
-        infos.append("expected_failures=%d" % expectedFails)
-        infos.append("unexpected_successes=%d" % unexpectedSuccesses)
-
-        # TODO: include each module just once? list good and bad modules?
-        infos.append("tested_modules=%s" % ",".join(self._grass_modules))
-        infos.append("supplementary_files=%s" % ",".join(self._supplementary_files))
-
-        # module, modules?, c, c++?, python
-        # TODO: include also type modules?
-        # TODO: include also C++ code?
-        # TODO: distinguish C and Python modules?
-        infos.append("test_type=%s" % (self.test_type))
+        infos.extend(
+            (
+                "total=%d" % (run),
+                "failures=%d" % failed,
+                "errors=%d" % errored,
+                "successes=%d" % succeeded,
+                "skipped=%d" % skipped,
+                # TODO: document this: if not supported by view,
+                # expected_failures should be counted as failures and vice versa
+                # or both add to skipped as unclear?
+                "expected_failures=%d" % expectedFails,
+                "unexpected_successes=%d" % unexpectedSuccesses,
+                # TODO: include each module just once? list good and bad modules?
+                "tested_modules=%s" % ",".join(self._grass_modules),
+                "supplementary_files=%s" % ",".join(self._supplementary_files),
+                # module, modules?, c, c++?, python
+                # TODO: include also type modules?
+                # TODO: include also C++ code?
+                # TODO: distinguish C and Python modules?
+                "test_type=%s" % (self.test_type),
+            )
+        )
 
         self._stream.write("\n".join(infos))
         self._stream.write("\n")
         self._stream.flush()
 
 
-class MultiTestResult(TestResult):
+class MultiTestResult(grass.gunittest.result.TestResult):
     # descriptions and verbosity unused
     # included for compatibility with unittest's TestResult
     # where are also unused, so perhaps we can remove them
     # stream set to None and not included in interface, it would not make sense
-    def __init__(self, results, forgiving=False, descriptions=None, verbosity=None):
-        super(MultiTestResult, self).__init__(
-            descriptions=descriptions, verbosity=verbosity, stream=None
-        )
+    def __init__(
+        self, results, forgiving=False, descriptions=None, verbosity=None
+    ) -> None:
+        super().__init__(stream=None, descriptions=descriptions, verbosity=verbosity)
         self._results = results
         self._forgiving = forgiving
 
-    def startTest(self, test):
-        super(MultiTestResult, self).startTest(test)
+    def startTest(
+        self, test: grass.gunittest.case.TestCase | unittest.case.TestCase
+    ) -> None:
+        super().startTest(test)
         for result in self._results:
             try:
                 result.startTest(test)
@@ -327,9 +230,11 @@ class MultiTestResult(TestResult):
                 else:
                     raise
 
-    def stopTest(self, test):
+    def stopTest(
+        self, test: grass.gunittest.case.TestCase | unittest.case.TestCase
+    ) -> None:
         """Called when the given test has been run"""
-        super(MultiTestResult, self).stopTest(test)
+        super().stopTest(test)
         for result in self._results:
             try:
                 result.stopTest(test)
@@ -339,8 +244,10 @@ class MultiTestResult(TestResult):
                 else:
                     raise
 
-    def addSuccess(self, test):
-        super(MultiTestResult, self).addSuccess(test)
+    def addSuccess(
+        self, test: grass.gunittest.case.TestCase | unittest.case.TestCase
+    ) -> None:
+        super().addSuccess(test)
         for result in self._results:
             try:
                 result.addSuccess(test)
@@ -350,8 +257,10 @@ class MultiTestResult(TestResult):
                 else:
                     raise
 
-    def addError(self, test, err):
-        super(MultiTestResult, self).addError(test, err)
+    def addError(
+        self, test: grass.gunittest.case.TestCase | unittest.case.TestCase, err
+    ) -> None:
+        super().addError(test, err)
         for result in self._results:
             try:
                 result.addError(test, err)
@@ -361,8 +270,10 @@ class MultiTestResult(TestResult):
                 else:
                     raise
 
-    def addFailure(self, test, err):
-        super(MultiTestResult, self).addFailure(test, err)
+    def addFailure(
+        self, test: grass.gunittest.case.TestCase | unittest.case.TestCase, err
+    ) -> None:
+        super().addFailure(test, err)
         for result in self._results:
             try:
                 result.addFailure(test, err)
@@ -372,8 +283,10 @@ class MultiTestResult(TestResult):
                 else:
                     raise
 
-    def addSkip(self, test, reason):
-        super(MultiTestResult, self).addSkip(test, reason)
+    def addSkip(
+        self, test: grass.gunittest.case.TestCase | unittest.case.TestCase, reason: str
+    ) -> None:
+        super().addSkip(test, reason)
         for result in self._results:
             try:
                 result.addSkip(test, reason)
@@ -383,8 +296,10 @@ class MultiTestResult(TestResult):
                 else:
                     raise
 
-    def addExpectedFailure(self, test, err):
-        super(MultiTestResult, self).addExpectedFailure(test, err)
+    def addExpectedFailure(
+        self, test: grass.gunittest.case.TestCase | unittest.case.TestCase, err
+    ) -> None:
+        super().addExpectedFailure(test, err)
         for result in self._results:
             try:
                 result.addExpectedFailure(test, err)
@@ -394,8 +309,10 @@ class MultiTestResult(TestResult):
                 else:
                     raise
 
-    def addUnexpectedSuccess(self, test):
-        super(MultiTestResult, self).addUnexpectedSuccess(test)
+    def addUnexpectedSuccess(
+        self, test: grass.gunittest.case.TestCase | unittest.case.TestCase
+    ) -> None:
+        super().addUnexpectedSuccess(test)
         for result in self._results:
             try:
                 result.addUnexpectedSuccess(test)
@@ -405,9 +322,9 @@ class MultiTestResult(TestResult):
                 else:
                     raise
 
-    def printErrors(self):
-        "Called by TestRunner after test run"
-        super(MultiTestResult, self).printErrors()
+    def printErrors(self) -> None:
+        """Called by TestRunner after test run"""
+        super().printErrors()
         for result in self._results:
             try:
                 result.printErrors()
@@ -417,12 +334,12 @@ class MultiTestResult(TestResult):
                 else:
                     raise
 
-    def startTestRun(self):
+    def startTestRun(self) -> None:
         """Called once before any tests are executed.
 
         See startTest for a method called before each test.
         """
-        super(MultiTestResult, self).startTestRun()
+        super().startTestRun()
         for result in self._results:
             try:
                 result.startTestRun()
@@ -432,12 +349,12 @@ class MultiTestResult(TestResult):
                 else:
                     raise
 
-    def stopTestRun(self):
+    def stopTestRun(self) -> None:
         """Called once after all tests are executed.
 
         See stopTest for a method called after each test.
         """
-        super(MultiTestResult, self).stopTestRun()
+        super().stopTestRun()
         for result in self._results:
             try:
                 result.stopTestRun()
@@ -449,9 +366,8 @@ class MultiTestResult(TestResult):
 
     # TODO: better would be to pass start at the beginning
     # alternative is to leave counting time on class
-    # TODO: document: we expect all grass classes to have setTimes
     # TODO: alternatively, be more forgiving for non-unittest methods
-    def setTimes(self, start_time, end_time, time_taken):
+    def setTimes(self, start_time: float, end_time: float, time_taken: float) -> None:
         for result in self._results:
             try:
                 result.setTimes(start_time, end_time, time_taken)
@@ -462,43 +378,26 @@ class MultiTestResult(TestResult):
                     raise
 
 
-class GrassTestRunner(object):
+class GrassTestRunner(unittest.TextTestRunner):
+    resultclass = TextTestResult
+
     def __init__(
         self,
-        stream=sys.stderr,
-        descriptions=True,
-        verbosity=1,
-        failfast=False,
-        buffer=False,
+        *,
         result=None,
-    ):
-        self.stream = _WritelnDecorator(stream)
-        self.descriptions = descriptions
-        self.verbosity = verbosity
-        self.failfast = failfast
-        self.buffer = buffer
+        **kwargs,
+    ) -> None:
+        super().__init__(**kwargs)
+
         self._result = result
 
     def run(self, test):
-        "Run the given test case or test suite."
-        result = self._result
-        unittest.registerResult(result)
-        result.failfast = self.failfast
-        result.buffer = self.buffer
-        startTime = time.time()
-        startTestRun = getattr(result, "startTestRun", None)
-        if startTestRun is not None:
-            startTestRun()
-        try:
-            test(result)
-        finally:
-            stopTime = time.time()
-            timeTaken = stopTime - startTime
-            setTimes = getattr(result, "setTimes", None)
-            if setTimes is not None:
-                setTimes(startTime, stopTime, timeTaken)
-            stopTestRun = getattr(result, "stopTestRun", None)
-            if stopTestRun is not None:
-                stopTestRun()
-
+        """Run the given test case or test suite."""
+        startTime = time.perf_counter()
+        result = super().run(test)
+        stopTime = time.perf_counter()
+        timeTaken = stopTime - startTime
+        setTimes = getattr(result, "setTimes", None)
+        if setTimes is not None:
+            setTimes(startTime, stopTime, timeTaken)
         return result

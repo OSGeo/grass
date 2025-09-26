@@ -1,6 +1,39 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
+/**
+ * Merges the statf[] arrays for each thread into
+ * Thread 0 for use in the support computation.
+ *
+ * The function takes in a 2D array thread_statf[][], where
+ * the rows represent each thread and each column is
+ * a file that is being used to patch. The result is
+ * that thread_statf[0] is an array of size [nfiles] that holds
+ * the merged stats information.
+ *
+ * The function takes in a pointer to thread_statf[][], directly
+ * modifying it
+ */
+void merge_threads(struct Cell_stats **thread_statf, int nprocs, int nfiles)
+{
+    CELL next_cell_stat;
+    long merge_count;
+    for (int i = 0; i < nfiles; i++) {
+        for (int t = 1; t < nprocs; t++) {
+            Rast_rewind_cell_stats(thread_statf[t] + i);
+            while (Rast_next_cell_stat(&next_cell_stat, &merge_count,
+                                       thread_statf[t] + i)) {
+                if (next_cell_stat &&
+                    !Rast_find_cell_stat(next_cell_stat, &merge_count,
+                                         thread_statf[0] + i)) {
+                    Rast_update_cell_stats(&next_cell_stat, 1,
+                                           thread_statf[0] + i);
+                }
+            }
+        }
+    }
+}
+
 /*
  * creates new category and color structures from the patching
  * files category and color files
@@ -11,7 +44,6 @@
  * final cats/colr only if these patching layers actually
  * contributed new categories to the final result
  */
-
 int support(char **names, struct Cell_stats *statf, int nfiles,
             struct Categories *cats, int *cats_ok, struct Colors *colr,
             int *colr_ok, RASTER_MAP_TYPE out_type)

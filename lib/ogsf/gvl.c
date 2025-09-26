@@ -79,7 +79,7 @@ geovol *gvl_get_prev_vol(int id)
 /*!
    \brief Get all volumes
 
-   \param[out] list of geovol structs
+   \param[out] gvols list of geovol structs
 
    \return number of available volume sets
  */
@@ -633,7 +633,7 @@ int gvl_isosurf_set_att_src(geovol_isosurf *isosurf, int desc, int src)
 {
     G_debug(5, "gvl_isosurf_set_att_src");
 
-    /* check if old source was MAP_ATT, deattach volfile */
+    /* check if old source was MAP_ATT, detach volfile */
     if (MAP_ATT == gvl_isosurf_get_att_src(isosurf, desc)) {
         gvl_file_free_datah(isosurf->att[desc].hfile);
 

@@ -8,10 +8,7 @@ for details.
 @author Soeren Gebbert
 """
 
-import grass.pygrass.modules as pymod
-import subprocess
 from grass.gunittest.case import TestCase
-from grass.gunittest.gmodules import SimpleModule
 
 
 class TestSTRDSToRast3(TestCase):

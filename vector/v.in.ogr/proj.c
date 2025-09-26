@@ -24,7 +24,6 @@ int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
     *proj_wkt = NULL;
 
     /* Fetch input layer projection in GRASS form. */
-#if GDAL_VERSION_NUM >= 1110000
     if (geom_col) {
         int igeom;
         OGRGeomFieldDefnH Ogr_geomdefn;
@@ -42,9 +41,6 @@ int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
     else {
         hSRS = OGR_L_GetSpatialRef(Ogr_layer);
     }
-#else
-    hSRS = OGR_L_GetSpatialRef(Ogr_layer); /* should not be freed later */
-#endif
 
     /* verbose is used only when comparing input SRS to GRASS projection,
      * not when comparing SRS's of several input layers */
@@ -80,7 +76,7 @@ int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
 
     if (!OSRIsProjected(hSRS) && !OSRIsGeographic(hSRS)) {
         G_important_message(
-            _("Projection for layer <%s> does not contain a valid SRS"),
+            _("Projection for layer <%s> does not contain a valid CRS"),
             OGR_L_GetName(Ogr_layer));
 
         if (verbose) {
@@ -133,8 +129,8 @@ int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
 /* compare projections of all OGR layers
  * return 0 if all layers have the same projection
  * return 1 if layer projections differ */
-int cmp_layer_srs(ds_t Ogr_ds, int nlayers, int *layers, char **layer_names,
-                  char *geom_col)
+int cmp_layer_srs(GDALDatasetH Ogr_ds, int nlayers, int *layers,
+                  char **layer_names, char *geom_col)
 {
     int layer;
     struct Key_Value *proj_info1, *proj_units1;
@@ -156,7 +152,7 @@ int cmp_layer_srs(ds_t Ogr_ds, int nlayers, int *layers, char **layer_names,
     layer = 0;
     do {
         /* Get first SRS */
-        Ogr_layer = ds_getlayerbyindex(Ogr_ds, layers[layer]);
+        Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layers[layer]);
 
         if (get_layer_proj(Ogr_layer, &cellhd1, &proj_info1, &proj_units1,
                            &proj_srid1, &proj_wkt1, geom_col, 0) == 0) {
@@ -201,7 +197,7 @@ int cmp_layer_srs(ds_t Ogr_ds, int nlayers, int *layers, char **layer_names,
 
     for (layer = 1; layer < nlayers; layer++) {
         /* Get SRS of other layer(s) */
-        Ogr_layer = ds_getlayerbyindex(Ogr_ds, layers[layer]);
+        Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layers[layer]);
         G_get_window(&cellhd2);
         if (get_layer_proj(Ogr_layer, &cellhd2, &proj_info2, &proj_units2,
                            &proj_srid2, &proj_wkt2, geom_col, 0) != 0) {
@@ -265,20 +261,19 @@ int cmp_layer_srs(ds_t Ogr_ds, int nlayers, int *layers, char **layer_names,
 }
 
 /* keep in sync with r.in.gdal, r.external, v.external */
-void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
+void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                       char *geom_col, char *outloc, int create_only,
                       int override, int check_only)
 {
     struct Cell_head loc_wind;
     struct Key_Value *proj_info = NULL, *proj_units = NULL;
-    struct Key_Value *loc_proj_info = NULL, *loc_proj_units = NULL;
     char *wkt = NULL, *srid = NULL;
     char error_msg[8096];
     int proj_trouble;
     OGRLayerH Ogr_layer;
 
     /* Get first layer to be imported to use for projection check */
-    Ogr_layer = ds_getlayerbyindex(hDS, layer);
+    Ogr_layer = GDALDatasetGetLayer(hDS, layer);
 
     /* -------------------------------------------------------------------- */
     /*      Fetch the projection in GRASS form, SRID, and WKT.              */
@@ -302,14 +297,14 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
          * real SRS has not been recognized or is missing */
         if (proj_trouble) {
             G_fatal_error(_("Unable to convert input map projection to GRASS "
-                            "format; cannot create new location."));
+                            "format; cannot create new project."));
         }
         else {
             if (0 != G_make_location_crs(outloc, cellhd, proj_info, proj_units,
                                          srid, wkt)) {
-                G_fatal_error(_("Unable to create new location <%s>"), outloc);
+                G_fatal_error(_("Unable to create new project <%s>"), outloc);
             }
-            G_message(_("Location <%s> created"), outloc);
+            G_message(_("Project <%s> created"), outloc);
 
             G_unset_window(); /* new location, projection, and window */
             G_get_window(cellhd);
@@ -317,11 +312,12 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
 
         /* If create only, clean up and exit here */
         if (create_only) {
-            ds_close(hDS);
+            GDALClose(hDS);
             exit(EXIT_SUCCESS);
         }
     }
     else {
+        struct Key_Value *loc_proj_info = NULL, *loc_proj_units = NULL;
         int err = 0;
         void (*msg_fn)(const char *, ...);
 
@@ -339,7 +335,7 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
             }
             else {
                 msg_fn = G_fatal_error;
-                ds_close(hDS);
+                GDALClose(hDS);
             }
             msg_fn(error_msg);
             if (!override) {
@@ -368,14 +364,15 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
                                               proj_info, proj_units)) != 1) {
             int i_value;
 
-            strcpy(error_msg, _("Projection of dataset does not"
-                                " appear to match current location.\n\n"));
+            strcpy(error_msg,
+                   _("Coordinate reference system of dataset does not"
+                     " appear to match current project.\n\n"));
 
             /* TODO: output this info sorted by key: */
             if (loc_wind.proj != cellhd->proj || err != -2) {
                 /* error in proj_info */
                 if (loc_proj_info != NULL) {
-                    strcat(error_msg, _("Location PROJ_INFO is:\n"));
+                    strcat(error_msg, _("Project PROJ_INFO is:\n"));
                     for (i_value = 0; i_value < loc_proj_info->nitems;
                          i_value++)
                         sprintf(error_msg + strlen(error_msg), "%s: %s\n",
@@ -384,22 +381,22 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
                     strcat(error_msg, "\n");
                 }
                 else {
-                    strcat(error_msg, _("Location PROJ_INFO is:\n"));
+                    strcat(error_msg, _("Project PROJ_INFO is:\n"));
                     if (loc_wind.proj == PROJECTION_XY)
                         sprintf(error_msg + strlen(error_msg),
-                                "Location proj = %d (unreferenced/unknown)\n",
+                                "Project proj = %d (unreferenced/unknown)\n",
                                 loc_wind.proj);
                     else if (loc_wind.proj == PROJECTION_LL)
                         sprintf(error_msg + strlen(error_msg),
-                                "Location proj = %d (lat/long)\n",
+                                "Project proj = %d (lat/long)\n",
                                 loc_wind.proj);
                     else if (loc_wind.proj == PROJECTION_UTM)
                         sprintf(error_msg + strlen(error_msg),
-                                "Location proj = %d (UTM), zone = %d\n",
+                                "Project proj = %d (UTM), zone = %d\n",
                                 loc_wind.proj, cellhd->zone);
                     else
                         sprintf(error_msg + strlen(error_msg),
-                                "Location proj = %d (unknown), zone = %d\n",
+                                "Project proj = %d (unknown), zone = %d\n",
                                 loc_wind.proj, cellhd->zone);
                 }
 
@@ -473,7 +470,7 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
             else {
                 /* error in proj_units */
                 if (loc_proj_units != NULL) {
-                    strcat(error_msg, "Location PROJ_UNITS is:\n");
+                    strcat(error_msg, "Project PROJ_UNITS is:\n");
                     for (i_value = 0; i_value < loc_proj_units->nitems;
                          i_value++)
                         sprintf(error_msg + strlen(error_msg), "%s: %s\n",
@@ -491,13 +488,14 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
                 }
             }
             if (!check_only) {
-                strcat(error_msg, _("\nIn case of no significant differences "
-                                    "in the projection definitions,"
-                                    " use the -o flag to ignore them and use"
-                                    " current location definition.\n"));
-                strcat(error_msg, _("Consider generating a new location from "
+                strcat(error_msg,
+                       _("\nIn case of no significant differences "
+                         "in the coordinate reference system definitions,"
+                         " use the -o flag to ignore them and use"
+                         " current project definition.\n"));
+                strcat(error_msg, _("Consider generating a new project from "
                                     "the input dataset using "
-                                    "the 'location' parameter.\n"));
+                                    "the 'project' parameter.\n"));
             }
 
             if (check_only)
@@ -506,7 +504,7 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
                 msg_fn = G_fatal_error;
             msg_fn("%s", error_msg);
             if (check_only) {
-                ds_close(hDS);
+                GDALClose(hDS);
                 exit(EXIT_FAILURE);
             }
         }
@@ -515,12 +513,17 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
                 msg_fn = G_message;
             else
                 msg_fn = G_verbose_message;
-            msg_fn(_("Projection of input dataset and current location "
-                     "appear to match"));
+            msg_fn(_("Coordinate reference system of input dataset and current "
+                     "project appear to match"));
+
             if (check_only) {
-                ds_close(hDS);
+                GDALClose(hDS);
                 exit(EXIT_SUCCESS);
             }
         }
+        G_free_key_value(loc_proj_units);
+        G_free_key_value(loc_proj_info);
     }
+    G_free_key_value(proj_units);
+    G_free_key_value(proj_info);
 }

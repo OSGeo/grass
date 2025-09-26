@@ -1,10 +1,10 @@
 <h2>DESCRIPTION</h2>
 
-This numerical program calculates implicit transient, confined and
-unconfined groundwater flow in two dimensions based on
+<em>r.gwflow</em> is a numerical program which calculates implicit transient,
+confined and unconfined groundwater flow in two dimensions based on
 raster maps and the current region settings.
 All initial and boundary conditions must be provided as
-raster maps. The unit in the location must be meters.
+raster maps. The unit of the current project's coordinate reference system must be meters.
 <p>This module is sensitive to mask settings. All cells which are outside the mask
 are ignored and handled as no flow boundaries.
 <p><center>
@@ -60,11 +60,11 @@ solve the resulting non-linear equation system.
 <p>Two different boundary conditions are implemented,
 the Dirichlet and Neumann conditions. By default the calculation area is surrounded by homogeneous Neumann boundary conditions.
 The calculation and boundary status of single cells must be set with a status map,
-the following states are supportet:
+the following states are supported:
 
 <ul>
 <li>0 == inactive - the cell with status 0 will not be calculated, active cells will have a no flow boundary to this cell</li>
-<li>1 == active - this cell is used for groundwater floaw calculation, inner sources and recharge can be defined for those cells</li>
+<li>1 == active - this cell is used for groundwater flow calculation, inner sources and recharge can be defined for those cells</li>
 <li>2 == Dirichlet - cells of this type will have a fixed piezometric head value which do not change over the time </li>
 </ul>
 <br>
@@ -95,7 +95,7 @@ g.region res=25 res3=25 t=100 b=0 n=1000 s=0 w=0 e=1000 -p3
 #now create the input raster maps for confined and unconfined aquifers
 r.mapcalc expression="phead = if(row() == 1 , 50, 40)"
 r.mapcalc expression="status = if(row() == 1 , 2, 1)"
-r.mapcalc expression="well = if(row() == 20 && col() == 20 , -0.01, 0)"
+r.mapcalc expression="well = if(row() == 20 &amp;&amp; col() == 20 , -0.01, 0)"
 r.mapcalc expression="hydcond = 0.00025"
 r.mapcalc expression="recharge = 0"
 r.mapcalc expression="top_conf = 20.0"

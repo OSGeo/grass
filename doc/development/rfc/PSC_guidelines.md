@@ -2,7 +2,7 @@
 
 Author: [GRASS PSC](https://trac.osgeo.org/grass/wiki/PSC)
 
-Contact: [grass-psc AT lists.osgeo.org](http://lists.osgeo.org/mailman/listinfo/grass-psc)
+Contact: [grass-psc AT lists.osgeo.org](https://lists.osgeo.org/mailman/listinfo/grass-psc)
 
 Status: Adopted (6 April 2007)
 
