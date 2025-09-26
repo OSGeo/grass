@@ -25,7 +25,6 @@ import sys
 import atexit
 import subprocess
 import shutil
-import codecs
 import string
 import random
 import shlex
@@ -1948,6 +1947,7 @@ def create_project(
     epsg=None,
     proj4=None,
     filename=None,
+    pack=None,
     wkt=None,
     datum=None,
     datum_trans=None,
@@ -2073,6 +2073,10 @@ def create_project(
                 env=local_env(),
             )
             stdin = wkt
+    elif pack:
+        from grass.grassdb.create import create_project_from_pack
+
+        create_project_from_pack(mapset_path, pack)
     else:
         _create_location_xy(mapset_path.directory, mapset_path.location)
 
@@ -2097,16 +2101,10 @@ def _set_location_description(path, location, text):
     :raises ~grass.exceptions.ScriptError:
         Raise :py:exc:`~grass.exceptions.ScriptError` on error.
     """
+    from grass.grassdb.create import _set_project_description
+
     try:
-        with codecs.open(
-            os.path.join(path, location, "PERMANENT", "MYNAME"),
-            encoding="utf-8",
-            mode="w",
-        ) as fd:
-            if text:
-                fd.write(text + os.linesep)
-            else:
-                fd.write(os.linesep)
+        _set_project_description(Path(path) / location, text)
     except OSError as e:
         raise ScriptError(repr(e))
 
@@ -2120,37 +2118,10 @@ def _create_location_xy(database, location):
     :raises ~grass.exceptions.ScriptError:
         Raise :py:exc:`~grass.exceptions.ScriptError` on error.
     """
+    from grass.grassdb.create import create_xy_project
+
     try:
-        base_path = Path(database)
-        project_dir = base_path / location
-        permanent_dir = project_dir / "PERMANENT"
-        default_wind_path = permanent_dir / "DEFAULT_WIND"
-        wind_path = permanent_dir / "WIND"
-        project_dir.mkdir()
-        permanent_dir.mkdir()
-        # create DEFAULT_WIND and WIND files
-        regioninfo = [
-            "proj:       0",
-            "zone:       0",
-            "north:      1",
-            "south:      0",
-            "east:       1",
-            "west:       0",
-            "cols:       1",
-            "rows:       1",
-            "e-w resol:  1",
-            "n-s resol:  1",
-            "top:        1",
-            "bottom:     0",
-            "cols3:      1",
-            "rows3:      1",
-            "depths:     1",
-            "e-w resol3: 1",
-            "n-s resol3: 1",
-            "t-b resol:  1",
-        ]
-        default_wind_path.write_text("\n".join(regioninfo))
-        shutil.copy(default_wind_path, wind_path)
+        create_xy_project(Path(database) / location)
     except OSError as e:
         raise ScriptError(repr(e))
 
