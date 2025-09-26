@@ -109,7 +109,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
     /* flag.print & flag.gprint */
     if (print_flag & PRINT_REG) {
         prj = G_database_projection_name();
-        if (!prj)
+        if (!prj && format != JSON)
             prj = "** unknown **";
 
         switch (format) {
@@ -123,8 +123,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
             fprintf(stdout, "%-*s %d\n", width, "zone:", window->zone);
             break;
         case JSON:
-            json_object_set_number(root_object, "projection", window->proj);
-            json_object_set_number(root_object, "zone", window->zone);
+            // We print CRS info at the end of the JSON output, not here.
             break;
         }
 
@@ -295,6 +294,30 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
                                        (long)window->rows3 * window->cols3 *
                                            window->depths);
 #endif
+            // The library functions try hard to provide a name and the creation
+            // process actually stores 'unknown' if the name is not available,
+            // so something is always read. Here, we assume that single word
+            // 'unknown' is the same as no name.
+            if (prj && strcmp(prj, "unknown") != 0)
+                json_object_dotset_string(root_object, "crs.name", prj);
+            else
+                json_object_dotset_null(root_object, "crs.name");
+            const char *type_string;
+            if (window->proj == 0)
+                type_string = "xy";
+            else if (window->proj == 1)
+                type_string = "utm";
+            else if (window->proj == 3)
+                type_string = "ll";
+            else
+                // This is including code 2 (state plane) which still exists
+                // in the library define, but should not occur, so we don't
+                // handle it here (possibly creating output: 2 | other).
+                type_string = "other";
+            json_object_dotset_string(root_object, "crs.type", type_string);
+            json_object_dotset_number(root_object, "crs.type_code",
+                                      window->proj);
+            json_object_dotset_number(root_object, "crs.zone", window->zone);
             break;
         }
     }
