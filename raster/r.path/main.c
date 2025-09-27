@@ -21,6 +21,7 @@
 #include <string.h>
 #include <math.h>
 #include <float.h>
+#include <errno.h>
 
 /* for using the "open" statement */
 #include <sys/types.h>
@@ -394,6 +395,10 @@ int main(int argc, char **argv)
 
         tempfile1 = G_tempfile();
         val_fd = open(tempfile1, O_RDWR | O_CREAT, 0666);
+        if (val_fd < 0) {
+            G_fatal_error(_("Unable to open temporary file <%s>: %s"),
+                          tempfile1, strerror(errno));
+        }
 
         map_buf = Rast_allocate_d_buf();
 
