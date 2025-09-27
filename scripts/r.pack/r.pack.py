@@ -171,10 +171,11 @@ def main():
             shutil.copyfile(path, os.path.join(tmp_dir, "PROJ_" + support))
 
     # copy CRS info from computational region
-    data = gs.parse_command("g.region", flags="p", format="shell")
+    data = gs.parse_command("g.region", flags="p", format="json")["crs"]
     crs_data = {}
-    crs_data["projection"] = int(data["projection"])
-    crs_data["zone"] = int(data["zone"])
+    crs_data["type_code"] = data["type_code"]
+    crs_data["type"] = data["type"]
+    crs_data["zone"] = data["zone"]
     (tmp_dir / "computational_region_crs.json").write_text(json.dumps(crs_data))
 
     # pack it all up
