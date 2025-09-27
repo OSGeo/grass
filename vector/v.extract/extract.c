@@ -472,6 +472,5 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
     Vect_destroy_field_info(Fi);
     Vect_destroy_cats_struct(Line_Cats_Old);
     Vect_destroy_line_struct(Points);
-    
     return 0;
 }
