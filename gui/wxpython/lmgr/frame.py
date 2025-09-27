@@ -123,6 +123,9 @@ class GMFrame(wx.Frame):
 
         self._giface = LayerManagerGrassInterface(self)
 
+        # List of wxGUI tools frames with initilized tgis framework suprocesses
+        self.framesWithInitTgisSubprocesses = []
+
         # workspace manager
         self.workspace_manager = WorkspaceManager(lmgr=self, giface=self._giface)
         self._setTitle()
@@ -1698,6 +1701,7 @@ class GMFrame(wx.Frame):
         frame = AnimationFrame(parent=self, giface=self._giface)
         frame.CentreOnScreen()
         frame.Show()
+        self.framesWithInitTgisSubprocesses.append(frame)
 
         tree = self.GetLayerTree()
         if tree:
@@ -1725,8 +1729,9 @@ class GMFrame(wx.Frame):
         except ImportError:
             GError(parent=self, message=_("Unable to start Timeline Tool."))
             return
-        frame = TimelineFrame(None)
+        frame = TimelineFrame(parent=self)
         frame.Show()
+        self.framesWithInitTgisSubprocesses.append(frame)
 
     def OnTplotTool(self, event=None, cmd=None):
         """Launch Temporal Plot Tool"""
@@ -1737,6 +1742,7 @@ class GMFrame(wx.Frame):
             return
         frame = TplotFrame(parent=self, giface=self._giface)
         frame.Show()
+        self.framesWithInitTgisSubprocesses.append(frame)
 
     def OnHistogram(self, event):
         """Init histogram display canvas and tools"""
@@ -2281,6 +2287,7 @@ class GMFrame(wx.Frame):
         if ret != wx.ID_CANCEL:
             self._closeWindow(event)
             if ret == wx.ID_YES:
+                self._stopFramesWithInitTgisSubprocesses()
                 self._quitGRASS()
 
     def _closeWindow(self, event):
@@ -2300,6 +2307,23 @@ class GMFrame(wx.Frame):
 
         self._auimgr.UnInit()
         self.Destroy()
+
+    def _stopFramesWithInitTgisSubprocesses(self):
+        """Stop wxGUI tools frames initiallized tgis framework
+        subprocesses
+
+        All these wxGUI Animation, Timeline, Temporal tool initialize tgis
+        framework (messenger and C-interface subprocesses) which require to be
+        properly stopped before quitting GRASS (sending SIGTERM signal), because
+        it causes "freeze" wxGUI tool window and wxGUI processes are not terminated.
+        """
+        try:
+            for frame in self.framesWithInitTgisSubprocesses:
+                if frame:
+                    frame.close()
+        # OSError: handle is closed error
+        except OSError:
+            pass
 
     def _quitGRASS(self):
         """Quit GRASS terminal"""
