@@ -1,6 +1,6 @@
 #include <grass/vector.h>
 #include <grass/dbmi.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 
 #ifndef _LOCAL_PROTO_
 #define _LOCAL_PROTO_

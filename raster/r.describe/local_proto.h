@@ -19,7 +19,7 @@
 #define __R_DESC_LOCAL_PROTO_H__
 
 #include <grass/raster.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 
 enum OutputFormat { PLAIN, JSON };
 

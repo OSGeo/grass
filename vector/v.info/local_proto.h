@@ -1,5 +1,5 @@
 #include <grass/vector.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 
 #define PRINT_CONTENT_UNSET  0x00
 #define PRINT_CONTENT_TEXT   0x02

@@ -158,6 +158,11 @@ JSON_Status G_json_array_append_null(JSON_Array *array)
     return json_array_append_null(array);
 }
 
+void G_json_set_float_serialization_format(const char *format)
+{
+    json_set_float_serialization_format(format);
+}
+
 char *G_json_serialize_to_string_pretty(const JSON_Value *value)
 {
     return json_serialize_to_string_pretty(value);

@@ -23,7 +23,7 @@
 #include <grass/colors.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 #include "local_proto.h"
 
 static struct Categories cats;
@@ -138,11 +138,11 @@ int main(int argc, char *argv[])
     }
     if (parm.format->answer && strcmp(parm.format->answer, "json") == 0) {
         format = JSON;
-        root_value = json_value_init_array();
+        root_value = G_json_value_init_array();
         if (root_value == NULL) {
             G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
         }
-        root_array = json_array(root_value);
+        root_array = G_json_array(root_value);
     }
     else {
         format = PLAIN;
@@ -407,13 +407,13 @@ int main(int argc, char *argv[])
 void print_json(JSON_Value *root_value)
 {
     char *serialized_string = NULL;
-    serialized_string = json_serialize_to_string_pretty(root_value);
+    serialized_string = G_json_serialize_to_string_pretty(root_value);
     if (serialized_string == NULL) {
         G_fatal_error(_("Failed to initialize pretty JSON string."));
     }
     puts(serialized_string);
-    json_free_serialized_string(serialized_string);
-    json_value_free(root_value);
+    G_json_free_serialized_string(serialized_string);
+    G_json_value_free(root_value);
 }
 
 int print_label(long x, enum OutputFormat format, JSON_Array *root_array,
@@ -437,24 +437,24 @@ int print_label(long x, enum OutputFormat format, JSON_Array *root_array,
         fprintf(stdout, "\n");
         break;
     case JSON:
-        category_value = json_value_init_object();
-        category = json_object(category_value);
-        json_object_set_number(category, "category", x);
+        category_value = G_json_value_init_object();
+        category = G_json_object(category_value);
+        G_json_object_set_number(category, "category", x);
         if (strlen(label) == 0) {
-            json_object_set_null(category, "label");
+            G_json_object_set_null(category, "label");
         }
         else {
-            json_object_set_string(category, "label", label);
+            G_json_object_set_string(category, "label", label);
         }
         if (color_format != NONE) {
             if (strcmp(color, "*") == 0) {
-                json_object_set_null(category, "color");
+                G_json_object_set_null(category, "color");
             }
             else {
-                json_object_set_string(category, "color", color);
+                G_json_object_set_string(category, "color", color);
             }
         }
-        json_array_append_value(root_array, category_value);
+        G_json_array_append_value(root_array, category_value);
         break;
     }
 
@@ -486,24 +486,24 @@ int print_d_label(double x, enum OutputFormat format, JSON_Array *root_array,
         fprintf(stdout, "\n");
         break;
     case JSON:
-        category_value = json_value_init_object();
-        category = json_object(category_value);
-        json_object_set_number(category, "category", x);
+        category_value = G_json_value_init_object();
+        category = G_json_object(category_value);
+        G_json_object_set_number(category, "category", x);
         if (strlen(label) == 0) {
-            json_object_set_null(category, "label");
+            G_json_object_set_null(category, "label");
         }
         else {
-            json_object_set_string(category, "label", label);
+            G_json_object_set_string(category, "label", label);
         }
         if (color_format != NONE) {
             if (strcmp(color, "*") == 0) {
-                json_object_set_null(category, "color");
+                G_json_object_set_null(category, "color");
             }
             else {
-                json_object_set_string(category, "color", color);
+                G_json_object_set_string(category, "color", color);
             }
         }
-        json_array_append_value(root_array, category_value);
+        G_json_array_append_value(root_array, category_value);
         break;
     }
 
