@@ -3,16 +3,17 @@ import pytest
 from grass.tools import Tools
 
 FORMAT_DICT = {
-    "COG": "tif",
+    # ToDo: Fix https://github.com/OSGeo/grass/issues/6398
+    # "COG": "tif",
+    # "GPKG": "gpkg",
     "GTiff": "tif",
-    "GPKG": "gpkg",
     "VRT": "vrt",
     "netCDF": "nc",
     "ENVI": "img",
 }
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def simple_raster_map(tmp_path_factory):
     """Fixture to create a basic GRASS environment with a simple raster map containing attributes.
 
@@ -49,12 +50,15 @@ def test_basic_cog_export(simple_raster_map, file_format):
     tools = Tools(session=session)
     suffix = FORMAT_DICT[file_format]
     output_file = tmp_path / f"{mapname}.{suffix}"
-    tools.r_out_gdal(
+    export = tools.r_out_gdal(
         input=mapname,
-        output=str(output_file),
+        output=output_file,
         format=file_format,
     )
-    assert output_file.exists(), f"{mapname} not exportd to {output_file}"
+    # Check successful export
+    assert output_file.exists(), f"{mapname} not exported to {output_file}"
+    # Check that nodata and data range checks are performed
+    assert "Checking GDAL data type and nodata value" in export.stderr
 
 
 def test_compressed_gtiff_export(simple_raster_map):
@@ -66,14 +70,17 @@ def test_compressed_gtiff_export(simple_raster_map):
     mapname, session, tmp_path = simple_raster_map
     tools = Tools(session=session)
 
-    output_file = tmp_path / f"{mapname}.tif"
-    tools.r_out_gdal(
+    output_file = tmp_path / f"{mapname}_lzw.tif"
+    export = tools.r_out_gdal(
         input=mapname,
-        output=str(output_file),
+        output=output_file,
         format="GTiff",
         createopt="COMPRESS=LZW",
     )
-    assert output_file.exists(), f"{mapname} not exportd to {output_file}"
+    # Check successful export
+    assert output_file.exists(), f"{mapname} not exported to {output_file}"
+    # Check that nodata and data range checks are performed
+    assert "Checking GDAL data type and nodata value" in export.stderr
 
 
 def test_fast_gtiff_export(simple_raster_map):
@@ -85,15 +92,17 @@ def test_fast_gtiff_export(simple_raster_map):
     mapname, session, tmp_path = simple_raster_map
     tools = Tools(session=session)
 
-    output_file = tmp_path / f"{mapname}.tif"
-    tools.r_out_gdal(
+    output_file = tmp_path / f"{mapname}_fast.tif"
+    export = tools.r_out_gdal(
         flags="f",
         input=mapname,
-        output=str(output_file),
+        output=output_file,
         format="GTiff",
         type="Byte",
         nodata=255,
         createopt="COMPRESS=LZW",
     )
-    assert output_file.exists(), f"{mapname} not exportd to {output_file}"
-    # Here I would like to assert "Checking GDAL data type and nodata value" not in std_err
+    # Check successful export
+    assert output_file.exists(), f"{mapname} not exported to {output_file}"
+    # Check that nodata and data range checks are NOT performed
+    assert "Checking GDAL data type and nodata value" not in export.stderr
