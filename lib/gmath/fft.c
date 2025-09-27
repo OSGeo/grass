@@ -18,7 +18,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
- * \author GRASS GIS Development Team
+ * \author GRASS Development Team
  *
  * \date 2001-2006
  */

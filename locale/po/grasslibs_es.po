@@ -11,12 +11,13 @@
 # Joana Palahí/SIGTE-UdG <joana@sigte.udg.edu>, 2011.
 # Javier García Prieto <fjgarciaprieto@hotmail.com>, 2009, 2010, 2013, 2014, 2016.
 # Daniel Torres <nobeeakon@gmail.com>, 2014, 2016.
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 10:14+0000\n"
-"PO-Revision-Date: 2025-06-14 20:56+0000\n"
+"POT-Creation-Date: 2025-09-13 15:39+0000\n"
+"PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/es/>\n"
 "Language: es\n"
@@ -407,7 +408,7 @@ msgstr "No ha sido posible iniciar el controlador <%s>"
 #: ../lib/vector/Vlib/net_build.c:158 ../lib/vector/Vlib/net_build.c:208
 #: ../lib/vector/Vlib/net_build.c:502 ../lib/vector/Vlib/net_build.c:799
 #: ../lib/vector/Vlib/net_build.c:975 ../lib/vector/Vlib/write_ogr.c:197
-#: ../lib/vector/Vlib/write_pg.c:3040 ../lib/vector/neta/timetables.c:140
+#: ../lib/vector/Vlib/write_pg.c:3040 ../lib/vector/neta/timetables.c:141
 #: ../lib/vector/neta/utils.c:123
 #, c-format
 msgid "Unable to open database <%s> by driver <%s>"
@@ -1139,27 +1140,28 @@ msgstr "No ha sido posible abrir archivo de elemento %s para <%s@%s>"
 msgid "Region file %s/%s/%s is empty"
 msgstr "El archivo de región %s/%s/%s está vacío"
 
-#: ../lib/gis/gisinit.c:78 ../lib/gis/gisinit.c:129
+#: ../lib/gis/gisinit.c:78 ../lib/gis/gisinit.c:128
 #, fuzzy, c-format
-msgid "Module built against version %s but trying to use version %s. In case of errors you need to rebuild the module against GRASS GIS version %s."
-msgstr "El módulo fue construido con versión %s pero se está intetando usar versión %s. NEcesita reconstruir GRASS GIS o desenmarañar instalaciones múltiples."
+msgid "Module built against version %s but trying to use version %s. In case of errors you need to rebuild the module against GRASS version %s."
+msgstr "El módulo fue construido con versión %s pero se está intetando usar versión %s. NEcesita reconstruir GRASS o desenmarañar instalaciones múltiples."
 
-#: ../lib/gis/gisinit.c:86 ../lib/gis/gisinit.c:137
-#, c-format
-msgid "Module built against version %s but trying to use version %s. You need to rebuild GRASS GIS or untangle multiple installations."
-msgstr "El módulo fue construido con versión %s pero se está intetando usar versión %s. NEcesita reconstruir GRASS GIS o desenmarañar instalaciones múltiples."
+#: ../lib/gis/gisinit.c:85 ../lib/gis/gisinit.c:135
+#, fuzzy, c-format
+#| msgid "Module built against version %s but trying to use version %s. You need to rebuild GRASS GIS or untangle multiple installations."
+msgid "Module built against version %s but trying to use version %s. You need to rebuild GRASS or untangle multiple installations."
+msgstr "El módulo fue construido con versión %s pero se está intetando usar versión %s. NEcesita reconstruir GRASS o desenmarañar instalaciones múltiples."
 
-#: ../lib/gis/gisinit.c:101
+#: ../lib/gis/gisinit.c:100
 #, c-format
 msgid "MAPSET %s - permission denied"
 msgstr "DIRECTORIO DE MAPAS %s - permiso denegado"
 
-#: ../lib/gis/gisinit.c:104
+#: ../lib/gis/gisinit.c:103
 #, c-format
 msgid "MAPSET %s not found at %s"
 msgstr "DIRECTORIO DE MAPAS %s no encontrado en %s"
 
-#: ../lib/gis/gisinit.c:155
+#: ../lib/gis/gisinit.c:153
 msgid "System not initialized. Programmer forgot to call G_gisinit()."
 msgstr "El sistema no ha sido inicializado. EL programador olvidó llamar G_gisinit()."
 
@@ -1642,25 +1644,25 @@ msgid "Flags:"
 msgstr "Banderas:"
 
 #: ../lib/gis/parser_help.c:222 ../lib/gis/parser_html.c:185
-#: ../lib/gis/parser_interface.c:329 ../lib/gis/parser_md_cli.c:345
-#: ../lib/gis/parser_md_python.c:545 ../lib/gis/parser_rest.c:158
+#: ../lib/gis/parser_interface.c:329 ../lib/gis/parser_md_cli.c:343
+#: ../lib/gis/parser_md_python.c:555 ../lib/gis/parser_rest.c:158
 msgid "Allow output files to overwrite existing files"
 msgstr "Permite a los archivos de salida sobrescribir los archivos existentes"
 
 #: ../lib/gis/parser_help.c:224 ../lib/gis/parser_html.c:189
-#: ../lib/gis/parser_interface.c:337 ../lib/gis/parser_md_cli.c:352
+#: ../lib/gis/parser_interface.c:337 ../lib/gis/parser_md_cli.c:350
 msgid "Print usage summary"
 msgstr "Mostrar resumen de uso"
 
 #: ../lib/gis/parser_help.c:225 ../lib/gis/parser_html.c:192
-#: ../lib/gis/parser_interface.c:344 ../lib/gis/parser_md_cli.c:355
-#: ../lib/gis/parser_md_python.c:550 ../lib/gis/parser_rest.c:162
+#: ../lib/gis/parser_interface.c:344 ../lib/gis/parser_md_cli.c:353
+#: ../lib/gis/parser_md_python.c:560 ../lib/gis/parser_rest.c:162
 msgid "Verbose module output"
 msgstr "Salida detallada del módulo"
 
 #: ../lib/gis/parser_help.c:226 ../lib/gis/parser_html.c:195
-#: ../lib/gis/parser_interface.c:351 ../lib/gis/parser_md_cli.c:358
-#: ../lib/gis/parser_md_python.c:554 ../lib/gis/parser_rest.c:165
+#: ../lib/gis/parser_interface.c:351 ../lib/gis/parser_md_cli.c:356
+#: ../lib/gis/parser_md_python.c:564 ../lib/gis/parser_rest.c:165
 msgid "Quiet module output"
 msgstr "Salida \"silenciosa\" del módulo"
 
@@ -1669,7 +1671,7 @@ msgid "Super quiet module output"
 msgstr "Salida súper silenciosa del módulo."
 
 #: ../lib/gis/parser_help.c:228 ../lib/gis/parser_html.c:198
-#: ../lib/gis/parser_md_cli.c:364
+#: ../lib/gis/parser_md_cli.c:362
 msgid "Force launching GUI dialog"
 msgstr "Forzar lanzamiento de cuadro de diálogo GUI"
 
@@ -1714,28 +1716,28 @@ msgid "Options"
 msgstr "Opciones"
 
 #: ../lib/gis/parser_html.c:257 ../lib/gis/parser_md_cli.c:113
-#: ../lib/gis/parser_md_python.c:256 ../lib/gis/parser_rest.c:224
+#: ../lib/gis/parser_md_python.c:266 ../lib/gis/parser_rest.c:224
 msgid "Default"
 msgstr "Preseleccionado"
 
-#: ../lib/gis/parser_json.c:378
+#: ../lib/gis/parser_json.c:383
 #, c-format
 msgid "Input string not understood: <%s>. Multiple '@' chars?"
 msgstr ""
 
-#: ../lib/gis/parser_md_cli.c:103 ../lib/gis/parser_md_python.c:207
+#: ../lib/gis/parser_md_cli.c:103 ../lib/gis/parser_md_python.c:217
 #, fuzzy
 #| msgid "Illegal row value"
 msgid "Allowed values"
 msgstr "Valor de fila no admitido"
 
-#: ../lib/gis/parser_md_cli.c:361 ../lib/gis/parser_md_python.c:559
+#: ../lib/gis/parser_md_cli.c:359 ../lib/gis/parser_md_python.c:569
 #, fuzzy
 #| msgid "Super quiet module output"
 msgid "Very quiet module output"
 msgstr "Salida súper silenciosa del módulo."
 
-#: ../lib/gis/parser_md_python.c:182
+#: ../lib/gis/parser_md_python.c:192
 msgid "Used as"
 msgstr ""
 
@@ -2085,12 +2087,16 @@ msgid "Project name (not path to project)"
 msgstr "Nombre de Localización (no es ruta de Localización)"
 
 #: ../lib/gis/parser_standard_options.c:730
-msgid "GRASS GIS database directory"
-msgstr "Directorio de bases de datos GRASS GIS"
+#, fuzzy
+#| msgid "GRASS GIS database directory"
+msgid "GRASS database directory"
+msgstr "Directorio de bases de datos GRASS"
 
 #: ../lib/gis/parser_standard_options.c:731
-msgid "Default: path to the current GRASS GIS database"
-msgstr "Predeterminado: ruta a la base de datos actual GRASS GIS"
+#, fuzzy
+#| msgid "Default: path to the current GRASS GIS database"
+msgid "Default: path to the current GRASS database"
+msgstr "Predeterminado: ruta a la base de datos actual GRASS"
 
 #: ../lib/gis/parser_standard_options.c:743
 msgid "Coordinates"
@@ -3419,12 +3425,12 @@ msgstr "No ha sido posible abrir archivo de salida de firmas '%s'"
 msgid "prepare_signature: outline has odd number of points."
 msgstr "prepare_signature: El contorno tiene un número impar de puntos."
 
-#: ../lib/imagery/iclass_statistics.c:225 ../lib/imagery/iscatt_core.c:956
+#: ../lib/imagery/iclass_statistics.c:225 ../lib/imagery/iscatt_core.c:965
 #, c-format
 msgid "prepare_signature: scan line %d has odd number of points."
 msgstr "prepare_signature: El escaneo de la línea %d tiene un número impar de puntos."
 
-#: ../lib/imagery/iclass_statistics.c:235 ../lib/imagery/iscatt_core.c:965
+#: ../lib/imagery/iclass_statistics.c:235 ../lib/imagery/iscatt_core.c:976
 msgid "signature: perimeter points out of order."
 msgstr "firma: perímetro puntos fuera de orden."
 
@@ -3454,74 +3460,74 @@ msgstr "Valor de categoría de celda fuera de rango"
 msgid "Unable to write header into category raster condition file <%s>."
 msgstr "No ha sido posible escribir encabezado en archivo de condiciones de categorías ráster <%s>."
 
-#: ../lib/imagery/iscatt_core.c:98
+#: ../lib/imagery/iscatt_core.c:99
 #, c-format
 msgid "Unable to write into category raster condition file <%s>."
 msgstr "No ha sido posible escribir en archivo de condiciones de categorías ráster <%s>."
 
-#: ../lib/imagery/iscatt_core.c:250
+#: ../lib/imagery/iscatt_core.c:252
 #, c-format
 msgid "Unable to open category raster conditions file <%s>."
 msgstr "No ha sido posible abrir el archivo de condiciones de categoría raster <%s>."
 
-#: ../lib/imagery/iscatt_core.c:258
+#: ../lib/imagery/iscatt_core.c:260
 #, c-format
 msgid "Unable to find patch raster <%s>."
 msgstr "No ha sido posible encontrar el raster de parche <%s>."
 
-#: ../lib/imagery/iscatt_core.c:274
+#: ../lib/imagery/iscatt_core.c:276
 #, c-format
 msgid "Resolutions of patch <%s> and patched file <%s> are not same."
 msgstr "Las resoluciones del parche <%s>  y el archivo parchado <%s> no son iguales."
 
-#: ../lib/imagery/iscatt_core.c:300 ../lib/imagery/iscatt_core.c:341
+#: ../lib/imagery/iscatt_core.c:302 ../lib/imagery/iscatt_core.c:345
 #, c-format
 msgid "Corrupted  category raster conditions file <%s> (fseek failed)"
 msgstr "Archivo <%s> de condiciones de categorías ráster corrompido (ha fallado fseek)"
 
-#: ../lib/imagery/iscatt_core.c:331
+#: ../lib/imagery/iscatt_core.c:334
 #, c-format
 msgid "Unable to write into category raster conditions file <%s>"
 msgstr "No ha sido posible escribir en archivo de condiciones de categorías ráster <%s>"
 
-#: ../lib/imagery/iscatt_core.c:518
+#: ../lib/imagery/iscatt_core.c:524
 msgid "Unable to read from category raster condition file."
 msgstr ""
 
-#: ../lib/imagery/iscatt_core.c:525
+#: ../lib/imagery/iscatt_core.c:531
 msgid "Invalid size of category raster conditions file."
 msgstr "Archivo de condiciones de categorías ráster no válido."
 
-#: ../lib/imagery/iscatt_core.c:568
+#: ../lib/imagery/iscatt_core.c:574
 msgid "Data inconsistent. Value computed for scatter plot is out of initialized range."
 msgstr "Inconsistencia en los datos. Valor calculado para gráfica de dispersión está fuera del rango inicial."
 
-#: ../lib/imagery/iscatt_core.c:738
+#: ../lib/imagery/iscatt_core.c:741
 #, c-format
 msgid "Unable to find raster <%s>"
 msgstr "No ha sido posible encontrar el raster <%s>"
 
-#: ../lib/imagery/iscatt_core.c:747
+#: ../lib/imagery/iscatt_core.c:750
 #, c-format
 msgid "Unable to open raster <%s>"
 msgstr "No ha sido posible abrir mapa ráster <%s>"
 
-#: ../lib/imagery/iscatt_core.c:753
+#: ../lib/imagery/iscatt_core.c:759
 #, c-format
 msgid "Raster <%s> type is not <%s>"
 msgstr "Tipo de ráster <%s> no es <%s>"
 
-#: ../lib/imagery/iscatt_core.c:766
+#: ../lib/imagery/iscatt_core.c:772
 #, c-format
 msgid "Unable to read range of raster <%s>"
 msgstr "No ha sido posible leer rango de ráster <%s>"
 
-#: ../lib/imagery/iscatt_core.c:790
+#: ../lib/imagery/iscatt_core.c:796
 #, c-format
 msgid "Unable to open category raster condition file <%s>"
 msgstr ""
 
-#: ../lib/imagery/iscatt_core.c:803
+#: ../lib/imagery/iscatt_core.c:812
 msgid "Corrupted category raster conditions file (fseek failed)"
 msgstr "Archivo de condiciones de categorías ráster corrompido (ha fallado fseek)"
 
@@ -4417,7 +4423,7 @@ msgstr "El mapa vectorial <%s> cargó (%d puntos)."
 #: ../lib/vector/Vlib/map.c:300 ../lib/vector/Vlib/map.c:433
 #: ../lib/vector/Vlib/net_build.c:152 ../lib/vector/Vlib/net_build.c:203
 #: ../lib/vector/Vlib/net_build.c:496 ../lib/vector/Vlib/net_build.c:793
-#: ../lib/vector/Vlib/net_build.c:970 ../lib/vector/neta/timetables.c:135
+#: ../lib/vector/Vlib/net_build.c:970 ../lib/vector/neta/timetables.c:136
 #: ../lib/vector/neta/utils.c:119
 #, c-format
 msgid "Database connection not defined for layer %d"
@@ -4458,17 +4464,17 @@ msgstr "no hay datos"
 msgid "Raster map <%s> is outside of current region. Load failed."
 msgstr "El mapa ráster <%s> está fuera de la región actual. Su carga ha fallado."
 
-#: ../lib/ogsf/gs2.c:1726 ../lib/ogsf/gs2.c:1733 ../lib/ogsf/gs2.c:1742
-#: ../lib/ogsf/gs2.c:1752 ../lib/ogsf/gs2.c:1761 ../lib/ogsf/gs2.c:1772
-#: ../lib/ogsf/gs2.c:1820
+#: ../lib/ogsf/gs2.c:1727 ../lib/ogsf/gs2.c:1734 ../lib/ogsf/gs2.c:1743
+#: ../lib/ogsf/gs2.c:1753 ../lib/ogsf/gs2.c:1762 ../lib/ogsf/gs2.c:1773
+#: ../lib/ogsf/gs2.c:1821
 msgid "GS_load_att_map(): Out of memory. Unable to load map"
 msgstr "GS_load_att_map(): Sin memoria disponible. No es posible cargar el mapa."
 
-#: ../lib/ogsf/gs2.c:1849
+#: ../lib/ogsf/gs2.c:1850
 msgid "Loading failed"
 msgstr "La carga ha fallado"
 
-#: ../lib/ogsf/gs2.c:1853
+#: ../lib/ogsf/gs2.c:1854
 msgid "Error finding range"
 msgstr "Error al encontrar el rango."
 
@@ -5708,33 +5714,92 @@ msgstr "Error al cerrar archivo de metadatos <%s> para mapa ráster <%s@%s>"
 msgid "Unable to create <%s> metadata file for raster map <%s@%s>"
 msgstr "No ha sido posible crear archivo de metadatos <%s> para mapa ráster <%s@%s>"
 
-#: ../lib/raster/reclass.c:168
+#: ../lib/raster/reclass.c:162
+#, fuzzy, c-format
+#| msgid "Error reading range file for [%s in %s]"
+msgid "Error reading beginning of header file for <%s@%s>: %s"
+msgstr "Error al leer archivo de rango para [%s in %s]"
+
+#: ../lib/raster/reclass.c:180
 #, c-format
 msgid "Too many reclass categories for <%s@%s>"
 msgstr "Demasiadas categorías de reclasificación para <%s@%s>"
 
-#: ../lib/raster/reclass.c:171
-#, c-format
-msgid "Illegal reclass format in header file for <%s@%s>"
+#: ../lib/raster/reclass.c:184
+#, fuzzy, c-format
+#| msgid "Illegal reclass format in header file for <%s@%s>"
+msgid "Illegal reclass format in header file for <%s@%s>: %s"
 msgstr "Formato de reclasificación no admitido en archivo de encabezado para <%s@%s>"
 
-#: ../lib/raster/reclass.c:273
+#: ../lib/raster/reclass.c:252
+#, fuzzy, c-format
+#| msgid "Unable to open %s for reading"
+msgid "File too short, reading line %d"
+msgstr "No se puede abrir %s para lectura."
+
+#: ../lib/raster/reclass.c:259
+#, fuzzy, c-format
+#| msgid "Field <%s> missing"
+msgid "Line too long: %s..."
+msgstr "Campo <%s> faltante"
+
+#: ../lib/raster/reclass.c:265
+#, fuzzy, c-format
+#| msgid "Format definition is not correct: %s"
+msgid "Format is not key:value: %s"
+msgstr "Definición de formato no es correcta: %s"
+
+#: ../lib/raster/reclass.c:284
+#, fuzzy, c-format
+#| msgid "Unknown type: %s"
+msgid "Unknown key at line: %s"
+msgstr "Tipo desconocido: %s"
+
+#: ../lib/raster/reclass.c:295
+#, fuzzy, c-format
+#| msgid "Unable to read find raster <%s>"
+msgid "Mapset not read, only raster name: %s"
+msgstr "No se puede leer \"Encontrar ráster <% s>\"."
+
+#: ../lib/raster/reclass.c:299
+#, fuzzy, c-format
+#| msgid "Raster map <%s> not found in mapset <%s>"
+msgid "Raster name not read, only mapset: %s"
+msgstr "Mapa ráster <%s> no encontrado en Directorio de mapas <%s>"
+
+#: ../lib/raster/reclass.c:302
+#, fuzzy
+#| msgid "Raster map <%s> not found"
+msgid "Raster name and mapset not read"
+msgstr "Mapa ráster <%s> no encontrado"
+
+#: ../lib/raster/reclass.c:333
 msgid "Illegal reclass request"
 msgstr "Solicitud de reclasificación no admitida"
 
-#: ../lib/raster/reclass.c:278
+#: ../lib/raster/reclass.c:338
 msgid "Illegal reclass type"
 msgstr "Tipo de reclasificación no admitido"
 
-#: ../lib/raster/reclass.c:284
+#: ../lib/raster/reclass.c:344
 #, c-format
 msgid "Unable to create header file for <%s@%s>"
 msgstr "No ha sido posible crear archivo de encabezado para <%s@%s>"
 
-#: ../lib/raster/reclass.c:332
+#: ../lib/raster/reclass.c:392
 #, c-format
 msgid "Unable to create dependency file in <%s@%s>"
 msgstr "No ha sido posible crear archivo de dependencias en <%s@%s>"
+
+#: ../lib/raster/reclass.c:479
+#, c-format
+msgid "Reading integer failed on line: %s (after reading min: %d)"
+msgstr ""
+
+#: ../lib/raster/reclass.c:484
+#, c-format
+msgid "First entry (min) not read yet and reading integer failed on line: %s"
+msgstr ""
 
 #: ../lib/raster/sample.c:68
 msgid "Unknown interpolation type"
@@ -5963,10 +6028,10 @@ msgstr "ráster3d"
 #: ../lib/vector/neta/components.c:72 ../lib/vector/neta/components.c:182
 #: ../lib/vector/neta/flow.c:67 ../lib/vector/neta/flow.c:190
 #: ../lib/vector/neta/path.c:259 ../lib/vector/neta/spanningtree.c:103
-#: ../lib/vector/neta/timetables.c:69 ../lib/vector/neta/timetables.c:170
-#: ../lib/vector/neta/timetables.c:180 ../lib/vector/neta/timetables.c:193
-#: ../lib/vector/neta/timetables.c:276 ../lib/vector/neta/timetables.c:410
-#: ../lib/vector/neta/timetables.c:421
+#: ../lib/vector/neta/timetables.c:69 ../lib/vector/neta/timetables.c:171
+#: ../lib/vector/neta/timetables.c:181 ../lib/vector/neta/timetables.c:194
+#: ../lib/vector/neta/timetables.c:277 ../lib/vector/neta/timetables.c:411
+#: ../lib/vector/neta/timetables.c:422
 msgid "Out of memory"
 msgstr "Se ha terminado el espacio en la memoria"
 
@@ -6496,36 +6561,36 @@ msgstr "Líneas eliminadas: %d"
 msgid "Removed bridges: %d"
 msgstr "Puentes eliminados: %d"
 
-#: ../lib/vector/Vlib/buffer2.c:356
+#: ../lib/vector/Vlib/buffer2.c:361
 msgid "Line is not looped"
 msgstr "La línea no ha sido utilizada en un lazo."
 
-#: ../lib/vector/Vlib/buffer2.c:438
+#: ../lib/vector/Vlib/buffer2.c:443
 #, c-format
 msgid "Unexpected result of line_intersection() res = %d"
 msgstr "Resultado inesperado de line_intersection() res = %d"
 
-#: ../lib/vector/Vlib/buffer2.c:587
+#: ../lib/vector/Vlib/buffer2.c:592
 msgid "Next edge was visited (right) but it is not the first one !!! breaking loop"
 msgstr "¡¡¡El siguiente borde (derecha) fue visitado pero no es el primero!!! Rompiendo el ciclo."
 
-#: ../lib/vector/Vlib/buffer2.c:598
+#: ../lib/vector/Vlib/buffer2.c:603
 msgid "Next edge was visited (left) but it is not the first one !!! breaking loop"
 msgstr "¡¡¡Borde siguiente ya ha sido visitado (izquierda) pero no es el primero!!! Rompiendo bucle"
 
-#: ../lib/vector/Vlib/buffer2.c:646
+#: ../lib/vector/Vlib/buffer2.c:651
 msgid "side != 0 feature not implemented"
 msgstr "lado ! = 0. Característica no implementada."
 
-#: ../lib/vector/Vlib/buffer2.c:892 ../lib/vector/Vlib/buffer2.c:940
+#: ../lib/vector/Vlib/buffer2.c:897 ../lib/vector/Vlib/buffer2.c:945
 msgid "zero area size"
 msgstr "Àrea de tamaño cero."
 
-#: ../lib/vector/Vlib/buffer2.c:898 ../lib/vector/Vlib/buffer2.c:946
+#: ../lib/vector/Vlib/buffer2.c:903 ../lib/vector/Vlib/buffer2.c:951
 msgid "Line was not closed"
 msgstr "La línea no ha sido cerrada."
 
-#: ../lib/vector/Vlib/buffer2.c:912 ../lib/vector/Vlib/buffer2.c:965
+#: ../lib/vector/Vlib/buffer2.c:917 ../lib/vector/Vlib/buffer2.c:970
 msgid "Vect_get_point_in_poly() failed"
 msgstr "Ha fallado Vect_get_point_in_poly()."
 
@@ -6736,7 +6801,7 @@ msgstr[1] "%d primitivas registradas"
 #: ../lib/vector/Vlib/build_sfa.c:668
 #, c-format
 msgid "One vertex registered"
-msgid_plural "%<PRId64> vertices registered"
+msgid_plural "%d vertices registered"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -8891,8 +8956,8 @@ msgid "Computing minimum spanning tree..."
 msgstr "Calculando el árbol de mínima expansión..."
 
 #: ../lib/vector/neta/timetables.c:46 ../lib/vector/neta/timetables.c:73
-#: ../lib/vector/neta/timetables.c:205 ../lib/vector/neta/timetables.c:244
-#: ../lib/vector/neta/timetables.c:284
+#: ../lib/vector/neta/timetables.c:206 ../lib/vector/neta/timetables.c:245
+#: ../lib/vector/neta/timetables.c:285
 #, c-format
 msgid "Unable to open select cursor: %s"
 msgstr "No ha sido posible abrir el cursor resultado de la instrucción select: %s"
@@ -10311,9 +10376,6 @@ msgstr "Herramienta de consulta desconocida"
 #~ msgid "Unable to read compressed null file for <%s@%s>"
 #~ msgstr "No se puede abrir el archivo de cabecera del vectorial <%s>"
 
-#~ msgid "Unable to read find raster <%s>"
-#~ msgstr "No se puede leer \"Encontrar ráster <% s>\"."
-
 #~ msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s> %s"
 #~ msgstr "No ha sido posible leer archivo de encabezado para mapa ráster <%s@%s>. Es un mapa de reclasificación del mapa ráster <%s@%s> %s"
 
@@ -10458,10 +10520,6 @@ msgstr "Herramienta de consulta desconocida"
 #, python-format
 #~ msgid "Unknown temporal type \"%s\""
 #~ msgstr "Tipo temporal desconocido \"%s\""
-
-#, python-format
-#~ msgid "Unknown type: %s"
-#~ msgstr "Tipo desconocido: %s"
 
 #, python-format
 #~ msgid "Unsupported relative time unit type for %(type)s map <%(id)s> with layer %(l)s: %(u)s"

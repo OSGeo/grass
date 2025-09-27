@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("copyright"));
     G_add_keyword(_("version"));
     G_add_keyword(_("license"));
-    module->label = _("Displays GRASS GIS version info.");
+    module->label = _("Displays GRASS version info.");
     module->description =
         _("Optionally also prints build or copyright information.");
 
@@ -257,8 +257,7 @@ int main(int argc, char *argv[])
             case SHELL:
                 fprintf(stdout, "libgis_revision=\n");
                 fprintf(stdout, "libgis_date=\n");
-                G_warning(
-                    "GRASS GIS libgis version and date number not available");
+                G_warning("GRASS libgis version and date number not available");
                 /* this can be alternatively fatal error or it can cause
                    fatal error later */
                 break;
@@ -272,13 +271,12 @@ int main(int argc, char *argv[])
             case JSON:
                 G_json_object_set_null(root_object, "libgis_revision");
                 G_json_object_set_null(root_object, "libgis_date");
-                G_warning(
-                    "GRASS GIS libgis version and date number not available");
+                G_warning("GRASS libgis version and date number not available");
                 break;
             }
         }
         if (no_libgis) {
-            G_debug(1, _("GRASS GIS libgis version and date number don't have "
+            G_debug(1, _("GRASS libgis version and date number don't have "
                          "the expected format."
                          " Trying to print the original strings..."));
             G_debug(1, _("GIS_H_VERSION=\"%s\""), GIS_H_VERSION);

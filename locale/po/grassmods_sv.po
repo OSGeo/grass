@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 10:14+0000\n"
-"PO-Revision-Date: 2025-08-02 19:48+0000\n"
+"POT-Creation-Date: 2025-09-13 15:39+0000\n"
+"PO-Revision-Date: 2025-08-25 19:14+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
 "Language: sv\n"
@@ -30,8 +30,8 @@ msgstr "Tabell <%s> hittades inte i databas <%s> med drivaren <%s>"
 #: ../db/db.select/main.c:74 ../db/db.tables/main.c:45
 #: ../display/d.vect.thematic/main.c:294 ../display/d.vect/opt.c:147
 #: ../doc/examples/vector/v.example/main.c:130
-#: ../raster/r.stream.extract/close.c:176 ../vector/v.db.connect/main.c:216
-#: ../vector/v.db.connect/main.c:285 ../vector/v.edit/select.c:505
+#: ../raster/r.stream.extract/close.c:176 ../vector/v.db.connect/main.c:341
+#: ../vector/v.db.connect/main.c:484 ../vector/v.edit/select.c:505
 #: ../vector/v.out.svg/main.c:152 ../vector/v.out.vtk/writeVTK.c:640
 #: ../vector/v.profile/main.c:434 ../vector/v.profile/main.c:600
 #, c-format
@@ -48,7 +48,7 @@ msgstr "Det går inte att öppna databasen <%s>"
 
 #: ../db/db.columns/main.c:65 ../db/db.describe/main.c:82
 #: ../doc/examples/vector/v.example/main.c:143
-#: ../scripts/db.univar/db.univar.py:129 ../vector/v.db.connect/main.c:229
+#: ../scripts/db.univar/db.univar.py:129 ../vector/v.db.connect/main.c:354
 #: ../vector/v.extract/main.c:233 ../vector/v.in.ascii/main.c:447
 #: ../vector/v.info/print.c:229 ../vector/v.out.ogr/main.c:722
 #: ../vector/v.out.postgis/table.c:41 ../vector/v.out.svg/main.c:165
@@ -65,23 +65,33 @@ msgstr "Det går inte att beskriva tabellen <%s>"
 #: ../db/db.describe/main.c:59 ../general/g.list/list.c:89
 #: ../general/g.mapset/main.c:174 ../imagery/i.group/main.c:124
 #: ../raster/r.category/main.c:143 ../raster/r.describe/dumplist.c:47
-#: ../raster/r.proj/main.c:345 ../raster/r.regression.multi/main.c:203
+#: ../raster/r.distance/report.c:63 ../raster/r.proj/main.c:345
+#: ../raster/r.regression.multi/main.c:203
 #: ../raster/r.stats.quantile/main.c:382 ../raster/r.stats.quantile/main.c:439
 #: ../raster/r.univar/stats.c:96 ../raster/r.univar/stats.c:396
 #: ../raster/r.volume/main.c:177 ../raster/r.what.color/main.c:246
-#: ../raster/r.what/main.c:280 ../vector/v.category/main.c:255
-#: ../vector/v.category/main.c:320 ../vector/v.distance/main.c:310
-#: ../vector/v.info/print.c:866
+#: ../raster/r.what/main.c:280 ../vector/v.category/main.c:264
+#: ../vector/v.category/main.c:333 ../vector/v.class/main.c:223
+#: ../vector/v.class/main.c:264 ../vector/v.class/main.c:271
+#: ../vector/v.db.connect/main.c:152 ../vector/v.distance/main.c:310
+#: ../vector/v.info/print.c:866 ../vector/v.what.rast/main.c:144
+#: ../vector/v.what/main.c:226 ../vector/v.what/what.c:508
+#: ../vector/v.what/what.c:652 ../vector/v.what/what.c:705
+#: ../vector/v.what/what.c:898 ../vector/v.what/what.c:1037
+#: ../vector/v.what/what.c:1158
 msgid "Failed to initialize JSON array. Out of memory?"
 msgstr "Misslyckades med att initiera JSON-array. Har du slut på minne?"
 
 #: ../db/db.columns/main.c:98 ../db/db.connect/main.c:243
-#: ../general/g.findfile/main.c:36 ../general/g.list/list.c:139
+#: ../general/g.findfile/main.c:36 ../general/g.list/list.c:140
 #: ../general/g.mapset/main.c:37 ../general/g.mapsets/list.c:34
-#: ../misc/m.measure/main.c:182 ../raster/r.regression.line/main.c:269
+#: ../misc/m.measure/main.c:182 ../raster/r.distance/report.c:138
+#: ../raster/r.regression.line/main.c:269
 #: ../raster/r.regression.multi/main.c:696
 #: ../raster/r.stats.quantile/main.c:472 ../raster/r.volume/main.c:448
-#: ../raster3d/r3.info/main.c:993
+#: ../raster3d/r3.info/main.c:993 ../vector/v.class/main.c:379
+#: ../vector/v.db.connect/main.c:434 ../vector/v.what.rast/main.c:694
+#: ../vector/v.what/main.c:321
 msgid "Failed to serialize JSON to pretty format."
 msgstr "Misslyckades med att serialisera JSON till pretty-format."
 
@@ -108,7 +118,7 @@ msgstr "Misslyckades med att serialisera JSON till pretty-format."
 #: ../locale/scriptstrings/v.db.renamecolumn_to_translate.c:4
 #: ../locale/scriptstrings/v.db.update_to_translate.c:4
 #: ../locale/scriptstrings/v.what.vect_to_translate.c:4
-#: ../vector/v.db.connect/main.c:53 ../vector/v.db.select/main.c:99
+#: ../vector/v.db.connect/main.c:61 ../vector/v.db.select/main.c:99
 #: ../vector/v.distance/main.c:127 ../vector/v.in.db/main.c:53
 #: ../vector/v.to.db/main.c:39 ../vector/v.vect.stats/main.c:130
 msgid "database"
@@ -138,10 +148,10 @@ msgstr "databas"
 #: ../locale/scriptstrings/v.db.update_to_translate.c:3
 #: ../locale/scriptstrings/v.what.strds_to_translate.c:7
 #: ../locale/scriptstrings/v.what.vect_to_translate.c:7
-#: ../vector/v.class/main.c:46 ../vector/v.db.connect/main.c:52
+#: ../vector/v.class/main.c:55 ../vector/v.db.connect/main.c:60
 #: ../vector/v.db.select/main.c:98 ../vector/v.distance/main.c:128
 #: ../vector/v.to.db/main.c:38 ../vector/v.univar/main.c:97
-#: ../vector/v.vect.stats/main.c:129 ../vector/v.what.rast/main.c:75
+#: ../vector/v.vect.stats/main.c:129 ../vector/v.what.rast/main.c:82
 #: ../vector/v.what.rast3/main.c:70
 msgid "attribute table"
 msgstr "attributtabell"
@@ -192,10 +202,10 @@ msgstr "Lista alla kolumner för en given tabell."
 #: ../raster/r.external/main.c:97 ../raster/r.external/main.c:136
 #: ../raster/r.in.gdal/main.c:238 ../raster/r.in.gdal/main.c:272
 #: ../raster/r.info/main.c:115 ../raster/r.object.geometry/main.c:95
-#: ../raster/r.out.gdal/main.c:142 ../raster/r.profile/main.c:113
+#: ../raster/r.out.gdal/main.c:142 ../raster/r.profile/main.c:118
 #: ../raster/r.proj/main.c:208 ../raster/r.proj/main.c:221
 #: ../raster/r.proj/main.c:233 ../raster/r.proj/main.c:242
-#: ../raster/r.stats/main.c:155 ../raster/r.sunmask/main.c:233
+#: ../raster/r.stats/main.c:160 ../raster/r.sunmask/main.c:233
 #: ../raster/r.sunmask/main.c:239 ../raster/r.univar/r.univar_main.c:127
 #: ../raster/r.univar/r3.univar_main.c:89 ../raster/r.what/main.c:134
 #: ../raster/r.what/main.c:142 ../raster/r.what/main.c:145
@@ -203,24 +213,26 @@ msgstr "Lista alla kolumner för en given tabell."
 #: ../raster/r.what/main.c:169 ../raster/r.what/main.c:175
 #: ../raster/r.what/main.c:185 ../raster3d/r3.info/main.c:101
 #: ../temporal/t.connect/main.c:43 ../vector/v.category/main.c:169
-#: ../vector/v.colors.out/main.c:71 ../vector/v.colors/main.c:132
-#: ../vector/v.colors/main.c:140 ../vector/v.db.connect/main.c:83
-#: ../vector/v.db.connect/main.c:88 ../vector/v.db.connect/main.c:96
-#: ../vector/v.db.connect/main.c:102 ../vector/v.distance/main.c:247
-#: ../vector/v.external.out/args.c:68 ../vector/v.external.out/args.c:81
-#: ../vector/v.external.out/args.c:87 ../vector/v.external/args.c:60
-#: ../vector/v.external/args.c:67 ../vector/v.external/args.c:76
-#: ../vector/v.in.ogr/main.c:351 ../vector/v.in.ogr/main.c:358
-#: ../vector/v.info/parse.c:24 ../vector/v.info/parse.c:29
-#: ../vector/v.info/parse.c:34 ../vector/v.info/parse.c:39
-#: ../vector/v.info/parse.c:44 ../vector/v.info/parse.c:53
-#: ../vector/v.to.db/parse.c:118 ../vector/v.to.db/parse.c:125
-#: ../vector/v.to.db/parse.c:130 ../vector/v.to.db/parse.c:136
-#: ../vector/v.to.db/parse.c:141 ../vector/v.to.db/parse.c:147
-#: ../vector/v.univar/main.c:152 ../vector/v.vect.stats/main.c:229
-#: ../vector/v.vect.stats/main.c:236 ../vector/v.what/main.c:94
-#: ../vector/v.what/main.c:99 ../vector/v.what/main.c:104
-#: ../vector/v.what/main.c:109 ../vector/v.what/main.c:115
+#: ../vector/v.class/main.c:106 ../vector/v.colors.out/main.c:71
+#: ../vector/v.colors/main.c:132 ../vector/v.colors/main.c:140
+#: ../vector/v.db.connect/main.c:92 ../vector/v.db.connect/main.c:105
+#: ../vector/v.db.connect/main.c:115 ../vector/v.db.connect/main.c:121
+#: ../vector/v.distance/main.c:247 ../vector/v.external.out/args.c:68
+#: ../vector/v.external.out/args.c:81 ../vector/v.external.out/args.c:87
+#: ../vector/v.external/args.c:60 ../vector/v.external/args.c:67
+#: ../vector/v.external/args.c:76 ../vector/v.in.ogr/main.c:351
+#: ../vector/v.in.ogr/main.c:358 ../vector/v.info/parse.c:24
+#: ../vector/v.info/parse.c:29 ../vector/v.info/parse.c:34
+#: ../vector/v.info/parse.c:39 ../vector/v.info/parse.c:44
+#: ../vector/v.info/parse.c:53 ../vector/v.to.db/parse.c:118
+#: ../vector/v.to.db/parse.c:125 ../vector/v.to.db/parse.c:130
+#: ../vector/v.to.db/parse.c:136 ../vector/v.to.db/parse.c:141
+#: ../vector/v.to.db/parse.c:147 ../vector/v.univar/main.c:152
+#: ../vector/v.vect.stats/main.c:229 ../vector/v.vect.stats/main.c:236
+#: ../vector/v.what.rast/main.c:112 ../vector/v.what/main.c:100
+#: ../vector/v.what/main.c:105 ../vector/v.what/main.c:111
+#: ../vector/v.what/main.c:118 ../vector/v.what/main.c:126
+#: ../vector/v.what/main.c:134 ../vector/v.what/main.c:142
 msgid "Print"
 msgstr "Skriv ut"
 
@@ -251,6 +263,7 @@ msgstr "Skriv ut aktuella anslutningsparametrar med skal-stil och avsluta [för�
 #: ../raster/r.regression.multi/main.c:179
 #: ../raster/r.univar/r.univar_main.c:103
 #: ../raster/r.univar/r3.univar_main.c:65 ../vector/v.univar/main.c:131
+#: ../vector/v.what/main.c:124
 msgid "This flag is deprecated and will be removed in a future release. Use format=shell instead."
 msgstr "Denna flagga är föråldrad och kommer att tas bort i en framtida version. Använd istället format=shell."
 
@@ -282,25 +295,34 @@ msgstr "Standardgrupp av databasanvändare till vilken select-behörighet bevilj
 
 #: ../db/db.connect/main.c:115 ../general/g.region/main.c:389
 #: ../misc/m.measure/main.c:67 ../raster3d/r3.info/main.c:98
+#: ../vector/v.what/main.c:97
 msgid "plain;Plain text output;shell;shell script style output;json;JSON (JavaScript Object Notation);"
 msgstr "plain;Utdata i klartext;skal;utdata i skalskriptstil;json;JSON (JavaScript Object Notation);"
 
 #: ../db/db.connect/main.c:144 ../general/g.findfile/main.c:187
-#: ../general/g.list/list.c:121 ../general/g.mapset/main.c:118
+#: ../general/g.list/list.c:122 ../general/g.mapset/main.c:118
 #: ../general/g.mapsets/list.c:13 ../general/g.proj/output.c:54
 #: ../general/g.proj/output.c:360 ../general/g.region/main.c:471
 #: ../general/g.version/main.c:140 ../misc/m.measure/main.c:87
-#: ../raster/r.describe/dumplist.c:37 ../raster/r.info/main.c:147
-#: ../raster/r.proj/main.c:487 ../raster/r.regression.line/main.c:101
+#: ../raster/r.describe/dumplist.c:37 ../raster/r.distance/report.c:210
+#: ../raster/r.distance/report.c:217 ../raster/r.distance/report.c:224
+#: ../raster/r.info/main.c:147 ../raster/r.proj/main.c:487
+#: ../raster/r.regression.line/main.c:101
 #: ../raster/r.regression.multi/main.c:197
 #: ../raster/r.regression.multi/main.c:566
 #: ../raster/r.stats.quantile/main.c:430 ../raster/r.stats.quantile/main.c:447
 #: ../raster/r.univar/stats.c:104 ../raster/r.univar/stats.c:148
 #: ../raster/r.univar/stats.c:439 ../raster/r.volume/main.c:409
 #: ../raster/r.what.color/main.c:52 ../raster3d/r3.info/main.c:153
-#: ../vector/v.category/main.c:248 ../vector/v.category/main.c:915
-#: ../vector/v.distance/main.c:1578 ../vector/v.info/print.c:824
-#: ../vector/v.info/print.c:860 ../vector/v.univar/main.c:629
+#: ../vector/v.category/main.c:942 ../vector/v.class/main.c:257
+#: ../vector/v.class/main.c:348 ../vector/v.db.connect/main.c:306
+#: ../vector/v.db.connect/main.c:399 ../vector/v.distance/main.c:1578
+#: ../vector/v.info/print.c:824 ../vector/v.info/print.c:860
+#: ../vector/v.univar/main.c:630 ../vector/v.what.rast/main.c:628
+#: ../vector/v.what/what.c:202 ../vector/v.what/what.c:273
+#: ../vector/v.what/what.c:441 ../vector/v.what/what.c:539
+#: ../vector/v.what/what.c:680 ../vector/v.what/what.c:728
+#: ../vector/v.what/what.c:933
 msgid "Failed to initialize JSON object. Out of memory?"
 msgstr "Misslyckades med att initiera JSON-objekt. Har du slut på minne?"
 
@@ -312,14 +334,15 @@ msgstr "Misslyckades med att initiera JSON-objekt. Har du slut på minne?"
 #: ../raster/r.univar/r.univar_main.c:220
 #: ../raster/r.univar/r3.univar_main.c:176
 #: ../scripts/db.univar/db.univar.py:122
-#: ../scripts/v.db.univar/v.db.univar.py:99 ../vector/v.category/main.c:232
-#: ../vector/v.univar/main.c:177
+#: ../scripts/v.db.univar/v.db.univar.py:99 ../vector/v.univar/main.c:177
+#: ../vector/v.what/main.c:195
 msgid "Flag 'g' is deprecated and will be removed in a future release. Please use format=shell instead."
 msgstr "Flaggan \"g\" är föråldrad och kommer att tas bort i en framtida version. Använd format=shell istället."
 
 #: ../db/db.connect/main.c:160 ../misc/m.measure/main.c:103
 #: ../raster/r.regression.line/main.c:117
-#: ../raster/r.regression.multi/main.c:216 ../vector/v.univar/main.c:180
+#: ../raster/r.regression.multi/main.c:216 ../vector/v.db.connect/main.c:182
+#: ../vector/v.univar/main.c:180
 msgid "The -g flag cannot be used with format=json. Please select only one output format."
 msgstr "Flaggan -g kan inte användas med format=json. Välj endast ett utdataformat."
 
@@ -460,18 +483,18 @@ msgid "Lists all databases for a given driver and location."
 msgstr "Visar en lista över alla databaser för en viss drivrutin och plats."
 
 #: ../db/db.describe/main.c:140 ../general/g.proj/output.c:382
-#: ../general/g.region/main.c:986 ../general/g.version/main.c:411
+#: ../general/g.region/main.c:986 ../general/g.version/main.c:409
 #: ../imagery/i.group/main.c:301 ../raster/r.category/main.c:412
 #: ../raster/r.describe/dumplist.c:69 ../raster/r.info/main.c:997
 #: ../raster/r.mask.status/main.c:111 ../raster/r.object.geometry/main.c:401
-#: ../raster/r.profile/main.c:296 ../raster/r.proj/main.c:370
+#: ../raster/r.profile/main.c:319 ../raster/r.proj/main.c:370
 #: ../raster/r.proj/main.c:545 ../raster/r.report/prt_json.c:200
-#: ../raster/r.stats/main.c:408 ../raster/r.univar/stats.c:493
+#: ../raster/r.stats/main.c:427 ../raster/r.univar/stats.c:493
 #: ../raster/r.what.color/main.c:290 ../raster/r.what/main.c:619
-#: ../vector/v.category/main.c:307 ../vector/v.category/main.c:954
+#: ../vector/v.category/main.c:320 ../vector/v.category/main.c:989
 #: ../vector/v.distance/main.c:1799 ../vector/v.info/main.c:106
 #: ../vector/v.info/print.c:291 ../vector/v.info/print.c:907
-#: ../vector/v.to.db/report.c:514 ../vector/v.univar/main.c:817
+#: ../vector/v.to.db/report.c:514 ../vector/v.univar/main.c:818
 msgid "Failed to initialize pretty JSON string."
 msgstr "Misslyckades med att initiera en vacker JSON-sträng."
 
@@ -544,7 +567,7 @@ msgstr "Namn på fil som innehåller SQL-sats(er)"
 #: ../raster/r.in.ascii/main.c:78 ../raster/r.reclass/main.c:67
 #: ../raster/r.recode/main.c:60 ../raster3d/r3.in.ascii/main.c:87
 #: ../vector/v.edit/args.c:94 ../vector/v.segment/main.c:81
-#: ../vector/v.what/main.c:77
+#: ../vector/v.what/main.c:79
 msgid "'-' for standard input"
 msgstr "\"-\" för standardinmatning"
 
@@ -592,7 +615,7 @@ msgstr "Användarnamn"
 #: ../raster/r.in.bin/main.c:307 ../raster/r.in.bin/main.c:334
 #: ../raster/r.in.bin/main.c:342 ../raster/r.in.bin/main.c:351
 #: ../raster/r.in.bin/main.c:412 ../raster/r.in.bin/main.c:424
-#: ../raster/r.out.mpeg/main.c:135 ../raster/r.resamp.bspline/main.c:111
+#: ../raster/r.out.mpeg/main.c:136 ../raster/r.resamp.bspline/main.c:111
 #: ../raster/r.resamp.bspline/main.c:119 ../raster/r.resamp.bspline/main.c:125
 #: ../raster/r.resamp.bspline/main.c:136 ../raster/r.resamp.bspline/main.c:141
 #: ../raster/r.resamp.rst/main.c:211 ../raster/r.resamp.rst/main.c:218
@@ -605,8 +628,8 @@ msgstr "Användarnamn"
 #: ../raster/r.viewshed/main.cpp:499 ../raster/r.viewshed/main.cpp:512
 #: ../raster/r.walk/main.c:314 ../raster/r.walk/main.c:324
 #: ../raster/r.walk/main.c:334 ../vector/v.colors.out/main.c:68
-#: ../vector/v.colors.out/main.c:79 ../vector/v.db.connect/main.c:65
-#: ../vector/v.db.connect/main.c:71 ../vector/v.external.out/args.c:23
+#: ../vector/v.colors.out/main.c:79 ../vector/v.db.connect/main.c:73
+#: ../vector/v.db.connect/main.c:79 ../vector/v.external.out/args.c:23
 #: ../vector/v.external.out/args.c:38 ../vector/v.external.out/args.c:51
 #: ../vector/v.external.out/args.c:57 ../vector/v.lidar.correction/main.c:103
 #: ../vector/v.lidar.correction/main.c:112
@@ -670,7 +693,7 @@ msgstr "Testet lyckades."
 #: ../db/db.select/main.c:140 ../raster/r.object.geometry/main.c:118
 #: ../raster/r.quantile/main.c:346 ../raster/r.regression.line/main.c:92
 #: ../raster/r.regression.multi/main.c:188
-#: ../raster/r.stats.quantile/main.c:375 ../raster/r.stats/main.c:235
+#: ../raster/r.stats.quantile/main.c:375 ../raster/r.stats/main.c:240
 #: ../raster/r.univar/r.univar_main.c:193
 #: ../raster/r.univar/r3.univar_main.c:149 ../raster/r.what/main.c:193
 #: ../vector/v.db.select/main.c:182
@@ -712,7 +735,7 @@ msgstr "Vertikal skivavskiljare (kräver flaggan -v)"
 #: ../db/db.select/main.c:239 ../locale/scriptstrings/i.oif_to_translate.c:5
 #: ../locale/scriptstrings/r.out.xyz_to_translate.c:7
 #: ../raster/r.quantile/main.c:331 ../raster/r.stats.quantile/main.c:684
-#: ../raster/r.stats/main.c:121 ../raster/r.univar/r.univar_main.c:78
+#: ../raster/r.stats/main.c:122 ../raster/r.univar/r.univar_main.c:78
 #: ../raster/r.univar/r3.univar_main.c:42 ../raster/r.what/main.c:139
 #: ../vector/v.db.select/main.c:150
 msgid "Name for output file (if omitted or \"-\" output to stdout)"
@@ -1156,8 +1179,8 @@ msgstr "OGR-lager <%s> hittades inte"
 
 #: ../db/drivers/ogr/execute.c:71 ../scripts/db.univar/db.univar.py:137
 #: ../vector/v.colors.out/make_colors.c:42 ../vector/v.colors/scan_attr.c:34
-#: ../vector/v.db.connect/main.c:292 ../vector/v.distance/main.c:574
-#: ../vector/v.distance/main.c:616 ../vector/v.in.db/main.c:188
+#: ../vector/v.db.connect/main.c:491 ../vector/v.distance/main.c:574
+#: ../vector/v.distance/main.c:616 ../vector/v.in.db/main.c:195
 #: ../vector/v.neighbors/main.c:234 ../vector/v.out.lidar/main.c:114
 #: ../vector/v.out.lidar/main.c:154 ../vector/v.reclass/main.c:145
 #: ../vector/v.to.3d/trans2.c:63 ../vector/v.to.3d/trans3.c:66
@@ -1285,14 +1308,15 @@ msgstr "Det går inte att välja från Postgres:"
 
 #: ../db/drivers/postgres/listdb.c:85 ../db/drivers/postgres/listtab.c:90
 #: ../db/drivers/sqlite/listdb.c:135 ../imagery/i.smap/multialloc.c:112
-#: ../raster/r.li/r.li.daemon/list.c:47 ../raster/r.stream.extract/bseg.c:41
-#: ../raster/r.stream.extract/cseg.c:41 ../raster/r.stream.extract/dseg.c:41
-#: ../raster/r.stream.extract/seg.c:41 ../raster/r.sun/main.c:874
-#: ../raster/r.sun/main.c:884 ../raster/r.sun/main.c:895
-#: ../raster/r.sun/main.c:905 ../raster/r.sun/main.c:915
-#: ../raster/r.sun/main.c:925 ../raster/r.sun/main.c:935
-#: ../raster/r.sun/main.c:946 ../raster/r.sun/main.c:956
-#: ../raster/r.to.rast3/main.c:243 ../raster/r.watershed/seg/bseg_open.c:43
+#: ../raster/r.li/r.li.daemon/list.c:32 ../raster/r.li/r.li.daemon/list.c:35
+#: ../raster/r.stream.extract/bseg.c:41 ../raster/r.stream.extract/cseg.c:41
+#: ../raster/r.stream.extract/dseg.c:41 ../raster/r.stream.extract/seg.c:41
+#: ../raster/r.sun/main.c:874 ../raster/r.sun/main.c:884
+#: ../raster/r.sun/main.c:895 ../raster/r.sun/main.c:905
+#: ../raster/r.sun/main.c:915 ../raster/r.sun/main.c:925
+#: ../raster/r.sun/main.c:935 ../raster/r.sun/main.c:946
+#: ../raster/r.sun/main.c:956 ../raster/r.to.rast3/main.c:243
+#: ../raster/r.watershed/seg/bseg_open.c:43
 #: ../raster/r.watershed/seg/cseg_open.c:43
 #: ../raster/r.watershed/seg/dseg_open.c:43
 #: ../raster/r.watershed/seg/sseg_open.c:42 ../raster3d/r3.to.rast/main.c:357
@@ -1831,12 +1855,12 @@ msgstr "Visar en lista över alla tillgängliga displayfärger."
 #: ../raster/r.null/main.c:58 ../raster/r.object.geometry/main.c:76
 #: ../raster/r.out.ascii/main.c:53 ../raster/r.out.bin/main.c:298
 #: ../raster/r.out.gdal/main.c:135 ../raster/r.out.gridatb/main.c:66
-#: ../raster/r.out.mat/main.c:62 ../raster/r.out.mpeg/main.c:103
+#: ../raster/r.out.mat/main.c:62 ../raster/r.out.mpeg/main.c:104
 #: ../raster/r.out.png/main.c:110 ../raster/r.out.pov/main.c:111
 #: ../raster/r.out.ppm/main.c:52 ../raster/r.out.ppm3/main.c:57
 #: ../raster/r.out.vrml/main.c:44 ../raster/r.out.vtk/main.c:59
 #: ../raster/r.param.scale/interface.c:52 ../raster/r.patch/main.c:68
-#: ../raster/r.path/main.c:149 ../raster/r.profile/main.c:56
+#: ../raster/r.path/main.c:149 ../raster/r.profile/main.c:57
 #: ../raster/r.proj/main.c:151 ../raster/r.quant/main.c:48
 #: ../raster/r.quantile/main.c:297 ../raster/r.random.cells/main.c:49
 #: ../raster/r.random.surface/main.c:56 ../raster/r.random/main.c:53
@@ -1855,7 +1879,7 @@ msgstr "Visar en lista över alla tillgängliga displayfärger."
 #: ../raster/r.solute.transport/main.c:228 ../raster/r.spread/main.c:102
 #: ../raster/r.spreadpath/main.c:77 ../raster/r.statistics/main.c:53
 #: ../raster/r.stats.quantile/main.c:644 ../raster/r.stats.zonal/main.c:104
-#: ../raster/r.stats/main.c:109 ../raster/r.stream.extract/main.c:76
+#: ../raster/r.stats/main.c:110 ../raster/r.stream.extract/main.c:76
 #: ../raster/r.sun/main.c:241 ../raster/r.sunhours/main.c:70
 #: ../raster/r.sunmask/main.c:118 ../raster/r.support.stats/main.c:35
 #: ../raster/r.support/main.c:54 ../raster/r.surf.area/main.c:75
@@ -1874,7 +1898,7 @@ msgstr "Visar en lista över alla tillgängliga displayfärger."
 #: ../raster/r.what.color/main.c:190 ../raster/r.what/main.c:111
 #: ../raster3d/r3.cross.rast/main.c:231 ../raster3d/r3.to.rast/main.c:259
 #: ../vector/v.neighbors/main.c:121 ../vector/v.sample/main.c:75
-#: ../vector/v.to.rast/main.c:47 ../vector/v.what.rast/main.c:72
+#: ../vector/v.to.rast/main.c:47 ../vector/v.what.rast/main.c:79
 #: ../vector/v.what.rast3/main.c:67 ../visualization/ximgview/main.c:289
 msgid "raster"
 msgstr "raster"
@@ -2046,10 +2070,10 @@ msgstr "L: Lägg till M: Ta bort R: Avsluta och spara\n"
 #: ../raster/r.contour/main.c:90 ../raster/r.random/main.c:55
 #: ../vector/v.buffer/main.c:217 ../vector/v.build.polylines/main.c:113
 #: ../vector/v.build/main.c:36 ../vector/v.category/main.c:98
-#: ../vector/v.class/main.c:44 ../vector/v.clean/main.c:50
+#: ../vector/v.class/main.c:53 ../vector/v.clean/main.c:50
 #: ../vector/v.clean/test/topocheck.c:41 ../vector/v.cluster/main.c:82
 #: ../vector/v.colors.out/main.c:48 ../vector/v.colors/main.c:57
-#: ../vector/v.db.connect/main.c:51 ../vector/v.db.select/main.c:97
+#: ../vector/v.db.connect/main.c:59 ../vector/v.db.select/main.c:97
 #: ../vector/v.decimate/main.c:116 ../vector/v.delaunay/main.c:85
 #: ../vector/v.distance/main.c:125 ../vector/v.drape/main.c:55
 #: ../vector/v.edit/main.c:55 ../vector/v.external.out/main.c:42
@@ -2096,8 +2120,8 @@ msgstr "L: Lägg till M: Ta bort R: Avsluta och spara\n"
 #: ../vector/v.to.rast3/main.c:48 ../vector/v.transform/main.c:71
 #: ../vector/v.type/main.c:38 ../vector/v.univar/main.c:94
 #: ../vector/v.vect.stats/main.c:128 ../vector/v.vol.rst/main.c:218
-#: ../vector/v.voronoi/main.c:118 ../vector/v.what.rast/main.c:70
-#: ../vector/v.what.rast3/main.c:65 ../vector/v.what/main.c:61
+#: ../vector/v.voronoi/main.c:118 ../vector/v.what.rast/main.c:77
+#: ../vector/v.what.rast3/main.c:65 ../vector/v.what/main.c:63
 #: ../visualization/ximgview/main.c:290
 msgid "vector"
 msgstr "vektor"
@@ -2123,7 +2147,7 @@ msgstr "Ingen grafikenhet vald"
 #: ../raster/r.carve/main.c:153 ../raster/r.cost/main.c:357
 #: ../raster/r.walk/main.c:460 ../scripts/r.mask/r.mask.py:173
 #: ../scripts/v.db.univar/v.db.univar.py:80
-#: ../scripts/v.dissolve/v.dissolve.py:585 ../scripts/v.pack/v.pack.py:62
+#: ../scripts/v.dissolve/v.dissolve.py:576 ../scripts/v.pack/v.pack.py:62
 #: ../scripts/v.report/v.report.py:85 ../vector/v.clean/test/topocheck.c:62
 #: ../vector/v.colors/main.c:252 ../vector/v.edit/main.c:161
 #: ../vector/v.lidar.correction/main.c:158
@@ -2153,11 +2177,11 @@ msgstr "Vektorkarta <%s> hittades inte"
 #: ../raster/r.what/main.c:265 ../raster3d/r3.flow/main.c:398
 #: ../vector/v.buffer/main.c:332 ../vector/v.build.polylines/main.c:152
 #: ../vector/v.build/main.c:120 ../vector/v.build/main.c:130
-#: ../vector/v.class/main.c:98 ../vector/v.clean/main.c:291
+#: ../vector/v.class/main.c:145 ../vector/v.clean/main.c:291
 #: ../vector/v.clean/test/topocheck.c:66 ../vector/v.clean/test/topocheck.c:86
 #: ../vector/v.cluster/main.c:140 ../vector/v.colors.out/make_colors.c:23
 #: ../vector/v.colors.out/scan_cats.c:19 ../vector/v.colors/main.c:276
-#: ../vector/v.db.connect/main.c:148 ../vector/v.db.select/main.c:268
+#: ../vector/v.db.connect/main.c:221 ../vector/v.db.select/main.c:268
 #: ../vector/v.decimate/main.c:267 ../vector/v.delaunay/main.c:120
 #: ../vector/v.distance/main.c:398 ../vector/v.distance/main.c:421
 #: ../vector/v.drape/main.c:141 ../vector/v.edit/main.c:176
@@ -2209,7 +2233,7 @@ msgstr "Vektorkarta <%s> hittades inte"
 #: ../vector/v.transform/main.c:207 ../vector/v.type/main.c:128
 #: ../vector/v.univar/main.c:193 ../vector/v.vect.stats/main.c:284
 #: ../vector/v.vect.stats/main.c:296 ../vector/v.vol.rst/main.c:547
-#: ../vector/v.voronoi/main.c:193 ../vector/v.what.rast/main.c:130
+#: ../vector/v.voronoi/main.c:193 ../vector/v.what.rast/main.c:171
 #: ../vector/v.what.rast3/main.c:115
 #, c-format
 msgid "Unable to open vector map <%s>"
@@ -2232,7 +2256,7 @@ msgstr "Det går inte att öppna vektorkartan <%s>"
 #: ../vector/v.external/main.c:178 ../vector/v.extract/main.c:409
 #: ../vector/v.extrude/main.c:194 ../vector/v.fill.holes/main.c:88
 #: ../vector/v.generalize/main.c:335 ../vector/v.hull/main.c:122
-#: ../vector/v.in.ascii/main.c:252 ../vector/v.in.db/main.c:150
+#: ../vector/v.in.ascii/main.c:252 ../vector/v.in.db/main.c:157
 #: ../vector/v.in.dxf/main.c:143 ../vector/v.in.lidar/main.c:566
 #: ../vector/v.in.ogr/main.c:870 ../vector/v.in.pdal/main.cpp:441
 #: ../vector/v.in.region/main.c:75 ../vector/v.kernel/main.c:345
@@ -2394,8 +2418,8 @@ msgstr "Går inte att läsa färg"
 
 #: ../display/d.graph/do_graph.c:105 ../display/d.graph/do_graph.c:350
 #: ../display/d.graph/do_graph.c:365 ../display/d.graph/main.c:103
-#: ../display/d.labels/color.c:65 ../display/d.legend.vect/draw.c:201
-#: ../display/d.legend.vect/draw.c:212 ../display/d.rast/display.c:25
+#: ../display/d.labels/color.c:65 ../display/d.legend.vect/draw.c:202
+#: ../display/d.legend.vect/draw.c:213 ../display/d.rast/display.c:25
 #: ../raster/r.out.png/main.c:174
 #, c-format
 msgid "[%s]: No such color"
@@ -2481,7 +2505,7 @@ msgstr "Rutnätsfärg"
 #: ../display/d.grid/main.c:93 ../display/d.grid/main.c:98
 #: ../display/d.grid/main.c:104 ../display/d.grid/main.c:110
 #: ../raster/r.colors.out/raster3d_main.c:64
-#: ../raster/r.colors.out/raster_main.c:63 ../raster/r.profile/main.c:118
+#: ../raster/r.colors.out/raster_main.c:63 ../raster/r.profile/main.c:123
 #: ../raster/r.what.color/main.c:218 ../vector/v.colors.out/main.c:74
 msgid "Color"
 msgstr "Färg"
@@ -2654,6 +2678,12 @@ msgstr "Procent för att ljusa upp intensitetskanalen"
 msgid "Respect NULL values while drawing"
 msgstr "Respektera NULL-värden vid ritning"
 
+#: ../display/d.histogram/bar.c:129 ../display/d.histogram/bar.c:385
+#: ../display/d.histogram/pie.c:131
+#, c-format
+msgid "Tic name <%s> is too long"
+msgstr "Tic-namnet <%s> är för långt"
+
 #: ../display/d.histogram/main.c:81
 msgid "histogram"
 msgstr "histogram"
@@ -2680,12 +2710,12 @@ msgstr "histogram"
 #: ../raster/r.regression.line/main.c:52
 #: ../raster/r.regression.multi/main.c:138 ../raster/r.report/main.c:68
 #: ../raster/r.statistics/main.c:54 ../raster/r.stats.quantile/main.c:645
-#: ../raster/r.stats.zonal/main.c:105 ../raster/r.stats/main.c:110
+#: ../raster/r.stats.zonal/main.c:105 ../raster/r.stats/main.c:111
 #: ../raster/r.support.stats/main.c:36 ../raster/r.surf.area/main.c:77
 #: ../raster/r.texture/main.c:99 ../raster/r.univar/r.univar_main.c:166
 #: ../raster/r.univar/r3.univar_main.c:119 ../raster3d/r3.in.lidar/main.c:162
 #: ../raster3d/r3.neighbors/main.c:207 ../raster3d/r3.stats/main.c:48
-#: ../vector/v.class/main.c:47 ../vector/v.kcv/main.c:54
+#: ../vector/v.class/main.c:56 ../vector/v.kcv/main.c:54
 #: ../vector/v.neighbors/main.c:120 ../vector/v.normal/main.c:71
 #: ../vector/v.outlier/main.c:69 ../vector/v.perturb/main.c:64
 #: ../vector/v.qcount/main.c:60 ../vector/v.random/main.c:100
@@ -2744,11 +2774,6 @@ msgstr "Kategorifilen för <%s> är inte tillgänglig"
 #, c-format
 msgid "Range information for <%s> not available"
 msgstr "Information om intervall för <%s> är inte tillgänglig"
-
-#: ../display/d.histogram/pie.c:131
-#, c-format
-msgid "Tic name <%s> is too long"
-msgstr "Tic-namnet <%s> är för långt"
 
 #: ../display/d.info/main.c:36
 msgid "Displays information about the active display monitor."
@@ -2830,7 +2855,7 @@ msgstr "Regionstorleken är större än maxreg, inget visas."
 msgid "Unable to open label file <%s>"
 msgstr "Det går inte att öppna etikettfilen <%s>"
 
-#: ../display/d.legend.vect/draw.c:77 ../display/d.legend.vect/main.c:266
+#: ../display/d.legend.vect/draw.c:78 ../display/d.legend.vect/main.c:266
 #: ../display/d.linegraph/main.c:409 ../display/d.linegraph/main.c:427
 #: ../display/d.linegraph/main.c:726 ../display/d.text/main.c:368
 #: ../display/d.where/main.c:168 ../general/g.cairocomp/main.c:46
@@ -2846,11 +2871,11 @@ msgstr "Det går inte att öppna etikettfilen <%s>"
 msgid "Unable to open input file <%s>"
 msgstr "Det gick inte att öppna indatafilen <%s>"
 
-#: ../display/d.legend.vect/draw.c:185
+#: ../display/d.legend.vect/draw.c:186
 msgid "Cannot read symbol"
 msgstr "Det går inte att läsa symbolen"
 
-#: ../display/d.legend.vect/draw.c:246
+#: ../display/d.legend.vect/draw.c:247
 msgid "Invalid value for color type in legend file. Use one of 'lf' or 'ps'."
 msgstr "Ogiltigt värde för färgtyp i legendfilen. Använd en av 'lf' eller 'ps'."
 
@@ -3643,7 +3668,7 @@ msgstr "Det går inte att ta bort katalogen <%s>"
 #: ../misc/m.nviz.script/main.c:198 ../misc/m.transform/main.c:273
 #: ../raster/r.category/main.c:239 ../raster/r.horizon/main.c:430
 #: ../raster/r.in.lidar/main.c:670 ../raster/r.out.ascii/main.c:152
-#: ../raster/r.out.ppm3/main.c:134 ../raster/r.profile/main.c:210
+#: ../raster/r.out.ppm3/main.c:134 ../raster/r.profile/main.c:224
 #: ../raster/r.recode/main.c:89 ../raster3d/r3.out.vtk/main.c:422
 #: ../vector/v.edit/main.c:82 ../vector/v.net/main.c:99
 #: ../vector/v.out.ascii/main.c:129 ../vector/v.out.vtk/main.c:172
@@ -3913,7 +3938,7 @@ msgstr "Det går inte att läsa intervallet för %s"
 msgid "Unable to read FP range for %s"
 msgstr "Det går inte att läsa FP-intervallet för %s"
 
-#: ../display/d.profile/main.c:194 ../raster/r.profile/main.c:57
+#: ../display/d.profile/main.c:194 ../raster/r.profile/main.c:58
 #: ../raster/r.transect/main.c:103 ../raster3d/r3.cross.rast/main.c:230
 #: ../vector/v.profile/main.c:156
 msgid "profile"
@@ -3931,7 +3956,7 @@ msgstr "Plottar profilen för en transekt."
 msgid "Raster map to be profiled"
 msgstr "Rasterkarta som ska profileras"
 
-#: ../display/d.profile/main.c:206 ../raster/r.profile/main.c:73
+#: ../display/d.profile/main.c:206 ../raster/r.profile/main.c:74
 msgid "Profile coordinate pairs"
 msgstr "Koordinatpar för profil"
 
@@ -4021,6 +4046,7 @@ msgstr "Antal signifikanta siffror (endast flyttal)"
 msgid "Get text color from cell color value"
 msgstr "Hämta textfärg från cellens färgvärde"
 
+#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #: ../display/d.rast.num/main.c:211 ../raster/r.thin/io.c:106
@@ -4412,12 +4438,12 @@ msgstr "Skapa 3D-diagram"
 #: ../vector/v.buffer/main.c:422 ../vector/v.colors/read_rgb.c:23
 #: ../vector/v.colors/scan_attr.c:24 ../vector/v.colors/write_rgb.c:20
 #: ../vector/v.distance/main.c:590 ../vector/v.edit/select.c:499
-#: ../vector/v.extrude/main.c:223 ../vector/v.generalize/misc.c:167
+#: ../vector/v.extrude/main.c:223 ../vector/v.generalize/misc.c:168
 #: ../vector/v.neighbors/main.c:219 ../vector/v.overlay/main.c:422
 #: ../vector/v.surf.bspline/crosscorr.c:123 ../vector/v.to.rast/support.c:101
 #: ../vector/v.to.rast/support.c:271 ../vector/v.to.rast/support.c:499
 #: ../vector/v.univar/main.c:271 ../vector/v.vect.stats/main.c:345
-#: ../vector/v.vect.stats/main.c:422 ../vector/v.what.rast/main.c:137
+#: ../vector/v.vect.stats/main.c:422 ../vector/v.what.rast/main.c:178
 #: ../vector/v.what.rast3/main.c:121
 #, c-format
 msgid "Database connection not defined for layer %d"
@@ -4431,17 +4457,17 @@ msgstr "Databasanslutning inte definierad för lagret %d"
 #: ../raster/r.contour/main.c:170 ../raster/r.random/random.c:67
 #: ../raster/r.to.vect/main.c:200 ../raster/r.volume/main.c:322
 #: ../raster3d/r3.flow/main.c:46 ../vector/v.buffer/main.c:427
-#: ../vector/v.class/main.c:113 ../vector/v.colors.out/make_colors.c:36
+#: ../vector/v.class/main.c:160 ../vector/v.colors.out/make_colors.c:36
 #: ../vector/v.colors/read_rgb.c:27 ../vector/v.colors/scan_attr.c:28
-#: ../vector/v.colors/write_rgb.c:24 ../vector/v.db.connect/main.c:224
-#: ../vector/v.db.connect/main.c:334 ../vector/v.db.select/main.c:282
+#: ../vector/v.colors/write_rgb.c:24 ../vector/v.db.connect/main.c:349
+#: ../vector/v.db.connect/main.c:533 ../vector/v.db.select/main.c:282
 #: ../vector/v.distance/main.c:562 ../vector/v.distance/main.c:595
 #: ../vector/v.distance/main.c:646 ../vector/v.distance/main.c:1395
 #: ../vector/v.distance/main.c:1415 ../vector/v.edit/select.c:512
 #: ../vector/v.extract/extract.c:276 ../vector/v.extract/main.c:226
 #: ../vector/v.extract/main.c:324 ../vector/v.extrude/main.c:228
-#: ../vector/v.in.ascii/main.c:359 ../vector/v.in.db/main.c:162
-#: ../vector/v.in.db/main.c:308 ../vector/v.in.dxf/write_vect.c:211
+#: ../vector/v.in.ascii/main.c:359 ../vector/v.in.db/main.c:169
+#: ../vector/v.in.db/main.c:315 ../vector/v.in.dxf/write_vect.c:211
 #: ../vector/v.in.ogr/main.c:1167 ../vector/v.in.ogr/main.c:1216
 #: ../vector/v.info/print.c:221 ../vector/v.kcv/main.c:126
 #: ../vector/v.label.sa/labels.c:78 ../vector/v.label/main.c:277
@@ -4469,14 +4495,14 @@ msgstr "Databasanslutning inte definierad för lagret %d"
 #: ../vector/v.to.rast/support.c:277 ../vector/v.to.rast/support.c:506
 #: ../vector/v.to.rast/vect2rast.c:58 ../vector/v.to.rast3/main.c:86
 #: ../vector/v.transform/trans_digit.c:41 ../vector/v.vol.rst/main.c:588
-#: ../vector/v.vol.rst/user1.c:95 ../vector/v.what.rast/main.c:143
+#: ../vector/v.vol.rst/user1.c:95 ../vector/v.what.rast/main.c:184
 #: ../vector/v.what.rast3/main.c:126
 #, c-format
 msgid "Unable to open database <%s> by driver <%s>"
 msgstr "Det gick inte att öppna databas <%s> med drivrutin <%s>"
 
 #: ../display/d.vect.chart/plot.c:84 ../display/d.vect/attr.c:111
-#: ../vector/v.in.db/main.c:229
+#: ../vector/v.in.db/main.c:236
 #, c-format
 msgid "Unable to open select cursor: '%s'"
 msgstr "Det går inte att öppna markeringsmarkören: '%s'"
@@ -4500,7 +4526,7 @@ msgstr "Det går inte att läsa symbolen <%s>, det går inte att visa punkter"
 #: ../vector/v.label.sa/labels.c:140 ../vector/v.label/main.c:292
 #: ../vector/v.out.lidar/main.c:731 ../vector/v.perturb/main.c:200
 #: ../vector/v.to.3d/trans2.c:84 ../vector/v.to.3d/trans3.c:86
-#: ../vector/v.vol.rst/user1.c:137 ../vector/v.what.rast/main.c:215
+#: ../vector/v.vol.rst/user1.c:137 ../vector/v.what.rast/main.c:256
 msgid "Unable to read vector map"
 msgstr "Det går inte att läsa vektorkartan"
 
@@ -4564,31 +4590,31 @@ msgstr "Klassbrytningar, utan minimum och maximum"
 msgid "Classes"
 msgstr "Klasser"
 
-#: ../display/d.vect.thematic/main.c:120 ../vector/v.class/main.c:67
+#: ../display/d.vect.thematic/main.c:120 ../vector/v.class/main.c:76
 msgid "Algorithm to use for classification"
 msgstr "Algoritm att använda för klassificering"
 
-#: ../display/d.vect.thematic/main.c:123 ../vector/v.class/main.c:75
+#: ../display/d.vect.thematic/main.c:123 ../vector/v.class/main.c:84
 msgid "quantiles"
 msgstr "kvantiler"
 
-#: ../display/d.vect.thematic/main.c:123 ../vector/v.class/main.c:75
+#: ../display/d.vect.thematic/main.c:123 ../vector/v.class/main.c:84
 msgid "simple intervals"
 msgstr "enkla intervall"
 
-#: ../display/d.vect.thematic/main.c:123 ../vector/v.class/main.c:75
+#: ../display/d.vect.thematic/main.c:123 ../vector/v.class/main.c:84
 msgid "standard deviations"
 msgstr "standardavvikelser"
 
-#: ../display/d.vect.thematic/main.c:124 ../vector/v.class/main.c:76
+#: ../display/d.vect.thematic/main.c:124 ../vector/v.class/main.c:85
 msgid "discontinuities"
 msgstr "diskontinuiteter"
 
-#: ../display/d.vect.thematic/main.c:124 ../vector/v.class/main.c:76
+#: ../display/d.vect.thematic/main.c:124 ../vector/v.class/main.c:85
 msgid "equiprobable (normal distribution)"
 msgstr "utjämningsbar (normalfördelning)"
 
-#: ../display/d.vect.thematic/main.c:133 ../vector/v.class/main.c:84
+#: ../display/d.vect.thematic/main.c:133 ../vector/v.class/main.c:94
 msgid "Number of classes to define"
 msgstr "Antal klasser som ska definieras"
 
@@ -4678,7 +4704,7 @@ msgid "'layer' must be > 0"
 msgstr "\"lager\" måste vara > 0"
 
 #: ../display/d.vect.thematic/main.c:290 ../display/d.vect/opt.c:143
-#: ../vector/v.db.connect/main.c:174
+#: ../vector/v.db.connect/main.c:253
 msgid "Database connection not defined"
 msgstr "Databasanslutningen är inte definierad"
 
@@ -4742,12 +4768,12 @@ msgstr ""
 msgid "Classification of %s into %i classes\n"
 msgstr "Klassificering av %s till %i-klasser\n"
 
-#: ../display/d.vect.thematic/main.c:517 ../vector/v.class/main.c:195
+#: ../display/d.vect.thematic/main.c:517 ../vector/v.class/main.c:297
 #, c-format
 msgid "Using algorithm: *** %s ***\n"
 msgstr "Använda algoritm: *** %s ***\n"
 
-#: ../display/d.vect.thematic/main.c:518 ../vector/v.class/main.c:196
+#: ../display/d.vect.thematic/main.c:518 ../vector/v.class/main.c:299
 #, c-format
 msgid "Mean: %f\tStandard deviation = %f\n"
 msgstr "Medelvärde: %f Standardavvikelse = %f\n"
@@ -4757,7 +4783,7 @@ msgstr "Medelvärde: %f Standardavvikelse = %f\n"
 msgid "Last chi2 = %f\n"
 msgstr "Sista chi2 = %f\n"
 
-#: ../display/d.vect.thematic/main.c:524 ../vector/v.class/main.c:203
+#: ../display/d.vect.thematic/main.c:524 ../vector/v.class/main.c:306
 #, c-format
 msgid "Stdev multiplied by %.4f to define step\n"
 msgstr "Stdev multiplicerat med %.4f för att definiera steg\n"
@@ -4832,6 +4858,11 @@ msgstr "Inget attribut hittades för katt %d: %s"
 #: ../display/d.vect/label.c:32
 msgid "Topology level required for drawing centroids for OGR layers"
 msgstr "Topologinivå som krävs för att rita centroider för OGR-lager"
+
+#: ../display/d.vect/legend.c:18 ../display/d.vect/main.c:367
+#, c-format
+msgid "Map name <%s> is too long"
+msgstr "Kartnamnet <%s> är för långt"
 
 #: ../display/d.vect/lines.c:114
 msgid "Unable to display features by id, topology not available. Please try to rebuild topology using v.build or v.build.all."
@@ -5028,32 +5059,32 @@ msgstr "Regionstorleken är lägre än minreg, inget visas"
 msgid "Region size is greater than maxreg, nothing displayed"
 msgstr "Regionstorleken är större än maxreg, inget visas"
 
-#: ../display/d.vect/main.c:373
+#: ../display/d.vect/main.c:376
 #, c-format
 msgid "The -%c flag and <%s> option cannot be used together, the -%c flag will be ignored!"
 msgstr "Flaggan -%c och alternativet <%s> kan inte användas tillsammans, flaggan -%c ignoreras!"
 
-#: ../display/d.vect/main.c:398 ../display/d.vect/main.c:404
+#: ../display/d.vect/main.c:401 ../display/d.vect/main.c:407
 #, c-format
 msgid "Option <%s> must be > 0"
 msgstr "Alternativ <%s> måste vara > 0"
 
-#: ../display/d.vect/main.c:409
+#: ../display/d.vect/main.c:412
 #, c-format
 msgid "%d error in cat option"
 msgid_plural "%d errors in cat option"
 msgstr[0] "%d fel i kattalternativet"
 msgstr[1] "%d fel i kattalternativet"
 
-#: ../display/d.vect/main.c:426
+#: ../display/d.vect/main.c:429
 msgid "Plotting..."
 msgstr "Plottar..."
 
-#: ../display/d.vect/main.c:438
+#: ../display/d.vect/main.c:441
 msgid "The bounding box of the map is outside the current region, nothing drawn"
 msgstr "Kartans avgränsningsbox ligger utanför den aktuella regionen, inget ritas"
 
-#: ../display/d.vect/main.c:510
+#: ../display/d.vect/main.c:513
 msgid "Rendering failed"
 msgstr "Rendering misslyckades"
 
@@ -5137,7 +5168,7 @@ msgstr "Vektorkartan är inte 3D. Det går inte att visa z-koordinater."
 #: ../raster/r.random.cells/main.c:50 ../raster/r.random/main.c:54
 #: ../vector/v.drape/main.c:57 ../vector/v.extrude/main.c:68
 #: ../vector/v.kcv/main.c:57 ../vector/v.random/main.c:99
-#: ../vector/v.sample/main.c:74 ../vector/v.what.rast/main.c:71
+#: ../vector/v.sample/main.c:74 ../vector/v.what.rast/main.c:78
 #: ../vector/v.what.rast3/main.c:66
 msgid "sampling"
 msgstr "provtagning"
@@ -5145,8 +5176,8 @@ msgstr "provtagning"
 #: ../display/d.where/main.c:46
 #: ../locale/scriptstrings/v.what.strds_to_translate.c:5
 #: ../locale/scriptstrings/v.what.vect_to_translate.c:5
-#: ../raster/r.what/main.c:113 ../vector/v.what.rast/main.c:73
-#: ../vector/v.what.rast3/main.c:68 ../vector/v.what/main.c:63
+#: ../raster/r.what/main.c:113 ../vector/v.what.rast/main.c:80
+#: ../vector/v.what.rast3/main.c:68 ../vector/v.what/main.c:65
 msgid "position"
 msgstr "placering"
 
@@ -5156,8 +5187,8 @@ msgstr "placering"
 #: ../locale/scriptstrings/v.what.strds_to_translate.c:6
 #: ../locale/scriptstrings/v.what.vect_to_translate.c:6
 #: ../raster/r.what.color/main.c:191 ../raster/r.what/main.c:112
-#: ../vector/v.what.rast/main.c:74 ../vector/v.what.rast3/main.c:69
-#: ../vector/v.what/main.c:62
+#: ../vector/v.what.rast/main.c:81 ../vector/v.what.rast3/main.c:69
+#: ../vector/v.what/main.c:64
 msgid "querying"
 msgstr "frågar"
 
@@ -5244,8 +5275,8 @@ msgstr "Min första rastermodul"
 #: ../raster/r.colors/edit_colors.c:506 ../raster/r.compress/main.c:124
 #: ../raster/r.compress/main.c:318 ../raster/r.cost/main.c:364
 #: ../raster/r.cost/main.c:391 ../raster/r.cost/main.c:711
-#: ../raster/r.cross/main.c:101 ../raster/r.distance/parse.c:70
-#: ../raster/r.distance/parse.c:79 ../raster/r.fill.stats/main.c:1026
+#: ../raster/r.cross/main.c:101 ../raster/r.distance/parse.c:76
+#: ../raster/r.distance/parse.c:85 ../raster/r.fill.stats/main.c:1026
 #: ../raster/r.flow/flow_io.c:67 ../raster/r.flow/flow_io.c:245
 #: ../raster/r.geomorphon/memory.c:47 ../raster/r.info/main.c:140
 #: ../raster/r.kappa/main.c:173 ../raster/r.kappa/stats.c:33
@@ -5661,7 +5692,7 @@ msgstr "Parameter 'file' innehåller referens till <%s> mapset, men mapset-param
 
 #: ../general/g.findfile/main.c:158
 #: ../imagery/i.ortho.photo/i.ortho.photo/menu.c:90
-#: ../raster/r.out.mpeg/main.c:150 ../raster/r.path/main.c:240
+#: ../raster/r.out.mpeg/main.c:151 ../raster/r.path/main.c:240
 #: ../raster/r.path/main.c:247 ../raster/r.path/main.c:253
 #, c-format
 msgid "Name <%s> is too long"
@@ -5824,12 +5855,12 @@ msgstr "Startar <%s> grafiskt gränssnitt, vänta..."
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr "Startar <%s> grafiskt gränssnitt i bakgrunden, vänta..."
 
-#: ../general/g.list/list.c:167 ../general/g.region/main.c:543
+#: ../general/g.list/list.c:168 ../general/g.region/main.c:543
 #, c-format
 msgid "Unable to read header of 3D raster map <%s@%s>"
 msgstr "Det gick inte att läsa rubriken för 3D-rasterkartan <%s@%s>"
 
-#: ../general/g.list/list.c:176
+#: ../general/g.list/list.c:177
 #, c-format
 msgid "Unable to open vector map <%s@%s> on topological level"
 msgstr "Det går inte att öppna vektorkarta <%s@%s> på topologisk nivå"
@@ -5895,8 +5926,8 @@ msgstr "Om inte angiven eller \"-\", standardutdata"
 
 #: ../general/g.list/main.c:122 ../general/g.version/main.c:127
 #: ../imagery/i.group/main.c:88 ../raster/r.info/main.c:112
-#: ../raster/r.proj/main.c:205 ../vector/v.category/main.c:166
-#: ../vector/v.info/parse.c:48 ../vector/v.univar/main.c:149
+#: ../raster/r.proj/main.c:205 ../vector/v.info/parse.c:48
+#: ../vector/v.univar/main.c:149
 msgid "plain;Human readable text output;shell;shell script style text output;json;JSON (JavaScript Object Notation);"
 msgstr "vanlig;mänsklig läsbar textutmatning;skal;textutmatning i skalskriptstil;json;JSON (JavaScript Object Notation);"
 
@@ -6739,7 +6770,7 @@ msgstr "Namn på det nya projekt (plats) som ska skapas"
 msgid "plain;Human readable text output;shell;shell script style text output;json;JSON (JavaScript Object Notation);wkt;Well-known text output;proj4;PROJ.4 style text output;"
 msgstr "plain;Human readable text output;skal;skal script style text output;json;JSON (JavaScript Object Notation);wkt;Välkänd text output;proj4;PROJ.4 style text output;"
 
-#: ../general/g.proj/main.c:271
+#: ../general/g.proj/main.c:271 ../vector/v.what.rast/main.c:159
 #, c-format
 msgid "The format option can only be used with -%c flag"
 msgstr "Formatalternativet kan endast användas med flaggan -%c"
@@ -7509,8 +7540,8 @@ msgid "license"
 msgstr "licens"
 
 #: ../general/g.version/main.c:80
-msgid "Displays GRASS GIS version info."
-msgstr "Visar GRASS GIS versionsinformation."
+msgid "Displays GRASS version info."
+msgstr "Visar GRASS versionsinformation."
 
 #: ../general/g.version/main.c:82
 msgid "Optionally also prints build or copyright information."
@@ -7558,34 +7589,34 @@ msgstr "Skal"
 msgid "Cannot use the -g flag with format=json; please select only one option."
 msgstr "Flaggan -g kan inte användas med format=json. Välj endast ett alternativ."
 
-#: ../general/g.version/main.c:268
+#: ../general/g.version/main.c:267
 #, c-format
 msgid "Cannot determine GRASS libgis version and date number. The GRASS build might be broken. Report this to developers or packagers.\n"
 msgstr "Det går inte att fastställa GRASS libgis version och datumnummer. GRASS-versionen kan vara trasig. Rapportera detta till utvecklare eller paketerare.\n"
 
-#: ../general/g.version/main.c:281
-msgid "GRASS GIS libgis version and date number don't have the expected format. Trying to print the original strings..."
-msgstr "GRASS GIS libgis version och datumnummer har inte det förväntade formatet. Försöker skriva ut de ursprungliga strängarna..."
+#: ../general/g.version/main.c:279
+msgid "GRASS libgis version and date number don't have the expected format. Trying to print the original strings..."
+msgstr "GRASS libgis version och datumnummer har inte det förväntade formatet. Försöker skriva ut de ursprungliga strängarna..."
 
-#: ../general/g.version/main.c:284
+#: ../general/g.version/main.c:282
 #, c-format
 msgid "GIS_H_VERSION=\"%s\""
 msgstr "GIS_H_VERSION=\"%s\""
 
-#: ../general/g.version/main.c:285
+#: ../general/g.version/main.c:283
 #, c-format
 msgid "GIS_H_DATE=\"%s\""
 msgstr "GIS_H_DATE=\"%s\""
 
-#: ../general/g.version/main.c:347
+#: ../general/g.version/main.c:345
 msgid "GRASS not compiled with GDAL/OGR support"
 msgstr "GRASS är inte kompilerad med GDAL/OGR-stöd"
 
-#: ../general/g.version/main.c:372
+#: ../general/g.version/main.c:370
 msgid "GRASS not compiled with GEOS support"
 msgstr "GRASS inte kompilerad med GEOS-stöd"
 
-#: ../general/g.version/main.c:398
+#: ../general/g.version/main.c:396
 msgid "GRASS not compiled with SQLite support"
 msgstr "GRASS är inte kompilerad med SQLite-stöd"
 
@@ -8125,7 +8156,7 @@ msgstr "Iteration %.2d: konvergens %.2f%% (%s förflutit, %s kvar)"
 #: ../imagery/i.segment/main.c:39 ../imagery/i.signatures/main.c:106
 #: ../imagery/i.smap/main.c:38 ../imagery/i.svm.predict/main.c:52
 #: ../imagery/i.svm.train/main.c:55 ../raster/r.kappa/main.c:70
-#: ../vector/v.class/main.c:45
+#: ../vector/v.class/main.c:54
 msgid "classification"
 msgstr "classification"
 
@@ -12769,7 +12800,7 @@ msgstr "Sparar innehållet i den aktiva bildskärmen till en grafikfil."
 #: ../raster/r.colors.out/raster_main.c:47 ../raster/r.external.out/main.c:235
 #: ../raster/r.out.ascii/main.c:54 ../raster/r.out.bin/main.c:299
 #: ../raster/r.out.gdal/main.c:136 ../raster/r.out.gridatb/main.c:67
-#: ../raster/r.out.mat/main.c:63 ../raster/r.out.mpeg/main.c:104
+#: ../raster/r.out.mat/main.c:63 ../raster/r.out.mpeg/main.c:105
 #: ../raster/r.out.png/main.c:111 ../raster/r.out.pov/main.c:112
 #: ../raster/r.out.ppm/main.c:53 ../raster/r.out.ppm3/main.c:58
 #: ../raster/r.out.vrml/main.c:45 ../raster/r.out.vtk/main.c:60
@@ -12791,7 +12822,7 @@ msgstr "export"
 #: ../raster/r.external.out/main.c:236 ../raster/r.out.ascii/main.c:55
 #: ../raster/r.out.bin/main.c:300 ../raster/r.out.gdal/main.c:137
 #: ../raster/r.out.gridatb/main.c:68 ../raster/r.out.mat/main.c:64
-#: ../raster/r.out.mpeg/main.c:105 ../raster/r.out.png/main.c:112
+#: ../raster/r.out.mpeg/main.c:106 ../raster/r.out.png/main.c:112
 #: ../raster/r.out.pov/main.c:113 ../raster/r.out.ppm/main.c:54
 #: ../raster/r.out.ppm3/main.c:59 ../raster/r.out.vrml/main.c:46
 #: ../raster/r.out.vtk/main.c:61 ../raster3d/r3.out.ascii/main.c:304
@@ -13222,16 +13253,16 @@ msgid "Specific branch to fetch addon from (only used when fetching from git)"
 msgstr "Specifik gren att hämta tillägget från (används endast när det hämtas från git)"
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:16
-msgid "List available extensions in the official GRASS GIS Addons repository"
-msgstr "Lista över tillgängliga tillägg i det officiella GRASS GIS Addons-arkivet"
+msgid "List available extensions in the official GRASS Addons repository"
+msgstr "Lista över tillgängliga tillägg i det officiella GRASS Addons-arkivet"
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:18
-msgid "List available extensions in the official GRASS GIS Addons repository including module description"
-msgstr "Lista över tillgängliga tillägg i det officiella GRASS GIS Addons-arkivet inklusive modulbeskrivning"
+msgid "List available extensions in the official GRASS Addons repository including module description"
+msgstr "Lista över tillgängliga tillägg i det officiella GRASS Addons-arkivet inklusive modulbeskrivning"
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:20
-msgid "List available extensions in the official GRASS GIS Addons repository (shell script style)"
-msgstr "Lista tillgängliga tillägg i det officiella GRASS GIS Addons-arkivet (skal script-stil)"
+msgid "List available extensions in the official GRASS Addons repository (shell script style)"
+msgstr "Lista tillgängliga tillägg i det officiella GRASS Addons-arkivet (skal script-stil)"
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:22
 msgid "List locally installed extensions"
@@ -14379,8 +14410,8 @@ msgid "Include no data values"
 msgstr "Inkluderar inga datavärden"
 
 #: ../locale/scriptstrings/r.pack_to_translate.c:1
-msgid "Exports a raster map as GRASS GIS specific archive file"
-msgstr "Exporterar en rasterkarta som GRASS GIS-specifik arkivfil"
+msgid "Exports a raster map as GRASS specific archive file"
+msgstr "Exporterar en rasterkarta som GRASS-specifik arkivfil"
 
 #: ../locale/scriptstrings/r.pack_to_translate.c:4
 #: ../locale/scriptstrings/r.unpack_to_translate.c:4
@@ -14571,8 +14602,8 @@ msgid "Output field separator"
 msgstr "Separator för utmatningsfält"
 
 #: ../locale/scriptstrings/r.unpack_to_translate.c:1
-msgid "Imports a GRASS GIS specific raster archive file (packed with r.pack) as a raster map"
-msgstr "Importerar en GRASS GIS-specifik rasterarkivfil (packad med r.pack) som en rasterkarta"
+msgid "Imports a GRASS specific raster archive file (packed with r.pack) as a raster map"
+msgstr "Importerar en GRASS-specifik rasterarkivfil (packad med r.pack) som en rasterkarta"
 
 #: ../locale/scriptstrings/r.unpack_to_translate.c:5
 #: ../locale/scriptstrings/v.unpack_to_translate.c:5
@@ -15020,17 +15051,19 @@ msgstr "Sortera datasetet för rymdtid efter kategori"
 #: ../locale/scriptstrings/t.vect.univar_to_translate.c:9
 #: ../locale/scriptstrings/t.vect.univar_to_translate.c:12
 #: ../raster/r.kappa/main.c:107 ../raster/r.kappa/main.c:112
-#: ../raster/r.report/parse.c:66 ../raster/r.report/parse.c:74
-#: ../raster/r.report/parse.c:82 ../raster/r.report/parse.c:105
-#: ../raster/r.report/parse.c:108 ../raster/r.report/parse.c:113
-#: ../raster/r.report/parse.c:118 ../raster/r.report/parse.c:123
-#: ../raster/r.stats.quantile/main.c:688 ../raster/r.stats/main.c:125
-#: ../raster/r.stats/main.c:129 ../raster/r.stats/main.c:152
-#: ../raster/r.univar/r.univar_main.c:96 ../raster/r.univar/r.univar_main.c:105
+#: ../raster/r.profile/main.c:127 ../raster/r.report/parse.c:66
+#: ../raster/r.report/parse.c:74 ../raster/r.report/parse.c:82
+#: ../raster/r.report/parse.c:105 ../raster/r.report/parse.c:108
+#: ../raster/r.report/parse.c:113 ../raster/r.report/parse.c:118
+#: ../raster/r.report/parse.c:123 ../raster/r.stats.quantile/main.c:688
+#: ../raster/r.stats/main.c:126 ../raster/r.stats/main.c:130
+#: ../raster/r.stats/main.c:153 ../raster/r.univar/r.univar_main.c:96
+#: ../raster/r.univar/r.univar_main.c:105
 #: ../raster/r.univar/r.univar_main.c:119
 #: ../raster/r.univar/r3.univar_main.c:58
 #: ../raster/r.univar/r3.univar_main.c:67
 #: ../raster/r.univar/r3.univar_main.c:81 ../raster/r.volume/main.c:121
+#: ../vector/v.category/main.c:173
 msgid "Formatting"
 msgstr "Formaterar"
 
@@ -16138,8 +16171,8 @@ msgid "select"
 msgstr "välj"
 
 #: ../locale/scriptstrings/t.vect.export_to_translate.c:1
-msgid "Exports a space time vector dataset as GRASS GIS specific archive file."
-msgstr "Exporterar en vektoruppsättning för rymdtid som GRASS GIS-specifik arkivfil."
+msgid "Exports a space time vector dataset as GRASS specific archive file."
+msgstr "Exporterar en vektoruppsättning för rymdtid som GRASS-specifik arkivfil."
 
 #: ../locale/scriptstrings/t.vect.export_to_translate.c:6
 msgid "Name of a space time vector dataset archive"
@@ -16170,8 +16203,8 @@ msgid "Register empty maps"
 msgstr "Registrera tomma kartor"
 
 #: ../locale/scriptstrings/t.vect.import_to_translate.c:1
-msgid "Imports a space time vector dataset from a GRASS GIS specific archive file."
-msgstr "Importerar en vektordatauppsättning för rymdtid från en GRASS GIS-specifik arkivfil."
+msgid "Imports a space time vector dataset from a GRASS specific archive file."
+msgstr "Importerar en vektordatauppsättning för rymdtid från en GRASS-specifik arkivfil."
 
 #: ../locale/scriptstrings/t.vect.import_to_translate.c:12
 msgid "Create a new project (location) and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
@@ -16222,7 +16255,7 @@ msgid "Adds missing centroids to closed boundaries."
 msgstr "Lägger till saknade centroider till slutna gränser."
 
 #: ../locale/scriptstrings/v.centroids_to_translate.c:3
-#: ../vector/v.category/main.c:836
+#: ../vector/v.category/main.c:857
 msgid "centroid"
 msgstr "centroid"
 
@@ -16231,7 +16264,7 @@ msgstr "centroid"
 #: ../locale/scriptstrings/v.dissolve_to_translate.c:4
 #: ../locale/scriptstrings/v.to.lines_to_translate.c:4
 #: ../misc/m.measure/main.c:55 ../vector/v.buffer/main.c:219
-#: ../vector/v.category/main.c:842 ../vector/v.in.ascii/main.c:71
+#: ../vector/v.category/main.c:863 ../vector/v.in.ascii/main.c:71
 #: ../vector/v.to.db/main.c:40 ../vector/v.type/main.c:41
 msgid "area"
 msgstr "område"
@@ -16480,7 +16513,7 @@ msgstr "lösas upp"
 #: ../locale/scriptstrings/v.in.lines_to_translate.c:4
 #: ../locale/scriptstrings/v.to.lines_to_translate.c:5
 #: ../vector/v.buffer/main.c:222 ../vector/v.build.polylines/main.c:116
-#: ../vector/v.category/main.c:825 ../vector/v.edit/main.c:58
+#: ../vector/v.category/main.c:846 ../vector/v.edit/main.c:58
 #: ../vector/v.in.ascii/main.c:72 ../vector/v.parallel/main.c:51
 #: ../vector/v.to.points/main.c:55 ../vector/v.type/main.c:42
 msgid "line"
@@ -16634,7 +16667,7 @@ msgstr "Importerar ASCII x,y[,z]-koordinater som en serie rader."
 
 #: ../locale/scriptstrings/v.in.lines_to_translate.c:5
 #: ../locale/scriptstrings/v.to.lines_to_translate.c:6
-#: ../vector/v.category/main.c:820 ../vector/v.edit/main.c:60
+#: ../vector/v.category/main.c:841 ../vector/v.edit/main.c:60
 #: ../vector/v.in.ascii/main.c:73 ../vector/v.segment/main.c:64
 #: ../vector/v.to.points/main.c:58 ../vector/v.type/main.c:43
 msgid "point"
@@ -16733,8 +16766,8 @@ msgid "Restrict fetch to features which touch the current region"
 msgstr "Begränsa hämtningen till inslag som berör den aktuella regionen"
 
 #: ../locale/scriptstrings/v.pack_to_translate.c:1
-msgid "Exports a vector map as GRASS GIS specific archive file"
-msgstr "Exporterar en vektorkarta som GRASS GIS-specifik arkivfil"
+msgid "Exports a vector map as GRASS specific archive file"
+msgstr "Exporterar en vektorkarta som GRASS-specifik arkivfil"
 
 #: ../locale/scriptstrings/v.pack_to_translate.c:5
 msgid "Name of vector map to pack up"
@@ -16817,8 +16850,8 @@ msgid "Method used for point interpolation"
 msgstr "Metod som används för punktinterpolation"
 
 #: ../locale/scriptstrings/v.unpack_to_translate.c:1
-msgid "Imports a GRASS GIS specific vector archive file (packed with v.pack) as a vector map"
-msgstr "Importerar en GRASS GIS-specifik vektorarkivfil (packad med v.pack) som en vektorkarta"
+msgid "Imports a GRASS specific vector archive file (packed with v.pack) as a vector map"
+msgstr "Importerar en GRASS-specifik vektorarkivfil (packad med v.pack) som en vektorkarta"
 
 #: ../locale/scriptstrings/v.unpack_to_translate.c:6
 msgid "Name for output vector map"
@@ -16845,12 +16878,12 @@ msgid "Uploads vector values at positions of vector points to the table."
 msgstr "Laddar upp vektorvärden vid positioner för vektorpunkter till tabellen."
 
 #: ../locale/scriptstrings/v.what.vect_to_translate.c:8
-#: ../vector/v.what.rast/main.c:82 ../vector/v.what.rast3/main.c:77
+#: ../vector/v.what.rast/main.c:89 ../vector/v.what.rast3/main.c:77
 msgid "Name of vector points map for which to edit attributes"
 msgstr "Namn på karta med vektorpunkter för vilka attribut ska redigeras"
 
 #: ../locale/scriptstrings/v.what.vect_to_translate.c:11
-#: ../vector/v.what.rast/main.c:98 ../vector/v.what.rast3/main.c:88
+#: ../vector/v.what.rast/main.c:105 ../vector/v.what.rast3/main.c:88
 msgid "Name of attribute column to be updated with the query result"
 msgstr "Namn på attributkolumnen som ska uppdateras med frågeresultatet"
 
@@ -17627,7 +17660,7 @@ msgid "Target east,north coordinates to local x,y"
 msgstr "Rikta in öst-, nordkoordinater till lokala x,y"
 
 #: ../ps/ps.map/catval.c:47 ../ps/ps.map/catval.c:108 ../ps/ps.map/catval.c:174
-#: ../vector/v.class/main.c:107 ../vector/v.label.sa/labels.c:75
+#: ../vector/v.class/main.c:154 ../vector/v.label.sa/labels.c:75
 #: ../vector/v.label/main.c:273 ../vector/v.vol.rst/user1.c:91
 msgid "Unable to get layer info for vector map"
 msgstr "Det går inte att få lagerinformation för vektorkarta"
@@ -17637,7 +17670,7 @@ msgid "Column type not supported (must be string)"
 msgstr "Kolumntyp stöds inte (måste vara sträng)"
 
 #: ../ps/ps.map/catval.c:65 ../ps/ps.map/catval.c:130 ../ps/ps.map/catval.c:197
-#: ../vector/v.class/main.c:128 ../vector/v.normal/main.c:132
+#: ../vector/v.class/main.c:175 ../vector/v.normal/main.c:132
 #: ../vector/v.out.lidar/main.c:131 ../vector/v.out.lidar/main.c:165
 #: ../vector/v.sample/main.c:149 ../vector/v.surf.bspline/main.c:402
 #: ../vector/v.surf.idw/read_sites.c:70 ../vector/v.to.rast3/main.c:98
@@ -17913,7 +17946,7 @@ msgid "Can't create temporary PostScript mask file."
 msgstr "Det går inte att skapa en tillfällig PostScript-maskfil."
 
 #: ../ps/ps.map/ps_raster.c:101 ../raster/r.grow.distance/main.c:325
-#: ../raster/r.out.mpeg/main.c:294 ../raster/r.series.accumulate/main.c:249
+#: ../raster/r.out.mpeg/main.c:295 ../raster/r.series.accumulate/main.c:249
 #: ../raster/r.series.accumulate/main.c:274
 #: ../raster/r.series.accumulate/main.c:285
 #: ../raster/r.series.accumulate/main.c:293
@@ -18271,7 +18304,7 @@ msgid "Only one raster map name found in input file"
 msgstr "Endast ett namn på en rasterkarta hittades i indatafilen"
 
 #: ../raster/r.buildvrt/main.c:186 ../raster/r.series.accumulate/main.c:266
-#: ../raster/r.series/main.c:337 ../raster/r.stats/main.c:303
+#: ../raster/r.series/main.c:337 ../raster/r.stats/main.c:319
 msgid "Raster map not found"
 msgstr "Rasterkarta hittades inte"
 
@@ -19124,7 +19157,7 @@ msgstr "Konturnivåer"
 msgid "Either <%s> or <%s> option must be specified"
 msgstr "Antingen <%s> eller <%s> alternativ måste anges"
 
-#: ../raster/r.contour/main.c:149 ../raster/r.stats/main.c:352
+#: ../raster/r.contour/main.c:149 ../raster/r.stats/main.c:371
 #, c-format
 msgid "Unable to read fp range of raster map <%s>"
 msgstr "Det gick inte att läsa fp-intervallet i rasterkartan <%s>"
@@ -19631,24 +19664,24 @@ msgstr "Sortera efter avstånd i stigande ordning"
 msgid "Sort by distance in descending order"
 msgstr "Sortera efter avstånd i fallande ordning"
 
-#: ../raster/r.distance/parse.c:54
+#: ../raster/r.distance/parse.c:60
 msgid "Include category labels in the output"
 msgstr "Inkludera kategoribeteckningar i utdata"
 
-#: ../raster/r.distance/parse.c:58
+#: ../raster/r.distance/parse.c:64
 msgid "Report zero distance if rasters are overlapping"
 msgstr "Rapportera noll avstånd om raster är överlappande"
 
-#: ../raster/r.distance/parse.c:62
+#: ../raster/r.distance/parse.c:68
 msgid "Report null objects as *"
 msgstr "Rapportera nollobjekt som *"
 
-#: ../raster/r.distance/parse.c:72 ../raster/r.distance/parse.c:81
+#: ../raster/r.distance/parse.c:78 ../raster/r.distance/parse.c:87
 #, c-format
 msgid "Raster map <%s> is not CELL"
 msgstr "Rasterkarta <%s> är inte CELL"
 
-#: ../raster/r.distance/report.c:56
+#: ../raster/r.distance/report.c:58
 #: ../scripts/i.colors.enhance/i.colors.enhance.py:149
 #: ../scripts/i.colors.enhance/i.colors.enhance.py:177
 #: ../scripts/i.colors.enhance/i.colors.enhance.py:187
@@ -19948,9 +19981,12 @@ msgstr "Bildgrupp <%s> skapad"
 
 #: ../raster/r.external/proj.c:51 ../raster/r.external/proj.c:93
 #: ../raster/r.in.gdal/proj.c:51 ../raster/r.in.gdal/proj.c:93
-#, c-format
+#, fuzzy, c-format
+#| msgid ""
+#| "Input contains an invalid SRS. WKT definition:\n"
+#| "%s"
 msgid ""
-"Input contains an invalid SRS. WKT definition:\n"
+"Input contains an invalid CRS. WKT definition:\n"
 "%s"
 msgstr ""
 "Indata innehåller en ogiltig SRS. WKT definition:\n"
@@ -20840,7 +20876,7 @@ msgstr "Beräkning av slinga för obegränsat grundvattenflöde %i"
 msgid "Maximum difference between this and last increment: %g"
 msgstr "Maximal skillnad mellan detta och det senaste inkrementet: %g"
 
-#: ../raster/r.gwflow/main.c:563 ../raster3d/r3.gwflow/main.c:286
+#: ../raster/r.gwflow/main.c:563 ../raster3d/r3.gwflow/main.c:298
 msgid "Unable to create and solve the linear equation system"
 msgstr "Kan inte skapa och lösa det linjära ekvationssystemet"
 
@@ -20943,7 +20979,7 @@ msgstr "Punktläge"
 msgid "Sampling distance step coefficient (0.5-1.5)"
 msgstr "Provtagningsavstånd stegkoefficient (0,5-1,5)"
 
-#: ../raster/r.horizon/main.c:314 ../raster/r.profile/main.c:68
+#: ../raster/r.horizon/main.c:314 ../raster/r.profile/main.c:69
 msgid "Name of file for output (use output=- for stdout)"
 msgstr "Namn på fil för utdata (använd output=- för stdout)"
 
@@ -21187,7 +21223,7 @@ msgstr "Det går inte att skriva till filen"
 #: ../raster/r.in.bin/main.c:115 ../raster/r.in.bin/main.c:117
 #: ../raster/r.in.bin/main.c:119 ../raster/r.in.bin/main.c:121
 #: ../raster/r.in.bin/main.c:647 ../raster/r.in.gridatb/file_io.c:21
-#: ../raster/r.in.gridatb/file_io.c:27 ../raster/r.in.gridatb/file_io.c:61
+#: ../raster/r.in.gridatb/file_io.c:29 ../raster/r.in.gridatb/file_io.c:63
 #: ../raster/r.in.mat/main.c:133 ../raster/r.in.mat/main.c:155
 #: ../raster/r.in.mat/main.c:175 ../raster/r.in.mat/main.c:177
 #: ../raster/r.in.mat/main.c:183 ../raster/r.in.mat/main.c:189
@@ -21652,15 +21688,20 @@ msgstr ""
 msgid "Unable to open file: %s"
 msgstr "Kunde inte öppna filen: %s"
 
-#: ../raster/r.in.gridatb/file_io.c:40
+#: ../raster/r.in.gridatb/file_io.c:24
+#, c-format
+msgid "Unexpected end of file while reading %s"
+msgstr "Oväntat slut på filen vid läsning av %s"
+
+#: ../raster/r.in.gridatb/file_io.c:42
 msgid "Setting window header failed"
 msgstr "Inställning av fönsterhuvud misslyckades"
 
-#: ../raster/r.in.gridatb/file_io.c:43
+#: ../raster/r.in.gridatb/file_io.c:45
 msgid "Rows changed"
 msgstr "Raderna ändrade"
 
-#: ../raster/r.in.gridatb/file_io.c:46
+#: ../raster/r.in.gridatb/file_io.c:48
 msgid "Cols changed"
 msgstr "Cols förändrades"
 
@@ -22734,11 +22775,11 @@ msgstr "Kan inte öppna filen <%s> för att skriva etikett"
 msgid "Problem reading r.stats output"
 msgstr "Problem med att läsa r.stats-utdata"
 
-#: ../raster/r.kappa/stats.c:64
+#: ../raster/r.kappa/stats.c:66
 msgid "Failed to remove file"
 msgstr "Misslyckades med att ta bort fil"
 
-#: ../raster/r.kappa/stats.c:66
+#: ../raster/r.kappa/stats.c:68
 msgid "error running r.stats"
 msgstr "fel vid körning av r.stats"
 
@@ -24286,65 +24327,72 @@ msgstr "Skriva ut karta..."
 msgid "%ld bytes written to '%s'"
 msgstr "%ld byte skrivs till '%s'"
 
-#: ../raster/r.out.mpeg/main.c:106
+#: ../raster/r.out.mpeg/main.c:107
 msgid "animation"
 msgstr "animation"
 
-#: ../raster/r.out.mpeg/main.c:108
+#: ../raster/r.out.mpeg/main.c:109
 msgid "Converts raster map series to MPEG movie."
 msgstr "Konverterar rasterkartserier till MPEG-film."
 
-#: ../raster/r.out.mpeg/main.c:117
+#: ../raster/r.out.mpeg/main.c:118
 #, c-format
 msgid "Name of input raster map(s) for view no.%d"
 msgstr "Namn på ingående rasterkarta(er) för vy nr%d"
 
-#: ../raster/r.out.mpeg/main.c:120
+#: ../raster/r.out.mpeg/main.c:121
 msgid "Views"
 msgstr "Visningar"
 
-#: ../raster/r.out.mpeg/main.c:134
+#: ../raster/r.out.mpeg/main.c:135
 msgid "Quality factor (1 = highest quality, lowest compression)"
 msgstr "Kvalitetsfaktor (1 = högsta kvalitet, lägsta komprimering)"
 
-#: ../raster/r.out.mpeg/main.c:139
+#: ../raster/r.out.mpeg/main.c:140
 msgid "Convert on the fly, uses less disk space"
 msgstr "Konvertera i farten, använder mindre diskutrymme"
 
-#: ../raster/r.out.mpeg/main.c:140
+#: ../raster/r.out.mpeg/main.c:141
 msgid "Requires r.out.ppm with stdout option"
 msgstr "Kräver r.out.ppm med stdout-alternativ"
 
-#: ../raster/r.out.mpeg/main.c:169
+#: ../raster/r.out.mpeg/main.c:170
 msgid "Either mpeg_encode or ppmtompeg must be installed"
 msgstr "Antingen mpeg_encode eller ppmtompeg måste vara installerat"
 
-#: ../raster/r.out.mpeg/main.c:299
+#: ../raster/r.out.mpeg/main.c:300
 #, c-format
 msgid "Unable to read color table for <%s>"
 msgstr "Det går inte att läsa färgtabellen för <%s>"
 
-#: ../raster/r.out.mpeg/main.c:348 ../raster/r.out.mpeg/main.c:380
+#: ../raster/r.out.mpeg/main.c:349 ../raster/r.out.mpeg/main.c:381
 msgid "mpeg_encode ERROR"
 msgstr "mpeg_encode FEL"
 
-#: ../raster/r.out.mpeg/main.c:421
+#: ../raster/r.out.mpeg/main.c:422
 msgid "Error reading wildcard"
 msgstr "Fel vid läsning av jokertecken"
 
-#: ../raster/r.out.mpeg/write.c:80 ../raster/r.out.mpeg/write.c:166
+#: ../raster/r.out.mpeg/main.c:460 ../raster/r.out.mpeg/write.c:324
+#: ../raster/r.out.mpeg/write.c:331
+#, fuzzy, c-format
+#| msgid "Unable to create temporary file <%s>"
+msgid "Failed to remove temporary file <%s>: %s"
+msgstr "Det går inte att skapa en temporär fil <%s>"
+
+#: ../raster/r.out.mpeg/write.c:81 ../raster/r.out.mpeg/write.c:167
 msgid "Size mismatch error!"
 msgstr "Fel på fel storlek!"
 
-#: ../raster/r.out.mpeg/write.c:128 ../raster/r.out.mpeg/write.c:169
+#: ../raster/r.out.mpeg/write.c:129 ../raster/r.out.mpeg/write.c:170
 msgid "Unable to open output file"
 msgstr "Det går inte att öppna utdatafilen"
 
-#: ../raster/r.out.mpeg/write.c:203
+#: ../raster/r.out.mpeg/write.c:204
 msgid "Unable to create temporary files."
 msgstr "Det går inte att skapa temporära filer."
 
-#: ../raster/r.out.mpeg/write.c:208
+#: ../raster/r.out.mpeg/write.c:209
 #, c-format
 msgid "Directory <%s> too long"
 msgstr "Katalog <%s> för lång"
@@ -24932,87 +24980,87 @@ msgstr "Banan lämnar den nuvarande regionen"
 msgid "One coordinate pair per line, please"
 msgstr "Ett koordinatpar per rad, tack"
 
-#: ../raster/r.profile/main.c:58 ../raster/r.transect/main.c:104
+#: ../raster/r.profile/main.c:59 ../raster/r.transect/main.c:104
 #: ../vector/v.profile/main.c:157
 msgid "transect"
 msgstr "transekt"
 
-#: ../raster/r.profile/main.c:60
+#: ../raster/r.profile/main.c:61
 msgid "Outputs the raster map layer values lying on user-defined line(s)."
 msgstr "Utmatning av rasterkartans lagervärden som ligger på användardefinierade linjer."
 
-#: ../raster/r.profile/main.c:79
+#: ../raster/r.profile/main.c:80
 msgid "Name of input file containing coordinate pairs"
 msgstr "Namn på indatafil som innehåller koordinatpar"
 
-#: ../raster/r.profile/main.c:80
+#: ../raster/r.profile/main.c:81
 msgid "Use instead of the 'coordinates' option. \"-\" reads from stdin."
 msgstr "Används istället för alternativet \"coordinates\". \"-\" läser från stdin."
 
-#: ../raster/r.profile/main.c:88
+#: ../raster/r.profile/main.c:89
 msgid "Resolution along profile (default = current region resolution)"
 msgstr "Upplösning längs profil (standard = aktuell regionupplösning)"
 
-#: ../raster/r.profile/main.c:95 ../raster/r.transect/main.c:124
+#: ../raster/r.profile/main.c:96 ../raster/r.transect/main.c:124
 msgid "Output easting and northing in first two columns of four column output"
 msgstr "Utmatning av easting och northing i de två första kolumnerna i utmatningen med fyra kolumner"
 
-#: ../raster/r.profile/main.c:101
+#: ../raster/r.profile/main.c:102
 msgid "Output color values for each profile point (format controlled by color_format option; default is 'triplet' for plain output, 'hex' for JSON)"
 msgstr "Utmatning av färgvärden för varje profilpunkt (format styrs av alternativet color_format; standard är ’triplet’ för vanlig utdata, ’hex’ för JSON)"
 
-#: ../raster/r.profile/main.c:109
+#: ../raster/r.profile/main.c:110
 msgid "If units are not specified, current project units are used. Meters are used by default in geographic (latlon) projects."
 msgstr "Om enheter inte anges används aktuella projektenheter. Metrar används som standard i geografiska projekt (latlon)."
 
-#: ../raster/r.profile/main.c:131
+#: ../raster/r.profile/main.c:140
 msgid "Either use profile option or coordinate_file  option, but not both"
 msgstr "Använd antingen profile-alternativet eller coordinate_file-alternativet, men inte båda"
 
-#: ../raster/r.profile/main.c:158
+#: ../raster/r.profile/main.c:167
 #, c-format
 msgid "Illegal resolution %g [%s]"
 msgstr "Olaglig upplösning %g [%s]"
 
-#: ../raster/r.profile/main.c:173
+#: ../raster/r.profile/main.c:185
 #, c-format
 msgid "Using resolution: %g [%s]"
 msgstr "Använda upplösning: %g [%s]"
 
-#: ../raster/r.profile/main.c:218
+#: ../raster/r.profile/main.c:232
 msgid "Output columns:"
 msgstr "Kolumner för utdata:"
 
-#: ../raster/r.profile/main.c:221
+#: ../raster/r.profile/main.c:235
 #, c-format
 msgid "Easting, Northing, Along track dist. [%s], Elevation"
 msgstr "Ostlig riktning, Nordlig riktning, Längs spåret dist. [%s], Höjd över havet"
 
-#: ../raster/r.profile/main.c:225
+#: ../raster/r.profile/main.c:239
 #, c-format
 msgid "Along track dist. [%s], Elevation"
 msgstr "Längs spåret dist. [%s], Höjd över havet"
 
-#: ../raster/r.profile/main.c:227
+#: ../raster/r.profile/main.c:241
 msgid " RGB color"
 msgstr " RGB-färg"
 
-#: ../raster/r.profile/main.c:239
+#: ../raster/r.profile/main.c:262
 #, c-format
 msgid "Could not open <%s>"
 msgstr "Det gick inte att öppna <%s>"
 
-#: ../raster/r.profile/main.c:245
+#: ../raster/r.profile/main.c:268
 #, c-format
 msgid "Invalid coordinates %s %s"
 msgstr "Ogiltiga koordinater %s %s"
 
-#: ../raster/r.profile/main.c:327
+#: ../raster/r.profile/main.c:350
 #, c-format
 msgid "Approx. transect length: %f [%s]"
 msgstr "Ungefärlig transektlängd: %f [%s]"
 
-#: ../raster/r.profile/main.c:331
+#: ../raster/r.profile/main.c:354
 msgid "Endpoint coordinates are outside of current region settings"
 msgstr "Koordinaterna för slutpunkten ligger utanför inställningarna för den aktuella regionen"
 
@@ -25137,7 +25185,7 @@ msgstr "Kontrollerar projekt <%s> mapset <%s>"
 #: ../vector/v.net/args.c:156 ../vector/v.net/args.c:162
 #: ../vector/v.net/args.c:166 ../vector/v.net/args.c:176
 #: ../vector/v.proj/main.c:248 ../vector/v.select/main.c:100
-#: ../vector/v.what.rast/main.c:120
+#: ../vector/v.what.rast/main.c:138
 #, c-format, python-format
 msgid "Required parameter <%s> not set"
 msgstr "Obligatorisk parameter <%s> inte inställd"
@@ -25781,7 +25829,7 @@ msgstr "Det gick inte att läsa f_range för karta %s"
 msgid "Data range of %s is %s to %s (entire map)"
 msgstr "Dataområdet för %s är %s till %s (hela kartan)"
 
-#: ../raster/r.recode/read_rules.c:35 ../raster/r.stats/main.c:379
+#: ../raster/r.recode/read_rules.c:35 ../raster/r.stats/main.c:398
 #, c-format
 msgid "Unable to read range for map <%s>"
 msgstr "Det går inte att läsa intervallet för karta <%s>"
@@ -25976,7 +26024,7 @@ msgstr "Sidans bredd är för liten"
 msgid "Reports statistics for raster maps."
 msgstr "Rapporterar statistik för rasterkartor."
 
-#: ../raster/r.report/parse.c:37 ../raster/r.stats/main.c:116
+#: ../raster/r.report/parse.c:37 ../raster/r.stats/main.c:117
 msgid "Name of raster map(s) to report on"
 msgstr "Namn på den eller de rasterkartor som ska rapporteras"
 
@@ -26012,8 +26060,8 @@ msgstr "antal celler"
 msgid "percent cover"
 msgstr "procent täckning"
 
-#: ../raster/r.report/parse.c:56 ../raster/r.stats/main.c:162
-#: ../raster/r.stats/main.c:167 ../raster/r.stats/main.c:173
+#: ../raster/r.report/parse.c:56 ../raster/r.stats/main.c:167
+#: ../raster/r.stats/main.c:172 ../raster/r.stats/main.c:178
 #: ../vector/v.vect.stats/main.c:202 ../vector/v.vect.stats/main.c:209
 #: ../vector/v.vect.stats/main.c:218 ../vector/v.vect.stats/main.c:226
 msgid "Statistics"
@@ -26035,30 +26083,30 @@ msgstr "Sidlängd"
 msgid "Page width"
 msgstr "Sidans bredd"
 
-#: ../raster/r.report/parse.c:91 ../raster/r.stats/main.c:138
+#: ../raster/r.report/parse.c:91 ../raster/r.stats/main.c:139
 msgid "Number of floating-point subranges to collect stats from"
 msgstr "Antal subranges med flyttal för att samla in statistik från"
 
 #: ../raster/r.report/parse.c:92 ../raster/r.report/parse.c:139
-#: ../raster/r.report/parse.c:145 ../raster/r.stats/main.c:139
-#: ../raster/r.stats/main.c:199 ../raster/r.stats/main.c:205
-#: ../raster/r.stats/main.c:221 ../raster/r.stats/main.c:227
+#: ../raster/r.report/parse.c:145 ../raster/r.stats/main.c:140
+#: ../raster/r.stats/main.c:204 ../raster/r.stats/main.c:210
+#: ../raster/r.stats/main.c:226 ../raster/r.stats/main.c:232
 msgid "Floating point"
 msgstr "Flytande punkt"
 
-#: ../raster/r.report/parse.c:99 ../raster/r.stats/main.c:146
+#: ../raster/r.report/parse.c:99 ../raster/r.stats/main.c:147
 msgid "Sort output statistics by cell counts"
 msgstr "Sortera utmatningsstatistik efter cellantal"
 
-#: ../raster/r.report/parse.c:100 ../raster/r.stats/main.c:147
+#: ../raster/r.report/parse.c:100 ../raster/r.stats/main.c:148
 msgid "Default: sorted by categories or intervals"
 msgstr "Standard: sorterad efter kategorier eller intervall"
 
-#: ../raster/r.report/parse.c:103 ../raster/r.stats/main.c:150
+#: ../raster/r.report/parse.c:103 ../raster/r.stats/main.c:151
 msgid "Sort by cell counts in ascending order"
 msgstr "Sortera efter cellantal i stigande ordning"
 
-#: ../raster/r.report/parse.c:104 ../raster/r.stats/main.c:151
+#: ../raster/r.report/parse.c:104 ../raster/r.stats/main.c:152
 msgid "Sort by cell counts in descending order"
 msgstr "Sortera efter cellantal i fallande ordning"
 
@@ -26074,24 +26122,24 @@ msgstr "Använd formfeeds mellan sidorna"
 msgid "Scientific format"
 msgstr "Vetenskapligt format"
 
-#: ../raster/r.report/parse.c:127 ../raster/r.stats/main.c:209
+#: ../raster/r.report/parse.c:127 ../raster/r.stats/main.c:214
 msgid "Do not report no data value"
 msgstr "Rapportera inte inget datavärde"
 
 #: ../raster/r.report/parse.c:128 ../raster/r.report/parse.c:133
-#: ../raster/r.stats/main.c:210 ../raster/r.stats/main.c:215
+#: ../raster/r.stats/main.c:215 ../raster/r.stats/main.c:220
 msgid "No data"
 msgstr "Ingen data"
 
-#: ../raster/r.report/parse.c:132 ../raster/r.stats/main.c:214
+#: ../raster/r.report/parse.c:132 ../raster/r.stats/main.c:219
 msgid "Do not report cells where all maps have no data"
 msgstr "Rapportera inte celler där alla kartor saknar data"
 
-#: ../raster/r.report/parse.c:138 ../raster/r.stats/main.c:220
+#: ../raster/r.report/parse.c:138 ../raster/r.stats/main.c:225
 msgid "Report for cats floating-point ranges (floating-point maps only)"
 msgstr "Rapport för katters flyttalsintervall (endast flyttalskartor)"
 
-#: ../raster/r.report/parse.c:144 ../raster/r.stats/main.c:226
+#: ../raster/r.report/parse.c:144 ../raster/r.stats/main.c:231
 msgid "Read floating-point map as integer (use map's quant rules)"
 msgstr "Läs kartan med flyttal som heltal (använd kartans kvantregler)"
 
@@ -28216,75 +28264,75 @@ msgstr "Generering av reclass-karta"
 msgid "Writing output map"
 msgstr "Skriva utmatningskarta"
 
-#: ../raster/r.stats/main.c:111
+#: ../raster/r.stats/main.c:112
 msgid "Generates area statistics for raster map."
 msgstr "Genererar områdesstatistik för rasterkarta."
 
-#: ../raster/r.stats/main.c:161
+#: ../raster/r.stats/main.c:166
 msgid "Print area totals in square meters"
 msgstr "Total tryckyta i kvadratmeter"
 
-#: ../raster/r.stats/main.c:166
+#: ../raster/r.stats/main.c:171
 msgid "Print cell counts (sortable)"
 msgstr "Skriv ut cellantal (sorterbart)"
 
-#: ../raster/r.stats/main.c:172
+#: ../raster/r.stats/main.c:177
 msgid "Print approximate (total percent may not be 100%) percents"
 msgstr "Skriv ut ungefärliga procentsatser (den totala procentsatsen kanske inte är 100 %)"
 
-#: ../raster/r.stats/main.c:177
+#: ../raster/r.stats/main.c:182
 msgid "Print category labels"
 msgstr "Skriv ut kategorietiketter"
 
-#: ../raster/r.stats/main.c:181
+#: ../raster/r.stats/main.c:186
 msgid "One cell (range) per line"
 msgstr "En cell (intervall) per rad"
 
-#: ../raster/r.stats/main.c:185
+#: ../raster/r.stats/main.c:190
 msgid "Print grid coordinates (east and north)"
 msgstr "Skriv ut koordinater (öster och norr)"
 
-#: ../raster/r.stats/main.c:186 ../raster/r.stats/main.c:193
+#: ../raster/r.stats/main.c:191 ../raster/r.stats/main.c:198
 msgid "Coordinates"
 msgstr "Koordinater"
 
-#: ../raster/r.stats/main.c:190
+#: ../raster/r.stats/main.c:195
 msgid "Print x and y (column and row)"
 msgstr "Skriv ut x och y (kolumn och rad)"
 
-#: ../raster/r.stats/main.c:192
+#: ../raster/r.stats/main.c:197
 msgid "Indexing starts with 1: first column and row are 1"
 msgstr "Indexeringen börjar med 1: första kolumnen och raden är 1"
 
-#: ../raster/r.stats/main.c:197
+#: ../raster/r.stats/main.c:202
 msgid "Print averaged values instead of intervals (floating-point maps only)"
 msgstr "Skriv ut medelvärden i stället för intervall (endast flyttalskartor)"
 
-#: ../raster/r.stats/main.c:203
+#: ../raster/r.stats/main.c:208
 msgid "Print raw indexes of floating-point ranges (floating-point maps only)"
 msgstr "Skriv ut råindex för flyttalsintervall (endast flyttalskartor)"
 
-#: ../raster/r.stats/main.c:241
+#: ../raster/r.stats/main.c:246
 #, c-format
 msgid "'%s' must be greater than zero; using %s=255"
 msgstr "'%s' måste vara större än noll; med %s=255"
 
-#: ../raster/r.stats/main.c:321
+#: ../raster/r.stats/main.c:340
 #, c-format
 msgid "Raster map <%s> is reading as integer map! Flag '-%c' and/or '%s' option will be ignored."
 msgstr "Rasterkarta <%s> läses som heltalskarta! Flaggorna \"-%c\" och/eller \"-%s\" kommer att ignoreras."
 
-#: ../raster/r.stats/main.c:337
+#: ../raster/r.stats/main.c:356
 #, c-format
 msgid "Cats for raster map <%s> are either missing or have no explicit labels. Using %s=%d."
 msgstr "Katter för rasterkarta <%s> saknas antingen eller har inga explicita etiketter. Använda %s=%d."
 
-#: ../raster/r.stats/main.c:344
+#: ../raster/r.stats/main.c:363
 #, c-format
 msgid "Flag '-%c' was given, using cats fp ranges of raster map <%s>, ignoring '%s' option"
 msgstr "Flagga '-%c' gavs, använder cats fp-områden i rasterkarta <%s>, ignorerar '%s'-alternativet"
 
-#: ../raster/r.stats/raw_stats.c:202
+#: ../raster/r.stats/raw_stats.c:230
 msgid "Invalid map type"
 msgstr "Ogiltig karttyp"
 
@@ -29406,7 +29454,7 @@ msgstr "Tar bort null-filen för [%s] ...\n"
 
 #: ../raster/r.support/main.c:356 ../raster/r.viewshed/viewshed.cpp:240
 #: ../scripts/d.polar/d.polar.py:405
-#: ../scripts/i.in.spotvgt/i.in.spotvgt.py:281
+#: ../scripts/i.in.spotvgt/i.in.spotvgt.py:278
 #: ../scripts/r.fillnulls/r.fillnulls.py:681
 #: ../scripts/r.in.aster/r.in.aster.py:173 ../scripts/r.plane/r.plane.py:131
 #: ../scripts/v.in.e00/v.in.e00.py:171
@@ -29804,6 +29852,7 @@ msgstr "För många kategorier (hittades: %i, max: %i). Försök att skala om el
 msgid "Input raster must be of type CELL."
 msgstr "Inmatningsrastret måste vara av typen CELL."
 
+#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #: ../raster/r.thin/io.c:108 ../raster/r.thin/io.c:179
@@ -30049,7 +30098,7 @@ msgstr "Skriva områden..."
 msgid "No area for centroid %d"
 msgstr "Inget område för centroid %d"
 
-#: ../raster/r.to.vect/areas_io.c:344 ../vector/v.category/main.c:492
+#: ../raster/r.to.vect/areas_io.c:344 ../vector/v.category/main.c:505
 #: ../vector/v.delaunay/main.c:172 ../vector/v.in.ogr/main.c:1541
 msgid "Unable to calculate area centroid"
 msgstr "Det går inte att beräkna områdets centroid"
@@ -30349,6 +30398,7 @@ msgstr "Utökad"
 
 #: ../raster/r.univar/r.univar_main.c:101
 #: ../raster/r.univar/r3.univar_main.c:63 ../vector/v.univar/main.c:129
+#: ../vector/v.what/main.c:122
 msgid "Print the stats in shell script style [deprecated]"
 msgstr "Skriv ut statistiken i skalskriptformat [föråldrat]"
 
@@ -31912,7 +31962,7 @@ msgstr "Frågar rasterkartor om deras kategorivärden och kategorietiketter."
 msgid "Name of existing raster map(s) to query"
 msgstr "Namn på befintlig(a) rasterkarta(er) som ska sökas"
 
-#: ../raster/r.what/main.c:123 ../vector/v.what/main.c:76
+#: ../raster/r.what/main.c:123 ../vector/v.what/main.c:78
 msgid "Coordinates for query"
 msgstr "Koordinater för förfrågan"
 
@@ -32007,7 +32057,7 @@ msgstr "Output map finns redan. Kommer att skrivas över!"
 msgid "Wrong 3D raster datatype! Cannot create raster map"
 msgstr "Fel datatyp för 3D-raster! Det går inte att skapa en rasterkarta"
 
-#: ../raster3d/r3.cross.rast/main.c:342 ../raster3d/r3.gwflow/main.c:415
+#: ../raster3d/r3.cross.rast/main.c:342 ../raster3d/r3.gwflow/main.c:427
 #: ../raster3d/r3.info/main.c:1004 ../raster3d/r3.null/main.c:153
 #: ../raster3d/r3.out.vtk/errorHandling.c:62
 #, c-format
@@ -32230,7 +32280,11 @@ msgstr ""
 "Cholesky-lösaren fungerar inte med glesa matriser.\n"
 "Tänk på att välja en helt fylld kvadratisk matris med flaggan -f "
 
-#: ../raster3d/r3.gwflow/main.c:368 ../raster3d/r3.in.lidar/main.c:488
+#: ../raster3d/r3.gwflow/main.c:236
+msgid "No sink map provided. Initializing zero sink..."
+msgstr ""
+
+#: ../raster3d/r3.gwflow/main.c:380 ../raster3d/r3.in.lidar/main.c:488
 #: ../raster3d/r3.in.lidar/main.c:496 ../raster3d/r3.in.lidar/main.c:504
 #: ../raster3d/r3.in.lidar/main.c:512 ../raster3d/r3.in.lidar/main.c:520
 #: ../raster3d/r3.in.lidar/main.c:529 ../raster3d/r3.in.lidar/main.c:537
@@ -33337,8 +33391,8 @@ msgid "Download file from <{url}>, failed. Check internet connection."
 msgstr "Hämta fil från <{url}>, misslyckades. Kontrollera internetanslutningen."
 
 #: ../scripts/g.extension.all/g.extension.all.py:174
-msgid "Unable to get GRASS GIS version."
-msgstr "Det går inte att få fram GRASS GIS-versionen."
+msgid "Unable to get GRASS version."
+msgstr "Det går inte att få fram GRASS-versionen."
 
 #: ../scripts/g.extension.all/g.extension.all.py:196
 msgid "The <{}> addon cannot be reinstalled. Addon wasn't found among the official addons."
@@ -33688,8 +33742,8 @@ msgstr "Tillägg <%s> hittades inte"
 
 #: ../scripts/g.extension/g.extension.py:2368
 #, python-brace-format
-msgid "Unable to create '{filename}': {error}. Is the GRASS GIS documentation package installed? Installation continues, but documentation may not look right."
-msgstr "Det går inte att skapa '{filename}': {error}. Är GRASS GIS-dokumentationspaketet installerat? Installationen fortsätter, men dokumentationen kanske inte ser rätt ut."
+msgid "Unable to create '{filename}': {error}. Is the GRASS documentation package installed? Installation continues, but documentation may not look right."
+msgstr "Det går inte att skapa '{filename}': {error}. Är GRASS-dokumentationspaketet installerat? Installationen fortsätter, men dokumentationen kanske inte ser rätt ut."
 
 #: ../scripts/g.extension/g.extension.py:2387
 #, python-format
@@ -33838,21 +33892,21 @@ msgstr "Omvandling av digitala siffror till NDVI..."
 msgid "Importing SPOT VGT NDVI quality map..."
 msgstr "Importera SPOT VGT NDVI kvalitetskarta ..."
 
-#: ../scripts/i.in.spotvgt/i.in.spotvgt.py:259
+#: ../scripts/i.in.spotvgt/i.in.spotvgt.py:256
 #, python-format
 msgid "Imported SPOT VEGETATION SM quality map <%s>."
 msgstr "Importerad SPOT VEGETATION SM kvalitetskarta <%s>."
 
-#: ../scripts/i.in.spotvgt/i.in.spotvgt.py:261
+#: ../scripts/i.in.spotvgt/i.in.spotvgt.py:258
 #, python-format
 msgid "Note: A snow map can be extracted by category 252 (d.rast %s cat=252)"
 msgstr "Obs: En snökarta kan extraheras med kategori 252 (d.rast %s cat=252)"
 
-#: ../scripts/i.in.spotvgt/i.in.spotvgt.py:264
+#: ../scripts/i.in.spotvgt/i.in.spotvgt.py:261
 msgid "Filtering NDVI map by Status Map quality layer..."
 msgstr "Filtrering av NDVI-karta efter Status Map-kvalitetslager ..."
 
-#: ../scripts/i.in.spotvgt/i.in.spotvgt.py:275
+#: ../scripts/i.in.spotvgt/i.in.spotvgt.py:272
 #, python-format
 msgid "Filtered SPOT VEGETATION NDVI map <%s>."
 msgstr "Filtrerad SPOT VEGETATION NDVI-karta <%s>."
@@ -34426,23 +34480,24 @@ msgid "WMS version <1.3.0> will be used, because version <1.1.1> does not suppor
 msgstr "WMS-version <1.3.0> kommer att användas, eftersom version <1.1.1> inte stöder <%s>projektion"
 
 #: ../scripts/r.in.wms/wms_base.py:138
-#, python-format
-msgid "SRS differences: WMS source EPSG %s != location EPSG %s (use srs=%s to adjust)"
+#, fuzzy, python-format
+#| msgid "SRS differences: WMS source EPSG %s != location EPSG %s (use srs=%s to adjust)"
+msgid "CRS (SRS) differences: WMS source EPSG %s != location EPSG %s (use srs=%s to adjust)"
 msgstr "SRS skillnader: WMS källa EPSG %s != plats EPSG %s (använd srs=%s för att justera)"
 
-#: ../scripts/r.in.wms/wms_base.py:152
+#: ../scripts/r.in.wms/wms_base.py:153
 msgid "Unable to get projection info"
 msgstr "Det går inte att få projektionsinformation"
 
-#: ../scripts/r.in.wms/wms_base.py:159
+#: ../scripts/r.in.wms/wms_base.py:160
 msgid "Maxcols must be greater than 100"
 msgstr "Maxcols måste vara större än 100"
 
-#: ../scripts/r.in.wms/wms_base.py:163
+#: ../scripts/r.in.wms/wms_base.py:164
 msgid "Maxrows must be greater than 100"
 msgstr "Maxrows måste vara större än 100"
 
-#: ../scripts/r.in.wms/wms_base.py:205
+#: ../scripts/r.in.wms/wms_base.py:206
 #, python-format
 msgid ""
 "These parameter are ignored: %s\n"
@@ -34451,7 +34506,7 @@ msgstr ""
 "Dessa parametrar ignoreras: %s\n"
 "                             %s drivrutinen stöder inte parametrarna."
 
-#: ../scripts/r.in.wms/wms_base.py:219
+#: ../scripts/r.in.wms/wms_base.py:220
 #, python-format
 msgid ""
 "These flags are ignored: %s\n"
@@ -34460,17 +34515,17 @@ msgstr ""
 "Dessa flaggor ignoreras: %s\n"
 "                             %s drivrutinen stöder inte flaggorna."
 
-#: ../scripts/r.in.wms/wms_base.py:270
+#: ../scripts/r.in.wms/wms_base.py:271
 #, python-format
 msgid "Authorization failed to <%s> when fetching capabilities"
 msgstr "Auktorisering misslyckades för <%s> vid hämtning av kapacitet"
 
-#: ../scripts/r.in.wms/wms_base.py:274
+#: ../scripts/r.in.wms/wms_base.py:275
 #, python-brace-format
 msgid "Unable to fetch capabilities from <{0}>. Reason: "
 msgstr "Det gick inte att hämta funktioner från <{0}>. Orsak till detta: "
 
-#: ../scripts/r.in.wms/wms_base.py:313
+#: ../scripts/r.in.wms/wms_base.py:314
 #, python-format
 msgid ""
 "Unable to open file '%s'.\n"
@@ -34479,47 +34534,47 @@ msgstr ""
 "Det går inte att öppna filen '%s'.\n"
 "%s\n"
 
-#: ../scripts/r.in.wms/wms_base.py:355
+#: ../scripts/r.in.wms/wms_base.py:356
 msgid "Unable to write data into tempfile"
 msgstr "Det går inte att skriva data till tempfile"
 
-#: ../scripts/r.in.wms/wms_base.py:373
+#: ../scripts/r.in.wms/wms_base.py:374
 #, python-format
 msgid "Unable to determine region, %s failed"
 msgstr "Det gick inte att fastställa region, %s misslyckades"
 
-#: ../scripts/r.in.wms/wms_base.py:377
+#: ../scripts/r.in.wms/wms_base.py:378
 msgid "Region definition: 4 points required"
 msgstr "Definition av region: 4 punkter krävs"
 
-#: ../scripts/r.in.wms/wms_base.py:383
+#: ../scripts/r.in.wms/wms_base.py:384
 msgid "Reprojection of region using m.proj failed."
 msgstr "Reprojektion av region med hjälp av m.proj misslyckades."
 
-#: ../scripts/r.in.wms/wms_base.py:423
+#: ../scripts/r.in.wms/wms_base.py:424
 msgid "Reprojecting raster..."
 msgstr "Återprojicering av raster..."
 
-#: ../scripts/r.in.wms/wms_base.py:482 ../scripts/r.in.wms/wms_base.py:584
-#: ../scripts/r.in.wms/wms_base.py:615 ../scripts/r.in.wms/wms_base.py:656
+#: ../scripts/r.in.wms/wms_base.py:483 ../scripts/r.in.wms/wms_base.py:585
+#: ../scripts/r.in.wms/wms_base.py:616 ../scripts/r.in.wms/wms_base.py:657
 #, python-format
 msgid "%s failed"
 msgstr "%s misslyckades"
 
-#: ../scripts/r.in.wms/wms_base.py:499
+#: ../scripts/r.in.wms/wms_base.py:500
 msgid "Unable to create temporary files"
 msgstr "Det går inte att skapa temporära filer"
 
-#: ../scripts/r.in.wms/wms_base.py:524
+#: ../scripts/r.in.wms/wms_base.py:525
 #, python-format
 msgid "Please change output name, or change names of these rasters: %s, module needs to create this temporary maps during execution."
 msgstr "Ändra utdatanamn eller ändra namn på dessa raster: %s, modulen måste skapa dessa tillfälliga kartor under körningen."
 
-#: ../scripts/r.in.wms/wms_base.py:561
+#: ../scripts/r.in.wms/wms_base.py:562
 msgid "WMS import failed, nothing imported"
 msgstr "WMS-importen misslyckades, inget importerades"
 
-#: ../scripts/r.in.wms/wms_base.py:568
+#: ../scripts/r.in.wms/wms_base.py:569
 #, python-format
 msgid "<%s> created."
 msgstr "<%s> skapad."
@@ -34986,7 +35041,7 @@ msgid "File {name} not found."
 msgstr "Fil {name} hittades inte."
 
 #: ../scripts/r.unpack/r.unpack.py:81 ../scripts/r.unpack/r.unpack.py:135
-#: ../scripts/v.unpack/v.unpack.py:81 ../scripts/v.unpack/v.unpack.py:144
+#: ../scripts/v.unpack/v.unpack.py:81 ../scripts/v.unpack/v.unpack.py:141
 msgid "Pack file unreadable"
 msgstr "Pack-fil oläslig"
 
@@ -35006,8 +35061,8 @@ msgstr "Rasterkarta <{name}> finns redan och kommer att skrivas över"
 
 #: ../scripts/r.unpack/r.unpack.py:129
 #, python-brace-format
-msgid "This GRASS GIS pack file contains vector data. Use v.unpack to unpack <{name}>"
-msgstr "Denna GRASS GIS pack-fil innehåller vektordata. Använd v.unpack för att packa upp <{name}>"
+msgid "This GRASS pack file contains vector data. Use v.unpack to unpack <{name}>"
+msgstr "Denna GRASS pack-fil innehåller vektordata. Använd v.unpack för att packa upp <{name}>"
 
 #: ../scripts/r.unpack/r.unpack.py:140
 msgid "Overriding projection check (using current project's CRS)."
@@ -35017,7 +35072,7 @@ msgstr "Åsidosättande av projektionskontroll (med hjälp av det aktuella proje
 msgid "PROJ_INFO file is missing, unpack raster map in XY (unprojected) project."
 msgstr "PROJ_INFO-filen saknas, packa upp rasterkartan i XY-projektet (ej projicerat)."
 
-#: ../scripts/r.unpack/r.unpack.py:177 ../scripts/v.unpack/v.unpack.py:186
+#: ../scripts/r.unpack/r.unpack.py:177 ../scripts/v.unpack/v.unpack.py:183
 #, python-brace-format
 msgid ""
 "Difference between PROJ_INFO file of packed map and of current project:\n"
@@ -35026,7 +35081,7 @@ msgstr ""
 "Skillnad mellan PROJ_INFO-fil för packad karta och för aktuellt projekt:\n"
 "{diff}"
 
-#: ../scripts/r.unpack/r.unpack.py:184 ../scripts/v.unpack/v.unpack.py:193
+#: ../scripts/r.unpack/r.unpack.py:184 ../scripts/v.unpack/v.unpack.py:190
 #, python-brace-format
 msgid ""
 "Difference between PROJ_UNITS file of packed map and of current project:\n"
@@ -35035,7 +35090,7 @@ msgstr ""
 "Skillnad mellan PROJ_UNITS-filen för packad karta och för aktuellt projekt:\n"
 "{diff}"
 
-#: ../scripts/r.unpack/r.unpack.py:190 ../scripts/v.unpack/v.unpack.py:199
+#: ../scripts/r.unpack/r.unpack.py:190 ../scripts/v.unpack/v.unpack.py:196
 msgid "Coordinate reference system of dataset does not appear to match current project. In case of no significant differences in the CRS definitions, use the -o flag to ignore them and use current project definition."
 msgstr "Datasetets koordinatreferenssystem verkar inte stämma överens med aktuellt projekt. Om det inte finns några betydande skillnader i CRS-definitionerna kan du använda flaggan -o för att ignorera dem och använda den aktuella projektdefinitionen."
 
@@ -35300,7 +35355,7 @@ msgstr "Det gick inte att skapa databas <%s> med drivrutin <%s>"
 
 #: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:144
 #: ../vector/v.decimate/copy_tab.c:101 ../vector/v.extract/copy_tab.c:106
-#: ../vector/v.generalize/misc.c:180 ../vector/v.to.points/main.c:187
+#: ../vector/v.generalize/misc.c:181 ../vector/v.to.points/main.c:187
 #, c-format, python-format
 msgid "Unable to copy table <%s>"
 msgstr "Det går inte att kopiera tabell <%s>"
@@ -35391,7 +35446,7 @@ msgid "Use of libsqlitefunctions only with SQLite backend"
 msgstr "Användning av libsqlitefunctions endast med SQLite-backend"
 
 #: ../scripts/v.db.update/v.db.update.py:103
-#: ../scripts/v.dissolve/v.dissolve.py:615 ../vector/v.to.rast/support.c:297
+#: ../scripts/v.dissolve/v.dissolve.py:605 ../vector/v.to.rast/support.c:297
 #: ../vector/v.to.rast/support.c:528 ../vector/v.to.rast/vect2rast.c:67
 #: ../vector/v.what.rast3/main.c:143
 #, c-format, python-format
@@ -35406,71 +35461,71 @@ msgstr "<value> och <qcolumn> är ömsesidigt uteslutande"
 msgid "Either <value> or <qcolumn> must be given"
 msgstr "Antingen <value> eller <qcolumn> måste anges"
 
-#: ../scripts/v.dissolve/v.dissolve.py:248
+#: ../scripts/v.dissolve/v.dissolve.py:246
 #, python-brace-format
 msgid "At least one method must be provided when backend <{backend}> is used"
 msgstr "Minst en metod måste anges när backend <{backend}> används"
 
-#: ../scripts/v.dissolve/v.dissolve.py:256
+#: ../scripts/v.dissolve/v.dissolve.py:254
 #, python-brace-format
 msgid "Method <{method}> is not available for backend <{backend}>"
 msgstr "Metod <{method}> är inte tillgänglig för backend <{backend}>"
 
-#: ../scripts/v.dissolve/v.dissolve.py:271
+#: ../scripts/v.dissolve/v.dissolve.py:269
 #, python-brace-format
 msgid "Column <{column}> does not exist in vector <{vector}> (layer <{layer}>). Specify result columns with 'name type' syntax if you are using function calls instead of aggregate column names only."
 msgstr "Kolumn <{column}> finns inte i vektor <{vector}> (lager <{layer}>). Ange resultatkolumner med syntaxen \"name type\" om du använder funktionsanrop i stället för enbart aggregerade kolumnnamn."
 
-#: ../scripts/v.dissolve/v.dissolve.py:279
+#: ../scripts/v.dissolve/v.dissolve.py:277
 #, python-brace-format
 msgid "Column <{column}> selected for aggregation does not exist in vector <{vector}> (layer <{layer}>)"
 msgstr "Kolumn <{column}> som valts för aggregering finns inte i vektor <{vector}> (lager <{layer}>)"
 
-#: ../scripts/v.dissolve/v.dissolve.py:322
+#: ../scripts/v.dissolve/v.dissolve.py:320
 #, python-brace-format
 msgid "When result columns are specified, the number of aggregate columns ({columns_to_aggregate}) needs to be the same as the number of methods ({methods})"
 msgstr "När resultatkolumner anges måste antalet aggregatkolumner ({columns_to_aggregate}) vara detsamma som antalet metoder ({methods})"
 
-#: ../scripts/v.dissolve/v.dissolve.py:338
+#: ../scripts/v.dissolve/v.dissolve.py:336
 #, python-brace-format
 msgid "The number of result columns ({result_columns}) needs to be the same as the number of aggregate columns ({columns_to_aggregate})"
 msgstr "Antalet resultatkolumner ({result_columns}) måste vara detsamma som antalet aggregatkolumner ({columns_to_aggregate})"
 
-#: ../scripts/v.dissolve/v.dissolve.py:349
+#: ../scripts/v.dissolve/v.dissolve.py:347
 #, python-brace-format
 msgid "The number of result columns ({result_columns}) needs to be the same as the number of aggregation methods ({methods})"
 msgstr "Antalet resultatkolumner ({result_columns}) måste vara detsamma som antalet aggregeringsmetoder ({methods})"
 
-#: ../scripts/v.dissolve/v.dissolve.py:362
+#: ../scripts/v.dissolve/v.dissolve.py:360
 #, python-brace-format
 msgid "Result column '{column}' needs a type specified (using the syntax: 'name type') when no methods are provided with the {option_name} option and aggregation backend is '{backend}'"
 msgstr "Resultatkolumnen '{column}' behöver en specificerad typ (med syntaxen: 'name type') när inga metoder tillhandahålls med alternativet {option_name} och aggregeringsbackend är '{backend}'"
 
-#: ../scripts/v.dissolve/v.dissolve.py:376
+#: ../scripts/v.dissolve/v.dissolve.py:374
 #, python-brace-format
 msgid "Methods must be specified with {backend} backend and with result columns provided"
 msgstr "Metoder måste specificeras med {backend} backend och med resultatkolumner som tillhandahålls"
 
-#: ../scripts/v.dissolve/v.dissolve.py:590
+#: ../scripts/v.dissolve/v.dissolve.py:581
 #, python-format
 msgid "No '%s' option specified. Dissolving based on category values from layer <%s>."
 msgstr "Inget '%s'-alternativ angivet. Upplösning baserad på kategorivärden från lager <%s>."
 
-#: ../scripts/v.dissolve/v.dissolve.py:606
+#: ../scripts/v.dissolve/v.dissolve.py:596
 #, python-format
 msgid "Invalid layer number (%d). Parameter '%s' specified, assuming layer '1'."
 msgstr "Ogiltigt lagernummer (%d). Parameter '%s' angiven, antar lager '1'."
 
-#: ../scripts/v.dissolve/v.dissolve.py:618
+#: ../scripts/v.dissolve/v.dissolve.py:608
 msgid "Key column must be of type integer or string"
 msgstr "Nyckelkolumnen måste vara av typen heltal eller sträng"
 
-#: ../scripts/v.dissolve/v.dissolve.py:623
+#: ../scripts/v.dissolve/v.dissolve.py:613
 #, python-brace-format
 msgid "Key column type must be string (text) for aggregation method to work, not '{column_type}'"
 msgstr "Nyckelkolumnens typ måste vara sträng (text) för att aggregeringsmetoden ska fungera, inte '{column_type}'"
 
-#: ../scripts/v.dissolve/v.dissolve.py:676
+#: ../scripts/v.dissolve/v.dissolve.py:664
 #, python-brace-format
 msgid ""
 "A processing step failed. Check the above error messages and see the following details:\n"
@@ -35799,40 +35854,40 @@ msgstr "Vektorkarta <%s> finns redan"
 msgid "Vector map <%s> already exists and will be overwritten"
 msgstr "Vektorkarta <%s> finns redan och kommer att skrivas över"
 
-#: ../scripts/v.unpack/v.unpack.py:138
+#: ../scripts/v.unpack/v.unpack.py:137
 #, python-format
-msgid "This GRASS GIS pack file contains raster data. Use r.unpack to unpack <%s>"
-msgstr "Denna GRASS GIS-paketfil innehåller rasterdata. Använd r.unpack för att packa upp <%s>"
+msgid "This GRASS pack file contains raster data. Use r.unpack to unpack <%s>"
+msgstr "Denna GRASS-paketfil innehåller rasterdata. Använd r.unpack för att packa upp <%s>"
 
-#: ../scripts/v.unpack/v.unpack.py:155
+#: ../scripts/v.unpack/v.unpack.py:152
 msgid "PROJ_INFO file is missing, unpack vector map in XY (unprojected) project."
 msgstr "PROJ_INFO-fil saknas, packa upp vektorkarta i XY-projekt (oprojekterat)."
 
-#: ../scripts/v.unpack/v.unpack.py:181
+#: ../scripts/v.unpack/v.unpack.py:178
 msgid "Projection information does not match. Proceeding..."
 msgstr "Projektionsinformationen stämmer inte. Fortsätter..."
 
-#: ../scripts/v.unpack/v.unpack.py:243
+#: ../scripts/v.unpack/v.unpack.py:240
 #, python-format
 msgid "Coping table <%s> as table <%s>"
 msgstr "Kopiera tabell <%s> som tabell <%s>"
 
-#: ../scripts/v.unpack/v.unpack.py:258
+#: ../scripts/v.unpack/v.unpack.py:255
 #, python-format
 msgid "Unable to copy table <%s> as table <%s>"
 msgstr "Det går inte att kopiera tabell <%s> till tabell <%s>"
 
-#: ../scripts/v.unpack/v.unpack.py:263
+#: ../scripts/v.unpack/v.unpack.py:260
 #, python-format
 msgid "Connect table <%s> to vector map <%s> at layer <%s>"
 msgstr "Anslut tabell <%s> till vektorkarta <%s> på lager <%s>"
 
-#: ../scripts/v.unpack/v.unpack.py:282
+#: ../scripts/v.unpack/v.unpack.py:279
 #, python-format
 msgid "Unable to connect table <%s> to vector map <%s>"
 msgstr "Det går inte att ansluta tabell <%s> till vektorkarta <%s>"
 
-#: ../scripts/v.unpack/v.unpack.py:286
+#: ../scripts/v.unpack/v.unpack.py:283
 #, python-format
 msgid "Vector map <%s> successfully unpacked"
 msgstr "Vektorkarta <%s> framgångsrikt uppackad"
@@ -36047,10 +36102,10 @@ msgstr "Alternativet '%s' är inte tillgängligt med GEOS-buffring"
 msgid "Unable to select data from table <%s>"
 msgstr "Det går inte att välja data från tabellen <%s>"
 
-#: ../vector/v.buffer/main.c:444 ../vector/v.class/main.c:125
+#: ../vector/v.buffer/main.c:444 ../vector/v.class/main.c:172
 #: ../vector/v.sample/main.c:238 ../vector/v.surf.bspline/crosscorr.c:141
 #: ../vector/v.surf.bspline/main.c:399 ../vector/v.surf.idw/read_sites.c:67
-#: ../vector/v.to.rast3/main.c:102 ../vector/v.what.rast/main.c:184
+#: ../vector/v.to.rast3/main.c:102 ../vector/v.what.rast/main.c:225
 msgid "Column type not supported"
 msgstr "Kolumntyp stöds inte"
 
@@ -36074,7 +36129,7 @@ msgstr "Buffertområden..."
 #: ../vector/v.buffer/main.c:545 ../vector/v.buffer/main.c:658
 #: ../vector/v.label.sa/labels.c:165 ../vector/v.label/main.c:323
 #: ../vector/v.sample/main.c:224 ../vector/v.sample/main.c:232
-#: ../vector/v.vol.rst/user1.c:171 ../vector/v.what.rast/main.c:615
+#: ../vector/v.vol.rst/user1.c:171 ../vector/v.what.rast/main.c:730
 #: ../vector/v.what.rast3/main.c:278
 #, c-format
 msgid "No record for category %d in table <%s>"
@@ -36225,7 +36280,7 @@ msgid_plural "%d polylines stored in output vector map"
 msgstr[0] "%d polylinje lagrad i vektormapp för utdata"
 msgstr[1] "%d polylinjer lagrade i utdatans vektorkarta"
 
-#: ../vector/v.build.polylines/main.c:243 ../vector/v.category/main.c:966
+#: ../vector/v.build.polylines/main.c:243 ../vector/v.category/main.c:1001
 #: ../vector/v.net/main.c:157 ../vector/v.proj/main.c:615
 #: ../vector/v.rectify/main.c:280 ../vector/v.transform/main.c:314
 #: ../vector/v.type/main.c:152
@@ -36290,7 +36345,7 @@ msgstr "Direkt läsåtkomst till OGR-lager stöds inte av denna modul. Kör %s f
 msgid "Vector map <%s> is not in current mapset"
 msgstr "Vektorkarta <%s> finns inte i aktuell kartuppsättning"
 
-#: ../vector/v.category/main.c:100 ../vector/v.db.connect/main.c:54
+#: ../vector/v.category/main.c:100 ../vector/v.db.connect/main.c:62
 msgid "layer"
 msgstr "lager"
 
@@ -36327,8 +36382,8 @@ msgid "copy values from one layer to another (e.g. layer=1,2,3 copies values fro
 msgstr "kopiera värden från ett lager till ett annat (t.ex. layer=1,2,3 kopierar värden från lager 1 till lager 2 och 3)"
 
 #: ../vector/v.category/main.c:146
-msgid "print report (statistics), in shell style: layer type count min max"
-msgstr "skriv ut rapport (statistik), i skalstil: lagertyp antal min max"
+msgid "print report (statistics), in CSV style: layer type count min max"
+msgstr "skriv ut rapport (statistik), i CSV-stil: lagertyp antal min max"
 
 #: ../vector/v.category/main.c:148
 msgid "print category values, layers are separated by '|', more cats in the same layer are separated by '/'"
@@ -36338,139 +36393,159 @@ msgstr "skriv ut kategorivärden, lager separeras med \"|\", fler katter i samma
 msgid "print only layer numbers"
 msgstr "skriv endast ut lagernummer"
 
-#: ../vector/v.category/main.c:174
-msgid "Shell script style, currently only for report [deprecated]"
-msgstr "Skalskriptformat, för närvarande endast för rapport [föråldrat]"
+#: ../vector/v.category/main.c:166
+msgid "plain;Human readable text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation);"
+msgstr "vanlig;Mänskligt läsbar textutmatning;csv;CSV (kommaseparerade värden);json;JSON (JavaScript Object Notation);"
 
-#: ../vector/v.category/main.c:176
-msgid "Format: layer type count min max. This flag is deprecated and will be removed in a future release. Use format=shell instead."
-msgstr "Format: lagertyp antal min max. Denna flagga är föråldrad och kommer att tas bort i en framtida version. Använd format=shell istället."
+#: ../vector/v.category/main.c:177
+msgid "CSV style output, currently only for report [deprecated]"
+msgstr "CSV-stilutmatning, för närvarande endast för rapport [föråldrat]"
 
-#: ../vector/v.category/main.c:180
+#: ../vector/v.category/main.c:179
+msgid "Format: layer type count min max. This flag is deprecated and will be removed in a future release. Use format=csv instead."
+msgstr "Format: lagertyp antal min max. Denna flagga är föråldrad och kommer att tas bort i en framtida version. Använd format=csv istället."
+
+#: ../vector/v.category/main.c:183
 msgid "Do not copy attribute table(s)"
 msgstr "Kopiera inte attributtabell(er)"
 
-#: ../vector/v.category/main.c:198
+#: ../vector/v.category/main.c:201
 msgid "Database connection and attribute tables for concerned layers are not changed"
 msgstr "Databasanslutning och attributtabeller för berörda lager ändras inte"
 
-#: ../vector/v.category/main.c:236
-msgid "JSON output and shell output cannot be used simultaneously."
-msgstr "JSON-utdata och skal-utdata kan inte användas samtidigt."
+#: ../vector/v.category/main.c:243 ../vector/v.db.connect/main.c:179
+msgid "Flag 'g' is deprecated and will be removed in a future release. Please use format=csv instead."
+msgstr "Flaggan ”g” är föråldrad och kommer att tas bort i en framtida version. Använd istället format=csv."
 
-#: ../vector/v.category/main.c:268 ../vector/v.category/main.c:375
-#: ../vector/v.category/main.c:385 ../vector/v.kcv/main.c:96
+#: ../vector/v.category/main.c:247
+msgid "JSON output and CSV output cannot be used simultaneously."
+msgstr "JSON-utdata och CSV-utdata kan inte användas samtidigt."
+
+#: ../vector/v.category/main.c:277 ../vector/v.category/main.c:388
+#: ../vector/v.category/main.c:398 ../vector/v.kcv/main.c:96
 #: ../vector/v.kcv/main.c:188
 #, c-format
 msgid "Unable to open vector map <%s> at topological level %d"
 msgstr "Det gick inte att öppna vektorkarta <%s> på topologisk nivå %d"
 
-#: ../vector/v.category/main.c:331
+#: ../vector/v.category/main.c:344
 msgid "Invalid category number (must be equal to or greater than 0). Normally category number starts at 1."
 msgstr "Ogiltigt kategorinummer (måste vara lika med eller större än 0). Normalt börjar kategorinumret på 1."
 
-#: ../vector/v.category/main.c:341
+#: ../vector/v.category/main.c:354
 #, c-format
 msgid "%d error in id option"
 msgid_plural "%d errors in id option"
 msgstr[0] "%d fel i id-alternativet"
 msgstr[1] "%d fel i id-alternativet"
 
-#: ../vector/v.category/main.c:351
+#: ../vector/v.category/main.c:364
 msgid "Output vector wasn't entered"
 msgstr "Utdatavektorn var inte inmatad"
 
-#: ../vector/v.category/main.c:403
+#: ../vector/v.category/main.c:416
 msgid "Too many layers for this operation"
 msgstr "För många lager för denna operation"
 
-#: ../vector/v.category/main.c:406 ../vector/v.category/main.c:409
+#: ../vector/v.category/main.c:419 ../vector/v.category/main.c:422
 msgid "2 layers must be specified"
 msgstr "2 lager måste anges"
 
-#: ../vector/v.category/main.c:417
+#: ../vector/v.category/main.c:430
 #, c-format
 msgid "Categories already exist in layer %d"
 msgstr "Kategorier finns redan i lagret %d"
 
-#: ../vector/v.category/main.c:461 ../vector/v.drape/main.c:175
+#: ../vector/v.category/main.c:474 ../vector/v.drape/main.c:175
 #: ../vector/v.select/select.c:48
 msgid "Processing features..."
 msgstr "Bearbetning av funktioner..."
 
-#: ../vector/v.category/main.c:506
+#: ../vector/v.category/main.c:519
 #, c-format
 msgid "%d new centroid placed in output map"
 msgid_plural "%d new centroids placed in output map"
 msgstr[0] "%d ny centroid placerad i utdatakartan"
 msgstr[1] "%d nya centroider placerade i utdatakartan"
 
-#: ../vector/v.category/main.c:813
+#: ../vector/v.category/main.c:834
 msgid "Layer/table"
 msgstr "Lager/tabell"
 
-#: ../vector/v.category/main.c:817
+#: ../vector/v.category/main.c:838
 msgid "Layer"
 msgstr "Lager"
 
-#: ../vector/v.category/main.c:819
+#: ../vector/v.category/main.c:840
 #, c-format
 msgid "type       count        min        max\n"
 msgstr "typ antal min max\n"
 
-#: ../vector/v.category/main.c:830
+#: ../vector/v.category/main.c:851
 msgid "boundary"
 msgstr "avgränsning"
 
-#: ../vector/v.category/main.c:847
+#: ../vector/v.category/main.c:868
 msgid "face"
 msgstr "yta"
 
-#: ../vector/v.category/main.c:852
+#: ../vector/v.category/main.c:873
 msgid "kernel"
 msgstr "kärna"
 
-#: ../vector/v.category/main.c:858
+#: ../vector/v.category/main.c:879
 msgid "all"
 msgstr "alla"
 
-#: ../vector/v.category/main.c:964 ../vector/v.rectify/main.c:278
+#: ../vector/v.category/main.c:999 ../vector/v.rectify/main.c:278
 msgid "Copying attribute table(s)..."
 msgstr "Kopiera attributtabell(er)..."
 
-#: ../vector/v.category/main.c:975
+#: ../vector/v.category/main.c:1010
 #, c-format
 msgid "Categories copied from layer %d to layer %d"
 msgstr "Kategorier kopierade från lager %d till lager %d"
 
-#: ../vector/v.category/main.c:980
+#: ../vector/v.category/main.c:1015
 #, c-format
 msgid "%d feature modified."
 msgid_plural "%d features modified."
 msgstr[0] "%d funktionen ändrad."
 msgstr[1] "%d funktioner modifierade."
 
-#: ../vector/v.class/main.c:49
+#: ../vector/v.class/main.c:58
 msgid "Classifies attribute data, e.g. for thematic mapping"
 msgstr "Klassificerar attributdata, t.ex. för tematisk kartläggning"
 
-#: ../vector/v.class/main.c:57
+#: ../vector/v.class/main.c:66
 msgid "Column name or expression"
 msgstr "Kolumnnamn eller uttryck"
 
-#: ../vector/v.class/main.c:89
+#: ../vector/v.class/main.c:98 ../vector/v.db.connect/main.c:91
+msgid "Field separator for printing output"
+msgstr "Fältseparator för att skriva ut utdata"
+
+#: ../vector/v.class/main.c:111
 msgid "Print only class breaks (without min and max)"
 msgstr "Skriv endast ut klassraster (utan min och max)"
 
-#: ../vector/v.class/main.c:134
+#: ../vector/v.class/main.c:133
+msgid "CSV format cannot be used with the -b flag. Please use the -b flag with the 'list' format instead."
+msgstr "CSV-format kan inte användas med flaggan -b. Använd istället flaggan -b med formatet ”list”."
+
+#: ../vector/v.class/main.c:138
+msgid "The 'list' format can only be used with the -b flag. Please use -b to enable list output."
+msgstr "Formatet 'list' kan endast användas med flaggan -b. Använd -b för att aktivera listutmatning."
+
+#: ../vector/v.class/main.c:181
 msgid "Unable to sort array of values"
 msgstr "Det går inte att sortera en matris med värden"
 
-#: ../vector/v.class/main.c:165
+#: ../vector/v.class/main.c:212
 msgid "The discontinuities algorithm indicates that some class breaks are not statistically significant at alpha=0.05. You are advised to reduce the number of classes."
 msgstr "Diskontinuitetsalgoritmen indikerar att vissa klassuppdelningar inte är statistiskt signifikanta vid alpha=0,05. Du rekommenderas att minska antalet klasser."
 
-#: ../vector/v.class/main.c:193
+#: ../vector/v.class/main.c:295
 #, c-format
 msgid ""
 "\n"
@@ -36479,12 +36554,12 @@ msgstr ""
 "\n"
 "Klassificering av %s till %i-klasser\n"
 
-#: ../vector/v.class/main.c:200
+#: ../vector/v.class/main.c:303
 #, c-format
 msgid "Lowest chi2 = %f\n"
 msgstr "Lägsta chi2 = %f\n"
 
-#: ../vector/v.class/main.c:206
+#: ../vector/v.class/main.c:309
 #, c-format
 msgid ""
 "%15s%15s%15s\n"
@@ -36493,7 +36568,7 @@ msgstr ""
 "%15s%15s%15s\n"
 "\n"
 
-#: ../vector/v.class/main.c:218
+#: ../vector/v.class/main.c:322
 #, c-format
 msgid ""
 "\n"
@@ -36955,7 +37030,7 @@ msgstr "Ingen färgtabell definierad för vector map <%s>"
 msgid "Layer <%s> not found"
 msgstr "Lager <%s> hittades inte"
 
-#: ../vector/v.colors.out/make_colors.c:31 ../vector/v.db.connect/main.c:212
+#: ../vector/v.colors.out/make_colors.c:31 ../vector/v.db.connect/main.c:337
 #: ../vector/v.db.select/main.c:276 ../vector/v.distance/main.c:557
 #: ../vector/v.distance/main.c:639 ../vector/v.extract/main.c:217
 #: ../vector/v.extract/main.c:315 ../vector/v.random/main.c:268
@@ -37133,7 +37208,7 @@ msgstr "Minvärdet (%d) ligger utanför intervallet %d,%d"
 msgid "Max value (%d) is out of range %d,%d"
 msgstr "Maxvärdet (%d) ligger utanför intervallet %d,%d"
 
-#: ../vector/v.colors/write_rgb.c:37 ../vector/v.what.rast/main.c:178
+#: ../vector/v.colors/write_rgb.c:37 ../vector/v.what.rast/main.c:219
 #, c-format
 msgid "Unable to add column <%s> to table <%s>"
 msgstr "Det går inte att lägga till kolumn <%s> i tabell <%s>"
@@ -37161,86 +37236,92 @@ msgstr "Inget färgvärde definierat för kategori %d"
 msgid "Unable to update RGB values"
 msgstr "Det går inte att uppdatera RGB-värden"
 
-#: ../vector/v.db.connect/main.c:56
+#: ../vector/v.db.connect/main.c:64
 msgid "Prints/sets DB connection for a vector map to attribute table."
 msgstr "Skriver ut/ställer in DB-anslutning för en vektorkarta till attributtabell."
 
-#: ../vector/v.db.connect/main.c:78
+#: ../vector/v.db.connect/main.c:86
 msgid "Format: layer number[/layer name]"
 msgstr "Format: lagernummer[/lagernamn]"
 
-#: ../vector/v.db.connect/main.c:82
-msgid "Field separator for shell script style output"
-msgstr "Fältavgränsare för utdata i stil med skal-skript"
-
-#: ../vector/v.db.connect/main.c:87
+#: ../vector/v.db.connect/main.c:104
 msgid "Print all map connection parameters and exit"
 msgstr "Skriv ut alla parametrar för kartans anslutning och avsluta"
 
-#: ../vector/v.db.connect/main.c:93
-msgid "Print all map connection parameters in shell script style and exit"
-msgstr "Skriv ut alla parametrar för map-anslutningen i form av ett skalskript och avsluta"
+#: ../vector/v.db.connect/main.c:110
+#, fuzzy
+#| msgid "Print all map connection parameters and exit"
+msgid "Print all map connection parameters in a legacy format [deprecated]"
+msgstr "Skriv ut alla parametrar för kartans anslutning och avsluta"
 
-#: ../vector/v.db.connect/main.c:95
-msgid "Format: layer[/layer name] table key database driver"
-msgstr "Format: lager[/lagernamn] tabell nyckel databas drivrutin"
+#: ../vector/v.db.connect/main.c:112
+#, fuzzy
+#| msgid "Format: layer type count min max. This flag is deprecated and will be removed in a future release. Use format=csv instead."
+msgid "Order: layer[/layer name] table key database driverThis flag is deprecated and will be removed in a future release. Use format=csv instead."
+msgstr "Format: lagertyp antal min max. Denna flagga är föråldrad och kommer att tas bort i en framtida version. Använd format=csv istället."
 
-#: ../vector/v.db.connect/main.c:100
+#: ../vector/v.db.connect/main.c:119
 msgid "Print types/names of table columns for specified layer and exit"
 msgstr "Skriv ut typer/namn på tabellkolumner för angivet lager och avsluta"
 
-#: ../vector/v.db.connect/main.c:107
+#: ../vector/v.db.connect/main.c:126
 msgid "Delete connection for certain layer (not the table)"
 msgstr "Ta bort anslutningen för ett visst lager (inte tabellen)"
 
-#: ../vector/v.db.connect/main.c:143
+#: ../vector/v.db.connect/main.c:174
+#, fuzzy
+#| msgid "The -p flag is required when using the format option."
+msgid "The -p or -c flag is required when using the format option."
+msgstr "Flaggan -p krävs när formatalternativet används."
+
+#: ../vector/v.db.connect/main.c:216
 msgid "Please choose only one print style"
 msgstr "Välj endast en tryckstil"
 
-#: ../vector/v.db.connect/main.c:153 ../vector/v.kcv/main.c:170
+#: ../vector/v.db.connect/main.c:226 ../vector/v.kcv/main.c:170
 msgid "Unable to modify vector map stored in other mapset"
 msgstr "Går inte att ändra vektorkarta som lagrats i annan mapset"
 
-#: ../vector/v.db.connect/main.c:161
+#: ../vector/v.db.connect/main.c:234
 #, c-format
 msgid "Map <%s> is not connected to a database"
 msgstr "Map <%s> är inte ansluten till en databas"
 
-#: ../vector/v.db.connect/main.c:169
+#: ../vector/v.db.connect/main.c:242
 #, c-format
 msgid "Vector map <%s> is connected by:\n"
 msgstr "Vektorkarta <%s> är ansluten av:\n"
 
-#: ../vector/v.db.connect/main.c:190
+#: ../vector/v.db.connect/main.c:287
 #, c-format
 msgid "layer <%d/%s> table <%s> in database <%s> through driver <%s> with key <%s>\n"
 msgstr "lager <%d/%s> tabell <%s> i databas <%s> via drivrutin <%s> med nyckel <%s>\n"
 
-#: ../vector/v.db.connect/main.c:198
+#: ../vector/v.db.connect/main.c:295
 #, c-format
 msgid "layer <%d> table <%s> in database <%s> through driver <%s> with key <%s>\n"
 msgstr "lager <%d> tabell <%s> i databas <%s> via drivrutin <%s> med nyckel <%s>\n"
 
-#: ../vector/v.db.connect/main.c:270
+#: ../vector/v.db.connect/main.c:469
 #, c-format
 msgid "Use --overwrite to overwrite existing link for layer <%d>"
 msgstr "Använd --overwrite för att skriva över befintlig länk för lager <%d>"
 
-#: ../vector/v.db.connect/main.c:279 ../vector/v.db.connect/main.c:318
+#: ../vector/v.db.connect/main.c:478 ../vector/v.db.connect/main.c:517
 #, c-format
 msgid "Table <%s> does not exist in database <%s>"
 msgstr "Tabell <%s> finns inte i databas <%s>"
 
-#: ../vector/v.db.connect/main.c:298 ../vector/v.in.db/main.c:191
+#: ../vector/v.db.connect/main.c:497 ../vector/v.in.db/main.c:198
 msgid "Data type of key column must be integer"
 msgstr "Datatyp för nyckelkolumn måste vara heltal"
 
-#: ../vector/v.db.connect/main.c:305 ../vector/v.db.connect/main.c:325
+#: ../vector/v.db.connect/main.c:504 ../vector/v.db.connect/main.c:524
 #, c-format
 msgid "The table <%s> is now part of vector map <%s> and may be deleted or overwritten by GRASS modules"
 msgstr "Tabellen <%s> är nu en del av vektorkartan <%s> och kan tas bort eller skrivas över av GRASS-moduler"
 
-#: ../vector/v.db.connect/main.c:340 ../vector/v.kcv/main.c:176
+#: ../vector/v.db.connect/main.c:539 ../vector/v.kcv/main.c:176
 #: ../vector/v.net.alloc/main.c:328 ../vector/v.net.allpairs/main.c:183
 #: ../vector/v.net.centrality/main.c:268 ../vector/v.net.components/main.c:193
 #: ../vector/v.net.distance/main.c:297 ../vector/v.net.flow/main.c:183
@@ -37249,16 +37330,16 @@ msgstr "Tabellen <%s> är nu en del av vektorkartan <%s> och kan tas bort eller 
 msgid "Cannot create index"
 msgstr "Kan inte skapa index"
 
-#: ../vector/v.db.connect/main.c:344 ../vector/v.kcv/main.c:180
+#: ../vector/v.db.connect/main.c:543 ../vector/v.kcv/main.c:180
 #, c-format
 msgid "Cannot grant privileges on table %s"
 msgstr "Kan inte ge privilegier på tabellen %s"
 
-#: ../vector/v.db.connect/main.c:348 ../vector/v.kcv/main.c:182
+#: ../vector/v.db.connect/main.c:547 ../vector/v.kcv/main.c:182
 msgid "Select privileges were granted on the table"
 msgstr "Select-behörighet beviljades för tabellen"
 
-#: ../vector/v.db.connect/main.c:355
+#: ../vector/v.db.connect/main.c:554
 msgid "For defining a new connection you have to specify these parameters: driver, database, table [, key [, layer]]"
 msgstr "För att definiera en ny anslutning måste du ange följande parametrar: drivrutin, databas, tabell [, nyckel [, lager]]"
 
@@ -37793,12 +37874,12 @@ msgid "%d categories read from the map don't exist in the table"
 msgstr "%d kategorier som läses från kartan finns inte i tabellen"
 
 #: ../vector/v.distance/main.c:1846 ../vector/v.vect.stats/main.c:779
-#: ../vector/v.what.rast/main.c:683
+#: ../vector/v.what.rast/main.c:798
 #, c-format
 msgid "%d update errors"
 msgstr "%d uppdateringsfel"
 
-#: ../vector/v.distance/main.c:1848 ../vector/v.what.rast/main.c:685
+#: ../vector/v.distance/main.c:1848 ../vector/v.what.rast/main.c:800
 #, c-format
 msgid "%d records updated."
 msgstr "%d poster uppdaterade."
@@ -37810,7 +37891,7 @@ msgstr "%d poster uppdaterade."
 msgid "3D"
 msgstr "3D"
 
-#: ../vector/v.drape/main.c:59 ../vector/v.what.rast/main.c:76
+#: ../vector/v.drape/main.c:59 ../vector/v.what.rast/main.c:83
 #: ../vector/v.what.rast3/main.c:71
 msgid "surface information"
 msgstr "ytinformation"
@@ -38559,8 +38640,9 @@ msgid "No projection information available for layer <%s>"
 msgstr "Ingen projektionsinformation tillgänglig för lager <%s>"
 
 #: ../vector/v.external/proj.c:78 ../vector/v.in.ogr/proj.c:79
-#, c-format
-msgid "Projection for layer <%s> does not contain a valid SRS"
+#, fuzzy, c-format
+#| msgid "Projection for layer <%s> does not contain a valid SRS"
+msgid "Projection for layer <%s> does not contain a valid CRS"
 msgstr "Projektionen för lager <%s> innehåller inte en giltig SRS"
 
 #: ../vector/v.extract/extract.c:202
@@ -39045,7 +39127,7 @@ msgstr "Antal hörnpunkter för valda funktioner minskat från %d till %d (%d%% 
 msgid "Number of vertices for selected features changed from %d to %d (%d%% remaining)"
 msgstr "Antal hörnpunkter för valda funktioner ändrat från %d till %d (%d%% återstår)"
 
-#: ../vector/v.generalize/misc.c:163
+#: ../vector/v.generalize/misc.c:164
 #, c-format
 msgid "Layer %d"
 msgstr "Lager %d"
@@ -39412,59 +39494,71 @@ msgstr "Måste referera till en kolumn med heltal"
 msgid "Use imported table as attribute table for new map"
 msgstr "Använd importerad tabell som attributtabell för ny karta"
 
-#: ../vector/v.in.db/main.c:140
+#: ../vector/v.in.db/main.c:126
+#, fuzzy, c-format
+#| msgid "Output vector map name <%s> is too long"
+msgid "Output vector name too long: <%s>"
+msgstr "Utmatningsvektorkartans namn <%s> är för långt"
+
+#: ../vector/v.in.db/main.c:131
+#, fuzzy, c-format
+#| msgid "Map name <%s> is too long"
+msgid "Mapset name too long: <%s>"
+msgstr "Kartnamnet <%s> är för långt"
+
+#: ../vector/v.in.db/main.c:147
 #, c-format
 msgid "Vector map <%s> cannot be overwritten because input table <%s> is linked to this map."
 msgstr "Vektorkarta <%s> kan inte skrivas över eftersom inmatningstabell <%s> är länkad till denna karta."
 
-#: ../vector/v.in.db/main.c:176
+#: ../vector/v.in.db/main.c:183
 #, c-format
 msgid "Output vector map, table <%s> (driver: <%s>, database: <%s>) already exists"
 msgstr "Utmatningsvektorkarta, tabell <%s> (drivrutin: <%s>, databas: <%s>) finns redan"
 
-#: ../vector/v.in.db/main.c:196
+#: ../vector/v.in.db/main.c:203
 #, c-format
 msgid "Option <%s> must be specified when -%c flag is given"
 msgstr "Alternativ <%s> måste anges när flaggan -%c ges"
 
-#: ../vector/v.in.db/main.c:201
+#: ../vector/v.in.db/main.c:208
 #, c-format
 msgid "Unable to define key column. This operation is not supported by <%s> driver. You need to define <%s> option."
 msgstr "Det går inte att definiera nyckelkolumnen. Den här åtgärden stöds inte av <%s> drivrutin. Du måste definiera <%s> alternativ."
 
-#: ../vector/v.in.db/main.c:239 ../vector/v.voronoi/main.c:429
+#: ../vector/v.in.db/main.c:246 ../vector/v.voronoi/main.c:429
 msgid "Writing features..."
 msgstr "Skriva funktioner..."
 
-#: ../vector/v.in.db/main.c:247
+#: ../vector/v.in.db/main.c:254
 msgid "Key column must be integer"
 msgstr "Nyckelkolumnen måste vara ett heltal"
 
-#: ../vector/v.in.db/main.c:260
+#: ../vector/v.in.db/main.c:267
 msgid "x/y/z column must be integer or double"
 msgstr "x/y/z-kolumnen måste vara heltal eller dubbel"
 
-#: ../vector/v.in.db/main.c:286 ../vector/v.net/main.c:155
+#: ../vector/v.in.db/main.c:293 ../vector/v.net/main.c:155
 #: ../vector/v.to.3d/main.c:95 ../vector/v.to.3d/main.c:116
 #: ../vector/v.transform/main.c:312
 msgid "Copying attributes..."
 msgstr "Kopiera attribut..."
 
-#: ../vector/v.in.db/main.c:293
+#: ../vector/v.in.db/main.c:300
 msgid "Unable to copy table"
 msgstr "Det går inte att kopiera tabellen"
 
-#: ../vector/v.in.db/main.c:319
+#: ../vector/v.in.db/main.c:326
 #, c-format
 msgid "Unable to add key column <%s>: SERIAL type is not supported by <%s>"
 msgstr "Det går inte att lägga till nyckelkolumn <%s>: SERIAL-typen stöds inte av <%s>"
 
-#: ../vector/v.in.db/main.c:330
+#: ../vector/v.in.db/main.c:337
 #, c-format
 msgid "Failed to update key column <%s>"
 msgstr "Misslyckades med att uppdatera nyckelkolumn <%s>"
 
-#: ../vector/v.in.db/main.c:346
+#: ../vector/v.in.db/main.c:353
 #, c-format
 msgid "%d point written to vector map."
 msgid_plural "%d points written to vector map."
@@ -41611,10 +41705,10 @@ msgstr "Det går inte att välja poster från LRS-tabellen: %s"
 
 #: ../vector/v.lrs/v.lrs.label/main.c:332 ../vector/v.out.ogr/attrb.c:55
 #: ../vector/v.out.ogr/attrb_fast.c:62
-#: ../vector/v.out.ogr/export_areas_fast.c:118
-#: ../vector/v.out.ogr/export_areas_fast.c:185
-#: ../vector/v.out.ogr/export_areas_fast.c:305
-#: ../vector/v.out.ogr/export_areas_fast.c:410
+#: ../vector/v.out.ogr/export_areas_fast.c:119
+#: ../vector/v.out.ogr/export_areas_fast.c:187
+#: ../vector/v.out.ogr/export_areas_fast.c:308
+#: ../vector/v.out.ogr/export_areas_fast.c:413
 #: ../vector/v.out.ogr/export_lines_fast.c:103
 #: ../vector/v.out.ogr/export_lines_fast.c:170
 #: ../vector/v.out.ogr/export_lines_fast.c:301
@@ -43545,8 +43639,8 @@ msgstr "Skapa ett nytt tomt lager i den definierade OGR-datakällan och avsluta.
 msgid "List supported output formats and exit"
 msgstr "Lista över utdataformat som stöds och avsluta"
 
-#: ../vector/v.out.ogr/attrb.c:51 ../vector/v.out.ogr/export_areas_fast.c:182
-#: ../vector/v.out.ogr/export_areas_fast.c:407
+#: ../vector/v.out.ogr/attrb.c:51 ../vector/v.out.ogr/export_areas_fast.c:184
+#: ../vector/v.out.ogr/export_areas_fast.c:410
 #: ../vector/v.out.ogr/export_lines_fast.c:167
 #: ../vector/v.out.ogr/export_lines_fast.c:395
 #: ../vector/v.out.vtk/writeVTK.c:582
@@ -43577,10 +43671,10 @@ msgstr "Skapandet av OGR-lagret <%s> misslyckades"
 #: ../vector/v.out.ogr/export_areas.c:123
 #: ../vector/v.out.ogr/export_areas.c:227
 #: ../vector/v.out.ogr/export_areas.c:278
-#: ../vector/v.out.ogr/export_areas_fast.c:164
-#: ../vector/v.out.ogr/export_areas_fast.c:221
-#: ../vector/v.out.ogr/export_areas_fast.c:379
-#: ../vector/v.out.ogr/export_areas_fast.c:451
+#: ../vector/v.out.ogr/export_areas_fast.c:166
+#: ../vector/v.out.ogr/export_areas_fast.c:223
+#: ../vector/v.out.ogr/export_areas_fast.c:382
+#: ../vector/v.out.ogr/export_areas_fast.c:454
 #: ../vector/v.out.ogr/export_lines.c:131
 #: ../vector/v.out.ogr/export_lines.c:229
 #: ../vector/v.out.ogr/export_lines.c:278
@@ -43593,7 +43687,7 @@ msgstr "Misslyckades med att skapa OGR-funktion"
 
 #: ../vector/v.out.ogr/export_areas.c:168
 #: ../vector/v.out.ogr/export_areas_fast.c:95
-#: ../vector/v.out.ogr/export_areas_fast.c:275
+#: ../vector/v.out.ogr/export_areas_fast.c:278
 #: ../vector/v.out.ogr/export_lines.c:177
 #: ../vector/v.out.ogr/export_lines_fast.c:77
 #: ../vector/v.out.ogr/export_lines_fast.c:265
@@ -43603,14 +43697,14 @@ msgstr "Det går inte att exportera flera funktioner. Inget kategoriindex för l
 
 #: ../vector/v.out.ogr/export_areas.c:180
 #: ../vector/v.out.ogr/export_areas_fast.c:104
-#: ../vector/v.out.ogr/export_areas_fast.c:288
+#: ../vector/v.out.ogr/export_areas_fast.c:291
 #: ../vector/v.out.ogr/export_lines_fast.c:86
 #: ../vector/v.out.ogr/export_lines_fast.c:274
 msgid "Exporting features with category..."
 msgstr "Exportera funktioner med kategori..."
 
 #: ../vector/v.out.ogr/export_areas.c:202
-#: ../vector/v.out.ogr/export_areas_fast.c:353
+#: ../vector/v.out.ogr/export_areas_fast.c:356
 #: ../vector/v.out.ogr/export_lines.c:212
 #: ../vector/v.out.ogr/export_lines_fast.c:349
 #, c-format
@@ -43618,23 +43712,23 @@ msgid "Unable to create multi-feature. Category %d not found in line %d, field %
 msgstr "Det går inte att skapa flera funktioner. Kategori %d hittades inte i rad %d, fält %d"
 
 #: ../vector/v.out.ogr/export_areas.c:243
-#: ../vector/v.out.ogr/export_areas_fast.c:174
-#: ../vector/v.out.ogr/export_areas_fast.c:395
+#: ../vector/v.out.ogr/export_areas_fast.c:176
+#: ../vector/v.out.ogr/export_areas_fast.c:398
 #: ../vector/v.out.ogr/export_lines_fast.c:159
 #: ../vector/v.out.ogr/export_lines_fast.c:383
 msgid "Exporting features without category..."
 msgstr "Exportera funktioner utan kategori..."
 
-#: ../vector/v.out.ogr/export_areas_fast.c:114
-#: ../vector/v.out.ogr/export_areas_fast.c:301
+#: ../vector/v.out.ogr/export_areas_fast.c:115
+#: ../vector/v.out.ogr/export_areas_fast.c:304
 #: ../vector/v.out.ogr/export_lines_fast.c:99
 #: ../vector/v.out.ogr/export_lines_fast.c:297
 #, c-format
 msgid "Cannot select attributes sorted by %s"
 msgstr "Det går inte att välja attribut sorterade efter %s"
 
-#: ../vector/v.out.ogr/export_areas_fast.c:142
-#: ../vector/v.out.ogr/export_areas_fast.c:328
+#: ../vector/v.out.ogr/export_areas_fast.c:144
+#: ../vector/v.out.ogr/export_areas_fast.c:331
 #: ../vector/v.out.ogr/export_lines_fast.c:126
 #: ../vector/v.out.ogr/export_lines_fast.c:323
 msgid "Category index is not sorted ascending by cat!"
@@ -44158,6 +44252,12 @@ msgstr "%d rader extraherade"
 #, c-format
 msgid "Cannot select attributes for cat=%d"
 msgstr "Det går inte att välja attribut för cat=%d"
+
+#: ../vector/v.out.svg/main.c:414
+#, fuzzy, c-format
+#| msgid "Group name <%s> is too long"
+msgid "Column name <%s> is too long"
+msgstr "Gruppnamnet <%s> är för långt"
 
 #: ../vector/v.out.vtk/head.c:26
 msgid "writeVTKHeader: Writing VTK-Header"
@@ -45846,8 +45946,8 @@ msgid "Conversion factor for values used for approximation"
 msgstr "Omvandlingsfaktor för värden som används för approximation"
 
 #: ../vector/v.surf.rst/main.c:423
-msgid "GRASS GIS is not compiled with OpenMP support, parallel computation is disabled."
-msgstr "GRASS GIS är inte kompilerat med OpenMP-stöd, parallellberäkning är inaktiverad."
+msgid "GRASS is not compiled with OpenMP support, parallel computation is disabled."
+msgstr "GRASS är inte kompilerat med OpenMP-stöd, parallellberäkning är inaktiverad."
 
 #: ../vector/v.surf.rst/main.c:434 ../vector/v.surf.rst/main.c:439
 #: ../vector/v.surf.rst/main.c:444 ../vector/v.surf.rst/main.c:450
@@ -46136,7 +46236,7 @@ msgstr "Kolumn <%s> finns. För att skriva över, använd flaggan --overwrite"
 msgid "Category index for vector map <%s> is not sorted"
 msgstr "Kategoriindex för vektorkarta <%s> är inte sorterat"
 
-#: ../vector/v.to.db/main.c:428 ../vector/v.what.rast/main.c:269
+#: ../vector/v.to.db/main.c:428 ../vector/v.what.rast/main.c:310
 #, c-format
 msgid "Unable to write history for vector map <%s>"
 msgstr "Det går inte att skriva historik för vektorkarta <%s>"
@@ -46842,7 +46942,7 @@ msgstr "Beräkning av geometriska avstånd mellan %d primitiver..."
 msgid " Database connection not defined for layer <%s>"
 msgstr " Ingen databasanslutning definierad för lager <%s>"
 
-#: ../vector/v.univar/main.c:748
+#: ../vector/v.univar/main.c:749
 msgid "Cannot sort the key/value array"
 msgstr "Det går inte att sortera nyckel/värde-arrayen"
 
@@ -47349,75 +47449,79 @@ msgid_plural "Found %d vertices in <%s>, but at least 2 are needed"
 msgstr[0] "Hittade %d vertex i <%s>, men minst 2 behövs"
 msgstr[1] "Hittade %d toppar i <%s>, men minst 2 behövs"
 
-#: ../vector/v.what.rast/main.c:78
+#: ../vector/v.what.rast/main.c:85
 msgid "Uploads raster values at positions of vector points to the table."
 msgstr "Laddar upp rastervärden på positioner för vektorpunkter till tabellen."
 
-#: ../vector/v.what.rast/main.c:92
+#: ../vector/v.what.rast/main.c:99
 msgid "Name of existing raster map to be queried"
 msgstr "Namn på befintlig rasterkarta som ska efterfrågas"
 
-#: ../vector/v.what.rast/main.c:105
+#: ../vector/v.what.rast/main.c:111
+msgid "Field separator for CSV style output"
+msgstr "Fältavgränsare för utdata i CSV-stil"
+
+#: ../vector/v.what.rast/main.c:123
 msgid "Interpolate values from the nearest four cells"
 msgstr "Interpolera värden från de närmaste fyra cellerna"
 
-#: ../vector/v.what.rast/main.c:110
+#: ../vector/v.what.rast/main.c:128
 msgid "Print categories and values instead of updating the database"
 msgstr "Skriv ut kategorier och värden i stället för att uppdatera databasen"
 
-#: ../vector/v.what.rast/main.c:170
+#: ../vector/v.what.rast/main.c:211
 #, c-format
 msgid "Column <%s> not found in the table <%s>. Creating..."
 msgstr "Kolumn <%s> finns inte i tabellen <%s>. Skapar..."
 
-#: ../vector/v.what.rast/main.c:187
+#: ../vector/v.what.rast/main.c:228
 msgid "Raster type is integer and column type is float"
 msgstr "Rastertyp är heltal och kolumntyp är float"
 
-#: ../vector/v.what.rast/main.c:190
+#: ../vector/v.what.rast/main.c:231
 msgid "Raster type is float and column type is integer, some data lost!!"
 msgstr "Rastertyp är float och kolumntyp är integer, vissa data förlorade!!!"
 
-#: ../vector/v.what.rast/main.c:208 ../vector/v.what.rast3/main.c:161
+#: ../vector/v.what.rast/main.c:249 ../vector/v.what.rast3/main.c:161
 msgid "Reading features from vector map..."
 msgstr "Läser funktioner från vektorkarta..."
 
-#: ../vector/v.what.rast/main.c:277
+#: ../vector/v.what.rast/main.c:318
 #, c-format
 msgid "No features of type (%s) found in the current computational region"
 msgstr "Inga funktioner av typen (%s) hittades i den aktuella beräkningsregionen"
 
-#: ../vector/v.what.rast/main.c:301
+#: ../vector/v.what.rast/main.c:342
 #, c-format
 msgid "%d points outside current region were skipped"
 msgstr "%d punkter utanför aktuell region hoppades över"
 
-#: ../vector/v.what.rast/main.c:305
+#: ../vector/v.what.rast/main.c:346
 #, c-format
 msgid "%d points without category were skipped"
 msgstr "%d punkter utan kategori hoppades över"
 
-#: ../vector/v.what.rast/main.c:560 ../vector/v.what.rast/main.c:602
+#: ../vector/v.what.rast/main.c:609 ../vector/v.what.rast/main.c:717
 #, c-format
 msgid "Multiple points (%d) of category %d, value set to 'NULL'"
 msgstr "Flera punkter (%d) i kategori %d, värdet satt till 'NULL'"
 
-#: ../vector/v.what.rast/main.c:673
+#: ../vector/v.what.rast/main.c:788
 #, c-format
 msgid "%d categories loaded from vector"
 msgstr "%d kategorier laddade från vektor"
 
-#: ../vector/v.what.rast/main.c:675
+#: ../vector/v.what.rast/main.c:790
 #, c-format
 msgid "%d duplicate categories in vector map <%s>"
 msgstr "%d dubbletter av kategorier i vektorkartan <%s>"
 
-#: ../vector/v.what.rast/main.c:679
+#: ../vector/v.what.rast/main.c:794
 #, c-format
 msgid "%d categories loaded from table"
 msgstr "%d kategorier laddade från tabell"
 
-#: ../vector/v.what.rast/main.c:680
+#: ../vector/v.what.rast/main.c:795
 #, c-format
 msgid "%d categories from vector missing in table"
 msgstr "%d kategorier från vektorn saknas i tabellen"
@@ -47500,86 +47604,118 @@ msgid_plural "%d records updated."
 msgstr[0] "%d posten uppdaterad."
 msgstr[1] "%d poster uppdaterade."
 
-#: ../vector/v.what/main.c:64
+#: ../vector/v.what/main.c:66
 msgid "Queries a vector map at given locations."
 msgstr "Frågar en vektorkarta på givna platser."
 
-#: ../vector/v.what/main.c:84
+#: ../vector/v.what/main.c:86
 msgid "Query threshold distance"
 msgstr "Avstånd till tröskelvärde för förfrågan"
 
-#: ../vector/v.what/main.c:85
+#: ../vector/v.what/main.c:87
 msgid "Threshold"
 msgstr "Tröskel"
 
-#: ../vector/v.what/main.c:88
+#: ../vector/v.what/main.c:90
 msgid "Name of attribute column(s)"
 msgstr "Namn på attributkolumn(er)"
 
-#: ../vector/v.what/main.c:89
+#: ../vector/v.what/main.c:91
 msgid "Default: all columns"
 msgstr "Standard: alla kolumner"
 
-#: ../vector/v.what/main.c:93
-msgid "Print topological information (debugging)"
-msgstr "Skriv ut topologisk information (felsökning)"
-
-#: ../vector/v.what/main.c:98
+#: ../vector/v.what/main.c:104
 msgid "Print attribute information"
 msgstr "Skriv ut attributinformation"
 
-#: ../vector/v.what/main.c:103
-msgid "Print the stats in shell script style"
-msgstr "Skriv ut statistiken i skal script-stil"
+#: ../vector/v.what/main.c:110
+#, fuzzy
+#| msgid "Print attribute information"
+msgid "Print attribute database connection information"
+msgstr "Skriv ut attributinformation"
 
-#: ../vector/v.what/main.c:108
-msgid "Print the stats in JSON"
+#: ../vector/v.what/main.c:115
+msgid "Print topological information (debugging)"
+msgstr "Skriv ut topologisk information (felsökning)"
+
+#: ../vector/v.what/main.c:117
+#, fuzzy
+#| msgid "Print topological information (debugging)"
+msgid "Prints internal information for topology debugging"
+msgstr "Skriv ut topologisk information (felsökning)"
+
+#: ../vector/v.what/main.c:130
+#, fuzzy
+#| msgid "Print the stats in JSON"
+msgid "Print the stats in JSON [deprecated]"
 msgstr "Skriv ut statistiken i JSON"
 
-#: ../vector/v.what/main.c:114
-msgid "Print multiple features if overlapping features are found"
+#: ../vector/v.what/main.c:132
+#, fuzzy
+#| msgid "This flag is deprecated and will be removed in a future release. Use format=csv instead."
+msgid "This flag is deprecated and will be removed in a future release. Use format=json instead."
+msgstr "Denna flagga är föråldrad och kommer att tas bort i en framtida version. Använd istället format=csv."
+
+#: ../vector/v.what/main.c:139
+#, fuzzy
+#| msgid "Print multiple features if overlapping features are found"
+msgid "Print multiple features for each map if they meet the criteria"
 msgstr "Skriv ut flera funktioner om överlappande funktioner hittas"
 
-#: ../vector/v.what/main.c:131
+#: ../vector/v.what/main.c:141
+msgid "For JSON, this places features under a \"features\" key"
+msgstr ""
+
+#: ../vector/v.what/main.c:160
 msgid "No input vector maps!"
 msgstr "Ingen inmatning av vektorkartor!"
 
-#: ../vector/v.what/main.c:201
+#: ../vector/v.what/main.c:190
+#, fuzzy
+#| msgid "Flag 'j' is deprecated and will be removed in a future release. Please use format=proj4 instead."
+msgid "Flag 'j' is deprecated and will be removed in a future release. Please use format=json instead."
+msgstr "Flaggan 'j' är föråldrad och kommer att tas bort i en framtida version. Använd format=proj4 istället."
+
+#: ../vector/v.what/main.c:215
+msgid "Flag 'i' prints attribute database connection information. It is currently always enabled for backward compatibility, but this behavior will be removed in a future release. Please use the 'i' flag together with the 'a' flag instead."
+msgstr ""
+
+#: ../vector/v.what/main.c:272
 #, c-format
 msgid "Number of given vector maps (%d) differs from number of layers (%d)"
 msgstr "Antalet givna vektorkartor (%d) skiljer sig från antalet lager (%d)"
 
-#: ../vector/v.what/main.c:211
+#: ../vector/v.what/main.c:282
 #, c-format
 msgid "You must build topology on vector map <%s>"
 msgstr "Du måste bygga upp topologin på en vektorkarta <%s>"
 
-#: ../vector/v.what/main.c:229
+#: ../vector/v.what/main.c:301
 #, c-format
 msgid "Unknown input format, skipping: '%s'"
 msgstr "Okänt inmatningsformat, hoppar över: '%s'"
 
-#: ../vector/v.what/what.c:46
+#: ../vector/v.what/what.c:47
 msgid "Cannot open driver"
 msgstr "Det går inte att öppna drivrutinen"
 
-#: ../vector/v.what/what.c:54
+#: ../vector/v.what/what.c:55
 msgid "Cannot open database"
 msgstr "Det går inte att öppna databasen"
 
-#: ../vector/v.what/what.c:68
+#: ../vector/v.what/what.c:69
 msgid "Cannot open select cursor"
 msgstr "Det går inte att öppna markören"
 
-#: ../vector/v.what/what.c:75
+#: ../vector/v.what/what.c:76
 msgid "Cannot fetch next record"
 msgstr "Kan inte hämta nästa post"
 
-#: ../vector/v.what/what.c:78
+#: ../vector/v.what/what.c:79
 msgid "No database record"
 msgstr "Ingen databasregistrering"
 
-#: ../vector/v.what/what.c:182
+#: ../vector/v.what/what.c:222
 #, c-format
 msgid ""
 "Layer: %d\n"
@@ -47588,7 +47724,7 @@ msgstr ""
 "Layer: %d\n"
 "Kategori: %d\n"
 
-#: ../vector/v.what/what.c:208
+#: ../vector/v.what/what.c:263
 #, c-format
 msgid ""
 "\n"
@@ -47603,12 +47739,12 @@ msgstr ""
 "Tabell: %s\n"
 "Nyckelkolumn: %s\n"
 
-#: ../vector/v.what/what.c:388
+#: ../vector/v.what/what.c:493
 #, c-format
 msgid "Nothing found.\n"
 msgstr "Inget hittades.\n"
 
-#: ../vector/v.what/what.c:486
+#: ../vector/v.what/what.c:635
 #, c-format
 msgid ""
 "Id: %d\n"
@@ -47621,12 +47757,12 @@ msgstr ""
 "Vänster: %d\n"
 "Höger: %d\n"
 
-#: ../vector/v.what/what.c:489 ../vector/v.what/what.c:567
+#: ../vector/v.what/what.c:638 ../vector/v.what/what.c:794
 #, c-format
 msgid "Length: %f\n"
 msgstr "Längd: %f\n"
 
-#: ../vector/v.what/what.c:509
+#: ../vector/v.what/what.c:667
 #, c-format
 msgid ""
 "Node[%d]=%d\n"
@@ -47637,7 +47773,7 @@ msgstr ""
 "Antal_linjer=%d\n"
 "Coordinates=%.6f,%.6f,%.6f\n"
 
-#: ../vector/v.what/what.c:515
+#: ../vector/v.what/what.c:673
 #, c-format
 msgid ""
 ",\n"
@@ -47650,7 +47786,7 @@ msgstr ""
 "\"Antal_linjer\": %d,\n"
 "\"Koordinater\": %.6f,%.6f,%.6f"
 
-#: ../vector/v.what/what.c:521
+#: ../vector/v.what/what.c:696
 #, c-format
 msgid ""
 "Node[%d]: %d\n"
@@ -47661,7 +47797,7 @@ msgstr ""
 "Antal rader: %d\n"
 "Koordinater: %.6f, %.6f, %.6f\n"
 
-#: ../vector/v.what/what.c:541
+#: ../vector/v.what/what.c:739
 #, c-format
 msgid ""
 "Id: %d\n"
@@ -47670,27 +47806,27 @@ msgstr ""
 "Id: %d\n"
 "Vinkel: %.8f\n"
 
-#: ../vector/v.what/what.c:564
+#: ../vector/v.what/what.c:791
 #, c-format
 msgid "Type: %s\n"
 msgstr "Typ: %s\n"
 
-#: ../vector/v.what/what.c:565
+#: ../vector/v.what/what.c:792
 #, c-format
 msgid "Id: %d\n"
 msgstr "Id: %d\n"
 
-#: ../vector/v.what/what.c:586
+#: ../vector/v.what/what.c:821
 #, c-format
 msgid "Point height: %f\n"
 msgstr "Punktens höjd: %f\n"
 
-#: ../vector/v.what/what.c:609
+#: ../vector/v.what/what.c:852
 #, c-format
 msgid "Line height: %f\n"
 msgstr "Linjehöjd: %f\n"
 
-#: ../vector/v.what/what.c:629
+#: ../vector/v.what/what.c:886
 #, c-format
 msgid ""
 "Line height min: %f\n"
@@ -47699,7 +47835,7 @@ msgstr ""
 "Linjehöjd min: %f\n"
 "Linjehöjd max: %f\n"
 
-#: ../vector/v.what/what.c:674
+#: ../vector/v.what/what.c:969
 #, c-format
 msgid ""
 "Type: Area\n"
@@ -47708,12 +47844,12 @@ msgstr ""
 "Typ av område Område\n"
 "Områdets höjd: %f\n"
 
-#: ../vector/v.what/what.c:688
+#: ../vector/v.what/what.c:992
 #, c-format
 msgid "Type: Area\n"
 msgstr "Typ av område Område\n"
 
-#: ../vector/v.what/what.c:713
+#: ../vector/v.what/what.c:1029
 #, c-format
 msgid ""
 "Area: %d\n"
@@ -47722,17 +47858,17 @@ msgstr ""
 "Område: %d\n"
 "Antal öar: %d\n"
 
-#: ../vector/v.what/what.c:728
+#: ../vector/v.what/what.c:1056
 #, c-format
 msgid "Isle[%d]: %d\n"
 msgstr "Isle[%d]: %d\n"
 
-#: ../vector/v.what/what.c:748
+#: ../vector/v.what/what.c:1099
 #, c-format
 msgid "Island: %d In area: %d\n"
 msgstr "Ö: %d I område: %d\n"
 
-#: ../vector/v.what/what.c:770
+#: ../vector/v.what/what.c:1142
 #, c-format
 msgid ""
 "Sq Meters: %.3f\n"
@@ -47741,7 +47877,7 @@ msgstr ""
 "Kvadratmeter: %.3f\n"
 "Hectares: %.3f\n"
 
-#: ../vector/v.what/what.c:772
+#: ../vector/v.what/what.c:1144
 #, c-format
 msgid ""
 "Acres: %.3f\n"
@@ -47798,6 +47934,18 @@ msgstr "Visa BMP-bilder från PNG-drivrutinen."
 #: ../visualization/ximgview/main.c:298
 msgid "Image file"
 msgstr "Bildfil"
+
+#~ msgid "Print the stats in shell script style"
+#~ msgstr "Skriv ut statistiken i skal script-stil"
+
+#~ msgid "Field separator for shell script style output"
+#~ msgstr "Fältavgränsare för utdata i stil med skal-skript"
+
+#~ msgid "Print all map connection parameters in shell script style and exit"
+#~ msgstr "Skriv ut alla parametrar för map-anslutningen i form av ett skalskript och avsluta"
+
+#~ msgid "Format: layer[/layer name] table key database driver"
+#~ msgstr "Format: lager[/lagernamn] tabell nyckel databas drivrutin"
 
 #~ msgid "Substitute variables in database settings"
 #~ msgstr "Ersätta variabler i databasinställningar"

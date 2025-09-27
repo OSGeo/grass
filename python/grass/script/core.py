@@ -144,7 +144,8 @@ _capture_stderr = False  # capture stderr of subprocesses if possible
 
 
 def call(*args, **kwargs):
-    return Popen(*args, **kwargs).wait()
+    with Popen(*args, **kwargs) as p:
+        return p.wait()
 
 
 # GRASS-oriented interface to subprocess module
@@ -355,7 +356,7 @@ def make_command(
                         "To run the module <%s> add underscore at the end"
                         " of the option <%s> to avoid conflict with Python"
                         " keywords. Underscore at the beginning is"
-                        " deprecated in GRASS GIS 7.0 and has been removed"
+                        " deprecated in GRASS 7.0 and has been removed"
                         " in version 7.1."
                     )
                     % (prog, opt)
@@ -367,7 +368,14 @@ def make_command(
 
 
 def handle_errors(
-    returncode, result, args, kwargs, handler=None, stderr=None, env=None
+    returncode,
+    result,
+    args,
+    kwargs,
+    handler=None,
+    stderr=None,
+    exception=None,
+    env=None,
 ):
     """Error handler for :func:`run_command()` and similar functions
 
@@ -458,9 +466,9 @@ def handle_errors(
         sys.exit(returncode)
     else:
         module, code = get_module_and_code(args, kwargs)
-        raise CalledModuleError(
-            module=module, code=code, returncode=returncode, errors=stderr
-        )
+        if not exception:
+            exception = CalledModuleError
+        raise exception(module, code, returncode=returncode, errors=stderr)
 
 
 def popen_args_command(
@@ -505,7 +513,7 @@ def start_command(
     verbose=False,
     superquiet=False,
     **kwargs,
-):
+) -> Popen:
     """Returns a :class:`~grass.script.core.Popen` object with the command created by
     :py:func:`~grass.script.core.make_command`.
     Accepts any of the arguments which :py:class:`Popen()` accepts apart from "args"
@@ -596,9 +604,7 @@ def run_command(*args, **kwargs):
 
     :raises ~grass.exceptions.CalledModuleError: When module returns non-zero return code.
     """
-    encoding = "default"
-    if "encoding" in kwargs:
-        encoding = kwargs["encoding"]
+    encoding = kwargs.get("encoding", "default")
 
     if _capture_stderr and "stderr" not in kwargs.keys():
         kwargs["stderr"] = PIPE
@@ -668,9 +674,7 @@ def read_command(*args, **kwargs):
 
     :return: stdout
     """
-    encoding = "default"
-    if "encoding" in kwargs:
-        encoding = kwargs["encoding"]
+    encoding = kwargs.get("encoding", "default")
 
     if _capture_stderr and "stderr" not in kwargs.keys():
         kwargs["stderr"] = PIPE
@@ -774,9 +778,7 @@ def write_command(*args, **kwargs):
 
     :raises ~grass.exceptions.CalledModuleError: When module returns non-zero return code
     """
-    encoding = "default"
-    if "encoding" in kwargs:
-        encoding = kwargs["encoding"]
+    encoding = kwargs.get("encoding", "default")
     # TODO: should we delete it from kwargs?
     stdin = kwargs["stdin"]
     if _capture_stderr and "stderr" not in kwargs.keys():
@@ -1075,7 +1077,7 @@ def parser() -> tuple[dict[str, str], dict[str, bool]]:
     https://grass.osgeo.org/grass-devel/manuals/parser_standard_options.html
     """
     if not os.getenv("GISBASE"):
-        print("You must be in GRASS GIS to run this program.", file=sys.stderr)
+        print("You must be in GRASS to run this program.", file=sys.stderr)
         sys.exit(1)
 
     cmdline = [basename(sys.argv[0])]
@@ -1095,8 +1097,11 @@ def parser() -> tuple[dict[str, str], dict[str, bool]]:
         s = p.communicate()[0]
         lines = s.split(b"\0")
         if not lines or lines[0] != b"@ARGS_PARSED@":
-            stdout = os.fdopen(sys.stdout.fileno(), "wb")
-            stdout.write(s)
+            if hasattr(sys.stdout, "buffer"):
+                sys.stdout.buffer.write(s)
+            else:
+                text = s.decode(sys.stdout.encoding, "strict")
+                sys.stdout.write(text)
             sys.exit(p.returncode)
         return _parse_opts(lines[1:])
 
@@ -2001,19 +2006,11 @@ def create_project(
             )
         return env
 
-    # check if location already exists
+    # check if a project with the same name already exists
     if Path(mapset_path.directory, mapset_path.location).exists():
         if not overwrite:
-            fatal(
-                _("Location <%s> already exists. Operation canceled.")
-                % mapset_path.location,
-                env=local_env(),
-            )
-        warning(
-            _("Location <%s> already exists and will be overwritten")
-            % mapset_path.location,
-            env=local_env(),
-        )
+            msg = f"Project <{mapset_path.location}> already exists"
+            raise ScriptError(msg)
         shutil.rmtree(os.path.join(mapset_path.directory, mapset_path.location))
 
     stdin = None

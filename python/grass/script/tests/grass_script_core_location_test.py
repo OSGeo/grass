@@ -6,6 +6,7 @@ import os
 import pytest
 
 import grass.script as gs
+from grass.exceptions import ScriptError
 
 xfail_mp_spawn = pytest.mark.xfail(
     multiprocessing.get_start_method() == "spawn",
@@ -165,9 +166,20 @@ def test_files(tmp_path):
         assert description_file.read_text(encoding="utf-8").strip() == description
 
 
+@pytest.mark.parametrize("overwrite", [False, None])
+def test_project_no_overwrite(tmp_path, overwrite):
+    """Check that project we raise exception when project exists"""
+    project = tmp_path / "project_1"
+    gs.create_project(project, overwrite=overwrite)
+    assert project.exists()
+    with pytest.raises(ScriptError, match=r"project_1.*already exists"):
+        gs.create_project(project, overwrite=overwrite)
+    assert project.exists()
+
+
 def test_project_overwrite(tmp_path):
-    """Check that project can be overwritten"""
-    project = tmp_path / "project"
+    """Check that existing project can be overwritten"""
+    project = tmp_path / "project_1"
     gs.create_project(project)
     assert project.exists()
     gs.create_project(project, overwrite=True)

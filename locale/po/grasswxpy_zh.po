@@ -1,17 +1,18 @@
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: GRASS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 10:14+0000\n"
-"PO-Revision-Date: \n"
-"Last-Translator: Shulin Yang <shulin.yang.9@gmail.com>\n"
-"Language-Team: Simplified Chinese <grass-translations@lists.osgeo.org>\n"
+"POT-Creation-Date: 2025-09-13 15:39+0000\n"
+"PO-Revision-Date: 2025-08-26 14:19+0000\n"
+"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
+"Language-Team: Chinese (Simplified) <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/zh_Hans/>\n"
 "Language: zh\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.6.9\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: ../gui/wxpython/animation/controller.py:244
 #: ../gui/wxpython/animation/dialogs.py:858
@@ -4854,7 +4855,7 @@ msgstr ""
 #, fuzzy
 #| msgid "About GRASS GIS"
 msgid "About GRASS"
-msgstr "关于GRASS GIS"
+msgstr "关于GRASS"
 
 #: ../gui/wxpython/gui_core/ghelp.py:80
 msgid "Info"
@@ -6840,7 +6841,7 @@ msgstr "3. 选择GRASS地图集"
 #, fuzzy
 #| msgid "GRASS GIS database directory contains Locations."
 msgid "GRASS database directory contains Locations."
-msgstr "包含GRASS地点的GRASS GIS数据库目录。"
+msgstr "包含GRASS地点的GRASS数据库目录。"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:158
 msgid "All data in one Location is in the same  coordinate reference system (projection). One Location can be one project. Location contains Mapsets."
@@ -6911,7 +6912,7 @@ msgstr "删除选中的地图集"
 #, fuzzy, python-format
 #| msgid "GRASS GIS %s startup%s"
 msgid "GRASS %s startup%s"
-msgstr "GRASS GIS %s 启动 %s"
+msgstr "GRASS %s 启动 %s"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:304
 msgid "Enter GRASS session"
@@ -12383,7 +12384,7 @@ msgstr ""
 #, fuzzy
 #| msgid "GRASS GIS Setup for r.li modules"
 msgid "Setup for r.li modules - GRASS"
-msgstr "GRASS GIS r.li模块设置"
+msgstr "GRASS r.li模块设置"
 
 #: ../gui/wxpython/rlisetup/sampling_frame.py:234
 #: ../gui/wxpython/rlisetup/sampling_frame.py:350

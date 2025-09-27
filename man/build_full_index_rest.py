@@ -35,7 +35,7 @@ classes.sort()
 # begin full index:
 filename = "full_index.txt"
 with open(filename + ".tmp", "wb") as f:
-    write_rest_header(f, "GRASS GIS %s Reference Manual: Full index" % grass_version)
+    write_rest_header(f, "GRASS %s Reference Manual: Full index" % grass_version)
 
     # generate main index of all modules:
     f.write(full_index_header)

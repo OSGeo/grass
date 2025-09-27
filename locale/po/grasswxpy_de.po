@@ -7,12 +7,13 @@
 # Markus Neteler <neteler osgeo.org>, 2008, 2009, 2010.
 # Robert Nuske <rnuske gwdg.de>, 2009, 2010.
 # Robert Nuske <robert.nuske nw-fva.de>, 2011, 2012, 2013, 2014.
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 10:14+0000\n"
-"PO-Revision-Date: 2025-06-14 21:41+0000\n"
+"POT-Creation-Date: 2025-09-13 15:39+0000\n"
+"PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/de/>\n"
 "Language: de\n"
@@ -1454,7 +1455,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Close GRASS GIS Data Catalog"
 msgid "Close GRASS Data Catalog"
-msgstr "Schließe GRASS GIS Datenkatalog"
+msgstr "Schließe GRASS Datenkatalog"
 
 #: ../gui/wxpython/datacatalog/g.gui.datacatalog.py:50
 #, fuzzy

@@ -4,13 +4,14 @@
 #
 # Luca Delucchi <lucadeluge@gmail.com>, 2009, 2010, 2011, 2014.
 # Andrea Giacomelli <pibinko gmail.com>, 2010.
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 10:14+0000\n"
-"PO-Revision-Date: 2025-04-03 08:42+0000\n"
-"Last-Translator: luca <lucadeluge@gmail.com>\n"
+"POT-Creation-Date: 2025-09-13 15:39+0000\n"
+"PO-Revision-Date: 2025-08-26 13:29+0000\n"
+"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Italian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -700,7 +701,7 @@ msgstr "%s=, %s=, %s= e %s= si escludono a vicenda."
 #, fuzzy
 #| msgid "Animation Tool - GRASS GIS"
 msgid "Animation Tool - GRASS"
-msgstr "Strumento Animazione - GRASS GIS"
+msgstr "Strumento Animazione - GRASS"
 
 #: ../gui/wxpython/animation/nviztask.py:40
 #, python-format
@@ -1454,7 +1455,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Close GRASS GIS Data Catalog"
 msgid "Close GRASS Data Catalog"
-msgstr "Chiudere il Catalogo Dati di GRASS GIS"
+msgstr "Chiudere il Catalogo Dati di GRASS"
 
 #: ../gui/wxpython/datacatalog/g.gui.datacatalog.py:50
 #, fuzzy
@@ -2516,7 +2517,7 @@ msgstr "Caricando gli attributi per il vettoriale <%s> ..."
 #, fuzzy
 #| msgid "Attribute Table Manager - GRASS GIS"
 msgid "Attribute Table Manager - GRASS"
-msgstr "Gestore della Tabella degli Attributi - GRASS GIS"
+msgstr "Gestore della Tabella degli Attributi - GRASS"
 
 #: ../gui/wxpython/dbmgr/manager.py:92
 msgid "Attribute Table Manager"
@@ -4694,7 +4695,7 @@ msgstr "Nome del simbolo:"
 #, fuzzy
 #| msgid "Quit GRASS GIS"
 msgid "Quit GRASS"
-msgstr "Esci da GRASS GIS"
+msgstr "Esci da GRASS"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2355
 msgid "Do you want to quit GRASS including shell or just close the GUI?"
@@ -4938,7 +4939,7 @@ msgstr "Prova di impostare la variabile GRASS_ADDON_PATH o GRASS_ADDON_BASE"
 #, fuzzy
 #| msgid "About GRASS GIS"
 msgid "About GRASS"
-msgstr "Informazioni su GRASS GIS"
+msgstr "Informazioni su GRASS"
 
 #: ../gui/wxpython/gui_core/ghelp.py:80
 msgid "Info"
@@ -6828,7 +6829,7 @@ msgstr "Raster <%s> non trovato"
 #, fuzzy
 #| msgid "GRASS GIS Supervised Classification Tool"
 msgid "Supervised Classification Tool - GRASS"
-msgstr "GRASS GIS Strumento Classificazione Supervisionata"
+msgstr "GRASS Strumento Classificazione Supervisionata"
 
 #: ../gui/wxpython/iclass/g.gui.iclass.py:122
 #, python-format
@@ -6922,10 +6923,8 @@ msgid "Unable to load icon theme. Reason: %s. Quitting wxGUI..."
 msgstr "Impossibile caricare il tema delle icone. Motivazione: %s. Esce da wxGUI..."
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:122
-#, fuzzy
-#| msgid "1. Select GRASS GIS database directory"
 msgid "1. Select GRASS database directory"
-msgstr "1. Scegli la cartella dei dati GRASS GIS"
+msgstr "1. Scegli la cartella dei dati GRASS"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:127
 msgid "2. Select GRASS Location"
@@ -6939,7 +6938,7 @@ msgstr "3. Seleziona mapset di GRASS"
 #, fuzzy
 #| msgid "GRASS GIS database directory contains Locations."
 msgid "GRASS database directory contains Locations."
-msgstr "La directory del database di GRASS GIS contiene Location.  "
+msgstr "La directory del database di GRASS contiene Location."
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:158
 msgid "All data in one Location is in the same  coordinate reference system (projection). One Location can be one project. Location contains Mapsets."
@@ -7010,7 +7009,7 @@ msgstr "Elimina il mapset selezionato"
 #, fuzzy, python-format
 #| msgid "GRASS GIS %s startup%s"
 msgid "GRASS %s startup%s"
-msgstr "Avvio%s di GRASS GIS %s"
+msgstr "Avvio%s di GRASS %s"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:304
 msgid "Enter GRASS session"
@@ -7333,10 +7332,8 @@ msgid "target Z:"
 msgstr "destinazione Z:"
 
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:50
-#, fuzzy
-#| msgid "GRASS GIS Manage Ground Control Points"
 msgid "GRASS Manage Ground Control Points"
-msgstr "GRASS GIS Gestore Punti di Controllo sul Terreno"
+msgstr "GRASS Gestore Punti di Controllo sul Terreno"
 
 #: ../gui/wxpython/iscatt/controllers.py:209
 msgid "No data set."
@@ -12157,10 +12154,8 @@ msgid "labels: "
 msgstr "etichette:"
 
 #: ../gui/wxpython/psmap/g.gui.psmap.py:52
-#, fuzzy
-#| msgid "Cartographic Composer - GRASS GIS"
 msgid "Cartographic Composer - GRASS"
-msgstr "Compositore cartografico - GRASS GIS"
+msgstr "Compositore cartografico - GRASS"
 
 #: ../gui/wxpython/psmap/instructions.py:157
 #, python-format
@@ -12579,10 +12574,8 @@ msgid "The raster map <%s> already exists. Please remove or rename the maps with
 msgstr "Il raster <%s> esiste già. Rimuove o rinominare le mappe con il prefisso '%s' o selezionare l'opzione per sovrascrivere le mappe esistenti"
 
 #: ../gui/wxpython/rlisetup/g.gui.rlisetup.py:48
-#, fuzzy
-#| msgid "GRASS GIS Setup for r.li modules"
 msgid "Setup for r.li modules - GRASS"
-msgstr "GRASS GIS Setup per i moduli r.li"
+msgstr "GRASS Setup per i moduli r.li"
 
 #: ../gui/wxpython/rlisetup/sampling_frame.py:234
 #: ../gui/wxpython/rlisetup/sampling_frame.py:350
@@ -13513,7 +13506,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Animation Tool - GRASS GIS"
 msgid "Timeline Tool - GRASS"
-msgstr "Strumento Animazione - GRASS GIS"
+msgstr "Strumento Animazione - GRASS"
 
 #: ../gui/wxpython/tplot/frame.py:48
 #, python-brace-format

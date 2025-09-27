@@ -17,14 +17,13 @@ space and are independent of the GIS's computation region.
 
 ## Attribute management
 
-The default database driver used by GRASS GIS 8 is SQLite. GRASS
+The default database driver used by GRASS 8 is SQLite. GRASS
 handles multiattribute vector data by default. The *db.\** set of
 commands provides basic SQL support for attribute management, while the
 *v.db.\** set of commands operates on vector maps.
 
 Note: The list of available database drivers can vary in various binary
-distributions of GRASS, for details see [SQL support in GRASS
-GIS](sql.md).
+distributions of GRASS, for details see [SQL support in GRASS](sql.md).
 
 ## Vector data import and export
 
