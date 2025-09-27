@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-13 15:39+0000\n"
+"POT-Creation-Date: 2025-09-20 16:33+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/de/>\n"
@@ -263,7 +263,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/gselect.py:1666
 #: ../gui/wxpython/location_wizard/wizard.py:1446
 #: ../gui/wxpython/location_wizard/wizard.py:1801
-#: ../gui/wxpython/modules/import_export.py:860
+#: ../gui/wxpython/modules/import_export.py:862
 #: ../gui/wxpython/nviz/tools.py:676 ../gui/wxpython/psmap/dialogs.py:2749
 #: ../gui/wxpython/psmap/dialogs.py:3055 ../gui/wxpython/psmap/dialogs.py:5796
 #: ../gui/wxpython/tplot/frame.py:376
@@ -1412,7 +1412,7 @@ msgid "More options..."
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/dialogs.py:44
-#: ../gui/wxpython/modules/import_export.py:966
+#: ../gui/wxpython/modules/import_export.py:968
 msgid "Reprojection"
 msgstr ""
 
@@ -1482,7 +1482,7 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/infomanager.py:54
-#: ../gui/wxpython/modules/import_export.py:600
+#: ../gui/wxpython/modules/import_export.py:602
 msgid "Import vector data"
 msgstr "Importiere Vektordaten"
 
@@ -3124,7 +3124,7 @@ msgstr "Wende Änderungen an und speichere sie in den Benutzereinstellungen (Sta
 #: ../gui/wxpython/image2target/ii2t_manager.py:2841
 #: ../gui/wxpython/iscatt/dialogs.py:411
 #: ../gui/wxpython/modules/import_export.py:129
-#: ../gui/wxpython/modules/import_export.py:760
+#: ../gui/wxpython/modules/import_export.py:762
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1999
 #: ../gui/wxpython/vnet/dialogs.py:1331
 #: ../gui/wxpython/web_services/dialogs.py:152
@@ -4878,7 +4878,7 @@ msgstr "Verzeichnis"
 
 #: ../gui/wxpython/gui_core/forms.py:2251
 #: ../gui/wxpython/modules/import_export.py:86
-#: ../gui/wxpython/modules/import_export.py:979
+#: ../gui/wxpython/modules/import_export.py:981
 msgid "Layer id"
 msgstr "Layer id"
 
@@ -5249,7 +5249,7 @@ msgid "Choose file"
 msgstr "Wählen die Datei"
 
 #: ../gui/wxpython/gui_core/gselect.py:1651
-#: ../gui/wxpython/gui_core/gselect.py:2775
+#: ../gui/wxpython/gui_core/gselect.py:2777
 msgid "Feature type:"
 msgstr "Objekttyp:"
 
@@ -5311,44 +5311,44 @@ msgstr ""
 msgid "PostgreSQL DB <{psql}> program was not found. Please, install it."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2646
-#: ../gui/wxpython/modules/import_export.py:504
+#: ../gui/wxpython/gui_core/gselect.py:2648
+#: ../gui/wxpython/modules/import_export.py:506
 msgid "The Python GDAL package is missing. Please install it."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2767
+#: ../gui/wxpython/gui_core/gselect.py:2769
 msgid "LineString"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2767
+#: ../gui/wxpython/gui_core/gselect.py:2769
 #: ../gui/wxpython/psmap/dialogs.py:6221 ../gui/wxpython/psmap/toolbars.py:103
 #: ../gui/wxpython/vdigit/preferences.py:729
 msgid "Point"
 msgstr "Punkt"
 
-#: ../gui/wxpython/gui_core/gselect.py:2767
+#: ../gui/wxpython/gui_core/gselect.py:2769
 msgid "Polygon"
 msgstr "Polygon"
 
-#: ../gui/wxpython/gui_core/gselect.py:2980
+#: ../gui/wxpython/gui_core/gselect.py:2982
 msgid "No vector map selected in layer manager. Operation canceled."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2999
+#: ../gui/wxpython/gui_core/gselect.py:3001
 msgid "Input vector map is not selected"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:3003
+#: ../gui/wxpython/gui_core/gselect.py:3005
 #, python-format
 msgid "Input vector map <%s> and selected map <%s> in layer manager are different. Operation canceled."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:3119
+#: ../gui/wxpython/gui_core/gselect.py:3121
 #, python-format
 msgid "Unable to import C imagery library functions: %s\n"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:3197
+#: ../gui/wxpython/gui_core/gselect.py:3199
 msgid "No vector map selected"
 msgstr ""
 
@@ -9918,7 +9918,7 @@ msgid "List of %s layers"
 msgstr " Liste von %s Ebenen"
 
 #: ../gui/wxpython/modules/import_export.py:81
-#: ../gui/wxpython/modules/import_export.py:1008
+#: ../gui/wxpython/modules/import_export.py:1010
 msgid "right click to (un)select all"
 msgstr ""
 
@@ -9932,13 +9932,13 @@ msgstr ""
 
 #: ../gui/wxpython/modules/import_export.py:134
 #: ../gui/wxpython/modules/import_export.py:457
-#: ../gui/wxpython/modules/import_export.py:619
+#: ../gui/wxpython/modules/import_export.py:621
 msgid "&Import"
 msgstr "&Import"
 
 #: ../gui/wxpython/modules/import_export.py:135
 #: ../gui/wxpython/modules/import_export.py:458
-#: ../gui/wxpython/modules/import_export.py:620
+#: ../gui/wxpython/modules/import_export.py:622
 msgid "Import selected layers"
 msgstr "Importiere ausgewählte Ebenen"
 
@@ -9969,84 +9969,84 @@ msgid "Link external raster data"
 msgstr "Einbindung externer Rasterdaten"
 
 #: ../gui/wxpython/modules/import_export.py:445
-#: ../gui/wxpython/modules/import_export.py:607
+#: ../gui/wxpython/modules/import_export.py:609
 msgid "Add linked layers into layer tree"
 msgstr "Verknüpfte Ebenen in den Ebenenbaum einfügen"
 
 #: ../gui/wxpython/modules/import_export.py:447
-#: ../gui/wxpython/modules/import_export.py:609
-#: ../gui/wxpython/modules/import_export.py:867
+#: ../gui/wxpython/modules/import_export.py:611
+#: ../gui/wxpython/modules/import_export.py:869
 msgid "Add imported layers into layer tree"
 msgstr "Importierte Ebenen der Baumstruktur hinzufügen"
 
 #: ../gui/wxpython/modules/import_export.py:454
-#: ../gui/wxpython/modules/import_export.py:616
+#: ../gui/wxpython/modules/import_export.py:618
 msgid "&Link"
 msgstr "&Link"
 
 #: ../gui/wxpython/modules/import_export.py:455
-#: ../gui/wxpython/modules/import_export.py:617
+#: ../gui/wxpython/modules/import_export.py:619
 msgid "Link selected layers"
 msgstr "Binde ausgewählte Ebenen ein"
 
 #: ../gui/wxpython/modules/import_export.py:478
-#: ../gui/wxpython/modules/import_export.py:640
+#: ../gui/wxpython/modules/import_export.py:642
 msgid "No layers selected. Operation canceled."
 msgstr "Keine Kartenebene selektiert. Operation abgebrochen."
 
-#: ../gui/wxpython/modules/import_export.py:523
+#: ../gui/wxpython/modules/import_export.py:525
 msgid "Unable to determine number of raster bands"
 msgstr ""
 
-#: ../gui/wxpython/modules/import_export.py:598
+#: ../gui/wxpython/modules/import_export.py:600
 msgid "Link external vector data"
 msgstr "Einbindung externer Vektordaten"
 
-#: ../gui/wxpython/modules/import_export.py:752
+#: ../gui/wxpython/modules/import_export.py:754
 msgid "Define output format for vector data"
 msgstr ""
 
-#: ../gui/wxpython/modules/import_export.py:754
+#: ../gui/wxpython/modules/import_export.py:756
 msgid "Define output format for raster data"
 msgstr ""
 
-#: ../gui/wxpython/modules/import_export.py:762
+#: ../gui/wxpython/modules/import_export.py:764
 msgid "Set external format and close dialog"
 msgstr ""
 
-#: ../gui/wxpython/modules/import_export.py:822
+#: ../gui/wxpython/modules/import_export.py:824
 msgid "No data source selected."
 msgstr ""
 
-#: ../gui/wxpython/modules/import_export.py:846
+#: ../gui/wxpython/modules/import_export.py:848
 msgid "Import DXF layers"
 msgstr "Importiere DXF-Layer"
 
-#: ../gui/wxpython/modules/import_export.py:859
+#: ../gui/wxpython/modules/import_export.py:861
 msgid "Choose DXF file to import"
 msgstr "Wählen Sie zu importierende DXF-Datei"
 
-#: ../gui/wxpython/modules/import_export.py:879
+#: ../gui/wxpython/modules/import_export.py:881
 msgid "No layers selected."
 msgstr ""
 
-#: ../gui/wxpython/modules/import_export.py:979
+#: ../gui/wxpython/modules/import_export.py:981
 msgid "Name for output GRASS map"
 msgstr ""
 
-#: ../gui/wxpython/modules/import_export.py:1001
+#: ../gui/wxpython/modules/import_export.py:1003
 msgid "Projection of following layers do not match with projection of current location. "
 msgstr ""
 
-#: ../gui/wxpython/modules/import_export.py:1006
+#: ../gui/wxpython/modules/import_export.py:1008
 msgid "Layers to be reprojected"
 msgstr ""
 
-#: ../gui/wxpython/modules/import_export.py:1019
+#: ../gui/wxpython/modules/import_export.py:1021
 msgid "&Import && reproject"
 msgstr "&Importieren && neu projizieren"
 
-#: ../gui/wxpython/modules/import_export.py:1021
+#: ../gui/wxpython/modules/import_export.py:1023
 msgid "Reproject selected layers"
 msgstr ""
 
