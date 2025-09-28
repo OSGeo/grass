@@ -41,8 +41,8 @@ static int get_reclass_table(FILE *, struct Reclass *, char **);
  * \return 0 if it is not
  * \return -1 if there was a problem reading the raster header
  */
-int Rast_is_reclass(const char *name, const char *mapset, char *rname,
-                    char *rmapset)
+int Rast_is_reclass(const char *name, const char *mapset, char rname[GNAME_MAX],
+                    char rmapset[GMAPSET_MAX])
 {
     FILE *fd;
     int type;
@@ -142,15 +142,16 @@ int Rast_get_reclass(const char *name, const char *mapset,
 {
     FILE *fd;
     int stat;
+    char rname[GNAME_MAX] = {0}, rmapset[GMAPSET_MAX] = {0};
+    char *tmp_name = rname, *tmp_mapset = rmapset;
 
     fd = fopen_cellhd_old(name, mapset);
     if (fd == NULL)
         return -1;
-    reclass->name = NULL;
-    reclass->mapset = NULL;
     char *error_message = NULL;
-    reclass->type =
-        reclass_type(fd, &reclass->name, &reclass->mapset, &error_message);
+    reclass->type = reclass_type(fd, &tmp_name, &tmp_mapset, &error_message);
+    reclass->name = G_store(tmp_name);
+    reclass->mapset = G_store(tmp_mapset);
     if (reclass->type == 0) {
         // no reclass
         fclose(fd);
@@ -267,17 +268,11 @@ static int reclass_type(FILE *fd, char **rname, char **rmapset,
             }
             return -1;
         }
-        if (strncmp(label, "maps", 4) == 0) {
-            if (*rmapset)
-                strcpy(*rmapset, arg);
-            else
-                *rmapset = G_store(arg);
+        if (strncmp(label, "maps", 4) == 0 && *rmapset) {
+            G_strlcpy(*rmapset, arg, GMAPSET_MAX);
         }
-        else if (strncmp(label, "name", 4) == 0) {
-            if (*rname)
-                strcpy(*rname, arg);
-            else
-                *rname = G_store(arg);
+        else if (strncmp(label, "name", 4) == 0 && *rname) {
+            G_strlcpy(*rname, arg, GNAME_MAX);
         }
         else {
             if (error_message != NULL) {
@@ -286,7 +281,7 @@ static int reclass_type(FILE *fd, char **rname, char **rmapset,
             return -1;
         }
     }
-    if (**rmapset && **rname)
+    if ((*rmapset && **rmapset) || (*rname && **rname))
         return type;
     else {
         // If they do not occur in the two lines we expect them.
