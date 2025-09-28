@@ -10,6 +10,7 @@
 extern JSON_Value *G_json_value_init_object(void);
 extern JSON_Value *G_json_value_init_array(void);
 
+extern JSON_Value_Type G_json_value_get_type(const JSON_Value *value);
 extern JSON_Object *G_json_value_get_object(const JSON_Value *);
 extern JSON_Object *G_json_object(const JSON_Value *);
 extern JSON_Object *G_json_object_get_object(const JSON_Object *, const char *);

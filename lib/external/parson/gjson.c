@@ -31,6 +31,11 @@ JSON_Value *G_json_value_init_array(void)
     return json_value_init_array();
 }
 
+JSON_Value_Type G_json_value_get_type(const JSON_Value *value)
+{
+    return json_value_get_type(value);
+}
+
 JSON_Object *G_json_value_get_object(const JSON_Value *value)
 {
     return json_value_get_object(value);
