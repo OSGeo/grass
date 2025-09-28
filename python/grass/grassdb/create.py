@@ -22,17 +22,26 @@ from pathlib import Path
 from grass.grassdb.manage import resolve_mapset_path, MapsetPath
 
 
-def create_xy_project(path: Path | str):
+def create_xy_project(path: Path | str) -> None:
+    """Create a project with with general cartesian coordinate system (XY)
+
+    :raises: OSError on error related to the file system
+    """
     _create_project_dir(path)
     # create DEFAULT_WIND and WIND files
-    _add_computation_region_to_project_dir(path, projection=0, zone=0)
+    _add_computation_region_to_project_dir(path, crs_type_code=0, zone=0)
 
 
-def _create_project_dir(path: Path | str):
+def _create_project_dir(path: Path | str) -> Path:
+    """Create an empty project directory including directory for the default mapset
+
+    :returns: Path to the default mapset
+    """
     project_dir = Path(path)
     permanent_dir = project_dir / "PERMANENT"
     project_dir.mkdir()
     permanent_dir.mkdir()
+    return permanent_dir
 
 
 def _set_project_description(path: Path | str, text: str):
@@ -49,33 +58,33 @@ def _set_project_description(path: Path | str, text: str):
 
 
 def _add_computation_region_to_project_dir(
-    path: Path | str, projection: int | None = None, zone: int | None = None
+    path: Path | str, *, crs_type_code: int | None = None, zone: int | None = None
 ):
     """Add computational region to project directory
 
     Creates both the default and the current compuational regions.
     If the file already exists, it is overwritten.
     """
-    project_dir = Path(path)
-    permanent_dir = project_dir / "PERMANENT"
+    permanent_dir = Path(path) / "PERMANENT"
     default_wind_path = permanent_dir / "DEFAULT_WIND"
     wind_path = permanent_dir / "WIND"
+    size: float = 1
     regioninfo = [
-        f"proj:      {projection if projection is not None else 0}",
-        f"zone:      {zone if zone is not None else 0}",
-        "north:      1",
+        f"proj:       {crs_type_code if crs_type_code is not None else 0}",
+        f"zone:       {zone if zone is not None else 0}",
+        f"north:      {size}",
         "south:      0",
-        "east:       1",
+        f"east:       {size}",
         "west:       0",
-        "cols:       1",
-        "rows:       1",
+        f"cols:       {size}",
+        f"rows:       {size}",
         "e-w resol:  1",
         "n-s resol:  1",
-        "top:        1",
+        f"top:        {size}",
         "bottom:     0",
-        "cols3:      1",
-        "rows3:      1",
-        "depths:     1",
+        f"cols3:      {size}",
+        f"rows3:      {size}",
+        f"depths:     {size}",
         "e-w resol3: 1",
         "n-s resol3: 1",
         "t-b resol:  1",
@@ -139,11 +148,17 @@ def set_project_crs_from_pack(mapset_path: MapsetPath, filename: str):
         data_names = [
             tarinfo.name for tarinfo in tar.getmembers() if "/" not in tarinfo.name
         ]
-        tar_info = tar.getmember(data_names[0] + "/" + "computational_region_crs.json")
+        try:
+            tar_info = tar.getmember(
+                data_names[0] + "/" + "computational_region_crs.json"
+            )
+        except KeyError as error:
+            msg = "Missing complete CRS info: Use pack from version 8.5 (2025) or above"
+            raise ValueError(msg) from error
         data = json.loads(tar.extractfile(tar_info).read().decode("utf-8"))
         _add_computation_region_to_project_dir(
             Path(mapset_path.directory) / mapset_path.location,
-            projection=data["projection"],
+            crs_type_code=data["projection"],
             zone=data["zone"],
         )
 
