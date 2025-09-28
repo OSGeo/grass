@@ -22,25 +22,20 @@ from icons.icon import MetaIcon
 icons = {
     "reloadTree": MetaIcon(img="redraw", label=_("Reload GRASS projects")),
     "reloadMapset": MetaIcon(img="reload", label=_("Reload current GRASS mapset only")),
-    "unlocked": MetaIcon(
-        img="edit", label=_("Restrict edits to the current mapset only")
-    ),
-    "locked": MetaIcon(
-        img="edit", label=_("Allow edits outside of the current mapset")
-    ),
-    "addGrassDB": MetaIcon(
-        img="grassdb-add", label=_("Add existing or create new database")
-    ),
     "addMapset": MetaIcon(
         img="mapset-add", label=_("Create new mapset in current project")
     ),
-    "addLocation": MetaIcon(
+    "addProject": MetaIcon(
         img="location-add",
-        label=_("Create new project (location) in current GRASS database"),
+        label=_("Add an existing project"),
+    ),
+    "createProject": MetaIcon(
+        img="location-create",
+        label=_("Create new project"),
     ),
     "downloadLocation": MetaIcon(
         img="location-download",
-        label=_("Download sample project (location) to current GRASS database"),
+        label=_("Download sample project"),
     ),
     "importRaster": MetaIcon(
         img="raster-import", label=_("Import raster data  [r.import]")
@@ -126,20 +121,14 @@ class DataCatalogToolbar(BaseToolbar):
                     self.parent.OnReloadCurrentMapset,
                 ),
                 (
-                    ("lock", icons["locked"].label),
-                    icons["locked"],
-                    self.OnSetRestriction,
-                    wx.ITEM_CHECK,
-                ),
-                (
-                    ("addGrassDB", icons["addGrassDB"].label),
-                    icons["addGrassDB"],
-                    self.parent.OnAddGrassDB,
-                ),
-                (
-                    ("addLocation", icons["addLocation"].label),
-                    icons["addLocation"],
+                    ("createProject", icons["createProject"].label),
+                    icons["createProject"],
                     self.parent.OnCreateLocation,
+                ),
+                (
+                    ("addProject", icons["addProject"].label),
+                    icons["addProject"],
+                    self.parent.OnAddProject,
                 ),
                 (
                     ("downloadLocation", icons["downloadLocation"].label),
@@ -168,13 +157,3 @@ class DataCatalogToolbar(BaseToolbar):
                 ),
             )
         )
-
-    def OnSetRestriction(self, event):
-        if self.GetToolState(self.lock):
-            self.SetToolNormalBitmap(self.lock, icons["unlocked"].GetBitmap())
-            self.SetToolShortHelp(self.lock, icons["unlocked"].GetLabel())
-            self.parent.SetRestriction(restrict=False)
-        else:
-            self.SetToolNormalBitmap(self.lock, icons["locked"].GetBitmap())
-            self.SetToolShortHelp(self.lock, icons["locked"].GetLabel())
-            self.parent.SetRestriction(restrict=True)

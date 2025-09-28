@@ -227,7 +227,7 @@ class DataCatalogTree(TreeView):
         super().__init__(parent=parent, model=self._model, id=wx.ID_ANY, style=style)
 
         self._giface = giface
-        self._restricted = True
+        self._restricted = False
 
         self.showNotification = Signal("Tree.showNotification")
         self.showImportDataInfo = Signal("Tree.showImportDataInfo")
