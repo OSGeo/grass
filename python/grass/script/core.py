@@ -1944,6 +1944,8 @@ def create_location(*args, **kwargs):
 def create_project(
     path,
     name=None,
+    *,
+    crs=None,
     epsg=None,
     proj4=None,
     filename=None,
@@ -2012,6 +2014,21 @@ def create_project(
             msg = f"Project <{mapset_path.location}> already exists"
             raise ScriptError(msg)
         shutil.rmtree(os.path.join(mapset_path.directory, mapset_path.location))
+
+    # translate crs to specific case
+    if crs:
+        if str(crs).upper() == "XY":
+            epsg = proj4 = filename = wkt = pack = None
+        elif str(crs).upper().startswith("EPSG:"):
+            epsg = str(crs).split(":", 1)[1]
+            if ":" in epsg:
+                epsg, datum_trans = epsg.split(":", 1)
+            else:
+                datum_trans = None
+        elif any(str(crs).endswith(ext) for ext in [".grass_raster", ".grr", ".rpack"]):
+            pack = crs
+        else:
+            filename = crs
 
     stdin = None
     kwargs = {}

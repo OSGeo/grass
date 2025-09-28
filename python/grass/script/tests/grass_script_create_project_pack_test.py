@@ -1,5 +1,6 @@
 """Test functions in grass.script.setup"""
 
+import shutil
 import os
 
 import pytest
@@ -8,9 +9,22 @@ import grass.script as gs
 from grass.tools import Tools
 
 
-def test_raster_pack_crs(tmp_path, pack_raster_file4x5_rows):
+def test_raster_pack_pack_param(tmp_path, pack_raster_file4x5_rows):
     project = tmp_path / "test"
     gs.create_project(project, pack=pack_raster_file4x5_rows)
+    with (
+        gs.setup.init(project, env=os.environ.copy()) as session,
+        Tools(session=session) as tools,
+    ):
+        assert tools.g_proj(flags="p", format="shell").keyval["srid"] == "EPSG:3358"
+
+
+@pytest.mark.parametrize("suffix", [".rpack", ".grass_raster", ".grr"])
+def test_raster_pack_crs_param_extensions(tmp_path, pack_raster_file4x5_rows, suffix):
+    project = tmp_path / "test"
+    test_file = tmp_path / f"test{suffix}"
+    shutil.copy(pack_raster_file4x5_rows, test_file)
+    gs.create_project(project, crs=pack_raster_file4x5_rows)
     with (
         gs.setup.init(project, env=os.environ.copy()) as session,
         Tools(session=session) as tools,
