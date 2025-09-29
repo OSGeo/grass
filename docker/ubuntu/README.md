@@ -84,7 +84,6 @@ DOCKER_BUILDKIT=1 docker build . \
 docker run -it grass-stable-ubuntu:latest grass -h
 ```
 
-
 __To build and run a latest version with wxgui__:
 
 The `GUI` build argument allows choosing if the GUI should
