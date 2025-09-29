@@ -83,7 +83,7 @@ jobs:
         env:
           CFLAGS: -std=gnu11
           CXXFLAGS: -std=c++11
-        run: .github/workflows/build_ubuntu-22.04.sh "${HOME}/install"
+        run: .github/workflows/build_ubuntu-24.04.sh "${HOME}/install"
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@3599b3baa15b485a2e49ef411a7a4bb2452e7f93 # v3.30.5
