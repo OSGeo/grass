@@ -255,9 +255,8 @@ int main(int argc, char **argv)
 
     if (lseek(fe, 0, SEEK_SET) == -1 || lseek(fd, 0, SEEK_SET) == -1) {
         int err = errno;
-        /* GTC seek refers to reading/writing from a different position
-         * in a file */
-        G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
     }
 
     new_id = Rast_open_new(new_map_name, in_type);
@@ -266,9 +265,8 @@ int main(int argc, char **argv)
     if (opt5->answer != NULL) {
         if (lseek(fm, 0, SEEK_SET) == -1) {
             int err = errno;
-            /* GTC seek refers to reading/writing from a different position
-             * in a file */
-            G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+            G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                          strerror(err), err);
         }
         bas_id = Rast_open_new(bas_name, CELL_TYPE);
 

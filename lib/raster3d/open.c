@@ -300,9 +300,8 @@ void *Rast3d_open_cell_new(const char *name, int typeIntern, int cache,
     nofHeaderBytes = lseek(map->data_fd, (long)0, SEEK_CUR);
     if (nofHeaderBytes == -1) {
         int err = errno;
-        /* GTC seek refers to reading/writing from a different position
-         * in a file */
-        Rast3d_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+        Rast3d_error(_("File read/write operation failed: %s (%d)"),
+                     strerror(err), err);
         return (void *)NULL;
     }
 

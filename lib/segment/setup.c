@@ -54,9 +54,8 @@ int seg_setup(SEGMENT *SEG)
     SEG->offset = (int)lseek(SEG->fd, 0L, SEEK_CUR);
     if (SEG->offset == -1) {
         int err = errno;
-        /* GTC seek refers to reading/writing from a different position
-         * in a file */
-        G_warning(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+        G_warning(_("File read/write operation failed: %s (%d)"), strerror(err),
+                  err);
         return -1;
     }
 

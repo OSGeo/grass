@@ -512,10 +512,8 @@ int main(int argc, char **argv)
             }
             if (lseek(fe, (off_t)thispoint->row * bsz, SEEK_SET) == -1) {
                 int err = errno;
-                /* GTC seek refers to reading/writing from a different position
-                 * in a file */
-                G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
-                              strerror(err));
+                G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                              strerror(err), err);
             }
             read(fe, in_buf, bsz);
             memcpy(&thispoint->value, (char *)in_buf + bpe() * thispoint->col,
@@ -637,9 +635,8 @@ struct point *drain(int fd, struct point *list, int nrow, int ncol)
         /* find flow direction at this point */
         if (lseek(fd, (off_t)list->row * ncol * sizeof(CELL), SEEK_SET) == -1) {
             int err = errno;
-            /* GTC seek refers to reading/writing from a different position
-             * in a file */
-            G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+            G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                          strerror(err), err);
         }
         read(fd, dir, ncol * sizeof(CELL));
         direction = *(dir + list->col);
@@ -714,9 +711,8 @@ struct point *drain_cost(int dir_fd, struct point *list, int nrow, int ncol)
         if (lseek(dir_fd, (off_t)list->row * ncol * sizeof(DCELL), SEEK_SET) ==
             -1) {
             int err = errno;
-            /* GTC seek refers to reading/writing from a different position
-             * in a file */
-            G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+            G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                          strerror(err), err);
         }
         read(dir_fd, dir_buf, ncol * sizeof(DCELL));
         direction = *(dir_buf + list->col);

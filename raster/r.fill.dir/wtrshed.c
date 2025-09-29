@@ -105,10 +105,8 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
 
             if (lseek(fm, bas[i].offset, SEEK_SET) == -1) {
                 int err = errno;
-                /* GTC seek refers to reading/writing from a different position
-                 * in a file */
-                G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
-                              strerror(err));
+                G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                              strerror(err), err);
             }
             if (read(fm, bas[i].p, bufsz) < 0)
                 G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
@@ -116,10 +114,8 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
 
             if (lseek(fd, dir[i].offset, SEEK_SET) == -1) {
                 int err = errno;
-                /* GTC seek refers to reading/writing from a different position
-                 * in a file */
-                G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
-                              strerror(err));
+                G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                              strerror(err), err);
             }
             if (read(fd, dir[i].p, bufsz) < 0)
                 G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
@@ -141,10 +137,8 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
             /* write one line */
             if (lseek(fm, bas[sline].offset, SEEK_SET) == -1) {
                 int err = errno;
-                /* GTC seek refers to reading/writing from a different position
-                 * in a file */
-                G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
-                              strerror(err));
+                G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                              strerror(err), err);
             }
             if (write(fm, bas[sline].p, bufsz) < 0)
                 G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
@@ -168,10 +162,9 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
 
                 if (lseek(fm, bas[mxbuf - 1].offset, SEEK_SET) == -1) {
                     int err = errno;
-                    /* GTC seek refers to reading/writing from a different
-                     * position in a file */
-                    G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
-                                  strerror(err));
+                    G_fatal_error(
+                        _("File read/write operation failed: %s (%d)"),
+                        strerror(err), err);
                 }
                 if (read(fm, bas[mxbuf - 1].p, bufsz) < 0)
                     G_fatal_error(_("File reading error in %s() %d:%s"),
@@ -179,10 +172,9 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
 
                 if (lseek(fd, dir[mxbuf - 1].offset, SEEK_SET) == -1) {
                     int err = errno;
-                    /* GTC seek refers to reading/writing from a different
-                     * position in a file */
-                    G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
-                                  strerror(err));
+                    G_fatal_error(
+                        _("File read/write operation failed: %s (%d)"),
+                        strerror(err), err);
                 }
                 if (read(fd, dir[mxbuf - 1].p, bufsz) < 0)
                     G_fatal_error(_("File reading error in %s() %d:%s"),
@@ -206,10 +198,8 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
 
             if (lseek(fm, bas[i].offset, SEEK_SET) == -1) {
                 int err = errno;
-                /* GTC seek refers to reading/writing from a different position
-                 * in a file */
-                G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
-                              strerror(err));
+                G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                              strerror(err), err);
             }
             if (read(fm, bas[i].p, bufsz) < 0)
                 G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
@@ -217,10 +207,8 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
 
             if (lseek(fd, dir[i].offset, SEEK_SET) == -1) {
                 int err = errno;
-                /* GTC seek refers to reading/writing from a different position
-                 * in a file */
-                G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
-                              strerror(err));
+                G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                              strerror(err), err);
             }
             if (read(fd, dir[i].p, bufsz) < 0)
                 G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
@@ -243,10 +231,8 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
             /* write one line */
             if (lseek(fm, bas[nline - 1].offset, SEEK_SET) == -1) {
                 int err = errno;
-                /* GTC seek refers to reading/writing from a different position
-                 * in a file */
-                G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
-                              strerror(err));
+                G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                              strerror(err), err);
             }
             if (write(fm, bas[nline - 1].p, bufsz) < 0)
                 G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
@@ -269,10 +255,9 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
 
                 if (lseek(fm, bas[0].offset, SEEK_SET) == -1) {
                     int err = errno;
-                    /* GTC seek refers to reading/writing from a different
-                     * position in a file */
-                    G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
-                                  strerror(err));
+                    G_fatal_error(
+                        _("File read/write operation failed: %s (%d)"),
+                        strerror(err), err);
                 }
                 if (read(fm, bas[0].p, bufsz) < 0)
                     G_fatal_error(_("File reading error in %s() %d:%s"),
@@ -280,10 +265,9 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
 
                 if (lseek(fd, dir[0].offset, SEEK_SET) == -1) {
                     int err = errno;
-                    /* GTC seek refers to reading/writing from a different
-                     * position in a file */
-                    G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
-                                  strerror(err));
+                    G_fatal_error(
+                        _("File read/write operation failed: %s (%d)"),
+                        strerror(err), err);
                 }
                 if (read(fd, dir[0].p, bufsz) < 0)
                     G_fatal_error(_("File reading error in %s() %d:%s"),

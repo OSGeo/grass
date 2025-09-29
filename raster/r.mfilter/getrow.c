@@ -21,17 +21,15 @@ int getrow(int fd, void *buf, int row, int len)
     if (direction > 0) {
         if (lseek(fd, (off_t)row * len, 0) == -1) {
             int err = errno;
-            /* GTC seek refers to reading/writing from a different position
-             * in a file */
-            G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+            G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                          strerror(err), err);
         }
     }
     else {
         if (lseek(fd, (off_t)(nrows - row - 1) * len, 0) == -1) {
             int err = errno;
-            /* GTC seek refers to reading/writing from a different position
-             * in a file */
-            G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+            G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                          strerror(err), err);
         }
     }
     if (read(fd, (DCELL *)buf, len) != len)

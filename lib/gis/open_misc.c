@@ -157,9 +157,8 @@ int G_open_update_misc(const char *dir, const char *element, const char *name)
     if (fd >= 0)
         if (lseek(fd, 0L, SEEK_END) == -1) {
             int err = errno;
-            /* GTC seek refers to reading/writing from a different position
-             * in a file */
-            G_warning(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+            G_warning(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
             return -1;
         }
 
@@ -230,9 +229,8 @@ FILE *G_fopen_append_misc(const char *dir, const char *element,
         return (FILE *)0;
     if (lseek(fd, 0L, SEEK_END) == -1) {
         int err = errno;
-        /* GTC seek refers to reading/writing from a different position
-         * in a file */
-        G_warning(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+        G_warning(_("File read/write operation failed: %s (%d)"), strerror(err),
+                  err);
         return (FILE *)-1;
     }
 
@@ -249,9 +247,8 @@ FILE *G_fopen_modify_misc(const char *dir, const char *element,
         return (FILE *)0;
     if (lseek(fd, 0L, SEEK_END) == -1) {
         int err = errno;
-        /* GTC seek refers to reading/writing from a different position
-         * in a file */
-        G_warning(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+        G_warning(_("File read/write operation failed: %s (%d)"), strerror(err),
+                  err);
         return (FILE *)-1;
     }
 

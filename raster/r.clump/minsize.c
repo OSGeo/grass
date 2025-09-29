@@ -152,9 +152,8 @@ static int update_cid_box(int cfd, int rowmin, int rowmax, int colmin,
         coffset = (off_t)row * csize + colmin * sizeof(CELL);
         if (lseek(cfd, coffset, SEEK_SET) == -1) {
             int err = errno;
-            /* GTC seek refers to reading/writing from a different position
-             * in a file */
-            G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+            G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                          strerror(err), err);
         }
         if (read(cfd, cbuf, csizebox) != csizebox)
             G_fatal_error(_("Unable to read from temp file"));
@@ -168,9 +167,8 @@ static int update_cid_box(int cfd, int rowmin, int rowmax, int colmin,
 
         if (lseek(cfd, coffset, SEEK_SET) == -1) {
             int err = errno;
-            /* GTC seek refers to reading/writing from a different position
-             * in a file */
-            G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+            G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                          strerror(err), err);
         }
         if (write(cfd, cbuf, csizebox) != csizebox)
             G_fatal_error(_("Unable to write to temp file"));
@@ -262,10 +260,9 @@ static int find_best_neighbour(int bfd, int nin, DCELL *rng, int cfd, int csize,
                 coffset = (off_t)rown * csize;
                 if (lseek(cfd, coffset, SEEK_SET) == -1) {
                     int err = errno;
-                    /* GTC seek refers to reading/writing from a different
-                     * position in a file */
-                    G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
-                                  strerror(err));
+                    G_fatal_error(
+                        _("File read/write operation failed: %s (%d)"),
+                        strerror(err), err);
                 }
                 if (read(cfd, cbuf, csize) != csize)
                     G_fatal_error(_("Unable to read from temp file"));
@@ -302,10 +299,9 @@ static int find_best_neighbour(int bfd, int nin, DCELL *rng, int cfd, int csize,
                                       (next.row * ncols + next.col);
                             if (lseek(bfd, boffset, SEEK_SET) == -1) {
                                 int err = errno;
-                                /* GTC seek refers to reading/writing from a
-                                 * different position in a file */
-                                G_fatal_error(_("Unable to seek: %1$d %2$s"),
-                                              err, strerror(err));
+                                G_fatal_error(_("File read/write operation "
+                                                "failed: %s (%d)"),
+                                              strerror(err), err);
                             }
                             if (read(bfd, val, bsize) != bsize)
                                 G_fatal_error(
@@ -315,10 +311,9 @@ static int find_best_neighbour(int bfd, int nin, DCELL *rng, int cfd, int csize,
                         boffset = (off_t)sizeof(DCELL) * (rown * ncols + coln);
                         if (lseek(bfd, boffset, SEEK_SET) == -1) {
                             int err = errno;
-                            /* GTC seek refers to reading/writing from a
-                             * different position in a file */
-                            G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
-                                          strerror(err));
+                            G_fatal_error(
+                                _("File read/write operation failed: %s (%d)"),
+                                strerror(err), err);
                         }
                         if (read(bfd, valn, bsize) != bsize)
                             G_fatal_error(_("Unable to read from temp file"));
@@ -446,9 +441,8 @@ int merge_small_clumps(int *in_fd, int nin, DCELL *rng, int diag, int minsize,
     /* rewind temp file */
     if (lseek(cfd, 0, SEEK_SET) == -1) {
         int err = errno;
-        /* GTC seek refers to reading/writing from a different position
-         * in a file */
-        G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
     }
 
     G_message(_("Merging clumps smaller than %d cells..."), minsize);
@@ -480,10 +474,8 @@ int merge_small_clumps(int *in_fd, int nin, DCELL *rng, int diag, int minsize,
             coffset = (off_t)row * csize + col * size1;
             if (lseek(cfd, coffset, SEEK_SET) == -1) {
                 int err = errno;
-                /* GTC seek refers to reading/writing from a different position
-                 * in a file */
-                G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
-                              strerror(err));
+                G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                              strerror(err), err);
             }
             if (read(cfd, &this_id, size1) != size1)
                 G_fatal_error(_("Unable to read from temp file"));
@@ -554,9 +546,8 @@ int merge_small_clumps(int *in_fd, int nin, DCELL *rng, int diag, int minsize,
     /* rewind temp file */
     if (lseek(cfd, 0, SEEK_SET) == -1) {
         int err = errno;
-        /* GTC seek refers to reading/writing from a different position
-         * in a file */
-        G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
     }
 
     for (row = 0; row < nrows; row++) {

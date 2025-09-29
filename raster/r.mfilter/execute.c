@@ -79,9 +79,8 @@ int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
     /* rewind output */
     if (lseek(out[MASTER], 0L, SEEK_SET) == -1) {
         int err = errno;
-        /* GTC seek refers to reading/writing from a different position
-         * in a file */
-        G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
     }
 
     /* copy border rows to output */
@@ -112,10 +111,8 @@ int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
             starty += start * dy;
             if (lseek(out[id], (off_t)buflen * (mid + start), SEEK_SET) == -1) {
                 int err = errno;
-                /* GTC seek refers to reading/writing from a different position
-                 * in a file */
-                G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
-                              strerror(err));
+                G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                              strerror(err), err);
             }
         }
 #endif
@@ -165,9 +162,8 @@ int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
     starty = rcount * dy;
     if (lseek(out[MASTER], (off_t)buflen * (mid + rcount), SEEK_SET) == -1) {
         int err = errno;
-        /* GTC seek refers to reading/writing from a different position
-         * in a file */
-        G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
     }
 
     /* copy border rows to output */

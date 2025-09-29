@@ -142,9 +142,8 @@ static void set_file_pointer(int fd, int row)
     fcb->row_ptr[row] = lseek(fcb->data_fd, 0L, SEEK_CUR);
     if (fcb->row_ptr[row] == -1) {
         int err = errno;
-        /* GTC seek refers to reading/writing from a different position
-         * in a file */
-        G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
     }
 }
 
@@ -522,9 +521,8 @@ static void write_null_bits_compressed(const unsigned char *flags, int row,
     fcb->null_row_ptr[row] = lseek(fcb->null_fd, 0L, SEEK_CUR);
     if (fcb->null_row_ptr[row] == -1) {
         int err = errno;
-        /* GTC seek refers to reading/writing from a different position
-         * in a file */
-        G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
     }
 
     /* get upper bound of compressed size */

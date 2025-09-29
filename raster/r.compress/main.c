@@ -167,9 +167,8 @@ static int process(char *name, int uncompress)
     oldsize = lseek(data_fd, (off_t)0, SEEK_END);
     if (oldsize == -1) {
         int err = errno;
-        /* GTC seek refers to reading/writing from a different position
-         * in a file */
-        G_warning(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+        G_warning(_("File read/write operation failed: %s (%d)"), strerror(err),
+                  err);
         return 1;
     }
     close(data_fd);
@@ -200,9 +199,8 @@ static int process(char *name, int uncompress)
     newsize = lseek(data_fd, (off_t)0, SEEK_END);
     if (newsize == -1) {
         int err = errno;
-        /* GTC seek refers to reading/writing from a different position
-         * in a file */
-        G_warning(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+        G_warning(_("File read/write operation failed: %s (%d)"), strerror(err),
+                  err);
         return 1;
     }
     close(data_fd);

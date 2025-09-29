@@ -740,9 +740,8 @@ int write_raster(int mv_fd, int random_access, struct g_area *g)
     file_buf = G_malloc(cols * sizeof(double));
     if (lseek(random_access, 0, SEEK_SET) == -1) {
         int err = errno;
-        /* GTC seek refers to reading/writing from a different position
-         * in a file */
-        G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
     }
 
     cell_buf = Rast_allocate_d_buf();

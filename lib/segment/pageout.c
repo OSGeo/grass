@@ -38,9 +38,8 @@ int seg_pageout(SEGMENT *SEG, int i)
 {
     if (SEG->seek(SEG, SEG->scb[i].n, 0) == -1) {
         int err = errno;
-        /* GTC seek refers to reading/writing from a different position
-         * in a file */
-        G_warning(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+        G_warning(_("File read/write operation failed: %s (%d)"), strerror(err),
+                  err);
         return -1;
     }
     errno = 0;

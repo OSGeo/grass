@@ -69,9 +69,8 @@ static int read_row(int file, void *buf, int row, int buf_len)
 {
     if (lseek(file, ((off_t)row) * buf_len, 0) == -1) {
         int err = errno;
-        /* GTC seek refers to reading/writing from a different position
-         * in a file */
-        G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
     }
     return (read(file, buf, buf_len) == buf_len);
 }
@@ -80,9 +79,8 @@ static int write_row(int file, const void *buf, int row, int buf_len)
 {
     if (lseek(file, ((off_t)row) * buf_len, 0) == -1) {
         int err = errno;
-        /* GTC seek refers to reading/writing from a different position
-         * in a file */
-        G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
     }
     return (write(file, buf, buf_len) == buf_len);
 }

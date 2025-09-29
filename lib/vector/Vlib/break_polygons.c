@@ -236,10 +236,9 @@ void Vect_break_polygons_file(struct Map_info *Map, int type,
                 if (lseek(xpntfd, (off_t)(fpoint - 1) * sizeof(XPNT2),
                           SEEK_SET) == -1) {
                     int err = errno;
-                    /* GTC seek refers to reading/writing from a different
-                     * position in a file */
-                    G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
-                                  strerror(err));
+                    G_fatal_error(
+                        _("File read/write operation failed: %s (%d)"),
+                        strerror(err), err);
                 }
                 if (read(xpntfd, &XPnt, sizeof(XPNT2)) < 0)
                     G_fatal_error(_("File reading error in %s() %d:%s"),
@@ -254,10 +253,9 @@ void Vect_break_polygons_file(struct Map_info *Map, int type,
                     if (lseek(xpntfd, (off_t)(fpoint - 1) * sizeof(XPNT2),
                               SEEK_SET) == -1) {
                         int err = errno;
-                        /* GTC seek refers to reading/writing from a different
-                         * position in a file */
-                        G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
-                                      strerror(err));
+                        G_fatal_error(
+                            _("File read/write operation failed: %s (%d)"),
+                            strerror(err), err);
                     }
                     if (write(xpntfd, &XPnt, sizeof(XPNT2)) < 0)
                         G_fatal_error(_("File writing error in %s() %d:%s"),
@@ -275,10 +273,9 @@ void Vect_break_polygons_file(struct Map_info *Map, int type,
                         if (lseek(xpntfd, (off_t)(fpoint - 1) * sizeof(XPNT2),
                                   SEEK_SET) == -1) {
                             int err = errno;
-                            /* GTC seek refers to reading/writing from a
-                             * different position in a file */
-                            G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
-                                          strerror(err));
+                            G_fatal_error(
+                                _("File read/write operation failed: %s (%d)"),
+                                strerror(err), err);
                         }
                         if (write(xpntfd, &XPnt, sizeof(XPNT2)) < 0)
                             G_fatal_error(_("File writing error in %s() %d:%s"),
@@ -304,10 +301,9 @@ void Vect_break_polygons_file(struct Map_info *Map, int type,
                 if (lseek(xpntfd, (off_t)(npoints - 1) * sizeof(XPNT2),
                           SEEK_SET) == -1) {
                     int err = errno;
-                    /* GTC seek refers to reading/writing from a different
-                     * position in a file */
-                    G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
-                                  strerror(err));
+                    G_fatal_error(
+                        _("File read/write operation failed: %s (%d)"),
+                        strerror(err), err);
                 }
                 if (write(xpntfd, &XPnt, sizeof(XPNT2)) < 0)
                     G_fatal_error(_("File writing error in %s() %d:%s"),
@@ -370,10 +366,8 @@ void Vect_break_polygons_file(struct Map_info *Map, int type,
             if (lseek(xpntfd, (off_t)(fpoint - 1) * sizeof(XPNT2), SEEK_SET) ==
                 -1) {
                 int err = errno;
-                /* GTC seek refers to reading/writing from a different position
-                 * in a file */
-                G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
-                              strerror(err));
+                G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                              strerror(err), err);
             }
             if (read(xpntfd, &XPnt, sizeof(XPNT2)) < 0)
                 G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
@@ -414,10 +408,9 @@ void Vect_break_polygons_file(struct Map_info *Map, int type,
                         if (lseek(xpntfd, (off_t)(fpoint - 1) * sizeof(XPNT2),
                                   SEEK_SET) == -1) {
                             int err = errno;
-                            /* GTC seek refers to reading/writing from a
-                             * different position in a file */
-                            G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
-                                          strerror(err));
+                            G_fatal_error(
+                                _("File read/write operation failed: %s (%d)"),
+                                strerror(err), err);
                         }
                         if (write(xpntfd, &XPnt, sizeof(XPNT2)) < 0)
                             G_fatal_error(_("File writing error in %s() %d:%s"),

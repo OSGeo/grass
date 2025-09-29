@@ -62,9 +62,8 @@ int Segment_get_row(const SEGMENT *SEG, void *buf, off_t row)
         SEG->address(SEG, row, col, &n, &index);
         if (SEG->seek(SEG, n, index) == -1) {
             int err = errno;
-            /* GTC seek refers to reading/writing from a different position
-             * in a file */
-            G_warning(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+            G_warning(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
             return -1;
         }
 
@@ -84,9 +83,8 @@ int Segment_get_row(const SEGMENT *SEG, void *buf, off_t row)
         SEG->address(SEG, row, col, &n, &index);
         if (SEG->seek(SEG, n, index) == -1) {
             int err = errno;
-            /* GTC seek refers to reading/writing from a different position
-             * in a file */
-            G_warning(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+            G_warning(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
             return -1;
         }
 

@@ -179,9 +179,8 @@ int Rast3d_write_tile(RASTER3D_Map *map, int tileIndex, const void *tile,
         lseek(map->data_fd, (long)0, SEEK_END) - map->index[tileIndex];
     if (map->tileLength[tileIndex] == -1) {
         int err = errno;
-        /* GTC seek refers to reading/writing from a different position
-         * in a file */
-        G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
     }
 
     return 1;

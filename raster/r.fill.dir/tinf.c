@@ -403,9 +403,8 @@ int retreat_band3(int fh, struct band3 *bnd)
         rc = read(fh, bnd->b[0], bnd->sz);
         if (lseek(fh, (off_t)-2 * bnd->sz, SEEK_CUR) == -1) {
             int err = errno;
-            /* GTC seek refers to reading/writing from a different position
-             * in a file */
-            G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+            G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                          strerror(err), err);
         }
     }
     return rc;

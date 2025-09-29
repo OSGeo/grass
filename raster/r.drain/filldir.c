@@ -110,9 +110,8 @@ void filldir(int fe, int fd, int nl, struct band3 *bnd, struct metrics *m)
 
     if (lseek(fe, 0, SEEK_SET) == -1 || lseek(fd, 0, SEEK_SET) == -1) {
         int err = errno;
-        /* GTC seek refers to reading/writing from a different position
-         * in a file */
-        G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
     }
     advance_band3(fe, bnd);
     for (i = 0; i < nl; i++) {

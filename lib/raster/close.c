@@ -398,10 +398,8 @@ static int close_new(int fd, int ok)
                 lseek(fcb->null_fd, 0L, SEEK_CUR);
             if (fcb->null_row_ptr[fcb->cellhd.rows] == -1) {
                 int err = errno;
-                /* GTC seek refers to reading/writing from a different position
-                 * in a file */
-                G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
-                              strerror(err));
+                G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                              strerror(err), err);
             }
             Rast__write_null_row_ptrs(fd, fcb->null_fd);
         }
@@ -446,10 +444,8 @@ static int close_new(int fd, int ok)
             fcb->row_ptr[fcb->cellhd.rows] = lseek(fcb->data_fd, 0L, SEEK_CUR);
             if (fcb->row_ptr[fcb->cellhd.rows] == -1) {
                 int err = errno;
-                /* GTC seek refers to reading/writing from a different position
-                 * in a file */
-                G_fatal_error(_("Unable to seek: %1$d %2$s"), err,
-                              strerror(err));
+                G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                              strerror(err), err);
             }
             Rast__write_row_ptrs(fd);
         }
@@ -547,9 +543,8 @@ void Rast__close_null(int fd)
         fcb->null_row_ptr[fcb->cellhd.rows] = lseek(fcb->null_fd, 0L, SEEK_CUR);
         if (fcb->null_row_ptr[fcb->cellhd.rows] == -1) {
             int err = errno;
-            /* GTC seek refers to reading/writing from a different position
-             * in a file */
-            G_fatal_error(_("Unable to seek: %1$d %2$s"), err, strerror(err));
+            G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                          strerror(err), err);
         }
         Rast__write_null_row_ptrs(fd, fcb->null_fd);
         G_free(fcb->null_row_ptr);
