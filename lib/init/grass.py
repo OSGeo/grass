@@ -2082,7 +2082,7 @@ def validate_cmdline(params: Parameters) -> None:
 
 def find_grass_python_package() -> None:
     """Find path to the grass package and add it to path if needed"""
-    # Wheather or not the pre-set path exists, the environment may be just
+    # Whether or not the pre-set path exists, the environment may be just
     # set up right already. Let's try a basic import first.
     try:
         import grass.script as unused_gs  # noqa: F401, ICN001
@@ -2116,7 +2116,7 @@ def find_grass_python_package() -> None:
             # These strings are not translatable because we can't load translations.
             msg = (
                 f"The grass Python package cannot be imported from {path}. "
-                "Try setting PYTHONPATH or GRASS_PYDIR to where the grass is."
+                "Try setting PYTHONPATH or GRASS_PYDIR to where the grass package is."
             )
             raise RuntimeError(msg) from error
     # The path provided by the build or by the user does not exist.
