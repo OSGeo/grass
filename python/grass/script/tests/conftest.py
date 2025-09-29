@@ -48,8 +48,10 @@ def session_2x2(tmp_path):
         yield session
 
 
-@pytest.fixture
-def pack_raster_file4x5_rows(tmp_path):
+@pytest.fixture(scope="module")
+def pack_raster_file4x5_rows(tmp_path_factory):
+    """Native raster in pack format in EPSG:3358"""
+    tmp_path = tmp_path_factory.mktemp("pack_raster")
     project = tmp_path / "xy_test4x5"
     gs.create_project(project, epsg="3358")
     with gs.setup.init(project, env=os.environ.copy()) as session:

@@ -1,3 +1,4 @@
+import json
 import sys
 
 import pytest
@@ -53,3 +54,27 @@ def test_subcommand_run_tool_regular_run():
 def test_subcommand_run_tool_failure_run():
     """Check that a tool produces non-zero return code"""
     assert main(["run", "g.region", "raster=does_not_exist"]) == 1
+
+
+def test_subcommand_run_with_crs_as_epsg(capfd):
+    """Check that CRS provided as EPSG is applied"""
+    assert main(["run", "--crs", "EPSG:3358", "g.proj", "-p", "format=json"]) == 0
+    assert json.loads(capfd.readouterr().out)["srid"] == "EPSG:3358"
+
+
+def test_subcommand_run_with_crs_as_pack2(pack_raster_file4x5_rows, capfd):
+    """Check that CRS provided as pack file is applied"""
+    assert (
+        main(
+            [
+                "run",
+                "--crs",
+                str(pack_raster_file4x5_rows),
+                "g.proj",
+                "-p",
+                "format=json",
+            ]
+        )
+        == 0
+    )
+    assert json.loads(capfd.readouterr().out)["srid"] == "EPSG:3358"
