@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 

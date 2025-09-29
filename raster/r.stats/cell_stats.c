@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 #include <grass/glocale.h>
 #include "global.h"
 
