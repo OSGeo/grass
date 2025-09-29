@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_vi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-13 15:39+0000\n"
+"POT-Creation-Date: 2025-09-20 16:33+0000\n"
 "PO-Revision-Date: 2025-07-26 01:37+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Vietnamese <https://weblate.osgeo.org/projects/grass-gis/grassmods/vi/>\n"
@@ -76,11 +76,11 @@ msgstr ""
 #: ../vector/v.category/main.c:333 ../vector/v.class/main.c:223
 #: ../vector/v.class/main.c:264 ../vector/v.class/main.c:271
 #: ../vector/v.db.connect/main.c:152 ../vector/v.distance/main.c:310
-#: ../vector/v.info/print.c:866 ../vector/v.what.rast/main.c:144
-#: ../vector/v.what/main.c:226 ../vector/v.what/what.c:508
-#: ../vector/v.what/what.c:652 ../vector/v.what/what.c:705
-#: ../vector/v.what/what.c:898 ../vector/v.what/what.c:1037
-#: ../vector/v.what/what.c:1158
+#: ../vector/v.info/print.c:866 ../vector/v.vect.stats/main.c:284
+#: ../vector/v.what.rast/main.c:144 ../vector/v.what/main.c:226
+#: ../vector/v.what/what.c:508 ../vector/v.what/what.c:652
+#: ../vector/v.what/what.c:705 ../vector/v.what/what.c:898
+#: ../vector/v.what/what.c:1037 ../vector/v.what/what.c:1158
 msgid "Failed to initialize JSON array. Out of memory?"
 msgstr ""
 
@@ -92,8 +92,8 @@ msgstr ""
 #: ../raster/r.regression.multi/main.c:696
 #: ../raster/r.stats.quantile/main.c:472 ../raster/r.volume/main.c:448
 #: ../raster3d/r3.info/main.c:993 ../vector/v.class/main.c:379
-#: ../vector/v.db.connect/main.c:434 ../vector/v.what.rast/main.c:694
-#: ../vector/v.what/main.c:321
+#: ../vector/v.db.connect/main.c:434 ../vector/v.vect.stats/main.c:863
+#: ../vector/v.what.rast/main.c:694 ../vector/v.what/main.c:321
 msgid "Failed to serialize JSON to pretty format."
 msgstr ""
 
@@ -122,7 +122,7 @@ msgstr ""
 #: ../locale/scriptstrings/v.what.vect_to_translate.c:4
 #: ../vector/v.db.connect/main.c:61 ../vector/v.db.select/main.c:99
 #: ../vector/v.distance/main.c:127 ../vector/v.in.db/main.c:53
-#: ../vector/v.to.db/main.c:39 ../vector/v.vect.stats/main.c:130
+#: ../vector/v.to.db/main.c:39 ../vector/v.vect.stats/main.c:138
 msgid "database"
 msgstr ""
 
@@ -153,7 +153,7 @@ msgstr ""
 #: ../vector/v.class/main.c:55 ../vector/v.db.connect/main.c:60
 #: ../vector/v.db.select/main.c:98 ../vector/v.distance/main.c:128
 #: ../vector/v.to.db/main.c:38 ../vector/v.univar/main.c:97
-#: ../vector/v.vect.stats/main.c:129 ../vector/v.what.rast/main.c:82
+#: ../vector/v.vect.stats/main.c:137 ../vector/v.what.rast/main.c:82
 #: ../vector/v.what.rast3/main.c:70
 msgid "attribute table"
 msgstr ""
@@ -230,7 +230,7 @@ msgstr ""
 #: ../vector/v.to.db/parse.c:125 ../vector/v.to.db/parse.c:130
 #: ../vector/v.to.db/parse.c:136 ../vector/v.to.db/parse.c:141
 #: ../vector/v.to.db/parse.c:147 ../vector/v.univar/main.c:152
-#: ../vector/v.vect.stats/main.c:229 ../vector/v.vect.stats/main.c:236
+#: ../vector/v.vect.stats/main.c:238 ../vector/v.vect.stats/main.c:251
 #: ../vector/v.what.rast/main.c:112 ../vector/v.what/main.c:100
 #: ../vector/v.what/main.c:105 ../vector/v.what/main.c:111
 #: ../vector/v.what/main.c:118 ../vector/v.what/main.c:126
@@ -321,11 +321,11 @@ msgstr ""
 #: ../vector/v.class/main.c:348 ../vector/v.db.connect/main.c:306
 #: ../vector/v.db.connect/main.c:399 ../vector/v.distance/main.c:1578
 #: ../vector/v.info/print.c:824 ../vector/v.info/print.c:860
-#: ../vector/v.univar/main.c:630 ../vector/v.what.rast/main.c:628
-#: ../vector/v.what/what.c:202 ../vector/v.what/what.c:273
-#: ../vector/v.what/what.c:441 ../vector/v.what/what.c:539
-#: ../vector/v.what/what.c:680 ../vector/v.what/what.c:728
-#: ../vector/v.what/what.c:933
+#: ../vector/v.univar/main.c:630 ../vector/v.vect.stats/main.c:800
+#: ../vector/v.what.rast/main.c:628 ../vector/v.what/what.c:202
+#: ../vector/v.what/what.c:273 ../vector/v.what/what.c:441
+#: ../vector/v.what/what.c:539 ../vector/v.what/what.c:680
+#: ../vector/v.what/what.c:728 ../vector/v.what/what.c:933
 msgid "Failed to initialize JSON object. Out of memory?"
 msgstr ""
 
@@ -1182,7 +1182,7 @@ msgstr ""
 #: ../vector/v.out.lidar/main.c:154 ../vector/v.reclass/main.c:145
 #: ../vector/v.to.3d/trans2.c:63 ../vector/v.to.3d/trans3.c:66
 #: ../vector/v.transform/trans_digit.c:116 ../vector/v.univar/main.c:405
-#: ../vector/v.vect.stats/main.c:446
+#: ../vector/v.vect.stats/main.c:485
 #, c-format, python-format
 msgid "Column <%s> not found in table <%s>"
 msgstr ""
@@ -2116,7 +2116,7 @@ msgstr ""
 #: ../vector/v.to.points/main.c:52 ../vector/v.to.rast/main.c:45
 #: ../vector/v.to.rast3/main.c:48 ../vector/v.transform/main.c:71
 #: ../vector/v.type/main.c:38 ../vector/v.univar/main.c:94
-#: ../vector/v.vect.stats/main.c:128 ../vector/v.vol.rst/main.c:218
+#: ../vector/v.vect.stats/main.c:136 ../vector/v.vol.rst/main.c:218
 #: ../vector/v.voronoi/main.c:118 ../vector/v.what.rast/main.c:77
 #: ../vector/v.what.rast3/main.c:65 ../vector/v.what/main.c:63
 #: ../visualization/ximgview/main.c:290
@@ -2157,7 +2157,7 @@ msgstr ""
 #: ../vector/v.lrs/v.lrs.where/main.c:135 ../vector/v.outlier/main.c:176
 #: ../vector/v.profile/main.c:371 ../vector/v.profile/main.c:375
 #: ../vector/v.surf.bspline/main.c:260 ../vector/v.surf.bspline/main.c:336
-#: ../vector/v.vect.stats/main.c:280 ../vector/v.vect.stats/main.c:288
+#: ../vector/v.vect.stats/main.c:319 ../vector/v.vect.stats/main.c:327
 #, c-format, python-format
 msgid "Vector map <%s> not found"
 msgstr ""
@@ -2228,8 +2228,8 @@ msgstr ""
 #: ../vector/v.to.rast/support.c:267 ../vector/v.to.rast/support.c:495
 #: ../vector/v.to.rast/vect2rast.c:39 ../vector/v.to.rast3/main.c:74
 #: ../vector/v.transform/main.c:207 ../vector/v.type/main.c:128
-#: ../vector/v.univar/main.c:193 ../vector/v.vect.stats/main.c:284
-#: ../vector/v.vect.stats/main.c:296 ../vector/v.vol.rst/main.c:547
+#: ../vector/v.univar/main.c:193 ../vector/v.vect.stats/main.c:323
+#: ../vector/v.vect.stats/main.c:335 ../vector/v.vol.rst/main.c:547
 #: ../vector/v.voronoi/main.c:193 ../vector/v.what.rast/main.c:171
 #: ../vector/v.what.rast3/main.c:115
 #, c-format
@@ -4163,10 +4163,10 @@ msgstr ""
 #: ../vector/v.to.3d/args.c:25 ../vector/v.to.db/parse.c:43
 #: ../vector/v.to.points/main.c:66 ../vector/v.to.points/main.c:70
 #: ../vector/v.to.rast/main.c:59 ../vector/v.to.rast/main.c:62
-#: ../vector/v.to.rast/main.c:65 ../vector/v.vect.stats/main.c:152
-#: ../vector/v.vect.stats/main.c:157 ../vector/v.vect.stats/main.c:162
-#: ../vector/v.vect.stats/main.c:169 ../vector/v.vect.stats/main.c:174
-#: ../vector/v.vect.stats/main.c:179 ../vector/v.vect.stats/main.c:185
+#: ../vector/v.to.rast/main.c:65 ../vector/v.vect.stats/main.c:160
+#: ../vector/v.vect.stats/main.c:165 ../vector/v.vect.stats/main.c:170
+#: ../vector/v.vect.stats/main.c:177 ../vector/v.vect.stats/main.c:182
+#: ../vector/v.vect.stats/main.c:187 ../vector/v.vect.stats/main.c:193
 msgid "Selection"
 msgstr ""
 
@@ -4428,8 +4428,8 @@ msgstr ""
 #: ../vector/v.neighbors/main.c:219 ../vector/v.overlay/main.c:422
 #: ../vector/v.surf.bspline/crosscorr.c:123 ../vector/v.to.rast/support.c:101
 #: ../vector/v.to.rast/support.c:271 ../vector/v.to.rast/support.c:499
-#: ../vector/v.univar/main.c:271 ../vector/v.vect.stats/main.c:345
-#: ../vector/v.vect.stats/main.c:422 ../vector/v.what.rast/main.c:178
+#: ../vector/v.univar/main.c:271 ../vector/v.vect.stats/main.c:384
+#: ../vector/v.vect.stats/main.c:461 ../vector/v.what.rast/main.c:178
 #: ../vector/v.what.rast3/main.c:121
 #, c-format
 msgid "Database connection not defined for layer %d"
@@ -10692,7 +10692,7 @@ msgstr ""
 #: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:149
 #: ../imagery/i.rectify/main.c:151 ../raster/r.proj/main.c:281
 #: ../raster/r.statistics/main.c:118 ../raster/r.stats.zonal/main.c:168
-#: ../vector/v.neighbors/main.c:193 ../vector/v.vect.stats/main.c:318
+#: ../vector/v.neighbors/main.c:193 ../vector/v.vect.stats/main.c:357
 #, c-format
 msgid "<%s=%s> unknown %s"
 msgstr ""
@@ -16771,14 +16771,14 @@ msgstr ""
 #: ../locale/scriptstrings/v.rast.stats_to_translate.c:5
 #: ../raster/r.resamp.stats/main.c:264 ../raster/r.univar/r.univar_main.c:167
 #: ../raster/r.univar/r3.univar_main.c:120 ../vector/v.univar/main.c:96
-#: ../vector/v.vect.stats/main.c:131
+#: ../vector/v.vect.stats/main.c:139
 msgid "univariate statistics"
 msgstr ""
 
 #: ../locale/scriptstrings/v.rast.stats_to_translate.c:6
 #: ../raster/r.statistics/main.c:55 ../raster/r.stats.quantile/main.c:646
 #: ../raster/r.stats.zonal/main.c:106 ../raster/r.univar/r.univar_main.c:168
-#: ../vector/v.vect.stats/main.c:132
+#: ../vector/v.vect.stats/main.c:140
 msgid "zonal statistics"
 msgstr ""
 
@@ -26034,8 +26034,8 @@ msgstr ""
 
 #: ../raster/r.report/parse.c:56 ../raster/r.stats/main.c:167
 #: ../raster/r.stats/main.c:172 ../raster/r.stats/main.c:178
-#: ../vector/v.vect.stats/main.c:202 ../vector/v.vect.stats/main.c:209
-#: ../vector/v.vect.stats/main.c:218 ../vector/v.vect.stats/main.c:226
+#: ../vector/v.vect.stats/main.c:210 ../vector/v.vect.stats/main.c:217
+#: ../vector/v.vect.stats/main.c:226 ../vector/v.vect.stats/main.c:234
 msgid "Statistics"
 msgstr ""
 
@@ -34210,7 +34210,7 @@ msgstr ""
 msgid "Unable to read GDAL dataset <%s>"
 msgstr ""
 
-#: ../scripts/r.import/r.import.py:271 ../scripts/v.import/v.import.py:308
+#: ../scripts/r.import/r.import.py:271 ../scripts/v.import/v.import.py:310
 #, python-format
 msgid "Coordinate reference system not available for input <%s>"
 msgstr ""
@@ -34232,7 +34232,7 @@ msgstr ""
 msgid "Please check the 'extent' parameter"
 msgstr ""
 
-#: ../scripts/r.import/r.import.py:391 ../scripts/v.import/v.import.py:335
+#: ../scripts/r.import/r.import.py:391 ../scripts/v.import/v.import.py:337
 msgid "Unable to reproject to source project"
 msgstr ""
 
@@ -34251,7 +34251,7 @@ msgstr ""
 msgid "Using current region resolution for input band <{out}>: nsres={ns}, ewres={ew}"
 msgstr ""
 
-#: ../scripts/r.import/r.import.py:445 ../scripts/v.import/v.import.py:382
+#: ../scripts/r.import/r.import.py:445 ../scripts/v.import/v.import.py:386
 #, python-format
 msgid "Reprojecting <%s>..."
 msgstr ""
@@ -34520,150 +34520,150 @@ msgid ""
 "                                 Tag <%s> was not found."
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:30 ../scripts/r.in.wms/wms_gdal_drv.py:23
-#: ../scripts/v.import/v.import.py:272 ../scripts/v.import/v.import.py:350
+#: ../scripts/r.in.wms/wms_drv.py:32 ../scripts/r.in.wms/wms_gdal_drv.py:25
+#: ../scripts/v.import/v.import.py:274 ../scripts/v.import/v.import.py:354
 msgid "Unable to load GDAL Python bindings (requires package 'python-gdal' being installed)"
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:53
+#: ../scripts/r.in.wms/wms_drv.py:55
 msgid "Downloading data from WMS server..."
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:114
+#: ../scripts/r.in.wms/wms_drv.py:116
 #, python-format
 msgid ""
 "Authorization failed to '%s' when fetching data.\n"
 "%s"
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:119
+#: ../scripts/r.in.wms/wms_drv.py:121
 #, python-format
 msgid ""
 "Unable to fetch data from: '%s'\n"
 "%s"
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:145
+#: ../scripts/r.in.wms/wms_drv.py:147
 #, python-format
 msgid ""
 "Server refused to send data for a tile.\n"
 "Request will be repeated after %d s."
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:153
+#: ../scripts/r.in.wms/wms_drv.py:155
 #, python-format
 msgid ""
 "Unable to write data into tempfile.\n"
 "%s"
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:166
+#: ../scripts/r.in.wms/wms_drv.py:168
 #, python-format
 msgid ""
 "Unable to read data from tempfile.\n"
 "%s"
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:171
+#: ../scripts/r.in.wms/wms_drv.py:173
 #, python-format
 msgid "WMS server error: %s"
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:173
+#: ../scripts/r.in.wms/wms_drv.py:175
 msgid "WMS server unknown error"
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:179
+#: ../scripts/r.in.wms/wms_drv.py:181
 #, python-format
 msgid "WMS server error: no band(s) received. Is server URL correct? <%s>"
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:205
+#: ../scripts/r.in.wms/wms_drv.py:207
 #, python-format
 msgid "Driver %s does not supports Create() method"
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:283
+#: ../scripts/r.in.wms/wms_drv.py:285
 #, python-format
 msgid "Unable to open %s "
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:360
+#: ../scripts/r.in.wms/wms_drv.py:362
 msgid "Region is out of server data extend."
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:392
+#: ../scripts/r.in.wms/wms_drv.py:394
 #, python-format
 msgid "Fetching %d tiles with %d x %d pixel size per tile..."
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:625 ../scripts/r.in.wms/wms_drv.py:904
+#: ../scripts/r.in.wms/wms_drv.py:627 ../scripts/r.in.wms/wms_drv.py:906
 #, python-format
 msgid ""
 "Unable to parse tile service file.\n"
 "%s\n"
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:673
+#: ../scripts/r.in.wms/wms_drv.py:675
 #, python-format
 msgid "Layer '%s' was not found in capabilities file"
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:692
+#: ../scripts/r.in.wms/wms_drv.py:694
 #, python-format
 msgid "Layer '%s' is not available with %s code."
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:928
+#: ../scripts/r.in.wms/wms_drv.py:930
 #, python-format
 msgid ""
 "Unable to parse tile service file. \n"
 " No tag '%s' was found."
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:941
+#: ../scripts/r.in.wms/wms_drv.py:943
 #, python-format
 msgid "Tiled group '%s' was not found in tile service file"
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:1033
+#: ../scripts/r.in.wms/wms_drv.py:1035
 #, python-format
 msgid ""
 "Wrong form of parameter '%s' in '%s'. \n"
 "                                  The parameter was ignored."
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:1058
+#: ../scripts/r.in.wms/wms_drv.py:1060
 #, python-format
 msgid "Parameter '%s' in '%s' is not variable in tile pattern url."
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:1065
+#: ../scripts/r.in.wms/wms_drv.py:1067
 #, python-format
 msgid "%s driver supports only '%s' parameter in '%s'. Other parameters are ignored."
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_gdal_drv.py:146
+#: ../scripts/r.in.wms/wms_gdal_drv.py:148
 msgid ""
 "If module will not be able to fetch the data in this geographic projection, \n"
 " try 'WMS_GRASS' driver or use WMS version 1.1.1."
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_gdal_drv.py:169
+#: ../scripts/r.in.wms/wms_gdal_drv.py:171
 msgid "Unable to open GDAL WMS driver"
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_gdal_drv.py:175
+#: ../scripts/r.in.wms/wms_gdal_drv.py:177
 #, python-format
 msgid "Unable to find %s driver"
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_gdal_drv.py:182
+#: ../scripts/r.in.wms/wms_gdal_drv.py:184
 #, python-format
 msgid "Driver %s supports CreateCopy() method."
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_gdal_drv.py:195
+#: ../scripts/r.in.wms/wms_gdal_drv.py:197
 msgid "Incorrect WMS query"
 msgstr ""
 
@@ -35390,27 +35390,27 @@ msgstr ""
 msgid "Unable to import <%s>"
 msgstr ""
 
-#: ../scripts/v.import/v.import.py:288
+#: ../scripts/v.import/v.import.py:290
 #, python-format
 msgid "Unable to create project from OGR datasource <%s>"
 msgstr ""
 
-#: ../scripts/v.import/v.import.py:342
+#: ../scripts/v.import/v.import.py:344
 #, python-format
 msgid "Importing <%s> ..."
 msgstr ""
 
-#: ../scripts/v.import/v.import.py:360
+#: ../scripts/v.import/v.import.py:364
 #, python-format
 msgid "Unable to import OGR datasource <%s>"
 msgstr ""
 
-#: ../scripts/v.import/v.import.py:375 ../scripts/v.pack/v.pack.py:87
+#: ../scripts/v.import/v.import.py:379 ../scripts/v.pack/v.pack.py:87
 #, python-brace-format
 msgid "option <{key}>: <{value}> exists."
 msgstr ""
 
-#: ../scripts/v.import/v.import.py:392
+#: ../scripts/v.import/v.import.py:396
 #, python-format
 msgid "Unable to to reproject vector <%s>"
 msgstr ""
@@ -37244,7 +37244,7 @@ msgid "No attribute table for layer %d"
 msgstr ""
 
 #: ../vector/v.decimate/copy_tab.c:109 ../vector/v.extract/copy_tab.c:114
-#: ../vector/v.vect.stats/main.c:350 ../vector/v.vect.stats/main.c:435
+#: ../vector/v.vect.stats/main.c:389 ../vector/v.vect.stats/main.c:474
 #, c-format
 msgid "Unable to open database <%s> with driver <%s>"
 msgstr ""
@@ -37694,7 +37694,7 @@ msgstr ""
 msgid "%d categories read from the map don't exist in the table"
 msgstr ""
 
-#: ../vector/v.distance/main.c:1846 ../vector/v.vect.stats/main.c:779
+#: ../vector/v.distance/main.c:1846 ../vector/v.vect.stats/main.c:854
 #: ../vector/v.what.rast/main.c:798
 #, c-format
 msgid "%d update errors"
@@ -41832,15 +41832,15 @@ msgstr ""
 msgid "Neighborhood diameter in map units"
 msgstr ""
 
-#: ../vector/v.neighbors/main.c:162 ../vector/v.vect.stats/main.c:207
+#: ../vector/v.neighbors/main.c:162 ../vector/v.vect.stats/main.c:215
 msgid "Column name of points map to use for statistics"
 msgstr ""
 
-#: ../vector/v.neighbors/main.c:163 ../vector/v.vect.stats/main.c:208
+#: ../vector/v.neighbors/main.c:163 ../vector/v.vect.stats/main.c:216
 msgid "Column of points map must be numeric"
 msgstr ""
 
-#: ../vector/v.neighbors/main.c:243 ../vector/v.vect.stats/main.c:455
+#: ../vector/v.neighbors/main.c:243 ../vector/v.vect.stats/main.c:494
 #, c-format
 msgid "points_column <%s> of points vector <%s> must be numeric"
 msgstr ""
@@ -42055,7 +42055,7 @@ msgid "Finds articulation points"
 msgstr ""
 
 #: ../vector/v.net.bridge/main.c:98 ../vector/v.to.db/parse.c:40
-#: ../vector/v.vect.stats/main.c:150
+#: ../vector/v.vect.stats/main.c:158
 msgid "Feature type"
 msgstr ""
 
@@ -46646,115 +46646,115 @@ msgstr ""
 msgid "Cannot sort the key/value array"
 msgstr ""
 
-#: ../vector/v.vect.stats/main.c:134
+#: ../vector/v.vect.stats/main.c:142
 msgid "Count points in areas, calculate statistics from point attributes."
 msgstr ""
 
-#: ../vector/v.vect.stats/main.c:138
+#: ../vector/v.vect.stats/main.c:146
 msgid "Name of existing vector map with points"
 msgstr ""
 
-#: ../vector/v.vect.stats/main.c:143
+#: ../vector/v.vect.stats/main.c:151
 msgid "Name of existing vector map with areas"
 msgstr ""
 
-#: ../vector/v.vect.stats/main.c:156
+#: ../vector/v.vect.stats/main.c:164
 msgid "Layer number for points map"
 msgstr ""
 
-#: ../vector/v.vect.stats/main.c:161
+#: ../vector/v.vect.stats/main.c:169
 msgid "Category values for points map"
 msgstr ""
 
-#: ../vector/v.vect.stats/main.c:166
+#: ../vector/v.vect.stats/main.c:174
 msgid "WHERE conditions of SQL statement without 'where' keyword for points map"
 msgstr ""
 
-#: ../vector/v.vect.stats/main.c:173
+#: ../vector/v.vect.stats/main.c:181
 msgid "Layer number for area map"
 msgstr ""
 
-#: ../vector/v.vect.stats/main.c:178
+#: ../vector/v.vect.stats/main.c:186
 msgid "Category values for area map"
 msgstr ""
 
-#: ../vector/v.vect.stats/main.c:183
+#: ../vector/v.vect.stats/main.c:191
 msgid "WHERE conditions of SQL statement without 'where' keyword for area map"
 msgstr ""
 
-#: ../vector/v.vect.stats/main.c:201
+#: ../vector/v.vect.stats/main.c:209
 msgid "Method for aggregate statistics"
 msgstr ""
 
-#: ../vector/v.vect.stats/main.c:214
+#: ../vector/v.vect.stats/main.c:222
 msgid "Column name to upload points count"
 msgstr ""
 
-#: ../vector/v.vect.stats/main.c:216
+#: ../vector/v.vect.stats/main.c:224
 msgid "Column to hold points count, must be of type integer, will be created if not existing"
 msgstr ""
 
-#: ../vector/v.vect.stats/main.c:222
+#: ../vector/v.vect.stats/main.c:230
 msgid "Column name to upload statistics"
 msgstr ""
 
-#: ../vector/v.vect.stats/main.c:224
+#: ../vector/v.vect.stats/main.c:232
 msgid "Column to hold statistics, must be of type double, will be created if not existing"
 msgstr ""
 
-#: ../vector/v.vect.stats/main.c:234
+#: ../vector/v.vect.stats/main.c:249
 msgid "Print output to stdout, do not update attribute table"
 msgstr ""
 
-#: ../vector/v.vect.stats/main.c:235
+#: ../vector/v.vect.stats/main.c:250
 msgid "First column is always area category"
 msgstr ""
 
-#: ../vector/v.vect.stats/main.c:290
+#: ../vector/v.vect.stats/main.c:329
 #, c-format
 msgid "Vector map <%s> is not in the current mapset <%s> and cannot be updated"
 msgstr ""
 
-#: ../vector/v.vect.stats/main.c:354
+#: ../vector/v.vect.stats/main.c:393
 msgid "count_column is required to upload point counts"
 msgstr ""
 
-#: ../vector/v.vect.stats/main.c:363
+#: ../vector/v.vect.stats/main.c:402
 msgid "count_column must be of type integer"
 msgstr ""
 
-#: ../vector/v.vect.stats/main.c:376 ../vector/v.vect.stats/main.c:409
+#: ../vector/v.vect.stats/main.c:415 ../vector/v.vect.stats/main.c:448
 #, c-format
 msgid "Unable to add column <%s>"
 msgstr ""
 
-#: ../vector/v.vect.stats/main.c:383
+#: ../vector/v.vect.stats/main.c:422
 msgid "stats_column is required to upload point stats"
 msgstr ""
 
-#: ../vector/v.vect.stats/main.c:395
+#: ../vector/v.vect.stats/main.c:434
 msgid "stats_column must be of type double precision"
 msgstr ""
 
-#: ../vector/v.vect.stats/main.c:418
+#: ../vector/v.vect.stats/main.c:457
 msgid "collecting attributes from points vector..."
 msgstr ""
 
-#: ../vector/v.vect.stats/main.c:519
+#: ../vector/v.vect.stats/main.c:558
 #, c-format
 msgid "No area categories in vector <%s>, layer <%s>"
 msgstr ""
 
-#: ../vector/v.vect.stats/main.c:544
+#: ../vector/v.vect.stats/main.c:583
 msgid "Selecting points for each area..."
 msgstr ""
 
-#: ../vector/v.vect.stats/main.c:655
+#: ../vector/v.vect.stats/main.c:694
 #, c-format
 msgid "could not find area category %d"
 msgstr ""
 
-#: ../vector/v.vect.stats/main.c:777
+#: ../vector/v.vect.stats/main.c:852
 #, c-format
 msgid "%d records updated"
 msgstr ""
