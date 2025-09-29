@@ -126,7 +126,6 @@ static int Rast3d_writeTileCompressed(RASTER3D_Map *map, int nofNum)
  *          2 ... if write request was ignored,
  *          0 ... otherwise.
  */
-
 int Rast3d_write_tile(RASTER3D_Map *map, int tileIndex, const void *tile,
                       int type)
 {
@@ -201,7 +200,6 @@ int Rast3d_write_tile(RASTER3D_Map *map, int tileIndex, const void *tile,
  *  \param tile
  *  \return int
  */
-
 int Rast3d_write_tile_float(RASTER3D_Map *map, int tileIndex, const void *tile)
 {
     int status;
@@ -226,7 +224,6 @@ int Rast3d_write_tile_float(RASTER3D_Map *map, int tileIndex, const void *tile)
  *  \param tile
  *  \return int
  */
-
 int Rast3d_write_tile_double(RASTER3D_Map *map, int tileIndex, const void *tile)
 {
     int status;
@@ -259,7 +256,6 @@ int Rast3d_write_tile_double(RASTER3D_Map *map, int tileIndex, const void *tile)
  *  \return 1 ... if successful,
  *          0 ... otherwise.
  */
-
 int Rast3d_flush_tile(RASTER3D_Map *map, int tileIndex)
 {
     const void *tile;
@@ -304,7 +300,6 @@ int Rast3d_flush_tile(RASTER3D_Map *map, int tileIndex)
  *  \return 1 ... if successful,
  *          0 ... otherwise.
  */
-
 int Rast3d_flush_tile_cube(RASTER3D_Map *map, int xMin, int yMin, int zMin,
                            int xMax, int yMax, int zMax)
 {
@@ -350,7 +345,6 @@ int Rast3d_flush_tile_cube(RASTER3D_Map *map, int xMin, int yMin, int zMin,
  *  \return 1 ... if successful,
  *          0 ... otherwise.
  */
-
 int Rast3d_flush_tiles_in_cube(RASTER3D_Map *map, int xMin, int yMin, int zMin,
                                int xMax, int yMax, int zMax)
 {

@@ -75,11 +75,10 @@ void *Rast3d_open_cell_old_no_header(const char *name, const char *mapset)
  *  \param name
  *  \param mapset
  *  \param window
- *  \param type
+ *  \param typeIntern
  *  \param cache
  *  \return void *
  */
-
 void *Rast3d_open_cell_old(const char *name, const char *mapset,
                            RASTER3D_Region *window, int typeIntern, int cache)
 {
@@ -203,12 +202,11 @@ void *Rast3d_open_cell_old(const char *name, const char *mapset,
  * structure ... if successful, NULL ... otherwise.
  *
  *  \param name
- *  \param type
+ *  \param typeIntern
  *  \param cache
  *  \param region
  *  \return void *
  */
-
 void *Rast3d_open_cell_new(const char *name, int typeIntern, int cache,
                            RASTER3D_Region *region)
 {

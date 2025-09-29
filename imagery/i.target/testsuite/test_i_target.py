@@ -5,7 +5,7 @@ from grass.gunittest.main import test
 
 
 class TestITarget(TestCase):
-    """Regression tests for the i.target GRASS GIS module."""
+    """Regression tests for the i.target GRASS module."""
 
     @classmethod
     def setUpClass(cls):

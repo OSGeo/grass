@@ -131,11 +131,27 @@ int main(int argc, char **argv)
     }
 
     type = 0;
-    strcpy(map_name, opt1->answer);
-    strcpy(new_map_name, opt2->answer);
-    strcpy(dir_name, opt4->answer);
-    if (opt5->answer != NULL)
-        strcpy(bas_name, opt5->answer);
+    if (G_strlcpy(map_name, opt1->answer, sizeof(map_name)) >=
+        sizeof(map_name)) {
+        G_fatal_error(_("Input map name <%s> is too long"), opt1->answer);
+    }
+
+    if (G_strlcpy(new_map_name, opt2->answer, sizeof(new_map_name)) >=
+        sizeof(new_map_name)) {
+        G_fatal_error(_("Output map name <%s> is too long"), opt2->answer);
+    }
+
+    if (G_strlcpy(dir_name, opt4->answer, sizeof(dir_name)) >=
+        sizeof(dir_name)) {
+        G_fatal_error(_("Direction map name <%s> is too long"), opt4->answer);
+    }
+
+    if (opt5->answer != NULL) {
+        if (G_strlcpy(bas_name, opt5->answer, sizeof(bas_name)) >=
+            sizeof(bas_name)) {
+            G_fatal_error(_("Areas map name <%s> is too long"), opt5->answer);
+        }
+    }
 
     if (strcmp(opt3->answer, "agnps") == 0)
         type = 1;

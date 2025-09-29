@@ -173,7 +173,6 @@ void RTreeNodeCover(struct RTree_Node *n, struct RTree_Rect *r, struct RTree *t)
  * area to accommodate the new rectangle, then the smallest area before,
  * to get the best resolution when searching.
  */
-
 static int RTreePickLeafBranch(struct RTree_Rect *r, struct RTree_Node *n,
                                struct RTree *t)
 {
@@ -600,7 +599,6 @@ int RTreeAddBranch(struct RTree_Branch *b, struct RTree_Node *n,
 /*
  * for debugging only: print items to stdout
  */
-
 void RTreeTabIn(int depth)
 {
     int i;

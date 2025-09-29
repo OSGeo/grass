@@ -6,7 +6,7 @@
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
+ * \author GRASS Development Team
  *
  * \date 2005-2018
  */
@@ -40,7 +40,6 @@
  * \return 1 if successful
  * \return -1 if unable to seek or write segment file
  */
-
 int Segment_put_row(const SEGMENT *SEG, const void *buf, off_t row)
 {
     int size;

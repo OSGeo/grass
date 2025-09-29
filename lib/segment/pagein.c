@@ -6,7 +6,7 @@
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
+ * \author GRASS Development Team
  *
  * \date 2005-2009
  */
@@ -34,7 +34,6 @@
  * \return 1 if successful
  * \return -1 if unable to seek or read segment file
  */
-
 int seg_pagein(SEGMENT *SEG, int n)
 {
     int cur;

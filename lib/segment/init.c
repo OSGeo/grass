@@ -52,7 +52,6 @@ static int read_off_t(int, off_t *);
  * \return -1 if unable to seek or read segment file
  * \return -2 if out of memory
  */
-
 int Segment_init(SEGMENT *SEG, int fd, int nseg)
 {
     SEG->open = 0;

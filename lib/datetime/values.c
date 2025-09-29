@@ -23,7 +23,6 @@ static int have(int x, const DateTime *dt)
  *  \param year
  *  \return int
  */
-
 int datetime_check_year(const DateTime *dt, int year)
 {
     if (!have(DATETIME_YEAR, dt))
@@ -48,7 +47,6 @@ int datetime_check_year(const DateTime *dt, int year)
  *  \param month
  *  \return int
  */
-
 int datetime_check_month(const DateTime *dt, int month)
 {
     if (!have(DATETIME_MONTH, dt))
@@ -83,7 +81,6 @@ int datetime_check_month(const DateTime *dt, int month)
  *  \param day
  *  \return int
  */
-
 int datetime_check_day(const DateTime *dt, int day)
 {
     int month, year, ad;
@@ -120,7 +117,6 @@ int datetime_check_day(const DateTime *dt, int day)
  *  \param hour
  *  \return int
  */
-
 int datetime_check_hour(const DateTime *dt, int hour)
 {
     if (!have(DATETIME_HOUR, dt))
@@ -145,7 +141,6 @@ int datetime_check_hour(const DateTime *dt, int hour)
  *  \param minute
  *  \return int
  */
-
 int datetime_check_minute(const DateTime *dt, int minute)
 {
     if (!have(DATETIME_MINUTE, dt))
@@ -170,7 +165,6 @@ int datetime_check_minute(const DateTime *dt, int minute)
  *  \param second
  *  \return int
  */
-
 int datetime_check_second(const DateTime *dt, double second)
 {
     if (!have(DATETIME_SECOND, dt))
@@ -195,7 +189,6 @@ int datetime_check_second(const DateTime *dt, double second)
  *  \param fracsec
  *  \return int
  */
-
 int datetime_check_fracsec(const DateTime *dt, int fracsec)
 {
     if (!have(DATETIME_SECOND, dt))
@@ -214,7 +207,6 @@ int datetime_check_fracsec(const DateTime *dt, int fracsec)
  *  \param year
  *  \return int
  */
-
 int datetime_get_year(const DateTime *dt, int *year)
 {
     int stat;
@@ -237,7 +229,6 @@ int datetime_get_year(const DateTime *dt, int *year)
  *  \param year
  *  \return int
  */
-
 int datetime_set_year(DateTime *dt, int year)
 {
     int stat;
@@ -261,7 +252,6 @@ int datetime_set_year(DateTime *dt, int year)
  *  \param month
  *  \return int
  */
-
 int datetime_get_month(const DateTime *dt, int *month)
 {
     int stat;
@@ -284,7 +274,6 @@ int datetime_get_month(const DateTime *dt, int *month)
  *  \param month
  *  \return int
  */
-
 int datetime_set_month(DateTime *dt, int month)
 {
     int stat;
@@ -308,7 +297,6 @@ int datetime_set_month(DateTime *dt, int month)
  *  \param day
  *  \return int
  */
-
 int datetime_get_day(const DateTime *dt, int *day)
 {
     int stat;
@@ -336,7 +324,6 @@ int datetime_get_day(const DateTime *dt, int *day)
  *  \param day
  *  \return int
  */
-
 int datetime_set_day(DateTime *dt, int day)
 {
     int stat;
@@ -357,7 +344,6 @@ int datetime_set_day(DateTime *dt, int day)
  *  \param hour
  *  \return int
  */
-
 int datetime_get_hour(const DateTime *dt, int *hour)
 {
     int stat;
@@ -378,7 +364,6 @@ int datetime_get_hour(const DateTime *dt, int *hour)
  *  \param hour
  *  \return int
  */
-
 int datetime_set_hour(DateTime *dt, int hour)
 {
     int stat;
@@ -399,7 +384,6 @@ int datetime_set_hour(DateTime *dt, int hour)
  *  \param minute
  *  \return int
  */
-
 int datetime_get_minute(const DateTime *dt, int *minute)
 {
     int stat;
@@ -420,7 +404,6 @@ int datetime_get_minute(const DateTime *dt, int *minute)
  *  \param minute
  *  \return int
  */
-
 int datetime_set_minute(DateTime *dt, int minute)
 {
     int stat;
@@ -441,7 +424,6 @@ int datetime_set_minute(DateTime *dt, int minute)
  *  \param second
  *  \return int
  */
-
 int datetime_get_second(const DateTime *dt, double *second)
 {
     int stat;
@@ -462,7 +444,6 @@ int datetime_get_second(const DateTime *dt, double *second)
  *  \param second
  *  \return int
  */
-
 int datetime_set_second(DateTime *dt, double second)
 {
     int stat;
@@ -483,7 +464,6 @@ int datetime_set_second(DateTime *dt, double second)
  *  \param fracsec
  *  \return int
  */
-
 int datetime_get_fracsec(const DateTime *dt, int *fracsec)
 {
     int stat;
@@ -504,7 +484,6 @@ int datetime_get_fracsec(const DateTime *dt, int *fracsec)
  *  \param fracsec
  *  \return int
  */
-
 int datetime_set_fracsec(DateTime *dt, int fracsec)
 {
     int stat;
