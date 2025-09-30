@@ -36,6 +36,8 @@ extern const char *G_json_object_dotget_string(JSON_Object *, const char *);
 extern JSON_Status G_json_object_dotset_number(JSON_Object *, const char *,
                                                double);
 extern double G_json_object_dotget_number(JSON_Object *, const char *);
+extern JSON_Status G_json_object_dotset_null(JSON_Object *object,
+                                             const char *name);
 
 extern JSON_Array *G_json_array(const JSON_Value *);
 extern JSON_Value *G_json_array_get_value(const JSON_Array *, size_t);

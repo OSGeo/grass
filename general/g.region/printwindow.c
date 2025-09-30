@@ -109,7 +109,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
     /* flag.print & flag.gprint */
     if (print_flag & PRINT_REG) {
         prj = G_database_projection_name();
-        if (!prj)
+        if (!prj && format != JSON)
             prj = "** unknown **";
 
         switch (format) {
@@ -123,6 +123,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
             fprintf(stdout, "%-*s %d\n", width, "zone:", window->zone);
             break;
         case JSON:
+            // We print CRS info at the end of the JSON output, not here.
             break;
         }
 
@@ -293,6 +294,36 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
                                          (long)window->rows3 * window->cols3 *
                                              window->depths);
 #endif
+            // The library functions try hard to provide a name and the creation
+            // process actually stores 'unknown' if the name is not available,
+            // so something is always read. Here, we assume that single word
+            // 'unknown' is the same as no name.
+            if (prj && strcmp(prj, "unknown") != 0)
+                G_json_object_dotset_string(root_object, "crs.name", prj);
+            else
+                G_json_object_dotset_null(root_object, "crs.name");
+            const char *type_string;
+            if (window->proj == 0)
+                type_string = "xy";
+            else if (window->proj == 1)
+                type_string = "utm";
+            else if (window->proj == 3)
+                type_string = "ll";
+            else
+                // This is including code 2 (state plane) which still exists
+                // in the library define, but should not occur, so we don't
+                // handle it here (possibly creating output: 2 | other).
+                type_string = "other";
+            G_json_object_dotset_string(root_object, "crs.type", type_string);
+            G_json_object_dotset_number(root_object, "crs.type_code",
+                                        window->proj);
+            // If the zone is 0 for other than UTM, we consider that as zone not
+            // set, but we still allow non-zero for non-UTM (if ever set).
+            if (window->proj != 1 && window->zone == 0)
+                G_json_object_dotset_null(root_object, "crs.zone");
+            else
+                G_json_object_dotset_number(root_object, "crs.zone",
+                                            window->zone);
             break;
         }
     }
