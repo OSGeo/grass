@@ -1,9 +1,11 @@
 import json
+import subprocess
 import sys
 
 import pytest
 
 from grass.app.cli import main
+from grass.gunittest.utils import xfail_windows
 
 
 def test_cli_help_runs():
@@ -56,13 +58,36 @@ def test_subcommand_run_tool_failure_run():
     assert main(["run", "g.region", "raster=does_not_exist"]) == 1
 
 
+@xfail_windows
 def test_subcommand_run_with_crs_as_epsg(capfd):
     """Check that CRS provided as EPSG is applied"""
     assert main(["run", "--crs", "EPSG:3358", "g.proj", "-p", "format=json"]) == 0
     assert json.loads(capfd.readouterr().out)["srid"] == "EPSG:3358"
 
 
-def test_subcommand_run_with_crs_as_pack2(pack_raster_file4x5_rows, capfd):
+def test_subcommand_run_with_crs_as_epsg_subprocess():
+    """Check that CRS provided as EPSG is applied"""
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "grass.app",
+            "run",
+            "--crs",
+            "EPSG:3358",
+            "g.proj",
+            "-p",
+            "format=json",
+        ],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    assert json.loads(result.stdout)["srid"] == "EPSG:3358"
+
+
+@xfail_windows
+def test_subcommand_run_with_crs_as_pack(pack_raster_file4x5_rows, capfd):
     """Check that CRS provided as pack file is applied"""
     assert (
         main(
@@ -78,3 +103,24 @@ def test_subcommand_run_with_crs_as_pack2(pack_raster_file4x5_rows, capfd):
         == 0
     )
     assert json.loads(capfd.readouterr().out)["srid"] == "EPSG:3358"
+
+
+def test_subcommand_run_with_crs_as_pack_subprocess(pack_raster_file4x5_rows, capfd):
+    """Check that CRS provided as pack file is applied"""
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "grass.app",
+            "run",
+            "--crs",
+            str(pack_raster_file4x5_rows),
+            "g.proj",
+            "-p",
+            "format=json",
+        ],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    assert json.loads(result.stdout)["srid"] == "EPSG:3358"
