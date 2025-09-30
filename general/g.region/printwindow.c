@@ -299,9 +299,9 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
             // so something is always read. Here, we assume that single word
             // 'unknown' is the same as no name.
             if (prj && strcmp(prj, "unknown") != 0)
-                json_object_dotset_string(root_object, "crs.name", prj);
+                G_json_object_dotset_string(root_object, "crs.name", prj);
             else
-                json_object_dotset_null(root_object, "crs.name");
+                G_json_object_dotset_null(root_object, "crs.name");
             const char *type_string;
             if (window->proj == 0)
                 type_string = "xy";
@@ -314,16 +314,16 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
                 // in the library define, but should not occur, so we don't
                 // handle it here (possibly creating output: 2 | other).
                 type_string = "other";
-            json_object_dotset_string(root_object, "crs.type", type_string);
-            json_object_dotset_number(root_object, "crs.type_code",
-                                      window->proj);
+            G_json_object_dotset_string(root_object, "crs.type", type_string);
+            G_json_object_dotset_number(root_object, "crs.type_code",
+                                        window->proj);
             // If the zone is 0 for other than UTM, we consider that as zone not
             // set, but we still allow non-zero for non-UTM (if ever set).
             if (window->proj != 1 && window->zone == 0)
-                json_object_dotset_null(root_object, "crs.zone");
+                G_json_object_dotset_null(root_object, "crs.zone");
             else
-                json_object_dotset_number(root_object, "crs.zone",
-                                          window->zone);
+                G_json_object_dotset_number(root_object, "crs.zone",
+                                            window->zone);
             break;
         }
     }
