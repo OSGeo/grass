@@ -317,7 +317,13 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
             json_object_dotset_string(root_object, "crs.type", type_string);
             json_object_dotset_number(root_object, "crs.type_code",
                                       window->proj);
-            json_object_dotset_number(root_object, "crs.zone", window->zone);
+            // If the zone is 0 for other than UTM, we consider that as zone not
+            // set, but we still allow non-zero for non-UTM (if ever set).
+            if (window->proj != 1 && window->zone == 0)
+                json_object_dotset_null(root_object, "crs.zone");
+            else
+                json_object_dotset_number(root_object, "crs.zone",
+                                          window->zone);
             break;
         }
     }
