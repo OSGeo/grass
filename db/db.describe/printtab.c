@@ -4,8 +4,8 @@
 #include <grass/gjson.h>
 
 int print_table_definition(dbDriver *driver, dbTable *table,
-                           enum OutputFormat format, JSON_Object *root_object,
-                           JSON_Array *cols_array)
+                           enum OutputFormat format, G_JSON_Object *root_object,
+                           G_JSON_Array *cols_array)
 {
     int ncols, col, nrows;
     dbColumn *column;
@@ -55,10 +55,10 @@ int print_table_definition(dbDriver *driver, dbTable *table,
 }
 
 int print_column_definition(dbColumn *column, int position,
-                            enum OutputFormat format, JSON_Array *cols_array)
+                            enum OutputFormat format, G_JSON_Array *cols_array)
 {
-    JSON_Object *col_object = NULL;
-    JSON_Value *col_value = NULL;
+    G_JSON_Object *col_object = NULL;
+    G_JSON_Value *col_value = NULL;
 
     dbString value_string;
 
@@ -121,7 +121,7 @@ int print_column_definition(dbColumn *column, int position,
 }
 
 int print_priv(char *label, int priv, enum OutputFormat format,
-               JSON_Object *root_object)
+               G_JSON_Object *root_object)
 {
     switch (format) {
     case PLAIN:

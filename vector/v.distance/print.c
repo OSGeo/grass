@@ -5,7 +5,7 @@
  */
 int print_upload(NEAR *Near, UPLOAD *Upload, int i, dbCatValArray *cvarr,
                  dbCatVal *catval, char *sep, enum OutputFormat format,
-                 JSON_Object *object)
+                 G_JSON_Object *object)
 {
     int j;
 

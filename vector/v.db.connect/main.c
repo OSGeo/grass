@@ -48,9 +48,9 @@ int main(int argc, char **argv)
     struct Map_info Map;
     char *sep;
     enum OutputFormat format;
-    JSON_Value *root_value = NULL, *conn_value = NULL;
-    JSON_Array *root_array = NULL;
-    JSON_Object *conn_object = NULL;
+    G_JSON_Value *root_value = NULL, *conn_value = NULL;
+    G_JSON_Array *root_array = NULL;
+    G_JSON_Object *conn_object = NULL;
     int skip_header = 0;
 
     /* set up the options and flags for the command line parser */

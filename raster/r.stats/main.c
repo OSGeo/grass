@@ -59,8 +59,8 @@ int main(int argc, char *argv[])
     int do_sort;
 
     enum OutputFormat format;
-    JSON_Array *root_array;
-    JSON_Value *root_value;
+    G_JSON_Array *root_array;
+    G_JSON_Value *root_value;
 
     /* printf format */
     char fmt[20];

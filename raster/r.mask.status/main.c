@@ -97,8 +97,8 @@ int report_status(struct Parameters *params)
         full_underlying = G_fully_qualified_name(reclass_name, reclass_mapset);
 
     if (strcmp(params->format->answer, "json") == 0) {
-        JSON_Value *root_value = G_json_value_init_object();
-        JSON_Object *root_object = G_json_object(root_value);
+        G_JSON_Value *root_value = G_json_value_init_object();
+        G_JSON_Object *root_object = G_json_object(root_value);
         G_json_object_set_boolean(root_object, "present", present);
         G_json_object_set_string(root_object, "name", full_mask);
         if (is_mask_reclass)

@@ -44,8 +44,8 @@ int main(int argc, char *argv[])
     int pix;
     bool update_file = false;
     enum OutputFormat format;
-    JSON_Value *root_value;
-    JSON_Object *root_object;
+    G_JSON_Value *root_value;
+    G_JSON_Object *root_object;
 
     struct GModule *module;
     struct {

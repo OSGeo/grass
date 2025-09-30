@@ -41,7 +41,7 @@ static char *format_zone(int zone_num)
 }
 
 void print_region(struct Map_info *Map, enum OutputFormat format,
-                  JSON_Object *root_object)
+                  G_JSON_Object *root_object)
 {
     char tmp1[1024], tmp2[1024];
 
@@ -78,7 +78,7 @@ void print_region(struct Map_info *Map, enum OutputFormat format,
 }
 
 void print_topo(struct Map_info *Map, enum OutputFormat format,
-                JSON_Object *root_object)
+                G_JSON_Object *root_object)
 {
     int with_z;
     long nprimitives;
@@ -229,9 +229,10 @@ void print_columns(struct Map_info *Map, const char *input_opt,
         G_fatal_error(_("Unable to describe table <%s>"), fi->table);
     }
 
-    JSON_Value *root_value = NULL, *columns_value = NULL, *column_value = NULL;
-    JSON_Object *root_object = NULL, *column_object = NULL;
-    JSON_Array *columns_array = NULL;
+    G_JSON_Value *root_value = NULL, *columns_value = NULL,
+                 *column_value = NULL;
+    G_JSON_Object *root_object = NULL, *column_object = NULL;
+    G_JSON_Array *columns_array = NULL;
 
     if (format == JSON) {
         root_value = G_json_value_init_object();
@@ -300,7 +301,7 @@ void print_columns(struct Map_info *Map, const char *input_opt,
 }
 
 void print_shell(struct Map_info *Map, const char *field_opt,
-                 enum OutputFormat format, JSON_Object *root_object)
+                 enum OutputFormat format, G_JSON_Object *root_object)
 {
     int map_type;
     int time_ok, first_time_ok, second_time_ok;
@@ -815,15 +816,15 @@ void parse_history_line(const char *buf, char *command, char *gisdbase,
 
  */
 void add_record_to_json(char *command, char *user, char *date,
-                        char *mapset_path, JSON_Array *record_array,
+                        char *mapset_path, G_JSON_Array *record_array,
                         int history_number)
 {
 
-    JSON_Value *info_value = G_json_value_init_object();
+    G_JSON_Value *info_value = G_json_value_init_object();
     if (info_value == NULL) {
         G_fatal_error(_("Failed to initialize JSON object. Out of memory?"));
     }
-    JSON_Object *info_object = G_json_object(info_value);
+    G_JSON_Object *info_object = G_json_object(info_value);
 
     G_json_object_set_number(info_object, "history_number", history_number);
     G_json_object_set_string(info_object, "command", command);
@@ -849,9 +850,9 @@ void print_history(struct Map_info *Map, enum OutputFormat format)
     char user[STR_LEN] = {0}, date[STR_LEN] = {0};
     char mapset_path[GPATH_MAX] = {0};
 
-    JSON_Value *root_value = NULL, *record_value = NULL;
-    JSON_Object *root_object = NULL;
-    JSON_Array *record_array = NULL;
+    G_JSON_Value *root_value = NULL, *record_value = NULL;
+    G_JSON_Object *root_object = NULL;
+    G_JSON_Array *record_array = NULL;
 
     if (format == JSON) {
         root_value = G_json_value_init_object();

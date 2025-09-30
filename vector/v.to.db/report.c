@@ -7,11 +7,11 @@ int report(enum OutputFormat format)
 {
     char unit_name[20];
 
-    JSON_Value *records_value = NULL, *record_value = NULL, *root_value = NULL,
-               *units_value = NULL, *totals_value = NULL;
-    JSON_Array *records_array = NULL;
-    JSON_Object *record = NULL, *root_object = NULL, *units_object = NULL,
-                *totals_object = NULL;
+    G_JSON_Value *records_value = NULL, *record_value = NULL,
+                 *root_value = NULL, *units_value = NULL, *totals_value = NULL;
+    G_JSON_Array *records_array = NULL;
+    G_JSON_Object *record = NULL, *root_object = NULL, *units_object = NULL,
+                  *totals_object = NULL;
     // todo: add measurement unit
 
     if (format == JSON) {

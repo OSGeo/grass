@@ -31,8 +31,8 @@ int main(int argc, char *argv[])
 
     enum OutputFormat format;
 
-    JSON_Value *root_value;
-    JSON_Object *root_object;
+    G_JSON_Value *root_value;
+    G_JSON_Object *root_object;
 
     struct Map_info Map;
 
