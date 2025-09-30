@@ -193,7 +193,7 @@ class TestRegion(TestCase):
                 "name": "Lambert Conformal Conic",
                 "type": "other",
                 "type_code": 99,
-                "zone": 0,
+                "zone": None,
             },
         }
 
@@ -250,7 +250,7 @@ class TestRegion(TestCase):
                 "name": "Lambert Conformal Conic",
                 "type": "other",
                 "type_code": 99,
-                "zone": 0,
+                "zone": None,
             },
         }
 
