@@ -2093,7 +2093,9 @@ def create_project(
     elif pack:
         from grass.grassdb.create import create_project_from_pack
 
-        create_project_from_pack(mapset_path, pack)
+        create_project_from_pack(
+            Path(mapset_path.directory) / mapset_path.location, pack
+        )
     else:
         _create_location_xy(mapset_path.directory, mapset_path.location)
 

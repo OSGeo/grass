@@ -29,7 +29,7 @@ def create_xy_project(path: Path | str) -> None:
     """
     _create_project_dir(path)
     # create DEFAULT_WIND and WIND files
-    _add_computation_region_to_project_dir(path, crs_type_code=0, zone=0)
+    _add_computation_region_to_project_dir(path, crs_type_code=0)
 
 
 def _create_project_dir(path: Path | str) -> Path:
@@ -131,18 +131,16 @@ def get_default_mapset_name():
 
 
 def create_project_from_pack(
-    mapset_path: MapsetPath, filename: str, description: str | None = None
+    path: Path | str, filename: str, description: str | None = None
 ):
-    _create_project_dir(Path(mapset_path.directory) / mapset_path.location)
-    set_project_crs_from_pack(mapset_path, filename)
+    _create_project_dir(path)
+    set_project_crs_from_pack(path, filename)
     if description:
         # A little inconsistency with create_project which always creates the description file.
-        _set_project_description(
-            Path(mapset_path.directory) / mapset_path.location, description
-        )
+        _set_project_description(path, description)
 
 
-def set_project_crs_from_pack(mapset_path: MapsetPath, filename: str):
+def set_project_crs_from_pack(path: Path | str, filename: str):
     """Overwrites current region (if any)"""
     with tarfile.open(filename) as tar:
         data_names = [
@@ -157,7 +155,7 @@ def set_project_crs_from_pack(mapset_path: MapsetPath, filename: str):
             raise ValueError(msg) from error
         data = json.loads(tar.extractfile(tar_info).read().decode("utf-8"))
         _add_computation_region_to_project_dir(
-            Path(mapset_path.directory) / mapset_path.location,
+            path,
             crs_type_code=data["projection"],
             zone=data["zone"],
         )
@@ -174,4 +172,6 @@ def set_project_crs_from_pack(mapset_path: MapsetPath, filename: str):
                 tar_info = tar.getmember(data_names[0] + "/" + name)
             except KeyError:
                 continue
-            Path(Path(mapset_path) / name).write_bytes(tar.extractfile(tar_info).read())
+            Path(path / "PERMANENT" / name).write_bytes(
+                tar.extractfile(tar_info).read()
+            )
