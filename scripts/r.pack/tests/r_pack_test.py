@@ -170,7 +170,7 @@ def test_files_present_xy_integer(
             .decode("utf-8")
         )
         assert data["type_code"] == 0
-        assert data["zone"] == 0
+        assert data["zone"] is None
         assert data["type"] == "xy"
 
 
@@ -220,5 +220,5 @@ def test_files_present_general_crs_float(tmp_path, data_type):
             .decode("utf-8")
         )
         assert data["type_code"] == 99
-        assert data["zone"] == 0
+        assert data["zone"] is None
         assert data["type"] == "other"
