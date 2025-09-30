@@ -94,14 +94,18 @@ have a very large impact on the size of the output file.
 available for a given file format, and certain compression methods may
 only be supported for certain data types (depends on vendor and version).
 <!-- e.g. data destined for ESRI software should use COMPRESS=LZW/PACKBITS/DEFLATE ??? -->
-<p>If the export settings are set such that data loss would occur in the output
-file (i.e, due to the particular choice of data type and/or file type), the
-normal behaviour of <em>r.out.gdal</em> in this case would be to issue an error
-message describing the problem and exit without exporting. The <b>-f</b> flag
-allows raster export even if some of the data loss tests are not passed, and
-warnings are issued instead of errors. If both the <b>-f</b> flag, the
-<b>nodata</b>b> option and the <b>type</b> option are given by the user,
-nodata and datatype checks are skipped for performance reasons.
+<p>By default, <em>r.out.gdal</em> identifies suitable settings for
+<b>nodata</b> and data <b>type</b>, if not given by the user.
+If however the export settings are set such that data loss would occur
+in the output file (i.e, due to the particular choice of data type and/or
+file type), the normal behaviour of <em>r.out.gdal</em> in this case
+would be to issue an error message describing the problem and exit without
+exporting. However, depending on the data size, data loss tests may take
+some time. For performance reasons, those tests can therefore be skipped
+if both the <b>-f</b> flag, the <b>nodata</b> option and the <b>type</b>
+option are given. Here the assumtion is that the user has made a
+deliberate choice about those settings and considered the potential risk
+for data loss when forcing the export with the <b>-f</b> flag.
 <p><em>r.out.gdal</em> exports may appear all black or gray on initial
 display in other GIS software. This is not a bug of <em>r.out.gdal</em>,
 but often caused by the default color table assigned by that software.
