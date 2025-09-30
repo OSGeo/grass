@@ -259,40 +259,40 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
 #endif
             break;
         case JSON:
-            json_object_set_number(root_object, "north", window->north);
-            json_object_set_number(root_object, "south", window->south);
-            json_object_set_number(root_object, "west", window->west);
-            json_object_set_number(root_object, "east", window->east);
-            json_object_set_number(root_object, "nsres", d_nsres);
-            json_object_set_number(root_object, "ewres", d_ewres);
-            json_object_set_number(root_object, "rows", window->rows);
-            json_object_set_number(root_object, "cols", window->cols);
+            G_json_object_set_number(root_object, "north", window->north);
+            G_json_object_set_number(root_object, "south", window->south);
+            G_json_object_set_number(root_object, "west", window->west);
+            G_json_object_set_number(root_object, "east", window->east);
+            G_json_object_set_number(root_object, "nsres", d_nsres);
+            G_json_object_set_number(root_object, "ewres", d_ewres);
+            G_json_object_set_number(root_object, "rows", window->rows);
+            G_json_object_set_number(root_object, "cols", window->cols);
 
             if (print_flag & PRINT_3D) {
-                json_object_set_number(root_object, "nsres3", d_nsres3);
-                json_object_set_number(root_object, "ewres3", d_ewres3);
-                json_object_set_number(root_object, "top", window->top);
-                json_object_set_number(root_object, "bottom", window->bottom);
-                json_object_set_number(root_object, "rows3", window->rows3);
-                json_object_set_number(root_object, "cols3", window->cols3);
-                json_object_set_number(root_object, "tbres", d_tbres);
-                json_object_set_number(root_object, "depths", window->depths);
+                G_json_object_set_number(root_object, "nsres3", d_nsres3);
+                G_json_object_set_number(root_object, "ewres3", d_ewres3);
+                G_json_object_set_number(root_object, "top", window->top);
+                G_json_object_set_number(root_object, "bottom", window->bottom);
+                G_json_object_set_number(root_object, "rows3", window->rows3);
+                G_json_object_set_number(root_object, "cols3", window->cols3);
+                G_json_object_set_number(root_object, "tbres", d_tbres);
+                G_json_object_set_number(root_object, "depths", window->depths);
             }
 
 #ifdef HAVE_LONG_LONG_INT
-            json_object_set_number(root_object, "cells",
-                                   (long long)window->rows * window->cols);
+            G_json_object_set_number(root_object, "cells",
+                                     (long long)window->rows * window->cols);
             if (print_flag & PRINT_3D)
-                json_object_set_number(root_object, "cells3",
-                                       (long long)window->rows3 *
-                                           window->cols3 * window->depths);
+                G_json_object_set_number(root_object, "cells3",
+                                         (long long)window->rows3 *
+                                             window->cols3 * window->depths);
 #else
-            json_object_set_number(root_object, "cells",
-                                   (long)window->rows * window->cols);
+            G_json_object_set_number(root_object, "cells",
+                                     (long)window->rows * window->cols);
             if (print_flag & PRINT_3D)
-                json_object_set_number(root_object, "cells3",
-                                       (long)window->rows3 * window->cols3 *
-                                           window->depths);
+                G_json_object_set_number(root_object, "cells3",
+                                         (long)window->rows3 * window->cols3 *
+                                             window->depths);
 #endif
             // The library functions try hard to provide a name and the creation
             // process actually stores 'unknown' if the name is not available,
@@ -475,16 +475,16 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
                 fprintf(stdout, "%-*s %11s\n", width, "center latitude:", buf);
                 break;
             case JSON:
-                json_object_set_number(root_object, "nw_long", lo1);
-                json_object_set_number(root_object, "nw_lat", la1);
-                json_object_set_number(root_object, "ne_long", lo2);
-                json_object_set_number(root_object, "ne_lat", la2);
-                json_object_set_number(root_object, "se_long", lo3);
-                json_object_set_number(root_object, "se_lat", la3);
-                json_object_set_number(root_object, "sw_long", lo4);
-                json_object_set_number(root_object, "sw_lat", la4);
-                json_object_set_number(root_object, "center_long", loc);
-                json_object_set_number(root_object, "center_lat", lac);
+                G_json_object_set_number(root_object, "nw_long", lo1);
+                G_json_object_set_number(root_object, "nw_lat", la1);
+                G_json_object_set_number(root_object, "ne_long", lo2);
+                G_json_object_set_number(root_object, "ne_lat", la2);
+                G_json_object_set_number(root_object, "se_long", lo3);
+                G_json_object_set_number(root_object, "se_lat", la3);
+                G_json_object_set_number(root_object, "sw_long", lo4);
+                G_json_object_set_number(root_object, "sw_lat", la4);
+                G_json_object_set_number(root_object, "center_long", loc);
+                G_json_object_set_number(root_object, "center_lat", lac);
                 break;
             }
 
@@ -499,8 +499,8 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
                     fprintf(stdout, "%-*s %d\n", width, "cols:", window->cols);
                     break;
                 case JSON:
-                    json_object_set_number(root_object, "rows", window->rows);
-                    json_object_set_number(root_object, "cols", window->cols);
+                    G_json_object_set_number(root_object, "rows", window->rows);
+                    G_json_object_set_number(root_object, "cols", window->cols);
                     break;
                 }
             }
@@ -542,10 +542,10 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
             }
             break;
         case JSON:
-            json_object_set_number(root_object, "ns_extent",
-                                   window->north - window->south);
-            json_object_set_number(root_object, "ew_extent",
-                                   window->east - window->west);
+            G_json_object_set_number(root_object, "ns_extent",
+                                     window->north - window->south);
+            G_json_object_set_number(root_object, "ew_extent",
+                                     window->east - window->west);
             break;
         }
     }
@@ -576,10 +576,10 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
             }
             break;
         case JSON:
-            json_object_set_number(root_object, "center_easting",
-                                   (window->west + window->east) / 2.);
-            json_object_set_number(root_object, "center_northing",
-                                   (window->north + window->south) / 2.);
+            G_json_object_set_number(root_object, "center_easting",
+                                     (window->west + window->east) / 2.);
+            G_json_object_set_number(root_object, "center_northing",
+                                     (window->north + window->south) / 2.);
             break;
         }
     }
@@ -590,7 +590,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
         switch (format) {
         case JSON:
             snprintf(gmt, 120, "%s/%s/%s/%s", west, east, south, north);
-            json_object_set_string(root_object, "GMT", gmt);
+            G_json_object_set_string(root_object, "GMT", gmt);
             break;
         default:
             fprintf(stdout, "%s/%s/%s/%s\n", west, east, south, north);
@@ -604,7 +604,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
         switch (format) {
         case JSON:
             snprintf(wms, 150, "bbox=%s,%s,%s,%s", west, south, east, north);
-            json_object_set_string(root_object, "WMS", wms);
+            G_json_object_set_string(root_object, "WMS", wms);
             break;
         default:
             G_format_northing(window->north, north, -1);
@@ -698,7 +698,8 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
                     "convergence angle:", convergence);
             break;
         case JSON:
-            json_object_set_number(root_object, "converge_angle", convergence);
+            G_json_object_set_number(root_object, "converge_angle",
+                                     convergence);
         }
     }
 
@@ -904,14 +905,14 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
                 fprintf(stdout, "%-*s  %s\n", width, "center latitude:", buf);
                 break;
             case JSON:
-                json_object_set_number(root_object, "ll_n", sh_ll_n);
-                json_object_set_number(root_object, "ll_s", sh_ll_s);
-                json_object_set_number(root_object, "ll_w", sh_ll_w);
-                json_object_set_number(root_object, "ll_e", sh_ll_e);
+                G_json_object_set_number(root_object, "ll_n", sh_ll_n);
+                G_json_object_set_number(root_object, "ll_s", sh_ll_s);
+                G_json_object_set_number(root_object, "ll_w", sh_ll_w);
+                G_json_object_set_number(root_object, "ll_e", sh_ll_e);
                 /* center of the largest bounding box */
-                json_object_set_number(root_object, "ll_clon", loc);
-                json_object_set_number(root_object, "ll_clat",
-                                       (sh_ll_n + sh_ll_s) / 2.);
+                G_json_object_set_number(root_object, "ll_clon", loc);
+                G_json_object_set_number(root_object, "ll_clat",
+                                         (sh_ll_n + sh_ll_s) / 2.);
             }
 
             /*It should be calculated which number of rows and cols we have in

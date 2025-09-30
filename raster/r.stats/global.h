@@ -1,6 +1,6 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 
 #define SORT_DEFAULT 0
 #define SORT_ASC     1

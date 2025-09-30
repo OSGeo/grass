@@ -13,7 +13,7 @@
 #define PRINT_GMT    0x200
 #define PRINT_WMS    0x400
 
-#include <grass/parson.h>
+#include <grass/gjson.h>
 
 enum OutputFormat { PLAIN, SHELL, JSON };
 
