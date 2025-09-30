@@ -65,7 +65,6 @@ def test_crs_ll(tmp_path):
         assert data["crs"]["type"] == "ll"
         # We test the value we are returning (but the value is not part of the API).
         assert data["crs"]["name"] == "Latitude-Longitude"
-        # Zero is not an ideal value, but that's what we are returning now.
         assert data["crs"]["zone"] is None
 
 
@@ -90,7 +89,6 @@ def test_crs_other_epsg(tmp_path):
         name = data["crs"]["name"]
         assert "North Carolina".lower() in name.lower()
         assert "NAD83".lower() in name.lower()
-        # Zero is not an ideal value, but that's what we are returning now.
         assert data["crs"]["zone"] is None
 
 
@@ -106,5 +104,4 @@ def test_crs_other_custom(tmp_path):
         assert data["crs"]["type_code"] == 99
         assert data["crs"]["type"] == "other"
         assert data["crs"]["name"] is None
-        # Zero is not an ideal value, but that's what we are returning now.
         assert data["crs"]["zone"] is None
