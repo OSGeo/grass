@@ -100,12 +100,13 @@ If however the export settings are set such that data loss would occur
 in the output file (i.e, due to the particular choice of data type and/or
 file type), the normal behaviour of <em>r.out.gdal</em> in this case
 would be to issue an error message describing the problem and exit without
-exporting. However, depending on the data size, data loss tests may take
-some time. For performance reasons, those tests can therefore be skipped
-if both the <b>-f</b> flag, the <b>nodata</b> option and the <b>type</b>
-option are given. Here the assumtion is that the user has made a
-deliberate choice about those settings and considered the potential risk
-for data loss when forcing the export with the <b>-f</b> flag.
+exporting. However, depending on the size of the data, tests to check for
+data loss may take some time. For performance reasons, these tests can be
+skipped if the <b>-f</b>b> flag, the <b>nodata</b>b> option and the
+<b>type</b>b> option are all specified. The assumption here is that the
+user has made a deliberate choice about these settings and considered the
+potential risk of data loss when forcing the export with the <b>-f</b>b>
+flag.
 <p><em>r.out.gdal</em> exports may appear all black or gray on initial
 display in other GIS software. This is not a bug of <em>r.out.gdal</em>,
 but often caused by the default color table assigned by that software.
