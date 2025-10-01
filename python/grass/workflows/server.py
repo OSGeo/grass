@@ -14,6 +14,8 @@
 This module provides two classes for managing Jupyter Notebook servers
 programmatically within GRASS GIS tools or scripting environments:
 
+Functions:
+- `is_jupyter_installed()`: Check if Jupyter Notebook is installed on the system.
 Classes:
 - `JupyterServerInstance`: Manages a single Jupyter Notebook server instance.
 - `JupyterServerRegistry`: Manages multiple `JupyterServerInstance` objects
@@ -49,6 +51,33 @@ import atexit
 import signal
 import sys
 import shutil
+
+
+def is_jupyter_installed():
+    """Check if Jupyter Notebook is installed.
+
+    - On Linux/macOS: returns True if the presence command succeeds, False otherwise.
+    - On Windows: currently always returns False because Jupyter is
+    not bundled.
+    TODO: Once Jupyter becomes part of the Windows build
+    process, this method should simply return True without additional checks.
+
+    :return: True if Jupyter Notebook is installed and available, False otherwise.
+    """
+    if sys.platform.startswith("win"):
+        # For now, always disabled on Windows
+        return False
+
+    try:
+        result = subprocess.run(
+            ["jupyter", "notebook", "--version"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=True,
+        )
+        return result.returncode == 0
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return False
 
 
 class JupyterServerInstance:
@@ -97,17 +126,6 @@ class JupyterServerInstance:
             sys.exit(0)
 
     @staticmethod
-    def is_jupyter_notebook_installed():
-        """Check if Jupyter Notebook is installed.
-        :return: True if Jupyter Notebook is installed, False otherwise (bool).
-        """
-        try:
-            subprocess.check_output(["jupyter", "notebook", "--version"])
-            return True
-        except (subprocess.CalledProcessError, FileNotFoundError):
-            return False
-
-    @staticmethod
     def find_free_port():
         """Find a free port on the local machine.
         :return: A free port number (int).
@@ -137,7 +155,7 @@ class JupyterServerInstance:
     def start_server(self):
         """Run Jupyter server in the given directory on a free port."""
         # Check if Jupyter Notebook is installed
-        if not JupyterServerInstance.is_jupyter_notebook_installed():
+        if not is_jupyter_installed():
             raise RuntimeError(_("Jupyter Notebook is not installed"))
 
         # Find free port and build server url
