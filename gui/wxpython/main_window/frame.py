@@ -906,6 +906,39 @@ class GMFrame(wx.Frame):
         # add map display panel to notebook and make it current
         self.mainnotebook.AddPage(gmodeler_panel, _("Graphical Modeler"))
 
+    def OnJupyterNotebook(self, event=None, cmd=None):
+        """Launch Jupyter Notebook page. See OnJupyterNotebook documentation"""
+        from jupyter_notebook.panel import JupyterPanel
+
+        jupyter_panel = JupyterPanel(
+            parent=self, giface=self._giface, statusbar=self.statusbar, dockable=True
+        )
+        jupyter_panel.SetUpPage(self, self.mainnotebook)
+        jupyter_panel.SetUpNotebookInterface()
+
+        # add map display panel to notebook and make it current
+        self.mainnotebook.AddPage(jupyter_panel, _("Jupyter Notebook"))
+
+    def OnShowJupyterInfo(self, event=None):
+        """Show information dialog when Jupyter Notebook is not installed."""
+        if sys.platform.startswith("win"):
+            message = _(
+                "Jupyter Notebook is currently not included in the Windows GRASS build process.\n"
+                "This feature will be available in a future release."
+            )
+        else:
+            message = _(
+                "To use notebooks in GRASS, you need to have the Jupyter Notebook "
+                "package installed. After the installation, please restart GRASS to enable this feature."
+            )
+
+        wx.MessageBox(
+            message=message,
+            caption=_("Jupyter Notebook not available"),
+            style=wx.OK | wx.ICON_INFORMATION,
+            parent=self,
+        )
+
     def OnPsMap(self, event=None, cmd=None):
         """Launch Cartographic Composer. See OnIClass documentation"""
         from psmap.frame import PsMapFrame
@@ -2404,6 +2437,10 @@ class GMFrame(wx.Frame):
             if hasattr(event, "Veto"):
                 event.Veto()
             return
+
+        from grass.workflows import JupyterServerRegistry
+
+        JupyterServerRegistry.get().stop_all_servers()
 
         self.DisplayCloseAll()
 
