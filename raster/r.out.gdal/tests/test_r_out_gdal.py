@@ -28,7 +28,7 @@ def simple_raster_map(tmp_path_factory):
     gs.create_project(project, epsg=4326)
 
     with gs.setup.init(project) as session:
-        tools = Tools(session=session)
+        tools = Tools(session=session, consistent_return_value=True)
         tools.g_region(n=10, s=0, e=10, w=0, res=1)
 
         tools.r_mapcalc(
@@ -46,7 +46,7 @@ def test_basic_cog_export(simple_raster_map, file_format):
     - Export of common format works with defaults.
     """
     mapname, session, tmp_path = simple_raster_map
-    tools = Tools(session=session)
+    tools = Tools(session=session, consistent_return_value=True)
     suffix = FORMAT_DICT[file_format]
     output_file = tmp_path / f"{mapname}_{file_format}.{suffix}"
     export = tools.r_out_gdal(
@@ -67,7 +67,7 @@ def test_compressed_gtiff_export(simple_raster_map):
     - Export of common format works.
     """
     mapname, session, tmp_path = simple_raster_map
-    tools = Tools(session=session)
+    tools = Tools(session=session, consistent_return_value=True)
 
     output_file = tmp_path / f"{mapname}_lzw.tif"
     export = tools.r_out_gdal(
@@ -89,7 +89,7 @@ def test_fast_gtiff_export(simple_raster_map):
     - Fast export of works if type, nodata and -f are given.
     """
     mapname, session, tmp_path = simple_raster_map
-    tools = Tools(session=session)
+    tools = Tools(session=session, consistent_return_value=True)
 
     output_file = tmp_path / f"{mapname}_fast.tif"
     export = tools.r_out_gdal(
