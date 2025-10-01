@@ -1,3 +1,5 @@
+import json
+import subprocess
 import sys
 
 import pytest
@@ -53,3 +55,75 @@ def test_subcommand_run_tool_regular_run():
 def test_subcommand_run_tool_failure_run():
     """Check that a tool produces non-zero return code"""
     assert main(["run", "g.region", "raster=does_not_exist"]) == 1
+
+
+@pytest.mark.skipif(
+    sys.platform.startswith("win"), reason="pytest capfd not reliable on Windows"
+)
+def test_subcommand_run_with_crs_as_epsg(capfd):
+    """Check that CRS provided as EPSG is applied"""
+    assert main(["run", "--crs", "EPSG:3358", "g.proj", "-p", "format=json"]) == 0
+    assert json.loads(capfd.readouterr().out)["srid"] == "EPSG:3358"
+
+
+def test_subcommand_run_with_crs_as_epsg_subprocess():
+    """Check that CRS provided as EPSG is applied"""
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "grass.app",
+            "run",
+            "--crs",
+            "EPSG:3358",
+            "g.proj",
+            "-p",
+            "format=json",
+        ],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    assert json.loads(result.stdout)["srid"] == "EPSG:3358"
+
+
+@pytest.mark.skipif(
+    sys.platform.startswith("win"), reason="pytest capfd not reliable on Windows"
+)
+def test_subcommand_run_with_crs_as_pack(pack_raster_file4x5_rows, capfd):
+    """Check that CRS provided as pack file is applied"""
+    assert (
+        main(
+            [
+                "run",
+                "--crs",
+                str(pack_raster_file4x5_rows),
+                "g.proj",
+                "-p",
+                "format=json",
+            ]
+        )
+        == 0
+    )
+    assert json.loads(capfd.readouterr().out)["srid"] == "EPSG:3358"
+
+
+def test_subcommand_run_with_crs_as_pack_subprocess(pack_raster_file4x5_rows, capfd):
+    """Check that CRS provided as pack file is applied"""
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "grass.app",
+            "run",
+            "--crs",
+            str(pack_raster_file4x5_rows),
+            "g.proj",
+            "-p",
+            "format=json",
+        ],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    assert json.loads(result.stdout)["srid"] == "EPSG:3358"
