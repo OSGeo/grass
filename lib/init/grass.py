@@ -660,12 +660,16 @@ def create_location(gisdbase, location, geostring) -> None:
     :param location: name of new Location
     :param geostring: path to a georeferenced file or EPSG code
     """
-    from grass.script import core as gcore  # pylint: disable=E0611
+    import grass.script as gs  # pylint: disable=E0611
 
     try:
-        gcore.create_project(gisdbase, location, crs=geostring)
-    except gcore.ScriptError as err:
-        fatal(err.value.strip('"').strip("'").replace("\\n", os.linesep))
+        gs.create_project(gisdbase, location, crs=geostring)
+    except gs.ScriptError as err:
+        fatal(
+            _("Error creating project: {}").format(
+                err.value.strip('"').strip("'").replace("\\n", os.linesep)
+            )
+        )
 
 
 def can_create_location(gisdbase: StrPath, location) -> bool:
