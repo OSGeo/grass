@@ -5,7 +5,6 @@ import sys
 import pytest
 
 from grass.app.cli import main
-from grass.gunittest.utils import xfail_windows
 
 
 def test_cli_help_runs():
@@ -58,7 +57,9 @@ def test_subcommand_run_tool_failure_run():
     assert main(["run", "g.region", "raster=does_not_exist"]) == 1
 
 
-@xfail_windows
+@pytest.mark.skipif(
+    sys.platform.startswith("win"), reason="pytest capfd not reliable on Windows"
+)
 def test_subcommand_run_with_crs_as_epsg(capfd):
     """Check that CRS provided as EPSG is applied"""
     assert main(["run", "--crs", "EPSG:3358", "g.proj", "-p", "format=json"]) == 0
@@ -86,7 +87,9 @@ def test_subcommand_run_with_crs_as_epsg_subprocess():
     assert json.loads(result.stdout)["srid"] == "EPSG:3358"
 
 
-@xfail_windows
+@pytest.mark.skipif(
+    sys.platform.startswith("win"), reason="pytest capfd not reliable on Windows"
+)
 def test_subcommand_run_with_crs_as_pack(pack_raster_file4x5_rows, capfd):
     """Check that CRS provided as pack file is applied"""
     assert (
