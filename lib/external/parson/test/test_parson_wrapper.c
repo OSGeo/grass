@@ -18,7 +18,6 @@
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
-#include <grass/parson.h>
 #include <grass/gjson.h>
 
 #include "test_gjson_lib.h"
@@ -151,8 +150,8 @@ int test_parson_wrapper(void)
         G_warning("Error in G_json_object_set_null");
         sum++;
     }
-    if (json_value_get_type(G_json_object_get_value(object, TEST_OBJECT_KEY)) !=
-        JSONNull) {
+    if (G_json_value_get_type(
+            G_json_object_get_value(object, TEST_OBJECT_KEY)) != JSONNull) {
         G_warning("Error: G_json_object_set_null failed, the value type is not "
                   "null.");
         sum++;
@@ -235,7 +234,7 @@ int test_parson_wrapper(void)
         G_warning("Error in G_json_array_append_null");
         sum++;
     }
-    if (json_value_get_type(G_json_array_get_value(array, 0)) != JSONNull) {
+    if (G_json_value_get_type(G_json_array_get_value(array, 0)) != JSONNull) {
         G_warning("Error in G_json_array_append_null, the value type is not "
                   "null.");
         sum++;
