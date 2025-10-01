@@ -1,7 +1,7 @@
 """
-Create objects in GRASS Spatial Database
+Create objects in a GRASS project
 
-(C) 2020 by the GRASS Development Team
+(C) 2020-2025 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -133,6 +133,7 @@ def get_default_mapset_name():
 def create_project_from_pack(
     path: Path | str, filename: str, description: str | None = None
 ):
+    """Create project from a GRASS native raster file (aka pack file)"""
     _create_project_dir(path)
     set_project_crs_from_pack(path, filename)
     if description:
@@ -140,26 +141,26 @@ def create_project_from_pack(
         _set_project_description(path, description)
 
 
-def set_project_crs_from_pack(path: Path | str, filename: str):
-    """Overwrites current region (if any)"""
-    with tarfile.open(filename) as tar:
+def set_project_crs_from_pack(path: Path | str, filename: Path | str):
+    """Set project CRS from a GRASS native raster file.
+
+    Overwrites the values of the current and the default computational region (if any).
+    """
+    with tarfile.open(os.fspath(filename)) as tar:
         data_names = [
             tarinfo.name for tarinfo in tar.getmembers() if "/" not in tarinfo.name
         ]
         try:
-            tar_info = tar.getmember(
-                data_names[0] + "/" + "computational_region_crs.json"
-            )
+            tar_info = tar.getmember(data_names[0] + "/computational_region_crs.json")
         except KeyError as error:
             msg = "Missing complete CRS info: Use pack from version 8.5 (2025) or above"
             raise ValueError(msg) from error
         data = json.loads(tar.extractfile(tar_info).read().decode("utf-8"))
         _add_computation_region_to_project_dir(
             path,
-            crs_type_code=data["projection"],
+            crs_type_code=data["type_code"],
             zone=data["zone"],
         )
-
         crs_files = [
             "PROJ_UNITS",
             "PROJ_INFO",
@@ -172,6 +173,6 @@ def set_project_crs_from_pack(path: Path | str, filename: str):
                 tar_info = tar.getmember(data_names[0] + "/" + name)
             except KeyError:
                 continue
-            Path(path / "PERMANENT" / name).write_bytes(
+            (Path(path) / "PERMANENT" / name).write_bytes(
                 tar.extractfile(tar_info).read()
             )

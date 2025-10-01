@@ -164,7 +164,17 @@ def test_crs_parameter_xy_overrides_epsg(tmp_path):
         gs.setup.init(project, env=os.environ.copy()) as session,
         Tools(session=session) as tools,
     ):
-        assert tools.g_region(flags="p", format="shell").keyval["projection"] == 0
+        assert tools.g_region(flags="p", format="json")["crs"]["type"] == "xy"
+
+
+def test_crs_parameter_epsg_overrides_epsg(tmp_path):
+    project = tmp_path / "test"
+    gs.create_project(project, crs="EPSG:4326", epsg=3358)
+    with (
+        gs.setup.init(project, env=os.environ.copy()) as session,
+        Tools(session=session) as tools,
+    ):
+        assert tools.g_proj(flags="p", format="shell").keyval["srid"] == "EPSG:4326"
 
 
 @pytest.mark.parametrize("crs", ["EPSG:4326", "epsg:3358"])
