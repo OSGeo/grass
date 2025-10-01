@@ -136,7 +136,8 @@ static bool Rast__get_present_mask(char *name, char *mapset)
  * @return true if mask is present, false otherwise
  */
 bool Rast_mask_status(char *name, char *mapset, bool *is_mask_reclass,
-                      char *reclass_name, char *reclass_mapset)
+                      char reclass_name[GNAME_MAX],
+                      char reclass_mapset[GMAPSET_MAX])
 {
     bool present = Rast__get_present_mask(name, mapset);
 
