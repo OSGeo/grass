@@ -446,7 +446,9 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                                         north);
         }
 
-        strcpy(buf, vect[i]);
+        if (G_strlcpy(buf, vect[i], sizeof(buf)) >= sizeof(buf)) {
+            G_fatal_error(_("Vector name <%s> is too long"), vect[i]);
+        }
         if ((str = strchr(buf, '@')))
             *str = 0;
 
