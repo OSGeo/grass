@@ -8,6 +8,7 @@ FROM ubuntu:24.04@sha256:353675e2a41babd526e2b837d7ec780c2a05bca0164f7ea5dbbd433
 
 ARG BASE_NAME="ubuntu:24.04"
 ARG DIGEST="sha256:353675e2a41babd526e2b837d7ec780c2a05bca0164f7ea5dbbd433d21d166fc"
+ARG PYTHON_VERSION=3.12
 
 # Have build parameters as build arguments?
 # ARG LDFLAGS="-s -Wl,--no-undefined -lblas"
@@ -365,7 +366,7 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
 # Copy GRASS from build image
 COPY --link --from=build /usr/local/bin/* /usr/local/bin/
 COPY --link --from=build /usr/local/grass85 /usr/local/grass85/
-COPY --link --from=build /src/site-packages /usr/lib/python3.10/
+COPY --link --from=build /src/site-packages /usr/lib/python${PYTHON_VERSION}/
 COPY --link --from=build /usr/lib/gdalplugins /usr/lib/gdalplugins
 # COPY --link --from=datum_grids /tmp/cdn.proj.org/*.tif /usr/share/proj/
 
@@ -375,7 +376,8 @@ RUN ln -sf /usr/local/grass85 /usr/local/grass
 # show GRASS, PROJ, GDAL etc versions
 RUN grass --tmp-project EPSG:4326 --exec g.version -rge && \
     pdal --version && \
-    python --version
+    python --version && \
+    python -c "import numpy; print(numpy.__version__)"
 
 WORKDIR /tmp
 COPY docker/testdata/simple.laz .
