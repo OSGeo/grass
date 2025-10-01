@@ -48,7 +48,7 @@ def test_basic_cog_export(simple_raster_map, file_format):
     mapname, session, tmp_path = simple_raster_map
     tools = Tools(session=session)
     suffix = FORMAT_DICT[file_format]
-    output_file = tmp_path / f"{mapname}.{suffix}"
+    output_file = tmp_path / f"{mapname}_{file_format}.{suffix}"
     export = tools.r_out_gdal(
         input=mapname,
         output=output_file,
