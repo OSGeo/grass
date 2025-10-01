@@ -8,7 +8,7 @@
  */
 
 #include <stdlib.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
@@ -173,8 +173,8 @@ int main(int argc, char *argv[])
 
     if (strcmp(parm.format->answer, "json") == 0) {
         format = JSON;
-        array_value = json_value_init_array();
-        array = json_array(array_value);
+        array_value = G_json_value_init_array();
+        array = G_json_array(array_value);
     }
     else if (strcmp(parm.format->answer, "csv") == 0) {
         format = CSV;
@@ -314,13 +314,14 @@ int main(int argc, char *argv[])
     }
 
     if (format == JSON) {
-        char *serialized_string = json_serialize_to_string_pretty(array_value);
+        char *serialized_string =
+            G_json_serialize_to_string_pretty(array_value);
         if (serialized_string == NULL) {
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         }
         puts(serialized_string);
-        json_free_serialized_string(serialized_string);
-        json_value_free(array_value);
+        G_json_free_serialized_string(serialized_string);
+        G_json_value_free(array_value);
     }
 
     Rast_close(fd);

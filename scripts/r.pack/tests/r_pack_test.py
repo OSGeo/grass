@@ -169,8 +169,9 @@ def test_files_present_xy_integer(
             .read()
             .decode("utf-8")
         )
-        assert data["projection"] == 0
-        assert data["zone"] == 0
+        assert data["type_code"] == 0
+        assert data["zone"] is None
+        assert data["type"] == "xy"
 
 
 @pytest.mark.parametrize("data_type", ["float", "double"])
@@ -218,5 +219,6 @@ def test_files_present_general_crs_float(tmp_path, data_type):
             .read()
             .decode("utf-8")
         )
-        assert data["projection"] == 99
-        assert data["zone"] == 0
+        assert data["type_code"] == 99
+        assert data["zone"] is None
+        assert data["type"] == "other"
