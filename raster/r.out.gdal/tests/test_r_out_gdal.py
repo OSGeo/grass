@@ -3,9 +3,8 @@ import pytest
 from grass.tools import Tools
 
 FORMAT_DICT = {
-    # ToDo: Fix https://github.com/OSGeo/grass/issues/6398
-    # "COG": "tif",
-    # "GPKG": "gpkg",
+    "COG": "tif",
+    "GPKG": "gpkg",
     "GTiff": "tif",
     "VRT": "vrt",
     "netCDF": "nc",
