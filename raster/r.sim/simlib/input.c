@@ -301,7 +301,7 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
 
     setup->si0 = setup->sisum / cc;
     setup->vmean = vsum / cc;
-    double chmean = chsum / cc;
+    setup->chmean = chsum / cc;
 
     if (grids->inf)
         setup->infmean = infsum / cc;
@@ -336,7 +336,12 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
                 "kg/m2s \n"),
               setup->si0);
     G_message(_("Mean flow velocity \t= %f m/s\n"), setup->vmean);
-    G_message(_("Mean Mannings \t= %f\n"), 1.0 / chmean);
+
+    // Prevent potential division by zero error
+    if (setup->chmean != 0.0)
+        G_message(_("Mean Mannings \t= %f\n"), 1.0 / setup->chmean);
+    else
+        G_message(_("Mean Mannings \t= undefined (chmean is zero)\n"));
 
     setup->deltap = amin1(setup->deltap, deltaw);
 

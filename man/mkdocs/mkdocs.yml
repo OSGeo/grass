@@ -1,6 +1,6 @@
 ---
 # Project information
-site_author: The GRASS Development Team  # Default author to all pages
+site_author: The GRASS Development Team # Default author to all pages
 site_name: !ENV SITE_NAME
 site_url: https://grass.osgeo.org/grass-stable/manuals/
 
@@ -29,10 +29,9 @@ theme:
     - content.code.copy
     - content.tabs.link
     - content.tooltips
-    - search.suggest
+    - search.share
     - search.highlight
     - navigation.footer
-    - navigation.indexes
     - navigation.instant
     - navigation.instant.progress
     - navigation.tabs
@@ -154,7 +153,7 @@ nav:
           - List of components: wxGUI.components.md
 
   - Key concepts:
-      - GRASS projects: grass_database.md
+      - GRASS projects: grass_projects.md
       - Raster overview: rasterintro.md
       - 3D raster overview: raster3dintro.md
       - Vector overview: vectorintro.md
@@ -202,3 +201,4 @@ not_in_nav: |
   grass-sqlite.md
   wxpyimgview.md
   ximgview.md
+  grass_database.md

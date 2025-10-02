@@ -354,7 +354,8 @@ int calculateD(int fd, struct area_entry *ad, char **par, double *result)
 
     buf_null = Rast_allocate_d_buf();
     if (buf_null == NULL) {
-        close(mask_fd);
+        if (masked)
+            close(mask_fd);
         G_fatal_error("malloc buf_null failed");
     }
 
@@ -553,7 +554,8 @@ int calculateF(int fd, struct area_entry *ad, char **par, double *result)
 
     buf_null = Rast_allocate_f_buf();
     if (buf_null == NULL) {
-        close(mask_fd);
+        if (masked)
+            close(mask_fd);
         G_fatal_error("malloc buf_null failed");
     }
 

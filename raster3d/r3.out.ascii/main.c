@@ -56,7 +56,8 @@ void fatalError(char *errorMsg)
     if (map != NULL) {
         /* should unopen map here! */
         if (!Rast3d_close(map))
-            fatalError(_("Unable to close 3D raster map"));
+            Rast3d_fatal_error("%s (%s)", errorMsg,
+                               _("Unable to close 3D raster map"));
     }
 
     Rast3d_fatal_error("%s", errorMsg);

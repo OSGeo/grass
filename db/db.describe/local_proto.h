@@ -1,7 +1,7 @@
 #ifndef __LOCAL_PROTO_H__
 #define __LOCAL_PROTO_H__
 
-#include <grass/parson.h>
+#include <grass/gjson.h>
 
 enum OutputFormat { PLAIN, JSON };
 

@@ -57,15 +57,15 @@ void Init(void)
     }
 
     if (Uniform->answer)
-        sprintf(Buf, "Uni. R. S.");
+        snprintf(Buf, sizeof(Buf), "Uni. R. S.");
     else
-        sprintf(Buf, "Dist. R. S.");
+        snprintf(Buf, sizeof(Buf), "Dist. R. S.");
 
     if (!range_high_stuff->answer)
         High = 255;
     else {
         High = atoi(range_high_stuff->answer);
-        sprintf(String, " high=%d", High);
+        snprintf(String, sizeof(String), " high=%d", High);
         strcat(Buf, String);
     }
 
@@ -197,15 +197,15 @@ void Init(void)
     }
 
     if (NumDist > 0) {
-        sprintf(String, " dist=");
+        snprintf(String, sizeof(String), " dist=");
         strcat(Buf, String);
         for (i = 0; i < NumDist - 1; i++) {
-            sprintf(String, "%.*lf,", Digits(AllFilters[i].MaxDist, 6),
-                    AllFilters[i].MaxDist);
+            snprintf(String, sizeof(String), "%.*lf,",
+                     Digits(AllFilters[i].MaxDist, 6), AllFilters[i].MaxDist);
             strcat(Buf, String);
         }
-        sprintf(String, "%.*lf", Digits(AllFilters[i].MaxDist, 6),
-                AllFilters[i].MaxDist);
+        snprintf(String, sizeof(String), "%.*lf",
+                 Digits(AllFilters[i].MaxDist, 6), AllFilters[i].MaxDist);
         strcat(Buf, String);
     }
 
@@ -229,15 +229,15 @@ void Init(void)
     }
 
     if (NumExp > 0) {
-        sprintf(String, " exp=");
+        snprintf(String, sizeof(String), " exp=");
         strcat(Buf, String);
         for (i = 0; i < NumExp - 1; i++) {
-            sprintf(String, "%.*lf,", Digits(AllFilters[i].Exp, 6),
-                    AllFilters[i].Exp);
+            snprintf(String, sizeof(String), "%.*lf,",
+                     Digits(AllFilters[i].Exp, 6), AllFilters[i].Exp);
             strcat(Buf, String);
         }
-        sprintf(String, "%.*lf", Digits(AllFilters[i].Exp, 6),
-                AllFilters[i].Exp);
+        snprintf(String, sizeof(String), "%.*lf", Digits(AllFilters[i].Exp, 6),
+                 AllFilters[i].Exp);
         strcat(Buf, String);
     }
 
@@ -245,16 +245,16 @@ void Init(void)
         G_fatal_error(_("Must have a exponent value for each filter"));
 
     if (NumWeight > 0) {
-        sprintf(String, " flat=");
+        snprintf(String, sizeof(String), " flat=");
         strcat(Buf, String);
         for (i = 0; i < NumWeight - 1; i++) {
-            sprintf(String, "%.*lf,", Digits(AllFilters[i].Mult, 6),
-                    AllFilters[i].Mult);
+            snprintf(String, sizeof(String), "%.*lf,",
+                     Digits(AllFilters[i].Mult, 6), AllFilters[i].Mult);
             strcat(Buf, String);
             G_debug(3, "(AllFilters[i].Mult):%.12lf", AllFilters[i].Mult);
         }
-        sprintf(String, "%.*lf", Digits(AllFilters[i].Mult, 6),
-                AllFilters[i].Mult);
+        snprintf(String, sizeof(String), "%.*lf", Digits(AllFilters[i].Mult, 6),
+                 AllFilters[i].Mult);
         strcat(Buf, String);
     }
 

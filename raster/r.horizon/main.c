@@ -35,6 +35,7 @@ Program was refactored by Anna Petrasova to remove most global variables.
 #include <omp.h>
 #endif
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -43,7 +44,7 @@ Program was refactored by Anna Petrasova to remove most global variables.
 #include <grass/raster.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 
 #define WHOLE_RASTER   1
 #define SINGLE_POINT   0
@@ -334,7 +335,8 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    G_set_omp_num_threads(parm.nprocs);
+    int nprocs = G_set_omp_num_threads(parm.nprocs);
+    nprocs = Rast_disable_omp_on_mask(nprocs);
 
     struct Cell_head cellhd;
     struct Cell_head new_cellhd;
@@ -604,26 +606,26 @@ int main(int argc, char *argv[])
         JSON_Array *coordinates;
         JSON_Object *origin;
         if (format == JSON) {
-            root_value = json_value_init_array();
-            coordinates = json_value_get_array(root_value);
-            json_set_float_serialization_format("%lf");
+            root_value = G_json_value_init_array();
+            coordinates = G_json_array(root_value);
+            G_json_set_float_serialization_format("%lf");
         }
         for (int i = 0; i < point_count; ++i) {
             /* Calculate the horizon for each point */
             if (format == JSON) {
-                origin_value = json_value_init_object();
-                origin = json_value_get_object(origin_value);
+                origin_value = G_json_value_init_object();
+                origin = G_json_value_get_object(origin_value);
             }
             calculate_point_mode(&settings, &geometry, xcoords[i], ycoords[i],
                                  fp, format, origin);
             if (format == JSON)
-                json_array_append_value(coordinates, origin_value);
+                G_json_array_append_value(coordinates, origin_value);
         }
         if (format == JSON) {
-            char *json_string = json_serialize_to_string_pretty(root_value);
+            char *json_string = G_json_serialize_to_string_pretty(root_value);
             fprintf(fp, "%s\n", json_string);
-            json_free_serialized_string(json_string);
-            json_value_free(root_value);
+            G_json_free_serialized_string(json_string);
+            G_json_value_free(root_value);
         }
         fclose(fp);
         G_free(xcoords);
@@ -859,10 +861,10 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
         fprintf(fp, "\n");
         break;
     case JSON:
-        json_object_set_number(json_origin, "x", xcoord);
-        json_object_set_number(json_origin, "y", ycoord);
-        horizons_value = json_value_init_array();
-        horizons = json_value_get_array(horizons_value);
+        G_json_object_set_number(json_origin, "x", xcoord);
+        G_json_object_set_number(json_origin, "y", ycoord);
+        horizons_value = G_json_value_init_array();
+        horizons = G_json_array(horizons_value);
         break;
     }
 
@@ -880,8 +882,8 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
             shadow_angle *= rad2deg;
         }
         if (format == JSON) {
-            value = json_value_init_object();
-            object = json_object(value);
+            value = G_json_value_init_object();
+            object = G_json_object(value);
         }
         if (settings->compassOutput) {
             double tmpangle;
@@ -897,10 +899,10 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
                 fprintf(fp, "\n");
                 break;
             case JSON:
-                json_object_set_number(object, "azimuth", tmpangle);
-                json_object_set_number(object, "angle", shadow_angle);
-                json_object_set_number(object, "distance", horizon.length);
-                json_array_append_value(horizons, value);
+                G_json_object_set_number(object, "azimuth", tmpangle);
+                G_json_object_set_number(object, "angle", shadow_angle);
+                G_json_object_set_number(object, "distance", horizon.length);
+                G_json_array_append_value(horizons, value);
                 break;
             }
         }
@@ -913,10 +915,10 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
                 fprintf(fp, "\n");
                 break;
             case JSON:
-                json_object_set_number(object, "azimuth", printangle);
-                json_object_set_number(object, "angle", shadow_angle);
-                json_object_set_number(object, "distance", horizon.length);
-                json_array_append_value(horizons, value);
+                G_json_object_set_number(object, "azimuth", printangle);
+                G_json_object_set_number(object, "angle", shadow_angle);
+                G_json_object_set_number(object, "distance", horizon.length);
+                G_json_array_append_value(horizons, value);
                 break;
             }
         }
@@ -936,7 +938,7 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
     } /* end of for loop over angles */
 
     if (format == JSON) {
-        json_object_set_value(json_origin, "horizons", horizons_value);
+        G_json_object_set_value(json_origin, "horizons", horizons_value);
     }
 }
 

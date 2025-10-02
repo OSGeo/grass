@@ -56,14 +56,49 @@ v.db.select samples
 v.db.univar samples column=heights
 ```
 
-### JSON output
+### Python example with JSON output
 
-This uses the JSON output of the module which is passed using a pipe (in
-Bash or other unix-like shell) to the *jq* tool which selects just the
-relevant statistic.
+Using the example above, print the 90th percentile in Python:
 
-```sh
-v.db.univar precip_30ynormals column=annual format=json | jq .statistics.mean
+```python
+import grass.script as gs
+
+data = gs.parse_command(
+    "v.db.univar", table="samples", column="heights", format="json", flags="e"
+)
+print(data["percentiles"])
+```
+
+Output:
+
+```text
+[{'percentile': 90.0, 'value': 139.0807}]
+```
+
+The JSON will look like this:
+
+```json
+{
+    "n": 100,
+    "min": 62.71209,
+    "max": 147.2162,
+    "range": 84.50410999999998,
+    "mean": 110.95470289999996,
+    "mean_abs": 110.95470289999996,
+    "variance": 362.63393287085927,
+    "stddev": 19.042949689343278,
+    "coeff_var": 0.17162814366242862,
+    "sum": 11095.470289999996,
+    "first_quartile": 95.56498,
+    "median": 107.5519,
+    "third_quartile": 125.1526,
+    "percentiles": [
+        {
+            "percentile": 90.0,
+            "value": 139.0807
+        }
+    ]
+}
 ```
 
 ## SEE ALSO

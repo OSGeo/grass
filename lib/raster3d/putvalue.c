@@ -14,7 +14,6 @@
  *  \return 1 ... if successful,
  *          0 ... otherwise.
  */
-
 int Rast3d_put_float(RASTER3D_Map *map, int x, int y, int z, float value)
 {
     int tileIndex, offs;
@@ -49,7 +48,6 @@ int Rast3d_put_float(RASTER3D_Map *map, int x, int y, int z, float value)
  *  \return 1 ... if successful,
  *          0 ... otherwise.
  */
-
 int Rast3d_put_double(RASTER3D_Map *map, int x, int y, int z, double value)
 {
     int tileIndex, offs;
@@ -88,7 +86,6 @@ int Rast3d_put_double(RASTER3D_Map *map, int x, int y, int z, double value)
  *  \return 1 ... if successful,
  *          0 ... otherwise.
  */
-
 int Rast3d_put_value(RASTER3D_Map *map, int x, int y, int z, const void *value,
                      int type)
 {

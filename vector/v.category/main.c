@@ -19,7 +19,7 @@
 
 #include <grass/glocale.h>
 #include <grass/gis.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 #include <grass/vector.h>
 
 #define O_ADD       1
@@ -51,7 +51,7 @@ typedef struct {
     int min[FRTYPES], max[FRTYPES];
 } FREPORT;
 
-enum OutputFormat { PLAIN, SHELL, JSON };
+enum OutputFormat { PLAIN, CSV, JSON };
 
 void format_json_fr(FREPORT *freport, int fr_type, char *name,
                     JSON_Array *array)
@@ -59,14 +59,14 @@ void format_json_fr(FREPORT *freport, int fr_type, char *name,
     JSON_Object *object;
     JSON_Value *value;
     if (freport->count[fr_type] > 0) {
-        value = json_value_init_object();
-        object = json_object(value);
-        json_object_set_string(object, "type", name);
-        json_object_set_number(object, "layer", freport->field);
-        json_object_set_number(object, "count", freport->count[fr_type]);
-        json_object_set_number(object, "min", freport->min[fr_type]);
-        json_object_set_number(object, "max", freport->max[fr_type]);
-        json_array_append_value(array, value);
+        value = G_json_value_init_object();
+        object = G_json_object(value);
+        G_json_object_set_string(object, "type", name);
+        G_json_object_set_number(object, "layer", freport->field);
+        G_json_object_set_number(object, "count", freport->count[fr_type]);
+        G_json_object_set_number(object, "min", freport->min[fr_type]);
+        G_json_object_set_number(object, "max", freport->max[fr_type]);
+        G_json_array_append_value(array, value);
     }
 }
 
@@ -83,16 +83,16 @@ int main(int argc, char *argv[])
     double x, y;
     int cat, ocat, scat, *fields, nfields, field;
     struct GModule *module;
-    struct Option *in_opt, *out_opt, *option_opt, *type_opt;
+    struct Option *in_opt, *out_opt, *option_opt, *type_opt, *fs_opt;
     struct Option *cat_opt, *field_opt, *step_opt, *id_opt, *format_opt;
-    struct Flag *shell, *notab;
+    struct Flag *csv, *notab;
     FREPORT **freps;
     int nfreps, rtype, fld;
-    char *desc;
+    char *desc, *fs;
     enum OutputFormat format;
     JSON_Array *root_array = NULL;
     JSON_Value *root_value = NULL;
-    JSON_Object *root_object = NULL;
+    int skip_header = 0;
 
     module = G_define_module();
     G_add_keyword(_("vector"));
@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
           "value"),
         _("copy values from one layer to another (e.g. layer=1,2,3 copies "
           "values from layer 1 to layer 2 and 3)"),
-        _("print report (statistics), in shell style: layer type count min "
+        _("print report (statistics), in CSV style: layer type count min "
           "max"),
         _("print category values, layers are separated by '|', more cats in "
           "the same layer are separated by '/'"),
@@ -162,18 +162,22 @@ int main(int argc, char *argv[])
     step_opt->description = _("Category increment");
 
     format_opt = G_define_standard_option(G_OPT_F_FORMAT);
-    format_opt->options = "plain,shell,json";
+    format_opt->options = "plain,csv,json";
     format_opt->descriptions = _("plain;Human readable text output;"
-                                 "shell;shell script style text output;"
+                                 "csv;CSV (Comma Separated Values);"
                                  "json;JSON (JavaScript Object Notation);");
     format_opt->guisection = _("Print");
 
-    shell = G_define_flag();
-    shell->key = 'g';
-    shell->label = _("Shell script style, currently only for report");
-    shell->description = _(
-        "[DEPRECATED] Format: layer type count min max. This flag is obsolete "
-        "and will be removed in a future release. Use format=shell instead.");
+    fs_opt = G_define_standard_option(G_OPT_F_SEP);
+    fs_opt->answer = NULL;
+    fs_opt->guisection = _("Formatting");
+
+    csv = G_define_flag();
+    csv->key = 'g';
+    csv->label = _("CSV style output, currently only for report [deprecated]");
+    csv->description =
+        _("Format: layer type count min max. This flag is deprecated "
+          "and will be removed in a future release. Use format=csv instead.");
 
     notab = G_define_standard_flag(G_FLG_V_TABLE);
     notab->description = _("Do not copy attribute table(s)");
@@ -214,45 +218,52 @@ int main(int argc, char *argv[])
         break;
     }
 
+    /* For backward compatibility */
+    if (!fs_opt->answer) {
+        if (strcmp(format_opt->answer, "csv") == 0)
+            fs_opt->answer = "comma";
+        else
+            fs_opt->answer = "space";
+    }
+
     /* read format */
     switch (format_opt->answer[0]) {
     case ('j'):
         format = JSON;
         break;
-    case ('s'):
-        format = SHELL;
+    case ('c'):
+        format = CSV;
         break;
     default:
         format = PLAIN;
         break;
     }
-    if (shell->answer) {
-        G_warning(_("Flag 'g' is deprecated and will be removed in a future "
-                    "release. Please use format=shell instead."));
+    if (csv->answer) {
+        G_verbose_message(
+            _("Flag 'g' is deprecated and will be removed in a future "
+              "release. Please use format=csv instead."));
         if (format == JSON) {
-            G_fatal_error(_(
-                "JSON output and shell output cannot be used simultaneously."));
+            G_fatal_error(
+                _("JSON output and CSV output cannot be used simultaneously."));
         }
-        format = SHELL;
+        else if (format == PLAIN)
+            skip_header = 1; /* For backward compatibility */
+
+        format = CSV;
     }
+
+    fs = G_option_to_separator(fs_opt);
 
     if (option == O_LYR) {
         JSON_Array *layers_array = NULL;
         JSON_Value *layers_value = NULL;
         if (format == JSON) {
-            root_value = json_value_init_object();
-            if (root_value == NULL) {
-                G_fatal_error(
-                    _("Failed to initialize JSON object. Out of memory?"));
-            }
-            root_object = json_object(root_value);
-
-            layers_value = json_value_init_array();
+            layers_value = G_json_value_init_array();
             if (layers_value == NULL) {
                 G_fatal_error(
                     _("Failed to initialize JSON array. Out of memory?"));
             }
-            layers_array = json_array(layers_value);
+            layers_array = G_json_array(layers_value);
         }
 
         /* print vector layer numbers */
@@ -266,18 +277,23 @@ int main(int argc, char *argv[])
                 _("Unable to open vector map <%s> at topological level %d"),
                 Vect_get_full_name(&In), 2);
         }
+
+        if (!skip_header && format == CSV) {
+            fprintf(stdout, "layer\n");
+        }
+
         if (In.format == GV_FORMAT_NATIVE) {
             nfields = Vect_cidx_get_num_fields(&In);
             for (i = 0; i < nfields; i++) {
                 if ((field = Vect_cidx_get_field_number(&In, i)) > 0) {
                     switch (format) {
-                    case SHELL:
+                    case CSV:
                     case PLAIN:
                         fprintf(stdout, "%d\n", field);
                         break;
 
                     case JSON:
-                        json_array_append_number(layers_array, field);
+                        G_json_array_append_number(layers_array, field);
                         break;
                     }
                 }
@@ -285,39 +301,38 @@ int main(int argc, char *argv[])
         }
         else {
             switch (format) {
-            case SHELL:
+            case CSV:
             case PLAIN:
                 fprintf(stdout, "%s\n", field_opt->answer);
                 break;
 
             case JSON:
-                json_array_append_string(layers_array, field_opt->answer);
+                G_json_array_append_string(layers_array, field_opt->answer);
                 break;
             }
         }
 
         if (format == JSON) {
-            json_object_set_value(root_object, "layers", layers_value);
 
             char *serialized_string = NULL;
-            serialized_string = json_serialize_to_string_pretty(root_value);
+            serialized_string = G_json_serialize_to_string_pretty(layers_value);
             if (serialized_string == NULL) {
                 G_fatal_error(_("Failed to initialize pretty JSON string."));
             }
             puts(serialized_string);
-            json_free_serialized_string(serialized_string);
-            json_value_free(root_value);
+            G_json_free_serialized_string(serialized_string);
+            G_json_value_free(layers_value);
         }
         Vect_close(&In);
         exit(EXIT_SUCCESS);
     }
 
     if ((option == O_REP || option == O_PRN) && format == JSON) {
-        root_value = json_value_init_array();
+        root_value = G_json_value_init_array();
         if (root_value == NULL) {
             G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
         }
-        root_array = json_array(root_value);
+        root_array = G_json_array(root_value);
     }
 
     cat = atoi(cat_opt->answer);
@@ -739,71 +754,79 @@ int main(int argc, char *argv[])
                 }
             }
         }
+
+        if (!skip_header && format == CSV) {
+            fprintf(stdout, "%s%s%s%s%s%s%s%s%s\n", "layer", fs, "type", fs,
+                    "count", fs, "min", fs, "max");
+        }
+
         for (i = 0; i < nfreps; i++) {
             switch (format) {
-            case SHELL:
+            case CSV:
                 if (freps[i]->count[FR_POINT] > 0)
-                    fprintf(stdout, "%d point %d %d %d\n", freps[i]->field,
-                            freps[i]->count[FR_POINT],
+                    fprintf(stdout, "%d%spoint%s%d%s%d%s%d\n", freps[i]->field,
+                            fs, fs, freps[i]->count[FR_POINT], fs,
                             (freps[i]->min[FR_POINT] < 0
                                  ? 0
                                  : freps[i]->min[FR_POINT]),
-                            freps[i]->max[FR_POINT]);
+                            fs, freps[i]->max[FR_POINT]);
 
                 if (freps[i]->count[FR_LINE] > 0)
-                    fprintf(stdout, "%d line %d %d %d\n", freps[i]->field,
-                            freps[i]->count[FR_LINE],
+                    fprintf(stdout, "%d%sline%s%d%s%d%s%d\n", freps[i]->field,
+                            fs, fs, freps[i]->count[FR_LINE], fs,
                             (freps[i]->min[FR_LINE] < 0
                                  ? 0
                                  : freps[i]->min[FR_LINE]),
-                            freps[i]->max[FR_LINE]);
+                            fs, freps[i]->max[FR_LINE]);
 
                 if (freps[i]->count[FR_BOUNDARY] > 0)
-                    fprintf(stdout, "%d boundary %d %d %d\n", freps[i]->field,
-                            freps[i]->count[FR_BOUNDARY],
+                    fprintf(stdout, "%d%sboundary%s%d%s%d%s%d\n",
+                            freps[i]->field, fs, fs,
+                            freps[i]->count[FR_BOUNDARY], fs,
                             (freps[i]->min[FR_BOUNDARY] < 0
                                  ? 0
                                  : freps[i]->min[FR_BOUNDARY]),
-                            freps[i]->max[FR_BOUNDARY]);
+                            fs, freps[i]->max[FR_BOUNDARY]);
 
                 if (freps[i]->count[FR_CENTROID] > 0)
-                    fprintf(stdout, "%d centroid %d %d %d\n", freps[i]->field,
-                            freps[i]->count[FR_CENTROID],
+                    fprintf(stdout, "%d%scentroid%s%d%s%d%s%d\n",
+                            freps[i]->field, fs, fs,
+                            freps[i]->count[FR_CENTROID], fs,
                             (freps[i]->min[FR_BOUNDARY] < 0
                                  ? 0
                                  : freps[i]->min[FR_BOUNDARY]),
-                            freps[i]->max[FR_CENTROID]);
+                            fs, freps[i]->max[FR_CENTROID]);
 
                 if (freps[i]->count[FR_AREA] > 0)
-                    fprintf(stdout, "%d area %d %d %d\n", freps[i]->field,
-                            freps[i]->count[FR_AREA],
+                    fprintf(stdout, "%d%sarea%s%d%s%d%s%d\n", freps[i]->field,
+                            fs, fs, freps[i]->count[FR_AREA], fs,
                             (freps[i]->min[FR_AREA] < 0
                                  ? 0
                                  : freps[i]->min[FR_AREA]),
-                            freps[i]->max[FR_AREA]);
+                            fs, freps[i]->max[FR_AREA]);
 
                 if (freps[i]->count[FR_FACE] > 0)
-                    fprintf(stdout, "%d face %d %d %d\n", freps[i]->field,
-                            freps[i]->count[FR_FACE],
+                    fprintf(stdout, "%d%sface%s%d%s%d%s%d\n", freps[i]->field,
+                            fs, fs, freps[i]->count[FR_FACE], fs,
                             (freps[i]->min[FR_FACE] < 0
                                  ? 0
                                  : freps[i]->min[FR_FACE]),
-                            freps[i]->max[FR_FACE]);
+                            fs, freps[i]->max[FR_FACE]);
 
                 if (freps[i]->count[FR_KERNEL] > 0)
-                    fprintf(stdout, "%d kernel %d %d %d\n", freps[i]->field,
-                            freps[i]->count[FR_KERNEL],
+                    fprintf(stdout, "%d%skernel%s%d%s%d%s%d\n", freps[i]->field,
+                            fs, fs, freps[i]->count[FR_KERNEL], fs,
                             (freps[i]->min[FR_KERNEL] < 0
                                  ? 0
                                  : freps[i]->min[FR_KERNEL]),
-                            freps[i]->max[FR_KERNEL]);
+                            fs, freps[i]->max[FR_KERNEL]);
 
                 if (freps[i]->count[FR_ALL] > 0)
                     fprintf(
-                        stdout, "%d all %d %d %d\n", freps[i]->field,
-                        freps[i]->count[FR_ALL],
+                        stdout, "%d%sall%s%d%s%d%s%d\n", freps[i]->field, fs,
+                        fs, freps[i]->count[FR_ALL], fs,
                         (freps[i]->min[FR_ALL] < 0 ? 0 : freps[i]->min[FR_ALL]),
-                        freps[i]->max[FR_ALL]);
+                        fs, freps[i]->max[FR_ALL]);
                 break;
 
             case PLAIN:
@@ -872,6 +895,10 @@ int main(int argc, char *argv[])
         break;
 
     case (O_PRN):
+        if (format == CSV && !skip_header) {
+            fprintf(stdout, "%s%s%s%s%s\n", "id", fs, "layer", fs, "cat");
+        }
+
         while ((type = Vect_read_next_line(&In, Points, Cats)) > 0) {
             id++;
             int has = 0;
@@ -898,38 +925,48 @@ int main(int argc, char *argv[])
             for (i = 0; i < nfields; i++) {
                 int first = 1;
 
-                if (i > 0 && format != JSON)
+                if (i > 0 &&
+                    (format == PLAIN || (format == CSV && skip_header)))
                     fprintf(stdout, "|");
                 for (j = 0; j < Cats->n_cats; j++) {
                     if (Cats->field[j] == fields[i]) {
-                        if (!first && format != JSON)
+                        if (!first &&
+                            (format == PLAIN || (format == CSV && skip_header)))
                             fprintf(stdout, "/");
 
                         JSON_Object *cat_object = NULL;
                         JSON_Value *cat_value = NULL;
                         if (format == JSON) {
-                            cat_value = json_value_init_object();
+                            cat_value = G_json_value_init_object();
                             if (cat_value == NULL) {
                                 G_fatal_error(_("Failed to initialize JSON "
                                                 "object. Out of memory?"));
                             }
-                            cat_object = json_object(cat_value);
+                            cat_object = G_json_object(cat_value);
                         }
 
                         switch (format) {
-                        case SHELL:
+                        case CSV:
+                            if (skip_header) {
+                                fprintf(stdout, "%d", Cats->cat[j]);
+                            }
+                            else {
+                                fprintf(stdout, "%d%s%d%s%d\n", id, fs,
+                                        fields[i], fs, Cats->cat[j]);
+                            }
+                            break;
                         case PLAIN:
                             fprintf(stdout, "%d", Cats->cat[j]);
                             break;
 
                         case JSON:
-                            json_object_set_number(cat_object, "id", id);
-                            json_object_set_number(cat_object, "layer",
-                                                   fields[i]);
-                            json_object_set_number(cat_object, "category",
-                                                   Cats->cat[j]);
+                            G_json_object_set_number(cat_object, "id", id);
+                            G_json_object_set_number(cat_object, "layer",
+                                                     fields[i]);
+                            G_json_object_set_number(cat_object, "category",
+                                                     Cats->cat[j]);
 
-                            json_array_append_value(root_array, cat_value);
+                            G_json_array_append_value(root_array, cat_value);
                             break;
                         }
 
@@ -938,7 +975,7 @@ int main(int argc, char *argv[])
                 }
             }
 
-            if (format != JSON) {
+            if (format == PLAIN || (format == CSV && skip_header)) {
                 fprintf(stdout, "\n");
             }
         }
@@ -947,13 +984,13 @@ int main(int argc, char *argv[])
 
     if ((option == O_REP || option == O_PRN) && format == JSON) {
         char *serialized_string = NULL;
-        serialized_string = json_serialize_to_string_pretty(root_value);
+        serialized_string = G_json_serialize_to_string_pretty(root_value);
         if (serialized_string == NULL) {
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         }
         puts(serialized_string);
-        json_free_serialized_string(serialized_string);
-        json_value_free(root_value);
+        G_json_free_serialized_string(serialized_string);
+        G_json_value_free(root_value);
     }
 
     if (option == O_ADD || option == O_DEL || option == O_CHFIELD ||

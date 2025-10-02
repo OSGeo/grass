@@ -5,12 +5,14 @@ Fixture for grass.jupyter.TimeSeries test
 Fixture for ReprojectionRenderer test with simple GRASS location, raster, vector.
 """
 
+import os
 from datetime import datetime
 from types import SimpleNamespace
 
 import pytest
 
 import grass.script as gs
+from grass.tools import Tools
 
 
 @pytest.fixture(scope="module")
@@ -19,9 +21,9 @@ def space_time_raster_dataset(tmp_path_factory):
     Returns object with attributes about the dataset.
     """
     tmp_path = tmp_path_factory.mktemp("raster_time_series")
-    location = "test"
-    gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with gs.setup.init(tmp_path / location):
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with gs.setup.init(project):
         gs.run_command("g.region", s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10)
         names = [f"precipitation_{i}" for i in range(1, 7)]
         max_values = [550, 450, 320, 510, 300, 650]
@@ -73,9 +75,9 @@ def simple_dataset(tmp_path_factory):
     Returns object with attributes about the dataset.
     """
     tmp_path = tmp_path_factory.mktemp("simple_dataset")
-    location = "test"
-    gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with gs.setup.init(tmp_path / location):
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with gs.setup.init(project):
         gs.run_command("g.proj", flags="c", epsg=26917)
         gs.run_command("g.region", s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10)
         # Create Vector
@@ -91,3 +93,22 @@ def simple_dataset(tmp_path_factory):
             vector_name=vector_name,
             full_vector_name=f"{vector_name}@PERMANENT",
         )
+
+
+@pytest.fixture
+def session(tmp_path):
+    project = tmp_path / "xy_project"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy()) as session:
+        yield session
+
+
+@pytest.fixture
+def session_with_data(tmp_path):
+    project = tmp_path / "xy_project"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy()) as session:
+        tools = Tools(session=session)
+        tools.g_region(s=0, n=5, w=0, e=2, res=1)
+        tools.r_mapcalc(expression="data = row() * col()")
+        yield session

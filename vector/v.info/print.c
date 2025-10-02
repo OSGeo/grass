@@ -5,7 +5,7 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
-#include <grass/parson.h>
+#include <grass/gjson.h>
 
 #include "local_proto.h"
 
@@ -17,9 +17,9 @@
     fprintf(stdout, "%c\n", x)
 
 /* cloned from lib/gis/wind_format.c */
-void format_double(double value, char *buf)
+void format_double(double value, char buf[BUFSZ])
 {
-    sprintf(buf, "%.8f", value);
+    snprintf(buf, BUFSZ, "%.8f", value);
     G_trim_decimal(buf);
 }
 
@@ -67,12 +67,12 @@ void print_region(struct Map_info *Map, enum OutputFormat format,
         fprintf(stdout, "bottom=%f\n", box.B);
         break;
     case JSON:
-        json_object_set_number(root_object, "north", box.N);
-        json_object_set_number(root_object, "south", box.S);
-        json_object_set_number(root_object, "east", box.E);
-        json_object_set_number(root_object, "west", box.W);
-        json_object_set_number(root_object, "top", box.T);
-        json_object_set_number(root_object, "bottom", box.B);
+        G_json_object_set_number(root_object, "north", box.N);
+        G_json_object_set_number(root_object, "south", box.S);
+        G_json_object_set_number(root_object, "east", box.E);
+        G_json_object_set_number(root_object, "west", box.W);
+        G_json_object_set_number(root_object, "top", box.T);
+        G_json_object_set_number(root_object, "bottom", box.B);
         break;
     }
 }
@@ -148,30 +148,30 @@ void print_topo(struct Map_info *Map, enum OutputFormat format,
 
         break;
     case JSON:
-        json_object_set_number(root_object, "nodes", Vect_get_num_nodes(Map));
-        json_object_set_number(root_object, "points",
-                               Vect_get_num_primitives(Map, GV_POINT));
-        json_object_set_number(root_object, "lines",
-                               Vect_get_num_primitives(Map, GV_LINE));
-        json_object_set_number(root_object, "boundaries",
-                               Vect_get_num_primitives(Map, GV_BOUNDARY));
-        json_object_set_number(root_object, "centroids",
-                               Vect_get_num_primitives(Map, GV_CENTROID));
-        json_object_set_number(root_object, "areas", Vect_get_num_areas(Map));
-        json_object_set_number(root_object, "islands",
-                               Vect_get_num_islands(Map));
+        G_json_object_set_number(root_object, "nodes", Vect_get_num_nodes(Map));
+        G_json_object_set_number(root_object, "points",
+                                 Vect_get_num_primitives(Map, GV_POINT));
+        G_json_object_set_number(root_object, "lines",
+                                 Vect_get_num_primitives(Map, GV_LINE));
+        G_json_object_set_number(root_object, "boundaries",
+                                 Vect_get_num_primitives(Map, GV_BOUNDARY));
+        G_json_object_set_number(root_object, "centroids",
+                                 Vect_get_num_primitives(Map, GV_CENTROID));
+        G_json_object_set_number(root_object, "areas", Vect_get_num_areas(Map));
+        G_json_object_set_number(root_object, "islands",
+                                 Vect_get_num_islands(Map));
         if (with_z) {
-            json_object_set_number(root_object, "faces",
-                                   Vect_get_num_primitives(Map, GV_FACE));
-            json_object_set_number(root_object, "kernels",
-                                   Vect_get_num_primitives(Map, GV_KERNEL));
-            json_object_set_number(root_object, "volumes",
-                                   Vect_get_num_primitives(Map, GV_VOLUME));
-            json_object_set_number(root_object, "holes",
-                                   Vect_get_num_holes(Map));
+            G_json_object_set_number(root_object, "faces",
+                                     Vect_get_num_primitives(Map, GV_FACE));
+            G_json_object_set_number(root_object, "kernels",
+                                     Vect_get_num_primitives(Map, GV_KERNEL));
+            G_json_object_set_number(root_object, "volumes",
+                                     Vect_get_num_primitives(Map, GV_VOLUME));
+            G_json_object_set_number(root_object, "holes",
+                                     Vect_get_num_holes(Map));
         }
-        json_object_set_number(root_object, "primitives", nprimitives);
-        json_object_set_boolean(root_object, "map3d", Vect_is_3d(Map));
+        G_json_object_set_number(root_object, "primitives", nprimitives);
+        G_json_object_set_boolean(root_object, "map3d", Vect_is_3d(Map));
     }
 }
 
@@ -195,9 +195,12 @@ void print_columns(struct Map_info *Map, const char *input_opt,
             input_opt);
     }
 
-    G_message(_("Displaying column types/names for database connection of "
-                "layer <%s>:"),
-              field_opt);
+    if (format == PLAIN) {
+        fprintf(stdout,
+                _("Column names and types for database connection of "
+                  "layer <%s>:\n"),
+                field_opt);
+    }
 
     if ((fi = Vect_get_field2(Map, field_opt)) == NULL) {
         Vect_close(Map);
@@ -231,61 +234,65 @@ void print_columns(struct Map_info *Map, const char *input_opt,
     JSON_Array *columns_array = NULL;
 
     if (format == JSON) {
-        root_value = json_value_init_object();
-        root_object = json_object(root_value);
-        columns_value = json_value_init_array();
-        columns_array = json_array(columns_value);
-        json_object_set_value(root_object, "columns", columns_value);
+        root_value = G_json_value_init_object();
+        root_object = G_json_object(root_value);
+        columns_value = G_json_value_init_array();
+        columns_array = G_json_array(columns_value);
+        G_json_object_set_value(root_object, "columns", columns_value);
     }
 
     ncols = db_get_table_number_of_columns(table);
     for (col = 0; col < ncols; col++) {
         switch (format) {
         case SHELL:
+            fprintf(stdout, "%s|%s\n",
+                    db_sqltype_name(
+                        db_get_column_sqltype(db_get_table_column(table, col))),
+                    db_get_column_name(db_get_table_column(table, col)));
             break;
 
         case JSON:
-            column_value = json_value_init_object();
-            column_object = json_object(column_value);
+            column_value = G_json_value_init_object();
+            column_object = G_json_object(column_value);
 
-            json_object_set_string(
+            G_json_object_set_string(
                 column_object, "name",
                 db_get_column_name(db_get_table_column(table, col)));
 
             int sql_type =
                 db_get_column_sqltype(db_get_table_column(table, col));
-            json_object_set_string(column_object, "sql_type",
-                                   db_sqltype_name(sql_type));
+            G_json_object_set_string(column_object, "sql_type",
+                                     db_sqltype_name(sql_type));
 
             int c_type = db_sqltype_to_Ctype(sql_type);
-            json_object_set_boolean(
+            G_json_object_set_boolean(
                 column_object, "is_number",
                 (c_type == DB_C_TYPE_INT || c_type == DB_C_TYPE_DOUBLE));
 
-            json_array_append_value(columns_array, column_value);
+            G_json_array_append_value(columns_array, column_value);
             break;
 
         case PLAIN:
-            fprintf(stdout, "%s|%s\n",
-                    db_sqltype_name(
-                        db_get_column_sqltype(db_get_table_column(table, col))),
-                    db_get_column_name(db_get_table_column(table, col)));
+            fprintf(stdout, "%s: %s\n",
+                    db_get_column_name(db_get_table_column(table, col)),
+                    db_sqltype_name(db_get_column_sqltype(
+                        db_get_table_column(table, col))));
             break;
         }
     }
 
     if (format == JSON) {
         char *serialized_string = NULL;
-        serialized_string = json_serialize_to_string_pretty(root_value);
+        serialized_string = G_json_serialize_to_string_pretty(root_value);
         if (serialized_string == NULL) {
-            json_value_free(root_value);
+            G_json_value_free(root_value);
             db_close_database_shutdown_driver(driver);
             Vect_close(Map);
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         }
         puts(serialized_string);
-        json_free_serialized_string(serialized_string);
-        json_value_free(root_value);
+        G_json_free_serialized_string(serialized_string);
+        G_json_value_free(root_value);
     }
 
     Vect_destroy_field_info(fi);
@@ -338,17 +345,17 @@ void print_shell(struct Map_info *Map, const char *field_opt,
         fprintf(stdout, "source_date=%s\n", Vect_get_map_date(Map));
         break;
     case JSON:
-        json_object_set_string(root_object, "name", Vect_get_name(Map));
-        json_object_set_string(root_object, "mapset", Vect_get_mapset(Map));
-        json_object_set_string(root_object, "project", G_location());
-        json_object_set_string(root_object, "database", G_gisdbase());
-        json_object_set_string(root_object, "title", Vect_get_map_name(Map));
-        json_object_set_string(root_object, "scale", scale_tmp);
-        json_object_set_string(root_object, "creator", Vect_get_person(Map));
-        json_object_set_string(root_object, "organization",
-                               Vect_get_organization(Map));
-        json_object_set_string(root_object, "source_date",
-                               Vect_get_map_date(Map));
+        G_json_object_set_string(root_object, "name", Vect_get_name(Map));
+        G_json_object_set_string(root_object, "mapset", Vect_get_mapset(Map));
+        G_json_object_set_string(root_object, "project", G_location());
+        G_json_object_set_string(root_object, "database", G_gisdbase());
+        G_json_object_set_string(root_object, "title", Vect_get_map_name(Map));
+        G_json_object_set_string(root_object, "scale", scale_tmp);
+        G_json_object_set_string(root_object, "creator", Vect_get_person(Map));
+        G_json_object_set_string(root_object, "organization",
+                                 Vect_get_organization(Map));
+        G_json_object_set_string(root_object, "source_date",
+                                 Vect_get_map_date(Map));
         break;
     }
 
@@ -362,7 +369,7 @@ void print_shell(struct Map_info *Map, const char *field_opt,
             fprintf(stdout, "timestamp=%s\n", timebuff);
             break;
         case JSON:
-            json_object_set_string(root_object, "timestamp", timebuff);
+            G_json_object_set_string(root_object, "timestamp", timebuff);
             break;
         }
     }
@@ -374,7 +381,7 @@ void print_shell(struct Map_info *Map, const char *field_opt,
             fprintf(stdout, "timestamp=none\n");
             break;
         case JSON:
-            json_object_set_null(root_object, "timestamp");
+            G_json_object_set_null(root_object, "timestamp");
             break;
         }
     }
@@ -391,13 +398,13 @@ void print_shell(struct Map_info *Map, const char *field_opt,
             fprintf(stdout, "feature_type=%s\n", geom_type);
             break;
         case JSON:
-            json_object_set_string(root_object, "format", maptype_str);
-            json_object_set_string(root_object, "format-detail",
-                                   Vect_get_finfo_format_info(Map));
-            json_object_set_string(root_object, "ogr_layer", finfo_lname);
-            json_object_set_string(root_object, "ogr_dsn",
-                                   Vect_get_finfo_dsn_name(Map));
-            json_object_set_string(root_object, "feature_type", geom_type);
+            G_json_object_set_string(root_object, "format", maptype_str);
+            G_json_object_set_string(root_object, "format-detail",
+                                     Vect_get_finfo_format_info(Map));
+            G_json_object_set_string(root_object, "ogr_layer", finfo_lname);
+            G_json_object_set_string(root_object, "ogr_dsn",
+                                     Vect_get_finfo_dsn_name(Map));
+            G_json_object_set_string(root_object, "feature_type", geom_type);
             break;
         }
     }
@@ -420,15 +427,15 @@ void print_shell(struct Map_info *Map, const char *field_opt,
             fprintf(stdout, "feature_type=%s\n", geom_type);
             break;
         case JSON:
-            json_object_set_string(root_object, "format", maptype_str);
-            json_object_set_string(root_object, "format-detail",
-                                   Vect_get_finfo_format_info(Map));
-            json_object_set_string(root_object, "pg_table", finfo_lname);
-            json_object_set_string(root_object, "pg_dbname",
-                                   Vect_get_finfo_dsn_name(Map));
-            json_object_set_string(root_object, "geometry_column",
-                                   finfo->pg.geom_column);
-            json_object_set_string(root_object, "feature_type", geom_type);
+            G_json_object_set_string(root_object, "format", maptype_str);
+            G_json_object_set_string(root_object, "format-detail",
+                                     Vect_get_finfo_format_info(Map));
+            G_json_object_set_string(root_object, "pg_table", finfo_lname);
+            G_json_object_set_string(root_object, "pg_dbname",
+                                     Vect_get_finfo_dsn_name(Map));
+            G_json_object_set_string(root_object, "geometry_column",
+                                     finfo->pg.geom_column);
+            G_json_object_set_string(root_object, "feature_type", geom_type);
             break;
         }
 
@@ -443,10 +450,10 @@ void print_shell(struct Map_info *Map, const char *field_opt,
                 fprintf(stdout, "pg_topo_column=%s\n", topogeom_column);
                 break;
             case JSON:
-                json_object_set_string(root_object, "pg_topo_schema",
-                                       toposchema_name);
-                json_object_set_string(root_object, "pg_topo_column",
-                                       topogeom_column);
+                G_json_object_set_string(root_object, "pg_topo_schema",
+                                         toposchema_name);
+                G_json_object_set_string(root_object, "pg_topo_column",
+                                         topogeom_column);
                 break;
             }
         }
@@ -461,7 +468,7 @@ void print_shell(struct Map_info *Map, const char *field_opt,
             fprintf(stdout, "format=%s\n", maptype_str);
             break;
         case JSON:
-            json_object_set_string(root_object, "format", maptype_str);
+            G_json_object_set_string(root_object, "format", maptype_str);
             break;
         }
     }
@@ -473,7 +480,7 @@ void print_shell(struct Map_info *Map, const char *field_opt,
         fprintf(stdout, "level=%d\n", Vect_level(Map));
         break;
     case JSON:
-        json_object_set_number(root_object, "level", Vect_level(Map));
+        G_json_object_set_number(root_object, "level", Vect_level(Map));
         break;
     }
     if (Vect_level(Map) > 0) {
@@ -484,8 +491,8 @@ void print_shell(struct Map_info *Map, const char *field_opt,
             fprintf(stdout, "num_dblinks=%d\n", Vect_get_num_dblinks(Map));
             break;
         case JSON:
-            json_object_set_number(root_object, "num_dblinks",
-                                   Vect_get_num_dblinks(Map));
+            G_json_object_set_number(root_object, "num_dblinks",
+                                     Vect_get_num_dblinks(Map));
             break;
         }
 
@@ -505,18 +512,18 @@ void print_shell(struct Map_info *Map, const char *field_opt,
                     fprintf(stdout, "attribute_primary_key=%s\n", fi->key);
                     break;
                 case JSON:
-                    json_object_set_number(
+                    G_json_object_set_number(
                         root_object, "attribute_layer_number", fi->number);
-                    json_object_set_string(root_object, "attribute_layer_name",
-                                           fi->name);
-                    json_object_set_string(root_object, "attribute_database",
-                                           fi->database);
-                    json_object_set_string(
+                    G_json_object_set_string(root_object,
+                                             "attribute_layer_name", fi->name);
+                    G_json_object_set_string(root_object, "attribute_database",
+                                             fi->database);
+                    G_json_object_set_string(
                         root_object, "attribute_database_driver", fi->driver);
-                    json_object_set_string(root_object, "attribute_table",
-                                           fi->table);
-                    json_object_set_string(root_object, "attribute_primary_key",
-                                           fi->key);
+                    G_json_object_set_string(root_object, "attribute_table",
+                                             fi->table);
+                    G_json_object_set_string(root_object,
+                                             "attribute_primary_key", fi->key);
                     break;
                 }
             }
@@ -536,14 +543,14 @@ void print_shell(struct Map_info *Map, const char *field_opt,
         fprintf(stdout, "comment=%s\n", Vect_get_comment(Map));
         break;
     case JSON:
-        json_object_set_string(root_object, "projection",
-                               Vect_get_proj_name(Map));
+        G_json_object_set_string(root_object, "projection",
+                                 Vect_get_proj_name(Map));
         if (G_projection() == PROJECTION_UTM) {
-            json_object_set_number(root_object, "zone", Vect_get_zone(Map));
+            G_json_object_set_number(root_object, "zone", Vect_get_zone(Map));
         }
-        json_object_set_number(root_object, "digitization_threshold",
-                               Vect_get_thresh(Map));
-        json_object_set_string(root_object, "comment", Vect_get_comment(Map));
+        G_json_object_set_number(root_object, "digitization_threshold",
+                                 Vect_get_thresh(Map));
+        G_json_object_set_string(root_object, "comment", Vect_get_comment(Map));
         break;
     }
     G_free(finfo_lname);
@@ -559,7 +566,7 @@ void print_info(struct Map_info *Map)
     struct TimeStamp ts;
     int time_ok, first_time_ok, second_time_ok;
     struct bound_box box;
-    char tmp1[256], tmp2[256];
+    char tmp1[BUFSZ], tmp2[BUFSZ];
 
     time_ok = first_time_ok = second_time_ok = FALSE;
     map_type = Vect_maptype(Map);
@@ -745,19 +752,21 @@ void print_info(struct Map_info *Map)
 
     G_format_northing(box.N, tmp1, G_projection());
     G_format_northing(box.S, tmp2, G_projection());
-    sprintf(line, "              %c: %17s    %c: %17s", 'N', tmp1, 'S', tmp2);
+    snprintf(line, sizeof(line), "              %c: %17s    %c: %17s", 'N',
+             tmp1, 'S', tmp2);
     printline(line);
 
     G_format_easting(box.E, tmp1, G_projection());
     G_format_easting(box.W, tmp2, G_projection());
-    sprintf(line, "              %c: %17s    %c: %17s", 'E', tmp1, 'W', tmp2);
+    snprintf(line, sizeof(line), "              %c: %17s    %c: %17s", 'E',
+             tmp1, 'W', tmp2);
     printline(line);
 
     if (Vect_is_3d(Map)) {
         format_double(box.B, tmp1);
         format_double(box.T, tmp2);
-        sprintf(line, "              %c: %17s    %c: %17s", 'B', tmp1, 'T',
-                tmp2);
+        snprintf(line, sizeof(line), "              %c: %17s    %c: %17s", 'B',
+                 tmp1, 'T', tmp2);
         printline(line);
     }
     printline("");
@@ -767,7 +776,7 @@ void print_info(struct Map_info *Map)
     printline(line);
     G_saprintf(line, "  %s:", _("Comment"));
     printline(line);
-    sprintf(line, "    %s", Vect_get_comment(Map));
+    snprintf(line, sizeof(line), "    %s", Vect_get_comment(Map));
     printline(line);
     divider('+');
     fprintf(stdout, "\n");
@@ -810,19 +819,19 @@ void add_record_to_json(char *command, char *user, char *date,
                         int history_number)
 {
 
-    JSON_Value *info_value = json_value_init_object();
+    JSON_Value *info_value = G_json_value_init_object();
     if (info_value == NULL) {
         G_fatal_error(_("Failed to initialize JSON object. Out of memory?"));
     }
-    JSON_Object *info_object = json_object(info_value);
+    JSON_Object *info_object = G_json_object(info_value);
 
-    json_object_set_number(info_object, "history_number", history_number);
-    json_object_set_string(info_object, "command", command);
-    json_object_set_string(info_object, "mapset_path", mapset_path);
-    json_object_set_string(info_object, "user", user);
-    json_object_set_string(info_object, "date", date);
+    G_json_object_set_number(info_object, "history_number", history_number);
+    G_json_object_set_string(info_object, "command", command);
+    G_json_object_set_string(info_object, "mapset_path", mapset_path);
+    G_json_object_set_string(info_object, "user", user);
+    G_json_object_set_string(info_object, "date", date);
 
-    json_array_append_value(record_array, info_value);
+    G_json_array_append_value(record_array, info_value);
 }
 
 /*!
@@ -845,18 +854,18 @@ void print_history(struct Map_info *Map, enum OutputFormat format)
     JSON_Array *record_array = NULL;
 
     if (format == JSON) {
-        root_value = json_value_init_object();
+        root_value = G_json_value_init_object();
         if (root_value == NULL) {
             G_fatal_error(
                 _("Failed to initialize JSON object. Out of memory?"));
         }
-        root_object = json_object(root_value);
+        root_object = G_json_object(root_value);
 
-        record_value = json_value_init_array();
+        record_value = G_json_value_init_array();
         if (record_value == NULL) {
             G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
         }
-        record_array = json_array(record_value);
+        record_array = G_json_array(record_value);
     }
 
     Vect_hist_rewind(Map);
@@ -890,16 +899,16 @@ void print_history(struct Map_info *Map, enum OutputFormat format)
     }
 
     if (format == JSON) {
-        json_object_set_value(root_object, "records", record_value);
+        G_json_object_set_value(root_object, "records", record_value);
 
-        char *serialized_string = json_serialize_to_string_pretty(root_value);
+        char *serialized_string = G_json_serialize_to_string_pretty(root_value);
         if (!serialized_string) {
-            json_value_free(root_value);
+            G_json_value_free(root_value);
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         }
         puts(serialized_string);
 
-        json_free_serialized_string(serialized_string);
-        json_value_free(root_value);
+        G_json_free_serialized_string(serialized_string);
+        G_json_value_free(root_value);
     }
 }

@@ -69,11 +69,11 @@ class CmdThread(threading.Thread):
 
     requestId = 0
 
-    def __init__(self, receiver, requestQ=None, resultQ=None, **kwds):
+    def __init__(self, receiver, requestQ=None, resultQ=None, **kwargs):
         """
         :param receiver: event receiver (used in PostEvent)
         """
-        threading.Thread.__init__(self, **kwds)
+        threading.Thread.__init__(self, **kwargs)
 
         if requestQ is None:
             self.requestQ = Queue.Queue()
@@ -94,18 +94,18 @@ class CmdThread(threading.Thread):
 
         self.start()
 
-    def RunCmd(self, *args, **kwds):
+    def RunCmd(self, *args, **kwargs):
         """Run command in queue
 
         :param args: unnamed command arguments
-        :param kwds: named command arguments
+        :param kwargs: named command arguments
 
         :return: request id in queue
         """
         CmdThread.requestId += 1
 
         self.requestCmd = None
-        self.requestQ.put((CmdThread.requestId, args, kwds))
+        self.requestQ.put((CmdThread.requestId, args, kwargs))
 
         return CmdThread.requestId
 
@@ -128,7 +128,7 @@ class CmdThread(threading.Thread):
                 "addLayer": None,
                 "notification": None,
             }
-            requestId, args, kwds = self.requestQ.get()
+            requestId, args, kwargs = self.requestQ.get()
             for key in (
                 "callable",
                 "onDone",
@@ -137,9 +137,9 @@ class CmdThread(threading.Thread):
                 "addLayer",
                 "notification",
             ):
-                if key in kwds:
-                    variables[key] = kwds[key]
-                    del kwds[key]
+                if key in kwargs:
+                    variables[key] = kwargs[key]
+                    del kwargs[key]
 
             if not variables["callable"]:
                 variables["callable"] = GrassCmd
@@ -166,7 +166,7 @@ class CmdThread(threading.Thread):
                 wx.PostEvent(self.receiver, event)
 
             time.sleep(0.1)
-            self.requestCmd = variables["callable"](*args, **kwds)
+            self.requestCmd = variables["callable"](*args, **kwargs)
             if self._want_abort_all and self.requestCmd is not None:
                 self.requestCmd.abort()
                 if self.requestQ.empty():
@@ -217,7 +217,7 @@ class CmdThread(threading.Thread):
                         "map=%s" % mapName,
                         "color=%s" % colorTable,
                     ]
-                    self.requestCmdColor = variables["callable"](*argsColor, **kwds)
+                    self.requestCmdColor = variables["callable"](*argsColor, **kwargs)
                     self.resultQ.put((requestId, self.requestCmdColor.run()))
 
             if self.receiver:
@@ -362,7 +362,7 @@ class GConsole(wx.EvtHandler):
     def __init__(self, guiparent=None, giface=None, ignoredCmdPattern=None):
         r"""
         :param guiparent: parent window for created GUI objects
-        :param lmgr: layer manager window (TODO: replace by giface)
+        :param giface: GRASS interface instance
         :param ignoredCmdPattern: regular expression specifying commands
                                   to be ignored (e.g. @c '^d\..*' for
                                   display commands)

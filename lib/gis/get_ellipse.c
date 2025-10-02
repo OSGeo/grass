@@ -255,7 +255,7 @@ int G_read_ellipsoid_table(int fatal)
     if (G_is_initialized(&table.initialized))
         return 1;
 
-    sprintf(file, "%s/etc/proj/ellipse.table", G_gisbase());
+    snprintf(file, sizeof(file), "%s/etc/proj/ellipse.table", G_gisbase());
     fd = fopen(file, "r");
 
     if (fd == NULL) {
@@ -278,7 +278,7 @@ int G_read_ellipsoid_table(int fatal)
         if (sscanf(buf, "%s  \"%99[^\"]\" %s %s", name, descr, buf1, buf2) !=
             4) {
             err++;
-            sprintf(buf, " %d", line);
+            snprintf(buf, sizeof(buf), " %d", line);
             if (*badlines)
                 G_strlcat(badlines, ",", sizeof(badlines));
             G_strlcat(badlines, buf, sizeof(badlines));
@@ -301,7 +301,7 @@ int G_read_ellipsoid_table(int fatal)
             table.count++;
         else {
             err++;
-            sprintf(buf, " %d", line);
+            snprintf(buf, sizeof(buf), " %d", line);
             if (*badlines)
                 G_strlcat(badlines, ",", sizeof(badlines));
             G_strlcat(badlines, buf, sizeof(badlines));

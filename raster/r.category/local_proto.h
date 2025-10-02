@@ -18,9 +18,7 @@
 #ifndef __LOCAL_PROTO_H__
 #define __LOCAL_PROTO_H__
 
-#include <grass/parson.h>
-
-#define COLOR_STRING_LENGTH 30
+#include <grass/gjson.h>
 
 enum OutputFormat { PLAIN, JSON };
 enum ColorOutput { NONE, RGB_OUTPUT, HEX_OUTPUT, TRIPLET_OUTPUT, HSV_OUTPUT };

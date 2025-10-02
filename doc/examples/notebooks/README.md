@@ -15,9 +15,9 @@ the notebook.
 See also the official documentation for
 [The Jupyter Notebook](https://jupyter-notebook.readthedocs.io/en/latest/).
 
-### Introductory notebooks to GRASS GIS and Jupyter
+### Introductory notebooks to GRASS and Jupyter
 
-* GRASS GIS in Jupyter Notebook with Python and grass.jupyter:
+* GRASS in Jupyter Notebook with Python and grass.jupyter:
   [jupyter_example.ipynb](jupyter_example.ipynb)
 * The grass.jupyter Package: [jupyter_tutorial.ipynb](jupyter_tutorial.ipynb)
 
@@ -27,6 +27,6 @@ See also the official documentation for
 * Spatio-Temporal Analysis with grass.jupyter: [temporal.ipynb](temporal.ipynb)
 * Solar Energy Potential Analysis:
   [solar_potential.ipynb](solar_potential.ipynb)
-* GRASS GIS Scripting with Python:
+* GRASS Scripting with Python:
   [scripting_example.ipynb](scripting_example.ipynb)
-* Hydrology with GRASS GIS: [hydrology.ipynb](hydrology.ipynb)
+* Hydrology with GRASS: [hydrology.ipynb](hydrology.ipynb)

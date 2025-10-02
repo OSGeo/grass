@@ -362,7 +362,7 @@ int main(int argc, char *argv[])
             db_begin_transaction(driver);
 
             db_init_string(&sql);
-            sprintf(buf, "create table %s ( ", Fi->table);
+            snprintf(buf, sizeof(buf), "create table %s ( ", Fi->table);
             db_append_string(&sql, buf);
 
             if (catcol < 0) {
@@ -381,10 +381,10 @@ int main(int argc, char *argv[])
                 case DB_C_TYPE_INT:
                     G_verbose_message("Column: %d  type: integer", i + 1);
                     if (!columns_opt->answer) {
-                        sprintf(buf, "int_%d integer", n_int + 1);
+                        snprintf(buf, sizeof(buf), "int_%d integer", n_int + 1);
                         db_append_string(&sql, buf);
                         if (catcol == i) {
-                            sprintf(buf, "int_%d", n_int + 1);
+                            snprintf(buf, sizeof(buf), "int_%d", n_int + 1);
                             key = G_store(buf);
                         }
                     }
@@ -393,7 +393,8 @@ int main(int argc, char *argv[])
                 case DB_C_TYPE_DOUBLE:
                     G_verbose_message("Column: %d  type: double", i + 1);
                     if (!columns_opt->answer) {
-                        sprintf(buf, "dbl_%d double precision", n_double + 1);
+                        snprintf(buf, sizeof(buf), "dbl_%d double precision",
+                                 n_double + 1);
                         db_append_string(&sql, buf);
                     }
                     n_double++;
@@ -402,8 +403,8 @@ int main(int argc, char *argv[])
                     G_verbose_message("Column: %d  type: string length: %d",
                                       i + 1, collen[i]);
                     if (!columns_opt->answer) {
-                        sprintf(buf, "str_%d varchar(%d)", n_string + 1,
-                                collen[i]);
+                        snprintf(buf, sizeof(buf), "str_%d varchar(%d)",
+                                 n_string + 1, collen[i]);
                         db_append_string(&sql, buf);
                     }
                     n_string++;

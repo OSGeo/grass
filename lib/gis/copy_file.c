@@ -1,6 +1,6 @@
 /****************************************************************************
  *
- * MODULE:       GRASS GIS library - copy_file.c
+ * MODULE:       GRASS library - copy_file.c
  * AUTHOR(S):    Paul Kelly
  * PURPOSE:      Function to copy one file to another.
  * COPYRIGHT:    (C) 2007 by the GRASS Development Team

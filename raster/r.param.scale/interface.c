@@ -92,7 +92,7 @@ void interface(int argc, char **argv)
     tol2_val->required = NO;
     tol2_val->answer = "0.0001";
 
-    sprintf(buf, "3-%i", MAX_WSIZE);
+    snprintf(buf, sizeof(buf), "3-%i", MAX_WSIZE);
     win_size->key = "size";
     win_size->description = _("Size of processing window (odd number only)");
     win_size->type = TYPE_INTEGER;

@@ -4,7 +4,7 @@
 #
 # TOOL:         build_grass_app.bash
 # AUTHOR(s):    Nicklas Larsson
-# PURPOSE:      Build and bundle GRASS GIS app for macOS
+# PURPOSE:      Build and bundle GRASS app for macOS
 # COPYRIGHT:    (c) 2020-2025 Nicklas Larsson and the GRASS Development Team
 #               (c) 2020 Michael Barton
 #               (c) 2018 Eric Hutton, Community Surface Dynamics Modeling
@@ -37,7 +37,7 @@ conda_stable_file="${this_script_dir}/files/conda-requirements-stable-${arch}.tx
 conda_dev_file="${this_script_dir}/files/conda-requirements-dev-${arch}.txt"
 conda_req_file="$conda_stable_file"
 conda_temp_dir=$(mktemp -d -t GRASS)
-conda_bin="${conda_temp_dir}/bin/mamba"
+conda_bin="${conda_temp_dir}/bin/conda"
 conda_update_stable=0
 miniconda_url="https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-MacOSX-${arch}.sh"
 dmg_title=
@@ -88,7 +88,7 @@ fi
 
 function display_usage () { cat <<- _EOF_
 
-GRASS GIS build script for Anaconda.
+GRASS build script for Anaconda.
 
 Description...
 
@@ -679,8 +679,8 @@ fi
 
 patch_grass
 
-begingroup "Build and install GRASS GIS"
-# configure and compile GRASS GIS
+begingroup "Build and install GRASS"
+# configure and compile GRASS
 
 pushd "$grassdir" > /dev/null || exit
 

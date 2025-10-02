@@ -1,4 +1,4 @@
-# Install GRASS GIS from source code
+# Install GRASS from source code
 
 Please read _all_ text below.
 
@@ -16,7 +16,7 @@ Please read _all_ text below.
 - (I) CODE OPTIMIZATION
 - (J) DEBUGGING OPTIONS
 - (K) SUPPORT
-- (L) GRASS GIS PROGRAMMER'S MANUAL
+- (L) GRASS PROGRAMMER'S MANUAL
 - (M) CONTRIBUTING CODE AND PATCHES
 
 ## PREREQUISITES
@@ -31,7 +31,7 @@ Installation order:
 1. PROJ
 2. GDAL/OGR (compiled without GRASS support)
 3. optionally: databases such as PostgreSQL, MySQL, SQLite
-4. GRASS GIS
+4. GRASS
 5. optionally: GDAL-OGR-GRASS plugin
 
 ## (A) SOURCE CODE DISTRIBUTION
@@ -139,7 +139,7 @@ To successfully compile GRASS on 64bit platforms, the required
 FFTW library has to be compiled with `-fPIC` flag:
 
 ```bash
-#this applies to FFTW3, not to GRASS GIS:
+#this applies to FFTW3, not to GRASS:
 cd fftw-3.3.4/
 CFLAGS="-fPIC" ./configure
 make
@@ -177,13 +177,13 @@ grass
 
 See the `ReadMe.rtf` in the `./macosx/` folder and the Wiki page above.
 
-## (F) RUNNING GRASS GIS
+## (F) RUNNING GRASS
 
 Download a sample data package from the GRASS web site, see
 <https://grass.osgeo.org/download/sample-data/>
 
 Extract the data set and point the "Database" field in the
-GRASS GIS startup menu to the extracted directory.
+GRASS startup menu to the extracted directory.
 
 Enjoy.
 

@@ -3,7 +3,7 @@ GRASS Python testing framework test case
 
 Copyright (C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS GIS
+License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :authors: Vaclav Petras
@@ -16,6 +16,7 @@ import subprocess
 import hashlib
 import uuid
 import unittest
+from unittest.util import safe_repr
 
 from grass.pygrass.modules import Module
 from grass.exceptions import CalledModuleError
@@ -31,7 +32,6 @@ from .checkers import (
     text_file_md5,
     files_equal_md5,
 )
-from .utils import safe_repr
 from .gutils import is_map_in_mapset
 
 from io import StringIO
@@ -40,7 +40,7 @@ from io import StringIO
 class TestCase(unittest.TestCase):
     # we disable R0904 for all TestCase classes because their purpose is to
     # provide a lot of assert methods
-    # pylint: disable=R0904
+    # pylint: disable=R0904,C0103
     """
 
     Always use keyword arguments for all parameters other than first two. For
@@ -65,19 +65,14 @@ class TestCase(unittest.TestCase):
         self.addTypeEqualityFunc(str, "assertMultiLineEqual")
 
     def _formatMessage(self, msg, standardMsg):
-        """Honor the longMessage attribute when generating failure messages.
-
+        """Honour the longMessage attribute when generating failure messages.
         If longMessage is False this means:
-
         * Use only an explicit message if it is provided
         * Otherwise use the standard message for the assert
 
         If longMessage is True:
-
         * Use the standard message
-        * If an explicit message is provided, return string with both messages
-
-        Based on Python unittest _formatMessage, formatting changed.
+        * If an explicit message is provided, plus ' : ' and the explicit message
         """
         if not self.longMessage:
             return msg or standardMsg
@@ -86,9 +81,9 @@ class TestCase(unittest.TestCase):
         try:
             # don't switch to '{}' formatting in Python 2.X
             # it changes the way unicode input is handled
-            return "%s \n%s" % (msg, standardMsg)
+            return "%s : %s" % (standardMsg, msg)
         except UnicodeDecodeError:
-            return "%s \n%s" % (safe_repr(msg), safe_repr(standardMsg))
+            return "%s : %s" % (safe_repr(standardMsg), safe_repr(msg))
 
     @classmethod
     def use_temp_region(cls):
@@ -104,6 +99,7 @@ class TestCase(unittest.TestCase):
             @classmethod
             def setUpClass(self):
                 self.use_temp_region()
+
 
             @classmethod
             def tearDownClass(self):
@@ -151,7 +147,7 @@ class TestCase(unittest.TestCase):
         call_module("g.remove", quiet=True, flags="f", type="region", name=name)
         # TODO: we don't know if user calls this
         # so perhaps some decorator which would use with statement
-        # but we have zero chance of infuencing another test class
+        # but we have zero chance of influencing another test class
         # since we use class-specific name for temporary region
 
     def assertMultiLineEqual(self, first, second, msg=None):
@@ -218,16 +214,21 @@ class TestCase(unittest.TestCase):
 
         ::
 
-            self.assertModuleKeyValue('r.info', map='elevation', flags='gr',
-                                      reference=dict(min=55.58, max=156.33),
-                                      precision=0.01, sep='=')
+            self.assertModuleKeyValue(
+                "r.info",
+                map="elevation",
+                flags="gr",
+                reference=dict(min=55.58, max=156.33),
+                precision=0.01,
+                sep="=",
+            )
 
         ::
 
-            module = SimpleModule('r.info', map='elevation', flags='gr')
-            self.assertModuleKeyValue(module,
-                                      reference=dict(min=55.58, max=156.33),
-                                      precision=0.01, sep='=')
+            module = SimpleModule("r.info", map="elevation", flags="gr")
+            self.assertModuleKeyValue(
+                module, reference=dict(min=55.58, max=156.33), precision=0.01, sep="="
+            )
 
         The output of the module should be key-value pairs (shell script style)
         which is typically obtained using ``-g`` flag.
@@ -284,8 +285,8 @@ class TestCase(unittest.TestCase):
         Typical example is checking minimum, maximum and number of NULL cells
         in the map::
 
-            values = 'null_cells=0\nmin=55.5787925720215\nmax=156.329864501953'
-            self.assertRasterFitsUnivar(raster='elevation', reference=values)
+            values = "null_cells=0\nmin=55.5787925720215\nmax=156.329864501953"
+            self.assertRasterFitsUnivar(raster="elevation", reference=values)
 
         Use keyword arguments syntax for all function parameters.
 
@@ -301,6 +302,7 @@ class TestCase(unittest.TestCase):
             msg=msg,
             sep="=",
             precision=precision,
+            nprocs=1,
         )
 
     def assertRasterFitsInfo(self, raster, reference, precision=None, msg=None):
@@ -310,8 +312,8 @@ class TestCase(unittest.TestCase):
         Only the provided values are tested.
         Typical example is checking minimum, maximum and type of the map::
 
-            minmax = 'min=0\nmax=1451\ndatatype=FCELL'
-            self.assertRasterFitsInfo(raster='elevation', reference=minmax)
+            minmax = "min=0\nmax=1451\ndatatype=FCELL"
+            self.assertRasterFitsInfo(raster="elevation", reference=minmax)
 
         Use keyword arguments syntax for all function parameters.
 
@@ -381,7 +383,7 @@ class TestCase(unittest.TestCase):
         A example of checking number of points::
 
             topology = dict(points=10938, primitives=10938)
-            self.assertVectorFitsTopoInfo(vector='bridges', reference=topology)
+            self.assertVectorFitsTopoInfo(vector="bridges", reference=topology)
 
         Note that here we are checking also the number of primitives to prove
         that there are no other features besides points.
@@ -481,9 +483,8 @@ class TestCase(unittest.TestCase):
         Only the provided values are tested.
         Typical example is checking minimum and maximum of a column::
 
-            minmax = 'min=0\nmax=1451'
-            self.assertVectorFitsUnivar(map='bridges', column='WIDTH',
-                                        reference=minmax)
+            minmax = "min=0\nmax=1451"
+            self.assertVectorFitsUnivar(map="bridges", column="WIDTH", reference=minmax)
 
         Use keyword arguments syntax for all function parameters.
 
@@ -638,7 +639,7 @@ class TestCase(unittest.TestCase):
     ):
         """Test the existence of a file.
 
-        .. note:
+        .. note::
             By default this also checks if the file size is greater than 0
             since we rarely want a file to be empty. It also checks
             if the file is accessible for reading since we expect that user
@@ -670,11 +671,11 @@ class TestCase(unittest.TestCase):
         trust (that you obtain the right file). Then you compute MD5
         sum of the file. And provide the sum in a test as a string::
 
-            self.assertFileMd5('result.png', md5='807bba4ffa...')
+            self.assertFileMd5("result.png", md5="807bba4ffa...")
 
         Use `file_md5()` function from this package::
 
-            file_md5('original_result.png')
+            file_md5("original_result.png")
 
         Or in command line, use ``md5sum`` command if available:
 
@@ -685,12 +686,13 @@ class TestCase(unittest.TestCase):
         Finally, you can use Python ``hashlib`` to obtain MD5::
 
             import hashlib
+
             hasher = hashlib.md5()
             # expecting the file to fit into memory
-            hasher.update(open('original_result.png', 'rb').read())
+            hasher.update(open("original_result.png", "rb").read())
             hasher.hexdigest()
 
-        .. note:
+        .. note::
             For text files, always create MD5 sum using ``\n`` (LF)
             as newline characters for consistency. Also use newline
             at the end of file (as for example, Git or PEP8 requires).
@@ -1120,7 +1122,7 @@ class TestCase(unittest.TestCase):
 
         This method should not be used to test v.overlay or v.select.
         """
-        diff = self._compute_xor_vectors(
+        diff = self._compute_vector_xor(
             ainput=reference,
             binput=actual,
             alayer=layer,
@@ -1152,11 +1154,11 @@ class TestCase(unittest.TestCase):
     def assertVectorEqualsVector(self, actual, reference, digits, precision, msg=None):
         """Test that two vectors are equal.
 
-        .. note:
+        .. note::
             This test should not be used to test ``v.in.ascii`` and
             ``v.out.ascii`` modules.
 
-        .. warning:
+        .. warning::
             ASCII files for vectors are loaded into memory, so this
             function works well only for "not too big" vector maps.
         """
@@ -1181,11 +1183,11 @@ class TestCase(unittest.TestCase):
     def assertVectorEqualsAscii(self, actual, reference, digits, precision, msg=None):
         """Test that vector is equal to the vector stored in GRASS ASCII file.
 
-        .. note:
+        .. note::
             This test should not be used to test ``v.in.ascii`` and
             ``v.out.ascii`` modules.
 
-        .. warning:
+        .. warning::
             ASCII files for vectors are loaded into memory, so this
             function works well only for "not too big" vector maps.
         """
@@ -1219,11 +1221,11 @@ class TestCase(unittest.TestCase):
     ):
         """Test that two GRASS ASCII vector files are equal.
 
-        .. note:
+        .. note::
             This test should not be used to test ``v.in.ascii`` and
             ``v.out.ascii`` modules.
 
-        .. warning:
+        .. warning::
             ASCII files for vectors are loaded into memory, so this
             function works well only for "not too big" vector maps.
         """
@@ -1241,8 +1243,8 @@ class TestCase(unittest.TestCase):
         # workaround for missing -h (do not print header) flag in v.out.ascii
         num_lines_of_header = 10
         diff = difflib.unified_diff(
-            fromlines[num_lines_of_header:],
-            tolines[num_lines_of_header:],
+            [line.strip() for line in fromlines[num_lines_of_header:]],
+            [line.strip() for line in tolines[num_lines_of_header:]],
             "reference",
             "actual",
             n=context_lines,
@@ -1282,7 +1284,7 @@ class TestCase(unittest.TestCase):
                 # TODO: all HTML files might be collected by the main reporter
                 # TODO: standardize the format of name of HTML file
                 # for one test id there is only one possible file of this name
-                htmldiff_file_name = self.id() + "_ascii_diff" + ".html"
+                htmldiff_file_name: str = self.id() + "_ascii_diff" + ".html"
                 self.supplementary_files.append(htmldiff_file_name)
                 htmldiff = difflib.HtmlDiff().make_file(
                     fromlines,
@@ -1310,7 +1312,7 @@ class TestCase(unittest.TestCase):
         In terms of testing framework, this function causes a common error,
         not a test failure.
 
-        :raises CalledModuleError: if the module failed
+        :raises ~grass.exceptions.CalledModuleError: If the module failed
         """
         module = _module_from_parameters(module, **kwargs)
         _check_module_run_parameters(module)

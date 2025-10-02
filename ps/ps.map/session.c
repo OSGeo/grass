@@ -12,7 +12,7 @@ static FILE *fd;
 int add_to_session(int indent, char *buf)
 {
     accept();
-    sprintf(cur, "%s%s", indent ? "  " : "", buf);
+    snprintf(cur, sizeof(cur), "%s%s", indent ? "  " : "", buf);
 
     return 0;
 }

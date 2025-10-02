@@ -26,7 +26,7 @@ static geoview Gv;
    the user decide on the id for each.
 
    \param data nviz data
-   \param id
+   \param id cplane id
  */
 int Nviz_new_cplane(nv_data *data, int id)
 {
@@ -43,7 +43,7 @@ int Nviz_new_cplane(nv_data *data, int id)
    \brief Turn on (make current) the given clip plane.
 
    \param data nviz data
-   \param cplane id
+   \param id cplane id
  */
 int Nviz_on_cplane(nv_data *data, int id)
 {
@@ -58,7 +58,7 @@ int Nviz_on_cplane(nv_data *data, int id)
    \brief Turn off (make inactive) the given clip plane
 
    \param data nviz data
-   \param cplane id
+   \param id cplane id
  */
 int Nviz_off_cplane(nv_data *data, int id)
 {

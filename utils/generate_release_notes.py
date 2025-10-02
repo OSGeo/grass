@@ -177,7 +177,7 @@ def print_notes(
     """
     num_changes = round_down_to_five(len(changes))
     print(
-        f"The GRASS GIS {end_tag} release provides more than "
+        f"The GRASS {end_tag} release provides more than "
         f"{num_changes} improvements and fixes "
         f"with respect to the release {start_tag}.\n"
     )

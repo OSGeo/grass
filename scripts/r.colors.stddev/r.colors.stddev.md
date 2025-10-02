@@ -11,7 +11,7 @@ colored red, and beyond 3 S.D. are colored black.
 For a differences map there is an option to lock the center of the color
 table at zero. Values more than two S.D. below the mean will be colored
 blue; values below the mean but less than 2 S.D. away will transition to
-white, and above the mean the colors will simularly transition to full
+white, and above the mean the colors will similarly transition to full
 red at +2 S.D.
 
 ## EXAMPLE

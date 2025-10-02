@@ -19,6 +19,7 @@
  *
  *****************************************************************************/
 #define NFILES 400
+#define BUFSZ  256
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,17 +30,17 @@
 #include <grass/raster.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 
 struct order {
     int point;
     int row;
     int col;
     int cat;
-    char north_buf[256];
-    char east_buf[256];
-    char lab_buf[256];
-    char clr_buf[NFILES][256];
+    char north_buf[BUFSZ];
+    char east_buf[BUFSZ];
+    char lab_buf[BUFSZ];
+    char clr_buf[NFILES][BUFSZ];
     CELL value[NFILES];
     DCELL dvalue[NFILES];
 };
@@ -274,11 +275,11 @@ int main(int argc, char *argv[])
         format = PLAIN;
 
     if (format == JSON) {
-        root_value = json_value_init_array();
+        root_value = G_json_value_init_array();
         if (root_value == NULL) {
             G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
         }
-        root_array = json_array(root_value);
+        root_array = G_json_array(root_value);
     }
 
     /* print header row */
@@ -356,10 +357,10 @@ int main(int argc, char *argv[])
                                 north = Points->y[0];
                                 cat = Cats->cat[0];
                                 cache[point_cnt].cat = cat;
-                                sprintf(cache[point_cnt].east_buf, "%.15g",
-                                        east);
-                                sprintf(cache[point_cnt].north_buf, "%.15g",
-                                        north);
+                                snprintf(cache[point_cnt].east_buf, BUFSZ,
+                                         "%.15g", east);
+                                snprintf(cache[point_cnt].north_buf, BUFSZ,
+                                         "%.15g", north);
                             }
                         }
                         else {
@@ -482,8 +483,8 @@ int main(int argc, char *argv[])
                         Rast_get_d_color(&(cache[point].dvalue[i]), &red,
                                          &green, &blue, &ncolor[i]);
 
-                    sprintf(cache[point].clr_buf[i], "%03d:%03d:%03d", red,
-                            green, blue);
+                    snprintf(cache[point].clr_buf[i], BUFSZ, "%03d:%03d:%03d",
+                             red, green, blue);
                 }
             }
         } /* point loop */
@@ -530,9 +531,11 @@ int main(int argc, char *argv[])
                             continue;
                         }
                         if (out_type[i] == FCELL_TYPE)
-                            sprintf(tmp_buf, "%.7g", cache[point].dvalue[i]);
+                            snprintf(tmp_buf, sizeof(tmp_buf), "%.7g",
+                                     cache[point].dvalue[i]);
                         else /* DCELL */
-                            sprintf(tmp_buf, "%.15g", cache[point].dvalue[i]);
+                            snprintf(tmp_buf, sizeof(tmp_buf), "%.15g",
+                                     cache[point].dvalue[i]);
                         G_trim_decimal(tmp_buf); /* not needed with %g? */
                         fprintf(stdout, "%s%s", fs, tmp_buf);
                     }
@@ -546,57 +549,58 @@ int main(int argc, char *argv[])
                 fprintf(stdout, "\n");
             }
             else {
-                point_value = json_value_init_object();
-                point_object = json_object(point_value);
+                point_value = G_json_value_init_object();
+                point_object = G_json_object(point_value);
 
                 if (flg.cat->answer) {
-                    json_object_set_number(point_object, "cat",
-                                           cache[point].cat);
+                    G_json_object_set_number(point_object, "cat",
+                                             cache[point].cat);
                 }
 
-                json_object_set_number(point_object, "easting",
-                                       atof(cache[point].east_buf));
-                json_object_set_number(point_object, "northing",
-                                       atof(cache[point].north_buf));
-                json_object_set_string(point_object, "site_name",
-                                       cache[point].lab_buf);
+                G_json_object_set_number(point_object, "easting",
+                                         atof(cache[point].east_buf));
+                G_json_object_set_number(point_object, "northing",
+                                         atof(cache[point].north_buf));
+                G_json_object_set_string(point_object, "site_name",
+                                         cache[point].lab_buf);
 
                 for (i = 0; i < nfiles; i++) {
-                    layer_value = json_value_init_object();
-                    layer_object = json_object(layer_value);
+                    layer_value = G_json_value_init_object();
+                    layer_object = G_json_object(layer_value);
 
                     if (Rast_is_c_null_value(&cache[point].value[i]) ||
                         Rast_is_d_null_value(&cache[point].dvalue[i])) {
-                        json_object_set_null(layer_object, "value");
+                        G_json_object_set_null(layer_object, "value");
                         if (flg.label->answer)
-                            json_object_set_null(layer_object, "label");
+                            G_json_object_set_null(layer_object, "label");
                         if (flg.color->answer)
-                            json_object_set_null(layer_object, "color");
+                            G_json_object_set_null(layer_object, "color");
                     }
                     else {
                         if (out_type[i] == CELL_TYPE) {
-                            json_object_set_number(layer_object, "value",
-                                                   (long)cache[point].value[i]);
+                            G_json_object_set_number(
+                                layer_object, "value",
+                                (long)cache[point].value[i]);
                             cache[point].dvalue[i] = cache[point].value[i];
                         }
                         else { /* FCELL or DCELL */
-                            json_object_set_number(layer_object, "value",
-                                                   cache[point].dvalue[i]);
+                            G_json_object_set_number(layer_object, "value",
+                                                     cache[point].dvalue[i]);
                         }
                         if (flg.label->answer)
-                            json_object_set_string(
+                            G_json_object_set_string(
                                 layer_object, "label",
                                 Rast_get_d_cat(&(cache[point].dvalue[i]),
                                                &cats[i]));
                         if (flg.color->answer)
-                            json_object_set_string(layer_object, "color",
-                                                   cache[point].clr_buf[i]);
+                            G_json_object_set_string(layer_object, "color",
+                                                     cache[point].clr_buf[i]);
                     }
 
-                    json_object_set_value(point_object, opt.input->answers[i],
-                                          layer_value);
+                    G_json_object_set_value(point_object, opt.input->answers[i],
+                                            layer_value);
                 }
-                json_array_append_value(root_array, point_value);
+                G_json_array_append_value(root_array, point_value);
             }
         }
 
@@ -611,13 +615,13 @@ int main(int argc, char *argv[])
 
     if (format == JSON) {
         char *serialized_string = NULL;
-        serialized_string = json_serialize_to_string_pretty(root_value);
+        serialized_string = G_json_serialize_to_string_pretty(root_value);
         if (serialized_string == NULL) {
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         }
         puts(serialized_string);
-        json_free_serialized_string(serialized_string);
-        json_value_free(root_value);
+        G_json_free_serialized_string(serialized_string);
+        G_json_value_free(root_value);
     }
 
     if (!opt.coords->answers && !opt.points->answers && tty)

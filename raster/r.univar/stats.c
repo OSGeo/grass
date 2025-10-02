@@ -11,7 +11,7 @@
  *
  */
 
-#include <grass/parson.h>
+#include <grass/gjson.h>
 #include "globals.h"
 
 /* *************************************************************** */
@@ -84,16 +84,27 @@ void free_univar_stat_struct(univar_stat *stats)
 /* *************************************************************** */
 int print_stats(univar_stat *stats, enum OutputFormat format)
 {
-    JSON_Value *root_value, *zone_value;
-    JSON_Array *root_array;
-    JSON_Object *zone_object;
+    JSON_Value *root_value = NULL, *zone_value = NULL;
+    JSON_Array *root_array = NULL;
+    JSON_Object *zone_object = NULL;
 
     if (format == JSON) {
-        root_value = json_value_init_array();
-        if (root_value == NULL) {
-            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        if (zone_info.n_zones) {
+            root_value = G_json_value_init_array();
+            if (root_value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON array. Out of memory?"));
+            }
+            root_array = G_json_array(root_value);
         }
-        root_array = json_array(root_value);
+        else {
+            zone_value = G_json_value_init_object();
+            if (zone_value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON object. Out of memory?"));
+            }
+            zone_object = G_json_object(zone_value);
+        }
     }
 
     int z, n_zones = zone_info.n_zones;
@@ -127,81 +138,49 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
 
         if (stats[z].n == 0)
             stats[z].sum = stats[z].sum_abs = NAN;
-        sprintf(sum_str, "%.15g", stats[z].sum);
+        snprintf(sum_str, sizeof(sum_str), "%.15g", stats[z].sum);
         G_trim_decimal(sum_str);
 
-        if (!param.shell_style->answer && format == PLAIN) {
-            if (zone_info.n_zones) {
-                int z_cat = z + zone_info.min;
-
-                fprintf(stdout, "\nzone %d %s\n\n", z_cat,
-                        Rast_get_c_cat(&z_cat, &(zone_info.cats)));
+        if (format == JSON && zone_info.n_zones) {
+            zone_value = G_json_value_init_object();
+            if (zone_value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON object. Out of memory?"));
             }
-            fprintf(stdout, "total null and non-null cells: %lu\n",
-                    stats[z].size);
-            fprintf(stdout, "total null cells: %lu\n\n",
-                    stats[z].size - stats[z].n);
-            fprintf(stdout, "Of the non-null cells:\n----------------------\n");
+            zone_object = G_json_object(zone_value);
         }
+        if (zone_info.n_zones) {
+            int z_cat = z + zone_info.min;
 
-        if (param.shell_style->answer || format == JSON) {
-            if (format == JSON) {
-                zone_value = json_value_init_object();
-                zone_object = json_object(zone_value);
-            }
-            if (zone_info.n_zones) {
-                int z_cat = z + zone_info.min;
-
-                switch (format) {
-                case PLAIN:
-                    fprintf(stdout, "zone=%d;%s\n", z_cat,
-                            Rast_get_c_cat(&z_cat, &(zone_info.cats)));
-                    break;
-                case JSON:
-                    json_object_set_number(zone_object, "zone_number", z_cat);
-                    json_object_set_string(
-                        zone_object, "zone_category",
-                        Rast_get_c_cat(&z_cat, &(zone_info.cats)));
-                    break;
-                }
-            }
             switch (format) {
             case PLAIN:
-                fprintf(stdout, "n=%lu\n", stats[z].n);
-                fprintf(stdout, "null_cells=%lu\n", stats[z].size - stats[z].n);
-                fprintf(stdout, "cells=%lu\n", stats[z].size);
-                fprintf(stdout, "min=%.15g\n", stats[z].min);
-                fprintf(stdout, "max=%.15g\n", stats[z].max);
-                fprintf(stdout, "range=%.15g\n", stats[z].max - stats[z].min);
-                fprintf(stdout, "mean=%.15g\n", mean);
-                fprintf(stdout, "mean_of_abs=%.15g\n",
-                        stats[z].sum_abs / stats[z].n);
-                fprintf(stdout, "stddev=%.15g\n", stdev);
-                fprintf(stdout, "variance=%.15g\n", variance);
-                fprintf(stdout, "coeff_var=%.15g\n", var_coef);
-                fprintf(stdout, "sum=%s\n", sum_str);
+                fprintf(stdout, "\nzone %d %s\n\n", z_cat,
+                        Rast_get_c_cat(&z_cat, &(zone_info.cats)));
+                break;
+            case SHELL:
+                fprintf(stdout, "zone=%d;%s\n", z_cat,
+                        Rast_get_c_cat(&z_cat, &(zone_info.cats)));
                 break;
             case JSON:
-                json_object_set_number(zone_object, "n", stats[z].n);
-                json_object_set_number(zone_object, "null_cells",
-                                       stats[z].size - stats[z].n);
-                json_object_set_number(zone_object, "cells", stats[z].size);
-                json_object_set_number(zone_object, "min", stats[z].min);
-                json_object_set_number(zone_object, "max", stats[z].max);
-                json_object_set_number(zone_object, "range",
-                                       stats[z].max - stats[z].min);
-                json_object_set_number(zone_object, "mean", mean);
-                json_object_set_number(zone_object, "mean_of_abs",
-                                       stats[z].sum_abs / stats[z].n);
-                json_object_set_number(zone_object, "stddev", stdev);
-                json_object_set_number(zone_object, "variance", variance);
-                json_object_set_number(zone_object, "coeff_var", var_coef);
-                json_object_set_number(zone_object, "sum", stats[z].sum);
+                G_json_object_set_number(zone_object, "zone", z_cat);
+                G_json_object_set_string(
+                    zone_object, "zone_label",
+                    Rast_get_c_cat(&z_cat, &(zone_info.cats)));
+                break;
+            case CSV:
+                /* already addressed in print_stats_table */
                 break;
             }
         }
-        else {
-            fprintf(stdout, "n: %lu\n", stats[z].n);
+        switch (format) {
+        case PLAIN:
+            fprintf(stdout, "total null and non-null cells: %zu\n",
+                    stats[z].size);
+            fprintf(stdout, "total null cells: %zu\n\n",
+                    stats[z].size - stats[z].n);
+            fprintf(stdout, "Of the non-null cells:\n----------------------\n");
+
+            fprintf(stdout, "n: %zu\n", stats[z].n);
             fprintf(stdout, "minimum: %g\n", stats[z].min);
             fprintf(stdout, "maximum: %g\n", stats[z].max);
             fprintf(stdout, "range: %g\n", stats[z].max - stats[z].min);
@@ -212,6 +191,79 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
             fprintf(stdout, "variance: %g\n", variance);
             fprintf(stdout, "variation coefficient: %g %%\n", var_coef);
             fprintf(stdout, "sum: %s\n", sum_str);
+            break;
+        case SHELL:
+            fprintf(stdout, "n=%zu\n", stats[z].n);
+            fprintf(stdout, "null_cells=%zu\n", stats[z].size - stats[z].n);
+            fprintf(stdout, "cells=%zu\n", stats[z].size);
+            fprintf(stdout, "min=%.15g\n", stats[z].min);
+            fprintf(stdout, "max=%.15g\n", stats[z].max);
+            fprintf(stdout, "range=%.15g\n", stats[z].max - stats[z].min);
+            fprintf(stdout, "mean=%.15g\n", mean);
+            fprintf(stdout, "mean_of_abs=%.15g\n",
+                    stats[z].sum_abs / stats[z].n);
+            fprintf(stdout, "stddev=%.15g\n", stdev);
+            fprintf(stdout, "variance=%.15g\n", variance);
+            fprintf(stdout, "coeff_var=%.15g\n", var_coef);
+            fprintf(stdout, "sum=%s\n", sum_str);
+            break;
+        case JSON:
+            G_json_object_set_number(zone_object, "n", stats[z].n);
+            G_json_object_set_number(zone_object, "null_cells",
+                                     stats[z].size - stats[z].n);
+            G_json_object_set_number(zone_object, "cells", stats[z].size);
+
+            if (isfinite(stats[z].min))
+                G_json_object_set_number(zone_object, "min", stats[z].min);
+            else
+                G_json_object_set_null(zone_object, "min");
+
+            if (isfinite(stats[z].max))
+                G_json_object_set_number(zone_object, "max", stats[z].max);
+            else
+                G_json_object_set_null(zone_object, "max");
+
+            if (isfinite(stats[z].max - stats[z].min))
+                G_json_object_set_number(zone_object, "range",
+                                         stats[z].max - stats[z].min);
+            else
+                G_json_object_set_null(zone_object, "range");
+
+            if (isfinite(mean))
+                G_json_object_set_number(zone_object, "mean", mean);
+            else
+                G_json_object_set_null(zone_object, "mean");
+
+            if (isfinite(stats[z].sum_abs / stats[z].n))
+                G_json_object_set_number(zone_object, "mean_of_abs",
+                                         stats[z].sum_abs / stats[z].n);
+            else
+                G_json_object_set_null(zone_object, "mean_of_abs");
+
+            if (isfinite(stdev))
+                G_json_object_set_number(zone_object, "stddev", stdev);
+            else
+                G_json_object_set_null(zone_object, "stddev");
+
+            if (isfinite(variance))
+                G_json_object_set_number(zone_object, "variance", variance);
+            else
+                G_json_object_set_null(zone_object, "variance");
+
+            if (isfinite(var_coef))
+                G_json_object_set_number(zone_object, "coeff_var", var_coef);
+            else
+                G_json_object_set_null(zone_object, "coeff_var");
+
+            if (isfinite(stats[z].sum))
+                G_json_object_set_number(zone_object, "sum", stats[z].sum);
+            else
+                G_json_object_set_null(zone_object, "sum");
+
+            break;
+        case CSV:
+            /* already addressed in print_stats_table */
+            break;
         }
 
         /* TODO: mode, skewness, kurtosis */
@@ -292,60 +344,8 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
                 }
             }
 
-            if (param.shell_style->answer || format == JSON) {
-                switch (format) {
-                case PLAIN:
-                    fprintf(stdout, "first_quartile=%g\n", quartile_25);
-                    fprintf(stdout, "median=%g\n", median);
-                    fprintf(stdout, "third_quartile=%g\n", quartile_75);
-                    break;
-                case JSON:
-                    json_object_set_number(zone_object, "first_quartile",
-                                           quartile_25);
-                    json_object_set_number(zone_object, "median", median);
-                    json_object_set_number(zone_object, "third_quartile",
-                                           quartile_75);
-                    break;
-                }
-
-                JSON_Value *percentiles_array_value, *percentile_value;
-                JSON_Array *percentiles_array;
-                JSON_Object *percentile_object;
-
-                if (format == JSON) {
-                    percentiles_array_value = json_value_init_array();
-                    percentiles_array = json_array(percentiles_array_value);
-                }
-
-                for (i = 0; i < stats[z].n_perc; i++) {
-                    char buf[24];
-
-                    snprintf(buf, sizeof(buf), "%.15g", stats[z].perc[i]);
-                    G_strchg(buf, '.', '_');
-                    switch (format) {
-                    case PLAIN:
-                        fprintf(stdout, "percentile_%s=%g\n", buf,
-                                quartile_perc[i]);
-                        break;
-                    case JSON:
-                        percentile_value = json_value_init_object();
-                        percentile_object = json_object(percentile_value);
-                        json_object_set_number(percentile_object, "percentile",
-                                               stats[z].perc[i]);
-                        json_object_set_number(percentile_object, "value",
-                                               quartile_perc[i]);
-                        json_array_append_value(percentiles_array,
-                                                percentile_value);
-                        break;
-                    }
-                }
-
-                if (format == JSON) {
-                    json_object_set_value(zone_object, "percentiles",
-                                          percentiles_array_value);
-                }
-            }
-            else {
+            switch (format) {
+            case PLAIN:
                 fprintf(stdout, "1st quartile: %g\n", quartile_25);
                 if (stats[z].n % 2)
                     fprintf(stdout, "median (odd number of cells): %g\n",
@@ -354,8 +354,57 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
                     fprintf(stdout, "median (even number of cells): %g\n",
                             median);
                 fprintf(stdout, "3rd quartile: %g\n", quartile_75);
+                break;
+            case SHELL:
+                fprintf(stdout, "first_quartile=%g\n", quartile_25);
+                fprintf(stdout, "median=%g\n", median);
+                fprintf(stdout, "third_quartile=%g\n", quartile_75);
+                break;
+            case JSON:
+                if (isfinite(quartile_25))
+                    G_json_object_set_number(zone_object, "first_quartile",
+                                             quartile_25);
+                else
+                    G_json_object_set_null(zone_object, "first_quartile");
 
-                for (i = 0; i < stats[z].n_perc; i++) {
+                if (isfinite(median))
+                    G_json_object_set_number(zone_object, "median", median);
+                else
+                    G_json_object_set_null(zone_object, "median");
+
+                if (isfinite(quartile_75))
+                    G_json_object_set_number(zone_object, "third_quartile",
+                                             quartile_75);
+                else
+                    G_json_object_set_null(zone_object, "third_quartile");
+
+                break;
+            case CSV:
+                /* already addressed in print_stats_table */
+                break;
+            }
+
+            JSON_Value *percentiles_array_value = NULL,
+                       *percentile_value = NULL;
+            JSON_Array *percentiles_array = NULL;
+            JSON_Object *percentile_object = NULL;
+
+            if (format == JSON) {
+                percentiles_array_value = G_json_value_init_array();
+                if (percentiles_array_value == NULL) {
+                    G_fatal_error(
+                        _("Failed to initialize JSON array. Out of memory?"));
+                }
+                percentiles_array = G_json_array(percentiles_array_value);
+            }
+
+            for (i = 0; i < stats[z].n_perc; i++) {
+                char buf[24];
+
+                snprintf(buf, sizeof(buf), "%.15g", stats[z].perc[i]);
+                G_strchg(buf, '.', '_');
+                switch (format) {
+                case PLAIN:
                     if (stats[z].perc[i] == (int)stats[z].perc[i]) {
                         /* percentile is an exact integer */
                         if ((int)stats[z].perc[i] % 10 == 1 &&
@@ -379,8 +428,45 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
                         fprintf(stdout, "%.15g percentile: %g\n",
                                 stats[z].perc[i], quartile_perc[i]);
                     }
+                    break;
+                case SHELL:
+                    fprintf(stdout, "percentile_%s=%g\n", buf,
+                            quartile_perc[i]);
+                    break;
+                case JSON:
+                    percentile_value = G_json_value_init_object();
+                    if (percentile_value == NULL) {
+                        G_fatal_error(_("Failed to initialize JSON object. "
+                                        "Out of memory?"));
+                    }
+                    percentile_object = G_json_object(percentile_value);
+
+                    if (isfinite(stats[z].perc[i]))
+                        G_json_object_set_number(
+                            percentile_object, "percentile", stats[z].perc[i]);
+                    else
+                        G_json_object_set_null(percentile_object, "percentile");
+
+                    if (isfinite(quartile_perc[i]))
+                        G_json_object_set_number(percentile_object, "value",
+                                                 quartile_perc[i]);
+                    else
+                        G_json_object_set_null(percentile_object, "value");
+
+                    G_json_array_append_value(percentiles_array,
+                                              percentile_value);
+                    break;
+                case CSV:
+                    /* already addressed in print_stats_table */
+                    break;
                 }
             }
+
+            if (format == JSON) {
+                G_json_object_set_value(zone_object, "percentiles",
+                                        percentiles_array_value);
+            }
+
             G_free((void *)quartile_perc);
             G_free((void *)qpos_perc);
         }
@@ -389,19 +475,32 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
          * above with zone */
         /* if (!(param.shell_style->answer))
            G_message("\n"); */
-        if (format == JSON) {
-            json_array_append_value(root_array, zone_value);
+        if (format == JSON && zone_info.n_zones) {
+            G_json_array_append_value(root_array, zone_value);
         }
     }
 
     if (format == JSON) {
-        char *serialized_string = json_serialize_to_string_pretty(root_value);
+        char *serialized_string = NULL;
+        if (zone_info.n_zones) {
+            serialized_string = G_json_serialize_to_string_pretty(root_value);
+        }
+        else {
+            serialized_string = G_json_serialize_to_string_pretty(zone_value);
+        }
+
         if (serialized_string == NULL) {
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         }
         puts(serialized_string);
-        json_free_serialized_string(serialized_string);
-        json_value_free(root_value);
+        G_json_free_serialized_string(serialized_string);
+
+        if (zone_info.n_zones) {
+            G_json_value_free(root_value);
+        }
+        else {
+            G_json_value_free(zone_value);
+        }
     }
 
     return 1;
@@ -449,7 +548,7 @@ int print_stats_table(univar_stat *stats)
                 /* percentile is not an exact integer */
                 char buf[24];
 
-                sprintf(buf, "%.15g", stats[0].perc[i]);
+                snprintf(buf, sizeof(buf), "%.15g", stats[0].perc[i]);
                 G_strchg(buf, '.', '_');
                 fprintf(stdout, "%sperc_%s", zone_info.sep, buf);
             }
@@ -498,9 +597,9 @@ int print_stats_table(univar_stat *stats)
         }
 
         /* non-null cells cells */
-        fprintf(stdout, "%lu%s", stats[z].n, zone_info.sep);
+        fprintf(stdout, "%zu%s", stats[z].n, zone_info.sep);
         /* null cells */
-        fprintf(stdout, "%lu%s", stats[z].size - stats[z].n, zone_info.sep);
+        fprintf(stdout, "%zu%s", stats[z].size - stats[z].n, zone_info.sep);
         /* min */
         fprintf(stdout, "%.15g%s", stats[z].min, zone_info.sep);
         /* max */
@@ -519,11 +618,11 @@ int print_stats_table(univar_stat *stats)
         /* coefficient of variance */
         fprintf(stdout, "%.15g%s", var_coef, zone_info.sep);
         /* sum */
-        sprintf(sum_str, "%.15g", stats[z].sum);
+        snprintf(sum_str, sizeof(sum_str), "%.15g", stats[z].sum);
         G_trim_decimal(sum_str);
         fprintf(stdout, "%s%s", sum_str, zone_info.sep);
         /* absolute sum */
-        sprintf(sum_str, "%.15g", stats[z].sum_abs);
+        snprintf(sum_str, sizeof(sum_str), "%.15g", stats[z].sum_abs);
         G_trim_decimal(sum_str);
         fprintf(stdout, "%s", sum_str);
 
@@ -626,4 +725,26 @@ int print_stats_table(univar_stat *stats)
     }
 
     return 1;
+}
+
+univar_stat *univar_stat_with_percentiles(int map_type)
+{
+    univar_stat *stats;
+    unsigned int i, j;
+    unsigned int n_zones = zone_info.n_zones;
+
+    if (n_zones == 0)
+        n_zones = 1;
+
+    i = 0;
+    while (param.percentile->answers[i])
+        i++;
+    stats = create_univar_stat_struct(map_type, i);
+    for (i = 0; i < n_zones; i++) {
+        for (j = 0; j < stats[i].n_perc; j++) {
+            sscanf(param.percentile->answers[j], "%lf", &(stats[i].perc[j]));
+        }
+    }
+
+    return stats;
 }

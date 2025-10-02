@@ -32,21 +32,21 @@ static int show(CELL, CELL, int *, DCELL, DCELL, RASTER_MAP_TYPE, int,
 static void initialize_json_object(JSON_Value **root_value,
                                    JSON_Object **root_object)
 {
-    *root_value = json_value_init_object();
+    *root_value = G_json_value_init_object();
     if (*root_value == NULL) {
         G_fatal_error(_("Failed to initialize JSON object. Out of memory?"));
     }
-    *root_object = json_object(*root_value);
+    *root_object = G_json_object(*root_value);
 }
 
 static void initialize_json_array(JSON_Value **root_value,
                                   JSON_Array **root_array)
 {
-    *root_value = json_value_init_array();
+    *root_value = G_json_value_init_array();
     if (*root_value == NULL) {
         G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
     }
-    *root_array = json_array(*root_value);
+    *root_array = G_json_array(*root_value);
 }
 
 static void append_category_ranges(JSON_Array *range_array, long min, long max)
@@ -55,23 +55,23 @@ static void append_category_ranges(JSON_Array *range_array, long min, long max)
     JSON_Value *cat_value;
     initialize_json_object(&cat_value, &cat_object);
 
-    json_object_set_number(cat_object, "min", min);
-    json_object_set_number(cat_object, "max", max);
+    G_json_object_set_number(cat_object, "min", min);
+    G_json_object_set_number(cat_object, "max", max);
 
-    json_array_append_value(range_array, cat_value);
+    G_json_array_append_value(range_array, cat_value);
 }
 
 static void output_pretty_json(JSON_Value *root_value)
 {
-    char *serialized_string = json_serialize_to_string_pretty(root_value);
+    char *serialized_string = G_json_serialize_to_string_pretty(root_value);
     if (!serialized_string) {
-        json_value_free(root_value);
+        G_json_value_free(root_value);
         G_fatal_error(_("Failed to initialize pretty JSON string."));
     }
     puts(serialized_string);
 
-    json_free_serialized_string(serialized_string);
-    json_value_free(root_value);
+    G_json_free_serialized_string(serialized_string);
+    G_json_value_free(root_value);
 }
 
 int long_list(struct Cell_stats *statf, DCELL dmin, DCELL dmax,
@@ -97,13 +97,13 @@ int long_list(struct Cell_stats *statf, DCELL dmin, DCELL dmax,
                 fprintf(stdout, "%s\n", no_data_str);
                 break;
             case JSON:
-                json_object_set_boolean(root_object, "has_nulls", true);
+                G_json_object_set_boolean(root_object, "has_nulls", true);
                 break;
             }
         }
         else {
             if (format == JSON) {
-                json_object_set_boolean(root_object, "has_nulls", false);
+                G_json_object_set_boolean(root_object, "has_nulls", false);
             }
         }
     }
@@ -124,17 +124,17 @@ int long_list(struct Cell_stats *statf, DCELL dmin, DCELL dmax,
                 JSON_Value *cat_value;
                 initialize_json_object(&cat_value, &cat_object);
 
-                json_object_set_number(cat_object, "min",
-                                       dmin + (double)(cat - 1) *
-                                                  (dmax - dmin) / nsteps);
-                json_object_set_number(cat_object, "max",
-                                       dmin + (double)cat * (dmax - dmin) /
-                                                  nsteps);
+                G_json_object_set_number(cat_object, "min",
+                                         dmin + (double)(cat - 1) *
+                                                    (dmax - dmin) / nsteps);
+                G_json_object_set_number(cat_object, "max",
+                                         dmin + (double)cat * (dmax - dmin) /
+                                                    nsteps);
 
-                json_array_append_value(range_array, cat_value);
+                G_json_array_append_value(range_array, cat_value);
             }
             else {
-                json_array_append_number(range_array, (long)cat);
+                G_json_array_append_number(range_array, (long)cat);
             }
 
             break;
@@ -143,10 +143,10 @@ int long_list(struct Cell_stats *statf, DCELL dmin, DCELL dmax,
 
     if (format == JSON) {
         if (map_type != CELL_TYPE) {
-            json_object_set_value(root_object, "ranges", range_value);
+            G_json_object_set_value(root_object, "ranges", range_value);
         }
         else {
-            json_object_set_value(root_object, "values", range_value);
+            G_json_object_set_value(root_object, "values", range_value);
         }
 
         output_pretty_json(root_value);
@@ -180,13 +180,13 @@ int compact_list(struct Cell_stats *statf, DCELL dmin, DCELL dmax,
                 fprintf(stdout, "%s ", no_data_str);
                 break;
             case JSON:
-                json_object_set_boolean(root_object, "has_nulls", true);
+                G_json_object_set_boolean(root_object, "has_nulls", true);
                 break;
             }
         }
         else {
             if (format == JSON) {
-                json_object_set_boolean(root_object, "has_nulls", false);
+                G_json_object_set_boolean(root_object, "has_nulls", false);
             }
         }
     }
@@ -211,7 +211,7 @@ int compact_list(struct Cell_stats *statf, DCELL dmin, DCELL dmax,
         fprintf(stdout, "\n");
         break;
     case JSON:
-        json_object_set_value(root_object, "ranges", range_value);
+        G_json_object_set_value(root_object, "ranges", range_value);
         output_pretty_json(root_value);
         break;
     }
@@ -240,15 +240,16 @@ static int show(CELL low, CELL high, int *len, DCELL dmin, DCELL dmax,
     if (map_type != CELL_TYPE) {
         switch (format) {
         case PLAIN:
-            sprintf(text, "%f%s%f ", dmin + (low - 1) * (dmax - dmin) / nsteps,
-                    dmin < 0 ? " thru " : "-",
-                    dmin + high * (dmax - dmin) / nsteps);
+            snprintf(text, sizeof(text), "%f%s%f ",
+                     dmin + (low - 1) * (dmax - dmin) / nsteps,
+                     dmin < 0 ? " thru " : "-",
+                     dmin + high * (dmax - dmin) / nsteps);
             break;
         case JSON:
-            json_object_set_number(cat_object, "min",
-                                   dmin + (low - 1) * (dmax - dmin) / nsteps);
-            json_object_set_number(cat_object, "max",
-                                   dmin + high * (dmax - dmin) / nsteps);
+            G_json_object_set_number(cat_object, "min",
+                                     dmin + (low - 1) * (dmax - dmin) / nsteps);
+            G_json_object_set_number(cat_object, "max",
+                                     dmin + high * (dmax - dmin) / nsteps);
             break;
         }
     }
@@ -256,14 +257,14 @@ static int show(CELL low, CELL high, int *len, DCELL dmin, DCELL dmax,
         switch (format) {
         case PLAIN:
             if (low == high)
-                sprintf(text, "%ld ", (long)low);
+                snprintf(text, sizeof(text), "%ld ", (long)low);
             else
-                sprintf(text, "%ld%s%ld ", (long)low, low < 0 ? " thru " : "-",
-                        (long)high);
+                snprintf(text, sizeof(text), "%ld%s%ld ", (long)low,
+                         low < 0 ? " thru " : "-", (long)high);
             break;
         case JSON:
-            json_object_set_number(cat_object, "min", (long)low);
-            json_object_set_number(cat_object, "max", (long)high);
+            G_json_object_set_number(cat_object, "min", (long)low);
+            G_json_object_set_number(cat_object, "max", (long)high);
             break;
         }
     }
@@ -280,7 +281,7 @@ static int show(CELL low, CELL high, int *len, DCELL dmin, DCELL dmax,
         fprintf(stdout, "%s", text);
         break;
     case JSON:
-        json_array_append_value(root_array, cat_value);
+        G_json_array_append_value(root_array, cat_value);
         break;
     }
 
@@ -345,19 +346,19 @@ int compact_range_list(CELL negmin, CELL negmax, CELL zero, CELL posmin,
                 fprintf(stdout, "%s\n", no_data_str);
                 break;
             case JSON:
-                json_object_set_boolean(root_object, "has_nulls", true);
+                G_json_object_set_boolean(root_object, "has_nulls", true);
                 break;
             }
         }
         else {
             if (format == JSON) {
-                json_object_set_boolean(root_object, "has_nulls", false);
+                G_json_object_set_boolean(root_object, "has_nulls", false);
             }
         }
     }
 
     if (format == JSON) {
-        json_object_set_value(root_object, "ranges", range_value);
+        G_json_object_set_value(root_object, "ranges", range_value);
         output_pretty_json(root_value);
     }
 
@@ -421,19 +422,19 @@ int range_list(CELL negmin, CELL negmax, CELL zero, CELL posmin, CELL posmax,
                 fprintf(stdout, "%s\n", no_data_str);
                 break;
             case JSON:
-                json_object_set_boolean(root_object, "has_nulls", true);
+                G_json_object_set_boolean(root_object, "has_nulls", true);
                 break;
             }
         }
         else {
             if (format == JSON) {
-                json_object_set_boolean(root_object, "has_nulls", false);
+                G_json_object_set_boolean(root_object, "has_nulls", false);
             }
         }
     }
 
     if (format == JSON) {
-        json_object_set_value(root_object, "ranges", range_value);
+        G_json_object_set_value(root_object, "ranges", range_value);
         output_pretty_json(root_value);
     }
 
