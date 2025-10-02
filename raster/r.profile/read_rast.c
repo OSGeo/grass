@@ -15,7 +15,8 @@
 
 int read_rast(double east, double north, double dist, int fd, int coords,
               RASTER_MAP_TYPE data_type, FILE *fp, char *null_string,
-              enum OutputFormat format, JSON_Array *array, ColorFormat clr_frmt)
+              enum OutputFormat format, G_JSON_Array *array,
+              ColorFormat clr_frmt)
 {
     static DCELL *dcell;
     static int cur_row = -1;
@@ -24,8 +25,8 @@ int read_rast(double east, double north, double dist, int fd, int coords,
     static struct Cell_head window;
     int row, col;
     int outofbounds = FALSE;
-    JSON_Object *object;
-    JSON_Value *value;
+    G_JSON_Object *object;
+    G_JSON_Value *value;
 
     if (format == JSON) {
         value = G_json_value_init_object();
