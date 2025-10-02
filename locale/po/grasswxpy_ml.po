@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-20 16:33+0000\n"
+"POT-Creation-Date: 2025-09-27 17:16+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Mohammed Rashad <rashadkm@gmail.com>\n"
 "Language-Team: Malayalam <grass-translations@lists.osgeo.org>\n"
@@ -871,7 +871,7 @@ msgstr ""
 #: ../gui/wxpython/core/gcmd.py:153
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:714
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:760
-#: ../gui/wxpython/lmgr/frame.py:2319 ../gui/wxpython/main_window/frame.py:2427
+#: ../gui/wxpython/lmgr/frame.py:2319 ../gui/wxpython/main_window/frame.py:2428
 msgid "Message"
 msgstr "സന്ദേശം"
 
@@ -1277,30 +1277,30 @@ msgstr ""
 msgid "Vector map <%(map)s>: %(msg)s\n"
 msgstr ""
 
-#: ../gui/wxpython/core/utils.py:836
+#: ../gui/wxpython/core/utils.py:838
 #, python-format
 msgid ""
 "%s: line skipped - unable to parse '%s'\n"
 "Reason: %s\n"
 msgstr ""
 
-#: ../gui/wxpython/core/utils.py:842
+#: ../gui/wxpython/core/utils.py:844
 #, python-format
 msgid "Duplicated key: %s\n"
 msgstr ""
 
-#: ../gui/wxpython/core/utils.py:846
+#: ../gui/wxpython/core/utils.py:848
 #, python-brace-format
 msgid "Unable to open file '{name}': {error}\n"
 msgstr ""
 
-#: ../gui/wxpython/core/utils.py:871
+#: ../gui/wxpython/core/utils.py:873
 #, fuzzy, python-brace-format
 #| msgid "Unable to create new mapset: %s"
 msgid "Unable to create file '{name}': {error}\n"
 msgstr "പുതിയ മാപ്പ്സെറ്റ് ഉണ്ടാക്കാൻ പറ്റുനില്ല: %s"
 
-#: ../gui/wxpython/core/utils.py:945 ../gui/wxpython/gui_core/forms.py:1913
+#: ../gui/wxpython/core/utils.py:947 ../gui/wxpython/gui_core/forms.py:1913
 msgid "Select Color"
 msgstr "നിറം തിരഞ്ഞെടുക്കുക"
 
@@ -6026,7 +6026,7 @@ msgid "No vector map layer selected. Operation canceled."
 msgstr ""
 
 #: ../gui/wxpython/gui_core/vselect.py:288 ../gui/wxpython/lmgr/frame.py:2318
-#: ../gui/wxpython/main_window/frame.py:2426
+#: ../gui/wxpython/main_window/frame.py:2427
 #: ../gui/wxpython/mapdisp/frame.py:711
 msgid "No map layer selected. Operation canceled."
 msgstr ""
@@ -6477,7 +6477,7 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/iclass/frame.py:107 ../gui/wxpython/iclass/frame.py:1652
-#: ../gui/wxpython/lmgr/frame.py:1687 ../gui/wxpython/main_window/frame.py:1842
+#: ../gui/wxpython/lmgr/frame.py:1687 ../gui/wxpython/main_window/frame.py:1843
 msgid "Supervised Classification Tool"
 msgstr ""
 
@@ -7516,7 +7516,7 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1180 ../gui/wxpython/lmgr/frame.py:1858
 #: ../gui/wxpython/main_window/frame.py:1336
-#: ../gui/wxpython/main_window/frame.py:2022
+#: ../gui/wxpython/main_window/frame.py:2023
 msgid "Selected map layer is not vector."
 msgstr ""
 
@@ -7627,19 +7627,19 @@ msgstr ""
 msgid "Platform"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1566 ../gui/wxpython/main_window/frame.py:1722
+#: ../gui/wxpython/lmgr/frame.py:1566 ../gui/wxpython/main_window/frame.py:1723
 msgid "Close all Map Displays"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1584 ../gui/wxpython/main_window/frame.py:1740
+#: ../gui/wxpython/lmgr/frame.py:1584 ../gui/wxpython/main_window/frame.py:1741
 msgid "Enter new name:"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1585 ../gui/wxpython/main_window/frame.py:1741
+#: ../gui/wxpython/lmgr/frame.py:1585 ../gui/wxpython/main_window/frame.py:1742
 msgid "Rename Map Display"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1679 ../gui/wxpython/main_window/frame.py:1834
+#: ../gui/wxpython/lmgr/frame.py:1679 ../gui/wxpython/main_window/frame.py:1835
 #, python-format
 msgid ""
 "Unable to launch \"Supervised Classification Tool\".\n"
@@ -7647,35 +7647,35 @@ msgid ""
 "Reason: %s"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1726 ../gui/wxpython/main_window/frame.py:1881
+#: ../gui/wxpython/lmgr/frame.py:1726 ../gui/wxpython/main_window/frame.py:1882
 msgid "Unable to start Timeline Tool."
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1736 ../gui/wxpython/main_window/frame.py:1891
+#: ../gui/wxpython/lmgr/frame.py:1736 ../gui/wxpython/main_window/frame.py:1892
 msgid "Unable to start Temporal Plot Tool."
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1906 ../gui/wxpython/main_window/frame.py:2068
+#: ../gui/wxpython/lmgr/frame.py:1906 ../gui/wxpython/main_window/frame.py:2069
 msgid "Add selected map layers into layer tree"
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1938 ../gui/wxpython/lmgr/frame.py:1976
-#: ../gui/wxpython/main_window/frame.py:2100
-#: ../gui/wxpython/main_window/frame.py:2138
+#: ../gui/wxpython/main_window/frame.py:2101
+#: ../gui/wxpython/main_window/frame.py:2139
 #, python-format
 msgid "Unsupported map layer type <%s>."
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:2119 ../gui/wxpython/main_window/frame.py:2262
+#: ../gui/wxpython/lmgr/frame.py:2119 ../gui/wxpython/main_window/frame.py:2263
 msgid "Note that cell values can only be displayed for regions of less than 10,000 cells."
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:2214 ../gui/wxpython/lmgr/layertree.py:2128
-#: ../gui/wxpython/main_window/frame.py:2338
+#: ../gui/wxpython/main_window/frame.py:2339
 msgid "opacity:"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:2223 ../gui/wxpython/main_window/frame.py:2347
+#: ../gui/wxpython/lmgr/frame.py:2223 ../gui/wxpython/main_window/frame.py:2348
 #, python-format
 msgid ""
 "Do you want to remove map layer(s)\n"
@@ -7686,23 +7686,23 @@ msgstr ""
 "%s \n"
 "മാപ്പ് ട്രീയിൽ നിന്നും മാറ്റണമൊ?"
 
-#: ../gui/wxpython/lmgr/frame.py:2228 ../gui/wxpython/main_window/frame.py:2352
+#: ../gui/wxpython/lmgr/frame.py:2228 ../gui/wxpython/main_window/frame.py:2353
 msgid "Do you want to remove selected map layer(s) from layer tree?"
 msgstr "തിരഞ്ഞെടുക്കപെട്ട മാപ്പ് ലയെറുകൾ കളയണമൊ?"
 
-#: ../gui/wxpython/lmgr/frame.py:2234 ../gui/wxpython/main_window/frame.py:2358
+#: ../gui/wxpython/lmgr/frame.py:2234 ../gui/wxpython/main_window/frame.py:2359
 msgid "Remove map layer"
 msgstr "മാപ്പ് ലയെർ കളയുക"
 
-#: ../gui/wxpython/lmgr/frame.py:2292 ../gui/wxpython/main_window/frame.py:2400
+#: ../gui/wxpython/lmgr/frame.py:2292 ../gui/wxpython/main_window/frame.py:2401
 msgid "Quit GRASS GUI"
 msgstr "പുറത്ത് കടക്കുക"
 
-#: ../gui/wxpython/lmgr/frame.py:2330 ../gui/wxpython/main_window/frame.py:2438
+#: ../gui/wxpython/lmgr/frame.py:2330 ../gui/wxpython/main_window/frame.py:2439
 msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:2341 ../gui/wxpython/main_window/frame.py:2449
+#: ../gui/wxpython/lmgr/frame.py:2341 ../gui/wxpython/main_window/frame.py:2450
 msgid "Constrain map to region geometry?"
 msgstr ""
 
@@ -8650,7 +8650,13 @@ msgstr ""
 msgid "No project provided. Operation canceled."
 msgstr ""
 
-#: ../gui/wxpython/main_window/frame.py:2000
+#: ../gui/wxpython/main_window/frame.py:1713
+#, fuzzy
+#| msgid "Close workspace file"
+msgid "Close workspace"
+msgstr "വർക്സ്പേസ് ഫയൽ അടയ്ക്കുക"
+
+#: ../gui/wxpython/main_window/frame.py:2001
 msgid "Code editor"
 msgstr ""
 
@@ -15108,9 +15114,6 @@ msgstr ""
 
 #~ msgid "Choose GRC file to load"
 #~ msgstr "തുറക്കെണ്ട GRC ഫയൽ തിരഞെടുക്കുക"
-
-#~ msgid "Close workspace file"
-#~ msgstr "വർക്സ്പേസ് ഫയൽ അടയ്ക്കുക"
 
 #, fuzzy
 #~ msgid "Common export formats using OGR"

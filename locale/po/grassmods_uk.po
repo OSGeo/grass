@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_uk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-20 16:33+0000\n"
+"POT-Creation-Date: 2025-09-27 17:16+0000\n"
 "PO-Revision-Date: 2025-07-26 01:37+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Ukrainian <https://weblate.osgeo.org/projects/grass-gis/grassmods/uk/>\n"
@@ -305,8 +305,8 @@ msgstr ""
 #: ../general/g.mapsets/list.c:13 ../general/g.proj/output.c:54
 #: ../general/g.proj/output.c:360 ../general/g.region/main.c:471
 #: ../general/g.version/main.c:140 ../misc/m.measure/main.c:87
-#: ../raster/r.describe/dumplist.c:37 ../raster/r.distance/report.c:210
-#: ../raster/r.distance/report.c:217 ../raster/r.distance/report.c:224
+#: ../raster/r.describe/dumplist.c:37 ../raster/r.distance/report.c:211
+#: ../raster/r.distance/report.c:218 ../raster/r.distance/report.c:225
 #: ../raster/r.info/main.c:147 ../raster/r.proj/main.c:487
 #: ../raster/r.regression.line/main.c:101
 #: ../raster/r.regression.multi/main.c:197
@@ -481,7 +481,7 @@ msgid "Lists all databases for a given driver and location."
 msgstr ""
 
 #: ../db/db.describe/main.c:140 ../general/g.proj/output.c:382
-#: ../general/g.region/main.c:986 ../general/g.version/main.c:409
+#: ../general/g.region/main.c:990 ../general/g.version/main.c:409
 #: ../imagery/i.group/main.c:301 ../raster/r.category/main.c:412
 #: ../raster/r.describe/dumplist.c:69 ../raster/r.info/main.c:997
 #: ../raster/r.mask.status/main.c:111 ../raster/r.object.geometry/main.c:401
@@ -2138,7 +2138,7 @@ msgid "No graphics device selected"
 msgstr ""
 
 #: ../display/d.extract/main.c:96 ../doc/examples/vector/v.example/main.c:76
-#: ../general/g.region/main.c:565 ../misc/m.nviz.image/vector.c:83
+#: ../general/g.region/main.c:569 ../misc/m.nviz.image/vector.c:83
 #: ../raster/r.carve/main.c:153 ../raster/r.cost/main.c:357
 #: ../raster/r.walk/main.c:460 ../scripts/r.mask/r.mask.py:173
 #: ../scripts/v.db.univar/v.db.univar.py:80
@@ -2162,7 +2162,7 @@ msgstr ""
 
 #: ../display/d.extract/main.c:101 ../display/d.path/main.c:190
 #: ../display/d.vect.chart/main.c:244
-#: ../doc/examples/vector/v.example/main.c:88 ../general/g.region/main.c:575
+#: ../doc/examples/vector/v.example/main.c:88 ../general/g.region/main.c:579
 #: ../general/manage/lister/vector.c:32 ../misc/m.nviz.image/vector.c:301
 #: ../raster/r.carve/main.c:157 ../raster/r.cost/main.c:599
 #: ../raster/r.cost/main.c:666 ../raster/r.drain/main.c:277
@@ -4460,7 +4460,7 @@ msgstr ""
 #: ../vector/v.extract/extract.c:276 ../vector/v.extract/main.c:226
 #: ../vector/v.extract/main.c:324 ../vector/v.extrude/main.c:228
 #: ../vector/v.in.ascii/main.c:359 ../vector/v.in.db/main.c:169
-#: ../vector/v.in.db/main.c:315 ../vector/v.in.dxf/write_vect.c:211
+#: ../vector/v.in.db/main.c:315 ../vector/v.in.dxf/write_vect.c:214
 #: ../vector/v.in.ogr/main.c:1167 ../vector/v.in.ogr/main.c:1216
 #: ../vector/v.info/print.c:221 ../vector/v.kcv/main.c:126
 #: ../vector/v.label.sa/labels.c:78 ../vector/v.label/main.c:277
@@ -5264,8 +5264,8 @@ msgstr ""
 msgid "My first raster module"
 msgstr ""
 
-#: ../doc/examples/raster/r.example/main.c:105 ../general/g.region/main.c:510
-#: ../general/g.region/main.c:896 ../general/g.region/main.c:905
+#: ../doc/examples/raster/r.example/main.c:105 ../general/g.region/main.c:512
+#: ../general/g.region/main.c:900 ../general/g.region/main.c:909
 #: ../imagery/i.gensig/parse.c:38 ../imagery/i.gensigset/parse.c:45
 #: ../imagery/i.ortho.photo/i.ortho.elev/main.c:219 ../imagery/i.pca/main.c:132
 #: ../imagery/i.segment/parse_args.c:202 ../imagery/i.svm.train/main.c:260
@@ -5309,7 +5309,7 @@ msgstr ""
 #: ../scripts/d.rast.leg/d.rast.leg.py:99
 #: ../scripts/r.buffer.lowmem/r.buffer.lowmem.py:85
 #: ../scripts/r.fillnulls/r.fillnulls.py:152 ../scripts/r.grow/r.grow.py:117
-#: ../scripts/r.mask/r.mask.py:151 ../scripts/r.pack/r.pack.py:72
+#: ../scripts/r.mask/r.mask.py:151 ../scripts/r.pack/r.pack.py:74
 #: ../scripts/r.reclass.area/r.reclass.area.py:101
 #: ../scripts/r.reclass.area/r.reclass.area.py:222 ../scripts/r.rgb/r.rgb.py:55
 #: ../scripts/v.rast.stats/v.rast.stats.py:154 ../vector/v.colors/main.c:317
@@ -5856,7 +5856,7 @@ msgstr ""
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr ""
 
-#: ../general/g.list/list.c:168 ../general/g.region/main.c:543
+#: ../general/g.list/list.c:168 ../general/g.region/main.c:545
 #, c-format
 msgid "Unable to read header of 3D raster map <%s@%s>"
 msgstr ""
@@ -7052,7 +7052,12 @@ msgstr ""
 msgid "Region <%s> not found"
 msgstr ""
 
-#: ../general/g.region/main.c:540 ../raster/r.colors/edit_colors.c:515
+#: ../general/g.region/main.c:509
+#, c-format
+msgid "Raster map name too long: <%s>"
+msgstr ""
+
+#: ../general/g.region/main.c:542 ../raster/r.colors/edit_colors.c:515
 #: ../raster/r.univar/r3.univar_main.c:210
 #: ../raster/r.univar/r3.univar_main.c:248 ../raster3d/r3.cross.rast/main.c:246
 #: ../raster3d/r3.flow/main.c:87 ../raster3d/r3.mask/main.c:53
@@ -7067,35 +7072,40 @@ msgstr ""
 msgid "3D raster map <%s> not found"
 msgstr ""
 
-#: ../general/g.region/main.c:585
+#: ../general/g.region/main.c:566
+#, c-format
+msgid "Vector map name too long: <%s>"
+msgstr ""
+
+#: ../general/g.region/main.c:589
 msgid "Unable to get map bounding box"
 msgstr ""
 
-#: ../general/g.region/main.c:919
+#: ../general/g.region/main.c:923
 #, c-format
 msgid "'%s' option not used with <%s> because a coordinate would become invalid"
 msgstr ""
 
-#: ../general/g.region/main.c:929 ../general/g.region/main.c:939
-#: ../general/g.region/main.c:949
+#: ../general/g.region/main.c:933 ../general/g.region/main.c:943
+#: ../general/g.region/main.c:953
 #, c-format
 msgid "'%s' option not used with <%s> because <%s> would become minor than <%s>"
 msgstr ""
 
-#: ../general/g.region/main.c:961
+#: ../general/g.region/main.c:965
 #, c-format
 msgid "Unable to set region <%s>"
 msgstr ""
 
-#: ../general/g.region/main.c:966
+#: ../general/g.region/main.c:970
 msgid "Unable to update current region"
 msgstr ""
 
-#: ../general/g.region/main.c:974
+#: ../general/g.region/main.c:978
 msgid "Unable to change default region. The current mapset is not <PERMANENT>."
 msgstr ""
 
-#: ../general/g.region/main.c:1001 ../raster/r.in.lidar/main.c:540
+#: ../general/g.region/main.c:1005 ../raster/r.in.lidar/main.c:540
 #: ../raster/r.in.pdal/main.cpp:646
 #, c-format
 msgid "Invalid input <%s=%s>"
@@ -17661,7 +17671,7 @@ msgstr ""
 #: ../vector/v.class/main.c:175 ../vector/v.normal/main.c:132
 #: ../vector/v.out.lidar/main.c:131 ../vector/v.out.lidar/main.c:165
 #: ../vector/v.sample/main.c:149 ../vector/v.surf.bspline/main.c:402
-#: ../vector/v.surf.idw/read_sites.c:70 ../vector/v.to.rast3/main.c:98
+#: ../vector/v.surf.idw/read_sites.c:71 ../vector/v.to.rast3/main.c:98
 #: ../vector/v.univar/main.c:417 ../vector/v.vol.rst/user1.c:108
 msgid "Unable to select data from table"
 msgstr ""
@@ -18540,9 +18550,9 @@ msgid "Pass 2 of 2..."
 msgstr ""
 
 #: ../raster/r.clump/clump.c:98 ../raster/r.clump/clump.c:116
-#: ../raster/r.fill.dir/filldir.c:149 ../raster/r.fill.dir/filldir.c:155
-#: ../raster/r.fill.dir/filldir.c:160 ../raster/r.fill.dir/filldir.c:182
-#: ../raster/r.fill.dir/filldir.c:185 ../raster/r.fill.dir/wtrshed.c:107
+#: ../raster/r.fill.dir/filldir.c:147 ../raster/r.fill.dir/filldir.c:153
+#: ../raster/r.fill.dir/filldir.c:158 ../raster/r.fill.dir/filldir.c:180
+#: ../raster/r.fill.dir/filldir.c:183 ../raster/r.fill.dir/wtrshed.c:107
 #: ../raster/r.fill.dir/wtrshed.c:113 ../raster/r.fill.dir/wtrshed.c:133
 #: ../raster/r.fill.dir/wtrshed.c:155 ../raster/r.fill.dir/wtrshed.c:161
 #: ../raster/r.fill.dir/wtrshed.c:183 ../raster/r.fill.dir/wtrshed.c:189
@@ -19119,11 +19129,11 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: ../raster/r.contour/cont.c:265
+#: ../raster/r.contour/cont.c:268
 msgid "Illegal edge number"
 msgstr ""
 
-#: ../raster/r.contour/cont.c:372
+#: ../raster/r.contour/cont.c:375
 msgid "Edge number out of range"
 msgstr ""
 
@@ -19163,7 +19173,7 @@ msgid "Unable to create table: '%s'"
 msgstr ""
 
 #: ../raster/r.contour/main.c:187 ../raster3d/r3.flow/main.c:68
-#: ../vector/v.in.ascii/main.c:548 ../vector/v.in.dxf/write_vect.c:242
+#: ../vector/v.in.ascii/main.c:548 ../vector/v.in.dxf/write_vect.c:245
 #: ../vector/v.in.lidar/attributes.c:139 ../vector/v.in.ogr/main.c:1392
 #: ../vector/v.reclass/main.c:322 ../vector/v.to.points/main.c:219
 #, c-format
@@ -19174,7 +19184,7 @@ msgstr ""
 #: ../raster/r.stream.extract/close.c:201 ../raster/r.to.vect/main.c:249
 #: ../raster3d/r3.flow/main.c:73 ../vector/v.decimate/copy_tab.c:121
 #: ../vector/v.distance/main.c:1484 ../vector/v.extract/copy_tab.c:126
-#: ../vector/v.in.ascii/main.c:435 ../vector/v.in.dxf/write_vect.c:239
+#: ../vector/v.in.ascii/main.c:435 ../vector/v.in.dxf/write_vect.c:242
 #: ../vector/v.in.lidar/attributes.c:144 ../vector/v.in.ogr/main.c:1180
 #: ../vector/v.mkgrid/main.c:372 ../vector/v.mkgrid/main.c:433
 #: ../vector/v.overlay/main.c:625 ../vector/v.patch/main.c:391
@@ -19192,7 +19202,7 @@ msgid "Writing attributes..."
 msgstr ""
 
 #: ../raster/r.contour/main.c:215 ../raster3d/r3.flow/flowline.c:61
-#: ../vector/v.overlay/area_area.c:423 ../vector/v.overlay/line_area.c:452
+#: ../vector/v.overlay/area_area.c:434 ../vector/v.overlay/line_area.c:452
 #: ../vector/v.to.points/write.c:59
 #, c-format
 msgid "Unable to insert new record: '%s'"
@@ -20085,7 +20095,7 @@ msgstr ""
 msgid "File reading error in %s() %d:%s"
 msgstr ""
 
-#: ../raster/r.fill.dir/dopolys.c:88
+#: ../raster/r.fill.dir/dopolys.c:90
 #, c-format
 msgid "Found %d unresolved area"
 msgid_plural "Found %d unresolved areas"
@@ -20094,8 +20104,8 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: ../raster/r.fill.dir/dopolys.c:102 ../raster/r.fill.dir/filldir.c:163
-#: ../raster/r.fill.dir/filldir.c:192 ../raster/r.fill.dir/main.c:214
+#: ../raster/r.fill.dir/dopolys.c:104 ../raster/r.fill.dir/filldir.c:161
+#: ../raster/r.fill.dir/filldir.c:190 ../raster/r.fill.dir/main.c:214
 #: ../raster/r.fill.dir/ppupdate.c:225 ../raster/r.fill.dir/resolve.c:126
 #: ../raster/r.fill.dir/resolve.c:167 ../raster/r.fill.dir/resolve.c:205
 #: ../raster/r.fill.dir/wtrshed.c:135 ../raster/r.fill.dir/wtrshed.c:212
@@ -20655,7 +20665,7 @@ msgstr ""
 msgid "Region resolution shouldn't be lesser than map %s resolution. Run g.region raster=%s to set proper resolution"
 msgstr ""
 
-#: ../raster/r.geomorphon/pattern.c:224
+#: ../raster/r.geomorphon/pattern.c:228
 #, c-format
 msgid "Internal error in %s()"
 msgstr ""
@@ -20839,23 +20849,44 @@ msgstr ""
 msgid "The cholesky solver dos not work with sparse matrices. You may choose a full filled quadratic matrix, flag -f."
 msgstr ""
 
-#: ../raster/r.gwflow/main.c:308
+#: ../raster/r.gwflow/main.c:288
+msgid "Failed to initialize geometry data"
+msgstr ""
+
+#: ../raster/r.gwflow/main.c:295
+msgid "Failed to allocate LES callback"
+msgstr ""
+
+#: ../raster/r.gwflow/main.c:304
+msgid "Failed to allocate gwflow data structure"
+msgstr ""
+
+#: ../raster/r.gwflow/main.c:318
 #, c-format
 msgid "Calculation time: %g"
 msgstr ""
 
-#: ../raster/r.gwflow/main.c:395
+#: ../raster/r.gwflow/main.c:385 ../raster/r.gwflow/main.c:419
+#: ../raster/r.gwflow/main.c:585 ../raster3d/r3.gwflow/main.c:298
+msgid "Unable to create and solve the linear equation system"
+msgstr ""
+
+#: ../raster/r.gwflow/main.c:408
 #, c-format
 msgid "Calculation of unconfined groundwater flow loop %i"
 msgstr ""
 
-#: ../raster/r.gwflow/main.c:418
+#: ../raster/r.gwflow/main.c:434
 #, c-format
 msgid "Maximum difference between this and last increment: %g"
 msgstr ""
 
-#: ../raster/r.gwflow/main.c:563 ../raster3d/r3.gwflow/main.c:298
-msgid "Unable to create and solve the linear equation system"
+#: ../raster/r.gwflow/main.c:472
+msgid "Failed to compute gradient field"
+msgstr ""
+
+#: ../raster/r.gwflow/main.c:557
+msgid "Unable to create the linear equation system"
 msgstr ""
 
 #: ../raster/r.his/main.c:72
@@ -24929,7 +24960,7 @@ msgstr ""
 msgid "No path at row %d, col %d"
 msgstr ""
 
-#: ../raster/r.path/main.c:541 ../vector/v.overlay/area_area.c:123
+#: ../raster/r.path/main.c:541 ../vector/v.overlay/area_area.c:134
 #: ../vector/v.overlay/line_area.c:255
 msgid "Breaking lines..."
 msgstr ""
@@ -30192,7 +30223,7 @@ msgstr ""
 
 #: ../raster/r.to.vect/main.c:242 ../raster/r.volume/main.c:342
 #: ../raster3d/r3.flow/main.c:65 ../vector/v.in.ascii/main.c:428
-#: ../vector/v.in.dxf/write_vect.c:234 ../vector/v.lrs/v.lrs.create/main.c:342
+#: ../vector/v.in.dxf/write_vect.c:237 ../vector/v.lrs/v.lrs.create/main.c:342
 #: ../vector/v.mkgrid/main.c:364 ../vector/v.mkgrid/main.c:425
 #: ../vector/v.random/main.c:297
 #, c-format
@@ -33365,7 +33396,7 @@ msgid "Branch <{branch}> not found in repository <{url}>"
 msgstr ""
 
 #: ../scripts/g.extension/g.extension.py:391
-#: ../scripts/g.extension/g.extension.py:2787
+#: ../scripts/g.extension/g.extension.py:2790
 #, python-brace-format
 msgid ""
 "Failed to get addons files list from the Git repository <{repo_path}>.\n"
@@ -33671,36 +33702,36 @@ msgstr ""
 msgid "Unable for write manual page: %s"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2484
+#: ../scripts/g.extension/g.extension.py:2487
 msgid "GRASS_ADDON_BASE is not defined, installing to {}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2491
+#: ../scripts/g.extension/g.extension.py:2494
 #, python-brace-format
 msgid "You don't have permission to install extension to <{0}>. Try to run {1} with administrator rights (su or sudo)."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2583
+#: ../scripts/g.extension/g.extension.py:2586
 #, python-brace-format
 msgid "Identified {0} as known hosting service"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2588
+#: ../scripts/g.extension/g.extension.py:2591
 #, python-brace-format
 msgid "Not using {service} as known hosting service because the URL ends with '{suffix}'"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2605
+#: ../scripts/g.extension/g.extension.py:2608
 #, python-brace-format
 msgid "Will use the following URL for download: {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2636
+#: ../scripts/g.extension/g.extension.py:2639
 #, python-brace-format
 msgid "Cannot open URL <{url}>: {error}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2842
+#: ../scripts/g.extension/g.extension.py:2845
 msgid "Flag '{}' is relevant only to 'operation=add'. Ignoring this flag."
 msgstr ""
 
@@ -34745,26 +34776,41 @@ msgstr ""
 msgid "All subsequent raster operations will be limited to the raster mask area. Removing the mask (with r.mask -r) or renaming a raster map named '{name}' will restore raster operations to normal."
 msgstr ""
 
-#: ../scripts/r.pack/r.pack.py:77 ../scripts/v.pack/v.pack.py:82
+#: ../scripts/r.pack/r.pack.py:80 ../scripts/v.pack/v.pack.py:82
 #, python-format
 msgid "Pack file <%s> already exists and will be overwritten"
 msgstr ""
 
-#: ../scripts/r.pack/r.pack.py:81
+#: ../scripts/r.pack/r.pack.py:84
 #, python-format
 msgid "option <output>: <%s> exists."
 msgstr ""
 
-#: ../scripts/r.pack/r.pack.py:83
+#: ../scripts/r.pack/r.pack.py:86
+#, python-brace-format
+msgid "Directory '{path}' does not exist"
+msgstr ""
+
+#: ../scripts/r.pack/r.pack.py:88
+#, python-brace-format
+msgid "Path '{path}' is not a directory"
+msgstr ""
+
+#: ../scripts/r.pack/r.pack.py:90
+#, python-brace-format
+msgid "Directory '{path}' is not writable"
+msgstr ""
+
+#: ../scripts/r.pack/r.pack.py:92
 #, python-format
 msgid "Packing <%s> to <%s>..."
 msgstr ""
 
-#: ../scripts/r.pack/r.pack.py:152
+#: ../scripts/r.pack/r.pack.py:161
 msgid "No raster map components found"
 msgstr ""
 
-#: ../scripts/r.pack/r.pack.py:183
+#: ../scripts/r.pack/r.pack.py:199
 #, python-format
 msgid "Raster map saved to '%s'"
 msgstr ""
@@ -35952,8 +35998,8 @@ msgstr ""
 
 #: ../vector/v.buffer/main.c:444 ../vector/v.class/main.c:172
 #: ../vector/v.sample/main.c:238 ../vector/v.surf.bspline/crosscorr.c:141
-#: ../vector/v.surf.bspline/main.c:399 ../vector/v.surf.idw/read_sites.c:67
-#: ../vector/v.to.rast3/main.c:102 ../vector/v.what.rast/main.c:225
+#: ../vector/v.surf.bspline/main.c:399 ../vector/v.to.rast3/main.c:102
+#: ../vector/v.what.rast/main.c:225
 msgid "Column type not supported"
 msgstr ""
 
@@ -36025,7 +36071,7 @@ msgstr ""
 
 #: ../vector/v.buffer/main.c:800 ../vector/v.buffer/main.c:807
 #: ../vector/v.delaunay/main.c:144 ../vector/v.in.ogr/main.c:1467
-#: ../vector/v.in.ogr/main.c:1482 ../vector/v.overlay/area_area.c:127
+#: ../vector/v.in.ogr/main.c:1482 ../vector/v.overlay/area_area.c:138
 #: ../vector/v.patch/main.c:538 ../vector/v.patch/main.c:555
 msgid "Removing duplicates..."
 msgstr ""
@@ -36049,7 +36095,7 @@ msgstr ""
 msgid "Removing bridges..."
 msgstr ""
 
-#: ../vector/v.buffer/main.c:825 ../vector/v.overlay/area_area.c:172
+#: ../vector/v.buffer/main.c:825 ../vector/v.overlay/area_area.c:183
 msgid "Attaching islands..."
 msgstr ""
 
@@ -36057,7 +36103,7 @@ msgstr ""
 msgid "Calculating centroids for all areas..."
 msgstr ""
 
-#: ../vector/v.buffer/main.c:846 ../vector/v.overlay/area_area.c:185
+#: ../vector/v.buffer/main.c:846 ../vector/v.overlay/area_area.c:196
 msgid "Cannot calculate area centroid"
 msgstr ""
 
@@ -39525,7 +39571,12 @@ msgstr ""
 msgid "Layer %d: %s"
 msgstr ""
 
-#: ../vector/v.in.dxf/write_vect.c:248
+#: ../vector/v.in.dxf/write_vect.c:151
+#, c-format
+msgid "Layer name <%s> is too long"
+msgstr ""
+
+#: ../vector/v.in.dxf/write_vect.c:251
 #, c-format
 msgid "Unable to add database link for vector map <%s>"
 msgstr ""
@@ -39808,7 +39859,7 @@ msgstr ""
 msgid "Number of OSM line splits: %d"
 msgstr ""
 
-#: ../vector/v.in.ogr/clean.c:123 ../vector/v.overlay/area_area.c:168
+#: ../vector/v.in.ogr/clean.c:123 ../vector/v.overlay/area_area.c:179
 msgid "Merging lines..."
 msgstr ""
 
@@ -40106,7 +40157,7 @@ msgstr ""
 msgid "Snapping boundaries (threshold = %.3e)..."
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1486 ../vector/v.overlay/area_area.c:130
+#: ../vector/v.in.ogr/main.c:1486 ../vector/v.overlay/area_area.c:141
 #: ../vector/v.patch/main.c:559
 msgid "Cleaning boundaries at nodes..."
 msgstr ""
@@ -40133,7 +40184,7 @@ msgstr ""
 msgid "The order of features in input layer <%s> has changed"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1630 ../vector/v.overlay/area_area.c:294
+#: ../vector/v.in.ogr/main.c:1630 ../vector/v.overlay/area_area.c:305
 msgid "Writing centroids..."
 msgstr ""
 
@@ -44283,7 +44334,12 @@ msgstr ""
 msgid "Snapping boundaries with %g ..."
 msgstr ""
 
-#: ../vector/v.overlay/area_area.c:113
+#: ../vector/v.overlay/area_area.c:99
+#, c-format
+msgid "Line with %d points reduced to %d point, deleting line."
+msgstr ""
+
+#: ../vector/v.overlay/area_area.c:124
 #, c-format
 msgid "%d boundary snapped"
 msgid_plural "%d boundaries snapped"
@@ -44292,18 +44348,18 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: ../vector/v.overlay/area_area.c:217
+#: ../vector/v.overlay/area_area.c:228
 #, c-format
 msgid "Querying vector map <%s>..."
 msgstr ""
 
-#: ../vector/v.overlay/area_area.c:281 ../vector/v.overlay/area_area.c:364
-#: ../vector/v.overlay/area_area.c:394 ../vector/v.overlay/line_area.c:391
+#: ../vector/v.overlay/area_area.c:292 ../vector/v.overlay/area_area.c:375
+#: ../vector/v.overlay/area_area.c:405 ../vector/v.overlay/line_area.c:391
 #: ../vector/v.overlay/line_area.c:421
 msgid "Attribute not found"
 msgstr ""
 
-#: ../vector/v.overlay/area_area.c:455
+#: ../vector/v.overlay/area_area.c:466
 msgid "Copying results to final output map..."
 msgstr ""
 
@@ -45589,7 +45645,7 @@ msgid "No records selected from table <%s> "
 msgstr ""
 
 #: ../vector/v.surf.bspline/crosscorr.c:230
-#: ../vector/v.surf.idw/read_sites.c:108
+#: ../vector/v.surf.idw/read_sites.c:109
 #, c-format
 msgid "No record for point (cat = %d)"
 msgstr ""
@@ -45763,7 +45819,12 @@ msgstr ""
 msgid "Input vector map <%s> is 3D - using z-coordinates to interpolate"
 msgstr ""
 
-#: ../vector/v.surf.idw/read_sites.c:72
+#: ../vector/v.surf.idw/read_sites.c:68
+#, c-format
+msgid "Column type of column <%s> is not numeric"
+msgstr ""
+
+#: ../vector/v.surf.idw/read_sites.c:73
 #, c-format
 msgid "One record selected from table"
 msgid_plural "%d records selected from table"
@@ -45772,7 +45833,7 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: ../vector/v.surf.idw/read_sites.c:128
+#: ../vector/v.surf.idw/read_sites.c:129
 #, c-format
 msgid "%ld point loaded"
 msgid_plural "%ld points loaded"
