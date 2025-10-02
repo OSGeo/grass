@@ -99,12 +99,18 @@ Some software may not recognize all of the compression methods available
 for a given file format, and certain compression methods may only be
 supported for certain data types (depends on vendor and version).
 
-If the export settings are set such that data loss would occur in the
-output file (i.e, due to the particular choice of data type and/or file
-type), the normal behaviour of *r.out.gdal* in this case would be to
-issue an error message describing the problem and exit without
-exporting. The **-f** flag allows raster export even if some of the data
-loss tests are not passed, and warnings are issued instead of errors.
+By default, *r.out.gdal* identifies suitable settings for
+**nodata** and data **type**, if not given by the user.
+If however the export settings are set such that data loss would occur
+in the output file (i.e, due to the particular choice of data type and/or
+file type), the normal behaviour of *r.out.gdal* in this case would be
+to issue an error message describing the problem and exit without
+exporting. However, depending on the data size, data loss tests may take
+some time. For performance reasons, those tests can therefore be skipped
+if both the **-f** flag, the **nodata** option and the **type**
+option are given. Here the assumtion is that the user has made a
+deliberate choice about those settings and considered the potential risk
+for data loss when forcing the export with the **-f** flag.
 
 *r.out.gdal* exports may appear all black or gray on initial display in
 other GIS software. This is not a bug of *r.out.gdal*, but often caused
